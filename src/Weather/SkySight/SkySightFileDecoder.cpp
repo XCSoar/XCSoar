@@ -4,6 +4,7 @@
 #include "SkySightFileDecoder.hpp"
 #include "LegendMapping.hpp"
 #include "SkySightLimits.hpp"
+#include "SkySightPayloadSuffixes.hpp"
 
 #include "LogFile.hpp"
 #include "io/FileReader.hxx"
@@ -14,6 +15,7 @@
 #include "lib/zlib/GunzipReader.hxx"
 #include "system/FileUtil.hpp"
 #include "util/ScopeExit.hxx"
+#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <array>
@@ -30,6 +32,8 @@
 #include <netcdf.h>
 #include "Geo/GeoTIFFHeaders.hpp"
 #endif
+
+using namespace std::string_view_literals;
 
 namespace {
 
@@ -52,18 +56,6 @@ CopyPath(Path path)
 CopyOptionalPath(Path path)
 {
   return path != nullptr ? CopyPath(path) : AllocatedPath{};
-}
-
-[[nodiscard]] bool
-HasForecastDataSuffix(std::string_view path) noexcept
-{
-  return path.ends_with(".nc") ||
-    path.ends_with(".nc.min") ||
-    path.ends_with(".tif") || path.ends_with(".tiff") ||
-    path.ends_with(".tif.min") || path.ends_with(".tiff.min") ||
-    path.ends_with(".png") ||
-    path.ends_with(".png.min") ||
-    path.ends_with(".jpg") || path.ends_with(".jpeg");
 }
 
 enum class ForecastPayloadType : uint8_t {
@@ -149,13 +141,13 @@ DetectForecastPayloadType(Path path) noexcept
   if (path.EndsWithIgnoreCase(".nc"))
     return ForecastPayloadType::NetCdf;
 
-  if (path.EndsWithIgnoreCase(".tif") || path.EndsWithIgnoreCase(".tiff"))
+  if (SkySight::PathEndsWithAnyIgnoreCase(path, SkySight::TIFF_SUFFIXES))
     return ForecastPayloadType::Tiff;
 
   if (path.EndsWithIgnoreCase(".png"))
     return ForecastPayloadType::Png;
 
-  if (path.EndsWithIgnoreCase(".jpg") || path.EndsWithIgnoreCase(".jpeg"))
+  if (SkySight::PathEndsWithAnyIgnoreCase(path, SkySight::JPEG_SUFFIXES))
     return ForecastPayloadType::Jpeg;
 
   return ForecastPayloadType::Unknown;
@@ -203,16 +195,28 @@ ReplacePath(Path source_path, AllocatedPath target_path)
   return target_path;
 }
 
+/**
+ * Peel a trailing ".min" gzip wrapper suffix from a mutable path string.
+ */
+[[nodiscard]] bool
+StripMinSuffix(std::string &path) noexcept
+{
+  auto view = std::string_view{path};
+  if (!RemoveSuffix(view, ".min"sv))
+    return false;
+
+  path.resize(view.size());
+  return true;
+}
+
 [[nodiscard]] AllocatedPath
 GetNormalisedPayloadTarget(Path source_path, const char *suffix)
 {
-  if (!source_path.EndsWithIgnoreCase(".min"))
+  std::string path{source_path.c_str()};
+  if (!StripMinSuffix(path))
     return AllocatedPath(source_path.WithSuffix(suffix).c_str());
 
-  std::string base{source_path.c_str()};
-  base.resize(base.size() - 4);
-
-  Path base_path{base.c_str()};
+  Path base_path{path.c_str()};
   if (base_path.EndsWithIgnoreCase(suffix))
     return AllocatedPath(base_path.c_str());
 
@@ -243,30 +247,22 @@ NeedsGunzipForecastPayload(Path path) noexcept;
 [[nodiscard]] AllocatedPath
 GetGunzipOutputPath(Path compressed_path);
 
+/**
+ * Delete overlay products derived from @p path.  When @p include_raw_extracts
+ * is true (zip invalidation), also remove `.min` / `.nc` siblings.
+ */
 void
-DeleteDisplayArtifacts(Path path) noexcept
+DeleteDerivedArtifacts(Path path,
+                       bool include_raw_extracts = false) noexcept
 {
+  if (include_raw_extracts)
+    for (const auto suffix : SkySight::RAW_EXTRACT_SUFFIXES)
+      DeleteIfExists(path.WithSuffix(suffix.data()));
+
   /* Prefer the versioned NetCDF overlay suffix; also remove legacy .tif
      washes from earlier decoders that painted near-zero opaque. */
-  DeleteIfExists(path.WithSuffix(".v2.tif"));
-  DeleteIfExists(path.WithSuffix(".tif"));
-  DeleteIfExists(path.WithSuffix(".tiff"));
-  DeleteIfExists(path.WithSuffix(".png"));
-  DeleteIfExists(path.WithSuffix(".jpg"));
-  DeleteIfExists(path.WithSuffix(".jpeg"));
-}
-
-void
-DeleteArchiveExtractionVariants(Path archive_path) noexcept
-{
-  DeleteIfExists(archive_path.WithSuffix(".min"));
-  DeleteIfExists(archive_path.WithSuffix(".nc"));
-  DeleteIfExists(archive_path.WithSuffix(".v2.tif"));
-  DeleteIfExists(archive_path.WithSuffix(".tif"));
-  DeleteIfExists(archive_path.WithSuffix(".tiff"));
-  DeleteIfExists(archive_path.WithSuffix(".png"));
-  DeleteIfExists(archive_path.WithSuffix(".jpg"));
-  DeleteIfExists(archive_path.WithSuffix(".jpeg"));
+  for (const auto suffix : SkySight::DERIVED_OVERLAY_SUFFIXES)
+    DeleteIfExists(path.WithSuffix(suffix.data()));
 }
 
 void
@@ -275,12 +271,12 @@ DeletePreparedPayloadArtifacts(Path path) noexcept
   if (NeedsGunzipForecastPayload(path)) {
     const auto inflated_path = GetGunzipOutputPath(path);
     DeleteIfExists(inflated_path);
-    DeleteDisplayArtifacts(inflated_path);
-    DeleteDisplayArtifacts(path);
+    DeleteDerivedArtifacts(inflated_path);
+    DeleteDerivedArtifacts(path);
     return;
   }
 
-  DeleteDisplayArtifacts(path);
+  DeleteDerivedArtifacts(path);
 }
 
 void
@@ -309,6 +305,39 @@ CopyReader(Reader &reader, OutputStream &output, std::size_t maximum_size,
   }
 }
 
+/**
+ * Return @p output_path when it already exists and is within the size
+ * limit.  When @p source_path is set, also require the output not be older
+ * than the source (used after gunzip so a stale inflate is rebuilt).
+ */
+[[nodiscard]] AllocatedPath
+ReuseExpandedPayloadIfPresent(Path output_path, Path source_path)
+{
+  if (!File::Exists(output_path))
+    return nullptr;
+
+  if (source_path != nullptr &&
+      File::GetLastModification(output_path) <
+        File::GetLastModification(source_path))
+    return nullptr;
+
+  if (File::GetSize(output_path) > SkySight::MAX_EXPANDED_FORECAST_BYTES)
+    throw SkySight::ResourceLimitError(
+      "Expanded SkySight forecast exceeds its size limit");
+
+  return AllocatedPath(output_path.c_str());
+}
+
+void
+WriteExpandedPayload(Reader &reader, Path output_path,
+                     const CancellationCheck &is_cancelled)
+{
+  FileOutputStream output(output_path);
+  CopyReader(reader, output, SkySight::MAX_EXPANDED_FORECAST_BYTES,
+             is_cancelled);
+  output.Commit();
+}
+
 [[nodiscard]] bool
 NeedsGunzipForecastPayload(Path path) noexcept
 {
@@ -319,8 +348,7 @@ NeedsGunzipForecastPayload(Path path) noexcept
 GetGunzipOutputPath(Path compressed_path)
 {
   std::string output_value{compressed_path.c_str()};
-  if (compressed_path.EndsWithIgnoreCase(".min") && output_value.size() > 4)
-    output_value.resize(output_value.size() - 4);
+  (void)StripMinSuffix(output_value);
 
   if (Path{output_value.c_str()}.GetSuffix() == nullptr)
     return Path{output_value.c_str()}.WithSuffix(".nc");
@@ -333,22 +361,14 @@ InflateForecastPayload(Path compressed_path,
                        const CancellationCheck &is_cancelled)
 {
   const auto output_path = GetGunzipOutputPath(compressed_path);
-  if (File::Exists(output_path) &&
-      File::GetLastModification(output_path) >=
-        File::GetLastModification(compressed_path)) {
-    if (File::GetSize(output_path) > SkySight::MAX_EXPANDED_FORECAST_BYTES)
-      throw SkySight::ResourceLimitError(
-        "Expanded SkySight forecast exceeds its size limit");
-
-    return AllocatedPath(output_path.c_str());
-  }
+  if (auto existing = ReuseExpandedPayloadIfPresent(output_path,
+                                                    compressed_path);
+      existing != nullptr)
+    return existing;
 
   FileReader file(compressed_path);
   GunzipReader gunzip(file);
-  FileOutputStream output(output_path);
-  CopyReader(gunzip, output, SkySight::MAX_EXPANDED_FORECAST_BYTES,
-             is_cancelled);
-  output.Commit();
+  WriteExpandedPayload(gunzip, output_path, is_cancelled);
   return AllocatedPath(output_path.c_str());
 }
 
@@ -376,7 +396,7 @@ ExtractArchiveEntry(Path archive_path, const CancellationCheck &is_cancelled)
     if (fallback_entry_name.empty())
       fallback_entry_name = entry_name;
 
-    if (HasForecastDataSuffix(entry_name))
+    if (SkySight::HasForecastDataSuffix(entry_name))
       break;
   }
 
@@ -391,19 +411,12 @@ ExtractArchiveEntry(Path archive_path, const CancellationCheck &is_cancelled)
     ? archive_path.WithSuffix(suffix)
     : archive_path.WithSuffix(".payload");
 
-  if (File::Exists(output_path)) {
-    if (File::GetSize(output_path) > SkySight::MAX_EXPANDED_FORECAST_BYTES)
-      throw SkySight::ResourceLimitError(
-        "Expanded SkySight forecast exceeds its size limit");
-
-    return AllocatedPath(output_path.c_str());
-  }
+  if (auto existing = ReuseExpandedPayloadIfPresent(output_path, nullptr);
+      existing != nullptr)
+    return existing;
 
   ZipReader reader(archive.get(), entry_name.c_str());
-  FileOutputStream output(output_path);
-  CopyReader(reader, output, SkySight::MAX_EXPANDED_FORECAST_BYTES,
-             is_cancelled);
-  output.Commit();
+  WriteExpandedPayload(reader, output_path, is_cancelled);
   return AllocatedPath(output_path.c_str());
 }
 
@@ -453,7 +466,8 @@ MakeDisplayReadyData(Path path)
 [[nodiscard]] SkySightPreparedData
 PrepareNetCdfPayload(PreparedForecastPayload payload)
 {
-  auto display_path = payload.source_path.WithSuffix(".v2.tif");
+  auto display_path = payload.source_path.WithSuffix(
+    SkySight::DECODED_OVERLAY_SUFFIX.data());
   auto cleanup_source_path = CopyPath(payload.source_path);
 
   /* Ignore legacy .tif overlays that painted near-zero background opaque. */
@@ -965,7 +979,7 @@ SkySightFileDecodeJob::OnNotification() noexcept
 }
 
 SkySightPreparedData
-SkySightFileDecoder::Prepare(Path path)
+SkySightFileDecoder::MakeDeferredPreparation(Path path) noexcept
 {
   return {
     SkySightPreparedDataKind::NeedsPreparation,
@@ -989,22 +1003,20 @@ FindExistingPath(Path path) noexcept
 [[nodiscard]] AllocatedPath
 FindNetCdfOverlay(Path path) noexcept
 {
-  return FindExistingPath(path.WithSuffix(".v2.tif"));
+  return FindExistingPath(
+    path.WithSuffix(SkySight::DECODED_OVERLAY_SUFFIX.data()));
 }
 
 [[nodiscard]] AllocatedPath
 FindProviderImage(Path path) noexcept
 {
-  if ((path.EndsWithIgnoreCase(".tif") ||
-       path.EndsWithIgnoreCase(".tiff") ||
-       path.EndsWithIgnoreCase(".png") ||
-       path.EndsWithIgnoreCase(".jpg") ||
-       path.EndsWithIgnoreCase(".jpeg")) &&
+  if (SkySight::PathEndsWithAnyIgnoreCase(
+        path, SkySight::DISPLAY_IMAGE_SUFFIXES) &&
       File::Exists(path))
     return CopyPath(path);
 
-  for (const auto *suffix : {".png", ".jpg", ".jpeg", ".tiff"}) {
-    const auto candidate = path.WithSuffix(suffix);
+  for (const auto suffix : SkySight::ALTERNATE_DISPLAY_IMAGE_SUFFIXES) {
+    const auto candidate = path.WithSuffix(suffix.data());
     if (File::Exists(candidate))
       return AllocatedPath(candidate.c_str());
   }
@@ -1038,7 +1050,7 @@ SkySightFileDecoder::InvalidateCache(Path path) noexcept
   DeleteIfExists(path);
 
   if (path.EndsWithIgnoreCase(".zip")) {
-    DeleteArchiveExtractionVariants(path);
+    DeleteDerivedArtifacts(path, true);
     return;
   }
 
