@@ -236,6 +236,16 @@ SkySightRequest::SkySightRequest(SkySightAPI &_api, CurlGlobal &_curl,
 
 SkySightRequest::~SkySightRequest() noexcept
 {
+  BeginShutdown();
+}
+
+void
+SkySightRequest::BeginShutdown() noexcept
+{
+  if (shutting_down)
+    return;
+
+  shutting_down = true;
   CancelAll();
 }
 
@@ -351,6 +361,9 @@ SkySightRequest::HasPendingTileDownloads() const noexcept
 void
 SkySightRequest::Configure(std::string_view new_email, std::string_view new_password)
 {
+  if (shutting_down)
+    return;
+
   email = std::string{new_email};
   password = std::string{new_password};
   api_key.clear();
@@ -408,6 +421,9 @@ SkySightRequest::RequeueFileJob(FileJob &job, time_t ready_at) noexcept
 bool
 SkySightRequest::Poll() noexcept
 {
+  if (shutting_down)
+    return false;
+
   TryPumpQueue();
 
   if (throttle_until == 0 && throttle_resume_notification_pending) {
@@ -421,6 +437,9 @@ SkySightRequest::Poll() noexcept
 void
 SkySightRequest::PumpQueue()
 {
+  if (shutting_down)
+    return;
+
   CleanupFinishedJobs();
 
   const auto now = std::time(nullptr);
@@ -508,7 +527,7 @@ SkySightRequest::TryPumpQueue() noexcept
 void
 SkySightRequest::EnsureLoggedIn()
 {
-  if (!HasCredentials() || login_running || IsLoggedIn())
+  if (shutting_down || !HasCredentials() || login_running || IsLoggedIn())
     return;
 
   const auto now = std::time(nullptr);
@@ -616,6 +635,9 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
 void
 SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires_auth)
 {
+  if (shutting_down)
+    return;
+
   PumpQueue();
 
   const std::string key{filename.c_str()};
@@ -649,6 +671,9 @@ SkySightRequest::DownloadDatafile(std::string_view layer_id,
                                   Path filename,
                                   bool high_priority)
 {
+  if (shutting_down)
+    return DownloadDatafileResult::Duplicate;
+
   PumpQueue();
 
   const std::string key{filename.c_str()};
@@ -714,7 +739,7 @@ SkySightRequest::StartAuthenticatedJsonRequest(
   std::function<void(std::exception_ptr)> on_error,
   std::function<void()> before_start)
 {
-  if (running)
+  if (shutting_down || running)
     return false;
 
   if (!HasCredentials())
