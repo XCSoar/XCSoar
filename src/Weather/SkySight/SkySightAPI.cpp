@@ -68,6 +68,19 @@ ParseFloat(const boost::json::value &value)
   return 0;
 }
 
+[[nodiscard]] bool
+TryGetJsonString(const boost::json::object &entry, const char *key,
+                 std::string_view &out) noexcept
+{
+  const auto *value = entry.if_contains(key);
+  if (value == nullptr || !value->is_string())
+    return false;
+
+  const auto &text = value->as_string();
+  out = {text.c_str(), text.size()};
+  return true;
+}
+
 void
 ParseLegend(const boost::json::object &entry, SkySight::Layer &layer)
 {
@@ -253,24 +266,17 @@ SkySightAPI::ParseRegions(const boost::json::value &value,
         continue;
 
       std::string name{id};
-      if (const auto *name_value = entry.if_contains("name");
-          name_value != nullptr && name_value->is_string()) {
-        const std::string_view text{name_value->as_string().c_str(),
-                                    name_value->as_string().size()};
+      if (std::string_view text; TryGetJsonString(entry, "name", text)) {
         if (ValidateUTF8(text))
           name = text;
       }
 
       std::string projection;
-      if (const auto *projection_value = entry.if_contains("projection");
-          projection_value != nullptr && projection_value->is_string())
-        projection = projection_value->as_string().c_str();
+      if (std::string_view text; TryGetJsonString(entry, "projection", text))
+        projection = text;
 
       std::string tz;
-      if (const auto *tz_value = entry.if_contains("tz");
-          tz_value != nullptr && tz_value->is_string()) {
-        const std::string_view text{tz_value->as_string().c_str(),
-                                    tz_value->as_string().size()};
+      if (std::string_view text; TryGetJsonString(entry, "tz", text)) {
         if (ValidateUTF8(text))
           tz = text;
       }
@@ -373,29 +379,19 @@ SkySightAPI::ParseLayers(const boost::json::value &value,
         copy_runtime_state(*layer);
       }
 
-      if (const auto *name = entry.if_contains("name");
-          name != nullptr && name->is_string()) {
-        const std::string_view text{name->as_string().c_str(),
-                                    name->as_string().size()};
+      if (std::string_view text; TryGetJsonString(entry, "name", text))
         layer->name = ValidateUTF8(text) ? std::string{text} : layer->id;
-      }
 
-      if (const auto *description = entry.if_contains("description");
-          description != nullptr && description->is_string()) {
-        const std::string_view text{description->as_string().c_str(),
-                                    description->as_string().size()};
+      if (std::string_view text; TryGetJsonString(entry, "description", text))
         layer->description = ValidateUTF8(text)
           ? std::string{text}
           : std::string{};
-      }
 
-      if (const auto *projection = entry.if_contains("projection");
-          projection != nullptr && projection->is_string())
-        layer->projection = projection->as_string().c_str();
+      if (std::string_view text; TryGetJsonString(entry, "projection", text))
+        layer->projection = text;
 
-      if (const auto *data_type = entry.if_contains("data_type");
-          data_type != nullptr && data_type->is_string())
-        layer->data_type = data_type->as_string().c_str();
+      if (std::string_view text; TryGetJsonString(entry, "data_type", text))
+        layer->data_type = text;
 
       ParseLegend(entry, *layer);
     }
