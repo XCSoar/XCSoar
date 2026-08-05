@@ -46,6 +46,9 @@ Version 7.45 - not yet released
 * WeGlide
   - fix crash when opening the aircraft type picker without a network
     connection
+* weather
+  - Offer weather controls (map-bottom cursor bar) on non-OpenGL builds
+    as well, so RASP pages can use them on memory-canvas and Kobo
 * ui
   - Fix zoom buttons still appearing when "Show Zoom button" is off
     while Menu or Quick Menu is on #2830

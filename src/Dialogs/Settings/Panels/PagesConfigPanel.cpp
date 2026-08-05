@@ -417,9 +417,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   static constexpr StaticEnumChoice bottom_list[] = {
     { PageLayout::Bottom::NOTHING, N_("Nothing") },
     { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
-#if defined(HAVE_EDL) || defined(ENABLE_OPENGL)
+    /* Always available: RASP does not require OpenGL, and the shared
+       weather cursor bar works for RASP on memory canvas / Kobo. */
     { PageLayout::Bottom::WEATHER_CONTROLS, N_("Weather controls") },
-#endif
     nullptr
   };
   AddEnum(_("Bottom area"),
