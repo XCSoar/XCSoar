@@ -6,6 +6,7 @@ from build.autotools import AutotoolsProject
 from build.meson import MesonProject
 from build.cmake import CmakeProject, configure as configure_cmake
 from build.openssl import OpenSSLProject
+from build.angle import AngleProject
 from build.gcc import BinutilsProject, GccProject, GccBootstrapProject
 from build.linux import SabotageLinuxHeadersProject
 from build.lua import LuaProject
@@ -492,6 +493,8 @@ sdl2 = CmakeProject(
     ],
     patches=abspath("lib/sdl2/patches"),
 )
+
+angle = AngleProject()
 
 lua = LuaProject(
     (

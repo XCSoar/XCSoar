@@ -40,6 +40,38 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 from build.libs import *
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
+use_angle_env = os.environ.get('USE_ANGLE', 'auto')
+if use_angle_env == 'auto':
+    use_angle = toolchain.is_darwin and not toolchain.is_target_ios
+else:
+    use_angle = (use_angle_env == 'y')
+
+thirdparty_projects = {
+    'binutils': binutils,
+    'linux-headers': linux_headers,
+    'gcc-bootstrap': gcc_bootstrap,
+    'musl': musl,
+    'gcc': gcc,
+    'zlib': zlib,
+    'fmt': libfmt,
+    'libsodium': libsodium,
+    'freetype': freetype,
+    'openssl': openssl,
+    'c-ares': cares,
+    'curl': curl,
+    'libpng': libpng,
+    'libjpeg': libjpeg,
+    'lua': lua,
+    'sqlite': sqlite3,
+    'proj': proj,
+    'libtiff': libtiff,
+    'libgeotiff': libgeotiff,
+    'libsalsa': libsalsa,
+    'libusb': libusb,
+    'simple-usbmodeswitch': simple_usbmodeswitch,
+    'sdl2': sdl2,
+    'angle': angle,
+}
 
 if toolchain.is_windows:
     thirdparty_libs = [
@@ -50,6 +82,10 @@ if toolchain.is_windows:
         curl,
         lua,
     ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
 
     # Add SDL2, sqlite3, and their dependencies for OpenGL/ANGLE builds
     if enable_sdl:
@@ -76,6 +112,12 @@ elif toolchain.is_darwin:
         cares,
         curl,
         lua,
+    ]
+    if use_angle:
+        thirdparty_libs += [
+            angle,
+        ]
+    thirdparty_libs += [
         sdl2
     ]
     if geotiff_enabled:
@@ -123,6 +165,35 @@ elif '-kobo-linux-' in host_triplet:
     ]
 else:
     raise RuntimeError('Unrecognized target')
+
+package_selection = os.environ.get('THIRDPARTY_PACKAGES', 'auto')
+if package_selection != 'auto':
+    selected_names = {
+        name.strip()
+        for name in package_selection.split(',')
+        if name.strip()
+    }
+    unknown_names = selected_names - thirdparty_projects.keys()
+    if unknown_names:
+        raise RuntimeError(
+            'Unknown third-party package(s): ' + ', '.join(sorted(unknown_names))
+        )
+
+    available_projects = set(thirdparty_libs)
+    unsupported_names = {
+        name for name in selected_names
+        if thirdparty_projects[name] not in available_projects
+    }
+    if unsupported_names:
+        raise RuntimeError(
+            'Third-party package(s) unavailable for this target: ' +
+            ', '.join(sorted(unsupported_names))
+        )
+
+    selected_projects = {thirdparty_projects[name] for name in selected_names}
+    thirdparty_libs = [
+        project for project in thirdparty_libs if project in selected_projects
+    ]
 
 # build the third-party libraries
 for x in thirdparty_libs:
