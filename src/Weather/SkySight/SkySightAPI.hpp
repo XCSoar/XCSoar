@@ -50,6 +50,9 @@ public:
   SkySightAPI(SkySightClient &_owner, CurlGlobal &curl, Path _cache_path);
   ~SkySightAPI();
 
+  /** Cancel downloads and decode work before UI/curl teardown. */
+  void BeginShutdown() noexcept;
+
   void Configure(std::string_view email, std::string_view password,
                  std::string_view new_region);
 
@@ -159,6 +162,7 @@ private:
   bool layers_loaded = false;
   time_t last_layers_request = 0;
   time_t last_layers_refresh = 0;
+  bool shutting_down = false;
   [[gnu::pure]] AllocatedPath GetRegionsCachePath() const noexcept;
   [[gnu::pure]] AllocatedPath GetLayersCachePath() const noexcept;
   void LoadCachedRegions() noexcept;
