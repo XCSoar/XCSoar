@@ -61,10 +61,7 @@ public:
     if (skysight->NumSelectedLayers() == 0) {
       row_renderer.DrawFirstRow(canvas, rc, "SkySight");
 
-      if (!skysight->HasCredentials())
-        row_renderer.DrawSecondRow(canvas, rc,
-                                   _("Configure SkySight credentials in Weather settings."));
-      else if (skysight->IsThrottled())
+      if (skysight->IsThrottled())
         row_renderer.DrawSecondRow(canvas, rc,
                                    _("SkySight API rate-limited. Retrying shortly."));
       else if (!skysight->HasForecastLayers())
@@ -357,13 +354,6 @@ private:
   void SelectClicked() {
     if (skysight == nullptr)
       return;
-
-    if (!skysight->HasCredentials()) {
-      ShowMessageBox(
-        _("Configure your SkySight credentials in Weather settings before loading the full SkySight catalog."),
-        "SkySight", MB_OK);
-      return;
-    }
 
     if (!skysight->HasForecastLayers()) {
       skysight->RefreshCatalog();
