@@ -1,0 +1,19 @@
+Index: SDL2-2.30.0/src/video/uikit/SDL_uikitviewcontroller.m
+===================================================================
+--- SDL2-2.30.0.orig/src/video/uikit/SDL_uikitviewcontroller.m
++++ SDL2-2.30.0/src/video/uikit/SDL_uikitviewcontroller.m
+@@ -55,10 +55,12 @@ SDL_HideHomeIndicatorHintChanged(void *u
+ #pragma clang diagnostic push
+ #pragma clang diagnostic ignored "-Wunguarded-availability-new"
+         if ([viewcontroller respondsToSelector:@selector(setNeedsUpdateOfHomeIndicatorAutoHidden)]) {
+-            [viewcontroller setNeedsUpdateOfHomeIndicatorAutoHidden];
+-            [viewcontroller setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
++#ifdef __IPHONE_11_0
++            [viewcontroller performSelectorOnMainThread:@selector(setNeedsUpdateOfHomeIndicatorAutoHidden) withObject:nil waitUntilDone:NO];
++            [viewcontroller performSelectorOnMainThread:@selector(setNeedsUpdateOfScreenEdgesDeferringSystemGestures) withObject:nil waitUntilDone:NO];
++#endif
+         }
+ #pragma clang diagnostic pop
+     }
+ }
+ #endif

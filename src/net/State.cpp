@@ -55,7 +55,9 @@ GetNetState()
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
+#ifdef HAVE_APPLE_NETWORK_FRAMEWORK
 #include <Network/Network.h>
+#endif
 #endif
 
 #if defined(_WIN32)
@@ -70,7 +72,7 @@ static NetState cached_net_state = NetState::UNKNOWN;
 static bool net_state_refresh_pending = false;
 static PeriodClock last_update;
 
-#if defined(__APPLE__)
+#if defined(__APPLE__) && defined(HAVE_APPLE_NETWORK_FRAMEWORK)
 static std::once_flag nw_path_monitor_once;
 static std::atomic<NetState> nw_path_monitor_state{NetState::UNKNOWN};
 static std::atomic<bool> nw_path_monitor_ready{false};
@@ -197,7 +199,7 @@ PollNetState() noexcept
   BOOL connected = InternetGetConnectedState(&flags, 0);
   return connected ? NetState::CONNECTED : NetState::DISCONNECTED;
 
-#elif defined(__APPLE__)
+#elif defined(__APPLE__) && defined(HAVE_APPLE_NETWORK_FRAMEWORK)
   if (@available(iOS 12.0, macOS 10.14, *)) {
     std::call_once(nw_path_monitor_once, InitPathMonitor);
     if (!nw_path_monitor_ready.load(std::memory_order_acquire))
@@ -206,6 +208,9 @@ PollNetState() noexcept
     return nw_path_monitor_state.load(std::memory_order_acquire);
   }
 
+  return NetState::UNKNOWN;
+
+#elif defined(__APPLE__)
   return NetState::UNKNOWN;
 
 #else

@@ -53,6 +53,7 @@ class OpenSSLProject(MakeProject):
 
             # Apple
             'x86_64-apple-darwin': 'darwin64-x86_64-cc',
+            'armv7-apple-darwin': 'ios-cross',
             'aarch64-apple-darwin': 'darwin64-arm64-cc',
         }
 

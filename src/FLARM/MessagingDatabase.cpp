@@ -94,7 +94,7 @@ FlarmMessagingDatabase::Update(const MessagingRecord &record) noexcept
 std::optional<MessagingRecord>
 FlarmMessagingDatabase::FindRecordById(FlarmId id) const noexcept
 {
-  const std::shared_lock<SharedMutex> lock(mutex);
+  const SharedLock lock(mutex);
 
   auto i = map.find(id);
   if (i == map.end())
@@ -130,14 +130,14 @@ FlarmMessagingDatabase::ComputeHashLocked() const noexcept
 size_t
 FlarmMessagingDatabase::ComputeHash() const noexcept
 {
-  const std::shared_lock<SharedMutex> lock(mutex);
+  const SharedLock lock(mutex);
   return ComputeHashLocked();
 }
 
 bool
 FlarmMessagingDatabase::HasUpdates() const noexcept
 {
-  const std::shared_lock<SharedMutex> lock(mutex);
+  const SharedLock lock(mutex);
   return ComputeHashLocked() != last_saved_hash;
 }
 

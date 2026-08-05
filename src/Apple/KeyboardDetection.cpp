@@ -7,14 +7,18 @@
 #include <TargetConditionals.h>
 #if TARGET_OS_IPHONE
 
+#ifdef __IPHONE_14_0
 #import <GameController/GCKeyboard.h>
+#endif
 
 [[nodiscard]]
 bool
 IsHardwareKeyboardConnected() noexcept
 {
+#ifdef __IPHONE_14_0
   if (@available(iOS 14.0, *))
     return GCKeyboard.coalescedKeyboard != nil;
+#endif
 
   return false;
 }

@@ -14,6 +14,10 @@ def __write_cmake_compiler(f: TextIO, language: str, compiler: str) -> None:
         compiler = s[1]
     print(f'set(CMAKE_{language}_COMPILER {compiler})', file=f)
 
+def __get_osx_sysroot(cflags: str) -> Optional[str]:
+    m = re.search(r'-isysroot +(\S+)', cflags)
+    return m.group(1) if m else None
+
 def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bool, cmake_system_name: str) -> None:
     cppflags = toolchain.cppflags
     if no_isystem:
@@ -43,16 +47,26 @@ set(CMAKE_AR {toolchain.ar})
 set(CMAKE_RANLIB {toolchain.ranlib})
 """)
 
+    if cmake_system_name == 'iOS':
+        arch = toolchain.host_triplet.split('-', 1)[0]
+        if arch == 'aarch64':
+            arch = 'arm64'
+
+        sysroot = __get_osx_sysroot(toolchain.cflags)
+        if sysroot:
+            print(f'set(CMAKE_OSX_SYSROOT {sysroot})', file=f)
+
+        print(f'set(CMAKE_OSX_ARCHITECTURES {arch})', file=f)
+        print('set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)', file=f)
+
     if cmake_system_name == 'Darwin':
         # On macOS, cmake forcibly adds an "-isysroot" flag even if
         # one is already present in the flags variable; this breaks
         # cross-compiling for iOS, and can be worked around by setting
         # the CMAKE_OSX_SYSROOT variable
         # (https://cmake.org/cmake/help/latest/variable/CMAKE_OSX_SYSROOT.html).
-        m = re.search(r'-isysroot +(\S+)', toolchain.cflags)
-        if m:
-            sysroot = m.group(1)
-
+        sysroot = __get_osx_sysroot(toolchain.cflags)
+        if sysroot:
             print(f'set(CMAKE_OSX_SYSROOT {sysroot})', file=f)
 
             # search libraries and headers only in the sysroot, not on
@@ -117,11 +131,7 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
 
         cmake_system_name = 'Linux'
         if toolchain.is_darwin:
-            cmake_system_name = 'Darwin'
-            if toolchain.is_target_ios and 'SDL2' in src:
-                # SDL2 needs CMAKE_SYSTEM_NAME set to iOS, otherwise it will build for macOS
-                # but OpenSSL needs CMAKE_SYSTEM_NAME set to Darwin, otherwise it will fail to build
-                cmake_system_name = 'iOS'
+            cmake_system_name = 'iOS' if toolchain.is_target_ios else 'Darwin'
         elif toolchain.is_windows:
             cmake_system_name = 'Windows'
 
@@ -144,6 +154,7 @@ class CmakeProject(Project):
                  configure_args: Optional[list[str]]=None,
                  windows_configure_args: Optional[list[str]]=None,
                  android_configure_args: Optional[list[str]]=None,
+                 ios_configure_args: Optional[list[str]]=None,
                  darwin_configure_args: Optional[list[str]]=None,
                  env: Optional[Mapping[str, str]]=None,
                  **kwargs):
@@ -151,6 +162,7 @@ class CmakeProject(Project):
         self.configure_args = configure_args or []
         self.windows_configure_args = windows_configure_args or []
         self.android_configure_args = android_configure_args or []
+        self.ios_configure_args = ios_configure_args or []
         self.darwin_configure_args = darwin_configure_args or []
         self.env = env
 
@@ -162,6 +174,8 @@ class CmakeProject(Project):
             configure_args = configure_args + self.windows_configure_args
         if toolchain.is_android:
             configure_args = configure_args + self.android_configure_args
+        if toolchain.is_target_ios:
+            configure_args = configure_args + self.ios_configure_args
         if toolchain.is_darwin:
             configure_args = configure_args + self.darwin_configure_args
         configure(toolchain, src, build, configure_args, self.env)

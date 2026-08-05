@@ -270,10 +270,15 @@ curl = CmakeProject(
     android_configure_args=[
         "-DENABLE_ARES=OFF",  # Disable c-ares on Android - use system getaddrinfo() instead
     ],
+    ios_configure_args=[
+        "-DENABLE_ARES=OFF",  # c-ares does not read iOS SystemConfiguration DNS
+    ],
     # Darwin/iOS: use SecureTransport for SSL
     darwin_configure_args=[
         "-DCURL_USE_OPENSSL=OFF",
         "-DCURL_USE_SECTRANSP=ON",
+        "-DUSE_LIBIDN2=OFF",
+        "-DHAVE_LIBSOCKET=0",
     ],
     patches=abspath("lib/curl/patches"),
 )
@@ -451,6 +456,7 @@ sdl2 = CmakeProject(
     [
         "-DBUILD_SHARED_LIBS=OFF",
         "-DSDL_TEST=OFF",
+        "-DSDL_CCACHE=OFF",
         # subsystems
         "-DSDL_RENDER=OFF",
         "-DSDL_JOYSTICK=ON", # won't compile for iOS without SDL_JOYSTICK
