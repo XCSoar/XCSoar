@@ -8,6 +8,11 @@ Version 7.45 - not yet released
   - fix LS-8 polar max.\ cruise speed: the default stored 190 (km/h) in
     the m/s field; default and built-in LS-8 polars now use 52.78 m/s
     #1134
+* logger
+  - continue the previous IGC file after a crash or power cut, so one flight
+    is recorded as one file instead of one file per restart
+  - rebuild task progress, flight time, trail and statistics from that file
+    when the flight resumes, behind a cancellable progress dialog
 * tracking
   - Do not resolve SkyLines or XCSoar Cloud hosts while the network link is
     down, avoiding repeated DNS timeout errors in the log #1750
