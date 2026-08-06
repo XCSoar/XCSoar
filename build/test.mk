@@ -964,6 +964,7 @@ $(eval $(call link-program,TestRadixTree,TEST_RADIX_TREE))
 TEST_LOGGER_SOURCES = \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
+	$(SRC)/IGC/IGCRepair.cpp \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
