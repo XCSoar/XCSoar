@@ -109,6 +109,7 @@ TEST_NAMES = \
 	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
+	TestCutSession \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
 	TestInputConfig \
@@ -227,6 +228,14 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
+
+TEST_CUT_SESSION_SOURCES = \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/CutSession.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCutSession.cpp
+TEST_CUT_SESSION_DEPENDS = IO OS TIME MATH UTIL
+$(eval $(call link-program,TestCutSession,TEST_CUT_SESSION))
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
