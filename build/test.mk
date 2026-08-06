@@ -109,6 +109,8 @@ TEST_NAMES = \
 	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
+	TestCutSession \
+	TestFlightResume \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
 	TestInputConfig \
@@ -227,6 +229,14 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
+
+TEST_CUT_SESSION_SOURCES = \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/CutSession.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCutSession.cpp
+TEST_CUT_SESSION_DEPENDS = IO OS TIME MATH UTIL
+$(eval $(call link-program,TestCutSession,TEST_CUT_SESSION))
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
@@ -955,6 +965,7 @@ $(eval $(call link-program,TestRadixTree,TEST_RADIX_TREE))
 TEST_LOGGER_SOURCES = \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
+	$(SRC)/IGC/IGCRepair.cpp \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
@@ -1909,9 +1920,90 @@ RUN_TASK_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
 	$(TEST_SRC_DIR)/RunTask.cpp
 RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINTFILE GLIDE GEO MATH UTIL IO TIME
 $(eval $(call link-program,RunTask,RUN_TASK))
+
+TEST_FLIGHT_RESUME_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/GlideComputer.cpp \
+	$(SRC)/Computer/GlideComputerBlackboard.cpp \
+	$(SRC)/Computer/GlideComputerInterface.cpp \
+	$(SRC)/Computer/GlideComputerAirData.cpp \
+	$(SRC)/Computer/TaskComputer.cpp \
+	$(SRC)/Computer/StatsComputer.cpp \
+	$(SRC)/Computer/LogComputer.cpp \
+	$(SRC)/Computer/WarningComputer.cpp \
+	$(SRC)/Computer/RouteComputer.cpp \
+	$(SRC)/Computer/TraceComputer.cpp \
+	$(SRC)/Computer/ContestComputer.cpp \
+	$(SRC)/Computer/CuComputer.cpp \
+	$(SRC)/Computer/ThermalLocator.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
+	$(SRC)/Computer/ThermalRecency.cpp \
+	$(SRC)/Computer/AutoQNH.cpp \
+	$(SRC)/Computer/AverageVarioComputer.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Computer/GlideRatioCalculator.cpp \
+	$(SRC)/Computer/GlideRatioComputer.cpp \
+	$(SRC)/Computer/LiftDatabaseComputer.cpp \
+	$(SRC)/Computer/WaveComputer.cpp \
+	$(SRC)/Computer/ThermalBandComputer.cpp \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/Store.cpp \
+	$(SRC)/Computer/Wind/MeasurementList.cpp \
+	$(SRC)/Computer/Wind/WindEKF.cpp \
+	$(SRC)/Computer/Wind/WindEKFGlue.cpp \
+	$(SRC)/Computer/Wind/Computer.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitor.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitors.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorGlideTerrain.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorLandableReachable.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorSunset.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorWind.cpp \
+	$(SRC)/Computer/ConditionMonitor/MoreConditionMonitors.cpp \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/Task/ProtectedTaskManager.cpp \
+	$(SRC)/Task/ProtectedRoutePlanner.cpp \
+	$(SRC)/Task/RoutePlannerGlue.cpp \
+	$(SRC)/Task/DefaultTask.cpp \
+	$(SRC)/Atmosphere/CuSonde.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/Airspace/ActivePredicate.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Computer/ConditionMonitor/AirspaceEnterMonitor.cpp \
+	$(SRC)/Computer/Settings.cpp \
+	$(SRC)/FlightStatistics.cpp \
+	$(SRC)/Math/SunEphemeris.cpp \
+	$(SRC)/TeamCode/TeamCode.cpp \
+	$(SRC)/TeamCode/Settings.cpp \
+	$(SRC)/Logger/Settings.cpp \
+	$(SRC)/Computer/Wind/Settings.cpp \
+	$(SRC)/PageState.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
+	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Interface.cpp \
+	$(SRC)/UIState.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlightResume.cpp
+TEST_FLIGHT_RESUME_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINTFILE ROUTE WAYPOINT GLIDE CONTEST AIRSPACE GEO MATH UTIL IO OS TIME UNITS
+$(eval $(call link-program,TestFlightResume,TEST_FLIGHT_RESUME))
 
 
 RUN_TRAIL_RENDERER_STRESS_SOURCES = \

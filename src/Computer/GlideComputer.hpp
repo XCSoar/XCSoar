@@ -37,6 +37,8 @@ class GlideComputer : public GlideComputerBlackboard
   ConditionMonitors condition_monitors;
   MoreConditionMonitors idle_condition_monitors;
 
+  GlideComputerTaskEvents &task_events;
+
   const Waypoints &waypoints;
 
   Retrospective retrospective;
@@ -60,6 +62,31 @@ public:
                 GlideComputerTaskEvents& events);
 
   void SetTerrain(RasterTerrain *_terrain);
+
+  /**
+   * Silence the condition monitors, for the duration of a Resume sweep.
+   *
+   * Without this the six monitors fire for every replayed fix, and the pilot
+   * is buried in hours of stale notifications the moment the progress dialog
+   * closes.
+   */
+  void SetConditionMonitorsSuppressed(bool suppressed) noexcept {
+    condition_monitors.SetSuppressed(suppressed);
+  }
+
+  /**
+   * Stop anything reaching the pilot's IGC file, for the duration of a Resume
+   * sweep.  See LogComputer::SetSuppressed().
+   */
+  void SetLoggingSuppressed(bool suppressed) noexcept {
+    log_computer.SetSuppressed(suppressed);
+  }
+
+  /**
+   * Stop announcing task starts, turnpoint advances and finishes, for the
+   * duration of a Resume sweep.  See GlideComputerTaskEvents::SetSuppressed().
+   */
+  void SetTaskEventsSuppressed(bool suppressed) noexcept;
 
   void SetLogger(Logger *logger) {
     log_computer.SetLogger(logger);
@@ -92,6 +119,44 @@ public:
    * Process slow calculations. Called by the CalculationThread.
    */
   void ProcessIdle(bool exhaustive=false);
+
+  /**
+   * The part of ProcessIdle() that a Resume sweep is allowed to run.
+   *
+   * A separate entry point rather than a flag on ProcessIdle(), because a
+   * flag would leave LogComputer::Run() *reachable* and rely on every future
+   * edit respecting it.  If that call ever ran during a sweep, every
+   * replayed fix would be written into the pilot's IGC file, duplicating the
+   * whole Flight in the one artefact that matters for scoring -- and no test
+   * would catch it unless it inspected the file.  An entry point that does
+   * not contain the call cannot regress that way.
+   *
+   * Also omits the airspace warning computer, whose replayed hours of stale
+   * warnings the pilot must never see.
+   *
+   * @param solve_contest also solve the contest, which is worth doing once at
+   * the end of a sweep rather than for every replayed fix
+   */
+  void ProcessIdleForReplay(bool solve_contest=false);
+
+  /**
+   * Undo a Resume reconstruction that turned out to belong to a Flight that
+   * has already ended.
+   *
+   * ResetFlight() is the only call that reaches everything a sweep rebuilt:
+   * task progress lives in the task engine rather than in DerivedInfo, along
+   * with the trace, contest, statistics and retrospective.  But it also wipes
+   * the live takeoff that triggered the Resume in the first place, so the
+   * flying state captured before the sweep is put back afterwards.
+   *
+   * The flying computer's own counters are reset and cannot be restored -- it
+   * exposes no injection API -- but the aircraft is airborne and moving, and
+   * FlyingComputer::Moving() re-arms the moving clock before the flying state
+   * is re-evaluated, so the first live fix repairs that.
+   *
+   * @param live_flight the flying state as it was before the sweep
+   */
+  void RejectReconstruction(const FlyingState &live_flight);
 
   void ProcessExhaustive() {
     ProcessIdle(true);

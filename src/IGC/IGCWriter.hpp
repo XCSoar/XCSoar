@@ -18,20 +18,40 @@ struct NMEAInfo;
 struct GeoPoint;
 
 class IGCWriter {
+  /* declared before `file` so that, when appending, the existing records are
+     replayed through the hash before the output stream is opened.  On
+     Windows FileOutputStream takes the file exclusively, so a reader cannot
+     open it afterwards. */
+  GRecord grecord;
+
   FileOutputStream file;
   BufferedOutputStream buffered;
-
-  GRecord grecord;
 
   IGCFix fix;
 
   std::array<char, 255> buffer;
 
 public:
+  enum class Mode {
+    /** Start a new IGC file, replacing any existing one. */
+    CREATE,
+
+    /**
+     * Continue an existing IGC file, so that one Flight remains one file
+     * across a crash or power cut.
+     *
+     * The caller must not write a header or a declaration: both are already
+     * in the file.  The running G-record hash is restored from what is
+     * there, so the signature written at the end covers the whole Flight.
+     */
+    APPEND,
+  };
+
   /**
-   * Throws on error.
+   * Throws on error, including when #Mode::APPEND is given a file that is
+   * not fit to append to.
    */
-  explicit IGCWriter(Path path);
+  explicit IGCWriter(Path path, Mode mode = Mode::CREATE);
 
   void Flush() {
     buffered.Flush();
