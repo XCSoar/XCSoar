@@ -279,6 +279,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/CutSession.cpp \
+	$(SRC)/IGC/IGCRepair.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/NmeaReplay.cpp \
 	$(SRC)/Replay/DemoReplay.cpp \
