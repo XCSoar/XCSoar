@@ -16,6 +16,7 @@ class AbstractReplay;
 class CatmullRomInterpolator;
 class MergeThread;
 class CalculationThread;
+class OperationEnvironment;
 class Error;
 
 class Replay final
@@ -78,6 +79,15 @@ public:
 private:
   bool Update();
 
+private:
+  /**
+   * Open the file and reset the replay state, without scheduling the paced
+   * timer.
+   *
+   * Throws std::runtime_errror on error.
+   */
+  void Open(Path _path);
+
 public:
   void Stop();
 
@@ -85,6 +95,17 @@ public:
    * Throws std::runtime_errror on error.
    */
   void Start(Path _path);
+
+  /**
+   * Like Start(), but for a Resume sweep, which consumes the whole file at
+   * once and so wants no paced timer running alongside it.
+   *
+   * Call on the UI thread: UI::Timer is not thread-safe, and Stop() cancels
+   * one.
+   *
+   * Throws std::runtime_errror on error.
+   */
+  void StartSweep(Path _path);
 
   Path GetFilename() const {
     return path;
@@ -128,6 +149,24 @@ public:
    */
   unsigned ProcessAllFixes(MergeThread &merge_thread,
                            CalculationThread &calc_thread);
+
+  /**
+   * Like ProcessAllFixes(), but reports progress and stops early when \a env
+   * is cancelled, for the Resume sweep behind its progress dialog.
+   *
+   * Unlike ProcessAllFixes() this touches no UI::Timer, so it is safe to run
+   * on a worker thread -- provided the caller opened the file with
+   * StartSweep() on the UI thread, so no paced replay is running.
+   *
+   * \a merge_thread and \a calc_thread must be suspended.
+   *
+   * @param total the expected number of fixes, for the progress range
+   * @return the number of fixes processed, which is fewer than \a total if
+   * the sweep was cancelled -- the partial result is kept either way
+   */
+  unsigned SweepAllFixes(MergeThread &merge_thread,
+                         CalculationThread &calc_thread,
+                         OperationEnvironment &env, unsigned total);
 
 private:
   void OnTimer();
