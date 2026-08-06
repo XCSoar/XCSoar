@@ -13,6 +13,25 @@
 #include <cassert>
 
 void
+HeightMatrix::FillGradient(UnsignedPoint2D _size,
+                           int16_t min_h, int16_t max_h,
+                           bool vertical) noexcept
+{
+  SetSize(_size);
+
+  auto *p = data.data();
+  const int range = max_h - min_h;
+  const unsigned n = vertical ? _size.y : _size.x;
+  const int divisor = n > 1 ? (int)(n - 1) : 1;
+
+  for (unsigned y = 0; y < _size.y; ++y)
+    for (unsigned x = 0; x < _size.x; ++x)
+      *p++ = TerrainHeight(
+        (int16_t)(min_h + range *
+                  (int)(vertical ? y : x) / divisor));
+}
+
+void
 HeightMatrix::SetSize(std::size_t _size) noexcept
 {
   assert(_size > 0);
