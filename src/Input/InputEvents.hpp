@@ -206,6 +206,7 @@ void eventBeep(const char *misc);
 void eventUserDisplayModeForce(const char *misc);
 void eventAirspaceDisplayMode(const char *misc);
 void eventAutoLogger(const char *misc);
+void eventResumeFlight(const char *misc);
 void eventGotoLookup(const char *misc);
 void eventAddWaypoint(const char *misc);
 void eventTraffic(const char *misc);
