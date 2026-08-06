@@ -21,6 +21,7 @@ GlideComputer::GlideComputer(const ComputerSettings &_settings,
    warning_computer(_settings.airspace.warnings, _airspace_database),
    task_computer(task, _airspace_database, &warning_computer.GetManager()),
    idle_condition_monitors(warning_computer.GetManager()),
+   task_events(events),
    waypoints(_way_points),
    retrospective(_way_points),
    team_code_ref_id(-1)
@@ -170,6 +171,43 @@ GlideComputer::ProcessIdle(bool exhaustive)
   // Calculate summary of flight
   if (basic.location_available)
     retrospective.UpdateSample(basic.location);
+}
+
+void
+GlideComputer::SetTaskEventsSuppressed(bool suppressed) noexcept
+{
+  task_events.SetSuppressed(suppressed);
+}
+
+void
+GlideComputer::ProcessIdleForReplay(bool solve_contest)
+{
+  const MoreData &basic = Basic();
+  DerivedInfo &calculated = SetCalculated();
+
+  /* rebuilds the barograph, climb history and task speed graphs; internally
+     throttled to one sample a minute, so calling it per replayed fix is
+     cheap */
+  stats_computer.DoLogging(basic, calculated);
+
+  if (solve_contest)
+    /* the contest trace was filled by TraceComputer during ProcessGPS; this
+       is what turns it into a result */
+    task_computer.ProcessIdle(basic, calculated, GetComputerSettings(), true);
+
+  // Calculate summary of flight
+  if (basic.location_available)
+    retrospective.UpdateSample(basic.location);
+}
+
+void
+GlideComputer::RejectReconstruction(const FlyingState &live_flight)
+{
+  ResetFlight(true);
+
+  /* same shape as RestoreFinish(): restore wholesale, then put the flying
+     state back to avoid confusing takeoff and landing detection */
+  SetCalculated().flight = live_flight;
 }
 
 bool
