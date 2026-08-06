@@ -1909,6 +1909,8 @@ RUN_TASK_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
 	$(TEST_SRC_DIR)/RunTask.cpp
 RUN_TASK_DEPENDS = $(DEBUG_REPLAY_DEPENDS) TASKFILE WAYPOINTFILE GLIDE GEO MATH UTIL IO TIME
 $(eval $(call link-program,RunTask,RUN_TASK))
