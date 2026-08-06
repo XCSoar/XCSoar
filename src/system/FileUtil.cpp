@@ -480,6 +480,35 @@ File::GetLastModification(Path path) noexcept
 }
 
 bool
+File::Truncate(Path path, uint64_t length) noexcept
+{
+  assert(path != nullptr);
+
+  if (length > GetSize(path))
+    /* both truncate() and SetEndOfFile() would extend the file instead */
+    return false;
+
+#ifdef HAVE_POSIX
+  return truncate(path.c_str(), (off_t)length) == 0;
+#else
+  HANDLE h = CreateFileW(UTF8ToWide(path.c_str()).c_str(),
+                         GENERIC_WRITE, 0, nullptr,
+                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (h == INVALID_HANDLE_VALUE)
+    return false;
+
+  LARGE_INTEGER li;
+  li.QuadPart = (LONGLONG)length;
+
+  const bool success = SetFilePointerEx(h, li, nullptr, FILE_BEGIN) &&
+    SetEndOfFile(h);
+
+  CloseHandle(h);
+  return success;
+#endif
+}
+
+bool
 File::Touch(Path path) noexcept
 {
 #ifdef HAVE_POSIX
