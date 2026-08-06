@@ -3,7 +3,9 @@
 
 #include "Logger/LoggerImpl.hpp"
 #include "Logger/Settings.hpp"
+#include "Language/Language.hpp"
 #include "LogFile.hpp"
+#include "Message.hpp"
 #include "LocalPath.hpp"
 #include "Repository/FileType.hpp"
 #include "Device/Declaration.hpp"
@@ -16,6 +18,7 @@
 #include "util/CharUtil.hxx"
 
 #include <algorithm>
+#include <utility>
 
 const struct LoggerImpl::PreTakeoffBuffer &
 LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
@@ -205,6 +208,32 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   const auto logs_path = LocalPath(GetFileTypeDefaultDir(FileType::IGC));
   Directory::CreateRecursive(logs_path);
 
+  /* the F-record counter restarts either way; when appending that merely
+     re-emits an F-record, which is harmless */
+  frecord.Reset();
+
+  /* consume the Resume handler's verdict; it applies to this Session only */
+  const AllocatedPath resume = std::exchange(resume_target, nullptr);
+  appending = false;
+
+  if (resume != nullptr) {
+    try {
+      filename = Path{resume.c_str()};
+      writer = std::make_unique<IGCWriter>(filename,
+                                           IGCWriter::Mode::APPEND);
+      appending = true;
+      LogFormat("Continuing Flight in %s", filename.c_str());
+      return true;
+    } catch (...) {
+      /* a file too damaged to continue costs the pilot their Resume, but it
+         must never cost them the rest of the Flight: fall through and start
+         a fresh one */
+      LogError(std::current_exception(), "Cannot continue previous file");
+      Message::AddMessage(_("Cannot continue previous flight log"));
+      writer.reset();
+    }
+  }
+
   const BrokenDate today = gps_info.date_time_utc.IsDatePlausible()
     ? gps_info.date_time_utc.GetDate()
     : BrokenDate::TodayUTC();
@@ -217,8 +246,6 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     if (!File::Exists(filename))
       break;  // file not exist, we'll use this name
   }
-
-  frecord.Reset();
 
   try {
     writer = std::make_unique<IGCWriter>(filename);
@@ -276,6 +303,12 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     return;
 
   simulator = gps_info.location_available && !gps_info.gps.real;
+
+  if (appending)
+    /* continuing an existing file: its header and declaration are already
+       there, and rewriting either would corrupt the record */
+    return;
+
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name, decl.copilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,

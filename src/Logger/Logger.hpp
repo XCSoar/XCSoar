@@ -26,6 +26,14 @@ public:
   [[gnu::pure]]
   bool IsLoggerActive() const noexcept;
 
+  /**
+   * Continue this file at the next StartLogger() instead of opening a new
+   * one.  Set only by the Resume handler, and only after it has validated
+   * the reconstruction: appending cannot be undone once two Flights share a
+   * file, so nothing is appended on an unvalidated guess.
+   */
+  void SetResumeTarget(Path path) noexcept;
+
   void GUIStartLogger(const NMEAInfo& gps_info,
                       const ComputerSettings& settings,
                       const ProtectedTaskManager *protected_task_manager,
