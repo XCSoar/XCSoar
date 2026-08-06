@@ -131,6 +131,10 @@ CalculationThread::ProcessReplayFix() noexcept
   glide_computer.Expire();
   glide_computer.ProcessGPS(true);
 
+  /* deliberately not ProcessIdle(): that one writes the fix into the pilot's
+     IGC file, which during a replay would duplicate the whole Flight */
+  glide_computer.ProcessIdleForReplay();
+
   {
     const std::lock_guard lock{device_blackboard.mutex};
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
