@@ -5,11 +5,14 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
+#include "Weather/Features.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+
+#include <string_view>
 
 enum ControlIndex {
 #ifdef HAVE_HTTP
@@ -24,7 +27,6 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
-  /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 };
@@ -33,7 +35,7 @@ void
 WeatherConfigPanel::Prepare(ContainerWindow &parent,
                             const PixelRect &rc) noexcept
 {
-#ifdef HAVE_HTTP
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 #endif
 
@@ -51,7 +53,7 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-#ifdef HAVE_HTTP
+#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
   auto &settings = CommonInterface::SetComputerSettings().weather;
 #endif
 
@@ -61,7 +63,6 @@ WeatherConfigPanel::Save(bool &_changed) noexcept
 #endif
 
   _changed |= changed;
-
   return true;
 }
 

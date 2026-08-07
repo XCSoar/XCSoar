@@ -96,6 +96,40 @@ TestPageLimitGuard()
 }
 
 static void
+TestApplySkySightOverlay()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  ok1(ApplyWeatherOverlayToPage(settings, 0, PageLayout::Overlay::SKYSIGHT,
+                                -1, "wind_925"));
+  ok1(settings.pages[0].overlay == PageLayout::Overlay::SKYSIGHT);
+  ok1(settings.pages[0].skysight_overlay == "wind_925");
+  ok1(settings.pages[0].skysight_time == PageLayout::SKYSIGHT_TIME_AUTO);
+  ok1(settings.pages[0].bottom == PageLayout::Bottom::WEATHER_CONTROLS);
+  ok1(settings.pages[0].rasp_field == -1);
+}
+
+static void
+TestReplaceSkySightPageLayer()
+{
+  PageSettings settings;
+  settings.SetDefaults();
+
+  ok1(!ApplyWeatherOverlayToPage(settings, settings.n_pages,
+                                 PageLayout::Overlay::SKYSIGHT,
+                                 -1, "thermal"));
+  ok1(ApplyWeatherOverlayToPage(settings, 0,
+                                PageLayout::Overlay::SKYSIGHT,
+                                -1, "wind"));
+  ok1(ApplyWeatherOverlayToPage(settings, 0,
+                                PageLayout::Overlay::SKYSIGHT,
+                                -1, "thermal"));
+  ok1(settings.pages[0].skysight_overlay == "thermal");
+  ok1(settings.pages[0].skysight_time == PageLayout::SKYSIGHT_TIME_AUTO);
+}
+
+static void
 TestNormaliseCursorValues()
 {
   auto page = PageLayout::Default();
@@ -182,16 +216,27 @@ TestAddPageFromDraftCopiesCursors()
       AddPageResult::SUCCESS);
   ok1(settings.pages[new_page_index].xctherm_layer == 2);
   ok1(settings.pages[new_page_index].xctherm_time == 15);
+
+  draft = PageLayout::Default();
+  ApplyWeatherOverlayToLayout(draft, PageLayout::Overlay::SKYSIGHT,
+                              -1, "wind_925");
+  draft.skysight_time = 1785542400;
+  ok1(AddWeatherOverlayPageFromDraft(settings, draft, new_page_index) ==
+      AddPageResult::SUCCESS);
+  ok1(settings.pages[new_page_index].skysight_overlay == "wind_925");
+  ok1(settings.pages[new_page_index].skysight_time == 1785542400);
 }
 
 int
 main()
 {
-  plan_tests(43 + 9);
+  plan_tests(43 + 9 + 6 + 5 + 3);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
   TestReplaceCurrentOverlay();
+  TestApplySkySightOverlay();
+  TestReplaceSkySightPageLayer();
   TestPageLimitGuard();
   TestNormaliseCursorValues();
   TestXCThermManualCursorDefaultsOnAdd();

@@ -16,7 +16,9 @@
 #include "Weather/EDL/StateController.hpp"
 #endif
 #ifdef HAVE_HTTP
+#include "DataGlobals.hpp"
 #include "Interface.hpp"
+#include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #endif
 
@@ -83,6 +85,22 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
       }
     }
 #endif
+    break;
+
+  case PageLayout::Overlay::SKYSIGHT:
+    builder.Append(" | SkySight");
+    if (!layout.skysight_overlay.empty()) {
+      const char *label = layout.skysight_overlay.c_str();
+#ifdef HAVE_HTTP
+      if (const auto skysight = DataGlobals::GetSkySight();
+          skysight != nullptr)
+        if (const auto *layer = skysight->GetSelectedLayer(label);
+            layer != nullptr)
+          label = layer->name.c_str();
+#endif
+      builder.Append(": ");
+      builder.Append(label);
+    }
     break;
 
   case PageLayout::Overlay::MAX:

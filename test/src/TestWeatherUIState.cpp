@@ -94,6 +94,5 @@ main()
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
-
   return exit_status();
 }

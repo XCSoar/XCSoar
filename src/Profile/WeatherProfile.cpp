@@ -20,6 +20,22 @@ namespace Profile {
 
 #endif
 
+#ifdef HAVE_HTTP
+
+namespace Profile {
+  static void Load(const ProfileMap &map, SkySightSettings &settings) {
+    if (!map.Get(ProfileKeys::SkySightEmail, settings.email))
+      map.Get(ProfileKeys::LegacySkySightEmail, settings.email);
+    if (!map.Get(ProfileKeys::SkySightPassword, settings.password))
+      map.Get(ProfileKeys::LegacySkySightPassword, settings.password);
+    if (!map.Get(ProfileKeys::SkySightRegion, settings.region))
+      map.Get(ProfileKeys::LegacySkySightRegion, settings.region);
+    map.Get(ProfileKeys::SkySightAutoUpdate, settings.auto_update);
+  }
+}
+
+#endif
+
 void
 Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 {
@@ -59,6 +75,10 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
   map.Get(ProfileKeys::XCThermWaveHeight, settings.xctherm.wave_height);
   map.Get(ProfileKeys::XCThermVerticalWindAGL,
           settings.xctherm.vertical_wind_agl);
-  /* download_span_hours is intentionally NOT persisted — it resets
+  /* download_span_hours is intentionally NOT persisted - it resets
      to the default (1 h) at every startup. */
+
+#ifdef HAVE_HTTP
+  Load(map, settings.skysight);
+#endif
 }

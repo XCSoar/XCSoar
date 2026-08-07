@@ -291,6 +291,15 @@ constexpr std::string_view PCMetUsername = "PCMetUsername";
 constexpr std::string_view PCMetPassword = "PCMetPassword";
 constexpr std::string_view PCMetFtpUsername = "PCMetFtpUsername";
 constexpr std::string_view PCMetFtpPassword = "PCMetFtpPassword";
+constexpr std::string_view SkySightEmail = "SkySightEmail";
+constexpr std::string_view SkySightPassword = "SkySightPassword";
+constexpr std::string_view SkySightRegion = "SkySightRegion";
+constexpr std::string_view SkySightSelectedLayers = "SkySightSelectedLayers";
+constexpr std::string_view LegacySkySightEmail = "SkysightEmail";
+constexpr std::string_view LegacySkySightPassword = "SkysightPassword";
+constexpr std::string_view LegacySkySightRegion = "SkysightRegion";
+constexpr std::string_view LegacySkySightSelectedLayers =
+  "SkysightSelectedLayers";
 
 constexpr std::string_view EnableThermalInformationMap = "EnableThermalInformationMap";
 
@@ -326,6 +335,7 @@ constexpr std::string_view MasterAudioVolume = "MasterAudioVolume";
 constexpr std::string_view RaspFile = "RaspFile";
 constexpr std::string_view RaspAutoUpdate = "RaspAutoUpdate";
 constexpr std::string_view EdlAutoUpdate = "EdlAutoUpdate";
+constexpr std::string_view SkySightAutoUpdate = "SkySightAutoUpdate";
 constexpr std::string_view XCThermAutoSwitch = "XCThermAutoSwitch";
 constexpr std::string_view XCThermEmail = "XCThermEmail";
 constexpr std::string_view XCThermPassword = "XCThermPassword";

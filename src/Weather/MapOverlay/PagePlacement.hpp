@@ -5,6 +5,8 @@
 
 #include "PageSettings.hpp"
 
+#include <string_view>
+
 namespace WeatherMapOverlay {
 
 enum class AddPageResult {
@@ -42,6 +44,11 @@ CopyWeatherOverlayCursors(PageLayout &dest,
     dest.xctherm_time = src.xctherm_time;
     break;
 
+  case PageLayout::Overlay::SKYSIGHT:
+    dest.skysight_overlay = src.skysight_overlay;
+    dest.skysight_time = src.skysight_time;
+    break;
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
@@ -53,7 +60,8 @@ CopyWeatherOverlayCursors(PageLayout &dest,
 static inline void
 ApplyWeatherOverlayToLayout(PageLayout &layout,
                             PageLayout::Overlay overlay,
-                            int rasp_field=-1) noexcept
+                            int rasp_field=-1,
+                            std::string_view skysight_layer_id={}) noexcept
 {
   if (!layout.IsDefined())
     layout = PageLayout::Default();
@@ -76,6 +84,11 @@ ApplyWeatherOverlayToLayout(PageLayout &layout,
     layout.xctherm_layer = PageLayout::XCTHERM_LAYER_AUTO;
     layout.xctherm_time = PageLayout::XCTHERM_TIME_AUTO;
   }
+  if (overlay == PageLayout::Overlay::SKYSIGHT)
+    layout.skysight_overlay = skysight_layer_id;
+  else
+    layout.skysight_overlay.clear();
+  layout.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
   layout.Normalise();
 }
 
@@ -83,12 +96,14 @@ static inline bool
 ApplyWeatherOverlayToPage(PageSettings &settings,
                           unsigned page_index,
                           PageLayout::Overlay overlay,
-                          int rasp_field=-1) noexcept
+                          int rasp_field=-1,
+                          std::string_view skysight_layer_id={}) noexcept
 {
   if (page_index >= settings.n_pages)
     return false;
 
-  ApplyWeatherOverlayToLayout(settings.pages[page_index], overlay, rasp_field);
+  ApplyWeatherOverlayToLayout(settings.pages[page_index], overlay, rasp_field,
+                              skysight_layer_id);
   return true;
 }
 
@@ -96,7 +111,8 @@ static inline AddPageResult
 AddWeatherOverlayPage(PageSettings &settings,
                       PageLayout::Overlay overlay,
                       unsigned &new_page_index,
-                      int rasp_field=-1) noexcept
+                      int rasp_field=-1,
+                      std::string_view skysight_layer_id={}) noexcept
 {
   if (settings.n_pages >= PageSettings::MAX_PAGES)
     return AddPageResult::PAGE_LIMIT_REACHED;
@@ -105,7 +121,7 @@ AddWeatherOverlayPage(PageSettings &settings,
   /* Always start from the default map+InfoBoxes layout. */
   settings.pages[append_index] = PageLayout::Default();
   ApplyWeatherOverlayToLayout(settings.pages[append_index],
-                              overlay, rasp_field);
+                              overlay, rasp_field, skysight_layer_id);
   ++settings.n_pages;
   new_page_index = append_index;
   return AddPageResult::SUCCESS;
@@ -121,7 +137,8 @@ AddWeatherOverlayPageFromDraft(PageSettings &settings,
     ? draft.rasp_field
     : -1;
   const auto result = AddWeatherOverlayPage(settings, draft.overlay,
-                                            new_page_index, rasp_field);
+                                            new_page_index, rasp_field,
+                                            draft.skysight_overlay.c_str());
   if (result != AddPageResult::SUCCESS)
     return result;
 
@@ -139,7 +156,8 @@ static inline bool
 EnsureWeatherOverlayOnPage(PageSettings &settings,
                            unsigned page_index,
                            PageLayout::Overlay overlay,
-                           int rasp_field=-1) noexcept
+                           int rasp_field=-1,
+                           std::string_view skysight_layer_id={}) noexcept
 {
   if (page_index >= settings.n_pages)
     return false;
@@ -167,7 +185,8 @@ EnsureWeatherOverlayOnPage(PageSettings &settings,
     ClearWeatherOverlayFromLayout(other);
   }
 
-  ApplyWeatherOverlayToLayout(page, overlay, rasp_field);
+  ApplyWeatherOverlayToLayout(page, overlay, rasp_field,
+                              skysight_layer_id);
   return true;
 }
 

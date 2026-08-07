@@ -43,6 +43,9 @@ Version 7.45 - not yet released
 * WeGlide
   - fix crash when opening the aircraft type picker without a network
     connection
+* weather
+  - Offer weather controls (map-bottom cursor bar) on non-OpenGL builds
+    as well, so RASP pages can use them on memory-canvas and Kobo
 * ui
   - add help text for plane ``Max. Cruise Speed`` #1134
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
@@ -197,6 +200,9 @@ Version 7.45 - not yet released
   - Rename to turnpoint observation zone type "Symmetric Quadrant" to
     "Symmetric Sector", as these zones do not have to be 90 degrees but
     support any angle.
+  - add SkySight forecast overlays with per-page layer/time selection,
+    selected-layer setup, optional automatic updates, offline preloading,
+    cache management, and throttle recovery #2690
   - Outline selected targets on the FLARM traffic radar
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit

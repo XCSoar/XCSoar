@@ -64,12 +64,13 @@ endif
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
-$$($(2)_OBJS): CPPFLAGS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_CPPFLAGS))
+$$($(2)_OBJS): CPPFLAGS_DEPENDS += $$($(2)_DEPENDS_FLAT)
 
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
+	$$(file >$$@.rsp,$$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs))
+	$$(Q)$$(LINK) @$$@.rsp
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)
@@ -133,7 +134,7 @@ $(2)_LDLIBS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_LDLIBS))
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
-$$($(2)_OBJS): CPPFLAGS += $$(foreach i,$$($(2)_DEPENDS_FLAT),$$($$(i)_CPPFLAGS))
+$$($(2)_OBJS): CPPFLAGS_DEPENDS += $$($(2)_DEPENDS_FLAT)
 
 # Link the unstripped binary
 ifneq ($(TARGET_IS_DARWIN),y)
@@ -142,7 +143,8 @@ endif
 
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(ABI_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs)
+	$$(file >$$@.rsp,$$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs))
+	$$(Q)$$(LINK) @$$@.rsp
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)
@@ -168,12 +170,19 @@ $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
 $$($(2)_OBJS): CFLAGS += $$($(2)_CFLAGS) $$($(2)_CFLAGS_INTERNAL)
 $$($(2)_OBJS): CXXFLAGS += $$($(2)_CXXFLAGS) $$($(2)_CXXFLAGS_INTERNAL)
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS) $$($(2)_CPPFLAGS_INTERNAL)
-$$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
+$$($(2)_OBJS): CPPFLAGS_DEPENDS += $$($(2)_DEPENDS)
 
 # Link
+#
+# Some GCC 13 gcc-ar wrappers (used by OpenVario / Yocto) do not
+# expand a response file before prepending "-" to argv[1].  Therefore,
+# keep ARFLAGS and the archive path on the real argv.  Put the object
+# list in a response file except on Darwin, whose ar does not support it.
 $$($(2)_BIN): $$($(2)_OBJS)
 	@$$(NQ)echo "  AR      $$@"
-	$$(Q)$$(AR) $$(ARFLAGS) $$@ $$^
+	$$(if $$(filter y,$$(TARGET_IS_DARWIN)),,$$(file >$$@.rsp,$$^))
+	$$(Q)rm -f $$@
+	$$(Q)$$(AR) $$(ARFLAGS) $$@ $$(if $$(filter y,$$(TARGET_IS_DARWIN)),$$^,@$$@.rsp)
 
 $(2)_LIBS = $$($(2)_BIN)
 $(2)_LDADD = $$($(2)_BIN)
