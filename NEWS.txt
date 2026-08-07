@@ -38,6 +38,8 @@ Version 7.45 - not yet released
   - correct ``.plr`` optional max.\ cruise speed unit to m/s and
     distinguish WinPilot fields from the XCSoar extension #1134
 * development
+  - build system: add a Wayland Flatpak packaging target and CI artifacts
+    for x86_64 and aarch64
   - Log screen resolution, DPI, virtual DPI, approximate size, and
     small-screen flag at startup #1548
 * WeGlide

@@ -136,6 +136,45 @@ jobs:
           body: ${{ env.CHANGELOGENTRY }}
           prerelease: ${{ env.PRERELEASE }}
 
+  flatpak:
+    name: Flatpak (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-25.08
+      options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Generate Flatpak manifest
+        run: make FLATPAK_SOURCE_TYPE=dir flatpak-manifest
+
+      - name: Build Flatpak bundle
+        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          manifest-path: output/UNIX/flatpak/org.xcsoar.XCSoar.yml
+          bundle: XCSoar-${{ matrix.arch }}.flatpak
+          arch: ${{ matrix.arch }}
+          cache-key: flatpak-${{ matrix.arch }}-${{ hashFiles('flatpak/**', 'build/**', 'lib/boost/patches/**', 'Makefile') }}
+
+      - name: Upload Flatpak artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: XCSoar-${{ github.sha }}-FLATPAK-${{ matrix.arch }}
+          path: XCSoar-${{ matrix.arch }}.flatpak
+          if-no-files-found: error
+
   build:
     runs-on: ${{ matrix.os }}
     needs: release

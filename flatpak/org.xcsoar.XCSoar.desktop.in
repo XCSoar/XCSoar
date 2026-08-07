@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=XCSoar
+Comment=Flight navigation and tactical glide computer
+Exec=xcsoar
+Icon=@FLATPAK_APP_ID@
+Terminal=false
+Categories=Navigation;Utility;Science;
+Keywords=gliding;soaring;flight;navigation;aviation;

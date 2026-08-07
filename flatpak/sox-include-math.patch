@@ -1,0 +1,8 @@
+--- a/src/sox_sample_test.h
++++ b/src/sox_sample_test.h
+@@ -18,5 +18,6 @@
+ #endif
+ #include <assert.h>
++#include <math.h>
+ #include "sox.h"
+ #define TEST_UINT(bits) \
