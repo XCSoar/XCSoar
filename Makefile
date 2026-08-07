@@ -242,6 +242,7 @@ endif
 ifeq ($(FUZZER),n)
 include $(topdir)/build/dist.mk
 include $(topdir)/build/install.mk
+include $(topdir)/build/flatpak.mk
 endif
 
 ######## compiler flags
