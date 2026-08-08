@@ -7,6 +7,7 @@
  */
 
 #include "system/ConvertPathName.hpp"
+#include "system/FileUtil.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
 #include "util/PrintException.hxx"
@@ -27,14 +28,8 @@ static const char szNoFile[] = "Validation check failed.  File not found";
 static STATUS_t
 ValidateXCS(Path path, GRecord &oGRecord)
 {
-  STATUS_t eStatus = eValidationFileNotFound;
-
-  FILE *inFile = nullptr;
-  inFile = fopen(path.c_str(), "r");
-  if (inFile == nullptr)
-    return eStatus;
-
-  fclose(inFile);
+  if (!File::Exists(path))
+    return eValidationFileNotFound;
 
   oGRecord.Initialize();
   oGRecord.VerifyGRecordInFile(path);

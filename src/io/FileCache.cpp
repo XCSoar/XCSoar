@@ -8,6 +8,7 @@
 #include "util/SpanCast.hxx"
 
 #ifdef _WIN32
+#include "system/UTF8Win32.hpp"
 #include "time/FileTime.hxx"
 #endif
 
@@ -60,7 +61,8 @@ GetRegularFileInfo(Path path, FileInfo &info)
   return true;
 #else
   WIN32_FILE_ATTRIBUTE_DATA data;
-  if (!GetFileAttributesEx(path.c_str(), GetFileExInfoStandard, &data) ||
+  if (!GetFileAttributesExW(UTF8ToWide(path.c_str()).c_str(),
+                            GetFileExInfoStandard, &data) ||
       (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     return false;
 
