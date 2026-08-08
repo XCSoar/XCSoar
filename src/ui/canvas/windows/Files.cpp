@@ -7,6 +7,8 @@
 
 #include <shlobj.h>
 #include <windef.h> // for MAX_PATH
+#include "system/Win32UTF8PathGuard.hpp"
+
 #include <string>
 
 /**

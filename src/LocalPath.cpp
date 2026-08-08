@@ -37,6 +37,7 @@
 #ifdef _WIN32
 #include <shlobj.h>
 #include <windef.h> // for MAX_PATH
+#include "system/Win32UTF8PathGuard.hpp"
 #endif
 
 #ifdef ANDROID
