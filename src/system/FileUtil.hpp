@@ -17,9 +17,7 @@
 #include <fileapi.h>
 #include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h>
-#ifdef CopyFile
-#undef CopyFile
-#endif
+#include "Win32UTF8PathGuard.hpp"
 #endif
 
 namespace File {

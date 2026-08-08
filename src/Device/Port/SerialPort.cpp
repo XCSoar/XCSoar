@@ -7,11 +7,14 @@
 #include "system/Error.hxx"
 #include "system/Sleep.h"
 #include "system/OverlappedEvent.hpp"
+#include "system/UTF8Win32.hpp"
 
 #include <fileapi.h>
+#include "system/Win32UTF8PathGuard.hpp"
 
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
 #include <stdio.h>
 
 SerialPort::SerialPort(PortListener *_listener, DataHandler &_handler)
@@ -38,16 +41,19 @@ SerialPort::Open(const char *path, unsigned _baud_rate)
 {
   assert(!Thread::IsInside());
 
+  if (path == nullptr || *path == '\0')
+    throw std::runtime_error("Invalid serial port path");
+
   DCB PortDCB;
 
-  // Open the serial port.
-  hPort = CreateFile(path,
-                     GENERIC_READ | GENERIC_WRITE, // Access (read-write) mode
-                     0,            // Share mode
-                     nullptr, // Pointer to the security attribute
-                     OPEN_EXISTING,// How to open the serial port
-                     FILE_FLAG_OVERLAPPED, // Overlapped I/O
-                     nullptr); // Handle to port with attribute to copy
+  // Open the serial port (wide API; path is UTF-8, usually "COMn").
+  hPort = CreateFileW(UTF8ToWide(path).c_str(),
+                      GENERIC_READ | GENERIC_WRITE, // Access (read-write) mode
+                      0,            // Share mode
+                      nullptr, // Pointer to the security attribute
+                      OPEN_EXISTING,// How to open the serial port
+                      FILE_FLAG_OVERLAPPED, // Overlapped I/O
+                      nullptr); // Handle to port with attribute to copy
 
   // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE)
