@@ -5,6 +5,7 @@
 #include "Protocol.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Port/Port.hpp"
+#include "system/OpenPathFile.hpp"
 #include "system/Path.hpp"
 #include "Operation/Operation.hpp"
 #include "vlconv.h"
@@ -90,7 +91,7 @@ DownloadFlightInner(Port &port, unsigned bulkrate,
   if (length == 0)
     return false;
 
-  FILE *outfile = fopen(path.c_str(), "wt");
+  FILE *outfile = OpenPathFile(path, "wt");
   if (outfile == nullptr)
     return false;
 

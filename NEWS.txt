@@ -241,6 +241,8 @@ Version 7.45 - not yet released
     non-ASCII characters (Unicode directory listing and file open)
   - fix startup crash when the Windows user profile contains non-English
     characters (e.g. Cyrillic account names) #2824
+  - open ZIP maps, JPEG/TIFF images, Lua scripts, fonts, and cache files
+    from folders with non-English characters on Windows
 * devices
   - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
     shows other gliders on the FLARM radar and map

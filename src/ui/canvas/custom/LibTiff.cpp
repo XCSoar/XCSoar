@@ -10,6 +10,10 @@
 
 #include <tiffio.h>
 
+#ifdef _WIN32
+#include "system/UTF8Win32.hpp"
+#endif
+
 #ifdef USE_GEOTIFF
 #include "Geo/Quadrilateral.hpp"
 
@@ -26,7 +30,11 @@ TiffOpen(Path path, const char *mode)
   XTIFFInitialize();
 #endif
 
+#ifdef _WIN32
+  return TIFFOpenW(UTF8ToWide(path.c_str()).c_str(), mode);
+#else
   return TIFFOpen(path.c_str(), mode);
+#endif
 }
 
 class TiffLoader {
