@@ -33,11 +33,13 @@ SkipLuaFileHeader(std::string_view data) noexcept
 		data.remove_prefix(3);
 
 	if (!data.empty() && data.front() == '#') {
+		/* luaL_loadfile() skips the shebang and then inserts a
+		   newline so Lua line numbers still match the file. */
 		const auto nl = data.find('\n');
 		if (nl == std::string_view::npos)
 			data = {};
 		else
-			data.remove_prefix(nl + 1);
+			data.remove_prefix(nl);
 	}
 
 	return data;
