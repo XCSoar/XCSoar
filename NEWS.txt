@@ -239,6 +239,8 @@ Version 7.45 - not yet released
 * Windows
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters (Unicode directory listing and file open)
+  - fix startup crash when the Windows user profile contains non-English
+    characters (e.g. Cyrillic account names) #2824
 * devices
   - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
     shows other gliders on the FLARM radar and map

@@ -43,8 +43,7 @@ public:
 };
 
 /**
- * Create an empty temp directory with an ASCII path (so teardown via
- * Directory::Remove remains reliable).
+ * Create an empty temp directory (UTF-8 Path from GetTempPathW).
  */
 static AllocatedPath
 MakeTempDir() noexcept
@@ -113,10 +112,38 @@ TestUtf8FileRoundTrip() noexcept
   Directory::Remove(dir);
 }
 
+/**
+ * Directory Create/Exists/IsWritable/Remove with a Cyrillic UTF-8 name
+ * (same class of path as issue #2824).
+ */
+static void
+TestUtf8Directory() noexcept
+{
+  const AllocatedPath dir = MakeTempDir();
+  if (dir == nullptr) {
+    skip(5, 0, "temp directory failed");
+    return;
+  }
+
+  /* Линар */
+  static constexpr const char *const utf8_subdir =
+    "\xd0\x9b\xd0\xb8\xd0\xbd\xd0\xb0\xd1\x80";
+  const AllocatedPath sub = AllocatedPath::Build(dir, Path(utf8_subdir));
+
+  Directory::Create(sub);
+  ok1(Directory::Exists(sub));
+  ok1(ValidateUTF8(sub.c_str()));
+  ok1(Directory::IsWritable(sub));
+  ok1(Directory::Remove(sub));
+  ok1(!Directory::Exists(sub));
+
+  Directory::Remove(dir);
+}
+
 int
 main()
 {
-  plan_tests(18);
+  plan_tests(23);
 
   /* Returned size() must equal character count (no null in size) */
   ok1(UTF8ToWide(std::string_view("")).size() == 0);
@@ -142,6 +169,7 @@ main()
   ok1(WideToUTF8((const wchar_t *)nullptr).empty());
 
   TestUtf8FileRoundTrip();
+  TestUtf8Directory();
 
   return exit_status();
 }
