@@ -36,5 +36,6 @@ build/local-config.mk
 
 .idea
 .ccache
+.flatpak-builder
 messages.mo
 po/*.mo

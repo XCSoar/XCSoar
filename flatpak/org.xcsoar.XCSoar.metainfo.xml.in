@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@FLATPAK_APP_ID@</id>
+  <name>XCSoar</name>
+  <summary>Flight navigation and tactical glide computer</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+  <developer>
+    <name>XCSoar</name>
+  </developer>
+  <url type="homepage">https://xcsoar.org/</url>
+  <url type="bugtracker">https://github.com/XCSoar/XCSoar/issues</url>
+  <description>
+    <p>XCSoar is a tactical glide computer for gliders, paragliders and hang
+    gliders. It provides flight navigation, airspace awareness, task
+    management and flight analysis.</p>
+  </description>
+  <launchable type="desktop-id">@FLATPAK_APP_ID@.desktop</launchable>
+  <provides>
+    <binary>xcsoar</binary>
+  </provides>
+</component>

@@ -1,4 +1,4 @@
-ifeq ($(TARGET),UNIX)
+ifneq ($(filter $(TARGET),UNIX WAYLAND),)
 
 DESTDIR =
 prefix = $(DESTDIR)/usr
