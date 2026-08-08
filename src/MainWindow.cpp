@@ -1504,13 +1504,18 @@ MainWindow::KillWidget() noexcept
   if (widget == nullptr)
     return;
 
-  widget->Leave();
-  widget->Hide();
-  widget->Unprepare();
-  delete widget;
+  /* Clear the pointer before destroying.  On Windows, DestroyWindow on
+     a focused child (e.g. FLARM radar) can re-enter OnSetFocus(); if
+     #widget still pointed here, WindowWidget::SetFocus() would assert
+     after the native window was already destroyed (#2824). */
+  Widget *const old = widget;
   widget = nullptr;
-
   InputEvents::SetFlavour(nullptr);
+
+  old->Leave();
+  old->Hide();
+  old->Unprepare();
+  delete old;
 }
 
 void
@@ -1519,10 +1524,12 @@ MainWindow::KillTopWidget() noexcept
   if (top_widget == nullptr)
     return;
 
-  top_widget->Hide();
-  top_widget->Unprepare();
-  delete top_widget;
+  Widget *const old = top_widget;
   top_widget = nullptr;
+
+  old->Hide();
+  old->Unprepare();
+  delete old;
 }
 
 void
@@ -1556,14 +1563,16 @@ MainWindow::KillBottomWidget() noexcept
   if (bottom_widget == nullptr)
     return;
 
+  Widget *const old = bottom_widget;
+  bottom_widget = nullptr;
+
   if (widget == nullptr)
     /* the bottom widget is only visible below the map, but not below
        a custom main widget; see HaveBottomWidget() */
-    bottom_widget->Hide();
+    old->Hide();
 
-  bottom_widget->Unprepare();
-  delete bottom_widget;
-  bottom_widget = nullptr;
+  old->Unprepare();
+  delete old;
 }
 
 void

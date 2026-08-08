@@ -198,6 +198,8 @@ Version 7.45 - not yet released
     "Symmetric Sector", as these zones do not have to be 90 degrees but
     support any angle.
   - Outline selected targets on the FLARM traffic radar
+  - Fix crash when leaving the FLARM traffic radar with a horizontal
+    swipe (focus re-entry while destroying the page widget) #2824
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit
   - Fix crash when opening the map item list on waypoints with long
