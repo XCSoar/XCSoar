@@ -40,7 +40,7 @@ Directory::Create(Path path) noexcept
 #ifdef HAVE_POSIX
   mkdir(path.c_str(), 0777);
 #else /* !HAVE_POSIX */
-  CreateDirectory(path.c_str(), nullptr);
+  CreateDirectoryW(UTF8ToWide(path.c_str()).c_str(), nullptr);
 #endif /* !HAVE_POSIX */
 }
 
@@ -67,7 +67,7 @@ Directory::Exists(Path path) noexcept
 
   return S_ISDIR(st.st_mode);
 #else
-  DWORD attributes = GetFileAttributes(path.c_str());
+  DWORD attributes = GetFileAttributesW(UTF8ToWide(path.c_str()).c_str());
   return attributes != INVALID_FILE_ATTRIBUTES &&
     (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 #endif
@@ -89,7 +89,7 @@ Directory::IsWritable(Path path) noexcept
   if (!Directory::Exists(path))
     return false;
 
-  // Try to create a uniquely-named file using CreateFileA and remove it
+  // Try to create a uniquely-named file using CreateFileW and remove it
   // immediately. This avoids CRT path formatting and keeps overhead low.
   std::string base = path.c_str();
   if (base.empty())
@@ -103,8 +103,6 @@ Directory::IsWritable(Path path) noexcept
   constexpr size_t hex_len = 8;
   constexpr std::string_view suffix = "_wt";
   constexpr std::string_view ext = ".tmp";
-  if (base.size() + suffix.size() + hex_len + ext.size() >= MAX_PATH)
-    return false;
 
   const unsigned seed = GetTickCount() ^ GetCurrentProcessId();
   for (unsigned attempt = 0; attempt < 8; ++attempt) {
@@ -116,13 +114,19 @@ Directory::IsWritable(Path path) noexcept
     tmpname.append(hexbuf);
     tmpname.append(ext);
 
-    HANDLE h = CreateFile(tmpname.c_str(),
-                          GENERIC_WRITE,
-                          FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                          nullptr,
-                          CREATE_NEW,
-                          FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
-                          nullptr);
+    const std::wstring wtmp = UTF8ToWide(tmpname);
+    if (wtmp.empty() || wtmp.size() >= MAX_PATH)
+      return false;
+
+    HANDLE h = CreateFileW(wtmp.c_str(),
+                           GENERIC_WRITE,
+                           FILE_SHARE_READ | FILE_SHARE_WRITE |
+                             FILE_SHARE_DELETE,
+                           nullptr,
+                           CREATE_NEW,
+                           FILE_ATTRIBUTE_TEMPORARY |
+                             FILE_FLAG_DELETE_ON_CLOSE,
+                           nullptr);
     if (h != INVALID_HANDLE_VALUE) {
       CloseHandle(h);
       return true;
@@ -369,28 +373,29 @@ Directory::Remove(Path path) noexcept
   closedir(dir);
   return ok && rmdir(path.c_str()) == 0;
 #else
-  AllocatedPath search = AllocatedPath::Build(path, Path("*"));
-
-  WIN32_FIND_DATA fd;
-  HANDLE hFind = FindFirstFile(search.c_str(), &fd);
-  if (hFind == INVALID_HANDLE_VALUE)
-    return RemoveDirectoryA(path.c_str());
+  std::string dir = path.c_str();
+  AppendDirSeparator(dir);
 
   bool ok = true;
-  do {
-    if (IsDots(fd.cFileName))
-      continue;
+  const bool enumerated =
+    ForEachFindFile(dir + "*", [&](const WIN32_FIND_DATAW &fd) {
+      const std::string name = WideToUTF8(fd.cFileName);
+      if (IsDots(name.c_str()))
+        return;
 
-    AllocatedPath child = AllocatedPath::Build(path, Path(fd.cFileName));
+      AllocatedPath child = AllocatedPath::Build(path, Path(name.c_str()));
 
-    if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-      ok &= Remove(child);
-    else
-      ok &= (DeleteFile(child.c_str()) != 0);
-  } while (FindNextFile(hFind, &fd));
+      if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        ok &= Remove(child);
+      else
+        ok &= File::Delete(child);
+    });
 
-  FindClose(hFind);
-  return ok && RemoveDirectoryA(path.c_str());
+  if (!enumerated)
+    return RemoveDirectoryW(UTF8ToWide(path.c_str()).c_str()) != 0;
+
+  return ok &&
+    RemoveDirectoryW(UTF8ToWide(path.c_str()).c_str()) != 0;
 #endif
 }
 

@@ -3,6 +3,7 @@
 
 #include "LibJPEG.hpp"
 #include "UncompressedImage.hpp"
+#include "system/OpenPathFile.hpp"
 #include "system/Path.hpp"
 #include "util/ScopeExit.hxx"
 
@@ -10,7 +11,6 @@
 #include <stdexcept>
 
 #include <cassert>
-#include <stdio.h>
 #include <cstddef>
 
 extern "C" {
@@ -69,7 +69,7 @@ DecodeJPEG(struct jpeg_decompress_struct &cinfo)
 UncompressedImage
 LoadJPEGFile(Path path)
 {
-  FILE *file = fopen(path.c_str(), "rb");
+  FILE *file = OpenPathFile(path, "rb");
   if (file == nullptr)
     return UncompressedImage();
 

@@ -3,11 +3,26 @@
 
 #include "ui/canvas/custom/Files.hpp"
 #include "ui/canvas/FontSearch.hpp"
-#include "system/PathName.hpp"
+#include "system/UTF8Win32.hpp"
 
 #include <shlobj.h>
 #include <windef.h> // for MAX_PATH
+#include "system/Win32UTF8PathGuard.hpp"
+
 #include <string>
+
+/**
+ * Replace the final path component of a UTF-8 path string.
+ */
+static void
+ReplaceBaseNameUTF8(std::string &path, const char *new_base) noexcept
+{
+  const auto slash = path.find_last_of("/\\");
+  if (slash == std::string::npos)
+    path = new_base;
+  else
+    path.replace(slash + 1, std::string::npos, new_base);
+}
 
 /**
  * Get the Windows fonts directory using the Shell API.
@@ -20,14 +35,15 @@ GetWindowsFontsPath() noexcept
   static std::string fonts_path;
 
   if (fonts_path.empty()) {
-    char buffer[MAX_PATH];
-    if (SHGetSpecialFolderPathA(nullptr, buffer,
+    wchar_t buffer[MAX_PATH];
+    if (SHGetSpecialFolderPathW(nullptr, buffer,
                                 CSIDL_FONTS, FALSE)) {
-      fonts_path = buffer;
-    } else {
+      fonts_path = WideToUTF8(buffer);
+    }
+
+    if (fonts_path.empty())
       // Fallback to typical location if API fails
       fonts_path = "C:\\Windows\\Fonts";
-    }
   }
 
   return fonts_path.c_str();
@@ -43,11 +59,12 @@ GetExeFontsPath() noexcept
   static std::string exe_fonts_path;
 
   if (exe_fonts_path.empty()) {
-    char buffer[MAX_PATH];
-    DWORD len = GetModuleFileName(nullptr, buffer, MAX_PATH);
+    wchar_t buffer[MAX_PATH];
+    DWORD len = GetModuleFileNameW(nullptr, buffer, MAX_PATH);
     if (len > 0 && len < MAX_PATH) {
-      ReplaceBaseName(buffer, "fonts");
-      exe_fonts_path = buffer;
+      exe_fonts_path = WideToUTF8(buffer);
+      if (!exe_fonts_path.empty())
+        ReplaceBaseNameUTF8(exe_fonts_path, "fonts");
     }
   }
 

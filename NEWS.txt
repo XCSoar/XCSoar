@@ -204,6 +204,8 @@ Version 7.45 - not yet released
     "Symmetric Sector", as these zones do not have to be 90 degrees but
     support any angle.
   - Outline selected targets on the FLARM traffic radar
+  - Fix crash when leaving the FLARM traffic radar with a horizontal
+    swipe (focus re-entry while destroying the page widget) #2824
   - Weather cursor bar: narrower stepper buttons on touchscreens and clip
     long centre labels instead of hiding them when they do not fit
   - Fix crash when opening the map item list on waypoints with long
@@ -245,6 +247,10 @@ Version 7.45 - not yet released
 * Windows
   - fix crash opening the log list when replay filenames contain
     non-ASCII characters (Unicode directory listing and file open)
+  - fix startup crash when the Windows user profile contains non-English
+    characters (e.g. Cyrillic account names) #2824
+  - open ZIP maps, JPEG/TIFF images, Lua scripts, fonts, and cache files
+    from folders with non-English characters on Windows
 * devices
   - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
     shows other gliders on the FLARM radar and map
