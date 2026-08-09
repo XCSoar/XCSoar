@@ -39,6 +39,13 @@ class BufferCanvas : public Canvas {
   PixelPoint old_translate;
   UnsignedPoint2D old_size;
 
+  /**
+   * Screen-space scissor must not clip FBO draws (e.g. #VScrollPanel
+   * leaves GL_SCISSOR_TEST enabled while child OnPaint fills a tall
+   * buffer).
+   */
+  GLboolean old_scissor_enabled = GL_FALSE;
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
   DisplayOrientation old_orientation;
 #endif
@@ -78,11 +85,23 @@ public:
   void Grow(PixelSize new_size) noexcept;
 
   /**
-   * Begin painting to the buffer and to the specified #Canvas.
+   * Begin painting into this buffer's current size (no resize).
+   * Pair with #End.  Does not copy to any on-screen canvas.
+   */
+  void Begin() noexcept;
+
+  /**
+   * Begin painting to the buffer, resizing it to match @a other.
    *
    * @param other an on-screen #Canvas
    */
   void Begin(Canvas &other) noexcept;
+
+  /**
+   * Finish painting started with #Begin; restores GL state.
+   * Does not blit to the screen.
+   */
+  void End() noexcept;
 
   /**
    * Commit the data that was painted into this #BufferCanvas into
@@ -97,4 +116,14 @@ public:
   void Commit(Canvas &other) noexcept;
 
   void CopyTo(Canvas &other) noexcept;
+
+  /**
+   * Copy a source rectangle from this buffer onto @a dest.
+   */
+  void CopyTo(Canvas &dest, PixelRect dest_rc,
+              PixelRect src_rc) noexcept;
+
+private:
+  void Activate() noexcept;
+  void Deactivate() noexcept;
 };
