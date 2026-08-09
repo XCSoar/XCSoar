@@ -6,6 +6,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Point2D.hpp"
 #include "util/StringAPI.hxx"
@@ -61,12 +62,13 @@ VScrollPanel::GetScrollStep() const noexcept
 
 /**
  * Can the user scroll with pixel precision?  Fast displays get
- * kinetic/smooth scrolling; e-paper snaps to avoid refresh storms.
+ * kinetic/smooth scrolling; e-paper and slow CPUs snap (same gate as
+ * map pan animations in InputEventsMap).
  */
 static bool
 UsePixelPan() noexcept
 {
-  return !HasEPaper();
+  return !HasEPaper() && !IsSlowCPU();
 }
 
 void
