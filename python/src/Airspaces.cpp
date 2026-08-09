@@ -174,7 +174,11 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
 
   /* Create airspace and save it into the database */
   auto as = std::make_shared<AirspacePolygon>(points);
-  as->SetProperties(std::move(name), type, {}, base, top);
+  as->SetProperties(std::move(name), false,
+                    BrokenDateTime::Invalid(), BrokenDateTime::Invalid(),
+                    true, false,
+                    std::string{}, TransponderCode{},
+                    type, type, base, top);
   self->airspace_database->Add(std::move(as));
 
   Py_RETURN_NONE;
