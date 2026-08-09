@@ -145,12 +145,10 @@ VScrollWidget::Show(const PixelRect &rc) noexcept
   visible = true;
   widget->Show(GetWindow().GetVirtualRect());
 
-  if (reserve_scrollbar) {
-    /* Rich-text content may update its maximum size after the
-       initial Show (e.g. after text layout).  Re-measure. */
-    UpdateVirtualHeight(rc);
-    widget->Move(GetWindow().GetVirtualRect());
-  }
+  /* Remeasure after the child has laid out.  Forms may change
+     row sizes during Show(); rich text finishes text layout. */
+  UpdateVirtualHeight(rc);
+  widget->Move(GetWindow().GetVirtualRect());
 }
 
 bool
@@ -282,14 +280,10 @@ VScrollWidget::KeyPress(unsigned key_code) noexcept
 void
 VScrollWidget::OnVScrollPanelChange() noexcept
 {
-  if (!visible)
-    return;
-
-  /* Origin-only changes must not remeasure virtual height: form
-     widgets that report size from their HWND would feedback into
-     SetVirtualHeight and force a full child relayout on every
-     smooth-scroll tick (WIN64 crash with bordered controls). */
-  widget->Move(GetWindow().GetVirtualRect());
+  if (visible) {
+    UpdateVirtualHeight(GetWindow().GetClientRect());
+    widget->Move(GetWindow().GetVirtualRect());
+  }
 }
 
 bool
