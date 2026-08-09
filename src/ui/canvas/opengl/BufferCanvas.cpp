@@ -30,7 +30,8 @@ BufferCanvas::Create(PixelSize new_size) noexcept
     stencil_buffer = new GLRenderBuffer();
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil,
+                            size.width, size.height);
     stencil_buffer->Unbind();
   }
 
@@ -74,7 +75,8 @@ BufferCanvas::Resize(PixelSize new_size) noexcept
 
     stencil_buffer->Bind();
     PixelSize size = texture->GetAllocatedSize();
-    stencil_buffer->Storage(OpenGL::render_buffer_stencil, size.width, size.height);
+    stencil_buffer->Storage(OpenGL::render_buffer_stencil,
+                            size.width, size.height);
     stencil_buffer->Unbind();
   }
 
@@ -82,12 +84,11 @@ BufferCanvas::Resize(PixelSize new_size) noexcept
 }
 
 void
-BufferCanvas::Begin(Canvas &other) noexcept
+BufferCanvas::Activate() noexcept
 {
   assert(IsDefined());
   assert(!active);
-
-  Resize(other.GetSize());
+  assert(frame_buffer != nullptr);
 
   /* activate the frame buffer */
   frame_buffer->Bind();
@@ -112,6 +113,13 @@ BufferCanvas::Begin(Canvas &other) noexcept
   old_translate = OpenGL::translate;
   old_size = OpenGL::viewport_size;
 
+  /* Parent paint may have enabled a screen-space scissor (e.g.
+     VScrollPanel).  That box is wrong for this FBO's viewport and
+     would clip strip fills to a band that shifts with layout. */
+  old_scissor_enabled = glIsEnabled(GL_SCISSOR_TEST);
+  if (old_scissor_enabled)
+    glDisable(GL_SCISSOR_TEST);
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
   old_orientation = OpenGL::display_orientation;
   OpenGL::display_orientation = DisplayOrientation::DEFAULT;
@@ -129,12 +137,10 @@ BufferCanvas::Begin(Canvas &other) noexcept
 }
 
 void
-BufferCanvas::Commit(Canvas &other) noexcept
+BufferCanvas::Deactivate() noexcept
 {
   assert(IsDefined());
   assert(active);
-  assert(GetWidth() == other.GetWidth());
-  assert(GetHeight() == other.GetHeight());
   assert(frame_buffer != nullptr);
 
   assert(OpenGL::translate.x == 0);
@@ -157,12 +163,12 @@ BufferCanvas::Commit(Canvas &other) noexcept
 
   OpenGL::UpdateShaderTranslate();
 
+  if (old_scissor_enabled)
+    glEnable(GL_SCISSOR_TEST);
+
 #ifdef SOFTWARE_ROTATE_DISPLAY
   OpenGL::display_orientation = old_orientation;
 #endif
-
-  /* copy frame buffer to screen */
-  CopyTo(other);
 
 #ifndef NDEBUG
   active = false;
@@ -170,13 +176,67 @@ BufferCanvas::Commit(Canvas &other) noexcept
 }
 
 void
+BufferCanvas::Begin() noexcept
+{
+  Activate();
+}
+
+void
+BufferCanvas::Begin(Canvas &other) noexcept
+{
+  assert(IsDefined());
+
+  Resize(other.GetSize());
+  Activate();
+}
+
+void
+BufferCanvas::End() noexcept
+{
+  Deactivate();
+}
+
+void
+BufferCanvas::Commit(Canvas &other) noexcept
+{
+  assert(IsDefined());
+  assert(active);
+  assert(GetWidth() == other.GetWidth());
+  assert(GetHeight() == other.GetHeight());
+
+  End();
+  CopyTo(other);
+}
+
+void
 BufferCanvas::CopyTo(Canvas &other) noexcept
+{
+  CopyTo(other, other.GetRect(), GetRect());
+}
+
+void
+BufferCanvas::CopyTo([[maybe_unused]] Canvas &dest, PixelRect dest_rc,
+                     PixelRect src_rc) noexcept
 {
   assert(IsDefined());
   assert(frame_buffer != nullptr);
+  assert(!active);
+
+  /* FBO-backed buffers use a flipped texture.  Full-buffer CopyTo is
+     fine (the whole image is inverted as a unit), but a partial source
+     rectangle would otherwise show the strip upside-down and invert
+     scroll direction.  Remap canvas-space Y into the flipped texel
+     space that #GLTexture::Draw expects. */
+  if (texture->IsFlipped()) {
+    const int buffer_h = static_cast<int>(GetHeight());
+    const int src_h = static_cast<int>(src_rc.GetHeight());
+    const int new_top = buffer_h - src_rc.bottom;
+    src_rc.top = new_top;
+    src_rc.bottom = new_top + src_h;
+  }
 
   OpenGL::texture_shader->Use();
 
   texture->Bind();
-  texture->Draw(other.GetRect(), GetRect());
+  texture->Draw(dest_rc, src_rc);
 }
