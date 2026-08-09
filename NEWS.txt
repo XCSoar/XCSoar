@@ -152,6 +152,11 @@ Version 7.45 - not yet released
     scroll height before wrapping, skip FreeType for runs that clearly
     fit or overflow by character budget, and use one measure for
     typical bullets
+  - Speed up scrolling long rich-text pages (What's New, Credits):
+    size the text window to the viewport instead of the full content
+    height so each scroll frame does not move or clear a tall window;
+    cache a painted strip and pan it when scrolling
+
   - Treat Markdown list items as one paragraph (indented continuations
     stay in the same bullet with hanging indent), including What's New
   - Fix Quick Guide Up/Down focus so the bottom-bar checkbox and Close
