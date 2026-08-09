@@ -563,9 +563,10 @@ dlgQuickGuideShowModal(bool force_info)
   }
 
   /* ---- What's New page (conditional, shown on version change) ---- */
-  /* Body is Markdown generated at build time from the first block of NEWS.txt
-     (see tools/news_to_quickguide_md.py and QuickGuideNEWS.hpp).  The Credits
-     dialog still loads the full gzipped NEWS history as plain text. */
+  /* Body is Markdown generated at build time from the first block of
+     NEWS.txt (tools/news_to_quickguide_md.py → QuickGuideNEWS.hpp).
+     Each NEWS bullet is one list-item paragraph.  Credits still loads
+     the full gzipped NEWS as plain text. */
   if (news_needed && quick_guide_news_markdown[0] != '\0') {
     state.news_page_index = pager->GetSize();
 
