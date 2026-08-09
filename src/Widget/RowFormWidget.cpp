@@ -523,15 +523,9 @@ RowFormWidget::Show(const PixelRect &rc) noexcept
 void
 RowFormWidget::Move(const PixelRect &rc) noexcept
 {
-  /* Pure scroll origin changes only move the panel; skip row
-     re-layout so bordered GENERIC controls are not resized. */
-  const bool size_changed = !IsDefined() ||
-    GetWindow().GetSize() != rc.GetSize();
-
   WindowWidget::Move(rc);
 
-  if (size_changed)
-    UpdateLayout();
+  UpdateLayout();
 }
 
 bool
