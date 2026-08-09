@@ -703,3 +703,17 @@ PageActions::SetCustomBottom(Widget *widget)
   state.special_page.bottom = PageLayout::Bottom::CUSTOM;
   CommonInterface::main_window->SetBottomWidget(widget);
 }
+
+bool
+PageActions::AllowMapOverlayButtons() noexcept
+{
+  const PageLayout &special_page =
+    CommonInterface::GetUIState().pages.special_page;
+  if (!special_page.IsDefined())
+    return true;
+
+  /* SetCustomBottom() marks special_page so RestoreBottom() can undo
+     it; the map remains active and overlay buttons should stay. */
+  return special_page.IsMapMain() &&
+    special_page.bottom == PageLayout::Bottom::CUSTOM;
+}
