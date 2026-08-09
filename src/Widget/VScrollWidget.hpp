@@ -16,9 +16,11 @@ struct DialogLook;
  *
  * When @a reserve_scrollbar is true the child widget's width is
  * reduced by the scrollbar width so content never hides behind the
- * scrollbar.  This mode also enables enhanced keyboard handling
- * (Up/Down scroll only when scrollable) and the gesture callback
- * for horizontal swipes.
+ * scrollbar, and the child is sized to the physical viewport (not
+ * the full virtual content height) so scrolling does not Move() a
+ * tall window each frame.  This mode also enables enhanced keyboard
+ * handling (Up/Down scroll only when scrollable) and the gesture
+ * callback for horizontal swipes.
  *
  * When @a reserve_scrollbar is false (the default) the child widget
  * receives the full rectangle and scrolling only activates when the
