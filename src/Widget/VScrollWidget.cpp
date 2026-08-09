@@ -282,10 +282,14 @@ VScrollWidget::KeyPress(unsigned key_code) noexcept
 void
 VScrollWidget::OnVScrollPanelChange() noexcept
 {
-  if (visible) {
-    UpdateVirtualHeight(GetWindow().GetClientRect());
-    widget->Move(GetWindow().GetVirtualRect());
-  }
+  if (!visible)
+    return;
+
+  /* Origin-only changes must not remeasure virtual height: form
+     widgets that report size from their HWND would feedback into
+     SetVirtualHeight and force a full child relayout on every
+     smooth-scroll tick (WIN64 crash with bordered controls). */
+  widget->Move(GetWindow().GetVirtualRect());
 }
 
 bool

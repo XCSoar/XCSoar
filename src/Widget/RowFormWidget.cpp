@@ -73,7 +73,12 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return Layout::GetMinimumControlHeight();
   }
 
-  return window->GetSize().height;
+  /* Use the window rectangle (outer size on GDI), not GetSize()
+     (client area).  Move() sizes the outer HWND; feeding client
+     height back into Move() shrinks bordered controls on every
+     layout pass (e.g. VScrollPanel smooth scroll) until height
+     reaches 0 and PaintCanvas asserts. */
+  return window->GetPosition().GetHeight();
 }
 
 unsigned
@@ -103,7 +108,7 @@ RowFormWidget::Row::GetMaximumHeight(const DialogLook &look,
     return 4096;
   }
 
-  return window->GetSize().height;
+  return window->GetPosition().GetHeight();
 }
 
 inline void
@@ -518,9 +523,15 @@ RowFormWidget::Show(const PixelRect &rc) noexcept
 void
 RowFormWidget::Move(const PixelRect &rc) noexcept
 {
+  /* Pure scroll origin changes only move the panel; skip row
+     re-layout so bordered GENERIC controls are not resized. */
+  const bool size_changed = !IsDefined() ||
+    GetWindow().GetSize() != rc.GetSize();
+
   WindowWidget::Move(rc);
 
-  UpdateLayout();
+  if (size_changed)
+    UpdateLayout();
 }
 
 bool

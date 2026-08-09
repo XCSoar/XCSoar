@@ -251,6 +251,7 @@ Version 7.45 - not yet released
     characters (e.g. Cyrillic account names) #2824
   - open ZIP maps, JPEG/TIFF images, Lua scripts, fonts, and cache files
     from folders with non-English characters on Windows
+  - fix crash when scrolling the Weather → RASP settings page #2828
 * devices
   - Condor 3: Spectate.json multiplayer traffic driver (Condor3Spectate)
     shows other gliders on the FLARM radar and map
