@@ -61,7 +61,7 @@ static constexpr unsigned separator_height = 2;
 static bool
 ShowMapOverlayZoomButtons(const UISettings &settings) noexcept
 {
-  return settings.show_zoom_button || settings.show_menu_button;
+  return settings.show_zoom_button;
 }
 
 [[gnu::pure]]
