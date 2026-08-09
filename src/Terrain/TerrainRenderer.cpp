@@ -351,6 +351,29 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
 #ifdef ENABLE_OPENGL
+  /* Call once — the helper mutates quantisation_pixels. */
+  const bool quantisation_improved = raster_renderer.UpdateQuantisation();
+#else
+  constexpr bool quantisation_improved = false;
+#endif
+
+  /* Exact same view: reuse without consulting overscan bounds.
+     Near the map edge, overscan is clipped so old_bounds.IsInside()
+     can fail even when the projection is unchanged. */
+  if (!quantisation_improved &&
+      compare_projection.Compare(map_projection) &&
+      terrain_serial == terrain.GetSerial() &&
+      sunazimuth.CompareRoughly(last_sun_azimuth)) {
+    if (settings.contours == Contours::OFF ||
+#ifdef ENABLE_OPENGL
+        raster_renderer.GetQuantisationPixels() > 2 ||
+#endif
+        map_projection.GetScale() == last_projection_scale) {
+      return true;
+    }
+  }
+
+#ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
   GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
@@ -362,32 +385,27 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       return false;
   }
 
-  if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
+  if (!quantisation_improved &&
+      old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation()) {
+      sunazimuth.CompareRoughly(last_sun_azimuth)) {
     /* The existing terrain image is suitable for reuse.
        But with contours: Re-use only without zoom change.
        Otherwise we can re-use as a fast preview, but
        re-render the higher quality views (q=2 and q=1) */
     if (settings.contours == Contours::OFF ||
         raster_renderer.GetQuantisationPixels() > 2 ||
-        map_projection.GetScale() == last_projection_scale)
+        map_projection.GetScale() == last_projection_scale) {
+      compare_projection = CompareProjection(map_projection);
       return true;
+    }
   }
 
-#else
-  if (compare_projection.Compare(map_projection) &&
-      terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth))
-    /* no change since previous frame */
-    return true;
-
-  compare_projection = CompareProjection(map_projection);
 #endif
 
   terrain_serial = terrain.GetSerial();
+  compare_projection = CompareProjection(map_projection);
 
   last_sun_azimuth = sunazimuth;
 
