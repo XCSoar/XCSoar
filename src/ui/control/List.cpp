@@ -8,6 +8,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -20,15 +21,15 @@
 #include <algorithm>
 
 /**
- * Can the user scroll with pixel precision?  This is used on fast
- * displays to give more instant feedback, which feels more slick.  On
- * slow e-paper screens, this is not a good idea.
+ * Can the user scroll with pixel precision?  Fast displays get
+ * kinetic/smooth scrolling; e-paper and slow CPUs snap (same gate as
+ * map pan animations in InputEventsMap).
  */
-[[gnu::const]]
+[[gnu::pure]]
 static bool
 UsePixelPan() noexcept
 {
-  return !HasEPaper();
+  return !HasEPaper() && !IsSlowCPU();
 }
 
 ListControl::ListControl(const DialogLook &_look) noexcept
