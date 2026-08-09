@@ -46,6 +46,10 @@ Version 7.45 - not yet released
 * ui
   - Fix zoom buttons still appearing when "Show Zoom button" is off
     while Menu or Quick Menu is on #2830
+  - Keep map overlay zoom with the menu/QuickMenu buttons top-right
+    (+ above -), including when zoom is the only overlay button
+  - Keep overlay buttons visible during bottom QuestionWidgets
+    (airspace / task prompts) #2830
   - add help text for plane ``Max. Cruise Speed`` #1134
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
     toggles (also fixes north-up so it no longer changes auto-zoom)
