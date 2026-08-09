@@ -44,6 +44,8 @@ Version 7.45 - not yet released
   - fix crash when opening the aircraft type picker without a network
     connection
 * ui
+  - Fix zoom buttons still appearing when "Show Zoom button" is off
+    while Menu or Quick Menu is on #2830
   - add help text for plane ``Max. Cruise Speed`` #1134
   - Bind F5/F6 on the FLARM traffic radar to auto-zoom and north-up
     toggles (also fixes north-up so it no longer changes auto-zoom)
