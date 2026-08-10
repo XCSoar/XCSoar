@@ -80,6 +80,17 @@ CheckboxBoxSize(const Font &font) noexcept
 }
 
 /**
+ * Width of checkbox + gap after it (must match #RenderCheckboxSegment).
+ */
+[[gnu::pure]]
+static int
+CheckboxPrefixWidth(const Font &font) noexcept
+{
+  const int box_size = CheckboxBoxSize(font);
+  return box_size + Layout::Scale(4);
+}
+
+/**
  * Content margin for the rich text area (top, left, right, bottom).
  * Larger than GetTextPadding() for comfortable reading.
  * Touch layouts get extra padding for easier interaction.
@@ -510,12 +521,14 @@ RichTextWindow::CalcWrapTextWidth(unsigned column_width) const noexcept
 
   unsigned text_width = column_width;
   bool has_list = false;
+  bool has_checkbox = false;
   for (const auto &span : parsed.styles) {
-    if (span.style == TextStyle::ListItem ||
-        span.style == TextStyle::Checkbox ||
-        span.style == TextStyle::CheckboxChecked) {
+    if (span.style == TextStyle::ListItem)
       has_list = true;
-      break;
+    else if (span.style == TextStyle::Checkbox ||
+             span.style == TextStyle::CheckboxChecked) {
+      has_list = true;
+      has_checkbox = true;
     }
   }
 
@@ -532,12 +545,18 @@ RichTextWindow::CalcWrapTextWidth(unsigned column_width) const noexcept
 
   /* List first lines paint with a left indent; continuations hang
      under the body.  WrapText uses one width for the whole doc, so
-     reserve the hang so wrapped lines do not run past the edge. */
+     reserve the hang so wrapped lines do not run past the edge.
+     Checkboxes are often wider than "- "; use the larger of the two. */
   if (has_list) {
-    const unsigned hang = static_cast<unsigned>(
-      measure.CalcTextSize("  ").width +
+    const unsigned list_indent = measure.CalcTextSize("  ").width;
+    unsigned hang = list_indent +
       measure.CalcTextSize("- ").width +
-      measure.CalcTextSize(" ").width);
+      measure.CalcTextSize(" ").width;
+    if (has_checkbox) {
+      const unsigned cb_hang = list_indent +
+        static_cast<unsigned>(CheckboxPrefixWidth(*font));
+      hang = std::max(hang, cb_hang);
+    }
     if (text_width > hang)
       text_width -= hang;
   }
@@ -662,17 +681,6 @@ MeasureNumberedListPrefixWidth(const Font &font, const std::string &text,
     return 0;
   const std::size_t n = i + 2 - line_start;
   return font.TextSize(std::string_view(text.c_str() + line_start, n)).width;
-}
-
-/**
- * Width of checkbox + gap after it (must match #RenderCheckboxSegment).
- */
-[[gnu::pure]]
-static int
-CheckboxPrefixWidth(const Font &font) noexcept
-{
-  const int box_size = CheckboxBoxSize(font);
-  return box_size + Layout::Scale(4);
 }
 
 void
@@ -818,10 +826,18 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
     return TextStartsWithNumberedList(text, line_start, line_length);
   };
 
-  /* Plain-text "- " bullet (e.g. Credits NEWS without Markdown). */
-  auto PlainLineStartsWithBullet =
-    [&text](std::size_t start, std::size_t length) noexcept {
-      return length >= 2 && text[start] == '-' && text[start + 1] == ' ';
+  /* Plain-text "- " bullet (e.g. Credits NEWS without Markdown).
+     NEWS uses an indented "  - " prefix; skip leading spaces/tabs.
+     Returns byte length of leading whitespace + "- ", or 0. */
+  auto PlainBulletPrefixLength =
+    [&text](std::size_t start, std::size_t length) noexcept -> std::size_t {
+      const std::size_t end = start + length;
+      std::size_t i = start;
+      while (i < end && (text[i] == ' ' || text[i] == '\t'))
+        ++i;
+      if (i + 1 >= end || text[i] != '-' || text[i + 1] != ' ')
+        return 0;
+      return i + 2 - start;
     };
 
   // If no links and no styles, each line is a single normal segment
@@ -835,15 +851,18 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
         seg_line.segments.push_back({line.start, line.length, SIZE_MAX, TextStyle::Normal});
 
       if (is_new_para) {
+        const std::size_t plain_bullet_n =
+          PlainBulletPrefixLength(line.start, line.length);
         in_list_paragraph =
           IsListParagraphStart(seg_line, line.start, line.length) ||
-          PlainLineStartsWithBullet(line.start, line.length);
+          plain_bullet_n > 0;
         if (in_list_paragraph && font != nullptr) {
           if (TextStartsWithNumberedList(text, line.start, line.length))
             current_list_hang = MeasureNumberedListPrefixWidth(
               *font, text, line.start, line.length);
-          else if (PlainLineStartsWithBullet(line.start, line.length))
-            current_list_hang = font->TextSize("- ").width;
+          else if (plain_bullet_n > 0)
+            current_list_hang = font->TextSize(std::string_view(
+              text.c_str() + line.start, plain_bullet_n)).width;
           else
             current_list_hang = list_indent;
         } else
@@ -1190,7 +1209,9 @@ RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
     return;
   const unsigned text_width = widget_size.width - padding * 2;
 
-  const std::size_t n_lines = segmented_lines->size();
+  const std::size_t n_lines = std::min({segmented_lines->size(),
+                                        line_y_offsets.size(),
+                                        line_heights.size()});
 
   /* Binary search: first line whose bottom is past clip_top. */
   std::size_t first_line = 0;
