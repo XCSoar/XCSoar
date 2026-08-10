@@ -324,20 +324,19 @@ FileMultiSelectWidget::PaintDirectoryItem(Canvas &canvas, PixelRect rc,
   PixelRect text_rc = rc;
   text_rc.left = rc.left + (int)padding;
 
-  const unsigned max_icon_size =
-    rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
+  PixelRect box_rc = GetListRowCheckBoxRect(rc);
+  const unsigned max_icon_size = box_rc.GetWidth();
 
   if (folder_icon_.IsDefined() && max_icon_size > 0) {
-    // Centre the icon in the same column as the file checkboxes
-    // (which occupy max_icon_size × max_icon_size).
+    // Centre the icon in the same column as the file checkboxes.
     // Use the target_height overload so the icon scales to fit the row,
     // matching the checkbox behaviour at any DPI / window size.
     PixelPoint center{
-      rc.left + (int)padding + (int)max_icon_size / 2,
+      box_rc.left + (int)max_icon_size / 2,
       rc.top + (int)rc.GetHeight() / 2,
     };
     folder_icon_.Draw(canvas, center, max_icon_size);
-    text_rc.left += (int)max_icon_size + 2 * (int)padding;
+    text_rc.left = box_rc.right + 2 * (int)padding;
   }
 
   const char *name = item.is_up ? "..." : GetComparableName(item.path);
@@ -362,13 +361,7 @@ FileMultiSelectWidget::PaintFileItem(Canvas &canvas, PixelRect rc,
 
   // Draw checkbox at left and then render text columns/rows according to
   // configured providers and selected renderer.
-  unsigned box_size = rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
-  PixelRect box_rc;
-  box_rc.left = rc.left + (int)padding;
-  box_rc.top = rc.top + (int)padding;
-  box_rc.right = box_rc.left + (int)box_size;
-  box_rc.bottom = box_rc.top + (int)box_size;
-
+  PixelRect box_rc = GetListRowCheckBoxRect(rc);
   const bool focused = !HasCursorKeys() || GetList().HasFocus();
   DrawCheckBox(canvas, UIGlobals::GetDialogLook(), box_rc, selected, focused, false, true);
 

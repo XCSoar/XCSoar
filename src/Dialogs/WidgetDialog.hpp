@@ -130,6 +130,11 @@ public:
     buttons.ReselectToFirstEnabled();
   }
 
+  /** @see ButtonPanel::SelectFirstEnabled() */
+  void SelectFirstEnabledButton() noexcept {
+    buttons.SelectFirstEnabled();
+  }
+
   int ShowModal();
 
   /* virtual methods from class WndForm */

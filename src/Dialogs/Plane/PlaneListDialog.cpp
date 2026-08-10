@@ -7,7 +7,9 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
+#include "Screen/Layout.hpp"
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
@@ -21,6 +23,7 @@
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Message.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "Components.hpp"
@@ -39,10 +42,14 @@ class PlaneListWidget final
 
   struct ListItem {
     StaticString<32> name;
+    StaticString<6> competition_id;
+    StaticString<32> type;
     AllocatedPath path;
 
-    ListItem(std::string_view _name, Path _path) noexcept
-      :name(_name), path(_path) {}
+    ListItem(std::string_view _name, const char *_competition_id,
+             const char *_type, Path _path) noexcept
+      :name(_name), competition_id(_competition_id), type(_type),
+       path(_path) {}
 
     bool operator<(const ListItem &i2) const noexcept {
       return StringCollate(name, i2.name) < 0;
@@ -60,7 +67,10 @@ class PlaneListWidget final
       std::string_view name{filename.c_str()};
       RemoveSuffix(name, std::string_view{".xcp"});
 
-      list.emplace_back(name, path);
+      Plane plane{};
+      PlaneGlue::ReadFile(plane, path);
+      list.emplace_back(name, plane.competition_id.c_str(),
+                        plane.type.c_str(), path);
     }
   };
 
@@ -99,6 +109,12 @@ protected:
   }
 
   void OnActivateItem(unsigned index) noexcept override;
+
+  bool IsMouseActivateHotspot(unsigned index, PixelPoint relative,
+                              PixelSize item_size) const noexcept override;
+
+  bool OnMouseActivateItem(unsigned index, PixelPoint relative,
+                           PixelSize item_size) noexcept override;
 };
 
 void
@@ -119,13 +135,18 @@ PlaneListWidget::UpdateList() noexcept
   list_control.Invalidate();
 
   const bool empty = list.empty();
-  load_button->SetEnabled(!empty);
+  const bool only_active = list.size() == 1 &&
+    Profile::GetPathIsEqual("PlanePath", list[0].path);
+  /* Empty, or sole plane already active: Activate is a no-op → arm
+     New.  Otherwise prefer Activate (including after New adds a
+     plane and Activate becomes usable again). */
+  load_button->SetEnabled(!empty && !only_active);
   edit_button->SetEnabled(!empty);
   copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
 
   if (form != nullptr)
-    form->ResyncButtonPanelSelection();
+    form->SelectFirstEnabledButton();
 }
 
 void
@@ -133,11 +154,15 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
 {
   form = &dialog;
 
+  /* Activate first so EnableCursorSelection(0) arms it; when the
+     list is empty or the sole plane is already active, UpdateList()
+     disables Activate and SelectFirstEnabledButton() arms New.
+     After a plane is added, Activate is re-enabled and armed again. */
+  load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
   dialog.AddButton(_("New"), [this](){ NewClicked(); });
   edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(false); });
   copy_button = dialog.AddButton(_("Copy"), [this](){ EditClicked(true); });
   delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
-  load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
 
 void
@@ -156,18 +181,34 @@ PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   assert(i < list.size());
 
-  if (Profile::GetPathIsEqual("PlanePath", list[i].path)) {
-    StaticString<256> buffer;
-    buffer.Format("%s - %s", list[i].name.c_str(), _("Active"));
-    row_renderer.DrawFirstRow(canvas, rc, buffer);
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  const bool active =
+    Profile::GetPathIsEqual("PlanePath", list[i].path);
+
+  PixelRect box_rc = GetListRowCheckBoxRect(rc);
+  if (box_rc.GetWidth() > 0)
+    DrawCheckBox(canvas, look, box_rc, active, false, false, true);
+
+  PixelRect text_rc = rc;
+  if (box_rc.GetWidth() > 0)
+    text_rc.left = box_rc.right + 2 * (int)Layout::GetTextPadding();
+
+  if (!list[i].type.empty()) {
+    StaticString<96> buffer;
+    buffer.Format("%s - %s", list[i].name.c_str(), list[i].type.c_str());
+    row_renderer.DrawFirstRow(canvas, text_rc, buffer);
   } else
-    row_renderer.DrawFirstRow(canvas, rc, list[i].name);
+    row_renderer.DrawFirstRow(canvas, text_rc, list[i].name);
 
   Path path = list[i].path;
   if (auto relative_path = RelativePath(path); relative_path != nullptr)
     path = relative_path;
 
-  row_renderer.DrawSecondRow(canvas, rc, path.c_str());
+  row_renderer.DrawSecondRow(canvas, text_rc, path.c_str());
+
+  if (!list[i].competition_id.empty())
+    row_renderer.DrawRightFirstRow(canvas, text_rc,
+                                   list[i].competition_id.c_str());
 }
 
 static bool
@@ -183,6 +224,14 @@ LoadFile(Path path) noexcept
                          settings.polar.glide_polar_task);
   backend_components->SetTaskPolar(settings.polar);
   Profile::Save();
+
+  const char *label = !settings.plane.polar_name.empty()
+    ? settings.plane.polar_name.c_str()
+    : settings.plane.registration.c_str();
+  if (settings.polar.glide_polar_task.IsValid())
+    Message::AddMessage(_("Polar changed"), label);
+  else
+    Message::AddMessage(_("Invalid Polar"), label);
 
   return true;
 }
@@ -252,6 +301,13 @@ PlaneListWidget::NewClicked() noexcept
     }
 
     UpdateList();
+
+    /* First plane: activate immediately so settings apply, the
+       checkbox reflects active, and LoadFile()'s status message
+       can fire. */
+    if (list.size() == 1 && LoadFile(path))
+      UpdateList();
+
     break;
   }
 }
@@ -351,8 +407,40 @@ PlaneListWidget::OnActivateItem(unsigned i) noexcept
   tmp.Format(_("Activate plane \"%s\"?"),
              list[i].name.c_str());
 
-  if (ShowMessageBox(tmp, " ", MB_YESNO) == IDYES)
-    LoadWithDialog(i);
+  if (ShowMessageBox(tmp, " ", MB_YESNO) == IDYES &&
+      LoadWithDialog(i))
+    UpdateList();
+}
+
+bool
+PlaneListWidget::IsMouseActivateHotspot([[maybe_unused]] unsigned index,
+                                       PixelPoint relative,
+                                       PixelSize item_size) const noexcept
+{
+  /* Grow the hit target slightly for touch. */
+  PixelRect box = GetListRowCheckBoxRect(PixelRect{item_size});
+  box.Grow((int)Layout::GetTextPadding());
+  return box.GetWidth() > 0 && box.Contains(relative);
+}
+
+bool
+PlaneListWidget::OnMouseActivateItem(unsigned index, PixelPoint relative,
+                                     PixelSize item_size) noexcept
+{
+  PixelRect box = GetListRowCheckBoxRect(PixelRect{item_size});
+  box.Grow((int)Layout::GetTextPadding());
+  if (box.GetWidth() == 0 || !box.Contains(relative))
+    return false;
+
+  assert(index < list.size());
+
+  /* Checkbox tap activates without the confirm dialog; already
+     active is a no-op. */
+  if (!Profile::GetPathIsEqual("PlanePath", list[index].path) &&
+      LoadWithDialog(index))
+    UpdateList();
+
+  return true;
 }
 
 void
@@ -366,7 +454,9 @@ dlgPlanesShowModal() noexcept
   dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
   /* Like Alternates: list cursor picks the plane; Left/Right arm an
-     action (New/Edit/…); Enter runs it. */
+     action (Activate/New/…); Enter runs it. Empty list or sole
+     active plane: Activate is disabled and
+     SelectFirstEnabledButton() arms New. */
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();

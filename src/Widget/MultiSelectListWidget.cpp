@@ -41,21 +41,12 @@ MultiSelectListWidget::DrawCheckboxText(Canvas &canvas, const PixelRect &rc,
   const DialogLook &look = UIGlobals::GetDialogLook();
   const bool focused = !HasCursorKeys() || GetList().HasFocus();
 
-  const unsigned padding = Layout::GetTextPadding();
-  unsigned box_size = rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
-  // Draw checkbox box at left of row
-  PixelRect box_rc;
-  box_rc.left = rc.left + (int)padding;
-  box_rc.top = rc.top + (int)padding;
-  box_rc.right = box_rc.left + (int)box_size;
-  box_rc.bottom = box_rc.top + (int)box_size;
-
-  DrawCheckBox(canvas, UIGlobals::GetDialogLook(), box_rc,
-               selected, focused, false, true);
+  PixelRect box_rc = GetListRowCheckBoxRect(rc);
+  DrawCheckBox(canvas, look, box_rc, selected, focused, false, true);
 
   // Draw text to the right of the checkbox, clipped to row
   const Font &font = *look.list.font;
-  const PixelPoint text_pos(box_rc.right + 2 * (int)padding,
+  const PixelPoint text_pos(box_rc.right + 2 * (int)Layout::GetTextPadding(),
                            rc.top + (int)((rc.GetHeight() - font.GetHeight()) / 2));
 
   canvas.Select(font);

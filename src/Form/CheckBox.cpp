@@ -10,6 +10,24 @@
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 
+PixelRect
+GetListRowCheckBoxRect(PixelRect rc) noexcept
+{
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned box_size =
+    rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
+
+  PixelRect box_rc{};
+  if (box_size == 0)
+    return box_rc;
+
+  box_rc.left = rc.left + (int)padding;
+  box_rc.top = rc.top + (int)padding;
+  box_rc.right = box_rc.left + (int)box_size;
+  box_rc.bottom = box_rc.top + (int)box_size;
+  return box_rc;
+}
+
 void
 DrawCheckBox(Canvas &canvas, const DialogLook &look,
              const PixelRect &box_rc,

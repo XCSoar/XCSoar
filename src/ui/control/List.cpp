@@ -497,7 +497,17 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
 
   if (drag_mode == DragMode::CURSOR &&
       p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
+    const unsigned index = GetCursorIndex();
+    const PixelRect item_rc = GetItemRect(index);
+    const PixelPoint relative{p.x - item_rc.left, p.y - item_rc.top};
+    const PixelSize item_size = item_rc.GetSize();
+
     drag_end();
+
+    if (cursor_handler != nullptr &&
+        cursor_handler->OnMouseActivateItem(index, relative, item_size))
+      return true;
+
     ActivateItem();
     return true;
   }
@@ -606,8 +616,15 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     drag_y = GetPixelOrigin() + Pos.y;
     drag_y_window = Pos.y;
 
-    if (activate_on_first_click) {
-      // Single-click activation path (opt-in for multi-select UIs).
+    const PixelRect item_rc = GetItemRect(index);
+    const PixelPoint relative{Pos.x - item_rc.left, Pos.y - item_rc.top};
+    const PixelSize item_size = item_rc.GetSize();
+    const bool hotspot = cursor_handler != nullptr &&
+      cursor_handler->IsMouseActivateHotspot(index, relative, item_size);
+
+    if (activate_on_first_click || hotspot) {
+      // Single-click activation path (opt-in for multi-select UIs
+      // or row hotspots such as a checkbox).
       SetCursorIndex(index);
       if (CanActivateItem()) {
         drag_mode = DragMode::CURSOR;
