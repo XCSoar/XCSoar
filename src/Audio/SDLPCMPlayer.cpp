@@ -83,7 +83,6 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
     convert_buffer.resize(actual.samples * channels);
 
   source = &_source;
-  SDL_PauseAudioDevice(device, 0);
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   // SDL's CoreAudio backend may reset the AVAudioSession category and
@@ -91,10 +90,15 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
   // preferred configuration and mark the audio vario as active so that
   // one-shot sound effects don't deactivate the shared AVAudioSession
   // (which would also silence the audio vario).
+  //
+  // Both must happen before the device is unpaused: otherwise a one-shot
+  // sound finishing in that window would deactivate the session while the
+  // audio vario is already playing, and SDL would not resume on its own.
   SetAudioVarioSessionActive(true);
   ActivateAudioSession();
-  SDL_PauseAudioDevice(device, 0);
 #endif
+
+  SDL_PauseAudioDevice(device, 0);
 
   return true;
 }
