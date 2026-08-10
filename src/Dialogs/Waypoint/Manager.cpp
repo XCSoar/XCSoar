@@ -18,6 +18,7 @@
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "GetWaypointReachability.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
@@ -160,7 +161,8 @@ WaypointManagerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
                              row_renderer,
                              UIGlobals::GetMapLook().waypoint,
-                             CommonInterface::GetMapSettings().waypoint);
+                             CommonInterface::GetMapSettings().waypoint,
+                             GetWaypointReachability(*info.waypoint));
 }
 
 void

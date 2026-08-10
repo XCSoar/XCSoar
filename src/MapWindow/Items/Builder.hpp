@@ -22,6 +22,7 @@ struct ThermalLocatorInfo;
 struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
+struct ComputerSettings;
 class NOAAStore;
 namespace TIM { struct Thermal; }
 
@@ -39,7 +40,10 @@ public:
   void AddArrivalAltitudes(const ProtectedRoutePlanner &route_planner,
                      const RasterTerrain *terrain, double safety_height);
   void AddSelfIfNear(const GeoPoint &self, Angle bearing);
-  void AddWaypoints(const Waypoints &waypoints);
+  void AddWaypoints(const Waypoints &waypoints,
+                    const ProtectedRoutePlanner *route_planner,
+                    const MoreData &basic, const DerivedInfo &calculated,
+                    const ComputerSettings &settings);
   void AddVisibleAirspace(const Airspaces &airspaces,
                           const ProtectedAirspaceWarningManager *warning_manager,
                           const AirspaceComputerSettings &computer_settings,
