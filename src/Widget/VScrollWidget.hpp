@@ -72,6 +72,11 @@ public:
     return *widget;
   }
 
+  [[gnu::pure]]
+  bool ReservesScrollbar() const noexcept {
+    return reserve_scrollbar;
+  }
+
   /**
    * Set a callback for horizontal swipe gestures.
    * Only effective when reserve_scrollbar is true.
