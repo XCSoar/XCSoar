@@ -403,6 +403,9 @@ Version 7.45 - not yet released
     pre-filtered to recently-used waypoints; listed in the Gesture Help
     dialog with its own icon #336
 * map
+  - apply snail trail wind drift only when zoomed in (about 16 km across
+    the short map edge), so a Full trail in circling mode no longer
+    looks shifted away from turnpoints at overview scales #2835
   - fix black terrain after idle high-resolution sharpening on OpenGL
     devices with a 2048-pixel texture limit (e.g. Raspberry Pi 3 / VC4)
   - on hosts with max CPU frequency ≤ 1.4 GHz (typical Kobo, Raspberry Pi

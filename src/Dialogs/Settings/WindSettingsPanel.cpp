@@ -52,8 +52,8 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
   if (edit_trail_drift)
     AddBoolean(_("Trail drift"),
                _("Determines whether the snail trail is drifted with the wind "
-                 "when displayed in circling mode. Switched Off, "
-                 "the snail trail stays uncompensated for wind drift."),
+                 "when displayed in circling mode at near map scales. Switched "
+                 "Off, the snail trail stays uncompensated for wind drift."),
                map_settings.trail.wind_drift_enabled);
   else
     AddDummy();
