@@ -10,7 +10,8 @@
 
 unsigned
 TwoTextRowsRenderer::CalculateLayout(const Font &_first_font,
-                                     const Font &_second_font) noexcept
+                                     const Font &_second_font,
+                                     unsigned min_height) noexcept
 {
   const unsigned first_font_height = _first_font.GetHeight();
   const unsigned second_font_height = _second_font.GetHeight();
@@ -18,7 +19,8 @@ TwoTextRowsRenderer::CalculateLayout(const Font &_first_font,
   const unsigned max_height = Layout::GetMaximumControlHeight();
   const unsigned padded_height =
     first_font_height + second_font_height + 3 * text_padding;
-  const unsigned row_height = std::max(padded_height, max_height);
+  const unsigned row_height =
+    std::max(std::max(padded_height, max_height), min_height);
 
   unsigned vertical_padding =
     (row_height - first_font_height - second_font_height) / 3;

@@ -283,19 +283,25 @@ ButtonPanel::ReselectToFirstEnabled() noexcept
   if (selected_index < 0)
     return;
 
-  const auto is_usable = [this](unsigned i) {
-    return buttons[i]->IsVisible() && buttons[i]->IsEnabled();
-  };
-
   if (selected_index < (int)buttons.size() &&
-      is_usable((unsigned)selected_index))
+      buttons[selected_index]->IsVisible() &&
+      buttons[selected_index]->IsEnabled())
+    return;
+
+  SelectFirstEnabled();
+}
+
+void
+ButtonPanel::SelectFirstEnabled() noexcept
+{
+  if (selected_index < 0)
     return;
 
   if (selected_index < (int)buttons.size() && selected_index >= 0)
     buttons[selected_index]->SetSelected(false);
 
   for (unsigned i = 0; i < buttons.size(); ++i) {
-    if (is_usable(i)) {
+    if (buttons[i]->IsVisible() && buttons[i]->IsEnabled()) {
       selected_index = (int)i;
       buttons[selected_index]->SetSelected(true);
       return;

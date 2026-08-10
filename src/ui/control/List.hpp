@@ -72,6 +72,29 @@ public:
   }
 
   virtual void OnActivateItem([[maybe_unused]] unsigned index) noexcept {}
+
+  /**
+   * Return true if a mouse/touch press at #relative (within the item
+   * rectangle of size #item_size) should activate on first click
+   * (e.g. a row checkbox).
+   */
+  [[gnu::pure]]
+  virtual bool IsMouseActivateHotspot([[maybe_unused]] unsigned index,
+                                      [[maybe_unused]] PixelPoint relative,
+                                      [[maybe_unused]] PixelSize item_size) const noexcept {
+    return false;
+  }
+
+  /**
+   * Handle mouse/touch activation at #relative.  Return true if the
+   * click was consumed (keyboard activation still uses
+   * #OnActivateItem).
+   */
+  virtual bool OnMouseActivateItem([[maybe_unused]] unsigned index,
+                                   [[maybe_unused]] PixelPoint relative,
+                                   [[maybe_unused]] PixelSize item_size) noexcept {
+    return false;
+  }
 };
 
 /**

@@ -56,6 +56,13 @@ public:
   void ReselectToFirstEnabled() noexcept;
 
   /**
+   * Always arm the first enabled button (e.g. after a list refresh
+   * when a higher-priority action such as Activate becomes usable
+   * again).  No-op if cursor selection is disabled.
+   */
+  void SelectFirstEnabled() noexcept;
+
+  /**
    * Called from #Button::OnSetFocus: move #selected_index to the
    * focused #Button so cursor-selection stays aligned with focus.
    */

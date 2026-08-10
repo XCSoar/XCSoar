@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/PaintWindow.hpp"
+#include "ui/dim/Rect.hpp"
 
 #include <string>
 #include <cassert>
@@ -12,7 +13,6 @@
 struct DialogLook;
 class ContainerWindow;
 class Canvas;
-struct PixelRect;
 
 /**
  * Draw the checkbox box and optional check mark into the given rectangle.
@@ -22,6 +22,14 @@ void DrawCheckBox(Canvas &canvas, const DialogLook &look,
                   const PixelRect &box_rc,
                   bool checked, bool focused, bool pressed,
                   bool enabled) noexcept;
+
+/**
+ * Checkbox on the left of a list row (same layout as multi-select
+ * file lists).  Returns an empty rect if the row is too short.
+ * Pass an item-local rect (origin at 0,0) for hit-testing.
+ */
+[[gnu::pure]]
+PixelRect GetListRowCheckBoxRect(PixelRect rc) noexcept;
 
 /**
  * This class is used for creating buttons.

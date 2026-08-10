@@ -32,10 +32,13 @@ class TwoTextRowsRenderer {
 
 public:
   /**
+   * @param min_height optional minimum row height (e.g. for a tall
+   * left-column glyph); extra space is split into the vertical paddings
    * @return the row height (including top and bottom padding)
    */
   unsigned CalculateLayout(const Font &_first_font,
-                           const Font &_second_font) noexcept;
+                           const Font &_second_font,
+                           unsigned min_height = 0) noexcept;
 
   const Font &GetFirstFont() const noexcept {
     return *first_font;
