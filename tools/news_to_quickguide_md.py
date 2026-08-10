@@ -18,8 +18,9 @@ import sys
 # GitHub issue links for NEWS “#1234” references (same tracker as the repo).
 GITHUB_ISSUE_BASE = "https://github.com/XCSoar/XCSoar/issues"
 # At least two digits, not ``#0`` / ``#1`` FLARM-style suffixes.  Skip
-# ``#digits`` already used as link text in […](…); avoid “##…” headings.
-_ISSUE_REF = re.compile(r"(?<!\[)#([1-9]\d+)\b")
+# ``#digits`` already used as link text in […](…), headings (``##…``),
+# and bare ``#1234(`` fragments.
+_ISSUE_REF = re.compile(r"(?<![#\[])#([1-9]\d+)\b(?!\()")
 
 
 def extract_first_version_block(text: str) -> str:
