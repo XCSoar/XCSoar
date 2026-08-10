@@ -49,6 +49,8 @@ Version 7.45 - not yet released
 * weather
   - Offer weather controls (map-bottom cursor bar) on non-OpenGL builds
     as well, so RASP pages can use them on memory-canvas and Kobo
+  - Keep the selected SkySight forecast time when changing layer
+    (picker or step); do not force Auto unless Auto was already selected
 * ui
   - Fix zoom buttons still appearing when "Show Zoom button" is off
     while Menu or Quick Menu is on #2830

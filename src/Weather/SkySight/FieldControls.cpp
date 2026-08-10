@@ -146,10 +146,8 @@ EditLayerOnLayout(PageLayout &page, bool offer_setup) noexcept
   if (layer == nullptr)
     return LayerPickerResult::NONE;
 
-  if (page.skysight_overlay != layer->id.c_str()) {
+  if (page.skysight_overlay != layer->id.c_str())
     page.skysight_overlay = layer->id;
-    page.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
-  }
 
   return LayerPickerResult::CHANGED;
 }
@@ -353,7 +351,6 @@ StepLayer(int delta) noexcept
             return false;
 
           page.skysight_overlay = layer->id;
-          page.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
           return true;
         }))
     return false;
