@@ -176,9 +176,19 @@ private:
                       time_t forecast_time) noexcept;
   void StartNextDecodeJob() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
-  static std::string FormatUrlTimestamp(time_t timestamp);
+  /**
+   * Format a UTC instant for a SkySight URL path segment
+   * (@c YYYY/MM/DD/HHMM).
+   *
+   * Live tile paths use the region's civil clock (@p region_tz from the
+   * regions API).  Pass an empty @p region_tz to keep the path in UTC.
+   * Cache filenames always use UTC via FormatFileTimestamp().
+   */
+  static std::string FormatUrlTimestamp(time_t timestamp,
+                                        std::string_view region_tz={});
+  /** Cache filenames always use UTC. */
   static std::string FormatFileTimestamp(time_t timestamp);
-  static std::string MakeTileUrl(const SkySight::Layer &layer,
-                                 time_t timestamp,
-                                 const GeoBitmap::TileData &tile);
+  std::string MakeTileUrl(const SkySight::Layer &layer,
+                          time_t timestamp,
+                          const GeoBitmap::TileData &tile) const;
 };

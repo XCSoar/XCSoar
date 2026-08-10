@@ -112,10 +112,9 @@ public:
         second_row = _("Updating...");
     } else if (layer->SupportsLiveTiles()) {
       if (layer->last_update != 0) {
-        const auto &settings = CommonInterface::GetComputerSettings();
         second_row.Format(_("Live layer. Last update %s"),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->last_update)),
-                                              settings.utc_offset).c_str());
+                                              skysight->GetForecastDisplayOffset(layer->last_update)).c_str());
       } else {
         second_row = _("Live tile layer.");
       }
@@ -127,27 +126,28 @@ public:
       else
         second_row = _("Forecast steps available. Activate or choose Time to download one.");
     } else {
-      const auto &settings = CommonInterface::GetComputerSettings();
       const auto now = std::time(nullptr);
       const auto age = std::chrono::seconds(now > layer->mtime
                                             ? now - layer->mtime
                                             : 0);
       if (layer->forecast_time != 0) {
+        const auto step_offset =
+          skysight->GetForecastDisplayOffset(layer->forecast_time);
         second_row.Format(_("Step %s. Data from %s to %s. Updated %s ago"),
                           SkySight::FormatForecastTimeLabel(
                             *layer, layer->forecast_time,
-                            settings.utc_offset).c_str(),
+                            step_offset).c_str(),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->from)),
-                                              settings.utc_offset).c_str(),
+                                              skysight->GetForecastDisplayOffset(layer->from)).c_str(),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->to)),
-                                              settings.utc_offset).c_str(),
+                                              skysight->GetForecastDisplayOffset(layer->to)).c_str(),
                           FormatTimespanSmart(age).c_str());
       } else {
         second_row.Format(_("Data from %s to %s. Updated %s ago"),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->from)),
-                                              settings.utc_offset).c_str(),
+                                              skysight->GetForecastDisplayOffset(layer->from)).c_str(),
                           FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->to)),
-                                              settings.utc_offset).c_str(),
+                                              skysight->GetForecastDisplayOffset(layer->to)).c_str(),
                           FormatTimespanSmart(age).c_str());
       }
     }

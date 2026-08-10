@@ -32,6 +32,8 @@ struct SkySightRegionEntry {
   std::string id;
   std::string name;
   std::string projection;
+  /** IANA time zone from the SkySight regions API (e.g. Europe/Warsaw). */
+  std::string tz;
   GeoBounds bounds = GeoBounds::Invalid();
 
   bool operator==(std::string_view other) const noexcept {

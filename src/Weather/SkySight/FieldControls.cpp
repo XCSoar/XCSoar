@@ -25,6 +25,11 @@ namespace SkySight {
 static constexpr unsigned TIME_PICKER_AUTO =
   std::numeric_limits<unsigned>::max();
 
+[[nodiscard]] static RoughTimeDelta
+DisplayOffsetFor(const SkySightClient &skysight, time_t utc_time) noexcept
+{
+  return skysight.GetForecastDisplayOffset(utc_time);
+}
 [[nodiscard]] static const Layer *
 GetLayer(const PageLayout &page) noexcept
 {
@@ -68,8 +73,9 @@ bool
 EditTimeOnLayout(PageLayout &page) noexcept
 {
   try {
+    const auto skysight = DataGlobals::GetSkySight();
     const auto *layer = GetLayer(page);
-    if (layer == nullptr || layer->SupportsLiveTiles())
+    if (skysight == nullptr || layer == nullptr || layer->SupportsLiveTiles())
       return false;
 
     const auto times = GetSelectableForecastTimes(*layer);
@@ -81,7 +87,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
     for (unsigned i = 0; i < times.size(); ++i)
       picker.addEnumText(FormatForecastTimeLabel(
         *layer, times[i],
-        CommonInterface::GetComputerSettings().utc_offset).c_str(), i);
+        DisplayOffsetFor(*skysight, times[i])).c_str(), i);
 
     if (page.skysight_time == PageLayout::SKYSIGHT_TIME_AUTO)
       picker.SetValue(TIME_PICKER_AUTO);
@@ -192,6 +198,7 @@ void
 FormatTimeLabelForPage(StaticString<64> &text,
                        const PageLayout &page) noexcept
 {
+  const auto skysight = DataGlobals::GetSkySight();
   const auto *layer = GetLayer(page);
   if (layer == nullptr) {
     text = _("No page layer");
@@ -214,7 +221,10 @@ FormatTimeLabelForPage(StaticString<64> &text,
   }
 
   const auto label = FormatForecastTimeLabel(
-    *layer, timestamp, CommonInterface::GetComputerSettings().utc_offset);
+    *layer, timestamp,
+    skysight != nullptr
+      ? DisplayOffsetFor(*skysight, timestamp)
+      : RoughTimeDelta{});
   if (automatic)
     text.Format(_("AUTO: %s"), label.c_str());
   else if (layer->FindDatafile(timestamp) == nullptr)
