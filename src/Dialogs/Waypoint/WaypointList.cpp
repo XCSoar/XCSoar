@@ -39,6 +39,7 @@
 #include "Language/Language.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
+#include "GetWaypointReachability.hpp"
 
 #include <algorithm>
 #include <list>
@@ -636,7 +637,8 @@ WaypointListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                              info.GetVector(location),
                              row_renderer,
                              UIGlobals::GetMapLook().waypoint,
-                             CommonInterface::GetMapSettings().waypoint);
+                             CommonInterface::GetMapSettings().waypoint,
+                             GetWaypointReachability(*info.waypoint));
 }
 
 void

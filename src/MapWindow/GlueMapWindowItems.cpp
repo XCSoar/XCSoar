@@ -77,7 +77,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   }
 
   if (waypoints)
-    builder.AddWaypoints(*waypoints);
+    builder.AddWaypoints(*waypoints, route_planner, basic, calculated,
+                         computer_settings);
 
 #ifdef HAVE_NOAA
   if (noaa_store)

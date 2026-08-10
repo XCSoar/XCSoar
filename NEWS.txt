@@ -218,6 +218,10 @@ Version 7.45 - not yet released
     internal audio vario volume
   - audio vario: add manual/automatic Vario/STF sound switching and
     ``VarioAudioMode`` input events
+  - show landable waypoint reachability in the "map elements at this
+    location" dialog, the waypoint selection dialog and the waypoint
+    manager; their icons were always drawn as unreachable even when the
+    map showed the same airfield as reachable #2836
 * glide computer
   - fix wild T Avg climb rates by preferring the instrument vario when
     available #2754

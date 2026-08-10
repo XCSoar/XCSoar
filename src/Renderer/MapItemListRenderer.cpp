@@ -241,7 +241,8 @@ Draw(Canvas &canvas, const PixelRect rc,
      const WaypointRendererSettings &renderer_settings)
 {
   WaypointListRenderer::Draw(canvas, rc, *item.waypoint,
-                             row_renderer, look, renderer_settings);
+                             row_renderer, look, renderer_settings,
+                             item.reachable);
 }
 
 #ifdef HAVE_NOAA
