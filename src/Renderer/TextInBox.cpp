@@ -12,6 +12,7 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
 static PixelPoint
@@ -114,11 +115,21 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
 
   if (mode.shape == LabelShape::ROUNDED_BLACK ||
       mode.shape == LabelShape::ROUNDED_WHITE) {
-    /* A hairline pen breaks up along the rounded corners: OpenGL draws
-       the outline as a triangle strip whose half width (0.5px) rounds
-       to zero on most of the arc segments, leaving a dotted edge.
-       Scale the width so every segment has area. */
-    const Pen outline_pen{std::max(1u, Layout::ScaleFinePenWidth(1)),
+    /* A hairline pen breaks up along the rounded corners where the
+       outline is emitted as a triangle strip: its half width (0.5px)
+       rounds to zero on most of the arc segments, leaving a dotted
+       edge.  Widen the pen only there.  Where GL_LINE_LOOP draws the
+       outline (and on the non-OpenGL canvases), a DPI-scaled pen would
+       merely make the box fat and - because LineToTriangles() rounds
+       the segment offsets to whole pixels - ragged around the corners;
+       on a 3x iPhone it turns the 1px hairline into 3px. */
+    unsigned outline_width = 1;
+#ifdef ENABLE_OPENGL
+    if (!UseOpenGLLineLoopOutline(outline_width))
+      outline_width = std::max(2u, Layout::ScaleFinePenWidth(1));
+#endif
+
+    const Pen outline_pen{outline_width,
                           mode.shape == LabelShape::ROUNDED_BLACK
                           ? COLOR_BLACK : COLOR_WHITE};
     canvas.Select(outline_pen);

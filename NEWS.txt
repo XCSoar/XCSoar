@@ -93,6 +93,9 @@ Version 7.45 - not yet released
   - Fix map vario / final-glide value labels: use a rounded rectangle
     (not a pill) with even text padding and an unbroken outline for the
     semitransparent background #1438
+  - Restore the thin, crisp outline on rounded map labels (landable
+    waypoints, vario, final glide); on Retina iPhones it had become
+    too thick, too dark and ragged at the corners #2840
   - Swap map overlay sides: vario bar on the left, final glide bar on
     the right #1210
   - Add airspace labels toggle: Display page 2, Quick Menu, and
