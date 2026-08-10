@@ -3,7 +3,6 @@
 
 #include "Asset.hpp"
 #include "CommandLine.hpp"
-#include "Hardware/CPU.hpp"
 
 #ifndef KOBO
 static DisplayType display_type = DisplayType::LCD;
@@ -49,15 +48,3 @@ HasKeyboard() noexcept
 }
 
 #endif
-
-/**
- * Default for harness / tools that link Form/List without
- * Hardware/CPU.cpp.  The strong definition in CPU.cpp overrides this
- * in the main binary.
- */
-[[gnu::weak]]
-bool
-IsSlowCPU() noexcept
-{
-  return false;
-}
