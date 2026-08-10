@@ -465,8 +465,17 @@ GlueMapWindow::RenderTrail(Canvas &canvas,
     break;
   }
 
-  DrawTrail(canvas, aircraft_pos, min_time,
-            GetMapSettings().trail.wind_drift_enabled && InCirclingMode());
+  /* Trail drift is for thermal centering at near zoom.  At overview
+     scales a Full trail shifted by hours of wind looks like a wrong
+     ground track (#2835, #709).  GetMapScale 2000 ≈ 16 km short edge. */
+  static constexpr double TRAIL_DRIFT_MAX_MAP_SCALE = 2000;
+
+  const bool enable_traildrift =
+    GetMapSettings().trail.wind_drift_enabled &&
+    InCirclingMode() &&
+    render_projection.GetMapScale() <= TRAIL_DRIFT_MAX_MAP_SCALE;
+
+  DrawTrail(canvas, aircraft_pos, min_time, enable_traildrift);
 }
 
 void
