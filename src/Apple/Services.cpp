@@ -8,14 +8,21 @@
 #include "Services.hpp"
 #import <AVFoundation/AVFoundation.h>
 
+#include <atomic>
+
 #if TARGET_OS_IPHONE
 
-static bool audio_vario_session_active = false;
+/**
+ * Accessed from the SDL audio thread (SDLPCMPlayer), from the thread
+ * calling SoundUtil::Play() and from the AVAudioPlayer delegate
+ * callbacks, so it needs to be atomic.
+ */
+static std::atomic<bool> audio_vario_session_active{false};
 
 void
 SetAudioVarioSessionActive(bool active)
 {
-  audio_vario_session_active = active;
+  audio_vario_session_active.store(active, std::memory_order_release);
 }
 
 void
@@ -45,7 +52,7 @@ ActivateAudioSession()
 void
 DeactivateAudioSession()
 {
-  if (audio_vario_session_active) {
+  if (audio_vario_session_active.load(std::memory_order_acquire)) {
     // keep the session active while the audio vario's audio device is
     // open: deactivating it would also silence the audio vario, which
     // SDL would not resume on its own
