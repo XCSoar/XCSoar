@@ -6,6 +6,7 @@
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
 #include "LiveTileUtils.hpp"
+#include "RegionTime.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "Weather/BackgroundDownloadProgress.hpp"
 #include "Weather/MapOverlay/PagePlacement.hpp"
@@ -337,6 +338,23 @@ std::string_view
 SkySightClient::GetRegion() const noexcept
 {
   return api->GetRegion();
+}
+
+std::string_view
+SkySightClient::GetRegionTimeZone() const noexcept
+{
+  const auto region_id = GetRegion();
+  for (const auto &candidate : GetRegions())
+    if (candidate.id == region_id)
+      return candidate.tz;
+
+  return {};
+}
+
+RoughTimeDelta
+SkySightClient::GetForecastDisplayOffset(time_t utc_time) const noexcept
+{
+  return SkySight::GetRegionUtcOffset(GetRegionTimeZone(), utc_time);
 }
 
 std::size_t
@@ -1002,7 +1020,7 @@ SkySightClient::UpdateActiveLayer(unsigned index, Path path,
   } else if (active_layer->forecast_time != 0) {
     const auto forecast_time = FormatLocalDateTimeYYYYMMDDHHMM(
       TimeStamp(std::chrono::duration<double>(active_layer->forecast_time)),
-      CommonInterface::GetComputerSettings().utc_offset);
+      GetForecastDisplayOffset(active_layer->forecast_time));
     label.AppendFormat(" (%s)", forecast_time.c_str());
   }
 
