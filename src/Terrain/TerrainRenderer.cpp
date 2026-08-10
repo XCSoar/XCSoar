@@ -359,9 +359,11 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
   /* Exact same view: reuse without consulting overscan bounds.
      Near the map edge, overscan is clipped so old_bounds.IsInside()
-     can fail even when the projection is unchanged. */
+     can fail even when the projection is unchanged.  Use
+     CompareExact (not tolerant Compare) so a tiny pan cannot skip
+     the IsInside coverage check. */
   if (!quantisation_improved &&
-      compare_projection.Compare(map_projection) &&
+      compare_projection.CompareExact(map_projection) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth)) {
     if (settings.contours == Contours::OFF ||

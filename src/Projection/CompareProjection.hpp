@@ -54,6 +54,16 @@ public:
     return Compare(CompareProjection(projection));
   }
 
+  /**
+   * Are the screen-corner geopoints identical to the saved ones?
+   * Unlike Compare(), this rejects any movement — including sub-pixel.
+   */
+  bool CompareExact(const CompareProjection &other) const noexcept;
+
+  bool CompareExact(const WindowProjection &projection) const noexcept {
+    return CompareExact(CompareProjection(projection));
+  }
+
   bool CompareAndUpdate(const CompareProjection &other) noexcept;
 
   /**

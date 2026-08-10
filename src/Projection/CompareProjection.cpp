@@ -40,6 +40,16 @@ CompareProjection::Compare(const CompareProjection &other) const noexcept
 }
 
 bool
+CompareProjection::CompareExact(const CompareProjection &other) const noexcept
+{
+  return IsDefined() &&
+    corners.top_left == other.corners.top_left &&
+    corners.top_right == other.corners.top_right &&
+    corners.bottom_left == other.corners.bottom_left &&
+    corners.bottom_right == other.corners.bottom_right;
+}
+
+bool
 CompareProjection::CompareAndUpdate(const CompareProjection &other) noexcept
 {
   if (Compare(other))
