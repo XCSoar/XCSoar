@@ -16,10 +16,6 @@
 #include <chrono>
 #endif
 
-#ifdef __APPLE__
-#include <time.h>
-#endif
-
 namespace SkySight {
 
 /**
@@ -51,29 +47,13 @@ TryChronoOffset(std::string_view tz_name, time_t utc_time) noexcept
 #endif
 }
 
-#ifdef __APPLE__
-[[nodiscard]] inline std::optional<RoughTimeDelta>
-TryAppleOffset(std::string_view tz_name, time_t utc_time) noexcept
-{
-  const std::string name{tz_name};
-  timezone_t zone = tzalloc(name.c_str());
-  if (zone == nullptr)
-    return std::nullopt;
-
-  struct tm tm {};
-  const auto *local = localtime_rz(zone, &utc_time, &tm);
-  tzfree(zone);
-  if (local == nullptr)
-    return std::nullopt;
-
-  return RoughTimeDelta::FromSeconds(local->tm_gmtoff);
-}
-#endif
-
 #ifndef _WIN32
 /**
- * Last-resort portable path: temporarily set TZ for localtime_r.
+ * Portable path: temporarily set TZ for localtime_r.
  * Serialized because TZ is process-global.
+ *
+ * Used on Apple as well: Darwin does not provide BSD tzalloc/localtime_rz,
+ * and Apple libc++ often lacks a working chrono TZ database.
  */
 [[nodiscard]] inline std::optional<RoughTimeDelta>
 TryPosixTzOffset(std::string_view tz_name, time_t utc_time) noexcept
@@ -120,13 +100,6 @@ GetRegionUtcOffset(std::string_view tz_name, time_t utc_time) noexcept
         region_time_detail::TryChronoOffset(tz_name, utc_time);
       offset)
     return *offset;
-
-#ifdef __APPLE__
-  if (const auto offset =
-        region_time_detail::TryAppleOffset(tz_name, utc_time);
-      offset)
-    return *offset;
-#endif
 
 #ifndef _WIN32
   if (const auto offset =
