@@ -10,6 +10,7 @@
 #include "ContestProfile.hpp"
 #include "Map.hpp"
 #include "Computer/Settings.hpp"
+#include "time/SystemTimeZone.hpp"
 
 namespace Profile {
   static void Load(const ProfileMap &map, WindSettings &settings);
@@ -161,7 +162,17 @@ Profile::Load(const ProfileMap &map, ComputerSettings &settings)
 
   map.Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
 
-  LoadUTCOffset(map, settings.utc_offset);
+  const bool has_utc_offset = LoadUTCOffset(map, settings.utc_offset);
+
+  if (!map.Get(ProfileKeys::AutoUTCOffset, settings.auto_utc_offset))
+    /* migration from a profile written by an older version: enable the
+       automatic mode only for users who never configured an explicit
+       UTC offset, so we don't override a deliberate setting */
+    settings.auto_utc_offset = !has_utc_offset;
+
+  if (settings.auto_utc_offset)
+    settings.utc_offset =
+      RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
 
   Load(map, settings.task);
   Load(map, settings.contest);
