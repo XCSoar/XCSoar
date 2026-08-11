@@ -423,7 +423,8 @@ Version 7.45 - not yet released
     drawing began before map bounds were ready #2734
   - tap the on-map compass to reset a rotated map to north-up in pan
     mode, or to cycle the active display mode's map orientation; the
-    compass is now always shown (previously hidden with north-up) #2839
+    compass is now shown with north-up as well (it stays hidden only on
+    a dedicated "Map (north-up)" page) #2839
   - pan mode: the map rotation freezes at pan entry instead of following
     the configured orientation (no more map spinning when panning while
     circling with track-up); leaving pan restores the orientation
