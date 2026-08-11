@@ -338,35 +338,19 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   // force north-up if the current page is a dedicated MAP_NORTH_UP page
   const PageLayout &layout = PageActions::GetConfiguredLayout();
   if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
-    /* a north-up page rejects a held manual rotation; clear so the
-       angle cannot reappear when leaving this page */
-    manual_rotation = false;
     visible_projection.SetScreenAngle(Angle::Zero());
     OnProjectionModified();
     compass_visible = false;
     return;
   }
 
-  /* a two-finger twist or a compass tap in pan mode temporarily
-     overrides the configured orientation; the angle is held while
-     panning and released (falling back to the configured orientation)
-     once pan mode is left */
-  if (manual_rotation) {
-    if (IsPanning() || GestureOwnsMap()) {
-      visible_projection.SetScreenAngle(manual_rotation_angle);
-      OnProjectionModified();
-      compass_visible = true;
-      return;
-    }
-
-    manual_rotation = false;
-  }
-
   /* while panning (or while a two-finger gesture owns the map), the
-     screen angle stays frozen at the angle from pan entry; without
-     this, the configured orientation would keep rotating the panned
-     map with every fix (e.g. track-up while circling).  Leaving pan
-     mode falls back to the configured orientation. */
+     screen angle is user-controlled: it stays frozen at the angle from
+     pan entry, and a two-finger twist or a compass tap sets it
+     directly.  Without this, the configured orientation would keep
+     rotating the panned map with every fix (e.g. track-up while
+     circling).  Leaving pan mode falls back to the configured
+     orientation. */
   if (IsPanning() || GestureOwnsMap()) {
     compass_visible = true;
     return;
@@ -465,12 +449,11 @@ GlueMapWindow::HandleCompassTap(const PixelPoint p) noexcept
     return false;
 
   if (IsPanning()) {
-    /* while panning, tapping the compass resets a rotated map back
-       to north-up; the angle is held by the manual-rotation
-       mechanism (like a two-finger twist) and released when pan mode
-       is left */
-    manual_rotation = true;
-    manual_rotation_angle = Angle::Zero();
+    /* while panning, tapping the compass resets a rotated map back to
+       north-up; UpdateScreenAngle() leaves the angle alone while
+       panning, so it is held until pan mode is left */
+    visible_projection.SetScreenAngle(Angle::Zero());
+    OnProjectionModified();
     QuickRedraw();
   } else
     CycleMapOrientation();

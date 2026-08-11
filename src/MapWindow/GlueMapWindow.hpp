@@ -174,14 +174,6 @@ class GlueMapWindow : public MapWindow {
   bool pinch_rotating = false;
 #endif
 
-  /**
-   * Hold #manual_rotation_angle instead of the configured orientation
-   * while panning: set by a two-finger twist and by a compass tap in
-   * pan mode.  Cleared by UpdateScreenAngle() when pan mode is left.
-   */
-  bool manual_rotation = false;
-  Angle manual_rotation_angle = Angle::Zero();
-
   DisplayMode last_display_mode = DisplayMode::NONE;
 
   /**

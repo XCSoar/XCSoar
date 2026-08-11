@@ -450,7 +450,6 @@ GlueMapWindow::ResetMultiTouchSessionState() noexcept
   multi_touch_was_panning = false;
   pinch_scaling = false;
   pinch_rotating = false;
-  manual_rotation = false;
 }
 
 void
@@ -593,19 +592,19 @@ GlueMapWindow::OnMultiTouchMove(PixelPoint a, PixelPoint b) noexcept
     /* screen y grows downward, so a visually clockwise finger twist
        increases the measured angle; subtract it so the map content
        rotates with the fingers */
-    manual_rotation_angle = pinch_start_screen_angle - twist;
-    manual_rotation = true;
+    const Angle new_angle = pinch_start_screen_angle - twist;
 
     /* a rotation is a deliberate manipulation; enter pan mode so the
-       chosen angle is held */
+       chosen angle is held (UpdateScreenAngle() leaves the angle alone
+       while panning) */
     if (!multi_touch_pan_ui) {
       CommitMultiTouchPanUI();
       RebasePinchAfterLayoutChange(a, b, distance, centroid);
       pinch_start_finger_angle = finger_angle;
-      pinch_start_screen_angle = manual_rotation_angle;
+      pinch_start_screen_angle = new_angle;
     }
 
-    visible_projection.SetScreenAngle(manual_rotation_angle);
+    visible_projection.SetScreenAngle(new_angle);
     OnProjectionModified();
   }
 
@@ -684,8 +683,9 @@ GlueMapWindow::OnCancelMode() noexcept
 
 #ifdef HAVE_MULTI_TOUCH
     if (was_multi_touch)
-      /* drop a held twist angle and refresh after the session flags
-         were cleared */
+      /* refresh after the session flags were cleared; a twist angle
+         from a cancelled gesture that did not enter pan mode is
+         dropped by UpdateScreenAngle() */
       QuickRedraw();
 #endif
   }
