@@ -117,6 +117,8 @@ Version 7.46 - not yet released
   - freeze map rotation when entering pan instead of following the
     configured orientation, so the map does not spin while panning
     in track-up circling; leaving pan restores the orientation
+  - defer the automatic zoom switch between circling and cruise until
+    pan mode is left, when circling zoom is enabled
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
