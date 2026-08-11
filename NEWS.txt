@@ -114,6 +114,9 @@ Version 7.46 - not yet released
   - tap the on-map compass to reset a rotated map to north-up in pan
     mode, or to cycle the active display mode's map orientation; the
     compass is now always shown (previously hidden with north-up) #2839
+  - freeze map rotation when entering pan instead of following the
+    configured orientation, so the map does not spin while panning
+    in track-up circling; leaving pan restores the orientation
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
