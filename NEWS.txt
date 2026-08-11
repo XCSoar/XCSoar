@@ -424,6 +424,9 @@ Version 7.45 - not yet released
   - tap the on-map compass to reset a rotated map to north-up in pan
     mode, or to cycle the active display mode's map orientation; the
     compass is now always shown (previously hidden with north-up) #2839
+  - pan mode: the map rotation freezes at pan entry instead of following
+    the configured orientation (no more map spinning when panning while
+    circling with track-up); leaving pan restores the orientation
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,

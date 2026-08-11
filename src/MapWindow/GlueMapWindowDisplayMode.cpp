@@ -354,6 +354,16 @@ GlueMapWindow::UpdateScreenAngle() noexcept
     manual_rotation = false;
   }
 
+  /* while panning (or while a two-finger gesture owns the map), the
+     screen angle stays frozen at the angle from pan entry; without
+     this, the configured orientation would keep rotating the panned
+     map with every fix (e.g. track-up while circling).  Leaving pan
+     mode falls back to the configured orientation. */
+  if (IsPanning() || GestureOwnsMap()) {
+    compass_visible = true;
+    return;
+  }
+
   MapOrientation orientation =
     ui_state.display_mode == DisplayMode::CIRCLING
     ? settings.circling_orientation
