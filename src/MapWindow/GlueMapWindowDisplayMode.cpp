@@ -7,9 +7,14 @@
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
+#include "Language/Language.hpp"
+#include "Message.hpp"
 #include "Profile/Profile.hpp"
+#include "Renderer/CompassRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "PageActions.hpp"
+#include "util/StaticString.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
@@ -325,21 +330,19 @@ GlueMapWindow::UpdateScreenAngle() noexcept
   // force north-up if the current page is a dedicated MAP_NORTH_UP page
   const PageLayout &layout = PageActions::GetConfiguredLayout();
   if (layout.main == PageLayout::Main::MAP_NORTH_UP) {
-#ifdef HAVE_MULTI_TOUCH
-    /* a north-up page rejects temporary twist; clear so the angle
-       cannot reappear when leaving this page */
+    /* a north-up page rejects a held manual rotation; clear so the
+       angle cannot reappear when leaving this page */
     manual_rotation = false;
-#endif
     visible_projection.SetScreenAngle(Angle::Zero());
     OnProjectionModified();
     compass_visible = false;
     return;
   }
 
-#ifdef HAVE_MULTI_TOUCH
-  /* a two-finger twist temporarily overrides the configured
-     orientation; the angle is held while panning and released (falling
-     back to the configured orientation) once pan mode is left */
+  /* a two-finger twist or a compass tap in pan mode temporarily
+     overrides the configured orientation; the angle is held while
+     panning and released (falling back to the configured orientation)
+     once pan mode is left */
   if (manual_rotation) {
     if (IsPanning() || GestureOwnsMap()) {
       visible_projection.SetScreenAngle(manual_rotation_angle);
@@ -350,7 +353,6 @@ GlueMapWindow::UpdateScreenAngle() noexcept
 
     manual_rotation = false;
   }
-#endif
 
   MapOrientation orientation =
     ui_state.display_mode == DisplayMode::CIRCLING
@@ -377,7 +379,106 @@ GlueMapWindow::UpdateScreenAngle() noexcept
 
   OnProjectionModified();
 
-  compass_visible = orientation != MapOrientation::NORTH_UP;
+  /* the compass is always drawn: it doubles as a button (tap to
+     cycle through the map orientations), so it must stay tappable
+     with north-up, too */
+  compass_visible = true;
+}
+
+/**
+ * The order in which a compass tap cycles through the map
+ * orientations.
+ */
+static constexpr MapOrientation
+NextMapOrientation(MapOrientation orientation) noexcept
+{
+  switch (orientation) {
+  case MapOrientation::TRACK_UP:
+    return MapOrientation::NORTH_UP;
+  case MapOrientation::NORTH_UP:
+    return MapOrientation::TARGET_UP;
+  case MapOrientation::TARGET_UP:
+    return MapOrientation::HEADING_UP;
+  case MapOrientation::HEADING_UP:
+    return MapOrientation::WIND_UP;
+  case MapOrientation::WIND_UP:
+    return MapOrientation::TRACK_UP;
+  }
+
+  return MapOrientation::NORTH_UP;
+}
+
+[[gnu::const]]
+static const char *
+MapOrientationCaption(MapOrientation orientation) noexcept
+{
+  /* the same strings as in MapDisplayConfigPanel, so the existing
+     translations are reused */
+  switch (orientation) {
+  case MapOrientation::TRACK_UP:
+    return N_("Track up");
+  case MapOrientation::NORTH_UP:
+    return N_("North up");
+  case MapOrientation::TARGET_UP:
+    return N_("Target up");
+  case MapOrientation::HEADING_UP:
+    return N_("Heading up");
+  case MapOrientation::WIND_UP:
+    return N_("Wind up");
+  }
+
+  return "";
+}
+
+bool
+GlueMapWindow::HandleCompassTap(const PixelPoint p) noexcept
+{
+  if (!compass_visible)
+    return false;
+
+  PixelRect rc = GetClientRect();
+  rc.right -= std::min(int(top_right_margin), int(rc.GetWidth()));
+
+  const auto pos = CompassRenderer::GetPosition(rc);
+  const int radius = Layout::Scale(19);
+  const PixelRect hit_box{pos.x - radius, pos.y - radius,
+                          pos.x + radius + 1, pos.y + radius + 1};
+  if (!hit_box.Contains(p))
+    return false;
+
+  if (IsPanning()) {
+    /* while panning, tapping the compass resets a rotated map back
+       to north-up; the angle is held by the manual-rotation
+       mechanism (like a two-finger twist) and released when pan mode
+       is left */
+    manual_rotation = true;
+    manual_rotation_angle = Angle::Zero();
+    QuickRedraw();
+  } else
+    CycleMapOrientation();
+
+  return true;
+}
+
+inline void
+GlueMapWindow::CycleMapOrientation() noexcept
+{
+  MapSettings &settings = CommonInterface::SetMapSettings();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
+
+  MapOrientation &orientation = circling
+    ? settings.circling_orientation
+    : settings.cruise_orientation;
+  orientation = NextMapOrientation(orientation);
+
+  StaticString<64> msg;
+  msg.Format("%s: %s",
+             circling ? _("Circling orientation") : _("Cruise orientation"),
+             gettext(MapOrientationCaption(orientation)));
+  Message::AddMessage(msg);
+
+  ActionInterface::SendMapSettings(true);
 }
 
 void

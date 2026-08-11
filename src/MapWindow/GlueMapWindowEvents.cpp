@@ -59,11 +59,18 @@ GlueMapWindow::OnDestroy() noexcept
 }
 
 bool
-GlueMapWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
+GlueMapWindow::OnMouseDouble(PixelPoint p) noexcept
 {
   map_item_timer.Cancel();
 
   mouse_down_clock.Update();
+
+  if (HandleCompassTap(p)) {
+    /* rapid repeated taps on the compass are cycling through the map
+       orientations, not requesting the menu */
+    ignore_single_click = true;
+    return true;
+  }
 
   InputEvents::ShowMenu();
   ignore_single_click = true;
@@ -349,6 +356,12 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
   }
 
   if (arm_mapitem_list) {
+    /* the compass doubles as a button: tapping it resets a rotated
+       map back to north-up while panning and cycles through the map
+       orientations otherwise */
+    if (HandleCompassTap(drag_start))
+      return true;
+
     map_item_timer.Schedule(std::chrono::milliseconds(200));
     return true;
   }

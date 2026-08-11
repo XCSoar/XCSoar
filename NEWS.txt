@@ -421,6 +421,9 @@ Version 7.45 - not yet released
   - Add renderer to display distance rings around the current location #2522
   - Fix intermittent white-map hang on startup for non-OpenGL builds when
     drawing began before map bounds were ready #2734
+  - tap the on-map compass to reset a rotated map to north-up in pan
+    mode, or to cycle the active display mode's map orientation; the
+    compass is now always shown (previously hidden with north-up) #2839
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
