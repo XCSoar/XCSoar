@@ -111,6 +111,9 @@ Version 7.46 - not yet released
     stand out on typical terrain #2988
   - leave Trail drift off by default so the displayed track matches
     the ground until the option is turned on #2995
+  - tap the on-map compass to reset a rotated map to north-up in pan
+    mode, or to cycle the active display mode's map orientation; the
+    compass is now always shown (previously hidden with north-up) #2839
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box

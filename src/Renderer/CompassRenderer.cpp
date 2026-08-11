@@ -13,13 +13,18 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
+PixelPoint
+CompassRenderer::GetPosition(const PixelRect rc) noexcept
+{
+  return {rc.right - int(GetCenterInset()),
+          int(GetCenterInset()) + rc.top};
+}
+
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc) noexcept
 {
-  PixelPoint pos(rc.right - int(GetCenterInset()),
-                 int(GetCenterInset()) + rc.top);
-  Draw(canvas, screen_angle, pos);
+  Draw(canvas, screen_angle, GetPosition(rc));
 }
 
 unsigned
