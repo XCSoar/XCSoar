@@ -213,6 +213,12 @@ private:
 
   DisplayMode last_display_mode = DisplayMode::NONE;
 
+  /**
+   * A circling/cruise zoom switch (#SwitchZoomClimb) is due, but was
+   * deferred because pan mode was active.
+   */
+  bool switch_zoom_climb_pending = false;
+
   OffsetHistory offset_history;
 
   /*
