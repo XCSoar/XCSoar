@@ -427,6 +427,8 @@ Version 7.45 - not yet released
   - pan mode: the map rotation freezes at pan entry instead of following
     the configured orientation (no more map spinning when panning while
     circling with track-up); leaving pan restores the orientation
+  - pan mode: with circling zoom enabled, the automatic zoom switch on
+    circling/cruise transitions is deferred until pan mode is left
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,

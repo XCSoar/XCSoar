@@ -314,7 +314,15 @@ GlueMapWindow::UpdateDisplayMode() noexcept
   last_display_mode = new_mode;
 
   if (is_circling != was_circling)
+    switch_zoom_climb_pending = true;
+
+  /* while panning, the user is inspecting the map; don't let a
+     circling/cruise transition of the (still flying) aircraft yank
+     the scale away - apply the switch once pan mode is left */
+  if (switch_zoom_climb_pending && !IsPanning() && !GestureOwnsMap()) {
+    switch_zoom_climb_pending = false;
     SwitchZoomClimb();
+  }
 }
 
 void
