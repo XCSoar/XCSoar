@@ -935,7 +935,12 @@ will be referenced as `Custom' set and will also be stored in your profile.
 Set the local time offset with respect to UTC.
 
 \begin{description}
-\item[UTC offset]  The field allows the UTC local time offset to be specified.
+\item[Automatic UTC offset]  If enabled, the UTC offset is taken from the time zone
+  configured in the operating system and is kept up to date, so it follows daylight
+  saving time changes and travelling to another time zone.  Disable this option to
+  enter the offset manually.
+\item[UTC offset]  The field allows the UTC local time offset to be specified.  It is
+  only editable while `Automatic UTC offset' is disabled.
 \item[Local time]  The local time is displayed below in order to make it easier to verify
   the correct offset has been entered.  Offsets to the half-hour may be set.
 \item[Use GPS time*] This option, if enabled sets the clock of the computer to 

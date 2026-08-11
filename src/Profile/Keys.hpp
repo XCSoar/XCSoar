@@ -144,6 +144,7 @@ constexpr std::string_view AppAveThermalNeedle = "AppAveThermalNeedle";
 constexpr std::string_view AutoAdvance = "AutoAdvance";
 constexpr std::string_view UTCOffset = "UTCOffset";
 constexpr std::string_view UTCOffsetSigned = "UTCOffsetSigned";
+constexpr std::string_view AutoUTCOffset = "AutoUTCOffset";
 constexpr std::string_view BlockSTF = "BlockSpeedToFly";
 constexpr std::string_view AutoZoom = "AutoZoom";
 constexpr std::string_view MenuTimeout = "MenuTimeout";

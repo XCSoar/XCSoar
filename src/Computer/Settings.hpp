@@ -211,6 +211,13 @@ struct ComputerSettings {
   /** Update system time from GPS time */
   bool set_system_time_from_gps;
 
+  /**
+   * Keep #utc_offset synchronised with the time zone configured in the
+   * operating system?  This follows daylight saving time transitions
+   * and time zone changes while travelling.
+   */
+  bool auto_utc_offset;
+
   /** local time adjustment (in seconds) */
   RoughTimeDelta utc_offset;
 
