@@ -7,6 +7,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/StringFormat.hpp"
 
+#include <cstdint>
 #include <cstring>
 
 using namespace InfoBoxFactory;
@@ -114,9 +115,6 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     break;
-
-  case InfoBoxSettings::Geometry::INHERIT:
-    break;
   }
 
   map.Get(ProfileKeys::InfoBoxTitleScale, settings.scale_title_font);
@@ -149,6 +147,16 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
       }
     }
 
+    {
+      const int n = StringFormat(profileKey, sizeof(profileKey),
+                                 "InfoBoxPanel%uGeometry", i);
+      if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey)) {
+        unsigned tmp_geometry = panel.geometry;
+        if (map.Get(profileKey, tmp_geometry) && tmp_geometry <= UINT8_MAX)
+          panel.geometry = static_cast<uint8_t>(tmp_geometry);
+      }
+    }
+
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
       const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", i, j);
       if (n < 0 || static_cast<size_t>(n) >= sizeof(profileKey))
@@ -169,6 +177,13 @@ Profile::Save(ProfileMap &map,
     const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uName", index);
     if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
       map.Set(profileKey, panel.name);
+  }
+
+  {
+    const int n = StringFormat(profileKey, sizeof(profileKey),
+                               "InfoBoxPanel%uGeometry", index);
+    if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
+      map.Set(profileKey, static_cast<unsigned>(panel.geometry));
   }
 
   for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
