@@ -22,7 +22,6 @@
 #include "util/StringAPI.hxx"
 #include "util/StaticArray.hxx"
 #include "Panels/LayoutConfigPanel.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 
 #include <cassert>
@@ -90,7 +89,6 @@ class InfoBoxesConfigWidget final
 
   // Cached for re-layout when geometry changes
   ContainerWindow *parent_container = nullptr;
-  WindowStyle preview_style;
 
 public:
   InfoBoxesConfigWidget(WndForm &_dialog,
@@ -296,6 +294,7 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   close_button.Create(parent, button_look, _("Close"), layout.close_button,
                       button_style, dialog.MakeModalResultCallback(mrOK));
 
+  WindowStyle preview_style;
   preview_style.Hide();
 
   previews.resize(layout.info_boxes.count);
@@ -349,13 +348,15 @@ InfoBoxesConfigWidget::UpdateLayout(const PixelRect &rc) noexcept
 
   // Ensure enough preview windows exist
   if (previews.size() < new_count) {
+    WindowStyle preview_style;
+    preview_style.Hide();
+
     const unsigned before = previews.size();
     previews.resize(new_count);
     for (unsigned i = before; i < new_count; ++i) {
       previews[i].SetParent(*this, i);
-      // Create missing preview windows (create style locally for simplicity)
-      WindowStyle style; style.Hide();
-      previews[i].Create(*parent_container, layout.info_boxes.positions[i], style);
+      previews[i].Create(*parent_container, layout.info_boxes.positions[i],
+                         preview_style);
     }
   }
 

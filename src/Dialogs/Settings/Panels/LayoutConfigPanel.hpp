@@ -4,9 +4,9 @@
 #pragma once
 
 #include <memory>
-#include "Form/DataField/Enum.hpp"
 
 class Widget;
+struct StaticEnumChoice;
 
 std::unique_ptr<Widget>
 CreateLayoutConfigPanel();
