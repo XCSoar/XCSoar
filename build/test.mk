@@ -144,6 +144,10 @@ TEST_NAMES += \
 	TestDriver
 endif
 
+ifeq ($(TARGET_IS_KOBO),y)
+TEST_NAMES += TestKoboModel
+endif
+
 ifeq ($(HAVE_WIN32),n)
 TEST_NAMES += \
 	TestDataLayoutMigration \
@@ -363,6 +367,14 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+ifeq ($(TARGET_IS_KOBO),y)
+TEST_KOBO_MODEL_SOURCES = \
+	$(SRC)/Kobo/Model.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestKoboModel.cpp
+$(eval $(call link-program,TestKoboModel,TEST_KOBO_MODEL))
+endif
 
 TEST_ISO8601_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \

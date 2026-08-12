@@ -52,6 +52,10 @@ class LinuxInputDevice final {
 
   bool is_pointer;
 
+#ifdef TARGET_IS_KOBO_NICKEL
+  bool grabbed;
+#endif
+
   PipeEvent event;
 
 public:

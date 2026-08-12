@@ -5,6 +5,7 @@
 #include "ui/canvas/FontSearch.hpp"
 
 static constexpr const char *const font_search_paths[] = {
+  "/mnt/onboard/.adds/xcsoar/fonts",
   "/mnt/onboard/XCSoar/fonts",
   "/mnt/onboard/fonts",
   "/opt/xcsoar/share/fonts",

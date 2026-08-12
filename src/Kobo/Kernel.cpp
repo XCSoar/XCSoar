@@ -51,6 +51,9 @@ Copy(int out_fd, int in_fd, const char *out_path, const char *in_path)
 bool
 KoboInstallKernel(const char *uimage_path)
 {
+  if (IsKoboMediaTek())
+    return false;
+
   const char *const out_path = "/dev/mmcblk0";
 
   const int in_fd = open(uimage_path, O_RDONLY|O_NOCTTY|O_CLOEXEC);
@@ -95,6 +98,7 @@ try {
   /* All Kobo except Clara HD, Clara 2E, Libra 2 and Libra H2O have a factory kernel without OTG mode so
      a custom kernel is installed for OTG. */
   if (kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::CLARA_2E
+      || IsKoboMediaTek(kobo_model)
       || kobo_model == KoboModel::LIBRA2 || kobo_model == KoboModel::LIBRA_H2O)
         return false;
 
@@ -118,6 +122,9 @@ IsKoboOTGHostMode()
 {
 #ifdef KOBO
   KoboModel kobo_model = DetectKoboModel();
+  if (IsKoboMediaTek(kobo_model))
+    return false;
+
   if (kobo_model != KoboModel::CLARA_HD && kobo_model != KoboModel::CLARA_2E
       && kobo_model != KoboModel::LIBRA2 && kobo_model != KoboModel::LIBRA_H2O)
         return IsKoboCustomKernel();

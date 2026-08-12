@@ -18,9 +18,14 @@ SystemSettings::SetDefaults()
 #ifdef _WIN32
     devices[0].path = "COM1:";
 #else
+#ifdef TARGET_IS_KOBO_NICKEL
+    devices[0].path = "/dev/ttyS0";
+    devices[0].baud_rate = 9600;
+#else
     devices[0].path = "/dev/tty0";
-#endif
     devices[0].baud_rate = 4800;
+#endif
+#endif
     devices[0].driver_name = "Generic";
   }
 }

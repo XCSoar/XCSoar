@@ -171,10 +171,14 @@ KoboExportUSBStorage()
                     "file=/dev/mmcblk0p3", "stall=0", "removable=1",
                     "product_id=Kobo");
     break;
+
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
+    return false;
   }
   return result;
 #else
-  return true;
+  return false;
 #endif
 }
 
@@ -304,6 +308,10 @@ KoboWifiOn()
     InsMod("/drivers/mx6sll-ntx/wifi/mlan.ko");
     InsMod("/drivers/mx6sll-ntx/wifi/moal.ko", "mod_para=nxp/wifi_mod_para_sd8987.conf");
     break;
+
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
+    return false;
   }
 
   Sleep(2000);
@@ -413,6 +421,8 @@ KoboCanChangeBacklightBrightness()
   case KoboModel::GLO_HD:
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     return true;
 
@@ -439,6 +449,8 @@ KoboGetBacklightBrightness()
 
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
       result = atoi(line);
@@ -470,6 +482,8 @@ KoboSetBacklightBrightness([[maybe_unused]] int percent)
 
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
     break;
@@ -512,6 +526,8 @@ KoboGetBacklightColourFile() noexcept
     break;
 
   case KoboModel::CLARA_HD:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
     files_to_check[1] = true;
     break;
 
