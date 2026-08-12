@@ -7,6 +7,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/StringFormat.hpp"
 
+#include <cstdint>
 #include <cstring>
 
 using namespace InfoBoxFactory;
@@ -147,14 +148,12 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
     }
 
     {
-      sprintf(profileKey, "InfoBoxPanel%uGeometry", i);
-      unsigned tmp_geometry = panel.geometry;
-      if (map.Get(profileKey, tmp_geometry)) {
-        if (tmp_geometry == InfoBoxSettings::Panel::INHERIT_GEOMETRY) {
-          panel.geometry = InfoBoxSettings::Panel::INHERIT_GEOMETRY;
-        } else {
+      const int n = StringFormat(profileKey, sizeof(profileKey),
+                                 "InfoBoxPanel%uGeometry", i);
+      if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey)) {
+        unsigned tmp_geometry = panel.geometry;
+        if (map.Get(profileKey, tmp_geometry) && tmp_geometry <= UINT8_MAX)
           panel.geometry = static_cast<uint8_t>(tmp_geometry);
-        }
       }
     }
 
@@ -180,8 +179,12 @@ Profile::Save(ProfileMap &map,
       map.Set(profileKey, panel.name);
   }
 
-  sprintf(profileKey, "InfoBoxPanel%uGeometry", index);
-  map.Set(profileKey, static_cast<unsigned>(panel.geometry));
+  {
+    const int n = StringFormat(profileKey, sizeof(profileKey),
+                               "InfoBoxPanel%uGeometry", index);
+    if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
+      map.Set(profileKey, static_cast<unsigned>(panel.geometry));
+  }
 
   for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
     const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", index, j);
