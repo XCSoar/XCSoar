@@ -4,8 +4,6 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "InfoBoxes/InfoBoxArrange.hpp"
-#include "InfoBoxes/InfoBoxArrangeWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "UIActions.hpp"
 #include "PageActions.hpp"
@@ -21,7 +19,6 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
-#include "Gauge/VarioGeometry.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -43,6 +40,10 @@
 #include "Storage/StorageManager.hpp"
 #include "Storage/StorageEvents.hpp"
 
+#ifdef USE_WINUSER
+#include "Storage/win/WinHotplugForward.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Android/ReceiveTask.hpp"
 #include "Android/Main.hpp"
@@ -55,6 +56,19 @@
 #endif
 
 static constexpr unsigned separator_height = 2;
+
+/**
+ * Returns the InfoBox geometry of the currently active panel, falling
+ * back to the global setting when the panel does not override it.
+ */
+[[gnu::pure]]
+static InfoBoxSettings::Geometry
+GetActiveInfoBoxGeometry() noexcept
+{
+  const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  return settings.ResolveGeometry(settings.panels[panel_index]);
+}
 
 [[gnu::pure]]
 static PixelRect
@@ -478,14 +492,10 @@ MainWindow::InitialiseConfigured()
 
   PixelRect rc = GetClientRect();
 
-  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
-  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
-
+  const InfoBoxSettings &ib_settings = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, geometry,
-                             ui_settings.info_boxes.scale_title_font);
+    InfoBoxLayout::Calculate(rc, GetActiveInfoBoxGeometry(),
+                             ib_settings.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -614,16 +624,9 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexce
     return;
   }
 
-  const unsigned width = std::min(layout.vario.GetWidth(),
-                                  VarioGeometry::GetCompactWidth(
-                                    layout.vario.GetHeight()));
-  look->vario.ReinitialiseLayout(width, layout.control_size.width);
-
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
                                  look->vario));
-  else
-    static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
 
   vario.Move(layout.vario);
   vario.Show();
@@ -717,13 +720,8 @@ MainWindow::ReinitialiseLayout() noexcept
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
-  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
-
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, geometry,
+    InfoBoxLayout::Calculate(rc, GetActiveInfoBoxGeometry(),
                              ui_settings.info_boxes.scale_title_font);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
@@ -758,6 +756,24 @@ MainWindow::ReinitialiseLayout() noexcept
 
   if (map != nullptr)
     map->BringToBottom();
+}
+
+void
+MainWindow::CheckInfoBoxGeometry() noexcept
+{
+  if (map == nullptr || !InfoBoxManager::IsReady())
+    /* still starting up; InitialiseConfigured() picks the right
+       geometry anyway */
+    return;
+
+  /* InfoBoxLayout::Layout::geometry is the validated geometry, so
+     validate the new one as well before comparing */
+  if (InfoBoxLayout::Calculate(GetClientRect(),
+                               GetActiveInfoBoxGeometry()).geometry ==
+      InfoBoxManager::layout.geometry)
+    return;
+
+  ReinitialiseLayout();
 }
 
 void
@@ -874,14 +890,9 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 void
 MainWindow::ReinitialiseLook() noexcept
 {
-  const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
-  const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
-
+  const InfoBoxSettings &ib_settings = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(GetClientRect(),
-                             geometry,
+    InfoBoxLayout::Calculate(GetClientRect(), GetActiveInfoBoxGeometry(),
                              ib_settings.scale_title_font);
 
   assert(look != nullptr);
@@ -889,17 +900,7 @@ MainWindow::ReinitialiseLook() noexcept
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.width);
 
-  if (ib_layout.HasVario()) {
-    const unsigned width = std::min(ib_layout.vario.GetWidth(),
-                                    VarioGeometry::GetCompactWidth(
-                                      ib_layout.vario.GetHeight()));
-    look->vario.ReinitialiseLayout(width, ib_layout.control_size.width);
-    if (vario.IsDefined())
-      static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
-  }
-
   InfoBoxManager::ScheduleRedraw();
-  Invalidate();
 }
 
 #ifdef ANDROID
@@ -977,10 +978,6 @@ MainWindow::ResumeThreads() noexcept
 void
 MainWindow::SetDefaultFocus() noexcept
 {
-  if (InfoBoxArrange::SetFocus())
-    /* the InfoBox arrange overlay is modal; it must keep the keys */
-    return;
-
   if (map != nullptr && widget == nullptr)
     map->SetFocus();
   else if (widget == nullptr || !widget->SetFocus())
@@ -1028,6 +1025,26 @@ MainWindow::OnStorageEvent(const StorageEventInfo &info) noexcept
     popup->AddMessage(msg.c_str());
 }
 
+// Windows event handlers
+
+#ifdef USE_WINUSER
+LRESULT
+MainWindow::OnMessage(HWND hWnd, UINT message,
+                      WPARAM wParam, LPARAM lParam) noexcept
+{
+  switch (message) {
+  case WM_DEVICECHANGE:
+    /* Forward device change notifications to the storage hotplug
+       forwarder which will call the registered
+       WindowsStorageHotplugMonitor. */
+    Storage::Win::ForwardDeviceChange(wParam, lParam);
+    break;
+  }
+
+  return SingleWindow::OnMessage(hWnd, message, wParam, lParam);
+}
+#endif
+
 void
 MainWindow::OnResize(PixelSize new_size) noexcept
 {
@@ -1052,10 +1069,7 @@ MainWindow::OnSetFocus() noexcept
 {
   SingleWindow::OnSetFocus();
 
-  if (HasDialog())
-    /* recover the dialog focus if it got lost */
-    GetTopDialog().FocusFirstControl();
-  else if (!InfoBoxArrange::SetFocus()) {
+  if (!HasDialog()) {
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
@@ -1063,7 +1077,9 @@ MainWindow::OnSetFocus() noexcept
       map->SetFocus();
     else if (widget != nullptr)
       widget->SetFocus();
-  }
+  } else
+    /* recover the dialog focus if it got lost */
+    GetTopDialog().FocusFirstControl();
 }
 
 void
@@ -1200,9 +1216,7 @@ MainWindow::RunTimer() noexcept
   } else if (!CommonInterface::Calculated().circling ||
              InputEvents::IsFlavour("TA")) {
     thermal_assistant.Hide();
-  } else if (!HasDialog() && !InfoBoxArrange::IsActive()) {
-    /* the arrange overlay covers the whole screen, and the gauge
-       raises itself above everything else when it appears */
+  } else if (!HasDialog()) {
     if (!thermal_assistant.IsDefined())
       thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard(),
                                                       look->thermal_assistant_gauge));
@@ -1340,34 +1354,6 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
-#ifdef ENABLE_OPENGL
-  /* The gesture trail is painted by the #GlueMapWindow and the
-     dragged InfoBox by the arrange overlay, but both follow the
-     pointer past their own window borders, and OpenGL does not clip a
-     child window to its rectangle.  Areas which no child window
-     repaints (the safe area insets reserved by the #TopWindow, for
-     example) would keep those pixels forever, and each buffer of the
-     swap chain needs a clean frame of its own.  Therefore clear the
-     whole window while a trail exists, and for as many extra frames
-     as the swap chain has buffers after it is gone. */
-  const bool arranging = look != nullptr && InfoBoxArrange::IsActive();
-  const bool trail = arranging || InfoBoxArrangeWindow::IsCardFloating() ||
-    (map != nullptr && map->HasGestureTrail());
-  if (trail)
-    clear_trail_frames = GetPresentationBufferCount();
-
-  if (trail || clear_trail_frames > 0) {
-    canvas.DrawFilledRectangle(canvas.GetRect(),
-                               arranging
-                               ? look->dialog.background_color
-                               : COLOR_BLACK);
-
-    if (!trail && --clear_trail_frames > 0)
-      /* nothing else is going to request the remaining frames */
-      Invalidate();
-  }
-#endif
-
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
     PixelRect rc = map->GetPosition();
@@ -1406,10 +1392,9 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   /* Overlapped gauges (FLARM, thermal assistant) use GetMainRect() for
      "avoid InfoBoxes" corners; re-layout when fullscreen changes. */
   const PixelRect rc = GetClientRect();
-  const auto &info_boxes = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, info_boxes.geometry,
-                             info_boxes.scale_title_font);
+    InfoBoxLayout::Calculate(rc,
+                             CommonInterface::GetUISettings().info_boxes.geometry);
   ReinitialiseLayout_flarm(rc, ib_layout);
   ReinitialiseLayoutTA(rc, ib_layout);
 
