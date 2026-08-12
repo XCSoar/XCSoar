@@ -481,15 +481,10 @@ MainWindow::InitialiseConfigured()
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
-
-  const InfoBoxSettings::Geometry effective_geometry =
-    page_geometry != InfoBoxSettings::Geometry::INHERIT
-      ? page_geometry
-      : ui_settings.info_boxes.geometry;
+  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, effective_geometry,
+    InfoBoxLayout::Calculate(rc, geometry,
                              ui_settings.info_boxes.scale_title_font);
 
   assert(look != nullptr);
@@ -725,15 +720,10 @@ MainWindow::ReinitialiseLayout() noexcept
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
-
-  const InfoBoxSettings::Geometry effective_geometry =
-    page_geometry != InfoBoxSettings::Geometry::INHERIT
-      ? page_geometry
-      : ui_settings.info_boxes.geometry;
+  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, effective_geometry,
+    InfoBoxLayout::Calculate(rc, geometry,
                              ui_settings.info_boxes.scale_title_font);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
@@ -887,17 +877,12 @@ MainWindow::ReinitialiseLook() noexcept
   const InfoBoxSettings &ib_settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = ib_settings.panels[panel_index];
-  const InfoBoxSettings::Geometry &page_geometry = panel.geometry;
-
-  const InfoBoxSettings::Geometry effective_geometry =
-    page_geometry != InfoBoxSettings::Geometry::INHERIT
-      ? page_geometry
-      : ui_settings.info_boxes.geometry;
+  const InfoBoxSettings::Geometry geometry = ib_settings.ResolveGeometry(panel);
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),
-                             effective_geometry,
-                             ui_settings.info_boxes.scale_title_font);
+                             geometry,
+                             ib_settings.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
