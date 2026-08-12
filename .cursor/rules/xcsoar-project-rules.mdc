@@ -104,6 +104,8 @@ alwaysApply: true
   // Later, when displaying: gettext(names[i])
   ```
 - `N_()` is commonly used with `StaticEnumChoice` arrays for enum dropdowns; `AddChoices()` automatically calls `gettext()` on these strings
+- Use `C_()` / `NC_()` (gettext `msgctxt`) for short ambiguous UI labels that share English text but differ by role — e.g. `C_("Button", "Setup")`, `NC_("Setting", "Auto")`, `C_("Status", "Live")`, `C_("Weather control", "Time")`
+- Prefer existing context names (`Button`, `Menu`, `Setting`, `Status`, `Weather control`, `Weather layer`, `Abbreviation`, `InfoBox`, …) over inventing new ones
 - **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
 - Log messages should remain in English for consistency and debugging
 
@@ -773,12 +775,26 @@ Key rules:
 - Valid comment placement: Before `#, fuzzy` or at the start of an entry block
 - Comments violating `.po` syntax will cause `msgmerge` to fail during `make update-po`
 
+### Low-churn catalog updates
+- Goal: routine `make update-po` / translation fills must **not** rewrite wrapping, comments, or untouched entries
+- Catalogs omit `#:` file:line locations (`--no-location` in `build/gettext.mk`) — they churn on every source edit and are not needed at runtime
+- `make update-po` ends with `tools/update_po_low_churn.py`, which:
+  - Patches only entries whose translation/key actually changed
+  - Preserves original `msgid`/`msgstr` quote wrapping on untouched entries
+  - Strips any remaining `#:` location lines
+  - Upgrades 1:1 bare→`msgctxt` additions in place when possible
+  - Falls back safely if entry block spans overlap (avoids corrupting catalogs)
+- **Never** bulk-rewrite `.po` files with `polib.save()` / full gettext rewrap — that destroys low-churn and creates huge diffs
+- Edit `msgstr` with targeted text replacements (or tools that call `update_po_low_churn.py`); keep existing line wrapping
+- Large refreshes: prefer one `po: Regenerate translation catalog` (pot) plus one `po/<lang>: Refresh translations` commit per language, each language file touched once on the branch
+- Raw git `+/-` on `po/` is often dominated by one-time structural changes (e.g. stripping `#:`); judge content churn by entry-level msgstr adds/fixes
+
 ### Translation Commit Organization
-- Translation updates should be committed as a single, comprehensive commit
-- Translation commits should generally be at the end of a feature branch
-- Commit message format: `po: <brief summary of what was translated/fixed>`
+- Small translation fixes: one `po:` commit (or `po/<lang>:` for a single catalog) at the end of a feature branch
+- Large catalog refreshes: `po: Regenerate translation catalog` then per-language `po/<lang>: Refresh translations`
+- Commit message format: `po: <brief summary>` or `po/<lang>: Refresh translations`
 - Include detailed description of what was fixed across which languages
-- Use `make update-po` before committing translations to ensure line numbers are current
+- Run `make update-po` before committing catalog changes
 - Example commit structure:
   ```
   po: Update translations and fix incorrect msgid associations
@@ -787,7 +803,6 @@ Key rules:
   - Correct Hungarian translations for airspace and task messages
   - Fix Croatian typo: "Iskjučen" → "Isključen"
   - Translate new strings ("XCSoar data path", "Click to view...") into all 33 languages
-  - Update line number references via make update-po
   ```
 
 ### Translation Best Practices
@@ -795,31 +810,28 @@ Key rules:
 - Check for empty `msgstr` values in c-format strings (these cause blank UI text)
 - Verify translations are semantically correct, not just syntactically valid
 - Be aware of common translation confusion patterns (e.g., "No alternates available" vs "Update available")
+- Avoid literal `%` + letter sequences in `msgstr` that look like printf tokens (e.g. `%-n`, `%s`) unless the `msgid` has matching placeholders; prefer spelled-out "percent" / rephrasing when needed
 - Use native speaker review when possible for quality assurance
 - Test UI with translations enabled to catch display issues
+- Validate with `msgfmt --check po/<lang>.po` (and prefer checking all `po/*.po`)
 
 ### Running make update-po
 - Run `make update-po` after any source code changes that add/modify translatable strings
-- This updates:
-  - Line number references in all `.po` files
-  - Adds new `msgid` entries from source code
-  - Marks changed strings as `#, fuzzy`
-  - Updates the `po/xcsoar.pot` template
-- Always commit `po/xcsoar.pot` along with `.po` file changes
-- Review the diff after `make update-po` to catch any unintended changes
+- This updates `po/xcsoar.pot` and merges into each `po/*.po` via low-churn patching
+- Always commit `po/xcsoar.pot` along with `.po` file changes when the template changed
+- Review the diff after `make update-po` — unchanged entries should not be rewrapped; investigate large diffs
 
 ### What make update-po Actually Does
 
-Under the hood, `make update-po` runs these operations:
-1. Extracts all `_()` and `N_()` strings from source code → `po/xcsoar.pot`
-2. For each `.po` file, runs `msgmerge` to:
-   - Update line number references where strings are used
-   - Add new `msgid` entries from source
-   - Mark modified strings as `#, fuzzy` (needs review)
-   - Remove obsolete entries (moved to bottom with `#~`)
-3. Preserves existing translations (`msgstr` values)
+Under the hood, `make update-po` (`build/gettext.mk`) runs:
+1. `xgettext` / `msgcat` with `--no-wrap` and `--no-location` → `po/xcsoar.pot` (keywords `_`, `N_`, `C_`, `NC_`)
+2. For each `.po` file:
+   - `msgmerge --no-wrap --no-location --previous`
+   - `msgattrib --clear-fuzzy --empty --no-obsolete --clear-previous`
+   - `tools/update_po_low_churn.py --original <po> --normalized <tmp>`
+3. Result: new/changed keys appear; existing translations kept; layout of untouched entries preserved
 
-**Important:** This is why `.po` syntax must be perfect - `msgmerge` is a strict parser!
+**Important:** `.po` syntax must stay valid — `msgmerge` is a strict parser!
 
 ### Debugging make update-po Failures
 
