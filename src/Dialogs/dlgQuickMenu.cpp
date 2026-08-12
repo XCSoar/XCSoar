@@ -22,6 +22,9 @@
 #include "util/StaticString.hxx"
 
 #include <boost/container/static_vector.hpp>
+#ifdef TARGET_IS_KOBO_NICKEL
+#include <algorithm>
+#endif
 #include <cstdlib>
 #include <memory>
 
@@ -87,7 +90,16 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
   canvas.Select(*look.button.font);
   canvas.SetBackgroundTransparent();
 
+#ifdef TARGET_IS_KOBO_NICKEL
+  const PixelSize text_size = canvas.CalcTextSize(caption);
+  const int x = rc.left +
+    std::max(0, int(rc.GetWidth()) - int(text_size.width)) / 2;
+  const int y = rc.top +
+    std::max(0, int(rc.GetHeight()) - int(text_size.height)) / 2;
+  canvas.DrawClippedText({x, y}, rc.right - x, caption);
+#else
   text_renderer.Draw(canvas, rc, caption);
+#endif
 }
 
 class QuickMenu final : public WindowWidget {

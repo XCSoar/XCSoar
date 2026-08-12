@@ -6,6 +6,28 @@
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 
+#ifdef TARGET_IS_KOBO_NICKEL
+#include <algorithm>
+
+static void
+PrepareKoboNickelButtonCaption(Canvas &canvas, const PixelRect &rc,
+                               ButtonState state, PixelPoint position,
+                               PixelSize size) noexcept
+{
+  const bool inverted = state == ButtonState::FOCUSED ||
+    state == ButtonState::PRESSED;
+  const PixelRect text_rc{
+    position.x, position.y,
+    std::min(rc.right, position.x + int(size.width)),
+    std::min(rc.bottom, position.y + int(size.height)),
+  };
+
+  /* Temporary until FBInk glyph blending is root-caused on the devices. */
+  canvas.DrawFilledRectangle(text_rc, inverted ? COLOR_BLACK : COLOR_WHITE);
+  canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
+}
+#endif
+
 unsigned
 TextButtonRenderer::GetMinimumButtonWidth(const ButtonLook &look,
                                           std::string_view caption) noexcept
@@ -43,7 +65,18 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
 
   canvas.Select(*look.font);
 
+#ifdef TARGET_IS_KOBO_NICKEL
+  const PixelSize text_size = canvas.CalcTextSize(GetCaption());
+  const int x = rc.left +
+    std::max(0, int(rc.GetWidth()) - int(text_size.width)) / 2;
+  const int y = rc.top +
+    std::max(0, int(rc.GetHeight()) - int(text_size.height)) / 2;
+  const PixelPoint position{x, y};
+  PrepareKoboNickelButtonCaption(canvas, rc, state, position, text_size);
+  canvas.DrawClippedText(position, rc.right - x, GetCaption());
+#else
   text_renderer.Draw(canvas, rc, GetCaption());
+#endif
 }
 
 unsigned
@@ -63,4 +96,3 @@ TextButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
     DrawCaption(canvas, frame_renderer.GetDrawingRect(rc, state),
                 state);
 }
-
