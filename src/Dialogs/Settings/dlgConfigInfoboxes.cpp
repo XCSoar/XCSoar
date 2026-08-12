@@ -153,8 +153,9 @@ public:
     paste_button.MoveAndShow(layout.paste_button);
     close_button.MoveAndShow(layout.close_button);
 
-    for (unsigned i = 0; i < previews.size(); ++i)
-      previews[i].MoveAndShow(layout.info_boxes.positions[i]);
+    /* create missing preview windows, position them and hide those the
+       current geometry does not use */
+    UpdateLayout(rc);
   }
 
   void Hide() noexcept override {
@@ -339,6 +340,11 @@ InfoBoxesConfigWidget::UpdateLayout(const PixelRect &rc) noexcept
     if (current_preview >= new_count)
       current_preview = 0;
     LoadValueEnum(INFOBOX, current_preview);
+
+    /* LoadValueEnum() calls DataField::SetValue(), which does not
+       notify the listener, so refresh the "Content" field and its
+       description explicitly */
+    RefreshEditContent();
   }
 
   // Ensure enough preview windows exist
