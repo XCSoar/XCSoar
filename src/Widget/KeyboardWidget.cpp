@@ -164,6 +164,14 @@ KeyboardWidget::ResizeButtons()
 }
 
 void
+KeyboardWidget::MoveSymbolKey(PixelPoint position) noexcept
+{
+  /* the key holds either '-' or '_', depending on the shift state */
+  MoveButton('-', position);
+  MoveButton('_', position);
+}
+
+void
 KeyboardWidget::MoveButtonsToRow(const PixelRect &rc, const char *row_keys,
                                  unsigned row, int offset) noexcept
 {
@@ -186,15 +194,15 @@ KeyboardWidget::MoveButtons(const PixelRect &rc)
   MoveButtonsToRow(rc, "ZXCVBNM@.", 3, int(button_size.width));
 
   if (IsLandscape(rc)) {
-    MoveButton('-', rc.GetTopLeft() + PixelSize(int(button_size.width) * 9,
-                                                int(Layout::Scale(160U))));
+    MoveSymbolKey(rc.GetTopLeft() + PixelSize(int(button_size.width) * 9,
+                                              int(Layout::Scale(160U))));
     MoveButton(' ', rc.GetTopLeft() + PixelSize(int(Layout::Scale(80U)),
                                                  int(Layout::Scale(160U))));
     ResizeButton(' ', {Layout::Scale(93U), Layout::Scale(40U)});
   } else {
     const int h = int(button_size.height);
     const int w = int(button_size.width);
-    MoveButton('-', rc.GetTopLeft() + PixelSize(w * 8, h * 4));
+    MoveSymbolKey(rc.GetTopLeft() + PixelSize(w * 8, h * 4));
     MoveButton(' ', rc.GetTopLeft() + PixelSize(w * 2, h * 4));
     ResizeButton(' ', {button_size.width * 11 / 2, button_size.height});
   }
@@ -248,9 +256,14 @@ KeyboardWidget::UpdateShiftState() noexcept
       if (shift_state) {
         if (IsLowerAlphaASCII(c))
           buttons[i].SetCharacter(c - 0x20);
+        else if (show_shift_button && c == '-')
+          /* '-' doubles as '_', which is otherwise not reachable */
+          buttons[i].SetCharacter('_');
       } else {
         if (IsUpperAlphaASCII(c))
           buttons[i].SetCharacter(c + 0x20);
+        else if (show_shift_button && c == '_')
+          buttons[i].SetCharacter('-');
       }
     }
   }
