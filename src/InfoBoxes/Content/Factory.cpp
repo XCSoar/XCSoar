@@ -1267,6 +1267,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxPlaceholder,
   },
 
+  // e_Invisible
+  {
+    N_("Invisible"),
+    N_("Invisible"),
+    N_("This InfoBox is invisible: the map is extended over its slot and shows in its place."),
+    UpdateInfoBoxInvisible,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

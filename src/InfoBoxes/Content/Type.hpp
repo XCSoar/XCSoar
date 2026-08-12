@@ -162,6 +162,7 @@ namespace InfoBoxFactory
     e_ReleaseSpace, /* Occupies no space of its own: the InfoBox is not displayed and the other InfoBoxes of the same line grow into the gap */
     e_MergeAlongLine, /* Occupies no space of its own: the InfoBox is not displayed and the preceding InfoBox of the same line grows over it */
     e_MergeAcrossLines, /* Occupies no space of its own: the InfoBox is not displayed and the InfoBox above it in the previous line grows over it */
+    e_Invisible, /* Draws nothing at all; the map is extended over this InfoBox slot instead */
     e_NUM_TYPES /* Last item */
   };
 

@@ -12,10 +12,14 @@
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
+#include "Look/InfoBoxLook.hpp"
+#include "MainWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "UIState.hpp"
 
 #include <algorithm> // for std::equal()
 #include <cassert>
+#include <cstdint>
 
 namespace InfoBoxManager {
 
@@ -45,13 +49,28 @@ DisplayInfoBox() noexcept;
 static void
 InfoBoxDrawIfDirty() noexcept;
 
-static void
+/**
+ * Apply the contents of the given panel to #layout.  Returns true if
+ * the layout was recalculated, which means the InfoBox slots may have
+ * moved.
+ */
+static bool
 UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept;
 
 } // namespace InfoBoxManager
 
 static bool infoboxes_dirty = false;
 static bool infoboxes_hidden = false;
+
+/**
+ * Bit mask of the InfoBox slots which are currently configured as
+ * #InfoBoxFactory::e_Invisible.  Kept up to date by DisplayInfoBox();
+ * a change of this mask means the map window needs to be resized.
+ */
+static uint_least32_t invisible_mask = 0;
+
+static_assert(InfoBoxSettings::Panel::MAX_CONTENTS <= 32,
+              "invisible_mask is too small");
 
 /* True after Create() finishes and until Destroy() runs.  Startup can
    re-enter layout (terrain load, PageActions::Update) while windows
@@ -65,6 +84,80 @@ const InfoBoxLayout::Layout &
 InfoBoxManager::GetGeometryLayout() noexcept
 {
   return base_layout;
+}
+
+[[gnu::pure]]
+static const InfoBoxSettings::Panel &
+GetCurrentPanel() noexcept
+{
+  const unsigned panel = CommonInterface::GetUIState().panel_index;
+  return CommonInterface::GetUISettings().info_boxes.panels[panel];
+}
+
+/**
+ * Is the given slot of the current panel configured as
+ * #InfoBoxFactory::e_Invisible?  Such an InfoBox is never shown; the
+ * map window is extended over it instead.
+ */
+[[gnu::pure]]
+static bool
+IsInvisible(const InfoBoxSettings::Panel &panel, unsigned i) noexcept
+{
+  return panel.contents[i] == InfoBoxFactory::e_Invisible;
+}
+
+/**
+ * Recalculate #invisible_mask; returns true if it has changed, which
+ * means the map window needs to be moved.
+ */
+static bool
+UpdateInvisibleMask() noexcept
+{
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
+  uint_least32_t mask = 0;
+  for (unsigned i = 0; i < InfoBoxManager::layout.count; ++i)
+    if (IsInvisible(panel, i))
+      mask |= uint_least32_t(1) << i;
+
+  if (mask == invisible_mask)
+    return false;
+
+  invisible_mask = mask;
+  return true;
+}
+
+PixelRect
+InfoBoxManager::ExpandOverInvisible(PixelRect rc) noexcept
+{
+  if (invisible_mask == 0)
+    return rc;
+
+  for (unsigned i = 0; i < layout.count; ++i) {
+    if ((invisible_mask & (uint_least32_t(1) << i)) == 0)
+      continue;
+
+    const PixelRect &ib = layout.positions[i];
+    rc.left = std::min(rc.left, ib.left);
+    rc.top = std::min(rc.top, ib.top);
+    rc.right = std::max(rc.right, ib.right);
+    rc.bottom = std::max(rc.bottom, ib.bottom);
+  }
+
+  return rc;
+}
+
+void
+InfoBoxManager::PaintInvisible(Canvas &canvas,
+                               const InfoBoxLook &look) noexcept
+{
+  if (!infoboxes_ready || infoboxes_hidden || invisible_mask == 0)
+    return;
+
+  for (unsigned i = 0; i < layout.count; ++i)
+    if ((invisible_mask & (uint_least32_t(1) << i)) != 0)
+      canvas.DrawFilledRectangle(layout.positions[i],
+                                 look.background_color);
 }
 
 // TODO locking
@@ -98,20 +191,25 @@ InfoBoxManager::Show() noexcept
   if (!infoboxes_ready)
     return;
 
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
   for (unsigned i = 0; i < layout.count; i++) {
-    if (infoboxes[i] != nullptr && layout.visible[i])
+    /* "invisible" InfoBoxes stay hidden (the map is drawn there), and
+       so do those which have released their space */
+    if (infoboxes[i] != nullptr && layout.visible[i] &&
+        !IsInvisible(panel, i))
       infoboxes[i]->Show();
   }
 
   SetDirty();
 }
 
-void
+bool
 InfoBoxManager::UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept
 {
   if (std::equal(layout_contents, layout_contents + layout.count,
                  panel.contents))
-    return;
+    return false;
 
   std::copy_n(panel.contents, layout.count, layout_contents);
 
@@ -135,9 +233,11 @@ InfoBoxManager::UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept
                                 : layout.borders[i]);
     infoboxes[i]->Move(layout.positions[i]);
 
-    if (!infoboxes_hidden)
+    if (!infoboxes_hidden && !IsInvisible(panel, i))
       infoboxes[i]->Show();
   }
+
+  return true;
 }
 
 void
@@ -158,7 +258,7 @@ InfoBoxManager::DisplayInfoBox() noexcept
   const InfoBoxSettings::Panel &settings =
     CommonInterface::GetUISettings().info_boxes.panels[panel];
 
-  UpdateLayout(settings);
+  const bool layout_changed = UpdateLayout(settings);
 
   for (unsigned i = 0; i < layout.count; i++) {
     if (infoboxes[i] == nullptr)
@@ -182,8 +282,9 @@ InfoBoxManager::DisplayInfoBox() noexcept
 
     /* apply the visibility on every pass: Show() may have run while
        UIState::panel_index still pointed at the previous page, and
-       would then have shown an InfoBox which this page collapses */
-    if (!layout.visible[i])
+       would then have shown an InfoBox which this page collapses or
+       draws the map over */
+    if (DisplayType == InfoBoxFactory::e_Invisible || !layout.visible[i])
       infoboxes[i]->FastHide();
     else if (!infoboxes_hidden)
       infoboxes[i]->Show();
@@ -193,6 +294,15 @@ InfoBoxManager::DisplayInfoBox() noexcept
 
   first = false;
   displaying = false;
+
+  const bool mask_changed = UpdateInvisibleMask();
+
+  if ((mask_changed || (layout_changed && invisible_mask != 0)) &&
+      CommonInterface::main_window != nullptr)
+    /* the map window covers the "invisible" slots: follow both a
+       change of the set and a move of the slots which the new
+       contents of the panel may have caused */
+    CommonInterface::main_window->RelayoutMapArea();
 }
 
 void
@@ -275,6 +385,11 @@ InfoBoxManager::Create(ContainerWindow &parent,
   layout = _layout;
   InfoBoxLayout::ApplyContents(layout, panel);
   std::copy_n(panel.contents, layout.count, layout_contents);
+
+  /* determine the "invisible" slots before the caller queries
+     ExpandOverInvisible() to position the map window */
+  invisible_mask = 0;
+  UpdateInvisibleMask();
 
   for (unsigned i = layout.count; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
     infoboxes[i] = nullptr;

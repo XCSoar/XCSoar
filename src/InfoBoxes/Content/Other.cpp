@@ -247,6 +247,16 @@ UpdateInfoBoxPlaceholder(InfoBoxData &data) noexcept
 }
 
 void
+UpdateInfoBoxInvisible(InfoBoxData &data) noexcept
+{
+  /* nothing is ever drawn for this InfoBox; clear all texts so that
+     no leftovers of the previous content can show up */
+  data.SetTitle("");
+  data.SetValue("");
+  data.SetComment("");
+}
+
+void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {

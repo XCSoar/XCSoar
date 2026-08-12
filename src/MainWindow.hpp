@@ -299,6 +299,15 @@ private:
 
   void UpdateMapOverlayButtonLayout() noexcept;
 
+public:
+  /**
+   * Re-run #LayoutMapArea() and the dependent layouts.  Called by
+   * #InfoBoxManager when the set of "invisible" InfoBoxes changes,
+   * because those slots are covered by the map window.
+   */
+  void RelayoutMapArea() noexcept;
+
+private:
   /**
    * Adjust the flarm radar position
    */

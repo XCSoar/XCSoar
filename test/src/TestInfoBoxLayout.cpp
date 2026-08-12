@@ -252,13 +252,66 @@ TestMergeAcrossLines()
   }
 }
 
+static void
+TestInvisible()
+{
+  /* other than the placeholders, an "invisible" InfoBox claims a slot
+     of its own: that slot is where the map shows through */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_Invisible}});
+
+    ok1(l.visible[1]);
+    ok1(l.positions[1].left == 120);
+    ok1(l.positions[1].right == 240);
+    ok1(l.positions[1].top == 0);
+    ok1(l.positions[1].bottom == 85);
+  }
+
+  /* it takes part in the redistribution of its line, so a neighbour
+     which releases its space widens the hole */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_Invisible}, {2, e_ReleaseSpace}});
+
+    ok1(l.visible[1]);
+    ok1(!l.visible[2]);
+    ok1(l.positions[1].left == 160);
+    ok1(l.positions[1].right == 320);
+  }
+
+  /* a Merge along line grows it over the following slot */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_Invisible}, {2, e_MergeAlongLine}});
+
+    ok1(l.visible[1]);
+    ok1(!l.visible[2]);
+    ok1(l.positions[1].right == 360);
+  }
+
+  /* and it can be the anchor of a Merge across lines, which makes the
+     hole two lines tall */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_Invisible}, {5, e_MergeAcrossLines}});
+
+    ok1(l.visible[1]);
+    ok1(!l.visible[5]);
+    ok1(l.positions[1].top == 0);
+    ok1(l.positions[1].bottom == 170);
+    ok1(l.positions[4].right == 120);
+  }
+}
+
 int main()
 {
-  plan_tests(24 + 19 + 33);
+  plan_tests(24 + 19 + 33 + 17);
 
   TestReleaseSpace();
   TestMergeAlongLine();
   TestMergeAcrossLines();
+  TestInvisible();
 
   return exit_status();
 }

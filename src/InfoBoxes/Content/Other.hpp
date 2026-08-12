@@ -40,6 +40,14 @@ UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxPlaceholder(InfoBoxData &data) noexcept;
 
+/**
+ * The "invisible" InfoBox: it has no title, no value and no comment.
+ * Its window is never shown; the map is extended over the slot
+ * instead (see #InfoBoxManager::ExpandOverInvisible()).
+ */
+void
+UpdateInfoBoxInvisible(InfoBoxData &data) noexcept;
+
 class InfoBoxContentNbrSat final : public InfoBoxContent {
 public:
   void Update(InfoBoxData &data) noexcept override;

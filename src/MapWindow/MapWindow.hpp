@@ -171,6 +171,18 @@ protected:
    */
   unsigned top_right_margin = 0;
 
+  /**
+   * The part of this window which is really visible to the user, in
+   * window coordinates.  The map window may be larger than that: it is
+   * extended below InfoBox slots configured "invisible", and the
+   * remaining (opaque) InfoBoxes are drawn on top of it.  HUD overlays
+   * (compass, map scale, final glide bar, ...) are placed inside this
+   * rectangle so they cannot end up behind an InfoBox.
+   *
+   * An empty rectangle means "the whole client area".
+   */
+  PixelRect overlay_rect{0, 0, 0, 0};
+
 #ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use
@@ -209,6 +221,26 @@ public:
 
   bool IsPanning() const noexcept {
     return follow_mode == FOLLOW_PAN;
+  }
+
+  /**
+   * Restrict the placement of HUD overlays to the given part of this
+   * window (window coordinates); see #overlay_rect.  Pass an empty
+   * rectangle to use the whole client area again.
+   */
+  void SetOverlayRect(PixelRect rc) noexcept {
+    overlay_rect = rc;
+  }
+
+  /**
+   * The rectangle HUD overlays are placed in; see #overlay_rect.
+   */
+  [[gnu::pure]]
+  PixelRect GetOverlayRect() const noexcept {
+    return overlay_rect.left < overlay_rect.right &&
+      overlay_rect.top < overlay_rect.bottom
+      ? overlay_rect
+      : GetClientRect();
   }
 
   void SetWaypoints(Waypoints *_waypoints) noexcept {

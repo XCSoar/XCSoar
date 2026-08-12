@@ -428,7 +428,7 @@ private:
   void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                      const NMEAInfo &info) const noexcept;
   void DrawCrossHairs(Canvas &canvas) const noexcept;
-  void DrawPanInfo(Canvas &canvas) const noexcept;
+  void DrawPanInfo(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
