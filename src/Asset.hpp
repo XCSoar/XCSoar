@@ -218,15 +218,9 @@ HasCursorKeys() noexcept
 /**
  * Does this device have a display with colors?
  */
-static constexpr bool
-HasColors() noexcept
-{
-#if defined(GREYSCALE)
-  return false;
-#else
-  return !IsKobo();
-#endif
-}
+[[gnu::pure]]
+bool
+HasColors() noexcept;
 
 /**
  * Is dithering black&white used on the display?

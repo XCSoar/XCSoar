@@ -8,6 +8,14 @@
 
 #include <type_traits>
 
+#ifdef KOBO
+enum class KoboModel;
+
+[[gnu::const]]
+DisplayType
+GetKoboDefaultDisplayType(KoboModel model) noexcept;
+#endif
+
 /**
  * Display settings.
  */
