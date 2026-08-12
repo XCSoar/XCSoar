@@ -4,6 +4,7 @@
 #pragma once
 
 #include <atomic>
+#include <memory>
 
 #ifdef __APPLE__
 #include <TargetConditionals.h>
@@ -50,6 +51,9 @@ struct SDL_Texture;
 class Canvas;
 struct PixelSize;
 namespace UI { class Display; }
+#ifdef TARGET_IS_KOBO_NICKEL
+class FBInkBackend;
+#endif
 
 #if defined(USE_FB) && !defined(KOBO)
 /* defined if we need to initialise /dev/tty to graphics mode, see
@@ -112,12 +116,16 @@ class TopCanvas
 #endif /* USE_MEMORY_CANVAS */
 
 #ifdef USE_FB
+#ifdef TARGET_IS_KOBO_NICKEL
+  std::unique_ptr<FBInkBackend> fbink;
+#else
   int fd = -1;
 
   void *map = nullptr;
   unsigned map_pitch, map_bpp;
 
   uint32_t epd_update_marker;
+#endif
 #endif // USE_FB
 
 #ifdef KOBO
