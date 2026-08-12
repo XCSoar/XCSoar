@@ -351,6 +351,7 @@ libjpeg = CmakeProject(
     [
         "-DENABLE_STATIC=ON",
         "-DENABLE_SHARED=OFF",
+        "-DCMAKE_C_STANDARD_LIBRARIES=-lm",
     ],
     env={
         # unwind tables are needed for throwing C++ exceptions from C
