@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os.path, subprocess, shutil
 from typing import Optional, Sequence, Union
 

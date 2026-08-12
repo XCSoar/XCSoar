@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os.path, subprocess, sys
 from typing import Collection, Iterable, Optional, Sequence, Union
 from collections.abc import Mapping

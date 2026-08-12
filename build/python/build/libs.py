@@ -12,6 +12,26 @@ from build.lua import LuaProject
 from build.musl import MuslProject
 
 
+class CurlProject(CmakeProject):
+    def configure(self, toolchain):
+        src = self.unpack(toolchain)
+        build = self.make_build_path(toolchain)
+
+        configure_args = list(self.configure_args)
+        if toolchain.is_windows:
+            configure_args += self.windows_configure_args
+        if toolchain.is_android:
+            configure_args += self.android_configure_args
+        if toolchain.is_darwin:
+            configure_args += self.darwin_configure_args
+        if toolchain.is_nickel:
+            configure_args.append(
+                '-DOPENSSL_ROOT_DIR=' + toolchain.install_prefix)
+
+        configure_cmake(toolchain, src, build, configure_args, self.env)
+        return build
+
+
 class LibPngProject(CmakeProject):
     def configure(self, toolchain):
         src = self.unpack(toolchain)
@@ -235,7 +255,7 @@ cares = CmakeProject(
     patches=abspath("lib/c-ares/patches"),
 )
 
-curl = CmakeProject(
+curl = CurlProject(
     (
         "https://curl.se/download/curl-8.5.0.tar.xz",
         "https://github.com/curl/curl/releases/download/curl-8_5_0/curl-8.5.0.tar.xz",

@@ -23,6 +23,7 @@ class NativeToolchain:
         self.is_windows = False
         self.is_android = False
         self.is_darwin = sys.platform == 'darwin'
+        self.is_nickel = False
 
         self.cc = 'ccache gcc'
         self.cxx = 'ccache g++'
@@ -60,6 +61,7 @@ class Toolchain:
         self.is_windows = 'mingw32' in host_triplet
         self.is_android = '-android' in host_triplet
         self.is_darwin = '-darwin' in host_triplet
+        self.is_nickel = host_triplet == 'arm-nickel-linux-gnueabihf'
         
         self.is_target_ios = target_is_ios
 

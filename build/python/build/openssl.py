@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import subprocess
 from typing import Optional, Sequence, Union
 
@@ -46,6 +48,7 @@ class OpenSSLProject(MakeProject):
 
             # Kobo
             'armv7a-kobo-linux-musleabihf': 'linux-generic32',
+            'arm-nickel-linux-gnueabihf': 'linux-generic32',
 
             # Windows
             'i686-w64-mingw32': 'mingw',
@@ -62,6 +65,7 @@ class OpenSSLProject(MakeProject):
             'no-module',
             'no-engine',
             'no-static-engine',
+            'no-dso',
             'no-async',
             'no-tests',
             'no-makedepend',
