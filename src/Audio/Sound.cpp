@@ -27,7 +27,7 @@
 #endif
 
 bool
-PlayResource(const char *resource_name)
+PlayResource([[maybe_unused]] const char *resource_name)
 {
 #ifdef ANDROID
 

@@ -1,3 +1,5 @@
+ifeq ($(TARGET_IS_KOBO_NICKEL),n)
+
 $(eval $(call pkg-config-library,LIBCRYPTO,libcrypto))
 
 KOBO_MENU_SOURCES = \
@@ -50,7 +52,9 @@ ifeq ($(TARGET),UNIX)
 OPTIONAL_OUTPUTS += $(KOBO_MENU_BIN)
 endif
 
-ifeq ($(TARGET_IS_KOBO),y)
+endif
+
+ifeq ($(TARGET_IS_KOBO)$(TARGET_IS_KOBO_NICKEL),yn)
 
 KOBO_POWER_OFF_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \

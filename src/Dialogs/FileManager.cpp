@@ -454,7 +454,7 @@ ManagedFileListWidget::UpdateButtons()
 }
 
 void
-ManagedFileListWidget::OnActivateItem(unsigned index) noexcept
+ManagedFileListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (items.empty()) {

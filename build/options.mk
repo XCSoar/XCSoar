@@ -45,7 +45,9 @@ endif
 # compile without UI?
 HEADLESS ?= n
 
-ifeq ($(TARGET_IS_KOBO),y)
+ifeq ($(TARGET_IS_KOBO_NICKEL),y)
+  DITHER ?= n
+else ifeq ($(TARGET_IS_KOBO),y)
   DITHER ?= y
 else
   DITHER ?= n

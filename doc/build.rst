@@ -513,10 +513,10 @@ This target requires a Nickel ABI sysroot with:
 
 The validated toolchain image is
 ``ghcr.io/anj1/nickeltc-gcc14:sha-6da75a292ebb40855cde651b910c36d975b154f7``.
-It exports ``NICKEL_SYSROOT`` and provides
-``arm-linux-gnueabihf-gcc-14``/``g++-14``.  Equivalent newer compilers may be
-selected with ``NICKEL_CROSS_PREFIX`` and ``NICKEL_CROSS_SUFFIX``.  To
-compile, run::
+It exports ``NICKEL_SYSROOT`` and provides the unversioned
+``arm-nickel-linux-gnueabihf-gcc``/``g++`` toolchain used by the default
+``KOBO_NICKEL`` configuration.  An alternative compiler may be selected with
+``NICKEL_CROSS_PREFIX`` and ``NICKEL_CROSS_SUFFIX``.  To compile, run::
   make TARGET=KOBO_NICKEL DEBUG=n WERROR=y
 
 The resulting binary is written to::
@@ -721,6 +721,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - Framebuffer (software)
    - Cross-compile target (ARMv7 + NEON).
+ * - ``KOBO_NICKEL``
+   - Kobo e-readers launched from Nickel/NickelMenu
+   - no
+   - FBInk framebuffer (software)
+   - Cross-compile target for Nickel's ABI/sysroot.
  * - ``NEON``
    - Generic ARMv7 + NEON
    - yes
