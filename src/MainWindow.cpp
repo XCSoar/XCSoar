@@ -753,6 +753,27 @@ MainWindow::ReinitialiseLayout() noexcept
 }
 
 void
+MainWindow::CheckInfoBoxGeometry() noexcept
+{
+  if (map == nullptr || !InfoBoxManager::IsReady())
+    /* still starting up; InitialiseConfigured() picks the right
+       geometry anyway */
+    return;
+
+  const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  const auto geometry = settings.ResolveGeometry(settings.panels[panel_index]);
+
+  /* InfoBoxLayout::Layout::geometry is the validated geometry, so
+     validate the new one as well before comparing */
+  if (InfoBoxLayout::Calculate(GetClientRect(), geometry).geometry ==
+      InfoBoxManager::layout.geometry)
+    return;
+
+  ReinitialiseLayout();
+}
+
+void
 MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
                                      const InfoBoxLayout::Layout &ib_layout) noexcept
 {
