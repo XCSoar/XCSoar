@@ -121,6 +121,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexc
   unsigned right = rc.right;
 
   switch (geometry) {
+  case InfoBoxSettings::Geometry::INHERIT:
   case InfoBoxSettings::Geometry::SPLIT_8:
   case InfoBoxSettings::Geometry::OBSOLETE_SPLIT_8:
     if (layout.landscape) {
@@ -425,6 +426,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     /* landscape */
 
     switch (geometry) {
+    case InfoBoxSettings::Geometry::INHERIT:
     case InfoBoxSettings::Geometry::SPLIT_8:
     case InfoBoxSettings::Geometry::SPLIT_10:
     case InfoBoxSettings::Geometry::SPLIT_3X4:
@@ -464,6 +466,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxSettings::Geometry geometry,
     /* portrait and square */
 
     switch (geometry) {
+    case InfoBoxSettings::Geometry::INHERIT:
     case InfoBoxSettings::Geometry::SPLIT_8:
     case InfoBoxSettings::Geometry::SPLIT_10:
     case InfoBoxSettings::Geometry::SPLIT_3X4:
@@ -537,6 +540,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
   const bool landscape = screen_size.width > screen_size.height;
 
   switch (geometry) {
+  case InfoBoxSettings::Geometry::INHERIT:
   case InfoBoxSettings::Geometry::SPLIT_8:
   case InfoBoxSettings::Geometry::SPLIT_10:
   case InfoBoxSettings::Geometry::BOTTOM_RIGHT_8:
@@ -654,6 +658,8 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
   unsigned border = 0;
 
   switch (geometry) {
+  case InfoBoxSettings::Geometry::INHERIT:
+    break;
   case InfoBoxSettings::Geometry::SPLIT_8:
     if (landscape) {
       if (i != 3 && i != 7)

@@ -6,6 +6,9 @@
 #include <memory>
 
 class Widget;
+struct StaticEnumChoice;
 
 std::unique_ptr<Widget>
 CreateLayoutConfigPanel();
+
+extern const StaticEnumChoice info_box_geometry_list[];

@@ -81,7 +81,7 @@ static_assert(ARRAY_SIZE(display_type_list) ==
               unsigned(DisplayType::COUNT) + 1,
               "display_type_list must match DisplayType::COUNT");
 
-static constexpr StaticEnumChoice info_box_geometry_list[] = {
+constexpr StaticEnumChoice info_box_geometry_list[] = {
   { InfoBoxSettings::Geometry::SPLIT_8,
     N_("8 Split") },
   { InfoBoxSettings::Geometry::SPLIT_10,
