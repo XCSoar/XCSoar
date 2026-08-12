@@ -1,0 +1,141 @@
+Internationalisation (gettext)
+==============================
+
+XCSoar uses `GNU gettext <https://www.gnu.org/software/gettext/>`__ for
+UI strings. Catalogues live in :file:`po/` (33 languages plus the
+:file:`xcsoar.pot` template). Macros are defined in
+:file:`src/Language/Language.hpp`.
+
+Marking strings in source
+-------------------------
+
+- ``_("Text")`` — translate immediately at the call site.
+- ``N_("Text")`` — mark for extraction only (static arrays / initialisers);
+  translate later with ``gettext()``. ``AddChoices()`` does this for
+  ``StaticEnumChoice`` labels.
+- ``C_("Context", "Text")`` / ``NC_("Context", "Text")`` — same as
+  ``_()`` / ``N_()``, with a gettext ``msgctxt`` so identical English
+  strings can be disambiguated by role.
+
+**Do not** mark log messages for translation
+(``LogFormat()``, ``LogDebug()``, ``LogInfo()``, ``LogError()``,
+and similar). Keep logs in English for consistency and debugging.
+
+Reuse existing English strings whenever the same wording fits.
+Slightly different spellings or punctuation create extra catalogue
+entries and more work for every language. Prefer matching an existing
+``msgid`` (or an existing ``msgctxt`` + ``msgid`` pair) over inventing
+a near-duplicate. Use ``msgctxt`` only when the same English text
+genuinely needs different translations by role.
+
+When to use ``msgctxt``
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Use context for short, ambiguous UI labels that share English wording but
+mean different things (button vs setting vs status). Prefer existing
+context names:
+
+- ``Button``, ``Menu``, ``Setting``, ``Status``
+- ``Weather control``, ``Weather layer``, ``Abbreviation``, ``InfoBox``
+
+Examples::
+
+  C_("Button", "Setup")
+  NC_("Setting", "Auto")
+  C_("Status", "Live")
+  C_("Weather control", "Time")
+
+Avoid inventing new context names when an existing one fits.
+
+Updating catalogues
+-------------------
+
+After adding or changing marked strings::
+
+  make update-po TARGET=UNIX
+
+This regenerates :file:`po/xcsoar.pot` and merges into every
+:file:`po/*.po`.
+
+What ``make update-po`` does
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Implemented in :file:`build/gettext.mk`:
+
+1. ``xgettext`` / ``msgcat`` with ``--no-wrap`` and ``--no-location``
+   (keywords ``_``, ``N_``, ``C_``, ``NC_``) → :file:`po/xcsoar.pot`
+2. For each language file:
+
+   - ``msgmerge --no-wrap --no-location --previous``
+   - ``msgattrib --clear-fuzzy --empty --no-obsolete --clear-previous``
+   - :file:`tools/update_po_low_churn.py` patches only changed entries
+
+``#:`` file:line locations are omitted on purpose. They churn on every
+source edit and are not required at runtime.
+
+Low-churn policy
+~~~~~~~~~~~~~~~~
+
+Routine catalogue updates must not rewrap or rewrite untouched entries.
+
+:file:`tools/update_po_low_churn.py`:
+
+- Rewrites only entries whose translation or key changed
+- Keeps original ``msgid`` / ``msgstr`` quote wrapping where possible
+- Strips leftover ``#:`` lines
+- Upgrades 1:1 bare → ``msgctxt`` additions in place when possible
+- Falls back safely if entry block spans overlap
+
+**Never** bulk-save a whole ``.po`` with ``polib`` (or any tool that
+rewraps the file). That destroys low-churn history and produces huge
+diffs. Edit ``msgstr`` values with targeted replacements, or go through
+``make update-po`` / ``update_po_low_churn.py``.
+
+Filling translations
+--------------------
+
+1. Run ``make update-po``.
+2. Fill empty ``msgstr`` entries (all 33 languages when possible).
+3. Validate::
+
+     msgfmt --check -o /dev/null po/<lang>.po
+
+4. Spot-check placeholders (``%s``, ``%u``, …) match the ``msgid``.
+5. Avoid ``msgstr`` text that looks like printf tokens unless the
+   ``msgid`` has the same placeholders (e.g. Hungarian ``50%-nál`` can
+   be misread as ``%-n``; prefer a spelled-out “percent” form).
+
+Keep brand names such as ``SkySight`` and ``NetCDF`` unchanged unless a
+language already has an established local form.
+
+Commit organisation
+-------------------
+
+- Small fixes: one ``po:`` commit (or ``po/<lang>:`` for a single file),
+  usually at the end of a feature branch.
+- Large refreshes:
+
+  1. ``po: Regenerate translation catalog`` (:file:`xcsoar.pot`, and any
+     source fix required for extraction)
+  2. One ``po/<lang>: Refresh translations`` commit per language
+
+Each language file should be touched once on a refresh branch when
+practical. Fold follow-up msgstr fixes into that language’s commit.
+
+``.po`` syntax notes
+--------------------
+
+- Never put custom comments between ``#, fuzzy`` and ``msgid``, or
+  between ``msgid`` and ``msgstr``.
+- Place comments before ``#, fuzzy`` or at the start of an entry block.
+- Invalid syntax breaks ``msgmerge`` during ``make update-po``.
+
+Related files
+-------------
+
+- :file:`po/*.po`, :file:`po/xcsoar.pot`
+- :file:`src/Language/Language.hpp`
+- :file:`build/gettext.mk`
+- :file:`tools/update_po_low_churn.py`
+- :file:`Data/Input/default.xci` (event labels extracted via
+  :file:`tools/xci2po.pl`)
