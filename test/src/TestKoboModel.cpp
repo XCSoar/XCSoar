@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Kobo/Model.hpp"
+#include "DisplaySettings.hpp"
+#include "Asset.hpp"
 #include "TestUtil.hpp"
 
 #include <span>
@@ -16,7 +18,7 @@ Parse(std::string_view value) noexcept
 int
 main()
 {
-  plan_tests(13);
+  plan_tests(22);
 
   ok1(Parse("SN-N365") == KoboModel::CLARA_BW);
   ok1(Parse("SN-P365") == KoboModel::CLARA_BW);
@@ -33,6 +35,21 @@ main()
   ok1(std::string_view{GetKoboWifiInterface(KoboModel::CLARA_COLOUR)} == "wlan0");
   ok1(std::string_view{GetKoboWifiInterface(KoboModel::CLARA_2E)} == "mlan0");
   ok1(std::string_view{GetKoboWifiInterface(KoboModel::GLO_HD)} == "eth0");
+
+  ok1(GetKoboDefaultDisplayType(KoboModel::CLARA_BW) == DisplayType::E_INK);
+  ok1(GetKoboDefaultDisplayType(KoboModel::CLARA_COLOUR) ==
+      DisplayType::COLOR_E_INK);
+  ok1(GetKoboDefaultDisplayType(KoboModel::UNKNOWN) == DisplayType::E_INK);
+
+  SetDisplayType(DisplayType::E_INK);
+  ok1(!HasColors());
+  ok1(HasEPaper());
+  SetDisplayType(DisplayType::COLOR_E_INK);
+  ok1(HasColors());
+  ok1(HasEPaper());
+  SetDisplayType(DisplayType::LCD);
+  ok1(HasColors());
+  ok1(!HasEPaper());
 
   return exit_status();
 }
