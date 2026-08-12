@@ -254,8 +254,10 @@ InfoBoxesConfigWidget::Prepare(ContainerWindow &parent,
   geom_dfe->AddChoice(GEOMETRY_INHERIT_ID, _("Inherit from global settings"));
   geom_dfe->AddChoices(info_box_geometry_list);
   geom_dfe->SetValue(geom_id);
-  Add(_("Page geometry"),
-      _("Override InfoBox geometry only for this page. If unset, global setting is used."),
+  Add(_("Geometry"),
+      _("The InfoBox geometry used while this InfoBox set is active.  "
+        "\"Inherit from global settings\" uses the geometry configured in "
+        "the screen layout settings."),
       geom_dfe);
 
   DataFieldEnum *dfe = new DataFieldEnum(this);

@@ -445,8 +445,8 @@ Version 7.45 - not yet released
   - Fix intermittent white-map hang on startup for non-OpenGL builds when
     drawing began before map bounds were ready #2734
 * ui
-  - InfoBox sets can now define their own page geometry, overriding the default
-    InfoBox geometry configured in the screen layout settings #1864
+  - InfoBox sets can now define their own geometry, overriding the default
+    geometry configured in the screen layout settings #1863
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,
     distance; tap to change home waypoint) #2320
