@@ -510,6 +510,7 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   rasp_layer_opacity = CommonInterface::GetMapSettings().rasp_layer_opacity;
   AddInteger(_("Overlay opacity"),
+             /* xgettext:no-c-format */
              _("Sets the opacity of the RASP weather overlay on the map.  "
                "0% is fully transparent, 100% is fully opaque."),
              "%d %%", "%d", 0, 100, 10,
