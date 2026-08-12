@@ -67,10 +67,17 @@ $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS)
 $$($(2)_OBJS): CPPFLAGS_DEPENDS += $$($(2)_DEPENDS_FLAT)
 
 # Link the unstripped binary
+ifeq ($$($(2)_LINK_GROUP),y)
+$$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
+	@$$(NQ)echo "  LINK    $$@"
+	$$(file >$$@.rsp,$$(ld-flags) -o $$@ $$(sort $$($(2)_OBJS)) -Wl,--start-group $$($(2)_LDADD) $$(TARGET_LDADD) $$($(2)_LDLIBS) $$(ld-libs) -Wl,--end-group)
+	$$(Q)$$(LINK) @$$@.rsp
+else
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
 	$$(file >$$@.rsp,$$(ld-flags) -o $$@ $$^ $$($(2)_LDLIBS) $$(ld-libs))
 	$$(Q)$$(LINK) @$$@.rsp
+endif
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)

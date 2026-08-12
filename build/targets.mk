@@ -3,7 +3,7 @@ TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	FUZZER \
-	PI PI2 CUBIE KOBO NEON \
+	PI PI2 CUBIE KOBO KOBO_NICKEL NEON \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
@@ -55,6 +55,7 @@ TARGET_IS_PI := n
 TARGET_IS_PI32 := n
 TARGET_IS_PI64 := n
 TARGET_IS_KOBO := n
+TARGET_IS_KOBO_NICKEL := n
 TARGET_IS_CUBIE := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
@@ -237,6 +238,35 @@ ifeq ($(TARGET),KOBO)
   TARGET_IS_KOBO = y
 
   HOST_TRIPLET = armv7a-kobo-linux-musleabihf
+endif
+
+ifeq ($(TARGET),KOBO_NICKEL)
+  # Kobo devices launched from Nickel/NickelMenu, without replacing the boot
+  # flow with XCSoar's legacy KoboRoot.tgz package.
+  override TARGET = NEON
+  override TARGET_FLAVOR = KOBO_NICKEL
+  TARGET_IS_KOBO = y
+  TARGET_IS_KOBO_NICKEL = y
+
+  # Build against Nickel's ABI/sysroot with an external compiler new enough
+  # for XCSoar's C++20 coroutine usage.
+  HOST_TRIPLET = arm-nickel-linux-gnueabihf
+  NICKEL_CROSS_PREFIX ?= arm-linux-gnueabihf-
+  NICKEL_CROSS_SUFFIX ?= -10
+  TCPREFIX = $(NICKEL_CROSS_PREFIX)
+  TCSUFFIX = $(NICKEL_CROSS_SUFFIX)
+
+  # This toolchain's gold reports spurious alignment warnings for merged
+  # string sections.  BFD links the same input cleanly but has no ICF.
+  USE_LD ?= bfd
+  ICF ?= n
+
+  ifeq ($(strip $(NICKEL_SYSROOT)),)
+    $(error NICKEL_SYSROOT must name the Nickel target sysroot)
+  endif
+
+  # Audio support can be re-enabled once the base launch path is proven.
+  ENABLE_ALSA = n
 endif
 
 ifeq ($(TARGET),NEON)
@@ -533,7 +563,17 @@ ifeq ($(TARGET_IS_KOBO),y)
 
   TARGET_CXXFLAGS += -Wno-psabi
 
-  TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(HOST_TRIPLET)-
+  ifeq ($(TARGET_IS_KOBO_NICKEL),y)
+    TARGET_ARCH += -no-pie
+    TARGET_CPPFLAGS += --sysroot=$(NICKEL_SYSROOT)
+    TARGET_CPPFLAGS += -DTARGET_IS_KOBO_NICKEL=1
+    # GCC 10 misdiagnoses nodiscard constructors used for base/member
+    # initialization as discarded temporaries.
+    TARGET_CXXFLAGS += -Wno-unused-result
+    TARGET_CXXFLAGS += -include $(abspath build/kobo_nickel_libstdcxx_compat.hpp)
+  else
+    TCPREFIX = $(abspath $(THIRDPARTY_LIBS_DIR))/bin/$(HOST_TRIPLET)-
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -564,6 +604,14 @@ endif
 TARGET_LDFLAGS =
 TARGET_LDLIBS =
 TARGET_LDADD =
+
+ifeq ($(TARGET_IS_KOBO_NICKEL),y)
+  TARGET_LDFLAGS += --sysroot=$(NICKEL_SYSROOT)
+  TARGET_LDFLAGS += -static-libstdc++ -static-libgcc
+  TARGET_LDFLAGS += -Wl,-rpath,/usr/local/Kobo -Wl,-rpath,/usr/local/Qt-5.2.1-arm/lib
+  TARGET_LDLIBS += -ldl
+  XCSOAR_LINK_GROUP = y
+endif
 
 ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--major-subsystem-version=6
@@ -604,7 +652,7 @@ ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   TARGET_LDFLAGS += -L$(CUBIE)/usr/local/stow/sunxi-mali/lib
 endif
 
-ifeq ($(TARGET_IS_KOBO),y)
+ifeq ($(TARGET_IS_KOBO)$(TARGET_IS_KOBO_NICKEL),yn)
   TARGET_LDFLAGS += --static
 
   # Dirty workaround for a musl/libstdc++ problem: libstdc++ imports

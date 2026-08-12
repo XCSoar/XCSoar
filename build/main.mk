@@ -721,6 +721,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/XCSoar.cpp
 endif
 
+ifeq ($(TARGET_IS_KOBO_NICKEL),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Compatibility/getrandom.c
+endif
+
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFileModal.cpp \

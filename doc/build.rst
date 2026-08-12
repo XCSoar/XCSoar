@@ -721,6 +721,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - Framebuffer (software)
    - Cross-compile target (ARMv7 + NEON).
+ * - ``KOBO_NICKEL``
+   - Kobo e-readers launched from Nickel/NickelMenu
+   - no
+   - Framebuffer (software)
+   - Cross-compile target for Nickel's ABI/sysroot.
  * - ``NEON``
    - Generic ARMv7 + NEON
    - yes

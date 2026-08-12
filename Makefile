@@ -262,7 +262,7 @@ ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
 endif
 
-ifeq ($(TARGET_IS_KOBO),y)
+ifeq ($(TARGET_IS_KOBO)$(TARGET_IS_KOBO_NICKEL),yn)
 OUTPUTS += $(KOBO_MENU_BIN) $(KOBO_POWER_OFF_BIN)
 endif
 
