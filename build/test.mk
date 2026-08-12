@@ -146,6 +146,7 @@ endif
 
 ifeq ($(HAVE_WIN32),n)
 TEST_NAMES += \
+	TestKoboModel \
 	TestDataLayoutMigration \
 	TestLocalPathResolve
 endif
@@ -363,6 +364,13 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+TEST_KOBO_MODEL_SOURCES = \
+	$(SRC)/Kobo/Model.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestKoboModel.cpp
+TEST_KOBO_MODEL_CPPFLAGS = -DKOBO
+$(eval $(call link-program,TestKoboModel,TEST_KOBO_MODEL))
 
 TEST_ISO8601_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \

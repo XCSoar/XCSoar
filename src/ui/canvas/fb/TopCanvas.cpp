@@ -152,6 +152,8 @@ TopCanvas::TopCanvas(UI::Display &_display)
   case KoboModel::GLO:
   case KoboModel::AURA:
   case KoboModel::NIA:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
     frame_sync = false;
     break;
 

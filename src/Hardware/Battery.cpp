@@ -65,6 +65,23 @@ GetInfo() noexcept
     }
     break;
 
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
+    if (File::ReadString(Path("/sys/class/power_supply/bd71827_bat/status"),
+                         line, sizeof(line))) {
+      if (StringIsEqual(line,"Not charging\n") ||
+          StringIsEqual(line,"Charging\n") ||
+          StringIsEqual(line,"Full\n"))
+        external.status = Power::ExternalInfo::Status::ON;
+      else if (StringIsEqual(line,"Discharging\n"))
+        external.status = Power::ExternalInfo::Status::OFF;
+    }
+
+    if (File::ReadString(Path("/sys/class/power_supply/bd71827_bat/capacity"),
+                         line, sizeof(line)))
+      battery.remaining_percent = atoi(line);
+    break;
+
   default:
     // code shamelessly copied from OS/SystemLoad.cpp
     if (!File::ReadString(Path("/sys/class/power_supply/mc13892_bat/uevent"),

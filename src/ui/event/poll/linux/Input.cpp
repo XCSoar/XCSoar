@@ -15,6 +15,8 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 
+#include <linux/input.h>
+
 template<typename T>
 static constexpr unsigned
 BitSize() noexcept
@@ -42,6 +44,9 @@ LinuxInputDevice::LinuxInputDevice(EventQueue &_queue,
                                    MergeMouse &_merge) noexcept
   :queue(_queue), merge(_merge),
    edit_position(0, 0), public_position(0, 0),
+#ifdef TARGET_IS_KOBO_NICKEL
+   grabbed(false),
+#endif
    event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady))
 {
 }
@@ -97,6 +102,11 @@ LinuxInputDevice::Open(const char *path) noexcept
         max_y = abs.maximum;
       }
     }
+
+#ifdef TARGET_IS_KOBO_NICKEL
+    /* Nickel keeps running while XCSoar owns the display. */
+    grabbed = ioctl(event.GetFileDescriptor().Get(), EVIOCGRAB, 1) == 0;
+#endif
   }
 
   rel_x = rel_y = rel_wheel = 0;
@@ -111,8 +121,15 @@ LinuxInputDevice::Close() noexcept
   if (!IsOpen())
     return;
 
-  if (is_pointer)
+  if (is_pointer) {
+#ifdef TARGET_IS_KOBO_NICKEL
+    if (grabbed) {
+      ioctl(event.GetFileDescriptor().Get(), EVIOCGRAB, 0);
+      grabbed = false;
+    }
+#endif
     merge.RemovePointer();
+  }
 
   event.Close();
 }
