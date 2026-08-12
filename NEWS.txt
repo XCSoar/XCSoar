@@ -444,6 +444,15 @@ Version 7.45 - not yet released
   - Add renderer to display distance rings around the current location #2522
   - Fix intermittent white-map hang on startup for non-OpenGL builds when
     drawing began before map bounds were ready #2734
+  - tap the on-map compass to reset a rotated map to north-up in pan
+    mode, or to cycle the active display mode's map orientation; the
+    compass is now shown with north-up as well (it stays hidden only on
+    a dedicated "Map (north-up)" page) #2839
+  - pan mode: the map rotation freezes at pan entry instead of following
+    the configured orientation (no more map spinning when panning while
+    circling with track-up); leaving pan restores the orientation
+  - pan mode: with circling zoom enabled, the automatic zoom switch on
+    circling/cruise transitions is deferred until pan mode is left
 * ui
   - infoboxen: refresh titles after changing the interface language #2314
   - infoboxen: add "Home" InfoBox (waypoint name, arrival height at home,

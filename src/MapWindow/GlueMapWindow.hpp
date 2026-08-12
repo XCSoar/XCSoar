@@ -172,16 +172,15 @@ class GlueMapWindow : public MapWindow {
 
   /** True after finger twist crosses the rotate dead zone. */
   bool pinch_rotating = false;
-
-  /**
-   * Hold #manual_rotation_angle instead of the configured orientation.
-   * Cleared by UpdateScreenAngle() when pan mode is left.
-   */
-  bool manual_rotation = false;
-  Angle manual_rotation_angle = Angle::Zero();
 #endif
 
   DisplayMode last_display_mode = DisplayMode::NONE;
+
+  /**
+   * A circling/cruise zoom switch (#SwitchZoomClimb) is due, but was
+   * deferred because pan mode was active.
+   */
+  bool switch_zoom_climb_pending = false;
 
   OffsetHistory offset_history;
 
@@ -391,6 +390,25 @@ private:
   void SwitchZoomClimb() noexcept;
 
   void SaveDisplayModeScales() noexcept;
+
+  /**
+   * Handle a tap at the given position if it hits the on-map compass
+   * (using a hit box somewhat larger than the drawn arrow so it can
+   * be tapped with a finger): while panning, reset a rotated map
+   * back to north-up; otherwise cycle through the map orientations
+   * (#CycleMapOrientation).
+   *
+   * @return true if the position hit the compass and the tap was
+   * handled
+   */
+  bool HandleCompassTap(PixelPoint p) noexcept;
+
+  /**
+   * Switch the orientation setting of the current display mode
+   * (cruise or circling) to the next available one and show a brief
+   * popup message with the new value.
+   */
+  void CycleMapOrientation() noexcept;
 
   /**
    * Persist the current projection scale as the circling or cruise
