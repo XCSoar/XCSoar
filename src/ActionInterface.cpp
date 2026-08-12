@@ -337,6 +337,11 @@ ActionInterface::UpdateDisplayMode() noexcept
   state.panel_name = gettext(panel.name);
 
   UpdateMapScalePageInfo(state);
+
+  /* the active panel may have changed, and a panel may override the
+     global InfoBox geometry */
+  if (main_window != nullptr)
+    main_window->CheckInfoBoxGeometry();
 }
 
 void

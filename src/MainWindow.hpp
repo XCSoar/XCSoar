@@ -326,6 +326,14 @@ public:
   void ReinitialiseLayout() noexcept;
 
   /**
+   * Check whether the InfoBox geometry of the currently active panel
+   * differs from the one the InfoBoxes were created with, and
+   * reinitialise the layout if it does.  Cheap enough to be called
+   * whenever the display mode (and thus the panel) may have changed.
+   */
+  void CheckInfoBoxGeometry() noexcept;
+
+  /**
    * Reinitialise the #Look after relevant #UISettings have been
    * changed.
    */

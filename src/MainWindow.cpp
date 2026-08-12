@@ -57,6 +57,19 @@
 
 static constexpr unsigned separator_height = 2;
 
+/**
+ * Returns the InfoBox geometry of the currently active panel, falling
+ * back to the global setting when the panel does not override it.
+ */
+[[gnu::pure]]
+static InfoBoxSettings::Geometry
+GetActiveInfoBoxGeometry() noexcept
+{
+  const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  return settings.ResolveGeometry(settings.panels[panel_index]);
+}
+
 [[gnu::pure]]
 static PixelRect
 GetMapOverlayButtonRect(const PixelRect rc, int top) noexcept
@@ -480,7 +493,7 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, GetActiveInfoBoxGeometry());
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -706,7 +719,7 @@ MainWindow::ReinitialiseLayout() noexcept
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, GetActiveInfoBoxGeometry());
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
@@ -740,6 +753,24 @@ MainWindow::ReinitialiseLayout() noexcept
 
   if (map != nullptr)
     map->BringToBottom();
+}
+
+void
+MainWindow::CheckInfoBoxGeometry() noexcept
+{
+  if (map == nullptr || !InfoBoxManager::IsReady())
+    /* still starting up; InitialiseConfigured() picks the right
+       geometry anyway */
+    return;
+
+  /* InfoBoxLayout::Layout::geometry is the validated geometry, so
+     validate the new one as well before comparing */
+  if (InfoBoxLayout::Calculate(GetClientRect(),
+                               GetActiveInfoBoxGeometry()).geometry ==
+      InfoBoxManager::layout.geometry)
+    return;
+
+  ReinitialiseLayout();
 }
 
 void
@@ -856,11 +887,8 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc,
 void
 MainWindow::ReinitialiseLook() noexcept
 {
-  const auto &ui_settings = CommonInterface::GetUISettings();
-
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(GetClientRect(),
-                             ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(GetClientRect(), GetActiveInfoBoxGeometry());
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
