@@ -328,6 +328,8 @@ Version 7.45 - not yet released
 * development
   - logging: record screen resolution, DPI, virtual DPI, approximate
     size, and small-screen flag at startup #1548
+  - ui: access the text input services of the operating system (its
+    on-screen keyboard and the clipboard) on SDL builds
   - Android: ship native debug symbols for Google Play
   - time: unify UTC conversion (BrokenDateTime / Windows TimeGm)
   - MapWindow: publish a coherent projection snapshot for the
