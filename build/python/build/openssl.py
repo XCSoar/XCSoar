@@ -2,7 +2,7 @@ import subprocess
 from typing import Optional, Sequence, Union
 
 from build.makeproject import MakeProject
-from .toolchain import AnyToolchain
+from .toolchain import AnyToolchain, Toolchain
 
 class OpenSSLProject(MakeProject):
     def __init__(self, url: Union[str, Sequence[str]], md5: str, installed: str,
@@ -46,6 +46,7 @@ class OpenSSLProject(MakeProject):
 
             # Kobo
             'armv7a-kobo-linux-musleabihf': 'linux-generic32',
+            'arm-nickel-linux-gnueabihf': 'linux-generic32',
 
             # Windows
             'i686-w64-mingw32': 'mingw',
@@ -69,13 +70,22 @@ class OpenSSLProject(MakeProject):
             '--prefix=' + toolchain.install_prefix,
         ]
 
+        if toolchain.is_nickel:
+            configure.append('no-dso')
+            assert isinstance(toolchain, Toolchain)
+            # LTO may select gcc-ar or another archiver wrapper, so use the
+            # configured prefix rather than deriving it from AR.
+            cross_compile = toolchain.cross_compile_prefix
+        elif toolchain.host_triplet is not None:
+            cross_compile = f'{toolchain.host_triplet}-'
+
         if toolchain.is_windows:
             # workaround for build failures
             configure.append('no-asm')
 
         if toolchain.host_triplet is not None:
             configure.append(openssl_archs[toolchain.host_triplet])
-            configure.append(f'--cross-compile-prefix={toolchain.host_triplet}-')
+            configure.append(f'--cross-compile-prefix={cross_compile}')
 
         subprocess.check_call(configure, cwd=src, env=toolchain.env)
         self.build_make(toolchain, src)

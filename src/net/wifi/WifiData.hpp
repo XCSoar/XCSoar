@@ -136,7 +136,7 @@ struct WifiNetworkEntry {
       }
 
       if (!entry.interface_name.empty()) {
-        StaticString<64> address;
+        StaticString<64> address{};
         if (TryFormatWifiInterfaceAddress(entry.interface_name.c_str(),
                                           address)) {
           text.Format("%s (%s)", _("Connected"), address.c_str());

@@ -20,7 +20,7 @@ class LuaProject(MakeProject):
 
         if toolchain.is_target_ios:
             cflags += ' -DLUA_USE_IOS'
-            
+
         return MakeProject.get_make_args(self, toolchain) + [
             'CC=' + toolchain.cc,
             'AR=' + toolchain.ar + ' rcu',

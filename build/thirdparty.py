@@ -4,12 +4,12 @@ import os, os.path
 import re
 import sys
 
-if len(sys.argv) < 14 or len(sys.argv) > 15:
-    print("Usage: build.py LIB_PATH HOST_TRIPLET TARGET_IS_IOS ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES [ENABLE_SDL]", file=sys.stderr)
+if len(sys.argv) < 15 or len(sys.argv) > 16:
+    print("Usage: build.py LIB_PATH HOST_TRIPLET TARGET_IS_IOS ARCH_CFLAGS CPPFLAGS ARCH_LDFLAGS CC CXX AR ARFLAGS RANLIB STRIP WINDRES CROSS_COMPILE_PREFIX [ENABLE_SDL]", file=sys.stderr)
     sys.exit(1)
 
-lib_path, host_triplet, target_is_ios, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres = sys.argv[1:14]
-enable_sdl = sys.argv[14] if len(sys.argv) > 14 else ''
+lib_path, host_triplet, target_is_ios, arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags, ranlib, strip, windres, cross_compile_prefix = sys.argv[1:15]
+enable_sdl = sys.argv[15] if len(sys.argv) > 15 else ''
 target_is_ios = (target_is_ios == 'y') # convert to boolean
 enable_sdl = (enable_sdl == 'y') # convert to boolean
 
@@ -34,7 +34,7 @@ toolchain = Toolchain(xcsoar_path, lib_path,
                       tarball_path, src_path, build_path, install_prefix,
                       host_triplet, target_is_ios,
                       arch_cflags, cppflags, arch_ldflags, cc, cxx, ar, arflags,
-                      ranlib, strip, windres)
+                      ranlib, strip, windres, cross_compile_prefix)
 
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
@@ -110,6 +110,19 @@ elif toolchain.is_android:
         libtiff,
         libgeotiff,
         netcdf,
+    ]
+elif host_triplet == 'arm-nickel-linux-gnueabihf':
+    thirdparty_libs = [
+        zlib,
+        libfmt,
+        libsodium,
+        freetype,
+        openssl,
+        libpng,
+        libjpeg,
+        cares,
+        curl,
+        lua,
     ]
 elif '-kobo-linux-' in host_triplet:
     thirdparty_libs = [
