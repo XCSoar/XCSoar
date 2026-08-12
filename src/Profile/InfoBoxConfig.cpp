@@ -114,6 +114,9 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
     break;
+
+  case InfoBoxSettings::Geometry::INHERIT:
+    break;
   }
 
   map.Get(ProfileKeys::InfoBoxTitleScale, settings.scale_title_font);
