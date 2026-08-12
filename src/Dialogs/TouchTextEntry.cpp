@@ -10,8 +10,11 @@
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/TextInput.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/TruncateString.hpp"
 #include "ui/window/Window.hpp"
@@ -21,18 +24,26 @@
 namespace {
 struct TextEntryLayout {
   PixelRect editor;
+  PixelRect paste;
   PixelRect backspace;
   PixelRect keyboard;
   PixelRect ok, cancel, clear;
 };
 
+/**
+ * @param with_paste reserve room for the @em Paste button
+ */
 static void
-ComputeTextEntryLayout(const PixelRect &rc, TextEntryLayout &o) noexcept
+ComputeTextEntryLayout(const PixelRect &rc, bool with_paste,
+                       TextEntryLayout &o) noexcept
 {
   const int client_height = rc.GetHeight();
   const int padding = Layout::Scale(2);
   const int backspace_width = Layout::Scale(36);
   const int backspace_left = rc.right - padding - backspace_width;
+  const int paste_width = with_paste ? Layout::Scale(60) : 0;
+  const int paste_left = backspace_left - (with_paste ? padding : 0) -
+    paste_width;
   const int editor_height = Layout::Scale(22);
   const int editor_bottom = padding + editor_height;
   const int button_height = Layout::Scale(40);
@@ -69,7 +80,8 @@ ComputeTextEntryLayout(const PixelRect &rc, TextEntryLayout &o) noexcept
     ? rc.right
     : clear_left + Layout::Scale(50);
 
-  o.editor = {0, padding, backspace_left - padding, editor_bottom};
+  o.editor = {0, padding, paste_left - padding, editor_bottom};
+  o.paste = {paste_left, padding, paste_left + paste_width, editor_bottom};
   o.backspace = {backspace_left, padding, rc.right - padding, editor_bottom};
   o.keyboard = {padding, keyboard_top, rc.right - padding, keyboard_bottom};
   o.ok = {ok_left, button_top, ok_right, button_bottom};
@@ -80,7 +92,8 @@ ComputeTextEntryLayout(const PixelRect &rc, TextEntryLayout &o) noexcept
 static void
 ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
                      Button &cancel, Button &clear, KeyboardWidget &keyboard,
-                     Button &backspace, ContainerWindow &client_area) noexcept
+                     Button &backspace, Button *paste,
+                     ContainerWindow &client_area) noexcept
 {
   editor.Move(L.editor);
   ok.Move(L.ok);
@@ -88,6 +101,8 @@ ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
   clear.Move(L.clear);
   keyboard.Move(L.keyboard);
   backspace.Move(L.backspace);
+  if (paste != nullptr)
+    paste->Move(L.paste);
   client_area.Invalidate();
 }
 } // namespace
@@ -99,6 +114,7 @@ static Button *textentry_backspace = NULL;
 static Button *textentry_ok = NULL;
 static Button *textentry_cancel = NULL;
 static Button *textentry_clear = NULL;
+static Button *textentry_paste = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
@@ -112,6 +128,30 @@ UpdateAllowedCharacters()
 {
   if (AllowedCharactersCallback)
     kb->SetAllowedCharacters(AllowedCharactersCallback(edittext));
+}
+
+/**
+ * Check a character against the AllowedCharacters callback.
+ *
+ * @return the character to be inserted (may have been converted to
+ * upper case), or 0 if it is not allowed
+ */
+static char
+FilterCharacter(char ch)
+{
+  if (!AllowedCharactersCallback)
+    return ch;
+
+  const char *allowed = AllowedCharactersCallback(edittext);
+  if (allowed == nullptr || StringFind(allowed, ch) != nullptr)
+    return ch;
+
+  /* the allowed set is usually upper case only */
+  if (const char upper = ToUpperASCII(ch);
+      upper != ch && StringFind(allowed, upper) != nullptr)
+    return upper;
+
+  return 0;
 }
 
 static void
@@ -152,6 +192,28 @@ DoCharacter(char character)
   return true;
 }
 
+/**
+ * Append the system clipboard contents to the edit field.
+ */
+static void
+OnPaste()
+{
+  for (const char ch : UI::TextInput::GetClipboardText()) {
+    if (!IsPrintableASCII(ch))
+      /* TODO: ASCII only for now, because we don't have proper UTF-8
+         support yet */
+      continue;
+
+    const char filtered = FilterCharacter(ch);
+    if (filtered == 0)
+      continue;
+
+    if (!DoCharacter(filtered))
+      /* the edit field is full */
+      break;
+  }
+}
+
 static bool
 FormKeyDown(unsigned key_code)
 {
@@ -161,6 +223,20 @@ FormKeyDown(unsigned key_code)
   if (HasCursorKeys() && kb != nullptr &&
       kb->KeyPress(key_code, textentry_backspace, textentry_ok))
     return true;
+
+  /* the @em Paste button sits left of the on-screen backspace */
+  if (HasCursorKeys() && textentry_client != nullptr &&
+      textentry_paste != nullptr && textentry_backspace != nullptr) {
+    Window *const w = textentry_client->GetFocusedWindow();
+    if (key_code == KEY_LEFT && w == static_cast<Window *>(textentry_backspace)) {
+      textentry_paste->SetFocus();
+      return true;
+    }
+    if (key_code == KEY_RIGHT && w == static_cast<Window *>(textentry_paste)) {
+      textentry_backspace->SetFocus();
+      return true;
+    }
+  }
 
   if (HasCursorKeys() && textentry_client != nullptr && textentry_ok != nullptr &&
       textentry_cancel != nullptr && textentry_clear != nullptr) {
@@ -248,6 +324,8 @@ TouchTextEntry(char *text, size_t width,
 
   max_width = std::min(MAX_TEXTENTRY, width);
 
+  const bool with_paste = UI::TextInput::HasClipboard();
+
   const DialogLook &look = UIGlobals::GetDialogLook();
   WndForm form(UIGlobals::GetMainWindow(), look, caption);
   form.SetKeyDownFunction(FormKeyDown);
@@ -257,7 +335,7 @@ TouchTextEntry(char *text, size_t width,
   textentry_client = &client_area;
   const PixelRect rc0 = client_area.GetClientRect();
   TextEntryLayout L;
-  ComputeTextEntryLayout(rc0, L);
+  ComputeTextEntryLayout(rc0, with_paste, L);
 
   WndProperty _editor(client_area, look, "",
                       L.editor,
@@ -304,12 +382,20 @@ TouchTextEntry(char *text, size_t width,
 
   textentry_backspace = &backspace_button;
 
+  Button paste_button;
+  if (with_paste) {
+    paste_button.Create(client_area, look.button, _("Paste"), L.paste,
+                        button_style, [](){ OnPaste(); });
+    textentry_paste = &paste_button;
+  }
+
   form.SetClientLayoutFunction([&]() {
     const PixelRect rc = client_area.GetClientRect();
     TextEntryLayout layout;
-    ComputeTextEntryLayout(rc, layout);
+    ComputeTextEntryLayout(rc, with_paste, layout);
     ApplyTextEntryLayout(layout, _editor, ok_button, cancel_button, clear_button,
-                        keyboard, backspace_button, client_area);
+                         keyboard, backspace_button,
+                         with_paste ? &paste_button : nullptr, client_area);
   });
 
   AllowedCharactersCallback = accb;
@@ -329,6 +415,7 @@ TouchTextEntry(char *text, size_t width,
   textentry_ok = NULL;
   textentry_cancel = NULL;
   textentry_clear = NULL;
+  textentry_paste = NULL;
   textentry_client = NULL;
 
   keyboard.Hide();
