@@ -87,6 +87,13 @@ Font::Load(const FontDescription &d)
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
 }
 
+bool
+Font::HasGlyph([[maybe_unused]] unsigned unicode) const noexcept
+{
+  /* CoreText falls back to other fonts of the operating system */
+  return true;
+}
+
 PixelSize
 Font::TextSize(const std::string_view text) const noexcept
 {

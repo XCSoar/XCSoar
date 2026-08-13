@@ -104,6 +104,15 @@ public:
   [[gnu::pure]]
   PixelSize TextSize(std::string_view text) const noexcept;
 
+  /**
+   * Can this font render the given Unicode character?  Backends whose
+   * text API falls back to other fonts of the operating system always
+   * return true; those without a fallback (FreeType, which loads one
+   * font file) really check the font.
+   */
+  [[gnu::pure]]
+  bool HasGlyph(unsigned unicode) const noexcept;
+
 #if defined(USE_FREETYPE) || defined(USE_APPKIT) || defined(USE_UIKIT)
   static constexpr std::size_t BufferSize(const PixelSize size) noexcept {
     return std::size_t(size.width) * std::size_t(size.height);
