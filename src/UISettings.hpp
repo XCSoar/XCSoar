@@ -72,6 +72,17 @@ struct UISettings {
     AUTO,
   } dark_mode;
 
+  /**
+   * Which mode XCSoar starts in; ASK shows the fly/simulator prompt.
+   * Ignored when "-fly" or "-simulator" was passed on the command
+   * line.
+   */
+  enum class StartupMode : uint_least8_t {
+    ASK,
+    FLY,
+    SIMULATOR,
+  } startup_mode;
+
   FormatSettings format;
   MapSettings map;
   InfoBoxSettings info_boxes;

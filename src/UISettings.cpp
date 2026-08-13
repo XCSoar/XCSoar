@@ -37,6 +37,8 @@ UISettings::SetDefaults() noexcept
   dark_mode = DarkMode::AUTO;
 #endif
 
+  startup_mode = StartupMode::ASK;
+
   format.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();

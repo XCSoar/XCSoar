@@ -361,20 +361,45 @@ Startup(UI::Display &display)
   CommonInterface::SetUISettings().SetDefaults();
   main_window->Initialise();
 
-#ifdef SIMULATOR_AVAILABLE
-  // prompt for simulator if not set by command line argument "-simulator" or "-fly"
-  if (!sim_set_in_cmd_line_flag) {
-    SimulatorPromptResult result = dlgSimulatorPromptShowModal();
-    switch (result) {
-    case SPR_QUIT:
-      return false;
+  CommonInterface::SetSystemSettings().SetDefaults();
+  CommonInterface::SetComputerSettings().SetDefaults();
+  CommonInterface::SetUIState().Clear();
 
-    case SPR_FLY:
+  const auto &computer_settings = CommonInterface::GetComputerSettings();
+  const auto &ui_settings = CommonInterface::GetUISettings();
+  auto &live_blackboard = CommonInterface::GetLiveBlackboard();
+
+  if (!LoadProfile())
+    return false;
+
+#ifdef SIMULATOR_AVAILABLE
+  /* choose fly or simulator mode; the command line arguments
+     "-simulator" and "-fly" win over the profile setting, and the
+     prompt is shown only if neither has decided */
+  if (!sim_set_in_cmd_line_flag) {
+    switch (ui_settings.startup_mode) {
+    case UISettings::StartupMode::FLY:
       global_simulator_flag = false;
       break;
 
-    case SPR_SIMULATOR:
+    case UISettings::StartupMode::SIMULATOR:
       global_simulator_flag = true;
+      break;
+
+    case UISettings::StartupMode::ASK:
+      switch (dlgSimulatorPromptShowModal()) {
+      case SPR_QUIT:
+        return false;
+
+      case SPR_FLY:
+        global_simulator_flag = false;
+        break;
+
+      case SPR_SIMULATOR:
+        global_simulator_flag = true;
+        break;
+      }
+
       break;
     }
   }
@@ -389,17 +414,6 @@ Startup(UI::Display &display)
     native_view->StartMyService(env);
   }
 #endif
-
-  CommonInterface::SetSystemSettings().SetDefaults();
-  CommonInterface::SetComputerSettings().SetDefaults();
-  CommonInterface::SetUIState().Clear();
-
-  const auto &computer_settings = CommonInterface::GetComputerSettings();
-  const auto &ui_settings = CommonInterface::GetUISettings();
-  auto &live_blackboard = CommonInterface::GetLiveBlackboard();
-
-  if (!LoadProfile())
-    return false;
 
   operation.SetText(_("Initialising"));
 
