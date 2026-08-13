@@ -181,6 +181,8 @@ Version 7.45 - not yet released
     contents of the system clipboard
   - label the backspace key of the text entry dialog “⌫” where the
     font has that character
+  - use the system font on macOS and iOS instead of Helvetica: it
+    covers far more characters and has a designed bold cut
   - list and picker dialogs use a single keyboard focus: Left/Right
     page the list, Enter confirms, Up/Down reach OK/Cancel
   - allow lower-case letters in HighScore Style text entry #2387
