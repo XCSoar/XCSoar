@@ -101,6 +101,19 @@ ComputeTextEntryLayout(const PixelRect &rc, bool with_keyboard, bool with_paste,
   o.clear = {clear_left, button_top, clear_right, button_bottom};
 }
 
+/**
+ * The caption of the backspace key: the "erase to the left" symbol
+ * where the font has it, else an arrow made of ASCII.
+ */
+[[gnu::pure]]
+static const char *
+BackspaceCaption(const ButtonLook &look) noexcept
+{
+  return look.font != nullptr && look.font->HasGlyph(0x232B)
+    ? "⌫"
+    : "<-";
+}
+
 static void
 ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
                      Button &cancel, Button &clear, KeyboardWidget *keyboard,
@@ -410,7 +423,8 @@ TouchTextEntry(char *text, size_t width,
     kb = &keyboard;
   }
 
-  Button backspace_button(client_area, look.button, "<-",
+  Button backspace_button(client_area, look.button,
+                          BackspaceCaption(look.button),
                           L.backspace,
                           button_style, [](){ OnBackspace(); });
 

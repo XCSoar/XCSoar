@@ -30,6 +30,14 @@ Font::Load(const FontDescription &d)
   CalculateHeights();
 }
 
+bool
+Font::HasGlyph([[maybe_unused]] unsigned unicode) const noexcept
+{
+  /* we do not know what the GDI font can do; assume the worst, which
+     only costs us a nicer symbol here and there */
+  return false;
+}
+
 PixelSize
 Font::TextSize(std::string_view text) const noexcept
 {
