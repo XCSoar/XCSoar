@@ -8,10 +8,16 @@ if [[ -f "$SCRIPT_DIR/.env" ]]; then
   source "$SCRIPT_DIR/.env"
 fi
 
+# Testing builds use their own bundle identifier (see build/ios.mk)
+case "$(printf '%s' "${TESTING:-n}" | tr '[:upper:]' '[:lower:]')" in
+  y|yes|true|1) DEFAULT_BUNDLE_ID="XCSoar-testing" ;;
+  *) DEFAULT_BUNDLE_ID="XCSoar" ;;
+esac
+
 # Configuration
 IPA_SIGNED_PATH="${IOS_SIGNED_IPA_PATH:-$(pwd)/output/IOS64/xcsoar-signed.ipa}"
 DEVICE_NAME="${IOS_DEVICE_NAME:-}"
-BUNDLE_ID="${IOS_BUNDLE_ID:-"XCSoar"}"
+BUNDLE_ID="${IOS_BUNDLE_ID:-$DEFAULT_BUNDLE_ID}"
 
 # Validate required environment variables
 if [[ -z "$DEVICE_NAME" ]]; then
