@@ -368,6 +368,8 @@ Version 7.45 - 2026-08-15
   - time: unify UTC conversion (BrokenDateTime / Windows TimeGm)
   - MapWindow: publish a coherent projection snapshot for the
     DrawThread on non-OpenGL builds #2735
+  - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
+    produce the testing flavour
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
