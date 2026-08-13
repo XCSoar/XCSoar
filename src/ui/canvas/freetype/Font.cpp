@@ -274,6 +274,18 @@ ForEachGlyph(const FT_Face face, unsigned ascent_height, T &&text,
     });
 }
 
+bool
+Font::HasGlyph(unsigned unicode) const noexcept
+{
+#ifndef ENABLE_OPENGL
+  const std::lock_guard lock{freetype_mutex};
+#endif
+
+  /* there is only this one font file and no fallback, so a character
+     the font does not have cannot be drawn at all */
+  return face != nullptr && FT_Get_Char_Index(face, unicode) != 0;
+}
+
 PixelSize
 Font::TextSize(std::string_view text) const noexcept
 {

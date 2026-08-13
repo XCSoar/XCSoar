@@ -179,6 +179,8 @@ Version 7.45 - not yet released
     the text input style “Keyboard” keeps XCSoar's own keyboard
   - add a “Paste” button to the text entry dialog, which appends the
     contents of the system clipboard
+  - label the backspace key of the text entry dialog “⌫” where the
+    font has that character
   - list and picker dialogs use a single keyboard focus: Left/Right
     page the list, Enter confirms, Up/Down reach OK/Cancel
   - allow lower-case letters in HighScore Style text entry #2387

@@ -36,6 +36,13 @@ Font::Destroy() noexcept
   text_util_object = nullptr;
 }
 
+bool
+Font::HasGlyph([[maybe_unused]] unsigned unicode) const noexcept
+{
+  /* android.graphics.Paint falls back to other fonts of the system */
+  return true;
+}
+
 PixelSize
 Font::TextSize(std::string_view text) const noexcept
 {
