@@ -6,6 +6,9 @@ IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
 IPA_NAME = xcsoar.ipa
 IOS_APP_DIR_NAME = XCSoar.app
+IOS_DSYM_NAME = $(IOS_APP_DIR_NAME).dSYM
+IOS_DSYM = $(TARGET_OUTPUT_DIR)/$(IOS_DSYM_NAME)
+IOS_DSYM_INPUT = $(TARGET_OUTPUT_DIR)/dsym-input/XCSoar
 
 ifeq ($(wildcard VERSION.txt),)
 $(error VERSION.txt is missing)
@@ -110,5 +113,26 @@ $(TARGET_OUTPUT_DIR)/$(IPA_NAME): $(TARGET_BIN_DIR)/xcsoar $(TARGET_OUTPUT_DIR)/
 	$(Q)cd $(IPA_TMPDIR) && $(ZIP) -qr ../$(IPA_NAME) ./*
 
 ipa: $(TARGET_OUTPUT_DIR)/$(IPA_NAME)
+
+# Generate the dSYM from an identically named copy of the executable that is
+# shipped in the IPA, and verify that both retain the same build UUID.
+$(IOS_DSYM_INPUT): $(TARGET_BIN_DIR)/xcsoar
+	@$(NQ)echo "  CP      $@"
+	$(Q)$(MKDIR) -p $(@D)
+	$(Q)cp $< $@
+
+$(IOS_DSYM): $(IOS_DSYM_INPUT)
+	@$(NQ)echo "  DSYM    $@"
+	$(Q)rm -rf $@
+	$(Q)xcrun dsymutil $(IOS_DSYM_INPUT) -o $@
+	$(Q)binary_uuid="$$(xcrun dwarfdump --uuid $(TARGET_BIN_DIR)/xcsoar | awk '{ print $$2 }' | LC_ALL=C sort | tr '\n' ' ')"; \
+	  dsym_uuid="$$(xcrun dwarfdump --uuid $@ | awk '{ print $$2 }' | LC_ALL=C sort | tr '\n' ' ')"; \
+	  test -n "$$binary_uuid" && test "$$binary_uuid" = "$$dsym_uuid" || { \
+	    echo "dSYM UUID mismatch: binary=$$binary_uuid dSYM=$$dsym_uuid" >&2; \
+	    exit 1; \
+	  }
+
+.PHONY: ios-dsym
+ios-dsym: $(IOS_DSYM)
 
 endif
