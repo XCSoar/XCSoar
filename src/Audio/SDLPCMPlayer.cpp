@@ -33,8 +33,10 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
       source = &_source;
       SDL_PauseAudioDevice(device, 0);
       SDL_UnlockAudioDevice(device);
+      return true;
     }
 
+    /* the sample rate has changed, so the device needs to be reopened */
     Stop();
   }
 
