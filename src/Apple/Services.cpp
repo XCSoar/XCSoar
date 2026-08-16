@@ -6,23 +6,32 @@
 #include <TargetConditionals.h>
 #include "LogFile.hpp"
 #include "Services.hpp"
+#include "thread/Mutex.hxx"
 #import <AVFoundation/AVFoundation.h>
-
-#include <atomic>
 
 #if TARGET_OS_IPHONE
 
 /**
- * Accessed from the SDL audio thread (SDLPCMPlayer), from the thread
- * calling SoundUtil::Play() and from the AVAudioPlayer delegate
- * callbacks, so it needs to be atomic.
+ * Serialises audio_vario_session_active against the deactivation of the
+ * shared AVAudioSession. Without it, DeactivateAudioSession() could read
+ * the flag as false, then have the audio vario start up (setting the
+ * flag and activating the session) before its own setActive:NO takes
+ * effect, silencing the freshly started vario.
  */
-static std::atomic<bool> audio_vario_session_active{false};
+static Mutex audio_session_mutex;
+
+/**
+ * Protected by #audio_session_mutex: written from the SDL audio thread
+ * (SDLPCMPlayer) and read from the thread calling SoundUtil::Play() and
+ * from the AVAudioPlayer delegate callbacks.
+ */
+static bool audio_vario_session_active = false;
 
 void
 SetAudioVarioSessionActive(bool active)
 {
-  audio_vario_session_active.store(active, std::memory_order_release);
+  const std::lock_guard lock{audio_session_mutex};
+  audio_vario_session_active = active;
 }
 
 void
@@ -52,7 +61,12 @@ ActivateAudioSession()
 void
 DeactivateAudioSession()
 {
-  if (audio_vario_session_active.load(std::memory_order_acquire)) {
+  // hold the lock across the check and the deactivation, so that the
+  // audio vario cannot start up in between and get silenced by our
+  // setActive:NO
+  const std::lock_guard lock{audio_session_mutex};
+
+  if (audio_vario_session_active) {
     // keep the session active while the audio vario's audio device is
     // open: deactivating it would also silence the audio vario, which
     // SDL would not resume on its own
