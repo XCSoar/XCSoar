@@ -70,6 +70,7 @@ Version 7.45 - not yet released
   - fix fluctuating hill-shading strength #2262
   - fix intermittent white-map hang on startup for non-OpenGL builds
     when drawing began before map bounds were ready #2734
+  - fix the ragged white halo behind map labels on high-DPI screens
 * weather
   - remember overlay layer/time (or level/altitude) per weather map
     page, with a map-bottom cursor bar, Weather Setup, and Forecast
