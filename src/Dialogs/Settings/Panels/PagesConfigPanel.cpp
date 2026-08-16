@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "PagesConfigPanel.hpp"
+#include "Dialogs/Message.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
@@ -524,15 +525,46 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
     }
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.overlay = (PageLayout::Overlay)dfe.GetValue();
-    if (value.overlay == PageLayout::Overlay::SKYSIGHT &&
-        value.skysight_overlay.empty()) {
+    const auto overlay = (PageLayout::Overlay)dfe.GetValue();
+    if (overlay == PageLayout::Overlay::SKYSIGHT) {
 #ifdef HAVE_HTTP
-      if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr)
-        if (const auto *layer = skysight->GetSelectedLayer(0); layer != nullptr)
-          value.skysight_overlay = layer->id;
+      const auto skysight = DataGlobals::GetSkySight();
+      const SkySight::Layer *layer = nullptr;
+      if (skysight != nullptr) {
+        if (!value.skysight_overlay.empty() &&
+            skysight->IsSelectedLayer(value.skysight_overlay.c_str()))
+          layer = skysight->GetSelectedLayer(value.skysight_overlay.c_str());
+
+        for (std::size_t i = 0; layer == nullptr &&
+             i < skysight->NumSelectedLayers(); ++i)
+          layer = skysight->GetSelectedLayer(i);
+      }
+
+      if (layer != nullptr) {
+        value.skysight_overlay = layer->id;
+      } else if (value.skysight_overlay.empty()) {
+        const char *message;
+        if (skysight == nullptr)
+          message = _("SkySight is unavailable.");
+        else if (skysight->IsThrottled())
+          message = _("SkySight API rate-limited. Retrying shortly.");
+        else if (!skysight->HasForecastLayers())
+          message = _("Loading SkySight catalog...");
+        else
+          message = _("No SkySight layers selected");
+
+        ShowMessageBox(message, "SkySight", MB_OK | MB_ICONINFORMATION);
+        ApplyValueToForm();
+        return;
+      }
+
+      if (layer == nullptr)
+        value.skysight_overlay.clear();
+#else
+      value.skysight_overlay.clear();
 #endif
     }
+    value.overlay = overlay;
   } else if (&df == &GetDataField(OVERLAY_DETAIL)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     if (value.overlay == PageLayout::Overlay::RASP)
