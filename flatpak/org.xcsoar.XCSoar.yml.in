@@ -1,0 +1,117 @@
+id: @FLATPAK_APP_ID@
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: xcsoar
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+  - --filesystem=xdg-documents
+  - --filesystem=xdg-download
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+  - '*.a'
+  - '*.la'
+  - /bin/magick
+  - /bin/sox
+  - /bin/soxi
+  - /lib/libMagickCore-*.so*
+  - /lib/libMagickWand-*.so*
+  - /share/ImageMagick-*
+
+modules:
+  - name: imagemagick
+    buildsystem: autotools
+    config-opts:
+      - --disable-docs
+      - --disable-static
+      - --without-magick-plus-plus
+      - --without-perl
+    sources:
+      - type: archive
+        url: https://download.imagemagick.org/archive/releases/ImageMagick-7.1.2-27.tar.xz
+        sha256: 005b177dd25f46c2458b543164f296d66ce97e6a7be1084529d25df527984813
+
+  - name: sox
+    buildsystem: simple
+    build-commands:
+      - "sed -i '/#include <assert.h>/a #include <math.h>' src/sox_sample_test.h"
+      - ./configure --prefix=/app --disable-shared
+      - make
+      - make install
+    sources:
+      - type: archive
+        url: https://downloads.sourceforge.net/project/sox/sox/14.4.2/sox-14.4.2.tar.gz
+        sha256: b45f598643ffbd8e363ff24d61166ccec4836fea6d3888881b8df53e3bb55f6c
+
+  - name: c-ares
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DCARES_STATIC=ON
+      - -DCARES_SHARED=OFF
+      - -DCARES_STATIC_PIC=ON
+      - -DCARES_BUILD_TOOLS=OFF
+      - -DCARES_THREADS=OFF
+    sources:
+      - type: archive
+        url: https://github.com/c-ares/c-ares/releases/download/cares-1_24_0/c-ares-1.24.0.tar.gz
+        sha256: c517de6d5ac9cd55a9b72c1541c3e25b84588421817b5f092850ac09a8df5103
+
+  - name: libsodium
+    buildsystem: autotools
+    config-opts:
+      - --disable-shared
+      - --enable-static
+    sources:
+      - type: archive
+        url: https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz
+        sha256: ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
+
+  # XCSoar's third-party builds pin Lua 5.4.6.  Lua itself does not ship a
+  # pkg-config file, so install the static library and expose the package name
+  # which build/liblua.mk uses.
+  - name: lua
+    buildsystem: simple
+    build-commands:
+      - make -C src MYCFLAGS="$CFLAGS -fPIC" MYLDFLAGS="$LDFLAGS" liblua.a
+      - install -Dm644 src/liblua.a /app/lib/liblua.a
+      - install -Dm644 src/lauxlib.h src/luaconf.h src/lua.h src/lualib.h -t /app/include
+      - >-
+        printf '%s\n' 'prefix=/app' 'exec_prefix=${prefix}' 'libdir=${exec_prefix}/lib'
+        'includedir=${prefix}/include' '' 'Name: Lua' 'Description: Lua language'
+        'Version: 5.4.6' 'Libs: -L${libdir} -llua -lm' 'Cflags: -I${includedir}'
+        > /app/lib/pkgconfig/lua5.4.pc
+    sources:
+      - type: archive
+        url: http://www.lua.org/ftp/lua-5.4.6.tar.gz
+        sha256: 7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88
+
+  - name: xcsoar
+    buildsystem: simple
+    build-commands:
+      # Do not reuse target configuration generated outside the SDK.  In
+      # particular, it may describe host-only pkg-config dependencies.
+      - rm -rf output/WAYLAND
+      - >-
+        make -j"$FLATPAK_BUILDER_N_JOBS" TARGET=WAYLAND DEBUG=n GEOTIFF=n ICF=n
+        EXTRA_CPPFLAGS="-isystem /app/include"
+        FLATPAK_APP_ID=@FLATPAK_APP_ID@ flatpak-install prefix=/app
+    sources:
+      # Build the checked-out source tree, as CI does.  Do not copy generated
+      # output or builder state into the sandbox.
+      - type: dir
+        path: @FLATPAK_SOURCE_ROOT@
+        skip: [darwin/XCSoarExecutable, darwin/XCSoar.xcodeproj/XCSoar.app,
+          output@FLATPAK_HIDDEN_SOURCE_FILES@]
+      - type: file
+        url: https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2
+        sha256: 49551aff3b22cbc5c5a9ed3dbc92f0e23ea50a0f7325b0d198b705e8ee3fc305
+        dest: output/download
+        dest-filename: boost_1_90_0.tar.bz2

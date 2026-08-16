@@ -6,7 +6,7 @@ BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
 BOOST_TARBALL = $(DOWNLOAD_DIR)/$(BOOST_TARBALL_NAME)
 BOOST_BASE_NAME = $(patsubst %.tar.bz2,%,$(BOOST_TARBALL_NAME))
 BOOST_SRC = $(OUT)/src/$(BOOST_BASE_NAME)
-BOOST_PATCHES_DIR = $(topdir)/lib/boost/patches
+BOOST_PATCHES_DIR = $(abspath $(topdir)/lib/boost/patches)
 BOOST_PATCHES = $(addprefix $(BOOST_PATCHES_DIR)/,$(shell cat $(BOOST_PATCHES_DIR)/series))
 
 $(BOOST_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
@@ -18,7 +18,9 @@ $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCH
 	@$(NQ)echo "  UNTAR   $(BOOST_TARBALL_NAME)"
 	$(Q)rm -rf $(BOOST_SRC)
 	$(Q)tar xjfC $< $(OUT)/src $(BOOST_BASE_NAME)/boost
-	$(Q)cd $(BOOST_SRC) && QUILT_PATCHES=$(abspath $(BOOST_PATCHES_DIR)) quilt push -a -q
+	$(Q)cd $(BOOST_SRC) && while IFS= read -r patch_file; do \
+		patch -p1 < "$(BOOST_PATCHES_DIR)/$$patch_file" || exit $$?; \
+	done < "$(BOOST_PATCHES_DIR)/series"
 	@touch $@
 
 .PHONY: boost
