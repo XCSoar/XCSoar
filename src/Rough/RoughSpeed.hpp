@@ -8,19 +8,28 @@
 #include <cstdint>
 
 /**
- * Store an rough speed value, when the exact value is not needed.
+ * Store a rough speed value, when the exact value is not needed.
  *
- * The accuracy is about 2mm/s. The range is 0 - 127 m/s.
+ * The accuracy is about 16 mm/s. The range is 0 - 1023 m/s.
  */
 class RoughSpeed {
   uint16_t value;
 
+  static constexpr double SCALE = 64;
+  static constexpr double MAX_MPS = 1023;
+
   static constexpr uint16_t Import(double x) {
-    return (uint16_t)(x * 512);
+    if (!(x > 0))
+      return 0;
+
+    if (x > MAX_MPS)
+      x = MAX_MPS;
+
+    return uint16_t(x * SCALE);
   }
 
   static constexpr double Export(uint16_t x) {
-    return double(x) / 512;
+    return double(x) / SCALE;
   }
 
 public:
