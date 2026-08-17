@@ -312,9 +312,12 @@ Net::DownloadManager::BeginDeinitialise() noexcept
 void
 Net::DownloadManager::Deinitialise() noexcept
 {
-  assert(thread != nullptr);
-
+  /* Null after delete so a same-process re-entry of runNative
+     (quick restart before System.exit finishes) can Initialise()
+     again.  Leaving a dangling pointer trips assert(thread ==
+     nullptr) on the next startup. */
   delete thread;
+  thread = nullptr;
 }
 
 bool
