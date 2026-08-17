@@ -5137,6 +5137,9 @@ msgstr "Obvesti"
 msgid "Browse"
 msgstr "Pretražuj"
 
+msgid "Scan QR Code"
+msgstr "Skeniraj kodo QR"
+
 msgid "Download Declaration"
 msgstr "Prenesi deklaracijo"
 

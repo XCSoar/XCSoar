@@ -5173,6 +5173,9 @@ msgstr "宣言"
 msgid "Browse"
 msgstr "表示"
 
+msgid "Scan QR Code"
+msgstr "QRコードをスキャン"
+
 msgid "Download Declaration"
 msgstr "宣言をダウンロード"
 

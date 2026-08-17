@@ -5178,6 +5178,9 @@ msgstr "Anmelden"
 msgid "Browse"
 msgstr "Durchsuchen"
 
+msgid "Scan QR Code"
+msgstr "QR-Code scannen"
+
 msgid "Download Declaration"
 msgstr "Deklaration herunterladen"
 

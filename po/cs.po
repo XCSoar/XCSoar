@@ -5133,6 +5133,9 @@ msgstr "Deklaruj"
 msgid "Browse"
 msgstr "Procházej"
 
+msgid "Scan QR Code"
+msgstr "Skenovat QR kód"
+
 msgid "Download Declaration"
 msgstr "Stáhnout deklaraci"
 

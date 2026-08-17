@@ -5140,6 +5140,9 @@ msgstr "Deklarál"
 msgid "Browse"
 msgstr "Tallóz"
 
+msgid "Scan QR Code"
+msgstr "QR-kód beolvasása"
+
 msgid "Download Declaration"
 msgstr "Deklaráció letöltése"
 

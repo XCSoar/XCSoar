@@ -5164,6 +5164,9 @@ msgstr "Заявити"
 msgid "Browse"
 msgstr "Огляд"
 
+msgid "Scan QR Code"
+msgstr "Сканувати QR-код"
+
 msgid "Download Declaration"
 msgstr "Завантажити декларацію"
 

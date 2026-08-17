@@ -4975,6 +4975,9 @@ msgstr "申报"
 msgid "Browse"
 msgstr "浏览"
 
+msgid "Scan QR Code"
+msgstr "扫描二维码"
+
 msgid "Download Declaration"
 msgstr "下载申报"
 

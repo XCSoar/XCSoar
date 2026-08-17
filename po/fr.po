@@ -5195,6 +5195,9 @@ msgstr "Déclarer"
 msgid "Browse"
 msgstr "Circuits enregistrés"
 
+msgid "Scan QR Code"
+msgstr "Scanner le code QR"
+
 msgid "Download Declaration"
 msgstr "Télécharger la déclaration"
 

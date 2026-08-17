@@ -5206,6 +5206,9 @@ msgstr "Δήλωση"
 msgid "Browse"
 msgstr "Αναζήτηση"
 
+msgid "Scan QR Code"
+msgstr "Σάρωση κωδικού QR"
+
 msgid "Download Declaration"
 msgstr "Λήψη δήλωσης"
 

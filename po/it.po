@@ -5193,6 +5193,9 @@ msgstr "Dichiara"
 msgid "Browse"
 msgstr "Sfoglia"
 
+msgid "Scan QR Code"
+msgstr "Scansiona codice QR"
+
 msgid "Download Declaration"
 msgstr "Scarica dichiarazione"
 

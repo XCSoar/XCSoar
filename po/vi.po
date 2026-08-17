@@ -5115,6 +5115,9 @@ msgstr "Khai báo"
 msgid "Browse"
 msgstr "duyệt"
 
+msgid "Scan QR Code"
+msgstr "Quét mã QR"
+
 msgid "Download Declaration"
 msgstr "Tải xuống tờ khai"
 

@@ -5063,6 +5063,9 @@ msgstr "타스크 선언"
 msgid "Browse"
 msgstr "타스크 찾아보기"
 
+msgid "Scan QR Code"
+msgstr "QR 코드 스캔"
+
 msgid "Download Declaration"
 msgstr "선언서 다운로드"
 

@@ -5129,6 +5129,9 @@ msgstr "Objaviti"
 msgid "Browse"
 msgstr "Pretraživanje"
 
+msgid "Scan QR Code"
+msgstr "Skeniraj QR kod"
+
 msgid "Download Declaration"
 msgstr "Slanje deklaracije"
 

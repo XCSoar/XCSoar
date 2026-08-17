@@ -5127,6 +5127,9 @@ msgstr "Ilmoita"
 msgid "Browse"
 msgstr "Selaa"
 
+msgid "Scan QR Code"
+msgstr "Skannaa QR-koodi"
+
 msgid "Download Declaration"
 msgstr "Lataa ilmoitus"
 
