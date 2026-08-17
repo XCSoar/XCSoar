@@ -47,6 +47,13 @@ public class XCSoar extends Activity implements PermissionManager {
 
   private static NativeView nativeView;
 
+  /**
+   * The activity that currently owns the process.  A quick relaunch
+   * can construct a new instance before the exiting one is destroyed;
+   * onDestroy() must not System.exit() in that case.
+   */
+  private static XCSoar currentActivity;
+
   private Handler mainHandler;
   private PermissionHelper permissionHelper;
 
@@ -73,6 +80,8 @@ public class XCSoar extends Activity implements PermissionManager {
     Log.d(TAG, "DEVICE=" + Build.DEVICE);
     Log.d(TAG, "BOARD=" + Build.BOARD);
     Log.d(TAG, "FINGERPRINT=" + Build.FINGERPRINT);
+
+    currentActivity = this;
 
     if (!Loader.loaded) {
       TextView tv = new TextView(this);
@@ -354,6 +363,15 @@ public class XCSoar extends Activity implements PermissionManager {
       super.onDestroy();
       return;
     }
+
+    /* A newer activity is already running in this process (quick
+       relaunch).  Leave JNI and the VM alone. */
+    if (currentActivity != this) {
+      super.onDestroy();
+      return;
+    }
+
+    currentActivity = null;
 
     /* Mark the app as shutting down so that MyService will not restart
        itself after System.exit() kills the process.  The flag must be
