@@ -12,7 +12,13 @@ $(error VERSION.txt is missing)
 endif
 
 IOS_PATCH_VERSION ?= 0
-IOS_APP_VERSION ?= $(shell cat VERSION.txt).$(IOS_PATCH_VERSION)
+# Patch releases put X.Y.Z in VERSION.txt.  Two-part VERSION.txt still
+# appends IOS_PATCH_VERSION so CFBundleShortVersionString is X.Y.Z.
+ifeq ($(words $(subst ., ,$(VERSION))),2)
+IOS_APP_VERSION ?= $(VERSION).$(IOS_PATCH_VERSION)
+else
+IOS_APP_VERSION ?= $(VERSION_SHORT)
+endif
 IOS_APP_BUILD_NUMBER ?= 1
 
 ifeq ($(TESTING),y)

@@ -1,8 +1,10 @@
 #!/bin/bash
 
-TAG="${1}"
-VERSION=$(echo "$TAG" | cut -f2 -d v)
-STARTLINENUMBER=$(grep -n -E "^Version $VERSION " NEWS.txt | cut -f1 -d:)
+RAW="${1:-}"
+# Accept v7.45.1, 7.45.1, or refs/tags/v7.45.1
+VERSION="${RAW##*/}"
+VERSION="${VERSION#v}"
+STARTLINENUMBER=$(grep -n -E "^Version ${VERSION} " NEWS.txt | cut -f1 -d:)
 if [ -z "${STARTLINENUMBER}" ]; then
   echo "ERROR: Version $1 not found in NEWS.txt"
   exit 1
