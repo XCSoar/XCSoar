@@ -23,6 +23,24 @@ void
 dlgTaskManagerShowModal();
 
 /**
+ * Is a task manager currently on screen?
+ */
+[[gnu::pure]]
+bool
+HasVisibleTaskManager() noexcept;
+
+/**
+ * Show a task that arrived from outside (e.g. a scanned QR code) in
+ * the task manager that is already on screen.  This keeps a scan
+ * started from inside the task manager from stacking a second one on
+ * top of it.
+ *
+ * May only be called when HasVisibleTaskManager() returns true.
+ */
+void
+TaskManagerReceiveTask(std::unique_ptr<OrderedTask> task) noexcept;
+
+/**
  * Show a dialog that lets the user edit a task point (and lets him
  * navigate to other task points).
  *

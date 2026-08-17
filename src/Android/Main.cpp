@@ -206,6 +206,18 @@ try {
 }
 
 gcc_visibility_default
+JNIEXPORT jstring JNICALL
+Java_org_xcsoar_NativeView_onReceiveTaskQRCode(JNIEnv *env,
+                                               [[maybe_unused]] jclass cls,
+                                               jstring text)
+try {
+  ReceiveTaskQRCode(Java::String::GetUTFChars(env, text).c_str());
+  return nullptr;
+} catch (...) {
+  return env->NewStringUTF(GetFullMessage(std::current_exception()).c_str());
+}
+
+gcc_visibility_default
 jboolean
 Java_org_xcsoar_NativeView_isSimulatorNative([[maybe_unused]] JNIEnv *env,
                                              [[maybe_unused]] jclass cls)

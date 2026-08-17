@@ -28,6 +28,7 @@ jmethodID NativeView::isAutoRotateEnabled_method;
 jmethodID NativeView::getPhysicalOrientation_method;
 jmethodID NativeView::startMyService_method;
 jmethodID NativeView::launchSAFTreePicker_method;
+jmethodID NativeView::scanQRCode_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -90,6 +91,8 @@ NativeView::Initialise(JNIEnv *env)
   launchSAFTreePicker_method =
     env->GetMethodID(cls, "launchSAFTreePicker",
                      "(Ljava/lang/String;)V");
+
+  scanQRCode_method = env->GetMethodID(cls, "scanQRCode", "()V");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(

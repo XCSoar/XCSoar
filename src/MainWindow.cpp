@@ -885,8 +885,18 @@ MainWindow::OnTaskReceived() noexcept
     /* postpone until XCSoar is running */
     return;
 
+  if (HasVisibleTaskManager()) {
+    /* the task manager may be the dialog that started the scan in the
+       first place; give the task straight to it rather than stacking a
+       second one on top */
+    if (auto task = GetReceivedTask())
+      TaskManagerReceiveTask(std::move(task));
+    return;
+  }
+
   if (HasDialog())
-    /* don't intercept an existing modal dialog */
+    /* don't intercept an existing modal dialog; the task stays
+       pending and RunTimer() offers it again later */
     return;
 
   auto task = GetReceivedTask();

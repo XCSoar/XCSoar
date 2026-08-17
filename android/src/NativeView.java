@@ -343,6 +343,26 @@ class NativeView extends SurfaceView
 
   static native String onReceiveXCTrackTask(String data);
 
+  /**
+   * Hand the raw text of a scanned QR code to native code, which
+   * inspects the URI scheme prefix itself.
+   *
+   * @return null on success, or a human-readable error message
+   */
+  static native String onReceiveTaskQRCode(String text);
+
+  /**
+   * Open the camera to scan a task QR code.  Called from native code
+   * when the pilot picks "Scan QR Code".  The scanner Activity
+   * reports its own result, so there is nothing to return here.
+   */
+  void scanQRCode() {
+    final Context ctx = getContext();
+    if (ctx instanceof XCSoar) {
+      ((XCSoar) ctx).scanQRCode();
+    }
+  }
+
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,
                                   int width, int height,

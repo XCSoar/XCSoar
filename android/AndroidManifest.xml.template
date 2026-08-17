@@ -59,7 +59,17 @@
 
     <service android:name="org.xcsoar.MyService" android:foregroundServiceType="location"/>
 
-    <!-- this Activity receives scanned QR codes -->
+    <!-- this Activity scans task QR codes with the built-in camera.
+         hardwareAccelerated is spelled out because the TextureView
+         showing the camera preview draws nothing without it, and never
+         hands out the SurfaceTexture the scanner waits for. -->
+    <activity android:name="org.xcsoar.QRScannerActivity"
+              android:exported="false"
+              android:hardwareAccelerated="true"
+              android:screenOrientation="portrait"
+              android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
+
+    <!-- this Activity receives QR codes scanned by another app -->
     <activity android:name="org.xcsoar.ReceiveTaskActivity"
               android:exported="true">
       <intent-filter>
@@ -104,6 +114,9 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
 
+  <!-- used only to scan task QR codes, on demand -->
+  <uses-permission android:name="android.permission.CAMERA"/>
+
   <!-- required since Android 13 / targetSdkVersion 33+ for posting notifications -->
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
@@ -132,6 +145,8 @@
   <uses-feature android:name="android.hardware.location.network" android:required="false"/>
   <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
   <uses-feature android:name="android.hardware.usb.accessory" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
   <!-- enable USB host mode -->
   <uses-feature android:name="android.hardware.usb.host" android:required="false" />
