@@ -136,6 +136,17 @@ jobs:
           body: ${{ env.CHANGELOGENTRY }}
           prerelease: ${{ env.PRERELEASE }}
 
+  docs:
+    name: "Build and Publish Manuals"
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-docs.yml
+    with:
+      release_version: ${{ needs.release.outputs.version }}
+    secrets: inherit
+
   build:
     runs-on: ${{ matrix.os }}
     needs: release
@@ -826,6 +837,18 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+      - name: Deploy installer to Download server - release
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && (matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL') }}
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: output/${{ matrix.target }}/bin/${{ matrix.target_final }}-${{ needs.release.outputs.version }}-${{ matrix.target }}-Installer.exe
+          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+          SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}
 
       - name: Show ccache stats
         run: ccache --show-stats || true
