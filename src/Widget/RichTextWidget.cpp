@@ -97,8 +97,11 @@ RichTextWidget::SetFocus() noexcept
 bool
 RichTextWidget::KeyPress(unsigned key_code) noexcept
 {
-  // Forward key events to the window
-  if (IsDefined())
-    return GetWindow().InjectKeyPress(key_code);
-  return false;
+  /* Only when the window has focus.  Otherwise Up/Down/Enter would
+     move the link cursor or activate a link while Close (or another
+     control) is focused; same rule as #ListWidget. */
+  if (!IsDefined() || !HasFocus())
+    return false;
+
+  return GetWindow().InjectKeyPress(key_code);
 }
