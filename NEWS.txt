@@ -16,6 +16,8 @@ Version 7.46 - not yet released
 * map
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
+  - fix the map scale arrows: draw them at the height of the scale box
+    instead of overlapping it
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
