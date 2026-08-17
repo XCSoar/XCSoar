@@ -34,6 +34,19 @@ public:
     return size;
   }
 
+  /**
+   * The size Draw(Canvas&, PixelPoint, unsigned) will paint for the
+   * given target height.
+   */
+  [[gnu::pure]]
+  PixelSize GetScaledSize(unsigned target_height) const noexcept {
+    if (target_height == 0 || target_height == size.height ||
+        size.height == 0)
+      return size;
+
+    return {size.width * target_height / size.height, target_height};
+  }
+
   bool IsDefined() const noexcept {
     return bitmap.IsDefined();
   }

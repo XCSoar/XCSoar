@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    version="1.1"
-   viewBox="0 0 16 22"
+   viewBox="0 0 14 22"
    id="svg3"
    sodipodi:docname="scalearrow_left.svg"
-   width="16"
+   width="14"
    height="22"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -33,21 +33,17 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3" />
   <g
-     transform="rotate(180,12.510349,6.993)"
-     id="g3">
-    <g
-       transform="matrix(0.34374,0,0,0.34374,8.9989,3)"
-       fill-rule="evenodd"
-       id="g2">
-      <path
-         d="M 20.228,15.98 C 20.2237,14.8699 19.80076,13.7612 18.9592,12.9136 L 7.4012,1.2786 C 6.6077,0.48093 5.5602,0.0434 4.4835,0.0072 V -6.01e-5 L 0.0037,2e-4 l 8.68e-6,31.96 4.47980002,-0.0012 v -0.0058 c 1.0767,-0.03619 2.1242,-0.47373 2.9177,-1.2714 L 18.959209,19.0468 c 0.84157,-0.84756 1.2659,-1.9563 1.2688,-3.0664"
-         fill="#ffffff"
-         style="-inkscape-stroke:none"
-         id="path1" />
-      <path
-         d="M 5.358,3.3367 3.3151,5.394 13.8581,16 3.3151,26.606 5.358,28.6633 17.938,16.0003 Z"
-         style="-inkscape-stroke:none"
-         id="path2" />
-    </g>
+     transform="matrix(-0.694213,0,0,0.689612,14.022568,-0.02)"
+     fill-rule="evenodd"
+     id="g2">
+    <path
+       d="M 20.228,15.98 C 20.2237,14.8699 19.80076,13.7612 18.9592,12.9136 L 7.4012,1.2786 C 6.6077,0.48093 5.5602,0.0434 4.4835,0.0072 V -6.01e-5 L 0.0037,2e-4 l 8.68e-6,31.96 4.47980002,-0.0012 v -0.0058 c 1.0767,-0.03619 2.1242,-0.47373 2.9177,-1.2714 L 18.959209,19.0468 c 0.84157,-0.84756 1.2659,-1.9563 1.2688,-3.0664"
+       fill="#ffffff"
+       style="-inkscape-stroke:none"
+       id="path1" />
+    <path
+       d="M 5.358,3.3367 3.3151,5.394 13.8581,16 3.3151,26.606 5.358,28.6633 17.938,16.0003 Z"
+       style="-inkscape-stroke:none"
+       id="path2" />
   </g>
 </svg>
