@@ -72,6 +72,11 @@ AndroidStorageHotplugMonitor::Start() noexcept
     return;
   }
 
+  if (receiver_ctor == nullptr ||
+      receiver_start_method == nullptr ||
+      receiver_stop_method == nullptr)
+    return;
+
   try {
     Java::LocalObject obj{env,
         env->NewObject(receiver_cls, receiver_ctor, context->Get())};
@@ -108,9 +113,11 @@ AndroidStorageHotplugMonitor::Stop() noexcept
   if (env == nullptr)
     return;
 
-  env->CallVoidMethod(receiver_.Get(), receiver_stop_method);
-  if (env->ExceptionCheck())
-    env->ExceptionClear();
+  if (receiver_stop_method != nullptr) {
+    env->CallVoidMethod(receiver_.Get(), receiver_stop_method);
+    if (env->ExceptionCheck())
+      env->ExceptionClear();
+  }
 
   receiver_.Clear(env);
 }
