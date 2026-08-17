@@ -72,6 +72,7 @@ struct zxdg_toplevel_decoration_v1;
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#include <cmath>
 #endif
 
 namespace UI {
@@ -412,20 +413,21 @@ public:
       return rc;
     }
 
-    // Get screen scale factor. We need to use nativeScale instead of scale
-    // to correctly account for downsampling on mini and Plus devices.
-    CGFloat scale = [UIScreen mainScreen].nativeScale;
+    /* Get the scale factor of the screen this window is on.  We need
+       nativeScale instead of scale to correctly account for
+       downsampling on mini and Plus devices; it is also the scale the
+       window size was derived from. */
+    const CGFloat scale = window.screen.nativeScale;
 
-    UIEdgeInsets insets = window.safeAreaInsets;
-    insets.top *= scale;
-    insets.left *= scale;
-    insets.bottom *= scale;
-    insets.right *= scale;
+    /* The safe area is expressed in points.  Round the scaled insets
+       instead of truncating them, which would bias them towards being
+       too small. */
+    const UIEdgeInsets insets = window.safeAreaInsets;
 
-    rc.left += static_cast<int>(insets.left);
-    rc.top += static_cast<int>(insets.top);
-    rc.right -= static_cast<int>(insets.right);
-    rc.bottom -= static_cast<int>(insets.bottom);
+    rc.left += (int)std::lround(insets.left * scale);
+    rc.top += (int)std::lround(insets.top * scale);
+    rc.right -= (int)std::lround(insets.right * scale);
+    rc.bottom -= (int)std::lround(insets.bottom * scale);
 
     return rc;
   }
