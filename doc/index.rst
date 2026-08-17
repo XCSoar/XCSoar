@@ -9,6 +9,7 @@ XCSoar
    devsetup
    rebranding
    policy
+   release
    architecture
    weather_overlays
    data_directory
