@@ -1,3 +1,5 @@
+Version 7.45.1 - not yet released
+
 Version 7.45 - 2026-08-15
 * highlights
   - add SkySight, EDL, and XCTherm weather overlays on map pages,
