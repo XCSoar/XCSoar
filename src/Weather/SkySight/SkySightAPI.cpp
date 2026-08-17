@@ -901,7 +901,22 @@ SkySightAPI::PreloadDefaultDatafile(std::string_view layer_id) noexcept
 
   bool success = false;
   const auto *selected = layer->FindDatafile(layer->forecast_time);
+  if ((selected == nullptr || selected->link.empty()) &&
+      layer->UsesAutomaticForecastTime()) {
+    const auto forecast_time =
+      SkySight::ChooseAutomaticForecastTime(*layer);
+    if (forecast_time > 0)
+      selected = layer->FindDatafile(forecast_time);
+  }
+
   if (selected == nullptr || selected->link.empty()) {
+    /* Catalog links from a recent /api/data are enough to display or
+       queue the default step.  Do not start another metadata fetch. */
+    if (SkySight::HasForecastCatalogLinks(*layer)) {
+      owner.OnDataUpdated();
+      return false;
+    }
+
     layer->RequestForecastMetadata(
       SkySight::ForecastMetadataIntent::ActiveDefault);
     success = true;
