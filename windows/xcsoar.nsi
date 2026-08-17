@@ -7,7 +7,7 @@
 !define PRODUCT_NAME "XCSoar"
 !endif
 
-; Version should be coming via override from command line with -DPRODUCT_VERSION=x.y
+; Version should be coming via override from command line with -DPRODUCT_VERSION=x.y.z
 !ifndef PRODUCT_VERSION
 !define PRODUCT_VERSION "dev"
 !endif
