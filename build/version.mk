@@ -1,6 +1,25 @@
 VERSION = $(strip $(shell cat $(topdir)/VERSION.txt))
 FULL_VERSION = $(VERSION)
 
+# VERSION.txt is major.minor or major.minor.patch (policy.rst / release.rst).
+VERSION_WORDS := $(subst ., ,$(VERSION))
+VERSION_MAJOR := $(word 1,$(VERSION_WORDS))
+VERSION_MINOR := $(word 2,$(VERSION_WORDS))
+VERSION_PATCH := $(or $(word 3,$(VERSION_WORDS)),0)
+
+# Always three components for stores that require X.Y.Z (iOS / macOS).
+VERSION_SHORT = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+
+# Android versionName omits a trailing .0; versionCode uses
+# major*10^7 + minor*10^5 + patch*10^4 + build (build 0 for tags).
+ifeq ($(VERSION_PATCH),0)
+ANDROID_VERSION_NAME ?= $(VERSION_MAJOR).$(VERSION_MINOR)
+else
+ANDROID_VERSION_NAME ?= $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+endif
+ANDROID_VERSION_BUILD ?= 0
+ANDROID_VERSION_CODE ?= $(shell echo $$(($(VERSION_MAJOR)*10000000+$(VERSION_MINOR)*100000+$(VERSION_PATCH)*10000+$(ANDROID_VERSION_BUILD))))
+
 # Product name (default: XCSoar, can be overridden via PRODUCT_NAME variable)
 PRODUCT_NAME ?= XCSoar
 
