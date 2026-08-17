@@ -1,5 +1,21 @@
 ---
 on:
+  workflow_call:
+    inputs:
+      release_version:
+        description: Release version used for download server publication
+        required: false
+        default: ''
+        type: string
+    secrets:
+      REPOSITORY_SSH_KEY:
+        required: false
+      REPOSITORY_HOST:
+        required: false
+      REPOSITORY_SSH_USER:
+        required: false
+      REPOSITORY_REMOTE_PATH:
+        required: false
   workflow_dispatch:
   push:
     paths:
@@ -36,7 +52,7 @@ jobs:
 
      - name: find githash
        run: |
-         echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+         echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
 
      - name: Install build dependencies
        run: |
@@ -50,6 +66,31 @@ jobs:
        with:
          name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
          path: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
+
+     - name: Upload manuals to GitHub Release
+       if: ${{ inputs.release_version != '' }}
+       uses: ncipollo/release-action@v1
+       with:
+         allowUpdates: true
+         artifactErrorsFailBuild: true
+         artifacts: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
+         omitBodyDuringUpdate: true
+         omitNameDuringUpdate: true
+         omitPrereleaseDuringUpdate: true
+         replacesArtifacts: true
+         tag: ${{ github.ref_name }}
+
+     - name: Deploy manuals to Download server
+       if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}
+       uses: easingthemes/ssh-deploy@main
+       env:
+         SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+         ARGS: "-rltgoDzvO"
+         SOURCE: output/${{ env.DOC_OUTPUT }}/
+         REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+         REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+         TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ inputs.release_version }}/
+         SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ inputs.release_version }}
 
   readthedocs-sphinx:
     runs-on: ubuntu-24.04
