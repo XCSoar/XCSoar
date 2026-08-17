@@ -45,6 +45,13 @@ class LibInputHandler final {
    */
   unsigned n_pointers = 0, n_touch_screens = 0, n_keyboards = 0;
 
+  /**
+   * Set when open_restricted fails.  Cleared after a suspend/resume
+   * re-scan so a failed hotplug is not ignored for the rest of the
+   * session.
+   */
+  bool need_rescan = false;
+
 public:
   explicit LibInputHandler(EventQueue &_queue) noexcept;
 
@@ -119,6 +126,8 @@ private:
   void CloseDevice(int fd) noexcept;
 
   void HandleEvent(struct libinput_event *li_event) noexcept;
+  void DrainEvents() noexcept;
+  void RescanDevices() noexcept;
   void HandlePendingEvents() noexcept;
 
   void OnSocketReady(unsigned events) noexcept;
