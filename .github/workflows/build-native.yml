@@ -462,6 +462,9 @@ jobs:
             VERSION_NAME="${VERSION_NAME}.${PATCH}"
           fi
 
+          echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
+          echo "ANDROID_VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
+
           sed -i \
             -e "s/android:versionCode=\"[0-9][0-9]*\"/android:versionCode=\"${VERSION_CODE}\"/" \
             -e "s/android:versionName=\"[^\"]*\"/android:versionName=\"${VERSION_NAME}\"/" \
