@@ -397,35 +397,37 @@ public:
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept override {
     assert(IsDefined());
-    
-    // Get screen bounds
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-    // Get screen scale factor. We need to use nativeScale instead of scale
-    // to correctly account for downsampling on mini and Plus devices.
-    CGFloat scale = [UIScreen mainScreen].nativeScale;
-    int width = (int)(screenBounds.size.width * scale);
-    int height = (int)(screenBounds.size.height * scale);
-    
+
+    /* Start from this window's real size (which was derived from the
+       OpenGL drawable) instead of computing the screen size from
+       UIScreen again: two independent conversions from points to
+       pixels can be rounded differently, and a client rect which is
+       one pixel smaller than the framebuffer makes full-screen dialogs
+       look non-maximised. */
+    PixelRect rc = ContainerWindow::GetClientRect();
+
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
     if (window == nullptr) {
       // Fallback to full screen if window is not available
-      return PixelRect(0, 0, width, height);
+      return rc;
     }
-    
+
+    // Get screen scale factor. We need to use nativeScale instead of scale
+    // to correctly account for downsampling on mini and Plus devices.
+    CGFloat scale = [UIScreen mainScreen].nativeScale;
+
     UIEdgeInsets insets = window.safeAreaInsets;
     insets.top *= scale;
     insets.left *= scale;
     insets.bottom *= scale;
     insets.right *= scale;
 
-    PixelRect result(
-        static_cast<int>(insets.left),
-        static_cast<int>(insets.top),
-        static_cast<int>(width - insets.right),
-        static_cast<int>(height - insets.bottom)
-    );
+    rc.left += static_cast<int>(insets.left);
+    rc.top += static_cast<int>(insets.top);
+    rc.right -= static_cast<int>(insets.right);
+    rc.bottom -= static_cast<int>(insets.bottom);
 
-    return result;
+    return rc;
   }
 #endif
 
