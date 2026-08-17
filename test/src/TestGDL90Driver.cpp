@@ -570,6 +570,47 @@ TestTrafficDriver() noexcept
   ok1(t != nullptr && between(t->altitude,
                               Units::ToSysUnit(4990, Unit::FEET),
                               Units::ToSysUnit(5010, Unit::FEET)));
+  ok1(t != nullptr && t->speed_received);
+  ok1(t != nullptr && between(t->speed,
+                              Units::ToSysUnit(122.5, Unit::KNOTS),
+                              Units::ToSysUnit(123.5, Unit::KNOTS)));
+}
+
+static void
+TestTrafficHighSpeed() noexcept
+{
+  /* Same layout as TestTrafficDriver; 434 kt ≈ 223 m/s (A320 cruise).
+     The old RoughSpeed 1/512 scale wrapped above 127 m/s. */
+  static constexpr uint8_t payload[] = {
+    0x00,
+    0x4C, 0xAA, 0xAA,
+    0x1F, 0xEF, 0x15,
+    0xA8, 0x89, 0x78,
+    0x0F, 0x09,
+    0xA9,
+    0x1B, 0x20, 0x00, // 434 kt, vertical 0
+    0x20,
+    0x01,
+    0x41, 0x33, 0x32, 0x30, 0x20, 0x20, 0x20, 0x20, // callsign
+    0x00,
+  };
+
+  const auto frame = BuildFrame(0x14, payload, sizeof(payload));
+
+  GDL90Device dev;
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+
+  Feed(dev, info, frame);
+
+  const FlarmId expected = FlarmId::Parse("4CAAAA", nullptr);
+  const FlarmTraffic *t = info.flarm.traffic.FindTraffic(expected);
+  ok1(t != nullptr);
+  ok1(t != nullptr && t->speed_received);
+  ok1(t != nullptr && between(t->speed,
+                              Units::ToSysUnit(433.5, Unit::KNOTS),
+                              Units::ToSysUnit(434.5, Unit::KNOTS)));
 }
 
 static void
@@ -881,7 +922,7 @@ TestOversizeFrameDropped() noexcept
 
 int main()
 {
-  plan_tests(89);
+  plan_tests(94);
 
   TestBadCrcIgnored();
   TestHeartbeatTimeOfDay();
@@ -894,6 +935,7 @@ int main()
   TestOwnshipGeometricAltitudeDatum();
   TestForeFlightAhrs();
   TestTrafficDriver();
+  TestTrafficHighSpeed();
   TestTrafficAddressTypeSource();
   TestRelativeAltitudeFromPressureAltitude();
   TestHorizontalRangeFilter();

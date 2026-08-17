@@ -414,6 +414,19 @@ TestFLARM()
     skip(15, 0, "traffic == NULL");
   }
 
+  /* ADS-B airliner GS via PFLAA; used to wrap RoughSpeed above 127 m/s. */
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,1,4CAAAA,90,,223,0,8*1B",
+                       nmea_info));
+
+  id = FlarmId::Parse("4CAAAA", NULL);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->speed_received);
+    ok1(equals(traffic->speed, 223));
+  } else {
+    skip(2, 0, "traffic == NULL");
+  }
+
   // PFLAA with IDType=0 (random ID)
   ok1(parser.ParseLine("$PFLAA,0,300,400,20,0,ABC123,90,,20,,8*30",
                        nmea_info));
@@ -3361,7 +3374,8 @@ int main()
   CreateDataPath();
 
   plan_tests(1091 /* drivers */ + 29 /* PFLAU extended */
-             + 37 /* PFLAA v7+ */ + 12 /* PFLAE */ + 10 /* PFLAJ */
+             + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
+             + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
