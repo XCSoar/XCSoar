@@ -110,6 +110,7 @@ elif toolchain.is_android:
         libtiff,
         libgeotiff,
         netcdf,
+        zxing_cpp,
     ]
 elif '-kobo-linux-' in host_triplet:
     thirdparty_libs = [
