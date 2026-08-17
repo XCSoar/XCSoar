@@ -38,6 +38,9 @@ on:
     branches:
       - master
       - apple-testing
+      # Current minor patch line (v7.45.x, v7.46.x, ...). Publish jobs stay
+      # gated to master and v* tags below.
+      - 'v*.x'
     tags:
       - 'v*'
 
@@ -67,6 +70,7 @@ on:
       - 'VERSION.txt'
     branches:
       - master
+      - 'v*.x'
 
 permissions:
   contents: read
