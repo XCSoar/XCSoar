@@ -50,6 +50,13 @@ class TopographyFileRenderer final
   Serial visible_serial;
   GeoBounds visible_bounds;
 
+  /**
+   * #Projection::GetScale() (px/m) used to build #visible_shapes.
+   * Recache when the map is zoomed in (larger scale) so previously
+   * skipped sub-pixel lines can appear.
+   */
+  double visible_scale = 0;
+
   std::vector<const XShape *> visible_shapes, visible_labels;
 
   std::vector<GeoPoint> visible_points;
