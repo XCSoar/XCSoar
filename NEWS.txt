@@ -5,6 +5,9 @@ Version 7.47 - not yet released
 * dialogs
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
+* Linux
+  - fix -WIDTHxHEIGHT so a Raspberry Pi or other KMS display
+    switches to that resolution when the display lists it
 * map
   - cache a 4× terrain grid with the overview and use it when one
     screen pixel is at least that coarse, so a wide view does not
