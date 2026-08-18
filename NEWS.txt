@@ -481,6 +481,11 @@ Version 7.46 - not yet released
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132
   - build system: drop the GLX desktop OpenGL backend; UNIX X11
     OpenGL uses EGL and OpenGL ES #2140
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
   - documentation: document the release and post-release version workflow
   - documentation: remove Windows CE and retired GDI target names from
     the developer manuals
