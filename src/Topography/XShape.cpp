@@ -4,6 +4,7 @@
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
 #include "util/Compiler.h"
+#include "util/StaticArray.hxx"
 #include "util/StringAPI.hxx"
 #include "util/UTF8.hpp"
 #include "util/StringStrip.hxx"
@@ -14,8 +15,12 @@
 #include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
+#include "Geo/GeoClip.hpp"
+
 #include <algorithm>
+#include <cassert>
 #include <stdexcept>
+#include <vector>
 
 static BasicAllocatedString<char>
 ImportLabel(const char *src) noexcept
@@ -68,6 +73,74 @@ ToGeoPoint(const pointObj &src) noexcept
 }
 
 [[gnu::pure]]
+static bool
+ShapeFullyInsideClip(const shapeObj &shape, const GeoBounds &clip) noexcept
+{
+  return clip.IsInside(ImportRect(shape.bounds));
+}
+
+static constexpr uint16_t MAX_LINE_POINTS = 16384;
+
+static_assert(XShape::MAX_LINES <= 255,
+              "num_lines is stored in a uint8_t");
+
+/**
+ * Clip one shapefile line into #out_pts / #out_counts.  A long way
+ * that leaves and re-enters the viewport becomes several short
+ * polylines.
+ */
+static void
+ClipShapeLine(const lineObj &line, const GeoClip &clip,
+              std::vector<GeoPoint> &out_pts,
+              std::array<uint16_t, XShape::MAX_LINES> &out_counts,
+              uint8_t &n_out, uint8_t max_lines) noexcept
+{
+  if (line.numpoints < 2 || n_out >= max_lines)
+    return;
+
+  uint16_t count = 0;
+  for (int j = 1; j < line.numpoints; ++j) {
+    GeoPoint a = ToGeoPoint(line.point[j - 1]);
+    GeoPoint b = ToGeoPoint(line.point[j]);
+    const GeoPoint b_orig = b;
+    if (!clip.ClipLine(a, b))
+      continue;
+
+    if (count == 0) {
+      if (n_out >= max_lines)
+        return;
+      out_pts.push_back(a);
+      out_pts.push_back(b);
+      count = 2;
+    } else if (count >= MAX_LINE_POINTS) {
+      out_counts[n_out++] = count;
+      count = 0;
+      if (n_out >= max_lines)
+        return;
+      out_pts.push_back(a);
+      out_pts.push_back(b);
+      count = 2;
+    } else {
+      out_pts.push_back(b);
+      ++count;
+    }
+
+    if (b.longitude != b_orig.longitude ||
+        b.latitude != b_orig.latitude) {
+      out_counts[n_out++] = count;
+      count = 0;
+    }
+  }
+
+  if (count >= 2) {
+    if (n_out < max_lines)
+      out_counts[n_out++] = count;
+    else
+      out_pts.resize(out_pts.size() - count);
+  }
+}
+
+[[gnu::pure]]
 static auto
 ImportShapePoint(const pointObj &src, [[maybe_unused]] const GeoPoint &file_center) noexcept
 {
@@ -88,10 +161,30 @@ ImportShapePoint(const pointObj &src, [[maybe_unused]] const GeoPoint &file_cent
 #endif
 }
 
+[[gnu::pure]]
+static auto
+ImportGeoPoint(const GeoPoint &vertex,
+               [[maybe_unused]] const GeoPoint &file_center) noexcept
+{
+#ifdef ENABLE_OPENGL
+  const GeoPoint relative = vertex - file_center;
+  return ShapePoint{
+    ShapeScalar(relative.longitude.Native()),
+    ShapeScalar(relative.latitude.Native()),
+  };
+#else
+  return vertex;
+#endif
+}
+
 XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
-               const char *_label)
+               const char *_label, const GeoBounds *clip,
+               bool *clipped)
   :label(ImportLabel(_label))
 {
+  if (clipped != nullptr)
+    *clipped = false;
+
   bounds = ImportRect(shape.bounds);
   if (!bounds.Check())
     throw std::runtime_error{"Malformed shape bounds"};
@@ -106,6 +199,54 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
     return;
   }
 
+  const bool do_clip = clip != nullptr &&
+    shape.type == MS_SHAPE_LINE &&
+    !ShapeFullyInsideClip(shape, *clip);
+
+  if (do_clip) {
+    if (clipped != nullptr)
+      *clipped = true;
+
+    std::vector<GeoPoint> clipped_pts;
+    std::array<uint16_t, XShape::MAX_LINES> clipped_counts{};
+    uint8_t n_clipped = 0;
+    const GeoClip geo_clip{*clip};
+
+    const std::size_t input_lines = std::min((std::size_t)shape.numlines,
+                                             lines.size());
+    for (std::size_t l = 0; l < input_lines; ++l)
+      ClipShapeLine(shape.line[l], geo_clip,
+                    clipped_pts, clipped_counts, n_clipped,
+                    uint8_t(lines.size()));
+
+    num_lines = n_clipped;
+    if (num_lines == 0)
+      return;
+
+    GeoBounds new_bounds = GeoBounds::Invalid();
+    for (const GeoPoint &gp : clipped_pts) {
+      if (!new_bounds.IsValid())
+        new_bounds = GeoBounds(gp);
+      else
+        new_bounds.Extend(gp);
+    }
+    if (new_bounds.Check())
+      bounds = new_bounds;
+
+    std::size_t n = 0;
+    for (uint8_t l = 0; l < num_lines; ++l) {
+      lines[l] = clipped_counts[l];
+      n += lines[l];
+    }
+    assert(n == clipped_pts.size());
+
+    points = std::make_unique<Point[]>(n);
+    auto *p = points.get();
+    for (const GeoPoint &gp : clipped_pts)
+      *p++ = ImportGeoPoint(gp, file_center);
+    return;
+  }
+
   const std::size_t input_lines = std::min((std::size_t)shape.numlines,
                                            lines.size());
   std::size_t num_points = 0;
@@ -114,7 +255,8 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
       /* malformed shape */
       continue;
 
-    lines[num_lines] = std::min(shape.line[l].numpoints, 16384);
+    lines[num_lines] = std::min(shape.line[l].numpoints,
+                                int(MAX_LINE_POINTS));
     num_points += lines[num_lines];
     ++num_lines;
   }
@@ -133,6 +275,46 @@ XShape::XShape(const shapeObj &shape, const GeoPoint &file_center,
 XShape::~XShape() noexcept = default;
 
 #ifdef ENABLE_OPENGL
+
+/**
+ * Ear-clip a ring.  Rings larger than TARGET are subsampled in O(n)
+ * first at every thinning level; PolygonToTriangles() itself is O(n²)
+ * and a large landcover ring would freeze the topography loader.
+ */
+static unsigned
+PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
+                          GLushort *triangles,
+                          ShapeScalar min_distance) noexcept
+{
+  constexpr unsigned TARGET = 128;
+  /* orig[] stores source vertex indices in GLushort. */
+  assert(n > 0 && n - 1 <= 0xffff);
+
+  if (n <= TARGET)
+    return PolygonToTriangles(src, n, triangles, min_distance);
+
+  StaticArray<ShapePoint, TARGET + 1> thin_pts;
+  StaticArray<GLushort, TARGET + 1> orig;
+
+  const unsigned stride = (n + TARGET - 1) / TARGET;
+  for (unsigned i = 0; i < n; i += stride) {
+    orig.append(i);
+    thin_pts.append(src[i]);
+  }
+  if (orig.back() != GLushort(n - 1)) {
+    orig.append(n - 1);
+    thin_pts.append(src[n - 1]);
+  }
+
+  /* PolygonToTriangles writes at most 3*(m-2) indices for m vertices;
+     m <= TARGET+1. */
+  GLushort tmp[3 * (TARGET + 1)];
+  const unsigned count =
+    PolygonToTriangles(thin_pts.data(), thin_pts.size(), tmp, 0);
+  for (unsigned j = 0; j < count; ++j)
+    triangles[j] = orig[tmp[j]];
+  return count;
+}
 
 inline bool
 XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
@@ -185,8 +367,9 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
     *idx_count = 0;
     const ShapePoint *pt = points.get();
     for (std::size_t i=0; i < num_lines; i++) {
-      std::size_t count = PolygonToTriangles(pt, lines[i], idx + *idx_count,
-                                             min_distance);
+      std::size_t count = PolygonToTrianglesThinned(pt, lines[i],
+                                                    idx + *idx_count,
+                                                    min_distance);
       if (i > 0) {
         const GLushort offset = pt - points.get();
         const std::size_t max_idx_count = *idx_count + count;
