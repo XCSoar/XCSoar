@@ -3,6 +3,7 @@
 
 #include "Thread.hpp"
 #include "TopographyStore.hpp"
+#include "Screen/Layout.hpp"
 
 TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)
@@ -53,7 +54,7 @@ TopographyThread::Tick() noexcept
     const WindowProjection projection = next_projection;
 
     const ScopeUnlock unlock(mutex);
-    again = store.ScanVisibility(projection, 1) > 0;
+    again = store.ScanVisibility(projection, 1, Layout::Scale(1u)) > 0;
   }
 
   /* notify the client that we have updated the topography cache */
