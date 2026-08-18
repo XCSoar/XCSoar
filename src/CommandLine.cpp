@@ -25,6 +25,7 @@
 namespace CommandLine {
   unsigned width = IsKobo() ? 600 : 640;
   unsigned height = IsKobo() ? 800 : 480;
+  bool size_specified = false;
 
 #ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
@@ -154,15 +155,19 @@ CommandLine::Parse(Args &args)
       height = ParseUnsigned(s + 1, &p);
       if (*p != '\0')
         args.UsageError();
+      size_specified = true;
     } else if (StringIsEqual(s, "-portrait")) {
       width = 480;
       height = 640;
+      size_specified = true;
     } else if (StringIsEqual(s, "-square")) {
       width = 480;
       height = 480;
+      size_specified = true;
     } else if (StringIsEqual(s, "-small")) {
       width = 320;
       height = 240;
+      size_specified = true;
     } else if (StringIsEqual(s, "-touchscreen")) {
       touch_input = TouchInput::Force;
     } else if (StringIsEqual(s, "-notouchscreen")) {

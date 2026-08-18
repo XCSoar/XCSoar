@@ -84,10 +84,14 @@ Version 7.46 - not yet released
     large enough for a gloved tap
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
+* Linux
+  - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
+    switch to that resolution when the display lists it (e.g. -800x600)
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+
 
 Version 7.45 - 2026-08-15
 * highlights

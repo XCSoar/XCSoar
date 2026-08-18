@@ -54,7 +54,12 @@
 static int
 Main()
 {
+#ifdef MESA_KMS
+  ScreenGlobalInit screen_init({CommandLine::width, CommandLine::height},
+                               CommandLine::size_specified);
+#else
   ScreenGlobalInit screen_init;
+#endif
 
 #ifdef _WIN32
   /* try to make the UI most responsive */

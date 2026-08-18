@@ -82,8 +82,10 @@ class Display
   bool dirty = true;
 
 public:
-  Display()
-    :EGL::GbmDisplay(GetDriFD()),
+  Display(PixelSize preferred_mode = {},
+          bool use_preferred_mode = false)
+    :EGL::DrmDisplay(preferred_mode, use_preferred_mode),
+     EGL::GbmDisplay(GetDriFD()),
      EGL::Display(GetGbmDevice()) {}
 
   void SetDirty() noexcept {
