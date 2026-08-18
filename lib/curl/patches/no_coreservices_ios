@@ -1,0 +1,29 @@
+Index: curl-8.5.0/CMakeLists.txt
+===================================================================
+--- curl-8.5.0.orig/CMakeLists.txt
++++ curl-8.5.0/CMakeLists.txt
+@@ -471,16 +471,22 @@ endif()
+ if(use_core_foundation_and_core_services)
+   find_library(COREFOUNDATION_FRAMEWORK "CoreFoundation")
+-  find_library(CORESERVICES_FRAMEWORK "CoreServices")
++  if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
++    find_library(CORESERVICES_FRAMEWORK "CoreServices")
++  endif()
+ 
+   if(NOT COREFOUNDATION_FRAMEWORK)
+       message(FATAL_ERROR "CoreFoundation framework not found")
+   endif()
+-  if(NOT CORESERVICES_FRAMEWORK)
++  if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS" AND NOT CORESERVICES_FRAMEWORK)
+       message(FATAL_ERROR "CoreServices framework not found")
+   endif()
+ 
+-  list(APPEND CURL_LIBS "-framework CoreFoundation -framework CoreServices")
++  if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
++    list(APPEND CURL_LIBS "-framework CoreFoundation")
++  else()
++    list(APPEND CURL_LIBS "-framework CoreFoundation -framework CoreServices")
++  endif()
+ endif()
+ 
+ if(CURL_USE_OPENSSL)

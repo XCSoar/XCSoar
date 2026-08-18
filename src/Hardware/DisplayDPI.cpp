@@ -65,9 +65,16 @@ GetDPI()
   }
 #elif defined(__APPLE__)
 #if TARGET_OS_IPHONE
+#if defined(ENABLE_SDL) && !defined(__LP64__)
+  /* SDL_WINDOW_ALLOW_HIGHDPI hangs while creating the GL context on iOS 6.
+     The 32-bit SDL iOS target therefore renders in UIKit points, so report
+     logical DPI instead of Retina physical DPI. */
+  return 160;
+#else
   UIScreen *screen = [UIScreen mainScreen];
   float scale = [screen scale];
   return static_cast<unsigned>(scale * 160);
+#endif
 #else
   NSScreen *screen = [NSScreen mainScreen];
   float scale = [screen backingScaleFactor];
