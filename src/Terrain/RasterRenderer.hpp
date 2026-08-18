@@ -9,6 +9,9 @@
 #include "Geo/GeoBounds.hpp"
 #endif
 
+#include <cstdint>
+#include <memory>
+
 static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
 
 class Angle;
@@ -42,8 +45,9 @@ class RasterRenderer {
 
   /**
    * Lower bound for the idle-based quantisation heuristic in
-   * UpdateQuantisation().  Terrain leaves this at 1 (allowing full
-   * resolution when idle); RASP raises it to suppress the step to 1.
+   * UpdateQuantisation() (slow CPUs only; fast hosts stay at 1).
+   * Terrain leaves this at 1 (allowing full resolution when idle);
+   * RASP raises it to suppress the step to 1.
    */
   unsigned min_quantisation_pixels = 1;
 #endif
@@ -61,6 +65,19 @@ class RasterRenderer {
    * texture has to be redrawn.
    */
   GeoBounds bounds = GeoBounds::Invalid();
+
+  std::unique_ptr<GLTexture> height_texture;
+  std::unique_ptr<GLTexture> ramp_texture;
+  std::unique_ptr<uint8_t[]> ramp_rgba;
+  bool use_cpu_hillshade = false;
+  bool shader_hillshade = false;
+  bool ramp_texture_dirty = true;
+  int sun_sx = 0, sun_sy = 0, sun_sz = 255;
+  int contrast_for_draw = 65;
+  unsigned height_scale_for_draw = 4;
+  double height_slope_factor_for_draw = 1;
+  bool shading_for_draw = true;
+  unsigned contour_div_for_draw = 0;
 #endif
 
   HeightMatrix height_matrix;
@@ -153,6 +170,14 @@ public:
   }
 
   /**
+   * True when SetQuantisationPixels() locked the value (previews).
+   */
+  [[gnu::pure]]
+  bool IsQuantisationFixed() const noexcept {
+    return fixed_quantisation;
+  }
+
+  /**
    * Calculate a new #quantisation_pixels value.
    *
    * @return true if the new #quantisation_pixels value is smaller
@@ -165,6 +190,28 @@ public:
   }
 
   const GLTexture &BindAndGetTexture() const noexcept;
+
+  /**
+   * Use the CPU GenerateSlopeImage() path even on OpenGL (A/B tests).
+   */
+  void SetUseCpuHillshade(bool cpu) noexcept {
+    use_cpu_hillshade = cpu;
+    shader_hillshade = false;
+  }
+
+  [[gnu::pure]]
+  bool IsShaderHillshade() const noexcept {
+    return shader_hillshade;
+  }
+
+  void SetSunFromAzimuth(Angle sunazimuth, int brightness,
+                         int contrast) noexcept;
+
+  /**
+   * Contour interval as a height divisor (power of two), or 0 to
+   * disable.  Applied in the hillshade shader without a CPU rebuild.
+   */
+  void SetContourSpacing(unsigned contour_spacing) noexcept;
 #endif
 
   /**
@@ -245,4 +292,11 @@ protected:
 
 private:
   void ContourStart(unsigned contour_height_scale) noexcept;
+
+#ifdef ENABLE_OPENGL
+  void UploadHeightTexture() noexcept;
+  void UploadRampTexture() noexcept;
+  void DrawHillshade(const WindowProjection &projection,
+                     float alpha) const noexcept;
+#endif
 };

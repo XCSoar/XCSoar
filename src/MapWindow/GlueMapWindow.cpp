@@ -8,6 +8,7 @@
 #include "Interface.hpp"
 #include "time/PeriodClock.hpp"
 #include "ui/event/Idle.hpp"
+#include "Hardware/CPU.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 #include "Components.hpp"
@@ -269,6 +270,9 @@ static constexpr auto TERRAIN_QUANTISATION_IDLE_STEP =
 void
 GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 {
+  if (!IsSlowCPU())
+    return;
+
   terrain_quantisation_idle_done = false;
   terrain_quantisation_timer.Schedule(TERRAIN_QUANTISATION_IDLE_STEP);
 }
@@ -276,6 +280,9 @@ GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 void
 GlueMapWindow::PollTerrainQuantisationIdle() noexcept
 {
+  if (!IsSlowCPU())
+    return;
+
   if (!IsUserIdle(750)) {
     terrain_quantisation_idle_done = false;
     return;
