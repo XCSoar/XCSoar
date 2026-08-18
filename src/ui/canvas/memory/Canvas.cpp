@@ -19,9 +19,6 @@
 
 #include <algorithm>
 #include <cassert>
-#ifdef TARGET_IS_KOBO_NICKEL
-#include <memory>
-#endif
 #include <string.h>
 
 class SDLRasterCanvas : public RasterCanvas<ActivePixelTraits> {
@@ -209,45 +206,14 @@ Canvas::CalcTextSize(std::string_view text) const noexcept
   if (font == nullptr)
     return size;
 
-#ifdef TARGET_IS_KOBO_NICKEL
-  return font->TextSize(text2);
-#else
   /* see if the TextCache can handle this request */
   size = TextCache::LookupSize(*font, text2);
   if (size.height > 0)
     return size;
 
   return TextCache::GetSize(*font, text2);
-#endif
 }
 
-#ifdef TARGET_IS_KOBO_NICKEL
-struct RenderedTextBuffer {
-  std::unique_ptr<uint8_t[]> data;
-  PixelSize size;
-
-  explicit operator bool() const noexcept {
-    return data != nullptr;
-  }
-};
-
-static RenderedTextBuffer
-RenderTextUncached(const Font *font, std::string_view text) noexcept
-{
-  if (font == nullptr || text.empty())
-    return {};
-
-  assert(font->IsDefined());
-  const PixelSize size = font->TextSize(text);
-  const std::size_t buffer_size = font->BufferSize(size);
-  if (buffer_size == 0)
-    return {};
-
-  auto data = std::make_unique<uint8_t[]>(buffer_size);
-  font->Render(text, size, data.get());
-  return {std::move(data), size};
-}
-#else
 static TextCache::Result
 RenderText(const Font *font, std::string_view text) noexcept
 {
@@ -258,7 +224,6 @@ RenderText(const Font *font, std::string_view text) noexcept
 
   return TextCache::Get(*font, text);
 }
-#endif
 
 template<typename Operations>
 static void
@@ -295,21 +260,12 @@ Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));
 
-#ifdef TARGET_IS_KOBO_NICKEL
-  const auto s = RenderTextUncached(font, text);
+  auto s = RenderText(font, text);
   if (!s)
     return;
-  const TextCache::Result result{s.data.get(), s.size.width, s.size};
-#else
-  const auto s = RenderText(font, text);
-  if (!s)
-    return;
-  const auto result = s;
-#endif
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, p.x, p.y, result.size.width, result.size.height,
-                    result,
+  CopyTextRectangle(canvas, p.x, p.y, s.size.width, s.size.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 }
@@ -319,23 +275,14 @@ Canvas::DrawTransparentText(PixelPoint p, std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));
 
-#ifdef TARGET_IS_KOBO_NICKEL
-  const auto s = RenderTextUncached(font, text);
-  if (!s)
-    return;
-  const TextCache::Result result{s.data.get(), s.size.width, s.size};
-#else
-  const auto s = RenderText(font, text);
+  auto s = RenderText(font, text);
   if (s.data == nullptr)
     return;
-  const auto result = s;
-#endif
 
   SDLRasterCanvas canvas(buffer);
   ColoredAlphaPixelOperations<ActivePixelTraits, GreyscalePixelTraits>
     transparent(canvas.Import(text_color));
-  CopyTextRectangle(canvas, p.x, p.y, result.size.width, result.size.height,
-                    transparent, result);
+  CopyTextRectangle(canvas, p.x, p.y, s.size.width, s.size.height, transparent, s);
 }
 
 void
@@ -353,23 +300,15 @@ Canvas::DrawClippedText(PixelPoint p, unsigned width,
 {
   assert(ValidateUTF8(text));
 
-#ifdef TARGET_IS_KOBO_NICKEL
-  const auto s = RenderTextUncached(font, text);
-  if (!s)
-    return;
-  const TextCache::Result result{s.data.get(), s.size.width, s.size};
-#else
-  const auto s = RenderText(font, text);
+  auto s = RenderText(font, text);
   if (s.data == nullptr)
     return;
-  const auto result = s;
-#endif
 
-  if (width > result.size.width)
-    width = result.size.width;
+  if (width > s.size.width)
+    width = s.size.width;
 
   SDLRasterCanvas canvas(buffer);
-  CopyTextRectangle(canvas, p.x, p.y, width, result.size.height, result,
+  CopyTextRectangle(canvas, p.x, p.y, width, s.size.height, s,
                     text_color, background_color,
                     background_mode == OPAQUE);
 
