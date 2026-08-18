@@ -16,6 +16,12 @@ Version 7.47 - not yet released
   - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
     high-DPI screens; the discrete scale list is the scale-bar
     width, up to 1000 km
+* development
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
 
 Version 7.46 - 2026-10-19
 * highlights
