@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Main.hpp"
-#include "ReceiveTask.hpp"
+#include "Task/ReceiveTask.hpp"
 #include "Environment.hpp"
 #include "Components.hpp"
 #include "Context.hpp"

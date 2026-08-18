@@ -44,14 +44,15 @@
 #include "Storage/win/WinHotplugForward.hpp"
 #endif
 
-#ifdef ANDROID
-#include "Android/ReceiveTask.hpp"
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
+#include "Task/ReceiveTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/Queue.hpp"
+
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 #include "java/Global.hxx"
 #endif
 
@@ -878,6 +879,8 @@ MainWindow::OnLook() noexcept
   ReinitialiseLook();
 }
 
+#endif // ANDROID
+
 void
 MainWindow::OnTaskReceived() noexcept
 {
@@ -906,7 +909,23 @@ MainWindow::OnTaskReceived() noexcept
   dlgTaskManagerShowModal(std::move(task));
 }
 
-#endif // ANDROID
+/**
+ * Trampoline for PostReceivedTask(): the event loop calls this on the
+ * UI thread, where opening a dialog is safe.
+ */
+static void
+ShowReceivedTask(void *ctx) noexcept
+{
+  ((MainWindow *)ctx)->OnTaskReceived();
+}
+
+void
+PostReceivedTask() noexcept
+{
+  if (UI::event_queue != nullptr && CommonInterface::main_window != nullptr)
+    UI::event_queue->InjectCall(ShowReceivedTask,
+                                CommonInterface::main_window);
+}
 
 void
 MainWindow::Destroy() noexcept
@@ -1170,14 +1189,12 @@ MainWindow::RunTimer() noexcept
 {
   LateInitialise();
 
-#ifdef ANDROID
   /* if we still havn't processed the task that was received from a QR
-     code, re-post the TASK_RECEIVED event to invoke OnTaskReceived()
-     again; we must not open the task manager dialog here because it
-     would block the timer while the dialog is open */
+     code, ask the event loop for OnTaskReceived() again; we must not
+     open the task manager dialog here because it would block the timer
+     while the dialog is open */
   if (IsRunning() && !HasDialog() && HasReceivedTask())
-    UI::event_queue->Inject(UI::Event::TASK_RECEIVED);
-#endif
+    PostReceivedTask();
 
   ProcessTimer();
 

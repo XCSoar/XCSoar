@@ -6,8 +6,6 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/TaskBehaviour.hpp"
 #include "thread/Mutex.hxx"
-#include "ui/event/Globals.hpp"
-#include "ui/event/Queue.hpp"
 #include "util/StringCompare.hxx"
 
 #include <boost/json.hpp>
@@ -46,10 +44,9 @@ ReceiveXCTrackTask(std::string_view data)
     received_task = std::move(task);
   }
 
-  /* if XCSoar is already running, post a TASK_RECEIVED event so
-     MainWindow::OnTaskReceived() opens the task manager */
-  if (UI::event_queue != nullptr)
-    UI::event_queue->Inject(UI::Event::TASK_RECEIVED);
+  /* if XCSoar is already running, ask the UI thread to open the task
+     manager; otherwise the task stays pending until it does */
+  PostReceivedTask();
 }
 
 void

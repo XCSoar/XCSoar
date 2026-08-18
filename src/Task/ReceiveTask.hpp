@@ -15,6 +15,19 @@ HasReceivedTask() noexcept;
 std::unique_ptr<OrderedTask>
 GetReceivedTask() noexcept;
 
+/**
+ * Ask the UI thread to show the task that has just been stored, by
+ * calling MainWindow::OnTaskReceived() from the event loop.
+ *
+ * This is implemented by the UI layer (MainWindow.cpp) rather than
+ * here, because only that knows how to reach the main window.  It may
+ * be called from any thread, and does nothing at all while the event
+ * loop does not exist yet: the task stays pending and
+ * MainWindow::RunTimer() offers it again once XCSoar is up.
+ */
+void
+PostReceivedTask() noexcept;
+
 void
 ReceiveXCTrackTask(std::string_view data);
 
