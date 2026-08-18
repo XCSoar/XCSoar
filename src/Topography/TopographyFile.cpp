@@ -10,7 +10,6 @@
 #ifdef ENABLE_OPENGL
 #include "Topography/ShapeRenderer.hpp"
 #include "Geo/FAISphere.hpp"
-#include "Screen/Layout.hpp"
 #endif
 
 #include <zzip/lib.h>
@@ -233,9 +232,11 @@ TopographyFile::Update(const WindowProjection &map_projection)
         if (b.GetWidth() >= min_span || b.GetHeight() >= min_span) {
           const unsigned level =
             GetThinningLevel(map_projection.GetMapScale());
+          /* Paint() divides by Layout::Scale(1) too; keep UI scale 1
+             here so TopographyFile does not link Screen (LoadTopography). */
           const ShapeScalar min_distance =
             ShapeScalar(GetMinimumPointDistance(level))
-            / (Layout::Scale(1) * FAISphere::REARTH);
+            / FAISphere::REARTH;
           [[maybe_unused]] const auto indices =
             it->shape->GetIndices(int(level), min_distance);
         }
