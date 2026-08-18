@@ -5,6 +5,10 @@
 #include "ui/canvas/Canvas.hpp"
 #include "lib/fmt/SystemError.hxx"
 
+#ifdef TARGET_IS_KOBO_NICKEL
+#include "FBInkBackend.hpp"
+#endif
+
 #ifdef USE_FB
 #include "ui/canvas/memory/Export.hpp"
 #endif
@@ -13,7 +17,7 @@
 #include "Hardware/DisplayDPI.hpp"
 #endif
 
-#if defined(KOBO) && defined(USE_FB)
+#if defined(KOBO) && defined(USE_FB) && !defined(TARGET_IS_KOBO_NICKEL)
 #include "Kobo/Model.hpp"
 #include "mxcfb.h"
 #endif
@@ -21,15 +25,20 @@
 #include <algorithm>
 
 #ifdef USE_FB
+#ifndef TARGET_IS_KOBO_NICKEL
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#endif
 #include <cassert>
 #include <string.h>
+#ifndef TARGET_IS_KOBO_NICKEL
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#endif
 
+#ifndef TARGET_IS_KOBO_NICKEL
 static unsigned
 TranslateDimension(unsigned value) noexcept
 {
@@ -60,6 +69,7 @@ GetSize(const struct fb_var_screeninfo &vinfo) noexcept
 {
   return PixelSize(GetWidth(vinfo), GetHeight(vinfo));
 }
+#endif
 
 #endif
 
@@ -68,10 +78,12 @@ TopCanvas::~TopCanvas() noexcept
   buffer.Free();
 
 #ifdef USE_FB
+#ifndef TARGET_IS_KOBO_NICKEL
   if (fd >= 0) {
     close(fd);
     fd = -1;
   }
+#endif
 #endif
 }
 
@@ -80,6 +92,14 @@ TopCanvas::~TopCanvas() noexcept
 TopCanvas::TopCanvas(UI::Display &_display)
   :display(_display)
 {
+#ifdef TARGET_IS_KOBO_NICKEL
+  fbink = std::make_unique<FBInkBackend>();
+  const PixelSize new_size = fbink->GetSize();
+  if (new_size.width == 0 || new_size.height == 0)
+    throw std::runtime_error("FBInk reported an empty display");
+
+  buffer.Allocate(new_size);
+#else
   assert(fd < 0);
 
   const char *path = "/dev/fb0";
@@ -152,6 +172,8 @@ TopCanvas::TopCanvas(UI::Display &_display)
   case KoboModel::GLO:
   case KoboModel::AURA:
   case KoboModel::NIA:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
     frame_sync = false;
     break;
 
@@ -175,14 +197,19 @@ TopCanvas::TopCanvas(UI::Display &_display)
                            vinfo.width, vinfo.height);
 
   buffer.Allocate(new_size);
+#endif
 }
 
 inline PixelSize
 TopCanvas::GetNativeSize() const noexcept
 {
+#ifdef TARGET_IS_KOBO_NICKEL
+  return fbink->GetSize();
+#else
   struct fb_var_screeninfo vinfo;
   ioctl(fd, FBIOGET_VSCREENINFO, &vinfo);
   return ::GetSize(vinfo);
+#endif
 }
 
 bool
@@ -217,10 +244,12 @@ TopCanvas::CheckResize(const PixelSize new_native_size) noexcept
   /* changed: update the size and allocate a new buffer */
 
 #ifdef USE_FB
+#ifndef TARGET_IS_KOBO_NICKEL
   struct fb_fix_screeninfo finfo;
   ioctl(fd, FBIOGET_FSCREENINFO, &finfo);
 
   map_pitch = finfo.line_length;
+#endif
 #endif
 
   buffer.Free();
@@ -243,6 +272,30 @@ void
 TopCanvas::Flip()
 {
 #ifdef USE_FB
+
+#ifdef TARGET_IS_KOBO_NICKEL
+  const auto frame_buffer = fbink->Prepare();
+  if (frame_buffer.pitch < buffer.size.width * frame_buffer.bytes_per_pixel ||
+      frame_buffer.size < std::size_t{frame_buffer.pitch} * buffer.size.height)
+    throw std::runtime_error("FBInk framebuffer is smaller than the canvas");
+
+#ifdef GREYSCALE
+  CopyFromGreyscale(
+#ifdef DITHER
+                    dither,
+#endif
+#ifdef KOBO
+                    enable_dither,
+#endif
+                    frame_buffer.data, frame_buffer.pitch,
+                    frame_buffer.bytes_per_pixel, buffer);
+#else
+  CopyFromBGRA(frame_buffer.data, frame_buffer.pitch,
+               frame_buffer.bytes_per_pixel, buffer);
+#endif
+
+  fbink->Refresh(buffer.size);
+#else
 
 #ifdef GREYSCALE
   CopyFromGreyscale(
@@ -291,6 +344,7 @@ TopCanvas::Flip()
   ioctl(fd, MXCFB_SEND_UPDATE, &epd_update_data);
 #endif
 
+#endif /* TARGET_IS_KOBO_NICKEL */
 #endif /* USE_FB */
 }
 
@@ -299,7 +353,9 @@ TopCanvas::Flip()
 void
 TopCanvas::Wait() noexcept
 {
+#ifndef TARGET_IS_KOBO_NICKEL
   ioctl(fd, MXCFB_WAIT_FOR_UPDATE_COMPLETE, &epd_update_marker);
+#endif
 }
 
 #endif

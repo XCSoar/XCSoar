@@ -15,7 +15,9 @@ endif
 
 # disable some warnings, we're not ready for them yet
 CXX_WARNINGS += -Wno-missing-field-initializers
+ifneq ($(TARGET_IS_KOBO_NICKEL),y)
 CXX_WARNINGS += -Wcast-align
+endif
 
 # plain C warnings
 

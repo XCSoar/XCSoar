@@ -129,7 +129,7 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
    * parse the date
    * parse and absorb all three values, even if one or more is empty, e.g. ",,13"
    */
-  unsigned year, month, day;
+  unsigned year{}, month{}, day{};
   valid_fields += ReadCheckedRange(line,year,1800,2500);
   valid_fields += ReadCheckedRange(line,month,1,12);
   valid_fields += ReadCheckedRange(line,day,1,31);
@@ -138,7 +138,7 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
    * parse the time
    * parse and check all four values, even if one or more is empty, e.g. ",,33,"
    */
-  unsigned hour, minute, second, centisecond;
+  unsigned hour{}, minute{}, second{}, centisecond{};
   valid_fields += ReadCheckedRange(line,hour,0,23);
   valid_fields += ReadCheckedRange(line,minute,0,59);
   valid_fields += ReadCheckedRange(line,second,0,59);
@@ -148,7 +148,7 @@ XCTracerDevice::XCTRC(NMEAInputLine &line, NMEAInfo &info)
    * parse the GPS fix
    * parse and check both  values, even if one or more is empty, e.g. ",3.1234,"
    */
-  double latitude, longitude;
+  double latitude{}, longitude{};
   valid_fields += ReadCheckedRange(line,latitude,-90.0,90.0);
   valid_fields += ReadCheckedRange(line,longitude,-180.0,180.0);
 

@@ -80,6 +80,8 @@ TEST_NAMES = \
 	TestInputTransformMode \
 	TestOverwritingRingBuffer \
 	TestDateTime TestISO8601 TestRoughTime TestWrapClock \
+	TestCanvasExport \
+    TestCanvasExportColor \
 	TestPolylineDecoder \
 	TestTransponderCode \
 	TestMath \
@@ -142,6 +144,10 @@ ifeq ($(TARGET_IS_ANDROID),n)
 TEST_NAMES += \
 	TestProfile \
 	TestDriver
+endif
+
+ifeq ($(TARGET_IS_KOBO),y)
+TEST_NAMES += TestKoboModel
 endif
 
 ifeq ($(HAVE_WIN32),n)
@@ -363,6 +369,30 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+ifeq ($(TARGET_IS_KOBO),y)
+TEST_KOBO_MODEL_SOURCES = \
+	$(SRC)/Asset.cpp \
+	$(SRC)/DisplaySettings.cpp \
+	$(SRC)/Kobo/Model.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestKoboModel.cpp
+$(eval $(call link-program,TestKoboModel,TEST_KOBO_MODEL))
+endif
+
+TEST_CANVAS_EXPORT_SOURCES = \
+	$(CANVAS_SRC_DIR)/memory/Dither.cpp \
+	$(TEST_SRC_DIR)/CanvasExportGreyscale.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCanvasExport.cpp
+TEST_CANVAS_EXPORT_CPPFLAGS = -DDITHER -DGREYSCALE -DKOBO
+$(eval $(call link-program,TestCanvasExport,TEST_CANVAS_EXPORT))
+
+TEST_CANVAS_EXPORT_COLOR_SOURCES = \
+	$(TEST_SRC_DIR)/CanvasExportColor.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCanvasExportColor.cpp
+$(eval $(call link-program,TestCanvasExportColor,TEST_CANVAS_EXPORT_COLOR))
 
 TEST_ISO8601_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \

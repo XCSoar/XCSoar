@@ -3,6 +3,18 @@
 
 #include "DisplaySettings.hpp"
 
+#ifdef KOBO
+#include "Kobo/Model.hpp"
+
+DisplayType
+GetKoboDefaultDisplayType(KoboModel model) noexcept
+{
+  return model == KoboModel::CLARA_COLOUR
+    ? DisplayType::COLOR_E_INK
+    : DisplayType::E_INK;
+}
+#endif
+
 void
 DisplaySettings::SetDefaults()
 {
@@ -11,7 +23,7 @@ DisplaySettings::SetDefaults()
   invert_cursor_colors = false;
   full_screen = true;
 #ifdef KOBO
-  display_type = DisplayType::E_INK;
+  display_type = GetKoboDefaultDisplayType(DetectKoboModel());
 #else
   display_type = DisplayType::LCD;
 #endif

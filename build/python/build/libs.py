@@ -275,6 +275,9 @@ curl = CmakeProject(
         "-DCURL_USE_OPENSSL=OFF",
         "-DCURL_USE_SECTRANSP=ON",
     ],
+    nickel_configure_args=[
+        "-DOPENSSL_ROOT_DIR={install_prefix}",
+    ],
     patches=abspath("lib/curl/patches"),
 )
 
@@ -351,6 +354,9 @@ libjpeg = CmakeProject(
     [
         "-DENABLE_STATIC=ON",
         "-DENABLE_SHARED=OFF",
+    ],
+    nickel_configure_args=[
+        "-DCMAKE_C_STANDARD_LIBRARIES=-lm",
     ],
     env={
         # unwind tables are needed for throwing C++ exceptions from C

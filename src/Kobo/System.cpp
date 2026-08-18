@@ -22,6 +22,8 @@ static constexpr const char *kobo_config_dir = "/mnt/onboard/XCSoarData/kobo";
 static constexpr const char *kobo_wifi_auto_on_path =
   "/mnt/onboard/XCSoarData/kobo/wifi_auto_on";
 
+#ifndef TARGET_IS_KOBO_NICKEL
+
 static bool
 WaitForPath(const char *path, unsigned timeout_ms) noexcept
 {
@@ -68,11 +70,12 @@ SiblingPath(const char *name, char *buffer, size_t size)
 }
 
 #endif
+#endif
 
 bool
 KoboReboot()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   return Run("/sbin/reboot");
 #else
   return false;
@@ -82,7 +85,7 @@ KoboReboot()
 bool
 KoboPowerOff()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   char buffer[256];
   if (SiblingPath("PowerOff", buffer, sizeof(buffer)))
     execl(buffer, buffer, nullptr);
@@ -97,7 +100,7 @@ KoboPowerOff()
 bool
 KoboUmountData()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   return umount("/mnt/onboard") == 0 || errno == EINVAL;
 #else
   return true;
@@ -107,7 +110,7 @@ KoboUmountData()
 bool
 KoboMountData()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   Run("/bin/dosfsck", "-a", "-w", "/dev/mmcblk0p3");
   return mount("/dev/mmcblk0p3", "/mnt/onboard", "vfat",
                MS_NOATIME|MS_NODEV|MS_NOEXEC|MS_NOSUID,
@@ -120,7 +123,7 @@ KoboMountData()
 bool
 KoboExportUSBStorage()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   bool result = false;
 
   RmMod("g_ether");
@@ -168,17 +171,21 @@ KoboExportUSBStorage()
                     "file=/dev/mmcblk0p3", "stall=0", "removable=1",
                     "product_id=Kobo");
     break;
+
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
+    return false;
   }
   return result;
 #else
-  return true;
+  return false;
 #endif
 }
 
 void
 KoboUnexportUSBStorage()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   KoboModel kobo_model = DetectKoboModel();
   if(kobo_model == KoboModel::CLARA_HD || kobo_model == KoboModel::CLARA_2E
       || kobo_model == KoboModel::LIBRA2 || kobo_model == KoboModel::LIBRA_H2O)
@@ -243,7 +250,7 @@ SetKoboWifiAutoOn(bool enabled)
 void
 ApplyKoboWifiAutoOn()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   if (IsKoboWifiAutoOn()) {
     if (!IsKoboWifiOn())
       KoboWifiOn();
@@ -256,7 +263,7 @@ ApplyKoboWifiAutoOn()
 bool
 KoboWifiOn()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
 
   switch (DetectKoboModel())
   {
@@ -301,6 +308,10 @@ KoboWifiOn()
     InsMod("/drivers/mx6sll-ntx/wifi/mlan.ko");
     InsMod("/drivers/mx6sll-ntx/wifi/moal.ko", "mod_para=nxp/wifi_mod_para_sd8987.conf");
     break;
+
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
+    return false;
   }
 
   Sleep(2000);
@@ -334,7 +345,7 @@ KoboWifiOn()
 bool
 KoboWifiOff()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   const char *interface =  GetKoboWifiInterface();
   Run("/usr/bin/killall", "wpa_supplicant", "udhcpc");
   if (DetectKoboModel() != KoboModel::CLARA_2E)
@@ -354,7 +365,7 @@ KoboWifiOff()
 void
 KoboExecNickel()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   /* our "rcS" will call the original Kobo "rcS" if start_nickel
      exists */
   mkdir("/mnt/onboard/XCSoarData", 0777);
@@ -370,7 +381,7 @@ KoboExecNickel()
 void
 KoboRunXCSoar([[maybe_unused]] const char *mode)
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   char buffer[256];
   const char *cmd = buffer;
 
@@ -384,7 +395,7 @@ KoboRunXCSoar([[maybe_unused]] const char *mode)
 void
 KoboRunTelnetd()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   /* telnetd requires /dev/pts - mount it (if it isn't already) */
   if (mkdir("/dev/pts", 0777) == 0)
     mount("none", "/dev/pts", "devpts", MS_RELATIME, NULL);
@@ -396,7 +407,7 @@ KoboRunTelnetd()
 void
 KoboRunFtpd()
 {
-#ifdef KOBO
+#if defined(KOBO) && !defined(TARGET_IS_KOBO_NICKEL)
   /* ftpd needs to be fired through tcpsvd (or inetd) */
   Start("/usr/bin/tcpsvd", "-E", "0.0.0.0", "21", "ftpd", "-w", "/mnt/onboard");
 #endif
@@ -410,6 +421,8 @@ KoboCanChangeBacklightBrightness()
   case KoboModel::GLO_HD:
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     return true;
 
@@ -436,6 +449,8 @@ KoboGetBacklightBrightness()
 
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     if (File::ReadString(Path("/sys/class/backlight/mxc_msp430.0/brightness"), line, sizeof(line))) {
       result = atoi(line);
@@ -467,6 +482,8 @@ KoboSetBacklightBrightness([[maybe_unused]] int percent)
 
   case KoboModel::LIBRA2:
   case KoboModel::CLARA_2E:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
   case KoboModel::CLARA_HD:
     File::WriteExisting(Path("/sys/class/backlight/mxc_msp430.0/brightness"), std::to_string(percent).c_str());
     break;
@@ -509,6 +526,8 @@ KoboGetBacklightColourFile() noexcept
     break;
 
   case KoboModel::CLARA_HD:
+  case KoboModel::CLARA_BW:
+  case KoboModel::CLARA_COLOUR:
     files_to_check[1] = true;
     break;
 

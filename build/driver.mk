@@ -57,6 +57,12 @@ LX_EOS_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX_EOS/LXEosDeclare.cpp \
 	$(DRIVER_SRC_DIR)/LX_EOS/LXEosDownload.cpp
 
+ifeq ($(TARGET_IS_KOBO_NICKEL),y)
+# NickelTC's glibc implicitly exposes major() and minor() from
+# <sys/types.h>, which collide with VersionNumber's member names.
+$(call SRC_TO_OBJ,$(DRIVER_SRC_DIR)/LX_EOS/LXEosDevice.cpp): private CPPFLAGS += -D_SYS_SYSMACROS_H=1
+endif
+
 FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/Device.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Register.cpp \

@@ -394,8 +394,8 @@ Debugging for iOS and macOS
 
 Debugging under iOS and macOS is possible using the LLDB debugger.
 To make this convenient, Xcode or Visual Studio can be used.
-An example Xcode project is provided in `darwin/XCSoar.xcodeproj`. 
-It includes one target for iOS and macOS and will automatically build 
+An example Xcode project is provided in `darwin/XCSoar.xcodeproj`.
+It includes one target for iOS and macOS and will automatically build
 the XCSoar binary for the selected device target, using the build
 helper script `darwin/build.sh`.
 For iOS debugging with Visual Studio Code, the `iOS Debug`
@@ -494,6 +494,38 @@ packaging section in addition to the Kobo build dependencies (the
 Then compile using this command::
 
   make TARGET=KOBO output/KOBO/KoboRoot.tgz
+
+Compiling for Kobo Nickel/NickelMenu
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``KOBO_NICKEL`` target builds XCSoar for Kobo devices where XCSoar is
+launched from Nickel or NickelMenu instead of replacing the normal boot flow
+with ``KoboRoot.tgz``.  This target is intended for newer secure-boot Kobo
+devices such as the Kobo Clara Colour.
+
+This target requires a Nickel ABI sysroot with:
+
+- an ARM hard-float GCC 14 or newer cross compiler, because XCSoar requires
+  C++20 coroutine support;
+- Nickel's runtime libraries and headers;
+- FBInk's matching library and header installed in that sysroot;
+- a compiler prefix/suffix selecting that compiler.
+
+The validated toolchain image is
+``ghcr.io/anj1/nickeltc-gcc14:sha-6da75a292ebb40855cde651b910c36d975b154f7``.
+It exports ``NICKEL_SYSROOT`` and provides the unversioned
+``arm-nickel-linux-gnueabihf-gcc``/``g++`` toolchain used by the default
+``KOBO_NICKEL`` configuration.  An alternative compiler may be selected with
+``NICKEL_CROSS_PREFIX`` and ``NICKEL_CROSS_SUFFIX``.  To compile, run::
+  make TARGET=KOBO_NICKEL DEBUG=n WERROR=y
+
+The resulting binary is written to::
+
+  output/KOBO_NICKEL/bin/xcsoar
+
+Packaging and NickelMenu launcher scripts are maintained separately.  Nickel
+builds deliberately exclude the legacy ``KoboRoot.tgz``, ``KoboMenu`` and
+``PowerOff`` installation lifecycle.
 
 Building USB-OTG Kobo Kernel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -689,6 +721,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - Framebuffer (software)
    - Cross-compile target (ARMv7 + NEON).
+ * - ``KOBO_NICKEL``
+   - Kobo e-readers launched from Nickel/NickelMenu
+   - no
+   - FBInk framebuffer (software)
+   - Cross-compile target for Nickel's ABI/sysroot.
  * - ``NEON``
    - Generic ARMv7 + NEON
    - yes

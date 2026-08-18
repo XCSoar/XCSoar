@@ -23,6 +23,7 @@ class NativeToolchain:
         self.is_windows = False
         self.is_android = False
         self.is_darwin = sys.platform == 'darwin'
+        self.is_nickel = False
 
         self.cc = 'ccache gcc'
         self.cxx = 'ccache g++'
@@ -45,9 +46,10 @@ class Toolchain:
     def __init__(self, top_path: str, lib_path: str,
                  tarball_path: str, src_path: str, build_path: str, install_prefix: str,
                  host_triplet: str, target_is_ios: bool,
-                 arch_cflags: str, cppflags: str, arch_ldflags: str, 
+                 arch_cflags: str, cppflags: str, arch_ldflags: str,
                  cc: str, cxx: str, ar: str, arflags: str,
-                 ranlib: str, strip: str, windres: str):
+                 ranlib: str, strip: str, windres: str,
+                 cross_compile_prefix: str):
         self.tarball_path = tarball_path
         self.src_path = src_path
         self.build_path = build_path
@@ -60,6 +62,7 @@ class Toolchain:
         self.is_windows = 'mingw32' in host_triplet
         self.is_android = '-android' in host_triplet
         self.is_darwin = '-darwin' in host_triplet
+        self.is_nickel = host_triplet == 'arm-nickel-linux-gnueabihf'
         
         self.is_target_ios = target_is_ios
 
@@ -70,6 +73,7 @@ class Toolchain:
         self.ranlib = ranlib
         self.strip = strip
         self.windres = windres
+        self.cross_compile_prefix = cross_compile_prefix
 
         common_flags = '-Os -g -ffunction-sections -fdata-sections -fvisibility=hidden ' + arch_cflags
         self.cflags = common_flags

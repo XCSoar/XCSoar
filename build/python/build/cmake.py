@@ -72,10 +72,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
-    elif toolchain.is_android:
-        # Android uses the NDK compiler sysroot for platform headers/libs,
-        # but third-party package discovery must still stay inside our
-        # target prefix to avoid picking up host libraries such as zlib.
+    elif toolchain.is_android or toolchain.is_nickel:
+        # Android and Nickel use the compiler's own platform sysroot, but
+        # third-party package discovery must stay inside our target prefix to
+        # avoid picking up host libraries such as zlib.
         f.write(f"""
 set(CMAKE_FIND_ROOT_PATH "{toolchain.install_prefix}")
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -108,7 +108,7 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
         # properly); but we must not do that on Android because the NDK
         # has a sysroot already
         no_isystem = False
-        if not toolchain.is_android and not toolchain.is_darwin:
+        if not toolchain.is_android and not toolchain.is_darwin and not toolchain.is_nickel:
             configure.append('-DCMAKE_SYSROOT=' + toolchain.install_prefix)
 
             # strip "-isystem" to avoid build failures with C++ headers
@@ -145,6 +145,7 @@ class CmakeProject(Project):
                  windows_configure_args: Optional[list[str]]=None,
                  android_configure_args: Optional[list[str]]=None,
                  darwin_configure_args: Optional[list[str]]=None,
+                 nickel_configure_args: Optional[list[str]]=None,
                  env: Optional[Mapping[str, str]]=None,
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
@@ -152,6 +153,7 @@ class CmakeProject(Project):
         self.windows_configure_args = windows_configure_args or []
         self.android_configure_args = android_configure_args or []
         self.darwin_configure_args = darwin_configure_args or []
+        self.nickel_configure_args = nickel_configure_args or []
         self.env = env
 
     def configure(self, toolchain: AnyToolchain) -> str:
@@ -164,6 +166,11 @@ class CmakeProject(Project):
             configure_args = configure_args + self.android_configure_args
         if toolchain.is_darwin:
             configure_args = configure_args + self.darwin_configure_args
+        if toolchain.is_nickel:
+            configure_args = configure_args + [
+                arg.format(install_prefix=toolchain.install_prefix)
+                for arg in self.nickel_configure_args
+            ]
         configure(toolchain, src, build, configure_args, self.env)
         return build
 

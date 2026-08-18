@@ -211,14 +211,14 @@ public:
     }
 
     /* outer loop, stepping perpendicular to line */
-    Point ml1, ml2, ml1b, ml2b;
+    Point ml1{0, 0}, ml2{0, 0}, ml1b{0, 0}, ml2b{0, 0};
     for (unsigned q = 0; dd <= tk; q++) {
 
       /* call to inner loop - right edge */
       const auto temp = Paraline(pt, d1);
       if (q == 0) {
-        ml1 = pt;
-        ml1b = temp;
+        ml1 = ml2 = pt;
+        ml1b = ml2b = temp;
       } else {
         ml2 = pt;
         ml2b = temp;

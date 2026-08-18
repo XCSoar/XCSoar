@@ -22,6 +22,16 @@ SetDisplayType(DisplayType type) noexcept
 }
 
 bool
+HasColors() noexcept
+{
+#ifdef GREYSCALE
+  return false;
+#else
+  return display_type != DisplayType::E_INK;
+#endif
+}
+
+bool
 HasEPaper() noexcept
 {
   return IsEPaperDisplayType(display_type);

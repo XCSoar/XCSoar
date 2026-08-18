@@ -538,7 +538,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
     settings_map.terrain.enable = ((val & 0x02) == 0x02);
 
     // Show current state after cycling
-    StaticString<128> buf;
+    StaticString<128> buf{};
     buf.AppendFormat(_("%s / %s"),
                      settings_map.topography_enabled ? _("On") : _("Off"),
                      settings_map.terrain.enable ? _("On") : _("Off"));

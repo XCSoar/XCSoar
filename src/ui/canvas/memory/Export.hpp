@@ -79,6 +79,6 @@ CopyFromGreyscale(
 
 void
 CopyFromBGRA(void *_dest_pixels, unsigned _dest_pitch, unsigned dest_bpp,
-             ConstImageBuffer<BGRAPixelTraits> src);
+             ConstImageBuffer<BGRAPixelTraits> src) noexcept;
 
 #endif
