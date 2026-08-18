@@ -20,7 +20,10 @@
 struct GeoPoint;
 
 class XShape {
-  static constexpr std::size_t MAX_LINES = 32;
+public:
+  static constexpr std::size_t MAX_LINES = 64;
+
+private:
 #ifdef ENABLE_OPENGL
   static constexpr std::size_t THINNING_LEVELS = 4;
 #endif
@@ -78,9 +81,15 @@ class XShape {
 public:
   /**
    * Throws on error.
+   *
+   * @param clip if non-null and this is a polyline, keep only the
+   * parts that intersect #clip (long OSM ways otherwise occupy RAM
+   * for the whole map)
+   * @param clipped set to true when geometry was reduced to #clip
    */
   XShape(const shapeObj &shape, const GeoPoint &file_center,
-         const char *label);
+         const char *label, const GeoBounds *clip=nullptr,
+         bool *clipped=nullptr);
 
   ~XShape() noexcept;
 

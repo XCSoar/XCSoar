@@ -4,6 +4,7 @@
 #include "Topography/TopographyFileRenderer.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
+#include "Topography/ShapeRenderer.hpp"
 #include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -47,26 +48,56 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
 
 TopographyFileRenderer::~TopographyFileRenderer() noexcept = default;
 
+/**
+ * True if a feature's geographic box is smaller than
+ * #SHAPE_MIN_BBOX_PX on screen.  Cheap (angle spans only).
+ */
+[[gnu::pure]]
+static bool
+ShapeTooSmall(const GeoBounds &bounds, Angle min_span) noexcept
+{
+  return bounds.GetWidth() < min_span && bounds.GetHeight() < min_span;
+}
+
+[[gnu::pure]]
+static bool
+ShapeTooSmallToDraw(const XShape &shape, Angle min_span) noexcept
+{
+  /* Lines: never skip.  At 120 km, 1 px is ~150 m; OSM road sticks
+     shorter than that would leave a gapped network.  Polygons: skip
+     sub-pixel fills that would still cost ear-clip. */
+  return shape.get_type() == MS_SHAPE_POLYGON &&
+    ShapeTooSmall(shape.get_bounds(), min_span);
+}
+
 void
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
 {
+  const double scale = projection.GetScale();
   if (file.GetSerial() == visible_serial &&
+      scale <= visible_scale &&
       visible_bounds.IsInside(projection.GetScreenBounds()) &&
       projection.GetScreenBounds().Scale(2).IsInside(visible_bounds))
     /* cache is clean */
     return;
 
   visible_serial = file.GetSerial();
+  visible_scale = scale;
   visible_bounds = projection.GetScreenBounds().Scale(1.2);
   visible_shapes.clear();
   visible_points.clear();
   visible_labels.clear();
 
+  const Angle min_span =
+    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+
   for (const XShape &shape : file) {
     if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
-    if (shape.get_type() != MS_SHAPE_NULL) {
+    const bool too_small = ShapeTooSmallToDraw(shape, min_span);
+
+    if (shape.get_type() != MS_SHAPE_NULL && !too_small) {
       if (shape.get_type() == MS_SHAPE_POINT) {
         if (icon.IsDefined()) {
           const auto *points = shape.GetPoints();
@@ -85,7 +116,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
         visible_shapes.push_back(&shape);
     }
 
-    if (shape.GetLabel() != nullptr)
+    if (shape.GetLabel() != nullptr && !too_small)
       visible_labels.push_back(&shape);
   }
 }
@@ -197,8 +228,14 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 #endif
 
+  const Angle min_span =
+    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+
   for (const XShape *shape_p : visible_shapes) {
     const XShape &shape = *shape_p;
+
+    if (ShapeTooSmallToDraw(shape, min_span))
+      continue;
 
     const auto lines = shape.GetLines();
 #ifdef ENABLE_OPENGL
@@ -253,6 +290,10 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
       {
         const auto triangles = shape.GetIndices(level, min_distance);
+        if (triangles.indices == nullptr || triangles.count == nullptr ||
+            *triangles.count == 0)
+          break;
+
         const unsigned n = *triangles.count;
 
 #ifdef GL_EXT_multi_draw_arrays
@@ -372,9 +413,15 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 
   std::set<std::string> drawn_labels;
 
+  const Angle min_span =
+    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+
   // Iterate over all shapes in the file
   for (const XShape *shape_p : visible_labels) {
     const XShape &shape = *shape_p;
+
+    if (ShapeTooSmallToDraw(shape, min_span))
+      continue;
 
     // Skip shapes without a label
     const char *label = shape.GetLabel();
