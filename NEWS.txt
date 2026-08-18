@@ -1,4 +1,7 @@
 Version 7.46 - not yet released
+* map
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded
 * Linux
   - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
     switch to that resolution (e.g. -800x600)
