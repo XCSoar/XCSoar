@@ -114,6 +114,11 @@ RaspColorbarWindow::OnPaint(Canvas &canvas) noexcept
     0, (int)INT16_MAX);
 
   RasterRenderer renderer;
+#ifdef ENABLE_OPENGL
+  /* Colorbar uses GetImage(); the shader path never allocates that
+     bitmap. */
+  renderer.SetUseCpuHillshade(true);
+#endif
   if (use_alpha)
     renderer.PrepareColorTableAlpha(
       &ramp, style->do_water,

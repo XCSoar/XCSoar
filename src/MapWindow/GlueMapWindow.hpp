@@ -128,7 +128,7 @@ private:
 
   /**
    * Re-render terrain at higher OpenGL quantisation after the user
-   * stops interacting (see RasterRenderer::GetQuantisation()).
+   * stops interacting on slow CPUs (see GetQuantisation()).
    */
   UI::Timer terrain_quantisation_timer{
     [this]{ OnTerrainQuantisationTimer(); }};

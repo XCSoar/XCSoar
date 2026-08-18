@@ -30,6 +30,10 @@ Version 7.46 - not yet released
   - fix choosing SkySight as a page overlay with no layers available
     silently switching back to None
 * map
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded (also on
+    older OpenGL ES 2 devices); faster devices use full terrain
+    resolution immediately instead of waiting until the map is idle
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box

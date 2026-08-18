@@ -65,6 +65,18 @@ extern GLint filled_circle_projection, filled_circle_translate,
   filled_circle_color1, filled_circle_color2;
 
 /**
+ * DEM hillshade: height texture + colour ramp, sun as a uniform.
+ * Null if the shader failed to compile (CPU GenerateSlopeImage).
+ */
+extern GLProgram *hillshade_shader;
+extern GLint hillshade_projection, hillshade_translate,
+  hillshade_height_tex, hillshade_ramp_tex,
+  hillshade_texel_step, hillshade_sun, hillshade_contrast,
+  hillshade_height_slope_factor, hillshade_height_div,
+  hillshade_q, hillshade_do_shading, hillshade_contour_div,
+  hillshade_height_texel;
+
+/**
  * Throws on error.
  */
 void InitShaders();
