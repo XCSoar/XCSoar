@@ -27,8 +27,11 @@
 #endif
 
 bool
-PlayResource([[maybe_unused]] const char *resource_name)
+PlayResource(const char *resource_name)
 {
+  if (resource_name == nullptr || *resource_name == '\0')
+    return false;
+
 #ifdef ANDROID
 
   if (strstr(resource_name, ".wav"))
