@@ -8,6 +8,7 @@
 #include "util/ScopeExit.hxx"
 
 #ifdef ENABLE_OPENGL
+#include "Topography/ShapeRenderer.hpp"
 #include "Geo/FAISphere.hpp"
 #include "Screen/Layout.hpp"
 #endif
@@ -68,6 +69,7 @@ TopographyFile::~TopographyFile() noexcept
 void
 TopographyFile::ClearCache() noexcept
 {
+  const std::lock_guard lock{mutex};
   cache_list.clear();
   list.clear();
   cache_bounds.SetInvalid();
@@ -79,6 +81,7 @@ TopographyFile::ClearCache() noexcept
   }
 
   cached_shapes = 0;
+  ++serial;
 }
 
 void
@@ -225,7 +228,7 @@ TopographyFile::Update(const WindowProjection &map_projection)
          (same 1 px bbox rule as Paint). */
       if (it->shape->get_type() == MS_SHAPE_POLYGON) {
         const Angle min_span =
-          map_projection.PixelsToAngle(1);
+          map_projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
         const GeoBounds &b = it->shape->get_bounds();
         if (b.GetWidth() >= min_span || b.GetHeight() >= min_span) {
           const unsigned level =
@@ -233,7 +236,8 @@ TopographyFile::Update(const WindowProjection &map_projection)
           const ShapeScalar min_distance =
             ShapeScalar(GetMinimumPointDistance(level))
             / (Layout::Scale(1) * FAISphere::REARTH);
-          it->shape->GetIndices(int(level), min_distance);
+          [[maybe_unused]] const auto indices =
+            it->shape->GetIndices(int(level), min_distance);
         }
       }
 #endif

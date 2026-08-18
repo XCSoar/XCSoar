@@ -132,8 +132,12 @@ ClipShapeLine(const lineObj &line, const GeoClip &clip,
     }
   }
 
-  if (count >= 2 && n_out < max_lines)
-    out_counts[n_out++] = count;
+  if (count >= 2) {
+    if (n_out < max_lines)
+      out_counts[n_out++] = count;
+    else
+      out_pts.resize(out_pts.size() - count);
+  }
 }
 
 [[gnu::pure]]

@@ -6,7 +6,7 @@ Version 7.46 - not yet released
     to the map view, and keep recently seen shapes while panning
 * Linux
   - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
-    switch to that resolution (e.g. -800x600)
+    switch to that resolution when the display lists it (e.g. -800x600)
 * development
   - add RunTerrainRenderer to show TerrainRenderer hillshade with a
     rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the

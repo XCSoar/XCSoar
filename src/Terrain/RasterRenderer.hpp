@@ -9,6 +9,7 @@
 #include "Geo/GeoBounds.hpp"
 #endif
 
+#include <cstdint>
 #include <memory>
 
 static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
@@ -66,6 +67,7 @@ class RasterRenderer {
 
   std::unique_ptr<GLTexture> height_texture;
   std::unique_ptr<GLTexture> ramp_texture;
+  std::unique_ptr<uint8_t[]> ramp_rgba;
   bool use_cpu_hillshade = false;
   bool shader_hillshade = false;
   bool ramp_texture_dirty = true;

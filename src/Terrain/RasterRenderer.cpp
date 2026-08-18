@@ -915,21 +915,28 @@ RasterRenderer::UploadRampTexture() noexcept
 {
   assert(color_table != nullptr);
 
+  if (ramp_texture != nullptr && !ramp_texture_dirty)
+    return;
+
+  constexpr unsigned n = 256 * 128 * 4;
+  if (ramp_rgba == nullptr)
+    ramp_rgba = std::make_unique<uint8_t[]>(n);
+
+  FillRampRgba(ramp_rgba.get(), color_table);
+
   constexpr PixelSize ramp_size{256, 128};
-  uint8_t rgba[256 * 128 * 4];
-  FillRampRgba(rgba, color_table);
 
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
   if (ramp_texture == nullptr) {
     ramp_texture = std::make_unique<GLTexture>(GL_RGBA, ramp_size,
                                                GL_RGBA, GL_UNSIGNED_BYTE,
-                                               rgba);
-  } else if (ramp_texture_dirty) {
+                                               ramp_rgba.get());
+  } else {
     ramp_texture->Bind();
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                     ramp_size.width, ramp_size.height,
-                    GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+                    GL_RGBA, GL_UNSIGNED_BYTE, ramp_rgba.get());
   }
 
   ramp_texture->Bind();
