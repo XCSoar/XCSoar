@@ -5141,6 +5141,9 @@ msgstr "Deklarér"
 msgid "Browse"
 msgstr "Bliv venlig at søge"
 
+msgid "Scan QR Code"
+msgstr "Scan QR-kode"
+
 msgid "Download Declaration"
 msgstr "Download deklaration"
 

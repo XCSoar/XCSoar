@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Main.hpp"
-#include "ReceiveTask.hpp"
+#include "Task/ReceiveTask.hpp"
 #include "Environment.hpp"
 #include "Components.hpp"
 #include "Context.hpp"
@@ -200,6 +200,18 @@ Java_org_xcsoar_NativeView_onReceiveXCTrackTask(JNIEnv *env,
                                                 jstring data)
 try {
   ReceiveXCTrackTask(Java::String::GetUTFChars(env, data).c_str());
+  return nullptr;
+} catch (...) {
+  return env->NewStringUTF(GetFullMessage(std::current_exception()).c_str());
+}
+
+gcc_visibility_default
+JNIEXPORT jstring JNICALL
+Java_org_xcsoar_NativeView_onReceiveTaskQRCode(JNIEnv *env,
+                                               [[maybe_unused]] jclass cls,
+                                               jstring text)
+try {
+  ReceiveTaskQRCode(Java::String::GetUTFChars(env, text).c_str());
   return nullptr;
 } catch (...) {
   return env->NewStringUTF(GetFullMessage(std::current_exception()).c_str());

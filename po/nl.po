@@ -5179,6 +5179,9 @@ msgstr "Declareer"
 msgid "Browse"
 msgstr "Bladeren"
 
+msgid "Scan QR Code"
+msgstr "QR-code scannen"
+
 msgid "Download Declaration"
 msgstr "Download declaratie"
 

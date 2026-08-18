@@ -15,6 +15,9 @@ class TaskActionsPanel : public RowFormWidget {
     DECLARE,
     BROWSE,
     SAVE,
+#ifdef ANDROID
+    SCAN_QR_CODE,
+#endif
 #ifdef HAVE_HTTP
     WEGLIDE_SPACER,
     WEGLIDE_STATUS,
@@ -44,6 +47,9 @@ private:
   void OnNewTaskClicked();
   void OnDeclareClicked();
   void OnDownloadClicked() noexcept;
+#ifdef ANDROID
+  void OnScanQRCodeClicked() noexcept;
+#endif
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;

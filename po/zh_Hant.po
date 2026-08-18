@@ -4971,6 +4971,9 @@ msgstr "申報"
 msgid "Browse"
 msgstr "流覽"
 
+msgid "Scan QR Code"
+msgstr "掃描 QR 碼"
+
 msgid "Download Declaration"
 msgstr "下載申報"
 

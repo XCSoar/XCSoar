@@ -5170,6 +5170,9 @@ msgstr "הצהר"
 msgid "Browse"
 msgstr "עיין"
 
+msgid "Scan QR Code"
+msgstr "סרוק קוד QR"
+
 msgid "Download Declaration"
 msgstr "הורד הצהרה"
 

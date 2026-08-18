@@ -610,6 +610,8 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
 	$(SRC)/Hardware/Battery.cpp \
+	\
+	$(SRC)/Task/ReceiveTask.cpp \
 
 ifneq ($(TARGET),ANDROID)
 ifeq ($(TARGET_IS_LINUX),y)
@@ -705,7 +707,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/UsbSerialHelper.cpp \
 	$(SRC)/Android/TextEntryDialog.cpp \
 	$(SRC)/Android/FileProvider.cpp \
-	$(SRC)/Android/ReceiveTask.cpp \
+	$(SRC)/Android/QRScanner.cpp \
+	$(SRC)/Task/QRDecoder.cpp \
 	$(SRC)/Android/SAFHelper.cpp \
 	$(SRC)/Storage/android/SAFReader.cpp \
 	$(SRC)/Storage/android/SAFOutputStream.cpp \
@@ -834,6 +837,11 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_LDLIBS += $(NETCDF_LDLIBS)
+endif
+
+ifeq ($(ZXING),y)
+$(call SRC_TO_OBJ,$(SRC)/Task/QRDecoder.cpp): CPPFLAGS += $(ZXING_CPPFLAGS)
+XCSOAR_LDLIBS += $(ZXING_LDLIBS)
 endif
 
 XCSOAR_STRIP = y

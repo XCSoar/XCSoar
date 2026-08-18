@@ -174,6 +174,37 @@ libfmt = CmakeProject(
     base="fmt-11.2.0",
 )
 
+zxing_cpp = CmakeProject(
+    "https://github.com/zxing-cpp/zxing-cpp/archive/v3.1.1.tar.gz",
+    "7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542",
+    "lib/libZXing.a",
+    [
+        "-DBUILD_SHARED_LIBS=OFF",
+        # we only decode, and only QR codes
+        "-DZXING_READERS=ON",
+        "-DZXING_WRITERS=OFF",
+        "-DZXING_ENABLE_1D=OFF",
+        "-DZXING_ENABLE_AZTEC=OFF",
+        "-DZXING_ENABLE_DATAMATRIX=OFF",
+        "-DZXING_ENABLE_MAXICODE=OFF",
+        "-DZXING_ENABLE_PDF417=OFF",
+        "-DZXING_ENABLE_QRCODE=ON",
+        "-DZXING_C_API=OFF",
+        "-DZXING_EXAMPLES=OFF",
+        "-DZXING_UNIT_TESTS=OFF",
+        "-DZXING_BLACKBOX_TESTS=OFF",
+        # never fetch anything from the network during the build
+        "-DZXING_DEPENDENCIES=LOCAL",
+        # Android's libc++ falls back to __bsd_locale_fallbacks.h below
+        # API 24, and precompiling that header with NDK r26d fails with
+        # a va_list mismatch.  GTIN.cpp compiles fine without the PCH.
+        "-DZXING_DISABLE_PCH=ON",
+    ],
+    name="zxing-cpp",
+    version="3.1.1",
+    base="zxing-cpp-3.1.1",
+)
+
 libsodium = AutotoolsProject(
     (
         "https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz",

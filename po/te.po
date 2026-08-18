@@ -5014,6 +5014,9 @@ msgstr "పేవెన్న"
 msgid "Browse"
 msgstr "అర్చ్‌బుక్"
 
+msgid "Scan QR Code"
+msgstr "QR కోడ్ స్కాన్ చేయండి"
+
 msgid "Download Declaration"
 msgstr "ప్రకటనను డౌన్‌లోడ్ చేయండి"
 

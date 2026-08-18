@@ -5133,6 +5133,9 @@ msgstr "Tanımla"
 msgid "Browse"
 msgstr "Gez"
 
+msgid "Scan QR Code"
+msgstr "QR kodu tara"
+
 msgid "Download Declaration"
 msgstr "Deklarasyonu indir"
 

@@ -5090,6 +5090,9 @@ msgstr "Deklarera"
 msgid "Browse"
 msgstr "Bläddra"
 
+msgid "Scan QR Code"
+msgstr "Skanna QR-kod"
+
 msgid "Download Declaration"
 msgstr "Ladda ner deklaration"
 

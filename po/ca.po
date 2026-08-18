@@ -5182,6 +5182,9 @@ msgstr "Declara"
 msgid "Browse"
 msgstr "Explora"
 
+msgid "Scan QR Code"
+msgstr "Escaneja el codi QR"
+
 msgid "Download Declaration"
 msgstr "Descarrega la declaració"
 

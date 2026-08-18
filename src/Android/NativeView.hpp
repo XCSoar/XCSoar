@@ -42,6 +42,7 @@ class NativeView {
   static jmethodID getPhysicalOrientation_method;
   static jmethodID startMyService_method;
   static jmethodID launchSAFTreePicker_method;
+  static jmethodID scanQRCode_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -204,4 +205,12 @@ public:
    * Launch the SAF document-tree picker for a given volume UUID.
    */
   void LaunchSAFTreePicker(JNIEnv *env, const char *volume_uuid) const noexcept;
+
+  /**
+   * Open the camera to scan a task QR code.  The scanner Activity
+   * delivers its result on its own, via ReceiveTaskQRCode().
+   */
+  void ScanQRCode(JNIEnv *env) const noexcept {
+    env->CallVoidMethod(obj, scanQRCode_method);
+  }
 };

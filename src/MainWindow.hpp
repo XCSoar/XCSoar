@@ -388,6 +388,17 @@ public:
   }
 #endif
 
+  /**
+   * Show a task that arrived from outside XCSoar (a scanned QR code,
+   * or an "xctsk:" link handed over by another app).
+   *
+   * Called from the event loop via PostReceivedTask(), never directly
+   * from the thread the task arrived on.  Does nothing while XCSoar is
+   * still starting up or while another modal dialog is open; RunTimer()
+   * offers the task again in that case.
+   */
+  void OnTaskReceived() noexcept;
+
   void SetTerrain(RasterTerrain *terrain) noexcept;
   void SetTopography(TopographyStore *topography) noexcept;
 
@@ -554,6 +565,5 @@ protected:
 
 #ifdef ANDROID
   void OnLook() noexcept override;
-  void OnTaskReceived() noexcept override;
 #endif
 };

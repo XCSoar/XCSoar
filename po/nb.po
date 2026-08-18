@@ -5120,6 +5120,9 @@ msgstr "Deklarer"
 msgid "Browse"
 msgstr "Bla gjennom"
 
+msgid "Scan QR Code"
+msgstr "Skann QR-kode"
+
 msgid "Download Declaration"
 msgstr "Last ned deklarasjon"
 
