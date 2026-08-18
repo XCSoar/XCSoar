@@ -321,6 +321,66 @@ Tests task calculation with flight data.
 - Replays flight data through the task
 - Reports task start, finish, and statistics
 
+RunMapRendererStress
+~~~~~~~~~~~~~~~~~~~~
+
+Benchmarks map rendering (terrain DEM plus vector topography) from an
+``.xcm`` map container.  This is the map-paint counterpart to
+``RunTrailRendererStress``.
+
+**Usage**:
+
+.. code-block:: bash
+
+   ./output/UNIX/bin/RunMapRendererStress ~/.xcsoar/maps/ALPS_Test.xcm
+   ./output/UNIX/bin/RunMapRendererStress --radius=3000 --lat=46.5 --lon=11.3 map.xcm
+   ./output/UNIX/bin/RunMapRendererStress --no-cache --draws=40 --width=1600 --height=960 map.xcm
+
+**What it does**:
+
+- Loads ``topology.tpl`` and shapefiles from the map ZIP
+- Optionally loads ``terrain.jp2``
+- For each map half-width (``--radius``), times shape loading
+  (``ScanVisibility``), terrain tiles, the first paint, and warm redraws
+- Prints a TSV table on stdout (``scan_ms``, ``first_ms``, ``frame_ms``,
+  plus terrain / topography / label breakdowns)
+- ``--no-cache`` flushes the software topography/terrain bitmap caches
+  before each timed draw so ``frame_ms`` / ``topo_ms`` measure rasterize
+  cost instead of a blit.  OpenGL already redraws vectors every frame.
+
+Default radii are 750 m, 3 km, 19 km, 50 km and 150 km (circling through
+overview).  Samples run small-to-large so the shape cache expands; pass a
+single ``--radius`` for an isolated measurement.
+
+RunTerrainRenderer
+~~~~~~~~~~~~~~~~~~
+
+Opens a window that loads DEM terrain from an ``.xcm`` and redraws
+``TerrainRenderer`` with a rotating sun azimuth.  OpenGL builds use
+the GPU hillshade shader by default; ``--cpu-shade`` forces the CPU
+``GenerateSlopeImage`` path for A/B tests.
+
+**Usage**:
+
+.. code-block:: bash
+
+   ./output/UNIX/bin/RunTerrainRenderer ~/.xcsoar/maps/ALPS_Test.xcm
+   ./output/UNIX/bin/RunTerrainRenderer -800x600 --radius=19000 \
+     --lat=46.12 --lon=10.58 map.xcm
+   ./output/UNIX/bin/RunTerrainRenderer -800x600 --cpu-shade \
+     --seconds=15 --radius=25000 map.xcm
+
+**What it does**:
+
+- Loads ``terrain.jp2`` from the map ZIP
+- Rotates the sun every timer tick (default 3° / 50 ms)
+- GPU path uploads the height matrix once; CPU path rebuilds slope
+  shading every tick
+- Overlay shows ``GPU`` or ``CPU``, sun azimuth, and ``Generate()``
+  time
+- ``--seconds=N`` closes the window (for ``perf``)
+- ``-WxH`` sets the window size (same as other ``Run*`` window tools)
+
 RunWindComputer
 ~~~~~~~~~~~~~~~
 

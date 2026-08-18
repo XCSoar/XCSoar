@@ -8,6 +8,11 @@ Version 7.46 - not yet released
   - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
     switch to that resolution (e.g. -800x600)
 * development
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
   - documentation: document the release and post-release version workflow
 
 
