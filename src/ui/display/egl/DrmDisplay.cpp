@@ -3,6 +3,7 @@
 
 #include "DrmDisplay.hpp"
 #include "Hardware/DisplayDPI.hpp"
+#include "LogFile.hpp"
 #include "lib/fmt/SystemError.hxx"
 
 #include <span>
@@ -74,7 +75,48 @@ ChooseConnector(FileDescriptor dri_fd, const drmModeRes &resources)
   return ChooseConnector(dri_fd, connectors);
 }
 
-DrmDisplay::DrmDisplay()
+/**
+ * Pick a connector mode.  When the user passed @c -WIDTHxHEIGHT,
+ * prefer an exact match (closest to 60 Hz).  Otherwise keep the
+ * first/preferred mode so KMS stays at native resolution.
+ */
+static drmModeModeInfo
+ChooseMode(const drmModeConnector &connector,
+           PixelSize preferred, bool use_preferred) noexcept
+{
+  const drmModeModeInfo *best = &connector.modes[0];
+  if (!use_preferred || preferred.width == 0 || preferred.height == 0)
+    return *best;
+
+  const drmModeModeInfo *exact = nullptr;
+  for (int i = 0; i < connector.count_modes; ++i) {
+    const auto &m = connector.modes[i];
+    if (m.hdisplay != preferred.width || m.vdisplay != preferred.height)
+      continue;
+
+    if (exact == nullptr) {
+      exact = &m;
+      continue;
+    }
+
+    const int err = m.vrefresh > 60 ? int(m.vrefresh) - 60
+                                    : 60 - int(m.vrefresh);
+    const int best_err = exact->vrefresh > 60 ? int(exact->vrefresh) - 60
+                                              : 60 - int(exact->vrefresh);
+    if (err < best_err)
+      exact = &m;
+  }
+
+  if (exact != nullptr)
+    return *exact;
+
+  LogFmt("DRM: no {}x{} mode, using {}x{}@{}",
+         preferred.width, preferred.height,
+         best->hdisplay, best->vdisplay, best->vrefresh);
+  return *best;
+}
+
+DrmDisplay::DrmDisplay(PixelSize preferred_mode, bool use_preferred_mode)
   :dri_fd(OpenDriDevice())
 {
   drmModeRes *resources = drmModeGetResources(dri_fd.Get());
@@ -87,14 +129,21 @@ DrmDisplay::DrmDisplay()
   if (auto *encoder = drmModeGetEncoder(dri_fd.Get(), connector->encoder_id)) {
     crtc_id = encoder->crtc_id;
     drmModeFreeEncoder(encoder);
-  } else
+  } else {
+    drmModeFreeConnector(connector);
+    drmModeFreeResources(resources);
     throw std::runtime_error("No usable DRM encoder found");
+  }
 
-  mode = connector->modes[0];
+  mode = ChooseMode(*connector, preferred_mode, use_preferred_mode);
+
+  LogFmt("DRM mode: {}x{}@{}",
+         mode.hdisplay, mode.vdisplay, mode.vrefresh);
 
   size_mm = {connector->mmWidth, connector->mmHeight};
 
   drmModeFreeConnector(connector);
+  drmModeFreeResources(resources);
 }
 
 DrmDisplay::~DrmDisplay() noexcept = default;
