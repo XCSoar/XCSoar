@@ -53,7 +53,12 @@
 static int
 Main()
 {
+#ifdef MESA_KMS
+  ScreenGlobalInit screen_init({CommandLine::width, CommandLine::height},
+                               CommandLine::size_specified);
+#else
   ScreenGlobalInit screen_init;
+#endif
 
 #if defined(__APPLE__) && !TARGET_OS_IPHONE
   // We do not want the ugly non-localized main menu which SDL creates

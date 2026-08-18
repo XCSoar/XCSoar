@@ -1,6 +1,10 @@
 Version 7.46 - not yet released
+* Linux
+  - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
+    switch to that resolution (e.g. -800x600)
 * development
   - documentation: document the release and post-release version workflow
+
 
 Version 7.45 - 2026-08-15
 * highlights
