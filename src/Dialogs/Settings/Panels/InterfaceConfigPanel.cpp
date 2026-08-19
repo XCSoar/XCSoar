@@ -18,7 +18,6 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
-#include "ui/event/TextInput.hpp"
 #include "Repository/FileType.hpp"
 #include "Version.hpp"
 
@@ -168,26 +167,9 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     nullptr
   };
 
-  /* the system keyboard is only offered where the operating system
-     actually has one (e.g. iOS), where it is also the default */
-  static constexpr StaticEnumChoice text_input_list_system[] = {
-    { DialogSettings::TextInputStyle::Default, N_("Default"),
-      N_("The keyboard of the operating system.") },
-    { DialogSettings::TextInputStyle::Keyboard, N_("Keyboard"),
-      N_("XCSoar's own on-screen keyboard.") },
-    { DialogSettings::TextInputStyle::HighScore,
-      N_("HighScore Style") },
-    { DialogSettings::TextInputStyle::SystemKeyboard,
-      N_("System keyboard"),
-      N_("The keyboard of the operating system, which provides all special characters.") },
-    nullptr
-  };
-
   AddEnum(_("Text input style"),
           _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
-          UI::TextInput::HasScreenKeyboard()
-          ? text_input_list_system : text_input_list,
-          (unsigned)settings.dialog.text_input_style);
+          text_input_list, (unsigned)settings.dialog.text_input_style);
   SetExpertRow(TextInput);
 
   /* on-screen keyboard doesn't work without a pointing device
