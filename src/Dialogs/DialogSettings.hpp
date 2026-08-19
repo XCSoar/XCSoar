@@ -20,13 +20,6 @@ struct DialogSettings {
     Keyboard,
 
     HighScore,
-
-    /**
-     * Use the on-screen keyboard provided by the operating system
-     * (e.g. on iOS), which gives access to all special characters.
-     * Falls back to #Keyboard if the platform has none.
-     */
-    SystemKeyboard,
   };
 
   enum class TabStyle : uint8_t {

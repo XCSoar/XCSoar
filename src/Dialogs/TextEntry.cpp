@@ -14,7 +14,6 @@ TextEntryDialog(char *text, size_t width,
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:
-  case DialogSettings::TextInputStyle::SystemKeyboard:
     /* the keyboard of the operating system (iOS) is much more capable
        than ours, so use it wherever there is one */
     if (HasPointer() && UI::TextInput::HasScreenKeyboard())
