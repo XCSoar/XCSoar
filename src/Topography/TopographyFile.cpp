@@ -156,7 +156,8 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field,
 }
 
 bool
-TopographyFile::Update(const WindowProjection &map_projection)
+TopographyFile::Update(const WindowProjection &map_projection,
+                       unsigned layout_scale)
 {
   if (map_projection.GetMapScale() > scale_threshold)
     /* not visible, don't update cache now */
@@ -232,11 +233,11 @@ TopographyFile::Update(const WindowProjection &map_projection)
         if (b.GetWidth() >= min_span || b.GetHeight() >= min_span) {
           const unsigned level =
             GetThinningLevel(map_projection.GetMapScale());
-          /* Paint() divides by Layout::Scale(1) too; keep UI scale 1
-             here so TopographyFile does not link Screen (LoadTopography). */
+          if (layout_scale == 0)
+            layout_scale = 1;
           const ShapeScalar min_distance =
             ShapeScalar(GetMinimumPointDistance(level))
-            / FAISphere::REARTH;
+            / (layout_scale * FAISphere::REARTH);
           [[maybe_unused]] const auto indices =
             it->shape->GetIndices(int(level), min_distance);
         }

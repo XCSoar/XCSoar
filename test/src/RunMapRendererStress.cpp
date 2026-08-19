@@ -404,7 +404,8 @@ ScanAll(TopographyStore &store,
 {
   unsigned total = 0;
   unsigned n;
-  while ((n = store.ScanVisibility(projection, 1024)) > 0)
+  while ((n = store.ScanVisibility(projection, 1024,
+                                   Layout::Scale(1u))) > 0)
     total += n;
   return total;
 }
