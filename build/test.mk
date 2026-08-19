@@ -1146,6 +1146,8 @@ ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
 DEBUG_PROGRAM_NAMES += \
 	RunTrailRendererStress \
+	RunMapRendererStress \
+	RunTerrainRenderer \
 	RunTrace \
 	RunContestAnalysis \
 	RunWaveComputer \
@@ -1976,6 +1978,43 @@ RUN_TRAIL_RENDERER_STRESS_SOURCES = \
 RUN_TRAIL_RENDERER_STRESS_DEPENDS = \
 	$(DEBUG_REPLAY_DEPENDS) SCREEN EVENT ASYNC OS IO THREAD GEO MATH UTIL TIME
 $(eval $(call link-program,RunTrailRendererStress,RUN_TRAIL_RENDERER_STRESS))
+
+RUN_MAP_RENDERER_STRESS_SOURCES = \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Look/TopographyLook.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
+	$(SRC)/Renderer/TransparentRendererCache.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/RunMapRendererStress.cpp
+RUN_MAP_RENDERER_STRESS_DEPENDS = \
+	TERRAIN TOPO SCREEN EVENT RESOURCE OPERATION \
+	ASYNC OS IO THREAD GEO MATH UTIL TIME ZZIP JASPER
+$(eval $(call link-program,RunMapRendererStress,RUN_MAP_RENDERER_STRESS))
+
+RUN_TERRAIN_RENDERER_SOURCES = \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunTerrainRenderer.cpp
+RUN_TERRAIN_RENDERER_DEPENDS = \
+	TERRAIN FORM SCREEN EVENT RESOURCE OPERATION \
+	ASYNC OS IO THREAD GEO MATH UTIL TIME ZZIP JASPER
+$(eval $(call link-program,RunTerrainRenderer,RUN_TERRAIN_RENDERER))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \

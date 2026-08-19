@@ -42,6 +42,14 @@ GLint filled_circle_projection, filled_circle_translate,
   filled_circle_center, filled_circle_radius1, filled_circle_radius2,
   filled_circle_color1, filled_circle_color2;
 
+GLProgram *hillshade_shader;
+GLint hillshade_projection, hillshade_translate,
+  hillshade_height_tex, hillshade_ramp_tex,
+  hillshade_texel_step, hillshade_sun, hillshade_contrast,
+  hillshade_height_slope_factor, hillshade_height_div,
+  hillshade_q, hillshade_do_shading, hillshade_contour_div,
+  hillshade_height_texel;
+
 } // namespace OpenGL
 
 #define GLSL_VERSION "#version 100\n"
@@ -240,6 +248,100 @@ static constexpr char filled_circle_fragment_shader[] =
     }
 )glsl";
 
+static const char *const hillshade_vertex_shader = texture_vertex_shader;
+
+static constexpr char hillshade_fragment_shader[] =
+  GLSL_VERSION
+  R"glsl(
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+#else
+    precision mediump float;
+#endif
+    uniform sampler2D height_tex;
+    uniform sampler2D ramp_tex;
+    uniform vec2 texel_step;
+    uniform vec3 sun;
+    uniform float contrast;
+    uniform float height_slope_factor;
+    uniform float height_div;
+    uniform float q;
+    uniform float do_shading;
+    uniform float contour_div;
+    uniform vec2 height_texel;
+    varying vec2 texcoordvar;
+
+    float decode_height(vec4 t) {
+      float lo = floor(t.r * 255.0 + 0.5);
+      float hi = floor(t.a * 255.0 + 0.5);
+      float bits = hi * 256.0 + lo;
+      if (bits >= 32768.0)
+        return bits - 65536.0;
+      return bits;
+    }
+
+    vec4 ramp_lookup(float h_idx, float sindex) {
+      return texture2D(ramp_tex, vec2((h_idx + 0.5) / 256.0,
+                                      (sindex + 64.5) / 128.0));
+    }
+
+    float contour_interval(float h) {
+      if (h <= 0.0)
+        return 0.0;
+      return min(254.0, floor(h / contour_div));
+    }
+
+    void main() {
+      float h = decode_height(texture2D(height_tex, texcoordvar));
+      if (h <= -30000.0) {
+        gl_FragColor = ramp_lookup(255.0, 0.0);
+        return;
+      }
+
+      float h_idx = min(254.0, max(0.0, floor(h / height_div)));
+      float sindex = 0.0;
+
+      if (do_shading > 0.5) {
+        float h_above = decode_height(texture2D(height_tex,
+            texcoordvar - vec2(0.0, texel_step.y)));
+        float h_below = decode_height(texture2D(height_tex,
+            texcoordvar + vec2(0.0, texel_step.y)));
+        float h_left = decode_height(texture2D(height_tex,
+            texcoordvar - vec2(texel_step.x, 0.0)));
+        float h_right = decode_height(texture2D(height_tex,
+            texcoordvar + vec2(texel_step.x, 0.0)));
+
+        if (h_above > -30000.0 && h_below > -30000.0 &&
+            h_left > -30000.0 && h_right > -30000.0) {
+          float p32 = clamp(h_above - h_below, -512.0, 512.0);
+          float p22 = clamp(h_right - h_left, -512.0, 512.0);
+          float p20 = 2.0 * q;
+          float p31 = 2.0 * q;
+          float dd0 = p22 * p31;
+          float dd1 = p20 * p32;
+          float dd2 = p20 * p31 * height_slope_factor;
+          float mag = sqrt(dd0 * dd0 + dd1 * dd1 + dd2 * dd2);
+          float sval = (dd2 * sun.z + dd0 * sun.x + dd1 * sun.y) /
+            max(mag, 1.0);
+          sindex = clamp((sval - sun.z) * contrast / 128.0, -63.0, 63.0);
+        }
+      }
+
+      if (contour_div > 0.5) {
+        float h_up = decode_height(texture2D(height_tex,
+            texcoordvar - vec2(0.0, height_texel.y)));
+        float h_lf = decode_height(texture2D(height_tex,
+            texcoordvar - vec2(height_texel.x, 0.0)));
+        float ci = contour_interval(h);
+        if (ci != contour_interval(h_up) ||
+            ci != contour_interval(h_lf))
+          sindex = -64.0;
+      }
+
+      gl_FragColor = ramp_lookup(h_idx, sindex);
+    }
+)glsl";
+
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 {
@@ -383,11 +485,38 @@ OpenGL::InitShaders()
   filled_circle_radius2 = filled_circle_shader->GetUniformLocation("radius2");
   filled_circle_color1 = filled_circle_shader->GetUniformLocation("color1");
   filled_circle_color2 = filled_circle_shader->GetUniformLocation("color2");
+
+  hillshade_shader = CompileProgram(hillshade_vertex_shader,
+                                    hillshade_fragment_shader);
+  hillshade_shader->BindAttribLocation(Attribute::POSITION, "position");
+  hillshade_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*hillshade_shader);
+
+  hillshade_projection = hillshade_shader->GetUniformLocation("projection");
+  hillshade_translate = hillshade_shader->GetUniformLocation("translate");
+  hillshade_height_tex = hillshade_shader->GetUniformLocation("height_tex");
+  hillshade_ramp_tex = hillshade_shader->GetUniformLocation("ramp_tex");
+  hillshade_texel_step = hillshade_shader->GetUniformLocation("texel_step");
+  hillshade_sun = hillshade_shader->GetUniformLocation("sun");
+  hillshade_contrast = hillshade_shader->GetUniformLocation("contrast");
+  hillshade_height_slope_factor =
+    hillshade_shader->GetUniformLocation("height_slope_factor");
+  hillshade_height_div = hillshade_shader->GetUniformLocation("height_div");
+  hillshade_q = hillshade_shader->GetUniformLocation("q");
+  hillshade_do_shading = hillshade_shader->GetUniformLocation("do_shading");
+  hillshade_contour_div = hillshade_shader->GetUniformLocation("contour_div");
+  hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
+
+  hillshade_shader->Use();
+  glUniform1i(hillshade_height_tex, 0);
+  glUniform1i(hillshade_ramp_tex, 1);
 }
 
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete hillshade_shader;
+  hillshade_shader = nullptr;
   delete filled_circle_shader;
   filled_circle_shader = nullptr;
   delete circle_outline_shader;
@@ -441,6 +570,10 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   filled_circle_shader->Use();
   glUniformMatrix4fv(filled_circle_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
+
+  hillshade_shader->Use();
+  glUniformMatrix4fv(hillshade_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
 }
 
 void
@@ -471,4 +604,7 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   filled_circle_shader->Use();
   glUniform2f(filled_circle_translate, t.x, t.y);
+
+  hillshade_shader->Use();
+  glUniform2f(hillshade_translate, t.x, t.y);
 }

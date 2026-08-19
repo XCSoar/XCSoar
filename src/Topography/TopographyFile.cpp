@@ -7,6 +7,11 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/ScopeExit.hxx"
 
+#ifdef ENABLE_OPENGL
+#include "Topography/ShapeRenderer.hpp"
+#include "Geo/FAISphere.hpp"
+#endif
+
 #include <zzip/lib.h>
 
 #include <algorithm>
@@ -63,14 +68,80 @@ TopographyFile::~TopographyFile() noexcept
 void
 TopographyFile::ClearCache() noexcept
 {
-  for (auto &i : shapes)
-    i.shape.reset();
-
+  const std::lock_guard lock{mutex};
+  cache_list.clear();
   list.clear();
+  cache_bounds.SetInvalid();
+
+  for (auto &i : shapes) {
+    i.in_list = false;
+    i.clip_bounds.SetInvalid();
+    i.shape.reset();
+  }
+
+  cached_shapes = 0;
+  ++serial;
+}
+
+void
+TopographyFile::UnlinkVisible(ShapeEnvelope &e,
+                              ShapeList::iterator &prev) noexcept
+{
+  assert(e.in_list);
+  assert(&*std::next(prev) == &e);
+
+  const std::lock_guard lock{mutex};
+  list.erase_after(prev);
+  e.in_list = false;
+  ++serial;
+}
+
+void
+TopographyFile::DropCached(ShapeEnvelope &e) noexcept
+{
+  assert(!e.in_list);
+  assert(e.shape != nullptr);
+
+  if (e.cache_hook.is_linked())
+    cache_list.erase(cache_list.iterator_to(e));
+
+  e.shape.reset();
+  e.clip_bounds.SetInvalid();
+  --cached_shapes;
+}
+
+void
+TopographyFile::TouchCache(ShapeEnvelope &e) noexcept
+{
+  if (e.cache_hook.is_linked())
+    cache_list.erase(cache_list.iterator_to(e));
+  cache_list.push_front(e);
+}
+
+void
+TopographyFile::EvictOverflow() noexcept
+{
+  if (cached_shapes <= MAX_CACHED_SHAPES)
+    return;
+
+  auto it = cache_list.end();
+  while (cached_shapes > CACHE_KEEP_SHAPES &&
+         it != cache_list.begin()) {
+    --it;
+    ShapeEnvelope &e = *it;
+    if (e.in_list)
+      continue;
+
+    it = cache_list.erase(it);
+    e.shape.reset();
+    e.clip_bounds.SetInvalid();
+    --cached_shapes;
+  }
 }
 
 static std::unique_ptr<XShape>
-LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
+LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field,
+          const GeoBounds *clip, bool *clipped)
 {
   shapeObj shape;
   msInitShape(&shape);
@@ -81,11 +152,12 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field)
     ? file.ReadLabel(i, label_field)
     : nullptr;
 
-  return std::make_unique<XShape>(shape, center, label);
+  return std::make_unique<XShape>(shape, center, label, clip, clipped);
 }
 
 bool
-TopographyFile::Update(const WindowProjection &map_projection)
+TopographyFile::Update(const WindowProjection &map_projection,
+                       [[maybe_unused]] unsigned layout_scale)
 {
   if (map_projection.GetMapScale() > scale_threshold)
     /* not visible, don't update cache now */
@@ -117,41 +189,74 @@ TopographyFile::Update(const WindowProjection &map_projection)
   const auto status = file.GetStatus();
   assert(status != nullptr);
 
-  // Iterate through the shapefile entries
   auto prev = list.before_begin();
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
-    if (!msGetBit(status, i)) {
-      // If the shape is outside the bounds
-      // delete the shape from the cache
-      if (it->shape != nullptr) {
-        assert(&*std::next(prev) == &*it);
+    const bool visible = msGetBit(status, i);
 
-        /* remove from linked list (protected) */
-        {
-          const std::lock_guard lock{mutex};
-          list.erase_after(prev);
-          ++serial;
+    if (visible && it->shape != nullptr &&
+        it->clip_bounds.IsValid() &&
+        !it->clip_bounds.IsInside(cache_bounds)) {
+      /* clipped to an old viewport; reload so the new area is
+         complete */
+      if (it->in_list)
+        UnlinkVisible(*it, prev);
+      DropCached(*it);
+    }
+
+    if (!visible) {
+      if (it->in_list)
+        UnlinkVisible(*it, prev);
+      continue;
+    }
+
+    if (it->shape == nullptr) {
+      assert(!it->in_list);
+
+      EvictOverflow();
+
+      bool clipped = false;
+      it->shape = LoadShape(file, center, i, label_field,
+                            &cache_bounds, &clipped);
+      it->clip_bounds = clipped ? cache_bounds : GeoBounds::Invalid();
+      ++cached_shapes;
+      TouchCache(*it);
+
+#ifdef ENABLE_OPENGL
+      /* Triangulate on the topography thread so Paint never
+         ear-clips a newly panned-in fill.  Skip sub-pixel fills
+         (same 1 px bbox rule as Paint). */
+      if (it->shape->get_type() == MS_SHAPE_POLYGON) {
+        const Angle min_span =
+          map_projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+        const GeoBounds &b = it->shape->get_bounds();
+        if (b.GetWidth() >= min_span || b.GetHeight() >= min_span) {
+          const unsigned level =
+            GetThinningLevel(map_projection.GetMapScale());
+          if (layout_scale == 0)
+            layout_scale = 1;
+          const ShapeScalar min_distance =
+            ShapeScalar(GetMinimumPointDistance(level))
+            / (layout_scale * FAISphere::REARTH);
+          [[maybe_unused]] const auto indices =
+            it->shape->GetIndices(int(level), min_distance);
         }
+      }
+#endif
 
-        /* now it's unreachable, and we can delete the XShape without
-           holding a lock */
-        it->shape.reset();
+      {
+        const std::lock_guard lock{mutex};
+        prev = list.insert_after(prev, *it);
+        it->in_list = true;
+        ++serial;
       }
     } else {
-      // is inside the bounds
-      if (it->shape == nullptr) {
-        assert(&*std::next(prev) != &*it);
-
-        // shape isn't cached yet -> cache the shape
-        it->shape = LoadShape(file, center, i, label_field);
-
-        /* insert into linked list (protected) */
-        {
-          const std::lock_guard lock{mutex};
-          prev = list.insert_after(prev, *it);
-          ++serial;
-        }
+      TouchCache(*it);
+      if (!it->in_list) {
+        const std::lock_guard lock{mutex};
+        prev = list.insert_after(prev, *it);
+        it->in_list = true;
+        ++serial;
       } else {
         ++prev;
         assert(&*prev == &*it);
@@ -160,6 +265,8 @@ TopographyFile::Update(const WindowProjection &map_projection)
   }
 
   assert(std::next(prev) == list.end());
+
+  EvictOverflow();
 
   return true;
 }
@@ -174,9 +281,12 @@ TopographyFile::LoadAll()
     if (it->shape == nullptr) {
       assert(&*std::next(prev) != &*it);
       // shape isn't cached yet -> cache the shape
-      it->shape = LoadShape(file, center, i, label_field);
-      // update list pointer
+      it->shape = LoadShape(file, center, i, label_field,
+                            nullptr, nullptr);
+      ++cached_shapes;
+      TouchCache(*it);
       prev = list.insert_after(prev, *it);
+      it->in_list = true;
     } else {
       ++prev;
       assert(&*prev == &*it);

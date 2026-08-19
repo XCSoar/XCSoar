@@ -7,6 +7,7 @@
 #include "Geo/GeoBounds.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/IntrusiveForwardList.hxx"
+#include "util/IntrusiveList.hxx"
 #include "util/Serial.hpp"
 #include "ui/canvas/PortableColor.hpp"
 #include "ResourceId.hpp"
@@ -26,7 +27,30 @@ struct zzip_dir;
 class TopographyFile {
   struct ShapeEnvelope final : IntrusiveForwardListHook {
     std::unique_ptr<const XShape> shape;
+
+    IntrusiveListHook<IntrusiveHookMode::TRACK> cache_hook;
+
+    /**
+     * Viewport used when #shape was clipped.  Invalid means the
+     * full shapefile feature is in RAM.
+     */
+    GeoBounds clip_bounds = GeoBounds::Invalid();
+
+    /**
+     * True while this envelope is in #list (visible cache).
+     */
+    bool in_list = false;
   };
+
+  /**
+   * Cap on loaded #XShape objects (on- and off-screen).  Prevents
+   * unbounded RAM when panning a dense map; triangulation stays
+   * cached until LRU eviction.
+   */
+  static constexpr unsigned MAX_CACHED_SHAPES = 8192;
+
+  /** After a miss, evict down to this so one pan does not thrash. */
+  static constexpr unsigned CACHE_KEEP_SHAPES = MAX_CACHED_SHAPES * 3 / 4;
 
   /**
    * This gets incremented by Update().
@@ -46,6 +70,13 @@ class TopographyFile {
 
   using ShapeList = IntrusiveForwardList<ShapeEnvelope>;
   ShapeList list;
+
+  using CacheList = IntrusiveList<
+    ShapeEnvelope,
+    IntrusiveListMemberHookTraits<&ShapeEnvelope::cache_hook>>;
+  CacheList cache_list;
+
+  unsigned cached_shapes = 0;
 
   const int label_field;
 
@@ -247,9 +278,12 @@ public:
   /**
    * Throws on error.
    *
+   * @param layout_scale UI pixel scale (Layout::Scale(1)); used for
+   * OpenGL ear-clip tolerance so it matches Paint()
    * @return true if new data from the topography file has been loaded
    */
-  bool Update(const WindowProjection &map_projection);
+  bool Update(const WindowProjection &map_projection,
+              unsigned layout_scale=1);
 
   /**
    * Throws on error.
@@ -260,4 +294,11 @@ public:
 
 protected:
   void ClearCache() noexcept;
+
+private:
+  void UnlinkVisible(ShapeEnvelope &e,
+                     ShapeList::iterator &prev) noexcept;
+  void DropCached(ShapeEnvelope &e) noexcept;
+  void TouchCache(ShapeEnvelope &e) noexcept;
+  void EvictOverflow() noexcept;
 };

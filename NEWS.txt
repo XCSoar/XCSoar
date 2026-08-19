@@ -1,6 +1,20 @@
 Version 7.46 - not yet released
+* map
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded
+  - skip tiny topography fills, simplify large areas, clip long roads
+    to the map view, and keep recently seen shapes while panning
+* Linux
+  - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
+    switch to that resolution when the display lists it (e.g. -800x600)
 * development
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
   - documentation: document the release and post-release version workflow
+
 
 Version 7.45 - 2026-08-15
 * highlights
