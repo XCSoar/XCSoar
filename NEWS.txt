@@ -1,4 +1,23 @@
 Version 7.46 - not yet released
+* android
+  - fix crash when exiting the app #2873
+  - fix crash when restarting the app immediately after exit
+* input
+  - fix USB HID remotes (e.g. SteFly) that stop sending keys on
+    OpenVario after the stick re-enumerates #2820
+* weather
+  - fix SkySight re-downloading forecast metadata when stepping
+    layers on the weather cursor, which could hit the API rate
+    limit #2867
+* map
+  - fix the ragged white halo behind map labels on high-DPI screens
+    #2879
+* FLARM
+  - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
+* dialogs
+  - fix keyboard wrap in the Checklist: Down from Close returns
+    to the list and highlights an item so Enter acts on that row
+    #2862
 * development
   - documentation: document the release and post-release version workflow
 
