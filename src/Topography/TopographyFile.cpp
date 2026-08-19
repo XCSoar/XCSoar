@@ -157,7 +157,7 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field,
 
 bool
 TopographyFile::Update(const WindowProjection &map_projection,
-                       unsigned layout_scale)
+                       [[maybe_unused]] unsigned layout_scale)
 {
   if (map_projection.GetMapScale() > scale_threshold)
     /* not visible, don't update cache now */
