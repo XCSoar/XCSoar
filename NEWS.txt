@@ -33,6 +33,8 @@ Version 7.46 - not yet released
     #2862
 * development
   - documentation: document the release and post-release version workflow
+  - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
+    produce the testing flavour
 
 Version 7.45 - 2026-08-15
 * highlights
@@ -368,8 +370,6 @@ Version 7.45 - 2026-08-15
   - time: unify UTC conversion (BrokenDateTime / Windows TimeGm)
   - MapWindow: publish a coherent projection snapshot for the
     DrawThread on non-OpenGL builds #2735
-  - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
-    produce the testing flavour
 
 Version 7.44 - 2026-03-22
 * WaypointDetails
