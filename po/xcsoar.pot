@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-12 23:20+0200\n"
+"POT-Creation-Date: 2026-08-20 22:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6183,25 +6183,25 @@ msgstr ""
 msgid "United Kingdom. ICON-UK model."
 msgstr ""
 
-msgid "XCTherm email"
+msgid "XC Therm email"
 msgstr ""
 
-msgid "Email address for your XCTherm account."
+msgid "Email address for your XC Therm account."
 msgstr ""
 
-msgid "XCTherm password"
+msgid "XC Therm password"
 msgstr ""
 
-msgid "Password for your XCTherm account."
+msgid "Password for your XC Therm account."
 msgstr ""
 
-msgid "XCTherm region"
+msgid "XC Therm region"
 msgstr ""
 
-msgid "Forecast region. Changes which model XCTherm fetches data from. Restart or re-download after changing."
+msgid "Forecast region. Changes which model XC Therm fetches data from. Restart or re-download after changing."
 msgstr ""
 
-msgid "XCTherm Auto Layer/Time"
+msgid "XC Therm Auto Layer/Time"
 msgstr ""
 
 msgid "Automatically switch altitude layer based on GPS altitude and forecast time based on UTC clock."
@@ -7008,7 +7008,7 @@ msgstr ""
 msgid "Network is not available."
 msgstr ""
 
-msgid "Forecast index has no XCTherm parameters."
+msgid "Forecast index has no XC Therm parameters."
 msgstr ""
 
 msgid ""
@@ -7357,11 +7357,11 @@ msgid "No TAF available!"
 msgstr ""
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
 msgstr ""
 
 #, c-format
-msgid "Downloading XCTherm %s..."
+msgid "Downloading XC Therm %s..."
 msgstr ""
 
 #, no-c-format

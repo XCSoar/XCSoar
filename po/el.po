@@ -10054,30 +10054,30 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "Ηνωμένο Βασίλειο. Μοντέλο ICON-UK."
 
-msgid "XCTherm email"
-msgstr "Email XCTherm"
+msgid "XC Therm email"
+msgstr "Email XC Therm"
 
-msgid "Email address for your XCTherm account."
-msgstr "Διεύθυνση email για τον λογαριασμό XCTherm."
+msgid "Email address for your XC Therm account."
+msgstr "Διεύθυνση email για τον λογαριασμό XC Therm."
 
-msgid "XCTherm password"
-msgstr "Κωδικός XCTherm"
+msgid "XC Therm password"
+msgstr "Κωδικός XC Therm"
 
-msgid "Password for your XCTherm account."
-msgstr "Κωδικός πρόσβασης για τον λογαριασμό XCTherm."
+msgid "Password for your XC Therm account."
+msgstr "Κωδικός πρόσβασης για τον λογαριασμό XC Therm."
 
-msgid "XCTherm region"
-msgstr "Περιοχή XCTherm"
+msgid "XC Therm region"
+msgstr "Περιοχή XC Therm"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
 msgstr ""
-"Περιοχή πρόγνωσης. Αλλάζει από ποιο μοντέλο λαμβάνει δεδομένα το XCTherm. "
+"Περιοχή πρόγνωσης. Αλλάζει από ποιο μοντέλο λαμβάνει δεδομένα το XC Therm. "
 "Επανεκκινήστε ή κατεβάστε ξανά μετά την αλλαγή."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "Αυτόμ. στρώμα/ώρα XCTherm"
+msgid "XC Therm Auto Layer/Time"
+msgstr "Αυτόμ. στρώμα/ώρα XC Therm"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10368,8 +10368,8 @@ msgstr "Δεν έχει επιλεγεί στρώμα."
 msgid "Network is not available."
 msgstr "Το δίκτυο δεν είναι διαθέσιμο."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Ο δείκτης πρόγνωσης δεν έχει παραμέτρους XCTherm."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Ο δείκτης πρόγνωσης δεν έχει παραμέτρους XC Therm."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10491,12 +10491,12 @@ msgid "HTTP support"
 msgstr "Υποστήριξη HTTP"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "Λήψη XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "Λήψη XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "Λήψη XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "Λήψη XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr ""

@@ -9604,28 +9604,28 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "英國。ICON-UK 模式。"
 
-msgid "XCTherm email"
-msgstr "XCTherm 信箱"
+msgid "XC Therm email"
+msgstr "XC Therm 信箱"
 
-msgid "Email address for your XCTherm account."
-msgstr "XCTherm 帳戶的電子郵件地址。"
+msgid "Email address for your XC Therm account."
+msgstr "XC Therm 帳戶的電子郵件地址。"
 
-msgid "XCTherm password"
-msgstr "XCTherm 密碼"
+msgid "XC Therm password"
+msgstr "XC Therm 密碼"
 
-msgid "Password for your XCTherm account."
-msgstr "XCTherm 帳戶的密碼。"
+msgid "Password for your XC Therm account."
+msgstr "XC Therm 帳戶的密碼。"
 
-msgid "XCTherm region"
-msgstr "XCTherm 區域"
+msgid "XC Therm region"
+msgstr "XC Therm 區域"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
-msgstr "預報區域。更改 XCTherm 取得資料所用的模式。更改後請重新啟動或重新下載。"
+msgstr "預報區域。更改 XC Therm 取得資料所用的模式。更改後請重新啟動或重新下載。"
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm 自動圖層/時間"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm 自動圖層/時間"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -9904,8 +9904,8 @@ msgstr "未選擇圖層。"
 msgid "Network is not available."
 msgstr "網路不可用。"
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "預報索引沒有 XCTherm 參數。"
+msgid "Forecast index has no XC Therm parameters."
+msgstr "預報索引沒有 XC Therm 參數。"
 
 msgid ""
 "Forecast download failed.\n"
@@ -10014,12 +10014,12 @@ msgid "HTTP support"
 msgstr "HTTP 支援"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "正在下載 XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "正在下載 XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "正在下載 XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "正在下載 XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr "透過 SkyLines 伺服器（tracking.skylines.aero）啟用即時追蹤。"
