@@ -100,11 +100,6 @@ class GaugeVario : public AntiFlickerWindow
 
   LabelValueDrawInfo average_di, mc_di, gross_di;
 
-  int ival_av_last = 0;
-  int vval_last = 0;
-  int sval_last = 0;
-  int ival_last = 0;
-
   double last_v_diff = 0;
 
   int last_ballast = -1;
@@ -149,6 +144,7 @@ protected:
 
 private:
   void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
+  void RenderVarioBar(Canvas &canvas, const PixelRect &rc, int ival) noexcept;
   void RenderZero(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,
