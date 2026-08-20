@@ -50,21 +50,21 @@ XCThermConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddText(_("XCTherm email"),
-          _("Email address for your XCTherm account."),
+  AddText(_("XC Therm email"),
+          _("Email address for your XC Therm account."),
           settings.xctherm.credentials.email);
 
-  AddPassword(_("XCTherm password"),
-              _("Password for your XCTherm account."),
+  AddPassword(_("XC Therm password"),
+              _("Password for your XC Therm account."),
               settings.xctherm.credentials.password);
 
-  AddEnum(_("XCTherm region"),
-          _("Forecast region. Changes which model XCTherm fetches data "
+  AddEnum(_("XC Therm region"),
+          _("Forecast region. Changes which model XC Therm fetches data "
             "from. Restart or re-download after changing."),
           xctherm_region_list,
           settings.xctherm.model);
 
-  AddBoolean(_("XCTherm Auto Layer/Time"),
+  AddBoolean(_("XC Therm Auto Layer/Time"),
              _("Automatically switch altitude layer based on GPS altitude "
                "and forecast time based on UTC clock."),
              settings.xctherm.auto_switch);
