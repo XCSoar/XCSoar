@@ -19,6 +19,7 @@
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 #include "Repository/FileType.hpp"
+#include "Simulator.hpp"
 #include "Version.hpp"
 
 using namespace std::chrono;
@@ -34,6 +35,9 @@ enum ControlIndex {
   TextInput,
 #ifdef HAVE_VIBRATOR
   HapticFeedback,
+#endif
+#ifdef SIMULATOR_AVAILABLE
+  StartupMode,
 #endif
   ShowQuickGuideOnStartup,
   ShowReleaseNotesOnStartup,
@@ -190,6 +194,24 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(HapticFeedback);
 #endif /* HAVE_VIBRATOR */
 
+#ifdef SIMULATOR_AVAILABLE
+  static constexpr StaticEnumChoice startup_mode_list[] = {
+    { UISettings::StartupMode::ASK, N_("Ask"),
+      N_("Show the Fly / Simulator prompt on every start.") },
+    { UISettings::StartupMode::FLY, N_("Fly"),
+      N_("Start in fly mode without asking.") },
+    { UISettings::StartupMode::SIMULATOR, N_("Simulator"),
+      N_("Start in simulator mode without asking.") },
+    nullptr
+  };
+
+  AddEnum(_("Startup mode"),
+          _("Determines whether XCSoar asks for fly or simulator mode on "
+            "startup, or always starts in one of them.  The command line "
+            "options \"-fly\" and \"-simulator\" override this setting."),
+          startup_mode_list, (unsigned)settings.startup_mode);
+#endif
+
   bool hide_quick_guide = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup,
                hide_quick_guide);
@@ -305,6 +327,11 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 
 #ifdef HAVE_VIBRATOR
   changed |= SaveValueEnum(HapticFeedback, ProfileKeys::HapticFeedback, settings.haptic_feedback);
+#endif
+
+#ifdef SIMULATOR_AVAILABLE
+  changed |= SaveValueEnum(StartupMode, ProfileKeys::StartupMode,
+                           settings.startup_mode);
 #endif
 
   bool hide_quick_guide = false;
