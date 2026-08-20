@@ -66,10 +66,9 @@ class Condor3UDPDevice final : public AbstractDevice {
     const double h = std::hypot(vx, vy);
     info.ground_speed = h;
     info.ground_speed_available.Update(info.clock);
-    /* Do not derive track from Condor vx/vy: Condor documents them as
-       ground velocity but they are not reliable earth-frame N/E (see
-       compass handler comment).  Using them after compass expires made
-       the FLARM traffic radar bearing jump by ~120°. */
+    /* Do not derive track from Condor vx/vy: documented as ground
+       velocity but not reliable earth-frame N/E.  Using them after
+       compass expired made FLARM traffic radar bearing jump ~120°. */
   }
 
   bool
@@ -106,10 +105,11 @@ class Condor3UDPDevice final : public AbstractDevice {
     if (StringIsEqualIgnoreCase(key, "compass"sv)) {
       info.attitude.heading = Angle::Degrees(value);
       info.attitude.heading_available.Update(info.clock);
-      /* Circling/thermal assistant use track turn rate; keep it aligned
-         with compass because Condor vx/vy are not reliable east/north. */
-      info.track = info.attitude.heading;
-      info.track_available.Update(info.clock);
+      /* Heading only.  Copying compass into track made the ground
+         track line follow heading in a crosswind (#2900).  Condor
+         vx/vy are not reliable earth-frame N/E either; leave track
+         unset so GPS RMC or ComputeTrack() from position can supply
+         ground track. */
       return true;
     }
 
@@ -190,8 +190,6 @@ class Condor3UDPDevice final : public AbstractDevice {
       if (!info.attitude.heading_available) {
         info.attitude.heading = Angle::Radians(value);
         info.attitude.heading_available.Update(info.clock);
-        info.track = info.attitude.heading;
-        info.track_available.Update(info.clock);
       }
       return true;
     }
