@@ -116,6 +116,7 @@ DIALOG_SOURCES = \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp) \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/NOTAM/NOTAMMessageListener.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/DisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WindConfigPanel.cpp \
@@ -610,6 +611,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
 	$(SRC)/Hardware/Battery.cpp \
+	$(SRC)/Hardware/DisplayBrightness.cpp \
 
 ifneq ($(TARGET),ANDROID)
 ifeq ($(TARGET_IS_LINUX),y)
