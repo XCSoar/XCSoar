@@ -9760,28 +9760,28 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
 
-msgid "XCTherm email"
-msgstr "XCTherm e-mail"
+msgid "XC Therm email"
+msgstr "XC Therm e-mail"
 
-msgid "Email address for your XCTherm account."
-msgstr "E-mail adresa XCTherm računa."
+msgid "Email address for your XC Therm account."
+msgstr "E-mail adresa XC Therm računa."
 
-msgid "XCTherm password"
-msgstr "XCTherm 암호"
+msgid "XC Therm password"
+msgstr "XC Therm 암호"
 
-msgid "Password for your XCTherm account."
-msgstr "암호 XCTherm računa."
+msgid "Password for your XC Therm account."
+msgstr "암호 XC Therm računa."
 
-msgid "XCTherm region"
-msgstr "XCTherm regija"
+msgid "XC Therm region"
+msgstr "XC Therm regija"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
-msgstr "예보 지역. XCTherm이 데이터를 가져오는 모델을 바꿉니다. 변경 후 다시 시작하거나 다시 내려받으세요."
+msgstr "예보 지역. XC Therm이 데이터를 가져오는 모델을 바꿉니다. 변경 후 다시 시작하거나 다시 내려받으세요."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm auto 레이어/시간"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm auto 레이어/시간"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10062,8 +10062,8 @@ msgstr "Nije odabran 레이어."
 msgid "Network is not available."
 msgstr "네트워크 nije dostupna."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Indeks 예보 nema XCTherm parametre."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Indeks 예보 nema XC Therm parametre."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10174,12 +10174,12 @@ msgid "HTTP support"
 msgstr "HTTP podrška"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "다운로드 XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "다운로드 XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "다운로드 XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "다운로드 XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr "SkyLines 서버(tracking.skylines.aero)를 통한 실시간 추적을 사용합니다."

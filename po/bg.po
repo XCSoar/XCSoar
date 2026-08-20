@@ -10038,30 +10038,30 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "Обединено кралство. Модел ICON-UK."
 
-msgid "XCTherm email"
-msgstr "Имейл XCTherm"
+msgid "XC Therm email"
+msgstr "Имейл XC Therm"
 
-msgid "Email address for your XCTherm account."
-msgstr "Имейл адрес за вашия акаунт XCTherm."
+msgid "Email address for your XC Therm account."
+msgstr "Имейл адрес за вашия акаунт XC Therm."
 
-msgid "XCTherm password"
-msgstr "Парола XCTherm"
+msgid "XC Therm password"
+msgstr "Парола XC Therm"
 
-msgid "Password for your XCTherm account."
-msgstr "Парола за вашия акаунт XCTherm."
+msgid "Password for your XC Therm account."
+msgstr "Парола за вашия акаунт XC Therm."
 
-msgid "XCTherm region"
-msgstr "Регион XCTherm"
+msgid "XC Therm region"
+msgstr "Регион XC Therm"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
 msgstr ""
-"Регион на прогнозата. Променя модела, от който XCTherm изтегля данни. След "
+"Регион на прогнозата. Променя модела, от който XC Therm изтегля данни. След "
 "промяна рестартирайте или изтеглете отново."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "Авто слой/време XCTherm"
+msgid "XC Therm Auto Layer/Time"
+msgstr "Авто слой/време XC Therm"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10350,8 +10350,8 @@ msgstr "Няма избран слой."
 msgid "Network is not available."
 msgstr "Мрежа недоступна."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Индексът на прогнозата не съдържа параметри на XCTherm."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Индексът на прогнозата не съдържа параметри на XC Therm."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10474,12 +10474,12 @@ msgid "HTTP support"
 msgstr "Поддержка HTTP"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "Зареждане XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "Зареждане XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "Зареждане XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "Зареждане XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr ""

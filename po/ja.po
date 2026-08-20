@@ -9986,28 +9986,28 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "英国。ICON-UK モデル。"
 
-msgid "XCTherm email"
-msgstr "XCTherm メール"
+msgid "XC Therm email"
+msgstr "XC Therm メール"
 
-msgid "Email address for your XCTherm account."
-msgstr "XCTherm アカウントのメールアドレス。"
+msgid "Email address for your XC Therm account."
+msgstr "XC Therm アカウントのメールアドレス。"
 
-msgid "XCTherm password"
-msgstr "XCTherm パスワード"
+msgid "XC Therm password"
+msgstr "XC Therm パスワード"
 
-msgid "Password for your XCTherm account."
-msgstr "XCTherm アカウントのパスワード。"
+msgid "Password for your XC Therm account."
+msgstr "XC Therm アカウントのパスワード。"
 
-msgid "XCTherm region"
-msgstr "XCTherm 地域"
+msgid "XC Therm region"
+msgstr "XC Therm 地域"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
-msgstr "予報地域。XCTherm がデータを取得するモデルを変更します。変更後は再起動または再ダウンロード。"
+msgstr "予報地域。XC Therm がデータを取得するモデルを変更します。変更後は再起動または再ダウンロード。"
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm 自動レイヤ/時刻"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm 自動レイヤ/時刻"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10286,8 +10286,8 @@ msgstr "レイヤが選択されていません。"
 msgid "Network is not available."
 msgstr "ネットワークを利用できません。"
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "予報インデックスに XCTherm パラメータがありません。"
+msgid "Forecast index has no XC Therm parameters."
+msgstr "予報インデックスに XC Therm パラメータがありません。"
 
 msgid ""
 "Forecast download failed.\n"
@@ -10398,12 +10398,12 @@ msgid "HTTP support"
 msgstr "HTTP サポート"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "XCTherm %s をダウンロード中 (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "XC Therm %s をダウンロード中 (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "XCTherm %s をダウンロード中..."
+msgid "Downloading XC Therm %s..."
+msgstr "XC Therm %s をダウンロード中..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr "SkyLines サーバ（tracking.skylines.aero）経由のライブトラッキングを有効にします。"

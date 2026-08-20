@@ -9890,30 +9890,30 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "Storbritannien. ICON-UK-modell."
 
-msgid "XCTherm email"
-msgstr "XCTherm-e-post"
+msgid "XC Therm email"
+msgstr "XC Therm-e-post"
 
-msgid "Email address for your XCTherm account."
-msgstr "E-postadress for ditt XCTherm-konto."
+msgid "Email address for your XC Therm account."
+msgstr "E-postadress for ditt XC Therm-konto."
 
-msgid "XCTherm password"
-msgstr "XCTherm-passord"
+msgid "XC Therm password"
+msgstr "XC Therm-passord"
 
-msgid "Password for your XCTherm account."
-msgstr "Passord for XCTherm-kontoen din."
+msgid "Password for your XC Therm account."
+msgstr "Passord for XC Therm-kontoen din."
 
-msgid "XCTherm region"
-msgstr "XCTherm-region"
+msgid "XC Therm region"
+msgstr "XC Therm-region"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
 msgstr ""
-"Varselregion. Endrer hvilken modell XCTherm henter data fra. Start på nytt "
+"Varselregion. Endrer hvilken modell XC Therm henter data fra. Start på nytt "
 "eller last ned igjen etter endring."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm auto lager/tid"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm auto lager/tid"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10201,8 +10201,8 @@ msgstr "Inget lager valt."
 msgid "Network is not available."
 msgstr "Nettverket er ikke tilgjengeligt."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Varselindexet har ingen XCTherm-parametrar."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Varselindexet har ingen XC Therm-parametrar."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10324,12 +10324,12 @@ msgid "HTTP support"
 msgstr "HTTP-støtte"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "Laster ned XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "Laster ned XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "Laster ned XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "Laster ned XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr "Aktiver live tracking via SkyLines-servern (tracking.skylines.aero)."
