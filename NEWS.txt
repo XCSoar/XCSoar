@@ -22,6 +22,9 @@ Version 7.46 - not yet released
 * glide computer
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
+* devices
+  - fix the map ground track line following heading instead of ground
+    track with Condor 3 UDP in a crosswind #2900
 * dialogs
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
