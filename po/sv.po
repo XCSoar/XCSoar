@@ -9896,19 +9896,19 @@ msgid "United Kingdom. ICON-UK model."
 msgstr "Storbritannien. ICON-UK-modell."
 
 msgid "XC Therm email"
-msgstr "XC Therm-e-post"
+msgstr "XC Therm e-post"
 
 msgid "Email address for your XC Therm account."
-msgstr "E-postadress för ditt XC Therm-konto."
+msgstr "E-postadress för ditt konto hos XC Therm."
 
 msgid "XC Therm password"
-msgstr "XC Therm-lösenord"
+msgstr "XC Therm lösenord"
 
 msgid "Password for your XC Therm account."
-msgstr "Lösenord för ditt XC Therm-konto."
+msgstr "Lösenord för ditt konto hos XC Therm."
 
 msgid "XC Therm region"
-msgstr "XC Therm-region"
+msgstr "XC Therm region"
 
 msgid ""
 "Forecast region. Changes which model XC Therm fetches data from. Restart or "
@@ -10208,7 +10208,7 @@ msgid "Network is not available."
 msgstr "Nätverket är inte tillgängligt."
 
 msgid "Forecast index has no XC Therm parameters."
-msgstr "Prognosindexet har inga XC Therm-parametrar."
+msgstr "Prognosindexet har inga parametrar för XC Therm."
 
 msgid ""
 "Forecast download failed.\n"

@@ -9938,7 +9938,7 @@ msgid "XC Therm password"
 msgstr "XC Therm salasana"
 
 msgid "Password for your XC Therm account."
-msgstr "XC Therm-tilisi salasana."
+msgstr "XC Therm -tilisi salasana."
 
 msgid "XC Therm region"
 msgstr "XC Therm regija"
