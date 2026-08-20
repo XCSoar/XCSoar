@@ -436,7 +436,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
     { PageLayout::Overlay::EDL, NC_("Abbreviation", "EDL") },
 #endif
 #ifdef HAVE_HTTP
-    { PageLayout::Overlay::XCTHERM, "XCTherm" },
+    { PageLayout::Overlay::XCTHERM, "XC Therm" },
     { PageLayout::Overlay::SKYSIGHT, "SkySight" },
 #endif
     nullptr

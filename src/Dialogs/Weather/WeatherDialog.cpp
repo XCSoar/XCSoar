@@ -152,7 +152,7 @@ ShowWeatherDialog(const char *page)
   if (page != nullptr && StringIsEqual(page, "xctherm"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreateXCThermTabWidget(), "XCTherm");
+  widget.AddTab(CreateXCThermTabWidget(), "XC Therm");
 #endif
 
   if (page != nullptr && StringIsEqual(page, "rasp"))

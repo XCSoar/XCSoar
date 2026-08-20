@@ -44,7 +44,7 @@ XCThermGeoJSONOverlay::SetForecast(
 {
   const std::lock_guard lock{mutex};
   forecast = std::move(_forecast);
-  label = _label != nullptr ? _label : "XCTherm";
+  label = _label != nullptr ? _label : "XC Therm";
   parameter = _parameter != nullptr ? _parameter : "";
   forecast_utc = _forecast_utc;
 }
@@ -163,7 +163,7 @@ XCThermGeoJSONOverlay::FormatPointInfo(const GeoPoint &p, char *buffer,
 const char *
 XCThermGeoJSONOverlay::GetLabel() const noexcept
 {
-  return "XCTherm";
+  return "XC Therm";
 }
 
 bool

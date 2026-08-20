@@ -453,7 +453,7 @@ XCThermWidget::StartDownload() noexcept
 
   const auto &region = XCTherm::GetRegion(settings.model);
   if (selected_layer >= region.layer_count) {
-    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
+    ShowMessageBox(_("No layer selected."), "XC Therm", MB_OK);
     return;
   }
 
@@ -467,7 +467,7 @@ XCThermWidget::StartDownload() noexcept
     });
   if (active_job == nullptr) {
     if (GetXCThermDownloadGlue() == nullptr || Net::curl == nullptr)
-      ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
+      ShowMessageBox(_("Network is not available."), "XC Therm", MB_OK);
     return;
   }
 
@@ -539,13 +539,13 @@ XCThermWidget::FinishDownload() noexcept
     UpdateStatusControl();
     if (!canceled) {
       if (job->index_no_parameters.load()) {
-        ShowMessageBox(_("Forecast index has no XCTherm parameters."),
-                       "XCTherm", MB_OK);
+        ShowMessageBox(_("Forecast index has no XC Therm parameters."),
+                       "XC Therm", MB_OK);
       } else if (job->error_eptr) {
-        ShowError(job->error_eptr, "XCTherm");
+        ShowError(job->error_eptr, "XC Therm");
       } else {
         ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
-                       "XCTherm", MB_OK);
+                       "XC Therm", MB_OK);
       }
     }
     return;
@@ -608,13 +608,13 @@ XCThermWidget::FinishDownload() noexcept
     PageActions::Update();
 
   if (job->error_eptr && !canceled) {
-    ShowError(job->error_eptr, "XCTherm");
+    ShowError(job->error_eptr, "XC Therm");
   } else if (any_miss && !canceled) {
     StaticString<128> msg;
     msg.Format(_("Got %u of %u hourly slices (%u newly downloaded).\n"
                  "Some slots were unavailable."),
                ok, span, nu);
-    ShowMessageBox(msg, "XCTherm", MB_OK);
+    ShowMessageBox(msg, "XC Therm", MB_OK);
   }
 }
 
@@ -629,7 +629,7 @@ XCThermWidget::DeleteClicked() noexcept
   const auto &region = XCTherm::GetRegion(settings.model);
 
   if (selected_layer >= region.layer_count) {
-    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
+    ShowMessageBox(_("No layer selected."), "XC Therm", MB_OK);
     return;
   }
 
@@ -756,7 +756,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   time_help.Format(_("Forecast time for the current map page %s overlay. "
                      "Opens the same picker as the weather controls "
                      "(Auto, Now, or a UTC hour)."),
-                   "XCTherm");
+                   "XC Therm");
   auto *time = AddEnum(C_("Weather control", "Time"), time_help.c_str());
   time->SetEditCallback(EditTimeCallback);
 

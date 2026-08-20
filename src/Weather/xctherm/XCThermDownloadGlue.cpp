@@ -65,7 +65,7 @@ XCThermDownloadGlue::Start(
   completion_error = {};
 
   StaticString<128> text;
-  text.Format(_("Downloading XCTherm %s..."),
+  text.Format(_("Downloading XC Therm %s..."),
               gettext(job->target_label.c_str()));
   BackgroundDownloadProgress::Get().Begin(text.c_str());
   BackgroundDownloadProgress::Get().SetProgressRange(100);

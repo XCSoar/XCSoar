@@ -45,9 +45,9 @@ XcthermControlsModel::FormatPrimaryLabel(StaticString<64> &text) const noexcept
     backend.FormatTimeLabel(text);
   });
   if (text.empty())
-    text = "XCTherm";
+    text = "XC Therm";
 #else
-  text = "XCTherm";
+  text = "XC Therm";
 #endif
 }
 

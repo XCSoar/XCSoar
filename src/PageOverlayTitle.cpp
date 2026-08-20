@@ -68,7 +68,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::XCTHERM:
-    builder.Append(", XCTherm");
+    builder.Append(", XC Therm");
 #ifdef HAVE_HTTP
     {
       builder.Append(' ');
