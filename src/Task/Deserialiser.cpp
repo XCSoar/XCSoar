@@ -252,6 +252,8 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
                     data.start_constraints.require_arm);
   node.GetAttribute("start_score_exit",
                     data.start_constraints.score_exit);
+  node.GetAttribute("pev_start_enabled",
+                    data.start_constraints.pev_start_enabled);
   node.GetAttribute("start_max_speed", data.start_constraints.max_speed);
   node.GetAttribute("start_max_height", data.start_constraints.max_height);
   GetHeightRef(node, "start_max_height_ref",
@@ -270,6 +272,15 @@ Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
                     data.start_constraints.pev_start_wait_time);
   node.GetAttribute("pev_start_window",
                     data.start_constraints.pev_start_window);
+  unsigned start_mode = (unsigned)StartMode::NORMAL;
+  if (node.GetAttribute("start_mode", start_mode))
+    data.start_constraints.start_mode = (StartMode)start_mode;
+  else if (data.finish_constraints.fai_finish)
+    data.start_constraints.start_mode = StartMode::FAI_START_FINISH;
+  else if (data.start_constraints.pev_start_enabled)
+    data.start_constraints.start_mode = StartMode::PEV;
+  else
+    data.start_constraints.start_mode = StartMode::NORMAL;
 
 }
 

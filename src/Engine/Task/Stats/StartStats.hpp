@@ -33,12 +33,12 @@ struct StartStats {
   double ground_speed;
 
   /**
-   * True when #pev_offset_seconds records start time minus PEV window
-   * start (#CommonStats::pev_start_time_span) at the crossing.
+   * True when #pev_offset_seconds records start time minus pilot-event
+   * window start (#CommonStats::pilot_event_start_time_span) at the crossing.
    */
   bool pev_offset_available;
 
-  /** Seconds from PEV window start to actual start; only if
+  /** Seconds from pilot-event window start to actual start; only if
    * #pev_offset_available. */
   int pev_offset_seconds;
 
@@ -56,7 +56,7 @@ struct StartStats {
    * Enable the #HasStarted() flag and copy data from the
    * #AircraftState.
    *
-   * @param pev_span optional PEV window snapshot; if defined with a
+   * @param pev_span optional pilot-event window snapshot; if defined with a
    * valid start, #pev_offset_seconds records start time minus that
    * start.
    */

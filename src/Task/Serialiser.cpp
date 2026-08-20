@@ -249,6 +249,10 @@ Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
                     data.start_constraints.require_arm);
   node.SetAttribute("start_score_exit",
                     data.start_constraints.score_exit);
+  node.SetAttribute("start_mode",
+                    (unsigned)data.start_constraints.start_mode);
+  node.SetAttribute("pev_start_enabled",
+                    data.start_constraints.pev_start_enabled);
   node.SetAttribute("start_max_speed", data.start_constraints.max_speed);
   node.SetAttribute("start_max_height", data.start_constraints.max_height);
   node.SetAttribute("start_max_height_ref",
