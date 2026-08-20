@@ -2,6 +2,10 @@ Version 7.46 - not yet released
 * android
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
+* iOS
+  - remove the thin white frame around full-screen dialogs (such as
+    the Fly/Simulator screen), which no longer stop one pixel short of
+    the display edge
 * input
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
@@ -319,9 +323,6 @@ Version 7.45 - 2026-08-15
   - fix crash when the app restarts after the screen is torn down
   - fix spurious outline lines on high-DPI displays #1514
 * iOS
-  - remove the thin white frame around full-screen dialogs (such as
-    the Fly/Simulator screen), which no longer stop one pixel short of
-    the display edge
   - fix audio vario playback through the device speaker
   - disable the Core Location distance filter so built-in GPS is not
     suppressed while stationary #2380
