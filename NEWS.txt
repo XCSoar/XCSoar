@@ -18,6 +18,10 @@ Version 7.46 - not yet released
     #2879
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
+  - fix no-position targets missing from the radar and map #2847
+* glide computer
+  - fix best-glide speed and speed-to-fly at altitude when MacCready
+    is set, so density scaling no longer inflates MacCready #2881
 * dialogs
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
