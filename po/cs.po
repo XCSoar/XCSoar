@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-19 22:09+0100\n"
-"PO-Revision-Date: 2024-09-09 08:09+0000\n"
+"PO-Revision-Date: 2026-08-20 17:18+0200\n"
 "Last-Translator: Miroslav Burdych <mirek.burdych@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/xcsoar/"
 "translations/cs/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Poedit 3.9\n"
 "X-Launchpad-Export-Date: 2017-03-03 11:48+0000\n"
 
 #. #-#-#-#-#  cpp.pot (xcsoar)  #-#-#-#-#
@@ -145,12 +145,12 @@ msgid ""
 "A 90-degree sector with 'infinite' length sides. Cross any edge, scored from "
 "corner point."
 msgstr ""
-"90° výseč s \"nekonečnými\" rameny. Protni kteroukoliv hranu, boduje se "
-"rohový bod."
+"90° výseč s \"nekonečnými\" rameny. Protni kteroukoliv hranu, boduje se z "
+"rohového bodu."
 
 #, no-c-format
 msgid "A keyhole. Scored from center."
-msgstr "Kruh+výseč, bodováno ze středu."
+msgstr "Kruh+výseč, boduje se ze středu."
 
 #, no-c-format
 msgid ""
@@ -158,7 +158,7 @@ msgid ""
 "sector. Scored from center."
 msgstr ""
 "(Německá pravidla) Libovolný bod v rámci 1/2 km od středu nebo 10km z 90° "
-"sektoru. Bodováno od středu."
+"sektoru. Boduje se ze středu."
 
 #, no-c-format
 msgid ""
@@ -166,34 +166,34 @@ msgid ""
 "sector. Scored from center."
 msgstr ""
 "(Anglická pravidla) Libovolný bod v rámci 1/2 km od středu nebo 20km z 90° "
-"sektoru. Bodováno od středu."
+"sektoru. Boduje se ze středu."
 
 #, no-c-format
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10 km of a 180-degree "
 "sector. Scored from center."
 msgstr ""
-"(Anglická pravidla) Libovolný bod v rámci 1/2 km od středu nebo 10km ze 180° "
-"sektoru. Bodováno od středu."
+"(Anglická pravidla) Libovolný bod v rámci 1/2 km od středu nebo 10km ze "
+"180° sektoru. Boduje se ze středu."
 
 #, no-c-format
 msgid "A cylinder. Any point within area scored from center."
-msgstr "Válec. Libovolný bod v oblasti bodovaný od středu."
+msgstr "Válec. Libovolný bod v oblasti, bodovaný ze středu."
 
 #, no-c-format
 msgid "A 1 mile cylinder. Scored by farthest point reached in area."
-msgstr "1-mílový válec. Bodováno podle nejzazšího dosaženého bodu v oblasti."
+msgstr "1-mílový válec. Boduje se z nejzazšího dosaženého bodu v oblasti."
 
 #, no-c-format
 msgid "A cylinder. Scored by farthest point reached in area."
-msgstr "Válec. Bodováno podle nejzazšího dosaženého bodu v oblasti."
+msgstr "Válec. Boduje se z nejzazšího dosaženého bodu v oblasti."
 
 #, no-c-format
 msgid ""
 "A sector that can vary in angle and radius. Scored by farthest point reached "
 "inside area."
 msgstr ""
-"Sektor, který může mít různý úhel a poloměr. Bodováno podle nejzazšího "
+"Sektor, který může mít různý úhel a poloměr. Boduje se z nejzazšího "
 "dosaženého bodu v oblasti."
 
 #, no-c-format
@@ -219,12 +219,12 @@ msgid ""
 "A sector that can vary in angle, inner and outer radius. Scored by farthest "
 "point reached inside area."
 msgstr ""
-"Výseč, která se může lišit v úhlech, vnitřním i vnějším poloměru. Bodováno "
-"dle nejzazšího dosaženého bodu v oblasti."
+"Výseč, která se může lišit v úhlech, vnitřním i vnějším poloměru. Boduje "
+"se z nejzazšího dosaženého bodu v oblasti."
 
 #, no-c-format
 msgid "A keyhole. Scored by farthest point reached in area."
-msgstr "Kruh+výseč, bodováno dle nejzazšího dosaženého bodu v oblasti."
+msgstr "Kruh+výseč, boduje se z nejzazšího dosaženého bodu v oblasti."
 
 #, no-c-format
 msgid "FAI start quadrant"
@@ -377,7 +377,7 @@ msgid "Error"
 msgstr "Chyba"
 
 msgid "Start Logger"
-msgstr "Zapnout logger"
+msgstr "Zapni logger"
 
 msgid "Stop Logger"
 msgstr "Zastav logger"
@@ -405,7 +405,7 @@ msgid "Failed to download flight list."
 msgstr "Nepodařilo se stáhnout seznam letů."
 
 msgid "Download flight"
-msgstr "Stáhnout let"
+msgstr "Stáhni let"
 
 msgid "Logger is empty."
 msgstr "Logger je prázdný."
@@ -544,7 +544,7 @@ msgid "Stop"
 msgstr "Zastav"
 
 msgid "Start"
-msgstr "Start"
+msgstr "Spusť"
 
 #, no-c-format
 msgid "Long"
@@ -643,10 +643,10 @@ msgid "Circling zoom off"
 msgstr "Zvětšení v kroužení Vyp"
 
 msgid "Airspace shown"
-msgstr "Vzdusný prostor zobrazen"
+msgstr "Vzdušný prostor zobrazen"
 
 msgid "Airspace hidden"
-msgstr "Vzdusný prostor skryt"
+msgstr "Vzdušný prostor skryt"
 
 msgid "Show airspace off"
 msgstr "Zobrazení prostorů Vyp"
@@ -673,7 +673,7 @@ msgid "Hold turn"
 msgstr "Pozdrž obrat"
 
 msgid "Armed start activated"
-msgstr "Aktivován start s vlekem"
+msgstr "Aktivován start"
 
 msgid "Auto. MacCready on"
 msgstr "Auto MacCready Zap"
@@ -682,25 +682,25 @@ msgid "Auto. MacCready off"
 msgstr "Auto MacCready Vyp"
 
 msgid "Go to target"
-msgstr "Leť k cíli"
+msgstr "GoTo cíl"
 
 msgid "Task resumed"
-msgstr "Úkol pokračuje"
+msgstr "Úloha pokračuje"
 
 msgid "No task to resume"
-msgstr "Úloha není definována."
+msgstr "Chybí úloha k pokračování"
 
 msgid "Ordered task invalid"
-msgstr "Normální úloha"
+msgstr "Zadaná úloha neplatná"
 
 msgid "Task resume failed"
-msgstr "Rychlost úlohy"
+msgstr "Pokračování v úloze selhalo"
 
 msgid "Task aborted"
 msgstr "Úloha zrušena"
 
 msgid "Ordered task"
-msgstr "Normální úloha"
+msgstr "Zadaná úloha"
 
 msgid "No task"
 msgstr "Chybí úloha"
@@ -740,13 +740,13 @@ msgid "Bugs performance"
 msgstr "Zamoušení"
 
 msgid "Ballast dump stopped"
-msgstr "Skládka balastu se zastavila"
+msgstr "Vypuštění zátěže zastaveno"
 
 msgid "Ballast dump time is 0 in plane profile"
-msgstr "Doba vypuštění zátěže je 0 v rovinném profilu"
+msgstr "Doba vypuštění zátěže je nastavena na 0 v profilu kluzáku"
 
 msgid "Ballast dump started"
-msgstr "Spouštění balastu začalo"
+msgstr "Vypuštění zátěže spuštěno"
 
 #, no-c-format
 msgid "Ballast %"
@@ -884,7 +884,15 @@ msgstr "H dostup čistá"
 
 #, no-c-format
 msgid "Height of the top of the mixing layer, which for thermal convection is the average top of a dry thermal. Over flat terrain, maximum thermalling heights will be lower due to the glider descent rate and other factors. In the presence of clouds (which release additional buoyancy aloft, creating \"cloudsuck\") the updraft top will be above this forecast, but the maximum thermalling height will then be limited by the cloud base. Further, when the mixing results from shear turbulence rather than thermal mixing this parameter is not useful for glider flying."
-msgstr "Výška vrcholu promíchávací vrstvy, která pro termickou konvekci tvoří průměrný strop dostupu stoupavých proudů v čisté termice. Nad plochým terénem bude výška dostupů nižší vlivem opadání kluzáku a dalším faktorům. Pokud se vyskytnou mraky (které podporují vzestupný proud vytvořením efektu \"sání mrakem\"), vrchol dostupu bude výše než tato předpověď, ale maximální dostup bude limitován základnou mraku. Dále, pokud je promíchávání následek turbulence střihu větru spíše než termického promíchávání, tento parametr není vhodný pro termické létání. "
+msgstr ""
+"Výška vrcholu promíchávací vrstvy, která pro termickou konvekci tvoří "
+"průměrný strop dostupu stoupavých proudů v čisté termice. Nad plochým "
+"terénem bude výška dostupů nižší vlivem opadání kluzáku a dalším faktorům. "
+"Pokud se vyskytnou mraky (které podporují vzestupný proud vytvořením "
+"efektu \"sání mrakem\"), vrchol dostupu bude výše než tato předpověď, ale "
+"maximální dostup bude limitován základnou mraku. Dále, pokud je "
+"promíchávání následek turbulence střihu větru spíše než termického "
+"promíchávání, tento parametr není vhodný pro termické létání."
 
 #, no-c-format
 msgid "dwcrit"
@@ -1007,7 +1015,7 @@ msgstr "FLARM zprávy"
 
 #, no-c-format
 msgid "FLARMnet"
-msgstr "FLARM"
+msgstr "FLARMnet"
 
 msgid ""
 "Polar has invalid coefficients.\n"
@@ -1024,7 +1032,7 @@ msgid "Battery low"
 msgstr "Nízký stav baterie"
 
 msgid "Polar received from device"
-msgstr "Sync. ze zařízení"
+msgstr "Polára ze zařízení přijata"
 
 #, c++-format
 msgid "Plane profile matched: {}"
@@ -1134,7 +1142,7 @@ msgstr "Stránky"
 
 #, no-c-format
 msgid "WeGlide"
-msgstr "Kluzák"
+msgstr "WeGlide"
 
 #, no-c-format
 msgid "Weather"
@@ -1183,7 +1191,7 @@ msgid "Update"
 msgstr "Aktualizuj"
 
 msgid "Update all"
-msgstr "Aktualizuj"
+msgstr "Aktualizuj vše"
 
 msgid "Queued"
 msgstr "Ve frontě"
@@ -1257,7 +1265,7 @@ msgid "I²C bus"
 msgstr "I²C sběrnice"
 
 msgid "Select the description or bus number that matches your configuration."
-msgstr "Vyberte popis nebo číslo sběrnice, které odpovídá vaší konfiguraci."
+msgstr "Vyber popis nebo číslo sběrnice, které odpovídá konfiguraci."
 
 msgid "I²C addr"
 msgstr "I²C adresa"
@@ -1297,7 +1305,7 @@ msgid "Tells XCSoar to send settings like the MacCready value, bugs and ballast 
 msgstr "Určuje, zda má XCSoar odesílat nastavení MacCready, zamoušení a vodní zátěže do externího zařízení."
 
 msgid "Polar sync"
-msgstr "Polára V"
+msgstr "Sync poláry"
 
 msgid "Whether you use a K6Bt to connect the device."
 msgstr "Povolte tuto volbu, pokud používáte K6Bt pro připojení zařízení."
@@ -1332,7 +1340,7 @@ msgid "%s on %s"
 msgstr "%s v %s"
 
 msgid "GPS fix"
-msgstr "Oprava GPS"
+msgstr "GPS fix"
 
 #. device sends GPGGA, but no valid location
 msgid "Bad GPS"
@@ -1437,7 +1445,7 @@ msgid "Hardware type"
 msgstr "Verze hardware"
 
 msgid "Flarm ID"
-msgstr "FLARM partner"
+msgstr "FLARM ID"
 
 msgid "Hardware version"
 msgstr "Verze hardware"
@@ -1449,22 +1457,22 @@ msgid "Obstacle database"
 msgstr "Databáze překážek"
 
 msgid "Flight state"
-msgstr "Čas letu"
+msgstr "Stav letu"
 
 msgid "In flight"
-msgstr "Za letu"
+msgstr "V letu"
 
 msgid "On ground"
-msgstr "Rychlost vůči zemi"
+msgstr "Na zemi"
 
 msgid "Recording"
-msgstr "Interval záznamu"
+msgstr "Záznam"
 
 msgid "Baro only"
-msgstr "Pouze start"
+msgstr "Pouze baro"
 
 msgid "IGC recorder"
-msgstr "Letový záznamník"
+msgstr "IGC záznamník"
 
 msgid "Simulation"
 msgstr "Simulátor"
@@ -1482,13 +1490,13 @@ msgid "Fixed obstacle from database, all alarm levels. 30s."
 msgstr "Pevná překážka z databáze, všechny úrovně alarmu. 30 s."
 
 msgid "Alert Zone fly-through (e.g. active skydiving area). 30s."
-msgstr "Průlet výstražnou zónou (např. aktivní para oblast). 30 s."
+msgstr "Průlet výstražnou zónou (např. aktivní oblast paraseskoků). 30 s."
 
 msgid "Multiple traffic types and an alert zone, no warnings. 30s."
 msgstr "Více typů provozu a výstražná zóna, bez varování. 30 s."
 
 msgid "Simulation scenario"
-msgstr "Simulátor"
+msgstr "Simulační scénář"
 
 #, no-c-format
 msgid "Volume"
@@ -1502,10 +1510,10 @@ msgid "Save"
 msgstr "Ulož"
 
 msgid "Horizontal Range"
-msgstr "Horizontální dolet"
+msgstr "Horizontální vzdál."
 
 msgid "Vertical Range"
-msgstr "Vzdálenost k týmu"
+msgstr "Vertikální vzdál."
 
 msgid "Changes to configuration saved. Restart XCSoar to apply changes."
 msgstr ""
@@ -1543,7 +1551,7 @@ msgid "Alt offset QNH"
 msgstr "Výškový offset QNH"
 
 msgid "Alt take off"
-msgstr "Vzdálenost ke vzletu"
+msgstr "Výška vzletu"
 
 msgid "Auto off"
 msgstr "Auto Vyp"
@@ -1555,7 +1563,7 @@ msgid "Always run"
 msgstr "Vždy běží"
 
 msgid "Enable NMEA"
-msgstr "Zapnout NMEA"
+msgstr "Zapni NMEA"
 
 msgid "Recording interval"
 msgstr "Interval záznamu"
@@ -1652,16 +1660,16 @@ msgid "Switches"
 msgstr "Přepínače"
 
 msgid "Baud rate port 1"
-msgstr "Rychlost připojení"
+msgstr "Baud rate port 1"
 
 msgid "Baud rate port 2"
-msgstr "Rychlost připojení"
+msgstr "Baud rate port 2"
 
 msgid "Threshold"
 msgstr "Práh"
 
 msgid "Select a speed threshold."
-msgstr "Reproduktor práh"
+msgstr "Vyber prahovou rychlost."
 
 #, no-c-format
 msgid "Glider"
@@ -1727,7 +1735,7 @@ msgid "Logger interval"
 msgstr "Interval záznamu"
 
 msgid "Stealth mode"
-msgstr "Tajný mód"
+msgstr "Tichý mód"
 
 msgid "No tracking mode"
 msgstr "Bez sledování"
@@ -1742,13 +1750,13 @@ msgid "PCAS range"
 msgstr "Dosah PCAS"
 
 msgid "PCAS vertical range"
-msgstr "Výšková oblast PCAS"
+msgstr "Výškový rozsah PCAS"
 
 msgid "ADSB range"
 msgstr "Dosah ADSB"
 
 msgid "ADSB vertical range"
-msgstr "Výšková oblast ADSB"
+msgstr "Výškový rozsah ADSB"
 
 msgid "Ack Day"
 msgstr "Deaktivuj"
@@ -1799,16 +1807,16 @@ msgid "Select Pattern"
 msgstr "Vyber vzor"
 
 msgid "Squawk code"
-msgstr "Zadej kód"
+msgstr "Squawk kód"
 
 msgid "Set Squawk Code"
-msgstr "Nastavit kód"
+msgstr "Nastav Squawk kód"
 
 msgid "Radio"
 msgstr "Rádio"
 
 msgid "Station"
-msgstr "Otáčky"
+msgstr "Stanice"
 
 msgid "Set Active Frequency"
 msgstr "Na aktivní frekvenci"
@@ -1929,17 +1937,17 @@ msgid "External"
 msgstr "Externí"
 
 msgid "Wind Settings"
-msgstr "Výpočet větru"
+msgstr "Nastavení větru"
 
 msgid "Dump"
-msgstr "Vypuštění balastu"
+msgstr "Vypuštění zátěže"
 
 msgid ""
 "Ballast dump time is 0 in plane profile.\n"
 "Open Plane configuration now?"
 msgstr ""
-"Doba vypuštění zátěže je 0 v rovinném profilu.\n"
-"Otevřít konfiguraci roviny nyní?"
+"Doba vypuštění zátěže je nastavena na 0 v profilu kluzáku.\nOtevřít "
+"konfiguraci kluzáku?"
 
 msgid "Flight Setup"
 msgstr "Nastav let"
@@ -1957,7 +1965,9 @@ msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ba
 msgstr "Zátěž kluzáku. Stiskněte tlačítko Vypusť/Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže, rychlostí zadanou v nastavení letadla."
 
 msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Aktuální plošné zatížení, vypočtené z prázdné hmotnosti kluzáku, hmotnosti posádky a balastu."
+msgstr ""
+"Aktuální plošné zatížení, vypočtené z prázdné hmotnosti kluzáku, hmotnosti "
+"posádky a vodní zátěže."
 
 msgid "Bugs"
 msgstr "Zamoušení"
@@ -2067,16 +2077,16 @@ msgid "Content"
 msgstr "Obsah"
 
 msgid "Copy Set"
-msgstr "Kopírovat sadu"
+msgstr "Kopíruj sadu"
 
 msgid "Paste Set"
-msgstr "Vlož"
+msgstr "Vlož sadu"
 
 msgid "Overwrite all InfoBoxes in this set?"
 msgstr "Změnit všechny InfoBoxy v tomto souboru?"
 
 msgid "InfoBox paste set"
-msgstr "InfoBox vložit"
+msgstr "Vlož InfoBox sadu"
 
 msgid "Invalid"
 msgstr "Neplatný"
@@ -2095,7 +2105,7 @@ msgid "Team"
 msgstr "Partner"
 
 msgid "Callsign"
-msgstr "Volací značka"
+msgstr "Volací znak"
 
 msgid "Change callsign"
 msgstr "Změň volací znak"
@@ -2166,8 +2176,7 @@ msgstr "Kód týmu"
 
 msgid "Task Calc"
 msgstr ""
-"Stav\n"
-"Úloha"
+"Výpočty\nÚloha"
 
 msgid "Analysis"
 msgstr "Analýza"
@@ -2206,7 +2215,7 @@ msgid "Warnings"
 msgstr "Varování"
 
 msgid "Checklist"
-msgstr "Kontrolní seznam"
+msgstr "Checklist"
 
 #, no-c-format
 msgid "Getting Started"
@@ -2216,16 +2225,16 @@ msgid "Download the example checklist or create your own:"
 msgstr "Stáhněte si ukázkový checklist nebo si vytvořte vlastní:"
 
 msgid "Download Example"
-msgstr "Stáhnout příklad"
+msgstr "Stáhni příklad"
 
 msgid "View Documentation"
-msgstr "Zobrazit dokumentaci"
+msgstr "Zobraz dokumentaci"
 
 msgid "Then select it in"
 msgstr "Poté jej vyberte v"
 
 msgid "Site Files > Checklist"
-msgstr "Soubory"
+msgstr "Soubory >Checklist"
 
 msgid "Features"
 msgstr "Funkce"
@@ -2235,7 +2244,7 @@ msgstr "Interaktivní zaškrtávací políčka"
 
 #, no-c-format
 msgid "**Bold** and # Headings"
-msgstr "**Tučné** a nadpisy #"
+msgstr "**Tučné** a # Nadpisy"
 
 msgid "Clickable links"
 msgstr "Klikatelné odkazy"
@@ -2247,7 +2256,7 @@ msgid "Maps: geo:47.5,8.5"
 msgstr "Mapy: geo:47.5,8.5"
 
 msgid "No checklist loaded"
-msgstr "Žádný kontrolní seznam nenahrán"
+msgstr "Žádný checklist nenahrán"
 
 msgid "New"
 msgstr "Nový"
@@ -2265,7 +2274,7 @@ msgid "File exists already."
 msgstr "Soubor už existuje."
 
 msgid "Failed to load file."
-msgstr "Chyba nahraní souboru."
+msgstr "Chyba nahrání souboru."
 
 #, c-format
 msgid "Delete \"%s\"?"
@@ -2306,7 +2315,7 @@ msgid "Activate plane \"%s\"?"
 msgstr "Aktivovat letadlo \"%s\"?"
 
 msgid "Planes"
-msgstr "Letadla"
+msgstr "Letadlo"
 
 msgid "Plane Details"
 msgstr "Detail letadla"
@@ -2356,7 +2365,7 @@ msgstr "Nahraj poláru"
 
 #. let the user select
 msgid "Load Polar From File"
-msgstr "Nahrát poláru ze souboru"
+msgstr "Nahraj poláru ze souboru"
 
 msgid "Plane Polar"
 msgstr "Polára kluzáku"
@@ -2365,7 +2374,7 @@ msgid "Download"
 msgstr "Stáhni"
 
 msgid "Switch InfoBox"
-msgstr "InfoBox"
+msgstr "Změň InfoBox"
 
 msgid "File"
 msgstr "Soubor"
@@ -2374,8 +2383,8 @@ msgid ""
 "Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file "
 "(.nmea). Leave blank to run the demo."
 msgstr ""
-"Název souboru k přehrání. Může být IGC soubor (.igc), raw NMEA log soubor "
-"(.nmea), nebo pokud necháte prázdné, spustí demo."
+"Název souboru k přehrání. Může být IGC soubor (.igc), nebo raw NMEA log "
+"soubor (.nmea). Pro spuštěni dema ponechte prázdné."
 
 msgid "Rate"
 msgstr "Tempo"
@@ -2384,7 +2393,7 @@ msgid ""
 "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time "
 "replay."
 msgstr ""
-"Zrychlení přehrávání. nastav 0 pro pauzu, 1 pro normální přehrání v reálném "
+"Rychlost přehrávání. Nastavte 0 pro zastavení, 1 pro přehrání v reálném "
 "čase."
 
 msgid "Replay"
@@ -2406,13 +2415,13 @@ msgid "Enter your password"
 msgstr "Zadejte své heslo"
 
 msgid "Wrong password."
-msgstr "Nesprávné heslo"
+msgstr "Nesprávné heslo."
 
 msgid "Enter a new password"
 msgstr "Zadejte nové heslo"
 
 msgid "Status"
-msgstr "Stav"
+msgstr "Status"
 
 msgid "Flight"
 msgstr "Let"
@@ -2455,7 +2464,7 @@ msgid "3D fix"
 msgstr "3D fix"
 
 msgid "Roaming"
-msgstr "Volný let"
+msgstr "Roaming"
 
 msgid "GPS lock"
 msgstr "GPS signál"
@@ -2477,7 +2486,7 @@ msgid "Assigned task time"
 msgstr "Přidělený čas úlohy"
 
 msgid "Estimated task time"
-msgstr "Očekávaná doba úlohy"
+msgstr "Odhad doby úlohy"
 
 msgid "Remaining time"
 msgstr "Zbývající čas"
@@ -2582,7 +2591,7 @@ msgid "Flight time"
 msgstr "Čas letu"
 
 msgid "Takeoff time"
-msgstr "Čas startu"
+msgstr "Čas vzletu"
 
 msgid "Landing time"
 msgstr "Čas přistání"
@@ -2626,25 +2635,25 @@ msgid "No active task point."
 msgstr "Bod úlohy není definován."
 
 msgid "Replace in task"
-msgstr "Nahradit v úloze"
+msgstr "Nahraď v úloze"
 
 msgid "Task would not be valid after the change."
 msgstr "Úloha nebude po změně validní."
 
 msgid "Created Goto Task."
-msgstr "Vytvořena jednobodová úloha (GoTo)."
+msgstr "Vytvořena GoTo úloha."
 
 msgid "Success"
 msgstr "Úspěch"
 
 msgid "Created 2-point task from Goto Task."
-msgstr "Z jednobodové úlohy(GoTo) vytvořena dvoubodá."
+msgstr "Z jednobodové (GoTo) úlohy vytvořena 2-bodová."
 
 msgid "Waypoint not in task."
 msgstr "Bod není v úloze."
 
 msgid "Remove from task"
-msgstr "Odstranit z úlohy"
+msgstr "Odstraň z úlohy"
 
 msgid "Replace in Task"
 msgstr "Nahraď v úloze"
@@ -2691,7 +2700,7 @@ msgstr "Otočný bod"
 
 #, no-c-format
 msgid "Landable"
-msgstr "Přistávací"
+msgstr "Přistávací plocha"
 
 #, no-c-format
 msgid "Mountain Pass"
@@ -2763,17 +2772,17 @@ msgstr "Komentář"
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
-msgstr "Editor otočných bodů ještě neumí souřadnice v UTM formátu."
+msgstr "Editor otočných bodů neumí zpracovat souřadnice v UTM formátu."
 
 msgid "Choose a filter or click here"
-msgstr "Vyberte filtr nebo klikněte zde"
+msgstr "Vyber filtr nebo klikni zde"
 
 msgid "Select Waypoint"
 msgstr "Vyber otočný bod"
 
 #, no-c-format
 msgid "All on"
-msgstr "Vše zap"
+msgstr "Vše ZAP"
 
 #, no-c-format
 msgid "All airspaces are displayed."
@@ -2944,15 +2953,15 @@ msgstr "Prostory budou vyplněny transparentně."
 
 #, no-c-format
 msgid "Disable final glide bar."
-msgstr "Deaktivovat dokluzový indikátor."
+msgstr "Deaktivuje zobrazení dokluzového indikátoru."
 
 #, no-c-format
 msgid "Always show final glide bar."
-msgstr "Vždy zobrazit dokluzový indikátor."
+msgstr "Vždy zobrazí dokluzový indikátor."
 
 #, no-c-format
 msgid "Show final glide bar if approaching final glide range."
-msgstr "Zobrazit dokluzový indikátor při přiblížení k hranici dokluzu."
+msgstr "Zobrazí dokluzový indikátor při přiblížení k hranici dokluzu."
 
 #, no-c-format
 msgid "Auto (follow InfoBoxes)"
@@ -2960,7 +2969,7 @@ msgstr "Auto (u InfoBoxů)"
 
 #, no-c-format
 msgid "Top left"
-msgstr "Nahoře vlevo"
+msgstr "Vlevo nahoře"
 
 #, no-c-format
 msgid "Top right"
@@ -2976,19 +2985,19 @@ msgstr "Vpravo dole"
 
 #, no-c-format
 msgid "Center top"
-msgstr "Nahoře ve středu"
+msgstr "Střed nahoře"
 
 #, no-c-format
 msgid "Center bottom"
-msgstr "Ve středu dole"
+msgstr "Střed dole"
 
 #, no-c-format
 msgid "Top left (avoid InfoBoxes)"
-msgstr "Vlevo dole (mimo InfoBoxy)"
+msgstr "Vlevo nahoře (mimo InfoBoxy)"
 
 #, no-c-format
 msgid "Top right (avoid InfoBoxes)"
-msgstr "Vpravo dole (mimo InfoBoxy)"
+msgstr "Vpravo nahoře (mimo InfoBoxy)"
 
 #, no-c-format
 msgid "Bottom left (avoid InfoBoxes)"
@@ -3000,69 +3009,63 @@ msgstr "Vpravo dole (mimo InfoBoxy)"
 
 #, no-c-format
 msgid "Center top (avoid InfoBoxes)"
-msgstr "Vlevo dole (mimo InfoBoxy)"
+msgstr "Střed nahoře (mimo InfoBoxy)"
 
 #, no-c-format
 msgid "Center bottom (avoid InfoBoxes)"
-msgstr "Vlevo dole (mimo InfoBoxy)"
+msgstr "Střed dole (mimo InfoBoxy)"
 
 #, no-c-format
 msgid "Disable thermal assistant."
-msgstr "Deaktivovat termického asistenta."
+msgstr "Deaktivuje zobrazení termického asistenta."
 
 #, no-c-format
 msgid "Show thermal assistant in bottom left."
-msgstr "Zobrazit termického asistenta vlevo dole."
+msgstr "Zobrazí termického asistenta vlevo dole."
 
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom left, above or to the right of InfoBoxes "
 "(if present)."
 msgstr ""
-"Zobrazit termického asistenta vlevo dole, nad, nebo vpravo od InfoBoxů "
+"Zobrazí termického asistenta vlevo dole, nad, nebo vpravo od InfoBoxů "
 "(pokud jsou zobrazeny)."
 
 #, no-c-format
 msgid "Show thermal assistant in bottom right."
-msgstr "Zobrazit termického asistenta vpravo dole."
+msgstr "Zobrazí termického asistenta vpravo dole."
 
 #, no-c-format
 msgid ""
 "Show thermal assistant in bottom right, above or to the left of InfoBoxes "
 "(if present)."
 msgstr ""
-"Zobrazit termického asistenta vpravo dole, nad, nebo vlevo od InfoBoxů "
+"Zobrazí termického asistenta vpravo dole, nad, nebo vlevo od InfoBoxů "
 "(pokud jsou zobrazeny)."
 
 #, no-c-format
 msgid "Show thermal assistant in top left."
-msgstr "Zobrazit termického asistenta vlevo dole."
+msgstr "Zobrazí termického asistenta vlevo nahoře."
 
 #, no-c-format
 msgid "Show thermal assistant in top right."
-msgstr "Zobrazit termického asistenta vpravo dole."
+msgstr "Zobrazí termického asistenta vpravo nahoře."
 
 #, no-c-format
 msgid "Show thermal assistant in center top."
-msgstr "Zobrazit termického asistenta vlevo dole."
+msgstr "Zobrazí termického asistenta ve středu nahoře."
 
 #, no-c-format
 msgid "Show thermal assistant in top left (avoid InfoBoxes)."
-msgstr ""
-"Zobrazit termického asistenta vlevo dole, nad, nebo vpravo od InfoBoxů "
-"(pokud jsou zobrazeny)."
+msgstr "Zobrazí termického asistenta vlevo nahoře (mimo InfoBoxy)."
 
 #, no-c-format
 msgid "Show thermal assistant in top right (avoid InfoBoxes)."
-msgstr ""
-"Zobrazit termického asistenta vpravo dole, nad, nebo vlevo od InfoBoxů "
-"(pokud jsou zobrazeny)."
+msgstr "Zobrazí termického asistenta vpravo nahoře (mimo InfoBoxy)."
 
 #, no-c-format
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
-msgstr ""
-"Zobrazit termického asistenta vlevo dole, nad, nebo vpravo od InfoBoxů "
-"(pokud jsou zobrazeny)."
+msgstr "Zobrazí termického asistenta ve středu nahoře (mimo InfoBoxy)."
 
 msgid ""
 "This enables the display of the FLARM radar gauge. The track bearing of the "
@@ -3071,32 +3074,32 @@ msgid ""
 "of the target relative to you. In all modes, the color of the target "
 "indicates the threat level."
 msgstr ""
-"Zapne zobrazení FLARM radaru. Směr letu cíle, relativní k vlastnímu letadlu "
-"je zobrazen šipkou, trojúhelník směřující nahoru nebo dolů ukazuje relativní "
-"výšku. Ve všech režimech barva cíle indikuje míru hrozby."
+"Zapne zobrazení FLARM radaru. Trasa letu cíle, relativní k vlastnímu "
+"letadlu je zobrazen šipkou, trojúhelník směřující nahoru nebo dolů ukazuje "
+"relativní výšku. Ve všech režimech barva cíle indikuje míru hrozby."
 
 msgid "Auto close FLARM"
-msgstr "Skrývat FLARM"
+msgstr "Skrýt FLARM auto"
 
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
-"Zapnutím této volby se FLARM obrazovka automaticky zavře, pokud není v okolí "
-"žádný provoz. Vypnutím zůstane FLARM obrazovka aktivní i pokud nic "
-"nedetekuje."
+"Zapnutím této volby se FLARM obrazovka automaticky zavře, pokud není v "
+"okolí žádný provoz. Vypnutím volby zůstane FLARM obrazovka aktivní, "
+"přestože není žádný provoz detekován."
 
 msgid "FLARM display"
 msgstr "FLARM zobrazení"
 
 msgid "Choose a location for the FLARM display."
-msgstr "Vyberte umístění pro zobrazení FLARMu."
+msgstr "Vybírá umístění zobrazení FLARM radaru."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
 "the main screen."
 msgstr ""
-"Aktivace a výběr umístění termického adistenta, zobrazeného jako překryv "
+"Aktivuje a vybírá umístění termického asistenta, zobrazeného jako překryv "
 "hlavní obrazovky."
 
 msgid ""
@@ -3128,17 +3131,17 @@ msgid "Vario bar"
 msgstr "Indikátor vária"
 
 msgid "If set to \"On\" the vario bar will be shown."
-msgstr "Při zapnutí bude zobrazen indikátor vária"
+msgstr "Při zapnutí bude zobrazen indikátor vária."
 
 msgid "No position target"
-msgstr "Leť k cíli"
+msgstr "Bezpoziční cíl"
 
 msgid ""
 "This parameter enables or disables the No Position Target Distance Ring in "
 "Flarm Radar"
 msgstr ""
-"Tento parametr povoluje nebo zakazuje zobrazení polohového cílového okruhu v "
-"Flarm Radar"
+"Tento parametr povoluje nebo zakazuje zobrazení bezpozičního cíle na Flarm "
+"Radar obrazovce."
 
 msgid "Speed arrows"
 msgstr "Rychlostní šipky"
@@ -3170,7 +3173,7 @@ msgid "Show bugs"
 msgstr "Zamoušení"
 
 msgid "Whether to show the bugs percentage."
-msgstr "Určuje, zda zobrazit zamoušení křídel."
+msgstr "Určuje, zda zobrazit procento zamoušení křídel."
 
 msgid "Show ballast"
 msgstr "Zátěž"
@@ -3213,7 +3216,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Final glide"
-msgstr "Dolét"
+msgstr "Dokluz"
 
 #, no-c-format
 msgid ""
@@ -3227,11 +3230,13 @@ msgstr ""
 
 #, no-c-format
 msgid "Trending average climb"
-msgstr "Očekávané pr. stoupání"
+msgstr "Trend pr. stoupání"
 
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
-msgstr "Nastaví MC na základě všech předchozích průměrných hodnot stoupání."
+msgstr ""
+"Nastaví MC na základě trendu průměrného stoupání všech předchozích "
+"stoupání."
 
 #, no-c-format
 msgid "Both"
@@ -3242,8 +3247,8 @@ msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
 msgstr ""
-"Nastaví očekávané průměrné stoupání v průběhu úlohy a dokluzu na "
-"nejrychlejší přílet."
+"Nastaví MC na základě trendu průměrného stoupání v průběhu úlohy a na "
+"dokluzu na nejrychlejší přílet."
 
 msgid "Auto MC mode"
 msgstr "Auto MC mód"
@@ -3381,7 +3386,9 @@ msgid "Menu timeout"
 msgstr "Timeout menu"
 
 msgid "This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer."
-msgstr "Určuje, jak dlouho budou zobrazena menu pokud uživatel neprovede žádnou akci, nebo nestiskne žádné tlačítko."
+msgstr ""
+"Určuje, jak dlouho budou zobrazena menu pokud uživatel neprovede žádnou "
+"akci."
 
 #, no-c-format
 msgid "Keyboard"
@@ -3561,7 +3568,7 @@ msgstr "Sklo"
 
 #, no-c-format
 msgid "Use the system-wide setting"
-msgstr "Použije nastavení systému"
+msgstr "Použij nastavení systému"
 
 #, no-c-format
 msgid "Black text on white background"
@@ -3577,7 +3584,7 @@ msgstr "Řídit se globálním"
 
 #, no-c-format
 msgid "Use the same light/dark mode as the overall UI."
-msgstr "Použít stejný světlý/tmavý režim jako zbytek rozhraní."
+msgstr "Použij stejný světlý/tmavý režim jako zbytek rozhraní."
 
 #, no-c-format
 msgid "Light"
@@ -3585,7 +3592,7 @@ msgstr "Světlý"
 
 #, no-c-format
 msgid "Always use dark text on a light InfoBox background."
-msgstr "Vždy používat tmavý text na světlém pozadí InfoBoxu."
+msgstr "Vždy použít tmavý text na světlém pozadí InfoBoxu."
 
 #, no-c-format
 msgid "Dark"
@@ -3593,7 +3600,7 @@ msgstr "Tmavý"
 
 #, no-c-format
 msgid "Always use light text on a dark InfoBox background."
-msgstr "Vždy používat světlý text na tmavém pozadí InfoBoxu."
+msgstr "Vždy použít světlý text na tmavém pozadí InfoBoxu."
 
 msgid "Full screen"
 msgstr "Celá obrazovka"
@@ -3624,7 +3631,7 @@ msgid "InfoBox title size"
 msgstr "InfoBox názvy"
 
 msgid "Zoom factor for InfoBox title and comment text"
-msgstr "Změna procenta titulku a komentáře InfoBoxu"
+msgstr "Změna velikosti textu názvu a komentáře InfoBoxu"
 
 msgid "Tab dialog style"
 msgstr "Styl záložek"
@@ -3655,10 +3662,10 @@ msgid "Show the Menu button"
 msgstr "Zobrazuje tlačítko Menu"
 
 msgid "Show Zoom button"
-msgstr "Tlačítko Menu"
+msgstr "Tlačítka Zoom"
 
 msgid "Show the Zoom button"
-msgstr "Zobrazuje tlačítko Menu"
+msgstr "Zobrazuje tlačítka Zoomu"
 
 msgid "Cursor zoom"
 msgstr "Zvětšení kurzoru"
@@ -3680,13 +3687,13 @@ msgid "Pilot name"
 msgstr "Jméno pilota"
 
 msgid "Name of the pilot in command, recorded in the IGC flight log."
-msgstr "Jméno velícího pilota zaznamenané v letovém záznamu IGC."
+msgstr "Jméno velícího pilota, zaznamenané v letovém záznamu IGC."
 
 msgid "CoPilot name"
 msgstr "Jméno kopilota"
 
 msgid "The co-pilot name recorded in the IGC flight log."
-msgstr "Barevné schéma odpovídá výšce."
+msgstr "Jméno druhého pilota, zaznamenané v letovém záznamu IGC."
 
 msgid "Crew weight default"
 msgstr "Výchozí váha posádky"
@@ -3723,14 +3730,14 @@ msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr ""
-"Zapnout NMEA záznam při vzletu? Pokud je tato volba vypnuta, lze NMEA záznam "
-"zapnout ručně."
+"Zapnout NMEA záznam při vzletu? Pokud je tato volba vypnuta, lze NMEA "
+"záznam stále zapnout ručně."
 
 msgid "Log book"
 msgstr "Záznamník letů"
 
 msgid "Logs each start and landing."
-msgstr "Zaznamená každý start a přistání."
+msgstr "Zaznamená každý vzlet a přistání."
 
 msgid "Logger ID"
 msgstr "Logger-ID"
@@ -3799,11 +3806,11 @@ msgstr "Trasa"
 
 #, no-c-format
 msgid "Use a recent average of the ground track as basis."
-msgstr "Použij současný průměrovaný kurz pozemní stopy jako základ."
+msgstr "Použij současný průměrovaný kurz pozemní trasy jako základ."
 
 #, no-c-format
 msgid "Target"
-msgstr "Cíl bod"
+msgstr "Cílový bod"
 
 #, no-c-format
 msgid "Use the current target waypoint as basis."
@@ -3861,7 +3868,7 @@ msgstr "Nastavuje zvětšení mapy na jednotlivých obrazovkách."
 
 #, no-c-format
 msgid "Map (north-up)"
-msgstr "Mapa (s severem nahoru)"
+msgstr "Mapa (sever nahoru)"
 
 msgid "Main area"
 msgstr "Hlavní oblast"
@@ -3953,7 +3960,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr "Výpočet akčního rádiusu je vypnutý."
+msgstr "Výpočet doletu je vypnutý."
 
 #, no-c-format
 msgid "Straight"
@@ -3961,7 +3968,7 @@ msgstr "Přímo"
 
 #, no-c-format
 msgid "The reach is from straight line paths from the glider."
-msgstr "Akční rádius v přímé linii letu kluzáku."
+msgstr "Dolet v přímé linii letu kluzáku."
 
 #, no-c-format
 msgid "Turning"
@@ -3969,19 +3976,17 @@ msgstr "Odbočky"
 
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"Akční rádius je vypočten s přihlédnutím k vyhnutí se terénním překážkám."
+msgstr "Dolet je vypočten s přihlédnutím k vyhnutí se terénním překážkám."
 
 #. Spacer
 msgid "Reach mode"
-msgstr "Výpočet akčního rádiusu"
+msgstr "Výpočet doletu"
 
 msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr ""
-"Určuje, jak jsou prováděny výpočty akčního rádiusu kluzáku s ohledem na "
-"terén."
+"Určuje, jak jsou prováděny výpočty doletu kluzáku s ohledem na terén."
 
 #, no-c-format
 msgid "Uses task glide polar."
@@ -3989,25 +3994,25 @@ msgstr "Použije poláru úlohy."
 
 #, no-c-format
 msgid "Safety MC"
-msgstr "Bezpečné MC"
+msgstr "Bezpečná MC"
 
 #, no-c-format
 msgid "Uses safety MacCready value."
-msgstr "Použije bezpečnostní MacCready hodnotu"
+msgstr "Použije bezpečnou MacCready hodnotu."
 
 msgid "Reach polar"
-msgstr "Polára pro akční rádius"
+msgstr "Polára pro dolet"
 
 msgid ""
 "This determines the glide performance used in reach, landable arrival, abort "
 "and alternate calculations."
 msgstr ""
-"Klouzavost, užívaná ve výpočtech akčního rádiusu, přerušení úlohy a "
-"alternativ."
+"Určuje klouzavost, užívanou v doletu, výšce příletu na letiště, přerušení "
+"úlohy a výpočtu záložních ploch."
 
 #, no-c-format
 msgid "Disables the reach display."
-msgstr "Akční rádius není zobrazen."
+msgstr "Dolet není zobrazen."
 
 #, no-c-format
 msgid "Terrain line"
@@ -4015,7 +4020,7 @@ msgstr "Linie terénu"
 
 #, no-c-format
 msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Zobrazí přerušovanou čáru na hranici akčního rádiusu kluzáku."
+msgstr "Zobrazí přerušovanou čáru na hranici doletu kluzáku."
 
 #, no-c-format
 msgid "Terrain shade"
@@ -4023,7 +4028,7 @@ msgstr "Stínování terénu"
 
 #, no-c-format
 msgid "Shades terrain outside glide reach."
-msgstr "Stínování terénu mimo akční rádius kluzáku."
+msgstr "Stínování terénu mimo dolet kluzáku."
 
 #, no-c-format
 msgid "Working line"
@@ -4040,7 +4045,7 @@ msgstr "Linie pracovního pásma, linie terénu"
 #, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
 msgstr ""
-"Zobrazí přerušovanou čáru na hranici pracovního pásma a akčního rádiusu "
+"Zobrazí přerušovanou čáru na hranici pracovního pásma a akčního rádia "
 "kluzáku."
 
 #, no-c-format
@@ -4054,7 +4059,7 @@ msgstr ""
 "kluzáku."
 
 msgid "Reach display"
-msgstr "Akční rádius"
+msgstr "Dolet"
 
 msgid "Arrival height"
 msgstr "Výška příletu"
@@ -4080,13 +4085,13 @@ msgid "Home"
 msgstr "Domov"
 
 msgid "Alternates mode"
-msgstr "Režim alternativ"
+msgstr "Režim zál. ploch"
 
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
-"Určuje způsob třídění alternativ v okně alternativ a v režimu přerušení "
-"úlohy."
+"Určuje způsob třídění záložních ploch v okně alternativ a v režimu "
+"přerušení úlohy."
 
 msgid "Polar degradation"
 msgstr "Degradace poláry"
@@ -4113,8 +4118,8 @@ msgid ""
 "airfields."
 msgstr ""
 "Použité nastavení MacCready, pokud je zapnuto bezpečností nastavení MC pro "
-"výpočet akčního rádiusu, v režimu přerušení úlohy a pro určení výšky příletu "
-"na letiště."
+"výpočet doletu, v režimu přerušení úlohy a pro určení výšky příletu na "
+"letiště."
 
 msgid "STF risk factor"
 msgstr "STF rizikový faktor"
@@ -4132,7 +4137,7 @@ msgstr ""
 "výšce). Doporučená hodnota je 0.3."
 
 msgid "XCSoar data path"
-msgstr "Cesta XCSoar dat"
+msgstr "Datapath XCSoar"
 
 msgid "Click to view full path"
 msgstr "Klikněte pro zobrazení plné cesty"
@@ -4147,7 +4152,10 @@ msgid "Watched WPTs"
 msgstr "Sledované body"
 
 msgid "Waypoint files containing special waypoints for which additional computations like calculation of arrival height in map display always takes place. Useful for waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."
-msgstr "Soubor speciálních bodů, pro které se vždy provádí zvláštní výpočty (např. výpočet příletové výšky v mapě). Užitečné pro body, jako jsou známé termální zóny (elektrárny) nebo horské průsmyky."
+msgstr ""
+"Soubor speciálních bodů, pro které se vždy provádí další výpočty (např. "
+"výpočet příletové výšky v mapě). Užitečné pro body, jako jsou známé "
+"termální zóny (elektrárny) nebo horské průsmyky."
 
 msgid "WPT A/F details"
 msgstr "Detaily WPT A/F"
@@ -4156,7 +4164,7 @@ msgid "The files may contain extracts from enroute supplements or other contribu
 msgstr "Tyto soubory mohou obsahovat výběry z doplňků pro letové cesty nebo jinou přidanou informaci o jednotlivých bodech tras a letištiích."
 
 msgid "FLARM database"
-msgstr "Mapová databáze"
+msgstr "FLARM databáze"
 
 msgid "The name of the file containing information about registered FLARM devices."
 msgstr "Název souboru, obsahujícího informace o registrovaných zařízeních FLARM."
@@ -4169,17 +4177,18 @@ msgstr "Soubor checklistu obsahující předletové i další kontrolní seznamy
 
 #, no-c-format
 msgid "Disable display of ground track line."
-msgstr "Zakáže zobrazení pozemní stopy."
+msgstr "Zakáže zobrazení linie pozemní trasy."
 
 #, no-c-format
 msgid "Always display ground track line."
-msgstr "Vždy zobrazí pozemní stopu."
+msgstr "Vždy zobrazí linii pozemní trasy."
 
 #, no-c-format
 msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
-msgstr "Zobrazí pozemní stopu, pokud je výrazný rozdíl od plánovaného kurzu."
+msgstr ""
+"Zobrazí linii pozemní trasy, pokud je výrazný rozdíl od směru letu kluzáku."
 
 #, no-c-format
 msgid "Vario #1"
@@ -4234,15 +4243,15 @@ msgstr ""
 
 #, no-c-format
 msgid "Vario E-ink"
-msgstr "Vário e-ink"
+msgstr "Vário E-ink"
 
 #, no-c-format
 msgid ""
 "E-ink friendly color scheme, lighter and thicker dots means lift while "
 "darker and thinner means sink."
 msgstr ""
-"Barevné schéma přátelské k e-ink. Světlejší a silnější body značí stoupání, "
-"zatímco tmavší a tenčí body klesání."
+"Barevné schéma přátelské k E-ink. Světlejší a silnější body značí "
+"stoupání, zatímco tmavší a tenčí body klesání."
 
 #, no-c-format
 msgid "The colour scheme corresponds to the height."
@@ -4309,10 +4318,10 @@ msgid "Symbol and Name"
 msgstr "Symbol a jméno"
 
 msgid "Ground track"
-msgstr "Pozemní stopa"
+msgstr "Pozemní trasa"
 
 msgid "Display the ground track as a grey line on the map."
-msgstr "Zobrazí pozemní stopu, jako šedou linku na mapě."
+msgstr "Zobrazí pozemní trasu, jako šedou linku na mapě."
 
 msgid "This enables the display of FLARM traffic on the map window."
 msgstr "Tato volba zobrazí FLARM provoz na mapě."
@@ -4322,7 +4331,8 @@ msgstr "Blednutí provozu"
 
 msgid "Keep showing traffic for a while after it has disappeared."
 msgstr ""
-"Po určitou dobu pokračuje v zobrazení symbolu provozu i když není detekován."
+"Po určitou dobu pokračuje v zobrazení symbolu provozu přestože není "
+"detekován."
 
 msgid "Trail length"
 msgstr "Délka stopy"
@@ -4509,9 +4519,8 @@ msgid ""
 "Safety margin for AAT task optimisation. Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
-"Bezpečností časová rezerva, na kterou je optimalizována AAT úloha. "
-"Optimalizace se snaží dokončit úlohu v minimálním čase plus tato časová "
-"rezerva."
+"Časová rezerva, na kterou je optimalizována AAT úloha. Optimalizace se "
+"snaží dokončit úlohu v minimálním čase plus tato časová rezerva."
 
 #, no-c-format
 msgid "Disable contest calculations"
@@ -4551,7 +4560,9 @@ msgstr "WeGlide kombinuje v soutěži WeGlide Free několik systémů bodování
 
 #, no-c-format
 msgid "A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized."
-msgstr "Ze záznamu letu je vybrán startovní bod, jeden otočný bod a cílový bod tak, aby byla maximalizována vzdálenost mezi startem a otočným bodem"
+msgstr ""
+"Ze záznamu letu je vybrán startovní bod, jeden otočný bod a cílový bod "
+"tak, aby byla maximalizována vzdálenost mezi startem a otočným bodem."
 
 #, no-c-format
 msgid "LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km."
@@ -4573,20 +4584,23 @@ msgid "FAI triangle areas"
 msgstr "Oblasti FAI trojúhelníku"
 
 msgid "Show FAI triangle areas on the map."
-msgstr "Zobrazí oblasti FAI trojúhelníku na mapu plánování úlohy."
+msgstr "Zobrazí na mapu pomocníky oblastí FAI trojúhelníku."
 
 msgid "FAI triangle threshold"
 msgstr "Hranice FAI trojúhelníku"
 
 msgid "Specifies which threshold is used for \"large\" FAI triangles."
-msgstr "Určuje hranici použitou pro \"velké\" FAI trijúhelníky."
+msgstr "Určuje hranici použitou pro \"velké\" FAI trojúhelníky."
 
 #, no-c-format
 msgid "95% dist. rule helpers"
-msgstr "95% dist. pravidlo pomůcky"
+msgstr "Pomocník 95% vzdál."
 
 msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
-msgstr "Zobrazit pomocníky pro argentinskou federaci pravidlo \"95% vzdálenost\". InfoBox AAT Distance Around Target InfoBox zobrazí promítnutou vzdálenost vs. maximum a změní barvy, jakmile se přiblížíte k 95 %."
+msgstr ""
+"Zobrazí pomocníky pro pravidlo \"95% vzdálenosti\" argentinské federace . "
+"InfoBox AAT Vzdálenost k cíli zobrazí projektovanou vzdálenost vs. maximum "
+"a změní barvy, jakmile se přiblížíte k 95% vzdálenosti."
 
 msgid "Draw a digital elevation terrain on the map."
 msgstr "Na mapě vykreslí digitální výškový model terénu."
@@ -4595,7 +4609,7 @@ msgid "Topography display"
 msgstr "Topografie"
 
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
-msgstr "Vykreslí topografické rysy (silnice, řeky, jezera atd.) do mapy."
+msgstr "Vykreslí topografické prvky (silnice, řeky, jezera atd.) do mapy."
 
 #, no-c-format
 msgid "Low lands"
@@ -4659,15 +4673,15 @@ msgstr "Francouzké SIA VFR mapy"
 
 #, no-c-format
 msgid "High Contrast"
-msgstr "Kontrast terénu"
+msgstr "Vysoký kontast"
 
 #, no-c-format
 msgid "High Contrast low lands"
-msgstr "Kontrast terénu"
+msgstr "Vysoký kontrast nížiny"
 
 #, no-c-format
 msgid "Very low lands"
-msgstr "Nížiny"
+msgstr "Extrémní nížiny"
 
 msgid "Terrain colors"
 msgstr "Barvy terénu"
@@ -4862,7 +4876,9 @@ msgstr "Dokluz kolem překážek"
 
 #, no-c-format
 msgid "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
-msgstr "Výška příletu s vyhýbáním se terénním překážkám. Vyžaduje nastavení \"Akční rádius: Odbočky\" v záložce \"Plachtařské výpočty > Trasa\"."
+msgstr ""
+"Výška příletu s vyhýbáním se terénním překážkám. Vyžaduje nastavení "
+"\"Dolet: Odbočky\" v záložce \"Plachtařské výpočty > Trasa\"."
 
 #, no-c-format
 msgid "Straight & terrain glide"
@@ -4870,7 +4886,9 @@ msgstr "Přímý dokluz & překážky"
 
 #, no-c-format
 msgid "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
-msgstr "Jsou zobrazeny obě výšky příletu. Vyžaduje nastavení \"Akční rádius: Odbočky\" v záložce \"Plachtařské výpočty > Trasa\"."
+msgstr ""
+"Jsou zobrazeny obě výšky příletu. Vyžaduje nastavení \"Dolet: Odbočky\" v "
+"záložce \"Plachtařské výpočty > Trasa\"."
 
 #, no-c-format
 msgid "Required GR & terrain glide"
@@ -4878,7 +4896,10 @@ msgstr "Požadovaný KP & dokluz překážky"
 
 #, no-c-format
 msgid "Both Required glide ratio and terrain avoidance height are displayed. Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings."
-msgstr "Je zobrazen požadovaný klouzavý poměr KP a a výška příletu s vyhýbáním se terénním překážkám. Vyžaduje nastavení \"Akční rádius: Odbočky\" v záložce \"Plachtařské výpočty > Trasa\"."
+msgstr ""
+"Je zobrazen požadovaný klouzavý poměr KP a a výška příletu s vyhýbáním se "
+"terénním překážkám. Vyžaduje nastavení \"Dolet: Odbočky\" v záložce "
+"\"Plachtařské výpočty > Trasa\"."
 
 msgid "Determines how arrival height is displayed in waypoint labels"
 msgstr "Určuje, jak bude zobrazena výška příletu v popisu bodu"
@@ -4955,8 +4976,8 @@ msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
-"[Vyp] Zobrazí stejné ikony pro všechny přistávací plochy.\n"
-"[Zap] Zobrazí přistávací plochy s dodatečnou informací, jako délka a směr dráhy."
+"[Vyp] Zobrazí stejné ikony pro všechny přistávací plochy.\n[Zap] Zobrazí "
+"přistávací plochy s dodatečnou informací, jako délka a směr RWY."
 
 msgid "Landable size"
 msgstr "Velikost letišť"
@@ -4971,8 +4992,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
-"[Vyp] Zobrazí jednotnou délku dráhy.\n"
-"[Zap] Zobrazí délku dráhy v odpovídajícím měřítku."
+"[Vyp] Zobrazí jednotnou délku RWY.\n[Zap] Zobrazí délku RWY v "
+"odpovídajícím měřítku."
 
 msgid "Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."
 msgstr "Zobrazí pozice stoupavých proudů, stažených z Thermal Information Map (thermalmap.info)."
@@ -5042,7 +5063,7 @@ msgstr ""
 "Pokračovat?"
 
 msgid "Task has been modified"
-msgstr "Úloha byl modifikována"
+msgstr "Úloha byla modifikována"
 
 msgid "Task unchanged"
 msgstr "Úloha nezměněna"
@@ -5137,13 +5158,13 @@ msgid "Download Declaration"
 msgstr "Stáhnout deklaraci"
 
 msgid "My Tasks"
-msgstr "V Pirker"
+msgstr "Moje úlohy"
 
 msgid "Declared Tasks"
-msgstr "Deklarovat trať?"
+msgstr "Deklarované úlohy"
 
 msgid "Competitions Today"
-msgstr "Soutěžní ID"
+msgstr "Probíhající soutěže"
 
 msgid "Recent Scores"
 msgstr "Nedávné výsledky"
@@ -5161,7 +5182,7 @@ msgid "Load the selected task?"
 msgstr "Nahrát vybranou úlohu?"
 
 msgid "Task Browser"
-msgstr "Přohlížeč úlohy"
+msgstr "Přohlížeč úloh"
 
 msgid "Can't delete .CUP files"
 msgstr "Nemohu smazat .CUP soubor"
@@ -5179,10 +5200,10 @@ msgid "Less"
 msgstr "Méně"
 
 msgid "Refresh"
-msgstr "Obnovit"
+msgstr "Obnov"
 
 msgid "No tasks"
-msgstr "Chybí úloha"
+msgstr "Chybí úlohy"
 
 #, c-format
 msgid "%u TPs"
@@ -5344,10 +5365,10 @@ msgstr "Optimalizuj"
 
 #. no alternates: don't show the dialog
 msgid "No alternates available"
-msgstr "Nedostupné alternativy"
+msgstr "Záložní plochy nedostupné"
 
 msgid "Alternates"
-msgstr "Alternativy"
+msgstr "Záložní plochy"
 
 msgid "Now"
 msgstr "Nyní"
@@ -5404,17 +5425,14 @@ msgid ""
 "\n"
 "4. **Task** - Create a task for navigation guidance. [Nav > Task Manager](xcsoar://dialog/task)"
 msgstr ""
-"# Předletová kontrola\n"
-"\n"
-"Před každým letem ověřte:\n"
-"\n"
-"1. **Letadlo a polára** - Je vybrané správné letadlo i polára. [Nastavení > Letadlo](xcsoar://config/planes)\n"
-"\n"
-"2. **Letové parametry** - Plošné zatížení, degradace poláry, QNH, maximální teplota. [Info > Let](xcsoar://dialog/flight)\n"
-"\n"
-"3. **Vítr** - Nastavte vítr ručně nebo povolte automatické určování větru. [Info > Vítr](xcsoar://dialog/wind)\n"
-"\n"
-"4. **Úloha** - Vytvořte úlohu pro navigační vedení. [Nav > Správce úloh](xcsoar://dialog/task)"
+"# Předletová kontrola\n\nPřed každým letem ověřte:\n\n1. **Letadlo a "
+"polára** - Je vybrané správné letadlo i polára. [Nastav > "
+"Letadlo](xcsoar://config/planes)\n\n2. **Letové parametry** - Plošné "
+"zatížení, zamoušení, QNH, maximální teplota. [Nastav > Nastav "
+"let](xcsoar://dialog/flight)\n\n3. **Vítr** - Nastavte vítr ručně nebo "
+"povolte automatické určování větru. [Nastav > "
+"Vítr](xcsoar://dialog/wind)\n\n4. **Úloha** - Vytvořte úlohu pro navigační "
+"vedení. [Nav > Správce úloh](xcsoar://dialog/task)"
 
 msgid ""
 "# After Your Flight\n"
@@ -5427,15 +5445,13 @@ msgid ""
 "\n"
 "4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
 msgstr ""
-"# Po letu\n"
-"\n"
-"1. **Stáhnout záznamy** - Získejte letové záznamy z FLARMu nebo loggeru. [Nastavení > Zařízení](xcsoar://config/devices)\n"
-"\n"
-"2. **Analýza** - Prohlédněte statistiky letu. [Info > Analýza](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Stav** - Zkontrolujte časy a statistiky letu. [Info > Stav](xcsoar://dialog/status)\n"
-"\n"
-"4. **Nahrání** - Nahrajte let přímo do WeGlide z XCSoar. Nastavte své WeGlide User ID v [Nastavení > Systém > WeGlide](xcsoar://config/weglide)"
+"# Po letu\n\n1. **Stáhnout záznamy** - Získejte letové záznamy z FLARMu "
+"nebo loggeru. [Nastav > Zařízení](xcsoar://config/devices)\n\n2. "
+"**Analýza** - Prohlédněte statistiky letu. [Info > "
+"Analýza](xcsoar://dialog/analysis)\n\n3. **Status** - Zkontrolujte časy a "
+"statistiky letu. [Info > Status](xcsoar://dialog/status)\n\n4. **Nahrání "
+"letu** - Nahrajte let z XCSoaru přímo do WeGlide . Nastavte své WeGlide "
+"User ID v [Nastav> Nastavení > WeGlide](xcsoar://config/weglide)"
 
 msgid ""
 "![](resource:IDB_LOCATION_PIN)\n"
@@ -5501,7 +5517,7 @@ msgstr ""
 "Toto nastavení můžete kdykoli změnit v [Nastavení > Sledování](xcsoar://config/tracking)."
 
 msgid "Welcome to XCSoar"
-msgstr "Vítejte v XCSoar"
+msgstr "Vítejte v XCSoaru"
 
 msgid "The safety disclaimer must be accepted to use XCSoar. Quit?"
 msgstr "Pro použití XCSoar musíte přijmout bezpečnostní upozornění. Ukončit?"
@@ -5516,25 +5532,25 @@ msgid "Safety Disclaimer"
 msgstr "Bezpečnostní upozornění"
 
 msgid "Don't show these release notes again"
-msgstr "Příště tyto poznámky k vydání nezobrazovat"
+msgstr "Příště poznámky k vydání nezobrazovat"
 
 msgid "What's New"
-msgstr "Co je zde?"
+msgstr "Novinky"
 
 msgid "Enable XCSoar Cloud"
-msgstr "Povolit XCSoar Cloud"
+msgstr "Povol XCSoar Cloud"
 
 msgid "XCSoar Cloud"
 msgstr "XCSoar Cloud"
 
 msgid "Not Now"
-msgstr "Nenalezeno"
+msgstr "Nyní ne"
 
 msgid "Location Access"
-msgstr "Poloha"
+msgstr "Přístup k poloze"
 
 msgid "Notifications"
-msgstr "Poloha"
+msgstr "Upozornění"
 
 #, no-c-format
 msgid "Gesture Navigation"
@@ -5645,7 +5661,7 @@ msgid "Add this turn point?"
 msgstr "Přidat tento otočný bod?"
 
 msgid "Use"
-msgstr "Použít"
+msgstr "Použij"
 
 msgid "No METAR available"
 msgstr "METAR nedostupný"
@@ -5683,7 +5699,7 @@ msgid "Hangglider (Rigid/FAI5)"
 msgstr "Závěsný kluzák (Rigid/FAI5)"
 
 msgid "Allow tracking when on a roaming mobile data connection."
-msgstr "Povolit sledování při roamingovém mobilním datovém připojení."
+msgstr "Povolí sledování při roamingovém mobilním datovém připojení."
 
 msgid "Tracking Interval"
 msgstr "Interval sledování"
@@ -5713,7 +5729,7 @@ msgid "Server"
 msgstr "Server"
 
 msgid "Show thermals"
-msgstr "Zobrazit detaily:"
+msgstr "Zobraz st. proudy"
 
 msgid "Obtain and show thermal locations reported by others."
 msgstr "Získává a zobrazuje pozici st. proudů od dalších uživatelů."
@@ -6221,7 +6237,7 @@ msgstr "Procentuálně stoupání"
 
 #, no-c-format
 msgid "% Climb"
-msgstr "% stoupání"
+msgstr "% Stoupání"
 
 #, no-c-format
 msgid ""
@@ -6338,12 +6354,12 @@ msgid ""
 "(if an accelerometer is connected). When Block mode speed-to-fly is "
 "selected, this InfoBox displays the MacCready speed."
 msgstr ""
-"Okamžitá optimální rychlost letu MacCready (STF), využívající výpočty netto "
-"varia k určení rychlosti delfínového letu v současném kurzu. Během přeskoku "
-"je STF rychlost optimalizována pro udržení výšky. Na dokluzu počítá s "
-"klesáním. V režimu stoupání ukazuje rychlost min. opadání vztaženou k "
-"aktuálnímu násobku zatížení (pokud je připojen akcelerometr). Pokud je "
-"vybrána STÁLÁ STF rychlost, InfoBox zobrazuje rychlost MacCready."
+"Okamžitá optimální rychlost letu MacCready (STF), využívající výpočty "
+"netto varia k určení rychlosti delfínového letu na současné trase kluzáku. "
+"Během přeskoku je STF rychlost optimalizována pro udržení výšky. Na "
+"dokluzu počítá s klesáním. V režimu stoupání ukazuje rychlost min. opadání "
+"vztaženou k aktuálnímu násobku zatížení (pokud je připojen akcelerometr). "
+"Pokud je vybrána STÁLÁ STF rychlost, InfoBox zobrazuje rychlost MacCready."
 
 #, no-c-format
 msgid "Netto vario"
@@ -6415,11 +6431,12 @@ msgid ""
 "directly toward the next waypoint. This calculation accounts for the "
 "curvature of the Earth."
 msgstr ""
-"Rozdíl mezi aktuálním kurzem a kurzem k dalšímu otočnému bodu (v úloze AAT k "
-"cílovému bodu uvnitř AAT oblasti). Při větru se vlivem snosu tento kurz liší "
-"od skutečného směru pohybu kluzáku. Šipky ukazují směr, kterým je potřeba "
-"kurz upravit tak, aby se shodoval s kurzem k dalšímu otočnému bodu. Výpočet "
-"bere v úvahu zakřivení Země."
+"Rozdíl mezi aktuální trasou kluzáku (směrem pohybu po povrchu země) a "
+"kurzem k dalšímu otočnému bodu (v úloze AAT k cílovému bodu uvnitř AAT "
+"oblasti). GPS navigace je založená na trase, a trasa se může lišit od "
+"směru letu kluzáku, když fouká vítr.. Šipky ukazují směr, kterým je "
+"potřeba kurz upravit tak, aby se shodoval s kurzem k dalšímu otočnému "
+"bodu. Výpočet bere v úvahu zakřivení Země."
 
 #, no-c-format
 msgid "Outside air temperature"
@@ -6698,7 +6715,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Alternate 1"
-msgstr "Alternativa 1"
+msgstr "Záložní plochy"
 
 #, no-c-format
 msgid "Altn 1"
@@ -6710,7 +6727,7 @@ msgstr "Zobrazí název a kurz k nejvhodnějšímu záložnímu místu přistán
 
 #, no-c-format
 msgid "Alternate 2"
-msgstr "Alternativa 2"
+msgstr "Záložní 2"
 
 #, no-c-format
 msgid "Altn 2"
@@ -6722,7 +6739,7 @@ msgstr "Zobrazí název a kurz k druhému záložnímu místu přistání."
 
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr "Alternativa 1 - klouzavý poměr"
+msgstr "Záložní 1 - klouzavý poměr"
 
 #, no-c-format
 msgid "Altn 1 GR"
@@ -6834,7 +6851,7 @@ msgstr "Barogram"
 
 #, no-c-format
 msgid "Trace of altitude during flight."
-msgstr "Výškový profil letu"
+msgstr "Výškový profil letu."
 
 #, no-c-format
 msgid "Vario trace"
@@ -6862,7 +6879,7 @@ msgstr "Stopa vertikální rychlosti vzduchové hmoty, je rovna hodnotě z vario
 
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "Záznam současného stoupání"
+msgstr "Záznam průběhu stoupání"
 
 #, no-c-format
 msgid "TC Trace"
@@ -6890,7 +6907,7 @@ msgstr "Průběh úlohy"
 
 #, no-c-format
 msgid "Progress"
-msgstr "Úloha"
+msgstr "Progres"
 
 #, no-c-format
 msgid "Clock-like display of distance remaining along task, showing achieved task points."
@@ -6998,7 +7015,9 @@ msgstr "Terén střet"
 
 #, no-c-format
 msgid "Distance to the next terrain collision along the current task leg. At this location, the altitude will be below the configured terrain clearance altitude."
-msgstr "Vzdálenost k místu střetu s terénem ve směru aktuálního ramene trasy. V tomto bodě bude výška pod výškou, nastavenou pro překonání terénu."
+msgstr ""
+"Vzdálenost k místu střetu s terénem ve směru aktuálního ramene úlohy. V "
+"tomto bodě bude výška pod výškou, nastavenou pro překonání terénu."
 
 #, no-c-format
 msgid "Altitude (Auto)"
@@ -7058,7 +7077,7 @@ msgstr "Odpočet otevření/uzavření pásky"
 
 #, no-c-format
 msgid "Start open"
-msgstr "Strt otevřn"
+msgstr "Start otevřen"
 
 #, no-c-format
 msgid "Start open/close countdown at reaching"
@@ -7066,7 +7085,7 @@ msgstr "Odpočet ot./uzavření pásky při protnutí"
 
 #, no-c-format
 msgid "Start reach"
-msgstr "Strt dosažn"
+msgstr "Start dosažen"
 
 #, no-c-format
 msgid "Next radial"
@@ -7210,7 +7229,9 @@ msgstr "Satelity"
 
 #, no-c-format
 msgid "Number of satellites currently used by the GPS module. If this information is unavailable, the displayed value is '---'."
-msgstr "Počet používaných (viditelných) satelitů GPS modulu. Pokud tato informace není k dispozici, je zobrazeno '---'."
+msgstr ""
+"Počet satelitů používaných GPS modulem. Pokud tato informace není k "
+"dispozici, je zobrazeno '---'."
 
 #, no-c-format
 msgid "Active Radio Frequency"
@@ -7222,7 +7243,7 @@ msgstr "Akt freq"
 
 #, no-c-format
 msgid "Active radio frequency."
-msgstr "Aktivní radiofrekvence"
+msgstr "Aktivní radiofrekvence."
 
 #, no-c-format
 msgid "Standby Radio Frequency"
@@ -7234,7 +7255,7 @@ msgstr "Zál freq"
 
 #, no-c-format
 msgid "Standby radio frequency."
-msgstr "Záložní radiofrekvence"
+msgstr "Záložní radiofrekvence."
 
 #, no-c-format
 msgid "Thermal time"
@@ -7250,7 +7271,7 @@ msgstr "Čas strávený v současném stoupavém proudu."
 
 #, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Alternativa 2 - klouzavý poměr"
+msgstr "Záložní 2 - klouzavý poměr"
 
 #, no-c-format
 msgid "Altn 2 GR"
@@ -7282,7 +7303,7 @@ msgstr "XPDR kód"
 
 #, no-c-format
 msgid "Currently set transponder code."
-msgstr "Nastavený kód odpovídače"
+msgstr "Nastavený kód odpovídače."
 
 #, no-c-format
 msgid "Engine CHT"
@@ -7294,7 +7315,7 @@ msgstr "CHT"
 
 #, no-c-format
 msgid "Engine cylinder head temperature."
-msgstr "Teplota hlav válců motoru"
+msgstr "Teplota hlav válců motoru."
 
 #, no-c-format
 msgid "Engine EGT"
@@ -7306,7 +7327,7 @@ msgstr "EGT"
 
 #, no-c-format
 msgid "Engine exhaust gas temperature."
-msgstr "Teplota výfukových plynů motoru"
+msgstr "Teplota výfukových plynů motoru."
 
 #, no-c-format
 msgid "Engine Revolutions Per Minute"
@@ -7338,31 +7359,33 @@ msgstr "Rychlost odhadovaná"
 
 #, no-c-format
 msgid "V Task Est"
-msgstr "V Pirker"
+msgstr "V úl odhad"
 
 #, no-c-format
 msgid "Estimated average cross-country speed for current task as of task completion, assuming performance of ideal MacCready cruise/climb cycle."
-msgstr "Odhadovaný lokální čas při příletu do koncového bodu trati. Předpokládá let dle ideálního MacCreadyho cyklu stoupání/přeskoků."
+msgstr ""
+"Odhadovaná průměrná rychlos přeletu při příletu do koncového bodu trati. "
+"Předpokládá let dle ideálního MacCreadyho cyklu stoupání/přeskoků."
 
 #, no-c-format
 msgid "Home altitude difference"
-msgstr "Rozdílová výška nad dalším bodem"
+msgstr "Rozdílová výška nad domovským bodem"
 
 #, no-c-format
 msgid "Home AltD"
-msgstr "Domů vzdál"
+msgstr "Domů AltD"
 
 #, no-c-format
 msgid "Arrival altitude at the home waypoint relative to the safety arrival height."
-msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
+msgstr "Výška příletu nad domovský bod relativně k bezpečné výšce příletu."
 
 #, no-c-format
 msgid "Speed task leg"
-msgstr "Rychlost úlohy průměrná"
+msgstr "Rychlost ramena úlohy"
 
 #, no-c-format
 msgid "V Task Leg"
-msgstr "V úl prům"
+msgstr "V úl rameno"
 
 #, no-c-format
 msgid "Average cross-country speed while on current task leg, not compensated for altitude."
@@ -7370,27 +7393,31 @@ msgstr "Průměrná rychlost v úloze nekompenzovaná o výšku."
 
 #, no-c-format
 msgid "Alternate 1 altitude difference"
-msgstr "Rozdílová výška nad dalším bodem"
+msgstr "Rozdílová výška nad záložní plochou 1"
 
 #, no-c-format
 msgid "Altn 1 AltD"
-msgstr "Altn 1"
+msgstr "Altn 1 AltD"
 
 #, no-c-format
 msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
+msgstr ""
+"Výška příletu nad nejlepší záložní místo přistání relativně k bezpečné "
+"výšce příletu."
 
 #, no-c-format
 msgid "Alternate 2 altitude difference"
-msgstr "Rozdílová výška nad dalším bodem"
+msgstr "Rozdílová výška nad záložní plochou 2"
 
 #, no-c-format
 msgid "Altn 2 AltD"
-msgstr "Altn 2"
+msgstr "Altn 2 AltD"
 
 #, no-c-format
 msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
+msgstr ""
+"Výška příletu nad druhé nejlepší záložní místo přistání relativně k "
+"bezpečné výšce příletu."
 
 #, no-c-format
 msgid "Simulator"
@@ -7580,10 +7607,10 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
-"Metoda použitá pro detekci rychlosti stoupání (RYCHLÉ/POMALÉ).\n"
-"[NENÍ]: Stav POMALÉ deaktivován\n"
-"[MACCREADY]: Stav RYCHLÉ, když hodnota brutto vária > nastavení MacCready.\n"
-"[PRŮMĚROVÁNÍ]: Stav RYCHLÉ, když hodnota brutto vária > průměr brutto vária."
+"Komparační metoda použitá pro detekci rychlosti stoupání "
+"(RYCHLÉ/POMALÉ).\n[NENÍ]: Stav POMALÉ deaktivován\n[MACCREADY]: Stav "
+"RYCHLÉ, když hodnota brutto vária > nastavení MacCready.\n[PRŮMĚROVÁNÍ]: "
+"Stav RYCHLÉ, když hodnota brutto vária > průměr brutto vária."
 
 #, no-c-format
 msgid "Cruise lift trigger"
@@ -7790,7 +7817,7 @@ msgstr "Určuje, zda je připojena sonda celkové energie TE."
 
 #, no-c-format
 msgid "Pitot port"
-msgstr "Pitotův přístav"
+msgstr "Pitot port"
 
 #, no-c-format
 msgid "Whether the Pitot port is connected."
@@ -7835,7 +7862,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Baud rate Vega"
-msgstr "Přenosová rychlost Vega"
+msgstr "Baud rate Vega"
 
 #, no-c-format
 msgid ""
@@ -7855,7 +7882,7 @@ msgstr "FLARM připojen"
 #, no-c-format
 msgid ""
 "Enable detection of FLARM. Disable only if FLARM is not used or disconnected."
-msgstr "Zapnutá FLARM detekce. Vypněte pouze pokud FLARM není používán."
+msgstr "Zapne detekci FLARMu. Vypněte pouze pokud FLARM není používán."
 
 #, no-c-format
 msgid "PDA power"
@@ -7935,7 +7962,7 @@ msgid "Below final glide"
 msgstr "Výška nestačí na dokluz"
 
 msgid "Final glide through terrain"
-msgstr "Dráha dokluzu koliduje s terénem"
+msgstr "Dokluz koliduje s terénem"
 
 msgid "Zoom"
 msgstr "Zvětšení"
@@ -7954,15 +7981,13 @@ msgid ""
 "MC+\n"
 "(UP)"
 msgstr ""
-"MC+\n"
-"(UP)"
+"MC+\n(NAHORU)"
 
 msgid ""
 "MC-\n"
 "(DOWN)"
 msgstr ""
-"MC-\n"
-"(ZÁHOD)"
+"MC-\n(DOLŮ)"
 
 msgid "Previous waypoint"
 msgstr "Předchozí navigační bod"
@@ -8086,7 +8111,7 @@ msgstr ""
 
 #, no-c-format
 msgid "FLARM Radar"
-msgstr "Radar FLARM"
+msgstr "FLARM radar"
 
 msgid ""
 "Info\n"
@@ -8127,10 +8152,10 @@ msgid "Nearest Airspace"
 msgstr "Nejbližší prostor"
 
 msgid "WeGlide Aircraft"
-msgstr "Letadlo WeGlide"
+msgstr "WeGlide letoun"
 
 msgid "Select WeGlide Type"
-msgstr "Vyberte typ WeGlide"
+msgstr "Vyber WeGlide typ"
 
 msgid "Thermal hotspot"
 msgstr "Termický hotspot"
@@ -8166,12 +8191,12 @@ msgstr "Zdroj"
 #, no-c-format
 msgctxt "Glider polar coefficient"
 msgid "Polar V"
-msgstr "Polární V"
+msgstr "V poláry"
 
 #, no-c-format
 msgctxt "Glider polar coefficient"
 msgid "Polar W"
-msgstr "Polární W"
+msgstr "W poláry"
 
 #, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
@@ -8179,21 +8204,21 @@ msgid "G"
 msgstr "G"
 
 msgid "PEV offset at start"
-msgstr "Offset PEV na startu"
+msgstr "Offset PEV při startu"
 
 msgid "Add #standby or #active to the link, for example vhf:122.800#standby"
 msgstr ""
 "Přidejte #standby nebo #active k odkazu, například vhf:122.800#standby"
 
 msgid "VHF link"
-msgstr "Odkaz VHF"
+msgstr "VHF link"
 
 msgid "This frequency is not valid for VHF airband."
 msgstr "Tato frekvence není platná pro letecké pásmo VHF."
 
 msgid "Use #standby or #active after the frequency (example: vhf:122.800#standby)."
 msgstr ""
-"Použijte #standby nebo #active za frekvencí (příklad: vhf:122.800#standby)."
+"Použij #standby nebo #active za frekvencí (příklad: vhf:122.800#standby)."
 
 #, c++-format
 msgid "{0}: {1} MHz — {2}"
@@ -8205,54 +8230,54 @@ msgstr "{0}: {1} MHz"
 
 msgid "Tells XCSoar to send its current GPS position to the device as $GPGGA and $GPRMC sentences. Turn off when another GPS source is already feeding the device on the same line. Changes take effect after reconnecting the device."
 msgstr ""
-"Říká XCSoar, aby odesílal aktuální GPS polohu do zařízení jako věty $GPGGA a"
-" $GPRMC. Vypněte, pokud jiné GPS již napájí zařízení na stejné lince. Změny "
-"se projeví po opětovném připojení zařízení."
+"XCSoar bude odesílal aktuální GPS polohu do zařízení jako věty $GPGGA a "
+"$GPRMC. Vypněte, pokud již jiné GPS tyto věty zasílá na stejné lince. "
+"Změny se projeví po opětovném připojení zařízení."
 
 msgid "Synchronize the glide polar between XCSoar and the device (LXNAV varios). 'Receive' adopts the polar from the device (e.g. for club gliders). 'Send' pushes XCSoar's polar to the device."
 msgstr ""
-"Synchronizovat klouzavou poláru mezi XCSoar a zařízením (varia LXNAV). "
+"Synchronizace rychlostní poláry mezi XCSoar a zařízením (varia LXNAV). "
 "'Receive' převezme poláru ze zařízení (např. pro klubové větroně). 'Send' "
 "odešle poláru XCSoar do zařízení."
 
 msgid "Set standby from a link"
-msgstr "Nastavit standby z odkazu"
+msgstr "Nastav standby z odkazu"
 
 msgid "User repositories"
-msgstr "Uživatelské repozitáře"
+msgstr "Vlastní repozitáře"
 
 msgid "List of additional user repository URIs, separated by '|' character."
-msgstr "Seznam dalších URI uživatelských repozitářů oddělených znakem '|'."
+msgstr "Seznam dalších URI uživatelských repozitářů, oddělených znakem '|'."
 
 #, no-c-format
 msgid "FFVP Federal Cup (NetCoupe) on WeGlide. The scored path has at most three turnpoints between start and finish and at least 25 km total. Points are proportional to credited distance, 100 divided by the glider handicap (DAeC-style index), and a success factor of 1.0 for a free flight or 1.2 for a task declared electronically before takeoff. XCSoar live scoring uses a success factor of 1.0 only, not the 1.2 multiplier for declared tasks."
 msgstr ""
 "Federální pohár FFVP (NetCoupe) na WeGlide. Bodovaná trať má nejvýše tři "
 "otočné body mezi startem a cílem a alespoň 25 km celkem. Body jsou úměrné "
-"započtené vzdálenosti, 100 děleno handicapem větroně (index ve stylu DAeC) a"
-" faktorem úspěchu 1,0 pro volný let nebo 1,2 pro úlohu vyhlášenou "
-"elektronicky před vzletem. Živé bodování XCSoar používá pouze faktor úspěchu"
-" 1,0, bez násobitele 1,2 pro vyhlášené úlohy."
+"započtené vzdálenosti, 100 děleno handicapem větroně (index ve stylu DAeC) "
+"a faktorem úspěchu 1.0 pro volný let nebo 1.2 pro úlohu vyhlášenou "
+"elektronicky před vzletem. Živé bodování XCSoar používá pouze faktor "
+"úspěchu 1.0, bez násobitele 1.2 pro vyhlášené úlohy."
 
 msgid "The terrain can be shaded among slopes to indicate either wind direction, sun position, a geographically fixed shading from North-West, or a screen-relative fixed shading from top left."
 msgstr ""
 "Terén může být stínován na svazích podle směru větru, polohy slunce, "
-"geograficky pevného stínování od severozápadu nebo pevného stínování vůči "
-"obrazovce zleva nahoře."
+"geograficky od severozápadu nebo vzhledem k obrazovce z levého horního "
+"rohu."
 
 msgid "Waypoint icon size"
-msgstr "Velikost ikony bodu"
+msgstr "Velikost ikony OB"
 
 msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr ""
-"Velikost symbolů bodů trati na mapě jako procento vestavěné grafiky (dialogy"
-" seznamů zachovávají pevnou velikost ikony řádku)."
+"Velikost symbolů bodů trati na mapě jako procento vestavěné grafiky "
+"(dialogy seznamů zachovávají pevnou velikost ikon)."
 
 msgid "Altn mode: MANUAL"
-msgstr "Režim Altn: RUČNÍ"
+msgstr "Výběr zál. ploch: RUČNÍ"
 
 msgid "Altn mode: AUTO"
-msgstr "Režim Altn: AUTO"
+msgstr "Výběr zál. ploch: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -8277,27 +8302,26 @@ msgid ""
 "\n"
 "Long-press on the map to enter Pan mode. Tap while in Pan mode to see nearby waypoints."
 msgstr ""
-"# Navigace gesty\n"
-"\n"
-"XCSoar podporuje dotyková gesta na mapě:\n"
-"\n"
-"- ![U](resource:IDB_GESTURE_UP) **Přejet nahoru** (U): Přiblížit\n"
-"- ![D](resource:IDB_GESTURE_DOWN) **Přejet dolů** (D): Oddálit\n"
-"- ![R](resource:IDB_GESTURE_RIGHT) **Přejet doprava** (R): Předchozí režim obrazovky\n"
-"- ![L](resource:IDB_GESTURE_LEFT) **Přejet doleva** (L): Další režim obrazovky\n"
-"- ![UD](resource:IDB_GESTURE_UD) **Nahoru-dolů** (UD): Automatický zoom\n"
-"- ![DU](resource:IDB_GESTURE_DU) **Dolů-nahoru** (DU): Menu\n"
-"- ![DR](resource:IDB_GESTURE_DR) **Dolů-doprava** (DR): Podrobnosti bodu\n"
-"- ![DL](resource:IDB_GESTURE_DL) **Dolů-doleva** (DL): Záložní\n"
-"- ![LU](resource:IDB_GESTURE_LU) **Doleva-nahoru** (LU): Nedávno použité body\n"
-"- ![RD](resource:IDB_GESTURE_RD) **Doprava-dolů** (RD): Správce úloh\n"
-"- ![URD](resource:IDB_GESTURE_URD) **Nahoru-doprava-dolů** (URD): Analýza\n"
-"- ![LDR](resource:IDB_GESTURE_LDR) **Doleva-dolů-doprava** (LDR): Kontrolní seznam\n"
-"- ![URDL](resource:IDB_GESTURE_URDL) **Nahoru-doprava-dolů-doleva** (URDL): Režim Pan\n"
-"- ![LDRDL](resource:IDB_GESTURE_LDRDL) **Doleva-dolů-doprava-dolů-doleva** (LDRDL): Stav\n"
-"- ![ULDR](resource:IDB_GESTURE_ULDR) **Nahoru-doleva-dolů-doprava** (ULDR): Rychlé menu\n"
-"\n"
-"Dlouhým stiskem mapy vstoupíte do režimu Pan. Klepnutím v režimu Pan zobrazíte blízké body trati."
+"# Navigace gesty\n\nXCSoar podporuje dotyková gesta na mapě:\n\n- "
+"![U](resource:IDB_GESTURE_UP) **Přejet nahoru** (U): Přiblížit\n- "
+"![D](resource:IDB_GESTURE_DOWN) **Přejet dolů** (D): Oddálit\n- "
+"![R](resource:IDB_GESTURE_RIGHT) **Přejet doprava** (R): Předchozí režim "
+"obrazovky\n- ![L](resource:IDB_GESTURE_LEFT) **Přejet doleva** (L): Další "
+"režim obrazovky\n- ![UD](resource:IDB_GESTURE_UD) **Nahoru-dolů** (UD): "
+"Automatický zoom\n- ![DU](resource:IDB_GESTURE_DU) **Dolů-nahoru** (DU): "
+"Menu\n- ![DR](resource:IDB_GESTURE_DR) **Dolů-doprava** (DR): Podrobnosti "
+"bodu\n- ![DL](resource:IDB_GESTURE_DL) **Dolů-doleva** (DL): Záložní\n- "
+"![LU](resource:IDB_GESTURE_LU) **Doleva-nahoru** (LU): Nedávno použité "
+"body\n- ![RD](resource:IDB_GESTURE_RD) **Doprava-dolů** (RD): Správce "
+"úloh\n- ![URD](resource:IDB_GESTURE_URD) **Nahoru-doprava-dolů** (URD): "
+"Analýza\n- ![LDR](resource:IDB_GESTURE_LDR) **Doleva-dolů-doprava** (LDR): "
+"Checklist\n- ![URDL](resource:IDB_GESTURE_URDL) "
+"**Nahoru-doprava-dolů-doleva** (URDL): Režim Pan\n- "
+"![LDRDL](resource:IDB_GESTURE_LDRDL) **Doleva-dolů-doprava-dolů-doleva** "
+"(LDRDL): Status\n- ![ULDR](resource:IDB_GESTURE_ULDR) "
+"**Nahoru-doleva-dolů-doprava** (ULDR): Rychlé menu\n\nDlouhým stiskem mapy "
+"vstoupíte do režimu Pan. Klepnutím v režimu Pan zobrazíte blízké body "
+"trati."
 
 msgid "Please enter four letters or digits only (ICAO station code)."
 msgstr "Zadejte pouze čtyři písmena nebo číslice (kód stanice ICAO)."
@@ -8308,17 +8332,18 @@ msgstr "Aktualizace repozitáře"
 #, no-c-format
 msgid "Signed countdown until the start gate opens or closes (now). Value colour and secondary line reflect gate state at the current time: Waiting (blue), Open (green), Closed (red). PEV window overrides task gate when set."
 msgstr ""
-"Odpočítávání se znaménkem do otevření nebo zavření startovní brány (nyní). "
-"Barva hodnoty a druhý řádek odrážejí stav brány: Čekání (modrá), Otevřeno "
-"(zelená), Zavřeno (červená). Okno PEV při nastavení přepisuje bránu úlohy."
+"Odpočítávání se znaménkem do otevření nebo uzavření startovní brány "
+"(nyní). Barva hodnoty a druhý řádek odrážejí stav brány: Čekání (modrá), "
+"Otevřeno (zelená), Zavřeno (červená). Okno PEV při nastavení přepisuje "
+"bránu úlohy."
 
 #, no-c-format
 msgid "Same gate as Start open. Main value is estimated time to reach the start line (MacCready leg when available, else distance / ground speed). Value colour and secondary line reflect gate state at that ETA: Too early (blue), Can start (green), Too late (red)."
 msgstr ""
 "Stejná brána jako Start open. Hlavní hodnota je odhadovaný čas k startovní "
-"čáře (noha MacCready, jinak vzdálenost / rychlost vůči zemi). Barva a druhý "
-"řádek odrážejí stav brány při tomto ETA: Příliš brzy (modrá), Lze startovat "
-"(zelená), Příliš pozdě (červená)."
+"čáře (MacCready ramena trati, jinak vzdálenost / rychlost vůči zemi). "
+"Barva a druhý řádek odrážejí stav brány při tomto ETA: Příliš brzy "
+"(modrá), Lze startovat (zelená), Příliš pozdě (červená)."
 
 #, no-c-format
 msgid "Home waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to change the home waypoint."
@@ -8398,7 +8423,7 @@ msgid "No RASP file loaded"
 msgstr "Nenačten žádný soubor RASP"
 
 msgid "RASP weather layer to display on this map page."
-msgstr "Vrstva počasí RASP pro zobrazení na této stránce mapy."
+msgstr "Vrstva počasí RASP pro zobrazení na této mapové stránce."
 
 #, c-format
 msgid "Cached %u files for the selected UTC day."
@@ -8446,10 +8471,11 @@ msgstr ""
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
 msgstr ""
-"Aktivní bod: zobrazuje další bod úlohy při načtené uspořádané úloze, jinak "
-"bod Goto. Zobrazí název bodu, rozdíl výšky příletu vůči bezpečné výšce "
-"příletu a vzdálenost. Klepnutím zvolíte jiný bod (bod úlohy pro přeskočení "
-"na nohu, nebo libovolný bod jako Goto bez úlohy)."
+"Aktivní bod: zobrazuje další bod úlohy, když je načtena zadaná úloha, "
+"jinak bod GoTo. Zobrazí název bodu, rozdíl výšky příletu vůči bezpečné "
+"výšce příletu a vzdálenost. Klepnutím zvolíte jiný bod (bod úlohy pro "
+"přeskočení na jiné rameno úlohy, nebo libovolný jiný bod jako GoTo, pokud "
+"není nahrána úloha)."
 
 #, no-c-format
 msgid "A Symmetric Sector with a custom radius."
@@ -8593,21 +8619,21 @@ msgid "Distance rings off"
 msgstr "Kružnice vzdálenosti vypnuty"
 
 msgid "Airspace labels hidden"
-msgstr "Popisky vzdušného prostoru skryty"
+msgstr "Popisy vzdušného prostoru skryty"
 
 msgid "Airspace labels shown"
-msgstr "Popisky vzdušného prostoru zobrazeny"
+msgstr "Popisy vzdušného prostoru zobrazeny"
 
 msgid "Airspace labels on"
-msgstr "Popisky vzdušného prostoru zapnuty"
+msgstr "Popisy vzdušného prostoru zapnuty"
 
 msgid "Airspace labels off"
-msgstr "Popisky vzdušného prostoru vypnuty"
+msgstr "Popisy vzdušného prostoru vypnuty"
 
 #, no-c-format
 msgctxt "Status"
 msgid "Auto (circling/cruise)"
-msgstr "Auto (kroužení/přelet)"
+msgstr "Auto (kroužení/přeskok)"
 
 #, no-c-format
 msgctxt "Status"
@@ -8747,7 +8773,7 @@ msgid "Exporting: %s"
 msgstr "Exportuji: %s"
 
 msgid "Select at least one flight."
-msgstr "Vyberte alespoň jeden let."
+msgstr "Vyber alespoň jeden let."
 
 #, no-c-format
 msgctxt "Menu"
@@ -8782,7 +8808,7 @@ msgstr ""
 "nastavení."
 
 msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide lze nahrát pouze soubory .igc."
+msgstr "Na WeGlide lze nahrát pouze .igc soubory."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -8794,7 +8820,7 @@ msgid "Flights"
 msgstr "Lety"
 
 msgid "Show .nmea files"
-msgstr "Zobrazit soubory .nmea"
+msgstr "Zobraz soubory .nmea"
 
 msgid "(none)"
 msgstr "(žádný)"
@@ -8802,12 +8828,12 @@ msgstr "(žádný)"
 #, no-c-format
 msgctxt "Button"
 msgid "Choose location"
-msgstr "Zvolit umístění"
+msgstr "Zvol umístění"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Export"
-msgstr "Exportovat"
+msgstr "Exportuj"
 
 msgid "Creating backup"
 msgstr "Vytváření zálohy"
@@ -8829,7 +8855,7 @@ msgstr "Obnovení přepíše stávající data. Pokračovat?"
 #, no-c-format
 msgctxt "Button"
 msgid "Restore"
-msgstr "Obnovit"
+msgstr "Obnov"
 
 msgid "Restore failed."
 msgstr "Obnovení selhalo."
@@ -8854,7 +8880,7 @@ msgstr "Správce záloh"
 #, no-c-format
 msgctxt "Button"
 msgid "Create backup"
-msgstr "Vytvořit zálohu"
+msgstr "Vytvoř zálohu"
 
 msgid "Select a target first."
 msgstr "Nejprve vyberte cíl."
@@ -8865,7 +8891,7 @@ msgstr "Záloha selhala."
 #, no-c-format
 msgctxt "Button"
 msgid "Restore backup"
-msgstr "Obnovit zálohu"
+msgstr "Obnov zálohu"
 
 msgid "No backup files found in selected location."
 msgstr "Ve zvoleném umístění nebyly nalezeny žádné zálohy."
@@ -8873,13 +8899,13 @@ msgstr "Ve zvoleném umístění nebyly nalezeny žádné zálohy."
 #, no-c-format
 msgctxt "Button"
 msgid "Delete backup"
-msgstr "Smazat zálohu"
+msgstr "Smaž zálohu"
 
 msgid "Delete this backup?"
 msgstr "Smazat tuto zálohu?"
 
 msgid "Select backup file"
-msgstr "Vybrat soubor zálohy"
+msgstr "Vyber soubor zálohy"
 
 msgid "Importing"
 msgstr "Importuji"
@@ -8943,7 +8969,7 @@ msgstr "Přenos souborů"
 #, no-c-format
 msgctxt "Button"
 msgid "Create folder"
-msgstr "Vytvořit složku"
+msgstr "Vytvoř složku"
 
 msgid "Invalid folder name."
 msgstr "Neplatný název složky."
@@ -8957,10 +8983,10 @@ msgstr "Vytvoření složky selhalo."
 #, no-c-format
 msgctxt "Button"
 msgid "Move"
-msgstr "Přesun"
+msgstr "Přesuň"
 
 msgid "Select at least one file."
-msgstr "Vyberte alespoň jeden soubor."
+msgstr "Vyber alespoň jeden soubor."
 
 #, c-format
 msgid "Delete '%s'?"
@@ -8982,7 +9008,7 @@ msgid "Select a single file to rename."
 msgstr "Pro přejmenování vyberte jeden soubor."
 
 msgid "Rename file"
-msgstr "Přejmenovat soubor"
+msgstr "Přejmenuj soubor"
 
 msgid "Invalid name."
 msgstr "Neplatný název."
@@ -9001,16 +9027,16 @@ msgid "Overwrite '%s' with '%s'?"
 msgstr "Přepsat '%s' souborem '%s'?"
 
 msgid "Transfer to"
-msgstr "Přenos do"
+msgstr "Přesuň do"
 
 msgid "Invalid destination folder."
 msgstr "Neplatná cílová složka."
 
 msgid "Move files"
-msgstr "Přesunout soubory"
+msgstr "Přesuň soubory"
 
 msgid "Copy files"
-msgstr "Kopírovat soubory"
+msgstr "Kopíruj soubory"
 
 #, c-format
 msgid "Moved %u file(s). Skipped %u. Failed %u."
@@ -9040,7 +9066,7 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Organize files"
-msgstr "Uspořádat soubory"
+msgstr "Uspořádej soubory"
 
 #, c-format
 msgid ""
@@ -9083,22 +9109,22 @@ msgstr "Bez změn. %u zařízení."
 #, no-c-format
 msgctxt "Button"
 msgid "Scan"
-msgstr "Skenovat"
+msgstr "Skenuj"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Grant access"
-msgstr "Udělovat přístup"
+msgstr "Uděl přístup"
 
 #, no-c-format
 msgctxt "Menu"
 msgid "Choose location"
-msgstr "Zvolit umístění"
+msgstr "Zvol umístění"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Change folder"
-msgstr "Změnit složku"
+msgstr "Změň složku"
 
 msgid "Finalizing backup"
 msgstr "Dokončování zálohy"
@@ -9140,7 +9166,7 @@ msgstr ""
 #, no-c-format
 msgctxt "Setting"
 msgid "Emit GPGGA/GPRMC"
-msgstr "Vysílat GPGGA/GPRMC"
+msgstr "Vysílej GPGGA/GPRMC"
 
 #, no-c-format
 msgid "Audio when connected"
@@ -9177,7 +9203,7 @@ msgstr "Dělitel hardwarového taktu 20 ms (1 = 50 Hz, 10 = 5 Hz)."
 #, no-c-format
 msgctxt "Setting"
 msgid "Use system date for UTC"
-msgstr "Použít systémové datum pro UTC"
+msgstr "Použij systémové datum pro UTC"
 
 msgid ""
 "The GDL90 protocol sends time-of-day only, not calendar date. When this is "
@@ -9198,7 +9224,7 @@ msgstr "Nastavení GDL90"
 #, no-c-format
 msgctxt "Button"
 msgid "Sim: Jump to"
-msgstr "Sim: Skočit na"
+msgstr "Sim: Posuň sem"
 
 msgid "Failed to acknowledge airspace warning for day"
 msgstr "Nepodařilo se potvrdit varování vzdušného prostoru na den"
@@ -9322,8 +9348,8 @@ msgid ""
 "Show Q-code %s?\n"
 "This will remove matching Q-code filters, which may also show other NOTAMs."
 msgstr ""
-"Zobrazit Q-code %s?\n"
-"Tím se odstraní odpovídající filtry Q-code, což může zobrazit i jiné NOTAM."
+"Zobrazit Q-code %s?\nTím se odstraní odpovídající filtry Q-code, mohou být "
+"zobrazeny i jiné NOTAMy."
 
 #, no-c-format
 msgctxt "Menu"
@@ -9356,7 +9382,7 @@ msgstr "Nikdy"
 #, no-c-format
 msgctxt "Menu"
 msgid "NOTAMs"
-msgstr "NOTAM"
+msgstr "NOTAMy"
 
 #, c-format
 msgid "%u total"
@@ -9371,7 +9397,7 @@ msgstr "%u viditelných"
 
 #, no-c-format
 msgid "Thermal Information Map"
-msgstr "Mapa termických informací"
+msgstr "Thermal Info Map"
 
 msgid "Traffic Details"
 msgstr "Podrobnosti provozu"
@@ -9382,22 +9408,22 @@ msgid "Information"
 msgstr "Informace"
 
 msgid "Press here to download"
-msgstr "Stiskněte zde pro stažení"
+msgstr "Stáhněte zde"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Connect"
-msgstr "Připojit"
+msgstr "Připoj"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Forget"
-msgstr "Zapomenout"
+msgstr "Zapomeň"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Disconnect"
-msgstr "Odpojit"
+msgstr "Odpoj"
 
 #, no-c-format
 msgctxt "Menu"
@@ -9422,27 +9448,26 @@ msgstr "—"
 #, no-c-format
 msgctxt "Button"
 msgid "Set as Startup Location"
-msgstr "Nastavit jako startovní polohu"
+msgstr "Jako výchozí pozice"
 
 msgid "Show NOTAM labels"
-msgstr "Zobrazit popisky NOTAM"
+msgstr "Zobraz popisy NOTAM"
 
 msgid "Show brief NOTAM text labels on the map when zoomed in sufficiently."
 msgstr ""
-"Zobrazovat krátké textové popisky NOTAM na mapě při dostatečném přiblížení."
+"Zobrazí krátké textové popisky NOTAMu na mapě při dostatečném přiblížení."
 
 msgid "NOTAM Support"
 msgstr "Podpora NOTAM"
 
 msgid "Enable downloading and display of NOTAMs from aviation authorities."
-msgstr "Povolit stahování a zobrazování NOTAM od leteckých úřadů."
+msgstr "Povolí stahování a zobrazování NOTAMů leteckých orgánů."
 
 msgid ""
 "Notice: NOTAM display is for situational awareness only\n"
 "and does not replace proper pre-flight NOTAM briefing."
 msgstr ""
-"Upozornění: zobrazení NOTAM slouží pouze ke situačnímu přehledu\n"
-"a nenahrazuje řádný předletový briefing NOTAM."
+"Pozor: Zobrazení NOTAM slouží pouze k\nsituačnímu přehledu!"
 
 msgid "API URL"
 msgstr "URL API"
@@ -9463,17 +9488,17 @@ msgid "Radius around current location to fetch NOTAMs."
 msgstr "Poloměr kolem aktuální polohy pro stahování NOTAM."
 
 msgid "Auto-Refresh (minutes)"
-msgstr "Automatické obnovení (minuty)"
+msgstr "Automatické obnovení"
 
 msgid "Automatically refresh NOTAMs every X minutes. Set to 0 to disable."
-msgstr "Automaticky obnovovat NOTAM každých X minut. Nastavte 0 pro vypnutí."
+msgstr "Automaticky obnovuje NOTAM každých X minut. Nastavte 0 pro vypnutí."
 
 #, c-format
 msgid "%d min"
 msgstr "%d min"
 
 msgid "Show IFR-Only NOTAMs"
-msgstr "Zobrazit NOTAM pouze IFR"
+msgstr "Zobraz pouze IFR NOTAMy"
 
 msgid "Include NOTAMs for IFR traffic only."
 msgstr "Zahrnout NOTAM pouze pro provoz IFR."
@@ -9483,23 +9508,26 @@ msgid "%u filtered"
 msgstr "%u filtrováno"
 
 msgid "Show Only Currently Effective"
-msgstr "Zobrazit jen aktuálně platné"
+msgstr "Zobraz jen aktuálně platné"
 
 msgid "Filter out NOTAMs not currently in effect."
-msgstr "Odfiltrovat NOTAM, které právě neplatí."
+msgstr "Odfiltrování NOTAMů, které právě neplatí."
 
 msgid "Maximum NOTAM Radius"
-msgstr "Maximální poloměr NOTAM"
+msgstr "Maximální poloměr NOTAMu"
 
 msgid "Filter out NOTAMs with radius larger than this. Set to 0 to disable."
 msgstr ""
-"Odfiltrovat NOTAM s poloměrem větším než toto. Nastavte 0 pro vypnutí."
+"Odfiltruje NOTAMy s poloměrem větším než nastavená hodnota. Nastavte 0 pro "
+"vypnutí."
 
 msgid "Hidden Q-Codes"
-msgstr "Skryté Q-Code"
+msgstr "Skryté Q-kódy"
 
 msgid "Space-separated Q-code prefixes to hide (e.g., QA QK QN QOA QOL)."
-msgstr "Předpony Q-code ke skrytí oddělené mezerami (např. QA QK QN QOA QOL)."
+msgstr ""
+"Předpony Q-code, oddělené mezerami, určené ke skrytí (např. QA QK QN QOA "
+"QOL)."
 
 msgid "No valid location."
 msgstr "Žádná platná poloha."
@@ -9522,24 +9550,24 @@ msgstr "Načteno %u NOTAM"
 #, no-c-format
 msgctxt "Setting"
 msgid "Show Quick Guide"
-msgstr "Zobrazit rychlého průvodce"
+msgstr "Rychlý průvodce"
 
 msgid "If enabled, the Quick Guide is shown when XCSoar starts."
-msgstr "Je-li zapnuto, rychlý průvodce se zobrazí při startu XCSoar."
+msgstr "Je-li zapnuto, rychlý průvodce se při startu XCSoaru zobrazí."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Show release notes"
-msgstr "Zobrazit poznámky k vydání"
+msgstr "Poznámky vydání"
 
 msgid "If enabled, the What's New page is shown on the next startup."
-msgstr "Je-li zapnuto, stránka Novinky se zobrazí při příštím startu."
+msgstr "Je-li zapnuto, stránka Novinky se při příštím startu zobrazí."
 
 msgid "Safety disclaimer accepted"
-msgstr "Bezpečnostní prohlášení přijato"
+msgstr "Bezp. prohlášení"
 
 msgid "Whether the safety disclaimer has been accepted for this version."
-msgstr "Zda bylo bezpečnostní prohlášení přijato pro tuto verzi."
+msgstr "Určuje, zda bylo pro tuto verzi potvrzeno bezpečnostní prohlášení ."
 
 #, no-c-format
 msgctxt "Setting"
@@ -9563,15 +9591,15 @@ msgstr ""
 #, no-c-format
 msgctxt "Setting"
 msgid "Color e-ink"
-msgstr "Barevný e-ink"
+msgstr "Barevný E-ink"
 
 #, no-c-format
 msgid ""
 "Color electronic paper. Disables kinetic and smooth scrolling like "
 "monochrome e-ink."
 msgstr ""
-"Barevný elektronický papír. Vypíná kinetické a plynulé posouvání stejně jako"
-" mono e-ink."
+"Barevný elektronický papír. Vypíná kinetické a plynulé posouvání stejně "
+"jako mono E-ink."
 
 #, no-c-format
 msgctxt "Setting"
@@ -9582,22 +9610,22 @@ msgid ""
 "Select the display technology. E-ink modes disable kinetic and smooth "
 "scrolling for slow refresh screens."
 msgstr ""
-"Vyberte technologii displeje. Režimy e-ink vypínají kinetické a plynulé "
-"posouvání u pomalu obnovovaných obrazovek."
+"Vybírá technologii displeje zařízení. Režimy E-ink vypínají kinetické a "
+"plynulé posouvání u pomalu obnovovaných obrazovek."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Show QuickMenu button"
-msgstr "Zobrazit tlačítko QuickMenu"
+msgstr "Tlačítko QuickMenu"
 
 msgid "Show the QuickMenu button"
-msgstr "Zobrazit tlačítko QuickMenu"
+msgstr "Zobrazí tlačítko QuickMenu"
 
 msgid "WiFi service is not available."
 msgstr "Služba WiFi není dostupná."
 
 msgid "Managed by system settings."
-msgstr "Spravováno systémovým nastavením."
+msgstr "Spravováno systémem."
 
 msgid "This page shows WiFi status. Use WiFi list to scan and connect."
 msgstr ""
@@ -9689,7 +9717,7 @@ msgid ""
 "Select a RASP or EDL map overlay to configure its layer or level for this "
 "page."
 msgstr ""
-"Vyberte překryv mapy RASP nebo EDL pro nastavení vrstvy nebo hladiny této "
+"Vyber překryv mapy RASP nebo EDL pro nastavení vrstvy nebo hladiny této "
 "stránky."
 
 #, no-c-format
@@ -9740,7 +9768,7 @@ msgid ""
 "Reachable airfields are listed first (smallest detour toward home at top), "
 "then outlanding sites."
 msgstr ""
-"Nejprve jsou uvedena dosažitelná letiště (nejmenší zajížďka domů nahoře), "
+"Nejprve jsou uvedena dosažitelná letiště (nejmenší zajížďka k domovu), "
 "poté místa nouzového přistání."
 
 #, no-c-format
@@ -9754,9 +9782,10 @@ msgid ""
 "be reached with the current altitude and conditions. The triangle is only "
 "shown during cruise when the target is reachable."
 msgstr ""
-"Zobrazit na mapě zelený trojúhelník podél aktuální tratě ukazující "
-"nejvzdálenější bod, z něhož lze ještě dosáhnout aktivního bodu úlohy nebo "
-"cíle Goto při aktuální výšce a podmínkách."
+"Zobrazí na mapě zelený trojúhelník podél aktuální trasy letu, určující "
+"nejvzdálenější bod, z něhož lze ještě dosáhnout aktivní OB úlohy nebo GoTo "
+"cíl při aktuální výšce a meteo podmínkách. Trojúhelník je zobrazen pouze v "
+"režimu přeskoku, pokud je cílový bod dosažitelný."
 
 msgid ""
 "Primary waypoints files.  Supported file types are Cambridge/WinPilot files "
@@ -9792,7 +9821,7 @@ msgid "Online traffic on map"
 msgstr "Online provoz na mapě"
 
 msgid "Show traffic from SkyLines and XCSoar Cloud on the map."
-msgstr "Zobrazit provoz ze SkyLines a XCSoar Cloud na mapě."
+msgstr "Zobrazí na mapě provoz ze SkyLines a XCSoar Cloud."
 
 #, no-c-format
 msgctxt "Setting"
@@ -9800,7 +9829,7 @@ msgid "Distance rings"
 msgstr "Kružnice vzdálenosti"
 
 msgid "Display distance rings around the aircraft on the map."
-msgstr "Zobrazit kružnice vzdálenosti kolem letadla na mapě."
+msgstr "Zobrazí vzdálenostní kružnice na mapě kolem symbolu kluzáku."
 
 #, no-c-format
 msgctxt "Setting"
@@ -9810,7 +9839,7 @@ msgstr "Pevné (severozápad)"
 #, no-c-format
 msgctxt "Setting"
 msgid "Fixed (Top Left)"
-msgstr "Pevné (vlevo nahoře)"
+msgstr "Pevné (vlevo zhora)"
 
 #, no-c-format
 msgctxt "Setting"
@@ -9883,7 +9912,7 @@ msgstr "Pevný rozestup 64 m, bez závislosti na zoomu"
 msgid ""
 "Draw contour lines on the terrain. Contour mode controls density of contour "
 "lines."
-msgstr "Kreslit vrstevnice na terénu. Režim vrstevnic řídí hustotu čar."
+msgstr "Vykresluje vrstevnice na terénu. Režim vrstevnic řídí hustotu čar."
 
 msgid "pc_met Username"
 msgstr "Uživatelské jméno pc_met"
@@ -9900,7 +9929,7 @@ msgid ""
 "Covers the entire Alpine arc from Vienna to Perpignan, forecasting wave "
 "throughout the whole Alps region. ICON-CH model."
 msgstr ""
-"Pokryje celý alpský oblouk od Vídně po Perpignan a předpovídá vlnu v celé "
+"Pokrývá celý alpský oblouk od Vídně po Perpignan a předpovídá vlnu v celé "
 "alpské oblasti. Model ICON-CH."
 
 #, no-c-format
@@ -9940,7 +9969,7 @@ msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
 "based on UTC clock."
 msgstr ""
-"Automaticky přepínat výškovou vrstvu podle GPS výšky a čas předpovědi podle "
+"Automaticky přepíná výškovou vrstvu podle GPS výšky a čas předpovědi podle "
 "hodin UTC."
 
 msgid "Angle of the OZ sector"
@@ -9949,7 +9978,7 @@ msgstr "Úhel sektoru OZ"
 #, no-c-format
 msgctxt "Button"
 msgid "Select as Alternate"
-msgstr "Vybrat jako záložní"
+msgstr "Vyber jako záložní"
 
 #, no-c-format
 msgctxt "Menu"
@@ -10011,7 +10040,7 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Apply to page"
-msgstr "Použít na stránku"
+msgstr "Použij na stránku"
 
 #, no-c-format
 msgctxt "Button"
@@ -10027,8 +10056,10 @@ msgid ""
 "**Simulator mode:** Drag from the glider to set direction and speed. Jump with **Sim: Jump to** on a waypoint or map point. Fine-tune height and speed with the **Altitude** and **Speed Ground** InfoBoxes.\n"
 "\n"
 msgstr ""
-"**Režim simulátoru:** Tažením od větroně nastavíte směr a rychlost. Skok přes **Sim: Skočit na** na bodu trati nebo bodu mapy. Doladění výšky a rychlosti InfoBoxy **Výška** a **Rychlost vůči zemi**.\n"
-"\n"
+"**Režim simulátoru:** Tažením od symbolu kluzáku nastavte směr a rychlost "
+"letu. Posuňte kluzák pomocí **Sim: Posuň sem** na bod trati nebo mapy. "
+"Upravujte výšku a rychlost letu pomocí InfoBoxů **Výška** a **Rychlost "
+"vůči zemi**.\n\n"
 
 msgid ""
 "![](resource:IDB_WARNING_TRIANGLE)\n"
@@ -10153,11 +10184,12 @@ msgid ""
 "energy vario input; without those, manual STF is silent and auto cruise "
 "falls back to vario."
 msgstr ""
-"Zvolte, zda zvukové vario zůstane v ručním režimu, nebo automaticky přepíná "
-"mezi Variem při kroužení a STF při přeletu. Ruční režim začíná po každém "
-"restartu ve Variu a lze jej měnit externími vstupními událostmi. Ve "
+"Zvolte, zda zvukové vario zůstane v ručním režimu, nebo automaticky "
+"přepíná mezi Variem při kroužení a STF při přeletu. Ruční režim začíná po "
+"každém restartu ve Variu a lze jej měnit externími vstupními událostmi. Ve "
 "vestavěném simulátoru potřebuje zvuk STF platnou rychlost a vstup varia "
-"celkové energie; bez nich je ruční STF tiché a auto přelet přejde na vario."
+"celkové energie; bez nich je ruční STF tiché a auto přeskok přejde zpět na "
+"vario."
 
 #, no-c-format
 msgid "1 hour"
@@ -10319,7 +10351,7 @@ msgstr "Přednačíst den"
 #, no-c-format
 msgctxt "Button"
 msgid "Clean other days"
-msgstr "Vyčistit jiné dny"
+msgstr "Vyčisti jiné dny"
 
 msgid ""
 "Forecast time for the current map page. Opens the same picker as the weather"
@@ -10354,7 +10386,8 @@ msgid "Downloading XCTherm %s..."
 msgstr "Stahování XCTherm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
-msgstr "Povolit živé sledování přes server SkyLines (tracking.skylines.aero)."
+msgstr ""
+"Povoluje živé sledování přes server SkyLines (tracking.skylines.aero)."
 
 msgid ""
 "Download the position of your SkyLines friends live from the SkyLines "
@@ -10378,18 +10411,19 @@ msgstr ""
 #, no-c-format
 msgctxt "Setting"
 msgid "Show traffic"
-msgstr "Zobrazit provoz"
+msgstr "Zobraz provoz"
 
 msgid ""
 "Receive traffic from the XCSoar Cloud server and OGN. Requires flying with a"
 " real GPS fix."
 msgstr ""
-"Přijímat provoz ze serveru XCSoar Cloud a OGN. Vyžaduje let se skutečným GPS"
-" fixem."
+"Přijímá provoz ze serveru XCSoar Cloud a OGN. Vyžaduje let se skutečným "
+"GPS fixem."
 
 msgid ""
 "Allow XCSoar Cloud communication when on a roaming mobile data connection."
-msgstr "Povolit komunikaci XCSoar Cloud při mobilních datech v roamingu."
+msgstr ""
+"Povolí komunikaci XCSoar Cloud při roamingovém mobilním datovém připojení."
 
 msgid "Hostname or IP address of the XCSoar Cloud server."
 msgstr "Název hostitele nebo IP adresa serveru XCSoar Cloud."
@@ -10412,7 +10446,7 @@ msgstr ""
 #, no-c-format
 msgctxt "Setting"
 msgid "Own FLARM IDs"
-msgstr "Vlastní ID FLARM"
+msgstr "Vlastní FLARM ID"
 
 #, no-c-format
 msgctxt "Status"
@@ -10609,7 +10643,8 @@ msgid ""
 "Simulator Steer by dragging from the glider, or using InfoBoxes Altitude and"
 " Speed Ground"
 msgstr ""
-"Simulátor: řiďte tažením od větroně nebo InfoBoxy Výška a Rychlost vůči zemi"
+"Simulátor: Směr a rychlost letu upravte tažením od symbolu kluzáku nebo "
+"změnou hodnot InfoBoxů Výška a Rychlost vůči zemi"
 
 msgid "+"
 msgstr "+"
@@ -10648,7 +10683,7 @@ msgstr ""
 "Nastavení"
 
 msgid "Airspace Labels"
-msgstr "Popisky vzdušného prostoru"
+msgstr "Popisy prostorů"
 
 msgid "Data Management"
 msgstr "Správa dat"
@@ -10673,12 +10708,12 @@ msgstr ""
 "limit pro turbulenci / zelený oblouk z letové příručky."
 
 msgid "Overlay opacity"
-msgstr "Neprůhlednost překryvu"
+msgstr "Průhlednost překryvu"
 
 #, no-c-format
 msgid "Sets the opacity of the RASP weather overlay on the map.  0% is fully transparent, 100% is fully opaque."
 msgstr ""
-"Nastavuje neprůhlednost meteorologického překryvu RASP na mapě.  0% je plně "
+"Nastavuje průhlednost meteorologického překryvu RASP na mapě. 0% je plně "
 "průhledné, 100% je plně neprůhledné."
 
 #, no-c-format
@@ -10707,8 +10742,8 @@ msgstr "Stránka"
 
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
 msgstr ""
-"Určuje, zda je stopa unášena větrem při zobrazení v režimu kroužení na "
-"blízkých měřítkách mapy. Vypnuto — stopa zůstává bez kompenzace driftu "
+"Určuje, zda je stopa unášena větrem při zobrazení režimu kroužení při "
+"velkém přiblížení mapy. Vypnuto — stopa zůstává bez kompenzace driftu "
 "větru."
 
 #, c-format
@@ -10717,7 +10752,7 @@ msgstr "Limit stahování: zkusit znovu za %u s"
 
 #, c-format
 msgid "Retry download in %u s"
-msgstr "Zkusit stahování znovu za %u s"
+msgstr "Zkus stahování znovu za %u s"
 
 #, no-c-format
 msgctxt "Status"
@@ -10785,8 +10820,7 @@ msgstr ""
 "překryv počasí."
 
 msgid "Select a weather map overlay to configure its layer or level for this page."
-msgstr ""
-"Vyberte překryv počasí pro nastavení vrstvy nebo hladiny této stránky."
+msgstr "Vyber překryv počasí pro nastavení vrstvy nebo hladiny této stránky."
 
 #, no-c-format
 msgctxt "Setting"
@@ -10810,7 +10844,7 @@ msgid "SkySight Region"
 msgstr "Region SkySight"
 
 msgid "Select the SkySight region used for live weather layers."
-msgstr "Vyberte region SkySight pro živé vrstvy počasí."
+msgstr "Vyber region SkySight pro živé vrstvy počasí."
 
 msgid "SkySight API rate-limited. Retrying shortly."
 msgstr "API SkySight omezeno. Brzy se zkusí znovu."
@@ -10886,30 +10920,30 @@ msgstr "Přidat"
 #, no-c-format
 msgctxt "Button"
 msgid "Set active"
-msgstr "Nastavit aktivní"
+msgstr "Nastav aktivní"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Preload Layer"
-msgstr "Přednačíst vrstvu"
+msgstr "Přednačti vrstvu"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Preload Selected"
-msgstr "Přednačíst výběr"
+msgstr "Přednačti výběr"
 
 msgid "Select SkySight Layers"
-msgstr "Vybrat vrstvy SkySight"
+msgstr "Vyber vrstvy SkySight"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Select all"
-msgstr "Vše"
+msgstr "Vyber vše"
 
 #, no-c-format
 msgctxt "Button"
 msgid "Select none"
-msgstr "Nic"
+msgstr "Zruš výběr"
 
 msgid "Some selected layers couldn't be added (the list may be full)."
 msgstr "Některé vybrané vrstvy se nepodařilo přidat (seznam může být plný)."
@@ -10969,14 +11003,14 @@ msgstr "Celkové místo na disku použité složkou mezipaměti SkySight."
 #, no-c-format
 msgctxt "Button"
 msgid "Clear downloaded data"
-msgstr "Smazat data"
+msgstr "Smaž data"
 
 msgid "SkySight is unavailable."
 msgstr "SkySight není dostupný."
 
 #, c-format
 msgid "SkySight rate limit reached; continuing in %u seconds."
-msgstr "Dosažen limit SkySight; pokračuji za %u s."
+msgstr "Dosažen limit stažení SkySight; pokračuji za %u s."
 
 msgid "SkySight downloads resumed."
 msgstr "Stahování SkySight obnoveno."
@@ -11060,7 +11094,7 @@ msgstr "Smaž"
 #, no-c-format
 msgctxt "Menu"
 msgid "Setup"
-msgstr "Nastavení"
+msgstr "Nastav"
 
 #, no-c-format
 msgctxt "Setting"
