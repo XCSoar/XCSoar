@@ -589,6 +589,32 @@ Replay::ForwardScanToTime(TimeStamp target_ts, TimeStamp progress_end,
 }
 
 bool
+Replay::SeekForward(FloatDuration delta,
+                    MergeThread &merge_thread,
+                    CalculationThread &calculation_thread,
+                    JobRunner &runner) noexcept
+{
+  /* an empty path means demo mode, which has no recording to seek
+     in */
+  if (!IsActive() || path == nullptr || path.empty() ||
+      !virtual_time.IsDefined() || delta.count() <= 0)
+    return false;
+
+  const TimeStamp target_ts = virtual_time + delta;
+
+  /* clamp the progress scale at the recording end, so the bar still
+     reaches 100% when skipping past the end of the flight */
+  const RecordingScan scan = ScanRecording(path);
+  TimeStamp progress_end = target_ts;
+  if (scan.end_time.IsDefined() && scan.end_time > virtual_time &&
+      scan.end_time < target_ts)
+    progress_end = scan.end_time;
+
+  return ForwardScanToTime(target_ts, progress_end,
+                           merge_thread, calculation_thread, runner);
+}
+
+bool
 Replay::SeekToNextFlightMode(CirclingMode mode,
                               MergeThread &merge_thread,
                               CalculationThread &calculation_thread,
