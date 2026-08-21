@@ -44,7 +44,14 @@ EventQueue::Generate(Event &event) noexcept
 bool
 EventQueue::Pop(Event &event) noexcept
 {
-  return !quit && (Generate(event) || ::SDL_PollEvent(&event.event));
+  if (quit)
+    return false;
+
+  /* update the cached clock so due timers are dispatched even while
+     events keep arriving and Wait() never runs into its timeout */
+  FlushClockCaches();
+
+  return Generate(event) || ::SDL_PollEvent(&event.event);
 }
 
 bool
@@ -58,6 +65,8 @@ EventQueue::Wait(Event &event) noexcept
     return false;
 
   while (true) {
+    FlushClockCaches();
+
     if (Generate(event))
       return true;
 
@@ -71,8 +80,6 @@ EventQueue::Wait(Event &event) noexcept
       : SDL_WaitEvent(&event.event);
     if (result != 0)
       return result > 0;
-
-    FlushClockCaches();
   }
 }
 
