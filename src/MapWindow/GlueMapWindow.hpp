@@ -92,6 +92,20 @@ class GlueMapWindow : public MapWindow {
 #endif
   }
 
+public:
+  /**
+   * Is a gesture trail currently visible?  Under OpenGL, it may
+   * extend beyond this window, because the pointer is captured while
+   * the gesture is drawn.
+   *
+   * @see MainWindow::OnPaint()
+   */
+  [[gnu::pure]]
+  bool HasGestureTrail() const noexcept {
+    return gestures.HasPoints();
+  }
+
+private:
   /**
    * Should pan chrome (crosshair, pan info) be drawn?  Hidden during
    * an early multi-touch gesture that has not yet committed pan UI,
