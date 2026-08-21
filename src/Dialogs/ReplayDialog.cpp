@@ -38,7 +38,7 @@ public:
   void CreateButtons(WidgetDialog &dialog) noexcept {
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
-    dialog.AddButton("+10'", [this](){ OnFastForwardClicked(); });
+    dialog.AddButton("+10'", [this](){ OnSkipClicked(); });
     dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
     dialog.AddButton(_("Circling"), [this](){ OnSeekNextCirclingClicked(); });
     dialog.AddButton(_("Cruise"), [this](){ OnSeekNextCruiseClicked(); });
@@ -47,7 +47,7 @@ public:
 private:
   void OnStopClicked() noexcept;
   void OnStartClicked() noexcept;
-  void OnFastForwardClicked() noexcept;
+  void OnSkipClicked() noexcept;
   void OnSeekClicked() noexcept;
   void OnSeekNextCirclingClicked() noexcept;
   void OnSeekNextCruiseClicked() noexcept;
@@ -108,9 +108,28 @@ ReplayControlWidget::OnStartClicked() noexcept
 }
 
 inline void
-ReplayControlWidget::OnFastForwardClicked() noexcept
+ReplayControlWidget::OnSkipClicked() noexcept
 {
-  replay.FastForward(std::chrono::minutes{10});
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return;
+
+  if (!replay.IsActive()) {
+    ShowMessageBox(_("Replay is not active."), _("Replay"), MB_OK);
+    return;
+  }
+
+  DialogJobRunner runner{UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
+                         _("Replay"), true};
+
+  /* reaching the end of the recording succeeds, so only a rejected
+     seek (demo mode, or no fix read yet) is reported */
+  if (!replay.SeekForward(std::chrono::minutes{10},
+                          *backend_components->merge_thread,
+                          *backend_components->calculation_thread, runner))
+    ShowMessageBox(_("Could not seek replay."), _("Replay"), MB_OK);
 }
 
 bool
