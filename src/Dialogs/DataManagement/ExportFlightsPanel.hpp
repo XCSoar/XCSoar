@@ -7,3 +7,6 @@
  * Declaration for the Export Flights dialog (moved into DataManagement).
  */
 void ShowExportFlightsDialog();
+
+/** Releases the export-flight metadata cache before the Asio event loop. */
+void ShutdownExportFlightsPanel() noexcept;

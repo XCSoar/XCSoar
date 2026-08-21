@@ -46,7 +46,7 @@ ParseBRecordTime(const char *line, BrokenTime &time,
 
 IgcMetaCache::~IgcMetaCache() noexcept
 {
-  CancelBackgroundFill();
+  Shutdown();
 }
 
 IgcMetaCache::CacheEntry
@@ -179,6 +179,13 @@ IgcMetaCache::CancelBackgroundFill() noexcept
 
   current_notify.store(nullptr);
   inject_task->Cancel();
+}
+
+void
+IgcMetaCache::Shutdown() noexcept
+{
+  CancelBackgroundFill();
+  inject_task.reset();
 }
 
 void

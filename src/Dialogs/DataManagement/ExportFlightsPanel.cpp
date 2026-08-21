@@ -40,6 +40,12 @@ static constexpr char EXPORT_FLIGHTS_SUBFOLDER[] = "xcsoar_flights";
 
 static IgcMetaCache igc_cache;
 
+void
+ShutdownExportFlightsPanel() noexcept
+{
+  igc_cache.Shutdown();
+}
+
 // Export job that runs in background thread
 struct ExportJob final : public Job {
   std::vector<Path> selected_files;

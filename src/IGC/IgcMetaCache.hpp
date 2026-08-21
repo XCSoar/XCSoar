@@ -64,6 +64,13 @@ public:
   void CancelBackgroundFill() noexcept;
 
   /**
+   * Releases resources which reference the Asio event loop.  This must be
+   * called before that event loop is destroyed when the cache has static
+   * storage duration.
+   */
+  void Shutdown() noexcept;
+
+  /**
    * Non-blocking. Returns immediately; completion is signalled via
    * `OnFillComplete()` and the `UI::Notify` passed to
    * `StartBackgroundFill()`.

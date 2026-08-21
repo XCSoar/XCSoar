@@ -23,6 +23,7 @@
 #include "Audio/GlobalPCMMixer.hpp"
 #include "Audio/GlobalPCMResourcePlayer.hpp"
 #include "Audio/GlobalVolumeController.hpp"
+#include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "system/Args.hpp"
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
@@ -79,6 +80,9 @@ Main()
   int ret = EXIT_FAILURE;
   if (Startup(screen_init.GetDisplay()))
     ret = CommonInterface::main_window->RunEventLoop();
+
+  /* The export-flight cache owns an InjectTask on the Asio event loop. */
+  ShutdownExportFlightsPanel();
 
   Shutdown();
 
