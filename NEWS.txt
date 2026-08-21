@@ -260,6 +260,11 @@ Version 7.45 - 2026-08-15
     (previously forced to FAI Quadrants) #2697
   - fix CUPX embedded POINTS.CUP on Windows
   - fix crash when queuing many background file downloads #2624
+* logger
+  - continue the previous IGC file after a crash or power cut, so one
+    flight is recorded as one file instead of one file per restart
+  - rebuild task progress, flight time, trail and statistics from that
+    file when the flight resumes, behind a cancellable progress dialog
 * tracking
   - untangle XCSoar Cloud settings from SkyLines live tracking;
     rename the map setting to “Online traffic on map”

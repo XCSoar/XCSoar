@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "IGC/IGCWriter.hpp"
+#include "IGCRepair.hpp"
 #include "IGCString.hpp"
 #include "Generator.hpp"
 #include "NMEA/Info.hpp"
@@ -11,16 +12,48 @@
 
 #include <cassert>
 
-IGCWriter::IGCWriter(Path path)
-  :file(path,
-        /* we use CREATE_VISIBLE here so the user can recover partial
-           IGC files after a crash/battery failure/etc. */
-        FileOutputStream::Mode::CREATE_VISIBLE),
+/**
+ * Repair the file, and replay its records through a fresh hash, before the
+ * output stream is opened.
+ *
+ * Both must happen first.  Truncating a file that is already open for
+ * appending is fragile; and on Windows FileOutputStream opens with share
+ * mode 0, so once it holds the file no reader can open it at all and the
+ * hash could never be restored.
+ */
+static GRecord
+PrepareGRecord(Path path, IGCWriter::Mode mode)
+{
+  GRecord grecord;
+  grecord.Initialize();
+
+  if (mode == IGCWriter::Mode::APPEND) {
+    RepairIgcForAppend(path);
+
+    /* so the G-record written at the end of the Flight covers the part
+       written before the cut */
+    grecord.LoadFileToBuffer(path);
+  }
+
+  return grecord;
+}
+
+static constexpr FileOutputStream::Mode
+OpenMode(IGCWriter::Mode mode) noexcept
+{
+  return mode == IGCWriter::Mode::APPEND
+    ? FileOutputStream::Mode::APPEND_OR_CREATE
+    /* we use CREATE_VISIBLE here so the user can recover partial
+       IGC files after a crash/battery failure/etc. */
+    : FileOutputStream::Mode::CREATE_VISIBLE;
+}
+
+IGCWriter::IGCWriter(Path path, Mode mode)
+  :grecord(PrepareGRecord(path, mode)),
+   file(path, OpenMode(mode)),
    buffered(file)
 {
   fix.Clear();
-
-  grecord.Initialize();
 }
 
 void

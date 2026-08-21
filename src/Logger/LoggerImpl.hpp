@@ -79,6 +79,15 @@ private:
   LoggerFRecord frecord;
 
   /**
+   * A file the Resume handler has validated and wants continued, or nullptr.
+   * Consumed and cleared by StartLogger().
+   */
+  AllocatedPath resume_target = nullptr;
+
+  /** Did the current Session continue an existing file? */
+  bool appending = false;
+
+  /**
    * If at least one GPS fix came from the simulator
    * (NMEA_INFO.Simulator), then this flag is true, and signing is
    * disabled.
@@ -95,6 +104,27 @@ public:
 
   bool IsActive() const noexcept {
     return writer != nullptr;
+  }
+
+  /**
+   * Continue this file instead of opening a new one, for the next Logger
+   * Session only.
+   *
+   * Set by the Resume handler once it has replayed a Cut Session and
+   * confirmed the Flight was still airborne when it ended.  The logger never
+   * makes that judgement itself: appending is a commitment that cannot be
+   * undone once the two Flights share a file, so nothing is appended unless
+   * the reconstruction was validated first.
+   *
+   * Consumed by the next StartLogger() and cleared there, so it can never
+   * affect a later Session.
+   */
+  void SetResumeTarget(Path path) noexcept {
+    resume_target = path;
+  }
+
+  bool IsResuming() const noexcept {
+    return resume_target != nullptr;
   }
 
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,

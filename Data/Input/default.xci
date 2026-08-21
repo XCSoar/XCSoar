@@ -44,8 +44,15 @@ data=STARTUP_REAL
 mode=default
 type=gce
 data=TAKEOFF
+# Events run in REVERSE of the order written: the parser prepends each one to
+# a linked list that processGo() then walks from the head.  ResumeFlight is
+# written last precisely because it must run FIRST -- it decides whether the
+# logger should continue the previous file, and AutoLogger start then acts on
+# that decision.  Appending cannot be undone, so it happens only after the
+# reconstruction has been validated.
 event=AutoLogger start
 event=StatusMessage Takeoff
+event=ResumeFlight
 
 mode=default
 type=gce
