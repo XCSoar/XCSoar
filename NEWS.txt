@@ -38,6 +38,9 @@ Version 7.46 - not yet released
 * glide computer
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
+  - fix circling wind staying blank on paragliders and other aircraft
+    without airspeed or a gyroscope, including fast IGC replay; polar
+    min-sink can lower GPS-only wind quality #2905
 * devices
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
