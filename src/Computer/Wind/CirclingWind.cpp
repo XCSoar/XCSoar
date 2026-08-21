@@ -10,6 +10,7 @@
 #include "Math/Util.hpp"
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/MoreData.hpp"
+#include "time/FloatDuration.hxx"
 
 #include <algorithm>
 #include <cmath>
@@ -38,6 +39,11 @@ IMU, if available. IMU data is more reliable especially at higher wind speeds.
 The algorithm uses True Airspeed to compensate for changing airspeed during the
 circle. The algorithm also runs without the availability of True Airspeed, but
 then without this compensation.
+
+GPS track rate is not constant in wind when wind is a large fraction of
+airspeed (typical for paragliders). Without TAS or a gyroscope, the
+angular-rate roundness gate is therefore skipped. Quality comes from the
+cosine fit of ground speed, nudged by polar min-sink.
 
 Some of the errors made here will be averaged-out by the WindStore, which keeps
 a number of wind measurements and calculates a weighted average based on
@@ -77,7 +83,8 @@ void CirclingWind::ShowResources(const MoreData &info) noexcept {
 }
 
 CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
-                                             const CirclingInfo &circling) noexcept {
+                                             const CirclingInfo &circling,
+                                             double vmin) noexcept {
   if (!circling.circling) {
     Reset();
     return Result(0);
@@ -193,12 +200,20 @@ CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
       }
 
       // this should be small (< 0.3) for a good enough circle
+      const auto avg_deg = angular_rate_avg.Degrees();
       const double circle_quality_metric =
-          std::abs(max_angular_rate_deviation / angular_rate_avg.Degrees());
+          avg_deg == 0
+              ? INITIAL_MIN_FIT_METRIC
+              : std::abs(max_angular_rate_deviation / avg_deg);
 
-      if (circle_quality_metric < 1.0) {
+      /* GPS track rate varies with wind when W/V is large.  Without TAS
+         or a gyro that is not a reason to discard the circle (#2905). */
+      const bool relax_roundness =
+          !usable_airspeed && !usable_gyroscope;
+
+      if (relax_roundness || circle_quality_metric < 1.0) {
         result = CalcWind(circle_quality_metric, n_samples, current_circle,
-                          angular_rate_source);
+                          angular_rate_source, relax_roundness, vmin);
 
         /* we have a good circle, wait for 1/4 circle before calculating the
            next */
@@ -215,23 +230,34 @@ CirclingWind::Result CirclingWind::NewSample(const MoreData &info,
 CirclingWind::Result CirclingWind::CalcWind(double quality_metric,
                                             size_t n_samples,
                                             Angle circle,
-                                            char angular_rate_source) noexcept {
+                                            char angular_rate_source,
+                                            bool relax_roundness,
+                                            double vmin) noexcept {
   assert(n_samples > 1);
   assert(!samples.empty());
 
-  // reject if average time step greater than 2.0 seconds
+  /* Reject circles whose GPS samples are too sparse for a cosine fit.
+     4 s covers 3 s IGC logger steps; 2 s was too tight for that and
+     for IGC replay faster than 1× (virtual time jumps by the replay
+     rate each wall-clock tick). */
   const auto measure_time = (samples[0].time - samples[n_samples - 1].time);
   const auto avg_step_width = measure_time / (n_samples - 1);
   if (avg_step_width <= std::chrono::seconds{0})
     return Result(0);
-  if (avg_step_width > std::chrono::seconds{2})
+  if (avg_step_width > std::chrono::seconds{4})
     return Result(0);
 
-  // reject if step width isn't sufficiently uniform
-  for (size_t i = 1; i < n_samples; i++)
-    if (std::chrono::abs(samples[i - 1].time - samples[i].time -
-                         avg_step_width) > (avg_step_width * 0.05))
-      return Result(0);
+  /* 5 % was tighter than wall-clock jitter on IGC replay and phone
+     GPS.  Without TAS or a gyro, time spacing is not a roundness
+     proxy — skip it.  Otherwise allow half a step or 0.5 s. */
+  if (!relax_roundness) {
+    const auto max_dev = std::max(avg_step_width * 0.5,
+                                  FloatDuration{0.5});
+    for (size_t i = 1; i < n_samples; i++)
+      if (std::chrono::abs(samples[i - 1].time - samples[i].time -
+                           avg_step_width) > max_dev)
+        return Result(0);
+  }
 
   /* the fraction of the last step to be removed from the sum over the full
      circle */
@@ -323,8 +349,15 @@ CirclingWind::Result CirclingWind::CalcWind(double quality_metric,
   }
 
   SpeedVector wind(wind_bearing.AsBearing(), wind_speed);
-  const auto quality = EstimateQuality(quality_metric, min_fit_metric,
-                                       wind_speed, angular_rate_source);
+  auto quality = EstimateQuality(quality_metric, min_fit_metric,
+                                 wind_speed, angular_rate_source,
+                                 relax_roundness);
+
+  /* No TAS: GPS roundness is skipped.  If mean GS is far from polar
+     min-sink, drop quality by one (never to zero). */
+  if (relax_roundness && vmin > 0 && quality > 0 &&
+      (speed_offset < vmin / 2 || speed_offset > 2 * vmin))
+    quality = std::max(1u, quality - 1);
 
   return Result(quality, wind);
 }
@@ -332,10 +365,23 @@ CirclingWind::Result CirclingWind::CalcWind(double quality_metric,
 unsigned int CirclingWind::EstimateQuality(double circle_quality,
                                            double fit_cosine_quality,
                                            double wind_speed,
-                                           char angular_rate_source) noexcept {
+                                           char angular_rate_source,
+                                           bool relax_roundness) noexcept {
   /* The return value matches the quality number of WindStore::SlotMeasurement
    * This estimation is heuristic, not scientific.
    */
+  if (relax_roundness) {
+    /* GPS track rate is not a circle-quality proxy when W/V is large.
+     * Score the cosine fit only, and keep quality at least 1 so a
+     * plausible wind is not discarded (replay GPS is noisy). */
+    int quality = 3;
+    if (fit_cosine_quality > 8)
+      quality = 2;
+    if (fit_cosine_quality > 20)
+      quality = 1;
+    return (unsigned)quality;
+  }
+
   /* Perfect circles are skewed, if GPS-track is the criteria, with higher
    * winds, hence allow some margin for this. wind_speed in m/s
    */
