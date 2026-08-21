@@ -90,7 +90,8 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestClimbAvCalc TestFilteredVarioComputer \
+	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
@@ -645,6 +646,15 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
+
+TEST_CIRCLING_WIND_SOURCES = \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCirclingWind.cpp
+TEST_CIRCLING_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
+$(eval $(call link-program,TestCirclingWind,TEST_CIRCLING_WIND))
 
 TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
