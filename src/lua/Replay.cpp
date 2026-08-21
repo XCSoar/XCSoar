@@ -7,15 +7,36 @@
 #include "Util.hxx"
 #include "system/Path.hpp"
 #include "Replay/Replay.hpp"
+#include "NMEA/CirclingInfo.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
+#include "Job/Job.hpp"
+#include "Job/Runner.hpp"
+#include "Operation/Operation.hpp"
 #include "Protection.hpp"
 
 extern "C" {
 #include <lauxlib.h>
 }
+
+namespace {
+
+/**
+ * Runs a replay seek synchronously, without a progress dialog;
+ * scripts have no UI to report progress to.
+ */
+class InlineJobRunner final : public JobRunner {
+public:
+  bool Run(Job &job) override {
+    NullOperationEnvironment env;
+    job.Run(env);
+    return true;
+  }
+};
+
+} // namespace
 
 static int
 l_replay_index(lua_State *L)
@@ -57,6 +78,61 @@ l_replay_fastforward(lua_State *L)
 
   FloatDuration delta_s{luaL_checknumber(L, 1)};
   return !backend_components->replay->FastForward(delta_s);
+}
+
+static int
+l_replay_seek_to_flight_minutes(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return luaL_error(L, "Replay seek unavailable");
+
+  const auto minutes = static_cast<unsigned>(luaL_checkinteger(L, 1));
+  InlineJobRunner runner;
+  const bool ok =
+    backend_components->replay->SeekToFlightElapsedMinutes(
+      minutes, *backend_components->merge_thread,
+      *backend_components->calculation_thread, runner);
+  Lua::Push(L, ok);
+  return 1;
+}
+
+static int
+l_replay_seek_to_next_circling(lua_State *L)
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return luaL_error(L, "Replay seek unavailable");
+
+  InlineJobRunner runner;
+  const bool ok =
+    backend_components->replay->SeekToNextFlightMode(
+      CirclingMode::CLIMB, *backend_components->merge_thread,
+      *backend_components->calculation_thread, runner);
+  Lua::Push(L, ok);
+  return 1;
+}
+
+static int
+l_replay_seek_to_next_cruise(lua_State *L)
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return luaL_error(L, "Replay seek unavailable");
+
+  InlineJobRunner runner;
+  const bool ok =
+    backend_components->replay->SeekToNextFlightMode(
+      CirclingMode::CRUISE, *backend_components->merge_thread,
+      *backend_components->calculation_thread, runner);
+  Lua::Push(L, ok);
+  return 1;
 }
 
 static int
@@ -124,6 +200,9 @@ l_replay_process_all([[maybe_unused]] lua_State *L)
 static constexpr struct luaL_Reg settings_funcs[] = {
   {"set_time_scale", l_replay_settimescale},
   {"fast_forward", l_replay_fastforward},
+  {"seek_to_flight_minutes", l_replay_seek_to_flight_minutes},
+  {"seek_to_next_circling", l_replay_seek_to_next_circling},
+  {"seek_to_next_cruise", l_replay_seek_to_next_cruise},
   {"start", l_replay_start},
   {"stop", l_replay_stop},
   {"process_all", l_replay_process_all},

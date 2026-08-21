@@ -9,6 +9,10 @@
 #include "time/Stamp.hpp"
 #include "system/Path.hpp"
 
+#include "NMEA/CirclingInfo.hpp"
+
+#include <functional>
+
 class DeviceBlackboard;
 class Logger;
 class ProtectedTaskManager;
@@ -16,6 +20,8 @@ class AbstractReplay;
 class CatmullRomInterpolator;
 class MergeThread;
 class CalculationThread;
+class JobRunner;
+class OperationEnvironment;
 class Error;
 
 class Replay final
@@ -58,6 +64,12 @@ class Replay final
    * is held back until #virtual_time has passed #next_data.time.
    */
   NMEAInfo next_data;
+
+  /**
+   * The number of fixes read from the #AbstractReplay since Start().
+   * Used to scale the seek progress bar.
+   */
+  unsigned fixes_read;
 
   CatmullRomInterpolator *cli = nullptr;
 
@@ -129,6 +141,62 @@ public:
   unsigned ProcessAllFixes(MergeThread &merge_thread,
                            CalculationThread &calc_thread);
 
+  /**
+   * Restart the current recording and replay up to the given number
+   * of minutes after the first fix, merging every fix into the
+   * blackboard.  The scan is run through the given #JobRunner, which
+   * may report progress and allow cancelling; a cancelled seek keeps
+   * the position that was reached.
+   */
+  bool SeekToFlightElapsedMinutes(unsigned minutes,
+                                  MergeThread &merge_thread,
+                                  CalculationThread &calculation_thread,
+                                  JobRunner &runner) noexcept;
+
+  /**
+   * Replay forward from the current position until the flight mode
+   * changes to the requested state (circling or cruise).  The scan is
+   * run through the given #JobRunner, which may allow cancelling; a
+   * cancelled seek keeps the position that was reached.
+   */
+  bool SeekToNextFlightMode(CirclingMode mode,
+                            MergeThread &merge_thread,
+                            CalculationThread &calculation_thread,
+                            JobRunner &runner) noexcept;
+
 private:
+  /**
+   * Read the next fix from the #AbstractReplay, keeping #fixes_read
+   * up to date.
+   */
+  bool ReadNextFix(NMEAInfo &data);
+
+  /**
+   * Apply fixes forward from the current position through merge and
+   * calculation until the given predicate matches the state after a
+   * fix, the recording ends, time warps or the scan is cancelled.
+   * The worker threads are suspended while scanning, and the reached
+   * position becomes the new playback position.  Call only while the
+   * replay is active with a defined #virtual_time and not in demo
+   * mode.
+   *
+   * @return true if the predicate matched
+   */
+  bool ForwardScan(MergeThread &merge_thread,
+                   CalculationThread &calculation_thread,
+                   JobRunner &runner,
+                   std::function<bool(OperationEnvironment &)> matched) noexcept;
+
+  /**
+   * Scan forward from the current position until the given time of
+   * day, showing progress scaled to \a progress_end (usually the
+   * target, clamped at the recording end).  Reaching the end of the
+   * recording before the target is not an error.
+   */
+  bool ForwardScanToTime(TimeStamp target_ts, TimeStamp progress_end,
+                         MergeThread &merge_thread,
+                         CalculationThread &calculation_thread,
+                         JobRunner &runner) noexcept;
+
   void OnTimer();
 };
