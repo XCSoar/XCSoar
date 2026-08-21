@@ -44,6 +44,9 @@ Version 7.46 - not yet released
     Setup / Look / Pages: the panel claimed every drag that started
     on one of its controls, so the list and its scroll bar never
     moved
+  - fix a settings panel going dead after a swipe: the control the
+    swipe had started on kept the mouse capture, so every later press
+    was delivered to it instead of to the control that was pressed
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
