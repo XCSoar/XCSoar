@@ -222,6 +222,20 @@ ScrollBar::DragBegin(PaintWindow *w, unsigned y) noexcept
 }
 
 void
+ScrollBar::DragBeginCentred(PaintWindow *w) noexcept
+{
+  // Make sure that we are not dragging already
+  assert(!dragging);
+
+  // Pick the slider up by its middle
+  drag_offset = GetSliderHeight() / 2;
+  // ... and remember that we are dragging now
+  dragging = true;
+  w->SetCapture();
+  w->Invalidate(rc_slider);
+}
+
+void
 ScrollBar::DragEnd(PaintWindow *w) noexcept
 {
   // If we are not dragging right now -> nothing to end

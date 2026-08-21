@@ -179,6 +179,16 @@ public:
   void DragBegin(PaintWindow *w, unsigned y) noexcept;
 
   /**
+   * Should be called when beginning to drag with the slider centred
+   * on the pointer instead of grabbed where it was hit.  A finger
+   * cannot hit a slider that is only a few pixels tall, so a touch
+   * anywhere on the track picks the slider up.
+   *
+   * @param w The Window object the ScrollBar is belonging to
+   */
+  void DragBeginCentred(PaintWindow *w) noexcept;
+
+  /**
    * Should be called when stopping to drag
    * (Called by ListControl::OnMouseUp)
    * @param w The Window object the ScrollBar is belonging to

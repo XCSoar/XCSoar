@@ -8,6 +8,8 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "UIUtil/KineticManager.hpp"
 
+#include <cstdlib>
+
 struct DialogLook;
 class ContainerWindow;
 
@@ -140,6 +142,22 @@ class ListControl final : public PaintWindow {
    * top of the window
    */
   int drag_y_window;
+
+  /**
+   * The item the current drag started on, to be selected when the
+   * gesture turns out to be a tap.  On a touch screen the cursor is
+   * moved only on release: moving it on press would drag the
+   * selection along with every swipe, and would run the (possibly
+   * expensive) ListCursorHandler::OnCursorMoved() right when the
+   * scroll gesture begins.  Negative when unused.
+   */
+  int pending_cursor = -1;
+
+  /**
+   * Has the current drag moved far enough to count as scrolling
+   * rather than as a tap?
+   */
+  bool drag_scrolled = false;
 
   ListItemRenderer *item_renderer = nullptr;
   ListCursorHandler *cursor_handler = nullptr;
@@ -315,6 +333,24 @@ private:
   }
 
   void drag_end() noexcept;
+
+  /**
+   * Has the pointer moved far enough from the start of the drag to
+   * make this a scroll gesture instead of a tap?
+   *
+   * @param y the y coordinate of the pointer, relative to this window
+   */
+  [[gnu::pure]]
+  bool IsScrollGesture(int y) const noexcept {
+    return abs(y - drag_y_window) > (int)item_height / 5;
+  }
+
+  /**
+   * Scroll to the position the ScrollBar slider is being dragged to.
+   *
+   * @param y the y coordinate of the pointer, relative to this window
+   */
+  void ScrollBarDragMove(int y) noexcept;
 
   void DrawItems(Canvas &canvas, unsigned start, unsigned end) const noexcept;
 
