@@ -173,6 +173,19 @@ public:
                             CalculationThread &calculation_thread,
                             JobRunner &runner) noexcept;
 
+  /**
+   * Skip the replay forward by the given duration from the current
+   * position, applying every fix on the way.  Unlike FastForward(),
+   * this jumps immediately instead of playing back faster.  The scan
+   * is run through the given #JobRunner, which may report progress
+   * and allow cancelling; reaching the end of the recording is not
+   * an error.
+   */
+  bool SeekForward(FloatDuration delta,
+                   MergeThread &merge_thread,
+                   CalculationThread &calculation_thread,
+                   JobRunner &runner) noexcept;
+
 private:
   /**
    * Read the next fix from the #AbstractReplay, keeping #fixes_read
