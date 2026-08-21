@@ -4,12 +4,17 @@
 #include "ReplayDialog.hpp"
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/JobDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+
+#include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
+#include "NMEA/CirclingInfo.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
 #include "Repository/FileType.hpp"
@@ -21,6 +26,7 @@ class ReplayControlWidget final
   enum Controls {
     FILE,
     RATE,
+    FLIGHT_MINUTES,
   };
 
   Replay &replay;
@@ -33,12 +39,18 @@ public:
     dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
     dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
     dialog.AddButton("+10'", [this](){ OnFastForwardClicked(); });
+    dialog.AddButton(_("Seek"), [this](){ OnSeekClicked(); });
+    dialog.AddButton(_("Circling"), [this](){ OnSeekNextCirclingClicked(); });
+    dialog.AddButton(_("Cruise"), [this](){ OnSeekNextCruiseClicked(); });
   }
 
 private:
   void OnStopClicked() noexcept;
   void OnStartClicked() noexcept;
   void OnFastForwardClicked() noexcept;
+  void OnSeekClicked() noexcept;
+  void OnSeekNextCirclingClicked() noexcept;
+  void OnSeekNextCruiseClicked() noexcept;
 
   static bool EditReplayFile(const char *caption, DataField &df,
                              const char *help_text);
@@ -69,6 +81,12 @@ ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   GetDataField(RATE).SetOnModified([this]{
     replay.SetTimeScale(GetValueFloat(RATE));
   });
+
+  AddInteger(_("Flight min"),
+             _("Position in the flight to jump to, in minutes since the "
+               "recording started."),
+             "%u", "%u",
+             0, Replay::MAX_SEEK_MINUTES, 1, 0);
 }
 
 inline void
@@ -116,6 +134,80 @@ ReplayControlWidget::EditReplayFile([[maybe_unused]] const char *caption,
   }
 
   return false;
+}
+
+inline void
+ReplayControlWidget::OnSeekClicked() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return;
+
+  if (!replay.IsActive()) {
+    ShowMessageBox(_("Replay is not active."), _("Replay"), MB_OK);
+    return;
+  }
+
+  const unsigned minutes =
+    static_cast<unsigned>(GetValueInteger(FLIGHT_MINUTES));
+
+  DialogJobRunner runner{UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
+                         _("Replay"), true};
+
+  if (!replay.SeekToFlightElapsedMinutes(
+        minutes, *backend_components->merge_thread,
+        *backend_components->calculation_thread, runner))
+    ShowMessageBox(_("Could not seek replay."), _("Replay"), MB_OK);
+}
+
+inline void
+ReplayControlWidget::OnSeekNextCirclingClicked() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return;
+
+  if (!replay.IsActive()) {
+    ShowMessageBox(_("Replay is not active."), _("Replay"), MB_OK);
+    return;
+  }
+
+  DialogJobRunner runner{UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
+                         _("Replay"), true};
+
+  if (!replay.SeekToNextFlightMode(
+        CirclingMode::CLIMB, *backend_components->merge_thread,
+        *backend_components->calculation_thread, runner))
+    ShowMessageBox(_("No further circling phase found."), _("Replay"),
+                   MB_OK);
+}
+
+inline void
+ReplayControlWidget::OnSeekNextCruiseClicked() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->merge_thread == nullptr ||
+      backend_components->calculation_thread == nullptr)
+    return;
+
+  if (!replay.IsActive()) {
+    ShowMessageBox(_("Replay is not active."), _("Replay"), MB_OK);
+    return;
+  }
+
+  DialogJobRunner runner{UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
+                         _("Replay"), true};
+
+  if (!replay.SeekToNextFlightMode(
+        CirclingMode::CRUISE, *backend_components->merge_thread,
+        *backend_components->calculation_thread, runner))
+    ShowMessageBox(_("No further cruise phase found."), _("Replay"),
+                   MB_OK);
 }
 
 void
