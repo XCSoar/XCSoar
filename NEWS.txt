@@ -94,6 +94,10 @@ Version 7.46 - not yet released
     makes the short scroll bars in settings panels usable at all
   - on touch screens, swiping a list scrolls it without dragging the
     selection to the row the finger came down on
+  - fix dragging inside a settings panel, e.g. scrolling the list in
+    Setup / Look / Pages: the panel claimed every drag that started
+    on one of its controls, so the list and its scroll bar never
+    moved
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
