@@ -243,6 +243,11 @@ ContainerWindow::RemoveChild(Window &child) noexcept
 
   if (active_child == &child)
     active_child = nullptr;
+
+  /* never leave capture_child dangling at a window that is going
+     away */
+  if (capture_child == &child)
+    ReleaseChildCapture(&child);
 }
 
 Window *
@@ -362,6 +367,22 @@ ContainerWindow::ReleaseChildCapture(Window *window) noexcept
     parent->ReleaseChildCapture(this);
   else
     DisableCapture();
+}
+
+void
+ContainerWindow::CancelChildCapture() noexcept
+{
+  Window *child = capture_child;
+  if (child == nullptr)
+    return;
+
+  /* OnCancelMode() makes the child release the capture, which clears
+     capture_child through ReleaseChildCapture(); clear it explicitly
+     as well, in case the child does not */
+  child->OnCancelMode();
+
+  if (capture_child == child)
+    capture_child = nullptr;
 }
 
 void

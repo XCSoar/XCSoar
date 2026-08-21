@@ -185,6 +185,14 @@ Window::Hide() noexcept
     return;
 
   visible = false;
+
+  /* a window that is no longer on screen must not keep the mouse
+     capture: every further event would be routed to it instead of to
+     what the user can actually see.  Both calls are cheap no-ops
+     unless this window, or a descendant, is capturing. */
+  parent->ReleaseChildCapture(this);
+  ClearCapture();
+
   parent->Invalidate();
 }
 
