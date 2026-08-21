@@ -2384,7 +2384,7 @@ msgid ""
 "(.nmea). Leave blank to run the demo."
 msgstr ""
 "Název souboru k přehrání. Může být IGC soubor (.igc), nebo raw NMEA log "
-"soubor (.nmea). Pro spuštěni dema ponechte prázdné."
+"soubor (.nmea). Pro spuštění dema ponechte prázdné."
 
 msgid "Rate"
 msgstr "Tempo"
@@ -4045,7 +4045,7 @@ msgstr "Linie pracovního pásma, linie terénu"
 #, no-c-format
 msgid "Draws a dashed line at the working and terrain glide reaches."
 msgstr ""
-"Zobrazí přerušovanou čáru na hranici pracovního pásma a akčního rádia "
+"Zobrazí přerušovanou čáru na hranici pracovního pásma a doletu "
 "kluzáku."
 
 #, no-c-format
@@ -4598,7 +4598,7 @@ msgstr "Pomocník 95% vzdál."
 
 msgid "Show helpers for Argentinean Federation \"95% distance\" rule. The AAT Distance Around Target InfoBox will show projected distance vs. maximum and change colors as you approach 95%."
 msgstr ""
-"Zobrazí pomocníky pro pravidlo \"95% vzdálenosti\" argentinské federace . "
+"Zobrazí pomocníky pro pravidlo \"95% vzdálenosti\" argentinské federace. "
 "InfoBox AAT Vzdálenost k cíli zobrazí projektovanou vzdálenost vs. maximum "
 "a změní barvy, jakmile se přiblížíte k 95% vzdálenosti."
 
@@ -4673,7 +4673,7 @@ msgstr "Francouzké SIA VFR mapy"
 
 #, no-c-format
 msgid "High Contrast"
-msgstr "Vysoký kontast"
+msgstr "Vysoký kontrast"
 
 #, no-c-format
 msgid "High Contrast low lands"
@@ -5451,7 +5451,7 @@ msgstr ""
 "Analýza](xcsoar://dialog/analysis)\n\n3. **Status** - Zkontrolujte časy a "
 "statistiky letu. [Info > Status](xcsoar://dialog/status)\n\n4. **Nahrání "
 "letu** - Nahrajte let z XCSoaru přímo do WeGlide . Nastavte své WeGlide "
-"User ID v [Nastav> Nastavení > WeGlide](xcsoar://config/weglide)"
+"User ID v [Nastavení > Nastav > WeGlide](xcsoar://config/weglide)"
 
 msgid ""
 "![](resource:IDB_LOCATION_PIN)\n"
@@ -6434,7 +6434,7 @@ msgstr ""
 "Rozdíl mezi aktuální trasou kluzáku (směrem pohybu po povrchu země) a "
 "kurzem k dalšímu otočnému bodu (v úloze AAT k cílovému bodu uvnitř AAT "
 "oblasti). GPS navigace je založená na trase, a trasa se může lišit od "
-"směru letu kluzáku, když fouká vítr.. Šipky ukazují směr, kterým je "
+"směru letu kluzáku, když fouká vítr. Šipky ukazují směr, kterým je "
 "potřeba kurz upravit tak, aby se shodoval s kurzem k dalšímu otočnému "
 "bodu. Výpočet bere v úvahu zakřivení Země."
 
@@ -6715,7 +6715,7 @@ msgstr ""
 
 #, no-c-format
 msgid "Alternate 1"
-msgstr "Záložní plochy"
+msgstr "Zál. plocha 1"
 
 #, no-c-format
 msgid "Altn 1"
@@ -6727,7 +6727,7 @@ msgstr "Zobrazí název a kurz k nejvhodnějšímu záložnímu místu přistán
 
 #, no-c-format
 msgid "Alternate 2"
-msgstr "Záložní 2"
+msgstr "Zál. plocha 2"
 
 #, no-c-format
 msgid "Altn 2"
@@ -6739,7 +6739,7 @@ msgstr "Zobrazí název a kurz k druhému záložnímu místu přistání."
 
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr "Záložní 1 - klouzavý poměr"
+msgstr "Zál. plocha 1 KP"
 
 #, no-c-format
 msgid "Altn 1 GR"
@@ -7271,7 +7271,7 @@ msgstr "Čas strávený v současném stoupavém proudu."
 
 #, no-c-format
 msgid "Alternate 2 GR"
-msgstr "Záložní 2 - klouzavý poměr"
+msgstr "Zál. plocha 2 KP"
 
 #, no-c-format
 msgid "Altn 2 GR"
@@ -7364,7 +7364,7 @@ msgstr "V úl odhad"
 #, no-c-format
 msgid "Estimated average cross-country speed for current task as of task completion, assuming performance of ideal MacCready cruise/climb cycle."
 msgstr ""
-"Odhadovaná průměrná rychlos přeletu při příletu do koncového bodu trati. "
+"Odhadovaná průměrná rychlost přeletu při příletu do koncového bodu trati. "
 "Předpokládá let dle ideálního MacCreadyho cyklu stoupání/přeskoků."
 
 #, no-c-format
@@ -8230,7 +8230,7 @@ msgstr "{0}: {1} MHz"
 
 msgid "Tells XCSoar to send its current GPS position to the device as $GPGGA and $GPRMC sentences. Turn off when another GPS source is already feeding the device on the same line. Changes take effect after reconnecting the device."
 msgstr ""
-"XCSoar bude odesílal aktuální GPS polohu do zařízení jako věty $GPGGA a "
+"XCSoar bude odesílat aktuální GPS polohu do zařízení jako věty $GPGGA a "
 "$GPRMC. Vypněte, pokud již jiné GPS tyto věty zasílá na stejné lince. "
 "Změny se projeví po opětovném připojení zařízení."
 
@@ -9567,7 +9567,7 @@ msgid "Safety disclaimer accepted"
 msgstr "Bezp. prohlášení"
 
 msgid "Whether the safety disclaimer has been accepted for this version."
-msgstr "Určuje, zda bylo pro tuto verzi potvrzeno bezpečnostní prohlášení ."
+msgstr "Určuje, zda bylo pro tuto verzi potvrzeno bezpečnostní prohlášení."
 
 #, no-c-format
 msgctxt "Setting"
@@ -10708,12 +10708,12 @@ msgstr ""
 "limit pro turbulenci / zelený oblouk z letové příručky."
 
 msgid "Overlay opacity"
-msgstr "Průhlednost překryvu"
+msgstr "Neprůhlednost překryvu"
 
 #, no-c-format
 msgid "Sets the opacity of the RASP weather overlay on the map.  0% is fully transparent, 100% is fully opaque."
 msgstr ""
-"Nastavuje průhlednost meteorologického překryvu RASP na mapě. 0% je plně "
+"Nastavuje neprůhlednost meteorologického překryvu RASP na mapě. 0% je plně "
 "průhledné, 100% je plně neprůhledné."
 
 #, no-c-format
