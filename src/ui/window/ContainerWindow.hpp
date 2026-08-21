@@ -131,6 +131,17 @@ public:
     return capture_child != nullptr && capture_child->HandlesDragging();
   }
 
+  /**
+   * Tell the child that currently captures the mouse that its press
+   * was cancelled, and forget it.
+   *
+   * Use this when this container consumes the rest of a gesture
+   * itself: the child never sees the matching mouse-up, so without
+   * this it stays pressed and keeps the capture, and the stale
+   * #capture_child misroutes every later press to it.
+   */
+  void CancelChildCapture() noexcept;
+
 protected:
   [[gnu::pure]]
   Window *FindNextControl(Window *reference) noexcept;
@@ -139,6 +150,14 @@ protected:
   Window *FindPreviousControl(Window *reference) noexcept;
 
 public:
+#else /* USE_WINUSER */
+
+  /**
+   * On GDI the operating system owns the mouse capture; there is no
+   * child capture of ours to cancel.
+   */
+  void CancelChildCapture() noexcept {}
+
 #endif /* !USE_WINUSER */
 
   /**

@@ -252,12 +252,11 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
        StringIsEqual(gesture, "R"))) {
     /* Horizontal swipe detected — defer listener: flipping the pager
        from here would hide this panel during OnMouseUp (crash). */
-    if (dragging) {
-      dragging = false;
-      ReleaseCapture();
-    }
-    if (potential_tap) {
-      potential_tap = false;
+    if (dragging || potential_tap) {
+      dragging = potential_tap = false;
+      /* the child that accepted the press does not get this
+         mouse-up */
+      CancelChildCapture();
       ReleaseCapture();
     }
     defer_swipe_queue.push_back(
@@ -276,6 +275,9 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
     const bool enable_kinetic = UsePixelPan();
 
     dragging = false;
+    /* we swallowed the gesture that started on the child (see
+       #potential_tap), so it does not get this mouse-up either */
+    CancelChildCapture();
     ReleaseCapture();
 
     if (enable_kinetic) {
