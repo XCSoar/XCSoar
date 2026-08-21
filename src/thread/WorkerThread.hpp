@@ -9,8 +9,10 @@
  * A thread which performs regular work in background.
  */
 class WorkerThread : public SuspensibleThread {
+protected:
   using Duration = std::chrono::steady_clock::duration;
 
+private:
   Cond trigger_cond;
   bool trigger_flag = false;
 
@@ -75,6 +77,16 @@ public:
   }
 
 protected:
+  /**
+   * Rate-limit for the next idle after Tick().  Subclasses may drop
+   * this (e.g. IGC replay on fast hosts) so GPS-driven computers keep
+   * ~1 Hz samples.
+   */
+  [[gnu::pure]]
+  virtual Duration GetPeriodMin() const noexcept {
+    return period_min;
+  }
+
   virtual void Run() noexcept;
 
   /**

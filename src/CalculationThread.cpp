@@ -5,6 +5,7 @@
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Asset.hpp"
 #include "Hardware/CPU.hpp"
 
 /**
@@ -69,6 +70,7 @@ CalculationThread::Tick() noexcept
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
+    replay_active = glide_computer.Basic().gps.replay;
   }
 
   bool force;
@@ -146,4 +148,15 @@ CalculationThread::ForceTrigger() noexcept
   }
 
   WorkerThread::Trigger();
+}
+
+CalculationThread::Duration
+CalculationThread::GetPeriodMin() const noexcept
+{
+  /* Fast LCD hosts: skip the 450 ms cap so 10x IGC replay still
+     feeds circling wind at ~1 Hz.  Idle stays 100 ms.  E-paper and
+     slow CPUs keep the limit; 1x replay already matches it. */
+  if (replay_active && !HasEPaper() && !IsSlowCPU())
+    return Duration{};
+  return WorkerThread::GetPeriodMin();
 }
