@@ -62,6 +62,12 @@ public:
    */
   void ProcessReplayFix() noexcept;
 
+  /**
+   * Reset the flight state of the GlideComputer before a replay
+   * restart.  Call only while the worker thread is suspended.
+   */
+  void ResetFlight() noexcept;
+
 protected:
   void Tick() noexcept override;
 };
