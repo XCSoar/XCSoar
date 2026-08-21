@@ -29,6 +29,13 @@ class CalculationThread final : public WorkerThread {
    */
   bool force;
 
+  /**
+   * Set from the last Tick() GPS.  On fast LCD hosts, replay skips the
+   * 450 ms period so 10x IGC still feeds circling wind.  E-paper and
+   * slow CPUs keep the limit.  Idle stays 100 ms.
+   */
+  bool replay_active = false;
+
   ComputerSettings settings_computer;
 
   double screen_distance_meters;
@@ -64,4 +71,6 @@ public:
 
 protected:
   void Tick() noexcept override;
+
+  Duration GetPeriodMin() const noexcept override;
 };
