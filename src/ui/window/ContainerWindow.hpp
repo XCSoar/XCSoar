@@ -122,6 +122,15 @@ public:
   void ReleaseChildCapture(Window *window) noexcept;
   void ClearCapture() noexcept override;
 
+  /**
+   * A container drags nothing itself; defer to the child that is
+   * currently capturing the mouse, i.e. the one that owns the gesture
+   * in progress.
+   */
+  bool HandlesDragging() const noexcept override {
+    return capture_child != nullptr && capture_child->HandlesDragging();
+  }
+
 protected:
   [[gnu::pure]]
   Window *FindNextControl(Window *reference) noexcept;
