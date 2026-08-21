@@ -130,6 +130,7 @@
 
 #ifdef __APPLE__
 #include "Apple/Services.hpp"
+#include "Apple/BackgroundSave.hpp"
 #endif
 
 #ifdef HAVE_EDL
@@ -400,6 +401,13 @@ Startup(UI::Display &display)
 
   if (!LoadProfile())
     return false;
+
+#ifdef __APPLE__
+  /* now that there is a profile to save, arm the "save on suspend"
+     hook; doing this any earlier could persist the still empty
+     profile map */
+  InitializeAppleBackgroundSave();
+#endif
 
   operation.SetText(_("Initialising"));
 
@@ -778,6 +786,14 @@ DestroyNetComponents() noexcept
 #endif
 
 void
+SaveUserState() noexcept
+{
+  SaveFlarmColors();
+  SaveFlarmMessaging();
+  Profile::Save();
+}
+
+void
 Shutdown()
 {
   VerboseOperationEnvironment operation;
@@ -787,6 +803,12 @@ Shutdown()
 
   // Turn off all displays first to prevent UI operations from blocking
   global_running = false;
+
+#ifdef __APPLE__
+  /* stop saving on suspend before we start tearing down the state
+     which SaveUserState() would touch */
+  DeinitializeAppleBackgroundSave();
+#endif
 
 #ifdef HAVE_HTTP
   if (main_window != nullptr)
@@ -832,12 +854,9 @@ Shutdown()
   }
 #endif
 
-  SaveFlarmColors();
-  SaveFlarmMessaging();
-
   // Save settings to profile
   operation.SetText(_("Shutdown, saving profile..."));
-  Profile::Save();
+  SaveUserState();
 
   operation.SetText(_("Shutdown, please wait..."));
 

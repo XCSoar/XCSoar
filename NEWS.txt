@@ -3,6 +3,8 @@ Version 7.46 - not yet released
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
 * iOS
+  - save the settings when the app moves to the background, so they
+    survive being swiped away in the app switcher
   - remove the thin white frame around full-screen dialogs (such as
     the Fly/Simulator screen), which no longer stop one pixel short of
     the display edge
