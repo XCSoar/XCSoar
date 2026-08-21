@@ -206,6 +206,16 @@ public:
   }
 
   /**
+   * The list pans its contents and drags its scroll bar slider, so a
+   * surrounding #VScrollPanel must leave a drag that started here
+   * alone.  Only while there actually is something to scroll: an
+   * entirely visible list lets the panel have the gesture.
+   */
+  bool HandlesDragging() const noexcept override {
+    return scroll_bar.IsDefined();
+  }
+
+  /**
    * Returns the height of list items
    * @return height of list items in pixel
    */
