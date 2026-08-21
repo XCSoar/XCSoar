@@ -35,6 +35,11 @@ Version 7.46 - not yet released
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
+  - pressing the scroll bar of a list beside the slider now moves the
+    slider to that spot instead of stepping a row or a page, which
+    makes the short scroll bars in settings panels usable at all
+  - on touch screens, swiping a list scrolls it without dragging the
+    selection to the row the finger came down on
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
