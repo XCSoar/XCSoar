@@ -3,7 +3,7 @@
 
 #include "Settings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "time/Zone.hxx"
+#include "time/SystemTimeZone.hpp"
 
 void
 PolarSettings::SetDefaults()
@@ -57,7 +57,8 @@ ComputerSettings::SetDefaults()
 
   average_eff_time = ae30seconds;
   set_system_time_from_gps = false;
-  utc_offset = RoughTimeDelta::FromSeconds(GetTimeZoneOffset());
+  auto_utc_offset = true;
+  utc_offset = RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
   forecast_temperature = Temperature::FromCelsius(25);
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();
