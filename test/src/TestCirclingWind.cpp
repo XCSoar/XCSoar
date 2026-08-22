@@ -124,10 +124,20 @@ WindMatches(const CirclingWind::Result &result, const SpeedVector &want,
 {
   if (!result.IsValid())
     return false;
-  if (std::fabs(result.wind.norm - want.norm) > speed_tol)
+
+  const double speed_err = std::fabs(result.wind.norm - want.norm);
+  const double bearing_err =
+    std::fabs((result.wind.bearing.AsBearing() - want.bearing)
+                .AsDelta()
+                .Degrees());
+  if (speed_err > speed_tol || bearing_err > bearing_tol.Degrees()) {
+    diag("got %.2f m/s %.1f deg, want %.2f m/s %.1f deg "
+         "(speed_err %.2f, bearing_err %.1f)",
+         result.wind.norm, result.wind.bearing.AsBearing().Degrees(),
+         want.norm, want.bearing.Degrees(), speed_err, bearing_err);
     return false;
-  return result.wind.bearing.AsBearing().CompareRoughly(want.bearing,
-                                                        bearing_tol);
+  }
+  return true;
 }
 
 static void
