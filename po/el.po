@@ -11238,3 +11238,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
+msgid "Paste"
+msgstr ""
+

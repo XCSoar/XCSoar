@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 22:41+0200\n"
+"POT-Creation-Date: 2026-08-22 14:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5053,6 +5053,15 @@ msgstr ""
 msgid "Select a weather map overlay to configure its layer or level for this page."
 msgstr ""
 
+msgid "SkySight is unavailable."
+msgstr ""
+
+msgid "SkySight API rate-limited. Retrying shortly."
+msgstr ""
+
+msgid "Loading SkySight catalog..."
+msgstr ""
+
 #, no-c-format
 msgctxt "Setting"
 msgid "SkySight Email"
@@ -6556,6 +6565,9 @@ msgctxt "Menu"
 msgid "Alternates 2"
 msgstr ""
 
+msgid "Paste"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -7066,12 +7078,6 @@ msgstr ""
 msgid "This function is not available on your platform yet."
 msgstr ""
 
-msgid "SkySight API rate-limited. Retrying shortly."
-msgstr ""
-
-msgid "Loading SkySight catalog..."
-msgstr ""
-
 msgid "No SkySight layers selected. Press Add to list to choose parameters."
 msgstr ""
 
@@ -7205,9 +7211,6 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Clear downloaded data"
-msgstr ""
-
-msgid "SkySight is unavailable."
 msgstr ""
 
 msgid "Failed to acknowledge airspace warning"

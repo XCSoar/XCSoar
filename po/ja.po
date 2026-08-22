@@ -11088,3 +11088,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "手動"
 
+msgid "Paste"
+msgstr ""
+

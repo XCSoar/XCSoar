@@ -11112,3 +11112,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Ručno"
 
+msgid "Paste"
+msgstr ""
+

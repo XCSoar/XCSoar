@@ -10871,3 +10871,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "수동"
 
+msgid "Paste"
+msgstr ""
+

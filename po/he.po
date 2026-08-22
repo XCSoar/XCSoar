@@ -11012,3 +11012,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "ידנית"
 
+msgid "Paste"
+msgstr ""
+
