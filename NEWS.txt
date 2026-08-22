@@ -10,6 +10,8 @@ Version 7.46 - not yet released
     characters and providing a designed bold cut
   - save the settings when the app moves to the background, so they
     survive being swiped away in the app switcher
+  - fix other apps' audio staying ducked after XCSoar plays a sound,
+    and the audio vario cutting out when leaving settings #2609
   - remove the thin white frame around full-screen dialogs (such as
     the Fly/Simulator screen), which no longer stop one pixel short of
     the display edge
