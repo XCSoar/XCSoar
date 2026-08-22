@@ -3,6 +3,11 @@ Version 7.46 - not yet released
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
 * iOS
+  - use the system keyboard for text entry so special characters
+    can be typed, and add a Paste button for the clipboard; the
+    Keyboard text-input style keeps XCSoar's own grid #2894
+  - use the system font instead of Helvetica, covering more
+    characters and providing a designed bold cut
   - save the settings when the app moves to the background, so they
     survive being swiped away in the app switcher
   - remove the thin white frame around full-screen dialogs (such as
@@ -36,6 +41,7 @@ Version 7.46 - not yet released
   - fix the Devices Debug button not writing port traffic to xcsoar.log
     #2903
 * dialogs
+  - let Shift type '_' on XCSoar's on-screen keyboard
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
