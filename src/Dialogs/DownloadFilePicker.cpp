@@ -24,10 +24,52 @@
 #include "thread/Mutex.hxx"
 #include "LocalPath.hpp"
 #include "system/FileUtil.hpp"
+#include "util/StaticString.hxx"
+#include <map>
+#include <set>
+#include <string>
+#include <string_view>
 #include <vector>
 
 #include <cassert>
 
+static const char *
+GetCountryName(std::string_view area) noexcept
+{
+  if (area == "ar") return _("Argentina");
+  if (area == "au") return _("Australia");
+  if (area == "br") return _("Brazil");
+  if (area == "bg") return _("Bulgaria");
+  if (area == "ca") return _("Canada");
+  if (area == "cl") return _("Chile");
+  if (area == "co") return _("Colombia");
+  if (area == "cz") return _("Czechia");
+  if (area == "dk") return _("Denmark");
+  if (area == "fi") return _("Finland");
+  if (area == "fr") return _("France");
+  if (area == "de") return _("Germany");
+  if (area == "hu") return _("Hungary");
+  if (area == "ie") return _("Ireland");
+  if (area == "il") return _("Israel");
+  if (area == "it") return _("Italy");
+  if (area == "jp") return _("Japan");
+  if (area == "mw") return _("Malawi");
+  if (area == "mx") return _("Mexico");
+  if (area == "na") return _("Namibia");
+  if (area == "nz") return _("New Zealand");
+  if (area == "no") return _("Norway");
+  if (area == "pl") return _("Poland");
+  if (area == "pt") return _("Portugal");
+  if (area == "za") return _("South Africa");
+  if (area == "es") return _("Spain");
+  if (area == "se") return _("Sweden");
+  if (area == "tr") return _("Turkey");
+  if (area == "ua") return _("Ukraine");
+  if (area == "gb") return _("United Kingdom");
+  if (area == "us") return _("United States");
+
+  return nullptr;
+}
 
 class DownloadFilePickerWidget final
   : public ListWidget,
@@ -44,6 +86,20 @@ class DownloadFilePickerWidget final
   Button *download_button;
 
   std::vector<AvailableFile> items;
+
+  struct VisibleItem {
+    enum class Type {
+      GROUP,
+      FILE,
+    } type;
+
+    std::string group;
+    std::string label;
+    std::size_t file_index;
+  };
+
+  std::vector<VisibleItem> visible_items;
+  std::set<std::string> expanded_groups;
 
   TextRowRenderer row_renderer;
 
@@ -79,11 +135,10 @@ public:
 
 protected:
   void RefreshList();
+  void RebuildVisibleItems();
   void RefreshRepository() noexcept;
 
-  void UpdateButtons() {
-    download_button->SetEnabled(true);
-  }
+  void UpdateButtons();
 
   void Download();
   void Cancel();
@@ -102,12 +157,22 @@ public:
     return true;
   }
 
-  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
+  void OnActivateItem(unsigned index) noexcept override {
     if (items.empty()) {
       assert(index == 0);
       RefreshRepository();
+    } else if (visible_items[index].type == VisibleItem::Type::GROUP) {
+      const auto &group = visible_items[index].group;
+      if (!expanded_groups.erase(group))
+        expanded_groups.insert(group);
+
+      RebuildVisibleItems();
     } else
       Download();
+  }
+
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
+    UpdateButtons();
   }
 
   /* virtual methods from class Net::DownloadListener */
@@ -162,11 +227,65 @@ DownloadFilePickerWidget::RefreshList()
     if (i.type == file_type)
       items.emplace_back(std::move(i));
 
+  RebuildVisibleItems();
+}
+
+void
+DownloadFilePickerWidget::RebuildVisibleItems()
+{
+  visible_items.clear();
+
+  if (file_type == FileType::MAP) {
+    std::map<std::string, std::vector<std::size_t>> groups;
+    std::vector<std::size_t> regions;
+
+    for (std::size_t i = 0; i < items.size(); ++i) {
+      const char *area = items[i].GetArea();
+      if (area != nullptr && *area != '\0')
+        groups[area].push_back(i);
+      else
+        regions.push_back(i);
+    }
+
+    for (const auto &[group, files] : groups) {
+      const char *name = GetCountryName(group);
+      visible_items.push_back({VisibleItem::Type::GROUP, group,
+                               name != nullptr ? name : group, 0});
+      if (expanded_groups.contains(group))
+        for (const auto file_index : files)
+          visible_items.push_back({VisibleItem::Type::FILE, {}, {}, file_index});
+    }
+
+    if (!regions.empty()) {
+      const std::string group = _("Regions");
+      visible_items.push_back({VisibleItem::Type::GROUP, group, group, 0});
+      if (expanded_groups.contains(group))
+        for (const auto file_index : regions)
+          visible_items.push_back({VisibleItem::Type::FILE, {}, {}, file_index});
+    }
+  } else {
+    for (std::size_t i = 0; i < items.size(); ++i)
+      visible_items.push_back({VisibleItem::Type::FILE, {}, {}, i});
+  }
+
   ListControl &list = GetList();
-  list.SetLength(std::max(items.size(), size_t{1}));
+  list.SetLength(std::max(visible_items.size(), size_t{1}));
   list.Invalidate();
 
   UpdateButtons();
+}
+
+void
+DownloadFilePickerWidget::UpdateButtons()
+{
+  bool enabled = items.empty();
+  if (IsDefined() && !items.empty() && !visible_items.empty()) {
+    const unsigned index = GetList().GetCursorIndex();
+    enabled = index < visible_items.size() &&
+      visible_items[index].type == VisibleItem::Type::FILE;
+  }
+
+  download_button->SetEnabled(enabled);
 }
 
 void
@@ -193,9 +312,17 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  const auto &file = items[i];
-
-  row_renderer.DrawTextRow(canvas, rc, file.GetName());
+  const auto &item = visible_items[i];
+  if (item.type == VisibleItem::Type::GROUP) {
+    StaticString<64> text;
+    text.Format("%s %s", expanded_groups.contains(item.group) ? "▼" : "▶",
+                item.label.c_str());
+    row_renderer.DrawTextRow(canvas, rc, text);
+  } else {
+    StaticString<256> text;
+    text.Format("    %s", items[item.file_index].GetName());
+    row_renderer.DrawTextRow(canvas, rc, text);
+  }
 }
 
 void
@@ -209,9 +336,13 @@ DownloadFilePickerWidget::Download()
   }
 
   const unsigned current = GetList().GetCursorIndex();
-  assert(current < items.size());
+  assert(current < visible_items.size());
 
-  const auto &file = items[current];
+  const auto &item = visible_items[current];
+  if (item.type != VisibleItem::Type::FILE)
+    return;
+
+  const auto &file = items[item.file_index];
 
   try {
     AllocatedPath dest_dir = GetFileTypeDefaultDir(file_type);
