@@ -252,8 +252,7 @@ LXDevice::PutCrewMass(double crew_mass, OperationEnvironment &env)
     return false;
 
   /* Send full POLAR command with only pilot_weight changed to
-     avoid zeroing other fields on the device.  Fall back to
-     partial command if we haven't read the device polar yet. */
+     avoid zeroing other fields on the device. */
   std::string cmd;
   {
     const std::lock_guard lock{mutex};
@@ -281,14 +280,9 @@ LXDevice::PutCrewMass(double crew_mass, OperationEnvironment &env)
     return true;
   }
 
-  /* Fall back to partial command */
-  LXNAVVario::SetPilotWeight(port, env, crew_mass);
-
-  {
-    const std::lock_guard lock{mutex};
-    last_sent_crew_mass = crew_mass;
-  }
-
+  /* Do not fall back to a partial POLAR write: empty a,b,c fields
+     zero the polar on LXNAV S-series varios (#2397).  Skip until
+     device_polar has been populated from a prior POLAR read/write. */
   return true;
 }
 
@@ -303,8 +297,7 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
     return false;
 
   /* Send full POLAR command with only empty_weight changed to
-     avoid zeroing other fields on the device.  Fall back to
-     partial command if we haven't read the device polar yet. */
+     avoid zeroing other fields on the device. */
   std::string cmd;
   {
     const std::lock_guard lock{mutex};
@@ -332,14 +325,7 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
     return true;
   }
 
-  /* Fall back to partial command */
-  LXNAVVario::SetEmptyWeight(port, env, empty_mass);
-
-  {
-    const std::lock_guard lock{mutex};
-    last_sent_empty_mass = empty_mass;
-  }
-
+  /* Same as PutCrewMass: never send empty-coefficient POLAR (#2397). */
   return true;
 }
 

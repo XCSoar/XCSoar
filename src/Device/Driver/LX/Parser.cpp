@@ -280,50 +280,11 @@ ParseDoubleValue(std::string_view sv) noexcept
 }
 
 /**
- * Parse the POLAR value from a PLXV0 sentence.
- *
- * Format: <a>,<b>,<c>,<polar_load>,<polar_weight>,
- *         <max_weight>,<empty_weight>,<pilot_weight>,<name>,<stall>
- *
- * Coefficients arrive in LX units (v=1 corresponds to 100 km/h)
- * and are converted to SI (m/s) before storing.
- */
-static void
-ParsePLXV0Polar(std::string_view value, NMEAInfo &info) noexcept
-{
-  const std::string value_str{value};
-  NMEAInputLine polar_line{value_str.c_str()};
-  double a_lx, b_lx, c, polar_load, polar_weight,
-    max_weight, empty_weight, pilot_weight;
-  if (polar_line.ReadChecked(a_lx) &&
-      polar_line.ReadChecked(b_lx) &&
-      polar_line.ReadChecked(c) &&
-      polar_line.ReadChecked(polar_load) &&
-      polar_line.ReadChecked(polar_weight) &&
-      polar_line.ReadChecked(max_weight) &&
-      polar_line.ReadChecked(empty_weight) &&
-      polar_line.ReadChecked(pilot_weight)) {
-
-    const double a = a_lx / (LX_POLAR_V * LX_POLAR_V);
-    const double b = b_lx / LX_POLAR_V;
-
-    info.settings.ProvidePolarCoefficients(a, b, c, info.clock);
-    info.settings.ProvidePolarLoad(polar_load, info.clock);
-    info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
-    info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
-    info.settings.ProvidePolarPilotWeight(pilot_weight, info.clock);
-    info.settings.ProvidePolarEmptyWeight(empty_weight, info.clock);
-  } else {
-    LogFmt("LXNAV: Failed to parse POLAR values from: {}", value);
-  }
-}
-
-/**
  * Parse the $PLXV0 sentence (LXNAV sVarios (including V7)).
  */
 static bool
 PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
-      NMEAInfo &info)
+      NMEAInfo &info, LXDevice &device)
 {
   const auto name = line.ReadView();
   if (name.empty())
@@ -336,8 +297,10 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
   if (!type.starts_with('W'))
     return true;
 
-  const std::lock_guard<Mutex> lock{settings};
-  settings.Set(std::string{name}, value);
+  {
+    const std::lock_guard<Mutex> lock{settings};
+    settings.Set(std::string{name}, value);
+  }
 
   if (name == "ELEVATION"sv) {
     if (auto d = ParseDoubleValue(value))
@@ -346,10 +309,65 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
     if (auto d = ParseDoubleValue(value))
       info.settings.ProvideMacCready(*d, info.clock);
   } else if (name == "POLAR"sv || name == "POL"sv) {
-    ParsePLXV0Polar(value, info);
+    device.StoreReceivedPolar(value, info);
   }
 
   return true;
+}
+
+void
+LXDevice::StoreReceivedPolar(std::string_view value,
+                             NMEAInfo &info) noexcept
+{
+  /*
+   * Format: <a>,<b>,<c>,<polar_load>,<polar_weight>,
+   *         <max_weight>,<empty_weight>,<pilot_weight>,<name>,<stall>
+   *
+   * Coefficients arrive in LX units (v=1 corresponds to 100 km/h)
+   * and are converted to SI (m/s) before storing.
+   */
+  const std::string value_str{value};
+  NMEAInputLine polar_line{value_str.c_str()};
+  double a_lx, b_lx, c, polar_load, polar_weight,
+    max_weight, empty_weight, pilot_weight;
+  if (!polar_line.ReadChecked(a_lx) ||
+      !polar_line.ReadChecked(b_lx) ||
+      !polar_line.ReadChecked(c) ||
+      !polar_line.ReadChecked(polar_load) ||
+      !polar_line.ReadChecked(polar_weight) ||
+      !polar_line.ReadChecked(max_weight) ||
+      !polar_line.ReadChecked(empty_weight) ||
+      !polar_line.ReadChecked(pilot_weight)) {
+    LogFmt("LXNAV: Failed to parse POLAR values from: {}", value);
+    return;
+  }
+
+  const PolarCoefficients pc = LXNAVPolar::FromNmeaPolar(a_lx, b_lx, c);
+  const auto name = std::string{polar_line.ReadView()};
+  double stall = 0;
+  polar_line.ReadChecked(stall);
+
+  {
+    const std::lock_guard lock{mutex};
+    device_polar.a = pc.a;
+    device_polar.b = pc.b;
+    device_polar.c = pc.c;
+    device_polar.polar_load = polar_load;
+    device_polar.polar_weight = polar_weight;
+    device_polar.max_weight = max_weight;
+    device_polar.empty_weight = empty_weight;
+    device_polar.pilot_weight = pilot_weight;
+    device_polar.name = name;
+    device_polar.stall = stall;
+    device_polar.valid = true;
+  }
+
+  info.settings.ProvidePolarCoefficients(pc.a, pc.b, pc.c, info.clock);
+  info.settings.ProvidePolarLoad(polar_load, info.clock);
+  info.settings.ProvidePolarReferenceMass(polar_weight, info.clock);
+  info.settings.ProvidePolarMaximumMass(max_weight, info.clock);
+  info.settings.ProvidePolarPilotWeight(pilot_weight, info.clock);
+  info.settings.ProvidePolarEmptyWeight(empty_weight, info.clock);
 }
 
 static void
@@ -781,7 +799,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (type == "$PLXV0"sv) {
     is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings, info);
+    return PLXV0(line, lxnav_vario_settings, info, *this);
   }
 
   if (type == "$PLXVC"sv) {

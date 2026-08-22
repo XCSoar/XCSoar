@@ -15,21 +15,22 @@
 #include "Engine/Task/TaskType.hpp"
 #include "time/PeriodClock.hpp"
 
+#include "LXNAVPolarConversion.hpp"
+
 #include <array>
 #include <atomic>
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <string_view>
 
 struct MoreData;
 struct DerivedInfo;
 
 /**
- * LXNAV polar coefficients use a normalised speed where
- * v==1 corresponds to 100 km/h.  This is the conversion factor
- * from that unit to m/s.
+ * LXNAV polar: v==1 corresponds to 100 km/h; same as LXNAVPolar::V_REF_MS.
  */
-static constexpr double LX_POLAR_V = 100.0 / 3.6;
+static constexpr double LX_POLAR_V = LXNAVPolar::V_REF_MS;
 
 class LXDevice: public AbstractDevice
 {
@@ -506,6 +507,14 @@ public:
 
   void OnCalculatedUpdate(const MoreData &basic,
                           const DerivedInfo &calculated) override;
+
+  /**
+   * Cache a PLXV0 POLAR response in device_polar and publish
+   * coefficients/masses into ExternalSettings.  ApplyExternalSettings
+   * only adopts the polar when polar_sync is RECEIVE (#2397).
+   */
+  void StoreReceivedPolar(std::string_view value,
+                          NMEAInfo &info) noexcept;
 
 private:
   /**
