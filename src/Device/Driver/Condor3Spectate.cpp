@@ -468,7 +468,8 @@ Condor3SpectateCreateOnPort([[maybe_unused]] const DeviceConfig &config,
                            Port &com_port)
 {
   auto *device = new Condor3SpectateDevice();
-  if (auto *spectate = dynamic_cast<SpectateFilePort *>(&com_port))
+  if (auto *spectate = dynamic_cast<SpectateFilePort *>(
+        &com_port.GetImplementationPort()))
     spectate->SetDevice(device);
   return device;
 }
