@@ -48,13 +48,15 @@ ActivateAudioSession()
            withOptions:AVAudioSessionCategoryOptionMixWithOthers
                  error:&error];
   if (error) {
-    LogFormat("AVAudioSession setCategory error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession setCategory error: {}",
+           [[error localizedDescription] UTF8String]);
     error = nil;
   }
 
   [session setActive:YES error:&error];
   if (error) {
-    LogFormat("AVAudioSession activate error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession activate error: {}",
+           [[error localizedDescription] UTF8String]);
   }
 }
 
@@ -78,7 +80,8 @@ DeactivateAudioSession()
                                    withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
                                    error:&error];
   if (error) {
-    LogFormat("AVAudioSession deactivate error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession deactivate error: {}",
+           [[error localizedDescription] UTF8String]);
   }
 }
 
@@ -104,7 +107,8 @@ DeinitializeAppleServices()
                                    withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation
                                    error:&error];
   if (error) {
-    LogFormat("AVAudioSession deinitialize error: %s", [[error localizedDescription] UTF8String]);
+    LogFmt("AVAudioSession deinitialize error: {}",
+           [[error localizedDescription] UTF8String]);
   }
 #endif
 }
