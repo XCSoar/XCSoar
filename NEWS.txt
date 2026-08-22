@@ -53,6 +53,9 @@ Version 7.46 - not yet released
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
+* infoboxen
+  - show Airspeed TAS and IAS in blue when the value is estimated
+    from ground speed and wind instead of an instrument
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
