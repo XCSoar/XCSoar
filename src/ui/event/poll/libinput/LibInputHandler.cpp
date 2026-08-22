@@ -185,8 +185,13 @@ int
 LibInputHandler::OpenDevice(const char *path, int flags) noexcept
 {
   int fd = open(path, flags);
-  if (fd < 0)
-    return -errno;
+  if (fd < 0) {
+    const int e = errno;
+    LogFormat("libinput: failed to open %s: %s",
+              path != nullptr ? path : "?", strerror(e));
+    need_rescan = true;
+    return -e;
+  }
 
   return fd;
 }
@@ -361,18 +366,49 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
 }
 
 inline void
-LibInputHandler::HandlePendingEvents() noexcept
+LibInputHandler::DrainEvents() noexcept
 {
-  if (li == nullptr)
-    return;
-
-  libinput_dispatch(li);
   for (libinput_event *li_event = libinput_get_event(li);
        nullptr != li_event;
        li_event = libinput_get_event(li)) {
     HandleEvent(li_event);
     libinput_event_destroy(li_event);
   }
+}
+
+inline void
+LibInputHandler::RescanDevices() noexcept
+{
+  /* libinput ignores devices that fail to open until
+     libinput_resume().  Resume is a no-op while the udev monitor is
+     already running, so bounce suspend/resume to re-enumerate
+     without destroying the context.  Do not call this from
+     OpenDevice(); that runs inside libinput_resume(). */
+  need_rescan = false;
+  LogFormat("libinput: re-scanning input devices");
+  libinput_suspend(li);
+  if (libinput_resume(li) != 0)
+    LogFormat("libinput: resume after re-scan failed");
+
+  libinput_dispatch(li);
+  DrainEvents();
+
+  /* Ignore remove/open-failure flags from the bounce itself so we
+     do not loop.  A later udev event can set need_rescan again. */
+  need_rescan = false;
+}
+
+inline void
+LibInputHandler::HandlePendingEvents() noexcept
+{
+  if (li == nullptr)
+    return;
+
+  libinput_dispatch(li);
+  DrainEvents();
+
+  if (need_rescan)
+    RescanDevices();
 }
 
 void

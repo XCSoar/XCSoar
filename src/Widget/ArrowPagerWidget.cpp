@@ -235,7 +235,35 @@ ArrowPagerWidget::FocusPageBottom() noexcept
       return true;
   }
 
-  return page.SetFocus();
+  if (!page.SetFocus())
+    return false;
+
+  /* Reserved-scrollbar rich text: highlight the last visible item.
+     SetFocus alone leaves the scroller focused with nothing
+     selected (same as #QuickGuidePageWidget wrapping Up from the
+     bottom bar).  Call the inner widget so the scroller does not
+     treat this as a page-scroll. */
+  if (auto *vs = dynamic_cast<VScrollWidget *>(&page))
+    if (vs->ReservesScrollbar())
+      vs->GetWidget().KeyPress(KEY_UP);
+
+  return true;
+}
+
+bool
+ArrowPagerWidget::FocusPageStart() noexcept
+{
+  Widget &page = GetCurrentWidget();
+  if (!page.SetFocus())
+    return false;
+
+  /* Highlight the first visible link/checkbox.  A page with no
+     items just keeps window focus. */
+  Widget *inner = &page;
+  if (auto *vs = dynamic_cast<VScrollWidget *>(&page))
+    inner = &vs->GetWidget();
+  inner->KeyPress(KEY_DOWN);
+  return true;
 }
 
 bool
@@ -300,8 +328,13 @@ ArrowPagerWidget::PageHandsOffToChrome(bool key_up) const noexcept
 bool
 ArrowPagerWidget::MoveChromeFocusDown() noexcept
 {
-  if (close_button.HasFocus())
-    return true; /* end of chrome chain */
+  if (close_button.HasFocus()) {
+    /* Wrap back into reserved-scrollbar rich text (Checklist,
+       Credits).  Other pages stay on Close. */
+    if (PageHandsOffToChrome(false))
+      return FocusPageStart();
+    return true;
+  }
 
   if (previous_button.HasFocus()) {
     if (next_button.IsEnabled())
@@ -322,7 +355,16 @@ ArrowPagerWidget::MoveChromeFocusDown() noexcept
 bool
 ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 {
-  if (PagerWidget::KeyPress(key_code))
+  const bool chrome_focused =
+    previous_button.HasFocus() ||
+    next_button.HasFocus() ||
+    close_button.HasFocus();
+
+  /* When chrome has focus, do not forward to the page.  Unfocused
+     rich text would treat Down as "no current item -> first link"
+     without taking focus, so Close stayed highlighted and Enter
+     activated that first item. */
+  if (!chrome_focused && PagerWidget::KeyPress(key_code))
     return true;
 
   if (extra != nullptr && extra->KeyPress(key_code))

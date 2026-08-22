@@ -224,8 +224,13 @@ GlidePolar::UpdateBestLD() noexcept
   assert(polar.IsValid());
   assert(mc >= 0);
 
-  const double vbld_ias = sqrt((polar.c + mc) / polar.a);
-  VbestLD = std::clamp(vbld_ias * density_ratio, Vmin, Vmax);
+  /* density-scaled polar: w'(v) = (a/DR) v^2 + b v + c DR; the
+     MacCready setting is a true vertical speed and must not be
+     scaled, so the optimum is sqrt((c DR + mc) DR / a) -- consistent
+     with GlidePolarSpeedToFly and GetBestGlideRatioSpeed() */
+  const double vbld = sqrt((polar.c * density_ratio + mc) *
+                           density_ratio / polar.a);
+  VbestLD = std::clamp(vbld, Vmin, Vmax);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif

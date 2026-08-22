@@ -47,9 +47,19 @@ Window::IsMaximised() const noexcept
 {
   assert(IsDefined());
 
-  return parent != nullptr &&
-    GetSize().width >= parent->GetSize().width &&
-    GetSize().height >= parent->GetSize().height;
+  if (parent == nullptr)
+    return false;
+
+  /* compare with the parent's client rect, not with its raw size: a
+     #TopWindow may reserve space at the edges (e.g. the iOS safe
+     area), and a window which fills that client area is "maximised",
+     even though it is smaller than the parent window itself.  For all
+     other windows, GetClientRect() is PixelRect{GetSize()}, so this is
+     equivalent to comparing the sizes. */
+  const PixelSize parent_size = parent->GetClientRect().GetSize();
+
+  return GetSize().width >= parent_size.width &&
+    GetSize().height >= parent_size.height;
 }
 
 void

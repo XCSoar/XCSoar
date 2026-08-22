@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    version="1.1"
-   viewBox="0 0 12.5 22"
+   viewBox="0 0 25 22"
    id="svg3"
    sodipodi:docname="contour_spacing_icon.svg"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
-   width="12.5"
+   width="25"
    height="22"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -112,6 +112,9 @@
        id="guide10"
        inkscape:locked="false" />
   </sodipodi:namedview>
+  <g
+     transform="matrix(2.004224,0,0,1.995702,-0.012184,-0.083862)"
+     id="content">
   <rect
      style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:0.506457;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"
      id="rect13"
@@ -139,4 +142,5 @@
      d="M 6.1822682,3.773297 V 7.356086"
      id="path10-4-1"
      sodipodi:nodetypes="cc" />
+  </g>
 </svg>

@@ -84,10 +84,12 @@ $(MANIFEST_PACKAGE_STAMP): FORCE | $(NO_ARCH_OUTPUT_DIR)/dirstamp
 		echo "$(MANIFEST_PACKAGE)" > $@.tmp && mv $@.tmp $@; \
 	fi
 
-$(MANIFEST_PROCESSED): $(MANIFEST_TEMPLATE) $(MANIFEST_PACKAGE_STAMP) | $(NO_ARCH_OUTPUT_DIR)/dirstamp
+$(MANIFEST_PROCESSED): $(MANIFEST_TEMPLATE) $(MANIFEST_PACKAGE_STAMP) $(topdir)/VERSION.txt | $(NO_ARCH_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  PROCESS $@"
 	$(Q)sed -e 's/@PACKAGE_NAME@/$(MANIFEST_PACKAGE)/g' \
 		-e 's|@APP_LABEL@|$(MANIFEST_APP_LABEL)|g' \
+		-e 's/android:versionCode="[0-9][0-9]*"/android:versionCode="$(ANDROID_VERSION_CODE)"/' \
+		-e 's/android:versionName="[^"]*"/android:versionName="$(ANDROID_VERSION_NAME)"/' \
 		$< > $@
 
 

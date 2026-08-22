@@ -38,6 +38,9 @@ on:
     branches:
       - master
       - apple-testing
+      # Current minor patch line (v7.45.x, v7.46.x, ...). Publish jobs stay
+      # gated to master and v* tags below.
+      - 'v*.x'
     tags:
       - 'v*'
 
@@ -67,6 +70,7 @@ on:
       - 'VERSION.txt'
     branches:
       - master
+      - 'v*.x'
 
 permissions:
   contents: read
@@ -135,6 +139,17 @@ jobs:
           name: Version ${{ github.ref_name }}
           body: ${{ env.CHANGELOGENTRY }}
           prerelease: ${{ env.PRERELEASE }}
+
+  docs:
+    name: "Build and Publish Manuals"
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-docs.yml
+    with:
+      release_version: ${{ needs.release.outputs.version }}
+    secrets: inherit
 
   build:
     runs-on: ${{ matrix.os }}
@@ -458,6 +473,9 @@ jobs:
             VERSION_NAME="${VERSION_NAME}.${PATCH}"
           fi
 
+          echo "ANDROID_VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
+          echo "ANDROID_VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
+
           sed -i \
             -e "s/android:versionCode=\"[0-9][0-9]*\"/android:versionCode=\"${VERSION_CODE}\"/" \
             -e "s/android:versionName=\"[^\"]*\"/android:versionName=\"${VERSION_NAME}\"/" \
@@ -559,7 +577,7 @@ jobs:
           elif [ ${{ matrix.target }} = "MACOS" ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa ios-dsym
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -625,7 +643,7 @@ jobs:
             echo "Building production release version with TESTING=n"
             
             # Build the IPA without TESTING (production release)
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=n ipa
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=n ipa ios-dsym
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -661,6 +679,10 @@ jobs:
 
           echo "iOS IPA signed successfully"
 
+      - name: Create iOS archive for App Store Connect
+        if: ${{ matrix.target == 'IOS64' && steps.sign_ios.outcome == 'success' }}
+        run: bash darwin/create-ios-archive.sh
+
       - name: Sign macOS package
         id: sign_macos
         if: ${{ matrix.target == 'MACOS' && env.MACOS_SIGNING_CONFIGURED == 'true' && steps.tests.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
@@ -683,8 +705,13 @@ jobs:
         if: ${{ matrix.target == 'IOS64' && steps.tests.outcome == 'success' && steps.sign_ios.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
         uses: actions/upload-artifact@v7
         with:
-          name: ios-testflight-ipa
-          path: output/IOS64/xcsoar-signed.ipa
+          name: ios-testflight-build
+          path: |
+            output/IOS64/xcsoar-signed.ipa
+            output/IOS64/XCSoar.xcarchive
+            output/IOS64/XCSoar.app.dSYM
+          if-no-files-found: error
+          retention-days: 90
 
       - name: Upload artifact for TestFlight (macOS)
         if: ${{ matrix.target == 'MACOS' && steps.tests.outcome == 'success' && steps.sign_macos.outcome == 'success' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
@@ -827,6 +854,18 @@ jobs:
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
 
+      - name: Deploy installer to Download server - release
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && (matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL') }}
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: output/${{ matrix.target }}/bin/${{ matrix.target_final }}-${{ needs.release.outputs.version }}-${{ matrix.target }}-Installer.exe
+          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
+          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
+          TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+          SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}
+
       - name: Show ccache stats
         run: ccache --show-stats || true
 
@@ -917,12 +956,17 @@ jobs:
     needs: [build]
     if: ${{ (github.repository == 'XCSoar/XCSoar' || github.repository == 'yorickreum/XCSoar') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v')) }}
     steps:
-      - name: Download iOS IPA
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
+
+      - name: Download iOS build
         id: ios_ipa
         continue-on-error: true
         uses: actions/download-artifact@v8
         with:
-          name: ios-testflight-ipa
+          name: ios-testflight-build
 
       - name: Download macOS PKG
         id: macos_pkg
@@ -931,49 +975,38 @@ jobs:
         with:
           name: macos-testflight-pkg
 
+      - name: Prepare iOS archive export signing
+        if: steps.ios_ipa.outcome == 'success'
+        env:
+          APPLE_CERTIFICATES_BASE64: ${{ secrets.APPLE_CERTIFICATES_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        run: |
+          if [ -z "$APPLE_CERTIFICATES_BASE64" ] || [ -z "$APPLE_CERTIFICATE_PASSWORD" ]; then
+            echo "iOS archive export requires the distribution certificate"
+            exit 1
+          fi
+
+          printf '%s' "$APPLE_CERTIFICATES_BASE64" | base64 --decode > ios-cert.p12
+          security create-keychain -p actions ios-export.keychain
+          security default-keychain -s ios-export.keychain
+          security unlock-keychain -p actions ios-export.keychain
+          security set-keychain-settings -t 3600 -u ios-export.keychain
+          security import ios-cert.p12 -k ios-export.keychain \
+            -P "$APPLE_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/xcodebuild
+          security set-key-partition-list -S apple-tool:,apple: -s -k actions ios-export.keychain
+          rm ios-cert.p12
+
       - name: Upload iOS to App Store Connect / TestFlight
         if: steps.ios_ipa.outcome == 'success'
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APP_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
           ASC_PROVIDER: ${{ secrets.ASC_PROVIDER }}
-        run: |
-          IPA_PATH=""
-          for candidate in \
-            "ios-testflight-ipa/output/IOS64/xcsoar-signed.ipa" \
-            "ios-testflight-ipa/xcsoar-signed.ipa" \
-            "xcsoar-signed.ipa"; do
-            if [ -f "$candidate" ]; then
-              IPA_PATH="$candidate"
-              break
-            fi
-          done
-          if [ -z "$IPA_PATH" ]; then
-            echo "Signed IPA not found after download"
-            exit 1
-          fi
-          echo "Using IPA at: $IPA_PATH"
-
-          if [ -z "$APPLE_ID" ] || [ -z "$APP_SPECIFIC_PASSWORD" ]; then
-            echo "TestFlight credentials not configured"
-            exit 1
-          fi
-
-          echo "Uploading iOS build to App Store Connect / TestFlight..."
-          if [ -n "$ASC_PROVIDER" ]; then
-            xcrun altool --upload-app \
-              -f "$IPA_PATH" \
-              -t ios \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD" \
-              --asc-provider "$ASC_PROVIDER"
-          else
-            xcrun altool --upload-app \
-              -f "$IPA_PATH" \
-              -t ios \
-              -u "$APPLE_ID" \
-              -p "$APP_SPECIFIC_PASSWORD"
-          fi
+          ASC_API_KEY_BASE64: ${{ secrets.ASC_API_KEY_BASE64 }}
+          ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID }}
+          ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID }}
+        run: bash darwin/upload-ios-testflight.sh
 
       - name: Upload macOS to App Store Connect / TestFlight
         if: steps.macos_pkg.outcome == 'success'
@@ -1018,6 +1051,10 @@ jobs:
               -u "$APPLE_ID" \
               -p "$APP_SPECIFIC_PASSWORD"
           fi
+
+      - name: Cleanup iOS export keychain
+        if: always()
+        run: security delete-keychain ios-export.keychain || true
 
       - name: No TestFlight artifacts from build
         if: ${{ steps.ios_ipa.outcome != 'success' && steps.macos_pkg.outcome != 'success' }}

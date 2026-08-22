@@ -5,10 +5,13 @@
 #include "LabelBlock.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
+#include "Math/Angle.hpp"
 #include "Screen/Layout.hpp"
 #include "util/UTF8.hpp"
 
 #include <algorithm>
+
+#include <math.h>
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
@@ -56,19 +59,43 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc) noexcept
   return offset;
 }
 
+/**
+ * Stamp the text along a circle of the given radius, one stamp per
+ * ~1.5px of circumference so consecutive stamps always overlap.  The
+ * four diagonal copies this used to be only close up while the offset
+ * is 1px; beyond that they leave gaps along every stroke, which is
+ * what high-DPI screens hit (offset 5 on a 3x iPhone).
+ */
+static void
+DrawTextHalo(Canvas &canvas, const char *text, const PixelPoint p,
+             const unsigned offset) noexcept
+{
+  /* 8 is the full neighbourhood of a 1px halo, 16 caps the cost */
+  const unsigned n = std::clamp(4 * offset, 8u, 16u);
+
+  for (unsigned i = 0; i < n; ++i) {
+    const auto [sin, cos] =
+      (Angle::FullCircle() * ((double)i / n)).SinCos();
+    canvas.DrawText({p.x + (int)lround(cos * offset),
+                     p.y + (int)lround(sin * offset)},
+                    text);
+  }
+}
+
 void
 RenderShadowedText(Canvas &canvas, const char *text,
                    PixelPoint p,
                    bool inverted) noexcept
 {
+  if (text == nullptr || text[0] == '\0')
+    return;
+
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
-  const int offset = canvas.GetFontHeight() / 12u;
-  canvas.DrawText({p.x + offset, p.y + offset}, text);
-  canvas.DrawText({p.x - offset, p.y + offset}, text);
-  canvas.DrawText({p.x + offset, p.y - offset}, text);
-  canvas.DrawText({p.x - offset, p.y - offset}, text);
+
+  /* at least 1px, or tiny fonts get no halo at all */
+  DrawTextHalo(canvas, text, p, std::max(1u, canvas.GetFontHeight() / 12u));
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(p, text);

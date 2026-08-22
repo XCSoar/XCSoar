@@ -18,7 +18,12 @@ endif
 
 # App Store version (must be X.Y.Z format)
 MACOS_PATCH_VERSION ?= 0
-MACOS_APP_VERSION ?= $(shell cat VERSION.txt).$(MACOS_PATCH_VERSION)
+# Same rule as ios.mk: full semver in VERSION.txt, or X.Y + patch.
+ifeq ($(words $(subst ., ,$(VERSION))),2)
+MACOS_APP_VERSION ?= $(VERSION).$(MACOS_PATCH_VERSION)
+else
+MACOS_APP_VERSION ?= $(VERSION_SHORT)
+endif
 MACOS_APP_BUILD_NUMBER ?= 1
 
 # App name and package names are always the same

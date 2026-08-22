@@ -802,6 +802,14 @@ SkySightClient::SetLayerActive(std::string_view id, bool request_update)
   manual_update_requested = request_update;
   if (!active_layer->SupportsLiveTiles()) {
     if (api->IsSelectedLayer(id)) {
+      /* Restore AUTO's catalog default when the page has not picked a
+         step yet, so the cache lookup can match a just-fetched layer. */
+      if (active_layer->UsesAutomaticForecastTime() &&
+          active_layer->forecast_time <= 0 &&
+          !active_layer->forecast_datafiles.empty())
+        active_layer->forecast_time =
+          SkySight::ChooseAutomaticForecastTime(*active_layer);
+
       const bool has_exact_forecast_image =
         HasExactForecastImage(GetRegion(), *active_layer);
       const bool manual_update_started = request_update &&
@@ -811,7 +819,7 @@ SkySightClient::SetLayerActive(std::string_view id, bool request_update)
       if (!manual_update_started && !has_exact_forecast_image &&
           (IsAutoUpdateEnabled() || request_update))
         (void)api->PreloadDefaultDatafile(id);
-      else if (!manual_update_started)
+      else if (!manual_update_started && !has_exact_forecast_image)
         api->RequestForecastMetadata(id);
     }
   }
@@ -844,7 +852,10 @@ SkySightClient::ApplyPageOverlay(const PageLayout &page) noexcept
       ? SkySight::ForecastTimeMode::AutoDefault
       : SkySight::ForecastTimeMode::Fixed;
     if (automatic)
-      layer->forecast_time = 0;
+      /* Keep a usable catalog time so SetLayerActive can reuse a
+         cached image instead of treating AUTO as a cache miss. */
+      layer->forecast_time =
+        SkySight::ChooseAutomaticForecastTime(*layer);
     else {
       const time_t fixed = time_t(page.skysight_time);
       if (int64_t(fixed) == page.skysight_time)

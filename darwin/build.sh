@@ -16,6 +16,28 @@ fi
 readonly TARGET_PLATFORM_NAME="$1"
 readonly CONFIGURATION="$2"
 
+# Load environment variables from .env file if it exists from darwin/.env
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    echo "build.sh: Loading configuration from darwin/.env"
+    set -a
+    # shellcheck disable=SC1091
+    source "$SCRIPT_DIR/.env"
+    set +a
+fi
+
+# Normalise the TESTING flag; make expects a lower case "y"
+case "$(printf '%s' "${TESTING:-n}" | tr '[:upper:]' '[:lower:]')" in
+    y|yes|true|1)
+        TESTING="y"
+        echo "build.sh: Building the testing flavour (TESTING=y)"
+        ;;
+    *)
+        TESTING="n"
+        ;;
+esac
+export TESTING
+
 # Set debug flag based on configuration
 DEBUG="n"
 if [ "${CONFIGURATION}" = "Debug" ]; then
@@ -75,7 +97,9 @@ NUM_CPUS=$(getconf _NPROCESSORS_ONLN 2>/dev/null || sysctl -n hw.ncpu 2>/dev/nul
 echo "Building with $NUM_CPUS parallel jobs..."
 
 # Execute make with error checking
-if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TARGET="$TARGET" $IPA_TARGET; then
+# TESTING must be passed on the command line: build/options.mk assigns a
+# default with "=", which would override the value from the environment.
+if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" TARGET="$TARGET" $IPA_TARGET; then
     echo "Error: Build failed" >&2
     exit 1
 fi

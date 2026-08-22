@@ -57,10 +57,10 @@ UpdateDownloadProgressText(const XCThermDownloadJob &job) noexcept
 
   StaticString<128> text;
   if (slot > 0 && total > 0)
-    text.Format(_("Downloading XCTherm %s (%u/%u)..."),
+    text.Format(_("Downloading XC Therm %s (%u/%u)..."),
                 gettext(job.target_label.c_str()), slot, total);
   else
-    text.Format(_("Downloading XCTherm %s..."),
+    text.Format(_("Downloading XC Therm %s..."),
                 gettext(job.target_label.c_str()));
 
   BackgroundDownloadProgress::Get().SetText(text.c_str());

@@ -9873,30 +9873,30 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "הממלכה המאוחדת. מודל ICON-UK."
 
-msgid "XCTherm email"
-msgstr "XCTherm e-mail"
+msgid "XC Therm email"
+msgstr "XC Therm e-mail"
 
-msgid "Email address for your XCTherm account."
-msgstr "E-mail adresa XCTherm računa."
+msgid "Email address for your XC Therm account."
+msgstr "E-mail adresa XC Therm računa."
 
-msgid "XCTherm password"
-msgstr "XCTherm סיסמה"
+msgid "XC Therm password"
+msgstr "XC Therm סיסמה"
 
-msgid "Password for your XCTherm account."
-msgstr "סיסמה XCTherm računa."
+msgid "Password for your XC Therm account."
+msgstr "סיסמה XC Therm računa."
 
-msgid "XCTherm region"
-msgstr "XCTherm regija"
+msgid "XC Therm region"
+msgstr "XC Therm regija"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
 msgstr ""
-"אזור תחזית. משנה מאיזה מודל XCTherm שואב נתונים. הפעילו מחדש או הורידו מחדש "
+"אזור תחזית. משנה מאיזה מודל XC Therm שואב נתונים. הפעילו מחדש או הורידו מחדש "
 "לאחר השינוי."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm שכבה/זמן אוטומטי"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm שכבה/זמן אוטומטי"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10183,8 +10183,8 @@ msgstr "Nije odabran שכבה."
 msgid "Network is not available."
 msgstr "רשת nije dostupna."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Indeks תחזית nema XCTherm parametre."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Indeks תחזית nema XC Therm parametre."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10302,12 +10302,12 @@ msgid "HTTP support"
 msgstr "HTTP podrška"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "הורדה XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "הורדה XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "הורדה XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "הורדה XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr "אפשר מעקב חי דרך שרת SkyLines (tracking.skylines.aero)."

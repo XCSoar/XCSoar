@@ -9950,30 +9950,30 @@ msgstr "UK"
 msgid "United Kingdom. ICON-UK model."
 msgstr "Spolené království. Model ICON-UK."
 
-msgid "XCTherm email"
-msgstr "E-mail XCTherm"
+msgid "XC Therm email"
+msgstr "E-mail XC Therm"
 
-msgid "Email address for your XCTherm account."
-msgstr "E-mailová adresa účtu XCTherm."
+msgid "Email address for your XC Therm account."
+msgstr "E-mailová adresa účtu XC Therm."
 
-msgid "XCTherm password"
-msgstr "Heslo XCTherm"
+msgid "XC Therm password"
+msgstr "Heslo XC Therm"
 
-msgid "Password for your XCTherm account."
-msgstr "Heslo účtu XCTherm."
+msgid "Password for your XC Therm account."
+msgstr "Heslo účtu XC Therm."
 
-msgid "XCTherm region"
-msgstr "Region XCTherm"
+msgid "XC Therm region"
+msgstr "Region XC Therm"
 
 msgid ""
-"Forecast region. Changes which model XCTherm fetches data from. Restart or "
+"Forecast region. Changes which model XC Therm fetches data from. Restart or "
 "re-download after changing."
 msgstr ""
-"Region predpovědi. Mění model, ze ktorého XCTherm stahuje dáta. Po změně "
+"Region predpovědi. Mění model, ze ktorého XC Therm stahuje dáta. Po změně "
 "restartujte alebo stáhněte znova."
 
-msgid "XCTherm Auto Layer/Time"
-msgstr "XCTherm auto vrstva/čas"
+msgid "XC Therm Auto Layer/Time"
+msgstr "XC Therm auto vrstva/čas"
 
 msgid ""
 "Automatically switch altitude layer based on GPS altitude and forecast time "
@@ -10262,8 +10262,8 @@ msgstr "Nie je vybrána žádná vrstva."
 msgid "Network is not available."
 msgstr "Sieť nie je dostupná."
 
-msgid "Forecast index has no XCTherm parameters."
-msgstr "Index predpovědi nemá parametery XCTherm."
+msgid "Forecast index has no XC Therm parameters."
+msgstr "Index predpovědi nemá parametery XC Therm."
 
 msgid ""
 "Forecast download failed.\n"
@@ -10385,12 +10385,12 @@ msgid "HTTP support"
 msgstr "Podpora HTTP"
 
 #, c-format
-msgid "Downloading XCTherm %s (%u/%u)..."
-msgstr "Sťahovanie XCTherm %s (%u/%u)..."
+msgid "Downloading XC Therm %s (%u/%u)..."
+msgstr "Sťahovanie XC Therm %s (%u/%u)..."
 
 #, c-format
-msgid "Downloading XCTherm %s..."
-msgstr "Sťahovanie XCTherm %s..."
+msgid "Downloading XC Therm %s..."
+msgstr "Sťahovanie XC Therm %s..."
 
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr ""

@@ -25,10 +25,10 @@ class AndroidStorageHotplugMonitor : public StorageHotplugMonitor {
 
   /**
    * Java-side StorageHotplugReceiver instance.
-   * Uses TrivialRef because it may or may not be set, and needs
-   * explicit Set/Clear lifecycle management.
+   * Value-initialised: TrivialRef does not zero its stored
+   * reference, so an uninitialised member looks "defined".
    */
-  Java::TrivialRef<jobject> receiver_;
+  Java::TrivialRef<jobject> receiver_{};
 
 public:
   explicit AndroidStorageHotplugMonitor(StorageHotplugHandler &handler) noexcept;
