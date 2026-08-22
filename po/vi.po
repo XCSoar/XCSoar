@@ -11065,3 +11065,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Hướng dẫn thủ công"
 
+msgid "Paste"
+msgstr ""
+

@@ -11211,3 +11211,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Handmatig"
 
+msgid "Paste"
+msgstr ""
+

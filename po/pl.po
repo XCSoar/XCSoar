@@ -11203,3 +11203,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Ręcznie"
 
+msgid "Paste"
+msgstr ""
+

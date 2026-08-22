@@ -11190,3 +11190,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Вручну"
 
+msgid "Paste"
+msgstr ""
+

@@ -10698,3 +10698,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "手冊"
 
+msgid "Paste"
+msgstr ""
+

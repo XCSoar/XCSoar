@@ -11120,3 +11120,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "El ile"
 
+msgid "Paste"
+msgstr ""
+

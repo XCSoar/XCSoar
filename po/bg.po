@@ -11214,3 +11214,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Ръчно"
 
+msgid "Paste"
+msgstr ""
+

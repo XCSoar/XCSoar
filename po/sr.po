@@ -11100,3 +11100,6 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Uputstvo"
 
+msgid "Paste"
+msgstr ""
+
