@@ -215,15 +215,18 @@ try {
     parser.DisableGeoid();
 
   if (driver->CreateOnPort != nullptr) {
-    Device *new_device = driver->CreateOnPort(config, port->GetImplementationPort());
+    /* Pass DumpPort, not GetImplementationPort(): Devices Debug logs
+       driver Read/Write through this wrapper (#2903).  Drivers that
+       must downcast to a concrete port (Condor3Spectate) unwrap in
+       CreateOnPort. */
+    Device *new_device = driver->CreateOnPort(config, *port);
 
     const std::lock_guard lock{mutex};
     device = new_device;
 
     if (driver->HasPassThrough() && config.use_second_device &&
         second_driver->CreateOnPort != nullptr)
-      second_device = second_driver->CreateOnPort(config,
-                                                  port->GetImplementationPort());
+      second_device = second_driver->CreateOnPort(config, *port);
   } else
     port->StartRxThread();
 

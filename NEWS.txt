@@ -31,6 +31,8 @@ Version 7.46 - not yet released
 * devices
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
+  - fix the Devices Debug button not writing port traffic to xcsoar.log
+    #2903
 * dialogs
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
