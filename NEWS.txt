@@ -41,6 +41,8 @@ Version 7.46 - not yet released
   - fix circling wind staying blank on paragliders and other aircraft
     without airspeed or a gyroscope, including fast IGC replay; polar
     min-sink can lower GPS-only wind quality #2905
+  - skip estimated TAS from ground speed and wind when GPS track is
+    missing
 * devices
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
