@@ -335,6 +335,11 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
 
   case DRAG_GESTURE:
     const char* gesture = gestures.Finish();
+
+    /* repaint to erase the gesture trail; the map is not redrawn on
+       its own unless the gesture happens to trigger it */
+    PaintWindow::Invalidate();
+
     if (gesture && OnMouseGesture(gesture))
       return true;
 
@@ -663,8 +668,12 @@ GlueMapWindow::OnCancelMode() noexcept
     ResetMultiTouchSessionState();
 #endif
 
-    if (drag_mode == DRAG_GESTURE)
+    if (drag_mode == DRAG_GESTURE) {
       gestures.Finish();
+
+      /* repaint to erase the gesture trail */
+      PaintWindow::Invalidate();
+    }
 
     ReleaseCapture();
     drag_mode = DRAG_NONE;
@@ -693,6 +702,9 @@ GlueMapWindow::OnPaint(Canvas &canvas) noexcept
   if (IsPanChromeVisible())
     DrawCrossHairs(canvas);
 
+  /* the trail may leave this window (the pointer is captured); under
+     OpenGL it is painted over the InfoBoxes, and MainWindow::OnPaint()
+     takes care of erasing it afterwards */
   DrawGesture(canvas);
 }
 

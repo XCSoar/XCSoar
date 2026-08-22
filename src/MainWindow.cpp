@@ -1321,6 +1321,28 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+#ifdef ENABLE_OPENGL
+  /* The gesture trail is painted by the #GlueMapWindow, but it
+     follows the pointer past the map borders, and OpenGL does not
+     clip a child window to its rectangle.  Areas which no child
+     window repaints (the safe area insets reserved by the
+     #TopWindow, for example) would keep those pixels forever, and
+     each buffer of the swap chain needs a clean frame of its own.
+     Therefore clear the whole window while a trail exists, and for a
+     few frames after it is gone. */
+  const bool gesture_trail = map != nullptr && map->HasGestureTrail();
+  if (gesture_trail)
+    clear_gesture_frames = 3;
+
+  if (gesture_trail || clear_gesture_frames > 0) {
+    canvas.DrawFilledRectangle(canvas.GetRect(), COLOR_BLACK);
+
+    if (!gesture_trail && --clear_gesture_frames > 0)
+      /* nothing else is going to request the remaining frames */
+      Invalidate();
+  }
+#endif
+
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
     PixelRect rc = map->GetPosition();
