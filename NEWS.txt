@@ -45,6 +45,9 @@ Version 7.46 - not yet released
     #2903
 * dialogs
   - let Shift type '_' on XCSoar's on-screen keyboard
+  - let Select as Alternate pin a landing field from AUTO, and use
+    Alternate Mode: Auto only to return the Alternate InfoBox to the
+    computed list #2912
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
