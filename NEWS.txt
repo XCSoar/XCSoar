@@ -56,6 +56,8 @@ Version 7.46 - not yet released
 * infoboxen
   - show Airspeed TAS and IAS in blue when the value is estimated
     from ground speed and wind instead of an instrument
+  - replace light green on Alternate MANUAL final glide with blue,
+    matching Next waypoint
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can

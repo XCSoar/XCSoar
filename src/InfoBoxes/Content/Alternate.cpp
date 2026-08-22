@@ -60,6 +60,15 @@ GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept
     : C_("Abbreviation", "AUTO");
 }
 
+/**
+ * Value colour for Alternate InfoBoxes.
+ *
+ * Unreachable is red.  Final glide is blue, like Next waypoint (a
+ * calculated glide state, not MacCready green).  Below final glide,
+ * AUTO stays default because the computer is still ranking fields;
+ * MANUAL is red because the pilot pinned this field and it is not
+ * yet flyable straight in.
+ */
 [[gnu::pure]]
 unsigned
 GetAlternateInfoBoxValueColor(const ResolvedAlternateInfo& alternate) noexcept
@@ -67,11 +76,11 @@ GetAlternateInfoBoxValueColor(const ResolvedAlternateInfo& alternate) noexcept
   if (!alternate.solution.IsOk())
     return 1;
 
-  if (alternate.mode == AlternateInfoBoxMode::MANUAL)
-    return alternate.solution.IsFinalGlide() ? 3 : 1;
-
   if (alternate.solution.IsFinalGlide())
     return 2;
+
+  if (alternate.mode == AlternateInfoBoxMode::MANUAL)
+    return 1;
 
   return 0;
 }
