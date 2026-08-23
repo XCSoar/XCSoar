@@ -213,19 +213,11 @@ RepositoryFilePickerWidget::RefreshList()
     return;
   }
 
-  if (allow_area_step && !selected_area.empty()) {
-    bool still_present = false;
-    for (const auto &area : areas) {
-      if (area == selected_area) {
-        still_present = true;
-        break;
-      }
-    }
-
-    if (still_present) {
-      ShowFileList();
-      return;
-    }
+  if (allow_area_step && !selected_area.empty() &&
+      std::find(areas.begin(), areas.end(),
+                selected_area) != areas.end()) {
+    ShowFileList();
+    return;
   }
 
   if (allow_area_step) {
@@ -346,7 +338,10 @@ RepositoryFilePickerWidget::UpdateButtons()
   else
     primary_button->SetCaption(C_("Button", "Add"));
 
-  primary_button->SetEnabled(true);
+  primary_button->SetEnabled(empty ||
+                             (showing_areas
+                              ? !areas.empty()
+                              : !visible_files.empty()));
 
   if (select_all_button != nullptr) {
     select_all_button->SetEnabled(files_view && !visible_files.empty());
