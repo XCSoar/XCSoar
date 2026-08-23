@@ -540,6 +540,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/FlarmProfile.cpp \
 	\
 	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileArea.cpp \
+	$(SRC)/Repository/CountryName.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/Repository/Parser.cpp \
 	\

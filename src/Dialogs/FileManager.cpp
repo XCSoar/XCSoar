@@ -7,7 +7,6 @@
 #include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
-#include "Renderer/TextRowRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Language/Language.hpp"
@@ -23,7 +22,7 @@
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
-#include "ListPicker.hpp"
+#include "DownloadFilePicker.hpp"
 #include "Form/Button.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "ui/event/Notify.hpp"
@@ -557,51 +556,6 @@ ManagedFileListWidget::DownloadRemoteFile(const AvailableFile &remote_file)
   EnqueueRemoteFileDownload(remote_file);
 }
 
-
-class AddFileListItemRenderer final : public ListItemRenderer {
-  const std::vector<AvailableFile> &list;
-  const DialogLook &look;
-
-  TwoTextRowsRenderer row_renderer;
-
-public:
-  AddFileListItemRenderer(const std::vector<AvailableFile> &_list,
-                          const DialogLook &_look)
-    :list(_list), look(_look) {}
-
-  unsigned CalculateLayout() noexcept {
-    return row_renderer.CalculateLayout(*look.list.font_bold,
-                                        look.small_font);
-  }
-
-  unsigned OnListResized() noexcept override {
-    return CalculateLayout();
-  }
-
-  void OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept override;
-};
-
-void
-AddFileListItemRenderer::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                                     unsigned i) noexcept
-{
-  assert(i < list.size());
-
-  const AvailableFile &file = list[i];
-
-  if (file.GetName())
-    row_renderer.DrawFirstRow(canvas, rc, file.GetName());
-
-  if (file.GetDescription())
-    row_renderer.DrawSecondRow(canvas, rc, file.GetDescription());
-
-  if (file.update_date.IsPlausible()) {
-    char string_buffer[21];
-    FormatISO8601(string_buffer, file.update_date);
-    row_renderer.DrawRightSecondRow(canvas, rc, string_buffer);
-  }
-}
-
 #endif
 
 void
@@ -609,8 +563,6 @@ ManagedFileListWidget::Add()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
-
-  const DialogLook &look = UIGlobals::GetDialogLook();
 
   std::vector<AvailableFile> list;
   for (const auto &remote_file : repository) {
@@ -634,19 +586,9 @@ ManagedFileListWidget::Add()
     return;
   }
 
-  AddFileListItemRenderer item_renderer(list, look);
-  int i = ListPicker(_("Select a file"),
-                     list.size(), 0,
-                     item_renderer.CalculateLayout(),
-                     item_renderer);
-  if (i < 0)
-    return;
-
-  assert((unsigned)i < list.size());
-
-  const AvailableFile &remote_file = list[i];
-
-  DownloadRemoteFile(remote_file);
+  const auto chosen = SelectAvailableFiles(std::move(list));
+  for (const auto &remote_file : chosen)
+    DownloadRemoteFile(remote_file);
 #endif
 }
 

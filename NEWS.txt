@@ -49,6 +49,9 @@ Version 7.46 - not yet released
   - fix the Devices Debug button not writing port traffic to xcsoar.log
     #2903
 * dialogs
+  - pick a country (by name) or Regions first when downloading site
+    files, then tick the files to download, with name and description
+    on two lines
   - let Shift type '_' on XCSoar's on-screen keyboard
   - let Select as Alternate pin a landing field from AUTO, and use
     Alternate Mode: Auto only to return the Alternate InfoBox to the
