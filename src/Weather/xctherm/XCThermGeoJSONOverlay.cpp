@@ -10,6 +10,8 @@
 
 #include "Look/Colors.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Geo/GeoClip.hpp"
+#include "MapWindow/MapCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
 #ifdef ENABLE_OPENGL
@@ -228,12 +230,8 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
   const ScopeAlphaBlend alpha_blend;
 #endif
 
-  /* Temporary buffer for screen-space polygon points.
-     We reuse this across polygons to avoid reallocation. */
-  std::vector<BulkPixelPoint> screen_points;
-  screen_points.reserve(256);
-
-  const auto screen_rect = projection.GetScreenRect();
+  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
+  MapCanvas map_canvas(canvas, projection, clip);
 
   for (const auto &band : forecast.bands) {
     /* Set color for this wind band.
@@ -261,32 +259,7 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
       if (ring.size() < 3)
         continue;
 
-      /* Quick bounding-box visibility check */
-      GeoPoint bb_min = ring[0], bb_max = ring[0];
-      for (const auto &pt : ring) {
-        if (pt.longitude < bb_min.longitude) bb_min.longitude = pt.longitude;
-        if (pt.latitude < bb_min.latitude) bb_min.latitude = pt.latitude;
-        if (pt.longitude > bb_max.longitude) bb_max.longitude = pt.longitude;
-        if (pt.latitude > bb_max.latitude) bb_max.latitude = pt.latitude;
-      }
-
-      /* Check if bounding box intersects the screen */
-      auto tl = projection.GeoToScreen(GeoPoint(bb_min.longitude, bb_max.latitude));
-      auto br = projection.GeoToScreen(GeoPoint(bb_max.longitude, bb_min.latitude));
-
-      if (br.x < screen_rect.left || tl.x > screen_rect.right ||
-          br.y < screen_rect.top || tl.y > screen_rect.bottom)
-        continue;
-
-      /* Project all points to screen coordinates */
-      screen_points.clear();
-      for (const auto &pt : ring) {
-        auto sp = projection.GeoToScreen(pt);
-        screen_points.push_back(BulkPixelPoint{sp.x, sp.y});
-      }
-
-      canvas.DrawPolygon(screen_points.data(),
-                         (unsigned)screen_points.size());
+      map_canvas.FillPolygon(ring.data(), (unsigned)ring.size());
     }
   }
 }

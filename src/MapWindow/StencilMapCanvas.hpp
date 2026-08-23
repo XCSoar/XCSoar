@@ -6,12 +6,9 @@
 #ifndef ENABLE_OPENGL
 
 #include "Geo/GeoClip.hpp"
-#include "util/ReusableArray.hpp"
 
 struct PixelPoint;
-struct BulkPixelPoint;
 class Canvas;
-class Projection;
 class WindowProjection;
 struct AirspaceRendererSettings;
 class SearchPointVector;
@@ -22,13 +19,6 @@ class SearchPointVector;
 class StencilMapCanvas
 {
   const GeoClip clip;
-
-  /**
-   * A variable-length buffer for clipped GeoPoints.
-   */
-  ReusableArray<GeoPoint> geo_points_buffer;
-
-  ReusableArray<BulkPixelPoint> pixel_points_buffer;
 
 public:
   Canvas &buffer;

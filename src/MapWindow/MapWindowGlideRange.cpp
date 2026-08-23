@@ -2,178 +2,21 @@
 // Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
+#include "MapCanvas.hpp"
 #include "Look/MapLook.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Geo/GeoClip.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
 #include "Route/FlatTriangleFanVisitor.hpp"
+#include "util/StaticArray.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
-#include "ui/canvas/opengl/VertexPointer.hpp"
-#include "ui/canvas/opengl/Triangulate.hpp"
 #endif
 
 #include <stdio.h>
-#include "util/StaticArray.hxx"
-
-typedef std::vector<BulkPixelPoint> BulkPixelPointVector;
-
-struct ProjectedFan {
-  /**
-   * The number of points of the associated ReachFan.  The first
-   * ProjectedFan starts of ProjectedFans::points[0], followed by the
-   * second one at ProjectedFans::points[reach_fan0.size], etc.
-   */
-  unsigned size;
-
-  ProjectedFan() noexcept = default;
-
-  constexpr ProjectedFan(unsigned n) noexcept:size(n) {}
-
-#ifdef ENABLE_OPENGL
-  void DrawFill(const BulkPixelPoint *points, unsigned start) const noexcept {
-    /* triangulate the polygon */
-    AllocatedArray<GLushort> triangle_buffer;
-
-    unsigned idx_count = PolygonToTriangles(points + start, size,
-                                            triangle_buffer);
-    if (idx_count == 0)
-      return;
-
-    /* add offset to all vertex indices */
-    for (unsigned i = 0; i < idx_count; ++i)
-      triangle_buffer[i] += start;
-
-    glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
-                   triangle_buffer.data());
-  }
-
-  void DrawOutline(const BulkPixelPoint *all_points, unsigned start,
-                   unsigned pen_width) const noexcept {
-    const BulkPixelPoint *fan_points = all_points + start;
-
-    if (UseOpenGLLineLoopOutline(pen_width)) {
-      glDrawArrays(GL_LINE_LOOP, start, size);
-    } else {
-      static AllocatedArray<BulkPixelPoint> outline_buffer;
-      const unsigned strip_len =
-        LineToTriangles(fan_points, size, outline_buffer,
-                        pen_width, true);
-      if (strip_len > 0) {
-        const ScopeVertexPointer vp{outline_buffer.data()};
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
-      }
-    }
-  }
-#else
-  void DrawFill(Canvas &canvas, const BulkPixelPoint *points) const noexcept {
-    canvas.DrawPolygon(&points[0], size);
-  }
-
-  void DrawOutline(Canvas &canvas, const BulkPixelPoint *points) const noexcept {
-    canvas.DrawPolygon(&points[0], size);
-  }
-#endif
-};
-
-struct ProjectedFans {
-  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
-
-  ProjectedFanVector fans;
-
-  /**
-   * All points of all ProjectedFan objects.  The first one starts of
-   * points[0], followed by the second one at points[fans[0].size],
-   * etc.
-   */
-  BulkPixelPointVector points;
-
-#ifndef NDEBUG
-  unsigned remaining = 0;
-#endif
-
-  ProjectedFans() noexcept {
-    /* try to guess the total number of vertices */
-    points.reserve(FlatTriangleFanTree::MAX_FANS * ROUTEPOLAR_POINTS / 10);
-  }
-
-  bool empty() const noexcept {
-    return fans.empty();
-  }
-
-  bool full() const noexcept {
-    return fans.full();
-  }
-
-  ProjectedFanVector::size_type size() const noexcept {
-    return fans.size();
-  }
-
-  ProjectedFan &Append(unsigned n) noexcept {
-#ifndef NDEBUG
-    assert(remaining == 0);
-    remaining = n;
-#endif
-
-    points.reserve(points.size() + n);
-
-    fans.push_back(ProjectedFan(n));
-    return fans.back();
-  }
-
-  void Append(const PixelPoint &pt) noexcept {
-#ifndef NDEBUG
-    assert(remaining > 0);
-    --remaining;
-#endif
-
-    points.push_back(pt);
-  }
-
-  void DrawFill([[maybe_unused]] Canvas &canvas) const noexcept {
-    assert(remaining == 0);
-
-#ifdef ENABLE_OPENGL
-    unsigned start = 0;
-    const auto *points = &this->points[0];
-    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
-      i->DrawFill(points, start);
-      start += i->size;
-    }
-#else
-    const auto *points = &this->points[0];
-    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
-      i->DrawFill(canvas, points);
-      points += i->size;
-    }
-#endif
-  }
-
-#ifdef ENABLE_OPENGL
-  void DrawOutline(unsigned pen_width) const noexcept {
-    assert(remaining == 0);
-
-    const auto *points = &this->points[0];
-    unsigned start = 0;
-    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
-      i->DrawOutline(points, start, pen_width);
-      start += i->size;
-    }
-  }
-#else
-  void DrawOutline(Canvas &canvas) const noexcept {
-    assert(remaining == 0);
-
-    const auto *points = &this->points[0];
-    for (auto i = fans.begin(), end = fans.end(); i != end; ++i) {
-      i->DrawOutline(canvas, points);
-      points += i->size;
-    }
-  }
-#endif
-};
-
-typedef StaticArray<ProjectedFan, FlatTriangleFanTree::MAX_FANS> ProjectedFanVector;
+#include <vector>
 
 class TriangleCompound final : public FlatTriangleFanVisitor {
   /**
@@ -186,10 +29,14 @@ class TriangleCompound final : public FlatTriangleFanVisitor {
   /** GeoClip instance used for TriangleFan clipping */
   const GeoClip clip;
 
-public:
-  /** STL-Container of rasterized polygons */
-  ProjectedFans fans;
+  StaticArray<unsigned, FlatTriangleFanTree::MAX_FANS> sizes;
 
+  /**
+   * Concatenated geographic rings; ring i has sizes[i] vertices.
+   */
+  std::vector<GeoPoint> geo;
+
+public:
   TriangleCompound(const FlatProjection &_flat_projection,
                    const MapWindowProjection &_proj) noexcept
     :flat_projection(_flat_projection), proj(_proj),
@@ -197,30 +44,59 @@ public:
   {
   }
 
+  bool empty() const noexcept {
+    return sizes.empty();
+  }
+
+  auto size() const noexcept {
+    return sizes.size();
+  }
+
+  void DrawFill(Canvas &canvas) const noexcept {
+    MapCanvas map_canvas(canvas, proj, clip);
+    unsigned start = 0;
+    for (unsigned n : sizes) {
+      map_canvas.FillPolygon(&geo[start], n);
+      start += n;
+    }
+  }
+
+  void DrawOutline(Canvas &canvas) const noexcept {
+    MapCanvas map_canvas(canvas, proj, clip);
+    unsigned start = 0;
+    for (unsigned n : sizes) {
+      map_canvas.DrawPolygonOutline(&geo[start], n);
+      start += n;
+    }
+  }
+
   /* virtual methods from class FlatTriangleFanVisitor */
 
-  void VisitFan([[maybe_unused]] FlatGeoPoint origin, std::span<const FlatGeoPoint> fan) noexcept override {
+  void VisitFan([[maybe_unused]] FlatGeoPoint origin,
+                std::span<const FlatGeoPoint> fan) noexcept override {
 
-    if (fan.size() < 3 || fans.full())
+    if (fan.size() < 3 || sizes.full())
       return;
 
     GeoPoint g[ROUTEPOLAR_POINTS + 2];
     for (size_t i = 0; i < fan.size(); ++i)
       g[i] = flat_projection.Unproject(fan[i]);
 
-    // Perform clipping on the GeoPointVector
-    GeoPoint clipped[(ROUTEPOLAR_POINTS + 2) * 3];
-    unsigned size = clip.ClipPolygon(clipped, g, fan.size());
-    // With less than three points we can't draw a polygon
-    if (size < 3)
+    unsigned n = (unsigned)fan.size();
+    if (g[0] == g[n - 1])
+      n--;
+    if (n < 3)
       return;
 
-    // Work directly on the PixelPoints in the fans vector
-    fans.Append(size);
+    GeoBounds bb(g[0]);
+    for (unsigned i = 1; i < n; ++i)
+      bb.Extend(g[i]);
+    if (bb.IsValid() && !clip.Overlaps(bb))
+      return;
 
-    // Convert GeoPoints to PixelPoints
-    for (unsigned i = 0; i < size; ++i)
-      fans.Append(proj.GeoToScreen(clipped[i]));
+    sizes.push_back(n);
+    for (unsigned i = 0; i < n; ++i)
+      geo.push_back(g[i]);
   }
 };
 
@@ -268,7 +144,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
                                visitor, working);
 
   // Exit early if not fans found
-  if (visitor.fans.empty())
+  if (visitor.empty())
     return;
 
   const Pen& reach_pen = working? look.reach_working_pen : look.reach_terrain_pen;
@@ -285,8 +161,6 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
 #ifdef ENABLE_OPENGL
 
-    const ScopeVertexPointer vp(&visitor.fans.points[0]);
-
     const GLEnable<GL_STENCIL_TEST> stencil_test;
     glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -295,8 +169,9 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
     glStencilFunc(GL_ALWAYS, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    COLOR_WHITE.Bind();
-    visitor.fans.DrawFill(canvas);
+    canvas.SelectWhiteBrush();
+    canvas.SelectNullPen();
+    visitor.DrawFill(canvas);
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -325,7 +200,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
     buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
-    visitor.fans.DrawOutline(buffer);
+    visitor.DrawOutline(buffer);
 
     // Select a white brush (will later be transparent)
     buffer.SelectNullPen();
@@ -333,7 +208,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
     // Draw the TerrainLine polygons to remove the
     // brush pattern from the polygon areas
-    visitor.fans.DrawFill(buffer);
+    visitor.DrawFill(buffer);
 
     // Copy everything non-white to the buffer
     canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
@@ -347,12 +222,12 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
   }
 
-  if (visitor.fans.size() == 1) {
+  if (visitor.size() == 1) {
     /* only one fan: we can draw a simple polygon */
 
 #ifdef ENABLE_OPENGL
-    const ScopeVertexPointer vp(&visitor.fans.points[0]);
-    reach_pen.Bind();
+    canvas.Select(reach_pen);
+    visitor.DrawOutline(canvas);
 #else
     // Select the TerrainLine pen
     canvas.SelectHollowBrush();
@@ -365,22 +240,14 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
     // Draw the TerrainLine polygon
 
-#ifdef ENABLE_OPENGL
-    visitor.fans.DrawOutline(reach_pen.GetWidth());
-#else
-    visitor.fans.DrawOutline(canvas);
-#endif
-
-#ifdef ENABLE_OPENGL
-    reach_pen.Unbind();
+#ifndef ENABLE_OPENGL
+    visitor.DrawOutline(canvas);
 #endif
   } else {
     /* more than one fan (turning reach enabled): we have to use a
        stencil to draw the outline, because the fans may overlap */
 
 #ifdef ENABLE_OPENGL
-  const ScopeVertexPointer vp(&visitor.fans.points[0]);
-
   glEnable(GL_STENCIL_TEST);
   glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -389,16 +256,16 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
   glStencilFunc(GL_ALWAYS, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-  COLOR_WHITE.Bind();
-  visitor.fans.DrawFill(canvas);
+  canvas.SelectWhiteBrush();
+  canvas.SelectNullPen();
+  visitor.DrawFill(canvas);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  reach_pen_thick.Bind();
-  visitor.fans.DrawOutline(reach_pen_thick.GetWidth());
-  reach_pen_thick.Unbind();
+  canvas.Select(reach_pen_thick);
+  visitor.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);
 
@@ -417,7 +284,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
   buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
 
   // Draw the TerrainLine polygons
-  visitor.fans.DrawOutline(buffer);
+  visitor.DrawOutline(buffer);
 
   // Select a white brush (will later be transparent)
   buffer.SelectNullPen();
@@ -427,7 +294,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
   // the lines connecting all the polygons
   //
   // This removes half of the TerrainLine line width !!
-  visitor.fans.DrawFill(buffer);
+  visitor.DrawFill(buffer);
 
   // Copy everything non-white to the buffer
   canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),

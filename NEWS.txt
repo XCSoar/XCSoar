@@ -36,6 +36,8 @@ Version 7.46 - not yet released
     resolution immediately instead of waiting until the map is idle
   - skip tiny topography fills, simplify large areas, clip long roads
     to the map view, and keep recently seen shapes while panning
+  - fix map fills and outlines (airspace, XC Therm, reach, FAI
+    areas, weather overlays) vanishing when only partly on the map
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box

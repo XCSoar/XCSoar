@@ -169,7 +169,7 @@ private:
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
-    DrawPolygon(airspace.GetPoints());
+    DrawPolygonOutline(airspace.GetPoints());
   }
 
 public:
