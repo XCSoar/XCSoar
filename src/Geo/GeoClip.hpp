@@ -19,6 +19,9 @@ public:
   GeoClip(const GeoBounds &other)
     :GeoBounds(other), width(GetWidth()) {}
 
+  using GeoBounds::Overlaps;
+  using GeoBounds::IsValid;
+
 protected:
   /**
    * Imports a longitude value.  To avoid wraparound bugs, all
@@ -72,7 +75,11 @@ public:
    * The implementation is a specialization of the Sutherland-Hodgman
    * algorithm, with only horizontal and vertical bound lines.
    *
-   * @param dest a GeoPoint array with enough space for three times
+   * Scratch space is allocated internally so dest is write-only and
+   * may alias src.  Each clip pass can insert vertices, so dest must
+   * hold four times src_length.
+   *
+   * @param dest a GeoPoint array with enough space for four times
    * src_length
    * @return the number of vertices written to dest; if less than 3,
    * then the polygon can not be drawn
