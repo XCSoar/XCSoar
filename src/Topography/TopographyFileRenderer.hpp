@@ -48,12 +48,12 @@ class TopographyFileRenderer final
   MaskedIcon icon;
 
   Serial visible_serial;
-  GeoBounds visible_bounds;
+  GeoBounds visible_bounds = GeoBounds::Invalid();
 
   /**
    * #Projection::GetScale() (px/m) used to build #visible_shapes.
    * Recache when the map is zoomed in (larger scale) so previously
-   * skipped sub-pixel lines can appear.
+   * skipped sub-pixel fills can appear.
    */
   double visible_scale = 0;
 

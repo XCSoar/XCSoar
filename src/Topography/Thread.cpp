@@ -3,6 +3,7 @@
 
 #include "Thread.hpp"
 #include "TopographyStore.hpp"
+#include "TopographyFile.hpp"
 #include "Screen/Layout.hpp"
 
 TopographyThread::TopographyThread(TopographyStore &_store,
@@ -33,7 +34,7 @@ TopographyThread::Trigger(const WindowProjection &_projection)
       return;
   }
 
-  last_bounds = new_bounds.Scale(1.1);
+  last_bounds = new_bounds.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   scale_threshold = store.GetNextScaleThreshold(_projection.GetMapScale());
 
   {
