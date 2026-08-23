@@ -25,6 +25,12 @@ class GLBuffer {
   GLvoid *p;
 #endif
 
+  /**
+   * True when #BeginWrite mapped the GL buffer.  False when it fell
+   * back to malloc (or the write was empty).
+   */
+  bool mapped = false;
+
 public:
   GLBuffer() noexcept {
     glGenBuffers(1, &id);
@@ -90,13 +96,21 @@ public:
 
   GLvoid *BeginWrite(size_t size) noexcept {
     Bind();
+    mapped = false;
 
-    void *result;
-    if (OpenGL::mapbuffer) {
-      Data(GLsizeiptr(size), nullptr);
-      result = MapWrite();
-    } else {
-      result = malloc(size);
+    void *result = nullptr;
+    if (size > 0) {
+      if (OpenGL::mapbuffer) {
+        Data(GLsizeiptr(size), nullptr);
+        result = MapWrite();
+        if (result != nullptr)
+          mapped = true;
+      }
+
+      /* Mali-400 advertises GL_OES_mapbuffer but returns null for
+         large VBOs (dense landcover).  Fall back to a client copy. */
+      if (result == nullptr)
+        result = malloc(size);
     }
 
 #ifndef NDEBUG
@@ -112,9 +126,9 @@ public:
     p = nullptr;
 #endif
 
-    if (OpenGL::mapbuffer) {
+    if (mapped) {
       Unmap();
-    } else {
+    } else if (data != nullptr) {
       Data(GLsizeiptr(size), data);
       free(data);
     }

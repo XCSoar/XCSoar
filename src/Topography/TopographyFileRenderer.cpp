@@ -11,6 +11,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "LogFile.hpp"
 #include "shapelib/mapserver.h"
 #include "util/AllocatedArray.hxx"
 #include "Geo/GeoClip.hpp"
@@ -124,15 +125,13 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
 
 #ifdef ENABLE_OPENGL
 
-inline void
+inline bool
 TopographyFileRenderer::UpdateArrayBuffer() noexcept
 {
   if (array_buffer == nullptr)
     array_buffer = std::make_unique<GLArrayBuffer>();
   else if (file.GetSerial() == array_buffer_serial)
-    return;
-
-  array_buffer_serial = file.GetSerial();
+    return true;
 
   unsigned n = 0;
   for (auto &shape : file) {
@@ -142,9 +141,17 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
     n = std::accumulate(lines.begin(), lines.end(), n);
   }
 
+  if (n == 0)
+    return false;
+
   ShapePoint *p = (ShapePoint *)
     array_buffer->BeginWrite(n * sizeof(*p));
-  assert (p != nullptr);
+  if (p == nullptr) {
+    LogFmt("Topography: {} failed to allocate {} vertices",
+           file.GetName(), n);
+    GLArrayBuffer::Unbind();
+    return false;
+  }
 
   for (const auto &shape : file) {
     const auto lines = shape.GetLines();
@@ -156,6 +163,8 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
   }
 
   array_buffer->CommitWrite(n * sizeof(*p), p - n);
+  array_buffer_serial = file.GetSerial();
+  return true;
 }
 
 #endif
@@ -189,7 +198,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   OpenGL::solid_shader->Use();
 
-  UpdateArrayBuffer();
+  if (!UpdateArrayBuffer())
+    return;
   array_buffer->Bind();
   const ShapePoint *const buffer = nullptr;
 

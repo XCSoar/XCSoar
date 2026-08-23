@@ -112,7 +112,7 @@ private:
   void UpdateVisibleShapes(const WindowProjection &projection) noexcept;
 
 #ifdef ENABLE_OPENGL
-  void UpdateArrayBuffer() noexcept;
+  bool UpdateArrayBuffer() noexcept;
 #endif
 
   void PaintPoints(Canvas &canvas, const WindowProjection &projection) noexcept;
