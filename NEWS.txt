@@ -20,8 +20,8 @@ Version 7.47 - not yet released
   - fix map fills and outlines (airspace, XC Therm, reach, FAI
     areas, weather overlays) vanishing when only partly on the map
   - fix topography labels flickering on and off while panning,
-    centre them on the feature, and enlarge place names when zoomed
-    in
+    centre area names on the feature, sit place names under point
+    icons, and enlarge place names when zoomed in
 * development
   - add RunTerrainRenderer to show TerrainRenderer hillshade with a
     rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
