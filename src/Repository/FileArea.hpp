@@ -17,20 +17,12 @@
 std::string
 NormalizeFileArea(std::string_view area) noexcept;
 
-/**
- * ISO alpha-2 from the first `_`/`-` token of the filename.
- * Empty if the token is not a country (Regions).
- */
 [[gnu::pure]]
-std::string
-GuessFileAreaFromName(std::string_view name) noexcept;
-
-/**
- * Repository `area=` if set, otherwise #GuessFileAreaFromName.
- */
-[[gnu::pure]]
-std::string
-NormalizeFileArea(const AvailableFile &file) noexcept;
+inline std::string
+NormalizeFileArea(const AvailableFile &file) noexcept
+{
+  return NormalizeFileArea(file.GetArea());
+}
 
 [[gnu::pure]]
 bool

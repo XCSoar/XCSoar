@@ -461,19 +461,6 @@ TestFileArea()
   ok1(ad_files.size() == 2);
   ok1(ad_files[0].name == "AD-WPT-National-OpenAIP.cup");
   ok1(ad_files[1].name == "AD-WPT-Airports-OpenAIP.cupx");
-
-  ok1(GuessFileAreaFromName("AUS_ADELAIDE_HighRes.xcm") == "AU");
-  ok1(GuessFileAreaFromName("US_COLORADO.xcm") == "US");
-  ok1(GuessFileAreaFromName("GER.xcm") == "DE");
-  ok1(GuessFileAreaFromName("UK.xcm") == "GB");
-  ok1(GuessFileAreaFromName("ALPS.xcm").empty());
-  ok1(GuessFileAreaFromName("BEN_WGER.xcm").empty());
-
-  const auto aus_map = MakeAreaFile("AUS_ADELAIDE.xcm", "");
-  ok1(NormalizeFileArea(aus_map) == "AU");
-
-  const auto tagged = MakeAreaFile("AUS_ADELAIDE.xcm", "de");
-  ok1(NormalizeFileArea(tagged) == "DE");
 }
 
 static void
@@ -509,7 +496,7 @@ int main()
     5 +   // TestFindByName
     3 +   // TestFieldsBeforeName
     10 +  // TestAvailableFile
-    24 +  // TestFileArea
+    16 +  // TestFileArea
     7     // TestCountryName
   );
 
