@@ -34,8 +34,11 @@ Version 7.46 - not yet released
     rebuilding the slope image; contour lines stay unshaded (also on
     older OpenGL ES 2 devices); faster devices use full terrain
     resolution immediately instead of waiting until the map is idle
-  - skip tiny topography fills, simplify large areas, clip long roads
-    to the map view, and keep recently seen shapes while panning
+  - skip tiny topography fills, simplify large areas without tearing
+    them, clip long roads to the map view, and keep recently seen
+    shapes while panning
+  - fix crash drawing dense topography fills at close zoom
+  - fix topography fills stretching across the map at some zoom levels
   - fix map fills and outlines (airspace, XC Therm, reach, FAI
     areas, weather overlays) vanishing when only partly on the map
   - fix the ragged white halo behind map labels on high-DPI screens

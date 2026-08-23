@@ -300,7 +300,8 @@ FindSharedEdge(const unsigned idx1, const unsigned idx2,
 
 unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,
-                unsigned vertex_count, unsigned polygon_count) noexcept
+                unsigned vertex_count,
+                [[maybe_unused]] unsigned polygon_count) noexcept
 {
   if (index_count < 3)
     /* bail out, because we didn't get even one triangle; we need to
@@ -315,7 +316,14 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 
   AddValueCounts(vcount, vertex_count, t, t_end);
 
-  const unsigned triangle_buffer_size = index_count + 2 * (polygon_count - 1);
+  /* Restarts insert two duplicate indices.  A landcover ring can
+     triangulate into many disconnected fans, so size for the worst
+     case (a restart before every remaining triangle), not
+     polygon_count. */
+  const unsigned triangle_count = index_count / 3;
+  const unsigned triangle_buffer_size = triangle_count == 0
+    ? 0
+    : index_count + 2 * (triangle_count - 1);
   const auto triangle_strip = new GLushort[triangle_buffer_size];
   auto strip = triangle_strip;
 
@@ -353,12 +361,6 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
     t += 3;
     triangles_left--;
 
-    /* TODO: I'm almost sure this is true, but I can't prove it. Maybe there
-     *       are polygons, where the degenerated triangle strip is longer
-     *       than all triangle indices.
-     *       Use a higher polygon_count and bigger triangle buffer if you
-     *       hit this one.
-     */
     assert(strip + 4 <= triangle_strip + triangle_buffer_size);
 
     // search for a shared edge

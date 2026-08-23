@@ -299,7 +299,15 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
 #ifdef GL_EXT_multi_draw_arrays
         const unsigned offset = shape.GetOffset();
-        if (GLExt::HaveMultiDrawElements() && offset + n < 0x10000) {
+        unsigned n_verts = 0;
+        for (const unsigned nv : shape.GetLines())
+          n_verts += nv;
+        /* GLushort indices; offset+n (strip length) is not the
+           highest vertex.  Wrapping picks vertices from other
+           shapes and stretches fills across the map. */
+        if (GLExt::HaveMultiDrawElements() &&
+            offset < 0x10000 &&
+            n_verts <= 0x10000 - offset) {
           /* postpone, draw many polygons with a single
              glMultiDrawElements() call */
           polygon_counts.push_back(n);
