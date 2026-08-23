@@ -489,11 +489,12 @@ private:
     if (!SetupOutline(airspace))
       return;
 
+    /* ClipPolygon inserts view-box edges; stroke the original ring. */
     if (use_outline_stencil) {
       const GLEnable<GL_STENCIL_TEST> stencil;
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
     } else
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
   void DrawOutline(const AbstractAirspace &airspace, PixelPoint center,
@@ -675,11 +676,12 @@ private:
     if (!SetupOutline(airspace))
       return;
 
+    /* ClipPolygon inserts view-box edges; stroke the original ring. */
     if (use_outline_stencil) {
       const GLEnable<GL_STENCIL_TEST> stencil;
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
     } else
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
   void DrawOutline(const AbstractAirspace &airspace, PixelPoint center,

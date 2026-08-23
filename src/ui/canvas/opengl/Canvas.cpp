@@ -186,10 +186,13 @@ Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept
 
   pen.Bind();
 
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  /* GLES and macOS cannot draw wide GL_LINE_STRIP; use a triangle
+     strip so airspace borders keep their width. */
+  const unsigned width = pen.GetWidth();
+  if (pen.GetStyle() == Pen::SOLID && width > 1 &&
+      !UseOpenGLLineLoopOutline(width)) {
     unsigned strip_len = LineToTriangles(points, num_points, vertex_buffer,
-                                         pen.GetWidth(), false, false);
+                                         width, false, false);
     if (strip_len > 0) {
       const ScopeVertexPointer vp{vertex_buffer.data()};
       glDrawArrays(GL_TRIANGLE_STRIP, 0, strip_len);
@@ -229,6 +232,20 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
                           vertex_buffer);
     pen.Unbind();
   }
+}
+
+void
+Canvas::DrawFilledTriangles(const FloatPoint2D *points,
+                            const GLushort *indices,
+                            unsigned idx_count) noexcept
+{
+  if (brush.IsHollow() || idx_count < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+  brush.Bind();
+  const ScopeVertexPointer vp(points);
+  glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, indices);
 }
 
 void
