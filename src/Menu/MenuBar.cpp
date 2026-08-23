@@ -4,9 +4,21 @@
 #include "MenuBar.hpp"
 #include "ui/window/ContainerWindow.hpp"
 #include "Input/InputEvents.hpp"
+#include "Screen/Layout.hpp"
 
 #include <algorithm>
 #include <cassert>
+
+unsigned
+MenuBar::GetButtonHeight(unsigned screen_height, bool portrait) noexcept
+{
+  unsigned height = std::max(1u,
+    screen_height / (portrait ? menubar_height_scale_factor : 5u));
+  const unsigned cap = Layout::GetInflightButtonHeight();
+  if (portrait && cap > 0 && height > cap)
+    height = cap;
+  return height;
+}
 
 [[gnu::pure]]
 static PixelRect
@@ -17,8 +29,7 @@ GetButtonPosition(unsigned i, PixelRect rc)
   const bool portrait = screen_height > screen_width;
 
   unsigned width = std::max(1u, screen_width / (portrait ? 4u : 5u));
-  unsigned height = std::max(1u,
-    screen_height / (portrait ? menubar_height_scale_factor : 5u));
+  unsigned height = MenuBar::GetButtonHeight(screen_height, portrait);
 
   if (i == 0) {
     rc.left = rc.right;

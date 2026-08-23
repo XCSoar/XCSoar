@@ -273,6 +273,22 @@ GetMaximumControlHeight() noexcept
 }
 
 /**
+ * In-flight tap target (pan menu, map cursor bar), in points.
+ * ~20 mm, large enough for a gloved tap (2 * map hit radius).
+ */
+static constexpr unsigned inflight_button_pt = 56;
+
+/**
+ * Pixel size of #inflight_button_pt.
+ */
+[[gnu::pure]]
+static inline unsigned
+GetInflightButtonHeight() noexcept
+{
+  return PtScale(inflight_button_pt);
+}
+
+/**
  * Returns the radius (in pixels) of the hit circle around map
  * items.
  */

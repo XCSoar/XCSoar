@@ -70,6 +70,9 @@ Version 7.46 - not yet released
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
+* ui
+  - keep pan-mode menu buttons about 20 mm tall on tall phones,
+    large enough for a gloved tap
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
