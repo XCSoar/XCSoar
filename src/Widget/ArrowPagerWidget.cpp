@@ -14,6 +14,8 @@
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 
+#include <algorithm>
+
 ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
                                  const Widget *extra_widget) noexcept
   :main(rc)
@@ -24,8 +26,11 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
   if (width > height) {
     /* landscape */
 
+    /* Size for Close or Back so a caller can swap the caption without
+       clipping. */
     const unsigned close_button_width =
-      TextButtonRenderer::GetMinimumButtonWidth(look, _("Close"));
+      std::max(TextButtonRenderer::GetMinimumButtonWidth(look, _("Close")),
+               TextButtonRenderer::GetMinimumButtonWidth(look, _("Back")));
     const unsigned arrow_buttons_width =
       2 * ::Layout::GetMaximumControlHeight();
 

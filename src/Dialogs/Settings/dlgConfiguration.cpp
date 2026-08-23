@@ -322,7 +322,8 @@ OnUserLevel(bool expert) noexcept
 }
 
 /**
- * close dialog from menu page.  from content, goes to menu page
+ * Close on the menu page commits (mrOK).  On a settings page, return
+ * to the menu (Back).
  */
 static void
 OnCloseClicked(WidgetDialog &dialog)
@@ -343,6 +344,10 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
   if (caption == nullptr)
     caption = _("Configuration");
   dialog.SetCaption(caption);
+
+  pager->SetCloseButtonCaption(pager->GetCurrentIndex() == 0
+                               ? _("Close")
+                               : _("Back"));
 }
 
 void dlgConfigurationShowModal()
@@ -377,7 +382,7 @@ void dlgConfigurationShowModal()
 
   dialog.FinishPreliminary(pager);
 
-  /* Esc on a settings panel returns to the menu (same as Close);
+  /* Esc on a settings panel returns to the menu (same as Back);
      on the menu itself, leave Esc to cancel the dialog. */
   dialog.SetKeyDownFunction([&dialog](unsigned key_code) {
     if (key_code != KEY_ESCAPE || pager->GetCurrentIndex() == 0)
