@@ -59,7 +59,7 @@ MapLook::Initialise(const MapSettings &settings,
   tbm_pen.Create(Layout::ScalePenWidth(2), HasColors() ? COLOR_GREEN : COLOR_BLACK);
   tbm_brush.Create(HasColors() ? COLOR_GREEN : COLOR_BLACK);
 
-  distance_rings_pen.Create(Layout::ScalePenWidth(1),
+  distance_rings_pen.Create(Layout::ScaleFinePenWidth(1),
                             HasColors() ? COLOR_GRAY : COLOR_BLACK);
 
   contest_pens[0].Create(Layout::ScalePenWidth(1) + 2, COLOR_RED);
