@@ -497,7 +497,7 @@ ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
     quick_menu.NavigatePage(GridView::Direction::RIGHT);
   });
 
-  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.AddButton(_("Close"), mrCancel);
 
   quick_menu.SetNavigationButtons(prev_button, next_button);
 

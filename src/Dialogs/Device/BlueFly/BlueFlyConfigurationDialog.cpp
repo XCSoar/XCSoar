@@ -166,6 +166,6 @@ dlgConfigurationBlueFlyVarioShowModal(Device &_device)
                       "BlueFly Vario",
                       new BlueFlyConfigurationWidget(look, dialog, device));
 
-  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
