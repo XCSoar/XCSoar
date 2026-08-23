@@ -4,7 +4,6 @@
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
 #include "util/Compiler.h"
-#include "util/StaticArray.hxx"
 #include "util/StringAPI.hxx"
 #include "util/UTF8.hpp"
 #include "util/StringStrip.hxx"
@@ -13,6 +12,7 @@
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
 #include "ui/canvas/opengl/Triangulate.hpp"
+#include "Math/Line2D.hpp"
 #endif
 
 #include "Geo/GeoClip.hpp"
@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 static BasicAllocatedString<char>
@@ -277,9 +278,69 @@ XShape::~XShape() noexcept = default;
 #ifdef ENABLE_OPENGL
 
 /**
- * Ear-clip a ring.  Rings larger than TARGET are subsampled in O(n)
- * first at every thinning level; PolygonToTriangles() itself is O(n²)
- * and a large landcover ring would freeze the topography loader.
+ * Squared distance from #p to the segment #a–#b.
+ */
+[[gnu::pure]]
+static ShapeScalar
+PointSegmentDistance2(ShapePoint p, ShapePoint a, ShapePoint b) noexcept
+{
+  const Line2D<ShapePoint> line(a, b);
+  if (line.GetSquaredDistance() == 0)
+    return (p - a).MagnitudeSquared();
+
+  double t = line.ProjectedRatio(p);
+  if (t < 0)
+    t = 0;
+  else if (t > 1)
+    t = 1;
+  return (p - line.Interpolate(t)).MagnitudeSquared();
+}
+
+/**
+ * Douglas–Peucker keep-flags for src[0..n).  First and last are kept.
+ */
+static void
+SimplifyRingRDP(const ShapePoint *src, unsigned n, ShapeScalar eps2,
+                std::vector<char> &keep) noexcept
+{
+  keep.assign(n, 0);
+  if (n < 2)
+    return;
+
+  keep.front() = 1;
+  keep.back() = 1;
+
+  std::vector<std::pair<unsigned, unsigned>> stack;
+  stack.emplace_back(0, n - 1);
+
+  while (!stack.empty()) {
+    const auto [first, last] = stack.back();
+    stack.pop_back();
+
+    unsigned best = 0;
+    ShapeScalar best_d2 = eps2;
+    for (unsigned i = first + 1; i < last; ++i) {
+      const ShapeScalar d2 =
+        PointSegmentDistance2(src[i], src[first], src[last]);
+      if (d2 > best_d2) {
+        best_d2 = d2;
+        best = i;
+      }
+    }
+
+    if (best != 0) {
+      keep[best] = 1;
+      stack.emplace_back(first, best);
+      stack.emplace_back(best, last);
+    }
+  }
+}
+
+/**
+ * Ear-clip a ring.  Rings larger than TARGET are simplified with
+ * Douglas–Peucker first: PolygonToTriangles() is O(n²), and a
+ * uniform stride used to drop bays so landcover triangles stretched
+ * across the map.
  */
 static unsigned
 PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
@@ -287,30 +348,59 @@ PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
                           ShapeScalar min_distance) noexcept
 {
   constexpr unsigned TARGET = 128;
-  /* orig[] stores source vertex indices in GLushort. */
   assert(n > 0 && n - 1 <= 0xffff);
+
+  if (n >= 2 && src[0] == src[n - 1])
+    n--;
 
   if (n <= TARGET)
     return PolygonToTriangles(src, n, triangles, min_distance);
 
-  StaticArray<ShapePoint, TARGET + 1> thin_pts;
-  StaticArray<GLushort, TARGET + 1> orig;
-
-  const unsigned stride = (n + TARGET - 1) / TARGET;
-  for (unsigned i = 0; i < n; i += stride) {
-    orig.append(i);
-    thin_pts.append(src[i]);
-  }
-  if (orig.back() != GLushort(n - 1)) {
-    orig.append(n - 1);
-    thin_pts.append(src[n - 1]);
+  ShapeScalar min_x = src[0].x, max_x = src[0].x;
+  ShapeScalar min_y = src[0].y, max_y = src[0].y;
+  for (unsigned i = 1; i < n; ++i) {
+    min_x = std::min(min_x, src[i].x);
+    max_x = std::max(max_x, src[i].x);
+    min_y = std::min(min_y, src[i].y);
+    max_y = std::max(max_y, src[i].y);
   }
 
-  /* PolygonToTriangles writes at most 3*(m-2) indices for m vertices;
-     m <= TARGET+1. */
-  GLushort tmp[3 * (TARGET + 1)];
+  const ShapeScalar span = std::max(max_x - min_x, max_y - min_y);
+  if (span <= 0)
+    return PolygonToTriangles(src, n, triangles, min_distance);
+
+  ShapeScalar eps = span / ShapeScalar(TARGET);
+  ShapeScalar eps2 = eps * eps;
+
+  std::vector<char> keep;
+  unsigned n_keep = n;
+  for (unsigned pass = 0; pass < 8; ++pass) {
+    SimplifyRingRDP(src, n, eps2, keep);
+    n_keep = 0;
+    for (char k : keep)
+      n_keep += k != 0;
+    if (n_keep <= TARGET)
+      break;
+    eps2 *= 4;
+  }
+
+  if (n_keep < 3)
+    return 0;
+
+  std::vector<ShapePoint> thin_pts;
+  std::vector<GLushort> orig;
+  thin_pts.reserve(n_keep);
+  orig.reserve(n_keep);
+  for (unsigned i = 0; i < n; ++i) {
+    if (keep[i] == 0)
+      continue;
+    orig.push_back(GLushort(i));
+    thin_pts.push_back(src[i]);
+  }
+
+  std::vector<GLushort> tmp(3 * (thin_pts.size() - 2));
   const unsigned count =
-    PolygonToTriangles(thin_pts.data(), thin_pts.size(), tmp, 0);
+    PolygonToTriangles(thin_pts.data(), thin_pts.size(), tmp.data(), 0);
   for (unsigned j = 0; j < count; ++j)
     triangles[j] = orig[tmp[j]];
   return count;
@@ -360,7 +450,14 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
     // TODO: free memory saved by thinning (use malloc/realloc or some class?)
     return true;
   } else if (type == MS_SHAPE_POLYGON) {
-    index_count[thinning_level] = std::make_unique<GLushort[]>(1 + 3 * (num_points - 2) + 2 * (num_lines - 1));
+    /* Strip conversion may restart once per triangle; keep room for
+       2 extra indices per restart. */
+    const unsigned max_triangles =
+      num_points >= 2 * num_lines ? num_points - 2 * num_lines : 0;
+    const unsigned max_strip =
+      max_triangles == 0 ? 0 : 5 * max_triangles - 2;
+    index_count[thinning_level] =
+      std::make_unique<GLushort[]>(1 + max_strip);
     idx_count = index_count[thinning_level].get();
     indices[thinning_level] = idx = idx_count + 1;
 
