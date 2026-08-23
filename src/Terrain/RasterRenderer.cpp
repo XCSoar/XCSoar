@@ -1019,6 +1019,11 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
   }
 
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);
+  OpenGL::solid_shader->Use();
 }
 
 #endif
