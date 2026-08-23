@@ -169,7 +169,7 @@ TopographyFile::Update(const WindowProjection &map_projection,
     /* the cache is still fresh */
     return false;
 
-  cache_bounds = screenRect.Scale(2);
+  cache_bounds = screenRect.Scale(CACHE_BOUNDS_SCALE);
 
   // Test which shapes are inside the given bounds and save the
   // status to file.status

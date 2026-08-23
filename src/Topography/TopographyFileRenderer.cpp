@@ -74,16 +74,17 @@ void
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
 {
   const double scale = projection.GetScale();
+  const GeoBounds screen = projection.GetScreenBounds();
   if (file.GetSerial() == visible_serial &&
       scale <= visible_scale &&
-      visible_bounds.IsInside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().Scale(2).IsInside(visible_bounds))
-    /* cache is clean */
+      visible_bounds.IsValid() &&
+      visible_bounds.IsInside(screen))
+    /* still inside the last 2× viewport; pan only reprojects */
     return;
 
   visible_serial = file.GetSerial();
   visible_scale = scale;
-  visible_bounds = projection.GetScreenBounds().Scale(1.2);
+  visible_bounds = screen.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   visible_shapes.clear();
   visible_points.clear();
   visible_labels.clear();
@@ -324,7 +325,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
              clip them, to avoid integer overflows (as PixelPoint may
              store only 16 bit integers on some platforms) */
 
-          geo_points.GrowDiscard(msize * 3);
+          geo_points.GrowDiscard(msize * 4);
           for (unsigned i = 0; i < msize; ++i)
             geo_points[i] = src[i * iskip];
 
