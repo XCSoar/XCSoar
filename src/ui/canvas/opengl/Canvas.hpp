@@ -229,6 +229,14 @@ public:
   void DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
   /**
+   * Fill triangles whose vertices are in canvas pixel coordinates.
+   * Used for map polygons triangulated in geographic space.
+   */
+  void DrawFilledTriangles(const FloatPoint2D *points,
+                           const GLushort *indices,
+                           unsigned idx_count) noexcept;
+
+  /**
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
    * origin of the fan.
    */

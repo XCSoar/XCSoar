@@ -5,6 +5,7 @@
 #include "Engine/Task/Shapes/FAITriangleArea.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoClip.hpp"
+#include "MapWindow/MapCanvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/Canvas.hpp"
 
@@ -17,14 +18,7 @@ RenderFAISector(Canvas &canvas, const WindowProjection &projection,
   GeoPoint *geo_end = GenerateFAITriangleArea(geo_points, pt1, pt2,
                                               reverse, settings);
 
-  GeoPoint clipped[FAI_TRIANGLE_SECTOR_MAX * 3],
-    *clipped_end = clipped +
-    GeoClip(projection.GetScreenBounds().Scale(1.1))
-    .ClipPolygon(clipped, geo_points, geo_end - geo_points);
-
-  BulkPixelPoint points[FAI_TRIANGLE_SECTOR_MAX], *p = points;
-  for (GeoPoint *geo_i = clipped; geo_i != clipped_end;)
-    *p++ = projection.GeoToScreen(*geo_i++);
-
-  canvas.DrawPolygon(points, p - points);
+  MapCanvas map_canvas(canvas, projection,
+                       GeoClip(projection.GetScreenBounds().Scale(1.1)));
+  map_canvas.DrawPolygon(geo_points, geo_end - geo_points);
 }

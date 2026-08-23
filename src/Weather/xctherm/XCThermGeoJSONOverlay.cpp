@@ -11,6 +11,8 @@
 #include "Geo/GeoBounds.hpp"
 #include "Look/Colors.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Geo/GeoClip.hpp"
+#include "MapWindow/MapCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
 #ifdef ENABLE_OPENGL
@@ -229,14 +231,9 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
   const ScopeAlphaBlend alpha_blend;
 #endif
 
-  /* Temporary buffer for screen-space polygon points.
-     We reuse this across polygons to avoid reallocation. */
-  std::vector<BulkPixelPoint> screen_points;
-  screen_points.reserve(256);
-
-  /* Same idea as TopographyFileRenderer: cull in geo space against
-     GetScreenBounds(), which already covers a rotated viewport. */
   const GeoBounds &screen_bounds = projection.GetScreenBounds();
+  const GeoClip clip(screen_bounds.Scale(1.1));
+  MapCanvas map_canvas(canvas, projection, clip);
 
   for (const auto &band : forecast.bands) {
     /* Set color for this wind band.
@@ -271,15 +268,7 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
       if (!poly_bounds.Overlaps(screen_bounds))
         continue;
 
-      /* Project all points to screen coordinates */
-      screen_points.clear();
-      for (const auto &pt : ring) {
-        auto sp = projection.GeoToScreen(pt);
-        screen_points.push_back(BulkPixelPoint{sp.x, sp.y});
-      }
-
-      canvas.DrawPolygon(screen_points.data(),
-                         (unsigned)screen_points.size());
+      map_canvas.FillPolygon(ring.data(), (unsigned)ring.size());
     }
   }
 }
