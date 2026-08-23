@@ -871,6 +871,7 @@ MainWindow::ReinitialiseLook() noexcept
                              ib_layout.control_size.width);
 
   InfoBoxManager::ScheduleRedraw();
+  Invalidate();
 }
 
 #ifdef ANDROID
