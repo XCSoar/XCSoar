@@ -78,6 +78,11 @@ class TopographyFile {
 
   unsigned cached_shapes = 0;
 
+  /**
+   * Shapefile basename without directory or ".shp", for logging.
+   */
+  char name[40]{};
+
   const int label_field;
 
   const ResourceId icon, mdpi_icon, xhdpi_icon, xxhdpi_icon;
@@ -192,6 +197,19 @@ public:
 
   const Serial &GetSerial() const noexcept {
     return serial;
+  }
+
+  const char *GetName() const noexcept {
+    return name;
+  }
+
+  std::size_t GetFileShapeCount() const noexcept {
+    return shapes.size();
+  }
+
+  unsigned GetCachedShapeCount() const noexcept {
+    const std::lock_guard lock{mutex};
+    return cached_shapes;
   }
 
   const GeoPoint &GetCenter() const noexcept {

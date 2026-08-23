@@ -74,6 +74,22 @@ public:
 
   ~TopographyFileRenderer() noexcept;
 
+  const TopographyFile &GetFile() const noexcept {
+    return file;
+  }
+
+  std::size_t GetVisibleShapeCount() const noexcept {
+    return visible_shapes.size();
+  }
+
+  std::size_t GetVisiblePointCount() const noexcept {
+    return visible_points.size();
+  }
+
+  std::size_t GetVisibleLabelCount() const noexcept {
+    return visible_labels.size();
+  }
+
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
    * @param canvas The canvas to paint on
