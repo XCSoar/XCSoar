@@ -113,6 +113,13 @@ class TopographyFile {
 
 public:
   /**
+   * Viewport overscan for #cache_bounds, the topography thread
+   * trigger, and the paint-time visible list.  Pan inside this factor
+   * does not reload shapefile data or rebuild #visible_shapes.
+   */
+  static constexpr double CACHE_BOUNDS_SCALE = 2;
+
+  /**
    * Protects #serial, #shapes, #first.
    * The caller is responsible for locking it.
    */
