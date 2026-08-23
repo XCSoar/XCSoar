@@ -33,7 +33,8 @@ struct Layout {
 
 [[gnu::pure]]
 Layout
-Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry) noexcept;
+Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
+          unsigned scale_title_font=100) noexcept;
 
 [[gnu::const]]
 int

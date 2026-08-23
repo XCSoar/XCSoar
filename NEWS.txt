@@ -57,6 +57,9 @@ Version 7.46 - not yet released
     to the list and highlights an item so Enter acts on that row
     #2862
 * infoboxen
+  - pack portrait InfoBoxes on tall screens so title, value, and
+    comment sit closer together; InfoBox title size still grows the
+    boxes toward square at 150%
   - show Airspeed TAS and IAS in blue when the value is estimated
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
