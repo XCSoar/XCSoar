@@ -38,7 +38,8 @@ PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
  * be discarded pretty early in the rendering pipeline. This saves a lot of
  * OpenGL API calls.
  * The triangle buffer must hold at least:
- *   3*(triangle_count-2) + 2*(polygon_count-1) indices.
+ *   index_count + 2*(triangle_count-1) indices
+ * (worst case: every triangle starts a new strip).
  *
  * @param triangles triangle indicies, which will be overwriten with the strip
  * @param index_count number of triangle indices. (triangle_count*3)
