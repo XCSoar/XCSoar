@@ -479,8 +479,20 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     if (drawn_labels.contains(label))
       continue;
 
-    const PixelRect brect = PixelRect::Centered(*pt,
-                                                canvas.CalcTextSize(label));
+    const PixelSize tsize = canvas.CalcTextSize(label);
+    PixelRect brect;
+    if (shape.get_type() == MS_SHAPE_POINT && icon.IsDefined()) {
+      /* Sit the name under the icon so it does not cover the symbol.
+         Fills and roads stay centred on the hook. */
+      const int pad = Layout::GetTextPadding();
+      const PixelPoint origin{
+        pt->x - int(tsize.width) / 2,
+        pt->y + int(icon.GetSize().height + 1) / 2 + pad,
+      };
+      brect = PixelRect{origin, tsize};
+    } else {
+      brect = PixelRect::Centered(*pt, tsize);
+    }
     if (!label_block.check(brect))
       continue;
 

@@ -46,8 +46,8 @@ Version 7.46 - not yet released
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
   - fix topography labels flickering on and off while panning,
-    centre them on the feature, and enlarge place names when zoomed
-    in
+    centre area names on the feature, sit place names under point
+    icons, and enlarge place names when zoomed in
   - fix the live snail trail losing circling detail and jumping as the
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
