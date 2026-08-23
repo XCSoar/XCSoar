@@ -18,12 +18,11 @@ public:
     bool en1 = config.IsClassEnabled(label1.cls);
     bool en2 = config.IsClassEnabled(label2.cls);
 
-    if(en1 == en2)
-      return AirspaceAltitude::SortHighest(label2.base, label1.base);
-    else if(en1)
-      return false;
-    else
-      return true;
+    /* LabelBlock keeps the first box that claims a slot, so enabled
+       classes and higher bases must come first. */
+    if (en1 != en2)
+      return en1;
+    return AirspaceAltitude::SortHighest(label1.base, label2.base);
   }
 };
 

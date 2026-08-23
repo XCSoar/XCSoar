@@ -14,6 +14,7 @@
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/TextInBox.hpp"
+#include "Renderer/LabelBlock.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -256,7 +257,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 
   if (draw_altitude_labels) {
     for (const auto &label : labels)
-      DrawLabel(canvas, projection, label);
+      DrawLabel(canvas, projection, label, label_block);
   }
 
   if (draw_notam_labels) {
@@ -330,7 +331,8 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 inline void
 AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
                                  const WindowProjection &projection,
-                                 const AirspaceLabelList::Label &label) noexcept
+                                 const AirspaceLabelList::Label &label,
+                                 LabelBlock *label_block) noexcept
 {
   char topText[NAME_SIZE + 1];
   AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
@@ -345,13 +347,20 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
     std::max(topSize.width, baseSize.width) + 2 * padding;
   const unsigned labelHeight = topSize.height + baseSize.height;
 
-  // box
-  const auto pos = projection.GeoToScreen(label.pos);
+  /* Stay on GetCenter(); do not slide the box onto the visible clip
+     of a large airspace.  Skip if that centre is off the map. */
+  const auto pos = projection.GeoToScreenIfVisible(label.pos);
+  if (!pos)
+    return;
+
   PixelRect rect;
-  rect.left = pos.x - labelWidth / 2;
-  rect.top = pos.y;
+  rect.left = pos->x - int(labelWidth / 2);
+  rect.top = pos->y;
   rect.right = rect.left + labelWidth;
   rect.bottom = rect.top + labelHeight;
+  if (label_block != nullptr && !label_block->check(rect))
+    return;
+
   canvas.DrawRectangle(rect);
 
 #ifdef USE_GDI
