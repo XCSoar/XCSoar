@@ -480,7 +480,8 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -706,7 +707,8 @@ MainWindow::ReinitialiseLayout() noexcept
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
@@ -860,7 +862,8 @@ MainWindow::ReinitialiseLook() noexcept
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),
-                             ui_settings.info_boxes.geometry);
+                             ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -1359,9 +1362,10 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   /* Overlapped gauges (FLARM, thermal assistant) use GetMainRect() for
      "avoid InfoBoxes" corners; re-layout when fullscreen changes. */
   const PixelRect rc = GetClientRect();
+  const auto &info_boxes = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc,
-                             CommonInterface::GetUISettings().info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, info_boxes.geometry,
+                             info_boxes.scale_title_font);
   ReinitialiseLayout_flarm(rc, ib_layout);
   ReinitialiseLayoutTA(rc, ib_layout);
 
