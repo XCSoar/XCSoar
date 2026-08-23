@@ -240,6 +240,20 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
 }
 
 void
+Canvas::DrawFilledTriangles(const FloatPoint2D *points,
+                            const GLushort *indices,
+                            unsigned idx_count) noexcept
+{
+  if (brush.IsHollow() || idx_count < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+  brush.Bind();
+  const ScopeVertexPointer vp(points);
+  glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT, indices);
+}
+
+void
 Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexcept
 {
   if (brush.IsHollow() && !pen.IsDefined())

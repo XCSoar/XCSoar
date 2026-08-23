@@ -4,6 +4,7 @@
 #ifndef ENABLE_OPENGL
 
 #include "StencilMapCanvas.hpp"
+#include "MapCanvas.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
@@ -36,29 +37,12 @@ StencilMapCanvas::StencilMapCanvas(const StencilMapCanvas &other)
 void
 StencilMapCanvas::DrawSearchPointVector(const SearchPointVector &points)
 {
-  size_t size = points.size();
-  if (size < 3)
-    return;
-
-  /* copy all SearchPointVector elements to geo_points */
-  GeoPoint *geo_points = geo_points_buffer.get(size * 3);
-  for (unsigned i = 0; i < size; ++i)
-    geo_points[i] = points[i].GetLocation();
-
-  /* clip them */
-  size = clip.ClipPolygon(geo_points, geo_points, size);
-  if (size < 3)
-    /* it's completely outside the screen */
-    return;
-
-  /* draw it all */
-  BulkPixelPoint *screen = pixel_points_buffer.get(size);
-  for (unsigned i = 0; i < size; ++i)
-    screen[i] = proj.GeoToScreen(geo_points[i]);
-
-  buffer.DrawPolygon(&screen[0], size);
-  if (use_stencil)
-    stencil.DrawPolygon(&screen[0], size);
+  MapCanvas map_canvas(buffer, proj, clip);
+  map_canvas.FillPolygon(points);
+  if (use_stencil) {
+    MapCanvas stencil_canvas(stencil, proj, clip);
+    stencil_canvas.FillPolygon(points);
+  }
 }
 
 void
