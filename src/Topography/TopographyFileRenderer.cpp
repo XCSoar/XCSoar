@@ -385,6 +385,38 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 }
 
+/**
+ * Map scale (metres) at which labels use the largest font (circuit).
+ */
+static constexpr double LABEL_LARGE_SCALE = 2000;
+
+/**
+ * Fraction of the layer's label range at which labels step up to the
+ * medium font (well inside the range, not just as they appear).
+ */
+static constexpr double LABEL_MEDIUM_RANGE_FRACTION = 0.25;
+
+[[gnu::pure]]
+static TopographyLook::LabelSize
+LabelSizeForScale(double map_scale, double label_threshold,
+                  MS_SHAPE_TYPE type) noexcept
+{
+  /* Lines (roads, rivers) stay SMALL.  Each font size is a separate
+     TextCache key; 256 GPU textures.  Upsizing every street name at
+     circuit scale misses the cache and uploads glyphs on Mali-400. */
+  if (type != MS_SHAPE_POINT)
+    return TopographyLook::LabelSize::SMALL;
+
+  if (map_scale <= LABEL_LARGE_SCALE)
+    return TopographyLook::LabelSize::LARGE;
+
+  if (label_threshold > 0 &&
+      map_scale <= label_threshold * LABEL_MEDIUM_RANGE_FRACTION)
+    return TopographyLook::LabelSize::MEDIUM;
+
+  return TopographyLook::LabelSize::SMALL;
+}
+
 void
 TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                     const WindowProjection &projection,
@@ -401,73 +433,50 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   if (visible_labels.empty())
     return;
 
-  canvas.Select(file.IsLabelImportant(map_scale)
-                ? look.important_label_font
-                : look.regular_label_font);
-  canvas.SetTextColor(file.IsLabelImportant(map_scale) ?
-                COLOR_BLACK : COLOR_VERY_DARK_GRAY);
+  const bool important = file.IsLabelImportant(map_scale);
+  const auto size = LabelSizeForScale(map_scale,
+                                      file.GetLabelThreshold(),
+                                      visible_labels.front()->get_type());
+  canvas.Select(look.GetLabelFont(important, size));
+  canvas.SetTextColor(important ? COLOR_BLACK : COLOR_VERY_DARK_GRAY);
   canvas.SetBackgroundTransparent();
-
-  // get drawing info
-
-  int iskip = file.GetSkipSteps(map_scale);
 
   std::set<std::string> drawn_labels;
 
   const Angle min_span =
     projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
 
-  // Iterate over all shapes in the file
   for (const XShape *shape_p : visible_labels) {
     const XShape &shape = *shape_p;
 
     if (ShapeTooSmallToDraw(shape, min_span))
       continue;
 
-    // Skip shapes without a label
     const char *label = shape.GetLabel();
     assert(label != nullptr);
+    if (label[0] == '\0')
+      continue;
 
-    const auto lines = shape.GetLines();
-    const auto *points = shape.GetPoints();
+    /* Geographic centre, not the leftmost vertex: on compact shapes
+       that vertex flips while panning/rotating, so the text jumps
+       and loses the LabelBlock contest. */
+    const GeoPoint center = shape.get_bounds().GetCenter();
+    if (!center.IsValid())
+      continue;
 
-    for (const unsigned n : lines) {
-      int minx = canvas.GetWidth();
-      int miny = canvas.GetHeight();
+    const auto pt = projection.GeoToScreenIfVisible(center);
+    if (!pt)
+      continue;
 
-      const auto *end = points + n;
-      for (; points < end; points += iskip) {
-#ifdef ENABLE_OPENGL
-        auto pt = projection.GeoToScreen(file.ToGeoPoint(*points));
-#else
-        auto pt = projection.GeoToScreen(*points);
-#endif
+    if (drawn_labels.contains(label))
+      continue;
 
-        if (pt.x <= minx) {
-          minx = pt.x;
-          miny = pt.y;
-        }
-      }
+    const PixelRect brect = PixelRect::Centered(*pt,
+                                                canvas.CalcTextSize(label));
+    if (!label_block.check(brect))
+      continue;
 
-      points = end;
-
-      minx += 2;
-      miny += 2;
-
-      PixelSize tsize = canvas.CalcTextSize(label);
-      PixelRect brect;
-      brect.left = minx;
-      brect.right = brect.left + tsize.width;
-      brect.top = miny;
-      brect.bottom = brect.top + tsize.height;
-
-      if (!label_block.check(brect))
-        continue;
-
-      if (!drawn_labels.insert(label).second)
-        continue;
-
-      canvas.DrawText({minx, miny}, label);
-    }
+    drawn_labels.emplace(label);
+    canvas.DrawText(brect.GetTopLeft(), label);
   }
 }

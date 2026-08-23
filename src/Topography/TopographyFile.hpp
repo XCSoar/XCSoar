@@ -205,6 +205,10 @@ public:
     return map_scale <= label_threshold;
   }
 
+  double GetLabelThreshold() const noexcept {
+    return label_threshold;
+  }
+
   /**
    * Returns the map scale threshold that will be reached next by
    * zooming in.  This is used to decide when to rescan shapes that

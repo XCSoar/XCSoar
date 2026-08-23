@@ -42,6 +42,9 @@ Version 7.46 - not yet released
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
+  - fix topography labels flickering on and off while panning,
+    centre them on the feature, and enlarge place names when zoomed
+    in
   - fix the live snail trail losing circling detail and jumping as the
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
@@ -90,11 +93,11 @@ Version 7.46 - not yet released
 * ui
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
-* documentation
-  - describe the T Next Leg InfoBox and how to use it at a turn
 * Linux
   - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
     switch to that resolution when the display lists it (e.g. -800x600)
+* documentation
+  - describe the T Next Leg InfoBox and how to use it at a turn
 * development
   - add RunTerrainRenderer to show TerrainRenderer hillshade with a
     rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the

@@ -81,7 +81,9 @@ MapLook::Initialise(const MapSettings &settings,
   no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
 
   topography.Initialise();
-  airspace.Initialise(settings.airspace, topography.important_label_font);
+  airspace.Initialise(settings.airspace,
+                      topography.GetLabelFont(true,
+                                              TopographyLook::LabelSize::SMALL));
 
   overlay.Initialise(font, bold_font);
 }
