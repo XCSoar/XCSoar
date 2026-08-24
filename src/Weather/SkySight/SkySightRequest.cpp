@@ -71,6 +71,39 @@ public:
   }
 };
 
+class LiveTileProgress final {
+  const time_t started_at;
+  time_t last_report = 0;
+  curl_off_t last_bytes = 0;
+
+public:
+  LiveTileProgress() noexcept
+    :started_at(std::time(nullptr)) {}
+
+  static int Callback(void *data, curl_off_t total, curl_off_t now,
+                      [[maybe_unused]] curl_off_t upload_total,
+                      [[maybe_unused]] curl_off_t upload_now) noexcept {
+    auto &progress = *static_cast<LiveTileProgress *>(data);
+    const auto current_time = std::time(nullptr);
+    if (now <= progress.last_bytes ||
+        (progress.last_report != 0 &&
+         current_time - progress.last_report < 5))
+      return 0;
+
+    progress.last_report = current_time;
+    progress.last_bytes = now;
+    const auto elapsed = current_time - progress.started_at;
+    if (total > 0)
+      LogFmt("SkySight live tile: received {} of {} bytes after {} seconds",
+             now, total, elapsed);
+    else
+      LogFmt("SkySight live tile: received {} bytes after {} seconds",
+             now, elapsed);
+
+    return 0;
+  }
+};
+
 void
 ConfigureSkySightTransfer(CurlEasy &easy, long timeout_seconds)
 {
@@ -193,7 +226,7 @@ JsonTask(CurlGlobal &curl, std::string url, std::string api_key)
 static Co::Task<AllocatedPath>
 DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
                  std::string api_key, std::size_t maximum_size,
-                 long timeout_seconds)
+                 long timeout_seconds, bool log_live_tile_progress)
 {
   FileOutputStream file(path);
   LimitedOutputStream limited_file{file, maximum_size};
@@ -203,6 +236,10 @@ DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
   ConfigureSkySightTransfer(easy, timeout_seconds);
   easy.SetFailOnError(false);
 
+  LiveTileProgress progress;
+  if (log_live_tile_progress)
+    easy.SetXferInfoFunction(LiveTileProgress::Callback, &progress);
+
   CurlSlist headers;
   if (!api_key.empty()) {
     headers.Append((std::string{"X-API-Key: "} + api_key).c_str());
@@ -210,13 +247,25 @@ DownloadFileTask(CurlGlobal &curl, std::string url, AllocatedPath path,
     easy.SetRequestHeaders(headers.Get());
   }
 
-  const auto response = co_await Curl::CoStreamRequest(curl, std::move(easy),
-                                                       limited_file);
+  const auto response = co_await Curl::CoStreamRequest(
+    curl, std::move(easy), limited_file,
+    [log_live_tile_progress](unsigned status, const Curl::Headers &headers) {
+      if (!log_live_tile_progress)
+        return;
+
+      if (const auto i = headers.find("content-type"); i != headers.end())
+        LogFmt("SkySight live tile: HTTP {} content type '{}'", status,
+               i->second);
+      else
+        LogFmt("SkySight live tile: HTTP {} with no content type", status);
+    });
   if (response.status != 200 && response.status != 201)
     throw HttpStatusError(response.status,
                           ParseRetryAfter(response.headers, std::time(nullptr)));
 
   file.Commit();
+  if (log_live_tile_progress)
+    LogFmt("SkySight live tile: response completed");
   co_return path;
 }
 
@@ -281,6 +330,7 @@ SkySightRequest::CancelFileDownloads() noexcept
   payload_retry_at.clear();
   generic_keys.clear();
   tile_http_error_count.clear();
+  live_tile_download_started = false;
 }
 
 void
@@ -309,6 +359,7 @@ SkySightRequest::CancelTileDownloads() noexcept
   for (const auto &key : generic_keys)
     download_failures.Erase(key);
   generic_keys.clear();
+  live_tile_download_started = false;
   TryPumpQueue();
 }
 
@@ -453,6 +504,8 @@ SkySightRequest::PumpQueue()
                   return entry.second->kind == FileJob::Kind::Generic;
                 });
   live_tile_pacer.OnQueueState(now, has_live_tile_work);
+  if (!has_live_tile_work)
+    live_tile_download_started = false;
 
   if (now < throttle_until)
     return;
@@ -488,6 +541,10 @@ SkySightRequest::PumpQueue()
     if (job_ptr->kind == FileJob::Kind::Generic) {
       interactive_request_pacer.OnStarted(now);
       live_tile_pacer.OnStarted(now);
+      if (!live_tile_download_started) {
+        LogFmt("SkySight live tiles: download started");
+        live_tile_download_started = true;
+      }
     }
 
     file_jobs.emplace(key, std::move(active_job));
@@ -500,7 +557,8 @@ SkySightRequest::PumpQueue()
                          tile_download
                            ? SkySight::MAX_TILE_DOWNLOAD_BYTES
                            : SkySight::MAX_FORECAST_DOWNLOAD_BYTES,
-                         tile_download ? 60 : 10 * 60),
+                         tile_download ? 60 : 10 * 60,
+                         tile_download),
         [this, key](AllocatedPath) {
           OnFileSuccess(key);
         },
@@ -543,6 +601,7 @@ SkySightRequest::EnsureLoggedIn()
   last_login_request = now;
   login_running = true;
   interactive_request_pacer.OnStarted(now);
+  LogFmt("SkySight login: requesting API key");
 
   try {
     login_job.Start(LoginTask(curl, email, password),
@@ -579,6 +638,7 @@ SkySightRequest::OnLoginSuccess(boost::json::value value)
       throw std::runtime_error("SkySight login returned no usable API key");
 
     authentication_failures.Reset();
+    LogFmt("SkySight login: API key received");
     api.OnAuthenticated();
   } catch (...) {
     api_key.clear();
@@ -632,29 +692,29 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
   PumpQueue();
 }
 
-void
+bool
 SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires_auth)
 {
   if (shutting_down)
-    return;
+    return false;
 
   PumpQueue();
 
   const std::string key{filename.c_str()};
   if (file_jobs.find(key) != file_jobs.end() || IsQueued(key))
-    return;
+    return false;
 
   const auto now = std::time(nullptr);
   generic_keys.insert(key);
   if (!download_failures.CanQueue(key, now))
-    return;
+    return false;
 
   if (now < throttle_until)
-    return;
+    return false;
 
   if (auto retry = payload_retry_at.find(key); retry != payload_retry_at.end()) {
     if (now < retry->second)
-      return;
+      return false;
 
     payload_retry_at.erase(retry);
   }
@@ -662,6 +722,7 @@ SkySightRequest::DownloadFile(std::string_view url, Path filename, bool requires
   pending_jobs.emplace_back(key, std::string{url},
                             AllocatedPath(filename.c_str()), requires_auth);
   PumpQueue();
+  return true;
 }
 
 SkySightRequest::DownloadDatafileResult
@@ -993,6 +1054,7 @@ SkySightRequest::OnFileSuccess(const std::string &key) noexcept
 
     switch (i->second->kind) {
     case FileJob::Kind::Generic:
+      LogFmt("SkySight live tile: download completed");
       api.OnTileDownloadStateChanged();
       break;
 

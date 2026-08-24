@@ -89,6 +89,7 @@ class SkySightRequest final {
   SkySight::ThrottleFallbackPolicy throttle_fallback;
   SkySight::InteractiveRequestPacer interactive_request_pacer;
   SkySight::LiveTileRequestPacer live_tile_pacer;
+  bool live_tile_download_started = false;
   std::map<std::string, time_t> payload_retry_at;
   std::set<std::string, std::less<>> generic_keys;
   std::map<std::string, unsigned> tile_http_error_count;
@@ -148,7 +149,7 @@ public:
   /** Pump deferred downloads and report when a throttle pause has ended. */
   bool Poll() noexcept;
 
-  void DownloadFile(std::string_view url, Path filename, bool requires_auth);
+  bool DownloadFile(std::string_view url, Path filename, bool requires_auth);
   void CancelTileDownloads() noexcept;
   void CancelFileDownloads() noexcept;
   void ReconcileTileDownloads(

@@ -8,9 +8,11 @@
 
 namespace Curl {
 
-CoRequest::CoRequest(CurlGlobal &global, CurlEasy easy)
+CoRequest::CoRequest(CurlGlobal &global, CurlEasy easy,
+			   HeaderListener _header_listener)
 	:request(global, std::move(easy), *this),
-	 defer_error(global.GetEventLoop(), BIND_THIS_METHOD(OnDeferredError))
+	 defer_error(global.GetEventLoop(), BIND_THIS_METHOD(OnDeferredError)),
+	 header_listener(std::move(_header_listener))
 {
 	request.Start();
 }
@@ -45,6 +47,8 @@ CoRequest::OnHeaders(unsigned status, Headers &&headers)
 {
 	response.status = status;
 	response.headers = std::move(headers);
+	if (header_listener)
+		header_listener(status, response.headers);
 }
 
 void
