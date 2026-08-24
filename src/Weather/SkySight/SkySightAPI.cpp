@@ -3,7 +3,6 @@
 
 #include "SkySightAPI.hpp"
 #include "ForecastUtils.hpp"
-#include "RegionTime.hpp"
 #include "SkySightCache.hpp"
 #include "SkySightFileDecoder.hpp"
 #include "SkySightLimits.hpp"
@@ -11,7 +10,6 @@
 #include "SkySightRequest.hpp"
 #include "SkySightURL.hpp"
 #include "SkySightClient.hpp"
-#include "Formatter/LocalTimeFormatter.hpp"
 #include "io/FileReader.hxx"
 #include "io/FileOutputStream.hxx"
 #include "json/Parse.hxx"
@@ -606,27 +604,8 @@ SkySightAPI::ClearSelectedLayers() noexcept
 }
 
 std::string
-SkySightAPI::FormatUrlTimestamp(time_t timestamp, std::string_view region_tz)
+SkySightAPI::FormatUrlTimestamp(time_t timestamp)
 {
-  /* Convert UTC → region civil time only at this fetch/display edge. */
-  if (!region_tz.empty()) {
-    const auto offset = SkySight::GetRegionUtcOffset(region_tz, timestamp);
-    const auto local = FormatLocalDateTimeYYYYMMDDHHMM(
-      TimeStamp(std::chrono::duration<double>(timestamp)), offset);
-    /* YYYY-MM-DD HH:MM → YYYY/MM/DD/HHMM */
-    std::string out;
-    out.reserve(16);
-    out.append(local.c_str(), 4);
-    out.push_back('/');
-    out.append(local.c_str() + 5, 2);
-    out.push_back('/');
-    out.append(local.c_str() + 8, 2);
-    out.push_back('/');
-    out.append(local.c_str() + 11, 2);
-    out.append(local.c_str() + 14, 2);
-    return out;
-  }
-
   const auto tm = GmTime(std::chrono::system_clock::from_time_t(timestamp));
 
   char buffer[32];
@@ -649,16 +628,8 @@ SkySightAPI::MakeTileUrl(const SkySight::Layer &layer,
                          time_t timestamp,
                          const GeoBitmap::TileData &tile) const
 {
-  /* Live tile path civil time is region-local; @p timestamp stays UTC. */
-  std::string_view region_tz;
-  for (const auto &candidate : regions)
-    if (candidate.id == region) {
-      region_tz = candidate.tz;
-      break;
-    }
-
   return SkySightUrl::Tile(layer.id, tile.zoom, tile.x, tile.y,
-                           FormatUrlTimestamp(timestamp, region_tz));
+                           FormatUrlTimestamp(timestamp));
 }
 
 AllocatedPath
