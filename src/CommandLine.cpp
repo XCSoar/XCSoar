@@ -66,7 +66,7 @@ static const char option_summary[] =
   "  -resizable          resizable window\n"
 #endif
 #ifdef HAVE_CMDLINE_REPLAY
-  "  -replay=PATH        replay flight from IGC at PATH (desktop Unix/macOS)\n"
+  "  -replay=PATH        replay IGC or NMEA log at PATH (desktop Unix/macOS)\n"
 #endif
 #ifdef _WIN32
   "  -console            open debug output console\n"
