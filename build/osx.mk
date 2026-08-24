@@ -63,7 +63,7 @@ $(APP_BUNDLE): $(TARGET_BIN_DIR)/xcsoar Data/OSX/Info.plist.in.xml $(OSX_LOGO) $
 	    -e 's/OSX_BUNDLE_ID_PLACEHOLDER/$(MACOS_APP_BUNDLE_IDENTIFIER)/g' \
 	    < Data/OSX/Info.plist.in.xml > $(APP_CONTENTS)/Info.plist
 	@$(NQ)echo "  COPY    xcsoar binary"
-	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(APP_MACOS)/
+	$(Q)cp $(TARGET_BIN_DIR)/xcsoar $(APP_MACOS)/XCSoar
 	@$(NQ)echo "  COPY    icon"
 	$(Q)cp $(OSX_LOGO) $(APP_RESOURCES)/logo_1024.icns
 	@$(NQ)echo "  COPY    third-party notices"
@@ -78,20 +78,20 @@ ifeq ($(USE_ANGLE),y)
 	$(Q)if ! install_name_tool -change "$$(otool -L $(APP_FRAMEWORKS)/libEGL.dylib | grep libGLESv2 | awk '{print $$1}')" "@rpath/libGLESv2.dylib" $(APP_FRAMEWORKS)/libEGL.dylib 2>/dev/null; then \
 		echo "  WARN    Failed to update libEGL.dylib dependency"; \
 	fi
-	$(Q)if ! install_name_tool -change "./libEGL.dylib" "@rpath/libEGL.dylib" $(APP_MACOS)/xcsoar 2>/dev/null; then \
+	$(Q)if ! install_name_tool -change "./libEGL.dylib" "@rpath/libEGL.dylib" $(APP_MACOS)/XCSoar 2>/dev/null; then \
 		echo "  WARN    Failed to update xcsoar libEGL.dylib reference"; \
 	fi
-	$(Q)if ! install_name_tool -change "./libGLESv2.dylib" "@rpath/libGLESv2.dylib" $(APP_MACOS)/xcsoar 2>/dev/null; then \
+	$(Q)if ! install_name_tool -change "./libGLESv2.dylib" "@rpath/libGLESv2.dylib" $(APP_MACOS)/XCSoar 2>/dev/null; then \
 		echo "  WARN    Failed to update xcsoar libGLESv2.dylib reference"; \
 	fi
 endif
 # Bundle Homebrew libraries and fix all @rpath references
 	@$(NQ)echo "  BUNDLE  Homebrew libraries"
-	$(Q)if ! install_name_tool -add_rpath "@executable_path/../Frameworks" $(APP_MACOS)/xcsoar 2>/dev/null; then \
+	$(Q)if ! install_name_tool -add_rpath "@executable_path/../Frameworks" $(APP_MACOS)/XCSoar 2>/dev/null; then \
 		echo "  WARN    Failed to add rpath to xcsoar"; \
 	fi
 	$(Q)ANGLE_PATTERN="$(if $(ANGLE_PREFIX),|$(ANGLE_PREFIX),)"; \
-	for lib in $$(otool -L $(APP_MACOS)/xcsoar | \
+	for lib in $$(otool -L $(APP_MACOS)/XCSoar | \
 		grep -E "/opt/homebrew|/usr/local$$ANGLE_PATTERN" | \
 		awk '{print $$1}'); do \
 		[ -f "$$lib" ] || continue; \
@@ -107,7 +107,7 @@ endif
 		if ! install_name_tool -id "@rpath/$$base" $(APP_FRAMEWORKS)/$$base; then \
 			echo "  WARN    Failed to set install_name for $$base"; \
 		fi; \
-		if ! install_name_tool -change "$$lib" "@rpath/$$base" $(APP_MACOS)/xcsoar; then \
+		if ! install_name_tool -change "$$lib" "@rpath/$$base" $(APP_MACOS)/XCSoar; then \
 			echo "  WARN    Failed to update xcsoar reference for $$base"; \
 		fi; \
 	done

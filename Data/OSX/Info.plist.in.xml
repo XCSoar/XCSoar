@@ -6,12 +6,14 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleExecutable</key>
-    <string>xcsoar</string>
+    <string>XCSoar</string>
     <key>CFBundleIdentifier</key>
     <string>OSX_BUNDLE_ID_PLACEHOLDER</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
+    <string>OSX_APP_LABEL_PLACEHOLDER</string>
+    <key>CFBundleDisplayName</key>
     <string>OSX_APP_LABEL_PLACEHOLDER</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>

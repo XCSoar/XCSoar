@@ -45,7 +45,7 @@
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #if !TARGET_OS_IPHONE
-#import <AppKit/AppKit.h>
+#include "Apple/MacOSMainMenu.hpp"
 #endif
 #endif
 
@@ -56,11 +56,6 @@ Main()
 {
   ScreenGlobalInit screen_init;
 
-#if defined(__APPLE__) && !TARGET_OS_IPHONE
-  // We do not want the ugly non-localized main menu which SDL creates
-  [NSApp setMainMenu: [[NSMenu alloc] init]];
-#endif
-
 #ifdef _WIN32
   /* try to make the UI most responsive */
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
@@ -68,6 +63,10 @@ Main()
 
   AllowLanguage();
   InitLanguage();
+
+#if defined(__APPLE__) && !TARGET_OS_IPHONE
+  InitialiseMacOSMainMenu();
+#endif
 
   ScopeGlobalAsioThread global_asio_thread;
   const Net::ScopeInit net_init(asio_thread->GetEventLoop());
