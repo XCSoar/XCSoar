@@ -253,6 +253,11 @@ FormKeyDown(unsigned key_code)
     return true;
   }
 
+  /* The system keyboard reports Space as a key event before text input.
+     Do not let the focused action button interpret it as activation. */
+  if (kb == nullptr && key_code == KEY_SPACE)
+    return true;
+
   /* On devices with cursor keys, first let the on-screen keyboard
      move focus between key buttons; use Backspace for delete.  On
      others (e.g. Kobo), Left and Back both act as backspace. */
