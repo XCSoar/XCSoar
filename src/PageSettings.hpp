@@ -309,6 +309,11 @@ struct PageLayout
         bottom = Bottom::NOTHING;
     }
 
+    /* Migrate weather pages created before they acquired cursor controls.
+       Explicit bottom widgets, such as Cross Section, remain unchanged. */
+    if (UsesWeatherOverlay() && bottom == Bottom::NOTHING)
+      bottom = Bottom::WEATHER_CONTROLS;
+
     if (skysight_time < SKYSIGHT_TIME_AUTO)
       skysight_time = SKYSIGHT_TIME_AUTO;
 
