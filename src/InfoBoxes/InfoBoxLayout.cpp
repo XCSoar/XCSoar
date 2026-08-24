@@ -3,6 +3,7 @@
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Border.hpp"
+#include "Gauge/VarioGeometry.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm> // for std::clamp()
@@ -155,7 +156,8 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
-    layout.vario.left = rc.right - layout.control_size.width;
+    layout.vario.left = rc.right - VarioGeometry::GetCompactWidth(
+      layout.control_size.height * 2);
     layout.vario.right = rc.right;
     layout.vario.top = rc.bottom - layout.control_size.height * 2;
     layout.vario.bottom = rc.bottom;
@@ -181,7 +183,8 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
     break;
 
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
-    layout.vario.left = rc.right - layout.control_size.width;
+    layout.vario.left = rc.right - VarioGeometry::GetCompactWidth(
+      layout.control_size.height * 2);
     layout.vario.right = rc.right;
     layout.vario.top = rc.top;
     layout.vario.bottom = rc.top + layout.control_size.height * 2;
@@ -542,6 +545,32 @@ CalculateInfoBoxColumnWidth(unsigned screen_width,
                     control_height * 7 / 5);
 }
 
+static void
+CalculatePortraitVarioSizes(InfoBoxLayout::Layout &layout,
+                            PixelSize screen_size,
+                            unsigned scale_title_font) noexcept
+{
+  unsigned width = screen_size.width / 4;
+
+  for (unsigned i = 0; i < 8; ++i) {
+    const unsigned height =
+      CalculateInfoBoxRowHeight(screen_size.height, width,
+                                scale_title_font);
+    const unsigned vario_width =
+      VarioGeometry::GetCompactWidth(height * 2);
+    const unsigned next_width = (screen_size.width - vario_width) / 4;
+
+    if (next_width == width)
+      break;
+
+    width = next_width;
+  }
+
+  layout.control_size.width = width;
+  layout.control_size.height =
+    CalculateInfoBoxRowHeight(screen_size.height, width, scale_title_font);
+}
+
 void
 InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
                                 InfoBoxSettings::Geometry geometry,
@@ -606,21 +635,8 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
-    // calculate control dimensions
-    layout.control_size.width = 2 * screen_size.width / (layout.count + 2);
-    layout.control_size.height =
-      CalculateInfoBoxRowHeight(screen_size.height,
-                                layout.control_size.width,
-                                scale_title_font);
-    break;
-
   case InfoBoxSettings::Geometry::TOP_8_VARIO:
-    // calculate control dimensions
-    layout.control_size.width = 2 * screen_size.width / (layout.count + 2);
-    layout.control_size.height =
-      CalculateInfoBoxRowHeight(screen_size.height,
-                                layout.control_size.width,
-                                scale_title_font);
+    CalculatePortraitVarioSizes(layout, screen_size, scale_title_font);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:

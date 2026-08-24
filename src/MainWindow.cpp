@@ -19,6 +19,7 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
+#include "Gauge/VarioGeometry.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -610,9 +611,16 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexce
     return;
   }
 
+  const unsigned width = std::min(layout.vario.GetWidth(),
+                                  VarioGeometry::GetCompactWidth(
+                                    layout.vario.GetHeight()));
+  look->vario.ReinitialiseLayout(width, layout.control_size.width);
+
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
                                  look->vario));
+  else
+    static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
 
   vario.Move(layout.vario);
   vario.Show();
@@ -869,6 +877,15 @@ MainWindow::ReinitialiseLook() noexcept
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.width);
+
+  if (ib_layout.HasVario()) {
+    const unsigned width = std::min(ib_layout.vario.GetWidth(),
+                                    VarioGeometry::GetCompactWidth(
+                                      ib_layout.vario.GetHeight()));
+    look->vario.ReinitialiseLayout(width, ib_layout.control_size.width);
+    if (vario.IsDefined())
+      static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
+  }
 
   InfoBoxManager::ScheduleRedraw();
   Invalidate();
