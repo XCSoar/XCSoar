@@ -180,16 +180,9 @@ private:
                       time_t forecast_time) noexcept;
   void StartNextDecodeJob() noexcept;
   static void InitialiseLayers(std::vector<SkySight::Layer> &layers);
-  /**
-   * Format a UTC instant for a SkySight URL path segment
-   * (@c YYYY/MM/DD/HHMM).
-   *
-   * Live tile paths use the region's civil clock (@p region_tz from the
-   * regions API).  Pass an empty @p region_tz to keep the path in UTC.
-   * Cache filenames always use UTC via FormatFileTimestamp().
-   */
-  static std::string FormatUrlTimestamp(time_t timestamp,
-                                        std::string_view region_tz={});
+  /** Format a UTC instant for a SkySight URL path segment
+   * (@c YYYY/MM/DD/HHMM). */
+  static std::string FormatUrlTimestamp(time_t timestamp);
   /** Cache filenames always use UTC. */
   static std::string FormatFileTimestamp(time_t timestamp);
   std::string MakeTileUrl(const SkySight::Layer &layer,
