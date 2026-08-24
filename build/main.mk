@@ -660,6 +660,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 
+ifeq ($(TARGET_IS_OSX),y)
+XCSOAR_SOURCES += $(SRC)/Apple/MacOSMainMenu.cpp
+endif
+
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/java/Global.cxx \
