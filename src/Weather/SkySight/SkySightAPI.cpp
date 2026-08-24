@@ -689,9 +689,12 @@ void
 SkySightAPI::EnsureTile(const SkySight::Layer &layer, time_t timestamp,
                         const GeoBitmap::TileData &tile)
 {
-  request->DownloadFile(MakeTileUrl(layer, timestamp, tile),
-                        GetTilePath(layer, timestamp, tile),
-                        layer.requires_auth);
+  if (request->DownloadFile(MakeTileUrl(layer, timestamp, tile),
+                            GetTilePath(layer, timestamp, tile),
+                            layer.requires_auth))
+    LogFmt("SkySight live tile: queued layer='{}' time={} z={} x={} y={}",
+           layer.id, FormatFileTimestamp(timestamp),
+           tile.zoom, tile.x, tile.y);
 }
 
 void
