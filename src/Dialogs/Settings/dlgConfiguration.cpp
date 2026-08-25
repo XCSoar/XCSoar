@@ -79,6 +79,10 @@
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
 
+#if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
+#include "Panels/SystemdConfigPanel.hpp"
+#endif
+
 #include <cassert>
 
 static unsigned current_page;
@@ -168,6 +172,9 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
   { N_("Network"), CreateNetworkConfigPanel },
+#if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
+  { N_("Services"), CreateSystemdConfigPanel },
+#endif
   { nullptr, nullptr }
 };
 
