@@ -307,6 +307,52 @@ StopUnit(ODBus::Connection &connection,
   WaitJobRemoved(connection, object_path);
 }
 
+bool
+UnitExists(ODBus::Connection &connection, const char *name) noexcept
+{
+  try {
+    using namespace ODBus;
+
+    auto msg = Message::NewMethodCall("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1",
+            "org.freedesktop.systemd1.Manager",
+            "GetUnitFileState");
+    AppendMessageIter{*msg.Get()}.Append(name);
+
+    Message reply = CallMethodSync(connection, msg, false);
+    if (reply.IsError("org.freedesktop.systemd1.NoSuchUnitFile"))
+      return false;
+
+    reply.CheckThrowError();
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+void
+RestartUnit(ODBus::Connection &connection,
+            const char *name, const char *mode)
+{
+  using namespace ODBus;
+
+  auto msg = Message::NewMethodCall("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1",
+            "org.freedesktop.systemd1.Manager",
+            "RestartUnit");
+
+  AppendMessageIter{*msg.Get()}.Append(name).Append(mode);
+
+  Message reply = CallMethodSync(connection, msg);
+
+  Error error;
+  const char *object_path;
+  if (!reply.GetArgs(error, DBUS_TYPE_OBJECT_PATH, &object_path))
+    error.Throw("RestartUnit reply failed");
+
+  WaitJobRemoved(connection, object_path);
+}
+
 void
 ResetFailedUnit(ODBus::Connection &connection, const char *name)
 {

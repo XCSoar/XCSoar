@@ -95,6 +95,26 @@ StopUnit(ODBus::Connection &connection,
 	 const char *name, const char *mode="replace");
 
 /**
+ * Returns whether a unit file with the specified name is installed.
+ *
+ * This is intended for optional, explicitly configured units.  A D-Bus
+ * failure is treated like a missing unit.
+ */
+bool
+UnitExists(ODBus::Connection &connection, const char *name) noexcept;
+
+/**
+ * Restart a unit.
+ *
+ * Note: the caller must establish a match on "JobRemoved".
+ *
+ * Throws on error.
+ */
+void
+RestartUnit(ODBus::Connection &connection,
+	    const char *name, const char *mode="replace");
+
+/**
  * Resets the "failed" state of a specific unit.
  *
  * Throws on error.
