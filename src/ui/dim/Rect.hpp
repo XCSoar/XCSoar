@@ -143,6 +143,17 @@ struct PixelRect {
   }
 
   /**
+   * Return the intersection with another #PixelRect.  If the two do
+   * not overlap, the result IsEmpty().
+   */
+  constexpr PixelRect Intersection(PixelRect other) const noexcept {
+    return {left > other.left ? left : other.left,
+            top > other.top ? top : other.top,
+            right < other.right ? right : other.right,
+            bottom < other.bottom ? bottom : other.bottom};
+  }
+
+  /**
    * Return a new #PixelRect grown by this number of pixels.
    */
   constexpr PixelRect WithMargin(PixelSize margin) const noexcept {

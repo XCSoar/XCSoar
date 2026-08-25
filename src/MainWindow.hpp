@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/SingleWindow.hpp"
+#include "ui/window/Features.hpp" // for HAVE_FULL_SCREEN_SETTING
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/event/Timer.hpp"
@@ -134,9 +135,45 @@ private:
 
   UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
+  /**
+   * One-shot timer that re-checks the safe area on the next event
+   * loop iteration, which is when the system has applied a change we
+   * asked for.
+   *
+   * @see CheckSafeAreaChange()
+   */
+  UI::Timer safe_area_timer{[this]{ CheckSafeAreaChange(); }};
+
   BatteryTimer battery_timer;
 
   PixelRect map_rect;
+
+  /**
+   * The part of #map_rect that is covered neither by InfoBoxes nor
+   * by system UI: the stack of the top area, the main area and the
+   * bottom area.
+   *
+   * @see GetAreaStackRect()
+   */
+  PixelRect area_stack_rect{0, 0, 0, 0};
+
+  /**
+   * #area_stack_rect without the top and bottom areas; the HUD
+   * elements are drawn here.
+   *
+   * @see GetHudRect()
+   */
+  PixelRect hud_rect{0, 0, 0, 0};
+
+  /**
+   * The safe area the current layout was calculated for.  The system
+   * applies changes to it asynchronously (e.g. after the status bar
+   * has been hidden during startup), so poll for them.
+   *
+   * @see CheckSafeAreaChange()
+   */
+  PixelRect safe_area_rect{0, 0, 0, 0};
+
   bool FullScreen = false;
 
   /**
@@ -283,6 +320,46 @@ private:
   }
 
   /**
+   * The area in which everything except the map itself is laid out.
+   * This is the whole client area on the edges the user chose to
+   * stretch to, and the safe area on all others.
+   *
+   * @see DisplaySettings::infobox_area_stretch
+   */
+  [[gnu::pure]]
+  PixelRect GetInfoBoxAreaRect() const noexcept;
+
+  /**
+   * Re-run the layout if the system has changed the safe area behind
+   * our back.
+   */
+  void CheckSafeAreaChange() noexcept;
+
+  /**
+   * The stack of the top area, the main area and the bottom area,
+   * which is what the InfoBoxes and the system UI leave over.  What
+   * the top and bottom areas leave over is #GetHudRect().
+   *
+   * @see PageSettings
+   */
+  [[gnu::pure]]
+  PixelRect GetAreaStackRect() const noexcept;
+
+  /**
+   * The part of the main area that is covered neither by InfoBoxes,
+   * nor by the top and bottom areas, nor by system UI.  The HUD
+   * elements (compass, map scale, final glide bar, overlay buttons)
+   * are drawn here, and a #Widget shown instead of the map (FLARM
+   * radar, analysis, ...) is laid out here.  The map itself may
+   * extend beyond it, behind the InfoBoxes, behind the widgets and
+   * behind the system bars and the display cutout.
+   *
+   * Updated by #LayoutMapArea().
+   */
+  [[gnu::pure]]
+  PixelRect GetHudRect() const noexcept;
+
+  /**
    * The visible #GlueMapWindow area.  After layout, this is
    * #GlueMapWindow::GetPosition(); otherwise it is computed from
    * #GetMainRect() and top/bottom widgets.
@@ -296,10 +373,20 @@ private:
    */
   void LayoutMapArea() noexcept;
 
+  /**
+   * Move everything that follows #GetHudRect(): the current widget,
+   * the overlapped gauges and the status messages.  #LayoutMapArea()
+   * computes that rectangle, and must have run.
+   */
+  void LayoutHudElements() noexcept;
+
   void UpdateMapOverlayButtonLayout() noexcept;
 
   /**
    * Adjust the flarm radar position
+   *
+   * @param rc the InfoBox area; the positions that do not avoid the
+   * InfoBoxes are laid out in it, the others in #GetHudRect()
    */
   void ReinitialiseLayout_flarm(PixelRect rc,
                                 const InfoBoxLayout::Layout &ib_layout) noexcept;
@@ -309,6 +396,12 @@ private:
    */
   void ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexcept;
 
+  /**
+   * Adjust the thermal assistant position
+   *
+   * @param rc the InfoBox area; the positions that do not avoid the
+   * InfoBoxes are laid out in it, the others in #GetHudRect()
+   */
   void ReinitialiseLayoutTA(PixelRect rc,
                             const InfoBoxLayout::Layout &layout) noexcept;
 
@@ -375,6 +468,19 @@ public:
   }
 
   void SetFullScreen(bool _full_screen) noexcept;
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+  /**
+   * Apply DisplaySettings::full_screen and
+   * DisplaySettings::status_bar, i.e. hide or show the system bars
+   * (status bar, navigation bar, home indicator) and use the whole
+   * screen.
+   *
+   * Not to be confused with #SetFullScreen(), which hides the
+   * InfoBoxes.
+   */
+  void ApplyFullScreenSettings() noexcept;
+#endif
 
   /**
    * Coalesce map area layout (and map #FullRedraw) while a page layout
