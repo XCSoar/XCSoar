@@ -24,9 +24,13 @@ constexpr auto unit_removed_match = "type='signal',"
 
 /**
  * Throws on error.
+ *
+ * @param timeout_ms maximum time to wait for completion, or -1 to wait
+ * indefinitely
  */
 void
-WaitJobRemoved(ODBus::Connection &connection, const char *object_path);
+WaitJobRemoved(ODBus::Connection &connection, const char *object_path,
+	       int timeout_ms=-1);
 
 /**
  * Wait for the UnitRemoved signal for the specified unit name.
@@ -83,7 +87,7 @@ IsUnitActive(ODBus::Connection &connection, const char *name);
  */
 void
 StartUnit(ODBus::Connection &connection,
-	  const char *name, const char *mode="replace");
+	  const char *name, const char *mode="replace", int timeout_ms=-1);
 
 /**
  * Note: the caller must establish a match on "JobRemoved".
@@ -92,7 +96,7 @@ StartUnit(ODBus::Connection &connection,
  */
 void
 StopUnit(ODBus::Connection &connection,
-	 const char *name, const char *mode="replace");
+	 const char *name, const char *mode="replace", int timeout_ms=-1);
 
 /**
  * Returns whether a unit file with the specified name is installed.
@@ -112,7 +116,7 @@ UnitExists(ODBus::Connection &connection, const char *name) noexcept;
  */
 void
 RestartUnit(ODBus::Connection &connection,
-	    const char *name, const char *mode="replace");
+	    const char *name, const char *mode="replace", int timeout_ms=-1);
 
 /**
  * Resets the "failed" state of a specific unit.
