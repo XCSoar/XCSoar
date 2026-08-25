@@ -112,6 +112,7 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
 
   Layout layout;
 
+  layout.rc = rc;
   layout.geometry = geometry;
   layout.landscape = screen_size.width > screen_size.height;
   layout.count = geometry_counts[(unsigned)geometry];
