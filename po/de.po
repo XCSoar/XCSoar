@@ -11224,3 +11224,24 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Manuell"
 
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "Oben"
+
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "Rechts"
+
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "Unten"
+
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "Links"
+
+msgid "Stretch safe area"
+msgstr "Safe Area strecken"
+
+msgid "System status bar"
+msgstr "System-Statusleiste"

@@ -8,6 +8,8 @@
 namespace ProfileKeys {
 
 constexpr std::string_view FullScreen = "FullScreen";
+constexpr std::string_view SafeAreaStretch = "SafeAreaStretch";
+constexpr std::string_view StatusBar = "StatusBar";
 constexpr std::string_view UIScale = "UIScale";
 constexpr std::string_view CustomDPI = "CustomDPI";
 constexpr std::string_view DarkMode = "DarkMode";

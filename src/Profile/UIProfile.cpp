@@ -27,6 +27,8 @@ Profile::Load(const ProfileMap &map, DisplaySettings &settings)
   map.Get(ProfileKeys::CursorSize, settings.cursor_size);
   map.Get(ProfileKeys::CursorColorsInverted, settings.invert_cursor_colors);
   map.Get(ProfileKeys::FullScreen, settings.full_screen);
+  map.Get(ProfileKeys::SafeAreaStretch, settings.safe_area_stretch);
+  map.GetEnum(ProfileKeys::StatusBar, settings.status_bar);
   map.GetEnum(ProfileKeys::DisplayType, settings.display_type);
 }
 

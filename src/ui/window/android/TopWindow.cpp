@@ -86,6 +86,21 @@ TopWindow::ResumeSurface() noexcept
 }
 
 void
+TopWindow::AnnounceSafeAreaInsets(unsigned left, unsigned top,
+                                  unsigned right, unsigned bottom) noexcept
+{
+  const std::lock_guard lock{paused_mutex};
+  pending_safe_area_insets = {left, top, right, bottom};
+}
+
+void
+TopWindow::PublishSafeAreaInsets() noexcept
+{
+  const std::lock_guard lock{paused_mutex};
+  safe_area_insets = pending_safe_area_insets;
+}
+
+void
 TopWindow::RefreshSize() noexcept
 {
   PixelSize new_size_copy;
@@ -258,6 +273,10 @@ TopWindow::OnEvent(const Event &event)
     return OnMultiTouchUp();
 
   case Event::RESIZE: {
+    /* the insets belong to this resize; take them over before
+       anything is laid out or drawn with them */
+    PublishSafeAreaInsets();
+
     if (!screen->IsReady())
       /* postpone the resize if we're paused; the real resize will be
          handled by TopWindow::refresh() as soon as XCSoar is
