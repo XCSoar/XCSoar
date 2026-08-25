@@ -35,7 +35,13 @@ protected:
   const ButtonLook &look;
 
 public:
-  MenuBar(ContainerWindow &parent, const ButtonLook &look);
+  /**
+   * @param rc the area the buttons are laid out in; the caller passes
+   * the safe area so that the display cutout and the system bars
+   * cannot hide a menu button
+   */
+  MenuBar(ContainerWindow &parent, const PixelRect &rc,
+          const ButtonLook &look);
 
 public:
   void ShowButton(unsigned i, bool enabled, const char *text,

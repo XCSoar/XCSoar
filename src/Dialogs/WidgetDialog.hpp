@@ -144,7 +144,7 @@ protected:
   void OnResize(PixelSize new_size) noexcept override;
 
   /* virtual methods from class WndForm */
-  void ReinitialiseLayout(const PixelRect &parent_rc) noexcept override;
+  void ReinitialiseLayout(const PixelRect &rc) noexcept override;
   void SetDefaultFocus() noexcept override;
   bool OnAnyKeyDown(unsigned key_code) noexcept override;
 };
