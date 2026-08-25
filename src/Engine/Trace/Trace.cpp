@@ -503,6 +503,84 @@ StrideForBudget(unsigned point_count, unsigned max_points,
   return std::max(stride, need);
 }
 
+/**
+ * Distance-thin from the newest sample backward, then always keep the
+ * oldest candidate.  Anchoring at the tip stops the kept vertices from
+ * walking when the viewport drops an old point (follow / replay).
+ */
+static void
+ThinByDistanceFromTip(const TracePointVector &candidates,
+                      TracePointVector &out,
+                      unsigned sq_range) noexcept
+{
+  out.clear();
+  if (candidates.empty())
+    return;
+
+  out.reserve(candidates.size());
+  out.push_back(candidates.back());
+  size_t last = candidates.size() - 1;
+  for (size_t k = candidates.size() - 1; k-- > 0;) {
+    if (candidates[k].FlatSquareDistanceTo(candidates[last]) >= sq_range) {
+      out.push_back(candidates[k]);
+      last = k;
+    }
+  }
+
+  if (out.back().GetTime() != candidates.front().GetTime())
+    out.push_back(candidates.front());
+
+  std::reverse(out.begin(), out.end());
+}
+
+/**
+ * If the thinned path still exceeds \a max_points, stride only the
+ * older prefix so recent circling stays dense.
+ */
+static void
+FitPointBudget(TracePointVector &points, unsigned max_points,
+               unsigned min_stride) noexcept
+{
+  if (max_points < 2 || points.size() <= max_points)
+    return;
+
+  constexpr unsigned TAIL_CAP = 512;
+  const unsigned tail =
+    std::min(unsigned(points.size() - 2),
+             std::min(TAIL_CAP, max_points * 3 / 4));
+  if (tail < 2 || max_points <= tail + 1) {
+    ApplyPointStride(points,
+                     StrideForBudget(unsigned(points.size()), max_points,
+                                     min_stride));
+    return;
+  }
+
+  TracePointVector prefix;
+  prefix.insert(prefix.end(), points.begin(), points.end() - tail);
+  ApplyPointStride(prefix,
+                   StrideForBudget(unsigned(prefix.size()),
+                                   max_points - tail, min_stride));
+
+  TracePointVector kept;
+  kept.reserve(prefix.size() + tail);
+  kept.insert(kept.end(), prefix.begin(), prefix.end());
+
+  const auto tail_begin = points.end() - tail;
+  const size_t skip =
+    !kept.empty() && kept.back().GetTime() == tail_begin->GetTime() ? 1 : 0;
+  kept.insert(kept.end(), tail_begin + skip, points.end());
+  points.swap(kept);
+}
+
+static void
+ThinTraceCandidates(const TracePointVector &candidates,
+                    TracePointVector &out,
+                    const TrailSpatialFilter &filter) noexcept
+{
+  ThinByDistanceFromTip(candidates, out, filter.sq_range);
+  FitPointBudget(out, filter.max_points, filter.point_stride);
+}
+
 void
 FilterTraceByBounds(const TracePointVector &in,
                     TracePointVector &out,
@@ -548,21 +626,7 @@ FilterTraceByBounds(const TracePointVector &in,
   if (candidates.empty())
     return;
 
-  out.reserve(candidates.size());
-  out.push_back(candidates.front());
-  size_t last = 0;
-  for (size_t k = 1; k < candidates.size(); ++k) {
-    if (candidates[k].FlatSquareDistanceTo(candidates[last]) >=
-        filter.sq_range) {
-      out.push_back(candidates[k]);
-      last = k;
-    }
-  }
-
-  const unsigned stride =
-    StrideForBudget(unsigned(out.size()), filter.max_points,
-                    filter.point_stride);
-  ApplyPointStride(out, stride);
+  ThinTraceCandidates(candidates, out, filter);
 }
 
 TrailSpatialFilter
@@ -674,19 +738,5 @@ Trace::GetPoints(TracePointVector &v, const Time min_time,
   if (candidates.empty())
     return;
 
-  v.reserve(candidates.size());
-  v.push_back(candidates.front());
-  size_t last = 0;
-  for (size_t k = 1; k < candidates.size(); ++k) {
-    if (candidates[k].FlatSquareDistanceTo(candidates[last]) >=
-        filter.sq_range) {
-      v.push_back(candidates[k]);
-      last = k;
-    }
-  }
-
-  const unsigned stride =
-    StrideForBudget(unsigned(v.size()), filter.max_points,
-                    filter.point_stride);
-  ApplyPointStride(v, stride);
+  ThinTraceCandidates(candidates, v, filter);
 }

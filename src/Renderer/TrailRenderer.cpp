@@ -24,19 +24,11 @@ static constexpr double TRAIL_ZOOMED_OUT_MAP_SCALE = 6000;
 static constexpr double TRAIL_BOUNDS_SCALE = 4.;
 
 /**
- * On-screen trail sample spacing in points (1/72").  Converted to pixels
- * via Layout::PtScale (DPI / UI scale) then to metres via the projection,
- * so thinning tracks physical size across phones, OV boxes, and Kobo.
+ * On-screen spacing between kept trail fixes, in pixels (v7.44 used 3).
+ * Do not use Layout::PtScale here: on phones that becomes 10–100 px and
+ * circling vertices jump as the thinning lattice walks (#2948).
  */
-static constexpr unsigned TRAIL_SPACING_PT_MIN = 2;
-static constexpr unsigned TRAIL_SPACING_PT_MAX = 18;
-
-/**
- * Grow spacing with zoom-out: GetMapScale / this → pixel target before
- * PtScale clamps.  Smaller → more thinning when zoomed out.  Still only
- * feeds the px→m pipeline (not a device-specific stride ladder).
- */
-static constexpr double TRAIL_SPACING_MAP_SCALE_DIV = 250.;
+static constexpr int TRAIL_SPACING_PX = 3;
 
 namespace {
 
@@ -215,22 +207,14 @@ ComputeCatmullRomWeights(double t) noexcept
 
 /**
  * Target on-screen spacing between kept fixes, in pixels.
- * Floor/ceiling use Layout::PtScale so the same physical size on glass
- * applies across DPI/resolution; zoom only moves within that range.
  * Metres come from WindowProjection::DistancePixelsToMeters in
- * MakeTrailQuery — not from magic GetMapScale stride bands.
+ * MakeTrailQuery.
  */
-[[gnu::pure]]
+[[gnu::const]]
 static int
-GetTrailSpacingPixels(double map_scale) noexcept
+GetTrailSpacingPixels() noexcept
 {
-  const int min_px =
-    std::max(1, int(Layout::PtScale(TRAIL_SPACING_PT_MIN)));
-  const int max_px =
-    std::max(min_px, int(Layout::PtScale(TRAIL_SPACING_PT_MAX)));
-  const int from_zoom =
-    int(map_scale / TRAIL_SPACING_MAP_SCALE_DIV);
-  return std::clamp(from_zoom, min_px, max_px);
+  return TRAIL_SPACING_PX;
 }
 
 /** Max number of recent trace points that receive Catmull-Rom smoothing. */
@@ -469,30 +453,27 @@ TrailRenderer::LoadTrace(const TraceComputer &trace_computer,
 }
 
 /**
- * Soft cap on drawable trail samples.  Scaled with short-edge resolution
- * and point size so denser panels may keep a bit more; clamped so weak
- * ARM targets stay bounded regardless of airspeed / zoom.
+ * Soft cap on drawable trail samples.  Short-edge pixel count, with a
+ * floor so a high-DPI phone is not starved (PtScale in the divisor
+ * used to drop the budget to ~96 and stride away circling).
  */
 [[gnu::pure]]
 static unsigned
 GetTrailPointBudget() noexcept
 {
-  const unsigned pt = std::max(1u, Layout::PtScale(2));
-  const unsigned by_screen = Layout::min_screen_pixels / pt;
-  return std::clamp(by_screen, 96u, 384u);
+  return std::clamp(Layout::min_screen_pixels, 1024u, 4096u);
 }
 
 TrailQuery
 TrailRenderer::MakeTrailQuery(TimeStamp min_time,
                               const WindowProjection &projection) noexcept
 {
-  const double map_scale = projection.GetMapScale();
   TrailQuery query;
   query.min_time = min_time.Cast<std::chrono::duration<unsigned>>();
   query.bounds = projection.GetScreenBounds().Scale(TRAIL_BOUNDS_SCALE);
   query.project_location = projection.GetGeoScreenCenter();
   query.min_distance_m =
-    projection.DistancePixelsToMeters(GetTrailSpacingPixels(map_scale));
+    projection.DistancePixelsToMeters(GetTrailSpacingPixels());
   query.point_stride = 1;
   query.max_points = GetTrailPointBudget();
   return query;

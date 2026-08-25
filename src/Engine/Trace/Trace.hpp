@@ -34,16 +34,16 @@ struct TrailSpatialFilter {
   unsigned point_stride = 1;
   /**
    * Soft cap on returned points.  If distance thinning still exceeds
-   * this, stride is raised so draw cost stays bounded (PG and glider).
+   * this, the older prefix is strided so the recent tail stays dense.
    */
   unsigned max_points = 0;
   bool valid = false;
 };
 
 /**
- * Bounds-first then spacing-thin, matching Trace::GetPoints(..., bounds, ...).
- * Used by TrailRenderer on a local time-window history without re-walking
- * the store under lock.
+ * Bounds-first then spacing-thin from the newest sample, matching
+ * Trace::GetPoints(..., bounds, ...).  Used by TrailRenderer on a local
+ * time-window history without re-walking the store under lock.
  */
 void FilterTraceByBounds(const TracePointVector &in,
                          TracePointVector &out,
@@ -423,8 +423,9 @@ public:
   /**
    * Fill the vector with trace points not before #min_time that lie
    * inside \a bounds or on legs that intersect \a bounds, then apply
-   * minimum resolution #min_distance.  Bounds are applied before
-   * spacing thinning so cost tracks the viewport, not flight length.
+   * minimum resolution #min_distance from the newest sample backward.
+   * Bounds are applied before spacing thinning so cost tracks the
+   * viewport, not flight length. The latest point is always kept.
    */
   void GetPoints(TracePointVector &v, Time min_time,
                  const GeoBounds &bounds,

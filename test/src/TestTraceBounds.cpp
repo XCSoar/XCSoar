@@ -6,6 +6,7 @@
 #include "Geo/GeoBounds.hpp"
 #include "TestUtil.hpp"
 
+#include <algorithm>
 #include <chrono>
 
 using namespace std::chrono;
@@ -69,6 +70,79 @@ TestBoundsFirstQuery() noexcept
 }
 
 /**
+ * Coarse min_distance used to drop the newest samples; the tip must
+ * still be present (open leg / follow would otherwise rubber-band).
+ */
+static void
+TestThinningKeepsLatestPoint() noexcept
+{
+  Trace trace(seconds{0}, Trace::null_time, 256);
+
+  constexpr unsigned n_points = 40;
+  constexpr double step_deg = 0.0001; /* ~11 m */
+
+  for (unsigned i = 0; i < n_points; ++i) {
+    const GeoPoint loc(Angle::Degrees(8 + i * step_deg),
+                       Angle::Degrees(48));
+    trace.push_back(TracePoint(loc, seconds{i * 2}, 1000, 0, 0));
+  }
+
+  const GeoPoint end_loc = trace.back().GetLocation();
+  const GeoBounds box(
+    GeoPoint(Angle::Degrees(7.9), Angle::Degrees(48.1)),
+    GeoPoint(Angle::Degrees(8.1), Angle::Degrees(47.9)));
+
+  TracePointVector bounded;
+  /* 5 km: only first would survive a forward thin without keeping the tip. */
+  trace.GetPoints(bounded, {}, box, end_loc, 5000.);
+  ok1(!bounded.empty());
+  ok1(bounded.front().GetTime() == seconds{0});
+  ok1(bounded.back().GetTime() == trace.back().GetTime());
+  ok1(bounded.size() == 2);
+}
+
+/**
+ * Dropping the oldest sample must not retarget the whole thinning
+ * lattice.  Kept times from the tip stay the same (follow / 10x replay).
+ */
+static void
+TestThinningAnchoredAtTip() noexcept
+{
+  Trace trace(seconds{0}, Trace::null_time, 256);
+
+  constexpr unsigned n_points = 40;
+  constexpr double step_deg = 0.0005; /* ~55 m */
+
+  for (unsigned i = 0; i < n_points; ++i) {
+    const GeoPoint loc(Angle::Degrees(8 + i * step_deg),
+                       Angle::Degrees(48));
+    trace.push_back(TracePoint(loc, seconds{i * 2}, 1000, 0, 0));
+  }
+
+  const GeoPoint end_loc = trace.back().GetLocation();
+  const GeoBounds box(
+    GeoPoint(Angle::Degrees(7.9), Angle::Degrees(48.1)),
+    GeoPoint(Angle::Degrees(8.1), Angle::Degrees(47.9)));
+
+  TracePointVector full, dropped_first;
+  trace.GetPoints(full, {}, box, end_loc, 200.);
+  trace.GetPoints(dropped_first, seconds{2}, box, end_loc, 200.);
+
+  ok1(!full.empty());
+  ok1(!dropped_first.empty());
+  ok1(full.back().GetTime() == trace.back().GetTime());
+  ok1(dropped_first.back().GetTime() == trace.back().GetTime());
+
+  size_t match = 0;
+  while (match < full.size() && match < dropped_first.size() &&
+         full[full.size() - 1 - match].GetTime() ==
+           dropped_first[dropped_first.size() - 1 - match].GetTime())
+    ++match;
+
+  ok1(match >= std::min(full.size(), dropped_first.size()) - 1);
+}
+
+/**
  * A single long leg that crosses the viewport must keep both endpoints
  * (outside → outside with segment through the box).
  */
@@ -104,8 +178,10 @@ TestCrossingLegKept() noexcept
 int
 main()
 {
-  plan_tests(9 + 7);
+  plan_tests(9 + 7 + 4 + 5);
   TestBoundsFirstQuery();
   TestCrossingLegKept();
+  TestThinningKeepsLatestPoint();
+  TestThinningAnchoredAtTip();
   return exit_status();
 }
