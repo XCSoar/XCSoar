@@ -24,6 +24,7 @@
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "Look/DefaultFonts.hpp"
+#include "InfoBoxes/Border.hpp"
 #include "Look/Look.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
@@ -242,6 +243,29 @@ GetMapRectBelow(const PixelRect &rc, const PixelRect &top_rect) noexcept
   if (top_rect.top < top_rect.bottom)
     result.top += separator_height;
   return result;
+}
+
+/**
+ * The screen edges the given area is kept clear of.  InfoBoxes at
+ * those edges need a border, because they no longer end at the screen
+ * border.
+ */
+[[gnu::pure]]
+static unsigned
+GetOuterBorder(const PixelRect &stretched_rc, const PixelRect &rc) noexcept
+{
+  unsigned border = 0;
+
+  if (stretched_rc.top > rc.top)
+    border |= BORDERTOP;
+  if (stretched_rc.bottom < rc.bottom)
+    border |= BORDERBOTTOM;
+  if (stretched_rc.left > rc.left)
+    border |= BORDERLEFT;
+  if (stretched_rc.right < rc.right)
+    border |= BORDERRIGHT;
+
+  return border;
 }
 
 /**
@@ -845,9 +869,11 @@ MainWindow::ReinitialiseLayout() noexcept
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  const InfoBoxLayout::Layout ib_layout =
+  InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(stretched_rc, ui_settings.info_boxes.geometry,
                              ui_settings.info_boxes.scale_title_font);
+
+  ib_layout.outer_border = GetOuterBorder(stretched_rc, rc);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
