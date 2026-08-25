@@ -6,7 +6,11 @@
 #include "InfoBoxes/Content/Base.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 
+#include <array>
 #include <cstddef>
+
+struct Waypoint;
+struct GlideResult;
 
 enum class AlternateInfoBoxMode : uint8_t {
   AUTO,
@@ -43,6 +47,29 @@ static constexpr std::size_t alternate_info_box_slot_count = 2;
 static_assert(ToAlternateInfoBoxSlotIndex(AlternateInfoBoxSlot::FIRST) == 0);
 static_assert(ToAlternateInfoBoxSlotIndex(AlternateInfoBoxSlot::SECOND) == 1);
 static_assert(alternate_info_box_slot_count == 2);
+
+/** All alternate InfoBox slots, in display order. */
+inline constexpr std::array<AlternateInfoBoxSlot, alternate_info_box_slot_count>
+all_alternate_info_box_slots{
+  AlternateInfoBoxSlot::FIRST,
+  AlternateInfoBoxSlot::SECOND,
+};
+
+/**
+ * Returns the translated name of the specified alternate slot, e.g.
+ * "Alternate 1".
+ */
+[[gnu::pure]]
+const char *
+GetAlternateSlotName(AlternateInfoBoxSlot slot) noexcept;
+
+/**
+ * Returns the abbreviated label of the specified mode, as shown in
+ * the InfoBox titles ("AUTO" or "MAN").
+ */
+[[gnu::pure]]
+const char *
+GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept;
 
 /**
  * Returns the current source mode for the specified alternate InfoBox
@@ -82,6 +109,24 @@ SetManualAlternateWaypoint(AlternateInfoBoxSlot slot,
 void
 SelectManualAlternateWaypoint(AlternateInfoBoxSlot slot,
                               WaypointPtr waypoint) noexcept;
+
+/**
+ * Returns the waypoint the specified alternate slot currently refers
+ * to: the manually selected one in MANUAL mode, the computed
+ * alternate in AUTO mode, or nullptr if the slot has no target.
+ */
+[[gnu::pure]]
+WaypointPtr
+GetAlternateSlotWaypoint(AlternateInfoBoxSlot slot) noexcept;
+
+/**
+ * Solves the glide to the specified alternate for the current
+ * aircraft state.  The result is undefined if no solution is
+ * available.
+ */
+[[gnu::pure]]
+GlideResult
+SolveAlternateGlide(const Waypoint &waypoint) noexcept;
 
 /**
  * Clears the manually selected waypoint for the specified alternate

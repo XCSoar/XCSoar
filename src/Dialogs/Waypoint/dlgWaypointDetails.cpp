@@ -6,6 +6,7 @@
 #include "WaypointCommandsWidget.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/Content/Alternate.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -124,7 +125,7 @@ class WaypointDetailsWidget final
   : public NullWidget {
   struct Layout {
     PixelRect goto_button;
-    PixelRect alternate1_button, alternate2_button;
+    PixelRect alternate_button;
     PixelRect sim_jump_button;
     PixelRect magnify_button, shrink_button;
     PixelRect previous_button, next_button;
@@ -139,7 +140,7 @@ class WaypointDetailsWidget final
 #endif
 
     explicit Layout(const PixelRect &rc,
-                    bool sim_jump_active,
+                    bool sim_jump_active, bool alternate_active,
 #ifdef HAVE_RUN_FILE
                     TextRowRenderer &row_renderer,
 #endif
@@ -156,8 +157,14 @@ class WaypointDetailsWidget final
   const WaypointDetailsNesting nesting;
   const bool sim_jump_active;
 
+  /**
+   * Only a landable waypoint may be pinned as an alternate, and only
+   * when navigation actions are allowed at all.
+   */
+  const bool alternate_active;
+
   Button goto_button;
-  Button alternate1_button, alternate2_button;
+  Button alternate_button;
   Button sim_jump_button;
   Button magnify_button, shrink_button;
   Button previous_button, next_button;
@@ -194,6 +201,7 @@ public:
      task_manager(_task_manager),
      nesting(_nesting),
      sim_jump_active(is_simulator()),
+     alternate_active(task_manager != nullptr && waypoint->IsLandable()),
      commands_widget(new WaypointCommandsWidget(look, &dialog, waypoints, waypoint,
                                                 task_manager, allow_edit,
                                                 _nesting)) {}
@@ -226,7 +234,7 @@ public:
   void AdjustViewForZoomChange(int old_zoom, int new_zoom) noexcept;
 
   void OnGotoClicked();
-  void OnAlternateClicked(AlternateInfoBoxSlot slot);
+  void OnAlternateClicked();
   void OnSimJumpClicked();
 
   /* virtual methods from class Widget */
@@ -235,15 +243,15 @@ public:
 
   void Show(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
-                        sim_jump_active,
+                        sim_jump_active, alternate_active,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
 #endif
                         *waypoint);
 
     goto_button.MoveAndShow(layout.goto_button);
-    alternate1_button.MoveAndShow(layout.alternate1_button);
-    alternate2_button.MoveAndShow(layout.alternate2_button);
+    if (alternate_active)
+      alternate_button.MoveAndShow(layout.alternate_button);
     if (sim_jump_active)
       sim_jump_button.MoveAndShow(layout.sim_jump_button);
 
@@ -275,8 +283,8 @@ public:
 
   void Hide() noexcept override {
     goto_button.Hide();
-    alternate1_button.Hide();
-    alternate2_button.Hide();
+    if (alternate_active)
+      alternate_button.Hide();
     if (sim_jump_active)
       sim_jump_button.Hide();
 
@@ -301,15 +309,15 @@ public:
 
   void Move(const PixelRect &rc) noexcept override {
     const Layout layout(rc,
-                        sim_jump_active,
+                        sim_jump_active, alternate_active,
 #ifdef HAVE_RUN_FILE
                         file_list_handler.GetRowRenderer(),
 #endif
                         *waypoint);
 
     goto_button.Move(layout.goto_button);
-    alternate1_button.Move(layout.alternate1_button);
-    alternate2_button.Move(layout.alternate2_button);
+    if (alternate_active)
+      alternate_button.Move(layout.alternate_button);
     if (sim_jump_active)
       sim_jump_button.Move(layout.sim_jump_button);
 
@@ -343,8 +351,7 @@ public:
 
   bool HasFocus() const noexcept override {
     return goto_button.HasFocus() ||
-           alternate1_button.HasFocus() ||
-           alternate2_button.HasFocus() ||
+           (alternate_active && alternate_button.HasFocus()) ||
       (sim_jump_active && sim_jump_button.HasFocus()) ||
       (!images.empty() && (magnify_button.HasFocus() ||
                            shrink_button.HasFocus())) ||
@@ -384,6 +391,7 @@ WaypointDetailsDispatchImageInput(const char *misc) noexcept
 
 WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
                                       bool sim_jump_active,
+                                      bool alternate_active,
 #ifdef HAVE_RUN_FILE
                                       TextRowRenderer &row_renderer,
 #endif
@@ -398,8 +406,8 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
     auto buttons = main.CutLeftSafe(::Layout::Scale(96));
 
     goto_button = buttons.CutTopSafe(button_height);
-    alternate1_button = buttons.CutTopSafe(button_height);
-    alternate2_button = buttons.CutTopSafe(button_height);
+    if (alternate_active)
+      alternate_button = buttons.CutTopSafe(button_height);
     if (sim_jump_active)
       sim_jump_button = buttons.CutTopSafe(button_height);
     std::tie(magnify_button, shrink_button) = buttons.CutTopSafe(button_height).VerticalSplit();
@@ -408,12 +416,17 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 
     std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    auto buttons = main.CutBottomSafe((sim_jump_active ? 3 : 2) * button_height);
+    /* GoTo shares the bottom row unless the alternate button needs a
+       row of its own */
+    const unsigned button_rows = 1 + (alternate_active ? 1 : 0) +
+      (sim_jump_active ? 1 : 0);
+    auto buttons = main.CutBottomSafe(button_rows * button_height);
 
-    auto top_row = buttons.CutTopSafe(button_height);
-    goto_button = top_row.CutLeftSafe(top_row.GetWidth() / 3);
-    alternate1_button = top_row.CutLeftSafe(top_row.GetWidth() / 2);
-    alternate2_button = top_row;
+    if (alternate_active) {
+      auto top_row = buttons.CutTopSafe(button_height);
+      goto_button = top_row.CutLeftSafe(top_row.GetWidth() / 2);
+      alternate_button = top_row;
+    }
 
     if (sim_jump_active) {
       auto sim_row = buttons.CutTopSafe(button_height);
@@ -422,8 +435,15 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
     }
 
     auto bottom_row = buttons;
-    previous_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 3);
-    next_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 2);
+    if (alternate_active) {
+      previous_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 3);
+      next_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 2);
+    } else {
+      goto_button = bottom_row.CutLeftSafe(bottom_row.GetWidth() / 3);
+      std::tie(previous_button, next_button) =
+        bottom_row.CutLeftSafe(bottom_row.GetWidth() / 2).VerticalSplit();
+    }
+
     close_button = bottom_row;
 
     const unsigned padding = ::Layout::GetTextPadding();
@@ -504,7 +524,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   }
 
   const Layout layout(rc,
-                      sim_jump_active,
+                      sim_jump_active, alternate_active,
 #ifdef HAVE_RUN_FILE
                       file_list_handler.GetRowRenderer(),
 #endif
@@ -535,19 +555,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                        });
   }
 
-  alternate1_button.Create(parent, look.button, _("Alternate 1"),
-                           layout.alternate1_button, button_style,
-                           [this](){
-                             OnAlternateClicked(AlternateInfoBoxSlot::FIRST);
-                           });
-  alternate2_button.Create(parent, look.button, _("Alternate 2"),
-                           layout.alternate2_button, button_style,
-                           [this](){
-                             OnAlternateClicked(AlternateInfoBoxSlot::SECOND);
-                           });
-  const bool can_select_alternate = task_manager != nullptr;
-  alternate1_button.SetEnabled(can_select_alternate);
-  alternate2_button.SetEnabled(can_select_alternate);
+  if (alternate_active)
+    alternate_button.Create(parent, look.button,
+                            C_("Button", "Select as Alternate"),
+                            layout.alternate_button, button_style,
+                            [this](){ OnAlternateClicked(); });
 
   if (sim_jump_active)
     sim_jump_button.Create(parent, look.button, C_("Button", "Sim: Jump to"),
@@ -891,12 +903,17 @@ WaypointDetailsWidget::OnGotoClicked()
 }
 
 void
-WaypointDetailsWidget::OnAlternateClicked(AlternateInfoBoxSlot slot)
+WaypointDetailsWidget::OnAlternateClicked()
 {
-  if (task_manager == nullptr)
+  if (!alternate_active)
     return;
 
-  SelectManualAlternateWaypoint(slot, waypoint);
+  const auto slot =
+    dlgAlternateSlotShowModal(C_("Button", "Select as Alternate"));
+  if (!slot.has_value())
+    return;
+
+  SelectManualAlternateWaypoint(*slot, waypoint);
   if (nesting.state_change_committed != nullptr)
     *nesting.state_change_committed = true;
   dialog.SetModalResult(mrOK);
