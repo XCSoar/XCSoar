@@ -79,6 +79,22 @@ MapWindow::SetGlideComputer(GlideComputer *_gc) noexcept
 }
 
 void
+MapWindow::SetSafeAreaMargins(unsigned left, unsigned top,
+                              unsigned right, unsigned bottom) noexcept
+{
+  if (left == safe_area_margin_left && top == safe_area_margin_top &&
+      right == safe_area_margin_right && bottom == safe_area_margin_bottom)
+    return;
+
+  safe_area_margin_left = left;
+  safe_area_margin_top = top;
+  safe_area_margin_right = right;
+  safe_area_margin_bottom = bottom;
+
+  Invalidate();
+}
+
+void
 MapWindow::FlushCaches() noexcept
 {
   background.Flush();
