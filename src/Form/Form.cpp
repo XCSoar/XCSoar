@@ -47,7 +47,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
 WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const char *caption,
                  const WindowStyle style) noexcept
-  :WndForm(main_window, _look, main_window.GetClientRect(), caption, style)
+  :WndForm(main_window, _look, main_window.GetSafeAreaRect(), caption, style)
 {
 }
 
@@ -67,13 +67,25 @@ void
 WndForm::Create(SingleWindow &main_window,
                 const char *_caption, const WindowStyle style)
 {
-  Create(main_window, main_window.GetClientRect(), _caption, style);
+  Create(main_window, main_window.GetSafeAreaRect(), _caption, style);
 }
 
 SingleWindow &
 WndForm::GetMainWindow()
 {
   return *(SingleWindow *)GetRootOwner();
+}
+
+bool
+WndForm::IsMaximised() const noexcept
+{
+  if (!IsDefined())
+    return false;
+
+  const PixelSize available = GetMainWindow().GetSafeAreaRect().GetSize();
+  const PixelSize size = GetSize();
+
+  return size.width >= available.width && size.height >= available.height;
 }
 
 void
@@ -437,32 +449,33 @@ WndForm::SetCaption(const char *_caption)
 }
 
 void
-WndForm::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
+WndForm::ReinitialiseLayout(const PixelRect &rc) noexcept
 {
-  const unsigned parent_width = parent_rc.GetWidth();
-  const unsigned parent_height = parent_rc.GetHeight();
+  const PixelSize size = GetSize();
 
-  if (parent_width < GetSize().width || parent_height < GetSize().height) {
-  } else {
-    // reposition dialog to fit into TopWindow
-    PixelRect rc = GetPosition();
+  if (rc.GetWidth() < size.width || rc.GetHeight() < size.height)
+    /* does not fit; leave it where it is */
+    return;
 
-    if (rc.right > (int)parent_width)
-      rc.left = parent_width - rc.GetWidth();
-    if (rc.bottom > (int)parent_height)
-      rc.top = parent_height - rc.GetHeight();
+  /* reposition dialog to fit into the area available to dialogs; that
+     area does not necessarily start at the top left corner of the
+     window, because dialogs stay inside the safe area */
+  PixelRect dialog_rc = GetPosition();
 
-#ifdef USE_MEMORY_CANVAS
-    /* the RasterCanvas class doesn't clip negative window positions
-       properly, therefore we avoid this problem at this stage */
-    if (rc.left < 0)
-      rc.left = 0;
-    if (rc.top < 0)
-      rc.top = 0;
-#endif
+  if (dialog_rc.right > rc.right)
+    dialog_rc.left = rc.right - int(size.width);
+  if (dialog_rc.bottom > rc.bottom)
+    dialog_rc.top = rc.bottom - int(size.height);
 
-    Move(rc.GetTopLeft());
-  }
+  /* a dialog above or left of the safe area would hide under the
+     display cutout or the status bar; the RasterCanvas class also
+     doesn't clip negative window positions properly */
+  if (dialog_rc.left < rc.left)
+    dialog_rc.left = rc.left;
+  if (dialog_rc.top < rc.top)
+    dialog_rc.top = rc.top;
+
+  Move(dialog_rc.GetTopLeft());
 }
 
 void

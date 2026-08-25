@@ -37,10 +37,10 @@ ProgressDialog::ProgressDialog(SingleWindow &parent,
 }
 
 void
-ProgressDialog::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
+ProgressDialog::ReinitialiseLayout(const PixelRect &rc) noexcept
 {
-  /* Cover the main window when its geometry changes (rotation, resize). */
-  Move(parent_rc);
+  /* Cover the area available to dialogs when the geometry changes. */
+  Move(rc);
 }
 
 void

@@ -43,7 +43,7 @@ WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
 
 WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetSafeAreaRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(false), auto_size(true)
@@ -61,7 +61,7 @@ WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &loo
 
 WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetSafeAreaRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(true), auto_size(false)
@@ -108,8 +108,7 @@ WidgetDialog::FinishPreliminary(std::unique_ptr<Widget> _widget) noexcept
 void
 WidgetDialog::AutoSize()
 {
-  const PixelRect parent_rc = GetParentClientRect();
-  const PixelSize parent_size = parent_rc.GetSize();
+  const PixelRect rc = GetMainWindow().GetSafeAreaRect();
 
   PrepareWidget();
 
@@ -126,23 +125,23 @@ WidgetDialog::AutoSize()
     max_size.height + Layout::GetMaximumControlHeight();
 
   if (/* need full dialog height even for minimum widget height? */
-      min_height_with_buttons >= parent_size.height ||
+      min_height_with_buttons >= rc.GetHeight() ||
       /* try to avoid putting buttons left on portrait screens; try to
          comply with maximum widget height only on landscape
          screens */
-      (parent_size.width > parent_size.height &&
-       max_height_with_buttons >= parent_size.height)) {
+      (rc.GetWidth() > rc.GetHeight() &&
+       max_height_with_buttons >= rc.GetHeight())) {
     /* need full height, buttons must be left */
-    PixelRect rc = parent_rc;
-    if (max_size.height < parent_size.height)
-      rc.bottom = rc.top + max_size.height;
+    PixelRect dialog_rc = rc;
+    if (max_size.height < rc.GetHeight())
+      dialog_rc.bottom = dialog_rc.top + max_size.height;
 
-    PixelRect remaining = buttons.LeftLayout(rc);
+    PixelRect remaining = buttons.LeftLayout(dialog_rc);
     PixelSize remaining_size = remaining.GetSize();
     if (remaining_size.width > max_size.width)
-      rc.right -= remaining_size.width - max_size.width;
+      dialog_rc.right -= remaining_size.width - max_size.width;
 
-    Resize(rc.GetSize());
+    Resize(dialog_rc.GetSize());
     widget.Move(buttons.LeftLayout());
 
     MoveToCenter();
@@ -151,17 +150,17 @@ WidgetDialog::AutoSize()
 
   /* see if buttons fit at the bottom */
 
-  PixelRect rc = parent_rc;
-  if (max_size.width < parent_size.width)
-    rc.right = rc.left + max_size.width;
+  PixelRect dialog_rc = rc;
+  if (max_size.width < rc.GetWidth())
+    dialog_rc.right = dialog_rc.left + max_size.width;
 
-  PixelRect remaining = buttons.BottomLayout(rc);
+  PixelRect remaining = buttons.BottomLayout(dialog_rc);
   PixelSize remaining_size = remaining.GetSize();
 
   if (remaining_size.height > max_size.height)
-    rc.bottom -= remaining_size.height - max_size.height;
+    dialog_rc.bottom -= remaining_size.height - max_size.height;
 
-  Resize(rc.GetSize());
+  Resize(dialog_rc.GetSize());
   widget.Move(buttons.BottomLayout());
 
   MoveToCenter();
@@ -219,13 +218,13 @@ WidgetDialog::OnResize(PixelSize new_size) noexcept
 }
 
 void
-WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
+WidgetDialog::ReinitialiseLayout(const PixelRect &rc) noexcept
 {
   if (full)
     /* make it full-screen again on the resized main window */
-    Move(parent_rc);
+    Move(rc);
   else
-    WndForm::ReinitialiseLayout(parent_rc);
+    WndForm::ReinitialiseLayout(rc);
 }
 
 void
