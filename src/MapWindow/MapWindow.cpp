@@ -79,6 +79,22 @@ MapWindow::SetGlideComputer(GlideComputer *_gc) noexcept
 }
 
 void
+MapWindow::SetHudMargins(unsigned left, unsigned top,
+                              unsigned right, unsigned bottom) noexcept
+{
+  if (left == hud_margin_left && top == hud_margin_top &&
+      right == hud_margin_right && bottom == hud_margin_bottom)
+    return;
+
+  hud_margin_left = left;
+  hud_margin_top = top;
+  hud_margin_right = right;
+  hud_margin_bottom = bottom;
+
+  Invalidate();
+}
+
+void
 MapWindow::FlushCaches() noexcept
 {
   background.Flush();
