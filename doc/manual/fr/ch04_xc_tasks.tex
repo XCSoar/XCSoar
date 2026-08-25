@@ -555,15 +555,23 @@ peuvent fonctionner en mode \textbf{AUTO} ou en mode \textbf{MANUEL}. AUTO est
 le mode par défaut et affiche les meilleurs dégagements choisis
 automatiquement. En mode MANUEL, il est possible de choisir séparément pour
 chaque emplacement un dégagement atteignable dans la liste des dégagements.
-Un dégagement manuel peut aussi être affecté directement depuis n'importe quel
-waypoint, ou depuis une position de carte utilisable pour \bmenuw{Aller à}, en
-appuyant sur \bmenuw{Dégagement 1} ou \bmenuw{Dégagement 2} dans le dialogue
-``Éléments de carte à cet endroit'' ou dans le dialogue de détails du waypoint.
-Le bouton utilisé bascule automatiquement l'emplacement correspondant en mode
-MANUEL.
+Appuyer sur \bmenuw{Choisir dégagement} pour affecter un waypoint posable à
+l'une des deux InfoBoxes (mode MANUEL) : \xc{} demande alors lequel des deux
+emplacements utiliser, en affichant le terrain auquel chacun se réfère
+actuellement. Ce bouton est aussi disponible dans le dialogue ``Éléments de
+carte à cet endroit'' et dans le dialogue de détails du waypoint, ce qui permet
+d'affecter n'importe quel waypoint posable ; il n'est pas proposé pour les
+waypoints non posables.
 Cette sélection manuelle n'est valable que pendant l'exécution en cours : elle
-n'est pas sauvegardée au redémarrage de \xc{} et reste active jusqu'à
-ce qu'elle soit modifiée ou que l'emplacement soit remis sur AUTO.
+n'est pas sauvegardée au redémarrage de \xc{} et reste active jusqu'à ce
+qu'elle soit modifiée ou que \bmenuw{Alternate Mode: Auto} soit utilisé, qui
+demande lequel des deux emplacements doit repasser en AUTO.
+
+La liste des dégagements n'est liée à aucune des deux InfoBoxes : les terrains
+auxquels Dégagement 1 et Dégagement 2 se réfèrent y sont marqués ``ALT1'' et
+``ALT2''. Un terrain choisi manuellement mais que le calculateur n'a pas retenu est
+ajouté à la liste, qui peut donc contenir jusqu'à douze entrées : les dix
+options calculées et les deux terrains choisis par le pilote.
 
 Bien que les éléments de la liste des dégagements suivent des règles différentes, ils ont le même comportement vis-à-vis du circuit en cours. Faire sa sélection dans la liste des dégagements annule le circuit en cours. Une fois que les conditions s'améliorent, la reprise du circuit en utilisant le bouton déjà mentionné.
 

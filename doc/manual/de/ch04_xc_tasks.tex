@@ -587,14 +587,24 @@ Varianten können entweder im Modus \textbf{AUTO} oder \textbf{MANUELL}
 verwendet werden. AUTO ist die Voreinstellung und zeigt die automatisch
 ermittelten besten Alternativen an. Im manuellen Modus kann für jeden Slot
 unabhängig eine erreichbare Alternative aus der Alternativenliste ausgewählt
-werden. Eine manuelle Alternative kann auch direkt von jedem Wegpunkt oder von
-einer Kartenposition, die für \bmenuw{Ziele auf} verwendet werden kann, gesetzt
-werden: dazu im Dialog ``Kartenelemente an dieser Position'' oder im
-Wegpunktdetails-Dialog \bmenuw{Alternative 1} oder \bmenuw{Alternative 2}
-drücken. Der entsprechende Slot wird dabei automatisch auf MANUELL geschaltet.
+werden. Mit \bmenuw{Als Alternative wählen} wird ein landbarer Wegpunkt an
+eine der beiden InfoBoxen gebunden (MANUELL); \textsf{XCSoar} fragt dann,
+welche der beiden verwendet werden soll, und zeigt dabei das aktuelle Ziel
+jedes Slots an. Diese Schaltfläche steht auch im Dialog ``Kartenelemente an
+dieser Position'' und im Wegpunktdetails-Dialog zur Verfügung, so dass jeder
+landbare Wegpunkt gesetzt werden kann; bei nicht landbaren Wegpunkten wird sie
+nicht angeboten.
 Diese Auswahl gilt nur zur Laufzeit: sie wird beim Neustart von
 \textsf{XCSoar} nicht gespeichert und bleibt aktiv, bis sie erneut geändert
-oder der Slot wieder auf AUTO zurückgestellt wird.
+wird oder \bmenuw{Alternate Mode: Auto} gedrückt wird, das fragt, welcher
+der beiden Slots wieder auf AUTO gestellt werden soll.
+
+Die Alternativenliste selbst gehört zu keiner der beiden InfoBoxen: die Ziele,
+auf die Alternative 1 und Alternative 2 gerade zeigen, sind in der Liste mit
+``ALT1'' und ``ALT2'' markiert. Ein manuell gesetztes Ziel, das der
+Rechner nicht ermittelt hat, wird der Liste angehängt; sie kann daher bis zu
+zwölf Einträge enthalten: die zehn berechneten Optionen und die zwei vom
+Piloten gesetzten Ziele.
 
 Folgende Optionen sind dabei möglich:
 \begin{description}

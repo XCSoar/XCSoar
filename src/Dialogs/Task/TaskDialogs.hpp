@@ -54,16 +54,23 @@ void
 dlgTargetShowModal(int TargetPoint = -1);
 
 /**
- * Shows the current alternates list.
- *
- * @param slot if set, the dialog exposes the manual/auto controls for
- * the specified alternate InfoBox slot; otherwise it behaves as a
- * generic alternates list dialog
+ * Shows the current alternates list.  The dialog is not tied to an
+ * alternate InfoBox slot: it exposes the manual/auto controls for
+ * both of them, and marks the waypoints the slots currently refer to.
  */
 void
-dlgAlternatesListShowModal(Waypoints *waypoints,
-                           std::optional<AlternateInfoBoxSlot> slot =
-                             std::nullopt) noexcept;
+dlgAlternatesListShowModal(Waypoints *waypoints) noexcept;
+
+/**
+ * Asks the pilot which alternate InfoBox slot an action shall be
+ * applied to.  The dialog lists both slots with their current target
+ * and mode.
+ *
+ * @param caption the dialog caption, describing the action
+ * @return the selected slot, or std::nullopt if the pilot cancelled
+ */
+std::optional<AlternateInfoBoxSlot>
+dlgAlternateSlotShowModal(const char *caption) noexcept;
 
 /**
  * Shows the current alternates list and returns the selected waypoint.
