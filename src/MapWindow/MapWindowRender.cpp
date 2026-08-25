@@ -310,12 +310,16 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   draw_sw.Mark("RenderMisc2");
   DrawBestCruiseTrack(canvas, aircraft_pos);
 
+  /* the map overlays stay clear of the areas covered by system UI
+     (display cutout, status bar, home indicator) */
+  const PixelRect safe_rc = GetSafeAreaRect(rc);
+
   // Draw wind vector at aircraft
   if (basic.location_available)
-    DrawWind(canvas, aircraft_pos, rc);
+    DrawWind(canvas, aircraft_pos, safe_rc);
 
   // Render compass
-  DrawCompass(canvas, rc);
+  DrawCompass(canvas, safe_rc);
 
   //////////////////////////////////////////////// traffic
   // Draw traffic
