@@ -414,6 +414,12 @@ private:
    * @param rc the InfoBox area; the positions that do not avoid the
    * InfoBoxes are laid out in it, the others in #GetHudRect()
    */
+  /**
+   * Adjust the thermal assistant position
+   *
+   * @param rc the InfoBox area; the positions that do not avoid the
+   * InfoBoxes are laid out in it, the others in #GetHudRect()
+   */
   void ReinitialiseLayoutTA(PixelRect rc,
                             const InfoBoxLayout::Layout &layout) noexcept;
 

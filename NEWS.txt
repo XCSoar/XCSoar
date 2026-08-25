@@ -1,6 +1,13 @@
 Version 7.46 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
+  - add the "Stretch InfoBox area" setting (Config → Look → Display,
+    expert): pick the screen edges on which the InfoBoxes reach the
+    screen border instead of keeping clear of the display cutout and
+    the system bars; all edges by default, as before
+  - keep dialogs inside the safe area, whatever the edge settings, so
+    the display cutout and the system bars cannot hide a title or a
+    button #2466
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
@@ -14,6 +21,14 @@ Version 7.46 - not yet released
     characters and providing a designed bold cut
   - save the settings when the app moves to the background, so they
     survive being swiped away in the app switcher
+  - support the Full screen setting (Config → Look → Display) on iOS,
+    off by default: hide the system status bar and use the whole
+    screen, including the areas behind the display cutout and the home
+    indicator
+  - add the System status bar setting (Config → Look → Display): keep
+    the status bar visible in full screen mode, or hide it without
+    going full screen; "Auto" shows it unless the InfoBox area is
+    stretched to the top screen edge
   - fix other apps' audio staying ducked after XCSoar plays a sound,
     and the audio vario cutting out when leaving settings #2609
   - fix crash on exit after opening the flight export dialog
