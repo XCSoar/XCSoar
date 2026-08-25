@@ -497,7 +497,7 @@ GlidePolar::GetNextLegEqThermal(double current_wind,
   /* calculate coefficients of the polar shifted to the right
      by an amount equal to head wind (ground speed polar) */
   const PolarCoefficients s_polar(polar.a,
-                                  polar.b - 2 * next_wind * polar.a,
+                                  polar.b + 2 * next_wind * polar.a,
                                   polar.c + next_wind *
                                   (next_wind * polar.a + polar.b));
 

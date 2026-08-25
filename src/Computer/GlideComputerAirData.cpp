@@ -412,6 +412,7 @@ GlideComputerAirData::NextLegEqThermal([[maybe_unused]] const NMEAInfo &basic,
       !calculated.wind_available) {
     // Assign a negative value to invalidate the result
     calculated.next_leg_eq_thermal = -1;
+    calculated.next_leg_eq_thermal_inverse = -1;
     return;
   }
 
@@ -423,4 +424,6 @@ GlideComputerAirData::NextLegEqThermal([[maybe_unused]] const NMEAInfo &basic,
 
   calculated.next_leg_eq_thermal =
       settings.polar.glide_polar_task.GetNextLegEqThermal(wind_comp, next_comp);
+  calculated.next_leg_eq_thermal_inverse =
+      settings.polar.glide_polar_task.GetNextLegEqThermal(next_comp, wind_comp);
 }
