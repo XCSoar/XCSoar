@@ -640,7 +640,7 @@ MainWindow::InitialiseConfigured()
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
-  menu_bar = new MenuBar(*this, look->dialog.button);
+  menu_bar = new MenuBar(*this, GetSafeAreaRect(), look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
   ReinitialiseLayoutTA(rc, ib_layout);
@@ -1207,7 +1207,10 @@ MainWindow::OnResize(PixelSize new_size) noexcept
 
   ReinitialiseLayout();
 
-  const PixelRect rc = GetClientRect();
+  /* the menu buttons and the progress bar are laid out like dialogs:
+     inside the safe area, where they cannot be hidden by the display
+     cutout or the system bars */
+  const PixelRect rc = GetSafeAreaRect();
 
   if (menu_bar != nullptr)
     menu_bar->OnResize(rc);
@@ -1524,6 +1527,25 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
   }
 
   SingleWindow::OnPaint(canvas);
+
+  if (HasMaximisedDialog()) {
+    /* the dialog covers the safe area only; painting the map and the
+       InfoBoxes around it would be restless */
+    const PixelRect rc = GetClientRect(), safe_rc = GetSafeAreaRect();
+
+    if (safe_rc.top > rc.top)
+      canvas.DrawFilledRectangle({rc.left, rc.top, rc.right, safe_rc.top},
+                                 COLOR_BLACK);
+    if (safe_rc.bottom < rc.bottom)
+      canvas.DrawFilledRectangle({rc.left, safe_rc.bottom,
+                                  rc.right, rc.bottom}, COLOR_BLACK);
+    if (safe_rc.left > rc.left)
+      canvas.DrawFilledRectangle({rc.left, safe_rc.top,
+                                  safe_rc.left, safe_rc.bottom}, COLOR_BLACK);
+    if (safe_rc.right < rc.right)
+      canvas.DrawFilledRectangle({safe_rc.right, safe_rc.top,
+                                  rc.right, safe_rc.bottom}, COLOR_BLACK);
+  }
 }
 
 void
