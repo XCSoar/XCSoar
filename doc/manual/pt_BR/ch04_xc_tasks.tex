@@ -441,14 +441,22 @@ As InfoBoxes \textbf{Alternativo 1} / \textbf{Alternativo 2} e suas variantes
 podem funcionar em modo \textbf{AUTO} ou \textbf{MANUAL}. AUTO é o padrão e
 mostra os melhores alternativos escolhidos automaticamente. No modo MANUAL, um
 alternativo alcançável pode ser selecionado na lista de alternativos para cada
-slot de forma independente. Um alternativo manual também pode ser definido
-diretamente a partir de qualquer waypoint, ou de uma posição do mapa que possa
-ser usada para \bmenuw{Ir Para}, pressionando \bmenuw{Alternativo 1} ou
-\bmenuw{Alternativo 2} no diálogo ``Elementos do mapa neste local'' ou no
-diálogo de detalhes do waypoint. O botão usado muda automaticamente o slot
-correspondente para MANUAL. Esta seleção manual vale apenas durante a execução
+slot de forma independente. Pressione \bmenuw{Selecionar como Alternativo}
+para fixar um waypoint pousável em uma das duas InfoBoxes (MANUAL); o
+\textsf{XCSoar} pergunta então qual delas usar, mostrando o alvo atual de cada
+uma. Este botão também está disponível no diálogo ``Elementos do mapa neste
+local'' e no diálogo de detalhes do waypoint, de modo que qualquer waypoint
+pousável pode ser fixado; ele não é oferecido para waypoints não pousáveis.
+Esta seleção manual vale apenas durante a execução
 atual: ela não é salva ao reiniciar o \textsf{XCSoar} e permanece ativa até o
-piloto alterá-la novamente ou voltar o slot para AUTO.
+piloto alterá-la novamente ou pressionar \bmenuw{Alternate Mode: Auto}, que
+pergunta qual dos dois slots deve voltar para AUTO.
+
+A lista de alternativos não pertence a nenhuma das duas InfoBoxes: os alvos aos
+quais Alternativo 1 e Alternativo 2 se referem são marcados com ``ALT1'' e
+``ALT2''. Um alvo fixado manualmente que o computador de voo não classificou é
+acrescentado à lista, que pode portanto conter até doze entradas: as dez opções
+calculadas e os dois alvos fixados pelo piloto.
 
 Todavia, os itens na lista de alternativos obedecem regras diferentes e interagem da mesma forma com a prova atual.  Escolher um ponto na lista de alternativos aborta a prova; uma vez que as condições melhores, o resumo da prova pode ser realizado pelo botão já mencionado.
 

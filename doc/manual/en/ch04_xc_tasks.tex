@@ -710,11 +710,22 @@ As is with every waypoint list, additional information might be called by tappin
 
 The Alternate 1 / Alternate 2 InfoBoxes and their variants can be used either
 in \textbf{AUTO} mode or in \textbf{MANUAL} mode. AUTO is the default and
-shows the best automatically selected alternates. Tap \bmenuw{Select as Alternate}
-to pin a reachable field from the list onto that InfoBox (MANUAL). This
-manual selection is runtime-only: it is not saved when XCSoar is
-restarted, and it remains active until the pilot chooses another field or
-taps \bmenuw{Alternate Mode: Auto} to return the slot to AUTO.
+shows the best automatically selected alternates. Tap \bmenuw{Select as
+Alternate} to pin a landable field onto one of the two InfoBoxes (MANUAL);
+\xc{} then asks which of them shall be used, listing both with the field they
+currently refer to. Besides the alternates list, the same button is available
+in the ``Map elements at this location'' dialogue and on the waypoint details
+page, so that any landable waypoint may be pinned; it is not offered for
+waypoints that are not landable. This manual selection is runtime-only: it is
+not saved when \xc{} is restarted, and it remains active until the pilot
+chooses another field or taps \bmenuw{Alternate Mode: Auto}, which asks which
+of the two slots shall return to AUTO.
+
+The alternates list itself is not tied to one of the two InfoBoxes: the fields
+Alternate 1 and Alternate 2 currently refer to are marked ``ALT1'' and
+``ALT2'' in the list. A pinned field that the glide computer did not rank is
+appended to it, so the list may hold up to twelve entries: the ten computed
+options and the two fields pinned by the pilot.
 
 Although the items on the alternate list obey different rules they interact
 in the same way

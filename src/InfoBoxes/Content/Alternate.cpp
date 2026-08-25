@@ -51,15 +51,6 @@ std::mutex alternate_state_mutex;
  */
 std::array<AlternateSlotState, alternate_info_box_slot_count> alternate_slot_states;
 
-[[gnu::pure]]
-const char *
-GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept
-{
-  return mode == AlternateInfoBoxMode::MANUAL
-    ? C_("Abbreviation", "MAN")
-    : C_("Abbreviation", "AUTO");
-}
-
 /**
  * Value colour for Alternate InfoBoxes.
  *
@@ -104,9 +95,57 @@ GetManualAlternateWaypointUnlocked(AlternateInfoBoxSlot slot) noexcept
   return alternate_slot_states[ToAlternateInfoBoxSlotIndex(slot)].waypoint;
 }
 
-[[gnu::pure]]
+ResolvedAlternateInfo
+ResolveAlternateInfo(const AlternateInfoBoxSlot slot) noexcept
+{
+  ResolvedAlternateInfo resolved;
+  resolved.mode = GetAlternateInfoBoxMode(slot);
+  resolved.waypoint = GetAlternateSlotWaypoint(slot);
+
+  /* Re-solve with the current aircraft state every time the InfoBox
+     updates.  The list on the task stores solutions from the last glide
+     computer pass, which may skip runs when only altitude (e.g. baro)
+     changes without a new location fix timestamp. */
+  if (resolved.waypoint != nullptr)
+    resolved.solution = SolveAlternateGlide(*resolved.waypoint);
+
+  return resolved;
+}
+
+void
+SetAlternateTitle(InfoBoxData &data, const AlternateInfoBoxSlot slot,
+                  const char *suffix) noexcept
+{
+  const char *mode_label =
+    GetAlternateModeShortLabel(GetAlternateInfoBoxMode(slot));
+  const unsigned display_number = GetAlternateInfoBoxSlotDisplayNumber(slot);
+
+  if (suffix == nullptr)
+    data.FmtTitle(_("Altn {} {}"), display_number, mode_label);
+  else
+    data.FmtTitle(_("Altn {} {} {}"), display_number, suffix, mode_label);
+}
+
+} // namespace
+
+const char *
+GetAlternateSlotName(AlternateInfoBoxSlot slot) noexcept
+{
+  return slot == AlternateInfoBoxSlot::FIRST
+    ? _("Alternate 1")
+    : _("Alternate 2");
+}
+
+const char *
+GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept
+{
+  return mode == AlternateInfoBoxMode::MANUAL
+    ? C_("Abbreviation", "MAN")
+    : C_("Abbreviation", "AUTO");
+}
+
 GlideResult
-SolveManualAlternate(const Waypoint &waypoint) noexcept
+SolveAlternateGlide(const Waypoint &waypoint) noexcept
 {
   const auto &basic = CommonInterface::Basic();
   const auto &calculated = CommonInterface::Calculated();
@@ -128,58 +167,26 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
     settings.task.glide, calculated.glide_polar_safety);
 }
 
-ResolvedAlternateInfo
-ResolveAlternateInfo(AlternateInfoBoxSlot slot) noexcept
+WaypointPtr
+GetAlternateSlotWaypoint(const AlternateInfoBoxSlot slot) noexcept
 {
-  ResolvedAlternateInfo resolved;
-  resolved.mode = GetAlternateInfoBoxMode(slot);
+  if (GetAlternateInfoBoxMode(slot) == AlternateInfoBoxMode::MANUAL)
+    return GetManualAlternateWaypoint(slot);
 
   if (!backend_components || !backend_components->protected_task_manager)
-    return resolved;
-
-  if (resolved.mode == AlternateInfoBoxMode::MANUAL) {
-    resolved.waypoint = GetManualAlternateWaypoint(slot);
-    if (resolved.waypoint != nullptr)
-      resolved.solution = SolveManualAlternate(*resolved.waypoint);
-
-    return resolved;
-  }
+    return nullptr;
 
   ProtectedTaskManager::Lease lease{*backend_components->protected_task_manager};
   const AlternateList &alternates = lease->GetAlternates();
-  if (alternates.empty())
-    return resolved;
 
+  /* do not make Alternate 2 mirror Alternate 1 whenever only one
+     computed alternate is available */
   const unsigned index = ToAlternateInfoBoxSlotIndex(slot);
-
-  // Do not makes Alternate 2 mirror Alternate 1 whenever only one computed alternate is available
   if (index >= alternates.size())
-    return resolved;
+    return nullptr;
 
-  resolved.waypoint = alternates[index].waypoint;
-  /* Re-solve with the current aircraft state every time the InfoBox
-     updates.  The list on the task stores solutions from the last glide
-     computer pass, which may skip runs when only altitude (e.g. baro)
-     changes without a new location fix timestamp. */
-  resolved.solution = SolveManualAlternate(*resolved.waypoint);
-  return resolved;
+  return alternates[index].waypoint;
 }
-
-void
-SetAlternateTitle(InfoBoxData &data, AlternateInfoBoxSlot slot,
-                  const char *suffix) noexcept
-{
-  const char *mode_label =
-    GetAlternateModeShortLabel(GetAlternateInfoBoxMode(slot));
-  const unsigned display_number = GetAlternateInfoBoxSlotDisplayNumber(slot);
-
-  if (suffix == nullptr)
-    data.FmtTitle(_("Altn {} {}"), display_number, mode_label);
-  else
-    data.FmtTitle(_("Altn {} {} {}"), display_number, suffix, mode_label);
-}
-
-} // namespace
 
 AlternateInfoBoxMode
 GetAlternateInfoBoxMode(AlternateInfoBoxSlot slot) noexcept
@@ -250,7 +257,7 @@ InfoBoxContentAlternateBase::HandleClick() noexcept
       !data_components || !data_components->waypoints)
     return false;
 
-  dlgAlternatesListShowModal(data_components->waypoints.get(), slot);
+  dlgAlternatesListShowModal(data_components->waypoints.get());
   return true;
 }
 

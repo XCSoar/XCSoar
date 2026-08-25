@@ -627,10 +627,8 @@ InputEvents::eventSetup(const char *misc)
     dlgPlanesShowModal();
   else if (StringIsEqual(misc, "Profile"))
     ProfileListDialog();
-  else if (StringIsEqual(misc, "Alternates")) {
-    dlgAlternatesListShowModal(data_components->waypoints.get(),
-                               AlternateInfoBoxSlot::FIRST);
-  }
+  else if (StringIsEqual(misc, "Alternates"))
+    dlgAlternatesListShowModal(data_components->waypoints.get());
 
   trigger_redraw();
 }
