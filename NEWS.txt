@@ -36,6 +36,8 @@ Version 7.46 - not yet released
     instead of overlapping it
   - fix the live snail trail losing circling detail and jumping as the
     map follows the aircraft, including at 10x replay #2948
+  - keep the pan-mode map scale while panning, and restore the saved
+    circling or cruise scale when leaving pan mode
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
