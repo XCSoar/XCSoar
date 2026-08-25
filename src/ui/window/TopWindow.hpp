@@ -169,6 +169,8 @@ public:
   }
 
   void OnNativeConfigure(PixelSize new_native_size) noexcept;
+  void OnToplevelConfigureSize(int32_t width, int32_t height) noexcept;
+  void CommitNativeSurface() noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif

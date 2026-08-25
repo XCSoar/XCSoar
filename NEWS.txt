@@ -79,6 +79,8 @@ Version 7.46 - not yet released
     scale
   - use xdg-output logical size so Wayland fractional scaling matches
     the compositor
+  - keep running when the Wayland window is not on screen, so replay
+    and the snail trail do not freeze until the window is shown again
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can

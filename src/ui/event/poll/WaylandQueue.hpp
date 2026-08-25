@@ -76,6 +76,22 @@ class WaylandEventQueue final {
   PixelSize physical_screen_size{0, 0};
 #endif
 
+  /**
+   * Bound xdg_wm_base version.  State `suspended` exists since
+   * version 6.
+   */
+  uint32_t xdg_wm_base_version = 0;
+
+  bool activated = true;
+  bool suspended = false;
+
+  /**
+   * True after the first buffer was presented.  Until then the
+   * surface is not mapped, so missing ACTIVATED must not skip
+   * eglSwapBuffers or the window never appears.
+   */
+  bool presented = false;
+
 public:
   /**
    * @param queue the #EventQueue that shall receive Wayland input
@@ -104,15 +120,18 @@ public:
     return pointer;
   }
 
-  bool IsVisible() const noexcept {
-    // TODO: implement
-    return true;
-  }
+  [[gnu::pure]]
+  bool IsVisible() const noexcept;
 
-  void SetActivated(bool activated) noexcept {
-    // Activation state is tracked via xdg_toplevel configure events
-    // This method is called to update the activation state
-    (void)activated;
+  /**
+   * Update xdg_toplevel configure states.  Hidden surfaces must not
+   * call eglSwapBuffers: Mesa waits for a frame callback the
+   * compositor will not send.
+   */
+  void SetToplevelState(bool activated, bool suspended) noexcept;
+
+  void MarkPresented() noexcept {
+    presented = true;
   }
 
   bool HasPointer() const noexcept {
@@ -134,7 +153,7 @@ public:
 #endif
 
   void RegistryHandler(struct wl_registry *registry, uint32_t id,
-                       const char *interface) noexcept;
+                       const char *interface, uint32_t version) noexcept;
 
   void SeatHandleCapabilities(bool pointer, bool keyboard, bool touch) noexcept;
 

@@ -112,8 +112,12 @@ public:
 #endif
 
 #ifdef USE_WAYLAND
-  void SetActivated(bool activated) noexcept {
-    input_queue.SetActivated(activated);
+  void SetToplevelState(bool activated, bool suspended) noexcept {
+    input_queue.SetToplevelState(activated, suspended);
+  }
+
+  void MarkPresented() noexcept {
+    input_queue.MarkPresented();
   }
 #endif
 

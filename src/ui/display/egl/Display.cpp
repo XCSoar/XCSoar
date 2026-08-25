@@ -114,6 +114,13 @@ Display::CreateWindowSurface(EGLNativeWindowType native_window)
   if (surface == EGL_NO_SURFACE)
     throw FmtRuntimeError("eglCreateWindowSurface() failed: {:#x}", eglGetError());
 
+#ifdef USE_WAYLAND
+  /* Mesa waits in eglSwapBuffers for a compositor frame callback.
+     Hidden surfaces never get one, which stalls the UI thread.  Draw
+     without that wait; Refresh() skips Flip() when not visible. */
+  eglSwapInterval(display, 0);
+#endif
+
   return surface;
 }
 

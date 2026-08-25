@@ -85,7 +85,7 @@ struct Event {
     RESIZE,
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
     /**
      * Redraw the screen.
      */

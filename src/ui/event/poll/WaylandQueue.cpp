@@ -41,7 +41,7 @@ WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
                       const char *interface, [[maybe_unused]] uint32_t version)
 {
   auto &q = *(WaylandEventQueue *)data;
-  q.RegistryHandler(registry, id, interface);
+  q.RegistryHandler(registry, id, interface, version);
 }
 
 static void
@@ -402,9 +402,43 @@ WaylandEventQueue::OnFlush() noexcept
   }
 }
 
+bool
+WaylandEventQueue::IsVisible() const noexcept
+{
+  /* Do not eglSwapBuffers while the compositor has occluded the
+     surface: Mesa waits for a frame callback that will not arrive.
+     xdg-shell v6 reports that as SUSPENDED.  Older compositors drop
+     ACTIVATED instead, but only after the first buffer; the initial
+     configure is often unfocused, and skipping that swap leaves the
+     window unmapped. */
+  if (suspended)
+    return false;
+
+  if (!presented)
+    return true;
+
+  if (xdg_wm_base_version >= 6)
+    return true;
+
+  return activated;
+}
+
+void
+WaylandEventQueue::SetToplevelState(bool new_activated,
+                                    bool new_suspended) noexcept
+{
+  const bool was_visible = IsVisible();
+  activated = new_activated;
+  suspended = new_suspended;
+
+  if (IsVisible() && !was_visible)
+    queue.Push(Event::EXPOSE);
+}
+
 inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
-                                   const char *interface) noexcept
+                                   const char *interface,
+                                   uint32_t version) noexcept
 {
   if (StringIsEqual(interface, "wl_compositor"))
     compositor = (wl_compositor *)
@@ -419,10 +453,14 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
-  else if (StringIsEqual(interface, "xdg_wm_base"))
+  else if (StringIsEqual(interface, "xdg_wm_base")) {
+    const uint32_t supported =
+      (uint32_t)xdg_wm_base_interface.version;
+    xdg_wm_base_version = version < supported ? version : supported;
     wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
-                                              &xdg_wm_base_interface, 1);
-  else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
+                                              &xdg_wm_base_interface,
+                                              xdg_wm_base_version);
+  } else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
     decoration_manager = (zxdg_decoration_manager_v1 *)
       wl_registry_bind(registry, id,
                        &zxdg_decoration_manager_v1_interface, 1);
