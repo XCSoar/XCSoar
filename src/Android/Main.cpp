@@ -64,6 +64,7 @@
 #include "SAFHelper.hpp"
 #include "Storage/android/SAFOutputStream.hpp"
 
+#include <algorithm>
 #include <cassert>
 #include <mutex>
 
@@ -373,17 +374,16 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
                                          jint inset_left, jint inset_top,
                                          jint inset_right, jint inset_bottom)
 {
-  (void)inset_left;
-  (void)inset_top;
-  (void)inset_right;
-  (void)inset_bottom;
-
   const std::scoped_lock shutdown_lock{shutdown_mutex};
 
   if (event_queue == nullptr)
     return;
 
   if (auto *main_window = NativeView::GetPointer(env, obj)) {
+    main_window->AnnounceSafeAreaInsets(std::max(inset_left, 0),
+                                        std::max(inset_top, 0),
+                                        std::max(inset_right, 0),
+                                        std::max(inset_bottom, 0));
     main_window->AnnounceResize({width, height});
   }
 
