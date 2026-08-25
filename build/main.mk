@@ -789,6 +789,13 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
+# Selected systemd unit controls for desktop/embedded Linux.
+ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_KOBO)$(TARGET_IS_ANDROID),ynn)
+XCSOAR_SOURCES += \
+	$(SRC)/Dialogs/Settings/Panels/SystemdConfigPanel.cpp \
+	$(SRC)/Linux/SystemdServiceList.cpp
+endif
+
 include $(topdir)/build/net-wifi.mk
 
 XCSOAR_DEPENDS = \
