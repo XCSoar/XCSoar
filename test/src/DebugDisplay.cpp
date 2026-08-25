@@ -30,6 +30,8 @@ PrintScreenSize([[maybe_unused]] const UI::Display &display) noexcept
   printf("Refresh: %u mHz\n", display.GetRefreshMilliHz());
   printf("Make: %s\n", display.GetMake());
   printf("Model: %s\n", display.GetModel());
+  printf("Output: %s\n", display.GetOutputName());
+  printf("Description: %s\n", display.GetOutputDescription());
 #endif
 }
 

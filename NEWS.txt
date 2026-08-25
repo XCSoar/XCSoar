@@ -77,6 +77,8 @@ Version 7.46 - not yet released
     large enough for a gloved tap
   - size the Wayland UI from the output's physical size and integer
     scale
+  - use xdg-output logical size so Wayland fractional scaling matches
+    the compositor
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can

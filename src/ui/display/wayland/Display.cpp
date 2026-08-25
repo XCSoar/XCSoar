@@ -13,6 +13,8 @@
 #include "ui/glx/System.hpp"
 #endif
 
+#include "xdg-output-unstable-v1-client-protocol.h"
+
 #include <wayland-client.h>
 
 #include <cstdint>
@@ -87,6 +89,55 @@ static constexpr struct wl_output_listener output_listener = {
   .scale = OutputScale,
 };
 
+static void
+XdgOutputLogicalPosition([[maybe_unused]] void *data,
+                         [[maybe_unused]] struct zxdg_output_v1 *xdg_output,
+                         [[maybe_unused]] int32_t x,
+                         [[maybe_unused]] int32_t y) noexcept
+{
+}
+
+static void
+XdgOutputLogicalSize(void *data,
+                     [[maybe_unused]] struct zxdg_output_v1 *xdg_output,
+                     int32_t width, int32_t height) noexcept
+{
+  auto &display = *static_cast<Display *>(data);
+  display.OutputLogicalSize(width, height);
+}
+
+static void
+XdgOutputDone([[maybe_unused]] void *data,
+              [[maybe_unused]] struct zxdg_output_v1 *xdg_output) noexcept
+{
+}
+
+static void
+XdgOutputName(void *data,
+              [[maybe_unused]] struct zxdg_output_v1 *xdg_output,
+              const char *name) noexcept
+{
+  auto &display = *static_cast<Display *>(data);
+  display.OutputName(name);
+}
+
+static void
+XdgOutputDescription(void *data,
+                     [[maybe_unused]] struct zxdg_output_v1 *xdg_output,
+                     const char *description) noexcept
+{
+  auto &display = *static_cast<Display *>(data);
+  display.OutputDescription(description);
+}
+
+static constexpr struct zxdg_output_v1_listener xdg_output_listener = {
+  .logical_position = XdgOutputLogicalPosition,
+  .logical_size = XdgOutputLogicalSize,
+  .done = XdgOutputDone,
+  .name = XdgOutputName,
+  .description = XdgOutputDescription,
+};
+
 Display::Display()
   :display(wl_display_connect(nullptr))
 {
@@ -95,6 +146,8 @@ Display::Display()
 
   make.clear();
   model.clear();
+  output_name.clear();
+  output_description.clear();
 
   struct wl_registry *registry = wl_display_get_registry(display);
   wl_registry_add_listener(registry, &registry_listener, this);
@@ -105,8 +158,12 @@ Display::Display()
 
 Display::~Display() noexcept
 {
+  if (xdg_output != nullptr)
+    zxdg_output_v1_destroy(xdg_output);
   if (output != nullptr)
     wl_output_destroy(output);
+  if (xdg_output_manager != nullptr)
+    zxdg_output_manager_v1_destroy(xdg_output_manager);
 
   wl_display_disconnect(display);
 }
@@ -114,6 +171,9 @@ Display::~Display() noexcept
 PixelSize
 Display::GetSize() const noexcept
 {
+  if (logical_width > 0 && logical_height > 0)
+    return {logical_width, logical_height};
+
   if (width > 0 && height > 0 && scale > 1)
     return {width / scale, height / scale};
 
@@ -133,6 +193,20 @@ Display::GetSizeMM() const noexcept
 }
 
 void
+Display::BindXdgOutput() noexcept
+{
+  if (xdg_output != nullptr ||
+      xdg_output_manager == nullptr ||
+      output == nullptr)
+    return;
+
+  xdg_output = zxdg_output_manager_v1_get_xdg_output(xdg_output_manager,
+                                                     output);
+  if (xdg_output != nullptr)
+    zxdg_output_v1_add_listener(xdg_output, &xdg_output_listener, this);
+}
+
+void
 Display::RegistryHandler(struct wl_registry *registry, uint32_t id,
                          const char *interface, uint32_t version) noexcept
 {
@@ -142,6 +216,17 @@ Display::RegistryHandler(struct wl_registry *registry, uint32_t id,
       wl_registry_bind(registry, id, &wl_output_interface, bind_version);
     if (output != nullptr)
       wl_output_add_listener(output, &output_listener, this);
+    BindXdgOutput();
+    return;
+  }
+
+  if (StringIsEqual(interface, zxdg_output_manager_v1_interface.name) &&
+      xdg_output_manager == nullptr && version >= 1) {
+    const uint32_t bind_version = version >= 3 ? 3 : version;
+    xdg_output_manager = (struct zxdg_output_manager_v1 *)
+      wl_registry_bind(registry, id,
+                       &zxdg_output_manager_v1_interface, bind_version);
+    BindXdgOutput();
   }
 }
 
@@ -180,6 +265,29 @@ Display::OutputScale(int32_t factor) noexcept
 {
   if (factor > 0)
     scale = (unsigned)factor;
+}
+
+void
+Display::OutputLogicalSize(int32_t width, int32_t height) noexcept
+{
+  if (width > 0 && height > 0) {
+    logical_width = (unsigned)width;
+    logical_height = (unsigned)height;
+  }
+}
+
+void
+Display::OutputName(const char *name) noexcept
+{
+  if (name != nullptr)
+    output_name.SetUTF8(name);
+}
+
+void
+Display::OutputDescription(const char *description) noexcept
+{
+  if (description != nullptr)
+    output_description.SetUTF8(description);
 }
 
 } // namespace Wayland
