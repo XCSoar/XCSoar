@@ -171,6 +171,16 @@ protected:
    */
   unsigned top_right_margin = 0;
 
+  /**
+   * Margins that keep the HUD elements clear of the areas covered by
+   * system UI (display cutout, status bar, home indicator) while the
+   * map itself uses the whole screen.
+   *
+   * @see GetHudRect(), DisplaySettings::infobox_area_stretch
+   */
+  unsigned hud_margin_left = 0, hud_margin_top = 0;
+  unsigned hud_margin_right = 0, hud_margin_bottom = 0;
+
 #ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use
@@ -225,6 +235,34 @@ public:
   }
 
   void SetGlideComputer(GlideComputer *_gc) noexcept;
+
+  /**
+   * Keep the HUD elements this far away from the window borders.
+   *
+   * @see GetHudRect()
+   */
+  void SetHudMargins(unsigned left, unsigned top,
+                          unsigned right, unsigned bottom) noexcept;
+
+  /**
+   * The part of the given rectangle in which the HUD elements
+   * (compass, map scale, final glide bar, ...) may be drawn.  This is
+   * the whole rectangle unless the map extends into areas covered by
+   * system UI.
+   */
+  [[gnu::pure]]
+  PixelRect GetHudRect(PixelRect rc) const noexcept {
+    rc.left += int(hud_margin_left);
+    rc.top += int(hud_margin_top);
+    rc.right -= int(hud_margin_right);
+    rc.bottom -= int(hud_margin_bottom);
+    return rc;
+  }
+
+  [[gnu::pure]]
+  PixelRect GetHudRect() const noexcept {
+    return GetHudRect(GetClientRect());
+  }
 
   void SetAirspaces(Airspaces *airspaces) noexcept {
     airspace_renderer.SetAirspaces(airspaces);
