@@ -886,7 +886,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Thermal next leg equivalent"),
     N_("T Next Leg"),
-    N_("Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."),
+    N_("Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."),
     UpdateInfoBoxNextLegEqThermal,
   },
 

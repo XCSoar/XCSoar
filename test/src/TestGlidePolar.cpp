@@ -24,6 +24,7 @@ private:
   void TestMC();
   void TestDensityRatio();
   void TestDensityRatioMC();
+  void TestNextLegEqThermal();
 };
 
 void
@@ -260,6 +261,47 @@ GlidePolarTest::TestDensityRatioMC()
 }
 
 void
+GlidePolarTest::TestNextLegEqThermal()
+{
+  const double w = Units::ToSysUnit(30, Unit::KILOMETER_PER_HOUR);
+
+  for (const double mc : {0.1, 1.5, 4.0}) {
+    polar.SetMC(mc);
+
+    ok1(equals(polar.GetNextLegEqThermal(0, 0), mc));
+    ok1(equals(polar.GetNextLegEqThermal(w, w), mc));
+    ok1(equals(polar.GetNextLegEqThermal(-w, -w), mc));
+
+    ok1(polar.GetNextLegEqThermal(w, -w) < mc);
+    ok1(polar.GetNextLegEqThermal(-w, w) > mc);
+  }
+
+  GlidePolar asw20(0);
+  asw20.SetReferenceMass(377, false);
+  asw20.SetEmptyMass(377, false);
+  asw20.SetCrewMass(0, false);
+  asw20.SetCoefficients(PolarCoefficients::From3VW(
+      Units::ToSysUnit(116.2, Unit::KILOMETER_PER_HOUR),
+      Units::ToSysUnit(174.3, Unit::KILOMETER_PER_HOUR),
+      Units::ToSysUnit(213.04, Unit::KILOMETER_PER_HOUR),
+      -0.77, -1.89, -3.3), false);
+  asw20.Update();
+  asw20.SetMC(1.5);
+
+  const double primary = asw20.GetNextLegEqThermal(w, -w);
+  const double secondary = asw20.GetNextLegEqThermal(-w, w);
+
+  ok1(equals(asw20.GetNextLegEqThermal(w, w), asw20.GetMC()));
+  ok1(equals(asw20.GetNextLegEqThermal(-w, -w), asw20.GetMC()));
+  ok1(equals(primary, 0.59634));
+  ok1(equals(secondary, 2.87184));
+  ok1(primary > 0 && primary < asw20.GetMC());
+  ok1(secondary > asw20.GetMC());
+
+  polar.SetMC(0);
+}
+
+void
 GlidePolarTest::Run()
 {
   Init();
@@ -270,11 +312,12 @@ GlidePolarTest::Run()
   TestMC();
   TestDensityRatio();
   TestDensityRatioMC();
+  TestNextLegEqThermal();
 }
 
 int main()
 {
-  plan_tests(69 + 3);
+  plan_tests(69 + 3 + 21);
 
   GlidePolarTest test;
   test.Run();
