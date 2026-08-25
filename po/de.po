@@ -11287,3 +11287,25 @@ msgstr ""
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "Oben"
+
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "Rechts"
+
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "Unten"
+
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "Links"
+
+msgid "Stretch InfoBox area"
+msgstr "InfoBox-Bereich strecken"
+
+msgid "System status bar"
+msgstr "System-Statusleiste"
