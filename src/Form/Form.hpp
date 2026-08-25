@@ -113,6 +113,24 @@ public:
   [[gnu::pure]]
   UI::SingleWindow &GetMainWindow();
 
+  [[gnu::pure]]
+  const UI::SingleWindow &GetMainWindow() const {
+    return const_cast<WndForm *>(this)->GetMainWindow();
+  }
+
+  /**
+   * Does this dialog fill the whole area that is available to
+   * dialogs?  That is the safe area of the main window, which is
+   * smaller than its client area while the display cutout or the
+   * system bars are being drawn over.
+   *
+   * This deliberately hides Window::IsMaximised(), which compares
+   * with the parent's client area and would therefore consider no
+   * dialog maximised in full screen mode.
+   */
+  [[gnu::pure]]
+  bool IsMaximised() const noexcept;
+
   const DialogLook &GetLook() const {
     return look;
   }
@@ -196,9 +214,10 @@ public:
    * Reposition window, if possible.  Will be called whenever the
    * parent window changes.
    *
-   * @param parent_rc the parent's client rect
+   * @param rc the area available to dialogs, which is the safe area
+   * and does not necessarily start at the window's top left corner
    */
-  virtual void ReinitialiseLayout(const PixelRect &parent_rc) noexcept;
+  virtual void ReinitialiseLayout(const PixelRect &rc) noexcept;
 
 protected:
   /**

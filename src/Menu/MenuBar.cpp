@@ -61,11 +61,10 @@ MenuBar::Button::OnClicked() noexcept
   return true;
 }
 
-MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &_look)
+MenuBar::MenuBar(ContainerWindow &parent, const PixelRect &rc,
+                 const ButtonLook &_look)
   :look(_look)
 {
-  const PixelRect rc = parent.GetClientRect();
-
   WindowStyle style;
   style.Hide();
   style.Border();
