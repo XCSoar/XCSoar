@@ -41,7 +41,7 @@ class AlternatesListWidget final
   Button *cancel_button = nullptr;
   Button *goto_button = nullptr;
   Button *select_button = nullptr;
-  Button *mode_button = nullptr;
+  Button *auto_button = nullptr;
   Button *manual_button = nullptr;
   Button *set_active_freq_button = nullptr;
   Button *set_standby_freq_button = nullptr;
@@ -143,11 +143,9 @@ private:
     if (set_active_freq_button == nullptr || set_standby_freq_button == nullptr)
       return;
 
-    if (mode_button != nullptr) {
-      mode_button->SetCaption(GetAlternateInfoBoxMode(GetConfiguredSlot()) ==
-                                  AlternateInfoBoxMode::MANUAL
-                                ? _("Altn mode: MANUAL")
-                                : _("Altn mode: AUTO"));
+    if (auto_button != nullptr) {
+      auto_button->SetEnabled(GetAlternateInfoBoxMode(GetConfiguredSlot()) ==
+                              AlternateInfoBoxMode::MANUAL);
     }
 
     if (!HasValidSelection()) {
@@ -170,10 +168,8 @@ private:
       details_button->SetEnabled(true);
     set_active_freq_button->SetEnabled(has_freq);
     set_standby_freq_button->SetEnabled(has_freq);
-    if (manual_button != nullptr) {
-      manual_button->SetEnabled(GetAlternateInfoBoxMode(GetConfiguredSlot()) ==
-                                  AlternateInfoBoxMode::MANUAL);
-    }
+    if (manual_button != nullptr)
+      manual_button->SetEnabled(true);
   }
 };
 
@@ -203,17 +199,19 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
   }
 
   if (!select_mode && slot.has_value()) {
-    mode_button = dialog.AddButton("", [this](){
+    /* Alternate Mode: Auto returns a MANUAL slot to the computed
+       list. Pinning is Select as Alternate, which is always
+       available and sets MANUAL. */
+    auto_button = dialog.AddButton(C_("Button", "Alternate Mode: Auto"), [this](){
       const auto slot = GetConfiguredSlot();
-      const auto new_mode = GetAlternateInfoBoxMode(slot) ==
-        AlternateInfoBoxMode::MANUAL
-        ? AlternateInfoBoxMode::AUTO
-        : AlternateInfoBoxMode::MANUAL;
-      SetAlternateInfoBoxMode(slot, new_mode);
+      if (GetAlternateInfoBoxMode(slot) != AlternateInfoBoxMode::MANUAL)
+        return;
+
+      SetAlternateInfoBoxMode(slot, AlternateInfoBoxMode::AUTO);
       UpdateButtons();
     });
 
-    manual_button = dialog.AddButton(_("Select as Alternate"), [this](){
+    manual_button = dialog.AddButton(C_("Button", "Select as Alternate"), [this](){
       if (!HasValidSelection())
         return;
 
@@ -315,9 +313,9 @@ dlgAlternatesListShowModal(Waypoints *waypoints,
 
   const auto *title = _("Alternates");
   if (slot.has_value()) {
-    title = _("Alternates 1");
+    title = C_("Menu", "Alternates 1");
     if (*slot == AlternateInfoBoxSlot::SECOND)
-      title = _("Alternates 2");
+      title = C_("Menu", "Alternates 2");
   }
 
   TWidgetDialog<AlternatesListWidget>

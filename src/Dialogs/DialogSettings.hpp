@@ -8,11 +8,17 @@
 struct DialogSettings {
   enum class TextInputStyle : uint8_t {
     /**
-     * Use the platform default - i.e. keyboard if the device has a
-     * pointing device.
+     * Use the platform default - the operating system's on-screen
+     * keyboard where there is one, else XCSoar's own keyboard if the
+     * device has a pointing device.
      */
     Default,
+
+    /**
+     * Always use XCSoar's own on-screen keyboard.
+     */
     Keyboard,
+
     HighScore,
   };
 

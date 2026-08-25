@@ -951,15 +951,15 @@ ApplyStartGateReachStyle(InfoBoxData &data,
 
   switch (state) {
   case StartGateComment::TOO_EARLY:
-    data.SetComment(_("Too early"));
+    data.SetComment(C_("Status", "Too early"));
     data.SetValueColor(2);
     break;
   case StartGateComment::CAN_START:
-    data.SetComment(_("Can start"));
+    data.SetComment(C_("Status", "Can start"));
     data.SetValueColor(3);
     break;
   case StartGateComment::TOO_LATE:
-    data.SetComment(_("Too late"));
+    data.SetComment(C_("Status", "Too late"));
     data.SetValueColor(1);
     break;
   default:
@@ -1021,7 +1021,7 @@ UpdateStartOpenInfobox(InfoBoxData &data, const TimeStamp &projected_start_time_
       data.SetTitle(_("Start reach"));
     else {
       /* Title is StaticString<32> (31 bytes + NUL). */
-      data.SetTitle(_("Start unknown"));
+      data.SetTitle(C_("InfoBox", "Start unknown"));
     }
     return;
   }

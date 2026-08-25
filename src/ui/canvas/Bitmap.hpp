@@ -161,8 +161,11 @@ public:
   }
 #endif
 
-#ifndef USE_GDI
+#if !defined(USE_GDI) || defined(ENABLE_OPENGL)
   bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
+#endif
+
+#if !defined(USE_GDI) && !defined(ANDROID)
 #ifndef ANDROID
   bool Load(std::span<const std::byte> buffer, Type type=Type::STANDARD);
 #endif
@@ -180,14 +183,10 @@ public:
   bool LoadFile(Path path);
 
   /**
-   * Load a georeferenced image (e.g. GeoTIFF) and return its bounds.
+   * Load a georeferenced image and return its bounds.
    * Throws a std::runtime_error on error.
    */
-#ifdef USE_GEOTIFF
   GeoQuadrilateral LoadGeoFile(Path path);
-#else
-  [[noreturn]] GeoQuadrilateral LoadGeoFile(Path path);
-#endif
 
   void Reset() noexcept;
 

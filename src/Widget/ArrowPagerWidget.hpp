@@ -147,7 +147,23 @@ private:
   /** Up from chrome: last form row, Quick Guide bottom bar, or page. */
   bool FocusPageBottom() noexcept;
 
+  /**
+   * Down from Close: first page control, or first visible rich-text
+   * link/checkbox.
+   */
+  bool FocusPageStart() noexcept;
+
   /** Up/Down among prev / next / Close (and into the page). */
   bool MoveChromeFocusUp() noexcept;
   bool MoveChromeFocusDown() noexcept;
+
+  /** Focus prev, else next, else Close. */
+  bool FocusChromeStart() noexcept;
+
+  /**
+   * Whether declined page Up/Down should move to chrome (rich-text
+   * scroll pages), not Configuration form panels.
+   */
+  [[gnu::pure]]
+  bool PageHandsOffToChrome(bool key_up) const noexcept;
 };

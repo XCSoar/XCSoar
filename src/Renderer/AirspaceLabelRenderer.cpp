@@ -69,10 +69,10 @@ MakeNotamLabelText(const AbstractAirspace &airspace) noexcept
 {
   const char *const name = airspace.GetName();
   if (name == nullptr || name[0] == '\0')
-    return StaticString<64>{_("NOTAM")};
+    return StaticString<64>{C_("Status", "NOTAM")};
 
   if (!ValidateUTF8(name))
-    return StaticString<64>{_("NOTAM")};
+    return StaticString<64>{C_("Status", "NOTAM")};
 
   StaticString<64> label;
   constexpr std::size_t max_bytes_without_ellipsis =
@@ -89,7 +89,7 @@ MakeNotamLabelText(const AbstractAirspace &airspace) noexcept
 
   if (std::all_of(label.buffer(), label.buffer() + length,
                   [](const char ch) { return IsWhitespaceOrNull(ch); }))
-    return StaticString<64>{_("NOTAM")};
+    return StaticString<64>{C_("Status", "NOTAM")};
 
   if (name[length] != '\0')
     label += "...";

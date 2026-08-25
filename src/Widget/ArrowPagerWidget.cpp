@@ -14,6 +14,8 @@
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 
+#include <algorithm>
+
 ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
                                  const Widget *extra_widget) noexcept
   :main(rc)
@@ -24,8 +26,11 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
   if (width > height) {
     /* landscape */
 
+    /* Size for Close or Back so a caller can swap the caption without
+       clipping. */
     const unsigned close_button_width =
-      TextButtonRenderer::GetMinimumButtonWidth(look, _("Close"));
+      std::max(TextButtonRenderer::GetMinimumButtonWidth(look, _("Close")),
+               TextButtonRenderer::GetMinimumButtonWidth(look, _("Back")));
     const unsigned arrow_buttons_width =
       2 * ::Layout::GetMaximumControlHeight();
 
@@ -235,7 +240,35 @@ ArrowPagerWidget::FocusPageBottom() noexcept
       return true;
   }
 
-  return page.SetFocus();
+  if (!page.SetFocus())
+    return false;
+
+  /* Reserved-scrollbar rich text: highlight the last visible item.
+     SetFocus alone leaves the scroller focused with nothing
+     selected (same as #QuickGuidePageWidget wrapping Up from the
+     bottom bar).  Call the inner widget so the scroller does not
+     treat this as a page-scroll. */
+  if (auto *vs = dynamic_cast<VScrollWidget *>(&page))
+    if (vs->ReservesScrollbar())
+      vs->GetWidget().KeyPress(KEY_UP);
+
+  return true;
+}
+
+bool
+ArrowPagerWidget::FocusPageStart() noexcept
+{
+  Widget &page = GetCurrentWidget();
+  if (!page.SetFocus())
+    return false;
+
+  /* Highlight the first visible link/checkbox.  A page with no
+     items just keeps window focus. */
+  Widget *inner = &page;
+  if (auto *vs = dynamic_cast<VScrollWidget *>(&page))
+    inner = &vs->GetWidget();
+  inner->KeyPress(KEY_DOWN);
+  return true;
 }
 
 bool
@@ -270,10 +303,43 @@ ArrowPagerWidget::MoveChromeFocusUp() noexcept
 }
 
 bool
+ArrowPagerWidget::FocusChromeStart() noexcept
+{
+  if (previous_button.IsEnabled())
+    previous_button.SetFocus();
+  else if (next_button.IsEnabled())
+    next_button.SetFocus();
+  else
+    close_button.SetFocus();
+  return true;
+}
+
+bool
+ArrowPagerWidget::PageHandsOffToChrome(bool key_up) const noexcept
+{
+  const Widget &page = GetCurrentWidget();
+  if (auto *qg = dynamic_cast<const QuickGuidePageWidget *>(&page))
+    /* Down: only from the bottom bar (content goes there first).
+       Up: from content at the top (bottom bar handles Up itself). */
+    return key_up || qg->IsBottomBarFocused();
+
+  /* Credits / Checklist: reserved-scrollbar rich text. */
+  if (auto *vs = dynamic_cast<const VScrollWidget *>(&page))
+    return vs->ReservesScrollbar();
+
+  return false;
+}
+
+bool
 ArrowPagerWidget::MoveChromeFocusDown() noexcept
 {
-  if (close_button.HasFocus())
-    return true; /* end of chrome chain */
+  if (close_button.HasFocus()) {
+    /* Wrap back into reserved-scrollbar rich text (Checklist,
+       Credits).  Other pages stay on Close. */
+    if (PageHandsOffToChrome(false))
+      return FocusPageStart();
+    return true;
+  }
 
   if (previous_button.HasFocus()) {
     if (next_button.IsEnabled())
@@ -288,28 +354,22 @@ ArrowPagerWidget::MoveChromeFocusDown() noexcept
     return true;
   }
 
-  /* Quick Guide bottom bar → chrome.  Other pages return false so
-     WndForm can walk TabStops (z-order FocusNext would bounce back). */
-  auto *qg = dynamic_cast<QuickGuidePageWidget *>(&GetCurrentWidget());
-  if (qg == nullptr || !qg->IsBottomBarFocused())
-    return false;
-
-  if (previous_button.IsEnabled()) {
-    previous_button.SetFocus();
-    return true;
-  }
-  if (next_button.IsEnabled()) {
-    next_button.SetFocus();
-    return true;
-  }
-  close_button.SetFocus();
-  return true;
+  return PageHandsOffToChrome(false) && FocusChromeStart();
 }
 
 bool
 ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 {
-  if (PagerWidget::KeyPress(key_code))
+  const bool chrome_focused =
+    previous_button.HasFocus() ||
+    next_button.HasFocus() ||
+    close_button.HasFocus();
+
+  /* When chrome has focus, do not forward to the page.  Unfocused
+     rich text would treat Down as "no current item -> first link"
+     without taking focus, so Close stayed highlighted and Enter
+     activated that first item. */
+  if (!chrome_focused && PagerWidget::KeyPress(key_code))
     return true;
 
   if (extra != nullptr && extra->KeyPress(key_code))
@@ -317,7 +377,15 @@ ArrowPagerWidget::KeyPress(unsigned key_code) noexcept
 
   switch (key_code) {
   case KEY_UP:
-    return MoveChromeFocusUp();
+    if (MoveChromeFocusUp())
+      return true;
+    /* Content at top declined Up; rich-text OnKeyCheck would
+       otherwise swallow further Ups. */
+    if (PageHandsOffToChrome(true)) {
+      close_button.SetFocus();
+      return true;
+    }
+    return false;
 
   case KEY_DOWN:
     return MoveChromeFocusDown();

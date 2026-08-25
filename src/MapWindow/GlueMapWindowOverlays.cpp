@@ -141,6 +141,26 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 
     start = newline + 1;
   }
+
+  /* RASP field value at the panned location, analogous to the "map
+     items at this location" dialog. */
+  if (rasp_renderer && rasp_renderer->IsInside(location)) {
+    const char *label = rasp_renderer->GetLabel();
+    if (label != nullptr && *label != '\0') {
+      const auto value = FormatRaspValue(rasp_renderer->GetValueAt(location));
+
+      StaticString<128> rasp_line;
+      if (value.empty())
+        rasp_line = label;
+      else
+        rasp_line.Format("%s: %s", label, value.c_str());
+
+      TextInBox(canvas, rasp_line, p, mode,
+                render_projection.GetScreenSize());
+
+      p.y += height;
+    }
+  }
 }
 
 void
@@ -344,7 +364,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (!projection.IsValid())
     return;
 
-  StaticString<80> buffer;
+  StaticString<256> buffer;
 
   buffer.clear();
 
@@ -361,14 +381,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   const UIState &ui_state = GetUIState();
-  if (!ui_state.map_scale_page_title.empty()) {
-    buffer += ui_state.map_scale_page_title;
-    buffer += " ";
-  } else if (ui_state.auxiliary_enabled) {
-    buffer += ui_state.panel_name;
-    buffer += " ";
-  }
-
   if (Basic().gps.replay) {
     if (backend_components != nullptr &&
         backend_components->replay != nullptr)
@@ -381,17 +393,19 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     buffer += " ";
   }
 
+  if (!ui_state.map_scale_page_title.empty()) {
+    buffer += "| ";
+    buffer += ui_state.map_scale_page_title;
+    buffer += " ";
+  } else if (ui_state.auxiliary_enabled) {
+    buffer += ui_state.panel_name;
+    buffer += " ";
+  }
+
   if (GetComputerSettings().polar.ballast_timer_active)
     buffer.AppendFormat(
         "BALLAST %d LITERS ",
         (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
-
-  if (rasp_renderer != nullptr &&
-      ui_state.page_overlay != PageLayout::Overlay::RASP) {
-    const char *label = rasp_renderer->GetLabel();
-    if (label != nullptr)
-      buffer += gettext(label);
-  }
 
   if (!buffer.empty()) {
 
@@ -445,8 +459,17 @@ GlueMapWindow::RenderTrail(Canvas &canvas,
     break;
   }
 
-  DrawTrail(canvas, aircraft_pos, min_time,
-            GetMapSettings().trail.wind_drift_enabled && InCirclingMode());
+  /* Trail drift is for thermal centering at near zoom.  At overview
+     scales a Full trail shifted by hours of wind looks like a wrong
+     ground track (#2835, #709).  GetMapScale 2000 ≈ 16 km short edge. */
+  static constexpr double TRAIL_DRIFT_MAX_MAP_SCALE = 2000;
+
+  const bool enable_traildrift =
+    GetMapSettings().trail.wind_drift_enabled &&
+    InCirclingMode() &&
+    render_projection.GetMapScale() <= TRAIL_DRIFT_MAX_MAP_SCALE;
+
+  DrawTrail(canvas, aircraft_pos, min_time, enable_traildrift);
 }
 
 void

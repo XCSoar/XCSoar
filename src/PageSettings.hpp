@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "util/StaticString.hxx"
+
 #include <array>
 #include <cstdint>
 #include <span>
@@ -63,6 +65,20 @@ struct PageLayout
   InfoBoxConfig infobox_config;
 
   /**
+   * SkySight layer identifier for this page when overlay is SKYSIGHT.
+   */
+  StaticString<64> skysight_overlay;
+
+  /**
+   * Per-page SkySight forecast timestamp.  Zero follows the provider's
+   * automatic/default forecast; positive values select a fixed step.
+   * Live layers always use automatic time.
+   */
+  static constexpr int64_t SKYSIGHT_TIME_AUTO = 0;
+
+  int64_t skysight_time;
+
+  /**
    * What to show below the main area (i.e. map)?
    */
   enum class Bottom : uint8_t {
@@ -95,6 +111,7 @@ struct PageLayout
     RASP,
     EDL,
     XCTHERM,
+    SKYSIGHT,
 
     MAX
   } overlay;
@@ -145,6 +162,8 @@ struct PageLayout
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
     :valid(_valid), main(Main::MAP),
      infobox_config(_infobox_config),
+     skysight_overlay{},
+     skysight_time(SKYSIGHT_TIME_AUTO),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
      rasp_field(-1),
@@ -157,6 +176,8 @@ struct PageLayout
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
      infobox_config(_infobox_config),
+     skysight_overlay{},
+     skysight_time(SKYSIGHT_TIME_AUTO),
      bottom(Bottom::NOTHING),
      overlay(Overlay::NONE),
      rasp_field(-1),
@@ -236,11 +257,19 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesSkySightOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::SKYSIGHT &&
+      !skysight_overlay.empty();
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
       (overlay == Overlay::EDL || overlay == Overlay::RASP ||
-       overlay == Overlay::XCTHERM);
+       overlay == Overlay::XCTHERM || overlay == Overlay::SKYSIGHT);
   }
 
   /**
@@ -250,6 +279,8 @@ struct PageLayout
   {
     if (main == Main::EDL_MAP) {
       main = Main::MAP;
+      skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
       overlay = Overlay::EDL;
       if (bottom == Bottom::NOTHING)
         bottom = Bottom::WEATHER_CONTROLS;
@@ -258,16 +289,33 @@ struct PageLayout
     if (unsigned(overlay) >= unsigned(Overlay::MAX))
       overlay = Overlay::NONE;
 
-    if (IsMapMain()) {
-      if (overlay != Overlay::EDL && overlay != Overlay::RASP &&
-          overlay != Overlay::XCTHERM &&
-          bottom == Bottom::WEATHER_CONTROLS)
-        bottom = Bottom::NOTHING;
-    } else {
+    if (!IsMapMain()) {
+      skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
       overlay = Overlay::NONE;
       if (bottom == Bottom::WEATHER_CONTROLS)
         bottom = Bottom::NOTHING;
+    } else if (overlay == Overlay::SKYSIGHT) {
+      if (skysight_overlay.empty()) {
+        skysight_time = SKYSIGHT_TIME_AUTO;
+        overlay = Overlay::NONE;
+        if (bottom == Bottom::WEATHER_CONTROLS)
+          bottom = Bottom::NOTHING;
+      }
+    } else {
+      skysight_overlay.clear();
+      skysight_time = SKYSIGHT_TIME_AUTO;
+      if (!UsesWeatherOverlay() && bottom == Bottom::WEATHER_CONTROLS)
+        bottom = Bottom::NOTHING;
     }
+
+    /* Migrate weather pages created before they acquired cursor controls.
+       Explicit bottom widgets, such as Cross Section, remain unchanged. */
+    if (UsesWeatherOverlay() && bottom == Bottom::NOTHING)
+      bottom = Bottom::WEATHER_CONTROLS;
+
+    if (skysight_time < SKYSIGHT_TIME_AUTO)
+      skysight_time = SKYSIGHT_TIME_AUTO;
 
     if (overlay != Overlay::RASP) {
       rasp_field = -1;
@@ -305,11 +353,11 @@ struct PageLayout
 
   [[nodiscard]]
   const char *MakeTitle(const InfoBoxSettings &info_box_settings,
-                         std::span<char> buffer,
-                         const RaspStore *rasp=nullptr,
-                         const bool concise=false) const noexcept;
+                        std::span<char> buffer,
+                        const RaspStore *rasp=nullptr,
+                        const bool concise=false) const noexcept;
 
-  constexpr bool operator==(const PageLayout &other) const noexcept = default;
+  bool operator==(const PageLayout &other) const noexcept = default;
 };
 
 struct PageSettings {

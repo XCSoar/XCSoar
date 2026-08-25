@@ -20,6 +20,7 @@
 #endif
 #include "Interface.hpp"
 #include "Overlay.hpp"
+#include "OverlayLimits.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
@@ -77,7 +78,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   }
 
   if (waypoints)
-    builder.AddWaypoints(*waypoints);
+    builder.AddWaypoints(*waypoints, route_planner, basic, calculated,
+                         computer_settings);
 
 #ifdef HAVE_NOAA
   if (noaa_store)
@@ -87,8 +89,16 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   builder.AddTraffic(basic.flarm.traffic);
 
 #ifdef ENABLE_OPENGL
+#ifdef HAVE_HTTP
+  if (!list.full())
+    for (unsigned i = 0; i < MapWindowOverlay::MAX_MAP_OVERLAYS && !list.full(); ++i)
+      if (const auto *map_overlay = GetOverlay(i);
+          map_overlay != nullptr && map_overlay->IsInside(location))
+        list.push_back(new OverlayMapItem(*map_overlay, location));
+#else
   if (!list.full() && overlay && overlay->IsInside(location))
     list.push_back(new OverlayMapItem(*overlay, location));
+#endif
 #endif
 
   if (!list.full()) {
@@ -97,7 +107,8 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 #endif
 
     if (rasp_renderer && rasp_renderer->IsInside(location))
-      list.push_back(new RaspMapItem(rasp_renderer->GetLabel()));
+      list.push_back(new RaspMapItem(rasp_renderer->GetLabel(),
+                                     rasp_renderer->GetValueAt(location)));
   }
 
   // Sort the list of map items

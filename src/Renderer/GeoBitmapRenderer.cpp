@@ -10,10 +10,14 @@
 #include "ui/canvas/opengl/Texture.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/VertexPointer.hpp"
-#include "ui/canvas/opengl/Shaders.hpp"
-#include "ui/canvas/opengl/Program.hpp"
+#include "ui/canvas/opengl/Attribute.hpp"
 #include "ui/dim/BulkPoint.hpp"
 
+/**
+ * Draw a geo-referenced bitmap texture.  The caller is responsible
+ * for setting up the OpenGL shader (e.g. via
+ * ScopeTextureConstantAlpha) before calling this function.
+ */
 void
 DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const GeoBounds &bounds,
@@ -48,7 +52,6 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
     x1, y1,
   };
 
-  OpenGL::texture_shader->Use();
   glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
   glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
                         0, coord);

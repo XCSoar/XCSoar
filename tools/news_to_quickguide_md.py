@@ -4,10 +4,10 @@
 #
 # Reads NEWS.txt and writes a C++ header defining the Quick Guide "What's New"
 # body as Markdown: first "# Version …" line is Heading 1, each "* section"
-# line is Heading 2, with a blank line before and after each section title,
-# "  - " bullets merge indented continuation lines into one list item so the
-# in-app renderer wraps with correct hanging indent. A blank line is also
-# inserted after the H1.  ``#1234`` issue references become GitHub links.
+# line is Heading 2, with a blank line before and after each section title.
+# Each NEWS bullet (``  - `` plus indented continuations) becomes one Markdown
+# list item / paragraph so the in-app renderer keeps hanging indent.  ``#1234``
+# issue references become GitHub links.
 
 from __future__ import annotations
 
@@ -17,8 +17,10 @@ import sys
 
 # GitHub issue links for NEWS “#1234” references (same tracker as the repo).
 GITHUB_ISSUE_BASE = "https://github.com/XCSoar/XCSoar/issues"
-# Do not match “#digits” already used as link text in […](…); avoid “##…” headings.
-_ISSUE_REF = re.compile(r"(?<!\[)#(\d+)\b")
+# At least two digits, not ``#0`` / ``#1`` FLARM-style suffixes.  Skip
+# ``#digits`` already used as link text in […](…), headings (``##…``),
+# and bare ``#1234(`` fragments.
+_ISSUE_REF = re.compile(r"(?<![#\[])#([1-9]\d+)\b(?!\()")
 
 
 def extract_first_version_block(text: str) -> str:
@@ -80,7 +82,8 @@ def convert_news_block_to_markdown(block: str) -> str:
             i += 1
             continue
 
-        # Bullet with optional indented continuations (4 spaces).
+        # Bullet with optional indented continuations (4 spaces) → one
+        # Markdown list item (one paragraph in the rich-text renderer).
         if line.startswith("  - "):
             parts: list[str] = [line[4:].strip()]
             i += 1

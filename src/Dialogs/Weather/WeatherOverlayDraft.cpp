@@ -39,7 +39,8 @@ PageHasOverlay(unsigned page_index,
 }
 
 void
-State::Load(PageLayout::Overlay overlay) noexcept
+State::Load(PageLayout::Overlay overlay,
+            const char *skysight_layer_id) noexcept
 {
   const auto &settings = CommonInterface::GetUISettings().pages;
   const unsigned current =
@@ -53,7 +54,9 @@ State::Load(PageLayout::Overlay overlay) noexcept
   }
 
   draft = PageLayout::Default();
-  WeatherMapOverlay::ApplyWeatherOverlayToLayout(draft, overlay, -1);
+  WeatherMapOverlay::ApplyWeatherOverlayToLayout(
+    draft, overlay, -1,
+    skysight_layer_id != nullptr ? skysight_layer_id : "");
   baseline = PageLayout::Default();
   baseline.overlay = PageLayout::Overlay::NONE;
 }
@@ -77,6 +80,10 @@ State::IsDirty() const noexcept
     return draft.xctherm_layer != baseline.xctherm_layer ||
       draft.xctherm_time != baseline.xctherm_time;
 
+  case PageLayout::Overlay::SKYSIGHT:
+    return draft.skysight_overlay != baseline.skysight_overlay ||
+      draft.skysight_time != baseline.skysight_time;
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     return false;
@@ -93,7 +100,13 @@ State::SyncButtons(Button *apply_button, Button *add_button) const noexcept
 
   if (add_button != nullptr) {
     const auto &settings = CommonInterface::GetUISettings().pages;
-    add_button->SetEnabled(settings.n_pages < PageSettings::MAX_PAGES);
+    const bool valid_overlay =
+      draft.overlay != PageLayout::Overlay::NONE &&
+      draft.overlay != PageLayout::Overlay::MAX &&
+      (draft.overlay != PageLayout::Overlay::SKYSIGHT ||
+       draft.UsesSkySightOverlay());
+    add_button->SetEnabled(valid_overlay &&
+                           settings.n_pages < PageSettings::MAX_PAGES);
   }
 }
 
@@ -112,7 +125,8 @@ CommitDraft(const PageLayout &draft) noexcept
     : -1;
   if (!WeatherMapOverlay::EnsureWeatherOverlayOnPage(settings, page_index,
                                                      draft.overlay,
-                                                     rasp_field))
+                                                     rasp_field,
+                                                     draft.skysight_overlay.c_str()))
     return false;
 
   WeatherMapOverlay::CopyWeatherOverlayCursors(settings.pages[page_index],

@@ -10,7 +10,7 @@
 static constexpr StaticEnumChoice tri_state[] = {
   { 0, N_("Off") },
   { 1, N_("On") },
-  { 255, N_("Auto") },
+  { 255, NC_("Setting", "Auto") },
   { 0 },
 };
 

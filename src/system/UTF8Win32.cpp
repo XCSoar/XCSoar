@@ -5,6 +5,8 @@
 
 #ifdef _WIN32
 
+#include "util/UTF8.hpp"
+
 #include <cassert>
 #include <stringapiset.h>
 
@@ -13,6 +15,13 @@ UTF8ToWide(std::string_view s) noexcept
 {
   if (s.empty())
     return {};
+
+  /* Catch ACP/ANSI bytes mistaken for UTF-8 before the Win32 call
+     (#2824). MB_ERR_INVALID_CHARS would also fail; assert early. */
+  if (!ValidateUTF8(s)) {
+    assert(false);
+    return {};
+  }
 
   const int length = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
                                          s.data(), (int)s.size(),

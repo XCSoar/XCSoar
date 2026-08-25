@@ -24,6 +24,7 @@ int main(int argc, char **argv)
   GlidePolar glide_polar(0);
 
   CirclingSettings circling_settings;
+  circling_settings.SetDefaults();
 
   WindSettings wind_settings;
   wind_settings.SetDefaults();
@@ -39,17 +40,23 @@ int main(int argc, char **argv)
 
   while (replay->Next()) {
     const MoreData &basic = replay->Basic();
-    const DerivedInfo &calculated = replay->Calculated();
+    DerivedInfo &calculated = replay->SetCalculated();
 
-    circling_computer.TurnRate(replay->SetCalculated(),
+    /* DebugReplay's default polar is a glider.  Paraglider IGC ground
+       speeds are often below that takeoff threshold, so flying (and
+       circling wind) never start.  This tool is for wind analysis:
+       treat logged fixes as airborne. */
+    calculated.flight.flying = true;
+
+    circling_computer.TurnRate(calculated,
                                basic, calculated.flight);
-    circling_computer.Turning(replay->SetCalculated(),
+    circling_computer.Turning(calculated,
                               basic,
                               calculated.flight,
                               circling_settings);
 
     wind_computer.Compute(wind_settings, glide_polar, basic,
-                          replay->SetCalculated());
+                          calculated);
 
     if (calculated.estimated_wind_available.Modified(last)) {
       char time_buffer[32];

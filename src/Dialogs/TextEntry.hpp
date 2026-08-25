@@ -40,8 +40,14 @@ bool
 KnobTextEntry(char *text, size_t width,
               const char *caption);
 
+/**
+ * @param use_system_keyboard use the operating system's on-screen
+ * keyboard instead of XCSoar's own one; ignored on platforms which
+ * have none
+ */
 bool
 TouchTextEntry(char *text, size_t size,
                const char *caption=nullptr,
                AllowedCharacters ac=AllowedCharacters(),
-               bool default_shift_state = true);
+               bool default_shift_state = true,
+               bool use_system_keyboard = false);

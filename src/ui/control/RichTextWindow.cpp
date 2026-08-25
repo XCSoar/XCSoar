@@ -5,7 +5,6 @@
 #include "ui/canvas/TextWrapper.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/SubCanvas.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -78,6 +77,17 @@ CheckboxBoxSize(const Font &font) noexcept
   const int from_row = static_cast<int>(Layout::GetMaximumControlHeight()) -
                        2 * box_margin;
   return std::max({from_text, from_row, 4});
+}
+
+/**
+ * Width of checkbox + gap after it (must match #RenderCheckboxSegment).
+ */
+[[gnu::pure]]
+static int
+CheckboxPrefixWidth(const Font &font) noexcept
+{
+  const int box_size = CheckboxBoxSize(font);
+  return box_size + Layout::Scale(4);
 }
 
 /**
@@ -306,7 +316,10 @@ RichTextWindow::EnsureLineLayout() const noexcept
   if (size.width <= unsigned(padding * 2))
     return;
 
-  const unsigned text_width = size.width - padding * 2;
+  const unsigned column_width = size.width - padding * 2;
+  const unsigned text_width = CalcWrapTextWidth(column_width);
+  if (text_width == 0)
+    return;
 
   if (!line_y_offsets.empty() && line_layout_width == text_width)
     return;
@@ -358,8 +371,8 @@ RichTextWindow::EnsureLineLayout() const noexcept
         PixelSize img_size = bmp->GetSize();
         if (img_size.width == 0)
           img_size.width = 1;
-        /* Scale to fit within text_width, maintaining aspect ratio */
-        unsigned target_w = std::min(text_width, img_size.width);
+        /* Scale to fit within the full column (not wrap slack). */
+        unsigned target_w = std::min(column_width, img_size.width);
         unsigned target_h = img_size.height * target_w / img_size.width;
         /* Add small vertical padding around the image */
         line_heights[i] = static_cast<int>(target_h) + padding;
@@ -425,6 +438,8 @@ RichTextWindow::InvalidateLayout() noexcept
   line_y_offsets.clear();
   line_heights.clear();
   line_layout_width = 0;
+  checkbox_placeholders_expanded = false;
+  InvalidateContentCache();
 }
 
 std::size_t
@@ -473,6 +488,16 @@ void
 RichTextWindow::GetVisibleArea(int &visible_top, int &visible_bottom,
                                int &viewport_height) const noexcept
 {
+  /* Prefer VScrollPanel origin: rich-text children are sized to the
+     physical viewport and do not Move() on every scroll tick. */
+  if (const auto *panel =
+        dynamic_cast<const VScrollPanel *>(GetParent())) {
+    viewport_height = static_cast<int>(panel->GetSize().height);
+    visible_top = static_cast<int>(panel->GetOrigin());
+    visible_bottom = visible_top + viewport_height;
+    return;
+  }
+
   const PixelPoint top_left = GetPosition().GetTopLeft();
 
   viewport_height = 2000;
@@ -488,6 +513,57 @@ RichTextWindow::GetVisibleArea(int &visible_top, int &visible_bottom,
   }
 }
 
+unsigned
+RichTextWindow::CalcWrapTextWidth(unsigned column_width) const noexcept
+{
+  if (font == nullptr || column_width == 0)
+    return 0;
+
+  unsigned text_width = column_width;
+  bool has_list = false;
+  bool has_checkbox = false;
+  for (const auto &span : parsed.styles) {
+    if (span.style == TextStyle::ListItem)
+      has_list = true;
+    else if (span.style == TextStyle::Checkbox ||
+             span.style == TextStyle::CheckboxChecked) {
+      has_list = true;
+      has_checkbox = true;
+    }
+  }
+
+  AnyCanvas measure;
+  measure.Select(*font);
+
+  /* Link paint adds a space before/after each segment. */
+  if (!parsed.links.empty()) {
+    const unsigned space_w =
+      std::max(1u, measure.CalcTextSize(" ").width);
+    if (text_width > space_w * 2)
+      text_width -= space_w * 2;
+  }
+
+  /* List first lines paint with a left indent; continuations hang
+     under the body.  WrapText uses one width for the whole doc, so
+     reserve the hang so wrapped lines do not run past the edge.
+     Checkboxes are often wider than "- "; use the larger of the two. */
+  if (has_list) {
+    const unsigned list_indent = measure.CalcTextSize("  ").width;
+    unsigned hang = list_indent +
+      measure.CalcTextSize("- ").width +
+      measure.CalcTextSize(" ").width;
+    if (has_checkbox) {
+      const unsigned cb_hang = list_indent +
+        static_cast<unsigned>(CheckboxPrefixWidth(*font));
+      hang = std::max(hang, cb_hang);
+    }
+    if (text_width > hang)
+      text_width -= hang;
+  }
+
+  return text_width;
+}
+
 void
 RichTextWindow::EnsureWrappedText() const noexcept
 {
@@ -499,13 +575,33 @@ RichTextWindow::EnsureWrappedText() const noexcept
   if (size.width <= unsigned(padding * 2))
     return;
 
-  const unsigned text_width = size.width - padding * 2;
+  /* const API: expand placeholders before wrap (mutates parse). */
+  const_cast<RichTextWindow *>(this)->ExpandCheckboxPlaceholders();
+
+  const unsigned column_width = size.width - padding * 2;
+  const unsigned text_width = CalcWrapTextWidth(column_width);
+  if (text_width == 0)
+    return;
 
   if (wrapped_text && wrapped_text_width == text_width)
     return;
 
+  /* Wrap with the body font.  Never use H1/H2 for the whole document
+     — one title heading would force every bullet to wrap early.
+     Bold is only slightly wider; use it when present so bold runs
+     are less likely to overflow. */
+  bool has_bold = false;
+  for (const auto &span : parsed.styles) {
+    if (span.style == TextStyle::Bold ||
+        span.style == TextStyle::Heading3) {
+      has_bold = true;
+      break;
+    }
+  }
+  const Font &wrap_font = has_bold ? GetBoldFont() : *font;
+
   AnyCanvas canvas;
-  canvas.Select(*font);
+  canvas.Select(wrap_font);
   wrapped_text = std::make_unique<WrappedText>(
     WrapText(canvas, text_width, parsed.text));
   wrapped_text_width = text_width;
@@ -587,15 +683,71 @@ MeasureNumberedListPrefixWidth(const Font &font, const std::string &text,
   return font.TextSize(std::string_view(text.c_str() + line_start, n)).width;
 }
 
-/**
- * Width of checkbox + gap after it (must match #RenderCheckboxSegment).
- */
-[[gnu::pure]]
-static int
-CheckboxPrefixWidth(const Font &font) noexcept
+void
+RichTextWindow::ExpandCheckboxPlaceholders() noexcept
 {
-  const int box_size = CheckboxBoxSize(font);
-  return box_size + Layout::Scale(4);
+  if (checkbox_placeholders_expanded || font == nullptr)
+    return;
+
+  const int need_px = CheckboxPrefixWidth(*font);
+  AnyCanvas canvas;
+  canvas.Select(*font);
+  const int space_px =
+    std::max(1, static_cast<int>(canvas.CalcTextSize(" ").width));
+  const int n_spaces =
+    std::max(2, (need_px + space_px - 1) / space_px);
+
+  /* Widen/shrink from the end so earlier offsets stay stable. */
+  for (std::size_t si = parsed.styles.size(); si-- > 0;) {
+    auto &span = parsed.styles[si];
+    if (span.style != TextStyle::Checkbox &&
+        span.style != TextStyle::CheckboxChecked)
+      continue;
+    if (span.end <= span.start)
+      continue;
+
+    const int cur = static_cast<int>(span.end - span.start);
+    const int delta = n_spaces - cur;
+    if (delta == 0)
+      continue;
+
+    if (delta > 0)
+      parsed.text.insert(span.start + cur, delta, ' ');
+    else
+      parsed.text.erase(span.start + n_spaces,
+                        static_cast<std::size_t>(-delta));
+
+    /* Other spans/links: shift from the edit point.  This span's
+       end is updated explicitly so it is not double-shifted. */
+    const std::size_t edit_pos = delta > 0
+      ? span.start + cur
+      : span.start + n_spaces;
+    span.end = span.start + n_spaces;
+    for (auto &other : parsed.styles) {
+      if (&other == &span)
+        continue;
+      if (other.start >= edit_pos) {
+        other.start += delta;
+        other.end += delta;
+      } else if (other.end > edit_pos)
+        other.end += delta;
+    }
+    for (auto &link : parsed.links) {
+      if (link.start >= edit_pos) {
+        link.start += delta;
+        link.end += delta;
+      } else if (link.end > edit_pos)
+        link.end += delta;
+    }
+    for (auto &img : parsed.images) {
+      if (img.position >= edit_pos)
+        img.position += delta;
+    }
+  }
+
+  checkbox_placeholders_expanded = true;
+  if (checkbox_toggled.size() != parsed.styles.size())
+    checkbox_toggled.assign(parsed.styles.size(), 0);
 }
 
 /**
@@ -639,7 +791,11 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
   if (size.width <= unsigned(padding * 2))
     return;
 
-  const unsigned text_width = size.width - padding * 2;
+  /* Key off wrap width (not raw column) so hang/link slack stays in sync. */
+  const unsigned text_width =
+    CalcWrapTextWidth(size.width - padding * 2);
+  if (text_width == 0)
+    return;
 
   if (segmented_lines && segmented_lines_width == text_width)
     return;
@@ -670,10 +826,18 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
     return TextStartsWithNumberedList(text, line_start, line_length);
   };
 
-  /* Plain-text "- " bullet (e.g. Credits NEWS without Markdown). */
-  auto PlainLineStartsWithBullet =
-    [&text](std::size_t start, std::size_t length) noexcept {
-      return length >= 2 && text[start] == '-' && text[start + 1] == ' ';
+  /* Plain-text "- " bullet (e.g. Credits NEWS without Markdown).
+     NEWS uses an indented "  - " prefix; skip leading spaces/tabs.
+     Returns byte length of leading whitespace + "- ", or 0. */
+  auto PlainBulletPrefixLength =
+    [&text](std::size_t start, std::size_t length) noexcept -> std::size_t {
+      const std::size_t end = start + length;
+      std::size_t i = start;
+      while (i < end && (text[i] == ' ' || text[i] == '\t'))
+        ++i;
+      if (i + 1 >= end || text[i] != '-' || text[i + 1] != ' ')
+        return 0;
+      return i + 2 - start;
     };
 
   // If no links and no styles, each line is a single normal segment
@@ -687,15 +851,18 @@ RichTextWindow::EnsureSegmentedLines() const noexcept
         seg_line.segments.push_back({line.start, line.length, SIZE_MAX, TextStyle::Normal});
 
       if (is_new_para) {
+        const std::size_t plain_bullet_n =
+          PlainBulletPrefixLength(line.start, line.length);
         in_list_paragraph =
           IsListParagraphStart(seg_line, line.start, line.length) ||
-          PlainLineStartsWithBullet(line.start, line.length);
+          plain_bullet_n > 0;
         if (in_list_paragraph && font != nullptr) {
           if (TextStartsWithNumberedList(text, line.start, line.length))
             current_list_hang = MeasureNumberedListPrefixWidth(
               *font, text, line.start, line.length);
-          else if (PlainLineStartsWithBullet(line.start, line.length))
-            current_list_hang = font->TextSize("- ").width;
+          else if (plain_bullet_n > 0)
+            current_list_hang = font->TextSize(std::string_view(
+              text.c_str() + line.start, plain_bullet_n)).width;
           else
             current_list_hang = list_indent;
         } else
@@ -777,7 +944,8 @@ RichTextWindow::GetContentHeight() const noexcept
   if (size.width <= unsigned(padding * 2))
     return 0;
 
-  const unsigned text_width = size.width - padding * 2;
+  const unsigned column_width = size.width - padding * 2;
+  const unsigned text_width = CalcWrapTextWidth(column_width);
 
   if (cached_content_height > 0 && cached_height_width == text_width)
     return cached_content_height;
@@ -829,11 +997,12 @@ RichTextWindow::SyncParentScrollHeight() noexcept
     return;
 
   /* Move() may trigger OnResize() → InvalidateLayout(), which clears
-     cached_content_height; keep the value we synced. */
+     cached_content_height; keep the value we synced.  Stay at the
+     physical viewport; scrolling uses panel origin, not child y. */
   const unsigned height = cached_content_height;
   const unsigned vh = std::max(panel->GetSize().height, height);
   panel->SetVirtualHeight(vh);
-  Move(panel->GetVirtualRect());
+  Move(panel->GetPhysicalRect());
   panel->Invalidate();
   synced_scroll_height = height;
 }
@@ -871,6 +1040,9 @@ RichTextWindow::OnResize(PixelSize new_size) noexcept
      vertical resizes or resolution changes that don't alter width). */
   if (new_size.width != old_size.width)
     InvalidateLayout();
+  else if (new_size.height != old_size.height)
+    /* Strip height tracks the viewport. */
+    InvalidateContentCache();
 
   if (!parsed.text.empty())
     Invalidate();
@@ -932,16 +1104,15 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
                                   const TextSegment &seg,
                                   const char *text_data,
                                   int &x, int text_y,
-                                  int visible_top,
-                                  int text_line_height) noexcept
+                                  int text_line_height,
+                                  int content_y_origin) noexcept
 {
   std::string_view seg_text(text_data + seg.start, seg.length);
-  const bool is_focused = IsLinkFocused(seg.link_index);
 
   if (dark_mode)
-    canvas.SetTextColor(is_focused ? COLOR_WHITE : COLOR_XCSOAR_LIGHT);
+    canvas.SetTextColor(COLOR_XCSOAR_LIGHT);
   else
-    canvas.SetTextColor(is_focused ? COLOR_XCSOAR_LIGHT : COLOR_XCSOAR);
+    canvas.SetTextColor(COLOR_XCSOAR);
 
   const int link_spacing = canvas.CalcTextSize(" ").width;
   x += link_spacing;
@@ -950,26 +1121,13 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
   const int seg_width = static_cast<int>(text_size.width);
   canvas.DrawText({x, text_y}, seg_text);
 
-  /* Expand the touch target vertically on touch screens
-     so links are easier to tap */
   const int touch_expand = IsTouchLayout() ? Layout::Scale(4) : 0;
-  PixelRect link_rect{x, text_y + visible_top - touch_expand,
+  PixelRect link_rect{x, text_y - touch_expand,
                       x + seg_width,
-                      text_y + visible_top + text_line_height
-                        + touch_expand};
-  RegisterLinkRect(seg.link_index, link_rect);
-
-  if (is_focused && HasFocus()) {
-    const int focus_pad = Layout::ScalePenWidth(2);
-    PixelRect focus_rc{x - focus_pad, text_y - focus_pad,
-                       x + seg_width + focus_pad,
-                       text_y + text_line_height + focus_pad};
-    canvas.Select(Pen(Layout::ScalePenWidth(1),
-                      dark_mode ? COLOR_LIGHT_GRAY
-                                : COLOR_DARK_GRAY));
-    canvas.SelectHollowBrush();
-    canvas.DrawRectangle(focus_rc);
-  }
+                      text_y + text_line_height + touch_expand};
+  link_rect.Offset(0, content_y_origin);
+  content_hits.push_back({link_rect, seg.link_index, false,
+                          seg.start, seg.length});
 
   x += seg_width;
   x += link_spacing;
@@ -978,8 +1136,9 @@ RichTextWindow::RenderLinkSegment(Canvas &canvas,
 void
 RichTextWindow::RenderCheckboxSegment(Canvas &canvas,
                                       const TextSegment &seg,
-                                      int &x, int y_line, int visible_top,
-                                      int row_height) noexcept
+                                      int &x, int y_line,
+                                      int row_height,
+                                      int content_y_origin) noexcept
 {
   const std::size_t style_idx = FindCheckboxStyleIndex(seg.start);
   const int box_size = CheckboxBoxSize(*font);
@@ -989,31 +1148,20 @@ RichTextWindow::RenderCheckboxSegment(Canvas &canvas,
   bool checked = (style_idx != SIZE_MAX)
     ? IsCheckboxChecked(style_idx)
     : seg.IsCheckboxChecked();
-  const bool key_focused = (style_idx != SIZE_MAX) &&
-                          IsCheckboxFocused(style_idx);
-  if (dialog_look != nullptr) {
-    /* Outer focus square (same idea as #RenderLinkSegment); DrawCheckBox
-       only changes inner border, not a visible selection frame. */
-    if (key_focused && HasFocus()) {
-      const unsigned focus_w = Layout::ScalePenWidth(2);
-      PixelRect focus_rc = box_rc;
-      focus_rc.Grow((int)focus_w);
-      canvas.Select(Pen(focus_w, COLOR_XCSOAR_LIGHT));
-      canvas.SelectHollowBrush();
-      canvas.DrawRectangle(focus_rc);
-    }
-    DrawCheckBox(canvas, *dialog_look, box_rc, checked, key_focused, false, true);
-  } else
-    DrawSimpleCheckbox(canvas, box_rc, checked, key_focused, dark_mode);
+  if (dialog_look != nullptr)
+    DrawCheckBox(canvas, *dialog_look, box_rc, checked, false,
+                 false, true);
+  else
+    DrawSimpleCheckbox(canvas, box_rc, checked, false, dark_mode);
 
   if (style_idx != SIZE_MAX) {
-    /* Expand hit area on touch screens for easier tapping */
     const int cb_expand = IsTouchLayout() ? Layout::Scale(6) : 0;
     PixelRect click_rc{x - cb_expand,
-                       box_y + visible_top - cb_expand,
+                       box_y - cb_expand,
                        x + box_size + cb_expand,
-                       box_y + box_size + visible_top + cb_expand};
-    checkbox_rects.push_back({click_rc, style_idx});
+                       box_y + box_size + cb_expand};
+    click_rc.Offset(0, content_y_origin);
+    content_hits.push_back({click_rc, style_idx, true});
   }
 
   const int box_gap = Layout::Scale(4);
@@ -1046,73 +1194,58 @@ RichTextWindow::RenderPlainSegment(Canvas &canvas,
 }
 
 void
-RichTextWindow::OnPaint(Canvas &canvas) noexcept
+RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
+                             int clip_top, int clip_bottom) noexcept
 {
-  canvas.Clear(background_color);
-
-  if (parsed.text.empty() || font == nullptr)
+  if (parsed.text.empty() || font == nullptr ||
+      !segmented_lines || segmented_lines->empty() ||
+      line_y_offsets.empty())
     return;
 
   const int padding = GetContentPadding();
   const int text_line_height = font->GetLineSpacing();
-
-  EnsureSegmentedLines();
-  EnsureLineLayout();
-  /* Sync before GetVisibleArea(): Move() changes GetPosition(). */
-  SyncParentScrollHeight();
-
-  int visible_top, visible_bottom, viewport_height;
-  GetVisibleArea(visible_top, visible_bottom, viewport_height);
-
-  if (!segmented_lines || segmented_lines->empty() ||
-      line_y_offsets.empty())
-    return;
-
-  const std::size_t n_lines = segmented_lines->size();
-
-  /* Find first visible line using line layout Y offsets */
-  std::size_t first_line = 0;
-  for (std::size_t i = 0; i < n_lines; ++i) {
-    if (padding + line_y_offsets[i] + line_heights[i] > visible_top) {
-      first_line = i;
-      break;
-    }
-  }
-
-  /* Find last visible line */
-  std::size_t last_line = n_lines;
-  for (std::size_t i = first_line; i < n_lines; ++i) {
-    if (padding + line_y_offsets[i] > visible_bottom) {
-      last_line = i;
-      break;
-    }
-  }
-
   const auto widget_size = GetSize();
   if (widget_size.width <= unsigned(padding * 2))
     return;
   const unsigned text_width = widget_size.width - padding * 2;
 
-  const auto rc = canvas.GetRect();
-  const PixelSize sub_size{rc.GetWidth(),
-                           static_cast<unsigned>(viewport_height)};
-  SubCanvas sub_canvas(canvas, PixelPoint{0, visible_top}, sub_size);
-  sub_canvas.SetBackgroundTransparent();
+  const std::size_t n_lines = std::min({segmented_lines->size(),
+                                        line_y_offsets.size(),
+                                        line_heights.size()});
 
-  ClearLinkRects();
-  checkbox_rects.clear();
+  /* Binary search: first line whose bottom is past clip_top. */
+  std::size_t first_line = 0;
+  {
+    std::size_t lo = 0, hi = n_lines;
+    while (lo < hi) {
+      const std::size_t mid = lo + (hi - lo) / 2;
+      if (padding + line_y_offsets[mid] + line_heights[mid]
+          <= clip_top)
+        lo = mid + 1;
+      else
+        hi = mid;
+    }
+    first_line = lo;
+  }
+
+  std::size_t last_line = n_lines;
+  for (std::size_t i = first_line; i < n_lines; ++i) {
+    if (padding + line_y_offsets[i] >= clip_bottom) {
+      last_line = i;
+      break;
+    }
+  }
+
+  canvas.SetBackgroundTransparent();
 
   const char *text_data = parsed.text.c_str();
-
-  // Indentation for list items and checkboxes (roughly 2 spaces)
   const int list_indent = font->TextSize("  ").width;
 
   for (std::size_t i = first_line; i < last_line; ++i) {
     const SegmentedLine &line = (*segmented_lines)[i];
-    const int y = padding + line_y_offsets[i] - visible_top;
+    const int y = padding + line_y_offsets[i] - y_origin;
     const int cur_line_height = line_heights[i];
 
-    /* Check if this line contains a block image */
     if (!line.segments.empty()) {
       const auto &first_seg = line.segments.front();
       const MarkdownImage *img =
@@ -1137,17 +1270,14 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
 #ifdef ENABLE_OPENGL
           const ScopeAlphaBlend alpha_blend;
 #endif
-          sub_canvas.Stretch({img_x, img_y},
-                             {target_w, target_h},
-                             *bmp, {0, 0}, img_size);
-          continue; // Skip normal text rendering for this line
+          canvas.Stretch({img_x, img_y},
+                         {target_w, target_h},
+                         *bmp, {0, 0}, img_size);
+          continue;
         }
       }
     }
 
-    /* Determine the effective text height for this line.
-       Heading lines use a larger font, so we need to account for
-       that when vertically centering. */
     int effective_text_height = text_line_height;
     if (!line.segments.empty()) {
       const TextSegment &first = line.segments.front();
@@ -1156,14 +1286,12 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
           GetHeadingFont(first.style).GetLineSpacing();
     }
 
-    /* Normal text rendering -- vertically center text when the
-       line is taller than normal (e.g. due to inline images) */
     const int text_y =
       y + (cur_line_height - effective_text_height) / 2;
     int x = padding;
     if (line.is_list_continuation) {
-      /* Align with body text after bullet / "1. " on the first line */
-      x += line.list_hang_offset > 0 ? line.list_hang_offset : list_indent;
+      x += line.list_hang_offset > 0 ? line.list_hang_offset
+                                     : list_indent;
     } else if (!line.segments.empty()) {
       const TextSegment &first_seg = line.segments.front();
       if (first_seg.IsCheckbox() || first_seg.IsListItem())
@@ -1171,31 +1299,256 @@ RichTextWindow::OnPaint(Canvas &canvas) noexcept
     }
 
     for (const TextSegment &seg : line.segments) {
-      if (RenderInlineImage(sub_canvas, seg, x, y,
+      if (RenderInlineImage(canvas, seg, x, y,
                             cur_line_height, text_line_height))
         continue;
 
-      const Font *seg_font = font;
-      if (seg.IsHeading())
-        seg_font = &GetHeadingFont(seg.style);
-      else if (seg.IsBold() && bold_font)
-        seg_font = bold_font;
-
-      sub_canvas.Select(*seg_font);
+      const Font &seg_font = GetStyleFont(seg.style);
+      canvas.Select(seg_font);
 
       if (seg.IsLink())
-        RenderLinkSegment(sub_canvas, seg, text_data,
-                          x, text_y, visible_top,
-                          text_line_height);
+        /* Hit/focus height must match the painted font, not the
+           body line spacing (bold/heading links are taller/wider). */
+        RenderLinkSegment(canvas, seg, text_data,
+                          x, text_y, seg_font.GetLineSpacing(),
+                          y_origin);
       else if (seg.IsCheckbox())
-        RenderCheckboxSegment(sub_canvas, seg,
-                              x, y, visible_top,
-                              cur_line_height);
+        RenderCheckboxSegment(canvas, seg,
+                              x, y, cur_line_height,
+                              y_origin);
       else
-        RenderPlainSegment(sub_canvas, seg, text_data,
+        RenderPlainSegment(canvas, seg, text_data,
                            x, text_y);
     }
   }
+}
+
+void
+RichTextWindow::EnsureContentCache(int origin,
+                                   int viewport_h) noexcept
+{
+  if (viewport_h <= 0)
+    return;
+
+  const auto widget_size = GetSize();
+  if (widget_size.width == 0)
+    return;
+
+  const int content_h = static_cast<int>(
+    std::max(cached_content_height, widget_size.height));
+
+  /* Three viewports of strip so prefetch has runway; capped for
+     GL/memory. */
+  static constexpr int MAX_CACHE_HEIGHT = 4096;
+  int buf_h = std::max(viewport_h * 3, viewport_h + Layout::Scale(64));
+  buf_h = std::min(buf_h, MAX_CACHE_HEIGHT);
+  buf_h = std::min(buf_h, content_h);
+  buf_h = std::max(buf_h, viewport_h);
+
+  const PixelSize buf_size{widget_size.width,
+                           static_cast<unsigned>(buf_h)};
+
+  if (!content_cache.IsDefined() ||
+      content_cache.GetSize() != buf_size) {
+    content_cache.Create(buf_size);
+    content_cache_dirty = true;
+  }
+
+  const int max_top = std::max(0, content_h - buf_h);
+  const int margin = std::max(1, viewport_h / 4);
+  const int cache_bottom = content_cache_top + buf_h;
+
+  const bool outside =
+    origin < content_cache_top ||
+    origin + viewport_h > cache_bottom;
+  /* Prefetch before the hard edge when more content exists that way. */
+  const bool near_top =
+    content_cache_top > 0 &&
+    origin < content_cache_top + margin;
+  const bool near_bottom =
+    cache_bottom < content_h &&
+    origin + viewport_h > cache_bottom - margin;
+
+  if (!content_cache_dirty && !outside && !near_top && !near_bottom)
+    return;
+
+  /* Centre the strip on the visible origin when possible. */
+  int new_top = origin - (buf_h - viewport_h) / 2;
+  if (new_top < 0)
+    new_top = 0;
+  else if (new_top > max_top)
+    new_top = max_top;
+
+  if (!content_cache_dirty && new_top == content_cache_top)
+    return;
+
+  content_cache_top = new_top;
+  content_hits.clear();
+
+  content_cache.Begin();
+  content_cache.Clear(background_color);
+  PaintContent(content_cache, content_cache_top,
+               content_cache_top, content_cache_top + buf_h);
+  content_cache.End();
+  content_cache_dirty = false;
+}
+
+void
+RichTextWindow::PublishWindowHits(int origin,
+                                  int viewport_h) noexcept
+{
+  ClearLinkRects();
+  checkbox_rects.clear();
+
+  const int visible_bottom = origin + viewport_h;
+  for (const auto &hit : content_hits) {
+    if (hit.content_rect.bottom <= origin ||
+        hit.content_rect.top >= visible_bottom)
+      continue;
+
+    PixelRect window_rc = hit.content_rect;
+    window_rc.Offset(0, -origin);
+    if (hit.is_checkbox)
+      checkbox_rects.push_back({window_rc, hit.index});
+    else
+      RegisterLinkRect(hit.index, window_rc);
+  }
+}
+
+void
+RichTextWindow::DrawFocusOverlay(Canvas &canvas,
+                                 int origin) noexcept
+{
+  if (!HasFocus())
+    return;
+
+  canvas.SetBackgroundTransparent();
+
+  for (const auto &hit : content_hits) {
+    const bool focused = hit.is_checkbox
+      ? IsCheckboxFocused(hit.index)
+      : IsLinkFocused(hit.index);
+    if (!focused)
+      continue;
+
+    PixelRect window_rc = hit.content_rect;
+    window_rc.Offset(0, -origin);
+
+    if (hit.is_checkbox) {
+      const int box_size = CheckboxBoxSize(*font);
+      /* Shrink touch-expanded hit back toward the box for drawing. */
+      const int cb_expand = IsTouchLayout() ? Layout::Scale(6) : 0;
+      PixelRect box_rc = window_rc;
+      if (cb_expand > 0)
+        box_rc.Grow(-cb_expand);
+      /* Prefer exact box size if the hit was expanded. */
+      if (box_rc.GetWidth() != unsigned(box_size) ||
+          box_rc.GetHeight() != unsigned(box_size)) {
+        box_rc.left = window_rc.left + cb_expand;
+        box_rc.top = window_rc.top + cb_expand;
+        box_rc.right = box_rc.left + box_size;
+        box_rc.bottom = box_rc.top + box_size;
+      }
+
+      const bool checked = IsCheckboxChecked(hit.index);
+      if (dialog_look != nullptr) {
+        const unsigned focus_w = Layout::ScalePenWidth(2);
+        PixelRect focus_rc = box_rc;
+        focus_rc.Grow((int)focus_w);
+        canvas.Select(Pen(focus_w, COLOR_XCSOAR_LIGHT));
+        canvas.SelectHollowBrush();
+        canvas.DrawRectangle(focus_rc);
+        DrawCheckBox(canvas, *dialog_look, box_rc, checked, true,
+                     false, true);
+      } else
+        DrawSimpleCheckbox(canvas, box_rc, checked, true, dark_mode);
+    } else {
+      /* Repaint this link segment only (wrapped links have one hit
+         per visual line), using the same font as PaintContent. */
+      if (font == nullptr || hit.text_length == 0 ||
+          hit.text_start + hit.text_length > parsed.text.size())
+        continue;
+
+      std::string_view seg_text(parsed.text.c_str() + hit.text_start,
+                                hit.text_length);
+      const TextStyle style =
+        GetStyleAt(parsed.styles, hit.text_start);
+      const Font &seg_font = GetStyleFont(style);
+      canvas.Select(seg_font);
+      if (dark_mode)
+        canvas.SetTextColor(COLOR_WHITE);
+      else
+        canvas.SetTextColor(COLOR_XCSOAR_LIGHT);
+
+      const int touch_expand = IsTouchLayout() ? Layout::Scale(4) : 0;
+      const int text_y = window_rc.top + touch_expand;
+      canvas.DrawText({window_rc.left, text_y}, seg_text);
+
+      /* Size the ring to the formatted glyph box, not the
+         touch-expanded hit (which may use a taller line spacing). */
+      const PixelSize text_size = canvas.CalcTextSize(seg_text);
+      const int seg_width = static_cast<int>(text_size.width);
+      const int seg_height = seg_font.GetLineSpacing();
+      PixelRect focus_rc{window_rc.left, text_y,
+                         window_rc.left + seg_width,
+                         text_y + seg_height};
+      focus_rc.Grow(Layout::ScalePenWidth(2));
+      canvas.Select(Pen(Layout::ScalePenWidth(1),
+                        dark_mode ? COLOR_LIGHT_GRAY
+                                  : COLOR_DARK_GRAY));
+      canvas.SelectHollowBrush();
+      canvas.DrawRectangle(focus_rc);
+    }
+  }
+}
+
+void
+RichTextWindow::OnPaint(Canvas &canvas) noexcept
+{
+  if (parsed.text.empty() || font == nullptr) {
+    canvas.Clear(background_color);
+    return;
+  }
+
+  EnsureSegmentedLines();
+  EnsureLineLayout();
+  SyncParentScrollHeight();
+
+  int visible_top, visible_bottom, viewport_height;
+  GetVisibleArea(visible_top, visible_bottom, viewport_height);
+  (void)visible_bottom;
+
+  if (!segmented_lines || segmented_lines->empty() ||
+      line_y_offsets.empty()) {
+    canvas.Clear(background_color);
+    return;
+  }
+
+  EnsureContentCache(visible_top, viewport_height);
+
+  if (!content_cache.IsDefined()) {
+    canvas.Clear(background_color);
+    return;
+  }
+
+  /* Pan: blit the visible strip from the content cache. */
+  const int src_y = visible_top - content_cache_top;
+  const PixelSize view_size = GetSize();
+  const unsigned copy_h = std::min(view_size.height,
+    content_cache.GetHeight() > unsigned(src_y)
+      ? content_cache.GetHeight() - unsigned(src_y)
+      : 0u);
+  canvas.Clear(background_color);
+  if (copy_h == 0)
+    return;
+
+  const PixelSize copy_size{view_size.width, copy_h};
+  content_cache.CopyTo(canvas,
+                       PixelRect{PixelPoint{0, 0}, copy_size},
+                       PixelRect{PixelPoint{0, src_y}, copy_size});
+
+  PublishWindowHits(visible_top, viewport_height);
+  DrawFocusOverlay(canvas, visible_top);
 }
 
 bool
@@ -1261,6 +1614,7 @@ RichTextWindow::ToggleCheckbox(std::size_t style_index) noexcept
     return;
 
   checkbox_toggled[style_index] = !checkbox_toggled[style_index];
+  InvalidateContentCache();
   Invalidate();
 }
 
@@ -1370,12 +1724,19 @@ RichTextWindow::ScrollToFocusItem(const FocusItem &item) noexcept
   /* #VScrollPanel::ScrollTo expects parent-client coordinates. */
   ContainerWindow *parent = GetParent();
   if (parent != nullptr) {
-    const PixelRect window_rect = GetPosition();
     const int parent_height = parent->GetSize().height;
     const int margin = Layout::Scale(20);
 
-    const int item_top = item.y_pos + window_rect.top;
-    const int item_bottom = item.y_pos + item.height + window_rect.top;
+    /* Content Y → parent/viewport Y via scroll origin (child stays at
+       y=0 when hosted in a viewport-sized VScrollPanel). */
+    int origin = 0;
+    if (const auto *panel = dynamic_cast<const VScrollPanel *>(parent))
+      origin = static_cast<int>(panel->GetOrigin());
+    else
+      origin = -GetPosition().top;
+
+    const int item_top = item.y_pos - origin;
+    const int item_bottom = item.y_pos + item.height - origin;
 
     if (item_top < margin || item_bottom > parent_height - margin) {
       PixelRect scroll_rc{0, 0, 1, 1};
@@ -1429,8 +1790,11 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 
   switch (key_code) {
   case KEY_DOWN:
-    if (!current_pos.has_value()) {
-      /* Pick the first item currently in view. */
+    /* After PageDown (etc.) focus may sit on an off-screen item.
+       Re-anchor to the first visible focusable before advancing. */
+    if (!current_pos.has_value() ||
+        !FocusItemVisible(items[current_pos.value()],
+                          visible_top, visible_bottom)) {
       for (const auto &it : items) {
         if (FocusItemVisible(it, visible_top, visible_bottom)) {
           ScrollToFocusItem(it);
@@ -1440,12 +1804,14 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
       return false;
     }
     if (current_pos.value() + 1 < items.size()) {
+      const auto &cur = items[current_pos.value()];
       const auto &next = items[current_pos.value() + 1];
-      /* Stay within roughly one viewport; otherwise let the
-         scroller move — keep the current item so focus is not
-         lost while scrolling between sparse links. */
-      if (next.y_pos - items[current_pos.value()].y_pos <=
-          visible_bottom - visible_top) {
+      /* Move when the next item is on screen, or still within
+         about one viewport.  If it is farther, return false so
+         the parent scroller moves; once it enters the viewport
+         the FocusItemVisible branch selects it. */
+      if (FocusItemVisible(next, visible_top, visible_bottom) ||
+          next.y_pos - cur.y_pos <= visible_bottom - visible_top) {
         ScrollToFocusItem(next);
         return true;
       }
@@ -1453,7 +1819,9 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
     return false;
 
   case KEY_UP:
-    if (!current_pos.has_value()) {
+    if (!current_pos.has_value() ||
+        !FocusItemVisible(items[current_pos.value()],
+                          visible_top, visible_bottom)) {
       for (auto it = items.rbegin(); it != items.rend(); ++it) {
         if (FocusItemVisible(*it, visible_top, visible_bottom)) {
           ScrollToFocusItem(*it);
@@ -1463,9 +1831,10 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
       return false;
     }
     if (current_pos.value() > 0) {
+      const auto &cur = items[current_pos.value()];
       const auto &prev = items[current_pos.value() - 1];
-      if (items[current_pos.value()].y_pos - prev.y_pos <=
-          visible_bottom - visible_top) {
+      if (FocusItemVisible(prev, visible_top, visible_bottom) ||
+          cur.y_pos - prev.y_pos <= visible_bottom - visible_top) {
         ScrollToFocusItem(prev);
         return true;
       }

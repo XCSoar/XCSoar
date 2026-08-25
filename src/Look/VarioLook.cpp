@@ -55,23 +55,40 @@ VarioLook::Initialise(bool _inverse, bool _colors,
 }
 
 void
-VarioLook::ReinitialiseLayout(unsigned width)
+VarioLook::ReinitialiseLayout(unsigned width, unsigned reference_width)
 {
+  geometry_width = width;
+  geometry_scale_percent = reference_width > 0
+    ? width * 100 / reference_width
+    : 100;
+
+  arc_pen.Create(Layout::ScalePenWidth(2), text_color);
+  tick_pen.Create(Layout::ScalePenWidth(1), text_color);
+  thick_background_pen.Create(Layout::Scale(5), background_color);
+  thick_sink_pen.Create(Layout::Scale(5), sink_color);
+  thick_lift_pen.Create(Layout::Scale(5), lift_color);
+
+  /* Keep the value column legible when the dial has to shrink to fit a
+     compact portrait Vario window. */
+  const unsigned font_width = reference_width > 0
+    ? std::clamp(reference_width * 4 / 5, width, width * 4 / 3)
+    : width;
+
   FontDescription arc_label_font_d(8);
-  AutoSizeFont(arc_label_font_d, width / 10, "-5");
+  AutoSizeFont(arc_label_font_d, font_width / 10, "-5");
   arc_label_font.Load(arc_label_font_d);
 
   FontDescription value_font_d(14);
-  AutoSizeFont(value_font_d, width / 1.5, "-00.0m");
+  AutoSizeFont(value_font_d, font_width / 1.5, "-00.0m");
   value_font.Load(value_font_d);
 
   FontDescription unit_font_d(8);
-  AutoSizeFont(unit_font_d, width / 4.22, "00.0m");
+  AutoSizeFont(unit_font_d, font_width / 4.22, "00.0m");
   unit_font.Load(unit_font_d);
   unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), COLOR_GRAY);
 
   FontDescription label_font_d(8);
-  AutoSizeFont(label_font_d, width / 2, "Auto MC");
+  AutoSizeFont(label_font_d, font_width / 2, "Auto MC");
   label_font.Load(label_font_d);
 
 #ifdef HAVE_TEXT_CACHE

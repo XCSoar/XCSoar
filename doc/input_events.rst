@@ -527,8 +527,8 @@ Event list
  * - ``Weather``
    - Opens the weather dialog.
  * - ``WeatherOverlay``
-   - Adjusts the active map weather overlay cursor bar (EDL, RASP, or
-     XCTherm). Only has an effect on map pages that show weather overlay
+   - Adjusts the active map weather overlay cursor bar (EDL, RASP, XC Therm,
+     or SkySight). Only has an effect on map pages that show weather overlay
      controls. Arguments use a common ``<axis> …`` prefix:
 
      **Time:** ``time +``, ``time -`` (step forecast time), ``time picker``
@@ -545,15 +545,16 @@ Event list
      ``level picker`` (open the ComboPicker list for the active overlay).
 
      **Setup:** ``setup`` opens the Info → Weather dialog on the tab that
-     matches the active overlay (RASP, EDL, or XCTherm).
+     matches the active overlay (RASP, EDL, or XC Therm).
 
      **Secondary auto/manual:** ``field auto toggle`` (and ``altitude auto
      …``, ``level auto …`` aliases). On RASP, secondary auto falls back
      to time auto when no secondary axis exists.
 
      RASP overlays support time and layer selection. EDL overlays support
-     time and pressure level. XCTherm overlays map the secondary axis to
-     altitude bands and time to forecast hours.
+     time and pressure level. XC Therm overlays map the secondary axis to
+     altitude bands and time to forecast hours. SkySight uses the secondary
+     axis for selected layers and the time axis for available forecast steps.
  * - ``Zoom Z``
    - Controls map zoom. Possible arguments: ``auto toggle``,
      ``auto on``, ``auto off``, ``auto show``, ``in``, ``out``,
@@ -593,7 +594,7 @@ Built-in modes
   event. Stick UP/DOWN step the secondary axis (layer, level, or
   altitude), LEFT/RIGHT step time, RETURN opens the time picker, ESCAPE
   returns to ``default``. In ``mode=weather``, F2 opens the secondary
-  list and F3 toggles auto (secondary axis on EDL/XCTherm, time auto on
+  list and F3 toggles auto (secondary axis on EDL/XC Therm, time auto on
   RASP). The map overlay **+** / **−** buttons always zoom the map.
   See :ref:`weather-overlay-mode` below.
 - ``wptimg`` -- the waypoint details dialog is on an **image** page;
@@ -609,7 +610,7 @@ hierarchies.
 Weather overlay mode (``mode=weather``)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When a map page displays EDL, RASP, or XCTherm overlay controls in the
+When a map page displays EDL, RASP, XC Therm, or SkySight overlay controls in the
 bottom cursor bar, open the quick menu (F1 or the ULDR gesture) and choose
 **Forecast Controls** (RemoteStick), or bind ``Mode weather`` elsewhere,
 to enter ``mode=weather`` so stick and button bindings can adjust forecast
@@ -627,7 +628,7 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
    - Action
  * - UP / DOWN
    - ``WeatherOverlay field +/-``
-   - Step layer (RASP), pressure level (EDL), or altitude band (XCTherm)
+   - Step layer (RASP), pressure level (EDL), or altitude band (XC Therm)
  * - LEFT / RIGHT
    - ``WeatherOverlay time -/+``
    - Step forecast time
@@ -639,7 +640,7 @@ The built-in stick bindings in :file:`Data/Input/default.xci` are:
    - Open secondary-axis list (layer, level, or altitude)
  * - F3
    - ``WeatherOverlay field auto toggle``
-   - Toggle secondary auto (EDL/XCTherm) or time auto (RASP)
+   - Toggle secondary auto (EDL/XC Therm) or time auto (RASP)
  * - ESCAPE
    - ``Mode default``
    - Exit weather input mode
@@ -663,7 +664,7 @@ mirror the stick actions:
    - Layer / Level / Altitude list (``F2``)
  * - 3
    - Auto toggle
-   - Time auto (RASP) or secondary auto (EDL/XCTherm) (``F3``)
+   - Time auto (RASP) or secondary auto (EDL/XC Therm) (``F3``)
  * - 4
    - Time step forward
    - ``Time+ (RIGHT)``

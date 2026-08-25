@@ -49,17 +49,16 @@ WorkerThread::Run() noexcept
       const ScopeUnlock unlock(mutex);
 
       /* do the actual work */
-      if (period_min.count() > 0)
-        clock.Update();
-
+      clock.Update();
       Tick();
     }
 
     auto idle = idle_min;
-    if (period_min.count() > 0) {
+    const auto pmin = GetPeriodMin();
+    if (pmin.count() > 0) {
       const auto elapsed = clock.Elapsed();
-      if (elapsed + idle < period_min)
-        idle = period_min - elapsed;
+      if (elapsed + idle < pmin)
+        idle = pmin - elapsed;
     }
 
     if (idle.count() > 0 && _WaitForStopped(lock, idle))

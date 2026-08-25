@@ -135,8 +135,20 @@ public:
   void SetVirtualHeight(unsigned _virtual_height) noexcept;
 
   /**
+   * Current scroll offset in pixels (0 = top).
+   */
+  [[gnu::pure]]
+  unsigned GetOrigin() const noexcept {
+    return origin;
+  }
+
+  /**
    * Returns the position of the virtual rectangle within this window.
    * If the user has scrolled down, then its #top field is negative.
+   *
+   * Prefer #GetPhysicalRect for rich-text children that paint a
+   * viewport strip using #GetOrigin (avoids moving a full-height
+   * window on every scroll tick).
    */
   [[gnu::pure]]
   PixelRect GetVirtualRect() const noexcept {
@@ -159,6 +171,14 @@ public:
         scroll_bar.GetLeft(size),
         size.height,
       }};
+  }
+
+  /**
+   * #GetPhysicalRect for the panel's current size.
+   */
+  [[gnu::pure]]
+  PixelRect GetPhysicalRect() const noexcept {
+    return GetPhysicalRect(GetSize());
   }
 
 private:

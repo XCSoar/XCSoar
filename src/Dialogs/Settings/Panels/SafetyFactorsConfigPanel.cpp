@@ -105,7 +105,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
            task_behaviour.risk_gamma);
   SetExpertRow(RiskFactor);
 
-  AddBoolean(_("Turn back marker"),
+  AddBoolean(C_("Setting", "Turn back marker"),
              _("Show a green triangle on the map along the current track "
                "indicating the furthest point from which the active task "
                "waypoint or Goto target can still be reached with the "

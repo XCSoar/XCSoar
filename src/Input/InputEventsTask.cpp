@@ -368,7 +368,7 @@ InputEvents::eventTaskTransition(const char *misc)
           "\r\n%s: %s\r\n%s: %s\r\n%s: %s\r\n%s: %s",
           _("Altitude"),
           FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
-          FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
+          FormatUserSpeed(start_stats.ground_speed, true).c_str(), C_("Status", "Time"),
           FormatLocalTimeHHMM(start_stats.time,
                               CommonInterface::GetComputerSettings().utc_offset)
               .c_str(),
@@ -377,7 +377,7 @@ InputEvents::eventTaskTransition(const char *misc)
       TempAll.UnsafeFormat(
           "\r\n%s: %s\r\n%s: %s\r\n%s: %s", _("Altitude"),
           FormatUserAltitude(start_stats.altitude).c_str(), _("Speed"),
-          FormatUserSpeed(start_stats.ground_speed, true).c_str(), _("Time"),
+          FormatUserSpeed(start_stats.ground_speed, true).c_str(), C_("Status", "Time"),
           FormatLocalTimeHHMM(start_stats.time,
                               CommonInterface::GetComputerSettings().utc_offset)
               .c_str());

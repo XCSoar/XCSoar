@@ -10,8 +10,11 @@
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/TextInput.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "util/CharUtil.hxx"
+#include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/TruncateString.hpp"
 #include "ui/window/Window.hpp"
@@ -21,55 +24,76 @@
 namespace {
 struct TextEntryLayout {
   PixelRect editor;
+  PixelRect paste;
   PixelRect backspace;
   PixelRect keyboard;
   PixelRect ok, cancel, clear;
 };
 
+/**
+ * @param with_keyboard show XCSoar's own on-screen keyboard?  If not,
+ * the operating system's keyboard covers the lower part of the screen,
+ * and everything is moved up below the editor.
+ * @param with_paste reserve room for the @em Paste button
+ */
 static void
-ComputeTextEntryLayout(const PixelRect &rc, TextEntryLayout &o) noexcept
+ComputeTextEntryLayout(const PixelRect &rc, bool with_keyboard, bool with_paste,
+                       TextEntryLayout &o) noexcept
 {
   const int client_height = rc.GetHeight();
   const int padding = Layout::Scale(2);
   const int backspace_width = Layout::Scale(36);
   const int backspace_left = rc.right - padding - backspace_width;
+  const int paste_width = with_paste ? Layout::Scale(60) : 0;
+  const int paste_left = backspace_left - (with_paste ? padding : 0) -
+    paste_width;
   const int editor_height = Layout::Scale(22);
   const int editor_bottom = padding + editor_height;
   const int button_height = Layout::Scale(40);
   constexpr unsigned keyboard_rows = 5u;
   const int keyboard_top = editor_bottom + padding;
-  const int keyboard_height = int(keyboard_rows) * button_height;
+  const int keyboard_height = with_keyboard
+    ? int(keyboard_rows) * button_height
+    : 0;
   const int keyboard_bottom = keyboard_top + keyboard_height;
 
-  const bool vertical = client_height >= keyboard_bottom + button_height;
+  /* without our own keyboard, the action row stays right below the
+     editor, where the system keyboard cannot cover it */
+  const bool vertical = with_keyboard &&
+    client_height >= keyboard_bottom + button_height;
 
-  const int button_top = vertical
-    ? rc.bottom - button_height
-    : keyboard_bottom - button_height;
-  const int button_bottom = vertical
-    ? rc.bottom
-    : keyboard_bottom;
+  const int button_top = !with_keyboard
+    ? keyboard_top
+    : (vertical
+       ? rc.bottom - button_height
+       : keyboard_bottom - button_height);
+  const int button_bottom = button_top + button_height;
 
-  const int ok_left = vertical ? 0 : padding;
-  const int ok_right = vertical
+  /* the action row spans the whole width unless it has to share its
+     row with the last keyboard row */
+  const bool spread = vertical || !with_keyboard;
+
+  const int ok_left = spread ? 0 : padding;
+  const int ok_right = spread
     ? rc.right / 3
     : ok_left + Layout::Scale(80);
 
-  const int cancel_left = vertical
+  const int cancel_left = spread
     ? ok_right
     : Layout::Scale(175);
-  const int cancel_right = vertical
+  const int cancel_right = spread
     ? rc.right * 2 / 3
     : cancel_left + Layout::Scale(60);
 
-  const int clear_left = vertical
+  const int clear_left = spread
     ? cancel_right
     : Layout::Scale(235);
-  const int clear_right = vertical
+  const int clear_right = spread
     ? rc.right
     : clear_left + Layout::Scale(50);
 
-  o.editor = {0, padding, backspace_left - padding, editor_bottom};
+  o.editor = {0, padding, paste_left - padding, editor_bottom};
+  o.paste = {paste_left, padding, paste_left + paste_width, editor_bottom};
   o.backspace = {backspace_left, padding, rc.right - padding, editor_bottom};
   o.keyboard = {padding, keyboard_top, rc.right - padding, keyboard_bottom};
   o.ok = {ok_left, button_top, ok_right, button_bottom};
@@ -77,17 +101,34 @@ ComputeTextEntryLayout(const PixelRect &rc, TextEntryLayout &o) noexcept
   o.clear = {clear_left, button_top, clear_right, button_bottom};
 }
 
+/**
+ * The caption of the backspace key: the "erase to the left" symbol
+ * where the font has it, else an arrow made of ASCII.
+ */
+[[gnu::pure]]
+static const char *
+BackspaceCaption(const ButtonLook &look) noexcept
+{
+  return look.font != nullptr && look.font->HasGlyph(0x232B)
+    ? "⌫"
+    : "<-";
+}
+
 static void
 ApplyTextEntryLayout(const TextEntryLayout &L, WndProperty &editor, Button &ok,
-                     Button &cancel, Button &clear, KeyboardWidget &keyboard,
-                     Button &backspace, ContainerWindow &client_area) noexcept
+                     Button &cancel, Button &clear, KeyboardWidget *keyboard,
+                     Button &backspace, Button *paste,
+                     ContainerWindow &client_area) noexcept
 {
   editor.Move(L.editor);
   ok.Move(L.ok);
   cancel.Move(L.cancel);
   clear.Move(L.clear);
-  keyboard.Move(L.keyboard);
+  if (keyboard != nullptr)
+    keyboard->Move(L.keyboard);
   backspace.Move(L.backspace);
+  if (paste != nullptr)
+    paste->Move(L.paste);
   client_area.Invalidate();
 }
 } // namespace
@@ -99,6 +140,7 @@ static Button *textentry_backspace = NULL;
 static Button *textentry_ok = NULL;
 static Button *textentry_cancel = NULL;
 static Button *textentry_clear = NULL;
+static Button *textentry_paste = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
@@ -110,8 +152,33 @@ static char edittext[MAX_TEXTENTRY];
 static void
 UpdateAllowedCharacters()
 {
-  if (AllowedCharactersCallback)
+  if (kb != nullptr && AllowedCharactersCallback)
     kb->SetAllowedCharacters(AllowedCharactersCallback(edittext));
+}
+
+/**
+ * Check a character against the AllowedCharacters callback.  Without
+ * our own on-screen keyboard, nothing else enforces it.
+ *
+ * @return the character to be inserted (may have been converted to
+ * upper case), or 0 if it is not allowed
+ */
+static char
+FilterCharacter(char ch)
+{
+  if (!AllowedCharactersCallback)
+    return ch;
+
+  const char *allowed = AllowedCharactersCallback(edittext);
+  if (allowed == nullptr || StringFind(allowed, ch) != nullptr)
+    return ch;
+
+  /* the allowed set is usually upper case only */
+  if (const char upper = ToUpperASCII(ch);
+      upper != ch && StringFind(allowed, upper) != nullptr)
+    return upper;
+
+  return 0;
 }
 
 static void
@@ -152,6 +219,28 @@ DoCharacter(char character)
   return true;
 }
 
+/**
+ * Append the system clipboard contents to the edit field.
+ */
+static void
+OnPaste()
+{
+  for (const char ch : UI::TextInput::GetClipboardText()) {
+    if (!IsPrintableASCII(ch))
+      /* TODO: ASCII only for now, because we don't have proper UTF-8
+         support yet */
+      continue;
+
+    const char filtered = FilterCharacter(ch);
+    if (filtered == 0)
+      continue;
+
+    if (!DoCharacter(filtered))
+      /* the edit field is full */
+      break;
+  }
+}
+
 static bool
 FormKeyDown(unsigned key_code)
 {
@@ -161,6 +250,20 @@ FormKeyDown(unsigned key_code)
   if (HasCursorKeys() && kb != nullptr &&
       kb->KeyPress(key_code, textentry_backspace, textentry_ok))
     return true;
+
+  /* the @em Paste button sits left of the on-screen backspace */
+  if (HasCursorKeys() && textentry_client != nullptr &&
+      textentry_paste != nullptr && textentry_backspace != nullptr) {
+    Window *const w = textentry_client->GetFocusedWindow();
+    if (key_code == KEY_LEFT && w == static_cast<Window *>(textentry_backspace)) {
+      textentry_paste->SetFocus();
+      return true;
+    }
+    if (key_code == KEY_RIGHT && w == static_cast<Window *>(textentry_paste)) {
+      textentry_backspace->SetFocus();
+      return true;
+    }
+  }
 
   if (HasCursorKeys() && textentry_client != nullptr && textentry_ok != nullptr &&
       textentry_cancel != nullptr && textentry_clear != nullptr) {
@@ -225,6 +328,18 @@ FormCharacter(unsigned ch)
        support yet */
     return false;
 
+  if (kb == nullptr) {
+    /* without our own on-screen keyboard (which disables the buttons
+       for characters that are not allowed), the filter must be
+       applied here */
+    const char filtered = FilterCharacter((char)ch);
+    if (filtered == 0)
+      return true;
+
+    DoCharacter(filtered);
+    return true;
+  }
+
   DoCharacter((char)ch);
   return true;
 }
@@ -241,12 +356,19 @@ bool
 TouchTextEntry(char *text, size_t width,
                const char *caption,
                AllowedCharacters accb,
-               bool default_shift_state)
+               bool default_shift_state,
+               bool use_system_keyboard)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
 
   max_width = std::min(MAX_TEXTENTRY, width);
+
+  /* let the operating system provide the keyboard (giving access to
+     all special characters); if it has none, fall back to our own */
+  const bool system_keyboard = use_system_keyboard &&
+    UI::TextInput::HasScreenKeyboard();
+  const bool with_paste = UI::TextInput::HasClipboard();
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   WndForm form(UIGlobals::GetMainWindow(), look, caption);
@@ -257,7 +379,7 @@ TouchTextEntry(char *text, size_t width,
   textentry_client = &client_area;
   const PixelRect rc0 = client_area.GetClientRect();
   TextEntryLayout L;
-  ComputeTextEntryLayout(rc0, L);
+  ComputeTextEntryLayout(rc0, !system_keyboard, with_paste, L);
 
   WndProperty _editor(client_area, look, "",
                       L.editor,
@@ -292,24 +414,38 @@ TouchTextEntry(char *text, size_t width,
   KeyboardWidget keyboard(look.button, FormCharacter, !accb,
                           default_shift_state);
 
-  keyboard.Initialise(client_area, L.keyboard);
-  keyboard.Prepare(client_area, L.keyboard);
-  keyboard.Show(L.keyboard);
+  kb = nullptr;
+  if (!system_keyboard) {
+    keyboard.Initialise(client_area, L.keyboard);
+    keyboard.Prepare(client_area, L.keyboard);
+    keyboard.Show(L.keyboard);
 
-  kb = &keyboard;
+    kb = &keyboard;
+  }
 
-  Button backspace_button(client_area, look.button, "<-",
+  Button backspace_button(client_area, look.button,
+                          BackspaceCaption(look.button),
                           L.backspace,
                           button_style, [](){ OnBackspace(); });
 
   textentry_backspace = &backspace_button;
 
+  Button paste_button;
+  if (with_paste) {
+    paste_button.Create(client_area, look.button, _("Paste"), L.paste,
+                        button_style, [](){ OnPaste(); });
+    textentry_paste = &paste_button;
+  }
+
   form.SetClientLayoutFunction([&]() {
     const PixelRect rc = client_area.GetClientRect();
     TextEntryLayout layout;
-    ComputeTextEntryLayout(rc, layout);
+    ComputeTextEntryLayout(rc, !system_keyboard, with_paste, layout);
     ApplyTextEntryLayout(layout, _editor, ok_button, cancel_button, clear_button,
-                        keyboard, backspace_button, client_area);
+                         kb, backspace_button,
+                         with_paste ? &paste_button : nullptr, client_area);
+    if (system_keyboard)
+      UI::TextInput::SetScreenKeyboardRect(layout.editor);
   });
 
   AllowedCharactersCallback = accb;
@@ -323,16 +459,29 @@ TouchTextEntry(char *text, size_t width,
   }
 
   UpdateTextboxProp();
+
+  if (system_keyboard) {
+    UI::TextInput::SetScreenKeyboardRect(L.editor);
+    UI::TextInput::ShowScreenKeyboard();
+  }
+
   const bool result = form.ShowModal() == mrOK;
+
+  if (system_keyboard)
+    UI::TextInput::HideScreenKeyboard();
 
   textentry_backspace = NULL;
   textentry_ok = NULL;
   textentry_cancel = NULL;
   textentry_clear = NULL;
+  textentry_paste = NULL;
   textentry_client = NULL;
 
-  keyboard.Hide();
-  keyboard.Unprepare();
+  if (kb != nullptr) {
+    keyboard.Hide();
+    keyboard.Unprepare();
+    kb = nullptr;
+  }
 
   if (result) {
     CopyTruncateString(text, max_width, edittext);

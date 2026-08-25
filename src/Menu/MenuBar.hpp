@@ -51,4 +51,13 @@ public:
    * to a new position.
    */
   void OnResize(const PixelRect &rc);
+
+  /**
+   * Portrait: screen/6, capped at
+   * Layout::GetInflightButtonHeight() for gloved use on tall phones.
+   * Landscape: screen/5, uncapped.
+   */
+  [[gnu::pure]]
+  static unsigned GetButtonHeight(unsigned screen_height,
+                                  bool portrait) noexcept;
 };

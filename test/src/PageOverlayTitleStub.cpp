@@ -39,7 +39,15 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::XCTHERM:
-    builder.Append(", XCTherm");
+    builder.Append(", XC Therm");
+    break;
+
+  case PageLayout::Overlay::SKYSIGHT:
+    builder.Append(", SkySight");
+    if (!layout.skysight_overlay.empty()) {
+      builder.Append(' ');
+      builder.Append(layout.skysight_overlay.c_str());
+    }
     break;
 
   case PageLayout::Overlay::MAX:

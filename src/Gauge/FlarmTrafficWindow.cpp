@@ -360,8 +360,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Calculate screen coordinates
   const auto radar_mid = radar_renderer.GetCenter();
-  sc[i].x = radar_mid.x + iround(p.x * scale);
-  sc[i].y = radar_mid.y + iround(p.y * scale);
+  sc[i].x = (traffic.relative_east) ? radar_mid.x + iround(p.x * scale) : radar_mid.x;
+  sc[i].y = (traffic.relative_east) ? radar_mid.y + iround(p.y * scale) : radar_mid.y - scale;
 
   const Color *text_color;
   const Pen *target_pen, *circle_pen;

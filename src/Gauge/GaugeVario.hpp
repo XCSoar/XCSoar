@@ -53,6 +53,7 @@ class GaugeVario : public AntiFlickerWindow
 
   struct Geometry {
     int nlength0, nlength1, nwidth, nline;
+    int dial_radius;
 
     PixelPoint offset;
 
@@ -97,6 +98,7 @@ class GaugeVario : public AntiFlickerWindow
 
   bool background_dirty = true;
   bool needle_initialised = false;
+  bool vario_line_drawn = false;
 
   LabelValueDrawInfo average_di, mc_di, gross_di;
 
@@ -118,6 +120,8 @@ public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
              PixelRect rc, const WindowStyle style=WindowStyle()) noexcept;
+
+  void ReinitialiseLook() noexcept;
 
 protected:
   const MoreData &Basic() const noexcept {

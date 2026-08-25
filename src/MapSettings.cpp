@@ -50,6 +50,8 @@ MapSettings::SetDefaults() noexcept
   show_fai_triangle_areas = false;
   online_traffic_map_mode = DisplayOnlineTrafficMapMode::SYMBOL;
   show_95_percent_rule_helpers = false;
+  rasp_layer_opacity = 70;
+  rasp_contour_density = ContourDensity::OFF;
 
   trail.SetDefaults();
   item_list.SetDefaults();

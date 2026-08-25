@@ -60,7 +60,7 @@ RulesStatusPanel::Refresh() noexcept
           std::chrono::seconds{start_stats.pev_offset_seconds}, 3);
       SetText(PevOffsetAtStart, buf.c_str());
     } else
-      SetText(PevOffsetAtStart, _("—"));
+      SetText(PevOffsetAtStart, C_("Status", "—"));
   } else {
     ClearValue(StartTime);
     ClearValue(StartSpeed);

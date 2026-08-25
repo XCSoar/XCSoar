@@ -18,8 +18,9 @@ class CoStreamRequest : public CoRequest {
 	OutputStream &os;
 
 public:
-	CoStreamRequest(CurlGlobal &global, CurlEasy &&easy, OutputStream &_os)
-		:CoRequest(global, std::move(easy)), os(_os) {}
+	CoStreamRequest(CurlGlobal &global, CurlEasy &&easy, OutputStream &_os,
+				HeaderListener header_listener = {})
+		:CoRequest(global, std::move(easy), std::move(header_listener)), os(_os) {}
 
 private:
 	/* virtual methods from CurlResponseHandler */

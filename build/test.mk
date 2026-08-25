@@ -4,10 +4,10 @@ MORE_SCREEN_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Hardware/DisplayDPI.cpp
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(SRC)/Hardware/CPU.cpp
 ifeq ($(TARGET_IS_KOBO),y)
 MORE_SCREEN_SOURCES += \
-	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/Hardware/RotateDisplay.cpp
 endif
 
@@ -79,7 +79,7 @@ TEST_NAMES = \
 	test_task \
 	TestInputTransformMode \
 	TestOverwritingRingBuffer \
-	TestDateTime TestISO8601 TestRoughTime TestWrapClock \
+	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPolylineDecoder \
 	TestTransponderCode \
 	TestMath \
@@ -90,7 +90,8 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestClimbAvCalc TestFilteredVarioComputer \
+	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging \
@@ -244,6 +245,46 @@ TEST_WEATHER_UI_STATE_SOURCES = \
 TEST_WEATHER_UI_STATE_DEPENDS = TIME UTIL
 $(eval $(call link-program,TestWeatherUIState,TEST_WEATHER_UI_STATE))
 
+TEST_NAMES += TestSkySightForecastUtils
+
+TEST_SKYSIGHT_FORECAST_UTILS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightForecastUtils.cpp
+TEST_SKYSIGHT_FORECAST_UTILS_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightForecastUtils,TEST_SKYSIGHT_FORECAST_UTILS))
+
+TEST_NAMES += TestSkySightLegendMapping
+
+TEST_SKYSIGHT_LEGEND_MAPPING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightLegendMapping.cpp
+TEST_SKYSIGHT_LEGEND_MAPPING_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightLegendMapping,TEST_SKYSIGHT_LEGEND_MAPPING))
+
+TEST_NAMES += TestSkySightRegionTime
+
+TEST_SKYSIGHT_REGION_TIME_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightRegionTime.cpp
+TEST_SKYSIGHT_REGION_TIME_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightRegionTime,TEST_SKYSIGHT_REGION_TIME))
+
+TEST_NAMES += TestSkySightRequestPolicy
+
+TEST_SKYSIGHT_REQUEST_POLICY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightRequestPolicy.cpp
+TEST_SKYSIGHT_REQUEST_POLICY_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightRequestPolicy,TEST_SKYSIGHT_REQUEST_POLICY))
+
+TEST_NAMES += TestSkySightLiveTileUtils
+
+TEST_SKYSIGHT_LIVE_TILE_UTILS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkySightLiveTileUtils.cpp
+TEST_SKYSIGHT_LIVE_TILE_UTILS_DEPENDS = TIME UTIL
+$(eval $(call link-program,TestSkySightLiveTileUtils,TEST_SKYSIGHT_LIVE_TILE_UTILS))
+
 TEST_NAMES += TestWeatherOverlayPagePlacement
 
 TEST_WEATHER_OVERLAY_PAGE_PLACEMENT_SOURCES = \
@@ -351,6 +392,12 @@ TEST_ROUGH_TIME_SOURCES = \
 TEST_ROUGH_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestRoughTime,TEST_ROUGH_TIME))
 
+TEST_ROUGH_SPEED_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRoughSpeed.cpp
+TEST_ROUGH_SPEED_DEPENDS = MATH
+$(eval $(call link-program,TestRoughSpeed,TEST_ROUGH_SPEED))
+
 TEST_WRAP_CLOCK_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWrapClock.cpp
@@ -362,6 +409,7 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/PageSettings.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/WeatherProfile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -599,6 +647,15 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 
+TEST_CIRCLING_WIND_SOURCES = \
+	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCirclingWind.cpp
+TEST_CIRCLING_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
+$(eval $(call link-program,TestCirclingWind,TEST_CIRCLING_WIND))
+
 TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Computer/FilteredVarioComputer.cpp \
@@ -662,6 +719,7 @@ TEST_FILE_METADATA_FORMATTER_DEPENDS = MATH UTIL TIME OS
 $(eval $(call link-program,TestFileMetadataFormatter,TEST_FILE_METADATA_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
+	$(SRC)/Formatter/LocalTimeFormatter.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTimeFormatter.cpp
@@ -2117,7 +2175,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Weather/Rasp/RaspStore.cpp \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
+	$(SRC)/Weather/Rasp/ColorMap.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/RaspStylesData.cpp \
 	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
@@ -2207,6 +2267,11 @@ RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Profile/NotamConfig.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
+endif
+
+ifeq ($(HAVE_HTTP),y)
+RUN_MAP_WINDOW_SOURCES += \
+	$(TEST_SRC_DIR)/FakeSkySight.cpp
 endif
 
 RUN_MAP_WINDOW_DEPENDS = \

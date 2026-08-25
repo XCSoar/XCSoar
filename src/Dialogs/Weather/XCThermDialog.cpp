@@ -146,7 +146,7 @@ FormatLayerStatus(unsigned model, unsigned layer_index,
     text = _("Download failed");
     break;
   case LayerDownloadInfo::CANCELED:
-    text = _("Cancelled");
+    text = C_("Status", "Cancelled");
     break;
   default:
     text = _("Not downloaded");
@@ -453,7 +453,7 @@ XCThermWidget::StartDownload() noexcept
 
   const auto &region = XCTherm::GetRegion(settings.model);
   if (selected_layer >= region.layer_count) {
-    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
+    ShowMessageBox(_("No layer selected."), "XC Therm", MB_OK);
     return;
   }
 
@@ -467,7 +467,7 @@ XCThermWidget::StartDownload() noexcept
     });
   if (active_job == nullptr) {
     if (GetXCThermDownloadGlue() == nullptr || Net::curl == nullptr)
-      ShowMessageBox(_("Network is not available."), "XCTherm", MB_OK);
+      ShowMessageBox(_("Network is not available."), "XC Therm", MB_OK);
     return;
   }
 
@@ -539,13 +539,13 @@ XCThermWidget::FinishDownload() noexcept
     UpdateStatusControl();
     if (!canceled) {
       if (job->index_no_parameters.load()) {
-        ShowMessageBox(_("Forecast index has no XCTherm parameters."),
-                       "XCTherm", MB_OK);
+        ShowMessageBox(_("Forecast index has no XC Therm parameters."),
+                       "XC Therm", MB_OK);
       } else if (job->error_eptr) {
-        ShowError(job->error_eptr, "XCTherm");
+        ShowError(job->error_eptr, "XC Therm");
       } else {
         ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
-                       "XCTherm", MB_OK);
+                       "XC Therm", MB_OK);
       }
     }
     return;
@@ -608,13 +608,13 @@ XCThermWidget::FinishDownload() noexcept
     PageActions::Update();
 
   if (job->error_eptr && !canceled) {
-    ShowError(job->error_eptr, "XCTherm");
+    ShowError(job->error_eptr, "XC Therm");
   } else if (any_miss && !canceled) {
     StaticString<128> msg;
     msg.Format(_("Got %u of %u hourly slices (%u newly downloaded).\n"
                  "Some slots were unavailable."),
                ok, span, nu);
-    ShowMessageBox(msg, "XCTherm", MB_OK);
+    ShowMessageBox(msg, "XC Therm", MB_OK);
   }
 }
 
@@ -629,7 +629,7 @@ XCThermWidget::DeleteClicked() noexcept
   const auto &region = XCTherm::GetRegion(settings.model);
 
   if (selected_layer >= region.layer_count) {
-    ShowMessageBox(_("No layer selected."), "XCTherm", MB_OK);
+    ShowMessageBox(_("No layer selected."), "XC Therm", MB_OK);
     return;
   }
 
@@ -731,7 +731,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   const int active_layer = XCTherm::FindActiveLayerIndex(settings);
   selected_layer = active_layer >= 0 ? unsigned(active_layer) : 0;
 
-  auto *layer = AddEnum(_("Layer"),
+  auto *layer = AddEnum(C_("Weather control", "Layer"),
                         _("Altitude layer used for Update and Delete. "
                           "Use Altitude below to change what the map shows."));
   layer->GetDataField()->SetOnModified([this]{
@@ -741,7 +741,7 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   AddReadOnly(_("Status"),
               _("Download and cache status for the selected layer."));
 
-  AddEnum(_("Span"),
+  AddEnum(C_("Weather control", "Span"),
           _("How many forecast hours to download with Update."),
           span_list, settings.download_span_hours);
   GetControl(SPAN).GetDataField()->SetOnModified([this]{
@@ -749,31 +749,31 @@ XCThermWidget::Prepare(ContainerWindow &parent,
   });
 
   update_button = AddButton(_("Update"), [this]{ DownloadClicked(); });
-  delete_button = AddButton(_("Delete"), [this]{ DeleteClicked(); });
+  delete_button = AddButton(C_("Button", "Delete"), [this]{ DeleteClicked(); });
   AddSpacer();
 
   StaticString<256> time_help;
   time_help.Format(_("Forecast time for the current map page %s overlay. "
                      "Opens the same picker as the weather controls "
                      "(Auto, Now, or a UTC hour)."),
-                   "XCTherm");
-  auto *time = AddEnum(_("Time"), time_help.c_str());
+                   "XC Therm");
+  auto *time = AddEnum(C_("Weather control", "Time"), time_help.c_str());
   time->SetEditCallback(EditTimeCallback);
 
-  auto *altitude = AddEnum(_("Altitude"),
+  auto *altitude = AddEnum(C_("Weather control", "Altitude"),
                            _("Altitude band for the current map page. "
                              "Use Apply to page to commit changes."));
   altitude->SetEditCallback(EditAltitudeCallback);
 
-  apply_to_page_button = AddButton(_("Apply to page"), [this]{
+  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
     ApplyToPageClicked();
   });
-  add_page_button = AddButton(_("Add page"), [this]{
+  add_page_button = AddButton(C_("Button", "Add page"), [this]{
     AddPageClicked();
   });
   AddSpacer();
 
-  AddButton(_("Pages setup"), [this]{
+  AddButton(C_("Button", "Pages setup"), [this]{
     WeatherOverlayDraft::OpenPagesConfig();
     RefreshPageSection();
   });

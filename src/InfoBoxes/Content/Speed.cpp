@@ -98,6 +98,7 @@ UpdateInfoBoxSpeedIndicated(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromSpeed(basic.indicated_airspeed, false);
+  data.SetValueColor(basic.airspeed_real ? 0 : 2);
 }
 
 void
@@ -110,6 +111,7 @@ UpdateInfoBoxSpeed(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromSpeed(basic.true_airspeed, false);
+  data.SetValueColor(basic.airspeed_real ? 0 : 2);
 }
 
 void

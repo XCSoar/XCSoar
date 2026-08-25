@@ -10,7 +10,7 @@
 
 #include <cassert>
 
-static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRampEntry terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0, { 0x70, 0xc0, 0xa7 }},
     {250, { 0xca, 0xe7, 0xb9 }},
@@ -289,6 +289,29 @@ static constexpr ColorRamp terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
               "mismatched size");
 
+static constexpr ColorRamp terrain_ramps[] = {
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[0], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[1], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[2], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[3], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[4], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[5], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[6], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[7], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[8], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[9], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[10], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[11], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[12], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[13], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[14], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[15], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[16], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[17], nullptr },
+};
+static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
+              "mismatched size");
+
 // map scale is approximately 2 points on the grid
 // therefore, want one to one mapping if mapscale is 0.5
 // there are approx 30 pixels in mapscale
@@ -328,6 +351,31 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
 #ifdef ENABLE_OPENGL
+  /* Call once — the helper mutates quantisation_pixels. */
+  const bool quantisation_improved = raster_renderer.UpdateQuantisation();
+#else
+  constexpr bool quantisation_improved = false;
+#endif
+
+  /* Exact same view: reuse without consulting overscan bounds.
+     Near the map edge, overscan is clipped so old_bounds.IsInside()
+     can fail even when the projection is unchanged.  Use
+     CompareExact (not tolerant Compare) so a tiny pan cannot skip
+     the IsInside coverage check. */
+  if (!quantisation_improved &&
+      compare_projection.CompareExact(map_projection) &&
+      terrain_serial == terrain.GetSerial() &&
+      sunazimuth.CompareRoughly(last_sun_azimuth)) {
+    if (settings.contours == Contours::OFF ||
+#ifdef ENABLE_OPENGL
+        raster_renderer.GetQuantisationPixels() > 2 ||
+#endif
+        map_projection.GetScale() == last_projection_scale) {
+      return true;
+    }
+  }
+
+#ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
   GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
@@ -339,32 +387,27 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       return false;
   }
 
-  if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
+  if (!quantisation_improved &&
+      old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth) &&
-      !raster_renderer.UpdateQuantisation()) {
+      sunazimuth.CompareRoughly(last_sun_azimuth)) {
     /* The existing terrain image is suitable for reuse.
        But with contours: Re-use only without zoom change.
        Otherwise we can re-use as a fast preview, but
        re-render the higher quality views (q=2 and q=1) */
     if (settings.contours == Contours::OFF ||
         raster_renderer.GetQuantisationPixels() > 2 ||
-        map_projection.GetScale() == last_projection_scale)
+        map_projection.GetScale() == last_projection_scale) {
+      compare_projection = CompareProjection(map_projection);
       return true;
+    }
   }
 
-#else
-  if (compare_projection.Compare(map_projection) &&
-      terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth))
-    /* no change since previous frame */
-    return true;
-
-  compare_projection = CompareProjection(map_projection);
 #endif
 
   terrain_serial = terrain.GetSerial();
+  compare_projection = CompareProjection(map_projection);
 
   last_sun_azimuth = sunazimuth;
 
@@ -385,7 +428,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                      contour_pixel_size)
     : 0u;
 
-  const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
+  const ColorRamp *const color_ramp = &terrain_ramps[settings.ramp];
   if (color_ramp != last_color_ramp) {
     raster_renderer.PrepareColorTable(color_ramp, do_water,
                                       height_scale, interp_levels);

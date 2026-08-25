@@ -5,6 +5,7 @@
 // Currently for iOS only, not macOS (AVAudioSession is iOS only)
 
 #include "SoundUtil.hpp"
+#include "Services.hpp"
 #include "LogFile.hpp"
 
 #include <TargetConditionals.h>
@@ -15,7 +16,35 @@
 #import <Foundation/Foundation.h>
 
 #if TARGET_OS_IPHONE
+
+/**
+ * Deactivates the AVAudioSession once playback has finished, notifying
+ * other apps so that any audio they had ducked or paused while our sound
+ * was playing is restored. Without this, the session stays active
+ * indefinitely and other apps' audio remains ducked forever.
+ *
+ * (DeactivateAudioSession() skips the deactivation while the audio
+ * vario is active, so it keeps playing.)
+ */
+@interface XCSoarAudioPlayerDelegate : NSObject <AVAudioPlayerDelegate>
+@end
+
+@implementation XCSoarAudioPlayerDelegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)audioPlayer successfully:(BOOL)flag
+{
+  DeactivateAudioSession();
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)audioPlayer error:(NSError *)error
+{
+  DeactivateAudioSession();
+}
+
+@end
+
 static AVAudioPlayer *player = nil;
+static XCSoarAudioPlayerDelegate *player_delegate = nil;
 #endif
 
 bool
@@ -38,7 +67,7 @@ SoundUtil::Play(const char *resource_name)
   } else if (strcmp(resource_name, "IDR_WAV_DRIP") == 0) {
     filename = "beep_drip";
   } else {
-    LogFormat("Unknown sound resource: %s", resource_name);
+    LogFmt("Unknown sound resource: {}", resource_name);
     return false;
   }
   
@@ -55,16 +84,32 @@ SoundUtil::Play(const char *resource_name)
 
   if (!player) {
     if (error) {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): %s", resource_name, filename,
-                [[error localizedDescription] UTF8String]);
+      LogFmt("Failed to create AVAudioPlayer for {} ({}): {}",
+             resource_name, filename,
+             [[error localizedDescription] UTF8String]);
     } else {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): unknown reason", resource_name, filename);
+      LogFmt("Failed to create AVAudioPlayer for {} ({}): unknown reason",
+             resource_name, filename);
     }
     return false;
   }
 
-  [player prepareToPlay];
-  [player play];
+  // Activate the audio session for the duration of the playback. It is
+  // deactivated again by the player delegate once playback has finished,
+  // so that other apps' audio (e.g. music) is never ducked permanently.
+  ActivateAudioSession();
+
+  if (!player_delegate) {
+    player_delegate = [[XCSoarAudioPlayerDelegate alloc] init];
+  }
+  player.delegate = player_delegate;
+
+  if (![player prepareToPlay] || ![player play]) {
+    LogFmt("Failed to start playback for {} ({})", resource_name,
+           filename);
+    DeactivateAudioSession();
+    return false;
+  }
 
   return true;
 #else

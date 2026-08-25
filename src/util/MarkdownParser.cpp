@@ -175,6 +175,62 @@ SkipListMarker(const char *str) noexcept
   return str;
 }
 
+/**
+ * Indented line continuing the previous list item (CommonMark-style soft
+ * break inside one list paragraph).  Requires at least two spaces of
+ * indent; not a new list marker or heading.
+ */
+[[gnu::pure]]
+static bool
+IsListItemContinuation(const char *line_start) noexcept
+{
+  const char *str = line_start;
+  unsigned indent = 0;
+  while (*str == ' ' || *str == '\t') {
+    ++indent;
+    ++str;
+  }
+  if (indent < 2 || *str == '\0' || *str == '\n')
+    return false;
+  if (GetHeadingLevel(str) > 0)
+    return false;
+  return !IsListItem(line_start);
+}
+
+/**
+ * Join a list item's first line and indented continuations into one
+ * paragraph body (spaces, no newlines).  @p str_inout advances past
+ * the last consumed source line (still pointing at its trailing
+ * newline or NUL).
+ */
+static std::string
+CollectListItemBody(const char *content, const char *&str_inout)
+{
+  std::string body;
+  const char *line_end = FindLineEnd(content);
+  body.append(content, line_end);
+  str_inout = line_end;
+
+  while (*str_inout == '\n' && str_inout[1] != '\0') {
+    const char *next = str_inout + 1;
+    if (*next == '\n')
+      break;
+    if (!IsListItemContinuation(next))
+      break;
+
+    const char *q = next;
+    while (*q == ' ' || *q == '\t')
+      ++q;
+    line_end = FindLineEnd(q);
+    if (!body.empty() && body.back() != ' ')
+      body += ' ';
+    body.append(q, line_end);
+    str_inout = line_end;
+  }
+
+  return body;
+}
+
 [[gnu::const]]
 static constexpr bool
 IsLeadLabelChar(char c) noexcept
@@ -330,7 +386,6 @@ ParseMarkdown(const char *input)
       // Check for list item
       if (IsListItem(str)) {
         const char *content = SkipListMarker(str);
-        const char *line_end = FindLineEnd(str);
 
         // Check for checkbox: [ ] or [x]
         int checkbox_state = GetCheckboxState(content);
@@ -352,11 +407,10 @@ ParseMarkdown(const char *input)
           result.styles.push_back({marker_start, marker_start + 2, TextStyle::ListItem});
         }
 
-        // Find line end from content start
-        line_end = FindLineEnd(content);
-
-        // Now process the content for inline formatting (bold, links)
-        const char *p = content;
+        /* One list item = one paragraph: fold indented continuations. */
+        const std::string item_body = CollectListItemBody(content, str);
+        const char *p = item_body.c_str();
+        const char *line_end = p + item_body.size();
 
         MaybeAppendBoldListLeadLabel(result.text, result.styles, p, line_end);
 
@@ -399,10 +453,9 @@ ParseMarkdown(const char *input)
                 image.url.assign(img_url_begin, img_url_end);
                 image.is_block = false; // inline in list item
 
-                if (!image.alt_text.empty())
-                  result.text.append(image.alt_text);
-                else
-                  result.text += ' ';
+                /* Single-character placeholder so wrap cannot split
+                   alt text across lines; alt stays in #alt_text. */
+                result.text += ' ';
 
                 result.images.push_back(std::move(image));
                 p = img_url_end + 1;
@@ -486,7 +539,8 @@ ParseMarkdown(const char *input)
           result.text += *p++;
         }
 
-        str = line_end;
+        /* #CollectListItemBody left #str at the end of the last source
+           line; emit a single paragraph break after the item. */
         if (*str == '\n') {
           result.text += '\n';
           ++str;
@@ -556,11 +610,9 @@ ParseMarkdown(const char *input)
           image.url.assign(img_url_begin, img_url_end);
           image.is_block = is_block;
 
-          // Add placeholder text (alt text or single space)
-          if (!image.alt_text.empty())
-            result.text.append(image.alt_text);
-          else
-            result.text += ' ';
+          /* Single-character placeholder so wrap cannot split alt
+             text across lines; alt stays in #alt_text. */
+          result.text += ' ';
 
           result.images.push_back(std::move(image));
 

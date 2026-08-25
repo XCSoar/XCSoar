@@ -6,6 +6,7 @@
 #include "LinkableWindow.hpp"
 #include "util/MarkdownParser.hpp"
 #include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/BufferCanvas.hpp"
 #include "ui/canvas/Color.hpp"
 
 #include <map>
@@ -108,12 +109,26 @@ class RichTextWindow : public LinkableWindow {
   /** Checkbox toggle states (non-zero = toggled from original) */
   mutable std::vector<uint8_t> checkbox_toggled;
 
-  /** Checkbox hit rectangles for click detection */
+  /** Checkbox hit rectangles for click detection (window space). */
   struct CheckboxRect {
     PixelRect rect;
     std::size_t style_index;  ///< Index into parsed.styles
   };
   mutable std::vector<CheckboxRect> checkbox_rects;
+
+  /**
+   * Link/checkbox hit rectangles in content coordinates, filled with
+   * the painted strip.  Published to window space on each paint.
+   */
+  struct ContentHit {
+    PixelRect content_rect;
+    std::size_t index; ///< link index or checkbox style index
+    bool is_checkbox;
+    /** Link segment bytes in #parsed.text (ignored for checkboxes). */
+    std::size_t text_start = 0;
+    std::size_t text_length = 0;
+  };
+  std::vector<ContentHit> content_hits;
 
   /** Currently focused checkbox style_index (into parsed.styles), or nullopt */
   mutable std::optional<std::size_t> focused_checkbox_style;
@@ -129,7 +144,30 @@ class RichTextWindow : public LinkableWindow {
   mutable std::vector<int> line_heights;
   mutable unsigned line_layout_width = 0;
 
+  /**
+   * Sliding offscreen strip of painted content.  Scroll pans by
+   * blitting; the strip is refilled only when the origin leaves it
+   * or #content_cache_dirty is set.
+   */
+  BufferCanvas content_cache;
+
+  /** Content-space Y of buffer row 0. */
+  int content_cache_top = 0;
+
+  bool content_cache_dirty = true;
+
+  /**
+   * True after checkbox "  " placeholders were widened to match
+   * #CheckboxBoxSize for the current font (wrap/paint alignment).
+   */
+  bool checkbox_placeholders_expanded = false;
+
 private:
+  /**
+   * Widen Markdown checkbox placeholders so WrapText measures the
+   * same width as the painted checkbox + gap.
+   */
+  void ExpandCheckboxPlaceholders() noexcept;
   /**
    * Load or retrieve a cached bitmap for the given image URL.
    * Supports "resource:IDB_NAME" for compiled-in resources.
@@ -170,6 +208,13 @@ private:
    */
   void EnsureLineLayout() const noexcept;
   /**
+   * Column width available for wrapping (content width minus slack for
+   * link spacing and list hanging indent).
+   */
+  [[gnu::pure]]
+  unsigned CalcWrapTextWidth(unsigned column_width) const noexcept;
+
+  /**
    * Ensure wrapped_text is populated for current width.
    */
   void EnsureWrappedText() const noexcept;
@@ -196,22 +241,51 @@ private:
    */
   void SyncParentScrollHeight() noexcept;
 
+  /**
+   * Paint lines whose content Y overlaps [clip_top, clip_bottom) into
+   * @a canvas.  Canvas Y = content Y - @a y_origin.
+   * Also records #content_hits in content space (canvas rect + y_origin).
+   */
+  void PaintContent(Canvas &canvas, int y_origin,
+                    int clip_top, int clip_bottom) noexcept;
+
+  /**
+   * Ensure #content_cache covers the viewport with prefetch margin.
+   */
+  void EnsureContentCache(int origin, int viewport_h) noexcept;
+
+  /** Mark the painted strip invalid (text, layout, checkbox, theme). */
+  void InvalidateContentCache() noexcept {
+    content_cache_dirty = true;
+    content_hits.clear();
+  }
+
+  /**
+   * Publish #content_hits into window-space link/checkbox rects for
+   * the visible band.
+   */
+  void PublishWindowHits(int origin, int viewport_h) noexcept;
+
+  /** Draw keyboard focus chrome for the focused link/checkbox. */
+  void DrawFocusOverlay(Canvas &canvas, int origin) noexcept;
+
   /** Render an inline image for a segment, if present.
    * @return true if an image was rendered (caller should skip text) */
   bool RenderInlineImage(Canvas &canvas, const TextSegment &seg,
                          int &x, int y, int cur_line_height,
                          int text_line_height) const noexcept;
 
-  /** Render an underlined link segment with hit-rect registration. */
+  /** Render an underlined link segment; record content-space hit. */
   void RenderLinkSegment(Canvas &canvas, const TextSegment &seg,
                          const char *text_data, int &x, int text_y,
-                         int visible_top,
-                         int text_line_height) noexcept;
+                         int text_line_height,
+                         int content_y_origin) noexcept;
 
-  /** Render a checkbox segment with hit-rect registration. */
+  /** Render a checkbox segment; record content-space hit. */
   void RenderCheckboxSegment(Canvas &canvas, const TextSegment &seg,
-                             int &x, int y_line, int visible_top,
-                             int row_height) noexcept;
+                             int &x, int y_line,
+                             int row_height,
+                             int content_y_origin) noexcept;
 
   /** Render a plain text segment (heading, bold, list item, normal). */
   void RenderPlainSegment(Canvas &canvas, const TextSegment &seg,
@@ -244,6 +318,9 @@ public:
     bold_font = _bold_font ? _bold_font : &_font;
     heading1_font = _heading1_font ? _heading1_font : bold_font;
     heading2_font = _heading2_font ? _heading2_font : bold_font;
+    /* Placeholder expansion depends on font metrics. */
+    checkbox_placeholders_expanded = false;
+    InvalidateLayout();
   }
 
   /**
@@ -255,10 +332,12 @@ public:
                    Color _background_color = COLOR_WHITE) noexcept {
     dark_mode = _dark_mode;
     background_color = _background_color;
+    InvalidateContentCache();
   }
 
   void SetDialogLook(const DialogLook &look) noexcept {
     dialog_look = &look;
+    InvalidateContentCache();
   }
 
   [[gnu::pure]]
@@ -285,6 +364,21 @@ public:
       return heading2_font ? *heading2_font : GetBoldFont();
     default:
       return GetBoldFont();
+    }
+  }
+
+  /** Font used when painting a span with the given Markdown style. */
+  [[gnu::pure]]
+  const Font &GetStyleFont(TextStyle style) const noexcept {
+    switch (style) {
+    case TextStyle::Heading1:
+    case TextStyle::Heading2:
+    case TextStyle::Heading3:
+      return GetHeadingFont(style);
+    case TextStyle::Bold:
+      return GetBoldFont();
+    default:
+      return GetFont();
     }
   }
 

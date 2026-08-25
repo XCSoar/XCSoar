@@ -72,6 +72,9 @@
 #ifdef HAVE_HTTP
 #include "Panels/XCThermConfigPanel.hpp"
 #endif
+#ifdef HAVE_HTTP
+#include "Panels/SkySightConfigPanel.hpp"
+#endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
@@ -95,7 +98,7 @@ static constexpr TabMenuPage map_pages[] = {
   { N_("Terrain"), CreateTerrainDisplayConfigPanel },
   { N_("Airspace"), CreateAirspaceConfigPanel },
 #ifdef HAVE_HTTP
-  { N_("NOTAM"), CreateNOTAMConfigPanel },
+  { NC_("Setting", "NOTAM"), CreateNOTAMConfigPanel },
 #endif
   { nullptr, nullptr }
 };
@@ -137,11 +140,14 @@ static constexpr TabMenuPage weather_pages[] = {
   { N_("Thermal Information Map"), CreateWeatherConfigPanel },
 #endif
   { "RASP", CreateRaspConfigPanel },
+#ifdef HAVE_HTTP
+  { "SkySight", CreateSkySightConfigPanel },
+#endif
 #ifdef HAVE_PCMET
   { "Flugwetter (pc_met)", CreatePCMetConfigPanel },
 #endif
 #ifdef HAVE_HTTP
-  { "XCTherm", CreateXCThermConfigPanel },
+  { "XC Therm", CreateXCThermConfigPanel },
 #endif
   { nullptr, nullptr }
 };
@@ -152,7 +158,7 @@ static constexpr TabMenuPage setup_pages[] = {
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
-  { N_("Time"), CreateTimeConfigPanel },
+  { NC_("Setting", "Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
   { "XCSoar Cloud", CreateCloudConfigPanel },
@@ -173,7 +179,7 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Task Defaults"), task_pages },
   { N_("Look"), look_pages },
   { N_("Weather"), weather_pages },
-  { N_("Setup"), setup_pages },
+  { NC_("Menu", "Setup"), setup_pages },
 };
 
 static void
@@ -316,7 +322,8 @@ OnUserLevel(bool expert) noexcept
 }
 
 /**
- * close dialog from menu page.  from content, goes to menu page
+ * Close on the menu page commits (mrOK).  On a settings page, return
+ * to the menu (Back).
  */
 static void
 OnCloseClicked(WidgetDialog &dialog)
@@ -337,6 +344,10 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
   if (caption == nullptr)
     caption = _("Configuration");
   dialog.SetCaption(caption);
+
+  pager->SetCloseButtonCaption(pager->GetCurrentIndex() == 0
+                               ? _("Close")
+                               : _("Back"));
 }
 
 void dlgConfigurationShowModal()
@@ -371,7 +382,7 @@ void dlgConfigurationShowModal()
 
   dialog.FinishPreliminary(pager);
 
-  /* Esc on a settings panel returns to the menu (same as Close);
+  /* Esc on a settings panel returns to the menu (same as Back);
      on the menu itself, leave Esc to cancel the dialog. */
   dialog.SetKeyDownFunction([&dialog](unsigned key_code) {
     if (key_code != KEY_ESCAPE || pager->GetCurrentIndex() == 0)

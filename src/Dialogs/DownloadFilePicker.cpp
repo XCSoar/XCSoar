@@ -324,9 +324,9 @@ DownloadFilePicker(FileType file_type)
            UIGlobals::GetDialogLook(), _("Download"));
   dialog.SetWidget(dialog, file_type);
   dialog.GetWidget().CreateButtons();
-  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.AddButton(_("Close"), mrCancel);
   /* No EnableCursorSelection: Left/Right page the list (ListControl).
-     Up/Down walk list ↔ Download/Cancel; Enter downloads the cursor row. */
+     Up/Down walk list ↔ Download/Close; Enter downloads the cursor row. */
   dialog.ShowModal();
 
   return dialog.GetWidget().GetPath();

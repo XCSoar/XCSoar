@@ -33,6 +33,12 @@ GlueGaugeVario::Hide() noexcept
 }
 
 void
+GlueGaugeVario::ReinitialiseLook() noexcept
+{
+  ((GaugeVario &)GetWindow()).ReinitialiseLook();
+}
+
+void
 GlueGaugeVario::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
   ((GaugeVario &)GetWindow()).Invalidate();

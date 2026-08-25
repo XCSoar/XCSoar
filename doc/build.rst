@@ -142,6 +142,9 @@ similar operating systems:
 
 -  `libjpeg <https://libjpeg.sourceforge.net/>`__
 
+-  `NetCDF <https://www.unidata.ucar.edu/software/netcdf/>`__
+  (native Linux builds)
+
 -  OpenGL (Mesa)
 
 -  to run XCSoar, you need one of the following fonts (Debian package):
@@ -392,9 +395,14 @@ Debugging for iOS and macOS
 Debugging under iOS and macOS is possible using the LLDB debugger.
 To make this convenient, Xcode or Visual Studio can be used.
 An example Xcode project is provided in `darwin/XCSoar.xcodeproj`. 
-It includes one target for iOS and macOS and will automatically build 
+It includes one target for iOS and macOS and will automatically build
 the XCSoar binary for the selected device target, using the build
 helper script `darwin/build.sh`.
+That script reads optional settings from `darwin/.env` (see
+`darwin/.env.example`); for example ``TESTING=y`` builds the testing
+flavour with the red icon, which on iOS uses the separate bundle
+identifier ``XCSoar-testing`` and can therefore be installed next to the
+stable app.
 For iOS debugging with Visual Studio Code, the `iOS Debug`
 extension (https://github.com/nisargjhaveri/vscode-ios-debug) can be used.
 Note that this also requires an Xcode installation.

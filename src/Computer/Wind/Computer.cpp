@@ -40,7 +40,9 @@ WindComputer::Compute(const WindSettings &settings,
     return;
 
   if (settings.CirclingWindEnabled()) {
-    CirclingWind::Result result = circling_wind.NewSample(basic, calculated);
+    const double vmin = glide_polar.IsValid() ? glide_polar.GetVMin() : 0;
+    CirclingWind::Result result =
+      circling_wind.NewSample(basic, calculated, vmin);
     if (result.IsValid())
       wind_store.SlotMeasurement(basic, result.wind, result.quality);
   }

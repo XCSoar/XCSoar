@@ -42,6 +42,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Weather/MapOverlay/InputEvents.hpp"
 #include "Menu/MenuBar.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "Screen/Layout.hpp"
 
 #ifdef KOBO
 #include "ui/event/KeyCode.hpp"
@@ -212,22 +213,14 @@ InputEvents::drawButtons(Mode mode, bool full) noexcept
   CommonInterface::main_window->ShowMenu(menu, overlay_menu, full);
 
   GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
-  if (map != nullptr)
-  {
-    if (mode != MODE_DEFAULT)
-    {
-      /* Adjust the margin to ensure that GlueMapWindow elements,
-       * such as the scale, are not overdrawn by the buttons
-       * when in Pan mode. */
+  if (map != nullptr) {
+    /* Only portrait pan mode covers the scale with a bottom menu. */
+    unsigned margin = 0;
+    if (mode != MODE_DEFAULT && map->IsPanning() && !Layout::landscape) {
       PixelRect screen_rect = map->GetParentClientRect();
-      unsigned factor = (screen_rect.GetHeight() > screen_rect.GetWidth())
-        ? menubar_height_scale_factor
-        : 5;
-      
-      map->SetBottomMarginFactor(factor);
-    } else {
-      map->SetBottomMarginFactor(0);
+      margin = MenuBar::GetButtonHeight(screen_rect.GetHeight(), true);
     }
+    map->SetBottomMargin(margin);
   }
 }
 

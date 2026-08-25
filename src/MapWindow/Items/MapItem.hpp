@@ -13,6 +13,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Airspace/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
+#include "Renderer/WaypointReachability.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 #include "util/StaticString.hxx"
 
@@ -166,8 +167,15 @@ struct WaypointMapItem: public MapItem
 {
   WaypointPtr waypoint;
 
-  WaypointMapItem(const WaypointPtr &_waypoint)
-    :MapItem(Type::WAYPOINT), waypoint(_waypoint) {}
+  /**
+   * The reachability of this waypoint, calculated the same way as on
+   * the map, so the icon in the dialog matches the one on the map.
+   */
+  WaypointReachability reachable;
+
+  WaypointMapItem(const WaypointPtr &_waypoint,
+                  WaypointReachability _reachable=WaypointReachability::INVALID)
+    :MapItem(Type::WAYPOINT), waypoint(_waypoint), reachable(_reachable) {}
 };
 
 #ifdef HAVE_NOAA

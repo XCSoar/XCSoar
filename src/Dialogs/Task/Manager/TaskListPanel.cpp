@@ -78,7 +78,7 @@ public:
   void CreateButtons(ButtonPanel &buttons) {
     buttons.Add(_("Load"), [this](){ LoadTask(); });
     buttons.Add(_("Rename"), [this](){ RenameTask(); });
-    buttons.Add(_("Delete"), [this](){ DeleteTask(); });
+    buttons.Add(C_("Button", "Delete"), [this](){ DeleteTask(); });
     more_button = buttons.Add(_("More"), [this](){ OnMoreClicked(); });
     buttons.EnableCursorSelection();
   }

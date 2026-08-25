@@ -71,10 +71,11 @@ public:
   void Reset() noexcept;
 
   /**
-   * Called if a new sample is available in the samplelist.
+   * @param vmin polar min-sink TAS [m/s], or 0 if unknown.
    */
   [[nodiscard]]
-  Result NewSample(const MoreData &info, const CirclingInfo &circling) noexcept;
+  Result NewSample(const MoreData &info, const CirclingInfo &circling,
+                   double vmin = 0) noexcept;
 
 private:
   // remembers the status when circling started
@@ -85,11 +86,13 @@ private:
   unsigned int EstimateQuality(double circle_quality,
                                double fit_cosine_quality,
                                double wind_speed,
-                               char angular_rate_source) noexcept;
+                               char angular_rate_source,
+                               bool relax_roundness) noexcept;
 
   [[nodiscard]]
   Result CalcWind(double quality_metric, size_t n_samples,
-                  Angle circle, char angular_rate_source) noexcept;
+                  Angle circle, char angular_rate_source,
+                  bool relax_roundness, double vmin) noexcept;
 
   [[gnu::pure]]
   double FitCosine(size_t n_samples, double amplitude,

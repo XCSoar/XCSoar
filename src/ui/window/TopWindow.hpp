@@ -72,6 +72,7 @@ struct zxdg_toplevel_decoration_v1;
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#include <cmath>
 #endif
 
 namespace UI {
@@ -397,35 +398,38 @@ public:
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept override {
     assert(IsDefined());
-    
-    // Get screen bounds
-    CGRect screenBounds = [UIScreen mainScreen].bounds;
-    // Get screen scale factor. We need to use nativeScale instead of scale
-    // to correctly account for downsampling on mini and Plus devices.
-    CGFloat scale = [UIScreen mainScreen].nativeScale;
-    int width = (int)(screenBounds.size.width * scale);
-    int height = (int)(screenBounds.size.height * scale);
-    
+
+    /* Start from this window's real size (which was derived from the
+       OpenGL drawable) instead of computing the screen size from
+       UIScreen again: two independent conversions from points to
+       pixels can be rounded differently, and a client rect which is
+       one pixel smaller than the framebuffer makes full-screen dialogs
+       look non-maximised. */
+    PixelRect rc = ContainerWindow::GetClientRect();
+
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
     if (window == nullptr) {
       // Fallback to full screen if window is not available
-      return PixelRect(0, 0, width, height);
+      return rc;
     }
-    
-    UIEdgeInsets insets = window.safeAreaInsets;
-    insets.top *= scale;
-    insets.left *= scale;
-    insets.bottom *= scale;
-    insets.right *= scale;
 
-    PixelRect result(
-        static_cast<int>(insets.left),
-        static_cast<int>(insets.top),
-        static_cast<int>(width - insets.right),
-        static_cast<int>(height - insets.bottom)
-    );
+    /* Get the scale factor of the screen this window is on.  We need
+       nativeScale instead of scale to correctly account for
+       downsampling on mini and Plus devices; it is also the scale the
+       window size was derived from. */
+    const CGFloat scale = window.screen.nativeScale;
 
-    return result;
+    /* The safe area is expressed in points.  Round the scaled insets
+       instead of truncating them, which would bias them towards being
+       too small. */
+    const UIEdgeInsets insets = window.safeAreaInsets;
+
+    rc.left += (int)std::lround(insets.left * scale);
+    rc.top += (int)std::lround(insets.top * scale);
+    rc.right -= (int)std::lround(insets.right * scale);
+    rc.bottom -= (int)std::lround(insets.bottom * scale);
+
+    return rc;
   }
 #endif
 

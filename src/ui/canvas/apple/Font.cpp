@@ -46,22 +46,34 @@ Font::Load(const FontDescription &d)
 {
   NativeFontT *native_font;
 
+  /* the bold cut of the system font is asked for directly, so only
+     italic (and bold for the monospace font) is left to the trait
+     conversion below */
+  bool convert_bold = d.IsBold();
+
 #ifndef ENABLE_OPENGL
   const std::lock_guard lock{apple_font_mutex};
 #endif
 
-  if (d.IsMonospace())
+  if (d.IsMonospace()) {
     native_font = [NativeFontT fontWithName: @"Courier" size: d.GetHeight()];
-  else
-    native_font = [NativeFontT fontWithName: @"Helvetica" size: d.GetHeight()];
+  } else {
+    /* the system font covers far more characters than Helvetica (e.g.
+       U+232B, the backspace symbol), and its bold cut is designed
+       rather than synthesised */
+    native_font = convert_bold
+      ? [NativeFontT boldSystemFontOfSize: d.GetHeight()]
+      : [NativeFontT systemFontOfSize: d.GetHeight()];
+    convert_bold = false;
+  }
 
   if (nil == native_font)
     throw std::runtime_error{"fontWithName named"};
 
-  if (d.IsItalic() || d.IsBold()) {
+  if (d.IsItalic() || convert_bold) {
 #ifdef USE_APPKIT
     NSFontTraitMask mask = 0;
-    if (d.IsBold())
+    if (convert_bold)
       mask |= NSBoldFontMask;
     if (d.IsItalic())
       mask |= NSItalicFontMask;
@@ -69,8 +81,12 @@ Font::Load(const FontDescription &d)
         convertFont: native_font
         toHaveTrait: mask];
 #else
-    UIFontDescriptorSymbolicTraits mask = 0;
-    if (d.IsBold())
+    /* start from what the font already has: -fontDescriptorWithSymbolicTraits:
+       replaces the traits, and the bold cut asked for above would be
+       lost when italic is added here */
+    UIFontDescriptorSymbolicTraits mask =
+      native_font.fontDescriptor.symbolicTraits;
+    if (convert_bold)
       mask |= UIFontDescriptorTraitBold;
     if (d.IsItalic())
       mask |= UIFontDescriptorTraitItalic;
@@ -85,6 +101,13 @@ Font::Load(const FontDescription &d)
   height = ceilf([@"ÄjX€µ" sizeWithAttributes: draw_attributes].height);
   ascent_height = static_cast<unsigned>(ceilf([native_font ascender]));
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
+}
+
+bool
+Font::HasGlyph([[maybe_unused]] unsigned unicode) const noexcept
+{
+  /* CoreText falls back to other fonts of the operating system */
+  return true;
 }
 
 PixelSize

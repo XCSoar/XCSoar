@@ -74,7 +74,7 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 
   std::function<void()> UpdateButtons = [file_widget, select_button]() {
     select_button->SetCaption(file_widget->GetSelectedPaths().empty()
-                               ? _("Select all") : _("Select none"));
+                               ? C_("Button", "Select all") : C_("Button", "Select none"));
   };
 
   select_button->SetCallback([file_widget, UpdateButtons]() mutable {

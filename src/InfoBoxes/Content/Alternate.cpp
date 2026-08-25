@@ -56,10 +56,19 @@ const char *
 GetAlternateModeShortLabel(AlternateInfoBoxMode mode) noexcept
 {
   return mode == AlternateInfoBoxMode::MANUAL
-    ? _("MAN")
-    : _("AUTO");
+    ? C_("Abbreviation", "MAN")
+    : C_("Abbreviation", "AUTO");
 }
 
+/**
+ * Value colour for Alternate InfoBoxes.
+ *
+ * Unreachable is red.  Final glide is blue, like Next waypoint (a
+ * calculated glide state, not MacCready green).  Below final glide,
+ * AUTO stays default because the computer is still ranking fields;
+ * MANUAL is red because the pilot pinned this field and it is not
+ * yet flyable straight in.
+ */
 [[gnu::pure]]
 unsigned
 GetAlternateInfoBoxValueColor(const ResolvedAlternateInfo& alternate) noexcept
@@ -67,11 +76,11 @@ GetAlternateInfoBoxValueColor(const ResolvedAlternateInfo& alternate) noexcept
   if (!alternate.solution.IsOk())
     return 1;
 
-  if (alternate.mode == AlternateInfoBoxMode::MANUAL)
-    return alternate.solution.IsFinalGlide() ? 3 : 1;
-
   if (alternate.solution.IsFinalGlide())
     return 2;
+
+  if (alternate.mode == AlternateInfoBoxMode::MANUAL)
+    return 1;
 
   return 0;
 }
@@ -256,7 +265,7 @@ InfoBoxContentAlternateName::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 {
-  SetAlternateTitle(data, slot, _("GR"));
+  SetAlternateTitle(data, slot, C_("Abbreviation", "GR"));
 
   const auto alternate = ResolveAlternateInfo(slot);
   if (!alternate.IsValid()) {
@@ -286,7 +295,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxData &data) noexcept
 void
 InfoBoxContentAlternateAltDiff::Update(InfoBoxData &data) noexcept
 {
-  SetAlternateTitle(data, slot, _("AltD"));
+  SetAlternateTitle(data, slot, C_("Abbreviation", "AltD"));
 
   const auto alternate = ResolveAlternateInfo(slot);
   if (!alternate.IsValid()) {

@@ -5,6 +5,7 @@
 #include "DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Asset.hpp"
+#include "ui/event/TextInput.hpp"
 
 bool
 TextEntryDialog(char *text, size_t width,
@@ -13,6 +14,15 @@ TextEntryDialog(char *text, size_t width,
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:
+    /* the keyboard of the operating system (iOS) is much more capable
+       than ours, so use it wherever there is one */
+    if (HasPointer() && UI::TextInput::HasScreenKeyboard())
+      return TouchTextEntry(text, width, caption, accb, default_shift_state,
+                            true);
+
+    /* no system keyboard on this platform: fall back to our own */
+    [[fallthrough]];
+
   case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
       return TouchTextEntry(text, width, caption, accb, default_shift_state);

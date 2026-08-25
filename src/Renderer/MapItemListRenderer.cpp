@@ -13,6 +13,10 @@
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Units/Units.hpp"
+#include "Units/System.hpp"
+#include "Units/Descriptor.hpp"
+#include "Units/Unit.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -237,7 +241,8 @@ Draw(Canvas &canvas, const PixelRect rc,
      const WaypointRendererSettings &renderer_settings)
 {
   WaypointListRenderer::Draw(canvas, rc, *item.waypoint,
-                             row_renderer, look, renderer_settings);
+                             row_renderer, look, renderer_settings,
+                             item.reachable);
 }
 
 #ifdef HAVE_NOAA
@@ -444,6 +449,10 @@ Draw(Canvas &canvas, PixelRect rc,
      const RaspMapItem &item,
      const TwoTextRowsRenderer &row_renderer)
 {
+  const auto value = FormatRaspValue(item.value);
+  if (!value.empty())
+    rc.right = row_renderer.DrawRightFirstRow(canvas, rc, value);
+
   row_renderer.DrawFirstRow(canvas, rc, item.label.c_str());
 }
 

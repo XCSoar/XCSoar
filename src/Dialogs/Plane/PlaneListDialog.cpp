@@ -136,7 +136,7 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
   dialog.AddButton(_("New"), [this](){ NewClicked(); });
   edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(false); });
   copy_button = dialog.AddButton(_("Copy"), [this](){ EditClicked(true); });
-  delete_button = dialog.AddButton(_("Delete"), [this](){ DeleteClicked(); });
+  delete_button = dialog.AddButton(C_("Button", "Delete"), [this](){ DeleteClicked(); });
   load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
 }
 
@@ -335,7 +335,7 @@ PlaneListWidget::DeleteClicked() noexcept
 
   tmp.Format(_("Delete plane \"%s\"?"),
              tmp_name.c_str());
-  if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
+  if (ShowMessageBox(tmp, C_("Button", "Delete"), MB_YESNO) != IDYES)
     return;
 
   File::Delete(list[GetList().GetCursorIndex()].path);

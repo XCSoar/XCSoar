@@ -181,8 +181,9 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated) noexcept
   }
 
   if (!basic.ground_speed_available || !calculated.wind_available ||
-      !calculated.flight.flying) {
-    /* impossible to calculate */
+      !calculated.flight.flying ||
+      (basic.ground_speed > 0 && !basic.track_available)) {
+    /* GS+wind TAS needs a track whenever ground speed is used */
     basic.airspeed_available.Clear();
     return;
   }

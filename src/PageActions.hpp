@@ -130,4 +130,13 @@ namespace PageActions
    * MainWindow::SetBottomWidget().  Call RestoreBottom() to undo this.
    */
   void SetCustomBottom(Widget *widget);
+
+  /**
+   * Whether map overlay buttons (menu, QuickMenu, zoom) should be
+   * shown.  False for most special pages (e.g. pan fullscreen); true
+   * when #special_page is only a #SetCustomBottom() overlay such as a
+   * QuestionWidget on an otherwise normal map page.
+   */
+  [[gnu::pure]]
+  bool AllowMapOverlayButtons() noexcept;
 };

@@ -10,6 +10,7 @@
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
+#include "Apple/Services.hpp"
 #endif
 
 #include <cassert>
@@ -32,8 +33,10 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
       source = &_source;
       SDL_PauseAudioDevice(device, 0);
       SDL_UnlockAudioDevice(device);
+      return true;
     }
 
+    /* the sample rate has changed, so the device needs to be reopened */
     Stop();
   }
 
@@ -82,6 +85,21 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
     convert_buffer.resize(actual.samples * channels);
 
   source = &_source;
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  // SDL's CoreAudio backend may reset the AVAudioSession category and
+  // options when (re-)opening the audio device, so re-apply XCSoar's
+  // preferred configuration and mark the audio vario as active so that
+  // one-shot sound effects don't deactivate the shared AVAudioSession
+  // (which would also silence the audio vario).
+  //
+  // Both must happen before the device is unpaused: otherwise a one-shot
+  // sound finishing in that window would deactivate the session while the
+  // audio vario is already playing, and SDL would not resume on its own.
+  SetAudioVarioSessionActive(true);
+  ActivateAudioSession();
+#endif
+
   SDL_PauseAudioDevice(device, 0);
 
   return true;
@@ -96,6 +114,10 @@ SDLPCMPlayer::Stop()
   device = -1;
   source = nullptr;
   convert_buffer.clear();
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  SetAudioVarioSessionActive(false);
+#endif
 }
 
 inline void

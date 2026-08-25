@@ -82,6 +82,13 @@ private:
   Button *FindButton(unsigned ch);
 
   void MoveButton(unsigned ch, PixelPoint position) noexcept;
+
+  /**
+   * Move the '-' / '_' key (only one of them exists at a time, see
+   * #UpdateShiftState).
+   */
+  void MoveSymbolKey(PixelPoint position) noexcept;
+
   void ResizeButton(unsigned ch, PixelSize size) noexcept;
   void ResizeButtons();
   void MoveButtonsToRow(const PixelRect &rc, const char *row_keys, unsigned row,

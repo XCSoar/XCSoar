@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Gauge/GaugeVario.hpp"
+#include "Gauge/VarioGeometry.hpp"
 #include "Computer/STF.hpp"
 #include "Look/VarioLook.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -18,6 +19,18 @@ static constexpr double DELTA_V_STEP = 4.0;
 static constexpr double DELTA_V_LIMIT = 16.0;
 #define TEXT_BUG "Bug"
 #define TEXT_BALLAST "Bal"
+
+static int
+GetDialRadius(const VarioLook &look, unsigned window_width) noexcept
+{
+  const int arc_padding = look.arc_label_font.GetHeight();
+  const int tick_length = look.Scale(Layout::GetTextPadding() * 4);
+  const int label_width = look.arc_label_font.TextSize("-5").width;
+  const int right = int(std::min(window_width, look.geometry_width))
+    - int(look.Scale(Layout::GetTextPadding()));
+
+  return std::max(1, right - tick_length - arc_padding / 2 - label_width / 2);
+}
 
 inline
 GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
@@ -109,14 +122,14 @@ inline
 GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
                                                    PixelPoint position) noexcept
   :label_right(position.x),
-   label_top(position.y + Layout::Scale(1)),
+   label_top(position.y + look.Scale(Layout::Scale(1))),
    label_bottom(label_top + look.label_font.GetCapitalHeight()),
    label_y(label_top + look.label_font.GetCapitalHeight()
            - look.label_font.GetAscentHeight()),
    // TODO: update after units got reconfigured?
    value_right(position.x - UnitSymbolRenderer::GetSize(look.unit_font,
                                                         Units::current.vertical_speed_unit).width),
-   value_top(label_bottom + Layout::Scale(2)),
+   value_top(label_bottom + look.Scale(Layout::Scale(2))),
    value_bottom(value_top + look.value_font.GetCapitalHeight()),
    value_y(value_top + look.value_font.GetCapitalHeight()
            - look.value_font.GetAscentHeight())
@@ -126,7 +139,7 @@ GaugeVario::LabelValueGeometry::LabelValueGeometry(const VarioLook &look,
 inline unsigned
 GaugeVario::LabelValueGeometry::GetHeight(const VarioLook &look) noexcept
 {
-  return Layout::Scale(4) + look.value_font.GetCapitalHeight()
+  return look.Scale(Layout::Scale(4)) + look.value_font.GetCapitalHeight()
     + look.label_font.GetCapitalHeight();
 }
 
@@ -134,13 +147,14 @@ inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
   :ballast(look, rc), bugs(look, rc)
 {
-  nlength0 = Layout::Scale(15);
-  nlength1 = Layout::Scale(6);
-  nwidth = Layout::Scale(4);
-  nline = Layout::Scale(8);
+  nlength0 = look.Scale(Layout::Scale(10));
+  nlength1 = look.Scale(Layout::Scale(2));
+  nwidth = look.Scale(Layout::Scale(4));
+  nline = look.Scale(Layout::Scale(8));
 
   offset = rc.GetMiddleRight();
-  offset.x -= Layout::GetTextPadding();
+  offset.x -= look.Scale(Layout::GetTextPadding());
+  dial_radius = GetDialRadius(look, rc.GetWidth());
 
   const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
 
@@ -161,7 +175,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 static constexpr int
 WidthToHeight(int width) noexcept
 {
-  return width * 112 / 100;
+  return width * int(VarioGeometry::VERTICAL_SCALE_PERCENT) / 100;
 }
 
 static constexpr PixelPoint
@@ -181,7 +195,7 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 
   const int arc_padding = look.arc_label_font.GetHeight();
 
-  const int x_radius = rc.GetWidth() - arc_padding;
+  const int x_radius = GetDialRadius(look, rc.GetWidth());
   const int y_radius = WidthToHeight(x_radius);
 
   for (std::size_t i = 0; i < arc.size(); ++i) {
@@ -219,13 +233,14 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 
   const int n_ticks = GAUGEVARIORANGE / (tick_value_step / unit_factor);
 
-  const int tick_length = Layout::GetTextPadding() * 4;
+  const int tick_length = look.Scale(Layout::GetTextPadding() * 4);
 
   const IntPoint2D tick_start{1 - x_radius, 0};
   const IntPoint2D tick_end{-tick_length - x_radius, 0};
   const IntPoint2D label_center{-x_radius - arc_padding / 2 - tick_length, 0};
 
-  for (int i = -n_ticks; i < n_ticks; ++i) {
+  /* The end labels sit beyond the fitted dial on compact layouts. */
+  for (int i = 1 - n_ticks; i < n_ticks; ++i) {
     Angle angle = tick_angle_step * i;
     const FastIntegerRotation r{angle};
 
@@ -289,11 +304,10 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
       ival_av_thermal = ValueToNeedlePos(Calculated().current_thermal.lift_rate);
   }
 
-  auto vval = Basic().VarioOutputFilterActive()
-    ? (Basic().brutto_vario_available
-        ? Basic().FilteredBruttoVario()
-        : 0.)
-    : Basic().brutto_vario;
+  const bool vario_available = Basic().brutto_vario_available;
+  const auto vval = Basic().VarioOutputFilterActive()
+    ? (vario_available ? Basic().FilteredBruttoVario() : 0.)
+    : (vario_available ? Basic().brutto_vario : 0.);
   ival = ValueToNeedlePos(vval);
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (Settings().show_average_needle) {
@@ -312,24 +326,31 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
     ival_last = ival_av;
   }
 
-  if (!IsPersistent() || (sval != sval_last) || (ival != vval_last))
+  if (vario_line_drawn &&
+      (!vario_available || !IsPersistent() ||
+       (sval != sval_last) || (ival != vval_last))) {
     RenderVarioLine(canvas, vval_last, sval_last, true);
+    vario_line_drawn = false;
+  }
 
   sval_last = sval;
   if (Settings().show_thermal_average_needle) {
-      if (!IsPersistent() || ival_av_thermal != ival_av_last)
-          RenderNeedle(canvas, ival_av_last, false, true);
+    if (!IsPersistent() || ival_av_thermal != ival_av_last)
+      RenderNeedle(canvas, ival_av_last, false, true);
 
-      ival_av_last = ival_av_thermal;
+    ival_av_last = ival_av_thermal;
   } else {
-      if (!IsPersistent() || ival != vval_last)
-        RenderNeedle(canvas, vval_last, false, true);
+    if (!IsPersistent() || ival != vval_last)
+      RenderNeedle(canvas, vval_last, false, true);
 
-      vval_last = ival;
+    vval_last = ival;
   }
 
   // now draw items
-  RenderVarioLine(canvas, ival, sval, false);
+  if (vario_available) {
+    RenderVarioLine(canvas, ival, sval, false);
+    vario_line_drawn = true;
+  }
   if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
@@ -357,14 +378,14 @@ GaugeVario::MakePolygon(const int i) noexcept
 
   const FastIntegerRotation r(Angle::Degrees(i));
 
-  bit[0] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, geometry.nwidth}),
+  bit[0] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength0, geometry.nwidth}),
                                  geometry.offset);
-  bit[1] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength1, 0}),
+  bit[1] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength1, 0}),
                                  geometry.offset);
-  bit[2] = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nlength0, -geometry.nwidth}),
+  bit[2] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength0, -geometry.nwidth}),
                                  geometry.offset);
 
-  *bline = TransformRotatedPoint(r.Rotate({-geometry.offset.x + geometry.nline, 0}),
+  *bline = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nline, 0}),
                                  geometry.offset);
 }
 
@@ -385,13 +406,13 @@ void
 GaugeVario::RenderClimb(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
-  int x = rc.right - Layout::Scale(14);
-  int y = rc.bottom - Layout::Scale(24);
+  int x = rc.right - int(look.Scale(Layout::Scale(14)));
+  int y = rc.bottom - int(look.Scale(Layout::Scale(24)));
 
   if (!dirty)
     return;
 
-  const PixelSize dest_size{Layout::VptScale(9)};
+  const PixelSize dest_size{look.Scale(Layout::VptScale(9))};
 
   if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING)
     canvas.Stretch({x, y}, dest_size, look.climb_bitmap, {12, 0}, {12, 12});
@@ -572,17 +593,19 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
 
   double v_diff;
 
-  const unsigned arrow_y_size = Layout::Scale(3);
-  const unsigned arrow_x_size = Layout::Scale(7);
+  const unsigned arrow_y_size = look.Scale(Layout::Scale(3));
+  const unsigned arrow_x_size = look.Scale(Layout::Scale(7));
 
   const PixelRect rc = GetClientRect();
 
   int nary = NARROWS * arrow_y_size;
-  int ytop = rc.top + YOFFSET + nary; // JMW
-  int ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
+  const int y_offset = look.Scale(YOFFSET);
+  int ytop = rc.top + y_offset + nary; // JMW
+  int ybottom = rc.bottom - y_offset - nary
+    - int(look.Scale(Layout::FastScale(1)));
 
-  ytop += Layout::Scale(14);
-  ybottom -= Layout::Scale(14);
+  ytop += look.Scale(Layout::Scale(14));
+  ybottom -= look.Scale(Layout::Scale(14));
 
   x = rc.right - 2 * arrow_x_size;
 
@@ -600,16 +623,17 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
     last_v_diff = v_diff;
 
     if (IsPersistent()) {
-      const unsigned height = nary + arrow_y_size + Layout::FastScale(2);
+      const unsigned height = nary + arrow_y_size
+        + look.Scale(Layout::FastScale(2));
 
       const PixelSize size{arrow_x_size * 2 + 1, height};
 
       // bottom (too slow)
-      canvas.DrawFilledRectangle({{x, ybottom + YOFFSET}, size},
+      canvas.DrawFilledRectangle({{x, ybottom + y_offset}, size},
                                  look.background_color);
 
       // top (too fast)
-      canvas.DrawFilledRectangle({{x, ytop - YOFFSET + 1 - (int)height}, size},
+      canvas.DrawFilledRectangle({{x, ytop - y_offset + 1 - int(height)}, size},
                                  look.background_color);
     }
 
@@ -634,7 +658,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
     if (v_diff > 0) {
       // too slow
       y = ybottom;
-      y += YOFFSET;
+      y += y_offset;
 
       const PixelSize size{arrow_x_size * 2 + 1, arrow_y_size - 1};
       while (v_diff > 0) {
@@ -656,7 +680,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
     } else if (v_diff < 0) {
       // too fast
       y = ytop;
-      y -= YOFFSET;
+      y -= y_offset;
 
       const PixelSize size{arrow_x_size * 2 + 1, y - arrow_y_size + 1};
       while (v_diff < 0) {
@@ -774,13 +798,27 @@ GaugeVario::OnResize(PixelSize new_size) noexcept
 {
   AntiFlickerWindow::OnResize(new_size);
 
+  ReinitialiseLook();
+}
+
+void
+GaugeVario::ReinitialiseLook() noexcept
+{
+
   geometry = {look, GetClientRect()};
 
   /* trigger reinitialisation */
+  dirty = true;
   background_dirty = true;
   needle_initialised = false;
+  vario_line_drawn = false;
 
   average_di.Reset();
   mc_di.Reset();
   gross_di.Reset();
+
+  last_ballast = -1;
+  last_bugs = -1;
+
+  Invalidate();
 }

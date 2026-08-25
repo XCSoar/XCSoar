@@ -143,11 +143,19 @@ VScrollWidget::Show(const PixelRect &rc) noexcept
   UpdateVirtualHeight(rc);
 
   visible = true;
-  widget->Show(GetWindow().GetVirtualRect());
 
   if (reserve_scrollbar) {
-    /* Rich-text content may update its maximum size after the
-       initial Show (e.g. after text layout).  Re-measure. */
+    /* Viewport-sized child: paint uses VScrollPanel::GetOrigin().
+       Avoids Move()/Invalidate of a full virtual-height window on
+       every smooth-scroll tick. */
+    widget->Show(GetWindow().GetPhysicalRect());
+    UpdateVirtualHeight(rc);
+    widget->Move(GetWindow().GetPhysicalRect());
+  } else {
+    widget->Show(GetWindow().GetVirtualRect());
+
+    /* Remeasure after the child has laid out.  Forms may change
+       row sizes during Show(). */
     UpdateVirtualHeight(rc);
     widget->Move(GetWindow().GetVirtualRect());
   }
@@ -182,7 +190,9 @@ VScrollWidget::Move(const PixelRect &rc) noexcept
      and child widget changes size) */
   if (visible) {
     UpdateVirtualHeight(rc);
-    widget->Move(GetWindow().GetVirtualRect());
+    widget->Move(reserve_scrollbar
+                 ? GetWindow().GetPhysicalRect()
+                 : GetWindow().GetVirtualRect());
   }
 }
 
@@ -282,10 +292,19 @@ VScrollWidget::KeyPress(unsigned key_code) noexcept
 void
 VScrollWidget::OnVScrollPanelChange() noexcept
 {
-  if (visible) {
-    UpdateVirtualHeight(GetWindow().GetClientRect());
-    widget->Move(GetWindow().GetVirtualRect());
+  if (!visible)
+    return;
+
+  if (reserve_scrollbar) {
+    /* Origin-only updates already Invalidate() the panel.  Do not
+       Move() the child (Window::Move always invalidates, and the
+       child stays at the physical viewport).  Resize still goes
+       through VScrollWidget::Move. */
+    return;
   }
+
+  UpdateVirtualHeight(GetWindow().GetClientRect());
+  widget->Move(GetWindow().GetVirtualRect());
 }
 
 bool

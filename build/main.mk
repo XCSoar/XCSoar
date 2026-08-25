@@ -109,6 +109,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/Manager.cpp \
 	$(SRC)/Dialogs/Waypoint/dlgWaypointEdit.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointList.cpp \
+	$(SRC)/Dialogs/Waypoint/GetWaypointReachability.cpp \
 	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
@@ -126,6 +127,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/NetworkConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/RaspConfigPanel.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/SkySightConfigPanel.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
@@ -191,6 +193,11 @@ DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/PCMetDialog.cpp \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
+endif
+
+ifeq ($(HAVE_HTTP),y)
+DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Weather/SkySightDialog.cpp
 endif
 
 XCSOAR_SOURCES := \
@@ -400,7 +407,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/Rasp/RaspStore.cpp \
 	$(SRC)/Weather/Rasp/RaspCache.cpp \
 	$(SRC)/Weather/Rasp/RaspRenderer.cpp \
+	$(SRC)/Weather/Rasp/ColorMap.cpp \
 	$(SRC)/Weather/Rasp/RaspStyle.cpp \
+	$(SRC)/Weather/Rasp/RaspStylesData.cpp \
 	$(SRC)/Weather/Rasp/FieldControls.cpp \
 	$(SRC)/Weather/Rasp/Configured.cpp \
 	$(SRC)/Weather/Rasp/DownloadGlue.cpp \
@@ -412,6 +421,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Weather/MapOverlay/WeatherSetupDialog.cpp \
 	$(SRC)/Weather/MapOverlay/RaspControlsModel.cpp \
 	$(SRC)/Weather/MapOverlay/XcthermControlsModel.cpp \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/MapOverlay/SkySightControlsModel.cpp) \
+	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Weather/SkySight/FieldControls.cpp) \
 	$(SRC)/Weather/BackgroundDownloadProgress.cpp \
 	\
 	$(SRC)/Blackboard/BlackboardListener.cpp \
@@ -627,9 +638,21 @@ XCSOAR_SOURCES += \
 endif
 endif
 
+ifeq ($(HAVE_HTTP),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp \
+	$(SRC)/Weather/SkySight/SkySightClient.cpp \
+	$(SRC)/Weather/SkySight/SkySightCache.cpp \
+	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
+	$(SRC)/Weather/SkySight/SkySightRequest.cpp
+
+$(call SRC_TO_OBJ,$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp): CPPFLAGS += $(NETCDF_CPPFLAGS)
+endif
+
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Apple/Services.cpp \
+	$(SRC)/Apple/BackgroundSave.cpp \
 	$(SRC)/Apple/SoundUtil.cpp \
 	$(SRC)/Apple/PathProvider.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \
@@ -808,6 +831,10 @@ endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_LDLIBS += -framework CoreLocation -lSDL2main # include SDL2main for main() on MacOS and iOS (otherwise linking fails)
+endif
+
+ifeq ($(HAVE_HTTP),y)
+XCSOAR_LDLIBS += $(NETCDF_LDLIBS)
 endif
 
 XCSOAR_STRIP = y

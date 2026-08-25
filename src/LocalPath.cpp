@@ -23,12 +23,13 @@
 #endif
 
 #ifdef _WIN32
-#include "system/PathName.hpp"
+#include "system/UTF8Win32.hpp"
 #endif
 
 #include <algorithm>
 #include <list>
 #include <string>
+#include <string_view>
 #include <stdio.h>
 
 #include <cassert>
@@ -36,6 +37,7 @@
 #ifdef _WIN32
 #include <shlobj.h>
 #include <windef.h> // for MAX_PATH
+#include "system/Win32UTF8PathGuard.hpp"
 #endif
 
 #ifdef ANDROID
@@ -183,19 +185,38 @@ ContractLocalPath(Path src) noexcept
 #ifdef _WIN32
 
 /**
+ * Replace the final path component of a UTF-8 path string.
+ */
+static void
+ReplaceBaseNameUTF8(std::string &path, const char *new_base) noexcept
+{
+  const auto slash = path.find_last_of("/\\");
+  if (slash == std::string::npos)
+    path = new_base;
+  else
+    path.replace(slash + 1, std::string::npos, new_base);
+}
+
+/**
  * Find a product data folder in the same location as the executable.
  */
 [[gnu::pure]]
 static AllocatedPath
 FindDataPathAtModule(HMODULE hModule) noexcept
 {
-  char buffer[MAX_PATH];
-  if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
+  wchar_t buffer[MAX_PATH];
+  const DWORD n = GetModuleFileNameW(hModule, buffer, MAX_PATH);
+  /* n == MAX_PATH means truncated (and may lack a terminator). */
+  if (n == 0 || n >= MAX_PATH)
     return nullptr;
 
-  ReplaceBaseName(buffer, PRODUCT_DATA_DIR);
-  return Directory::Exists(Path(buffer))
-    ? AllocatedPath(buffer)
+  std::string path = WideToUTF8(std::wstring_view(buffer, n));
+  if (path.empty())
+    return nullptr;
+
+  ReplaceBaseNameUTF8(path, PRODUCT_DATA_DIR);
+  return Directory::Exists(Path(path.c_str()))
+    ? AllocatedPath(path.c_str())
     : nullptr;
 }
 
@@ -278,10 +299,14 @@ FindDataPaths() noexcept
 
   /* Windows: use "My Documents\<ProductDataDir>" */
   {
-    char buffer[MAX_PATH];
-    if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
-                               result.empty()))
-      result.emplace_back(AllocatedPath::Build(buffer, PRODUCT_DATA_DIR));
+    wchar_t buffer[MAX_PATH];
+    if (SHGetSpecialFolderPathW(nullptr, buffer, CSIDL_PERSONAL,
+                                result.empty())) {
+      const std::string personal = WideToUTF8(buffer);
+      if (!personal.empty())
+        result.emplace_back(AllocatedPath::Build(personal.c_str(),
+                                                 PRODUCT_DATA_DIR));
+    }
   }
 #endif // _WIN32
 

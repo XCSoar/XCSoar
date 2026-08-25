@@ -44,7 +44,7 @@ static constexpr StaticEnumChoice as_display_list[] = {
     N_("All airspaces are displayed.") },
   { AirspaceDisplayMode::CLIP, N_("Clip"),
     N_("Display airspaces below the clip altitude.") },
-  { AirspaceDisplayMode::AUTO, N_("Auto"),
+  { AirspaceDisplayMode::AUTO, NC_("Setting", "Auto"),
     N_("Display airspaces within a margin of the glider.") },
   { AirspaceDisplayMode::ALLBELOW, N_("All below"),
     N_("Display airspaces below the glider or within a margin.") },

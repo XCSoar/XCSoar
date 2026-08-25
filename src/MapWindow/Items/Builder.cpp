@@ -9,6 +9,8 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "Renderer/WaypointReachability.hpp"
+#include "Computer/Settings.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
@@ -71,11 +73,25 @@ MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, Angle bearing)
 }
 
 void
-MapItemListBuilder::AddWaypoints(const Waypoints &waypoints)
+MapItemListBuilder::AddWaypoints(const Waypoints &waypoints,
+                                 const ProtectedRoutePlanner *route_planner,
+                                 const MoreData &basic,
+                                 const DerivedInfo &calculated,
+                                 const ComputerSettings &settings)
 {
-  waypoints.VisitWithinRange(location, range, [&list=list](const auto &w){
-    if (!list.full())
-      list.append(new WaypointMapItem(w));
+  waypoints.VisitWithinRange(location, range, [&](const auto &w){
+    if (list.full())
+      return;
+
+    /* calculate the reachability the same way the map does, so the
+       icon in the dialog matches the one on the map */
+    auto reachable = WaypointReachability::INVALID;
+    if (w->IsLandable() || w->flags.watched)
+      reachable = CalculateWaypointReach(*w, route_planner, basic, calculated,
+                                         settings.polar,
+                                         settings.task).reachability;
+
+    list.append(new WaypointMapItem(w, reachable));
   });
 }
 

@@ -196,7 +196,7 @@ EditTimeOnLayout(PageLayout &page) noexcept
 
   const ComboList combo_list = field.CreateComboList(nullptr);
   StaticString<64> caption;
-  caption.Format("%s %s (UTC)", "XCTherm", _("Time"));
+  caption.Format("%s %s (UTC)", "XC Therm", C_("Weather control", "Time"));
   const auto result =
     WeatherMapOverlay::RunTimePicker(caption.c_str(), combo_list);
 
@@ -257,7 +257,7 @@ EditLayerOnLayout(PageLayout &page, bool offer_setup) noexcept
     return LayerPickerResult::NONE;
 
   DataFieldEnum field;
-  field.AddChoice(-1, _("Auto"));
+  field.AddChoice(-1, C_("Weather control", "Auto"));
   for (unsigned i = 0; i < region.layer_count; ++i)
     field.addEnumText(gettext(region.layers[i].short_label), int(i));
 
@@ -266,9 +266,9 @@ EditLayerOnLayout(PageLayout &page, bool offer_setup) noexcept
                  : unsigned(-1));
 
   bool setup = false;
-  const char *setup_caption = offer_setup ? _("Setup") : nullptr;
+  const char *setup_caption = offer_setup ? C_("Button", "Setup") : nullptr;
   StaticString<64> caption;
-  caption.Format("%s %s", "XCTherm", _("Altitude"));
+  caption.Format("%s %s", "XC Therm", C_("Weather control", "Altitude"));
   if (!ComboPicker(caption.c_str(), field, nullptr,
                    setup_caption, &setup))
     return setup ? LayerPickerResult::OPEN_SETUP

@@ -13,6 +13,11 @@
 #endif
 #include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Weather/Features.hpp"
+
+#ifdef HAVE_HTTP
+#include "SkySightDialog.hpp"
+#include "Dialogs/Settings/Panels/SkySightConfigPanel.hpp"
+#endif
 #if 0
 #include "MapOverlayWidget.hpp"
 #endif
@@ -33,6 +38,18 @@
 static int weather_page = 0;
 
 #ifdef HAVE_HTTP
+static std::unique_ptr<Widget>
+CreateSkySightTabWidget() noexcept
+{
+  return CreateWeatherCredentialGateWidget(
+    []() {
+      return CommonInterface::GetComputerSettings()
+        .weather.skysight.IsDefined();
+    },
+    CreateSkySightConfigPanel,
+    CreateSkySightWidget);
+}
+
 static std::unique_ptr<Widget>
 CreateXCThermTabWidget() noexcept
 {
@@ -79,7 +96,7 @@ CreateEDLUnavailableWidget() noexcept
 {
   static StaticString<128> message;
   FormatFeatureNotAvailableInThisBuildWithoutOpenGLRenderer(
-    message, N_("EDL weather"));
+    message, _("EDL weather"));
   return std::make_unique<EDLUnavailableWidget>(message.c_str());
 }
 #endif
@@ -117,6 +134,13 @@ ShowWeatherDialog(const char *page)
 
   /* setup tabs */
 
+#ifdef HAVE_HTTP
+  if (page != nullptr && StringIsEqual(page, "skysight"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateSkySightTabWidget(), "SkySight");
+#endif
+
 #ifdef HAVE_NOAA
   if (page != nullptr && StringIsEqual(page, "list"))
     start_page = widget.GetSize();
@@ -128,7 +152,7 @@ ShowWeatherDialog(const char *page)
   if (page != nullptr && StringIsEqual(page, "xctherm"))
     start_page = widget.GetSize();
 
-  widget.AddTab(CreateXCThermTabWidget(), "XCTherm");
+  widget.AddTab(CreateXCThermTabWidget(), "XC Therm");
 #endif
 
   if (page != nullptr && StringIsEqual(page, "rasp"))
