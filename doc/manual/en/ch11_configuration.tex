@@ -733,6 +733,37 @@ If customisation is disabled, default fonts will be used.
 
 
 %%%%%%%%%%%%%%%%%%
+\section{Look / Display}\label{sec:interface-display}
+
+This page configures how XCSoar uses the screen of the device.
+
+\begin{description}
+\item[Full screen]  Let XCSoar use the whole screen, including the areas
+  behind the system bars and the display cutout (the ``notch''). The map
+  always fills it completely; \emph{Stretch InfoBox area} decides which
+  edges
+  the InfoBoxes, gauges and map overlays may reach.
+  Only available on Android and iOS.
+\item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
+  that is available to the InfoBoxes, gauges and map overlays. Selecting
+  this entry opens a picker in which you choose the screen edges on which
+  the InfoBox area is stretched out to the screen border, so that they
+  reach the very edge
+  there. Dialogues and the menu buttons always stay inside the safe area.
+  Only relevant while \emph{Full screen} is enabled.
+\item[System status bar]  Whether the system status bar with the clock and
+  the battery level stays visible. \\
+  {\bf Auto}: Show it unless the InfoBox area is stretched to the top
+  screen edge. \\
+  {\bf Visible}: Always show it, even in full screen mode. \\
+  {\bf Hidden}: Never show it. \\
+  While the status bar is visible, the InfoBoxes keep clear of the top screen
+  edge, because they cannot be drawn behind it.
+  Only available on iOS.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
 \section{Look / Screen Layout}\label{sec:interface-appearance}
 \label{conf:interface-appearance}
 
