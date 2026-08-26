@@ -30,6 +30,19 @@ UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
 }
 
 void
+UpdateInfoBoxBloodOxygen(InfoBoxData &data) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.blood_oxygen_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetValueFromPercent(basic.blood_oxygen);
+}
+
+void
 UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().acceleration.available) {
