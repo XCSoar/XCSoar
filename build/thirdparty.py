@@ -39,6 +39,14 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
+# The pinned SDL2 build defaults to no Cocoa driver for iOS.  Enable the
+# desktop macOS video driver without changing the iOS configuration.
+if toolchain.is_darwin and not toolchain.is_target_ios:
+    sdl2.configure_args.append("-DSDL_COCOA=ON")
+    sdl2.configure_args.append("-DSDL_OPENGL=ON")
+    # SDL's EGL backend loads XCSoar's bundled ANGLE libraries at runtime.
+    sdl2.configure_args.append("-DSDL_LOADSO=ON")
+
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
 
 thirdparty_projects = {
