@@ -18,3 +18,8 @@ endif
 $(eval $(call link-library,fmt,FMT))
 
 FMT_LDLIBS += $(LIBFMT_LDLIBS)
+
+# fmt headers are used by common headers such as LogFile.hpp.
+ifneq ($(call THIRDPARTY_PACKAGE_SELECTED,fmt),y)
+TARGET_CPPFLAGS += $(FMT_CPPFLAGS)
+endif
