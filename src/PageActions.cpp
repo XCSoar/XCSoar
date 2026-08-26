@@ -17,6 +17,9 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
+#include "Terrain/TerrainSettings.hpp"
 #include "Weather/MapOverlay/ControlsFactory.hpp"
 #include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
@@ -53,6 +56,7 @@ namespace PageActions {
    * Restore the map zoom afte switching to a configured page.
    */
   static void RestoreMapZoom();
+  static void RestoreTerrainColors();
 
   /**
    * Loads the layout without updating current page information in
@@ -398,6 +402,32 @@ PageActions::RestoreMapZoom()
       map->QuickRedraw();
     }
   }
+
+  RestoreTerrainColors();
+}
+
+void
+PageActions::RestoreTerrainColors()
+{
+  const PagesState &state = CommonInterface::GetUIState().pages;
+  if (state.special_page.IsDefined())
+    return;
+
+  const PageSettings &settings = CommonInterface::GetUISettings().pages;
+  const PageLayout &layout = settings.pages[state.current_index];
+  unsigned ramp;
+  if (layout.terrain_ramp >= 0)
+    ramp = (unsigned)layout.terrain_ramp;
+  else if (!Profile::Get(ProfileKeys::TerrainRamp, ramp) ||
+           ramp >= TerrainRendererSettings::NUM_RAMPS)
+    ramp = 0;
+
+  MapSettings &map_settings = CommonInterface::SetMapSettings();
+  if (map_settings.terrain.ramp == ramp)
+    return;
+
+  map_settings.terrain.ramp = ramp;
+  ActionInterface::SendMapSettings(true);
 }
 
 const PageLayout &
@@ -444,6 +474,7 @@ PageActions::Update()
   }
 
   LoadLayout(GetCurrentLayout());
+  RestoreTerrainColors();
 }
 
 void

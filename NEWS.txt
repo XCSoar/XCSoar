@@ -30,6 +30,11 @@ Version 7.46 - not yet released
   - fix choosing SkySight as a page overlay with no layers available
     silently switching back to None
 * map
+  - add Terrain colors on Config → Look → Pages (map pages) so each
+    page can use its own ramp or the Map Display → Terrain default;
+    the choice is stored with the page and restored after restart
+  - open Config → Look → Pages with the currently active map page
+    selected in the list
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box

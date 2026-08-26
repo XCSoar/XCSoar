@@ -14,6 +14,7 @@
 #include "Profile/PageProfile.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
+#include "UIState.hpp"
 #include "DataGlobals.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
@@ -52,9 +53,13 @@ private:
     MAIN,
     INFO_BOX_PANEL,
     BOTTOM,
+    TERRAIN_COLORS,
     OVERLAY,
     OVERLAY_DETAIL,
   };
+
+  /** Sentinel for "use Map Display → Terrain colors". */
+  static constexpr unsigned TERRAIN_DEFAULT = 0xffff;
 
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
@@ -349,6 +354,7 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
     }
   }
 
+  SetRowEnabled(TERRAIN_COLORS, map_page);
   SetRowEnabled(OVERLAY, map_page);
   SetRowEnabled(OVERLAY_DETAIL, detail_enabled);
 }
@@ -358,6 +364,11 @@ PageLayoutEditWidget::ApplyValueToForm() noexcept
 {
   LoadValueEnum(BOTTOM, value.bottom);
   GetControl(BOTTOM).RefreshDisplay();
+  LoadValueEnum(TERRAIN_COLORS,
+                value.terrain_ramp < 0
+                ? TERRAIN_DEFAULT
+                : (unsigned)value.terrain_ramp);
+  GetControl(TERRAIN_COLORS).RefreshDisplay();
   LoadValueEnum(OVERLAY, value.overlay);
   GetControl(OVERLAY).RefreshDisplay();
   FillOverlayDetailControl();
@@ -430,6 +441,34 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
           bottom_list,
           (unsigned)PageLayout::Bottom::NOTHING, this);
 
+  static constexpr StaticEnumChoice terrain_list[] = {
+    { TERRAIN_DEFAULT, N_("Default"),
+      N_("Use the Terrain colors from Map Display → Terrain.") },
+    { 0, N_("Low lands"), },
+    { 1, N_("Mountainous"), },
+    { 2, N_("Imhof 7"), },
+    { 3, N_("Imhof 4"), },
+    { 4, N_("Imhof 12"), },
+    { 5, N_("Imhof Atlas"), },
+    { 6, N_("ICAO"), },
+    { 9, N_("Vibrant"), },
+    { 7, N_("Grey"), },
+    { 8, N_("White"), },
+    {10, N_("Sandstone"), },
+    {11, N_("Pastel"), },
+    {12, N_("Italian Avioportolano VFR Chart"), },
+    {13, N_("German DFS VFR Chart"), },
+    {14, N_("French SIA VFR Chart"), },
+    {15, N_("High Contrast"), },
+    {16, N_("High Contrast low lands"), },
+    {17, N_("Very low lands"), },
+    nullptr
+  };
+  AddEnum(_("Terrain colors"),
+          _("Terrain color ramp for this map page. Default follows "
+            "Map Display → Terrain."),
+          terrain_list, TERRAIN_DEFAULT, this);
+
   static constexpr StaticEnumChoice overlay_list[] = {
     { PageLayout::Overlay::NONE, N_("None") },
     { PageLayout::Overlay::RASP, NC_("Abbreviation", "RASP") },
@@ -465,6 +504,10 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 
   LoadValueEnum(MAIN, value.main);
   LoadValueEnum(BOTTOM, value.bottom);
+  LoadValueEnum(TERRAIN_COLORS,
+                value.terrain_ramp < 0
+                ? TERRAIN_DEFAULT
+                : (unsigned)value.terrain_ramp);
   LoadValueEnum(OVERLAY, value.overlay);
 
   unsigned ib = IBP_NONE;
@@ -523,6 +566,10 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
         value.bottom = PageLayout::Bottom::NOTHING;
 #endif
     }
+  } else if (&df == &GetDataField(TERRAIN_COLORS)) {
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    const unsigned ramp = dfe.GetValue();
+    value.terrain_ramp = ramp == TERRAIN_DEFAULT ? -1 : (int)ramp;
   } else if (&df == &GetDataField(OVERLAY)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     const auto overlay = (PageLayout::Overlay)dfe.GetValue();
@@ -629,7 +676,18 @@ PageListWidget::Initialise(ContainerWindow &parent,
 void
 PageListWidget::Show(const PixelRect &rc) noexcept
 {
+  /* Select the page that is currently active on the map.  Must run
+     in Show() (after Prepare): SetCursorIndex invokes OnCursorMoved →
+     editor->SetValue(), which needs the editor rows. */
+  unsigned current = CommonInterface::GetUIState().pages.current_index;
+  if (settings.n_pages > 0) {
+    if (current >= settings.n_pages)
+      current = settings.n_pages - 1;
+    GetList().SetCursorIndex(current);
+  }
+
   editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
+  UpdateButtons();
 
   ListWidget::Show(rc);
 }
