@@ -255,6 +255,20 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexc
 }
 
 void
+Canvas::DrawFilledTriangleFan(const FloatPoint2D *points,
+                              unsigned num_points) noexcept
+{
+  if (brush.IsHollow() || num_points < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+
+  ScopeVertexPointer vp(points);
+  brush.Bind();
+  glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
+}
+
+void
 Canvas::DrawHLine(int x1, int x2, int y, Color color) noexcept
 {
   color.Bind();

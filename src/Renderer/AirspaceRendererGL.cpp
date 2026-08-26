@@ -44,12 +44,6 @@ DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
                    GLuint stencil_value,
                    GLuint stencil_mask) noexcept
 {
-  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-  glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
-  glStencilMask(polygon_stencil);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
-  canvas.DrawTriangleFan(points, num_points);
-
   auto min_x = points[0].x;
   auto max_x = points[0].x;
   auto min_y = points[0].y;
@@ -60,6 +54,26 @@ DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
     min_y = std::min(min_y, points[i].y);
     max_y = std::max(max_y, points[i].y);
   }
+
+  /* Don't use a boundary vertex as the fan origin.  An acute first vertex
+     would make every triangle converge at the least numerically stable part
+     of the polygon.  A sub-pixel origin near the bounds center keeps narrow
+     corners local to their two adjacent triangles. */
+  static AllocatedArray<FloatPoint2D> fan_buffer;
+  fan_buffer.GrowDiscard(num_points + 2);
+  fan_buffer[0] = {
+    (float(min_x) + float(max_x)) * 0.5f + 0.25f,
+    (float(min_y) + float(max_y)) * 0.5f + 0.375f,
+  };
+  for (unsigned i = 0; i < num_points; ++i)
+    fan_buffer[i + 1] = {float(points[i].x), float(points[i].y)};
+  fan_buffer[num_points + 1] = fan_buffer[1];
+
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
+  glStencilMask(polygon_stencil);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
+  canvas.DrawFilledTriangleFan(fan_buffer.data(), num_points + 2);
 
   // Extend the cover by one pixel so its edge rules also clear every stencil
   // fragment written along the polygon's maximum coordinates.
