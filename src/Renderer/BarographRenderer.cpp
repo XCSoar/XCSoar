@@ -10,46 +10,103 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
+#include "NMEA/FlyingState.hpp"
 #include "FlightStatistics.hpp"
+#include "Formatter/LocalTimeFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
 #include "util/UTF8.hpp"
 
+#include <cstring>
+
 #include <fmt/format.h>
 
 void
-BarographCaption(char *sTmp, size_t buffer_size, const FlightStatistics &fs)
+BarographCaption(char *sTmp, size_t buffer_size,
+                 const FlightStatistics &fs,
+                 const FlyingState &flight,
+                 RoughTimeDelta utc_offset) noexcept
 {
   if (sTmp == nullptr || buffer_size == 0)
     return;
 
-  const std::lock_guard lock{fs.mutex};
+  sTmp[0] = '\0';
+  size_t used = 0;
 
-  if (!fs.altitude_ceiling.HasResult() || fs.altitude_base.IsEmpty()) {
-    sTmp[0] = '\0';
-  } else if (fs.altitude_ceiling.GetCount() < 4) {
-    auto result = fmt::format_to_n(sTmp, buffer_size - 1, "{}:\r\n  {:.0f}-{:.0f} {}",
-                                   _("Working band"),
-                                   (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
-                                   (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
-                                   Units::GetAltitudeName());
-    *result.out = '\0';
-    CropIncompleteUTF8(sTmp);
-  } else {
-    auto result = fmt::format_to_n(sTmp, buffer_size - 1,
-                                   "{}:\r\n  {:.0f}-{:.0f} {}\r\n\r\n{}:\r\n  {:.0f} {}/hr",
-                                   _("Working band"),
-                                   (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
-                                   (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
-                                   Units::GetAltitudeName(),
-                                   _("Ceiling trend"),
-                                   (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
-                                   Units::GetAltitudeName());
-    *result.out = '\0';
-    CropIncompleteUTF8(sTmp);
+  {
+    const std::lock_guard lock{fs.mutex};
+
+    if (fs.altitude_ceiling.HasResult() && !fs.altitude_base.IsEmpty()) {
+      if (fs.altitude_ceiling.GetCount() < 4) {
+        auto result = fmt::format_to_n(
+          sTmp, buffer_size - 1, "{}:\r\n  {:.0f}-{:.0f} {}",
+          _("Working band"),
+          (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+          (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
+          Units::GetAltitudeName());
+        *result.out = '\0';
+        used = result.size;
+      } else {
+        auto result = fmt::format_to_n(
+          sTmp, buffer_size - 1,
+          "{}:\r\n  {:.0f}-{:.0f} {}\r\n\r\n{}:\r\n  {:.0f} {}/hr",
+          _("Working band"),
+          (double)Units::ToUserAltitude(fs.GetMinWorkingHeight()),
+          (double)Units::ToUserAltitude(fs.GetMaxWorkingHeight()),
+          Units::GetAltitudeName(),
+          _("Ceiling trend"),
+          (double)Units::ToUserAltitude(fs.altitude_ceiling.GetGradient()),
+          Units::GetAltitudeName());
+        *result.out = '\0';
+        used = result.size;
+      }
+      CropIncompleteUTF8(sTmp);
+      used = strlen(sTmp);
+    }
   }
+
+  if (!flight.takeoff_time.IsDefined())
+    return;
+
+  if (used > 0 && used + 4 < buffer_size) {
+    sTmp[used++] = '\r';
+    sTmp[used++] = '\n';
+    sTmp[used++] = '\r';
+    sTmp[used++] = '\n';
+    sTmp[used] = '\0';
+  }
+
+  const auto takeoff =
+    FormatLocalTimeHHMM(flight.takeoff_time, utc_offset);
+
+  const bool show_landing = !flight.flying &&
+    flight.landing_time.IsDefined();
+
+  if (show_landing) {
+    const auto landing =
+      FormatLocalTimeHHMM(flight.landing_time, utc_offset);
+    auto result = fmt::format_to_n(
+      sTmp + used, buffer_size - used - 1,
+      "{}: {}\r\n{}: {}\r\n{}: {}",
+      _("Takeoff"), takeoff.c_str(),
+      _("Landing"), landing.c_str(),
+      _("Flight time"),
+      FormatSignedTimeHHMM(flight.flight_time).c_str());
+    *result.out = '\0';
+  } else {
+    auto result = fmt::format_to_n(
+      sTmp + used, buffer_size - used - 1,
+      "{}: {}\r\n{}: {}",
+      _("Takeoff"), takeoff.c_str(),
+      _("Flight time"),
+      FormatSignedTimeHHMM(flight.flight_time).c_str());
+    *result.out = '\0';
+  }
+
+  CropIncompleteUTF8(sTmp);
 }
 
 void

@@ -34,6 +34,9 @@ Version 7.46 - not yet released
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
+* analysis
+  - show takeoff and flight time on the Analysis barograph caption
+    (plus landing time after landing)
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
