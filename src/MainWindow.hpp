@@ -81,6 +81,12 @@ class MainWindow : public UI::SingleWindow {
   Widget *bottom_widget = nullptr;
 
   /**
+   * A transient #Widget that is shown between the map and the configured
+   * bottom widget.
+   */
+  Widget *bottom_banner_widget = nullptr;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
@@ -232,6 +238,17 @@ protected:
    * new bottom Widget.
    */
   void KillBottomWidget() noexcept;
+
+  bool HaveBottomBannerWidget() const noexcept {
+    return bottom_banner_widget != nullptr && widget == nullptr;
+  }
+
+  /**
+   * Destroy the current bottom banner Widget, but don't resize the main
+   * area.  The caller is responsible for doing that or installing a new
+   * bottom banner Widget.
+   */
+  void KillBottomBannerWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -477,6 +494,13 @@ public:
    * this method with widget==nullptr.
    */
   void SetBottomWidget(Widget *widget) noexcept;
+
+  /**
+   * Show a transient #Widget below the map and above the configured bottom
+   * widget.  This replaces (deletes) the previous bottom banner, if any.
+   * To disable this feature, call this method with widget==nullptr.
+   */
+  void SetBottomBannerWidget(Widget *widget) noexcept;
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted
