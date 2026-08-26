@@ -45,18 +45,18 @@ FlightStatistics::StartTask() noexcept
 }
 
 void
-FlightStatistics::AddAltitudeTerrain(const FloatDuration tflight,
+FlightStatistics::AddAltitudeTerrain(const TimeStamp time,
                                      const double terrainalt) noexcept
 {
   const std::lock_guard lock{mutex};
-  altitude_terrain.Update(ToNormalisedHours(tflight), terrainalt);
+  altitude_terrain.Update(ToNormalisedHours(time.ToDuration()), terrainalt);
 }
 
 void
-FlightStatistics::AddAltitude(const FloatDuration tflight,
+FlightStatistics::AddAltitude(const TimeStamp time,
                               const double alt, const bool final_glide) noexcept
 {
-  const double t = ToNormalisedHours(tflight);
+  const double t = ToNormalisedHours(time.ToDuration());
 
   const std::lock_guard lock{mutex};
 
@@ -100,7 +100,7 @@ FlightStatistics::AddTaskSpeed(const FloatDuration tflight,
 }
 
 void
-FlightStatistics::AddClimbBase(const FloatDuration tflight,
+FlightStatistics::AddClimbBase(const TimeStamp time,
                                const double alt) noexcept
 {
   const std::lock_guard lock{mutex};
@@ -109,15 +109,17 @@ FlightStatistics::AddClimbBase(const FloatDuration tflight,
   // as the base
   //
   if (altitude_ceiling.HasResult())
-    altitude_base.UpdateConvexNegative(ToNormalisedHours(tflight), alt);
+    altitude_base.UpdateConvexNegative(ToNormalisedHours(time.ToDuration()),
+                                       alt);
 }
 
 void
-FlightStatistics::AddClimbCeiling(const FloatDuration tflight,
+FlightStatistics::AddClimbCeiling(const TimeStamp time,
                                   const double alt) noexcept
 {
   const std::lock_guard lock{mutex};
-  altitude_ceiling.UpdateConvexPositive(ToNormalisedHours(tflight), alt);
+  altitude_ceiling.UpdateConvexPositive(ToNormalisedHours(time.ToDuration()),
+                                        alt);
 }
 
 /**
