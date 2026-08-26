@@ -79,6 +79,10 @@ Main()
   int ret = EXIT_FAILURE;
   if (Startup(screen_init.GetDisplay()))
     ret = CommonInterface::main_window->RunEventLoop();
+  else if (WasStartupCancelledByUser())
+    /* quitting from the startup dialogs is a deliberate user action,
+       not an error */
+    ret = EXIT_SUCCESS;
 
   /* The export-flight cache owns an InjectTask on the Asio event loop. */
   ShutdownExportFlightsPanel();
