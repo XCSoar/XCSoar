@@ -8,6 +8,10 @@
 #include "NativeView.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "LogFile.hpp"
+#include "LocalPath.hpp"
+#include "java/Class.hxx"
+
+#include <vector>
 
 Java::TrivialClass NativeView::cls;
 jfieldID NativeView::ptr_field;
@@ -20,6 +24,7 @@ jmethodID NativeView::loadResourceBitmap_method;
 jmethodID NativeView::loadFileBitmap_method;
 jmethodID NativeView::bitmapToTexture_method;
 jmethodID NativeView::shareText_method;
+jmethodID NativeView::shareFiles_method;
 jmethodID NativeView::openURL_method;
 jmethodID NativeView::openWifiSettings_method;
 jmethodID NativeView::openWaypointFile_method;
@@ -66,6 +71,8 @@ NativeView::Initialise(JNIEnv *env)
 
   shareText_method = env->GetMethodID(cls, "shareText",
                                           "(Ljava/lang/String;)V");
+  shareFiles_method = env->GetMethodID(cls, "shareFiles",
+                                       "([Ljava/lang/String;)V");
 
   openURL_method = env->GetMethodID(cls, "openURL",
                                     "(Ljava/lang/String;)Z");
@@ -199,6 +206,41 @@ NativeView::ShareText(JNIEnv *env, const char *text) noexcept
 {
   env->CallVoidMethod(obj, shareText_method,
                       Java::String{env, text}.Get());
+}
+
+void
+NativeView::ShareFiles(JNIEnv *env,
+                       std::span<const Path> absolute_paths) noexcept
+{
+  if (absolute_paths.empty())
+    return;
+
+  std::vector<const char *> relatives;
+  relatives.reserve(absolute_paths.size());
+  for (const Path path : absolute_paths) {
+    if (path == nullptr)
+      continue;
+    const Path relative = RelativePath(path);
+    if (relative == nullptr)
+      continue;
+    relatives.push_back(relative.c_str());
+  }
+
+  if (relatives.empty())
+    return;
+
+  const Java::Class string_class{env, "java/lang/String"};
+  const auto array =
+    env->NewObjectArray(jsize(relatives.size()), string_class, nullptr);
+  if (array == nullptr)
+    return;
+
+  for (jsize i = 0; i < jsize(relatives.size()); ++i) {
+    Java::String rel{env, relatives[std::size_t(i)]};
+    env->SetObjectArrayElement(array, i, rel.Get());
+  }
+
+  env->CallVoidMethod(obj, shareFiles_method, array);
 }
 
 bool

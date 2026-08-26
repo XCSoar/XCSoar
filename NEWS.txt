@@ -19,6 +19,8 @@ Version 7.47 - not yet released
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
 * android
+  - add Share to Export flights so selected IGC/NMEA files can be
+    sent via the system share sheet (Nearby Share, Drive, mail, …)
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
   - keep menu, dialogue and status text from overflowing on a
