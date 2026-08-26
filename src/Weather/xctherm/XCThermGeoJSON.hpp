@@ -27,8 +27,9 @@ struct WindBand {
   double max_ms;  // maximum vertical wind m/s
 
   /**
-   * Each polygon is a vector of rings.
-   * Ring 0 = exterior, rings 1..n = holes (rare in weather data).
+   * Each polygon is a vector of rings.  After Parse() cleanup only the
+   * exterior remains (ring 0); holes are dropped because the overlay
+   * does not draw them.
    */
   std::vector<std::vector<Ring>> polygons;
 
@@ -89,7 +90,14 @@ struct ForecastLayer {
  *
  * Each Feature must have:
  *   properties: { "min": <float>, "max": <float> }
- *   geometry: { "type": "MultiPolygon", "coordinates": [...] }
+ *   geometry: Polygon or MultiPolygon coordinates
+ *
+ * Post-import cleanup:
+ *   - drop holes (not drawn)
+ *   - split self-crossing exteriors
+ *   - drop degenerate / zero-area junk
+ *   - decompose concave exteriors into convex pieces
+ *   - sort bands by ascending |midpoint|
  *
  * @param content The full file content
  * @param skip_neutral If true, skip the band where

@@ -31,6 +31,11 @@ unsigned
 PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
                    GLushort *triangles, float min_distance=1) noexcept;
 
+unsigned
+PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
+                   AllocatedArray<GLushort> &triangles,
+                   float min_distance=0) noexcept;
+
 /**
  * Pack triangle indices into a triangle strip.
  * Empty triangles are inserted to connect individual strips. Thus we always

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Weather/xctherm/XCThermGeoJSON.hpp"
+#include "Weather/xctherm/XCThermGeoJSONCleanup.hpp"
 #include "TestUtil.hpp"
 
 using namespace XCThermGeoJSON;
@@ -32,9 +33,22 @@ P(double lon, double lat)
   return GeoPoint(Angle::Degrees(lon), Angle::Degrees(lat));
 }
 
+static Ring
+MakeBowtie()
+{
+  /* Classic self-crossing quad (figure-8). */
+  Ring ring;
+  ring.push_back(P(0, 0));
+  ring.push_back(P(1, 1));
+  ring.push_back(P(0, 1));
+  ring.push_back(P(1, 0));
+  ring.push_back(P(0, 0));
+  return ring;
+}
+
 int main()
 {
-  plan_tests(14 + 4);
+  plan_tests(14 + 4 + 8 + 3);
 
   ForecastLayer layer;
   /* Two disjoint bands side by side:
@@ -100,6 +114,71 @@ int main()
   ok1(FindBandAtPoint(holed, P(0.5, 0.5), lo, hi));
   ok1(equals(lo, 1.0));
   ok1(equals(hi, 2.0));
+
+  /* --- Cleanup: drop holes --- */
+  {
+    WindBand band = MakeSquareBand(1.0, 2.0, 0, 0, 4, 4);
+    Ring hole;
+    hole.push_back(P(1.5, 1.5));
+    hole.push_back(P(2.5, 1.5));
+    hole.push_back(P(2.5, 2.5));
+    hole.push_back(P(1.5, 2.5));
+    hole.push_back(P(1.5, 1.5));
+    band.polygons[0].push_back(std::move(hole));
+    CleanBandPolygons(band);
+    ok1(band.polygons.size() == 1);
+    ok1(band.polygons[0].size() == 1);
+  }
+
+  /* --- Cleanup: split bowtie into two simple parts --- */
+  {
+    auto parts = CleanExterior(MakeBowtie());
+    ok1(parts.size() == 2);
+    ok1(parts[0].size() == 1 && parts[0][0].size() >= 4);
+    ok1(parts[1].size() == 1 && parts[1][0].size() >= 4);
+  }
+
+  /* --- Cleanup: concave L becomes multiple convex pieces --- */
+  {
+    Ring ell;
+    ell.push_back(P(0, 0));
+    ell.push_back(P(2, 0));
+    ell.push_back(P(2, 1));
+    ell.push_back(P(1, 1));
+    ell.push_back(P(1, 2));
+    ell.push_back(P(0, 2));
+    ell.push_back(P(0, 0));
+    auto parts = CleanExterior(ell);
+    ok1(parts.size() >= 2);
+    ok1(parts.size() <= 4);
+    /* Each piece is a single exterior ring with at least a triangle. */
+    bool all_ok = !parts.empty();
+    for (const auto &poly : parts)
+      if (poly.size() != 1 || poly[0].size() < 4)
+        all_ok = false;
+    ok1(all_ok);
+  }
+
+  /* --- Cleanup: drop zero-area junk --- */
+  {
+    Ring flat;
+    flat.push_back(P(0, 0));
+    flat.push_back(P(1, 0));
+    flat.push_back(P(2, 0));
+    flat.push_back(P(0, 0));
+    ok1(CleanExterior(flat).empty());
+  }
+
+  /* --- Sort bands by ascending |mid| --- */
+  {
+    ForecastLayer sorted;
+    sorted.bands.push_back(MakeSquareBand(3.0, 4.0, 0, 0, 1, 1));   /* |mid|=3.5 */
+    sorted.bands.push_back(MakeSquareBand(-1.0, -0.5, 0, 0, 1, 1)); /* |mid|=0.75 */
+    sorted.bands.push_back(MakeSquareBand(0.2, 0.5, 0, 0, 1, 1));   /* |mid|=0.35 */
+    SortBandsByAbsMid(sorted);
+    ok1(equals((sorted.bands[0].min_ms + sorted.bands[0].max_ms) / 2, 0.35));
+    ok1(equals((sorted.bands[2].min_ms + sorted.bands[2].max_ms) / 2, 3.5));
+  }
 
   return exit_status();
 }

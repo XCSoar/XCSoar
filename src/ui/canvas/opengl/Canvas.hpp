@@ -10,6 +10,7 @@
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Font.hpp"
 #include "ui/canvas/Pen.hpp"
+#include "Math/Point2D.hpp"
 
 #include <string_view>
 
@@ -227,6 +228,13 @@ public:
   void DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
   void DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept;
+
+  /**
+   * Fill a polygon from float screen vertices (sub-pixel).  No outline.
+   * @param min_distance ear-clip neighbour thinning; 0 keeps all verts
+   */
+  void DrawPolygon(const FloatPoint2D *points, unsigned num_points,
+                   float min_distance = 0) noexcept;
 
   /**
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the

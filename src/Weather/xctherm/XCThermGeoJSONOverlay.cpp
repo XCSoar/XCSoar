@@ -13,6 +13,8 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
 #ifdef ENABLE_OPENGL
+#include "Math/FastRotation.hpp"
+#include "Math/Point2D.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
@@ -226,12 +228,15 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   /* Enable alpha blending for the entire overlay draw */
   const ScopeAlphaBlend alpha_blend;
-#endif
 
-  /* Temporary buffer for screen-space polygon points.
-     We reuse this across polygons to avoid reallocation. */
+  /* Float screen verts — avoid integer snap before ear-clip. */
+  std::vector<FloatPoint2D> screen_points;
+  screen_points.reserve(256);
+  const FastRotation screen_rotation{projection.GetScreenAngle()};
+#else
   std::vector<BulkPixelPoint> screen_points;
   screen_points.reserve(256);
+#endif
 
   const auto screen_rect = projection.GetScreenRect();
 
@@ -252,8 +257,7 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
     canvas.SelectNullPen();
 
     for (const auto &polygon : band.polygons) {
-      /* We only draw the exterior ring (ring 0).
-         Holes are rare in weather contour data. */
+      /* Parse() keeps exterior-only rings (holes dropped). */
       if (polygon.empty())
         continue;
 
@@ -278,8 +282,15 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
           br.y < screen_rect.top || tl.y > screen_rect.bottom)
         continue;
 
-      /* Project all points to screen coordinates */
       screen_points.clear();
+#ifdef ENABLE_OPENGL
+      for (const auto &pt : ring)
+        screen_points.push_back(projection.GeoToScreenF(pt,
+                                                        screen_rotation));
+
+      canvas.DrawPolygon(screen_points.data(),
+                         (unsigned)screen_points.size(), 0.f);
+#else
       for (const auto &pt : ring) {
         auto sp = projection.GeoToScreen(pt);
         screen_points.push_back(BulkPixelPoint{sp.x, sp.y});
@@ -287,6 +298,7 @@ XCThermGeoJSONOverlay::Draw(Canvas &canvas,
 
       canvas.DrawPolygon(screen_points.data(),
                          (unsigned)screen_points.size());
+#endif
     }
   }
 }

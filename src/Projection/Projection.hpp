@@ -5,6 +5,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
+#include "Math/Point2D.hpp"
 #include "Math/Util.hpp"
 #include "ui/dim/Point.hpp"
 
@@ -118,6 +119,21 @@ public:
    */
   [[gnu::pure]]
   PixelPoint GeoToScreen(const GeoPoint &g) const noexcept;
+
+  /**
+   * Same as #GeoToScreen, but keeps sub-pixel precision (no integer
+   * truncation).  Prefer this when triangulating dense polygons.
+   */
+  [[gnu::pure]]
+  FloatPoint2D GeoToScreenF(const GeoPoint &g) const noexcept;
+
+  /**
+   * Like #GeoToScreenF with a caller-provided rotation (avoids
+   * rebuilding #FastRotation per vertex).
+   */
+  [[gnu::pure]]
+  FloatPoint2D GeoToScreenF(const GeoPoint &g,
+                            const FastRotation &rotation) const noexcept;
 
   /**
    * Returns the origin/rotation center in screen coordinates

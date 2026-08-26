@@ -53,6 +53,30 @@ Projection::GeoToScreen(const GeoPoint &g) const noexcept
   return sc;
 }
 
+FloatPoint2D
+Projection::GeoToScreenF(const GeoPoint &g,
+                         const FastRotation &rotation) const noexcept
+{
+  assert(IsValid());
+
+  const GeoPoint d = geo_location - g;
+  const auto p = rotation.Rotate(DoublePoint2D{
+    g.latitude.fastcosine() * AngleToPixels(d.longitude),
+    AngleToPixels(d.latitude),
+  });
+
+  return {
+    float(screen_origin.x - p.x),
+    float(screen_origin.y + p.y),
+  };
+}
+
+FloatPoint2D
+Projection::GeoToScreenF(const GeoPoint &g) const noexcept
+{
+  return GeoToScreenF(g, FastRotation{screen_angle});
+}
+
 void
 Projection::SetScale(const double _scale) noexcept
 {

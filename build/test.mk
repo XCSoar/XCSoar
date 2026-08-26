@@ -955,6 +955,7 @@ $(eval $(call link-program,TestColorRamp,TEST_COLOR_RAMP))
 TEST_XCTHERM_BAND_QUERY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoJSONCleanup.cpp \
 	$(TEST_SRC_DIR)/TestXCThermBandQuery.cpp
 TEST_XCTHERM_BAND_QUERY_DEPENDS = GEO MATH
 $(eval $(call link-program,TestXCThermBandQuery,TEST_XCTHERM_BAND_QUERY))

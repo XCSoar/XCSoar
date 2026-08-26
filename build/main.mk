@@ -740,6 +740,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermDownload.cpp \
 	$(SRC)/Weather/xctherm/XCThermDownloadGlue.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
+	$(SRC)/Weather/xctherm/XCThermGeoJSONCleanup.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \
 	$(SRC)/Weather/xctherm/XCThermMapOverlay.cpp \

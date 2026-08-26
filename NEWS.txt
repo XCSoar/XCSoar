@@ -22,6 +22,11 @@ Version 7.46 - not yet released
 * weather
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
+  - clean XCTherm GeoJSON on import: drop holes, split self-crossing
+    contours, drop degenerate rings, decompose concave polygons into
+    convex pieces, and draw weaker |climb| bands before stronger ones
+  - draw XCTherm polygons with float screen coordinates (no integer
+    snap before triangulation) to reduce zoom flicker
   - fix the weather cursor bar keeping light colours in dark mode,
     and unreadable labels on Windows
   - fix SkySight re-downloading forecast metadata when stepping

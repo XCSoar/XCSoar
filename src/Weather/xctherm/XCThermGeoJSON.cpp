@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "XCThermGeoJSON.hpp"
+#include "XCThermGeoJSONCleanup.hpp"
 
 #include <boost/json.hpp>
 
@@ -81,6 +82,35 @@ ParseMultiPolygonCoords(const boost::json::array &arr,
 }
 
 /**
+ * Parse geometry.coordinates for either Polygon or MultiPolygon.
+ * Polygon coordinates are [ring, …]; MultiPolygon are [[ring, …], …].
+ */
+static void
+ParseGeometryCoordinates(const boost::json::object &geom,
+                         std::vector<std::vector<Ring>> &polygons)
+{
+  auto it_coords = geom.find("coordinates");
+  if (it_coords == geom.end() || !it_coords->value().is_array())
+    return;
+
+  const auto &coords = it_coords->value().as_array();
+  std::string_view type;
+  if (auto it_type = geom.find("type");
+      it_type != geom.end() && it_type->value().is_string())
+    type = it_type->value().as_string();
+
+  if (type == "Polygon") {
+    std::vector<Ring> polygon;
+    ParsePolygon(coords, polygon);
+    if (!polygon.empty())
+      polygons.push_back(std::move(polygon));
+  } else {
+    /* MultiPolygon (default) and unknown types with MultiPolygon shape. */
+    ParseMultiPolygonCoords(coords, polygons);
+  }
+}
+
+/**
  * Parse one Feature (one line of the GeoJSON stream).
  *
  * Expected shape:
@@ -115,18 +145,14 @@ ParseFeature(std::string_view line, WindBand &band) noexcept
     band.min_ms = it_min->value().to_number<double>();
     band.max_ms = it_max->value().to_number<double>();
 
-    /* geometry.coordinates */
+    /* geometry.coordinates — Polygon or MultiPolygon */
     auto it_geom = feature.find("geometry");
     if (it_geom == feature.end() || !it_geom->value().is_object())
       return false;
     const auto &geom = it_geom->value().as_object();
 
-    auto it_coords = geom.find("coordinates");
-    if (it_coords == geom.end() || !it_coords->value().is_array())
-      return false;
-
-    ParseMultiPolygonCoords(it_coords->value().as_array(), band.polygons);
-    return true;
+    ParseGeometryCoordinates(geom, band.polygons);
+    return !band.polygons.empty();
   } catch (const std::exception &) {
     /* Malformed line — skip silently (server sometimes ends a tile
        with a partially-buffered Feature). */
@@ -155,18 +181,18 @@ Parse(std::string_view content, bool skip_neutral) noexcept
         const bool is_neutral =
           band.min_ms >= -0.2 && band.max_ms <= 0.2;
         if ((!skip_neutral || !is_neutral) && !band.polygons.empty()) {
-          /* Grow the layer's geographic extent over this band's
-             exterior rings, so callers can cheaply test coverage. */
-          for (const auto &polygon : band.polygons)
-            if (!polygon.empty())
-              for (const auto &pt : polygon[0])
-                layer.bounds.Extend(pt);
+          /* Drop holes, split self-crossings, drop degenerate junk. */
+          CleanBandPolygons(band);
+          if (!band.polygons.empty()) {
+            /* Grow the layer's geographic extent over this band's
+               exterior rings, so callers can cheaply test coverage. */
+            for (const auto &polygon : band.polygons)
+              if (!polygon.empty())
+                for (const auto &pt : polygon[0])
+                  layer.bounds.Extend(pt);
 
-          /* push_back can throw bad_alloc; the function is noexcept
-             on the .hpp, so we keep allocations modest by reserving
-             nothing extra and trust that std::terminate on OOM is
-             acceptable here (consistent with the rest of the file). */
-          layer.bands.push_back(std::move(band));
+            layer.bands.push_back(std::move(band));
+          }
         }
       }
     }
@@ -175,6 +201,9 @@ Parse(std::string_view content, bool skip_neutral) noexcept
       break;
     pos = eol + 1;
   }
+
+  /* Weaker |mid| first so opaque fill lets stronger bands win. */
+  SortBandsByAbsMid(layer);
 
   return layer;
 }

@@ -232,6 +232,26 @@ Canvas::DrawPolygon(const BulkPixelPoint *points, unsigned num_points) noexcept
 }
 
 void
+Canvas::DrawPolygon(const FloatPoint2D *points, unsigned num_points,
+                    float min_distance) noexcept
+{
+  if (brush.IsHollow() || num_points < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+
+  ScopeVertexPointer vp(points);
+  brush.Bind();
+
+  static AllocatedArray<GLushort> triangle_buffer;
+  unsigned idx_count = PolygonToTriangles(points, num_points,
+                                          triangle_buffer, min_distance);
+  if (idx_count > 0)
+    glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
+                   triangle_buffer.data());
+}
+
+void
 Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexcept
 {
   if (brush.IsHollow() && !pen.IsDefined())

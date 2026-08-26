@@ -256,6 +256,16 @@ PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
   return _PolygonToTriangles(points, num_points, triangles, min_distance);
 }
 
+unsigned
+PolygonToTriangles(const FloatPoint2D *points, unsigned num_points,
+                   AllocatedArray<GLushort> &triangles,
+                   float min_distance) noexcept
+{
+  triangles.GrowDiscard(3 * (num_points - 2));
+  return _PolygonToTriangles(points, num_points, triangles.data(),
+                             min_distance);
+}
+
 /**
  * Count the occurrences of each value.
  */
