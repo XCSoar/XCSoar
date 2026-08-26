@@ -130,7 +130,7 @@ AdjustImageViewOnZoomChange(const double old_zoom_factor,
                view_pos.y);
 }
 
-void
+Layout
 PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
                   const double zoom_factor, DoublePoint2D &view_pos,
                   PixelPoint &pending_offset) noexcept
@@ -140,7 +140,7 @@ PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
                               unsigned(canvas.GetHeight())};
   if (bmp_size.width == 0 || bmp_size.height == 0 ||
       canvas_size.width == 0 || canvas_size.height == 0)
-    return;
+    return {};
 
   const double scale = GetImageScale(canvas_size, bmp_size, zoom_factor);
 
@@ -202,7 +202,25 @@ PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
   }
 
   pending_offset = {};
+
+  if (src_size.width == 0 || src_size.height == 0)
+    /* degenerate source rectangle; no overlay can be placed on it */
+    return {};
+
   canvas.Stretch(screen_pos, screen_size, bitmap, src_pos, src_size);
+
+  /* Stretch() was given integral rectangles, so the scale it applied
+     is the ratio of those, not the floating point scale computed
+     above; using the latter would drift the overlay away from the
+     bitmap towards the far edge */
+  return {
+    PixelRect{screen_pos, screen_size},
+    src_pos,
+    {
+      double(screen_size.width) / src_size.width,
+      double(screen_size.height) / src_size.height,
+    },
+  };
 }
 
 } // namespace ImageZoomView

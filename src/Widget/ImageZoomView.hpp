@@ -3,8 +3,10 @@
 
 #pragma once
 
-#include "ui/dim/Point.hpp"
-#include "ui/dim/Size.hpp"
+#include "ui/dim/Rect.hpp"
+#include "Math/Point2D.hpp"
+
+#include <cmath>
 
 #include <algorithm>
 
@@ -53,6 +55,46 @@ IsFitZoomFactor(double zoom_factor) noexcept
 }
 
 /**
+ * Describes where PaintZoomedBitmap() has put the bitmap on the
+ * canvas.  This allows callers to paint overlays on top of the
+ * bitmap at a known bitmap position.
+ */
+struct Layout {
+  /** the area of the canvas covered by the bitmap */
+  PixelRect screen_rect;
+
+  /**
+   * The top-left of the source rectangle passed to Stretch(), in
+   * bitmap pixels.  The fractional pan is already in #screen_rect.
+   */
+  PixelPoint view_pos;
+
+  /**
+   * The factors converting bitmap pixels to canvas pixels.  The two
+   * axes are tracked separately because Canvas::Stretch() works on
+   * integral rectangles: the effective scale is the ratio of the
+   * rectangles it was actually given, and rounding can differ per
+   * axis.
+   */
+  DoublePoint2D scale{0, 0};
+
+  constexpr bool IsDefined() const noexcept {
+    return scale.x > 0 && scale.y > 0;
+  }
+
+  /**
+   * Convert a position inside the bitmap to a canvas position.
+   */
+  [[gnu::pure]]
+  PixelPoint BitmapToScreen(DoublePoint2D p) const noexcept {
+    return {
+      screen_rect.left + int(std::lround((p.x - view_pos.x) * scale.x)),
+      screen_rect.top + int(std::lround((p.y - view_pos.y) * scale.y)),
+    };
+  }
+};
+
+/**
  * Determine the position in the bitmap which is displayed at the given
  * canvas position.
  */
@@ -92,10 +134,11 @@ AdjustImageViewOnZoomChange(double old_zoom_factor, double new_zoom_factor,
  *
  * @param view_pos Top-left of the visible region in bitmap pixels
  * @param pending_offset Drag/key nudge in screen pixels (applied once, then cleared)
+ * @return where the bitmap was painted; undefined if nothing was painted
  */
-void
+Layout
 PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap, double zoom_factor,
-                    DoublePoint2D &view_pos,
+                  DoublePoint2D &view_pos,
                     PixelPoint &pending_offset) noexcept;
 
 } // namespace ImageZoomView
