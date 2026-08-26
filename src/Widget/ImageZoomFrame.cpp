@@ -55,6 +55,13 @@ ImageZoomFrame::SetTryKeyInput(std::function<bool(unsigned)> &&f) noexcept
 }
 
 void
+ImageZoomFrame::SetOverlayRenderer(std::function<void(Canvas &,
+                                                      const ImageZoomView::Layout &)> &&f) noexcept
+{
+  overlay_renderer = std::move(f);
+}
+
+void
 ImageZoomFrame::SetOnZoomChanged(std::function<void()> &&f) noexcept
 {
   on_zoom_changed = std::move(f);
@@ -75,12 +82,16 @@ ImageZoomFrame::OnPaint(Canvas &canvas) noexcept
 
 #ifdef ENABLE_OPENGL
   /* the zoomed bitmap reaches beyond the canvas by up to one source
-     pixel */
+     pixel; the overlay is clipped with it */
   const GLCanvasScissor scissor(canvas);
 #endif
 
-  ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_factor,
-                                   view_pos, pending_offset);
+  const auto layout =
+    ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_factor,
+                                     view_pos, pending_offset);
+
+  if (overlay_renderer && layout.IsDefined())
+    overlay_renderer(canvas, layout);
 }
 
 bool

@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Form/Draw.hpp"
-#include "ui/dim/Point.hpp"
+#include "ImageZoomView.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/window/Features.hpp"
 #include "UIUtil/KineticManager.hpp"
@@ -61,6 +61,9 @@ class ImageZoomFrame final : public WndOwnerDrawFrame {
   std::function<bool(unsigned key_code)> try_key_input;
   std::function<void()> on_zoom_changed;
 
+  std::function<void(Canvas &canvas,
+                     const ImageZoomView::Layout &layout)> overlay_renderer;
+
 public:
   void Create(ContainerWindow &parent, PixelRect rc,
               const WindowStyle &style) noexcept;
@@ -68,6 +71,16 @@ public:
   void SetContent(const Bitmap *bitmap, double *zoom_factor) noexcept;
 
   void SetTryKeyInput(std::function<bool(unsigned key_code)> &&f) noexcept;
+
+  /**
+   * Install a function which paints on top of the bitmap, e.g. to
+   * mark a position inside the image.  It is passed the layout
+   * describing where the bitmap was painted.
+   *
+   * The function is called from OnPaint() and must not throw.
+   */
+  void SetOverlayRenderer(std::function<void(Canvas &canvas,
+                                             const ImageZoomView::Layout &layout)> &&f) noexcept;
 
   /**
    * Set a callback which is invoked after this window has changed the
