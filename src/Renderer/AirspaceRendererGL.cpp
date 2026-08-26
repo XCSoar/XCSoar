@@ -35,17 +35,18 @@ static constexpr GLuint POLYGON_STENCIL = 4;
  * This also handles self-intersections consistently.
  *
  * The caller must have selected the fill brush, enabled stencil testing and
- * initialized POLYGON_STENCIL to zero.  The temporary bit is cleared again
+ * initialized polygon_stencil to zero.  The temporary bit is cleared again
  * before returning.
  */
 static void
 DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
-                   unsigned num_points, GLuint stencil_value,
+                   unsigned num_points, GLuint polygon_stencil,
+                   GLuint stencil_value,
                    GLuint stencil_mask) noexcept
 {
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-  glStencilFunc(GL_ALWAYS, POLYGON_STENCIL, POLYGON_STENCIL);
-  glStencilMask(POLYGON_STENCIL);
+  glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
+  glStencilMask(polygon_stencil);
   glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
   canvas.DrawTriangleFan(points, num_points);
 
@@ -70,9 +71,9 @@ DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
   };
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-  glStencilFunc(GL_EQUAL, stencil_value | POLYGON_STENCIL,
-                stencil_mask | POLYGON_STENCIL);
-  glStencilMask(POLYGON_STENCIL);
+  glStencilFunc(GL_EQUAL, stencil_value | polygon_stencil,
+                stencil_mask | polygon_stencil);
+  glStencilMask(polygon_stencil);
   glStencilOp(GL_ZERO, GL_ZERO, GL_ZERO);
   canvas.DrawTriangleFan(bounds, 4);
 }
@@ -171,6 +172,7 @@ private:
         SetupInterior(airspace, !fill_airspace);
         const GLEnable<GL_BLEND> blend;
         DrawEvenOddPolygon(canvas, raster_points.data(), num_raster_points,
+                           fill_airspace ? FILL_STENCIL : POLYGON_STENCIL,
                            fill_airspace ? 0 : FILL_STENCIL,
                            FILL_STENCIL | OUTLINE_STENCIL);
       }
@@ -313,7 +315,7 @@ private:
       const GLEnable<GL_STENCIL_TEST> stencil;
       const GLEnable<GL_BLEND> blend;
       DrawEvenOddPolygon(canvas, raster_points.data(), num_raster_points,
-                         0, 0);
+                         FILL_STENCIL, 0, 0);
     }
 
     // draw outline
