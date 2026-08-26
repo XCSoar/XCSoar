@@ -661,6 +661,7 @@ private:
                        AtmosphericPressure pressure) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnBloodOxygenSensor(unsigned spo2) noexcept override;
   void OnEngineSensors(bool has_cht,
                        Temperature cht,
                        bool has_egt,

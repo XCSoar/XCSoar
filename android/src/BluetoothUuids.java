@@ -25,6 +25,23 @@ public final class BluetoothUuids {
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
 
   /**
+   * The Bluetooth SIG "Pulse Oximeter Service", used by sensors which
+   * measure the blood oxygen saturation (SpO2).
+   *
+   * @see https://www.bluetooth.com/specifications/specs/pulse-oximeter-service-1-0-1/
+   */
+  static final UUID PULSE_OXIMETER_SERVICE =
+    UUID.fromString("00001822-0000-1000-8000-00805F9B34FB");
+
+  /** a single measurement, sent when the sensor has finished measuring */
+  static final UUID PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5E-0000-1000-8000-00805F9B34FB");
+
+  /** a continuous stream of measurements */
+  static final UUID PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5F-0000-1000-8000-00805F9B34FB");
+
+  /**
    * @see https://sites.google.com/view/ppgmeter/startpage
    * Engine sensors service and characteristic
    */
@@ -102,6 +119,7 @@ public final class BluetoothUuids {
   public static final UUID[] getAllServiceUuids() {
       return new UUID[] { GENERIC_ACCESS_SERVICE,
                           HEART_RATE_SERVICE,
+                          PULSE_OXIMETER_SERVICE,
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
                           NORDIC_UART_SERVICE,
@@ -115,6 +133,8 @@ public final class BluetoothUuids {
     return new UUID[] { CLIENT_CHARACTERISTIC_CONFIGURATION,
                         DEVICE_NAME_CHARACTERISTIC,
                         HEART_RATE_MEASUREMENT_CHARACTERISTIC,
+                        PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC,
+                        PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC,
                         ENGINE_SENSORS_CHARACTERISTIC,
                         HM10_RX_TX_CHARACTERISTIC,
                         NORDIC_UART_RX_CHARACTERISTIC,
