@@ -690,6 +690,39 @@ XCThermAPI::ClearLayer(const std::string &parameter) noexcept
   XCTherm::ClearParsedLayerCache(&parameter);
 }
 
+void
+XCThermAPI::ClearAllCachedData() noexcept
+{
+  {
+    const std::lock_guard lock{cache_mutex};
+    disk_index.clear();
+    geojson_cache.clear();
+    lru_order.clear();
+  }
+
+  if (disk_cache_dir != nullptr) {
+    struct Deleter final : public File::Visitor {
+      void Visit(Path path, Path) override {
+        File::Delete(path);
+      }
+    } deleter;
+
+    for (unsigned r = 0; r < unsigned(XCTherm::Region::COUNT); ++r) {
+      const auto &region = XCTherm::GetRegion(XCTherm::Region(r));
+      try {
+        const auto model_dir =
+          AllocatedPath::Build(disk_cache_dir, Path(region.api_slug));
+        Directory::VisitSpecificFiles(model_dir, "*.xctcache", deleter);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "xctherm: failed to clear cache");
+      }
+    }
+  }
+
+  XCTherm::ClearParsedLayerCache();
+}
+
 unsigned
 XCThermAPI::PruneStaleRuns(const std::string &parameter,
                            unsigned current_utc_hour) noexcept
