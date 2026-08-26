@@ -7,6 +7,7 @@
 #include "Dialogs/Error.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Language/Language.hpp"
+#include "Language/FormatText.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "LogFile.hpp"
@@ -15,19 +16,39 @@
 #include "Screen/Layout.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "util/Exception.hxx"
-#include "Language/FormatText.hpp"
+#include "util/StaticString.hxx"
 #include "Widget/ListWidget.hpp"
 #include "net/wifi/WifiBackend.hpp"
 #include "net/wifi/WifiError.hpp"
 #include "net/wifi/WifiFormat.hpp"
+#include "system/OpenLink.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <array>
 #include <algorithm>
 #include <cstring>
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
+
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
+#if defined(KOBO)
+#include "Kobo/PlatformWifiBackend.hpp"
+#endif
+
+#if defined(HAVE_LINUX_NET_WIFI)
+#include "net/wifi/LinuxWifiBackend.hpp"
+#endif
+
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#include "java/Global.hxx"
+#endif
 
 namespace {
 
@@ -515,4 +536,68 @@ ShowWifiDialog(UniqueWifiBackend backend)
   dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
   dialog.ShowModal();
+}
+
+void
+OpenWifiList(std::function<void()> after) noexcept
+{
+#if defined(KOBO)
+  try {
+    auto backend = CreatePlatformWifiBackend();
+    if (backend == nullptr) {
+      ShowMessageBox(_("WiFi service is not available."),
+                     _("Network"), MB_OK);
+      return;
+    }
+
+    ShowWifiDialog(std::move(backend));
+    if (after)
+      after();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+  }
+#elif defined(HAVE_LINUX_NET_WIFI)
+  try {
+    auto backend = CreateLinuxWifiBackend();
+    if (backend == nullptr) {
+      ShowMessageBox(_("WiFi service is not available."),
+                     _("Network"), MB_OK);
+      return;
+    }
+
+    ShowWifiDialog(std::move(backend));
+    if (after)
+      after();
+  } catch (...) {
+    const auto message = WifiError::Format(std::current_exception());
+    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
+  }
+#elif defined(ANDROID)
+  (void)after;
+  if (native_view != nullptr && native_view->OpenWifiSettings(Java::GetEnv()))
+    return;
+
+  ShowMessageBox(_("Failed to open system settings."),
+                 C_("Setting", "Connectivity"), MB_OK);
+#elif defined(_WIN32)
+  (void)after;
+  if (OpenLink("ms-settings:network-wifi"))
+    return;
+
+  ShowMessageBox(_("Failed to open system settings."),
+                 C_("Setting", "Connectivity"), MB_OK);
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+  (void)after;
+  ShowMessageBox(_("Open the Settings app, then go to Wi-Fi."),
+                 C_("Setting", "Connectivity"), MB_OK);
+#else
+  (void)after;
+  {
+    StaticString<128> message;
+    FormatFeatureNotAvailableInThisBuild(message,
+                                         C_("Setting", "WiFi management"));
+    ShowMessageBox(message, C_("Setting", "Connectivity"), MB_OK);
+  }
+#endif
 }

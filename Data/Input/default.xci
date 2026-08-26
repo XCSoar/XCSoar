@@ -1359,6 +1359,14 @@ location=3
 mode=RemoteStick
 type=key
 data=0
+event=Setup Pages
+event=Mode default
+label=Pages
+location=48
+
+mode=RemoteStick
+type=key
+data=0
 event=Setup Airspace
 event=Mode default
 label=Airspace$(CheckAirspace)
@@ -1689,6 +1697,14 @@ data=0
 event=Mode weather
 label=Forecast\nControls
 location=45
+
+mode=RemoteStick
+type=key
+data=0
+event=WifiList
+event=Mode default
+label=WiFi List
+location=47
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote

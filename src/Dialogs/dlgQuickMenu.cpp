@@ -3,9 +3,12 @@
 
 #include "Asset.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/InternalLink.hpp"
+#include "Dialogs/Settings/Panels/QuickMenuConfigPanel.hpp"
 #include "Form/Button.hpp"
 #include "Form/GridView.hpp"
 #include "Input/InputEvents.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
 #include "Math/Util.hpp"
@@ -15,6 +18,7 @@
 #include "Renderer/TextRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
+#include "UISettings.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "WidgetDialog.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -111,7 +115,8 @@ class QuickMenu final : public WindowWidget {
   PixelRect CalculateConstrainedGridRect(const PixelRect &rc) const noexcept;
 
 public:
-  unsigned clicked_event;
+  unsigned clicked_event = 0;
+  bool customize_clicked = false;
 
   QuickMenu(WndForm &_dialog, const Menu &_menu) noexcept
     :dialog(_dialog), menu(_menu) {}
@@ -183,6 +188,26 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
 
   grid_view->RefreshLayout();
 
+  PixelRect button_rc;
+  button_rc.left = 0;
+  button_rc.top = 0;
+  button_rc.right = Layout::Scale(80);
+  button_rc.bottom = Layout::Scale(30);
+
+  /* Always first: open Config → Look → Quick Menu. */
+  if (buttons.size() < buttons.max_size()) {
+    auto &customize = buttons.emplace_back(
+      *grid_view, button_rc, buttonStyle,
+      std::make_unique<QuickMenuButtonRenderer>(dialog_look,
+                                                _("Customize quick menu")),
+      [this]() {
+        customize_clicked = true;
+        dialog.SetModalResult(mrOK);
+      });
+    customize.SetEnabled(true);
+    grid_view->AddItem(customize);
+  }
+
   for (unsigned i = 0; i < menu.MAX_ITEMS; ++i) {
     if (buttons.size() >= buttons.max_size())
       continue;
@@ -196,12 +221,6 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
       ButtonLabel::Expand(menuItem.label, std::span{buffer});
     if (!expanded.visible)
       continue;
-
-    PixelRect button_rc;
-    button_rc.left = 0;
-    button_rc.top = 0;
-    button_rc.right = Layout::Scale(80);
-    button_rc.bottom = Layout::Scale(30);
 
     auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
                                         std::make_unique<QuickMenuButtonRenderer>(dialog_look,
@@ -497,7 +516,7 @@ ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
     quick_menu.NavigatePage(GridView::Direction::RIGHT);
   });
 
-  dialog.AddButton(_("Close"), mrCancel);
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   quick_menu.SetNavigationButtons(prev_button, next_button);
 
@@ -505,6 +524,9 @@ ShowQuickMenu(UI::SingleWindow &parent, const Menu &menu) noexcept
   
   if (dialog.ShowModal() != mrOK)
     return -1;
+
+  if (dialog.GetWidget().customize_clicked)
+    return -2;
 
   return dialog.GetWidget().clicked_event;
 }
@@ -516,7 +538,35 @@ dlgQuickMenuShowModal(UI::SingleWindow &parent) noexcept
   if (menu == nullptr)
     return;
 
-  const int event = ShowQuickMenu(parent, *menu);
+  const UISettings &ui = CommonInterface::GetUISettings();
+  Menu filtered_menu;
+  const Menu *show_menu = menu;
+
+  if (ui.custom_quick_menu && ui.custom_quick_menu_count > 0) {
+    filtered_menu.Clear();
+    unsigned dest = 0;
+    for (unsigned i = 0; i < ui.custom_quick_menu_count; ++i) {
+      const unsigned location = ui.custom_quick_menu_items[i];
+      if (location >= Menu::MAX_ITEMS)
+        continue;
+
+      const auto &item = (*menu)[location];
+      if (!item.IsDefined())
+        continue;
+
+      filtered_menu.Add(item.label, dest++, item.event);
+    }
+
+    if (dest > 0)
+      show_menu = &filtered_menu;
+  }
+
+  const int event = ShowQuickMenu(parent, *show_menu);
+  if (event == -2) {
+    ShowConfigPanel(_("Quick Menu"), CreateQuickMenuConfigPanel);
+    return;
+  }
+
   if (event >= 0)
     InputEvents::ProcessEvent(event);
 }

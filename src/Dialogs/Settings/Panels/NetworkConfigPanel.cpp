@@ -10,7 +10,6 @@
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/State.hpp"
-#include "system/OpenLink.hpp"
 #include "util/StaticString.hxx"
 
 #include <functional>
@@ -200,66 +199,6 @@ PreparePlatformRows(RowFormWidget &widget, unsigned &n, NetworkConfigRows &rows,
 }
 
 static void
-OpenPlatformWifiList(std::function<void()> refresh) noexcept
-{
-#if defined(KOBO)
-  try {
-    auto backend = CreatePlatformWifiBackend();
-    if (backend == nullptr) {
-      ShowMessageBox(GetWifiServiceUnavailableText(), _("Network"), MB_OK);
-      return;
-    }
-
-    ShowWifiDialog(std::move(backend));
-    refresh();
-  } catch (...) {
-    const auto message = WifiError::Format(std::current_exception());
-    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-  }
-#elif defined(HAVE_LINUX_NET_WIFI)
-  try {
-    auto backend = CreateLinuxWifiBackend();
-    if (backend == nullptr) {
-      ShowMessageBox(GetWifiServiceUnavailableText(), _("Network"), MB_OK);
-      return;
-    }
-
-    ShowWifiDialog(std::move(backend));
-    refresh();
-  } catch (...) {
-    const auto message = WifiError::Format(std::current_exception());
-    ShowMessageBox(message.c_str(), _("Network"), MB_OK);
-  }
-#elif defined(ANDROID)
-  if (native_view != nullptr && native_view->OpenWifiSettings(Java::GetEnv()))
-    return;
-
-  ShowMessageBox(_("Failed to open system settings."),
-                 C_("Setting", "Connectivity"), MB_OK);
-#elif defined(_WIN32)
-  if (OpenLink("ms-settings:network-wifi"))
-    return;
-
-  ShowMessageBox(_("Failed to open system settings."),
-                 C_("Setting", "Connectivity"), MB_OK);
-#elif defined(__APPLE__) && TARGET_OS_IPHONE
-  ShowMessageBox(_("Open the Settings app, then go to Wi-Fi."),
-                 C_("Setting", "Connectivity"), MB_OK);
-#else
-  (void)refresh;
-  {
-    StaticString<128> message;
-    FormatFeatureNotAvailableInThisBuild(message, C_("Setting", "WiFi management"));
-    ShowMessageBox(message, C_("Setting", "Connectivity"), MB_OK);
-  }
-#endif
-
-#if defined(ANDROID) || defined(_WIN32) || (defined(__APPLE__) && TARGET_OS_IPHONE)
-  (void)refresh;
-#endif
-}
-
-static void
 BuildPlatformState(NetworkConfigState &state,
                    const NetworkConfigRows &rows) noexcept
 {
@@ -443,7 +382,7 @@ NetworkConfigWidget::Prepare(ContainerWindow &parent,
   PreparePlatformRows(*this, n, rows, *this);
 
   AddButton(C_("Button", "WiFi List"), [this]() {
-    OpenPlatformWifiList([this]() { OnRefresh(); });
+    OpenWifiList([this]() { OnRefresh(); });
   });
 
   OnRefresh();

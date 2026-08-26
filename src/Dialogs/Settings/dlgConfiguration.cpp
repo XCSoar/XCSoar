@@ -39,6 +39,7 @@
 #include "Panels/TaskDefaultsConfigPanel.hpp"
 #include "Panels/ScoringConfigPanel.hpp"
 #include "Panels/InfoBoxesConfigPanel.hpp"
+#include "Panels/QuickMenuConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
@@ -132,6 +133,7 @@ static constexpr TabMenuPage look_pages[] = {
   { N_("Screen Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
+  { N_("Quick Menu"), CreateQuickMenuConfigPanel },
   { nullptr, nullptr }
 };
 

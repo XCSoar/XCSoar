@@ -54,6 +54,22 @@ struct UISettings {
   bool show_zoom_button;
   bool show_quickmenu_button;
 
+  /**
+   * When enabled, the Quick Menu shows only the selected commands
+   * (locations from the RemoteStick menu) in custom order.
+   */
+  bool custom_quick_menu;
+
+  static constexpr unsigned MAX_CUSTOM_QUICK_MENU = 16;
+
+  /** Number of entries in #custom_quick_menu_items. */
+  unsigned custom_quick_menu_count;
+
+  /**
+   * Menu locations from the RemoteStick / Quick Menu source menu.
+   */
+  uint8_t custom_quick_menu_items[MAX_CUSTOM_QUICK_MENU];
+
   enum class PopupMessagePosition : uint8_t {
     CENTER,
     TOP_LEFT,
