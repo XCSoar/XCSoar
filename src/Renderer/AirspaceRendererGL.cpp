@@ -17,6 +17,7 @@
 #include "ui/canvas/opengl/Scope.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 /**
  * Stencil bits used by the airspace renderers.
@@ -24,6 +25,87 @@
 static constexpr GLuint FILL_STENCIL = 1;
 static constexpr GLuint OUTLINE_STENCIL = 2;
 static constexpr GLuint POLYGON_STENCIL = 4;
+
+/**
+ * Build a wide closed line with bevel joins as independent triangles.
+ *
+ * The generic OpenGL line strip builder changes the strip orientation at
+ * acute bends.  Rounded screen coordinates can move a bend across that
+ * threshold while panning, making sharp padding corners flicker.  Bevel joins
+ * have no angle threshold and remain well-defined all the way to a reversal.
+ */
+static unsigned
+BuildBeveledLoop(const BulkPixelPoint *src, unsigned src_size,
+                 float line_width,
+                 AllocatedArray<FloatPoint2D> &points,
+                 AllocatedArray<FloatPoint2D> &normals,
+                 AllocatedArray<FloatPoint2D> &triangles) noexcept
+{
+  if (src_size < 2)
+    return 0;
+
+  points.GrowDiscard(src_size);
+  unsigned size = 0;
+  for (unsigned i = 0; i < src_size; ++i) {
+    if (size == 0 ||
+        points[size - 1].x != src[i].x || points[size - 1].y != src[i].y)
+      points[size++] = {float(src[i].x), float(src[i].y)};
+  }
+
+  if (size > 1 && points[0] == points[size - 1])
+    --size;
+
+  if (size < 2)
+    return 0;
+
+  const float half_width = line_width * 0.5f;
+  normals.GrowDiscard(size);
+  for (unsigned i = 0; i < size; ++i) {
+    const auto &a = points[i];
+    const auto &b = points[(i + 1) % size];
+    const float dx = b.x - a.x;
+    const float dy = b.y - a.y;
+    const float scale = half_width / std::hypot(dx, dy);
+    normals[i] = {-dy * scale, dx * scale};
+  }
+
+  triangles.GrowDiscard(size * 9);
+  unsigned n = 0;
+  const auto append = [&triangles, &n](FloatPoint2D p) noexcept {
+    triangles[n++] = p;
+  };
+
+  for (unsigned i = 0; i < size; ++i) {
+    const auto &a = points[i];
+    const auto &b = points[(i + 1) % size];
+    const auto &normal = normals[i];
+    const auto a_left = a + normal;
+    const auto a_right = a - normal;
+    const auto b_left = b + normal;
+    const auto b_right = b - normal;
+
+    append(a_left);
+    append(a_right);
+    append(b_left);
+    append(b_left);
+    append(a_right);
+    append(b_right);
+
+    const auto &previous_normal = normals[(i + size - 1) % size];
+    const auto bend = CrossProduct(previous_normal, normal);
+    if (bend > 0) {
+      append(a);
+      append(a - previous_normal);
+      append(a - normal);
+    } else if (bend < 0) {
+      append(a);
+      append(a + previous_normal);
+      append(a + normal);
+    }
+  }
+
+  return n;
+}
 
 /**
  * Fill a possibly degenerate polygon using the even-odd rule.
@@ -98,6 +180,11 @@ class AirspaceVisitorRenderer final
   const AirspaceLook &look;
   const AirspaceWarningCopy &warning_manager;
   const AirspaceRendererSettings &settings;
+
+  AllocatedArray<FloatPoint2D> padding_points;
+  AllocatedArray<FloatPoint2D> padding_normals;
+  AllocatedArray<FloatPoint2D> padding_triangles;
+  unsigned num_padding_vertices = 0;
 
 public:
   AirspaceVisitorRenderer(Canvas &_canvas, const WindowProjection &_projection,
@@ -176,8 +263,12 @@ private:
 
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
+        num_padding_vertices =
+          BuildBeveledLoop(raster_points.data(), num_raster_points,
+                           look.thick_pen.GetWidth(), padding_points,
+                           padding_normals, padding_triangles);
         SetFillStencil();
-        DrawPrepared();
+        DrawPreparedPadding();
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
 
@@ -194,7 +285,7 @@ private:
       if (!fill_airspace) {
         // clear fill stencil (bit 0)
         ClearFillStencil();
-        DrawPrepared();
+        DrawPreparedPadding();
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
     }
@@ -264,8 +355,8 @@ private:
     glStencilMask(FILL_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    canvas.SelectHollowBrush();
-    canvas.Select(look.thick_pen);
+    canvas.SelectBlackBrush();
+    canvas.SelectNullPen();
   }
 
   void ClearFillStencil() {
@@ -275,8 +366,13 @@ private:
     glStencilMask(FILL_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
 
-    canvas.SelectHollowBrush();
-    canvas.Select(look.thick_pen);
+    canvas.SelectBlackBrush();
+    canvas.SelectNullPen();
+  }
+
+  void DrawPreparedPadding() noexcept {
+    canvas.DrawFilledTriangles(padding_triangles.data(),
+                               num_padding_vertices);
   }
 };
 
