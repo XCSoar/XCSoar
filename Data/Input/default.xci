@@ -1084,7 +1084,7 @@ mode=Info1
 type=key
 data=APP4
 event=Mode Info2
-label=Info\nPage 2/3
+label=Info\nPage 2/4
 location=4
 
 mode=Info1
@@ -1134,7 +1134,7 @@ mode=Info2
 type=key
 data=APP4
 event=Mode Info3
-label=Info\nPage 3/3
+label=Info\nPage 3/4
 location=4
 
 mode=Info2
@@ -1182,9 +1182,9 @@ location=9
 # -------------
 mode=Info3
 type=key
-data=ESCAPE
-event=Mode default
-label=Cancel
+data=APP4
+event=Mode Info4
+label=Info\nPage 4/4
 location=4
 
 
@@ -1226,6 +1226,25 @@ event=QuickGuide
 event=Mode default
 label=Quick Guide
 location=9
+
+
+# -------------
+# mode=Info4
+# -------------
+mode=Info4
+type=key
+data=ESCAPE
+event=Mode default
+label=Cancel
+location=4
+
+mode=Info4
+type=key
+data=6
+event=Logbook
+event=Mode default
+label=Logbook
+location=5
 
 # -------------
 # mode=Menu
@@ -1689,6 +1708,14 @@ data=0
 event=Mode weather
 label=Forecast\nControls
 location=45
+
+mode=RemoteStick
+type=key
+data=0
+event=Logbook
+event=Mode default
+label=Logbook
+location=46
 
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote

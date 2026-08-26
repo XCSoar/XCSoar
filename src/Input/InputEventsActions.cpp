@@ -311,6 +311,14 @@ InputEvents::eventChecklist([[maybe_unused]] const char *misc)
   dlgChecklistShowModal();
 }
 
+// Logbook
+// Lists IGC flights from the logs folder with takeoff/landing times.
+void
+InputEvents::eventLogbook([[maybe_unused]] const char *misc)
+{
+  dlgLogbookShowModal();
+}
+
 // Status
 // Displays one of the three status dialogs:
 //    system: display the system status

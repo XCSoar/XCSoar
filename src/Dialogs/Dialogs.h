@@ -9,6 +9,8 @@ void dlgBasicSettingsShowModal();
 
 void dlgChecklistShowModal();
 
+void dlgLogbookShowModal() noexcept;
+
 /**
  * Called from #SettingsLeave when the checklist file path in Site Files
  * was saved so the next checklist open uses the new profile entry.

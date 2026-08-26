@@ -51,6 +51,11 @@ Version 7.46 - not yet released
   - fix the Devices Debug button not writing port traffic to xcsoar.log
     #2903
 * dialogs
+  - add a Logbook dialog under Info listing IGC flights from the logs
+    folder with takeoff and landing from in-flight detection (not
+    E-records); duration is landing HH:MM minus takeoff HH:MM; warn
+    when the file starts or ends with too little time below the
+    takeoff-speed threshold; also available from the Quick Menu
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

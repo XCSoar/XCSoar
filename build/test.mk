@@ -1174,7 +1174,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunEnableNMEA \
 	CAI302Tool \
 	RunIGCWriter \
-	RunFlightLogger RunFlyingComputer \
+	RunFlightLogger RunFlyingComputer RunIGCFlightTimes \
 	RunCirclingWind RunWindEKF RunWindComputer \
 	RunExternalWind \
 	RunTask \
@@ -1906,6 +1906,22 @@ RUN_FLYING_COMPUTER_SOURCES = \
 	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
 RUN_FLYING_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL UNITS
 $(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))
+
+RUN_IGC_FLIGHT_TIMES_SOURCES = \
+	$(SRC)/Computer/IGCFlightTimes.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/Computer/FlyingComputer.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/RunIGCFlightTimes.cpp
+RUN_IGC_FLIGHT_TIMES_DEPENDS = LIBNMEA IO OS GEO MATH UTIL TIME UNITS
+$(eval $(call link-program,RunIGCFlightTimes,RUN_IGC_FLIGHT_TIMES))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
