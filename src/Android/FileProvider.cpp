@@ -4,10 +4,13 @@
 #include "org_xcsoar_FileProvider.h"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "java/String.hxx"
 #include "Components.hpp"
 #include "DataComponents.hpp"
 #include "LocalPath.hpp"
+#include "util/StringAPI.hxx"
+#include "util/StringCompare.hxx"
 
 #include <cassert>
 
@@ -31,4 +34,25 @@ Java_org_xcsoar_FileProvider_getWaypointFileForUri(JNIEnv *env, jclass,
   }
 
   return nullptr;
+}
+
+JNIEXPORT jstring JNICALL
+Java_org_xcsoar_FileProvider_getLocalFileForUri(JNIEnv *env, jclass,
+                                                jstring _relative_path)
+{
+  const auto relative = Java::String::GetUTFChars(env, _relative_path);
+  const char *rel = relative.c_str();
+  if (rel == nullptr || *rel == '\0')
+    return nullptr;
+
+  /* Refuse absolute paths and parent-directory traversal. */
+  if (*rel == '/' || *rel == '\\' ||
+      StringFind(rel, "..") != nullptr)
+    return nullptr;
+
+  const auto path = LocalPath(rel);
+  if (!File::Exists(path))
+    return nullptr;
+
+  return env->NewStringUTF(path.c_str());
 }

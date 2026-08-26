@@ -113,6 +113,13 @@ public final class FileProvider extends ContentProvider {
 
   private static native String getWaypointFileForUri(int id, String filename);
 
+  /**
+   * Resolve a path relative to the XCSoar data directory to an
+   * absolute filesystem path.  Returns null if the path is unsafe
+   * or the file does not exist.
+   */
+  private static native String getLocalFileForUri(String relativePath);
+
   private File getFileForUri(Uri uri) {
     String path = uri.getEncodedPath();
 
@@ -126,6 +133,11 @@ public final class FileProvider extends ContentProvider {
       int id = Integer.parseInt(Uri.decode(path.substring(0, i)));
       String name = Uri.decode(path.substring(i + 1));
       String file = getWaypointFileForUri(id, name);
+      if (file == null)
+        return null;
+      return new File(file);
+    } else if (tag.equals("files")) {
+      String file = getLocalFileForUri(Uri.decode(path));
       if (file == null)
         return null;
       return new File(file);
