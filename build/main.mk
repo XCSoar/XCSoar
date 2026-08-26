@@ -106,6 +106,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointCommandsWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/dlgWaypointDetails.cpp \
+	$(SRC)/Dialogs/Waypoint/dlgWaypointFilter.cpp \
 	$(SRC)/Dialogs/Waypoint/Manager.cpp \
 	$(SRC)/Dialogs/Waypoint/dlgWaypointEdit.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointList.cpp \

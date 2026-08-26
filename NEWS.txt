@@ -30,6 +30,10 @@ Version 7.46 - not yet released
   - fix choosing SkySight as a page overlay with no layers available
     silently switching back to None
 * map
+  - add a waypoint type Display filter on the map Waypoints settings
+    page (SeeYou CUP styles; task and watched waypoints stay visible),
+    including a Non-ICAO airports toggle (hide airports whose short
+    name is not four characters)
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
