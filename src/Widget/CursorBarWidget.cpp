@@ -4,6 +4,7 @@
 #include "CursorBarWidget.hpp"
 
 #include "Asset.hpp"
+#include "Interface.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
@@ -251,9 +252,18 @@ unsigned
 CursorBarWidget::DefaultHeight(unsigned rows) noexcept
 {
   rows = std::clamp(rows, 1U, MAX_ROWS);
-  const unsigned row_h = HasTouchScreen()
+  unsigned row_h = HasTouchScreen()
     ? Layout::GetMaximumControlHeight()
     : Layout::GetMinimumControlHeight();
+
+  unsigned percent =
+    CommonInterface::GetComputerSettings().weather.controls_height_percent;
+  if (percent < 30)
+    percent = 30;
+  else if (percent > 100)
+    percent = 100;
+  row_h = std::max(1u, (row_h * percent + 50) / 100);
+
   const unsigned separators = rows > 1 ? rows - 1 : 0;
   return row_h * rows + separators * SEPARATOR_H;
 }

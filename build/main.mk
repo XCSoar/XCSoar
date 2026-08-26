@@ -140,6 +140,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WeatherConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/WeatherControlsConfigPanel.cpp \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/PCMetConfigPanel.cpp) \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/XCThermConfigPanel.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp \

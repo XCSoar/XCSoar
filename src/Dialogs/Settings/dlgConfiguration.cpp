@@ -72,6 +72,7 @@
 #ifdef HAVE_HTTP
 #include "Panels/XCThermConfigPanel.hpp"
 #endif
+#include "Panels/WeatherControlsConfigPanel.hpp"
 #ifdef HAVE_HTTP
 #include "Panels/SkySightConfigPanel.hpp"
 #endif
@@ -149,6 +150,7 @@ static constexpr TabMenuPage weather_pages[] = {
 #ifdef HAVE_HTTP
   { "XC Therm", CreateXCThermConfigPanel },
 #endif
+  { N_("Controls"), CreateWeatherControlsConfigPanel },
   { nullptr, nullptr }
 };
 

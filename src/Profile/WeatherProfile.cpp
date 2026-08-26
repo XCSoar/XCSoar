@@ -53,6 +53,17 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
   map.Get(ProfileKeys::RaspAutoUpdate, settings.rasp.auto_update);
   map.Get(ProfileKeys::EdlAutoUpdate, settings.edl.auto_update);
+  map.Get(ProfileKeys::WeatherControlsHeightPercent,
+          settings.controls_height_percent);
+  if (settings.controls_height_percent < 30)
+    settings.controls_height_percent = 30;
+  else if (settings.controls_height_percent > 100)
+    settings.controls_height_percent = 100;
+  /* Snap to nearest 10 %. */
+  settings.controls_height_percent =
+    ((settings.controls_height_percent + 5) / 10) * 10;
+  if (settings.controls_height_percent < 30)
+    settings.controls_height_percent = 30;
 
   {
     StaticString<64> xctherm_email;
