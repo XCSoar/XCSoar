@@ -43,7 +43,7 @@ WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
 
 WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetSafeAreaRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(false), auto_size(true)
@@ -61,7 +61,7 @@ WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &loo
 
 WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetSafeAreaRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(true), auto_size(false)
@@ -108,7 +108,7 @@ WidgetDialog::FinishPreliminary(std::unique_ptr<Widget> _widget) noexcept
 void
 WidgetDialog::AutoSize()
 {
-  const PixelRect parent_rc = GetParentClientRect();
+  const PixelRect parent_rc = GetMainWindow().GetSafeAreaRect();
   const PixelSize parent_size = parent_rc.GetSize();
 
   PrepareWidget();

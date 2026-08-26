@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/window/SingleWindow.hpp"
+#include "ui/window/Features.hpp" // for HAVE_FULL_SCREEN_SETTING
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/event/Timer.hpp"
@@ -134,9 +135,36 @@ private:
 
   UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
+  /**
+   * One-shot timer that re-checks the safe area on the next event
+   * loop iteration, which is when the system has applied a change we
+   * asked for.
+   *
+   * @see CheckSafeAreaChange()
+   */
+  UI::Timer safe_area_timer{[this]{ CheckSafeAreaChange(); }};
+
   BatteryTimer battery_timer;
 
   PixelRect map_rect;
+
+  /**
+   * The part of #map_rect that is not covered by InfoBoxes and not
+   * covered by system UI; the map overlays are drawn here.
+   *
+   * @see GetMapSafeAreaRect()
+   */
+  PixelRect map_safe_area_rect{0, 0, 0, 0};
+
+  /**
+   * The safe area the current layout was calculated for.  The system
+   * applies changes to it asynchronously (e.g. after the status bar
+   * has been hidden during startup), so poll for them.
+   *
+   * @see CheckSafeAreaChange()
+   */
+  PixelRect safe_area_rect{0, 0, 0, 0};
+
   bool FullScreen = false;
 
   /**
@@ -272,6 +300,33 @@ private:
   }
 
   /**
+   * The area in which everything except the map itself is laid out.
+   * This is the whole client area on the edges the user chose to
+   * stretch to, and the safe area on all others.
+   *
+   * @see DisplaySettings::safe_area_stretch
+   */
+  [[gnu::pure]]
+  PixelRect GetStretchedSafeAreaRect() const noexcept;
+
+  /**
+   * Re-run the layout if the system has changed the safe area behind
+   * our back.
+   */
+  void CheckSafeAreaChange() noexcept;
+
+  /**
+   * The part of the main area that is covered neither by InfoBoxes
+   * nor by system UI.  The map overlays (compass, map scale, final
+   * glide bar, overlay buttons) are drawn here, and a #Widget shown
+   * instead of the map (FLARM radar, analysis, ...) is laid out here.
+   * The map itself may extend beyond it, behind the InfoBoxes and
+   * behind the system bars and the display cutout.
+   */
+  [[gnu::pure]]
+  PixelRect GetMapSafeAreaRect() const noexcept;
+
+  /**
    * The visible #GlueMapWindow area.  After layout, this is
    * #GlueMapWindow::GetPosition(); otherwise it is computed from
    * #GetMainRect() and top/bottom widgets.
@@ -364,6 +419,19 @@ public:
   }
 
   void SetFullScreen(bool _full_screen) noexcept;
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+  /**
+   * Apply DisplaySettings::full_screen and
+   * DisplaySettings::status_bar, i.e. hide or show the system bars
+   * (status bar, navigation bar, home indicator) and use the whole
+   * screen.
+   *
+   * Not to be confused with #SetFullScreen(), which hides the
+   * InfoBoxes.
+   */
+  void ApplyFullScreenSettings() noexcept;
+#endif
 
   /**
    * Coalesce map area layout (and map #FullRedraw) while a page layout

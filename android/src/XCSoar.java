@@ -280,13 +280,10 @@ public class XCSoar extends Activity implements PermissionManager {
               if (nativeView == null)
                 return;
 
-              int display_width = nativeView.getWidth();
-              int display_height = nativeView.getHeight();
-              int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
-              
-              if (display_width > 0 && display_height > 0) {
-                nativeView.resizedNative(display_width, display_height, inset_left, inset_top, inset_right, inset_bottom);
-              }
+              /* let NativeView determine the insets; hard-coding
+                 zeroes here would drop the safe area whenever the
+                 user toggles full screen mode */
+              nativeView.reportSize();
             }
           });
         }

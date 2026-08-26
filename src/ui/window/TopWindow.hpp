@@ -72,6 +72,8 @@ struct zxdg_toplevel_decoration_v1;
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+
+#include <algorithm>
 #include <cmath>
 #endif
 
@@ -172,6 +174,42 @@ public:
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
+
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+  /**
+   * Shall XCSoar use the whole screen, including the areas covered by
+   * the status bar, the display cutout ("notch") and the home
+   * indicator?  This is the iOS equivalent of Android's immersive
+   * mode.
+   *
+   * The initial value must match the default of
+   * DisplaySettings::full_screen, because the window is created before
+   * the profile is loaded.  On iOS, full-screen mode is opt-in.
+   *
+   * @see SetFullScreenMode()
+   */
+  bool full_screen_mode = false;
+
+  /**
+   * Shall the iOS status bar be hidden?  This is independent of
+   * #full_screen_mode: the window covers the whole screen either way,
+   * and the status bar merely overlays its top edge.
+   *
+   * The initial value must match what DisplaySettings::SetDefaults()
+   * resolves to, because the window is created before the profile has
+   * been loaded.
+   *
+   * @see SetStatusBarHidden()
+   */
+  bool status_bar_hidden = false;
+
+  /**
+   * Pass the current values of #full_screen_mode and
+   * #status_bar_hidden on to iOS.
+   */
+  void ApplyFullScreenMode() noexcept;
+#endif
+
 #ifdef DRAW_MOUSE_CURSOR
   uint8_t cursor_size = 1;
   bool invert_cursor_colors = false;
@@ -242,6 +280,29 @@ public:
   bool resized = false;
 
   PixelSize new_size;
+
+  struct SafeAreaInsets {
+    unsigned left = 0, top = 0, right = 0, bottom = 0;
+  };
+
+  /**
+   * The area covered by system UI (status bar, navigation bar,
+   * display cutout), as reported by Java via
+   * NativeView.resizedNative().
+   *
+   * Protected by #paused_mutex.
+   *
+   * @see PublishSafeAreaInsets()
+   */
+  SafeAreaInsets pending_safe_area_insets;
+
+  /**
+   * The insets the main thread works with.  Only #PublishSafeAreaInsets()
+   * writes it, so readers need no lock.
+   *
+   * @see GetSafeAreaRect()
+   */
+  SafeAreaInsets safe_area_insets;
 #endif
 
   DoubleClick double_click;
@@ -389,29 +450,74 @@ public:
 #endif
     
 #if defined(__APPLE__) && TARGET_OS_IPHONE
-  [[gnu::pure]]
-  const PixelSize GetSize() const noexcept {
-    PixelRect rc = GetClientRect();
-    return {rc.right-rc.left, rc.bottom-rc.top};
+  /**
+   * Enable or disable full-screen mode: hide the status bar, defer the
+   * system edge gestures, and let XCSoar draw into the whole screen,
+   * including the areas behind the display cutout ("notch") and the
+   * home indicator.  This is the iOS equivalent of Android's immersive
+   * mode.
+   *
+   * Unlike on Android, the window keeps its size; only the area
+   * returned by GetClientRect() changes, and no resize event is
+   * generated.
+   *
+   * @see DisplaySettings::full_screen
+   */
+  void SetFullScreenMode(bool _full_screen) noexcept;
+
+  /**
+   * Show or hide the iOS status bar.  This is independent of full
+   * screen mode.
+   */
+  void SetStatusBarHidden(bool _hidden) noexcept;
+
+  bool GetStatusBarHidden() const noexcept {
+    return status_bar_hidden;
   }
 
-  [[gnu::pure]]
-  const PixelRect GetClientRect() const noexcept override {
-    assert(IsDefined());
+  bool GetFullScreenMode() const noexcept {
+    return full_screen_mode;
+  }
 
+  /**
+   * The whole screen, including the areas covered by the status bar,
+   * the display cutout ("notch") and the home indicator.
+   */
+  [[gnu::pure]]
+  const PixelRect GetScreenRect() const noexcept {
     /* Start from this window's real size (which was derived from the
        OpenGL drawable) instead of computing the screen size from
        UIScreen again: two independent conversions from points to
        pixels can be rounded differently, and a client rect which is
        one pixel smaller than the framebuffer makes full-screen dialogs
        look non-maximised. */
-    PixelRect rc = ContainerWindow::GetClientRect();
+    return ContainerWindow::GetClientRect();
+  }
+
+  /**
+   * Like GetSafeAreaRect(), but for a window size that has not been
+   * applied yet, e.g. from inside OnResize().  @p size is the size of
+   * the whole window, not of its client area.
+   */
+  [[gnu::pure]]
+  const PixelRect GetSafeAreaRect(PixelSize size) const noexcept {
+    const PixelRect safe = GetSafeAreaRect();
+    const PixelRect rc{size};
+
+    return PixelRect(std::max(rc.left, safe.left),
+                     std::max(rc.top, safe.top),
+                     std::min(rc.right, safe.right),
+                     std::min(rc.bottom, safe.bottom));
+  }
+
+  [[gnu::pure]]
+  const PixelRect GetSafeAreaRect() const noexcept {
+    PixelRect rc = GetScreenRect();
 
     UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
-    if (window == nullptr) {
-      // Fallback to full screen if window is not available
+    if (window == nullptr)
+      /* the window is not available yet */
       return rc;
-    }
 
     /* Get the scale factor of the screen this window is on.  We need
        nativeScale instead of scale to correctly account for
@@ -428,6 +534,55 @@ public:
     rc.top += (int)std::lround(insets.top * scale);
     rc.right -= (int)std::lround(insets.right * scale);
     rc.bottom -= (int)std::lround(insets.bottom * scale);
+
+    return rc;
+  }
+
+  [[gnu::pure]]
+  const PixelRect GetClientRect() const noexcept override {
+    assert(IsDefined());
+
+    /* full-screen mode draws edge-to-edge, i.e. also behind the
+       status bar, the display cutout and the home indicator */
+    return full_screen_mode ? GetScreenRect() : GetSafeAreaRect();
+  }
+#endif
+
+#if !(defined(__APPLE__) && TARGET_OS_IPHONE)
+  /**
+   * The part of the window that is not covered by system UI such as
+   * the status bar, the navigation bar, the display cutout ("notch")
+   * or the home indicator.  Equals GetClientRect() on platforms and
+   * devices without such areas.
+   */
+  [[gnu::pure]]
+  PixelRect GetSafeAreaRect() const noexcept {
+    PixelRect rc = GetClientRect();
+
+#ifdef ANDROID
+    rc.left += int(safe_area_insets.left);
+    rc.top += int(safe_area_insets.top);
+    rc.right -= int(safe_area_insets.right);
+    rc.bottom -= int(safe_area_insets.bottom);
+#endif
+
+    return rc;
+  }
+
+  /**
+   * Like GetSafeAreaRect(), but for a window size that has not been
+   * applied yet, e.g. from inside OnResize().
+   */
+  [[gnu::pure]]
+  PixelRect GetSafeAreaRect(PixelSize size) const noexcept {
+    PixelRect rc{size};
+
+#ifdef ANDROID
+    rc.left += int(safe_area_insets.left);
+    rc.top += int(safe_area_insets.top);
+    rc.right -= int(safe_area_insets.right);
+    rc.bottom -= int(safe_area_insets.bottom);
+#endif
 
     return rc;
   }
@@ -489,6 +644,22 @@ public:
    * event to the event queue.  This method is thread-safe.
    */
   void AnnounceResize(PixelSize _new_size) noexcept;
+
+  /**
+   * The area covered by system UI has changed.  Called from the
+   * Android UI thread right before the RESIZE event is submitted;
+   * #PublishSafeAreaInsets() then hands the values to the main
+   * thread.  This method is thread-safe.
+   */
+  void AnnounceSafeAreaInsets(unsigned left, unsigned top,
+                              unsigned right, unsigned bottom) noexcept;
+
+  /**
+   * Copy the insets announced by the Android UI thread to the main
+   * thread.  Called while handling the RESIZE event, before anything
+   * is laid out or drawn with them.
+   */
+  void PublishSafeAreaInsets() noexcept;
 
   bool ResumeSurface() noexcept;
 

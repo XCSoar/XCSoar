@@ -21,6 +21,12 @@ struct Event;
 class SingleWindow : public TopWindow {
   std::forward_list<WndForm *> dialogs;
 
+  /**
+   * The area the open dialogs were laid out for.  A dialog that fills
+   * it grows with it; @see OnResize().
+   */
+  PixelRect dialog_rect{0, 0, 0, 0};
+
 public:
   using TopWindow::TopWindow;
 
@@ -52,6 +58,13 @@ public:
    * Forcefully cancel the top-most dialog.
    */
   void CancelDialog() noexcept;
+
+  /**
+   * Is any dialog open that fills the whole area available to
+   * dialogs, i.e. the safe area?
+   */
+  [[gnu::pure]]
+  bool HasMaximisedDialog() const noexcept;
 
   [[gnu::pure]]
   bool HasDialog() const noexcept {

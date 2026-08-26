@@ -171,6 +171,16 @@ protected:
    */
   unsigned top_right_margin = 0;
 
+  /**
+   * Margins that keep the map overlays clear of the areas covered by
+   * system UI (display cutout, status bar, home indicator) while the
+   * map itself uses the whole screen.
+   *
+   * @see GetSafeAreaRect(), DisplaySettings::safe_area_stretch
+   */
+  unsigned safe_area_margin_left = 0, safe_area_margin_top = 0;
+  unsigned safe_area_margin_right = 0, safe_area_margin_bottom = 0;
+
 #ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use
@@ -225,6 +235,34 @@ public:
   }
 
   void SetGlideComputer(GlideComputer *_gc) noexcept;
+
+  /**
+   * Keep the map overlays this far away from the window borders.
+   *
+   * @see GetSafeAreaRect()
+   */
+  void SetSafeAreaMargins(unsigned left, unsigned top,
+                          unsigned right, unsigned bottom) noexcept;
+
+  /**
+   * The part of the given rectangle in which the map overlays
+   * (compass, map scale, final glide bar, ...) may be drawn.  This is
+   * the whole rectangle unless the map extends into areas covered by
+   * system UI.
+   */
+  [[gnu::pure]]
+  PixelRect GetSafeAreaRect(PixelRect rc) const noexcept {
+    rc.left += int(safe_area_margin_left);
+    rc.top += int(safe_area_margin_top);
+    rc.right -= int(safe_area_margin_right);
+    rc.bottom -= int(safe_area_margin_bottom);
+    return rc;
+  }
+
+  [[gnu::pure]]
+  PixelRect GetSafeAreaRect() const noexcept {
+    return GetSafeAreaRect(GetClientRect());
+  }
 
   void SetAirspaces(Airspaces *airspaces) noexcept {
     airspace_renderer.SetAirspaces(airspaces);

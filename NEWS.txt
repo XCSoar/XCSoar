@@ -1,5 +1,16 @@
 Version 7.46 - not yet released
 * android
+  - add the "Stretch safe area" setting (Config → Look → Layout,
+    expert): pick the screen edges on which the InfoBoxes, gauges and
+    map overlays reach the screen border instead of keeping clear of
+    the display cutout and the system bars; the map keeps the whole
+    screen and stays visible above and below them, and InfoBoxes that
+    no longer end at the screen border get a border there
+  - keep dialogs, the menu buttons, the airspace and NOTAM warnings,
+    the FLARM radar and the other pages shown instead of the map
+    inside the safe area in full screen mode, regardless of the edge
+    settings, so the display cutout and the system bars cannot hide a
+    title or a button #2466
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
 * iOS
@@ -10,6 +21,13 @@ Version 7.46 - not yet released
     characters and providing a designed bold cut
   - save the settings when the app moves to the background, so they
     survive being swiped away in the app switcher
+  - add the Full screen setting (Config → Look → Layout, off by
+    default): hide the status bar and use the whole screen, including
+    the areas behind the display cutout and the home indicator
+  - add the System status bar setting (Config → Look → Layout): keep
+    the status bar visible in full screen mode, or hide it without
+    going full screen; "Auto" shows it unless the safe area is
+    stretched to the top screen edge
   - fix other apps' audio staying ducked after XCSoar plays a sound,
     and the audio vario cutting out when leaving settings #2609
   - fix crash on exit after opening the flight export dialog

@@ -419,11 +419,11 @@ Startup(UI::Display &display)
 #endif
 
 #ifdef ANDROID
-  {
-    const auto env = Java::GetEnv();
-    native_view->AcquireWakeLock(env);
-    native_view->SetFullScreen(env, ui_settings.display.full_screen);
-  }
+  native_view->AcquireWakeLock(Java::GetEnv());
+#endif
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+  main_window->ApplyFullScreenSettings();
 #endif
 
   Display::LoadOrientation(operation);

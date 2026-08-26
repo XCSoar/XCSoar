@@ -741,6 +741,27 @@ If customisation is disabled, default fonts will be used.
 This page once more details the appearance of the graphical user interface of XCSoar.
 
 \begin{description}
+\item[Full screen]  Let XCSoar use the whole screen, including the areas
+  behind the system bars and the display cutout (the ``notch''). The map
+  always fills it completely; \emph{Stretch safe area} decides which edges
+  the InfoBoxes, gauges and map overlays may reach.
+  Only available on Android and iOS.
+\item[Stretch safe area*]  The safe area is the part of the screen that is
+  available to the InfoBoxes, gauges and map overlays. Selecting this entry
+  opens a picker in which you choose the screen edges on which the safe area
+  is stretched out to the screen border, so that they reach the very edge
+  there. Dialogues, the menu buttons and the pages shown instead of the map
+  always stay inside the safe area.
+  Only relevant while \emph{Full screen} is enabled.
+\item[System status bar]  Whether the system status bar with the clock and
+  the battery level stays visible. \\
+  {\bf Auto}: Show it unless the safe area is stretched to the top screen
+  edge. \\
+  {\bf Visible}: Always show it, even in full screen mode. \\
+  {\bf Hidden}: Never show it. \\
+  While the status bar is visible, the InfoBoxes keep clear of the top screen
+  edge, because they cannot be drawn behind it.
+  Only available on iOS.
 \item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
   best for your screen size. The preceding number refer to the total number of 
   InfoBoxes of this geometry.
