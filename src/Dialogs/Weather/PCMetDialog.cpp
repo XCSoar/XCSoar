@@ -22,21 +22,37 @@
 #include "Widget/ImageZoomFrame.hpp"
 #include "Widget/Widget.hpp"
 #include "Weather/PCMet/Images.hpp"
+#include "Weather/PCMet/Georeference.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
+#include "Renderer/AircraftRenderer.hpp"
+#include "Look/MapLook.hpp"
+#include "MapSettings.hpp"
 #include "co/InvokeTask.hxx"
 #include "co/Task.hxx"
 #include "net/http/Init.hpp"
 #include "system/Path.hpp"
 #include "Interface.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/event/PeriodicTimer.hpp"
+
+#include <chrono>
 
 class PCMetImageWidget final : public NullWidget {
   const Bitmap &bitmap;
+
+  /**
+   * The geographic extent of #bitmap; nullptr if it is not known, in
+   * which case the aircraft symbol is not drawn.
+   */
+  const PCMet::ImageGeoreference *const georeference;
+
   ImageZoomFrame image_window;
   int zoom = 0;
 
   Button *magnify_button = nullptr;
   Button *shrink_button = nullptr;
+
+  UI::PeriodicTimer update_timer{[this]{ image_window.Invalidate(); }};
 
   void UpdateZoomControls() noexcept
   {
@@ -58,9 +74,49 @@ class PCMetImageWidget final : public NullWidget {
     image_window.ClearPendingOffset();
   }
 
+  /**
+   * Draw the aircraft symbol at the current GPS position, on top of
+   * the image.
+   */
+  void DrawAircraft(Canvas &canvas,
+                    const ImageZoomView::Layout &layout) noexcept
+  {
+    if (georeference == nullptr)
+      return;
+
+    const auto &basic = CommonInterface::Basic();
+    if (!basic.location_available)
+      return;
+
+    const auto pixel = georeference->ToPixel(basic.location);
+    if (!georeference->IsInside(pixel))
+      /* outside the map section this image shows */
+      return;
+
+    /* the georeference refers to the nominal image size; scale in case
+       the DWD ever delivers a different one */
+    const PixelSize size = bitmap.GetSize();
+    const PixelSize nominal = georeference->nominal_size;
+    const auto position = layout.BitmapToScreen({
+      pixel.x * size.width / nominal.width,
+      pixel.y * size.height / nominal.height,
+    });
+
+    if (!layout.screen_rect.Contains(position))
+      /* scrolled out of view */
+      return;
+
+    AircraftRenderer::Draw(canvas, CommonInterface::GetMapSettings(),
+                           UIGlobals::GetMapLook().aircraft,
+                           basic.attitude.heading
+                           - georeference->GetUpBearing(basic.location),
+                           position);
+  }
+
 public:
-  explicit PCMetImageWidget(const Bitmap &_bitmap) noexcept
-    :bitmap(_bitmap) {}
+  PCMetImageWidget(const Bitmap &_bitmap,
+                   const PCMet::ImageGeoreference *_georeference) noexcept
+    :bitmap(_bitmap), georeference(_georeference) {}
 
   void SetZoomButtons(Button *magnify, Button *shrink) noexcept
   {
@@ -145,22 +201,35 @@ public:
     image_window.SetContent(&bitmap, &zoom);
     image_window.SetTryKeyInput(
       [this](unsigned key_code) { return TryImageKey(key_code); });
+
+    if (georeference != nullptr)
+      image_window.SetOverlayRenderer(
+        [this](Canvas &canvas, const ImageZoomView::Layout &layout) {
+          DrawAircraft(canvas, layout);
+        });
+
     UpdateZoomControls();
   }
 
   void Unprepare() noexcept override
   {
     image_window.SetTryKeyInput(nullptr);
+    image_window.SetOverlayRenderer(nullptr);
   }
 
   void Show(const PixelRect &rc) noexcept override
   {
     image_window.MoveAndShow(rc);
     image_window.SetFocus();
+
+    if (georeference != nullptr)
+      /* keep the aircraft symbol up to date while we are moving */
+      update_timer.Schedule(std::chrono::seconds{1});
   }
 
   void Hide() noexcept override
   {
+    update_timer.Cancel();
     image_window.Hide();
   }
 
@@ -180,12 +249,14 @@ public:
 };
 
 static void
-BitmapDialog(const Bitmap &bitmap)
+BitmapDialog(const Bitmap &bitmap,
+             const PCMet::ImageGeoreference *georeference)
 {
   WidgetDialog dialog(WidgetDialog::Full{},
                       UIGlobals::GetMainWindow(),
                       UIGlobals::GetDialogLook(),
-                      "Flugwetter", new PCMetImageWidget(bitmap));
+                      "Flugwetter",
+                      new PCMetImageWidget(bitmap, georeference));
   auto &image = static_cast<PCMetImageWidget &>(dialog.GetWidget());
 
   dialog.AddButton(_("Close"), mrOK);
@@ -215,7 +286,7 @@ BitmapDialog(const PCMet::ImageType &type, const PCMet::ImageArea &area)
 
     Bitmap bitmap;
     bitmap.LoadFile(*path);
-    BitmapDialog(bitmap);
+    BitmapDialog(bitmap, PCMet::FindImageGeoreference(type.uri, area.name));
   } catch (...) {
     ShowError(std::current_exception(), "Flugwetter");
   }
