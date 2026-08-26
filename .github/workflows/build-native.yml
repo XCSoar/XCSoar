@@ -368,12 +368,10 @@ jobs:
             ~/opt/bundletool
 
       - name: "Cache third-party libraries"
-        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' }}
+        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'KOBO' || matrix.target == 'MACOS' }}
         uses: actions/cache@v6
         with:
-          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/thirdparty.mk') }}
-          restore-keys: |
-            thirdparty-${{ matrix.target }}-
+          key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/pkg-config.sh', 'build/python/build/cmake.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/python/build/*.py', 'build/thirdparty.mk', 'lib/**/patches/**') }}
           path: |
             ${{ github.workspace }}/output/${{ matrix.target }}/lib
 

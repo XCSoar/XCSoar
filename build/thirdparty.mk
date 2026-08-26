@@ -11,6 +11,9 @@ else ifeq ($(TARGET),ANDROID)
   endif
 else ifeq ($(TARGET_IS_IOS),y)
   USE_THIRDPARTY_LIBS = y
+else ifeq ($(TARGET_IS_OSX),y)
+  USE_THIRDPARTY_LIBS = y
+  THIRDPARTY_PACKAGES ?= sdl2
 else
   USE_THIRDPARTY_LIBS = n
 endif
