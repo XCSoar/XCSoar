@@ -102,7 +102,7 @@ TEST_NAMES = \
 	TestFilteredVarioComputer \
 	TestBasicComputer \
 	TestVarioSynthesiser TestAudioVario \
-	TestWaypointReader TestThermalBase \
+	TestWaypointReader TestWaypointDisplay TestThermalBase \
 	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestFlarmSpokenAlert \
@@ -1607,6 +1607,14 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
 TEST_WAY_POINT_FILE_DEPENDS = WAYPOINTFILE PROFILE OPERATION GEO MATH IO ZZIP OS THREAD UTIL
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
+
+TEST_WAYPOINT_DISPLAY_SOURCES = \
+	$(SRC)/Renderer/WaypointRendererSettings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestWaypointDisplay.cpp
+TEST_WAYPOINT_DISPLAY_DEPENDS = PROFILE UTIL
+$(eval $(call link-program,TestWaypointDisplay,TEST_WAYPOINT_DISPLAY))
 
 TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

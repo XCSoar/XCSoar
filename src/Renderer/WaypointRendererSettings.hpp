@@ -4,6 +4,7 @@
 #pragma once
 
 #include "LabelShape.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 #include <cstdint>
 
@@ -61,6 +62,18 @@ struct WaypointRendererSettings {
    */
   int map_waypoint_icon_scale;
 
+  /**
+   * Per-type map display filter, indexed by #Waypoint::Type.
+   * Task and watched waypoints are always drawn.
+   */
+  bool display_types[unsigned(Waypoint::Type::COUNT)];
+
+  [[gnu::pure]]
+  bool IsTypeDisplayed(Waypoint::Type type) const noexcept {
+    const unsigned i = unsigned(type);
+    return i >= unsigned(Waypoint::Type::COUNT) || display_types[i];
+  }
+
   void SetDefaults() noexcept {
     display_text_type = DisplayTextType::SHORT_NAME;
     arrival_height_display = ArrivalHeightDisplay::GLIDE;
@@ -72,7 +85,13 @@ struct WaypointRendererSettings {
     scale_runway_length = false;
     landable_rendering_scale = 100;
     map_waypoint_icon_scale = 100;
+
+    for (bool &display : display_types)
+      display = true;
   }
 
   void LoadFromProfile() noexcept;
+
+  /** Persist one type's display flag to the profile. */
+  void SaveTypeDisplay(Waypoint::Type type, bool display) noexcept;
 };
