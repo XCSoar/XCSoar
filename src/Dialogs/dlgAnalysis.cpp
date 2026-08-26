@@ -351,7 +351,8 @@ ChartControl::OnPaint(Canvas &canvas) noexcept
   case AnalysisPage::BAROGRAPH:
     RenderBarograph(canvas, rcgfx, chart_look, cross_section_look,
                     glide_computer.GetFlightStats(),
-                    basic, calculated, protected_task_manager);
+                    basic, calculated, protected_task_manager,
+                    settings_computer.utc_offset);
     break;
   case AnalysisPage::CLIMB:
     if (protected_task_manager != NULL) {

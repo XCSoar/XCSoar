@@ -167,6 +167,10 @@ Version 7.46 - not yet released
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
+* analysis
+  - plot the Analysis barograph against clock time (end labels and
+    hourly tick marks) so successive flights without relaunch no
+    longer overlay each other or mix terrain on the same X axis
 * FLARM
   - download flights from a PowerFLARM Flex or Fusion over the
     device Wi-Fi, after asking the device for its type #1882

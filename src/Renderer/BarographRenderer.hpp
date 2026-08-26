@@ -5,6 +5,8 @@
 
 #include <cstddef>
 
+#include "time/RoughTime.hpp"
+
 struct PixelRect;
 class Canvas;
 struct ChartLook;
@@ -35,4 +37,5 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
                 const FlightStatistics &fs,
                 const NMEAInfo &nmea_info,
                 const DerivedInfo &derived_info,
-                const ProtectedTaskManager *_task);
+                const ProtectedTaskManager *_task,
+                RoughTimeDelta utc_offset) noexcept;

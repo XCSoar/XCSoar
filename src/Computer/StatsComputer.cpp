@@ -43,13 +43,15 @@ StatsComputer::DoLogging(const MoreData &basic,
 
   if (calculated.flight.flying &&
       stats_clock.CheckAdvance(basic.time, PERIOD)) {
-    flightstats.AddAltitudeTerrain(calculated.flight.flight_time,
-                                   calculated.terrain_altitude);
+    if (basic.time_available) {
+      flightstats.AddAltitudeTerrain(basic.time,
+                                     calculated.terrain_altitude);
 
-    if (basic.NavAltitudeAvailable())
-      flightstats.AddAltitude(calculated.flight.flight_time,
-                              basic.nav_altitude,
-                              calculated.task_stats.flight_mode_final_glide);
+      if (basic.NavAltitudeAvailable())
+        flightstats.AddAltitude(basic.time,
+                                basic.nav_altitude,
+                                calculated.task_stats.flight_mode_final_glide);
+    }
 
     if (calculated.task_stats.task_valid &&
         calculated.task_stats.inst_speed_slow >= 0)
@@ -96,11 +98,12 @@ StatsComputer::OnDepartedThermal(const DerivedInfo &calculated)
   if (calculated.last_thermal.gain<= 0)
     return;
 
-  flightstats.AddClimbCeiling(t_end,
+  flightstats.AddClimbCeiling(calculated.last_thermal.end_time,
                               calculated.last_thermal.gain
                               + calculated.last_thermal.start_altitude);
 
-  flightstats.AddClimbBase(t_start, calculated.last_thermal.start_altitude);
+  flightstats.AddClimbBase(calculated.last_thermal.start_time,
+                           calculated.last_thermal.start_altitude);
 }
 
 void
