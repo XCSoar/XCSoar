@@ -85,4 +85,8 @@ static constexpr Color COLOR_XCTHERM_RED_ORANGE = Color(0xff, 0x40, 0x00);
 static constexpr Color COLOR_XCTHERM_RED = Color(0xff, 0x00, 0x00);
 static constexpr Color COLOR_XCTHERM_PURPLE = Color(0xa0, 0x20, 0xf0);
 
+/** Instantaneous external wind arrow (map overlay). */
+static constexpr Color COLOR_WIND_ARROW_INSTANTANEOUS =
+  Color(0x80, 0x80, 0xff);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;

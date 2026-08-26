@@ -11,7 +11,10 @@ class Font;
 struct WindArrowLook
 {
   Pen arrow_pen, shaft_pen;
+  /** Average / calculated wind (grey). */
   Brush arrow_brush;
+  /** Instantaneous external wind (blue). */
+  Brush arrow_brush_instantaneous;
 
   const Font *font;
 
