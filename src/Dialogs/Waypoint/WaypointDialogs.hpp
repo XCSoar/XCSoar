@@ -54,6 +54,13 @@ ShowWaypointListPersistentDialog(
 void
 dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept;
 
+/**
+ * Map display filter, one row per Waypoint::Type.
+ * Task and watched waypoints stay visible.
+ */
+void
+dlgWaypointFilterShowModal() noexcept;
+
 enum class WaypointEditResult {
   /** editing was canceled by the user */
   CANCEL,

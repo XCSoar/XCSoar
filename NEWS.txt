@@ -66,6 +66,12 @@ Version 7.47 - not yet released
     A north or south pan zoomed out keeps the picture until the
     view leaves it. A pinch keeps it until the fingers lift
 * map
+  - add a filter on the map Waypoints settings page to choose
+    which waypoint types are drawn. Task waypoints and watched
+    waypoints stay visible
+  - add a Non-ICAO airports row to that filter. It hides airports
+    whose short name is not four characters. Task waypoints and
+    watched waypoints stay visible
   - draw the map scale, the contour spacing, and auto-zoom (with a
     magnifying glass) on one line, and each part of the line above
     them (PAN with a four-arrow mark, the page name, an overlay,
@@ -157,6 +163,8 @@ Version 7.47 - not yet released
     login (wrong e-mail or password, subscription not active, too
     many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
+  - describe the map Waypoints filter: a type can be hidden, the
+    choice is saved, and task or watched waypoints stay drawn
   - describe the MacCready InfoBox speed-to-fly comment as true
     airspeed, labelled TAS, and the Setup switch for indicated
     airspeed
