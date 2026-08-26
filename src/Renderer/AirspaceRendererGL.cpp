@@ -16,6 +16,67 @@
 #include "Engine/Airspace/Predicate/AirspacePredicate.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 
+#include <algorithm>
+
+/**
+ * Stencil bits used by the airspace renderers.
+ */
+static constexpr GLuint FILL_STENCIL = 1;
+static constexpr GLuint OUTLINE_STENCIL = 2;
+static constexpr GLuint POLYGON_STENCIL = 4;
+
+/**
+ * Fill a possibly degenerate polygon using the even-odd rule.
+ *
+ * Clipping and projection to integer screen coordinates may turn an otherwise
+ * valid airspace polygon into a self-touching polygon.  Ear clipping cannot
+ * triangulate such a polygon, but toggling a stencil bit for every triangle in
+ * a fan leaves that bit set exactly where an odd number of triangles overlap.
+ * This also handles self-intersections consistently.
+ *
+ * The caller must have selected the fill brush, enabled stencil testing and
+ * initialized POLYGON_STENCIL to zero.  The temporary bit is cleared again
+ * before returning.
+ */
+static void
+DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
+                   unsigned num_points, GLuint stencil_value,
+                   GLuint stencil_mask) noexcept
+{
+  glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+  glStencilFunc(GL_ALWAYS, POLYGON_STENCIL, POLYGON_STENCIL);
+  glStencilMask(POLYGON_STENCIL);
+  glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
+  canvas.DrawTriangleFan(points, num_points);
+
+  auto min_x = points[0].x;
+  auto max_x = points[0].x;
+  auto min_y = points[0].y;
+  auto max_y = points[0].y;
+  for (unsigned i = 1; i < num_points; ++i) {
+    min_x = std::min(min_x, points[i].x);
+    max_x = std::max(max_x, points[i].x);
+    min_y = std::min(min_y, points[i].y);
+    max_y = std::max(max_y, points[i].y);
+  }
+
+  // Extend the cover by one pixel so its edge rules also clear every stencil
+  // fragment written along the polygon's maximum coordinates.
+  const BulkPixelPoint bounds[] = {
+    {int(min_x) - 1, int(min_y) - 1},
+    {int(max_x) + 1, int(min_y) - 1},
+    {int(max_x) + 1, int(max_y) + 1},
+    {int(min_x) - 1, int(max_y) + 1},
+  };
+
+  glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+  glStencilFunc(GL_EQUAL, stencil_value | POLYGON_STENCIL,
+                stencil_mask | POLYGON_STENCIL);
+  glStencilMask(POLYGON_STENCIL);
+  glStencilOp(GL_ZERO, GL_ZERO, GL_ZERO);
+  canvas.DrawTriangleFan(bounds, 4);
+}
+
 class AirspaceVisitorRenderer final
   : protected MapCanvas
 {
@@ -109,7 +170,9 @@ private:
       {
         SetupInterior(airspace, !fill_airspace);
         const GLEnable<GL_BLEND> blend;
-        DrawPrepared();
+        DrawEvenOddPolygon(canvas, raster_points.data(), num_raster_points,
+                           fill_airspace ? 0 : FILL_STENCIL,
+                           FILL_STENCIL | OUTLINE_STENCIL);
       }
 
       if (!fill_airspace) {
@@ -153,8 +216,9 @@ private:
     canvas.SelectHollowBrush();
 
     // set bit 1 in stencil buffer, where an outline is drawn
-    glStencilFunc(GL_ALWAYS, 3, 3);
-    glStencilMask(2);
+    glStencilFunc(GL_ALWAYS, FILL_STENCIL | OUTLINE_STENCIL,
+                  FILL_STENCIL | OUTLINE_STENCIL);
+    glStencilMask(OUTLINE_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     return true;
@@ -167,9 +231,10 @@ private:
 
     // restrict drawing area and don't paint over previously drawn outlines
     if (check_fillstencil)
-      glStencilFunc(GL_EQUAL, 1, 3);
+      glStencilFunc(GL_EQUAL, FILL_STENCIL,
+                    FILL_STENCIL | OUTLINE_STENCIL);
     else
-      glStencilFunc(GL_EQUAL, 0, 2);
+      glStencilFunc(GL_EQUAL, 0, OUTLINE_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
     canvas.Select(Brush(class_look.fill_color.WithAlpha(90)));
@@ -178,8 +243,9 @@ private:
 
   void SetFillStencil() {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glStencilFunc(GL_ALWAYS, 3, 3);
-    glStencilMask(1);
+    glStencilFunc(GL_ALWAYS, FILL_STENCIL | OUTLINE_STENCIL,
+                  FILL_STENCIL | OUTLINE_STENCIL);
+    glStencilMask(FILL_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     canvas.SelectHollowBrush();
@@ -188,8 +254,9 @@ private:
 
   void ClearFillStencil() {
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-    glStencilFunc(GL_ALWAYS, 3, 3);
-    glStencilMask(1);
+    glStencilFunc(GL_ALWAYS, FILL_STENCIL | OUTLINE_STENCIL,
+                  FILL_STENCIL | OUTLINE_STENCIL);
+    glStencilMask(FILL_STENCIL);
     glStencilOp(GL_KEEP, GL_KEEP, GL_ZERO);
 
     canvas.SelectHollowBrush();
@@ -213,7 +280,13 @@ public:
                _projection.GetScreenBounds().Scale(1.1)),
      look(_look), warning_manager(_warnings), settings(_settings)
   {
+    glStencilMask(0xff);
+    glClear(GL_STENCIL_BUFFER_BIT);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+
+  ~AirspaceFillRenderer() {
+    glStencilMask(0xff);
   }
 
 private:
@@ -237,8 +310,10 @@ private:
 
     if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
       // fill interior without overpainting any previous outlines
-      GLEnable<GL_BLEND> blend;
-      DrawPrepared();
+      const GLEnable<GL_STENCIL_TEST> stencil;
+      const GLEnable<GL_BLEND> blend;
+      DrawEvenOddPolygon(canvas, raster_points.data(), num_raster_points,
+                         0, 0);
     }
 
     // draw outline
