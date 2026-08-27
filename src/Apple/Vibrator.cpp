@@ -26,21 +26,46 @@ HaveHapticFeedback() noexcept
 }
 
 void
-VibrateShort() noexcept
+Vibrate(HapticFeedbackType type) noexcept
 {
-  /* keep the generator around; this keeps the "Taptic Engine" warmed
+  /* keep the generators around; this keeps the "Taptic Engine" warmed
      up, reducing the latency of the next impulse */
-  static UIImpactFeedbackGenerator *generator = nil;
+  static UIImpactFeedbackGenerator *press_generator = nil, *impact_generator = nil;
+  static UINotificationFeedbackGenerator *notification_generator = nil;
 
   const dispatch_block_t generate = ^{
-    if (generator == nil)
-      generator = [[UIImpactFeedbackGenerator alloc]
-                    initWithStyle:UIImpactFeedbackStyleLight];
+    switch (type) {
+    case HapticFeedbackType::PRESS:
+      if (press_generator == nil)
+        press_generator = [[UIImpactFeedbackGenerator alloc]
+                            initWithStyle:UIImpactFeedbackStyleLight];
 
-    [generator impactOccurred];
+      [press_generator impactOccurred];
+      [press_generator prepare];
+      break;
 
-    /* prepare the next impulse */
-    [generator prepare];
+    case HapticFeedbackType::LONG_PRESS:
+    case HapticFeedbackType::GESTURE:
+      if (impact_generator == nil)
+        impact_generator = [[UIImpactFeedbackGenerator alloc]
+                             initWithStyle:UIImpactFeedbackStyleMedium];
+
+      [impact_generator impactOccurred];
+      [impact_generator prepare];
+      break;
+
+    case HapticFeedbackType::NOTIFICATION:
+      if (notification_generator == nil)
+        notification_generator = [[UINotificationFeedbackGenerator alloc] init];
+
+      /* the "warning" pattern is the one iOS uses for a message that
+         asks for the user's attention */
+      [notification_generator
+        notificationOccurred:UINotificationFeedbackTypeWarning];
+      [notification_generator prepare];
+      break;
+
+    }
   };
 
   /* UIKit may only be used on the main thread; call it directly when

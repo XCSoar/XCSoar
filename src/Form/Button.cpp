@@ -133,7 +133,7 @@ Button::SetDown(bool _down)
     return;
 
 #ifdef HAVE_VIBRATOR
-  VibrateShort();
+  Vibrate(HapticFeedbackType::PRESS);
 #endif
 
   down = _down;

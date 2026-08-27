@@ -7,6 +7,8 @@
 #include <TargetConditionals.h>
 #if TARGET_OS_IPHONE
 
+#include "Hardware/Vibrator.hpp"
+
 namespace Apple {
 
 /**
@@ -18,14 +20,14 @@ bool
 HaveHapticFeedback() noexcept;
 
 /**
- * Generate a short haptic feedback impulse.  This function has no
+ * Generate haptic feedback for the given event.  This function has no
  * effect if the device is not able to generate haptic feedback.
  *
  * Note that iOS obeys the "System Haptics" setting internally, i.e. no
  * feedback is generated if the user has disabled it.
  */
 void
-VibrateShort() noexcept;
+Vibrate(HapticFeedbackType type) noexcept;
 
 } // namespace Apple
 
