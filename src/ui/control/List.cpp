@@ -502,6 +502,14 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
     if (tapped >= 0) {
       /* undo the wobble of a finger that did not really scroll */
       SetPixelOrigin(drag_y - drag_y_window);
+
+#ifdef HAVE_VIBRATOR
+      /* a tap which only moves the cursor gets the lighter selection
+         feedback; a scroll gesture gets none */
+      if ((unsigned)tapped != GetCursorIndex())
+        Vibrate(HapticFeedbackType::SELECTION);
+#endif
+
       SetCursorIndex(tapped);
       return true;
     }
