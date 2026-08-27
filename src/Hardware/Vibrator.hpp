@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 #endif
@@ -21,6 +23,25 @@
 #endif
 #endif
 
+/**
+ * The kind of event the haptic feedback belongs to.  Each platform
+ * maps these to the strength and the pattern which is customary
+ * there.
+ */
+enum class HapticFeedbackType : uint_least8_t {
+  /** a button or an InfoBox was pressed */
+  PRESS,
+
+  /** a long press was recognised */
+  LONG_PRESS,
+
+  /** a gesture was recognised */
+  GESTURE,
+
+  /** a message was shown to the user */
+  NOTIFICATION,
+};
+
 #ifdef HAVE_VIBRATOR
 
 /**
@@ -31,12 +52,12 @@ bool
 HaveVibrator() noexcept;
 
 /**
- * Vibrate for a very short amount of time.  This function has no
+ * Generate haptic feedback for the given event.  This function has no
  * effect if the device does not have a vibrator.  The caller must
  * check the haptic-feedback setting before calling.
  */
 void
-VibrateShort() noexcept;
+Vibrate(HapticFeedbackType type) noexcept;
 
 #else
 
