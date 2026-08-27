@@ -9,6 +9,7 @@
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+#include "Hardware/Vibrator.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -499,6 +500,13 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::CURSOR &&
       p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
+
+#ifdef HAVE_VIBRATOR
+    /* generate the feedback before activating the item, which may
+       open a modal dialog and thus return only much later */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     ActivateItem();
     return true;
   }
