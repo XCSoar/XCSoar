@@ -14,6 +14,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Hardware/Vibrator.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
@@ -384,6 +385,10 @@ InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
     dragging = true;
     SetCapture();
 
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     pressed = true;
     Invalidate();
 
@@ -503,7 +508,11 @@ InfoBoxWindow::OnDialogTimer() noexcept
     dragging = pressed = false;
     Invalidate();
     ReleaseCapture();
-    
+
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::LONG_PRESS);
+#endif
+
     InfoBoxManager::ShowInfoBoxPicker(id);
   } else {
     dragging = pressed = false;
