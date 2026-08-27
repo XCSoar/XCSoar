@@ -54,6 +54,7 @@ Version 7.46 - not yet released
   - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
     Services configuration menu
   - rename Setup Services to System Services
+  - move Language, Input from Look to Setup
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

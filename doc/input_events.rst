@@ -39,7 +39,7 @@ bindings. It is compiled into XCSoar and also serves as a template
 for custom files.
 
 To use a custom file, go to
-**Menu > Config > System > Look > Language, Input > Events**, select
+**Menu > Config > System > Setup > Language, Input > Events**, select
 your ``.xci`` file, and restart XCSoar.
 
 Custom files are loaded **on top of** the built-in defaults: key and
