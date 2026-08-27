@@ -225,22 +225,16 @@ UpdateProfileFromMoves(ProfileMap &profile, const MovedEntries &moved_entries)
 static void
 UpdateAllProfilesFromMoves(const MovedEntries &moved_entries)
 {
-  bool active_profile_changed = false;
-  for (const auto *entry : moved_entries)
-    active_profile_changed |= UpdateProfileReferences(entry->source_path,
-                                                      entry->destination_path);
-
-  if (active_profile_changed)
-    Profile::Save();
+  /* this runs BEFORE the profile is selected and loaded (see
+     LoadProfile() in Startup.cpp): update every profile file directly
+     on disk.  Profile::map is not loaded yet, so it must be neither
+     read nor saved here - a Profile::Save() at this point would
+     overwrite the selected profile file with an empty map */
 
   std::vector<AllocatedPath> profile_paths;
   CollectProfilePaths(profile_paths);
 
-  const Path active_profile_path = Profile::GetPath();
   for (const auto &profile_path : profile_paths) {
-    if (active_profile_path != nullptr && profile_path == active_profile_path)
-      continue;
-
     ProfileMap profile;
     try {
       Profile::LoadFile(profile, profile_path);
@@ -254,6 +248,17 @@ UpdateAllProfilesFromMoves(const MovedEntries &moved_entries)
       LogError(std::current_exception(), message.c_str());
     }
   }
+
+  /* an explicitly selected profile (e.g. a full-path "-profile=")
+     may itself have been moved: adjust only the in-memory path here,
+     the migrated file is then loaded normally by Profile::Load() */
+  const Path active_profile_path = Profile::GetPath();
+  if (active_profile_path != nullptr)
+    for (const auto *entry : moved_entries)
+      if (entry->source_path == active_profile_path) {
+        Profile::SetFiles(entry->destination_path);
+        break;
+      }
 }
 
 void
