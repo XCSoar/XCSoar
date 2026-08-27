@@ -44,7 +44,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
     colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
     colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_LIGHT_GREEN;
-    colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
+    colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_AMBER;
     colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
   } else
     std::fill(colors + 1, colors + 6, inverse ? COLOR_WHITE : COLOR_BLACK);
