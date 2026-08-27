@@ -35,6 +35,7 @@
 #include "Panels/DisplayConfigPanel.hpp"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Panels/GaugesConfigPanel.hpp"
+#include "Panels/TrafficConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
 #include "Panels/TaskRulesConfigPanel.hpp"
 #include "Panels/TaskDefaultsConfigPanel.hpp"
@@ -124,7 +125,8 @@ static constexpr TabMenuPage computer_pages[] = {
 };
 
 static constexpr TabMenuPage gauge_pages[] = {
-  { N_("FLARM, Other"), CreateGaugesConfigPanel },
+  { N_("Traffic"), CreateTrafficConfigPanel },
+  { N_("Overlays"), CreateGaugesConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
 #ifdef HAVE_PCM_PLAYER
   { N_("Audio Vario"), CreateAudioVarioConfigPanel },
