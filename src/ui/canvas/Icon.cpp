@@ -56,8 +56,8 @@ IconStretchInteger(unsigned source_dpi) noexcept
 #endif
 
 void
-MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
-                         ResourceId ultra_id,
+MaskedIcon::LoadResource(ResourceId id, ResourceId mdpi_id,
+                         ResourceId xhdpi_id,
                          bool center)
 {
 #ifdef ENABLE_OPENGL
@@ -65,11 +65,11 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
      the highest-resolution variant for maximum quality (especially
      beneficial when icons are scaled up in list views). */
   unsigned source_dpi = 96;
-  if (ultra_id.IsDefined()) {
-    id = ultra_id;
+  if (xhdpi_id.IsDefined()) {
+    id = xhdpi_id;
     source_dpi = 300;
-  } else if (big_id.IsDefined()) {
-    id = big_id;
+  } else if (mdpi_id.IsDefined()) {
+    id = mdpi_id;
     source_dpi = 192;
   }
 
@@ -77,14 +77,14 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId big_id,
   bitmap.Load(id);
 #else
   if (Layout::vdpi >= 120) {
-    /* switch to larger 160dpi icons at 120dpi */
+    /* switch to the larger mdpi icons at 120dpi */
 
     unsigned source_dpi = 96;
-    if (Layout::vdpi >= 220 && ultra_id.IsDefined()) {
-      id = ultra_id;
+    if (Layout::vdpi >= 220 && xhdpi_id.IsDefined()) {
+      id = xhdpi_id;
       source_dpi = 300;
-    } else if (big_id.IsDefined()) {
-      id = big_id;
+    } else if (mdpi_id.IsDefined()) {
+      id = mdpi_id;
       source_dpi = 192;
     }
 

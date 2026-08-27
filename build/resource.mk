@@ -37,14 +37,18 @@ BMP_ICONS_ALL += $$(BMP_ICONS_$(1))
 $$(eval $$(call rsvg-convert,$$(PNG_ICONS_$(1)),$$(DATA)/icons/%_$(1).png,$$(DATA)/icons/%.svg,--x-zoom=$2 --y-zoom=$2))
 endef
 
+# Icon density variants, named after the Android density buckets
+# (https://developer.android.com/training/multiscreen/screendensities);
+# ldpi is XCSoar's 96 dpi desktop baseline rather than Android's 120.
+
 # Default 100PPI (eg 320x240 4" display)
-$(eval $(call generate-icon-scale,96,1.0))
+$(eval $(call generate-icon-scale,ldpi,1.0))
 
 #160PPI (eg 640x480 5" display)
-$(eval $(call generate-icon-scale,160,1.6316))
+$(eval $(call generate-icon-scale,mdpi,1.6316))
 
 # 300dpi
-$(eval $(call generate-icon-scale,300,3.0))
+$(eval $(call generate-icon-scale,xhdpi,3.0))
 
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp

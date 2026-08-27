@@ -107,7 +107,7 @@ TopographyStore::Load(NLineReader &reader,
                               entry->important_label_range,
                               entry->color,
                               entry->shape_field,
-                              entry->icon, entry->big_icon, entry->ultra_icon,
+                              entry->icon, entry->mdpi_icon, entry->xhdpi_icon,
                               entry->pen_width);
     } catch (...) {
       LogError(std::current_exception());
