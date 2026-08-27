@@ -13,6 +13,7 @@
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "util/Compiler.h"
+#include "Tracking/Features.hpp"
 
 #include <jni.h>
 #include <mutex>
@@ -187,9 +188,15 @@ GetDisclosureText(const char *permission) noexcept
       "the screen is off or another app is in the foreground\n"
       "- **Foreground Service** - Keeps GPS active during your "
       "flight\n\n"
-      "Your location data is stored locally on your device. It is "
-      "not shared unless you explicitly enable tracking in "
-      "[Config > Tracking](xcsoar://config/tracking).\n\n"
+      "Your location data is stored locally on your device."
+#ifdef HAVE_TRACKING
+      " It is "
+      "not shared unless you explicitly enable "
+      "[SkyLines](xcsoar://config/skylines), "
+      "[LiveTrack24](xcsoar://config/livetrack24) or "
+      "[XCSoar Cloud](xcsoar://config/cloud)."
+#endif
+      "\n\n"
       "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)";
 
   if (strstr(permission, "ACCESS_BACKGROUND_LOCATION") != nullptr)
