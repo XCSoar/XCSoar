@@ -319,6 +319,10 @@ TEST_NOTAM_SOURCES = \
 	$(SRC)/NOTAM/Delta.cpp \
 	$(SRC)/NOTAM/NOTAMCache.cpp \
 	$(SRC)/NOTAM/Filter.cpp \
+	$(SRC)/Profile/Map.cpp \
+	$(SRC)/Profile/NotamConfig.cpp \
+	$(SRC)/Profile/NumericValue.cpp \
+	$(SRC)/Profile/StringValue.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
