@@ -29,6 +29,9 @@
  * there.
  */
 enum class HapticFeedbackType : uint_least8_t {
+  /** the selection moved to another item */
+  SELECTION,
+
   /** a button or an InfoBox was pressed */
   PRESS,
 

@@ -32,9 +32,18 @@ Vibrate(HapticFeedbackType type) noexcept
      up, reducing the latency of the next impulse */
   static UIImpactFeedbackGenerator *press_generator = nil, *impact_generator = nil;
   static UINotificationFeedbackGenerator *notification_generator = nil;
+  static UISelectionFeedbackGenerator *selection_generator = nil;
 
   const dispatch_block_t generate = ^{
     switch (type) {
+    case HapticFeedbackType::SELECTION:
+      if (selection_generator == nil)
+        selection_generator = [[UISelectionFeedbackGenerator alloc] init];
+
+      [selection_generator selectionChanged];
+      [selection_generator prepare];
+      break;
+
     case HapticFeedbackType::PRESS:
       if (press_generator == nil)
         press_generator = [[UIImpactFeedbackGenerator alloc]

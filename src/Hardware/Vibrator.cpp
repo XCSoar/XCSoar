@@ -58,6 +58,9 @@ static constexpr unsigned
 GetVibrationDuration(HapticFeedbackType type) noexcept
 {
   switch (type) {
+  case HapticFeedbackType::SELECTION:
+    return 15;
+
   case HapticFeedbackType::PRESS:
     return 25;
 

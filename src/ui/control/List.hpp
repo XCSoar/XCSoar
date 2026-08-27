@@ -141,6 +141,9 @@ class ListControl final : public PaintWindow {
    */
   int drag_y_window;
 
+  /** the cursor index when the current drag started */
+  unsigned drag_cursor;
+
   ListItemRenderer *item_renderer = nullptr;
   ListCursorHandler *cursor_handler = nullptr;
 

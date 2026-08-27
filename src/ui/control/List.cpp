@@ -514,6 +514,15 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
     const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
 
+#ifdef HAVE_VIBRATOR
+    /* a tap which only moved the cursor gets the lighter selection
+       feedback; a scroll gesture gets none (same threshold as the one
+       which turns a tap into a scroll in OnMouseMove()) */
+    if (drag_mode == DragMode::SCROLL && GetCursorIndex() != drag_cursor &&
+        abs(p.y - drag_y_window) <= (int)item_height / 5)
+      Vibrate(HapticFeedbackType::SELECTION);
+#endif
+
     drag_end();
 
     if (enable_kinetic) {
@@ -614,6 +623,7 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
 
     drag_y = GetPixelOrigin() + Pos.y;
     drag_y_window = Pos.y;
+    drag_cursor = GetCursorIndex();
 
     if (activate_on_first_click) {
       // Single-click activation path (opt-in for multi-select UIs).
