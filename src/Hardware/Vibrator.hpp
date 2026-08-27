@@ -43,6 +43,9 @@ enum class HapticFeedbackType : uint_least8_t {
 
   /** a message was shown to the user */
   NOTIFICATION,
+
+  /** the pilot was warned about a collision or an airspace */
+  ALARM,
 };
 
 #ifdef HAVE_VIBRATOR

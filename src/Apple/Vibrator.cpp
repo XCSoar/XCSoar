@@ -74,6 +74,16 @@ Vibrate(HapticFeedbackType type) noexcept
       [notification_generator prepare];
       break;
 
+    case HapticFeedbackType::ALARM:
+      if (notification_generator == nil)
+        notification_generator = [[UINotificationFeedbackGenerator alloc] init];
+
+      /* the "error" pattern is the most insistent one iOS offers, and
+         it is distinct from the one used for ordinary messages */
+      [notification_generator
+        notificationOccurred:UINotificationFeedbackTypeError];
+      [notification_generator prepare];
+      break;
     }
   };
 

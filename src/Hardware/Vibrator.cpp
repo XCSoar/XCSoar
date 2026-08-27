@@ -70,6 +70,9 @@ GetVibrationDuration(HapticFeedbackType type) noexcept
 
   case HapticFeedbackType::NOTIFICATION:
     return 150;
+
+  case HapticFeedbackType::ALARM:
+    return 400;
   }
 
   return 25;
