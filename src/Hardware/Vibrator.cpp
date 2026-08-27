@@ -48,17 +48,43 @@ IsHapticFeedbackEnabled() noexcept
   return false;
 }
 
+#ifdef ANDROID
+
+/**
+ * Android exposes only a plain vibration motor here, and the feedback
+ * types are approximated with different pulse lengths.
+ */
+static constexpr unsigned
+GetVibrationDuration(HapticFeedbackType type) noexcept
+{
+  switch (type) {
+  case HapticFeedbackType::PRESS:
+    return 25;
+
+  case HapticFeedbackType::LONG_PRESS:
+  case HapticFeedbackType::GESTURE:
+    return 40;
+
+  case HapticFeedbackType::NOTIFICATION:
+    return 150;
+  }
+
+  return 25;
+}
+
+#endif /* ANDROID */
+
 void
-VibrateShort() noexcept
+Vibrate(HapticFeedbackType type) noexcept
 {
   if (!IsHapticFeedbackEnabled())
     return;
 
 #ifdef ANDROID
   if (vibrator != nullptr)
-    vibrator->Vibrate(Java::GetEnv(), 25);
+    vibrator->Vibrate(Java::GetEnv(), GetVibrationDuration(type));
 #else
-  Apple::VibrateShort();
+  Apple::Vibrate(type);
 #endif
 }
 
