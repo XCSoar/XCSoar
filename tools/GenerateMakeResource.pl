@@ -12,16 +12,16 @@ while (<>) {
         print qq|MAKE_RESOURCE($1, $2, $id);\n|;
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         my $id = $next_id++;
-        print qq|MAKE_RESOURCE($1, $2_96, $id);\n|;
+        print qq|MAKE_RESOURCE($1, $2_ldpi, $id);\n|;
 
         $id = $next_id++;
-        print qq|MAKE_RESOURCE($1_HD, $2_160, $id);\n|;
+        print qq|MAKE_RESOURCE($1_MDPI, $2_mdpi, $id);\n|;
 
         $id = $next_id++;
-        print qq|MAKE_RESOURCE($1_UHD, $2_300, $id);\n|;
+        print qq|MAKE_RESOURCE($1_XHDPI, $2_xhdpi, $id);\n|;
 
         # this macro can be passed to MaskedIcon::LoadResource()
-        print qq|#define $1_ALL $1, $1_HD, $1_UHD\n|;
+        print qq|#define $1_ALL $1, $1_MDPI, $1_XHDPI\n|;
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # not used here
     } else {

@@ -51,8 +51,8 @@ public:
     return bitmap.IsDefined();
   }
 
-  void LoadResource(ResourceId id, ResourceId big_id = ResourceId::Null(),
-                    ResourceId ultra_id = ResourceId::Null(),
+  void LoadResource(ResourceId id, ResourceId mdpi_id = ResourceId::Null(),
+                    ResourceId xhdpi_id = ResourceId::Null(),
                     bool center=true);
 
   void Reset() noexcept {

@@ -49,7 +49,7 @@ class TopographyFile {
 
   const int label_field;
 
-  const ResourceId icon, big_icon, ultra_icon;
+  const ResourceId icon, mdpi_icon, xhdpi_icon;
 
   const unsigned pen_width;
 
@@ -128,7 +128,7 @@ public:
    * @param color The color to use for drawing, including alpha for OpenGL
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
-   * @param big_icon the resource id of the big icon, 0 for no big icon
+   * @param mdpi_icon the resource id of the mdpi icon, 0 for none
    * @param pen_width The pen width used for line drawing
    * @param label_threshold the zoom threshold for label rendering
    * @param important_label_threshold labels below this zoom threshold will
@@ -140,8 +140,8 @@ public:
                  const BGRA8Color color,
                  int label_field=-1,
                  ResourceId icon=ResourceId::Null(),
-                 ResourceId big_icon=ResourceId::Null(),
-                 ResourceId ultra_icon=ResourceId::Null(),
+                 ResourceId mdpi_icon=ResourceId::Null(),
+                 ResourceId xhdpi_icon=ResourceId::Null(),
                  unsigned pen_width=1);
 
   TopographyFile(const TopographyFile &) = delete;
@@ -197,12 +197,12 @@ public:
     return icon;
   }
 
-  ResourceId GetBigIcon() const noexcept {
-    return big_icon;
+  ResourceId GetMdpiIcon() const noexcept {
+    return mdpi_icon;
   }
 
-  ResourceId GetUltraIcon() const noexcept {
-    return ultra_icon;
+  ResourceId GetXhdpiIcon() const noexcept {
+    return xhdpi_icon;
   }
 
   const auto &GetColor() const noexcept {

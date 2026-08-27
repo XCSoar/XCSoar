@@ -14,7 +14,7 @@ struct TopographyIndexEntry {
 
   double shape_range, label_range, important_label_range;
 
-  ResourceId icon, big_icon, ultra_icon;
+  ResourceId icon, mdpi_icon, xhdpi_icon;
 
   long shape_field;
 
