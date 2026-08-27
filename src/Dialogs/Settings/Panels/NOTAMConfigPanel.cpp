@@ -207,8 +207,15 @@ NOTAMConfigPanel::Show(const PixelRect &rc) noexcept
     OnUpdateButton();
   });
   
-  ConfigPanel::BorrowExtraButton(2, _("List"), [](){
+  ConfigPanel::BorrowExtraButton(2, _("List"), [this](){
     ShowNOTAMListDialog(UIGlobals::GetMainWindow());
+
+    // Filtering from the list changes the shared settings directly.  This
+    // panel remains alive while the list dialog is open, so reload the text
+    // field to avoid saving its stale value on the next refresh.
+    LoadValue(HIDDEN_QCODES,
+              CommonInterface::GetComputerSettings().airspace.notam
+                .hidden_qcodes.c_str());
   });
 #endif
 
