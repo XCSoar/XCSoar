@@ -137,14 +137,23 @@ public:
 		array.GrowPreserve(_width * _height, width * height);
 
 		if (_width > width) {
-			const unsigned delta_w = _width - width;
-			const auto end = array.begin();
+			/* the loop below redistributes the preserved
+			   rows; with no rows to preserve (h == 0,
+			   e.g. growing a Reset() grid), "(h - 1)"
+			   wraps around and would construct an
+			   iterator before begin() - undefined
+			   behaviour which MSVC's debug iterators
+			   assert on */
+			if (h > 0) {
+				const unsigned delta_w = _width - width;
+				const auto end = array.begin();
 
-			for (auto in = array.begin() + (h - 1) * width,
-				     out = array.begin() + (h - 1) * _width + width;
-			     in > end; in -= width, out -= delta_w) {
-				out = std::move_backward(in, in + width, out);
-				std::fill(out - delta_w, out, fill);
+				for (auto in = array.begin() + (h - 1) * width,
+					     out = array.begin() + (h - 1) * _width + width;
+				     in > end; in -= width, out -= delta_w) {
+					out = std::move_backward(in, in + width, out);
+					std::fill(out - delta_w, out, fill);
+				}
 			}
 
 			width = _width;
