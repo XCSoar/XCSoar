@@ -4,7 +4,6 @@
 #include "DisplayConfigPanel.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "Profile/Keys.hpp"
-#include "Profile/Profile.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Hardware/DisplayBrightness.hpp"
 #include "Hardware/RotateDisplay.hpp"
@@ -17,6 +16,7 @@
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
+#include "util/StaticString.hxx"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -36,14 +36,16 @@
 
 enum ControlIndex {
   AppDisplayType,
-#ifdef ANDROID
-  FullScreen,
-#endif
+  CustomDPI,
   Orientation,
-  DarkMode,
 #if defined(HAVE_DISPLAY_BRIGHTNESS_CONTROL)
   ScreenBrightness,
 #endif
+#ifdef ANDROID
+  FullScreen,
+#endif
+  DarkMode,
+  UIScale,
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -90,6 +92,22 @@ static constexpr StaticEnumChoice dark_mode_list[] = {
   nullptr
 };
 
+static void
+FillDpiChoices(DataFieldEnum &df, unsigned value) noexcept
+{
+  static constexpr unsigned dpi_choices[] = {
+    120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
+  };
+
+  df.AddChoice(0, _("Automatic"));
+  for (unsigned dpi : dpi_choices) {
+    StaticString<20> buffer;
+    buffer.Format(_("%u dpi"), dpi);
+    df.AddChoice(dpi, buffer);
+  }
+  df.SetValue(value);
+}
+
 class DisplayConfigPanel final : public RowFormWidget {
   std::unique_ptr<DisplayBrightness> brightness;
 
@@ -98,7 +116,6 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()),
      brightness(DisplayBrightness::Detect()) {}
 
-public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 };
@@ -118,10 +135,13 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)ui_settings.display.display_type);
   SetExpertRow(AppDisplayType);
 
-#ifdef ANDROID
-  AddBoolean(_("Full screen"), _("Run XCSoar in full screen mode"),
-             ui_settings.display.full_screen);
-#endif
+  WndProperty *wp_dpi = AddEnum(_("Display resolution"),
+                                _("The display resolution is used to adapt line widths, "
+                                  "font size, landable size and more."));
+  FillDpiChoices(*(DataFieldEnum *)wp_dpi->GetDataField(),
+                 ui_settings.custom_dpi);
+  wp_dpi->RefreshDisplay();
+  SetExpertRow(CustomDPI);
 
   if (Display::RotateSupported())
     AddEnum(_("Display orientation"),
@@ -130,9 +150,6 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
             (unsigned)ui_settings.display.orientation);
   else
     AddDummy();
-
-  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
-          (unsigned)ui_settings.dark_mode);
 
 #ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
   if (brightness != nullptr) {
@@ -148,6 +165,19 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
   } else
     AddDummy();
 #endif
+
+#ifdef ANDROID
+  AddBoolean(_("Full screen"), _("Run XCSoar in full screen mode"),
+             ui_settings.display.full_screen);
+#endif
+
+  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
+          (unsigned)ui_settings.dark_mode);
+
+  AddInteger(_("Text size"),
+             nullptr,
+             "%d %%", "%d", 75, 200, 5,
+             ui_settings.scale);
 
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x",
@@ -170,32 +200,46 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
     SetDisplayType(ui_settings.display.display_type);
   }
 
+  if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
+                    ui_settings.custom_dpi))
+    require_restart = changed = true;
+
+  if (Display::RotateSupported() &&
+      SaveValueEnum(Orientation, ProfileKeys::MapOrientation,
+                    ui_settings.display.orientation)) {
+    changed = true;
+
+    if (!Display::Rotate(ui_settings.display.orientation))
+      LogString("Display rotation failed");
+
+#ifdef USE_POLL_EVENT
+    UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);
+#endif
+
+    CommonInterface::main_window->CheckResize();
+  }
+
+#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
+  if (brightness != nullptr && brightness->IsWritable()) {
+    const unsigned old_percent = brightness->GetBrightnessPercent();
+    const unsigned new_percent = GetValueInteger(ScreenBrightness);
+    if (new_percent != old_percent)
+      brightness->SetBrightnessPercent(new_percent);
+  }
+#endif
+
 #ifdef ANDROID
   changed |= SaveValue(FullScreen, ProfileKeys::FullScreen,
                        ui_settings.display.full_screen);
   native_view->SetFullScreen(Java::GetEnv(), ui_settings.display.full_screen);
 #endif
 
-  bool orientation_changed = false;
-
-  if (Display::RotateSupported()) {
-    orientation_changed =
-      SaveValueEnum(Orientation, ProfileKeys::MapOrientation,
-                    ui_settings.display.orientation);
-    changed |= orientation_changed;
-  }
-
   changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
                            ui_settings.dark_mode);
 
-  if (brightness != nullptr && brightness->IsWritable()) {
-#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
-    const unsigned old_percent = brightness->GetBrightnessPercent();
-    const unsigned new_percent = GetValueInteger(ScreenBrightness);
-    if (new_percent != old_percent)
-      brightness->SetBrightnessPercent(new_percent);
-#endif
-  }
+  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
+                       ui_settings.scale))
+    require_restart = changed = true;
 
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValueInteger(CursorSize, ProfileKeys::CursorSize,
@@ -208,19 +252,6 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
     ui_settings.display.invert_cursor_colors);
 #endif
 
-  if (orientation_changed) {
-    assert(Display::RotateSupported());
-
-    if (!Display::Rotate(ui_settings.display.orientation))
-      LogString("Display rotation failed");
-
-#ifdef USE_POLL_EVENT
-    UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);
-#endif
-
-    CommonInterface::main_window->CheckResize();
-  }
-
   _changed |= changed;
   return true;
 }
@@ -230,5 +261,3 @@ CreateDisplayConfigPanel()
 {
   return std::make_unique<DisplayConfigPanel>();
 }
-
-#undef HAVE_DISPLAY_BRIGHTNESS_CONTROL
