@@ -43,6 +43,15 @@ IconStretchFixed10(unsigned source_dpi) noexcept
   return Layout::VptScale(72 * 1024 * 3 / 2) / source_dpi;
 }
 
+#ifdef ENABLE_OPENGL
+/**
+ * The icons are rendered at this multiple of the resolution their
+ * density bucket needs, so the GPU has enough texels where they are
+ * magnified (list rows).  Keep in sync with build/resource.mk.
+ */
+static constexpr unsigned ICON_SUPERSAMPLE = 3;
+#endif
+
 /* nominal densities of the icon variants (Android density buckets);
    ldpi is the 96 dpi desktop baseline rather than Android's 120 */
 static constexpr unsigned ICON_LDPI = 96;
@@ -95,7 +104,8 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId mdpi_id,
     source_dpi = ICON_MDPI;
   }
 
-  const unsigned stretch = IconStretchFixed10(source_dpi);
+  const unsigned stretch =
+    IconStretchFixed10(source_dpi * ICON_SUPERSAMPLE);
   bitmap.Load(id);
 #else
   if (Layout::vdpi >= 120) {
