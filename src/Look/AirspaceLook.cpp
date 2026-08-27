@@ -40,6 +40,8 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
   if (settings.border_width != 0)
     border_pen.Create(Layout::ScalePenWidth(settings.border_width),
                       Color(settings.border_color));
+
+  label_pen.Create(1, Color(settings.border_color));
 }
 
 void
@@ -75,9 +77,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
   intercept_icon.LoadResource(IDB_AIRSPACEI_ALL);
 
   // labels
-  label_pen.Create(1, COLOR_BLUE);
   label_brush.Create(COLOR_WHITE);
-  label_text_color = COLOR_BLUE;
 
   name_font = &_name_font;
 }

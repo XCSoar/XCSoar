@@ -18,6 +18,7 @@ public:
   struct Label {
     GeoPoint pos;
     AirspaceClass cls;
+    AirspaceClass border_class;
     AirspaceAltitude base;
     AirspaceAltitude top;
     unsigned ordinal;
@@ -30,6 +31,10 @@ protected:
 
 public:
   void Add(const GeoPoint &pos, AirspaceClass cls, const AirspaceAltitude &base,
+           const AirspaceAltitude &top) noexcept;
+
+  void Add(const GeoPoint &pos, AirspaceClass cls, AirspaceClass border_class,
+           const AirspaceAltitude &base,
            const AirspaceAltitude &top) noexcept;
 
   /**

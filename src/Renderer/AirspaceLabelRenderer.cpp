@@ -108,6 +108,17 @@ public:
   }
 };
 
+[[gnu::pure]]
+static AirspaceClass
+GetAirspaceBorderClass(const AbstractAirspace &airspace,
+                       const AirspaceRendererSettings &settings) noexcept
+{
+  const AirspaceClass type_or_class = airspace.GetTypeOrClass();
+  return settings.classes[type_or_class].display
+    ? type_or_class
+    : airspace.GetClass();
+}
+
 static StaticString<64>
 MakeNotamLabelText(const AbstractAirspace &airspace) noexcept
 {
@@ -264,7 +275,7 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
                                    aircraft, awc);
 
   DrawInternal(canvas,
-               projection, visible, computer_settings.warnings,
+               projection, visible, settings, computer_settings.warnings,
                draw_altitude_labels, draw_notam_labels, label_block);
 }
 
@@ -272,6 +283,7 @@ inline void
 AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                     const WindowProjection &projection,
                                     AirspacePredicate visible,
+                                    const AirspaceRendererSettings &settings,
                                     const AirspaceWarningConfig &config,
                                     const bool draw_altitude_labels,
                                     const bool draw_notam_labels,
@@ -284,17 +296,16 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
                                                      projection.GetScreenDistanceMeters())) {
       const AbstractAirspace &airspace = i.GetAirspace();
       if (visible(airspace))
-        labels.Add(airspace.GetCenter(), airspace.GetClass(), airspace.GetBase(),
-                   airspace.GetTop());
+        labels.Add(airspace.GetCenter(), airspace.GetClass(),
+                   GetAirspaceBorderClass(airspace, settings),
+                   airspace.GetBase(), airspace.GetTop());
     }
 
     labels.Sort(config);
   }
 
   // default paint settings
-  canvas.SetTextColor(look.label_text_color);
   canvas.Select(*look.name_font);
-  canvas.Select(look.label_pen);
   canvas.Select(look.label_brush);
   canvas.SetBackgroundTransparent();
 
@@ -302,7 +313,7 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
     const PixelRect screen_rect = projection.GetScreenRect();
     for (const auto &label : labels)
       DrawLabel(canvas, projection.GeoToScreen(label.pos), screen_rect, label,
-                label_block);
+                settings, label_block);
   }
 
   if (draw_notam_labels) {
@@ -377,6 +388,7 @@ bool
 AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
                                  const PixelRect &map_rect,
                                  const AirspaceLabelList::Label &label,
+                                 const AirspaceRendererSettings &settings,
                                  LabelBlock *const label_block) noexcept
 {
   auto layout = MakeAirspaceLabelLayout(canvas, label);
@@ -385,6 +397,15 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
                        label_block);
   if (!placement)
     return false;
+
+  const Color color = settings.black_outline
+    ? COLOR_BLACK
+    : Color(settings.classes[label.border_class].border_color);
+  canvas.SetTextColor(color);
+  if (settings.black_outline)
+    canvas.SelectBlackPen();
+  else
+    canvas.Select(look.classes[label.border_class].label_pen);
 
   layout.SetVisualRect(placement->visual_rect);
   canvas.DrawRectangle(layout.visual_rect);
@@ -397,7 +418,7 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
 #else
   canvas.DrawHLine(layout.visual_rect.left + layout.padding,
                    layout.visual_rect.right - layout.padding,
-                   layout.separator_y, look.label_pen.GetColor());
+                   layout.separator_y, color);
 #endif
 
   canvas.DrawText(layout.top_text_origin, layout.top_text);

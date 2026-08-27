@@ -207,12 +207,13 @@ TestPlacementPriority()
   config.class_warnings[CLASSD] = true;
 
   AirspaceLabelList warning_labels;
-  warning_labels.Add(GeoPoint::Zero(), CLASSC, MakeAltitude(2000),
+  warning_labels.Add(GeoPoint::Zero(), CLASSC, CTR, MakeAltitude(2000),
                      MakeAltitude(3000));
   warning_labels.Add(GeoPoint::Zero(), CLASSD, MakeAltitude(1000),
                      MakeAltitude(3000));
   warning_labels.Sort(config);
   ok1(warning_labels[0].cls == CLASSD);
+  ok1(warning_labels[1].border_class == CTR);
 
   LabelBlock warning_block;
   const auto warning_winner = PlaceAirspaceLabel({500, 500}, label_size,
@@ -244,7 +245,7 @@ TestPlacementPriority()
 int
 main()
 {
-  plan_tests(35);
+  plan_tests(36);
 
   TestPreferredPlacement();
   TestFallbackPlacement();

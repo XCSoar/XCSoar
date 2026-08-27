@@ -59,6 +59,7 @@ private:
   void DrawInternal(Canvas &canvas,
                     const WindowProjection &projection,
                     AirspacePredicate visible,
+                    const AirspaceRendererSettings &settings,
                     const AirspaceWarningConfig &config,
                     bool draw_altitude_labels,
                     bool draw_notam_labels,
@@ -67,6 +68,7 @@ private:
   bool DrawLabel(Canvas &canvas, PixelPoint anchor,
                  const PixelRect &map_rect,
                  const AirspaceLabelList::Label &label,
+                 const AirspaceRendererSettings &settings,
                  LabelBlock *label_block) noexcept;
 
 public:
