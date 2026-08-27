@@ -197,6 +197,7 @@ Version 7.46 - not yet released
   - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
     Services configuration menu
   - rename Setup Services to System Services
+  - move Language, Input from Look to Setup
   - show the flight name, the device, and the driver on separate
     lines above a flight download, and the percent, amount complete,
     transfer speed, and estimated time remaining inside the progress
