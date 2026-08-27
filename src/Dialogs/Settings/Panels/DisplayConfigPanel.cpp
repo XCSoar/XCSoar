@@ -15,6 +15,8 @@
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
+#include "Asset.hpp"
+#include "util/Macros.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -33,6 +35,7 @@
 #endif
 
 enum ControlIndex {
+  AppDisplayType,
 #ifdef ANDROID
   FullScreen,
 #endif
@@ -46,6 +49,22 @@ enum ControlIndex {
   CursorInverted,
 #endif
 };
+
+static constexpr StaticEnumChoice display_type_list[] = {
+  { DisplayType::LCD, NC_("Setting", "LCD"),
+    N_("Conventional LCD or OLED. Full scrolling animations.") },
+  { DisplayType::E_INK, NC_("Setting", "E-ink"),
+    N_("Monochrome electronic paper. Disables kinetic and smooth "
+       "scrolling.") },
+  { DisplayType::COLOR_E_INK, NC_("Setting", "Color e-ink"),
+    N_("Color electronic paper. Disables kinetic and smooth "
+       "scrolling like monochrome e-ink.") },
+  nullptr
+};
+
+static_assert(ARRAY_SIZE(display_type_list) ==
+              unsigned(DisplayType::COUNT) + 1,
+              "display_type_list must match DisplayType::COUNT");
 
 static constexpr StaticEnumChoice display_orientation_list[] = {
   { DisplayOrientation::DEFAULT,
@@ -92,6 +111,13 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
+  AddEnum(C_("Setting", "Display type"),
+          _("Select the display technology. E-ink modes disable kinetic "
+            "and smooth scrolling for slow refresh screens."),
+          display_type_list,
+          (unsigned)ui_settings.display.display_type);
+  SetExpertRow(AppDisplayType);
+
 #ifdef ANDROID
   AddBoolean(_("Full screen"), _("Run XCSoar in full screen mode"),
              ui_settings.display.full_screen);
@@ -137,6 +163,12 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
+
+  if (SaveValueEnum(AppDisplayType, ProfileKeys::DisplayType,
+                    ui_settings.display.display_type)) {
+    changed = true;
+    SetDisplayType(ui_settings.display.display_type);
+  }
 
 #ifdef ANDROID
   changed |= SaveValue(FullScreen, ProfileKeys::FullScreen,
