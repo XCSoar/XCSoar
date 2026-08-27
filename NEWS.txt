@@ -85,6 +85,9 @@ Version 7.46 - not yet released
 * ui
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - fix blurry icons on high-DPI screens, most visible on the large
+    waypoint list icons, by rendering the icon set at a higher
+    resolution
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
