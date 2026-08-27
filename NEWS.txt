@@ -7,6 +7,8 @@ Version 7.46 - not yet released
     the chip latency timer to 1 ms and sending each binary frame in
     one write #3047
 * iOS
+  - add haptic feedback for button presses, gestures, and pop-up
+    messages, configurable with the Haptic feedback setting
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
     Keyboard text-input style keeps XCSoar's own grid #2894
