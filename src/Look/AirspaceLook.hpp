@@ -24,6 +24,9 @@ struct AirspaceClassLook {
 
   Pen border_pen;
 
+  /** A thin border pen for airspace altitude labels. */
+  Pen label_pen;
+
   void Initialise(const AirspaceClassRendererSettings &settings);
 };
 
@@ -36,12 +39,8 @@ struct AirspaceLook {
 
   MaskedIcon intercept_icon;
 
-  /**
-   * look for labels
-   */
-  Pen label_pen;
+  /** Look shared by all airspace altitude labels. */
   Brush label_brush;
-  Color label_text_color;
 
   /**
    * The font used to render the airspace name.

@@ -33,12 +33,22 @@ AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
                        const AirspaceAltitude &base,
                        const AirspaceAltitude &top) noexcept
 {
+  Add(pos, cls, cls, base, top);
+}
+
+void
+AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
+                       AirspaceClass border_class,
+                       const AirspaceAltitude &base,
+                       const AirspaceAltitude &top) noexcept
+{
   if (labels.full())
     return;
 
   const unsigned ordinal = unsigned(labels.size());
   auto &label = labels.append();
   label.cls = cls;
+  label.border_class = border_class;
   label.pos = pos;
   label.base = base;
   label.top = top;
