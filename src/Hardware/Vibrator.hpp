@@ -3,14 +3,25 @@
 
 #pragma once
 
-#ifdef ANDROID
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
 
 /**
- * This macro specifies whether this platform has support for a
- * vibrator.  Before actually using it, you have to check
+ * The macro HAVE_VIBRATOR specifies whether this platform has support
+ * for a vibrator.  Before actually using it, you have to check
  * HaveVibrator().
  */
+#ifdef ANDROID
 #define HAVE_VIBRATOR
+#elif defined(__APPLE__)
+#if TARGET_OS_IPHONE
+/* iOS generates haptic feedback with UIFeedbackGenerator */
+#define HAVE_VIBRATOR
+#endif
+#endif
+
+#ifdef HAVE_VIBRATOR
 
 /**
  * Check whether this device has a vibrator.
