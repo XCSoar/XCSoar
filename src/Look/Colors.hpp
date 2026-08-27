@@ -58,6 +58,14 @@ static constexpr Color COLOR_ADMONITION_TIP =
 static constexpr Color COLOR_LIGHT_GREEN = Color(0x00, 0xc0, 0x00);
 
 /**
+ * A dark gold readable on light backgrounds.
+ * Standard COLOR_YELLOW (255,255,0) is invisible on white, while a
+ * burnt orange would sit too close to COLOR_RED to serve as the
+ * caution step of a traffic light.
+ */
+static constexpr Color COLOR_AMBER = Color(0x80, 0x70, 0x00);
+
+/**
  * Airspace warning list / map-item status badge colours.
  */
 static constexpr Color COLOR_AIRSPACE_WARNING_INSIDE =
