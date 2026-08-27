@@ -946,7 +946,7 @@ Set the local time offset with respect to UTC.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Setup / Tracking}
+\section{Online Services / SkyLines}
 
 `{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
 network to send this position in real-time to a server, other people can see 
@@ -954,24 +954,30 @@ your exact position and track presented in a map just in time.
 The tracking option needs the capability to connect to mobile networking as offered by 
 your glide computer.
 
-Currently there are two tracking protocols implemented. `{\em SkyLines}' as a spin 
-off project from XCSoar itself; for details on this service have a look at 
-\url{https://skylines.aero}. 
-And also the `{\em LiveTrack24}' protocol used e.g.\ by the tracking
-portal on \url{http://www.livetrack24.com}.  
-Please consult the web pages of the service provider listed under `Server' 
-for details on this setup.
+`{\em SkyLines}' is a spin-off project from XCSoar itself; for details on this
+service have a look at \url{https://skylines.aero}.
 
 \begin{description}
-\item[SkyLines]  Switch this {\bf On} to enable the live stream of 
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em SkyLines}'.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
   a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
 \item[Key]  Create a key on the page \url{https://skylines.aero/tracking/info} 
   and enter it here, to identify your positions at the tracking service.
-\\
-\item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Online Services / LiveTrack24}
+
+The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
+\url{http://www.livetrack24.com}.
+Please consult the web pages of the service provider listed under `Server'
+for details on this setup.
+
+\begin{description}
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em LiveTrack24}'.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service.

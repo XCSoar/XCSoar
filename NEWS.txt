@@ -51,6 +51,8 @@ Version 7.46 - not yet released
   - fix the Devices Debug button not writing port traffic to xcsoar.log
     #2903
 * dialogs
+  - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
+    Online Services configuration menu
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

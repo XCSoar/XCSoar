@@ -188,8 +188,9 @@ GetDisclosureText(const char *permission) noexcept
       "- **Foreground Service** - Keeps GPS active during your "
       "flight\n\n"
       "Your location data is stored locally on your device. It is "
-      "not shared unless you explicitly enable tracking in "
-      "[Config > Tracking](xcsoar://config/tracking).\n\n"
+      "not shared unless you explicitly enable "
+      "[SkyLines](xcsoar://config/skylines) or "
+      "[LiveTrack24](xcsoar://config/livetrack24) tracking.\n\n"
       "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)";
 
   if (strstr(permission, "ACCESS_BACKGROUND_LOCATION") != nullptr)

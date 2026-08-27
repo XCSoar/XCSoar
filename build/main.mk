@@ -756,7 +756,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
 
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SkyLinesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/LiveTrack24ConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/CloudConfigPanel.cpp
 
 XCSOAR_SOURCES += \
