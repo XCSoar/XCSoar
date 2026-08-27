@@ -472,6 +472,12 @@ bool
 ListControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (scroll_bar.IsDragging()) {
+#ifdef HAVE_VIBRATOR
+    /* releasing the slider is the end of a deliberate drag; give it
+       the same feedback as a long press */
+    Vibrate(HapticFeedbackType::LONG_PRESS);
+#endif
+
     scroll_bar.DragEnd(this);
     return true;
   }
@@ -596,8 +602,17 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
   if (scroll_bar.IsInsideSlider(Pos)) {
     // if click is on scrollbar handle
     // -> start mouse drag
+#ifdef HAVE_VIBRATOR
+    /* only when grabbing the slider, not while dragging it */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     scroll_bar.DragBegin(this, Pos.y);
   } else if (scroll_bar.IsInside(Pos)) {
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     /* Pressed beside the slider: move the slider there on the press
        itself, and let it follow the pointer from there.  Stepping a
        row or a page instead only works on a bar that is long enough
