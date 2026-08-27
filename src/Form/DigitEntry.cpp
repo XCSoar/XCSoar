@@ -4,6 +4,7 @@
 #include "DigitEntry.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
+#include "Hardware/Vibrator.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -882,6 +883,10 @@ DigitEntry::OnMouseDown(PixelPoint p) noexcept
 {
   int i = FindColumnAt(p.x);
   if (i >= 0 && columns[i].IsEditable()) {
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     SetCursor(i);
     SetFocus();
 
