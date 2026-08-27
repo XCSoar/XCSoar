@@ -12,10 +12,8 @@
 #include "UIGlobals.hpp"
 #include "Asset.hpp"
 #include "Menu/ShowButton.hpp"
-#include "util/Macros.hpp"
 
 enum ControlIndex {
-  AppDisplayType,
   AppInfoBoxGeom,
   InfoBoxTitleScale,
   TabDialogStyle,
@@ -27,22 +25,6 @@ enum ControlIndex {
   ShowZoomButton,
   ShowQuickMenuButton,
 };
-
-static constexpr StaticEnumChoice display_type_list[] = {
-  { DisplayType::LCD, NC_("Setting", "LCD"),
-    N_("Conventional LCD or OLED. Full scrolling animations.") },
-  { DisplayType::E_INK, NC_("Setting", "E-ink"),
-    N_("Monochrome electronic paper. Disables kinetic and smooth "
-       "scrolling.") },
-  { DisplayType::COLOR_E_INK, NC_("Setting", "Color e-ink"),
-    N_("Color electronic paper. Disables kinetic and smooth "
-       "scrolling like monochrome e-ink.") },
-  nullptr
-};
-
-static_assert(ARRAY_SIZE(display_type_list) ==
-              unsigned(DisplayType::COUNT) + 1,
-              "display_type_list must match DisplayType::COUNT");
 
 static constexpr StaticEnumChoice info_box_geometry_list[] = {
   { InfoBoxSettings::Geometry::SPLIT_8,
@@ -154,13 +136,6 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddEnum(C_("Setting", "Display type"),
-          _("Select the display technology. E-ink modes disable kinetic "
-            "and smooth scrolling for slow refresh screens."),
-          display_type_list,
-          (unsigned)ui_settings.display.display_type);
-  SetExpertRow(AppDisplayType);
-
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
@@ -234,12 +209,6 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
   saved = true;
-
-  if (SaveValueEnum(AppDisplayType, ProfileKeys::DisplayType,
-                    ui_settings.display.display_type)) {
-    changed = true;
-    SetDisplayType(ui_settings.display.display_type);
-  }
 
   bool info_box_geometry_changed = false;
 
