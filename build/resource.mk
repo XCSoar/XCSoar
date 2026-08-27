@@ -40,15 +40,17 @@ endef
 # Icon density variants, named after the Android density buckets
 # (https://developer.android.com/training/multiscreen/screendensities);
 # ldpi is XCSoar's 96 dpi desktop baseline rather than Android's 120.
+# Zoom = bucket density / 96, so each variant carries exactly the
+# detail its density needs.
+ICON_ZOOM_LDPI = 1.0
+ICON_ZOOM_MDPI = 1.6667
+ICON_ZOOM_XHDPI = 3.3333
+ICON_ZOOM_XXHDPI = 5.0
 
-# Default 100PPI (eg 320x240 4" display)
-$(eval $(call generate-icon-scale,ldpi,1.0))
-
-#160PPI (eg 640x480 5" display)
-$(eval $(call generate-icon-scale,mdpi,1.6316))
-
-# 300dpi
-$(eval $(call generate-icon-scale,xhdpi,3.0))
+$(eval $(call generate-icon-scale,ldpi,$(ICON_ZOOM_LDPI)))
+$(eval $(call generate-icon-scale,mdpi,$(ICON_ZOOM_MDPI)))
+$(eval $(call generate-icon-scale,xhdpi,$(ICON_ZOOM_XHDPI)))
+$(eval $(call generate-icon-scale,xxhdpi,$(ICON_ZOOM_XXHDPI)))
 
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp

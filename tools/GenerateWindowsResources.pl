@@ -15,6 +15,7 @@ while (<>) {
         print "BITMAP_ICON($1, \"$2_ldpi\")\n";
         print "BITMAP_ICON($1_MDPI, \"$2_mdpi\")\n";
         print "BITMAP_ICON($1_XHDPI, \"$2_xhdpi\")\n";
+        print "BITMAP_ICON($1_XXHDPI, \"$2_xxhdpi\")\n";
     } elsif (/^app_icon\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         print qq|$1 ICON DISCARDABLE "bitmaps/$2.ico"\n|;
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
