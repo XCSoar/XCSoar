@@ -80,4 +80,5 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
   label_brush.Create(COLOR_WHITE);
 
   name_font = &_name_font;
+  ++name_font_serial;
 }

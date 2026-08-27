@@ -8,6 +8,7 @@
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "util/Serial.hpp"
 
 static constexpr unsigned NUMAIRSPACECOLORS = 18;
 static constexpr unsigned NUMAIRSPACEBRUSHES = 8;
@@ -55,6 +56,9 @@ struct AirspaceLook {
    * The font used to render the airspace name.
    */
   const Font *name_font;
+
+  /** Incremented by Initialise(), including after an in-place font reload. */
+  Serial name_font_serial;
 
   void Initialise(const AirspaceRendererSettings &settings,
                   const Font &_name_font);

@@ -27,7 +27,6 @@
 #include "Sizes.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <cstdlib>
 
 static constexpr double NOTAM_LABEL_MAX_MAP_SCALE = 4000;
@@ -262,9 +261,15 @@ AirspaceLabelRenderer::Draw(Canvas &canvas,
     settings.show_notam_labels &&
     projection.GetMapScale() <= NOTAM_LABEL_MAX_MAP_SCALE;
 
+  if (!draw_altitude_labels)
+    placement_cache.clear();
+
   if ((!draw_altitude_labels && !draw_notam_labels) ||
-      airspaces == nullptr || airspaces->IsEmpty())
+      airspaces == nullptr || airspaces->IsEmpty()) {
+    if (airspaces == nullptr || airspaces->IsEmpty())
+      placement_cache.clear();
     return;
+  }
 
   AirspaceWarningCopy awc;
   if (warning_manager != nullptr)
@@ -298,7 +303,8 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
       if (visible(airspace))
         labels.Add(airspace.GetCenter(), airspace.GetClass(),
                    GetAirspaceBorderClass(airspace, settings),
-                   airspace.GetBase(), airspace.GetTop());
+                   airspace.GetBase(), airspace.GetTop(),
+                   reinterpret_cast<AirspaceLabelList::Identity>(&airspace));
     }
 
     labels.Sort(config);
@@ -311,10 +317,36 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
 
   if (draw_altitude_labels) {
     const PixelRect screen_rect = projection.GetScreenRect();
-    for (const auto &label : labels)
-      DrawLabel(canvas, projection.GeoToScreen(label.pos), screen_rect, label,
-                settings, label_block);
+    if (placement_cache_serial != airspaces->GetSerial() ||
+        placement_cache_font_serial != look.name_font_serial ||
+        placement_cache_screen_size != screen_rect.GetSize()) {
+      // Airspace addresses are only valid within this store generation.
+      placement_cache.clear();
+      placement_cache_serial = airspaces->GetSerial();
+      placement_cache_font_serial = look.name_font_serial;
+      placement_cache_screen_size = screen_rect.GetSize();
+    }
+
+    for (const auto &label : labels) {
+      const auto cached = placement_cache.find(label.identity);
+      const std::optional<AirspaceLabelCandidate> preferred_candidate =
+        cached != placement_cache.end()
+          ? std::optional<AirspaceLabelCandidate>{cached->second}
+          : std::nullopt;
+      if (const auto candidate =
+            DrawLabel(canvas, projection.GeoToScreen(label.pos), screen_rect,
+                      label, settings, label_block, preferred_candidate))
+        placement_cache.insert_or_assign(label.identity, *candidate);
+    }
   }
+
+  // Retain the last successful placement only for labels in this draw pass.
+  std::erase_if(placement_cache, [&labels](const auto &entry) {
+    return std::none_of(labels.begin(), labels.end(),
+                        [&entry](const auto &label) {
+                          return label.identity == entry.first;
+                        });
+  });
 
   if (draw_notam_labels) {
     TextInBoxMode mode{};
@@ -384,19 +416,22 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
   }
 }
 
-bool
+std::optional<AirspaceLabelCandidate>
 AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
                                  const PixelRect &map_rect,
                                  const AirspaceLabelList::Label &label,
                                  const AirspaceRendererSettings &settings,
-                                 LabelBlock *const label_block) noexcept
+                                 LabelBlock *const label_block,
+                                 const std::optional<AirspaceLabelCandidate>
+                                   preferred_candidate) noexcept
 {
   auto layout = MakeAirspaceLabelLayout(canvas, label);
   const auto placement =
-    PlaceAirspaceLabel(anchor, layout.visual_size, layout.padding, map_rect,
-                       label_block);
+    PlaceAirspaceLabel(anchor, layout.visual_size, layout.padding,
+                       map_rect, label_block, preferred_candidate);
+
   if (!placement)
-    return false;
+    return std::nullopt;
 
   const Color color = settings.black_outline
     ? COLOR_BLACK
@@ -423,5 +458,5 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
 
   canvas.DrawText(layout.top_text_origin, layout.top_text);
   canvas.DrawText(layout.base_text_origin, layout.base_text);
-  return true;
+  return placement->candidate_index;
 }
