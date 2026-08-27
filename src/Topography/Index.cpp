@@ -9,7 +9,8 @@
 #include <stdlib.h>
 typedef struct {
   const char *name;
-  ResourceId resource_id, mdpi_resource_id, xhdpi_resource_id;
+  ResourceId resource_id, mdpi_resource_id, xhdpi_resource_id,
+    xxhdpi_resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
@@ -55,7 +56,7 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "reporting_point", IDB_REPORTING_POINT_ALL },
   { "pgtakeoff", IDB_PGTAKEOFF_ALL },
   { "pglanding", IDB_PGLANDING_ALL },
-  { nullptr, ResourceId::Null(), ResourceId::Null() }
+  { nullptr, ResourceId::Null(), ResourceId::Null(), ResourceId::Null() }
 };
 
 std::optional<TopographyIndexEntry>
@@ -96,6 +97,7 @@ ParseTopographyIndexLine(const char *line) noexcept
     entry.icon = ResourceId::Null();
     entry.mdpi_icon = ResourceId::Null();
     entry.xhdpi_icon = ResourceId::Null();
+    entry.xxhdpi_icon = ResourceId::Null();
     if (!icon_name.empty()) {
       const LOOKUP_ICON *ip = icon_list;
       while (ip->name != nullptr) {
@@ -103,6 +105,7 @@ ParseTopographyIndexLine(const char *line) noexcept
           entry.icon = ip->resource_id;
           entry.mdpi_icon = ip->mdpi_resource_id;
           entry.xhdpi_icon = ip->xhdpi_resource_id;
+          entry.xxhdpi_icon = ip->xxhdpi_resource_id;
           break;
         }
         ip++;

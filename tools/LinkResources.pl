@@ -33,6 +33,7 @@ while (<>) {
         add_to_src("$icons_dir/$2_ldpi.png", "resource_$1");
         add_to_src("$icons_dir/$2_mdpi.png", "resource_$1_MDPI");
         add_to_src("$icons_dir/$2_xhdpi.png", "resource_$1_XHDPI");
+        add_to_src("$icons_dir/$2_xxhdpi.png", "resource_$1_XXHDPI");
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         add_to_src("output/data/sound/$2.raw", "resource_$1") unless $target_is_android;
     } else {
