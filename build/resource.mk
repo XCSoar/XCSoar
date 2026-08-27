@@ -42,10 +42,23 @@ endef
 # ldpi is XCSoar's 96 dpi desktop baseline rather than Android's 120.
 # Zoom = bucket density / 96, so each variant carries exactly the
 # detail its density needs.
+#
+# OpenGL magnifies icons in list views, so its builds render three
+# times the detail of each bucket; Icon.cpp scales the nominal density
+# by the same factor, leaving the on-screen size unchanged.  The other
+# canvases stretch by an integer factor and cannot use the detail.
+# Keep in sync with ICON_SUPERSAMPLE in src/ui/canvas/Icon.cpp.
+ifeq ($(OPENGL),y)
+ICON_ZOOM_LDPI = 3.0
+ICON_ZOOM_MDPI = 5.0
+ICON_ZOOM_XHDPI = 10.0
+ICON_ZOOM_XXHDPI = 15.0
+else
 ICON_ZOOM_LDPI = 1.0
 ICON_ZOOM_MDPI = 1.6667
 ICON_ZOOM_XHDPI = 3.3333
 ICON_ZOOM_XXHDPI = 5.0
+endif
 
 $(eval $(call generate-icon-scale,ldpi,$(ICON_ZOOM_LDPI)))
 $(eval $(call generate-icon-scale,mdpi,$(ICON_ZOOM_MDPI)))
