@@ -5,6 +5,7 @@
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
+#include "Hardware/Vibrator.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "ui/event/Idle.hpp"
 #include "Look/Colors.hpp"
@@ -330,6 +331,10 @@ AirspaceWarningMonitor::Check() noexcept
     // un-blank the display, play a sound
     ResetUserIdle();
     PlayResource("IDR_WAV_BEEPBWEEP");
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::ALARM);
+#endif
+
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
       sound_interval_counter = 0;
       sound_timer.Schedule(std::chrono::milliseconds(500));
@@ -368,6 +373,10 @@ AirspaceWarningMonitor::Check() noexcept
   // un-blank the display, play a sound
   ResetUserIdle();
   PlayResource("IDR_WAV_BEEPBWEEP");
+#ifdef HAVE_VIBRATOR
+  Vibrate(HapticFeedbackType::ALARM);
+#endif
+
   if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
     sound_interval_counter = 0;
     sound_timer.Schedule(std::chrono::milliseconds(500));
