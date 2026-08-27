@@ -9,7 +9,7 @@
 #include <stdlib.h>
 typedef struct {
   const char *name;
-  ResourceId resource_id, big_resource_id, ultra_resource_id;
+  ResourceId resource_id, mdpi_resource_id, xhdpi_resource_id;
 } LOOKUP_ICON;
 
 static constexpr LOOKUP_ICON icon_list[] = {
@@ -94,15 +94,15 @@ ParseTopographyIndexLine(const char *line) noexcept
     const std::string_view icon_name{start, std::size_t(p - start)};
 
     entry.icon = ResourceId::Null();
-    entry.big_icon = ResourceId::Null();
-    entry.ultra_icon = ResourceId::Null();
+    entry.mdpi_icon = ResourceId::Null();
+    entry.xhdpi_icon = ResourceId::Null();
     if (!icon_name.empty()) {
       const LOOKUP_ICON *ip = icon_list;
       while (ip->name != nullptr) {
         if (icon_name == ip->name) {
           entry.icon = ip->resource_id;
-          entry.big_icon = ip->big_resource_id;
-          entry.ultra_icon = ip->ultra_resource_id;
+          entry.mdpi_icon = ip->mdpi_resource_id;
+          entry.xhdpi_icon = ip->xhdpi_resource_id;
           break;
         }
         ip++;
