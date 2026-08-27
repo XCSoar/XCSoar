@@ -103,6 +103,9 @@ private:
 
   unsigned n_visible = 0;
 
+  /** when was the last haptic feedback for a new message generated? */
+  std::chrono::steady_clock::time_point last_haptic{};
+
   bool enable_sound = true;
 
 public:
