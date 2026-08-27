@@ -24,25 +24,25 @@ public:
     if (label1.base.altitude != label2.base.altitude)
       return AirspaceAltitude::SortHighest(label1.base, label2.base);
 
-    return label1.ordinal < label2.ordinal;
+    return label1.identity < label2.identity;
   }
 };
 
 void
 AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
                        const AirspaceAltitude &base,
-                       const AirspaceAltitude &top) noexcept
+                       const AirspaceAltitude &top,
+                       const Identity identity) noexcept
 {
   if (labels.full())
     return;
 
-  const unsigned ordinal = unsigned(labels.size());
   auto &label = labels.append();
   label.cls = cls;
   label.pos = pos;
   label.base = base;
   label.top = top;
-  label.ordinal = ordinal;
+  label.identity = identity;
 }
 
 void
