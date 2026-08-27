@@ -95,6 +95,7 @@ ParseTopographyIndexLine(const char *line) noexcept
 
     entry.icon = ResourceId::Null();
     entry.big_icon = ResourceId::Null();
+    entry.ultra_icon = ResourceId::Null();
     if (!icon_name.empty()) {
       const LOOKUP_ICON *ip = icon_list;
       while (ip->name != nullptr) {
