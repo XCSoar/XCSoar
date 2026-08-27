@@ -20,7 +20,7 @@
 #include "Message.hpp"
 #include "Interface.hpp"
 #include "Device/Config.hpp"
-#include "Tracking/SkyLines/Features.hpp"
+#include "Tracking/Features.hpp"
 #ifdef HAVE_SKYLINES_TRACKING
 #include "Tracking/SkyLines/Key.hpp"
 #endif
@@ -223,7 +223,7 @@ GetConfigurationHelpText()
   const bool has_safety = SafetyFactorsDifferFromDefaults();
   const bool has_terrain_display = TerrainDisplayDiffersFromDefaults();
 
-  static StaticString<1536> text;
+  static StaticString<2048> text;
   text.Format(
     _("# Getting Started\n\n"
     "To use XCSoar effectively, configure the following:\n\n"
@@ -245,11 +245,7 @@ GetConfigurationHelpText()
     "- [%s] [Safety factors](xcsoar://config/safety) - "
     "Set arrival height, terrain clearance and polar degradation\n\n"
     "- [%s] [Terrain Display](xcsoar://config/terrain) - "
-    "Choose terrain colors, shading and contour lines\n\n"
-    "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
-    "Share your position via SkyLines or LiveTrack24\n\n"
-    "Explore XCSoar easily by restarting in Simulator mode, or by "
-    "[replaying an IGC flight](xcsoar://dialog/replay)."),
+    "Choose terrain colors, shading and contour lines\n\n"),
     has_map ? "x" : " ",
     has_polar ? "x" : " ",
     has_pilot ? "x" : " ",
@@ -258,6 +254,22 @@ GetConfigurationHelpText()
     tim_enabled ? "x" : " ",
     has_safety ? "x" : " ",
     has_terrain_display ? "x" : " ");
+
+#ifdef HAVE_SKYLINES_TRACKING
+  text += _("- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - "
+            "Share your position via SkyLines\n\n");
+#endif
+#ifdef HAVE_LIVETRACK24
+  text += _("- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - "
+            "Share your position via LiveTrack24\n\n");
+#endif
+#ifdef HAVE_TRACKING
+  text += _("- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - "
+            "Share position and thermals, and receive OGN traffic\n\n");
+#endif
+
+  text += _("Explore XCSoar easily by restarting in Simulator mode, or by "
+            "[replaying an IGC flight](xcsoar://dialog/replay).");
 
   return text.c_str();
 }
@@ -296,7 +308,7 @@ GetPostflightText() noexcept
     "[Info > Status](xcsoar://dialog/status)\n\n"
     "4. **Upload** - Upload to WeGlide directly from XCSoar. "
     "Configure your WeGlide User ID in "
-    "[Config > System > WeGlide](xcsoar://config/weglide)");
+    "[Config > Services > WeGlide](xcsoar://config/weglide)");
 }
 
 /* ---- Helpers ---- */
@@ -367,8 +379,10 @@ GetLocationDisclosureText() noexcept
     "- **Foreground Service** - Keeps GPS active during your "
     "flight\n\n"
     "Your location data is stored locally on your device. It is "
-    "not shared unless you explicitly enable tracking in "
-    "[Config > Tracking](xcsoar://config/tracking).\n\n"
+    "not shared unless you explicitly enable "
+    "[SkyLines](xcsoar://config/skylines), "
+    "[LiveTrack24](xcsoar://config/livetrack24) or "
+    "[XCSoar Cloud](xcsoar://config/cloud).\n\n"
     "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)");
 }
 
@@ -398,12 +412,14 @@ GetCloudConsentText() noexcept
   return _(
     "# XCSoar Cloud\n\n"
     "The XCSoar project offers a service that allows sharing "
-    "thermal and wave locations with other pilots in real time.\n\n"
+    "thermal and wave locations with other pilots in real time, "
+    "and receiving nearby traffic from other participants and "
+    "from OGN.\n\n"
     "If you participate, your **position**, **thermal/wave "
     "locations** and other weather data will be transmitted to "
     "the XCSoar Cloud server.\n\n"
     "You can change this at any time in "
-    "[Config > Tracking](xcsoar://config/tracking).");
+    "[Config > Services > XCSoar Cloud](xcsoar://config/cloud).");
 }
 
 #ifdef HAVE_SKYLINES_TRACKING
