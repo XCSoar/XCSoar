@@ -45,7 +45,7 @@ PlayHapticFeedback() noexcept
   if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
       (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
        GlobalSettings::haptic_feedback))
-    VibrateShort();
+    Vibrate(HapticFeedbackType::PRESS);
 #endif
 }
 
