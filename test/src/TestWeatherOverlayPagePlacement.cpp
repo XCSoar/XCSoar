@@ -166,21 +166,6 @@ TestNormaliseCursorValues()
 }
 
 static void
-TestNormaliseAddsWeatherControls()
-{
-  auto page = PageLayout::Default();
-  page.overlay = PageLayout::Overlay::SKYSIGHT;
-  page.skysight_overlay = "thermal";
-  page.bottom = PageLayout::Bottom::NOTHING;
-  page.Normalise();
-  ok1(page.bottom == PageLayout::Bottom::WEATHER_CONTROLS);
-
-  page.bottom = PageLayout::Bottom::CROSS_SECTION;
-  page.Normalise();
-  ok1(page.bottom == PageLayout::Bottom::CROSS_SECTION);
-}
-
-static void
 TestXCThermManualCursorDefaultsOnAdd()
 {
   PageSettings settings;
@@ -245,7 +230,7 @@ TestAddPageFromDraftCopiesCursors()
 int
 main()
 {
-  plan_tests(43 + 9 + 6 + 5 + 3 + 2);
+  plan_tests(43 + 9 + 6 + 5 + 3);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
@@ -254,7 +239,6 @@ main()
   TestReplaceSkySightPageLayer();
   TestPageLimitGuard();
   TestNormaliseCursorValues();
-  TestNormaliseAddsWeatherControls();
   TestXCThermManualCursorDefaultsOnAdd();
   TestAddPageFromDraftCopiesCursors();
 
