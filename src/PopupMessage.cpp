@@ -9,8 +9,15 @@
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
+#include "Hardware/Vibrator.hpp"
 
 #include <algorithm>
+
+#ifdef HAVE_VIBRATOR
+/** the minimum time between two haptic feedbacks for new messages */
+static constexpr std::chrono::steady_clock::duration HAPTIC_INTERVAL =
+  std::chrono::seconds(2);
+#endif
 
 using std::min;
 using std::max;
@@ -200,8 +207,13 @@ PopupMessage::Render() noexcept
   // new messages
 
   bool changed = false;
-  for (unsigned i = 0; i < MAXMESSAGES; ++i)
+  [[maybe_unused]] bool appeared = false;
+  for (unsigned i = 0; i < MAXMESSAGES; ++i) {
+    if (!messages[i].IsUnknown() && messages[i].IsNew())
+      appeared = true;
+
     changed = messages[i].Update(now) || changed;
+  }
 
   if (!changed) {
     return false;
@@ -217,6 +229,14 @@ PopupMessage::Render() noexcept
       n_visible++;
 
   lock.unlock();
+
+#ifdef HAVE_VIBRATOR
+  /* a burst of messages shall not turn into a burst of vibrations */
+  if (appeared && now >= last_haptic + HAPTIC_INTERVAL) {
+    last_haptic = now;
+    Vibrate(HapticFeedbackType::NOTIFICATION);
+  }
+#endif
 
   UpdateTextAndLayout();
 
