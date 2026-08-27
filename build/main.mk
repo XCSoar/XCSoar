@@ -658,6 +658,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/PathProvider.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \
 	$(SRC)/Apple/KeyboardDetection.cpp \
+	$(SRC)/Apple/Vibrator.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 
