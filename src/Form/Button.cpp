@@ -152,7 +152,8 @@ Button::SetDown(bool _down)
   if (_down == down)
     return;
 
-  PlayHapticFeedback();
+  if (_down)
+    PlayHapticFeedback();
 
   down = _down;
   Invalidate();
