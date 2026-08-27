@@ -12,15 +12,11 @@
 #include "MainWindow.hpp"
 
 enum ControlIndex {
-  EnableFLARMGauge,
-  AutoCloseFlarmDialog,
-  AppFlarmLocation,
   TAPosition,
   EnableThermalProfile,
   FinalGlideBarDisplayModeControl,
   EnableFinalGlideBarMC0,
   EnableVarioBar,
-  NoPositionTargetDistanceRing
 };
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
@@ -30,36 +26,6 @@ static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
     N_("Always show final glide bar.") },
   { FinalGlideBarDisplayMode::AUTO, NC_("Setting", "Auto"),
     N_("Show final glide bar if approaching final glide range.") },
-  nullptr
-};
-
-static constexpr StaticEnumChoice flarm_display_location_list[] = {
-  { TrafficSettings::GaugeLocation::AUTO,
-    N_("Auto (follow InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::TOP_LEFT,
-    N_("Top left") },
-  { TrafficSettings::GaugeLocation::TOP_RIGHT,
-    N_("Top right") },
-  { TrafficSettings::GaugeLocation::BOTTOM_LEFT,
-    N_("Bottom left") },
-  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT,
-    N_("Bottom right") },
-  { TrafficSettings::GaugeLocation::CENTER_TOP,
-    N_("Center top") },
-  { TrafficSettings::GaugeLocation::CENTER_BOTTOM,
-    N_("Center bottom") },
-  { TrafficSettings::GaugeLocation::TOP_LEFT_AVOID_IB,
-    N_("Top left (avoid InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::TOP_RIGHT_AVOID_IB,
-    N_("Top right (avoid InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::BOTTOM_LEFT_AVOID_IB,
-    N_("Bottom left (avoid InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::BOTTOM_RIGHT_AVOID_IB,
-    N_("Bottom right (avoid InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::CENTER_TOP_AVOID_IB,
-    N_("Center top (avoid InfoBoxes)") },
-  { TrafficSettings::GaugeLocation::CENTER_BOTTOM_AVOID_IB,
-    N_("Center bottom (avoid InfoBoxes)") },
   nullptr
 };
 
@@ -132,20 +98,6 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddBoolean(_("FLARM Radar"),
-             _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
-             ui_settings.traffic.enable_gauge);
-
-  AddBoolean(_("Auto close FLARM"),
-             _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
-             ui_settings.traffic.auto_close_dialog);
-  SetExpertRow(AutoCloseFlarmDialog);
-
-  AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
-          flarm_display_location_list,
-          (unsigned)ui_settings.traffic.gauge_location);
-  SetExpertRow(AppFlarmLocation);
-
   AddEnum(_("Thermal Assistant"),
             _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
             thermal_assistant_position_list,
@@ -176,11 +128,6 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Vario bar"),
              _("If set to \"On\" the vario bar will be shown."),
              map_settings.vario_bar_enabled);
-
-  AddBoolean(_("No position target"),
-             _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
-             ui_settings.traffic.no_position_target_distance_ring);
-
   SetExpertRow(EnableVarioBar);
 }
 
@@ -192,17 +139,11 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
   UISettings &ui_settings = CommonInterface::SetUISettings();
   MapSettings &map_settings = CommonInterface::SetMapSettings();
 
-  changed |= SaveValue(EnableFLARMGauge, ProfileKeys::EnableFLARMGauge,
-                       ui_settings.traffic.enable_gauge);
-
-  changed |= SaveValue(AutoCloseFlarmDialog, ProfileKeys::AutoCloseFlarmDialog,
-                       ui_settings.traffic.auto_close_dialog);
-
   if (SaveValueEnum(TAPosition, ProfileKeys::TAPosition,
-                    ui_settings.thermal_assistant_position) ||
-      SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
-                    ui_settings.traffic.gauge_location))
+                    ui_settings.thermal_assistant_position)) {
     CommonInterface::main_window->ReinitialiseLayout();
+    changed = true;
+  }
 
   changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
                        map_settings.show_thermal_profile);
@@ -216,9 +157,6 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
                        map_settings.vario_bar_enabled);
-
-  changed |= SaveValue(NoPositionTargetDistanceRing, ProfileKeys::NoPositionTargetDistanceRing,
-                       ui_settings.traffic.no_position_target_distance_ring);
 
   _changed |= changed;
 

@@ -198,6 +198,9 @@ Version 7.46 - not yet released
     Services configuration menu
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
+  - split Gauges FLARM, Other into Traffic and Overlays
+  - combine FLARM Radar on/off and position into one setting, like
+    Thermal Assistant
   - show the flight name, the device, and the driver on separate
     lines above a flight download, and the percent, amount complete,
     transfer speed, and estimated time remaining inside the progress
