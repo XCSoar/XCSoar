@@ -20,6 +20,7 @@ public:
     AirspaceClass cls;
     AirspaceAltitude base;
     AirspaceAltitude top;
+    unsigned ordinal;
   };
 
   static_assert(std::is_trivial_v<Label>);
@@ -30,6 +31,11 @@ protected:
 public:
   void Add(const GeoPoint &pos, AirspaceClass cls, const AirspaceAltitude &base,
            const AirspaceAltitude &top) noexcept;
+
+  /**
+   * Sort labels from highest to lowest placement priority: classes with
+   * enabled warnings first, then higher bases, then insertion order.
+   */
   void Sort(const AirspaceWarningConfig &config) noexcept;
 
   void Clear() noexcept {
