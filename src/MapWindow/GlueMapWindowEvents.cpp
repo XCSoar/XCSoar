@@ -16,6 +16,7 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "UserMapScale.hpp"
+#include "Hardware/Vibrator.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -622,6 +623,13 @@ GlueMapWindow::OnMultiTouchUp() noexcept
 bool
 GlueMapWindow::OnMouseGesture(const char *gesture) noexcept
 {
+#ifdef HAVE_VIBRATOR
+  /* generate the feedback before running the event, which may open a
+     modal dialog and thus return only much later */
+  if (InputEvents::IsGesture(gesture))
+    Vibrate(HapticFeedbackType::GESTURE);
+#endif
+
   return InputEvents::processGesture(gesture);
 }
 
