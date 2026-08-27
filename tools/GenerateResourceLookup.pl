@@ -14,6 +14,7 @@ while (<>) {
         print qq|  { "$1", $1 },\n|;
         print qq|  { "${1}_MDPI", ${1}_MDPI },\n|;
         print qq|  { "${1}_XHDPI", ${1}_XHDPI },\n|;
+        print qq|  { "${1}_XXHDPI", ${1}_XXHDPI },\n|;
     } elsif (/^sound\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         # sounds are not bitmap resources — skip
     } else {

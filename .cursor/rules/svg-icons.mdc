@@ -13,7 +13,7 @@ alwaysApply: false
 # SVG Icons (`Data/icons/`)
 
 XCSoar icons are **SVG sources** built into masked BMP tiles (ldpi / mdpi /
-xhdpi density buckets)
+xhdpi / xxhdpi density buckets)
 via `build/resource.mk`. They render on **OpenGL, GDI, and memory canvas**
 (including Kobo e-paper). Follow these rules so icons stay sharp, invert
 correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
@@ -62,8 +62,8 @@ correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
 1. `xsltproc` + `build/svg_preprocess.xsl` copies the SVG (optionally disables
    anti-aliasing for elements whose `id` / `inkscape:label` starts with
    `MASK_` or `NOAA_`).
-2. `rsvg-convert` renders the ldpi / mdpi / xhdpi variants at 1.0× / 1.6316×
-   / 3.0× zoom.
+2. `rsvg-convert` renders the ldpi / mdpi / xhdpi / xxhdpi variants at
+   density / 96 dpi zoom (`ICON_ZOOM_*` in `build/resource.mk`).
 3. ImageMagick splits **alpha → left half**, **RGB → right half**, tiles into
    `_tile.png`, then BMP. `MaskedIcon` composites mask + icon at runtime.
 
@@ -122,7 +122,7 @@ and verify on **light and dark** map themes.
 3. For waypoint types, also update `WaypointLook`, `WaypointIconRenderer`, and
    see `.cursor/rules/waypoint-types.mdc`.
 4. Rebuild icons: `make -j$(nproc) TARGET=UNIX` (or your target) so
-   `output/.../icons/*_{ldpi,mdpi,xhdpi}.bmp` regenerate.
+   `output/.../icons/*_{ldpi,mdpi,xhdpi,xxhdpi}.bmp` regenerate.
 5. Check **Android** drawables if the icon is exposed in the Java UI
    (`build/android.mk` + `build/android_bundle.mk`).
 

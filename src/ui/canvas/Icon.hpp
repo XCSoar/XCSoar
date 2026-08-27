@@ -53,6 +53,7 @@ public:
 
   void LoadResource(ResourceId id, ResourceId mdpi_id = ResourceId::Null(),
                     ResourceId xhdpi_id = ResourceId::Null(),
+                    ResourceId xxhdpi_id = ResourceId::Null(),
                     bool center=true);
 
   void Reset() noexcept {
