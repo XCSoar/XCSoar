@@ -139,7 +139,6 @@ static constexpr TabMenuPage task_pages[] = {
 };
 
 static constexpr TabMenuPage look_pages[] = {
-  { N_("Language, Input"), CreateInterfaceConfigPanel },
   { N_("Display"), CreateDisplayConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
@@ -180,6 +179,7 @@ static constexpr TabMenuPage online_pages[] = {
 
 static constexpr TabMenuPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
+  { N_("Language, Input"), CreateInterfaceConfigPanel },
   { N_("Units"), CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
