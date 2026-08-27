@@ -61,10 +61,14 @@ TestMigratesFilesAndAllProfiles()
                     "MapFile=%LOCAL_PATH%\\terrain.xcm\n"
                     "PlanePath=%LOCAL_PATH%\\plane.xcp\n"));
 
+  /* like LoadProfile() in Startup.cpp: the profile path may already
+     be selected, but the migration runs BEFORE Profile::Load() - the
+     in-memory map is still empty at that point */
   Profile::SetFiles(default_prf);
-  Profile::Load();
 
   MigrateDataLayoutToSubdirs();
+
+  Profile::Load();
 
   const auto map_path =
     AllocatedPath::Build(AllocatedPath::Build(data_path, Path("maps")),
@@ -92,6 +96,20 @@ TestMigratesFilesAndAllProfiles()
 
   ok1(Profile::GetPath() != nullptr);
   ok1(StringFind(Profile::GetPath().c_str(), "profiles") != nullptr);
+
+  /* the selected profile is now updated directly on disk as well (it
+     used to be skipped in favour of the in-memory map, which is not
+     loaded yet at migration time) */
+  const auto moved_default_prf =
+    AllocatedPath::Build(AllocatedPath::Build(data_path, Path("profiles")),
+                         Path("default.prf"));
+  ok1(!File::Exists(default_prf));
+
+  ProfileMap default_map;
+  Profile::LoadFile(default_map, moved_default_prf);
+  std::string raw_default_map;
+  ok1(default_map.Get(ProfileKeys::MapFile, raw_default_map));
+  ok1(StringFind(raw_default_map.c_str(), "maps") != nullptr);
 
   const auto moved_competition_prf =
     AllocatedPath::Build(AllocatedPath::Build(data_path, Path("profiles")),
@@ -147,7 +165,6 @@ TestDoesNotWriteMarkerWhenAllMovesFail()
                     "MapFile=%LOCAL_PATH%\\terrain.xcm\n"));
 
   Profile::SetFiles(default_prf);
-  Profile::Load();
 
   ok1(WriteTextFile(AllocatedPath::Build(data_path, Path("maps")),
                     "not a directory"));
@@ -155,6 +172,8 @@ TestDoesNotWriteMarkerWhenAllMovesFail()
                     "not a directory"));
 
   MigrateDataLayoutToSubdirs();
+
+  Profile::Load();
 
   ok1(!File::Exists(LocalPath(".xcsoar-subdir-layout-v1")));
   ok1(File::Exists(AllocatedPath::Build(data_path, Path("terrain.xcm"))));
@@ -165,7 +184,7 @@ main()
 {
   SetFakeLogFileQuiet(true);
 
-  plan_tests(43);
+  plan_tests(46);
   TestMigratesFilesAndAllProfiles();
   TestDoesNotWriteMarkerWhenAllMovesFail();
   return exit_status();

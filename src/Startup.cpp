@@ -158,6 +158,13 @@ WasStartupCancelledByUser() noexcept
 static bool
 LoadProfile()
 {
+  /* run the data-layout migration BEFORE the profile is selected and
+     loaded: it moves root-level profiles into profiles/ - selecting or
+     loading first ends up with an empty profile that later overwrites
+     the migrated one on exit (settings loss on first start after an
+     upgrade) */
+  MigrateDataLayoutToSubdirs();
+
   if (Profile::GetPath() == nullptr &&
       !dlgStartupShowModal()) {
     LogString("LoadProfile: no profile path and startup dialog was cancelled");
@@ -166,7 +173,6 @@ LoadProfile()
   }
 
   Profile::Load();
-  MigrateDataLayoutToSubdirs();
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
