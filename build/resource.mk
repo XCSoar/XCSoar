@@ -60,10 +60,24 @@ ICON_ZOOM_XHDPI = 3.3333
 ICON_ZOOM_XXHDPI = 5.0
 endif
 
+# The SVG sources do not change when the zoom factors do, and all
+# targets share the output directory; track the zoom in a stamp file
+# so that the PNGs are re-rendered when it changes.
+ICON_ZOOM_STAMP = $(DATA)/icons/zoom.stamp
+
+$(ICON_ZOOM_STAMP): FORCE | $(DATA)/icons/dirstamp
+	@zoom="$(ICON_ZOOM_LDPI) $(ICON_ZOOM_MDPI) $(ICON_ZOOM_XHDPI) $(ICON_ZOOM_XXHDPI)"; \
+	if [ "$$(cat $@ 2>/dev/null)" != "$$zoom" ]; then \
+		echo "$$zoom" >$@.$(RANDOM_NUMBER).tmp && mv $@.$(RANDOM_NUMBER).tmp $@; \
+	fi
+
 $(eval $(call generate-icon-scale,ldpi,$(ICON_ZOOM_LDPI)))
 $(eval $(call generate-icon-scale,mdpi,$(ICON_ZOOM_MDPI)))
 $(eval $(call generate-icon-scale,xhdpi,$(ICON_ZOOM_XHDPI)))
 $(eval $(call generate-icon-scale,xxhdpi,$(ICON_ZOOM_XXHDPI)))
+
+$(PNG_ICONS_ldpi) $(PNG_ICONS_mdpi) $(PNG_ICONS_xhdpi) \
+$(PNG_ICONS_xxhdpi): $(ICON_ZOOM_STAMP)
 
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
