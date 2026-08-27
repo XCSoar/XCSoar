@@ -55,6 +55,9 @@ Version 7.46 - not yet released
     Services configuration menu
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
+  - split Gauges FLARM, Other into Traffic and Overlays
+  - combine FLARM Radar on/off and position into one setting, like
+    Thermal Assistant
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download
