@@ -107,7 +107,7 @@ TopWindow::OnEvent(const Event &event)
     return true;
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
   case Event::EXPOSE:
     Invalidate();
     return true;

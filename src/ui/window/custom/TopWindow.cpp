@@ -63,6 +63,12 @@ TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
   CreateNative(text, size, style);
 #endif
 
+#ifdef USE_WAYLAND
+  if (initial_requested_size.width > 0 &&
+      initial_requested_size.height > 0)
+    size = initial_requested_size;
+#endif
+
   delete screen;
   screen = nullptr;
 
@@ -299,6 +305,11 @@ TopWindow::Refresh() noexcept
   invalidated = false;
 
   Expose();
+
+#ifdef USE_WAYLAND
+  if (event_queue != nullptr)
+    event_queue->MarkPresented();
+#endif
 }
 
 bool

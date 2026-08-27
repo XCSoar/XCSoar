@@ -115,11 +115,13 @@ ifeq ($(USE_WAYLAND),y)
 SCREEN_SOURCES += \
 	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c \
+	$(WAYLAND_GENERATED)/xdg-output-unstable-v1-public.c \
 	$(SRC)/ui/display/wayland/Display.cpp \
 	$(WINDOW_SRC_DIR)/wayland/TopWindow.cpp
 
 $(call SRC_TO_OBJ,$(SRC)/ui/window/wayland/TopWindow.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h
 $(call SRC_TO_OBJ,$(SRC)/ui/event/poll/WaylandQueue.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/display/wayland/Display.cpp): $(WAYLAND_GENERATED)/xdg-output-unstable-v1-client-protocol.h
 endif
 
 ifeq ($(OPENGL),y)

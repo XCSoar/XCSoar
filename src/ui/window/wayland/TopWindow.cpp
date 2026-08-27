@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 #include <chrono>
+#include <cstdint>
 
 namespace UI {
 
@@ -88,28 +89,32 @@ handle_toplevel_configure(void *data,
                           [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
                           int32_t width,
                           int32_t height,
-                          [[maybe_unused]] struct wl_array *states) noexcept
+                          struct wl_array *states) noexcept
 {
   auto *window = static_cast<TopWindow *>(data);
-  
-  /* In Wayland, width=0 or height=0 means "client decides" or "use current size".
-   * When going fullscreen, the compositor may send 0x0 first (state change),
-   * then send another configure with actual dimensions. We should always
-   * process configure events immediately, even during resize drags, to provide
-   * immediate visual feedback.
-   * 
-   * When dimensions are 0x0, the compositor will send another configure event
-   * with actual dimensions. We don't need to handle 0x0 - just wait for the
-   * next configure with real dimensions. The surface was already acked in
-   * handle_surface_configure, and will be committed when we resize. */
-  if (width > 0 && height > 0) {
-    /* Compositor provided explicit dimensions - resize immediately.
-     * This handles both normal resizes and fullscreen transitions where
-     * the compositor sends actual screen dimensions. */
-    window->OnNativeConfigure(PixelSize(width, height));
+
+  bool activated = false;
+  bool suspended = false;
+  const auto *state = static_cast<const uint32_t *>(states->data);
+  const auto *const states_end =
+    state + states->size / sizeof(uint32_t);
+  for (; state < states_end; ++state) {
+    switch (*state) {
+    case XDG_TOPLEVEL_STATE_ACTIVATED:
+      activated = true;
+      break;
+#ifdef XDG_TOPLEVEL_STATE_SUSPENDED
+    case XDG_TOPLEVEL_STATE_SUSPENDED:
+      suspended = true;
+      break;
+#endif
+    }
   }
-  /* If width/height are 0, skip resize. The compositor will send another
-   * configure event with actual dimensions, which we'll handle above. */
+
+  if (event_queue != nullptr)
+    event_queue->SetToplevelState(activated, suspended);
+
+  window->OnToplevelConfigureSize(width, height);
 }
 
 static void
@@ -122,9 +127,26 @@ handle_toplevel_close([[maybe_unused]] void *data,
   }
 }
 
+static void
+handle_toplevel_configure_bounds([[maybe_unused]] void *data,
+                                 [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
+                                 [[maybe_unused]] int32_t width,
+                                 [[maybe_unused]] int32_t height) noexcept
+{
+}
+
+static void
+handle_toplevel_wm_capabilities([[maybe_unused]] void *data,
+                                [[maybe_unused]] struct xdg_toplevel *xdg_toplevel,
+                                [[maybe_unused]] struct wl_array *capabilities) noexcept
+{
+}
+
 static const struct xdg_toplevel_listener toplevel_listener = {
   .configure = handle_toplevel_configure,
   .close = handle_toplevel_close,
+  .configure_bounds = handle_toplevel_configure_bounds,
+  .wm_capabilities = handle_toplevel_wm_capabilities,
 };
 
 void
@@ -234,9 +256,29 @@ TopWindow::DisableCapture() noexcept
 }
 
 void
+TopWindow::OnToplevelConfigureSize(int32_t width, int32_t height) noexcept
+{
+  /* width=0 or height=0 means "client decides". */
+  if (width > 0 && height > 0)
+    OnNativeConfigure(PixelSize(width, height));
+  else if (initial_requested_size.width > 0 &&
+           initial_requested_size.height > 0)
+    OnNativeConfigure(initial_requested_size);
+  else
+    CommitNativeSurface();
+}
+
+void
 TopWindow::OnNativeConfigure(PixelSize new_native_size) noexcept
 {
   MarkFirstConfigureReceived();
+  initial_requested_size = new_native_size;
+
+  /* The first configure arrives during CreateNative(), before
+     ContainerWindow::Create() has set size.  Resize() asserts
+     IsDefined(). */
+  if (!IsDefined())
+    return;
 
   if (screen != nullptr) {
     screen->CheckResize(new_native_size);
@@ -247,6 +289,13 @@ TopWindow::OnNativeConfigure(PixelSize new_native_size) noexcept
     Resize(logical_size);
   } else
     Resize(new_native_size);
+}
+
+void
+TopWindow::CommitNativeSurface() noexcept
+{
+  if (wl_surface != nullptr)
+    wl_surface_commit(wl_surface);
 }
 
 void
@@ -387,11 +436,9 @@ TopWindow::OnEvent(const Event &event)
   case Event::MOUSE_WHEEL:
     return OnMouseWheel(event.point, (int)event.param);
 
-#if defined(USE_X11) || defined(MESA_KMS)
   case Event::EXPOSE:
     Invalidate();
     return true;
-#endif
   }
 
   return false;
