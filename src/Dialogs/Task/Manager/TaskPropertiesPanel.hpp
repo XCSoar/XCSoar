@@ -49,4 +49,5 @@ protected:
 private:
   /* virtual methods from DataFieldListener */
   void OnModified(DataField &df) noexcept override;
+  void UpdateFinishHeightRange() noexcept;
 };

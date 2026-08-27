@@ -238,6 +238,8 @@ GetHeightRef(const ConstDataNode &node, const char *nodename,
   }
   if (StringIsEqual(type, "MSL")) {
     value = AltitudeReference::MSL;
+  } else if (StringIsEqual(type, "START")) {
+    value = AltitudeReference::START;
   } else {
     value = AltitudeReference::AGL;
   }

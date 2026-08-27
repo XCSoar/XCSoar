@@ -5,6 +5,8 @@
 
 #include "Geo/AltitudeReference.hpp"
 
+#include <optional>
+
 struct AircraftState;
 
 struct FinishConstraints {
@@ -36,5 +38,6 @@ struct FinishConstraints {
    */
   [[gnu::pure]]
   bool CheckHeight(const AircraftState &state,
-                   double finish_elevation) const;
+                   double finish_elevation,
+                   std::optional<double> start_altitude = {}) const;
 };

@@ -4,6 +4,7 @@
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TypeStrings.hpp"
@@ -220,12 +221,29 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 void
 TaskPropertiesPanel::OnModified(DataField &df) noexcept
 {
+  bool refresh = true;
   if (IsDataField(TASK_TYPE, df))
     OnTaskTypeChange((DataFieldEnum &)df);
   else if (IsDataField(START_MODE, df))
     ReadValues();
+  else if (IsDataField(FINISH_HEIGHT_REF, df)) {
+    UpdateFinishHeightRange();
+    refresh = false;
+  }
 
-  RefreshView();
+  if (refresh)
+    RefreshView();
+}
+
+void
+TaskPropertiesPanel::UpdateFinishHeightRange() noexcept
+{
+  auto &height = (DataFieldFloat &)GetDataField(FINISH_MIN_HEIGHT);
+  const auto &reference = (const DataFieldEnum &)GetDataField(FINISH_HEIGHT_REF);
+  const bool start = reference.GetValue() == (unsigned)AltitudeReference::START;
+  height.SetMin(start ? -10000 : 0);
+  if (!start && height.GetValue() < 0)
+    height.SetValue(0);
 }
 
 void
@@ -282,6 +300,8 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       N_("Reference is the height above the task point."), },
     { AltitudeReference::MSL, N_("MSL"),
       N_("Reference is altitude above mean sea level."), },
+    { AltitudeReference::START, N_("Start"),
+      N_("Reference is the altitude at which the task was started."), },
     nullptr
   };
 
@@ -290,13 +310,18 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
           altitude_reference_list);
 
   AddFloat(_("Finish min. height"),
-           _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. Set to 0 for no limit."),
+           _("Minimum height of finish compared to reference. With MSL or AGL reference, "
+             "the finish must be above this height. With Start reference, positive values "
+             "require the finish to be above the actual start height, while negative values "
+             "allow the finish to be below it."),
            "%.0f %s", "%.0f",
            0, 10000, 25, false, 0);
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),
-          altitude_reference_list);
+          altitude_reference_list, 0, this);
+
+  UpdateFinishHeightRange();
 
   AddDuration(_("PEV start wait time"),
               _("Wait time in minutes after Pilot Event (PEV) and before start gate opens. "

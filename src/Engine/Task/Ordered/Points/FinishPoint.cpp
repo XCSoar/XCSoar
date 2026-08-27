@@ -29,6 +29,7 @@ FinishPoint::Reset() noexcept
 {
   OrderedTaskPoint::Reset();
   fai_finish_height = 0;
+  start_altitude.reset();
 }
 
 bool
@@ -44,6 +45,11 @@ FinishPoint::GetElevation() const noexcept
 
   if (constraints.fai_finish) {
     return std::max(nominal_elevation, fai_finish_height);
+  } else if (constraints.min_height != 0 &&
+             constraints.min_height_ref == AltitudeReference::START &&
+             start_altitude.has_value()) {
+    return std::max(nominal_elevation,
+                    *start_altitude - constraints.min_height);
   } else {
     return std::max(nominal_elevation,
                     constraints.min_height +
@@ -86,7 +92,7 @@ FinishPoint::IsInSector(const AircraftState &state) const noexcept
 bool
 FinishPoint::InInHeightLimit(const AircraftState &state) const
 {
-  if (!constraints.CheckHeight(state, GetBaseElevation()))
+  if (!constraints.CheckHeight(state, GetBaseElevation(), start_altitude))
     return false;
 
   if (constraints.fai_finish)

@@ -14,10 +14,15 @@ FinishConstraints::SetDefaults()
 
 bool
 FinishConstraints::CheckHeight(const AircraftState &state,
-                               const double finish_elevation) const
+                               const double finish_elevation,
+                               const std::optional<double> start_altitude) const
 {
   if (min_height == 0)
     return true;
+
+  if (min_height_ref == AltitudeReference::START)
+    return start_altitude.has_value() &&
+      state.altitude >= *start_altitude - min_height;
 
   if (min_height_ref == AltitudeReference::MSL)
     return state.altitude >= min_height;

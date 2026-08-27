@@ -6,6 +6,8 @@
 #include "OrderedTaskPoint.hpp"
 #include "Task/Ordered/FinishConstraints.hpp"
 
+#include <optional>
+
 struct FinishConstraints;
 
 /**
@@ -27,6 +29,7 @@ class FinishPoint final : public OrderedTaskPoint
   FinishConstraints constraints;
 
   double fai_finish_height = 0;
+  std::optional<double> start_altitude;
 
 public:
   /**
@@ -51,6 +54,11 @@ public:
    * @param height FAI finish height (m)
    */
   void SetFaiFinishHeight(double height);
+
+  /** Set the altitude at which the task was started. */
+  void SetStartAltitude(double altitude) noexcept {
+    start_altitude = altitude;
+  }
 
   /* virtual methods from class TaskPoint */
   double GetElevation() const noexcept override;

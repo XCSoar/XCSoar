@@ -203,7 +203,8 @@ GetHeightRef(AltitudeReference height_ref)
     return ("AGL");
   case AltitudeReference::MSL:
     return ("MSL");
-
+  case AltitudeReference::START:
+    return ("START");
   case AltitudeReference::STD:
     /* not applicable here */
     break;
