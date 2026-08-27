@@ -469,7 +469,8 @@ AnalysisWidget::Update()
     StringFormatUnsafe(sTmp, "%s: %s", _("Analysis"),
                        _("Barograph"));
     dialog.SetCaption(sTmp);
-    BarographCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats());
+    BarographCaption(sTmp, sizeof(sTmp), glide_computer.GetFlightStats(),
+                     calculated.flight, settings_computer.utc_offset);
     info.SetText(sTmp);
     SetCalcCaption(_("Settings"));
     break;
