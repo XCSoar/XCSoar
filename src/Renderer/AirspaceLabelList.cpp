@@ -15,15 +15,16 @@ public:
   [[gnu::pure]]
   bool operator() (const AirspaceLabelList::Label &label1,
                    const AirspaceLabelList::Label &label2) noexcept {
-    bool en1 = config.IsClassEnabled(label1.cls);
-    bool en2 = config.IsClassEnabled(label2.cls);
+    const bool en1 = config.IsClassEnabled(label1.cls);
+    const bool en2 = config.IsClassEnabled(label2.cls);
 
-    if(en1 == en2)
-      return AirspaceAltitude::SortHighest(label2.base, label1.base);
-    else if(en1)
-      return false;
-    else
-      return true;
+    if (en1 != en2)
+      return en1;
+
+    if (label1.base.altitude != label2.base.altitude)
+      return AirspaceAltitude::SortHighest(label1.base, label2.base);
+
+    return label1.ordinal < label2.ordinal;
   }
 };
 
@@ -35,11 +36,13 @@ AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
   if (labels.full())
     return;
 
+  const unsigned ordinal = unsigned(labels.size());
   auto &label = labels.append();
   label.cls = cls;
   label.pos = pos;
   label.base = base;
   label.top = top;
+  label.ordinal = ordinal;
 }
 
 void

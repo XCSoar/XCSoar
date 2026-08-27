@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "AirspaceLabelRenderer.hpp"
+#include "AirspaceLabelPlacement.hpp"
 #include "AirspaceRendererSettings.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -42,6 +43,49 @@ struct NotamLabelCluster {
   unsigned count = 0;
   StaticArray<StaticString<64>, NOTAM_CLUSTER_VISIBLE_LINES> labels;
 };
+
+struct AirspaceLabelLayout {
+  char top_text[NAME_SIZE + 1];
+  char base_text[NAME_SIZE + 1];
+  PixelSize top_size;
+  PixelSize base_size;
+  PixelSize visual_size;
+  PixelRect visual_rect;
+  PixelPoint top_text_origin;
+  PixelPoint base_text_origin;
+  int separator_y;
+  unsigned padding;
+
+  void SetVisualRect(const PixelRect rect) noexcept {
+    visual_rect = rect;
+
+    const int text_right = rect.right - int(padding);
+    top_text_origin = {text_right - int(top_size.width), rect.top};
+    base_text_origin = {text_right - int(base_size.width),
+                        rect.bottom - int(base_size.height)};
+    separator_y = rect.top + int(visual_size.height) / 2;
+  }
+};
+
+static AirspaceLabelLayout
+MakeAirspaceLabelLayout(Canvas &canvas,
+                        const AirspaceLabelList::Label &label) noexcept
+{
+  AirspaceLabelLayout layout{};
+  AirspaceFormatter::FormatAltitudeShort(layout.top_text, label.top, false);
+  layout.top_size = canvas.CalcTextSize(layout.top_text);
+
+  AirspaceFormatter::FormatAltitudeShort(layout.base_text, label.base, false);
+  layout.base_size = canvas.CalcTextSize(layout.base_text);
+
+  layout.padding = Layout::GetTextPadding();
+  layout.visual_size = {
+    std::max(layout.top_size.width, layout.base_size.width) +
+      2 * layout.padding,
+    layout.top_size.height + layout.base_size.height,
+  };
+  return layout;
+}
 
 class AirspaceMapVisible
 {
@@ -255,8 +299,10 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
   canvas.SetBackgroundTransparent();
 
   if (draw_altitude_labels) {
+    const PixelRect screen_rect = projection.GetScreenRect();
     for (const auto &label : labels)
-      DrawLabel(canvas, projection, label);
+      DrawLabel(canvas, projection.GeoToScreen(label.pos), screen_rect, label,
+                label_block);
   }
 
   if (draw_notam_labels) {
@@ -327,51 +373,34 @@ AirspaceLabelRenderer::DrawInternal(Canvas &canvas,
   }
 }
 
-inline void
-AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
-                                 const WindowProjection &projection,
-                                 const AirspaceLabelList::Label &label) noexcept
+bool
+AirspaceLabelRenderer::DrawLabel(Canvas &canvas, const PixelPoint anchor,
+                                 const PixelRect &map_rect,
+                                 const AirspaceLabelList::Label &label,
+                                 LabelBlock *const label_block) noexcept
 {
-  char topText[NAME_SIZE + 1];
-  AirspaceFormatter::FormatAltitudeShort(topText, label.top, false);
-  const PixelSize topSize = canvas.CalcTextSize(topText);
+  auto layout = MakeAirspaceLabelLayout(canvas, label);
+  const auto placement =
+    PlaceAirspaceLabel(anchor, layout.visual_size, layout.padding, map_rect,
+                       label_block);
+  if (!placement)
+    return false;
 
-  char baseText[NAME_SIZE + 1];
-  AirspaceFormatter::FormatAltitudeShort(baseText, label.base, false);
-  const PixelSize baseSize = canvas.CalcTextSize(baseText);
-
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned labelWidth =
-    std::max(topSize.width, baseSize.width) + 2 * padding;
-  const unsigned labelHeight = topSize.height + baseSize.height;
-
-  // box
-  const auto pos = projection.GeoToScreen(label.pos);
-  PixelRect rect;
-  rect.left = pos.x - labelWidth / 2;
-  rect.top = pos.y;
-  rect.right = rect.left + labelWidth;
-  rect.bottom = rect.top + labelHeight;
-  canvas.DrawRectangle(rect);
+  layout.SetVisualRect(placement->visual_rect);
+  canvas.DrawRectangle(layout.visual_rect);
 
 #ifdef USE_GDI
-  canvas.DrawLine(rect.left + padding,
-                  rect.top + labelHeight / 2,
-                  rect.right - padding,
-                  rect.top + labelHeight / 2);
+  canvas.DrawLine(layout.visual_rect.left + layout.padding,
+                  layout.separator_y,
+                  layout.visual_rect.right - layout.padding,
+                  layout.separator_y);
 #else
-  canvas.DrawHLine(rect.left + padding,
-                   rect.right - padding,
-                   rect.top + labelHeight / 2, look.label_pen.GetColor());
+  canvas.DrawHLine(layout.visual_rect.left + layout.padding,
+                   layout.visual_rect.right - layout.padding,
+                   layout.separator_y, look.label_pen.GetColor());
 #endif
 
-  // top text
-  canvas.DrawText(rect.GetTopRight().At(-int(padding + topSize.width),
-                                        0),
-                  topText);
-
-  // base text
-  canvas.DrawText(rect.GetBottomRight().At(-int(padding + baseSize.width),
-                                           -(int)baseSize.height),
-                  baseText);
+  canvas.DrawText(layout.top_text_origin, layout.top_text);
+  canvas.DrawText(layout.base_text_origin, layout.base_text);
+  return true;
 }

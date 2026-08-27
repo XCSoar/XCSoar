@@ -17,6 +17,8 @@ class ProtectedAirspaceWarningManager;
 class Canvas;
 class LabelBlock;
 class WindowProjection;
+struct PixelPoint;
+struct PixelRect;
 
 class AirspaceLabelRenderer
 {
@@ -62,8 +64,10 @@ private:
                     bool draw_notam_labels,
                     LabelBlock *label_block) noexcept;
 
-  void DrawLabel(Canvas &canvas, const WindowProjection &projection,
-                 const AirspaceLabelList::Label &label) noexcept;
+  bool DrawLabel(Canvas &canvas, PixelPoint anchor,
+                 const PixelRect &map_rect,
+                 const AirspaceLabelList::Label &label,
+                 LabelBlock *label_block) noexcept;
 
 public:
   /**
