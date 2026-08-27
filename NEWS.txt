@@ -34,6 +34,10 @@ Version 7.46 - not yet released
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
+* analysis
+  - plot the Analysis barograph against clock time (end labels and
+    hourly tick marks) so successive flights without relaunch no
+    longer overlay each other or mix terrain on the same X axis
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
