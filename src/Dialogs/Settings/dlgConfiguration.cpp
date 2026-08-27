@@ -58,8 +58,14 @@
 #include "Panels/AudioConfigPanel.hpp"
 #endif
 
+#include "Tracking/Features.hpp"
+#ifdef HAVE_SKYLINES_TRACKING
+#include "Panels/SkyLinesConfigPanel.hpp"
+#endif
+#ifdef HAVE_LIVETRACK24
+#include "Panels/LiveTrack24ConfigPanel.hpp"
+#endif
 #ifdef HAVE_TRACKING
-#include "Panels/TrackingConfigPanel.hpp"
 #include "Panels/CloudConfigPanel.hpp"
 #endif
 
@@ -158,6 +164,20 @@ static constexpr TabMenuPage weather_pages[] = {
   { nullptr, nullptr }
 };
 
+static constexpr TabMenuPage online_pages[] = {
+#ifdef HAVE_SKYLINES_TRACKING
+  { "SkyLines", CreateSkyLinesConfigPanel },
+#endif
+#ifdef HAVE_LIVETRACK24
+  { "LiveTrack24", CreateLiveTrack24ConfigPanel },
+#endif
+#ifdef HAVE_TRACKING
+  { "XCSoar Cloud", CreateCloudConfigPanel },
+#endif
+  { "WeGlide", CreateWeGlideConfigPanel },
+  { nullptr, nullptr }
+};
+
 static constexpr TabMenuPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
   { N_("Units"), CreateUnitsConfigPanel },
@@ -165,17 +185,12 @@ static constexpr TabMenuPage setup_pages[] = {
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
   { NC_("Setting", "Time"), CreateTimeConfigPanel },
-#ifdef HAVE_TRACKING
-  { N_("Tracking"), CreateTrackingConfigPanel },
-  { "XCSoar Cloud", CreateCloudConfigPanel },
-#endif
-  { "WeGlide", CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
   { N_("Network"), CreateNetworkConfigPanel },
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
-  { N_("Services"), CreateSystemdConfigPanel },
+  { N_("System Services"), CreateSystemdConfigPanel },
 #endif
   { nullptr, nullptr }
 };
@@ -188,6 +203,7 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Task Defaults"), task_pages },
   { N_("Look"), look_pages },
   { N_("Weather"), weather_pages },
+  { NC_("Menu", "Services"), online_pages },
   { NC_("Menu", "Setup"), setup_pages },
 };
 

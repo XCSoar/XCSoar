@@ -31,6 +31,10 @@ ShowConfigPanel(const char *title,
  * - xcsoar://config/infoboxes - Opens InfoBox sets configuration
  * - xcsoar://config/pages - Opens pages configuration
  * - xcsoar://config/weglide - Opens WeGlide configuration
+ * - xcsoar://config/tracking - Opens SkyLines configuration
+ * - xcsoar://config/skylines - Opens SkyLines configuration
+ * - xcsoar://config/livetrack24 - Opens LiveTrack24 configuration
+ * - xcsoar://config/cloud - Opens XCSoar Cloud configuration
  * - xcsoar://dialog/checklist - Opens checklist dialog
  * - xcsoar://dialog/flight - Opens flight settings (basic settings)
  * - xcsoar://dialog/wind - Opens wind settings
