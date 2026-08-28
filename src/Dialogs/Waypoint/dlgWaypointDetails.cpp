@@ -828,6 +828,7 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       previous_button.SetFocus();
       NextPage(-1);
+      return true;
     }
     return false;
 
