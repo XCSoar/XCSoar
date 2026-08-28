@@ -110,10 +110,13 @@ static constexpr char invert_fragment_shader[] =
   GLSL_PRECISION
   R"glsl(
     uniform sampler2D texture;
+    varying vec4 colorvar;
     varying vec2 texcoordvar;
     void main() {
-      vec4 color = texture2D(texture, texcoordvar);
-      gl_FragColor = vec4(vec3(1) - color.rgb, color.a);
+      vec4 color;
+      vec4 alpha = vec4(vec3(0),texture2D(texture, texcoordvar).a);
+	  color = vec4(vec3(1) - colorvar.rgb, 0);
+      gl_FragColor = color + alpha;
     }
 )glsl";
 
@@ -126,7 +129,9 @@ static constexpr char alpha_fragment_shader[] =
     varying vec4 colorvar;
     varying vec2 texcoordvar;
     void main() {
-      gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);
+      vec4 color = vec4(colorvar.rgb, 0);
+      vec4 alpha = vec4(vec3(0),texture2D(texture, texcoordvar).a);
+	  gl_FragColor = color + alpha;
     }
 )glsl";
 
