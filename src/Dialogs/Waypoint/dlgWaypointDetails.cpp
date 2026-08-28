@@ -179,7 +179,7 @@ class WaypointDetailsWidget final
   LargeTextWindow details_text;
 
   StaticArray<Bitmap, 5> images;
-  int zoom = 0;
+  double zoom_factor = ImageZoomView::FIT_ZOOM_FACTOR;
 
 public:
   WaypointDetailsWidget(WidgetDialog &_dialog,
@@ -220,7 +220,9 @@ public:
   void OnMagnifyClicked();
   void OnShrinkClicked();
 
-  void AdjustViewForZoomChange(int old_zoom, int new_zoom) noexcept;
+  void AdjustViewForZoomChange(double old_zoom, double new_zoom) noexcept;
+
+  void SetZoomFactor(double new_zoom_factor) noexcept;
 
   void OnGotoClicked();
   void OnSimJumpClicked();
@@ -606,7 +608,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
     image_style.Hide();
 
     image_window.Create(parent, layout.main, image_style);
-    image_window.SetContent(&images[0], &zoom);
+    image_window.SetContent(&images[0], &zoom_factor);
 
     waypoint_image_input_target = this;
     const int mode_id = InputEvents::GetModeId("wptimg");
@@ -647,7 +649,7 @@ WaypointDetailsWidget::UpdatePage() noexcept
     magnify_button.SetVisible(image_page);
     shrink_button.SetVisible(image_page);
     if (image_page)
-      image_window.SetContent(&images[page - 3], &zoom);
+      image_window.SetContent(&images[page - 3], &zoom_factor);
   }
 
   UpdateCaption();
@@ -656,13 +658,13 @@ WaypointDetailsWidget::UpdatePage() noexcept
 void
 WaypointDetailsWidget::UpdateZoomControls()
 {
-  magnify_button.SetEnabled(zoom < ImageZoomView::max_zoom_level);
-  shrink_button.SetEnabled(zoom > 0);
+  magnify_button.SetEnabled(zoom_factor < ImageZoomView::MAX_ZOOM_FACTOR);
+  shrink_button.SetEnabled(!ImageZoomView::IsFitZoomFactor(zoom_factor));
 }
 
 void
-WaypointDetailsWidget::AdjustViewForZoomChange(const int old_zoom,
-                                               const int new_zoom) noexcept
+WaypointDetailsWidget::AdjustViewForZoomChange(const double old_zoom,
+                                               const double new_zoom) noexcept
 {
   if (images.empty() || page < 3 || !image_window.IsDefined())
     return;
@@ -698,37 +700,36 @@ WaypointDetailsWidget::NextPage(int step)
     image_window.Invalidate();
 
   if (page >= 3) {
-    const int old_zoom = zoom;
-    zoom = 0;
-    AdjustViewForZoomChange(old_zoom, zoom);
+    const double old_zoom_factor = zoom_factor;
+    zoom_factor = ImageZoomView::FIT_ZOOM_FACTOR;
+    AdjustViewForZoomChange(old_zoom_factor, zoom_factor);
     UpdateZoomControls();
   }
 }
 
 void
-WaypointDetailsWidget::OnMagnifyClicked()
+WaypointDetailsWidget::SetZoomFactor(const double new_zoom_factor) noexcept
 {
-  if (zoom >= ImageZoomView::max_zoom_level)
+  const double old_zoom_factor = zoom_factor;
+  zoom_factor = ImageZoomView::ClampZoomFactor(new_zoom_factor);
+  if (zoom_factor == old_zoom_factor)
     return;
 
-  const int old_zoom = zoom;
-  ++zoom;
-  AdjustViewForZoomChange(old_zoom, zoom);
+  AdjustViewForZoomChange(old_zoom_factor, zoom_factor);
   image_window.Invalidate();
   UpdateZoomControls();
 }
 
 void
+WaypointDetailsWidget::OnMagnifyClicked()
+{
+  SetZoomFactor(zoom_factor * ImageZoomView::ZOOM_STEP_FACTOR);
+}
+
+void
 WaypointDetailsWidget::OnShrinkClicked()
 {
-  if (zoom <= 0)
-    return;
-
-  const int old_zoom = zoom;
-  --zoom;
-  AdjustViewForZoomChange(old_zoom, zoom);
-  image_window.Invalidate();
-  UpdateZoomControls();
+  SetZoomFactor(zoom_factor / ImageZoomView::ZOOM_STEP_FACTOR);
 }
 
 bool
@@ -755,18 +756,15 @@ WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
     OnShrinkClicked();
     return;
   }
-  if (StringIsEqual(misc, "reset") && zoom > 0) {
-    const int old_zoom = zoom;
-    zoom = 0;
-    AdjustViewForZoomChange(old_zoom, zoom);
-    UpdateZoomControls();
-    image_window.Invalidate();
+  if (StringIsEqual(misc, "reset") &&
+      !ImageZoomView::IsFitZoomFactor(zoom_factor)) {
+    SetZoomFactor(ImageZoomView::FIT_ZOOM_FACTOR);
     goto_button.SetFocus();
     return;
   }
 
   if (StringIsEqual(misc, "left")) {
-    if (zoom == 0) {
+    if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       previous_button.SetFocus();
       NextPage(-1);
     } else
@@ -774,14 +772,14 @@ WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
     return;
   }
   if (StringIsEqual(misc, "right")) {
-    if (zoom == 0) {
+    if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       next_button.SetFocus();
       NextPage(+1);
     } else
       image_window.NudgeViewByPixelOffset({50, 0});
     return;
   }
-  if (zoom == 0)
+  if (ImageZoomView::IsFitZoomFactor(zoom_factor))
     return;
 
   if (StringIsEqual(misc, "up"))
@@ -810,7 +808,7 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     if (!images.empty() && image_window.IsVisible()) {
       shrink_button.SetFocus();
       shrink_button.Click();
-      if (zoom == 0) {
+      if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
         next_button.SetFocus();
       } else {
         image_window.Invalidate();
@@ -821,14 +819,14 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     return false;
 
   case KEY_LEFT:
-    if (zoom == 0) {
+    if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       previous_button.SetFocus();
       NextPage(-1);
     }
     return false;
 
   case KEY_RIGHT:
-    if (zoom == 0) {
+    if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       next_button.SetFocus();
       NextPage(+1);
       return true;
@@ -836,12 +834,9 @@ WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept {
     return false;
 
     case KEY_ESCAPE:
-      if (!images.empty() && zoom > 0) {
-        const int old_zoom = zoom;
-        zoom = 0;
-        AdjustViewForZoomChange(old_zoom, zoom);
-        image_window.Invalidate();
-        UpdateZoomControls();
+      if (!images.empty() &&
+          !ImageZoomView::IsFitZoomFactor(zoom_factor)) {
+        SetZoomFactor(ImageZoomView::FIT_ZOOM_FACTOR);
         goto_button.SetFocus();
         return true;
       }

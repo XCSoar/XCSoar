@@ -4,6 +4,7 @@
 #pragma once
 
 #include "WindowWidget.hpp"
+#include "ImageZoomView.hpp"
 
 class Bitmap;
 
@@ -13,7 +14,7 @@ class Bitmap;
  */
 class ViewImageWidget : public WindowWidget {
   const Bitmap *bitmap;
-  int zoom = 0;
+  double zoom_factor = ImageZoomView::FIT_ZOOM_FACTOR;
 
 public:
   explicit ViewImageWidget(const Bitmap *_bitmap=nullptr) noexcept
