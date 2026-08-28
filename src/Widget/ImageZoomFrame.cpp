@@ -15,10 +15,11 @@ ImageZoomFrame::Create(ContainerWindow &parent, const PixelRect rc,
 }
 
 void
-ImageZoomFrame::SetContent(const Bitmap *_bitmap, int *zoom) noexcept
+ImageZoomFrame::SetContent(const Bitmap *_bitmap,
+                           double *_zoom_factor) noexcept
 {
   bitmap = _bitmap;
-  zoom_level = zoom;
+  zoom_factor = _zoom_factor;
   view_pos = {};
   pending_offset = {};
   if (IsDefined())
@@ -41,10 +42,10 @@ ImageZoomFrame::NudgeViewByPixelOffset(const PixelPoint o) noexcept
 void
 ImageZoomFrame::OnPaint(Canvas &canvas) noexcept
 {
-  if (bitmap == nullptr || zoom_level == nullptr)
+  if (bitmap == nullptr || zoom_factor == nullptr)
     return;
 
-  ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_level,
+  ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_factor,
                                    view_pos, pending_offset);
 }
 
