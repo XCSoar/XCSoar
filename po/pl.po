@@ -3971,7 +3971,7 @@ msgid ""
 msgstr ""
 "Kiedy zaznaczone to wznoszenia w planowaniu szlaku są ograniczone do pułapu "
 "określonego przez większą z wartości: wysokość lotu +500m lub pułap termiki."
-"\r\n"
+"\n"
 "Jeśli wyłączone to wznoszenie jest nieograniczone."
 
 #, no-c-format
