@@ -1,8 +1,10 @@
 \chapter{Configuration}\label{cha:configuration}\label{conf:configuration}
 XCSoar is a highly configurable glide computer and can be customised
-to suit a wide variety of preferences and user requirements. The entire 
-configuration is saved in a so-called profile file, reflecting all 
-configuration settings. Whenever a configuration is judged being worthy, a 
+to suit a wide variety of preferences and user requirements. Most of the
+configuration is saved in a so-called profile file.  A few
+device-specific settings, such as the {\bf Startup mode}, are stored on
+the device itself (in the \texttt{state.ini} file) and apply to all
+profiles. Whenever a configuration is judged being worthy, a
 backup of the profile file is advisable (see Section~\ref{sec:profiles}. This
 chapter describes the configuration settings and options.
 
@@ -718,6 +720,17 @@ XCSoar.
   {\bf Default}: Uses the default input style for your platform.
 \item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
   when the device accepts your finger press as valid input on the touch-screen.
+\item[Startup mode]  Determines what XCSoar does with the fly/simulator
+  question on startup. \\
+  {\bf Ask}: The Fly / Simulator prompt appears on every start. \\
+  {\bf Fly}: XCSoar starts in fly mode straight away, which is what you
+  normally want in the cockpit. \\
+  {\bf Simulator}: XCSoar starts in simulator mode straight away. \\
+  The command line options \verb|-fly| and \verb|-simulator| override this
+  setting.  Unlike the other options on this page, this setting is stored
+  on the device, in the \texttt{state.ini} file in the data directory
+  (\texttt{XCSoarData}, or \texttt{.xcsoar} on Unix/Linux), not in the
+  profile; it therefore applies no matter which profile is loaded.
 \end{description}
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.

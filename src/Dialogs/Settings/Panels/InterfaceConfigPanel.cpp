@@ -19,6 +19,8 @@
 #include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 #include "Repository/FileType.hpp"
+#include "Simulator.hpp"
+#include "LocalAppState.hpp"
 #include "Version.hpp"
 
 using namespace std::chrono;
@@ -32,6 +34,9 @@ enum ControlIndex {
   TextInput,
 #ifdef HAVE_VIBRATOR
   HapticFeedback,
+#endif
+#ifdef SIMULATOR_AVAILABLE
+  StartupMode,
 #endif
   ShowQuickGuideOnStartup,
   ShowReleaseNotesOnStartup,
@@ -161,6 +166,25 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(HapticFeedback);
 #endif /* HAVE_VIBRATOR */
 
+#ifdef SIMULATOR_AVAILABLE
+  static constexpr StaticEnumChoice startup_mode_list[] = {
+    { LocalAppState::StartupMode::ASK, N_("Ask"),
+      N_("Show the Fly / Simulator prompt on every start.") },
+    { LocalAppState::StartupMode::FLY, N_("Fly"),
+      N_("Start in fly mode without asking.") },
+    { LocalAppState::StartupMode::SIMULATOR, N_("Simulator"),
+      N_("Start in simulator mode without asking.") },
+    nullptr
+  };
+
+  AddEnum(_("Startup mode"),
+          _("Determines whether XCSoar asks for fly or simulator mode on "
+            "startup, or always starts in one of them.  This setting is "
+            "stored on the device, not in the profile, so it applies to "
+            "all profiles."),
+          startup_mode_list, (unsigned)LocalAppState::GetStartupMode());
+#endif
+
   bool hide_quick_guide = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup,
                hide_quick_guide);
@@ -268,6 +292,16 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 
 #ifdef HAVE_VIBRATOR
   changed |= SaveValueEnum(HapticFeedback, ProfileKeys::HapticFeedback, settings.haptic_feedback);
+#endif
+
+#ifdef SIMULATOR_AVAILABLE
+  /* the startup mode is device state ("state.ini"), not a
+     profile setting, so that it applies to all profiles alike */
+  if (auto startup_mode = LocalAppState::GetStartupMode();
+      SaveValueEnum(StartupMode, startup_mode)) {
+    LocalAppState::SetStartupMode(startup_mode);
+    changed = true;
+  }
 #endif
 
   bool hide_quick_guide = false;
