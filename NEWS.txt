@@ -295,6 +295,8 @@ Version 7.46 - not yet released
     recently used waypoints (LU gesture) were opened #3207
   - filter only the recently used waypoints in the LU gesture list,
     and add waypoints selected with Goto to it #3207
+  - fix crash when moving the keyboard focus on the waypoint picture
+    page or in the flugwetter.de image view
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator
