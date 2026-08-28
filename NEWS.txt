@@ -1,4 +1,6 @@
 Version 7.45.2 - not yet released
+* documentation
+  - describe the T Next Leg InfoBox and how to use it at a turn
 
 Version 7.45.1 - 2026-08-28
 * highlights

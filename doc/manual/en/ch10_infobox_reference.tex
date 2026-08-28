@@ -201,8 +201,11 @@ maintaining altitude. In final glide mode, this speed-to-fly is calculated for
 descent. In climb mode, this switches to the speed for minimum sink at the
 current load factor (if an accelerometer is connected). When `Block' mode speed to
 fly is selected, this InfoBox displays the MacCready speed.}
-\ibi{Thermal next leg equivalent}{T Next Leg}{Thermal rate of climb on next 
-leg which is equivalent to a thermal equal to the MacCready setting on current leg.}
+\ibi{Thermal next leg equivalent}{T Next Leg}{Climb on the next task
+leg that gives the same average cross-country speed as flying the
+current leg at the MacCready setting, using the polar and the headwind
+on each track.  The box is invalid when there is no next leg, wind, or
+polar.  See Section~\ref{sec:t-next-leg}.}
 \ibi{Task cruise efficiency}{Cruise Eff}{Efficiency of cruise. 100 indicates perfect 
 MacCready performance. This value estimates your cruise efficiency according to the 
 current flight history with the set MC value.  Calculation begins after task is started.}
