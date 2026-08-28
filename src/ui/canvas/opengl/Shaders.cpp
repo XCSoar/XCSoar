@@ -24,6 +24,10 @@ GLint invert_projection, invert_texture, invert_translate;
 GLProgram *alpha_shader;
 GLint alpha_projection, alpha_texture, alpha_translate;
 
+GLProgram *alpha_fix_color_shader = nullptr;
+GLint alpha_fix_color_projection = 0, alpha_fix_color_texture = 0, 
+  alpha_fix_color_translate = 0, alpha_fix_color_color = 0;
+
 GLProgram *combine_texture_shader;
 GLint combine_texture_projection, combine_texture_texture,
   combine_texture_translate;
@@ -144,6 +148,33 @@ static constexpr char alpha_fragment_shader[] =
        * Full-vector additions or multiplications however work.
        */
       gl_FragColor = color + alpha;
+    }
+)glsl";
+
+static constexpr char alpha_fix_color_vertex_shader[] =
+  GLSL_VERSION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    attribute vec2 texcoord;
+    varying vec2 texcoordvar;
+    void main() {
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+      texcoordvar = texcoord;
+     }
+ )glsl";
+static constexpr char alpha_fix_color_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform sampler2D texture;
+    varying vec2 texcoordvar;
+    uniform vec4 color;
+    void main() {
+      gl_FragColor = vec4(color.rgb, texture2D(texture, texcoordvar).a);
     }
 )glsl";
 
@@ -349,6 +380,20 @@ OpenGL::InitShaders()
   alpha_shader->Use();
   glUniform1i(alpha_texture, 0);
 
+  alpha_fix_color_shader = CompileProgram(alpha_fix_color_vertex_shader,
+    alpha_fix_color_fragment_shader);
+  alpha_fix_color_shader->BindAttribLocation(Attribute::POSITION, "position");
+  alpha_fix_color_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  LinkProgram(*alpha_fix_color_shader);
+
+  alpha_fix_color_projection = alpha_fix_color_shader->GetUniformLocation("projection");
+  alpha_fix_color_texture = alpha_fix_color_shader->GetUniformLocation("texture");
+  alpha_fix_color_translate = alpha_fix_color_shader->GetUniformLocation("translate");
+  alpha_fix_color_color = alpha_fix_color_shader->GetUniformLocation("color");
+
+  alpha_fix_color_shader->Use();
+  glUniform1i(alpha_fix_color_texture, 0);
+  
   combine_texture_shader = CompileProgram(combine_texture_vertex_shader,
                                           combine_texture_fragment_shader);
   combine_texture_shader->BindAttribLocation(Attribute::POSITION, "position");
@@ -415,6 +460,8 @@ OpenGL::DeinitShaders() noexcept
   combine_texture_shader = nullptr;
   delete alpha_shader;
   alpha_shader = nullptr;
+  delete alpha_fix_color_shader;
+  alpha_fix_color_shader = nullptr;
   delete invert_shader;
   invert_shader = nullptr;
   delete texture_shader;
@@ -428,6 +475,10 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
 {
   alpha_shader->Use();
   glUniformMatrix4fv(alpha_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
+
+  alpha_fix_color_shader->Use();
+  glUniformMatrix4fv(alpha_fix_color_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
 
   invert_shader->Use();
@@ -476,6 +527,9 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   alpha_shader->Use();
   glUniform2f(alpha_translate, t.x, t.y);
+
+  alpha_fix_color_shader->Use();
+  glUniform2f(alpha_fix_color_translate, t.x, t.y);
 
   combine_texture_shader->Use();
   glUniform2f(combine_texture_translate, t.x, t.y);
