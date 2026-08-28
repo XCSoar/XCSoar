@@ -139,6 +139,29 @@ In addition, an automatic MacCready mode is available as described in
 Section~\ref{sec:auto-maccready}.
 
 
+\section{Thermal next leg equivalent}\label{sec:t-next-leg}
+
+The \infobox{T Next Leg} InfoBox shows the climb on the next task leg
+that gives the same average cross-country speed as flying the current
+leg at the MacCready setting.  The calculation uses the glide polar and
+the headwind component on each remaining track.  The box is blank when
+there is no valid next leg, no wind, or no polar.
+
+Compared with the MacCready setting:
+\begin{itemize}
+\item A lower value means the next leg is easier (typically a turn from
+  into-wind to downwind).  Weaker thermals after the turn can still
+  match the present average speed.
+\item A higher value means the next leg is harder (typically a turn
+  into wind).  Extra height before the turn, and less selective
+  thermalling afterwards, help hold the present average.
+\item A similar value means the wind on both legs is comparable.
+\end{itemize}
+
+This is not a MacCready setting.  MacCready remains the expected lift;
+T Next Leg only translates that performance onto the next track.
+
+
 \section{Glide polar}\label{sec:glidepolar}
 
 The glide polar specifications of a wide selection of glider types,
@@ -547,7 +570,9 @@ sunset warnings.
 The glide computer assumes the glider's average cross-country speed is
 equal to that achievable under classic MacCready theory taking wind
 into account, with the current MacCready setting.  This method is used
-for estimating arrival times and task finish time.
+for estimating arrival times and task finish time.  The T Next Leg
+InfoBox applies the same idea to the next task leg
+(Section~\ref{sec:t-next-leg}).
 
 The following task speed measures are defined:
 \begin{description}
