@@ -4,10 +4,10 @@
 #pragma once
 
 #include "Form/Draw.hpp"
+#include "ui/dim/Point.hpp"
 
 #include <functional>
 
-struct PixelPoint;
 struct PixelRect;
 class Bitmap;
 class ContainerWindow;
@@ -18,11 +18,12 @@ class WindowStyle;
  * Owner-draw window for pan/zoom bitmap viewing (drag and arrow nudge).
  */
 class ImageZoomFrame final : public WndOwnerDrawFrame {
-  PixelPoint last_mouse_pos, view_pos, pending_offset;
+  PixelPoint last_mouse_pos, pending_offset;
+  DoublePoint2D view_pos{};
   bool is_dragging = false;
 
   const Bitmap *bitmap = nullptr;
-  int *zoom_level = nullptr;
+  double *zoom_factor = nullptr;
 
   std::function<bool(unsigned key_code)> try_key_input;
 
@@ -30,13 +31,13 @@ public:
   void Create(ContainerWindow &parent, PixelRect rc,
               const WindowStyle &style) noexcept;
 
-  void SetContent(const Bitmap *bitmap, int *zoom) noexcept;
+  void SetContent(const Bitmap *bitmap, double *zoom_factor) noexcept;
 
   void SetTryKeyInput(std::function<bool(unsigned key_code)> &&f) noexcept;
 
   void NudgeViewByPixelOffset(PixelPoint o) noexcept;
 
-  PixelPoint &GetViewPosition() noexcept {
+  DoublePoint2D &GetViewPosition() noexcept {
     return view_pos;
   }
 

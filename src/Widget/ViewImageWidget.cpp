@@ -14,7 +14,7 @@ ViewImageWidget::SetBitmap(const Bitmap *_bitmap) noexcept
     return;
 
   auto &frame = (ImageZoomFrame &)GetWindow();
-  frame.SetContent(bitmap, &zoom);
+  frame.SetContent(bitmap, &zoom_factor);
   frame.Invalidate();
 }
 
@@ -27,6 +27,6 @@ ViewImageWidget::Prepare(ContainerWindow &parent,
 
   auto frame = std::make_unique<ImageZoomFrame>();
   frame->Create(parent, rc, hidden);
-  frame->SetContent(bitmap, &zoom);
+  frame->SetContent(bitmap, &zoom_factor);
   SetWindow(std::move(frame));
 }
