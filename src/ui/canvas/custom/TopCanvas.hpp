@@ -71,8 +71,8 @@ class TopCanvas
    * Swap-chain depth.  Extra full-window clears after an OpenGL
    * gesture trail use this so every presentation buffer gets a
    * clean frame.  Default 4 covers typical EGL/Android queues
-   * (triple-buffer plus a spare); Android overwrites it from the
-   * native window when the surface is acquired.
+   * (triple-buffer plus a spare); GetPresentationBufferCount()
+   * may raise it from EGL_BUFFER_AGE_KHR after the first swap.
    */
   unsigned presentation_buffer_count = 4;
 #endif

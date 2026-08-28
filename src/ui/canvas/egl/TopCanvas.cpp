@@ -123,17 +123,9 @@ TopCanvas::AcquireSurface()
   if (native_window == nullptr)
     return false;
 
-  int min_undequeued = 0;
-  if (ANativeWindow_query(native_window,
-                          NATIVE_WINDOW_MIN_UNDEQUEUED_BUFFERS,
-                          &min_undequeued) == 0 &&
-      min_undequeued > 0) {
-    /* BufferQueue: minUndequeued + 1 for the producer, +1 if
-       eglSwapBuffers is asynchronous. */
-    unsigned n = unsigned(min_undequeued) + 2;
-    if (n > presentation_buffer_count)
-      presentation_buffer_count = n;
-  }
+  /* NDK r26 (minSdk 21) has no public ANativeWindow_query();
+     NATIVE_WINDOW_MIN_UNDEQUEUED_BUFFERS is private.  Depth
+     comes from EGL_BUFFER_AGE_KHR in GetPresentationBufferCount(). */
 
   CreateSurface(native_window);
 
