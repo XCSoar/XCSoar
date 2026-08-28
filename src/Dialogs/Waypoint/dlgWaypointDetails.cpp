@@ -598,7 +598,14 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   commands_widget.Prepare();
 
   if (!images.empty()) {
-    image_window.Create(parent, layout.main, dock_style);
+    /* no ControlParent() here: the image window is a PaintWindow
+       without children, and WindowList::FindControl() casts a
+       "control parent" to ContainerWindow while looking for the next
+       control */
+    WindowStyle image_style;
+    image_style.Hide();
+
+    image_window.Create(parent, layout.main, image_style);
     image_window.SetContent(&images[0], &zoom);
 
     waypoint_image_input_target = this;
