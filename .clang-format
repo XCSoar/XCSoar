@@ -10,7 +10,7 @@ NamespaceIndentation: None
 # CamelCase for class/function names
 # Lower case with underscores for attributes/variables
 # All upper case for constants/enums
-Standard: Cpp20
+Standard: c++20
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: false
 AlignConsecutiveMacros: true
