@@ -112,8 +112,18 @@ static constexpr char invert_fragment_shader[] =
     uniform sampler2D texture;
     varying vec2 texcoordvar;
     void main() {
-      vec4 color = texture2D(texture, texcoordvar);
-      gl_FragColor = vec4(vec3(1) - color.rgb, color.a);
+      vec4 texture_sample;
+      vec4 color;
+      vec4 alpha;
+      texture_sample = texture2D(texture, texcoordvar);
+      alpha = vec4(vec3(0),texture_sample.a);
+      color = vec4(vec3(1) - texture_sample.rgb, 0);
+      /* Workaround for the LIMA GPU driver for OpenVario:
+       * Assigning the alpha component directly leads to
+       * render errors in blending mode
+       * Full-vector additions or multiplications however work.
+       */
+      gl_FragColor = color + alpha;
     }
 )glsl";
 
@@ -126,7 +136,14 @@ static constexpr char alpha_fragment_shader[] =
     varying vec4 colorvar;
     varying vec2 texcoordvar;
     void main() {
-      gl_FragColor = vec4(colorvar.rgb, texture2D(texture, texcoordvar).a);
+      vec4 color = vec4(colorvar.rgb, 0);
+      vec4 alpha = vec4(vec3(0),texture2D(texture, texcoordvar).a);
+      /* Workaround for the LIMA GPU driver for OpenVario:
+       * Assigning the alpha component directly leads to
+       * render errors in blending mode
+       * Full-vector additions or multiplications however work.
+       */
+      gl_FragColor = color + alpha;
     }
 )glsl";
 
