@@ -329,6 +329,12 @@ Version 7.46 - not yet released
   - add "Speed VMG" InfoBox: the part of the ground speed that closes
     the distance to the next waypoint
 * ui
+  - add pinch-to-zoom on waypoint pictures and downloaded weather
+    images: the image scales smoothly and follows the two fingers,
+    which also pan it #2868
+  - let a quick swipe across a zoomed waypoint picture or weather
+    image keep it moving for a moment, so that panning across a large
+    picture needs fewer strokes
   - show the MacCready setting beside L/D on the Analysis glide
     polar page #2035
   - stop quitting the simulator when the device battery falls below 5%
