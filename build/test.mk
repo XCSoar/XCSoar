@@ -149,7 +149,8 @@ endif
 ifeq ($(HAVE_WIN32),n)
 TEST_NAMES += \
 	TestDataLayoutMigration \
-	TestLocalPathResolve
+	TestLocalPathResolve \
+	TestLocalAppState
 endif
 
 ifeq ($(HAVE_WIN32),y)
@@ -886,6 +887,19 @@ TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
 	$(TEST_SRC_DIR)/TestDataLayoutMigration.cpp
 TEST_DATA_LAYOUT_MIGRATION_DEPENDS = PROFILE IO OS UTIL
 $(eval $(call link-program,TestDataLayoutMigration,TEST_DATA_LAYOUT_MIGRATION))
+
+TEST_LOCAL_APP_STATE_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/LocalAppState.cpp \
+	$(SRC)/system/FileUtil.cpp \
+	$(SRC)/system/Path.cpp \
+	$(SRC)/io/FileOutputStream.cxx \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLocalAppState.cpp
+TEST_LOCAL_APP_STATE_DEPENDS = PROFILE IO OS UTIL
+$(eval $(call link-program,TestLocalAppState,TEST_LOCAL_APP_STATE))
 
 TEST_LOCAL_PATH_RESOLVE_SOURCES = \
 	$(SRC)/DataFileLayout.cpp \
