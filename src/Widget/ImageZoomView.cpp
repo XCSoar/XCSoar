@@ -6,6 +6,7 @@
 #include "ui/canvas/Canvas.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace ImageZoomView {
 
@@ -159,10 +160,20 @@ PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
       ? (bmp_size.width - visible_width) / 2
       : view_pos.x + pending_offset.x / scale;
     view_pos.x = std::clamp(view_pos.x, 0.0, bmp_size.width - visible_width);
-    src_pos.x = int(view_pos.x);
-    src_size.width = unsigned(visible_width);
-    screen_pos.x = 0;
-    screen_size.width = canvas_size.width;
+
+    /* Blit whole source pixels, but place them at the exact fractional
+       position: rounding the source rectangle instead would quantise
+       the image position to whole source pixels, which is a visible
+       wobble while zooming.  The outermost pixel column reaches beyond
+       the canvas and is clipped. */
+    const int first = int(view_pos.x);
+    const int last = std::min(int(std::ceil(view_pos.x + visible_width)),
+                              int(bmp_size.width));
+    src_pos.x = first;
+    src_size.width = unsigned(last - first);
+    screen_pos.x = int(std::lround((first - view_pos.x) * scale));
+    screen_size.width = unsigned(int(std::lround((last - view_pos.x) * scale)) -
+                                 screen_pos.x);
   }
 
   const double scaled_height = bmp_size.height * scale;
@@ -179,10 +190,15 @@ PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
       : view_pos.y + pending_offset.y / scale;
     view_pos.y = std::clamp(view_pos.y, 0.0,
                             bmp_size.height - visible_height);
-    src_pos.y = int(view_pos.y);
-    src_size.height = unsigned(visible_height);
-    screen_pos.y = 0;
-    screen_size.height = canvas_size.height;
+
+    const int first = int(view_pos.y);
+    const int last = std::min(int(std::ceil(view_pos.y + visible_height)),
+                              int(bmp_size.height));
+    src_pos.y = first;
+    src_size.height = unsigned(last - first);
+    screen_pos.y = int(std::lround((first - view_pos.y) * scale));
+    screen_size.height = unsigned(int(std::lround((last - view_pos.y) * scale)) -
+                                  screen_pos.y);
   }
 
   pending_offset = {};
