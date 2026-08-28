@@ -1,3 +1,5 @@
+Version 7.45.2 - not yet released
+
 Version 7.45.1 - 2026-08-28
 * highlights
   - add Linux systemd service controls and display brightness
