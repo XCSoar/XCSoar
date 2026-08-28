@@ -18,7 +18,7 @@
 #include "SkySightDialog.hpp"
 #include "Dialogs/Settings/Panels/SkySightConfigPanel.hpp"
 #endif
-#if 0
+#ifdef HAVE_WEATHER_OVERLAY
 #include "MapOverlayWidget.hpp"
 #endif
 #include "Widget/TextWidget.hpp"
@@ -176,11 +176,10 @@ ShowWeatherDialog(const char *page)
   widget.AddTab(CreatePCMetTabWidget(), "Flugwetter");
 #endif
 
-#if 0
-  /* The German DWD has terminated our access to georeferenced images,
-     so this code is disabled for now, but will remain here;
-     eventually, we should refactor the code to be generic, allowing
-     arbitrary georeferenced images */
+#ifdef HAVE_WEATHER_OVERLAY
+  /* this was disabled while the only source was the DWD, whose
+     georeferenced images we lost access to; the radar composite needs
+     no account, so there is something to show again */
 
   if (page != nullptr && StringIsEqual(page, "overlay"))
     start_page = widget.GetSize();
