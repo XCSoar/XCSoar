@@ -166,10 +166,11 @@ private:
   /**
    * Number of frames which must still be repainted with a cleared
    * background to erase a gesture trail which the #GlueMapWindow has
-   * painted outside its own rectangle.  Every buffer of the swap
-   * chain needs a frame of its own.
+   * painted outside its own rectangle.  Sized from the swap-chain
+   * depth so every presentation buffer gets a clean frame.
    *
    * @see OnPaint()
+   * @see TopWindow::GetPresentationBufferCount()
    */
   unsigned clear_gesture_frames = 0;
 #endif

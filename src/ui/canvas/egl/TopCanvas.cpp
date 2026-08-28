@@ -123,6 +123,18 @@ TopCanvas::AcquireSurface()
   if (native_window == nullptr)
     return false;
 
+  int min_undequeued = 0;
+  if (ANativeWindow_query(native_window,
+                          NATIVE_WINDOW_MIN_UNDEQUEUED_BUFFERS,
+                          &min_undequeued) == 0 &&
+      min_undequeued > 0) {
+    /* BufferQueue: minUndequeued + 1 for the producer, +1 if
+       eglSwapBuffers is asynchronous. */
+    unsigned n = unsigned(min_undequeued) + 2;
+    if (n > presentation_buffer_count)
+      presentation_buffer_count = n;
+  }
+
   CreateSurface(native_window);
 
   return true;

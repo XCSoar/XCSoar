@@ -298,6 +298,13 @@ public:
   uint32_t GetRenderStateToken() const noexcept {
     return render_state_token;
   }
+
+  /**
+   * Swap-chain depth.  Used to erase an OpenGL gesture trail from
+   * every presentation buffer.
+   */
+  [[gnu::pure]]
+  unsigned GetPresentationBufferCount() const noexcept;
 #endif
 
 #ifdef ANDROID

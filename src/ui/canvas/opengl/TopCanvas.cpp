@@ -7,10 +7,42 @@
 #include "Init.hpp"
 #include "Math/Point2D.hpp"
 
+#ifdef USE_EGL
+#include "ui/display/Display.hpp"
+
+#include <algorithm>
+#endif
+
 PixelSize
 TopCanvas::GetSize() const noexcept
 {
   return {OpenGL::viewport_size.x, OpenGL::viewport_size.y};
+}
+
+unsigned
+TopCanvas::GetPresentationBufferCount() const noexcept
+{
+  unsigned count = presentation_buffer_count;
+
+#ifdef USE_EGL
+  if (surface != EGL_NO_SURFACE) {
+#ifdef EGL_BUFFER_AGE_KHR
+    const EGLint age_attr = EGL_BUFFER_AGE_KHR;
+#else
+    const EGLint age_attr = 0x313D;
+#endif
+    auto age = display.QuerySurface(surface, age_attr);
+    if (age && *age > 0)
+      count = std::max(count, unsigned(*age));
+  }
+#endif
+
+  if (count < 3)
+    count = 3;
+  else if (count > 8)
+    count = 8;
+
+  return count;
 }
 
 PixelSize
