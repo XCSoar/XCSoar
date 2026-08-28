@@ -9,8 +9,22 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 
 #include <cmath>
+
+/**
+ * Can the image glide on after a drag?  Fast displays get kinetic
+ * panning; e-paper and slow CPUs stop with the finger (same gate as
+ * the list and the map pan animations).
+ */
+[[gnu::pure]]
+static bool
+UseKineticPan() noexcept
+{
+  return !HasEPaper() && !IsSlowCPU();
+}
 
 void
 ImageZoomFrame::Create(ContainerWindow &parent, const PixelRect rc,
@@ -22,6 +36,8 @@ ImageZoomFrame::Create(ContainerWindow &parent, const PixelRect rc,
 void
 ImageZoomFrame::SetContent(const Bitmap *_bitmap, double *_zoom_factor) noexcept
 {
+  kinetic_timer.Cancel();
+
   bitmap = _bitmap;
   zoom_factor = _zoom_factor;
   view_pos = {};
@@ -72,6 +88,11 @@ ImageZoomFrame::OnMouseMove(const PixelPoint p,
 
   pending_offset += last_mouse_pos - p;
   last_mouse_pos = p;
+  drag_moved = true;
+
+  kinetic_x.MouseMove(p.x);
+  kinetic_y.MouseMove(p.y);
+
   Invalidate();
   return true;
 }
@@ -79,8 +100,14 @@ ImageZoomFrame::OnMouseMove(const PixelPoint p,
 bool
 ImageZoomFrame::OnMouseDown(const PixelPoint p) noexcept
 {
+  kinetic_timer.Cancel();
+
   is_dragging = true;
+  drag_moved = false;
   last_mouse_pos = p;
+
+  kinetic_x.MouseDown(p.x);
+  kinetic_y.MouseDown(p.y);
 
   /* capture the pointer, so the drag continues outside this window,
      and so multi-touch events are delivered here */
@@ -89,14 +116,55 @@ ImageZoomFrame::OnMouseDown(const PixelPoint p) noexcept
 }
 
 bool
-ImageZoomFrame::OnMouseUp([[maybe_unused]] const PixelPoint p) noexcept
+ImageZoomFrame::OnMouseUp(const PixelPoint p) noexcept
 {
+  if (is_dragging && drag_moved)
+    StartKineticPan(p);
+
   is_dragging = false;
 #ifdef HAVE_MULTI_TOUCH
   is_pinching = false;
 #endif
   ReleaseCapture();
   return true;
+}
+
+void
+ImageZoomFrame::StartKineticPan(const PixelPoint p) noexcept
+{
+  if (!UseKineticPan())
+    return;
+
+  kinetic_x.MouseUp(p.x);
+  kinetic_y.MouseUp(p.y);
+
+  if (kinetic_x.IsSteady() && kinetic_y.IsSteady())
+    /* the finger rested before it was lifted */
+    return;
+
+  /* the kinetic managers extrapolate from their own last filtered
+     position, which may differ from p; start from what they report
+     now, so that the glide continues without a jump */
+  kinetic_last = {kinetic_x.GetPosition(), kinetic_y.GetPosition()};
+
+  kinetic_timer.Schedule(std::chrono::milliseconds(30));
+}
+
+void
+ImageZoomFrame::OnKineticTimer() noexcept
+{
+  if (kinetic_x.IsSteady() && kinetic_y.IsSteady()) {
+    kinetic_timer.Cancel();
+    return;
+  }
+
+  const PixelPoint p{kinetic_x.GetPosition(), kinetic_y.GetPosition()};
+  if (p == kinetic_last)
+    return;
+
+  pending_offset += kinetic_last - p;
+  kinetic_last = p;
+  Invalidate();
 }
 
 #ifdef HAVE_MULTI_TOUCH
@@ -106,6 +174,8 @@ ImageZoomFrame::OnMultiTouchDown() noexcept
 {
   if (bitmap == nullptr || zoom_factor == nullptr)
     return false;
+
+  kinetic_timer.Cancel();
 
   /* the second finger takes over: a single-finger drag must not pan
      while the pinch is running */
@@ -193,8 +263,17 @@ ImageZoomFrame::OnCancelMode() noexcept
 #ifdef HAVE_MULTI_TOUCH
   is_pinching = false;
 #endif
+  kinetic_timer.Cancel();
 
   WndOwnerDrawFrame::OnCancelMode();
+}
+
+void
+ImageZoomFrame::OnDestroy() noexcept
+{
+  kinetic_timer.Cancel();
+
+  WndOwnerDrawFrame::OnDestroy();
 }
 
 bool
@@ -223,6 +302,8 @@ ImageZoomFrame::OnKeyCheck(const unsigned key_code) const noexcept
 bool
 ImageZoomFrame::OnKeyDown(const unsigned key_code) noexcept
 {
+  kinetic_timer.Cancel();
+
   if (try_key_input && try_key_input(key_code))
     return true;
 
