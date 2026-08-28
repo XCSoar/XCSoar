@@ -1,4 +1,9 @@
-Version 7.46 - not yet released
+Version 7.45.1 - not yet released
+* highlights
+  - add Linux systemd service controls and display brightness
+  - add a standard macOS application menu
+  - split Display and Layout in Configuration (display type, text
+    size, resolution, and rotation)
 * android
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
@@ -16,12 +21,17 @@ Version 7.46 - not yet released
   - remove the thin white frame around full-screen dialogs (such as
     the Fly/Simulator screen), which no longer stop one pixel short of
     the display edge
+* Linux
+  - apply KMS screen rotation to the framebuffer console
 * input
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
 * weather
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
+  - request SkySight live tiles in UTC so overlay times match the
+    forecast
+  - keep NOTAM list filters in sync after opening the list
   - fix the weather cursor bar keeping light colours in dark mode,
     and unreadable labels on Windows
   - fix SkySight re-downloading forecast metadata when stepping
@@ -38,6 +48,7 @@ Version 7.46 - not yet released
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
+  - erase the gesture trail when it leaves the map window
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
@@ -75,17 +86,27 @@ Version 7.46 - not yet released
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
     boxes toward square at 150%
+  - fit the analogue vario gauge to the available InfoBox size
   - show Airspeed TAS and IAS in blue when the value is estimated
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - move Display type, text size, and display resolution onto the
+    Display settings page
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+* data files
+  - run the data-directory layout migration before loading the
+    profile, so old waypoint/airspace keys are not applied too late
 * development
   - documentation: document the release and post-release version workflow
+  - build system: provision ANGLE via the Python thirdparty pipeline
+  - macOS: build a pinned SDL2 instead of the Homebrew bottle
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+  - ci: publish manuals and Windows installers; upload iOS dSYMs to
+    App Store Connect
 
 Version 7.45 - 2026-08-15
 * highlights

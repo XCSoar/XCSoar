@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="@PACKAGE_NAME@"
           android:installLocation="auto"
-          android:versionCode="74600000"
-          android:versionName="7.46">
+          android:versionCode="74510000"
+          android:versionName="7.45.1">
   <!--
     versionCode / versionName are replaced for CI Android jobs in
     .github/workflows/build-native.yml (master and release tags only).
