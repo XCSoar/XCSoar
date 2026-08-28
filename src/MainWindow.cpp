@@ -1328,11 +1328,12 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
      window repaints (the safe area insets reserved by the
      #TopWindow, for example) would keep those pixels forever, and
      each buffer of the swap chain needs a clean frame of its own.
-     Therefore clear the whole window while a trail exists, and for a
-     few frames after it is gone. */
+     Therefore clear the whole window while a trail exists, and for
+     as many extra frames as the swap chain has buffers after it is
+     gone. */
   const bool gesture_trail = map != nullptr && map->HasGestureTrail();
   if (gesture_trail)
-    clear_gesture_frames = 3;
+    clear_gesture_frames = GetPresentationBufferCount();
 
   if (gesture_trail || clear_gesture_frames > 0) {
     canvas.DrawFilledRectangle(canvas.GetRect(), COLOR_BLACK);
