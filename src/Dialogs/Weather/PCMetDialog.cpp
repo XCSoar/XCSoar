@@ -137,9 +137,12 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
   {
+    /* no ControlParent() here: the image window is a PaintWindow
+       without children, and WindowList::FindControl() casts a
+       "control parent" to ContainerWindow while looking for the next
+       control */
     WindowStyle image_style;
     image_style.Hide();
-    image_style.ControlParent();
 
     image_window.Create(parent, rc, image_style);
     image_window.SetContent(&bitmap, &zoom);
