@@ -766,12 +766,15 @@ WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
     return;
   }
 
+  /* ::Layout, not this class's nested Layout struct */
+  const int step = ::Layout::Scale(ImageZoomView::PAN_STEP);
+
   if (StringIsEqual(misc, "left")) {
     if (ImageZoomView::IsFitZoomFactor(zoom_factor)) {
       previous_button.SetFocus();
       NextPage(-1);
     } else
-      image_window.NudgeViewByPixelOffset({-50, 0});
+      image_window.NudgeViewByPixelOffset({-step, 0});
     return;
   }
   if (StringIsEqual(misc, "right")) {
@@ -779,16 +782,16 @@ WaypointDetailsWidget::OnWaypointImageEvent(const char *misc) noexcept
       next_button.SetFocus();
       NextPage(+1);
     } else
-      image_window.NudgeViewByPixelOffset({50, 0});
+      image_window.NudgeViewByPixelOffset({step, 0});
     return;
   }
   if (ImageZoomView::IsFitZoomFactor(zoom_factor))
     return;
 
   if (StringIsEqual(misc, "up"))
-    image_window.NudgeViewByPixelOffset({0, -50});
+    image_window.NudgeViewByPixelOffset({0, -step});
   else if (StringIsEqual(misc, "down"))
-    image_window.NudgeViewByPixelOffset({0, 50});
+    image_window.NudgeViewByPixelOffset({0, step});
 }
 
 bool

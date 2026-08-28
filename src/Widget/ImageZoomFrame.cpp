@@ -5,6 +5,7 @@
 #include "ImageZoomView.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
@@ -317,21 +318,23 @@ ImageZoomFrame::OnKeyDown(const unsigned key_code) noexcept
   if (try_key_input && try_key_input(key_code))
     return true;
 
+  const int step = Layout::Scale(ImageZoomView::PAN_STEP);
+
   switch (key_code) {
   case KEY_LEFT:
-    pending_offset.x -= 50;
+    pending_offset.x -= step;
     break;
 
   case KEY_RIGHT:
-    pending_offset.x += 50;
+    pending_offset.x += step;
     break;
 
   case KEY_UP:
-    pending_offset.y -= 50;
+    pending_offset.y -= step;
     break;
 
   case KEY_DOWN:
-    pending_offset.y += 50;
+    pending_offset.y += step;
     break;
 
   default:
