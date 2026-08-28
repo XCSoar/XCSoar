@@ -12,6 +12,10 @@
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scissor.hpp"
+#endif
+
 #include <cmath>
 
 /**
@@ -74,6 +78,12 @@ ImageZoomFrame::OnPaint(Canvas &canvas) noexcept
 
   if (bitmap == nullptr || zoom_factor == nullptr)
     return;
+
+#ifdef ENABLE_OPENGL
+  /* the zoomed bitmap reaches beyond the canvas by up to one source
+     pixel */
+  const GLCanvasScissor scissor(canvas);
+#endif
 
   ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_factor,
                                    view_pos, pending_offset);

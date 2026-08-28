@@ -79,6 +79,11 @@ AdjustImageViewOnZoomChange(double old_zoom_factor, double new_zoom_factor,
 
 /**
  * Paint a bitmap with the given zoom factor and pan offset.
+ *
+ * While zoomed in, this paints up to one source pixel beyond the
+ * canvas on each side; the caller must clip (OpenGL does not clip
+ * against siblings).
+ *
  * @param view_pos Top-left of the visible region in bitmap pixels
  * @param pending_offset Drag/key nudge in screen pixels (applied once, then cleared)
  */
