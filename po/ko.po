@@ -131,7 +131,7 @@ msgstr "타스크포인트의 코스 바깥을 기점으로 삼은 반경 1km 90
 
 #, no-c-format
 msgid "A straight line start gate. Cross start gate from inside area to start."
-msgstr "직선출발게이트. \r코스 안에서 밖을 향해 스타트 라인을 가로질러 출발."
+msgstr "직선출발게이트. 코스 안에서 밖을 향해 스타트 라인을 가로질러 출발."
 
 #, no-c-format
 msgid "A cylinder. Exit area to start."
@@ -169,7 +169,7 @@ msgid ""
 "(British rules) Any point within 1/2 km of center or 10 km of a 180-degree "
 "sector. Scored from center."
 msgstr ""
-"(영국식 룰) \r포인트에서 1/2km의 원혹은 반경 10km의 180도 섹터를 안에서 밖으"
+"(영국식 룰) 포인트에서 1/2km의 원혹은 반경 10km의 180도 섹터를 안에서 밖으"
 "로 통과할때 득점한다."
 
 #, no-c-format
