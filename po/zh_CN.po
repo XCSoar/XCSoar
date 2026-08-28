@@ -1757,6 +1757,7 @@ msgstr "如果启用，将在顶部添加一行显示您的到达那个位置的
 msgid "Select Color"
 msgstr "选择颜色"
 
+#, no-c-format
 msgid "Display"
 msgstr "显示"
 
@@ -1997,10 +1998,6 @@ msgstr "转弯点类型"
 #, no-c-format
 msgid "Language, Input"
 msgstr "语言，输入"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "屏幕布局"
 
 #, no-c-format
 msgid "Audio"
@@ -3272,9 +3269,6 @@ msgstr "控制最终滑翔信息框模式是否应用于自动页。"
 
 msgid "Text size"
 msgstr "文本大小"
-
-msgid "Display Resolution"
-msgstr "显示分辨率"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "显示分辨率用于适应线宽、字体大小、可着陆区大小等。"
@@ -7988,12 +7982,6 @@ msgstr "航点图标大小"
 msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr "地图上航点符号大小，为内置图稿的百分比（列表对话框保持固定行图标大小）。"
 
-msgid "Altn mode: MANUAL"
-msgstr "备降模式：手动"
-
-msgid "Altn mode: AUTO"
-msgstr "备降模式：自动"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10689,4 +10677,93 @@ msgstr "自动"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "手册"
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

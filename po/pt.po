@@ -1790,6 +1790,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "Selecionar Cor"
 
+#, no-c-format
 msgid "Display"
 msgstr "Ecrã"
 
@@ -2034,10 +2035,6 @@ msgstr "Tipos de Turnpoints"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Idioma, Entrada"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Layout da Ecrã"
 
 #, no-c-format
 msgid "Audio"
@@ -3369,9 +3366,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Tamanho do texto"
-
-msgid "Display Resolution"
-msgstr "Orientação do display"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "A resolução da exibição é usada para adaptar as larguras das linhas, o tamanho da fonte, o tamanho dos aterros e mais."
@@ -8308,12 +8302,6 @@ msgstr ""
 "Tamanho dos símbolos de waypoint no mapa como percentagem da arte "
 "incorporada (diálogos de lista mantêm um tamanho de ícone de linha fixo)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Modo Altn: MANUAL"
-
-msgid "Altn mode: AUTO"
-msgstr "Modo Altn: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -11173,4 +11161,93 @@ msgstr "Auto"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Manual"
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 
