@@ -146,12 +146,14 @@ public:
     image_window.SetContent(&bitmap, &zoom_factor);
     image_window.SetTryKeyInput(
       [this](unsigned key_code) { return TryImageKey(key_code); });
+    image_window.SetOnZoomChanged([this]() { UpdateZoomControls(); });
     UpdateZoomControls();
   }
 
   void Unprepare() noexcept override
   {
     image_window.SetTryKeyInput(nullptr);
+    image_window.SetOnZoomChanged(nullptr);
   }
 
   void Show(const PixelRect &rc) noexcept override

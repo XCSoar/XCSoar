@@ -616,6 +616,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                       : std::nullopt;
     image_window.SetTryKeyInput(
         [this](unsigned k) { return TryWaypointImageKey(k); });
+    image_window.SetOnZoomChanged([this]() { UpdateZoomControls(); });
   } else {
     wptimg_mode.reset();
   }
@@ -628,8 +629,10 @@ WaypointDetailsWidget::Unprepare() noexcept
   if (waypoint_image_input_target == this)
     waypoint_image_input_target = nullptr;
   wptimg_mode.reset();
-  if (!images.empty())
+  if (!images.empty()) {
     image_window.SetTryKeyInput(nullptr);
+    image_window.SetOnZoomChanged(nullptr);
+  }
   info_widget.Unprepare();
   commands_widget.Unprepare();
 }
