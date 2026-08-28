@@ -10,6 +10,7 @@
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
@@ -94,6 +95,8 @@ public:
   bool
   TryImageKey(unsigned key_code) noexcept
   {
+    const int step = Layout::Scale(ImageZoomView::PAN_STEP);
+
     switch (key_code) {
     case KEY_F2:
       Magnify();
@@ -106,25 +109,25 @@ public:
     case KEY_LEFT:
       if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({-50, 0});
+      image_window.NudgeViewByPixelOffset({-step, 0});
       return true;
 
     case KEY_RIGHT:
       if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({50, 0});
+      image_window.NudgeViewByPixelOffset({step, 0});
       return true;
 
     case KEY_UP:
       if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({0, -50});
+      image_window.NudgeViewByPixelOffset({0, -step});
       return true;
 
     case KEY_DOWN:
       if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({0, 50});
+      image_window.NudgeViewByPixelOffset({0, step});
       return true;
 
     default:

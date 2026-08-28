@@ -31,6 +31,12 @@ static constexpr double MAX_ZOOM_FACTOR = 32;
  */
 static constexpr double ZOOM_STEP_FACTOR = 2;
 
+/**
+ * The distance of one pan step (arrow keys), in logical pixels; pass
+ * it through Layout::Scale().
+ */
+static constexpr int PAN_STEP = 50;
+
 constexpr double
 ClampZoomFactor(double zoom_factor) noexcept
 {
