@@ -673,6 +673,15 @@ map first and select the layer afterwards.  \bmenug{Update} fetches a
 fresh image for the area now visible.  A new composite is published
 every five minutes.
 
+A map page can also carry the radar permanently: set \emph{Map
+overlay} to \emph{Rain radar} in
+\config{screenpages}.  The image is then fetched
+in the background whenever the page is shown, without a progress
+dialog interrupting the flight.  It is only re-fetched when a newer
+composite has been published or when the map has been panned outside
+the area the current image was fetched for, so a page left open does
+not download continuously.
+
 The colours are the classes the Deutscher Wetterdienst uses for its
 own radar images, from cyan for the weakest echo through green,
 yellow and orange to red and violet for the heaviest, so the picture

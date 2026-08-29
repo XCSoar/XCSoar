@@ -20,6 +20,9 @@ class NOTAMGlue;
 namespace EDL { class DownloadGlue; }
 #endif
 class XCThermDownloadGlue;
+#ifdef HAVE_WEATHER_OVERLAY
+class RadarDownloadGlue;
+#endif
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
 #endif
@@ -43,6 +46,9 @@ struct NetComponents {
   const std::unique_ptr<EDL::DownloadGlue> edl;
 # endif
   const std::unique_ptr<XCThermDownloadGlue> xctherm_download;
+# ifdef HAVE_WEATHER_OVERLAY
+  const std::unique_ptr<RadarDownloadGlue> opera_radar;
+# endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
   const std::unique_ptr<RaspDownloadGlue> rasp_download;
