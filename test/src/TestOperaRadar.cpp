@@ -169,7 +169,7 @@ Contains(const std::string &haystack, const char *needle) noexcept
 
 int main()
 {
-  plan_tests(77);
+  plan_tests(83);
 
   /* 12:07:30 minus the seven minute dissemination margin is 12:00:30,
      which rounds down to the 12:00 composite */
@@ -296,6 +296,22 @@ int main()
 
   /* the tile the aircraft is in must be the one that contains it */
   ok1(GeoBitmap::GetBounds(base).IsInside(augsburg));
+
+  /* the grid must survive a fix at its edges: longitude 180 lands one
+     tile past the last column and latitude past the Mercator cut-off
+     runs to infinity, and casting either out-of-range double to
+     uint32_t is undefined.  Both have to come back inside the grid. */
+  for (const double longitude : {180.0, -180.0, 179.9999999}) {
+    const auto edge = OPERA::GetAircraftTile(
+      GeoPoint{Angle::Degrees(longitude), Angle::Degrees(48.35)}, 9);
+    ok1(edge.IsValid() && edge.x < (uint32_t(1) << 9));
+  }
+
+  for (const double latitude : {89.9, -89.9, 85.05112878}) {
+    const auto edge = OPERA::GetAircraftTile(
+      GeoPoint{Angle::Degrees(10.9), Angle::Degrees(latitude)}, 9);
+    ok1(edge.IsValid() && edge.y < (uint32_t(1) << 9));
+  }
 
   const auto block = OPERA::CollectTiles(base);
   ok1(block.size() == OPERA::TILE_COUNT);
