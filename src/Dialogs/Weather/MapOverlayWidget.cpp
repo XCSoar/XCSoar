@@ -387,10 +387,10 @@ WeatherMapOverlayListWidget::DownloadRadar(Item &item)
     auto path = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
                                      UIGlobals::GetDialogLook(),
                                      _("Download"),
-                                     OPERA::DownloadRadar(bounds,
-                                                          size.width,
-                                                          size.height,
-                                                          *Net::curl, env),
+                                     OPERA::DownloadArea(bounds,
+                                                         size.width,
+                                                         size.height,
+                                                         *Net::curl, env),
                                      &env);
     if (!path)
       return false;

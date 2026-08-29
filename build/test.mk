@@ -581,6 +581,7 @@ $(eval $(call link-program,TestAngle,TEST_ANGLE))
 
 TEST_OPERA_RADAR_SOURCES = \
 	$(SRC)/Weather/OPERA/RadarData.cpp \
+	$(SRC)/ui/canvas/custom/GeoBitmapTile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOperaRadar.cpp
 TEST_OPERA_RADAR_DEPENDS = GEO MATH TIME FMT UTIL
