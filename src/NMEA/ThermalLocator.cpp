@@ -2,8 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "NMEA/ThermalLocator.hpp"
+#include "NMEA/ThermalProjection.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "Geo/Math.hpp"
 
 #include <algorithm>
 
@@ -38,7 +38,6 @@ GeoPoint
 ThermalSource::CalculateAdjustedLocation(double altitude,
                                          const SpeedVector &wind) const noexcept
 {
-  auto dh = altitude - ground_height;
-  auto t = dh / lift_rate;
-  return FindLatitudeLongitude(location, wind.bearing.Reciprocal(), wind.norm * t);
+  return ProjectThermalCore(location, altitude - ground_height,
+                            wind, lift_rate);
 }
