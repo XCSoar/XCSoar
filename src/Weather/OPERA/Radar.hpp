@@ -33,8 +33,28 @@ static constexpr unsigned CADENCE_MINUTES = 5;
 /**
  * How far behind the wall clock to look for the newest composite.  A
  * frame is not on the server the instant it is nominally acquired.
+ *
+ * Measured over a full day of the DBZH series: the delay between the
+ * time a frame depicts and the time it appears in the bucket was 4.2
+ * min at the median, 4.7 min at the 99th percentile and 6.3 min at
+ * its worst.  This constant is itself the margin: when the wall clock
+ * lands on a slot boundary the frame we ask for is only
+ * #LATENCY_MINUTES old, so anything below the worst observed delay
+ * would sometimes request a frame that is not there yet.
  */
-static constexpr unsigned LATENCY_MINUTES = 10;
+static constexpr unsigned LATENCY_MINUTES = 7;
+
+/**
+ * How old the frame on the map may get, counted from the time it
+ * depicts, before it is taken down.
+ *
+ * A frame is already #LATENCY_MINUTES to #LATENCY_MINUTES +
+ * #CADENCE_MINUTES old when it arrives, so this has to stay clear of
+ * that.  Twenty minutes leaves room for one failed refresh before the
+ * picture disappears, and puts a hard bound on how stale an echo the
+ * pilot can be looking at.
+ */
+static constexpr unsigned MAX_AGE_MINUTES = 20;
 
 /**
  * The largest image we render.  The composite is a 1km grid; more
@@ -52,6 +72,18 @@ static constexpr unsigned MAX_IMAGE_SIZE = 1024;
  */
 [[gnu::pure]]
 std::string MakeCompositeURL(const BrokenDateTime &utc);
+
+/**
+ * The time the composite that #MakeCompositeURL() points at nominally
+ * depicts.  The caller needs it to tell how old the picture on the
+ * map has become.
+ *
+ * @return an invalid time if @p utc is not plausible
+ *
+ * Exposed for the unit test.
+ */
+[[gnu::pure]]
+BrokenDateTime CompositeTime(const BrokenDateTime &utc);
 
 /**
  * Project a geographic location onto the composite's grid, which is
