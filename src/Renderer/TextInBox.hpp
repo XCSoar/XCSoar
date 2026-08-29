@@ -9,11 +9,21 @@ struct PixelPoint;
 struct PixelSize;
 struct PixelRect;
 class Canvas;
+class Color;
 class LabelBlock;
 void
 RenderShadowedText(Canvas &canvas, const char *text,
                    PixelPoint p,
                    bool inverted) noexcept;
+
+/**
+ * Like above, but with an explicit pair of colours, for text that is
+ * neither black nor white.
+ */
+void
+RenderShadowedText(Canvas &canvas, const char *text,
+                   PixelPoint p,
+                   Color text_color, Color outline_color) noexcept;
 
 struct TextInBoxMode {
   enum Alignment : uint8_t {
