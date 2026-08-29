@@ -10,10 +10,13 @@
 int
 main()
 {
-  plan_tests(6);
+  plan_tests(9);
 
   ok1(ThermalDisplay::IsVisible(4000));
   ok1(!ThermalDisplay::IsVisible(4000.001));
+  ok1(ThermalDisplay::IsTrafficVisible(true, 4000));
+  ok1(!ThermalDisplay::IsTrafficVisible(true, 4001));
+  ok1(!ThermalDisplay::IsTrafficVisible(false, 1000));
 
   const GeoPoint location{Angle::Degrees(7), Angle::Degrees(45)};
   ThermalSource source{};
