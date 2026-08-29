@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include "FlarmThermalCandidate.hpp"
+#include "FlarmThermalCluster.hpp"
 #include "FLARM/List.hpp"
-#include "Geo/SpeedVector.hpp"
-#include "Math/Angle.hpp"
 #include "NMEA/TrafficThermal.hpp"
 #include "NMEA/Validity.hpp"
 #include "time/Stamp.hpp"
@@ -16,24 +16,6 @@
 class RasterTerrain;
 struct SpeedVector;
 
-/** Initial tunable values for the FLARM thermal detector. */
-namespace FlarmThermalConstants {
-static constexpr FloatDuration CONTRIBUTOR_TIMEOUT{10};
-static constexpr FloatDuration GROUPING_TIME_GAP{120};
-static constexpr FloatDuration EXIT_TURN_WINDOW{5};
-
-static constexpr double ENTER_CLIMB_THRESHOLD = 0.5;
-static constexpr double EXIT_CLIMB_THRESHOLD = 0.3;
-static constexpr double MAX_DRIFT_CORRECTED_RADIUS = 500;
-static constexpr double GROUPING_RADIUS = 500;
-static constexpr double MIN_ACCUMULATED_TURN = 270;
-static constexpr double MIN_RECENT_TURN_RATE = 4;
-static constexpr double MIN_CURRENT_TURN_RATE = 3;
-
-/** Enough for the complete window after rate-aware sample coalescing. */
-static constexpr unsigned MAX_SAMPLE_COUNT = 128;
-}
-
 /**
  * Calculation state for detecting and grouping thermal climbs reported by
  * physical FLARM traffic.
@@ -43,13 +25,11 @@ static constexpr unsigned MAX_SAMPLE_COUNT = 128;
  * boundary.
  */
 class FlarmThermalComputer {
-  struct Sample {
-    TimeStamp time;
-    GeoPoint location;
-    double altitude;
-    Angle track;
-    double climb_rate;
-  };
+  using Sample = FlarmThermal::Sample;
+  using Candidate = FlarmThermal::Candidate;
+  using CandidateResult = FlarmThermal::CandidateResult;
+  using ContributorState = FlarmThermal::Contributor;
+  using ClusterGeometry = FlarmThermal::ClusterGeometry;
 
   struct TargetState {
     FlarmId id;
@@ -58,44 +38,6 @@ class FlarmThermalComputer {
     Validity last_average_update;
     TimeStamp last_seen;
     bool qualified;
-  };
-
-  struct ContributorState {
-    FlarmId id;
-    GeoPoint centre;
-    ThermalSource source;
-    TimeStamp first_seen;
-    TimeStamp last_seen;
-    TimeStamp last_value_time;
-    double latest_climb_rate;
-    double last_climb_rate;
-    double climb_integral;
-    double encounter_duration;
-    double encounter_average;
-    double min_altitude;
-    double max_altitude;
-    double reference_altitude;
-    double geometry_lift_rate;
-    SpeedVector geometry_wind;
-    SpeedVector drift_per_meter;
-    bool active;
-  };
-
-  /**
-   * Identity-free aggregate used for detector-side grouping and merging.
-   *
-   * This deliberately mirrors only the published geometry needed by the
-   * detector.  TrafficThermalInfo is an output snapshot and must not become
-   * an input to qualification, clustering, or contributor lifecycle rules.
-   */
-  struct ClusterGeometry {
-    GeoPoint reference_location;
-    double reference_altitude;
-    double lift_rate;
-    SpeedVector wind;
-    SpeedVector drift_per_meter;
-    double ground_height;
-    double max_observed_altitude;
   };
 
   struct ClusterState {
@@ -114,30 +56,6 @@ class FlarmThermalComputer {
   std::uint32_t next_cluster_serial;
   TimeStamp last_process_time;
 
-  struct Candidate {
-    FlarmId id;
-    GeoPoint centre;
-    ThermalSource source;
-    TimeStamp first_seen;
-    double altitude;
-    double min_altitude;
-    double max_altitude;
-    double climb_rate;
-    double geometry_lift_rate;
-    SpeedVector geometry_wind;
-    SpeedVector drift_per_meter;
-  };
-
-  enum class CandidateResult : std::uint8_t {
-    QUALIFIED,
-    INCOMPLETE_WINDOW,
-    WEAK_LIFT,
-    INSUFFICIENT_TURN,
-    LEFT_CIRCLE,
-    EXCESSIVE_RADIUS,
-    INVALID_SOURCE,
-  };
-
   TargetState *FindTarget(FlarmId id) noexcept;
   TargetState &AllocateTarget(FlarmId id) noexcept;
   void ResetTargetWindow(TargetState &target) noexcept;
@@ -150,12 +68,6 @@ class FlarmThermalComputer {
   ClusterState *FindCompatibleCluster(const Candidate &candidate,
                                       TimeStamp now) noexcept;
 
-  CandidateResult BuildCandidate(const TargetState &target,
-                                 const FlarmTraffic &traffic,
-                                 double geometry_lift_rate,
-                                 const SpeedVector &geometry_wind,
-                                 const RasterTerrain *terrain,
-                                 Candidate &candidate) const noexcept;
   void UpdateContributor(ClusterState &cluster, TargetState &target,
                          const Candidate &candidate,
                          TimeStamp now) noexcept;
@@ -163,8 +75,7 @@ class FlarmThermalComputer {
                        TrafficThermalInfo &output) noexcept;
   void RecomputeCluster(ClusterState &cluster,
                         TrafficThermalInfo &output) noexcept;
-  void MergeCompatibleClusters(TimeStamp now,
-                               TrafficThermalInfo &output) noexcept;
+  void MergeCompatibleClusters(TrafficThermalInfo &output) noexcept;
   void MergeClusters(unsigned keep_index, unsigned remove_index,
                      TrafficThermalInfo &output) noexcept;
 
