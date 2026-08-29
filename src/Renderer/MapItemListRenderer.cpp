@@ -38,7 +38,6 @@
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "time/RoughTime.hpp"
-#include "time/BrokenDateTime.hpp"
 
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
@@ -279,16 +278,14 @@ Draw(Canvas &canvas, PixelRect rc,
   row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
 
   StaticString<256> buffer;
-
-  auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
-  if (timespan.count() < 0)
-    timespan += hours{24};
+  const auto timespan = ElapsedTimeOrZero(item.current_time, thermal.time);
 
   buffer.Format("%s: %s - left %s ago (%s)",
                 _("Avg. lift"),
                 FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                 FormatTimespanSmart(timespan).c_str(),
                 FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+
   row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
