@@ -49,6 +49,10 @@ CopyWeatherOverlayCursors(PageLayout &dest,
     dest.skysight_time = src.skysight_time;
     break;
 
+  case PageLayout::Overlay::SATELLITE:
+    dest.satellite_layer = src.satellite_layer;
+    break;
+
   case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:

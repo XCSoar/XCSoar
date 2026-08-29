@@ -85,6 +85,7 @@ State::IsDirty() const noexcept
       draft.skysight_time != baseline.skysight_time;
 
   case PageLayout::Overlay::RADAR:
+  case PageLayout::Overlay::SATELLITE:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     return false;
