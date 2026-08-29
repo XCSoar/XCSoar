@@ -384,6 +384,18 @@ SatelliteDownloadGlue::OnCompleteNotify() noexcept
        is of something else entirely */
     return;
 
+  if (std::none_of(wanted.begin(), wanted.end(),
+                   [this](const auto &t){
+                     return EUMETView::IsSameTile(t, tile);
+                   }))
+    /* the block moved out from under this request: the aircraft
+       crossed into another tile while it was in flight, the block was
+       rebuilt around the new centre and this tile's slot was given
+       back.  The frame never changed, so checking that would not
+       catch it, and installing now would put a tile outside the block
+       on the map and hold a slot the block still wants. */
+    return;
+
   /* a tile that arrives but will not load must count as a failure,
      or NextMissingTile() would hand back the same tile for ever and
      we would download it in a loop */
