@@ -17,22 +17,44 @@
 
 using namespace GeoBitmap;
 
+/** The number of tiles along each axis, for a zoom we can shift by. */
+static constexpr uint32_t
+TilesPerAxis(unsigned zoom) noexcept
+{
+  /* the shift is undefined once zoom reaches the width of the type,
+     and TileData carries a uint16_t that nothing else validates */
+  return uint32_t{1} << std::min(zoom, unsigned(GeoBitmap::MAX_TILE_ZOOM));
+}
+
 static uint32_t
 LonToTileX(double lon, unsigned zoom) noexcept
 {
-  /* longitude wraps rather than running out, but a caller can still
-     hand us one outside the grid -- exactly 180 lands one tile past
-     the last, and a wild GPS fix lands anywhere -- and the cast of an
-     out-of-range double to uint32_t is undefined.  Wrap into the
-     grid, which is what the projection means anyway. */
-  const uint32_t tiles_per_axis = uint32_t{1} << zoom;
-  const double x = std::floor((lon + 180.0) / 360.0 * tiles_per_axis);
-  if (!(x >= 0) || !(x < double(tiles_per_axis))) {
-    const double wrapped = std::fmod(x, double(tiles_per_axis));
-    return uint32_t(wrapped < 0 ? wrapped + tiles_per_axis : wrapped);
-  }
+  const uint32_t tiles_per_axis = TilesPerAxis(zoom);
+  const double scaled = (lon + 180.0) / 360.0 * tiles_per_axis;
+  const double x = std::floor(scaled);
 
-  return uint32_t(x);
+  if (x >= 0 && x < double(tiles_per_axis))
+    return uint32_t(x);
+
+  if (x == double(tiles_per_axis))
+    /* the antimeridian, one index past the last column.  It is the
+       eastern edge of that column, and that is the tile a flight
+       reaching it is in; wrapping to the first column would put the
+       tile on the far side of the map, because
+       GeoQuadrilateral::GetBounds() does not wrap.
+
+       Tested against the index rather than the exact longitude: a
+       degree value that has been through Angle's radians and back is
+       not exactly 180 any more, and the boundary has to hold for what
+       actually arrives. */
+    return tiles_per_axis - 1;
+
+  /* anywhere else outside the grid is a longitude that has run past
+     the world, which the projection simply wraps.  The cast of an
+     out-of-range double to uint32_t would be undefined, so wrap
+     first. */
+  const double wrapped = std::fmod(x, double(tiles_per_axis));
+  return uint32_t(wrapped < 0 ? wrapped + tiles_per_axis : wrapped);
 }
 
 static uint32_t
@@ -46,7 +68,7 @@ LatToTileY(double lat, unsigned zoom) noexcept
   const double latitude_radians =
     std::clamp(lat, -MERCATOR_LIMIT, MERCATOR_LIMIT) * M_PI / 180.0;
 
-  const uint32_t tiles_per_axis = uint32_t{1} << zoom;
+  const uint32_t tiles_per_axis = TilesPerAxis(zoom);
   const double y = std::floor(
     (1.0 - std::asinh(std::tan(latitude_radians)) / M_PI) / 2.0 *
     tiles_per_axis);
