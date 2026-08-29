@@ -78,13 +78,42 @@ EUMETView::GetLayer(int index) noexcept
   return LAYERS[index];
 }
 
+uint16_t
+EUMETView::ChooseZoom(const GeoBounds &screen) noexcept
+{
+  if (!screen.IsValid())
+    return MAX_TILE_ZOOM;
+
+  /* the widest the map shows; the block is square, so the larger of
+     the two has to fit */
+  const double view = std::max(screen.GetGeoWidth(), screen.GetGeoHeight());
+  if (!(view > 0))
+    return MAX_TILE_ZOOM;
+
+  /* a tile at zoom z spans EQUATOR / 2^z along the parallel, and the
+     block is (2 * TILE_RANGE + 1) of them.  Take the coarsest step
+     that still covers the view, then refuse to go finer than the
+     satellite's own detail. */
+  constexpr double EQUATOR = 40075017;
+  const double parallel =
+    EQUATOR * std::cos(screen.GetCenter().latitude.Radians());
+  const double tiles_across = 2 * TILE_RANGE + 1;
+
+  const double ratio = tiles_across * parallel / view;
+  if (!(ratio > 1))
+    return MIN_TILE_ZOOM;
+
+  const int zoom = int(std::floor(std::log2(ratio)));
+  return uint16_t(std::clamp(zoom, int(MIN_TILE_ZOOM), int(MAX_TILE_ZOOM)));
+}
+
 GeoBitmap::TileData
-EUMETView::GetAircraftTile(const GeoPoint &location) noexcept
+EUMETView::GetAircraftTile(const GeoPoint &location, uint16_t zoom) noexcept
 {
   if (!location.IsValid())
     return {};
 
-  return GeoBitmap::GetTile(GeoBounds{location}, TILE_ZOOM);
+  return GeoBitmap::GetTile(GeoBounds{location}, zoom);
 }
 
 std::vector<GeoBitmap::TileData>
