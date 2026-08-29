@@ -29,6 +29,12 @@
 static_assert(EUMETView::TILE_COUNT <= MapWindowOverlay::MAX_MAP_OVERLAYS,
               "the tile block has to fit the map's overlay slots");
 
+/* PageSettings.hpp cannot include the layer table, so it carries its
+   own copy of the default index; tie the two together here rather
+   than letting them drift apart silently */
+static_assert(PageLayout::SATELLITE_LAYER_DEFAULT == EUMETView::DEFAULT_LAYER,
+              "the profile default must name the default layer");
+
 /**
  * The imagery is drawn under the map, so it has to stay a background:
  * terrain, airspace and the task are what the pilot is flying by, and
@@ -124,6 +130,9 @@ struct Slot {
 
   GeoBitmap::TileData tile{};
 
+  /** which product this tile is of */
+  int layer = -1;
+
   /** the frame this tile depicts */
   BrokenDateTime frame_time = BrokenDateTime::Invalid();
 
@@ -136,6 +145,16 @@ std::array<Slot, EUMETView::TILE_COUNT> slots;
 
 /** the layer the open page selected, or -1 when no page shows one */
 int active_layer = -1;
+
+/**
+ * Set while the map is panning, when the page is momentarily replaced
+ * by a layout carrying no overlay.  That is not the pilot leaving the
+ * imagery behind, so the tiles stay.
+ */
+bool suspended_for_pan = false;
+
+/** the layer the block is being filled with */
+int block_layer = -1;
 
 /** the frame the block is being filled with */
 BrokenDateTime block_frame = BrokenDateTime::Invalid();
@@ -199,7 +218,7 @@ ReleaseSlot(unsigned index) noexcept
 /** Is this tile already on the map, showing the right frame? */
 [[gnu::pure]]
 bool
-IsShown(const GeoBitmap::TileData &tile,
+IsShown(const GeoBitmap::TileData &tile, int layer,
         const BrokenDateTime &frame_time) noexcept
 {
   const auto *map = UIGlobals::GetMap();
@@ -209,7 +228,7 @@ IsShown(const GeoBitmap::TileData &tile,
   for (unsigned i = 0; i < slots.size(); ++i) {
     const auto &slot = slots[i];
     if (slot.IsUsed() && map->GetOverlay(i) == slot.overlay &&
-        EUMETView::IsSameTile(slot.tile, tile) &&
+        EUMETView::IsSameTile(slot.tile, tile) && slot.layer == layer &&
         slot.frame_time == frame_time)
       return true;
   }
@@ -236,10 +255,11 @@ ReleaseUnwantedSlots() noexcept
        overlay for the length of twenty-five requests.  Letting it go
        stale is bounded by the age limit below, which is the mechanism
        for that; this one is only about which ground is covered. */
-    const bool keep = std::any_of(wanted.begin(), wanted.end(),
-                                  [&slot](const auto &t){
-                                    return EUMETView::IsSameTile(slot.tile, t);
-                                  });
+    const bool keep = slot.layer == block_layer &&
+      std::any_of(wanted.begin(), wanted.end(),
+                  [&slot](const auto &t){
+                    return EUMETView::IsSameTile(slot.tile, t);
+                  });
 
     if (!keep)
       ReleaseSlot(i);
@@ -257,7 +277,8 @@ int
 FindSlotFor(const GeoBitmap::TileData &tile) noexcept
 {
   for (unsigned i = 0; i < slots.size(); ++i)
-    if (slots[i].IsUsed() && EUMETView::IsSameTile(slots[i].tile, tile))
+    if (slots[i].IsUsed() && slots[i].layer == block_layer &&
+        EUMETView::IsSameTile(slots[i].tile, tile))
       return int(i);
 
   for (unsigned i = 0; i < slots.size(); ++i)
@@ -267,32 +288,37 @@ FindSlotFor(const GeoBitmap::TileData &tile) noexcept
   return -1;
 }
 
-void
+[[nodiscard]]
+bool
 InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
             const BrokenDateTime &frame_time) noexcept
 {
   auto *map = UIGlobals::GetMap();
   if (map == nullptr || path == nullptr)
-    return;
+    return false;
 
   const int index = FindSlotFor(tile);
   if (index < 0)
-    return;
+    return false;
 
   Bitmap bitmap;
   try {
     if (!bitmap.LoadFile(path))
-      return;
+      return false;
   } catch (...) {
     LogError(std::current_exception(), "Satellite overlay");
-    return;
+    return false;
   }
 
   /* EUMETSAT's data policy makes the attribution mandatory wherever
      the imagery is shown; the overlay label carries it, so tapping
      the map names the source */
   const auto &layer = EUMETView::GetLayer(layer_index);
-  const auto label = fmt::format("{} — {} {}", gettext(layer.label),
+  /* the frame time is the part the pilot needs: it says how old the
+     cloud picture is.  The year alone said nothing. */
+  const auto label = fmt::format("{} {:02}:{:02}Z — {} {}",
+                                 gettext(layer.label),
+                                 frame_time.hour, frame_time.minute,
                                  EUMETView::ATTRIBUTION, frame_time.year);
 
   auto bmp = std::make_unique<MapOverlayBitmap>(std::move(bitmap),
@@ -303,8 +329,10 @@ InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
   auto &slot = slots[index];
   slot.overlay = bmp.get();
   slot.tile = tile;
+  slot.layer = layer_index;
   slot.frame_time = frame_time;
   map->SetOverlay(unsigned(index), std::move(bmp));
+  return true;
 }
 
 /**
@@ -317,7 +345,7 @@ GeoBitmap::TileData
 NextMissingTile() noexcept
 {
   for (const auto &tile : wanted)
-    if (!IsShown(tile, block_frame))
+    if (!IsShown(tile, block_layer, block_frame))
       return tile;
 
   return {};
@@ -351,8 +379,18 @@ SatelliteDownloadGlue::OnCompleteNotify() noexcept
     return;
   }
 
-  consecutive_failures = 0;
-  InstallTile(path, layer_index, tile, frame_time);
+  if (layer_index != block_layer)
+    /* the pilot changed product while this was in flight; the image
+       is of something else entirely */
+    return;
+
+  /* a tile that arrives but will not load must count as a failure,
+     or NextMissingTile() would hand back the same tile for ever and
+     we would download it in a loop */
+  if (InstallTile(path, layer_index, tile, frame_time))
+    consecutive_failures = 0;
+  else
+    ++consecutive_failures;
 
   /* straight on to the next tile, so the block fills as fast as the
      link allows rather than one tile per timer tick */
@@ -431,7 +469,9 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
      tile, or when a newer frame is due.  Everything is keyed on the
      tile grid, so a few kilometres of flight change nothing and the
      tiles already fetched stay on the map. */
-  if (!IsSameTile(base, block_base) || !(frame_time == block_frame)) {
+  if (layer_index != block_layer || !IsSameTile(base, block_base) ||
+      !(frame_time == block_frame)) {
+    block_layer = layer_index;
     block_base = base;
     block_frame = frame_time;
     wanted = CollectTiles(base);
@@ -461,6 +501,7 @@ EUMETView::ClearMapOverlay() noexcept
   for (unsigned i = 0; i < slots.size(); ++i)
     ReleaseSlot(i);
 
+  block_layer = -1;
   block_frame = BrokenDateTime::Invalid();
   block_base = {};
   wanted.clear();
@@ -470,9 +511,27 @@ EUMETView::ClearMapOverlay() noexcept
 void
 EUMETView::DeactivatePageOverlay() noexcept
 {
+  if (suspended_for_pan)
+    /* the page was only replaced by the full screen pan layout.  The
+       tiles still show the right ground, and throwing them away here
+       would cost the whole block again the moment panning ends. */
+    return;
+
   if (auto *glue = GetSatelliteDownloadGlue(); glue != nullptr)
     glue->Cancel();
 
   active_layer = -1;
   ClearMapOverlay();
+}
+
+void
+EUMETView::SuspendForPan() noexcept
+{
+  suspended_for_pan = true;
+}
+
+void
+EUMETView::ResumeAfterPan() noexcept
+{
+  suspended_for_pan = false;
 }

@@ -27,6 +27,7 @@ ShowWeatherSetupDialog() noexcept
     page = "skysight";
     break;
   case PageLayout::Overlay::RADAR:
+  case PageLayout::Overlay::SATELLITE:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;

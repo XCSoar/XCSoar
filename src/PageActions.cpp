@@ -335,6 +335,8 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
 #ifdef HAVE_WEATHER_OVERLAY
   if (layout.UsesRadarOverlay())
     OPERA::SuspendForPan();
+  if (layout.UsesSatelliteOverlay())
+    EUMETView::SuspendForPan();
 #endif
 }
 
@@ -348,6 +350,7 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.skysight.ResumeAfterPan();
 #ifdef HAVE_WEATHER_OVERLAY
   OPERA::ResumeAfterPan();
+  EUMETView::ResumeAfterPan();
 #endif
 }
 
