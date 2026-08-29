@@ -85,3 +85,17 @@ fdim(TimeStamp a, TimeStamp b) noexcept
 {
   return fdim(a.ToDuration(), b.ToDuration());
 }
+
+/**
+ * Return the elapsed time between two flight-clock timestamps.
+ *
+ * Undefined values and a future event (e.g. during a snapshot race around a
+ * time reset) produce zero instead of a negative or unrelated duration.
+ */
+static constexpr FloatDuration
+ElapsedTimeOrZero(TimeStamp now, TimeStamp event) noexcept
+{
+  return now.IsDefined() && event.IsDefined() && now > event
+    ? now - event
+    : FloatDuration{};
+}
