@@ -91,6 +91,7 @@ TEST_NAMES = \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestOperaRadar \
+	TestEumetviewSatellite \
 	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -586,6 +587,15 @@ TEST_OPERA_RADAR_SOURCES = \
 	$(TEST_SRC_DIR)/TestOperaRadar.cpp
 TEST_OPERA_RADAR_DEPENDS = GEO MATH TIME FMT UTIL
 $(eval $(call link-program,TestOperaRadar,TEST_OPERA_RADAR))
+
+TEST_EUMETVIEW_SATELLITE_SOURCES = \
+	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
+	$(SRC)/ui/canvas/custom/GeoBitmapTile.cpp \
+	$(SRC)/Geo/Quadrilateral.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEumetviewSatellite.cpp
+TEST_EUMETVIEW_SATELLITE_DEPENDS = GEO MATH TIME FMT UTIL
+$(eval $(call link-program,TestEumetviewSatellite,TEST_EUMETVIEW_SATELLITE))
 
 TEST_ARANGE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

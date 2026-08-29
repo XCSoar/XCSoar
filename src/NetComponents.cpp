@@ -20,6 +20,7 @@
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #ifdef HAVE_WEATHER_OVERLAY
 #include "Weather/OPERA/RadarPageOverlay.hpp"
+#include "Weather/EUMETView/SatellitePageOverlay.hpp"
 #endif
 #include "DataGlobals.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
@@ -45,6 +46,7 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
   ,xctherm_download(new XCThermDownloadGlue(curl))
 # ifdef HAVE_WEATHER_OVERLAY
   ,opera_radar(new RadarDownloadGlue(curl))
+  ,eumetview_satellite(new SatelliteDownloadGlue(curl))
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -98,6 +100,9 @@ NetComponents::BeginShutdown() noexcept
 # ifdef HAVE_WEATHER_OVERLAY
   if (opera_radar != nullptr)
     opera_radar->BeginShutdown();
+
+  if (eumetview_satellite != nullptr)
+    eumetview_satellite->BeginShutdown();
 # endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER

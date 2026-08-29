@@ -16,6 +16,9 @@
 #include "Interface.hpp"
 #include "DataGlobals.hpp"
 #include "Weather/Features.hpp"
+#ifdef HAVE_WEATHER_OVERLAY
+#include "Weather/EUMETView/Satellite.hpp"
+#endif
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #ifdef HAVE_EDL
@@ -298,9 +301,32 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
     break;
   }
 
+#ifdef HAVE_WEATHER_OVERLAY
+  case PageLayout::Overlay::SATELLITE: {
+    control.SetCaption(C_("Setting", "Satellite layer"));
+    control.SetHelpText(
+      _("Which EUMETView satellite product this page draws under the "
+        "map."));
+
+    const auto layers = EUMETView::GetLayers();
+    for (std::size_t i = 0; i < layers.size(); ++i)
+      df.AddChoice(int(i), gettext(layers[i].label));
+
+    if (value.satellite_layer >= 0 &&
+        std::size_t(value.satellite_layer) < layers.size())
+      df.SetValue(unsigned(value.satellite_layer));
+    else
+      df.SetValue(unsigned(PageLayout::SATELLITE_LAYER_DEFAULT));
+    break;
+  }
+#endif
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::XCTHERM:
   case PageLayout::Overlay::RADAR:
+#ifndef HAVE_WEATHER_OVERLAY
+  case PageLayout::Overlay::SATELLITE:
+#endif
 #ifndef HAVE_EDL
   case PageLayout::Overlay::EDL:
 #endif
@@ -338,6 +364,11 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
     case PageLayout::Overlay::SKYSIGHT:
 #ifdef HAVE_HTTP
       detail_enabled = DataGlobals::GetSkySight() != nullptr;
+#endif
+      break;
+    case PageLayout::Overlay::SATELLITE:
+#ifdef HAVE_WEATHER_OVERLAY
+      detail_enabled = true;
 #endif
       break;
     case PageLayout::Overlay::NONE:
@@ -444,6 +475,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #endif
 #ifdef HAVE_WEATHER_OVERLAY
     { PageLayout::Overlay::RADAR, N_("Rain radar") },
+    { PageLayout::Overlay::SATELLITE, N_("Satellite") },
 #endif
     nullptr
   };
@@ -577,6 +609,10 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 #ifdef HAVE_EDL
     else if (value.overlay == PageLayout::Overlay::EDL)
       value.edl_isobar = dfe.GetValue();
+#endif
+#ifdef HAVE_WEATHER_OVERLAY
+    else if (value.overlay == PageLayout::Overlay::SATELLITE)
+      value.satellite_layer = dfe.GetValue();
 #endif
     else if (value.overlay == PageLayout::Overlay::SKYSIGHT) {
 #ifdef HAVE_HTTP

@@ -22,6 +22,7 @@ namespace EDL { class DownloadGlue; }
 class XCThermDownloadGlue;
 #ifdef HAVE_WEATHER_OVERLAY
 class RadarDownloadGlue;
+class SatelliteDownloadGlue;
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
@@ -48,6 +49,7 @@ struct NetComponents {
   const std::unique_ptr<XCThermDownloadGlue> xctherm_download;
 # ifdef HAVE_WEATHER_OVERLAY
   const std::unique_ptr<RadarDownloadGlue> opera_radar;
+  const std::unique_ptr<SatelliteDownloadGlue> eumetview_satellite;
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER

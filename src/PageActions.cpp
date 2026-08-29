@@ -37,6 +37,7 @@
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
 #ifdef HAVE_WEATHER_OVERLAY
 #include "Weather/OPERA/RadarPageOverlay.hpp"
+#include "Weather/EUMETView/SatellitePageOverlay.hpp"
 #endif
 #endif
 
@@ -74,6 +75,7 @@ namespace PageActions {
   static void LeaveXcthermOverlay() noexcept;
   static void LeaveSkySightOverlay() noexcept;
   static void LeaveRadarOverlay() noexcept;
+  static void LeaveSatelliteOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
@@ -82,6 +84,7 @@ namespace PageActions {
   static void ApplyXcthermOverlay(const PageLayout &layout) noexcept;
   static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
   static void ApplyRadarOverlay() noexcept;
+  static void ApplySatelliteOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -185,6 +188,23 @@ PageActions::ApplyRadarOverlay() noexcept
 }
 
 void
+PageActions::LeaveSatelliteOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  EUMETView::DeactivatePageOverlay();
+#endif
+}
+
+void
+PageActions::ApplySatelliteOverlay([[maybe_unused]] const PageLayout &layout)
+  noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  EUMETView::ActivatePageOverlay(layout.satellite_layer);
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -197,6 +217,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveSkySightOverlay();
   else if (layout.UsesRadarOverlay())
     LeaveRadarOverlay();
+  else if (layout.UsesSatelliteOverlay())
+    LeaveSatelliteOverlay();
 }
 
 void
@@ -339,6 +361,8 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     LeaveSkySightOverlay();
   if (!layout.UsesRadarOverlay())
     LeaveRadarOverlay();
+  if (!layout.UsesSatelliteOverlay())
+    LeaveSatelliteOverlay();
 
   ClearPageOverlays();
 
@@ -364,6 +388,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::RADAR:
     ApplyRadarOverlay();
+    break;
+
+  case PageLayout::Overlay::SATELLITE:
+    ApplySatelliteOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:

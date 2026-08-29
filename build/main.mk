@@ -640,7 +640,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp \
 	$(SRC)/Weather/OPERA/Radar.cpp \
 	$(SRC)/Weather/OPERA/RadarData.cpp \
-	$(SRC)/Weather/OPERA/RadarPageOverlay.cpp
+	$(SRC)/Weather/OPERA/RadarPageOverlay.cpp \
+	$(SRC)/Weather/EUMETView/Satellite.cpp \
+	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
+	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp
 endif
 endif
 

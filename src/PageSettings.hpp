@@ -113,6 +113,7 @@ struct PageLayout
     XCTHERM,
     SKYSIGHT,
     RADAR,
+    SATELLITE,
 
     MAX
   } overlay;
@@ -158,6 +159,16 @@ struct PageLayout
   int xctherm_layer;
   int xctherm_time;
 
+  /**
+   * Selected EUMETView layer when #overlay is Overlay::SATELLITE, as
+   * an index into EUMETView::GetLayers().  Kept as a plain int so
+   * that this header does not have to pull the layer table in;
+   * #SATELLITE_LAYER_DEFAULT mirrors EUMETView::DEFAULT_LAYER.
+   */
+  static constexpr int SATELLITE_LAYER_DEFAULT = 0;
+
+  int satellite_layer;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
@@ -172,7 +183,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
@@ -186,7 +198,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -269,6 +282,13 @@ struct PageLayout
   UsesRadarOverlay() const noexcept
   {
     return IsMapMain() && overlay == Overlay::RADAR;
+  }
+
+  [[gnu::const]]
+  constexpr bool
+  UsesSatelliteOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::SATELLITE;
   }
 
   [[gnu::const]]
