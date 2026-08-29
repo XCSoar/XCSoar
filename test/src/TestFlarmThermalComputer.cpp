@@ -128,7 +128,9 @@ RunSingleSequence(FlarmThermalComputer &computer, TrafficThermalInfo &info,
                   FlarmId id, double climb_rate, bool circling=true,
                   double radius=100,
                   FlarmTraffic::SourceType source=
-                    FlarmTraffic::SourceType::FLARM)
+                    FlarmTraffic::SourceType::FLARM,
+                  FlarmTraffic::AircraftType type=
+                    FlarmTraffic::AircraftType::GLIDER)
 {
   for (unsigned i = 1; i <= 31; ++i) {
     TrafficList list{};
@@ -136,6 +138,7 @@ RunSingleSequence(FlarmThermalComputer &computer, TrafficThermalInfo &info,
     auto &traffic = AppendTraffic(list, id, TimeStamp{seconds{i}}, TEST_CENTRE,
                                   climb_rate, circling, radius);
     traffic.source = source;
+    traffic.type = type;
     computer.Process(list, TimeStamp{seconds{i}}, TEST_OWNSHIP_ALTITUDE,
                      SpeedVector::Zero(), nullptr, info);
     if (i == 30)
@@ -224,6 +227,15 @@ TestRejectedTracks()
   RunSingleSequence(online, online_info, FlarmId::FromValue(5), 1.5, true,
                     100, FlarmTraffic::SourceType::OGN);
   ok1(online_info.sources.empty());
+
+  TrafficThermalInfo unknown_info;
+  unknown_info.Clear();
+  FlarmThermalComputer unknown;
+  unknown.Reset(unknown_info);
+  RunSingleSequence(unknown, unknown_info, FlarmId::FromValue(6), 1.5, true,
+                    100, FlarmTraffic::SourceType::FLARM,
+                    FlarmTraffic::AircraftType::UNKNOWN);
+  ok1(unknown_info.sources.size() == 1);
 }
 
 static void
@@ -602,7 +614,7 @@ TestPublishedSamplingActionPersistence()
 int
 main()
 {
-  plan_tests(83);
+  plan_tests(85);
   SetFakeLogFileQuiet(true);
 
   TestTrafficThermalAllocation();
