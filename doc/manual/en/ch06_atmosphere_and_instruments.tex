@@ -682,6 +682,17 @@ composite has been published or when the map has been panned outside
 the area the current image was fetched for, so a page left open does
 not download continuously.
 
+While such a page is open, XCSoar watches how old the picture is.  A
+frame is already seven to twelve minutes old when it arrives, because
+the network needs about four minutes to publish it and it is only
+renewed every five.  Once a frame passes twenty minutes it is removed
+from the map \emph{before} a replacement is fetched, so a failing or
+slow connection can never leave a stale echo on display.  If the
+replacement then fails to arrive, a warning says so; that warning
+offers to stop appearing, and can be switched back on with
+\emph{Warn when radar expires} on the \emph{Look / Language, Input}
+configuration page (Section~\ref{sec:interface}).
+
 The colours are the classes the Deutscher Wetterdienst uses for its
 own radar images, from cyan for the weakest echo through green,
 yellow and orange to red and violet for the heaviest, so the picture

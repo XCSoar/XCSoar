@@ -355,6 +355,8 @@ constexpr std::string_view GDL90UseSystemUtcDate = "GDL90UseSystemUtcDate";
 
 constexpr std::string_view HideQuickGuideDialogOnStartup =
   "HideQuickGuideDialogOnStartup";
+constexpr std::string_view HideRadarStaleWarning =
+  "HideRadarStaleWarning";
 constexpr std::string_view DisclaimerAcknowledgedVersion =
   "DisclaimerAcknowledgedVersion";
 constexpr std::string_view LastSeenNewsVersion =

@@ -63,21 +63,31 @@ constexpr std::array<uint32_t, OPERA::N_CLASSES> CLASS_COLOUR{
 
 } // anonymous namespace
 
-std::string
-OPERA::MakeCompositeURL(const BrokenDateTime &utc)
+BrokenDateTime
+OPERA::CompositeTime(const BrokenDateTime &utc)
 {
   if (!utc.IsPlausible())
     /* without a clock we cannot tell which composite is the current
        one, and guessing would show yesterday's weather */
-    return {};
+    return BrokenDateTime::Invalid();
 
-  const auto t = utc - std::chrono::minutes{LATENCY_MINUTES};
-  const unsigned minute = (t.minute / CADENCE_MINUTES) * CADENCE_MINUTES;
+  auto t = utc - std::chrono::minutes{LATENCY_MINUTES};
+  t.minute = (t.minute / CADENCE_MINUTES) * CADENCE_MINUTES;
+  t.second = 0;
+  return t;
+}
+
+std::string
+OPERA::MakeCompositeURL(const BrokenDateTime &utc)
+{
+  const auto t = CompositeTime(utc);
+  if (!t.IsPlausible())
+    return {};
 
   return fmt::format("{}/{:04}/{:02}/{:02}/OPERA/COMP/"
                      "OPERA@{:04}{:02}{:02}T{:02}{:02}@0@DBZH.tiff",
                      BUCKET_URL, t.year, t.month, t.day,
-                     t.year, t.month, t.day, t.hour, minute);
+                     t.year, t.month, t.day, t.hour, t.minute);
 }
 
 DoublePoint2D
