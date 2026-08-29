@@ -107,19 +107,24 @@ const Layer &GetLayer(int index) noexcept;
 static constexpr int DEFAULT_LAYER = 0;
 
 /**
- * The zoom level of the tile grid the imagery is fetched on.
+ * The finest tile grid we ever fetch on.
  *
  * A tile is then about 25 km across in mid latitudes, so the 5 x 5
- * block below reaches at least fifty kilometres in every direction
- * from the aircraft, as an overlay meant to be flown by should.
+ * block reaches at least fifty kilometres in every direction from the
+ * aircraft, as an overlay meant to be flown by should.
  *
- * Fixed rather than derived from the map scale on purpose: the grid
- * is what makes a tile reusable, and a zoom that followed the map
- * would throw the whole picture away on every pinch.  Zooming in
- * would buy nothing either, the satellite having no more detail to
- * give.
+ * Zooming the map in never goes finer than this: the satellite has no
+ * more detail to give, and a finer grid would only spend data
+ * upsampling what is already there.
  */
-static constexpr uint16_t TILE_ZOOM = 10;
+static constexpr uint16_t MAX_TILE_ZOOM = 10;
+
+/**
+ * The coarsest grid, where a tile is some four hundred kilometres
+ * across and the block spans a couple of thousand.  Past that the map
+ * shows more than the satellite can see anyway.
+ */
+static constexpr uint16_t MIN_TILE_ZOOM = 6;
 
 /**
  * How many tiles to either side of the aircraft's own tile, so the
@@ -143,14 +148,32 @@ static constexpr unsigned TILE_COUNT =
 static constexpr unsigned TILE_PIXELS = 128;
 
 /**
- * The tile the aircraft is in.
+ * The grid to fetch on for a given map view: the finest one whose
+ * block still covers what the map shows, so that zooming out widens
+ * the imagery instead of leaving it covering the middle of the
+ * screen.
+ *
+ * Coarsening is the only thing the map scale decides.  Each step is a
+ * halving, so an ordinary pinch does not move it, and it never goes
+ * finer than #MAX_TILE_ZOOM.
+ *
+ * @param screen what the map shows, or an invalid bounds if unknown
+ *
+ * Exposed for the unit test.
+ */
+[[gnu::pure]]
+uint16_t ChooseZoom(const GeoBounds &screen) noexcept;
+
+/**
+ * The tile the aircraft is in, on the given grid.
  *
  * @return an invalid tile if @p location is not valid
  *
  * Exposed for the unit test.
  */
 [[gnu::pure]]
-GeoBitmap::TileData GetAircraftTile(const GeoPoint &location) noexcept;
+GeoBitmap::TileData GetAircraftTile(const GeoPoint &location,
+                                    uint16_t zoom) noexcept;
 
 /**
  * The tiles to fetch around @p base, nearest first, so that on a slow

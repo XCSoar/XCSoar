@@ -473,7 +473,16 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
   if (!frame_time.IsPlausible())
     return;
 
-  const auto base = GetAircraftTile(basic.location);
+  const auto &projection = map->VisibleProjection();
+  const auto screen = projection.IsValid()
+    ? projection.GetScreenBounds()
+    : GeoBounds::Invalid();
+
+  /* the grid follows the map only in the coarsening direction, so
+     zooming out widens the imagery rather than leaving it covering
+     the middle of the screen.  A change of grid makes a different
+     base tile, which rebuilds the block below. */
+  const auto base = GetAircraftTile(basic.location, ChooseZoom(screen));
   if (!base.IsValid())
     return;
 
