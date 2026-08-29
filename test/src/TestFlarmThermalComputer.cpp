@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Computer/FlarmThermalComputer.hpp"
+#include "Computer/FlarmThermalCandidate.hpp"
+#include "Computer/FlarmThermalCluster.hpp"
 #include "FLARM/Calculations.hpp"
 #include "FLARM/Computer.hpp"
 #include "FLARM/Data.hpp"
@@ -13,7 +15,9 @@
 #include "TestUtil.hpp"
 
 #include <algorithm>
+#include <array>
 #include <chrono>
+#include <cmath>
 
 using namespace std::chrono;
 
@@ -121,6 +125,174 @@ AppendTrafficWithGeometry(TrafficList &list, FlarmId id, TimeStamp time,
   traffic.relative_altitude = geometry_altitude - ownship_altitude;
   traffic.climb_rate_avg30s = reported_climb_rate;
   return traffic;
+}
+
+static void
+TestCandidateBoundaries()
+{
+  const FlarmId id = FlarmId::FromValue(7);
+  std::array<FlarmThermal::Sample, 4> samples{{
+    {TimeStamp{seconds{1}}, TEST_CENTRE, 1000, Angle::Degrees(0), 0.5},
+    {TimeStamp{seconds{11}}, TEST_CENTRE, 1005, Angle::Degrees(90), 0.5},
+    {TimeStamp{seconds{21}}, TEST_CENTRE, 1010, Angle::Degrees(180), 0.5},
+    {TimeStamp{seconds{31}}, TEST_CENTRE, 1015, Angle::Degrees(270), 0.5},
+  }};
+
+  TrafficList list{};
+  list.Clear();
+  auto &traffic = AppendTraffic(list, id, TimeStamp{seconds{31}},
+                                TEST_CENTRE, 0.5);
+  FlarmThermal::Candidate candidate;
+  ok1(FlarmThermal::BuildCandidate(
+        samples, id, false, traffic, 0.5, SpeedVector::Zero(),
+        nullptr, candidate) == FlarmThermal::CandidateResult::QUALIFIED);
+
+  traffic.climb_rate_avg30s = std::nextafter(0.5, 0.);
+  ok1(FlarmThermal::BuildCandidate(
+        samples, id, false, traffic, 0.5, SpeedVector::Zero(),
+        nullptr, candidate) == FlarmThermal::CandidateResult::WEAK_LIFT);
+
+  traffic.climb_rate_avg30s = 0.6;
+  samples.back().track = Angle::Degrees(269.9);
+  ok1(FlarmThermal::BuildCandidate(
+        samples, id, false, traffic, 0.6, SpeedVector::Zero(),
+        nullptr, candidate) ==
+      FlarmThermal::CandidateResult::INSUFFICIENT_TURN);
+
+  samples.back().track = Angle::Degrees(270);
+  traffic.climb_rate_avg30s_time_span =
+    FloatDuration{std::nextafter(30., 0.)};
+  ok1(FlarmThermal::BuildCandidate(
+        samples, id, false, traffic, 0.6, SpeedVector::Zero(),
+        nullptr, candidate) ==
+      FlarmThermal::CandidateResult::INCOMPLETE_WINDOW);
+}
+
+static FlarmThermal::ClusterGeometry
+MakeTestClusterGeometry(GeoPoint location=TEST_CENTRE)
+{
+  FlarmThermal::ClusterGeometry geometry{};
+  geometry.reference_location = location;
+  geometry.reference_altitude = 1000;
+  geometry.lift_rate = 1;
+  geometry.wind = SpeedVector::Zero();
+  geometry.drift_per_meter = SpeedVector::Zero();
+  geometry.ground_height = 0;
+  geometry.max_observed_altitude = 1200;
+  return geometry;
+}
+
+static void
+TestClusterRules()
+{
+  const auto geometry = MakeTestClusterGeometry();
+  const FlarmThermal::ClusterView first{
+    geometry, TimeStamp{seconds{1}}, TimeStamp{seconds{10}}, false,
+  };
+
+  FlarmThermal::Candidate candidate{};
+  candidate.centre = TEST_CENTRE;
+  candidate.source.ground_height = 0;
+  candidate.altitude = 1000;
+  candidate.drift_per_meter = SpeedVector::Zero();
+
+  ok1(FlarmThermal::GetClusterCompatibilityDistance(
+        candidate, first, TimeStamp{seconds{130}}).has_value());
+  ok1(!FlarmThermal::GetClusterCompatibilityDistance(
+         candidate, first,
+         TimeStamp{FloatDuration{130.001}}).has_value());
+
+  const FlarmThermal::ClusterView touching{
+    geometry, TimeStamp{seconds{130}}, TimeStamp{seconds{140}}, false,
+  };
+  const FlarmThermal::ClusterView separated{
+    geometry, TimeStamp{FloatDuration{130.001}},
+    TimeStamp{seconds{140}}, false,
+  };
+  ok1(FlarmThermal::AreClustersCompatible(first, touching));
+  ok1(!FlarmThermal::AreClustersCompatible(first, separated));
+  ok1(FlarmThermal::IsFirstClusterPreferred(
+        TimeStamp{seconds{1}}, 1, TimeStamp{seconds{1}}, 2));
+  ok1(!FlarmThermal::IsFirstClusterPreferred(
+         TimeStamp{seconds{1}}, 2, TimeStamp{seconds{1}}, 1));
+}
+
+static FlarmThermal::Contributor
+MakeTestContributor(FlarmId id, double reporting_lift,
+                    double historical_lift, double geometry_lift,
+                    double min_altitude, double max_altitude,
+                    double ground_height, bool active)
+{
+  FlarmThermal::Contributor contributor{};
+  contributor.id = id;
+  contributor.centre = TEST_CENTRE;
+  contributor.source.location = TEST_CENTRE;
+  contributor.source.ground_height = ground_height;
+  contributor.first_seen = TimeStamp{seconds{1}};
+  contributor.last_seen = TimeStamp{seconds{10}};
+  contributor.last_value_time = contributor.last_seen;
+  contributor.latest_climb_rate = reporting_lift;
+  contributor.last_climb_rate = reporting_lift;
+  contributor.encounter_average = historical_lift;
+  contributor.min_altitude = min_altitude;
+  contributor.max_altitude = max_altitude;
+  contributor.reference_altitude = 1000;
+  contributor.geometry_lift_rate = geometry_lift;
+  contributor.geometry_wind = SpeedVector::Zero();
+  contributor.drift_per_meter = SpeedVector::Zero();
+  contributor.active = active;
+  return contributor;
+}
+
+static void
+TestClusterAggregate()
+{
+  std::array<FlarmThermal::Contributor, 2> contributors{{
+    MakeTestContributor(FlarmId::FromValue(8), 2, 1, 1,
+                        900, 1200, 100, true),
+    MakeTestContributor(FlarmId::FromValue(9), 4, 3, 3,
+                        1100, 1400, 200, false),
+  }};
+
+  auto aggregate =
+    FlarmThermal::CalculateClusterAggregate(contributors, 1000);
+  ok1(aggregate.active_count == 1);
+  ok1(equals(aggregate.reporting_lift_rate, 2));
+  ok1(equals(aggregate.min_altitude, 900));
+  ok1(equals(aggregate.max_altitude, 1400));
+  ok1(equals(aggregate.geometry.lift_rate, 2));
+  ok1(equals(aggregate.geometry.ground_height, 150));
+  ok1(aggregate.geometry.reference_location.DistanceS(TEST_CENTRE) < 0.1);
+
+  contributors.front().active = false;
+  aggregate = FlarmThermal::CalculateClusterAggregate(contributors, 1000);
+  ok1(aggregate.active_count == 0 &&
+      equals(aggregate.reporting_lift_rate, 2));
+}
+
+static void
+TestContributorMerge()
+{
+  auto existing = MakeTestContributor(
+    FlarmId::FromValue(10), 2, 2, 1, 900, 1200, 100, false);
+  existing.climb_integral = 20;
+  existing.encounter_duration = 10;
+
+  auto incoming = MakeTestContributor(
+    FlarmId::FromValue(10), 4, 4, 3, 800, 1400, 200, true);
+  incoming.first_seen = TimeStamp{seconds{2}};
+  incoming.last_seen = TimeStamp{seconds{20}};
+  incoming.last_value_time = incoming.last_seen;
+  incoming.climb_integral = 80;
+  incoming.encounter_duration = 20;
+
+  existing = FlarmThermal::MergeContributors(existing, incoming);
+  ok1(equals(existing.encounter_duration, 30));
+  ok1(equals(existing.encounter_average, 100. / 30));
+  ok1(equals(existing.min_altitude, 800) &&
+      equals(existing.max_altitude, 1400));
+  ok1(existing.last_seen == incoming.last_seen);
+  ok1(existing.active);
 }
 
 static void
@@ -614,10 +786,14 @@ TestPublishedSamplingActionPersistence()
 int
 main()
 {
-  plan_tests(85);
+  plan_tests(108);
   SetFakeLogFileQuiet(true);
 
   TestTrafficThermalAllocation();
+  TestCandidateBoundaries();
+  TestClusterRules();
+  TestClusterAggregate();
+  TestContributorMerge();
   TestQualificationAndLifecycle();
   TestRejectedTracks();
   TestGrouping();
