@@ -96,7 +96,7 @@ TEST_NAMES = \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
-	TestWaypointReader TestThermalBase \
+	TestWaypointReader TestThermalBase TestThermalProjection \
 	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
@@ -1060,6 +1060,14 @@ TEST_SPEED_VECTOR_SOURCES = \
 	$(TEST_SRC_DIR)/TestSpeedVector.cpp
 TEST_SPEED_VECTOR_DEPENDS = MATH
 $(eval $(call link-program,TestSpeedVector,TEST_SPEED_VECTOR))
+
+TEST_THERMAL_PROJECTION_SOURCES = \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestThermalProjection.cpp
+TEST_THERMAL_PROJECTION_DEPENDS = GEO MATH
+$(eval $(call link-program,TestThermalProjection,TEST_THERMAL_PROJECTION))
 
 TEST_EARTH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
