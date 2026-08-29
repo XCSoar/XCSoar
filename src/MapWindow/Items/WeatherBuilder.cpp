@@ -4,6 +4,7 @@
 #include "Builder.hpp"
 #include "MapItem.hpp"
 #include "List.hpp"
+#include "MapWindow/ThermalDisplay.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Computer/Settings.hpp"
@@ -32,6 +33,25 @@ MapItemListBuilder::AddWeatherStations(NOAAStore &store)
   }
 }
 #endif
+
+template<typename Sources, typename GetLocation, typename MakeItem>
+static void
+AddDriftedThermals(MapItemList &list, GeoPoint location, double range,
+                   const Sources &sources, GetLocation get_location,
+                   MakeItem make_item)
+{
+  for (const auto &source : sources) {
+    if (list.full())
+      break;
+
+    const GeoPoint adjusted_location = get_location(source);
+    if (!adjusted_location.IsValid())
+      continue;
+
+    if (location.DistanceS(adjusted_location) < range)
+      list.append(make_item(source));
+  }
+}
 
 void
 MapItemListBuilder::AddThermals(const ObservationDatabase &observations,

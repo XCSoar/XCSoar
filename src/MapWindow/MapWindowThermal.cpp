@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
+#include "ThermalDisplay.hpp"
 #include "Look/MapLook.hpp"
 #include "Observation/Database.hpp"
 #include "Observation/Publish.hpp"
@@ -10,10 +11,31 @@
 #include "Tracking/Features.hpp"
 #include "net/http/Features.hpp"
 
+template<typename Sources, typename GetLocation>
+static void
+DrawDriftedThermalIcons(Canvas &canvas, const MaskedIcon &icon,
+                        const WindowProjection &projection,
+                        const Sources &sources,
+                        const double aircraft_altitude,
+                        GetLocation get_location) noexcept
+{
+  if (!ThermalDisplay::IsVisible(projection.GetMapScale()))
+    return;
+
+  for (const auto &source : sources) {
+    const GeoPoint location = get_location(source, aircraft_altitude);
+    if (!location.IsValid())
+      continue;
+
+    if (auto p = projection.GeoToScreenIfVisible(location))
+      icon.Draw(canvas, *p);
+  }
+}
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
 {
-  if (observations == nullptr || render_projection.GetMapScale() > 4000)
+  if (observations == nullptr ||
+      !ThermalDisplay::IsVisible(render_projection.GetMapScale()))
     return;
 
   const MoreData &basic = Basic();
