@@ -225,33 +225,53 @@ IsShown(const GeoBitmap::TileData &tile,
  * ones left behind as the aircraft flew on, and everything at all
  * when the frame moved on.
  */
-void
-ReleaseUnwantedSlots() noexcept
+[[gnu::pure]]
+bool
+IsWanted(const GeoBitmap::TileData &tile) noexcept
 {
-  for (unsigned i = 0; i < slots.size(); ++i) {
-    const auto &slot = slots[i];
-    if (!slot.IsUsed())
-      continue;
-
-    const bool keep = slot.frame_time == block_frame &&
-      std::any_of(wanted.begin(), wanted.end(),
-                  [&slot](const auto &t){
-                    return OPERA::IsSameTile(slot.tile, t);
-                  });
-
-    if (!keep)
-      ReleaseSlot(i);
-  }
+  return std::any_of(wanted.begin(), wanted.end(),
+                     [&tile](const auto &t){
+                       return OPERA::IsSameTile(tile, t);
+                     });
 }
 
-/** The first slot not holding a tile we want to keep. */
+/**
+ * Reserve a slot for a tile about to be fetched.
+ *
+ * Nothing is released ahead of time.  A newly published composite
+ * changes every tile's frame at once, and a change of map scale moves
+ * the whole grid, so releasing what the block no longer wants would
+ * empty the map -- every five minutes at the OPERA cadence -- and
+ * leave it empty for as long as a full block takes to arrive.
+ *
+ * Give up one echo at a time instead, and preferably the one the
+ * incoming tile is about to cover, so the hole is exactly where the
+ * replacement lands.  Leaving an old tile under a new one would draw
+ * the same ground twice, each at partial opacity, and darken it.
+ */
 [[gnu::pure]]
 int
-FindFreeSlot() noexcept
+ClaimSlotFor(const GeoBitmap::TileData &tile) noexcept
 {
   for (unsigned i = 0; i < slots.size(); ++i)
     if (!slots[i].IsUsed())
       return int(i);
+
+  const auto bounds = GeoBitmap::GetBounds(tile);
+  for (unsigned i = 0; i < slots.size(); ++i)
+    if (slots[i].IsUsed() && !IsWanted(slots[i].tile) &&
+        bounds.Overlaps(GeoBitmap::GetBounds(slots[i].tile))) {
+      ReleaseSlot(i);
+      return int(i);
+    }
+
+  /* nothing overlapping to reclaim; give up the first tile the block
+     no longer wants, wherever it is */
+  for (unsigned i = 0; i < slots.size(); ++i)
+    if (slots[i].IsUsed() && !IsWanted(slots[i].tile)) {
+      ReleaseSlot(i);
+      return int(i);
+    }
 
   return -1;
 }
@@ -445,15 +465,10 @@ RadarDownloadGlue::OnCompleteNotify() noexcept
      answer is to a question nobody is asking any more.  Two ways:
      a newer frame fell due, or the aircraft crossed into another tile
      and the block was rebuilt around it.  The frame check alone
-     misses the second -- the frame is unchanged there, but
-     ReleaseUnwantedSlots() has already given this slot back, and
-     installing now would drop a tile from outside the block onto the
-     map and hold a slot the block wants for something else. */
-  const bool still_wanted = frame_time == block_frame &&
-    std::any_of(wanted.begin(), wanted.end(),
-                [this](const auto &t){
-                  return OPERA::IsSameTile(t, tile);
-                });
+     misses the second -- the frame is unchanged there, and installing
+     would drop a tile from outside the block onto the map and hold a
+     slot the block wants for something else. */
+  const bool still_wanted = frame_time == block_frame && IsWanted(tile);
 
   if (!still_wanted)
     ReleaseSlot(slot);
@@ -561,7 +576,6 @@ OPERA::ActivatePageOverlay() noexcept
     block_base = base;
     block_frame = frame_time;
     wanted = CollectTiles(base);
-    ReleaseUnwantedSlots();
     consecutive_failures = 0;
   }
 
@@ -582,7 +596,7 @@ OPERA::ActivatePageOverlay() noexcept
     return;
   }
 
-  const auto slot = FindFreeSlot();
+  const auto slot = ClaimSlotFor(next);
   if (slot < 0)
     return;
 
