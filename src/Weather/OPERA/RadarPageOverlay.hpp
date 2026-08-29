@@ -8,6 +8,7 @@
 #include "net/AsyncTask.hpp"
 #include "system/Path.hpp"
 #include "ui/event/Notify.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 
 #include <exception>
 
@@ -34,9 +35,17 @@ class RadarDownloadGlue final {
   AllocatedPath path{nullptr};
   std::exception_ptr completion_error;
 
+  /**
+   * Watches the age of the frame on the map while a radar page is
+   * open: it fetches a newer one as soon as one exists, and takes the
+   * picture down once it is older than OPERA::MAX_AGE_MINUTES.
+   */
+  UI::PeriodicTimer age_timer{[this]{ OnAgeTimer(); }};
+
   Co::InvokeTask RunDownload();
   void OnCompletion(std::exception_ptr error) noexcept;
   void OnCompleteNotify() noexcept;
+  void OnAgeTimer() noexcept;
 
 public:
   explicit RadarDownloadGlue(CurlGlobal &_curl) noexcept;
@@ -57,6 +66,12 @@ public:
    */
   void Start(const GeoBounds &_bounds,
              unsigned _width, unsigned _height) noexcept;
+
+  /** Begin watching the age of the displayed frame. */
+  void ScheduleAgeCheck() noexcept;
+
+  /** Stop watching, because no page shows the radar any more. */
+  void CancelAgeCheck() noexcept;
 };
 
 /**
@@ -77,5 +92,11 @@ void ActivatePageOverlay() noexcept;
  * one we installed.
  */
 void ClearMapOverlay() noexcept;
+
+/**
+ * Leave the radar page: stop watching the frame's age and take it
+ * off the map.
+ */
+void DeactivatePageOverlay() noexcept;
 
 } // namespace OPERA
