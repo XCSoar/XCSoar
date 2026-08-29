@@ -17,6 +17,7 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Weather/Features.hpp"
 #include "Weather/MapOverlay/ControlsFactory.hpp"
 #include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
@@ -34,6 +35,9 @@
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/xctherm/FieldControls.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
+#ifdef HAVE_WEATHER_OVERLAY
+#include "Weather/OPERA/RadarPageOverlay.hpp"
+#endif
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -69,6 +73,7 @@ namespace PageActions {
   static void LeaveEdlOverlay() noexcept;
   static void LeaveXcthermOverlay() noexcept;
   static void LeaveSkySightOverlay() noexcept;
+  static void LeaveRadarOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
@@ -76,6 +81,7 @@ namespace PageActions {
   static void ApplyEdlOverlay(const PageLayout &layout) noexcept;
   static void ApplyXcthermOverlay(const PageLayout &layout) noexcept;
   static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
+  static void ApplyRadarOverlay() noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -163,6 +169,22 @@ PageActions::LeaveSkySightOverlay() noexcept
 }
 
 void
+PageActions::LeaveRadarOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::ClearMapOverlay();
+#endif
+}
+
+void
+PageActions::ApplyRadarOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::ActivatePageOverlay();
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -173,6 +195,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveXcthermOverlay();
   else if (layout.UsesSkySightOverlay())
     LeaveSkySightOverlay();
+  else if (layout.UsesRadarOverlay())
+    LeaveRadarOverlay();
 }
 
 void
@@ -306,6 +330,8 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     LeaveXcthermOverlay();
   if (!layout.UsesSkySightOverlay())
     LeaveSkySightOverlay();
+  if (!layout.UsesRadarOverlay())
+    LeaveRadarOverlay();
 
   ClearPageOverlays();
 
@@ -327,6 +353,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::SKYSIGHT:
     ApplySkySightOverlay(layout);
+    break;
+
+  case PageLayout::Overlay::RADAR:
+    ApplyRadarOverlay();
     break;
 
   case PageLayout::Overlay::MAX:

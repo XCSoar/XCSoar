@@ -44,6 +44,7 @@ CreateControlsModel(const PageLayout &layout) noexcept
     break;
 #endif
 
+  case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
