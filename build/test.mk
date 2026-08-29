@@ -663,6 +663,8 @@ $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 TEST_FLARM_THERMAL_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/FlarmThermalCandidate.cpp \
+	$(SRC)/Computer/FlarmThermalCluster.cpp \
 	$(SRC)/Computer/FlarmThermalComputer.cpp \
 	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/MapWindow/ThermalDisplay.cpp \
