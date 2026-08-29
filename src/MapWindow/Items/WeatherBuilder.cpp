@@ -61,8 +61,8 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
     [&basic, &wind](const ThermalSource &source) {
       return ThermalDisplay::GetLocation(source, basic.nav_altitude, wind);
     },
-    [](const ThermalSource &source) {
-      return new ThermalMapItem(source);
+    [&basic](const ThermalSource &source) {
+      return new ThermalMapItem(source, basic.time);
     });
 }
 
@@ -82,6 +82,6 @@ MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
     source.lift_rate = i.climb_rate;
     // TODO source.time = i.time;
 
-    list.append(new ThermalMapItem(source));
+    list.append(new ThermalMapItem(source, TimeStamp::Undefined()));
   }
 }
