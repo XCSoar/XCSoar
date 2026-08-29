@@ -758,8 +758,9 @@ The products offered are:
 \end{description}
 
 The imagery is fetched as a block of five by five tiles centred on
-the aircraft, each about twenty-five kilometres across, so the block
-reaches at least fifty kilometres in every direction.
+the aircraft.  At the scales a glider is flown at, a tile is about
+twenty-five kilometres across, so the block reaches at least fifty
+kilometres in every direction.
 
 The tiles are requested \emph{nearest first}: the one the glider is
 over, then the ring around it, then the next ring outwards.  This is
@@ -779,7 +780,15 @@ The tiles sit on the standard map tile grid, so flying on does not
 throw the picture away: when the aircraft crosses into the next tile,
 the tiles the new block shares with the old one stay exactly where
 they are and only the ones that have come into range are fetched.
-Panning and zooming fetch nothing at all.
+Panning fetches nothing at all.
+
+Zooming the map \emph{in} fetches nothing either --- the satellite has
+no finer detail to give, so a closer look would only spend data
+enlarging what is already on the screen.  Zooming \emph{out} past what
+the block covers does move it to a coarser grid, so that the imagery
+keeps covering the map instead of shrinking to the middle of it.  Each
+step is a halving, so an ordinary change of scale does not move it,
+and the coarsest grid spans a couple of thousand kilometres.
 
 A frame is not on the server the moment it is taken; the delay runs
 from about thirteen minutes on the rapid scan product to half an hour
