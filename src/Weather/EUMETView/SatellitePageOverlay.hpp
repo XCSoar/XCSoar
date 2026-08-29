@@ -111,4 +111,15 @@ void ClearMapOverlay() noexcept;
  */
 void DeactivatePageOverlay() noexcept;
 
+/**
+ * Entering pan mode replaces the page with a full screen map whose
+ * layout carries no overlay, which would otherwise be taken as
+ * leaving the page and throw the block away -- eighty kilobytes to
+ * fetch again because the pilot dragged the map.  The tiles are still
+ * the right ones, so hold on to them until #ResumeAfterPan().
+ */
+void SuspendForPan() noexcept;
+
+void ResumeAfterPan() noexcept;
+
 } // namespace EUMETView
