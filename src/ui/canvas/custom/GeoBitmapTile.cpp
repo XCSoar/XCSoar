@@ -20,8 +20,19 @@ using namespace GeoBitmap;
 static uint32_t
 LonToTileX(double lon, unsigned zoom) noexcept
 {
-  return uint32_t(std::floor((lon + 180.0) / 360.0 *
-                             (uint32_t{1} << zoom)));
+  /* longitude wraps rather than running out, but a caller can still
+     hand us one outside the grid -- exactly 180 lands one tile past
+     the last, and a wild GPS fix lands anywhere -- and the cast of an
+     out-of-range double to uint32_t is undefined.  Wrap into the
+     grid, which is what the projection means anyway. */
+  const uint32_t tiles_per_axis = uint32_t{1} << zoom;
+  const double x = std::floor((lon + 180.0) / 360.0 * tiles_per_axis);
+  if (!(x >= 0) || !(x < double(tiles_per_axis))) {
+    const double wrapped = std::fmod(x, double(tiles_per_axis));
+    return uint32_t(wrapped < 0 ? wrapped + tiles_per_axis : wrapped);
+  }
+
+  return uint32_t(x);
 }
 
 static uint32_t
