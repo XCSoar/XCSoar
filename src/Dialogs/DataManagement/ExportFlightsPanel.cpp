@@ -30,6 +30,12 @@
 #include "Interface.hpp"
 #include "ui/event/Notify.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#include "java/Global.hxx"
+#endif
+
 #include <vector>
 #include <memory>
 #include <string>
@@ -215,6 +221,27 @@ PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
                  MB_OK | (failed > 0 ? MB_ICONWARNING : MB_ICONINFORMATION));
 }
 
+#ifdef ANDROID
+static void
+PerformShare(FileMultiSelectWidget *file_widget)
+{
+  const auto selected = file_widget->GetSelectedPaths();
+  if (selected.empty()) {
+    ShowMessageBox(_("Select at least one flight."), "",
+                   MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  if (native_view == nullptr) {
+    ShowMessageBox(_("Sharing is not available."), C_("Button", "Share"),
+                   MB_OK | MB_ICONERROR);
+    return;
+  }
+
+  native_view->ShareFiles(Java::GetEnv(), selected);
+}
+#endif
+
 struct FlightContainer : public PropertyWidgetContainer {
   std::unique_ptr<FileMultiSelectWidget> file_list;
   UI::Notify igc_notify{[this]() {
@@ -392,6 +419,9 @@ ShowExportFlightsDialog()
   });
 
   dialog.AddButton(_("WeGlide Upload"), [&file_list]() { PerformWeGlideUpload(&file_list); });
+#ifdef ANDROID
+  dialog.AddButton(C_("Button", "Share"), [&file_list]() { PerformShare(&file_list); });
+#endif
   dialog.AddButton(C_("Button", "Export"), [&file_list]() { PerformExport(&file_list); });
   dialog.AddButton(C_("Button", "Select all"), [&file_list]() { file_list.SelectAll(); });
   dialog.AddButton(C_("Button", "Select none"), [&file_list]() { file_list.ClearSelection(); });

@@ -12,6 +12,7 @@
 #endif
 
 #include <cassert>
+#include <span>
 
 class Path;
 namespace UI { class TopWindow; }
@@ -33,6 +34,7 @@ class NativeView {
   static jmethodID loadFileBitmap_method;
   static jmethodID bitmapToTexture_method;
   static jmethodID shareText_method;
+  static jmethodID shareFiles_method;
   static jmethodID openURL_method;
   static jmethodID openWifiSettings_method;
   static jmethodID openWaypointFile_method;
@@ -165,6 +167,13 @@ public:
    * pick a recipient.
    */
   void ShareText(JNIEnv *env, const char *text) noexcept;
+
+  /**
+   * Share local data-directory files via the Android share sheet.
+   * Each path must be absolute under #GetPrimaryDataPath().
+   */
+  void ShareFiles(JNIEnv *env,
+                  std::span<const Path> absolute_paths) noexcept;
 
   /**
    * Open a URL in the default browser.
