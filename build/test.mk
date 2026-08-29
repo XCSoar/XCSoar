@@ -79,6 +79,7 @@ TEST_NAMES = \
 	test_task \
 	TestInputTransformMode \
 	TestOverwritingRingBuffer \
+	TestBoundedArray \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPolylineDecoder \
 	TestTransponderCode \
@@ -222,6 +223,12 @@ TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOverwritingRingBuffer.cpp
 TEST_OVERWRITING_RING_BUFFER_DEPENDS = MATH
 $(eval $(call link-program,TestOverwritingRingBuffer,TEST_OVERWRITING_RING_BUFFER))
+
+TEST_BOUNDED_ARRAY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBoundedArray.cpp
+TEST_BOUNDED_ARRAY_DEPENDS = MATH
+$(eval $(call link-program,TestBoundedArray,TEST_BOUNDED_ARRAY))
 
 TEST_IGC_PARSER_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
