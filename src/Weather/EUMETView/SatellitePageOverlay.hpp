@@ -80,8 +80,16 @@ public:
   void Start(int _layer_index, const GeoBitmap::TileData &_tile,
              const BrokenDateTime &_frame_time) noexcept;
 
-  /** Begin driving the sequence. */
-  void Schedule() noexcept;
+  /**
+   * Begin driving the sequence.
+   *
+   * @param soon while the block is still being built, or there is no
+   * fix to build it around yet.  Waiting a whole minute to notice
+   * that the GPS has come alive is most of the delay before the first
+   * tile appears; once the block is complete there is nothing to look
+   * for until the next frame is published.
+   */
+  void Schedule(bool soon) noexcept;
 
   /** Stop, because no page shows the imagery any more. */
   void Cancel() noexcept;
