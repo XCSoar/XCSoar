@@ -507,6 +507,12 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
   glue->Start(layer_index, next, frame_time);
 }
 
+int
+EUMETView::GetActiveLayer() noexcept
+{
+  return active_layer;
+}
+
 void
 EUMETView::ClearMapOverlay() noexcept
 {
