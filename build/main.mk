@@ -286,6 +286,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/GlueFlightLogger.cpp \
 	$(SRC)/Replay/Replay.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/IGC/CutSession.cpp \
+	$(SRC)/IGC/IGCRepair.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/NmeaReplay.cpp \
 	$(SRC)/Replay/DemoReplay.cpp \
@@ -344,6 +346,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Input/InputEventsPage.cpp \
 	$(SRC)/Input/InputEventsAirspace.cpp \
 	$(SRC)/Input/InputEventsTask.cpp \
+	$(SRC)/Input/InputEventsFlightResume.cpp \
 	$(SRC)/Input/InputEventsSettings.cpp \
 	$(SRC)/Input/InputEventsThermalAssistant.cpp \
 	$(SRC)/Input/InputEventsTraffic.cpp \

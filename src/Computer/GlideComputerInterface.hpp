@@ -10,8 +10,26 @@ class GlideComputer;
 class GlideComputerTaskEvents final : public TaskEvents {
   GlideComputer* computer;
 
+  bool suppressed = false;
+
 public:
   void SetComputer(GlideComputer &_computer) noexcept;
+
+  /**
+   * Stop notifying the pilot, for the duration of a Resume sweep.
+   *
+   * A sweep replays a whole Flight through the live task engine, so every
+   * start, turnpoint advance and finish the pilot already flew is announced
+   * again -- a burst of "Task started" and "Next waypoint" the moment the
+   * progress dialog closes.
+   *
+   * Only the notifications are suppressed.  The GlideComputer callbacks these
+   * methods also make are pure state, and rebuilding that state is the whole
+   * point of the sweep.
+   */
+  void SetSuppressed(bool _suppressed) noexcept {
+    suppressed = _suppressed;
+  }
 
   /* virtual methods from class TaskEvents */
   void EnterTransition(const TaskWaypoint& tp) noexcept override;

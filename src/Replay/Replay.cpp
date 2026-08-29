@@ -11,6 +11,7 @@
 #include "MergeThread.hpp"
 #include "Logger/Logger.hpp"
 #include "Interface.hpp"
+#include "Operation/Operation.hpp"
 #include "Repository/FileType.hpp"
 #include "CatmullRomInterpolator.hpp"
 #include "time/Cast.hxx"
@@ -42,6 +43,20 @@ Replay::Stop()
 void
 Replay::Start(Path _path)
 {
+  Open(_path);
+
+  timer.Schedule(std::chrono::milliseconds(100));
+}
+
+void
+Replay::StartSweep(Path _path)
+{
+  Open(_path);
+}
+
+void
+Replay::Open(Path _path)
+{
   assert(_path != nullptr);
 
   /* make sure the old AbstractReplay instance has cleaned up before
@@ -69,8 +84,6 @@ Replay::Start(Path _path)
   virtual_time = TimeStamp::Undefined();
   fast_forward = TimeStamp::Undefined();
   next_data.Reset();
-
-  timer.Schedule(std::chrono::milliseconds(100));
 }
 
 bool
@@ -229,6 +242,59 @@ Replay::ProcessAllFixes(MergeThread &merge_thread,
 
     if (data.time_available)
       data.Expire();
+  }
+
+  if (count > 0)
+    next_data = data;
+
+  return count;
+}
+
+unsigned
+Replay::SweepAllFixes(MergeThread &merge_thread,
+                      CalculationThread &calc_thread,
+                      OperationEnvironment &env, unsigned total)
+{
+  if (replay == nullptr || path == nullptr || path.empty())
+    return 0;
+
+  fast_forward = TimeStamp::Undefined();
+
+  env.SetProgressRange(total);
+
+  NMEAInfo data;
+  data.Reset();
+  unsigned count = 0;
+
+  while (replay->Update(data)) {
+    assert(!data.gps.real);
+
+    if (data.time_available)
+      virtual_time = data.time;
+
+    {
+      const std::lock_guard lock{device_blackboard.mutex};
+      device_blackboard.SetReplayState() = data;
+    }
+
+    merge_thread.ProcessReplayFix();
+    calc_thread.ProcessReplayFix();
+    ++count;
+
+    if (data.time_available)
+      data.Expire();
+
+    /* checking every fix would spend more time on the atomic than on the
+       fix; a Kobo manages a few hundred fixes a second, so this still reacts
+       to Cancel well inside a second */
+    if (count % 64 == 0) {
+      env.SetProgressPosition(count);
+
+      if (env.IsCancelled())
+        /* keep what has been reconstructed so far: state rebuilt as far as
+           this fix is genuinely correct for that part of the Flight */
+        break;
+    }
   }
 
   if (count > 0)
