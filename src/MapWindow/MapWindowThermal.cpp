@@ -4,6 +4,7 @@
 #include "MapWindow.hpp"
 #include "ThermalDisplay.hpp"
 #include "Look/MapLook.hpp"
+#include "LogFile.hpp"
 #include "ui/canvas/Icon.hpp"
 #ifdef HAVE_SKYLINES_TRACKING
 #include "Tracking/SkyLines/Data.hpp"
@@ -76,4 +77,41 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
         look.thermal_source_icon.Draw(canvas, *p);
   }
 #endif
+}
+
+void
+MapWindow::DrawFlarmThermals(Canvas &canvas) const noexcept
+{
+  if (!ThermalDisplay::IsTrafficVisible(
+        GetMapSettings().show_flarm_on_map,
+        render_projection.GetMapScale()))
+    return;
+
+  const MoreData &basic = Basic();
+  const DerivedInfo &calculated = Calculated();
+  const auto selected_wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+
+  DrawDriftedThermalIcons(
+    canvas, look.flarm_thermal_source_icon, render_projection,
+    calculated.traffic_thermals.sources, basic.nav_altitude,
+    [&selected_wind](const TrafficThermalSource &source,
+                     double aircraft_altitude) {
+      const GeoPoint location =
+        ThermalDisplay::GetLocation(source, aircraft_altitude);
+      if (location.IsValid())
+        LogDebug("FLARM thermal cluster={} display={:.6f},{:.6f} "
+                 "ownship_altitude={:.1f} reporting_lift={:.2f} "
+                 "geometry_lift={:.2f} stored_wind={:.1f}@{:.1f} "
+                 "selected_wind={:.1f}@{:.1f}",
+                 source.cluster_serial,
+                 location.latitude.Degrees(), location.longitude.Degrees(),
+                 aircraft_altitude, source.thermal.lift_rate,
+                 source.geometry_lift_rate,
+                 source.geometry_wind.norm,
+                 source.geometry_wind.bearing.Degrees(),
+                 selected_wind.norm, selected_wind.bearing.Degrees());
+      return location;
+    });
 }
