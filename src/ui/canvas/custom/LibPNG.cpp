@@ -87,6 +87,12 @@ LoadPNG(png_structp png_ptr, png_infop info_ptr,
        instead */
     png_set_palette_to_rgb(png_ptr);
 
+  if (color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+    /* we have no format for gray with an alpha channel, so widen it
+       to RGBA rather than fail; single channel WMS imagery arrives
+       this way */
+    png_set_gray_to_rgb(png_ptr);
+
   png_read_update_info(png_ptr, info_ptr);
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,
                &color_type, &interlace_type, nullptr, nullptr);
