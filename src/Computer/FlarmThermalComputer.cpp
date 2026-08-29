@@ -29,6 +29,8 @@ FlarmThermalComputer::FlarmThermalComputer() noexcept
 static bool
 IsEligibleTraffic(const FlarmTraffic &traffic) noexcept
 {
+  // IsPassive() classifies unknown types as powered; retain its low-speed
+  // exclusion while permitting physical FLARM traffic with an unknown type.
   if (!traffic.valid ||
       traffic.source != FlarmTraffic::SourceType::FLARM ||
       !traffic.id.IsDefined() ||
@@ -38,10 +40,11 @@ IsEligibleTraffic(const FlarmTraffic &traffic) noexcept
       !traffic.altitude_available ||
       !std::isfinite(double(traffic.altitude)) ||
       !std::isfinite(static_cast<Angle>(traffic.track).Native()) ||
-      traffic.IsPassive())
+      traffic.speed < 4)
     return false;
 
-  return traffic.type == FlarmTraffic::AircraftType::GLIDER ||
+  return traffic.type == FlarmTraffic::AircraftType::UNKNOWN ||
+    traffic.type == FlarmTraffic::AircraftType::GLIDER ||
     traffic.type == FlarmTraffic::AircraftType::HANG_GLIDER ||
     traffic.type == FlarmTraffic::AircraftType::PARA_GLIDER;
 }
