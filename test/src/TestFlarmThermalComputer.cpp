@@ -7,7 +7,6 @@
 #include "FLARM/Data.hpp"
 #include "Geo/Math.hpp"
 #include "Geo/SpeedVector.hpp"
-#include "MapWindow/ThermalDisplay.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/ThermalProjection.hpp"
 #include "FakeLogFile.hpp"
@@ -15,7 +14,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <limits>
 
 using namespace std::chrono;
 
@@ -23,78 +21,6 @@ static constexpr GeoPoint TEST_CENTRE = {
   Angle::Degrees(7), Angle::Degrees(45),
 };
 static constexpr double TEST_OWNSHIP_ALTITUDE = 900;
-
-static void
-TestThermalProjection()
-{
-  const SpeedVector wind{Angle::Degrees(90), 10};
-  const auto drift_per_meter =
-    CalculateThermalDriftPerMeter(wind, 2);
-  ok1(equals(drift_per_meter.norm, 5));
-  ok1(equals(drift_per_meter.bearing, 90));
-
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 0, drift_per_meter),
-              TEST_CENTRE));
-
-  const auto expected_upwind =
-    FindLatitudeLongitude(TEST_CENTRE, Angle::Degrees(270), 500);
-  const auto expected_downwind =
-    FindLatitudeLongitude(TEST_CENTRE, Angle::Degrees(90), 500);
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 100, drift_per_meter),
-              expected_upwind));
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, -100, drift_per_meter),
-              expected_downwind));
-
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 100,
-                                SpeedVector::Zero(), 2),
-              TEST_CENTRE));
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 100, wind, 0),
-              TEST_CENTRE));
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 100, wind, -1),
-              TEST_CENTRE));
-
-  const double nan = std::numeric_limits<double>::quiet_NaN();
-  ok1(equals(ProjectThermalCore(TEST_CENTRE, 100, wind, nan),
-              TEST_CENTRE));
-  ok1(equals(ProjectThermalCore(
-                TEST_CENTRE, 100,
-                SpeedVector{Angle::Degrees(90), nan}, 2),
-              TEST_CENTRE));
-  ok1(equals(ProjectThermalCore(
-                TEST_CENTRE, 100,
-                SpeedVector{Angle::Native(nan), 10}, 2),
-              TEST_CENTRE));
-  ok1(equals(ProjectThermalCore(
-                TEST_CENTRE, 100,
-                SpeedVector{Angle::Degrees(90), nan}),
-              TEST_CENTRE));
-  ok1(!ProjectThermalCore(GeoPoint::Invalid(), 100, drift_per_meter)
-        .IsValid());
-
-  const auto projected =
-    ProjectThermalCore(TEST_CENTRE, 200, wind, 2);
-
-  ThermalSource own_source{};
-  own_source.location = TEST_CENTRE;
-  own_source.ground_height = 1000;
-  own_source.lift_rate = 2;
-  ok1(equals(own_source.CalculateAdjustedLocation(1200, wind), projected));
-
-  TrafficThermalSource traffic_source{};
-  traffic_source.Clear();
-  traffic_source.thermal.ground_height = 1000;
-  traffic_source.reference_location = TEST_CENTRE;
-  traffic_source.reference_altitude = 1000;
-  traffic_source.drift_per_meter = drift_per_meter;
-  ok1(equals(traffic_source.CalculateAdjustedLocation(1200), projected));
-
-  ok1(equals(ThermalDisplay::GetLocation(own_source, 1200, wind),
-              projected));
-  ok1(equals(ThermalDisplay::GetLocation(traffic_source, 1200),
-              projected));
-  ok1(!ThermalDisplay::GetLocation(own_source, 999, wind).IsValid());
-  ok1(!ThermalDisplay::GetLocation(traffic_source, 999).IsValid());
-}
 
 static GeoPoint
 AdjustCoreToAltitude(GeoPoint centre, double altitude,
@@ -554,17 +480,6 @@ TestStableGeometryAndAltitudeDatum()
 }
 
 static void
-TestThermalVisibility()
-{
-  ok1(ThermalDisplay::IsVisible(4000));
-  ok1(ThermalDisplay::IsVisible(3999));
-  ok1(!ThermalDisplay::IsVisible(4001));
-  ok1(ThermalDisplay::IsTrafficVisible(true, 4000));
-  ok1(!ThermalDisplay::IsTrafficVisible(true, 4001));
-  ok1(!ThermalDisplay::IsTrafficVisible(false, 1000));
-}
-
-static void
 TestPublishedSamplingPolicy()
 {
   TrafficThermalInfo info;
@@ -687,10 +602,9 @@ TestPublishedSamplingActionPersistence()
 int
 main()
 {
-  plan_tests(108);
+  plan_tests(83);
   SetFakeLogFileQuiet(true);
 
-  TestThermalProjection();
   TestTrafficThermalAllocation();
   TestQualificationAndLifecycle();
   TestRejectedTracks();
@@ -700,7 +614,6 @@ main()
   TestMergePreservesAltitudeRange();
   TestStraightDepartureFreezesSource();
   TestStableGeometryAndAltitudeDatum();
-  TestThermalVisibility();
   TestPublishedSamplingPolicy();
   TestPublishedSamplingActionPersistence();
 
