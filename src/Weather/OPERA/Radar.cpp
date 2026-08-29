@@ -28,9 +28,10 @@ namespace {
 constexpr int8_t NO_CLASS = -1;
 
 /**
- * The largest tile we will inflate, as a guard against a directory
- * that claims an absurd tile size.  The composite's own tiles are
- * 512 by 512 of two float bands, a megabyte each.
+ * The largest tile we will inflate, counted in samples rather than in
+ * pixels, as a guard against a directory that claims an absurd tile
+ * size or band count.  The composite's own tiles are 512 by 512 of
+ * two float bands, half a million samples.
  */
 constexpr std::size_t MAX_TILE_PIXELS = 4u * 1024 * 1024;
 
@@ -50,7 +51,13 @@ InflateTile(std::span<const std::byte> compressed,
 {
   const std::size_t pixels =
     std::size_t(level.tile_width) * level.tile_height;
-  if (pixels == 0 || pixels > MAX_TILE_PIXELS || level.samples == 0)
+
+  /* the sample count comes out of the file just as the tile size
+     does, so the buffer has to be bounded by the product rather than
+     by the pixel count alone; written as a division so that the check
+     itself cannot overflow */
+  if (pixels == 0 || level.samples == 0 ||
+      pixels > MAX_TILE_PIXELS / level.samples)
     throw std::runtime_error("Unusable radar image");
 
   AllocatedArray<float> raw{pixels * level.samples};
