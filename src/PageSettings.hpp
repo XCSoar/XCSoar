@@ -281,6 +281,23 @@ struct PageLayout
   }
 
   /**
+   * Does this page carry an overlay that has to survive a pan?
+   *
+   * Panning shows the fullscreen map, whose layout carries no overlay
+   * at all, so without this the overlay would be torn down on the way
+   * in and fetched again on the way out.  This is deliberately not
+   * #UsesWeatherOverlay(): that one also gates the weather controls
+   * widget and the "weather" input mode, and an overlay with no
+   * forecast cursors would land the pilot in an empty control bar.
+   */
+  [[gnu::const]]
+  constexpr bool
+  UsesSuspendableOverlay() const noexcept
+  {
+    return UsesWeatherOverlay() || UsesRadarOverlay();
+  }
+
+  /**
    * Convert legacy page layouts to the current representation.
    */
   constexpr void Normalise() noexcept
