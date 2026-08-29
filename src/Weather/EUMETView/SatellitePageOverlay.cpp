@@ -244,26 +244,16 @@ IsShown(const GeoBitmap::TileData &tile, int layer,
 void
 ReleaseUnwantedSlots() noexcept
 {
-  for (unsigned i = 0; i < slots.size(); ++i) {
-    const auto &slot = slots[i];
-    if (!slot.IsUsed())
-      continue;
-
-    /* only the position decides.  A tile showing an older frame stays
-       on the map until the new frame's tile for the same ground has
-       actually arrived, so a newly published frame does not blank the
-       overlay for the length of twenty-five requests.  Letting it go
-       stale is bounded by the age limit below, which is the mechanism
-       for that; this one is only about which ground is covered. */
-    const bool keep = slot.layer == block_layer &&
-      std::any_of(wanted.begin(), wanted.end(),
-                  [&slot](const auto &t){
-                    return EUMETView::IsSameTile(slot.tile, t);
-                  });
-
-    if (!keep)
+  /* Only a change of product empties the map.  A tile the block no
+     longer wants -- left behind by flying on, or drawn on the grid
+     the map used before it was zoomed -- stays until something
+     actually replaces it, because taking it down first would blank
+     the overlay for as long as the new block takes to arrive.  They
+     are evicted one at a time by InstallTile(), as the tiles that
+     cover the same ground come in. */
+  for (unsigned i = 0; i < slots.size(); ++i)
+    if (slots[i].IsUsed() && slots[i].layer != block_layer)
       ReleaseSlot(i);
-  }
 }
 
 /**
@@ -284,6 +274,42 @@ FindSlotFor(const GeoBitmap::TileData &tile) noexcept
   for (unsigned i = 0; i < slots.size(); ++i)
     if (!slots[i].IsUsed())
       return int(i);
+
+  /* Every slot is taken, so one of the tiles the block no longer
+     wants has to go.  Take one this tile covers: a coarser tile spans
+     several finer ones, and leaving those underneath would draw the
+     same ground twice, each at partial opacity, and darken it. */
+  const auto bounds = GeoBitmap::GetBounds(tile);
+  for (unsigned i = 0; i < slots.size(); ++i) {
+    const auto &slot = slots[i];
+    if (!slot.IsUsed())
+      continue;
+
+    const bool wanted_here =
+      std::any_of(wanted.begin(), wanted.end(),
+                  [&slot](const auto &t){
+                    return EUMETView::IsSameTile(slot.tile, t);
+                  });
+
+    if (!wanted_here && bounds.Overlaps(GeoBitmap::GetBounds(slot.tile))) {
+      ReleaseSlot(i);
+      return int(i);
+    }
+  }
+
+  /* nothing overlapping to reclaim; give up the first stale tile
+     anywhere rather than drop the one that just arrived */
+  for (unsigned i = 0; i < slots.size(); ++i) {
+    const auto &slot = slots[i];
+    if (slot.IsUsed() &&
+        std::none_of(wanted.begin(), wanted.end(),
+                     [&slot](const auto &t){
+                       return EUMETView::IsSameTile(slot.tile, t);
+                     })) {
+      ReleaseSlot(i);
+      return int(i);
+    }
+  }
 
   return -1;
 }
@@ -410,12 +436,21 @@ SatelliteDownloadGlue::OnCompleteNotify() noexcept
 }
 
 void
-SatelliteDownloadGlue::Schedule() noexcept
+SatelliteDownloadGlue::Schedule(bool soon) noexcept
 {
-  /* the fastest layer publishes every five minutes, so once a minute
-     catches a new frame soon enough; it also retries whatever the
-     link dropped */
-  timer.Schedule(std::chrono::minutes{1});
+  /* Once the block stands there is nothing to do until the next frame
+     is published, and the fastest layer publishes every five minutes,
+     so a minute is soon enough -- and cheap enough to run for as long
+     as the page is open.
+     
+     While it is still being built the same minute is far too long.
+     The first activation usually happens before the GPS has a fix,
+     and the block is centred on the aircraft, so it can do nothing
+     but wait; a minute of that is most of the delay before any
+     imagery appears. */
+  timer.Schedule(soon
+                 ? std::chrono::steady_clock::duration{std::chrono::seconds{1}}
+                 : std::chrono::steady_clock::duration{std::chrono::minutes{1}});
 }
 
 void
@@ -457,21 +492,22 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
 
   active_layer = layer_index;
 
-  /* arm the timer first: it has to keep running even on the turns
-     where there is nothing to fetch, or the picture would never age
-     out and a dropped tile would never be retried */
-  glue->Schedule();
-
   const auto &basic = CommonInterface::Basic();
-  if (!basic.location_available)
+  if (!basic.location_available) {
     /* the block is centred on the aircraft, so without a fix there is
-       nothing to centre it on */
+       nothing to centre it on -- but a fix is usually seconds away at
+       startup, and waiting a minute to notice it is most of the delay
+       before any imagery appears */
+    glue->Schedule(true);
     return;
+  }
 
   const auto &layer = GetLayer(layer_index);
   const auto frame_time = FrameTime(layer, BrokenDateTime::NowUTC());
-  if (!frame_time.IsPlausible())
+  if (!frame_time.IsPlausible()) {
+    glue->Schedule(true);
     return;
+  }
 
   const auto &projection = map->VisibleProjection();
   const auto screen = projection.IsValid()
@@ -483,8 +519,10 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
      the middle of the screen.  A change of grid makes a different
      base tile, which rebuilds the block below. */
   const auto base = GetAircraftTile(basic.location, ChooseZoom(screen));
-  if (!base.IsValid())
+  if (!base.IsValid()) {
+    glue->Schedule(true);
     return;
+  }
 
   /* recompute the block when the aircraft has crossed into another
      tile, or when a newer frame is due.  Everything is keyed on the
@@ -500,15 +538,24 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
     consecutive_failures = 0;
   }
 
-  if (glue->IsRunning() || wanted.empty())
+  if (glue->IsRunning() || wanted.empty()) {
+    glue->Schedule(true);
     return;
+  }
 
-  if (consecutive_failures >= wanted.size())
-    /* the whole block failed in a row; wait for the timer rather than
-       spin */
+  if (consecutive_failures >= wanted.size()) {
+    /* the whole block failed in a row; back off to the slow tick
+       rather than spin on a link or a layer that is not answering */
+    glue->Schedule(false);
     return;
+  }
 
   const auto next = NextMissingTile();
+
+  /* keep looking often while the block is still coming in, and settle
+     back to once a minute once it stands */
+  glue->Schedule(next.IsValid());
+
   if (!next.IsValid())
     /* the block is complete */
     return;
