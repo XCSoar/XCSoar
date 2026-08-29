@@ -13,6 +13,7 @@ LIBNMEA_SOURCES = \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalProjection.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/TrafficThermal.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
