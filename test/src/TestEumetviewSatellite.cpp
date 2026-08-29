@@ -19,7 +19,7 @@ Contains(const std::string &haystack, const char *needle) noexcept
 
 int main()
 {
-  plan_tests(51);
+  plan_tests(55);
 
   const auto layers = EUMETView::GetLayers();
   ok1(!layers.empty());
@@ -176,6 +176,33 @@ int main()
   }
 
   ok1(wild_stays_in_grid);
+
+  /* the antimeridian is the eastern edge of the last column and the
+     western edge of the first, so the two ends are *different* tiles
+     -- and which one a position gets has to follow the direction it
+     was reached from, or a flight crossing the date line would find
+     its tile on the far side of the map.  GeoQuadrilateral::GetBounds()
+     does not wrap, so this is geometry and not merely bookkeeping. */
+  const auto east = EUMETView::GetAircraftTile({Angle::Degrees(180),
+                                                Angle::Degrees(0)},
+                                               EUMETView::MAX_TILE_ZOOM);
+  ok1(east.x == per_axis - 1);
+
+  /* +180 and -180 are the same Angle once the value has been through
+     radians, so there is no "other end" to ask for; what matters is
+     that reaching the boundary does not jump.  Just short of it must
+     be the same tile as the boundary itself. */
+  const auto almost = EUMETView::GetAircraftTile({Angle::Degrees(179.99),
+                                                  Angle::Degrees(0)},
+                                                 EUMETView::MAX_TILE_ZOOM);
+  ok1(EUMETView::IsSameTile(almost, east));
+
+  /* past the world, though, the projection wraps */
+  const auto beyond = EUMETView::GetAircraftTile({Angle::Degrees(180.5),
+                                                  Angle::Degrees(0)},
+                                                 EUMETView::MAX_TILE_ZOOM);
+  ok1(beyond.x < per_axis);
+  ok1(!EUMETView::IsSameTile(beyond, east));
 
   /* longitude wraps, so a flight over the date line keeps a whole
      block instead of losing the half that fell off the edge */
