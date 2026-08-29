@@ -640,6 +640,8 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp \
+	$(SRC)/Weather/OPERA/Radar.cpp \
+	$(SRC)/Weather/OPERA/RadarData.cpp \
 	$(SRC)/Weather/OPERA/RadarPageOverlay.cpp
 endif
 endif
@@ -742,8 +744,6 @@ XCSOAR_SOURCES += \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Overlays.cpp \
-	$(SRC)/Weather/OPERA/Radar.cpp \
-	$(SRC)/Weather/OPERA/RadarData.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAAFormatter.cpp \
