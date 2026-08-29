@@ -437,6 +437,9 @@ GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
   } else {
     MapWindow::DrawThermalEstimate(canvas);
   }
+
+  // FLARM thermal history is independent of ownship circling and pan state.
+  DrawFlarmThermals(canvas);
 }
 
 void
