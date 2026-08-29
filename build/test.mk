@@ -654,6 +654,7 @@ $(eval $(call link-program,TestGeoClip,TEST_GEO_CLIP))
 
 TEST_CLIMB_AV_CALC_SOURCES = \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
