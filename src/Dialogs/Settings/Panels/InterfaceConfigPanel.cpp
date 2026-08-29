@@ -35,6 +35,7 @@ enum ControlIndex {
 #endif
   ShowQuickGuideOnStartup,
   ShowReleaseNotesOnStartup,
+  WarnRadarExpired,
   DisclaimerAccepted,
 };
 
@@ -177,6 +178,14 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
                "startup."),
              !news_seen);
 
+  bool hide_radar_warning = false;
+  Profile::Get(ProfileKeys::HideRadarStaleWarning, hide_radar_warning);
+  AddBoolean(C_("Setting", "Warn when radar expires"),
+             _("If enabled, a warning is shown when the rain radar "
+               "overlay could not be refreshed and was removed from "
+               "the map."),
+             !hide_radar_warning);
+
   const char *disclaimer_acknowledged_version =
     Profile::Get(ProfileKeys::DisclaimerAcknowledgedVersion);
   const bool disclaimer_acknowledged =
@@ -275,6 +284,12 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   if (SaveValue(ShowQuickGuideOnStartup,
                 ProfileKeys::HideQuickGuideDialogOnStartup,
                 hide_quick_guide, true))
+    changed = true;
+
+  bool hide_radar_warning = false;
+  Profile::Get(ProfileKeys::HideRadarStaleWarning, hide_radar_warning);
+  if (SaveValue(WarnRadarExpired, ProfileKeys::HideRadarStaleWarning,
+                hide_radar_warning, true))
     changed = true;
 
   const bool show_release_notes = GetValueBoolean(ShowReleaseNotesOnStartup);
