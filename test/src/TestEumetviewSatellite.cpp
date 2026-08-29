@@ -19,7 +19,7 @@ Contains(const std::string &haystack, const char *needle) noexcept
 
 int main()
 {
-  plan_tests(47);
+  plan_tests(51);
 
   const auto layers = EUMETView::GetLayers();
   ok1(!layers.empty());
@@ -89,16 +89,16 @@ int main()
   /* ---------------- the tile block ---------------- */
 
   const GeoPoint aircraft{Angle::Degrees(11), Angle::Degrees(50)};
-  const auto base = EUMETView::GetAircraftTile(aircraft);
+  const auto base = EUMETView::GetAircraftTile(aircraft, EUMETView::MAX_TILE_ZOOM);
   ok1(base.IsValid());
-  ok1(base.zoom == EUMETView::TILE_ZOOM);
+  ok1(base.zoom == EUMETView::MAX_TILE_ZOOM);
 
   /* the aircraft has to be inside its own tile, or the block would be
      centred on the wrong ground */
   ok1(GeoBitmap::GetBounds(base).IsInside(aircraft));
 
   /* without a fix there is nothing to centre on */
-  ok1(!EUMETView::GetAircraftTile(GeoPoint::Invalid()).IsValid());
+  ok1(!EUMETView::GetAircraftTile(GeoPoint::Invalid(), EUMETView::MAX_TILE_ZOOM).IsValid());
 
   const auto tiles = EUMETView::CollectTiles(base);
   ok1(tiles.size() == EUMETView::TILE_COUNT);
@@ -154,7 +154,8 @@ int main()
   /* near the pole the block runs off the top of the world; the tiles
      that remain must still be a valid, shorter list */
   const auto polar = EUMETView::GetAircraftTile({Angle::Degrees(0),
-                                                 Angle::Degrees(84.9)});
+                                                 Angle::Degrees(84.9)},
+                                                EUMETView::MAX_TILE_ZOOM);
   const auto polar_tiles = EUMETView::CollectTiles(polar);
   ok1(polar_tiles.size() <= EUMETView::TILE_COUNT);
   ok1(!polar_tiles.empty());
@@ -162,14 +163,14 @@ int main()
   /* a position outside the grid must still name a tile inside it: the
      cast of an out-of-range double to uint32_t is undefined, and a
      GPS fix can be anything.  The grid is 2^zoom tiles per axis. */
-  const uint32_t per_axis = uint32_t{1} << EUMETView::TILE_ZOOM;
+  const uint32_t per_axis = uint32_t{1} << EUMETView::MAX_TILE_ZOOM;
   bool wild_stays_in_grid = true;
   for (const auto &p : {GeoPoint{Angle::Degrees(180), Angle::Degrees(0)},
                         GeoPoint{Angle::Degrees(-180), Angle::Degrees(0)},
                         GeoPoint{Angle::Degrees(0), Angle::Degrees(89.9)},
                         GeoPoint{Angle::Degrees(0), Angle::Degrees(-89.9)},
                         GeoPoint{Angle::Degrees(180), Angle::Degrees(89.9)}}) {
-    const auto t = EUMETView::GetAircraftTile(p);
+    const auto t = EUMETView::GetAircraftTile(p, EUMETView::MAX_TILE_ZOOM);
     if (!t.IsValid() || t.x >= per_axis || t.y >= per_axis)
       wild_stays_in_grid = false;
   }
@@ -179,8 +180,61 @@ int main()
   /* longitude wraps, so a flight over the date line keeps a whole
      block instead of losing the half that fell off the edge */
   const auto dateline = EUMETView::GetAircraftTile({Angle::Degrees(179.99),
-                                                    Angle::Degrees(50)});
+                                                    Angle::Degrees(50)},
+                                                   EUMETView::MAX_TILE_ZOOM);
   ok1(EUMETView::CollectTiles(dateline).size() == EUMETView::TILE_COUNT);
+
+  /* ---------------- the grid follows the map outwards ---------------- */
+
+  /* a map at gliding scales gets the finest grid: the satellite has
+     no more detail, so zooming in must never cost a refetch */
+  const GeoBounds close{
+    GeoPoint{Angle::Degrees(10.8), Angle::Degrees(50.1)},
+    GeoPoint{Angle::Degrees(11.2), Angle::Degrees(49.9)},
+  };
+  ok1(EUMETView::ChooseZoom(close) == EUMETView::MAX_TILE_ZOOM);
+  ok1(EUMETView::ChooseZoom(GeoBounds::Invalid()) ==
+      EUMETView::MAX_TILE_ZOOM);
+
+  /* and zooming out coarsens it, rather than leaving the imagery
+     covering the middle of the screen.  Whatever the map shows, the
+     block it picks has to cover it. */
+  bool block_covers_view = true;
+  bool never_finer_than_max = true;
+  for (const double half : {0.2, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0}) {
+    const GeoBounds view{
+      GeoPoint{Angle::Degrees(11 - half), Angle::Degrees(50 + half / 2)},
+      GeoPoint{Angle::Degrees(11 + half), Angle::Degrees(50 - half / 2)},
+    };
+
+    const auto zoom = EUMETView::ChooseZoom(view);
+    if (zoom > EUMETView::MAX_TILE_ZOOM)
+      never_finer_than_max = false;
+
+    const auto tiles = EUMETView::CollectTiles(
+      EUMETView::GetAircraftTile(aircraft, zoom));
+    if (tiles.empty()) {
+      block_covers_view = false;
+      continue;
+    }
+
+    GeoBounds block = GeoBitmap::GetBounds(tiles.front());
+    for (const auto &tile : tiles) {
+      const auto b = GeoBitmap::GetBounds(tile);
+      block.Extend(b.GetNorthWest());
+      block.Extend(b.GetSouthEast());
+    }
+
+    /* the block is centred on the aircraft, not on the view, so at
+       the coarsest grid a view wider than the world cannot be
+       covered; require it up to the point where the grid runs out */
+    if (zoom > EUMETView::MIN_TILE_ZOOM &&
+        block.GetGeoWidth() < view.GetGeoWidth())
+      block_covers_view = false;
+  }
+
+  ok1(block_covers_view);
+  ok1(never_finer_than_max);
 
   /* ---------------- the request ---------------- */
 
