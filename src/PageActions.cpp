@@ -309,6 +309,10 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.xctherm.SuspendForPan();
   if (layout.UsesSkySightOverlay())
     weather.skysight.SuspendForPan();
+#ifdef HAVE_WEATHER_OVERLAY
+  if (layout.UsesRadarOverlay())
+    OPERA::SuspendForPan();
+#endif
 }
 
 void
@@ -319,6 +323,9 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.rasp.ResumeAfterPan();
   weather.xctherm.ResumeAfterPan();
   weather.skysight.ResumeAfterPan();
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::ResumeAfterPan();
+#endif
 }
 
 void
