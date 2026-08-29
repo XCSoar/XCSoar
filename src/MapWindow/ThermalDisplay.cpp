@@ -4,6 +4,7 @@
 #include "ThermalDisplay.hpp"
 
 #include "NMEA/ThermalLocator.hpp"
+#include "NMEA/TrafficThermal.hpp"
 
 namespace ThermalDisplay {
 
@@ -15,6 +16,16 @@ GetLocation(const ThermalSource &source, double aircraft_altitude,
     return GeoPoint::Invalid();
 
   return source.CalculateAdjustedLocation(aircraft_altitude, wind);
+}
+
+GeoPoint
+GetLocation(const TrafficThermalSource &source,
+            double aircraft_altitude) noexcept
+{
+  if (aircraft_altitude < source.thermal.ground_height)
+    return GeoPoint::Invalid();
+
+  return source.CalculateAdjustedLocation(aircraft_altitude);
 }
 
 } // namespace ThermalDisplay
