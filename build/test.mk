@@ -94,7 +94,7 @@ TEST_NAMES = \
 	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
-	TestWaypointReader TestThermalBase TestThermalProjection \
+	TestWaypointReader TestThermalBase TestThermalProjection TestThermalDisplay \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
@@ -965,6 +965,15 @@ TEST_THERMAL_PROJECTION_SOURCES = \
 	$(TEST_SRC_DIR)/TestThermalProjection.cpp
 TEST_THERMAL_PROJECTION_DEPENDS = GEO MATH
 $(eval $(call link-program,TestThermalProjection,TEST_THERMAL_PROJECTION))
+
+TEST_THERMAL_DISPLAY_SOURCES = \
+	$(SRC)/MapWindow/ThermalDisplay.cpp \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestThermalDisplay.cpp
+TEST_THERMAL_DISPLAY_DEPENDS = GEO MATH
+$(eval $(call link-program,TestThermalDisplay,TEST_THERMAL_DISPLAY))
 
 TEST_EARTH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
