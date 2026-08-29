@@ -342,23 +342,31 @@ InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
   const auto &layer = EUMETView::GetLayer(layer_index);
   /* the frame time is the part the pilot needs: it says how old the
      cloud picture is.  The year alone said nothing. */
-  const auto label = fmt::format("{} {:02}:{:02}Z — {} {}",
-                                 gettext(layer.label),
-                                 frame_time.hour, frame_time.minute,
-                                 EUMETView::ATTRIBUTION, frame_time.year);
+  /* both the label and the overlay allocate, and this runs under a
+     noexcept completion handler, where an exception is std::terminate
+     rather than a lost tile */
+  try {
+    const auto label = fmt::format("{} {:02}:{:02}Z — {} {}",
+                                   gettext(layer.label),
+                                   frame_time.hour, frame_time.minute,
+                                   EUMETView::ATTRIBUTION, frame_time.year);
 
-  auto bmp = std::make_unique<MapOverlayBitmap>(std::move(bitmap),
-                                                GeoBitmap::GetGeoQuadrilateral(tile),
-                                                label.c_str());
-  bmp->SetAlpha(OVERLAY_ALPHA);
+    auto bmp = std::make_unique<MapOverlayBitmap>(std::move(bitmap),
+                                                  GeoBitmap::GetGeoQuadrilateral(tile),
+                                                  label.c_str());
+    bmp->SetAlpha(OVERLAY_ALPHA);
 
-  auto &slot = slots[index];
-  slot.overlay = bmp.get();
-  slot.tile = tile;
-  slot.layer = layer_index;
-  slot.frame_time = frame_time;
-  map->SetOverlay(unsigned(index), std::move(bmp));
-  return true;
+    auto &slot = slots[index];
+    slot.overlay = bmp.get();
+    slot.tile = tile;
+    slot.layer = layer_index;
+    slot.frame_time = frame_time;
+    map->SetOverlay(unsigned(index), std::move(bmp));
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(), "Satellite overlay");
+    return false;
+  }
 }
 
 /**
