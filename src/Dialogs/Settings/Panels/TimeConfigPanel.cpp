@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TimeConfigPanel.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Time.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
@@ -10,10 +11,12 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "time/SystemTimeZone.hpp"
 
 using namespace std::chrono;
 
 enum ControlIndex {
+  AutoUTCOffset,
   UTCOffset,
   LocalTime,
   SystemTimeFromGPS
@@ -27,6 +30,12 @@ public:
 
 public:
   void SetLocalTime(RoughTimeDelta utc_offset);
+
+  /**
+   * Enable/disable the manual UTC offset field and, while the
+   * automatic mode is enabled, show the offset we would use.
+   */
+  void UpdateAutoUTCOffset(bool automatic);
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -45,11 +54,26 @@ TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 }
 
 void
+TimeConfigPanel::UpdateAutoUTCOffset(bool automatic)
+{
+  SetRowEnabled(UTCOffset, !automatic);
+
+  if (automatic) {
+    const auto utc_offset =
+      RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
+    LoadValueDuration(UTCOffset, utc_offset.ToDuration());
+    SetLocalTime(utc_offset);
+  }
+}
+
+void
 TimeConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(UTCOffset, df)) {
     const auto &tdf = static_cast<const DataFieldTime &>(df);
     SetLocalTime(RoughTimeDelta::FromDuration(tdf.GetValue()));
+  } else if (IsDataField(AutoUTCOffset, df)) {
+    UpdateAutoUTCOffset(static_cast<const DataFieldBoolean &>(df).GetValue());
   }
 }
 
@@ -62,6 +86,14 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     CommonInterface::GetComputerSettings();
 
   const RoughTimeDelta utc_offset = settings_computer.utc_offset;
+
+  AddBoolean(_("Automatic UTC offset"),
+             _("Use the time zone configured in the operating system, and keep "
+               "following it across daylight saving time changes and when "
+               "travelling to another time zone. Disable this to enter the UTC "
+               "offset manually."),
+             settings_computer.auto_utc_offset, this);
+
   AddDuration(_("UTC offset"),
           _("The UTC offset field allows the UTC local time offset to be specified. The local "
             "time is displayed below in order to make it easier to verify the correct offset "
@@ -74,6 +106,8 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 
   Add(_("Local time"), 0, true);
   SetLocalTime(utc_offset);
+
+  UpdateAutoUTCOffset(settings_computer.auto_utc_offset);
 
   AddBoolean(_("Use GPS time"),
              _("If enabled sets the clock of the computer to the GPS time once a fix "
@@ -91,13 +125,31 @@ TimeConfigPanel::Save(bool &_changed) noexcept
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
-  const auto ival = GetValueTime(UTCOffset);
-  if (const auto new_utc_offset = RoughTimeDelta::FromDuration(ival);
-      new_utc_offset != settings_computer.utc_offset) {
-    settings_computer.utc_offset = new_utc_offset;
+  changed |= SaveValue(AutoUTCOffset, ProfileKeys::AutoUTCOffset,
+                       settings_computer.auto_utc_offset);
 
+  if (settings_computer.auto_utc_offset) {
+    /* in automatic mode, the UTC offset is owned by
+       UTCOffsetProcessTimer(); apply it right away instead of the
+       (disabled) form value, so the change is visible immediately */
+    if (const auto new_utc_offset =
+          RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
+        new_utc_offset != settings_computer.utc_offset) {
+      settings_computer.utc_offset = new_utc_offset;
+      changed = true;
+    }
+  } else {
+    const auto ival = GetValueTime(UTCOffset);
+
+    if (const auto new_utc_offset = RoughTimeDelta::FromDuration(ival);
+        new_utc_offset != settings_computer.utc_offset) {
+      settings_computer.utc_offset = new_utc_offset;
+      changed = true;
+    }
+
+    /* always store the manual offset, so switching back from automatic
+       mode restores what the user had configured */
     Profile::Set(ProfileKeys::UTCOffsetSigned, ival);
-    changed = true;
   }
 
   changed |= SaveValue(SystemTimeFromGPS, ProfileKeys::SetSystemTimeFromGPS,
