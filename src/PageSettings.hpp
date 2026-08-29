@@ -314,7 +314,8 @@ struct PageLayout
   constexpr bool
   UsesSuspendableOverlay() const noexcept
   {
-    return UsesWeatherOverlay() || UsesRadarOverlay();
+    return UsesWeatherOverlay() || UsesRadarOverlay() ||
+      UsesSatelliteOverlay();
   }
 
   /**
