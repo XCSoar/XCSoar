@@ -184,8 +184,9 @@ ShowWeatherDialog(const char *page)
   if (page != nullptr && StringIsEqual(page, "overlay"))
     start_page = widget.GetSize();
 
-  // TODO: better and translatable title?
-  widget.AddTab(CreateWeatherMapOverlayWidget(), "Overlay");
+  /* the other tabs are named after their service, which is why they
+     are not translated; this one is a common noun */
+  widget.AddTab(CreateWeatherMapOverlayWidget(), _("Overlay"));
 #endif
 
   /* restore previous page */
