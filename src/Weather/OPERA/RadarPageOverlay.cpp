@@ -430,11 +430,21 @@ RadarDownloadGlue::OnCompleteNotify() noexcept
 
   consecutive_failures = 0;
 
-  if (!(frame_time == block_frame))
-    /* the block moved on while this was in flight -- a newer frame is
-       due, or the radar was taken off the map.  Installing it now
-       would put a frame on the map that the age watchdog has already
-       decided against. */
+  /* The block can move while a tile is in flight, and then this
+     answer is to a question nobody is asking any more.  Two ways:
+     a newer frame fell due, or the aircraft crossed into another tile
+     and the block was rebuilt around it.  The frame check alone
+     misses the second -- the frame is unchanged there, but
+     ReleaseUnwantedSlots() has already given this slot back, and
+     installing now would drop a tile from outside the block onto the
+     map and hold a slot the block wants for something else. */
+  const bool still_wanted = frame_time == block_frame &&
+    std::any_of(wanted.begin(), wanted.end(),
+                [this](const auto &t){
+                  return OPERA::IsSameTile(t, tile);
+                });
+
+  if (!still_wanted)
     ReleaseSlot(slot);
   else if (drawn)
     InstallTile(slot, path, tile, frame_time);
