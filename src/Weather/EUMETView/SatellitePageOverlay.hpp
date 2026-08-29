@@ -107,6 +107,17 @@ void ActivatePageOverlay(int layer_index) noexcept;
 void ClearMapOverlay() noexcept;
 
 /**
+ * Which layer is on the map, or -1 if none is.
+ *
+ * The tiles carry an attribution label rather than a bare layer name,
+ * and there are up to twenty-five of them, so the Weather dialog
+ * cannot recognise them the way it recognises a single named bitmap.
+ * It asks here instead.
+ */
+[[gnu::pure]]
+int GetActiveLayer() noexcept;
+
+/**
  * Leave the satellite page: stop fetching and take the tiles down.
  */
 void DeactivatePageOverlay() noexcept;
