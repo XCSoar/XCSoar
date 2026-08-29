@@ -338,18 +338,29 @@ RadarDownloadGlue::Start(std::string _url, const GeoBitmap::TileData &_base,
       !_frame_time.IsPlausible() || _slot >= slots.size())
     return;
 
+  /* one file per slot, so the cache cannot grow with the flight.
+     Built before anything is assigned: this allocates, and we are
+     noexcept, so a failure here has to leave the glue as it was
+     rather than half-armed -- and must not reach the caller, where it
+     would be std::terminate() rather than a lost tile. */
+  AllocatedPath new_path{nullptr};
+  try {
+    new_path = AllocatedPath::Build(MakeCacheDirectory("opera"),
+                                    fmt::format("rain-{}.png",
+                                                _slot).c_str());
+  } catch (...) {
+    LogError(std::current_exception(), "Radar overlay");
+    return;
+  }
+
   url = std::move(_url);
   base_tile = _base;
   tile = _tile;
   frame_time = _frame_time;
   slot = _slot;
   drawn = false;
-  path = nullptr;
+  path = std::move(new_path);
   completion_error = {};
-
-  /* one file per slot, so the cache cannot grow with the flight */
-  path = AllocatedPath::Build(MakeCacheDirectory("opera"),
-                              fmt::format("rain-{}.png", slot).c_str());
 
   /* hold the slot now: the next tile must not be handed the same one
      while this download is in flight */
