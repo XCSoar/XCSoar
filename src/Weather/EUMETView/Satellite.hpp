@@ -167,7 +167,6 @@ std::vector<GeoBitmap::TileData>
 CollectTiles(const GeoBitmap::TileData &base) noexcept;
 
 /** Are these the same tile? */
-[[gnu::const]]
 constexpr bool
 IsSameTile(const GeoBitmap::TileData &a,
            const GeoBitmap::TileData &b) noexcept
