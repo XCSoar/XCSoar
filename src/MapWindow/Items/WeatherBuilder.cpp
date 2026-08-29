@@ -67,6 +67,23 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
 }
 
 void
+MapItemListBuilder::AddTrafficThermals(const TrafficThermalInfo &thermals,
+                                       const MoreData &basic,
+                                       const DerivedInfo &calculated)
+{
+  (void)calculated;
+
+  AddDriftedThermals(
+    list, location, range, thermals.sources,
+    [&basic](const TrafficThermalSource &source) {
+      return ThermalDisplay::GetLocation(source, basic.nav_altitude);
+    },
+    [&basic](const TrafficThermalSource &source) {
+      return new ThermalMapItem(source, basic.time);
+    });
+}
+
+void
 MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
 {
   for (const auto &i : thermals) {
@@ -82,6 +99,7 @@ MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
     source.lift_rate = i.climb_rate;
     // TODO source.time = i.time;
 
-    list.append(new ThermalMapItem(source, TimeStamp::Undefined()));
+    list.append(new ThermalMapItem(source, TimeStamp::Undefined(),
+                                   ThermalMapItem::Provenance::TIM));
   }
 }

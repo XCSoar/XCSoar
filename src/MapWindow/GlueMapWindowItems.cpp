@@ -6,6 +6,7 @@
 #include "Items/Builder.hpp"
 #include "Items/OverlayMapItem.hpp"
 #include "Items/RaspMapItem.hpp"
+#include "ThermalDisplay.hpp"
 #include "Dialogs/MapItemListDialog.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
@@ -66,8 +67,12 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                settings.airspace, basic,
                                calculated);
 
-  if (visible_projection.GetMapScale() <= 4000) {
+  if (ThermalDisplay::IsVisible(visible_projection.GetMapScale())) {
     builder.AddThermals(calculated.thermal_locator, basic, calculated);
+    if (ThermalDisplay::IsTrafficVisible(settings.show_flarm_on_map,
+                                         visible_projection.GetMapScale()))
+      builder.AddTrafficThermals(calculated.traffic_thermals, basic,
+                                 calculated);
 
 #ifdef HAVE_HTTP
     if (tim_glue != nullptr && computer_settings.weather.enable_tim) {
