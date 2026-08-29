@@ -7,6 +7,7 @@
 #include "Observation/Database.hpp"
 #include "Observation/Publish.hpp"
 #include "Engine/Observation/Store.hpp"
+#include "LogFile.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "Tracking/Features.hpp"
 #include "net/http/Features.hpp"
@@ -31,6 +32,7 @@ DrawDriftedThermalIcons(Canvas &canvas, const MaskedIcon &icon,
       icon.Draw(canvas, *p);
   }
 }
+
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
 {
@@ -65,4 +67,41 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
   for (const auto &row : shown)
     if (auto p = render_projection.GeoToScreenIfVisible(row.location))
       look.thermal_source_icon.Draw(canvas, *p);
+}
+
+void
+MapWindow::DrawFlarmThermals(Canvas &canvas) const noexcept
+{
+  if (!ThermalDisplay::IsTrafficVisible(
+        GetMapSettings().show_flarm_on_map,
+        render_projection.GetMapScale()))
+    return;
+
+  const MoreData &basic = Basic();
+  const DerivedInfo &calculated = Calculated();
+  const auto selected_wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+
+  DrawDriftedThermalIcons(
+    canvas, look.flarm_thermal_source_icon, render_projection,
+    calculated.traffic_thermals.sources, basic.nav_altitude,
+    [&selected_wind](const TrafficThermalSource &source,
+                     double aircraft_altitude) {
+      const GeoPoint location =
+        ThermalDisplay::GetLocation(source, aircraft_altitude);
+      if (location.IsValid())
+        LogDebug("FLARM thermal cluster={} display={:.6f},{:.6f} "
+                 "ownship_altitude={:.1f} reporting_lift={:.2f} "
+                 "geometry_lift={:.2f} stored_wind={:.1f}@{:.1f} "
+                 "selected_wind={:.1f}@{:.1f}",
+                 source.cluster_serial,
+                 location.latitude.Degrees(), location.longitude.Degrees(),
+                 aircraft_altitude, source.thermal.lift_rate,
+                 source.geometry_lift_rate,
+                 source.geometry_wind.norm,
+                 source.geometry_wind.bearing.Degrees(),
+                 selected_wind.norm, selected_wind.bearing.Degrees());
+      return location;
+    });
 }
