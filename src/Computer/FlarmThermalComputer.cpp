@@ -3,11 +3,8 @@
 
 #include "FlarmThermalComputer.hpp"
 
-#include "Computer/ThermalBase.hpp"
 #include "FLARM/Calculations.hpp"
 #include "NMEA/ThermalProjection.hpp"
-#include "Geo/Flat/FlatPoint.hpp"
-#include "Geo/Flat/FlatProjection.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "LogFile.hpp"
 #include "util/BoundedArray.hxx"
@@ -24,29 +21,6 @@ FlarmThermalComputer::FlarmThermalComputer() noexcept
 {
   targets.clear();
   clusters.clear();
-}
-
-static bool
-IsEligibleTraffic(const FlarmTraffic &traffic) noexcept
-{
-  // IsPassive() classifies unknown types as powered; retain its low-speed
-  // exclusion while permitting physical FLARM traffic with an unknown type.
-  if (!traffic.valid ||
-      traffic.source != FlarmTraffic::SourceType::FLARM ||
-      !traffic.id.IsDefined() ||
-      traffic.id_type == FlarmTraffic::IdType::RANDOM ||
-      traffic.no_track ||
-      !traffic.location_available || !traffic.location.Check() ||
-      !traffic.altitude_available ||
-      !std::isfinite(double(traffic.altitude)) ||
-      !std::isfinite(static_cast<Angle>(traffic.track).Native()) ||
-      traffic.speed < 4)
-    return false;
-
-  return traffic.type == FlarmTraffic::AircraftType::UNKNOWN ||
-    traffic.type == FlarmTraffic::AircraftType::GLIDER ||
-    traffic.type == FlarmTraffic::AircraftType::HANG_GLIDER ||
-    traffic.type == FlarmTraffic::AircraftType::PARA_GLIDER;
 }
 
 void
@@ -167,118 +141,6 @@ FlarmThermalComputer::AllocateCluster(TimeStamp first_seen,
   return cluster;
 }
 
-FlarmThermalComputer::CandidateResult
-FlarmThermalComputer::BuildCandidate(const TargetState &target,
-                                     const FlarmTraffic &traffic,
-                                     double geometry_lift_rate,
-                                     const SpeedVector &geometry_wind,
-                                     const RasterTerrain *terrain,
-                                     Candidate &candidate) const noexcept
-{
-  if (target.samples.size() < 2 ||
-      !traffic.climb_rate_avg30s_available ||
-      traffic.climb_rate_avg30s_time_span <
-        FlarmCalculations::AVERAGE_TIME ||
-      !std::isfinite(traffic.climb_rate_avg30s))
-    return CandidateResult::INCOMPLETE_WINDOW;
-
-  const auto &oldest = target.samples.front();
-  const auto &newest = target.samples.back();
-  if (newest.time - oldest.time < FlarmCalculations::AVERAGE_TIME)
-    return CandidateResult::INCOMPLETE_WINDOW;
-
-  const double climb_threshold = target.qualified
-    ? EXIT_CLIMB_THRESHOLD
-    : ENTER_CLIMB_THRESHOLD;
-  if (traffic.climb_rate_avg30s < climb_threshold)
-    return CandidateResult::WEAK_LIFT;
-
-  double accumulated_turn = 0;
-  for (unsigned i = 1; i < target.samples.size(); ++i)
-    accumulated_turn +=
-      (target.samples[i].track - target.samples[i - 1].track)
-      .AsDelta().Absolute().Degrees();
-
-  if (accumulated_turn < MIN_ACCUMULATED_TURN)
-    return CandidateResult::INSUFFICIENT_TURN;
-
-  if (target.qualified) {
-    unsigned tail_begin = target.samples.size() - 1;
-    while (tail_begin > 0 &&
-           target.samples[tail_begin - 1].time >=
-             newest.time - EXIT_TURN_WINDOW)
-      --tail_begin;
-
-    double recent_turn = 0;
-    for (unsigned i = tail_begin + 1; i < target.samples.size(); ++i)
-      recent_turn +=
-        (target.samples[i].track - target.samples[i - 1].track)
-        .AsDelta().Absolute().Degrees();
-
-    const double recent_duration =
-      (newest.time - target.samples[tail_begin].time).count();
-    const auto &previous = target.samples[target.samples.size() - 2];
-    const double current_duration = (newest.time - previous.time).count();
-    const double current_turn =
-      (newest.track - previous.track).AsDelta().Absolute().Degrees();
-
-    if (!(recent_duration > 0) ||
-        recent_turn / recent_duration < MIN_RECENT_TURN_RATE ||
-        !(current_duration > 0) ||
-        current_turn / current_duration < MIN_CURRENT_TURN_RATE)
-      return CandidateResult::LEFT_CIRCLE;
-  }
-
-  const auto drift_per_meter =
-    CalculateThermalDriftPerMeter(geometry_wind, geometry_lift_rate);
-
-  const FlatProjection projection(newest.location);
-  FlatPoint mean(0, 0);
-  for (const auto &sample : target.samples)
-    mean += projection.ProjectFloat(
-      ProjectThermalCore(sample.location,
-                         newest.altitude - sample.altitude,
-                         drift_per_meter));
-
-  mean = mean * (1. / target.samples.size());
-
-  const double flat_scale = projection.GetApproximateScale();
-  for (const auto &sample : target.samples) {
-    const auto point = projection.ProjectFloat(
-      ProjectThermalCore(sample.location,
-                         newest.altitude - sample.altitude,
-                         drift_per_meter));
-    if (point.Distance(mean) * flat_scale > MAX_DRIFT_CORRECTED_RADIUS)
-      return CandidateResult::EXCESSIVE_RADIUS;
-  }
-
-  candidate.id = target.id;
-  candidate.centre = projection.Unproject(mean);
-  candidate.first_seen = oldest.time;
-  candidate.altitude = newest.altitude;
-  candidate.min_altitude = oldest.altitude;
-  candidate.max_altitude = oldest.altitude;
-  for (const auto &sample : target.samples) {
-    candidate.min_altitude = std::min(candidate.min_altitude,
-                                      sample.altitude);
-    candidate.max_altitude = std::max(candidate.max_altitude,
-                                      sample.altitude);
-  }
-  candidate.climb_rate = traffic.climb_rate_avg30s;
-  candidate.geometry_lift_rate = geometry_lift_rate;
-  candidate.geometry_wind = geometry_wind;
-  candidate.drift_per_meter = drift_per_meter;
-  candidate.source.lift_rate = geometry_lift_rate;
-  candidate.source.time = newest.time;
-  EstimateThermalBase(terrain, candidate.centre, candidate.altitude,
-                      geometry_lift_rate, geometry_wind,
-                      candidate.source.location,
-                      candidate.source.ground_height);
-  return candidate.source.location.IsValid()
-    ? CandidateResult::QUALIFIED
-    : CandidateResult::INVALID_SOURCE;
-}
-
 FlarmThermalComputer::ClusterState *
 FlarmThermalComputer::FindCompatibleCluster(
     const Candidate &candidate, TimeStamp now) noexcept
@@ -287,10 +149,6 @@ FlarmThermalComputer::FindCompatibleCluster(
   double best_distance = GROUPING_RADIUS;
 
   for (auto &cluster : clusters) {
-    if (cluster.closed || now < cluster.last_seen ||
-        now > cluster.last_seen + GROUPING_TIME_GAP)
-      continue;
-
     bool already_contributed = false;
     for (const auto &contributor : cluster.contributors)
       if (contributor.id == candidate.id) {
@@ -301,30 +159,15 @@ FlarmThermalComputer::FindCompatibleCluster(
     if (cluster.contributors.full() && !already_contributed)
       continue;
 
-    const auto &geometry = cluster.geometry;
-    if (!geometry.reference_location.IsValid() ||
-        !(geometry.lift_rate > 0))
-      continue;
-
-    const double comparison_altitude = std::max({
-      candidate.altitude,
-      candidate.source.ground_height,
-      geometry.ground_height,
-      geometry.max_observed_altitude,
-      geometry.reference_altitude,
-    });
-    const auto candidate_location =
-      ProjectThermalCore(candidate.centre,
-                         comparison_altitude - candidate.altitude,
-                         candidate.drift_per_meter);
-    const auto cluster_location =
-      ProjectThermalCore(geometry.reference_location,
-                         comparison_altitude - geometry.reference_altitude,
-                         geometry.drift_per_meter);
-    const double distance = candidate_location.DistanceS(cluster_location);
-    if (distance <= best_distance) {
+    const FlarmThermal::ClusterView view{
+      cluster.geometry, cluster.first_seen, cluster.last_seen,
+      cluster.closed,
+    };
+    const auto distance =
+      FlarmThermal::GetClusterCompatibilityDistance(candidate, view, now);
+    if (distance && *distance <= best_distance) {
       best = &cluster;
-      best_distance = distance;
+      best_distance = *distance;
     }
   }
 
@@ -416,21 +259,6 @@ FlarmThermalComputer::UpdateContributor(ClusterState &cluster,
   cluster.closed = false;
 }
 
-static void
-AddVector(const SpeedVector &vector, double &east, double &north) noexcept
-{
-  east += vector.norm * vector.bearing.sin();
-  north += vector.norm * vector.bearing.cos();
-}
-
-static SpeedVector
-AverageVector(double east, double north, double count) noexcept
-{
-  return count > 0
-    ? SpeedVector(east / count, north / count)
-    : SpeedVector::Zero();
-}
-
 void
 FlarmThermalComputer::RecomputeCluster(ClusterState &cluster,
                                        TrafficThermalInfo &output) noexcept
@@ -438,73 +266,19 @@ FlarmThermalComputer::RecomputeCluster(ClusterState &cluster,
   if (cluster.contributors.empty())
     return;
 
-  unsigned active_count = 0;
-  double active_lift = 0;
-  double historical_lift = 0;
-  double min_altitude = cluster.contributors.front().min_altitude;
-  double max_altitude = cluster.contributors.front().max_altitude;
-  double geometry_lift = 0;
-  double wind_east = 0;
-  double wind_north = 0;
-  double drift_east = 0;
-  double drift_north = 0;
-  double ground_height = 0;
-
-  for (const auto &contributor : cluster.contributors)
-    cluster.geometry.reference_altitude =
-      std::max(cluster.geometry.reference_altitude,
-               contributor.source.ground_height);
-
-  const auto &first = cluster.contributors.front();
-  const GeoPoint projection_centre =
-    ProjectThermalCore(first.centre,
-                       cluster.geometry.reference_altitude -
-                         first.reference_altitude,
-                       first.drift_per_meter);
-  const FlatProjection projection(projection_centre);
-  FlatPoint reference_location(0, 0);
-
-  for (const auto &contributor : cluster.contributors) {
-    if (contributor.active) {
-      ++active_count;
-      active_lift += contributor.latest_climb_rate;
-    }
-
-    historical_lift += contributor.encounter_average;
-    min_altitude = std::min(min_altitude, contributor.min_altitude);
-    max_altitude = std::max(max_altitude, contributor.max_altitude);
-    geometry_lift += contributor.geometry_lift_rate;
-    AddVector(contributor.geometry_wind, wind_east, wind_north);
-    AddVector(contributor.drift_per_meter, drift_east, drift_north);
-    reference_location += projection.ProjectFloat(
-      ProjectThermalCore(
-        contributor.centre,
-        cluster.geometry.reference_altitude -
-          contributor.reference_altitude,
-        contributor.drift_per_meter));
-    ground_height += contributor.source.ground_height;
-  }
-
-  const double count = cluster.contributors.size();
-  cluster.geometry.reference_location =
-    projection.Unproject(reference_location * (1. / count));
-  cluster.geometry.lift_rate = geometry_lift / count;
-  cluster.geometry.wind =
-    AverageVector(wind_east, wind_north, count);
-  cluster.geometry.drift_per_meter =
-    AverageVector(drift_east, drift_north, count);
-  cluster.geometry.ground_height = ground_height / count;
-  cluster.geometry.max_observed_altitude = max_altitude;
+  const auto aggregate = FlarmThermal::CalculateClusterAggregate(
+    cluster.contributors, cluster.geometry.reference_altitude);
+  cluster.geometry = aggregate.geometry;
 
   auto &published = output.AllocateSource(cluster.serial);
   published.cluster_serial = cluster.serial;
   published.aircraft_count = cluster.contributors.size();
-  published.active_aircraft_count = active_count;
-  published.min_observed_altitude = min_altitude;
-  published.max_observed_altitude = max_altitude;
+  published.active_aircraft_count = aggregate.active_count;
+  published.min_observed_altitude = aggregate.min_altitude;
+  published.max_observed_altitude = aggregate.max_altitude;
   published.first_seen = cluster.first_seen;
   published.last_seen = cluster.last_seen;
-  published.active = active_count > 0;
+  published.active = aggregate.active_count > 0;
 
   published.reference_location = cluster.geometry.reference_location;
   published.reference_altitude = cluster.geometry.reference_altitude;
@@ -517,9 +291,7 @@ FlarmThermalComputer::RecomputeCluster(ClusterState &cluster,
     published.reference_location,
     published.thermal.ground_height - published.reference_altitude,
     published.drift_per_meter);
-  published.thermal.lift_rate = active_count > 0
-    ? active_lift / active_count
-    : historical_lift / count;
+  published.thermal.lift_rate = aggregate.reporting_lift_rate;
   published.thermal.time = cluster.last_seen;
 
   LogDebug("FLARM thermal cluster={} ground={:.6f},{:.6f} "
@@ -535,7 +307,7 @@ FlarmThermalComputer::RecomputeCluster(ClusterState &cluster,
            published.geometry_lift_rate,
            published.geometry_wind.norm,
            published.geometry_wind.bearing.Degrees(),
-           active_count, cluster.contributors.size());
+           aggregate.active_count, cluster.contributors.size());
 }
 
 void
@@ -577,19 +349,6 @@ FlarmThermalComputer::UpdateLifecycle(TimeStamp now,
   }
 }
 
-static bool
-ClustersOverlapInTime(TimeStamp a_first, TimeStamp a_last,
-                      TimeStamp b_first, TimeStamp b_last) noexcept
-{
-  if (a_last < b_first)
-    return b_first - a_last <= GROUPING_TIME_GAP;
-
-  if (b_last < a_first)
-    return a_first - b_last <= GROUPING_TIME_GAP;
-
-  return true;
-}
-
 void
 FlarmThermalComputer::MergeClusters(unsigned keep_index,
                                     unsigned remove_index,
@@ -613,38 +372,7 @@ FlarmThermalComputer::MergeClusters(unsigned keep_index,
       continue;
     }
 
-    const double combined_climb_duration =
-      existing->encounter_duration + incoming.encounter_duration;
-    if (combined_climb_duration > 0) {
-      existing->climb_integral += incoming.climb_integral;
-      existing->encounter_duration = combined_climb_duration;
-      existing->encounter_average =
-        existing->climb_integral / combined_climb_duration;
-    } else {
-      existing->encounter_average =
-        (existing->encounter_average + incoming.encounter_average) * 0.5;
-    }
-
-    existing->min_altitude = std::min(existing->min_altitude,
-                                      incoming.min_altitude);
-    existing->max_altitude = std::max(existing->max_altitude,
-                                      incoming.max_altitude);
-
-    existing->first_seen = std::min(existing->first_seen,
-                                    incoming.first_seen);
-    if (incoming.last_seen > existing->last_seen) {
-      existing->last_seen = incoming.last_seen;
-      existing->last_value_time = incoming.last_value_time;
-      existing->latest_climb_rate = incoming.latest_climb_rate;
-      existing->last_climb_rate = incoming.last_climb_rate;
-      existing->centre = incoming.centre;
-      existing->source = incoming.source;
-      existing->reference_altitude = incoming.reference_altitude;
-      existing->geometry_lift_rate = incoming.geometry_lift_rate;
-      existing->geometry_wind = incoming.geometry_wind;
-      existing->drift_per_meter = incoming.drift_per_meter;
-    }
-    existing->active = existing->active || incoming.active;
+    *existing = FlarmThermal::MergeContributors(*existing, incoming);
   }
 
   keep.first_seen = std::min(keep.first_seen, remove.first_seen);
@@ -652,9 +380,22 @@ FlarmThermalComputer::MergeClusters(unsigned keep_index,
   keep.closed = keep.closed && remove.closed;
   keep.recent = !keep.closed && (keep.recent || remove.recent);
 
-  for (auto &target : targets)
-    if (target.assigned_cluster_serial == remove_serial)
+  for (auto &target : targets) {
+    if (target.assigned_cluster_serial != remove_serial)
+      continue;
+
+    bool retained = false;
+    for (const auto &contributor : keep.contributors)
+      if (contributor.id == target.id) {
+        retained = true;
+        break;
+      }
+
+    if (retained)
       target.assigned_cluster_serial = keep.serial;
+    else
+      ResetTargetWindow(target);
+  }
 
   const auto keep_serial = keep.serial;
   output.RemoveBySerial(remove_serial);
@@ -665,60 +406,29 @@ FlarmThermalComputer::MergeClusters(unsigned keep_index,
 
 void
 FlarmThermalComputer::MergeCompatibleClusters(
-    TimeStamp now,
     TrafficThermalInfo &output) noexcept
 {
-  (void)now;
-
   bool merged;
   do {
     merged = false;
     for (unsigned i = 0; i < clusters.size() && !merged; ++i) {
-      if (clusters[i].closed)
-        continue;
-
-      const auto &a = clusters[i].geometry;
-      if (!a.reference_location.IsValid() ||
-          !(a.lift_rate > 0))
-        continue;
-
       for (unsigned j = i + 1; j < clusters.size(); ++j) {
-        if (clusters[j].closed ||
-            !ClustersOverlapInTime(clusters[i].first_seen,
-                                   clusters[i].last_seen,
-                                   clusters[j].first_seen,
-                                   clusters[j].last_seen))
-          continue;
-
-        const auto &b = clusters[j].geometry;
-        if (!b.reference_location.IsValid() ||
-            !(b.lift_rate > 0))
-          continue;
-
-        const double comparison_altitude = std::max({
-          a.ground_height,
-          b.ground_height,
-          a.max_observed_altitude,
-          b.max_observed_altitude,
-          a.reference_altitude,
-          b.reference_altitude,
-        });
-        const auto a_location = ProjectThermalCore(
-          a.reference_location,
-          comparison_altitude - a.reference_altitude,
-          a.drift_per_meter);
-        const auto b_location = ProjectThermalCore(
-          b.reference_location,
-          comparison_altitude - b.reference_altitude,
-          b.drift_per_meter);
-        if (a_location.DistanceS(b_location) > GROUPING_RADIUS)
+        const FlarmThermal::ClusterView a{
+          clusters[i].geometry, clusters[i].first_seen,
+          clusters[i].last_seen, clusters[i].closed,
+        };
+        const FlarmThermal::ClusterView b{
+          clusters[j].geometry, clusters[j].first_seen,
+          clusters[j].last_seen, clusters[j].closed,
+        };
+        if (!FlarmThermal::AreClustersCompatible(a, b))
           continue;
 
         unsigned keep = i;
         unsigned remove = j;
-        if (clusters[j].first_seen < clusters[i].first_seen ||
-            (clusters[j].first_seen == clusters[i].first_seen &&
-             clusters[j].serial < clusters[i].serial)) {
+        if (!FlarmThermal::IsFirstClusterPreferred(
+              clusters[i].first_seen, clusters[i].serial,
+              clusters[j].first_seen, clusters[j].serial)) {
           keep = j;
           remove = i;
         }
@@ -735,8 +445,8 @@ void
 FlarmThermalComputer::Process(const TrafficList &traffic, TimeStamp now,
                                double ownship_altitude,
                                const SpeedVector &wind,
-                              const RasterTerrain *terrain,
-                              TrafficThermalInfo &output) noexcept
+                               const RasterTerrain *terrain,
+                               TrafficThermalInfo &output) noexcept
 {
   if (!now.IsDefined() || !std::isfinite(ownship_altitude) ||
       (last_process_time.IsDefined() && now < last_process_time)) {
@@ -750,7 +460,7 @@ FlarmThermalComputer::Process(const TrafficList &traffic, TimeStamp now,
 
   for (const auto &item : traffic.list) {
     TargetState *target = FindTarget(item.id);
-    if (!IsEligibleTraffic(item)) {
+    if (!FlarmThermal::IsEligibleTraffic(item)) {
       if (target != nullptr)
         DeactivateTarget(*target, "ineligible-traffic");
       continue;
@@ -825,35 +535,16 @@ FlarmThermalComputer::Process(const TrafficList &traffic, TimeStamp now,
 
     Candidate candidate;
     const auto candidate_result =
-      BuildCandidate(*target, item, geometry_lift_rate, geometry_wind,
-                     terrain, candidate);
+      FlarmThermal::BuildCandidate(target->samples, target->id,
+                                   target->qualified, item,
+                                   geometry_lift_rate, geometry_wind,
+                                   terrain, candidate);
     if (candidate_result != CandidateResult::QUALIFIED) {
       if (target->qualified &&
           candidate_result != CandidateResult::INCOMPLETE_WINDOW) {
-        const char *reason = "incomplete-window";
-        switch (candidate_result) {
-        case CandidateResult::WEAK_LIFT:
-          reason = "weak-lift";
-          break;
-        case CandidateResult::INSUFFICIENT_TURN:
-          reason = "insufficient-turn";
-          break;
-        case CandidateResult::LEFT_CIRCLE:
-          reason = "left-circle";
-          break;
-        case CandidateResult::EXCESSIVE_RADIUS:
-          reason = "excessive-radius";
-          break;
-        case CandidateResult::INVALID_SOURCE:
-          reason = "invalid-source";
-          break;
-        case CandidateResult::QUALIFIED:
-        case CandidateResult::INCOMPLETE_WINDOW:
-          reason = "incomplete-window";
-          break;
-        }
-
-        DeactivateTarget(*target, reason);
+        DeactivateTarget(
+          *target,
+          FlarmThermal::GetCandidateResultName(candidate_result));
       }
 
       continue;
@@ -872,7 +563,7 @@ FlarmThermalComputer::Process(const TrafficList &traffic, TimeStamp now,
   }
 
   UpdateLifecycle(now, output);
-  MergeCompatibleClusters(now, output);
+  MergeCompatibleClusters(output);
 
   for (unsigned i = 0; i < targets.size();) {
     if (targets[i].last_seen.IsDefined() &&
