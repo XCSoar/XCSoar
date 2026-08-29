@@ -154,18 +154,31 @@ std::vector<GeoBitmap::TileData> wanted;
 unsigned consecutive_failures = 0;
 
 /**
- * How long ago the frame on the map was taken, or a negative duration
+ * How old the oldest tile still on the map is, or a negative duration
  * when nothing is on the map.
+ *
+ * Measured against the tiles actually drawn rather than the frame we
+ * are currently chasing: while a new frame is being fetched the two
+ * differ, and it is what the pilot can see that has to be judged.
  */
 [[gnu::pure]]
 std::chrono::system_clock::duration
-BlockAge() noexcept
+DisplayedAge() noexcept
 {
   const auto now = BrokenDateTime::NowUTC();
-  if (!block_frame.IsPlausible() || !now.IsPlausible())
+  if (!now.IsPlausible())
     return std::chrono::system_clock::duration{-1};
 
-  return now - block_frame;
+  auto oldest = std::chrono::system_clock::duration{-1};
+  for (const auto &slot : slots) {
+    if (!slot.IsUsed() || !slot.frame_time.IsPlausible())
+      continue;
+
+    if (const auto age = now - slot.frame_time; age > oldest)
+      oldest = age;
+  }
+
+  return oldest;
 }
 
 /** Drop one slot, if the map is still showing what we put there. */
@@ -217,22 +230,36 @@ ReleaseUnwantedSlots() noexcept
     if (!slot.IsUsed())
       continue;
 
-    const bool keep = slot.frame_time == block_frame &&
-      std::any_of(wanted.begin(), wanted.end(),
-                  [&slot](const auto &t){
-                    return EUMETView::IsSameTile(slot.tile, t);
-                  });
+    /* only the position decides.  A tile showing an older frame stays
+       on the map until the new frame's tile for the same ground has
+       actually arrived, so a newly published frame does not blank the
+       overlay for the length of twenty-five requests.  Letting it go
+       stale is bounded by the age limit below, which is the mechanism
+       for that; this one is only about which ground is covered. */
+    const bool keep = std::any_of(wanted.begin(), wanted.end(),
+                                  [&slot](const auto &t){
+                                    return EUMETView::IsSameTile(slot.tile, t);
+                                  });
 
     if (!keep)
       ReleaseSlot(i);
   }
 }
 
-/** The first slot not holding a tile we want to keep. */
+/**
+ * Where to put a tile: the slot already covering that ground, so a
+ * newer frame replaces the older picture of it rather than piling a
+ * second overlay on top and exhausting the slots; otherwise any free
+ * one.
+ */
 [[gnu::pure]]
 int
-FindFreeSlot() noexcept
+FindSlotFor(const GeoBitmap::TileData &tile) noexcept
 {
+  for (unsigned i = 0; i < slots.size(); ++i)
+    if (slots[i].IsUsed() && EUMETView::IsSameTile(slots[i].tile, tile))
+      return int(i);
+
   for (unsigned i = 0; i < slots.size(); ++i)
     if (!slots[i].IsUsed())
       return int(i);
@@ -248,7 +275,7 @@ InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
   if (map == nullptr || path == nullptr)
     return;
 
-  const int index = FindFreeSlot();
+  const int index = FindSlotFor(tile);
   if (index < 0)
     return;
 
@@ -354,7 +381,7 @@ SatelliteDownloadGlue::OnTimer() noexcept
     /* no page is showing the imagery */
     return;
 
-  const auto age = BlockAge();
+  const auto age = DisplayedAge();
   if (age >= std::chrono::system_clock::duration::zero() &&
       age > std::chrono::minutes{
         EUMETView::GetLayer(active_layer).max_age_minutes}) {
