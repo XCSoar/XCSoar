@@ -295,6 +295,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
 
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::XCTHERM:
+  case PageLayout::Overlay::RADAR:
 #ifndef HAVE_EDL
   case PageLayout::Overlay::EDL:
 #endif
@@ -336,6 +337,7 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
       break;
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::XCTHERM:
+    case PageLayout::Overlay::RADAR:
 #ifndef HAVE_EDL
     case PageLayout::Overlay::EDL:
 #endif
@@ -434,6 +436,9 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #ifdef HAVE_HTTP
     { PageLayout::Overlay::XCTHERM, "XC Therm" },
     { PageLayout::Overlay::SKYSIGHT, "SkySight" },
+#endif
+#ifdef HAVE_WEATHER_OVERLAY
+    { PageLayout::Overlay::RADAR, N_("Rain radar") },
 #endif
     nullptr
   };
