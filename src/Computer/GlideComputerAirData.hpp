@@ -9,6 +9,7 @@
 #include "CirclingComputer.hpp"
 #include "WaveComputer.hpp"
 #include "ThermalBandComputer.hpp"
+#include "FlarmThermalComputer.hpp"
 #include "Wind/Computer.hpp"
 #include "LiftDatabaseComputer.hpp"
 #include "AverageVarioComputer.hpp"
@@ -42,6 +43,7 @@ class GlideComputerAirData {
   LiftDatabaseComputer lift_database_computer;
 
   ThermalLocator thermallocator;
+  FlarmThermalComputer flarm_thermal_computer;
 
   AverageVarioComputer average_vario;
 

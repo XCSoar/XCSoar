@@ -15,6 +15,7 @@
 #include "Engine/ThermalBand/ThermalEncounterBand.hpp"
 #include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 #include "NMEA/ThermalLocator.hpp"
+#include "NMEA/TrafficThermal.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ClimbHistory.hpp"
 #include "TeamCode/TeamCode.hpp"
@@ -221,6 +222,9 @@ struct DerivedInfo:
   ThermalEncounterCollection thermal_encounter_collection;
 
   ThermalLocatorInfo thermal_locator;
+
+  /** Aggregated thermal sources inferred from physical FLARM traffic. */
+  TrafficThermalInfo traffic_thermals;
 
   /** Store of short term history of variables */
   TraceHistory trace_history;
