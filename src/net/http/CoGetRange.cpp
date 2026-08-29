@@ -7,7 +7,7 @@
 
 #include <fmt/format.h>
 
-#include <cassert>
+#include <limits>
 #include <stdexcept>
 
 namespace Net {
@@ -16,8 +16,16 @@ Co::Task<std::string>
 CoGetRange(CurlGlobal &curl, const char *url,
            uint_least64_t offset, std::size_t length)
 {
-  assert(url != nullptr);
-  assert(length > 0);
+  /* checked rather than asserted: this is a public entry point, and
+     an assertion would be compiled out of the builds that ship */
+  if (url == nullptr || *url == '\0')
+    throw std::invalid_argument("No URL to fetch");
+
+  if (length == 0)
+    throw std::invalid_argument("Empty byte range");
+
+  if (offset > std::numeric_limits<uint_least64_t>::max() - (length - 1))
+    throw std::invalid_argument("Byte range out of bounds");
 
   CurlEasy easy{url};
   Curl::Setup(easy);
