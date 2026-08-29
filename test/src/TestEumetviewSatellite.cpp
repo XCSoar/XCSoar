@@ -19,7 +19,7 @@ Contains(const std::string &haystack, const char *needle) noexcept
 
 int main()
 {
-  plan_tests(46);
+  plan_tests(47);
 
   const auto layers = EUMETView::GetLayers();
   ok1(!layers.empty());
@@ -158,6 +158,23 @@ int main()
   const auto polar_tiles = EUMETView::CollectTiles(polar);
   ok1(polar_tiles.size() <= EUMETView::TILE_COUNT);
   ok1(!polar_tiles.empty());
+
+  /* a position outside the grid must still name a tile inside it: the
+     cast of an out-of-range double to uint32_t is undefined, and a
+     GPS fix can be anything.  The grid is 2^zoom tiles per axis. */
+  const uint32_t per_axis = uint32_t{1} << EUMETView::TILE_ZOOM;
+  bool wild_stays_in_grid = true;
+  for (const auto &p : {GeoPoint{Angle::Degrees(180), Angle::Degrees(0)},
+                        GeoPoint{Angle::Degrees(-180), Angle::Degrees(0)},
+                        GeoPoint{Angle::Degrees(0), Angle::Degrees(89.9)},
+                        GeoPoint{Angle::Degrees(0), Angle::Degrees(-89.9)},
+                        GeoPoint{Angle::Degrees(180), Angle::Degrees(89.9)}}) {
+    const auto t = EUMETView::GetAircraftTile(p);
+    if (!t.IsValid() || t.x >= per_axis || t.y >= per_axis)
+      wild_stays_in_grid = false;
+  }
+
+  ok1(wild_stays_in_grid);
 
   /* longitude wraps, so a flight over the date line keeps a whole
      block instead of losing the half that fell off the edge */
