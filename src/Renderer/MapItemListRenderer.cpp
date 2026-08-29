@@ -271,20 +271,57 @@ Draw(Canvas &canvas, PixelRect rc,
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);
 
-  look.thermal_source_icon.Draw(canvas, pt);
+  const auto &icon = item.IsTraffic()
+    ? look.flarm_thermal_source_icon
+    : look.thermal_source_icon;
+  icon.Draw(canvas, pt);
 
   rc.left += line_height + text_padding;
 
-  row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
+  StaticString<128> title;
+  if (item.traffic) {
+    if (item.traffic->aircraft_count == 1)
+      title = _("FLARM thermal — 1 aircraft");
+    else
+      title.Format(_("FLARM thermal — %u aircraft"),
+                   item.traffic->aircraft_count);
+  } else
+    title = _("Thermal");
+  row_renderer.DrawFirstRow(canvas, rc, title);
 
   StaticString<256> buffer;
-  const auto timespan = ElapsedTimeOrZero(item.current_time, thermal.time);
+  if (item.traffic) {
+    const auto &traffic = *item.traffic;
+    const auto altitude_range = FormatUserAltitudeRange(
+      traffic.min_observed_altitude, traffic.max_observed_altitude);
+    if (traffic.active) {
+      buffer.Format(_("%s: %s - %s: %u - %s - %s: %s MSL"),
+                    _("Avg. lift"),
+                    FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                    _("Active"), traffic.active_aircraft_count,
+                    FormatLocalTimeHHMM(traffic.last_seen, utc_offset).c_str(),
+                    _("Observed altitude"), altitude_range.c_str());
+    } else {
+      const auto age = ElapsedTimeOrZero(item.current_time,
+                                         traffic.last_seen);
 
-  buffer.Format("%s: %s - left %s ago (%s)",
-                _("Avg. lift"),
-                FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
-                FormatTimespanSmart(timespan).c_str(),
-                FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+      buffer.Format(_("%s: %s - last seen %s ago (%s) - %s: %s MSL"),
+                    _("Avg. lift"),
+                    FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                    FormatTimespanSmart(age).c_str(),
+                    FormatLocalTimeHHMM(traffic.last_seen,
+                                        utc_offset).c_str(),
+                    _("Observed altitude"), altitude_range.c_str());
+    }
+  } else {
+    const auto timespan = ElapsedTimeOrZero(item.current_time, thermal.time);
+
+    buffer.Format("%s: %s - left %s ago (%s)",
+                  _("Avg. lift"),
+                  FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                  FormatTimespanSmart(timespan).c_str(),
+                  FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+  }
 
   row_renderer.DrawSecondRow(canvas, rc, buffer);
 }

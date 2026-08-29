@@ -9,6 +9,7 @@
 #include "FLARM/Id.hpp"
 #include "FLARM/Color.hpp"
 #include "NMEA/ThermalLocator.hpp"
+#include "NMEA/TrafficThermal.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Airspace/Ptr.hpp"
@@ -22,6 +23,7 @@
 #endif
 
 #include <chrono>
+#include <optional>
 
 enum class TaskPointType : uint8_t;
 
@@ -199,9 +201,49 @@ struct TrafficMapItem: public MapItem
 
 struct ThermalMapItem: public MapItem
 {
+  enum Provenance {
+    OWN_SHIP,
+    FLARM,
+    TIM,
+  };
+
+  struct TrafficDetails {
+    unsigned aircraft_count;
+    unsigned active_aircraft_count;
+    double min_observed_altitude;
+    double max_observed_altitude;
+    TimeStamp last_seen;
+    bool active;
+  };
+
   ThermalSource thermal;
   TimeStamp current_time;
+  Provenance provenance;
+  std::optional<TrafficDetails> traffic;
 
-  ThermalMapItem(const ThermalSource &_thermal, TimeStamp _current_time)
-    :MapItem(Type::THERMAL), thermal(_thermal), current_time(_current_time) {}
+  ThermalMapItem(const ThermalSource &_thermal, TimeStamp _current_time,
+                 Provenance _provenance=Provenance::OWN_SHIP)
+    :MapItem(Type::THERMAL), thermal(_thermal), current_time(_current_time),
+     provenance(_provenance), traffic(std::nullopt) {}
+
+  ThermalMapItem(const TrafficThermalSource &_thermal,
+                 TimeStamp _current_time)
+    :MapItem(Type::THERMAL), thermal(_thermal.thermal),
+     current_time(_current_time), provenance(Provenance::FLARM),
+     traffic(TrafficDetails{
+       _thermal.aircraft_count,
+       _thermal.active_aircraft_count,
+       _thermal.min_observed_altitude,
+       _thermal.max_observed_altitude,
+       _thermal.last_seen,
+       _thermal.active,
+     }) {}
+
+  [[nodiscard]] bool IsTraffic() const noexcept {
+    return provenance == Provenance::FLARM;
+  }
+
+  [[nodiscard]] TimeStamp GetSortTime() const noexcept {
+    return traffic ? traffic->last_seen : thermal.time;
+  }
 };
