@@ -94,7 +94,7 @@ TEST_NAMES = \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
-	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestFlarmThermalComputer TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase TestThermalProjection TestThermalDisplay \
@@ -739,6 +739,24 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 
+TEST_FLARM_THERMAL_COMPUTER_SOURCES = \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/FlarmThermalComputer.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
+	$(SRC)/MapWindow/ThermalDisplay.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/TrafficThermal.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmThermalComputer.cpp
+TEST_FLARM_THERMAL_COMPUTER_DEPENDS = FLARM GEO TIME MATH UTIL THREAD FMT
+$(eval $(call link-program,TestFlarmThermalComputer,TEST_FLARM_THERMAL_COMPUTER))
+
 TEST_CIRCLING_WIND_SOURCES = \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
@@ -1081,6 +1099,7 @@ TEST_THERMAL_DISPLAY_SOURCES = \
 	$(SRC)/MapWindow/ThermalDisplay.cpp \
 	$(SRC)/NMEA/ThermalProjection.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/TrafficThermal.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestThermalDisplay.cpp
 TEST_THERMAL_DISPLAY_DEPENDS = GEO MATH
