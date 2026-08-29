@@ -18,6 +18,7 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 struct TrafficList;
+struct TrafficThermalInfo;
 struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
@@ -53,6 +54,10 @@ public:
   void AddThermals(const ObservationDatabase &observations,
                    const MoreData &basic, const DerivedInfo &calculated,
                    const ComputerSettings &settings);
+
+  void AddTrafficThermals(const TrafficThermalInfo &thermals,
+                           const MoreData &basic,
+                           const DerivedInfo &calculated);
 
   void AddWeatherStations(NOAAStore &store);
 };

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
+#include "ThermalDisplay.hpp"
 #include "Items/List.hpp"
 #include "Items/Builder.hpp"
 #include "Items/OverlayMapItem.hpp"
@@ -63,13 +64,24 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                settings.airspace, basic,
                                calculated);
 
-  if (visible_projection.GetMapScale() <= 4000 && observations != nullptr)
+  if (ThermalDisplay::IsVisible(visible_projection.GetMapScale()) &&
+      observations != nullptr)
     builder.AddThermals(*observations, basic, calculated,
                         computer_settings);
+
+  if (ThermalDisplay::IsTrafficVisible(settings.show_flarm_on_map,
+                                       visible_projection.GetMapScale()))
+    builder.AddTrafficThermals(calculated.traffic_thermals, basic,
+                               calculated);
 
   if (waypoints)
     builder.AddWaypoints(*waypoints, route_planner, basic, calculated,
                          computer_settings);
+
+  if (ThermalDisplay::IsTrafficVisible(settings.show_flarm_on_map,
+                                       visible_projection.GetMapScale()))
+    builder.AddTrafficThermals(calculated.traffic_thermals, basic,
+                               calculated);
 
 #ifdef HAVE_NOAA
   if (noaa_store)

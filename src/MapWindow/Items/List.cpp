@@ -6,7 +6,6 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Weather/Features.hpp"
-#include "Geo/GeoBounds.hpp"
 
 static bool
 CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
@@ -59,9 +58,20 @@ CompareMapItems(const MapItem *a, const MapItem *b)
     return ((const TrafficMapItem *)a)->id <
            ((const TrafficMapItem *)b)->id;
 
-  case MapItem::Type::THERMAL:
-    return ((const ThermalMapItem *)a)->thermal.received >
-           ((const ThermalMapItem *)b)->thermal.received;
+  case MapItem::Type::THERMAL: {
+    const auto &thermal_a = *(const ThermalMapItem *)a;
+    const auto &thermal_b = *(const ThermalMapItem *)b;
+
+    /* Preserve the previous type ordering: standard sources precede FLARM
+       sources, with each group ordered from newest to oldest. */
+    if (thermal_a.IsTraffic() != thermal_b.IsTraffic())
+      return !thermal_a.IsTraffic();
+
+    if (thermal_a.IsTraffic())
+      return thermal_a.traffic->last_seen > thermal_b.traffic->last_seen;
+
+    return thermal_a.thermal.received > thermal_b.thermal.received;
+  }
 
   case MapItem::Type::AIRSPACE:
     return AirspaceAltitude::SortHighest(
@@ -92,27 +102,4 @@ void
 MapItemList::Sort()
 {
   std::sort(begin(), end(), CompareMapItems);
-}
-
-std::size_t
-MapItemList::FindSmallestAirspace() const noexcept
-{
-  std::size_t smallest = size();
-  double smallest_extent = 0;
-
-  for (std::size_t i = 0; i < size(); ++i) {
-    const MapItem &item = *(*this)[i];
-    if (item.type != MapItem::Type::AIRSPACE)
-      continue;
-
-    const GeoBounds bounds =
-      static_cast<const AirspaceMapItem &>(item).airspace->GetGeoBounds();
-    const double extent = bounds.GetGeoWidth() * bounds.GetGeoHeight();
-    if (smallest == size() || extent < smallest_extent) {
-      smallest = i;
-      smallest_extent = extent;
-    }
-  }
-
-  return smallest;
 }

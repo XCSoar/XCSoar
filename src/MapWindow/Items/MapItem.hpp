@@ -9,6 +9,7 @@
 #include "FLARM/Id.hpp"
 #include "FLARM/Color.hpp"
 #include "Engine/Observation/Store.hpp"
+#include "NMEA/TrafficThermal.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Airspace/Ptr.hpp"
@@ -22,6 +23,7 @@
 #endif
 
 #include <chrono>
+#include <optional>
 
 enum class TaskPointType : uint8_t;
 
@@ -199,8 +201,40 @@ struct TrafficMapItem: public MapItem
 
 struct ThermalMapItem: public MapItem
 {
+  struct TrafficDetails {
+    unsigned aircraft_count;
+    unsigned active_aircraft_count;
+    double min_observed_altitude;
+    double max_observed_altitude;
+    TimeStamp last_seen;
+    bool active;
+  };
+
   ObservedThermal thermal;
+  TimeStamp current_time;
+  std::optional<TrafficDetails> traffic;
 
   ThermalMapItem(const ObservedThermal &_thermal)
-    :MapItem(Type::THERMAL), thermal(_thermal) {}
+    :MapItem(Type::THERMAL), thermal(_thermal),
+     current_time(TimeStamp::Undefined()), traffic(std::nullopt) {}
+
+  ThermalMapItem(const TrafficThermalSource &_thermal,
+                 TimeStamp _current_time)
+    :MapItem(Type::THERMAL), thermal{.location = _thermal.thermal.location,
+                             .ground_height = _thermal.thermal.ground_height,
+                             .lift_rate = _thermal.thermal.lift_rate},
+     current_time(_current_time),
+     traffic(TrafficDetails{
+       _thermal.aircraft_count,
+       _thermal.active_aircraft_count,
+       _thermal.min_observed_altitude,
+       _thermal.max_observed_altitude,
+       _thermal.last_seen,
+       _thermal.active,
+     }) {}
+
+  [[nodiscard]] bool IsTraffic() const noexcept {
+    return traffic.has_value();
+  }
+
 };

@@ -86,3 +86,20 @@ MapItemListBuilder::AddThermals(const ObservationDatabase &observations,
       list.append(new ThermalMapItem(row));
   }
 }
+
+void
+MapItemListBuilder::AddTrafficThermals(const TrafficThermalInfo &thermals,
+                                       const MoreData &basic,
+                                       const DerivedInfo &calculated)
+{
+  (void)calculated;
+
+  AddDriftedThermals(
+    list, location, range, thermals.sources,
+    [&basic](const TrafficThermalSource &source) {
+      return ThermalDisplay::GetLocation(source, basic.nav_altitude);
+    },
+    [&basic](const TrafficThermalSource &source) {
+      return new ThermalMapItem(source, basic.time);
+    });
+}
