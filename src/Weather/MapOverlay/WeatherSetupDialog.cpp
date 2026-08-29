@@ -26,8 +26,12 @@ ShowWeatherSetupDialog() noexcept
   case PageLayout::Overlay::SKYSIGHT:
     page = "skysight";
     break;
-  case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::SATELLITE:
+    /* the imagery is listed on the Overlay tab, so open it there
+       rather than wherever the dialog was left last */
+    page = "overlay";
+    break;
+  case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
