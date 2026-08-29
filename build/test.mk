@@ -661,6 +661,7 @@ TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 
 TEST_FLARM_THERMAL_COMPUTER_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Computer/FlarmThermalComputer.cpp \
 	$(SRC)/Computer/ThermalBase.cpp \
@@ -675,7 +676,7 @@ TEST_FLARM_THERMAL_COMPUTER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmThermalComputer.cpp
-TEST_FLARM_THERMAL_COMPUTER_DEPENDS = FLARM GEO TIME MATH UTIL THREAD FMT
+TEST_FLARM_THERMAL_COMPUTER_DEPENDS = FLARM LIBNMEA GEO TIME MATH UTIL THREAD FMT
 $(eval $(call link-program,TestFlarmThermalComputer,TEST_FLARM_THERMAL_COMPUTER))
 
 TEST_CIRCLING_WIND_SOURCES = \
