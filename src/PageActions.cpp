@@ -179,7 +179,7 @@ void
 PageActions::LeaveRadarOverlay() noexcept
 {
 #ifdef HAVE_WEATHER_OVERLAY
-  OPERA::ClearMapOverlay();
+  OPERA::DeactivatePageOverlay();
 #endif
 }
 
