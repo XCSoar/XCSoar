@@ -4,8 +4,7 @@
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/ThermalProjection.hpp"
 #include "Geo/SpeedVector.hpp"
-
-#include <algorithm>
+#include "util/BoundedArray.hxx"
 
 void
 ThermalLocatorInfo::Clear() noexcept
@@ -16,22 +15,13 @@ ThermalLocatorInfo::Clear() noexcept
   sources.clear();
 }
 
-static constexpr bool
-CompareTime(const ThermalSource &a, const ThermalSource &b) noexcept
-{
-  return a.time < b.time;
-}
-
 ThermalSource &
 ThermalLocatorInfo::AllocateSource() noexcept
 {
-  if (!sources.full())
-    return sources.append();
-
-  auto oldest = std::min_element(sources.begin(), sources.end(),
-                                 CompareTime);
-  assert(oldest != sources.end());
-  return *oldest;
+  return BoundedArray::AppendOrReplaceOldest(
+    sources, [](const ThermalSource &source) noexcept {
+      return source.time;
+    }).value;
 }
 
 GeoPoint
