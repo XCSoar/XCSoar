@@ -112,6 +112,7 @@ struct PageLayout
     EDL,
     XCTHERM,
     SKYSIGHT,
+    RADAR,
 
     MAX
   } overlay;
@@ -261,6 +262,13 @@ struct PageLayout
   {
     return IsMapMain() && overlay == Overlay::SKYSIGHT &&
       !skysight_overlay.empty();
+  }
+
+  [[gnu::const]]
+  constexpr bool
+  UsesRadarOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::RADAR;
   }
 
   [[gnu::const]]
