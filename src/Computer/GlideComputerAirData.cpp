@@ -42,6 +42,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
   calculated.trace_history.circling_available.Clear();
 
   thermallocator.Reset();
+  flarm_thermal_computer.Reset(calculated.traffic_thermals);
 
   gr_computer.Reset();
 
@@ -91,6 +92,15 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                         basic, calculated);
   wind_computer.Select(settings.wind, basic, calculated);
   wind_computer.ComputeHeadWind(basic, calculated);
+
+  if (basic.time_available && basic.location_available &&
+      basic.NavAltitudeAvailable())
+    flarm_thermal_computer.Process(basic.flarm.traffic, basic.time,
+                                   basic.nav_altitude,
+                                   calculated.GetWindOrZero(), terrain,
+                                   calculated.traffic_thermals);
+  else
+    flarm_thermal_computer.Reset(calculated.traffic_thermals);
 
   if (basic.location_available)
     thermallocator.Process(calculated.circling && calculated.turning,
