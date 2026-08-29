@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
+#include "ThermalDisplay.hpp"
 #include "Look/MapLook.hpp"
 #include "ui/canvas/Icon.hpp"
 #ifdef HAVE_SKYLINES_TRACKING
@@ -12,25 +13,22 @@
 #include "net/client/tim/Thermal.hpp"
 #endif
 
-template<typename T>
+template<typename Sources, typename GetLocation>
 static void
-DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
-                   const WindowProjection &projection,
-                   const T &sources,
-                   const double aircraft_altitude,
-                   const SpeedVector &wind) noexcept
+DrawDriftedThermalIcons(Canvas &canvas, const MaskedIcon &icon,
+                        const WindowProjection &projection,
+                        const Sources &sources,
+                        const double aircraft_altitude,
+                        GetLocation get_location) noexcept
 {
+  if (!ThermalDisplay::IsVisible(projection.GetMapScale()))
+    return;
+
   for (const auto &source : sources) {
-    // find height difference
-    if (aircraft_altitude < source.ground_height)
+    const GeoPoint location = get_location(source, aircraft_altitude);
+    if (!location.IsValid())
       continue;
 
-    // draw thermal at location it would be at the glider's height
-    GeoPoint location = wind.IsNonZero()
-      ? source.CalculateAdjustedLocation(aircraft_altitude, wind)
-      : source.location;
-
-    // draw if it is in the field of view
     if (auto p = projection.GeoToScreenIfVisible(location))
       icon.Draw(canvas, *p);
   }
@@ -43,15 +41,20 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
   const DerivedInfo &calculated = Calculated();
   const ThermalLocatorInfo &thermal_locator = calculated.thermal_locator;
 
-  if (render_projection.GetMapScale() > 4000)
+  if (!ThermalDisplay::IsVisible(render_projection.GetMapScale()))
     return;
 
   // draw only at close map scales in non-circling mode
 
-  DrawThermalSources(canvas, look.thermal_source_icon, render_projection,
-                     thermal_locator.sources, basic.nav_altitude,
-                     calculated.wind_available
-                     ? calculated.wind : SpeedVector::Zero());
+  const SpeedVector wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+  DrawDriftedThermalIcons(
+    canvas, look.thermal_source_icon, render_projection,
+    thermal_locator.sources, basic.nav_altitude,
+    [&wind](const ThermalSource &source, double aircraft_altitude) {
+      return ThermalDisplay::GetLocation(source, aircraft_altitude, wind);
+    });
 
 #ifdef HAVE_SKYLINES_TRACKING
   const auto &cloud_settings = GetComputerSettings().tracking.cloud;
