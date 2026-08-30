@@ -95,6 +95,12 @@ struct TaskBehaviour {
   /** Compensation factor for risk at low altitude */
   double risk_gamma;
 
+  /**
+   * MacCready value (m/s) applied to the task polar at startup for
+   * speed-to-fly and task calculations.
+   */
+  double task_mc;
+
   /** Safety MacCready value (m/s) used by abort task */
   double safety_mc;
 

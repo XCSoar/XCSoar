@@ -125,8 +125,8 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
           this);
 
   static constexpr StaticEnumChoice reach_polar_list[] = {
-    { RoutePlannerConfig::Polar::TASK, N_("Task"),
-      N_("Uses task glide polar.") },
+    { RoutePlannerConfig::Polar::TASK, N_("Task MC"),
+      N_("Uses task MacCready value.") },
     { RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
       N_("Uses safety MacCready value.") },
     nullptr

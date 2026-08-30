@@ -42,8 +42,8 @@ Version 7.46 - not yet released
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
 * glide computer
-  - start MacCready at zero instead of copying Safety MC, so reach
-    safety no longer sets speed-to-fly on startup #2552
+  - add a Task MC setting for the MacCready used at startup, instead
+    of copying Safety MC into speed-to-fly #2552
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
@@ -82,10 +82,12 @@ Version 7.46 - not yet released
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - rename Reach polar Task to Task MC, matching Safety MC
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe the Task MC setting on the Safety Factors page
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can

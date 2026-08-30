@@ -15,6 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "ActionInterface.hpp"
 
 enum ControlIndex {
   ArrivalHeight,
@@ -22,6 +23,7 @@ enum ControlIndex {
   AlternateMode,
   PolarDegradation,
   AutoBugs,
+  TaskMC,
   SafetyMC,
   RiskFactor,
   TurnBackMarker,
@@ -89,6 +91,16 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
              settings_computer.polar.auto_bugs);
   SetExpertRow(AutoBugs);
 
+  AddFloat(_("Task MC"),
+           _("The MacCready setting used at startup for speed-to-fly "
+             "and task calculations. Safety MC is used only for reach, "
+             "abort and landing arrival."),
+           "%.1f %s", "%.1f",
+           0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
+           false, UnitGroup::VERTICAL_SPEED, task_behaviour.task_mc);
+  DataFieldFloat &task_mc = (DataFieldFloat &)GetDataField(TaskMC);
+  task_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
   AddFloat(_("Safety MC"),
            _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
            "%.1f %s", "%.1f",
@@ -145,6 +157,13 @@ SafetyFactorsConfigPanel::Save(bool &_changed) noexcept
 
   if (SaveValue(AutoBugs, settings_computer.polar.auto_bugs)) {
     Profile::Set(ProfileKeys::AutoBugs, settings_computer.polar.auto_bugs);
+    changed = true;
+  }
+
+  if (SaveValue(TaskMC, UnitGroup::VERTICAL_SPEED, task_behaviour.task_mc)) {
+    Profile::Set(ProfileKeys::TaskMacCready,
+                 iround(task_behaviour.task_mc * 10));
+    ActionInterface::SetMacCready(task_behaviour.task_mc);
     changed = true;
   }
 
