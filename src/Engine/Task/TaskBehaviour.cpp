@@ -36,7 +36,7 @@ TaskBehaviour::SetDefaults()
   calc_glide_required = true;
   goto_nonlandable = true;
   risk_gamma = 0;
-  task_mc = 0;
+  task_mc = 0.5;
   safety_mc = 0.5;
   safety_height_arrival = 300;
   task_type_default = TaskFactoryType::RACING;
