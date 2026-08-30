@@ -220,9 +220,11 @@ struct ThermalMapItem: public MapItem
 
   ThermalMapItem(const TrafficThermalSource &_thermal,
                  TimeStamp _current_time)
-    :MapItem(Type::THERMAL), thermal{.location = _thermal.thermal.location,
-                             .ground_height = _thermal.thermal.ground_height,
-                             .lift_rate = _thermal.thermal.lift_rate},
+    :MapItem(Type::THERMAL), thermal{
+       .location = _thermal.thermal.location,
+       .ground_height = _thermal.thermal.ground_height,
+       .lift_rate = _thermal.thermal.lift_rate,
+     },
      current_time(_current_time),
      traffic(TrafficDetails{
        _thermal.aircraft_count,
@@ -236,5 +238,4 @@ struct ThermalMapItem: public MapItem
   [[nodiscard]] bool IsTraffic() const noexcept {
     return traffic.has_value();
   }
-
 };

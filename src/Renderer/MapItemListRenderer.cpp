@@ -323,36 +323,34 @@ Draw(Canvas &canvas, PixelRect rc,
       traffic.min_observed_altitude, traffic.max_observed_altitude);
     if (traffic.active) {
       buffer.Format(_("%s: %s - %s: %u - %s - %s: %s MSL"),
-                    _("Avg. lift"),
+                    _("Avg."),
                     FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                     _("Active"), traffic.active_aircraft_count,
                     FormatLocalTimeHHMM(traffic.last_seen, utc_offset).c_str(),
-                    _("Observed altitude"), altitude_range.c_str());
+                    _("Alt."), altitude_range.c_str());
     } else {
       const auto age = ElapsedTimeOrZero(item.current_time,
                                          traffic.last_seen);
 
-      buffer.Format(_("%s: %s - last seen %s ago (%s) - %s: %s MSL"),
-                    _("Avg. lift"),
+      buffer.Format(_("%s: %s - %s ago - %s: %s MSL"),
+                    _("Avg."),
                     FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                     FormatTimespanSmart(age).c_str(),
-                    FormatLocalTimeHHMM(traffic.last_seen,
-                                        utc_offset).c_str(),
-                    _("Observed altitude"), altitude_range.c_str());
+                    _("Alt."), altitude_range.c_str());
     }
   } else {
     auto age = std::chrono::steady_clock::now() - thermal.received;
     if (age.count() < 0)
       age = {};
-  
+
     const auto age_s =
       std::chrono::duration_cast<std::chrono::seconds>(age);
     StaticString<64> ago;
     ago.Format(_("%s ago"), FormatTimespanSmart(age_s).c_str());
-  
+
     buffer.Format("%s, %s: %s - %s",
                   OriginLabel(thermal.origin),
-                  _("Avg. lift"),
+                  _("Avg."),
                   FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                   ago.c_str());
   }
