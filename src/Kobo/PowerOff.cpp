@@ -21,6 +21,8 @@
 #include "Model.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/PowerInfo.hpp"
+#include "DataFilePath.hpp"
+#include "LocalPath.hpp"
 #include "util/StringStrip.hxx"
 #include "util/UTF8.hpp"
 
@@ -91,8 +93,9 @@ DrawUserText(Canvas &canvas, PixelRect &rc) noexcept
   std::array<char, 2048> buffer;
 
   std::string_view text;
+  const auto path = LocalPath("kobo/poweroff.txt");
 
-  if (UniqueFileDescriptor fd; fd.OpenReadOnly("/mnt/onboard/XCSoarData/kobo/poweroff.txt")) {
+  if (UniqueFileDescriptor fd; fd.OpenReadOnly(path.c_str())) {
     ssize_t nbytes = fd.Read(std::as_writable_bytes(std::span{buffer}));
     if (nbytes <= 0)
       return;
@@ -133,7 +136,7 @@ DrawUserText(Canvas &canvas, PixelRect &rc) noexcept
 static void
 DrawFlights(Canvas &canvas, const PixelRect &rc)
 try {
-  FileLineReaderA file(Path("/mnt/onboard/XCSoarData/flights.log"));
+  FileLineReaderA file(ResolveLogsDataPath("flights.log"));
 
   FlightListRenderer renderer(normal_font, bold_font);
 
@@ -159,6 +162,8 @@ Draw(Canvas &canvas)
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
+  InitialiseDataPath();
+
   /* enable FreeType anti-aliasing, because we don't use dithering in
      this program */
   FreeType::mono = false;
