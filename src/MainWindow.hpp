@@ -26,6 +26,7 @@ class Menu;
 class MenuBar;
 class GlueMapWindow;
 class Widget;
+class WindowWidget;
 class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
@@ -81,10 +82,10 @@ class MainWindow : public UI::SingleWindow {
   Widget *bottom_widget = nullptr;
 
   /**
-   * A transient #Widget that is shown between the map and the configured
-   * bottom widget.
+   * A transient #Widget that is shown over the bottom of a custom main
+   * widget, or between the map and the configured bottom widget.
    */
-  Widget *bottom_banner_widget = nullptr;
+  WindowWidget *bottom_banner_widget = nullptr;
 
   /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
@@ -240,7 +241,7 @@ protected:
   void KillBottomWidget() noexcept;
 
   bool HaveBottomBannerWidget() const noexcept {
-    return bottom_banner_widget != nullptr && widget == nullptr;
+    return bottom_banner_widget != nullptr;
   }
 
   /**
@@ -249,6 +250,9 @@ protected:
    * bottom banner Widget.
    */
   void KillBottomBannerWidget() noexcept;
+
+  /** Keep the banner above the active page and other sibling overlays. */
+  void RaiseBottomBannerWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -306,6 +310,15 @@ private:
    */
   [[gnu::pure]]
   PixelRect GetMapAreaRect() const noexcept;
+
+  /**
+   * Return the banner rectangle for the active main content.  Custom pages
+   * use the full client area, shortened only by bottom menu buttons.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomBannerRect() const noexcept;
+
+  void LayoutBottomBannerWidget() noexcept;
 
   /**
    * Move top/bottom widgets and the map into the area returned by
@@ -496,11 +509,13 @@ public:
   void SetBottomWidget(Widget *widget) noexcept;
 
   /**
-   * Show a transient #Widget below the map and above the configured bottom
-   * widget.  This replaces (deletes) the previous bottom banner, if any.
-   * To disable this feature, call this method with widget==nullptr.
+   * Show a transient #Widget at the bottom of the active main content.  On
+   * map pages, space is reserved for it above the configured bottom widget;
+   * on custom pages, it overlaps the custom main widget.  This replaces
+   * (deletes) the previous bottom banner, if any.  To disable this feature,
+   * call this method with widget==nullptr.
    */
-  void SetBottomBannerWidget(Widget *widget) noexcept;
+  void SetBottomBannerWidget(WindowWidget *widget) noexcept;
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted

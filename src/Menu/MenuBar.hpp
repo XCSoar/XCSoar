@@ -53,6 +53,13 @@ public:
   void OnResize(const PixelRect &rc);
 
   /**
+   * Shorten @p rc so it ends above visible menu buttons that touch its
+   * bottom edge.  Buttons elsewhere on the screen do not affect it.
+   */
+  [[gnu::pure]]
+  PixelRect GetRemainingRectAboveBottomButtons(PixelRect rc) const noexcept;
+
+  /**
    * Portrait: screen/6, capped at
    * Layout::GetInflightButtonHeight() for gloved use on tall phones.
    * Landscape: screen/5, uncapped.
