@@ -3,10 +3,41 @@
 
 #include "ThermalDisplay.hpp"
 
+#include "Look/MapLook.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/TrafficThermal.hpp"
 
 namespace ThermalDisplay {
+
+TrafficLiftCategory
+ClassifyTrafficLift(double lift_rate, double mac_cready) noexcept
+{
+  if (lift_rate > mac_cready)
+    return TrafficLiftCategory::BETTER;
+
+  if (lift_rate >= mac_cready * 0.9)
+    return TrafficLiftCategory::WITHIN_TEN_PERCENT;
+
+  return TrafficLiftCategory::WORSE;
+}
+
+const MaskedIcon &
+GetFlarmThermalIcon(const MapLook &look, double lift_rate,
+                    double mac_cready) noexcept
+{
+  switch (ClassifyTrafficLift(lift_rate, mac_cready)) {
+  case TrafficLiftCategory::BETTER:
+    return look.flarm_thermal_source_green_icon;
+
+  case TrafficLiftCategory::WITHIN_TEN_PERCENT:
+    return look.flarm_thermal_source_blue_icon;
+
+  case TrafficLiftCategory::WORSE:
+    return look.flarm_thermal_source_icon;
+  }
+
+  return look.flarm_thermal_source_icon;
+}
 
 GeoPoint
 GetLocation(const ThermalSource &source, double aircraft_altitude,

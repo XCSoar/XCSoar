@@ -10,13 +10,22 @@
 int
 main()
 {
-  plan_tests(9);
+  plan_tests(13);
 
   ok1(ThermalDisplay::IsVisible(4000));
   ok1(!ThermalDisplay::IsVisible(4000.001));
   ok1(ThermalDisplay::IsTrafficVisible(true, 4000));
   ok1(!ThermalDisplay::IsTrafficVisible(true, 4001));
   ok1(!ThermalDisplay::IsTrafficVisible(false, 1000));
+
+  ok1(ThermalDisplay::ClassifyTrafficLift(2.1, 2) ==
+      ThermalDisplay::TrafficLiftCategory::BETTER);
+  ok1(ThermalDisplay::ClassifyTrafficLift(2, 2) ==
+      ThermalDisplay::TrafficLiftCategory::WITHIN_TEN_PERCENT);
+  ok1(ThermalDisplay::ClassifyTrafficLift(1.8, 2) ==
+      ThermalDisplay::TrafficLiftCategory::WITHIN_TEN_PERCENT);
+  ok1(ThermalDisplay::ClassifyTrafficLift(1.799, 2) ==
+      ThermalDisplay::TrafficLiftCategory::WORSE);
 
   const GeoPoint location{Angle::Degrees(7), Angle::Degrees(45)};
   ThermalSource source{};
