@@ -121,6 +121,9 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_VERSION))
     LogFormat("GL version: %s", s);
 
+  bool disable_mapbuffer = false;
+  bool disable_multi_draw = false;
+
   if (auto s = (const char *)glGetString(GL_RENDERER)) {
     LogFormat("GL renderer: %s", s);
 
@@ -134,6 +137,12 @@ OpenGL::SetupContext()
          Limit the maximum map scale to avoid triggering the bug.
          See https://github.com/XCSoar/XCSoar/issues/1235 */
       max_map_scale = 300000;
+      /* glMapBufferOES after glBufferData(..., nullptr) and
+         glMultiDrawElementsEXT SIGSEGV in libGLESv2_mtk (memcpy
+         from null).  Upload VBOs from client memory and draw
+         fills one polygon at a time. */
+      disable_mapbuffer = true;
+      disable_multi_draw = true;
     }
   }
 
@@ -169,6 +178,9 @@ OpenGL::SetupContext()
   }
 #endif
 
+  if (disable_mapbuffer)
+    mapbuffer = false;
+
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   if (IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
     GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
@@ -179,7 +191,17 @@ OpenGL::SetupContext()
     GLExt::multi_draw_arrays = nullptr;
     GLExt::multi_draw_elements = nullptr;
   }
+
+  if (disable_multi_draw) {
+    GLExt::multi_draw_arrays = nullptr;
+    GLExt::multi_draw_elements = nullptr;
+  }
 #endif
+
+  if (disable_mapbuffer || disable_multi_draw)
+    LogFormat("OpenGL: MapBuffer=%s MultiDrawElements=%s (GE8300)",
+              mapbuffer ? "on" : "off",
+              disable_multi_draw ? "off" : "on");
 
 #ifdef GL_EXT_discard_framebuffer
   if (IsExtensionSupported("GL_EXT_discard_framebuffer")) {

@@ -38,7 +38,8 @@ Version 7.46 - not yet released
     them, clip long roads to the map view, and keep recently seen
     shapes while panning
   - fix crash drawing dense topography fills at close zoom, including
-    devices that cannot map large OpenGL vertex buffers
+    devices that cannot map large OpenGL vertex buffers, and PowerVR
+    GPUs whose driver crashes in MapBuffer or MultiDrawElements
   - fix topography fills stretching across the map at some zoom levels
   - fix map fills and outlines (airspace, XC Therm, reach, FAI
     areas, weather overlays) vanishing when only partly on the map
