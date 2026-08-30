@@ -1,10 +1,23 @@
 # Third-Party Notices
 
+XCSoar itself is distributed under the GNU General Public License, version 2 or
+later; see COPYING.  This file collects the notices of third-party code that is
+embedded in the source tree or shipped with the binaries, and whose licences
+require their copyright and permission notices to be reproduced.
+
+Components are listed with the directory they occupy, so that the notice can be
+checked against the tree.
+
+
 ## ANGLE (Almost Native Graphics Layer Engine)
 
 XCSoar uses **ANGLE** to provide OpenGL ES where the platform has no
 native implementation: over Metal on macOS, over Direct3D 11 on
 Windows builds with ANGLE enabled.
+Not part of the source tree: it is fetched at build time and shipped with the
+binaries that use it.
+
+**Upstream:** [chromium.googlesource.com/angle/angle](https://chromium.googlesource.com/angle/angle)
 
 **License:** [BSD 3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
@@ -34,9 +47,16 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 ## CM4all libcommon
 
 XCSoar incorporates selected headers and sources derived from **CM4all libcommon**.
+Location in the tree: spread over `src/util/`, `src/net/`, `src/event/`, `src/io/`,
+`src/java/`, `src/lib/`, `src/time/`, `src/lua/`, `src/thread/`, `src/system/`,
+`src/json/`, `src/co/` and a few others; the files carry
+`SPDX-License-Identifier: BSD-2-Clause` and can be listed with
+
+    grep -rl "SPDX-License-Identifier: BSD-2-Clause" src/
 
 **Upstream:** [github.com/CM4all/libcommon](https://github.com/CM4all/libcommon)
 
@@ -68,3 +88,329 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+## GLM (OpenGL Mathematics)
+
+Header-only vector and matrix maths, used by the OpenGL renderer.
+Location in the tree: `lib/glm/` (git submodule)
+
+**Upstream:** [github.com/g-truc/glm](https://github.com/g-truc/glm)
+
+**License:** dual licensed under the Happy Bunny License (Modified MIT) and the
+MIT License; XCSoar takes the MIT option.  The licence text is in
+`lib/glm/manual.md`, the submodule ships no separate LICENSE file.
+
+Copyright (c) 2005 - G-Truc Creation
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+## IOIO
+
+Java library for talking to IOIO boards over USB or Bluetooth; compiled into
+the Android package.
+Location in the tree: `android/ioio/` (git submodule); the subset of files that
+is actually compiled is listed in `build/android.mk`.
+
+**Upstream:** [github.com/ytai/ioio](https://github.com/ytai/ioio), by way of the
+fork at [github.com/XCSoar/ioio](https://github.com/XCSoar/ioio)
+
+**License:** BSD 2-Clause, as stated in the file headers.  Note that
+`android/ioio/LICENSE` puts the repository as a whole under the Apache License
+2.0; the sources XCSoar compiles carry the notice below instead.  Five files
+under `android/ioio/IOIOLibCore/` bear no header of their own and fall under
+that repository licence.
+
+Copyright 2011, 2013, 2014, 2015 Ytai Ben-Tsvi. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are
+permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice, this list of
+      conditions and the following disclaimer.
+
+   2. Redistributions in binary form must reproduce the above copyright notice, this list
+      of conditions and the following disclaimer in the documentation and/or other materials
+      provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL ARSHAN POURSOHI OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The views and conclusions contained in the software and documentation are those of the
+authors and should not be interpreted as representing official policies, either expressed
+or implied.
+
+
+## JasPer (JPEG-2000 codec)
+
+Used for reading JPEG-2000 terrain and topography files.
+Location in the tree: `src/Terrain/jasper/`
+
+**Upstream:** [github.com/jasper-software/jasper](https://github.com/jasper-software/jasper)
+
+**License:** JasPer License Version 2.0
+
+JasPer License Version 2.0
+
+Copyright (c) 2001-2006 Michael David Adams
+Copyright (c) 1999-2000 Image Power, Inc.
+Copyright (c) 1999-2000 The University of British Columbia
+
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person (the
+"User") obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge,
+publish, distribute, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+1.  The above copyright notices and this permission notice (which
+includes the disclaimer below) shall be included in all copies or
+substantial portions of the Software.
+
+2.  The name of a copyright holder shall not be used to endorse or
+promote products derived from the Software without specific prior
+written permission.
+
+THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS
+LICENSE.  NO USE OF THE SOFTWARE IS AUTHORIZED HEREUNDER EXCEPT UNDER
+THIS DISCLAIMER.  THE SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS
+"AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS.  IN NO
+EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL
+INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING
+FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
+WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.  NO ASSURANCES ARE
+PROVIDED BY THE COPYRIGHT HOLDERS THAT THE SOFTWARE DOES NOT INFRINGE
+THE PATENT OR OTHER INTELLECTUAL PROPERTY RIGHTS OF ANY OTHER ENTITY.
+EACH COPYRIGHT HOLDER DISCLAIMS ANY LIABILITY TO THE USER FOR CLAIMS
+BROUGHT BY ANY OTHER ENTITY BASED ON INFRINGEMENT OF INTELLECTUAL
+PROPERTY RIGHTS OR OTHERWISE.  AS A CONDITION TO EXERCISING THE RIGHTS
+GRANTED HEREUNDER, EACH USER HEREBY ASSUMES SOLE RESPONSIBILITY TO SECURE
+ANY OTHER INTELLECTUAL PROPERTY RIGHTS NEEDED, IF ANY.  THE SOFTWARE
+IS NOT FAULT-TOLERANT AND IS NOT INTENDED FOR USE IN MISSION-CRITICAL
+SYSTEMS, SUCH AS THOSE USED IN THE OPERATION OF NUCLEAR FACILITIES,
+AIRCRAFT NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL
+SYSTEMS, DIRECT LIFE SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH
+THE FAILURE OF THE SOFTWARE OR SYSTEM COULD LEAD DIRECTLY TO DEATH,
+PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH
+RISK ACTIVITIES").  THE COPYRIGHT HOLDERS SPECIFICALLY DISCLAIM ANY
+EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR HIGH RISK ACTIVITIES.
+
+
+## MapServer
+
+The shapefile reader is taken from MapServer.  Despite the directory name, the
+files are MapServer sources (`Project: MapServer` in each header), not upstream
+shapelib.
+Location in the tree: `src/Topography/shapelib/`
+
+**Upstream:** [github.com/MapServer/MapServer](https://github.com/MapServer/MapServer),
+last synchronised with upstream 8.0.1
+
+**License:** MIT
+
+Copyright (c) 1996-2005 Regents of the University of Minnesota.
+Copyright (c) 1996-2008 Regents of the University of Minnesota. (`mapprimitive.c`)
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies of this Software or works derived from this Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+`mapsearch.c` additionally carries:
+
+    Copyright (c) 1970-2003, Wm. Randolph Franklin
+
+`mapstring.cpp` additionally carries:
+
+    Copyright (c) 1990, 1993 The Regents of the University of California
+    Copyright (c) 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+    Copyright (c) 2000-2004 University of Illinois Board of Trustees
+    Copyright (c) 2000-2005 Mark D. Roth
+
+
+## UsbSerial
+
+Driver library for USB-to-serial adapters (FTDI, CP210x, CH34x, PL2303, CDC);
+compiled into the Android package.
+Location in the tree: `android/UsbSerial/` (git submodule); the subset of files
+that is actually compiled is listed in `build/android.mk`.
+
+**Upstream:** [github.com/felHR85/UsbSerial](https://github.com/felHR85/UsbSerial),
+by way of the fork at
+[github.com/XCSoar/UsbSerial](https://github.com/XCSoar/UsbSerial)
+
+**License:** MIT
+
+Copyright (c) 2014 Felipe Herranz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+The glue that drives this library, `android/src/UsbSerialHelper.java` and
+`android/src/UsbSerialPort.java`, is XCSoar's own code and carries
+`SPDX-License-Identifier: GPL-2.0-or-later`.
+
+
+## zziplib
+
+Used for reading map files from ZIP archives.
+Location in the tree: `src/zzip/`
+
+**Upstream:** [github.com/gdraheim/zziplib](https://github.com/gdraheim/zziplib)
+
+**License:** dual LGPL / MPL, as stated in the file headers
+
+    Author:
+         Guido Draheim <guidod@gmx.de>
+         Tomi Ollila <Tomi.Ollila@iki.fi>
+
+    Copyright (c) Guido Draheim, use under copyleft (LGPL, MPL)
+
+Several files in this directory are XCSoar modifications and carry
+`SPDX-License-Identifier: GPL-2.0-or-later`.
+
+
+## XML parser
+
+Location in the tree: `src/XML/`
+
+**Upstream:** [applied-mathematics.net/tools/xmlParser.html](http://www.applied-mathematics.net/tools/xmlParser.html)
+
+Note that the upstream author has since relicensed: the version offered there
+today (2.44) is under the Aladdin Free Public License, which is not a free
+software licence.  The copy in this tree is version 1.08 and states the GNU
+Lesser General Public License 2.1 in its own header, quoted below.
+
+**License:** GNU Lesser General Public License, version 2.1
+
+    XML.c - implementation file for basic XML parser written in ANSI C++
+    for portability.  Version 1.08
+
+    Author: Frank Vanden Berghen
+    based on original implementation by Martyn C Brown
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License version 2.1 as
+    published by the Free Software Foundation.
+
+
+## Freescale MXC frame buffer header
+
+Kernel interface header used by the framebuffer backend on Kobo devices.
+Location in the tree: `src/ui/canvas/fb/mxcfb.h`
+
+**License:** GNU Lesser General Public License, version 2.1 or later
+
+    Copyright 2004-2011 Freescale Semiconductor, Inc. All Rights Reserved.
+
+    The code contained herein is licensed under the GNU Lesser General
+    Public License.  You may obtain a copy of the GNU Lesser General
+    Public License Version 2.1 or later at the following locations:
+
+    http://www.opensource.org/licenses/lgpl-license.html
+    http://www.gnu.org/copyleft/lgpl.html
+
+
+## libtap
+
+Test Anything Protocol harness, used by the unit tests only; not part of any
+shipped binary.
+Location in the tree: `test/src/tap.c`, `test/src/tap.h`
+
+**Upstream:** the original site (jc.ngo.org.uk) is gone; the code survives at
+[github.com/pozorvlak/libtap](https://github.com/pozorvlak/libtap), which carries
+the same copyright notice.
+
+**License:** BSD 2-Clause
+
+Copyright (c) 2004 Nik Clayton
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+
+
+## Volkslogger protocol code
+
+The Volkslogger driver is derived from code published by the device
+manufacturer and is distributed under XCSoar's own licence (see COPYING).
+Location in the tree: `src/Device/Driver/Volkslogger/`
+
+    Copyright (c): 2002 by Garrecht Ingenieurgesellschaft
