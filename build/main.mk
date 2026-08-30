@@ -643,6 +643,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/OPERA/RadarPageOverlay.cpp \
 	$(SRC)/Weather/EUMETView/Satellite.cpp \
 	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
+	$(SRC)/Weather/EUMETView/Enhance.cpp \
 	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp
 endif
 endif
