@@ -13,6 +13,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/TaskBehaviour.hpp"
 #include "Profile/Profile.hpp"
 #include "UIState.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -245,8 +246,8 @@ ActionInterface::OffsetManualMacCready(double offset, bool to_devices) noexcept
   auto mc = old_mc + offset;
   if (mc < 0)
     mc = 0;
-  else if (mc > 5)
-    mc = 5;
+  else if (mc > TaskBehaviour::TASK_MC_MAX)
+    mc = TaskBehaviour::TASK_MC_MAX;
 
   if (mc != old_mc)
     SetManualMacCready(mc, to_devices);

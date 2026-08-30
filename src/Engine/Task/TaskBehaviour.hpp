@@ -95,6 +95,24 @@ struct TaskBehaviour {
   /** Compensation factor for risk at low altitude */
   double risk_gamma;
 
+  /**
+   * Highest Task MC (m/s).  The ring, up and down, the task-status
+   * MacCready and the Startup Task MC setting all stop here.
+   */
+  static constexpr double TASK_MC_MAX = 5;
+
+  /**
+   * Highest Safety MC (m/s).  The Safety MC setting and abort up and
+   * down stop here.
+   */
+  static constexpr double SAFETY_MC_MAX = 10;
+
+  /**
+   * MacCready value (m/s) applied to the task polar at startup for
+   * speed-to-fly and task calculations.
+   */
+  double task_mc;
+
   /** Safety MacCready value (m/s) used by abort task */
   double safety_mc;
 

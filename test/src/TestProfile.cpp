@@ -9,6 +9,8 @@
 #include "Profile/Map.hpp"
 #include "Profile/WeatherProfile.hpp"
 #include "Profile/InfoBoxConfig.hpp"
+#include "Profile/TaskProfile.hpp"
+#include "Engine/Task/TaskBehaviour.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Weather/Settings.hpp"
 #include "io/FileLineReader.hpp"
@@ -421,11 +423,31 @@ TestInfoBoxCustomText()
   }
 }
 
+static void
+TestMacCreadyLimits()
+{
+  TaskBehaviour settings{};
+
+  ProfileMap map;
+  map.Set(ProfileKeys::TaskMacCready, 80u);
+  map.Set(ProfileKeys::SafetyMacCready, 150u);
+  Profile::Load(map, settings);
+  ok1(equals(settings.task_mc, TaskBehaviour::TASK_MC_MAX));
+  ok1(equals(settings.safety_mc, TaskBehaviour::SAFETY_MC_MAX));
+
+  map.Set(ProfileKeys::TaskMacCready, 5u);
+  map.Set(ProfileKeys::SafetyMacCready, 32u);
+  Profile::Load(map, settings);
+  ok1(equals(settings.task_mc, 0.5));
+  ok1(equals(settings.safety_mc, 3.2));
+}
+
 int main()
 try {
   plan_tests(50
              + 5 + 5 + 4
              + 15
+             + 4
 #ifdef HAVE_HTTP
              + 8
 #endif
@@ -437,6 +459,7 @@ try {
   TestMigration();
   TestWeatherPageCursorRoundTrip();
   TestInfoBoxCustomText();
+  TestMacCreadyLimits();
   TestSaveBeforeLoad();
   TestLoadThenSave();
   TestFailedLoadThenSave();

@@ -7,6 +7,8 @@
 #include "Keys.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+#include <algorithm>
+
 namespace Profile {
   static void Load(const ProfileMap &map, GlideSettings &settings);
   static void Load(const ProfileMap &map, TaskStartMargins &settings);
@@ -79,8 +81,13 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
   if (map.Get(ProfileKeys::RiskGamma, Temp))
     settings.risk_gamma = Temp / 10.;
 
+  if (map.Get(ProfileKeys::TaskMacCready, Temp))
+    settings.task_mc = std::clamp(Temp / 10.,
+                                  0., TaskBehaviour::TASK_MC_MAX);
+
   if (map.Get(ProfileKeys::SafetyMacCready, Temp))
-    settings.safety_mc = Temp / 10.;
+    settings.safety_mc = std::clamp(Temp / 10.,
+                                    0., TaskBehaviour::SAFETY_MC_MAX);
 
   map.Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
   map.GetEnum(ProfileKeys::TaskType, settings.task_type_default);
