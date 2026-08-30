@@ -6,10 +6,13 @@
 class ProfileMap;
 struct PageLayout;
 struct PageSettings;
+struct PageSettingOverrides;
 
 namespace Profile {
   void Load(const ProfileMap &map, PageSettings &settings);
 
   void Save(ProfileMap &map, const PageLayout &page, unsigned i);
+  void Save(ProfileMap &map, const PageSettingOverrides &overrides,
+            unsigned i);
   void Save(ProfileMap &map, const PageSettings &settings);
 };

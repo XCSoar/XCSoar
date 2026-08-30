@@ -362,7 +362,11 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
      can fail even when the projection is unchanged.  Use
      CompareExact (not tolerant Compare) so a tiny pan cannot skip
      the IsInside coverage check. */
-  if (!quantisation_improved &&
+  const bool settings_unchanged =
+    have_generated && settings == last_generated_settings;
+
+  if (settings_unchanged &&
+      !quantisation_improved &&
       compare_projection.CompareExact(map_projection) &&
       terrain_serial == terrain.GetSerial() &&
       sunazimuth.CompareRoughly(last_sun_azimuth)) {
@@ -387,7 +391,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       return false;
   }
 
-  if (!quantisation_improved &&
+  if (settings_unchanged &&
+      !quantisation_improved &&
       old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain.GetSerial() &&
@@ -446,6 +451,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 last_contour_spacing);
 
   last_projection_scale = map_projection.GetScale();
+  last_generated_settings = settings;
+  have_generated = true;
 
   return true;
 }

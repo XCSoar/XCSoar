@@ -6,6 +6,7 @@
 #include "Form/Control.hpp"
 #include "ui/dim/Rect.hpp"
 
+#include <functional>
 #include <string>
 
 struct DialogLook;
@@ -47,6 +48,22 @@ public:
 
   bool dragging = false, pressed = false;
 
+  /**
+   * When true, a click on the caption focuses/selects the row without
+   * opening the editor; a click on the value still begins editing.
+   */
+  bool caption_click_selects = false;
+
+  /**
+   * When true, the caption is drawn with Quick Menu focus colours
+   * (#DialogLook::focused), independent of keyboard focus — so touch
+   * selection for Delete stays visible.
+   */
+  bool caption_selected = false;
+
+  /** Optional callback after a caption-select click. */
+  std::function<void()> caption_selected_callback;
+
 public:
   /**
    * Constructor of the WndProperty
@@ -84,6 +101,24 @@ public:
   void SetReadOnly(bool _read_only=true) noexcept {
     read_only = _read_only;
   }
+
+  /**
+   * If enabled, clicking the caption selects the control (focus)
+   * without opening the value editor.  @p on_selected is invoked
+   * after focus is set (may be empty).
+   */
+  void SetCaptionClickSelects(bool enabled,
+                              std::function<void()> on_selected = {}) noexcept {
+    caption_click_selects = enabled;
+    caption_selected_callback = std::move(on_selected);
+  }
+
+  /**
+   * Highlight the caption with Quick Menu focus colours
+   * (#DialogLook::focused). Independent of #HasCursorKeys focus
+   * painting.
+   */
+  void SetCaptionSelected(bool selected) noexcept;
 
   [[gnu::pure]]
   bool IsReadOnly() const noexcept {
@@ -168,4 +203,7 @@ private:
   int DecValue() noexcept;
 
   void UpdateLayout() noexcept;
+
+  [[gnu::pure]]
+  bool IsPointInCaption(PixelPoint p) const noexcept;
 };

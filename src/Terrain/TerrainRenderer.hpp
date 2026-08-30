@@ -29,6 +29,14 @@ protected:
   double last_projection_scale = 0;
   unsigned last_contour_spacing = 0;
 
+  /**
+   * Settings used to build the cached terrain image.  OpenGL may reuse
+   * that image when the projection is unchanged; without this, ramp /
+   * contrast / contour changes would not repaint until pan or zoom.
+   */
+  TerrainRendererSettings last_generated_settings{};
+  bool have_generated = false;
+
   RasterRenderer raster_renderer;
 
 public:
@@ -46,6 +54,7 @@ public:
     raster_renderer.Invalidate();
 #endif
     compare_projection.Clear();
+    have_generated = false;
   }
 
 public:

@@ -3,13 +3,21 @@
 
 #include "PagesConfigPanel.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/DataField/ComboList.hpp"
 #include "Look/DialogLook.hpp"
+#include "util/StaticArray.hxx"
+#include "util/Compiler.h"
+#include "util/StringFormat.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "PageActions.hpp"
+#include "PageSetting.hpp"
+#include "PageSettingDescriptor.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
 #include "Profile/Current.hpp"
@@ -27,6 +35,7 @@
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
 
@@ -34,10 +43,143 @@
 #include "Weather/SkySight/SkySightClient.hpp"
 #endif
 
+#include <cassert>
+
 /* this macro exists in the WIN32 API */
 #ifdef DELETE
 #undef DELETE
 #endif
+
+static constexpr unsigned CHOICE_GLOBAL = 0xffff;
+
+class PageCustomSettingsWidget;
+
+static void
+ShowPageCustomSettingsDialog(PageSettingOverrides &overrides) noexcept;
+
+/**
+ * Hosts a scrollable custom-settings form and can remeasure after rows
+ * are shown or hidden.
+ */
+class PageCustomSettingsHost final : public NullWidget {
+  std::unique_ptr<VScrollWidget> scroll;
+  PageCustomSettingsWidget *form = nullptr;
+  PixelRect position{};
+  bool visible = false;
+
+public:
+  PageCustomSettingsHost(const DialogLook &look,
+                         PageSettingOverrides &overrides) noexcept;
+
+  void RefreshLayout() noexcept {
+    if (visible)
+      scroll->Move(position);
+  }
+
+  PageCustomSettingsWidget &GetForm() noexcept {
+    return *form;
+  }
+
+  PixelSize GetMinimumSize() const noexcept override {
+    return scroll->GetMinimumSize();
+  }
+
+  PixelSize GetMaximumSize() const noexcept override {
+    return scroll->GetMaximumSize();
+  }
+
+  void Initialise(ContainerWindow &parent,
+                  const PixelRect &rc) noexcept override {
+    position = rc;
+    scroll->Initialise(parent, rc);
+  }
+
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
+    position = rc;
+    scroll->Prepare(parent, rc);
+  }
+
+  void Unprepare() noexcept override {
+    scroll->Unprepare();
+  }
+
+  bool Save(bool &changed) noexcept override {
+    return scroll->Save(changed);
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    position = rc;
+    visible = true;
+    scroll->Show(rc);
+  }
+
+  void Hide() noexcept override {
+    visible = false;
+    scroll->Hide();
+  }
+
+  void Move(const PixelRect &rc) noexcept override {
+    position = rc;
+    scroll->Move(rc);
+  }
+
+  bool SetFocus() noexcept override {
+    return scroll->SetFocus();
+  }
+
+  bool HasFocus() const noexcept override {
+    return scroll->HasFocus();
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    return scroll->KeyPress(key_code);
+  }
+};
+
+class PageCustomSettingsWidget final
+  : public RowFormWidget, private DataFieldListener {
+  PageSettingOverrides &overrides;
+  PageCustomSettingsHost *host = nullptr;
+  Button *add_button = nullptr;
+  Button *delete_button = nullptr;
+  int selected_control = -1;
+
+  void FillControl(PageSettingId id, unsigned control) noexcept;
+  void SyncRows() noexcept;
+  void UpdateActionButtons() noexcept;
+  void OnAddClicked() noexcept;
+  void OnDeleteClicked() noexcept;
+  void SelectControl(unsigned control) noexcept;
+
+public:
+  PageCustomSettingsWidget(const DialogLook &_look,
+                           PageSettingOverrides &_overrides) noexcept
+    :RowFormWidget(_look), overrides(_overrides) {}
+
+  void SetHost(PageCustomSettingsHost &_host) noexcept {
+    host = &_host;
+  }
+
+  void SetActionButtons(Button &_add, Button &_delete) noexcept {
+    add_button = &_add;
+    delete_button = &_delete;
+    UpdateActionButtons();
+  }
+
+  void AddClicked() noexcept {
+    OnAddClicked();
+  }
+
+  void DeleteClicked() noexcept {
+    OnDeleteClicked();
+  }
+
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+
+private:
+  void OnModified(DataField &df) noexcept override;
+};
 
 class PageLayoutEditWidget final
   : public RowFormWidget, private DataFieldListener {
@@ -54,25 +196,31 @@ private:
     BOTTOM,
     OVERLAY,
     OVERLAY_DETAIL,
+    CUSTOM_SETTINGS,
   };
 
   static constexpr unsigned IBP_NONE = 0x7000;
   static constexpr unsigned IBP_AUTO = 0x7001;
 
   PageLayout value;
+  PageSettingOverrides *overrides = nullptr;
+  unsigned page_index = 0;
 
   Listener &listener;
 
   void UpdateOverlayControls() noexcept;
   void FillOverlayDetailControl() noexcept;
   void ApplyValueToForm() noexcept;
+  void UpdateCustomSettingsButton() noexcept;
+  void OnCustomSettingsClicked() noexcept;
 
 public:
   PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
     :RowFormWidget(_look), value(PageLayout::Default()),
      listener(_listener) {}
 
-  void SetValue(const PageLayout &_value);
+  void SetValue(unsigned index, const PageLayout &_value,
+                PageSettingOverrides &_overrides);
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -116,6 +264,7 @@ public:
       if (n < PageSettings::MAX_PAGES) {
         auto &page = settings.pages[n];
         page = PageLayout::Default();
+        settings.overrides[n].Clear();
         GetList().SetLength(n + 1);
         GetList().SetCursorIndex(n);
       }
@@ -128,12 +277,17 @@ public:
         std::copy(settings.pages.begin() + cursor + 1,
                   settings.pages.begin() + n,
                   settings.pages.begin() + cursor);
+        std::copy(settings.overrides.begin() + cursor + 1,
+                  settings.overrides.begin() + n,
+                  settings.overrides.begin() + cursor);
+        settings.overrides[n - 1].Clear();
         GetList().SetLength(n - 1);
 
         if (cursor == n - 1)
           GetList().SetCursorIndex(cursor - 1);
         else
-          editor->SetValue(settings.pages[cursor]);
+          editor->SetValue(cursor, settings.pages[cursor],
+                           settings.overrides[cursor]);
       }
     });
 
@@ -141,6 +295,8 @@ public:
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor > 0) {
         std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
+        std::swap(settings.overrides[cursor],
+                  settings.overrides[cursor - 1]);
         GetList().SetCursorIndex(cursor - 1);
       }
     });
@@ -150,6 +306,8 @@ public:
       const unsigned cursor = GetList().GetCursorIndex();
       if (cursor + 1 < n) {
         std::swap(settings.pages[cursor], settings.pages[cursor + 1]);
+        std::swap(settings.overrides[cursor],
+                  settings.overrides[cursor + 1]);
         GetList().SetCursorIndex(cursor + 1);
       }
     });
@@ -455,11 +613,19 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
   GetControl(OVERLAY_DETAIL).GetDataField()->EnableItemHelp(true);
   FillOverlayDetailControl();
   UpdateOverlayControls();
+
+  AddButton(_("Custom settings"), [this](){
+    OnCustomSettingsClicked();
+  });
+  UpdateCustomSettingsButton();
 }
 
 void
-PageLayoutEditWidget::SetValue(const PageLayout &_value)
+PageLayoutEditWidget::SetValue(unsigned index, const PageLayout &_value,
+                               PageSettingOverrides &_overrides)
 {
+  page_index = index;
+  overrides = &_overrides;
   value = _value;
   value.Normalise();
 
@@ -482,6 +648,239 @@ PageLayoutEditWidget::SetValue(const PageLayout &_value)
 
   FillOverlayDetailControl();
   UpdateOverlayControls();
+  UpdateCustomSettingsButton();
+}
+
+void
+PageLayoutEditWidget::UpdateCustomSettingsButton() noexcept
+{
+  StaticString<64> caption;
+  const unsigned n = overrides != nullptr ? overrides->n_items : 0;
+  if (n == 0)
+    caption = _("Custom settings");
+  else
+    caption.Format("%s (%u)", _("Custom settings"), n);
+
+  auto &button = (Button &)GetRow(CUSTOM_SETTINGS);
+  button.SetCaption(caption);
+}
+
+void
+PageLayoutEditWidget::OnCustomSettingsClicked() noexcept
+{
+  if (overrides == nullptr)
+    return;
+
+  ShowPageCustomSettingsDialog(*overrides);
+  UpdateCustomSettingsButton();
+}
+
+void
+PageCustomSettingsWidget::FillControl(PageSettingId id,
+                                      unsigned control) noexcept
+{
+  auto &df = (DataFieldEnum &)GetDataField(control);
+  df.ClearChoices();
+  df.AddChoice(CHOICE_GLOBAL, _("Global setting"));
+
+  const auto &desc = PageSettingRegistry::Get(id);
+  if (desc.type == PageSettingType::INTEGER) {
+    char label[16];
+    for (int v = desc.int_min; v <= desc.int_max; v += desc.int_step) {
+      StringFormat(label, sizeof(label), "%d %%", v);
+      df.AddChoice(unsigned(v), label);
+    }
+  } else {
+    assert(desc.choices != nullptr);
+    for (const StaticEnumChoice *c = desc.choices;
+         c->display_string != nullptr; ++c)
+      df.AddChoice(c->id, gettext(c->display_string), nullptr,
+                   c->help != nullptr ? gettext(c->help) : nullptr);
+  }
+
+  unsigned selected = CHOICE_GLOBAL;
+  if (const int *v = overrides.FindValue(id); v != nullptr &&
+      *v != PageSettingOverrides::INHERIT)
+    selected = unsigned(*v);
+
+  df.SetValue(selected);
+  GetControl(control).RefreshDisplay();
+}
+
+void
+PageCustomSettingsWidget::UpdateActionButtons() noexcept
+{
+  if (add_button != nullptr) {
+    bool can_add = false;
+    for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i)
+      if (!overrides.Contains(PageSettingId(i))) {
+        can_add = true;
+        break;
+      }
+    add_button->SetEnabled(can_add);
+  }
+
+  if (delete_button != nullptr)
+    delete_button->SetEnabled(selected_control >= 0 &&
+                              overrides.Contains(PageSettingId(selected_control)));
+}
+
+void
+PageCustomSettingsWidget::SelectControl(unsigned control) noexcept
+{
+  if (selected_control >= 0 &&
+      unsigned(selected_control) != control)
+    GetControl(unsigned(selected_control)).SetCaptionSelected(false);
+
+  selected_control = int(control);
+  GetControl(control).SetCaptionSelected(true);
+  GetControl(control).SetFocus();
+  UpdateActionButtons();
+}
+
+void
+PageCustomSettingsWidget::SyncRows() noexcept
+{
+  for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i) {
+    const auto id = PageSettingId(i);
+    const bool present = overrides.Contains(id);
+    SetRowAvailable(i, present);
+    if (present)
+      FillControl(id, i);
+    GetControl(i).SetCaptionSelected(false);
+  }
+
+  if (selected_control >= 0 &&
+      !overrides.Contains(PageSettingId(selected_control)))
+    selected_control = -1;
+
+  UpdateLayout();
+  if (host != nullptr)
+    host->RefreshLayout();
+
+  UpdateActionButtons();
+
+  if (selected_control >= 0) {
+    auto &control = GetControl(unsigned(selected_control));
+    control.SetCaptionSelected(true);
+    control.SetFocus();
+  }
+}
+
+void
+PageCustomSettingsWidget::OnAddClicked() noexcept
+{
+  ComboList list;
+  StaticArray<PageSettingId, unsigned(PageSettingId::COUNT)> ids;
+  for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i) {
+    const auto id = PageSettingId(i);
+    if (overrides.Contains(id))
+      continue;
+    const auto &desc = PageSettingRegistry::Get(id);
+    list.Append(ids.size(), gettext(desc.label));
+    ids.append(id);
+  }
+
+  if (list.empty())
+    return;
+
+  const int result = ComboPicker(_("Add"), list, nullptr);
+  if (result < 0 || unsigned(result) >= ids.size())
+    return;
+
+  const auto id = ids[result];
+  overrides.Add(id, PageSettingOverrides::INHERIT);
+  selected_control = int(id);
+  SyncRows();
+}
+
+void
+PageCustomSettingsWidget::OnDeleteClicked() noexcept
+{
+  if (selected_control < 0)
+    return;
+
+  const auto id = PageSettingId(selected_control);
+  if (!overrides.Contains(id))
+    return;
+
+  overrides.Remove(id);
+  selected_control = -1;
+  SyncRows();
+}
+
+void
+PageCustomSettingsWidget::Prepare(ContainerWindow &parent,
+                                  const PixelRect &rc) noexcept
+{
+  RowFormWidget::Prepare(parent, rc);
+
+  for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i) {
+    const auto &desc = PageSettingRegistry::Get(i);
+    AddEnum(gettext(desc.label), gettext(desc.help), this);
+    auto &control = GetControl(i);
+    control.GetDataField()->EnableItemHelp(true);
+    control.SetCaptionClickSelects(true, [this, i](){
+      SelectControl(i);
+    });
+    SetRowAvailable(i, false);
+  }
+
+  SyncRows();
+}
+
+void
+PageCustomSettingsWidget::OnModified(DataField &df) noexcept
+{
+  for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i) {
+    if (&df != &GetDataField(i))
+      continue;
+
+    SelectControl(i);
+
+    const auto id = PageSettingId(i);
+    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
+    const unsigned choice = dfe.GetValue();
+    if (choice == CHOICE_GLOBAL)
+      overrides.SetValue(id, PageSettingOverrides::INHERIT);
+    else
+      overrides.SetValue(id, int(choice));
+    return;
+  }
+
+  gcc_unreachable();
+}
+
+static void
+ShowPageCustomSettingsDialog(PageSettingOverrides &overrides) noexcept
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, _("Custom settings"));
+
+  auto host = std::make_unique<PageCustomSettingsHost>(look, overrides);
+  auto &form = host->GetForm();
+
+  dialog.FinishPreliminary(std::move(host));
+  Button *add = dialog.AddButton(_("Add"), [&form](){
+    form.AddClicked();
+  });
+  Button *del = dialog.AddButton(_("Delete"), [&form](){
+    form.DeleteClicked();
+  });
+  form.SetActionButtons(*add, *del);
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+}
+
+PageCustomSettingsHost::PageCustomSettingsHost(const DialogLook &look,
+                                               PageSettingOverrides &overrides) noexcept
+{
+  auto form_widget =
+    std::make_unique<PageCustomSettingsWidget>(look, overrides);
+  form = form_widget.get();
+  scroll = std::make_unique<VScrollWidget>(std::move(form_widget), look);
+  form->SetHost(*this);
 }
 
 void
@@ -601,9 +1000,8 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
       }
 #endif
     }
-  } else {
+  } else
     gcc_unreachable();
-  }
 
   value.Normalise();
   ApplyValueToForm();
@@ -629,7 +1027,8 @@ PageListWidget::Initialise(ContainerWindow &parent,
 void
 PageListWidget::Show(const PixelRect &rc) noexcept
 {
-  editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
+  const unsigned i = GetList().GetCursorIndex();
+  editor->SetValue(i, settings.pages[i], settings.overrides[i]);
 
   ListWidget::Show(rc);
 }
@@ -643,6 +1042,8 @@ PageListWidget::Save(bool &_changed) noexcept
   std::fill(settings.pages.begin() + settings.n_pages,
             settings.pages.end(),
             PageLayout::Undefined());
+  for (unsigned i = settings.n_pages; i < PageSettings::MAX_PAGES; ++i)
+    settings.overrides[i].Clear();
 
   for (unsigned i = 0; i < settings.n_pages; ++i)
     settings.pages[i].Normalise();
@@ -653,6 +1054,11 @@ PageListWidget::Save(bool &_changed) noexcept
     const PageLayout &src = settings.pages[i];
     if (src != dest) {
       Profile::Save(Profile::map, src, i);
+      changed = true;
+    }
+
+    if (settings.overrides[i] != _settings.overrides[i]) {
+      Profile::Save(Profile::map, settings.overrides[i], i);
       changed = true;
     }
   }
@@ -688,7 +1094,7 @@ PageListWidget::OnCursorMoved[[maybe_unused]] (unsigned idx) noexcept
 {
   UpdateButtons();
 
-  editor->SetValue(settings.pages[idx]);
+  editor->SetValue(idx, settings.pages[idx], settings.overrides[idx]);
 }
 
 void
@@ -705,7 +1111,7 @@ PageListWidget::OnModified(const PageLayout &new_value) noexcept
 
   if (i == 0 && !new_value.IsDefined()) {
     /* refuse to delete the first page (kludge) */
-    editor->SetValue(settings.pages[i]);
+    editor->SetValue(i, settings.pages[i], settings.overrides[i]);
     return;
   }
 

@@ -2,10 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "PageActions.hpp"
+#include "PageSetting.hpp"
 #include "UIActions.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
+#include "LogFile.hpp"
 #include "MainWindow.hpp"
 #include "util/ScopeExit.hxx"
 #include "CrossSection/CrossSectionWidget.hpp"
@@ -53,6 +55,12 @@ namespace PageActions {
    * Restore the map zoom afte switching to a configured page.
    */
   static void RestoreMapZoom();
+
+  /**
+   * Reload registered Map Display settings from the global profile,
+   * then apply sparse per-page overrides for the current page.
+   */
+  static void ApplyPageDisplaySettings() noexcept;
 
   /**
    * Loads the layout without updating current page information in
@@ -342,6 +350,9 @@ PageActions::LeavePage()
 {
   PagesState &state = CommonInterface::SetUIState().pages;
 
+  LogFmt("perPage: LeavePage index={} special={}",
+         state.current_index, state.special_page.IsDefined());
+
   LeaveWeatherOverlayPage(GetActiveLayout());
 
   if (state.special_page.IsDefined())
@@ -354,6 +365,8 @@ PageActions::LeavePage()
     page.cruise_scale = map_settings.cruise_scale;
     page.circling_scale = map_settings.circling_scale;
     page.auto_zoom_enabled = map_settings.auto_zoom_enabled;
+    LogFmt("perPage:   zoom snapshot cruise={} circling={} auto_zoom={}",
+           page.cruise_scale, page.circling_scale, page.auto_zoom_enabled);
   }
 }
 
@@ -369,7 +382,24 @@ PageActions::Restore()
   special_page.SetUndefined();
 
   LoadLayout(GetConfiguredLayout());
+  ApplyPageDisplaySettings();
   RestoreMapZoom();
+}
+
+void
+PageActions::ApplyPageDisplaySettings() noexcept
+{
+  const PagesState &state = CommonInterface::GetUIState().pages;
+  if (state.special_page.IsDefined()) {
+    LogFmt("perPage: ApplyPageDisplaySettings skip (special page)");
+    return;
+  }
+
+  LogFmt("perPage: ApplyPageDisplaySettings index={}",
+         state.current_index);
+  PageSettingApplyGlobalBaseline();
+  PageSettingApplyPageOverrides(state.current_index);
+  PageSettingNotifyLive();
 }
 
 void
@@ -392,12 +422,17 @@ PageActions::RestoreMapZoom()
 
     map_settings.auto_zoom_enabled = page.auto_zoom_enabled;
 
+    LogFmt("perPage: RestoreMapZoom index={} cruise={} circling={} auto_zoom={}",
+           state.current_index, map_settings.cruise_scale,
+           map_settings.circling_scale, map_settings.auto_zoom_enabled);
+
     GlueMapWindow *map = UIGlobals::GetMapIfActive();
     if (map != nullptr) {
       map->RestoreMapScale();
       map->QuickRedraw();
     }
-  }
+  } else
+    LogFmt("perPage: RestoreMapZoom skip (distinct_zoom off)");
 }
 
 const PageLayout &
@@ -435,15 +470,22 @@ PageActions::Update()
   /* While panning, GetCurrentLayout() is the transient FullScreen page.
      LoadLayout() calls DisablePan() without Restore(), which would leave
      the UI stuck on FullScreen without the configured bottom widget. */
-  if (IsPanning())
+  if (IsPanning()) {
+    LogFmt("perPage: Update skip (panning)");
     return;
+  }
 
   if (IsStuckPanFullScreenLayout()) {
+    LogFmt("perPage: Update restore stuck pan fullscreen");
     Restore();
     return;
   }
 
+  const PagesState &state = CommonInterface::GetUIState().pages;
+  LogFmt("perPage: Update LoadLayout index={} special={}",
+         state.current_index, state.special_page.IsDefined());
   LoadLayout(GetCurrentLayout());
+  ApplyPageDisplaySettings();
 }
 
 void
@@ -475,9 +517,10 @@ PageActions::Next()
   LeavePage();
 
   PagesState &state = CommonInterface::SetUIState().pages;
-
+  const unsigned from = state.current_index;
   state.current_index = NextIndex();
   state.special_page.SetUndefined();
+  LogFmt("perPage: Next {} -> {}", from, state.current_index);
 
   Update();
   RestoreMapZoom();
@@ -505,9 +548,10 @@ PageActions::Prev()
   LeavePage();
 
   PagesState &state = CommonInterface::SetUIState().pages;
-
+  const unsigned from = state.current_index;
   state.current_index = PrevIndex();
   state.special_page.SetUndefined();
+  LogFmt("perPage: Prev {} -> {}", from, state.current_index);
 
   Update();
   RestoreMapZoom();

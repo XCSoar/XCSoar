@@ -105,6 +105,9 @@ PageSettings::SetDefaults() noexcept
 
   std::fill(pages.begin() + 2, pages.end(), PageLayout::Undefined());
 
+  for (auto &o : overrides)
+    o.Clear();
+
   n_pages = 2;
 
   distinct_zoom = true;
@@ -113,10 +116,22 @@ PageSettings::SetDefaults() noexcept
 void
 PageSettings::Compress() noexcept
 {
-  auto last = std::remove_if(pages.begin(), pages.end(),
-                             [](const PageLayout &layout) {
-                               return !layout.IsDefined();
-                             });
-  std::fill(last, pages.end(), PageLayout::Undefined());
-  n_pages = std::distance(pages.begin(), last);
+  unsigned write = 0;
+  for (unsigned read = 0; read < MAX_PAGES; ++read) {
+    if (!pages[read].IsDefined())
+      continue;
+
+    if (write != read) {
+      pages[write] = pages[read];
+      overrides[write] = overrides[read];
+    }
+    ++write;
+  }
+
+  for (unsigned i = write; i < MAX_PAGES; ++i) {
+    pages[i] = PageLayout::Undefined();
+    overrides[i].Clear();
+  }
+
+  n_pages = write;
 }

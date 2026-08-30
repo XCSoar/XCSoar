@@ -5,12 +5,15 @@
 #include "Keys.hpp"
 #include "Map.hpp"
 #include "PageSettings.hpp"
+#include "PageSetting.hpp"
+#include "PageSettingDescriptor.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/NumberParser.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringFormat.hpp"
 
 #include <stdio.h>
+#include <string.h>
 
 /**
  * Old enum moved from PageSettings.
@@ -122,11 +125,37 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   _pl = pl;
 }
 
+static void
+LoadOverrides(const ProfileMap &map, PageSettingOverrides &overrides,
+              const unsigned page)
+{
+  overrides.Clear();
+
+  char profileKey[64];
+  int prefixLen = StringFormat(profileKey, sizeof(profileKey), "Page%u", page);
+  if (prefixLen <= 0 || (size_t)prefixLen >= sizeof(profileKey))
+    return;
+
+  for (unsigned i = 0; i < PageSettingRegistry::Count(); ++i) {
+    const auto &desc = PageSettingRegistry::Get(i);
+    strcpy(profileKey + prefixLen, desc.override_key);
+    int value;
+    if (!map.Get(profileKey, value))
+      continue;
+
+    if (!PageSettingRegistry::IsValidValue(desc, value))
+      value = PageSettingOverrides::INHERIT;
+    overrides.Add(desc.id, value);
+  }
+}
+
 void
 Profile::Load(const ProfileMap &map, PageSettings &settings)
 {
-  for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i)
+  for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i) {
     ::Load(map, settings.pages[i], i);
+    LoadOverrides(map, settings.overrides[i], i);
+  }
 
   settings.Compress();
 
@@ -189,10 +218,37 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
   map.Set(profileKey, skysight_time.c_str());
 }
 
+static void
+SaveOverrides(ProfileMap &map, const PageSettingOverrides &overrides,
+              const unsigned i)
+{
+  char profileKey[64];
+  int prefixLen = StringFormat(profileKey, sizeof(profileKey), "Page%u", i);
+  if (prefixLen <= 0 || (size_t)prefixLen >= sizeof(profileKey))
+    return;
+
+  for (unsigned r = 0; r < PageSettingRegistry::Count(); ++r) {
+    const auto &desc = PageSettingRegistry::Get(r);
+    strcpy(profileKey + prefixLen, desc.override_key);
+    if (const int *value = overrides.FindValue(desc.id); value != nullptr)
+      map.Set(profileKey, *value);
+    else
+      map.Remove(profileKey);
+  }
+}
+
+void
+Profile::Save(ProfileMap &map, const PageSettingOverrides &overrides,
+              const unsigned i)
+{
+  SaveOverrides(map, overrides, i);
+}
 
 void
 Profile::Save(ProfileMap &map, const PageSettings &settings)
 {
-  for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i)
+  for (unsigned i = 0; i < PageSettings::MAX_PAGES; ++i) {
     Save(map, settings.pages[i], i);
+    SaveOverrides(map, settings.overrides[i], i);
+  }
 }

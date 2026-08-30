@@ -4,6 +4,7 @@
 #pragma once
 
 #include "util/StaticString.hxx"
+#include "PageSetting.hpp"
 
 #include <array>
 #include <cstdint>
@@ -359,6 +360,12 @@ struct PageSettings {
   static constexpr unsigned MAX_PAGES = 8;
 
   std::array<PageLayout, MAX_PAGES> pages;
+
+  /**
+   * Sparse Map Display (and similar) overrides per page.  Parallel to
+   * #pages; empty means inherit every registered setting from global.
+   */
+  std::array<PageSettingOverrides, MAX_PAGES> overrides;
 
   unsigned n_pages;
 
