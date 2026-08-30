@@ -497,7 +497,11 @@ RepositoryFilePickerWidget::OnActivateItem(unsigned index) noexcept
     OpenArea(index);
   else if (!allow_multi_select) {
     GetList().SetCursorIndex(index);
-    ConfirmSelection();
+    try {
+      ConfirmSelection();
+    } catch (...) {
+      ShowError(std::current_exception(), _("Error"));
+    }
   } else
     ToggleSelection(index);
 }
