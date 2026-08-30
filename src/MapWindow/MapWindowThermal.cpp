@@ -3,6 +3,7 @@
 
 #include "MapWindow.hpp"
 #include "ThermalDisplay.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Look/MapLook.hpp"
 #include "Observation/Database.hpp"
 #include "Observation/Publish.hpp"
@@ -12,13 +13,13 @@
 #include "Tracking/Features.hpp"
 #include "net/http/Features.hpp"
 
-template<typename Sources, typename GetLocation>
+template<typename Sources, typename GetLocation, typename GetIcon>
 static void
-DrawDriftedThermalIcons(Canvas &canvas, const MaskedIcon &icon,
-                        const WindowProjection &projection,
+DrawDriftedThermalIcons(Canvas &canvas, const WindowProjection &projection,
                         const Sources &sources,
                         const double aircraft_altitude,
-                        GetLocation get_location) noexcept
+                        GetLocation get_location,
+                        GetIcon get_icon) noexcept
 {
   if (!ThermalDisplay::IsVisible(projection.GetMapScale()))
     return;
@@ -29,7 +30,7 @@ DrawDriftedThermalIcons(Canvas &canvas, const MaskedIcon &icon,
       continue;
 
     if (auto p = projection.GeoToScreenIfVisible(location))
-      icon.Draw(canvas, *p);
+      get_icon(source).Draw(canvas, *p);
   }
 }
 
@@ -82,10 +83,12 @@ MapWindow::DrawFlarmThermals(Canvas &canvas) const noexcept
   const auto selected_wind = calculated.wind_available
     ? calculated.wind
     : SpeedVector::Zero();
+  const double mac_cready =
+    GetComputerSettings().polar.glide_polar_task.GetMC();
 
   DrawDriftedThermalIcons(
-    canvas, look.flarm_thermal_source_icon, render_projection,
-    calculated.traffic_thermals.sources, basic.nav_altitude,
+    canvas, render_projection, calculated.traffic_thermals.sources,
+    basic.nav_altitude,
     [&selected_wind](const TrafficThermalSource &source,
                      double aircraft_altitude) {
       const GeoPoint location =
@@ -103,5 +106,10 @@ MapWindow::DrawFlarmThermals(Canvas &canvas) const noexcept
                  source.geometry_wind.bearing.Degrees(),
                  selected_wind.norm, selected_wind.bearing.Degrees());
       return location;
+    },
+    [this, mac_cready](const TrafficThermalSource &source)
+      -> const MaskedIcon & {
+      return ThermalDisplay::GetFlarmThermalIcon(
+        look, source.thermal.lift_rate, mac_cready);
     });
 }

@@ -78,11 +78,6 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     builder.AddWaypoints(*waypoints, route_planner, basic, calculated,
                          computer_settings);
 
-  if (ThermalDisplay::IsTrafficVisible(settings.show_flarm_on_map,
-                                       visible_projection.GetMapScale()))
-    builder.AddTrafficThermals(calculated.traffic_thermals, basic,
-                               calculated);
-
 #ifdef HAVE_NOAA
   if (noaa_store)
     builder.AddWeatherStations(*noaa_store);

@@ -7,6 +7,8 @@
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/OverlayMapItem.hpp"
 #include "MapWindow/Items/RaspMapItem.hpp"
+#include "MapWindow/ThermalDisplay.hpp"
+#include "Interface.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
@@ -284,7 +286,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const ThermalMapItem &item,
      [[maybe_unused]] RoughTimeDelta utc_offset,
      const TwoTextRowsRenderer &row_renderer,
-     const MapLook &look)
+     const MapLook &look,
+     double mac_cready)
 {
   const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
@@ -295,7 +298,8 @@ Draw(Canvas &canvas, PixelRect rc,
                       rc.top + line_height / 2);
 
   const auto &icon = item.IsTraffic()
-    ? look.flarm_thermal_source_icon
+    ? ThermalDisplay::GetFlarmThermalIcon(
+        look, thermal.lift_rate, mac_cready)
     : look.thermal_source_icon;
   icon.Draw(canvas, pt);
 
@@ -337,20 +341,20 @@ Draw(Canvas &canvas, PixelRect rc,
                     _("Observed altitude"), altitude_range.c_str());
     }
   } else {
-  auto age = std::chrono::steady_clock::now() - thermal.received;
-  if (age.count() < 0)
-    age = {};
-
-  const auto age_s =
-    std::chrono::duration_cast<std::chrono::seconds>(age);
-  StaticString<64> ago;
-  ago.Format(_("%s ago"), FormatTimespanSmart(age_s).c_str());
-
-  buffer.Format("%s, %s: %s - %s",
-                OriginLabel(thermal.origin),
-                _("Avg. lift"),
-                FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
-                ago.c_str());
+    auto age = std::chrono::steady_clock::now() - thermal.received;
+    if (age.count() < 0)
+      age = {};
+  
+    const auto age_s =
+      std::chrono::duration_cast<std::chrono::seconds>(age);
+    StaticString<64> ago;
+    ago.Format(_("%s ago"), FormatTimespanSmart(age_s).c_str());
+  
+    buffer.Format("%s, %s: %s - %s",
+                  OriginLabel(thermal.origin),
+                  _("Avg. lift"),
+                  FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                  ago.c_str());
   }
 
   row_renderer.DrawSecondRow(canvas, rc, buffer);
@@ -567,7 +571,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   case MapItem::Type::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
-           row_renderer, look);
+           row_renderer, look,
+           CommonInterface::GetComputerSettings()
+             .polar.glide_polar_task.GetMC());
     break;
 
   case MapItem::Type::OVERLAY:
