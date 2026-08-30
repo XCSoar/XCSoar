@@ -183,6 +183,8 @@ SafetyFactorsDifferFromDefaults() noexcept
     return true;
   if (p.auto_bugs != d_pol.auto_bugs)
     return true;
+  if (std::abs(t.task_mc - d_task.task_mc) > eps)
+    return true;
   if (std::abs(t.safety_mc - d_task.safety_mc) > eps)
     return true;
   if (std::abs(t.risk_gamma - d_task.risk_gamma) > eps)

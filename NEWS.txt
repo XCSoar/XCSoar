@@ -196,8 +196,8 @@ Version 7.46 - not yet released
     binary mode if the logger dropped it while the flight list was
     open #3049
 * glide computer
-  - start MacCready at zero instead of copying Safety MC, so reach
-    safety no longer sets speed-to-fly on startup #2552
+  - add a Startup Task MC setting (0 to 5 m/s) for the MacCready used at
+    startup, instead of copying Safety MC into speed-to-fly #2552
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
@@ -415,6 +415,7 @@ Version 7.46 - not yet released
   - add "Speed VMG" InfoBox: the part of the ground speed that closes
     the distance to the next waypoint
 * ui
+  - rename Reach polar Task to Task MC, matching Safety MC
   - add pinch-to-zoom on waypoint pictures and downloaded weather
     images: the image scales smoothly and follows the two fingers,
     which also pan it #2868
@@ -483,6 +484,7 @@ Version 7.46 - not yet released
     task, polar or flight log when a temporary file cannot be
     created #3256
 * documentation
+  - describe the Startup Task MC setting on the Safety Factors page
   - describe the repository download list: name and description,
     several files at once, and the country and search filters
   - clarify that Reach polar still applies to abort, alternates and

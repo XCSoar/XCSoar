@@ -8,6 +8,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/TaskBehaviour.hpp"
 #include "Language/Language.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -138,7 +139,7 @@ TaskStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
              "Use this to determine the effect on estimated task time due to changes in conditions. "
              "This value will not affect the main computer's setting if the dialog is exited with the Cancel button."),
            "%.1f %s", "%.1f",
-           0, Units::ToUserVSpeed(5),
+           0, Units::ToUserVSpeed(TaskBehaviour::TASK_MC_MAX),
            GetUserVerticalSpeedStep(), false, 0,
            this);
   DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);

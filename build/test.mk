@@ -520,6 +520,8 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/Profile.cpp \
+	$(SRC)/Profile/RouteProfile.cpp \
+	$(SRC)/Profile/TaskProfile.cpp \
 	$(SRC)/Profile/WeatherProfile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
