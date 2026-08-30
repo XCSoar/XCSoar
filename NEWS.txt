@@ -71,6 +71,8 @@ Version 7.46 - not yet released
   - let Select as Alternate pin a landing field from AUTO, and use
     Alternate Mode: Auto only to return the Alternate InfoBox to the
     computed list #2912
+  - show the same terrain reach on the Alternates list as the map,
+    including turning around obstacles
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862

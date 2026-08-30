@@ -111,9 +111,11 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
     { RoutePlannerConfig::ReachMode::OFF, N_("Off"),
       N_("Reach calculations disabled.") },
     { RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
-      N_("The reach is from straight line paths from the glider.") },
+      N_("The reach is from straight line paths from the glider. "
+         "Landable colours and the Alternates list use this reach.") },
     { RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
-      N_("The reach is calculated allowing turns around terrain obstacles.") },
+      N_("The reach is calculated allowing turns around terrain obstacles. "
+         "Landable colours and the Alternates list use this reach.") },
     nullptr
   };
 
