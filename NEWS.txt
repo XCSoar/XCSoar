@@ -486,6 +486,7 @@ Version 7.46 - not yet released
     created #3256
 * documentation
   - describe the Startup Task MC setting on the Safety Factors page
+  - clarify that Safety MC is for reach, not speed-to-fly
   - describe the repository download list: name and description,
     several files at once, and the country and search filters
   - clarify that Reach polar still applies to abort, alternates and
