@@ -300,28 +300,26 @@ Draw(Canvas &canvas, PixelRect rc,
       traffic.min_observed_altitude, traffic.max_observed_altitude);
     if (traffic.active) {
       buffer.Format(_("%s: %s - %s: %u - %s - %s: %s MSL"),
-                    _("Avg. lift"),
+                    _("Avg."),
                     FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                     _("Active"), traffic.active_aircraft_count,
                     FormatLocalTimeHHMM(traffic.last_seen, utc_offset).c_str(),
-                    _("Observed altitude"), altitude_range.c_str());
+                    _("Alt."), altitude_range.c_str());
     } else {
       const auto age = ElapsedTimeOrZero(item.current_time,
                                          traffic.last_seen);
 
-      buffer.Format(_("%s: %s - last seen %s ago (%s) - %s: %s MSL"),
-                    _("Avg. lift"),
+      buffer.Format(_("%s: %s - %s ago - %s: %s MSL"),
+                    _("Avg."),
                     FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                     FormatTimespanSmart(age).c_str(),
-                    FormatLocalTimeHHMM(traffic.last_seen,
-                                        utc_offset).c_str(),
-                    _("Observed altitude"), altitude_range.c_str());
+                    _("Alt."), altitude_range.c_str());
     }
   } else {
     const auto timespan = ElapsedTimeOrZero(item.current_time, thermal.time);
 
     buffer.Format("%s: %s - left %s ago (%s)",
-                  _("Avg. lift"),
+                  _("Avg."),
                   FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
                   FormatTimespanSmart(timespan).c_str(),
                   FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
