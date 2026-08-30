@@ -42,4 +42,5 @@ endif
 
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): $(topdir)/VERSION.txt
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): CPPFLAGS += $(VERSION_CPPFLAGS)
+$(call SRC_TO_OBJ,$(SRC)/Apple/MacOSMainMenu.cpp): CPPFLAGS += $(VERSION_CPPFLAGS)
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/dlgCredits.cpp): CPPFLAGS += $(VERSION_CPPFLAGS)

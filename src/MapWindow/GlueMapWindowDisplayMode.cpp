@@ -68,6 +68,11 @@ GlueMapWindow::SetPan(bool enable) noexcept
     break;
   }
 
+  /* Pan keeps its own scale.  Circling zoom must not yank it; leaving
+     pan restores the saved circling/cruise scale. */
+  if (!enable)
+    RestoreMapScale();
+
   FullRedraw();
 }
 
@@ -81,6 +86,7 @@ GlueMapWindow::TogglePan() noexcept
 
   case FOLLOW_PAN:
     follow_mode = FOLLOW_SELF;
+    RestoreMapScale();
     break;
   }
 
@@ -117,6 +123,10 @@ GlueMapWindow::UpdateScreenBounds() noexcept
 void
 GlueMapWindow::PersistCurrentScale() noexcept
 {
+  /* Pan zoom is temporary; do not overwrite circling/cruise scales. */
+  if (IsPanning())
+    return;
+
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
   MapSettings &settings = CommonInterface::SetMapSettings();
@@ -288,6 +298,9 @@ inline void
 GlueMapWindow::SwitchZoomClimb() noexcept
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
+
+  if (IsPanning())
+    return;
 
   if (settings.circle_zoom_enabled)
     RestoreMapScale();

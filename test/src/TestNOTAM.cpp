@@ -5,6 +5,9 @@
 #include "NOTAM/Filter.hpp"
 #include "NOTAM/NOTAMCache.hpp"
 #include "NOTAM/Settings.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Map.hpp"
+#include "Profile/NotamConfig.hpp"
 #include "Geo/AltitudeReference.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
@@ -67,7 +70,7 @@ MetadataValid(std::string_view json)
 int
 main()
 {
-  plan_tests(64);
+  plan_tests(65);
 
   const auto now = system_clock::now();
 
@@ -246,11 +249,20 @@ main()
   {
     NOTAMSettings settings;
     settings.hidden_qcodes =
-      "QNMXX QOBCE QMXLT QAFXX QXXXX QRTTT QMXLC QOLAS QPOCH QFALT QWULW";
-    ok1(settings.hidden_qcodes == "QNMXX QOBCE QMXLT QAFXX QXXXX QRTTT "
-                                  "QMXLC QOLAS QPOCH QFALT QWULW");
-    ok1(NOTAMFilter::IsQCodeHidden("QWULW", settings.hidden_qcodes));
-    ok1(NOTAMFilter::IsQCodeHidden("QWULW", settings.hidden_qcodes.c_str()));
+      "QAAAA QBBBB QCCCC QDDDD QEEEE QFFFF QGGGG QHHHH QIIII QJJJJ QKKKK "
+      "QLLLL QMMMM QNNNN QOOOO QPPPP QQQQQ QRRRR QSSSS QTTTT";
+    ok1(settings.hidden_qcodes == "QAAAA QBBBB QCCCC QDDDD QEEEE QFFFF "
+                                  "QGGGG QHHHH QIIII QJJJJ QKKKK QLLLL "
+                                  "QMMMM QNNNN QOOOO QPPPP QQQQQ QRRRR "
+                                  "QSSSS QTTTT");
+    ok1(NOTAMFilter::IsQCodeHidden("QTTTT", settings.hidden_qcodes));
+    ok1(NOTAMFilter::IsQCodeHidden("QTTTT", settings.hidden_qcodes.c_str()));
+
+    ProfileMap map;
+    map.Set(ProfileKeys::NOTAMHiddenQCodes, settings.hidden_qcodes.c_str());
+    NOTAMSettings loaded;
+    Profile::LoadNOTAMSettings(map, loaded);
+    ok1(loaded.hidden_qcodes == settings.hidden_qcodes);
   }
 
   {

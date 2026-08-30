@@ -26,6 +26,8 @@ public:
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
 
+  void ReinitialiseLook() noexcept;
+
 private:
   virtual void OnGPSUpdate(const MoreData &basic) override;
 };

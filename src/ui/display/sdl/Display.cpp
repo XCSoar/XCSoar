@@ -29,6 +29,11 @@ Display::Display()
 #ifdef USE_ANGLE
   // On Windows, tell SDL to use EGL (required for ANGLE)
   SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
+#ifdef __APPLE__
+  // SDL's EGL loader does not search the app bundle for bare dylib names.
+  SDL_setenv("SDL_VIDEO_GL_DRIVER", "@rpath/libGLESv2.dylib", 0);
+  SDL_setenv("SDL_VIDEO_EGL_DRIVER", "@rpath/libEGL.dylib", 0);
+#endif
 #endif
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);

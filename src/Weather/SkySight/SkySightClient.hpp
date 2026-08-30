@@ -44,6 +44,7 @@ class SkySightClient final {
   time_t planned_live_timestamp = 0;
   GeoBounds planned_live_bounds = GeoBounds::Invalid();
   std::vector<GeoBitmap::TileData> planned_live_tiles;
+  unsigned logged_live_tile_count = 0;
   std::array<std::string, LIVE_TILE_OVERLAY_COUNT> tile_filenames;
   std::array<GeoBitmap::TileData, LIVE_TILE_OVERLAY_COUNT> tile_coordinates;
   std::array<time_t, LIVE_TILE_OVERLAY_COUNT> tile_timestamps{};

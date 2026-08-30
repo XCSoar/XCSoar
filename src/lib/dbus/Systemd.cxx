@@ -12,22 +12,48 @@
 #include "Error.hxx"
 #include "util/StringAPI.hxx"
 
+#include <algorithm>
+#include <chrono>
+#include <cstdint>
+#include <limits>
+#include <stdexcept>
 #include <string>
 
 namespace Systemd {
 
 void
-WaitJobRemoved(ODBus::Connection &connection, const char *object_path)
+WaitJobRemoved(ODBus::Connection &connection, const char *object_path,
+               int timeout_ms)
 {
   using namespace ODBus;
+  using Clock = std::chrono::steady_clock;
+
+  const bool has_timeout = timeout_ms >= 0;
+  const auto deadline = Clock::now() +
+    std::chrono::milliseconds{has_timeout ? timeout_ms : 0};
 
   while (true) {
+    if (has_timeout && Clock::now() >= deadline)
+      throw std::runtime_error{"Timed out waiting for systemd job"};
+
     auto msg = Message::Pop(*connection);
     if (!msg.IsDefined()) {
-      if (dbus_connection_read_write(connection, -1))
+      int wait_ms = -1;
+      if (has_timeout) {
+        const auto now = Clock::now();
+        if (now >= deadline)
+          throw std::runtime_error{"Timed out waiting for systemd job"};
+
+        const auto remaining = std::chrono::ceil<std::chrono::milliseconds>(
+          deadline - now).count();
+        wait_ms = static_cast<int>(std::min<int64_t>(
+          remaining, std::numeric_limits<int>::max()));
+      }
+
+      if (dbus_connection_read_write(connection, wait_ms))
         continue;
-      else
-        break;
+
+      throw std::runtime_error{"D-Bus connection closed while waiting for systemd job"};
     }
 
     if (msg.IsSignal("org.freedesktop.systemd1.Manager", "JobRemoved")) {
@@ -263,7 +289,7 @@ IsUnitActive(ODBus::Connection &connection, const char *name)
 
 void
 StartUnit(ODBus::Connection &connection,
-       const char *name, const char *mode)
+       const char *name, const char *mode, int timeout_ms)
 {
   using namespace ODBus;
 
@@ -281,12 +307,12 @@ StartUnit(ODBus::Connection &connection,
   if (!reply.GetArgs(error, DBUS_TYPE_OBJECT_PATH, &object_path))
     error.Throw("StartUnit reply failed");
 
-  WaitJobRemoved(connection, object_path);
+  WaitJobRemoved(connection, object_path, timeout_ms);
 }
 
 void
 StopUnit(ODBus::Connection &connection,
-      const char *name, const char *mode)
+      const char *name, const char *mode, int timeout_ms)
 {
   using namespace ODBus;
 
@@ -304,7 +330,53 @@ StopUnit(ODBus::Connection &connection,
   if (!reply.GetArgs(error, DBUS_TYPE_OBJECT_PATH, &object_path))
     error.Throw("StopUnit reply failed");
 
-  WaitJobRemoved(connection, object_path);
+  WaitJobRemoved(connection, object_path, timeout_ms);
+}
+
+bool
+UnitExists(ODBus::Connection &connection, const char *name) noexcept
+{
+  try {
+    using namespace ODBus;
+
+    auto msg = Message::NewMethodCall("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1",
+            "org.freedesktop.systemd1.Manager",
+            "GetUnitFileState");
+    AppendMessageIter{*msg.Get()}.Append(name);
+
+    Message reply = CallMethodSync(connection, msg, false);
+    if (reply.IsError("org.freedesktop.systemd1.NoSuchUnitFile"))
+      return false;
+
+    reply.CheckThrowError();
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+void
+RestartUnit(ODBus::Connection &connection,
+            const char *name, const char *mode, int timeout_ms)
+{
+  using namespace ODBus;
+
+  auto msg = Message::NewMethodCall("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1",
+            "org.freedesktop.systemd1.Manager",
+            "RestartUnit");
+
+  AppendMessageIter{*msg.Get()}.Append(name).Append(mode);
+
+  Message reply = CallMethodSync(connection, msg);
+
+  Error error;
+  const char *object_path;
+  if (!reply.GetArgs(error, DBUS_TYPE_OBJECT_PATH, &object_path))
+    error.Throw("RestartUnit reply failed");
+
+  WaitJobRemoved(connection, object_path, timeout_ms);
 }
 
 void

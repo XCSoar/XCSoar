@@ -674,7 +674,7 @@ DownloadFilePicker(FileType file_type, bool allow_multi_select)
            UIGlobals::GetDialogLook(), _("Download"));
   dialog.SetWidget(dialog, file_type, allow_multi_select);
   dialog.GetWidget().CreateButtons();
-  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.AddButton(_("Close"), mrCancel);
   /* No EnableCursorSelection: Left/Right page the list (ListControl).
      Up/Down walk list ↔ buttons; Enter on a country opens it, Enter
      on a file toggles the checkbox. */

@@ -123,6 +123,10 @@ TopCanvas::AcquireSurface()
   if (native_window == nullptr)
     return false;
 
+  /* NDK r26 (minSdk 21) has no public ANativeWindow_query();
+     NATIVE_WINDOW_MIN_UNDEQUEUED_BUFFERS is private.  Depth
+     comes from EGL_BUFFER_AGE_KHR in GetPresentationBufferCount(). */
+
   CreateSurface(native_window);
 
   return true;

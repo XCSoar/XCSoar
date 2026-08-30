@@ -24,8 +24,6 @@
 using namespace std::chrono;
 
 enum ControlIndex {
-  UIScale,
-  CustomDPI,
   InputFile,
 #ifdef HAVE_NLS
   LanguageFile,
@@ -75,33 +73,6 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   const UISettings &settings = CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
-
-  AddInteger(_("Text size"),
-             nullptr,
-             "%d %%", "%d", 75, 200, 5,
-             settings.scale);
-
-  WndProperty *wp_dpi = AddEnum(_("Display Resolution"),
-                                _("The display resolution is used to adapt line widths, "
-                                  "font size, landable size and more."));
-  if (wp_dpi != nullptr) {
-    static constexpr unsigned dpi_choices[] = {
-      120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
-    };
-    const unsigned *dpi_choices_end =
-      dpi_choices + sizeof(dpi_choices) / sizeof(dpi_choices[0]);
-
-    DataFieldEnum &df = *(DataFieldEnum *)wp_dpi->GetDataField();
-    df.AddChoice(0, _("Automatic"));
-    for (const unsigned *dpi = dpi_choices; dpi != dpi_choices_end; ++dpi) {
-      StaticString<20> buffer;
-      buffer.Format(_("%u dpi"), *dpi);
-      df.AddChoice(*dpi, buffer);
-    }
-    df.SetValue(settings.custom_dpi);
-    wp_dpi->RefreshDisplay();
-  }
-  SetExpertRow(CustomDPI);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -231,14 +202,6 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 {
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
-
-  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
-                       settings.scale))
-    require_restart = changed = true;
-
-  if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
-                    settings.custom_dpi))
-    require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
     require_restart = changed = true;

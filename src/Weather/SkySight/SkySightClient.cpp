@@ -782,6 +782,7 @@ SkySightClient::ResetTiles() noexcept
   planned_live_timestamp = 0;
   planned_live_bounds.SetInvalid();
   planned_live_tiles.clear();
+  logged_live_tile_count = 0;
   displayed_layer = nullptr;
 }
 
@@ -1328,6 +1329,17 @@ SkySightClient::DisplayTileLayer()
     } else {
       missing_target_tiles.push_back(probe_tile);
     }
+  }
+
+  const auto missing_count = unsigned(missing_target_tiles.size());
+  if (missing_count > logged_live_tile_count) {
+    LogFmt("SkySight live tiles: requesting {} tiles for '{}'", missing_count,
+           active_layer->id);
+    logged_live_tile_count = missing_count;
+  } else if (missing_count == 0 && target_view_complete &&
+             logged_live_tile_count > 0) {
+    LogFmt("SkySight live tiles: update complete for '{}'", active_layer->id);
+    logged_live_tile_count = 0;
   }
 
   api->ReconcileTileDownloads(desired_keys);

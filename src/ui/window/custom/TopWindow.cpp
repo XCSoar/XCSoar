@@ -53,6 +53,16 @@ TopWindow::~TopWindow() noexcept
   delete screen;
 }
 
+#ifdef ENABLE_OPENGL
+unsigned
+TopWindow::GetPresentationBufferCount() const noexcept
+{
+  return screen != nullptr
+    ? screen->GetPresentationBufferCount()
+    : 4;
+}
+#endif
+
 void
 TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
                   TopWindowStyle style)

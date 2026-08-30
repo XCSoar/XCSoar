@@ -66,6 +66,17 @@ class TopCanvas
   const LinuxGraphicsTTY linux_graphics_tty;
 #endif
 
+#ifdef ENABLE_OPENGL
+  /**
+   * Swap-chain depth.  Extra full-window clears after an OpenGL
+   * gesture trail use this so every presentation buffer gets a
+   * clean frame.  Default 4 covers typical EGL/Android queues
+   * (triple-buffer plus a spare); GetPresentationBufferCount()
+   * may raise it from EGL_BUFFER_AGE_KHR after the first swap.
+   */
+  unsigned presentation_buffer_count = 4;
+#endif
+
 #ifdef USE_EGL
 
 #ifdef MESA_KMS
@@ -177,6 +188,14 @@ public:
    */
   [[gnu::pure]]
   PixelSize GetNativeSize() const noexcept;
+#endif
+
+#ifdef ENABLE_OPENGL
+  /**
+   * How many presentation buffers does the swap chain use?
+   */
+  [[gnu::pure]]
+  unsigned GetPresentationBufferCount() const noexcept;
 #endif
 
 #if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)

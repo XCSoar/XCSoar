@@ -19,6 +19,7 @@
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
+#include "Gauge/VarioGeometry.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
 #include "Look/GlobalFonts.hpp"
@@ -480,7 +481,8 @@ MainWindow::InitialiseConfigured()
   PixelRect rc = GetClientRect();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -609,9 +611,16 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexce
     return;
   }
 
+  const unsigned width = std::min(layout.vario.GetWidth(),
+                                  VarioGeometry::GetCompactWidth(
+                                    layout.vario.GetHeight()));
+  look->vario.ReinitialiseLayout(width, layout.control_size.width);
+
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
                                  look->vario));
+  else
+    static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
 
   vario.Move(layout.vario);
   vario.Show();
@@ -706,7 +715,8 @@ MainWindow::ReinitialiseLayout() noexcept
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   look->ReinitialiseLayout(ib_layout.control_size.width, ui_settings.info_boxes.scale_title_font);
 
@@ -860,14 +870,25 @@ MainWindow::ReinitialiseLook() noexcept
 
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(GetClientRect(),
-                             ui_settings.info_boxes.geometry);
+                             ui_settings.info_boxes.geometry,
+                             ui_settings.info_boxes.scale_title_font);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.width);
 
+  if (ib_layout.HasVario()) {
+    const unsigned width = std::min(ib_layout.vario.GetWidth(),
+                                    VarioGeometry::GetCompactWidth(
+                                      ib_layout.vario.GetHeight()));
+    look->vario.ReinitialiseLayout(width, ib_layout.control_size.width);
+    if (vario.IsDefined())
+      static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
+  }
+
   InfoBoxManager::ScheduleRedraw();
+  Invalidate();
 }
 
 #ifdef ANDROID
@@ -1321,6 +1342,29 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+#ifdef ENABLE_OPENGL
+  /* The gesture trail is painted by the #GlueMapWindow, but it
+     follows the pointer past the map borders, and OpenGL does not
+     clip a child window to its rectangle.  Areas which no child
+     window repaints (the safe area insets reserved by the
+     #TopWindow, for example) would keep those pixels forever, and
+     each buffer of the swap chain needs a clean frame of its own.
+     Therefore clear the whole window while a trail exists, and for
+     as many extra frames as the swap chain has buffers after it is
+     gone. */
+  const bool gesture_trail = map != nullptr && map->HasGestureTrail();
+  if (gesture_trail)
+    clear_gesture_frames = GetPresentationBufferCount();
+
+  if (gesture_trail || clear_gesture_frames > 0) {
+    canvas.DrawFilledRectangle(canvas.GetRect(), COLOR_BLACK);
+
+    if (!gesture_trail && --clear_gesture_frames > 0)
+      /* nothing else is going to request the remaining frames */
+      Invalidate();
+  }
+#endif
+
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
     PixelRect rc = map->GetPosition();
@@ -1359,9 +1403,10 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   /* Overlapped gauges (FLARM, thermal assistant) use GetMainRect() for
      "avoid InfoBoxes" corners; re-layout when fullscreen changes. */
   const PixelRect rc = GetClientRect();
+  const auto &info_boxes = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc,
-                             CommonInterface::GetUISettings().info_boxes.geometry);
+    InfoBoxLayout::Calculate(rc, info_boxes.geometry,
+                             info_boxes.scale_title_font);
   ReinitialiseLayout_flarm(rc, ib_layout);
   ReinitialiseLayoutTA(rc, ib_layout);
 

@@ -3,6 +3,7 @@
 
 #include "RotateDisplay.hpp"
 #include "DisplayOrientation.hpp"
+#include "util/Compiler.h"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -14,6 +15,12 @@
 #include "Kobo/Model.hpp"
 #endif
 
+#ifdef MESA_KMS
+#include "LogFile.hpp"
+#include "system/FileUtil.hpp"
+#include "system/Path.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -21,6 +28,31 @@
 #include "ui/window/SingleWindow.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
 #endif
+#endif
+
+#ifdef MESA_KMS
+[[gnu::const]]
+static const char *
+ToFbconRotate(DisplayOrientation orientation) noexcept
+{
+  switch (orientation) {
+  case DisplayOrientation::DEFAULT:
+  case DisplayOrientation::LANDSCAPE:
+    return "0";
+
+  case DisplayOrientation::REVERSE_PORTRAIT:
+    return "1";
+
+  case DisplayOrientation::REVERSE_LANDSCAPE:
+    return "2";
+
+  case DisplayOrientation::PORTRAIT:
+    return "3";
+  }
+
+  assert(false);
+  gcc_unreachable();
+}
 #endif
 
 void
@@ -146,6 +178,12 @@ Display::Rotate(DisplayOrientation orientation)
 #elif defined(SOFTWARE_ROTATE_DISPLAY)
   if (!RotateSupported())
     return false;
+
+#ifdef MESA_KMS
+  if (!File::WriteExisting(Path("/sys/class/graphics/fbcon/rotate"),
+                           ToFbconRotate(orientation)))
+    LogString("Failed to publish display rotation to fbcon");
+#endif
 
   UIGlobals::GetMainWindow().SetDisplayOrientation(orientation);
   return true;

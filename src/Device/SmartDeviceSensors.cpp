@@ -70,8 +70,11 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.time_available.Update(basic.clock);
   basic.date_time_utc = date_time;
 
-  basic.gps.satellites_used = n_satellites;
-  basic.gps.satellites_used_available.Update(basic.clock);
+  if (n_satellites >= 0) {
+    basic.gps.satellites_used = n_satellites;
+    basic.gps.satellites_used_available.Update(basic.clock);
+  } else
+    basic.gps.satellites_used_available.Clear();
   basic.gps.real = true;
   basic.gps.nonexpiring_internal_gps = true;
   basic.location = location;

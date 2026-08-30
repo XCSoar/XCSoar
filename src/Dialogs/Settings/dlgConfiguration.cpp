@@ -32,6 +32,7 @@
 #include "Panels/SafetyFactorsConfigPanel.hpp"
 #include "Panels/RouteConfigPanel.hpp"
 #include "Panels/InterfaceConfigPanel.hpp"
+#include "Panels/DisplayConfigPanel.hpp"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Panels/GaugesConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
@@ -78,6 +79,10 @@
 
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
+
+#if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
+#include "Panels/SystemdConfigPanel.hpp"
+#endif
 
 #include <cassert>
 
@@ -129,7 +134,8 @@ static constexpr TabMenuPage task_pages[] = {
 
 static constexpr TabMenuPage look_pages[] = {
   { N_("Language, Input"), CreateInterfaceConfigPanel },
-  { N_("Screen Layout"), CreateLayoutConfigPanel },
+  { N_("Display"), CreateDisplayConfigPanel },
+  { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
   { nullptr, nullptr }
@@ -168,6 +174,9 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
   { N_("Network"), CreateNetworkConfigPanel },
+#if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
+  { N_("Services"), CreateSystemdConfigPanel },
+#endif
   { nullptr, nullptr }
 };
 
@@ -322,7 +331,8 @@ OnUserLevel(bool expert) noexcept
 }
 
 /**
- * close dialog from menu page.  from content, goes to menu page
+ * Close on the menu page commits (mrOK).  On a settings page, return
+ * to the menu (Back).
  */
 static void
 OnCloseClicked(WidgetDialog &dialog)
@@ -343,6 +353,10 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
   if (caption == nullptr)
     caption = _("Configuration");
   dialog.SetCaption(caption);
+
+  pager->SetCloseButtonCaption(pager->GetCurrentIndex() == 0
+                               ? _("Close")
+                               : _("Back"));
 }
 
 void dlgConfigurationShowModal()
@@ -377,7 +391,7 @@ void dlgConfigurationShowModal()
 
   dialog.FinishPreliminary(pager);
 
-  /* Esc on a settings panel returns to the menu (same as Close);
+  /* Esc on a settings panel returns to the menu (same as Back);
      on the menu itself, leave Esc to cancel the dialog. */
   dialog.SetKeyDownFunction([&dialog](unsigned key_code) {
     if (key_code != KEY_ESCAPE || pager->GetCurrentIndex() == 0)

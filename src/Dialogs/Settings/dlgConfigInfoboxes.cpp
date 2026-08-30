@@ -17,6 +17,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "Interface.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
@@ -198,7 +199,9 @@ private:
 InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
                                       InfoBoxSettings::Geometry geometry)
 {
-  info_boxes = InfoBoxLayout::Calculate(rc, geometry);
+  const unsigned title_scale =
+    CommonInterface::GetUISettings().info_boxes.scale_title_font;
+  info_boxes = InfoBoxLayout::Calculate(rc, geometry, title_scale);
 
   form = info_boxes.remaining;
   auto buttons = form.CutTopSafe(::Layout::GetMaximumControlHeight());

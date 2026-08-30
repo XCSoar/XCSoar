@@ -48,7 +48,7 @@ TabWidget::Layout::Layout(Orientation orientation, PixelRect rc,
       if (extra_width > max_width)
         extra_width = max_width;
 
-      extra = tab_display.CutLeftSafe(extra_width);
+      extra = tab_display.CutRightSafe(extra_width);
     }
   }
 }

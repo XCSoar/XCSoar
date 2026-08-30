@@ -162,6 +162,17 @@ private:
    * because the map was replaced by a #Widget.
    */
   bool draw_suspended = false;
+#else
+  /**
+   * Number of frames which must still be repainted with a cleared
+   * background to erase a gesture trail which the #GlueMapWindow has
+   * painted outside its own rectangle.  Sized from the swap-chain
+   * depth so every presentation buffer gets a clean frame.
+   *
+   * @see OnPaint()
+   * @see TopWindow::GetPresentationBufferCount()
+   */
+  unsigned clear_gesture_frames = 0;
 #endif
 
   bool restore_page_pending = false;

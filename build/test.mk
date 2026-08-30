@@ -97,6 +97,7 @@ TEST_NAMES = \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
@@ -319,6 +320,10 @@ TEST_NOTAM_SOURCES = \
 	$(SRC)/NOTAM/Delta.cpp \
 	$(SRC)/NOTAM/NOTAMCache.cpp \
 	$(SRC)/NOTAM/Filter.cpp \
+	$(SRC)/Profile/Map.cpp \
+	$(SRC)/Profile/NotamConfig.cpp \
+	$(SRC)/Profile/NumericValue.cpp \
+	$(SRC)/Profile/StringValue.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -826,6 +831,12 @@ TEST_GLIDE_POLAR_SOURCES = \
 TEST_GLIDE_POLAR_DEPENDS = GEO MATH IO UNITS
 $(eval $(call link-program,TestGlidePolar,TEST_GLIDE_POLAR))
 
+TEST_LXNAV_POLAR_CONVERSION_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLXNAVPolarConversion.cpp
+TEST_LXNAV_POLAR_CONVERSION_DEPENDS = MATH UTIL GLIDE
+$(eval $(call link-program,TestLXNAVPolarConversion,TEST_LXNAV_POLAR_CONVERSION))
+
 TEST_FILE_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
@@ -1170,7 +1181,7 @@ DEBUG_PROGRAM_NAMES += \
 	FlightPath \
 	ReadProfileString ReadProfileInt \
 	KeyCodeDumper \
-	ReadPort RunPortHandler LogPort \
+	ReadPort RunPortHandler LogPort RunLXNAVPolarEcho \
 	SplicePorts \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
@@ -1651,6 +1662,21 @@ LOG_PORT_SOURCES = \
 	$(TEST_SRC_DIR)/LogPort.cpp
 LOG_PORT_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
+
+RUN_LXNAV_POLAR_ECHO_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
+	$(SRC)/Device/Config.cpp \
+	$(SRC)/Device/Util/NMEAWriter.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/RunLXNAVPolarEcho.cpp
+RUN_LXNAV_POLAR_ECHO_DEPENDS = PORT ASYNC LIBNET OPERATION IO OS THREAD TIME UTIL MATH GLIDE EVENT
+$(eval $(call link-program,RunLXNAVPolarEcho,RUN_LXNAV_POLAR_ECHO))
 
 SPLICE_PORTS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \

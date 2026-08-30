@@ -1,7 +1,14 @@
 PKG_CONFIG = pkg-config
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+  ifeq ($(TARGET_IS_ANDROID)$(TARGET_IS_KOBO)$(TARGET_IS_IOS),nnn)
+    # Prefer packages built by build/thirdparty.py, but allow packages omitted
+    # from THIRDPARTY_PACKAGES to be discovered on the native system.
+    PKG_CONFIG := PKG_CONFIG_PATH=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+  else
+    # Cross builds must not fall back to host pkg-config metadata.
+    PKG_CONFIG := PKG_CONFIG_PATH= PKG_CONFIG_LIBDIR=$(THIRDPARTY_LIBS_ROOT)/lib/pkgconfig $(PKG_CONFIG) --static
+  endif
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)

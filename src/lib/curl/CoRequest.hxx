@@ -10,6 +10,7 @@
 #include "event/DeferEvent.hxx"
 
 #include <exception>
+#include <functional>
 
 namespace Curl {
 
@@ -25,19 +26,25 @@ struct CoResponse {
  * A CURL HTTP request as a C++20 coroutine.
  */
 class CoRequest : protected CurlResponseHandler {
+public:
+	using HeaderListener = std::function<void(unsigned, const Headers &)>;
+
+private:
 	CurlRequest request;
 
 	DeferEvent defer_error;
 
 	CoResponse response;
 	std::exception_ptr error;
+	HeaderListener header_listener;
 
 	std::coroutine_handle<> continuation;
 
 	bool ready = false;
 
 public:
-	CoRequest(CurlGlobal &global, CurlEasy easy);
+	CoRequest(CurlGlobal &global, CurlEasy easy,
+		  HeaderListener _header_listener = {});
 
 	void DeferError(std::exception_ptr _error) noexcept;
 
