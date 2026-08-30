@@ -196,6 +196,8 @@ Version 7.46 - not yet released
     binary mode if the logger dropped it while the flight list was
     open #3049
 * glide computer
+  - start MacCready at zero instead of copying Safety MC, so reach
+    safety no longer sets speed-to-fly on startup #2552
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
