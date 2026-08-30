@@ -104,13 +104,20 @@ struct TaskBehaviour {
    */
   static constexpr double TASK_MC_MAX = 5;
 
-  static_assert(TASK_MC_DEFAULT <= TASK_MC_MAX);
+  /**
+   * Safety MC at startup (m/s).  About 25:1 still-air L/D on the
+   * default LS-8 (15m) polar.
+   */
+  static constexpr double SAFETY_MC_DEFAULT = 3.2;
 
   /**
    * Highest Safety MC (m/s).  The Safety MC setting and abort up and
    * down stop here.
    */
   static constexpr double SAFETY_MC_MAX = 10;
+
+  static_assert(TASK_MC_DEFAULT <= TASK_MC_MAX);
+  static_assert(SAFETY_MC_DEFAULT <= SAFETY_MC_MAX);
 
   /**
    * MacCready value (m/s) applied to the task polar at startup for
