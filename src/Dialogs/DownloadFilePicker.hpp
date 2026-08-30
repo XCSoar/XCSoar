@@ -9,8 +9,14 @@
 
 #include <vector>
 
+/**
+ * Download repository files of the given type.
+ *
+ * @param allow_multi_select when false, the picker chooses one file
+ * (used by FilePicker, which configures a single path).
+ */
 std::vector<AllocatedPath>
-DownloadFilePicker(FileType file_type);
+DownloadFilePicker(FileType file_type, bool allow_multi_select = true);
 
 /**
  * Pick one or more repository files.  Groups by country/area when

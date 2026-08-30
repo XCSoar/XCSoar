@@ -7,7 +7,7 @@
 #include <algorithm>
 
 std::string
-NormalizeFileArea(std::string_view area) noexcept
+NormalizeFileArea(std::string_view area)
 {
   std::string out;
   out.reserve(area.size());
@@ -20,7 +20,7 @@ NormalizeFileArea(std::string_view area) noexcept
 }
 
 bool
-FileMatchesArea(const AvailableFile &file, std::string_view area) noexcept
+FileMatchesArea(const AvailableFile &file, std::string_view area)
 {
   return NormalizeFileArea(file) == area;
 }
@@ -40,7 +40,7 @@ CollectUniqueFileAreas(const std::vector<AvailableFile> &files)
 
 unsigned
 CountFilesInArea(const std::vector<AvailableFile> &files,
-                 std::string_view area) noexcept
+                 std::string_view area)
 {
   unsigned count = 0;
   for (const auto &file : files)

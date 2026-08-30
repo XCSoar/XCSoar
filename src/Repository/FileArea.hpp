@@ -15,18 +15,18 @@
  */
 [[gnu::pure]]
 std::string
-NormalizeFileArea(std::string_view area) noexcept;
+NormalizeFileArea(std::string_view area);
 
 [[gnu::pure]]
 inline std::string
-NormalizeFileArea(const AvailableFile &file) noexcept
+NormalizeFileArea(const AvailableFile &file)
 {
   return NormalizeFileArea(file.GetArea());
 }
 
 [[gnu::pure]]
 bool
-FileMatchesArea(const AvailableFile &file, std::string_view area) noexcept;
+FileMatchesArea(const AvailableFile &file, std::string_view area);
 
 /**
  * Unique normalized area codes: Regions (empty) first, then A–Z.
@@ -38,7 +38,7 @@ CollectUniqueFileAreas(const std::vector<AvailableFile> &files);
 [[gnu::pure]]
 unsigned
 CountFilesInArea(const std::vector<AvailableFile> &files,
-                 std::string_view area) noexcept;
+                 std::string_view area);
 
 void
 AppendFilesInArea(const std::vector<AvailableFile> &files,

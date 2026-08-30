@@ -52,6 +52,7 @@ class RepositoryFilePickerWidget final
   const FileType file_type;
   const bool watch_repository;
   const bool download_on_confirm;
+  const bool allow_multi_select;
 
   TwoTextRowsRenderer row_renderer;
 
@@ -80,14 +81,17 @@ class RepositoryFilePickerWidget final
   std::exception_ptr repository_error;
 
 public:
-  RepositoryFilePickerWidget(WidgetDialog &_dialog, FileType _file_type)
+  RepositoryFilePickerWidget(WidgetDialog &_dialog, FileType _file_type,
+                             bool _allow_multi_select)
     :dialog(_dialog), file_type(_file_type),
-     watch_repository(true), download_on_confirm(true) {}
+     watch_repository(true), download_on_confirm(true),
+     allow_multi_select(_allow_multi_select) {}
 
   RepositoryFilePickerWidget(WidgetDialog &_dialog,
                              std::vector<AvailableFile> &&files)
     :dialog(_dialog), file_type(FileType::UNKNOWN),
      watch_repository(false), download_on_confirm(false),
+     allow_multi_select(true),
      all_files(std::move(files)) {}
 
   std::vector<AllocatedPath> &&TakeDownloadedPaths() {
@@ -160,6 +164,8 @@ RepositoryFilePickerWidget::Prepare(ContainerWindow &parent,
 
   CreateList(parent, look, rc, row_height);
   MultiSelectListWidget::Prepare(parent, rc);
+  if (!allow_multi_select)
+    GetList().SetActivateOnFirstClick(false);
   RefreshList();
 
   if (watch_repository) {
@@ -311,8 +317,9 @@ RepositoryFilePickerWidget::CreateButtons()
   primary_button = dialog.AddButton(_("Download"), [this](){
     OnPrimary();
   });
-  select_all_button = dialog.AddButton(C_("Button", "Select all"),
-                                       [this](){ OnSelectAll(); });
+  if (allow_multi_select)
+    select_all_button = dialog.AddButton(C_("Button", "Select all"),
+                                         [this](){ OnSelectAll(); });
   back_button = dialog.AddButton(_("Back"), [this](){
     ShowAreaList();
   });
@@ -393,15 +400,15 @@ RepositoryFilePickerWidget::DownloadOne(const AvailableFile &file)
 {
   const auto relative_path = GetFileDownloadRelativePath(file);
   if (relative_path == nullptr)
-    throw std::runtime_error("Invalid download filename");
+    throw std::runtime_error(_("Invalid download filename"));
 
   const AllocatedPath dest_dir = GetFileTypeDefaultDir(file.type);
   if (dest_dir != nullptr) {
     const auto dest_path = LocalPath(dest_dir);
     Directory::CreateRecursive(dest_path);
     if (!Directory::Exists(dest_path))
-      throw std::runtime_error("Directory does not exist and "
-                               "could not be created.");
+      throw std::runtime_error(_("Directory does not exist and "
+                                 "could not be created."));
   }
 
   return DownloadFileModal(_("Download"), file.GetURI(),
@@ -413,11 +420,18 @@ RepositoryFilePickerWidget::ConfirmSelection()
 {
   assert(!showing_areas);
 
-  auto indices = GetSelectedIndices();
-  if (indices.empty()) {
+  std::vector<unsigned> indices;
+  if (!allow_multi_select) {
     if (visible_files.empty())
       return;
     indices.push_back(GetList().GetCursorIndex());
+  } else {
+    indices = GetSelectedIndices();
+    if (indices.empty()) {
+      if (visible_files.empty())
+        return;
+      indices.push_back(GetList().GetCursorIndex());
+    }
   }
 
   chosen_files.clear();
@@ -481,7 +495,10 @@ RepositoryFilePickerWidget::OnActivateItem(unsigned index) noexcept
 
   if (showing_areas)
     OpenArea(index);
-  else
+  else if (!allow_multi_select) {
+    GetList().SetCursorIndex(index);
+    ConfirmSelection();
+  } else
     ToggleSelection(index);
 }
 
@@ -516,23 +533,25 @@ RepositoryFilePickerWidget::PaintFileItem(Canvas &canvas, const PixelRect rc,
   assert(idx < visible_files.size());
 
   const auto &file = visible_files[idx];
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  const bool focused = !HasCursorKeys() || GetList().HasFocus();
-  const unsigned padding = Layout::GetTextPadding();
-  const unsigned box_size = rc.GetHeight() > 2 * padding
-    ? rc.GetHeight() - 2 * padding
-    : 0;
-
-  PixelRect box_rc;
-  box_rc.left = rc.left + (int)padding;
-  box_rc.top = rc.top + (int)padding;
-  box_rc.right = box_rc.left + (int)box_size;
-  box_rc.bottom = box_rc.top + (int)box_size;
-
-  DrawCheckBox(canvas, look, box_rc, IsSelected(idx), focused, false, true);
-
   PixelRect text_rc = rc;
-  text_rc.left = box_rc.right + 2 * (int)padding;
+
+  if (allow_multi_select) {
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    const bool focused = !HasCursorKeys() || GetList().HasFocus();
+    const unsigned padding = Layout::GetTextPadding();
+    const unsigned box_size = rc.GetHeight() > 2 * padding
+      ? rc.GetHeight() - 2 * padding
+      : 0;
+
+    PixelRect box_rc;
+    box_rc.left = rc.left + (int)padding;
+    box_rc.top = rc.top + (int)padding;
+    box_rc.right = box_rc.left + (int)box_size;
+    box_rc.bottom = box_rc.top + (int)box_size;
+
+    DrawCheckBox(canvas, look, box_rc, IsSelected(idx), focused, false, true);
+    text_rc.left = box_rc.right + 2 * (int)padding;
+  }
 
   if (file.GetName())
     row_renderer.DrawFirstRow(canvas, text_rc, file.GetName());
@@ -641,7 +660,7 @@ RepositoryFilePickerWidget::OnDownloadCompleteNotification() noexcept
 }
 
 std::vector<AllocatedPath>
-DownloadFilePicker(FileType file_type)
+DownloadFilePicker(FileType file_type, bool allow_multi_select)
 {
   if (!Net::DownloadManager::IsAvailable()) {
     const char *message =
@@ -653,7 +672,7 @@ DownloadFilePicker(FileType file_type)
   TWidgetDialog<RepositoryFilePickerWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Download"));
-  dialog.SetWidget(dialog, file_type);
+  dialog.SetWidget(dialog, file_type, allow_multi_select);
   dialog.GetWidget().CreateButtons();
   dialog.AddButton(_("Cancel"), mrCancel);
   /* No EnableCursorSelection: Left/Right page the list (ListControl).
