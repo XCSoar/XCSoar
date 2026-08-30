@@ -102,7 +102,10 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
   task_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
   AddFloat(_("Safety MC"),
-           _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
+           _("The MacCready used for reach, abort and landing arrival "
+             "when Safety MC is selected for reach calculations. "
+             "Speed-to-fly is not affected. Higher values treat fewer "
+             "fields as reachable."),
            "%.1f %s", "%.1f",
            0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
            false, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);

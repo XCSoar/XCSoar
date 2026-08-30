@@ -463,9 +463,10 @@ of the safety heights. \\
 \item[Task MC]  \label{conf:taskMC} The MacCready setting used at startup for
   speed-to-fly and task calculations.  Safety MC is used only for reach, abort
   and landing arrival.  Default is 0.5~m/s.
-\item[Safety MC*]  When safety MC is enabled, this MacCready setting is used for reach 
-  calculations, task abort, alternates and for determining arrival altitude at airfields.
-  Default is 3.2~m/s (about 25:1 on the default LS-8 polar).\label{conf:safetyMC} 
+\item[Safety MC*]  The MacCready used for reach, abort and landing arrival
+  when Safety MC is selected for reach calculations.  Speed-to-fly is not
+  affected.  Higher values treat fewer fields as reachable.
+  Default is 3.2~m/s, about 25:1 on the default LS-8 polar.\label{conf:safetyMC} 
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
   speed to fly as the glider gets low, in order to compensate for
