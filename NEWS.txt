@@ -89,7 +89,10 @@ Version 7.46 - not yet released
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
   - describe the Task MC setting on the Safety Factors page
-  - clarify that Safety MC is for reach, not speed-to-fly
+  - clarify Reach polar versus always-Safety-MC (InfoBoxes, waypoint
+    details), and that abort does not copy Safety MC into the ring
+  - describe Reach display options: terrain reach versus thermal-base
+    working line
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can

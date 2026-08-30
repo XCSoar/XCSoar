@@ -101,7 +101,11 @@ struct TaskBehaviour {
    */
   double task_mc;
 
-  /** Safety MacCready value (m/s) used by abort task */
+  /**
+   * Safety MacCready (m/s) for terrain reach, landable colours, abort
+   * and the Alternates list when Reach polar is Safety MC.  Alternate
+   * InfoBoxes and waypoint Alt. diff. MC safety always use this value.
+   */
   double safety_mc;
 
   /** Minimum height above terrain for arrival height at landable waypoint (m) */

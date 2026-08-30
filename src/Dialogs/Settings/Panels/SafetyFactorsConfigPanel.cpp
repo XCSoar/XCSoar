@@ -92,9 +92,11 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(AutoBugs);
 
   AddFloat(_("Task MC"),
-           _("The MacCready setting used at startup for speed-to-fly "
-             "and task calculations. Safety MC is used only for reach, "
-             "abort and landing arrival."),
+           _("The MacCready used at startup for speed-to-fly and task "
+             "calculations. Changing it here also sets the live "
+             "MacCready. Terrain reach, landable colours, abort and the "
+             "Alternates list follow Reach polar, not this value unless "
+             "Reach polar is Task MC."),
            "%.1f %s", "%.1f",
            0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
            false, UnitGroup::VERTICAL_SPEED, task_behaviour.task_mc);
@@ -102,10 +104,11 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
   task_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
   AddFloat(_("Safety MC"),
-           _("The MacCready used for reach, abort and landing arrival "
-             "when Safety MC is selected for reach calculations. "
-             "Speed-to-fly is not affected. Higher values treat fewer "
-             "fields as reachable."),
+           _("The MacCready used for terrain reach, landable colours, "
+             "abort and the Alternates list when Reach polar is Safety "
+             "MC. Alternate InfoBoxes and waypoint Alt. diff. MC safety "
+             "always use this value. Speed-to-fly is not affected. "
+             "Higher values treat fewer fields as reachable."),
            "%.1f %s", "%.1f",
            0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
            false, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);

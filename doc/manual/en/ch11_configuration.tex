@@ -448,24 +448,25 @@ This page allows the safety heights and behaviour for the alternates mode to be 
   the glider must clear during final glide. \\
 See Section~\ref{sec:safety-heights} for more details on the meanings
 of the safety heights. \\
-\item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
-  in the alternates dialogue. \\
-  {\bf Simple}: The alternates will only be sorted by arrival height. 
-    The first waypoint in the list is therefore the most reachable waypoint. \\
-  {\bf Task}: The sorting will also take the current task direction into account, 
-    such that the sort order is according to minimum extra distance travelled to 
-    the respective field and onwards to the task. \\
-  {\bf Home}: The sorting will try to find landing options in the current direction 
-    to the configured home waypoint.  Similar to `task' but with 
-    the home field as the desired destination.
+\item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of
+  alternates in the alternates dialogue and in abort mode. \\
+  {\bf Simple}: Reachable airfields are listed first (nearest at top), then
+    outlanding sites (nearest at top). \\
+  {\bf Task}: Reachable airfields are listed first (smallest detour to the
+    active turnpoint at top), then outlanding sites. \\
+  {\bf Home}: Reachable airfields are listed first (smallest detour toward
+    home at top), then outlanding sites.
 \item[Polar degradation*]  A permanent polar degradation. 0\% means no degradation, 
   50\% indicates the glider's sink rate is doubled.
-\item[Task MC]  \label{conf:taskMC} The MacCready setting used at startup for
-  speed-to-fly and task calculations.  Safety MC is used only for reach, abort
-  and landing arrival.  Default is 0.5~m/s.
-\item[Safety MC*]  The MacCready used for reach, abort and landing arrival
-  when Safety MC is selected for reach calculations.  Speed-to-fly is not
-  affected.  Higher values treat fewer fields as reachable.
+\item[Task MC]  \label{conf:taskMC} The MacCready used at startup for
+  speed-to-fly and task calculations.  Changing it here also sets the live
+  MacCready.  Terrain reach, landable colours, abort and the Alternates list
+  follow Reach polar, not this value unless Reach polar is Task MC.
+  Default is 0.5~m/s.
+\item[Safety MC*]  The MacCready used for terrain reach, landable colours,
+  abort and the Alternates list when Reach polar is Safety MC.  Alternate
+  InfoBoxes and waypoint Alt.\ diff.\ MC safety always use this value.
+  Speed-to-fly is not affected.  Higher values treat fewer fields as reachable.
   Default is 3.2~m/s, about 25:1 on the default LS-8 polar.\label{conf:safetyMC} 
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
@@ -567,12 +568,22 @@ optimisations.
   {\bf Off}: Reach calculations disabled. \\
   {\bf Straight}: The reach is from straight line paths from the glider. \\
   {\bf Turning}: The reach is calculated allowing turns around terrain obstacles.
-\item[Reach display]  \label{conf:gliderange} This determines whether the
-glide reach is drawn as a line resp.\ a shade on the map area.
-\item[Reach polar*]  \label{conf:reachpolar} This determines the glide performance 
-  used in reach, landable arrival, abort and alternate calculations. \\
-  {\bf Task MC}: Uses task MacCready value; \\
+\item[Reach polar*]  \label{conf:reachpolar} Which MacCready is used for
+  terrain reach, landable colours, abort and the Alternates list.
+  The working line always uses Task MC.  Alternate InfoBoxes and waypoint
+  Alt.\ diff.\ MC safety always use Safety MC. \\
+  {\bf Task MC}: Uses task MacCready value. \\
   {\bf Safety MC}: Uses safety MacCready value.
+\item[Reach display]  \label{conf:gliderange} How the glide reach is drawn
+  on the map. Terrain reach uses the Reach polar down to the ground.
+  Working reach is how far you can glide and still arrive at typical
+  thermal-base height from this flight; it always uses Task MC. \\
+  {\bf Off}: No reach overlay on the map. \\
+  {\bf Terrain line}: How far you can glide to the ground. Uses the Reach polar. \\
+  {\bf Terrain shade}: Shades the map beyond glide to the ground. Uses the Reach polar. \\
+  {\bf Working line}: How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC. \\
+  {\bf Working line, terrain line}: Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar. \\
+  {\bf Working line, terrain shade}: Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar.
 \end{description}
 
 

@@ -133,23 +133,31 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
   };
 
   AddEnum(_("Reach polar"),
-          _("This determines the glide performance used in reach, landable arrival, abort and alternate calculations."),
+          _("Which MacCready is used for terrain reach, landable "
+            "colours, abort and the Alternates list. The working line "
+            "always uses Task MC. Alternate InfoBoxes and waypoint "
+            "Alt. diff. MC safety always use Safety MC."),
           reach_polar_list, (unsigned)route_planner.reach_polar_mode);
   SetExpertRow(ReachPolarMode);
 
   static constexpr StaticEnumChoice final_glide_terrain_list[] = {
     { FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
-      N_("Disables the reach display.") },
+      N_("No reach overlay on the map.") },
     { FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
-      N_("Draws a dashed line at the terrain glide reach.") },
+      N_("How far you can glide to the ground. Uses the Reach polar.") },
     { FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
-      N_("Shades terrain outside glide reach.") },
+      N_("Shades the map beyond glide to the ground. Uses the Reach polar.") },
     { FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
-      N_("Draws a dashed line at the working glide reach.") },
-    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE, N_("Working line, terrain line"),
-      N_("Draws a dashed line at the working and terrain glide reaches.") },
-    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE, N_("Working line, terrain shade"),
-      N_("Draws a dashed line at working, and shade terrain, glide reaches.") },
+      N_("How far you can glide and still arrive at typical thermal-base "
+         "height from this flight. Always uses Task MC.") },
+    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE,
+      N_("Working line, terrain line"),
+      N_("Working line to typical thermal-base height using Task MC, plus "
+         "terrain line to the ground using the Reach polar.") },
+    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE,
+      N_("Working line, terrain shade"),
+      N_("Working line to typical thermal-base height using Task MC, plus "
+         "shade beyond the ground using the Reach polar.") },
     nullptr
   };
 
