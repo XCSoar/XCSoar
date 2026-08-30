@@ -1292,7 +1292,7 @@ static constexpr MetaData meta_data[] = {
     Group::WAYPOINT,
     N_("Alternate 1 altitude difference"),
     N_("Altn 1 AltD"),
-    N_("Arrival altitude at the best alternate landing location relative to the safety arrival height."),
+    N_("Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."),
     []() noexcept -> InfoBoxContent * {
       return new InfoBoxContentAlternateAltDiff(AlternateInfoBoxSlot::FIRST);
     },
@@ -1303,7 +1303,7 @@ static constexpr MetaData meta_data[] = {
     Group::WAYPOINT,
     N_("Alternate 2 altitude difference"),
     N_("Altn 2 AltD"),
-    N_("Arrival altitude at the second-best alternate landing location relative to the safety arrival height."),
+    N_("Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."),
     []() noexcept -> InfoBoxContent * {
       return new InfoBoxContentAlternateAltDiff(AlternateInfoBoxSlot::SECOND);
     },
