@@ -95,6 +95,7 @@ TEST_NAMES = \
 	TestPCMetGeoreference \
 	TestOperaRadar \
 	TestEumetviewSatellite \
+	TestEumetviewEnhance \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -668,6 +669,13 @@ TEST_EUMETVIEW_SATELLITE_SOURCES = \
 	$(TEST_SRC_DIR)/TestEumetviewSatellite.cpp
 TEST_EUMETVIEW_SATELLITE_DEPENDS = GEO MATH TIME FMT UTIL
 $(eval $(call link-program,TestEumetviewSatellite,TEST_EUMETVIEW_SATELLITE))
+
+TEST_EUMETVIEW_ENHANCE_SOURCES = \
+	$(SRC)/Weather/EUMETView/Enhance.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEumetviewEnhance.cpp
+TEST_EUMETVIEW_ENHANCE_DEPENDS = MATH UTIL
+$(eval $(call link-program,TestEumetviewEnhance,TEST_EUMETVIEW_ENHANCE))
 
 TEST_ARANGE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

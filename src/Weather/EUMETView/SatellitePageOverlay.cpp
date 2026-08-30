@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "SatellitePageOverlay.hpp"
+#include "Enhance.hpp"
 #include "co/Task.hxx"
 #include "Components.hpp"
 #include "NetComponents.hpp"
@@ -15,6 +16,8 @@
 #include "Operation/ProgressListener.hpp"
 #include "lib/curl/Global.hxx"
 #include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/custom/LibPNG.hpp"
+#include "ui/canvas/custom/UncompressedImage.hpp"
 #include "util/BindMethod.hxx"
 
 #include <fmt/format.h>
@@ -136,6 +139,9 @@ struct Slot {
   /** the frame this tile depicts */
   BrokenDateTime frame_time = BrokenDateTime::Invalid();
 
+  /** the cached file, so the tile can be drawn again with a new stretch */
+  AllocatedPath path{nullptr};
+
   constexpr bool IsUsed() const noexcept {
     return overlay != nullptr;
   }
@@ -164,6 +170,27 @@ GeoBitmap::TileData block_base{};
 
 /** the tiles the block wants, nearest to the aircraft first */
 std::vector<GeoBitmap::TileData> wanted;
+
+/**
+ * The brightness of the block being filled, counted tile by tile as
+ * they arrive.
+ */
+EUMETView::ToneHistogram block_histogram;
+
+/**
+ * The stretch in force.  Invalid before the first block has finished,
+ * which is what makes the first block stretch every tile on its own:
+ * something has to be drawn before anything is known about the scene,
+ * and a tile of its own is the only measure available.  The seams
+ * that costs are gone as soon as the block completes.
+ */
+EUMETView::ToneWindow tone_window{0, 0};
+
+/** when #tone_window was last measured, for the time-decayed blend */
+std::chrono::steady_clock::time_point tone_time{};
+
+/** a window that has moved less than this is not worth a redraw */
+constexpr unsigned TONE_REDRAW_THRESHOLD = 5;
 
 /**
  * Tiles that failed, so a layer the server will not serve at all does
@@ -329,7 +356,31 @@ InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
 
   Bitmap bitmap;
   try {
-    if (!bitmap.LoadFile(path))
+    auto image = LoadPNG(path);
+    if (!image.IsDefined())
+      return false;
+
+    /* every tile counts towards the block, whichever stretch it is
+       drawn with; the count is what the next block will be stretched
+       on */
+    block_histogram.Add(image);
+
+    /* before the first block has finished there is no measure of the
+       scene, so the tile is stretched on itself.  That makes the tile
+       boundaries visible until the block completes, which is the
+       price of drawing something immediately. */
+    auto window = tone_window;
+    if (!window.IsValid()) {
+      EUMETView::ToneHistogram own;
+      own.Add(image);
+      window = EUMETView::MakeToneWindow(own);
+    }
+
+    if (auto enhanced = EUMETView::Enhance(image, window);
+        enhanced.IsDefined())
+      image = std::move(enhanced);
+
+    if (!bitmap.Load(std::move(image)))
       return false;
   } catch (...) {
     LogError(std::current_exception(), "Satellite overlay");
@@ -361,6 +412,7 @@ InstallTile(Path path, int layer_index, const GeoBitmap::TileData &tile,
     slot.tile = tile;
     slot.layer = layer_index;
     slot.frame_time = frame_time;
+    slot.path = AllocatedPath{path};
     map->SetOverlay(unsigned(index), std::move(bmp));
     return true;
   } catch (...) {
@@ -383,6 +435,44 @@ NextMissingTile() noexcept
       return tile;
 
   return {};
+}
+
+/**
+ * The block stands: measure it, fold the measurement into the stretch
+ * carried between refreshes, and draw the tiles again if that moved
+ * the stretch far enough to see.
+ *
+ * The redraw is what removes the seams the first block was drawn
+ * with.  From then on it hardly ever fires, because the stretch of
+ * one refresh is a good prediction of the next.
+ */
+void
+FinishBlock() noexcept
+{
+  const auto fresh = EUMETView::MakeToneWindow(block_histogram);
+  if (!fresh.IsValid())
+    return;
+
+  const auto now = std::chrono::steady_clock::now();
+  const auto previous = tone_window;
+  tone_window = EUMETView::BlendToneWindow(previous, fresh, now - tone_time);
+  tone_time = now;
+
+  if (previous.IsValid() &&
+      EUMETView::ToneWindowDistance(previous, tone_window) < TONE_REDRAW_THRESHOLD)
+    /* the picture would not visibly change */
+    return;
+
+  for (auto &slot : slots) {
+    if (!slot.IsUsed() || slot.path == nullptr)
+      continue;
+
+    /* InstallTile() finds this very slot again, because the tile it
+       is asked for is the one already in it.  A failure here is not
+       worth reacting to: the tile drawn with the old stretch stays,
+       which is exactly what we would fall back to anyway. */
+    (void)InstallTile(slot.path, slot.layer, slot.tile, slot.frame_time);
+  }
 }
 
 } // anonymous namespace
@@ -544,6 +634,7 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
     wanted = CollectTiles(base);
     ReleaseUnwantedSlots();
     consecutive_failures = 0;
+    block_histogram.Clear();
   }
 
   if (glue->IsRunning() || wanted.empty()) {
@@ -564,9 +655,11 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
      back to once a minute once it stands */
   glue->Schedule(next.IsValid());
 
-  if (!next.IsValid())
+  if (!next.IsValid()) {
     /* the block is complete */
+    FinishBlock();
     return;
+  }
 
   glue->Start(layer_index, next, frame_time);
 }
