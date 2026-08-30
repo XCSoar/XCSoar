@@ -44,6 +44,7 @@ Version 7.46 - not yet released
 * glide computer
   - add a Task MC setting for the MacCready used at startup, instead
     of copying Safety MC into speed-to-fly #2552
+  - default Safety MC to 3.2 m/s, about 25:1 on the default LS-8 polar
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
