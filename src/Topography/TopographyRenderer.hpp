@@ -50,3 +50,9 @@ public:
   void DrawLabels(Canvas &canvas, const WindowProjection &projection,
                   LabelBlock &label_block) noexcept;
 };
+
+#ifdef ENABLE_OPENGL
+void TopographyGpuStatsBeginDraw() noexcept;
+void TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept;
+void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
+#endif
