@@ -35,6 +35,7 @@
 #include "Panels/DisplayConfigPanel.hpp"
 #include "Panels/LayoutConfigPanel.hpp"
 #include "Panels/GaugesConfigPanel.hpp"
+#include "Panels/TrafficConfigPanel.hpp"
 #include "Panels/VarioConfigPanel.hpp"
 #include "Panels/TaskRulesConfigPanel.hpp"
 #include "Panels/TaskDefaultsConfigPanel.hpp"
@@ -58,8 +59,14 @@
 #include "Panels/AudioConfigPanel.hpp"
 #endif
 
+#include "Tracking/Features.hpp"
+#ifdef HAVE_SKYLINES_TRACKING
+#include "Panels/SkyLinesConfigPanel.hpp"
+#endif
+#ifdef HAVE_LIVETRACK24
+#include "Panels/LiveTrack24ConfigPanel.hpp"
+#endif
 #ifdef HAVE_TRACKING
-#include "Panels/TrackingConfigPanel.hpp"
 #include "Panels/CloudConfigPanel.hpp"
 #endif
 
@@ -118,7 +125,8 @@ static constexpr TabMenuPage computer_pages[] = {
 };
 
 static constexpr TabMenuPage gauge_pages[] = {
-  { N_("FLARM, Other"), CreateGaugesConfigPanel },
+  { N_("Traffic"), CreateTrafficConfigPanel },
+  { N_("Overlays"), CreateGaugesConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
 #ifdef HAVE_PCM_PLAYER
   { N_("Audio Vario"), CreateAudioVarioConfigPanel },
@@ -133,7 +141,6 @@ static constexpr TabMenuPage task_pages[] = {
 };
 
 static constexpr TabMenuPage look_pages[] = {
-  { N_("Language, Input"), CreateInterfaceConfigPanel },
   { N_("Display"), CreateDisplayConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
@@ -158,18 +165,28 @@ static constexpr TabMenuPage weather_pages[] = {
   { nullptr, nullptr }
 };
 
+static constexpr TabMenuPage online_pages[] = {
+#ifdef HAVE_SKYLINES_TRACKING
+  { "SkyLines", CreateSkyLinesConfigPanel },
+#endif
+#ifdef HAVE_LIVETRACK24
+  { "LiveTrack24", CreateLiveTrack24ConfigPanel },
+#endif
+#ifdef HAVE_TRACKING
+  { "XCSoar Cloud", CreateCloudConfigPanel },
+#endif
+  { "WeGlide", CreateWeGlideConfigPanel },
+  { nullptr, nullptr }
+};
+
 static constexpr TabMenuPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
+  { N_("Language, Input"), CreateInterfaceConfigPanel },
   { N_("Units"), CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
   { NC_("Setting", "Time"), CreateTimeConfigPanel },
-#ifdef HAVE_TRACKING
-  { N_("Tracking"), CreateTrackingConfigPanel },
-  { "XCSoar Cloud", CreateCloudConfigPanel },
-#endif
-  { "WeGlide", CreateWeGlideConfigPanel },
 #ifdef HAVE_VOLUME_CONTROLLER
   { N_("Audio"), CreateAudioConfigPanel },
 #endif
@@ -188,6 +205,7 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { N_("Task Defaults"), task_pages },
   { N_("Look"), look_pages },
   { N_("Weather"), weather_pages },
+  { NC_("Menu", "Online Services"), online_pages },
   { NC_("Menu", "Setup"), setup_pages },
 };
 

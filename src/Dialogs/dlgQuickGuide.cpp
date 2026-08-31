@@ -246,8 +246,10 @@ GetConfigurationHelpText()
     "Set arrival height, terrain clearance and polar degradation\n\n"
     "- [%s] [Terrain Display](xcsoar://config/terrain) - "
     "Choose terrain colors, shading and contour lines\n\n"
-    "- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - "
-    "Share your position via SkyLines or LiveTrack24\n\n"
+    "- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - "
+    "Share your position via SkyLines\n\n"
+    "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - "
+    "Share your position via LiveTrack24\n\n"
     "Explore XCSoar easily by restarting in Simulator mode, or by "
     "[replaying an IGC flight](xcsoar://dialog/replay)."),
     has_map ? "x" : " ",
@@ -296,7 +298,7 @@ GetPostflightText() noexcept
     "[Info > Status](xcsoar://dialog/status)\n\n"
     "4. **Upload** - Upload to WeGlide directly from XCSoar. "
     "Configure your WeGlide User ID in "
-    "[Config > System > WeGlide](xcsoar://config/weglide)");
+    "[Config > Online Services > WeGlide](xcsoar://config/weglide)");
 }
 
 /* ---- Helpers ---- */
@@ -367,8 +369,9 @@ GetLocationDisclosureText() noexcept
     "- **Foreground Service** - Keeps GPS active during your "
     "flight\n\n"
     "Your location data is stored locally on your device. It is "
-    "not shared unless you explicitly enable tracking in "
-    "[Config > Tracking](xcsoar://config/tracking).\n\n"
+    "not shared unless you explicitly enable "
+    "[SkyLines](xcsoar://config/skylines) or "
+    "[LiveTrack24](xcsoar://config/livetrack24) tracking.\n\n"
     "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)");
 }
 
@@ -403,7 +406,7 @@ GetCloudConsentText() noexcept
     "locations** and other weather data will be transmitted to "
     "the XCSoar Cloud server.\n\n"
     "You can change this at any time in "
-    "[Config > Tracking](xcsoar://config/tracking).");
+    "[Config > Online Services > XCSoar Cloud](xcsoar://config/cloud).");
 }
 
 #ifdef HAVE_SKYLINES_TRACKING

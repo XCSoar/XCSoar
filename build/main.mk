@@ -116,6 +116,7 @@ DIALOG_SOURCES = \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/NOTAMConfigPanel.cpp) \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/NOTAM/NOTAMMessageListener.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TrafficConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/DisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
@@ -756,7 +757,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermAutoSwitch.cpp \
 
 XCSOAR_SOURCES += \
-	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SkyLinesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/LiveTrack24ConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/CloudConfigPanel.cpp
 
 XCSOAR_SOURCES += \

@@ -58,6 +58,12 @@ Version 7.46 - not yet released
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
 * dialogs
+  - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
+    Online Services configuration menu
+  - move Language, Input from Look to Setup
+  - split Gauges FLARM, Other into Traffic and Overlays
+  - combine FLARM Radar on/off and position into one setting, like
+    Thermal Assistant
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

@@ -572,17 +572,26 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Gauges / FLARM, Other} \label{sec:flarmandother-gauge}
+\section{Gauges / Traffic} \label{sec:flarmandother-gauge}
 
 \begin{description}
-\item[FLARM radar]  \label{conf:flarmdisplay} This enables the display of the FLARM 
-  radar gauge. The track bearing of the target relative to the track bearing of the 
+\item[FLARM radar]  \label{conf:flarmdisplay} Enables the traffic radar and
+  chooses its position on the main screen, or {\bf Off} to hide it.
+  The track bearing of the target relative to the track bearing of the 
   aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
 \sketch{figures/flarmrose.png}
   the relative altitude of the target relative to you.
 \\
 \item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM 
   traffic has gone.
+\end{description}
+In all FLARM environments, the colour of the target indicates the threat level.
+
+
+%%%%%%%%%%
+\section{Gauges / Overlays}
+
+\begin{description}
 \item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
   ThermalAssistant gauge.
 \item[Thermal band] \label{conf:thermalband} Enables the display of the
@@ -590,7 +599,6 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 \item[Final glide bar MC0*]  If set to ON the final glide bar will show a second arrow 
   indicating the required altitude to reach the final waypoint at MC zero.
 \end{description}
-In all FLARM environments, the colour of the target indicates the threat level.
 
 
 %%%%%%%%%%
@@ -690,48 +698,6 @@ rules. \label{conf:taskrules}
 
 This page allows to set default turnpoint types used by the task editor. All 
 options are well described for the task manager in Chapter~\ref{cha:tasks}.
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Look / Language, Input}\label{sec:interface}
-
-This page allows to customise the way the user controls and interacts with
-XCSoar.
-
-\begin{description}
-\item[Events*]  The Input Events file defines the menu system and how XCSoar
-  responds to button presses and events from external devices.
-\item[Language]  The language options selects translations for English texts to
-  other languages.  Select {\bf English} for a native interface, {\bf Automatic}
-  to localise XCSoar according to the system settings; or you may select one of 
-  the two character language short cuts directly.
-\item[Status message*]  The status message file can be used to define sounds to 
-  be played when certain events occur, and how long various status messages will 
-  appear on screen.
-\item[Menu timeout*]  This determines how long menus will appear on screen if the user
-  does not make any button presses or interacts with the computer.
-\item[Text Input Style*]  Determines which style for text entries is used. 
-  See Section~\ref{sec:textentry} for further information on textual input. \\
-  {\bf HighScore Style}: For entering text you have to change the underlined 
-  character to the relevant letter. \\
-  {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
-  {\bf Default}: Uses the default input style for your platform.
-\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
-  when the device accepts your finger press as valid input on the touch-screen.
-\end{description}
-
-Press the \button{Fonts} button to adjust the fonts XCSoar uses.
-
-\subsection*{Font Configuration}
-
-This page enables customisation of fonts in various fields of the program.
-
-\sketch{figures/config-fonts.png}
-
-Once the customisation is enabled, the \button{Edit} buttons allow to change 
-some parameters (font face, height, bold and italic) of the chosen font.
-
-If customisation is disabled, default fonts will be used.
 
 
 %%%%%%%%%%%%%%%%%%
@@ -900,6 +866,47 @@ purposes.
 \end{description}
 
 
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Language, Input}\label{sec:interface}
+
+This page allows to customise the way the user controls and interacts with
+XCSoar.
+
+\begin{description}
+\item[Events*]  The Input Events file defines the menu system and how XCSoar
+  responds to button presses and events from external devices.
+\item[Language]  The language options selects translations for English texts to
+  other languages.  Select {\bf English} for a native interface, {\bf Automatic}
+  to localise XCSoar according to the system settings; or you may select one of 
+  the two character language short cuts directly.
+\item[Status message*]  The status message file can be used to define sounds to 
+  be played when certain events occur, and how long various status messages will 
+  appear on screen.
+\item[Menu timeout*]  This determines how long menus will appear on screen if the user
+  does not make any button presses or interacts with the computer.
+\item[Text Input Style*]  Determines which style for text entries is used. 
+  See Section~\ref{sec:textentry} for further information on textual input. \\
+  {\bf HighScore Style}: For entering text you have to change the underlined 
+  character to the relevant letter. \\
+  {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
+  {\bf Default}: Uses the default input style for your platform.
+\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
+  when the device accepts your finger press as valid input on the touch-screen.
+\end{description}
+
+Press the \button{Fonts} button to adjust the fonts XCSoar uses.
+
+\subsection*{Font Configuration}
+
+This page enables customisation of fonts in various fields of the program.
+
+\sketch{figures/config-fonts.png}
+
+Once the customisation is enabled, the \button{Edit} buttons allow to change 
+some parameters (font face, height, bold and italic) of the chosen font.
+
+If customisation is disabled, default fonts will be used.
+
 
 %%%%%%%%%%%%%%%%%%
 \section{Setup / Units}
@@ -946,7 +953,7 @@ Set the local time offset with respect to UTC.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Setup / Tracking}
+\section{Online Services / SkyLines}
 
 `{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
 network to send this position in real-time to a server, other people can see 
@@ -954,24 +961,30 @@ your exact position and track presented in a map just in time.
 The tracking option needs the capability to connect to mobile networking as offered by 
 your glide computer.
 
-Currently there are two tracking protocols implemented. `{\em SkyLines}' as a spin 
-off project from XCSoar itself; for details on this service have a look at 
-\url{https://skylines.aero}. 
-And also the `{\em LiveTrack24}' protocol used e.g.\ by the tracking
-portal on \url{http://www.livetrack24.com}.  
-Please consult the web pages of the service provider listed under `Server' 
-for details on this setup.
+`{\em SkyLines}' is a spin-off project from XCSoar itself; for details on this
+service have a look at \url{https://skylines.aero}.
 
 \begin{description}
-\item[SkyLines]  Switch this {\bf On} to enable the live stream of 
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em SkyLines}'.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
   a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
 \item[Key]  Create a key on the page \url{https://skylines.aero/tracking/info} 
   and enter it here, to identify your positions at the tracking service.
-\\
-\item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Online Services / LiveTrack24}
+
+The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
+\url{http://www.livetrack24.com}.
+Please consult the web pages of the service provider listed under `Server'
+for details on this setup.
+
+\begin{description}
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
   your position to `{\em LiveTrack24}'.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service.
