@@ -184,7 +184,6 @@ DIALOG_SOURCES = \
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += \
-	$(SRC)/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/AudioConfigPanel.cpp
 endif
 

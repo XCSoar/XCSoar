@@ -52,10 +52,6 @@
 #endif
 
 #ifdef HAVE_PCM_PLAYER
-#include "Panels/AudioVarioConfigPanel.hpp"
-#endif
-
-#ifdef HAVE_VOLUME_CONTROLLER
 #include "Panels/AudioConfigPanel.hpp"
 #endif
 
@@ -128,9 +124,6 @@ static constexpr TabMenuPage gauge_pages[] = {
   { N_("Traffic"), CreateTrafficConfigPanel },
   { N_("Overlays"), CreateGaugesConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
-#ifdef HAVE_PCM_PLAYER
-  { N_("Audio Vario"), CreateAudioVarioConfigPanel },
-#endif
   { nullptr, nullptr }
 };
 
@@ -182,14 +175,15 @@ static constexpr TabMenuPage online_pages[] = {
 static constexpr TabMenuPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
   { N_("Language, Input"), CreateInterfaceConfigPanel },
+#ifdef HAVE_PCM_PLAYER
+  /* Before Units: audio vario deadband uses vertical-speed units. */
+  { N_("Audio"), CreateAudioConfigPanel },
+#endif
   { N_("Units"), CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
   { NC_("Setting", "Time"), CreateTimeConfigPanel },
-#ifdef HAVE_VOLUME_CONTROLLER
-  { N_("Audio"), CreateAudioConfigPanel },
-#endif
   { N_("Network"), CreateNetworkConfigPanel },
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
   { N_("System Services"), CreateSystemdConfigPanel },

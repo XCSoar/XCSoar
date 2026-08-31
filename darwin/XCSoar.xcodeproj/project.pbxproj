@@ -3906,8 +3906,6 @@
 		5CBFE2222D742FA600F05795 /* AirspaceConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AirspaceConfigPanel.cpp; sourceTree = "<group>"; };
 		5CBFE2232D742FA600F05795 /* AudioConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioConfigPanel.hpp; sourceTree = "<group>"; };
 		5CBFE2242D742FA600F05795 /* AudioConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioConfigPanel.cpp; sourceTree = "<group>"; };
-		5CBFE2252D742FA600F05795 /* AudioVarioConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudioVarioConfigPanel.hpp; sourceTree = "<group>"; };
-		5CBFE2262D742FA600F05795 /* AudioVarioConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioVarioConfigPanel.cpp; sourceTree = "<group>"; };
 		5CBFE2272D742FA600F05795 /* CloudConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CloudConfigPanel.hpp; sourceTree = "<group>"; };
 		5CBFE2282D742FA600F05795 /* CloudConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CloudConfigPanel.cpp; sourceTree = "<group>"; };
 		5CBFE2292D742FA600F05795 /* ConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConfigPanel.hpp; sourceTree = "<group>"; };
@@ -15805,8 +15803,6 @@
 				5CBFE2222D742FA600F05795 /* AirspaceConfigPanel.cpp */,
 				5CBFE2232D742FA600F05795 /* AudioConfigPanel.hpp */,
 				5CBFE2242D742FA600F05795 /* AudioConfigPanel.cpp */,
-				5CBFE2252D742FA600F05795 /* AudioVarioConfigPanel.hpp */,
-				5CBFE2262D742FA600F05795 /* AudioVarioConfigPanel.cpp */,
 				5CBFE2272D742FA600F05795 /* CloudConfigPanel.hpp */,
 				5CBFE2282D742FA600F05795 /* CloudConfigPanel.cpp */,
 				5CBFE2292D742FA600F05795 /* ConfigPanel.hpp */,
