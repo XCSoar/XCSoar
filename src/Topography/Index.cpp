@@ -56,7 +56,8 @@ static constexpr LOOKUP_ICON icon_list[] = {
   { "reporting_point", IDB_REPORTING_POINT_ALL },
   { "pgtakeoff", IDB_PGTAKEOFF_ALL },
   { "pglanding", IDB_PGLANDING_ALL },
-  { nullptr, ResourceId::Null(), ResourceId::Null(), ResourceId::Null() }
+  { nullptr, ResourceId::Null(), ResourceId::Null(), ResourceId::Null(),
+    ResourceId::Null() }
 };
 
 std::optional<TopographyIndexEntry>
