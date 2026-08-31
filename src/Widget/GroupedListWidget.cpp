@@ -58,6 +58,20 @@ static constexpr unsigned CAPTION_GAP_PT = 4;
  */
 static constexpr unsigned PADDING_PT = MARGIN_PT;
 
+/**
+ * Additional distance which the badge and the value keep to the edge
+ * of a card.  They are drawn to the pixel, while a glyph carries some
+ * white space of its own; with the same distance as the caption on
+ * the other side, they look closer to the edge than they are.
+ */
+static constexpr unsigned EDGE_INSET_PT = 4;
+
+/** Horizontal padding inside a badge; vertically, half of it. */
+static constexpr unsigned BADGE_PADDING_PT = 4;
+
+/** Corner radius of a badge. */
+static constexpr unsigned BADGE_RADIUS_PT = 3;
+
 /** Distance between a card and the footer which explains it. */
 static constexpr unsigned FOOTER_GAP_PT = 4;
 
@@ -89,8 +103,14 @@ private:
 
     std::string text;
 
-    /** only for Type::HERO: the description below the title */
+    /**
+     * only for Type::ITEM: drawn at the right edge; only for
+     * Type::HERO: the description below the title
+     */
     std::string value{};
+
+    /** only for Type::ITEM: drawn in a rounded box */
+    std::string badge{};
 
     /** only for Type::ITEM */
     Callback callback{};
@@ -151,7 +171,8 @@ public:
 
   void AddHero(const char *title, const char *description) noexcept;
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
-  void AddItem(const char *caption, Callback callback) noexcept;
+  void AddItem(const char *caption, Callback callback,
+               const GroupedListWidget::ItemOptions &options) noexcept;
 
   void Clear() noexcept {
     /* the options of the group which is open must not leak into the
@@ -332,15 +353,20 @@ GroupedListControl::FinishGroup() noexcept
 }
 
 void
-GroupedListControl::AddItem(const char *caption, Callback callback) noexcept
+GroupedListControl::AddItem(const char *caption, Callback callback,
+                            const GroupedListWidget::ItemOptions &options) noexcept
 {
   assert(caption != nullptr);
 
   elements.push_back(Element{
     .type = Element::Type::ITEM,
     .text = caption,
+
+    .value = options.value != nullptr ? options.value : "",
+    .badge = options.badge != nullptr ? options.badge : "",
     .callback = std::move(callback),
   });
+
 }
 
 unsigned
@@ -660,10 +686,72 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     canvas.SetTextColor(text_color);
 
     const int font_height = look.list.font->GetHeight();
+    const int centre_y = text_rc.top + (int)text_rc.GetHeight() / 2;
+
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - font_height) / 2;
 
-    const PixelRect caption_rc = text_rc;
+    /* the caption uses the room which is left of the value and the
+       badge */
+    PixelRect caption_rc = text_rc;
+
+    caption_rc.right -= Layout::VptScale(EDGE_INSET_PT);
+
+    if (!element.value.empty()) {
+      const int width = canvas.CalcTextWidth(element.value.c_str());
+
+      /* the value sits in the middle of the item, like the badge and
+         the arrow, even when the caption has been pushed up by a
+         second line */
+      canvas.DrawClippedText({caption_rc.right - width,
+                              centre_y - font_height / 2},
+                             caption_rc, element.value.c_str());
+
+      caption_rc.right -= width + padding;
+    }
+
+    if (!element.badge.empty()) {
+      /* a short label on a filled rounded box; on the selected item
+         the colors are swapped, where the accent color is the
+         background of the item itself */
+      const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
+      const int badge_pad_y = badge_pad_x / 2;
+      const int badge_height = font_height + 2 * badge_pad_y;
+
+      PixelRect badge_rc;
+      badge_rc.right = caption_rc.right;
+      badge_rc.left = badge_rc.right
+        - canvas.CalcTextWidth(element.badge.c_str()) - 2 * badge_pad_x;
+      badge_rc.top = centre_y - badge_height / 2;
+      badge_rc.bottom = badge_rc.top + badge_height;
+
+      canvas.DrawFilledRectangle(badge_rc, selected
+                                 ? text_color
+                                 : look.list.focused.background_color);
+
+      const int badge_radius = std::min((int)Layout::VptScale(BADGE_RADIUS_PT),
+                                        badge_height / 2);
+      DrawRoundedEdge(canvas, badge_rc, true, background, badge_radius);
+      DrawRoundedEdge(canvas, badge_rc, false, background, badge_radius);
+
+      canvas.SetTextColor(selected
+                          ? background
+                          : look.list.focused.text_color);
+
+      /* center the capitals within the box, not the font box: its
+         descent is empty for a short label and would push the text
+         down */
+      const int badge_text_y = centre_y
+        - (int)look.list.font->GetAscentHeight()
+        + (int)look.list.font->GetCapitalHeight() / 2;
+
+      canvas.DrawClippedText({badge_rc.left + badge_pad_x, badge_text_y},
+                             badge_rc, element.badge.c_str());
+
+      caption_rc.right = badge_rc.left - padding;
+
+      canvas.SetTextColor(text_color);
+    }
 
     canvas.DrawClippedText({caption_rc.left, text_y}, caption_rc,
                            element.text.c_str());
@@ -1046,7 +1134,21 @@ GroupedListWidget::AddGroup(const char *caption,
 void
 GroupedListWidget::AddItem(const char *caption, Callback callback) noexcept
 {
-  control.AddItem(caption, std::move(callback));
+  control.AddItem(caption, std::move(callback), ItemOptions{});
+}
+
+void
+GroupedListWidget::AddItem(const char *caption, Callback callback,
+                           const ItemOptions &options) noexcept
+{
+  control.AddItem(caption, std::move(callback), options);
+}
+
+void
+GroupedListWidget::AddItem(const char *caption,
+                           const ItemOptions &options) noexcept
+{
+  control.AddItem(caption, Callback{}, options);
 }
 
 void

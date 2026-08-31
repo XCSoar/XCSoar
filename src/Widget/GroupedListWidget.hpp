@@ -38,6 +38,15 @@ public:
     const char *footer = nullptr;
   };
 
+  /** The contents and the decorations of an item. */
+  struct ItemOptions {
+    /** a text at the right edge, e.g. the current value of a setting */
+    const char *value = nullptr;
+
+    /** a short label in a rounded box, e.g. "active" */
+    const char *badge = nullptr;
+  };
+
 private:
   /** owns the window until Prepare() hands it to #WindowWidget */
   std::unique_ptr<GroupedListControl> pending;
@@ -70,6 +79,12 @@ public:
    * last AddGroup() call.
    */
   void AddItem(const char *caption, Callback callback) noexcept;
+
+  void AddItem(const char *caption, Callback callback,
+               const ItemOptions &options) noexcept;
+
+  /** Append an item which has no callback. */
+  void AddItem(const char *caption, const ItemOptions &options) noexcept;
 
   void Clear() noexcept;
 
