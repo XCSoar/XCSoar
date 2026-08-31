@@ -58,6 +58,8 @@ Version 7.46 - not yet released
   - move Dark mode and Text size from Display to Layout
   - rename Look Display to Screen, so it is not confused with
     Map Display
+  - show Task Rules start and finish limits without Expert mode;
+    keep PEV start and the speed/height margins as expert
   - move Audio Vario from Gauges to Setup Audio, together with
     master volume
   - split Gauges FLARM, Other into Traffic and Overlays
