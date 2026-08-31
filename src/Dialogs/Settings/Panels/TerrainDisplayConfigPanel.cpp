@@ -31,14 +31,14 @@
 enum ControlIndex {
   EnableTerrain,
   EnableTopography,
+#ifdef ENABLE_OPENGL
+  TerrainGpuDemSpike,
+#endif
   TerrainColors,
   TerrainSlopeShading,
   TerrainContrast,
   TerrainBrightness,
   TerrainContours,
-#ifdef ENABLE_OPENGL
-  TerrainGpuDemSpike,
-#endif
   TerrainSpacer,
   TerrainPreview,
 };
@@ -252,6 +252,15 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
              settings_map.topography_enabled);
   GetDataField(EnableTopography).SetListener(this);
 
+#ifdef ENABLE_OPENGL
+  AddBoolean(_("GPU DEM spike"),
+             _("Experimental: sample fine DEM tiles on the GPU "
+               "(no ScanMap)."),
+             terrain.gpu_dem_spike);
+  GetDataField(TerrainGpuDemSpike).SetListener(this);
+  SetExpertRow(TerrainGpuDemSpike);
+#endif
+
   static constexpr StaticEnumChoice terrain_ramp_list[] = {
     { 0, N_("Low lands"), },
     { 1, N_("Mountainous"), },
@@ -335,15 +344,6 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
           contours_list, (unsigned)terrain.contours);
   GetDataField(TerrainContours).SetListener(this);
   SetExpertRow(TerrainContours);
-
-#ifdef ENABLE_OPENGL
-  AddBoolean(_("GPU DEM spike"),
-             _("Experimental: sample fine DEM tiles on the GPU "
-               "(no ScanMap)."),
-             terrain.gpu_dem_spike);
-  GetDataField(TerrainGpuDemSpike).SetListener(this);
-  SetExpertRow(TerrainGpuDemSpike);
-#endif
 
   have_terrain_preview = data_components->terrain != nullptr;
   if (have_terrain_preview) {
