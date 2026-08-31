@@ -414,6 +414,11 @@ protected:
     if (waypoints.full())
       return;
 
+    const bool watched = way_point->flags.watched;
+    if (!in_task && !watched &&
+        !settings.IsWaypointDisplayed(*way_point))
+      return;
+
     if (!projection.WaypointInScaleFilter(*way_point) && !in_task)
       return;
 

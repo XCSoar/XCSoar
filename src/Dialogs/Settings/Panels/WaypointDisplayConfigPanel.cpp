@@ -9,6 +9,8 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "ConfigPanel.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 
 enum ControlIndex {
   WaypointLabels,
@@ -33,6 +35,8 @@ public:
 
   /* methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
   bool Save(bool &changed) noexcept override;
 
 private:
@@ -192,6 +196,23 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(AppScaleRunwayLength);
 
   UpdateVisibilities();
+}
+
+void
+WaypointDisplayConfigPanel::Show(const PixelRect &rc) noexcept
+{
+  ConfigPanel::BorrowExtraButton(2, _("Filter"), [](){
+    dlgWaypointFilterShowModal();
+  });
+
+  RowFormWidget::Show(rc);
+}
+
+void
+WaypointDisplayConfigPanel::Hide() noexcept
+{
+  RowFormWidget::Hide();
+  ConfigPanel::ReturnExtraButton(2);
 }
 
 bool
