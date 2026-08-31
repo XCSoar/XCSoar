@@ -21,17 +21,19 @@ using namespace std::chrono;
 
 enum ControlIndex {
   AirspaceDisplay,
+  ClipAltitude,
+  AltWarningMargin,
   AirspaceLabelSelection,
 #ifdef HAVE_HTTP
   ShowNotamLabels,
 #endif
-  ClipAltitude,
-  AltWarningMargin,
+  SPACER_WARNINGS,
   AirspaceWarnings,
   WarningDialog,
   WarningTime,
   RepetitiveSound,
   AcknowledgeTime,
+  SPACER_APPEARANCE,
   UseBlackOutline,
   AirspaceFillMode,
 #if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
@@ -95,21 +97,21 @@ private:
 void
 AirspaceConfigPanel::ShowDisplayControls(AirspaceDisplayMode mode)
 {
-  SetRowVisible(ClipAltitude,
-                mode == AirspaceDisplayMode::CLIP);
+  SetRowAvailable(ClipAltitude,
+                  mode == AirspaceDisplayMode::CLIP);
 
-  SetRowVisible(AltWarningMargin,
-                mode == AirspaceDisplayMode::AUTO ||
-                mode == AirspaceDisplayMode::ALLBELOW);
+  SetRowAvailable(AltWarningMargin,
+                  mode == AirspaceDisplayMode::AUTO ||
+                  mode == AirspaceDisplayMode::ALLBELOW);
 }
 
 void
 AirspaceConfigPanel::ShowWarningControls(bool visible)
 {
-  SetRowVisible(WarningDialog, visible);
-  SetRowVisible(WarningTime, visible);
-  SetRowVisible(RepetitiveSound, visible);
-  SetRowVisible(AcknowledgeTime, visible);
+  SetRowAvailable(WarningDialog, visible);
+  SetRowAvailable(WarningTime, visible);
+  SetRowAvailable(RepetitiveSound, visible);
+  SetRowAvailable(AcknowledgeTime, visible);
 }
 
 void
@@ -164,6 +166,16 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
           _("Controls filtering of airspace for display and warnings. The airspace filter button also allows filtering of display and warnings independently for each airspace class."),
           as_display_list, (unsigned)renderer.altitude_mode, this);
 
+  AddFloat(_("Clip altitude"),
+           _("For clip airspace mode, this is the altitude below which airspace is displayed."),
+           "%.0f %s", "%.0f", 0, 20000, 100, false,
+           UnitGroup::ALTITUDE, renderer.clip_altitude);
+
+  AddFloat(_("Margin"),
+           _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
+           "%.0f %s", "%.0f", 0, 10000, 100, false,
+           UnitGroup::ALTITUDE, computer.warnings.altitude_warning_margin);
+
   AddEnum(_("Label visibility"),
           _("Determines what labels are displayed."),
           as_label_selection_list, (unsigned)renderer.label_selection);
@@ -176,15 +188,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(ShowNotamLabels);
 #endif
 
-  AddFloat(_("Clip altitude"),
-           _("For clip airspace mode, this is the altitude below which airspace is displayed."),
-           "%.0f %s", "%.0f", 0, 20000, 100, false,
-           UnitGroup::ALTITUDE, renderer.clip_altitude);
-
-  AddFloat(_("Margin"),
-           _("For auto and all below airspace mode, this is the altitude above/below which airspace is included."),
-           "%.0f %s", "%.0f", 0, 10000, 100, false,
-           UnitGroup::ALTITUDE, computer.warnings.altitude_warning_margin);
+  AddSpacer();
 
   AddBoolean(_("Warnings"), _("Enable/disable all airspace warnings."),
              computer.enable_warnings, this);
@@ -211,6 +215,9 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
               computer.warnings.acknowledgement_time);
   SetExpertRow(AcknowledgeTime);
 
+  AddSpacer();
+  SetExpertRow(SPACER_APPEARANCE);
+
   AddBoolean(_("Use black outline"),
              _("Draw a black outline around each airspace rather than the airspace color."),
              renderer.black_outline);
@@ -227,7 +234,7 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(AirspaceTransparency);
 #endif
 
-  ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
+  ShowDisplayControls(renderer.altitude_mode);
   ShowWarningControls(computer.enable_warnings);
 }
 
