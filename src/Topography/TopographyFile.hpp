@@ -116,6 +116,12 @@ class TopographyFile {
    */
   GeoBounds cache_bounds = GeoBounds::Invalid();
 
+  /**
+   * True after the 2× overscan pass.  A cache miss first loads the
+   * screen rectangle so on-map shapes appear before the surround.
+   */
+  bool cache_overscan = false;
+
 public:
   /**
    * Viewport overscan for #cache_bounds, the topography thread
@@ -327,6 +333,9 @@ protected:
   void ClearCache() noexcept;
 
 private:
+  /**
+   * Remove @e from #list.  Caller must hold #mutex.
+   */
   void UnlinkVisible(ShapeEnvelope &e,
                      ShapeList::iterator &prev) noexcept;
   void DropCached(ShapeEnvelope &e) noexcept;

@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <vector>
 
 static void
 CopyShapeBaseName(char *dest, std::size_t dest_size,
@@ -92,6 +93,7 @@ TopographyFile::ClearCache() noexcept
   cache_list.clear();
   list.clear();
   cache_bounds.SetInvalid();
+  cache_overscan = false;
 
   for (auto &i : shapes) {
     i.in_list = false;
@@ -110,10 +112,8 @@ TopographyFile::UnlinkVisible(ShapeEnvelope &e,
   assert(e.in_list);
   assert(&*std::next(prev) == &e);
 
-  const std::lock_guard lock{mutex};
   list.erase_after(prev);
   e.in_list = false;
-  ++serial;
 }
 
 void
@@ -175,6 +175,37 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field,
   return std::make_unique<XShape>(shape, center, label, clip, clipped);
 }
 
+#ifdef ENABLE_OPENGL
+/**
+ * Ear-clip polygons on the topography thread so Paint never
+ * triangulates a newly panned-in fill.
+ */
+static void
+PrepareOpenGLShape(const XShape &shape, const TopographyFile &file,
+                   const WindowProjection &map_projection,
+                   unsigned layout_scale) noexcept
+{
+  if (shape.get_type() != MS_SHAPE_POLYGON)
+    return;
+
+  const Angle min_span =
+    map_projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+  const GeoBounds &b = shape.get_bounds();
+  if (b.GetWidth() < min_span && b.GetHeight() < min_span)
+    return;
+
+  const unsigned level =
+    file.GetThinningLevel(map_projection.GetMapScale());
+  if (layout_scale == 0)
+    layout_scale = 1;
+  const ShapeScalar min_distance =
+    ShapeScalar(file.GetMinimumPointDistance(level))
+    / (layout_scale * FAISphere::REARTH);
+  [[maybe_unused]] const auto indices =
+    shape.GetIndices(int(level), min_distance);
+}
+#endif
+
 bool
 TopographyFile::Update(const WindowProjection &map_projection,
                        [[maybe_unused]] unsigned layout_scale)
@@ -185,11 +216,17 @@ TopographyFile::Update(const WindowProjection &map_projection,
 
   const GeoBounds screenRect =
     map_projection.GetScreenBounds();
-  if (cache_bounds.IsValid() && cache_bounds.IsInside(screenRect))
-    /* the cache is still fresh */
+  if (cache_bounds.IsValid() && cache_bounds.IsInside(screenRect) &&
+      cache_overscan)
+    /* 2× cache still covers the screen */
     return false;
 
-  cache_bounds = screenRect.Scale(CACHE_BOUNDS_SCALE);
+  /* First pass: screen only, so on-map roads appear before the
+     surround is read from the zip.  Second pass: 2× overscan. */
+  const bool fill_overscan =
+    cache_bounds.IsValid() && cache_bounds.IsInside(screenRect);
+  cache_bounds = screenRect.Scale(fill_overscan ? CACHE_BOUNDS_SCALE : 1);
+  cache_overscan = fill_overscan;
 
   // Test which shapes are inside the given bounds and save the
   // status to file.status
@@ -209,7 +246,13 @@ TopographyFile::Update(const WindowProjection &map_projection,
   const auto status = file.GetStatus();
   assert(status != nullptr);
 
-  auto prev = list.before_begin();
+  struct PendingReload {
+    ShapeEnvelope *envelope;
+    std::unique_ptr<XShape> shape;
+    GeoBounds clip_bounds;
+  };
+  std::vector<PendingReload> reloads;
+
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     const bool visible = msGetBit(status, i);
@@ -218,73 +261,91 @@ TopographyFile::Update(const WindowProjection &map_projection,
         it->clip_bounds.IsValid() &&
         !it->clip_bounds.IsInside(cache_bounds)) {
       /* clipped to an old viewport; reload so the new area is
-         complete */
-      if (it->in_list)
-        UnlinkVisible(*it, prev);
-      DropCached(*it);
-    }
+         complete.  Keep in-list geometry until the mutex commit
+         so Paint cannot see a dangling XShape. */
+      bool clipped = false;
+      auto neu = LoadShape(file, center, i, label_field,
+                           &cache_bounds, &clipped);
+#ifdef ENABLE_OPENGL
+      PrepareOpenGLShape(*neu, *this, map_projection, layout_scale);
+#endif
+      if (it->in_list) {
+        reloads.push_back({
+          &*it, std::move(neu),
+          clipped ? cache_bounds : GeoBounds::Invalid(),
+        });
+        continue;
+      }
 
-    if (!visible) {
-      if (it->in_list)
-        UnlinkVisible(*it, prev);
+      DropCached(*it);
+      it->shape = std::move(neu);
+      it->clip_bounds = clipped ? cache_bounds : GeoBounds::Invalid();
+      ++cached_shapes;
+      TouchCache(*it);
       continue;
     }
+
+    if (!visible)
+      continue;
 
     if (it->shape == nullptr) {
       assert(!it->in_list);
 
-      EvictOverflow();
-
       bool clipped = false;
-      it->shape = LoadShape(file, center, i, label_field,
-                            &cache_bounds, &clipped);
+      auto neu = LoadShape(file, center, i, label_field,
+                           &cache_bounds, &clipped);
+#ifdef ENABLE_OPENGL
+      PrepareOpenGLShape(*neu, *this, map_projection, layout_scale);
+#endif
+      it->shape = std::move(neu);
       it->clip_bounds = clipped ? cache_bounds : GeoBounds::Invalid();
       ++cached_shapes;
       TouchCache(*it);
-
-#ifdef ENABLE_OPENGL
-      /* Triangulate on the topography thread so Paint never
-         ear-clips a newly panned-in fill.  Skip sub-pixel fills
-         (same 1 px bbox rule as Paint). */
-      if (it->shape->get_type() == MS_SHAPE_POLYGON) {
-        const Angle min_span =
-          map_projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
-        const GeoBounds &b = it->shape->get_bounds();
-        if (b.GetWidth() >= min_span || b.GetHeight() >= min_span) {
-          const unsigned level =
-            GetThinningLevel(map_projection.GetMapScale());
-          if (layout_scale == 0)
-            layout_scale = 1;
-          const ShapeScalar min_distance =
-            ShapeScalar(GetMinimumPointDistance(level))
-            / (layout_scale * FAISphere::REARTH);
-          [[maybe_unused]] const auto indices =
-            it->shape->GetIndices(int(level), min_distance);
-        }
-      }
-#endif
-
-      {
-        const std::lock_guard lock{mutex};
-        prev = list.insert_after(prev, *it);
-        it->in_list = true;
-        ++serial;
-      }
     } else {
       TouchCache(*it);
+    }
+  }
+
+  {
+    const std::lock_guard lock{mutex};
+
+    for (auto &r : reloads) {
+      if (r.envelope->cache_hook.is_linked())
+        cache_list.erase(cache_list.iterator_to(*r.envelope));
+      r.envelope->shape = std::move(r.shape);
+      r.envelope->clip_bounds = r.clip_bounds;
+      TouchCache(*r.envelope);
+    }
+
+    auto prev = list.before_begin();
+    it = shapes.begin();
+    for (std::size_t i = 0; i < file.size(); ++i, ++it) {
+      const bool visible = msGetBit(status, i);
+
+      if (!visible) {
+        if (it->in_list)
+          UnlinkVisible(*it, prev);
+        continue;
+      }
+
       if (!it->in_list) {
-        const std::lock_guard lock{mutex};
+        /* LRU may have dropped this envelope during an earlier
+           load in this pass; skip rather than linking a null
+           shape. */
+        if (it->shape == nullptr)
+          continue;
+
         prev = list.insert_after(prev, *it);
         it->in_list = true;
-        ++serial;
       } else {
         ++prev;
         assert(&*prev == &*it);
       }
     }
-  }
 
-  assert(std::next(prev) == list.end());
+    assert(std::next(prev) == list.end());
+    ++serial;
+  }
 
   EvictOverflow();
 
@@ -301,8 +362,11 @@ TopographyFile::LoadAll()
   auto it = shapes.begin();
   for (std::size_t i = 0; i < file.size(); ++i, ++it) {
     if (it->shape != nullptr && it->clip_bounds.IsValid()) {
-      if (it->in_list)
-        UnlinkVisible(*it, prev);
+      {
+        const std::lock_guard lock{mutex};
+        if (it->in_list)
+          UnlinkVisible(*it, prev);
+      }
       DropCached(*it);
     }
 
@@ -328,6 +392,7 @@ TopographyFile::LoadAll()
 
   assert(std::next(prev) == list.end());
 
+  const std::lock_guard lock{mutex};
   ++serial;
 }
 
