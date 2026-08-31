@@ -362,6 +362,8 @@ Version 7.46 - not yet released
     pixels, by refusing a size below 320x240 (240x320 when
     taller than wide) #2110
 * documentation
+  - clarify that Reach polar still applies to abort, alternates and
+    landable arrival when Reach mode is Off
   - document that on Android the InfoBox arrange page and the
     InfoBox Sets editor keep content below the notification shade
   - explain that speed-to-fly uses wind at MacCready 0 when a task
