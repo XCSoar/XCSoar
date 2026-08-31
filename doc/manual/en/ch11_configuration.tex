@@ -231,6 +231,14 @@ This page provides options for how waypoints are displayed on the map.
   {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
   {\bf None}: No name is displayed with the waypoint.
 
+\item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints
+  are displayed with names and arrival altitudes on the map: \\
+  {\bf All}: All waypoint labels will be displayed. \\
+  {\bf Task waypoints and landables}: All waypoints part of a task and all landables
+  will be displayed. \\
+  {\bf Task waypoints}: All waypoints part of a task will be displayed. \\
+  {\bf None}:  No waypoint labels will be displayed.
+
 \item[Arrival height*] \label{conf:arrivalheight} This setting allows arrival height
 and/or required glide ratio to also be shown in labels for landable waypoints. See Section~\ref{sec:waypoint-schemes} for more information.\\
   {\bf None}: Neither arrival height nor required glide ratio is displayed. \\
@@ -271,15 +279,10 @@ and/or required glide ratio to also be shown in labels for landable waypoints. S
   you must detour, and the detour will cost you 150m (compared to if there were
   no terrain in your way).
 
-\item[Label style*]  Labels for landables can be shown on a rounded rectangle with 
+\item[Label style*]  Labels for landables can be shown on a rounded rectangle with
   white background, or with outlined letters.
-\item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints 
-  are displayed with names and arrival altitudes on the map: \\
-  {\bf All}: All waypoint labels will be displayed. \\
-  {\bf Task waypoints and landables}: All waypoints part of a task and all landables 
-  will be displayed. \\
-  {\bf Task waypoints}: All waypoints part of a task will be displayed. \\
-  {\bf None}:  No waypoint labels will be displayed.
+\item[Waypoint icon size] Size of waypoint symbols on the map as a percentage of
+  the built-in artwork. List dialogs keep a fixed row icon size.
 \item[Landable symbols]  \label{conf:waypointicons} Three styles are available:
   Purple circles (WinPilot style), a high contrast style with icons,
   and icons with a traffic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
