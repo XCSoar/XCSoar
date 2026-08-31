@@ -42,6 +42,7 @@ constexpr std::string_view DrawTerrain = "DrawTerrain";
 constexpr std::string_view SlopeShading = "SlopeShading";
 constexpr std::string_view SlopeShadingType = "SlopeShadingType";
 constexpr std::string_view TerrainContours = "TerrainContours";
+constexpr std::string_view TerrainGpuDemSpike = "TerrainGpuDemSpike";
 constexpr std::string_view DrawTopography = "DrawTopology";
 constexpr std::string_view FinalGlideTerrain = "FinalGlideTerrain";
 constexpr std::string_view AutoWind = "AutoWind";

@@ -47,10 +47,10 @@ GLint filled_circle_projection, filled_circle_translate,
 GLProgram *hillshade_shader;
 GLint hillshade_projection, hillshade_translate,
   hillshade_height_tex, hillshade_ramp_tex,
-  hillshade_texel_step, hillshade_sun, hillshade_contrast,
+  hillshade_sun, hillshade_contrast,
   hillshade_height_slope_factor, hillshade_height_div,
-  hillshade_q, hillshade_do_shading, hillshade_contour_div,
-  hillshade_height_texel;
+  hillshade_do_shading, hillshade_contour_div,
+  hillshade_height_texel, hillshade_contour_step;
 
 } // namespace OpenGL
 
@@ -260,15 +260,14 @@ static constexpr char hillshade_fragment_shader[] =
     precision mediump float;
     uniform sampler2D height_tex;
     uniform sampler2D ramp_tex;
-    uniform vec2 texel_step;
     uniform vec3 sun;
     uniform float contrast;
     uniform float height_slope_factor;
     uniform float height_div;
-    uniform float q;
     uniform float do_shading;
     uniform float contour_div;
     uniform vec2 height_texel;
+    uniform vec2 contour_step;
     varying vec2 texcoordvar;
 
     vec2 unpack_la(vec4 t) {
@@ -276,9 +275,12 @@ static constexpr char hillshade_fragment_shader[] =
                   floor(t.a * 255.0 + 0.5));
     }
 
+    vec2 la(vec2 uv) {
+      return unpack_la(texture2D(height_tex, uv));
+    }
+
     /* TerrainHeight::IsSpecial(): value <= -30000.
-       -32768 → hi=128; -30000 → hi=138 lo=208.  Do not reconstruct
-       those heights (they do not fit in mediump). */
+       -32768 → hi=128; -30000 → hi=138 lo=208. */
     bool is_special(vec2 b) {
       return b.y >= 128.0 &&
              (b.y < 138.0 || (b.y == 138.0 && b.x <= 208.0));
@@ -296,69 +298,87 @@ static constexpr char hillshade_fragment_shader[] =
                                       (sindex + 64.5) / 128.0));
     }
 
-    float contour_interval(float h) {
-      if (h <= 0.0)
-        return 0.0;
-      return min(254.0, floor(h / contour_div));
+    float shade_index(float n0, float n1) {
+      n0 = clamp(n0, -512.0, 512.0);
+      n1 = clamp(n1, -512.0, 512.0);
+      float n2 = height_slope_factor;
+      float mag = sqrt(n0 * n0 + n1 * n1 + n2 * n2);
+      float num = n2 * sun.z + n0 * sun.x + n1 * sun.y;
+      float sval = mag > 0.0 ? num / mag : 0.0;
+      return clamp((sval - sun.z) * contrast / 128.0, -63.0, 63.0);
     }
 
     void main() {
-      vec2 b = unpack_la(texture2D(height_tex, texcoordvar));
+      vec2 b = la(texcoordvar);
       if (is_special(b)) {
         gl_FragColor = ramp_lookup(255.0, 0.0);
         return;
       }
 
-      float h = height(b);
+      /* Decode, then bilinear.  Hardware LINEAR on packed L/A is
+         wrong (mixes the two bytes). */
+      vec2 ts = height_texel;
+      vec2 f = fract(texcoordvar / ts - 0.5);
+      vec2 o = (floor(texcoordvar / ts - 0.5) + 0.5) * ts;
+      vec2 b00 = la(o);
+      vec2 b10 = la(o + vec2(ts.x, 0.0));
+      vec2 b01 = la(o + vec2(0.0, ts.y));
+      vec2 b11 = la(o + ts);
+      float h00 = height(b00);
+      float h10 = height(b10);
+      float h01 = height(b01);
+      float h11 = height(b11);
+      bool corners_ok = !is_special(b00) && !is_special(b10) &&
+                        !is_special(b01) && !is_special(b11);
+
+      float h = corners_ok
+        ? mix(mix(h00, h10, f.x), mix(h01, h11, f.x), f.y)
+        : height(b);
       float h_idx = min(254.0, max(0.0, floor(h / height_div)));
       float sindex = 0.0;
 
       if (do_shading > 0.5) {
-        vec2 b_above = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(0.0, texel_step.y)));
-        vec2 b_below = unpack_la(texture2D(height_tex,
-            texcoordvar + vec2(0.0, texel_step.y)));
-        vec2 b_left = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(texel_step.x, 0.0)));
-        vec2 b_right = unpack_la(texture2D(height_tex,
-            texcoordvar + vec2(texel_step.x, 0.0)));
-
-        if (!is_special(b_above) && !is_special(b_below) &&
-            !is_special(b_left) && !is_special(b_right)) {
-          /* Same n as GenerateSlopeImage, divided by p20*p31 so
-             mediump cannot overflow (dd0 = p22*p31).  sval/sindex
-             use trunc-toward-zero, matching the CPU ints. */
-          float p32 = clamp(height(b_above) - height(b_below),
-                            -512.0, 512.0);
-          float p22 = clamp(height(b_right) - height(b_left),
-                            -512.0, 512.0);
-          float p20 = max(2.0 * q, 1.0);
-          float p31 = max(2.0 * q, 1.0);
-          float n0 = p22 / p20;
-          float n1 = p32 / p31;
-          float n2 = height_slope_factor;
-          float mag = sqrt(n0 * n0 + n1 * n1 + n2 * n2);
-          float num = n2 * sun.z + n0 * sun.x + n1 * sun.y;
-          float sval = mag > 0.0 ? float(int(num / mag)) : 0.0;
-          sindex = float(int((sval - sun.z) * contrast / 128.0));
-          sindex = clamp(sindex, -63.0, 63.0);
+        if (corners_ok) {
+          /* Mix this cell's slope with the next so shade is continuous
+             at DEM edges (visible mainly in shadow). */
+          vec2 b20 = la(o + vec2(2.0 * ts.x, 0.0));
+          vec2 b21 = la(o + vec2(2.0 * ts.x, ts.y));
+          vec2 b02 = la(o + vec2(0.0, 2.0 * ts.y));
+          vec2 b12 = la(o + vec2(ts.x, 2.0 * ts.y));
+          float n0 = mix(h10 - h00, h11 - h01, f.y);
+          float n1 = mix(h00 - h01, h10 - h11, f.x);
+          if (!is_special(b20) && !is_special(b21) &&
+              !is_special(b02) && !is_special(b12)) {
+            float n0r = mix(height(b20) - h10, height(b21) - h11, f.y);
+            float n1b = mix(h01 - height(b02), h11 - height(b12), f.x);
+            n0 = mix(n0, n0r, f.x);
+            n1 = mix(n1, n1b, f.y);
+          }
+          sindex = shade_index(n0, n1);
         }
       }
 
-      if (contour_div > 0.5) {
-        vec2 b_up = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(0.0, height_texel.y)));
-        vec2 b_lf = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(height_texel.x, 0.0)));
-        float h_up = is_special(b_up) ? 0.0 : height(b_up);
-        float h_lf = is_special(b_lf) ? 0.0 : height(b_lf);
-        float ci = contour_interval(h);
-        if (ci != contour_interval(h_up) ||
-            ci != contour_interval(h_lf))
-          sindex = -64.0;
+      float s0 = floor(sindex);
+      vec4 terrain = mix(ramp_lookup(h_idx, s0),
+                         ramp_lookup(h_idx, min(s0 + 1.0, 63.0)),
+                         sindex - s0);
+
+      float cover = 0.0;
+      if (contour_div > 0.5 && corners_ok && h > 0.0) {
+        /* contour_step is screen pixels per DEM texel (mediump-safe).
+           Distance to the bilinear isoline, ~2 px wide with a fade so
+           diagonals stay a stroke instead of a 4-connected staircase. */
+        float gx = mix(h10 - h00, h11 - h01, f.y);
+        float gy = mix(h01 - h00, h11 - h10, f.x);
+        vec2 ppt = max(contour_step, vec2(0.5));
+        float g_px = length(vec2(gx, gy) / ppt);
+        float frac = fract(h / contour_div);
+        float dh = min(frac, 1.0 - frac) * contour_div;
+        float dist = dh / max(g_px, 1.0e-3);
+        cover = 1.0 - smoothstep(0.5, 2.0, dist);
       }
 
-      gl_FragColor = ramp_lookup(h_idx, sindex);
+      gl_FragColor = mix(terrain, ramp_lookup(h_idx, -64.0), cover);
     }
 )glsl";
 
@@ -517,16 +537,15 @@ OpenGL::InitShaders()
     hillshade_translate = hillshade_shader->GetUniformLocation("translate");
     hillshade_height_tex = hillshade_shader->GetUniformLocation("height_tex");
     hillshade_ramp_tex = hillshade_shader->GetUniformLocation("ramp_tex");
-    hillshade_texel_step = hillshade_shader->GetUniformLocation("texel_step");
     hillshade_sun = hillshade_shader->GetUniformLocation("sun");
     hillshade_contrast = hillshade_shader->GetUniformLocation("contrast");
     hillshade_height_slope_factor =
       hillshade_shader->GetUniformLocation("height_slope_factor");
     hillshade_height_div = hillshade_shader->GetUniformLocation("height_div");
-    hillshade_q = hillshade_shader->GetUniformLocation("q");
     hillshade_do_shading = hillshade_shader->GetUniformLocation("do_shading");
     hillshade_contour_div = hillshade_shader->GetUniformLocation("contour_div");
     hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
+    hillshade_contour_step = hillshade_shader->GetUniformLocation("contour_step");
 
     hillshade_shader->Use();
     glUniform1i(hillshade_height_tex, 0);

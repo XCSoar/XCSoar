@@ -270,6 +270,29 @@ public:
   }
 
   /**
+   * Coarse full-map height buffer (1/16 of fine DEM resolution).
+   */
+  const RasterBuffer &GetOverview() const noexcept {
+    return overview;
+  }
+
+  Point2D<uint_least16_t> GetTileSize() const noexcept {
+    return tile_size;
+  }
+
+  unsigned GetTileCountX() const noexcept {
+    return tiles.GetWidth();
+  }
+
+  unsigned GetTileCountY() const noexcept {
+    return tiles.GetHeight();
+  }
+
+  const RasterTile &GetTile(unsigned x, unsigned y) const noexcept {
+    return tiles.Get(x, y);
+  }
+
+  /**
    * Is the given point inside the map?
    */
   bool IsInside(RasterLocation p) const noexcept {

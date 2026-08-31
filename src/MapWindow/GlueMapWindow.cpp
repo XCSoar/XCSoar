@@ -9,6 +9,9 @@
 #include "time/PeriodClock.hpp"
 #include "ui/event/Idle.hpp"
 #include "Hardware/CPU.hpp"
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 #include "Components.hpp"
@@ -239,7 +242,7 @@ static constexpr auto TERRAIN_QUANTISATION_IDLE_STEP =
 void
 GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 {
-  if (!IsSlowCPU())
+  if (!IsSlowCPU() && !OpenGL::idle_terrain_quantisation)
     return;
 
   terrain_quantisation_idle_done = false;
@@ -249,7 +252,7 @@ GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 void
 GlueMapWindow::PollTerrainQuantisationIdle() noexcept
 {
-  if (!IsSlowCPU())
+  if (!IsSlowCPU() && !OpenGL::idle_terrain_quantisation)
     return;
 
   if (!IsUserIdle(750)) {

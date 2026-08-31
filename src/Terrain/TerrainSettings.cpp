@@ -14,6 +14,7 @@ TerrainRendererSettings::SetDefaults()
   brightness = 192;
   ramp = 0;
   contours = Contours::OFF;
+  gpu_dem_spike = false;
 }
 
 /**

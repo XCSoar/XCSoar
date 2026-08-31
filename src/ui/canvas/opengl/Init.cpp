@@ -123,6 +123,7 @@ OpenGL::SetupContext()
 
   bool disable_mapbuffer = false;
   bool disable_multi_draw = false;
+  idle_terrain_quantisation = false;
 
   if (auto s = (const char *)glGetString(GL_RENDERER)) {
     LogFormat("GL renderer: %s", s);
@@ -139,10 +140,12 @@ OpenGL::SetupContext()
       max_map_scale = 300000;
       /* glMapBufferOES after glBufferData(..., nullptr) and
          glMultiDrawElementsEXT SIGSEGV in libGLESv2_mtk (memcpy
-         from null).  Upload VBOs from client memory and draw
-         fills one polygon at a time. */
+         from null).  Upload VBOs from client memory; join fills
+         into one triangle list and roads into one GL_LINES list.
+         Do not ScanMap the DEM on every pan frame. */
       disable_mapbuffer = true;
       disable_multi_draw = true;
+      idle_terrain_quantisation = true;
     }
   }
 
