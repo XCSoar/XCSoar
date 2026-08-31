@@ -56,6 +56,8 @@ Version 7.46 - not yet released
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
   - move Dark mode and Text size from Display to Layout
+  - rename Look Display to Screen, so it is not confused with
+    Map Display
   - move Audio Vario from Gauges to Setup Audio, together with
     master volume
   - split Gauges FLARM, Other into Traffic and Overlays

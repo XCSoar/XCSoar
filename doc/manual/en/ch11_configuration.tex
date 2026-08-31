@@ -578,7 +578,7 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 \section{Gauges / Traffic} \label{sec:flarmandother-gauge}
 
 \begin{description}
-\item[FLARM radar]  \label{conf:flarmdisplay} Enables the traffic radar and
+\item[FLARM radar]  \label{conf:flarmdisplay}\label{conf:flarmradar-place} Enables the traffic radar and
   chooses its position on the main screen, or {\bf Off} to hide it.
   The track bearing of the target relative to the track bearing of the 
   aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
@@ -693,7 +693,29 @@ options are well described for the task manager in Chapter~\ref{cha:tasks}.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Look / Screen Layout}\label{sec:interface-appearance}
+\section{Look / Screen}\label{sec:look-screen}
+
+This page configures the physical screen: technology, resolution,
+orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
+
+\begin{description}
+\item[Display type*]  Select the display technology. E-ink modes disable
+  kinetic and smooth scrolling for slow refresh screens.
+\item[Display resolution*]  Used to adapt line widths, font size, landable
+  size and more.
+\item[Display orientation]  Rotate the display on devices that support it.
+\item[Screen brightness]  Adjust the screen brightness, where the platform
+  allows it.
+\item[Full screen]  Run XCSoar in full screen mode (Android).
+\item[Cursor zoom]  Control the size of the cursor. Default is 1.
+  Only available if the cursor is drawn by XCSoar.
+\item[Invert cursor color]  Use a black cursor. Default is {\bf Off}
+  (white cursor). Only available if the cursor is drawn by XCSoar.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Look / Layout}\label{sec:interface-appearance}
 \label{conf:interface-appearance}
 
 This page once more details the appearance of the graphical user interface of XCSoar.
@@ -702,11 +724,6 @@ This page once more details the appearance of the graphical user interface of XC
 \item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
   best for your screen size. The preceding number refer to the total number of 
   InfoBoxes of this geometry.
-\item[FLARM display*]  \label{conf:flarmradar-place}
-  In case you enabled the FLARM display this is to configure the
-  place on the screen, where the tiny radar window appears. As a default an `Auto' setup 
-  is possible, which means that the radar window will overlay the InfoBoxes, and not the map
-  part of the screen.
 \item[Tab dialogue style]  Determines whether tabbed dialogues use text or icons.
 \item[Message display*]  Defines the alignment of the status message box, either 
   {\bf Center} or in the {\bf TopLeft} corner.
@@ -718,12 +735,8 @@ This page once more details the appearance of the graphical user interface of XC
   glide.
 \item[InfoBox border*]  Two styles for InfoBox borders are available. \\
   {\bf Box}: Draws boxes around each InfoBox. \\
-  {\bf Tab}: Draws a tab at the top of the InfoBox across the 
+  {\bf Tab}: Draws a tab at the top of the InfoBox across the
   title. \\
-\item[Cursor size]  Control the size of the cursor. Default is 1.
-  Only available if cursor is drawn by XCSoar.
-\item[Black cursor] Use black instead of white cursor. Default is {\bf Off} (white cursor).
-  Only available if cursor is drawn by XCSoar.
 \end{description}
 
 
