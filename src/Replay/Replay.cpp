@@ -62,70 +62,6 @@ ApplyReplayFix(DeviceBlackboard &device_blackboard,
 }
 
 /**
- * Result of a cheap parse-only pass over the recording, without merge
- * or calculation.  Used to scale the seek progress bar.
- */
-struct RecordingScan {
-  /**
-   * The number of lines that will produce replay fixes (IGC B
-   * records); 0 if unknown for this file type.
-   */
-  unsigned fix_lines = 0;
-
-  /**
-   * The time of day of the first fix, or undefined if unknown.
-   */
-  TimeStamp start_time = TimeStamp::Undefined();
-
-  /**
-   * The time of day of the last fix, or undefined if unknown.
-   */
-  TimeStamp end_time = TimeStamp::Undefined();
-};
-
-RecordingScan
-ScanRecording(Path path) noexcept
-try {
-  RecordingScan result;
-
-  if (path == nullptr || path.empty() ||
-      !FilenameMatchesFileType(path.GetBase().c_str(), FileType::IGC))
-    return result;
-
-  FileLineReaderA reader{path};
-  while (const char *line = reader.ReadLine()) {
-    if (*line != 'B')
-      continue;
-
-    ++result.fix_lines;
-
-    /* B records start with the time of day as HHMMSS; the comparison
-       stops at the terminating null byte of short lines */
-    const char *t = line + 1;
-    bool valid = true;
-    for (unsigned i = 0; valid && i < 6; ++i)
-      valid = t[i] >= '0' && t[i] <= '9';
-
-    if (valid) {
-      const unsigned hh = (t[0] - '0') * 10 + (t[1] - '0');
-      const unsigned mm = (t[2] - '0') * 10 + (t[3] - '0');
-      const unsigned ss = (t[4] - '0') * 10 + (t[5] - '0');
-      if (hh < 24 && mm < 60 && ss < 60) {
-        const TimeStamp time_stamp{
-          std::chrono::seconds{hh * 3600 + mm * 60 + ss}};
-        if (!result.start_time.IsDefined())
-          result.start_time = time_stamp;
-        result.end_time = time_stamp;
-      }
-    }
-  }
-
-  return result;
-} catch (...) {
-  return {};
-}
-
-/**
  * Show the scanned flight time in the progress dialog, in seconds,
  * as "1234 / 12000 s" when the total is known and "1234 s"
  * otherwise.
@@ -275,6 +211,10 @@ Replay::Start(Path _path)
      creating a new one */
   Stop();
 
+  if (path != _path)
+    /* another file: the cached scan no longer describes it */
+    recording_scan_valid = false;
+
   path = _path;
 
   if (path == nullptr || path.empty()) {
@@ -299,6 +239,55 @@ Replay::Start(Path _path)
   fixes_read = 0;
 
   timer.Schedule(std::chrono::milliseconds(100));
+}
+
+const Replay::RecordingScan &
+Replay::GetRecordingScan() noexcept
+{
+  if (recording_scan_valid)
+    return recording_scan;
+
+  recording_scan = {};
+  recording_scan_valid = true;
+
+  if (path == nullptr || path.empty() ||
+      !FilenameMatchesFileType(path.GetBase().c_str(), FileType::IGC))
+    return recording_scan;
+
+  try {
+    FileLineReaderA reader{path};
+    while (const char *line = reader.ReadLine()) {
+      if (*line != 'B')
+        continue;
+
+      ++recording_scan.fix_lines;
+
+      /* B records start with the time of day as HHMMSS; the
+         comparison stops at the terminating null byte of short
+         lines */
+      const char *t = line + 1;
+      bool valid = true;
+      for (unsigned i = 0; valid && i < 6; ++i)
+        valid = t[i] >= '0' && t[i] <= '9';
+
+      if (valid) {
+        const unsigned hh = (t[0] - '0') * 10 + (t[1] - '0');
+        const unsigned mm = (t[2] - '0') * 10 + (t[3] - '0');
+        const unsigned ss = (t[4] - '0') * 10 + (t[5] - '0');
+        if (hh < 24 && mm < 60 && ss < 60) {
+          const TimeStamp time_stamp{
+            std::chrono::seconds{hh * 3600 + mm * 60 + ss}};
+          if (!recording_scan.start_time.IsDefined())
+            recording_scan.start_time = time_stamp;
+          recording_scan.end_time = time_stamp;
+        }
+      }
+    }
+  } catch (...) {
+    recording_scan = {};
+  }
+
+  return recording_scan;
 }
 
 bool
@@ -329,7 +318,7 @@ Replay::SeekToFlightElapsedMinutes(unsigned minutes,
   if (!IsActive() || path == nullptr || path.empty())
     return false;
 
-  const RecordingScan scan = ScanRecording(path);
+  const RecordingScan &scan = GetRecordingScan();
 
   if (scan.start_time.IsDefined() && virtual_time.IsDefined()) {
     const TimeStamp forward_target =
@@ -633,7 +622,7 @@ Replay::SeekForward(FloatDuration delta,
 
   /* clamp the progress scale at the recording end, so the bar still
      reaches 100% when skipping past the end of the flight */
-  const RecordingScan scan = ScanRecording(path);
+  const RecordingScan &scan = GetRecordingScan();
   TimeStamp progress_end = target_ts;
   if (scan.end_time.IsDefined() && scan.end_time > virtual_time &&
       scan.end_time < target_ts)
@@ -658,7 +647,7 @@ Replay::SeekToNextFlightMode(CirclingMode mode,
   /* the number of fixes until the requested phase cannot be known in
      advance, so the bar shows how far through the remaining recording
      the scan has come */
-  const unsigned total_fixes = ScanRecording(path).fix_lines;
+  const unsigned total_fixes = GetRecordingScan().fix_lines;
   const unsigned remaining_fixes =
     total_fixes > fixes_read ? total_fixes - fixes_read : 0;
 

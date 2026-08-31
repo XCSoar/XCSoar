@@ -73,6 +73,35 @@ class Replay final
 
   CatmullRomInterpolator *cli = nullptr;
 
+  /**
+   * Cheap parse-only summary of a recording, used to scale the seek
+   * progress bar and to find the time of the first fix.
+   */
+  struct RecordingScan {
+    /**
+     * The number of lines that will produce replay fixes (IGC B
+     * records); 0 if unknown for this file type.
+     */
+    unsigned fix_lines = 0;
+
+    /**
+     * The time of day of the first fix, or undefined if unknown.
+     */
+    TimeStamp start_time = TimeStamp::Undefined();
+
+    /**
+     * The time of day of the last fix, or undefined if unknown.
+     */
+    TimeStamp end_time = TimeStamp::Undefined();
+  };
+
+  /**
+   * The scan of #path, filled by the first seek and reused by the
+   * following ones; invalidated when Start() loads another file.
+   */
+  RecordingScan recording_scan;
+  bool recording_scan_valid = false;
+
 public:
   Replay(DeviceBlackboard &_device_blackboard,
          Logger *_logger, ProtectedTaskManager &_task_manager)
@@ -187,6 +216,12 @@ public:
                    JobRunner &runner) noexcept;
 
 private:
+  /**
+   * Return the scan of the current recording, reading the file once
+   * and caching the result.
+   */
+  const RecordingScan &GetRecordingScan() noexcept;
+
   /**
    * Read the next fix from the #AbstractReplay, keeping #fixes_read
    * up to date.  An I/O or parser error ends the recording just like
