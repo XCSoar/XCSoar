@@ -108,9 +108,7 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId mdpi_id,
     IconStretchFixed10(source_dpi * ICON_SUPERSAMPLE);
   bitmap.Load(id);
 #else
-  if (Layout::vdpi >= 120) {
-    /* switch to the larger variants at 120dpi */
-
+  if (density >= (ICON_LDPI + ICON_MDPI) / 2) {
     unsigned source_dpi = ICON_LDPI;
     if (density >= 400 && xxhdpi_id.IsDefined()) {
       id = xxhdpi_id;
