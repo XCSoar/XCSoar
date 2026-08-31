@@ -134,7 +134,7 @@ static constexpr TabMenuPage task_pages[] = {
 };
 
 static constexpr TabMenuPage look_pages[] = {
-  { N_("Display"), CreateDisplayConfigPanel },
+  { N_("Screen"), CreateDisplayConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },

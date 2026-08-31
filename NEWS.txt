@@ -4,7 +4,7 @@ Version 7.46 - not yet released
     page and the InfoBox Sets editor below the area that opens the
     notification shade
   - target Android 16 so Google Play still accepts updates #2874
-  - add the "Stretch InfoBox area" setting (Config → Look → Display,
+  - add the "Stretch InfoBox area" setting (Config → Look → Screen,
     expert): pick the screen edges on which the InfoBoxes, gauges,
     map overlays and the menu reach the screen border instead of
     keeping clear of the display cutout and the system bars;
@@ -46,11 +46,11 @@ Version 7.46 - not yet released
     characters and providing a designed bold cut
   - save the settings when the app moves to the background, so they
     survive being swiped away in the app switcher
-  - support the Full screen setting (Config → Look → Display) on iOS,
+  - support the Full screen setting (Config → Look → Screen) on iOS,
     off by default: hide the system status bar and use the whole
     screen, including the areas behind the display cutout and the home
     indicator
-  - add the System status bar setting (Config → Look → Display): keep
+  - add the System status bar setting (Config → Look → Screen): keep
     the status bar visible in full screen mode, or hide it without
     going full screen; "Auto" shows it unless the InfoBox area is
     stretched to the top screen edge
@@ -199,6 +199,8 @@ Version 7.46 - not yet released
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
   - move Dark mode and Text size from Display to Layout
+  - rename Look Display to Screen, so it is not confused with
+    Map Display
   - move Audio Vario from Gauges to Setup Audio, together with
     master volume
   - split Gauges FLARM, Other into Traffic and Overlays
