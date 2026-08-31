@@ -151,7 +151,9 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind "
                "when displayed in circling mode at near map scales. Switched "
-               "Off, the snail trail stays uncompensated for wind drift."),
+               "Off, the snail trail stays uncompensated for wind drift. "
+               "In circling this also applies to the projected track curve: "
+               "On keeps it relative to the air mass; Off includes wind."),
              settings_map.trail.wind_drift_enabled);
   SetExpertRow(TRAIL_DRIFT);
 
