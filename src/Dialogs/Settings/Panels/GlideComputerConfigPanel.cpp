@@ -15,12 +15,14 @@ using namespace std::chrono;
 
 enum ControlIndex {
   AutoMcMode,
-  BlockSTF,
-  EnableNavBaroAltitude,
-  EnableExternalTriggerCruise,
-  AverEffTime,
-  PredictWindDrift,
   WaveAssistant,
+  SPACER_GLIDE,
+  BlockSTF,
+  PredictWindDrift,
+  EnableNavBaroAltitude,
+  AverEffTime,
+  SPACER_MODE,
+  EnableExternalTriggerCruise,
   CruiseToCirclingModeSwitchThreshold,
   CirclingToCruiseModeSwitchThreshold,
 };
@@ -58,6 +60,14 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
           _("This option defines which auto MacCready algorithm is used."),
           auto_mc_list, (unsigned)settings_computer.task.auto_mc_mode);
 
+  AddBoolean(_("Wave assistant"),
+             _("Enable detection and display of wave lift. "
+               "When enabled, wave sources are identified and shown on the map."),
+             settings_computer.wave.enabled);
+
+  AddSpacer();
+  SetExpertRow(SPACER_GLIDE);
+
   AddBoolean(_("Block speed to fly"),
              _("If enabled, the command speed in cruise is set to the MacCready speed to fly in "
                  "no vertical air-mass movement. If disabled, the command speed in cruise is set "
@@ -66,17 +76,16 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
              settings_computer.features.block_stf_enabled);
   SetExpertRow(BlockSTF);
 
+  AddBoolean(_("Predict wind drift"),
+             _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
+             task_behaviour.glide.predict_wind_drift);
+  SetExpertRow(PredictWindDrift);
+
   AddBoolean(_("Nav. by baro altitude"),
              _("When enabled and if connected to a barometric altimeter, barometric altitude is "
                  "used for all navigation functions. Otherwise GPS altitude is used."),
              settings_computer.features.nav_baro_altitude_enabled);
   SetExpertRow(EnableNavBaroAltitude);
-
-  AddBoolean(_("Flap forces cruise"),
-             _("When Vega variometer is connected and this option is true, the positive flap "
-                 "setting switches the flight mode between circling and cruise."),
-             settings_computer.circling.external_trigger_cruise_enabled);
-  SetExpertRow(EnableExternalTriggerCruise);
 
   static constexpr StaticEnumChoice aver_eff_list[] = {
     { ae15seconds, "15 s", N_("Preferred period for paragliders.") },
@@ -94,15 +103,14 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
           aver_eff_list, settings_computer.average_eff_time);
   SetExpertRow(AverEffTime);
 
-  AddBoolean(_("Predict wind drift"),
-             _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
-             task_behaviour.glide.predict_wind_drift);
-  SetExpertRow(PredictWindDrift);
+  AddSpacer();
+  SetExpertRow(SPACER_MODE);
 
-  AddBoolean(_("Wave assistant"),
-             _("Enable detection and display of wave lift. "
-               "When enabled, wave sources are identified and shown on the map."),
-             settings_computer.wave.enabled);
+  AddBoolean(_("Flap forces cruise"),
+             _("When Vega variometer is connected and this option is true, the positive flap "
+                 "setting switches the flight mode between circling and cruise."),
+             settings_computer.circling.external_trigger_cruise_enabled);
+  SetExpertRow(EnableExternalTriggerCruise);
 
   AddDuration(_("Cruise/Circling period"),
               _("How many seconds of turning before changing from cruise to circling mode."),
@@ -127,24 +135,24 @@ GlideComputerConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(AutoMcMode, ProfileKeys::AutoMcMode, settings_computer.task.auto_mc_mode);
 
+  changed |= SaveValue(WaveAssistant, ProfileKeys::WaveAssistant,
+                       settings_computer.wave.enabled);
+
   changed |= SaveValue(BlockSTF, ProfileKeys::BlockSTF,
                        settings_computer.features.block_stf_enabled);
 
+  changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
+                       task_behaviour.glide.predict_wind_drift);
+
   changed |= SaveValue(EnableNavBaroAltitude, ProfileKeys::EnableNavBaroAltitude,
                        settings_computer.features.nav_baro_altitude_enabled);
-
-  changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
-                       settings_computer.circling.external_trigger_cruise_enabled);
 
   if (SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime,
                     settings_computer.average_eff_time))
     require_restart = changed = true;
 
-  changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
-                       task_behaviour.glide.predict_wind_drift);
-
-  changed |= SaveValue(WaveAssistant, ProfileKeys::WaveAssistant,
-                       settings_computer.wave.enabled);
+  changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
+                       settings_computer.circling.external_trigger_cruise_enabled);
 
   changed |= SaveValue(CruiseToCirclingModeSwitchThreshold, ProfileKeys::CruiseToCirclingModeSwitchThreshold,
                        settings_computer.circling.cruise_to_circling_mode_switch_threshold);
