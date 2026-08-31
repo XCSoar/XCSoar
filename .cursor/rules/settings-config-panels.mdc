@@ -1,0 +1,50 @@
+---
+description: Settings config panels — dependent rows, parent guards, dual-use help, small helpers
+globs:
+  - "src/Dialogs/Settings/**/*.cpp"
+  - "src/Dialogs/Settings/**/*.hpp"
+alwaysApply: false
+---
+
+# Settings config panels
+
+`RowFormWidget` is the shared form. Do not invent a panel base class or merge SkyLines / LiveTrack24 / Cloud / WeGlide.
+
+## Dependent rows: collapse, do not leave gaps
+
+`SetRowVisible` hides the control but **still reserves layout space**. Inapplicable children must use **`SetRowAvailable`** so the row leaves the layout (same as Expert via `SetExpertRow`).
+
+```cpp
+// BAD: blank hole when the parent is off
+SetRowVisible(TRAIL_DRIFT, trail_on);
+
+// GOOD
+SetRowAvailable(TRAIL_DRIFT, trail_on);
+```
+
+Use **`SetRowEnabled`** (grey-out) for a **master enable** whose children still apply once on (credentials, intervals). Use **collapse** when the child does not apply (trail type when trail is Off).
+
+**`AddDummy()`** is only for **ControlIndex alignment** when a row is not created on this platform (no rotate, no colour). Do not dummy-out parent-hidden children.
+
+## Hide in the UI is not ignore at runtime
+
+The profile still stores the child. The engine must key off the **parent**, or the child must stay visible.
+
+Before collapsing a row, grep the setting. If it is still used for something else, **keep the row** and say so in help — do not change flight behaviour to match the menu.
+
+| Pattern | Do |
+|---|---|
+| Child only used when parent is on | Collapse; confirm the parent guard in code |
+| Dual-use (e.g. Reach polar → abort; Trail drift → circling track) | Keep visible (or always show); extend help/manual |
+
+Expert-only rows are still applied; Expert is not a parent switch.
+
+## Translatable enums and helpers
+
+Translate the **unit**, not every numeric label (`_("%u sec")`, `_("%u min")`), matching `_("%u dpi")`.
+
+Put `_()` / fill logic in a **`.cpp` already in `XCSOAR_SOURCES`**. Do not put gettext in a header (that needs a `gettext.mk` exception). Share a small row helper (e.g. `AddTrackingIntervalRow`) rather than copying AddEnum + fill + `RefreshDisplay`.
+
+## Commits
+
+One panel or one concern per commit. Fold immediate polish (helper extract, help text for the same row) into that feature; do not leave a fixup commit that only relocates the same change.
