@@ -55,6 +55,9 @@ void
 FlarmThermalComputer::DeactivateTarget(TargetState &target,
                                        const char *reason) noexcept
 {
+  if (reason == nullptr || *reason == '\0')
+    reason = "unknown";
+
   if (auto *cluster = FindCluster(target.assigned_cluster_serial)) {
     LogDebug("FLARM thermal cluster={} target={:06X} exit={}",
              cluster->serial, target.id.Value(), reason);
