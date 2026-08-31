@@ -3950,6 +3950,7 @@
 		A1BFE24C2D742FA600F05795 /* LiveTrack24ConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LiveTrack24ConfigPanel.hpp; sourceTree = "<group>"; };
 		A1BFE24D2D742FA600F05795 /* LiveTrack24ConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LiveTrack24ConfigPanel.cpp; sourceTree = "<group>"; };
 		A1BFE24E2D742FA600F05795 /* TrackingIntervalChoices.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TrackingIntervalChoices.hpp; sourceTree = "<group>"; };
+		A1BFE24F2D742FA600F05795 /* TrackingIntervalChoices.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TrackingIntervalChoices.cpp; sourceTree = "<group>"; };
 		5CBFE24E2D742FA600F05795 /* UnitsConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitsConfigPanel.hpp; sourceTree = "<group>"; };
 		5CBFE24F2D742FA600F05795 /* UnitsConfigPanel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitsConfigPanel.cpp; sourceTree = "<group>"; };
 		5CBFE2502D742FA600F05795 /* VarioConfigPanel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VarioConfigPanel.hpp; sourceTree = "<group>"; };
@@ -15845,6 +15846,7 @@
 				5CBFE24A2D742FA600F05795 /* TimeConfigPanel.hpp */,
 				5CBFE24B2D742FA600F05795 /* TimeConfigPanel.cpp */,
 				A1BFE24E2D742FA600F05795 /* TrackingIntervalChoices.hpp */,
+				A1BFE24F2D742FA600F05795 /* TrackingIntervalChoices.cpp */,
 				5CBFE24C2D742FA600F05795 /* SkyLinesConfigPanel.hpp */,
 				5CBFE24D2D742FA600F05795 /* SkyLinesConfigPanel.cpp */,
 				5CBFE24E2D742FA600F05795 /* UnitsConfigPanel.hpp */,

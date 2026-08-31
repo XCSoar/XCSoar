@@ -90,8 +90,7 @@ LiveTrack24ConfigPanel::Prepare(ContainerWindow &parent,
 
   AddBoolean(_("Enable"), "", settings.livetrack24.enabled, this);
 
-  AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
-          FindClosestTrackingInterval(settings.livetrack24.interval));
+  AddTrackingIntervalRow(*this, settings.livetrack24.interval);
 
   AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
           (unsigned)settings.livetrack24.vehicleType);

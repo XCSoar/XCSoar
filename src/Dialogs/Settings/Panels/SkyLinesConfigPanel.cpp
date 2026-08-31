@@ -91,8 +91,7 @@ SkyLinesConfigPanel::Prepare(ContainerWindow &parent,
              _("Allow tracking when on a roaming mobile data connection."),
              settings.skylines.roaming, this);
 #endif
-  AddEnum(_("Tracking Interval"), nullptr, tracking_intervals,
-          FindClosestTrackingInterval(settings.skylines.interval));
+  AddTrackingIntervalRow(*this, settings.skylines.interval);
 
   AddBoolean(_("Track friends"),
              _("Download the position of your SkyLines friends live from "
