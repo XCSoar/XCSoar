@@ -85,7 +85,7 @@ GaugesConfigPanel::OnModified(DataField &df) noexcept
   if (IsDataField(FinalGlideBarDisplayModeControl, df)) {
     const DataFieldEnum &dfe = (const DataFieldEnum &)df;
     FinalGlideBarDisplayMode fgbdm = (FinalGlideBarDisplayMode)dfe.GetValue();
-    SetRowVisible(EnableFinalGlideBarMC0, fgbdm != FinalGlideBarDisplayMode::OFF);
+    SetRowAvailable(EnableFinalGlideBarMC0, fgbdm != FinalGlideBarDisplayMode::OFF);
   }
 }
 
@@ -121,9 +121,9 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
              map_settings.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
 
-  SetRowVisible(EnableFinalGlideBarMC0,
-                map_settings.final_glide_bar_display_mode !=
-                  FinalGlideBarDisplayMode::OFF);
+  SetRowAvailable(EnableFinalGlideBarMC0,
+                  map_settings.final_glide_bar_display_mode !=
+                    FinalGlideBarDisplayMode::OFF);
 
   AddBoolean(_("Vario bar"),
              _("If set to \"On\" the vario bar will be shown."),

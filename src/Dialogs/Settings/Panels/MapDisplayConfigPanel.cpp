@@ -65,9 +65,9 @@ MapDisplayConfigPanel::UpdateVisibilities()
 {
   auto orientation = (MapOrientation)GetValueEnum(OrientationCruise);
 
-  SetRowVisible(MAP_SHIFT_BIAS,
-                orientation == MapOrientation::NORTH_UP ||
-                orientation == MapOrientation::WIND_UP);
+  SetRowAvailable(MAP_SHIFT_BIAS,
+                  orientation == MapOrientation::NORTH_UP ||
+                  orientation == MapOrientation::WIND_UP);
 }
 
 void
