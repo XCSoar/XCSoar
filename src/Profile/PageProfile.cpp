@@ -6,6 +6,7 @@
 #include "Map.hpp"
 #include "PageSettings.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "Terrain/TerrainSettings.hpp"
 #include "util/NumberParser.hxx"
 #include "util/StaticString.hxx"
 #include "util/StringFormat.hpp"
@@ -112,6 +113,12 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
       pl.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
   }
 
+  strcpy(profileKey + prefixLen, "TerrainRamp");
+  if (!map.Get(profileKey, pl.terrain_ramp) ||
+      pl.terrain_ramp < -1 ||
+      pl.terrain_ramp >= (int)TerrainRendererSettings::NUM_RAMPS)
+    pl.terrain_ramp = -1;
+
   if (pl.overlay == PageLayout::Overlay::NONE &&
       pl.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
       pl.skysight_overlay.empty())
@@ -187,6 +194,9 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
   StaticString<32> skysight_time;
   skysight_time.Format("%lld", (long long)page.skysight_time);
   map.Set(profileKey, skysight_time.c_str());
+
+  strcpy(profileKey + prefixLen, "TerrainRamp");
+  map.Set(profileKey, page.terrain_ramp);
 }
 
 

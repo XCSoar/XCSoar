@@ -68,7 +68,13 @@ public:
   }
 
   void SetSettings(const TerrainRendererSettings &_settings) {
+    if (settings == _settings)
+      return;
+
     settings = _settings;
+    /* Ramp/contrast/etc. change with the same map view (e.g. per-page
+       terrain colors) must not reuse the cached image. */
+    Flush();
   }
 
 #ifdef ENABLE_OPENGL

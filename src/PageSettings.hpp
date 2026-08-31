@@ -4,6 +4,7 @@
 #pragma once
 
 #include "util/StaticString.hxx"
+#include "Terrain/TerrainSettings.hpp"
 
 #include <array>
 #include <cstdint>
@@ -157,6 +158,12 @@ struct PageLayout
   int xctherm_layer;
   int xctherm_time;
 
+  /**
+   * Per-page terrain color ramp for map pages.  Negative means use the
+   * global TerrainRamp from Map Display → Terrain.
+   */
+  int terrain_ramp;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
@@ -171,7 +178,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     terrain_ramp(-1) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
@@ -185,7 +193,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     terrain_ramp(-1) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -344,6 +353,10 @@ struct PageLayout
       if (xctherm_time < XCTHERM_TIME_AUTO || xctherm_time >= 24)
         xctherm_time = XCTHERM_TIME_AUTO;
     }
+
+    if (terrain_ramp < -1 ||
+        terrain_ramp >= (int)TerrainRendererSettings::NUM_RAMPS)
+      terrain_ramp = -1;
   }
 
   [[nodiscard]]
