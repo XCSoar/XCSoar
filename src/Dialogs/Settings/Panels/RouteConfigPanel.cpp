@@ -43,15 +43,16 @@ private:
 void
 RouteConfigPanel::ShowRouteControls(bool show)
 {
-  SetRowVisible(RoutePlannerAllowClimb, show);
-  SetRowVisible(RoutePlannerUseCeiling, show);
+  SetRowAvailable(RoutePlannerAllowClimb, show);
+  SetRowAvailable(RoutePlannerUseCeiling, show);
 }
 
 void
 RouteConfigPanel::ShowReachControls(bool show)
 {
-  SetRowVisible(FinalGlideTerrain, show);
-  SetRowVisible(ReachPolarMode, show);
+  /* Reach polar still applies to abort, alternates and landable
+     arrival when map reach is Off. */
+  SetRowAvailable(FinalGlideTerrain, show);
 }
 
 void
@@ -109,7 +110,8 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
 
   static constexpr StaticEnumChoice turning_reach_list[] = {
     { RoutePlannerConfig::ReachMode::OFF, N_("Off"),
-      N_("Reach calculations disabled.") },
+      N_("Disables map reach (terrain line and shade). Abort, "
+         "alternates and landable arrival still use the Reach polar.") },
     { RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
       N_("The reach is from straight line paths from the glider.") },
     { RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
@@ -133,7 +135,8 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
   };
 
   AddEnum(_("Reach polar"),
-          _("This determines the glide performance used in reach, landable arrival, abort and alternate calculations."),
+          _("Glide performance for map reach, landable arrival, abort and "
+            "alternates. This still applies when Reach mode is Off."),
           reach_polar_list, (unsigned)route_planner.reach_polar_mode);
   SetExpertRow(ReachPolarMode);
 

@@ -55,10 +55,12 @@ WindSettingsPanel::Prepare(ContainerWindow &parent,
                  "when displayed in circling mode at near map scales. Switched "
                  "Off, the snail trail stays uncompensated for wind drift."),
                map_settings.trail.wind_drift_enabled);
-  else
+  else if (edit_manual_wind)
     AddDummy();
 
   if (edit_manual_wind) {
+    AddSpacer();
+
     SpeedVector manual_wind = CommonInterface::Calculated().GetWindOrZero();
 
     AddReadOnly(C_("Wind source", "Source"));
