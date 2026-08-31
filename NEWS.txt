@@ -16,6 +16,9 @@ Version 7.46 - not yet released
   - remove the thin white frame around full-screen dialogs (such as
     the Fly/Simulator screen), which no longer stop one pixel short of
     the display edge
+* Kobo
+  - fix the power-off screen not listing flights after flights.log
+    moved into the logs directory #3001
 * input
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
