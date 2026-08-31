@@ -96,6 +96,8 @@ Version 7.46 - not yet released
 * documentation
   - clarify that Reach polar still applies to abort, alternates and
     landable arrival when Reach mode is Off
+  - clarify that Trail drift also controls the circling projected
+    track curve
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
