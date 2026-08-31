@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <vector>
+#include <cstdint>
 
 class TopographyFile;
 class Canvas;
@@ -64,6 +65,21 @@ class TopographyFileRenderer final
 #ifdef ENABLE_OPENGL
   std::unique_ptr<GLArrayBuffer> array_buffer;
   Serial array_buffer_serial;
+
+  /**
+   * Expanded (or MultiDraw) index lists for the current VBO and
+   * visible set.  Reused while panning inside the 2× cache.
+   */
+public:
+  struct CachedWindow {
+    unsigned window_base = 0;
+    std::vector<uint16_t> lines, fills;
+    std::vector<int> line_counts, fill_counts;
+  };
+private:
+  std::vector<CachedWindow> draw_windows;
+  unsigned draw_cache_thinning = ~0u;
+  bool draw_cache_valid = false;
 #endif
 
 public:
@@ -109,7 +125,8 @@ public:
                    LabelBlock &label_block) noexcept;
 
 private:
-  void UpdateVisibleShapes(const WindowProjection &projection) noexcept;
+  /** @return true if the visible-shape cache was rebuilt */
+  bool UpdateVisibleShapes(const WindowProjection &projection) noexcept;
 
 #ifdef ENABLE_OPENGL
   bool UpdateArrayBuffer() noexcept;
