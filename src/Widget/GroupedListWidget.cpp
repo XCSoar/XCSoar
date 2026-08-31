@@ -83,11 +83,14 @@ public:
 
 private:
   struct Element {
-    enum class Type : uint_least8_t { CAPTION, FOOTER, ITEM };
+    enum class Type : uint_least8_t { HERO, CAPTION, FOOTER, ITEM };
 
     Type type;
 
     std::string text;
+
+    /** only for Type::HERO: the description below the title */
+    std::string value{};
 
     /** only for Type::ITEM */
     Callback callback{};
@@ -146,6 +149,7 @@ public:
 
   void Create(ContainerWindow &parent, const PixelRect &rc) noexcept;
 
+  void AddHero(const char *title, const char *description) noexcept;
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
   void AddItem(const char *caption, Callback callback) noexcept;
 
@@ -283,6 +287,21 @@ GroupedListControl::Create(ContainerWindow &parent,
 }
 
 void
+GroupedListControl::AddHero(const char *title,
+                              const char *description) noexcept
+{
+  assert(title != nullptr);
+
+  FinishGroup();
+
+  elements.push_back(Element{
+    .type = Element::Type::HERO,
+    .text = title,
+    .value = description != nullptr ? description : "",
+  });
+}
+
+void
 GroupedListControl::AddGroup(const char *caption,
                              const GroupOptions &options) noexcept
 {
@@ -395,6 +414,8 @@ GroupedListControl::UpdateLayout() noexcept
   const int caption_gap = Layout::VptScale(CAPTION_GAP_PT);
   const int footer_gap = Layout::VptScale(FOOTER_GAP_PT);
 
+  const int padding = Layout::VptScale(PADDING_PT);
+
   const unsigned item_height = GetItemHeight();
   const unsigned caption_height = look.list.font_bold->GetHeight();
 
@@ -404,8 +425,7 @@ GroupedListControl::UpdateLayout() noexcept
   scroll_bar.Reset();
 
   for (unsigned pass = 0; pass < 2; ++pass) {
-    const int text_width = GetContentWidth() - 2 * margin
-      - 2 * (int)Layout::VptScale(PADDING_PT);
+    const int text_width = GetContentWidth() - 2 * margin - 2 * padding;
 
     int y = 0;
 
@@ -415,6 +435,17 @@ GroupedListControl::UpdateLayout() noexcept
       switch (element.type) {
       case Element::Type::ITEM:
         element.height = item_height;
+        break;
+
+      case Element::Type::HERO:
+        element.height = GetLeadingGap(i)
+          + 2 * padding + look.heading2_font.GetHeight();
+
+        if (!element.value.empty())
+          element.height += caption_gap +
+            text_renderer.GetHeight(*look.list.font,
+                                        std::max(text_width, 1),
+                                        element.value.c_str());
         break;
 
       case Element::Type::CAPTION:
@@ -636,6 +667,43 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     canvas.DrawClippedText({caption_rc.left, text_y}, caption_rc,
                            element.text.c_str());
+
+    break;
+  }
+
+  case Element::Type::HERO: {
+    /* a hero card which introduces the page or a part of it, with a
+       title and an optional description below it */
+    PixelRect card_rc = rc;
+    card_rc.top += GetLeadingGap(i);
+
+    canvas.DrawFilledRectangle(card_rc,
+                               look.list.GetBackgroundColor(false, false,
+                                                            false));
+
+    const int radius = Layout::VptScale(RADIUS_PT);
+    DrawRoundedEdge(canvas, card_rc, true, look.background_color, radius);
+    DrawRoundedEdge(canvas, card_rc, false, look.background_color, radius);
+
+    text_rc.top = card_rc.top + padding;
+    text_rc.bottom = card_rc.bottom - padding;
+
+    const Color title_color = look.list.GetTextColor(false, false, false);
+
+    canvas.Select(look.heading2_font);
+    canvas.SetTextColor(title_color);
+    canvas.DrawClippedText({text_rc.left, text_rc.top}, text_rc,
+                           element.text.c_str());
+
+    if (!element.value.empty()) {
+      text_rc.top += (int)look.heading2_font.GetHeight()
+        + (int)Layout::VptScale(CAPTION_GAP_PT);
+
+      canvas.Select(*look.list.font);
+      canvas.SetTextColor(title_color);
+
+      text_renderer.Draw(canvas, text_rc, element.value.c_str());
+    }
 
     break;
   }
@@ -954,6 +1022,13 @@ GroupedListWidget::GroupedListWidget(const DialogLook &look) noexcept
    control(*pending) {}
 
 GroupedListWidget::~GroupedListWidget() noexcept = default;
+
+void
+GroupedListWidget::AddHero(const char *title,
+                             const char *description) noexcept
+{
+  control.AddHero(title, description);
+}
 
 void
 GroupedListWidget::AddGroup(const char *caption) noexcept

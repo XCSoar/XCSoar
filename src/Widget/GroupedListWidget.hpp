@@ -49,6 +49,12 @@ public:
   ~GroupedListWidget() noexcept override;
 
   /**
+   * Add a hero card which introduces the page or a part of it, with a
+   * title in a larger font and an optional description below it.
+   */
+  void AddHero(const char *title, const char *description=nullptr) noexcept;
+
+  /**
    * Begin a new group.  All items added afterwards belong to it.
    *
    * @param caption the group caption; nullptr for a group which is
