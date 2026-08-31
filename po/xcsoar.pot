@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 22:41+0200\n"
+"POT-Creation-Date: 2026-08-31 23:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -968,6 +968,7 @@ msgstr ""
 msgid "Avg. lift"
 msgstr ""
 
+#, no-c-format
 msgid "Traffic"
 msgstr ""
 
@@ -1402,7 +1403,7 @@ msgid "Safety Factors"
 msgstr ""
 
 #, no-c-format
-msgid "Tracking"
+msgid "XCSoar Cloud"
 msgstr ""
 
 #, no-c-format
@@ -2888,7 +2889,7 @@ msgstr ""
 msgid "Trail drift"
 msgstr ""
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr ""
 
 #, no-c-format
@@ -2986,11 +2987,7 @@ msgid "Scoring"
 msgstr ""
 
 #, no-c-format
-msgid "FLARM, Other"
-msgstr ""
-
-#, no-c-format
-msgid "Audio Vario"
+msgid "Overlays"
 msgstr ""
 
 #, no-c-format
@@ -3002,11 +2999,11 @@ msgid "Turnpoint Types"
 msgstr ""
 
 #, no-c-format
-msgid "Language, Input"
+msgid "Screen"
 msgstr ""
 
 #, no-c-format
-msgid "Screen Layout"
+msgid "Layout"
 msgstr ""
 
 #, no-c-format
@@ -3014,7 +3011,16 @@ msgid "Thermal Information Map"
 msgstr ""
 
 #, no-c-format
+msgid "Language, Input"
+msgstr ""
+
+#. Before Units: audio vario deadband uses vertical-speed units.
+#, no-c-format
 msgid "Audio"
+msgstr ""
+
+#, no-c-format
+msgid "System Services"
 msgstr ""
 
 #, no-c-format
@@ -3035,6 +3041,11 @@ msgstr ""
 
 #, no-c-format
 msgctxt "Menu"
+msgid "Services"
+msgstr ""
+
+#, no-c-format
+msgctxt "Menu"
 msgid "Setup"
 msgstr ""
 
@@ -3042,6 +3053,9 @@ msgid "Expert"
 msgstr ""
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Back"
 msgstr ""
 
 msgid "The name of this InfoBox panel configuration."
@@ -3872,18 +3886,6 @@ msgstr ""
 msgid "Controls filtering of airspace for display and warnings. The airspace filter button also allows filtering of display and warnings independently for each airspace class."
 msgstr ""
 
-msgid "Label visibility"
-msgstr ""
-
-msgid "Determines what labels are displayed."
-msgstr ""
-
-msgid "Show NOTAM labels"
-msgstr ""
-
-msgid "Show brief NOTAM text labels on the map when zoomed in sufficiently."
-msgstr ""
-
 msgid "Clip altitude"
 msgstr ""
 
@@ -3894,6 +3896,18 @@ msgid "Margin"
 msgstr ""
 
 msgid "For auto and all below airspace mode, this is the altitude above/below which airspace is included."
+msgstr ""
+
+msgid "Label visibility"
+msgstr ""
+
+msgid "Determines what labels are displayed."
+msgstr ""
+
+msgid "Show NOTAM labels"
+msgstr ""
+
+msgid "Show brief NOTAM text labels on the map when zoomed in sufficiently."
 msgstr ""
 
 msgid "Enable/disable all airspace warnings."
@@ -4037,15 +4051,7 @@ msgid "Show final glide bar if approaching final glide range."
 msgstr ""
 
 #, no-c-format
-msgid "Auto (follow InfoBoxes)"
-msgstr ""
-
-#, no-c-format
-msgid "Top left"
-msgstr ""
-
-#, no-c-format
-msgid "Top right"
+msgid "Disable thermal assistant."
 msgstr ""
 
 #, no-c-format
@@ -4053,23 +4059,7 @@ msgid "Bottom left"
 msgstr ""
 
 #, no-c-format
-msgid "Bottom right"
-msgstr ""
-
-#, no-c-format
-msgid "Center top"
-msgstr ""
-
-#, no-c-format
-msgid "Center bottom"
-msgstr ""
-
-#, no-c-format
-msgid "Top left (avoid InfoBoxes)"
-msgstr ""
-
-#, no-c-format
-msgid "Top right (avoid InfoBoxes)"
+msgid "Show thermal assistant in bottom left."
 msgstr ""
 
 #, no-c-format
@@ -4077,27 +4067,11 @@ msgid "Bottom left (avoid InfoBoxes)"
 msgstr ""
 
 #, no-c-format
-msgid "Bottom right (avoid InfoBoxes)"
-msgstr ""
-
-#, no-c-format
-msgid "Center top (avoid InfoBoxes)"
-msgstr ""
-
-#, no-c-format
-msgid "Center bottom (avoid InfoBoxes)"
-msgstr ""
-
-#, no-c-format
-msgid "Disable thermal assistant."
-msgstr ""
-
-#, no-c-format
-msgid "Show thermal assistant in bottom left."
-msgstr ""
-
-#, no-c-format
 msgid "Show thermal assistant in bottom left, above or to the right of InfoBoxes (if present)."
+msgstr ""
+
+#, no-c-format
+msgid "Bottom right"
 msgstr ""
 
 #, no-c-format
@@ -4105,7 +4079,15 @@ msgid "Show thermal assistant in bottom right."
 msgstr ""
 
 #, no-c-format
+msgid "Bottom right (avoid InfoBoxes)"
+msgstr ""
+
+#, no-c-format
 msgid "Show thermal assistant in bottom right, above or to the left of InfoBoxes (if present)."
+msgstr ""
+
+#, no-c-format
+msgid "Top left"
 msgstr ""
 
 #, no-c-format
@@ -4113,7 +4095,15 @@ msgid "Show thermal assistant in top left."
 msgstr ""
 
 #, no-c-format
+msgid "Top right"
+msgstr ""
+
+#, no-c-format
 msgid "Show thermal assistant in top right."
+msgstr ""
+
+#, no-c-format
+msgid "Center top"
 msgstr ""
 
 #, no-c-format
@@ -4121,7 +4111,15 @@ msgid "Show thermal assistant in center top."
 msgstr ""
 
 #, no-c-format
+msgid "Top left (avoid InfoBoxes)"
+msgstr ""
+
+#, no-c-format
 msgid "Show thermal assistant in top left (avoid InfoBoxes)."
+msgstr ""
+
+#, no-c-format
+msgid "Top right (avoid InfoBoxes)"
 msgstr ""
 
 #, no-c-format
@@ -4129,22 +4127,11 @@ msgid "Show thermal assistant in top right (avoid InfoBoxes)."
 msgstr ""
 
 #, no-c-format
+msgid "Center top (avoid InfoBoxes)"
+msgstr ""
+
+#, no-c-format
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
-msgstr ""
-
-msgid "This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
-msgstr ""
-
-msgid "Auto close FLARM"
-msgstr ""
-
-msgid "Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."
-msgstr ""
-
-msgid "FLARM display"
-msgstr ""
-
-msgid "Choose a location for the FLARM display."
 msgstr ""
 
 msgid "Enable and select the position of the thermal assistant when overlayed on the main screen."
@@ -4171,10 +4158,132 @@ msgstr ""
 msgid "If set to \"On\" the vario bar will be shown."
 msgstr ""
 
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr ""
+
+#, no-c-format
+msgid "Auto (follow InfoBoxes)"
+msgstr ""
+
+#, no-c-format
+msgid "Center bottom"
+msgstr ""
+
+#, no-c-format
+msgid "Center bottom (avoid InfoBoxes)"
+msgstr ""
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr ""
+
+msgid "Auto close FLARM"
+msgstr ""
+
+msgid "Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."
+msgstr ""
+
 msgid "No position target"
 msgstr ""
 
 msgid "This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "LCD"
+msgstr ""
+
+#, no-c-format
+msgid "Conventional LCD or OLED. Full scrolling animations."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "E-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Color e-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
+msgstr ""
+
+#, no-c-format
+msgid "Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Landscape"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Landscape"
+msgstr ""
+
+msgid "Automatic"
+msgstr ""
+
+#, c-format
+msgid "%u dpi"
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Display type"
+msgstr ""
+
+msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr ""
+
+msgid "Display orientation"
+msgstr ""
+
+msgid "Rotate the display on devices that support it."
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+msgid "Full screen"
+msgstr ""
+
+msgid "Run XCSoar in full screen mode"
+msgstr ""
+
+msgid "Cursor zoom"
+msgstr ""
+
+msgid "Cursor zoom factor"
+msgstr ""
+
+msgid "Invert cursor color"
+msgstr ""
+
+msgid "Enable black cursor"
 msgstr ""
 
 msgid "Speed arrows"
@@ -4195,18 +4304,6 @@ msgstr ""
 msgid "Whether to show the MacCready setting."
 msgstr ""
 
-msgid "Show bugs"
-msgstr ""
-
-msgid "Whether to show the bugs percentage."
-msgstr ""
-
-msgid "Show ballast"
-msgstr ""
-
-msgid "Whether to show the ballast percentage."
-msgstr ""
-
 msgid "Show gross"
 msgstr ""
 
@@ -4217,6 +4314,18 @@ msgid "Averager needle"
 msgstr ""
 
 msgid "If true, the vario gauge will display a hollow averager needle. During cruise, this needle displays the average netto value. During circling, this needle displays the average gross value."
+msgstr ""
+
+msgid "Show bugs"
+msgstr ""
+
+msgid "Whether to show the bugs percentage."
+msgstr ""
+
+msgid "Show ballast"
+msgstr ""
+
+msgid "Whether to show the ballast percentage."
 msgstr ""
 
 msgid "Thermal Averager needle"
@@ -4255,22 +4364,28 @@ msgstr ""
 msgid "This option defines which auto MacCready algorithm is used."
 msgstr ""
 
+msgid "Wave assistant"
+msgstr ""
+
+msgid "Enable detection and display of wave lift. When enabled, wave sources are identified and shown on the map."
+msgstr ""
+
 msgid "Block speed to fly"
 msgstr ""
 
 msgid "If enabled, the command speed in cruise is set to the MacCready speed to fly in no vertical air-mass movement. If disabled, the command speed in cruise is set to the dolphin speed to fly, equivalent to the MacCready speed with vertical air-mass movement."
 msgstr ""
 
+msgid "Predict wind drift"
+msgstr ""
+
+msgid "Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."
+msgstr ""
+
 msgid "Nav. by baro altitude"
 msgstr ""
 
 msgid "When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used."
-msgstr ""
-
-msgid "Flap forces cruise"
-msgstr ""
-
-msgid "When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise."
 msgstr ""
 
 #, no-c-format
@@ -4287,16 +4402,10 @@ msgstr ""
 msgid "Here you can decide on how many seconds of flight this calculation must be done. Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds."
 msgstr ""
 
-msgid "Predict wind drift"
+msgid "Flap forces cruise"
 msgstr ""
 
-msgid "Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."
-msgstr ""
-
-msgid "Wave assistant"
-msgstr ""
-
-msgid "Enable detection and display of wave lift. When enabled, wave sources are identified and shown on the map."
+msgid "When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise."
 msgstr ""
 
 msgid "Cruise/Circling period"
@@ -4315,22 +4424,6 @@ msgid "Use final glide mode"
 msgstr ""
 
 msgid "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" pages."
-msgstr ""
-
-msgid "Text size"
-msgstr ""
-
-msgid "Display Resolution"
-msgstr ""
-
-msgid "The display resolution is used to adapt line widths, font size, landable size and more."
-msgstr ""
-
-msgid "Automatic"
-msgstr ""
-
-#, c-format
-msgid "%u dpi"
 msgstr ""
 
 msgid "Events"
@@ -4395,49 +4488,6 @@ msgid "Safety disclaimer accepted"
 msgstr ""
 
 msgid "Whether the safety disclaimer has been accepted for this version."
-msgstr ""
-
-#, no-c-format
-msgid "Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Landscape"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Landscape"
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "LCD"
-msgstr ""
-
-#, no-c-format
-msgid "Conventional LCD or OLED. Full scrolling animations."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "E-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Color e-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
 msgstr ""
 
 #, no-c-format
@@ -4577,18 +4627,6 @@ msgid "Glass"
 msgstr ""
 
 #, no-c-format
-msgid "Use the system-wide setting"
-msgstr ""
-
-#, no-c-format
-msgid "Black text on white background"
-msgstr ""
-
-#, no-c-format
-msgid "White text on black background"
-msgstr ""
-
-#, no-c-format
 msgid "Follow global"
 msgstr ""
 
@@ -4612,27 +4650,29 @@ msgstr ""
 msgid "Always use light text on a dark InfoBox background."
 msgstr ""
 
-msgid "Full screen"
+#, no-c-format
+msgid "Auto"
 msgstr ""
 
-msgid "Run XCSoar in full screen mode"
+#, no-c-format
+msgid "Use the system-wide setting"
 msgstr ""
 
-msgid "Display orientation"
+#, no-c-format
+msgid "Black text on white background"
 msgstr ""
 
-msgid "Rotate the display on devices that support it."
+#, no-c-format
+msgid "White text on black background"
 msgstr ""
 
 msgid "Dark mode"
 msgstr ""
 
-#, no-c-format
-msgctxt "Setting"
-msgid "Display type"
+msgid "Text size"
 msgstr ""
 
-msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
+msgid "Tab dialog style"
 msgstr ""
 
 msgid "InfoBox geometry"
@@ -4647,12 +4687,6 @@ msgstr ""
 msgid "Zoom factor for InfoBox title and comment text"
 msgstr ""
 
-msgid "Tab dialog style"
-msgstr ""
-
-msgid "Message display"
-msgstr ""
-
 msgid "Colored InfoBoxes"
 msgstr ""
 
@@ -4663,6 +4697,9 @@ msgid "InfoBox theme"
 msgstr ""
 
 msgid "InfoBox border"
+msgstr ""
+
+msgid "Message display"
 msgstr ""
 
 msgid "Show Menu button"
@@ -4683,18 +4720,6 @@ msgid "Show QuickMenu button"
 msgstr ""
 
 msgid "Show the QuickMenu button"
-msgstr ""
-
-msgid "Cursor zoom"
-msgstr ""
-
-msgid "Cursor zoom factor"
-msgstr ""
-
-msgid "Invert cursor color"
-msgstr ""
-
-msgid "Enable black cursor"
 msgstr ""
 
 #, no-c-format
@@ -5053,6 +5078,15 @@ msgstr ""
 msgid "Select a weather map overlay to configure its layer or level for this page."
 msgstr ""
 
+msgid "SkySight is unavailable."
+msgstr ""
+
+msgid "SkySight API rate-limited. Retrying shortly."
+msgstr ""
+
+msgid "Loading SkySight catalog..."
+msgstr ""
+
 #, no-c-format
 msgctxt "Setting"
 msgid "SkySight Email"
@@ -5109,7 +5143,7 @@ msgid "When enabled, route planning climbs are limited to ceiling defined by gre
 msgstr ""
 
 #, no-c-format
-msgid "Reach calculations disabled."
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr ""
 
 #, no-c-format
@@ -5150,7 +5184,7 @@ msgstr ""
 msgid "Reach polar"
 msgstr ""
 
-msgid "This determines the glide performance used in reach, landable arrival, abort and alternate calculations."
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
 msgstr ""
 
 #, no-c-format
@@ -5238,6 +5272,14 @@ msgstr ""
 msgid "Determines sorting of alternates in the alternates dialog and in abort mode."
 msgstr ""
 
+#, no-c-format
+msgctxt "Setting"
+msgid "Turn back marker"
+msgstr ""
+
+msgid "Show a green triangle on the map along the current track indicating the furthest point from which the active task waypoint or Goto target can still be reached with the current altitude and conditions. The triangle is only shown during cruise when the target is reachable."
+msgstr ""
+
 msgid "Polar degradation"
 msgstr ""
 
@@ -5259,14 +5301,6 @@ msgid "STF risk factor"
 msgstr ""
 
 msgid "The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk. Set to 0.0 for no compensation, 1.0 scales MC linearly with current height (with reference to height of the maximum climb). If considered, 0.3 is recommended."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Turn back marker"
-msgstr ""
-
-msgid "Show a green triangle on the map along the current track indicating the furthest point from which the active task waypoint or Goto target can still be reached with the current altitude and conditions. The triangle is only shown during cruise when the target is reachable."
 msgstr ""
 
 msgid "XCSoar data path"
@@ -6027,6 +6061,30 @@ msgid "Determines how labels are displayed with each waypoint"
 msgstr ""
 
 #, no-c-format
+msgid "Task waypoints & airfields"
+msgstr ""
+
+#, no-c-format
+msgid "All waypoints part of a task and all airfields will be displayed."
+msgstr ""
+
+#, no-c-format
+msgid "Task waypoints & landables"
+msgstr ""
+
+#, no-c-format
+msgid "All waypoints part of a task and all landables will be displayed."
+msgstr ""
+
+#, no-c-format
+msgid "Task waypoints"
+msgstr ""
+
+#, no-c-format
+msgid "All waypoints part of a task will be displayed."
+msgstr ""
+
+#, no-c-format
 msgid "No arrival height is displayed."
 msgstr ""
 
@@ -6076,28 +6134,10 @@ msgstr ""
 msgid "Label style"
 msgstr ""
 
-#, no-c-format
-msgid "Task waypoints & airfields"
+msgid "Waypoint icon size"
 msgstr ""
 
-#, no-c-format
-msgid "All waypoints part of a task and all airfields will be displayed."
-msgstr ""
-
-#, no-c-format
-msgid "Task waypoints & landables"
-msgstr ""
-
-#, no-c-format
-msgid "All waypoints part of a task and all landables will be displayed."
-msgstr ""
-
-#, no-c-format
-msgid "Task waypoints"
-msgstr ""
-
-#, no-c-format
-msgid "All waypoints part of a task will be displayed."
+msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr ""
 
 #, no-c-format
@@ -6128,12 +6168,6 @@ msgid "Landable symbols"
 msgstr ""
 
 msgid "Three styles are available: Purple circles (WinPilot style), a high contrast (monochrome) style, or orange. The rendering differs for landable field and airport. All styles mark the waypoints within reach green."
-msgstr ""
-
-msgid "Waypoint icon size"
-msgstr ""
-
-msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr ""
 
 msgid "Detailed landables"
@@ -6528,10 +6562,12 @@ msgstr ""
 msgid "Optimized"
 msgstr ""
 
-msgid "Altn mode: MANUAL"
-msgstr ""
-
-msgid "Altn mode: AUTO"
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
 msgstr ""
 
 #, no-c-format
@@ -6554,6 +6590,9 @@ msgstr ""
 #, no-c-format
 msgctxt "Menu"
 msgid "Alternates 2"
+msgstr ""
+
+msgid "Paste"
 msgstr ""
 
 msgid "Reset"
@@ -6728,9 +6767,24 @@ msgid ""
 "\n"
 "- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
 "\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
+msgstr ""
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
 "\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr ""
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr ""
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr ""
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
 msgstr ""
 
 msgid ""
@@ -6756,7 +6810,7 @@ msgid ""
 "\n"
 "3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
 "\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
 msgstr ""
 
 msgid ""
@@ -6770,7 +6824,7 @@ msgid ""
 "- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
 "- **Foreground Service** - Keeps GPS active during your flight\n"
 "\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
 "\n"
 "[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
 msgstr ""
@@ -6788,11 +6842,11 @@ msgstr ""
 msgid ""
 "# XCSoar Cloud\n"
 "\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
 "\n"
 "If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
 "\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
 msgstr ""
 
 #, no-c-format
@@ -6841,9 +6895,6 @@ msgstr ""
 msgid "Enable XCSoar Cloud"
 msgstr ""
 
-msgid "XCSoar Cloud"
-msgstr ""
-
 msgid "Not Now"
 msgstr ""
 
@@ -6888,7 +6939,19 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr ""
 
+msgid "Master Volume"
+msgstr ""
+
+msgid "The overall audio output volume."
+msgstr ""
+
+msgid "Audio Vario"
+msgstr ""
+
 msgid "Emulate the sound of an electronic vario."
+msgstr ""
+
+msgid "Vario Volume"
 msgstr ""
 
 msgid "The audio vario sound volume."
@@ -6936,12 +6999,6 @@ msgid "Deadband max. lift"
 msgstr ""
 
 msgid "Above this lift threshold the vario will start to play sounds if the 'Deadband' feature is enabled."
-msgstr ""
-
-msgid "Master Volume"
-msgstr ""
-
-msgid "The overall audio output volume."
 msgstr ""
 
 #, no-c-format
@@ -7064,12 +7121,6 @@ msgid "Please enter four letters or digits only (ICAO station code)."
 msgstr ""
 
 msgid "This function is not available on your platform yet."
-msgstr ""
-
-msgid "SkySight API rate-limited. Retrying shortly."
-msgstr ""
-
-msgid "Loading SkySight catalog..."
 msgstr ""
 
 msgid "No SkySight layers selected. Press Add to list to choose parameters."
@@ -7205,9 +7256,6 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Clear downloaded data"
-msgstr ""
-
-msgid "SkySight is unavailable."
 msgstr ""
 
 msgid "Failed to acknowledge airspace warning"
@@ -7364,18 +7412,6 @@ msgstr ""
 msgid "Downloading XC Therm %s..."
 msgstr ""
 
-#, no-c-format
-msgid "Hot-air balloon"
-msgstr ""
-
-#, no-c-format
-msgid "Hangglider (Flex/FAI1)"
-msgstr ""
-
-#, no-c-format
-msgid "Hangglider (Rigid/FAI5)"
-msgstr ""
-
 msgid "Enable live tracking via the SkyLines server (tracking.skylines.aero)."
 msgstr ""
 
@@ -7383,9 +7419,6 @@ msgid "Roaming"
 msgstr ""
 
 msgid "Allow tracking when on a roaming mobile data connection."
-msgstr ""
-
-msgid "Tracking Interval"
 msgstr ""
 
 msgid "Track friends"
@@ -7400,7 +7433,24 @@ msgstr ""
 msgid "Download the position of nearby SkyLines users live from the SkyLines server."
 msgstr ""
 
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr ""
+
 msgid "Your SkyLines tracking key. This is used to identify your aircraft on the server."
+msgstr ""
+
+#, no-c-format
+msgid "Hot-air balloon"
+msgstr ""
+
+#, no-c-format
+msgid "Hangglider (Flex/FAI1)"
+msgstr ""
+
+#, no-c-format
+msgid "Hangglider (Rigid/FAI5)"
 msgstr ""
 
 msgid "Vehicle Type"
@@ -7412,7 +7462,21 @@ msgstr ""
 msgid "Vehicle Name"
 msgstr ""
 
+msgid "Name of vehicle used."
+msgstr ""
+
 msgid "Server"
+msgstr ""
+
+#, c-format
+msgid "%u sec"
+msgstr ""
+
+#, c-format
+msgid "%u min"
+msgstr ""
+
+msgid "Tracking Interval"
 msgstr ""
 
 msgid "Participate in the XCSoar Cloud? This transmits your position while flying and allows receiving traffic from other XCSoar Cloud participants and OGN, as well as thermal and wave locations from the cloud server."
@@ -7486,6 +7550,57 @@ msgstr ""
 
 #, c-format
 msgid "Caching EDL forecast %s..."
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
 msgstr ""
 
 msgid "Could not contact the WiFi service."
