@@ -63,7 +63,8 @@ private:
                     LabelBlock *label_block) noexcept;
 
   void DrawLabel(Canvas &canvas, const WindowProjection &projection,
-                 const AirspaceLabelList::Label &label) noexcept;
+                 const AirspaceLabelList::Label &label,
+                 LabelBlock *label_block) noexcept;
 
 public:
   /**

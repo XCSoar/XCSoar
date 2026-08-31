@@ -80,6 +80,15 @@ public:
   void SetQuantisationPixels(unsigned q) noexcept {
     raster_renderer.SetQuantisationPixels(q);
   }
+
+  void SetUseCpuHillshade(bool cpu) noexcept {
+    raster_renderer.SetUseCpuHillshade(cpu);
+  }
+
+  [[gnu::pure]]
+  bool IsShaderHillshade() const noexcept {
+    return raster_renderer.IsShaderHillshade();
+  }
 #endif
 
   /**

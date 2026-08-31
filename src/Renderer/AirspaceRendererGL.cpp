@@ -82,8 +82,7 @@ private:
 
   void VisitPolygon(const AirspacePolygon &airspace) {
 	AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
-    if (!PreparePolygon(airspace.GetPoints()))
-      return;
+    const bool prepared = PreparePolygon(airspace.GetPoints());
 
     const AirspaceClassRendererSettings &class_settings =
       settings.classes[as_type_or_class];
@@ -93,7 +92,7 @@ private:
       class_settings.fill_mode ==
       AirspaceClassRendererSettings::FillMode::ALL;
 
-    if (!warning_manager.IsAcked(airspace) &&
+    if (prepared && !warning_manager.IsAcked(airspace) &&
         class_settings.fill_mode !=
         AirspaceClassRendererSettings::FillMode::NONE) {
       const GLEnable<GL_STENCIL_TEST> stencil;
@@ -101,7 +100,7 @@ private:
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
         SetFillStencil();
-        DrawPrepared();
+        DrawPolygonOutline(airspace.GetPoints());
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
 
@@ -115,14 +114,14 @@ private:
       if (!fill_airspace) {
         // clear fill stencil (bit 0)
         ClearFillStencil();
-        DrawPrepared();
+        DrawPolygonOutline(airspace.GetPoints());
         glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
       }
     }
 
-    // draw outline
+    /* ClipPolygon inserts view-box edges; draw the original ring. */
     if (SetupOutline(airspace))
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
 public:
@@ -232,18 +231,15 @@ private:
   }
 
   void VisitPolygon(const AirspacePolygon &airspace) {
-    if (!PreparePolygon(airspace.GetPoints()))
-      return;
-
-    if (!warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
+    if (PreparePolygon(airspace.GetPoints()) &&
+        !warning_manager.IsAcked(airspace) && SetupInterior(airspace)) {
       // fill interior without overpainting any previous outlines
       GLEnable<GL_BLEND> blend;
       DrawPrepared();
     }
 
-    // draw outline
     if (SetupOutline(airspace))
-      DrawPrepared();
+      DrawPolygonOutline(airspace.GetPoints());
   }
 
 public:

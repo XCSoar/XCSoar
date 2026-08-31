@@ -72,6 +72,14 @@ public:
     return projection;
   }
 
+  const RasterBuffer &GetOverview() const noexcept {
+    return raster_tile_cache.GetOverview();
+  }
+
+  const RasterTileCache &GetTileCache() const noexcept {
+    return raster_tile_cache;
+  }
+
   /**
    * The geographical distance in meters of the given amount
    * of pixels multiplied by 256.

@@ -31,6 +31,9 @@
 enum ControlIndex {
   EnableTerrain,
   EnableTopography,
+#ifdef ENABLE_OPENGL
+  TerrainGpuDemSpike,
+#endif
   TerrainColors,
   TerrainSlopeShading,
   TerrainContrast,
@@ -121,6 +124,9 @@ TerrainDisplayConfigPanel::ShowTerrainControls()
   SetRowVisible(TerrainContrast, show);
   SetRowVisible(TerrainBrightness, show);
   SetRowVisible(TerrainContours, show);
+#ifdef ENABLE_OPENGL
+  SetRowVisible(TerrainGpuDemSpike, show);
+#endif
   if (have_terrain_preview) {
     SetRowVisible(TerrainSpacer, show);
     SetRowVisible(TerrainPreview, show);
@@ -150,6 +156,9 @@ TerrainDisplayConfigPanel::UpdateTerrainPreview()
   terrain_settings.ramp = GetValueEnum(TerrainColors);
   terrain_settings.contours = (Contours)
     GetValueEnum(TerrainContours);
+#ifdef ENABLE_OPENGL
+  terrain_settings.gpu_dem_spike = GetValueBoolean(TerrainGpuDemSpike);
+#endif
 
   // Invalidate terrain preview
   if (have_terrain_preview)
@@ -242,6 +251,15 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent,
              _("Draw topographical features (roads, rivers, lakes etc.) on the map."),
              settings_map.topography_enabled);
   GetDataField(EnableTopography).SetListener(this);
+
+#ifdef ENABLE_OPENGL
+  AddBoolean(_("GPU DEM spike"),
+             _("Experimental: sample fine DEM tiles on the GPU "
+               "(no ScanMap)."),
+             terrain.gpu_dem_spike);
+  GetDataField(TerrainGpuDemSpike).SetListener(this);
+  SetExpertRow(TerrainGpuDemSpike);
+#endif
 
   static constexpr StaticEnumChoice terrain_ramp_list[] = {
     { 0, N_("Low lands"), },
@@ -372,6 +390,10 @@ TerrainDisplayConfigPanel::Save(bool &_changed) noexcept
     Profile::SetEnum(ProfileKeys::SlopeShadingType,
                      terrain_settings.slope_shading);
     Profile::SetEnum(ProfileKeys::TerrainContours, terrain_settings.contours);
+#ifdef ENABLE_OPENGL
+    Profile::Set(ProfileKeys::TerrainGpuDemSpike,
+                 terrain_settings.gpu_dem_spike);
+#endif
     changed = true;
   }
 

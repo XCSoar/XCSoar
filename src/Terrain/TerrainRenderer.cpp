@@ -8,7 +8,15 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#include "ui/event/Idle.hpp"
+#endif
+
 #include <cassert>
+#ifdef ENABLE_OPENGL
+#include <chrono>
+#endif
 
 static constexpr ColorRampEntry terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
   {
@@ -353,8 +361,26 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 #ifdef ENABLE_OPENGL
   /* Call once — the helper mutates quantisation_pixels. */
   const bool quantisation_improved = raster_renderer.UpdateQuantisation();
+  raster_renderer.SetSunFromAzimuth(sunazimuth, settings.brightness,
+                                    settings.contrast);
+  const bool sun_ok = raster_renderer.IsShaderHillshade() ||
+    sunazimuth.CompareRoughly(last_sun_azimuth);
 #else
   constexpr bool quantisation_improved = false;
+  const bool sun_ok = sunazimuth.CompareRoughly(last_sun_azimuth);
+#endif
+
+  const unsigned height_scale = 4;
+  const double screen_pixel_size =
+    1.0 / map_projection.GetScale();
+  const double dpi_factor =
+    Layout::ScalePenWidth(1024u) / 1024.0;
+  const double contour_pixel_size = screen_pixel_size * dpi_factor *
+    std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
+  last_contour_spacing = ContourSpacing(settings.contours, height_scale,
+                                        contour_pixel_size);
+#ifdef ENABLE_OPENGL
+  raster_renderer.SetContourSpacing(last_contour_spacing);
 #endif
 
   /* Exact same view: reuse without consulting overscan bounds.
@@ -365,68 +391,149 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   if (!quantisation_improved &&
       compare_projection.CompareExact(map_projection) &&
       terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth)) {
+      sun_ok) {
     if (settings.contours == Contours::OFF ||
 #ifdef ENABLE_OPENGL
+        raster_renderer.IsShaderHillshade() ||
         raster_renderer.GetQuantisationPixels() > 2 ||
 #endif
         map_projection.GetScale() == last_projection_scale) {
+#ifdef ENABLE_OPENGL
+      if (settings.gpu_dem_spike)
+        raster_renderer.GpuDemNoteReuse();
+#endif
       return true;
     }
   }
+
+  /* With GPU DEM tiles, serial bumps mean new fine tiles — fall
+     through to PrepareGpuDemTiles even if the camera is unchanged. */
 
 #ifdef ENABLE_OPENGL
   const GeoBounds &old_bounds = raster_renderer.GetBounds();
   GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
 
+  const bool spike = settings.gpu_dem_spike;
+  const bool serial_ok = terrain_serial == terrain.GetSerial();
+
   {
     RasterTerrain::Lease map(terrain);
     if (!new_bounds.IntersectWith(map->GetBounds()))
-      /* map is outside of visible screen area */
       return false;
   }
 
+  const bool do_water = true;
+  const int interp_levels = 2;
+  const bool is_terrain = true;
+  const bool do_shading = is_terrain &&
+                          settings.slope_shading != SlopeShading::OFF;
+
+  const ColorRamp *const color_ramp = &terrain_ramps[settings.ramp];
+  if (color_ramp != last_color_ramp) {
+    raster_renderer.PrepareColorTable(color_ramp, do_water,
+                                      height_scale, interp_levels);
+    last_color_ramp = color_ramp;
+  }
+
+  const bool coverage_ok = old_bounds.IsValid() &&
+    old_bounds.IsInside(new_bounds) &&
+    !IsLargeSizeDifference(old_bounds, new_bounds);
+
+  /* Same overscan reuse as the CPU path: pan/rotate within the
+     composed height FBO without a full re-blit. */
   if (!quantisation_improved &&
-      old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
-      !IsLargeSizeDifference(old_bounds, new_bounds) &&
-      terrain_serial == terrain.GetSerial() &&
-      sunazimuth.CompareRoughly(last_sun_azimuth)) {
-    /* The existing terrain image is suitable for reuse.
-       But with contours: Re-use only without zoom change.
-       Otherwise we can re-use as a fast preview, but
-       re-render the higher quality views (q=2 and q=1) */
+      coverage_ok &&
+      serial_ok &&
+      sun_ok &&
+      (!spike || raster_renderer.IsGpuDemTiles())) {
     if (settings.contours == Contours::OFF ||
+        raster_renderer.IsShaderHillshade() ||
         raster_renderer.GetQuantisationPixels() > 2 ||
         map_projection.GetScale() == last_projection_scale) {
       compare_projection = CompareProjection(map_projection);
+      if (spike)
+        raster_renderer.GpuDemNoteReuse();
       return true;
     }
   }
 
-#endif
+  /* Approach 2: fine DEM tiles on GPU — no ScanMap. */
+  if (spike) {
+    const bool allow_incremental =
+      coverage_ok && !quantisation_improved &&
+      raster_renderer.IsGpuDemTiles();
+    RasterTerrain::Lease map(terrain);
+    if (raster_renderer.PrepareGpuDemTiles(map, map_projection,
+                                           do_shading, height_scale,
+                                           last_contour_spacing,
+                                           allow_incremental)) {
+      terrain_serial = terrain.GetSerial();
+      compare_projection = CompareProjection(map_projection);
+      last_sun_azimuth = sunazimuth;
+      last_projection_scale = map_projection.GetScale();
+      return true;
+    }
+  }
 
+  if (!raster_renderer.IsShaderHillshade() &&
+      !raster_renderer.IsQuantisationFixed() &&
+      old_bounds.IsValid() &&
+      old_bounds.IsInside(new_bounds) &&
+      !IsUserIdle(750))
+    return true;
+
+  /* Weak GPUs (PowerVR GE8300): ScanMap of a detailed DEM is the
+     hitch.  The GPU DEM path above already skips ScanMap; this
+     freeze is only the CPU fallback while dragging. */
+  if (!spike &&
+      OpenGL::idle_terrain_quantisation &&
+      !quantisation_improved &&
+      !raster_renderer.IsQuantisationFixed() &&
+      old_bounds.IsValid() &&
+      old_bounds.Overlaps(new_bounds) &&
+      serial_ok &&
+      !IsUserIdle(750)) {
+    compare_projection = CompareProjection(map_projection);
+    return true;
+  }
+
+  terrain_serial = terrain.GetSerial();
+  compare_projection = CompareProjection(map_projection);
+  last_sun_azimuth = sunazimuth;
+
+  const auto scan_t0 = std::chrono::steady_clock::now();
+  {
+    RasterTerrain::Lease map(terrain);
+    raster_renderer.ScanMap(map, map_projection);
+  }
+
+  raster_renderer.GenerateImage(do_shading, height_scale,
+                                settings.contrast, settings.brightness,
+                                sunazimuth,
+                                last_contour_spacing);
+
+  if (spike) {
+    const unsigned us = unsigned(
+      std::chrono::duration_cast<std::chrono::microseconds>(
+        std::chrono::steady_clock::now() - scan_t0)
+        .count());
+    raster_renderer.GpuDemNoteScanMap(us);
+  }
+
+  last_projection_scale = map_projection.GetScale();
+  return true;
+#else
   terrain_serial = terrain.GetSerial();
   compare_projection = CompareProjection(map_projection);
 
   last_sun_azimuth = sunazimuth;
 
   const bool do_water = true;
-  const unsigned height_scale = 4;
   const int interp_levels = 2;
   const bool is_terrain = true;
   const bool do_shading = is_terrain &&
                           settings.slope_shading != SlopeShading::OFF;
-  const double screen_pixel_size =
-    1.0 / map_projection.GetScale();
-  const double dpi_factor =
-    Layout::ScalePenWidth(1024u) / 1024.0;
-  const double contour_pixel_size = screen_pixel_size * dpi_factor *
-    std::max(1u, raster_renderer.GetQuantisationPixels() / 2u);
-  last_contour_spacing = is_terrain
-    ? ContourSpacing(settings.contours, height_scale,
-                     contour_pixel_size)
-    : 0u;
 
   const ColorRamp *const color_ramp = &terrain_ramps[settings.ramp];
   if (color_ramp != last_color_ramp) {
@@ -448,4 +555,5 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   last_projection_scale = map_projection.GetScale();
 
   return true;
+#endif
 }

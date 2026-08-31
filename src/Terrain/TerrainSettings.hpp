@@ -67,6 +67,12 @@ struct TerrainRendererSettings {
   Contours contours;
 
   /**
+   * Experimental: draw loaded fine DEM tiles as GPU height textures
+   * (no ScanMap).  Falls back to ScanMap when unavailable.
+   */
+  bool gpu_dem_spike;
+
+  /**
    * Set all attributes to the default values.
    */
   void SetDefaults();
@@ -77,7 +83,8 @@ struct TerrainRendererSettings {
       contrast == other.contrast &&
       brightness == other.brightness &&
       ramp == other.ramp &&
-      contours == other.contours;
+      contours == other.contours &&
+      gpu_dem_spike == other.gpu_dem_spike;
   }
 
   bool operator!=(const TerrainRendererSettings &other) const {

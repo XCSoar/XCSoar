@@ -86,4 +86,11 @@ extern glm::mat4 projection_matrix;
  */
 extern unsigned max_map_scale;
 
+/**
+ * True when full-resolution terrain should wait until the user is
+ * idle (weak GPU: ScanMap + hillshade at q=1 during a pan is too
+ * expensive even if the CPU is above the slow-CPU threshold).
+ */
+extern bool idle_terrain_quantisation;
+
 } // namespace OpenGL

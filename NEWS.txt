@@ -33,10 +33,40 @@ Version 7.46 - not yet released
   - fix choosing SkySight as a page overlay with no layers available
     silently switching back to None
 * map
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded (also on
+    older OpenGL ES 2 devices); faster devices use full terrain
+    resolution immediately instead of waiting until the map is idle
+  - add an experimental GPU DEM path (expert Map Display → Terrain →
+    GPU DEM spike): draws the DEM overview and loaded fine tiles on
+    the GPU instead of CPU sampling, so panning keeps coarse terrain
+    until detail arrives; close zoom interpolates decoded heights
+    and bilinear slopes so hillshade is not too dark or blocky in
+    shadow; on a Pixel-class phone,
+    full rebuilds drop from roughly 40–70 ms to about 2–6 ms
+  - skip tiny topography fills, simplify large areas without tearing
+    them, clip long roads to the map view, and keep recently seen
+    shapes while panning
+  - load on-screen topography first when panning to a new area, then
+    fill the surrounding cache, so roads appear sooner
+  - fix crash drawing dense topography fills at close zoom, including
+    devices that cannot map large OpenGL vertex buffers, and PowerVR
+    GPUs whose driver crashes in MapBuffer or MultiDrawElements;
+    those GPUs draw fills and roads in 64k-vertex batches and keep
+    the last terrain image while panning instead of rebuilding it
+    every frame
+  - fix topography fills stretching across the map at some zoom levels
+  - fix map fills and outlines (airspace, XC Therm, reach, FAI
+    areas, weather overlays) vanishing when only partly on the map
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
+  - fix topography labels flickering on and off while panning,
+    centre area names on the feature, sit place names under point
+    icons, and enlarge place names when zoomed in
+  - fix airspace altitude labels overlapping each other and
+    topography names
   - fix the live snail trail losing circling detail and jumping as the
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
@@ -85,12 +115,21 @@ Version 7.46 - not yet released
 * ui
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+* Linux
+  - fix -WIDTHxHEIGHT so Raspberry Pi and other KMS displays actually
+    switch to that resolution when the display lists it (e.g. -800x600)
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+
 
 Version 7.45 - 2026-08-15
 * highlights

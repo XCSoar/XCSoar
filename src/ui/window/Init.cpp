@@ -25,9 +25,15 @@
 #include <libloaderapi.h>
 #endif
 
+#ifdef MESA_KMS
+ScreenGlobalInit::ScreenGlobalInit(PixelSize preferred_mode,
+                                   bool use_preferred_mode)
+  :display(preferred_mode, use_preferred_mode)
+#else
 ScreenGlobalInit::ScreenGlobalInit()
 #ifdef ANDROID
   :display(EGL_DEFAULT_DISPLAY)
+#endif
 #endif
 {
 #ifdef USE_FREETYPE

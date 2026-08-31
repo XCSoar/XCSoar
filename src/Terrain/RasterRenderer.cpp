@@ -3,6 +3,11 @@
 
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/RasterTileCache.hpp"
+#include "Terrain/RasterTile.hpp"
+#include "Terrain/RasterTraits.hpp"
+#include "Terrain/Height.hpp"
+#include "Math/Angle.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
@@ -11,18 +16,31 @@
 #include "Renderer/GeoBitmapRenderer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/event/Idle.hpp"
+#include "Hardware/CPU.hpp"
 #include "LogFile.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "time/PeriodClock.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
-#endif
-
-#ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/ConstantAlpha.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Texture.hpp"
+#include "ui/canvas/opengl/Shaders.hpp"
+#include "ui/canvas/opengl/Program.hpp"
+#include "ui/canvas/opengl/Attribute.hpp"
+#include "ui/canvas/opengl/VertexPointer.hpp"
+#include "ui/dim/BulkPoint.hpp"
+#include "ui/dim/Point.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
+#ifdef ENABLE_OPENGL
+#include <bit>
+#endif
 #include <cassert>
+#include <chrono>
+#include <cmath>
 #include <cstdint>
 
 /**
@@ -35,6 +53,134 @@ static constexpr double ZOOM_FACTOR_DIVISOR = 4250.0;
 static constexpr unsigned MAX_QUANTISATION_NEAR = 25;
 static constexpr unsigned MAX_QUANTISATION_LOW_ZOOM = 40;
 static constexpr double BOUNDS_SCALE_FACTOR = 1.5;
+
+static void
+ApplySlopeQuantisation(unsigned &quantisation_effective,
+                       double pixel_size,
+                       double map_cell_meters) noexcept
+{
+  if (pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
+    /* How many matrix cells one DEM sample spans.  Round down to
+       reduce slope artefacts from RasterBuffer interpolation. */
+    auto q = map_cell_meters / pixel_size;
+    quantisation_effective = std::max(1, (int)q);
+    const unsigned cap = Layout::FastScale(MAX_QUANTISATION_NEAR);
+    if (quantisation_effective > cap)
+      quantisation_effective = cap;
+  } else if (pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
+    auto q = map_cell_meters / pixel_size;
+    const double zoom_factor = 1.0 +
+      (pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
+    quantisation_effective = std::max(1, (int)(q * zoom_factor));
+    const unsigned cap = Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);
+    if (quantisation_effective > cap)
+      quantisation_effective = cap;
+  } else {
+    /* Extremely far: terrain features are too small to shade. */
+    quantisation_effective = 0;
+  }
+}
+
+#ifdef ENABLE_OPENGL
+static double
+TerrainBoundsScale() noexcept
+{
+  /* Weak GPUs freeze ScanMap while dragging; a wider overscan keeps
+     the last height image covering the view so the white map
+     background does not show through. */
+  return OpenGL::idle_terrain_quantisation ? 2.5 : BOUNDS_SCALE_FACTOR;
+}
+
+static constexpr auto GPU_DEM_STATS_PERIOD = std::chrono::seconds(2);
+
+struct GpuDemStats {
+  PeriodClock log_clock;
+  unsigned frames = 0;
+  unsigned reuse = 0, prep = 0, scan = 0;
+  uint64_t prep_us = 0, prep_max_us = 0;
+  uint64_t scan_us = 0, scan_max_us = 0;
+  uint64_t draw_us = 0, draw_max_us = 0;
+  uint64_t gpu_sync_us = 0;
+  unsigned quads_ov = 0, quads_tile = 0;
+  unsigned uploads = 0;
+  uint64_t upload_bytes = 0;
+  unsigned last_q = 0, last_qe = 0, last_active = 0;
+  unsigned last_nx = 0, last_ny = 0;
+  unsigned last_sw = 0, last_sh = 0;
+  unsigned last_drawn = 0;
+  bool last_idle = false;
+  bool have_gpu_sync = false;
+
+  void Reset() noexcept {
+    frames = reuse = prep = scan = 0;
+    prep_us = prep_max_us = 0;
+    scan_us = scan_max_us = 0;
+    draw_us = draw_max_us = 0;
+    gpu_sync_us = 0;
+    quads_ov = quads_tile = 0;
+    uploads = 0;
+    upload_bytes = 0;
+    have_gpu_sync = false;
+  }
+
+  void AddUs(uint64_t us, uint64_t &sum, uint64_t &mx) noexcept {
+    sum += us;
+    if (us > mx)
+      mx = us;
+  }
+
+  void Flush() noexcept {
+    if (frames == 0)
+      return;
+
+    const auto elapsed = log_clock.Elapsed();
+    const double sec =
+      elapsed.count() > 0
+      ? std::chrono::duration<double>(elapsed).count()
+      : 2.0;
+    const double fps = frames / sec;
+    const unsigned prep_n = prep > 0 ? prep : 1;
+    const double prep_avg_ms = (prep_us / 1000.0) / prep_n;
+    const double draw_avg_ms = (draw_us / 1000.0) / frames;
+    const double tiles_pf = quads_tile / double(frames);
+
+    LogFmt("OpenGL: GPU DEM {:.1f}s frames={} ({:.0f}/s) idle={}",
+           sec, frames, fps, last_idle ? 1 : 0);
+    LogFmt("OpenGL: GPU DEM path reuse={} prep={} scan={}",
+           reuse, prep, scan);
+    LogFmt("OpenGL: GPU DEM cpu prep avg/max {:.2f}/{:.2f} ms  "
+           "scan avg/max {:.2f}/{:.2f} ms  "
+           "draw avg/max {:.2f}/{:.2f} ms",
+           prep_avg_ms, prep_max_us / 1000.0,
+           scan > 0 ? (scan_us / 1000.0) / scan : 0.0,
+           scan_max_us / 1000.0,
+           draw_avg_ms, draw_max_us / 1000.0);
+    LogFmt("OpenGL: GPU DEM quads ov={} tiles={} (avg {:.1f}/frame) "
+           "uploads={} ({:.1f} KiB)",
+           quads_ov, quads_tile, tiles_pf,
+           uploads, upload_bytes / 1024.0);
+    LogFmt("OpenGL: GPU DEM q={} qe={} active={} grid={}x{} "
+           "view={}x{} drawn={} gpu_sync={:.1f}ms",
+           last_q, last_qe, last_active, last_nx, last_ny,
+           last_sw, last_sh, last_drawn,
+           have_gpu_sync ? gpu_sync_us / 1000.0 : -1.0);
+
+    Reset();
+    log_clock.Update();
+  }
+};
+
+static GpuDemStats gpu_dem_stats;
+
+static uint64_t
+SteadyUsSince(std::chrono::steady_clock::time_point t0) noexcept
+{
+  return uint64_t(std::chrono::duration_cast<std::chrono::microseconds>(
+                    std::chrono::steady_clock::now() - t0)
+                    .count());
+}
+
+#endif
 
 /** Keep slope neighbour sampling inside the height matrix. */
 static void
@@ -197,6 +343,11 @@ RasterRenderer::~RasterRenderer() noexcept
 static unsigned
 GetQuantisation() noexcept
 {
+  if (!IsSlowCPU() && !OpenGL::idle_terrain_quantisation)
+    /* fast hosts: full resolution immediately (GPU hillshade and
+       ScanMap are cheap enough without the idle ladder) */
+    return 1;
+
   if (IsUserIdle(1500))
     /* full terrain resolution when the user stops interacting */
     return 1;
@@ -242,57 +393,17 @@ RasterRenderer::ScanMap(const RasterMap &map,
 
   pixel_size = quantisation_pixels / projection.GetScale();
 
-  // set resolution
-
-  if (pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
-    // Data point size of the (terrain) map in meters multiplied by 256
-    auto map_pixel_size = map.PixelDistance(center, 1);
-
-    // How many screen pixels does one data point stretch?
-    auto q = map_pixel_size / pixel_size;
-
-    /* round down to reduce slope shading artefacts (caused by
-       RasterBuffer interpolation) */
-    quantisation_effective = std::max(1, (int)q);
-
-    /* when zoomed in very near, use a large fixed area for slope
-       calculation to ensure terrain shading still works */
-    const unsigned max_quantisation_near = Layout::FastScale(MAX_QUANTISATION_NEAR);
-    if (quantisation_effective > max_quantisation_near)
-      quantisation_effective = max_quantisation_near;
-
-  } else if (pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
-    auto map_pixel_size = map.PixelDistance(center, 1);
-    auto q = map_pixel_size / pixel_size;
-
-    /* At low zoom levels (3000-20000m pixel size), use adaptive coarse
-       quantisation instead of completely disabling shading. Scale
-       quantisation based on pixel_size: at 3000m use calculated q
-       (transition from normal mode), at 20000m use ~4x coarser
-       quantisation for better performance */
-    const double zoom_factor = 1.0 + (pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
-    quantisation_effective = std::max(1, (int)(q * zoom_factor));
-
-    /* Cap at reasonable maximum to avoid artifacts and maintain
-       performance. Higher cap than normal mode since we're at low zoom */
-    const unsigned max_quantisation_low_zoom = Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);
-    if (quantisation_effective > max_quantisation_low_zoom)
-      quantisation_effective = max_quantisation_low_zoom;
-
-  } else {
-    /* disable slope shading when zoomed out extremely far (pixel_size >= 20000m)
-       as terrain features become too small to be meaningful and performance
-       would suffer with reasonable quantisation */
-    quantisation_effective = 0;
-  }
+  ApplySlopeQuantisation(quantisation_effective, pixel_size,
+                         map.PixelDistance(center, 1));
 
 #ifdef ENABLE_OPENGL
-  bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
+  const double bounds_scale = TerrainBoundsScale();
+  bounds = projection.GetScreenBounds().Scale(bounds_scale);
   bounds.IntersectWith(map.GetBounds());
 
   UnsignedPoint2D matrix_size =
     (UnsignedPoint2D)projection.GetScreenSize()
-    * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
+    * static_cast<unsigned>(bounds_scale * 128.0f + 0.5f)
     / quantisation_pixels / 128;
   if (matrix_size.x == 0 || matrix_size.y == 0) {
     quantisation_effective = 0;
@@ -349,20 +460,6 @@ RasterRenderer::GenerateImage(bool do_shading,
                               const Angle sunazimuth,
                               unsigned contour_spacing) noexcept
 {
-  if (image == nullptr ||
-      height_matrix.GetSize().x > image->GetSize().width ||
-      height_matrix.GetSize().y > image->GetSize().height) {
-    delete image;
-    image = new RawBitmap(PixelSize{height_matrix.GetSize()});
-
-    delete[] contour_column_base;
-    contour_column_base = new unsigned char[height_matrix.GetSize().x];
-
-    delete[] contour_pending;
-    contour_pending =
-      new ColumnContourPending[height_matrix.GetSize().x];
-  }
-
   // At extreme zoom out, terrain features are too small to be meaningful;
   // disable both slope shading and contours.
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
@@ -387,6 +484,46 @@ RasterRenderer::GenerateImage(bool do_shading,
                Layout::ScalePenWidth(1u * 768u)
                / (quantisation_pixels * 1024u))
     : 1;
+
+#ifdef ENABLE_OPENGL
+  height_scale_for_draw = height_scale;
+  shading_for_draw = do_shading;
+  {
+    const unsigned q = std::max(1u, quantisation_effective);
+    const unsigned q_sq = q * q;
+    const unsigned max_hsf = std::max(1u, 8192u / q_sq);
+    height_slope_factor_for_draw =
+      std::clamp(static_cast<unsigned>(pixel_size), 1u, max_hsf);
+  }
+
+  if (!use_cpu_hillshade && OpenGL::hillshade_shader != nullptr &&
+      !has_alpha &&
+      height_matrix.GetSize().x > 0 && height_matrix.GetSize().y > 0) {
+    gpu_dem_tiles = false;
+    SetContourSpacing(contour_spacing);
+    UploadHeightTexture();
+    UploadRampTexture();
+    shader_hillshade = true;
+    return;
+  }
+
+  shader_hillshade = false;
+  gpu_dem_tiles = false;
+#endif
+
+  if (image == nullptr ||
+      height_matrix.GetSize().x > image->GetSize().width ||
+      height_matrix.GetSize().y > image->GetSize().height) {
+    delete image;
+    image = new RawBitmap(PixelSize{height_matrix.GetSize()});
+
+    delete[] contour_column_base;
+    contour_column_base = new unsigned char[height_matrix.GetSize().x];
+
+    delete[] contour_pending;
+    contour_pending =
+      new ColumnContourPending[height_matrix.GetSize().x];
+  }
 
   ContourStart(contour_height_scale);
 
@@ -679,6 +816,10 @@ RasterRenderer::PrepareColorTable(const ColorRamp *color_ramp, bool do_water,
   if (color_table == nullptr)
     color_table = new RawColor[256 * 128];
 
+#ifdef ENABLE_OPENGL
+  ramp_texture_dirty = true;
+#endif
+
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {
       RawColor color;
@@ -748,6 +889,10 @@ RasterRenderer::PrepareColorTableAlpha(const ColorRamp *color_ramp,
   if (color_table == nullptr)
     color_table = new RawColor[256 * 128];
 
+#ifdef ENABLE_OPENGL
+  ramp_texture_dirty = true;
+#endif
+
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {
       RawColor color;
@@ -787,6 +932,490 @@ RasterRenderer::ContourStart(const unsigned contour_height_scale) noexcept
               ColumnContourPending{});
 }
 
+#ifdef ENABLE_OPENGL
+
+static void
+FillRampRgba(uint8_t *dest, const RawColor *table) noexcept
+{
+  for (unsigned i = 0; i < 256 * 128; ++i) {
+#ifdef GREYSCALE
+    const uint8_t y = table[i].value.GetLuminosity();
+    *dest++ = y;
+    *dest++ = y;
+    *dest++ = y;
+    *dest++ = 255;
+#elif defined(USE_RGB565)
+    const uint16_t v = table[i].value.GetNativeValue();
+    *dest++ = uint8_t((v >> 8) & 0xf8);
+    *dest++ = uint8_t((v >> 3) & 0xfc);
+    *dest++ = uint8_t((v << 3) & 0xf8);
+    *dest++ = 255;
+#else
+    *dest++ = table[i].value.Red();
+    *dest++ = table[i].value.Green();
+    *dest++ = table[i].value.Blue();
+    *dest++ = table[i].alpha;
+#endif
+  }
+}
+
+void
+RasterRenderer::SetSunFromAzimuth(Angle sunazimuth, int brightness,
+                                  int contrast) noexcept
+{
+  const Angle fudgeelevation = Angle::Degrees(10) +
+    Angle::Degrees(80.0 / 255.0) * brightness;
+
+  sun_sx = (int)(255 * fudgeelevation.fastcosine() *
+                 -sunazimuth.fastsine());
+  sun_sy = (int)(255 * fudgeelevation.fastcosine() *
+                 -sunazimuth.fastcosine());
+  sun_sz = (int)(255 * fudgeelevation.fastsine());
+  contrast_for_draw = contrast;
+}
+
+void
+RasterRenderer::SetContourSpacing(unsigned contour_spacing) noexcept
+{
+  if (contour_spacing == 0) {
+    contour_div_for_draw = 0;
+    return;
+  }
+
+  unsigned s = 0;
+  while ((1u << s) < contour_spacing)
+    ++s;
+
+  contour_div_for_draw = s >= 16 ? 0 : (1u << s);
+}
+
+void
+RasterRenderer::UploadHeightLATexture(const void *data, PixelSize ps,
+                                      std::unique_ptr<GLTexture> &dest) noexcept
+{
+  static_assert(std::endian::native == std::endian::little);
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  if (dest == nullptr || dest->GetSize() != ps) {
+    dest = std::make_unique<GLTexture>(GL_LUMINANCE_ALPHA, ps,
+                                       GL_LUMINANCE_ALPHA,
+                                       GL_UNSIGNED_BYTE, data);
+  } else {
+    dest->Bind();
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ps.width, ps.height,
+                    GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, data);
+  }
+
+  dest->Bind();
+  /* Packed int16 in L/A: decode, then filter in the shader. */
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
+
+void
+RasterRenderer::UploadHeightTexture() noexcept
+{
+  const auto sz = height_matrix.GetSize();
+  UploadHeightLATexture(height_matrix.GetData(),
+                        PixelSize{int(sz.x), int(sz.y)},
+                        height_texture);
+}
+
+void
+RasterRenderer::SyncGpuDemTileTextures(const RasterMap &map) noexcept
+{
+  const auto &cache = map.GetTileCache();
+  const unsigned nx = cache.GetTileCountX();
+  const unsigned ny = cache.GetTileCountY();
+  const unsigned n = nx * ny;
+  dem_tile_grid = {nx, ny};
+
+  tile_tex_active = 0;
+  tile_tex_dropped = false;
+
+  if (tile_textures.size() != n) {
+    tile_textures.clear();
+    tile_textures.resize(n);
+    tile_starts.assign(n, {});
+    tile_ends.assign(n, {});
+    /* Grid rebuild drops cached tile textures. */
+    tile_tex_dropped = true;
+  }
+
+  const RasterBuffer &overview = map.GetOverview();
+  if (overview.IsDefined()) {
+    const auto osz = overview.GetSize();
+    const PixelSize ps{int(osz.x), int(osz.y)};
+      if (overview_texture == nullptr || overview_texture->GetSize() != ps) {
+        UploadHeightLATexture(overview.GetData(), ps, overview_texture);
+        gpu_dem_stats.uploads++;
+        gpu_dem_stats.upload_bytes +=
+          unsigned(ps.width) * unsigned(ps.height) * 2u;
+      }
+  }
+
+  for (unsigned y = 0; y < ny; ++y) {
+    for (unsigned x = 0; x < nx; ++x) {
+      const unsigned i = y * nx + x;
+      const RasterTile &tile = cache.GetTile(x, y);
+      if (!tile.IsLoaded() || !tile.buffer.IsDefined()) {
+        if (tile_textures[i]) {
+          tile_textures[i].reset();
+          tile_tex_dropped = true;
+        }
+        continue;
+      }
+
+      ++tile_tex_active;
+      tile_starts[i] = tile.start;
+      tile_ends[i] = tile.end;
+      const auto tsz = tile.buffer.GetSize();
+      const PixelSize ps{int(tsz.x), int(tsz.y)};
+      auto &tex = tile_textures[i];
+      if (tex == nullptr || tex->GetSize() != ps) {
+        UploadHeightLATexture(tile.buffer.GetData(), ps, tex);
+        gpu_dem_stats.uploads++;
+        gpu_dem_stats.upload_bytes +=
+          unsigned(ps.width) * unsigned(ps.height) * 2u;
+      }
+    }
+  }
+}
+
+bool
+RasterRenderer::PrepareGpuDemTiles(const RasterMap &map,
+                                   const WindowProjection &projection,
+                                   bool do_shading,
+                                   unsigned height_scale,
+                                   unsigned contour_spacing,
+                                   bool allow_incremental) noexcept
+{
+  const auto t0 = std::chrono::steady_clock::now();
+  gpu_dem_tiles = false;
+
+  if (use_cpu_hillshade ||
+      OpenGL::hillshade_shader == nullptr ||
+      has_alpha)
+    return false;
+
+  SyncGpuDemTileTextures(map);
+  if (tile_tex_active == 0 && overview_texture == nullptr)
+    return false;
+
+  dem_map_bounds = map.GetBounds();
+  dem_projection = map.GetProjection();
+
+  /* Same overscan + resolution policy as ScanMap(). */
+  const GeoPoint center = projection.ScreenToGeo(projection.GetScreenCenter());
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+  pixel_size = quantisation_pixels / projection.GetScale();
+  gpu_dem_cell_meters = std::max(1.0, map.PixelDistance(center, 1));
+  ApplySlopeQuantisation(quantisation_effective, pixel_size,
+                         gpu_dem_cell_meters);
+
+  last_quantisation_pixels = quantisation_pixels;
+
+  /* DrawGpuDemTiles uses the overview for coverage; keep an overscan
+     bounds only so Generate() can skip this call while panning. */
+  if (!allow_incremental || !bounds.IsValid() || tile_tex_dropped) {
+    bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
+    bounds.IntersectWith(dem_map_bounds);
+    if (!bounds.IsValid())
+      return false;
+  }
+
+  UnsignedPoint2D matrix_size =
+    (UnsignedPoint2D)projection.GetScreenSize() / quantisation_pixels;
+  if (matrix_size.x < 2)
+    matrix_size.x = 2;
+  if (matrix_size.y < 2)
+    matrix_size.y = 2;
+  ClampQuantisationEffectiveToMatrix(quantisation_effective, matrix_size);
+
+  height_scale_for_draw = height_scale;
+  shading_for_draw = do_shading && quantisation_effective > 0;
+  SetContourSpacing(contour_spacing);
+  UploadRampTexture();
+
+  gpu_dem_tiles = true;
+  shader_hillshade = true;
+
+  gpu_dem_stats.prep++;
+  gpu_dem_stats.AddUs(SteadyUsSince(t0),
+                      gpu_dem_stats.prep_us, gpu_dem_stats.prep_max_us);
+
+  static bool logged_gpu_dem = false;
+  if (!logged_gpu_dem) {
+    logged_gpu_dem = true;
+    LogFormat("OpenGL: GPU DEM tiles (overview + %u fine)",
+              tile_tex_active);
+  }
+
+  return true;
+}
+
+void
+RasterRenderer::GpuDemNoteReuse() noexcept
+{
+  gpu_dem_stats.reuse++;
+}
+
+void
+RasterRenderer::GpuDemNoteScanMap(unsigned cpu_us) noexcept
+{
+  gpu_dem_stats.scan++;
+  gpu_dem_stats.AddUs(cpu_us, gpu_dem_stats.scan_us,
+                      gpu_dem_stats.scan_max_us);
+}
+
+void
+RasterRenderer::UploadRampTexture() noexcept
+{
+  assert(color_table != nullptr);
+
+  if (ramp_texture != nullptr && !ramp_texture_dirty)
+    return;
+
+  constexpr unsigned n = 256 * 128 * 4;
+  if (ramp_rgba == nullptr)
+    ramp_rgba = std::make_unique<uint8_t[]>(n);
+
+  FillRampRgba(ramp_rgba.get(), color_table);
+
+  constexpr PixelSize ramp_size{256, 128};
+
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+  if (ramp_texture == nullptr) {
+    ramp_texture = std::make_unique<GLTexture>(GL_RGBA, ramp_size,
+                                               GL_RGBA, GL_UNSIGNED_BYTE,
+                                               ramp_rgba.get());
+  } else {
+    ramp_texture->Bind();
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+                    ramp_size.width, ramp_size.height,
+                    GL_RGBA, GL_UNSIGNED_BYTE, ramp_rgba.get());
+  }
+
+  ramp_texture->Bind();
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  ramp_texture_dirty = false;
+}
+
+double
+RasterRenderer::GpuDemHeightSlopeFactor() const noexcept
+{
+  /* Meters per DEM sample: n0/n2 is then the true slope. */
+  return gpu_dem_cell_meters;
+}
+
+void
+RasterRenderer::DrawHillshadeQuad(const WindowProjection &projection,
+                                  const GLTexture &height_tex,
+                                  const GeoPoint &nw, const GeoPoint &ne,
+                                  const GeoPoint &sw, const GeoPoint &se,
+                                  double height_slope_factor,
+                                  float alpha) const noexcept
+{
+  assert(ramp_texture != nullptr);
+
+  const BulkPixelPoint vertices[] = {
+    projection.GeoToScreen(nw),
+    projection.GeoToScreen(ne),
+    projection.GeoToScreen(sw),
+    projection.GeoToScreen(se),
+  };
+
+  const ScopeVertexPointer vp(vertices);
+
+  glActiveTexture(GL_TEXTURE0);
+  const_cast<GLTexture &>(height_tex).Bind();
+  /* GLTexture::Configure() defaults to LINEAR; packed int16 heights
+     must stay NEAREST or decode-and-filter in the shader is skipped. */
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glActiveTexture(GL_TEXTURE1);
+  ramp_texture->Bind();
+  glActiveTexture(GL_TEXTURE0);
+
+  OpenGL::hillshade_shader->Use();
+
+  const PixelSize allocated = height_tex.GetAllocatedSize();
+  const PixelSize size = height_tex.GetSize();
+  const GLfloat x1 = GLfloat(size.width) / allocated.width;
+  const GLfloat y1 = GLfloat(size.height) / allocated.height;
+  const GLfloat coord[] = {
+    0, 0,
+    x1, 0,
+    0, y1,
+    x1, y1,
+  };
+
+  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+                        0, coord);
+
+  glUniform3f(OpenGL::hillshade_sun,
+              GLfloat(sun_sx), GLfloat(sun_sy), GLfloat(sun_sz));
+  /* GPU DEM samples real 90 m posts, not interpolated screen pixels.
+     The CPU contrast curve is too shallow for Jura-scale slopes at
+     default brightness; scale it so relief stays visible. */
+  const float contrast = gpu_dem_tiles
+    ? float(contrast_for_draw) * 2.5f
+    : float(contrast_for_draw);
+  glUniform1f(OpenGL::hillshade_contrast, contrast);
+  glUniform1f(OpenGL::hillshade_height_slope_factor,
+              GLfloat(height_slope_factor));
+  glUniform1f(OpenGL::hillshade_height_div,
+              GLfloat(1u << height_scale_for_draw));
+  glUniform1f(OpenGL::hillshade_do_shading, shading_for_draw ? 1.f : 0.f);
+  glUniform2f(OpenGL::hillshade_height_texel,
+              1.f / GLfloat(allocated.width),
+              1.f / GLfloat(allocated.height));
+  glUniform1f(OpenGL::hillshade_contour_div,
+              GLfloat(contour_div_for_draw));
+  {
+    const float span_x =
+      std::hypot(float(vertices[1].x - vertices[0].x),
+                 float(vertices[1].y - vertices[0].y));
+    const float span_y =
+      std::hypot(float(vertices[2].x - vertices[0].x),
+                 float(vertices[2].y - vertices[0].y));
+    /* Screen pixels per DEM texel (shader isoline width). */
+    const unsigned tw = std::max(1u, size.width);
+    const unsigned th = std::max(1u, size.height);
+    const GLfloat csx = span_x / float(tw);
+    const GLfloat csy = span_y / float(th);
+    glUniform2f(OpenGL::hillshade_contour_step, csx, csy);
+  }
+
+  if (alpha < 1.0f) {
+    const GLBlend blend(alpha);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  } else {
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  }
+
+  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+}
+
+void
+RasterRenderer::DrawHillshade(const WindowProjection &projection,
+                              float alpha) const noexcept
+{
+  assert(bounds.IsValid());
+  assert(height_texture != nullptr);
+  assert(ramp_texture != nullptr);
+
+  DrawHillshadeQuad(projection, *height_texture,
+                    bounds.GetNorthWest(), bounds.GetNorthEast(),
+                    bounds.GetSouthWest(), bounds.GetSouthEast(),
+                    height_slope_factor_for_draw, alpha);
+
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);
+  OpenGL::solid_shader->Use();
+}
+
+void
+RasterRenderer::DrawGpuDemTiles(const WindowProjection &projection,
+                                float alpha) const noexcept
+{
+  assert(ramp_texture != nullptr);
+  assert(dem_map_bounds.IsValid());
+
+  const auto t0 = std::chrono::steady_clock::now();
+  const GeoBounds screen = projection.GetScreenBounds();
+  const double hsf = GpuDemHeightSlopeFactor();
+  unsigned tiles_drawn = 0;
+  unsigned ov_drawn = 0;
+
+  if (overview_texture) {
+    const double overview_hsf =
+      std::max(1.0, hsf * double(1u << RasterTraits::OVERVIEW_BITS));
+    DrawHillshadeQuad(projection, *overview_texture,
+                      dem_map_bounds.GetNorthWest(),
+                      dem_map_bounds.GetNorthEast(),
+                      dem_map_bounds.GetSouthWest(),
+                      dem_map_bounds.GetSouthEast(),
+                      overview_hsf, alpha);
+    ov_drawn = 1;
+  }
+
+  const unsigned nx = dem_tile_grid.x;
+  const unsigned ny = dem_tile_grid.y;
+  if (nx > 0 && ny > 0 &&
+      tile_textures.size() == nx * ny &&
+      tile_starts.size() == nx * ny) {
+    for (unsigned i = 0; i < nx * ny; ++i) {
+      if (!tile_textures[i])
+        continue;
+
+      const RasterLocation start = tile_starts[i];
+      const RasterLocation end = tile_ends[i];
+      if (end.x <= start.x || end.y <= start.y)
+        continue;
+
+      const GeoPoint nw = dem_projection.UnprojectCoarse(start);
+      const GeoPoint ne = dem_projection.UnprojectCoarse(
+        SignedRasterLocation(int(end.x), int(start.y)));
+      const GeoPoint sw = dem_projection.UnprojectCoarse(
+        SignedRasterLocation(int(start.x), int(end.y)));
+      const GeoPoint se = dem_projection.UnprojectCoarse(end);
+
+      const GeoBounds tb(nw, se);
+      if (!tb.IsValid() || !tb.Overlaps(screen))
+        continue;
+
+      DrawHillshadeQuad(projection, *tile_textures[i],
+                        nw, ne, sw, se,
+                        hsf, alpha);
+      ++tiles_drawn;
+    }
+  }
+
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glActiveTexture(GL_TEXTURE0);
+  OpenGL::solid_shader->Use();
+
+  const uint64_t cpu_us = SteadyUsSince(t0);
+  gpu_dem_stats.frames++;
+  gpu_dem_stats.AddUs(cpu_us, gpu_dem_stats.draw_us,
+                      gpu_dem_stats.draw_max_us);
+  gpu_dem_stats.quads_ov += ov_drawn;
+  gpu_dem_stats.quads_tile += tiles_drawn;
+  gpu_dem_stats.last_q = quantisation_pixels;
+  gpu_dem_stats.last_qe = quantisation_effective;
+  gpu_dem_stats.last_active = tile_tex_active;
+  gpu_dem_stats.last_nx = nx;
+  gpu_dem_stats.last_ny = ny;
+  gpu_dem_stats.last_drawn = tiles_drawn;
+  const auto view = projection.GetScreenSize();
+  gpu_dem_stats.last_sw = view.width;
+  gpu_dem_stats.last_sh = view.height;
+  gpu_dem_stats.last_idle = IsUserIdle(750);
+
+  if (!gpu_dem_stats.log_clock.IsDefined())
+    gpu_dem_stats.log_clock.Update();
+  else if (gpu_dem_stats.log_clock.Check(GPU_DEM_STATS_PERIOD)) {
+    const auto g0 = std::chrono::steady_clock::now();
+    glFinish();
+    gpu_dem_stats.gpu_sync_us = SteadyUsSince(g0);
+    gpu_dem_stats.have_gpu_sync = true;
+    const GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+      LogFmt("OpenGL: GPU DEM glGetError=0x{:x}", unsigned(err));
+    gpu_dem_stats.Flush();
+  }
+}
+
+#endif
+
 void
 RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      const WindowProjection &projection,
@@ -794,14 +1423,30 @@ RasterRenderer::Draw([[maybe_unused]] Canvas &canvas,
                      [[maybe_unused]] float alpha) const noexcept
 {
 #ifdef ENABLE_OPENGL
-  if (bounds.IsValid() && bounds.Overlaps(projection.GetScreenBounds())) {
-    const ScopeTextureConstantAlpha blend(has_alpha, alpha);
-
-    DrawGeoBitmap(*image,
-                  PixelSize{height_matrix.GetSize()},
-                  bounds,
-                  projection);
+  if (gpu_dem_tiles && ramp_texture && dem_map_bounds.IsValid()) {
+    /* Overview first, then loaded fine tiles (covers holes). */
+    if (dem_map_bounds.Overlaps(projection.GetScreenBounds()))
+      DrawGpuDemTiles(projection, alpha);
+    return;
   }
+
+  if (!bounds.IsValid() || !bounds.Overlaps(projection.GetScreenBounds()))
+    return;
+
+  if (shader_hillshade && height_texture && ramp_texture) {
+    DrawHillshade(projection, alpha);
+    return;
+  }
+
+  if (image == nullptr)
+    return;
+
+  const ScopeTextureConstantAlpha blend(has_alpha, alpha);
+
+  DrawGeoBitmap(*image,
+                PixelSize{height_matrix.GetSize()},
+                bounds,
+                projection);
 #else
   image->StretchTo(PixelSize{height_matrix.GetSize()},
                    canvas, projection.GetScreenSize(),

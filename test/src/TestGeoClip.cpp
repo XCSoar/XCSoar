@@ -203,11 +203,18 @@ test_clip_polygon()
     make_geo_point(-5, -50),
   };
   test_clip_polygon(clip, src8, 3, result7, 4);
+
+  /* in-place dest==src, one vertex clipped (MapCanvas / airspace) */
+  GeoPoint inplace[12];
+  for (unsigned i = 0; i < 3; ++i)
+    inplace[i] = src3[i];
+  unsigned inplace_n = clip.ClipPolygon(inplace, inplace, 3);
+  ok1(equals(result3, 4, inplace, inplace_n));
 }
 
 int main()
 {
-  plan_tests(24);
+  plan_tests(25);
 
   test_clip_line();
   test_clip_polygon();

@@ -14,6 +14,19 @@
 #include <cassert>
 
 /**
+ * Minimum screen-space spacing (pixels) between polyline vertices.
+ * Used by #AddPointIfDistant on the software renderer.
+ */
+constexpr int SHAPE_MIN_POINT_SPACING_PX = 8;
+
+/**
+ * Drop a whole fill only if its bbox is smaller than this on screen.
+ * Must not be used for polylines: at 120 km, even 1 px is ~150 m and
+ * skipping short OSM road sticks leaves a broken network.
+ */
+constexpr int SHAPE_MIN_BBOX_PX = 1;
+
+/**
  * A helper class optimized for doing bulk draws on OpenGL.
  */
 class ShapeRenderer : private NonCopyable {
@@ -53,7 +66,9 @@ public:
    void AddPointIfDistant(PixelPoint pt) {
     assert(num_points < points.size());
 
-    if (num_points == 0 || ManhattanDistance((PixelPoint)points[num_points - 1], pt) >= 8)
+    if (num_points == 0 ||
+        ManhattanDistance((PixelPoint)points[num_points - 1], pt) >=
+          SHAPE_MIN_POINT_SPACING_PX)
       AddPoint(pt);
   }
 

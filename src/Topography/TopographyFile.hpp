@@ -7,6 +7,7 @@
 #include "Geo/GeoBounds.hpp"
 #include "util/AllocatedArray.hxx"
 #include "util/IntrusiveForwardList.hxx"
+#include "util/IntrusiveList.hxx"
 #include "util/Serial.hpp"
 #include "ui/canvas/PortableColor.hpp"
 #include "ResourceId.hpp"
@@ -26,7 +27,30 @@ struct zzip_dir;
 class TopographyFile {
   struct ShapeEnvelope final : IntrusiveForwardListHook {
     std::unique_ptr<const XShape> shape;
+
+    IntrusiveListHook<IntrusiveHookMode::TRACK> cache_hook;
+
+    /**
+     * Viewport used when #shape was clipped.  Invalid means the
+     * full shapefile feature is in RAM.
+     */
+    GeoBounds clip_bounds = GeoBounds::Invalid();
+
+    /**
+     * True while this envelope is in #list (visible cache).
+     */
+    bool in_list = false;
   };
+
+  /**
+   * Cap on loaded #XShape objects (on- and off-screen).  Prevents
+   * unbounded RAM when panning a dense map; triangulation stays
+   * cached until LRU eviction.
+   */
+  static constexpr unsigned MAX_CACHED_SHAPES = 8192;
+
+  /** After a miss, evict down to this so one pan does not thrash. */
+  static constexpr unsigned CACHE_KEEP_SHAPES = MAX_CACHED_SHAPES * 3 / 4;
 
   /**
    * This gets incremented by Update().
@@ -46,6 +70,18 @@ class TopographyFile {
 
   using ShapeList = IntrusiveForwardList<ShapeEnvelope>;
   ShapeList list;
+
+  using CacheList = IntrusiveList<
+    ShapeEnvelope,
+    IntrusiveListMemberHookTraits<&ShapeEnvelope::cache_hook>>;
+  CacheList cache_list;
+
+  unsigned cached_shapes = 0;
+
+  /**
+   * Shapefile basename without directory or ".shp", for logging.
+   */
+  char name[40]{};
 
   const int label_field;
 
@@ -80,7 +116,20 @@ class TopographyFile {
    */
   GeoBounds cache_bounds = GeoBounds::Invalid();
 
+  /**
+   * True after the 2× overscan pass.  A cache miss first loads the
+   * screen rectangle so on-map shapes appear before the surround.
+   */
+  bool cache_overscan = false;
+
 public:
+  /**
+   * Viewport overscan for #cache_bounds, the topography thread
+   * trigger, and the paint-time visible list.  Pan inside this factor
+   * does not reload shapefile data or rebuild #visible_shapes.
+   */
+  static constexpr double CACHE_BOUNDS_SCALE = 2;
+
   /**
    * Protects #serial, #shapes, #first.
    * The caller is responsible for locking it.
@@ -155,6 +204,19 @@ public:
     return serial;
   }
 
+  const char *GetName() const noexcept {
+    return name;
+  }
+
+  std::size_t GetFileShapeCount() const noexcept {
+    return shapes.size();
+  }
+
+  unsigned GetCachedShapeCount() const noexcept {
+    const std::lock_guard lock{mutex};
+    return cached_shapes;
+  }
+
   const GeoPoint &GetCenter() const noexcept {
     return center;
   }
@@ -165,6 +227,10 @@ public:
 
   bool IsLabelVisible(double map_scale) const noexcept {
     return map_scale <= label_threshold;
+  }
+
+  double GetLabelThreshold() const noexcept {
+    return label_threshold;
   }
 
   /**
@@ -247,17 +313,32 @@ public:
   /**
    * Throws on error.
    *
+   * @param layout_scale UI pixel scale (Layout::Scale(1)); used for
+   * OpenGL ear-clip tolerance so it matches Paint()
    * @return true if new data from the topography file has been loaded
    */
-  bool Update(const WindowProjection &map_projection);
+  bool Update(const WindowProjection &map_projection,
+              unsigned layout_scale=1);
 
   /**
    * Throws on error.
    *
-   * Load all shapes into memory.  For debugging purposes.
+   * Load all shapes into memory.  For debugging purposes.  Reloads
+   * viewport-clipped cache entries unclipped, and inserts envelopes
+   * that Update() left in the off-screen LRU.
    */
   void LoadAll();
 
 protected:
   void ClearCache() noexcept;
+
+private:
+  /**
+   * Remove @e from #list.  Caller must hold #mutex.
+   */
+  void UnlinkVisible(ShapeEnvelope &e,
+                     ShapeList::iterator &prev) noexcept;
+  void DropCached(ShapeEnvelope &e) noexcept;
+  void TouchCache(ShapeEnvelope &e) noexcept;
+  void EvictOverflow() noexcept;
 };

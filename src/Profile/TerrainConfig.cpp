@@ -6,6 +6,10 @@
 #include "Map.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
+#ifdef ENABLE_OPENGL
+#include <cstdlib>
+#endif
+
 void
 Profile::LoadTerrainRendererSettings(const ProfileMap &map,
                                      TerrainRendererSettings &settings)
@@ -34,4 +38,11 @@ Profile::LoadTerrainRendererSettings(const ProfileMap &map,
   if (map.Get(ProfileKeys::TerrainContours, contours) &&
       contours < (uint8_t)Contours::COUNT)
     settings.contours = (Contours)contours;
+
+  map.Get(ProfileKeys::TerrainGpuDemSpike, settings.gpu_dem_spike);
+#ifdef ENABLE_OPENGL
+  /* UNIX A/B without touching the profile editor. */
+  if (const char *env = getenv("XCSOAR_GPU_DEM"); env != nullptr)
+    settings.gpu_dem_spike = env[0] != '\0' && env[0] != '0';
+#endif
 }

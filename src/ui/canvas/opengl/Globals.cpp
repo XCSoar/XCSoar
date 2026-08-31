@@ -29,6 +29,8 @@ glm::mat4 projection_matrix;
 
 unsigned max_map_scale;
 
+bool idle_terrain_quantisation;
+
 #ifndef NDEBUG
 #ifdef _WIN32
 DWORD thread;
