@@ -61,6 +61,8 @@ Version 7.46 - not yet released
   - split Gauges FLARM, Other into Traffic and Overlays
   - combine FLARM Radar on/off and position into one setting, like
     Thermal Assistant
+  - show analog vario speed arrows, average, MacCready, gross, and
+    averager needle without Expert mode
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

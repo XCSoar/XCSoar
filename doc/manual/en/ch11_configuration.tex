@@ -607,22 +607,27 @@ In all FLARM environments, the colour of the target indicates the threat level.
 %%%%%%%%%%
 \section{Gauges / Vario}\label{sec:vario-gauge}
 
-This page bundles all details to the vario-gauge and is entirely classified as expert setup.
+This page configures the analog vario gauge (shown with InfoBox layouts
+that include a vario).
 
 \begin{description}
-\item[Speed arrows*]  \label{conf:variogauge} Whether to show speed command 
+\item[Speed arrows]  \label{conf:variogauge} Whether to show speed command
   arrows on the vario gauge.
-  When shown, in cruise mode, arrows point up to command slow down; arrows point down 
+  When shown, in cruise mode, arrows point up to command slow down; arrows point down
   to command speed up.
-\item[Show average*]  Whether to show the average climb rate.  In cruise mode, this 
+\item[Show average]  Whether to show the average climb rate.  In cruise mode, this
   switches to showing the average net airmass rate.
-\item[Show MacCready*]  Whether to show the MacCready setting.
+\item[Show MacCready]  Whether to show the MacCready setting.
+\item[Show gross]  Whether to show the gross vario value.
+\item[Averager needle]  If true, the vario gauge will display a hollow averager
+  needle. During cruise, this needle displays the average net value. During circling,
+  this needle displays the average gross value.
 \item[Show bugs*]  Whether to show the bugs percentage.
 \item[Show ballast*]  Whether to show the ballast percentage.
-\item[Show gross*]  Whether to show the gross vario value.
-\item[Averager needle*]  If true, the vario gauge will display a hollow averager
-  needle. During cruise, this needle displays the average net value. During circling, 
-  this needle displays the average gross value.
+\item[Thermal Averager needle*]  If true, the vario gauge will display a thermal
+  averager needle instead of the current climb-rate needle. During cruise, this
+  needle displays the last thermal average net value. During circling, this
+  needle displays the average net value.
 \end{description}
 
 
