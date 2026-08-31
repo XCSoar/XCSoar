@@ -21,6 +21,7 @@ enum ControlIndex {
   PilotName,
   CoPilotName,
   CrewWeightTemplate,
+  SPACER_LOG,
   LoggerTimeStepCruise,
   LoggerTimeStepCircling,
   DisableAutoLogger,
@@ -68,6 +69,9 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent,
             "%.0f %s", "%.0f",
             0, Units::ToUserMass(300), 5, false, UnitGroup::MASS,
             logger.crew_mass_template);
+
+  AddSpacer();
+  SetExpertRow(SPACER_LOG);
 
   AddDuration(_("Time step cruise"),
               _("This is the time interval between logged points when not circling."),

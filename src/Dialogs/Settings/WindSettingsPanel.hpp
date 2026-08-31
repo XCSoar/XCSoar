@@ -17,6 +17,7 @@ class WindSettingsPanel final
     ZIG_ZAG_WIND,
     EXTERNAL_WIND,
     TrailDrift,
+    SPACER_MANUAL,
     SOURCE,
     Speed,
     Direction,

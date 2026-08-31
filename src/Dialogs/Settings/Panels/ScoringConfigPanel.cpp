@@ -54,7 +54,7 @@ ScoringConfigPanel::OnModified(DataField &df) noexcept
 void
 ScoringConfigPanel::ShowFAITriangleControls(bool show)
 {
-  SetRowVisible(FAI_TRIANGLE_THRESHOLD, show);
+  SetRowAvailable(FAI_TRIANGLE_THRESHOLD, show);
 }
 
 static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
