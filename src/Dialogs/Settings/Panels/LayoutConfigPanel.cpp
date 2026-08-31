@@ -10,17 +10,22 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "UtilsSettings.hpp"
 #include "Asset.hpp"
 #include "Menu/ShowButton.hpp"
 
 enum ControlIndex {
+  DarkMode,
+  UIScale,
+  TabDialogStyle,
+  SPACER_INFOBOX,
   AppInfoBoxGeom,
   InfoBoxTitleScale,
-  TabDialogStyle,
-  AppStatusMessageAlignment,
   AppInfoBoxColors,
   AppInfoBoxTheme,
   AppInfoBoxBorder,
+  SPACER_MAP,
+  AppStatusMessageAlignment,
   ShowMenuButton,
   ShowZoomButton,
   ShowQuickMenuButton,
@@ -110,6 +115,16 @@ static constexpr StaticEnumChoice infobox_theme_list[] = {
   nullptr
 };
 
+static constexpr StaticEnumChoice dark_mode_list[] = {
+  { UISettings::DarkMode::AUTO, N_("Auto"),
+    N_("Use the system-wide setting") },
+  { UISettings::DarkMode::OFF, N_("Off"),
+    N_("Black text on white background") },
+  { UISettings::DarkMode::ON, N_("On"),
+    N_("White text on black background") },
+  nullptr
+};
+
 class LayoutConfigPanel final : public RowFormWidget {
   /** Geometry when this panel was opened; restored if Settings is cancelled. */
   InfoBoxSettings::Geometry original_geometry{};
@@ -136,6 +151,19 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
 
   RowFormWidget::Prepare(parent, rc);
 
+  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
+          (unsigned)ui_settings.dark_mode);
+
+  AddInteger(_("Text size"),
+             nullptr,
+             "%d %%", "%d", 75, 200, 5,
+             ui_settings.scale);
+
+  AddEnum(_("Tab dialog style"), nullptr,
+          tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
+
+  AddSpacer();
+
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
@@ -145,22 +173,14 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
              ui_settings.info_boxes.scale_title_font);
   SetExpertRow(InfoBoxTitleScale);
 
-  AddEnum(_("Tab dialog style"), nullptr,
-          tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
-
-  AddEnum(_("Message display"), nullptr,
-          popup_msg_position_list,
-          (unsigned)ui_settings.popup_message_position);
-  SetExpertRow(AppStatusMessageAlignment);
-
-  if (HasColors()) {
+  if (HasColors())
     AddBoolean(_("Colored InfoBoxes"),
                _("If true, certain InfoBoxes will have coloured text. For example, the active waypoint "
                  "InfoBox will be blue when the glider is above final glide."),
                ui_settings.info_boxes.use_colors);
-    SetExpertRow(AppInfoBoxColors);
-  } else
+  else
     AddDummy();
+  SetExpertRow(AppInfoBoxColors);
 
   AddEnum(_("InfoBox theme"), nullptr, infobox_theme_list,
           (unsigned)ui_settings.info_boxes.theme);
@@ -169,6 +189,14 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
   AddEnum(_("InfoBox border"), nullptr, infobox_border_list,
           unsigned(ui_settings.info_boxes.border_style));
   SetExpertRow(AppInfoBoxBorder);
+
+  AddSpacer();
+  SetExpertRow(SPACER_MAP);
+
+  AddEnum(_("Message display"), nullptr,
+          popup_msg_position_list,
+          (unsigned)ui_settings.popup_message_position);
+  SetExpertRow(AppStatusMessageAlignment);
 
   AddBoolean(_("Show Menu button"), _("Show the Menu button"),
              ui_settings.show_menu_button);
@@ -209,6 +237,13 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
   saved = true;
+
+  changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
+                           ui_settings.dark_mode);
+
+  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
+                       ui_settings.scale))
+    require_restart = changed = true;
 
   bool info_box_geometry_changed = false;
 

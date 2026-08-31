@@ -55,6 +55,7 @@ Version 7.46 - not yet released
     Services configuration menu
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
+  - move Dark mode and Text size from Display to Layout
   - move Audio Vario from Gauges to Setup Audio, together with
     master volume
   - split Gauges FLARM, Other into Traffic and Overlays

@@ -44,8 +44,6 @@ enum ControlIndex {
 #ifdef ANDROID
   FullScreen,
 #endif
-  DarkMode,
-  UIScale,
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
   CursorInverted,
@@ -79,16 +77,6 @@ static constexpr StaticEnumChoice display_orientation_list[] = {
     N_("Reverse Portrait") },
   { DisplayOrientation::REVERSE_LANDSCAPE,
     N_("Reverse Landscape") },
-  nullptr
-};
-
-static constexpr StaticEnumChoice dark_mode_list[] = {
-  { UISettings::DarkMode::AUTO, N_("Auto"),
-    N_("Use the system-wide setting") },
-  { UISettings::DarkMode::OFF, N_("Off"),
-    N_("Black text on white background") },
-  { UISettings::DarkMode::ON, N_("On"),
-    N_("White text on black background") },
   nullptr
 };
 
@@ -171,14 +159,6 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
              ui_settings.display.full_screen);
 #endif
 
-  AddEnum(_("Dark mode"), nullptr, dark_mode_list,
-          (unsigned)ui_settings.dark_mode);
-
-  AddInteger(_("Text size"),
-             nullptr,
-             "%d %%", "%d", 75, 200, 5,
-             ui_settings.scale);
-
 #ifdef DRAW_MOUSE_CURSOR
   AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x",
              1, 10, 1, (unsigned)ui_settings.display.cursor_size);
@@ -233,13 +213,6 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
                        ui_settings.display.full_screen);
   native_view->SetFullScreen(Java::GetEnv(), ui_settings.display.full_screen);
 #endif
-
-  changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
-                           ui_settings.dark_mode);
-
-  if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
-                       ui_settings.scale))
-    require_restart = changed = true;
 
 #ifdef DRAW_MOUSE_CURSOR
   changed |= SaveValueInteger(CursorSize, ProfileKeys::CursorSize,
