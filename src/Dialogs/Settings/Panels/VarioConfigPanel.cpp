@@ -12,10 +12,11 @@ enum ControlIndex {
   AppGaugeVarioSpeedToFly,
   AppGaugeVarioAvgText,
   AppGaugeVarioMc,
-  AppGaugeVarioBugs,
-  AppGaugeVarioBallast,
   AppGaugeVarioGross,
   AppAveNeedle,
+  SPACER_POLAR,
+  AppGaugeVarioBugs,
+  AppGaugeVarioBallast,
   AppAveThermalNeedle,
 };
 
@@ -42,32 +43,30 @@ VarioConfigPanel::Prepare(ContainerWindow &parent,
              _("Whether to show speed command arrows on the vario gauge. In cruise mode, "
                  "arrows pointing up command slow down; arrows pointing down command speed up."),
              settings.show_speed_to_fly);
-  SetExpertRow(AppGaugeVarioSpeedToFly);
 
   AddBoolean(_("Show average"),
              _("Whether to show the average climb rate. In cruise mode, this switches to showing the "
                  "average netto airmass rate."),
              settings.show_average);
-  SetExpertRow(AppGaugeVarioAvgText);
 
   AddBoolean(_("Show MacReady"), _("Whether to show the MacCready setting."), settings.show_mc);
-  SetExpertRow(AppGaugeVarioMc);
-
-  AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.show_bugs);
-  SetExpertRow(AppGaugeVarioBugs);
-
-  AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.show_ballast);
-  SetExpertRow(AppGaugeVarioBallast);
 
   AddBoolean(_("Show gross"), _("Whether to show the gross climb rate."), settings.show_gross);
-  SetExpertRow(AppGaugeVarioGross);
 
   AddBoolean(_("Averager needle"),
              _("If true, the vario gauge will display a hollow averager needle. During cruise, this "
                  "needle displays the average netto value. During circling, this needle displays the "
                  "average gross value."),
              settings.show_average_needle);
-  SetExpertRow(AppAveNeedle);
+
+  AddSpacer();
+  SetExpertRow(SPACER_POLAR);
+
+  AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.show_bugs);
+  SetExpertRow(AppGaugeVarioBugs);
+
+  AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.show_ballast);
+  SetExpertRow(AppGaugeVarioBallast);
 
   AddBoolean(_("Thermal Averager needle"),
              _("If true, the vario gauge will display a thermal averager needle instead of the current climb-rate needle. During cruise, this "
@@ -90,13 +89,13 @@ VarioConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(AppGaugeVarioMc, ProfileKeys::AppGaugeVarioMc, settings.show_mc);
 
-  changed |= SaveValue(AppGaugeVarioBugs, ProfileKeys::AppGaugeVarioBugs, settings.show_bugs);
-
-  changed |= SaveValue(AppGaugeVarioBallast, ProfileKeys::AppGaugeVarioBallast, settings.show_ballast);
-
   changed |= SaveValue(AppGaugeVarioGross, ProfileKeys::AppGaugeVarioGross, settings.show_gross);
 
   changed |= SaveValue(AppAveNeedle, ProfileKeys::AppAveNeedle, settings.show_average_needle);
+
+  changed |= SaveValue(AppGaugeVarioBugs, ProfileKeys::AppGaugeVarioBugs, settings.show_bugs);
+
+  changed |= SaveValue(AppGaugeVarioBallast, ProfileKeys::AppGaugeVarioBallast, settings.show_ballast);
 
   changed |= SaveValue(AppAveThermalNeedle, ProfileKeys::AppAveThermalNeedle, settings.show_thermal_average_needle);
 
