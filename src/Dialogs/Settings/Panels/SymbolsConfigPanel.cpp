@@ -47,9 +47,9 @@ private:
 void
 SymbolsConfigPanel::ShowTrailControls(bool show)
 {
-  SetRowVisible(TRAIL_DRIFT, show);
-  SetRowVisible(TRAIL_TYPE, show);
-  SetRowVisible(TRAIL_WIDTH, show);
+  SetRowAvailable(TRAIL_DRIFT, show);
+  SetRowAvailable(TRAIL_TYPE, show);
+  SetRowAvailable(TRAIL_WIDTH, show);
 }
 
 void

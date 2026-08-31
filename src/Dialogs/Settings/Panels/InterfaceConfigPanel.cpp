@@ -145,7 +145,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
 
   /* on-screen keyboard doesn't work without a pointing device
      (mouse or touch screen) */
-  SetRowVisible(TextInput, HasPointer());
+  SetRowAvailable(TextInput, HasPointer());
 
 #ifdef HAVE_VIBRATOR
   static constexpr StaticEnumChoice haptic_feedback_list[] = {

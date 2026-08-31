@@ -45,8 +45,8 @@ void
 WaypointDisplayConfigPanel::UpdateVisibilities()
 {
   bool visible = GetValueBoolean(AppUseSWLandablesRendering);
-  SetRowVisible(AppLandableRenderingScale, visible);
-  SetRowVisible(AppScaleRunwayLength, visible);
+  SetRowAvailable(AppLandableRenderingScale, visible);
+  SetRowAvailable(AppScaleRunwayLength, visible);
 }
 
 void

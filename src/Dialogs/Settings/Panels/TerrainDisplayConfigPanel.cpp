@@ -117,15 +117,15 @@ void
 TerrainDisplayConfigPanel::ShowTerrainControls()
 {
   bool show = terrain_settings.enable;
-  SetRowVisible(SPACER_APPEARANCE, show);
-  SetRowVisible(TerrainColors, show);
-  SetRowVisible(TerrainSlopeShading, show);
-  SetRowVisible(TerrainContrast, show);
-  SetRowVisible(TerrainBrightness, show);
-  SetRowVisible(TerrainContours, show);
+  SetRowAvailable(SPACER_APPEARANCE, show);
+  SetRowAvailable(TerrainColors, show);
+  SetRowAvailable(TerrainSlopeShading, show);
+  SetRowAvailable(TerrainContrast, show);
+  SetRowAvailable(TerrainBrightness, show);
+  SetRowAvailable(TerrainContours, show);
   if (have_terrain_preview) {
-    SetRowVisible(TerrainSpacer, show);
-    SetRowVisible(TerrainPreview, show);
+    SetRowAvailable(TerrainSpacer, show);
+    SetRowAvailable(TerrainPreview, show);
   }
 }
 
