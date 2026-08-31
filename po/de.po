@@ -1160,10 +1160,6 @@ msgid "Safety Factors"
 msgstr "Sicherheitsfaktoren"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "Verfolgung"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "Geländedarstellung"
 
@@ -2028,11 +2024,6 @@ msgstr "Routenplaner"
 msgid "Scoring"
 msgstr "Wertung"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, etc"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "Audio-Vario"
 
@@ -2047,10 +2038,6 @@ msgstr "Wendepunkt Typen"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Sprache, Eingaben"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Anordnung"
 
 #, no-c-format
 msgid "Audio"
@@ -2109,6 +2096,7 @@ msgstr "Wettbewerbskennzeichen"
 msgid "Map"
 msgstr "Karte"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "Verkehr"
 
@@ -3089,18 +3077,6 @@ msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr ""
 "Platziere die Zentrierhilfe Mitte oben, unter oder rechts der InfoBoxen."
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"Aktiviert die Anzeige des FLARM Radars. Die Flugrichtung des Ziels relativ "
-"zum eigenen Steuerkurs wird als Pfeilkopf dargestellt. Ein Dreieck, das nach "
-"oben oder nach unten zeigt die Höhe des Ziels relativ zur Eigenen. In allen "
-"Modi deutet die Farbe des Ziels die Größe der Bedrohung an."
-
 msgid "Auto close FLARM"
 msgstr "Schließe FLARM automatisch"
 
@@ -3111,12 +3087,6 @@ msgstr ""
 "Eingeschaltet (\"EIN\") wird der FLARM Dialog automatisch geschlossen, "
 "sobald kein Verkehr da ist. \"AUS\" belässt den Dialog offen, auch wenn kein "
 "Verkehr mehr da ist."
-
-msgid "FLARM display"
-msgstr "FLARM Anzeige"
-
-msgid "Choose a location for the FLARM display."
-msgstr "Wähle eine Position für die FLARM Anzeige."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3384,9 +3354,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Schriftgröße"
-
-msgid "Display Resolution"
-msgstr "Bildschirmauflösung"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Die Bildschirmauflösung passt die Stärke der Linien, Schriftgrößen, Größe der Landemarkierung und anderer Symbole an."
@@ -3988,10 +3955,6 @@ msgstr ""
 "Thermikhöhe angenommen. Deaktiviert wird mit unbegrenztem Steigen geplant."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "Die Reichweite wird nicht berechnet."
-
-#, no-c-format
 msgid "Straight"
 msgstr "Direkt"
 
@@ -4032,14 +3995,6 @@ msgstr "Verwendet den Sicherheits-MacCready-Wert"
 
 msgid "Reach polar"
 msgstr "Erreichbar Polare"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"Hiermit wird festgelegt welche Flugleistung für die Berechnung der "
-"Reichweite, Erreichbarkeit der Landefelder, beim Abbruch und der "
-"Alternativen angenommen wird."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5463,56 +5418,6 @@ msgstr ""
 "4. **Aufgabe** - Eine Aufgabe für die Navigationsführung erstellen. [Navigation > Aufgabenmanager](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# Nach dem Flug\n"
-"\n"
-"1. **Logs herunterladen** - Lade Flugdaten von deinem FLARM- oder Logger-Gerät. [Konfiguration > Geräte](xcsoar://config/devices)\n"
-"\n"
-"2. **Analyse** - Prüfe deine Flugstatistiken. [Info > Analyse](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Kontrolliere Flugzeit und weitere Kennzahlen. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Lade den Flug direkt aus XCSoar zu WeGlide hoch. Konfiguriere dazu deine WeGlide User-ID unter [Konfiguration > System > WeGlide](xcsoar://config/weglide)"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Standortzugriff\n"
-"\n"
-"XCSoar verwendet Standortdaten, um Flugnavigation, Thermikkarte und Flugaufzeichnung auch dann bereitzustellen, wenn die App geschlossen ist oder nicht aktiv genutzt wird.\n"
-"\n"
-"- **GPS-Position** - Navigation in Echtzeit und Gleitrechner\n"
-"- **Standort im Hintergrund** - Kontinuierliche Flugaufzeichnung, wenn der Bildschirm aus ist oder eine andere App im Vordergrund läuft\n"
-"- **Foreground Service** - Hält das GPS während des Flugs aktiv\n"
-"\n"
-"Deine Standortdaten werden lokal auf deinem Gerät gespeichert. Eine Weitergabe erfolgt nur, wenn du Tracking unter [Konfiguration > Tracking](xcsoar://config/tracking) ausdrücklich aktivierst.\n"
-"\n"
-"[Datenschutzerklärung](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5528,23 +5433,6 @@ msgstr ""
 "XCSoar benötigt die Berechtigung für Benachrichtigungen, um während der Flugaufzeichnung eine dauerhafte Benachrichtigung anzeigen zu können. Diese Benachrichtigung ist unter Android für den Hintergrundbetrieb erforderlich und bietet einen schnellen Weg zurück zur App.\n"
 "\n"
 "Ohne diese Berechtigung kann Android die Flugaufzeichnung beenden, sobald die App im Hintergrund ist."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# XCSoar Cloud\n"
-"\n"
-"Das XCSoar-Projekt bietet einen Dienst, mit dem Thermik- und Wellenpositionen in Echtzeit mit anderen Piloten geteilt werden können.\n"
-"\n"
-"Bei Teilnahme werden **Position**, **Thermik-/Wellenpositionen** und weitere Wetterdaten an den XCSoar-Cloud-Server übertragen.\n"
-"\n"
-"Diese Einstellung kann jederzeit unter [Konfiguration > Tracking](xcsoar://config/tracking) geändert werden."
 
 msgid "Welcome to XCSoar"
 msgstr "Willkommen bei XCSoar"
@@ -5570,6 +5458,7 @@ msgstr "Was ist neu"
 msgid "Enable XCSoar Cloud"
 msgstr "XCSoar Cloud aktivieren"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar Cloud"
 
@@ -8352,12 +8241,6 @@ msgstr ""
 "Größe der Wegpunktsymbole auf der Karte als Prozentsatz der eingebauten "
 "Grafik (Listendialoge behalten feste Zeilensymbolgröße)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Altn-Modus: MANUELL"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn-Modus: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10208,60 +10091,6 @@ msgstr ""
 "Der **verantwortliche Luftfahrzeugführer** ist stets für den sicheren Betrieb des Luftfahrzeugs verantwortlich. Verlassen Sie sich niemals allein auf XCSoar für Navigation oder Situationsbewusstheit.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# Erste Schritte\n"
-"\n"
-"Um XCSoar effektiv zu nutzen, konfigurieren Sie Folgendes:\n"
-"\n"
-"- [Aus Sicherung wiederherstellen](xcsoar://dialog/backup) - Frühere XCSoar-Daten von USB oder SD-Karte wiederherstellen (optional)\n"
-"\n"
-"- [%s] [Karte und Daten](xcsoar://config/site-files) - Karten, Wegpunkte und Luftraumdateien für Ihre Region herunterladen\n"
-"\n"
-"- [%s] [Flugzeugpolar](xcsoar://config/planes) - Ihr Flugzeug mit der richtigen Polarkurve einrichten\n"
-"\n"
-"- [%s] [Pilotendaten](xcsoar://config/logger) - Name und Gewicht eingeben\n"
-"\n"
-"- [%s] [Geräte](xcsoar://config/devices) - Flugzeugeinstrumente verbinden\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Flüge automatisch zu WeGlide hochladen\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Thermikorte von thermalmap.info auf der Karte anzeigen\n"
-"\n"
-"- [%s] [Sicherheitsfaktoren](xcsoar://config/safety) - Ankunftshöhe, Geländefreiheit und Polarverschlechterung setzen\n"
-"\n"
-"- [%s] [Geländedarstellung](xcsoar://config/terrain) - Geländefarben, Schattierung und Höhenlinien wählen\n"
-"\n"
-"- [ ] [Live-Tracking](xcsoar://config/tracking) *(optional)* - Position über SkyLines oder LiveTrack24 teilen\n"
-"\n"
-"Erkunden Sie XCSoar leicht, indem Sie im Simulatormodus neu starten oder einen [IGC-Flug wiedergeben](xcsoar://dialog/replay)."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10849,12 +10678,6 @@ msgstr ""
 msgid "Page"
 msgstr "Seite"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"Bestimmt, ob die Flugspur bei Anzeige im Kreisflug bei nahen Kartenmaßstäben"
-" mit dem Wind verdriftet wird. Ausgeschaltet bleibt die Spur ohne Winddrift-"
-"Kompensation."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "Download-Limit: erneuter Versuch in %u s"
@@ -11223,4 +11046,224 @@ msgstr "Auto"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Manuell"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "Bestimmt, ob die Flugspur bei Anzeige im Kreisflug bei nahen Kartenmaßstäben mit dem Wind verdriftet wird. Ausgeschaltet bleibt die Spur ohne Winddrift-Kompensation. Im Kreisflug gilt das auch für die projizierte Spurkurve: Ein hält sie relativ zur Luftmasse; Aus schließt den Wind ein."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "Einblendungen"
+
+#, no-c-format
+msgid "Screen"
+msgstr "Bildschirm"
+
+#, no-c-format
+msgid "Layout"
+msgstr "Anordnung"
+
+#, no-c-format
+msgid "System Services"
+msgstr "Systemdienste"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "Dienste"
+
+msgid "Back"
+msgstr "Zurück"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "Deaktiviert das Verkehrsradar."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "Aktiviert das Verkehrsradar und wählt seine Position auf dem Hauptbildschirm. Die Flugrichtung des Ziels relativ zum eigenen Steuerkurs wird als Pfeilkopf dargestellt. Ein Dreieck, das nach oben oder nach unten zeigt die Höhe des Ziels relativ zur Eigenen. In allen Modi deutet die Farbe des Ziels die Größe der Bedrohung an."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "Deaktiviert die Kartenreichweite (Geländelinie und Schattierung). Abbruch, Alternativen und Ankunft auf Landefeldern verwenden weiterhin die Erreichbar-Polare."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "Hiermit wird festgelegt welche Flugleistung für die Berechnung der Reichweite, Erreichbarkeit der Landefelder, beim Abbruch und der Alternativen angenommen wird. Dies gilt auch, wenn der Reichweitenmodus Aus ist."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# Erste Schritte\n\nUm XCSoar effektiv zu nutzen, konfigurieren Sie Folgendes:\n\n- [Aus Sicherung wiederherstellen](xcsoar://dialog/backup) - Frühere XCSoar-Daten von USB oder SD-Karte wiederherstellen (optional)\n\n- [%s] [Karte und Daten](xcsoar://config/site-files) - Karten, Wegpunkte und Luftraumdateien für Ihre Region herunterladen\n\n- [%s] [Flugzeugpolar](xcsoar://config/planes) - Ihr Flugzeug mit der richtigen Polarkurve einrichten\n\n- [%s] [Pilotendaten](xcsoar://config/logger) - Name und Gewicht eingeben\n\n- [%s] [Geräte](xcsoar://config/devices) - Flugzeugeinstrumente verbinden\n\n- [%s] [WeGlide](xcsoar://config/weglide) - Flüge automatisch zu WeGlide hochladen\n\n- [%s] [Thermal Information Map](xcsoar://config/weather) - Thermikorte von thermalmap.info auf der Karte anzeigen\n\n- [%s] [Sicherheitsfaktoren](xcsoar://config/safety) - Ankunftshöhe, Geländefreiheit und Polarverschlechterung setzen\n\n- [%s] [Geländedarstellung](xcsoar://config/terrain) - Geländefarben, Schattierung und Höhenlinien wählen\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Position über SkyLines teilen\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Position über LiveTrack24 teilen\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Position und Thermik teilen und OGN-Verkehr empfangen\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "Erkunden Sie XCSoar leicht, indem Sie im Simulatormodus neu starten oder einen [IGC-Flug wiedergeben](xcsoar://dialog/replay)."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# Nach dem Flug\n\n1. **Logs herunterladen** - Lade Flugdaten von deinem FLARM- oder Logger-Gerät. [Konfiguration > Geräte](xcsoar://config/devices)\n\n2. **Analyse** - Prüfe deine Flugstatistiken. [Info > Analyse](xcsoar://dialog/analysis)\n\n3. **Status** - Kontrolliere Flugzeit und weitere Kennzahlen. [Info > Status](xcsoar://dialog/status)\n\n4. **Upload** - Lade den Flug direkt aus XCSoar zu WeGlide hoch. Konfiguriere dazu deine WeGlide User-ID unter [Konfiguration > Dienste > WeGlide](xcsoar://config/weglide)"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# Standortzugriff\n\nXCSoar verwendet Standortdaten, um Flugnavigation, Thermikkarte und Flugaufzeichnung auch dann bereitzustellen, wenn die App geschlossen ist oder nicht aktiv genutzt wird.\n\n- **GPS-Position** - Navigation in Echtzeit und Gleitrechner\n- **Standort im Hintergrund** - Kontinuierliche Flugaufzeichnung, wenn der Bildschirm aus ist oder eine andere App im Vordergrund läuft\n- **Foreground Service** - Hält das GPS während des Flugs aktiv\n\nDeine Standortdaten werden lokal auf deinem Gerät gespeichert. Eine Weitergabe erfolgt nur, wenn du ausdrücklich [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) oder [XCSoar Cloud](xcsoar://config/cloud) aktivierst.\n\n[Datenschutzerklärung](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# XCSoar Cloud\n\nDas XCSoar-Projekt bietet einen Dienst, mit dem Thermik- und Wellenpositionen in Echtzeit mit anderen Piloten geteilt und naher Verkehr anderer Teilnehmer sowie von OGN empfangen werden können.\n\nBei Teilnahme werden **Position**, **Thermik-/Wellenpositionen** und weitere Wetterdaten an den XCSoar-Cloud-Server übertragen.\n\nDiese Einstellung kann jederzeit unter [Konfiguration > Dienste > XCSoar Cloud](xcsoar://config/cloud) geändert werden."
+
+msgid "Vario Volume"
+msgstr "Vario-Lautstärke"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "Schlüssel"
+
+msgid "Name of vehicle used."
+msgstr "Name des Luftfahrzeugs."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u Sek."
+
+#, c-format
+msgid "%u min"
+msgstr "%u Min."
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

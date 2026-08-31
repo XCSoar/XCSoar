@@ -1122,10 +1122,6 @@ msgid "Safety Factors"
 msgstr "安全因素"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "跟蹤"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "顯示地形"
 
@@ -1978,11 +1974,6 @@ msgstr "路線"
 msgid "Scoring"
 msgstr "得分"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, 其它"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "高度表音訊"
 
@@ -1997,10 +1988,6 @@ msgstr "轉彎點類型"
 #, no-c-format
 msgid "Language, Input"
 msgstr "語言，輸入"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "螢幕佈局"
 
 #, no-c-format
 msgid "Audio"
@@ -2059,6 +2046,7 @@ msgstr "競賽ID"
 msgid "Map"
 msgstr "地圖"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "交通"
 
@@ -3007,17 +2995,6 @@ msgstr "自動（跟隨資訊框）"
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "自動（跟隨資訊框）"
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"這使得能夠顯示FLARM雷達測量儀。飛行器航跡方向相對於目標方向顯示為箭頭，三角形"
-"向上或向下顯示目標相對於目標的相對高度。在所有模式中，目標的顏色指示威脅級"
-"別。"
-
 msgid "Auto close FLARM"
 msgstr "自動關閉FLARM"
 
@@ -3027,12 +3004,6 @@ msgid ""
 msgstr ""
 "如果沒有流量，將此設置為“on”將自動關閉FLAM對話方塊。“關閉”將保持對話方塊打"
 "開，即使沒有當前的流量。"
-
-msgid "FLARM display"
-msgstr "顯示FLARM"
-
-msgid "Choose a location for the FLARM display."
-msgstr "選擇FLARM顯示的位置。"
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3272,9 +3243,6 @@ msgstr "控制最終滑翔資訊框模式是否應用於自動頁。"
 
 msgid "Text size"
 msgstr "文本大小"
-
-msgid "Display Resolution"
-msgstr "顯示解析度"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "顯示解析度用於適應線寬、字體大小、可著陸區大小等。"
@@ -3846,10 +3814,6 @@ msgstr ""
 "如果禁用，爬升無限制。"
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "禁用到達計算。"
-
-#, no-c-format
 msgid "Straight"
 msgstr "直線"
 
@@ -3888,11 +3852,6 @@ msgstr "使用MacCready安全值"
 
 msgid "Reach polar"
 msgstr "到達極曲線"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr "這決定了滑翔性能在到達、著陸、中止和備用計算中的應用。"
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5249,56 +5208,6 @@ msgstr ""
 "4. **任務** - 建立導航指導任務。 [導覽 > 工作管理員](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# 飛行結束後\n"
-"\n"
-"1. **下載日誌** - 從您的 FLARM 或記錄裝置檢索飛行日誌。 [配置 > 設備](xcsoar://config/devices)\n"
-"\n"
-"2. **分析** - 查看您的航班統計。 [資訊 > 分析](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **狀態** - 檢查航班時間和統計資料。 [訊息 > 狀態](xcsoar://dialog/status)\n"
-"\n"
-"4. **上傳** - 直接從 XCSoar 上傳到 WeGlide。在 [設定 > 系統 > WeGlide](xcsoar://config/weglide) 中設定您的 WeGlide 使用者 ID"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# 位置訪問\n"
-"\n"
-"即使應用程式關閉或未使用，XCSoar 也會收集位置資料以啟用飛行導航、熱測繪和飛行記錄。\n"
-"\n"
-"- **GPS 位置** - 即時導航和滑行計算機\n"
-"- **後台位置** - 當螢幕關閉或另一個應用程式位於前台時連續飛行記錄\n"
-"- **前台服務** - 在飛行期間保持 GPS 處於活動狀態\n"
-"\n"
-"您的位置資料儲存在您的裝置本地。除非您在 [配置 > 跟踪](xcsoar://config/tracking) 中明確啟用跟踪，否則它不會共享。\n"
-"\n"
-"[隱私權政策](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5314,23 +5223,6 @@ msgstr ""
 "XCSoar 需要通知權限才能在記錄您的航班時保持持久通知。 Android 需要此通知進行背景操作，並提供返回應用程式的快速方法。\n"
 "\n"
 "如果沒有此權限，Android 可能會在應用程式處於背景時停止飛行記錄。"
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# 翔騰雲\n"
-"\n"
-"XCSoar 專案提供了一項服務，允許與其他飛行員即時共享熱和波浪位置。\n"
-"\n"
-"如果您參與，您的**位置**、**熱/波浪位置**和其他天氣資料將傳輸到 XCSoar 雲端伺服器。\n"
-"\n"
-"您可以隨時在 [設定 > 追蹤](xcsoar://config/tracking) 中變更此設定。"
 
 msgid "Welcome to XCSoar"
 msgstr "歡迎來到雲翔"
@@ -5358,6 +5250,7 @@ msgstr ""
 msgid "Enable XCSoar Cloud"
 msgstr "啟用雲翔雲"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "翔雲翔雲"
 
@@ -7996,12 +7889,6 @@ msgstr "航點圖示大小"
 msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr "地圖上航點符號大小，為內建圖稿的百分比（列表對話框保持固定列圖示大小）。"
 
-msgid "Altn mode: MANUAL"
-msgstr "備降模式：手動"
-
-msgid "Altn mode: AUTO"
-msgstr "備降模式：自動"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -9760,60 +9647,6 @@ msgstr ""
 "**機長** 始終對飛機的安全運行負責。切勿僅依賴 XCSoar 進行導航或態勢感知。\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# 入門\n"
-"\n"
-"要有效使用 XCSoar，請設定以下內容：\n"
-"\n"
-"- [從備份還原](xcsoar://dialog/backup) - 從 USB 或 SD 卡還原先前的 XCSoar 資料（選用）\n"
-"\n"
-"- [%s] [地圖與資料](xcsoar://config/site-files) - 下載您所在地區的地圖、航點和空域檔案\n"
-"\n"
-"- [%s] [飛機極曲線](xcsoar://config/planes) - 用正確的極曲線設定飛機\n"
-"\n"
-"- [%s] [飛行員資訊](xcsoar://config/logger) - 輸入姓名和體重\n"
-"\n"
-"- [%s] [裝置](xcsoar://config/devices) - 連接飛行儀表\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - 自動將飛行上傳到 WeGlide\n"
-"\n"
-"- [%s] [熱氣流資訊圖](xcsoar://config/weather) - 在地圖上顯示 thermalmap.info 的熱氣流位置\n"
-"\n"
-"- [%s] [安全係數](xcsoar://config/safety) - 設定到達高度、地形間隙和極曲線衰減\n"
-"\n"
-"- [%s] [地形顯示](xcsoar://config/terrain) - 選擇地形顏色、陰影和等高線\n"
-"\n"
-"- [ ] [即時追蹤](xcsoar://config/tracking) *(選用)* - 透過 SkyLines 或 LiveTrack24 分享位置\n"
-"\n"
-"可透過在模擬器模式中重新啟動，或[重播 IGC 飛行](xcsoar://dialog/replay) 來輕鬆探索 XCSoar。"
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10350,9 +10183,6 @@ msgstr "在 RASP 天氣疊加上繪製等高線。更密的設定會繪製更多
 msgid "Page"
 msgstr "頁面"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr "決定在近距離地圖比例的盤旋模式下顯示時，蝸牛跡是否隨風漂移。關閉時，軌跡不做風漂補償。"
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "下載限制：%u 秒後重試"
@@ -10697,4 +10527,224 @@ msgstr "自動"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "手冊"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "決定在近距離地圖比例的盤旋模式下顯示時，蝸牛跡是否隨風漂移。關閉時，軌跡不做風漂補償。 盤旋時同樣適用於投影航跡：開為相對氣團；關則計入風。"
+
+#, no-c-format
+msgid "Overlays"
+msgstr "疊加層"
+
+#, no-c-format
+msgid "Screen"
+msgstr "螢幕"
+
+#, no-c-format
+msgid "Layout"
+msgstr "佈局"
+
+#, no-c-format
+msgid "System Services"
+msgstr "系統服務"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "服務"
+
+msgid "Back"
+msgstr "返回"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "關閉交通雷達。"
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "啟用交通雷達並選擇其在主螢幕上的位置。飛行器航跡方向相對於目標方向顯示為箭頭，三角形向上或向下顯示目標相對於目標的相對高度。在所有模式中，目標的顏色指示威脅級別。"
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "關閉地圖可達範圍（地形線與陰影）。中止、備降與可降落點到達仍使用可達範圍極線。"
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "這決定了滑翔性能在到達、著陸、中止和備用計算中的應用。即使可達範圍模式為關，仍然適用。"
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# 入門\n\n要有效使用 XCSoar，請設定以下內容：\n\n- [從備份還原](xcsoar://dialog/backup) - 從 USB 或 SD 卡還原先前的 XCSoar 資料（選用）\n\n- [%s] [地圖與資料](xcsoar://config/site-files) - 下載您所在地區的地圖、航點和空域檔案\n\n- [%s] [飛機極曲線](xcsoar://config/planes) - 用正確的極曲線設定飛機\n\n- [%s] [飛行員資訊](xcsoar://config/logger) - 輸入姓名和體重\n\n- [%s] [裝置](xcsoar://config/devices) - 連接飛行儀表\n\n- [%s] [WeGlide](xcsoar://config/weglide) - 自動將飛行上傳到 WeGlide\n\n- [%s] [熱氣流資訊圖](xcsoar://config/weather) - 在地圖上顯示 thermalmap.info 的熱氣流位置\n\n- [%s] [安全係數](xcsoar://config/safety) - 設定到達高度、地形間隙和極曲線衰減\n\n- [%s] [地形顯示](xcsoar://config/terrain) - 選擇地形顏色、陰影和等高線\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(選用)* - 透過 SkyLines 分享位置\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(選用)* - 透過 LiveTrack24 分享位置\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(選用)* - 分享位置與熱氣流，並接收 OGN 交通\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "可透過在模擬器模式中重新啟動，或[重播 IGC 飛行](xcsoar://dialog/replay) 來輕鬆探索 XCSoar。"
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# 飛行結束後\n\n1. **下載日誌** - 從您的 FLARM 或記錄裝置檢索飛行日誌。 [配置 > 設備](xcsoar://config/devices)\n\n2. **分析** - 查看您的航班統計。 [資訊 > 分析](xcsoar://dialog/analysis)\n\n3. **狀態** - 檢查航班時間和統計資料。 [訊息 > 狀態](xcsoar://dialog/status)\n\n4. **上傳** - 直接從 XCSoar 上傳到 WeGlide。在 [設定 > 服務 > WeGlide](xcsoar://config/weglide) 中設定您的 WeGlide 使用者 ID"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# 位置訪問\n\n即使應用程式關閉或未使用，XCSoar 也會收集位置資料以啟用飛行導航、熱測繪和飛行記錄。\n\n- **GPS 位置** - 即時導航和滑行計算機\n- **後台位置** - 當螢幕關閉或另一個應用程式位於前台時連續飛行記錄\n- **前台服務** - 在飛行期間保持 GPS 處於活動狀態\n\n除非明確啟用 [SkyLines](xcsoar://config/skylines)、[LiveTrack24](xcsoar://config/livetrack24) 或 [XCSoar Cloud](xcsoar://config/cloud)，否則不會分享。\n\n[隱私權政策](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# 翔騰雲\n\nXCSoar 專案提供了一項服務，允許與其他飛行員即時共享熱和波浪位置。，並接收其他參與者與 OGN 的附近交通。\n\n如果您參與，您的**位置**、**熱/波浪位置**和其他天氣資料將傳輸到 XCSoar 雲端伺服器。\n\n您可以隨時在 [設定 > 服務 > XCSoar Cloud](xcsoar://config/cloud) 中變更此設定。"
+
+msgid "Vario Volume"
+msgstr "高度表音量"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "金鑰"
+
+msgid "Name of vehicle used."
+msgstr "所用飛行器的名稱。"
+
+#, c-format
+msgid "%u sec"
+msgstr "%u 秒"
+
+#, c-format
+msgid "%u min"
+msgstr "%u 分"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

@@ -1122,10 +1122,6 @@ msgid "Safety Factors"
 msgstr "భద్రత కారకాలు"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "నిర్వహణ"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "టెర్రైన్ డిస్ప్లే"
 
@@ -1981,11 +1977,6 @@ msgstr "రోజువారీ"
 msgid "Scoring"
 msgstr "నియమాలు"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, అన్య"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "ఆక్సో వారియోమీటర్"
 
@@ -2000,10 +1991,6 @@ msgstr "టర్న్ పాయింట్ రకాలు"
 #, no-c-format
 msgid "Language, Input"
 msgstr "భాషలు, ఇంపులు"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "స్కీన్ లేబ్లైట్"
 
 #, no-c-format
 msgid "Audio"
@@ -2062,6 +2049,7 @@ msgstr "టీఎటీ నియమాలు"
 msgid "Map"
 msgstr "రిప్లికేషన్"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "సమాచారం"
 
@@ -3019,17 +3007,6 @@ msgstr "థర్మల్ సాహాజం నడిక కోటి రి�
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "థర్మల్ సాహాజం శరద్యాపరం (ఇన్ఫోబ౉క్స్లను తాజాగా కలదు)"
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"ఈ విలోమం FLARM రేడియో గ్రేజ్‌ను దాదాపు చేస్తుంది. తాజేశ కోణం ని వహాయ్ కోణం నిర్వహణ కోణంలో ఉన్న తాజేశ కోణం "
-"అనే సీక్‌లు దాదాపు చేయబడతాయి, మరియు తాజేశ నివారణ సంఖ్యను ఉన్నట్లు కోణం చెప్తుంది. అనేక రూపాలలో, తాజేశ "
-"వర్గమూలం తాజేశ స్థాయిని చెప్తుంది."
-
 msgid "Auto close FLARM"
 msgstr "FLARM రేడియో గ్రేజ్‌ని క్లోజూర్‌కి తాకి దాదాపు చేయండి."
 
@@ -3039,12 +3016,6 @@ msgid ""
 msgstr ""
 "ఇది \"On\" గా ఉంచితే ట్రాఫిక్ లేకపోతే ఆటోమేటిక్గా FLARM డియాలాగ్ మూసివేస్తుంది. \"Off\" గా ఉంచితే ట్రాఫిక్ "
 "లేకపోయినా డియాలాగ్ తెరిపి ఉంచినట్లు ఉంటుంది."
-
-msgid "FLARM display"
-msgstr "FLARM డిస్ప్లే"
-
-msgid "Choose a location for the FLARM display."
-msgstr "FLARM డిస్ప్లే కు ఒక స్థలం ఎంచుకోండి."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3289,9 +3260,6 @@ msgstr "అటో\" పాజెస్‌లో \"ఫైనల్‌గ్లై
 
 msgid "Text size"
 msgstr "టెక్స్‌ వేలు"
-
-msgid "Display Resolution"
-msgstr "డిస్ప్లే రిజల్యూషన్"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "ప్రాక్తన విడుదల దృష్టి నియంత్రణ అవసరమైన రేఖ వెడల్పనలు, ఫోం చదువు, లాండబుల్ వెడల్పనలు మరియు కొత్త రేఖలకు సరైన చదువులను నియంత్రించడానికి ఉపయోగించబడుతుంది."
@@ -3879,10 +3847,6 @@ msgstr ""
 "కావాలని పరిశీలించబడదు."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "రాయ్ సమాచారాలు అధికారికగా బట్టి ప్రతినిధిత్వం."
-
-#, no-c-format
 msgid "Straight"
 msgstr "సరళ"
 
@@ -3921,12 +3885,6 @@ msgstr "భద్రత మాక్ కీడ్రేస్ విలోంగ
 
 msgid "Reach polar"
 msgstr "రాయ్ పోలి"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"ఈ దృష్టిని రాయ్, క్లియరెన్స్, అబ్టో మరియు వాహన ప్రదర్శని లో ఉన్న గ్లైడ్ ప్రదర్శని ద్వారా నిర్ణయం చేసుకోబడతాయి."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5302,56 +5260,6 @@ msgstr ""
 "4. **టాస్క్** - నావిగేషన్ మార్గదర్శకత్వం కోసం టాస్క్‌ను సృష్టించండి. [Nav > టాస్క్ మేనేజర్](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# మీ ఫ్లైట్ తర్వాత\n"
-"\n"
-"1. **లాగ్‌లను డౌన్‌లోడ్ చేయండి** - మీ FLARM లేదా లాగర్ పరికరం నుండి విమాన లాగ్‌లను తిరిగి పొందండి. [కాన్ఫిగరేషన్ > పరికరాలు](xcsoar://config/devices)\n"
-"\n"
-"2. **విశ్లేషణ** - మీ విమాన గణాంకాలను సమీక్షించండి. [సమాచారం > విశ్లేషణ](xcsoar://dialog/analysis)\n"
-"\n"
-"3. ** స్థితి** - విమాన సమయం మరియు గణాంకాలను తనిఖీ చేయండి. [సమాచారం > స్థితి](xcsoar://dialog/status)\n"
-"\n"
-"4. **అప్‌లోడ్** - XCSoar నుండి నేరుగా WeGlideకి అప్‌లోడ్ చేయండి. మీ WeGlide వినియోగదారు IDని [Config > System > WeGlide](xcsoar://config/weglide)లో కాన్ఫిగర్ చేయండి"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# స్థాన యాక్సెస్\n"
-"\n"
-"XCSoar యాప్ మూసివేయబడినప్పుడు లేదా ఉపయోగంలో లేనప్పుడు కూడా ఫ్లైట్ నావిగేషన్, థర్మల్ మ్యాపింగ్ మరియు ఫ్లైట్ లాగింగ్‌ని ప్రారంభించడానికి స్థాన డేటాను సేకరిస్తుంది.\n"
-"\n"
-"- **GPS స్థానం** - రియల్ టైమ్ నావిగేషన్ మరియు గ్లైడ్ కంప్యూటర్\n"
-"- **బ్యాక్‌గ్రౌండ్ లొకేషన్** - స్క్రీన్ ఆఫ్‌లో ఉన్నప్పుడు లేదా మరొక యాప్ ముందు భాగంలో ఉన్నప్పుడు నిరంతర విమాన రికార్డింగ్\n"
-"- **ముందుగా ఉండే సేవ** - మీ ఫ్లైట్ సమయంలో GPSని యాక్టివ్‌గా ఉంచుతుంది\n"
-"\n"
-"మీ స్థాన డేటా మీ పరికరంలో స్థానికంగా నిల్వ చేయబడుతుంది. మీరు [Config > Tracking](xcsoar://config/tracking)లో ట్రాకింగ్‌ని స్పష్టంగా ప్రారంభిస్తే తప్ప ఇది భాగస్వామ్యం చేయబడదు.\n"
-"\n"
-"[గోప్యతా విధానం](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5367,23 +5275,6 @@ msgstr ""
 "మీ విమానాన్ని రికార్డ్ చేస్తున్నప్పుడు నిరంతర నోటిఫికేషన్‌ను నిర్వహించడానికి XCSoarకి నోటిఫికేషన్ అనుమతి అవసరం. బ్యాక్‌గ్రౌండ్ ఆపరేషన్ కోసం Androidకి ఈ నోటిఫికేషన్ అవసరం మరియు యాప్‌కి తిరిగి రావడానికి శీఘ్ర మార్గాన్ని అందిస్తుంది.\n"
 "\n"
 "ఈ అనుమతి లేకుండా, యాప్ బ్యాక్‌గ్రౌండ్‌లో ఉన్నప్పుడు Android విమాన రికార్డింగ్‌ను ఆపివేయవచ్చు."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# XCSoar క్లౌడ్\n"
-"\n"
-"XCSoar ప్రాజెక్ట్ ఇతర పైలట్‌లతో రియల్ టైమ్‌లో థర్మల్ మరియు వేవ్ లొకేషన్‌లను షేర్ చేయడానికి అనుమతించే సేవను అందిస్తుంది.\n"
-"\n"
-"మీరు పాల్గొంటే, మీ **స్థానం**, **థర్మల్/వేవ్ స్థానాలు** మరియు ఇతర వాతావరణ డేటా XCSoar క్లౌడ్ సర్వర్‌కు ప్రసారం చేయబడుతుంది.\n"
-"\n"
-"మీరు దీన్ని ఎప్పుడైనా [కాన్ఫిగరేషన్ > ట్రాకింగ్](xcsoar://config/tracking)లో మార్చవచ్చు."
 
 msgid "Welcome to XCSoar"
 msgstr "XCSoarకి స్వాగతం"
@@ -5409,6 +5300,7 @@ msgstr "కొత్తవి ఏమిటి"
 msgid "Enable XCSoar Cloud"
 msgstr "XCSoar క్లౌడ్‌ని ప్రారంభించండి"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar క్లౌడ్"
 
@@ -8078,12 +7970,6 @@ msgstr ""
 "అంతర్నిర్మిత కళాకృతి యొక్క శాతంగా మ్యాప్‌లోని వే పాయింట్ చిహ్నాల పరిమాణం "
 "(జాబితా డైలాగ్‌లు స్థిర వరుస చిహ్నం పరిమాణాన్ని ఉంచుతాయి)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -9927,60 +9813,6 @@ msgstr ""
 "**కమాండ్ పైలట్** విమానం సురక్షిత నిర్వహణకు ఎల్లప్పుడూ బాధ్యత వహిస్తారు. నావిగేషన్ లేదా పరిస్థితి అవగాహన కోసం XCSoarపై మాత్రమే ఆధారపడవద్దు.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# ప్రారంభం\n"
-"\n"
-"XCSoarను సమర్థవంతంగా ఉపయోగించడానికి కింది వాటిని కాన్ఫిగర్ చేయండి:\n"
-"\n"
-"- [బ్యాకప్ నుండి పునరుద్ధరించు](xcsoar://dialog/backup) - USB లేదా SD కార్డ్ నుండి మునుపటి XCSoar డేటాను పునరుద్ధరించండి (ఐచ్ఛికం)\n"
-"\n"
-"- [%s] [మ్యాప్ మరియు డేటా](xcsoar://config/site-files) - మీ ప్రాంతానికి మ్యాప్‌లు, మార్గ బిందువులు మరియు వాయుప్రదేశ ఫైళ్లను డౌన్‌లోడ్ చేయండి\n"
-"\n"
-"- [%s] [విమాన పోలార్](xcsoar://config/planes) - సరైన పోలార్ వక్రంతో మీ విమానాన్ని సెటప్ చేయండి\n"
-"\n"
-"- [%s] [పైలట్ సమాచారం](xcsoar://config/logger) - మీ పేరు మరియు బరువు నమోదు చేయండి\n"
-"\n"
-"- [%s] [పరికరాలు](xcsoar://config/devices) - మీ విమాన పరికరాలను కనెక్ట్ చేయండి\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - విమానాలను WeGlideకు స్వయంచాలకంగా అప్‌లోడ్ చేయండి\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - thermalmap.info నుండి థర్మల్ స్థానాలను మ్యాప్‌పై చూపండి\n"
-"\n"
-"- [%s] [భద్రతా కారకాలు](xcsoar://config/safety) - రాక ఎత్తు, భూభాగ క్లియరెన్స్ మరియు పోలార్ క్షీణతను సెట్ చేయండి\n"
-"\n"
-"- [%s] [భూభాగ ప్రదర్శన](xcsoar://config/terrain) - భూభాగ రంగులు, షేడింగ్ మరియు కాంటూర్ రేఖలను ఎంచుకోండి\n"
-"\n"
-"- [ ] [లైవ్ ట్రాకింగ్](xcsoar://config/tracking) *(ఐచ్ఛికం)* - SkyLines లేదా LiveTrack24 ద్వారా మీ స్థానాన్ని పంచుకోండి\n"
-"\n"
-"సిమ్యులేటర్ మోడ్‌లో మళ్లీ ప్రారంభించడం ద్వారా లేదా [IGC విమానాన్ని ప్లే చేయడం](xcsoar://dialog/replay) ద్వారా XCSoarను సులభంగా అన్వేషించండి."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10567,12 +10399,6 @@ msgstr ""
 msgid "Page"
 msgstr "పేజీ"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"సమీప మ్యాప్ స్కేల్స్‌లో సర్క్లింగ్ మోడ్‌లో చూపినప్పుడు స్నెయిల్ ట్రయిల్ "
-"గాలితో డ్రిఫ్ట్ అవుతుందో లేదో నిర్ణయిస్తుంది. ఆఫ్ అయితే ట్రయిల్ గాలి "
-"డ్రిఫ్ట్ కాంపెన్సేషన్ లేకుండా ఉంటుంది."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "డౌన్‌లోడ్ పరిమితి: %u సెలో మళ్లీ ప్రయత్నం"
@@ -10936,4 +10762,224 @@ msgstr "ఆటో"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "మానిలోయిక్"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "సమీప మ్యాప్ స్కేల్స్‌లో సర్క్లింగ్ మోడ్‌లో చూపినప్పుడు స్నెయిల్ ట్రయిల్ గాలితో డ్రిఫ్ట్ అవుతుందో లేదో నిర్ణయిస్తుంది. ఆఫ్ అయితే ట్రయిల్ గాలి డ్రిఫ్ట్ కాంపెన్సేషన్ లేకుండా ఉంటుంది. సర్క్లింగ్‌లో ప్రొజెక్టెడ్ ట్రాక్ వక్రానికి కూడా వర్తిస్తుంది: ఆన్ గాలి ద్రవ్యరాశికి సాపేక్షంగా ఉంచుతుంది; ఆఫ్ గాలిని చేర్చుతుంది."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "ఓవర్‌లేలు"
+
+#, no-c-format
+msgid "Screen"
+msgstr "స్క్రీన్"
+
+#, no-c-format
+msgid "Layout"
+msgstr "లేఅవుట్"
+
+#, no-c-format
+msgid "System Services"
+msgstr "సిస్టమ్ సేవలు"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "సేవలు"
+
+msgid "Back"
+msgstr "వెనుకకు"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "ట్రాఫిక్ రాడార్‌ను నిలిపివేస్తుంది."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "ట్రాఫిక్ రాడార్‌ను ప్రారంభించి ప్రధాన స్క్రీన్‌పై స్థానాన్ని ఎంచుకుంటుంది. తాజేశ కోణం ని వహాయ్ కోణం నిర్వహణ కోణంలో ఉన్న తాజేశ కోణం అనే సీక్‌లు దాదాపు చేయబడతాయి, మరియు తాజేశ నివారణ సంఖ్యను ఉన్నట్లు కోణం చెప్తుంది. అనేక రూపాలలో, తాజేశ వర్గమూలం తాజేశ స్థాయిని చెప్తుంది."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "మ్యాప్ రీచ్‌ను నిలిపివేస్తుంది (భూభాగ రేఖ మరియు షేడ్). అబార్ట్, ప్రత్యామ్నాయాలు మరియు ల్యాండబుల్ రాక ఇంకా రీచ్ పోలార్‌ను ఉపయోగిస్తాయి."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "ఈ దృష్టిని రాయ్, క్లియరెన్స్, అబ్టో మరియు వాహన ప్రదర్శని లో ఉన్న గ్లైడ్ ప్రదర్శని ద్వారా నిర్ణయం చేసుకోబడతాయి. రీచ్ మోడ్ ఆఫ్ అయినా ఇది వర్తిస్తుంది."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# ప్రారంభం\n\nXCSoarను సమర్థవంతంగా ఉపయోగించడానికి కింది వాటిని కాన్ఫిగర్ చేయండి:\n\n- [బ్యాకప్ నుండి పునరుద్ధరించు](xcsoar://dialog/backup) - USB లేదా SD కార్డ్ నుండి మునుపటి XCSoar డేటాను పునరుద్ధరించండి (ఐచ్ఛికం)\n\n- [%s] [మ్యాప్ మరియు డేటా](xcsoar://config/site-files) - మీ ప్రాంతానికి మ్యాప్‌లు, మార్గ బిందువులు మరియు వాయుప్రదేశ ఫైళ్లను డౌన్‌లోడ్ చేయండి\n\n- [%s] [విమాన పోలార్](xcsoar://config/planes) - సరైన పోలార్ వక్రంతో మీ విమానాన్ని సెటప్ చేయండి\n\n- [%s] [పైలట్ సమాచారం](xcsoar://config/logger) - మీ పేరు మరియు బరువు నమోదు చేయండి\n\n- [%s] [పరికరాలు](xcsoar://config/devices) - మీ విమాన పరికరాలను కనెక్ట్ చేయండి\n\n- [%s] [WeGlide](xcsoar://config/weglide) - విమానాలను WeGlideకు స్వయంచాలకంగా అప్‌లోడ్ చేయండి\n\n- [%s] [Thermal Information Map](xcsoar://config/weather) - thermalmap.info నుండి థర్మల్ స్థానాలను మ్యాప్‌పై చూపండి\n\n- [%s] [భద్రతా కారకాలు](xcsoar://config/safety) - రాక ఎత్తు, భూభాగ క్లియరెన్స్ మరియు పోలార్ క్షీణతను సెట్ చేయండి\n\n- [%s] [భూభాగ ప్రదర్శన](xcsoar://config/terrain) - భూభాగ రంగులు, షేడింగ్ మరియు కాంటూర్ రేఖలను ఎంచుకోండి\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(ఐచ్ఛికం)* - SkyLines ద్వారా స్థానాన్ని పంచుకోండి\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(ఐచ్ఛికం)* - LiveTrack24 ద్వారా స్థానాన్ని పంచుకోండి\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(ఐచ్ఛికం)* - స్థానం మరియు థర్మల్స్ పంచుకుని OGN ట్రాఫిక్ స్వీకరించండి\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "సిమ్యులేటర్ మోడ్‌లో మళ్లీ ప్రారంభించడం ద్వారా లేదా [IGC విమానాన్ని ప్లే చేయడం](xcsoar://dialog/replay) ద్వారా XCSoarను సులభంగా అన్వేషించండి."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# మీ ఫ్లైట్ తర్వాత\n\n1. **లాగ్‌లను డౌన్‌లోడ్ చేయండి** - మీ FLARM లేదా లాగర్ పరికరం నుండి విమాన లాగ్‌లను తిరిగి పొందండి. [కాన్ఫిగరేషన్ > పరికరాలు](xcsoar://config/devices)\n\n2. **విశ్లేషణ** - మీ విమాన గణాంకాలను సమీక్షించండి. [సమాచారం > విశ్లేషణ](xcsoar://dialog/analysis)\n\n3. ** స్థితి** - విమాన సమయం మరియు గణాంకాలను తనిఖీ చేయండి. [సమాచారం > స్థితి](xcsoar://dialog/status)\n\n4. **అప్‌లోడ్** - XCSoar నుండి నేరుగా WeGlideకి అప్‌లోడ్ చేయండి. మీ WeGlide వినియోగదారు IDని [Config > సేవలు > WeGlide](xcsoar://config/weglide)లో కాన్ఫిగర్ చేయండి"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# స్థాన యాక్సెస్\n\nXCSoar యాప్ మూసివేయబడినప్పుడు లేదా ఉపయోగంలో లేనప్పుడు కూడా ఫ్లైట్ నావిగేషన్, థర్మల్ మ్యాపింగ్ మరియు ఫ్లైట్ లాగింగ్‌ని ప్రారంభించడానికి స్థాన డేటాను సేకరిస్తుంది.\n\n- **GPS స్థానం** - రియల్ టైమ్ నావిగేషన్ మరియు గ్లైడ్ కంప్యూటర్\n- **బ్యాక్‌గ్రౌండ్ లొకేషన్** - స్క్రీన్ ఆఫ్‌లో ఉన్నప్పుడు లేదా మరొక యాప్ ముందు భాగంలో ఉన్నప్పుడు నిరంతర విమాన రికార్డింగ్\n- **ముందుగా ఉండే సేవ** - మీ ఫ్లైట్ సమయంలో GPSని యాక్టివ్‌గా ఉంచుతుంది\n\nమీ స్థాన డేటా మీ పరికరంలో స్థానికంగా నిల్వ చేయబడుతుంది. [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) లేదా [XCSoar Cloud](xcsoar://config/cloud) ను స్పష్టంగా ప్రారంభించకపోతే పంచుకోబడదు.\n\n[గోప్యతా విధానం](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# XCSoar క్లౌడ్\n\nXCSoar ప్రాజెక్ట్ ఇతర పైలట్‌లతో రియల్ టైమ్‌లో థర్మల్ మరియు వేవ్ లొకేషన్‌లను షేర్ చేయడానికి అనుమతించే సేవను అందిస్తుంది, మరియు ఇతర పాల్గొనేవారి నుండి మరియు OGN నుండి సమీప ట్రాఫిక్ స్వీకరించడం.\n\nమీరు పాల్గొంటే, మీ **స్థానం**, **థర్మల్/వేవ్ స్థానాలు** మరియు ఇతర వాతావరణ డేటా XCSoar క్లౌడ్ సర్వర్‌కు ప్రసారం చేయబడుతుంది.\n\nమీరు దీన్ని ఎప్పుడైనా [కాన్ఫిగరేషన్ > సేవలు > XCSoar Cloud](xcsoar://config/cloud)లో మార్చవచ్చు."
+
+msgid "Vario Volume"
+msgstr "వారియో వాల్యూమ్"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "కీ"
+
+msgid "Name of vehicle used."
+msgstr "ఉపయోగించిన వాహనం పేరు."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u సె"
+
+#, c-format
+msgid "%u min"
+msgstr "%u ని"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

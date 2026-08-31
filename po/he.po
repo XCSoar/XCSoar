@@ -1146,10 +1146,6 @@ msgid "Safety Factors"
 msgstr "פקורי בטיחות"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "מעקב"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "פני השטח"
 
@@ -2057,11 +2053,6 @@ msgstr "נתיב"
 msgid "Scoring"
 msgstr "ניקוד"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "פלארם,אחר"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "ואריו חשמלי"
 
@@ -2076,10 +2067,6 @@ msgstr "סוג נקודת סיבוב"
 #, no-c-format
 msgid "Language, Input"
 msgstr "שפה"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "מערך התצוגה"
 
 #, no-c-format
 msgid "Audio"
@@ -2138,6 +2125,7 @@ msgstr "ID תחרות"
 msgid "Map"
 msgstr "מפה"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "תנועה"
 
@@ -3138,17 +3126,6 @@ msgstr "עוזר התמרכזות"
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "עוזר התמרכזות"
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"מפעיל את תצוגת מדד מכ\"ם ה-FLARM. כיוון המסלול של המטרה יחסית לכיוון המסלול "
-"של המטוס מוצג כראש חץ, ומשולש הפונה למעלה או למטה מציג את הגובה היחסי של "
-"המטרה ביחס אליך. בכל המצבים, צבע המטרה מציין את רמת האיום."
-
 msgid "Auto close FLARM"
 msgstr "אוטו סגירה של FLARM"
 
@@ -3158,12 +3135,6 @@ msgid ""
 msgstr ""
 "הגדרה זו תסגר את הדיאלוג של FLARM אוטומטית אם אין😉raf. \"OFF\" יישאר את "
 "הדיאלוג פתוח גם ללא😉raf נוכחיים."
-
-msgid "FLARM display"
-msgstr "ציון FLARM"
-
-msgid "Choose a location for the FLARM display."
-msgstr "בחר מיקום לציון FLARM."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3414,9 +3385,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "טקסט"
-
-msgid "Display Resolution"
-msgstr "אין פתרון"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "התולעת נמצאת בשימוש כדי להתאים את רוחב הנקודות, הגודל של הטקסט, גודל היעד ועוד."
@@ -4002,10 +3970,6 @@ msgstr ""
 "של המטוס ועוד 500 מטר או הגבול התרמיקה. אם לא מופעלת, העליות אינן מוגבלות."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "חישובים של הגעה_DISABLED."
-
-#, no-c-format
 msgid "Straight"
 msgstr "ישר"
 
@@ -4044,12 +4008,6 @@ msgstr "משתמש בשיעור בטיחות מקרדיס."
 
 msgid "Reach polar"
 msgstr "פולר הגעה"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"זה קובע את הביצועים של הגלאישה שנמשכים בהעה, הגעה נחיתה אפשרית, ביטול וחליפה."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5453,56 +5411,6 @@ msgstr ""
 "4. **משימה** - צור משימה להנחיית ניווט. [Nav > Task Manager](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# אחרי הטיסה שלך\n"
-"\n"
-"1. **הורד יומנים** - אחזר יומני טיסה ממכשיר ה-FLARM או לוגר שלך. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **ניתוח** - סקור את סטטיסטיקת הטיסה שלך. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **סטטוס** - בדוק תזמון טיסה וסטטיסטיקה. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **העלה** - העלה ל-WeGlide ישירות מ-XCSoar. הגדר את ה-WeGlide User ID שלך ב-[Config > System > WeGlide](xcsoar://config/weglide)"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# גישה למיקום\n"
-"\n"
-"XCSoar אוספת נתוני מיקום כדי לאפשר ניווט טיסה, מיפוי תרמי ורישום טיסות גם כשהאפליקציה סגורה או לא בשימוש.\n"
-"\n"
-"- **מיקום GPS** - מחשב ניווט וגלישה בזמן אמת\n"
-"- **מיקום רקע** - הקלטת טיסה רציפה כשהמסך כבוי או אפליקציה אחרת בחזית\n"
-"- **שירות חזית** - שומר על GPS פעיל במהלך הטיסה שלך\n"
-"\n"
-"נתוני המיקום שלך מאוחסנים באופן מקומי במכשיר שלך. זה לא משותף אלא אם אתה מפעיל במפורש מעקב ב-[Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5518,23 +5426,6 @@ msgstr ""
 "XCSoar זקוק להרשאת הודעה כדי לשמור על הודעה מתמשכת בזמן הקלטת הטיסה שלך. הודעה זו נדרשת על ידי אנדרואיד לתפעול רקע ומספקת דרך מהירה לחזור לאפליקציה.\n"
 "\n"
 "ללא הרשאה זו, אנדרואיד עשויה להפסיק את הקלטת הטיסה כאשר האפליקציה נמצאת ברקע."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# ענן XCSoar\n"
-"\n"
-"פרויקט XCSoar מציע שירות המאפשר שיתוף מיקומים תרמיים וגלים עם טייסים אחרים בזמן אמת.\n"
-"\n"
-"אם תשתתף, **המיקום**, **מיקומי החום/גלים** שלך ונתוני מזג אוויר אחרים ישודרו לשרת XCSoar Cloud.\n"
-"\n"
-"אתה יכול לשנות זאת בכל עת ב-[Config > Tracking](xcsoar://config/tracking)."
 
 msgid "Welcome to XCSoar"
 msgstr "ברוכים הבאים ל-XCSoar"
@@ -5560,6 +5451,7 @@ msgstr "מה יש פה?"
 msgid "Enable XCSoar Cloud"
 msgstr "הפעל את XCSoar Cloud"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar Cloud"
 
@@ -8225,12 +8117,6 @@ msgstr ""
 "גודל סמלי נקודות הדרך על המפה כאחוז מהגרפיקה המובנית (תיבות דו־שיח של רשימה "
 "שומרות על גודל אייקון קבוע בשורה)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10038,60 +9924,6 @@ msgstr ""
 "**הטייס המפקד** אחראי תמיד להפעלה הבטוחה של כלי הטיס. לעולם אל תסתמך רק על XCSoar לניווט או למודעות מצבית.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# תחילת עבודה\n"
-"\n"
-"כדי להשתמש ב-XCSoar ביעילות, הגדר את הדברים הבאים:\n"
-"\n"
-"- [שחזור מגיבוי](xcsoar://dialog/backup) - שחזור נתוני XCSoar קודמים מכרטיס USB או SD (אופציונלי)\n"
-"\n"
-"- [%s] [מפה ונתונים](xcsoar://config/site-files) - הורדת מפות, נקודות דרך וקבצי מרחב אווירי לאזור שלך\n"
-"\n"
-"- [%s] [פולר מטוס](xcsoar://config/planes) - הגדרת כלי הטיס עם עקומת הפולר הנכונה\n"
-"\n"
-"- [%s] [פרטי טייס](xcsoar://config/logger) - הזנת שמך ומשקלך\n"
-"\n"
-"- [%s] [התקנים](xcsoar://config/devices) - חיבור מכשירי הטיסה שלך\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - העלאת טיסות אוטומטית ל-WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - הצגת מיקומי תרמיקות מ-thermalmap.info על המפה\n"
-"\n"
-"- [%s] [גורמי בטיחות](xcsoar://config/safety) - הגדרת גובה הגעה, מרווח מפני שטח ושחיקת פולר\n"
-"\n"
-"- [%s] [תצוגת פני שטח](xcsoar://config/terrain) - בחירת צבעי פני שטח, הצללה וקווי גובה\n"
-"\n"
-"- [ ] [מעקב חי](xcsoar://config/tracking) *(אופציונלי)* - שיתוף מיקומך דרך SkyLines או LiveTrack24\n"
-"\n"
-"חקור את XCSoar בקלות על ידי הפעלה מחדש במצב סימולטור, או על ידי [השמעת טיסת IGC](xcsoar://dialog/replay)."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10654,11 +10486,6 @@ msgstr ""
 msgid "Page"
 msgstr "עמוד"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"קובע האם עקבת החילזון נסחפת עם הרוח כשהיא מוצגת במצב הקפה בקני מידה קרובים "
-"של המפה. כבוי — העקבה נשארת ללא פיצוי על סחיפת רוח."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "מגבלת הורדה: ניסיון חוזר בעוד %u שנ׳"
@@ -11011,4 +10838,224 @@ msgstr "אוטו"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "ידנית"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "קובע האם עקבת החילזון נסחפת עם הרוח כשהיא מוצגת במצב הקפה בקני מידה קרובים של המפה. כבוי — העקבה נשארת ללא פיצוי על סחיפת רוח. בהקפה זה חל גם על עקומת המסלול המוקרנת: פועל שומר אותה ביחס למסת האוויר; כבוי כולל את הרוח."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "שכבות"
+
+#, no-c-format
+msgid "Screen"
+msgstr "מסך"
+
+#, no-c-format
+msgid "Layout"
+msgstr "מערך"
+
+#, no-c-format
+msgid "System Services"
+msgstr "שירותי מערכת"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "שירותים"
+
+msgid "Back"
+msgstr "חזרה"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "משבית את מכ״ם התנועה."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "מפעיל את מכ״ם התנועה ובוחר את מיקומו במסך הראשי. כיוון המסלול של המטרה יחסית לכיוון המסלול של המטוס מוצג כראש חץ, ומשולש הפונה למעלה או למטה מציג את הגובה היחסי של המטרה ביחס אליך. בכל המצבים, צבע המטרה מציין את רמת האיום."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "משבית את טווח המפה (קו קרקע והצללה). ביטול, חלופות והגעה לשדות נחיתה עדיין משתמשים בפולאר הטווח."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "זה קובע את הביצועים של הגלאישה שנמשכים בהעה, הגעה נחיתה אפשרית, ביטול וחליפה. זה עדיין חל כאשר מצב הטווח כבוי."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# תחילת עבודה\n\nכדי להשתמש ב-XCSoar ביעילות, הגדר את הדברים הבאים:\n\n- [שחזור מגיבוי](xcsoar://dialog/backup) - שחזור נתוני XCSoar קודמים מכרטיס USB או SD (אופציונלי)\n\n- [%s] [מפה ונתונים](xcsoar://config/site-files) - הורדת מפות, נקודות דרך וקבצי מרחב אווירי לאזור שלך\n\n- [%s] [פולר מטוס](xcsoar://config/planes) - הגדרת כלי הטיס עם עקומת הפולר הנכונה\n\n- [%s] [פרטי טייס](xcsoar://config/logger) - הזנת שמך ומשקלך\n\n- [%s] [התקנים](xcsoar://config/devices) - חיבור מכשירי הטיסה שלך\n\n- [%s] [WeGlide](xcsoar://config/weglide) - העלאת טיסות אוטומטית ל-WeGlide\n\n- [%s] [Thermal Information Map](xcsoar://config/weather) - הצגת מיקומי תרמיקות מ-thermalmap.info על המפה\n\n- [%s] [גורמי בטיחות](xcsoar://config/safety) - הגדרת גובה הגעה, מרווח מפני שטח ושחיקת פולר\n\n- [%s] [תצוגת פני שטח](xcsoar://config/terrain) - בחירת צבעי פני שטח, הצללה וקווי גובה\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(רשות)* - שתף את מיקומך באמצעות SkyLines\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(רשות)* - שתף את מיקומך באמצעות LiveTrack24\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(רשות)* - שתף מיקום ותרמיקות, וקבל תנועת OGN\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "חקור את XCSoar בקלות על ידי הפעלה מחדש במצב סימולטור, או על ידי [השמעת טיסת IGC](xcsoar://dialog/replay)."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# אחרי הטיסה שלך\n\n1. **הורד יומנים** - אחזר יומני טיסה ממכשיר ה-FLARM או לוגר שלך. [Config > Devices](xcsoar://config/devices)\n\n2. **ניתוח** - סקור את סטטיסטיקת הטיסה שלך. [Info > Analysis](xcsoar://dialog/analysis)\n\n3. **סטטוס** - בדוק תזמון טיסה וסטטיסטיקה. [Info > Status](xcsoar://dialog/status)\n\n4. **העלה** - העלה ל-WeGlide ישירות מ-XCSoar. הגדר את ה-WeGlide User ID שלך ב-[Config > שירותים > WeGlide](xcsoar://config/weglide)"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# גישה למיקום\n\nXCSoar אוספת נתוני מיקום כדי לאפשר ניווט טיסה, מיפוי תרמי ורישום טיסות גם כשהאפליקציה סגורה או לא בשימוש.\n\n- **מיקום GPS** - מחשב ניווט וגלישה בזמן אמת\n- **מיקום רקע** - הקלטת טיסה רציפה כשהמסך כבוי או אפליקציה אחרת בחזית\n- **שירות חזית** - שומר על GPS פעיל במהלך הטיסה שלך\n\nנתוני המיקום שלך מאוחסנים באופן מקומי במכשיר שלך. זה לא משותף אלא אם תפעיל במפורש את [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) או [XCSoar Cloud](xcsoar://config/cloud).\n\n[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# ענן XCSoar\n\nפרויקט XCSoar מציע שירות המאפשר שיתוף מיקומים תרמיים וגלים עם טייסים אחרים בזמן אמת, ולקבל תנועה קרובה ממשתתפים אחרים ומ-OGN.\n\nאם תשתתף, **המיקום**, **מיקומי החום/גלים** שלך ונתוני מזג אוויר אחרים ישודרו לשרת XCSoar Cloud.\n\nאתה יכול לשנות זאת בכל עת ב-[Config > שירותים > XCSoar Cloud](xcsoar://config/cloud)."
+
+msgid "Vario Volume"
+msgstr "עוצמת הוואריו"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "מפתח"
+
+msgid "Name of vehicle used."
+msgstr "שם כלי הטיס שבשימוש."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u שנ׳"
+
+#, c-format
+msgid "%u min"
+msgstr "%u דק׳"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

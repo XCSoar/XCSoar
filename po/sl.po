@@ -1146,10 +1146,6 @@ msgid "Safety Factors"
 msgstr "Varnostni faktori"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "Nadzorovanje | Tracking"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "Vključi teren"
 
@@ -2012,11 +2008,6 @@ msgstr "Pot | Route"
 msgid "Scoring"
 msgstr "Ocena | Scoring"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, drugo | FLARM, drugo"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "Zvonski variometer | Audio Vario"
 
@@ -2031,10 +2022,6 @@ msgstr "Tipi obratnih točk | Turnpoint Types"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Jezik, vnos | Language, Input"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Prikaz zaslona | Screen Layout"
 
 #, no-c-format
 msgid "Audio"
@@ -2093,6 +2080,7 @@ msgstr "Id natječaja"
 msgid "Map"
 msgstr "Karta"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "Tlačila"
 
@@ -3069,18 +3057,6 @@ msgstr "Dobitek višine zadnjega dviganja"
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "Dobitek višine zadnjega dviganja"
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"To omogoča prikaz FLARM radarne mize. Smer točke cilja relativno k smeri "
-"poti letalca je prikazana s številko, ter trikotnik, ki pokaze relativno "
-"višino točke cilja v odnosu na vas. V vseh načinih se barva točke cilja "
-"označuje stopnjo težavnosti."
-
 msgid "Auto close FLARM"
 msgstr "Samo zapri FLARM"
 
@@ -3090,12 +3066,6 @@ msgid ""
 msgstr ""
 "Nastavitev \"Vključeno\" bo avtomatsko zaprla okno FLARM, če ni nobene "
 "trgovine. \"Iskalno\" bo obdržalo okno odprto tudi brez trenutne trgovine."
-
-msgid "FLARM display"
-msgstr "Prikaz FLARM"
-
-msgid "Choose a location for the FLARM display."
-msgstr "Izberite lokacijo za prikaz FLARM."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3364,9 +3334,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Velikost besedila"
-
-msgid "Display Resolution"
-msgstr "Rešitev zaslona"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Rešitev zaslona se uporablja za dostosovanje širine vrstic, velikosti pismenosti, velikosti letalnih območij in več."
@@ -3960,10 +3927,6 @@ msgstr ""
 "vleki so beskonečni."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "Izračunavanje dosega je onemogočeno."
-
-#, no-c-format
 msgid "Straight"
 msgstr "Pravokotno"
 
@@ -4002,13 +3965,6 @@ msgstr "Uporablja varnostno MacCready vrednost."
 
 msgid "Reach polar"
 msgstr "Način dosega"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"To odreduje prevozno zmogljivost, ki jo uporabimo pri izračunanih dosegu, "
-"pristanku z dostopnim dosežkom, odpovedi in alternativnem pristanju."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5421,56 +5377,6 @@ msgstr ""
 "4. **Opravilo** - Ustvarite opravilo za navigacijsko vodenje. [Nav > Upravitelj opravil](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# Po vašem letu\n"
-"\n"
-"1. **Prenos dnevnikov** - Pridobite dnevnike letov iz vašega FLARM ali naprave za beleženje. [Konfiguracija > Naprave](xcsoar://config/devices)\n"
-"\n"
-"2. **Analiza** - Preglejte statistiko svojih letov. [Informacije > Analiza](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Preverite čas letenja in statistiko. [Informacije > Stanje](xcsoar://dialog/status)\n"
-"\n"
-"4. **Naloži** - Naložite v WeGlide neposredno iz XCSoar. Konfigurirajte svoj ID uporabnika WeGlide v [Konfiguracija > Sistem > WeGlide](xcsoar://config/weglide)"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Dostop do lokacije\n"
-"\n"
-"XCSoar zbira podatke o lokaciji, da omogoči navigacijo letov, termično kartiranje in beleženje letov, tudi ko je aplikacija zaprta ali ni v uporabi.\n"
-"\n"
-"- **Položaj GPS** - Navigacija v realnem času in drsni računalnik\n"
-"- **Lokacija v ozadju** - Neprekinjeno snemanje leta, ko je zaslon izklopljen ali je v ospredju druga aplikacija\n"
-"- **Foreground Service** - Ohranja GPS aktiven med vašim letom\n"
-"\n"
-"Podatki o vaši lokaciji so shranjeni lokalno v vaši napravi. Ni v skupni rabi, razen če izrecno omogočite sledenje v [Konfiguracija > Sledenje](xcsoar://config/tracking).\n"
-"\n"
-"[Politika zasebnosti](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5486,23 +5392,6 @@ msgstr ""
 "XCSoar potrebuje dovoljenje za obveščanje, da ohrani stalno obvestilo med snemanjem vašega leta. To obvestilo zahteva Android za delovanje v ozadju in omogoča hiter način vrnitve v aplikacijo.\n"
 "\n"
 "Brez tega dovoljenja lahko Android ustavi snemanje leta, ko je aplikacija v ozadju."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# XCSoar Cloud\n"
-"\n"
-"Projekt XCSoar ponuja storitev, ki omogoča izmenjavo termalnih in valovnih lokacij z drugimi piloti v realnem času.\n"
-"\n"
-"Če sodelujete, bodo vaš **položaj**, **toplotne/valovne lokacije** in drugi vremenski podatki poslani v strežnik XCSoar Cloud.\n"
-"\n"
-"To lahko kadar koli spremenite v [Konfiguracija > Sledenje](xcsoar://config/tracking)."
 
 msgid "Welcome to XCSoar"
 msgstr "Dobrodošli v XCSoar"
@@ -5528,6 +5417,7 @@ msgstr "Kaj je novega"
 msgid "Enable XCSoar Cloud"
 msgstr "Omogoči XCSoar Cloud"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar Cloud"
 
@@ -8255,12 +8145,6 @@ msgstr ""
 "Veličina simbola točk poti na zemljevidu kao postotak ugrađene grafike "
 "(dijalozi seznama zadržavaju fiksnu veličinu ikone retka)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10091,60 +9975,6 @@ msgstr ""
 "**Poveljnik zrakoplova** je vedno odgovoren za varno upravljanje zrakoplova. Nikoli se ne zanašajte izključno na XCSoar za navigacijo ali situacijsko ozaveščenost.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# Začetek\n"
-"\n"
-"Za učinkovito uporabo XCSoar konfigurirajte naslednje:\n"
-"\n"
-"- [Obnovi iz varnostne kopije](xcsoar://dialog/backup) - Obnovi prejšnje podatke XCSoar z USB ali SD kartice (izbirno)\n"
-"\n"
-"- [%s] [Zemljevid in podatki](xcsoar://config/site-files) - Prenesi zemljevide, točke poti in datoteke zračnega prostora za svojo regijo\n"
-"\n"
-"- [%s] [Polara zrakoplova](xcsoar://config/planes) - Nastavi zrakoplov s pravilno polarno krivuljo\n"
-"\n"
-"- [%s] [Podatki pilota](xcsoar://config/logger) - Vnesi ime in težo\n"
-"\n"
-"- [%s] [Naprave](xcsoar://config/devices) - Poveži letalske instrumente\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Samodejno naloži lete na WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Prikaži lokacije termike s thermalmap.info na zemljevidu\n"
-"\n"
-"- [%s] [Varnostni dejavniki](xcsoar://config/safety) - Nastavi višino prihoda, odmik od terena in poslabšanje polare\n"
-"\n"
-"- [%s] [Prikaz terena](xcsoar://config/terrain) - Izberi barve terena, senčenje in plastnice\n"
-"\n"
-"- [ ] [Sledenje v živo](xcsoar://config/tracking) *(izbirno)* - Deli svoj položaj prek SkyLines ali LiveTrack24\n"
-"\n"
-"Raziščite XCSoar enostavno z vnovičnim zagonom v načinu Simulatorja ali z [predvajanjem IGC leta](xcsoar://dialog/replay)."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10724,12 +10554,6 @@ msgstr ""
 msgid "Page"
 msgstr "Stran"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"Določa, ali se sled premika z vetrom pri prikazu v načinu kroženja na "
-"bližnjih merilih karte. Izključeno — sled ostane brez kompenzacije vetrnega "
-"drifta."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "Omejitev prenosa: ponovni poskus čez %u s"
@@ -11093,4 +10917,224 @@ msgstr "Avto"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Ročno"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "Določa, ali se sled premika z vetrom pri prikazu v načinu kroženja na bližnjih merilih karte. Izključeno — sled ostane brez kompenzacije vetrnega drifta. Pri kroženju velja tudi za projicirano sled: Vključeno jo drži glede na zračno maso; Izključeno vključi veter."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "Prekrivanja"
+
+#, no-c-format
+msgid "Screen"
+msgstr "Zaslon"
+
+#, no-c-format
+msgid "Layout"
+msgstr "Postavitev"
+
+#, no-c-format
+msgid "System Services"
+msgstr "Sistemske storitve"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "Storitve"
+
+msgid "Back"
+msgstr "Nazaj"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "Izklopi radar prometa."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "Vklopi radar prometa in izbere njegov položaj na glavnem zaslonu. Smer točke cilja relativno k smeri poti letalca je prikazana s številko, ter trikotnik, ki pokaze relativno višino točke cilja v odnosu na vas. V vseh načinih se barva točke cilja označuje stopnjo težavnosti."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "Izklopi doseg na karti (črta terena in senčenje). Prekinitev, alternative in prihod na pristajališča še vedno uporabljajo polaro dosega."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "To odreduje prevozno zmogljivost, ki jo uporabimo pri izračunanih dosegu, pristanku z dostopnim dosežkom, odpovedi in alternativnem pristanju. Velja tudi, ko je način dosega Izklopljen."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# Začetek\n\nZa učinkovito uporabo XCSoar konfigurirajte naslednje:\n\n- [Obnovi iz varnostne kopije](xcsoar://dialog/backup) - Obnovi prejšnje podatke XCSoar z USB ali SD kartice (izbirno)\n\n- [%s] [Zemljevid in podatki](xcsoar://config/site-files) - Prenesi zemljevide, točke poti in datoteke zračnega prostora za svojo regijo\n\n- [%s] [Polara zrakoplova](xcsoar://config/planes) - Nastavi zrakoplov s pravilno polarno krivuljo\n\n- [%s] [Podatki pilota](xcsoar://config/logger) - Vnesi ime in težo\n\n- [%s] [Naprave](xcsoar://config/devices) - Poveži letalske instrumente\n\n- [%s] [WeGlide](xcsoar://config/weglide) - Samodejno naloži lete na WeGlide\n\n- [%s] [Thermal Information Map](xcsoar://config/weather) - Prikaži lokacije termike s thermalmap.info na zemljevidu\n\n- [%s] [Varnostni dejavniki](xcsoar://config/safety) - Nastavi višino prihoda, odmik od terena in poslabšanje polare\n\n- [%s] [Prikaz terena](xcsoar://config/terrain) - Izberi barve terena, senčenje in plastnice\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(izbirno)* - Delite položaj prek SkyLines\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(izbirno)* - Delite položaj prek LiveTrack24\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(izbirno)* - Delite položaj in termiko ter prejemajte promet OGN\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "Raziščite XCSoar enostavno z vnovičnim zagonom v načinu Simulatorja ali z [predvajanjem IGC leta](xcsoar://dialog/replay)."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# Po vašem letu\n\n1. **Prenos dnevnikov** - Pridobite dnevnike letov iz vašega FLARM ali naprave za beleženje. [Konfiguracija > Naprave](xcsoar://config/devices)\n\n2. **Analiza** - Preglejte statistiko svojih letov. [Informacije > Analiza](xcsoar://dialog/analysis)\n\n3. **Status** - Preverite čas letenja in statistiko. [Informacije > Stanje](xcsoar://dialog/status)\n\n4. **Naloži** - Naložite v WeGlide neposredno iz XCSoar. Konfigurirajte svoj ID uporabnika WeGlide v [Konfiguracija > Storitve > WeGlide](xcsoar://config/weglide)"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# Dostop do lokacije\n\nXCSoar zbira podatke o lokaciji, da omogoči navigacijo letov, termično kartiranje in beleženje letov, tudi ko je aplikacija zaprta ali ni v uporabi.\n\n- **Položaj GPS** - Navigacija v realnem času in drsni računalnik\n- **Lokacija v ozadju** - Neprekinjeno snemanje leta, ko je zaslon izklopljen ali je v ospredju druga aplikacija\n- **Foreground Service** - Ohranja GPS aktiven med vašim letom\n\nPodatki o vaši lokaciji so shranjeni lokalno v vaši napravi. Ne deli se, razen če izrecno omogočite [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) ali [XCSoar Cloud](xcsoar://config/cloud).\n\n[Politika zasebnosti](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# XCSoar Cloud\n\nProjekt XCSoar ponuja storitev, ki omogoča izmenjavo termalnih in valovnih lokacij z drugimi piloti v realnem času ter prejemanje bližnjega prometa od drugih udeležencev in z OGN.\n\nČe sodelujete, bodo vaš **položaj**, **toplotne/valovne lokacije** in drugi vremenski podatki poslani v strežnik XCSoar Cloud.\n\nTo lahko kadar koli spremenite v [Konfiguracija > Storitve > XCSoar Cloud](xcsoar://config/cloud)."
+
+msgid "Vario Volume"
+msgstr "Glasnost varia"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "Ključ"
+
+msgid "Name of vehicle used."
+msgstr "Ime uporabljenega zrakoplova."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u s"
+
+#, c-format
+msgid "%u min"
+msgstr "%u min"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

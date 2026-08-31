@@ -1156,10 +1156,6 @@ msgid "Safety Factors"
 msgstr "Factori de Siguranță"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "Monitorizare"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "Teren pornit"
 
@@ -2022,11 +2018,6 @@ msgstr "Rute"
 msgid "Scoring"
 msgstr "Scorare"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, Alte"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "Variometru audio"
 
@@ -2041,10 +2032,6 @@ msgstr "Tipuri de puncte de intoarcere"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Limba, Intrare"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Dispozitiv de afișare a ecranului"
 
 #, no-c-format
 msgid "Audio"
@@ -2103,6 +2090,7 @@ msgstr "ID de competiție"
 msgid "Map"
 msgstr "Harta"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "Tráfice"
 
@@ -3083,19 +3071,6 @@ msgstr "Câştig în ultima termică"
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "Câştig în ultima termică"
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"Acest lucru permite afișarea măsuratorii FLARM. Direcția fațării traseu "
-"relativă a obiectului visulat față de direcția traseu al avionului este "
-"afișată ca cap de freză, iar un triunghi orientat în sus sau jos indică "
-"înălțimea relativă a obiectului visulat față de vârful. În toate modurile, "
-"culoarea obiectului visulat indică nivelul de amenințare."
-
 msgid "Auto close FLARM"
 msgstr "Închidere automată FLARM"
 
@@ -3106,12 +3081,6 @@ msgstr ""
 "Setarea acestuia la \"Activ\" va închide automat dialogul FLARM dacă nu "
 "există trafic. \"Dezactivat\" va păstra dialogul deschis chiar și fără "
 "trafic actual."
-
-msgid "FLARM display"
-msgstr "Afișare FLARM"
-
-msgid "Choose a location for the FLARM display."
-msgstr "Alege o poziție pentru afișarea FLARM."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3380,9 +3349,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Mărime text"
-
-msgid "Display Resolution"
-msgstr "Résoluția afișajului"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Résoluția afișajului este utilizată pentru a adapta lățimile liniei, dimensiunea fontului, dimensiunea terenurilor landabile și mai multe."
@@ -3988,10 +3954,6 @@ msgstr ""
 "sunt nesigure."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "Calculul de câtigăre este dezactivat."
-
-#, no-c-format
 msgid "Straight"
 msgstr "Direct"
 
@@ -4033,13 +3995,6 @@ msgstr "Folosește valoarea de siguranță MacCready."
 
 msgid "Reach polar"
 msgstr "Polar de câtigăre"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"Acest lucru determine performanța planară utilizată în calculul câtigării, a "
-"aterzierilor posibile, a aboretelor și alternativelor."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5462,56 +5417,6 @@ msgstr ""
 "4. **Sarcina** - Creați o sarcină pentru ghidare de navigare. [Nav > Manager de activități](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# După zborul tău\n"
-"\n"
-"1. **Descărcați jurnalele** - Preluați jurnalele de zbor de pe FLARM sau dispozitivul de înregistrare. [Configurare > Dispozitive](xcsoar://config/devices)\n"
-"\n"
-"2. **Analiză** - Examinați-vă statisticile de zbor. [Informații > Analiză](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Stare** - Verificați ora și statisticile zborului. [Informații > Stare](xcsoar://dialog/status)\n"
-"\n"
-"4. **Încărcați** - Încărcați în WeGlide direct din XCSoar. Configurați ID-ul de utilizator WeGlide în [Config > System > WeGlide](xcsoar://config/weglide)"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Acces la locație\n"
-"\n"
-"XCSoar colectează date despre locație pentru a permite navigarea zborului, cartografierea termică și înregistrarea zborului chiar și atunci când aplicația este închisă sau nu este utilizată.\n"
-"\n"
-"- **Poziție GPS** - Navigare în timp real și computer de alunecare\n"
-"- **Locație în fundal** - Înregistrare continuă a zborului când ecranul este oprit sau o altă aplicație este în prim-plan\n"
-"- **Serviciul de prim plan** - Menține GPS-ul activ în timpul zborului\n"
-"\n"
-"Datele dvs. de locație sunt stocate local pe dispozitivul dvs. Nu este partajat decât dacă activați în mod explicit urmărirea în [Configurare > Urmărire](xcsoar://config/tracking).\n"
-"\n"
-"[Politica de confidențialitate](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5527,23 +5432,6 @@ msgstr ""
 "XCSoar are nevoie de permisiunea de notificare pentru a menține o notificare persistentă în timpul înregistrării zborului. Această notificare este necesară de Android pentru funcționarea în fundal și oferă o modalitate rapidă de a reveni la aplicație.\n"
 "\n"
 "Fără această permisiune, Android poate opri înregistrarea zborului atunci când aplicația este în fundal."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# XCSoar Cloud\n"
-"\n"
-"Proiectul XCSoar oferă un serviciu care permite partajarea locațiilor termice și valurilor cu alți piloți în timp real.\n"
-"\n"
-"Dacă participați, **poziția**, **locațiile termice/de unde** și alte date meteo vor fi transmise serverului XCSoar Cloud.\n"
-"\n"
-"Puteți modifica oricând acest lucru în [Config > Tracking](xcsoar://config/tracking)."
 
 msgid "Welcome to XCSoar"
 msgstr "Bun venit la XCSoar"
@@ -5569,6 +5457,7 @@ msgstr "Ce este nou"
 msgid "Enable XCSoar Cloud"
 msgstr "Activați XCSoar Cloud"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar Cloud"
 
@@ -8297,12 +8186,6 @@ msgstr ""
 "Dimensiunea simbolurilor de punct de traseu pe hartă ca procent din grafica "
 "încorporată (dialogurile listă păstrează o dimensiune fixă)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Modo Altn: MANUALE"
-
-msgid "Altn mode: AUTO"
-msgstr "Modo Altn: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10147,60 +10030,6 @@ msgstr ""
 "**Pilotul comandant** este întotdeauna responsabil pentru operarea în siguranță a aeronavei. Nu vă bazați doar pe XCSoar pentru navigație sau conștientizarea situației.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# Începeți\n"
-"\n"
-"Pentru a folosi XCSoar eficient, configurați următoarele:\n"
-"\n"
-"- [Restaurare din copie de rezervă](xcsoar://dialog/backup) - Restaurați datele XCSoar anterioare de pe USB sau card SD (opțional)\n"
-"\n"
-"- [%s] [Hartă și date](xcsoar://config/site-files) - Descărcați hărți, puncte de traseu și fișiere de spațiu aerian pentru regiunea dvs.\n"
-"\n"
-"- [%s] [Polară aeronavă](xcsoar://config/planes) - Configurați aeronava cu curba polară corectă\n"
-"\n"
-"- [%s] [Info pilot](xcsoar://config/logger) - Introduceți numele și greutatea\n"
-"\n"
-"- [%s] [Dispozitive](xcsoar://config/devices) - Conectați instrumentele de zbor\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Încărcați automat zborurile pe WeGlide\n"
-"\n"
-"- [%s] [Hartă informații termice](xcsoar://config/weather) - Afișați locațiile termicelor de pe thermalmap.info pe hartă\n"
-"\n"
-"- [%s] [Factori de siguranță](xcsoar://config/safety) - Setați înălțimea de sosire, marja față de teren și degradarea polarei\n"
-"\n"
-"- [%s] [Afișare teren](xcsoar://config/terrain) - Alegeți culorile terenului, umbrirea și curbele de nivel\n"
-"\n"
-"- [ ] [Urmărire live](xcsoar://config/tracking) *(opțional)* - Partajați poziția prin SkyLines sau LiveTrack24\n"
-"\n"
-"Explorați XCSoar ușor repornind în mod Simulator, sau [redând un zbor IGC](xcsoar://dialog/replay)."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10786,12 +10615,6 @@ msgstr ""
 msgid "Page"
 msgstr "Pagină"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"Determină dacă urma este derivată cu vântul când este afișată în modul de "
-"spirală la scări apropiate ale hărții. Dezactivat, urma rămâne fără "
-"compensare pentru deriva vântului."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "Limită descărcare: reîncercare în %u s"
@@ -11156,4 +10979,224 @@ msgstr "Automat"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Manual"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "Determină dacă urma este derivată cu vântul când este afișată în modul de spirală la scări apropiate ale hărții. Dezactivat, urma rămâne fără compensare pentru deriva vântului. În termică se aplică și curbei de traiectorie proiectate: Pornit o păstrează față de masa de aer; Oprit include vântul."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "Suprapuneri"
+
+#, no-c-format
+msgid "Screen"
+msgstr "Ecran"
+
+#, no-c-format
+msgid "Layout"
+msgstr "Amenajare"
+
+#, no-c-format
+msgid "System Services"
+msgstr "Servicii de sistem"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "Servicii"
+
+msgid "Back"
+msgstr "Înapoi"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "Dezactivează radarul de trafic."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "Activează radarul de trafic și alege poziția pe ecranul principal. Direcția fațării traseu relativă a obiectului visulat față de direcția traseu al avionului este afișată ca cap de freză, iar un triunghi orientat în sus sau jos indică înălțimea relativă a obiectului visulat față de vârful. În toate modurile, culoarea obiectului visulat indică nivelul de amenințare."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "Dezactivează raza pe hartă (linie și umbrire teren). Abortul, alternativele și sosirea pe terenuri aterizabile folosesc în continuare polara de rasă."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "Acest lucru determine performanța planară utilizată în calculul câtigării, a aterzierilor posibile, a aboretelor și alternativelor. Se aplică și când modul de rasă este Oprit."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# Începeți\n\nPentru a folosi XCSoar eficient, configurați următoarele:\n\n- [Restaurare din copie de rezervă](xcsoar://dialog/backup) - Restaurați datele XCSoar anterioare de pe USB sau card SD (opțional)\n\n- [%s] [Hartă și date](xcsoar://config/site-files) - Descărcați hărți, puncte de traseu și fișiere de spațiu aerian pentru regiunea dvs.\n\n- [%s] [Polară aeronavă](xcsoar://config/planes) - Configurați aeronava cu curba polară corectă\n\n- [%s] [Info pilot](xcsoar://config/logger) - Introduceți numele și greutatea\n\n- [%s] [Dispozitive](xcsoar://config/devices) - Conectați instrumentele de zbor\n\n- [%s] [WeGlide](xcsoar://config/weglide) - Încărcați automat zborurile pe WeGlide\n\n- [%s] [Hartă informații termice](xcsoar://config/weather) - Afișați locațiile termicelor de pe thermalmap.info pe hartă\n\n- [%s] [Factori de siguranță](xcsoar://config/safety) - Setați înălțimea de sosire, marja față de teren și degradarea polarei\n\n- [%s] [Afișare teren](xcsoar://config/terrain) - Alegeți culorile terenului, umbrirea și curbele de nivel\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(opțional)* - Partajați poziția prin SkyLines\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(opțional)* - Partajați poziția prin LiveTrack24\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(opțional)* - Partajați poziția și termicele și primiți trafic OGN\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "Explorați XCSoar ușor repornind în mod Simulator, sau [redând un zbor IGC](xcsoar://dialog/replay)."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# După zborul tău\n\n1. **Descărcați jurnalele** - Preluați jurnalele de zbor de pe FLARM sau dispozitivul de înregistrare. [Configurare > Dispozitive](xcsoar://config/devices)\n\n2. **Analiză** - Examinați-vă statisticile de zbor. [Informații > Analiză](xcsoar://dialog/analysis)\n\n3. **Stare** - Verificați ora și statisticile zborului. [Informații > Stare](xcsoar://dialog/status)\n\n4. **Încărcați** - Încărcați în WeGlide direct din XCSoar. Configurați ID-ul de utilizator WeGlide în [Config > Servicii > WeGlide](xcsoar://config/weglide)"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# Acces la locație\n\nXCSoar colectează date despre locație pentru a permite navigarea zborului, cartografierea termică și înregistrarea zborului chiar și atunci când aplicația este închisă sau nu este utilizată.\n\n- **Poziție GPS** - Navigare în timp real și computer de alunecare\n- **Locație în fundal** - Înregistrare continuă a zborului când ecranul este oprit sau o altă aplicație este în prim-plan\n- **Serviciul de prim plan** - Menține GPS-ul activ în timpul zborului\n\nDatele dvs. Nu este partajat decât dacă activați explicit [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) sau [XCSoar Cloud](xcsoar://config/cloud).\n\n[Politica de confidențialitate](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# XCSoar Cloud\n\nProiectul XCSoar oferă un serviciu care permite partajarea locațiilor termice și valurilor cu alți piloți în timp real, și primirea traficului din apropiere de la alți participanți și de la OGN.\n\nDacă participați, **poziția**, **locațiile termice/de unde** și alte date meteo vor fi transmise serverului XCSoar Cloud.\n\nPuteți modifica oricând acest lucru în [Config > Servicii > XCSoar Cloud](xcsoar://config/cloud)."
+
+msgid "Vario Volume"
+msgstr "Volum variometru"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "Cheie"
+
+msgid "Name of vehicle used."
+msgstr "Numele vehiculului utilizat."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u s"
+
+#, c-format
+msgid "%u min"
+msgstr "%u min"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 

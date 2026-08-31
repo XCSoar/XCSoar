@@ -1132,10 +1132,6 @@ msgid "Safety Factors"
 msgstr "Güvenlik Faktörleri"
 
 #, no-c-format
-msgid "Tracking"
-msgstr "Takip"
-
-#, no-c-format
 msgid "Terrain Display"
 msgstr "Yükseltiler Açık"
 
@@ -2000,11 +1996,6 @@ msgstr "Yol"
 msgid "Scoring"
 msgstr "Puanlama"
 
-#, no-c-format
-msgid "FLARM, Other"
-msgstr "FLARM, Diğer"
-
-#, no-c-format
 msgid "Audio Vario"
 msgstr "Ses Vario"
 
@@ -2019,10 +2010,6 @@ msgstr "Dönüş Noktaları Türleri"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Dil, Giriş"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Ekran Düzeni"
 
 #, no-c-format
 msgid "Audio"
@@ -2081,6 +2068,7 @@ msgstr "Yarış kimliği"
 msgid "Map"
 msgstr "Harita"
 
+#, no-c-format
 msgid "Traffic"
 msgstr "Trafiğe"
 
@@ -3059,18 +3047,6 @@ msgstr "Termik yardımcıyı sağ üstte göster (InfoBox'lardan kaçın)."
 msgid "Show thermal assistant in center top (avoid InfoBoxes)."
 msgstr "Termik yardımcıyı üst ortada göster (InfoBox'lardan kaçın)."
 
-msgid ""
-"This enables the display of the FLARM radar gauge. The track bearing of the "
-"target relative to the track bearing of the aircraft is displayed as an "
-"arrow head, and a triangle pointing up or down shows the relative altitude "
-"of the target relative to you. In all modes, the color of the target "
-"indicates the threat level."
-msgstr ""
-"Bu, FLARM radar göstergesinin gösterilmesini etkinleştirir. Hedefin hedef "
-"traktingenine göre traktingenin yönünü bir ok ile ve hedefin sizinle olan "
-"yüksekliğinin yukarı veya aşağı bir üçgeni ile gösterir. Tüm modlarda, "
-"hedefin renkleri tehlike seviyesini gösterir."
-
 msgid "Auto close FLARM"
 msgstr "Otomatik FLARM Kapatma"
 
@@ -3081,12 +3057,6 @@ msgstr ""
 "Bu \"Evet\" olarak ayarlandığında, trafiğe rastlanmazsa FLARM dialog kutusu "
 "kapanacaktır. \"Hayır\" seçeneğiyle de dialog kutusu her zaman açık "
 "kalacaktır."
-
-msgid "FLARM display"
-msgstr "FLARM Görünümü"
-
-msgid "Choose a location for the FLARM display."
-msgstr "FLARM görüntülemesinin yerleştirileceği konumu seçin."
 
 msgid ""
 "Enable and select the position of the thermal assistant when overlayed on "
@@ -3359,9 +3329,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Metin boyutu"
-
-msgid "Display Resolution"
-msgstr "Görüntü çözünürlüğü"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Görüntü çözünürlüğü, çizgi kalınlıklarını, yazı tipi boyutlarını ve atlanabilir alanları ayarlama gibi kullanılır."
@@ -3955,10 +3922,6 @@ msgstr ""
 "kadar sınırlıdır. Devre dışı bırakıldığında, yükseltmeler sınırsızdır."
 
 #, no-c-format
-msgid "Reach calculations disabled."
-msgstr "Ulaşımlar gösterimi devre dışı."
-
-#, no-c-format
 msgid "Straight"
 msgstr "Doğru"
 
@@ -3997,13 +3960,6 @@ msgstr "Güvenlik MacCready değeri kullanılır."
 
 msgid "Reach polar"
 msgstr "Ulaşımla ilgili polara"
-
-msgid ""
-"This determines the glide performance used in reach, landable arrival, abort "
-"and alternate calculations."
-msgstr ""
-"Bu, ulaşım, atık varış, iptal ve alternatif hesaplamalarında kullanılan uç "
-"performansı belirler."
 
 #, no-c-format
 msgid "Disables the reach display."
@@ -5418,56 +5374,6 @@ msgstr ""
 "4. **Görev** - Gezinme rehberliği için bir görev oluşturun. [Nav > Görev Yöneticisi](xcsoar://dialog/task)"
 
 msgid ""
-"# After Your Flight\n"
-"\n"
-"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
-"\n"
-"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
-"\n"
-"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > System > WeGlide](xcsoar://config/weglide)"
-msgstr ""
-"# Uçuşunuzdan Sonra\n"
-"\n"
-"1. **Günlükleri indirin** - FLARM veya kaydedici cihazınızdan uçuş günlüklerini alın. [Yapılandırma > Cihazlar](xcsoar://config/devices)\n"
-"\n"
-"2. **Analiz** - Uçuş istatistiklerinizi inceleyin. [Bilgi > Analiz](xcsoar://dialog/analysis)\n"
-"\n"
-"3. **Durum** - Uçuş zamanlamasını ve istatistiklerini kontrol edin. [Bilgi > Durum](xcsoar://dialog/status)\n"
-"\n"
-"4. **Yükle** - WeGlide'a doğrudan XCSoar'dan yükleyin. WeGlide Kullanıcı Kimliğinizi [Yapılandırma > Sistem > WeGlide](xcsoar://config/weglide) bölümünde yapılandırın"
-
-msgid ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Location Access\n"
-"\n"
-"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
-"\n"
-"- **GPS Position** - Real-time navigation and glide computer\n"
-"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
-"- **Foreground Service** - Keeps GPS active during your flight\n"
-"\n"
-"Your location data is stored locally on your device. It is not shared unless you explicitly enable tracking in [Config > Tracking](xcsoar://config/tracking).\n"
-"\n"
-"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-msgstr ""
-"![](resource:IDB_LOCATION_PIN)\n"
-"\n"
-"# Konum Erişimi\n"
-"\n"
-"XCSoar, uygulama kapalıyken veya kullanılmadığında bile uçuş navigasyonunu, termal haritalamayı ve uçuş günlüğünü etkinleştirmek için konum verilerini toplar.\n"
-"\n"
-"- **GPS Konumu** - Gerçek zamanlı navigasyon ve süzülme bilgisayarı\n"
-"- **Arka Planda Konum** - Ekran kapalıyken veya başka bir uygulama ön plandayken sürekli uçuş kaydı\n"
-"- **Ön Plan Hizmeti** - Uçuşunuz sırasında GPS'i aktif tutar\n"
-"\n"
-"Konum verileriniz cihazınızda yerel olarak depolanır. [Yapılandırma > İzleme](xcsoar://config/tracking) bölümünde izlemeyi açıkça etkinleştirmediğiniz sürece paylaşılmaz.\n"
-"\n"
-"[Gizlilik Politikası](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
-
-msgid ""
 "![](resource:IDB_NOTIFICATION_BELL)\n"
 "\n"
 "# Notifications\n"
@@ -5483,23 +5389,6 @@ msgstr ""
 "XCSoar'ın uçuşunuzu kaydederken kalıcı bir bildirimi sürdürmek için bildirim iznine ihtiyacı var. Bu bildirim, Android'in arka planda çalışması için gereklidir ve uygulamaya geri dönmenin hızlı bir yolunu sağlar.\n"
 "\n"
 "Bu izin olmadan Android, uygulama arka plandayken uçuş kaydını durdurabilir."
-
-msgid ""
-"# XCSoar Cloud\n"
-"\n"
-"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time.\n"
-"\n"
-"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
-"\n"
-"You can change this at any time in [Config > Tracking](xcsoar://config/tracking)."
-msgstr ""
-"# XCSoar Bulut\n"
-"\n"
-"XCSoar projesi, termal ve dalga konumlarının diğer pilotlarla gerçek zamanlı olarak paylaşılmasına olanak tanıyan bir hizmet sunuyor.\n"
-"\n"
-"Katılırsanız **konumunuz**, **termal/dalga konumlarınız** ve diğer hava durumu verileriniz XCSoar Bulut sunucusuna iletilecektir.\n"
-"\n"
-"Bunu istediğiniz zaman [Yapılandırma > İzleme](xcsoar://config/tracking) bölümünden değiştirebilirsiniz."
 
 msgid "Welcome to XCSoar"
 msgstr "XCSoar'a hoş geldiniz"
@@ -5525,6 +5414,7 @@ msgstr "Ne var ne yok"
 msgid "Enable XCSoar Cloud"
 msgstr "XCSoar Cloud'u etkinleştirin"
 
+#, no-c-format
 msgid "XCSoar Cloud"
 msgstr "XCSoar Bulut"
 
@@ -8265,12 +8155,6 @@ msgstr ""
 "Yerleşik resmin yüzdesi olarak haritadaki yol noktası sembollerinin boyutu "
 "(liste iletişim kutuları sabit bir satır simgesi boyutunu korur)."
 
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
-
 msgid ""
 "# Gesture Navigation\n"
 "\n"
@@ -10112,60 +9996,6 @@ msgstr ""
 "**Sorumlu pilot** her zaman hava aracının güvenli işletilmesinden sorumludur. Navigasyon veya durumsal farkındalık için yalnızca XCSoar'a asla güvenmeyin.\n"
 "\n"
 
-#, c-format
-msgid ""
-"# Getting Started\n"
-"\n"
-"To use XCSoar effectively, configure the following:\n"
-"\n"
-"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
-"\n"
-"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
-"\n"
-"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
-"\n"
-"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
-"\n"
-"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
-"\n"
-"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
-"\n"
-"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
-"\n"
-"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
-"\n"
-"- [ ] [Live tracking](xcsoar://config/tracking) *(optional)* - Share your position via SkyLines or LiveTrack24\n"
-"\n"
-"Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
-msgstr ""
-"# Başlarken\n"
-"\n"
-"XCSoar'ı etkili kullanmak için şunları yapılandırın:\n"
-"\n"
-"- [Yedekten geri yükle](xcsoar://dialog/backup) - USB veya SD karttan önceki XCSoar verilerini geri yükleyin (isteğe bağlı)\n"
-"\n"
-"- [%s] [Harita ve veriler](xcsoar://config/site-files) - Bölgeniz için harita, yol noktası ve hava sahası dosyalarını indirin\n"
-"\n"
-"- [%s] [Uçak poları](xcsoar://config/planes) - Uçağınızı doğru polar eğrisiyle ayarlayın\n"
-"\n"
-"- [%s] [Pilot bilgisi](xcsoar://config/logger) - Adınızı ve ağırlığınızı girin\n"
-"\n"
-"- [%s] [Cihazlar](xcsoar://config/devices) - Uçuş aletlerinizi bağlayın\n"
-"\n"
-"- [%s] [WeGlide](xcsoar://config/weglide) - Uçuşları otomatik olarak WeGlide'a yükleyin\n"
-"\n"
-"- [%s] [Termik bilgi haritası](xcsoar://config/weather) - thermalmap.info termik konumlarını haritada gösterin\n"
-"\n"
-"- [%s] [Güvenlik faktörleri](xcsoar://config/safety) - Varış yüksekliği, arazi payı ve polar bozulmasını ayarlayın\n"
-"\n"
-"- [%s] [Arazi görünümü](xcsoar://config/terrain) - Arazi renkleri, gölgeleme ve eşyükselti eğrilerini seçin\n"
-"\n"
-"- [ ] [Canlı takip](xcsoar://config/tracking) *(isteğe bağlı)* - Konumunuzu SkyLines veya LiveTrack24 ile paylaşın\n"
-"\n"
-"XCSoar'ı Simülatör modunda yeniden başlatarak veya [bir IGC uçuşunu yeniden oynatarak](xcsoar://dialog/replay) kolayca keşfedin."
-
 msgid ""
 "# That's it!\n"
 "\n"
@@ -10751,12 +10581,6 @@ msgstr ""
 msgid "Page"
 msgstr "Sayfa"
 
-msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift."
-msgstr ""
-"Yakın harita ölçeklerinde daire modunda gösterilirken salyangoz izinin "
-"rüzgârla sürüklenip sürüklenmeyeceğini belirler. Kapalıyken iz rüzgâr "
-"sürüklenmesi telafisi olmadan kalır."
-
 #, c-format
 msgid "Download limit: retry in %u s"
 msgstr "İndirme limiti: %u sn içinde yeniden dene"
@@ -11119,4 +10943,224 @@ msgstr "Otomatik"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "El ile"
+
+msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
+msgstr "Yakın harita ölçeklerinde daire modunda gösterilirken salyangoz izinin rüzgârla sürüklenip sürüklenmeyeceğini belirler. Kapalıyken iz rüzgâr sürüklenmesi telafisi olmadan kalır. Dolaşmada bu, izdüşürülen iz eğrisi için de geçerlidir: Açık onu hava kütlesine göre tutar; Kapalı rüzgârı dahil eder."
+
+#, no-c-format
+msgid "Overlays"
+msgstr "Katmanlar"
+
+#, no-c-format
+msgid "Screen"
+msgstr "Ekran"
+
+#, no-c-format
+msgid "Layout"
+msgstr "Düzen"
+
+#, no-c-format
+msgid "System Services"
+msgstr "Sistem hizmetleri"
+
+#, no-c-format
+msgctxt "Menu"
+msgid "Services"
+msgstr "Hizmetler"
+
+msgid "Back"
+msgstr "Geri"
+
+#, no-c-format
+msgid "Disable the traffic radar."
+msgstr "Trafik radarını kapatır."
+
+msgid "Enable the traffic radar and choose its position on the main screen. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."
+msgstr "Trafik radarını açar ve ana ekrandaki konumunu seçer. Hedefin hedef traktingenine göre traktingenin yönünü bir ok ile ve hedefin sizinle olan yüksekliğinin yukarı veya aşağı bir üçgeni ile gösterir. Tüm modlarda, hedefin renkleri tehlike seviyesini gösterir."
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
+msgstr "Harita menzilini kapatır (arazi çizgisi ve gölgeleme). İptal, yedekler ve inilebilir sahalara varış hâlâ menzil polarını kullanır."
+
+msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
+msgstr "Bu, ulaşım, atık varış, iptal ve alternatif hesaplamalarında kullanılan uç performansı belirler. Menzil kipi Kapalı olsa da geçerlidir."
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+#, c-format
+msgid ""
+"# Getting Started\n"
+"\n"
+"To use XCSoar effectively, configure the following:\n"
+"\n"
+"- [Restore from backup](xcsoar://dialog/backup) - Restore previous XCSoar data from a USB or SD card (optional)\n"
+"\n"
+"- [%s] [Map and data](xcsoar://config/site-files) - Download maps, waypoints, and airspace files for your region\n"
+"\n"
+"- [%s] [Aircraft polar](xcsoar://config/planes) - Set up your aircraft with the correct polar curve\n"
+"\n"
+"- [%s] [Pilot info](xcsoar://config/logger) - Enter your name and weight\n"
+"\n"
+"- [%s] [Devices](xcsoar://config/devices) - Connect your flight instruments\n"
+"\n"
+"- [%s] [WeGlide](xcsoar://config/weglide) - Upload flights automatically to WeGlide\n"
+"\n"
+"- [%s] [Thermal Information Map](xcsoar://config/weather) - Show thermal locations from thermalmap.info on the map\n"
+"\n"
+"- [%s] [Safety factors](xcsoar://config/safety) - Set arrival height, terrain clearance and polar degradation\n"
+"\n"
+"- [%s] [Terrain Display](xcsoar://config/terrain) - Choose terrain colors, shading and contour lines\n"
+"\n"
+msgstr "# Başlarken\n\nXCSoar'ı etkili kullanmak için şunları yapılandırın:\n\n- [Yedekten geri yükle](xcsoar://dialog/backup) - USB veya SD karttan önceki XCSoar verilerini geri yükleyin (isteğe bağlı)\n\n- [%s] [Harita ve veriler](xcsoar://config/site-files) - Bölgeniz için harita, yol noktası ve hava sahası dosyalarını indirin\n\n- [%s] [Uçak poları](xcsoar://config/planes) - Uçağınızı doğru polar eğrisiyle ayarlayın\n\n- [%s] [Pilot bilgisi](xcsoar://config/logger) - Adınızı ve ağırlığınızı girin\n\n- [%s] [Cihazlar](xcsoar://config/devices) - Uçuş aletlerinizi bağlayın\n\n- [%s] [WeGlide](xcsoar://config/weglide) - Uçuşları otomatik olarak WeGlide'a yükleyin\n\n- [%s] [Termik bilgi haritası](xcsoar://config/weather) - thermalmap.info termik konumlarını haritada gösterin\n\n- [%s] [Güvenlik faktörleri](xcsoar://config/safety) - Varış yüksekliği, arazi payı ve polar bozulmasını ayarlayın\n\n- [%s] [Arazi görünümü](xcsoar://config/terrain) - Arazi renkleri, gölgeleme ve eşyükselti eğrilerini seçin\n\n"
+
+msgid ""
+"- [ ] [SkyLines](xcsoar://config/skylines) *(optional)* - Share your position via SkyLines\n"
+"\n"
+msgstr "- [ ] [SkyLines](xcsoar://config/skylines) *(isteğe bağlı)* - Konumunuzu SkyLines ile paylaşın\n\n"
+
+msgid ""
+"- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(optional)* - Share your position via LiveTrack24\n"
+"\n"
+msgstr "- [ ] [LiveTrack24](xcsoar://config/livetrack24) *(isteğe bağlı)* - Konumunuzu LiveTrack24 ile paylaşın\n\n"
+
+msgid ""
+"- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(optional)* - Share position and thermals, and receive OGN traffic\n"
+"\n"
+msgstr "- [ ] [XCSoar Cloud](xcsoar://config/cloud) *(isteğe bağlı)* - Konum ve termikleri paylaşın, OGN trafiği alın\n\n"
+
+msgid "Explore XCSoar easily by restarting in Simulator mode, or by [replaying an IGC flight](xcsoar://dialog/replay)."
+msgstr "XCSoar'ı Simülatör modunda yeniden başlatarak veya [bir IGC uçuşunu yeniden oynatarak](xcsoar://dialog/replay) kolayca keşfedin."
+
+msgid ""
+"# After Your Flight\n"
+"\n"
+"1. **Download logs** - Retrieve flight logs from your FLARM or logger device. [Config > Devices](xcsoar://config/devices)\n"
+"\n"
+"2. **Analysis** - Review your flight statistics. [Info > Analysis](xcsoar://dialog/analysis)\n"
+"\n"
+"3. **Status** - Check flight timing and statistics. [Info > Status](xcsoar://dialog/status)\n"
+"\n"
+"4. **Upload** - Upload to WeGlide directly from XCSoar. Configure your WeGlide User ID in [Config > Services > WeGlide](xcsoar://config/weglide)"
+msgstr "# Uçuşunuzdan Sonra\n\n1. **Günlükleri indirin** - FLARM veya kaydedici cihazınızdan uçuş günlüklerini alın. [Yapılandırma > Cihazlar](xcsoar://config/devices)\n\n2. **Analiz** - Uçuş istatistiklerinizi inceleyin. [Bilgi > Analiz](xcsoar://dialog/analysis)\n\n3. **Durum** - Uçuş zamanlamasını ve istatistiklerini kontrol edin. [Bilgi > Durum](xcsoar://dialog/status)\n\n4. **Yükle** - WeGlide'a doğrudan XCSoar'dan yükleyin. WeGlide Kullanıcı Kimliğinizi [Yapılandırma > Hizmetler > WeGlide](xcsoar://config/weglide) bölümünde yapılandırın"
+
+msgid ""
+"![](resource:IDB_LOCATION_PIN)\n"
+"\n"
+"# Location Access\n"
+"\n"
+"XCSoar collects location data to enable flight navigation, thermal mapping, and flight logging even when the app is closed or not in use.\n"
+"\n"
+"- **GPS Position** - Real-time navigation and glide computer\n"
+"- **Background Location** - Continuous flight recording when the screen is off or another app is in the foreground\n"
+"- **Foreground Service** - Keeps GPS active during your flight\n"
+"\n"
+"Your location data is stored locally on your device. It is not shared unless you explicitly enable [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) or [XCSoar Cloud](xcsoar://config/cloud).\n"
+"\n"
+"[Privacy Policy](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+msgstr "![](resource:IDB_LOCATION_PIN)\n\n# Konum Erişimi\n\nXCSoar, uygulama kapalıyken veya kullanılmadığında bile uçuş navigasyonunu, termal haritalamayı ve uçuş günlüğünü etkinleştirmek için konum verilerini toplar.\n\n- **GPS Konumu** - Gerçek zamanlı navigasyon ve süzülme bilgisayarı\n- **Arka Planda Konum** - Ekran kapalıyken veya başka bir uygulama ön plandayken sürekli uçuş kaydı\n- **Ön Plan Hizmeti** - Uçuşunuz sırasında GPS'i aktif tutar\n\nKonum verileriniz cihazınızda yerel olarak depolanır. Açıkça [SkyLines](xcsoar://config/skylines), [LiveTrack24](xcsoar://config/livetrack24) veya [XCSoar Cloud](xcsoar://config/cloud) etkinleştirmedikçe paylaşılmaz.\n\n[Gizlilik Politikası](https://github.com/XCSoar/XCSoar/blob/master/PRIVACY.md)"
+
+msgid ""
+"# XCSoar Cloud\n"
+"\n"
+"The XCSoar project offers a service that allows sharing thermal and wave locations with other pilots in real time, and receiving nearby traffic from other participants and from OGN.\n"
+"\n"
+"If you participate, your **position**, **thermal/wave locations** and other weather data will be transmitted to the XCSoar Cloud server.\n"
+"\n"
+"You can change this at any time in [Config > Services > XCSoar Cloud](xcsoar://config/cloud)."
+msgstr "# XCSoar Bulut\n\nXCSoar projesi, termal ve dalga konumlarının diğer pilotlarla gerçek zamanlı olarak paylaşılmasına olanak tanıyan bir hizmet sunuyor ve diğer katılımcılardan ve OGN’den yakın trafiği almak.\n\nKatılırsanız **konumunuz**, **termal/dalga konumlarınız** ve diğer hava durumu verileriniz XCSoar Bulut sunucusuna iletilecektir.\n\nBunu istediğiniz zaman [Yapılandırma > Hizmetler > XCSoar Cloud](xcsoar://config/cloud) bölümünden değiştirebilirsiniz."
+
+msgid "Vario Volume"
+msgstr "Vario ses düzeyi"
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Key"
+msgstr "Anahtar"
+
+msgid "Name of vehicle used."
+msgstr "Kullanılan aracın adı."
+
+#, c-format
+msgid "%u sec"
+msgstr "%u sn"
+
+#, c-format
+msgid "%u min"
+msgstr "%u dk"
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
 
