@@ -140,6 +140,12 @@ CalculationThread::ProcessReplayFix() noexcept
 }
 
 void
+CalculationThread::ResetFlight() noexcept
+{
+  glide_computer.ResetFlight(true);
+}
+
+void
 CalculationThread::ForceTrigger() noexcept
 {
   {

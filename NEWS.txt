@@ -82,12 +82,18 @@ Version 7.46 - not yet released
 * ui
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+* replay
+  - add seek to a chosen flight minute or to the next circling or cruise
+    phase, showing progress and allowing cancellation
+  - skip 10 minutes instead of fast-forwarding (+10' button) #933
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+  - lua: add replay seek functions seek_to_flight_minutes,
+    seek_to_next_circling and seek_to_next_cruise
 
 Version 7.45 - 2026-08-15
 * highlights

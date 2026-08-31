@@ -9,6 +9,10 @@
 #include "time/Stamp.hpp"
 #include "system/Path.hpp"
 
+#include "NMEA/CirclingInfo.hpp"
+
+#include <functional>
+
 class DeviceBlackboard;
 class Logger;
 class ProtectedTaskManager;
@@ -16,6 +20,8 @@ class AbstractReplay;
 class CatmullRomInterpolator;
 class MergeThread;
 class CalculationThread;
+class JobRunner;
+class OperationEnvironment;
 class Error;
 
 class Replay final
@@ -59,7 +65,42 @@ class Replay final
    */
   NMEAInfo next_data;
 
+  /**
+   * The number of fixes read from the #AbstractReplay since Start().
+   * Used to scale the seek progress bar.
+   */
+  unsigned fixes_read;
+
   CatmullRomInterpolator *cli = nullptr;
+
+  /**
+   * Cheap parse-only summary of a recording, used to scale the seek
+   * progress bar and to find the time of the first fix.
+   */
+  struct RecordingScan {
+    /**
+     * The number of lines that will produce replay fixes (IGC B
+     * records); 0 if unknown for this file type.
+     */
+    unsigned fix_lines = 0;
+
+    /**
+     * The time of day of the first fix, or undefined if unknown.
+     */
+    TimeStamp start_time = TimeStamp::Undefined();
+
+    /**
+     * The time of day of the last fix, or undefined if unknown.
+     */
+    TimeStamp end_time = TimeStamp::Undefined();
+  };
+
+  /**
+   * The scan of #path, filled by the first seek and reused by the
+   * following ones; invalidated when Start() loads another file.
+   */
+  RecordingScan recording_scan;
+  bool recording_scan_valid = false;
 
 public:
   Replay(DeviceBlackboard &_device_blackboard,
@@ -129,6 +170,91 @@ public:
   unsigned ProcessAllFixes(MergeThread &merge_thread,
                            CalculationThread &calc_thread);
 
+  /**
+   * The largest flight minute SeekToFlightElapsedMinutes() accepts,
+   * and the upper bound the dialog offers.
+   */
+  static constexpr unsigned MAX_SEEK_MINUTES = 24 * 60;
+
+  /**
+   * Seek to the given number of minutes after the first fix of the
+   * current recording, merging every fix into the blackboard.  A
+   * target ahead of the current position is reached by scanning
+   * forward, keeping the flight state accumulated so far; only a
+   * target behind it restarts the recording and replays it from the
+   * beginning.  The scan is run through the given #JobRunner, which
+   * may report progress and allow cancelling; a cancelled seek keeps
+   * the position that was reached.
+   */
+  bool SeekToFlightElapsedMinutes(unsigned minutes,
+                                  MergeThread &merge_thread,
+                                  CalculationThread &calculation_thread,
+                                  JobRunner &runner) noexcept;
+
+  /**
+   * Replay forward from the current position until the flight mode
+   * changes to the requested state (circling or cruise).  The scan is
+   * run through the given #JobRunner, which may allow cancelling; a
+   * cancelled seek keeps the position that was reached.
+   */
+  bool SeekToNextFlightMode(CirclingMode mode,
+                            MergeThread &merge_thread,
+                            CalculationThread &calculation_thread,
+                            JobRunner &runner) noexcept;
+
+  /**
+   * Skip the replay forward by the given duration from the current
+   * position, applying every fix on the way.  Unlike FastForward(),
+   * this jumps immediately instead of playing back faster.  The scan
+   * is run through the given #JobRunner, which may report progress
+   * and allow cancelling; reaching the end of the recording is not
+   * an error.
+   */
+  bool SeekForward(FloatDuration delta,
+                   MergeThread &merge_thread,
+                   CalculationThread &calculation_thread,
+                   JobRunner &runner) noexcept;
+
 private:
+  /**
+   * Return the scan of the current recording, reading the file once
+   * and caching the result.
+   */
+  const RecordingScan &GetRecordingScan() noexcept;
+
+  /**
+   * Read the next fix from the #AbstractReplay, keeping #fixes_read
+   * up to date.  An I/O or parser error ends the recording just like
+   * reaching its end, so seeks can be noexcept.
+   */
+  bool ReadNextFix(NMEAInfo &data) noexcept;
+
+  /**
+   * Apply fixes forward from the current position through merge and
+   * calculation until the given predicate matches the state after a
+   * fix, the recording ends, time warps or the scan is cancelled.
+   * The worker threads are suspended while scanning, and the reached
+   * position becomes the new playback position.  Call only while the
+   * replay is active with a defined #virtual_time and not in demo
+   * mode.
+   *
+   * @return true if the predicate matched
+   */
+  bool ForwardScan(MergeThread &merge_thread,
+                   CalculationThread &calculation_thread,
+                   JobRunner &runner,
+                   std::function<bool(OperationEnvironment &)> matched) noexcept;
+
+  /**
+   * Scan forward from the current position until the given time of
+   * day, showing progress scaled to \a progress_end (usually the
+   * target, clamped at the recording end).  Reaching the end of the
+   * recording before the target is not an error.
+   */
+  bool ForwardScanToTime(TimeStamp target_ts, TimeStamp progress_end,
+                         MergeThread &merge_thread,
+                         CalculationThread &calculation_thread,
+                         JobRunner &runner) noexcept;
+
   void OnTimer();
 };
