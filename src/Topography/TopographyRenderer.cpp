@@ -10,6 +10,9 @@
 
 #include <algorithm>
 #include <cmath>
+#ifdef ENABLE_OPENGL
+#include <chrono>
+#endif
 
 TopographyRenderer::TopographyRenderer(const TopographyStore &_store,
                                        const TopographyLook &look) noexcept
@@ -26,8 +29,14 @@ void
 TopographyRenderer::Draw(Canvas &canvas,
                          const WindowProjection &projection) noexcept
 {
+#ifdef ENABLE_OPENGL
+  TopographyGpuStatsBeginDraw();
+#endif
   for (auto &i : files)
     i.Paint(canvas, projection);
+#ifdef ENABLE_OPENGL
+  TopographyGpuStatsEndDraw(projection);
+#endif
 
   const double map_scale = projection.GetMapScale();
   if (last_logged_map_scale > 0 &&
@@ -71,6 +80,16 @@ TopographyRenderer::DrawLabels(Canvas &canvas,
                                const WindowProjection &projection,
                                LabelBlock &label_block) noexcept
 {
+#ifdef ENABLE_OPENGL
+  const auto t0 = std::chrono::steady_clock::now();
+#endif
   for (auto &i : files)
     i.PaintLabels(canvas, projection, label_block);
+#ifdef ENABLE_OPENGL
+  const unsigned us = unsigned(
+    std::chrono::duration_cast<std::chrono::microseconds>(
+      std::chrono::steady_clock::now() - t0)
+      .count());
+  TopographyGpuStatsAddLabels(us);
+#endif
 }
