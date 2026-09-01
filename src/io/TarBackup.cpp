@@ -14,12 +14,14 @@
 #include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
+#include "LogFile.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "util/UTF8.hpp"
 
 #include <algorithm>
 #include <exception>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -58,12 +60,12 @@ MakeArchiveName(Path full, Path root)
 }
 
 class CollectVisitor final : public File::Visitor {
-  ArchiveExcludePathFn exclude;
+  const ArchiveExcludePathFn &exclude;
   Path root;
   std::vector<ArchiveItem> &items;
 
 public:
-  CollectVisitor(ArchiveExcludePathFn exclude_, Path root_,
+  CollectVisitor(const ArchiveExcludePathFn &exclude_, Path root_,
                  std::vector<ArchiveItem> &items_) noexcept
     : exclude(exclude_), root(root_), items(items_) {}
 
@@ -81,7 +83,7 @@ public:
 
 [[nodiscard]]
 bool
-CollectSourceFiles(Path source_root, ArchiveExcludePathFn exclude,
+CollectSourceFiles(Path source_root, const ArchiveExcludePathFn &exclude,
                    std::vector<ArchiveItem> &items,
                    std::string &error_message) noexcept
 try {
@@ -98,7 +100,7 @@ try {
 
 [[nodiscard]]
 bool
-AcceptEntry(ArchiveExcludePathFn exclude, std::string_view name) noexcept
+AcceptEntry(const ArchiveExcludePathFn &exclude, std::string_view name) noexcept
 {
   return !name.empty() && (exclude == nullptr || !exclude(name));
 }
@@ -222,11 +224,14 @@ private:
 
 bool
 CreateBackup(Path source_root, OutputStream &output,
-             ArchiveExcludePathFn exclude,
+             const ArchiveExcludePathFn &exclude,
              OperationEnvironment &env,
              unsigned &created_files,
+             std::vector<std::string> &skipped_files,
              std::string &error_message) noexcept
 try {
+  skipped_files.clear();
+
   std::vector<ArchiveItem> items;
   if (!CollectSourceFiles(source_root, exclude, items, error_message))
     return false;
@@ -276,9 +281,23 @@ try {
     if (file_output == nullptr)
       progress.Advance(TAR_HEADER_SIZE);
 
+    /* opening happens before anything of this entry reaches the
+       archive: a file that cannot be read (in use by the NMEA or
+       the IGC logger, say) is left out, and the rest goes on */
+    std::unique_ptr<FileReader> in;
     try {
-      FileReader in(item.source_path);
-      writer.Add(item.archive_name, in, in.GetSize(),
+      in = std::make_unique<FileReader>(item.source_path);
+    } catch (...) {
+      LogError(std::current_exception(), "Backup: skipping file");
+      skipped_files.emplace_back(item.archive_name);
+
+      if (file_output == nullptr)
+        progress.Advance(item.size + PadTarBlockSize(item.size));
+      continue;
+    }
+
+    try {
+      writer.Add(item.archive_name, *in, in->GetSize(),
                  [&env, &progress, &sync_progress, file_output](uint64_t delta) {
                    if (env.IsCancelled())
                      throw OperationCancelled{};
@@ -326,7 +345,7 @@ try {
 
 bool
 RestoreBackup(Reader &input, Path destination_root,
-              ArchiveExcludePathFn exclude,
+              const ArchiveExcludePathFn &exclude,
               OperationEnvironment &env,
               unsigned &restored_files,
               unsigned &failed_files,
