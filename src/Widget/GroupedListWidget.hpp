@@ -48,7 +48,11 @@ public:
   /** The edge of the item where the check mark is drawn. */
   enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
 
-  /** The colors of a badge. */
+  /**
+   * The colors of a badge.  An item which is #ItemOptions::disabled is
+   * grey no matter which style it carries, and grey is reserved for
+   * it: it must stay the one thing which means "not available".
+   */
   enum class BadgeStyle : uint_least8_t {
     /** the accent color of the dialog; the state which shall be seen */
     PRIMARY,
@@ -94,6 +98,19 @@ public:
 
     /** is this item checked?  (only with a #SelectionMode) */
     bool checked = false;
+
+    /**
+     * Is this item currently not available?  It is drawn greyed out,
+     * the cursor skips it, and it carries a badge which says so,
+     * replacing #badge.
+     */
+    bool disabled = false;
+
+    /**
+     * The badge of an item which is #disabled; nullptr for the
+     * default label.  Use it to say why the item is not available.
+     */
+    const char *disabled_badge_label = nullptr;
   };
 
 private:

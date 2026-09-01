@@ -4,6 +4,7 @@
 #include "GroupedListWidget.hpp"
 #include "Asset.hpp"
 #include "ui/window/TopWindow.hpp"
+#include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRenderer.hpp"
 #include "Hardware/CPU.hpp"
@@ -128,6 +129,9 @@ private:
     /** only for Type::ITEM: draw a check mark */
     bool checked = false;
 
+    /** only for Type::ITEM: greyed out, and the cursor skips it */
+    bool disabled = false;
+
     /** only for Type::ITEM: may this item be checked, and how? */
     SelectionMode selection_mode = SelectionMode::NONE;
 
@@ -150,6 +154,11 @@ private:
 
     bool IsItem() const noexcept {
       return type == Type::ITEM;
+    }
+
+    /** may the cursor be moved to this element? */
+    bool IsSelectable() const noexcept {
+      return IsItem() && !disabled;
     }
 
     int GetBottom() const noexcept {
@@ -452,6 +461,23 @@ GetBadgeColors(const DialogLook &look,
   return accent;
 }
 
+/**
+ * An item which is not available always says so on its badge, and
+ * replaces the badge which the caller has set: that a setting cannot
+ * be reached at all matters more than the state it is in.
+ */
+[[gnu::pure]]
+static const char *
+GetBadge(const GroupedListWidget::ItemOptions &options) noexcept
+{
+  if (options.disabled)
+    return options.disabled_badge_label != nullptr
+      ? options.disabled_badge_label
+      : _("Disabled");
+
+  return options.badge != nullptr ? options.badge : "";
+}
+
 void
 GroupedListControl::AddItem(const char *caption, Callback callback,
                             const GroupedListWidget::ItemOptions &options) noexcept
@@ -463,11 +489,12 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .text = caption,
 
     .value = options.value != nullptr ? options.value : "",
-    .badge = options.badge != nullptr ? options.badge : "",
+    .badge = GetBadge(options),
     .badge_style = options.badge_style,
     .callback = std::move(callback),
     .chevron = options.chevron,
     .checked = options.checked,
+    .disabled = options.disabled,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
   });
@@ -548,14 +575,14 @@ GroupedListControl::FindItem(int i, bool forward) const noexcept
 
   if (forward) {
     for (; i < n; ++i)
-      if (i >= 0 && elements[i].IsItem())
+      if (i >= 0 && elements[i].IsSelectable())
         return i;
   } else {
     if (i > n)
       i = n;
 
     while (i-- > 0)
-      if (elements[i].IsItem())
+      if (elements[i].IsSelectable())
         return i;
   }
 
@@ -753,6 +780,8 @@ GroupedListControl::ActivateItem() noexcept
     return;
 
   Element &element = elements[cursor];
+  if (element.disabled)
+    return;
 
   switch (element.selection_mode) {
   case SelectionMode::NONE:
@@ -914,7 +943,15 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     canvas.Select(*look.list.font);
 
-    const Color text_color = row_colors.text_color;
+    const Color plain_text_color = row_colors.text_color;
+
+    /* an item which is not available keeps its background, but all of
+       its contents fade towards it */
+    const Color text_color = element.disabled
+      ? (look.dark_mode
+         ? DarkColor(plain_text_color)
+         : LightColor(plain_text_color))
+      : plain_text_color;
 
     canvas.SetTextColor(text_color);
 
@@ -939,7 +976,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       const int size = GetCheckSize();
       const bool left = element.check_position == CheckPosition::LEFT;
 
-      if (element.checked) {
+      if (element.checked && !element.disabled) {
         PixelRect check_rc;
         check_rc.left = left
           ? caption_rc.left
@@ -958,7 +995,11 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
         caption_rc.right -= GetCheckWidth();
     }
 
-    if (element.chevron) {
+    /* an item which is not available shows neither the arrow nor its
+       value: the arrow would promise a page which does not open, and
+       the state is not in effect anyway.  What is left is the caption
+       and the badge which says why */
+    if (element.chevron && !element.disabled) {
       const int size = std::max(2, font_height / 4);
 
       const Pen pen(Layout::ScalePenWidth(1), text_color);
@@ -971,7 +1012,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       caption_rc.right -= size + padding;
     }
 
-    if (!element.value.empty()) {
+    if (!element.value.empty() && !element.disabled) {
       const int width = canvas.CalcTextWidth(element.value.c_str());
 
       /* the value sits in the middle of the item, like the badge and
@@ -987,7 +1028,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     if (!element.badge.empty()) {
       /* a short label on a filled rounded box; on the selected item
          the colors are swapped, where the accent color is the
-         background of the item itself */
+         background of the item itself.  On an item which is not
+         available, the box is grey, like its text */
       const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
       const int badge_pad_y = badge_pad_x / 2;
       const int badge_height = font_height + 2 * badge_pad_y;
@@ -1002,7 +1044,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       const BadgeColors badge_colors = GetBadgeColors(look,
                                                       element.badge_style);
 
-      canvas.DrawFilledRectangle(badge_rc, selected
+      canvas.DrawFilledRectangle(badge_rc, selected || element.disabled
                                  ? text_color
                                  : badge_colors.background_color);
 
@@ -1011,7 +1053,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       DrawRoundedEdge(canvas, badge_rc, true, background, badge_radius);
       DrawRoundedEdge(canvas, badge_rc, false, background, badge_radius);
 
-      canvas.SetTextColor(selected
+      canvas.SetTextColor(selected || element.disabled
                           ? background
                           : badge_colors.text_color);
 
@@ -1239,7 +1281,7 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
     kinetic.MouseDown(origin);
 
   const int i = FindElementAt(p.y);
-  if (i >= 0 && elements[i].IsItem()) {
+  if (i >= 0 && elements[i].IsSelectable()) {
     SetCursor(i);
     drag_mode = DragMode::CURSOR;
     Invalidate();
