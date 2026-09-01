@@ -163,6 +163,18 @@ private:
     /** can the font draw #icon_text? */
     bool icon_glyph = false;
 
+    /** #text broken into lines by the last layout */
+    WrappedText wrapped_text{};
+
+    /** the width for which #wrapped_text was broken; -1 if never */
+    int wrapped_text_width = -1;
+
+    /** only for Type::ITEM: #value broken into lines */
+    WrappedText wrapped_value{};
+
+    /** the width for which #wrapped_value was broken; -1 if never */
+    int wrapped_value_width = -1;
+
     /** only for Type::ITEM: a second line below #text; it may wrap */
     std::string subtitle{};
 
@@ -506,7 +518,8 @@ private:
    * @param right align the lines at the right edge of the box
    */
   void DrawWrappedText(Canvas &canvas, const Font &font, const PixelRect &rc,
-                       const std::string &text, bool right) const noexcept;
+                       const std::string &text, const WrappedText &cached,
+                       int cached_width, bool right) const noexcept;
 
   /**
    * The width and the height of the icon of an item: one and a half
@@ -812,9 +825,16 @@ GroupedListControl::WalkFooter(std::size_t i,
   const int line_spacing = font.GetLineSpacing();
 
   const PixelRect rc = GetFooterRect(i);
-  /* the cast comes first: an empty box makes GetWidth() underflow,
-     and std::max() on the unsigned would keep the huge number */
-  const auto wrapped = WrapText(font, std::max((int)rc.GetWidth(), 1), text);
+  const int width = std::max((int)rc.GetWidth(), 1);
+
+  /* the layout has broken this text already */
+  WrappedText fallback;
+  if (elements[i].wrapped_text_width != width)
+    fallback = WrapText(font, width, text);
+
+  const WrappedText &wrapped = elements[i].wrapped_text_width == width
+    ? elements[i].wrapped_text
+    : fallback;
 
   int y = rc.top;
 
@@ -1352,15 +1372,33 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
 }
 
 /**
+ * Break a text into lines, unless the last break was for the same
+ * width.  Breaking measures every word of the text, and outside
+ * OpenGL it builds a canvas of its own for that; the layout and the
+ * paint both need the lines and must not do this twice.
+ */
+static const WrappedText &
+WrapCached(const Font &font, int width, const std::string &text,
+           WrappedText &cache, int &cache_width) noexcept
+{
+  if (cache_width != width) {
+    cache = WrapText(font, std::max(width, 1), text);
+    cache_width = width;
+  }
+
+  return cache;
+}
+
+/**
  * The height which a text needs inside a box of the given width: one
  * line is as tall as the font itself, more lines use its line
  * spacing.
  */
-[[gnu::pure]]
 static unsigned
-GetTextHeight(const Font &font, int width, const std::string &text) noexcept
+GetTextHeight(const Font &font, int width, const std::string &text,
+              WrappedText &cache, int &cache_width) noexcept
 {
-  const auto wrapped = WrapText(font, std::max(width, 1), text);
+  const auto &wrapped = WrapCached(font, width, text, cache, cache_width);
   const std::size_t lines = std::min(wrapped.lines.size(), MAX_TEXT_LINES);
 
   return lines <= 1
@@ -1381,16 +1419,22 @@ GroupedListControl::UpdateTextLayout(Element &element,
   element.value_height = 0;
 
   if (element.value.empty() || element.disabled) {
-    element.text_height = GetTextHeight(font, room, element.text);
+    element.text_height = GetTextHeight(font, room, element.text,
+                                        element.wrapped_text,
+                                        element.wrapped_text_width);
     return room;
   }
 
   if (element.value_below) {
     /* the value has the whole width, below the caption */
     element.value_width = room;
-    element.value_height = GetTextHeight(value_font, room, element.value);
+    element.value_height = GetTextHeight(value_font, room, element.value,
+                                         element.wrapped_value,
+                                         element.wrapped_value_width);
     element.value_is_below = true;
-    element.text_height = GetTextHeight(font, room, element.text);
+    element.text_height = GetTextHeight(font, room, element.text,
+                                        element.wrapped_text,
+                                        element.wrapped_text_width);
     return room;
   }
 
@@ -1420,8 +1464,12 @@ GroupedListControl::UpdateTextLayout(Element &element,
 
   element.value_width = value_width;
   element.value_height = GetTextHeight(value_font, value_width,
-                                       element.value);
-  element.text_height = GetTextHeight(font, caption_width, element.text);
+                                       element.value,
+                                       element.wrapped_value,
+                                       element.wrapped_value_width);
+  element.text_height = GetTextHeight(font, caption_width, element.text,
+                                      element.wrapped_text,
+                                      element.wrapped_text_width);
 
   return caption_width;
 }
@@ -1430,12 +1478,21 @@ void
 GroupedListControl::DrawWrappedText(Canvas &canvas, const Font &font,
                                     const PixelRect &rc,
                                     const std::string &text,
+                                    const WrappedText &cached,
+                                    int cached_width,
                                     bool right) const noexcept
 {
   canvas.Select(font);
 
   const int width = std::max((int)rc.GetWidth(), 1);
-  const auto wrapped = WrapText(font, width, text);
+
+  /* the layout has broken this text already; break it again only if
+     the box has become another one since */
+  WrappedText fallback;
+  if (cached_width != width)
+    fallback = WrapText(font, width, text);
+
+  const WrappedText &wrapped = cached_width == width ? cached : fallback;
 
   int y = rc.top;
 
@@ -1620,11 +1677,16 @@ GroupedListControl::UpdateLayout() noexcept
 
       case Element::Type::FOOTER: {
         const auto footer = GetFooter(i);
-        const auto wrapped = WrapText(*look.list.font,
-                                      std::max(text_width, 1),
-                                      *footer.text);
 
-        element.height = footer_gap + wrapped.lines.size() *
+        /* the cursor decides which text this is, so it may be another
+           one than the last time: break it again in any case */
+        element.wrapped_text = WrapText(*look.list.font,
+                                        std::max(text_width, 1),
+                                        *footer.text);
+        element.wrapped_text_width = text_width;
+
+        element.height = footer_gap +
+          element.wrapped_text.lines.size() *
           look.list.font->GetLineSpacing();
       }
         break;
@@ -2215,14 +2277,16 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       }
 
       DrawWrappedText(canvas, GetValueFont(element), value_rc,
-                      element.value, true);
+                      element.value, element.wrapped_value,
+                      element.wrapped_value_width, true);
     }
 
     PixelRect text_box = caption_rc;
     text_box.top = text_y;
     text_box.bottom = text_y + (int)element.text_height;
 
-    DrawWrappedText(canvas, *look.list.font, text_box, element.text, false);
+    DrawWrappedText(canvas, *look.list.font, text_box, element.text,
+                    element.wrapped_text, element.wrapped_text_width, false);
 
     if (!element.subtitle.empty()) {
       canvas.Select(look.small_font);
