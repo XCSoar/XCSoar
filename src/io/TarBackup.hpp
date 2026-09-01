@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <functional>
 #include <string>
 #include <string_view>
 
@@ -11,18 +12,27 @@ class Path;
 class OutputStream;
 class Reader;
 
-using ArchiveExcludePathFn = bool (*)(std::string_view) noexcept;
+/**
+ * Shall this archive entry (a relative path with '/' separators) be
+ * left out?  May be empty (nothing is excluded).
+ */
+using ArchiveExcludePathFn = std::function<bool(std::string_view)>;
 
 /**
  * Create a tar archive of all files under @p source_root,
  * writing to the given output stream.
+ *
+ * Any error - a file that cannot be opened or read, say - fails the
+ * whole backup; a file that shall not end up in the archive (one the
+ * program is writing right now, say) is the @p exclude callback's
+ * business.
  *
  * The caller is responsible for opening/committing/closing
  * the stream.
  */
 bool
 CreateBackup(Path source_root, OutputStream &output,
-             ArchiveExcludePathFn exclude,
+             const ArchiveExcludePathFn &exclude,
              OperationEnvironment &env,
              unsigned &created_files,
              std::string &error_message) noexcept;
@@ -35,7 +45,7 @@ CreateBackup(Path source_root, OutputStream &output,
  */
 bool
 RestoreBackup(Reader &input, Path destination_root,
-              ArchiveExcludePathFn exclude,
+              const ArchiveExcludePathFn &exclude,
               OperationEnvironment &env,
               unsigned &restored_files,
               unsigned &failed_files,

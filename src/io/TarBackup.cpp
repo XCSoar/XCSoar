@@ -58,12 +58,12 @@ MakeArchiveName(Path full, Path root)
 }
 
 class CollectVisitor final : public File::Visitor {
-  ArchiveExcludePathFn exclude;
+  const ArchiveExcludePathFn &exclude;
   Path root;
   std::vector<ArchiveItem> &items;
 
 public:
-  CollectVisitor(ArchiveExcludePathFn exclude_, Path root_,
+  CollectVisitor(const ArchiveExcludePathFn &exclude_, Path root_,
                  std::vector<ArchiveItem> &items_) noexcept
     : exclude(exclude_), root(root_), items(items_) {}
 
@@ -81,7 +81,7 @@ public:
 
 [[nodiscard]]
 bool
-CollectSourceFiles(Path source_root, ArchiveExcludePathFn exclude,
+CollectSourceFiles(Path source_root, const ArchiveExcludePathFn &exclude,
                    std::vector<ArchiveItem> &items,
                    std::string &error_message) noexcept
 try {
@@ -96,9 +96,11 @@ try {
   return false;
 }
 
+/* not noexcept: the exclude std::function may throw, and the caller's
+   catch block shall see that, not std::terminate() */
 [[nodiscard]]
 bool
-AcceptEntry(ArchiveExcludePathFn exclude, std::string_view name) noexcept
+AcceptEntry(const ArchiveExcludePathFn &exclude, std::string_view name)
 {
   return !name.empty() && (exclude == nullptr || !exclude(name));
 }
@@ -222,7 +224,7 @@ private:
 
 bool
 CreateBackup(Path source_root, OutputStream &output,
-             ArchiveExcludePathFn exclude,
+             const ArchiveExcludePathFn &exclude,
              OperationEnvironment &env,
              unsigned &created_files,
              std::string &error_message) noexcept
@@ -326,7 +328,7 @@ try {
 
 bool
 RestoreBackup(Reader &input, Path destination_root,
-              ArchiveExcludePathFn exclude,
+              const ArchiveExcludePathFn &exclude,
               OperationEnvironment &env,
               unsigned &restored_files,
               unsigned &failed_files,

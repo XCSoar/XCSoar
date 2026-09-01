@@ -27,6 +27,11 @@
 #include "fmt/format.h"
 #include "Storage/StorageUtil.hpp"
 #include "Storage/StorageDevice.hpp"
+#include "Interface.hpp"
+#include "Logger/Logger.hpp"
+#include "Logger/NMEALogger.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "util/StringCompare.hxx"
 
 #include <algorithm>
@@ -59,11 +64,62 @@ IsExcludedPath(std::string_view path) noexcept
   return false;
 }
 
+/**
+ * The archive name (relative to the data directory, '/' separators)
+ * of a file, or an empty string if it is not below the directory.
+ */
+static std::string
+MakeArchiveName(Path path, Path root)
+{
+  if (path == nullptr)
+    return {};
+
+  const Path relative = path.RelativeTo(root);
+  if (relative == nullptr)
+    return {};
+
+  std::string name = relative.c_str();
+  std::replace(name.begin(), name.end(), '\\', '/');
+  return name;
+}
+
+/**
+ * The files the running program is writing right now: the NMEA log
+ * and the IGC file of the active logger.  They cannot be read on
+ * Windows while they are open, and they are incomplete anyway.
+ */
+static std::vector<std::string>
+CollectFilesInUse(Path root)
+{
+  std::vector<std::string> names;
+
+  if (backend_components == nullptr)
+    return names;
+
+  const auto add = [&names, root](Path path){
+    auto name = MakeArchiveName(path, root);
+    if (!name.empty())
+      names.emplace_back(std::move(name));
+  };
+
+  if (backend_components->nmea_logger != nullptr)
+    add(backend_components->nmea_logger->GetPath());
+
+  if (backend_components->igc_logger != nullptr)
+    add(backend_components->igc_logger->GetActivePath());
+
+  return names;
+}
+
 // Backup job: creates a tarball of primary data path
 struct BackupJob final : public Job {
   AllocatedPath target_device;
   std::string tar_name;
   unsigned &created_files;
+
+  /** the files the loggers are writing; excluded from the archive */
+  std::vector<std::string> files_in_use;
+
   bool aborted{false};
   std::string error_message;
 
@@ -90,9 +146,16 @@ struct BackupJob final : public Job {
     }
 
     try {
+      files_in_use = CollectFilesInUse(primary);
+      const ArchiveExcludePathFn exclude = [this](std::string_view name){
+        return IsExcludedPath(name) ||
+          std::find(files_in_use.begin(), files_in_use.end(),
+                    name) != files_in_use.end();
+      };
+
       auto writer = dev->OpenWrite(Path(tar_name.c_str()), true);
 
-      if (!CreateBackup(primary, *writer, IsExcludedPath, env,
+      if (!CreateBackup(primary, *writer, exclude, env,
                         created_files, error_message)) {
         aborted = true;
         return;
@@ -154,6 +217,13 @@ struct RestoreJob final : public Job {
 static void
 RunRestoreJob(Path device_root, Path tar_name)
 {
+  if (CommonInterface::Calculated().flight.flying) {
+    /* overwriting the data files under a flying program helps nobody */
+    ShowMessageBox(_("Not available while flying."),
+                   C_("Button", "Restore"), MB_OK | MB_ICONWARNING);
+    return;
+  }
+
   int rr = ShowMessageBox(_("Restoring will overwrite existing data. Continue?"),
                           C_("Button", "Restore"), MB_YESNO);
   if (rr != IDYES)
@@ -357,6 +427,14 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
   });
 
   dialog.AddButton(C_("Button", "Create backup"), [container_ptr]() {
+    if (CommonInterface::Calculated().flight.flying) {
+      /* the loggers are writing, half the files would be left out -
+         and nobody needs a backup right now up there */
+      ShowMessageBox(_("Not available while flying."),
+                     C_("Button", "Create backup"), MB_OK | MB_ICONWARNING);
+      return;
+    }
+
     if (container_ptr->target_device_path == nullptr) {
       ShowMessageBox(_("Select a target first."), C_("Button", "Create backup"), MB_OK | MB_ICONERROR);
       return;
@@ -380,6 +458,21 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
       ShowMessageBox(fullmsg.c_str(), C_("Button", "Create backup"), MB_OK | MB_ICONERROR);
     } else {
       container_ptr->RefreshBackups();
+
+      if (!job.files_in_use.empty()) {
+        /* the backup is there, but on purpose without the files the
+           loggers are writing right now: say so, and which ones */
+        std::string msg = _("Backup complete.");
+        msg += "\n\n";
+        msg += _("Left out, being written right now:");
+        for (const auto &name : job.files_in_use) {
+          msg += "\n";
+          msg += name;
+        }
+
+        ShowMessageBox(msg.c_str(), C_("Button", "Create backup"),
+                       MB_OK | MB_ICONINFORMATION);
+      }
     }
   });
 
