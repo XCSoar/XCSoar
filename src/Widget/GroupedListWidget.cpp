@@ -15,6 +15,7 @@
 #include "Screen/Layout.hpp"
 #include "UIUtil/KineticManager.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/ColorGlyph.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "util/UTF8.hpp"
 #include "ui/canvas/Pen.hpp"
@@ -26,6 +27,7 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
 #endif
 
 #include <algorithm>
@@ -136,6 +138,9 @@ private:
     /** the icon which #icon_id names, once it has been loaded */
     std::unique_ptr<MaskedIcon> icon{};
 
+    /** #icon_text in its own colors, on a platform which can do that */
+    std::unique_ptr<Bitmap> icon_image{};
+
     /** the icon size for which the icon has been looked for; 0 if never */
     unsigned icon_size = 0;
 
@@ -199,7 +204,7 @@ private:
 
     /** does this element have something to draw in the icon column? */
     bool HasIcon() const noexcept {
-      return icon != nullptr || icon_glyph;
+      return icon != nullptr || icon_image != nullptr || icon_glyph;
     }
 
     /** the height of #subtitle, which may need more than one line */
@@ -936,10 +941,22 @@ GroupedListControl::PrepareIcons() noexcept
         element.icon = std::move(icon);
     }
 
+    if (element.icon == nullptr && element.icon_image == nullptr &&
+        !element.icon_text.empty()) {
+      /* an emoji is a color glyph, and the text stack can only draw a
+         one-color mask; where the platform has color fonts, render it
+         into an image instead */
+      auto image = std::make_unique<Bitmap>();
+
+      if (RenderColorGlyph(element.icon_text.c_str(), size, *image))
+        element.icon_image = std::move(image);
+    }
+
     /* a character is only an icon if the font can draw it; on a
        display which has no glyph for it, the item keeps no room for
        one */
     element.icon_glyph = element.icon == nullptr &&
+      element.icon_image == nullptr &&
       !element.icon_text.empty() &&
       look.heading1_font.HasGlyph(NextUTF8(element.icon_text.c_str()).first);
   }
@@ -1497,6 +1514,14 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
           element.icon->Draw(canvas, centre, height);
         }
+      } else if (element.icon_image != nullptr) {
+#ifdef ENABLE_OPENGL
+        /* the image is transparent around the glyph */
+        const ScopeAlphaBlend alpha_blend;
+#endif
+
+        canvas.Stretch({centre.x - size / 2, centre.y - size / 2},
+                       {size, size}, *element.icon_image);
       } else if (element.icon_glyph) {
         /* a character which stands in for an icon is drawn as large
            as the column, not as large as the text beside it: the
