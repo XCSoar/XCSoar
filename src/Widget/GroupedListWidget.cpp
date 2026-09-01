@@ -194,6 +194,12 @@ private:
   /** the selected item, or -1 if there is none */
   int cursor = -1;
 
+  /**
+   * The item index which Clear() has saved, to be restored by the
+   * next UpdateLayout(); -1 if there is nothing to restore.
+   */
+  int saved_cursor = -1;
+
   CursorCallback cursor_callback;
 
   enum class DragMode : uint_least8_t { NONE, SCROLL, CURSOR };
@@ -221,14 +227,22 @@ public:
   void AddItem(const char *caption, Callback callback,
                const GroupedListWidget::ItemOptions &options) noexcept;
 
+  /**
+   * Remove all elements, but remember where the user was: a list
+   * which refreshes itself while it is on the screen (a device list,
+   * a WiFi scan) is cleared and filled again, and must not jump back
+   * to the top each time.  The next UpdateLayout() restores the item
+   * the cursor was on, and the scroll position follows the contents.
+   */
   void Clear() noexcept {
+    saved_cursor = GetCursorIndex();
+
     /* the options of the group which is open must not leak into the
        items of the next build */
     group_options = {};
 
     elements.clear();
     cursor = -1;
-    origin = 0;
   }
 
   [[gnu::pure]]
@@ -828,6 +842,20 @@ GroupedListControl::UpdateLayout() noexcept
 
   SetOrigin(origin);
 
+  if (cursor < 0 && saved_cursor >= 0) {
+    /* the same item as before the list was rebuilt, or its neighbour
+       if the list has become shorter or the item cannot be selected
+       any more */
+    cursor = FindItemByIndex(saved_cursor);
+
+    if (cursor < 0)
+      cursor = FindItem(elements.size(), false);
+    else if (!elements[cursor].IsSelectable())
+      cursor = FindItem(cursor, true);
+  }
+
+  saved_cursor = -1;
+
   if (cursor < 0)
     cursor = FindItem(0, true);
 
@@ -917,8 +945,9 @@ GroupedListControl::ActivateItem() noexcept
     top->Refresh();
 
   /* the callback may open another dialog; invoke it after the check
-     mark has been updated */
-  if (const auto &callback = element.callback)
+     mark has been updated; it is a copy because the callback may
+     rebuild the list and destroy the element */
+  if (auto callback = element.callback)
     callback();
 }
 
