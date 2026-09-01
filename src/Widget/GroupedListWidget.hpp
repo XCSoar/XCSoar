@@ -234,6 +234,31 @@ public:
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
 
   /**
+   * Add a group which shows a view instead of items, e.g. a button or
+   * a preview of what the page changes.  Its caption and its footer
+   * work as they do for a group of items, and the view keeps the
+   * margins of a card and scrolls with the list.
+   *
+   * The view may edit something: Save(), Leave() and KeyPress() reach
+   * it like they reach the widgets above and below the list.  Click()
+   * and ReClick() do not, they belong to the activation area of a tab
+   * container, and the focus of this widget stays on the list.
+   *
+   * @param caption the group caption; nullptr for a group which shows
+   * nothing but the view
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  Other than the widget below the list, it may be taller
+   * than the window.
+   */
+  void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
+                      unsigned height_pt=0) noexcept;
+
+  void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
+                      const GroupOptions &options,
+                      unsigned height_pt=0) noexcept;
+
+  /**
    * Remove all elements.  The item the cursor is on and the scroll
    * position survive the next UpdateLayout(), so that a list which
    * refreshes itself does not jump back to the top.
@@ -314,6 +339,7 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Unprepare() noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool Leave() noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
