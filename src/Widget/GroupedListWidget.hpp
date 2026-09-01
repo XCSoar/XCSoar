@@ -116,6 +116,13 @@ public:
     /** a text at the right edge, e.g. the current value of a setting */
     const char *value = nullptr;
 
+    /**
+     * Draw #value below the caption instead of beside it, over the
+     * whole width of the item.  A value which leaves too little room
+     * for the caption moves there by itself.
+     */
+    bool value_below = false;
+
     /** a short label in a rounded box, e.g. "active" */
     const char *badge = nullptr;
 
