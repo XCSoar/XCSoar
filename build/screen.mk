@@ -102,7 +102,11 @@ SCREEN_SOURCES += \
 endif
 
 ifeq ($(call bool_or,$(APPKIT),$(UIKIT)),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/apple/Font.cpp
+SCREEN_SOURCES += \
+	$(CANVAS_SRC_DIR)/apple/Font.cpp \
+	$(CANVAS_SRC_DIR)/apple/ColorGlyph.cpp
+else
+SCREEN_SOURCES += $(CANVAS_SRC_DIR)/ColorGlyph.cpp
 endif
 
 ifeq ($(USE_X11),y)
