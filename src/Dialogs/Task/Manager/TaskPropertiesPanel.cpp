@@ -71,6 +71,7 @@ SetStartMode(OrderedTaskSettings &p, StartMode mode) noexcept
     p.finish_constraints.fai_finish = false;
     p.start_constraints.fai_finish = false;
     p.start_constraints.pev_start_enabled = true;
+    p.start_constraints.require_arm = false;
     break;
   }
   p.start_constraints.start_mode = mode;
@@ -94,13 +95,17 @@ TaskPropertiesPanel::RefreshView()
     ftype == TaskFactoryType::MAT;
   const StartMode start_mode = GetStartMode(p);
   const bool fai_start_finish = start_mode == StartMode::FAI_START_FINISH;
+  const bool arm_start_allowed = start_mode == StartMode::NORMAL ||
+    start_mode == StartMode::FAI_START_FINISH;
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueDuration(MIN_TIME, p.aat_min_time);
 
   LoadValueEnum(START_MODE, start_mode);
 
-  LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
+  SetRowEnabled(START_REQUIRES_ARM, arm_start_allowed);
+  LoadValue(START_REQUIRES_ARM,
+            arm_start_allowed && p.start_constraints.require_arm);
   LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetRoughStart());
@@ -154,8 +159,15 @@ TaskPropertiesPanel::ReadValues()
 
   changed |= SaveValue(MIN_TIME, p.aat_min_time);
 
-  if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
+  const bool arm_start_allowed = p.start_constraints.start_mode == StartMode::NORMAL ||
+    p.start_constraints.start_mode == StartMode::FAI_START_FINISH;
+  if (arm_start_allowed) {
+    if (SaveValue(START_REQUIRES_ARM, p.start_constraints.require_arm))
+      changed = true;
+  } else if (p.start_constraints.require_arm) {
+    p.start_constraints.require_arm = false;
     changed = true;
+  }
 
   changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
 
