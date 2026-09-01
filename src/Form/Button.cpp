@@ -3,6 +3,7 @@
 
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "LogFile.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
@@ -144,7 +145,12 @@ bool
 Button::OnClicked() noexcept
 {
   if (callback) {
-    callback();
+    try {
+      callback();
+    } catch (...) {
+      LogError(std::current_exception(), "Button callback failed");
+    }
+
     return true;
   }
 
