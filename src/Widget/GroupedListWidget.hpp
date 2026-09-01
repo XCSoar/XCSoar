@@ -5,10 +5,12 @@
 
 #include "WindowWidget.hpp"
 #include "ResourceId.hpp"
+#include "ui/dim/Rect.hpp"
 
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <utility>
 
 struct DialogLook;
 class GroupedListControl;
@@ -184,6 +186,12 @@ private:
 
   GroupedListControl &control;
 
+  /** the view below the list, or nullptr */
+  std::unique_ptr<Widget> bottom_widget;
+
+  /** the height of #bottom_widget; 0 asks the view itself */
+  unsigned bottom_widget_height_pt = 0;
+
 public:
   explicit GroupedListWidget(const DialogLook &look) noexcept;
   ~GroupedListWidget() noexcept override;
@@ -274,9 +282,40 @@ public:
    */
   void UpdateLayout() noexcept;
 
+  /**
+   * Show another view below the list, e.g. a preview of what the
+   * items above it change.  It sits between the list and the buttons
+   * of the dialog; it does not scroll with the list, and it does not
+   * cover it either, it takes its room from it.  Call this before
+   * Prepare().
+   *
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  The list always keeps half of the room.
+   */
+  void SetBottomWidget(std::unique_ptr<Widget> widget,
+                       unsigned height_pt=0) noexcept;
+
+private:
+  /** The room which #bottom_widget takes away from the list. */
+  [[gnu::pure]]
+  unsigned GetBottomWidgetHeight(const PixelRect &rc) const noexcept;
+
+  /** @return the rectangle of the list and the one of #bottom_widget */
+  [[gnu::pure]]
+  std::pair<PixelRect, PixelRect>
+  SplitRect(const PixelRect &rc) const noexcept;
+
+public:
   /* virtual methods from class Widget */
   PixelSize GetMinimumSize() const noexcept override;
   PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
+  bool Save(bool &changed) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
   bool KeyPress(unsigned key_code) noexcept override;
 };
