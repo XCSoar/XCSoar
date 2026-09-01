@@ -94,6 +94,8 @@ static constexpr TextRenderer text_renderer;
 class GroupedListControl final : public PaintWindow {
 public:
   using Callback = GroupedListWidget::Callback;
+  using SelectionMode = GroupedListWidget::SelectionMode;
+  using CheckPosition = GroupedListWidget::CheckPosition;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
   using GroupOptions = GroupedListWidget::GroupOptions;
 
@@ -123,8 +125,24 @@ private:
     /** only for Type::ITEM: draw an arrow at the right edge */
     bool chevron = false;
 
+    /** only for Type::ITEM: draw a check mark */
+    bool checked = false;
+
+    /** only for Type::ITEM: may this item be checked, and how? */
+    SelectionMode selection_mode = SelectionMode::NONE;
+
+    /** only for Type::ITEM: the edge which holds the check mark */
+    CheckPosition check_position = CheckPosition::RIGHT;
+
     /** the first / the last item of its group */
     bool first_in_group = false, last_in_group = false;
+
+    /**
+     * Does any item of this group have a check mark at this edge?
+     * All items of the group then reserve the room for it, which
+     * keeps their captions aligned.
+     */
+    bool check_left = false, check_right = false;
 
     /** position and height within the virtual contents */
     int top = 0;
@@ -195,6 +213,11 @@ public:
   [[gnu::pure]]
   unsigned GetItemCount() const noexcept;
 
+  void SetItemChecked(unsigned i, bool checked) noexcept;
+
+  [[gnu::pure]]
+  bool IsItemChecked(unsigned i) const noexcept;
+
   /**
    * Append the footer of the group which is currently open, if it
    * needs one.  Called when the next group begins and before the
@@ -243,6 +266,26 @@ private:
   int FindElementAt(int y) const noexcept;
 
   /**
+   * Look up an item by its index, counting only items.
+   *
+   * @return the element index, or -1 if there is no such item
+   */
+  [[gnu::pure]]
+  int FindItemByIndex(unsigned i) const noexcept;
+
+  /** Check the given item and uncheck the others of its group. */
+  void CheckOnly(std::size_t i) noexcept;
+
+  /**
+   * The width of the column which holds a check mark, including the
+   * padding which separates it from the text.
+   */
+  [[gnu::pure]]
+  int GetCheckWidth() const noexcept {
+    return GetCheckSize() + (int)Layout::VptScale(PADDING_PT);
+  }
+
+  /**
    * The gap above an element which begins a new group: the first
    * element keeps the same distance to the upper edge as the cards
    * keep to both sides.
@@ -260,6 +303,14 @@ private:
   static int GetSeparatorThickness() noexcept {
     return std::max(1u, Layout::ScalePenWidth(1) / 2);
   }
+
+  /** The width and the height of the check mark itself. */
+  [[gnu::pure]]
+  int GetCheckSize() const noexcept {
+    return std::max(4, (int)look.list.font->GetHeight() * 2 / 3);
+  }
+
+  static void DrawCheck(Canvas &canvas, PixelRect rc, Color color) noexcept;
 
   void SetOrigin(int _origin) noexcept;
   void EnsureVisible(unsigned i) noexcept;
@@ -416,6 +467,9 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .badge_style = options.badge_style,
     .callback = std::move(callback),
     .chevron = options.chevron,
+    .checked = options.checked,
+    .selection_mode = group_options.selection_mode,
+    .check_position = group_options.check_position,
   });
 
 }
@@ -428,6 +482,63 @@ GroupedListControl::GetItemCount() const noexcept
     if (element.IsItem())
       ++n;
   return n;
+}
+
+int
+GroupedListControl::FindItemByIndex(unsigned i) const noexcept
+{
+  unsigned n = 0;
+
+  for (std::size_t j = 0; j < elements.size(); ++j) {
+    if (!elements[j].IsItem())
+      continue;
+
+    if (n == i)
+      return j;
+
+    ++n;
+  }
+
+  return -1;
+}
+
+void
+GroupedListControl::CheckOnly(std::size_t i) noexcept
+{
+  assert(i < elements.size());
+  assert(elements[i].IsItem());
+
+  /* the items of a group are a run of neighbours; the flags of the
+     group say the same, but they are only maintained for the items
+     which are drawn */
+  std::size_t begin = i;
+  while (begin > 0 && elements[begin - 1].IsItem())
+    --begin;
+
+  for (std::size_t j = begin; j < elements.size() && elements[j].IsItem(); ++j)
+    elements[j].checked = j == i;
+}
+
+void
+GroupedListControl::SetItemChecked(unsigned i, bool checked) noexcept
+{
+  const int j = FindItemByIndex(i);
+  if (j < 0)
+    return;
+
+  if (checked && elements[j].selection_mode == SelectionMode::SINGLE)
+    CheckOnly(j);
+  else
+    elements[j].checked = checked;
+
+  Invalidate();
+}
+
+bool
+GroupedListControl::IsItemChecked(unsigned i) const noexcept
+{
+  const int j = FindItemByIndex(i);
+  return j >= 0 && elements[j].checked;
 }
 
 int
@@ -476,6 +587,37 @@ GroupedListControl::UpdateGroupFlags() noexcept
       !elements[i + 1].IsItem();
   }
 
+  /* find the groups which have check marks; all their items reserve
+     the room for one, even those which cannot be checked */
+  for (std::size_t i = 0; i < elements.size();) {
+    if (!elements[i].IsItem()) {
+      ++i;
+      continue;
+    }
+
+    std::size_t end = i;
+    bool left = false, right = false;
+
+    do {
+      const Element &element = elements[end];
+
+      if (element.selection_mode != SelectionMode::NONE) {
+        if (element.check_position == CheckPosition::LEFT)
+          left = true;
+        else
+          right = true;
+      }
+
+      ++end;
+    } while (end < elements.size() && elements[end].IsItem());
+
+    for (std::size_t j = i; j < end; ++j) {
+      elements[j].check_left = left;
+      elements[j].check_right = right;
+    }
+
+    i = end;
+  }
 }
 
 void
@@ -610,6 +752,24 @@ GroupedListControl::ActivateItem() noexcept
   if (cursor < 0 || (std::size_t)cursor >= elements.size())
     return;
 
+  Element &element = elements[cursor];
+
+  switch (element.selection_mode) {
+  case SelectionMode::NONE:
+    break;
+
+  case SelectionMode::SINGLE:
+    /* like a radio button: tapping the checked item keeps it checked */
+    CheckOnly(cursor);
+    Invalidate();
+    break;
+
+  case SelectionMode::MULTIPLE:
+    element.checked = !element.checked;
+    Invalidate();
+    break;
+  }
+
   /* the item under the finger is drawn pressed, and the release
      does not reach the screen before the next repaint: show it now,
      because the callback may take a while.  The window this list
@@ -618,7 +778,9 @@ GroupedListControl::ActivateItem() noexcept
   if (auto *top = dynamic_cast<UI::TopWindow *>(GetRootOwner()))
     top->Refresh();
 
-  if (const auto &callback = elements[cursor].callback)
+  /* the callback may open another dialog; invoke it after the check
+     mark has been updated */
+  if (const auto &callback = element.callback)
     callback();
 }
 
@@ -671,6 +833,26 @@ GroupedListControl::DrawRoundedEdge(Canvas &canvas, const PixelRect &rc,
     canvas.DrawFilledRectangle({rc.left, y, rc.left + dx, y + 1}, color);
     canvas.DrawFilledRectangle({rc.right - dx, y, rc.right, y + 1}, color);
   }
+}
+
+void
+GroupedListControl::DrawCheck(Canvas &canvas, PixelRect rc,
+                              Color color) noexcept
+{
+  /* a check mark, drawn as two strokes: a short one down to the lower
+     left corner, and a long one up to the upper right corner */
+  const Pen pen(std::max(2u, Layout::ScalePenWidth(2)), color);
+  canvas.Select(pen);
+
+  const int left = rc.left;
+  const int right = rc.right - 1;
+  const int bottom = rc.bottom - 1;
+
+  /* the corner where the two strokes meet */
+  const PixelPoint corner{left + (int)rc.GetWidth() / 3, bottom};
+
+  canvas.DrawLine({left, bottom - (int)rc.GetHeight() / 2}, corner);
+  canvas.DrawLine(corner, {right, rc.top});
 }
 
 void
@@ -742,11 +924,39 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - font_height) / 2;
 
-    /* the caption uses the room which is left of the arrow, the
-       value and the badge */
+    /* the caption uses the room which is left of the check mark, the
+       arrow, the value and the badge */
     PixelRect caption_rc = text_rc;
 
-    caption_rc.right -= Layout::VptScale(EDGE_INSET_PT);
+    const int edge_inset = Layout::VptScale(EDGE_INSET_PT);
+
+    caption_rc.right -= edge_inset;
+
+    if (element.check_left)
+      caption_rc.left += edge_inset;
+
+    if (element.check_left || element.check_right) {
+      const int size = GetCheckSize();
+      const bool left = element.check_position == CheckPosition::LEFT;
+
+      if (element.checked) {
+        PixelRect check_rc;
+        check_rc.left = left
+          ? caption_rc.left
+          : caption_rc.right - size;
+        check_rc.right = check_rc.left + size;
+        check_rc.top = centre_y - size / 2;
+        check_rc.bottom = check_rc.top + size;
+
+        DrawCheck(canvas, check_rc, text_color);
+      }
+
+      if (element.check_left)
+        caption_rc.left += GetCheckWidth();
+
+      if (element.check_right)
+        caption_rc.right -= GetCheckWidth();
+    }
 
     if (element.chevron) {
       const int size = std::max(2, font_height / 4);
@@ -1228,6 +1438,18 @@ unsigned
 GroupedListWidget::GetItemCount() const noexcept
 {
   return control.GetItemCount();
+}
+
+void
+GroupedListWidget::SetItemChecked(unsigned i, bool checked) noexcept
+{
+  control.SetItemChecked(i, checked);
+}
+
+bool
+GroupedListWidget::IsItemChecked(unsigned i) const noexcept
+{
+  return control.IsItemChecked(i);
 }
 
 void
