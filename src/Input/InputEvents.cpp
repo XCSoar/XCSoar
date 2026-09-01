@@ -147,6 +147,12 @@ InputEvents::UpdatePan() noexcept
 }
 
 void
+InputEvents::UpdateMenu() noexcept
+{
+  drawButtons(getModeID(), true);
+}
+
+void
 InputEvents::SetFlavour(const char *_flavour) noexcept
 {
   if (flavour == NULL && _flavour == NULL)

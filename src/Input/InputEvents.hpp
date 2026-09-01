@@ -54,6 +54,12 @@ void
 UpdatePan() noexcept;
 
 /**
+ * Update dynamic items in the current menu.
+ */
+void
+UpdateMenu() noexcept;
+
+/**
  * Set the "flavour" of the current mode.  It is an optional string
  * that gets appended to the current mode name, separated with a
  * dot, to build a new "overlay" mode.  This may be used to replace

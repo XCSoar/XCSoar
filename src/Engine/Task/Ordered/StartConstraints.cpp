@@ -15,6 +15,8 @@ StartConstraints::SetDefaults()
   require_arm = false;
   score_exit = true;
   fai_finish = false;
+  start_mode = StartMode::NORMAL;
+  pev_start_enabled = false;
   pev_start_wait_time = {};
   pev_start_window = {};
 }

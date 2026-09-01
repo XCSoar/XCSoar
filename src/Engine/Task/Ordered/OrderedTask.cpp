@@ -136,6 +136,15 @@ OrderedTask::UpdateStatsGeometry() noexcept
 }
 
 void
+OrderedTask::SetPilotEventWindowSnapshot(const TimeSpan &span) noexcept
+{
+  pilot_event_window_snapshot = span;
+
+  if (taskpoint_start != nullptr)
+    taskpoint_start->SetPilotEventWindowSnapshot(span);
+}
+
+void
 OrderedTask::UpdateGeometry() noexcept
 {
   UpdateStatsGeometry();
@@ -532,11 +541,15 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     assert(start_state.HasTime());
     stats.start.SetStarted(
         start_state,
-        pilot_pev_window_snapshot.IsDefined() ? &pilot_pev_window_snapshot
-                                             : nullptr);
+        pilot_event_window_snapshot.IsDefined() ? &pilot_event_window_snapshot
+                                                : nullptr);
 
     if (taskpoint_finish != nullptr)
-      taskpoint_finish->SetFaiFinishHeight(start_state.altitude - 1000);
+      taskpoint_finish->SetStartAltitude(start_state.altitude);
+
+    if (taskpoint_finish != nullptr)
+      taskpoint_finish->SetFaiFinishHeight(
+        start_state.altitude - FAI_FINISH_HEIGHT_LOSS);
   }
 
   if (task_events != nullptr) {
@@ -1150,6 +1163,30 @@ OrderedTask::TaskStarted(bool soft) const noexcept
   }
 
   return false;
+}
+
+bool
+OrderedTask::StartPolish(const AircraftState &state) noexcept
+{
+  if (task_points.size() < 2 || taskpoint_start == nullptr ||
+      !taskpoint_start->IsPolishStart())
+    return false;
+
+  if (TaskStarted() || !taskpoint_start->StartPolish(state))
+    return false;
+
+  stats.start.SetStarted(state);
+
+  SetActiveTaskPoint(1);
+  taskpoint_start->ScanActive(*task_points[active_task_point]);
+
+  if (task_events != nullptr) {
+    task_events->TaskStart();
+    task_events->ActiveAdvanced(*task_points[active_task_point],
+                                (int)active_task_point);
+  }
+
+  return true;
 }
 
 /**

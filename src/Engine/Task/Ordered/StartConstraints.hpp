@@ -9,6 +9,13 @@
 struct AircraftState;
 struct TaskStartMargins;
 
+enum class StartMode : unsigned {
+  NORMAL,
+  FAI_START_FINISH,
+  PEV,
+  POLISH,
+};
+
 struct StartConstraints {
   /**
    * The time span during which a hard start gate is open.
@@ -43,6 +50,16 @@ struct StartConstraints {
    * the constraints defined in this class will be ignored.
    */
   bool fai_finish;
+
+  /**
+   * Selected start mode.
+   */
+  StartMode start_mode;
+
+  /**
+   * Pilot Event (PEV) start is enabled.
+   */
+  bool pev_start_enabled;
 
   /**
    * Wait duration after Pilot Event (PEV) and start gate open time.

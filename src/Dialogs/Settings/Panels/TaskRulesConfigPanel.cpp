@@ -4,6 +4,8 @@
 #include "TaskRulesConfigPanel.hpp"
 #include "Profile/Keys.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Float.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -26,7 +28,7 @@ enum ControlIndex {
   PEVStartWindow,
 };
 
-class TaskRulesConfigPanel final : public RowFormWidget {
+class TaskRulesConfigPanel final : public RowFormWidget, DataFieldListener {
 public:
   TaskRulesConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -34,6 +36,19 @@ public:
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+private:
+  void OnModified(DataField &df) noexcept override {
+    if (IsDataField(FinishHeightRef, df))
+      UpdateFinishHeightRange();
+  }
+
+  void UpdateFinishHeightRange() noexcept {
+    auto &height = (DataFieldFloat &)GetDataField(FinishMinHeight);
+    const auto &reference = (const DataFieldEnum &)GetDataField(FinishHeightRef);
+    const bool start = reference.GetValue() == (unsigned)AltitudeReference::START;
+    height.SetMin(start ? -10000 : 0);
+  }
 };
 
 void
@@ -77,6 +92,8 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
       N_("Reference is the height above the task point."), },
     { AltitudeReference::MSL, N_("MSL"),
       N_("Reference is altitude above mean sea level."), },
+    { AltitudeReference::START, N_("Start"),
+      N_("Reference is the altitude at which the task was started."), },
     nullptr
   };
 
@@ -90,7 +107,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(spacer_2);
 
   AddFloat(_("Finish min. height"),
-           _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. "
+           _("Minimum height based on the finish height reference while finishing the task. "
+               "With Start reference, this is the maximum permitted height loss from start "
+               "to finish; negative values allow the finish to be below the start height. "
                "Set to 0 for no limit."),
            "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
            task_behaviour.ordered_defaults.finish_constraints.min_height);
@@ -99,21 +118,24 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),
           altitude_reference_list,
-          (unsigned)task_behaviour.ordered_defaults.finish_constraints.min_height_ref);
+          (unsigned)task_behaviour.ordered_defaults.finish_constraints.min_height_ref,
+          this);
   SetExpertRow(FinishHeightRef);
+
+  UpdateFinishHeightRange();
 
   AddSpacer();
   SetExpertRow(spacer_3);
 
   AddDuration(_("PEV start wait time"),
-              _("Wait time in minutes after Pilot Event and before start gate opens. "
+              _("Wait time in minutes after Pilot Event (PEV) and before start gate opens. "
                 "0 means start opens immediately."),
               {}, minutes{30}, minutes{1},
               task_behaviour.ordered_defaults.start_constraints.pev_start_wait_time);
   SetExpertRow(PEVStartWaitTime);
 
   AddDuration(_("PEV start window"),
-              _("Number of minutes start remains open after Pilot Event and PEV wait time."
+              _("Number of minutes start remains open after Pilot Event (PEV) and PEV wait time."
                 "0 means start will never close after it opens."),
               {}, minutes{30}, minutes{1},
               task_behaviour.ordered_defaults.start_constraints.pev_start_window);

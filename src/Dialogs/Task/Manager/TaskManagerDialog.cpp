@@ -32,6 +32,7 @@
 #include "Language/Language.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Input/InputEvents.hpp"
 
 inline
 TaskManagerDialog::TaskManagerDialog(WndForm &_dialog,
@@ -194,6 +195,7 @@ TaskManagerDialog::Commit()
     }
 
     backend_components->protected_task_manager->TaskCommit(*task);
+    InputEvents::UpdateMenu();
 
     try {
       backend_components->protected_task_manager->TaskSaveDefault();

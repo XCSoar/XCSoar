@@ -30,4 +30,9 @@ enum class AltitudeReference : uint8_t {
    * This is used for flight levels (FL).
    */
   STD,
+
+  /**
+   * Altitude is measured relative to the task start altitude.
+   */
+  START,
 };
