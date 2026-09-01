@@ -223,8 +223,8 @@ freetype = MesonProject(
 )
 
 cares = CmakeProject(
-    "https://github.com/c-ares/c-ares/releases/download/cares-1_24_0/c-ares-1.24.0.tar.gz",
-    "c517de6d5ac9cd55a9b72c1541c3e25b84588421817b5f092850ac09a8df5103",
+    "https://github.com/c-ares/c-ares/releases/download/v1.34.8/c-ares-1.34.8.tar.gz",
+    "c222b6d681096f9444d2c4863d2c1174019e27cacca0a4a5c114d36dd7d7bf78",
     "lib/libcares.a",
     [
         "-DCARES_STATIC=ON",
@@ -233,15 +233,14 @@ cares = CmakeProject(
         "-DCARES_BUILD_TOOLS=OFF",
         "-DCARES_THREADS=OFF",
     ],
-    patches=abspath("lib/c-ares/patches"),
 )
 
 curl = CmakeProject(
     (
-        "https://curl.se/download/curl-8.5.0.tar.xz",
-        "https://github.com/curl/curl/releases/download/curl-8_5_0/curl-8.5.0.tar.xz",
+        "https://curl.se/download/curl-8.14.1.tar.xz",
+        "https://github.com/curl/curl/releases/download/curl-8_14_1/curl-8.14.1.tar.xz",
     ),
-    "42ab8db9e20d8290a3b633e7fbb3cec15db34df65fd1015ef8ac1e4723750eeb",
+    "f4619a1e2474c4bbfedc88a7c2191209c8334b48fa1f4e53fd584cc12e9120dd",
     "lib/libcurl.a",
     [
         "-DBUILD_CURL_EXE=OFF",
@@ -260,8 +259,7 @@ curl = CmakeProject(
         "-DCURL_DISABLE_SMTP=ON",
         "-DCURL_DISABLE_GOPHER=ON",
         "-DCURL_DISABLE_COOKIES=ON",
-        "-DCURL_DISABLE_CRYPTO_AUTH=ON",
-        "-DCMAKE_USE_LIBSSH2=OFF",
+        "-DCURL_USE_LIBPSL=OFF",
         "-DBUILD_TESTING=OFF",
         "-DHAVE_FSEEKO=0",
     ],
@@ -270,11 +268,14 @@ curl = CmakeProject(
     ],
     android_configure_args=[
         "-DENABLE_ARES=OFF",  # Disable c-ares on Android - use system getaddrinfo() instead
+        "-DCURL_DISABLE_NETRC=ON",
     ],
     # Darwin/iOS: use SecureTransport for SSL
     darwin_configure_args=[
         "-DCURL_USE_OPENSSL=OFF",
         "-DCURL_USE_SECTRANSP=ON",
+        # CMake may find the host's pipe2() while cross-compiling for iOS.
+        "-DHAVE_PIPE2=0",
     ],
     patches=abspath("lib/curl/patches"),
 )
