@@ -29,6 +29,21 @@ class GroupedListWidget final : public WindowWidget {
 public:
   using Callback = std::function<void()>;
 
+  /** The colors of a badge. */
+  enum class BadgeStyle : uint_least8_t {
+    /** the accent color of the dialog; the state which shall be seen */
+    PRIMARY,
+
+    /** something needs attention, but works, e.g. "outdated" */
+    WARNING,
+
+    /** something is broken, e.g. "no fix" */
+    DANGER,
+
+    /** something has succeeded, e.g. "connected" */
+    SUCCESS,
+  };
+
   /** The contents and the behaviour of a group. */
   struct GroupOptions {
     /**
@@ -45,6 +60,9 @@ public:
 
     /** a short label in a rounded box, e.g. "active" */
     const char *badge = nullptr;
+
+    /** the colors of #badge */
+    BadgeStyle badge_style = BadgeStyle::PRIMARY;
   };
 
 private:
