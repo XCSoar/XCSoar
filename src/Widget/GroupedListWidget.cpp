@@ -2347,10 +2347,66 @@ GroupedListWidget::UpdateLayout() noexcept
   control.UpdateLayout();
 }
 
+void
+GroupedListWidget::SetBottomWidget(std::unique_ptr<Widget> _widget,
+                                   unsigned height_pt) noexcept
+{
+  assert(pending);
+
+  bottom_widget = std::move(_widget);
+  bottom_widget_height_pt = height_pt;
+}
+
+unsigned
+GroupedListWidget::GetBottomWidgetHeight(const PixelRect &rc) const noexcept
+{
+  if (bottom_widget == nullptr)
+    return 0;
+
+  unsigned height = bottom_widget_height_pt > 0
+    ? Layout::VptScale(bottom_widget_height_pt)
+    : bottom_widget->GetMaximumSize().height;
+
+  if (height == 0)
+    /* a view which does not say how tall it would like to be */
+    height = bottom_widget->GetMinimumSize().height;
+
+  /* the list keeps half of the room at least: it is what the page is
+     about, and the view below it only explains it */
+  return std::min(height, rc.GetHeight() / 2);
+}
+
+std::pair<PixelRect, PixelRect>
+GroupedListWidget::SplitRect(const PixelRect &rc) const noexcept
+{
+  PixelRect list_rc = rc, bottom_rc = rc;
+
+  list_rc.bottom = bottom_rc.top = rc.bottom - (int)GetBottomWidgetHeight(rc);
+
+  return {list_rc, bottom_rc};
+}
+
+/**
+ * A layout for Initialise() and Prepare(), which run before the view
+ * may be asked how tall it wants to be.  Show() and Move() follow
+ * with the real one.
+ */
+[[gnu::pure]]
+static std::pair<PixelRect, PixelRect>
+DummySplitRect(const PixelRect &rc) noexcept
+{
+  return rc.HorizontalSplit();
+}
+
 PixelSize
 GroupedListWidget::GetMinimumSize() const noexcept
 {
-  return { Layout::Scale(200u), 2u * control.GetItemHeight() };
+  PixelSize size{Layout::Scale(200u), 2u * control.GetItemHeight()};
+
+  if (bottom_widget != nullptr)
+    size.height += bottom_widget->GetMinimumSize().height;
+
+  return size;
 }
 
 PixelSize
@@ -2360,15 +2416,72 @@ GroupedListWidget::GetMaximumSize() const noexcept
 }
 
 void
+GroupedListWidget::Initialise(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
+{
+  if (bottom_widget != nullptr)
+    bottom_widget->Initialise(parent, DummySplitRect(rc).second);
+}
+
+void
 GroupedListWidget::Prepare(ContainerWindow &parent,
                            const PixelRect &rc) noexcept
 {
   assert(pending);
 
-  pending->Create(parent, rc);
+  const auto [list_rc, bottom_rc] = DummySplitRect(rc);
+
+  pending->Create(parent, bottom_widget == nullptr ? rc : list_rc);
   SetWindow(std::move(pending));
 
+  if (bottom_widget != nullptr)
+    bottom_widget->Prepare(parent, bottom_rc);
+
   UpdateLayout();
+}
+
+void
+GroupedListWidget::Unprepare() noexcept
+{
+  if (bottom_widget != nullptr)
+    bottom_widget->Unprepare();
+}
+
+bool
+GroupedListWidget::Save(bool &changed) noexcept
+{
+  return bottom_widget == nullptr || bottom_widget->Save(changed);
+}
+
+void
+GroupedListWidget::Show(const PixelRect &rc) noexcept
+{
+  const auto [list_rc, bottom_rc] = SplitRect(rc);
+
+  WindowWidget::Show(list_rc);
+
+  if (bottom_widget != nullptr)
+    bottom_widget->Show(bottom_rc);
+}
+
+void
+GroupedListWidget::Hide() noexcept
+{
+  if (bottom_widget != nullptr)
+    bottom_widget->Hide();
+
+  WindowWidget::Hide();
+}
+
+void
+GroupedListWidget::Move(const PixelRect &rc) noexcept
+{
+  const auto [list_rc, bottom_rc] = SplitRect(rc);
+
+  WindowWidget::Move(list_rc);
+
+  if (bottom_widget != nullptr)
+    bottom_widget->Move(bottom_rc);
 }
 
 bool
