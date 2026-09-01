@@ -87,19 +87,11 @@ static constexpr unsigned BADGE_RADIUS_PT = 3;
 static constexpr unsigned SUBTITLE_GAP_PT = 2;
 
 /**
- * How many lines may the value of an item use?  What does not fit
- * ends with an ellipsis; a value which was filled by accident must
- * not blow up the card.
+ * How many lines may the caption or the value of an item use?  What
+ * does not fit ends with an ellipsis; a text which was filled by
+ * accident must not blow up the card.
  */
-static constexpr std::size_t VALUE_MAX_LINES = 4;
-
-/**
- * The box which holds the value never uses less than this share of
- * the room next to the caption.  A value which would be squeezed into
- * a narrower box is drawn below the caption instead, where it has the
- * whole width.
- */
-static constexpr unsigned VALUE_MIN_PERCENT = 40;
+static constexpr std::size_t MAX_TEXT_LINES = 4;
 
 /** Distance between a card and the footer which explains it. */
 static constexpr unsigned FOOTER_GAP_PT = 4;
@@ -191,6 +183,9 @@ private:
 
     /** the height of #value, which may need more than one line */
     unsigned value_height = 0;
+
+    /** the height of the caption, which may need more than one line */
+    unsigned text_height = 0;
 
     /** only for Type::ITEM: drawn in a rounded box */
     std::string badge{};
@@ -447,19 +442,22 @@ private:
   int GetDecorationWidth(const Element &element) const noexcept;
 
   /**
-   * Find the box which holds the value of an item: how wide it is,
-   * whether it is beside the caption or below it, and how tall it is.
+   * Divide the room of an item between the caption and the value:
+   * both may wrap, and the one which needs more of it gets more.
    *
    * @param room the width which the caption and the value share
+   * @return the width of the box which holds the caption
    */
-  void UpdateValueLayout(Element &element, int room) const noexcept;
+  int UpdateTextLayout(Element &element, int room) const noexcept;
 
   /**
-   * Draw the value of an item into its box, right aligned; a value
-   * which is too wide wraps, and the last line ends with an ellipsis.
+   * Draw a text into its box; a text which is too wide wraps, and the
+   * last line ends with an ellipsis.
+   *
+   * @param right align the lines at the right edge of the box
    */
-  void DrawValue(Canvas &canvas, const PixelRect &rc,
-                 const std::string &value) const noexcept;
+  void DrawWrappedText(Canvas &canvas, const PixelRect &rc,
+                       const std::string &text, bool right) const noexcept;
 
   /**
    * The width and the height of the icon of an item: one and a half
@@ -1110,63 +1108,95 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
   return width;
 }
 
-void
-GroupedListControl::UpdateValueLayout(Element &element,
-                                      int room) const noexcept
+/**
+ * The height which a text needs inside a box of the given width: one
+ * line is as tall as the font itself, more lines use its line
+ * spacing.
+ */
+[[gnu::pure]]
+static unsigned
+GetTextHeight(const Font &font, int width, const std::string &text) noexcept
 {
+  const auto wrapped = WrapText(font, std::max(width, 1), text);
+  const std::size_t lines = std::min(wrapped.lines.size(), MAX_TEXT_LINES);
+
+  return lines <= 1
+    ? font.GetHeight()
+    : (unsigned)lines * font.GetLineSpacing();
+}
+
+int
+GroupedListControl::UpdateTextLayout(Element &element,
+                                     int room) const noexcept
+{
+  const Font &font = *look.list.font;
+  const int padding = Layout::VptScale(PADDING_PT);
+
   element.value_is_below = false;
   element.value_width = 0;
   element.value_height = 0;
 
-  if (element.value.empty() || element.disabled)
-    return;
-
-  const Font &font = *look.list.font;
-  const int padding = Layout::VptScale(PADDING_PT);
-
-  /* the box begins where the caption ends: the caption is never
-     covered by a value which is too wide for the item */
-  int width = room - (int)font.TextSize(element.text).width - padding;
-
-  if (!element.value_below &&
-      (int)font.TextSize(element.value).width <= width) {
-    /* it fits beside the caption, on one line, as most values do */
-    element.value_width = font.TextSize(element.value).width;
-    element.value_height = font.GetHeight();
-    return;
+  if (element.value.empty() || element.disabled) {
+    element.text_height = GetTextHeight(font, room, element.text);
+    return room;
   }
 
-  if (element.value_below || width < room * (int)VALUE_MIN_PERCENT / 100) {
-    /* wrapping into the little room which is left would make the item
-       very tall; below the caption, the value has the whole width */
+  if (element.value_below) {
+    /* the value has the whole width, below the caption */
+    element.value_width = room;
+    element.value_height = GetTextHeight(font, room, element.value);
     element.value_is_below = true;
-    width = room;
+    element.text_height = GetTextHeight(font, room, element.text);
+    return room;
   }
 
-  width = std::max(width, 1);
+  /* the caption and the value are two columns which share the room,
+     with nothing but the padding between them */
+  const int available = std::max(room - padding, 2);
+  const int caption_natural = (int)font.TextSize(element.text).width;
+  const int value_natural = (int)font.TextSize(element.value).width;
 
-  const auto wrapped = WrapText(font, width, element.value);
-  const std::size_t lines = std::min(wrapped.lines.size(), VALUE_MAX_LINES);
+  int value_width;
 
-  element.value_width = width;
-  element.value_height = lines * font.GetLineSpacing();
+  if (caption_natural + value_natural <= available ||
+      value_natural <= available / 2)
+    /* both fit, or the value is the short one: it keeps its width and
+       the caption takes the rest */
+    value_width = value_natural;
+  else if (caption_natural <= available / 2)
+    /* the caption is the short one */
+    value_width = available - caption_natural;
+  else
+    /* both are too wide: they share the room in the proportion of
+       what they would need */
+    value_width = available
+      - available * caption_natural / (caption_natural + value_natural);
+
+  const int caption_width = available - value_width;
+
+  element.value_width = value_width;
+  element.value_height = GetTextHeight(font, value_width, element.value);
+  element.text_height = GetTextHeight(font, caption_width, element.text);
+
+  return caption_width;
 }
 
 void
-GroupedListControl::DrawValue(Canvas &canvas, const PixelRect &rc,
-                              const std::string &value) const noexcept
+GroupedListControl::DrawWrappedText(Canvas &canvas, const PixelRect &rc,
+                                    const std::string &text,
+                                    bool right) const noexcept
 {
   const Font &font = *look.list.font;
   const int width = std::max((int)rc.GetWidth(), 1);
-  const auto wrapped = WrapText(font, width, value);
+  const auto wrapped = WrapText(font, width, text);
 
   int y = rc.top;
 
   for (std::size_t i = 0; i < wrapped.lines.size(); ++i) {
-    if (i + 1 == VALUE_MAX_LINES && wrapped.lines.size() > VALUE_MAX_LINES) {
+    if (i + 1 == MAX_TEXT_LINES && wrapped.lines.size() > MAX_TEXT_LINES) {
       /* the last line says that the text goes on */
       const std::string_view rest =
-        std::string_view{value}.substr(wrapped.lines[i].start);
+        std::string_view{text}.substr(wrapped.lines[i].start);
       const int ellipsis_width = (int)font.TextSize("…").width;
       const auto tail = WrapText(font, std::max(width - ellipsis_width, 1),
                                  rest);
@@ -1176,15 +1206,20 @@ GroupedListControl::DrawValue(Canvas &canvas, const PixelRect &rc,
                        : tail.lines.front().GetText(rest)};
       last += "…";
 
-      canvas.DrawClippedText({rc.right - (int)font.TextSize(last).width, y},
-                             rc, last);
+      const int x = right
+        ? rc.right - (int)font.TextSize(last).width
+        : rc.left;
+
+      canvas.DrawClippedText({x, y}, rc, last);
       return;
     }
 
-    const std::string_view text = wrapped.lines[i].GetText(value);
+    const std::string_view line = wrapped.lines[i].GetText(text);
+    const int x = right
+      ? rc.right - (int)font.TextSize(line).width
+      : rc.left;
 
-    canvas.DrawClippedText({rc.right - (int)font.TextSize(text).width, y},
-                           rc, text);
+    canvas.DrawClippedText({x, y}, rc, line);
 
     y += (int)font.GetLineSpacing();
   }
@@ -1261,13 +1296,7 @@ GroupedListControl::UpdateLayout() noexcept
            share, once the decorations have taken theirs */
         const int room = std::max(text_width - GetDecorationWidth(element), 1);
 
-        UpdateValueLayout(element, room);
-
-        /* the caption column loses the box of a value beside it */
-        const int caption_width = element.value_is_below ||
-          element.value_width == 0
-          ? room
-          : room - (int)element.value_width - (int)Layout::VptScale(PADDING_PT);
+        const int caption_width = UpdateTextLayout(element, room);
 
         element.subtitle_height = element.subtitle.empty()
           ? 0
@@ -1277,8 +1306,9 @@ GroupedListControl::UpdateLayout() noexcept
 
         /* the caption, its second line and a value below them are one
            block; a value beside them is a block of its own */
-        unsigned block = font_height;
-        unsigned lines = 1;
+        unsigned block = element.text_height;
+        unsigned lines = std::max(1u, element.text_height
+                                  / look.list.font->GetLineSpacing());
 
         if (element.subtitle_height > 0) {
           block += subtitle_gap + element.subtitle_height;
@@ -1617,7 +1647,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
        centred as one block */
     const int gap = Layout::VptScale(SUBTITLE_GAP_PT);
 
-    int block_height = font_height;
+    int block_height = (int)element.text_height;
 
     if (!element.subtitle.empty())
       block_height += gap + (int)element.subtitle_height;
@@ -1627,7 +1657,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - block_height) / 2;
-    const int subtitle_y = text_y + font_height + gap;
+    const int subtitle_y = text_y + (int)element.text_height + gap;
     const int value_y = element.subtitle.empty()
       ? subtitle_y
       : subtitle_y + (int)element.subtitle_height + gap;
@@ -1809,11 +1839,14 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
         value_rc.bottom = value_y + (int)element.value_height;
       }
 
-      DrawValue(canvas, value_rc, element.value);
+      DrawWrappedText(canvas, value_rc, element.value, true);
     }
 
-    canvas.DrawClippedText({caption_rc.left, text_y}, caption_rc,
-                           element.text.c_str());
+    PixelRect text_box = caption_rc;
+    text_box.top = text_y;
+    text_box.bottom = text_y + (int)element.text_height;
+
+    DrawWrappedText(canvas, text_box, element.text, false);
 
     if (!element.subtitle.empty()) {
       canvas.Select(look.small_font);
