@@ -147,6 +147,13 @@ public:
      * default label.  Use it to say why the item is not available.
      */
     const char *disabled_badge_label = nullptr;
+
+    /**
+     * Leave this item out.  It is not drawn, it occupies no room and
+     * the cursor skips it, but it keeps its index: the indices of the
+     * items behind it do not move while it is hidden.
+     */
+    bool hidden = false;
   };
 
 private:
@@ -204,7 +211,8 @@ public:
   void Clear() noexcept;
 
   /**
-   * @return the number of items
+   * @return the number of items; a hidden item counts too, because it
+   * keeps its index
    */
   [[gnu::pure]]
   unsigned GetItemCount() const noexcept;
