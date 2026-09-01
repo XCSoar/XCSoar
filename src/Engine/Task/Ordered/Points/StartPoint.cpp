@@ -62,7 +62,8 @@ StartPoint::StartPolish(const AircraftState &state) noexcept
     return false;
 
   if (!IsInSector(state) ||
-      !constraints.CheckSpeed(state.ground_speed, &margins))
+      !constraints.CheckSpeed(state.ground_speed, &margins) ||
+      !constraints.open_time_span.IsInside(FineTime{state.time}))
     return false;
 
   polish_start_state = state;
