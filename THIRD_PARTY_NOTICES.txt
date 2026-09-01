@@ -2,7 +2,9 @@
 
 ## ANGLE (Almost Native Graphics Layer Engine)
 
-XCSoar on macOS uses **ANGLE** (OpenGL ES over Metal) for rendering.
+XCSoar uses **ANGLE** to provide OpenGL ES where the platform has no
+native implementation: over Metal on macOS, over Direct3D 11 on
+Windows builds with ANGLE enabled.
 
 **License:** [BSD 3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
