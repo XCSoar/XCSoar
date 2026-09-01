@@ -9,6 +9,9 @@
 
 struct AircraftState;
 
+/** Maximum height loss allowed by the FAI finish rule (m). */
+static constexpr unsigned FAI_FINISH_HEIGHT_LOSS = 1000;
+
 struct FinishConstraints {
   /** Minimum height AGL (m) allowed to finish */
   unsigned min_height;

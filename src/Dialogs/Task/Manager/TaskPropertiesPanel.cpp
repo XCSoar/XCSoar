@@ -6,6 +6,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/FinishConstraints.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
@@ -105,30 +106,34 @@ TaskPropertiesPanel::RefreshView()
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetRoughStart());
   LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetRoughEnd());
 
-  SetRowVisible(START_MAX_SPEED, !fai_start_finish);
+  SetRowEnabled(START_MAX_SPEED, !fai_start_finish);
   LoadValue(START_MAX_SPEED, p.start_constraints.max_speed,
             UnitGroup::HORIZONTAL_SPEED);
 
-  SetRowVisible(START_MAX_HEIGHT, !fai_start_finish);
+  SetRowEnabled(START_MAX_HEIGHT, !fai_start_finish);
   LoadValue(START_MAX_HEIGHT, double(p.start_constraints.max_height),
             UnitGroup::ALTITUDE);
 
-  SetRowVisible(START_HEIGHT_REF, !fai_start_finish);
+  SetRowEnabled(START_HEIGHT_REF, !fai_start_finish);
   LoadValueEnum(START_HEIGHT_REF, p.start_constraints.max_height_ref);
 
-  SetRowVisible(FINISH_MIN_HEIGHT, !fai_start_finish);
-  LoadValue(FINISH_MIN_HEIGHT, double(p.finish_constraints.min_height),
+  SetRowEnabled(FINISH_MIN_HEIGHT, !fai_start_finish);
+  LoadValue(FINISH_MIN_HEIGHT,
+            double(fai_start_finish ? FAI_FINISH_HEIGHT_LOSS :
+                   p.finish_constraints.min_height),
             UnitGroup::ALTITUDE);
 
-  SetRowVisible(FINISH_HEIGHT_REF, !fai_start_finish);
+  SetRowEnabled(FINISH_HEIGHT_REF, !fai_start_finish);
   LoadValueEnum(FINISH_HEIGHT_REF, p.finish_constraints.min_height_ref);
 
   LoadValueEnum(TASK_TYPE, ftype);
 
-  SetRowVisible(PEV_START_WAIT_TIME, !fai_start_finish && start_mode == StartMode::PEV);
+  SetRowEnabled(PEV_START_WAIT_TIME,
+                !fai_start_finish && start_mode == StartMode::PEV);
   LoadValueDuration(PEV_START_WAIT_TIME,
                     p.start_constraints.pev_start_wait_time);
-  SetRowVisible(PEV_START_WINDOW, !fai_start_finish && start_mode == StartMode::PEV);
+  SetRowEnabled(PEV_START_WINDOW,
+                !fai_start_finish && start_mode == StartMode::PEV);
   LoadValueDuration(PEV_START_WINDOW,
                     p.start_constraints.pev_start_window);
 
@@ -179,11 +184,13 @@ TaskPropertiesPanel::ReadValues()
   changed |= SaveValueEnum(START_HEIGHT_REF,
                            p.start_constraints.max_height_ref);
 
-  unsigned min_height =
-    iround(Units::ToSysAltitude(GetValueFloat(FINISH_MIN_HEIGHT)));
-  if (min_height != p.finish_constraints.min_height) {
-    p.finish_constraints.min_height = min_height;
-    changed = true;
+  if (!p.finish_constraints.fai_finish) {
+    unsigned min_height =
+      iround(Units::ToSysAltitude(GetValueFloat(FINISH_MIN_HEIGHT)));
+    if (min_height != p.finish_constraints.min_height) {
+      p.finish_constraints.min_height = min_height;
+      changed = true;
+    }
   }
 
   changed |= SaveValueEnum(FINISH_HEIGHT_REF,
