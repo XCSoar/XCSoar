@@ -105,10 +105,13 @@ public final class BluetoothSensor
       } catch (SecurityException e) {
         throw new IOException("Bluetooth GATT connect not permitted", e);
       }
-    }
 
-    if (gatt == null)
-      throw new IOException("Bluetooth GATT connect failed");
+      /* only this branch has connected synchronously and can say
+         whether it worked; the posted one reports its own failure
+         through submitError() once it has actually run */
+      if (gatt == null)
+        throw new IOException("Bluetooth GATT connect failed");
+    }
   }
 
   @Override
