@@ -18,6 +18,7 @@
 #include "ui/canvas/ColorGlyph.hpp"
 #include "ui/canvas/Icon.hpp"
 #include "util/UTF8.hpp"
+#include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/control/ScrollBar.hpp"
@@ -94,6 +95,14 @@ static constexpr std::size_t MAX_TEXT_LINES = 4;
 
 /** Distance between a card and the footer which explains it. */
 static constexpr unsigned FOOTER_GAP_PT = 4;
+
+/**
+ * The height of the switch which shows a boolean value, and the
+ * distance between its track and its thumb.  The width follows from
+ * the height: the track of such a switch is much wider than tall.
+ */
+static constexpr unsigned TOGGLE_HEIGHT_PT = 22;
+static constexpr unsigned TOGGLE_INSET_PT = 2;
 
 /**
  * The renderer of the texts which may take more than one line, the
@@ -210,6 +219,9 @@ private:
 
     /** only for Type::ITEM: left out, as if it had not been added */
     bool hidden = false;
+
+    /** only for Type::ITEM: a switch which shows #checked */
+    bool toggle = false;
 
     /** only for Type::WIDGET: the view which this group shows */
     std::unique_ptr<Widget> widget{};
@@ -587,7 +599,32 @@ private:
     return std::max(4, (int)look.list.font->GetHeight() * 2 / 3);
   }
 
+  /** The height of the switch which shows a boolean value. */
+  [[gnu::pure]]
+  int GetToggleHeight() const noexcept {
+    /* it must not touch the edges of the item on a device whose rows
+       are shorter than the switch would like to be; the room it
+       leaves is the one the text keeps, which is a vertical measure.
+       The padding of the card is the horizontal one and much larger:
+       on a device without a touch screen, where a row is only as
+       tall as one line of text, it would leave nothing at all.  An
+       even height lets the two half circles meet the rectangle
+       between them without a step */
+    return std::max(6, std::min((int)Layout::VptScale(TOGGLE_HEIGHT_PT),
+                                (int)GetItemHeight()
+                                - 2 * (int)Layout::GetTextPadding())) & ~1;
+  }
+
+  /** The width of that switch; the track is much wider than tall. */
+  [[gnu::pure]]
+  int GetToggleWidth() const noexcept {
+    return GetToggleHeight() * 33 / 20;
+  }
+
   static void DrawCheck(Canvas &canvas, PixelRect rc, Color color) noexcept;
+
+  static void DrawToggle(Canvas &canvas, const PixelRect &rc, bool checked,
+                         const DialogLook &look) noexcept;
 
   void SetOrigin(int _origin) noexcept;
   void EnsureVisible(unsigned i) noexcept;
@@ -918,6 +955,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .checked = options.checked,
     .disabled = options.disabled,
     .hidden = options.hidden,
+    .toggle = options.toggle,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
   });
@@ -1299,6 +1337,9 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
 
   if (element.check_right)
     width += GetCheckWidth();
+
+  if (element.toggle && !element.disabled)
+    width += GetToggleWidth() + padding;
 
   if (element.chevron && !element.disabled)
     width += std::max(2, (int)font.GetHeight() / 4) + padding;
@@ -1694,7 +1735,12 @@ GroupedListControl::ActivateItem() noexcept
   if (element.disabled)
     return;
 
-  switch (element.selection_mode) {
+  if (element.toggle) {
+    /* the switch is the state of this item; the check mark of the
+       group does not apply to it */
+    element.checked = !element.checked;
+    Invalidate();
+  } else switch (element.selection_mode) {
   case SelectionMode::NONE:
     break;
 
@@ -1794,6 +1840,83 @@ GroupedListControl::DrawCheck(Canvas &canvas, PixelRect rc,
 
   canvas.DrawLine({left, bottom - (int)rc.GetHeight() / 2}, corner);
   canvas.DrawLine(corner, {right, rc.top});
+}
+
+/** The colors of the switch which shows a boolean value. */
+struct ToggleColors {
+  /** the pill behind the thumb */
+  Color track_color;
+
+  /** the thumb which sits at one of its ends */
+  Color thumb_color;
+};
+
+[[gnu::pure]]
+static ToggleColors
+GetToggleColors(const DialogLook &look, bool checked) noexcept
+{
+  if (!HasColors())
+    /* a display without colors tells the two states apart by
+       brightness alone */
+    return {checked ? COLOR_BLACK : COLOR_GRAY, COLOR_WHITE};
+
+  if (checked)
+    /* green-500 of the Tailwind palette: it is much lighter and more
+       saturated than the accent blue which the item under the cursor
+       wears, and it keeps its distance from that blue in hue as well.
+       The darker green of a badge sits too close to it: on the item
+       under the cursor the two read as one muddy color */
+    return {Color(0x22, 0xc5, 0x5e), COLOR_WHITE};
+
+  /* zinc-600 and zinc-300 of the same palette */
+  return {look.dark_mode
+          ? Color(0x52, 0x52, 0x5b)
+          : Color(0xd4, 0xd4, 0xd8),
+          COLOR_WHITE};
+}
+
+void
+GroupedListControl::DrawToggle(Canvas &canvas, const PixelRect &rc,
+                               bool checked, const DialogLook &look) noexcept
+{
+  const auto colors = GetToggleColors(look, checked);
+
+  const int height = (int)rc.GetHeight();
+  const int radius = height / 2;
+  const int centre_y = rc.top + radius;
+
+  /* the track is a rectangle between two half circles; other than a
+     rounded rectangle whose corners are painted over, this touches no
+     pixel outside the switch, and the background may be anything */
+  canvas.DrawFilledRectangle({rc.left + radius, rc.top,
+                              rc.right - radius, rc.bottom},
+                             colors.track_color);
+
+  /* only the circles take their color from the brush; it and the pen
+     have a name because a temporary would be gone at the semicolon,
+     and a canvas which selects the object itself rather than a copy
+     of it would draw with a deleted one.  The pen paints the rim of
+     the circle: give it the color of the brush, because a null pen is
+     black and the rim would be a frayed dark edge */
+  const Brush track_brush(colors.track_color);
+  const Pen track_pen(0, colors.track_color);
+  canvas.Select(track_brush);
+  canvas.Select(track_pen);
+
+  canvas.DrawCircle({rc.left + radius, centre_y}, radius);
+  canvas.DrawCircle({rc.right - radius, centre_y}, radius);
+
+  const int inset = std::max(1, (int)Layout::VptScale(TOGGLE_INSET_PT));
+  const int thumb_radius = radius - inset;
+
+  const Brush thumb_brush(colors.thumb_color);
+  const Pen thumb_pen(0, colors.thumb_color);
+  canvas.Select(thumb_brush);
+  canvas.Select(thumb_pen);
+  canvas.DrawCircle({checked
+                     ? rc.right - radius
+                     : rc.left + radius,
+                     centre_y}, thumb_radius);
 }
 
 void
@@ -1911,7 +2034,10 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       const int size = GetCheckSize();
       const bool left = element.check_position == CheckPosition::LEFT;
 
-      if (element.checked && !element.disabled) {
+      /* an item which carries a switch keeps the room of the column,
+         so that all captions of the group stay aligned, but the
+         switch says its state, not a check mark */
+      if (element.checked && !element.disabled && !element.toggle) {
         PixelRect check_rc;
         check_rc.left = left
           ? caption_rc.left
@@ -1928,6 +2054,21 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
       if (element.check_right)
         caption_rc.right -= GetCheckWidth();
+    }
+
+    if (element.toggle && !element.disabled) {
+      const int width = GetToggleWidth();
+      const int height = GetToggleHeight();
+
+      PixelRect toggle_rc;
+      toggle_rc.right = caption_rc.right;
+      toggle_rc.left = toggle_rc.right - width;
+      toggle_rc.top = centre_y - height / 2;
+      toggle_rc.bottom = toggle_rc.top + height;
+
+      DrawToggle(canvas, toggle_rc, element.checked, look);
+
+      caption_rc.right = toggle_rc.left - padding;
     }
 
     /* an item which is not available shows neither the arrow nor its

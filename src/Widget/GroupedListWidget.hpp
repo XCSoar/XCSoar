@@ -149,7 +149,22 @@ public:
     /** an arrow, marking an item which opens another page */
     bool chevron = false;
 
-    /** is this item checked?  (only with a #SelectionMode) */
+    /**
+     * A switch at the right edge which shows whether the setting is
+     * on, for an item which is nothing but a boolean.  Tapping the
+     * item flips the switch and then calls the callback, which reads
+     * the new state with GroupedListWidget::IsItemChecked().  The
+     * switch takes the place of the value, and of the check mark of a
+     * group which has a #SelectionMode: an item with a switch keeps
+     * the room of that column, but neither shows a check mark nor
+     * takes part in the selection of its group.
+     */
+    bool toggle = false;
+
+    /**
+     * Is this item checked?  It is the state of the check mark (with
+     * a #SelectionMode) or of the #toggle.
+     */
     bool checked = false;
 
     /**
