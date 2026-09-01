@@ -18,6 +18,9 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/StartPoint.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/Aircraft.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #include "Device/MultipleDevices.hpp"
 #include "PageActions.hpp"
@@ -150,6 +153,37 @@ ExpandTaskMacros(std::string_view name,
         return _("Disarm turn");
       }
     }
+  }
+
+  if (name == "PilotEventAnnounce") {
+    if (task == nullptr || common_stats.task_type != TaskType::ORDERED ||
+        !task_stats.task_valid)
+      return nullptr;
+
+    const auto &ordered_task = task_manager->GetOrderedTask();
+    if (ordered_task.TaskSize() == 0)
+      return nullptr;
+
+    const auto &start = (const StartPoint &)ordered_task.GetTaskPoint(0);
+    const auto &constraints =
+      ordered_task.GetOrderedTaskSettings().start_constraints;
+    if (!constraints.pev_start_enabled || ordered_task.TaskStarted())
+      return nullptr;
+
+    const AircraftState aircraft =
+      ToAircraftState(CommonInterface::Basic(), CommonInterface::Calculated());
+    bool can_announce;
+    if (constraints.start_mode == StartMode::POLISH) {
+      can_announce = start.IsInSector(aircraft) &&
+        constraints.open_time_span.IsInside(FineTime{aircraft.time});
+    } else {
+      const TimeStamp start_time(aircraft.time.ToDuration() +
+                                 constraints.pev_start_wait_time);
+      can_announce = constraints.open_time_span.IsInside(FineTime{start_time});
+    }
+
+    invalid |= !can_announce;
+    return _("Pilot Event Announce");
   }
 
   if (name == "AdvanceArmed") {

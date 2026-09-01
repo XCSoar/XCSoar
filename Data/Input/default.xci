@@ -674,8 +674,8 @@ data=6
 event=StatusMessage Pilot event announced
 event=Logger note PEV
 event=PilotEvent
-label=Pilot Event Announce
-location=5
+label=$(PilotEventAnnounce)
+location=7
 
 mode=Nav1
 type=key
@@ -689,7 +689,7 @@ type=key
 data=8
 event=AdjustWaypoint nextarm
 label=$(WaypointNextArm)
-location=7
+location=5
 
 mode=Nav1
 type=key
