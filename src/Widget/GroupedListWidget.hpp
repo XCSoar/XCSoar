@@ -288,6 +288,14 @@ public:
   int GetCursorIndex() const noexcept;
 
   /**
+   * Move the cursor to one item, counting only items.  A dialog which
+   * rearranges the list calls it to let the cursor follow the item
+   * the user has moved.  It may be called while the list is being
+   * filled: the cursor moves as soon as the list has been laid out.
+   */
+  void SetCursorIndex(unsigned i) noexcept;
+
+  /**
    * Check or uncheck one item.  In #SelectionMode::SINGLE, checking
    * an item unchecks the other items of its group.
    *

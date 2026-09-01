@@ -363,6 +363,8 @@ public:
   [[gnu::pure]]
   int GetCursorIndex() const noexcept;
 
+  void SetCursorByIndex(unsigned i) noexcept;
+
   void SetItemChecked(unsigned i, bool checked) noexcept;
 
   [[gnu::pure]]
@@ -1663,6 +1665,18 @@ GroupedListControl::SetCursor(int i) noexcept
 }
 
 void
+GroupedListControl::SetCursorByIndex(unsigned i) noexcept
+{
+  const int j = FindItemByIndex(i);
+  if (j >= 0)
+    SetCursor(j);
+  else
+    /* there is no such item yet: the list is being filled, and the
+       next UpdateLayout() moves the cursor there */
+    saved_cursor = i;
+}
+
+void
 GroupedListControl::MoveCursor(bool forward) noexcept
 {
   const int next = FindItem(forward ? cursor + 1 : cursor, forward);
@@ -2582,6 +2596,12 @@ int
 GroupedListWidget::GetCursorIndex() const noexcept
 {
   return control.GetCursorIndex();
+}
+
+void
+GroupedListWidget::SetCursorIndex(unsigned i) noexcept
+{
+  control.SetCursorByIndex(i);
 }
 
 void
