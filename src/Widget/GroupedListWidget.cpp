@@ -183,6 +183,9 @@ private:
     /** only for Type::ITEM: greyed out, and the cursor skips it */
     bool disabled = false;
 
+    /** only for Type::ITEM: left out, as if it had not been added */
+    bool hidden = false;
+
     /** only for Type::ITEM: may this item be checked, and how? */
     SelectionMode selection_mode = SelectionMode::NONE;
 
@@ -218,9 +221,14 @@ private:
       return type == Type::ITEM;
     }
 
+    /** is this element an item which is drawn? */
+    bool IsShownItem() const noexcept {
+      return IsItem() && !hidden;
+    }
+
     /** may the cursor be moved to this element? */
     bool IsSelectable() const noexcept {
-      return IsItem() && !disabled;
+      return IsShownItem() && !disabled;
     }
 
     int GetBottom() const noexcept {
@@ -589,7 +597,9 @@ GroupedListControl::FinishGroup() noexcept
   bool needed = *footer != '\0';
 
   for (auto i = elements.rbegin(); i != elements.rend() && i->IsItem(); ++i)
-    if (!i->help.empty())
+    /* the help of a hidden item is never shown: the cursor cannot
+       reach it, and an empty footer would be a gap below the card */
+    if (i->IsShownItem() && !i->help.empty())
       needed = true;
 
   if (!needed)
@@ -793,6 +803,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .chevron = options.chevron,
     .checked = options.checked,
     .disabled = options.disabled,
+    .hidden = options.hidden,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
   });
@@ -967,12 +978,24 @@ GroupedListControl::UpdateGroupFlags() noexcept
 {
   for (std::size_t i = 0; i < elements.size(); ++i) {
     Element &element = elements[i];
-    if (!element.IsItem())
+    if (!element.IsShownItem())
       continue;
 
-    element.first_in_group = i == 0 || !elements[i - 1].IsItem();
-    element.last_in_group = i + 1 == elements.size() ||
-      !elements[i + 1].IsItem();
+    /* a hidden item does not separate the two items around it: they
+       are drawn as neighbours of the same group */
+    std::size_t j = i;
+    while (j > 0 && elements[j - 1].IsItem() && !elements[j - 1].IsShownItem())
+      --j;
+
+    element.first_in_group = j == 0 || !elements[j - 1].IsItem();
+
+    j = i;
+    while (j + 1 < elements.size() && elements[j + 1].IsItem() &&
+           !elements[j + 1].IsShownItem())
+      ++j;
+
+    element.last_in_group = j + 1 == elements.size() ||
+      !elements[j + 1].IsItem();
   }
 
   /* find the groups which have check marks; all their items reserve
@@ -989,15 +1012,17 @@ GroupedListControl::UpdateGroupFlags() noexcept
     do {
       const Element &element = elements[end];
 
-      if (element.selection_mode != SelectionMode::NONE) {
-        if (element.check_position == CheckPosition::LEFT)
-          left = true;
-        else
-          right = true;
-      }
+      if (element.IsShownItem()) {
+        if (element.selection_mode != SelectionMode::NONE) {
+          if (element.check_position == CheckPosition::LEFT)
+            left = true;
+          else
+            right = true;
+        }
 
-      if (element.HasIcon())
-        icon = true;
+        if (element.HasIcon())
+          icon = true;
+      }
 
       ++end;
     } while (end < elements.size() && elements[end].IsItem());
@@ -1072,6 +1097,11 @@ GroupedListControl::UpdateLayout() noexcept
 
   saved_cursor = -1;
 
+  if (cursor >= 0 && (std::size_t)cursor < elements.size() &&
+      !elements[cursor].IsSelectable())
+    /* the item under the cursor has been hidden or disabled */
+    cursor = FindItem(cursor, true);
+
   if (cursor < 0)
     cursor = FindItem(0, true);
 
@@ -1100,6 +1130,11 @@ GroupedListControl::UpdateLayout() noexcept
 
       switch (element.type) {
       case Element::Type::ITEM:
+        if (element.hidden) {
+          element.height = 0;
+          break;
+        }
+
         if (element.subtitle.empty()) {
           element.height = item_height;
           break;
@@ -1729,6 +1764,10 @@ GroupedListControl::DrawElements(Canvas &canvas) noexcept
 
   for (std::size_t i = 0; i < elements.size(); ++i) {
     const Element &element = elements[i];
+    if (element.height == 0)
+      /* a hidden item */
+      continue;
+
     const int top = element.top - origin;
     if (top >= bottom)
       break;
