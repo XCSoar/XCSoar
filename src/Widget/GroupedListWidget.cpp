@@ -23,7 +23,6 @@
 #include "ui/control/ScrollBar.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/window/ContainerWindow.hpp"
-#include "ui/window/PaintWindow.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -111,7 +110,7 @@ static constexpr TextRenderer text_renderer;
  * a caption or a footer is only as tall as its text plus the gaps
  * around it, while an item is as tall as a touch target.
  */
-class GroupedListControl final : public PaintWindow {
+class GroupedListControl final : public ContainerWindow {
 public:
   /** A link inside an explanatory text, from "[caption](url)". */
   struct Link {
@@ -131,7 +130,7 @@ public:
 
 private:
   struct Element {
-    enum class Type : uint_least8_t { HERO, CAPTION, FOOTER, ITEM };
+    enum class Type : uint_least8_t { HERO, CAPTION, FOOTER, ITEM, WIDGET };
 
     Type type;
 
@@ -212,6 +211,18 @@ private:
     /** only for Type::ITEM: left out, as if it had not been added */
     bool hidden = false;
 
+    /** only for Type::WIDGET: the view which this group shows */
+    std::unique_ptr<Widget> widget{};
+
+    /** only for Type::WIDGET: its height; 0 asks the view itself */
+    unsigned widget_height_pt = 0;
+
+    /** has #widget been prepared for the list window? */
+    bool widget_prepared = false;
+
+    /** is #widget currently shown? */
+    bool widget_visible = false;
+
     /** only for Type::ITEM: may this item be checked, and how? */
     SelectionMode selection_mode = SelectionMode::NONE;
 
@@ -230,6 +241,11 @@ private:
 
     /** does any item of this group have an icon? */
     bool icon_column = false;
+
+    /** does this element fill the card of a group? */
+    bool IsGroupContent() const noexcept {
+      return IsItem() || type == Type::WIDGET;
+    }
 
     /** does this element have something to draw in the icon column? */
     bool HasIcon() const noexcept {
@@ -312,6 +328,8 @@ public:
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
   void AddItem(const char *caption, Callback callback,
                const GroupedListWidget::ItemOptions &options) noexcept;
+  void AddWidget(std::unique_ptr<Widget> widget,
+                 unsigned height_pt) noexcept;
 
   /**
    * Remove all elements, but remember where the user was: a list
@@ -322,6 +340,10 @@ public:
    */
   void Clear() noexcept {
     saved_cursor = GetCursorIndex();
+
+    /* the views are windows: hide them before their #Widget goes */
+    for (auto &element : elements)
+      UnprepareWidget(element);
 
     /* the options of the group which is open must not leak into the
        items of the next build */
@@ -404,6 +426,15 @@ public:
     return OnKeyDown(key_code);
   }
 
+  /**
+   * Hand one call of the #Widget protocol to the views of the widget
+   * groups.  A view which edits something is saved like the widgets
+   * around the list, and it may know a key which the list does not.
+   */
+  bool SaveWidgets(bool &changed) noexcept;
+  bool LeaveWidgets() noexcept;
+  bool KeyPressWidgets(unsigned key_code) noexcept;
+
 private:
   [[gnu::pure]]
   int GetViewHeight() const noexcept {
@@ -484,6 +515,33 @@ private:
 
   /** Load the icons, and find out which ones can be drawn. */
   void PrepareIcons() noexcept;
+
+  /** The height of the view which a Type::WIDGET element shows. */
+  [[gnu::pure]]
+  unsigned GetWidgetHeight(const Element &element) const noexcept;
+
+  [[gnu::pure]]
+  PixelRect GetWidgetRect(const Element &element) const noexcept;
+
+  /** Prepare the views which have been added since the last time. */
+  void PrepareWidgets() noexcept;
+
+  /** Undo PrepareWidgets() for one element. */
+  static void UnprepareWidget(Element &element) noexcept {
+    if (!element.widget_prepared)
+      return;
+
+    if (element.widget_visible) {
+      element.widget->Hide();
+      element.widget_visible = false;
+    }
+
+    element.widget->Unprepare();
+    element.widget_prepared = false;
+  }
+
+  /** Move the views to where the list has scrolled them. */
+  void MoveWidgets() noexcept;
 
   /** The font which draws the value of the given item. */
   [[gnu::pure]]
@@ -636,7 +694,7 @@ GroupedListControl::AddGroup(const char *caption,
 void
 GroupedListControl::FinishGroup() noexcept
 {
-  if (elements.empty() || !elements.back().IsItem())
+  if (elements.empty() || !elements.back().IsGroupContent())
     /* no group is open, or its footer has been added already */
     return;
 
@@ -864,6 +922,135 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
 
   Element &element = elements.back();
   element.help = ParseLinks(options.help, element.links);
+}
+
+void
+GroupedListControl::AddWidget(std::unique_ptr<Widget> widget,
+                              unsigned height_pt) noexcept
+{
+  assert(widget != nullptr);
+
+  Element &element = elements.emplace_back(Element{
+    .type = Element::Type::WIDGET,
+    .text = {},
+  });
+
+  element.widget = std::move(widget);
+  element.widget_height_pt = height_pt;
+}
+
+unsigned
+GroupedListControl::GetWidgetHeight(const Element &element) const noexcept
+{
+  assert(element.type == Element::Type::WIDGET);
+
+  if (element.widget_height_pt > 0)
+    return Layout::VptScale(element.widget_height_pt);
+
+  /* the view knows best how tall it needs to be, and other than the
+     widget below the list it may be taller than the window: the list
+     scrolls */
+  unsigned height = element.widget->GetMaximumSize().height;
+
+  if (height == 0)
+    height = element.widget->GetMinimumSize().height;
+
+  return std::max(height, Layout::GetMinimumControlHeight());
+}
+
+/**
+ * The rectangle of a view inside the list window: it uses the width
+ * of a card, and it scrolls with the list.
+ */
+PixelRect
+GroupedListControl::GetWidgetRect(const Element &element) const noexcept
+{
+  const int margin = Layout::VptScale(MARGIN_PT);
+  const int top = element.GetBottom() - (int)GetWidgetHeight(element) - origin;
+
+  return PixelRect{margin, top, GetContentWidth() - margin,
+                   top + (int)GetWidgetHeight(element)};
+}
+
+void
+GroupedListControl::PrepareWidgets() noexcept
+{
+  if (!IsDefined())
+    return;
+
+  for (auto &element : elements) {
+    if (element.type != Element::Type::WIDGET || element.widget_prepared)
+      continue;
+
+    const PixelRect rc{0, 0, 1, 1};
+
+    element.widget->Initialise(*this, rc);
+    element.widget->Prepare(*this, rc);
+    element.widget_prepared = true;
+  }
+}
+
+bool
+GroupedListControl::SaveWidgets(bool &changed) noexcept
+{
+  for (auto &element : elements)
+    if (element.widget_prepared && !element.widget->Save(changed))
+      return false;
+
+  return true;
+}
+
+bool
+GroupedListControl::LeaveWidgets() noexcept
+{
+  for (auto &element : elements)
+    if (element.widget_prepared && !element.widget->Leave())
+      return false;
+
+  return true;
+}
+
+bool
+GroupedListControl::KeyPressWidgets(unsigned key_code) noexcept
+{
+  for (auto &element : elements)
+    if (element.widget_prepared && element.widget->KeyPress(key_code))
+      return true;
+
+  return false;
+}
+
+void
+GroupedListControl::MoveWidgets() noexcept
+{
+  if (!IsDefined())
+    return;
+
+  const int bottom = GetViewHeight();
+
+  for (auto &element : elements) {
+    if (element.type != Element::Type::WIDGET || !element.widget_prepared)
+      continue;
+
+    const PixelRect rc = GetWidgetRect(element);
+
+    if (rc.bottom <= 0 || rc.top >= bottom) {
+      /* scrolled out of the window */
+      if (element.widget_visible) {
+        element.widget->Hide();
+        element.widget_visible = false;
+      }
+
+      continue;
+    }
+
+    if (element.widget_visible)
+      element.widget->Move(rc);
+    else {
+      element.widget->Show(rc);
+      element.widget_visible = true;
+    }
+  }
 }
 
 unsigned
@@ -1247,6 +1434,7 @@ GroupedListControl::UpdateLayout() noexcept
 {
   FinishGroup();
   PrepareIcons();
+  PrepareWidgets();
   UpdateGroupFlags();
 
   if (!IsDefined())
@@ -1377,6 +1565,16 @@ GroupedListControl::UpdateLayout() noexcept
           + (element.text.empty() ? 0u : caption_height + caption_gap);
         break;
 
+      case Element::Type::WIDGET:
+        element.height = GetWidgetHeight(element);
+
+        /* the caption of the group carries the gap above it; without
+           one, the view keeps the distance itself */
+        if (i == 0 || elements[i - 1].type != Element::Type::CAPTION)
+          element.height += GetLeadingGap(i);
+
+        break;
+
       case Element::Type::FOOTER: {
         const auto footer = GetFooter(i);
         const auto wrapped = WrapText(*look.list.font,
@@ -1404,6 +1602,8 @@ GroupedListControl::UpdateLayout() noexcept
 
   SetOrigin(origin);
 
+  MoveWidgets();
+
   Invalidate();
 }
 
@@ -1417,6 +1617,9 @@ GroupedListControl::SetOrigin(int _origin) noexcept
     return;
 
   origin = _origin;
+
+  MoveWidgets();
+
   Invalidate();
 }
 
@@ -1951,6 +2154,10 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     });
   }
     break;
+
+  case Element::Type::WIDGET:
+    /* the view is a child window: it paints itself */
+    break;
   }
 }
 
@@ -2004,6 +2211,19 @@ GroupedListControl::OnPaint(Canvas &canvas) noexcept
      is painted, it reaches beyond the elements */
   DrawElements(canvas);
 
+  {
+#ifdef ENABLE_OPENGL
+    /* a view which is half scrolled out must not reach beyond the
+       list: its window is not clipped by this one, and it would be
+       drawn over the dialog above it and over the widget below it */
+    const GLCanvasScissor scissor(PixelRect{PixelPoint{0, 0},
+                                            canvas.GetSize()});
+#endif
+
+    /* the views of the widget groups are child windows */
+    ContainerWindow::OnPaint(canvas);
+  }
+
   DrawScrollBar(canvas);
 }
 
@@ -2028,13 +2248,17 @@ GroupedListControl::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
 
-  PaintWindow::OnDestroy();
+  /* the views are child windows of this one */
+  for (auto &element : elements)
+    UnprepareWidget(element);
+
+  ContainerWindow::OnDestroy();
 }
 
 void
 GroupedListControl::OnResize(PixelSize new_size) noexcept
 {
-  PaintWindow::OnResize(new_size);
+  ContainerWindow::OnResize(new_size);
 
   if (scroll_bar.IsDefined())
     scroll_bar.SetSize(new_size);
@@ -2075,6 +2299,11 @@ GroupedListControl::OnCancelMode() noexcept
 bool
 GroupedListControl::OnMouseDown(PixelPoint p) noexcept
 {
+  /* the view of a widget group is a child window: it gets the press
+     before the list turns it into a drag */
+  if (ContainerWindow::OnMouseDown(p))
+    return true;
+
   SetFocus();
 
   if (scroll_bar.IsInside(p)) {
@@ -2113,9 +2342,13 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
 }
 
 bool
-GroupedListControl::OnMouseMove(PixelPoint p,
-                                [[maybe_unused]] unsigned keys) noexcept
+GroupedListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (drag_mode == DragMode::NONE && !scroll_bar.IsDragging() &&
+      ContainerWindow::OnMouseMove(p, keys))
+    /* the press began on a view of a widget group */
+    return true;
+
   if (scroll_bar.IsDragging()) {
     SetOrigin(scroll_bar.DragMove(content_height, GetViewHeight(), p.y));
     return true;
@@ -2145,6 +2378,10 @@ GroupedListControl::OnMouseMove(PixelPoint p,
 bool
 GroupedListControl::OnMouseUp(PixelPoint p) noexcept
 {
+  if (drag_mode == DragMode::NONE && !scroll_bar.IsDragging() &&
+      ContainerWindow::OnMouseUp(p))
+    return true;
+
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
     return true;
@@ -2306,6 +2543,24 @@ GroupedListWidget::AddItem(const char *caption,
 }
 
 void
+GroupedListWidget::AddWidgetGroup(const char *caption,
+                                  std::unique_ptr<Widget> widget,
+                                  unsigned height_pt) noexcept
+{
+  AddWidgetGroup(caption, std::move(widget), GroupOptions{}, height_pt);
+}
+
+void
+GroupedListWidget::AddWidgetGroup(const char *caption,
+                                  std::unique_ptr<Widget> widget,
+                                  const GroupOptions &options,
+                                  unsigned height_pt) noexcept
+{
+  control.AddGroup(caption, options);
+  control.AddWidget(std::move(widget), height_pt);
+}
+
+void
 GroupedListWidget::Clear() noexcept
 {
   control.Clear();
@@ -2450,7 +2705,15 @@ GroupedListWidget::Unprepare() noexcept
 bool
 GroupedListWidget::Save(bool &changed) noexcept
 {
-  return bottom_widget == nullptr || bottom_widget->Save(changed);
+  return control.SaveWidgets(changed) &&
+    (bottom_widget == nullptr || bottom_widget->Save(changed));
+}
+
+bool
+GroupedListWidget::Leave() noexcept
+{
+  return control.LeaveWidgets() &&
+    (bottom_widget == nullptr || bottom_widget->Leave());
 }
 
 void
@@ -2487,16 +2750,17 @@ GroupedListWidget::Move(const PixelRect &rc) noexcept
 bool
 GroupedListWidget::KeyPress(unsigned key_code) noexcept
 {
-  if (key_code != KEY_UP && key_code != KEY_DOWN)
-    return false;
-
   /* only when the list has the focus: Up/Down must reach a filter row
      or another focused control otherwise */
-  if (!IsDefined() || !control.HasFocus())
-    return false;
+  if ((key_code == KEY_UP || key_code == KEY_DOWN) &&
+      IsDefined() && control.HasFocus() &&
+      /* route this before #WndForm maps Up/Down to focus movement;
+         when no item is left, fall through, so that the dialog can
+         move the focus to another control */
+      control.KeyFromWidget(key_code))
+    return true;
 
-  /* route this before #WndForm maps Up/Down to focus movement; when
-     no item is left, return false so that the dialog can move the
-     focus to another control */
-  return control.KeyFromWidget(key_code);
+  /* a view of this page may know the key */
+  return control.KeyPressWidgets(key_code) ||
+    (bottom_widget != nullptr && bottom_widget->KeyPress(key_code));
 }
