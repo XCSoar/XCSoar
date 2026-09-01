@@ -93,6 +93,7 @@ static constexpr TextRenderer text_renderer;
 class GroupedListControl final : public PaintWindow {
 public:
   using Callback = GroupedListWidget::Callback;
+  using BadgeStyle = GroupedListWidget::BadgeStyle;
   using GroupOptions = GroupedListWidget::GroupOptions;
 
 private:
@@ -111,6 +112,9 @@ private:
 
     /** only for Type::ITEM: drawn in a rounded box */
     std::string badge{};
+
+    /** only for Type::ITEM: the colors of #badge */
+    BadgeStyle badge_style = BadgeStyle::PRIMARY;
 
     /** only for Type::ITEM */
     Callback callback{};
@@ -352,6 +356,47 @@ GroupedListControl::FinishGroup() noexcept
   });
 }
 
+/**
+ * The two colors of a badge.  They are always defined as a pair: the
+ * label sits on the filled box, and deriving one from the other would
+ * break the contrast in one of the two themes.
+ */
+struct BadgeColors {
+  Color background_color, text_color;
+};
+
+[[gnu::pure]]
+static BadgeColors
+GetBadgeColors(const DialogLook &look,
+               GroupedListWidget::BadgeStyle style) noexcept
+{
+  const BadgeColors accent{look.list.focused.background_color,
+                           look.list.focused.text_color};
+
+  if (!HasColors())
+    /* a monochrome display would turn all of them into the same grey */
+    return accent;
+
+  switch (style) {
+  case GroupedListWidget::BadgeStyle::PRIMARY:
+    break;
+
+    /* the three shades below are yellow-500, red-600 and green-700
+       of the Tailwind palette */
+
+  case GroupedListWidget::BadgeStyle::WARNING:
+    return {Color(0xea, 0xb3, 0x08), COLOR_WHITE};
+
+  case GroupedListWidget::BadgeStyle::DANGER:
+    return {Color(0xdc, 0x26, 0x26), COLOR_WHITE};
+
+  case GroupedListWidget::BadgeStyle::SUCCESS:
+    return {Color(0x15, 0x80, 0x3d), COLOR_WHITE};
+  }
+
+  return accent;
+}
+
 void
 GroupedListControl::AddItem(const char *caption, Callback callback,
                             const GroupedListWidget::ItemOptions &options) noexcept
@@ -364,6 +409,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
 
     .value = options.value != nullptr ? options.value : "",
     .badge = options.badge != nullptr ? options.badge : "",
+    .badge_style = options.badge_style,
     .callback = std::move(callback),
   });
 
@@ -725,9 +771,12 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       badge_rc.top = centre_y - badge_height / 2;
       badge_rc.bottom = badge_rc.top + badge_height;
 
+      const BadgeColors badge_colors = GetBadgeColors(look,
+                                                      element.badge_style);
+
       canvas.DrawFilledRectangle(badge_rc, selected
                                  ? text_color
-                                 : look.list.focused.background_color);
+                                 : badge_colors.background_color);
 
       const int badge_radius = std::min((int)Layout::VptScale(BADGE_RADIUS_PT),
                                         badge_height / 2);
@@ -736,7 +785,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
       canvas.SetTextColor(selected
                           ? background
-                          : look.list.focused.text_color);
+                          : badge_colors.text_color);
 
       /* center the capitals within the box, not the font box: its
          descent is empty for a short label and would push the text
