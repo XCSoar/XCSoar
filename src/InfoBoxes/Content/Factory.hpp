@@ -10,6 +10,30 @@ class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
+  /** A functional group for selecting an InfoBox type. */
+  enum class Category {
+    FLIGHT,
+    NAVIGATION,
+    TASK,
+    THERMAL,
+    WEATHER,
+    TRAFFIC,
+    SYSTEM,
+    CHARTS,
+    OTHER,
+    NUM_CATEGORIES,
+  };
+
+  /** Returns the functional group of the InfoBox type. */
+  [[gnu::const]]
+  Category
+  GetCategory(Type type) noexcept;
+
+  /** Returns the translated-at-use-site name of an InfoBox category. */
+  [[gnu::const]]
+  const char *
+  GetCategoryName(Category category) noexcept;
+
   /**
    * Returns the human-readable name of the info box type.
    */

@@ -8,6 +8,7 @@
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
@@ -245,37 +246,65 @@ InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
 
   const InfoBoxFactory::Type old_type = panel.contents[i];
 
-  ComboList list;
-  for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
-    const char *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type)j);
-    list.Append(j, gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
-                gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
-                desc != NULL ? gettext(desc) : NULL);
-  }
-
-  list.Sort();
-  list.current_index = list.LookUp(old_type);
-
-  /* let the user select */
-
-  StaticString<20> caption;
+  StaticString<64> caption;
   caption.Format("%s: %d", _("InfoBox"), i + 1);
-  int result = ComboPicker(caption, list, nullptr, true);
-  if (result < 0)
+
+  const auto old_category = InfoBoxFactory::GetCategory(old_type);
+  auto category = old_category;
+
+  while (true) {
+    ComboList category_list;
+    for (unsigned j = 0;
+         j < (unsigned)InfoBoxFactory::Category::NUM_CATEGORIES; ++j) {
+      const auto value = (InfoBoxFactory::Category)j;
+      const char *name = gettext(InfoBoxFactory::GetCategoryName(value));
+      category_list.Append(j, name, name);
+    }
+
+    category_list.current_index = category_list.LookUp((unsigned)category);
+    const int category_result = ComboPicker(caption, category_list);
+    if (category_result < 0)
+      return;
+
+    category = (InfoBoxFactory::Category)
+      category_list[category_result].int_value;
+
+    ComboList list;
+    for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL;
+         j < InfoBoxFactory::NUM_TYPES; ++j) {
+      const auto type = (InfoBoxFactory::Type)j;
+      if (InfoBoxFactory::GetCategory(type) != category)
+        continue;
+
+      const char *desc = InfoBoxFactory::GetDescription(type);
+      list.Append(j, gettext(InfoBoxFactory::GetName(type)),
+                  gettext(InfoBoxFactory::GetName(type)),
+                  desc != nullptr ? gettext(desc) : nullptr);
+    }
+
+    list.Sort();
+    list.current_index = list.LookUp(old_type);
+
+    const int result = ComboPicker(caption, list, nullptr, true, _("Back"));
+    if (result == mrExtra)
+      continue;
+    if (result < 0)
+      return;
+
+    /* was there a modification? */
+
+    const auto new_type = (InfoBoxFactory::Type)list[result].int_value;
+    if (new_type == old_type)
+      return;
+
+    /* yes: apply and save it */
+
+    panel.contents[i] = new_type;
+    DisplayInfoBox();
+
+    Profile::Save(Profile::map, panel, panel_index);
     return;
-
-  /* was there a modification? */
-
-  InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].int_value;
-  if (new_type == old_type)
-    return;
-
-  /* yes: apply and save it */
-
-  panel.contents[i] = new_type;
-  DisplayInfoBox();
-
-  Profile::Save(Profile::map, panel, panel_index);
+  }
 }
 
 void
