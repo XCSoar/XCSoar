@@ -29,6 +29,25 @@ class GroupedListWidget final : public WindowWidget {
 public:
   using Callback = std::function<void()>;
 
+  /** How many items the user may check. */
+  enum class SelectionMode : uint_least8_t {
+    /** no check marks; an item only invokes its callback */
+    NONE,
+
+    /**
+     * At most one item of each group carries a check mark, like a
+     * group of radio buttons.  Checking an item unchecks the item
+     * which was checked before, but only within the same group.
+     */
+    SINGLE,
+
+    /** any number of items carries a check mark */
+    MULTIPLE,
+  };
+
+  /** The edge of the item where the check mark is drawn. */
+  enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
+
   /** The colors of a badge. */
   enum class BadgeStyle : uint_least8_t {
     /** the accent color of the dialog; the state which shall be seen */
@@ -51,6 +70,12 @@ public:
      * word-wrapped and gets as much room as it needs.
      */
     const char *footer = nullptr;
+
+    /** how many items of this group may be checked at the same time */
+    SelectionMode selection_mode = SelectionMode::NONE;
+
+    /** the edge which holds the check mark */
+    CheckPosition check_position = CheckPosition::RIGHT;
   };
 
   /** The contents and the decorations of an item. */
@@ -66,6 +91,9 @@ public:
 
     /** an arrow, marking an item which opens another page */
     bool chevron = false;
+
+    /** is this item checked?  (only with a #SelectionMode) */
+    bool checked = false;
   };
 
 private:
@@ -92,7 +120,12 @@ public:
    */
   void AddGroup(const char *caption=nullptr) noexcept;
 
-  /** Begin a new group with the given options. */
+  /**
+   * Begin a new group which lets the user check its items.  Inside
+   * one group, items with and without a check mark may be mixed;
+   * those without one still reserve the room for it, which keeps
+   * their captions aligned.
+   */
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
 
   /**
@@ -104,7 +137,10 @@ public:
   void AddItem(const char *caption, Callback callback,
                const ItemOptions &options) noexcept;
 
-  /** Append an item which has no callback. */
+  /**
+   * Append an item which has no callback; useful for a list which is
+   * only there to be checked.
+   */
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
 
   void Clear() noexcept;
@@ -114,6 +150,20 @@ public:
    */
   [[gnu::pure]]
   unsigned GetItemCount() const noexcept;
+
+  /**
+   * Check or uncheck one item.  In #SelectionMode::SINGLE, checking
+   * an item unchecks the other items of its group.
+   *
+   * @param i the index of the item, counting only items
+   */
+  void SetItemChecked(unsigned i, bool checked=true) noexcept;
+
+  /**
+   * @param i the index of the item, counting only items
+   */
+  [[gnu::pure]]
+  bool IsItemChecked(unsigned i) const noexcept;
 
   /**
    * Lay out the elements again.  Called by Prepare(); call it again
