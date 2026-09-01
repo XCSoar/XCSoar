@@ -29,6 +29,12 @@ class GroupedListWidget final : public WindowWidget {
 public:
   using Callback = std::function<void()>;
 
+  /**
+   * @param index the index of the item the cursor has moved to,
+   * counting only items
+   */
+  using CursorCallback = std::function<void(unsigned index)>;
+
   /** How many items the user may check. */
   enum class SelectionMode : uint_least8_t {
     /** no check marks; an item only invokes its callback */
@@ -174,6 +180,21 @@ public:
    */
   [[gnu::pure]]
   unsigned GetItemCount() const noexcept;
+
+  /**
+   * Install a function which is called whenever the cursor moves to
+   * another item; a dialog uses it to enable and disable the buttons
+   * which act on the current item.  It is not called while the list
+   * is being built.
+   */
+  void SetCursorCallback(CursorCallback callback) noexcept;
+
+  /**
+   * @return the index of the item the cursor is on, counting only
+   * items; -1 if there is no cursor
+   */
+  [[gnu::pure]]
+  int GetCursorIndex() const noexcept;
 
   /**
    * Check or uncheck one item.  In #SelectionMode::SINGLE, checking
