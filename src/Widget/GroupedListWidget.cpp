@@ -5,6 +5,10 @@
 #include "Asset.hpp"
 #include "ui/window/TopWindow.hpp"
 #include "Language/Language.hpp"
+#include "Look/Colors.hpp"
+#include "system/OpenLink.hpp"
+#include "util/MarkdownParser.hpp"
+#include "ui/canvas/TextWrapper.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRenderer.hpp"
 #include "Hardware/CPU.hpp"
@@ -97,6 +101,14 @@ static constexpr TextRenderer text_renderer;
  */
 class GroupedListControl final : public PaintWindow {
 public:
+  /** A link inside an explanatory text, from "[caption](url)". */
+  struct Link {
+    /** the byte range of the caption within the text */
+    std::size_t start, end;
+
+    std::string url;
+  };
+
   using Callback = GroupedListWidget::Callback;
   using CursorCallback = GroupedListWidget::CursorCallback;
   using SelectionMode = GroupedListWidget::SelectionMode;
@@ -120,6 +132,9 @@ private:
      * the cursor is on this item
      */
     std::string help{};
+
+    /** the links of #help (Type::ITEM) or of #text (Type::FOOTER) */
+    std::vector<Link> links{};
 
     /**
      * only for Type::ITEM: drawn at the right edge; only for
@@ -274,11 +289,38 @@ public:
   void FinishGroup() noexcept;
 
   /**
-   * The text of a footer element: the help of the item the cursor
-   * is on, or the footer of the group.
+   * The text of a footer element and its links: the help of the
+   * item the cursor is on, or the footer of the group.
+   */
+  struct Footer {
+    const std::string *text;
+    const std::vector<Link> *links;
+  };
+
+  [[gnu::pure]]
+  Footer GetFooter(std::size_t i) const noexcept;
+
+  /** The area which the text of a footer element occupies. */
+  [[gnu::pure]]
+  PixelRect GetFooterRect(std::size_t i) const noexcept;
+
+  /**
+   * Walk the pieces of the text of a footer element: each call gets
+   * the area of one piece, its text, and the link it belongs to, or
+   * nullptr if it is plain text.
+   */
+  using FooterCallback =
+    std::function<void(PixelRect rc, std::string_view text,
+                       const Link *link)>;
+
+  void WalkFooter(std::size_t i, FooterCallback f) const noexcept;
+
+  /**
+   * @return the link at the given position, or nullptr if there is
+   * none
    */
   [[gnu::pure]]
-  const char *GetFooterText(std::size_t i) const noexcept;
+  const Link *FindLinkAt(PixelPoint p) const noexcept;
 
   /** Recalculate the layout and repaint. */
   void UpdateLayout() noexcept;
@@ -428,6 +470,27 @@ GroupedListControl::Create(ContainerWindow &parent,
   PaintWindow::Create(parent, rc, style);
 }
 
+/**
+ * Extract the links from a text which explains an item or a group,
+ * and return the text without their markup.
+ */
+static std::string
+ParseLinks(const char *src,
+           std::vector<GroupedListControl::Link> &links) noexcept
+{
+  links.clear();
+
+  if (src == nullptr || *src == '\0')
+    return {};
+
+  auto parsed = ParseMarkdown(src);
+
+  for (const auto &link : parsed.links)
+    links.push_back({link.start, link.end, link.url});
+
+  return std::move(parsed.text);
+}
+
 void
 GroupedListControl::AddHero(const char *title,
                               const char *description) noexcept
@@ -479,14 +542,16 @@ GroupedListControl::FinishGroup() noexcept
   if (!needed)
     return;
 
-  elements.push_back(Element{
+  Element &element = elements.emplace_back(Element{
     .type = Element::Type::FOOTER,
-    .text = footer,
+    .text = {},
   });
+
+  element.text = ParseLinks(footer, element.links);
 }
 
-const char *
-GroupedListControl::GetFooterText(std::size_t i) const noexcept
+GroupedListControl::Footer
+GroupedListControl::GetFooter(std::size_t i) const noexcept
 {
   assert(i < elements.size());
   assert(elements[i].type == Element::Type::FOOTER);
@@ -503,10 +568,98 @@ GroupedListControl::GetFooterText(std::size_t i) const noexcept
       }
 
     if (in_group)
-      return elements[cursor].help.c_str();
+      return {&elements[cursor].help, &elements[cursor].links};
   }
 
-  return elements[i].text.c_str();
+  return {&elements[i].text, &elements[i].links};
+}
+
+PixelRect
+GroupedListControl::GetFooterRect(std::size_t i) const noexcept
+{
+  const Element &element = elements[i];
+  const int margin = Layout::VptScale(MARGIN_PT);
+  const int padding = Layout::VptScale(PADDING_PT);
+
+  return {margin + padding,
+          element.top - origin + (int)Layout::VptScale(FOOTER_GAP_PT),
+          GetContentWidth() - margin - padding,
+          element.GetBottom() - origin};
+}
+
+void
+GroupedListControl::WalkFooter(std::size_t i,
+                                 FooterCallback f) const noexcept
+{
+  const auto footer = GetFooter(i);
+  if (footer.text->empty())
+    return;
+
+  const std::string &text = *footer.text;
+  const Font &font = *look.list.font;
+  const int line_spacing = font.GetLineSpacing();
+
+  const PixelRect rc = GetFooterRect(i);
+  /* the cast comes first: an empty box makes GetWidth() underflow,
+     and std::max() on the unsigned would keep the huge number */
+  const auto wrapped = WrapText(font, std::max((int)rc.GetWidth(), 1), text);
+
+  int y = rc.top;
+
+  for (const auto &line : wrapped.lines) {
+    const std::size_t line_end = line.start + line.length;
+    std::size_t position = line.start;
+    int x = rc.left;
+
+    while (position < line_end) {
+      /* the piece which begins here is either one link, or the plain
+         text up to the next one */
+      const Link *link = nullptr;
+      std::size_t end = line_end;
+
+      for (const auto &l : *footer.links) {
+        if (l.end <= position || l.start >= line_end)
+          continue;
+
+        if (l.start <= position) {
+          link = &l;
+          end = std::min(l.end, line_end);
+          break;
+        }
+
+        if (l.start < end)
+          end = l.start;
+      }
+
+      const std::string_view piece{text.data() + position, end - position};
+      const int width = font.TextSize(piece).width;
+
+      f(PixelRect{x, y, x + width, y + line_spacing}, piece, link);
+
+      x += width;
+      position = end;
+    }
+
+    y += line_spacing;
+  }
+}
+
+const GroupedListControl::Link *
+GroupedListControl::FindLinkAt(PixelPoint p) const noexcept
+{
+  const int i = FindElementAt(p.y);
+  if (i < 0 || elements[i].type != Element::Type::FOOTER)
+    return nullptr;
+
+  const Link *result = nullptr;
+
+  WalkFooter(i, [&result, p](PixelRect rc, std::string_view,
+                               const Link *link){
+    if (link != nullptr && rc.Contains(p))
+      result = link;
+  });
+
+  return result;
 }
 
 /**
@@ -589,8 +742,8 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .check_position = group_options.check_position,
   });
 
-  elements.back().help = options.help != nullptr ? options.help : "";
-
+  Element &element = elements.back();
+  element.help = ParseLinks(options.help, element.links);
 }
 
 unsigned
@@ -890,11 +1043,15 @@ GroupedListControl::UpdateLayout() noexcept
           + (element.text.empty() ? 0u : caption_height + caption_gap);
         break;
 
-      case Element::Type::FOOTER:
-        element.height = footer_gap +
-          text_renderer.GetHeight(*look.list.font,
+      case Element::Type::FOOTER: {
+        const auto footer = GetFooter(i);
+        const auto wrapped = WrapText(*look.list.font,
                                       std::max(text_width, 1),
-                                      GetFooterText(i));
+                                      *footer.text);
+
+        element.height = footer_gap + wrapped.lines.size() *
+          look.list.font->GetLineSpacing();
+      }
         break;
       }
 
@@ -1353,12 +1510,27 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                            text_rc, element.text.c_str());
     break;
 
-  case Element::Type::FOOTER:
+  case Element::Type::FOOTER: {
     canvas.Select(*look.list.font);
-    canvas.SetTextColor(look.text_color);
 
-    text_rc.top += Layout::VptScale(FOOTER_GAP_PT);
-    text_renderer.Draw(canvas, text_rc, GetFooterText(i));
+    /* the same color which the rich text of the manual uses for its
+       links */
+    const Color link_color = look.dark_mode
+      ? COLOR_XCSOAR_LIGHT
+      : COLOR_XCSOAR;
+
+    WalkFooter(i, [this, &canvas, link_color](PixelRect piece_rc,
+                                                std::string_view piece,
+                                                const Link *link){
+      canvas.SetTextColor(link != nullptr ? link_color : look.text_color);
+      canvas.DrawText(piece_rc.GetTopLeft(), piece);
+
+      if (link != nullptr)
+        canvas.DrawHLine(piece_rc.left, piece_rc.right,
+                         piece_rc.top + look.list.font->GetAscentHeight() + 1,
+                         link_color);
+    });
+  }
     break;
   }
 }
@@ -1563,6 +1735,14 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
   const bool activate = drag_mode == DragMode::CURSOR &&
     std::abs(p.y - drag_start_y) < Layout::Scale(8);
 
+  /* a tap on a link in an explanatory text opens it, as long as the
+     finger has not moved and the tap has become a scroll gesture */
+  const Link *const link =
+    drag_mode == DragMode::SCROLL &&
+    std::abs(p.y - drag_start_y) < Layout::Scale(8)
+    ? FindLinkAt(p)
+    : nullptr;
+
   const bool coast = drag_mode == DragMode::SCROLL && UseKineticScrolling();
 
   if (drag_mode != DragMode::NONE) {
@@ -1576,7 +1756,9 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
     kinetic_timer.Schedule(std::chrono::milliseconds(30));
   }
 
-  if (activate)
+  if (link != nullptr)
+    OpenLink(link->url.c_str());
+  else if (activate)
     ActivateItem();
 
   return true;
