@@ -66,4 +66,8 @@ public:
   constexpr bool IsMonospace() const {
     return monospace;
   }
+
+  constexpr FontDescription WithMonospace(bool _monospace=true) const {
+    return FontDescription(height, bold, italic, _monospace);
+  }
 };
