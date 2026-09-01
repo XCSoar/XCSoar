@@ -36,7 +36,12 @@ public final class BluetoothSensor
   private final Context context;
   private final BluetoothDevice device;
 
-  private BluetoothGatt gatt;
+  /**
+   * Assigned on the main thread, read on the Binder thread that
+   * delivers the GATT callbacks, so the two have to agree on what
+   * they see.
+   */
+  private volatile BluetoothGatt gatt;
 
   private int state = STATE_LIMBO;
 
@@ -330,6 +335,15 @@ public final class BluetoothSensor
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
+    final BluetoothGatt current = this.gatt;
+    if (current != null && gatt != current)
+      /* a disconnect still in flight from the client retryConnect()
+         has already closed.  Acting on it would close its replacement
+         and spend another retry on a connection that is fine.  The
+         null case is the first callback racing the assignment in the
+         constructor, and that one is ours. */
+      return;
+
     if (BluetoothProfile.STATE_CONNECTED == newState &&
         BluetoothGatt.GATT_SUCCESS == status) {
       everConnected = true;
