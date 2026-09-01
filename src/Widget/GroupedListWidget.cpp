@@ -74,6 +74,9 @@ static constexpr unsigned BADGE_PADDING_PT = 4;
 /** Corner radius of a badge. */
 static constexpr unsigned BADGE_RADIUS_PT = 3;
 
+/** Distance between the caption of an item and its second line. */
+static constexpr unsigned SUBTITLE_GAP_PT = 2;
+
 /** Distance between a card and the footer which explains it. */
 static constexpr unsigned FOOTER_GAP_PT = 4;
 
@@ -107,6 +110,9 @@ private:
     Type type;
 
     std::string text;
+
+    /** only for Type::ITEM: a second line below #text; it may wrap */
+    std::string subtitle{};
 
     /**
      * only for Type::ITEM: drawn at the right edge; only for
@@ -147,6 +153,9 @@ private:
      * keeps their captions aligned.
      */
     bool check_left = false, check_right = false;
+
+    /** the height of #subtitle, which may need more than one line */
+    unsigned subtitle_height = 0;
 
     /** position and height within the virtual contents */
     int top = 0;
@@ -284,6 +293,13 @@ private:
 
   /** Check the given item and uncheck the others of its group. */
   void CheckOnly(std::size_t i) noexcept;
+
+  /**
+   * The width which the decorations at the edges of an item take away
+   * from its caption.
+   */
+  [[gnu::pure]]
+  int GetDecorationWidth(const Element &element) const noexcept;
 
   /**
    * The width of the column which holds a check mark, including the
@@ -487,6 +503,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
   elements.push_back(Element{
     .type = Element::Type::ITEM,
     .text = caption,
+    .subtitle = options.subtitle != nullptr ? options.subtitle : "",
 
     .value = options.value != nullptr ? options.value : "",
     .badge = GetBadge(options),
@@ -647,6 +664,36 @@ GroupedListControl::UpdateGroupFlags() noexcept
   }
 }
 
+int
+GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
+{
+  /* this mirrors DrawElement(), which lays the decorations out while
+     it draws them */
+
+  const int padding = Layout::VptScale(PADDING_PT);
+  const Font &font = *look.list.font;
+
+  int width = Layout::VptScale(EDGE_INSET_PT);
+
+  if (element.check_left)
+    width += Layout::VptScale(EDGE_INSET_PT) + GetCheckWidth();
+
+  if (element.check_right)
+    width += GetCheckWidth();
+
+  if (element.chevron && !element.disabled)
+    width += std::max(2, (int)font.GetHeight() / 4) + padding;
+
+  if (!element.value.empty() && !element.disabled)
+    width += (int)font.TextSize(element.value).width + padding;
+
+  if (!element.badge.empty())
+    width += (int)font.TextSize(element.badge).width
+      + 2 * (int)Layout::VptScale(BADGE_PADDING_PT) + padding;
+
+  return width;
+}
+
 void
 GroupedListControl::UpdateLayout() noexcept
 {
@@ -663,6 +710,7 @@ GroupedListControl::UpdateLayout() noexcept
   const int padding = Layout::VptScale(PADDING_PT);
 
   const unsigned item_height = GetItemHeight();
+  const unsigned subtitle_gap = Layout::VptScale(SUBTITLE_GAP_PT);
   const unsigned caption_height = look.list.font_bold->GetHeight();
 
   /* the width available for a footer depends on the scroll bar, and
@@ -680,7 +728,40 @@ GroupedListControl::UpdateLayout() noexcept
 
       switch (element.type) {
       case Element::Type::ITEM:
-        element.height = item_height;
+        if (element.subtitle.empty()) {
+          element.height = item_height;
+          break;
+        }
+
+        /* the second line wraps inside the same column as the
+           caption, and the item grows with it */
+        element.subtitle_height =
+          text_renderer.GetHeight(look.small_font,
+                                      std::max(text_width
+                                               - GetDecorationWidth(element),
+                                               1),
+                                      element.subtitle.c_str());
+
+        {
+          const unsigned subtitle_lines =
+            element.subtitle_height / look.small_font.GetLineSpacing();
+
+          /* the room above and below grows with the number of lines:
+             with the padding of a one-line item, a tall item would
+             sit cramped between the two separators.  It never grows
+             beyond the room which a one-line item has, where the
+             minimum height of a touch target is what pads the
+             caption */
+          const unsigned vertical_padding =
+            std::min(Layout::GetTextPadding() * (1 + subtitle_lines),
+                     (item_height - look.list.font->GetHeight()) / 2);
+
+          element.height = std::max(look.list.font->GetHeight()
+                                    + subtitle_gap + element.subtitle_height
+                                    + 2 * vertical_padding,
+                                    Layout::GetMaximumControlHeight());
+        }
+
         break;
 
       case Element::Type::HERO:
@@ -958,8 +1039,19 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const int font_height = look.list.font->GetHeight();
     const int centre_y = text_rc.top + (int)text_rc.GetHeight() / 2;
 
-    const int text_y = text_rc.top
+    int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - font_height) / 2;
+    int subtitle_y = 0;
+
+    if (!element.subtitle.empty()) {
+      /* the caption and its second line are centred as one block */
+      const int gap = Layout::VptScale(SUBTITLE_GAP_PT);
+      const int block_height = font_height + gap
+        + (int)element.subtitle_height;
+
+      text_y = text_rc.top + ((int)text_rc.GetHeight() - block_height) / 2;
+      subtitle_y = text_y + font_height + gap;
+    }
 
     /* the caption uses the room which is left of the check mark, the
        arrow, the value and the badge */
@@ -1074,6 +1166,16 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     canvas.DrawClippedText({caption_rc.left, text_y}, caption_rc,
                            element.text.c_str());
+
+    if (!element.subtitle.empty()) {
+      canvas.Select(look.small_font);
+
+      PixelRect subtitle_rc = caption_rc;
+      subtitle_rc.top = subtitle_y;
+      subtitle_rc.bottom = subtitle_y + (int)element.subtitle_height;
+
+      text_renderer.Draw(canvas, subtitle_rc, element.subtitle.c_str());
+    }
 
     break;
   }

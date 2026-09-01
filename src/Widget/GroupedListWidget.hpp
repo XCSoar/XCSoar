@@ -84,6 +84,13 @@ public:
 
   /** The contents and the decorations of an item. */
   struct ItemOptions {
+    /**
+     * A second line below the caption, in a smaller font; the same
+     * shape the device list and the WiFi list use today.  It makes
+     * the item taller.
+     */
+    const char *subtitle = nullptr;
+
     /** a text at the right edge, e.g. the current value of a setting */
     const char *value = nullptr;
 
