@@ -4,6 +4,7 @@
 #pragma once
 
 #include "WindowWidget.hpp"
+#include "ResourceId.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -91,6 +92,20 @@ public:
 
   /** The contents and the decorations of an item. */
   struct ItemOptions {
+    /**
+     * An icon at the left edge, e.g. IDB_TEAMMATE_POS.  It is scaled
+     * into a square which is as tall as one and a half lines of text,
+     * no matter how tall the item is.
+     */
+    ResourceId icon = ResourceId::Null();
+
+    /**
+     * A character which is drawn where #icon would be, e.g. an emoji.
+     * It is left out on a display whose font does not have it, and
+     * the column is then not reserved either.
+     */
+    const char *icon_text = nullptr;
+
     /**
      * A second line below the caption, in a smaller font; the same
      * shape the device list and the WiFi list use today.  It makes

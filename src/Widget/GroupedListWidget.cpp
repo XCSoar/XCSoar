@@ -15,6 +15,8 @@
 #include "Screen/Layout.hpp"
 #include "UIUtil/KineticManager.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Icon.hpp"
+#include "util/UTF8.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "ui/control/ScrollBar.hpp"
@@ -30,6 +32,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -124,6 +127,21 @@ private:
 
     std::string text;
 
+    /** only for Type::ITEM: drawn at the left edge */
+    ResourceId icon_id = ResourceId::Null();
+
+    /** only for Type::ITEM: drawn at the left edge if there is no #icon */
+    std::string icon_text{};
+
+    /** the icon which #icon_id names, once it has been loaded */
+    std::unique_ptr<MaskedIcon> icon{};
+
+    /** the icon size for which the icon has been looked for; 0 if never */
+    unsigned icon_size = 0;
+
+    /** can the font draw #icon_text? */
+    bool icon_glyph = false;
+
     /** only for Type::ITEM: a second line below #text; it may wrap */
     std::string subtitle{};
 
@@ -175,6 +193,14 @@ private:
      * keeps their captions aligned.
      */
     bool check_left = false, check_right = false;
+
+    /** does any item of this group have an icon? */
+    bool icon_column = false;
+
+    /** does this element have something to draw in the icon column? */
+    bool HasIcon() const noexcept {
+      return icon != nullptr || icon_glyph;
+    }
 
     /** the height of #subtitle, which may need more than one line */
     unsigned subtitle_height = 0;
@@ -379,6 +405,28 @@ private:
    */
   [[gnu::pure]]
   int GetDecorationWidth(const Element &element) const noexcept;
+
+  /**
+   * The width and the height of the icon of an item: one and a half
+   * lines of text, so that it does not grow with the item when a
+   * subtitle makes it taller.
+   */
+  [[gnu::pure]]
+  int GetIconSize() const noexcept {
+    return (int)look.list.font->GetHeight() * 3 / 2;
+  }
+
+  /**
+   * The width of the column which holds the icon, including the
+   * padding which separates it from the text.
+   */
+  [[gnu::pure]]
+  int GetIconWidth() const noexcept {
+    return GetIconSize() + (int)Layout::VptScale(PADDING_PT);
+  }
+
+  /** Load the icons, and find out which ones can be drawn. */
+  void PrepareIcons() noexcept;
 
   /**
    * The width of the column which holds a check mark, including the
@@ -729,6 +777,8 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
   elements.push_back(Element{
     .type = Element::Type::ITEM,
     .text = caption,
+    .icon_id = options.icon,
+    .icon_text = options.icon_text != nullptr ? options.icon_text : "",
     .subtitle = options.subtitle != nullptr ? options.subtitle : "",
 
     .value = options.value != nullptr ? options.value : "",
@@ -862,6 +912,40 @@ GroupedListControl::FindElementAt(int y) const noexcept
 }
 
 void
+GroupedListControl::PrepareIcons() noexcept
+{
+  const unsigned size = GetIconSize();
+
+  for (auto &element : elements) {
+    if (!element.IsItem())
+      continue;
+
+    if (element.icon_size == size)
+      /* the icon of an item does not change; looking for one which
+         is not there costs a font lookup for every character, and on
+         a platform with color fonts a good deal more */
+      continue;
+
+    element.icon_size = size;
+
+    if (element.icon == nullptr && element.icon_id.IsDefined()) {
+      auto icon = std::make_unique<MaskedIcon>();
+      icon->LoadResource(element.icon_id);
+
+      if (icon->IsDefined())
+        element.icon = std::move(icon);
+    }
+
+    /* a character is only an icon if the font can draw it; on a
+       display which has no glyph for it, the item keeps no room for
+       one */
+    element.icon_glyph = element.icon == nullptr &&
+      !element.icon_text.empty() &&
+      look.heading1_font.HasGlyph(NextUTF8(element.icon_text.c_str()).first);
+  }
+}
+
+void
 GroupedListControl::UpdateGroupFlags() noexcept
 {
   for (std::size_t i = 0; i < elements.size(); ++i) {
@@ -883,7 +967,7 @@ GroupedListControl::UpdateGroupFlags() noexcept
     }
 
     std::size_t end = i;
-    bool left = false, right = false;
+    bool left = false, right = false, icon = false;
 
     do {
       const Element &element = elements[end];
@@ -895,12 +979,16 @@ GroupedListControl::UpdateGroupFlags() noexcept
           right = true;
       }
 
+      if (element.HasIcon())
+        icon = true;
+
       ++end;
     } while (end < elements.size() && elements[end].IsItem());
 
     for (std::size_t j = i; j < end; ++j) {
       elements[j].check_left = left;
       elements[j].check_right = right;
+      elements[j].icon_column = icon;
     }
 
     i = end;
@@ -917,6 +1005,9 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
   const Font &font = *look.list.font;
 
   int width = Layout::VptScale(EDGE_INSET_PT);
+
+  if (element.icon_column)
+    width += GetIconWidth();
 
   if (element.check_left)
     width += Layout::VptScale(EDGE_INSET_PT) + GetCheckWidth();
@@ -941,6 +1032,7 @@ void
 GroupedListControl::UpdateLayout() noexcept
 {
   FinishGroup();
+  PrepareIcons();
   UpdateGroupFlags();
 
   if (!IsDefined())
@@ -1297,10 +1389,17 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
        two cards, it shows the page behind them.  The selected item
        needs no line, its background already separates it from its
        neighbours */
-    if (!element.last_in_group && !selected)
-      canvas.DrawFilledRectangle({text_rc.left, rc.bottom - separator,
+    if (!element.last_in_group && !selected) {
+      /* the line begins where the caption does, like the lists of a
+         phone; the check mark is a state of the whole item and stays
+         outside */
+      const int left = text_rc.left +
+        (element.icon_column ? GetIconWidth() : 0);
+
+      canvas.DrawFilledRectangle({left, rc.bottom - separator,
                                   text_rc.right, rc.bottom},
                                  look.background_color);
+    }
 
     canvas.Select(*look.list.font);
 
@@ -1371,6 +1470,52 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
        value: the arrow would promise a page which does not open, and
        the state is not in effect anyway.  What is left is the caption
        and the badge which says why */
+    if (element.icon_column) {
+      const int size = GetIconSize();
+
+      const PixelPoint centre{caption_rc.left + size / 2, centre_y};
+
+      if (element.icon != nullptr) {
+        const PixelSize icon_size = element.icon->GetSize();
+
+        if ((int)icon_size.width <= size && (int)icon_size.height <= size) {
+          /* the icon keeps the size which it was loaded for: scaling
+             it a second time, to a size which is not the one the icon
+             system has chosen for this display, is what makes it
+             blurry.  This is also the overload which turns a dark
+             icon around on a dark background */
+          const PixelRect icon_rc{centre.x - size / 2, centre.y - size / 2,
+                                  centre.x + size / 2, centre.y + size / 2};
+
+          element.icon->Draw(canvas, icon_rc, false);
+        } else {
+          /* it does not fit: a wide icon gets a smaller height, so
+             that it does not grow out of the column */
+          const unsigned height = icon_size.width > icon_size.height
+            ? size * icon_size.height / icon_size.width
+            : size;
+
+          element.icon->Draw(canvas, centre, height);
+        }
+      } else if (element.icon_glyph) {
+        /* a character which stands in for an icon is drawn as large
+           as the column, not as large as the text beside it: the
+           heading font is the 3/2 of the list font which #GetIconSize
+           asks for */
+        canvas.Select(look.heading1_font);
+
+        const int width = canvas.CalcTextWidth(element.icon_text.c_str());
+        const int glyph_height = (int)look.heading1_font.GetHeight();
+
+        canvas.DrawText({centre.x - width / 2, centre_y - glyph_height / 2},
+                        element.icon_text.c_str());
+
+        canvas.Select(*look.list.font);
+      }
+
+      caption_rc.left += GetIconWidth();
+    }
+
     if (element.chevron && !element.disabled) {
       const int size = std::max(2, font_height / 4);
 
