@@ -25,6 +25,8 @@ Version 7.46 - not yet released
 * weather
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
+  - add Config → Weather → Controls height (30–100 %) for the
+    map-bottom weather overlay control rows
   - fix the weather cursor bar keeping light colours in dark mode,
     and unreadable labels on Windows
   - fix SkySight re-downloading forecast metadata when stepping
