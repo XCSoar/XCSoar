@@ -126,6 +126,7 @@ public:
   using SelectionMode = GroupedListWidget::SelectionMode;
   using CheckPosition = GroupedListWidget::CheckPosition;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
+  using TextFont = GroupedListWidget::TextFont;
   using GroupOptions = GroupedListWidget::GroupOptions;
 
 private:
@@ -174,6 +175,9 @@ private:
 
     /** only for Type::ITEM: draw #value below the caption */
     bool value_below = false;
+
+    /** only for Type::ITEM: the font of #value */
+    TextFont value_font = TextFont::DEFAULT;
 
     /** is #value drawn below the caption?  (the option, or too little room) */
     bool value_is_below = false;
@@ -456,7 +460,7 @@ private:
    *
    * @param right align the lines at the right edge of the box
    */
-  void DrawWrappedText(Canvas &canvas, const PixelRect &rc,
+  void DrawWrappedText(Canvas &canvas, const Font &font, const PixelRect &rc,
                        const std::string &text, bool right) const noexcept;
 
   /**
@@ -480,6 +484,14 @@ private:
 
   /** Load the icons, and find out which ones can be drawn. */
   void PrepareIcons() noexcept;
+
+  /** The font which draws the value of the given item. */
+  [[gnu::pure]]
+  const Font &GetValueFont(const Element &element) const noexcept {
+    return element.value_font == TextFont::MONO && look.mono_font.IsDefined()
+      ? look.mono_font
+      : *look.list.font;
+  }
 
   /**
    * The width of the column which holds a check mark, including the
@@ -838,6 +850,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
 
     .value = options.value != nullptr ? options.value : "",
     .value_below = options.value_below,
+    .value_font = options.value_font,
     .badge = GetBadge(options),
     .badge_style = options.badge_style,
     .callback = std::move(callback),
@@ -1130,6 +1143,7 @@ GroupedListControl::UpdateTextLayout(Element &element,
                                      int room) const noexcept
 {
   const Font &font = *look.list.font;
+  const Font &value_font = GetValueFont(element);
   const int padding = Layout::VptScale(PADDING_PT);
 
   element.value_is_below = false;
@@ -1144,7 +1158,7 @@ GroupedListControl::UpdateTextLayout(Element &element,
   if (element.value_below) {
     /* the value has the whole width, below the caption */
     element.value_width = room;
-    element.value_height = GetTextHeight(font, room, element.value);
+    element.value_height = GetTextHeight(value_font, room, element.value);
     element.value_is_below = true;
     element.text_height = GetTextHeight(font, room, element.text);
     return room;
@@ -1154,7 +1168,7 @@ GroupedListControl::UpdateTextLayout(Element &element,
      with nothing but the padding between them */
   const int available = std::max(room - padding, 2);
   const int caption_natural = (int)font.TextSize(element.text).width;
-  const int value_natural = (int)font.TextSize(element.value).width;
+  const int value_natural = (int)value_font.TextSize(element.value).width;
 
   int value_width;
 
@@ -1175,18 +1189,21 @@ GroupedListControl::UpdateTextLayout(Element &element,
   const int caption_width = available - value_width;
 
   element.value_width = value_width;
-  element.value_height = GetTextHeight(font, value_width, element.value);
+  element.value_height = GetTextHeight(value_font, value_width,
+                                       element.value);
   element.text_height = GetTextHeight(font, caption_width, element.text);
 
   return caption_width;
 }
 
 void
-GroupedListControl::DrawWrappedText(Canvas &canvas, const PixelRect &rc,
+GroupedListControl::DrawWrappedText(Canvas &canvas, const Font &font,
+                                    const PixelRect &rc,
                                     const std::string &text,
                                     bool right) const noexcept
 {
-  const Font &font = *look.list.font;
+  canvas.Select(font);
+
   const int width = std::max((int)rc.GetWidth(), 1);
   const auto wrapped = WrapText(font, width, text);
 
@@ -1839,14 +1856,15 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
         value_rc.bottom = value_y + (int)element.value_height;
       }
 
-      DrawWrappedText(canvas, value_rc, element.value, true);
+      DrawWrappedText(canvas, GetValueFont(element), value_rc,
+                      element.value, true);
     }
 
     PixelRect text_box = caption_rc;
     text_box.top = text_y;
     text_box.bottom = text_y + (int)element.text_height;
 
-    DrawWrappedText(canvas, text_box, element.text, false);
+    DrawWrappedText(canvas, *look.list.font, text_box, element.text, false);
 
     if (!element.subtitle.empty()) {
       canvas.Select(look.small_font);

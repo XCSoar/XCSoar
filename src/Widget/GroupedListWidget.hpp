@@ -55,6 +55,18 @@ public:
   /** The edge of the item where the check mark is drawn. */
   enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
 
+  /** The font which draws the value of an item. */
+  enum class TextFont : uint_least8_t {
+    /** the font of the list, like the caption */
+    DEFAULT,
+
+    /**
+     * Fixed width, for a value whose characters shall line up, e.g. a
+     * path, a serial number or a checksum.
+     */
+    MONO,
+  };
+
   /**
    * The colors of a badge.  An item which is #ItemOptions::disabled is
    * grey no matter which style it carries, and grey is reserved for
@@ -122,6 +134,9 @@ public:
      * for the caption moves there by itself.
      */
     bool value_below = false;
+
+    /** the font of #value */
+    TextFont value_font = TextFont::DEFAULT;
 
     /** a short label in a rounded box, e.g. "active" */
     const char *badge = nullptr;
