@@ -59,10 +59,11 @@ static constexpr unsigned CAPTION_GAP_PT = 4;
 static constexpr unsigned PADDING_PT = MARGIN_PT;
 
 /**
- * Additional distance which the badge and the value keep to the edge
- * of a card.  They are drawn to the pixel, while a glyph carries some
- * white space of its own; with the same distance as the caption on
- * the other side, they look closer to the edge than they are.
+ * Additional distance which the arrow, the check mark, the badge and
+ * the value keep to the edge of a card.  They are drawn to the pixel,
+ * while a glyph carries some white space of its own; with the same
+ * distance as the caption on the other side, they look closer to the
+ * edge than they are.
  */
 static constexpr unsigned EDGE_INSET_PT = 4;
 
@@ -118,6 +119,9 @@ private:
 
     /** only for Type::ITEM */
     Callback callback{};
+
+    /** only for Type::ITEM: draw an arrow at the right edge */
+    bool chevron = false;
 
     /** the first / the last item of its group */
     bool first_in_group = false, last_in_group = false;
@@ -411,6 +415,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .badge = options.badge != nullptr ? options.badge : "",
     .badge_style = options.badge_style,
     .callback = std::move(callback),
+    .chevron = options.chevron,
   });
 
 }
@@ -737,11 +742,24 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - font_height) / 2;
 
-    /* the caption uses the room which is left of the value and the
-       badge */
+    /* the caption uses the room which is left of the arrow, the
+       value and the badge */
     PixelRect caption_rc = text_rc;
 
     caption_rc.right -= Layout::VptScale(EDGE_INSET_PT);
+
+    if (element.chevron) {
+      const int size = std::max(2, font_height / 4);
+
+      const Pen pen(Layout::ScalePenWidth(1), text_color);
+      canvas.Select(pen);
+      canvas.DrawLine({caption_rc.right - size, centre_y - size},
+                      {caption_rc.right, centre_y});
+      canvas.DrawLine({caption_rc.right, centre_y},
+                      {caption_rc.right - size, centre_y + size});
+
+      caption_rc.right -= size + padding;
+    }
 
     if (!element.value.empty()) {
       const int width = canvas.CalcTextWidth(element.value.c_str());

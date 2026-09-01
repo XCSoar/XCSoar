@@ -63,6 +63,9 @@ public:
 
     /** the colors of #badge */
     BadgeStyle badge_style = BadgeStyle::PRIMARY;
+
+    /** an arrow, marking an item which opens another page */
+    bool chevron = false;
   };
 
 private:
