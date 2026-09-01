@@ -173,6 +173,11 @@ public:
    */
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
 
+  /**
+   * Remove all elements.  The item the cursor is on and the scroll
+   * position survive the next UpdateLayout(), so that a list which
+   * refreshes itself does not jump back to the top.
+   */
   void Clear() noexcept;
 
   /**
