@@ -224,8 +224,14 @@ TaskPropertiesPanel::OnModified(DataField &df) noexcept
   bool refresh = true;
   if (IsDataField(TASK_TYPE, df))
     OnTaskTypeChange((DataFieldEnum &)df);
-  else if (IsDataField(START_MODE, df))
-    ReadValues();
+  else if (IsDataField(START_MODE, df)) {
+    auto p = ordered_task->GetOrderedTaskSettings();
+    SetStartMode(p, (StartMode)((DataFieldEnum &)df).GetValue());
+    ordered_task->SetOrderedTaskSettings(p);
+    *task_changed = true;
+    refresh = false;
+    RefreshView();
+  }
   else if (IsDataField(FINISH_HEIGHT_REF, df)) {
     UpdateFinishHeightRange();
     refresh = false;
