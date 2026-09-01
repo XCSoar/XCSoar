@@ -5,6 +5,7 @@
 #include "Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/FinishConstraints.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
@@ -301,7 +302,9 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
              _("Configure whether the start must be armed manually or automatically."),
              false);
 
-  AddBoolean(_("Score start exit"), nullptr, false);
+  Add(_("Start zone behavior"), nullptr,
+      new DataFieldBoolean(false, _("Start on exit"),
+                           _("Start on entry")));
 
   const RoughTimeDelta time_zone =
     CommonInterface::GetComputerSettings().utc_offset;
