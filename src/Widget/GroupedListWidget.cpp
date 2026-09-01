@@ -98,6 +98,7 @@ static constexpr TextRenderer text_renderer;
 class GroupedListControl final : public PaintWindow {
 public:
   using Callback = GroupedListWidget::Callback;
+  using CursorCallback = GroupedListWidget::CursorCallback;
   using SelectionMode = GroupedListWidget::SelectionMode;
   using CheckPosition = GroupedListWidget::CheckPosition;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
@@ -193,6 +194,8 @@ private:
   /** the selected item, or -1 if there is none */
   int cursor = -1;
 
+  CursorCallback cursor_callback;
+
   enum class DragMode : uint_least8_t { NONE, SCROLL, CURSOR };
 
   DragMode drag_mode = DragMode::NONE;
@@ -230,6 +233,13 @@ public:
 
   [[gnu::pure]]
   unsigned GetItemCount() const noexcept;
+
+  void SetCursorCallback(CursorCallback callback) noexcept {
+    cursor_callback = std::move(callback);
+  }
+
+  [[gnu::pure]]
+  int GetCursorIndex() const noexcept;
 
   void SetItemChecked(unsigned i, bool checked) noexcept;
 
@@ -525,6 +535,21 @@ GroupedListControl::GetItemCount() const noexcept
   for (const auto &element : elements)
     if (element.IsItem())
       ++n;
+  return n;
+}
+
+int
+GroupedListControl::GetCursorIndex() const noexcept
+{
+  if (cursor < 0)
+    return -1;
+
+  int n = 0;
+
+  for (int j = 0; j < cursor; ++j)
+    if (elements[j].IsItem())
+      ++n;
+
   return n;
 }
 
@@ -844,6 +869,9 @@ GroupedListControl::SetCursor(int i) noexcept
   cursor = i;
   EnsureVisible(i);
   Invalidate();
+
+  if (cursor_callback)
+    cursor_callback(GetCursorIndex());
 }
 
 void
@@ -1582,6 +1610,18 @@ unsigned
 GroupedListWidget::GetItemCount() const noexcept
 {
   return control.GetItemCount();
+}
+
+void
+GroupedListWidget::SetCursorCallback(CursorCallback callback) noexcept
+{
+  control.SetCursorCallback(std::move(callback));
+}
+
+int
+GroupedListWidget::GetCursorIndex() const noexcept
+{
+  return control.GetCursorIndex();
 }
 
 void
