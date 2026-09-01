@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <functional>
 #include <memory>
-#include <utility>
+#include <tuple>
 
 struct DialogLook;
 class GroupedListControl;
@@ -186,6 +186,12 @@ private:
 
   GroupedListControl &control;
 
+  /** the view above the list, or nullptr */
+  std::unique_ptr<Widget> top_widget;
+
+  /** the height of #top_widget; 0 asks the view itself */
+  unsigned top_widget_height_pt = 0;
+
   /** the view below the list, or nullptr */
   std::unique_ptr<Widget> bottom_widget;
 
@@ -316,6 +322,20 @@ public:
   void UpdateLayout() noexcept;
 
   /**
+   * Show another view above the list, e.g. the row which names the
+   * directory a file list is in.  It sits between the title of the
+   * dialog and the list; it does not scroll with the list, and it
+   * does not cover it either, it takes its room from it.  Call this
+   * before Prepare().
+   *
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  The list always keeps half of the room.
+   */
+  void SetTopWidget(std::unique_ptr<Widget> widget,
+                    unsigned height_pt=0) noexcept;
+
+  /**
    * Show another view below the list, e.g. a preview of what the
    * items above it change.  It sits between the list and the buttons
    * of the dialog; it does not scroll with the list, and it does not
@@ -330,13 +350,17 @@ public:
                        unsigned height_pt=0) noexcept;
 
 private:
-  /** The room which #bottom_widget takes away from the list. */
+  /**
+   * The room which one of the two views takes; 0 if there is none.
+   */
   [[gnu::pure]]
-  unsigned GetBottomWidgetHeight(const PixelRect &rc) const noexcept;
+  static unsigned GetWidgetHeight(const Widget *widget,
+                                  unsigned height_pt) noexcept;
 
-  /** @return the rectangle of the list and the one of #bottom_widget */
+  /** @return the rectangles of #top_widget, of the list and of
+      #bottom_widget */
   [[gnu::pure]]
-  std::pair<PixelRect, PixelRect>
+  std::tuple<PixelRect, PixelRect, PixelRect>
   SplitRect(const PixelRect &rc) const noexcept;
 
 public:
