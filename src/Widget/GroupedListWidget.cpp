@@ -116,6 +116,12 @@ private:
     std::string subtitle{};
 
     /**
+     * only for Type::ITEM: replaces the footer of the group while
+     * the cursor is on this item
+     */
+    std::string help{};
+
+    /**
      * only for Type::ITEM: drawn at the right edge; only for
      * Type::HERO: the description below the title
      */
@@ -266,6 +272,13 @@ public:
    * layout is calculated.
    */
   void FinishGroup() noexcept;
+
+  /**
+   * The text of a footer element: the help of the item the cursor
+   * is on, or the footer of the group.
+   */
+  [[gnu::pure]]
+  const char *GetFooterText(std::size_t i) const noexcept;
 
   /** Recalculate the layout and repaint. */
   void UpdateLayout() noexcept;
@@ -451,13 +464,49 @@ GroupedListControl::FinishGroup() noexcept
     /* no group is open, or its footer has been added already */
     return;
 
-  if (group_options.footer == nullptr)
+  const char *const footer = group_options.footer != nullptr
+    ? group_options.footer
+    : "";
+
+  /* an item which explains itself needs a footer to be explained
+     in, even if the group has no text of its own */
+  bool needed = *footer != '\0';
+
+  for (auto i = elements.rbegin(); i != elements.rend() && i->IsItem(); ++i)
+    if (!i->help.empty())
+      needed = true;
+
+  if (!needed)
     return;
 
   elements.push_back(Element{
     .type = Element::Type::FOOTER,
-    .text = group_options.footer,
+    .text = footer,
   });
+}
+
+const char *
+GroupedListControl::GetFooterText(std::size_t i) const noexcept
+{
+  assert(i < elements.size());
+  assert(elements[i].type == Element::Type::FOOTER);
+
+  /* the items of this group are the elements right above it */
+  if (cursor >= 0 && (std::size_t)cursor < i &&
+      !elements[cursor].help.empty()) {
+    bool in_group = true;
+
+    for (std::size_t j = i; j-- > (std::size_t)cursor;)
+      if (!elements[j].IsItem()) {
+        in_group = false;
+        break;
+      }
+
+    if (in_group)
+      return elements[cursor].help.c_str();
+  }
+
+  return elements[i].text.c_str();
 }
 
 /**
@@ -539,6 +588,8 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
   });
+
+  elements.back().help = options.help != nullptr ? options.help : "";
 
 }
 
@@ -742,6 +793,26 @@ GroupedListControl::UpdateLayout() noexcept
   if (!IsDefined())
     return;
 
+  /* the footer of a group shows the help of the item under the
+     cursor, and the height of the footer depends on that text:
+     restore the cursor before the elements are measured */
+  if (cursor < 0 && saved_cursor >= 0) {
+    /* the same item as before the list was rebuilt, or its neighbour
+       if the list has become shorter or the item cannot be selected
+       any more */
+    cursor = FindItemByIndex(saved_cursor);
+
+    if (cursor < 0)
+      cursor = FindItem(elements.size(), false);
+    else if (!elements[cursor].IsSelectable())
+      cursor = FindItem(cursor, true);
+  }
+
+  saved_cursor = -1;
+
+  if (cursor < 0)
+    cursor = FindItem(0, true);
+
   const int margin = Layout::VptScale(MARGIN_PT);
   const int caption_gap = Layout::VptScale(CAPTION_GAP_PT);
   const int footer_gap = Layout::VptScale(FOOTER_GAP_PT);
@@ -823,7 +894,7 @@ GroupedListControl::UpdateLayout() noexcept
         element.height = footer_gap +
           text_renderer.GetHeight(*look.list.font,
                                       std::max(text_width, 1),
-                                      element.text.c_str());
+                                      GetFooterText(i));
         break;
       }
 
@@ -841,23 +912,6 @@ GroupedListControl::UpdateLayout() noexcept
   }
 
   SetOrigin(origin);
-
-  if (cursor < 0 && saved_cursor >= 0) {
-    /* the same item as before the list was rebuilt, or its neighbour
-       if the list has become shorter or the item cannot be selected
-       any more */
-    cursor = FindItemByIndex(saved_cursor);
-
-    if (cursor < 0)
-      cursor = FindItem(elements.size(), false);
-    else if (!elements[cursor].IsSelectable())
-      cursor = FindItem(cursor, true);
-  }
-
-  saved_cursor = -1;
-
-  if (cursor < 0)
-    cursor = FindItem(0, true);
 
   Invalidate();
 }
@@ -894,9 +948,21 @@ GroupedListControl::SetCursor(int i) noexcept
   if (i < 0 || i == cursor)
     return;
 
+  const int previous = cursor;
+
   cursor = i;
+
+  /* the footer of a group shows the help of the item under the
+     cursor, and its height changes with that text; measuring the
+     whole list again is only needed when such a text comes or goes */
+  if ((previous >= 0 && (std::size_t)previous < elements.size() &&
+       !elements[previous].help.empty()) ||
+      !elements[i].help.empty())
+    UpdateLayout();
+  else
+    Invalidate();
+
   EnsureVisible(i);
-  Invalidate();
 
   if (cursor_callback)
     cursor_callback(GetCursorIndex());
@@ -1292,7 +1358,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     canvas.SetTextColor(look.text_color);
 
     text_rc.top += Layout::VptScale(FOOTER_GAP_PT);
-    text_renderer.Draw(canvas, text_rc, element.text.c_str());
+    text_renderer.Draw(canvas, text_rc, GetFooterText(i));
     break;
   }
 }
@@ -1489,8 +1555,13 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
     return true;
   }
 
+  /* the press has moved the cursor to the item; asking which element
+     is under the finger now would miss it, because the footer of
+     another group may have grown or shrunk in between and moved the
+     item away.  A tap which has not wandered activates the item the
+     press has chosen */
   const bool activate = drag_mode == DragMode::CURSOR &&
-    FindElementAt(p.y) == cursor;
+    std::abs(p.y - drag_start_y) < Layout::Scale(8);
 
   const bool coast = drag_mode == DragMode::SCROLL && UseKineticScrolling();
 

@@ -77,7 +77,8 @@ public:
   struct GroupOptions {
     /**
      * An explanatory text below the card of the group.  It is
-     * word-wrapped and gets as much room as it needs.
+     * word-wrapped and gets as much room as it needs; an item with
+     * an #ItemOptions::help replaces it while the cursor is on it.
      */
     const char *footer = nullptr;
 
@@ -111,6 +112,13 @@ public:
 
     /** is this item checked?  (only with a #SelectionMode) */
     bool checked = false;
+
+    /**
+     * An explanation of this item, shown below the card of its group
+     * while the cursor is on this item; it replaces
+     * #GroupOptions::footer.
+     */
+    const char *help = nullptr;
 
     /**
      * Is this item currently not available?  It is drawn greyed out,
