@@ -5,6 +5,7 @@
 
 #include "Compat.hxx"
 #include "event/CoarseTimerEvent.hxx"
+#include "event/FineTimerEvent.hxx"
 #include "event/Chrono.hxx"
 #include "util/BindMethod.hxx"
 
@@ -18,10 +19,11 @@ namespace Co {
  * Suspend the current coroutine until @p delay has elapsed on
  * @p loop.  Must run on the thread that owns @p loop.
  */
-class SleepAwaitable final {
+template<typename Timer>
+class BasicSleepAwaitable final {
   const Event::Duration delay;
   std::coroutine_handle<> continuation{nullptr};
-  CoarseTimerEvent timer;
+  Timer timer;
 
   void OnExpired() noexcept {
     timer.Cancel();
@@ -30,11 +32,11 @@ class SleepAwaitable final {
   }
 
 public:
-  SleepAwaitable(EventLoop &loop, Event::Duration delay) noexcept
+  BasicSleepAwaitable(EventLoop &loop, Event::Duration delay) noexcept
     :delay(delay),
      timer(loop, BIND_THIS_METHOD(OnExpired)) {}
 
-  ~SleepAwaitable() noexcept {
+  ~BasicSleepAwaitable() noexcept {
     timer.Cancel();
   }
 
@@ -50,10 +52,23 @@ public:
   void await_resume() noexcept {}
 };
 
+using SleepAwaitable = BasicSleepAwaitable<CoarseTimerEvent>;
+
+/**
+ * Like #SleepAwaitable, but for delays below one second.
+ */
+using FineSleepAwaitable = BasicSleepAwaitable<FineTimerEvent>;
+
 inline SleepAwaitable
 Sleep(EventLoop &loop, Event::Duration delay) noexcept
 {
   return SleepAwaitable{loop, delay};
+}
+
+inline FineSleepAwaitable
+FineSleep(EventLoop &loop, Event::Duration delay) noexcept
+{
+  return FineSleepAwaitable{loop, delay};
 }
 
 } // namespace Co
