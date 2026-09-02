@@ -3,13 +3,15 @@
 
 #include "Client.hpp"
 #include "Device/RecordedFlight.hpp"
+#include "co/Sleep.hxx"
 #include "io/FileOutputStream.hxx"
 #include "lib/curl/CoRequest.hxx"
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
+#include "lib/curl/Global.hxx"
 #include "lib/curl/Setup.hxx"
 #include "lib/fmt/RuntimeError.hxx"
-#include "net/http/Progress.hpp"
+#include "Operation/ProgressListener.hpp"
 #include "system/Path.hpp"
 #include "time/BrokenDate.hpp"
 #include "time/BrokenTime.hpp"
@@ -20,12 +22,22 @@
 
 #include <stdexcept>
 
+#include <limits.h>
 #include <stdio.h>
 
 namespace FlarmHub {
 
 static constexpr long PROBE_CONNECT_TIMEOUT = 3;
 static constexpr long PROBE_TIMEOUT = 5;
+
+static constexpr long PROGRESS_TIMEOUT = 5;
+/**
+ * Ask the Hub this often while a transfer is running.  Co::Sleep()
+ * cannot be used for this: #CoarseTimerEvent documents a granularity
+ * of about one second.
+ */
+static constexpr Event::Duration PROGRESS_POLL_INTERVAL =
+  std::chrono::milliseconds(250);
 
 /**
  * Parse a timestamp such as "2020-05-01T06:17:48" (local time of the
@@ -116,9 +128,9 @@ ParseFlightList(const boost::json::value &json,
 }
 
 /**
- * The Hub is a small embedded HTTP server which serves one connection
- * at a time; give each request its own connection instead of leaving
- * an idle one behind, which would block the next request.
+ * Give each request its own connection: the Hub is a small embedded
+ * HTTP server which stops answering once an idle connection from a
+ * previous request is left on it.
  */
 static void
 SetupRequest(CurlEasy &easy)
@@ -126,6 +138,42 @@ SetupRequest(CurlEasy &easy)
   Curl::Setup(easy);
   easy.SetOption(CURLOPT_FRESH_CONNECT, 1L);
   easy.SetOption(CURLOPT_FORBID_REUSE, 1L);
+}
+
+/**
+ * Report the progress of the transfer between the Hub and the FLARM,
+ * which is the slow part; the Hub's own response to us is chunked and
+ * therefore has no Content-Length.  Asks right away so the size is
+ * known as early as possible, and runs until the caller destroys it.
+ */
+static Co::EagerTask<void>
+CoPollProgress(CurlGlobal &curl, std::string url, ProgressListener &progress)
+{
+  while (true) {
+    try {
+      CurlEasy easy{url.c_str()};
+      SetupRequest(easy);
+      easy.SetFailOnError();
+      easy.SetTimeout(PROGRESS_TIMEOUT);
+
+      const auto response = co_await Curl::CoRequest(curl, std::move(easy));
+      const auto json = boost::json::parse(response.body);
+      const auto &object = json.as_object();
+      const auto total = object.at("total").to_number<uint_least64_t>();
+      const auto loaded = object.at("loaded").to_number<uint_least64_t>();
+
+      /* a finished transfer is usually a leftover from the previous
+         one */
+      if (total > 0 && total <= UINT_MAX && loaded < total) {
+        progress.SetProgressRange(total);
+        progress.SetProgressPosition(loaded);
+      }
+    } catch (...) {
+      /* the progress display is not essential */
+    }
+
+    co_await Co::FineSleep(curl.GetEventLoop(), PROGRESS_POLL_INTERVAL);
+  }
 }
 
 static Co::Task<bool>
@@ -160,9 +208,16 @@ CoReadFlightList(CurlGlobal &curl, const char *host,
 
   CurlEasy easy{url.c_str()};
   SetupRequest(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
 
-  const auto response = co_await Curl::CoRequest(curl, std::move(easy));
+  /* register the request before asking for progress, so that the Hub
+     sees our connection first */
+  Curl::CoRequest request{curl, std::move(easy)};
+
+  const auto poll =
+    CoPollProgress(curl, fmt::format("http://{}/api/transfer/progress", host),
+                   progress);
+
+  const auto response = co_await request;
   if (response.status != 200)
     throw FmtRuntimeError("Failed to read the FLARM flight list: "
                           "HTTP status {}", response.status);
@@ -181,10 +236,16 @@ CoDownloadFlight(CurlGlobal &curl, const char *host, unsigned index,
 
   CurlEasy easy{url.c_str()};
   SetupRequest(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
 
-  const auto response =
-    co_await Curl::CoStreamRequest(curl, std::move(easy), file);
+  /* register the request before asking for progress, so that the Hub
+     sees our connection first */
+  Curl::CoStreamRequest request{curl, std::move(easy), file};
+
+  const auto poll =
+    CoPollProgress(curl, fmt::format("http://{}/api/transfer/progress", host),
+                   progress);
+
+  const auto response = co_await request;
 
   if (response.status != 200)
     throw FmtRuntimeError("Failed to download the IGC file: "
