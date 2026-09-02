@@ -21,7 +21,8 @@ class InternalSensors;
 #endif
 
 #ifdef ANDROID
-namespace Java { class LocalCloseable; }
+#include "java/Object.hxx"
+
 class _jobject;
 class Context;
 class BluetoothHelper;
@@ -69,11 +70,16 @@ public:
 #endif
 
 #ifdef ANDROID
-  std::pair<Java::LocalCloseable, Java::LocalCloseable> OpenDroidSoarV2(SensorListener &listener);
-  Java::LocalCloseable OpenI2Cbaro(const DeviceConfig &config, SensorListener &listener);
-  Java::LocalCloseable OpenNunchuck(const DeviceConfig &config, SensorListener &listener);
-  Java::LocalCloseable OpenVoltage(SensorListener &listener);
-  Java::LocalCloseable OpenGliderLink(SensorListener &listener);
-  Java::LocalCloseable OpenBluetoothSensor(const DeviceConfig &config, SensorListener &listener);
+  /* these return Java::LocalObject and not Java::LocalCloseable on
+     purpose: the caller wraps the result in a Java::GlobalCloseable
+     which owns the object from then on.  A LocalCloseable here would
+     close the sensor at the end of the caller's full-expression,
+     right after it was opened. */
+  std::pair<Java::LocalObject, Java::LocalObject> OpenDroidSoarV2(SensorListener &listener);
+  Java::LocalObject OpenI2Cbaro(const DeviceConfig &config, SensorListener &listener);
+  Java::LocalObject OpenNunchuck(const DeviceConfig &config, SensorListener &listener);
+  Java::LocalObject OpenVoltage(SensorListener &listener);
+  Java::LocalObject OpenGliderLink(SensorListener &listener);
+  Java::LocalObject OpenBluetoothSensor(const DeviceConfig &config, SensorListener &listener);
 #endif
 };
