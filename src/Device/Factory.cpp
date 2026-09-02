@@ -14,7 +14,7 @@
 #include "Android/IOIOHelper.hpp"
 #include "Android/NunchuckDevice.hpp"
 #include "Android/VoltageDevice.hpp"
-#include "java/Closeable.hxx"
+#include "java/Object.hxx"
 #endif
 
 #ifdef __APPLE__
@@ -60,7 +60,7 @@ DeviceFactory::OpenInternalSensors(SensorListener &listener)
 
 #ifdef ANDROID
 
-std::pair<Java::LocalCloseable, Java::LocalCloseable>
+std::pair<Java::LocalObject, Java::LocalObject>
 DeviceFactory::OpenDroidSoarV2(SensorListener &listener)
 {
   if (ioio_helper == nullptr)
@@ -84,7 +84,7 @@ DeviceFactory::OpenDroidSoarV2(SensorListener &listener)
   };
 }
 
-Java::LocalCloseable
+Java::LocalObject
 DeviceFactory::OpenI2Cbaro(const DeviceConfig &config, SensorListener &listener)
 {
   if (ioio_helper == nullptr)
@@ -99,7 +99,7 @@ DeviceFactory::OpenI2Cbaro(const DeviceConfig &config, SensorListener &listener)
                                listener);
 }
 
-Java::LocalCloseable
+Java::LocalObject
 DeviceFactory::OpenNunchuck(const DeviceConfig &config, SensorListener &listener)
 {
   if (ioio_helper == nullptr)
@@ -111,7 +111,7 @@ DeviceFactory::OpenNunchuck(const DeviceConfig &config, SensorListener &listener
                                 listener);
 }
 
-Java::LocalCloseable
+Java::LocalObject
 DeviceFactory::OpenVoltage(SensorListener &listener)
 {
   if (ioio_helper == nullptr)
@@ -123,13 +123,13 @@ DeviceFactory::OpenVoltage(SensorListener &listener)
                                listener);
 }
 
-Java::LocalCloseable
+Java::LocalObject
 DeviceFactory::OpenGliderLink(SensorListener &listener)
 {
   return GliderLink::Create(Java::GetEnv(), context, listener);
 }
 
-Java::LocalCloseable
+Java::LocalObject
 DeviceFactory::OpenBluetoothSensor(const DeviceConfig &config,
                                    SensorListener &listener)
 {
