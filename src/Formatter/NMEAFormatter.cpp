@@ -2,9 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "NMEAFormatter.hpp"
-#include "Units/Units.hpp"
-#include "Geo/GeoVector.hpp"
+#include "Geo/Geoid.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
+#include "Units/Units.hpp"
 #include "util/UTF8.hpp"
 
 #include <algorithm>
@@ -63,15 +64,26 @@ FormatGPGGA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   FormatTime(time_buffer, sizeof(time_buffer), date_time);
 
   if (info.time_available && info.location_available) {
+    char hdop_buffer[16] = "";
+    if (info.gps.hdop >= 0)
+      StringFormat(hdop_buffer, sizeof(hdop_buffer), "%.1f", info.gps.hdop);
+
+    char alt_buffer[16] = "";
+    if (info.gps_altitude_available)
+      StringFormat(alt_buffer, sizeof(alt_buffer), "%.3f", info.gps_altitude);
+
+    const double geoid_separation = EGM96::LookupSeparation(location);
+
     StringFormat(buffer, buffer_size,
-                 "GPGGA,%s,%s,%s,%u,%02u,%.1f,%.3f,M,,,,0000",
+                 "GPGGA,%s,%s,%s,%u,%02u,%s,%s,M,%.1f,M,,0000",
                  time_buffer,
                  lat_buffer,
                  long_buffer,
                  (unsigned)info.gps.fix_quality,
                  info.gps.satellites_used_available ? info.gps.satellites_used : 0,
-                 info.gps.hdop,
-                 info.gps_altitude);
+                 hdop_buffer,
+                 alt_buffer,
+                 geoid_separation);
   } else {
     StringFormat(buffer, buffer_size,
                  "%s",
