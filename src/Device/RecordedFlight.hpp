@@ -40,6 +40,11 @@ struct RecordedFlightInfo : FlightInfo {
     uint8_t flarm;
 
     /**
+     * Flight index, used by the FLARM Hub REST API.
+     */
+    unsigned flarm_hub;
+
+    /**
      * Flight number, used by Volkslogger driver
      */
     uint8_t volkslogger;
