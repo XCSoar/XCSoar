@@ -208,6 +208,8 @@ Version 7.45 - 2026-08-15
     list, Left/Right the action row
   - remove the ineffective “Unknown” row from airspace warning,
     display, and colour settings #1772
+  - fix repetitive airspace warning sound only playing once instead
+    of repeating while inside or near airspace #3016
 * infoboxen
   - add InfoBoxes: Altitude IGC, Home, Active Waypoint, Previous
     Waypoint, and QNH #2320 #2521

@@ -29,6 +29,7 @@
 #include "Message.hpp"
 
 #include <exception>
+#include <algorithm>
 
 class AirspaceWarningWidget final
   : public QuestionWidget {
@@ -259,9 +260,37 @@ public:
 void
 AirspaceWarningMonitor::Reset() noexcept
 {
+  sound_timer.Cancel();
+  sound_interval_counter = 0;
   const auto &calculated = CommonInterface::Calculated();
 
   last = calculated.airspace_warnings.latest;
+}
+
+void
+AirspaceWarningMonitor::PlayRepetitiveSound() noexcept
+{
+  const auto &config = CommonInterface::GetComputerSettings().airspace.warnings;
+  if (!config.repetitive_sound || backend_components == nullptr)
+    return;
+  const auto *manager = backend_components->GetAirspaceWarnings();
+  if (manager == nullptr)
+    return;
+  ProtectedAirspaceWarningManager::Lease lease(*manager);
+  FloatDuration closest{1000};
+  bool active = false;
+  for (const auto &warning : *lease.operator->()) {
+    if (!warning.IsActive()) continue;
+    active = true;
+    if (warning.IsInside()) closest = {};
+    else closest = std::min(closest, warning.GetSolution().elapsed_time);
+  }
+  if (!active) { sound_interval_counter = 0; sound_timer.Cancel(); return; }
+  const unsigned interval = ((closest * 3 / config.warning_time) + 1) * 2;
+  if (sound_interval_counter >= interval) {
+    PlayResource("IDR_WAV_BEEPBWEEP");
+    sound_interval_counter = 1;
+  } else ++sound_interval_counter;
 }
 
 void
@@ -301,6 +330,10 @@ AirspaceWarningMonitor::Check() noexcept
     // un-blank the display, play a sound
     ResetUserIdle();
     PlayResource("IDR_WAV_BEEPBWEEP");
+    if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
+      sound_interval_counter = 0;
+      sound_timer.Schedule(std::chrono::milliseconds(500));
+    }
 
     // show airspace warnings dialog
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog)
@@ -335,4 +368,8 @@ AirspaceWarningMonitor::Check() noexcept
   // un-blank the display, play a sound
   ResetUserIdle();
   PlayResource("IDR_WAV_BEEPBWEEP");
+  if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
+    sound_interval_counter = 0;
+    sound_timer.Schedule(std::chrono::milliseconds(500));
+  }
 }
