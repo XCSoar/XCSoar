@@ -154,6 +154,7 @@ public:
   using CursorCallback = GroupedListWidget::CursorCallback;
   using SelectionMode = GroupedListWidget::SelectionMode;
   using CheckPosition = GroupedListWidget::CheckPosition;
+  using EnterAction = GroupedListWidget::EnterAction;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
   using TextFont = GroupedListWidget::TextFont;
   using ToggleHitArea = GroupedListWidget::ToggleHitArea;
@@ -283,6 +284,9 @@ private:
 
     /** only for Type::ITEM: the edge which holds the check mark */
     CheckPosition check_position = CheckPosition::RIGHT;
+
+    /** only for Type::ITEM: what Enter does on it */
+    EnterAction enter_action = EnterAction::ITEM;
 
     /** the first / the last item of its group */
     bool first_in_group = false, last_in_group = false;
@@ -1102,6 +1106,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .toggle_hit_area = options.toggle_hit_area,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
+    .enter_action = group_options.enter_action,
   });
 
   Element &element = elements.back();
@@ -3037,17 +3042,29 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
   if (activate) {
     const Element &element = elements[press];
 
-    if (element.toggle &&
-        element.toggle_hit_area == ToggleHitArea::SWITCH) {
-      /* the switch is the control, and the rest of the item is only
-         its label: a tap beside it selects the item, which shows what
-         this setting does, and that is all it does */
-      const auto [left, right] = GetToggleHitArea(element);
+    /* the switch is a control of its own: a tap on it does what it
+       says, wherever the cursor was */
+    const auto [toggle_left, toggle_right] = GetToggleHitArea(element);
+    const bool on_switch = element.toggle &&
+      p.x >= toggle_left && p.x < toggle_right;
 
-      if (p.x < left || p.x >= right) {
-        SetCursor(press);
-        activate = false;
-      }
+    if (element.toggle && !on_switch &&
+        element.toggle_hit_area == ToggleHitArea::SWITCH) {
+      /* the rest of the item is only the label of that switch: a tap
+         beside it selects the item, which shows what this setting
+         does, and that is all it does */
+      SetCursor(press);
+      activate = false;
+    } else if (!on_switch && press != cursor &&
+               element.enter_action == EnterAction::ACTION_BAR) {
+      /* the items of this group are a choice, and choosing one is
+         what a tap on it means: the buttons of the dialog act on the
+         item under the cursor, and the finger must be able to point
+         at it without setting anything off.  A tap on the item which
+         the cursor is on already is the second one, and that one
+         activates it */
+      SetCursor(press);
+      activate = false;
     }
   }
 
@@ -3106,6 +3123,18 @@ GroupedListControl::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
+    /* an item which leaves Enter to the action bar does not take it
+       here; the button which is marked there gets it instead, and
+       the list keeps the cursor which that button acts on.  Should
+       no button be marked, the key comes back to #OnKeyDown() and
+       activates the item after all */
+    return cursor >= 0 &&
+      elements[cursor].enter_action == EnterAction::ITEM;
+
+  case KEY_SPACE:
+    /* the item itself, whoever owns Enter.  A control stick has no
+       such key: there, the action of an item belongs into the action
+       bar as a button of its own */
     return cursor >= 0;
 
   case KEY_UP:
@@ -3126,6 +3155,7 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
 
   switch (key_code) {
   case KEY_RETURN:
+  case KEY_SPACE:
     ActivateItem();
     return true;
 
@@ -3546,6 +3576,7 @@ GroupedListWidget::KeyPress(unsigned key_code) noexcept
       break;
 
     case KEY_RETURN:
+    case KEY_SPACE:
       if (control.KeyFromWidget(key_code))
         return true;
 
