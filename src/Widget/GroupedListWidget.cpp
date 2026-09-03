@@ -56,6 +56,25 @@ UseKineticScrolling() noexcept
 /** Distance between the cards and the edges of the widget area. */
 static constexpr unsigned MARGIN_PT = 10;
 
+/**
+ * A view this narrow lets its cards fill it: the margin beside them,
+ * and the rounded corners which go with it, are worth more as room
+ * for the text where there is little of it.
+ *
+ * The first number is the one which counts on a display of the usual
+ * kind, where a view of 400 pixels is a small device and 640x480 is
+ * not.  The second one belongs to a screen which is small in the
+ * hand, and it is larger, because such a display often has many dots
+ * per inch: XCSoar started with -small on a retina display draws
+ * into 640x480 pixels, which is not a lot of room once everything on
+ * it is twice as large, while a phone of the same size in the hand
+ * has half again as many pixels and can afford the margin.
+ *
+ * @see Layout::small_screen
+ */
+static constexpr unsigned NARROW_VIEW_PIXELS = 400;
+static constexpr unsigned NARROW_SMALL_SCREEN_PIXELS = 700;
+
 /** Corner radius of the card which holds the items of one group. */
 static constexpr unsigned RADIUS_PT = 8;
 
@@ -66,9 +85,13 @@ static constexpr unsigned GROUP_GAP_PT = 15;
 static constexpr unsigned CAPTION_GAP_PT = 4;
 
 /**
- * Horizontal padding of the contents of a card, and the distance
- * between the value and the arrow at its right edge.  The same as the
- * distance the card itself keeps to the edges of the list.
+ * Horizontal padding of the contents of a card, the distance between
+ * the icon and the caption, and the one between the value and the
+ * arrow at its right edge.  As much as the card itself keeps to the
+ * edges of the list, unless the items are shorter than a touch
+ * target asks for.
+ *
+ * @see GroupedListControl::GetPadding()
  */
 static constexpr unsigned PADDING_PT = MARGIN_PT;
 
@@ -573,6 +596,54 @@ private:
                        int cached_width, bool right) const noexcept;
 
   /**
+   * Does the view have so little room that the cards are better off
+   * filling it?  On such a screen the margin costs a tenth of the
+   * width, and the text is what it is taken from.
+   */
+  [[gnu::pure]]
+  bool IsNarrowView() const noexcept {
+    const unsigned width = GetSize().width;
+
+    return width < NARROW_VIEW_PIXELS ||
+      (Layout::small_screen && width < NARROW_SMALL_SCREEN_PIXELS);
+  }
+
+  /**
+   * The distance which the cards keep to the left and to the right
+   * edge of the view.  A narrow view has none: there the cards go
+   * from edge to edge.
+   */
+  [[gnu::pure]]
+  int GetCardMargin() const noexcept {
+    return IsNarrowView() ? 0 : (int)Layout::VptScale(MARGIN_PT);
+  }
+
+  /**
+   * The radius of the corners of a card.  It goes with the margin:
+   * a corner which is rounded against the edge of the screen is no
+   * corner but a bite out of the card.
+   */
+  [[gnu::pure]]
+  int GetCardRadius() const noexcept {
+    return IsNarrowView() ? 0 : (int)Layout::VptScale(RADIUS_PT);
+  }
+
+  /**
+   * The horizontal padding inside a card, which is also the distance
+   * between the icon of an item and its caption.  It is at most a
+   * quarter of the height of an item: a device without a touch
+   * screen makes its rows as tall as one line of text, and the
+   * padding a touch target asks for would be wider there than the
+   * text is tall.  On a touch screen the rows are tall enough that
+   * the padding keeps the full #PADDING_PT.
+   */
+  [[gnu::pure]]
+  int GetPadding() const noexcept {
+    return std::min((int)Layout::VptScale(PADDING_PT),
+                    (int)GetItemHeight() / 4);
+  }
+
+  /**
    * The width and the height of the icon of an item: one and a half
    * lines of text, so that it does not grow with the item when a
    * subtitle makes it taller.
@@ -588,7 +659,7 @@ private:
    */
   [[gnu::pure]]
   int GetIconWidth() const noexcept {
-    return GetIconSize() + (int)Layout::VptScale(PADDING_PT);
+    return GetIconSize() + GetPadding();
   }
 
   /** Load the icons, and find out which ones can be drawn. */
@@ -643,7 +714,7 @@ private:
    */
   [[gnu::pure]]
   int GetCheckWidth() const noexcept {
-    return GetCheckSize() + (int)Layout::VptScale(PADDING_PT);
+    return GetCheckSize() + GetPadding();
   }
 
   /**
@@ -927,8 +998,8 @@ PixelRect
 GroupedListControl::GetFooterRect(std::size_t i) const noexcept
 {
   const Element &element = elements[i];
-  const int margin = Layout::VptScale(MARGIN_PT);
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int margin = GetCardMargin();
+  const int padding = GetPadding();
 
   return {margin + padding,
           element.top - origin + (int)Layout::VptScale(FOOTER_GAP_PT),
@@ -1154,7 +1225,7 @@ GroupedListControl::GetWidgetHeight(const Element &element) const noexcept
 PixelRect
 GroupedListControl::GetWidgetRect(const Element &element) const noexcept
 {
-  const int margin = Layout::VptScale(MARGIN_PT);
+  const int margin = GetCardMargin();
   const int top = element.GetBottom() - (int)GetWidgetHeight(element) - origin;
 
   return PixelRect{margin, top, GetContentWidth() - margin,
@@ -1473,7 +1544,7 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
   /* this mirrors DrawElement(), which lays the decorations out while
      it draws them */
 
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int padding = GetPadding();
   const Font &font = *look.list.font;
 
   int width = Layout::VptScale(EDGE_INSET_PT);
@@ -1541,7 +1612,7 @@ GroupedListControl::UpdateTextLayout(Element &element,
 {
   const Font &font = *look.list.font;
   const Font &value_font = GetValueFont(element);
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int padding = GetPadding();
 
   element.value_is_below = false;
   element.value_width = 0;
@@ -1694,11 +1765,11 @@ GroupedListControl::UpdateLayout() noexcept
   if (cursor < 0 && !cursor_removed)
     cursor = FindItem(0, true);
 
-  const int margin = Layout::VptScale(MARGIN_PT);
+  const int margin = GetCardMargin();
   const int caption_gap = Layout::VptScale(CAPTION_GAP_PT);
   const int footer_gap = Layout::VptScale(FOOTER_GAP_PT);
 
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int padding = GetPadding();
 
   const unsigned item_height = GetItemHeight();
   const unsigned subtitle_gap = Layout::VptScale(SUBTITLE_GAP_PT);
@@ -1825,7 +1896,9 @@ GroupedListControl::UpdateLayout() noexcept
       y += (int)element.height;
     }
 
-    content_height = elements.empty() ? 0 : (unsigned)(y + margin);
+    content_height = elements.empty()
+      ? 0
+      : (unsigned)(y + (int)Layout::VptScale(MARGIN_PT));
 
     if (scroll_bar.IsDefined() ||
         content_height <= (unsigned)GetViewHeight())
@@ -2044,9 +2117,9 @@ GroupedListControl::GetToggleHitArea(const Element &element) const noexcept
   /* the switch sits at the right edge of the item, inside the margin
      of the card and its padding; only the check mark of a group is
      further out */
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int padding = GetPadding();
 
-  int right = GetContentWidth() - (int)Layout::VptScale(MARGIN_PT) - padding;
+  int right = GetContentWidth() - GetCardMargin() - padding;
   if (element.check_right)
     right -= GetCheckWidth();
 
@@ -2364,8 +2437,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 {
   const Element &element = elements[i];
 
-  const int margin = Layout::VptScale(MARGIN_PT);
-  const int padding = Layout::VptScale(PADDING_PT);
+  const int margin = GetCardMargin();
+  const int padding = GetPadding();
 
   rc.left += margin;
   rc.right -= margin;
@@ -2402,7 +2475,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     canvas.DrawFilledRectangle(background_rc, background);
 
-    const int radius = Layout::VptScale(RADIUS_PT);
+    const int radius = GetCardRadius();
 
     if (element.first_in_group)
       DrawRoundedEdge(canvas, rc, true, look.background_color, radius);
@@ -2715,7 +2788,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                                look.list.GetBackgroundColor(false, false,
                                                             false));
 
-    const int radius = Layout::VptScale(RADIUS_PT);
+    const int radius = GetCardRadius();
     DrawRoundedEdge(canvas, card_rc, true, look.background_color, radius);
     DrawRoundedEdge(canvas, card_rc, false, look.background_color, radius);
 
