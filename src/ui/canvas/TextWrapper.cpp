@@ -58,10 +58,21 @@ struct WrapBudget {
 static WrapBudget
 CalibrateWrapBudget(Canvas &canvas, unsigned width) noexcept
 {
+  /* one glyph is measured with its fractional advance rounded up,
+     which makes a run of them look wider than it is: a text of
+     nothing but narrow characters, and every text in a monospace
+     font, would then be wrapped although it fits.  Measure a run of
+     the same glyph instead and let the rounding go the way each
+     bound needs: up for the one which says a text fits, down for the
+     one which says it cannot */
+  static constexpr std::string_view wide = "WWWWWWWWWW";
+  static constexpr std::string_view narrow = "iiiiiiiiii";
+  static constexpr unsigned samples = 10;
+
   const unsigned max_cw =
-    std::max(1u, canvas.CalcTextSize("W").width);
+    std::max(1u, (canvas.CalcTextSize(wide).width + samples - 1) / samples);
   const unsigned min_cw =
-    std::max(1u, canvas.CalcTextSize("i").width);
+    std::max(1u, canvas.CalcTextSize(narrow).width / samples);
 
   std::size_t safe = width / max_cw;
   std::size_t must = width / min_cw + 1;
