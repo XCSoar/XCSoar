@@ -26,7 +26,6 @@
 #include "Language/Language.hpp"
 #include "Widget/ListWidget.hpp"
 #include "UIGlobals.hpp"
-#include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "util/StringFormat.hpp"
 #include <Message.hpp>
@@ -66,15 +65,9 @@ class AirspaceWarningListWidget final
 
   TwoTextRowsRenderer row_renderer;
 
-  /**
-   * Airspace repetitive warning sound interval counter.
-   */
-  unsigned sound_interval_counter;
-
 public:
   AirspaceWarningListWidget(ProtectedAirspaceWarningManager &aw)
-    :airspace_warnings(aw),
-     sound_interval_counter(1)
+    :airspace_warnings(aw)
   {}
 
   void CreateButtons(WidgetDialog &dialog) {
@@ -215,7 +208,6 @@ AirspaceWarningListWidget::OnCursorMoved(unsigned i) noexcept
 void
 AirspaceWarningListWidget::Show(const PixelRect &rc) noexcept
 {
-  sound_interval_counter = 0;
   ListWidget::Show(rc);
   UpdateList();
   update_list_timer.Schedule(std::chrono::milliseconds(500));
@@ -490,34 +482,9 @@ AirspaceWarningListWidget::UpdateList()
       /* the selection may have changed, update CursorAirspace */
       OnCursorMoved(GetList().GetCursorIndex());
 
-    // Process repetitive sound warnings if they are enabled in config
-    const AirspaceWarningConfig &warning_config =
-      CommonInterface::GetComputerSettings().airspace.warnings;
-    if (warning_config.repetitive_sound) {
-      FloatDuration tt_closest_airspace{1000};
-      for (const auto &i : warning_list) {
-        /* Find smallest time to nearest aispace (cannot always rely
-           on fact that closest airspace should be in the beginning of
-           the list) */
-        if (!i.IsInside())
-          tt_closest_airspace = std::min(tt_closest_airspace,
-                                         i.GetSolution().elapsed_time);
-        else
-          tt_closest_airspace = {};
-      }
-
-      const unsigned sound_interval =
-        ((tt_closest_airspace * 3 / warning_config.warning_time) + 1) * 2;
-      if (sound_interval_counter >= sound_interval) {
-        PlayResource("IDR_WAV_BEEPBWEEP");
-        sound_interval_counter = 1;
-      } else
-        ++sound_interval_counter;
-    }
   } else {
     GetList().SetLength(1);
     selected_airspace = NULL;
-    sound_interval_counter = 0;
   }
 
   GetList().Invalidate();
