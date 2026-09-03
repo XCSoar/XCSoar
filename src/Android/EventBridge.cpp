@@ -31,7 +31,9 @@ static unsigned
 TranslateKeyCode(unsigned key_code)
 {
   if (key_code == KEYCODE_BACK)
-    /* the "back" key acts as escape */
+    /* the "back" key acts as escape; on Android 16+ (target API 36)
+       KEYCODE_BACK is no longer dispatched, so XCSoar.java injects
+       this same code from OnBackInvokedCallback */
     return KEYCODE_ESCAPE;
 
   if (key_code >= KEYCODE_0 && key_code <= KEYCODE_9)

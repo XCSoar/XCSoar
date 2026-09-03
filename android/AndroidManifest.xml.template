@@ -33,6 +33,7 @@
               android:exported="true"
               android:icon="@mipmap/ic_launcher"
               android:label="@APP_LABEL@"
+              android:enableOnBackInvokedCallback="true"
               android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
               android:launchMode="singleInstance">
       <intent-filter>
@@ -91,7 +92,7 @@
 
   </application>
 
-  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35"/>
+  <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36"/>
 
   <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
                    android:usesPermissionFlags="neverForLocation"/>
