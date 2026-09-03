@@ -7,7 +7,7 @@
 
 /**
  * Off-screen canvas for the memory backend (#VirtualCanvas with
- * Begin/End/CopyTo helpers matching OpenGL/GDI).
+ * Begin/End/CopyTo helpers matching OpenGL).
  *
  * #Grow is inherited from #VirtualCanvas (defined in
  * ui/canvas/BufferCanvas.cpp for this backend).

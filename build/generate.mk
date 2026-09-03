@@ -94,9 +94,7 @@ generate:: $(OUT)/include/MathTables.h $(XCI_HEADERS) \
 	$(OUT)/include/InputEvents_Char2GCE.cpp $(OUT)/include/InputEvents_Char2NE.cpp \
 	$(OUT)/include/QuickGuideNEWS.hpp
 
-# UNIX resources
-
-ifeq ($(USE_WIN32_RESOURCES),n)
+# Embedded resources (LinkResources.pl)
 
 ifeq ($(TARGET_IS_ANDROID),n)
 
@@ -112,5 +110,3 @@ $(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resou
 generate:: $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
 endif # !TARGET_IS_ANDROID
-
-endif

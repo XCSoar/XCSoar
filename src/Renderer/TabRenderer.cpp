@@ -27,7 +27,7 @@ TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     /* draw single-line text centered in the tab button; avoid
        DrawFormattedText / TextRenderer which word-wrap at spaces,
        causing multi-word labels like "Turn Points" to break across
-       lines or disappear entirely on GDI */
+       lines or disappear entirely on software canvases */
     const PixelSize size = canvas.CalcTextSize(caption);
     const unsigned padding = Layout::GetTextPadding();
     const int min_x = rc.left + (int)padding;

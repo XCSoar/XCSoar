@@ -194,7 +194,7 @@ alwaysApply: true
 ## Architecture
 
 ### Multi-Platform Considerations
-- XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
+- XCSoar is a multi-platform project supporting: Windows (WIN64OPENGL, WIN32OPENGL), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
 - **String handling (UTF-8 everywhere):**
   - XCSoar uses UTF-8 encoding on all platforms
   - For new code: use `char`, `std::string`, `std::string_view`, plain string literals
@@ -625,22 +625,20 @@ Adding a new method callable between Java and C++ requires updating three files:
 
 ## GUI Guidelines
 
-### Rendering Backends — Always Consider All Three
+### Rendering Backends — Always Consider Both
 
-XCSoar has three canvas backends in `src/ui/canvas/`. **Every renderer implementation must work on all three:**
+XCSoar has two canvas backends in `src/ui/canvas/`. **Every renderer implementation must work on both:**
 
 | Backend | Define | Platform | Capabilities |
 |---------|--------|----------|-------------|
-| **OpenGL** | `ENABLE_OPENGL` | Linux/Android/macOS | Full color, alpha blending, gradients, hardware-accelerated |
+| **OpenGL** | `ENABLE_OPENGL` | Linux/Android/macOS/Windows | Full color, alpha blending, gradients, hardware-accelerated |
 | **Memory canvas** | `USE_MEMORY_CANVAS` | Kobo e-ink, headless (`VFB=y`) | Software rendering, greyscale on e-ink, no GPU |
-| **GDI** | `USE_GDI` | Windows | Win32 GDI API, full color but no alpha on all surfaces |
 
 When writing or modifying renderer code (`src/Renderer/`, `src/Look/`, `MapWindow/`):
 - **E-ink (memory canvas)**: No color, no gradients, no alpha blending. Use `IsDithered()` and `HasColors()` from `Asset.hpp`. Fall back to `COLOR_WHITE`/`COLOR_BLACK` with clear contrast.
 - **OpenGL**: Can use `AlphaBlendEnable`/`Disable`, textures, and smooth anti-aliased rendering.
-- **GDI**: Has color but limited alpha support. `Canvas::StretchMono()` and some blending operations differ.
-- Use `#ifdef ENABLE_OPENGL` / `#ifdef USE_MEMORY_CANVAS` / `#ifdef USE_GDI` when backend-specific code is unavoidable.
-- **Test with**: `TARGET=UNIX` (OpenGL default), `TARGET=UNIX OPENGL=n` (memory canvas), `TARGET=WIN64` (GDI).
+- Use `#ifdef ENABLE_OPENGL` / `#ifdef USE_MEMORY_CANVAS` when backend-specific code is unavoidable.
+- **Test with**: `TARGET=UNIX` (OpenGL default), `TARGET=UNIX OPENGL=n` (memory canvas), `TARGET=WIN64OPENGL` (Windows).
 
 ### UI Scaling and DPI Support
 - UI must scale from low-DPI devices (e.g., CGA resolution ~96 DPI) to very high-DPI devices (e.g., modern phones with 400+ DPI)
@@ -665,7 +663,7 @@ DPI detection, screen size queries, and display setup differ across targets. Whe
 | **Linux/Wayland** | `wl_surface` | Compositor scale factor (`wl_output`) | HiDPI via integer/fractional scaling |
 | **Linux/X11** | `XWindow` | `Xft.dpi` resource or fallback | May be inaccurate; `xrandr` for physical size |
 | **Kobo** | Framebuffer (`/dev/fb0`) | Hardcoded per model | Fixed resolution, no rotation, no DPI query API |
-| **Windows** | `HWND` (GDI) | `GetDpiForWindow()` / `GetDeviceCaps()` | Per-monitor DPI on Win10+ |
+| **Windows** | SDL / ANGLE | `GetDpiForWindow()` / `SDL_GetDisplayDPI()` | Per-monitor DPI on Win10+ |
 | **macOS/iOS** | Native view | `backingScaleFactor` / `UIScreen.scale` | Retina 2x/3x scaling |
 | **SDL** | `SDL_Window` | `SDL_GetDisplayDPI()` | Cross-platform fallback, may be inaccurate |
 
@@ -675,7 +673,7 @@ Key rules:
 - Use `IsEmbedded()`, `IsKobo()`, `IsAndroid()` from `Asset.hpp` for target-specific branches
 - **Kobo has no runtime DPI query** — screen parameters are hardcoded in device-specific setup
 - **Android provides reliable DPI** but beware of foldables and external displays changing at runtime
-- When adding a new display feature, check that it compiles with at least: `TARGET=UNIX`, `TARGET=ANDROID`, `TARGET=KOBO`, `TARGET=WIN64`
+- When adding a new display feature, check that it compiles with at least: `TARGET=UNIX`, `TARGET=ANDROID`, `TARGET=KOBO`, `TARGET=WIN64OPENGL`
 
 ### UI Operability
 - UI must be operable via multiple input methods: touch, keyboard, and gestures
@@ -895,7 +893,7 @@ If `make update-po` fails with syntax errors:
 - Always use parallel builds: `make -j$(nproc)` (or `-j16`, `-j8`, etc.)
 - Always use ccache: `USE_CCACHE=y` — significantly speeds up rebuilds
 - Always build with warnings as errors: `WERROR=y` (enabled by default when `DEBUG=y`)
-- Specify the target platform with `TARGET=`: `UNIX`, `ANDROID`, `WIN64`, `PC`, `KOBO`, etc.
+- Specify the target platform with `TARGET=`: `UNIX`, `ANDROID`, `WIN64OPENGL`, `KOBO`, etc.
 
 ### Common Build Commands
 ```bash
@@ -909,7 +907,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y everything
 make -j$(nproc) TARGET=ANDROID USE_CCACHE=y DEBUG=y
 
 # Cross-compile for Windows
-make -j$(nproc) TARGET=WIN64 USE_CCACHE=y
+make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y
 
 # Build with explicit warnings-as-errors (default in DEBUG)
 make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
@@ -922,7 +920,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 - **`V=1`** or **`V=2`**: verbose output to see actual compiler/linker commands
 
 ### Key Build Variables
-- `TARGET=`: platform (`UNIX`, `ANDROID`, `WIN64`, `PC`, `KOBO`, etc.)
+- `TARGET=`: platform (`UNIX`, `ANDROID`, `WIN64OPENGL`, `KOBO`, etc.)
 - `DEBUG=y|n`: debug build (default `y`); enables assertions, debug symbols, and `WERROR=y`
 - `WERROR=y`: treat all warnings as errors (defaults to `$(DEBUG)`)
 - `USE_CCACHE=y`: use ccache for faster recompilation
@@ -955,7 +953,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 - When adding a new bitmap resource variant (e.g., white title for dark mode), all resolution tiers that the code can select must be provided; if the code has `huge`/`big`/`standard` selection logic, the new variant needs matching sizes or the highest-resolution tier will fall back to a lower-resolution variant and appear blurry
 
 ### Platform-Specific Builds
-- Each platform may have platform-specific files in subdirectories (e.g., `src/ui/window/wayland/`, `src/ui/window/gdi/`)
+- Each platform may have platform-specific files in subdirectories (e.g., `src/ui/window/wayland/`, `src/ui/window/sdl/`)
 - Use `#ifdef USE_WAYLAND`, `#ifdef USE_X11`, `#ifdef ANDROID` for conditional compilation
 - Test changes on multiple platforms when possible (at minimum: Linux, Windows, Android)
 - Pay attention to duplicate symbol definitions across platform implementations
@@ -966,10 +964,9 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 
 **Directory Structure:**
 - `src/ui/window/custom/` - Shared base implementations (fallback/common code)
-- `src/ui/window/gdi/` - Windows GDI-specific implementations
-- `src/ui/window/wayland/` - Wayland-specific implementations  
+- `src/ui/window/wayland/` - Wayland-specific implementations
 - `src/ui/window/x11/` - X11-specific implementations
-- `src/ui/window/sdl/` - SDL-specific implementations
+- `src/ui/window/sdl/` - SDL-specific implementations (including Windows)
 - Similar patterns exist in `src/ui/canvas/`, `src/ui/event/`, `src/ui/display/`, etc.
 
 **Code Reuse Strategy:**
@@ -983,7 +980,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 - Start by implementing it entirely in `custom/` (cross-platform)
 - Only create platform-specific overrides when something genuinely can't be done portably
 - If a platform has a better/native API for the same thing, override just that method in the platform directory — keep the algorithm and data flow in shared code
-- Check if platform-specific directory exists (e.g., `wayland/`, `gdi/`) before creating `#ifdef` blocks
+- Check if platform-specific directory exists (e.g., `wayland/`, `sdl/`) before creating `#ifdef` blocks
 
 **Good vs bad isolation:**
 ```cpp
@@ -993,8 +990,8 @@ void TopWindow::SetFullScreen(bool full) {
   xdg_toplevel_set_fullscreen(toplevel, nullptr);
 #elif defined(USE_X11)
   XChangeProperty(display, window, ...);
-#elif defined(USE_GDI)
-  SetWindowLong(hwnd, GWL_STYLE, ...);
+#elif defined(USE_SDL)
+  SDL_SetWindowFullscreen(window, ...);
 #else
   // fallback?
 #endif
@@ -1004,7 +1001,7 @@ void TopWindow::SetFullScreen(bool full) {
 // custom/TopWindow.cpp — shared base (may be empty or have a fallback)
 // wayland/TopWindow.cpp — Wayland-specific SetFullScreen()
 // x11/TopWindow.cpp — X11-specific SetFullScreen()
-// gdi/TopWindow.cpp — GDI-specific SetFullScreen()
+// sdl/TopWindow.cpp — SDL-specific SetFullScreen()
 // All share the same class, same header, same interface
 ```
 
@@ -1021,7 +1018,6 @@ When debugging or extending platform code:
 5. Build system variables (in `build/detect.mk`) determine which platform is active
 
 **Common platform defines:**
-- `USE_GDI` - Windows GDI
 - `USE_WAYLAND` - Wayland compositor
 - `USE_X11` - X11 windowing
 - `USE_SDL` - SDL2 framework

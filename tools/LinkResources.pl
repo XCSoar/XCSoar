@@ -27,8 +27,6 @@ while (<>) {
         add_to_src("output/data/bitmaps/$2.png", "resource_$1");
     } elsif (/^bitmap_graphic\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         add_to_src("output/data/graphics2/$2.png", "resource_$1");
-    } elsif (/^(?:app_icon|hatch_bitmap)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
-        # only used on Windows
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         add_to_src("$icons_dir/$2_ldpi.png", "resource_$1");
         add_to_src("$icons_dir/$2_mdpi.png", "resource_$1_MDPI");

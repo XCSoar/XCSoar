@@ -317,9 +317,8 @@ arch instead):
   ``output/WIN64OPENGL/bin/libGLESv2.dll`` — ANGLE runtime (also inside zip
   and installer)
 
-Some features are compiled only when ``OPENGL=y`` (all OpenGL Windows targets),
-for example EDL weather and MbTiles map overlays. The deprecated GDI builds do
-not include them.
+Some features are compiled only when ``OPENGL=y`` (all current Windows
+targets), for example EDL weather and MbTiles map overlays.
 
 Compiling for iOS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -851,8 +850,7 @@ Interactive shell (compile with ``make`` or ``xcsoar-compile``)::
       -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 
 One-shot build via the wrapper script (``ANDROID``, ``DOCS``, ``KOBO``,
-``UNIX``, ``UNIX-SDL``, ``WAYLAND``, ``WIN64OPENGL``, ``WIN32OPENGL``;
-legacy GDI: ``PC``, ``WIN64``)::
+``UNIX``, ``UNIX-SDL``, ``WAYLAND``, ``WIN64OPENGL``, ``WIN32OPENGL``)::
 
   docker run \
       --mount type=bind,source="$(pwd)",target=/opt/xcsoar \

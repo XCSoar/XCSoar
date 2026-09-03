@@ -30,20 +30,16 @@ target:
 
 - **Unix/Linux**: ``output/UNIX/bin/`` (default, and for flavors like WAYLAND, FUZZER)
 - **Unix/Linux (optimized)**: ``output/OPT/bin/`` (``TARGET=OPT`` convenience target)
-- **Windows (OpenGL, recommended)**: ``output/WIN64OPENGL/bin/`` or
-  ``output/WIN32OPENGL/bin/``
-- **Windows (legacy GDI, deprecated)**: ``output/PC/bin/`` (32-bit) or
-  ``output/WIN64/bin/`` (64-bit flavor)
+- **Windows**: ``output/WIN64OPENGL/bin/`` or ``output/WIN32OPENGL/bin/``
 - **macOS**: ``output/OSX64/bin/`` or ``output/MACOS/bin/`` (default)
 
 **Important**: Many build "targets" are actually flavors that override the base
 target internally. For example, ``TARGET=WAYLAND`` builds as ``UNIX`` with
 output under ``output/UNIX/bin/``, while ``TARGET=OPT`` also builds as ``UNIX``
 but uses a separate output directory (``output/OPT/bin/``).
-OpenGL Windows flavors (``WIN64OPENGL``, ``WIN32OPENGL``) compile as ``PC`` but
-keep their own output directory (``output/WIN64OPENGL/``, etc.). Legacy
-``WIN64`` is a flavor of ``PC`` with the same split: built as ``PC``, output
-under ``output/WIN64/``.
+OpenGL Windows flavors (``WIN64OPENGL``, ``WIN32OPENGL``) compile as ``PC``
+(the internal MinGW toolchain name) but keep their own output directory
+(``output/WIN64OPENGL/``, etc.).
 
 **Note**: In the examples below, ``output/UNIX/bin/`` is used (typical for Linux
 development). Replace ``UNIX`` with your flavor output directory if different
@@ -826,14 +822,14 @@ vario on a free serial/USB port (XCSoar must not hold the port).
 **Build**::
 
    make -j$(nproc) TARGET=UNIX USE_CCACHE=y output/UNIX/bin/RunLXNAVPolarEcho
-   make -j$(nproc) TARGET=WIN64 USE_CCACHE=y output/WIN64/bin/RunLXNAVPolarEcho.exe
+   make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y output/WIN64OPENGL/bin/RunLXNAVPolarEcho.exe
 
 **Usage**::
 
    ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200
    ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200 --read-only
    ./output/UNIX/bin/RunLXNAVPolarEcho /dev/ttyUSB0 115200 --preserve-crew
-   ./output/WIN64/bin/RunLXNAVPolarEcho.exe COM3 115200
+   ./output/WIN64OPENGL/bin/RunLXNAVPolarEcho.exe COM3 115200
 
 **Modes**:
 
