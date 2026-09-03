@@ -239,6 +239,9 @@ private:
     /** only for Type::ITEM: the colors of #badge */
     BadgeStyle badge_style = BadgeStyle::PRIMARY;
 
+    /** only for Type::ITEM: the font of #badge */
+    TextFont badge_font = TextFont::DEFAULT;
+
     /** only for Type::ITEM */
     Callback callback{};
 
@@ -618,6 +621,14 @@ private:
   [[gnu::pure]]
   const Font &GetValueFont(const Element &element) const noexcept {
     return element.value_font == TextFont::MONO && look.mono_font.IsDefined()
+      ? look.mono_font
+      : *look.list.font;
+  }
+
+  /** The font which draws the badge of an item. */
+  [[gnu::pure]]
+  const Font &GetBadgeFont(const Element &element) const noexcept {
+    return element.badge_font == TextFont::MONO && look.mono_font.IsDefined()
       ? look.mono_font
       : *look.list.font;
   }
@@ -1080,6 +1091,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .value_font = options.value_font,
     .badge = GetBadge(options),
     .badge_style = options.badge_style,
+    .badge_font = options.badge_font,
     .callback = std::move(callback),
     .chevron = options.chevron,
     .checked = options.checked,
@@ -1477,7 +1489,7 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
     width += std::max(2, (int)font.GetHeight() / 4) + padding;
 
   if (!element.badge.empty())
-    width += (int)font.TextSize(element.badge).width
+    width += (int)GetBadgeFont(element).TextSize(element.badge).width
       + 2 * (int)Layout::VptScale(BADGE_PADDING_PT) + padding;
 
   return width;
@@ -2603,7 +2615,16 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
          available, the box is grey, like its text */
       const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
       const int badge_pad_y = badge_pad_x / 2;
-      const int badge_height = font_height + 2 * badge_pad_y;
+
+      const Font &badge_font = GetBadgeFont(element);
+      canvas.Select(badge_font);
+
+      /* the box is as tall as the list font, so that the badges of a
+         group are the same size, and taller where another font needs
+         the room */
+      const int badge_height = std::max(font_height,
+                                        (int)badge_font.GetHeight())
+        + 2 * badge_pad_y;
 
       PixelRect badge_rc;
       badge_rc.right = caption_rc.right;
@@ -2628,18 +2649,21 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                           ? background
                           : badge_colors.text_color);
 
-      /* center the capitals within the box, not the font box: its
-         descent is empty for a short label and would push the text
-         down */
-      const int badge_text_y = centre_y
-        - (int)look.list.font->GetAscentHeight()
-        + (int)look.list.font->GetCapitalHeight() / 2;
+      /* the text is centered by its box, which is what the font
+         renders into.  Aiming at the capitals instead would look
+         better for a short label, but it needs the distance from the
+         top of that box to the baseline, and a font whose ascent does
+         not include its leading - Courier on macOS - does not tell
+         it: the label would sit low by that leading */
+      const int badge_text_y = badge_rc.top
+        + (badge_height - (int)badge_font.GetHeight()) / 2;
 
       canvas.DrawClippedText({badge_rc.left + badge_pad_x, badge_text_y},
                              badge_rc, element.badge.c_str());
 
       caption_rc.right = badge_rc.left - padding;
 
+      canvas.Select(*look.list.font);
       canvas.SetTextColor(text_color);
     }
 

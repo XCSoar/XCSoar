@@ -77,14 +77,14 @@ public:
     ROW,
   };
 
-  /** The font which draws the value of an item. */
+  /** The font which draws a short text of an item. */
   enum class TextFont : uint_least8_t {
     /** the font of the list, like the caption */
     DEFAULT,
 
     /**
-     * Fixed width, for a value whose characters shall line up, e.g. a
-     * path, a serial number or a checksum.
+     * Fixed width, for a text whose characters shall line up, e.g. a
+     * path, a serial number, a checksum or a code of four letters.
      */
     MONO,
   };
@@ -165,6 +165,13 @@ public:
 
     /** the colors of #badge */
     BadgeStyle badge_style = BadgeStyle::PRIMARY;
+
+    /**
+     * The font of #badge.  A code which is read letter by letter, a
+     * frequency or an identifier is easier to compare from one item
+     * to the next when its characters line up.
+     */
+    TextFont badge_font = TextFont::DEFAULT;
 
     /** an arrow, marking an item which opens another page */
     bool chevron = false;
