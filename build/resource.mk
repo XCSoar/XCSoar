@@ -79,13 +79,19 @@ $(eval $(call generate-icon-scale,xxhdpi,$(ICON_ZOOM_XXHDPI)))
 $(PNG_ICONS_ldpi) $(PNG_ICONS_mdpi) $(PNG_ICONS_xhdpi) \
 $(PNG_ICONS_xxhdpi): $(ICON_ZOOM_STAMP)
 
+PNG_ICONS_ALL = $(PNG_ICONS_ldpi) $(PNG_ICONS_mdpi) \
+	$(PNG_ICONS_xhdpi) $(PNG_ICONS_xxhdpi)
+
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
 	$(Q)xsltproc --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
 
-# convert to uncompressed 8-bit BMP
+# Masked BMP tiles are only consumed by GDI and the memory canvas.
+# OpenGL embeds the SVG-rendered PNG (with alpha) directly.
+ifneq ($(OPENGL),y)
 $(eval $(call convert-to-bmp,$(BMP_ICONS_ALL),%.bmp,%_tile.png))
+endif
 
 ####### splash logo
 
@@ -322,16 +328,6 @@ PNG_DISCLOSURE_DST = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%.png,$(SV
 PNG_DISCLOSURE_WIN = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SVG_DISCLOSURE))
 BMP_DISCLOSURE_WIN = $(PNG_DISCLOSURE_WIN:.png=.bmp)
 
-$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
-	$(DATA)/graphics2/%.png, \
-	Data/graphics/%.svg, \
-	--width=80 --height=80))
-$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_WIN), \
-	$(DATA)/graphics/%.png, \
-	Data/graphics/%.svg, \
-	--width=80 --height=80))
-$(eval $(call convert-to-bmp-white,$(BMP_DISCLOSURE_WIN),%.bmp,%.png))
-
 ####### add gesture icons from docs
 
 GESTURES = down dl dr du left ldr ldrdl lu right rd rl up ud uldr urd urdl
@@ -346,19 +342,37 @@ $(DATA)/graphics2/dirstamp:
 	$(Q)mkdir -p $(DATA)/graphics2
 	@touch $@
 
-$(eval $(call rsvg-convert,$(GESTURES_DST), \
-	$(DATA)/graphics2/gesture_%.png, \
-	doc/manual/figures/gesture_%.svg, \
-	--width=82 --height=82))
+ifeq ($(USE_WIN32_RESOURCES),y)
+$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_WIN), \
+	$(DATA)/graphics/%.png, \
+	Data/graphics/%.svg, \
+	--width=80 --height=80))
+$(eval $(call convert-to-bmp-white,$(BMP_DISCLOSURE_WIN),%.bmp,%.png))
 $(eval $(call rsvg-convert,$(GESTURES_PNG_WIN), \
 	$(DATA)/graphics/gesture_%.png, \
 	doc/manual/figures/gesture_%.svg, \
 	--width=82 --height=82))
 $(eval $(call convert-to-bmp-white,$(GESTURES_BMP_WIN),%.bmp,%.png))
+else
+$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
+	$(DATA)/graphics2/%.png, \
+	Data/graphics/%.svg, \
+	--width=80 --height=80))
+$(eval $(call rsvg-convert,$(GESTURES_DST), \
+	$(DATA)/graphics2/gesture_%.png, \
+	doc/manual/figures/gesture_%.svg, \
+	--width=82 --height=82))
+endif
 
+ifeq ($(USE_WIN32_RESOURCES),n)
 RESOURCE_FILES += $(GESTURES_DST)
 RESOURCE_FILES += $(PNG_DISCLOSURE_DST)
+endif
+ifeq ($(OPENGL),y)
+RESOURCE_FILES += $(PNG_ICONS_ALL)
+else
 RESOURCE_FILES += $(BMP_ICONS_ALL)
+endif
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
