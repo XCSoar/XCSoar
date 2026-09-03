@@ -43,6 +43,7 @@ endif
 INSTALLER_DEPS = $(TARGET_BIN_DIR)/XCSoar.exe
 INSTALLER_DEPS += $(TARGET_BIN_DIR)/libEGL.dll $(TARGET_BIN_DIR)/libGLESv2.dll
 INSTALLER_DEPS += $(FONT_TARGETS)
+INSTALLER_DEPS += $(WIN_ICON_ICO)
 
 # Build the installer
 $(INSTALLER_OUTPUT): $(INSTALLER_DEPS) $(NSIS_SCRIPT) | $(TARGET_BIN_DIR)/dirstamp
@@ -54,6 +55,7 @@ $(INSTALLER_OUTPUT): $(INSTALLER_DEPS) $(NSIS_SCRIPT) | $(TARGET_BIN_DIR)/dirsta
 		-DOUTPUT_FILE="$(abspath $@)" \
 		-DBIN_DIR="$(abspath $(TARGET_BIN_DIR))" \
 		-DTARGET_FLAVOR="$(TARGET_FLAVOR)" \
+		-DAPP_ICON="$(abspath $(WIN_ICON_ICO))" \
 		xcsoar.nsi
 
 # Phony target for easy invocation

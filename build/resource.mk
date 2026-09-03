@@ -129,6 +129,30 @@ $(ICNS_SPLASH_1024): %.icns: %.png
 		rm -rf $@.iconset
 endif
 
+# Windows: multi-size .ico from the same logo SVGs (Explorer, taskbar,
+# NSIS). TESTING builds use the red logo, matching Android and macOS.
+ifeq ($(HAVE_WIN32),y)
+WIN_ICON_ICOS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.ico,$(SVG_SPLASH))
+ifeq ($(TESTING),y)
+WIN_ICON_ICO = $(DATA)/graphics/logo_red.ico
+else
+WIN_ICON_ICO = $(DATA)/graphics/logo.ico
+endif
+
+$(WIN_ICON_ICOS): $(DATA)/graphics/%.ico: Data/graphics/%.svg \
+	| $(DATA)/graphics/dirstamp
+	@$(NQ)echo "  ICO     $@"
+	$(Q)tmpdir=$$(mktemp -d) && \
+	trap 'rm -rf -- "$$tmpdir"' EXIT && \
+	for s in 16 24 32 48 64 128 256; do \
+		rsvg-convert --width=$$s --height=$$s $< \
+			-o $$tmpdir/$$s.png || exit 1; \
+	done && \
+	$(IM_CONVERT) $$tmpdir/16.png $$tmpdir/24.png $$tmpdir/32.png \
+		$$tmpdir/48.png $$tmpdir/64.png $$tmpdir/128.png \
+		$$tmpdir/256.png $@
+endif
+
 ####### version
 
 SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
@@ -360,9 +384,10 @@ RESOURCE_BINARY = $(RESOURCES_BIN)
 
 # Windows SDL builds: embed the exe icon via a minimal .rc
 ifeq ($(HAVE_WIN32),y)
-$(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc Data/bitmaps/xcsoarswift.ico | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
+$(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc $(WIN_ICON_ICO) \
+	| $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir Data -o $@ $<
+	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir $(DATA) -o $@ $<
 
 RESOURCE_BINARY += $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc
 endif
