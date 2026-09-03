@@ -13,10 +13,8 @@
 #include "TopographyLook.hpp"
 #include "OverlayLook.hpp"
 #include "ui/canvas/Icon.hpp"
-#include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Weather/Features.hpp"
 
 #ifdef HAVE_NOAA
@@ -39,11 +37,6 @@ struct MapLook {
 #endif
 
   OverlayLook overlay;
-
-#ifdef HAVE_HATCHED_BRUSH
-  Bitmap above_terrain_bitmap;
-  Brush above_terrain_brush;
-#endif
 
   MaskedIcon terrain_warning_icon;
 

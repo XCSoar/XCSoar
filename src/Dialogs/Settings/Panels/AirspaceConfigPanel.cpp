@@ -12,7 +12,6 @@
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
@@ -34,9 +33,6 @@ enum ControlIndex {
   AcknowledgeTime,
   UseBlackOutline,
   AirspaceFillMode,
-#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  AirspaceTransparency,
-#endif
 };
 
 static constexpr StaticEnumChoice as_display_list[] = {
@@ -221,12 +217,6 @@ AirspaceConfigPanel::Prepare(ContainerWindow &parent,
           as_fill_mode_list, (unsigned)renderer.fill_mode);
   SetExpertRow(AirspaceFillMode);
 
-#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  AddBoolean(_("Airspace transparency"), _("If enabled, then airspaces are filled transparently."),
-             renderer.transparency);
-  SetExpertRow(AirspaceTransparency);
-#endif
-
   ShowDisplayControls(renderer.altitude_mode); // TODO make this work the first time
   ShowWarningControls(computer.enable_warnings);
 }
@@ -278,11 +268,6 @@ AirspaceConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(UseBlackOutline, ProfileKeys::AirspaceBlackOutline, renderer.black_outline);
 
   changed |= SaveValueEnum(AirspaceFillMode, ProfileKeys::AirspaceFillMode, renderer.fill_mode);
-
-#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
-                       renderer.transparency);
-#endif
 
   _changed |= changed;
 

@@ -25,11 +25,6 @@ MapLook::Initialise(const MapSettings &settings,
   noaa.Initialise();
 #endif
 
-#ifdef HAVE_HATCHED_BRUSH
-  above_terrain_bitmap.Load(IDB_ABOVETERRAIN);
-  above_terrain_brush.Create(above_terrain_bitmap);
-#endif
-
   terrain_warning_icon.LoadResource(IDB_TERRAINWARNING_ALL);
 
   compass_brush.Create(IsDithered() ? COLOR_WHITE : ColorWithAlpha(Color(207, 207, 207), alpha));

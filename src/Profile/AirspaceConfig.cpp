@@ -4,7 +4,6 @@
 #include "AirspaceConfig.hpp"
 #include "Map.hpp"
 #include "Keys.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
@@ -69,10 +68,6 @@ Profile::Load(const ProfileMap &map, AirspaceRendererSettings &settings)
   map.GetEnum(ProfileKeys::AltMode, settings.altitude_mode);
   map.Get(ProfileKeys::ClipAlt, settings.clip_altitude);
 
-#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
-  map.Get(ProfileKeys::AirspaceTransparency, settings.transparency);
-#endif
-
   map.GetEnum(ProfileKeys::AirspaceFillMode, settings.fill_mode);
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
@@ -94,13 +89,6 @@ Profile::Load(const ProfileMap &map,
     if (map.Get(name, value))
       settings.display = (value & 0x1) != 0;
   }
-
-#ifdef HAVE_HATCHED_BRUSH
-  MakeAirspaceSettingName(name, "Brush", i);
-  map.Get(name, settings.brush);
-  if (settings.brush >= ARRAY_SIZE(AirspaceLook::brushes))
-    settings.brush = 0;
-#endif
 
   MakeAirspaceSettingName(name, "AirspaceBorderColor", i);
   if (!map.GetColor(name, settings.border_color))
@@ -191,12 +179,4 @@ Profile::SetAirspaceFillMode(ProfileMap &map, unsigned i, uint8_t mode)
   char name[64];
   MakeAirspaceSettingName(name, "AirspaceFillMode", i);
   map.SetEnum(name, (AirspaceClassRendererSettings::FillMode)mode);
-}
-
-void
-Profile::SetAirspaceBrush(ProfileMap &map, unsigned i, int brush_index)
-{
-  char name[64];
-  MakeAirspaceSettingName(name, "Brush", i);
-  map.Set(name, brush_index);
 }

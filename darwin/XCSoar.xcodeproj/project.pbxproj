@@ -3824,7 +3824,6 @@
 		5CBFE1D62D742FA600F05795 /* AirspaceWarningDialog.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AirspaceWarningDialog.hpp; sourceTree = "<group>"; };
 		5CBFE1D72D742FA600F05795 /* dlgAirspace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dlgAirspace.cpp; sourceTree = "<group>"; };
 		5CBFE1D82D742FA600F05795 /* dlgAirspaceDetails.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dlgAirspaceDetails.cpp; sourceTree = "<group>"; };
-		5CBFE1D92D742FA600F05795 /* dlgAirspacePatterns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dlgAirspacePatterns.cpp; sourceTree = "<group>"; };
 		5CBFE1DA2D742FA600F05795 /* dlgAirspaceWarnings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dlgAirspaceWarnings.cpp; sourceTree = "<group>"; };
 		5CBFE1DC2D742FA600F05795 /* BlueFlyConfigurationDialog.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlueFlyConfigurationDialog.cpp; sourceTree = "<group>"; };
 		5CBFE1DD2D742FA600F05795 /* BlueFlyDialogs.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlueFlyDialogs.hpp; sourceTree = "<group>"; };
@@ -15595,7 +15594,6 @@
 				5CBFE1D62D742FA600F05795 /* AirspaceWarningDialog.hpp */,
 				5CBFE1D72D742FA600F05795 /* dlgAirspace.cpp */,
 				5CBFE1D82D742FA600F05795 /* dlgAirspaceDetails.cpp */,
-				5CBFE1D92D742FA600F05795 /* dlgAirspacePatterns.cpp */,
 				5CBFE1DA2D742FA600F05795 /* dlgAirspaceWarnings.cpp */,
 			);
 			path = Airspace;

@@ -4,14 +4,9 @@
 #pragma once
 
 #include "Color.hpp"
-#include "Features.hpp"
 #include "Screen/Debug.hpp"
 
 #include <cassert>
-
-#ifdef HAVE_HATCHED_BRUSH
-class Bitmap;
-#endif
 
 /**
  * A Brush is used for drawing filled circles, rectangles and so on
@@ -33,16 +28,6 @@ public:
    * @param c The new Color
    */
   void Create(const Color c);
-
-#ifdef HAVE_HATCHED_BRUSH
-
-  /**
-   * Creates a bitmap-based Brush
-   * @param bitmap The bitmap the new Brush will be based on
-   */
-  void Create(const Bitmap &bitmap);
-
-#endif
 
   /**
    * Resets the Brush to nullptr

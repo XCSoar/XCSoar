@@ -45,6 +45,9 @@ Version 7.46 - not yet released
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
+* airspace
+  - fill airspaces with a transparent colour; hatch patterns and the
+    Airspace transparency setting are gone
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
@@ -94,6 +97,8 @@ Version 7.46 - not yet released
     resolution
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe airspace fill as a transparent colour, without hatch
+    patterns or the Airspace transparency setting
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and

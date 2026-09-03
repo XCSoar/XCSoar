@@ -5,7 +5,6 @@
 
 #include "Airspace/AirspaceClass.hpp"
 #include "ui/canvas/PortableColor.hpp"
-#include "ui/canvas/Features.hpp"
 
 #include <cstdint>
 
@@ -25,18 +24,13 @@ struct AirspaceClassRendererSettings
   /** Class-specific display flags */
   bool display;
 
-#ifdef HAVE_HATCHED_BRUSH
-  uint8_t brush;
-#endif
-
   RGB8Color border_color;
   RGB8Color fill_color;
 
   unsigned border_width;
 
   /**
-   * What portion of the airspace area should be filled with the
-   * airspace brush?
+   * What portion of the airspace area should be filled?
    *
    * (Only used if the parent FillMode is not ALL)
    */
@@ -74,17 +68,8 @@ struct AirspaceRendererSettings {
   /** Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;
 
-#if defined(HAVE_HATCHED_BRUSH) && defined(HAVE_ALPHA_BLEND)
   /**
-   * Should the airspace be rendered with a transparent brush instead
-   * of a pattern brush?
-   */
-  bool transparency;
-#endif
-
-  /**
-   * What portion of the airspace area should be filled with the
-   * airspace brush?
+   * What portion of the airspace area should be filled?
    */
   enum class FillMode: uint8_t {
     /** the platform specific default is used */
