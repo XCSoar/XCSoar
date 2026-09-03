@@ -120,6 +120,14 @@ public:
   }
 
   /**
+   * The buttons of this dialog, e.g. for
+   * GroupedListWidget::SetActionBar().
+   */
+  ButtonPanel &GetButtonPanel() noexcept {
+    return buttons;
+  }
+
+  /**
    * @see ButtonPanel::EnableCursorSelection()
    */
   void EnableCursorSelection(unsigned _index=0) {

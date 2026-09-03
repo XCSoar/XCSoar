@@ -299,6 +299,18 @@ ButtonPanel::BottomLayout() noexcept
   return BottomLayout(parent.GetClientRect());
 }
 
+Button *
+ButtonPanel::GetSelectedButton() noexcept
+{
+  if (selected_index < 0 || (unsigned)selected_index >= buttons.size())
+    return nullptr;
+
+  Button &button = *buttons[selected_index];
+  return button.IsVisible() && button.IsEnabled()
+    ? &button
+    : nullptr;
+}
+
 void
 ButtonPanel::ReselectToFirstEnabled() noexcept
 {
