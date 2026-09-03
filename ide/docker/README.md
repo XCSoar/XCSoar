@@ -17,8 +17,6 @@ including legacy Raspberry Pi cross-compile in a privileged container.
 | ``KOBO`` | Kobo e-reader build plus ``KoboRoot.tgz`` |
 | ``DOCS`` | Build the PDF manuals (``make manual``) |
 | ``UNIX-DEBIAN`` | Build a ``.deb`` package (``dpkg-buildpackage``) |
-| ``PC`` | Windows 32-bit GDI (**deprecated**; use ``WIN32OPENGL``) |
-| ``WIN64`` | Windows x64 GDI (**deprecated**; use ``WIN64OPENGL``) |
 
 Pass additional ``make`` options after the target name (e.g. ``USE_CCACHE=y
 everything``).

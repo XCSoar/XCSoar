@@ -27,7 +27,8 @@ else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
 
 else
-# Windows defaults to GDI (no OpenGL)
+# OpenGL Windows flavors set OPENGL=y in targets.mk first.
+# Bare TARGET=PC leaves OpenGL off and is rejected later.
 OPENGL ?= n
 endif
 

@@ -796,9 +796,8 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 {
   /* note that this implementation ignores the background color; it is
      not mandatory, and we can assume that the background is already
-     set; it is only being passed to this function because the GDI
-     implementation will be faster when erasing the background
-     again */
+     set; it is only being passed to this function because some
+     backends are faster when erasing the background again */
 
   PrepareColoredAlphaTexture(fg_color);
 

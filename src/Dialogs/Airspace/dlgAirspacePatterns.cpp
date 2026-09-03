@@ -13,7 +13,7 @@
 
 #include <cassert>
 
-/* brush patterns are only available on GDI */
+/* hatched brush patterns were a GDI-only feature */
 #ifdef HAVE_HATCHED_BRUSH
 
 class AirspacePatternsDialog : public ListItemRenderer {
