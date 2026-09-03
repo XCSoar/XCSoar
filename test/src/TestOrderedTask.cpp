@@ -2,12 +2,15 @@
 // Copyright The XCSoar Project
 
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Engine/Task/Ordered/Settings.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 
 #define ACCURACY 500
@@ -160,6 +163,41 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
              glide_polar.GetMC() > 0
              ? alt_required_at_aircraft - aircraft.altitude
              : 0));
+}
+
+static constexpr AircraftState
+MakeTimedAircraft(double longitude, double latitude, double altitude,
+                  FloatDuration time) noexcept
+{
+  AircraftState aircraft = MakeAircraft(longitude, latitude, altitude);
+  aircraft.time = TimeStamp{time};
+  aircraft.flying = true;
+  return aircraft;
+}
+
+static void
+ExitStartCylinder(OrderedTask &task, const GeoPoint &center,
+                  double altitude)
+{
+  const auto state_last = MakeTimedAircraft(center.longitude.Degrees(),
+                                            center.latitude.Degrees(),
+                                            altitude, FloatDuration{3600});
+  const auto state_now = MakeTimedAircraft(center.longitude.Degrees(),
+                                           center.latitude.Degrees() + 0.006,
+                                           altitude, FloatDuration{3660});
+  task.Update(state_now, state_last, glide_polar);
+  ok1(task.GetStats().start.HasStarted());
+}
+
+static void
+CheckTravelledDistance(const TaskStats &stats)
+{
+  ok1(stats.total.planned.IsDefined());
+  ok1(stats.total.remaining.IsDefined());
+  ok1(stats.total.travelled.IsDefined());
+  ok1(equals(stats.total.travelled.GetDistance(),
+             stats.total.planned.GetDistance() -
+             stats.total.remaining.GetDistance()));
 }
 
 static void
@@ -388,6 +426,89 @@ TestLowTPFinal()
 }
 
 static void
+TestTravelledDistance()
+{
+  ordered_task_settings.SetDefaults();
+
+  {
+    OrderedTask task(task_behaviour);
+    const StartPoint tp1(std::make_unique<LineSectorZone>(wp1->location),
+                         WaypointPtr(wp1), task_behaviour,
+                         ordered_task_settings.start_constraints);
+    task.Append(tp1);
+    const FinishPoint tp2(std::make_unique<LineSectorZone>(wp2->location),
+                          WaypointPtr(wp2), task_behaviour,
+                          ordered_task_settings.finish_constraints, false);
+    task.Append(tp2);
+    task.SetActiveTaskPoint(1);
+    task.UpdateGeometry();
+    ok1(!IsError(task.CheckTask()));
+
+    const auto aircraft = MakeAircraft(wp1->location, 2000);
+    task.Update(aircraft, aircraft, glide_polar);
+
+    const TaskStats &stats = task.GetStats();
+    CheckTravelledDistance(stats);
+    ok1(equals(stats.total.travelled.GetDistance(), 0));
+  }
+
+  {
+    const double width(1);
+    OrderedTask task(task_behaviour);
+    task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 500),
+                           WaypointPtr(wp1), task_behaviour,
+                           ordered_task_settings.start_constraints));
+    const ASTPoint tp2(std::make_unique<LineSectorZone>(wp3->location, width),
+                       MakeWaypointPtr(*wp3, 1500), task_behaviour);
+    task.Append(tp2);
+    const FinishPoint tp3(std::make_unique<LineSectorZone>(wp4->location, width),
+                          MakeWaypointPtr(*wp4, 100), task_behaviour,
+                          ordered_task_settings.finish_constraints, false);
+    task.Append(tp3);
+    task.SetActiveTaskPoint(1);
+    task.UpdateGeometry();
+    ok1(!IsError(task.CheckTask()));
+
+    ExitStartCylinder(task, wp1->location, 2000);
+
+    const auto state_last = MakeTimedAircraft(0, 45.05, 2000,
+                                              FloatDuration{3720});
+    const auto state_now = MakeTimedAircraft(0, 45.15, 2000,
+                                             FloatDuration{3780});
+    task.Update(state_now, state_last, glide_polar);
+    CheckTravelledDistance(task.GetStats());
+  }
+
+  {
+    OrderedTask task(task_behaviour);
+    task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 500),
+                           WaypointPtr(wp1), task_behaviour,
+                           ordered_task_settings.start_constraints));
+    task.Append(AATPoint(std::make_unique<CylinderZone>(wp2->location, 10000),
+                         WaypointPtr(wp2), task_behaviour));
+    task.Append(FinishPoint(std::make_unique<CylinderZone>(wp3->location, 500),
+                            WaypointPtr(wp3), task_behaviour,
+                            ordered_task_settings.finish_constraints));
+    task.SetActiveTaskPoint(1);
+    task.UpdateGeometry();
+    ok1(!IsError(task.CheckTask()));
+
+    AATPoint &aat = (AATPoint &)task.GetPoint(1);
+    aat.SetTarget(MakeGeoPoint(0, 45.31), true);
+    task.UpdateGeometry();
+
+    ExitStartCylinder(task, wp1->location, 2000);
+
+    const auto state_last = MakeTimedAircraft(0, 45.05, 2000,
+                                              FloatDuration{3720});
+    const auto state_now = MakeTimedAircraft(0, 45.15, 2000,
+                                             FloatDuration{3780});
+    task.Update(state_now, state_last, glide_polar);
+    CheckTravelledDistance(task.GetStats());
+  }
+}
+
+static void
 TestAll()
 {
   TestFlightToFinish(2000);
@@ -401,10 +522,11 @@ TestAll()
 
 int main()
 {
-  plan_tests(728);
+  plan_tests(746);
 
   task_behaviour.SetDefaults();
 
+  TestTravelledDistance();
   TestAll();
 
   glide_polar.SetMC(1);
