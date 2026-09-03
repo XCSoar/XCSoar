@@ -13,6 +13,7 @@
 #include <tuple>
 
 struct DialogLook;
+class ButtonPanel;
 class GroupedListControl;
 
 /**
@@ -34,9 +35,10 @@ public:
 
   /**
    * @param index the index of the item the cursor has moved to,
-   * counting only items
+   * counting only items; -1 if the cursor has been taken off the
+   * list, which happens when the user taps beside the items
    */
-  using CursorCallback = std::function<void(unsigned index)>;
+  using CursorCallback = std::function<void(int index)>;
 
   /** How many items the user may check. */
   enum class SelectionMode : uint_least8_t {
@@ -56,6 +58,24 @@ public:
 
   /** The edge of the item where the check mark is drawn. */
   enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
+
+  /**
+   * The part of an item where a tap flips its
+   * #ItemOptions::toggle.  It says nothing about the keyboard:
+   * Enter always flips the switch of the item under the cursor.
+   */
+  enum class ToggleHitArea : uint_least8_t {
+    /**
+     * The switch itself.  A tap on the rest of the item only moves
+     * the cursor there, which shows the #ItemOptions::help of the
+     * item; this lets the user read what a setting does before
+     * changing it.
+     */
+    SWITCH,
+
+    /** anywhere on the item, which is the larger target */
+    ROW,
+  };
 
   /** The font which draws the value of an item. */
   enum class TextFont : uint_least8_t {
@@ -161,6 +181,9 @@ public:
      */
     bool toggle = false;
 
+    /** the part of the item where a tap flips #toggle */
+    ToggleHitArea toggle_hit_area = ToggleHitArea::SWITCH;
+
     /**
      * Is this item checked?  It is the state of the check mark (with
      * a #SelectionMode) or of the #toggle.
@@ -180,6 +203,15 @@ public:
      * replacing #badge.
      */
     bool disabled = false;
+
+    /**
+     * May the cursor rest on this item while it is #disabled?
+     * Activating it still does nothing, but its help text can be
+     * read, and a button of the dialog can act on it - a button
+     * which makes the item available again could not be aimed at it
+     * otherwise.
+     */
+    bool selectable_when_disabled = false;
 
     /**
      * The badge of an item which is #disabled; nullptr for the
@@ -212,6 +244,9 @@ private:
 
   /** the height of #bottom_widget; 0 asks the view itself */
   unsigned bottom_widget_height_pt = 0;
+
+  /** the buttons which Left and Right reach, or nullptr */
+  ButtonPanel *action_bar = nullptr;
 
 public:
   explicit GroupedListWidget(const DialogLook &look) noexcept;
@@ -300,6 +335,31 @@ public:
    * is being built.
    */
   void SetCursorCallback(CursorCallback callback) noexcept;
+
+  /**
+   * Let Left and Right move the keyboard focus between the list and
+   * the buttons of the dialog, in the order in which the dialog has
+   * created them.  Without this, both keys stay free.
+   *
+   * A control stick has four directions and one button, and Up and
+   * Down belong to the list: this gives the user of such a device a
+   * way to reach a button which acts on the item under the cursor
+   * without scrolling to the end of the list first.  The focus is
+   * what decides where Enter goes, so there is no second, invisible
+   * state to keep in mind.  Combine it with
+   * WidgetDialog::EnableCursorSelection(), which marks the button
+   * which the focus is on: both keys then lead out of the list to
+   * the button which was used last, and only walk along the bar once
+   * the focus is there.
+   */
+  void SetActionBar(ButtonPanel &buttons) noexcept;
+
+  /**
+   * Move the keyboard focus to the next or the previous control of
+   * the dialog, which is a button of the action bar or the list
+   * itself.
+   */
+  bool MoveFocus(bool forward) noexcept;
 
   /**
    * @return the index of the item the cursor is on, counting only

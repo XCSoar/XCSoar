@@ -24,6 +24,8 @@
 #include "ui/control/ScrollBar.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/window/ContainerWindow.hpp"
+#include "Form/ButtonPanel.hpp"
+#include "Form/Button.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -34,8 +36,10 @@
 #include <cassert>
 #include <cmath>
 #include <cstdint>
+#include <iterator>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 /**
@@ -97,6 +101,23 @@ static constexpr std::size_t MAX_TEXT_LINES = 4;
 static constexpr unsigned FOOTER_GAP_PT = 4;
 
 /**
+ * While the keys move the cursor, the list scrolls a little further
+ * than it must, so that the items behind the one under the cursor
+ * are on the screen before the cursor gets to them.  How far may it
+ * scroll for that?  One entry per item it wants to gain, in percent
+ * of the height of the view, and each of them counts the whole way
+ * from the item under the cursor: scrolling by half of the view is
+ * worth one item ahead - on a screen which shows only a few items
+ * that is all the room there is, and the first item ahead is what
+ * matters most -, and a second one is worth it only if the two of
+ * them together fit into a fifth of the view, which a landscape
+ * window rarely affords and a tall one hardly notices.  The end of
+ * the table is the end of the look ahead: two items, however small
+ * they are.
+ */
+static constexpr unsigned LOOK_AHEAD_PERCENT[] = {50, 20};
+
+/**
  * The height of the switch which shows a boolean value, and the
  * distance between its track and its thumb.  The width follows from
  * the height: the track of such a switch is much wider than tall.
@@ -135,6 +156,7 @@ public:
   using CheckPosition = GroupedListWidget::CheckPosition;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
   using TextFont = GroupedListWidget::TextFont;
+  using ToggleHitArea = GroupedListWidget::ToggleHitArea;
   using GroupOptions = GroupedListWidget::GroupOptions;
 
 private:
@@ -226,14 +248,20 @@ private:
     /** only for Type::ITEM: draw a check mark */
     bool checked = false;
 
-    /** only for Type::ITEM: greyed out, and the cursor skips it */
+    /** only for Type::ITEM: greyed out, and does nothing */
     bool disabled = false;
+
+    /** only for Type::ITEM: may the cursor rest on it while #disabled? */
+    bool selectable_when_disabled = false;
 
     /** only for Type::ITEM: left out, as if it had not been added */
     bool hidden = false;
 
     /** only for Type::ITEM: a switch which shows #checked */
     bool toggle = false;
+
+    /** only for Type::ITEM: where a tap flips #toggle */
+    ToggleHitArea toggle_hit_area = ToggleHitArea::SWITCH;
 
     /** only for Type::WIDGET: the view which this group shows */
     std::unique_ptr<Widget> widget{};
@@ -294,7 +322,7 @@ private:
 
     /** may the cursor be moved to this element? */
     bool IsSelectable() const noexcept {
-      return IsShownItem() && !disabled;
+      return IsShownItem() && (!disabled || selectable_when_disabled);
     }
 
     int GetBottom() const noexcept {
@@ -326,11 +354,26 @@ private:
    */
   int saved_cursor = -1;
 
+  /**
+   * Has the cursor been taken off the list on purpose - a tap beside
+   * the items, a page which has none to point at?  Then UpdateLayout()
+   * must leave the list without one, instead of putting it on the
+   * first item as it does for a list which has just been filled.
+   */
+  bool cursor_removed = false;
+
   CursorCallback cursor_callback;
 
   enum class DragMode : uint_least8_t { NONE, SCROLL, CURSOR };
 
   DragMode drag_mode = DragMode::NONE;
+
+  /**
+   * The item under the finger, which is drawn pressed; -1 if there is
+   * none.  The cursor stays where it was until the finger is lifted:
+   * a press which becomes a scroll gesture must not select anything.
+   */
+  int pressed_element = -1;
 
   /** the virtual pixel row which was grabbed */
   int drag_y = 0;
@@ -364,6 +407,7 @@ public:
    */
   void Clear() noexcept {
     saved_cursor = GetCursorIndex();
+    pressed_element = -1;
 
     /* the views are windows: hide them before their #Widget goes */
     for (auto &element : elements)
@@ -449,7 +493,7 @@ public:
    * dialog's normal key dispatch.
    */
   bool KeyFromWidget(unsigned key_code) noexcept {
-    return OnKeyDown(key_code);
+    return OnKeyCheck(key_code) && OnKeyDown(key_code);
   }
 
   /**
@@ -642,9 +686,54 @@ private:
 
   void SetOrigin(int _origin) noexcept;
   void EnsureVisible(unsigned i) noexcept;
+
+  /**
+   * Scroll a little further than #EnsureVisible() would, in the
+   * direction the cursor is moving, so that the list shows what the
+   * next presses lead to.
+   */
+  void ScrollAhead(unsigned i, bool forward) noexcept;
+
   void SetCursor(int i) noexcept;
+
+  /**
+   * Take the cursor off the list, e.g. because the user has tapped
+   * beside the items.  The help text of the item goes with it.
+   */
+  void ClearCursor() noexcept;
+
+  /**
+   * Where a search for the next item begins.  Without a cursor - the
+   * list has just been filled, or a tap beside the items has taken it
+   * away - the search starts at the edge it comes from, so that Down
+   * finds the first item and Up the last one.
+   */
+  [[gnu::pure]]
+  int GetSearchStart(bool forward) const noexcept {
+    if (cursor >= 0)
+      return forward ? cursor + 1 : cursor;
+
+    return forward ? 0 : (int)elements.size();
+  }
+
   void MoveCursor(bool forward) noexcept;
+
+  /**
+   * Move the cursor by one screen full of items.  A page without a
+   * single item the cursor may rest on has nothing to move: it
+   * scrolls instead.
+   */
+  void MoveCursorPage(bool forward) noexcept;
+
   void ActivateItem() noexcept;
+
+  /**
+   * The horizontal range which the switch of an item occupies, wide
+   * enough for a finger.  Empty (left == right) if the item has no
+   * switch.
+   */
+  [[gnu::pure]]
+  std::pair<int, int> GetToggleHitArea(const Element &element) const noexcept;
 
   void UpdateGroupFlags() noexcept;
 
@@ -995,8 +1084,10 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .chevron = options.chevron,
     .checked = options.checked,
     .disabled = options.disabled,
+    .selectable_when_disabled = options.selectable_when_disabled,
     .hidden = options.hidden,
     .toggle = options.toggle,
+    .toggle_hit_area = options.toggle_hit_area,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
   });
@@ -1583,7 +1674,7 @@ GroupedListControl::UpdateLayout() noexcept
     /* the item under the cursor has been hidden or disabled */
     cursor = FindItem(cursor, true);
 
-  if (cursor < 0)
+  if (cursor < 0 && !cursor_removed)
     cursor = FindItem(0, true);
 
   const int margin = Layout::VptScale(MARGIN_PT);
@@ -1763,6 +1854,55 @@ GroupedListControl::EnsureVisible(unsigned i) noexcept
 }
 
 void
+GroupedListControl::ScrollAhead(unsigned i, bool forward) noexcept
+{
+  assert(i < elements.size());
+
+  const Element &element = elements[i];
+  const int room = GetViewHeight();
+
+  /* the items which follow are worth a look, and with them whatever
+     lies between them: the caption of the next group belongs to what
+     comes.  How many of them fit is not a question of their number
+     but of the room they ask for */
+  const int edge = forward ? element.GetBottom() : element.top;
+
+  int ahead = edge;
+  unsigned items_ahead = 0;
+
+  for (int j = (int)i; items_ahead < std::size(LOOK_AHEAD_PERCENT);) {
+    j += forward ? 1 : -1;
+    if (j < 0 || (std::size_t)j >= elements.size())
+      break;
+
+    const Element &next = elements[j];
+    const int next_edge = forward ? next.GetBottom() : next.top;
+
+    /* how far the view would have to scroll to show this element */
+    const int scroll = forward ? next_edge - edge : edge - next_edge;
+
+    if (scroll > room * (int)LOOK_AHEAD_PERCENT[items_ahead] / 100)
+      break;
+
+    ahead = next_edge;
+
+    if (next.IsShownItem())
+      ++items_ahead;
+  }
+
+  /* the item under the cursor stays on the screen as a whole */
+  if (forward) {
+    const int target = std::min(ahead - room, element.top);
+    if (target > origin)
+      SetOrigin(target);
+  } else {
+    const int target = std::max(ahead, element.GetBottom() - room);
+    if (target < origin)
+      SetOrigin(target);
+  }
+}
+
+void
 GroupedListControl::SetCursor(int i) noexcept
 {
   if (i < 0 || i == cursor)
@@ -1771,6 +1911,7 @@ GroupedListControl::SetCursor(int i) noexcept
   const int previous = cursor;
 
   cursor = i;
+  cursor_removed = false;
 
   /* the footer of a group shows the help of the item under the
      cursor, and its height changes with that text; measuring the
@@ -1794,18 +1935,109 @@ GroupedListControl::SetCursorByIndex(unsigned i) noexcept
   const int j = FindItemByIndex(i);
   if (j >= 0)
     SetCursor(j);
-  else
+  else {
     /* there is no such item yet: the list is being filled, and the
        next UpdateLayout() moves the cursor there */
     saved_cursor = i;
+    cursor_removed = false;
+  }
+}
+
+void
+GroupedListControl::ClearCursor() noexcept
+{
+  if (cursor < 0)
+    return;
+
+  cursor = -1;
+
+  /* the list is not being rebuilt: the cursor is meant to be gone,
+     and UpdateLayout() must not bring it back */
+  saved_cursor = -1;
+  cursor_removed = true;
+
+  /* the footer of the group showed the help of that item; the
+     elements below it move up */
+  UpdateLayout();
+
+  if (cursor_callback)
+    cursor_callback(GetCursorIndex());
 }
 
 void
 GroupedListControl::MoveCursor(bool forward) noexcept
 {
-  const int next = FindItem(forward ? cursor + 1 : cursor, forward);
-  if (next >= 0)
+  const int next = FindItem(GetSearchStart(forward), forward);
+  if (next < 0)
+    return;
+
+  SetCursor(next);
+
+  /* the view follows the cursor with a margin, instead of waiting
+     until it is at the edge: this way the list shows where the next
+     presses lead before the cursor gets there */
+  ScrollAhead(next, forward);
+}
+
+void
+GroupedListControl::MoveCursorPage(bool forward) noexcept
+{
+  const int room = GetViewHeight();
+
+  /* the view moves by exactly one screen, whatever is on it: this is
+     what makes the two keys a reliable way through a long page, and
+     the cursor is what follows, not the other way round */
+  SetOrigin(forward ? origin + room : origin - room);
+
+  /* the item the next press starts from: at the lower edge of the new
+     view when going down, at the upper one when going up, so that the
+     next press carries on where this one has stopped */
+  int next = -1;
+
+  for (std::size_t i = 0; i < elements.size(); ++i) {
+    const Element &element = elements[i];
+    if (!element.IsSelectable())
+      continue;
+
+    if (element.top < origin || element.GetBottom() > origin + room)
+      /* only an item which is there as a whole; half of one at the
+         edge of the view is not where a cursor belongs */
+      continue;
+
+    next = (int)i;
+
+    if (!forward)
+      break;
+  }
+
+  if (next < 0)
+    /* a screen full of an explanation, a hero card or a view: there
+       is nothing to point at */
+    ClearCursor();
+  else if (next != cursor)
     SetCursor(next);
+}
+
+std::pair<int, int>
+GroupedListControl::GetToggleHitArea(const Element &element) const noexcept
+{
+  if (!element.toggle || element.disabled)
+    return {0, 0};
+
+  /* the switch sits at the right edge of the item, inside the margin
+     of the card and its padding; only the check mark of a group is
+     further out */
+  const int padding = Layout::VptScale(PADDING_PT);
+
+  int right = GetContentWidth() - (int)Layout::VptScale(MARGIN_PT) - padding;
+  if (element.check_right)
+    right -= GetCheckWidth();
+
+  const int left = right - GetToggleWidth();
+
+  /* a finger is wider than the switch: let the padding around it
+     count, so that a tap next to it is not lost */
+  return {left - padding, right + padding};
 }
 
 void
@@ -2130,7 +2362,11 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
   switch (element.type) {
   case Element::Type::ITEM: {
     const bool selected = (int)i == cursor;
-    const bool pressed = selected && drag_mode == DragMode::CURSOR;
+
+    /* the item under the finger is drawn pressed while the one the
+       cursor is on keeps its color: the finger has not chosen
+       anything yet, and a scroll gesture chooses nothing at all */
+    const bool pressed = (int)i == pressed_element;
     const bool focused = !HasCursorKeys() || HasFocus();
 
     const RowColors row_colors = GetRowColors(look, selected, focused,
@@ -2650,6 +2886,7 @@ GroupedListControl::OnCancelMode() noexcept
 
   if (drag_mode != DragMode::NONE) {
     drag_mode = DragMode::NONE;
+    pressed_element = -1;
     ReleaseCapture();
     Invalidate();
   }
@@ -2694,7 +2931,12 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
 
   const int i = FindElementAt(p.y);
   if (i >= 0 && elements[i].IsSelectable()) {
-    SetCursor(i);
+    /* the item is drawn pressed right away, so that the finger gets
+       an answer; the cursor follows only when the finger is lifted
+       without having wandered off.  Moving it here would select an
+       item on every scroll gesture, and the explanation below the
+       group would jump while the list is still moving */
+    pressed_element = i;
     drag_mode = DragMode::CURSOR;
     Invalidate();
   } else
@@ -2723,8 +2965,10 @@ GroupedListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   if (drag_mode == DragMode::CURSOR &&
       std::abs(p.y - drag_start_y) > Layout::Scale(8)) {
     /* the finger has moved too far: this is a scroll gesture, not a
-       tap on an item */
+       tap on an item.  The item loses its pressed color, and the
+       item which the cursor was on all the while keeps it */
     drag_mode = DragMode::SCROLL;
+    pressed_element = -1;
     Invalidate();
   }
 
@@ -2750,21 +2994,52 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
     return true;
   }
 
-  /* the press has moved the cursor to the item; asking which element
-     is under the finger now would miss it, because the footer of
-     another group may have grown or shrunk in between and moved the
-     item away.  A tap which has not wandered activates the item the
-     press has chosen */
-  const bool activate = drag_mode == DragMode::CURSOR &&
-    std::abs(p.y - drag_start_y) < Layout::Scale(8);
+  /* the press has remembered the item under the finger; asking which
+     element is there now would miss it, because the footer of another
+     group may have grown or shrunk in between and moved the item
+     away.  A tap which has not wandered selects the item the press
+     has chosen, and activates it */
+  const bool tapped = std::abs(p.y - drag_start_y) < Layout::Scale(8);
+
+  const int press = pressed_element >= 0 &&
+    (std::size_t)pressed_element < elements.size()
+    ? pressed_element
+    : -1;
+
+  pressed_element = -1;
+
+  bool activate = drag_mode == DragMode::CURSOR && tapped && press >= 0;
+
+  if (activate) {
+    const Element &element = elements[press];
+
+    if (element.toggle &&
+        element.toggle_hit_area == ToggleHitArea::SWITCH) {
+      /* the switch is the control, and the rest of the item is only
+         its label: a tap beside it selects the item, which shows what
+         this setting does, and that is all it does */
+      const auto [left, right] = GetToggleHitArea(element);
+
+      if (p.x < left || p.x >= right) {
+        SetCursor(press);
+        activate = false;
+      }
+    }
+  }
 
   /* a tap on a link in an explanatory text opens it, as long as the
      finger has not moved and the tap has become a scroll gesture */
   const Link *const link =
-    drag_mode == DragMode::SCROLL &&
-    std::abs(p.y - drag_start_y) < Layout::Scale(8)
+    drag_mode == DragMode::SCROLL && tapped
     ? FindLinkAt(p)
     : nullptr;
+
+  /* a tap beside the items - on the gap between two cards, on a
+     caption or on an explanation - means "none of them", with a
+     finger as with a mouse; the cursor of a list nobody is using is
+     noise, and the buttons which act on it must not aim at an item
+     the user has left behind */
+  const bool clear_cursor = drag_mode == DragMode::SCROLL && tapped;
 
   const bool coast = drag_mode == DragMode::SCROLL && UseKineticScrolling();
 
@@ -2781,8 +3056,13 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
 
   if (link != nullptr)
     OpenLink(link->url.c_str());
-  else if (activate)
+  else if (activate) {
+    /* the cursor follows the finger only now: a press which became a
+       scroll gesture leaves it where it was */
+    SetCursor(press);
     ActivateItem();
+  } else if (clear_cursor)
+    ClearCursor();
 
   return true;
 }
@@ -2805,10 +3085,10 @@ GroupedListControl::OnKeyCheck(unsigned key_code) const noexcept
     return cursor >= 0;
 
   case KEY_UP:
-    return FindItem(cursor, false) >= 0;
+    return FindItem(GetSearchStart(false), false) >= 0;
 
   case KEY_DOWN:
-    return FindItem(cursor + 1, true) >= 0;
+    return FindItem(GetSearchStart(true), true) >= 0;
 
   default:
     return false;
@@ -2826,14 +3106,14 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_UP:
-    if (FindItem(cursor, false) < 0)
+    if (FindItem(GetSearchStart(false), false) < 0)
       break;
 
     MoveCursor(false);
     return true;
 
   case KEY_DOWN:
-    if (FindItem(cursor + 1, true) < 0)
+    if (FindItem(GetSearchStart(true), true) < 0)
       break;
 
     MoveCursor(true);
@@ -2841,18 +3121,27 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
 
   case KEY_HOME:
     SetCursor(FindItem(0, true));
+
+    /* the beginning of the page, not only the first item: what is
+       above it - a hero card, the caption of the first group - is
+       part of it, and Home is the way back to it */
+    SetOrigin(0);
     return true;
 
   case KEY_END:
     SetCursor(FindItem(elements.size(), false));
+
+    /* and the end of it, including the explanation below the last
+       group */
+    SetOrigin(content_height);
     return true;
 
   case KEY_PRIOR:
-    SetOrigin(origin - GetViewHeight());
+    MoveCursorPage(false);
     return true;
 
   case KEY_NEXT:
-    SetOrigin(origin + GetViewHeight());
+    MoveCursorPage(true);
     return true;
   }
 
@@ -2939,6 +3228,38 @@ void
 GroupedListWidget::SetCursorCallback(CursorCallback callback) noexcept
 {
   control.SetCursorCallback(std::move(callback));
+}
+
+void
+GroupedListWidget::SetActionBar(ButtonPanel &buttons) noexcept
+{
+  action_bar = &buttons;
+}
+
+bool
+GroupedListWidget::MoveFocus(bool forward) noexcept
+{
+  auto *parent = control.GetParent();
+  if (parent == nullptr)
+    return false;
+
+  if (action_bar != nullptr && control.HasFocus()) {
+    /* on the way out of the list, both keys lead to the button which
+       was used last: which of the two the user pressed says nothing
+       about which button is meant, and one of them landing on the
+       far end of the bar every time is a detour */
+    if (auto *button = action_bar->GetSelectedButton()) {
+      button->SetFocus();
+      return true;
+    }
+  }
+
+  /* the dialog knows the order of its controls, and it skips the
+     buttons which are disabled; the list is one of them, so the focus
+     comes back to it after the last button */
+  return forward
+    ? parent->FocusNextControl()
+    : parent->FocusPreviousControl();
 }
 
 int
@@ -3177,15 +3498,63 @@ GroupedListWidget::Move(const PixelRect &rc) noexcept
 bool
 GroupedListWidget::KeyPress(unsigned key_code) noexcept
 {
-  /* only when the list has the focus: Up/Down must reach a filter row
-     or another focused control otherwise */
-  if ((key_code == KEY_UP || key_code == KEY_DOWN) &&
-      IsDefined() && control.HasFocus() &&
-      /* route this before #WndForm maps Up/Down to focus movement;
-         when no item is left, fall through, so that the dialog can
-         move the focus to another control */
-      control.KeyFromWidget(key_code))
-    return true;
+  /* the keys are routed here, before #WndForm maps Up and Down to
+     focus movement and before a #ButtonPanel which has armed one of
+     its buttons takes the Enter away from the item under the cursor.
+     Only while the list or the action bar has the focus: Up and Down
+     must reach a filter row otherwise, and Left and Right are what
+     another control, a row of tabs for example, walks through what it
+     holds with */
+  if (IsDefined() && control.HasFocus()) {
+    switch (key_code) {
+    case KEY_UP:
+    case KEY_DOWN:
+      if (control.KeyFromWidget(key_code))
+        return true;
+
+      /* the list has no item left in this direction.  With an action
+         bar, Up and Down stay in the list all the same: Left and
+         Right are the way to the buttons, and a focus which slips
+         away at the end of the list would be a second one */
+      if (action_bar != nullptr)
+        return true;
+
+      break;
+
+    case KEY_RETURN:
+      if (control.KeyFromWidget(key_code))
+        return true;
+
+      break;
+
+    case KEY_LEFT:
+    case KEY_RIGHT:
+      /* out of the list and onto the buttons; Left reaches the last
+         one of them, which is where a dialog puts Close */
+      if (action_bar != nullptr && MoveFocus(key_code == KEY_RIGHT))
+        return true;
+
+      break;
+    }
+  } else if (action_bar != nullptr && IsDefined() &&
+             action_bar->HasFocus()) {
+    switch (key_code) {
+    case KEY_UP:
+    case KEY_DOWN:
+      /* Up and Down belong to the list wherever the focus is: they
+         bring it back instead of walking along the buttons, which
+         Left and Right already do */
+      control.SetFocus();
+      return true;
+
+    case KEY_LEFT:
+    case KEY_RIGHT:
+      if (MoveFocus(key_code == KEY_RIGHT))
+        return true;
+
+      break;
+    }
+  }
 
   /* a view of this page may know the key */
   return (top_widget != nullptr && top_widget->KeyPress(key_code)) ||
