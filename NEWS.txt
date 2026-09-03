@@ -46,6 +46,9 @@ Version 7.46 - not yet released
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
 * glide computer
+  - add a Task MC setting for the MacCready used at startup, instead
+    of copying Safety MC into speed-to-fly #2552
+  - default Safety MC to 3.2 m/s, about 25:1 on the default LS-8 polar
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
@@ -72,6 +75,8 @@ Version 7.46 - not yet released
   - let Select as Alternate pin a landing field from AUTO, and use
     Alternate Mode: Auto only to return the Alternate InfoBox to the
     computed list #2912
+  - show the same terrain reach on the Alternates list as the map,
+    including turning around obstacles
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
@@ -84,6 +89,7 @@ Version 7.46 - not yet released
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - rename Reach polar Task to Task MC, matching Safety MC
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - fix blurry icons on high-DPI screens, most visible on the large
@@ -91,6 +97,11 @@ Version 7.46 - not yet released
     resolution
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe the Task MC setting on the Safety Factors page
+  - clarify Reach polar versus always-Safety-MC (InfoBoxes, waypoint
+    details), and that abort does not copy Safety MC into the ring
+  - describe Reach display options: terrain reach versus thermal-base
+    working line
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow

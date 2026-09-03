@@ -412,10 +412,9 @@ landing point either from the waypoint file, or if no height is
 specified in the waypoint file, from the terrain file.
 
 \textbf{The estimated arrival altitude displayed next to landable
-  waypoints is by default calculated for best glide angle at zero
-  MacCready ring setting (MC$=0$), adjusted for wind.  However, a
-  safety MacCready setting may be configured to modify the MacCready
-  setting used in this calculation, as described below.}
+  waypoints uses the Reach polar (Safety MC by default).  Reach polar
+  can be set to Task MC instead.  Safety MC defaults to 3.2~m/s, about
+  25:1 on the default LS-8 polar.}
 
 Landable fields are only marked as reachable if the estimated arrival
 elevation above ground is above the arrival altitude safety height,
@@ -427,10 +426,10 @@ cross) is displayed on the screen, then the glider must climb in order
 to safely reach the destination.
 
 When calculating the arrival heights of landable fields (for map
-display purposes and in abort mode), a safety MacCready value can be
-specified in the configuration settings.  This safety value is set to
-zero by default.  Larger values make the arrival height calculation
-more conservative.
+display purposes and in abort mode), Reach polar selects Task MC or
+Safety MC.  Safety MC is 3.2~m/s by default (about 25:1 on the default
+LS-8 polar).  Larger values make the arrival height calculation more
+conservative.  Speed-to-fly is not affected.
 
 
 \section{Final glide calculator}

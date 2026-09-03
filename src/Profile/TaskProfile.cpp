@@ -78,6 +78,9 @@ Profile::Load(const ProfileMap &map, TaskBehaviour &settings)
   if (map.Get(ProfileKeys::RiskGamma, Temp))
     settings.risk_gamma = Temp / 10.;
 
+  if (map.Get(ProfileKeys::TaskMacCready, Temp))
+    settings.task_mc = Temp / 10.;
+
   if (map.Get(ProfileKeys::SafetyMacCready, Temp))
     settings.safety_mc = Temp / 10.;
 

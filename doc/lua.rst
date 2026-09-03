@@ -456,6 +456,9 @@ The following attributes are provided by ``xcsoar.settings``:
    - Area pressure for barometric altimeter calibration [Pascal].
  * - ``max_temp``
    - The forecast ground temperature [Kelvin].
+ * - ``taskmc``
+   - The MacCready setting used at startup for speed-to-fly and task
+     calculations [:math:`m/s`].
  * - ``safetymc``
    - The MacCready setting used, when safety MC is enabled for reach
      calculations, in task abort mode and for determining arrival

@@ -36,7 +36,9 @@ TaskBehaviour::SetDefaults()
   calc_glide_required = true;
   goto_nonlandable = true;
   risk_gamma = 0;
-  safety_mc = 0.5;
+  task_mc = 0.5;
+  /* About 25:1 still-air L/D on the default LS-8 (15m) polar. */
+  safety_mc = 3.2;
   safety_height_arrival = 300;
   task_type_default = TaskFactoryType::RACING;
   start_margins.SetDefaults();

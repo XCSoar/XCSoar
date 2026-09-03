@@ -95,7 +95,17 @@ struct TaskBehaviour {
   /** Compensation factor for risk at low altitude */
   double risk_gamma;
 
-  /** Safety MacCready value (m/s) used by abort task */
+  /**
+   * MacCready value (m/s) applied to the task polar at startup for
+   * speed-to-fly and task calculations.
+   */
+  double task_mc;
+
+  /**
+   * Safety MacCready (m/s) for terrain reach, landable colours, abort
+   * and the Alternates list when Reach polar is Safety MC.  Alternate
+   * InfoBoxes and waypoint Alt. diff. MC safety always use this value.
+   */
   double safety_mc;
 
   /** Minimum height above terrain for arrival height at landable waypoint (m) */

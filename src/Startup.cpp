@@ -577,7 +577,7 @@ Startup(UI::Display &display)
 
   GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(0);
-  gp.SetMC(computer_settings.task.safety_mc);
+  gp.SetMC(computer_settings.task.task_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
   gp.SetCrewMass(computer_settings.logger.crew_mass_template);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
