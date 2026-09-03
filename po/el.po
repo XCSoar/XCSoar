@@ -10034,14 +10034,6 @@ msgstr ""
 "Καλύπτει ολόκληρο το αλπικό τόξο από τη Βιέννη έως την Περπινιάν, πρόγνωση "
 "κύματος σε όλες τις Άλπεις. Μοντέλο ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ηνωμένο Βασίλειο. Μοντέλο ICON-UK."
-
 msgid "XC Therm email"
 msgstr "Email XC Therm"
 
@@ -11314,4 +11306,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Μοντέλο UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Ηνωμένο Βασίλειο. Μοντέλο UKV."
 

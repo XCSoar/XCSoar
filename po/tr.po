@@ -9926,14 +9926,6 @@ msgstr ""
 "Viyana'dan Perpignan'a kadar Alp yayının tamamını kapsıyor ve tüm Alpler "
 "bölgesi boyunca dalga tahmini yapıyor. ICON-CH modeli."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Birleşik Krallık. ICON-UK modeli."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11196,4 +11188,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV modeli"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Birleşik Krallık. UKV modeli."
 

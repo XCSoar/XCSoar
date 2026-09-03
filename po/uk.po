@@ -9999,14 +9999,6 @@ msgstr ""
 "Охоплює всю альпійську дугу від Відня до Перпіньяна, прогнозуючи хвилю по "
 "всьому регіону Альп. Модель ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Сполучене Королівство. Модель ICON-UK."
-
 msgid "XC Therm email"
 msgstr "Ел. пошта XC Therm"
 
@@ -11266,4 +11258,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Модель UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Сполучене Королівство. Модель UKV."
 

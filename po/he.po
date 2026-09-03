@@ -9853,14 +9853,6 @@ msgstr ""
 "מכסה את כל הקשת האלפינית מווינה ועד פרפיניאן, חוזה גל בכל אזור האלפים. דגם "
 "ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "הממלכה המאוחדת. מודל ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11088,4 +11080,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "מודל UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "הממלכה המאוחדת. מודל UKV."
 

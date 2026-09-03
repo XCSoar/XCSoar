@@ -10006,14 +10006,6 @@ msgstr ""
 "Cobreix tot l'arc alpí de Viena a Perpinyà, amb previsió d'ona a tots els "
 "Alps. Model ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Regne Unit. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "Email XC Therm"
 
@@ -11277,4 +11269,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Model UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Regne Unit. Model UKV."
 

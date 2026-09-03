@@ -9576,14 +9576,6 @@ msgid ""
 "throughout the whole Alps region. ICON-CH model."
 msgstr "覆盖从维也纳到佩皮尼昂的整个阿尔卑斯弧，预报整个阿尔卑斯地区的波状气流。ICON-CH 模式。"
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "英国。ICON-UK 模式。"
-
 msgid "XC Therm email"
 msgstr "XC Therm 邮箱"
 
@@ -10766,4 +10758,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV 模式"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "英国。UKV 模式。"
 

@@ -9908,14 +9908,6 @@ msgstr ""
 "Kattaa koko Alppikaaren Wienistä Perpignaniin ja ennustaa aaltoa koko "
 "Alppien alueella. ICON-CH-malli."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Yhdistynyt kuningaskunta. ICON-UK-malli."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11173,4 +11165,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV-malli"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Yhdistynyt kuningaskunta. UKV-malli."
 

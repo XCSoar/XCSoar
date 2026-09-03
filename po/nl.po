@@ -10012,14 +10012,6 @@ msgstr ""
 "Dekt de hele Alpenboog van Wenen tot Perpignan en voorspelt golf over de "
 "hele Alpenregio. ICON-CH-model."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Verenigd Koninkrijk. ICON-UK-model."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11287,4 +11279,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV-model"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Verenigd Koninkrijk. UKV-model."
 

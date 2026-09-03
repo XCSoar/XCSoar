@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-28 09:08+0200\n"
+"POT-Creation-Date: 2026-09-03 18:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6206,11 +6206,11 @@ msgid "Covers the entire Alpine arc from Vienna to Perpignan, forecasting wave t
 msgstr ""
 
 #, no-c-format
-msgid "UK"
+msgid "UKV Model"
 msgstr ""
 
 #, no-c-format
-msgid "United Kingdom. ICON-UK model."
+msgid "United Kingdom. UKV model."
 msgstr ""
 
 msgid "XC Therm email"
