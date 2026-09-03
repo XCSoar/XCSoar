@@ -9,14 +9,6 @@ PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_market.png,
 market-icons: $(PNG_MARKET_ICONS)
 $(eval $(call rsvg-convert,$(PNG_MARKET_ICONS),$(DATA)/graphics/%_market.png,Data/graphics/%.svg,--width=512))
 
-####### bitmaps
-
-BMP_BITMAPS = $(wildcard Data/bitmaps/*.bmp)
-PNG_BITMAPS = $(patsubst Data/bitmaps/%.bmp,$(DATA)/bitmaps/%.png,$(BMP_BITMAPS))
-
-$(PNG_BITMAPS): $(DATA)/bitmaps/%.png: Data/bitmaps/%.bmp | $(DATA)/bitmaps/dirstamp
-	$(Q)$(IM_CONVERT) +dither -type GrayScale -define png:color-type=0 $< $@
-
 ####### icons
 
 SVG_ICONS = $(wildcard Data/icons/*.svg)
@@ -295,8 +287,6 @@ $(call SRC_TO_OBJ,$(SRC)/ResourceLookup.cpp): $(TARGET_OUTPUT_DIR)/include/Resou
 
 ifeq ($(TARGET_IS_ANDROID),n)
 ifneq ($(TARGET),IOS)
-
-RESOURCE_FILES += $(PNG_BITMAPS)
 
 ####### permission disclosure graphics
 

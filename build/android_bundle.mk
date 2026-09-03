@@ -249,10 +249,6 @@ $(RES_DIR)/drawable-xxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)
 $(RES_DIR)/drawable-xxxhdpi/notification_icon.png: $(ICON_WHITE_SVG) | $(RES_DIR)/drawable-xxxhdpi/dirstamp
 	$(Q)rsvg-convert --width=96 $< -o $@
 
-PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_BITMAPS))
-$(PNG1): $(DRAWABLE_DIR)/%.png: Data/bitmaps/%.bmp | $(DRAWABLE_DIR)/dirstamp
-	$(Q)$(IM_PREFIX)convert $< $@
-
 PNG2 := $(patsubst $(DATA)/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_LAUNCH_ALL))
 $(PNG2): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
@@ -303,7 +299,7 @@ PNG9 := $(patsubst $(DATA)/graphics2/%.png,$(DRAWABLE_DIR)/%.png,$(PNG_LAUNCH_FL
 $(PNG9): $(DRAWABLE_DIR)/%.png: $(DATA)/graphics2/%.png | $(DRAWABLE_DIR)/dirstamp
 	$(Q)cp $< $@
 
-PNG_FILES = $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) $(PNG9) \
+PNG_FILES = $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) $(PNG9) \
 	$(RES_DIR)/drawable-ldpi/icon.png \
 	$(RES_DIR)/drawable/icon.png \
 	$(RES_DIR)/drawable-hdpi/icon.png \

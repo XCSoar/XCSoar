@@ -6,7 +6,7 @@
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Pen.hpp"
-#include "ui/canvas/Bitmap.hpp"
+#include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Font.hpp"
 
 class Font;
@@ -27,7 +27,7 @@ struct VarioLook {
 
   Pen thick_background_pen, thick_sink_pen, thick_lift_pen;
 
-  Bitmap climb_bitmap;
+  MaskedIcon climb_icon;
 
   const Font *text_font;
   Font value_font;
