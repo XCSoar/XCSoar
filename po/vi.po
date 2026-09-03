@@ -9882,14 +9882,6 @@ msgstr ""
 "Bao trùm toàn bộ vòng cung Alpine từ Vienna đến Perpignan, dự báo làn sóng "
 "trên toàn bộ khu vực Alps. mô hình ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Vương quốc Anh. Mô hình ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11141,4 +11133,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Mô hình UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Vương quốc Anh. Mô hình UKV."
 
