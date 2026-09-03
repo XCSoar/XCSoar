@@ -10,5 +10,9 @@
 #define HAVE_PCMET
 #ifdef ENABLE_OPENGL
 #define HAVE_EDL
+
+/* the map overlay widget is only built for OpenGL targets, because
+   drawing a georeferenced bitmap needs the OpenGL canvas */
+#define HAVE_WEATHER_OVERLAY
 #endif
 #endif

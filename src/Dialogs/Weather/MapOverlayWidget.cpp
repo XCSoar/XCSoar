@@ -16,6 +16,10 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Language/Language.hpp"
 #include "Weather/PCMet/Overlays.hpp"
+#include "Weather/OPERA/Radar.hpp"
+#include "Weather/EUMETView/Satellite.hpp"
+#include "Weather/EUMETView/SatellitePageOverlay.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Interface.hpp"
 #include "LocalPath.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
@@ -27,6 +31,7 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 
+#include <algorithm>
 #include <optional>
 #include <vector>
 
@@ -45,9 +50,42 @@ class WeatherMapOverlayListWidget final
 
     std::unique_ptr<PCMet::OverlayInfo> pc_met;
 
+    /**
+     * Set for the radar composite, which is downloaded on demand for
+     * the currently visible map area.  #radar_bounds is the area the
+     * cached image covers.
+     */
+    bool radar = false;
+    GeoBounds radar_bounds = GeoBounds::Invalid();
+
+    /**
+     * Index into EUMETView::GetLayers() for a satellite entry, or -1.
+     *
+     * The satellite imagery is not a single bitmap like everything
+     * else in this list: it is a block of tiles that fills in around
+     * the aircraft.  Rather than fetch it a second way here, the
+     * entry switches on the very same machinery a satellite page
+     * uses, and the tiles then arrive in the background.
+     */
+    int satellite_layer = -1;
+
     explicit Item(PCMet::OverlayInfo &&_pc_met)
       :name(_pc_met.label.c_str()), path(_pc_met.path.c_str()),
        pc_met(new PCMet::OverlayInfo(std::move(_pc_met))) {}
+
+    struct Radar {};
+
+    explicit Item(Radar)
+      :name(gettext(N_("Radar (EUMETNET OPERA)"))), radar(true) {}
+
+    struct Satellite { int layer; };
+
+    explicit Item(Satellite s)
+      :satellite_layer(s.layer) {
+      name.Format("%s (%s)",
+                  gettext(EUMETView::GetLayer(s.layer).label),
+                  _("Satellite"));
+    }
 
     Item(const char *_name, Path _path)
       :name(_name), path(_path) {}
@@ -92,6 +130,17 @@ private:
   }
 
   int FindActiveIndex() const {
+    if (const int layer = EUMETView::GetActiveLayer(); layer >= 0) {
+      /* the satellite block is many overlays carrying an attribution
+         label, so it cannot be found by matching a bitmap's name */
+      unsigned i = 0;
+      for (const auto &item : items) {
+        if (item.satellite_layer == layer)
+          return int(i);
+        ++i;
+      }
+    }
+
     const auto *map = UIGlobals::GetMap();
     if (map == nullptr)
       return -1;
@@ -186,10 +235,22 @@ protected:
 
 private:
   void SetOverlay(Path path, const char *label=nullptr);
+  void SetOverlay(Path path, const GeoBounds &bounds,
+                  const char *label);
+
+  /**
+   * Download the radar composite for the area the map currently shows.
+   *
+   * @return false if the download failed or was cancelled
+   */
+  bool DownloadRadar(Item &item);
 
   void UseClicked(unsigned i);
 
   void DisableClicked() {
+    if (EUMETView::GetActiveLayer() >= 0)
+      EUMETView::DeactivatePageOverlay();
+
     auto *map = UIGlobals::GetMap();
     if (map != nullptr)
       map->SetOverlay(nullptr);
@@ -221,6 +282,14 @@ WeatherMapOverlayListWidget::UpdateList()
     for (auto &i : PCMet::CollectOverlays())
       items.emplace_back(std::move(i));
 
+  /* the radar composite is open data and needs no account, so it is
+     always offered */
+  items.emplace_back(Item::Radar{});
+
+  /* so is the satellite imagery, one entry per product */
+  for (std::size_t i = 0; i < EUMETView::GetLayers().size(); ++i)
+    items.emplace_back(Item::Satellite{int(i)});
+
   struct Visitor : public File::Visitor {
     std::vector<Item> &items;
 
@@ -247,7 +316,14 @@ WeatherMapOverlayListWidget::UpdateList()
 
   const bool empty = items.empty();
   use_button->SetEnabled(!empty);
-  update_button->SetEnabled(pc_met_settings.ftp_credentials.IsDefined());
+
+  /* "Update" re-downloads; that is possible for the pc_met overlays
+     only with credentials, but always for the radar composite */
+  const bool can_update = pc_met_settings.ftp_credentials.IsDefined() ||
+    std::any_of(items.begin(), items.end(), [](const Item &i){
+      return i.radar;
+    });
+  update_button->SetEnabled(can_update);
 
   UpdateActiveIndex();
 }
@@ -331,6 +407,79 @@ WeatherMapOverlayListWidget::SetOverlay(Path path, const char *label)
   UpdateActiveIndex();
 }
 
+bool
+WeatherMapOverlayListWidget::DownloadRadar(Item &item)
+{
+  const auto *map = UIGlobals::GetMap();
+  if (map == nullptr)
+    return false;
+
+  const auto &projection = map->VisibleProjection();
+  const auto bounds = projection.GetScreenBounds();
+  if (!bounds.IsValid())
+    return false;
+
+  const auto size = projection.GetScreenSize();
+
+  try {
+    PluggableOperationEnvironment env;
+
+    auto path = ShowCoFunctionDialog(UIGlobals::GetMainWindow(),
+                                     UIGlobals::GetDialogLook(),
+                                     _("Download"),
+                                     OPERA::DownloadArea(bounds,
+                                                         size.width,
+                                                         size.height,
+                                                         *Net::curl, env),
+                                     &env);
+    if (!path)
+      return false;
+
+    item.path = std::move(*path);
+    item.radar_bounds = bounds;
+    UpdatePreview(item.path);
+    return true;
+  } catch (...) {
+    ShowError(std::current_exception(), _("Weather"));
+    return false;
+  }
+}
+
+/**
+ * Install an image whose extent is known from the request rather
+ * than from the file, which is how the radar composite arrives.
+ */
+void
+WeatherMapOverlayListWidget::SetOverlay(Path path, const GeoBounds &bounds,
+                                        const char *label)
+{
+  auto *map = UIGlobals::GetMap();
+  if (map == nullptr || !bounds.IsValid())
+    return;
+
+  Bitmap bitmap;
+  try {
+    if (!bitmap.LoadFile(path))
+      return;
+  } catch (...) {
+    ShowError(std::current_exception(), _("Weather"));
+    return;
+  }
+
+  auto bmp = std::make_unique<MapOverlayBitmap>(std::move(bitmap),
+                                                GeoQuadrilateral{
+                                                  bounds.GetNorthWest(),
+                                                  bounds.GetNorthEast(),
+                                                  bounds.GetSouthWest(),
+                                                  bounds.GetSouthEast(),
+                                                },
+                                                label);
+  bmp->SetAlpha(0.6);
+  map->SetOverlay(std::move(bmp));
+
+  UpdateActiveIndex();
+}
+
 void
 WeatherMapOverlayListWidget::UseClicked(unsigned i)
 {
@@ -341,7 +490,28 @@ WeatherMapOverlayListWidget::UseClicked(unsigned i)
 
   const char *label = nullptr;
   auto &item = items[i];
-  if (item.pc_met) {
+
+  if (EUMETView::GetActiveLayer() >= 0 && item.satellite_layer < 0)
+    /* every other entry installs a single bitmap into the first
+       overlay slot, which would leave the other twenty-four tiles of
+       a satellite block standing underneath it */
+    EUMETView::DeactivatePageOverlay();
+
+  if (item.satellite_layer >= 0) {
+    /* no modal download: the block fills in around the aircraft in
+       the background, nearest tile first, exactly as on a page */
+    EUMETView::ActivatePageOverlay(item.satellite_layer);
+    UpdateActiveIndex();
+    return;
+  } else if (item.radar) {
+    /* unlike the other entries this is fetched for the visible area,
+       so it is downloaded again even if we already have a file */
+    if (!DownloadRadar(item))
+      return;
+
+    SetOverlay(item.path, item.radar_bounds, item.name.c_str());
+    return;
+  } else if (item.pc_met) {
     const auto &info = *item.pc_met;
     label = info.label.c_str();
     if (item.path == nullptr) {
@@ -379,7 +549,14 @@ WeatherMapOverlayListWidget::UpdateClicked()
   BrokenDateTime now = BrokenDateTime::NowUTC();
   int i = 0;
   for (auto &item : items) {
-    if (item.pc_met) {
+    if (item.satellite_layer >= 0) {
+      if (i == active_index)
+        /* a no-op unless a newer frame is due or a tile is missing */
+        EUMETView::ActivatePageOverlay(item.satellite_layer);
+    } else if (item.radar) {
+      if (i == active_index && DownloadRadar(item))
+        SetOverlay(item.path, item.radar_bounds, item.name.c_str());
+    } else if (item.pc_met) {
       try {
         const auto &info = *item.pc_met;
 

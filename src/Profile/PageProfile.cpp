@@ -92,6 +92,10 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   if (!map.Get(profileKey, pl.xctherm_time))
     pl.xctherm_time = PageLayout::XCTHERM_TIME_AUTO;
 
+  strcpy(profileKey + prefixLen, "SatelliteLayer");
+  if (!map.Get(profileKey, pl.satellite_layer) || pl.satellite_layer < 0)
+    pl.satellite_layer = PageLayout::SATELLITE_LAYER_DEFAULT;
+
   strcpy(profileKey + prefixLen, "SkysightOverlay");
   const char *skysight_overlay_value = map.Get(profileKey);
   strcpy(profileKey + prefixLen, "SkysightOverlay");
@@ -179,6 +183,9 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "XCThermTime");
   map.Set(profileKey, page.xctherm_time);
+
+  strcpy(profileKey + prefixLen, "SatelliteLayer");
+  map.Set(profileKey, page.satellite_layer);
 
   strcpy(profileKey + prefixLen, "SkysightOverlay");
   map.Set(profileKey, page.skysight_overlay.c_str());

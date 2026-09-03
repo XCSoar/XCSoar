@@ -112,6 +112,8 @@ struct PageLayout
     EDL,
     XCTHERM,
     SKYSIGHT,
+    RADAR,
+    SATELLITE,
 
     MAX
   } overlay;
@@ -157,6 +159,16 @@ struct PageLayout
   int xctherm_layer;
   int xctherm_time;
 
+  /**
+   * Selected EUMETView layer when #overlay is Overlay::SATELLITE, as
+   * an index into EUMETView::GetLayers().  Kept as a plain int so
+   * that this header does not have to pull the layer table in;
+   * #SATELLITE_LAYER_DEFAULT mirrors EUMETView::DEFAULT_LAYER.
+   */
+  static constexpr int SATELLITE_LAYER_DEFAULT = 0;
+
+  int satellite_layer;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
@@ -171,7 +183,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
@@ -185,7 +198,8 @@ struct PageLayout
      edl_time(EDL_TIME_AUTO),
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
-     xctherm_time(XCTHERM_TIME_AUTO) {}
+     xctherm_time(XCTHERM_TIME_AUTO),
+     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -265,11 +279,43 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesRadarOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::RADAR;
+  }
+
+  [[gnu::const]]
+  constexpr bool
+  UsesSatelliteOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::SATELLITE;
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
       (overlay == Overlay::EDL || overlay == Overlay::RASP ||
        overlay == Overlay::XCTHERM || overlay == Overlay::SKYSIGHT);
+  }
+
+  /**
+   * Does this page carry an overlay that has to survive a pan?
+   *
+   * Panning shows the fullscreen map, whose layout carries no overlay
+   * at all, so without this the overlay would be torn down on the way
+   * in and fetched again on the way out.  This is deliberately not
+   * #UsesWeatherOverlay(): that one also gates the weather controls
+   * widget and the "weather" input mode, and an overlay with no
+   * forecast cursors would land the pilot in an empty control bar.
+   */
+  [[gnu::const]]
+  constexpr bool
+  UsesSuspendableOverlay() const noexcept
+  {
+    return UsesWeatherOverlay() || UsesRadarOverlay() ||
+      UsesSatelliteOverlay();
   }
 
   /**

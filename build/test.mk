@@ -90,6 +90,9 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
+	TestOperaRadar \
+	TestEumetviewSatellite \
+	TestEumetviewEnhance \
 	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -577,6 +580,30 @@ TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
 TEST_ANGLE_DEPENDS = MATH
 $(eval $(call link-program,TestAngle,TEST_ANGLE))
+
+TEST_OPERA_RADAR_SOURCES = \
+	$(SRC)/Weather/OPERA/RadarData.cpp \
+	$(SRC)/ui/canvas/custom/GeoBitmapTile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOperaRadar.cpp
+TEST_OPERA_RADAR_DEPENDS = GEO MATH TIME FMT UTIL
+$(eval $(call link-program,TestOperaRadar,TEST_OPERA_RADAR))
+
+TEST_EUMETVIEW_SATELLITE_SOURCES = \
+	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
+	$(SRC)/ui/canvas/custom/GeoBitmapTile.cpp \
+	$(SRC)/Geo/Quadrilateral.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEumetviewSatellite.cpp
+TEST_EUMETVIEW_SATELLITE_DEPENDS = GEO MATH TIME FMT UTIL
+$(eval $(call link-program,TestEumetviewSatellite,TEST_EUMETVIEW_SATELLITE))
+
+TEST_EUMETVIEW_ENHANCE_SOURCES = \
+	$(SRC)/Weather/EUMETView/Enhance.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestEumetviewEnhance.cpp
+TEST_EUMETVIEW_ENHANCE_DEPENDS = MATH UTIL
+$(eval $(call link-program,TestEumetviewEnhance,TEST_EUMETVIEW_ENHANCE))
 
 TEST_ARANGE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
