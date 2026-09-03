@@ -216,15 +216,14 @@ RichTextWindow::LoadImage(const std::string &url) const noexcept
   if (StringStartsWith(url.c_str(), "resource:")) {
     const char *name = url.c_str() + 9;
 
-#ifdef ENABLE_OPENGL
-    /* On OpenGL, prefer the _RGBA variant (PNG with alpha channel)
-       over the base resource (BMP with white background) so that
-       images composite correctly on non-white backgrounds. */
+    /* Prefer the _RGBA PNG (alpha) over the opaque fallback so images
+       composite on non-white backgrounds.  Both OpenGL and the
+       memory canvas load PNG via LoadPNG(); the memory canvas
+       pre-composites alpha against white. */
     const std::string rgba_name = std::string(name) + "_RGBA";
     ResourceId rgba_id = LookupResourceByName(rgba_name.c_str());
     if (rgba_id.IsDefined())
       bitmap.Load(rgba_id);
-#endif
 
     if (!bitmap.IsDefined()) {
       ResourceId id = LookupResourceByName(name);

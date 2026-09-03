@@ -14,23 +14,10 @@
 #include "ui/canvas/memory/PixelOperations.hpp"
 #endif
 
-#ifdef ENABLE_OPENGL
-
 Bitmap::Bitmap(ResourceId id)
 {
   Load(id);
 }
-
-#endif
-
-#ifdef USE_MEMORY_CANVAS
-
-Bitmap::Bitmap(ResourceId id)
-{
-  Load(id);
-}
-
-#endif
 
 bool
 Bitmap::Load(ResourceId id, Type type)
