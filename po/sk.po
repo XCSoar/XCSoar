@@ -9930,14 +9930,6 @@ msgstr ""
 "Pokryje celý alpský oblouk od Vídně po Perpignan a predpovídá vlnu v celé "
 "alpské oblasti. Model ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Spolené království. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "E-mail XC Therm"
 
@@ -11193,4 +11185,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Model UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Spolené království. Model UKV."
 

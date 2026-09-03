@@ -73,18 +73,18 @@ constexpr Layer CH_LAYERS[] = {
 };
 
 constexpr Layer UK_LAYERS[] = {
-  { "1000amsl", "vertical_wind_1000amsl",
-    N_("Vertical wind 1000 m AMSL"), N_("1000m AMSL"), 1000, false },
-  { "1500amsl", "vertical_wind_1500amsl",
-    N_("Vertical wind 1500 m AMSL"), N_("1500m AMSL"), 1500, false },
-  { "2000amsl", "vertical_wind_2000amsl",
-    N_("Vertical wind 2000 m AMSL"), N_("2000m AMSL"), 2000, false },
-  { "2500amsl", "vertical_wind_2500amsl",
-    N_("Vertical wind 2500 m AMSL"), N_("2500m AMSL"), 2500, false },
-  { "3000amsl", "vertical_wind_3000amsl",
-    N_("Vertical wind 3000 m AMSL"), N_("3000m AMSL"), 3000, false },
-  { "4200amsl", "vertical_wind_4200amsl",
-    N_("Vertical wind 4200 m AMSL"), N_("4200m AMSL"), 4200, false },
+  { "90000isbl", "vertical_wind_90000isbl",
+    N_("Vertical wind 900 hPa"), N_("900 hPa"), 1000, false },
+  { "85000isbl", "vertical_wind_85000isbl",
+    N_("Vertical wind 850 hPa"), N_("850 hPa"), 1500, false },
+  { "80000isbl", "vertical_wind_80000isbl",
+    N_("Vertical wind 800 hPa"), N_("800 hPa"), 2000, false },
+  { "75000isbl", "vertical_wind_75000isbl",
+    N_("Vertical wind 750 hPa"), N_("750 hPa"), 2500, false },
+  { "70000isbl", "vertical_wind_70000isbl",
+    N_("Vertical wind 700 hPa"), N_("700 hPa"), 3000, false },
+  { "60000isbl", "vertical_wind_60000isbl",
+    N_("Vertical wind 600 hPa"), N_("600 hPa"), 4200, false },
   { "100agl", "vertical_wind_100agl",
     N_("Vertical wind 100 m AGL"), N_("100m AGL"), 100, true },
   { "200agl", "vertical_wind_200agl",
@@ -97,7 +97,7 @@ constexpr Layer UK_LAYERS[] = {
 
 constexpr RegionDef REGIONS[] = {
   { "icon-ch", CH_LAYERS, unsigned(std::size(CH_LAYERS)) },
-  { "icon-uk", UK_LAYERS, unsigned(std::size(UK_LAYERS)) },
+  { "met-ukv", UK_LAYERS, unsigned(std::size(UK_LAYERS)) },
 };
 
 static_assert(std::size(REGIONS) == unsigned(Region::COUNT),

@@ -9875,14 +9875,6 @@ msgstr ""
 "Täcker hela alpbågen från Wien till Perpignan och prognostiserar vågor i "
 "hela Alperna. ICON-CH-modell."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Storbritannien. ICON-UK-modell."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-post"
 
@@ -11131,4 +11123,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV-modell"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Storbritannien. UKV-modell."
 

@@ -9948,14 +9948,6 @@ msgstr ""
 "Apima visą Alpių lanką nuo Vienos iki Perpinjano ir prognozuoja bangą visame"
 " Alpių regione. ICON-CH modelis."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Jungtinė Karalystė. ICON-UK modelis."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11220,4 +11212,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV modelis"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Jungtinė Karalystė. UKV modelis."
 

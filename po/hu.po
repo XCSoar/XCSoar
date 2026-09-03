@@ -9954,14 +9954,6 @@ msgstr ""
 "Lefedi a teljes alpesi ívet Bécstől Perpignanig, hullámot előrejelezve az "
 "egész Alpok régiójában. ICON-CH modell."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Egyesült Királyság. ICON-UK modell."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11228,4 +11220,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV-modell"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Egyesült Királyság. UKV-modell."
 

@@ -9742,14 +9742,6 @@ msgstr ""
 "వియన్నా నుండి పెర్పిగ్నాన్ వరకు మొత్తం ఆల్పైన్ ఆర్క్‌ను కవర్ చేస్తుంది, "
 "మొత్తం ఆల్ప్స్ ప్రాంతం అంతటా తరంగాన్ని అంచనా వేస్తుంది. ICON-CH మోడల్."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11013,4 +11005,12 @@ msgstr ""
 
 msgid "OpenVario audio vario daemon"
 msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Model UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Ujedinjeno Kraljevstvo. Model UKV."
 
