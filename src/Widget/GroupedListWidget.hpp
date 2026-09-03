@@ -59,6 +59,37 @@ public:
   /** The edge of the item where the check mark is drawn. */
   enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
 
+  /** What Enter does on an item. */
+  enum class EnterAction : uint_least8_t {
+    /**
+     * The item itself: it flips its switch, sets its check mark and
+     * calls its callback.  This is what a page of settings needs.
+     */
+    ITEM,
+
+    /**
+     * The button of the dialog which the action bar has marked,
+     * which then acts on the item under the cursor.  Use it for a
+     * group whose items are nothing but a choice, as the Alternates
+     * dialog is: the cursor picks one, Left and Right pick what to
+     * do with it, and Enter does it.  Without a marked button, the
+     * item is activated after all, so that Enter is never lost.
+     *
+     * The finger follows the same rule: a tap on an item which the
+     * cursor is not on only moves it there, so that a button can be
+     * aimed at the item without the tap setting anything off.  The
+     * second tap on the same item activates it.  A tap on the switch
+     * of an item is not a choice but the switch itself, and flips it
+     * as it always does.
+     *
+     * Space activates the item under the cursor whatever this says,
+     * for a keyboard which has that key.  A control stick has four
+     * directions and one button: give its user the action of the
+     * item as a button of the action bar.
+     */
+    ACTION_BAR,
+  };
+
   /**
    * The part of an item where a tap flips its
    * #ItemOptions::toggle.  It says nothing about the keyboard:
@@ -122,6 +153,13 @@ public:
 
     /** the edge which holds the check mark */
     CheckPosition check_position = CheckPosition::RIGHT;
+
+    /**
+     * What Enter does on an item of this group.  It is a property of
+     * the group because it follows from what its items are: a
+     * setting acts on its own, a choice waits for the action bar.
+     */
+    EnterAction enter_action = EnterAction::ITEM;
   };
 
   /** The contents and the decorations of an item. */
