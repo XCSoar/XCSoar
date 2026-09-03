@@ -1117,8 +1117,6 @@
 		5CBFD6B12D742FA600F05795 /* zzip.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = zzip.mk; sourceTree = "<group>"; };
 		5CBFD6B32D742FA600F05795 /* xcsoar-cloud.service */ = {isa = PBXFileReference; lastKnownFileType = text; path = "xcsoar-cloud.service"; sourceTree = "<group>"; };
 		5CBFD6B62D742FA600F05795 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; name = COPYING; path = ../COPYING; sourceTree = SOURCE_ROOT; };
-		5CBFD6C12D742FA600F05795 /* climb_12.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = climb_12.bmp; sourceTree = "<group>"; };
-		5CBFD6C22D742FA600F05795 /* climb_12inv.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = climb_12inv.bmp; sourceTree = "<group>"; };
 		5CBFD6C32D742FA600F05795 /* xcsoarswift.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = xcsoarswift.ico; sourceTree = "<group>"; };
 		5CBFD6C52D742FA600F05795 /* D.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = D.svg; sourceTree = "<group>"; };
 		5CBFD6C62D742FA600F05795 /* DL.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = DL.svg; sourceTree = "<group>"; };
@@ -11875,8 +11873,6 @@
 		5CBFD6C42D742FA600F05795 /* bitmaps */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD6C12D742FA600F05795 /* climb_12.bmp */,
-				5CBFD6C22D742FA600F05795 /* climb_12inv.bmp */,
 				5CBFD6C32D742FA600F05795 /* xcsoarswift.ico */,
 			);
 			path = bitmaps;
