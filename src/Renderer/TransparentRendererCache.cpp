@@ -48,16 +48,6 @@ TransparentRendererCache::Commit([[maybe_unused]] Canvas &canvas,
 }
 
 void
-TransparentRendererCache::CopyAndTo(Canvas &canvas,
-                                    const WindowProjection &projection) const
-{
-  if (empty)
-    return;
-
-  canvas.CopyAnd({0, 0}, projection.GetScreenSize(), buffer, {0, 0});
-}
-
-void
 TransparentRendererCache::CopyTransparentWhiteTo(Canvas &canvas,
                                                  const WindowProjection &projection) const
 {

@@ -39,9 +39,6 @@ public:
   void Commit([[maybe_unused]] Canvas &canvas, [[maybe_unused]] const WindowProjection &projection) {
   }
 
-  void CopyAndTo([[maybe_unused]] Canvas &canvas) const {
-  }
-
   void CopyTransparentWhiteTo([[maybe_unused]] Canvas &canvas) const {
   }
 
@@ -87,9 +84,6 @@ public:
    * Finish drawing to the cache.  Call CopyTo().
    */
   void Commit(Canvas &canvas, const WindowProjection &projection);
-
-  void CopyAndTo(Canvas &canvas,
-                 const WindowProjection &projection) const;
 
   void CopyTransparentWhiteTo(Canvas &canvas,
                               const WindowProjection &projection) const;

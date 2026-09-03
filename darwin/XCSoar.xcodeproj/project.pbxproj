@@ -1165,7 +1165,6 @@
 		5CBFD6F42D742FA600F05795 /* globe.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = globe.svg; sourceTree = "<group>"; };
 		5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_acquiring.svg; sourceTree = "<group>"; };
 		5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_disconnected.svg; sourceTree = "<group>"; };
-		5CBFD6F72D742FA600F05795 /* gps_lowsignal.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_lowsignal.svg; sourceTree = "<group>"; };
 		5CBFD6F82D742FA600F05795 /* icon_template.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = icon_template.svg; sourceTree = "<group>"; };
 		5CBFD6F92D742FA600F05795 /* map_bridge.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_bridge.svg; sourceTree = "<group>"; };
 		5CBFD6FA2D742FA600F05795 /* map_castle.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_castle.svg; sourceTree = "<group>"; };
@@ -6987,7 +6986,6 @@
 		5CBFEF1F2D742FA600F05795 /* GenerateSineTables.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GenerateSineTables.cpp; sourceTree = "<group>"; };
 		5CBFEF212D742FA600F05795 /* LinkResources.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = LinkResources.pl; sourceTree = "<group>"; };
 		5CBFEF222D742FA600F05795 /* polar_import.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = polar_import.py; sourceTree = "<group>"; };
-		5CBFEF232D742FA600F05795 /* svg2ico.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = svg2ico.sh; sourceTree = "<group>"; };
 		5CBFEF242D742FA600F05795 /* svg2po.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = svg2po.pl; sourceTree = "<group>"; };
 		5CBFEF252D742FA600F05795 /* svg2text.xsl */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = svg2text.xsl; sourceTree = "<group>"; };
 		5CBFEF262D742FA600F05795 /* svgl10n.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = svgl10n.pl; sourceTree = "<group>"; };
@@ -11933,7 +11931,6 @@
 				5CBFD6F42D742FA600F05795 /* globe.svg */,
 				5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */,
 				5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */,
-				5CBFD6F72D742FA600F05795 /* gps_lowsignal.svg */,
 				5CBFD6F82D742FA600F05795 /* icon_template.svg */,
 				5CBFD6F92D742FA600F05795 /* map_bridge.svg */,
 				5CBFD6FA2D742FA600F05795 /* map_castle.svg */,
@@ -20308,7 +20305,6 @@
 				5CBFEF1F2D742FA600F05795 /* GenerateSineTables.cpp */,
 				5CBFEF212D742FA600F05795 /* LinkResources.pl */,
 				5CBFEF222D742FA600F05795 /* polar_import.py */,
-				5CBFEF232D742FA600F05795 /* svg2ico.sh */,
 				5CBFEF242D742FA600F05795 /* svg2po.pl */,
 				5CBFEF252D742FA600F05795 /* svg2text.xsl */,
 				5CBFEF262D742FA600F05795 /* svgl10n.pl */,
