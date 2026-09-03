@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "ui/window/NativeWindow.hpp"
+#include "ui/window/PaintWindow.hpp"
 #include "ui/canvas/Color.hpp"
 #include "Renderer/TextRenderer.hpp"
 
@@ -23,7 +23,7 @@ public:
 /**
  * A window showing large multi-line text.
  */
-class LargeTextWindow : public NativeWindow {
+class LargeTextWindow : public PaintWindow {
   const Font *font = nullptr;
 
   std::string value;

@@ -6198,7 +6198,6 @@
 		5CBFEBED2D742FA600F05795 /* Init.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Init.hpp; sourceTree = "<group>"; };
 		5CBFEBEE2D742FA600F05795 /* Init.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Init.cpp; sourceTree = "<group>"; };
 		5CBFEBEF2D742FA600F05795 /* LazyPaintWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LazyPaintWindow.hpp; sourceTree = "<group>"; };
-		5CBFEBF02D742FA600F05795 /* NativeWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NativeWindow.hpp; sourceTree = "<group>"; };
 		5CBFEBF12D742FA600F05795 /* PaintWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PaintWindow.hpp; sourceTree = "<group>"; };
 		5CBFEBF22D742FA600F05795 /* SingleWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SingleWindow.hpp; sourceTree = "<group>"; };
 		5CBFEBF32D742FA600F05795 /* SingleWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SingleWindow.cpp; sourceTree = "<group>"; };
@@ -6228,7 +6227,6 @@
 		5CBFEC0E2D742FA600F05795 /* UnitsGlue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitsGlue.cpp; sourceTree = "<group>"; };
 		5CBFEC0F2D742FA600F05795 /* UnitsStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UnitsStore.hpp; sourceTree = "<group>"; };
 		5CBFEC102D742FA600F05795 /* UnitsStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitsStore.cpp; sourceTree = "<group>"; };
-		5CBFEC122D742FA600F05795 /* tchar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tchar.h; sourceTree = "<group>"; };
 		5CBFEC132D742FA600F05795 /* windef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = windef.h; sourceTree = "<group>"; };
 		5CBFEC162D742FA600F05795 /* AllocatedArray.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AllocatedArray.hxx; sourceTree = "<group>"; };
 		5CBFEC172D742FA600F05795 /* AllocatedGrid.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AllocatedGrid.hxx; sourceTree = "<group>"; };
@@ -19205,7 +19203,6 @@
 				5CBFEBED2D742FA600F05795 /* Init.hpp */,
 				5CBFEBEE2D742FA600F05795 /* Init.cpp */,
 				5CBFEBEF2D742FA600F05795 /* LazyPaintWindow.hpp */,
-				5CBFEBF02D742FA600F05795 /* NativeWindow.hpp */,
 				5CBFEBF12D742FA600F05795 /* PaintWindow.hpp */,
 				5CBFEBF22D742FA600F05795 /* SingleWindow.hpp */,
 				5CBFEBF32D742FA600F05795 /* SingleWindow.cpp */,
@@ -19273,7 +19270,6 @@
 		5CBFEC152D742FA600F05795 /* unix */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFEC122D742FA600F05795 /* tchar.h */,
 				5CBFEC132D742FA600F05795 /* windef.h */,
 			);
 			path = unix;

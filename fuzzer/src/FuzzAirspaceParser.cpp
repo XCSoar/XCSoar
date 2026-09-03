@@ -9,7 +9,6 @@
 #include "Operation/Operation.hpp"
 
 #include <stdio.h>
-#include <tchar.h>
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
 
