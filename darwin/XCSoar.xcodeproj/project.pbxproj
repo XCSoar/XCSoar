@@ -1161,7 +1161,6 @@
 		5CBFD6F42D742FA600F05795 /* globe.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = globe.svg; sourceTree = "<group>"; };
 		5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_acquiring.svg; sourceTree = "<group>"; };
 		5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_disconnected.svg; sourceTree = "<group>"; };
-		5CBFD6F72D742FA600F05795 /* gps_lowsignal.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_lowsignal.svg; sourceTree = "<group>"; };
 		5CBFD6F82D742FA600F05795 /* icon_template.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = icon_template.svg; sourceTree = "<group>"; };
 		5CBFD6F92D742FA600F05795 /* map_bridge.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_bridge.svg; sourceTree = "<group>"; };
 		5CBFD6FA2D742FA600F05795 /* map_castle.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_castle.svg; sourceTree = "<group>"; };
@@ -11891,7 +11890,6 @@
 				5CBFD6F42D742FA600F05795 /* globe.svg */,
 				5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */,
 				5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */,
-				5CBFD6F72D742FA600F05795 /* gps_lowsignal.svg */,
 				5CBFD6F82D742FA600F05795 /* icon_template.svg */,
 				5CBFD6F92D742FA600F05795 /* map_bridge.svg */,
 				5CBFD6FA2D742FA600F05795 /* map_castle.svg */,
