@@ -637,7 +637,8 @@ private:
   static void DrawCheck(Canvas &canvas, PixelRect rc, Color color) noexcept;
 
   static void DrawToggle(Canvas &canvas, const PixelRect &rc, bool checked,
-                         const DialogLook &look) noexcept;
+                         const DialogLook &look,
+                         Color background_color, Color text_color) noexcept;
 
   void SetOrigin(int _origin) noexcept;
   void EnsureVisible(unsigned i) noexcept;
@@ -655,6 +656,25 @@ private:
    */
   static void DrawRoundedEdge(Canvas &canvas, const PixelRect &rc,
                               bool top, Color color, int radius) noexcept;
+
+  /**
+   * Paint the arc of one rounded corner, just inside the pixels which
+   * #DrawRoundedEdge has taken away.
+   *
+   * @param top the upper corners, else the lower ones
+   */
+  static void DrawRoundedCorner(Canvas &canvas, const PixelRect &rc,
+                                bool top, Color color, int radius,
+                                int thickness) noexcept;
+
+  /**
+   * Draw the edge of one item of a card: its two sides, the line to
+   * the next item, and the rounded upper or lower edge of the card
+   * where this item is the first or the last one of it.
+   */
+  static void DrawCardBorder(Canvas &canvas, const PixelRect &rc,
+                             bool first, bool last, Color color,
+                             int radius) noexcept;
 
   void DrawElement(Canvas &canvas, std::size_t i,
                    PixelRect rc) const noexcept;
@@ -911,8 +931,9 @@ GetBadgeColors(const DialogLook &look,
   const BadgeColors accent{look.list.focused.background_color,
                            look.list.focused.text_color};
 
-  if (!HasColors())
-    /* a monochrome display would turn all of them into the same grey */
+  if (IsDithered())
+    /* a display which knows two colors would turn all of them into
+       the same black; one with gray levels tells them apart */
     return accent;
 
   switch (style) {
@@ -1851,9 +1872,10 @@ static RowColors
 GetRowColors(const DialogLook &look, bool selected, bool focused,
              bool pressed) noexcept
 {
-  if (pressed && HasColors())
+  if (pressed && !IsDithered())
     /* zinc-200 and zinc-700 of the Tailwind palette; a phone dims the
-       row under the finger instead of coloring it */
+       row under the finger instead of coloring it.  A dithered
+       display has no dim gray and takes the color of the look */
     return {look.dark_mode
             ? Color(0x3f, 0x3f, 0x46)
             : Color(0xe4, 0xe4, 0xe7),
@@ -1885,6 +1907,82 @@ GroupedListControl::DrawRoundedEdge(Canvas &canvas, const PixelRect &rc,
 }
 
 void
+GroupedListControl::DrawRoundedCorner(Canvas &canvas, const PixelRect &rc,
+                                      bool top, Color color, int radius,
+                                      int thickness) noexcept
+{
+  /* the arc is the ring between two circles, the one which
+     DrawRoundedEdge() has cut and one which is thinner by the
+     thickness of the line.  Drawing it row by row from the outer
+     circle towards the inner one keeps the line the same width all
+     the way around; following the outer circle alone would make it
+     bulge wherever two neighbouring rows begin at the same pixel */
+  const int inner_radius = std::max(0, radius - thickness);
+
+  for (int i = 0; i < radius; ++i) {
+    /* the distance of the middle of this pixel row from the center of
+       the circles */
+    const double dy = radius - i - 0.5;
+
+    const int outer = (int)std::lround(radius -
+                                       std::sqrt(radius * radius - dy * dy));
+
+    /* a row above the inner circle belongs to the line as a whole,
+       from the outer circle to where the straight edge begins */
+    const int inner = dy < inner_radius
+      ? (int)std::lround(radius -
+                         std::sqrt(inner_radius * inner_radius - dy * dy))
+      : radius;
+
+    if (inner <= outer)
+      continue;
+
+    const int y = top ? rc.top + i : rc.bottom - 1 - i;
+
+    canvas.DrawFilledRectangle({rc.left + outer, y, rc.left + inner, y + 1},
+                               color);
+    canvas.DrawFilledRectangle({rc.right - inner, y, rc.right - outer, y + 1},
+                               color);
+  }
+}
+
+void
+GroupedListControl::DrawCardBorder(Canvas &canvas, const PixelRect &rc,
+                                   bool first, bool last, Color color,
+                                   int radius) noexcept
+{
+  const int thickness = GetSeparatorThickness();
+
+  /* the two sides; the rows of a rounded corner get their pixels from
+     DrawRoundedCorner() instead */
+  const int top = rc.top + (first ? radius : 0);
+  const int bottom = rc.bottom - (last ? radius : 0);
+
+  canvas.DrawFilledRectangle({rc.left, top, rc.left + thickness, bottom},
+                             color);
+  canvas.DrawFilledRectangle({rc.right - thickness, top, rc.right, bottom},
+                             color);
+
+  if (first)
+    canvas.DrawFilledRectangle({rc.left + radius, rc.top,
+                                rc.right - radius, rc.top + thickness},
+                               color);
+
+  /* the lower edge of the card, or the line which separates this item
+     from the next one */
+  const int inset = last ? radius : 0;
+  canvas.DrawFilledRectangle({rc.left + inset, rc.bottom - thickness,
+                              rc.right - inset, rc.bottom},
+                             color);
+
+  if (first)
+    DrawRoundedCorner(canvas, rc, true, color, radius, thickness);
+
+  if (last)
+    DrawRoundedCorner(canvas, rc, false, color, radius, thickness);
+}
+
+void
 GroupedListControl::DrawCheck(Canvas &canvas, PixelRect rc,
                               Color color) noexcept
 {
@@ -1911,16 +2009,26 @@ struct ToggleColors {
 
   /** the thumb which sits at one of its ends */
   Color thumb_color;
+
+  /** the outline of the pill; the same as #track_color draws none */
+  Color outline_color;
 };
 
 [[gnu::pure]]
 static ToggleColors
-GetToggleColors(const DialogLook &look, bool checked) noexcept
+GetToggleColors(const DialogLook &look, bool checked,
+                Color background_color, Color text_color) noexcept
 {
-  if (!HasColors())
-    /* a display without colors tells the two states apart by
-       brightness alone */
-    return {checked ? COLOR_BLACK : COLOR_GRAY, COLOR_WHITE};
+  if (IsDithered())
+    /* a display which knows two colors has nothing but the two colors
+       of the row it sits on: the switch which is on is filled with
+       the color of the text, the one which is off shows the row
+       through it and draws its outline instead.  Both of them turn
+       around with the item under the cursor, as its icon does.  Gray
+       levels are enough for the colors below */
+    return {checked ? text_color : background_color,
+            checked ? background_color : text_color,
+            text_color};
 
   if (checked)
     /* green-500 of the Tailwind palette: it is much lighter and more
@@ -1928,46 +2036,66 @@ GetToggleColors(const DialogLook &look, bool checked) noexcept
        wears, and it keeps its distance from that blue in hue as well.
        The darker green of a badge sits too close to it: on the item
        under the cursor the two read as one muddy color */
-    return {Color(0x22, 0xc5, 0x5e), COLOR_WHITE};
+    return {Color(0x22, 0xc5, 0x5e), COLOR_WHITE, Color(0x22, 0xc5, 0x5e)};
 
   /* zinc-600 and zinc-300 of the same palette */
-  return {look.dark_mode
-          ? Color(0x52, 0x52, 0x5b)
-          : Color(0xd4, 0xd4, 0xd8),
-          COLOR_WHITE};
+  const Color track = look.dark_mode
+    ? Color(0x52, 0x52, 0x5b)
+    : Color(0xd4, 0xd4, 0xd8);
+
+  return {track, COLOR_WHITE, track};
 }
 
 void
 GroupedListControl::DrawToggle(Canvas &canvas, const PixelRect &rc,
-                               bool checked, const DialogLook &look) noexcept
+                               bool checked, const DialogLook &look,
+                               Color background_color,
+                               Color text_color) noexcept
 {
-  const auto colors = GetToggleColors(look, checked);
+  const auto colors = GetToggleColors(look, checked,
+                                      background_color, text_color);
 
-  const int height = (int)rc.GetHeight();
-  const int radius = height / 2;
-  const int centre_y = rc.top + radius;
-
-  /* the track is a rectangle between two half circles; other than a
+  /* the pill is a rectangle between two half circles; other than a
      rounded rectangle whose corners are painted over, this touches no
-     pixel outside the switch, and the background may be anything */
-  canvas.DrawFilledRectangle({rc.left + radius, rc.top,
-                              rc.right - radius, rc.bottom},
-                             colors.track_color);
+     pixel outside the switch, and the background may be anything.
 
-  /* only the circles take their color from the brush; it and the pen
+     Only the circles take their color from the brush; it and the pen
      have a name because a temporary would be gone at the semicolon,
      and a canvas which selects the object itself rather than a copy
      of it would draw with a deleted one.  The pen paints the rim of
      the circle: give it the color of the brush, because a null pen is
      black and the rim would be a frayed dark edge */
-  const Brush track_brush(colors.track_color);
-  const Pen track_pen(0, colors.track_color);
-  canvas.Select(track_brush);
-  canvas.Select(track_pen);
+  const auto draw_pill = [&canvas](const PixelRect &r, Color color){
+    const int radius = (int)r.GetHeight() / 2;
+    const int centre_y = r.top + radius;
 
-  canvas.DrawCircle({rc.left + radius, centre_y}, radius);
-  canvas.DrawCircle({rc.right - radius, centre_y}, radius);
+    canvas.DrawFilledRectangle({r.left + radius, r.top,
+                                r.right - radius, r.bottom},
+                               color);
 
+    const Brush brush(color);
+    const Pen pen(0, color);
+    canvas.Select(brush);
+    canvas.Select(pen);
+
+    canvas.DrawCircle({r.left + radius, centre_y}, radius);
+    canvas.DrawCircle({r.right - radius, centre_y}, radius);
+  };
+
+  if (colors.outline_color == colors.track_color)
+    draw_pill(rc, colors.track_color);
+  else {
+    /* the switch which is off has the color of the row behind it:
+       draw it one line larger in the color of the outline, and let
+       the track cover all but that line */
+    draw_pill(rc, colors.outline_color);
+
+    PixelRect inner = rc;
+    inner.Grow(-GetSeparatorThickness());
+    draw_pill(inner, colors.track_color);
+  }
+
+  const int radius = (int)rc.GetHeight() / 2;
   const int inset = std::max(1, (int)Layout::VptScale(TOGGLE_INSET_PT));
   const int thumb_radius = radius - inset;
 
@@ -1978,7 +2106,7 @@ GroupedListControl::DrawToggle(Canvas &canvas, const PixelRect &rc,
   canvas.DrawCircle({checked
                      ? rc.right - radius
                      : rc.left + radius,
-                     centre_y}, thumb_radius);
+                     rc.top + radius}, thumb_radius);
 }
 
 void
@@ -2029,11 +2157,18 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     if (element.last_in_group)
       DrawRoundedEdge(canvas, rc, false, look.background_color, radius);
 
+    /* a display which knows two colors paints the card in the same
+       white as the page behind it: draw its edge, or there would be
+       no card at all.  The line to the next item is part of it */
+    if (IsDithered())
+      DrawCardBorder(canvas, rc, element.first_in_group,
+                     element.last_in_group, look.list.text_color, radius);
+
     /* a thin line separates the items of a card; like the gap between
        two cards, it shows the page behind them.  The selected item
        needs no line, its background already separates it from its
        neighbours */
-    if (!element.last_in_group && !selected) {
+    if (!element.last_in_group && !selected && !IsDithered()) {
       /* the line begins where the caption does, like the lists of a
          phone; the check mark is a state of the whole item and stays
          outside */
@@ -2050,8 +2185,11 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const Color plain_text_color = row_colors.text_color;
 
     /* an item which is not available keeps its background, but all of
-       its contents fade towards it */
-    const Color text_color = element.disabled
+       its contents fade towards it.  A display which knows two colors
+       has no faded color: it would dither the text into a pattern
+       which is hard to read, and the badge of the item says clearly
+       enough that it cannot be reached */
+    const Color text_color = element.disabled && !IsDithered()
       ? (look.dark_mode
          ? DarkColor(plain_text_color)
          : LightColor(plain_text_color))
@@ -2128,7 +2266,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       toggle_rc.top = centre_y - height / 2;
       toggle_rc.bottom = toggle_rc.top + height;
 
-      DrawToggle(canvas, toggle_rc, element.checked, look);
+      DrawToggle(canvas, toggle_rc, element.checked, look,
+                 background, plain_text_color);
 
       caption_rc.right = toggle_rc.left - padding;
     }
@@ -2314,6 +2453,11 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const int radius = Layout::VptScale(RADIUS_PT);
     DrawRoundedEdge(canvas, card_rc, true, look.background_color, radius);
     DrawRoundedEdge(canvas, card_rc, false, look.background_color, radius);
+
+    /* this card is as white as the page, too */
+    if (IsDithered())
+      DrawCardBorder(canvas, card_rc, true, true, look.list.text_color,
+                     radius);
 
     text_rc.top = card_rc.top + padding;
     text_rc.bottom = card_rc.bottom - padding;
