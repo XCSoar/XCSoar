@@ -15,8 +15,6 @@
 #include "VirtualCanvas.hpp"
 #endif
 
-#include <algorithm>
-
 /**
  * Heuristic: if the caller's text colour is light, the background
  * is probably dark.  Threshold: average channel > 128.
@@ -43,14 +41,12 @@ IconStretchFixed10(unsigned source_dpi) noexcept
   return Layout::VptScale(72 * 1024 * 3 / 2) / source_dpi;
 }
 
-#ifdef ENABLE_OPENGL
 /**
  * The icons are rendered at this multiple of the resolution their
- * density bucket needs, so the GPU has enough texels where they are
- * magnified (list rows).  Keep in sync with build/resource.mk.
+ * density bucket needs, so list views and the memory canvas have
+ * enough texels when they scale.  Keep in sync with build/resource.mk.
  */
 static constexpr unsigned ICON_SUPERSAMPLE = 3;
-#endif
 
 /* nominal densities of the icon variants (Android density buckets);
    ldpi is the 96 dpi desktop baseline rather than Android's 120 */
@@ -72,12 +68,43 @@ DisplayDensity() noexcept
 
 #ifndef ENABLE_OPENGL
 
-[[gnu::const]]
-static unsigned
-IconStretchInteger(unsigned source_dpi) noexcept
+[[gnu::pure]]
+static PixelSize
+MaskedIconSourceSize(const Bitmap &bitmap) noexcept
 {
-  return std::max((IconStretchFixed10(source_dpi) + 512) >> 10,
-                  1u);
+  /* left half is mask, right half is icon */
+  return {bitmap.GetWidth() / 2, bitmap.GetHeight()};
+}
+
+static void
+DrawMaskedIcon(Canvas &canvas, PixelPoint dest, PixelSize dest_size,
+               const Bitmap &bitmap, bool invert) noexcept
+{
+  const PixelSize src_size = MaskedIconSourceSize(bitmap);
+  const PixelPoint icon_src{(int)src_size.width, 0};
+
+  if (invert) {
+    if (dest_size == src_size)
+      canvas.CopyNotOr(dest, dest_size, bitmap, icon_src);
+    else {
+      VirtualCanvas temp{dest_size};
+      temp.Stretch({0, 0}, dest_size, bitmap, icon_src, src_size);
+      canvas.CopyNotOr(dest, dest_size, temp, {0, 0});
+    }
+    return;
+  }
+
+  if (dest_size == src_size) {
+    canvas.CopyOr(dest, dest_size, bitmap, {0, 0});
+    canvas.CopyAnd(dest, dest_size, bitmap, icon_src);
+    return;
+  }
+
+  VirtualCanvas temp{dest_size};
+  temp.Stretch({0, 0}, dest_size, bitmap, {0, 0}, src_size);
+  canvas.CopyOr(dest, dest_size, temp, {0, 0});
+  temp.Stretch({0, 0}, dest_size, bitmap, icon_src, src_size);
+  canvas.CopyAnd(dest, dest_size, temp, {0, 0});
 }
 
 #endif
@@ -91,7 +118,6 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId mdpi_id,
      boundaries are midway between the buckets */
   const unsigned density = DisplayDensity();
 
-#ifdef ENABLE_OPENGL
   unsigned source_dpi = ICON_LDPI;
   if (density >= 400 && xxhdpi_id.IsDefined()) {
     id = xxhdpi_id;
@@ -107,38 +133,20 @@ MaskedIcon::LoadResource(ResourceId id, ResourceId mdpi_id,
   const unsigned stretch =
     IconStretchFixed10(source_dpi * ICON_SUPERSAMPLE);
   bitmap.Load(id);
-#else
-  if (density >= (ICON_LDPI + ICON_MDPI) / 2) {
-    unsigned source_dpi = ICON_LDPI;
-    if (density >= 400 && xxhdpi_id.IsDefined()) {
-      id = xxhdpi_id;
-      source_dpi = ICON_XXHDPI;
-    } else if (density >= 240 && xhdpi_id.IsDefined()) {
-      id = xhdpi_id;
-      source_dpi = ICON_XHDPI;
-    } else if (mdpi_id.IsDefined()) {
-      id = mdpi_id;
-      source_dpi = ICON_MDPI;
-    }
-
-    bitmap.LoadStretch(id, IconStretchInteger(source_dpi));
-  } else
-    bitmap.Load(id);
-#endif
 
   assert(IsDefined());
 
   has_colors = bitmap.HasColors();
 
-  size = bitmap.GetSize();
 #ifdef ENABLE_OPENGL
-  /* let the GPU stretch on-the-fly */
+  size = bitmap.GetSize();
+#else
+  size = MaskedIconSourceSize(bitmap);
+#endif
+  /* scale to the logical on-screen size; the bitmap keeps the
+     supersampled texels and Draw() stretches them */
   size.width = size.width * stretch >> 10;
   size.height = size.height * stretch >> 10;
-#else
-  /* left half is mask, right half is icon */
-  size.width /= 2;
-#endif
 
   if (center) {
     origin.x = size.width / 2;
@@ -165,8 +173,7 @@ MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, PixelPoint p) const noexcept
   texture.Bind();
   texture.Draw(PixelRect(p, size), texture.GetRect());
 #else
-  canvas.CopyOr(p, size, bitmap, {0, 0});
-  canvas.CopyAnd(p, size, bitmap, {(int)size.width, 0});
+  DrawMaskedIcon(canvas, p, size, bitmap, false);
 #endif
 }
 
@@ -211,28 +218,10 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p,
   texture.Bind();
   texture.Draw(PixelRect(dest, scaled_size), texture.GetRect());
 #else
-  /* memory canvas: stretch each half (mask / icon) into a temporary
-     surface, then composite with CopyOr + CopyAnd (or CopyNotOr for
-     dark-mode inversion). */
-  const Color old_text_color = canvas.GetTextColor();
   const bool inverse = !has_colors &&
-    IsDarkBackground(old_text_color);
+    IsDarkBackground(canvas.GetTextColor());
 
-  VirtualCanvas temp{scaled_size};
-
-  if (inverse) {
-    temp.Stretch({0, 0}, scaled_size,
-                 bitmap, {(int)size.width, 0}, size);
-    canvas.CopyNotOr(dest, scaled_size, temp, {0, 0});
-  } else {
-    temp.Stretch({0, 0}, scaled_size,
-                 bitmap, {0, 0}, size);
-    canvas.CopyOr(dest, scaled_size, temp, {0, 0});
-
-    temp.Stretch({0, 0}, scaled_size,
-                 bitmap, {(int)size.width, 0}, size);
-    canvas.CopyAnd(dest, scaled_size, temp, {0, 0});
-  }
+  DrawMaskedIcon(canvas, dest, scaled_size, bitmap, inverse);
 #endif
 }
 
@@ -262,21 +251,9 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc,
   texture.Bind();
   texture.Draw(PixelRect(position, size), texture.GetRect());
 #else
-
-  /* detect dark backgrounds from the caller's text color rather than
-     relying on the "inverse" parameter, which may not reflect the
-     actual background (e.g. TabRenderer passes "selected" as
-     inverse, but in dark mode *all* tabs have dark backgrounds).
-     Skip inversion for colour icons (has_colors). */
-  const Color old_text_color = canvas.GetTextColor();
   const bool dark_bg = !has_colors &&
-    IsDarkBackground(old_text_color);
+    IsDarkBackground(canvas.GetTextColor());
 
-  if (dark_bg) {
-    canvas.CopyNotOr(position, size, bitmap, {(int)size.width, 0});
-  } else {
-    canvas.CopyOr(position, size, bitmap, {0, 0});
-    canvas.CopyAnd(position, size, bitmap, {(int)size.width, 0});
-  }
+  DrawMaskedIcon(canvas, position, size, bitmap, dark_bg);
 #endif
 }
