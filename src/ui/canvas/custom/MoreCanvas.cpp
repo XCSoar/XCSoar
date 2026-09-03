@@ -18,7 +18,6 @@
 
 #include <limits.h>
 #include <string.h>
-#include <winuser.h>
 
 void
 Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
