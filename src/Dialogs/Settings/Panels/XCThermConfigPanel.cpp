@@ -28,8 +28,8 @@ static constexpr StaticEnumChoice xctherm_region_list[] = {
     N_("Covers the entire Alpine arc from Vienna to Perpignan, "
        "forecasting wave throughout the whole Alps region. "
        "ICON-CH model.") },
-  { unsigned(XCTherm::Region::UK), N_("UK"),
-    N_("United Kingdom. ICON-UK model.") },
+  { unsigned(XCTherm::Region::UK), N_("UKV Model"),
+    N_("United Kingdom. UKV model.") },
   nullptr
 };
 
