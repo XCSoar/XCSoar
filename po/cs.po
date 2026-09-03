@@ -1785,6 +1785,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "Vyber barvu"
 
+#, no-c-format
 msgid "Display"
 msgstr "Zobraz"
 
@@ -2026,10 +2027,6 @@ msgstr "Typ otočných bodů"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Jazyk, vstup"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Rozložení obrazovky"
 
 #, no-c-format
 msgid "Audio"
@@ -3355,9 +3352,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "Velikost textu"
-
-msgid "Display Resolution"
-msgstr "Rozlišení displeje"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Nastavení rozlišení displeje je používáno k adaptaci šíře linek, velikosti fontů, velikosti nouzových ploch a dalším úpravám."
@@ -7021,10 +7015,6 @@ msgid "T Next Leg"
 msgstr "ST př rameno"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Rychlost stoupání na příštím rameni, která odpovídá nastavení MacCready na současném rameni."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Složka protivětru (zjednodušeně)"
 
@@ -8247,12 +8237,6 @@ msgid "Size of waypoint symbols on the map as a percentage of the built-in artwo
 msgstr ""
 "Velikost symbolů bodů trati na mapě jako procento vestavěné grafiky (dialogy"
 " seznamů zachovávají pevnou velikost ikony řádku)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Režim Altn: RUČNÍ"
-
-msgid "Altn mode: AUTO"
-msgstr "Režim Altn: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -11071,4 +11055,97 @@ msgstr "Auto"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Ručně"
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
 

@@ -1836,6 +1836,7 @@ msgstr "אם מופעל שורה תופסת עלייה הגעה במקומך."
 msgid "Select Color"
 msgstr "בחOOSE COLOR"
 
+#, no-c-format
 msgid "Display"
 msgstr "תצוגה"
 
@@ -2076,10 +2077,6 @@ msgstr "סוג נקודת סיבוב"
 #, no-c-format
 msgid "Language, Input"
 msgstr "שפה"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "מערך התצוגה"
 
 #, no-c-format
 msgid "Audio"
@@ -3414,9 +3411,6 @@ msgstr ""
 
 msgid "Text size"
 msgstr "טקסט"
-
-msgid "Display Resolution"
-msgstr "אין פתרון"
 
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "התולעת נמצאת בשימוש כדי להתאים את רוחב הנקודות, הגודל של הטקסט, גודל היעד ועוד."
@@ -7027,10 +7021,6 @@ msgid "T Next Leg"
 msgstr "T נחיתת חוץ"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "קצב עלייה תרמית על ה\"path\" הבא שמתאפס לקצב עלייה תרמית שווה ל_Setting MacCready_ על ה\"path\" הנוכחית."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "רוח, אבר ראש (להוריד)"
 
@@ -8224,12 +8214,6 @@ msgid "Size of waypoint symbols on the map as a percentage of the built-in artwo
 msgstr ""
 "גודל סמלי נקודות הדרך על המפה כאחוז מהגרפיקה המובנית (תיבות דו־שיח של רשימה "
 "שומרות על גודל אייקון קבוע בשורה)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -11011,4 +10995,97 @@ msgstr "אוטו"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "ידנית"
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
 
