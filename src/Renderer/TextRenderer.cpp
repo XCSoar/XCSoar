@@ -7,8 +7,6 @@
 #include "ui/canvas/TextFormat.hpp"
 #include "Asset.hpp"
 
-#include <winuser.h>
-
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         std::string_view text) const noexcept

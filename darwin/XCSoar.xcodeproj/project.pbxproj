@@ -6230,7 +6230,6 @@
 		5CBFEC102D742FA600F05795 /* UnitsStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UnitsStore.cpp; sourceTree = "<group>"; };
 		5CBFEC122D742FA600F05795 /* tchar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tchar.h; sourceTree = "<group>"; };
 		5CBFEC132D742FA600F05795 /* windef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = windef.h; sourceTree = "<group>"; };
-		5CBFEC142D742FA600F05795 /* winuser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = winuser.h; sourceTree = "<group>"; };
 		5CBFEC162D742FA600F05795 /* AllocatedArray.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AllocatedArray.hxx; sourceTree = "<group>"; };
 		5CBFEC172D742FA600F05795 /* AllocatedGrid.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AllocatedGrid.hxx; sourceTree = "<group>"; };
 		5CBFEC182D742FA600F05795 /* AllocatedString.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AllocatedString.hxx; sourceTree = "<group>"; };
@@ -19276,7 +19275,6 @@
 			children = (
 				5CBFEC122D742FA600F05795 /* tchar.h */,
 				5CBFEC132D742FA600F05795 /* windef.h */,
-				5CBFEC142D742FA600F05795 /* winuser.h */,
 			);
 			path = unix;
 			sourceTree = "<group>";

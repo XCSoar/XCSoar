@@ -6,14 +6,6 @@
 #include "util/TriState.hpp"
 #include "util/Compiler.h"
 
-#ifdef _WIN32
-#include <windef.h> // for POINT (needed by wingdi.h)
-#include <wingdi.h>
-#ifdef ERROR
-#undef ERROR
-#endif
-#endif
-
 class Path;
 class ProfileMap;
 
