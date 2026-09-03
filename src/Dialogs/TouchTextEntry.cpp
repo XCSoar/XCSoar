@@ -244,6 +244,20 @@ OnPaste()
 static bool
 FormKeyDown(unsigned key_code)
 {
+  /* iOS sends Return as a keyboard event while its system keyboard is
+     visible.  Accept the entry there, but let a hardware keyboard's
+     Return activate the focused button. */
+  if (kb == nullptr && !HasKeyboard() && key_code == KEY_RETURN &&
+      textentry_ok != nullptr) {
+    textentry_ok->Click();
+    return true;
+  }
+
+  /* The system keyboard reports Space as a key event before text input.
+     Do not let the focused action button interpret it as activation. */
+  if (kb == nullptr && key_code == KEY_SPACE)
+    return true;
+
   /* On devices with cursor keys, first let the on-screen keyboard
      move focus between key buttons; use Backspace for delete.  On
      others (e.g. Kobo), Left and Back both act as backspace. */

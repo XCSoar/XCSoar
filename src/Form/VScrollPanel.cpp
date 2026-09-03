@@ -252,12 +252,11 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
        StringIsEqual(gesture, "R"))) {
     /* Horizontal swipe detected — defer listener: flipping the pager
        from here would hide this panel during OnMouseUp (crash). */
-    if (dragging) {
-      dragging = false;
-      ReleaseCapture();
-    }
-    if (potential_tap) {
-      potential_tap = false;
+    if (dragging || potential_tap) {
+      dragging = potential_tap = false;
+      /* the child that accepted the press does not get this
+         mouse-up */
+      CancelChildCapture();
       ReleaseCapture();
     }
     defer_swipe_queue.push_back(
@@ -276,6 +275,9 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
     const bool enable_kinetic = UsePixelPan();
 
     dragging = false;
+    /* we swallowed the gesture that started on the child (see
+       #potential_tap), so it does not get this mouse-up either */
+    CancelChildCapture();
     ReleaseCapture();
 
     if (enable_kinetic) {
@@ -361,22 +363,26 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     }
     return true;
   } else {
-    /* Start gesture tracking for swipe detection only in the
-       content area — not on the scrollbar, where slight horizontal
-       finger movement during a tap would misfire as a page-change
-       swipe (especially noticeable on e-ink touch screens). */
-    gesture_tracking = true;
-    gestures.Start(p, Layout::Scale(20));
-
     // First, let child widgets handle the event
     if (PanelControl::OnMouseDown(p)) {
+      if (HandlesDragging())
+        /* The child that took the press drags itself (a list that
+           pans, its scroll bar slider).  Leave the whole gesture to
+           it: capturing here would make EventChildAt() route every
+           further event to us, and the child would never see the rest
+           of its own drag.  Do not track a swipe either - panning a
+           list sideways must not flip the page. */
+        return true;
+
       potential_tap = true;
       drag_start = p;
+      StartGestureTracking(p);
       SetCapture();
       return true;
     }
 
     // No child widget handled it, so start dragging the content area
+    StartGestureTracking(p);
     dragging = true;
     drag_y = (int)origin + p.y;
     if (UsePixelPan())
@@ -384,6 +390,17 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     SetCapture();
     return true;
   }
+}
+
+void
+VScrollPanel::StartGestureTracking(PixelPoint p) noexcept
+{
+  /* Track swipes only in the content area — not on the scrollbar,
+     where slight horizontal finger movement during a tap would
+     misfire as a page-change swipe (especially noticeable on e-ink
+     touch screens). */
+  gesture_tracking = true;
+  gestures.Start(p, Layout::Scale(20));
 }
 
 bool

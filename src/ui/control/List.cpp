@@ -485,7 +485,18 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
     const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
 
+    /* a touch that did not turn into a scroll gesture selects the
+       item it started on (see #pending_cursor) */
+    const int tapped = drag_scrolled ? -1 : pending_cursor;
+
     drag_end();
+
+    if (tapped >= 0) {
+      /* undo the wobble of a finger that did not really scroll */
+      SetPixelOrigin(drag_y - drag_y_window);
+      SetCursorIndex(tapped);
+      return true;
+    }
 
     if (enable_kinetic) {
       kinetic.MouseUp(GetPixelOrigin());
@@ -500,6 +511,9 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
 void
 ListControl::drag_end() noexcept
 {
+  pending_cursor = -1;
+  drag_scrolled = false;
+
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
       InvalidateItem(cursor);
@@ -515,16 +529,10 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
-    if (UsePixelPan())
-      SetPixelOrigin(scroll_bar.DragMove(length * item_height,
-                                         GetSize().height,
-                                         p.y));
-    else
-      SetOrigin(scroll_bar.DragMove(length, items_visible, p.y));
-
+    ScrollBarDragMove(p.y);
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
-    if (abs(p.y - drag_y_window) > ((int)item_height / 5)) {
+    if (IsScrollGesture(p.y)) {
       drag_mode = DragMode::SCROLL;
       InvalidateItem(cursor);
     } else
@@ -532,6 +540,9 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   }
 
   if (drag_mode == DragMode::SCROLL) {
+    if (IsScrollGesture(p.y))
+      drag_scrolled = true;
+
     int new_origin = drag_y - p.y;
     SetPixelOrigin(new_origin);
     if (UsePixelPan())
@@ -540,6 +551,16 @@ ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
   }
 
   return PaintWindow::OnMouseMove(p, keys);
+}
+
+void
+ListControl::ScrollBarDragMove(int y) noexcept
+{
+  if (UsePixelPan())
+    SetPixelOrigin(scroll_bar.DragMove(length * item_height,
+                                       GetSize().height, y));
+  else
+    SetOrigin(scroll_bar.DragMove(length, items_visible, y));
 }
 
 bool
@@ -561,19 +582,15 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     // -> start mouse drag
     scroll_bar.DragBegin(this, Pos.y);
   } else if (scroll_bar.IsInside(Pos)) {
-    // if click in scroll bar up/down/pgup/pgdn
-    if (scroll_bar.IsInsideUpArrow(Pos.y))
-      // up
-      MoveOrigin(-1);
-    else if (scroll_bar.IsInsideDownArrow(Pos.y))
-      // down
-      MoveOrigin(1);
-    else if (scroll_bar.IsAboveSlider(Pos.y))
-      // page up
-      MoveOrigin(-(int)items_visible);
-    else if (scroll_bar.IsBelowSlider(Pos.y))
-      // page down
-      MoveOrigin(items_visible);
+    /* Pressed beside the slider: move the slider there on the press
+       itself, and let it follow the pointer from there.  Stepping a
+       row or a page instead only works on a bar that is long enough
+       to aim at, and this one rarely is: the slider of a short list
+       is thinner than a fingertip, and the two arrow buttons take a
+       control height each.  Rows can still be stepped with the wheel
+       and the cursor keys. */
+    scroll_bar.DragBeginCentred(this);
+    ScrollBarDragMove(Pos.y);
   } else {
     // if click in ListBox area
     // -> select appropriate item
@@ -600,6 +617,11 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
           CanActivateItem()) {
         drag_mode = DragMode::CURSOR;
         InvalidateItem(cursor);
+      } else if (HasTouchScreen()) {
+        /* select on release, so that a swipe scrolls the list instead
+           of dragging the selection along (see #pending_cursor) */
+        pending_cursor = index;
+        drag_mode = DragMode::SCROLL;
       } else {
         // Select item if it was not selected before
         SetCursorIndex(index);

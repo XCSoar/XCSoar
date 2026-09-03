@@ -186,6 +186,13 @@ UpdateInfoBoxNextLegEqThermal(InfoBoxData &data) noexcept
   }
 
   SetVSpeed(data, next_leg_eq_thermal);
+
+  const auto next_leg_eq_thermal_inverse =
+    CommonInterface::Calculated().next_leg_eq_thermal_inverse;
+  if (next_leg_eq_thermal_inverse >= 0)
+    data.SetCommentFromVerticalSpeed(next_leg_eq_thermal_inverse, false);
+  else
+    data.SetCommentInvalid();
 }
 
 void

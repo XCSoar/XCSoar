@@ -349,6 +349,20 @@ public:
    */
   void FocusParent() noexcept;
 
+  /**
+   * Does this Window use mouse dragging for its own purposes, such as
+   * panning its contents or dragging a scroll bar slider?
+   *
+   * A scrolling container (#VScrollPanel) lets the user scroll by
+   * swiping over its contents, and for that it takes the gesture away
+   * from the child that accepted the press.  That must not happen for
+   * a child which drags itself: it would silently stop receiving the
+   * rest of its own gesture.
+   */
+  virtual bool HandlesDragging() const noexcept {
+    return false;
+  }
+
   [[gnu::pure]]
   bool HasFocus() const noexcept {
     assert(IsDefined());

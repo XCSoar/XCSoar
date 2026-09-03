@@ -6,6 +6,9 @@
 #ifdef __APPLE__
 #include <TargetConditionals.h>
 
+#include <memory>
+#include <mutex>
+
 class SensorListener;
 
 #import <CoreLocation/CoreLocation.h>
@@ -52,9 +55,27 @@ class InternalSensors {
   CLLocationManager *location_manager;
   LocationDelegate *location_delegate;
 #if TARGET_OS_IPHONE
+  /**
+   * CoreMotion may invoke an already queued altimeter handler after
+   * stopRelativeAltitudeUpdates() has returned.  The handler owns this state
+   * instead of capturing InternalSensors, so it can safely outlive this
+   * object.
+   */
+  struct AltimeterCallbackState {
+    std::mutex mutex;
+    InternalSensors *owner;
+    SensorListener *listener;
+
+    AltimeterCallbackState(InternalSensors &_owner,
+                           SensorListener &_listener) noexcept
+      : owner(&_owner), listener(&_listener) {}
+  };
+
   CMAltimeter *altimeter;
+  NSOperationQueue *altimeter_queue;
   CMMotionActivityManager *motion_activity_manager;
   NSOperationQueue *motion_activity_queue;
+  std::shared_ptr<AltimeterCallbackState> altimeter_callback_state;
 #endif
 
   void Init();
