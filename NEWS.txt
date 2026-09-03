@@ -14,6 +14,7 @@ Version 7.45.1 - 2026-08-28
   - split Display and Layout in Configuration (display type, text
     size, resolution, and rotation)
 * android
+  - target Android 16 so Google Play still accepts updates #2874
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
 * iOS
@@ -109,6 +110,7 @@ Version 7.45.1 - 2026-08-28
   - run the data-directory layout migration before loading the
     profile, so old waypoint/airspace keys are not applied too late
 * development
+  - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow
   - build system: provision ANGLE via the Python thirdparty pipeline
   - macOS: build a pinned SDL2 instead of the Homebrew bottle

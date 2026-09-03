@@ -200,7 +200,7 @@ Compiling for Android
 
 For Android, you need:
 
-- `Android SDK level 35 <http://developer.android.com/sdk/>`__
+- `Android SDK level 36 <http://developer.android.com/sdk/>`__
 
 - `Android NDK r26d <http://developer.android.com/sdk/ndk/>`__
 
@@ -217,9 +217,9 @@ scripts::
 
 The required Android SDK components are:
 
-- Android SDK Build-Tools 35.0.0
+- Android SDK Build-Tools 36.0.0
 
-- SDK Platform 35
+- SDK Platform 36
 
 These can be installed from the Android Studio SDK Manager. On Debian/Ubuntu,
 :file:`ide/provisioning/install-android-tools.sh` (run after the ``ANDROID``
@@ -230,7 +230,7 @@ To install the same components manually::
 
   ~/opt/android-sdk-linux/cmdline-tools/bin/sdkmanager \
       --sdk_root=~/opt/android-sdk-linux \
-      "build-tools;35.0.0" "platforms;android-35"
+      "build-tools;36.0.0" "platforms;android-36"
 
 The ``Makefile`` assumes that the Android SDK is installed in
 ``~/opt/android-sdk-linux`` and the NDK is installed in

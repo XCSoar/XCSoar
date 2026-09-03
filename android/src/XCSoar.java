@@ -48,6 +48,15 @@ public class XCSoar extends Activity implements PermissionManager {
   private static NativeView nativeView;
 
   /**
+   * Predictive-back registration used on Android 16+, where
+   * {@link KeyEvent#KEYCODE_BACK} is no longer dispatched.
+   * Registered after {@link #initNative()} creates native input.
+   * Typed as Object so older Android never loads
+   * {@code OnBackInvokedCallback}.
+   */
+  private Object predictiveBack;
+
+  /**
    * The activity that currently owns the process.  A quick relaunch
    * can construct a new instance before the exiting one is destroyed;
    * onDestroy() must not System.exit() in that case.
@@ -159,8 +168,28 @@ public class XCSoar extends Activity implements PermissionManager {
        This ensures the consent rationale is always shown before requesting permission. */
   }
 
+  private void registerPredictiveBack() {
+    if (Build.VERSION.SDK_INT < 36 || predictiveBack != null)
+      return;
+
+    predictiveBack = PredictiveBack.register(this);
+  }
+
+  /**
+   * Drop the consuming callback so the activity can handle Back
+   * (finish / system navigation) when native input is gone.
+   */
+  private void unregisterPredictiveBack() {
+    if (predictiveBack == null)
+      return;
+
+    PredictiveBack.unregister(this, predictiveBack);
+    predictiveBack = null;
+  }
+
   private void quit() {
     nativeView = null;
+    unregisterPredictiveBack();
 
     TextView tv = new TextView(XCSoar.this);
     tv.setText("Shutting down XCSoar...");
@@ -178,6 +207,7 @@ public class XCSoar extends Activity implements PermissionManager {
   final Handler errorHandler = new Handler() {
     public void handleMessage(Message msg) {
       nativeView = null;
+      unregisterPredictiveBack();
       TextView tv = new TextView(XCSoar.this);
       tv.setText(msg.obj.toString());
       setContentView(tv);
@@ -302,6 +332,7 @@ public class XCSoar extends Activity implements PermissionManager {
        long as external storage is being forwarded to a PC */
     String state = Environment.getExternalStorageState();
     if (!Environment.MEDIA_MOUNTED.equals(state)) {
+      unregisterPredictiveBack();
       TextView tv = new TextView(this);
       tv.setText("External storage is not available (state='" + state
                  + "').  Please turn off USB storage.");
@@ -318,6 +349,7 @@ public class XCSoar extends Activity implements PermissionManager {
     nativeView.setFocusableInTouchMode(true);
     nativeView.setFocusable(true);
     nativeView.requestFocus();
+    registerPredictiveBack();
   }
 
   @Override protected void onPause() {
@@ -359,6 +391,8 @@ public class XCSoar extends Activity implements PermissionManager {
 
   @Override protected void onDestroy()
   {
+    unregisterPredictiveBack();
+
     if (!Loader.loaded) {
       super.onDestroy();
       return;
