@@ -26,20 +26,12 @@ SimulatorPromptWindow::OnCreate()
   WindowStyle style;
   style.TabStop();
 
-#ifndef USE_WIN32_RESOURCES
   fly_bitmap.Load(IDB_LAUNCHER1_RGBA);
-#else
-  fly_bitmap.Load(IDB_LAUNCHER1);
-#endif
   fly_button.Create(*this, rc, style,
                     std::make_unique<BitmapButtonRenderer>(fly_bitmap, true),
                     [this](){ callback(Result::FLY); });
 
-#ifndef USE_WIN32_RESOURCES
   sim_bitmap.Load(IDB_LAUNCHER2_RGBA);
-#else
-  sim_bitmap.Load(IDB_LAUNCHER2);
-#endif
   sim_button.Create(*this, rc, style,
                     std::make_unique<BitmapButtonRenderer>(sim_bitmap, true),
                     [this](){ callback(Result::SIMULATOR); });
@@ -107,11 +99,11 @@ SimulatorPromptWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(look.text_font);
   canvas.SetTextColor(COLOR_WHITE);
 #else
-  /* Without OpenGL there is no alpha blending — GDI uses BMP
-     resources and the software renderer uses pre-composited PNGs,
-     both with opaque white backgrounds.  A dark/gradient background
-     would show visible white rectangles around every bitmap.
-     Use a plain white background instead. */
+  /* Without OpenGL there is no alpha blending.  The software
+     renderer uses pre-composited PNGs with opaque white
+     backgrounds.  A dark/gradient background would show visible
+     white rectangles around every bitmap.  Use a plain white
+     background instead. */
   canvas.ClearWhite();
   logo_view.draw(canvas, logo_rect);
 

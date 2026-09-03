@@ -4,16 +4,9 @@
 #pragma once
 
 #include "PaintWindow.hpp"
-
-#ifndef USE_WINUSER
 #include "custom/WList.hpp"
-#endif
 
-#ifdef USE_WINUSER
-class Brush;
-#else
 class WindowReference;
-#endif
 
 /**
  * A container for more #Window objects.  It is also derived from
@@ -22,7 +15,6 @@ class WindowReference;
  */
 class ContainerWindow : public PaintWindow {
 protected:
-#ifndef USE_WINUSER
   friend class WindowList;
   WindowList children;
 
@@ -40,10 +32,8 @@ protected:
 
 public:
   ~ContainerWindow() noexcept override;
-#endif /* !USE_WINUSER */
 
 protected:
-#ifndef USE_WINUSER
   void OnDestroy() noexcept override;
   void OnCancelMode() noexcept override;
   bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
@@ -59,12 +49,8 @@ protected:
 #endif
 
   void OnPaint(Canvas &canvas) noexcept override;
-#else /* USE_WINUSER */
-  virtual void OnPaint([[maybe_unused]] Canvas &canvas) noexcept {}
-#endif
 
 public:
-#ifndef USE_WINUSER
   void AddChild(Window &child) noexcept;
   void RemoveChild(Window &child) noexcept;
 
@@ -130,8 +116,6 @@ protected:
   Window *FindPreviousControl(Window *reference) noexcept;
 
 public:
-#endif /* !USE_WINUSER */
-
   /**
    * Sets the keyboard focus on the first descendant window which has
    * the WindowStyle::tab_stop() attribute.
@@ -169,13 +153,4 @@ public:
    * rectangle visible in the view port.
    */
   virtual   void ScrollTo(const PixelRect &rc) noexcept;
-
-#ifdef USE_WINUSER
-  /**
-   * Win32 tracks focus via #HWND; walk from @c ::GetFocus() to the deepest
-   * #Window peer under this container.
-   */
-  [[gnu::pure]]
-  Window *GetFocusedWindow() noexcept;
-#endif
 };

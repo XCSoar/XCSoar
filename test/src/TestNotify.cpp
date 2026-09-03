@@ -18,9 +18,6 @@
 #elif defined(ENABLE_SDL)
 #include "ui/event/sdl/Event.hpp"
 #include "ui/event/sdl/Loop.hpp"
-#else
-#include "ui/event/windows/Event.hpp"
-#include "ui/event/windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB

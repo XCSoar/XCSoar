@@ -9,24 +9,13 @@
 
 #include <cassert>
 
-#ifdef USE_GDI
-#include <wingdi.h>
-#endif
-
 /**
  * A pen draws lines and borders.
  */
 class Pen
 {
 public:
-#ifdef USE_GDI
-  enum Style {
-    SOLID = PS_SOLID,
-    DASH1 = PS_DASH,
-    DASH2 = PS_DASH,
-    DASH3 = PS_DASH,
-  };
-#elif defined(USE_MEMORY_CANVAS)
+#ifdef USE_MEMORY_CANVAS
   enum Style : uint8_t {
     SOLID = uint8_t(~0),
     DASH1 = uint8_t(~0 - 0b1000),
@@ -43,9 +32,6 @@ public:
 #endif
 
 protected:
-#ifdef USE_GDI
-  HPEN pen = nullptr;
-#else
   Color color;
 
   uint8_t width = 0;
@@ -53,43 +39,8 @@ protected:
 #if defined(USE_MEMORY_CANVAS) || defined(ENABLE_OPENGL)
   Style style;
 #endif
-#endif
 
 public:
-#ifdef USE_GDI
-
-  /** Base Constructor for the Pen class */
-  Pen() noexcept = default;
-
-  /**
-   * Constructor that creates a Pen object, based on the given parameters
-   * @param style Line style (SOLID, DASH1/2/3, BLANK)
-   * @param width Width of the line/Pen
-   * @param c Color of the Pen
-   */
-  Pen(Style Style, unsigned width, const Color c) {
-    Create(Style, width, c);
-  }
-
-  /**
-   * Constructor that creates a solid Pen object, based on the given parameters
-   * @param width Width of the line/Pen
-   * @param c Color of the Pen
-   */
-  Pen(unsigned width, Color c) {
-    Create(width, c);
-  }
-
-  /** Destructor */
-  ~Pen() noexcept {
-    Destroy();
-  }
-
-  Pen(const Pen &other) = delete;
-  Pen &operator=(const Pen &other) = delete;
-
-#else /* !USE_GDI */
-
   Pen() noexcept = default;
 
   constexpr Pen(Style _style, unsigned _width, const Color _color) noexcept
@@ -105,8 +56,6 @@ public:
     , style(SOLID)
 #endif
   {}
-
-#endif /* !USE_GDI */
 
 public:
   /**
@@ -134,20 +83,9 @@ public:
    * @return True if the Pen is defined, False otherwise
    */
   bool IsDefined() const noexcept {
-#ifdef USE_GDI
-    return pen != nullptr;
-#else
     return width > 0;
-#endif
   }
 
-#ifdef USE_GDI
-  /**
-   * Returns the native HPEN object
-   * @return The native HPEN object
-   */
-  HPEN Native() const noexcept { return pen; }
-#else
   unsigned GetWidth() const noexcept {
     return width;
   }
@@ -155,7 +93,6 @@ public:
   const Color GetColor() const noexcept {
     return color;
   }
-#endif
 
 #ifdef ENABLE_OPENGL
   Style GetStyle() const noexcept {
@@ -196,8 +133,6 @@ public:
 #endif
 };
 
-#ifndef USE_GDI
-
 inline void
 Pen::Destroy() noexcept
 {
@@ -207,5 +142,3 @@ Pen::Destroy() noexcept
   width = 0;
 #endif
 }
-
-#endif

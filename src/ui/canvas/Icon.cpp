@@ -11,7 +11,7 @@
 
 #include "opengl/Shaders.hpp"
 #include "opengl/Program.hpp"
-#elif !defined(USE_GDI)
+#else
 #include "VirtualCanvas.hpp"
 #endif
 
@@ -165,23 +165,8 @@ MaskedIcon::Draw([[maybe_unused]] Canvas &canvas, PixelPoint p) const noexcept
   texture.Bind();
   texture.Draw(PixelRect(p, size), texture.GetRect());
 #else
-
-#ifdef USE_GDI
-  /* GDI uses current HDC colors when blitting from a monochrome
-     bitmap; ensure black foreground / white background */
-  const Color old_text_color = canvas.GetTextColor();
-  const Color old_bg_color = canvas.GetBackgroundColor();
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.SetBackgroundColor(COLOR_WHITE);
-#endif
-
   canvas.CopyOr(p, size, bitmap, {0, 0});
   canvas.CopyAnd(p, size, bitmap, {(int)size.width, 0});
-
-#ifdef USE_GDI
-  canvas.SetTextColor(old_text_color);
-  canvas.SetBackgroundColor(old_bg_color);
-#endif
 #endif
 }
 
@@ -225,27 +210,6 @@ MaskedIcon::Draw(Canvas &canvas, PixelPoint p,
   GLTexture &texture = *bitmap.GetNative();
   texture.Bind();
   texture.Draw(PixelRect(dest, scaled_size), texture.GetRect());
-#elif defined(USE_GDI)
-  const Color old_text_color = canvas.GetTextColor();
-  const bool inverse = !has_colors &&
-    IsDarkBackground(old_text_color);
-
-  const Color old_bg_color = canvas.GetBackgroundColor();
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.SetBackgroundColor(COLOR_WHITE);
-
-  if (inverse) {
-    canvas.Stretch(dest, scaled_size,
-                   bitmap, {(int)size.width, 0}, size, MERGEPAINT);
-  } else {
-    canvas.Stretch(dest, scaled_size,
-                   bitmap, {0, 0}, size, SRCPAINT);
-    canvas.Stretch(dest, scaled_size,
-                   bitmap, {(int)size.width, 0}, size, SRCAND);
-  }
-
-  canvas.SetTextColor(old_text_color);
-  canvas.SetBackgroundColor(old_bg_color);
 #else
   /* memory canvas: stretch each half (mask / icon) into a temporary
      surface, then composite with CopyOr + CopyAnd (or CopyNotOr for
@@ -308,24 +272,11 @@ MaskedIcon::Draw(Canvas &canvas, const PixelRect &rc,
   const bool dark_bg = !has_colors &&
     IsDarkBackground(old_text_color);
 
-#ifdef USE_GDI
-  /* GDI uses current HDC colors when blitting from a monochrome
-     bitmap; ensure black foreground / white background */
-  const Color old_bg_color = canvas.GetBackgroundColor();
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.SetBackgroundColor(COLOR_WHITE);
-#endif
-
   if (dark_bg) {
     canvas.CopyNotOr(position, size, bitmap, {(int)size.width, 0});
   } else {
     canvas.CopyOr(position, size, bitmap, {0, 0});
     canvas.CopyAnd(position, size, bitmap, {(int)size.width, 0});
   }
-
-#ifdef USE_GDI
-  canvas.SetTextColor(old_text_color);
-  canvas.SetBackgroundColor(old_bg_color);
-#endif
 #endif
 }

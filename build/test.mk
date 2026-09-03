@@ -2,7 +2,6 @@ name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 
 MORE_SCREEN_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/CPU.cpp

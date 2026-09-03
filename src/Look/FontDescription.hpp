@@ -3,59 +3,6 @@
 
 #pragma once
 
-#ifdef USE_GDI
-#include <windef.h>
-#include <wingdi.h>
-class FontDescription {
-  LOGFONT logfont;
-
-public:
-  FontDescription() = default;
-
-  /**
-   * @param _height the character (="em") height of the font
-   */
-  explicit FontDescription(unsigned _height,
-                           bool _bold=false, bool _italic=false,
-                           bool _monospace=false);
-
-  explicit operator const LOGFONT &() const {
-    return logfont;
-  }
-
-  unsigned GetHeight() const {
-    return -logfont.lfHeight;
-  }
-
-  void SetHeight(unsigned _height) {
-    logfont.lfHeight = -int(_height);
-  }
-
-  FontDescription WithHeight(unsigned _height) const {
-    FontDescription result(*this);
-    result.SetHeight(_height);
-    return result;
-  }
-
-  void SetBold(bool bold=true) {
-    logfont.lfWeight = bold ? FW_BOLD : FW_MEDIUM;
-  }
-
-  FontDescription WithBold(bool bold=true) const {
-    FontDescription result(*this);
-    result.SetBold(bold);
-    return result;
-  }
-
-private:
-  void Init(const char *face,
-            int height,
-            bool bold, bool italic,
-            bool monospace);
-};
-
-#else
-
 /**
  * A description for a font that shall be loaded.
  */
@@ -107,5 +54,3 @@ public:
     return monospace;
   }
 };
-
-#endif

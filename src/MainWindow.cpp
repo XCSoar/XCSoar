@@ -41,10 +41,6 @@
 #include "Storage/StorageManager.hpp"
 #include "Storage/StorageEvents.hpp"
 
-#ifdef USE_WINUSER
-#include "Storage/win/WinHotplugForward.hpp"
-#endif
-
 #ifdef ANDROID
 #include "Android/ReceiveTask.hpp"
 #include "Android/Main.hpp"
@@ -1012,26 +1008,6 @@ MainWindow::OnStorageEvent(const StorageEventInfo &info) noexcept
   if (!msg.empty())
     popup->AddMessage(msg.c_str());
 }
-
-// Windows event handlers
-
-#ifdef USE_WINUSER
-LRESULT
-MainWindow::OnMessage(HWND hWnd, UINT message,
-                      WPARAM wParam, LPARAM lParam) noexcept
-{
-  switch (message) {
-  case WM_DEVICECHANGE:
-    /* Forward device change notifications to the storage hotplug
-       forwarder which will call the registered
-       WindowsStorageHotplugMonitor. */
-    Storage::Win::ForwardDeviceChange(wParam, lParam);
-    break;
-  }
-
-  return SingleWindow::OnMessage(hWnd, message, wParam, lParam);
-}
-#endif
 
 void
 MainWindow::OnResize(PixelSize new_size) noexcept

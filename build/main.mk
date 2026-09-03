@@ -563,7 +563,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ui/control/TerminalWindow.cpp \
 	\
-	$(SRC)/Look/FontDescription.cpp \
 	$(SRC)/Look/GlobalFonts.cpp \
 	$(SRC)/Look/DefaultFonts.cpp \
 	\

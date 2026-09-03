@@ -3,12 +3,7 @@
 
 #include "ResourceId.hpp"
 
-#ifdef USE_WIN32_RESOURCES
-
-#define MAKE_RESOURCE(name, file, id) \
-  static constexpr ResourceId name(id);
-
-#elif defined(ANDROID)
+#ifdef ANDROID
 
 #define MAKE_RESOURCE(name, file, id) \
   static constexpr ResourceId name{#file};

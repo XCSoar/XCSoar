@@ -15,7 +15,6 @@ public:
   void Start() noexcept override;
   void Stop() noexcept override;
 
-  // Called from main window WndProc
   void OnDeviceChange(WPARAM wParam, LPARAM lParam) noexcept;
 
 private:

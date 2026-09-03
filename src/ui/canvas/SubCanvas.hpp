@@ -16,14 +16,12 @@
 class SubCanvas : public Canvas {
 #ifdef ENABLE_OPENGL
   PixelPoint relative;
-#elif defined(USE_WINUSER)
-  POINT old_viewport;
 #endif
 
 public:
   SubCanvas(Canvas &canvas, PixelPoint _offset, PixelSize _size) noexcept;
 
-#if defined(ENABLE_OPENGL) || defined(USE_WINUSER)
+#ifdef ENABLE_OPENGL
   ~SubCanvas() noexcept;
 #endif
 };

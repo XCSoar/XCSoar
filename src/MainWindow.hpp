@@ -540,11 +540,6 @@ protected:
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;
   void OnCancelMode() noexcept override;
-
-#ifdef USE_WINUSER
-  LRESULT OnMessage(HWND hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) noexcept override;
-#endif
   bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
   bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;

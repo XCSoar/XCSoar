@@ -10,5 +10,5 @@
 #elif defined(ENABLE_SDL)
 #include "sdl/KeyCode.hpp"
 #else
-#include "windows/KeyCode.hpp"
+#error No KeyCode implementation
 #endif

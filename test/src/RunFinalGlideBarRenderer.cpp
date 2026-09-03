@@ -18,10 +18,6 @@
 #include "Engine/GlideSolvers/GlideSettings.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 
-#ifdef USE_GDI
-#include "ResourceLoader.hpp"
-#endif
-
 class FinalGlideBarWindow : public PaintWindow
 {
   FinalGlideBarRenderer renderer;

@@ -354,16 +354,9 @@ AirspaceLabelRenderer::DrawLabel(Canvas &canvas,
   rect.bottom = rect.top + labelHeight;
   canvas.DrawRectangle(rect);
 
-#ifdef USE_GDI
-  canvas.DrawLine(rect.left + padding,
-                  rect.top + labelHeight / 2,
-                  rect.right - padding,
-                  rect.top + labelHeight / 2);
-#else
   canvas.DrawHLine(rect.left + padding,
                    rect.right - padding,
                    rect.top + labelHeight / 2, look.label_pen.GetColor());
-#endif
 
   // top text
   canvas.DrawText(rect.GetTopRight().At(-int(padding + topSize.width),

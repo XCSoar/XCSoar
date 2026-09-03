@@ -306,43 +306,6 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
     canvas.Clear(Color(255, 255, 255, 77));
 
-#elif defined(USE_GDI)
-
-    // Get a buffer for drawing a mask
-    Canvas &buffer = buffer_canvas;
-
-    // Set the pattern colors
-    buffer.SetBackgroundOpaque();
-    buffer.SetBackgroundColor(COLOR_WHITE);
-    buffer.SetTextColor(Color(0xd0, 0xd0, 0xd0));
-
-    // Paint the whole buffer canvas with a pattern brush (small dots)
-    buffer.Clear(look.above_terrain_brush);
-
-    // Select the TerrainLine pen
-    buffer.SelectHollowBrush();
-    buffer.Select(reach_pen_thick);
-    buffer.SetBackgroundColor(Color(0xf0, 0xf0, 0xf0));
-
-    // Draw the TerrainLine polygons
-    visitor.fans.DrawOutline(buffer);
-
-    // Select a white brush (will later be transparent)
-    buffer.SelectNullPen();
-    buffer.SelectWhiteBrush();
-
-    // Draw the TerrainLine polygons to remove the
-    // brush pattern from the polygon areas
-    visitor.fans.DrawFill(buffer);
-
-    // Copy everything non-white to the buffer
-    canvas.CopyTransparentWhite({0, 0}, render_projection.GetScreenSize(),
-                                buffer, {0, 0});
-
-    /* skip the separate terrain line step below, because we have done
-       it already */
-    return;
-
 #endif
 
   }
@@ -402,7 +365,7 @@ MapWindow::RenderTerrainAbove(Canvas &canvas, bool working) noexcept
 
   glDisable(GL_STENCIL_TEST);
 
-#elif defined(USE_GDI) || defined(USE_MEMORY_CANVAS)
+#elif defined(USE_MEMORY_CANVAS)
 
   // Get a buffer for drawing a mask
   Canvas &buffer = buffer_canvas;

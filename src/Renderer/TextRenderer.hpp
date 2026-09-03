@@ -14,10 +14,7 @@ class Font;
  */
 class TextRenderer {
   bool center = false, vcenter = false;
-
-#ifndef USE_GDI
   bool control = false;
-#endif
 
 public:
   constexpr void SetCenter(bool _center=true) noexcept {
@@ -28,10 +25,8 @@ public:
     vcenter = _vcenter;
   }
 
-  constexpr void SetControl([[maybe_unused]] bool _control=true) noexcept {
-#ifndef USE_GDI
+  constexpr void SetControl(bool _control=true) noexcept {
     control = _control;
-#endif
   }
 
   void InvalidateLayout() noexcept {}

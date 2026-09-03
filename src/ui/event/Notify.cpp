@@ -10,10 +10,6 @@ namespace UI {
 Notify::Notify(CallbackFunction _callback) noexcept
   :callback(std::move(_callback))
 {
-#ifdef USE_WINUSER
-  if (event_queue == nullptr)
-    Window::CreateMessageWindow();
-#endif
 }
 
 void
@@ -24,10 +20,6 @@ Notify::SendNotification() noexcept
 
   if (event_queue != nullptr)
     event_queue->InjectCall(Callback, this);
-#ifdef USE_WINUSER
-  else
-    SendUser(0);
-#endif
 }
 
 void
@@ -58,16 +50,5 @@ Notify::Callback(void *ctx) noexcept
   Notify &notify = *(Notify *)ctx;
   notify.RunNotification();
 }
-
-#ifdef USE_WINUSER
-
-bool
-Notify::OnUser([[maybe_unused]] unsigned id) noexcept
-{
-  RunNotification();
-  return true;
-}
-
-#endif
 
 } // namespace UI

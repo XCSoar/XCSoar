@@ -19,9 +19,7 @@ class ProgressWindow : public ContainerWindow {
 
   Bitmap bitmap_progress_border;
 
-#ifndef USE_WINUSER
   Font font;
-#endif
 
   LogoView logo;
 

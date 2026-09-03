@@ -284,15 +284,12 @@ A minimal 64-bit OpenGL build::
 Use one of the following targets:
 
 ================ =================================================
-``WIN64OPENGL``  Windows x64 (amd64 / x86-64), OpenGL via ANGLE (recommended)
-``WIN32OPENGL``  Windows 32-bit (i686), OpenGL via ANGLE (recommended)
-``PC``           32-bit Windows (i686), GDI legacy build (**deprecated**)
-``WIN64``        Windows x64 (amd64 / x86-64), GDI legacy build (**deprecated**)
+``WIN64OPENGL``  Windows x64 (amd64 / x86-64), OpenGL via ANGLE
+``WIN32OPENGL``  Windows 32-bit (i686), OpenGL via ANGLE
 ================ =================================================
 
-The GDI targets ``PC`` and ``WIN64`` are deprecated and will be removed in a
-future release. New development and releases focus on the OpenGL targets
-above.
+The GDI targets ``PC`` and ``WIN64`` have been removed. ``PC`` remains only
+as the internal MinGW toolchain name used by the OpenGL flavors.
 
 Typical OpenGL build commands::
 
@@ -597,17 +594,6 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - Software (VFB)
    - Builds fuzz targets with clang + libFuzzer.
- * - ``PC``
-   - Windows 32-bit (i686)
-   - no
-   - GDI
-   - MinGW-w64 cross-compile target. **Deprecated**; use ``WIN32OPENGL``.
- * - ``WIN64``
-   - Windows 64-bit (x86_64)
-   - no
-   - GDI
-   - Flavor of ``PC`` with 64-bit toolchain. **Deprecated**; use
-     ``WIN64OPENGL``.
  * - ``WIN64OPENGL``
    - Windows 64-bit (x86_64)
    - yes
