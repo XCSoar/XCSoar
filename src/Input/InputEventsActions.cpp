@@ -92,6 +92,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 
 #ifdef _WIN32
 #include <processthreadsapi.h> // for CreateProcess()
+#include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h> // for INFINITE
 #endif
 
