@@ -588,11 +588,7 @@ InputEvents::eventNull([[maybe_unused]] const char *misc)
 void
 InputEvents::eventBeep([[maybe_unused]] const char *misc)
 {
-#if defined(_WIN32) && !defined(ENABLE_SDL)
-  MessageBeep(MB_ICONEXCLAMATION);
-#else
   PlayResource("IDR_WAV_CLEAR");
-  #endif
 }
 
 // Setup
