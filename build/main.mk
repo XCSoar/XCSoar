@@ -607,6 +607,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Monitor/TaskConstraintsMonitor.cpp \
 	$(SRC)/Monitor/TaskAdvanceMonitor.cpp \
 	$(SRC)/Monitor/MatTaskMonitor.cpp \
+	$(SRC)/Monitor/TrafficMonitor.cpp \
 	$(SRC)/Monitor/AllMonitors.cpp \
 	\
 	$(SRC)/Hardware/PowerGlobal.cpp \
@@ -659,6 +660,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/PathProvider.cpp \
 	$(SRC)/Apple/InternalSensors.cpp \
 	$(SRC)/Apple/KeyboardDetection.cpp \
+	$(SRC)/Apple/Vibrator.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 

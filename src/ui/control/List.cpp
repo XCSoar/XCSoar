@@ -9,6 +9,7 @@
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+#include "Hardware/Vibrator.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -492,6 +493,12 @@ bool
 ListControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (scroll_bar.IsDragging()) {
+#ifdef HAVE_VIBRATOR
+    /* releasing the slider is the end of a deliberate drag; give it
+       the same feedback as a long press */
+    Vibrate(HapticFeedbackType::LONG_PRESS);
+#endif
+
     scroll_bar.DragEnd(this);
     return true;
   }
@@ -499,12 +506,28 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::CURSOR &&
       p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
+
+#ifdef HAVE_VIBRATOR
+    /* generate the feedback before activating the item, which may
+       open a modal dialog and thus return only much later */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     ActivateItem();
     return true;
   }
 
   if (drag_mode == DragMode::SCROLL || drag_mode == DragMode::CURSOR) {
     const bool enable_kinetic = UsePixelPan() && drag_mode == DragMode::SCROLL;
+
+#ifdef HAVE_VIBRATOR
+    /* a tap which only moved the cursor gets the lighter selection
+       feedback; a scroll gesture gets none (same threshold as the one
+       which turns a tap into a scroll in OnMouseMove()) */
+    if (drag_mode == DragMode::SCROLL && GetCursorIndex() != drag_cursor &&
+        abs(p.y - drag_y_window) <= (int)item_height / 5)
+      Vibrate(HapticFeedbackType::SELECTION);
+#endif
 
     drag_end();
 
@@ -580,9 +603,18 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
   if (scroll_bar.IsInsideSlider(Pos)) {
     // if click is on scrollbar handle
     // -> start mouse drag
+#ifdef HAVE_VIBRATOR
+    /* only when grabbing the slider, not while dragging it */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     scroll_bar.DragBegin(this, Pos.y);
   } else if (scroll_bar.IsInside(Pos)) {
     // if click in scroll bar up/down/pgup/pgdn
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     if (scroll_bar.IsInsideUpArrow(Pos.y))
       // up
       MoveOrigin(-1);
@@ -606,6 +638,7 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
 
     drag_y = GetPixelOrigin() + Pos.y;
     drag_y_window = Pos.y;
+    drag_cursor = GetCursorIndex();
 
     if (activate_on_first_click) {
       // Single-click activation path (opt-in for multi-select UIs).

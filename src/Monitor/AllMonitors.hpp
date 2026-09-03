@@ -10,6 +10,7 @@
 #include "TaskConstraintsMonitor.hpp"
 #include "TaskAdvanceMonitor.hpp"
 #include "MatTaskMonitor.hpp"
+#include "TrafficMonitor.hpp"
 
 /**
  * A container that combines all monitor classes.
@@ -20,6 +21,7 @@ class AllMonitors final : NullBlackboardListener, RateLimiter {
   TaskConstraintsMonitor task_constraints;
   TaskAdvanceMonitor task_advance;
   MatTaskMonitor mat_task;
+  TrafficMonitor traffic;
 
 public:
   AllMonitors();
@@ -31,6 +33,7 @@ public:
     task_constraints.Reset();
     task_advance.Reset();
     mat_task.Reset();
+    traffic.Reset();
   }
 
   void Check() {
@@ -39,6 +42,7 @@ public:
     task_constraints.Check();
     task_advance.Check();
     mat_task.Check();
+    traffic.Check();
   }
 
 private:

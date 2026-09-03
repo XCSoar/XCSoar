@@ -6,6 +6,7 @@
 #include "Widget/PagerWidget.hpp"
 #include "Widget/VScrollWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "Hardware/Vibrator.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
@@ -290,6 +291,10 @@ TabMenuDisplay::OnMouseDown(PixelPoint Pos) noexcept
   down_index = IsPointOverButton(Pos, GetPageMainIndex(cursor));
 
   if (!down_index.IsNone()) {
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     dragging = true;
     SetCapture();
 
