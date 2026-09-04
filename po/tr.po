@@ -11230,3 +11230,7 @@ msgstr ""
 #, no-c-format
 msgid "Startup Task MC"
 msgstr ""
+
+#, no-c-format
+msgid "Safety MC GR"
+msgstr ""

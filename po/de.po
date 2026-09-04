@@ -11367,3 +11367,7 @@ msgstr "Die Höchsttemperatur am Boden für heute. Eine Trockenadiabate von ihr 
 #, no-c-format
 msgid "Startup Task MC"
 msgstr ""
+
+#, no-c-format
+msgid "Safety MC GR"
+msgstr ""
