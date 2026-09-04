@@ -588,6 +588,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Components.cpp \
 	$(SRC)/BackendComponents.cpp \
 	$(SRC)/DataComponents.cpp \
+	$(SRC)/Update/Service.cpp \
+	$(SRC)/Update/State.cpp \
+	$(SRC)/Update/StateFile.cpp \
 	$(SRC)/DataGlobals.cpp \
 	\
 	$(SRC)/Device/Factory.cpp \
