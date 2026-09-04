@@ -62,6 +62,9 @@ Version 7.46 - not yet released
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
 * dialogs
+  - pick a country (by name) or Regions first when downloading site
+    files, then tick the files to download, with name and description
+    on two lines
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

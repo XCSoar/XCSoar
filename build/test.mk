@@ -853,6 +853,8 @@ $(eval $(call link-program,TestPath,TEST_PATH))
 TEST_REPOSITORY_SOURCES = \
 	$(SRC)/Repository/Parser.cpp \
 	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/FileArea.cpp \
+	$(SRC)/Repository/CountryName.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(SRC)/system/Path.cpp \
 	$(TEST_SRC_DIR)/tap.c \
