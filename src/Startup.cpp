@@ -8,6 +8,9 @@
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "Update/Service.hpp"
+#include "Update/Factory.hpp"
+#include "time/SystemClock.hxx"
 #include "DataGlobals.hpp"
 #include "ui/canvas/Features.hpp" // for SOFTWARE_ROTATE_DISPLAY
 #include "Profile/Profile.hpp"
@@ -124,6 +127,7 @@
 
 #include "util/ScopeExit.hxx"
 
+#include <chrono>
 #include <limits>
 
 #ifdef ENABLE_OPENGL
@@ -199,6 +203,11 @@ LoadProfile()
 static void
 AfterStartup()
 {
+  if (update_service != nullptr)
+    update_service->StartAutomaticCheck(
+      std::chrono::duration_cast<std::chrono::seconds>(
+        DurationSinceUnixEpoch(std::chrono::system_clock::now())).count());
+
   try {
     const auto lua_path = LocalPath(GetFileTypeDefaultDir(FileType::LUA));
     const AllocatedPath init_path = AllocatedPath::Build(lua_path, "init.lua");
@@ -925,6 +934,14 @@ Startup(UI::Display &display)
     net_components->tim->SetObservations(data_components->observations.get());
 #endif
 
+  update_service = CreateUpdateService(
+#ifdef HAVE_HTTP
+    Net::curl
+#else
+    nullptr
+#endif
+  );
+
   assert(!global_running);
   global_running = true;
 
@@ -938,6 +955,7 @@ Startup(UI::Display &display)
   operation.Hide();
 
   main_window->FinishStartup();
+  update_service->OnStartupFinished();
   main_window->SchedulePageActionsUpdate();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -993,6 +1011,9 @@ Shutdown()
      which SaveUserState() would touch */
   DeinitializeAppleBackgroundSave();
 #endif
+
+  if (update_service != nullptr)
+    update_service->BeginShutdown();
 
 #ifdef HAVE_HTTP
   BeginShutdownNetComponents();
@@ -1163,6 +1184,8 @@ Shutdown()
   DeinitTrafficGlobals();
 
   main_window->DeinitialiseStorage();
+
+  update_service.reset();
 
   if (backend_components != nullptr &&
       backend_components->storage_manager != nullptr)
