@@ -43,6 +43,9 @@ Version 7.46 - not yet released
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
 * FLARM
+  - download flights over the FLARM Hub REST API when the device is
+    connected as a TCP client, for PowerFLARM devices which refuse the
+    binary protocol #1882
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
 * glide computer

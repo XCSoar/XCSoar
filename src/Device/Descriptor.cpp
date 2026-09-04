@@ -561,6 +561,28 @@ DeviceDescriptor::Close() noexcept
 }
 
 void
+DeviceDescriptor::CloseBorrowed() noexcept
+{
+  assert(InMainThread());
+  assert(IsBorrowed());
+
+  borrowed = false;
+  Close();
+  borrowed = true;
+}
+
+void
+DeviceDescriptor::ScheduleReopenBorrowed() noexcept
+{
+  assert(InMainThread());
+  assert(IsBorrowed());
+
+  borrowed = false;
+  SlowReopen();
+  borrowed = true;
+}
+
+void
 DeviceDescriptor::Reopen(OperationEnvironment &env)
 {
   assert(InMainThread());
@@ -577,6 +599,12 @@ DeviceDescriptor::OnReopenTimer() noexcept
 
   if (!waiting_to_call_open)
     return;
+
+  if (IsOccupied()) {
+    /* somebody is still using this device; try again later */
+    reopen_timer.Schedule(std::chrono::seconds(5));
+    return;
+  }
 
   waiting_to_call_open = false;
 
