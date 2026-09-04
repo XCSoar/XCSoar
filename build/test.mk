@@ -90,7 +90,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGRecord TestClimbAvCalc TestBucketWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
@@ -652,14 +652,15 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
 
-TEST_CIRCLING_WIND_SOURCES = \
+TEST_BUCKET_WIND_SOURCES = \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
+	$(SRC)/Computer/Wind/BucketWind.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestCirclingWind.cpp
-TEST_CIRCLING_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
-$(eval $(call link-program,TestCirclingWind,TEST_CIRCLING_WIND))
+	$(TEST_SRC_DIR)/TestBucketWind.cpp
+TEST_BUCKET_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
+$(eval $(call link-program,TestBucketWind,TEST_BUCKET_WIND))
 
 TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
@@ -1187,7 +1188,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunIGCWriter \
 	RunFlightLogger RunFlyingComputer \
 	RunCirclingWind RunWindEKF RunWindComputer \
-	RunExternalWind \
+	RunBucketWind RunExternalWind \
 	RunTask \
 	LoadImage ViewImage \
 	RunCanvas RunMapWindow RunRichTextRenderer \
@@ -1944,6 +1945,17 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL
 $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
+
+RUN_BUCKET_WIND_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(SRC)/Computer/Wind/BucketWind.cpp \
+	$(SRC)/TransponderCode.cpp \
+	$(SRC)/Formatter/NMEAFormatter.cpp \
+	$(TEST_SRC_DIR)/RunBucketWind.cpp
+RUN_BUCKET_WIND_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL
+$(eval $(call link-program,RunBucketWind,RUN_BUCKET_WIND))
 
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
