@@ -8275,6 +8275,20 @@ msgid "Polar W"
 msgstr "Polare W"
 
 #, no-c-format
+msgctxt "InfoBox"
+msgid "Speed VMG"
+msgstr "Geschwindigkeit VMG"
+
+#, no-c-format
+msgctxt "Abbreviation"
+msgid "V VMG"
+msgstr "V VMG"
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr "Der Anteil der Geschwindigkeit über Grund in Richtung des nächsten Wegpunkts. Er entspricht der vollen Geschwindigkeit über Grund bei direktem Kurs, fällt quer dazu auf null und wird negativ, wenn man sich entfernt. Er beziffert, was ein Umweg abseits der direkten Route kostet."
+
+#, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr "G"
