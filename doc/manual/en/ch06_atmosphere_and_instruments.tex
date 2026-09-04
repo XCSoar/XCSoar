@@ -655,6 +655,73 @@ EDL imagery as a map overlay and does not expose additional model
 parameters beyond the forecast hour and the fixed isobar levels
 published by the EDL service.
 
+\section{Rain radar}\label{sec:rain-radar}
+
+XCSoar can draw the European weather radar composite on the map.  The
+data comes from EUMETNET's OPERA programme, is published under CC~BY
+4.0 and needs no account and no subscription.
+
+The layer is listed as \emph{Radar (EUMETNET OPERA)} on the
+``Overlay'' page of the
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenug{Info} menu.
+Select it and press \bmenug{Use}; \bmenug{Disable} switches it off
+again.
+
+Selecting it draws the part of the newest composite covering the area
+the map is currently showing, so pan and zoom the map first and select
+the layer afterwards.  \bmenug{Update} fetches a fresh image for the
+area now visible.  A new composite is published every five minutes.
+
+A map page can also carry the radar permanently: set \emph{Map
+overlay} to \emph{Rain radar} in
+\config{screenpages}.  The picture is then fetched
+in the background whenever the page is shown, without a progress
+dialog interrupting the flight.
+
+It arrives in pieces, nearest first.  XCSoar divides the area around
+the aircraft into a block of tiles and fetches them in rings growing
+outwards from underneath the glider, so on a slow or intermittent
+connection the weather you are flying into is drawn before the
+distant weather is.  Each tile stays on the map on its own: flying on
+fetches only the tiles that come into range, and panning or zooming
+keeps whatever still fits.
+
+This is also what keeps the feature affordable.  The composite is one
+file of about five megabytes covering the continent, but it is
+tiled and carries a pyramid of reduced-resolution copies, and the
+server serves byte ranges, so XCSoar reads its index and then only
+those tiles it actually needs, at the resolution the map is drawn at.
+At the scales one flies at that is between two and three per cent of
+the file -- typically a hundred and fifty kilobytes for the whole
+block, and about a hundred for the first tile, the one under the
+aircraft.  Zoomed out far enough to see half the continent it is more,
+because more ground is being asked for.
+
+While such a page is open, XCSoar watches how old the picture is.
+XCSoar asks for a frame seven minutes old, because one takes four to
+six minutes to reach the server after it is measured; frames are
+renewed every five minutes, so what is on the map is between seven and
+twelve minutes old.  Once a frame passes twenty minutes it is removed
+from the map \emph{before} a replacement is fetched, so a failing or
+slow connection can never leave a stale echo on display.  If the
+replacement then fails to arrive, a warning says so; that warning
+offers to stop appearing, and can be switched back on with
+\emph{Warn when radar expires} on the \emph{Look / Language, Input}
+configuration page (Section~\ref{sec:interface}).
+
+The colours are the classes the Deutscher Wetterdienst uses for its
+own radar images, from cyan for the weakest echo through green,
+yellow and orange to red and violet for the heaviest, so the picture
+reads the way German pilots are used to.  Areas the radar network
+does not reach are left transparent rather than shaded, because the
+map underneath should stay visible.
+
+Coverage reaches from the Azores to northern Scandinavia and from
+Iceland to eastern Europe; nineteen national weather services
+contribute.
+
+Note that this feature requires and uses an internet connection.
+
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
 German weather service ``Deutscher Wetterdienst'' provides several
