@@ -1251,6 +1251,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxPlaceholder,
   },
 
+  // e_MergeAlongLine
+  {
+    NC_("InfoBox", "Merge along line"),
+    NC_("Abbreviation", "Merge"),
+    N_("This slot is merged into the preceding InfoBox of the same line. That InfoBox then spans both and gets twice the space, which helps with long values such as waypoint names. The preceding InfoBox is the one to the left in portrait and the one above in landscape. Several in a row widen it further; in the first slot of a line it behaves like Release space."),
+    UpdateInfoBoxPlaceholder,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

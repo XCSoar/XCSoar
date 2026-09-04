@@ -160,6 +160,7 @@ namespace InfoBoxFactory
     e_WP_VMG, /* Speed VMG: the component of ground speed made good towards the next waypoint */
     e_CustomText, /* Shows the free text configured for this slot instead of a value */
     e_ReleaseSpace, /* Occupies no space of its own: the InfoBox is not displayed and the other InfoBoxes of the same line grow into the gap */
+    e_MergeAlongLine, /* Occupies no space of its own: the InfoBox is not displayed and the preceding InfoBox of the same line grows over it */
     e_NUM_TYPES /* Last item */
   };
 
