@@ -8,8 +8,8 @@
 #include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "util/Macros.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/BoxShadowRenderer.hpp"
 #include "ui/event/Globals.hpp"
 
 #ifndef USE_WINUSER
@@ -17,10 +17,7 @@
 #endif
 
 #ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Program.hpp"
-#include "ui/canvas/opengl/Shaders.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
-#include "ui/canvas/opengl/VertexPointer.hpp"
 #endif
 
 #ifdef ANDROID
@@ -423,52 +420,9 @@ WndForm::OnPaint(Canvas &canvas) noexcept
   [[maybe_unused]] const bool is_active = main_window.IsTopDialog(*this);
 
 #ifdef ENABLE_OPENGL
-  if (!IsDithered() && !IsMaximised() && is_active) {
-    /* draw a shade around the current dialog to emphasise it */
-    const ScopeAlphaBlend alpha_blend;
-
-    const PixelRect rc = GetClientRect();
-    const int size = Layout::VptScale(4);
-
-    const BulkPixelPoint vertices[8] = {
-      { rc.left + size, rc.top + size },
-      { rc.right, rc.top + size },
-      { rc.right, rc.bottom },
-      { rc.left + size, rc.bottom },
-      { rc.left, rc.top + size },
-      { rc.right + size, rc.top + size },
-      { rc.right + size, rc.bottom + size },
-      { rc.left + size, rc.bottom + size },
-    };
-
-    const ScopeVertexPointer vp(vertices);
-
-    static constexpr Color inner_color = COLOR_BLACK.WithAlpha(192);
-    static constexpr Color outer_color = COLOR_BLACK.WithAlpha(16);
-    static constexpr Color colors[8] = {
-      inner_color,
-      inner_color,
-      inner_color,
-      inner_color,
-      outer_color,
-      outer_color,
-      outer_color,
-      outer_color,
-    };
-
-    const ScopeColorPointer cp(colors);
-
-    static constexpr GLubyte indices[] = {
-      0, 4, 1, 4, 5, 1,
-      1, 5, 2, 5, 6, 2,
-      2, 6, 3, 6, 7, 3,
-      3, 7, 0, 7, 4, 0,
-    };
-
-    OpenGL::solid_shader->Use();
-    glDrawElements(GL_TRIANGLES, ARRAY_SIZE(indices),
-                   GL_UNSIGNED_BYTE, indices);
-  }
+  if (!IsDithered() && !IsMaximised() && is_active)
+    /* draw a soft shadow around the current dialog to emphasise it */
+    DrawBoxShadow(GetClientRect());
 #endif
 
   ContainerWindow::OnPaint(canvas);

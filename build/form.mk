@@ -6,6 +6,7 @@ FORM_SOURCES = \
 	$(SRC)/UIUtil/KineticManager.cpp \
 	$(SRC)/Renderer/TextRenderer.cpp \
 	$(SRC)/Renderer/TabRenderer.cpp \
+	$(SRC)/Renderer/BoxShadowRenderer.cpp \
 	$(SRC)/Renderer/ButtonRenderer.cpp \
 	$(SRC)/Renderer/TextButtonRenderer.cpp \
 	$(SRC)/Renderer/SymbolRenderer.cpp \
