@@ -264,6 +264,11 @@ Version 7.45 - 2026-08-15
   - match the large-radar task direction arrow to the map
     best-cruise shape #2027
 * simulator
+  - add a “Startup mode” setting (Look → Language, Input) to always
+    start in fly or simulator mode instead of answering the Fly /
+    Simulator prompt on every start; the choice is stored per device
+    (state.ini), not in the profile, so it applies to all
+    profiles #2859
   - make simulator mode easier to find: startup tip to steer by
     dragging from the glider or via Altitude / Speed Ground
     InfoBoxes; Welcome Quick Guide paragraph; “Sim: Jump to” on map

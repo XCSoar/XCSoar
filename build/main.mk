@@ -580,6 +580,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ApplyExternalSettings.cpp \
 	$(SRC)/ApplyVegaSwitches.cpp \
 	$(SRC)/MainWindow.cpp \
+	$(SRC)/LocalAppState.cpp \
 	$(SRC)/Startup.cpp \
 	$(SRC)/Components.cpp \
 	$(SRC)/BackendComponents.cpp \
