@@ -16,6 +16,17 @@ namespace InfoBoxManager
 
 extern InfoBoxLayout::Layout layout;
 
+/**
+ * The layout as the geometry alone defines it, before the contents of
+ * the current panel were applied: every slot keeps the rectangle of
+ * its own cell, even where an InfoBox has grown over a collapsed
+ * neighbour.  #InfoBoxArrange offers one card per cell and therefore
+ * uses this instead of #layout.
+ */
+[[gnu::pure]]
+const InfoBoxLayout::Layout &
+GetGeometryLayout() noexcept;
+
 void
 ProcessTimer() noexcept;
 

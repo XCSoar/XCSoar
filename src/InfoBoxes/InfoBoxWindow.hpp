@@ -24,7 +24,7 @@ class InfoBoxWindow : public LazyPaintWindow
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
 
-  const unsigned border_kind;
+  unsigned border_kind;
 
   const unsigned id;
 
@@ -107,6 +107,12 @@ class InfoBoxWindow : public LazyPaintWindow
    */
   void Paint(Canvas &canvas);
 
+  /**
+   * Recalculate the title, value and comment rectangles from the
+   * current window size and border flags.
+   */
+  void CalculateRects() noexcept;
+
 public:
   void PaintInto(Canvas &dest, int xoff, int yoff,
                  unsigned width, unsigned height);
@@ -133,6 +139,13 @@ public:
   const InfoBoxLook &GetLook() const {
     return look;
   }
+
+  /**
+   * Change the border flags (see #BorderKind_t).  This is used when
+   * the InfoBox grows into the space of a collapsed neighbour and
+   * takes over its outer edge.
+   */
+  void SetBorderKind(unsigned _border_kind) noexcept;
 
   void SetContentProvider(std::unique_ptr<InfoBoxContent> _content);
 

@@ -1243,6 +1243,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentCustomText>::Create,
   },
 
+  // e_ReleaseSpace
+  {
+    NC_("InfoBox", "Release space"),
+    NC_("Abbreviation", "Release"),
+    N_("Placeholder which is not displayed and claims no space of its own: the other InfoBoxes of the same line grow into the gap. A line is a row in portrait and a column in landscape. Use it for a line with fewer but wider InfoBoxes than the selected geometry provides."),
+    UpdateInfoBoxPlaceholder,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

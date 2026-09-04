@@ -32,6 +32,14 @@ UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept;
 void
 UpdateInfoBoxNbrSat(InfoBoxData &data) noexcept;
 
+/**
+ * The layout placeholders: InfoBoxes which are not displayed and only
+ * give their space to other InfoBoxes; see
+ * InfoBoxLayout::ApplyContents().
+ */
+void
+UpdateInfoBoxPlaceholder(InfoBoxData &data) noexcept;
+
 class InfoBoxContentNbrSat final : public InfoBoxContent {
 public:
   void Update(InfoBoxData &data) noexcept override;

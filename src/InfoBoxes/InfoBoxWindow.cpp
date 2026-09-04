@@ -315,10 +315,27 @@ InfoBoxWindow::OnDestroy() noexcept
 }
 
 void
+InfoBoxWindow::SetBorderKind(unsigned _border_kind) noexcept
+{
+  if (_border_kind == border_kind)
+    return;
+
+  border_kind = _border_kind;
+  CalculateRects();
+  Invalidate();
+}
+
+void
 InfoBoxWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
+  CalculateRects();
+}
+
+void
+InfoBoxWindow::CalculateRects() noexcept
+{
   PixelRect rc = GetClientRect();
 
   if (border_kind & BORDERLEFT)

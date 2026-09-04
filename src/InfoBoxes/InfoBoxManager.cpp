@@ -14,11 +14,24 @@
 #include "Interface.hpp"
 #include "UIState.hpp"
 
+#include <algorithm> // for std::equal()
 #include <cassert>
 
 namespace InfoBoxManager {
 
 InfoBoxLayout::Layout layout;
+
+/**
+ * The layout as calculated from the geometry alone, before the
+ * contents of the current panel were applied to it.
+ */
+static InfoBoxLayout::Layout base_layout;
+
+/**
+ * The panel contents which #layout was derived from.
+ */
+static InfoBoxFactory::Type
+layout_contents[InfoBoxSettings::Panel::MAX_CONTENTS];
 
 /**
  * Is this the initial DisplayInfoBox() call?  If yes, then all
@@ -32,6 +45,9 @@ DisplayInfoBox() noexcept;
 static void
 InfoBoxDrawIfDirty() noexcept;
 
+static void
+UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept;
+
 } // namespace InfoBoxManager
 
 static bool infoboxes_dirty = false;
@@ -44,6 +60,12 @@ static bool infoboxes_hidden = false;
 static bool infoboxes_ready = false;
 
 static InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
+
+const InfoBoxLayout::Layout &
+InfoBoxManager::GetGeometryLayout() noexcept
+{
+  return base_layout;
+}
 
 // TODO locking
 void
@@ -77,11 +99,45 @@ InfoBoxManager::Show() noexcept
     return;
 
   for (unsigned i = 0; i < layout.count; i++) {
-    if (infoboxes[i] != nullptr)
+    if (infoboxes[i] != nullptr && layout.visible[i])
       infoboxes[i]->Show();
   }
 
   SetDirty();
+}
+
+void
+InfoBoxManager::UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept
+{
+  if (std::equal(layout_contents, layout_contents + layout.count,
+                 panel.contents))
+    return;
+
+  std::copy_n(panel.contents, layout.count, layout_contents);
+
+  layout = base_layout;
+  InfoBoxLayout::ApplyContents(layout, panel);
+
+  const auto border_style =
+    CommonInterface::GetUISettings().info_boxes.border_style;
+
+  for (unsigned i = 0; i < layout.count; ++i) {
+    if (infoboxes[i] == nullptr)
+      continue;
+
+    if (!layout.visible[i]) {
+      infoboxes[i]->Hide();
+      continue;
+    }
+
+    infoboxes[i]->SetBorderKind(border_style == InfoBoxSettings::BorderStyle::TAB
+                                ? 0
+                                : layout.borders[i]);
+    infoboxes[i]->Move(layout.positions[i]);
+
+    if (!infoboxes_hidden)
+      infoboxes[i]->Show();
+  }
 }
 
 void
@@ -102,6 +158,8 @@ InfoBoxManager::DisplayInfoBox() noexcept
   const InfoBoxSettings::Panel &settings =
     CommonInterface::GetUISettings().info_boxes.panels[panel];
 
+  UpdateLayout(settings);
+
   for (unsigned i = 0; i < layout.count; i++) {
     if (infoboxes[i] == nullptr)
       continue;
@@ -121,6 +179,14 @@ InfoBoxManager::DisplayInfoBox() noexcept
       infoboxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType));
       DisplayTypeLast[i] = DisplayType;
     }
+
+    /* apply the visibility on every pass: Show() may have run while
+       UIState::panel_index still pointed at the previous page, and
+       would then have shown an InfoBox which this page collapses */
+    if (!layout.visible[i])
+      infoboxes[i]->FastHide();
+    else if (!infoboxes_hidden)
+      infoboxes[i]->Show();
 
     infoboxes[i]->UpdateContent();
   }
@@ -200,9 +266,15 @@ InfoBoxManager::Create(ContainerWindow &parent,
   const InfoBoxSettings &settings =
     CommonInterface::GetUISettings().info_boxes;
 
+  const InfoBoxSettings::Panel &panel =
+    settings.panels[CommonInterface::GetUIState().panel_index];
+
   infoboxes_ready = false;
   first = true;
+  base_layout = _layout;
   layout = _layout;
+  InfoBoxLayout::ApplyContents(layout, panel);
+  std::copy_n(panel.contents, layout.count, layout_contents);
 
   for (unsigned i = layout.count; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
     infoboxes[i] = nullptr;
@@ -216,9 +288,9 @@ InfoBoxManager::Create(ContainerWindow &parent,
     int Border =
       settings.border_style == InfoBoxSettings::BorderStyle::TAB
       ? 0
-      /* layout.geometry is the effective layout, while
+      /* layout.borders is derived from the effective layout, while
          settings.geometry is the configured layout */
-      : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
+      : layout.borders[i];
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
                                      Border, settings, look,

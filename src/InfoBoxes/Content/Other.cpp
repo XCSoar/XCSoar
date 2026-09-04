@@ -238,6 +238,15 @@ UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept
 }
 
 void
+UpdateInfoBoxPlaceholder(InfoBoxData &data) noexcept
+{
+  /* there is nothing to show: the window is hidden, except when a
+     whole line consists of placeholders, because a line cannot
+     collapse */
+  data.SetInvalid();
+}
+
+void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {

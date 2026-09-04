@@ -119,6 +119,11 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
 
   CalcInfoBoxSizes(layout, screen_size, geometry, scale_title_font);
 
+  for (unsigned i = 0; i < layout.count; ++i) {
+    layout.borders[i] = GetBorder(geometry, layout.landscape, i);
+    layout.visible[i] = true;
+  }
+
   layout.ClearVario();
 
   unsigned right = rc.right;
@@ -956,4 +961,152 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
   }
 
   return border;
+}
+
+struct Group {
+  /** the index after the last InfoBox of this row or column */
+  unsigned end;
+
+  /** is this a row (and not a column)? */
+  bool horizontal;
+};
+
+/**
+ * Determine the row (or column) which starts at the given index: the
+ * longest run of InfoBoxes sharing the same top and bottom edge (a
+ * row) or the same left and right edge (a column).
+ */
+[[gnu::pure]]
+static Group
+FindGroup(const PixelRect *positions, unsigned start, unsigned count) noexcept
+{
+  const PixelRect &first = positions[start];
+
+  if (start + 1 < count) {
+    const PixelRect &second = positions[start + 1];
+
+    if (second.top == first.top && second.bottom == first.bottom) {
+      unsigned end = start + 2;
+      while (end < count && positions[end].top == first.top &&
+             positions[end].bottom == first.bottom)
+        ++end;
+      return {end, true};
+    }
+
+    if (second.left == first.left && second.right == first.right) {
+      unsigned end = start + 2;
+      while (end < count && positions[end].left == first.left &&
+             positions[end].right == first.right)
+        ++end;
+      return {end, false};
+    }
+  }
+
+  return {start + 1, true};
+}
+
+/**
+ * Distribute the space of one row (or column) among its InfoBoxes,
+ * according to the given weights; a weight of zero hides the InfoBox.
+ */
+static void
+DistributeGroup(InfoBoxLayout::Layout &layout,
+                unsigned start, unsigned end, bool horizontal,
+                const unsigned *weights, unsigned total) noexcept
+{
+  const int begin = horizontal
+    ? layout.positions[start].left
+    : layout.positions[start].top;
+  const int limit = horizontal
+    ? layout.positions[end - 1].right
+    : layout.positions[end - 1].bottom;
+  const int size = limit - begin;
+
+  /* the far edges of the geometry, needed below and overwritten by
+     the loop */
+  int edges[InfoBoxSettings::Panel::MAX_CONTENTS];
+  for (unsigned i = start; i < end; ++i)
+    edges[i] = horizontal
+      ? layout.positions[i].right
+      : layout.positions[i].bottom;
+
+  /* as long as the line still holds one weight unit per slot, nothing
+     was released and the InfoBoxes can keep the edges of the geometry;
+     spreading the line evenly instead would round them differently and
+     move them off the grid of the neighbouring lines */
+  const bool keep_edges = total == end - start;
+
+  unsigned first_visible = end, last_visible = end;
+  unsigned accumulated = 0;
+  int previous = begin;
+
+  for (unsigned i = start; i < end; ++i) {
+    if (weights[i] == 0) {
+      layout.visible[i] = false;
+      continue;
+    }
+
+    accumulated += weights[i];
+
+    const int next = keep_edges
+      ? edges[start + accumulated - 1]
+      : begin + size * int(accumulated) / int(total);
+
+    if (horizontal) {
+      layout.positions[i].left = previous;
+      layout.positions[i].right = next;
+    } else {
+      layout.positions[i].top = previous;
+      layout.positions[i].bottom = next;
+    }
+
+    previous = next;
+
+    if (first_visible == end)
+      first_visible = i;
+    last_visible = i;
+  }
+
+  /* the outer InfoBoxes have taken over the outer edges of the row
+     (or column), and with them their borders */
+
+  const int near_mask = horizontal ? BORDERLEFT : BORDERTOP;
+  layout.borders[first_visible] =
+    (layout.borders[first_visible] & ~near_mask) |
+    (layout.borders[start] & near_mask);
+
+  const int far_mask = horizontal ? BORDERRIGHT : BORDERBOTTOM;
+  layout.borders[last_visible] =
+    (layout.borders[last_visible] & ~far_mask) |
+    (layout.borders[end - 1] & far_mask);
+}
+
+void
+InfoBoxLayout::ApplyContents(Layout &layout,
+                             const InfoBoxSettings::Panel &panel) noexcept
+{
+  for (unsigned start = 0; start < layout.count;) {
+    const auto group = FindGroup(layout.positions, start, layout.count);
+
+    unsigned weights[InfoBoxSettings::Panel::MAX_CONTENTS];
+    unsigned total = 0, collapsed = 0;
+
+    for (unsigned i = start; i < group.end; ++i) {
+      if (panel.contents[i] == InfoBoxFactory::e_ReleaseSpace) {
+        weights[i] = 0;
+        ++collapsed;
+      } else {
+        weights[i] = 1;
+        ++total;
+      }
+    }
+
+    /* leave the row alone if nothing was collapsed, and also if
+       everything was: a row cannot disappear */
+    if (collapsed > 0 && total > 0)
+      DistributeGroup(layout, start, group.end, group.horizontal,
+                      weights, total);
+
+    start = group.end;
+  }
 }
