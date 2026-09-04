@@ -2,21 +2,28 @@
 // Copyright The XCSoar Project
 
 #include "SafetyFactorsConfigPanel.hpp"
+#include "ActionInterface.hpp"
+#include "BackendComponents.hpp"
+#include "Components.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Form/DataField/ComboList.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Float.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Formatter/GlideRatioFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Float.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskBehaviour.hpp"
-#include "Language/Language.hpp"
-#include "Units/Units.hpp"
-#include "Formatter/UserUnits.hpp"
 #include "UIGlobals.hpp"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
-#include "ActionInterface.hpp"
+#include "Units/Units.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "util/StaticString.hxx"
+
+#include <algorithm>
 
 enum ControlIndex {
   ArrivalHeight,
@@ -28,17 +35,171 @@ enum ControlIndex {
   AutoBugs,
   TaskMC,
   SafetyMC,
+  SafetyMCGlideRatio,
   RiskFactor,
 };
 
-class SafetyFactorsConfigPanel final : public RowFormWidget {
+/**
+ * Format the best glide ratio in still air at the given MacCready
+ * setting, i.e. the glide ratio achieved when flying at the speed to
+ * fly for it.  The polar must be valid.
+ *
+ * @param user_mc the MacCready setting in the user's vertical speed unit
+ */
+static void
+FormatGlideRatioAtMC(char *buffer, size_t size,
+                     const GlidePolar &polar, double user_mc) noexcept
+{
+  GlidePolar mc_polar = polar;
+  mc_polar.SetMC(Units::ToSysVSpeed(user_mc));
+  FormatGlideRatio(buffer, size, mc_polar.GetBestLD());
+}
+
+/**
+ * The safety MC data field, which shows the glide ratio resulting from
+ * each MacCready value next to it in the combo list.
+ */
+class SafetyMCDataField final : public DataFieldFloat {
+  /**
+   * The polar the glide ratios are calculated with; invalid when no
+   * polar is configured, in which case no glide ratio is shown.
+   */
+  GlidePolar polar;
+
+public:
+  using DataFieldFloat::DataFieldFloat;
+
+  void SetPolar(const GlidePolar &_polar) noexcept {
+    polar = _polar;
+  }
+
+protected:
+  /* virtual methods from class DataFieldFloat */
+  void AppendComboValue(ComboList &combo_list,
+                        double value) const noexcept override;
+};
+
+void
+SafetyMCDataField::AppendComboValue(ComboList &combo_list,
+                                    double value) const noexcept
+{
+  const unsigned i = combo_list.size();
+  DataFieldFloat::AppendComboValue(combo_list, value);
+
+  if (!polar.IsValid())
+    return;
+
+  char glide_ratio[16];
+  FormatGlideRatioAtMC(glide_ratio, sizeof(glide_ratio), polar, value);
+  combo_list.SetAnnotation(i, glide_ratio);
+}
+
+class SafetyFactorsConfigPanel final
+  : public RowFormWidget, DataFieldListener {
+  /**
+   * The help text of the safety MC row, which explains the glide ratio
+   * and names the active polar.  #WndProperty does not copy the help
+   * text, so it is kept here; the fixed capacity keeps the pointer
+   * handed to it valid even when the text is rebuilt.
+   */
+  StaticString<1024> safety_mc_help;
+
 public:
   SafetyFactorsConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+private:
+  /**
+   * @return the polar the safety MC glide ratio is calculated with,
+   * including the polar degradation currently entered in this dialog;
+   * invalid when no polar is configured
+   */
+  GlidePolar GetGlideRatioPolar() const noexcept;
+
+  void BuildSafetyMCHelp() noexcept;
+  void UpdateSafetyMCGlideRatio() noexcept;
+
+  /* methods from DataFieldListener */
+  void OnModified(DataField &df) noexcept override;
 };
+
+void
+SafetyFactorsConfigPanel::OnModified(DataField &df) noexcept
+{
+  if (IsDataField(SafetyMC, df) || IsDataField(PolarDegradation, df))
+    UpdateSafetyMCGlideRatio();
+}
+
+GlidePolar
+SafetyFactorsConfigPanel::GetGlideRatioPolar() const noexcept
+{
+  const PolarSettings &settings = CommonInterface::GetComputerSettings().polar;
+  GlidePolar polar = settings.glide_polar_task;
+
+  if (!polar.IsValid())
+    return polar;
+
+  /* preview the degradation value currently entered in this dialog,
+     applied to the bugs setting like PolarSettings::SetDegradationFactor();
+     the clamp is redundant for values entered here, but keeps SetBugs()
+     inside its assertion range */
+  const double degradation_factor =
+    1 - std::clamp(GetValueFloat(PolarDegradation), 0., 50.) / 100;
+  polar.SetBugs(degradation_factor * settings.bugs);
+
+  return polar;
+}
+
+void
+SafetyFactorsConfigPanel::BuildSafetyMCHelp() noexcept
+{
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+
+  safety_mc_help = _("The MacCready used for terrain reach, landable colours, "
+                     "abort and the Alternates list when Reach polar is Safety "
+                     "MC. Alternate InfoBoxes and waypoint Alt. diff. MC safety "
+                     "always use this value. Speed-to-fly is not affected. "
+                     "Higher values treat fewer fields as reachable.");
+  safety_mc_help += "\n\n";
+
+  if (!settings.polar.glide_polar_task.IsValid()) {
+    safety_mc_help += _("No glide polar is configured, so no glide ratio "
+                        "can be shown. Select a plane first.");
+    return;
+  }
+
+  safety_mc_help += _("The glide ratio next to each value is the best "
+                      "glide ratio in still air at that MacCready "
+                      "setting, including bugs, ballast and polar "
+                      "degradation.");
+
+  if (!settings.plane.polar_name.empty()) {
+    safety_mc_help += "\n";
+    safety_mc_help.AppendFormat(_("Active polar: %s"),
+                                settings.plane.polar_name.c_str());
+  }
+}
+
+void
+SafetyFactorsConfigPanel::UpdateSafetyMCGlideRatio() noexcept
+{
+  const GlidePolar polar = GetGlideRatioPolar();
+
+  auto &df = (SafetyMCDataField &)GetDataField(SafetyMC);
+  df.SetPolar(polar);
+
+  if (!polar.IsValid()) {
+    SetText(SafetyMCGlideRatio, _("Unknown"));
+    return;
+  }
+
+  char buffer[16];
+  FormatGlideRatioAtMC(buffer, sizeof(buffer), polar, df.GetValue());
+  SetText(SafetyMCGlideRatio, buffer);
+}
 
 void
 SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
@@ -90,7 +251,8 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
              "50% indicates the glider's sink rate is doubled."),
            "%.0f %%", "%.0f",
            0, 50, 1, false,
-           (1 - settings_computer.polar.degradation_factor) * 100);
+           (1 - settings_computer.polar.degradation_factor) * 100,
+           this);
   SetExpertRow(PolarDegradation);
 
   AddBoolean(_("Auto bugs"), /* xgettext:no-c-format */
@@ -111,19 +273,25 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
   DataFieldFloat &task_mc = (DataFieldFloat &)GetDataField(TaskMC);
   task_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
-  AddFloat(_("Safety MC"),
-           _("The MacCready used for terrain reach, landable colours, "
-             "abort and the Alternates list when Reach polar is Safety "
-             "MC. Alternate InfoBoxes and waypoint Alt. diff. MC safety "
-             "always use this value. Speed-to-fly is not affected. "
-             "Higher values treat fewer fields as reachable."),
-           "%.1f %s", "%.1f",
-           0, Units::ToUserVSpeed(TaskBehaviour::SAFETY_MC_MAX),
-           GetUserVerticalSpeedStep(),
-           false, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
+  BuildSafetyMCHelp();
+
+  auto *safety_mc =
+    new SafetyMCDataField("%.1f", "%.1f %s",
+                          0,
+                          Units::ToUserVSpeed(TaskBehaviour::SAFETY_MC_MAX),
+                          Units::ToUserVSpeed(task_behaviour.safety_mc),
+                          GetUserVerticalSpeedStep(), false, this);
+  safety_mc->SetUnits(Units::GetVerticalSpeedName());
+  safety_mc->SetFormat(GetUserVerticalSpeedFormat(false, false));
+  Add(_("Safety MC"), safety_mc_help, safety_mc);
   SetExpertRow(SafetyMC);
-  DataFieldFloat &safety_mc = (DataFieldFloat &)GetDataField(SafetyMC);
-  safety_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
+  /* no help text: this row always carries a value, and
+     WndProperty::BeginEditing() then shows the value instead of the
+     help; the explanation is on the safety MC row above */
+  AddReadOnly(_("Safety MC GR"));
+  SetExpertRow(SafetyMCGlideRatio);
+  UpdateSafetyMCGlideRatio();
 
   AddFloat(_("STF risk factor"),
            _("The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk. Set to 0.0 for no compensation, 1.0 scales MC linearly with current height (with reference to height of the maximum climb). If considered, 0.3 is recommended."),
