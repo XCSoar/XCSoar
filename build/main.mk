@@ -658,6 +658,7 @@ endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 $(call SRC_TO_OBJ,$(SRC)/Weather/OPERA/Radar.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
+include $(topdir)/build/update.mk
 
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
@@ -827,6 +828,13 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/FlarmTrafficBuilder.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
+
+ifneq ($(PLAY),y)
+TARGET_CPPFLAGS += -DHAVE_UPDATE -DHAVE_REPOSITORY_UPDATE
+XCSOAR_SOURCES += \
+	$(SRC)/Update/RepositoryBackend.cpp \
+	$(SRC)/Update/RepositoryOffer.cpp
+endif
 
 ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \

@@ -124,6 +124,9 @@
 #include "lua/Background.hpp"
 #include "Repository/FileType.hpp"
 #include "Repository/Glue.hpp"
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Repository/Service.hpp"
+#endif
 
 #include "util/ScopeExit.hxx"
 
@@ -203,10 +206,16 @@ LoadProfile()
 static void
 AfterStartup()
 {
+  const auto now = std::chrono::duration_cast<std::chrono::seconds>(
+    DurationSinceUnixEpoch(std::chrono::system_clock::now())).count();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (net_components != nullptr && net_components->repository != nullptr)
+    net_components->repository->Refresh(false);
+#endif
+
   if (update_service != nullptr)
-    update_service->StartAutomaticCheck(
-      std::chrono::duration_cast<std::chrono::seconds>(
-        DurationSinceUnixEpoch(std::chrono::system_clock::now())).count());
+    update_service->StartAutomaticCheck(now);
 
   try {
     const auto lua_path = LocalPath(GetFileTypeDefaultDir(FileType::LUA));
@@ -935,8 +944,8 @@ Startup(UI::Display &display)
 #endif
 
   update_service = CreateUpdateService(
-#ifdef HAVE_HTTP
-    Net::curl
+#ifdef HAVE_DOWNLOAD_MANAGER
+    net_components != nullptr ? net_components->repository.get() : nullptr
 #else
     nullptr
 #endif
