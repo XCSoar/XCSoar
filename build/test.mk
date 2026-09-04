@@ -678,6 +678,24 @@ TEST_SESSION_SOURCES = \
 TEST_SESSION_DEPENDS = PROFILE GEO MATH IO OS UTIL
 $(eval $(call link-program,TestSession,TEST_SESSION))
 
+TEST_NAMES += TestUpdate
+TEST_UPDATE_SOURCES = \
+	$(SRC)/Update/Service.cpp \
+	$(SRC)/Update/State.cpp \
+	$(SRC)/Update/RepositoryOffer.cpp \
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/ui/event/Idle.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUpdate.cpp
+ifeq ($(HAVE_HTTP),y)
+TEST_UPDATE_SOURCES += \
+	$(SRC)/Repository/Parser.cpp \
+	$(SRC)/Repository/Service.cpp \
+	$(SRC)/Update/RepositoryBackend.cpp
+endif
+TEST_UPDATE_DEPENDS = PROFILE EVENT SCREEN MATH ASYNC OS IO THREAD UTIL JSON
+$(eval $(call link-program,TestUpdate,TEST_UPDATE))
+
 TEST_MAC_CREADY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMacCready.cpp
