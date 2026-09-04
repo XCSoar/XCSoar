@@ -155,6 +155,7 @@ namespace InfoBoxFactory
     e_QNH, /* Current QNH pressure setting; tap to adjust manually */
     e_ActiveWaypoint, /* Active waypoint infobox: shows the current task's next waypoint name (or Goto waypoint if no task), arrival altitude diff, and distance */
     e_PreviousWaypoint, /* Previous waypoint infobox: shows the task waypoint before the active leg (start when on the first leg) with arrival altitude diff and distance; selection is informational only and never advances the task or sets a Goto */
+    e_WP_VMG, /* Speed VMG: the component of ground speed made good towards the next waypoint */
     e_NUM_TYPES /* Last item */
   };
 
