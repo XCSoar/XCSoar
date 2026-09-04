@@ -9,16 +9,18 @@
 #include <cassert>
 
 class ButtonPanel {
+  static constexpr unsigned MAX_BUTTONS = 12u;
+
   ContainerWindow &parent;
   const ButtonLook &look;
   WindowStyle style;
 
-  StaticArray<Button *, 8u> buttons;
+  StaticArray<Button *, MAX_BUTTONS> buttons;
 
   /**
    * Map key codes to the button that "owns" it.  Used by KeyPress().
    */
-  unsigned keys[8u];
+  unsigned keys[MAX_BUTTONS];
 
   /**
    * The button currently selected with KEY_LEFT / KEY_RIGHT on
