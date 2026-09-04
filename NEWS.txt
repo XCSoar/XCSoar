@@ -21,6 +21,8 @@ Version 7.46 - not yet released
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
 * input
+  - add a ``WifiList`` input event that opens the platform Wi‑Fi list
+    or system Wi‑Fi settings
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
 * weather
@@ -84,6 +86,9 @@ Version 7.46 - not yet released
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - add a Quick Menu settings page under Look to pick and order
+    commands; the Quick Menu also has a Customize quick menu button
+  - add Pages and WiFi List to the Quick Menu command list
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - fix blurry icons on high-DPI screens, most visible on the large

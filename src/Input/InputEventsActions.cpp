@@ -76,6 +76,8 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "Dialogs/InternalLink.hpp"
+#include "Dialogs/WifiDialog.hpp"
+#include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -309,6 +311,14 @@ void
 InputEvents::eventChecklist([[maybe_unused]] const char *misc)
 {
   dlgChecklistShowModal();
+}
+
+// WifiList
+// Opens the platform WiFi list / system WiFi settings.
+void
+InputEvents::eventWifiList([[maybe_unused]] const char *misc)
+{
+  OpenWifiList();
 }
 
 // Status
@@ -633,7 +643,8 @@ InputEvents::eventSetup(const char *misc)
   else if (StringIsEqual(misc, "Alternates")) {
     dlgAlternatesListShowModal(data_components->waypoints.get(),
                                AlternateInfoBoxSlot::FIRST);
-  }
+  } else if (StringIsEqual(misc, "Pages"))
+    ShowConfigPanel(_("Pages"), CreatePagesConfigPanel);
 
   trigger_redraw();
 }

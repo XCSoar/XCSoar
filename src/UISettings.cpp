@@ -31,6 +31,11 @@ UISettings::SetDefaults() noexcept
   show_zoom_button = show_menu_button;
   show_quickmenu_button = HasTouchScreen();
 
+  custom_quick_menu = false;
+  custom_quick_menu_count = 0;
+  for (auto &item : custom_quick_menu_items)
+    item = 0;
+
 #ifdef KOBO
   dark_mode = DarkMode::OFF;
 #else

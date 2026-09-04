@@ -9,6 +9,8 @@
 #include "PageProfile.hpp"
 #include "UnitsConfig.hpp"
 #include "UISettings.hpp"
+#include "Menu/MenuData.hpp"
+#include "util/StringFormat.hpp"
 
 namespace Profile {
   static void Load(const ProfileMap &map, DisplaySettings &settings);
@@ -136,6 +138,25 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   map.Get(ProfileKeys::ShowMenuButton, settings.show_menu_button);
   map.Get(ProfileKeys::ShowZoomButton, settings.show_zoom_button);
   map.Get(ProfileKeys::ShowQuickMenuButton, settings.show_quickmenu_button);
+
+  map.Get(ProfileKeys::CustomQuickMenu, settings.custom_quick_menu);
+  map.Get(ProfileKeys::CustomQuickMenuCount, settings.custom_quick_menu_count);
+  if (settings.custom_quick_menu_count > UISettings::MAX_CUSTOM_QUICK_MENU)
+    settings.custom_quick_menu_count = UISettings::MAX_CUSTOM_QUICK_MENU;
+
+  for (unsigned i = 0; i < UISettings::MAX_CUSTOM_QUICK_MENU; ++i) {
+    char profile_key[32];
+    const int n = StringFormat(profile_key, sizeof(profile_key),
+                               "CustomQuickMenuItem%u", i);
+    if (n < 0 || static_cast<size_t>(n) >= sizeof(profile_key))
+      continue;
+
+    unsigned location = 0;
+    if (map.Get(profile_key, location) && location < Menu::MAX_ITEMS)
+      settings.custom_quick_menu_items[i] = (uint8_t)location;
+    else
+      settings.custom_quick_menu_items[i] = 0;
+  }
 
   if (!map.GetEnum(ProfileKeys::DarkMode, settings.dark_mode)) {
     /* migrate the old AppInverseInfoBox setting */
