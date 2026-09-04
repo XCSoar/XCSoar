@@ -6,7 +6,7 @@
 #include "Number.hpp"
 #include "time/PeriodClock.hpp"
 
-class DataFieldFloat final : public NumberDataField {
+class DataFieldFloat : public NumberDataField {
   double mValue;
   double mMin;
   double mMax;
@@ -34,6 +34,10 @@ public:
 
   void SetUnits(const char *text) noexcept {
     unit = text;
+  }
+
+  const char *GetUnits() const noexcept {
+    return unit;
   }
 
   void SetMin(double v) noexcept {
@@ -71,5 +75,10 @@ public:
   void SetFromCombo(int iDataFieldIndex, const char *sValue) noexcept override;
 
 protected:
-  void AppendComboValue(ComboList &combo_list, double value) const noexcept;
+  /**
+   * Append one value to the combo list.  Derived classes may override
+   * this to annotate the entries with a derived value.
+   */
+  virtual void AppendComboValue(ComboList &combo_list,
+                                double value) const noexcept;
 };
