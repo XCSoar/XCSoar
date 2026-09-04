@@ -19,3 +19,7 @@
  */
 bool
 dlgQuickGuideShowModal(bool force_info = false);
+
+/** Show the release notes for the installed XCSoar version. */
+void
+dlgQuickGuideShowReleaseNotes();

@@ -39,6 +39,8 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Storage/StorageManager.hpp"
+#include "Dialogs/UpdateDialog.hpp"
+#include "Update/Service.hpp"
 #include "Storage/StorageEvents.hpp"
 
 #ifdef USE_WINUSER
@@ -1379,6 +1381,9 @@ MainWindow::RunTimer() noexcept
   LateInitialise();
 
   CheckSafeAreaChange();
+  if (update_service != nullptr &&
+      update_service->ShouldNotifyAutomatically())
+    update_dialog_notify.SendNotification();
 
 #ifdef ANDROID
   /* if we still havn't processed the task that was received from a QR
@@ -1418,6 +1423,14 @@ MainWindow::RunTimer() noexcept
   }
 
   battery_timer.Process();
+}
+
+void
+MainWindow::OnUpdateDialogNotify() noexcept
+{
+  if (update_service != nullptr &&
+      update_service->ShouldNotifyAutomatically())
+    ShowAutomaticUpdateDialog(*update_service);
 }
 
 void

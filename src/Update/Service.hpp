@@ -75,6 +75,10 @@ public:
   [[gnu::pure]] const UpdateInfo *GetInfo() const noexcept {
     return info ? &*info : nullptr;
   }
+  [[gnu::pure]] std::optional<int64_t>
+  GetLastSuccessfulCheck() const noexcept {
+    return persistent_state.last_successful_check;
+  }
   [[gnu::pure]] bool ShouldNotifyAutomatically() const noexcept {
     return notify_automatically;
   }

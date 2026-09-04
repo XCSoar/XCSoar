@@ -83,6 +83,9 @@
 
 #include "Panels/WeGlideConfigPanel.hpp"
 #include "Panels/NetworkConfigPanel.hpp"
+#ifdef HAVE_UPDATE
+#include "Panels/UpdateConfigPanel.hpp"
+#endif
 
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
 #include "Panels/SystemdConfigPanel.hpp"
@@ -182,6 +185,9 @@ static constexpr TabMenuPage setup_pages[] = {
   // ToDo: implement API that controls order in which pages are saved
   { N_("Network"), CreateNetworkConfigPanel },
   { N_("Screen"), CreateDisplayConfigPanel },
+#ifdef HAVE_UPDATE
+  { N_("Software Update"), CreateUpdateConfigPanel },
+#endif
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
   { N_("System Services"), CreateSystemdConfigPanel },
 #endif
