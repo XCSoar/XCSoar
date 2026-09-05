@@ -75,6 +75,8 @@ Version 7.46 - not yet released
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
+  - fix crash when moving the keyboard focus on the waypoint picture
+    page or in the flugwetter.de image view
 * infoboxen
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
@@ -84,6 +86,12 @@ Version 7.46 - not yet released
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - add pinch-to-zoom on waypoint pictures and downloaded weather
+    images: the image scales smoothly and follows the two fingers,
+    which also pan it #2868
+  - let a quick swipe across a zoomed waypoint picture or weather
+    image keep it moving for a moment, so that panning across a large
+    picture needs fewer strokes
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - fix blurry icons on high-DPI screens, most visible on the large

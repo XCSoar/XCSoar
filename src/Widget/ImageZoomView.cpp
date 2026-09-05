@@ -12,12 +12,10 @@ namespace ImageZoomView {
 
 namespace {
 
-static constexpr int zoom_factors[] = {1, 2, 4, 8, 16, 32};
-
 [[gnu::const]]
 static double
 GetImageScale(const PixelSize canvas_size, const PixelSize bitmap_size,
-              const int zoom_level) noexcept
+              const double zoom_factor) noexcept
 {
   if (bitmap_size.width == 0 || bitmap_size.height == 0 ||
       canvas_size.width == 0 || canvas_size.height == 0)
@@ -26,42 +24,77 @@ GetImageScale(const PixelSize canvas_size, const PixelSize bitmap_size,
   const double fit_scale = std::min(
     static_cast<double>(canvas_size.width) / bitmap_size.width,
     static_cast<double>(canvas_size.height) / bitmap_size.height);
-  return fit_scale *
-         zoom_factors[std::clamp(zoom_level, 0, max_zoom_level)];
+  return fit_scale * ClampZoomFactor(zoom_factor);
 }
 
 [[gnu::const]]
 static double
-FocalOnAxis(const double bmp_size, const double canvas_size,
-              const double old_scale, const int old_zoom,
-              const double view_pos) noexcept
+CanvasToBitmapAxis(const double bmp_size, const double canvas_size,
+                   const double scale, const double view_pos,
+                   const double anchor) noexcept
 {
-  if (old_zoom == 0 || bmp_size * old_scale <= canvas_size)
-    return bmp_size * 0.5;
+  const double bitmap_pos = bmp_size * scale <= canvas_size
+    /* the whole image is visible, centred in the canvas */
+    ? (anchor - (canvas_size - bmp_size * scale) * 0.5) / scale
+    : view_pos + anchor / scale;
 
-  return view_pos + (canvas_size * 0.5) / old_scale;
+  return std::clamp(bitmap_pos, 0.0, bmp_size);
 }
 
 static void
-RepositionAxis(const double bmp_size, const double canvas_size,
-               const double new_scale, const double focal,
-               double &view_pos) noexcept
+MoveViewAxis(const double bmp_size, const double canvas_size,
+             const double scale, const double bitmap_pos,
+             const double anchor, double &view_pos) noexcept
 {
-  if (bmp_size * new_scale <= canvas_size) {
+  if (bmp_size * scale <= canvas_size) {
     view_pos = 0;
     return;
   }
 
-  const double visible = canvas_size / new_scale;
-  view_pos = focal - (canvas_size * 0.5) / new_scale;
-  view_pos = std::clamp(view_pos, 0.0, std::max(0.0, bmp_size - visible));
+  const double visible = canvas_size / scale;
+  view_pos = std::clamp(bitmap_pos - anchor / scale, 0.0,
+                        std::max(0.0, bmp_size - visible));
 }
 
 } // namespace
 
+DoublePoint2D
+CanvasToBitmap(const PixelPoint p, const DoublePoint2D view_pos,
+               const PixelSize canvas_size, const PixelSize bitmap_size,
+               const double zoom_factor) noexcept
+{
+  const double scale = GetImageScale(canvas_size, bitmap_size, zoom_factor);
+
+  return {
+    CanvasToBitmapAxis(bitmap_size.width, canvas_size.width, scale,
+                       view_pos.x, p.x),
+    CanvasToBitmapAxis(bitmap_size.height, canvas_size.height, scale,
+                       view_pos.y, p.y),
+  };
+}
+
 void
-AdjustImageViewOnZoomChange(const int old_zoom, const int new_zoom,
-                            PixelPoint &view_pos,
+MoveViewTo(const DoublePoint2D bitmap_pos, const PixelPoint anchor,
+           DoublePoint2D &view_pos,
+           const PixelSize canvas_size, const PixelSize bitmap_size,
+           const double zoom_factor) noexcept
+{
+  if (bitmap_size.width == 0 || bitmap_size.height == 0 ||
+      canvas_size.width == 0 || canvas_size.height == 0)
+    return;
+
+  const double scale = GetImageScale(canvas_size, bitmap_size, zoom_factor);
+
+  MoveViewAxis(bitmap_size.width, canvas_size.width, scale,
+               bitmap_pos.x, anchor.x, view_pos.x);
+  MoveViewAxis(bitmap_size.height, canvas_size.height, scale,
+               bitmap_pos.y, anchor.y, view_pos.y);
+}
+
+void
+AdjustImageViewOnZoomChange(const double old_zoom_factor,
+                            const double new_zoom_factor,
+                            DoublePoint2D &view_pos,
                             const PixelSize canvas_size,
                             const PixelSize bitmap_size) noexcept
 {
@@ -69,84 +102,107 @@ AdjustImageViewOnZoomChange(const int old_zoom, const int new_zoom,
       canvas_size.width == 0 || canvas_size.height == 0)
     return;
 
-  if (new_zoom == 0) {
+  if (IsFitZoomFactor(new_zoom_factor)) {
     view_pos = {0, 0};
     return;
   }
 
-  const double old_scale = GetImageScale(canvas_size, bitmap_size, old_zoom);
-  const double new_scale = GetImageScale(canvas_size, bitmap_size, new_zoom);
+  const double old_scale = GetImageScale(canvas_size, bitmap_size,
+                                         old_zoom_factor);
+  const double new_scale = GetImageScale(canvas_size, bitmap_size,
+                                         new_zoom_factor);
 
   const double bmp_w = bitmap_size.width;
   const double bmp_h = bitmap_size.height;
-
-  double view_x = view_pos.x;
-  double view_y = view_pos.y;
+  const double centre_x = canvas_size.width * 0.5;
+  const double centre_y = canvas_size.height * 0.5;
 
   const double focal_x =
-    FocalOnAxis(bmp_w, canvas_size.width, old_scale, old_zoom, view_x);
+    CanvasToBitmapAxis(bmp_w, canvas_size.width, old_scale, view_pos.x,
+                       centre_x);
   const double focal_y =
-    FocalOnAxis(bmp_h, canvas_size.height, old_scale, old_zoom, view_y);
+    CanvasToBitmapAxis(bmp_h, canvas_size.height, old_scale, view_pos.y,
+                       centre_y);
 
-  RepositionAxis(bmp_w, canvas_size.width, new_scale, focal_x, view_x);
-  RepositionAxis(bmp_h, canvas_size.height, new_scale, focal_y, view_y);
-
-  view_pos.x = int(std::lround(view_x));
-  view_pos.y = int(std::lround(view_y));
+  MoveViewAxis(bmp_w, canvas_size.width, new_scale, focal_x, centre_x,
+               view_pos.x);
+  MoveViewAxis(bmp_h, canvas_size.height, new_scale, focal_y, centre_y,
+               view_pos.y);
 }
 
 void
-PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap, const int zoom,
-                  PixelPoint &view_pos, PixelPoint &pending_offset) noexcept
+PaintZoomedBitmap(Canvas &canvas, const Bitmap &bitmap,
+                  const double zoom_factor, DoublePoint2D &view_pos,
+                  PixelPoint &pending_offset) noexcept
 {
-  PixelSize img_size = bitmap.GetSize();
-  if (img_size.width == 0 || img_size.height == 0 ||
-      canvas.GetWidth() == 0 || canvas.GetHeight() == 0)
+  const PixelSize bmp_size = bitmap.GetSize();
+  const PixelSize canvas_size{unsigned(canvas.GetWidth()),
+                              unsigned(canvas.GetHeight())};
+  if (bmp_size.width == 0 || bmp_size.height == 0 ||
+      canvas_size.width == 0 || canvas_size.height == 0)
     return;
 
-  const double scale = GetImageScale(
-    {unsigned(canvas.GetWidth()), unsigned(canvas.GetHeight())},
-    img_size, zoom);
+  const double scale = GetImageScale(canvas_size, bmp_size, zoom_factor);
 
-  PixelPoint screen_pos;
-  PixelSize screen_size;
+  PixelPoint screen_pos, src_pos;
+  PixelSize screen_size, src_size;
 
-  const double scaled_width = img_size.width * scale;
-  if (scaled_width <= canvas.GetWidth()) {
+  const double scaled_width = bmp_size.width * scale;
+  if (scaled_width <= canvas_size.width) {
     view_pos.x = 0;
-    screen_pos.x = (canvas.GetWidth() - int(scaled_width)) / 2;
+    src_pos.x = 0;
+    src_size.width = bmp_size.width;
+    screen_pos.x = (int(canvas_size.width) - int(scaled_width)) / 2;
     screen_size.width = unsigned(scaled_width);
   } else {
-    const double visible_width = canvas.GetWidth() / scale;
-    view_pos.x = zoom == 0
-      ? int((img_size.width - visible_width) / 2)
-      : int(view_pos.x + pending_offset.x / scale);
-    view_pos.x = std::clamp(view_pos.x, 0,
-                            int(img_size.width - visible_width));
-    img_size.width = unsigned(visible_width);
-    screen_pos.x = 0;
-    screen_size.width = unsigned(canvas.GetWidth());
+    const double visible_width = canvas_size.width / scale;
+    view_pos.x = IsFitZoomFactor(zoom_factor)
+      ? (bmp_size.width - visible_width) / 2
+      : view_pos.x + pending_offset.x / scale;
+    view_pos.x = std::clamp(view_pos.x, 0.0, bmp_size.width - visible_width);
+
+    /* Blit whole source pixels, but place them at the exact fractional
+       position: rounding the source rectangle instead would quantise
+       the image position to whole source pixels, which is a visible
+       wobble while zooming.  The outermost pixel column reaches beyond
+       the canvas and is clipped. */
+    const int first = int(view_pos.x);
+    const int last = std::min(int(std::ceil(view_pos.x + visible_width)),
+                              int(bmp_size.width));
+    src_pos.x = first;
+    src_size.width = unsigned(last - first);
+    screen_pos.x = int(std::lround((first - view_pos.x) * scale));
+    screen_size.width = unsigned(int(std::lround((last - view_pos.x) * scale)) -
+                                 screen_pos.x);
   }
 
-  const double scaled_height = img_size.height * scale;
-  if (scaled_height <= canvas.GetHeight()) {
+  const double scaled_height = bmp_size.height * scale;
+  if (scaled_height <= canvas_size.height) {
     view_pos.y = 0;
-    screen_pos.y = (canvas.GetHeight() - int(scaled_height)) / 2;
+    src_pos.y = 0;
+    src_size.height = bmp_size.height;
+    screen_pos.y = (int(canvas_size.height) - int(scaled_height)) / 2;
     screen_size.height = unsigned(scaled_height);
   } else {
-    const double visible_height = canvas.GetHeight() / scale;
-    view_pos.y = zoom == 0
-      ? int((img_size.height - visible_height) / 2)
-      : int(view_pos.y + pending_offset.y / scale);
-    view_pos.y = std::clamp(view_pos.y, 0,
-                            int(img_size.height - visible_height));
-    img_size.height = unsigned(visible_height);
-    screen_pos.y = 0;
-    screen_size.height = unsigned(canvas.GetHeight());
+    const double visible_height = canvas_size.height / scale;
+    view_pos.y = IsFitZoomFactor(zoom_factor)
+      ? (bmp_size.height - visible_height) / 2
+      : view_pos.y + pending_offset.y / scale;
+    view_pos.y = std::clamp(view_pos.y, 0.0,
+                            bmp_size.height - visible_height);
+
+    const int first = int(view_pos.y);
+    const int last = std::min(int(std::ceil(view_pos.y + visible_height)),
+                              int(bmp_size.height));
+    src_pos.y = first;
+    src_size.height = unsigned(last - first);
+    screen_pos.y = int(std::lround((first - view_pos.y) * scale));
+    screen_size.height = unsigned(int(std::lround((last - view_pos.y) * scale)) -
+                                  screen_pos.y);
   }
 
   pending_offset = {};
-  canvas.Stretch(screen_pos, screen_size, bitmap, view_pos, img_size);
+  canvas.Stretch(screen_pos, screen_size, bitmap, src_pos, src_size);
 }
 
 } // namespace ImageZoomView

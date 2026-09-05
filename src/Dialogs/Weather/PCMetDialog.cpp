@@ -10,6 +10,7 @@
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
@@ -33,7 +34,7 @@
 class PCMetImageWidget final : public NullWidget {
   const Bitmap &bitmap;
   ImageZoomFrame image_window;
-  int zoom = 0;
+  double zoom_factor = ImageZoomView::FIT_ZOOM_FACTOR;
 
   Button *magnify_button = nullptr;
   Button *shrink_button = nullptr;
@@ -41,12 +42,12 @@ class PCMetImageWidget final : public NullWidget {
   void UpdateZoomControls() noexcept
   {
     if (magnify_button != nullptr)
-      magnify_button->SetEnabled(zoom < ImageZoomView::max_zoom_level);
+      magnify_button->SetEnabled(zoom_factor < ImageZoomView::MAX_ZOOM_FACTOR);
     if (shrink_button != nullptr)
-      shrink_button->SetEnabled(zoom > 0);
+      shrink_button->SetEnabled(!ImageZoomView::IsFitZoomFactor(zoom_factor));
   }
 
-  void AdjustView(const int old_zoom, const int new_zoom) noexcept
+  void AdjustView(const double old_zoom, const double new_zoom) noexcept
   {
     if (!image_window.IsDefined())
       return;
@@ -69,33 +70,33 @@ public:
     UpdateZoomControls();
   }
 
-  void Magnify() noexcept
+  void SetZoomFactor(const double new_zoom_factor) noexcept
   {
-    if (zoom >= ImageZoomView::max_zoom_level)
+    const double old_zoom_factor = zoom_factor;
+    zoom_factor = ImageZoomView::ClampZoomFactor(new_zoom_factor);
+    if (zoom_factor == old_zoom_factor)
       return;
 
-    const int old_zoom = zoom;
-    ++zoom;
-    AdjustView(old_zoom, zoom);
+    AdjustView(old_zoom_factor, zoom_factor);
     image_window.Invalidate();
     UpdateZoomControls();
   }
 
+  void Magnify() noexcept
+  {
+    SetZoomFactor(zoom_factor * ImageZoomView::ZOOM_STEP_FACTOR);
+  }
+
   void Shrink() noexcept
   {
-    if (zoom <= 0)
-      return;
-
-    const int old_zoom = zoom;
-    --zoom;
-    AdjustView(old_zoom, zoom);
-    image_window.Invalidate();
-    UpdateZoomControls();
+    SetZoomFactor(zoom_factor / ImageZoomView::ZOOM_STEP_FACTOR);
   }
 
   bool
   TryImageKey(unsigned key_code) noexcept
   {
+    const int step = Layout::Scale(ImageZoomView::PAN_STEP);
+
     switch (key_code) {
     case KEY_F2:
       Magnify();
@@ -106,27 +107,27 @@ public:
       return true;
 
     case KEY_LEFT:
-      if (zoom == 0)
+      if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({-50, 0});
+      image_window.NudgeViewByPixelOffset({-step, 0});
       return true;
 
     case KEY_RIGHT:
-      if (zoom == 0)
+      if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({50, 0});
+      image_window.NudgeViewByPixelOffset({step, 0});
       return true;
 
     case KEY_UP:
-      if (zoom == 0)
+      if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({0, -50});
+      image_window.NudgeViewByPixelOffset({0, -step});
       return true;
 
     case KEY_DOWN:
-      if (zoom == 0)
+      if (ImageZoomView::IsFitZoomFactor(zoom_factor))
         return false;
-      image_window.NudgeViewByPixelOffset({0, 50});
+      image_window.NudgeViewByPixelOffset({0, step});
       return true;
 
     default:
@@ -137,20 +138,25 @@ public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override
   {
+    /* no ControlParent() here: the image window is a PaintWindow
+       without children, and WindowList::FindControl() casts a
+       "control parent" to ContainerWindow while looking for the next
+       control */
     WindowStyle image_style;
     image_style.Hide();
-    image_style.ControlParent();
 
     image_window.Create(parent, rc, image_style);
-    image_window.SetContent(&bitmap, &zoom);
+    image_window.SetContent(&bitmap, &zoom_factor);
     image_window.SetTryKeyInput(
       [this](unsigned key_code) { return TryImageKey(key_code); });
+    image_window.SetOnZoomChanged([this]() { UpdateZoomControls(); });
     UpdateZoomControls();
   }
 
   void Unprepare() noexcept override
   {
     image_window.SetTryKeyInput(nullptr);
+    image_window.SetOnZoomChanged(nullptr);
   }
 
   void Show(const PixelRect &rc) noexcept override
