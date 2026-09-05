@@ -34,6 +34,8 @@ Version 7.46 - not yet released
   - fix choosing SkySight as a page overlay with no layers available
     silently switching back to None
 * map
+  - draw dual wind arrows when instantaneous external wind is
+    available (average grey, instantaneous blue; e.g. Larus ``I``)
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
@@ -54,6 +56,8 @@ Version 7.46 - not yet released
   - skip estimated TAS from ground speed and wind when GPS track is
     missing
 * devices
+  - accept Larus ``$PLARW`` instantaneous wind (``I``) in addition to
+    average (``A``)
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
   - fix the Devices Debug button not writing port traffic to xcsoar.log
