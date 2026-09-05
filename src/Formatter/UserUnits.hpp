@@ -50,6 +50,20 @@ FormatUserAltitude(double value) noexcept
   return buffer;
 }
 
+void
+FormatUserAltitudeRange(double minimum, double maximum,
+                        char *buffer, size_t buffer_size,
+                        bool include_unit = true);
+
+[[gnu::const]]
+static inline auto
+FormatUserAltitudeRange(double minimum, double maximum)
+{
+  BasicStringBuffer<char, 64> buffer;
+  FormatUserAltitudeRange(minimum, maximum, buffer.data(), buffer.capacity());
+  return buffer;
+}
+
 /**
  * Converts a double-based Altitude into a formatted string of the alternate
  * altitude format

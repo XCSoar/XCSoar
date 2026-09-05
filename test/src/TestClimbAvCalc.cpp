@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Computer/ClimbAverageCalculator.hpp"
+#include "FLARM/Calculations.hpp"
+#include "FLARM/List.hpp"
 #include "TestUtil.hpp"
 
 #include <cstdio>
@@ -94,13 +96,159 @@ TestExpiration()
   ok1(!c.Expired(TimeStamp{std::chrono::seconds{61}}, std::chrono::minutes{1}));
 }
 
+static void
+TestWindowReadiness()
+{
+  ClimbAverageCalculator c;
+  c.Reset();
+  constexpr FloatDuration AVERAGE_TIME = std::chrono::seconds{30};
+
+  auto result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{1}},
+                                     100, AVERAGE_TIME);
+  ok1(result.time_span == FloatDuration::zero());
+  ok1(!result.IsComplete(AVERAGE_TIME));
+
+  result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{30}},
+                                129, AVERAGE_TIME);
+  ok1(result.time_span == std::chrono::seconds{29});
+  ok1(!result.IsComplete(AVERAGE_TIME));
+
+  result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{31}},
+                                130, AVERAGE_TIME);
+  ok1(result.time_span == AVERAGE_TIME);
+  ok1(result.IsComplete(AVERAGE_TIME));
+  ok1(equals(result.average, 1));
+
+  result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{31}},
+                                160, AVERAGE_TIME);
+  ok1(result.IsComplete(AVERAGE_TIME));
+  ok1(equals(result.average, 2));
+
+  result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{10}},
+                                10, AVERAGE_TIME);
+  ok1(result.time_span == FloatDuration::zero());
+  ok1(!result.IsComplete(AVERAGE_TIME));
+}
+
+static void
+TestHighRateSamples()
+{
+  ClimbAverageCalculator c;
+  c.Reset();
+  constexpr FloatDuration AVERAGE_TIME = std::chrono::seconds{30};
+
+  ClimbAverageResult result{};
+  for (unsigned i = 0; i <= 600; ++i) {
+    const FloatDuration elapsed{i / 20.};
+    result = c.GetAverageWithSpan(TimeStamp{std::chrono::seconds{1} + elapsed},
+                                  elapsed.count() * 2, AVERAGE_TIME,
+                                  FlarmCalculations::SAMPLE_POLICY);
+  }
+
+  ok1(result.IsComplete(AVERAGE_TIME));
+  ok1(equals(result.time_span.count(), 30));
+  ok1(equals(result.average, 2));
+}
+
+static void
+TestSamplingPolicy()
+{
+  ClimbAverageCalculator c;
+  c.Reset();
+
+  const auto policy = FlarmCalculations::SAMPLE_POLICY;
+  const auto window = FlarmCalculations::AVERAGE_TIME;
+  const TimeStamp start{std::chrono::seconds{1}};
+
+  auto result = c.GetAverageWithSpan(start, 100, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::APPENDED);
+  ok1(!result.reset);
+
+  result = c.GetAverageWithSpan(start, 101, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::REPLACED);
+
+  result = c.GetAverageWithSpan(
+    start + FloatDuration{0.249}, 102, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::IGNORED);
+
+  result = c.GetAverageWithSpan(
+    start + policy.minimum_interval, 103, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::APPENDED);
+
+  result = c.GetAverageWithSpan(
+    start + policy.minimum_interval + policy.maximum_gap,
+    104, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::APPENDED);
+  ok1(!result.reset);
+
+  result = c.GetAverageWithSpan(
+    start + policy.minimum_interval + policy.maximum_gap +
+      FloatDuration{0.001},
+    105, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::IGNORED);
+  ok1(!result.reset);
+
+  result = c.GetAverageWithSpan(
+    start + policy.minimum_interval + policy.maximum_gap * 2 +
+      FloatDuration{0.002},
+    106, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::APPENDED);
+  ok1(result.reset);
+  ok1(result.time_span == FloatDuration::zero());
+
+  result = c.GetAverageWithSpan(start, 107, window, policy);
+  ok1(result.sample_action == ClimbSampleAction::APPENDED);
+  ok1(result.reset);
+  ok1(result.time_span == FloatDuration::zero());
+
+  result = c.GetAverageWithSpan(TimeStamp::Undefined(), 108,
+                                window, policy);
+  ok1(result.sample_action == ClimbSampleAction::IGNORED);
+  ok1(result.reset);
+}
+
+static void
+TestFlarmDiscontinuities()
+{
+  FlarmCalculations calculations;
+  const auto id = FlarmId::FromValue(123);
+
+  FlarmCalculations::AverageResult result{};
+  for (unsigned i = 1; i <= 31; ++i)
+    result = calculations.Average30sWithSpan(
+      id, TimeStamp{std::chrono::seconds{i}}, 100 + i);
+
+  ok1(result.IsComplete(std::chrono::seconds{30}));
+  ok1(equals(result.average, 1));
+
+  result = calculations.Average30sWithSpan(
+    id, TimeStamp{std::chrono::seconds{37}}, 137);
+  ok1(!result.IsComplete(std::chrono::seconds{30}));
+
+  result = calculations.Average30sWithSpan(
+    id, TimeStamp{std::chrono::seconds{20}}, 120);
+  ok1(result.time_span == FloatDuration::zero());
+
+  TrafficList empty{};
+  empty.Clear();
+  calculations.ResetMissing(empty);
+  result = calculations.Average30sWithSpan(
+    id, TimeStamp{std::chrono::seconds{21}}, 121);
+  ok1(result.time_span == FloatDuration::zero());
+  ok1(!result.IsComplete(std::chrono::seconds{30}));
+}
+
 int main()
 {
-  plan_tests(16);
+  plan_tests(53);
 
   TestBasic();
   TestDuplicateTimestamps();
   TestExpiration();
+  TestWindowReadiness();
+  TestHighRateSamples();
+  TestSamplingPolicy();
+  TestFlarmDiscontinuities();
 
   return exit_status();
 }

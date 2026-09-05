@@ -69,6 +69,9 @@ struct MapLook {
   Pen contest_pens[3];
 
   MaskedIcon thermal_source_icon;
+  MaskedIcon flarm_thermal_source_icon;
+  MaskedIcon flarm_thermal_source_green_icon;
+  MaskedIcon flarm_thermal_source_blue_icon;
 
   MaskedIcon traffic_safe_icon;
   MaskedIcon traffic_warning_icon;

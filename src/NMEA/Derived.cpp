@@ -70,6 +70,7 @@ DerivedInfo::Reset()
   thermal_encounter_collection.Reset();
 
   thermal_locator.Clear();
+  traffic_thermals.Clear();
 
   trace_history.clear();
 

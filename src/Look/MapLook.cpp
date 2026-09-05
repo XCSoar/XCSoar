@@ -67,6 +67,9 @@ MapLook::Initialise(const MapSettings &settings,
   contest_pens[2].Create(Layout::ScalePenWidth(1), COLOR_BLUE);
 
   thermal_source_icon.LoadResource(IDB_THERMALSOURCE_ALL);
+  flarm_thermal_source_icon.LoadResource(IDB_FLARM_THERMALSOURCE_ALL);
+  flarm_thermal_source_green_icon.LoadResource(IDB_FLARM_THERMALSOURCE_GREEN_ALL);
+  flarm_thermal_source_blue_icon.LoadResource(IDB_FLARM_THERMALSOURCE_BLUE_ALL);
 
   traffic_safe_icon.LoadResource(IDB_TRAFFIC_SAFE_ALL, false);
   traffic_warning_icon.LoadResource(IDB_TRAFFIC_WARNING_ALL, false);

@@ -7,6 +7,8 @@
 #include "MapWindow/Items/MapItem.hpp"
 #include "MapWindow/Items/OverlayMapItem.hpp"
 #include "MapWindow/Items/RaspMapItem.hpp"
+#include "MapWindow/ThermalDisplay.hpp"
+#include "Interface.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
@@ -38,7 +40,6 @@
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "time/RoughTime.hpp"
-#include "time/BrokenDateTime.hpp"
 
 #ifdef HAVE_NOAA
 #include "Renderer/NOAAListRenderer.hpp"
@@ -262,7 +263,8 @@ Draw(Canvas &canvas, PixelRect rc,
      const ThermalMapItem &item,
      RoughTimeDelta utc_offset,
      const TwoTextRowsRenderer &row_renderer,
-     const MapLook &look)
+     const MapLook &look,
+     double mac_cready)
 {
   const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
@@ -272,23 +274,57 @@ Draw(Canvas &canvas, PixelRect rc,
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);
 
-  look.thermal_source_icon.Draw(canvas, pt);
+  const auto &icon = item.IsTraffic()
+    ? ThermalDisplay::GetFlarmThermalIcon(
+        look, thermal.lift_rate, mac_cready)
+    : look.thermal_source_icon;
+  icon.Draw(canvas, pt);
 
   rc.left += line_height + text_padding;
 
-  row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
+  StaticString<128> title;
+  if (item.traffic) {
+    if (item.traffic->aircraft_count == 1)
+      title = _("FLARM thermal — 1 aircraft");
+    else
+      title.Format(_("FLARM thermal — %u aircraft"),
+                   item.traffic->aircraft_count);
+  } else
+    title = _("Thermal");
+  row_renderer.DrawFirstRow(canvas, rc, title);
 
   StaticString<256> buffer;
+  if (item.traffic) {
+    const auto &traffic = *item.traffic;
+    const auto altitude_range = FormatUserAltitudeRange(
+      traffic.min_observed_altitude, traffic.max_observed_altitude);
+    if (traffic.active) {
+      buffer.Format(_("%s: %s - %s: %u - %s - %s: %s MSL"),
+                    _("Avg."),
+                    FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                    _("Active"), traffic.active_aircraft_count,
+                    FormatLocalTimeHHMM(traffic.last_seen, utc_offset).c_str(),
+                    _("Alt."), altitude_range.c_str());
+    } else {
+      const auto age = ElapsedTimeOrZero(item.current_time,
+                                         traffic.last_seen);
 
-  auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
-  if (timespan.count() < 0)
-    timespan += hours{24};
+      buffer.Format(_("%s: %s - %s ago - %s: %s MSL"),
+                    _("Avg."),
+                    FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                    FormatTimespanSmart(age).c_str(),
+                    _("Alt."), altitude_range.c_str());
+    }
+  } else {
+    const auto timespan = ElapsedTimeOrZero(item.current_time, thermal.time);
 
-  buffer.Format("%s: %s - left %s ago (%s)",
-                _("Avg. lift"),
-                FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
-                FormatTimespanSmart(timespan).c_str(),
-                FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+    buffer.Format("%s: %s - left %s ago (%s)",
+                  _("Avg."),
+                  FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
+                  FormatTimespanSmart(timespan).c_str(),
+                  FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+  }
+
   row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 
@@ -503,7 +539,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   case MapItem::Type::THERMAL:
     ::Draw(canvas, rc, (const ThermalMapItem &)item, utc_offset,
-           row_renderer, look);
+           row_renderer, look,
+           CommonInterface::GetComputerSettings()
+             .polar.glide_polar_task.GetMC());
     break;
 
   case MapItem::Type::OVERLAY:
