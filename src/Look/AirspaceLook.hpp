@@ -8,6 +8,7 @@
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "util/Serial.hpp"
 
 static constexpr unsigned NUMAIRSPACECOLORS = 18;
 static constexpr unsigned NUMAIRSPACEBRUSHES = 8;
@@ -28,6 +29,9 @@ struct AirspaceClassLook {
 
   Pen border_pen;
 
+  /** A thin border pen for airspace altitude labels. */
+  Pen label_pen;
+
   void Initialise(const AirspaceClassRendererSettings &settings);
 };
 
@@ -45,17 +49,16 @@ struct AirspaceLook {
 
   MaskedIcon intercept_icon;
 
-  /**
-   * look for labels
-   */
-  Pen label_pen;
+  /** Look shared by all airspace altitude labels. */
   Brush label_brush;
-  Color label_text_color;
 
   /**
    * The font used to render the airspace name.
    */
   const Font *name_font;
+
+  /** Incremented by Initialise(), including after an in-place font reload. */
+  Serial name_font_serial;
 
   void Initialise(const AirspaceRendererSettings &settings,
                   const Font &_name_font);
