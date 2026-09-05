@@ -19,6 +19,12 @@ binaries that use it.
 
 **Upstream:** [chromium.googlesource.com/angle/angle](https://chromium.googlesource.com/angle/angle)
 
+Windows builds do not compile ANGLE themselves: they download pre-built
+libraries from the packaging repository
+[github.com/XCSoar/angle-libs](https://github.com/XCSoar/angle-libs), pinned by
+`windows/fetch-angle-from-github.sh` to release tag `a96fca8`, commit
+`a96fca8d5ee2ca61e8de419e38cd577579281c9e`.
+
 **License:** [BSD 3-Clause](https://opensource.org/licenses/BSD-3-Clause)
 
 Copyright (c) 2002-2024 The ANGLE Project Authors.
@@ -53,10 +59,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 XCSoar incorporates selected headers and sources derived from **CM4all libcommon**.
 Location in the tree: spread over `src/util/`, `src/net/`, `src/event/`, `src/io/`,
 `src/java/`, `src/lib/`, `src/time/`, `src/lua/`, `src/thread/`, `src/system/`,
-`src/json/`, `src/co/` and a few others; the files carry
-`SPDX-License-Identifier: BSD-2-Clause` and can be listed with
+`src/json/`, `src/co/` and a few others.  The files carry
+`SPDX-License-Identifier: BSD-2-Clause`, but that marker on its own does not
+establish CM4all provenance: XCSoar has BSD-2-Clause sources of its own under
+`src/UIUtil/`, `src/Android/`, `src/Audio/SLES/` and `src/Tracking/SkyLines/`.
+The derived files are the ones whose header also names the copyright holder:
 
-    grep -rl "SPDX-License-Identifier: BSD-2-Clause" src/
+    grep -rl "Copyright CM4all GmbH" src/
+    grep -rl "Copyright Max Kellermann" src/
 
 **Upstream:** [github.com/CM4all/libcommon](https://github.com/CM4all/libcommon)
 
@@ -333,11 +343,11 @@ Several files in this directory are XCSoar modifications and carry
 
 Location in the tree: `src/XML/`
 
-**Upstream:** [applied-mathematics.net/tools/xmlParser.html](http://www.applied-mathematics.net/tools/xmlParser.html)
+**Upstream:** [applied-mathematics.net/tools/xmlParser.html](https://www.applied-mathematics.net/tools/xmlParser.html)
 
-Note that the upstream author has since relicensed: the version offered there
-today (2.44) is under the Aladdin Free Public License, which is not a free
-software licence.  The copy in this tree is version 1.08 and states the GNU
+Note that the upstream author has since relicensed: version 2.44, the one
+offered upstream, is under the Aladdin Free Public License, which is not a
+free software licence.  The copy in this tree is version 1.08 and states the GNU
 Lesser General Public License 2.1 in its own header, quoted below.
 
 **License:** GNU Lesser General Public License, version 2.1
