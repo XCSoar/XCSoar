@@ -72,18 +72,18 @@ class MainWindow : public UI::SingleWindow {
   GlueMapWindow *map = nullptr;
 
   /**
-   * A #Widget that is shown above the map.
+   * A #Widget that is shown above the main content.
    */
   Widget *top_widget = nullptr;
 
   /**
-   * A #Widget that is shown below the map.
+   * A #Widget that is shown below the main content.
    */
   Widget *bottom_widget = nullptr;
 
   /**
-   * A transient #Widget that is shown over the bottom of a custom main
-   * widget, or between the map and the configured bottom widget.
+   * A transient #Widget between the main content and the configured
+   * bottom widget.
    */
   WindowWidget *bottom_banner_widget = nullptr;
 
@@ -226,11 +226,7 @@ protected:
   void KillTopWidget() noexcept;
 
   bool HaveBottomWidget() const noexcept {
-    /* currently, the bottom widget is only visible below the map, but
-       not below a custom main widget */
-    /* TODO: eliminate this limitation; don't forget to remove the
-       "widget==nullptr" check from MainWindow::KillBottomWidget() */
-    return bottom_widget != nullptr && widget == nullptr;
+    return bottom_widget != nullptr;
   }
 
   /**
@@ -294,11 +290,6 @@ public:
 
 private:
   [[gnu::pure]]
-  const PixelRect &GetMainRect(const PixelRect &full_rc) const noexcept {
-    return FullScreen ? full_rc : map_rect;
-  }
-
-  [[gnu::pure]]
   PixelRect GetMainRect() const noexcept {
     return FullScreen ? GetClientRect() : map_rect;
   }
@@ -312,17 +303,15 @@ private:
   PixelRect GetMapAreaRect() const noexcept;
 
   /**
-   * Return the banner rectangle for the active main content.  Custom pages
-   * use the full client area, shortened only by bottom menu buttons.
+   * Return the banner rectangle inside the InfoBox boundaries, above the
+   * configured bottom widget, for both map and custom pages.
    */
   [[gnu::pure]]
   PixelRect GetBottomBannerRect() const noexcept;
 
-  void LayoutBottomBannerWidget() noexcept;
-
   /**
-   * Move top/bottom widgets and the map into the area returned by
-   * #GetMapAreaRect().
+   * Lay out the top/bottom widgets, banner and active main content inside
+   * #GetMainRect().  The hidden map follows the same content rectangle.
    */
   void LayoutMapArea() noexcept;
 
@@ -495,25 +484,24 @@ public:
   void SchedulePageActionsUpdate() noexcept;
 
   /**
-   * Show this #Widget above the map.  This replaces (deletes) the
+   * Show this #Widget above the main content.  This replaces (deletes) the
    * previous top widget, if any.  To disable this feature, call this
    * method with widget==nullptr.
    */
   void SetTopWidget(Widget *widget) noexcept;
 
   /**
-   * Show this #Widget below the map.  This replaces (deletes) the
+   * Show this #Widget below the main content.  This replaces (deletes) the
    * previous bottom widget, if any.  To disable this feature, call
    * this method with widget==nullptr.
    */
   void SetBottomWidget(Widget *widget) noexcept;
 
   /**
-   * Show a transient #Widget at the bottom of the active main content.  On
-   * map pages, space is reserved for it above the configured bottom widget;
-   * on custom pages, it overlaps the custom main widget.  This replaces
-   * (deletes) the previous bottom banner, if any.  To disable this feature,
-   * call this method with widget==nullptr.
+   * Show a transient #Widget below the active main content, reserving space
+   * above the configured bottom widget on both map and custom pages.  This
+   * replaces (deletes) the previous bottom banner, if any.  To disable this
+   * feature, call this method with widget==nullptr.
    */
   void SetBottomBannerWidget(WindowWidget *widget) noexcept;
 
