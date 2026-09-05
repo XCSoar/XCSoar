@@ -384,6 +384,8 @@ public:
 #ifndef USE_WINUSER
   void BringToTop() noexcept;
   void BringToBottom() noexcept;
+  /** Place this window immediately below a sibling without taking focus. */
+  void PlaceBelow(Window &sibling) noexcept;
 #else
   void BringToTop() noexcept {
     AssertThread();
@@ -399,6 +401,15 @@ public:
     AssertThread();
 
     ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
+                   SWP_NOMOVE|SWP_NOSIZE|
+                   SWP_NOACTIVATE|SWP_NOOWNERZORDER);
+  }
+
+  void PlaceBelow(Window &sibling) noexcept {
+    AssertThread();
+    assert(this != &sibling);
+    assert(GetParent() == sibling.GetParent());
+    ::SetWindowPos(hWnd, sibling.hWnd, 0, 0, 0, 0,
                    SWP_NOMOVE|SWP_NOSIZE|
                    SWP_NOACTIVATE|SWP_NOOWNERZORDER);
   }

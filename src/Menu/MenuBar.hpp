@@ -11,6 +11,7 @@
 static constexpr unsigned menubar_height_scale_factor = 6;
 
 class ContainerWindow;
+namespace UI { class SingleWindow; }
 
 /**
  * A container for menu buttons.
@@ -41,6 +42,9 @@ public:
   void ShowButton(unsigned i, bool enabled, const char *text,
                   unsigned event);
   void HideButton(unsigned i);
+
+  /** Keep visible menu buttons above page overlays and below dialogs. */
+  void BringToTop(UI::SingleWindow &parent) noexcept;
 
   bool IsButtonEnabled(unsigned i) const {
     return buttons[i].IsEnabled();

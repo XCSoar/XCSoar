@@ -251,7 +251,7 @@ protected:
    */
   void KillBottomBannerWidget() noexcept;
 
-  /** Keep the banner above the active page and other sibling overlays. */
+  /** Keep the banner above page content, below menu buttons and dialogs. */
   void RaiseBottomBannerWidget() noexcept;
 
 public:

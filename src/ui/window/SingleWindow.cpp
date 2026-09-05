@@ -28,6 +28,19 @@ SingleWindow::CancelDialog() noexcept
   GetTopDialog().SetModalResult(mrCancel);
 }
 
+void
+SingleWindow::BringToTopBelowDialogs(Window &window) noexcept
+{
+  WndForm *bottom_dialog = nullptr;
+  for (auto *dialog : dialogs)
+    bottom_dialog = dialog;
+
+  if (bottom_dialog != nullptr)
+    window.PlaceBelow(*bottom_dialog);
+  else
+    window.BringToTop();
+}
+
 bool
 SingleWindow::OnClose() noexcept
 {
