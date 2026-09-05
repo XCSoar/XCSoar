@@ -208,6 +208,9 @@ For Android, you need:
 
 - Java JDK
 
+- `bundletool <https://developer.android.com/tools/bundletool>`__
+  (``ide/provisioning/install-android-tools.sh`` installs it)
+
 On Debian, install host packages and the SDK/NDK via the provisioning
 scripts::
 
@@ -244,6 +247,13 @@ Load/update the IOIO source code::
 To compile, run::
 
   make TARGET=ANDROID
+
+That writes ``XCSoar-debug.apk`` and ``XCSoar-debug.aab`` to
+``output/ANDROID/bin/``.  Both single-ABI and ``ANDROIDFAT`` builds use
+the same aapt2/bundletool pipeline: the APK is a universal package
+extracted from the App Bundle.  ``ANDROID_BUNDLE_BUILD=y`` keeps that
+pipeline and only changes the output directory to
+``output/ANDROID_BUNDLE/`` (CI uses this next to ``PLAY=y``).
 
 Use one of the following targets:
 

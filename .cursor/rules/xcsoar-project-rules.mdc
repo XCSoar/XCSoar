@@ -949,8 +949,8 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 - Check `build/options.mk` for feature flags that might need to be enabled
 
 ### Android Resource Pipeline
-- `build/android.mk` and `build/android_bundle.mk` must be kept in sync; changes to one must be mirrored in the other
-- Generated RGBA PNGs (from SVG sources) go to `output/data/graphics2/` and need explicit copy rules to `$(DRAWABLE_DIR)` in both Android Makefiles
+- Android APK and AAB share `build/android.mk` (aapt2 + bundletool). `ANDROID_BUNDLE_BUILD=y` only selects `output/ANDROID_BUNDLE/`
+- Generated RGBA PNGs (from SVG sources) go to `output/data/graphics2/` and need explicit copy rules to `$(DRAWABLE_DIR)` in `build/android.mk`
 - Resource copy rules use numbered variables (`PNG1`..`PNG9` etc.) and must be listed in the `PNG_FILES` aggregate variable
 - When adding a new bitmap resource variant (e.g., white title for dark mode), all resolution tiers that the code can select must be provided; if the code has `huge`/`big`/`standard` selection logic, the new variant needs matching sizes or the highest-resolution tier will fall back to a lower-resolution variant and appear blurry
 
@@ -1076,7 +1076,7 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Verify all user-visible changes have corresponding NEWS.txt entries
 - When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
 - Follow `.cursor/rules/news.txt.mdc` for NEWS.txt wording and audience
-- When adding Android drawable resources, check both `build/android.mk` and `build/android_bundle.mk`
+- When adding Android drawable resources, register the copy rule in `build/android.mk`
 
 ## Common Mistakes and How to Avoid Them
 
@@ -1103,8 +1103,8 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - ✅ Add to correct feature's LDLIBS (e.g., `AUDIO_LDLIBS` for sound)
 - ❌ Platform-specific code without proper `#ifdef` guards
 - ✅ Use appropriate platform detection macros
-- ❌ Adding resource copy rules to `build/android.mk` but not `build/android_bundle.mk`
-- ✅ Always update both Android Makefiles in sync
+- ❌ Forgetting to add a new Android drawable to `PNG_FILES` in `build/android.mk`
+- ✅ Register the copy rule and list it in `PNG_FILES`
 - ❌ Adding only one resolution tier for a new bitmap variant (e.g., 320px white title)
 - ✅ Provide all resolution tiers the code can select (e.g., 320px + 640px)
 
