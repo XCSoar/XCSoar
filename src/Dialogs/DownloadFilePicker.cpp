@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "DownloadFilePicker.hpp"
+#include "DownloadFilter.hpp"
 #include "EmptyDownloadList.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Error.hpp"
@@ -12,7 +13,11 @@
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
-#include "Widget/ListWidget.hpp"
+#include "Form/Edit.hpp"
+#include "Form/DataField/String.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "ui/control/List.hpp"
 #include "Language/Language.hpp"
 #include "system/Path.hpp"
 #include "Repository/FileRepository.hpp"
@@ -29,9 +34,44 @@
 #include <cassert>
 
 
+/**
+ * A row for the country filter: shows "All" or the ticked countries,
+ * and opens the checkbox list (DownloadFilter::EditAreas()) when
+ * edited.
+ */
+class DownloadAreasDataField final : public DataFieldString {
+public:
+  explicit DownloadAreasDataField(DataFieldListener *listener) noexcept
+    :DataFieldString("", listener)
+  {
+    char buffer[256];
+    SetValue(DownloadFilter::FormatAreas(buffer));
+  }
+
+  /** the selection changed: refresh the text and tell the listener */
+  void Update() noexcept {
+    char buffer[256];
+    ModifyValue(DownloadFilter::FormatAreas(buffer));
+  }
+};
+
+static bool
+EditDownloadAreas([[maybe_unused]] const char *caption, DataField &df,
+                  [[maybe_unused]] const char *help_text) noexcept
+{
+  if (!DownloadFilter::EditAreas())
+    return false;
+
+  static_cast<DownloadAreasDataField &>(df).Update();
+  return true;
+}
+
 class DownloadFilePickerWidget final
-  : public ListWidget,
+  : public RowFormWidget, ListItemRenderer, ListCursorHandler,
+    DataFieldListener,
     Net::DownloadListener {
+
+  enum Controls { AREAS, SEARCH };
 
   WidgetDialog &dialog;
 
@@ -39,11 +79,19 @@ class DownloadFilePickerWidget final
 
   const FileType file_type;
 
-  unsigned font_height;
+  /** countries/search only where they make sense - not for firmware
+      images and the like */
+  const bool filtered;
 
-  Button *download_button;
+  Button *download_button = nullptr;
+
+  ListControl *list = nullptr;
 
   std::vector<AvailableFile> items;
+
+  /** is the repository index itself empty/missing (as opposed to
+      the filter leaving nothing)? */
+  bool repository_empty = true;
 
   TextRowRenderer row_renderer;
 
@@ -69,7 +117,9 @@ class DownloadFilePickerWidget final
 
 public:
   DownloadFilePickerWidget(WidgetDialog &_dialog, FileType _file_type)
-    :dialog(_dialog), file_type(_file_type) {}
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     dialog(_dialog), file_type(_file_type),
+     filtered(DownloadFilter::AppliesTo(_file_type)) {}
 
   AllocatedPath &&GetPath() {
     return std::move(path);
@@ -82,7 +132,8 @@ protected:
   void RefreshRepository() noexcept;
 
   void UpdateButtons() {
-    download_button->SetEnabled(true);
+    if (download_button != nullptr)
+      download_button->SetEnabled(!items.empty() || repository_empty);
   }
 
   void Download();
@@ -104,10 +155,18 @@ public:
 
   void OnActivateItem([[maybe_unused]] unsigned index) noexcept override {
     if (items.empty()) {
-      assert(index == 0);
-      RefreshRepository();
+      if (repository_empty)
+        RefreshRepository();
     } else
       Download();
+  }
+
+  /* virtual methods from class DataFieldListener */
+  void OnModified(DataField &df) noexcept override {
+    if (IsDataField(SEARCH, df))
+      DownloadFilter::SetSearchText(df.GetAsString());
+
+    RefreshList();
   }
 
   /* virtual methods from class Net::DownloadListener */
@@ -121,16 +180,40 @@ public:
 };
 
 void
-DownloadFilePickerWidget::Prepare(ContainerWindow &parent,
+DownloadFilePickerWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                                   const PixelRect &rc) noexcept
 {
+  if (filtered) {
+  DownloadFilter::LoadFromProfile();
+
+  Add(_("Countries"),
+      _("Show only the files of these countries - the same selection "
+        "for maps, waypoints and airspaces, kept in the profile.  "
+        "Files that concern every country stay listed."),
+      new DownloadAreasDataField(this));
+  GetControl(AREAS).SetEditCallback(EditDownloadAreas);
+
+  Add(_("Search"),
+      _("Show only the files whose name or description contains this "
+        "text."),
+      new DataFieldString(DownloadFilter::GetSearchText(), this));
+  }
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  unsigned row_height = row_renderer.CalculateLayout(*look.list.font);
-  if (items.empty())
-    row_height = LayoutEmptyDownloadRow(row_renderer);
+  const unsigned row_height =
+    std::max(row_renderer.CalculateLayout(*look.list.font),
+             LayoutEmptyDownloadRow(row_renderer));
 
-  CreateList(parent, look, rc, row_height);
+  WindowStyle style;
+  style.TabStop();
+  auto l = std::make_unique<ListControl>((ContainerWindow &)GetWindow(), look,
+                                         rc, style, row_height);
+  l->SetItemRenderer(this);
+  l->SetCursorHandler(this);
+  list = l.get();
+  AddRemaining(std::move(l));
+
   RefreshList();
 
   Net::DownloadManager::AddListener(*this);
@@ -157,14 +240,18 @@ DownloadFilePickerWidget::RefreshList()
   FileRepository repository;
   LoadAllRepositories(repository);
 
+  repository_empty = repository.begin() == repository.end();
+
   items.clear();
   for (auto &i : repository)
-    if (i.type == file_type)
+    if (i.type == file_type &&
+        (!filtered ||
+         (DownloadFilter::MatchesArea(i) &&
+          DownloadFilter::MatchesSearch(i))))
       items.emplace_back(std::move(i));
 
-  ListControl &list = GetList();
-  list.SetLength(std::max(items.size(), size_t{1}));
-  list.Invalidate();
+  list->SetLength(std::max(items.size(), size_t{1}));
+  list->Invalidate();
 
   UpdateButtons();
 }
@@ -189,7 +276,12 @@ DownloadFilePickerWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   if (items.empty()) {
     assert(i == 0);
-    DrawEmptyDownloadHint(row_renderer, canvas, rc);
+
+    if (repository_empty)
+      DrawEmptyDownloadHint(row_renderer, canvas, rc);
+    else
+      row_renderer.DrawTextRow(canvas, rc,
+                               _("No file matches the filter."));
     return;
   }
 
@@ -204,11 +296,12 @@ DownloadFilePickerWidget::Download()
   assert(Net::DownloadManager::IsAvailable());
 
   if (items.empty()) {
-    RefreshRepository();
+    if (repository_empty)
+      RefreshRepository();
     return;
   }
 
-  const unsigned current = GetList().GetCursorIndex();
+  const unsigned current = list->GetCursorIndex();
   assert(current < items.size());
 
   const auto &file = items[current];
