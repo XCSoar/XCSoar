@@ -866,7 +866,6 @@
 		5CBFD5992D742FA600F05795 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5CBFD59A2D742FA600F05795 /* build.gradle */ = {isa = PBXFileReference; lastKnownFileType = text; path = build.gradle; sourceTree = "<group>"; };
 		5CBFD59B2D742FA600F05795 /* proguard-rules.pro */ = {isa = PBXFileReference; lastKnownFileType = text; path = "proguard-rules.pro"; sourceTree = "<group>"; };
-		5CBFD59D2D742FA600F05795 /* usbserial.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; path = usbserial.jar; sourceTree = "<group>"; };
 		5CBFD59F2D742FA600F05795 /* SerialBufferTest.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = SerialBufferTest.java; sourceTree = "<group>"; };
 		5CBFD5A12D742FA600F05795 /* ProtocolBufferTest.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = ProtocolBufferTest.java; sourceTree = "<group>"; };
 		5CBFD5A82D742FA600F05795 /* CH34xIds.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = CH34xIds.java; sourceTree = "<group>"; };
@@ -1657,12 +1656,6 @@
 		5CBFD8FA2D742FA600F05795 /* install-android-tools.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-android-tools.sh"; sourceTree = "<group>"; };
 		5CBFD8FB2D742FA600F05795 /* install-darwin-packages.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-darwin-packages.sh"; sourceTree = "<group>"; };
 		5CBFD8FC2D742FA600F05795 /* install-debian-packages.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-debian-packages.sh"; sourceTree = "<group>"; };
-		5CBFD8FE2D742FA600F05795 /* action_set_name */ = {isa = PBXFileReference; lastKnownFileType = text; path = action_set_name; sourceTree = "<group>"; };
-		5CBFD8FF2D742FA600F05795 /* creator_uid */ = {isa = PBXFileReference; lastKnownFileType = text; path = creator_uid; sourceTree = "<group>"; };
-		5CBFD9002D742FA600F05795 /* id */ = {isa = PBXFileReference; lastKnownFileType = text; path = id; sourceTree = "<group>"; };
-		5CBFD9012D742FA600F05795 /* index_uuid */ = {isa = PBXFileReference; lastKnownFileType = text; path = index_uuid; sourceTree = "<group>"; };
-		5CBFD9022D742FA600F05795 /* vagrant_cwd */ = {isa = PBXFileReference; lastKnownFileType = text; path = vagrant_cwd; sourceTree = "<group>"; };
-		5CBFD9062D742FA600F05795 /* loader.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = loader.rb; sourceTree = "<group>"; };
 		5CBFD9092D742FA600F05795 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		5CBFD90A2D742FA600F05795 /* Vagrantfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Vagrantfile; sourceTree = "<group>"; };
 		5CBFD90D2D742FA600F05795 /* aura2.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = aura2.config; sourceTree = "<group>"; };
@@ -7013,7 +7006,6 @@
 		5CBFEF0A2D742FA600F05795 /* ViewImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ViewImage.cpp; sourceTree = "<group>"; };
 		5CBFEF0C2D742FA600F05795 /* gnuplotitems.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = gnuplotitems.pl; sourceTree = "<group>"; };
 		5CBFEF0D2D742FA600F05795 /* opt_retrospective.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = opt_retrospective.pl; sourceTree = "<group>"; };
-		5CBFEF0E2D742FA600F05795 /* testall.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = testall.pl; sourceTree = "<group>"; };
 		5CBFEF152D742FA600F05795 /* AndroidMockLocation.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = AndroidMockLocation.pl; sourceTree = "<group>"; };
 		5CBFEF162D742FA600F05795 /* BinToC.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = BinToC.pl; sourceTree = "<group>"; };
 		5CBFEF172D742FA600F05795 /* BinToC.pm */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = BinToC.pm; sourceTree = "<group>"; };
@@ -7027,7 +7019,6 @@
 		5CBFEF202D742FA600F05795 /* GenerateWindowsResources.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = GenerateWindowsResources.pl; sourceTree = "<group>"; };
 		5CBFEF212D742FA600F05795 /* LinkResources.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = LinkResources.pl; sourceTree = "<group>"; };
 		5CBFEF222D742FA600F05795 /* polar_import.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = polar_import.py; sourceTree = "<group>"; };
-		5CBFEF232D742FA600F05795 /* svg2ico.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = svg2ico.sh; sourceTree = "<group>"; };
 		5CBFEF242D742FA600F05795 /* svg2po.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = svg2po.pl; sourceTree = "<group>"; };
 		5CBFEF252D742FA600F05795 /* svg2text.xsl */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = svg2text.xsl; sourceTree = "<group>"; };
 		5CBFEF262D742FA600F05795 /* svgl10n.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = svgl10n.pl; sourceTree = "<group>"; };
@@ -11392,14 +11383,6 @@
 			path = integrationapp;
 			sourceTree = "<group>";
 		};
-		5CBFD59E2D742FA600F05795 /* eclipse_lib */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD59D2D742FA600F05795 /* usbserial.jar */,
-			);
-			path = eclipse_lib;
-			sourceTree = "<group>";
-		};
 		5CBFD5A02D742FA600F05795 /* usbserial */ = {
 			isa = PBXGroup;
 			children = (
@@ -11606,7 +11589,6 @@
 		5CBFD5DB2D742FA600F05795 /* usbserial */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD59E2D742FA600F05795 /* eclipse_lib */,
 				5CBFD5D72D742FA600F05795 /* src */,
 				5CBFD5D82D742FA600F05795 /* .gitignore */,
 				5CBFD5D92D742FA600F05795 /* build.gradle */,
@@ -12718,55 +12700,9 @@
 			path = provisioning;
 			sourceTree = "<group>";
 		};
-		5CBFD9032D742FA600F05795 /* virtualbox */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD8FE2D742FA600F05795 /* action_set_name */,
-				5CBFD8FF2D742FA600F05795 /* creator_uid */,
-				5CBFD9002D742FA600F05795 /* id */,
-				5CBFD9012D742FA600F05795 /* index_uuid */,
-				5CBFD9022D742FA600F05795 /* vagrant_cwd */,
-			);
-			path = virtualbox;
-			sourceTree = "<group>";
-		};
-		5CBFD9042D742FA600F05795 /* XCSoarDevEnv */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD9032D742FA600F05795 /* virtualbox */,
-			);
-			path = XCSoarDevEnv;
-			sourceTree = "<group>";
-		};
-		5CBFD9052D742FA600F05795 /* machines */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD9042D742FA600F05795 /* XCSoarDevEnv */,
-			);
-			path = machines;
-			sourceTree = "<group>";
-		};
-		5CBFD9072D742FA600F05795 /* rgloader */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD9062D742FA600F05795 /* loader.rb */,
-			);
-			path = rgloader;
-			sourceTree = "<group>";
-		};
-		5CBFD9082D742FA600F05795 /* .vagrant */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD9052D742FA600F05795 /* machines */,
-				5CBFD9072D742FA600F05795 /* rgloader */,
-			);
-			path = .vagrant;
-			sourceTree = "<group>";
-		};
 		5CBFD90B2D742FA600F05795 /* vagrant */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD9082D742FA600F05795 /* .vagrant */,
 				5CBFD9092D742FA600F05795 /* .gitignore */,
 				5CBFD90A2D742FA600F05795 /* Vagrantfile */,
 			);
@@ -20378,7 +20314,6 @@
 			children = (
 				5CBFEF0C2D742FA600F05795 /* gnuplotitems.pl */,
 				5CBFEF0D2D742FA600F05795 /* opt_retrospective.pl */,
-				5CBFEF0E2D742FA600F05795 /* testall.pl */,
 			);
 			path = tools;
 			sourceTree = "<group>";
@@ -20412,7 +20347,6 @@
 				5CBFEF202D742FA600F05795 /* GenerateWindowsResources.pl */,
 				5CBFEF212D742FA600F05795 /* LinkResources.pl */,
 				5CBFEF222D742FA600F05795 /* polar_import.py */,
-				5CBFEF232D742FA600F05795 /* svg2ico.sh */,
 				5CBFEF242D742FA600F05795 /* svg2po.pl */,
 				5CBFEF252D742FA600F05795 /* svg2text.xsl */,
 				5CBFEF262D742FA600F05795 /* svgl10n.pl */,
