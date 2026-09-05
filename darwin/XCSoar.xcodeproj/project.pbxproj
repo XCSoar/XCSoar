@@ -29,7 +29,6 @@
 		5CBFD0A72D742FA600F05795 /* Android-CI-release.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "Android-CI-release.yml"; sourceTree = "<group>"; };
 		5CBFD0A82D742FA600F05795 /* gradle-wrapper-validation.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "gradle-wrapper-validation.yml"; sourceTree = "<group>"; };
 		5CBFD0A92D742FA600F05795 /* update-gradle-wrapper.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "update-gradle-wrapper.yml"; sourceTree = "<group>"; };
-		5CBFD0AB2D742FA600F05795 /* dependabot.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = dependabot.yml; sourceTree = "<group>"; };
 		5CBFD0AD2D742FA600F05795 /* codeStyleConfig.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = codeStyleConfig.xml; sourceTree = "<group>"; };
 		5CBFD0AE2D742FA600F05795 /* Project.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Project.xml; sourceTree = "<group>"; };
 		5CBFD0B12D742FA600F05795 /* HelloIOIOSmokeTest.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = HelloIOIOSmokeTest.kt; sourceTree = "<group>"; };
@@ -7147,7 +7146,6 @@
 			isa = PBXGroup;
 			children = (
 				5CBFD0AA2D742FA600F05795 /* workflows */,
-				5CBFD0AB2D742FA600F05795 /* dependabot.yml */,
 			);
 			path = .github;
 			sourceTree = "<group>";
