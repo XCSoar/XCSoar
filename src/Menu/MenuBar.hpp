@@ -11,6 +11,7 @@
 static constexpr unsigned menubar_height_scale_factor = 6;
 
 class ContainerWindow;
+namespace UI { class SingleWindow; }
 
 /**
  * A container for menu buttons.
@@ -42,6 +43,9 @@ public:
                   unsigned event);
   void HideButton(unsigned i);
 
+  /** Keep visible menu buttons above page overlays and below dialogs. */
+  void BringToTop(UI::SingleWindow &parent) noexcept;
+
   bool IsButtonEnabled(unsigned i) const {
     return buttons[i].IsEnabled();
   }
@@ -51,6 +55,13 @@ public:
    * to a new position.
    */
   void OnResize(const PixelRect &rc);
+
+  /**
+   * Shorten @p rc so it ends above visible menu buttons that touch its
+   * bottom edge.  Buttons elsewhere on the screen do not affect it.
+   */
+  [[gnu::pure]]
+  PixelRect GetRemainingRectAboveBottomButtons(PixelRect rc) const noexcept;
 
   /**
    * Portrait: screen/6, capped at

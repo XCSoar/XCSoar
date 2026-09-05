@@ -137,6 +137,7 @@ public:
 
 protected:
   void AutoSize();
+  void AutoSize(const PixelRect &parent_rc);
 
 protected:
   /* virtual methods from class Window */

@@ -12,6 +12,8 @@
 #include "Look/DialogLook.hpp"
 #include "ui/event/Globals.hpp"
 
+#include <algorithm>
+
 #ifndef USE_WINUSER
 #include "ui/window/custom/Reference.hpp"
 #endif
@@ -56,7 +58,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
 WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const char *caption,
                  const WindowStyle style) noexcept
-  :WndForm(main_window, _look, main_window.GetClientRect(), caption, style)
+  :WndForm(main_window, _look, main_window.GetDialogRect(), caption, style)
 {
 }
 
@@ -64,6 +66,10 @@ void
 WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
                 const char *_caption, const WindowStyle style)
 {
+  preferred_size = rc.GetSize();
+  full_screen = preferred_size == main_window.GetClientRect().GetSize() ||
+    preferred_size == main_window.GetDialogRect().GetSize();
+
   if (_caption != nullptr)
     caption = _caption;
   else
@@ -80,13 +86,22 @@ void
 WndForm::Create(SingleWindow &main_window,
                 const char *_caption, const WindowStyle style)
 {
-  Create(main_window, main_window.GetClientRect(), _caption, style);
+  Create(main_window, main_window.GetDialogRect(), _caption, style);
 }
 
 SingleWindow &
 WndForm::GetMainWindow()
 {
   return *(SingleWindow *)GetRootOwner();
+}
+
+bool
+WndForm::IsMaximised() const noexcept
+{
+  const auto &main_window = static_cast<const SingleWindow &>(*GetParent());
+  const auto available = main_window.GetDialogRect().GetSize();
+  return GetSize().width >= available.width &&
+    GetSize().height >= available.height;
 }
 
 void
@@ -160,35 +175,14 @@ WndForm::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     last_drag.x = position.left + p.x;
     last_drag.y = position.top + p.y;
 
-    PixelRect parent = GetParentClientRect();
-    parent.Grow(-client_rect.top);
-
-    PixelRect new_position = position;
-    new_position.Offset(dx, dy);
-
-    if (new_position.right < parent.left)
-      new_position.Offset(parent.left - new_position.right, 0);
-
-    if (new_position.left > parent.right)
-      new_position.Offset(parent.right - new_position.left, 0);
-
-    if (new_position.top > parent.bottom)
-      new_position.Offset(0, parent.bottom - new_position.top);
-
-    if (new_position.top < 0)
-      new_position.Offset(0, -new_position.top);
-
-#ifdef USE_MEMORY_CANVAS
-    /* the RasterCanvas class doesn't clip negative window positions
-       properly, therefore we avoid this problem at this stage */
-    if (new_position.left < 0)
-      new_position.left = 0;
-
-    if (new_position.top < 0)
-      new_position.top = 0;
-#endif
-
-    Move(new_position.GetTopLeft());
+    const PixelRect parent = GetMainWindow().GetDialogRect();
+    const PixelPoint origin{
+      std::clamp(position.left + dx, parent.left,
+                 std::max(parent.left, parent.right - int(GetSize().width))),
+      std::clamp(position.top + dy, parent.top,
+                 std::max(parent.top, parent.bottom - int(GetSize().height))),
+    };
+    Move(origin);
 
     return true;
   }
@@ -326,7 +320,12 @@ WndForm::ShowModal()
   Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
-    if (!main_window.FilterEvent(event, this)) {
+    const bool dialog_event = main_window.FilterEvent(event, this);
+    Window *overlay = main_window.GetDialogOverlay();
+    const bool overlay_event =
+      !dialog_event && overlay != nullptr && event.IsMouse() &&
+      main_window.FilterEvent(event, overlay);
+    if (!dialog_event && !overlay_event) {
       if (modeless && event.IsMouseDown())
         break;
       else
@@ -341,6 +340,33 @@ WndForm::ShowModal()
         continue;
       else
         hastimed = true;
+    }
+
+    if (overlay_event) {
+      /* Allow only the registered warning strip outside the modal dialog.
+         Keep keyboard focus on the menu after tapping a warning button. */
+#ifdef USE_WINUSER
+      const HWND dialog_focus = ::GetFocus();
+#else
+      const auto dialog_focus = GetFocusedWindowReference();
+#endif
+      /* Bypass Win32's dialog keyboard manager for this sibling window. */
+      loop.EventLoop::Dispatch(event);
+#ifdef USE_WINUSER
+      if (::IsWindow(dialog_focus))
+        ::SetFocus(dialog_focus);
+      else
+        SetDefaultFocus();
+#else
+      Window *focus = dialog_focus.Defined()
+        ? dialog_focus.Get(*this)
+        : nullptr;
+      if (focus != nullptr)
+        focus->SetFocus();
+      else
+        SetDefaultFocus();
+#endif
+      continue;
     }
 
     if (event.IsKeyDown()) {
@@ -545,30 +571,21 @@ WndForm::SetCaption(const char *_caption)
 void
 WndForm::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
 {
-  const unsigned parent_width = parent_rc.GetWidth();
-  const unsigned parent_height = parent_rc.GetHeight();
-
-  if (parent_width < GetSize().width || parent_height < GetSize().height) {
-  } else {
-    // reposition dialog to fit into TopWindow
-    PixelRect rc = GetPosition();
-
-    if (rc.right > (int)parent_width)
-      rc.left = parent_width - rc.GetWidth();
-    if (rc.bottom > (int)parent_height)
-      rc.top = parent_height - rc.GetHeight();
-
-#ifdef USE_MEMORY_CANVAS
-    /* the RasterCanvas class doesn't clip negative window positions
-       properly, therefore we avoid this problem at this stage */
-    if (rc.left < 0)
-      rc.left = 0;
-    if (rc.top < 0)
-      rc.top = 0;
-#endif
-
-    Move(rc.GetTopLeft());
+  if (full_screen) {
+    Move(parent_rc);
+    return;
   }
+
+  const PixelSize size{
+    std::min(preferred_size.width, parent_rc.GetWidth()),
+    std::min(preferred_size.height, parent_rc.GetHeight()),
+  };
+  const auto position = GetPosition();
+  const PixelPoint origin{
+    std::clamp(position.left, parent_rc.left, parent_rc.right - int(size.width)),
+    std::clamp(position.top, parent_rc.top, parent_rc.bottom - int(size.height)),
+  };
+  Move(origin, size);
 }
 
 void

@@ -3,6 +3,7 @@
 
 #include "MenuBar.hpp"
 #include "ui/window/ContainerWindow.hpp"
+#include "ui/window/SingleWindow.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 
@@ -103,4 +104,29 @@ MenuBar::OnResize(const PixelRect &rc)
 {
   for (unsigned i = 0; i < MAX_BUTTONS; ++i)
     buttons[i].Move(GetButtonPosition(i, rc));
+}
+
+void
+MenuBar::BringToTop(UI::SingleWindow &parent) noexcept
+{
+  for (auto &button : buttons)
+    if (button.IsVisible())
+      parent.BringToTopBelowDialogs(button);
+}
+
+PixelRect
+MenuBar::GetRemainingRectAboveBottomButtons(PixelRect rc) const noexcept
+{
+  const int bottom = rc.bottom;
+
+  for (const auto &button : buttons) {
+    if (!button.IsVisible())
+      continue;
+
+    const PixelRect button_rc = button.GetPosition();
+    if (button_rc.top < bottom && button_rc.bottom >= bottom)
+      rc.bottom = std::min(rc.bottom, button_rc.top);
+  }
+
+  return rc;
 }

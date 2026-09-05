@@ -32,7 +32,7 @@ TrackingGestureManager::Start(PixelPoint p, int threshold)
 }
 
 const char*
-TrackingGestureManager::Finish()
+TrackingGestureManager::Finish() noexcept
 {
   points.clear();
   return GestureManager::Finish();
