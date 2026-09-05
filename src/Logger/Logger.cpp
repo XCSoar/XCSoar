@@ -52,6 +52,13 @@ Logger::IsLoggerActive() const noexcept
   return logger.IsActive();
 }
 
+AllocatedPath
+Logger::GetActivePath() const noexcept
+{
+  const std::lock_guard protect{lock};
+  return AllocatedPath(logger.GetPath());
+}
+
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const ComputerSettings& settings,

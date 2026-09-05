@@ -97,6 +97,16 @@ public:
     return writer != nullptr;
   }
 
+  /**
+   * The IGC file being written, or nullptr while the logger is off.
+   */
+  Path GetPath() const noexcept {
+    if (!IsActive())
+      return nullptr;
+
+    return filename;
+  }
+
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
                    const char *asset_number, const Declaration &decl);
 

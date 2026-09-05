@@ -4,6 +4,7 @@
 #pragma once
 
 #include "LoggerImpl.hpp"
+#include "system/Path.hpp"
 #include "thread/Mutex.hxx"
 
 struct NMEAInfo;
@@ -25,6 +26,14 @@ public:
 
   [[gnu::pure]]
   bool IsLoggerActive() const noexcept;
+
+  /**
+   * The IGC file being written right now, or nullptr while the
+   * logger is off.  A backup leaves it out: it is not sharable on
+   * Windows, and incomplete anyway.
+   */
+  [[gnu::pure]]
+  AllocatedPath GetActivePath() const noexcept;
 
   void GUIStartLogger(const NMEAInfo& gps_info,
                       const ComputerSettings& settings,

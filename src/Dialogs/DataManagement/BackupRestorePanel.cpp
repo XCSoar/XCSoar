@@ -27,6 +27,10 @@
 #include "fmt/format.h"
 #include "Storage/StorageUtil.hpp"
 #include "Storage/StorageDevice.hpp"
+#include "Logger/Logger.hpp"
+#include "Logger/NMEALogger.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 #include "util/StringCompare.hxx"
 
 #include <algorithm>
@@ -59,11 +63,59 @@ IsExcludedPath(std::string_view path) noexcept
   return false;
 }
 
+/**
+ * The archive name (relative to the data directory, '/' separators)
+ * of a file, or an empty string if it is not below the directory.
+ */
+static std::string
+MakeArchiveName(Path path, Path root) noexcept
+{
+  if (path == nullptr)
+    return {};
+
+  const Path relative = path.RelativeTo(root);
+  if (relative == nullptr)
+    return {};
+
+  std::string name = relative.c_str();
+  std::replace(name.begin(), name.end(), '\\', '/');
+  return name;
+}
+
+/**
+ * The files the running program is writing right now: the NMEA log
+ * and the IGC file of the active logger.  They cannot be read on
+ * Windows while they are open, and they are incomplete anyway.
+ */
+static std::vector<std::string>
+CollectFilesInUse(Path root) noexcept
+{
+  std::vector<std::string> names;
+
+  if (backend_components == nullptr)
+    return names;
+
+  const auto add = [&names, root](Path path){
+    auto name = MakeArchiveName(path, root);
+    if (!name.empty())
+      names.emplace_back(std::move(name));
+  };
+
+  if (backend_components->nmea_logger != nullptr)
+    add(backend_components->nmea_logger->GetPath());
+
+  if (backend_components->igc_logger != nullptr)
+    add(backend_components->igc_logger->GetActivePath());
+
+  return names;
+}
+
 // Backup job: creates a tarball of primary data path
 struct BackupJob final : public Job {
   AllocatedPath target_device;
   std::string tar_name;
   unsigned &created_files;
+  std::vector<std::string> skipped_files;
   bool aborted{false};
   std::string error_message;
 
@@ -89,11 +141,17 @@ struct BackupJob final : public Job {
       return;
     }
 
+    const auto in_use = CollectFilesInUse(primary);
+    const ArchiveExcludePathFn exclude = [&in_use](std::string_view name){
+      return IsExcludedPath(name) ||
+        std::find(in_use.begin(), in_use.end(), name) != in_use.end();
+    };
+
     try {
       auto writer = dev->OpenWrite(Path(tar_name.c_str()), true);
 
-      if (!CreateBackup(primary, *writer, IsExcludedPath, env,
-                        created_files, error_message)) {
+      if (!CreateBackup(primary, *writer, exclude, env,
+                        created_files, skipped_files, error_message)) {
         aborted = true;
         return;
       }
@@ -380,6 +438,21 @@ ShowBackupManagerDialogWithTarget(const AllocatedPath &initial_target)
       ShowMessageBox(fullmsg.c_str(), C_("Button", "Create backup"), MB_OK | MB_ICONERROR);
     } else {
       container_ptr->RefreshBackups();
+
+      if (!job.skipped_files.empty()) {
+        /* the backup is there, but not complete: say which files
+           were left out, they were in use */
+        std::string msg = _("Backup complete.");
+        msg += "\n\n";
+        msg += _("Skipped, in use:");
+        for (const auto &name : job.skipped_files) {
+          msg += "\n";
+          msg += name;
+        }
+
+        ShowMessageBox(msg.c_str(), C_("Button", "Create backup"),
+                       MB_OK | MB_ICONINFORMATION);
+      }
     }
   });
 
