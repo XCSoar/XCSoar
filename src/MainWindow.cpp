@@ -345,7 +345,8 @@ MainWindow::LayoutMapArea() noexcept
 
   const MapAreaLayout layout =
     CalculateMapAreaLayout(GetMainRect(), top_widget,
-                           bottom_banner_widget, bottom_widget);
+                           HasDialog() ? nullptr : bottom_banner_widget,
+                           bottom_widget);
   if (HaveTopWidget())
     top_widget->Move(layout.top);
 
@@ -1428,9 +1429,10 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
   }
 #endif
   if (map != nullptr) {
+    const auto *map_banner = HasDialog() ? nullptr : bottom_banner_widget;
     const MapAreaLayout layout =
       CalculateMapAreaLayout(GetMainRect(), top_widget,
-                             bottom_banner_widget, bottom_widget);
+                             map_banner, bottom_widget);
 
     if (HaveTopWidget()) {
       /* draw a separator between top widget and map */
@@ -1440,7 +1442,7 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
       canvas.DrawFilledRectangle(rc, COLOR_BLACK);
     }
 
-    if (HaveBottomBannerWidget()) {
+    if (map_banner != nullptr) {
       /* draw a separator between the map and transient banner */
       PixelRect rc = layout.map;
       rc.top = rc.bottom;
@@ -1451,7 +1453,7 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     if (HaveBottomWidget()) {
       /* draw a separator above the configured bottom area */
       PixelRect rc = layout.map;
-      rc.top = HaveBottomBannerWidget()
+      rc.top = map_banner != nullptr
         ? layout.bottom_banner.bottom
         : layout.map.bottom;
       rc.bottom = layout.bottom.top;
