@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
@@ -161,6 +162,9 @@ IsCtrlKeyPressed() noexcept
 bool
 GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   map_item_timer.Cancel();
 
   bool was_kinetic_motion = false;
@@ -363,6 +367,9 @@ bool
 GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p,
                             [[maybe_unused]] int delta) noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   map_item_timer.Cancel();
 
 #ifdef ENABLE_OPENGL
@@ -388,6 +395,9 @@ GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p,
 bool
 GlueMapWindow::OnMultiTouchDown() noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   if (!visible_projection.IsValid())
     return false;
 

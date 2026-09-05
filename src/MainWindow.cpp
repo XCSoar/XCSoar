@@ -4,6 +4,8 @@
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
+#include "InfoBoxes/InfoBoxArrangeWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "UIActions.hpp"
 #include "PageActions.hpp"
@@ -962,6 +964,10 @@ MainWindow::ResumeThreads() noexcept
 void
 MainWindow::SetDefaultFocus() noexcept
 {
+  if (InfoBoxArrange::SetFocus())
+    /* the InfoBox arrange overlay is modal; it must keep the keys */
+    return;
+
   if (map != nullptr && widget == nullptr)
     map->SetFocus();
   else if (widget == nullptr || !widget->SetFocus())
@@ -1033,7 +1039,10 @@ MainWindow::OnSetFocus() noexcept
 {
   SingleWindow::OnSetFocus();
 
-  if (!HasDialog()) {
+  if (HasDialog())
+    /* recover the dialog focus if it got lost */
+    GetTopDialog().FocusFirstControl();
+  else if (!InfoBoxArrange::SetFocus()) {
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
@@ -1041,9 +1050,7 @@ MainWindow::OnSetFocus() noexcept
       map->SetFocus();
     else if (widget != nullptr)
       widget->SetFocus();
-  } else
-    /* recover the dialog focus if it got lost */
-    GetTopDialog().FocusFirstControl();
+  }
 }
 
 void
@@ -1180,7 +1187,9 @@ MainWindow::RunTimer() noexcept
   } else if (!CommonInterface::Calculated().circling ||
              InputEvents::IsFlavour("TA")) {
     thermal_assistant.Hide();
-  } else if (!HasDialog()) {
+  } else if (!HasDialog() && !InfoBoxArrange::IsActive()) {
+    /* the arrange overlay covers the whole screen, and the gauge
+       raises itself above everything else when it appears */
     if (!thermal_assistant.IsDefined())
       thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard(),
                                                       look->thermal_assistant_gauge));
@@ -1319,23 +1328,28 @@ void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
-  /* The gesture trail is painted by the #GlueMapWindow, but it
-     follows the pointer past the map borders, and OpenGL does not
-     clip a child window to its rectangle.  Areas which no child
-     window repaints (the safe area insets reserved by the
-     #TopWindow, for example) would keep those pixels forever, and
-     each buffer of the swap chain needs a clean frame of its own.
-     Therefore clear the whole window while a trail exists, and for
-     as many extra frames as the swap chain has buffers after it is
-     gone. */
-  const bool gesture_trail = map != nullptr && map->HasGestureTrail();
-  if (gesture_trail)
-    clear_gesture_frames = GetPresentationBufferCount();
+  /* The gesture trail is painted by the #GlueMapWindow and the
+     dragged InfoBox by the arrange overlay, but both follow the
+     pointer past their own window borders, and OpenGL does not clip a
+     child window to its rectangle.  Areas which no child window
+     repaints (the safe area insets reserved by the #TopWindow, for
+     example) would keep those pixels forever, and each buffer of the
+     swap chain needs a clean frame of its own.  Therefore clear the
+     whole window while a trail exists, and for as many extra frames
+     as the swap chain has buffers after it is gone. */
+  const bool arranging = look != nullptr && InfoBoxArrange::IsActive();
+  const bool trail = arranging || InfoBoxArrangeWindow::IsCardFloating() ||
+    (map != nullptr && map->HasGestureTrail());
+  if (trail)
+    clear_trail_frames = GetPresentationBufferCount();
 
-  if (gesture_trail || clear_gesture_frames > 0) {
-    canvas.DrawFilledRectangle(canvas.GetRect(), COLOR_BLACK);
+  if (trail || clear_trail_frames > 0) {
+    canvas.DrawFilledRectangle(canvas.GetRect(),
+                               arranging
+                               ? look->dialog.background_color
+                               : COLOR_BLACK);
 
-    if (!gesture_trail && --clear_gesture_frames > 0)
+    if (!trail && --clear_trail_frames > 0)
       /* nothing else is going to request the remaining frames */
       Invalidate();
   }
