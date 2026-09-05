@@ -60,13 +60,32 @@ BuildBeveledLoop(const BulkPixelPoint *src, unsigned src_size,
 
   const float half_width = line_width * 0.5f;
   normals.GrowDiscard(size);
+
+  unsigned first_valid = size;
   for (unsigned i = 0; i < size; ++i) {
     const auto &a = points[i];
     const auto &b = points[(i + 1) % size];
     const float dx = b.x - a.x;
     const float dy = b.y - a.y;
-    const float scale = half_width / std::hypot(dx, dy);
+    const float length = std::hypot(dx, dy);
+    if (length <= 0)
+      continue;
+
+    const float scale = half_width / length;
     normals[i] = {-dy * scale, dx * scale};
+    if (first_valid == size)
+      first_valid = i;
+  }
+
+  if (first_valid == size)
+    return 0;
+
+  for (unsigned k = 1; k < size; ++k) {
+    const unsigned i = (first_valid + k) % size;
+    const auto &a = points[i];
+    const auto &b = points[(i + 1) % size];
+    if (std::hypot(b.x - a.x, b.y - a.y) <= 0)
+      normals[i] = normals[(i + size - 1) % size];
   }
 
   triangles.GrowDiscard(size * 9);
