@@ -28,6 +28,8 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
+	$(SRC)/InfoBoxes/InfoBoxArrange.cpp \
+	$(SRC)/InfoBoxes/InfoBoxArrangeWindow.cpp \
 	$(SRC)/InfoBoxes/Panel/AltitudeInfo.cpp \
 	$(SRC)/InfoBoxes/Panel/AltitudeSimulator.cpp \
 	$(SRC)/InfoBoxes/Panel/AltitudeSetup.cpp \

@@ -121,6 +121,9 @@ public:
   void ShowAll() noexcept;
   void HideAll() noexcept;
 
+  /** Paint and hit-test these buttons above a sibling that covers them. */
+  void Raise() noexcept;
+
   [[gnu::pure]]
   bool HasFocus() const noexcept;
 

@@ -341,6 +341,13 @@ ButtonPanel::HideAll() noexcept
     i->Hide();
 }
 
+void
+ButtonPanel::Raise() noexcept
+{
+  for (auto i : buttons)
+    i->BringToTop();
+}
+
 bool
 ButtonPanel::HasFocus() const noexcept
 {

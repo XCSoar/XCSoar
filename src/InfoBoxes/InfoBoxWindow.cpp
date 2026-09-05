@@ -14,12 +14,20 @@
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 
 #include <algorithm>
 
 /** timeout of infobox focus */
 static constexpr std::chrono::steady_clock::duration FOCUS_TIMEOUT_MAX = std::chrono::seconds(20);
+
+/**
+ * How long the InfoBox has to be pressed before the arrange mode
+ * starts.  This is the Material long-press timeout.
+ */
+static constexpr auto REORDER_DELAY = InfoBoxArrange::LONG_PRESS;
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
@@ -172,6 +180,8 @@ InfoBoxWindow::Paint(Canvas &canvas)
     DrawGlassBackground(canvas, rc, background_color);
   else
     canvas.DrawFilledRectangle(rc, background_color);
+
+  PaintLongPressGlow(canvas);
 
   if (data.GetCustom() && content) {
     /* if there's no comment, the content object may paint that area,
@@ -376,7 +386,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 bool
-InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
+InfoBoxWindow::OnMouseDown(PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
 
@@ -387,8 +397,11 @@ InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
     pressed = true;
     Invalidate();
 
+    press_point = p;
+    press_start = std::chrono::steady_clock::now();
     long_press_pending = true;
-    dialog_timer.Schedule(std::chrono::seconds(1));
+    dialog_timer.Schedule(REORDER_DELAY);
+    hold_timer.Schedule(InfoBoxArrange::TAP);
   }
 
   return true;
@@ -408,19 +421,24 @@ InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 
     ReleaseCapture();
 
-    if (was_pressed) {
-      if (long_press_pending) {
-        long_press_pending = false;
-        
-        InfoBoxManager::ClearFocusExcept(id);
-        SetFocus();
+    hold_timer.Cancel();
+    fade_timer.Cancel();
 
-        const bool click_handled = content != nullptr && content->HandleClick();
+    if (was_pressed && hold_armed) {
+      hold_armed = false;
+      long_press_pending = false;
+      InfoBoxArrange::Begin(id);
+    } else if (was_pressed && long_press_pending) {
+      long_press_pending = false;
 
-        if (!click_handled && GetDialogContent() != nullptr)
-          /* delay the dialog opening to prevent double click detection */
-          dialog_timer.Schedule(std::chrono::milliseconds(300));
-      }
+      InfoBoxManager::ClearFocusExcept(id);
+      SetFocus();
+
+      const bool click_handled = content != nullptr && content->HandleClick();
+
+      if (!click_handled && GetDialogContent() != nullptr)
+        /* delay the dialog opening to prevent double click detection */
+        dialog_timer.Schedule(std::chrono::milliseconds(300));
     }
 
     return true;
@@ -433,6 +451,7 @@ bool
 InfoBoxWindow::OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
+  StopLongPress();
   InputEvents::ShowMenu();
   return true;
 }
@@ -442,8 +461,17 @@ InfoBoxWindow::OnMouseMove(PixelPoint p, [[maybe_unused]] unsigned keys) noexcep
 {
   if (dragging) {
     SetPressed(IsInside(p));
-    if (!pressed)
+    if (!pressed) {
       dialog_timer.Cancel();
+      StopLongPress();
+    } else if (long_press_pending && !hold_armed) {
+      /* slop before the hold is armed cancels it; after that,
+         lift-off commits and sliding off the box cancels */
+      if (InfoBoxArrange::PastTouchSlop(p, press_point)) {
+        dialog_timer.Cancel();
+        StopLongPress();
+      }
+    }
     return true;
   }
 
@@ -467,7 +495,7 @@ InfoBoxWindow::OnCancelMode() noexcept
   }
 
   dialog_timer.Cancel();
-  long_press_pending = false;
+  StopLongPress();
 
   PaintWindow::OnCancelMode();
 }
@@ -476,7 +504,7 @@ void
 InfoBoxWindow::OnSetFocus() noexcept
 {
   InfoBoxManager::ClearFocusExcept(id);
-  
+
   PaintWindow::OnSetFocus();
 
   focus_timer.Schedule(HasCursorKeys() ? FOCUS_TIMEOUT_MAX : std::chrono::milliseconds(1100));
@@ -495,22 +523,66 @@ InfoBoxWindow::OnKillFocus() noexcept
 }
 
 void
+InfoBoxWindow::StopLongPress() noexcept
+{
+  if (!long_press_pending && !hold_armed && !fade_timer.IsActive())
+    return;
+
+  long_press_pending = false;
+  hold_armed = false;
+  hold_timer.Cancel();
+  fade_timer.Cancel();
+  Invalidate();
+}
+
+void
+InfoBoxWindow::OnHoldArmed() noexcept
+{
+  if (!long_press_pending)
+    return;
+
+  if (!HasEPaper() && !IsSlowCPU())
+    fade_timer.Schedule(InfoBoxArrange::LONG_PRESS_FADE);
+  Invalidate();
+}
+
+void
+InfoBoxWindow::PaintLongPressGlow(Canvas &canvas) noexcept
+{
+  if (!long_press_pending && !hold_armed)
+    return;
+
+  const bool fade = !HasEPaper() && !IsSlowCPU() && !hold_armed;
+  const unsigned t = fade
+    ? InfoBoxArrange::LongPressFade(press_start)
+    : 256;
+  const PixelRect rc = GetClientRect();
+  const int height = int(rc.GetHeight() * t / 256);
+  if (height <= 0)
+    return;
+
+  PixelRect fill = rc;
+  fill.top = fill.bottom - height;
+  canvas.DrawFilledRectangle(fill, look.GetPreviewGlowColor());
+}
+
+void
 InfoBoxWindow::OnDialogTimer() noexcept
 {
+  hold_timer.Cancel();
+  fade_timer.Cancel();
+
   if (long_press_pending) {
-    long_press_pending = false;
-    
-    dragging = pressed = false;
+    /* the hold is armed; the action waits for lift-off */
+    hold_armed = true;
     Invalidate();
-    ReleaseCapture();
-    
-    InfoBoxManager::ShowInfoBoxPicker(id);
-  } else {
-    dragging = pressed = false;
-    Invalidate();
-    ReleaseCapture();
-    
-    if (GetDialogContent() != nullptr)
-      ShowDialog();
+    return;
   }
+
+  dragging = pressed = false;
+  Invalidate();
+  ReleaseCapture();
+
+  if (GetDialogContent() != nullptr)
+    ShowDialog();
 }
