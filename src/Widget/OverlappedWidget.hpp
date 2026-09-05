@@ -19,8 +19,4 @@ public:
    * allow overlapped widgets.
    */
   void Raise() noexcept;
-
-#ifdef USE_WINUSER
-  void Hide() noexcept override;
-#endif
 };

@@ -5,7 +5,7 @@ CPUS=$(lscpu -p | tail -n1 | cut -f1 -d,)
 cd /opt/xcsoar || exit 1
 
 if [[ $# -lt 1 ]]; then
-  echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL UNIX-DEBIAN WIN64OPENGL WIN32OPENGL PC WIN64"
+  echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL UNIX-DEBIAN WIN64OPENGL WIN32OPENGL"
   exit 1
 fi
 
@@ -25,7 +25,7 @@ case "${TARGET}" in
         make TARGET="${TARGET}" -j"${CPUS}" "${ARGS[@]}"
         make TARGET="${TARGET}" -j"${CPUS}" output/KOBO/KoboRoot.tgz
       ;;
-      "WAYLAND" | "UNIX" | "WIN64OPENGL" | "WIN32OPENGL" | "PC" | "WIN64")
+      "WAYLAND" | "UNIX" | "WIN64OPENGL" | "WIN32OPENGL")
         make TARGET="${TARGET}" -j"${CPUS}" "${ARGS[@]}"
       ;;
       "UNIX-SDL")
@@ -36,7 +36,7 @@ case "${TARGET}" in
         ls ../
       ;;
       *)
-        echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL UNIX-DEBIAN WIN64OPENGL WIN32OPENGL PC WIN64"
+        echo "No target specified. Valid targets: ANDROID DOCS KOBO WAYLAND UNIX UNIX-SDL UNIX-DEBIAN WIN64OPENGL WIN32OPENGL"
         exit 1
       ;;
 esac

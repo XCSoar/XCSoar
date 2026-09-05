@@ -13,12 +13,7 @@
 #include "PortableColor.hpp"
 #include "ui/dim/Size.hpp"
 
-#ifdef USE_GDI
-#include <windef.h>
-#include <wingdi.h>
-#else
 #include <memory>
-#endif
 
 #include <cstdint>
 
@@ -35,13 +30,13 @@ class GLTexture;
 #endif
 
 /**
- * Greyscale, RGB565 and GDI RawColor types store no alpha, so fall back to an
- * opaque colormap there.
+ * Greyscale and RGB565 RawColor types store no alpha, so fall back to
+ * an opaque colormap there.
  */
 constexpr bool
 HaveBitmapSourceAlpha() noexcept
 {
-#if defined(GREYSCALE) || defined(USE_RGB565) || defined(USE_GDI)
+#if defined(GREYSCALE) || defined(USE_RGB565)
   return false;
 #else
   return true;
@@ -103,18 +98,6 @@ struct RawColor
   constexpr RawColor(uint8_t R, uint8_t G, uint8_t B, uint8_t A) noexcept
     :value(R, G, B), alpha(A) {}
 
-#elif defined(USE_GDI)
-
-  BGR8Color value;
-
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B) noexcept
-    :value(R, G, B) {}
-
-  /** Constructor with alpha (alpha is ignored on GDI) */
-  constexpr RawColor(uint8_t R, uint8_t G, uint8_t B,
-                     [[maybe_unused]] uint8_t A) noexcept
-    :value(R, G, B) {}
-
 #else
 #error No implementation
 #endif
@@ -127,12 +110,7 @@ class RawBitmap final
 {
   const PixelSize size;
 
-#ifdef USE_GDI
-  const unsigned corrected_width;
-  RawColor *buffer;
-#else
   const std::unique_ptr<RawColor[]> buffer;
-#endif
 
 #ifdef ENABLE_OPENGL
   const std::unique_ptr<GLTexture> texture;
@@ -142,10 +120,6 @@ class RawBitmap final
    * texture?
    */
   mutable bool dirty = true;
-#elif defined(USE_GDI)
-  BITMAPINFO bi;
-
-  HBITMAP bitmap;
 #endif
 
 public:
@@ -154,7 +128,7 @@ public:
    */
   explicit RawBitmap(PixelSize size) noexcept;
 
-#if defined(ENABLE_OPENGL) || defined(USE_GDI)
+#ifdef ENABLE_OPENGL
   ~RawBitmap() noexcept;
 #endif
 
@@ -163,42 +137,25 @@ public:
    * @return The Buffer as RawColor array
    */
   RawColor *GetBuffer() noexcept {
-#ifdef USE_GDI
-    return buffer;
-#else
     return buffer.get();
-#endif
   }
 
   const RawColor *GetBuffer() const noexcept {
-#ifdef USE_GDI
-    return buffer;
-#else
     return buffer.get();
-#endif
   }
 
   /**
    * Returns a pointer to the top-most row.
    */
   RawColor *GetTopRow() noexcept {
-#ifndef USE_GDI
     return GetBuffer();
-#else
-  /* in WIN32 bitmaps, the bottom-most row comes first */
-    return GetBuffer() + (size.height - 1) * corrected_width;
-#endif
   }
 
   /**
    * Returns a pointer to the row below the current one.
    */
   RawColor *GetNextRow(RawColor *row) noexcept {
-#ifndef USE_GDI
     return row + size.width;
-#else
-    return row - corrected_width;
-#endif
   }
 
   void SetDirty() noexcept {

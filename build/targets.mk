@@ -21,7 +21,7 @@ ifeq ($(TARGET),)
       TARGET = UNIX
     endif
   else
-    TARGET = PC
+    TARGET = WIN64OPENGL
   endif
 else
   ifeq ($(filter $(TARGET),$(TARGETS)),)
@@ -66,8 +66,7 @@ TARGET_ARCH :=
 # virtual targets ("flavors")
 
 ifeq ($(TARGET),WIN64)
-  X64 := y
-  override TARGET = PC
+  $(error TARGET=WIN64 (GDI) has been removed; use TARGET=WIN64OPENGL)
 endif
 
 ifeq ($(TARGET),WIN64OPENGL)
@@ -570,7 +569,7 @@ ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--minor-subsystem-version=0
 
   # default to "console"; overridden to "windows" by
-  # GDI_LDLIBS (screen.mk) or SDL_LDLIBS (sdl.mk) for GUI programs
+  # SDL_LDLIBS (sdl.mk) for GUI programs
   TARGET_LDFLAGS += -Wl,-subsystem,console
 
   ifeq ($(X64),y)

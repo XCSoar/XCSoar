@@ -8,7 +8,6 @@
 
 class Airspaces;
 class ProtectedAirspaceWarningManager;
-struct AirspaceLook;
 
 void
 dlgAirspaceDetails(ConstAirspacePtr airspace,
@@ -23,7 +22,6 @@ dlgAirspaceDetailsForBrowseParent(
   ConstAirspacePtr airspace,
   ProtectedAirspaceWarningManager *airspace_warnings) noexcept;
 
-int dlgAirspacePatternsShowModal(const AirspaceLook &look);
 void dlgAirspaceShowModal(bool colored);
 
 void

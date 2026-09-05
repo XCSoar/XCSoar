@@ -3,10 +3,6 @@
 
 #pragma once
 
-#ifdef USE_WINUSER
-#include "ui/window/Window.hpp"
-#endif
-
 #include <atomic>
 #include <functional>
 
@@ -17,9 +13,6 @@ namespace UI {
  * thread.
  */
 class Notify final
-#ifdef USE_WINUSER
-  : Window
-#endif
 {
   std::atomic<bool> pending{false};
 
@@ -53,11 +46,6 @@ private:
    * Called by the event loop when the "notify" message is received.
    */
   static void Callback(void *ctx) noexcept;
-
-#ifdef USE_WINUSER
-private:
-  bool OnUser(unsigned id) noexcept override;
-#endif
 };
 
 } // namespace UI

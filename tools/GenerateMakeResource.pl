@@ -7,7 +7,7 @@ my $next_id = 100;
 while (<>) {
     next if /^\s*(?:#.*)?$/;
 
-    if (/^(?:bitmap_bitmap|bitmap_graphic|hatch_bitmap|app_icon)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+    if (/^bitmap_graphic\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         my $id = $next_id++;
         print qq|MAKE_RESOURCE($1, $2, $id);\n|;
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {

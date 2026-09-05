@@ -4,21 +4,13 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/TextFormat.hpp"
 #include "util/StringAPI.hxx"
-
-#ifndef NDEBUG
 #include "util/UTF8.hpp"
-#endif
-
-#ifndef UNICODE
-#include "util/UTF8.hpp"
-#endif
 
 #include <algorithm>
 #include <cassert>
 
 #include <limits.h>
 #include <string.h>
-#include <winuser.h>
 
 void
 Canvas::DrawRaisedEdge(PixelRect &rc) noexcept
@@ -106,42 +98,26 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
       size_t line_start = i;
       const char *line_ptr = duplicated + line_start;
       size_t line_len_bytes = strlen(line_ptr);
-      
-#ifndef UNICODE
-      // On non-Unicode platforms, get actual UTF-8 character count
-      size_t line_len_chars = LengthUTF8(
-        reinterpret_cast<const char *>(line_ptr));
-#else
-      // On Unicode platforms, character count equals byte count
-      size_t line_len_chars = line_len_bytes;
-#endif
-      
+      size_t line_len_chars = LengthUTF8(line_ptr);
+
       // find the maximum number of characters that fit using binary search
       size_t chars_that_fit = 0;
       size_t low = 1;
       size_t high = line_len_chars;
-      
+
       while (low <= high) {
         size_t mid = (low + high) / 2;
-        
-#ifndef UNICODE
-        // On non-Unicode platforms (char=char), use UTF-8 character boundaries
         size_t byte_pos = TruncateStringUTF8(
-          std::string_view(reinterpret_cast<const char *>(line_ptr), line_len_bytes),
-          mid);
-#else
-        // On Unicode platforms (char=wchar_t), character = code unit
-        size_t byte_pos = mid;
-#endif
-        
+          std::string_view(line_ptr, line_len_bytes), mid);
+
         if (byte_pos > line_len_bytes)
           byte_pos = line_len_bytes;
-        
+
         char saved = duplicated[line_start + byte_pos];
         duplicated[line_start + byte_pos] = '\0';
         PixelSize test_sz = CalcTextSize(line_ptr);
         duplicated[line_start + byte_pos] = saved;
-        
+
         if (test_sz.width <= r.GetWidth()) {
           chars_that_fit = byte_pos;
           low = mid + 1;
@@ -149,7 +125,7 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
           high = mid - 1;
         }
       }
-      
+
       // if we found a break point, insert a null terminator
       if (chars_that_fit > 0 && chars_that_fit < line_len_bytes) {
         const size_t break_position = line_start + chars_that_fit;

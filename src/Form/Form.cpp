@@ -11,10 +11,7 @@
 #include "util/Macros.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/event/Globals.hpp"
-
-#ifndef USE_WINUSER
 #include "ui/window/custom/Reference.hpp"
-#endif
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Program.hpp"
@@ -32,9 +29,6 @@
 #elif defined(USE_POLL_EVENT)
 #include "ui/event/shared/Event.hpp"
 #include "ui/event/poll/Loop.hpp"
-#elif defined(_WIN32)
-#include "ui/event/windows/Event.hpp"
-#include "ui/event/windows/Loop.hpp"
 #endif
 
 using namespace UI;
@@ -70,10 +64,6 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
     caption.clear();
 
   ContainerWindow::Create(main_window, rc, style);
-
-#if defined(USE_WINUSER) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, caption.c_str());
-#endif
 }
 
 void
@@ -244,55 +234,26 @@ WndForm::OnCancelMode() noexcept
   }
 }
 
-#ifdef USE_WINUSER
-
-bool
-WndForm::OnCommand(unsigned id, unsigned code) noexcept
-{
-  switch (id) {
-  case IDCANCEL:
-    /* sent by the WIN32 dialog manager when the user presses
-       Escape */
-    SetModalResult(mrCancel);
-    return true;
-  }
-
-  return ContainerWindow::OnCommand(id, code);
-}
-
-#endif
-
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
  */
 [[gnu::pure]]
 static bool
-CheckKey([[maybe_unused]] ContainerWindow *container, const Event &event)
+CheckKey(ContainerWindow *container, const Event &event)
 {
-#ifdef USE_WINUSER
-  const MSG &msg = event.msg;
-  LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
-                            (LPARAM)&msg);
-  return (r & DLGC_WANTMESSAGE) != 0;
-#else
   Window *focused = container->GetFocusedWindow();
   if (focused == nullptr)
     return false;
 
   return focused->OnKeyCheck(event.GetKeyCode());
-#endif
 }
 
 int
 WndForm::ShowModal()
 {
-#ifndef USE_WINUSER
   ContainerWindow *root = GetRootOwner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
-#else
-  HWND oldFocusHwnd;
-#endif /* USE_WINUSER */
 
   PeriodClock enter_clock;
   if (HasTouchScreen())
@@ -305,24 +266,15 @@ WndForm::ShowModal()
   SingleWindow &main_window = GetMainWindow();
   main_window.CancelMode();
 
-#ifdef USE_WINUSER
-  oldFocusHwnd = ::GetFocus();
-#endif /* USE_WINUSER */
   SetDefaultFocus();
 
   bool hastimed = false;
 
   main_window.AddDialog(this);
 
-#ifndef USE_GDI
   main_window.Refresh();
-#endif
 
-#if defined(ANDROID) || defined(USE_POLL_EVENT) || defined(ENABLE_SDL)
   EventLoop loop(*event_queue, main_window);
-#else
-  DialogEventLoop loop(*event_queue, *this);
-#endif
   Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
@@ -357,11 +309,7 @@ WndForm::ShowModal()
       }
 #endif
 
-      if (
-#ifdef USE_WINUSER
-          IdentifyDescendant(event.msg.hwnd) &&
-#endif
-          (event.GetKeyCode() == KEY_UP || event.GetKeyCode() == KEY_DOWN)) {
+      if (event.GetKeyCode() == KEY_UP || event.GetKeyCode() == KEY_DOWN) {
         /* KEY_UP and KEY_DOWN move the focus only within the current
            control group - but we want it to behave like Shift-Tab and
            Tab */
@@ -403,15 +351,11 @@ WndForm::ShowModal()
 
   main_window.RemoveDialog(this);
 
-#ifdef USE_WINUSER
-  ::SetFocus(oldFocusHwnd);
-#else
   if (old_focus_reference.Defined()) {
     Window *old_focus = old_focus_reference.Get(*root);
     if (old_focus != nullptr)
       old_focus->SetFocus();
   }
-#endif /* !USE_WINUSER */
 
   return modal_result;
 }
@@ -478,11 +422,9 @@ WndForm::OnPaint(Canvas &canvas) noexcept
 
   // Draw the borders
   if (!IsMaximised()) {
-#ifndef USE_GDI
     if (IsDithered())
       canvas.DrawOutlineRectangle(rcClient, COLOR_BLACK);
     else
-#endif
       canvas.DrawRaisedEdge(rcClient);
   }
 
@@ -520,8 +462,6 @@ WndForm::OnPaint(Canvas &canvas) noexcept
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
     canvas.Clear(COLOR_YELLOW.WithAlpha(80));
-#elif defined(USE_GDI)
-    canvas.InvertRectangle(title_rect);
 #else
     canvas.InvertRectangle(GetClientRect());
 #endif

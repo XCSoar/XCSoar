@@ -54,8 +54,11 @@ RequestExecutionLevel admin
 
 ; Interface Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "..\Data\bitmaps\xcsoarswift.ico"
-!define MUI_UNICON "..\Data\bitmaps\xcsoarswift.ico"
+!ifndef APP_ICON
+!define APP_ICON "..\output\data\graphics\logo.ico"
+!endif
+!define MUI_ICON "${APP_ICON}"
+!define MUI_UNICON "${APP_ICON}"
 
 ; Pages
 !insertmacro MUI_PAGE_WELCOME

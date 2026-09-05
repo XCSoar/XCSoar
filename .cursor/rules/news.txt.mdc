@@ -232,8 +232,8 @@ user-facing and another adds separate technical detail (e.g. installer in
 ## Deprecations and removals
 
 - User sections: what is going away and what to use instead, in user terms
-- `* development`: target names and flags OK (e.g. deprecate `PC` / `WIN64`
-  GDI targets)
+- `* development`: target names and flags OK (e.g. `PC` / `WIN64` GDI
+  targets were removed; use `WIN64OPENGL` / `WIN32OPENGL`)
 
 ## Platform notes (user sections)
 

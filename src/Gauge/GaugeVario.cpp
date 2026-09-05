@@ -412,11 +412,15 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
   if (!dirty)
     return;
 
-  const PixelSize dest_size{look.Scale(Layout::VptScale(9))};
+  const unsigned dest = look.Scale(Layout::VptScale(9));
+  const PixelSize dest_size{dest};
 
-  if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING)
-    canvas.Stretch({x, y}, dest_size, look.climb_bitmap, {12, 0}, {12, 12});
-  else if (IsPersistent())
+  if (Basic().switch_state.flight_mode == SwitchState::FlightMode::CIRCLING) {
+    canvas.SetTextColor(look.text_color);
+    look.climb_icon.Draw(canvas,
+                         {x + int(dest / 2), y + int(dest / 2)},
+                         dest);
+  } else if (IsPersistent())
     canvas.DrawFilledRectangle(PixelRect{{x, y}, dest_size},
                                look.background_color);
 }

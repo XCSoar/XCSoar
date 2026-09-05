@@ -14,7 +14,7 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
 {
   origin = 0;
 
-  NativeWindow::Create(&parent, rc, style);
+  PaintWindow::Create(&parent, rc, style);
 }
 
 void
@@ -77,7 +77,7 @@ LargeTextWindow::ScrollTo(unsigned new_origin) noexcept
 void
 LargeTextWindow::OnResize(PixelSize new_size) noexcept
 {
-  NativeWindow::OnResize(new_size);
+  PaintWindow::OnResize(new_size);
 
   if (!value.empty()) {
     /* revalidate the scroll position */
@@ -94,14 +94,14 @@ LargeTextWindow::OnResize(PixelSize new_size) noexcept
 void
 LargeTextWindow::OnSetFocus() noexcept
 {
-  NativeWindow::OnSetFocus();
+  PaintWindow::OnSetFocus();
   Invalidate();
 }
 
 void
 LargeTextWindow::OnKillFocus() noexcept
 {
-  NativeWindow::OnKillFocus();
+  PaintWindow::OnKillFocus();
   Invalidate();
 }
 
@@ -179,7 +179,7 @@ LargeTextWindow::OnKeyDown(unsigned key_code) noexcept
     return true;
   }
 
-  return NativeWindow::OnKeyDown(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool

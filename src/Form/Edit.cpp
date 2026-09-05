@@ -90,10 +90,6 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
    edit_callback(EditDataFieldDialog)
 {
   Create(parent, rc, Caption, CaptionWidth, style);
-
-#if defined(USE_WINUSER) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, Caption);
-#endif
 }
 
 WndProperty::WndProperty(const DialogLook &_look) noexcept

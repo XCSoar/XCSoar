@@ -7,8 +7,6 @@
 #include "ui/canvas/TextFormat.hpp"
 #include "Asset.hpp"
 
-#include <winuser.h>
-
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
                         std::string_view text) const noexcept
@@ -38,21 +36,12 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
 {
   unsigned format = (center ? DT_CENTER : DT_LEFT);
 
-#ifdef USE_GDI
-  if (vcenter) {
-    const unsigned height = GetHeight(canvas, rc, text);
-    int top = (rc.top + rc.bottom - height) / 2;
-    if (top > rc.top)
-      rc.top = top;
-  }
-#else
   if (vcenter)
     format |= DT_VCENTER;
 
   if (control && IsDithered())
     /* button texts are underlined on the Kobo */
     format |= DT_UNDERLINE;
-#endif
 
   canvas.DrawFormattedText(rc, text, format);
 }

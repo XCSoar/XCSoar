@@ -80,8 +80,6 @@ env:
   BOOST: boost_1_87_0
   # Names in the run Artifacts list; must match upload + download in
   # "Upload artifact for VirusTotal" and the upload-to-virustotal job.
-  VT_ARTIFACT_WIN64: virustotal-win64
-  VT_ARTIFACT_PC: virustotal-pc
   VT_ARTIFACT_WIN64OPENGL: virustotal-opengl-WIN64OPENGL
   VT_ARTIFACT_WIN32OPENGL: virustotal-opengl-WIN32OPENGL
 
@@ -203,14 +201,6 @@ jobs:
             ndk: r26d
             target_container: debian:trixie-slim
           - os: ubuntu-24.04
-            target: WIN64
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .exe
-            target_upload: true
-            target_container: debian:trixie-slim
-          - os: ubuntu-24.04
             target: WIN64OPENGL
             target_bin: XCSoar
             target_bin_path: bin
@@ -224,14 +214,6 @@ jobs:
             target_bin_path: bin
             target_final: XCSoar
             target_ext: .zip
-            target_upload: true
-            target_container: debian:trixie-slim
-          - os: ubuntu-24.04
-            target: PC
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .exe
             target_upload: true
             target_container: debian:trixie-slim
           - os: macos-26
@@ -288,7 +270,7 @@ jobs:
           max-size: 3G
 
       - name: Configure ccache for cross-compilation
-        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' || matrix.target == 'WIN64' || matrix.target == 'PC' }}
+        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
         run: |
           ccache --set-config compiler_check=content
           ccache --set-config hard_link=false
@@ -390,11 +372,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
             fi
-            if [ ${{ matrix.target }} = 'WIN64' ] || [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh WIN
-            fi
-            if [ ${{ matrix.target }} = 'PC' ]; then
+            if [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
@@ -564,12 +542,8 @@ jobs:
                 output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
               fi
             fi
-          elif [ ${{ matrix.target }} = 'WIN64' ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
-          elif [ ${{ matrix.target }} = 'PC' ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "MACOS" ]; then
@@ -619,12 +593,8 @@ jobs:
               output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
               output/${{ matrix.target }}/symbols.zip
             fi
-          elif [ ${{ matrix.target }} = 'WIN64' ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
-          elif [ ${{ matrix.target }} = 'PC' ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "MACOS" ]; then
@@ -749,20 +719,6 @@ jobs:
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}-Installer.exe
           path: output/${{ matrix.target }}/bin/XCSoar-*-${{ matrix.target }}-Installer.exe
-
-      - name: Upload artifact for VirusTotal (Win64)
-        if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64' }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ env.VT_ARTIFACT_WIN64 }}
-          path: output/WIN64/bin/XCSoar.exe
-
-      - name: Upload artifact for VirusTotal (PC)
-        if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'PC' }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: ${{ env.VT_ARTIFACT_PC }}
-          path: output/PC/bin/XCSoar.exe
 
       - name: Upload artifact for VirusTotal (Win64 OpenGL)
         if: ${{ github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) && matrix.target == 'WIN64OPENGL' }}
@@ -1084,22 +1040,6 @@ jobs:
     env:
       VT_API_KEY: ${{ secrets.VT_API_KEY }}
     steps:
-      - name: Download Win64 executable
-        id: win64
-        continue-on-error: true
-        uses: actions/download-artifact@v8
-        with:
-          name: ${{ env.VT_ARTIFACT_WIN64 }}
-          path: vt-scan/w64
-
-      - name: Download PC executable
-        id: pc
-        continue-on-error: true
-        uses: actions/download-artifact@v8
-        with:
-          name: ${{ env.VT_ARTIFACT_PC }}
-          path: vt-scan/pc
-
       - name: Download Win64 OpenGL executable
         id: win64opengl
         continue-on-error: true

@@ -44,10 +44,7 @@ class BufferWindow : public PaintWindow {
 #endif
 
 public:
-  void Invalidate() noexcept
-#ifndef USE_WINUSER
-    override
-#endif
+  void Invalidate() noexcept override
   {
     dirty = true;
     PaintWindow::Invalidate();

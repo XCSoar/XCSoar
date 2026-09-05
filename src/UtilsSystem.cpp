@@ -11,12 +11,9 @@
 #endif
 
 #ifdef _WIN32
+#include "ui/display/sdl/Display.hpp"
 #include <windef.h> // for HWND (needed by winuser.h)
 #include <winuser.h>
-#endif
-
-#if defined(_WIN32) && defined(ENABLE_OPENGL)
-#include "ui/display/sdl/Display.hpp"
 #include <SDL_video.h>
 #include <algorithm>
 #endif
@@ -92,10 +89,11 @@ SystemWindowSize() noexcept
   return PixelSize{ CommandLine::width, CommandLine::height };
 #else
   /// @todo implement this properly for SDL/UNIX
-#if defined(_WIN32) && defined(ENABLE_OPENGL)
-  /* The OpenGL build declares per-monitor DPI awareness (via SDL), so Windows
-   * no longer auto-scales the window.  Query the system DPI via SDL and scale
-   * the requested window size so it appears at the intended physical size. */
+#ifdef _WIN32
+  /* Windows declares per-monitor DPI awareness (via SDL), so it no
+   * longer auto-scales the window.  Query the system DPI via SDL and
+   * scale the requested window size so it appears at the intended
+   * physical size. */
   const auto dpi = SDL::Display::GetDPI();
   const auto overhead = GetWindowDecorationOverhead();
   PixelSize size = PixelSize{

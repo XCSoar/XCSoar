@@ -60,7 +60,7 @@ IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
 static PixelSize
 GetDisplaySize([[maybe_unused]] const UI::Display &display, [[maybe_unused]] PixelSize fallback) noexcept
 {
-#if defined(USE_X11) || defined(USE_GDI)
+#ifdef USE_X11
   return display.GetSize();
 #else
   return fallback;

@@ -51,10 +51,6 @@ else ifeq ($(ENABLE_SDL),y)
 EVENT_SOURCES += \
 	$(SRC)/ui/event/sdl/Loop.cpp \
 	$(SRC)/ui/event/sdl/Queue.cpp
-else ifeq ($(HAVE_WIN32),y)
-EVENT_SOURCES += \
-	$(SRC)/ui/event/windows/Loop.cpp \
-	$(SRC)/ui/event/windows/Queue.cpp
 endif
 
 ifeq ($(USE_LIBINPUT),y)
@@ -71,7 +67,6 @@ EVENT_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
-	$(WINUSER_CPPFLAGS) \
 	$(OPENGL_CPPFLAGS) $(EGL_FEATURE_CPPFLAGS) $(GLX_CPPFLAGS) \
 	$(MEMORY_CANVAS_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \

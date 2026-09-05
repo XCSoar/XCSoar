@@ -1,6 +1,11 @@
-// Minimal resource file for OpenGL/SDL builds
-// Contains only the application icon for Windows Explorer/taskbar display
+// Minimal resource file for Windows SDL builds: the application icon
+// (Explorer / taskbar).  Artwork is generated from Data/graphics/logo.svg
+// (or logo_red.svg when XCSOAR_TESTING is set).
 
 #define IDI_XCSOAR 101
 
-IDI_XCSOAR ICON DISCARDABLE "bitmaps/xcsoarswift.ico"
+#ifdef XCSOAR_TESTING
+IDI_XCSOAR ICON DISCARDABLE "graphics/logo_red.ico"
+#else
+IDI_XCSOAR ICON DISCARDABLE "graphics/logo.ico"
+#endif

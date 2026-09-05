@@ -18,9 +18,9 @@
  */
 class ActionWidget
 #ifdef HAVE_CLIPPING
-/* need PanelWidget on GDI so dialog background gets rendered in the
-   Widget area just in case this Widget becomes "visible", to avoid
-   uninitialised screen area */
+/* need PanelWidget when HAVE_CLIPPING so dialog background gets
+   rendered in the Widget area just in case this Widget becomes
+   "visible", to avoid uninitialised screen area */
   : public PanelWidget
 #else
 /* on OpenGL, we can avoid the overhead of creating a panel window */

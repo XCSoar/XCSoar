@@ -14,7 +14,7 @@ alwaysApply: false
 
 XCSoar icons are **SVG sources** built into masked BMP tiles (ldpi / mdpi /
 xhdpi / xxhdpi density buckets)
-via `build/resource.mk`. They render on **OpenGL, GDI, and memory canvas**
+via `build/resource.mk`. They render on **OpenGL and memory canvas**
 (including Kobo e-paper). Follow these rules so icons stay sharp, invert
 correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
 

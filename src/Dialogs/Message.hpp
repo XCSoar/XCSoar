@@ -3,35 +3,37 @@
 
 #pragma once
 
-#ifdef _WIN32
-#include <windef.h> // for HWND (needed by winuser.h)
-#include <winuser.h>
-#else
+/* Portable copies of the Win32 message-box constants.  ShowMessageBox
+   is XCSoar's own dialog; these names match the Win32 values so a
+   prior windows.h include is harmless. */
 
+#ifndef IDOK
 enum {
-  IDCANCEL = 3,
-  IDOK,
-  IDYES,
-  IDNO,
-  IDRETRY,
-  IDABORT,
-  IDIGNORE,
+  IDOK = 1,
+  IDCANCEL = 2,
+  IDABORT = 3,
+  IDRETRY = 4,
+  IDIGNORE = 5,
+  IDYES = 6,
+  IDNO = 7,
 };
+#endif
 
+#ifndef MB_OK
 enum {
-  MB_OKCANCEL,
-  MB_OK,
-  MB_YESNO,
-  MB_YESNOCANCEL,
-  MB_RETRYCANCEL,
-  MB_ABORTRETRYIGNORE,
-  MB_ICONINFORMATION = 0x10,
-  MB_ICONWARNING = 0x20,
-  MB_ICONEXCLAMATION = 0x40,
-  MB_ICONQUESTION = 0x80,
-  MB_ICONERROR = 0x100,
-};
+  MB_OK = 0x0000,
+  MB_OKCANCEL = 0x0001,
+  MB_ABORTRETRYIGNORE = 0x0002,
+  MB_YESNOCANCEL = 0x0003,
+  MB_YESNO = 0x0004,
+  MB_RETRYCANCEL = 0x0005,
 
+  MB_ICONERROR = 0x10,
+  MB_ICONQUESTION = 0x20,
+  MB_ICONEXCLAMATION = 0x30,
+  MB_ICONWARNING = 0x30,
+  MB_ICONINFORMATION = 0x40,
+};
 #endif
 
 /**

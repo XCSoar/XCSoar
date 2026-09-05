@@ -73,11 +73,11 @@ RowFormWidget::Row::GetMinimumHeight(const DialogLook &look,
     return Layout::GetMinimumControlHeight();
   }
 
-  /* Use the window rectangle (outer size on GDI), not GetSize()
-     (client area).  Move() sizes the outer HWND; feeding client
-     height back into Move() shrinks bordered controls on every
-     layout pass (e.g. VScrollPanel smooth scroll) until height
-     reaches 0 and PaintCanvas asserts. */
+  /* Use the window rectangle (outer size), not GetSize() (client
+     area).  Move() sizes the outer window; feeding client height
+     back into Move() shrinks bordered controls on every layout
+     pass (e.g. VScrollPanel smooth scroll) until height reaches 0
+     and PaintCanvas asserts. */
   return window->GetPosition().GetHeight();
 }
 
@@ -249,9 +249,7 @@ Window &
 RowFormWidget::Add(Row::Type type, std::unique_ptr<Window> window) noexcept
 {
   assert(IsDefined());
-#ifndef USE_WINUSER
   assert(window->GetParent() == &GetWindow());
-#endif
   assert(window->IsVisible());
   /* cannot append rows after a REMAINING row */
   assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
@@ -286,9 +284,7 @@ RowFormWidget::AddMultiLine(const char *text) noexcept
   ContainerWindow &panel = (ContainerWindow &)GetWindow();
   auto ltw = std::make_unique<LargeTextWindow>();
   ltw->Create(panel, rc, style);
-#ifndef USE_WINUSER
   ltw->SetFont(look.text_font);
-#endif
   ltw->SetColors(look.ReadOnlyValueBackground(), look.list.text_color,
                  look.ReadOnlyValueBorderColor());
 

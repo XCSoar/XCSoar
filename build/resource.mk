@@ -1,12 +1,6 @@
 include build/rsvg.mk
 include build/imagemagick.mk
 
-USE_WIN32_RESOURCES = $(call bool_and,$(HAVE_WIN32),$(call bool_not,$(ENABLE_SDL)))
-
-ifeq ($(USE_WIN32_RESOURCES),y)
-TARGET_CPPFLAGS += -DUSE_WIN32_RESOURCES
-endif
-
 ####### market icons
 
 SVG_MARKET_ICONS = Data/graphics/logo.svg Data/graphics/logo_red.svg
@@ -14,14 +8,6 @@ PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_market.png,
 
 market-icons: $(PNG_MARKET_ICONS)
 $(eval $(call rsvg-convert,$(PNG_MARKET_ICONS),$(DATA)/graphics/%_market.png,Data/graphics/%.svg,--width=512))
-
-####### bitmaps
-
-BMP_BITMAPS = $(wildcard Data/bitmaps/*.bmp)
-PNG_BITMAPS = $(patsubst Data/bitmaps/%.bmp,$(DATA)/bitmaps/%.png,$(BMP_BITMAPS))
-
-$(PNG_BITMAPS): $(DATA)/bitmaps/%.png: Data/bitmaps/%.bmp | $(DATA)/bitmaps/dirstamp
-	$(Q)$(IM_CONVERT) +dither -type GrayScale -define png:color-type=0 $< $@
 
 ####### icons
 
@@ -43,22 +29,15 @@ endef
 # Zoom = bucket density / 96, so each variant carries exactly the
 # detail its density needs.
 #
-# OpenGL magnifies icons in list views, so its builds render three
-# times the detail of each bucket; Icon.cpp scales the nominal density
-# by the same factor, leaving the on-screen size unchanged.  The other
-# canvases stretch by an integer factor and cannot use the detail.
-# Keep in sync with ICON_SUPERSAMPLE in src/ui/canvas/Icon.cpp.
-ifeq ($(OPENGL),y)
+# Icons are rendered at three times the bucket so list views and the
+# memory canvas have enough texels when they scale.  Icon.cpp scales
+# the nominal density by the same factor, leaving the on-screen size
+# unchanged.  Keep in sync with ICON_SUPERSAMPLE in
+# src/ui/canvas/Icon.cpp.
 ICON_ZOOM_LDPI = 3.0
 ICON_ZOOM_MDPI = 5.0
 ICON_ZOOM_XHDPI = 10.0
 ICON_ZOOM_XXHDPI = 15.0
-else
-ICON_ZOOM_LDPI = 1.0
-ICON_ZOOM_MDPI = 1.6667
-ICON_ZOOM_XHDPI = 3.3333
-ICON_ZOOM_XXHDPI = 5.0
-endif
 
 # The SVG sources do not change when the zoom factors do, and all
 # targets share the output directory; track the zoom in a stamp file
@@ -79,13 +58,19 @@ $(eval $(call generate-icon-scale,xxhdpi,$(ICON_ZOOM_XXHDPI)))
 $(PNG_ICONS_ldpi) $(PNG_ICONS_mdpi) $(PNG_ICONS_xhdpi) \
 $(PNG_ICONS_xxhdpi): $(ICON_ZOOM_STAMP)
 
+PNG_ICONS_ALL = $(PNG_ICONS_ldpi) $(PNG_ICONS_mdpi) \
+	$(PNG_ICONS_xhdpi) $(PNG_ICONS_xxhdpi)
+
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | $(DATA)/icons/dirstamp
 	@$(NQ)echo "  XSLT    $@"
 	$(Q)xsltproc --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output $@ $^
 
-# convert to uncompressed 8-bit BMP
+# Masked BMP tiles are only consumed by the memory canvas.
+# OpenGL embeds the SVG-rendered PNG (with alpha) directly.
+ifneq ($(OPENGL),y)
 $(eval $(call convert-to-bmp,$(BMP_ICONS_ALL),%.bmp,%_tile.png))
+endif
 
 ####### splash logo
 
@@ -135,6 +120,30 @@ $(ICNS_SPLASH_1024): %.icns: %.png
 		sips -z 16 16 $< --out $@.iconset/icon_16x16.png >/dev/null && \
 		iconutil -c icns $@.iconset -o $@ && \
 		rm -rf $@.iconset
+endif
+
+# Windows: multi-size .ico from the same logo SVGs (Explorer, taskbar,
+# NSIS). TESTING builds use the red logo, matching Android and macOS.
+ifeq ($(HAVE_WIN32),y)
+WIN_ICON_ICOS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.ico,$(SVG_SPLASH))
+ifeq ($(TESTING),y)
+WIN_ICON_ICO = $(DATA)/graphics/logo_red.ico
+else
+WIN_ICON_ICO = $(DATA)/graphics/logo.ico
+endif
+
+$(WIN_ICON_ICOS): $(DATA)/graphics/%.ico: Data/graphics/%.svg \
+	| $(DATA)/graphics/dirstamp
+	@$(NQ)echo "  ICO     $@"
+	$(Q)tmpdir=$$(mktemp -d) && \
+	trap 'rm -rf -- "$$tmpdir"' EXIT && \
+	for s in 16 24 32 48 64 128 256; do \
+		rsvg-convert --width=$$s --height=$$s $< \
+			-o $$tmpdir/$$s.png || exit 1; \
+	done && \
+	$(IM_CONVERT) $$tmpdir/16.png $$tmpdir/24.png $$tmpdir/32.png \
+		$$tmpdir/48.png $$tmpdir/64.png $$tmpdir/128.png \
+		$$tmpdir/256.png $@
 endif
 
 ####### version
@@ -197,13 +206,8 @@ SVG_LAUNCH = Data/graphics/launcher.svg Data/graphics/launcher_red.svg
 PNG_LAUNCH_640 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_640.png,$(SVG_LAUNCH))
 BMP_LAUNCH_FLY_640 = $(PNG_LAUNCH_640:.png=_1.bmp)
 BMP_LAUNCH_SIM_640 = $(PNG_LAUNCH_640:.png=_2.bmp)
-BMP_LAUNCH_DLL_FLY_640 = $(PNG_LAUNCH_640:.png=_dll_1.bmp)
-BMP_LAUNCH_DLL_SIM_640 = $(PNG_LAUNCH_640:.png=_dll_2.bmp)
 
 BMP_LAUNCH_ALL = $(BMP_LAUNCH_FLY_640) $(BMP_LAUNCH_SIM_640)
-ifeq ($(USE_WIN32_RESOURCES),y)
-BMP_LAUNCH_ALL += $(BMP_LAUNCH_DLL_FLY_640) $(BMP_LAUNCH_DLL_SIM_640)
-endif
 
 # render from SVG to PNG
 $(eval $(call rsvg-convert,$(PNG_LAUNCH_640),$(DATA)/graphics/%_640.png,Data/graphics/%.svg,--width=640))
@@ -212,17 +216,13 @@ $(eval $(call rsvg-convert,$(PNG_LAUNCH_640),$(DATA)/graphics/%_640.png,Data/gra
 $(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_640),%_1.bmp,%.png,-background white))
 $(BMP_LAUNCH_SIM_640): $(BMP_LAUNCH_FLY_640)
 
-# split into two uncompressed 8-bit BMPs (single 'convert' operation)
-$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_640),%_dll_1.bmp,%.png,-background blue))
-$(BMP_LAUNCH_DLL_SIM_640): $(BMP_LAUNCH_DLL_FLY_640)
-
 # back to PNG
 
 PNG_LAUNCH_ALL = $(patsubst %.bmp,%.png,$(BMP_LAUNCH_ALL))
 $(PNG_LAUNCH_ALL): %.png: %.bmp
 	$(Q)$(IM_CONVERT) $< $@
 
-# RGBA PNG halves (preserving alpha for non-Win32 builds)
+# RGBA PNG halves (preserving alpha).
 # These go into graphics2/ because LinkResources.pl loads bitmap_graphic from there
 PNG_LAUNCH_FLY_640_RGBA = $(patsubst $(DATA)/graphics/%.png,$(DATA)/graphics2/%_rgba_1.png,$(PNG_LAUNCH_640))
 PNG_LAUNCH_SIM_640_RGBA = $(patsubst $(DATA)/graphics/%.png,$(DATA)/graphics2/%_rgba_2.png,$(PNG_LAUNCH_640))
@@ -237,9 +237,6 @@ $(PNG_LAUNCH_SIM_640_RGBA): $(PNG_LAUNCH_FLY_640_RGBA)
 
 ifneq ($(TARGET),ANDROID)
 ifneq ($(TARGET),IOS)
-# For non-Win32 or Win32 with SDL (which doesn't use Win32 resources),
-# we need to convert WAV sounds to RAW format
-ifeq ($(USE_WIN32_RESOURCES),n)
 
 WAV_SOUNDS = $(wildcard Data/sound/*.wav)
 RAW_SOUNDS = $(patsubst Data/sound/%.wav,$(DATA)/sound/%.raw,$(WAV_SOUNDS))
@@ -248,7 +245,6 @@ $(RAW_SOUNDS): $(DATA)/sound/%.raw: Data/sound/%.wav | $(DATA)/sound/dirstamp
 	@$(NQ)echo "  SOX     $@"
 	$(Q)sox -V1 $< --bits 16 --rate 44100 --channels 1 $@
 
-endif
 endif
 endif
 
@@ -289,7 +285,7 @@ $(RESOURCE_FLAGS_STAMP): FORCE | $(TARGET_OUTPUT_DIR)/dirstamp
 
 $(TARGET_OUTPUT_DIR)/resources.txt: Data/resources.txt $(RESOURCE_FLAGS_STAMP) | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  CPP     $@"
-	$(Q)cat $< |$(CC) -E -o $@.$(RANDOM_NUMBER).tmp -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) $(GDI_CPPFLAGS) -
+	$(Q)cat $< |$(CC) -E -o $@.$(RANDOM_NUMBER).tmp -I$(OUT)/include $(TARGET_CPPFLAGS) $(OPENGL_CPPFLAGS) -
 	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
 
 RANDOM_NUMBER := $(shell od -vAn -N4 -tu4 < /dev/urandom| tr -d ' ')
@@ -309,73 +305,49 @@ $(call SRC_TO_OBJ,$(SRC)/ResourceLookup.cpp): $(TARGET_OUTPUT_DIR)/include/Resou
 ifeq ($(TARGET_IS_ANDROID),n)
 ifneq ($(TARGET),IOS)
 
-ifeq ($(USE_WIN32_RESOURCES),y)
-RESOURCE_FILES += $(BMP_BITMAPS)
-else
-RESOURCE_FILES += $(PNG_BITMAPS)
-endif
-
 ####### permission disclosure graphics
 
 SVG_DISCLOSURE = Data/graphics/location_pin.svg Data/graphics/notification_bell.svg Data/graphics/bluetooth.svg Data/graphics/warning_triangle.svg Data/graphics/rotate.svg
 PNG_DISCLOSURE_DST = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%.png,$(SVG_DISCLOSURE))
-PNG_DISCLOSURE_WIN = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SVG_DISCLOSURE))
-BMP_DISCLOSURE_WIN = $(PNG_DISCLOSURE_WIN:.png=.bmp)
-
-$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
-	$(DATA)/graphics2/%.png, \
-	Data/graphics/%.svg, \
-	--width=80 --height=80))
-$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_WIN), \
-	$(DATA)/graphics/%.png, \
-	Data/graphics/%.svg, \
-	--width=80 --height=80))
-$(eval $(call convert-to-bmp-white,$(BMP_DISCLOSURE_WIN),%.bmp,%.png))
 
 ####### add gesture icons from docs
 
 GESTURES = down dl dr du left ldr ldrdl lu right rd rl up ud uldr urd urdl
 GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_, \
 	$(addsuffix .png,$(GESTURES)))
-GESTURES_PNG_WIN = $(addprefix $(DATA)/graphics/gesture_, \
-	$(addsuffix .png,$(GESTURES)))
-GESTURES_BMP_WIN = $(GESTURES_PNG_WIN:.png=.bmp)
 
 $(DATA)/graphics2/dirstamp:
 	@$(NQ)echo "  MKDIR   $(DATA)/graphics2/"
 	$(Q)mkdir -p $(DATA)/graphics2
 	@touch $@
 
+$(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
+	$(DATA)/graphics2/%.png, \
+	Data/graphics/%.svg, \
+	--width=80 --height=80))
 $(eval $(call rsvg-convert,$(GESTURES_DST), \
 	$(DATA)/graphics2/gesture_%.png, \
 	doc/manual/figures/gesture_%.svg, \
 	--width=82 --height=82))
-$(eval $(call rsvg-convert,$(GESTURES_PNG_WIN), \
-	$(DATA)/graphics/gesture_%.png, \
-	doc/manual/figures/gesture_%.svg, \
-	--width=82 --height=82))
-$(eval $(call convert-to-bmp-white,$(GESTURES_BMP_WIN),%.bmp,%.png))
 
 RESOURCE_FILES += $(GESTURES_DST)
 RESOURCE_FILES += $(PNG_DISCLOSURE_DST)
+ifeq ($(OPENGL),y)
+RESOURCE_FILES += $(PNG_ICONS_ALL)
+else
 RESOURCE_FILES += $(BMP_ICONS_ALL)
+endif
 RESOURCE_FILES += $(BMP_SPLASH_320) $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_640) $(BMP_TITLE_320) $(BMP_TITLE_110)
-ifneq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(PNG_SPLASH_320_RGBA) $(PNG_SPLASH_160_RGBA) $(PNG_SPLASH_80_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_110_RGBA) $(PNG_TITLE_320_RGBA) $(PNG_TITLE_640_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_320_RGBA)
 RESOURCE_FILES += $(PNG_TITLE_WHITE_640_RGBA)
-endif
 RESOURCE_FILES += $(BMP_LAUNCH_ALL)
-ifneq ($(USE_WIN32_RESOURCES),y)
 RESOURCE_FILES += $(PNG_LAUNCH_FLY_640_RGBA) $(PNG_LAUNCH_SIM_640_RGBA)
-endif
 
 RESOURCE_FILES += $(RAW_SOUNDS)
-
-ifeq ($(USE_WIN32_RESOURCES),n)
 
 $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(filter $(DATA)/icons/%.bmp,$(RESOURCE_FILES))): $(DATA)/icons2/%.png: $(DATA)/icons/%.bmp | $(DATA)/icons2/dirstamp
 	$(Q)$(IM_CONVERT) $< $@
@@ -386,38 +358,11 @@ $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(filter $(DATA)/graph
 RESOURCE_FILES := $(patsubst $(DATA)/graphics/%.bmp,$(DATA)/graphics2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst $(DATA)/icons/%.bmp,$(DATA)/icons2/%.png,$(RESOURCE_FILES))
 RESOURCE_FILES := $(patsubst %.bmp,%.png,$(RESOURCE_FILES))
-endif #!USE_WIN32_RESOURCES
-
-ifeq ($(USE_WIN32_RESOURCES),y)
-RESOURCE_FILES += $(GESTURES_BMP_WIN)
-RESOURCE_FILES += $(BMP_DISCLOSURE_WIN)
-endif #USE_WIN32_RESOURCES
 
 endif #TARGET!=IOS
 endif #!TARGET_IS_ANDROID
 
 ifeq ($(TARGET_IS_ANDROID),n)
-
-ifeq ($(USE_WIN32_RESOURCES),y)
-
-$(TARGET_OUTPUT_DIR)/XCSoar.rc: $(TARGET_OUTPUT_DIR)/resources.txt Data/XCSoar.rc tools/GenerateWindowsResources.pl
-	@$(NQ)echo "  GEN     $@"
-	$(Q)cp Data/XCSoar.rc $@.$(RANDOM_NUMBER).tmp
-	$(Q)$(PERL) tools/GenerateWindowsResources.pl $< >>$@.$(RANDOM_NUMBER).tmp
-	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
-
-$(TARGET_OUTPUT_DIR)/include/resource.h: $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp | $(OUT)/include/dirstamp
-	@$(NQ)echo "  GEN     $@"
-	$(Q)$(PERL) -ne 'print "#define $$1 $$2\n" if /^MAKE_RESOURCE\((\w+), \S+, (\d+)\);/;' $< >$@.$(RANDOM_NUMBER).tmp
-	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
-
-RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/XCSoar.rsc
-
-$(TARGET_OUTPUT_DIR)/XCSoar.rsc: %.rsc: %.rc $(TARGET_OUTPUT_DIR)/include/resource.h $(RESOURCE_FILES) | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
-	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir output/data --include-dir Data -o $@ $<
-
-else # USE_WIN32_RESOURCES
 
 $(TARGET_OUTPUT_DIR)/resources.c: export TARGET_IS_ANDROID:=$(TARGET_IS_ANDROID)
 $(TARGET_OUTPUT_DIR)/resources.c: export ENABLE_OPENGL:=$(OPENGL)
@@ -430,15 +375,14 @@ RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
 RESOURCE_BINARY = $(RESOURCES_BIN)
 
-# For Windows OpenGL builds (SDL), add minimal resource file to add the app icon to the .exe
+# Windows SDL builds: embed the exe icon via a minimal .rc
 ifeq ($(HAVE_WIN32),y)
-$(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc Data/bitmaps/xcsoarswift.ico | $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
+$(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc $(WIN_ICON_ICO) \
+	| $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir Data -o $@ $<
+	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir $(DATA) -o $@ $<
 
 RESOURCE_BINARY += $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc
-endif
-
 endif
 
 endif # !TARGET_IS_ANDROID

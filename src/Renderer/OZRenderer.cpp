@@ -13,10 +13,6 @@
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 
-#ifdef USE_GDI
-#include "AirspaceRendererSettings.hpp"
-#endif
-
 OZRenderer::OZRenderer(const TaskLook &_task_look,
                        const AirspaceLook &_airspace_look,
                        const AirspaceRendererSettings &_settings) noexcept
@@ -32,18 +28,9 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const noexcept
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
 
     canvas.Select(Brush(color.WithAlpha(64)));
-#elif defined(USE_GDI)
-    canvas.SetMixMask();
-
-    // this color is used as the black bit
-    canvas.SetTextColor(color);
-    // get brush, can be solid or a 1bpp bitmap
-    canvas.Select(airspace_look.brushes[settings.classes[AATASK].brush]);
-#else /* !GDI */
-    canvas.Select(Brush(color.WithAlpha(64)));
-#endif /* !GDI */
 
     canvas.SelectNullPen();
     return;
@@ -66,9 +53,7 @@ OZRenderer::Finish([[maybe_unused]] Canvas &canvas, Layer layer) const noexcept
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
-#elif defined(USE_GDI)
-    canvas.SetMixCopy();
-#endif /* GDI */
+#endif
   }
 }
 

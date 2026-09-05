@@ -7,6 +7,6 @@
 #include "opengl/BufferCanvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
 #include "memory/BufferCanvas.hpp"
-#else /* GDI */
-#include "gdi/BufferCanvas.hpp"
+#else
+#error "No canvas backend selected"
 #endif

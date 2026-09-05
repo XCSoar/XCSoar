@@ -218,46 +218,8 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_FB
-else ifeq ($(HAVE_WIN32)$(ENABLE_SDL),yn)
-SCREEN_SOURCES += \
-	$(SRC)/ui/display/gdi/Display.cpp \
-	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
-	$(WINDOW_SRC_DIR)/gdi/Window.cpp \
-	$(WINDOW_SRC_DIR)/gdi/PaintWindow.cpp \
-	$(WINDOW_SRC_DIR)/gdi/ContainerWindow.cpp \
-	$(CONTROL_SRC_DIR)/gdi/LargeTextWindow.cpp \
-	$(CONTROL_SRC_DIR)/RichTextWindow.cpp \
-	$(CONTROL_SRC_DIR)/LinkableWindow.cpp \
-	$(CANVAS_SRC_DIR)/TextWrapper.cpp \
-	$(WINDOW_SRC_DIR)/gdi/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/gdi/TopWindow.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Pen.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Brush.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Bitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/GdiPlusBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/RawBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Canvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/SubCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/BufferCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp \
-
-ifeq ($(OPENGL),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/GeoBitmap.cpp
-ifeq ($(TIFF),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
-endif
-endif
-
-GDI_CPPFLAGS = -DUSE_GDI
-WINUSER_CPPFLAGS = -DUSE_WINUSER
-GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
-
-ifeq ($(TARGET),PC)
-GDI_LDLIBS += -Wl,-subsystem,windows
-endif
+else ifeq ($(HAVE_WIN32),y)
+$(error Windows GDI support has been removed; use TARGET=WIN64OPENGL or TARGET=WIN32OPENGL)
 endif
 
 ifeq ($(TARGET_IS_LINUX),y)
@@ -279,7 +241,6 @@ SCREEN_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
-	$(GDI_CPPFLAGS) $(WINUSER_CPPFLAGS) \
 	$(FREETYPE_FEATURE_CPPFLAGS) \
 	$(APPKIT_CPPFLAGS) \
 	$(UIKIT_CPPFLAGS) \
@@ -292,7 +253,7 @@ SCREEN_CPPFLAGS = \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
-SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS GDI OPENGL WAYLAND EGL GLX APPKIT UIKIT
+SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS OPENGL WAYLAND EGL GLX APPKIT UIKIT
 
 ifeq ($(TIFF),y)
 SCREEN_DEPENDS += LIBTIFF

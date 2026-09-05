@@ -12,7 +12,7 @@
 static void
 PrintScreenSize([[maybe_unused]] const UI::Display &display) noexcept
 {
-#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_GDI)
+#if defined(USE_X11) || defined(MESA_KMS)
   const auto size = display.GetSize();
   printf("Width: %u px | Height: %u px\n", size.width, size.height);
 #endif
