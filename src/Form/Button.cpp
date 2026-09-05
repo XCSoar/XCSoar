@@ -37,6 +37,18 @@ Button::Button() = default;
 Button::~Button() noexcept = default;
 
 void
+PlayHapticFeedback() noexcept
+{
+#ifdef HAVE_VIBRATOR
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+  if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
+      (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
+       GlobalSettings::haptic_feedback))
+    VibrateShort();
+#endif
+}
+
+void
 Button::Create(ContainerWindow &parent,
                const PixelRect &rc,
                WindowStyle style,
@@ -139,13 +151,7 @@ Button::SetDown(bool _down)
   if (_down == down)
     return;
 
-#ifdef HAVE_VIBRATOR
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
-  if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
-      (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
-       GlobalSettings::haptic_feedback))
-    VibrateShort();
-#endif
+  PlayHapticFeedback();
 
   down = _down;
   Invalidate();

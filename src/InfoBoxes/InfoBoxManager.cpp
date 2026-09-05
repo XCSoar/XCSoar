@@ -4,6 +4,7 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
@@ -12,6 +13,8 @@
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
+
+#include <cassert>
 
 namespace InfoBoxManager {
 
@@ -48,6 +51,8 @@ InfoBoxManager::Hide() noexcept
 {
   if (infoboxes_hidden)
     return;
+
+  InfoBoxArrange::Save();
 
   infoboxes_hidden = true;
 
@@ -227,6 +232,8 @@ InfoBoxManager::Create(ContainerWindow &parent,
 void
 InfoBoxManager::Destroy() noexcept
 {
+  InfoBoxArrange::Reset();
+
   infoboxes_ready = false;
   first = true;
 
@@ -236,13 +243,10 @@ InfoBoxManager::Destroy() noexcept
   }
 }
 
-void
-InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
+bool
+InfoBoxManager::ShowInfoBoxPicker(InfoBoxSettings::Panel &panel,
+                                  unsigned i) noexcept
 {
-  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
-  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
-
   const InfoBoxFactory::Type old_type = panel.contents[i];
 
   ComboList list;
@@ -259,23 +263,69 @@ InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
   /* let the user select */
 
   StaticString<20> caption;
-  caption.Format("%s: %d", _("InfoBox"), i + 1);
+  caption.Format("%s: %u", _("InfoBox"), i + 1);
   int result = ComboPicker(caption, list, nullptr, true);
   if (result < 0)
-    return;
+    return false;
 
   /* was there a modification? */
 
   InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].int_value;
   if (new_type == old_type)
-    return;
-
-  /* yes: apply and save it */
+    return false;
 
   panel.contents[i] = new_type;
-  DisplayInfoBox();
+  return true;
+}
 
+void
+InfoBoxManager::ShowInfoBoxPicker(const int i) noexcept
+{
+  if (i < 0)
+    return;
+
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
+  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+
+  if (!ShowInfoBoxPicker(panel, i))
+    return;
+
+  DisplayInfoBox();
   Profile::Save(Profile::map, panel, panel_index);
+}
+
+InfoBoxSettings::Panel &
+InfoBoxManager::GetPanel(unsigned index) noexcept
+{
+  assert(index < InfoBoxSettings::MAX_PANELS);
+
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  return settings.panels[index];
+}
+
+InfoBoxSettings::Panel &
+InfoBoxManager::GetCurrentPanel() noexcept
+{
+  return GetPanel(CommonInterface::GetUIState().panel_index);
+}
+
+void
+InfoBoxManager::Refresh() noexcept
+{
+  DisplayInfoBox();
+}
+
+void
+InfoBoxManager::SavePanel(unsigned index) noexcept
+{
+  Profile::Save(Profile::map, GetPanel(index), index);
+}
+
+void
+InfoBoxManager::SaveCurrentPanel() noexcept
+{
+  SavePanel(CommonInterface::GetUIState().panel_index);
 }
 
 void
