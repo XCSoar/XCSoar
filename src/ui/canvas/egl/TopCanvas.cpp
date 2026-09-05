@@ -81,9 +81,6 @@ TopCanvas::~TopCanvas() noexcept
   ReleaseSurface();
 
 #ifdef MESA_KMS
-  if (next_bo != nullptr)
-    gbm_surface_release_buffer(gbm_surface, next_bo);
-
   if (current_bo != nullptr)
     gbm_surface_release_buffer(gbm_surface, current_bo);
 
@@ -150,40 +147,6 @@ TopCanvas::Flip()
 {
   assert(surface != EGL_NO_SURFACE);
 
-#ifdef MESA_KMS
-  const FileDescriptor dri_fd = display.GetDriFD();
-
-  const auto process_drm_events = [&]() {
-    while (true) {
-      const int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
-      if (handle_event_ret == 0)
-        continue;
-
-      if (errno == EAGAIN)
-        break;
-
-      fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
-      exit(EXIT_FAILURE);
-    }
-  };
-
-  process_drm_events();
-
-  if (page_flip_pending) {
-    if (!page_flip_finished)
-      return;
-
-    page_flip_pending = false;
-    page_flip_finished = false;
-
-    if (current_bo != nullptr)
-      gbm_surface_release_buffer(gbm_surface, current_bo);
-
-    current_bo = next_bo;
-    next_bo = nullptr;
-  }
-#endif
-
   if (!display.SwapBuffers(surface)) {
 #ifdef ANDROID
     LogFormat("eglSwapBuffers() failed: 0x%x", eglGetError());
@@ -198,6 +161,7 @@ TopCanvas::Flip()
 
   auto *fb = (EGL::DrmFrameBuffer *)gbm_bo_get_user_data(new_bo);
   if (!fb) {
+	const FileDescriptor dri_fd = display.GetDriFD();
     fb = new EGL::DrmFrameBuffer(dri_fd, gbm_bo_get_width(new_bo),
                                  gbm_bo_get_height(new_bo), 24, 32,
                                  gbm_bo_get_stride(new_bo),
@@ -212,19 +176,15 @@ TopCanvas::Flip()
 
   if (nullptr == current_bo) {
     saved_crtc = display.ModeGetCrtc();
-    display.ModeSetCrtc(fb->GetId(), 0, 0);
-    current_bo = new_bo;
-  } else {
-    int page_flip_ret = display.ModePageFlip(fb->GetId(),
-                                             DRM_MODE_PAGE_FLIP_EVENT,
-                                             &page_flip_finished);
-    if (0 != page_flip_ret) {
-      fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
-      exit(EXIT_FAILURE);
-    }
-    next_bo = new_bo;
-    page_flip_pending = true;
-    page_flip_finished = false;
+	}
+
+  // Do an immediate flip without waiting for the vertical gap.
+  display.ModeSetCrtc(fb->GetId(), 0, 0);
+
+  if (current_bo != nullptr) {
+    gbm_surface_release_buffer(gbm_surface, current_bo);
   }
+  current_bo = new_bo;
+
 #endif
 }
