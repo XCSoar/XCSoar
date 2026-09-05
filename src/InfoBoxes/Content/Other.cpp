@@ -8,6 +8,7 @@
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/PowerGlobal.hpp"
 #include "system/SystemLoad.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
@@ -27,6 +28,102 @@ UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
   }
 
   data.FmtValue("{}", basic.heart_rate);
+}
+
+/**
+ * Blood oxygen saturation below which the value is shown in yellow.
+ * Above it the value is drawn in the normal text colour.
+ *
+ * There is no official limit for aviation; this is the value recommended
+ * by the AOPA Air Safety Institute and in gliding literature, and it is
+ * also the alarm limit most commonly used on hospital monitors.
+ */
+static constexpr unsigned BLOOD_OXYGEN_CAUTION = 90;
+
+/**
+ * Blood oxygen saturation below which the value is shown in red.  This is
+ * the factory default alarm limit of pulse oximeters that are common in
+ * aviation, and the value at which gliding literature advises to use
+ * supplemental oxygen.
+ */
+static constexpr unsigned BLOOD_OXYGEN_WARNING = 85;
+
+/**
+ * How far the value has to rise above a threshold again before the colour
+ * improves.  Consumer pulse oximeters are only accurate to a few percent,
+ * so without this the colour would flicker while the value hovers around a
+ * threshold.  A deteriorating value changes the colour immediately.
+ */
+static constexpr unsigned BLOOD_OXYGEN_HYSTERESIS = 2;
+
+/**
+ * Show how old the value is once it exceeds this age.  A working pulse
+ * oximeter reports every few seconds; the pilot cannot tell a current
+ * reading from an old one, and the reading already lags the actual
+ * saturation by a minute or more, so an old value should not be presented
+ * as if it were current.
+ */
+static constexpr auto BLOOD_OXYGEN_SHOW_AGE = std::chrono::seconds(30);
+
+static constexpr unsigned BLOOD_OXYGEN_LEVEL_OK = 0;
+static constexpr unsigned BLOOD_OXYGEN_LEVEL_CAUTION = 1;
+static constexpr unsigned BLOOD_OXYGEN_LEVEL_WARNING = 2;
+
+[[gnu::const]]
+static unsigned
+BloodOxygenLevel(unsigned spo2, unsigned previous) noexcept
+{
+  if (spo2 < BLOOD_OXYGEN_WARNING +
+      (previous >= BLOOD_OXYGEN_LEVEL_WARNING ? BLOOD_OXYGEN_HYSTERESIS : 0))
+    return BLOOD_OXYGEN_LEVEL_WARNING;
+
+  if (spo2 < BLOOD_OXYGEN_CAUTION +
+      (previous >= BLOOD_OXYGEN_LEVEL_CAUTION ? BLOOD_OXYGEN_HYSTERESIS : 0))
+    return BLOOD_OXYGEN_LEVEL_CAUTION;
+
+  return BLOOD_OXYGEN_LEVEL_OK;
+}
+
+void
+UpdateInfoBoxBloodOxygen(InfoBoxData &data) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+
+  /* the level the hysteresis compares against; only ever touched from the
+     user interface thread */
+  static unsigned level = BLOOD_OXYGEN_LEVEL_OK;
+
+  if (!basic.blood_oxygen_available) {
+    /* a value that arrives after a gap is judged without hysteresis */
+    level = BLOOD_OXYGEN_LEVEL_OK;
+    data.SetInvalid();
+    return;
+  }
+
+  level = BloodOxygenLevel(basic.blood_oxygen, level);
+
+  data.SetValueFromPercent(basic.blood_oxygen);
+
+  static constexpr unsigned colors[] = {
+    0, // the normal text colour
+    4, // yellow
+    1, // red
+  };
+
+  data.SetValueColor(colors[level]);
+
+  /* this is the age of the reception, not of the measurement: the sensor
+     may have measured considerably earlier than it sent the value */
+  const Validity now{basic.clock};
+  if (now.IsValid()) {
+    const auto age = now.GetTimeDifference(basic.blood_oxygen_available);
+    if (age >= BLOOD_OXYGEN_SHOW_AGE) {
+      data.SetComment(FormatTimespanSmart(age).c_str());
+      return;
+    }
+  }
+
+  data.SetCommentInvalid();
 }
 
 void
