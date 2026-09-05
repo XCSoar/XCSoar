@@ -85,7 +85,9 @@ WindowList::PlaceBelow(Window &w, Window &sibling) noexcept
   assert(Contains(sibling));
 
   list.erase(list.iterator_to(w));
-  list.insert(std::next(list.iterator_to(sibling)), w);
+  auto next = list.iterator_to(sibling);
+  ++next;
+  list.insert(next, w);
 }
 
 [[gnu::pure]]

@@ -127,7 +127,7 @@ protected:
                Color text_color) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
-  void StopDragging() {
+  void StopDragging() noexcept {
     if (!dragging)
       return;
 
