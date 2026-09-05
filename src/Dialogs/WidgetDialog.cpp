@@ -43,7 +43,7 @@ WidgetDialog::WidgetDialog(SingleWindow &parent, const DialogLook &look,
 
 WidgetDialog::WidgetDialog(Auto, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetDialogRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(false), auto_size(true)
@@ -61,7 +61,7 @@ WidgetDialog::WidgetDialog(Auto tag, SingleWindow &parent, const DialogLook &loo
 
 WidgetDialog::WidgetDialog(Full, SingleWindow &parent, const DialogLook &look,
                            const char *caption) noexcept
-  :WndForm(parent, look, parent.GetClientRect(), caption, GetDialogStyle()),
+  :WndForm(parent, look, parent.GetDialogRect(), caption, GetDialogStyle()),
    buttons(GetClientAreaWindow(), look.button),
    widget(GetClientAreaWindow()),
    full(true), auto_size(false)
@@ -108,7 +108,12 @@ WidgetDialog::FinishPreliminary(std::unique_ptr<Widget> _widget) noexcept
 void
 WidgetDialog::AutoSize()
 {
-  const PixelRect parent_rc = GetParentClientRect();
+  AutoSize(GetMainWindow().GetDialogRect());
+}
+
+void
+WidgetDialog::AutoSize(const PixelRect &parent_rc)
+{
   const PixelSize parent_size = parent_rc.GetSize();
 
   PrepareWidget();
@@ -145,7 +150,8 @@ WidgetDialog::AutoSize()
     Resize(rc.GetSize());
     widget.Move(buttons.LeftLayout());
 
-    MoveToCenter();
+    Move({parent_rc.left + (int(parent_size.width) - int(GetSize().width)) / 2,
+          parent_rc.top + (int(parent_size.height) - int(GetSize().height)) / 2});
     return;
   }
 
@@ -164,7 +170,8 @@ WidgetDialog::AutoSize()
   Resize(rc.GetSize());
   widget.Move(buttons.BottomLayout());
 
-  MoveToCenter();
+  Move({parent_rc.left + (int(parent_size.width) - int(GetSize().width)) / 2,
+        parent_rc.top + (int(parent_size.height) - int(GetSize().height)) / 2});
 }
 
 int
@@ -224,6 +231,8 @@ WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
   if (full)
     /* make it full-screen again on the resized main window */
     Move(parent_rc);
+  else if (auto_size)
+    AutoSize(parent_rc);
   else
     WndForm::ReinitialiseLayout(parent_rc);
 }

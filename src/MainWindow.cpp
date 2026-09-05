@@ -286,6 +286,9 @@ MainWindow::GetBottomBannerRect() const noexcept
 {
   assert(bottom_banner_widget != nullptr);
 
+  if (HasDialog())
+    return GetBottomWidgetRect(GetClientRect(), bottom_banner_widget);
+
   return CalculateMapAreaLayout(GetMainRect(), top_widget,
                                 bottom_banner_widget,
                                 bottom_widget).bottom_banner;
@@ -334,15 +337,20 @@ MainWindow::LayoutMapArea() noexcept
     return;
   }
 
+  const bool banner_visible = HaveBottomBannerWidget() &&
+    bottom_banner_widget->GetWindow().IsVisible();
+  if (banner_visible)
+    /* Update width-dependent text metrics before allocating the final height. */
+    bottom_banner_widget->Move(GetBottomBannerRect());
+
   const MapAreaLayout layout =
     CalculateMapAreaLayout(GetMainRect(), top_widget,
                            bottom_banner_widget, bottom_widget);
   if (HaveTopWidget())
     top_widget->Move(layout.top);
 
-  if (HaveBottomBannerWidget() &&
-      bottom_banner_widget->GetWindow().IsVisible())
-    bottom_banner_widget->Move(layout.bottom_banner);
+  if (banner_visible)
+    bottom_banner_widget->Move(GetBottomBannerRect());
 
   if (HaveBottomWidget())
     bottom_widget->Move(layout.bottom);
@@ -351,7 +359,26 @@ MainWindow::LayoutMapArea() noexcept
   if (widget != nullptr)
     widget->Move(layout.map);
 
+  if (banner_visible) {
+    const auto banner_rect =
+      GetBottomWidgetRect(GetClientRect(), bottom_banner_widget);
+    SetDialogOverlay(&bottom_banner_widget->GetWindow(),
+                     banner_rect.GetHeight());
+  } else {
+    SetDialogOverlay(nullptr);
+  }
+
   RaiseBottomBannerWidget();
+}
+
+void
+MainWindow::OnDialogChanged() noexcept
+{
+  if (!HaveBottomBannerWidget())
+    return;
+
+  LayoutMapArea();
+  UpdateMapOverlayButtonLayout();
 }
 
 void
@@ -1077,6 +1104,10 @@ MainWindow::OnResize(PixelSize new_size) noexcept
   if (menu_bar != nullptr)
     menu_bar->OnResize(rc);
 
+  /* Use the final client rectangle (including safe insets) and the banner's
+     updated font metrics even if its reserved height has not changed. */
+  ReinitialiseDialogs();
+
   ProgressGlue::Move(rc);
 }
 
@@ -1632,6 +1663,7 @@ MainWindow::KillBottomBannerWidget() noexcept
 
   WindowWidget *const old = bottom_banner_widget;
   bottom_banner_widget = nullptr;
+  SetDialogOverlay(nullptr);
 
   if (old->GetWindow().IsVisible())
     old->Hide();
@@ -1646,7 +1678,7 @@ MainWindow::RaiseBottomBannerWidget() noexcept
   if (HaveBottomBannerWidget() &&
       bottom_banner_widget->GetWindow().IsVisible()) {
     BringToTopBelowDialogs(bottom_banner_widget->GetWindow());
-    if (menu_bar != nullptr)
+    if (menu_bar != nullptr && !HasDialog())
       menu_bar->BringToTop(*this);
   }
 }

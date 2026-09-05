@@ -83,7 +83,7 @@ class MainWindow : public UI::SingleWindow {
 
   /**
    * A transient #Widget between the main content and the configured
-   * bottom widget.
+   * bottom widget, or in a reserved screen-bottom strip while dialogs are open.
    */
   WindowWidget *bottom_banner_widget = nullptr;
 
@@ -304,7 +304,8 @@ private:
 
   /**
    * Return the banner rectangle inside the InfoBox boundaries, above the
-   * configured bottom widget, for both map and custom pages.
+   * configured bottom widget, for both map and custom pages.  While a dialog
+   * is open, use a full-width strip at the bottom of the client area instead.
    */
   [[gnu::pure]]
   PixelRect GetBottomBannerRect() const noexcept;
@@ -501,7 +502,8 @@ public:
    * Show a transient #Widget below the active main content, reserving space
    * above the configured bottom widget on both map and custom pages.  This
    * replaces (deletes) the previous bottom banner, if any.  To disable this
-   * feature, call this method with widget==nullptr.
+   * feature, call this method with widget==nullptr.  Modal dialogs reserve
+   * space for the banner at the bottom of the screen.
    */
   void SetBottomBannerWidget(WindowWidget *widget) noexcept;
 
@@ -562,6 +564,8 @@ private:
 #endif
 
 protected:
+  void OnDialogChanged() noexcept override;
+
   /* virtual methods from class Window */
   void OnDestroy() noexcept override;
   void OnResize(PixelSize new_size) noexcept override;

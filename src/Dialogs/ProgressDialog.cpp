@@ -23,7 +23,7 @@ GetCancelButtonRect(const PixelRect &client_rc) noexcept
 ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
                                const char *caption)
-  :WndForm(parent, dialog_look, parent.GetClientRect(), caption),
+  :WndForm(parent, dialog_look, parent.GetDialogRect(), caption),
    progress(GetClientAreaWindow())
 {
   auto layout_client = [this]() noexcept {
