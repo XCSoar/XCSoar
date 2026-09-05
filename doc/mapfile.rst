@@ -137,8 +137,6 @@ alpha
    polygons are completely transparent, 255 means they are completely
    opaque. Only used by XCSoar v6.7 and later.
 
-   On Windows, the alpha component is ignored.
-
 Point Features
 ~~~~~~~~~~~~~~
 
