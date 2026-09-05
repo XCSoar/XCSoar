@@ -256,38 +256,18 @@ zh_Hang (Traditional Chinese)
 
 *Contributions attributed to the LK8000 project (http://www.lk8000.it/)
 
-Libraries and code segments are included from the following projects:
+Libraries and code segments are included from the following projects.
+Those whose licence requires its own copyright and permission notice
+are listed in THIRD_PARTY_NOTICES.txt instead, with the licence text
+and the directory they occupy:
  Boost C++ libraries
  https://www.boost.org/
-
- CM4all libcommon
- https://github.com/CM4all/libcommon
-
- OpenGL Mathematics (GLM)
- https://github.com/g-truc/glm
-
- IOIO
- https://github.com/ytai/ioio
-
- UsbSerial for Android
- https://github.com/felHR85/UsbSerial
-
- JasPer
- http://www.ece.uvic.ca/~mdadams/jasper/
-
- zziplib
- http://zziplib.sourceforge.net/
-
- shapelib
- http://shapelib.maptools.org/
 
  Flightgear
  http://www.flightgear.org/~curt
 
  Polygon interior code
  http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
-
- Volkslogger code by Garrecht Ingenieurgesellschaft
 
  Algorithms from Aviation Formulary
  http://williams.best.vwh.net/avform.htm
