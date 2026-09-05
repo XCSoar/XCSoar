@@ -2,7 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "UnitSymbolRenderer.hpp"
+#include "TextInBox.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Color.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm>
@@ -109,10 +111,24 @@ UnitSymbolRenderer::GetAscentHeight(const Font &font, const Unit unit) noexcept
   return font.GetAscentHeight() + font.GetHeight();
 }
 
-void
-UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
-                         const Unit unit,
-                         const Pen &unit_fraction_pen) noexcept
+/**
+ * Draw one line of the symbol, with a halo when one was asked for.
+ */
+static void
+DrawSymbolLine(Canvas &canvas, const PixelPoint p, const char *text,
+               const Color *halo) noexcept
+{
+  if (halo == nullptr)
+    canvas.DrawText(p, text);
+  else
+    RenderShadowedText(canvas, text, p, halo[0], halo[1]);
+}
+
+static void
+DrawSymbol(Canvas &canvas, const PixelPoint pos,
+           const Unit unit,
+           const Pen &unit_fraction_pen,
+           const Color *halo) noexcept
 {
   assert((size_t)unit < ARRAY_SIZE(symbol_strings));
 
@@ -124,7 +140,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
   assert(strings.line2 != nullptr);
 
   if (!strings.line1) {
-    canvas.DrawText(pos, strings.line2);
+    DrawSymbolLine(canvas, pos, strings.line2, halo);
     return;
   }
 
@@ -138,10 +154,10 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                       pos.At(size1.width, size1.height));
     }
 
-    canvas.DrawText(pos, strings.line1);
-    canvas.DrawText(pos.At((size1.width - size2.width) / 2,
-                           size1.height),
-                    strings.line2);
+    DrawSymbolLine(canvas, pos, strings.line1, halo);
+    DrawSymbolLine(canvas, pos.At((size1.width - size2.width) / 2,
+                                  size1.height),
+                   strings.line2, halo);
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
@@ -149,7 +165,27 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
                       pos.At(size2.width, size1.height));
     }
 
-    canvas.DrawText(pos.At((size2.width - size1.width) / 2, 0), strings.line1);
-    canvas.DrawText(pos.At(0, size1.height), strings.line2);
+    DrawSymbolLine(canvas, pos.At((size2.width - size1.width) / 2, 0),
+                   strings.line1, halo);
+    DrawSymbolLine(canvas, pos.At(0, size1.height), strings.line2, halo);
   }
+}
+
+void
+UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
+                         const Unit unit,
+                         const Pen &unit_fraction_pen) noexcept
+{
+  DrawSymbol(canvas, pos, unit, unit_fraction_pen, nullptr);
+}
+
+void
+UnitSymbolRenderer::Draw(Canvas &canvas, const PixelPoint pos,
+                         const Unit unit,
+                         const Pen &unit_fraction_pen,
+                         const Color text_color,
+                         const Color outline_color) noexcept
+{
+  const Color halo[]{text_color, outline_color};
+  DrawSymbol(canvas, pos, unit, unit_fraction_pen, halo);
 }

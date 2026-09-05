@@ -9,6 +9,7 @@
 #include "Input/InputEvents.hpp"
 #include "Renderer/GlassRenderer.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -20,6 +21,25 @@
 
 /** timeout of infobox focus */
 static constexpr std::chrono::steady_clock::duration FOCUS_TIMEOUT_MAX = std::chrono::seconds(20);
+
+/**
+ * Pick an outline colour that separates coloured text from the given
+ * InfoBox background: a light outline on a dark background and the
+ * other way round.
+ */
+static Color
+GetOutlineColor(Color background_color) noexcept
+{
+#ifdef GREYSCALE
+  const unsigned luminosity = background_color.GetLuminosity();
+#else
+  const unsigned luminosity = (background_color.Red()
+                               + background_color.Green()
+                               + background_color.Blue()) / 3;
+#endif
+
+  return luminosity < 0x80 ? COLOR_WHITE : COLOR_BLACK;
+}
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
@@ -99,12 +119,13 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_color)
+InfoBoxWindow::PaintValue(Canvas &canvas, Color background_color)
 {
   if (data.value.empty())
     return;
 
-  canvas.SetTextColor(look.GetValueColor(data.value_color));
+  const Color value_color = look.GetValueColor(data.value_color);
+  canvas.SetTextColor(value_color);
 
   canvas.Select(look.value_font);
   int ascent_height = look.value_font.GetAscentHeight();
@@ -122,7 +143,17 @@ InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_colo
   if (value_p.x < 0)
     value_p.x = 0;
 
-  canvas.TextAutoClipped(value_p, data.value);
+  /* the value colours are picked to convey a meaning, not for contrast
+     against the InfoBox background; outline the ones that are neither
+     black nor white, so they stay readable on either background */
+  const bool outline = value_color != COLOR_BLACK && value_color != COLOR_WHITE;
+  const Color outline_color = GetOutlineColor(background_color);
+
+  if (outline)
+    RenderShadowedText(canvas, data.value.c_str(), value_p,
+                       value_color, outline_color);
+  else
+    canvas.TextAutoClipped(value_p, data.value);
 
   if (unit_width != 0) {
     const int unit_height =
@@ -132,8 +163,13 @@ InfoBoxWindow::PaintValue(Canvas &canvas, [[maybe_unused]] Color background_colo
                                    ascent_height - unit_height);
 
     canvas.Select(look.unit_font);
-    UnitSymbolRenderer::Draw(canvas, unit_p,
-                             data.value_unit, look.unit_fraction_pen);
+    if (outline)
+      UnitSymbolRenderer::Draw(canvas, unit_p,
+                               data.value_unit, look.unit_fraction_pen,
+                               value_color, outline_color);
+    else
+      UnitSymbolRenderer::Draw(canvas, unit_p,
+                               data.value_unit, look.unit_fraction_pen);
   }
 }
 
