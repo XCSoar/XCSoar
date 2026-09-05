@@ -50,6 +50,9 @@ Version 7.46 - not yet released
   - fix UK XC Therm forecast overlays (met-ukv model and layer
     catalog) #3029
 * map
+  - avoid overlapping airspace altitude labels by trying eight nearby
+    positions #771
+  - match airspace altitude label borders to the airspace class color
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
