@@ -375,11 +375,11 @@ ApplyJobPreviewToMap(const std::shared_ptr<XCThermDownloadJob> &job) noexcept
 
   std::lock_guard lock{job->result_mutex};
   if (!job->first_forecast.IsEmpty()) {
-    /* The span starts at the previous UTC hour; when the job has not
-       reported the first slot's UTC yet, fall back to current_utc-1. */
+    /* The span starts at the current UTC hour; when the job has not
+       reported the first slot's UTC yet, fall back to current_utc. */
     const unsigned shown_utc = job->has_first_forecast_utc
       ? job->first_forecast_utc
-      : (job->current_utc + 23) % 24;
+      : job->current_utc;
     ApplyForecastLayerToMap(std::move(job->first_forecast),
                             gettext(job->target_label.c_str()),
                             job->param.c_str(), shown_utc);

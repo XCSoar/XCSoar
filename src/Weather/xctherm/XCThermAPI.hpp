@@ -340,9 +340,15 @@ public:
 
   /**
    * Clear every cached entry for a single parameter (e.g. one altitude
-   * layer). Used by the dialog's Delete button.
+   * layer).
    */
   void ClearLayer(const std::string &parameter) noexcept;
+
+  /**
+   * Remove all on-disk and in-memory XCTherm forecast cache (every
+   * region/model). Used by the dialog's Delete button.
+   */
+  void ClearAllCachedData() noexcept;
 
   /**
    * Stale-run prune: drop cached slices for @p parameter whose

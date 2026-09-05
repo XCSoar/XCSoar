@@ -156,11 +156,10 @@ RunXCThermDownload(CurlGlobal &curl,
     if (job->cancel.load())
       break;
 
-    const bool is_past = (slot_i == 0);
-    const unsigned slot_base = is_past
-      ? (job->current_utc + 23) % 24
-      : job->current_utc;
-    const unsigned slot_offset = is_past ? 0u : slot_i;
+    /* Slot 0 = current UTC hour (floor of now); then +1 … +span.
+       Example at 14:50 with span 6 → 14,15,16,17,18,19,20. */
+    const unsigned slot_base = job->current_utc;
+    const unsigned slot_offset = slot_i;
 
     job->current_offset.store(slot_i + 1);
     job->bytes_now.store(0);
