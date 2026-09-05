@@ -118,6 +118,16 @@ Version 7.46 - not yet released
   - let Left/Right still change settings pages on Services until Up
     selects a service action
 * infoboxen
+  - rearrange the InfoBoxes of a page by dragging one onto another;
+    a long press and lift opens that mode with the box selected;
+    sliding off cancels; a tap explains a card, a short move
+    picks it up, and a hold then lift opens the list; the Quick
+    Menu opens the mode without picking a box up; the cursor keys
+    and a remote stick leave the cards toward Help and Close; the
+    overlay uses the same colours as the InfoBox set dialog
+  - compose the InfoBox sets in the configuration with the same view:
+    every InfoBox is a card which can be moved around; Copy Set, Paste
+    Set and Rename are the dialog buttons
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
     boxes toward square at 150%
@@ -174,6 +184,8 @@ Version 7.46 - not yet released
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
     the comment shows no wind when the box is blank because wind is
     missing
+  - describe how to rearrange the InfoBoxes, and correct how the
+    InfoBox dialogue is opened
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
 * development
