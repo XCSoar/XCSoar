@@ -75,6 +75,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: build-native-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   DEBUG: y
   BOOST: boost_1_87_0
