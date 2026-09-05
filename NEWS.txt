@@ -104,6 +104,8 @@ Version 7.46 - not yet released
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
+  - build system: package Android APK and AAB from one
+    aapt2/bundletool pipeline #2021
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
