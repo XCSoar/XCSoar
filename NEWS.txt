@@ -83,6 +83,8 @@ Version 7.46 - not yet released
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
+  - add "Speed VMG" InfoBox: the part of the ground speed that closes
+    the distance to the next waypoint
 * ui
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
@@ -103,6 +105,8 @@ Version 7.46 - not yet released
     was delivered to it instead of to the control that was pressed
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe the Speed VMG InfoBox in the English, German and Brazilian
+    Portuguese manuals
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow
