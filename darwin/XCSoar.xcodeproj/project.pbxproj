@@ -1624,7 +1624,6 @@
 		5CBFD8C82D742FA600F05795 /* XCSoar-manual-pt_BR.tex */ = {isa = PBXFileReference; lastKnownFileType = text; path = "XCSoar-manual-pt_BR.tex"; sourceTree = "<group>"; };
 		5CBFD8CA2D742FA600F05795 /* buttons.sty */ = {isa = PBXFileReference; lastKnownFileType = text; path = buttons.sty; sourceTree = "<group>"; };
 		5CBFD8CB2D742FA600F05795 /* figures.tex */ = {isa = PBXFileReference; lastKnownFileType = text; path = figures.tex; sourceTree = "<group>"; };
-		5CBFD8CC2D742FA600F05795 /* generate_manuals.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = generate_manuals.bat; sourceTree = "<group>"; };
 		5CBFD8CD2D742FA600F05795 /* latex2html.config */ = {isa = PBXFileReference; lastKnownFileType = text; path = latex2html.config; sourceTree = "<group>"; };
 		5CBFD8CE2D742FA600F05795 /* toc.tex */ = {isa = PBXFileReference; lastKnownFileType = text; path = toc.tex; sourceTree = "<group>"; };
 		5CBFD8CF2D742FA600F05795 /* xcsoar.sty */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcsoar.sty; sourceTree = "<group>"; };
@@ -12595,7 +12594,6 @@
 				5CBFD8C92D742FA600F05795 /* pt_BR */,
 				5CBFD8CA2D742FA600F05795 /* buttons.sty */,
 				5CBFD8CB2D742FA600F05795 /* figures.tex */,
-				5CBFD8CC2D742FA600F05795 /* generate_manuals.bat */,
 				5CBFD8CD2D742FA600F05795 /* latex2html.config */,
 				5CBFD8CE2D742FA600F05795 /* toc.tex */,
 				5CBFD8CF2D742FA600F05795 /* xcsoar.sty */,
