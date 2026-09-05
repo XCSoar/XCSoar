@@ -921,8 +921,6 @@
 		5CBFD5E72D742FA600F05795 /* settings.gradle */ = {isa = PBXFileReference; lastKnownFileType = text; path = settings.gradle; sourceTree = "<group>"; };
 		5CBFD5E92D742FA600F05795 /* AndroidManifest.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AndroidManifest.xml; sourceTree = "<group>"; };
 		5CBFD5EB2D742FA600F05795 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; name = AUTHORS; path = ../AUTHORS; sourceTree = SOURCE_ROOT; };
-		5CBFD5EC2D742FA600F05795 /* README.fedora-rpm */ = {isa = PBXFileReference; lastKnownFileType = text; path = "README.fedora-rpm"; sourceTree = "<group>"; };
-		5CBFD5ED2D742FA600F05795 /* xcsoar.spec */ = {isa = PBXFileReference; lastKnownFileType = text; path = xcsoar.spec; sourceTree = "<group>"; };
 		5CBFD5EF2D742FA600F05795 /* __init__.cpython-312.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-312.pyc"; sourceTree = "<group>"; };
 		5CBFD5F02D742FA600F05795 /* __init__.cpython-313.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "__init__.cpython-313.pyc"; sourceTree = "<group>"; };
 		5CBFD5F12D742FA600F05795 /* autotools.cpython-312.pyc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "autotools.cpython-312.pyc"; sourceTree = "<group>"; };
@@ -1658,9 +1656,6 @@
 		5CBFD8F12D742FA600F05795 /* xcsoar-test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "xcsoar-test"; sourceTree = "<group>"; };
 		5CBFD8F32D742FA600F05795 /* Dockerfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Dockerfile; sourceTree = "<group>"; };
 		5CBFD8F42D742FA600F05795 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		5CBFD8F62D742FA600F05795 /* .cproject */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = .cproject; sourceTree = "<group>"; };
-		5CBFD8F72D742FA600F05795 /* .project */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = .project; sourceTree = "<group>"; };
-		5CBFD8F82D742FA600F05795 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		5CBFD8FA2D742FA600F05795 /* install-android-tools.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-android-tools.sh"; sourceTree = "<group>"; };
 		5CBFD8FB2D742FA600F05795 /* install-darwin-packages.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-darwin-packages.sh"; sourceTree = "<group>"; };
 		5CBFD8FC2D742FA600F05795 /* install-debian-packages.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "install-debian-packages.sh"; sourceTree = "<group>"; };
@@ -6677,8 +6672,6 @@
 		5CBFEDA42D742FA600F05795 /* Version.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Version.hpp; sourceTree = "<group>"; };
 		5CBFEDA52D742FA600F05795 /* Version.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Version.cpp; sourceTree = "<group>"; };
 		5CBFEDA62D742FA600F05795 /* XCSoar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XCSoar.cpp; sourceTree = "<group>"; };
-		5CBFEDA82D742FA600F05795 /* crlf_to_all.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = crlf_to_all.pl; sourceTree = "<group>"; };
-		5CBFEDA92D742FA600F05795 /* original.xci */ = {isa = PBXFileReference; lastKnownFileType = text; path = original.xci; sourceTree = "<group>"; };
 		5CBFEDAB2D742FA600F05795 /* openair.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = openair.txt; sourceTree = "<group>"; };
 		5CBFEDAC2D742FA600F05795 /* openair_extended.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = openair_extended.txt; sourceTree = "<group>"; };
 		5CBFEDAD2D742FA600F05795 /* tnp.sua */ = {isa = PBXFileReference; lastKnownFileType = text; path = tnp.sua; sourceTree = "<group>"; };
@@ -7023,16 +7016,12 @@
 		5CBFEF0C2D742FA600F05795 /* gnuplotitems.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = gnuplotitems.pl; sourceTree = "<group>"; };
 		5CBFEF0D2D742FA600F05795 /* opt_retrospective.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = opt_retrospective.pl; sourceTree = "<group>"; };
 		5CBFEF0E2D742FA600F05795 /* testall.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = testall.pl; sourceTree = "<group>"; };
-		5CBFEF102D742FA600F05795 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		5CBFEF122D742FA600F05795 /* rasp2jp2.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = rasp2jp2.pl; sourceTree = "<group>"; };
-		5CBFEF132D742FA600F05795 /* rasp2xcsoar.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = rasp2xcsoar.pl; sourceTree = "<group>"; };
 		5CBFEF152D742FA600F05795 /* AndroidMockLocation.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = AndroidMockLocation.pl; sourceTree = "<group>"; };
 		5CBFEF162D742FA600F05795 /* BinToC.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = BinToC.pl; sourceTree = "<group>"; };
 		5CBFEF172D742FA600F05795 /* BinToC.pm */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = BinToC.pm; sourceTree = "<group>"; };
 		5CBFEF182D742FA600F05795 /* changelog.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = changelog.sh; sourceTree = "<group>"; };
 		5CBFEF192D742FA600F05795 /* Char2GCE.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = Char2GCE.pl; sourceTree = "<group>"; };
 		5CBFEF1A2D742FA600F05795 /* Char2NE.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = Char2NE.pl; sourceTree = "<group>"; };
-		5CBFEF1B2D742FA600F05795 /* convplane.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = convplane.pl; sourceTree = "<group>"; };
 		5CBFEF1C2D742FA600F05795 /* gdb.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = gdb.py; sourceTree = "<group>"; };
 		5CBFEF1D2D742FA600F05795 /* GenerateMakeResource.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = GenerateMakeResource.pl; sourceTree = "<group>"; };
 		5CBFEF1E2D742FA600F05795 /* GenerateResources.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = GenerateResources.pl; sourceTree = "<group>"; };
@@ -11670,15 +11659,6 @@
 			path = ../android;
 			sourceTree = SOURCE_ROOT;
 		};
-		5CBFD5EE2D742FA600F05795 /* contrib */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD5EC2D742FA600F05795 /* README.fedora-rpm */,
-				5CBFD5ED2D742FA600F05795 /* xcsoar.spec */,
-			);
-			path = contrib;
-			sourceTree = "<group>";
-		};
 		5CBFD6172D742FA600F05795 /* __pycache__ */ = {
 			isa = PBXGroup;
 			children = (
@@ -11766,7 +11746,6 @@
 		5CBFD6B22D742FA600F05795 /* build */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD5EE2D742FA600F05795 /* contrib */,
 				5CBFD62E2D742FA600F05795 /* python */,
 				5CBFD62F2D742FA600F05795 /* abi.mk */,
 				5CBFD6302D742FA600F05795 /* alsa.mk */,
@@ -12733,16 +12712,6 @@
 			path = docker;
 			sourceTree = "<group>";
 		};
-		5CBFD8F92D742FA600F05795 /* eclipse */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD8F62D742FA600F05795 /* .cproject */,
-				5CBFD8F72D742FA600F05795 /* .project */,
-				5CBFD8F82D742FA600F05795 /* README */,
-			);
-			path = eclipse;
-			sourceTree = "<group>";
-		};
 		5CBFD8FD2D742FA600F05795 /* provisioning */ = {
 			isa = PBXGroup;
 			children = (
@@ -12812,7 +12781,6 @@
 			isa = PBXGroup;
 			children = (
 				5CBFD8F52D742FA600F05795 /* docker */,
-				5CBFD8F92D742FA600F05795 /* eclipse */,
 				5CBFD8FD2D742FA600F05795 /* provisioning */,
 				5CBFD90B2D742FA600F05795 /* vagrant */,
 			);
@@ -19976,15 +19944,6 @@
 			path = ../src;
 			sourceTree = SOURCE_ROOT;
 		};
-		5CBFEDAA2D742FA600F05795 /* CRLF_Bug */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFEDA82D742FA600F05795 /* crlf_to_all.pl */,
-				5CBFEDA92D742FA600F05795 /* original.xci */,
-			);
-			path = CRLF_Bug;
-			sourceTree = "<group>";
-		};
 		5CBFEDAE2D742FA600F05795 /* airspace */ = {
 			isa = PBXGroup;
 			children = (
@@ -20431,38 +20390,25 @@
 		5CBFEF112D742FA600F05795 /* test */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFEDAA2D742FA600F05795 /* CRLF_Bug */,
 				5CBFEDEE2D742FA600F05795 /* data */,
 				5CBFEDF12D742FA600F05795 /* lua */,
 				5CBFEE042D742FA600F05795 /* plot */,
 				5CBFEF0B2D742FA600F05795 /* src */,
 				5CBFEF0F2D742FA600F05795 /* tools */,
-				5CBFEF102D742FA600F05795 /* README */,
 			);
 			name = test;
 			path = ../test;
 			sourceTree = SOURCE_ROOT;
 		};
-		5CBFEF142D742FA600F05795 /* rasp */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFEF122D742FA600F05795 /* rasp2jp2.pl */,
-				5CBFEF132D742FA600F05795 /* rasp2xcsoar.pl */,
-			);
-			path = rasp;
-			sourceTree = "<group>";
-		};
 		5CBFEF2D2D742FA600F05795 /* tools */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFEF142D742FA600F05795 /* rasp */,
 				5CBFEF152D742FA600F05795 /* AndroidMockLocation.pl */,
 				5CBFEF162D742FA600F05795 /* BinToC.pl */,
 				5CBFEF172D742FA600F05795 /* BinToC.pm */,
 				5CBFEF182D742FA600F05795 /* changelog.sh */,
 				5CBFEF192D742FA600F05795 /* Char2GCE.pl */,
 				5CBFEF1A2D742FA600F05795 /* Char2NE.pl */,
-				5CBFEF1B2D742FA600F05795 /* convplane.pl */,
 				5CBFEF1C2D742FA600F05795 /* gdb.py */,
 				5CBFEF1D2D742FA600F05795 /* GenerateMakeResource.pl */,
 				5CBFEF1E2D742FA600F05795 /* GenerateResources.pl */,
