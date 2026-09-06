@@ -15,6 +15,7 @@
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "ActionInterface.hpp"
 
 enum ControlIndex {
   ArrivalHeight,
@@ -22,6 +23,7 @@ enum ControlIndex {
   AlternateMode,
   PolarDegradation,
   AutoBugs,
+  TaskMC,
   SafetyMC,
   RiskFactor,
   TurnBackMarker,
@@ -89,8 +91,24 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent,
              settings_computer.polar.auto_bugs);
   SetExpertRow(AutoBugs);
 
+  AddFloat(_("Task MC"),
+           _("The MacCready used at startup for speed-to-fly and task "
+             "calculations. Changing it here also sets the live "
+             "MacCready. Terrain reach, landable colours, abort and the "
+             "Alternates list follow Reach polar, not this value unless "
+             "Reach polar is Task MC."),
+           "%.1f %s", "%.1f",
+           0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
+           false, UnitGroup::VERTICAL_SPEED, task_behaviour.task_mc);
+  DataFieldFloat &task_mc = (DataFieldFloat &)GetDataField(TaskMC);
+  task_mc.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
   AddFloat(_("Safety MC"),
-           _("The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode and for determining arrival altitude at airfields."),
+           _("The MacCready used for terrain reach, landable colours, "
+             "abort and the Alternates list when Reach polar is Safety "
+             "MC. Alternate InfoBoxes and waypoint Alt. diff. MC safety "
+             "always use this value. Speed-to-fly is not affected. "
+             "Higher values treat fewer fields as reachable."),
            "%.1f %s", "%.1f",
            0, Units::ToUserVSpeed(10), GetUserVerticalSpeedStep(),
            false, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc);
@@ -145,6 +163,13 @@ SafetyFactorsConfigPanel::Save(bool &_changed) noexcept
 
   if (SaveValue(AutoBugs, settings_computer.polar.auto_bugs)) {
     Profile::Set(ProfileKeys::AutoBugs, settings_computer.polar.auto_bugs);
+    changed = true;
+  }
+
+  if (SaveValue(TaskMC, UnitGroup::VERTICAL_SPEED, task_behaviour.task_mc)) {
+    Profile::Set(ProfileKeys::TaskMacCready,
+                 iround(task_behaviour.task_mc * 10));
+    ActionInterface::SetMacCready(task_behaviour.task_mc);
     changed = true;
   }
 

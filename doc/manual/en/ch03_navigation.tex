@@ -494,13 +494,14 @@ element functions in the same way as markers or waypoints.
 
 \section{Glide range line}\label{sec:reach}
 
-A reachable glide `footprint' is displayed on the map display as a
-black and white dashed line, indicating where the glider would descend
-through the terrain clearance height.  The reach shows clearance
-tracks extending in all directions, optionally including paths around
-terrain obstructions.  This feature is useful in assessing range with
-respect to topography when searching low for lift, and when flying in
-mountainous areas.
+A reachable glide `footprint' is displayed on the map as a dashed line,
+indicating where the glider would descend through the terrain clearance
+height (terrain reach).  Reach display can also show a working line: how
+far the glider can fly and still arrive at typical thermal-base height
+from this flight.  The reach shows clearance tracks extending in all
+directions, optionally including paths around terrain obstructions.
+This feature is useful in assessing range with respect to topography when
+searching low for lift, and when flying in mountainous areas.
 
 Reach calculations may be configured \config{turningreach} to two levels of detail:
 \begin{description}
@@ -545,16 +546,18 @@ Note that task calculations are otherwise unaffected by reach
 calculations --- for example, altitudes required as shown in the final
 glide bar or task data as displayed in InfoBoxes do not take reach into account.
 
-Furthermore, the reach calculations are used for footprint, landable
-waypoint arrival heights, abort mode and the alternates dialogue.  The glider
-performance and MacCready setting used in these calculations are configurable\config{reachpolar}:
+Furthermore, terrain reach is used for the footprint, landable waypoint
+colours, abort mode and the Alternates list.  The MacCready used in these
+calculations is configurable\config{reachpolar}:
 \begin{description}
-\item[Task] The MC value is that used in the task.
-\item[Safety MC] A configurable, typically low MC value is set by the user to set
-  performance near, but slightly degraded, to best glide performance. The amount of safety 
-  in the reach calculation is then the gap between best glide performance and the glide
-  performance following the safety MC speed to fly. 
+\item[Task MC] The live task MacCready (the same value as speed-to-fly).
+\item[Safety MC] A separate MacCready for conservative reach.  Default is
+  3.2~m/s, about 25:1 on the default LS-8 polar.  Higher values treat fewer
+  fields as reachable.  Speed-to-fly is not affected.
 \end{description}
+The working line always uses Task MC.  Alternate InfoBoxes and the
+waypoint Alt.\ diff.\ MC safety figure always use Safety MC, even if
+Reach polar is Task MC.
 
 \section{Status tabs `\emph{Flight}' and `\emph{Time}'}\label{sec:flight-status}
 

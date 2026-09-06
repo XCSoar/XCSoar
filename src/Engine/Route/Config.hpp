@@ -37,7 +37,10 @@ struct RoutePlannerConfig
       straight line */
   ReachMode reach_calc_mode;
 
-  /** Whether reach/abort calculations will use the task or safety polar */
+  /**
+   * Task MC or Safety MC for terrain reach, landable colours, abort
+   * and the Alternates list. Working reach always uses Task MC.
+   */
   Polar reach_polar_mode;
 
   void SetDefaults();

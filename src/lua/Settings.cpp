@@ -54,6 +54,14 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.forecast_temperature.ToKelvin());
+  } else if (StringIsEqual(name, "taskmc")) {
+      /* The MacCready setting used at startup for speed-to-fly and
+         task calculations. */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+      const TaskBehaviour &task_behaviour = settings_computer.task;
+
+      Lua::Push(L, task_behaviour.task_mc);
   } else if (StringIsEqual(name, "safetymc")) {
       /* The MacCready setting used, when safety MC is enabled 
          for reach calculations, in task abort mode and for 

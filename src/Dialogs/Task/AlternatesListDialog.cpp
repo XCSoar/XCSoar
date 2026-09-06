@@ -4,6 +4,7 @@
 #include "TaskDialogs.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Dialogs/Waypoint/GetWaypointReachability.hpp"
 #include "Form/Form.hpp"
 #include "InfoBoxes/Content/Alternate.hpp"
 #include "Widget/ListWidget.hpp"
@@ -115,12 +116,21 @@ public:
     const ComputerSettings &settings = CommonInterface::GetComputerSettings();
     const Waypoint &waypoint = *alternates[index].waypoint;
     const GlideResult& solution = alternates[index].solution;
+    const auto reach = GetWaypointReach(waypoint);
+
+    double arrival_altitude =
+      solution.SelectAltitudeDifference(settings.task.glide);
+    if (reach.result.terrain_valid == ReachResult::Validity::VALID)
+      arrival_altitude = reach.result.terrain;
+    else if (reach.reachability != WaypointReachability::INVALID)
+      arrival_altitude = reach.result.direct;
 
     WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
-                               solution.SelectAltitudeDifference(settings.task.glide),
+                               arrival_altitude,
                                row_renderer,
                                UIGlobals::GetMapLook().waypoint,
-                               CommonInterface::GetMapSettings().waypoint);
+                               CommonInterface::GetMapSettings().waypoint,
+                               reach.reachability);
   }
 
   bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
