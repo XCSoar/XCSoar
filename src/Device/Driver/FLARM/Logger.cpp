@@ -306,22 +306,26 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
       SendStartByte();
       SendFrameHeader(header, env, std::chrono::seconds(1));
 
-      // Wait for an answer and save the payload for further processing
+      FLARM::MessageType result = FLARM::MessageType::ERROR;
       try {
-        ack = WaitForACKOrNACK(header.sequence_number, data,
-                               length, env,
-                               std::chrono::seconds(10)) ==
-          FLARM::MessageType::ACK;
+        result = WaitForACKOrNACK(header.sequence_number, data,
+                                  length, env,
+                                  std::chrono::seconds(10));
       } catch (const DeviceTimeout &) {
-        ack = false;
+        result = FLARM::MessageType::ERROR;
       }
 
-      if (ack)
+      if (result == FLARM::MessageType::NACK)
+        return false;
+
+      if (result == FLARM::MessageType::ACK && length > 3) {
+        ack = true;
         break;
+      }
     }
 
-    // If no ACK was received
-    if (!ack || length <= 3)
+    // Timeout or ACK payload too short (need sequence, progress, data)
+    if (!ack)
       return false;
 
     length -= 3;
