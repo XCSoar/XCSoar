@@ -13,7 +13,6 @@
 #include "Screen/Layout.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/Font.hpp"
-#include "PageActions.hpp"
 #include "Widget/QuestionWidget.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
@@ -176,7 +175,7 @@ public:
       }
 
       monitor.Schedule();
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomBannerWidget(nullptr);
     });
 
     AddButton(_("Ack Day"), [this](){
@@ -190,7 +189,7 @@ public:
       }
 
       monitor.Schedule();
-      PageActions::RestoreBottom();
+      CommonInterface::main_window->SetBottomBannerWidget(nullptr);
     });
 
     AddButton(_("More"), [this](){
@@ -299,7 +298,7 @@ AirspaceWarningMonitor::HideWidget() noexcept
   if (widget == nullptr)
     return;
 
-  PageActions::RestoreBottom();
+  CommonInterface::main_window->SetBottomBannerWidget(nullptr);
 }
 
 void
@@ -362,7 +361,7 @@ AirspaceWarningMonitor::Check() noexcept
                                        w->GetAirspacePtr(),
                                        w->GetWarningState(),
                                        w->GetSolution());
-    PageActions::SetCustomBottom(widget);
+    CommonInterface::main_window->SetBottomBannerWidget(widget);
   }
 
   // un-blank the display, play a sound

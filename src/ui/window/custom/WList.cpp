@@ -77,6 +77,19 @@ WindowList::BringToBottom(Window &w) noexcept
   list.push_back(w);
 }
 
+void
+WindowList::PlaceBelow(Window &w, Window &sibling) noexcept
+{
+  assert(&w != &sibling);
+  assert(Contains(w));
+  assert(Contains(sibling));
+
+  list.erase(list.iterator_to(w));
+  auto next = list.iterator_to(sibling);
+  ++next;
+  list.insert(next, w);
+}
+
 [[gnu::pure]]
 static bool
 IsAt(Window &w, PixelPoint p) noexcept

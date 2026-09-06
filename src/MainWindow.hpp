@@ -26,6 +26,7 @@ class Menu;
 class MenuBar;
 class GlueMapWindow;
 class Widget;
+class WindowWidget;
 class RasterTerrain;
 class TopographyStore;
 class MapWindowProjection;
@@ -71,14 +72,20 @@ class MainWindow : public UI::SingleWindow {
   GlueMapWindow *map = nullptr;
 
   /**
-   * A #Widget that is shown above the map.
+   * A #Widget that is shown above the main content.
    */
   Widget *top_widget = nullptr;
 
   /**
-   * A #Widget that is shown below the map.
+   * A #Widget that is shown below the main content.
    */
   Widget *bottom_widget = nullptr;
+
+  /**
+   * A transient #Widget between the main content and the configured
+   * bottom widget, or in a reserved screen-bottom strip while dialogs are open.
+   */
+  WindowWidget *bottom_banner_widget = nullptr;
 
   /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
@@ -219,11 +226,7 @@ protected:
   void KillTopWidget() noexcept;
 
   bool HaveBottomWidget() const noexcept {
-    /* currently, the bottom widget is only visible below the map, but
-       not below a custom main widget */
-    /* TODO: eliminate this limitation; don't forget to remove the
-       "widget==nullptr" check from MainWindow::KillBottomWidget() */
-    return bottom_widget != nullptr && widget == nullptr;
+    return bottom_widget != nullptr;
   }
 
   /**
@@ -232,6 +235,20 @@ protected:
    * new bottom Widget.
    */
   void KillBottomWidget() noexcept;
+
+  bool HaveBottomBannerWidget() const noexcept {
+    return bottom_banner_widget != nullptr;
+  }
+
+  /**
+   * Destroy the current bottom banner Widget, but don't resize the main
+   * area.  The caller is responsible for doing that or installing a new
+   * bottom banner Widget.
+   */
+  void KillBottomBannerWidget() noexcept;
+
+  /** Keep the banner above page content, below menu buttons and dialogs. */
+  void RaiseBottomBannerWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -273,11 +290,6 @@ public:
 
 private:
   [[gnu::pure]]
-  const PixelRect &GetMainRect(const PixelRect &full_rc) const noexcept {
-    return FullScreen ? full_rc : map_rect;
-  }
-
-  [[gnu::pure]]
   PixelRect GetMainRect() const noexcept {
     return FullScreen ? GetClientRect() : map_rect;
   }
@@ -291,8 +303,16 @@ private:
   PixelRect GetMapAreaRect() const noexcept;
 
   /**
-   * Move top/bottom widgets and the map into the area returned by
-   * #GetMapAreaRect().
+   * Return the banner rectangle inside the InfoBox boundaries, above the
+   * configured bottom widget, for both map and custom pages.  While a dialog
+   * is open, use a full-width strip at the bottom of the client area instead.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomBannerRect() const noexcept;
+
+  /**
+   * Lay out the top/bottom widgets, banner and active main content inside
+   * #GetMainRect().  The hidden map follows the same content rectangle.
    */
   void LayoutMapArea() noexcept;
 
@@ -465,18 +485,27 @@ public:
   void SchedulePageActionsUpdate() noexcept;
 
   /**
-   * Show this #Widget above the map.  This replaces (deletes) the
+   * Show this #Widget above the main content.  This replaces (deletes) the
    * previous top widget, if any.  To disable this feature, call this
    * method with widget==nullptr.
    */
   void SetTopWidget(Widget *widget) noexcept;
 
   /**
-   * Show this #Widget below the map.  This replaces (deletes) the
+   * Show this #Widget below the main content.  This replaces (deletes) the
    * previous bottom widget, if any.  To disable this feature, call
    * this method with widget==nullptr.
    */
   void SetBottomWidget(Widget *widget) noexcept;
+
+  /**
+   * Show a transient #Widget below the active main content, reserving space
+   * above the configured bottom widget on both map and custom pages.  This
+   * replaces (deletes) the previous bottom banner, if any.  To disable this
+   * feature, call this method with widget==nullptr.  Modal dialogs reserve
+   * space for the banner at the bottom of the screen.
+   */
+  void SetBottomBannerWidget(WindowWidget *widget) noexcept;
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted
@@ -535,6 +564,8 @@ private:
 #endif
 
 protected:
+  void OnDialogChanged() noexcept override;
+
   /* virtual methods from class Window */
   void OnDestroy() noexcept override;
   void OnResize(PixelSize new_size) noexcept override;

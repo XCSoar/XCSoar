@@ -49,6 +49,13 @@ protected:
 
   bool dragging = false;
 
+  /** Retain the requested geometry when a transient overlay reduces space. */
+  bool full_screen = false;
+  PixelSize preferred_size{};
+
+  /** Do not remember sizes imposed by the available dialog area. */
+  bool reinitialising_layout = false;
+
   /** The ClientWindow */
   SolidContainerWindow client_area;
   /** Coordinates of the ClientWindow */
@@ -112,6 +119,9 @@ public:
    */
   [[gnu::pure]]
   UI::SingleWindow &GetMainWindow();
+
+  /** A dialog can fill its available area while leaving an overlay visible. */
+  bool IsMaximised() const noexcept;
 
   const DialogLook &GetLook() const {
     return look;
@@ -197,10 +207,10 @@ public:
   }
 
   /**
-   * Reposition window, if possible.  Will be called whenever the
-   * parent window changes.
+   * Fit the window inside the available dialog area.  Restore its preferred
+   * size when a transient overlay disappears.
    *
-   * @param parent_rc the parent's client rect
+   * @param parent_rc the parent's available dialog rectangle
    */
   virtual void ReinitialiseLayout(const PixelRect &parent_rc) noexcept;
 

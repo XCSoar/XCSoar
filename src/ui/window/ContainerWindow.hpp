@@ -89,6 +89,11 @@ public:
     Invalidate();
   }
 
+  void PlaceChildBelow(Window &child, Window &sibling) noexcept {
+    children.PlaceBelow(child, sibling);
+    Invalidate();
+  }
+
   /**
    * Locate a child window by its relative coordinates.
    */

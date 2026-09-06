@@ -61,13 +61,13 @@ GestureManager::Start(PixelPoint p, int _threshold)
 }
 
 const char*
-GestureManager::Finish()
+GestureManager::Finish() noexcept
 {
   return GetGesture();
 }
 
 const char*
-GestureManager::GetGesture() const
+GestureManager::GetGesture() const noexcept
 {
   return gesture.empty()
     ? NULL
