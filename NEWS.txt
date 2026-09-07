@@ -176,6 +176,9 @@ Version 7.46 - not yet released
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
+  - fix the start point, the leg to the first turn point and the
+    remaining task distance jumping about while waiting inside the
+    start sector #3056
   - a Goto with no known elevation keeps bearing and distance, and
     leaves arrival height, required glide ratio, time estimates and
     the final-glide bar blank instead of assuming sea level #3286
