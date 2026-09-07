@@ -9,11 +9,14 @@
  */
 namespace GlobalSettings {
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(__APPLE__)
 inline bool dark_mode = false;
-inline bool haptic_feedback = false;
 #else
 static constexpr bool dark_mode = false;
+#endif
+
+#ifdef ANDROID
+inline bool haptic_feedback = false;
 #endif
 
 } // namespace GlobalSettings
