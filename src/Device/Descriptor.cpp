@@ -209,9 +209,17 @@ try {
   port = std::move(_port);
 
   parser.Reset();
-  parser.SetReal(!StringIsEqual(driver->name, "Condor") &&
-                 !StringIsEqual(driver->name, "Condor3UDP"));
-  if (config.IsDriver("Condor") || config.IsDriver("Condor3UDP"))
+  /* Condor NMEA GGA has no geoid field; the scenery altitude is already
+     MSL.  Applying EGM96 made GPS ~40 m low (#3055).  Condor3 and
+     Spectate use the same GPS stream; Spectate does not parse LXWP0,
+     so the generic GGA path is the altitude InfoBox. */
+  const bool condor_family =
+    StringIsEqual(driver->name, "Condor") ||
+    StringIsEqual(driver->name, "Condor3") ||
+    StringIsEqual(driver->name, "Condor3UDP") ||
+    StringIsEqual(driver->name, "Condor3Spectate");
+  parser.SetReal(!condor_family);
+  if (condor_family)
     parser.DisableGeoid();
 
   if (driver->CreateOnPort != nullptr) {

@@ -119,6 +119,7 @@ Version 7.45.1 - 2026-08-28
   - skip estimated TAS from ground speed and wind when GPS track is
     missing
 * devices
+  - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too low #3055
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
   - fix the Devices Debug button not writing port traffic to xcsoar.log

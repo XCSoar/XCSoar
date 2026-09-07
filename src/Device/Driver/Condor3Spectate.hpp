@@ -35,8 +35,10 @@ public:
    *
    * @param own_cn if non-empty, exclude this competition number from
    * traffic list
-   * @param live_ref when defined, use Condor3UDP position as the
-   * coordinate reference instead of own-ship from Spectate.json
+   * @param live_ref when defined, use the live GPS position for
+   * PFLAA north/east.  Relative altitude still uses Spectate.json
+   * own-ship when the competition number is found, so GPS geoid
+   * and Condor altimeter heights are not mixed.
    */
   static bool Build(Path path, const char *own_cn, Lines &lines,
                     const Condor3SpectateReference *live_ref=nullptr) noexcept;
