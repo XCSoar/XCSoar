@@ -28,6 +28,20 @@ class StartPoint final : public OrderedTaskPoint {
    */
   StartConstraints constraints;
 
+  /**
+   * The point on the observation zone boundary the aircraft is
+   * expected to cross, as chosen by find_best_start().  This is what
+   * the task navigates to while the start is the active task point.
+   *
+   * It is kept apart from the search point written by the minimum
+   * distance search, which answers a different question and is
+   * updated on a different schedule.
+   *
+   * Invalid until find_best_start() has run, which does not happen
+   * before the aircraft is flying, and again after Reset().
+   */
+  GeoPoint start_location;
+
 public:
   /**
    * Constructor.  Sets task area to non-scorable; distances
@@ -74,8 +88,10 @@ public:
 
   /* virtual methods from class TaskPoint */
   double GetElevation() const noexcept override;
+  const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
+  void Reset() noexcept override;
   bool CheckExitTransition(const AircraftState &ref_now,
                            const AircraftState &ref_last) const noexcept override;
 
