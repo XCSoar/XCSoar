@@ -35,6 +35,10 @@
 #include "NOTAM/NOTAMGlue.hpp"
 #endif
 
+#ifdef __APPLE__
+#include "Apple/DarkMode.hpp"
+#endif
+
 static void
 MessageProcessTimer() noexcept
 {
@@ -197,12 +201,38 @@ SettingsProcessTimer() noexcept
   ProcessAutoBugs();
 }
 
+#ifdef __APPLE__
+
+/**
+ * Follows the operating system's appearance setting, which macOS and
+ * iOS may switch at any time, e.g. on their sunset-to-sunrise
+ * schedule.  Neither sends the application an event our event loop
+ * could see, so the setting has to be polled; this is only necessary
+ * while the user has asked us to follow it.
+ */
+static void
+DarkModeProcessTimer() noexcept
+{
+  if (CommonInterface::GetUISettings().dark_mode !=
+      UISettings::DarkMode::AUTO)
+    return;
+
+  if (UpdateAppleDarkMode())
+    CommonInterface::main_window->ReinitialiseLook();
+}
+
+#endif
+
 static void
 CommonProcessTimer() noexcept
 {
   BlackboardProcessTimer();
 
   SettingsProcessTimer();
+
+#ifdef __APPLE__
+  DarkModeProcessTimer();
+#endif
 
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();

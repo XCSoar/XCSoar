@@ -131,6 +131,7 @@
 #ifdef __APPLE__
 #include "Apple/Services.hpp"
 #include "Apple/BackgroundSave.hpp"
+#include "Apple/DarkMode.hpp"
 #endif
 
 #ifdef HAVE_EDL
@@ -351,6 +352,14 @@ Startup(UI::Display &display)
   main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
+
+#ifdef __APPLE__
+  /* inherit the system appearance; this must happen after the window
+     exists, because on iOS the appearance is read from the window
+     scene, and before anything builds a Look or shows the progress
+     window */
+  UpdateAppleDarkMode();
+#endif
 
 #ifdef ENABLE_OPENGL
   LogFmt("OpenGL: "
