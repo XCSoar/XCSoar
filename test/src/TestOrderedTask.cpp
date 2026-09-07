@@ -10,10 +10,14 @@
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
+#include "Geo/Math.hpp"
 #include "Math/Constants.hpp"
+
+#include <cmath>
 
 #define ACCURACY 500
 
@@ -768,11 +772,13 @@ TestStartNearestPointContinuity()
 
 /**
  * While the start point is still the active task point, the aircraft
- * has not started yet: the origin of the first leg is a point on the
- * start boundary where the start can still be crossed.  Two pieces of
- * code write that value (StartPoint::find_best_start() and the
- * minimum distance Dijkstra); both must search the boundary, so that
- * the origin can at worst step from one boundary node to the next.
+ * has not started yet: it must still leave through the boundary, so
+ * the samples it collects inside the sector constrain nothing.
+ *
+ * Two things follow, and this checks both.  The origin of the first
+ * leg stays on the boundary, moving by at most one of the nodes the
+ * boundary is sampled at.  The minimum remaining task distance stays
+ * put as the aircraft moves about inside the sector.
  */
 static void
 TestStartLegOrigin()
@@ -842,6 +848,105 @@ TestStartLegOrigin()
 }
 
 static void
+AppendStartNavigationTask(OrderedTask &task)
+{
+  task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 3000),
+                         WaypointPtr(wp1), task_behaviour,
+                         ordered_task_settings.start_constraints));
+  task.Append(AATPoint(std::make_unique<CylinderZone>(wp5->location, 20000),
+                       WaypointPtr(wp5), task_behaviour));
+  task.Append(FinishPoint(std::make_unique<CylinderZone>(wp4->location, 500),
+                          WaypointPtr(wp4), task_behaviour,
+                          ordered_task_settings.finish_constraints));
+  task.UpdateGeometry();
+}
+
+/**
+ * The start boundary node which minimises the distance from the
+ * aircraft via that node to the next task point.
+ */
+static GeoPoint
+FindBestStartNode(const OrderedTask &task, const GeoPoint &location)
+{
+  const GeoPoint &next = task.GetPoint(1).GetLocationRemaining();
+
+  GeoPoint best = GeoPoint::Invalid();
+  double best_distance = 0;
+  for (const GeoPoint &node : task.GetPoint(0).GetBoundary()) {
+    const double distance = ::DoubleDistance(location, node, next);
+    if (!best.IsValid() || distance < best_distance) {
+      best = node;
+      best_distance = distance;
+    }
+  }
+
+  return best;
+}
+
+/**
+ * While the start is the active task point, the task navigates to the
+ * start boundary node giving the shortest flight to the next task
+ * point, and the bearing line points at the same node.  The minimum
+ * distance search, which also writes a start node, must not move it.
+ *
+ * A large AAT area next makes the two searches disagree often.  A
+ * reset task forgets the node chosen during the previous flight.
+ */
+static void
+TestStartNavigationLocation()
+{
+  ordered_task_settings.SetDefaults();
+
+  OrderedTask task(task_behaviour);
+  AppendStartNavigationTask(task);
+
+  ok1(!IsError(task.CheckTask()));
+
+  /* circle inside the start cylinder, well clear of its boundary, so
+     the aircraft never starts */
+
+  constexpr double CIRCLE_RADIUS = 0.016; // degrees of latitude
+  const double lon_scale = 1 / std::cos(wp1->location.latitude.Radians());
+
+  auto state_last = MakeTimedAircraft(0, 45 + CIRCLE_RADIUS, 2000,
+                                      FloatDuration{3600});
+
+  for (unsigned i = 1; i <= 40; ++i) {
+    const double a = 0.25 * i;
+    const auto state =
+      MakeTimedAircraft(CIRCLE_RADIUS * lon_scale * std::sin(a),
+                        45 + CIRCLE_RADIUS * std::cos(a), 2000,
+                        FloatDuration{3600 + 2 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+
+    const GeoPoint origin = task.GetPoint(0).GetLocationRemaining();
+
+    ok1(task.GetActiveTaskPointIndex() == 0);
+    ok1(FindBestStartNode(task, state.location).Distance(origin) < 1);
+    ok1(task.GetStats().current_leg.location_remaining
+        .Distance(origin) < 1);
+  }
+
+  /* after a reset, the start on the ground is that of a task which
+     was never flown */
+  task.Reset();
+
+  OrderedTask fresh(task_behaviour);
+  AppendStartNavigationTask(fresh);
+
+  auto ground = MakeTimedAircraft(-0.05, 44.96, 2000, FloatDuration{7200});
+  ground.flying = false;
+  task.Update(ground, ground, glide_polar);
+  fresh.Update(ground, ground, glide_polar);
+
+  ok1(task.GetPoint(0).GetLocationRemaining()
+      .Distance(fresh.GetPoint(0).GetLocationRemaining()) < 1);
+  ok1(equals(task.GetStats().total.planned.GetDistance(),
+             fresh.GetStats().total.planned.GetDistance()));
+}
+
+static void
 TestAll()
 {
   TestFlightToFinish(2000);
@@ -855,12 +960,13 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8 + 31 + 5 + 49);
+  plan_tests(746 + 8 + 31 + 5 + 49 + 123);
 
   task_behaviour.SetDefaults();
 
   TestTravelledDistance();
   TestStartLegOrigin();
+  TestStartNavigationLocation();
   TestAll();
 
   glide_polar.SetMC(1);
