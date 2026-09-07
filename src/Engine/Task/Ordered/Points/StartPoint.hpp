@@ -54,12 +54,19 @@ public:
   }
 
   /**
-   * Search for the min point on the boundary from
-   * the aircraft state to the next point.  Should only
-   * be performed when the aircraft state is inside the sector
+   * Search the observation zone boundary for the node which minimises
+   * the distance from the aircraft via that node to the next task
+   * point, and make it this task point's "remaining" location.
+   *
+   * This runs on every cycle while the start is the active task
+   * point, wherever the aircraft is; it does not require the aircraft
+   * to be inside the sector.  It does not run before takeoff, though:
+   * OrderedTask::CheckTransitions() returns early while the aircraft
+   * is not flying.
    *
    * @param state Current aircraft state
    * @param next Next task point following the start
+   * @param projection the projection used by the task
    */
   void find_best_start(const AircraftState &state,
                        const OrderedTaskPoint &next,
