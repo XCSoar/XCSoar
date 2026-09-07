@@ -148,4 +148,7 @@ private:
   /* virtual methods from class VScrollPanelListener */
   void OnVScrollPanelChange() noexcept override;
   bool OnVScrollPanelGesture(const char *gesture) noexcept override;
+  bool IsVScrollPanelGestureEnabled() const noexcept override {
+    return reserve_scrollbar && static_cast<bool>(gesture_callback);
+  }
 };

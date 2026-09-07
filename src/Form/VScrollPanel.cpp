@@ -395,6 +395,9 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
 void
 VScrollPanel::StartGestureTracking(PixelPoint p) noexcept
 {
+  if (!listener.IsVScrollPanelGestureEnabled())
+    return;
+
   /* Track swipes only in the content area — not on the scrollbar,
      where slight horizontal finger movement during a tap would
      misfire as a page-change swipe (especially noticeable on e-ink

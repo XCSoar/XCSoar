@@ -30,6 +30,15 @@ public:
     (void)gesture;
     return false;
   }
+
+  /**
+   * Returns true if this panel should track and display horizontal swipe
+   * gestures.
+   */
+  [[gnu::pure]]
+  virtual bool IsVScrollPanelGestureEnabled() const noexcept {
+    return false;
+  }
 };
 
 /**
