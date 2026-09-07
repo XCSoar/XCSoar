@@ -6,7 +6,16 @@
 
 int main()
 {
-  plan_tests(9);
+  plan_tests(17);
+
+  ok1(IsAllowedUrl("https://xcsoar.org/download", "xcsoar.org"));
+  ok1(IsAllowedUrl("https://XCSOAR.ORG/download", "xcsoar.org"));
+  ok1(IsAllowedUrl("https://example.org/download", "*"));
+  ok1(!IsAllowedUrl("http://xcsoar.org/download", "xcsoar.org"));
+  ok1(!IsAllowedUrl("HTTPS://xcsoar.org/download", "xcsoar.org"));
+  ok1(!IsAllowedUrl("https://evil.xcsoar.org/download", "xcsoar.org"));
+  ok1(!IsAllowedUrl("https://xcsoar.org:443/download", "xcsoar.org"));
+  ok1(!IsAllowedUrl("https://user@xcsoar.org/download", "xcsoar.org"));
 
   /* basic %XX decoding */
   {
