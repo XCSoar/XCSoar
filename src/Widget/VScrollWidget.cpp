@@ -144,7 +144,7 @@ VScrollWidget::Show(const PixelRect &rc) noexcept
 
   visible = true;
 
-  if (reserve_scrollbar) {
+  if (PaintsScrollOrigin()) {
     /* Viewport-sized child: paint uses VScrollPanel::GetOrigin().
        Avoids Move()/Invalidate of a full virtual-height window on
        every smooth-scroll tick. */
@@ -190,7 +190,7 @@ VScrollWidget::Move(const PixelRect &rc) noexcept
      and child widget changes size) */
   if (visible) {
     UpdateVirtualHeight(rc);
-    widget->Move(reserve_scrollbar
+    widget->Move(PaintsScrollOrigin()
                  ? GetWindow().GetPhysicalRect()
                  : GetWindow().GetVirtualRect());
   }
@@ -295,7 +295,7 @@ VScrollWidget::OnVScrollPanelChange() noexcept
   if (!visible)
     return;
 
-  if (reserve_scrollbar) {
+  if (PaintsScrollOrigin()) {
     /* Origin-only updates already Invalidate() the panel.  Do not
        Move() the child (Window::Move always invalidates, and the
        child stays at the physical viewport).  Resize still goes

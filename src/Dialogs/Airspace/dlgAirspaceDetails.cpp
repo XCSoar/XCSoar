@@ -437,7 +437,8 @@ NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     : SafeString(airspace_name != nullptr ? airspace_name : "");
   Add(std::make_unique<VScrollWidget>(
     std::make_unique<ScrollableLargeTextWidget>(GetLook(), text.c_str()),
-    GetLook(), true, GetScrollableTextRowMaximumHeight(rc)));
+    GetLook(), true, GetScrollableTextRowMaximumHeight(rc),
+    VScrollWidget::ScrollMode::MOVE));
 
   AddNOTAMValidity(notam_opt, buffer);
   AddNOTAMAltitudes(buffer);

@@ -128,6 +128,7 @@ Version 7.45.1 - 2026-08-28
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
 * dialogs
+  - fix NOTAM details text being truncated and unable to scroll #2943
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download

@@ -16,9 +16,11 @@ struct DialogLook;
  *
  * When @a reserve_scrollbar is true the child widget's width is
  * reduced by the scrollbar width so content never hides behind the
- * scrollbar, and the child is sized to the physical viewport (not
- * the full virtual content height) so scrolling does not Move() a
- * tall window each frame.  This mode also enables enhanced keyboard
+ * scrollbar.  With ScrollMode::PAINT, the child is sized to the physical
+ * viewport (not the full virtual content height) so scrolling does not
+ * Move() a tall window each frame.  ScrollMode::MOVE supports children
+ * which do not paint the panel's scroll origin themselves.
+ * Reserving the scrollbar also enables enhanced keyboard
  * handling (Up/Down scroll only when scrollable) and the gesture
  * callback for horizontal swipes.
  *
@@ -28,6 +30,15 @@ struct DialogLook;
  * appropriate for flexible form-style widgets such as RowFormWidget.
  */
 class VScrollWidget final : public WindowWidget, VScrollPanelListener {
+public:
+  enum class ScrollMode {
+    /** Move the full-height child window when scrolling. */
+    MOVE,
+    /** The viewport-sized child paints using VScrollPanel::GetOrigin(). */
+    PAINT,
+  };
+
+private:
   const DialogLook &look;
 
   std::unique_ptr<Widget> widget;
@@ -36,6 +47,8 @@ class VScrollWidget final : public WindowWidget, VScrollPanelListener {
 
   /** Reserve horizontal space for the scrollbar. */
   bool reserve_scrollbar;
+
+  const ScrollMode scroll_mode;
 
   /** Optional maximum height reported to parent layout. */
   unsigned maximum_layout_height;
@@ -54,14 +67,18 @@ public:
    * @param _reserve_scrollbar  If true, reserve space for scrollbar
    *                            and enable enhanced keyboard/gesture
    *                            handling (for rich-text / prose content)
+   * @param _scroll_mode How reserved-scrollbar content is scrolled;
+   *                     PAINT requires the child to read the panel origin
    */
   explicit VScrollWidget(std::unique_ptr<Widget> &&_widget,
                          const DialogLook &_look,
                          bool _reserve_scrollbar = false,
-                         unsigned _maximum_layout_height = 0) noexcept
+                         unsigned _maximum_layout_height = 0,
+                         ScrollMode _scroll_mode = ScrollMode::PAINT) noexcept
     :look(_look),
      widget(std::move(_widget)),
      reserve_scrollbar(_reserve_scrollbar),
+     scroll_mode(_scroll_mode),
      maximum_layout_height(_maximum_layout_height) {}
 
   Widget &GetWidget() noexcept {
@@ -105,6 +122,10 @@ public:
   bool KeyPress(unsigned key_code) noexcept override;
 
 private:
+  bool PaintsScrollOrigin() const noexcept {
+    return reserve_scrollbar && scroll_mode == ScrollMode::PAINT;
+  }
+
   VScrollPanel &GetWindow() noexcept {
     return (VScrollPanel &)WindowWidget::GetWindow();
   }
