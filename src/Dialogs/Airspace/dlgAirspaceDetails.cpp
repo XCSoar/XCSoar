@@ -212,6 +212,8 @@ AirspaceDetailsWidget::AckDayOrEnable() noexcept
  * Extended widget for displaying NOTAM-specific information
  */
 class NOTAMDetailsWidget final : public AirspaceDetailsWidget {
+  VScrollWidget *text_widget = nullptr;
+
 public:
   NOTAMDetailsWidget(ConstAirspacePtr _airspace,
                      ProtectedAirspaceWarningManager *_warnings)
@@ -219,6 +221,7 @@ public:
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 
 private:
   void AddNOTAMIdentifiers(const char *notam_number,
@@ -435,10 +438,12 @@ NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     notam_opt && !notam_opt->text.empty()
     ? SafeString(notam_opt->text)
     : SafeString(airspace_name != nullptr ? airspace_name : "");
-  Add(std::make_unique<VScrollWidget>(
+  auto scroll = std::make_unique<VScrollWidget>(
     std::make_unique<ScrollableLargeTextWidget>(GetLook(), text.c_str()),
     GetLook(), true, GetScrollableTextRowMaximumHeight(rc),
-    VScrollWidget::ScrollMode::MOVE));
+    VScrollWidget::ScrollMode::MOVE);
+  text_widget = scroll.get();
+  Add(std::move(scroll));
 
   AddNOTAMValidity(notam_opt, buffer);
   AddNOTAMAltitudes(buffer);
@@ -451,4 +456,10 @@ NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     const auto distance = closest.Distance(basic.location);
     AddReadOnly(_("Distance"), nullptr, FormatUserDistance(distance));
   }
+}
+
+bool
+NOTAMDetailsWidget::KeyPress(unsigned key_code) noexcept
+{
+  return text_widget != nullptr && text_widget->KeyPress(key_code);
 }

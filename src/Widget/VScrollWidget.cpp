@@ -224,11 +224,11 @@ VScrollWidget::KeyPress(unsigned key_code) noexcept
 {
   /* Let the child widget handle the key first
      (for link/checkbox navigation in rich text). */
-  if (widget->KeyPress(key_code))
+  if (PaintsScrollOrigin() && widget->KeyPress(key_code))
     return true;
 
   if (!reserve_scrollbar)
-    return false;
+    return widget->KeyPress(key_code);
 
   /* Handle scrolling keys — only consume directional keys if there
      is room to scroll.  Otherwise return false so the parent widget
