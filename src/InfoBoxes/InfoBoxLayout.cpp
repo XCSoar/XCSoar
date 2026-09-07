@@ -963,8 +963,14 @@ InfoBoxLayout::GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
   return border;
 }
 
+/**
+ * One line of the layout: a row in portrait, a column in landscape.
+ */
 struct Group {
-  /** the index after the last InfoBox of this row or column */
+  /** the index of the first InfoBox of this line */
+  unsigned start;
+
+  /** the index after the last InfoBox of this line */
   unsigned end;
 
   /** is this a row (and not a column)? */
@@ -990,7 +996,7 @@ FindGroup(const PixelRect *positions, unsigned start, unsigned count) noexcept
       while (end < count && positions[end].top == first.top &&
              positions[end].bottom == first.bottom)
         ++end;
-      return {end, true};
+      return {start, end, true};
     }
 
     if (second.left == first.left && second.right == first.right) {
@@ -998,11 +1004,11 @@ FindGroup(const PixelRect *positions, unsigned start, unsigned count) noexcept
       while (end < count && positions[end].left == first.left &&
              positions[end].right == first.right)
         ++end;
-      return {end, false};
+      return {start, end, false};
     }
   }
 
-  return {start + 1, true};
+  return {start, start + 1, true};
 }
 
 /**
@@ -1010,10 +1016,12 @@ FindGroup(const PixelRect *positions, unsigned start, unsigned count) noexcept
  * according to the given weights; a weight of zero hides the InfoBox.
  */
 static void
-DistributeGroup(InfoBoxLayout::Layout &layout,
-                unsigned start, unsigned end, bool horizontal,
+DistributeGroup(InfoBoxLayout::Layout &layout, const Group &group,
                 const unsigned *weights, unsigned total) noexcept
 {
+  const unsigned start = group.start, end = group.end;
+  const bool horizontal = group.horizontal;
+
   const int begin = horizontal
     ? layout.positions[start].left
     : layout.positions[start].top;
@@ -1081,52 +1089,252 @@ DistributeGroup(InfoBoxLayout::Layout &layout,
     (layout.borders[end - 1] & far_mask);
 }
 
+static constexpr unsigned NO_ANCHOR = ~0u;
+
+/**
+ * Calculate how many slots of its line each InfoBox claims; a weight
+ * of zero means that the InfoBox is not displayed.
+ *
+ * #InfoBoxFactory::e_MergeAcrossLines keeps its weight, because only
+ * its extent across the lines is handed over; that keeps the columns
+ * of both lines aligned.
+ *
+ * @param rejected InfoBoxes which have no InfoBox to merge into and
+ * therefore release their space instead
+ * @param total receives the sum of all weights
+ * @return the number of InfoBoxes with weight zero
+ */
+static unsigned
+CalculateWeights(const InfoBoxSettings::Panel &panel, const Group &group,
+                 const bool *rejected,
+                 unsigned *weights, unsigned &total) noexcept
+{
+  unsigned collapsed = 0;
+
+  /* the most recent InfoBox which claims space of its own;
+     #InfoBoxFactory::e_MergeAlongLine hands its slot to that one */
+  unsigned previous = group.end;
+
+  total = 0;
+
+  for (unsigned i = group.start; i < group.end; ++i) {
+    switch (panel.contents[i]) {
+    case InfoBoxFactory::e_ReleaseSpace:
+      weights[i] = 0;
+      ++collapsed;
+      break;
+
+    case InfoBoxFactory::e_MergeAlongLine:
+      weights[i] = 0;
+      ++collapsed;
+
+      if (previous < group.end) {
+        ++weights[previous];
+        ++total;
+      }
+
+      break;
+
+    case InfoBoxFactory::e_MergeAcrossLines:
+      if (rejected[i]) {
+        weights[i] = 0;
+        ++collapsed;
+        break;
+      }
+
+      [[fallthrough]];
+
+    default:
+      weights[i] = 1;
+      ++total;
+      previous = i;
+      break;
+    }
+  }
+
+  return collapsed;
+}
+
+/**
+ * Find the InfoBox in the previous line which the
+ * #InfoBoxFactory::e_MergeAcrossLines slot @p i shall merge into.
+ *
+ * @param anchors the anchor of each slot already merged across lines
+ * @return the index of the InfoBox, or #NO_ANCHOR if there is none
+ */
+[[gnu::pure]]
+static unsigned
+FindAnchor(const InfoBoxLayout::Layout &layout,
+           const InfoBoxSettings::Panel &panel,
+           const Group &line, const Group &previous,
+           const unsigned *anchors, unsigned i) noexcept
+{
+  if (previous.horizontal != line.horizontal ||
+      previous.end - previous.start != line.end - line.start)
+    /* the two lines are not built alike, so their slots cannot line
+       up */
+    return NO_ANCHOR;
+
+  const PixelRect &a = layout.positions[previous.start];
+  const PixelRect &b = layout.positions[line.start];
+  if (line.horizontal ? a.bottom != b.top : a.right != b.left)
+    /* the two lines do not touch; there is map in between */
+    return NO_ANCHOR;
+
+  unsigned j = previous.start + (i - line.start);
+
+  while (true) {
+    switch (panel.contents[j]) {
+    case InfoBoxFactory::e_MergeAcrossLines:
+      /* a stack of more than two lines */
+      return anchors[j];
+
+    case InfoBoxFactory::e_MergeAlongLine:
+      /* follow it to the InfoBox which swallowed it */
+      if (j == previous.start)
+        return NO_ANCHOR;
+
+      --j;
+      continue;
+
+    case InfoBoxFactory::e_ReleaseSpace:
+      /* that slot has given its space to the rest of its line, so
+         there is nothing left to merge into */
+      return NO_ANCHOR;
+
+    default:
+      return layout.visible[j] ? j : NO_ANCHOR;
+    }
+  }
+}
+
+/**
+ * Let the InfoBox @p anchor grow over the slots [start,end) of the
+ * next line.  That is only possible if both cover exactly the same
+ * columns (rows in landscape); otherwise the result would not be a
+ * rectangle.
+ *
+ * @return false if they do not line up
+ */
+static bool
+ExtendAnchor(InfoBoxLayout::Layout &layout, bool horizontal,
+             unsigned anchor, unsigned start, unsigned end) noexcept
+{
+  const PixelRect &first = layout.positions[start];
+  const PixelRect &last = layout.positions[end - 1];
+  PixelRect &rc = layout.positions[anchor];
+
+  if (horizontal) {
+    if (rc.left != first.left || rc.right != last.right)
+      return false;
+
+    rc.bottom = last.bottom;
+    layout.borders[anchor] = (layout.borders[anchor] & ~BORDERBOTTOM) |
+      (layout.borders[end - 1] & BORDERBOTTOM);
+  } else {
+    if (rc.top != first.top || rc.bottom != last.bottom)
+      return false;
+
+    rc.right = last.right;
+    layout.borders[anchor] = (layout.borders[anchor] & ~BORDERRIGHT) |
+      (layout.borders[end - 1] & BORDERRIGHT);
+  }
+
+  return true;
+}
+
+/**
+ * Merge all #InfoBoxFactory::e_MergeAcrossLines slots into the
+ * InfoBoxes of the previous line.
+ *
+ * @param rejected receives the slots which could not be merged
+ * @return true if another slot was rejected; the layout has to be
+ * calculated again, because that slot now releases its space
+ */
+static bool
+MergeAcrossLines(InfoBoxLayout::Layout &layout,
+                 const InfoBoxSettings::Panel &panel,
+                 const Group *lines, unsigned n_lines,
+                 bool *rejected) noexcept
+{
+  unsigned anchors[InfoBoxSettings::Panel::MAX_CONTENTS];
+  std::fill_n(anchors, layout.count, NO_ANCHOR);
+
+  for (unsigned l = 1; l < n_lines; ++l) {
+    const Group &line = lines[l], &previous = lines[l - 1];
+
+    for (unsigned i = line.start; i < line.end; ++i) {
+      if (panel.contents[i] != InfoBoxFactory::e_MergeAcrossLines ||
+          rejected[i])
+        continue;
+
+      const unsigned anchor =
+        FindAnchor(layout, panel, line, previous, anchors, i);
+
+      /* collect the following slots which merge into the same
+         InfoBox, so that a group of them can cover a wide anchor */
+      unsigned end = i + 1;
+      while (end < line.end &&
+             panel.contents[end] == InfoBoxFactory::e_MergeAcrossLines &&
+             !rejected[end] &&
+             FindAnchor(layout, panel, line, previous,
+                        anchors, end) == anchor)
+        ++end;
+
+      if (anchor == NO_ANCHOR ||
+          !ExtendAnchor(layout, line.horizontal, anchor, i, end)) {
+        for (unsigned j = i; j < end; ++j)
+          rejected[j] = true;
+
+        return true;
+      }
+
+      for (unsigned j = i; j < end; ++j) {
+        layout.visible[j] = false;
+        anchors[j] = anchor;
+      }
+
+      i = end - 1;
+    }
+  }
+
+  return false;
+}
+
 void
 InfoBoxLayout::ApplyContents(Layout &layout,
                              const InfoBoxSettings::Panel &panel) noexcept
 {
+  Group lines[InfoBoxSettings::Panel::MAX_CONTENTS];
+  unsigned n_lines = 0;
+
   for (unsigned start = 0; start < layout.count;) {
-    const auto group = FindGroup(layout.positions, start, layout.count);
+    lines[n_lines] = FindGroup(layout.positions, start, layout.count);
+    start = lines[n_lines++].end;
+  }
 
-    unsigned weights[InfoBoxSettings::Panel::MAX_CONTENTS];
-    unsigned total = 0, collapsed = 0;
+  const Layout geometry = layout;
 
-    /* the most recent InfoBox which claims space of its own;
-       #InfoBoxFactory::e_MergeAlongLine hands its slot to that one */
-    unsigned previous = group.end;
+  /* an InfoBox which cannot be merged into the previous line releases
+     its space instead; that shifts its line and may invalidate other
+     merges, so repeat until the set of rejected slots is stable */
+  bool rejected[InfoBoxSettings::Panel::MAX_CONTENTS] = {};
 
-    for (unsigned i = start; i < group.end; ++i) {
-      switch (panel.contents[i]) {
-      case InfoBoxFactory::e_ReleaseSpace:
-        weights[i] = 0;
-        ++collapsed;
-        break;
+  while (true) {
+    layout = geometry;
 
-      case InfoBoxFactory::e_MergeAlongLine:
-        weights[i] = 0;
-        ++collapsed;
+    for (unsigned l = 0; l < n_lines; ++l) {
+      unsigned weights[InfoBoxSettings::Panel::MAX_CONTENTS], total;
+      const unsigned collapsed =
+        CalculateWeights(panel, lines[l], rejected, weights, total);
 
-        if (previous < group.end) {
-          ++weights[previous];
-          ++total;
-        }
-
-        break;
-
-      default:
-        weights[i] = 1;
-        ++total;
-        previous = i;
-        break;
-      }
+      /* leave the line alone if nothing was collapsed, and also if
+         everything was: a line cannot disappear */
+      if (collapsed > 0 && total > 0)
+        DistributeGroup(layout, lines[l], weights, total);
     }
 
-    /* leave the row alone if nothing was collapsed, and also if
-       everything was: a row cannot disappear */
-    if (collapsed > 0 && total > 0)
-      DistributeGroup(layout, start, group.end, group.horizontal,
-                      weights, total);
-
-    start = group.end;
+    if (!MergeAcrossLines(layout, panel, lines, n_lines, rejected))
+      break;
   }
 }

@@ -158,12 +158,107 @@ TestMergeAlongLine()
   }
 }
 
+static void
+TestMergeAcrossLines()
+{
+  /* the InfoBox at the same position of the previous line grows over
+     the slot and gets twice the height */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{5, e_MergeAcrossLines}});
+
+    ok1(!l.visible[5]);
+    ok1(l.positions[1].left == 120);
+    ok1(l.positions[1].right == 240);
+    ok1(l.positions[1].top == 0);
+    ok1(l.positions[1].bottom == 170);
+
+    /* the rest of both lines is untouched */
+    ok1(l.positions[4].right == 120);
+    ok1(l.positions[6].left == 240);
+  }
+
+  /* two of them next to each other under an anchor which is twice as
+     wide give a 2x2 block */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_MergeAlongLine},
+                          {4, e_MergeAcrossLines}, {5, e_MergeAcrossLines}});
+
+    ok1(!l.visible[1]);
+    ok1(!l.visible[4]);
+    ok1(!l.visible[5]);
+    ok1(l.positions[0].left == 0);
+    ok1(l.positions[0].right == 240);
+    ok1(l.positions[0].bottom == 170);
+  }
+
+  /* one slot under a wide anchor would give an L shape; that is
+     rejected and the slot releases its space instead */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_MergeAlongLine}, {4, e_MergeAcrossLines}});
+
+    ok1(l.positions[0].bottom == 85);
+    ok1(!l.visible[4]);
+    ok1(l.positions[5].left == 0);
+    ok1(l.positions[5].right == 160);
+  }
+
+  /* an anchor which has released its space is no anchor */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{1, e_ReleaseSpace}, {5, e_MergeAcrossLines}});
+
+    ok1(!l.visible[1]);
+    ok1(!l.visible[5]);
+    ok1(l.positions[4].right == 160);
+  }
+
+  /* lines which do not touch cannot be merged: there is map between
+     the second and the third line of this geometry */
+  {
+    const auto l = Apply({0, 0, 480, 800}, Geometry::SPLIT_3X4,
+                         {{8, e_MergeAcrossLines}});
+
+    ok1(!l.visible[8]);
+    ok1(l.positions[4].bottom == 170);
+    ok1(l.positions[9].left == 0);
+    ok1(l.positions[9].right == 160);
+  }
+
+  /* landscape: the previous line is the column to the left */
+  {
+    const auto l = Apply({0, 0, 800, 480}, Geometry::SPLIT_3X4,
+                         {{5, e_MergeAcrossLines}});
+
+    ok1(!l.visible[5]);
+    ok1(l.positions[1].top == 120);
+    ok1(l.positions[1].bottom == 240);
+    ok1(l.positions[1].left == 0);
+    ok1(l.positions[1].right == 280);
+  }
+
+  /* the previous line may have been redistributed by a merge of its
+     own; its edges must still line up with this one */
+  {
+    const auto l = Apply({0, 0, 922, 1990}, Geometry::SPLIT_3X4,
+                         {{3, e_MergeAlongLine}, {5, e_MergeAcrossLines}});
+
+    ok1(!l.visible[5]);
+    ok1(l.positions[1].left == 230);
+    ok1(l.positions[1].right == 460);
+    ok1(l.positions[1].bottom == l.positions[4].bottom);
+  }
+}
+
 int main()
 {
-  plan_tests(24 + 19);
+  plan_tests(24 + 19 + 33);
 
   TestReleaseSpace();
   TestMergeAlongLine();
+  TestMergeAcrossLines();
 
   return exit_status();
 }

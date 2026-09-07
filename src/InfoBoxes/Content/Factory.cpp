@@ -1259,6 +1259,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxPlaceholder,
   },
 
+  // e_MergeAcrossLines
+  {
+    NC_("InfoBox", "Merge across lines"),
+    NC_("Abbreviation", "Merge line"),
+    N_("This slot is merged into the InfoBox at the same position of the previous line. That InfoBox then spans both and gets twice the height, which helps the graphical InfoBoxes such as Barogram or Horizon. The previous line is the row above in portrait and the column to the left in landscape. If the two do not line up exactly, or if there is no InfoBox to merge into, this behaves like Release space."),
+    UpdateInfoBoxPlaceholder,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
