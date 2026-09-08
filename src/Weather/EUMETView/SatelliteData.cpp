@@ -23,19 +23,20 @@ constexpr std::array<EUMETView::Layer, 6> LAYERS{{
   /* first, and the default: the closest counterpart to the pc_met
      vis_hrv images, and the one product here that covers Europe at
      the HRV sampling German pilots are used to reading */
-  {"msg_fes:rgb_eview", N_("European HRV RGB"), 15, 30, 65},
+  {"msg_fes:rgb_eview", N_("European HRV RGB"), 15, 65},
 
   /* MTG, which resolves about twice as finely as SEVIRI HRV */
-  {"mtg_fd:vis06_hrfi", N_("Visible 0.6 µm (MTG)"), 10, 25, 50},
-  {"mtg_fd:ir105_hrfi", N_("Infrared 10.5 µm (MTG)"), 10, 25, 50},
+  {"mtg_fd:vis06_hrfi", N_("Visible 0.6 µm (MTG)"), 10, 50},
+  {"mtg_fd:ir105_hrfi", N_("Infrared 10.5 µm (MTG)"), 10, 50},
 
   /* the RGB composites are assembled from several channels and reach
-     the server a few minutes behind the single channel products */
-  {"mtg_fd:rgb_truecolour", N_("True colour (MTG)"), 10, 30, 55},
-  {"mtg_fd:rgb_geocolour", N_("Geo colour (MTG)"), 10, 30, 55},
+     the server a few minutes behind the single channel products, which
+     the frame search follows on its own */
+  {"mtg_fd:rgb_truecolour", N_("True colour (MTG)"), 10, 55},
+  {"mtg_fd:rgb_geocolour", N_("Geo colour (MTG)"), 10, 55},
 
   /* five minute cadence, and the promptest of them by a wide margin */
-  {"msg_rss:rgb_natural_nrt", N_("Rapid scan natural colour"), 5, 15, 30},
+  {"msg_rss:rgb_natural_nrt", N_("Rapid scan natural colour"), 5, 30},
 }};
 
 /**
@@ -181,7 +182,7 @@ EUMETView::FrameTime(const Layer &layer, const BrokenDateTime &utc) noexcept
        and guessing would ask for one that does not exist */
     return BrokenDateTime::Invalid();
 
-  auto t = utc - std::chrono::minutes{layer.latency_minutes};
+  auto t = utc;
   t.minute = (t.minute / layer.cadence_minutes) * layer.cadence_minutes;
   t.second = 0;
   return t;

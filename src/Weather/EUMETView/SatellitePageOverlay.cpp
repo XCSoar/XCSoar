@@ -194,6 +194,26 @@ std::chrono::steady_clock::time_point tone_time{};
 constexpr unsigned TONE_REDRAW_THRESHOLD = 5;
 
 /**
+ * Was this failure the server saying the frame does not exist?
+ */
+[[gnu::pure]]
+bool
+IsMissingFrame(const std::exception_ptr &error) noexcept
+{
+  if (!error)
+    return false;
+
+  try {
+    std::rethrow_exception(error);
+  } catch (const EUMETView::MissingFrame &) {
+    return true;
+  } catch (...) {
+  }
+
+  return false;
+}
+
+/**
  * The layer whose block came back carrying no pixels at all.
  *
  * A product that needs sunlight is masked to fully transparent where
@@ -207,6 +227,19 @@ constexpr unsigned TONE_REDRAW_THRESHOLD = 5;
  * Weather dialog can mark the entry for as long as it lasts.
  */
 int empty_layer = -1;
+
+/**
+ * The newest frame that could exist, and how many cadence steps back
+ * from it lies the newest one that actually does.
+ *
+ * The offset is thrown away whenever the clock rolls into a new
+ * frame, so every cycle starts optimistic: a publishing delay that
+ * grows is followed by stepping back, and one that shrinks is picked
+ * up on the very next frame rather than being carried around in a
+ * constant measured on some other day.
+ */
+BrokenDateTime nominal_frame = BrokenDateTime::Invalid();
+unsigned frame_offset = 0;
 
 /**
  * Tiles that failed, so a layer the server will not serve at all does
@@ -514,6 +547,24 @@ SatelliteDownloadGlue::OnCompleteNotify() noexcept
     return;
 
   if (completion_error) {
+    if (IsMissingFrame(completion_error)) {
+      /* not a lost tile: the frame is not published yet.  Step back
+         one cadence and let the next pass rebuild the block around
+         the older frame.  Bounded by the age at which the picture
+         would be taken down anyway, so a layer that has stopped
+         publishing does not walk backwards for ever. */
+      completion_error = {};
+
+      const auto &layer = EUMETView::GetLayer(layer_index);
+      if (const unsigned limit =
+            layer.max_age_minutes / layer.cadence_minutes;
+          frame_offset < limit)
+        ++frame_offset;
+
+      EUMETView::ActivatePageOverlay(active_layer);
+      return;
+    }
+
     LogError(std::exchange(completion_error, {}), "Satellite download");
 
     /* send the tile that failed to the back of the queue, so one the
@@ -631,11 +682,20 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
   }
 
   const auto &layer = GetLayer(layer_index);
-  const auto frame_time = FrameTime(layer, BrokenDateTime::NowUTC());
-  if (!frame_time.IsPlausible()) {
+  const auto nominal = FrameTime(layer, BrokenDateTime::NowUTC());
+  if (!nominal.IsPlausible()) {
     glue->Schedule(true);
     return;
   }
+
+  if (!(nominal == nominal_frame)) {
+    /* a newer frame may be out; ask for it before anything older */
+    nominal_frame = nominal;
+    frame_offset = 0;
+  }
+
+  const auto frame_time =
+    nominal - std::chrono::minutes{frame_offset * layer.cadence_minutes};
 
   const auto &projection = map->VisibleProjection();
   const auto screen = projection.IsValid()
