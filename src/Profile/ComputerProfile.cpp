@@ -123,7 +123,7 @@ Profile::Load(const ProfileMap &map, WaveSettings &settings)
 }
 
 bool
-Profile::LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r)
+Profile::LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r) noexcept
 {
   /* NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
      settings file (with negative offsets stored as "utc_offset + 24 *
@@ -138,7 +138,7 @@ Profile::LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r)
     /* no profile value present */
     return false;
 
-  if (value > 13 * 3600 || value < -13 * 3600)
+  if (value > MAX_UTC_OFFSET.count() || value < MIN_UTC_OFFSET.count())
     /* illegal value */
     return false;
 

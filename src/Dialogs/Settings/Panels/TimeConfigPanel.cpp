@@ -17,6 +17,8 @@
 
 using namespace std::chrono;
 
+static constexpr auto UTC_OFFSET_STEP = minutes{15};
+
 enum ControlIndex {
   AutoUTCOffset,
   UTCOffset,
@@ -106,9 +108,9 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
           _("The UTC offset field allows the UTC local time offset to be specified. The local "
             "time is displayed below in order to make it easier to verify the correct offset "
             "has been entered."),
-              hours{-13},
-              hours{13},
-              minutes{30},
+              Profile::MIN_UTC_OFFSET,
+              Profile::MAX_UTC_OFFSET,
+              UTC_OFFSET_STEP,
               utc_offset.ToDuration(),
               2, this);
 
