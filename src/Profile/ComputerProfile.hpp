@@ -5,7 +5,9 @@
 
 class ProfileMap;
 struct ComputerSettings;
+class RoughTimeDelta;
 
 namespace Profile {
+  bool LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r);
   void Load(const ProfileMap &map, ComputerSettings &settings);
 };

@@ -122,8 +122,8 @@ Profile::Load(const ProfileMap &map, WaveSettings &settings)
   map.Get(ProfileKeys::WaveAssistant, settings.enabled);
 }
 
-static bool
-LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r)
+bool
+Profile::LoadUTCOffset(const ProfileMap &map, RoughTimeDelta &value_r)
 {
   /* NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
      settings file (with negative offsets stored as "utc_offset + 24 *

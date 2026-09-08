@@ -6,6 +6,8 @@
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Time.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
+#include "Profile/ComputerProfile.hpp"
+#include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -24,6 +26,9 @@ enum ControlIndex {
 
 class TimeConfigPanel final
   : public RowFormWidget, DataFieldListener {
+  RoughTimeDelta manual_utc_offset;
+  bool manual_utc_offset_modified = false;
+
 public:
   TimeConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -58,12 +63,11 @@ TimeConfigPanel::UpdateAutoUTCOffset(bool automatic)
 {
   SetRowEnabled(UTCOffset, !automatic);
 
-  if (automatic) {
-    const auto utc_offset =
-      RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
-    LoadValueDuration(UTCOffset, utc_offset.ToDuration());
-    SetLocalTime(utc_offset);
-  }
+  const auto utc_offset = automatic
+    ? RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset())
+    : manual_utc_offset;
+  LoadValueDuration(UTCOffset, utc_offset.ToDuration());
+  SetLocalTime(utc_offset);
 }
 
 void
@@ -71,7 +75,9 @@ TimeConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(UTCOffset, df)) {
     const auto &tdf = static_cast<const DataFieldTime &>(df);
-    SetLocalTime(RoughTimeDelta::FromDuration(tdf.GetValue()));
+    manual_utc_offset = RoughTimeDelta::FromDuration(tdf.GetValue());
+    manual_utc_offset_modified = true;
+    SetLocalTime(manual_utc_offset);
   } else if (IsDataField(AutoUTCOffset, df)) {
     UpdateAutoUTCOffset(static_cast<const DataFieldBoolean &>(df).GetValue());
   }
@@ -86,6 +92,8 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
     CommonInterface::GetComputerSettings();
 
   const RoughTimeDelta utc_offset = settings_computer.utc_offset;
+  manual_utc_offset = utc_offset;
+  Profile::LoadUTCOffset(Profile::map, manual_utc_offset);
 
   AddBoolean(_("Automatic UTC offset"),
              _("Use the time zone configured in the operating system, and keep "
@@ -146,10 +154,14 @@ TimeConfigPanel::Save(bool &_changed) noexcept
       settings_computer.utc_offset = new_utc_offset;
       changed = true;
     }
+  }
 
-    /* always store the manual offset, so switching back from automatic
-       mode restores what the user had configured */
-    Profile::Set(ProfileKeys::UTCOffsetSigned, ival);
+  if (!settings_computer.auto_utc_offset || manual_utc_offset_modified) {
+    /* Without this key, a saved offset implies legacy manual mode. */
+    Profile::Set(ProfileKeys::AutoUTCOffset, settings_computer.auto_utc_offset);
+    Profile::Set(ProfileKeys::UTCOffsetSigned, manual_utc_offset.AsSeconds());
+    manual_utc_offset_modified = false;
+    changed = true;
   }
 
   changed |= SaveValue(SystemTimeFromGPS, ProfileKeys::SetSystemTimeFromGPS,
