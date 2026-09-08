@@ -55,6 +55,9 @@ GetFileTypePatterns(const FileType file_type) noexcept
   case FileType::PROFILE:
     return "*.prf\0";
 
+  case FileType::SOFTWARE_UPDATE:
+    return "\0";
+
   case FileType::PLANE:
     return "*.xcp\0";
 
@@ -110,6 +113,9 @@ GetFileTypeDefaultDir(const FileType file_type)
 
   case FileType::PROFILE:
     return AllocatedPath("profiles");
+
+  case FileType::SOFTWARE_UPDATE:
+    return nullptr;
 
   case FileType::UNKNOWN:
   case FileType::COUNT:

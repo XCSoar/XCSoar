@@ -160,7 +160,17 @@ TestAllTypes()
     "\n"
     "name = i.xcl\n"
     "uri = http://x/i\n"
-    "type = checklist\n";
+    "type = checklist\n"
+    "\n"
+    "name = xcsoar-UNIX\n"
+    "uri = https://xcsoar.org/download\n"
+    "description = Stable release\n"
+    "type = software-update\n"
+    "target = UNIX\n"
+    "version = 2026.1\n"
+    "channel = stable\n"
+    "offer-id = 2026.1\n"
+    "source = XCSoar\n";
   StringLineReader reader(input);
   FileRepository repo;
 
@@ -175,6 +185,15 @@ TestAllTypes()
   ok1(repo.FindByName("g.xci")->type == FileType::XCI);
   ok1(repo.FindByName("h.tsk")->type == FileType::TASK);
   ok1(repo.FindByName("i.xcl")->type == FileType::CHECKLIST);
+  const auto *update = repo.FindByName("xcsoar-UNIX");
+  ok1(update != nullptr);
+  ok1(update->type == FileType::SOFTWARE_UPDATE);
+  ok1(update->software_update.has_value());
+  ok1(update->software_update->target == "UNIX");
+  ok1(update->software_update->version == "2026.1");
+  ok1(update->software_update->channel == "stable");
+  ok1(update->software_update->offer_id == "2026.1");
+  ok1(update->software_update->source == "XCSoar");
 }
 
 static void
@@ -454,7 +473,7 @@ int main()
     2 +   // TestCommentsAndBlanks
     8 +   // TestSingleFile
     7 +   // TestMultipleFiles
-    10 +  // TestAllTypes
+    18 +  // TestAllTypes
     3 +   // TestUnknownType
     6 +   // TestUpdateDate
     3 +   // TestInvalidDate
