@@ -338,22 +338,24 @@ WifiListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     ? nullptr
     : FormatWifiSecurityLabel(info.security);
 
-  row_renderer.DrawFirstRow(canvas, rc, GetPrimaryText(info));
-  row_renderer.DrawSecondRow(canvas, rc, GetSecondaryText(info));
-
   const bool connected = info.kind == WifiNetworkKind::ConnectedNetwork;
   const auto state = WifiNetworkEntry::FormatState(info);
+  PixelRect primary_rc = rc;
 
   if (!state.empty()) {
     const auto old_text_color = canvas.GetTextColor();
     if (connected)
       canvas.SetTextColor(COLOR_GREEN);
 
-    row_renderer.DrawRightFirstRow(canvas, rc, state.c_str());
+    primary_rc.right =
+      row_renderer.DrawRightFirstRow(canvas, rc, state.c_str());
 
     if (connected)
       canvas.SetTextColor(old_text_color);
   }
+
+  row_renderer.DrawFirstRow(canvas, primary_rc, GetPrimaryText(info));
+  row_renderer.DrawSecondRow(canvas, rc, GetSecondaryText(info));
 
   if (info.is_visible) {
     StaticString<64> text;
