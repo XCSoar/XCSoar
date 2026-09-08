@@ -101,10 +101,15 @@ const Layer &GetLayer(int index) noexcept;
 
 /**
  * The index of the layer shown when the pilot has not chosen one.
- * `msg_fes:rgb_eview` is the closest counterpart to what German
- * pilots know from the pc_met `vis_hrv` images.
+ *
+ * `mtg_fd:ir105_hrfi`, because infrared is the only kind of product
+ * here that carries a picture around the clock.  The visible ones --
+ * and the RGB composites built on them -- are masked to fully
+ * transparent where the sun is not up, which would leave a pilot who
+ * enables the overlay before dawn or after dusk looking at an empty
+ * map.
  */
-static constexpr int DEFAULT_LAYER = 0;
+static constexpr int DEFAULT_LAYER = 2;
 
 /**
  * The finest tile grid we ever fetch on.
