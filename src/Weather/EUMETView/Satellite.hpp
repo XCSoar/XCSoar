@@ -7,6 +7,7 @@
 #include "system/Path.hpp"
 
 #include <cstddef>
+#include <stdexcept>
 #include <span>
 #include <string>
 #include <string_view>
@@ -65,28 +66,13 @@ struct Layer {
   unsigned cadence_minutes;
 
   /**
-   * How far behind the wall clock to look for the newest frame.  A
-   * frame is not on the server the instant it is nominally acquired,
-   * and asking for one that is not there yet is an error rather than
-   * an older picture: EUMETView answers `InvalidDimensionValue`, "no
-   * nearest match found", instead of falling back.
-   *
-   * Measured per layer; see #LATENCY_MEASURED_ON.
-   */
-  unsigned latency_minutes;
-
-  /**
    * How old the frame on the map may get, counted from the time it
-   * depicts, before it is taken down.  It is already
-   * #latency_minutes to #latency_minutes + #cadence_minutes old when
-   * it arrives, so this has to stay clear of that sum and leave room
-   * for one failed refresh.
+   * depicts, before it is taken down.  This also bounds the search
+   * for the newest frame that exists: there is no point asking for
+   * one so old that it would be taken down on arrival.
    */
   unsigned max_age_minutes;
 };
-
-/** The date the latency figures in #GetLayers() were measured. */
-static constexpr const char *LATENCY_MEASURED_ON = "2026-08-29";
 
 /** Every layer we offer, in the order the configuration lists them. */
 [[gnu::const]]
@@ -203,8 +189,28 @@ IsSameTile(const GeoBitmap::TileData &a,
 }
 
 /**
- * The time of the newest frame of @p layer that can be expected to be
- * on the server at @p utc, rounded down to the layer's cadence.
+ * Thrown when the server has no frame for the time asked for, which
+ * is how it answers a frame that has not been published yet.  Told
+ * apart from the other failures because it is not a lost tile but an
+ * instruction to look further back.
+ */
+class MissingFrame final : public std::runtime_error {
+public:
+  using std::runtime_error::runtime_error;
+};
+
+/**
+ * The newest frame of @p layer that could exist at @p utc, i.e. the
+ * wall clock rounded down to the layer's cadence.
+ *
+ * This is deliberately optimistic.  A frame is not on the server the
+ * instant it is nominally acquired, so the first request of a block
+ * may well be answered with #MissingFrame; the caller then steps back
+ * a cadence at a time until one exists.  Starting from the clock
+ * every time, rather than from a measured latency, means a delay that
+ * grows is followed automatically and one that shrinks is picked up
+ * on the very next frame instead of being carried around in a
+ * constant that was true on the day it was written.
  *
  * @return an invalid time if @p utc is not plausible
  *

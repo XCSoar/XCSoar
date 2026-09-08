@@ -24,17 +24,14 @@ int main()
   const auto layers = EUMETView::GetLayers();
   ok1(!layers.empty());
 
-  /* every layer has to be able to hold a frame long enough to be
-     replaced: a frame is already latency..latency+cadence minutes old
-     when it arrives, so an age limit inside that window would expire
-     the picture as it was installed, and the overlay would flicker
-     rather than refresh */
+  /* #max_age_minutes doubles as the bound on the search for the
+     newest frame that exists, so it has to be worth several cadence
+     steps -- otherwise a layer that publishes a little late could
+     never be reached at all */
   bool ages_are_clear = true;
   bool table_is_sane = true;
   for (const auto &layer : layers) {
-    /* the margin has to leave room for one refresh to fail */
-    if (layer.max_age_minutes <
-        layer.latency_minutes + 2 * layer.cadence_minutes)
+    if (layer.max_age_minutes < 3 * layer.cadence_minutes)
       ages_are_clear = false;
 
     if (layer.cadence_minutes == 0 || 60 % layer.cadence_minutes != 0)
@@ -68,16 +65,20 @@ int main()
   ok1(frame.minute % ten.cadence_minutes == 0);
   ok1(frame.second == 0);
 
-  /* it is never newer than the delay, and never older than the delay
-     plus one cadence step */
+  /* it names the newest frame that could exist, so it is never in the
+     future and never more than one cadence step behind the clock; the
+     caller finds out how far back the newest published one really is
+     by asking for it */
   const auto age = noon - frame;
-  ok1(age >= std::chrono::minutes{ten.latency_minutes});
-  ok1(age < std::chrono::minutes{ten.latency_minutes + ten.cadence_minutes});
+  ok1(age >= std::chrono::minutes{0});
+  ok1(age < std::chrono::minutes{ten.cadence_minutes});
 
-  /* the delay may carry the frame back across midnight */
+  /* stepping back a cadence at a time may carry the search across
+     midnight */
   const BrokenDateTime after_midnight{BrokenDate{2026, 8, 28},
                                       BrokenTime{0, 2, 0}};
-  const auto wrapped = EUMETView::FrameTime(ten, after_midnight);
+  const auto wrapped = EUMETView::FrameTime(ten, after_midnight)
+    - std::chrono::minutes{3 * ten.cadence_minutes};
   ok1(wrapped.IsPlausible());
   ok1(wrapped.day == 27);
   ok1(wrapped.hour == 23);
