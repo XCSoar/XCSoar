@@ -7,7 +7,16 @@
 #include "FileType.hpp"
 #include "time/BrokenDate.hpp"
 
+#include <optional>
 #include <string>
+
+struct SoftwareUpdateMetadata {
+  std::string target;
+  std::string version;
+  std::string channel;
+  std::string offer_id;
+  std::string source;
+};
 
 /**
  * The description of a file that is available in a remote repository.
@@ -38,6 +47,9 @@ struct AvailableFile {
 
   BrokenDate update_date;
 
+  /** Present only for SOFTWARE_UPDATE repository entries. */
+  std::optional<SoftwareUpdateMetadata> software_update;
+
   /**
   * The SHA256 hash of the contents of this file.
   * Zeroed if no hash is available.
@@ -67,6 +79,7 @@ struct AvailableFile {
     area.clear();
     type = FileType::UNKNOWN;
     update_date = BrokenDate::Invalid();
+    software_update.reset();
     sha256_hash.fill(std::byte{0});
   }
 

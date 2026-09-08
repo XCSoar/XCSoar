@@ -69,6 +69,7 @@ static constexpr std::array FILE_TYPE_MAPPINGS{
   FileTypeMapping{"xci", FileType::XCI},
   FileTypeMapping{"task", FileType::TASK},
   FileTypeMapping{"checklist", FileType::CHECKLIST},
+  FileTypeMapping{"software-update", FileType::SOFTWARE_UPDATE},
 };
 
 static FileType
@@ -79,6 +80,34 @@ ParseFileType(std::string_view value) noexcept
       return mapping.type;
 
   return FileType::UNKNOWN;
+}
+
+struct SoftwareUpdateFieldMapping {
+  std::string_view name;
+  std::string SoftwareUpdateMetadata::*field;
+};
+
+static constexpr std::array SOFTWARE_UPDATE_FIELD_MAPPINGS{
+  SoftwareUpdateFieldMapping{"target", &SoftwareUpdateMetadata::target},
+  SoftwareUpdateFieldMapping{"version", &SoftwareUpdateMetadata::version},
+  SoftwareUpdateFieldMapping{"channel", &SoftwareUpdateMetadata::channel},
+  SoftwareUpdateFieldMapping{"offer-id", &SoftwareUpdateMetadata::offer_id},
+  SoftwareUpdateFieldMapping{"source", &SoftwareUpdateMetadata::source},
+};
+
+static bool
+AssignSoftwareUpdateField(AvailableFile &file, std::string_view name,
+                          const char *value)
+{
+  for (const auto &mapping : SOFTWARE_UPDATE_FIELD_MAPPINGS)
+    if (name == mapping.name) {
+      if (!file.software_update)
+        file.software_update.emplace();
+      (*file.software_update).*mapping.field = value;
+      return true;
+    }
+
+  return false;
 }
 
 bool
@@ -108,10 +137,14 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
       file.uri.assign(value);
     } else if (StringIsEqual(name, "description")) {
       file.description.assign(value);
+    } else if (AssignSoftwareUpdateField(file, name, value)) {
+      /* assigned above */
     } else if (StringIsEqual(name, "area")) {
       file.area = value;
     } else if (StringIsEqual(name, "type")) {
       file.type = ParseFileType(value);
+      if (file.type == FileType::SOFTWARE_UPDATE && !file.software_update)
+        file.software_update.emplace();
     } else if (StringIsEqual(name, "update")) {
       unsigned year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)

@@ -335,6 +335,7 @@ bool
 FileTypeSupportsDownload(FileType type) noexcept
 {
   return type != FileType::IGC && type != FileType::UNKNOWN &&
+         type != FileType::SOFTWARE_UPDATE &&
          Net::DownloadManager::IsAvailable();
 }
 
