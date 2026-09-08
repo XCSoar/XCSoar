@@ -14,7 +14,7 @@
 #include <vector>
 #include <memory>
 
-namespace UI { class Notify; }
+namespace UI { class DelayedNotify; class Notify; }
 
 class IgcMetaCache {
   class FillJob;
@@ -55,7 +55,8 @@ public:
   const char *GetCompactInfoPtr(Path path) noexcept;
 
   void StartBackgroundFill(std::vector<AllocatedPath> paths,
-                           UI::Notify *notify = nullptr);
+                           UI::DelayedNotify *progress_notify,
+                           UI::Notify *completion_notify);
   void CancelBackgroundFill() noexcept;
 
   /**
