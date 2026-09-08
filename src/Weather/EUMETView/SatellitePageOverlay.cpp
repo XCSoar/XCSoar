@@ -10,6 +10,7 @@
 #include "Interface.hpp"
 #include "LogFile.hpp"
 #include "Language/Language.hpp"
+#include "Message.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "MapWindow/OverlayBitmap.hpp"
 #include "MapWindow/OverlayLimits.hpp"
@@ -191,6 +192,21 @@ std::chrono::steady_clock::time_point tone_time{};
 
 /** a window that has moved less than this is not worth a redraw */
 constexpr unsigned TONE_REDRAW_THRESHOLD = 5;
+
+/**
+ * The layer whose block came back carrying no pixels at all.
+ *
+ * A product that needs sunlight is masked to fully transparent where
+ * the sun is not up, and the pilot would otherwise be left looking at
+ * an empty map with nothing to say whether the imagery is missing or
+ * merely slow.
+ *
+ * Remembered so the notice is given once when the product falls
+ * silent rather than on every frame -- a night at a five minute
+ * cadence would otherwise be twelve messages an hour -- and so the
+ * Weather dialog can mark the entry for as long as it lasts.
+ */
+int empty_layer = -1;
 
 /**
  * Tiles that failed, so a layer the server will not serve at all does
@@ -450,8 +466,22 @@ void
 FinishBlock() noexcept
 {
   const auto fresh = EUMETView::MakeToneWindow(block_histogram);
-  if (!fresh.IsValid())
+  if (!fresh.IsValid()) {
+    /* ToneHistogram::Add() skips fully transparent pixels, so an
+       empty histogram means every tile of the block was blank: the
+       server served the request but had nothing to draw here. */
+    if (block_layer != empty_layer) {
+      empty_layer = block_layer;
+      Message::AddMessage(_("No satellite imagery here right now"),
+                          gettext(EUMETView::GetLayer(block_layer).label));
+    }
+
     return;
+  }
+
+  if (block_layer == empty_layer)
+    /* it is back */
+    empty_layer = -1;
 
   const auto now = std::chrono::steady_clock::now();
   const auto previous = tone_window;
@@ -662,6 +692,12 @@ EUMETView::ActivatePageOverlay(int layer_index) noexcept
   }
 
   glue->Start(layer_index, next, frame_time);
+}
+
+bool
+EUMETView::IsLayerEmpty(int layer_index) noexcept
+{
+  return layer_index >= 0 && layer_index == empty_layer;
 }
 
 int
