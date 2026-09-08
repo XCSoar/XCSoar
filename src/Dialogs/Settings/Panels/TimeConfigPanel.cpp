@@ -20,10 +20,10 @@ using namespace std::chrono;
 static constexpr auto UTC_OFFSET_STEP = minutes{15};
 
 enum ControlIndex {
-  AutoUTCOffset,
-  UTCOffset,
-  LocalTime,
-  SystemTimeFromGPS
+  AUTO_UTC_OFFSET,
+  UTC_OFFSET,
+  LOCAL_TIME,
+  SYSTEM_TIME_FROM_GPS
 };
 
 class TimeConfigPanel final
@@ -56,31 +56,31 @@ private:
 void
 TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
 {
-  SetText(LocalTime,
+  SetText(LOCAL_TIME,
           FormatLocalTimeHHMM(CommonInterface::Basic().time, utc_offset));
 }
 
 void
 TimeConfigPanel::UpdateAutoUTCOffset(bool automatic)
 {
-  SetRowEnabled(UTCOffset, !automatic);
+  SetRowEnabled(UTC_OFFSET, !automatic);
 
   const auto utc_offset = automatic
     ? RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset())
     : manual_utc_offset;
-  LoadValueDuration(UTCOffset, utc_offset.ToDuration());
+  LoadValueDuration(UTC_OFFSET, utc_offset.ToDuration());
   SetLocalTime(utc_offset);
 }
 
 void
 TimeConfigPanel::OnModified(DataField &df) noexcept
 {
-  if (IsDataField(UTCOffset, df)) {
+  if (IsDataField(UTC_OFFSET, df)) {
     const auto &tdf = static_cast<const DataFieldTime &>(df);
     manual_utc_offset = RoughTimeDelta::FromDuration(tdf.GetValue());
     manual_utc_offset_modified = true;
     SetLocalTime(manual_utc_offset);
-  } else if (IsDataField(AutoUTCOffset, df)) {
+  } else if (IsDataField(AUTO_UTC_OFFSET, df)) {
     UpdateAutoUTCOffset(static_cast<const DataFieldBoolean &>(df).GetValue());
   }
 }
@@ -125,7 +125,7 @@ TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                "real-time clock with battery backup or your computer frequently runs "
                "out of battery power or otherwise loses time."),
              settings_computer.set_system_time_from_gps);
-  SetExpertRow(SystemTimeFromGPS);
+  SetExpertRow(SYSTEM_TIME_FROM_GPS);
 }
 
 bool
@@ -135,7 +135,7 @@ TimeConfigPanel::Save(bool &_changed) noexcept
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
-  changed |= SaveValue(AutoUTCOffset, ProfileKeys::AutoUTCOffset,
+  changed |= SaveValue(AUTO_UTC_OFFSET, ProfileKeys::AutoUTCOffset,
                        settings_computer.auto_utc_offset);
 
   if (settings_computer.auto_utc_offset) {
@@ -149,7 +149,7 @@ TimeConfigPanel::Save(bool &_changed) noexcept
       changed = true;
     }
   } else {
-    const auto ival = GetValueTime(UTCOffset);
+    const auto ival = GetValueTime(UTC_OFFSET);
 
     if (const auto new_utc_offset = RoughTimeDelta::FromDuration(ival);
         new_utc_offset != settings_computer.utc_offset) {
@@ -166,7 +166,7 @@ TimeConfigPanel::Save(bool &_changed) noexcept
     changed = true;
   }
 
-  changed |= SaveValue(SystemTimeFromGPS, ProfileKeys::SetSystemTimeFromGPS,
+  changed |= SaveValue(SYSTEM_TIME_FROM_GPS, ProfileKeys::SetSystemTimeFromGPS,
                        settings_computer.set_system_time_from_gps);
 
   _changed |= changed;
