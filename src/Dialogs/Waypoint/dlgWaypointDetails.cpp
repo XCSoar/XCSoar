@@ -918,8 +918,7 @@ WaypointDetailsWidget::OnAlternateClicked()
   if (!alternate_active)
     return;
 
-  const auto slot =
-    dlgAlternateSlotShowModal(C_("Button", "Select as Alternate"));
+  const auto slot = dlgAlternateSlotShowModal(waypoint->name.c_str());
   if (!slot.has_value())
     return;
 
