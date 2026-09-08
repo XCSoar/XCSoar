@@ -21,6 +21,9 @@ Version 7.46 - not yet released
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
 * input
+  - add ``InfoBoxGeometry`` and ``DarkMode`` input events to cycle
+    InfoBox layout and dark mode from the keyboard (default keys L
+    and N)
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
 * weather

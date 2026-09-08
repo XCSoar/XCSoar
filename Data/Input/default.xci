@@ -532,6 +532,18 @@ type=key
 data=RIGHT
 event=ScreenModes next
 
+mode=default
+type=key
+data=N
+event=DarkMode show
+event=DarkMode toggle
+
+mode=default
+type=key
+data=L
+event=InfoBoxGeometry show
+event=InfoBoxGeometry next
+
 # Gestures
 
 mode=default

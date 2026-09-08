@@ -3,8 +3,10 @@
 
 #include "InputEvents.hpp"
 #include "Dialogs/Error.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
@@ -19,6 +21,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 #include "Components.hpp"
@@ -399,6 +402,160 @@ InputEvents::eventAdjustForecastTemperature(const char *misc)
     StringFormatUnsafe(Temp, "%f", temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
+}
+
+static constexpr StaticEnumChoice info_box_geometry_list[] = {
+  { InfoBoxSettings::Geometry::SPLIT_8,
+    N_("8 Split") },
+  { InfoBoxSettings::Geometry::SPLIT_10,
+    N_("10 Split") },
+  { InfoBoxSettings::Geometry::SPLIT_3X4,
+    N_("12 Split in 3 rows") },
+  { InfoBoxSettings::Geometry::SPLIT_3X5,
+    N_("15 Split in 3 rows") },
+  { InfoBoxSettings::Geometry::SPLIT_3X6,
+    N_("18 Split in 3 rows") },
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_8,
+    N_("8 Bottom or Right") },
+  { InfoBoxSettings::Geometry::BOTTOM_8_VARIO,
+    N_("8 Bottom + Vario (Portrait)") },
+  { InfoBoxSettings::Geometry::TOP_LEFT_8,
+    N_("8 Top or Left") },
+  { InfoBoxSettings::Geometry::TOP_8_VARIO,
+    N_("8 Top + Vario (Portrait)") },
+  { InfoBoxSettings::Geometry::RIGHT_9_VARIO,
+    N_("9 Right + Vario (Landscape)") },
+  { InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO,
+    N_("9 Left + Right + Vario (Landscape)") },
+  { InfoBoxSettings::Geometry::LEFT_12_RIGHT_3_VARIO,
+    N_("12 Left + 3 Right Vario (Landscape)") },
+  { InfoBoxSettings::Geometry::RIGHT_5,
+    N_("5 Right (Square)") },
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_10,
+    N_("10 Bottom or Right") },
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_12,
+    N_("12 Bottom or Right") },
+  { InfoBoxSettings::Geometry::TOP_LEFT_10,
+    N_("10 Top or Left") },
+  { InfoBoxSettings::Geometry::TOP_LEFT_12,
+    N_("12 Top or Left") },
+  { InfoBoxSettings::Geometry::RIGHT_16,
+    N_("16 Right (Landscape)") },
+  { InfoBoxSettings::Geometry::RIGHT_24,
+    N_("24 Bottom or Right") },
+  { InfoBoxSettings::Geometry::TOP_LEFT_4,
+    N_("4 Top or Left") },
+  { InfoBoxSettings::Geometry::BOTTOM_RIGHT_4,
+    N_("4 Bottom or Right") },
+  nullptr
+};
+
+static unsigned
+CountInfoBoxGeometries() noexcept
+{
+  unsigned n = 0;
+  while (info_box_geometry_list[n].display_string != nullptr)
+    ++n;
+  return n;
+}
+
+[[gnu::pure]]
+static unsigned
+FindInfoBoxGeometryIndex(InfoBoxSettings::Geometry geometry) noexcept
+{
+  const unsigned n = CountInfoBoxGeometries();
+  for (unsigned i = 0; i < n; ++i)
+    if (InfoBoxSettings::Geometry(info_box_geometry_list[i].id) == geometry)
+      return i;
+
+  return 0;
+}
+
+[[gnu::pure]]
+static const char *
+InfoBoxGeometryLabel(InfoBoxSettings::Geometry geometry) noexcept
+{
+  const unsigned n = CountInfoBoxGeometries();
+  for (unsigned i = 0; i < n; ++i)
+    if (InfoBoxSettings::Geometry(info_box_geometry_list[i].id) == geometry)
+      return info_box_geometry_list[i].display_string;
+
+  return N_("Unknown");
+}
+
+void
+InputEvents::eventInfoBoxGeometry(const char *misc)
+{
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+  InfoBoxSettings::Geometry &geometry = ui_settings.info_boxes.geometry;
+
+  const unsigned n = CountInfoBoxGeometries();
+  unsigned index = FindInfoBoxGeometryIndex(geometry);
+
+  if (StringIsEqual(misc, "show")) {
+    char tbuf[64];
+    StringFormatUnsafe(tbuf, _("%s: %s"), _("InfoBox geometry"),
+                       gettext(InfoBoxGeometryLabel(geometry)));
+    Message::AddMessage(tbuf);
+    return;
+  }
+
+  if (StringIsEqual(misc, "previous"))
+    index = (index + n - 1) % n;
+  else if (StringIsEqual(misc, "next") || StringIsEqual(misc, "toggle"))
+    index = (index + 1) % n;
+  else
+    return;
+
+  geometry = InfoBoxSettings::Geometry(info_box_geometry_list[index].id);
+  Profile::Set(ProfileKeys::InfoBoxGeometry,
+               EnumCast<InfoBoxSettings::Geometry>()(geometry));
+
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->ReinitialiseLayout();
+
+  char tbuf[64];
+  StringFormatUnsafe(tbuf, _("%s: %s"), _("InfoBox geometry"),
+                     gettext(info_box_geometry_list[index].display_string));
+  Message::AddMessage(tbuf);
+}
+
+void
+InputEvents::eventDarkMode(const char *misc)
+{
+  static const char *const msg[] = {
+    N_("Off"),
+    N_("On"),
+    N_("Auto"),
+  };
+  static_assert(ARRAY_SIZE(msg) == unsigned(UISettings::DarkMode::AUTO) + 1,
+                "Array size must match DarkMode enum");
+
+  const UISettings old_ui_settings = CommonInterface::GetUISettings();
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+
+  if (StringIsEqual(misc, "toggle")) {
+    ui_settings.dark_mode = UISettings::DarkMode(
+      (unsigned(ui_settings.dark_mode) + 1) %
+      (unsigned(UISettings::DarkMode::AUTO) + 1));
+  } else if (StringIsEqual(misc, "off"))
+    ui_settings.dark_mode = UISettings::DarkMode::OFF;
+  else if (StringIsEqual(misc, "on"))
+    ui_settings.dark_mode = UISettings::DarkMode::ON;
+  else if (StringIsEqual(misc, "auto"))
+    ui_settings.dark_mode = UISettings::DarkMode::AUTO;
+  else if (StringIsEqual(misc, "show")) {
+    char tbuf[64];
+    StringFormatUnsafe(tbuf, _("%s: %s"), _("Dark mode"),
+                       gettext(msg[unsigned(ui_settings.dark_mode)]));
+    Message::AddMessage(tbuf);
+    return;
+  } else
+    return;
+
+  Profile::Set(ProfileKeys::DarkMode,
+               EnumCast<UISettings::DarkMode>()(ui_settings.dark_mode));
+  SettingsLeave(old_ui_settings);
 }
 
 void
