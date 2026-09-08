@@ -66,6 +66,27 @@ public:
 };
 
 #if defined(_WIN32)
+/**
+ * Scale a coarse TIFF toward about 2048 pixels on its longer axis, and
+ * at most four times, so a georeferenced grid with few pixels per sample
+ * stays smooth when the map stretches it.  A detailed image is left
+ * unchanged: upscaling it costs up to sixteen times the memory and only
+ * repeats pixels the map already has.
+ */
+[[gnu::const]]
+static unsigned
+SelectUpscale(unsigned width, unsigned height) noexcept
+{
+  constexpr unsigned TARGET_AXIS = 2048;
+  constexpr unsigned MAX_SCALE = 4;
+
+  const unsigned axis = std::max(width, height);
+  if (axis == 0 || axis >= TARGET_AXIS)
+    return 1;
+
+  return std::min(TARGET_AXIS / axis, MAX_SCALE);
+}
+
 static UncompressedImage
 BilinearUpscale(UncompressedImage &&src, unsigned scale)
 {
@@ -171,7 +192,8 @@ LoadTiff(TIFFRGBAImage &img)
   auto uncompressed = UncompressedImage(UncompressedImage::Format::RGBA,
                                         img.width * 4, img.width, img.height,
                                         std::move(data), true);
-  return BilinearUpscale(std::move(uncompressed), 4);
+  return BilinearUpscale(std::move(uncompressed),
+                         SelectUpscale(img.width, img.height));
 #else
   return UncompressedImage(UncompressedImage::Format::RGBA, img.width * 4,
                            img.width, img.height, std::move(data), true);
