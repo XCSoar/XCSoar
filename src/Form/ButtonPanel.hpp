@@ -45,6 +45,14 @@ public:
     buttons[selected_index]->SetSelected(true);
   }
 
+  void DisableCursorSelection() noexcept {
+    if (selected_index < 0)
+      return;
+
+    buttons[selected_index]->SetSelected(false);
+    selected_index = -1;
+  }
+
   /**
    * After the enabled/visible state of a button has changed, move
    * #selected_index to the first enabled one if the current
