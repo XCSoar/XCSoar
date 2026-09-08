@@ -78,7 +78,7 @@ public:
   explicit RaspStore(AllocatedPath &&_path)
     :path(std::move(_path)) {}
 
-  [[gnu::const]]
+  [[gnu::pure]]
   unsigned GetItemCount() const {
     return maps.size();
   }
@@ -86,7 +86,7 @@ public:
   [[nodiscard]]
   BrokenDateTime GetFileModifiedTime() const noexcept;
 
-  [[gnu::const]]
+  [[gnu::pure]]
   const MapItem &GetItemInfo(unsigned i) const {
     return maps[i];
   }
