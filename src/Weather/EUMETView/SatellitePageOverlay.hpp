@@ -115,6 +115,16 @@ void ActivatePageOverlay(int layer_index) noexcept;
 void ClearMapOverlay() noexcept;
 
 /**
+ * Did the last completed block of this layer carry no pixels at all?
+ *
+ * A product that needs sunlight comes back fully transparent where
+ * the sun is not up; the Weather dialog marks such an entry so the
+ * pilot is not left guessing.
+ */
+[[gnu::pure]]
+bool IsLayerEmpty(int layer_index) noexcept;
+
+/**
  * Which layer is on the map, or -1 if none is.
  *
  * The tiles carry an attribution label rather than a bare layer name,
