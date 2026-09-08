@@ -217,6 +217,13 @@ protected:
       rc.right = row_renderer.DrawRightColumn(canvas, rc, " < ");
     }
 
+    if (const int layer = items[i].satellite_layer;
+        layer >= 0 && EUMETView::IsLayerEmpty(layer))
+      /* the server answered but the product had nothing to draw here:
+         say so, rather than leaving an empty map to be read as a slow
+         download */
+      rc.right = row_renderer.DrawRightColumn(canvas, rc, _("no data"));
+
     TextListWidget::OnPaintItem(canvas, rc, i);
   }
 

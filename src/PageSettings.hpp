@@ -165,7 +165,7 @@ struct PageLayout
    * that this header does not have to pull the layer table in;
    * #SATELLITE_LAYER_DEFAULT mirrors EUMETView::DEFAULT_LAYER.
    */
-  static constexpr int SATELLITE_LAYER_DEFAULT = 0;
+  static constexpr int SATELLITE_LAYER_DEFAULT = 2;
 
   int satellite_layer;
 
