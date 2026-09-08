@@ -22,6 +22,7 @@ namespace EDL { class DownloadGlue; }
 class XCThermDownloadGlue;
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
+namespace Repository { class Service; }
 #endif
 
 /**
@@ -45,6 +46,7 @@ struct NetComponents {
   const std::unique_ptr<XCThermDownloadGlue> xctherm_download;
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
+  const std::unique_ptr<Repository::Service> repository;
   const std::unique_ptr<RaspDownloadGlue> rasp_download;
 #endif
 

@@ -4,10 +4,12 @@
 #include "Repository/Parser.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Glue.hpp"
+#include "Repository/Freshness.hpp"
 #include "io/LineReader.hpp"
 #include "TestUtil.hpp"
 
 #include <cstring>
+#include <chrono>
 
 /**
  * A simple in-memory NLineReader for testing.
@@ -434,6 +436,17 @@ TestAvailableFile()
   ok1(f.type == FileType::UNKNOWN);
 }
 
+static void
+TestRefreshFreshness()
+{
+  using namespace std::chrono;
+  const system_clock::time_point now{seconds{200000}};
+  ok1(Repository::IsRefreshDue({}, now));
+  ok1(!Repository::IsRefreshDue(now - hours{23}, now));
+  ok1(Repository::IsRefreshDue(now - hours{24}, now));
+  ok1(Repository::IsRefreshDue(now + seconds{1}, now));
+}
+
 int main()
 {
   plan_tests(
@@ -455,7 +468,8 @@ int main()
     5 +   // TestFindByName
     3 +   // TestFieldsBeforeName
     7 +   // TestRaspForecastOutOfDate
-    10    // TestAvailableFile
+    10 +  // TestAvailableFile
+    4     // TestRefreshFreshness
   );
 
   TestEmpty();
@@ -477,6 +491,7 @@ int main()
   TestFieldsBeforeName();
   TestRaspForecastOutOfDate();
   TestAvailableFile();
+  TestRefreshFreshness();
 
   return exit_status();
 }

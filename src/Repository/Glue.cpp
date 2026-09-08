@@ -105,12 +105,7 @@ IsUserRepositoryFile(std::string_view name) noexcept
 void
 LoadAllRepositories(FileRepository &repository)
 {
-  try {
-    FileLineReaderA reader(ResolveRepositoryDataPath("repository"));
-    ParseFileRepository(repository, reader);
-  } catch (const std::runtime_error &) {
-    /* not yet downloaded - ignore */
-  }
+  LoadMainRepository(repository);
 
   for (const auto &repo : GetUserRepositories()) {
     try {
@@ -120,6 +115,20 @@ LoadAllRepositories(FileRepository &repository)
       /* not yet downloaded - ignore */
     }
   }
+}
+
+bool
+LoadMainRepository(FileRepository &repository) noexcept
+try {
+  FileRepository parsed;
+  FileLineReaderA reader(ResolveRepositoryDataPath("repository"));
+  if (!ParseFileRepository(parsed, reader))
+    return false;
+
+  repository.files.splice(repository.files.end(), parsed.files);
+  return true;
+} catch (...) {
+  return false;
 }
 
 void
