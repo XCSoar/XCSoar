@@ -775,6 +775,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Dialogs/DownloadFilter.cpp \
 	$(SRC)/Repository/Glue.cpp \
+	$(SRC)/Repository/Service.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/MOSMIX/Station.cpp \
 	$(SRC)/Weather/MOSMIX/Forecast.cpp \

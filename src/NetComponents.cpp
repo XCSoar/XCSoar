@@ -14,6 +14,7 @@
 #endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
+#include "Repository/Service.hpp"
 #include "Weather/Rasp/DownloadGlue.hpp"
 #include "Repository/Glue.hpp"
 #endif
@@ -51,7 +52,8 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
-  ,rasp_download(new RaspDownloadGlue())
+  ,repository(new Repository::Service()),
+   rasp_download(new RaspDownloadGlue())
 #endif
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -79,6 +81,9 @@ NetComponents::BeginShutdown() noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   RepositoryAutoUpdateShutdown();
+  if (repository != nullptr)
+    repository->BeginShutdown();
+
   Net::DownloadManager::BeginDeinitialise();
 #endif
 
