@@ -4,6 +4,9 @@
 #pragma once
 
 #include "StaticString.hxx"
+
+#include <charconv>
+#include <optional>
 #include <stdlib.h>
 
 /**
@@ -14,6 +17,49 @@ struct VersionNumber
   unsigned int major;
   unsigned int minor;
   unsigned int patch;
+
+  /**
+   * Parse exactly two or three unsigned decimal components.
+   *
+   * Unlike the legacy constructor, this rejects suffixes, missing components
+   * and overflow, making it suitable for untrusted version metadata.
+   */
+  static std::optional<VersionNumber>
+  Parse(std::string_view value) noexcept
+  {
+    unsigned parts[3]{};
+    unsigned n_parts = 0;
+
+    while (!value.empty() && n_parts < 3) {
+      const auto separator = value.find('.');
+      const auto part = value.substr(0, separator);
+      if (part.empty())
+        return std::nullopt;
+
+      const auto parsed = std::from_chars(part.data(),
+                                          part.data() + part.size(),
+                                          parts[n_parts]);
+      if (parsed.ec != std::errc{} ||
+          parsed.ptr != part.data() + part.size())
+        return std::nullopt;
+
+      ++n_parts;
+      if (separator == value.npos) {
+        value = {};
+        break;
+      }
+
+      if (separator + 1 == value.size())
+        return std::nullopt;
+
+      value.remove_prefix(separator + 1);
+    }
+
+    if (!value.empty() || n_parts < 2)
+      return std::nullopt;
+
+    return VersionNumber(parts[0], parts[1], parts[2]);
+  }
 
   VersionNumber(const std::string_view str)
   {

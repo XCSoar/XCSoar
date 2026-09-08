@@ -257,7 +257,7 @@ RaspDownloadGlue::OnDownloadNotify() noexcept
 
   switch (pending_completion.exchange(PendingCompletion::NONE)) {
   case PendingCompletion::REPOSITORY:
-    RequestUpdateIfOutOfDate();
+    RequestConfiguredRaspUpdateIfOutOfDate();
     break;
 
   case PendingCompletion::RASP_RELOAD:

@@ -18,6 +18,9 @@
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/NetworkConfigPanel.hpp"
+#ifdef HAVE_UPDATE
+#include "Dialogs/Settings/Panels/UpdateConfigPanel.hpp"
+#endif
 #include "Dialogs/Settings/Panels/WeatherConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/SafetyFactorsConfigPanel.hpp"
 #include "Dialogs/Settings/Panels/TrackingConfigPanel.hpp"
@@ -82,6 +85,9 @@ static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
   {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
   {"config/network",    N_("Network"),    CreateNetworkConfigPanel},
+#ifdef HAVE_UPDATE
+  {"config/software-update", N_("Software Update"), CreateUpdateConfigPanel},
+#endif
   {"config/weather",    N_("Weather"),    CreateWeatherConfigPanel},
   {"config/safety",     N_("Safety Factors"), CreateSafetyFactorsConfigPanel},
   {"config/tracking",   N_("Tracking"),   CreateTrackingConfigPanel},

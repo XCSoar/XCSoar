@@ -105,6 +105,9 @@ jobs:
           ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
           submodules: true
 
+      - name: Test update repository entry generator
+        run: python3 test/test_update_repository_entry.py
+
       - name: Parse changelog
         if: startsWith(github.ref, 'refs/tags/v')
         run: |

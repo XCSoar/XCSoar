@@ -614,6 +614,9 @@ ManagedFileListWidget::Add()
 
   std::vector<AvailableFile> list;
   for (const auto &remote_file : repository) {
+    if (!FileTypeSupportsDownload(remote_file.type))
+      continue;
+
     std::string_view name = remote_file.GetName();
     if (IsDownloading(remote_file.GetName()))
       /* already downloading this file */

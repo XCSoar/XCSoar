@@ -423,6 +423,18 @@ TEST_PROFILE_SOURCES = \
 TEST_PROFILE_DEPENDS = PROFILE MATH IO OS UTIL
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
 
+TEST_NAMES += TestUpdate
+TEST_UPDATE_SOURCES = \
+	$(SRC)/Update/Service.cpp \
+	$(SRC)/Update/State.cpp \
+	$(SRC)/Update/RepositoryOffer.cpp \
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/ui/event/Idle.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestUpdate.cpp
+TEST_UPDATE_DEPENDS = PROFILE EVENT SCREEN MATH ASYNC OS IO THREAD UTIL JSON
+$(eval $(call link-program,TestUpdate,TEST_UPDATE))
+
 TEST_MAC_CREADY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMacCready.cpp

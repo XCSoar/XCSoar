@@ -84,6 +84,8 @@ Version 7.46 - not yet released
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
 * ui
+  - add an optional daily update check and Software Update dialog; repository
+    offers open the trusted download page and never install automatically
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - fix blurry icons on high-DPI screens, most visible on the large

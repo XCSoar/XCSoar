@@ -457,6 +457,28 @@ IsQuickGuideHidden() noexcept
   return hidden;
 }
 
+void
+dlgQuickGuideShowReleaseNotes()
+{
+  if (quick_guide_news_markdown[0] == '\0') {
+    ShowMessageBox(_("No release notes are available."),
+                   _("Release notes"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  StaticString<64> caption;
+  caption.Format("%s: %s", _("Release notes"), XCSoar_Version);
+
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, caption);
+  dialog.FinishPreliminary(std::make_unique<VScrollWidget>(
+    std::make_unique<RichTextWidget>(look, quick_guide_news_markdown, false),
+    look, true));
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+}
+
 bool
 dlgQuickGuideShowModal(bool force_info)
 {

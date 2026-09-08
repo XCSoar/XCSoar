@@ -131,6 +131,7 @@ private:
 
   UI::Notify refresh_info_boxes_notify{[this]{ OnRefreshInfoBoxesNotify(); }};
   UI::Notify page_actions_update_notify{[this]{ OnPageActionsUpdateNotify(); }};
+  UI::Notify update_dialog_notify{[this]{ OnUpdateDialogNotify(); }};
 
   UI::PeriodicTimer timer{[this]{ RunTimer(); }};
 
@@ -523,6 +524,7 @@ private:
   void OnRestorePageNotify() noexcept;
   void OnRefreshInfoBoxesNotify() noexcept;
   void OnPageActionsUpdateNotify() noexcept;
+  void OnUpdateDialogNotify() noexcept;
 
   void OnTerrainLoaded() noexcept;
 
