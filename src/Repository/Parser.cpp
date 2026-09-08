@@ -8,6 +8,9 @@
 #include "util/HexString.hpp"
 #include "system/Path.hpp"
 
+#include <array>
+#include <string_view>
+
 /**
  * Parses a line of the repository file.
  * Each line is of the form `name = value`
@@ -51,6 +54,33 @@ Commit(FileRepository &repository, AvailableFile &file)
   return true;
 }
 
+struct FileTypeMapping {
+  std::string_view name;
+  FileType type;
+};
+
+static constexpr std::array FILE_TYPE_MAPPINGS{
+  FileTypeMapping{"airspace", FileType::AIRSPACE},
+  FileTypeMapping{"waypoint-details", FileType::WAYPOINTDETAILS},
+  FileTypeMapping{"waypoint", FileType::WAYPOINT},
+  FileTypeMapping{"map", FileType::MAP},
+  FileTypeMapping{"flarmnet", FileType::FLARMNET},
+  FileTypeMapping{"rasp", FileType::RASP},
+  FileTypeMapping{"xci", FileType::XCI},
+  FileTypeMapping{"task", FileType::TASK},
+  FileTypeMapping{"checklist", FileType::CHECKLIST},
+};
+
+static FileType
+ParseFileType(std::string_view value) noexcept
+{
+  for (const auto &mapping : FILE_TYPE_MAPPINGS)
+    if (value == mapping.name)
+      return mapping.type;
+
+  return FileType::UNKNOWN;
+}
+
 bool
 ParseFileRepository(FileRepository &repository, NLineReader &reader)
 {
@@ -81,24 +111,7 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
     } else if (StringIsEqual(name, "area")) {
       file.area = value;
     } else if (StringIsEqual(name, "type")) {
-      if (StringIsEqual(value, "airspace"))
-        file.type = FileType::AIRSPACE;
-      else if (StringIsEqual(value, "waypoint-details"))
-        file.type = FileType::WAYPOINTDETAILS;
-      else if (StringIsEqual(value, "waypoint"))
-        file.type = FileType::WAYPOINT;
-      else if (StringIsEqual(value, "map"))
-        file.type = FileType::MAP;
-      else if (StringIsEqual(value, "flarmnet"))
-        file.type = FileType::FLARMNET;
-      else if (StringIsEqual(value, "rasp"))
-        file.type = FileType::RASP;
-      else if (StringIsEqual(value, "xci"))
-        file.type = FileType::XCI;
-      else if (StringIsEqual(value, "task"))
-        file.type = FileType::TASK;
-      else if (StringIsEqual(value, "checklist"))
-        file.type = FileType::CHECKLIST;
+      file.type = ParseFileType(value);
     } else if (StringIsEqual(name, "update")) {
       unsigned year, month, day;
       if (sscanf(value, "%04u-%02u-%02u", &year, &month, &day) == 3)
