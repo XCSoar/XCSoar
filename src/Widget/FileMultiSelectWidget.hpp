@@ -91,6 +91,12 @@ public:
 
   void Refresh() noexcept;
 
+  /** Repaint visible rows without reloading files or changing list state. */
+  void InvalidateRows() noexcept {
+    if (IsDefined())
+      GetList().Invalidate();
+  }
+
   /** Select all file items (exclude directories). */
   void SelectAllFiles() noexcept;
 

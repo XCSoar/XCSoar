@@ -9,24 +9,32 @@
 #include "Job/Job.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
+#include "ui/event/Notify.hpp"
+#include "ui/event/DelayedNotify.hpp"
 #include "LogFile.hpp"
 #include <utility>
 
 class IgcMetaCache::FillJob final : public Job {
   IgcMetaCache &cache;
   std::vector<AllocatedPath> paths;
+  UI::DelayedNotify *progress_notify;
 
 public:
-  FillJob(IgcMetaCache &_cache, std::vector<AllocatedPath> &&_paths) noexcept
-    :cache(_cache), paths(std::move(_paths)) {}
+  FillJob(IgcMetaCache &_cache, std::vector<AllocatedPath> &&_paths,
+          UI::DelayedNotify *_progress_notify) noexcept
+    :cache(_cache), paths(std::move(_paths)),
+     progress_notify(_progress_notify) {}
 
   void Run(OperationEnvironment &env) override {
     for (const auto &path : paths) {
       if (env.IsCancelled())
         break;
 
-      if (cache.Find(Path(path.c_str())) == nullptr)
+      if (cache.Find(Path(path.c_str())) == nullptr) {
         cache.Insert(cache.ParseEntry(Path(path.c_str()), env));
+        if (progress_notify != nullptr)
+          progress_notify->SendNotification();
+      }
     }
   }
 };
@@ -109,14 +117,16 @@ IgcMetaCache::GetCompactInfoPtr(Path path) noexcept
 
 void
 IgcMetaCache::StartBackgroundFill(std::vector<AllocatedPath> paths,
-                                  UI::Notify *notify)
+                                  UI::DelayedNotify *progress_notify,
+                                  UI::Notify *completion_notify)
 {
   if (async.IsBusy())
     CancelBackgroundFill();
 
-  fill_job = std::make_unique<FillJob>(*this, std::move(paths));
+  fill_job = std::make_unique<FillJob>(*this, std::move(paths),
+                                       progress_notify);
   try {
-    async.Start(fill_job.get(), operation, notify);
+    async.Start(fill_job.get(), operation, completion_notify);
   } catch (...) {
     fill_job.reset();
     throw;
