@@ -525,14 +525,13 @@ MapItemListWidget::OnAlternateClicked()
   if (item == nullptr || !CanSelectAlternateItem(*item))
     return;
 
-  const auto slot =
-    dlgAlternateSlotShowModal(C_("Button", "Select as Alternate"));
+  const auto &waypoint = static_cast<const WaypointMapItem &>(*item).waypoint;
+
+  const auto slot = dlgAlternateSlotShowModal(waypoint->name.c_str());
   if (!slot.has_value())
     return;
 
-  SelectManualAlternateWaypoint(*slot,
-                                static_cast<const WaypointMapItem &>(*item)
-                                .waypoint);
+  SelectManualAlternateWaypoint(*slot, waypoint);
   cancel_button->Click();
 }
 
