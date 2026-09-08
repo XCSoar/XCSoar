@@ -54,8 +54,14 @@ EUMETView::DownloadTile(const Layer &layer, const GeoBitmap::TileData &tile,
       const std::string_view text{(const char *)data.data(),
                                   std::min(data.size(), std::size_t(4096))};
 
-      if (auto message = ExtractServiceException(text); !message.empty())
+      if (auto message = ExtractServiceException(text); !message.empty()) {
+        /* the frame asked for is not on the server; the caller steps
+           back a cadence and tries the one before it */
+        if (text.find("InvalidDimensionValue") != text.npos)
+          throw MissingFrame(std::move(message));
+
         throw std::runtime_error(std::move(message));
+      }
 
       throw std::runtime_error("The server did not return an image");
     }
