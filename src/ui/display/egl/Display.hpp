@@ -60,7 +60,7 @@ public:
 
 private:
   void InitDisplay(EGLNativeDisplayType native_display,
-                   unsigned antialiasing_samples);
+                   unsigned requested_antialiasing_samples);
   void CreateContext();
 };
 

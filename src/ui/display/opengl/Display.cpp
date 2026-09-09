@@ -3,17 +3,12 @@
 
 #include "Display.hpp"
 #include "ui/canvas/opengl/Init.hpp"
-#include "ui/canvas/opengl/Globals.hpp"
 
 namespace OpenGL {
 
-Display::Display(unsigned antialiasing_samples)
+Display::Display()
 {
   Initialise();
-
-  /* Store the configured antialiasing samples so that BufferWindow
-     can paint accordingly */
-  OpenGL::antialiasing_samples = antialiasing_samples;
 
   /* not calling SetupContext() here when using libSDL, because libSDL
      creates the OpenGL context using SDL_GL_CreateContext(), which

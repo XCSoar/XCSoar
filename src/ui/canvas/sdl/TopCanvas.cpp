@@ -10,6 +10,7 @@
 #ifdef ENABLE_OPENGL
 #include "ui/dim/Rect.hpp"
 #include "ui/canvas/opengl/Init.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
 #include "Math/Point2D.hpp"
 #include "LogFile.hpp"
 #else
@@ -81,13 +82,23 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
     throw FmtRuntimeError("SDL_GL_CreateContext({}) has failed: {}",
                           (const void *)window, ::SDL_GetError());
 
-  LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  /* this is the only place where the real number of MSAA samples is
+     known: SDL_CreateWindow() may have been retried without
+     antialiasing, and only now that the context exists does
+     SDL_GL_GetAttribute() report what we got instead of what we
+     asked for */
+  const unsigned samples = GetConfigAttrib(SDL_GL_MULTISAMPLESAMPLES, 0);
+
+  LogFormat("SDL_GL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%u",
             GetConfigAttrib(SDL_GL_RED_SIZE, 0),
             GetConfigAttrib(SDL_GL_GREEN_SIZE, 0),
             GetConfigAttrib(SDL_GL_BLUE_SIZE, 0),
             GetConfigAttrib(SDL_GL_ALPHA_SIZE, 0),
             GetConfigAttrib(SDL_GL_DEPTH_SIZE, 0),
-            GetConfigAttrib(SDL_GL_STENCIL_SIZE, 0));
+            GetConfigAttrib(SDL_GL_STENCIL_SIZE, 0),
+            samples);
+
+  OpenGL::SetAntialiasingSamples(samples);
 
   /* this is usually done by OpenGL::Display, but libSDL doesn't allow
      that */

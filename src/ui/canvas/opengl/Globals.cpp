@@ -4,6 +4,7 @@
 #include "Globals.hpp"
 #include "Debug.hpp"
 #include "ui/dim/Point.hpp"
+#include "LogFile.hpp"
 
 #include <glm/mat4x4.hpp>
 
@@ -40,5 +41,12 @@ DWORD thread;
 pthread_t thread;
 #endif
 #endif
+
+void
+SetAntialiasingSamples(unsigned samples) noexcept
+{
+  antialiasing_samples = samples;
+  LogFmt("Anti-aliasing: {} samples", samples);
+}
 
 } // namespace OpenGL

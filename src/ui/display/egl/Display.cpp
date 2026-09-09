@@ -3,6 +3,7 @@
 
 #include "Display.hpp"
 #include "ConfigChooser.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "LogFile.hpp"
 
@@ -41,7 +42,7 @@ GetConfigAttrib(EGLDisplay display, EGLConfig config,
 
 inline void
 Display::InitDisplay(EGLNativeDisplayType native_display,
-                     unsigned antialiasing_samples)
+                     unsigned requested_antialiasing_samples)
 {
   assert(display == EGL_NO_DISPLAY);
 
@@ -64,15 +65,22 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
   if (!eglBindAPI(EGL_OPENGL_ES_API))
     throw std::runtime_error("eglBindAPI() failed");
 
-  chosen_config = EGL::ChooseConfig(display, antialiasing_samples);
+  chosen_config = EGL::ChooseConfig(display, requested_antialiasing_samples);
 
-  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d",
+  const unsigned samples = GetConfigAttrib(display, chosen_config,
+                                           EGL_SAMPLES, 0);
+
+  LogFormat("EGL config: RGB=%d/%d/%d alpha=%d depth=%d stencil=%d samples=%u"
+            " (requested %u)",
             GetConfigAttrib(display, chosen_config, EGL_RED_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_GREEN_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_BLUE_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_ALPHA_SIZE, 0),
             GetConfigAttrib(display, chosen_config, EGL_DEPTH_SIZE, 0),
-            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0));
+            GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0),
+            samples, requested_antialiasing_samples);
+
+  OpenGL::SetAntialiasingSamples(samples);
 }
 
 inline void
