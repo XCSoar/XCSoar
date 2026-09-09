@@ -5,6 +5,10 @@
 #include "Screen/Debug.hpp"
 #include "ui/event/Globals.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #ifdef USE_FREETYPE
 #include "ui/canvas/Font.hpp"
 #endif
@@ -24,6 +28,13 @@ ScreenGlobalInit::ScreenGlobalInit([[maybe_unused]] unsigned antialiasing_sample
   :display(antialiasing_samples)
 #endif
 {
+#ifdef ENABLE_OPENGL
+  /* remember what was asked for: the window surface may have fallen
+     back to fewer samples (or to none), but a framebuffer object can
+     still provide what the profile asks for */
+  OpenGL::requested_antialiasing_samples = antialiasing_samples;
+#endif
+
 #ifdef USE_FREETYPE
   Font::Initialise();
 #endif

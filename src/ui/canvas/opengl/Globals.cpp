@@ -21,6 +21,8 @@ GLenum render_buffer_depth_stencil, render_buffer_stencil;
 
 unsigned available_antialiasing_samples;
 
+unsigned requested_antialiasing_samples;
+
 unsigned antialiasing_samples;
 
 FboAntialiasingMode fbo_antialiasing_mode;
