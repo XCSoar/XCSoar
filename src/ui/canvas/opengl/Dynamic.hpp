@@ -45,4 +45,16 @@ static inline void MultiDrawElements(Args... args) noexcept {
 inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
 #endif // GL_EXT_discard_framebuffer
 
+#ifdef GL_EXT_multisampled_render_to_texture
+/**
+ * Render a framebuffer object with multisampling, resolved implicitly
+ * when the framebuffer is unbound.  Both pointers are loaded together
+ * and are either both valid or both nullptr.
+ */
+inline PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC
+  framebuffer_texture_2d_multisample;
+inline PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC
+  renderbuffer_storage_multisample;
+#endif // GL_EXT_multisampled_render_to_texture
+
 } // namespace GLExt
