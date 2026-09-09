@@ -25,6 +25,40 @@ static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0;
 static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT;
 static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT;
 
+#ifdef HAVE_MULTISAMPLE_FBO
+
+/* the read/draw framebuffer split used by the explicit multisample
+   resolve; the GLES2 headers only ever spell these with a vendor
+   suffix, but all of the spellings share the core enum value */
+#ifdef GL_READ_FRAMEBUFFER
+static constexpr GLenum READ_FRAMEBUFFER = GL_READ_FRAMEBUFFER;
+static constexpr GLenum DRAW_FRAMEBUFFER = GL_DRAW_FRAMEBUFFER;
+#elif defined(GL_READ_FRAMEBUFFER_NV)
+static constexpr GLenum READ_FRAMEBUFFER = GL_READ_FRAMEBUFFER_NV;
+static constexpr GLenum DRAW_FRAMEBUFFER = GL_DRAW_FRAMEBUFFER_NV;
+#elif defined(GL_READ_FRAMEBUFFER_ANGLE)
+static constexpr GLenum READ_FRAMEBUFFER = GL_READ_FRAMEBUFFER_ANGLE;
+static constexpr GLenum DRAW_FRAMEBUFFER = GL_DRAW_FRAMEBUFFER_ANGLE;
+#elif defined(GL_READ_FRAMEBUFFER_APPLE)
+static constexpr GLenum READ_FRAMEBUFFER = GL_READ_FRAMEBUFFER_APPLE;
+static constexpr GLenum DRAW_FRAMEBUFFER = GL_DRAW_FRAMEBUFFER_APPLE;
+#else
+#error No GL_READ_FRAMEBUFFER found
+#endif
+
+/* a sized colour format for the multisampled renderbuffer; the
+   unsized GL_RGB the BufferCanvas texture uses is not a valid
+   renderbuffer format */
+#ifdef GL_RGB8
+static constexpr GLenum RGB8 = GL_RGB8;
+#elif defined(GL_RGB8_OES)
+static constexpr GLenum RGB8 = GL_RGB8_OES;
+#else
+#error No GL_RGB8 found
+#endif
+
+#endif // HAVE_MULTISAMPLE_FBO
+
 #ifdef GL_DEPTH_STENCIL
 static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL;
 #elif defined(GL_DEPTH_STENCIL_EXT)
@@ -129,5 +163,24 @@ FramebufferTexture2DMultisample(GLenum target, GLenum attachment,
 }
 
 #endif // GL_EXT_multisampled_render_to_texture
+
+#ifdef GL_NV_framebuffer_blit
+
+/**
+ * Resolve a multisampled framebuffer bound to #READ_FRAMEBUFFER into
+ * the single-sampled one bound to #DRAW_FRAMEBUFFER.  The caller must
+ * have checked that OpenGL::fbo_antialiasing_mode is
+ * FboAntialiasingMode::BLIT.
+ */
+static inline void
+BlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
+                GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
+                GLbitfield mask, GLenum filter) noexcept
+{
+  GLExt::blit_framebuffer(srcX0, srcY0, srcX1, srcY1,
+                          dstX0, dstY0, dstX1, dstY1, mask, filter);
+}
+
+#endif // GL_NV_framebuffer_blit
 
 } // namespace OpenGL
