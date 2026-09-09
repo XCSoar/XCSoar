@@ -56,13 +56,16 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (FileTypeSupportsDownload(df.GetFileDataField().GetFileType())) {
     const auto download = [file_widget, &df]() {
-      const auto path = DownloadFilePicker(df.GetFileDataField().GetFileType());
-      if (path != nullptr) {
-        df.ForceModify(path);
-        df.GetFileDataField().Sort();
+      const auto file_type = df.GetFileDataField().GetFileType();
+      const auto paths = DownloadFilePicker(file_type);
+      if (paths.empty())
+        return;
 
-        file_widget->Refresh();
-      }
+      for (const auto &path : paths)
+        df.ForceModify(path);
+      df.GetFileDataField().Sort();
+
+      file_widget->Refresh();
     };
     dialog.AddButton(_("Download"), download);
     file_widget->EnableEmptyDownloadHint(download);

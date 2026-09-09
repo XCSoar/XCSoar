@@ -35,11 +35,11 @@ FilePicker(const char *caption, FileDataField &df, const char *help_text,
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (i == mrExtra) {
-    const auto path = DownloadFilePicker(file_type);
-    if (path == nullptr)
+    const auto paths = DownloadFilePicker(file_type, false);
+    if (paths.empty())
       return false;
 
-    df.ForceModify(path);
+    df.ForceModify(paths.front());
     return true;
   }
 #endif

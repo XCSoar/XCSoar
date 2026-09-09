@@ -3,10 +3,13 @@
 
 #include "Repository/Parser.hpp"
 #include "Repository/FileRepository.hpp"
+#include "Repository/FileArea.hpp"
+#include "Repository/CountryName.hpp"
 #include "io/LineReader.hpp"
 #include "TestUtil.hpp"
 
 #include <cstring>
+#include <vector>
 
 /**
  * A simple in-memory NLineReader for testing.
@@ -409,6 +412,69 @@ TestAvailableFile()
   ok1(f.type == FileType::UNKNOWN);
 }
 
+static AvailableFile
+MakeAreaFile(const char *name, const char *area)
+{
+  AvailableFile f;
+  f.Clear();
+  f.name = name;
+  f.uri = "http://example.com/file";
+  f.area = area;
+  f.type = FileType::WAYPOINT;
+  return f;
+}
+
+static void
+TestFileArea()
+{
+  ok1(NormalizeFileArea("ad") == "AD");
+  ok1(NormalizeFileArea("AD") == "AD");
+  ok1(NormalizeFileArea("").empty());
+
+  const auto ad_lower = MakeAreaFile("AD-WPT-National-OpenAIP.cup", "ad");
+  const auto ad_upper = MakeAreaFile("AD-WPT-Airports-OpenAIP.cupx", "AD");
+  const auto de = MakeAreaFile("DE-WPT-National-XCSoar.cup", "DE");
+  const auto global = MakeAreaFile("GLB-WPT-ProvingGrounds-XCSoar.cup", "");
+
+  std::vector<AvailableFile> files;
+  files.push_back(ad_lower);
+  files.push_back(ad_upper);
+  files.push_back(de);
+  files.push_back(global);
+
+  const auto areas = CollectUniqueFileAreas(files);
+  ok1(areas.size() == 3);
+  ok1(areas[0].empty());
+  ok1(areas[1] == "AD");
+  ok1(areas[2] == "DE");
+
+  ok1(FileMatchesArea(ad_lower, "AD"));
+  ok1(FileMatchesArea(ad_upper, "AD"));
+  ok1(!FileMatchesArea(de, "AD"));
+  ok1(FileMatchesArea(global, ""));
+
+  ok1(CountFilesInArea(files, "AD") == 2);
+  ok1(CountFilesInArea(files, "") == 1);
+
+  std::vector<AvailableFile> ad_files;
+  AppendFilesInArea(files, "AD", ad_files);
+  ok1(ad_files.size() == 2);
+  ok1(ad_files[0].name == "AD-WPT-National-OpenAIP.cup");
+  ok1(ad_files[1].name == "AD-WPT-Airports-OpenAIP.cupx");
+}
+
+static void
+TestCountryName()
+{
+  ok1(GetCountryName("de") != nullptr);
+  ok1(strcmp(GetCountryName("de"), "Germany") == 0);
+  ok1(strcmp(GetCountryName("DE"), "Germany") == 0);
+  ok1(strcmp(GetCountryName("ad"), "Andorra") == 0);
+  ok1(strcmp(GetCountryName("ZW"), "Zimbabwe") == 0);
+  ok1(GetCountryName("") == nullptr);
+  ok1(GetCountryName("zz") == nullptr);
+}
+
 int main()
 {
   plan_tests(
@@ -429,7 +495,9 @@ int main()
     4 +   // TestWhitespaceHandling
     5 +   // TestFindByName
     3 +   // TestFieldsBeforeName
-    10    // TestAvailableFile
+    10 +  // TestAvailableFile
+    16 +  // TestFileArea
+    7     // TestCountryName
   );
 
   TestEmpty();
@@ -450,6 +518,8 @@ int main()
   TestFindByName();
   TestFieldsBeforeName();
   TestAvailableFile();
+  TestFileArea();
+  TestCountryName();
 
   return exit_status();
 }
