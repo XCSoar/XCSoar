@@ -271,7 +271,7 @@ try {
     Path path = Profile::GetPath();
     AllocatedPath default_path;
     if (path == nullptr) {
-      default_path = Profile::GetDefaultPath();
+      default_path = Profile::GetMostRecentPath();
       path = default_path;
     }
     ProfileMap temp_map;

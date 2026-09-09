@@ -15,6 +15,7 @@
 #include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
 
+#include <chrono>
 #include <string>
 #include <cassert>
 #include <windef.h> /* for MAX_PATH */
@@ -40,6 +41,37 @@ AllocatedPath
 Profile::GetDefaultPath() noexcept
 {
   return BuildProfilePath(Path(XCSPROFILE));
+}
+
+AllocatedPath
+Profile::GetMostRecentPath() noexcept
+{
+  class NewestVisitor final : public File::Visitor {
+  public:
+    AllocatedPath path = nullptr;
+    std::chrono::system_clock::time_point timestamp =
+      std::chrono::system_clock::time_point::min();
+
+    void Visit(Path _path, [[maybe_unused]] Path filename) override {
+      const auto t = File::GetLastModification(_path);
+      if (t > timestamp) {
+        timestamp = t;
+        path = AllocatedPath(_path);
+      }
+    }
+  } visitor;
+
+  try {
+    Directory::VisitSpecificFiles(LocalPath(Path("profiles")), "*.prf",
+                                  visitor);
+  } catch (...) {
+    /* unreadable profile directory: fall back to the default below */
+  }
+
+  if (visitor.path != nullptr)
+    return std::move(visitor.path);
+
+  return GetDefaultPath();
 }
 
 void

@@ -59,13 +59,15 @@ Main()
 {
   // Peek at the profile for the AA setting without modifying global
   // Profile state - Profile::GetPath() must remain nullptr so that
-  // dlgStartupShowModal() is still shown later.
+  // dlgStartupShowModal() is still shown later.  Unless a profile was
+  // given on the command line, use the most recently used one: that is
+  // what the startup dialog will preselect.
   unsigned antialiasing_samples = 0;
   try {
     Path path = Profile::GetPath();
     AllocatedPath default_path;
     if (path == nullptr) {
-      default_path = Profile::GetDefaultPath();
+      default_path = Profile::GetMostRecentPath();
       path = default_path;
     }
     ProfileMap temp_map;
