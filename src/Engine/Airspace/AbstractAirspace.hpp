@@ -166,6 +166,22 @@ public:
                                 const FlatProjection &projection) const noexcept = 0;
 
   /**
+   * Distance from a reference location to the airspace boundary,
+   * valid for points inside and outside the airspace.  For polygons
+   * this uses the integer-projected nearest boundary point (accurate
+   * to about one projection grid cell); for circles it is exact.
+   * Note the difference to ClosestPoint(), which for circles returns
+   * the reference location itself when it is inside.
+   *
+   * @param loc Reference location of observer
+   *
+   * @return Distance (m) to the closest point of the boundary
+   */
+  [[gnu::pure]]
+  virtual double DistanceToBoundary(const GeoPoint &loc,
+                                    const FlatProjection &projection) const noexcept;
+
+  /**
    * Set terrain altitude for AGL-referenced airspace altitudes
    *
    * @param alt Height above MSL of terrain (m) at center

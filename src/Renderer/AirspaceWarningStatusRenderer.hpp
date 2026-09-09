@@ -14,12 +14,30 @@ class Font;
  * map-items dialog.
  */
 struct AirspaceWarningStatusBadge {
+  /**
+   * The Cleared* variants apply to an airspace the pilot has a
+   * clearance for, the Covered* ones to an airspace whose warning is
+   * suppressed by another airspace's clearance.  Both are drawn in
+   * the clearance colour, but each carries its own caption so the
+   * wording may differ.
+   */
   enum class Kind : uint8_t {
     None,
     Inside,
     Near,
+    ClearedInside,
+    ClearedNear,
+    Cleared,
+    CoveredInside,
+    CoveredNear,
+    Covered,
   } kind = Kind::None;
 
+  /**
+   * Has the warning no valid "ACK"?  Ignored for the Cleared* and
+   * Covered* kinds: a clearance suppresses the acknowledgement
+   * distinction.
+   */
   bool active = true;
 
   [[nodiscard]]

@@ -12,6 +12,10 @@ AirspaceWarning::SaveState() noexcept
   state_last = state;
   state = WARNING_CLEAR;
   expired_last = expired;
+  covered_by_clearance = false;
+  interval_task_ = AirspaceWarningInterval::Invalid();
+  interval_filter_ = AirspaceWarningInterval::Invalid();
+  interval_glide_ = AirspaceWarningInterval::Invalid();
 }
 
 void
@@ -38,7 +42,8 @@ AirspaceWarning::WarningLive(const Duration ack_time,
 
   if ((state != WARNING_CLEAR)
       && (state < state_last)
-      && (state_last == WARNING_INSIDE))
+      && (state_last == WARNING_INSIDE)
+      && !covered_by_clearance)
     // if inside was acknowledged, consider warning to be acknowledged
     acktime_warning = std::max(acktime_warning, acktime_inside);
 
@@ -68,7 +73,7 @@ AirspaceWarning::WarningLive(const Duration ack_time,
 bool
 AirspaceWarning::ChangedState() const noexcept
 {
-  if (expired > expired_last)
+  if (expired != expired_last)
     return true;
 
   if ((state_last == WARNING_CLEAR) && (state > WARNING_CLEAR))
@@ -83,6 +88,15 @@ AirspaceWarning::ChangedState() const noexcept
 bool
 AirspaceWarning::IsAckExpired() const noexcept
 {
+  // Covered by another airspace's clearance: warning
+  // is treated like an acknowledged one so it does not alert.
+  if (covered_by_clearance)
+    return false;
+
+  // Clearance suppresses warnings against this airspace itself.
+  if (cleared_day)
+    return false;
+
   if (ack_day)
     // these ones persist
     return false;
@@ -131,6 +145,54 @@ AirspaceWarning::AcknowledgeWarning(const bool set) noexcept
     acktime_warning = null_acktime;
   else
     acktime_warning = {};
+}
+
+void
+AirspaceWarning::SetInterval(
+    const State method,
+    const AirspaceWarningInterval &iv) noexcept
+{
+  switch (method) {
+  case WARNING_TASK:
+    interval_task_ = iv;
+    break;
+  case WARNING_FILTER:
+    interval_filter_ = iv;
+    break;
+  case WARNING_GLIDE:
+    interval_glide_ = iv;
+    break;
+  case WARNING_CLEAR:
+  case WARNING_INSIDE:
+    break;
+  }
+}
+
+const AirspaceWarningInterval &
+AirspaceWarning::GetInterval(const State method) const noexcept
+{
+  switch (method) {
+  case WARNING_TASK:
+    return interval_task_;
+  case WARNING_FILTER:
+    return interval_filter_;
+  case WARNING_GLIDE:
+    return interval_glide_;
+  case WARNING_CLEAR:
+  case WARNING_INSIDE:
+    break;
+  }
+
+  /* static invalid instance for unsupported states */
+  static constexpr auto invalid =
+    AirspaceWarningInterval::Invalid();
+  return invalid;
+}
+
+bool
+AirspaceWarning::HasInterval(const State method) const noexcept
+{
+  return GetInterval(method).IsValid();
 }
 
 bool

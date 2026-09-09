@@ -27,6 +27,11 @@ public:
   bool GetAckDay(const AbstractAirspace &airspace) const noexcept;
 
   void AcknowledgeDay(ConstAirspacePtr airspace, bool set=true);
+
+  void SetCleared(ConstAirspacePtr airspace, bool set=true);
+
+  [[gnu::pure]]
+  bool GetCleared(const AbstractAirspace &airspace) const noexcept;
   void AcknowledgeWarning(ConstAirspacePtr airspace, bool set=true);
   void AcknowledgeInside(ConstAirspacePtr airspace, bool set=true);
   void Acknowledge(ConstAirspacePtr airspace) noexcept;

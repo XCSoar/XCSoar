@@ -9,6 +9,8 @@
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
+#include "Form/Button.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -117,6 +119,7 @@ public:
      airspace(std::move(_airspace)), warnings(_warnings) {}
 
   void AckDayOrEnable() noexcept;
+  void ToggleClearance() noexcept;
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -247,6 +250,20 @@ dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
 
   if (warnings != nullptr) {
     widget->dialog = &dialog;
+
+    const bool cleared = warnings->GetCleared(*airspace);
+    const AirspaceWarningConfig &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    const bool clearance_allowed =
+      warning_config.IsClassClearanceAllowed(airspace->GetTypeOrClass());
+
+    Button *clearance_button =
+      dialog.AddButton(cleared ? _("Revoke Clearance") : _("Set Clearance"),
+                       [widget](){ widget->ToggleClearance(); });
+
+    if (!cleared && !clearance_allowed)
+      clearance_button->SetEnabled(false);
+
     const char *label = _("Ack Day");
     try {
       label = warnings->GetAckDay(*airspace) ? _("Enable") : _("Ack Day");
@@ -268,6 +285,24 @@ dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
   }
 
   return dialog.ShowModal() == mrOK;
+}
+
+void
+AirspaceDetailsWidget::ToggleClearance() noexcept
+{
+  assert(warnings != nullptr);
+
+  try {
+    const bool cleared = warnings->GetCleared(*airspace);
+    warnings->SetCleared(airspace, !cleared);
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to update airspace clearance");
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  }
+
+  dialog->SetModalResult(mrOK);
 }
 
 void

@@ -39,4 +39,17 @@ public:
                const DerivedInfo &calculated,
                const ProtectedAirspaceWarningManager *airspace_warnings,
                const Airspaces &airspace_database) noexcept;
+
+  /**
+   * Like FindVertical(), but returns the next altitude above or below
+   * the aircraft where the pilot would actually start being in a
+   * warning state (warning-capable, non-acked, non-cleared airspace,
+   * not itself covered by a clearance). Honours the airspace
+   * clearance logic.
+   */
+  static NearestAirspace
+  FindNextWarningEntry(const MoreData &basic,
+                       const DerivedInfo &calculated,
+                       const ProtectedAirspaceWarningManager *airspace_warnings,
+                       const Airspaces &airspace_database) noexcept;
 };

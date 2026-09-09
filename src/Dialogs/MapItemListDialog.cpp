@@ -22,8 +22,11 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Engine/Airspace/AirspaceWarningConfig.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/AirspaceWarningStatusRenderer.hpp"
+#include "Look/Colors.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
@@ -63,13 +66,35 @@ QueryWarningStatusNoThrow(ProtectedAirspaceWarningManager &warnings,
   try {
     const ProtectedAirspaceWarningManager::Lease lease(warnings);
     const AirspaceWarning *warning = lease->GetWarningPtr(airspace);
-    if (warning == nullptr || !warning->IsWarning())
+    if (warning == nullptr)
       return true;
 
     status.active = warning->IsActive();
-    status.kind = warning->IsInside()
-      ? AirspaceWarningStatusBadge::Kind::Inside
-      : AirspaceWarningStatusBadge::Kind::Near;
+
+    if (warning->IsCleared()) {
+      /* a clearance overrides the warning colour; the caption still
+         tells the pilot where the airspace is relative to us */
+      if (warning->IsInside())
+        status.kind = AirspaceWarningStatusBadge::Kind::ClearedInside;
+      else if (warning->IsWarning())
+        status.kind = AirspaceWarningStatusBadge::Kind::ClearedNear;
+      else
+        status.kind = AirspaceWarningStatusBadge::Kind::Cleared;
+    } else if (warning->IsCoveredByClearance()) {
+      /* suppressed by another airspace's clearance: info only, not a
+         warning */
+      if (warning->IsInside())
+        status.kind = AirspaceWarningStatusBadge::Kind::CoveredInside;
+      else if (warning->IsWarning())
+        status.kind = AirspaceWarningStatusBadge::Kind::CoveredNear;
+      else
+        status.kind = AirspaceWarningStatusBadge::Kind::Covered;
+    } else if (warning->IsWarning()) {
+      status.kind = warning->IsInside()
+        ? AirspaceWarningStatusBadge::Kind::Inside
+        : AirspaceWarningStatusBadge::Kind::Near;
+    }
+
     return true;
   } catch (const std::exception &e) {
     LogFmt("Failed to query airspace warning status: {}", e.what());
@@ -118,6 +143,7 @@ class MapItemListWidget final
   Button *settings_button, *details_button, *cancel_button, *goto_button;
   Button *sim_jump_button = nullptr;
   Button *ack_button, *enable_button;
+  Button *clearance_button, *revoke_clearance_button;
 
   WndForm *dialog = nullptr;
   Waypoints *waypoints = nullptr;
@@ -180,11 +206,17 @@ protected:
                                    item->type == MapItem::Type::LOCATION));
     ack_button->SetEnabled(item != nullptr && CanAckItem(*item));
     enable_button->SetEnabled(item != nullptr && CanEnableItem(*item));
+    clearance_button->SetEnabled(item != nullptr &&
+                                 CanSetClearanceItem(*item));
+    revoke_clearance_button->SetEnabled(item != nullptr &&
+                                        CanRevokeClearanceItem(*item));
   }
 
   void OnGotoClicked();
   void OnAckClicked();
   void OnEnableClicked();
+  void OnSetClearanceClicked();
+  void OnRevokeClearanceClicked();
 
 public:
   /* virtual methods from class Widget */
@@ -260,6 +292,43 @@ public:
       ack_day;
   }
 
+  bool CanSetClearanceItem(unsigned index) const noexcept {
+    return CanSetClearanceItem(*list[index]);
+  }
+
+  static bool CanSetClearanceItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
+      return false;
+
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    if (backend_components->GetAirspaceWarnings() == nullptr ||
+        backend_components->GetAirspaceWarnings()
+          ->GetCleared(*as_item.airspace))
+      return false;
+
+    /* respect the per-class permission set in the Filter dialog */
+    const AirspaceWarningConfig &warning_config =
+      CommonInterface::GetComputerSettings().airspace.warnings;
+    return warning_config.IsClassClearanceAllowed(
+      as_item.airspace->GetTypeOrClass());
+  }
+
+  bool CanRevokeClearanceItem(unsigned index) const noexcept {
+    return CanRevokeClearanceItem(*list[index]);
+  }
+
+  static bool CanRevokeClearanceItem(const MapItem &item) noexcept {
+    if (backend_components == nullptr ||
+        item.type != MapItem::Type::AIRSPACE)
+      return false;
+
+    const AirspaceMapItem &as_item = (const AirspaceMapItem &)item;
+    return backend_components->GetAirspaceWarnings() != nullptr &&
+      backend_components->GetAirspaceWarnings()
+        ->GetCleared(*as_item.airspace);
+  }
+
   void OnActivateItem(unsigned index) noexcept override;
 };
 
@@ -293,6 +362,16 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
   enable_button = dialog.AddButton(_("Enable"), [this](){
     OnEnableClicked();
   });
+
+  clearance_button = dialog.AddButton(_("Set Clearance"),
+                                      [this](){
+    OnSetClearanceClicked();
+  });
+
+  revoke_clearance_button =
+    dialog.AddButton(_("Revoke Clearance"), [this](){
+      OnRevokeClearanceClicked();
+    });
 
   settings_button = dialog.AddButton(_("Settings"), [](){
     ShowMapItemListSettingsDialog();
@@ -349,21 +428,26 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
+  bool cleared = false;
   bool ack_day = false;
   AirspaceWarningStatusBadge warning_status;
   if (item->type == MapItem::Type::AIRSPACE &&
       backend_components != nullptr) {
     if (auto *warnings = backend_components->GetAirspaceWarnings();
         warnings != nullptr) {
-      const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
-      QueryAckDayNoThrow(*warnings, *as_item.airspace, ack_day);
-      QueryWarningStatusNoThrow(*warnings, *as_item.airspace,
-                               warning_status);
+      const auto &as = *static_cast<const AirspaceMapItem &>(*item).airspace;
+      cleared = warnings->GetCleared(as);
+      QueryAckDayNoThrow(*warnings, as, ack_day);
+      QueryWarningStatusNoThrow(*warnings, as, warning_status);
     }
   }
 
-  if (ack_day)
+  if (cleared)
+    canvas.SetTextColor(COLOR_CLEARANCE);
+  else if (ack_day)
     canvas.SetTextColor(COLOR_GRAY);
+  else
+    canvas.SetTextColor(dialog_look.list.text_color);
 
   PixelRect draw_rc = rc;
   PixelRect status_rc{};
@@ -382,7 +466,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   renderer.Draw(canvas, draw_rc, *item,
-                &CommonInterface::Basic().flarm.traffic);
+                &CommonInterface::Basic().flarm.traffic,
+                cleared);
 
   if (show_status)
     DrawAirspaceWarningStatus(canvas, *dialog_look.list.font,
@@ -576,6 +661,46 @@ MapItemListWidget::OnEnableClicked()
   }
   UpdateButtons();
   GetList().Invalidate();
+}
+
+inline void
+MapItemListWidget::OnSetClearanceClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  try {
+    backend_components->GetAirspaceWarnings()->SetCleared(
+      as_item.airspace, true);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to update airspace clearance: {}", e.what());
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to update airspace clearance");
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  }
+  UpdateButtons();
+}
+
+inline void
+MapItemListWidget::OnRevokeClearanceClicked()
+{
+  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
+    list[GetCursorIndex()];
+  try {
+    backend_components->GetAirspaceWarnings()->SetCleared(
+      as_item.airspace, false);
+  } catch (const std::exception &e) {
+    LogFmt("Failed to update airspace clearance: {}", e.what());
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to update airspace clearance");
+    Message::AddMessage(_("Failed to update airspace clearance"));
+    return;
+  }
+  UpdateButtons();
 }
 
 static bool

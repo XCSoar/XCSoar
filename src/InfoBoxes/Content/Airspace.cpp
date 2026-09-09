@@ -68,10 +68,10 @@ InfoBoxNearestAirspaceVertical::Update(InfoBoxData &data) noexcept
     return;
   }
 
-  NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
-                                                          CommonInterface::Calculated(),
-                                                          backend_components->GetAirspaceWarnings(),
-                                                          *data_components->airspaces);
+  NearestAirspace nearest = NearestAirspace::FindNextWarningEntry(CommonInterface::Basic(),
+                                                                  CommonInterface::Calculated(),
+                                                                  backend_components->GetAirspaceWarnings(),
+                                                                  *data_components->airspaces);
   if (!nearest.IsDefined()) {
     data.SetInvalid();
     return;
@@ -88,10 +88,10 @@ InfoBoxNearestAirspaceVertical::HandleClick() noexcept
       data_components->airspaces == nullptr)
     return false;
 
-  NearestAirspace nearest = NearestAirspace::FindVertical(CommonInterface::Basic(),
-                                                          CommonInterface::Calculated(),
-                                                          backend_components->GetAirspaceWarnings(),
-                                                          *data_components->airspaces);
+  NearestAirspace nearest = NearestAirspace::FindNextWarningEntry(CommonInterface::Basic(),
+                                                                  CommonInterface::Calculated(),
+                                                                  backend_components->GetAirspaceWarnings(),
+                                                                  *data_components->airspaces);
 
   if (!nearest.IsDefined())
     return false;

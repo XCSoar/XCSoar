@@ -43,6 +43,8 @@ public:
                                         const FlatProjection &projection) const noexcept override;
   GeoPoint ClosestPoint(const GeoPoint &loc,
                         const FlatProjection &projection) const noexcept override;
+  double DistanceToBoundary(const GeoPoint &loc,
+                            const FlatProjection &projection) const noexcept override;
 
   /**
    * Accessor for radius
