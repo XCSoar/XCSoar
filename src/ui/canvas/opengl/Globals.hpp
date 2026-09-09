@@ -60,11 +60,6 @@ extern GLenum render_buffer_depth_stencil;
 extern GLenum render_buffer_stencil;
 
 /**
- * Maximum number of MSAA samples supported (0 if not queried yet).
- */
-extern unsigned max_antialiasing_samples;
-
-/**
  * The MSAA sample counts XCSoar offers in its user interface.
  */
 inline constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
