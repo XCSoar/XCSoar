@@ -30,6 +30,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <algorithm>
+#include <initializer_list>
 
 #include <cassert>
 #include <string.h>
@@ -99,6 +100,107 @@ CheckStencil() noexcept
 
   /* not supported */
   return GL_NONE;
+}
+
+#ifdef GL_EXT_multisampled_render_to_texture
+
+/**
+ * Load the first of @a names that the GL implementation knows.  The
+ * multisample entry points exist under a core name and an assortment
+ * of vendor-suffixed ones, all with the same signature, and which of
+ * them resolves says nothing about which extension string was
+ * advertised.
+ */
+static OpenGL::Function
+GetAnyProcAddress(std::initializer_list<const char *> names) noexcept
+{
+  for (const char *name : names)
+    if (auto f = OpenGL::GetProcAddress(name))
+      return f;
+
+  return nullptr;
+}
+
+#endif
+
+/**
+ * Determine whether and how a framebuffer object can be rendered with
+ * multisampling, and load the entry points needed for it.
+ */
+static void
+SetupFboAntialiasing() noexcept
+{
+  using OpenGL::FboAntialiasingMode;
+
+  auto mode = FboAntialiasingMode::NONE;
+  unsigned samples = 0;
+
+#ifdef GL_EXT_multisampled_render_to_texture
+  /* GL_MAX_SAMPLES_EXT, not GL_MAX_SAMPLES: this file includes
+     Function.hpp, which on GLX pulls in <GL/gl.h> and defines the
+     latter, but no other backend does */
+
+  const bool implicit =
+    OpenGL::IsExtensionSupported("GL_EXT_multisampled_render_to_texture");
+
+  /* the desktop mechanism; the extension is spelled differently by
+     every vendor, and is core in OpenGL ES 3.0 and desktop GL 3.0,
+     where no extension string is advertised at all - so ask for the
+     entry point rather than for a name.  Resolving one proves
+     nothing on its own (eglGetProcAddress() and glXGetProcAddress()
+     may answer for functions the context does not have), but the
+     GL_MAX_SAMPLES_EXT query below is what actually decides */
+#ifdef GL_NV_framebuffer_blit
+  GLExt::blit_framebuffer = (PFNGLBLITFRAMEBUFFERNVPROC)
+    GetAnyProcAddress({"glBlitFramebuffer", "glBlitFramebufferEXT",
+                       "glBlitFramebufferANGLE", "glBlitFramebufferNV"});
+
+  const bool blit = GLExt::blit_framebuffer != nullptr;
+#else
+  const bool blit = false;
+#endif
+
+  if (implicit || blit) {
+    GLExt::renderbuffer_storage_multisample =
+      (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC)
+      GetAnyProcAddress({"glRenderbufferStorageMultisample",
+                         "glRenderbufferStorageMultisampleEXT",
+                         "glRenderbufferStorageMultisampleANGLE",
+                         "glRenderbufferStorageMultisampleNV",
+                         "glRenderbufferStorageMultisampleAPPLE"});
+  } else {
+    GLExt::renderbuffer_storage_multisample = nullptr;
+  }
+
+  GLExt::framebuffer_texture_2d_multisample = implicit
+    ? (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC)
+    OpenGL::GetProcAddress("glFramebufferTexture2DMultisampleEXT")
+    : nullptr;
+
+  if (GLExt::renderbuffer_storage_multisample != nullptr) {
+    /* prefer the implicit resolve: on the tiled GPUs that offer it,
+       the explicit blit would force a full tile write-out */
+    if (GLExt::framebuffer_texture_2d_multisample != nullptr)
+      mode = FboAntialiasingMode::IMPLICIT;
+#ifdef GL_NV_framebuffer_blit
+    else if (GLExt::blit_framebuffer != nullptr)
+      mode = FboAntialiasingMode::BLIT;
+#endif
+
+    if (mode != FboAntialiasingMode::NONE) {
+      GLint value = 0;
+      glGetIntegerv(GL_MAX_SAMPLES_EXT, &value);
+      if (value > 1)
+        samples = unsigned(value);
+      else
+        /* the implementation has the entry points but cannot actually
+           multisample anything */
+        mode = FboAntialiasingMode::NONE;
+    }
+  }
+#endif // GL_EXT_multisampled_render_to_texture
+
+  OpenGL::SetFboAntialiasing(mode, samples);
 }
 
 void
@@ -178,6 +280,8 @@ OpenGL::SetupContext()
     GLExt::discard_framebuffer = nullptr;
   }
 #endif
+
+  SetupFboAntialiasing();
 
   render_buffer_depth_stencil = CheckDepthStencil();
 
