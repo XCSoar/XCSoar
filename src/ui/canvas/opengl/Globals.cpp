@@ -23,6 +23,10 @@ unsigned available_antialiasing_samples;
 
 unsigned antialiasing_samples;
 
+FboAntialiasingMode fbo_antialiasing_mode;
+
+unsigned fbo_antialiasing_samples;
+
 UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -63,6 +67,28 @@ SetAvailableAntialiasingSamples(unsigned mask) noexcept
 
   LogFmt("Anti-aliasing available:{}",
          buffer.empty() ? " none" : buffer.c_str());
+}
+
+void
+SetFboAntialiasing(FboAntialiasingMode mode, unsigned samples) noexcept
+{
+  fbo_antialiasing_mode = mode;
+  fbo_antialiasing_samples = samples;
+
+  switch (mode) {
+  case FboAntialiasingMode::NONE:
+    LogFmt("FBO anti-aliasing: not available");
+    break;
+
+  case FboAntialiasingMode::IMPLICIT:
+    LogFmt("FBO anti-aliasing: up to {} samples, implicit resolve",
+           samples);
+    break;
+
+  case FboAntialiasingMode::BLIT:
+    LogFmt("FBO anti-aliasing: up to {} samples, blit resolve", samples);
+    break;
+  }
 }
 
 } // namespace OpenGL

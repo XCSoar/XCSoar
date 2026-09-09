@@ -15,8 +15,9 @@
 
 #include <glm/fwd.hpp>
 
-#ifdef SOFTWARE_ROTATE_DISPLAY
 #include <cstdint>
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
 enum class DisplayOrientation : uint8_t;
 #endif
 
@@ -94,6 +95,54 @@ extern unsigned antialiasing_samples;
  */
 void
 SetAntialiasingSamples(unsigned samples) noexcept;
+
+/**
+ * How this GL implementation can render a framebuffer object with
+ * multisampling.
+ */
+enum class FboAntialiasingMode : uint8_t {
+  /** not at all */
+  NONE,
+
+  /**
+   * GL_EXT_multisampled_render_to_texture: the texture is attached
+   * with a sample count and resolved implicitly when the framebuffer
+   * is unbound.  Nearly free on tiled GPUs, which is where this
+   * extension is found.
+   */
+  IMPLICIT,
+
+  /**
+   * A multisampled colour renderbuffer, resolved into the texture
+   * with glBlitFramebuffer().  What desktop GPUs offer.
+   */
+  BLIT,
+};
+
+extern FboAntialiasingMode fbo_antialiasing_mode;
+
+/**
+ * The largest number of MSAA samples a framebuffer object can be
+ * rendered with, or 0 if this GL implementation cannot multisample an
+ * FBO at all (in which case #fbo_antialiasing_mode is NONE).  Unlike
+ * #antialiasing_samples, which is a property of the window surface,
+ * this is a property of the GL context.
+ *
+ * The two are deliberately independent: the window surface
+ * antialiases everything painted directly to it (the gauges, the
+ * dialogs, the form controls), while this one antialiases everything
+ * painted through a #BufferCanvas (the map, the InfoBoxes, the
+ * renderer caches).  Each uses as many samples as it can, so they may
+ * differ.
+ */
+extern unsigned fbo_antialiasing_samples;
+
+/**
+ * Publish the framebuffer object multisample capability.  Called by
+ * OpenGL::SetupContext() once the context exists.
+ */
+void
+SetFboAntialiasing(FboAntialiasingMode mode, unsigned samples) noexcept;
 
 /**
  * The dimensions of the OpenGL window in pixels.
