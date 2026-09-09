@@ -34,7 +34,7 @@ public:
                              width, height);
   }
 
-#ifdef GL_EXT_multisampled_render_to_texture
+#ifdef HAVE_MULTISAMPLE_FBO
   /**
    * Like Storage(), but multisampled.  @a samples must not exceed
    * OpenGL::fbo_antialiasing_samples, and must match every other

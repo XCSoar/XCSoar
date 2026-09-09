@@ -130,7 +130,7 @@ FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget,
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
 }
 
-#ifdef GL_EXT_multisampled_render_to_texture
+#ifdef HAVE_MULTISAMPLE_FBO
 
 /**
  * Allocate multisampled renderbuffer storage.  The caller must have
@@ -162,10 +162,6 @@ FramebufferTexture2DMultisample(GLenum target, GLenum attachment,
                                             texture, level, samples);
 }
 
-#endif // GL_EXT_multisampled_render_to_texture
-
-#ifdef GL_NV_framebuffer_blit
-
 /**
  * Resolve a multisampled framebuffer bound to #READ_FRAMEBUFFER into
  * the single-sampled one bound to #DRAW_FRAMEBUFFER.  The caller must
@@ -181,6 +177,6 @@ BlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
                           dstX0, dstY0, dstX1, dstY1, mask, filter);
 }
 
-#endif // GL_NV_framebuffer_blit
+#endif // HAVE_MULTISAMPLE_FBO
 
 } // namespace OpenGL

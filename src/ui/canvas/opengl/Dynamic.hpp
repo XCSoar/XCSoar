@@ -10,6 +10,18 @@
 #define HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
 #endif
 
+/**
+ * Can this build render a framebuffer object with multisampling?
+ * Both mechanisms need tokens and typedefs from the extension
+ * headers, and the code paths are written as a pair, so they are
+ * gated together.  Whether the running implementation actually offers
+ * one of them is OpenGL::fbo_antialiasing_mode.
+ */
+#if defined(GL_EXT_multisampled_render_to_texture) && \
+  defined(GL_NV_framebuffer_blit)
+#define HAVE_MULTISAMPLE_FBO
+#endif
+
 namespace GLExt {
 
 #ifdef HAVE_DYNAMIC_MAPBUFFER
@@ -45,7 +57,7 @@ static inline void MultiDrawElements(Args... args) noexcept {
 inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
 #endif // GL_EXT_discard_framebuffer
 
-#ifdef GL_EXT_multisampled_render_to_texture
+#ifdef HAVE_MULTISAMPLE_FBO
 /**
  * Allocate multisampled renderbuffer storage.  Both multisample
  * mechanisms need this, and both spell the entry point
@@ -64,9 +76,7 @@ inline PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC
  */
 inline PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC
   framebuffer_texture_2d_multisample;
-#endif // GL_EXT_multisampled_render_to_texture
 
-#ifdef GL_NV_framebuffer_blit
 /**
  * Resolve a multisampled framebuffer explicitly by blitting it into a
  * single-sampled one.  nullptr if the implementation cannot do that;
@@ -75,6 +85,6 @@ inline PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC
  * EXT, NV or ANGLE variants, which share this signature.
  */
 inline PFNGLBLITFRAMEBUFFERNVPROC blit_framebuffer;
-#endif // GL_NV_framebuffer_blit
+#endif // HAVE_MULTISAMPLE_FBO
 
 } // namespace GLExt
