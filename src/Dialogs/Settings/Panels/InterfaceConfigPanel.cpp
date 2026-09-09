@@ -27,6 +27,33 @@
 
 using namespace std::chrono;
 
+/**
+ * Add one anti-aliasing choice, annotated with whether it is the
+ * level currently in use, or one this display cannot provide.
+ *
+ * @param available bit mask of usable sample counts; 0 means the
+ * platform cannot enumerate them, in which case nothing is marked
+ * @param active the number of samples actually in use
+ */
+static void
+AddAntialiasingChoice(DataFieldEnum &df, unsigned samples,
+                      unsigned available, unsigned active) noexcept
+{
+  StaticString<64> label;
+
+  if (samples == 0)
+    label.Format("%s", _("Off"));
+  else
+    label.Format("%ux", samples);
+
+  if (samples == active)
+    label.AppendFormat(" (%s)", _("active"));
+  else if (available != 0 && (available & (1u << samples)) == 0)
+    label.AppendFormat(" (%s)", _("not available"));
+
+  df.AddChoice(samples, label.c_str());
+}
+
 enum ControlIndex {
   AntiAliasing,
   InputFile,
@@ -84,33 +111,20 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
                                    "Higher values improve quality but may reduce performance."));
   if (wp_antialiasing != nullptr) {
     DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
-    df.AddChoice(0, _("Off"));
 
-    // Display all options but mark currently unavailable ones as "Not available"
 #ifdef ENABLE_OPENGL
-    const unsigned max_samples = OpenGL::max_antialiasing_samples;
+    using OpenGL::ANTIALIASING_SAMPLE_COUNTS;
+    const unsigned available = OpenGL::available_antialiasing_samples;
+    const unsigned active = OpenGL::antialiasing_samples;
 #else
-    const unsigned max_samples = 0;
+    static constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
+    /* without OpenGL there is no antialiasing implemented */
+    const unsigned available = 1, active = ~0u;
 #endif
-    if (max_samples >= 2)
-      df.AddChoice(2, _("2x"));
-    else
-      df.AddChoice(2, _("2x (Not available)"));
 
-    if (max_samples >= 4)
-      df.AddChoice(4, _("4x"));
-    else
-      df.AddChoice(4, _("4x (Not available)"));
-
-    if (max_samples >= 8)
-      df.AddChoice(8, _("8x"));
-    else
-      df.AddChoice(8, _("8x (Not available)"));
-
-    if (max_samples >= 16)
-      df.AddChoice(16, _("16x"));
-    else
-      df.AddChoice(16, _("16x (Not available)"));  
+    AddAntialiasingChoice(df, 0, available, active);
+    for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
+      AddAntialiasingChoice(df, n, available, active);
 
     df.SetValue(settings.antialiasing);
     wp_antialiasing->RefreshDisplay();
