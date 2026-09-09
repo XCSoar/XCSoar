@@ -65,6 +65,27 @@ extern GLenum render_buffer_stencil;
 extern unsigned max_antialiasing_samples;
 
 /**
+ * The MSAA sample counts XCSoar offers in its user interface.
+ */
+inline constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
+
+/**
+ * Bit mask of the MSAA sample counts this display can actually
+ * provide: bit n is set if a window configuration with n samples
+ * exists. Bit 0 is set whenever the mask has been probed at all, so
+ * a value of zero means "unknown", i.e. the platform cannot
+ * enumerate its configurations (libSDL).
+ */
+extern unsigned available_antialiasing_samples;
+
+/**
+ * Publish the result of probing the display for usable MSAA sample
+ * counts.
+ */
+void
+SetAvailableAntialiasingSamples(unsigned mask) noexcept;
+
+/**
  * The number of MSAA samples the window surface really has (0 =
  * disabled) as opposed to the number requested in the profile.
  * Only changes on startup, no protection necessary.
