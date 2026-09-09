@@ -62,10 +62,8 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept;
  * <10> Units of antenna altitude, meters
  * <11> Geoidal separation, the difference between the WGS-84 earth
  *      ellipsoid and mean-sea-level (geoid), "-" means mean-sea-level
- *      below ellipsoid
- *      (not implemented)
- * <12> Units of geoidal separation, meters 
- *      (not implemented)
+ *      below ellipsoid (EGM96 lookup at the fix location)
+ * <12> Units of geoidal separation, meters
  * <13> Age of differential GPS data, time in seconds since last SC104
  *      type 1 or 9 update, null field when DGPS is not used 
  *      (not implemented)
