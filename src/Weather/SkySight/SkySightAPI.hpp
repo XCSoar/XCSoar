@@ -32,7 +32,6 @@ class SkySightAPI final {
   struct PendingDecodeJob {
     SkySightPreparedData prepared;
     std::string variable_name;
-    std::map<float, SkySight::LegendColor> legend;
     std::string layer_id;
     time_t forecast_time = 0;
   };
