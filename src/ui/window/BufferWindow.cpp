@@ -4,9 +4,7 @@
 #include "BufferWindow.hpp"
 #include "TopWindow.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "ui/canvas/opengl/Globals.hpp"
-#else
+#ifndef ENABLE_OPENGL
 #include "ui/canvas/WindowCanvas.hpp"
 #endif
 
@@ -41,18 +39,6 @@ BufferWindow::OnResize(PixelSize new_size) noexcept
 void
 BufferWindow::OnPaint(Canvas &canvas) noexcept
 {
-#ifdef ENABLE_OPENGL
-  /* An FBO does not inherit the window surface's multisampling, so
-     where the FBO cannot be multisampled in its own right, bypass it
-     and render directly to the window surface: antialiasing the map
-     matters more than buffering it.  Where it can, we get both. */
-  if (OpenGL::antialiasing_samples > 0 &&
-      OpenGL::fbo_antialiasing_mode == OpenGL::FboAntialiasingMode::NONE) {
-    OnPaintBuffer(canvas);
-    return;
-  }
-#endif
-
   if (!buffer.IsDefined()) {
     buffer.Create(canvas);
     dirty = true;
