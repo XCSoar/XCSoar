@@ -34,6 +34,19 @@ public:
                              width, height);
   }
 
+#ifdef GL_EXT_multisampled_render_to_texture
+  /**
+   * Like Storage(), but multisampled.  @a samples must not exceed
+   * OpenGL::fbo_antialiasing_samples, and must match every other
+   * attachment of the framebuffer this is attached to.
+   */
+  static void StorageMultisample(GLsizei samples, GLenum internalformat,
+                                 GLsizei width, GLsizei height) {
+    FBO::RenderbufferStorageMultisample(FBO::RENDERBUFFER, samples,
+                                        internalformat, width, height);
+  }
+#endif
+
   void AttachFramebuffer(GLenum attachment) {
     FBO::FramebufferRenderbuffer(FBO::FRAMEBUFFER, attachment,
                                  FBO::RENDERBUFFER, id);
