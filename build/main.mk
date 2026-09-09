@@ -642,6 +642,9 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
+	$(SRC)/Weather/SkySight/ContourOverlay.cpp \
+	$(SRC)/Weather/SkySight/ContourRaster.cpp \
+	$(SRC)/Weather/SkySight/FieldImage.cpp \
 	$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp \
 	$(SRC)/Weather/SkySight/SkySightClient.cpp \
 	$(SRC)/Weather/SkySight/SkySightCache.cpp \

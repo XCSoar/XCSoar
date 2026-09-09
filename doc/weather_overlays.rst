@@ -145,6 +145,58 @@ files, rendered images, live tiles, and temporary files. Provider catalog
 metadata, credentials, selected layers, page configuration, and persisted API
 throttle state are preserved.
 
+SkySight overlay rendering
+--------------------------
+
+SkySight forecast files hold a NetCDF grid of scalar samples, not a
+picture.  :cpp:`SkySightFileDecoder` converts that grid and
+:file:`src/Weather/SkySight/FieldImage.cpp` stores it as a single-band
+GeoTIFF; :cpp:`SkySightContourOverlay` then contours it for the patch of
+map that is on screen.  Provider images (live tiles) keep using the plain
+:cpp:`MapOverlayBitmap` path.
+
+Why the field is stored rather than a finished image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Every SkySight region is continent-sized.  ``EUROPE`` alone is 3002 x 1504
+samples at 0.02 degrees, so an image holding one classified pixel per
+sample already fills the raster budget.  The map magnifies that texture
+with ``GL_LINEAR``, which blends *colours* across a whole grid cell and
+produces shades the legend does not contain.  Pre-rendering finely enough
+to avoid it is impossible: two pixels per sample would need a 72 MB
+texture, and four would exceed the 8192 px axis limit in
+:cpp:`LoadTiff()`.
+
+Contouring the visible patch instead keeps the raster small at every
+zoom, because a screen only ever shows a few dozen grid cells.
+
+Points to keep in mind when touching this:
+
+- :cpp:`SampleField()` interpolates bicubically (Catmull-Rom) and clamps
+  to the four surrounding samples.  Without the clamp, overshoot near
+  steep gradients paints bands the forecast never reaches.
+- Samples next to missing data fall back to bilinear interpolation over
+  the valid neighbours, and become missing once less than half the weight
+  is backed by data.  This keeps the coastline of a model domain from
+  growing a transparent fringe.
+- :cpp:`ContourRasterizer` renders a window but samples the whole field,
+  so a patch boundary never becomes a contour boundary.  Keep it that
+  way, or panning will show seams.
+- :cpp:`GeoBounds` takes north-west and south-east, in that order.
+  Swapping them inverts the latitude range and the overlay silently stops
+  drawing.
+- Samples are packed into 8 bits over the range the data actually covers,
+  which keeps a cached forecast smaller than the RGBA image it replaced.
+  Widen it only with a measurement: a 16-bit field costs about six times
+  the cache.
+- :cpp:`SelectWindow()` bounds the raster with
+  ``MAX_CONTOUR_RASTER_AXIS`` / ``MAX_CONTOUR_RASTER_CELLS`` from
+  :file:`SkySightLimits.hpp`, and targets roughly two screen pixels per
+  raster pixel.  Rendering runs in the draw thread, so keep it that way.
+- ``FIELD_IMAGE_MAGIC`` identifies the layout.  Change what the decoder
+  writes and the magic must change with it, so overlays from an earlier
+  decoder are re-fetched rather than drawn as pictures.
+
 Threading and async boundaries
 ------------------------------
 

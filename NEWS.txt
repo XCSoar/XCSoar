@@ -24,6 +24,10 @@ Version 7.46 - not yet released
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
 * weather
+  - SkySight: draw forecast overlays as smooth contour bands instead of
+    one coloured square per forecast grid point, so layer boundaries
+    stay sharp at every zoom level; forecasts already downloaded are
+    fetched again once, and use slightly less storage than before
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
   - fix the weather cursor bar keeping light colours in dark mode,
