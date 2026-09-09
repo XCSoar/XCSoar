@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ui/opengl/SystemExt.hpp"
+#include "Dynamic.hpp"
 
 #if (defined(__APPLE__) && defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE)
 #define GL_UNBIND_FRAMEBUFFER 1
@@ -94,5 +95,39 @@ FramebufferTexture2D(GLenum target, GLenum attachment, GLenum textarget,
 {
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
 }
+
+#ifdef GL_EXT_multisampled_render_to_texture
+
+/**
+ * Allocate multisampled renderbuffer storage.  The caller must have
+ * checked OpenGL::fbo_antialiasing_samples first; @a samples must not
+ * exceed it, and must match the sample count of every other
+ * attachment of the framebuffer.
+ */
+static inline void
+RenderbufferStorageMultisample(GLenum target, GLsizei samples,
+                               GLenum internalformat,
+                               GLsizei width, GLsizei height) noexcept
+{
+  GLExt::renderbuffer_storage_multisample(target, samples, internalformat,
+                                          width, height);
+}
+
+/**
+ * Attach a texture to a framebuffer as a multisampled colour buffer.
+ * Rendering happens in an implicit multisample buffer which is
+ * resolved into the texture when the framebuffer is unbound; there is
+ * no explicit blit, and the texture itself is never multisampled.
+ */
+static inline void
+FramebufferTexture2DMultisample(GLenum target, GLenum attachment,
+                                GLenum textarget, GLuint texture,
+                                GLint level, GLsizei samples) noexcept
+{
+  GLExt::framebuffer_texture_2d_multisample(target, attachment, textarget,
+                                            texture, level, samples);
+}
+
+#endif // GL_EXT_multisampled_render_to_texture
 
 } // namespace OpenGL
