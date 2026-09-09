@@ -161,24 +161,56 @@ ContourPalette::Find(float value) const noexcept
   return i->opaque ? &i->color : nullptr;
 }
 
+ContourWindow
+FitContourRaster(ContourWindow window, unsigned upsample, unsigned max_axis,
+                 std::size_t max_cells) noexcept
+{
+  window.raster_width = 0;
+  window.raster_height = 0;
+  if (window.width == 0 || window.height == 0 || max_axis == 0 ||
+      max_cells == 0)
+    return window;
+
+  double width = double(window.width) * std::max(upsample, 1u);
+  double height = double(window.height) * std::max(upsample, 1u);
+
+  const double scale = std::min({1.0, max_axis / width, max_axis / height,
+                                 std::sqrt(double(max_cells) /
+                                           (width * height))});
+  if (scale < 1) {
+    width *= scale;
+    height *= scale;
+  }
+
+  /* Truncating can only shrink the raster, so both budgets still hold;
+     a patch narrower than one pixel still gets one. */
+  window.raster_width = std::max(1u, unsigned(width));
+  window.raster_height = std::max(1u, unsigned(height));
+  return window;
+}
+
 ContourRasterizer::ContourRasterizer(const ScalarField &_field,
                                      const ContourPalette &_palette,
                                      ContourWindow _window) noexcept
-  :field(_field), palette(_palette), window(_window)
+  :field(_field), palette(_palette), window(_window),
+   x_step(window.raster_width > 0
+          ? float(window.width) / float(window.raster_width)
+          : 1),
+   y_step(window.raster_height > 0
+          ? float(window.height) / float(window.raster_height)
+          : 1)
 {
-  if (window.upsample < 1)
-    window.upsample = 1;
 }
 
 float
 ContourRasterizer::SampleAt(unsigned x, unsigned y) const noexcept
 {
-  const float scale = 1.0f / float(window.upsample);
-
-  /* output pixel centres, expressed in grid samples */
+  /* Output pixel centres, expressed in grid samples.  The step is below
+     one while the patch is magnified and above one once a zoomed-out
+     view has to be decimated into the raster budget. */
   return SampleField(field,
-                     float(window.x) + (float(x) + 0.5f) * scale - 0.5f,
-                     float(window.y) + (float(y) + 0.5f) * scale - 0.5f);
+                     float(window.x) + (float(x) + 0.5f) * x_step - 0.5f,
+                     float(window.y) + (float(y) + 0.5f) * y_step - 0.5f);
 }
 
 void
