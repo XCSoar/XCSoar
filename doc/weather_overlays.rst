@@ -189,10 +189,20 @@ Points to keep in mind when touching this:
   which keeps a cached forecast smaller than the RGBA image it replaced.
   Widen it only with a measurement: a 16-bit field costs about six times
   the cache.
-- :cpp:`SelectWindow()` bounds the raster with
-  ``MAX_CONTOUR_RASTER_AXIS`` / ``MAX_CONTOUR_RASTER_CELLS`` from
-  :file:`SkySightLimits.hpp`, and targets roughly two screen pixels per
-  raster pixel.  Rendering runs in the draw thread, so keep it that way.
+- :cpp:`SelectWindow()` targets roughly two screen pixels per raster
+  pixel, then hands the patch to :cpp:`FitContourRaster()`, which fits it
+  to ``MAX_CONTOUR_RASTER_AXIS`` / ``MAX_CONTOUR_RASTER_CELLS`` from
+  :file:`SkySightLimits.hpp` **and** to ``OpenGL::max_texture_size``.
+  Zooming out grows the patch until it is the whole region, so the
+  budget has to bound the raster itself, not just the magnification --
+  and the device limit matters: VC4 caps textures at 2048, below the
+  compile-time budget.  Rendering runs in the draw thread, so keep it
+  that way.
+- Over-large patches are decimated, never cropped, so a zoomed-out view
+  keeps its full extent and only loses detail.  A raster pixel therefore
+  covers more than one sample at low zoom; :cpp:`ContourWindow` carries
+  the raster size for exactly that reason, rather than an integer
+  magnification.
 - ``FIELD_IMAGE_MAGIC`` identifies the layout.  Change what the decoder
   writes and the magic must change with it, so overlays from an earlier
   decoder are re-fetched rather than drawn as pictures.
