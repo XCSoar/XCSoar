@@ -58,7 +58,7 @@ public:
   }
 
   template<typename T>
-  void SetLabel(T &&_label) noexcept {
+  void SetLabel(T &&_label) {
     label = std::forward<T>(_label);
     if (cached)
       cached->SetLabel(label.c_str());
