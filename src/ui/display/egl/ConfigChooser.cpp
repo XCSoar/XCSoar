@@ -9,7 +9,9 @@
 #include "ui/canvas/egl/GBM.hpp"
 #endif
 
+#include <algorithm>
 #include <array>
+#include <optional>
 #include <span>
 
 namespace EGL {
@@ -123,10 +125,19 @@ FindConfigWithAttribute(EGLDisplay display,
 
 #endif /* MESA_KMS */
 
-EGLConfig
-ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
+/**
+ * Ask EGL for a list of configurations and pick the one which suits
+ * XCSoar best. Throws on error.
+ *
+ * @param antialiasing_samples the requested number of MSAA samples;
+ * 0 disables antialiasing
+ * @return the chosen config or std::nullopt if there is no
+ * configuration matching the requested antialiasing
+ */
+static std::optional<EGLConfig>
+TryChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
 {
-  static constexpr EGLint attributes[] = {
+  static constexpr EGLint base_attributes[] = {
 #ifdef ANDROID
     /* EGL_STENCIL_SIZE not listed here because we have a fallback for
        configurations without stencil (but we prefer native stencil)
@@ -157,17 +168,32 @@ ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
     EGL_NONE
   };
 
+  /* the base attributes plus an optional multisampling request;
+     eglChooseConfig() sorts configurations without multisampling
+     first, so we need to ask for it explicitly instead of picking a
+     multisample configuration from the result list */
+  std::array<EGLint, std::size(base_attributes) + 4> attributes;
+  auto *a = std::copy_n(base_attributes, std::size(base_attributes) - 1,
+                        attributes.data());
+  if (antialiasing_samples > 0) {
+    *a++ = EGL_SAMPLE_BUFFERS;
+    *a++ = 1;
+    *a++ = EGL_SAMPLES;
+    *a++ = static_cast<EGLint>(antialiasing_samples);
+  }
+  *a = EGL_NONE;
+
   std::array<EGLConfig, 64> configs;
   EGLint num_configs;
-  if (!eglChooseConfig(display, attributes, configs.data(), configs.size(),
+  if (!eglChooseConfig(display, attributes.data(),
+                       configs.data(), configs.size(),
                        &num_configs))
     throw FmtRuntimeError("eglChooseConfig() failed: {:#x}", eglGetError());
 
   if (num_configs == 0)
-    throw std::runtime_error("eglChooseConfig() failed");
+    return std::nullopt;
 
 #ifdef MESA_KMS
-  (void)antialiasing_samples; // not yet supported on MESA_KMS
   /* On some GBM targets, such as the Raspberry Pi 4,
      eglChooseConfig() gives us an EGLConfig which will later fail
      eglCreateWindowSurface() with EGL_BAD_MATCH.  Only the EGLConfig
@@ -179,23 +205,44 @@ ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
     i = FindConfigWithAttribute(display, configs.data(), num_configs,
                                 EGL_NATIVE_VISUAL_ID,
                                 XCSOAR_GBM_FORMAT_FALLBACK);
+
+  if (i < 0 && antialiasing_samples > 0)
+    /* none of the multisample configurations has a usable native
+       visual; let the caller retry without antialiasing */
+    return std::nullopt;
+
   return i >= 0 ? configs[i] : configs[0];
 #elif defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
   const auto closest_config =
     FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
                       8, 8, 8, 0, 0, 1, antialiasing_samples);
   if (closest_config == nullptr)
-    throw std::runtime_error("eglChooseConfig() failed");
-
-  LogFormat("EGL config: samples=%d (requested %u)",
-            GetConfigAttrib(display, closest_config, EGL_SAMPLES, 0),
-            antialiasing_samples);
+    return std::nullopt;
 
   return closest_config;
 #else
-  (void)antialiasing_samples; // not yet supported
+  /* eglChooseConfig() has sorted the configurations for us, and the
+     multisampling request (if any) was part of the attribute list */
   return configs[0];
 #endif
+}
+
+EGLConfig
+ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
+{
+  if (antialiasing_samples > 0) {
+    if (const auto config = TryChooseConfig(display, antialiasing_samples))
+      return *config;
+
+    LogFormat("Requested %ux anti-aliasing not available, disabling",
+              antialiasing_samples);
+  }
+
+  const auto config = TryChooseConfig(display, 0);
+  if (!config)
+    throw std::runtime_error("eglChooseConfig() failed");
+
+  return *config;
 }
 
 } // namespace EGL
