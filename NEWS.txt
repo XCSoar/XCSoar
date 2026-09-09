@@ -124,6 +124,10 @@ Version 7.46 - not yet released
     first, and take it off when it grows too old
   - draw the glider on the flugwetter.de radar and satellite
     pictures, and on Sat Rad Blitz, at its GPS position #2966
+  - draw SkySight forecast overlays as smooth contour bands instead of
+    one coloured square per forecast grid point, so layer boundaries
+    stay sharp at every zoom level; forecasts already downloaded are
+    fetched again once, and use slightly less storage than before
 * map
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain
