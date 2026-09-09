@@ -9,6 +9,10 @@
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/custom/UncompressedImage.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #include <algorithm>
 #include <cmath>
 #include <memory>
@@ -32,11 +36,28 @@ constexpr double SCREEN_PIXELS_PER_RASTER_PIXEL = 2;
  */
 constexpr double WINDOW_MARGIN = 0.25;
 
+/**
+ * Longest side of a contour texture.  Terrain already clamps to
+ * OpenGL::max_texture_size (2048 when the driver did not report one);
+ * the compile-time axis budget still applies on top.
+ */
+[[gnu::pure]] unsigned
+GetMaxRasterAxis() noexcept
+{
+  const unsigned max_texture = OpenGL::max_texture_size > 0
+    ? OpenGL::max_texture_size
+    : OpenGL::DEFAULT_MAX_TEXTURE_SIZE;
+  return std::min(SkySight::MAX_CONTOUR_RASTER_AXIS, max_texture);
+}
+
 [[gnu::pure]] bool
 Contains(const SkySight::ContourWindow &outer,
          const SkySight::ContourWindow &inner) noexcept
 {
-  return outer.upsample == inner.upsample &&
+  /* Reuse only at the same detail: a raster rendered for a wider patch
+     carries fewer pixels per sample than a zoomed-in view needs. */
+  return outer.width * inner.raster_width ==
+      inner.width * outer.raster_width &&
     outer.x <= inner.x && outer.y <= inner.y &&
     outer.x + outer.width >= inner.x + inner.width &&
     outer.y + outer.height >= inner.y + inner.height;
@@ -96,16 +117,14 @@ SkySightContourOverlay::SelectWindow(
 
   const auto wanted = long(std::lround(screen_pixels_per_sample /
                                        SCREEN_PIXELS_PER_RASTER_PIXEL));
-  window.upsample =
+  const auto upsample =
     unsigned(std::clamp(wanted, 1L, long(SkySight::MAX_CONTOUR_UPSAMPLE)));
 
-  /* ...and never beyond what the raster budget allows. */
-  window.upsample = std::min(window.upsample,
-                             SkySight::ChooseContourUpsample(
-                               window.width, window.height,
-                               SkySight::MAX_CONTOUR_RASTER_AXIS,
-                               SkySight::MAX_CONTOUR_RASTER_CELLS));
-  return window;
+  /* Zooming out grows the patch until it is the whole region, which is
+     far past anything a texture can hold, so the raster is fitted to the
+     budget rather than the wish. */
+  return SkySight::FitContourRaster(window, upsample, GetMaxRasterAxis(),
+                                    SkySight::MAX_CONTOUR_RASTER_CELLS);
 }
 
 bool
@@ -149,7 +168,7 @@ SkySightContourOverlay::Draw(Canvas &canvas,
                              const WindowProjection &projection) noexcept
 {
   const auto window = SelectWindow(projection);
-  if (window.width == 0 || window.height == 0)
+  if (window.empty())
     return;
 
   if ((!cached || !Contains(cached_window, window)) && !Render(window))
