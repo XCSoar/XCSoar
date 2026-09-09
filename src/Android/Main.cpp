@@ -296,7 +296,7 @@ try {
     Path path = Profile::GetPath();
     AllocatedPath default_path;
     if (path == nullptr) {
-      default_path = LocalPath("default.prf");
+      default_path = Profile::GetDefaultPath();
       path = default_path;
     }
     ProfileMap temp_map;
