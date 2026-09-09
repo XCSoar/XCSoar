@@ -42,10 +42,12 @@ void
 BufferWindow::OnPaint(Canvas &canvas) noexcept
 {
 #ifdef ENABLE_OPENGL
-  /* When antialiasing is enabled, bypass the FBO and render directly
-     to the window surface to benefit from MSAA. FBOs don't inherit
-     the window's multisampling. */
-  if (OpenGL::antialiasing_samples > 0) {
+  /* An FBO does not inherit the window surface's multisampling, so
+     where the FBO cannot be multisampled in its own right, bypass it
+     and render directly to the window surface: antialiasing the map
+     matters more than buffering it.  Where it can, we get both. */
+  if (OpenGL::antialiasing_samples > 0 &&
+      OpenGL::fbo_antialiasing_mode == OpenGL::FboAntialiasingMode::NONE) {
     OnPaintBuffer(canvas);
     return;
   }
