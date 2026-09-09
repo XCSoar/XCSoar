@@ -65,10 +65,19 @@ extern GLenum render_buffer_stencil;
 extern unsigned max_antialiasing_samples;
 
 /**
- * Currently configured antialiasing samples (0 = disabled).
- * Should only change on restart, so no protection necessary.
+ * The number of MSAA samples the window surface really has (0 =
+ * disabled) as opposed to the number requested in the profile.
+ * Only changes on startup, no protection necessary.
  */
 extern unsigned antialiasing_samples;
+
+/**
+ * Publish the number of MSAA samples of the window surface. Called
+ * by the platform code as soon as the surface configuration is
+ * known, and before the first window is painted.
+ */
+void
+SetAntialiasingSamples(unsigned samples) noexcept;
 
 /**
  * The dimensions of the OpenGL window in pixels.
