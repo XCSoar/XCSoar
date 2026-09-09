@@ -81,6 +81,7 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
             samples, requested_antialiasing_samples);
 
   OpenGL::SetAntialiasingSamples(samples);
+  OpenGL::SetAvailableAntialiasingSamples(ProbeAntialiasingSamples(display));
 }
 
 inline void

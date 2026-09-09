@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ConfigChooser.hpp"
+#include "ui/canvas/opengl/Globals.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "LogFile.hpp"
 
@@ -16,8 +17,6 @@
 
 namespace EGL {
 
-#if defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
-
 [[gnu::pure]]
 static int
 GetConfigAttrib(EGLDisplay display, EGLConfig config,
@@ -28,6 +27,8 @@ GetConfigAttrib(EGLDisplay display, EGLConfig config,
     ? value
     : default_value;
 }
+
+#if defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
 
 [[gnu::pure]]
 static int
@@ -243,6 +244,32 @@ ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
     throw std::runtime_error("eglChooseConfig() failed");
 
   return *config;
+}
+
+unsigned
+ProbeAntialiasingSamples(EGLDisplay display) noexcept
+{
+  /* bit 0 marks the mask as valid; "no antialiasing" always works */
+  unsigned mask = 1;
+
+  for (const unsigned n : OpenGL::ANTIALIASING_SAMPLE_COUNTS) {
+    try {
+      /* this asks exactly the question the user cares about: would
+         ChooseConfig() find a usable configuration for this level?
+         EGL_SAMPLES matches "at least", though, so a request for 8
+         may return a 16x configuration; only an exact match means
+         this level exists (a larger one sets its own bit in its own
+         iteration) */
+      const auto config = TryChooseConfig(display, n);
+      if (config &&
+          unsigned(GetConfigAttrib(display, *config, EGL_SAMPLES, 0)) == n)
+        mask |= 1u << n;
+    } catch (...) {
+      /* eglChooseConfig() failed; treat this level as unavailable */
+    }
+  }
+
+  return mask;
 }
 
 } // namespace EGL

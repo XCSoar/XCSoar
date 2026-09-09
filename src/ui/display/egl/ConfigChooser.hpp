@@ -10,4 +10,12 @@ namespace EGL {
 EGLConfig
 ChooseConfig(EGLDisplay display, unsigned antialiasing_samples = 0);
 
+/**
+ * Determine which MSAA sample counts this display can provide, by
+ * asking for each of them in turn. See
+ * OpenGL::available_antialiasing_samples for the bit mask layout.
+ */
+unsigned
+ProbeAntialiasingSamples(EGLDisplay display) noexcept;
+
 } // namespace EGL
