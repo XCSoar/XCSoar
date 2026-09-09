@@ -82,6 +82,13 @@ void
 SetAvailableAntialiasingSamples(unsigned mask) noexcept;
 
 /**
+ * The number of MSAA samples the profile asks for (0 = disabled), as
+ * opposed to the number any particular buffer really gets.  Set by
+ * ScreenGlobalInit() once, before the first window is painted.
+ */
+extern unsigned requested_antialiasing_samples;
+
+/**
  * The number of MSAA samples the window surface really has (0 =
  * disabled) as opposed to the number requested in the profile.
  * Only changes on startup, no protection necessary.
