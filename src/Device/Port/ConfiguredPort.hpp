@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Device/Features.hpp"
+
 #include <memory>
 
 namespace Cares { class Channel; }
@@ -16,6 +18,8 @@ struct DeviceConfig;
 class BluetoothHelper;
 class IOIOHelper;
 class UsbSerialHelper;
+#elif defined(HAVE_APPLE_BLUETOOTH)
+class BluetoothHelper;
 #endif
 
 /**
@@ -28,6 +32,8 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
          BluetoothHelper *bluetooth_helper,
          IOIOHelper *ioio_helper,
          UsbSerialHelper *usb_serial_helper,
+#elif defined(HAVE_APPLE_BLUETOOTH)
+         BluetoothHelper *bluetooth_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler);

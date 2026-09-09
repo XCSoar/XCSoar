@@ -542,9 +542,12 @@ private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info) noexcept;
 
 public:
-  void SetMonitor(DataHandler  *_monitor) noexcept {
-    monitor = _monitor;
-  }
+  /**
+   * Install a handler which receives a copy of all data received
+   * from and written to the port, e.g. for the port monitor dialog.
+   * Pass nullptr to remove.
+   */
+  void SetMonitor(DataHandler *_monitor) noexcept;
 
   void SetDispatcher(PortLineHandler *_dispatcher) noexcept {
     dispatcher = _dispatcher;

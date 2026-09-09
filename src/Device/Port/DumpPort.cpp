@@ -4,6 +4,7 @@
 #include "DumpPort.hpp"
 #include "Device/Error.hpp"
 #include "HexDump.hpp"
+#include "io/DataHandler.hpp"
 
 #include <cstdint>
 #include <stdio.h>
@@ -68,6 +69,9 @@ DumpPort::Write(std::span<const std::byte> src)
     LogFmt("Write({})={}", src.size(), nbytes);
     HexDump("W ", src.first(nbytes));
   }
+
+  if (write_monitor != nullptr && nbytes > 0)
+    write_monitor->DataReceived(src.first(nbytes));
 
   return nbytes;
 }

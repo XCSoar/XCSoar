@@ -4,6 +4,11 @@ Version 7.46 - not yet released
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
 * iOS
+  - keep Bluetooth LE connections and transfers alive while the app
+    is briefly in the background (bluetooth-central background mode)
+  - add Bluetooth LE support: device discovery and serial port
+    connections (HM-10, Nordic UART, Microchip/ISSC and compatible
+    bridges) via CoreBluetooth #1815
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
     Keyboard text-input style keeps XCSoar's own grid #2894
@@ -54,6 +59,15 @@ Version 7.46 - not yet released
   - skip estimated TAS from ground speed and wind when GPS track is
     missing
 * devices
+  - FLARM: more robust flight download over slow links (e.g.
+    Bluetooth LE bridges): wait for the connection before entering
+    binary mode, longer ping window, and retries when selecting a
+    flight so single lost frames no longer drop flights from the list
+  - FLARM: automatically restart an interrupted flight download and
+    skip the already saved part instead of failing the whole
+    transfer
+  - XCVario: allow a second driver on the port, so the flights of a
+    FLARM connected to the XCVario can be downloaded
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
   - fix the Devices Debug button not writing port traffic to xcsoar.log
@@ -61,6 +75,7 @@ Version 7.46 - not yet released
   - fix LXNAV polar sync writes that could zero the vario polar when
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
+  - Port monitor: also show data written to the device
 * dialogs
   - put the Close button on the right of the Status and Weather
     tab strips

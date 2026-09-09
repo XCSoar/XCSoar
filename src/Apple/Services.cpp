@@ -11,6 +11,10 @@
 
 #if TARGET_OS_IPHONE
 
+#include "BluetoothHelper.hpp"
+
+BluetoothHelper *bluetooth_helper;
+
 /**
  * Serialises audio_vario_session_active against the deactivation of the
  * shared AVAudioSession. Without it, DeactivateAudioSession() could read
@@ -93,6 +97,8 @@ InitializeAppleServices()
 {
 #if TARGET_OS_IPHONE
   ActivateAudioSession();
+
+  bluetooth_helper = new BluetoothHelper();
 #endif
 }
 
@@ -110,6 +116,9 @@ DeinitializeAppleServices()
     LogFmt("AVAudioSession deinitialize error: {}",
            [[error localizedDescription] UTF8String]);
   }
+
+  delete bluetooth_helper;
+  bluetooth_helper = nullptr;
 #endif
 }
 

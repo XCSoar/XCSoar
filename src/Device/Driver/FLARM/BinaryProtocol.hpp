@@ -83,7 +83,7 @@ static_assert(std::is_trivial<FrameHeader>::value, "type is not trivial");
 
 /**
  * Convenience function. Returns a pre-populated FrameHeader instance that is
- * ready to be sent by the SendFrameHeader() function.
+ * ready to be sent by the SendFrame() function.
  * @param message_type Message type of the FrameHeader
  * @param payload the payload; used for CRC calculations
  * @return An initialized FrameHeader instance
@@ -104,6 +104,18 @@ void
 SendEscaped(Port &port, std::span<const std::byte> src,
             OperationEnvironment &env,
             std::chrono::steady_clock::duration timeout);
+
+/**
+ * Send one complete frame: the start byte, the escaped header and the
+ * escaped payload, in a single write.  On a packet oriented link such
+ * as Bluetooth LE, every write is a packet of its own, and a frame
+ * which is spread over several of them is easily mangled by a bridge.
+ */
+void
+SendFrame(Port &port, const FrameHeader &header,
+          std::span<const std::byte> payload,
+          OperationEnvironment &env,
+          std::chrono::steady_clock::duration timeout);
 
 /**
  * Reads a specified number of bytes from the port while applying the

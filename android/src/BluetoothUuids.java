@@ -7,6 +7,9 @@ import java.util.UUID;
 
 /**
  * Various Bluetooth service/characteristic UUIDs.
+ *
+ * Keep this in sync with src/Apple/BluetoothUuids.hpp, the iOS
+ * counterpart of this class.
  */
 public final class BluetoothUuids {
   static final UUID GENERIC_ACCESS_SERVICE =

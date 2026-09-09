@@ -7,7 +7,8 @@ package org.xcsoar;
  * Continuously receives callbacks about detected or updated devices.
  */
 interface DetectDeviceListener {
-  /* keep this in sync with src/Android/DetectDeviceListener.hpp */
+  /* keep this in sync with src/Android/DetectDeviceListener.hpp and
+     src/Apple/DetectDeviceListener.hpp */
   static final int TYPE_IOIO = 1;
   static final int TYPE_BLUETOOTH_CLASSIC = 2;
   static final int TYPE_BLUETOOTH_LE = 3;

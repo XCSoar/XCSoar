@@ -106,6 +106,7 @@
             <string>audio</string>
             <string>location</string>
             <string>fetch</string>
+            <string>bluetooth-central</string>
         </array>
         <key>BGTaskSchedulerPermittedIdentifiers</key>
         <array>
@@ -138,5 +139,9 @@
         <string>XCODE_BUILD_PLACEHOLDER</string>
         <key>DTPlatformBuild</key>
         <string>SDK_BUILD_PLACEHOLDER</string>
+        <key>NSBluetoothAlwaysUsageDescription</key>
+        <string>XCSoar uses Bluetooth to receive data from external devices such as FLARM, GPS and variometer sensors.</string>
+        <key>NSBluetoothPeripheralUsageDescription</key>
+        <string>XCSoar uses Bluetooth to receive data from external devices such as FLARM, GPS and variometer sensors.</string>
     </dict>
 </plist>

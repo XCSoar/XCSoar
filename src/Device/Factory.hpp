@@ -30,6 +30,10 @@ class IOIOHelper;
 class UsbSerialHelper;
 #endif
 
+#ifdef HAVE_APPLE_BLUETOOTH
+class BluetoothHelper;
+#endif
+
 class DeviceFactory final {
   EventLoop &event_loop;
   Cares::Channel &cares;
@@ -42,6 +46,10 @@ class DeviceFactory final {
   UsbSerialHelper *const usb_serial_helper;
 #endif
 
+#ifdef HAVE_APPLE_BLUETOOTH
+  BluetoothHelper *const bluetooth_helper;
+#endif
+
 public:
   constexpr DeviceFactory(EventLoop &_event_loop, Cares::Channel &_cares
 #ifdef ANDROID
@@ -51,6 +59,9 @@ public:
                           IOIOHelper *_ioio_helper,
                           UsbSerialHelper *_usb_serial_helper
 #endif
+#ifdef HAVE_APPLE_BLUETOOTH
+                          , BluetoothHelper *_bluetooth_helper
+#endif
     ) noexcept
     :event_loop(_event_loop), cares(_cares)
 #ifdef ANDROID
@@ -59,6 +70,9 @@ public:
      bluetooth_helper(_bluetooth_helper),
      ioio_helper(_ioio_helper),
      usb_serial_helper(_usb_serial_helper)
+#endif
+#ifdef HAVE_APPLE_BLUETOOTH
+    , bluetooth_helper(_bluetooth_helper)
 #endif
     {}
 

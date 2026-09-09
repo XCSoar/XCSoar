@@ -16,6 +16,10 @@
 #include "AndroidUsbSerialPort.hpp"
 #endif
 
+#ifdef HAVE_APPLE_BLUETOOTH
+#include "AppleBluetoothPort.hpp"
+#endif
+
 #if defined(HAVE_POSIX)
 #include "TTYPort.hpp"
 #else
@@ -69,6 +73,8 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
                  BluetoothHelper *bluetooth_helper,
                  IOIOHelper *ioio_helper,
                  UsbSerialHelper *usb_serial_helper,
+#elif defined(HAVE_APPLE_BLUETOOTH)
+                 BluetoothHelper *bluetooth_helper,
 #endif
                  const DeviceConfig &config, PortListener *listener,
                  DataHandler &handler)
@@ -98,6 +104,15 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
     return OpenAndroidBleSerialPort(*bluetooth_helper,
                                     config.bluetooth_mac,
                                     listener, handler);
+#elif defined(HAVE_APPLE_BLUETOOTH)
+    if (config.bluetooth_mac.empty())
+      throw std::runtime_error("No Bluetooth MAC configured");
+
+    if (bluetooth_helper == nullptr)
+      throw std::runtime_error("Bluetooth not available");
+
+    return OpenAppleBleSerialPort(*bluetooth_helper, config.bluetooth_mac,
+                                listener, handler);
 #else
     throw std::runtime_error("Bluetooth not available");
 #endif
@@ -244,6 +259,8 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
          BluetoothHelper *bluetooth_helper,
          IOIOHelper *ioio_helper,
          UsbSerialHelper *usb_serial_helper,
+#elif defined(HAVE_APPLE_BLUETOOTH)
+         BluetoothHelper *bluetooth_helper,
 #endif
          const DeviceConfig &config, PortListener *listener,
          DataHandler &handler)
@@ -253,6 +270,8 @@ OpenPort(EventLoop &event_loop, Cares::Channel &cares,
                                bluetooth_helper,
                                ioio_helper,
                                usb_serial_helper,
+#elif defined(HAVE_APPLE_BLUETOOTH)
+                               bluetooth_helper,
 #endif
                                config, listener, handler);
   if (port != nullptr)

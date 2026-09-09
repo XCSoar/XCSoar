@@ -302,7 +302,13 @@ XVCCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port &com_port)
 const struct DeviceRegister xcv_driver = {
   "XCVario",
   "XCVario",
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
+  /* the XCVario forwards the serial data of the device connected to
+     it (usually a FLARM), and it needs no command to do so; declaring
+     PASS_THROUGH allows a second driver to be configured on the same
+     port, and AbstractDevice::EnablePassThrough() does nothing and
+     succeeds */
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS |
+  DeviceRegister::PASS_THROUGH,
   XVCCreateOnPort,
 };
 

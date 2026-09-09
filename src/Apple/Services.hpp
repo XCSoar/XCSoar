@@ -12,6 +12,13 @@ void DeinitializeAppleServices();
 
 #if TARGET_OS_IPHONE
 
+class BluetoothHelper;
+
+/**
+ * The global Bluetooth LE helper, created by InitializeAppleServices().
+ */
+extern BluetoothHelper *bluetooth_helper;
+
 /**
  * (Re-)applies XCSoar's preferred AVAudioSession category and options
  * (Playback, MixWithOthers) and activates the session, so that XCSoar's

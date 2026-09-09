@@ -5,10 +5,12 @@
 #include "CRC16.hpp"
 #include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
+#include "LogFile.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/SpanCast.hxx"
 
 #include <algorithm> // for std::find_if()
+#include <vector>
 
 static constexpr auto
 FindSpecial(std::span<const std::byte>::iterator begin,
@@ -75,6 +77,38 @@ FLARM::SendEscaped(Port &port, std::span<const std::byte> src,
   }
 }
 
+static void
+AppendEscaped(std::vector<std::byte> &dest,
+              std::span<const std::byte> src) noexcept
+{
+  for (const std::byte b : src) {
+    if (b == FLARM::START_FRAME) {
+      dest.push_back(FLARM::ESCAPE);
+      dest.push_back(FLARM::ESCAPE_START);
+    } else if (b == FLARM::ESCAPE) {
+      dest.push_back(FLARM::ESCAPE);
+      dest.push_back(FLARM::ESCAPE_ESCAPE);
+    } else
+      dest.push_back(b);
+  }
+}
+
+void
+FLARM::SendFrame(Port &port, const FrameHeader &header,
+                 std::span<const std::byte> payload,
+                 OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout)
+{
+  std::vector<std::byte> frame;
+  frame.reserve(1 + 2 * (sizeof(header) + payload.size()));
+
+  frame.push_back(START_FRAME);
+  AppendEscaped(frame, ReferenceAsBytes(header));
+  AppendEscaped(frame, payload);
+
+  port.FullWrite(frame, env, timeout);
+}
+
 static std::byte *
 ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
                     OperationEnvironment &env, const TimeoutClock timeout)
@@ -119,6 +153,18 @@ ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
   return p;
 }
 
+/**
+ * Give up on a frame after this much silence, even if the caller
+ * allows more time for the whole frame.  A bridge which drops the
+ * rest of a frame (e.g. a Bluetooth LE adapter with a short transmit
+ * queue) is detected in seconds instead of blocking until the frame
+ * timeout has expired, and the caller can retry that much earlier.
+ * Any link which is still delivering data keeps the frame alive,
+ * because each chunk restarts this timeout.
+ */
+static constexpr std::chrono::steady_clock::duration
+FRAME_IDLE_TIMEOUT = std::chrono::seconds{3};
+
 bool
 FLARM::ReceiveEscaped(Port &port, std::span<std::byte> dest,
                       OperationEnvironment &env,
@@ -130,20 +176,29 @@ FLARM::ReceiveEscaped(Port &port, std::span<std::byte> dest,
 
   // Receive data byte-by-byte including escaping until buffer is full
   std::byte *p = dest.data(), *end = p + dest.size();
-  while (p < end) {
-    p = ReceiveSomeUnescape(port, {p, std::size_t(end - p)},
-                            env, timeout);
-    if (p == nullptr)
-      return false;
+  try {
+    while (p < end) {
+      const TimeoutClock idle_timeout{std::min(timeout.GetRemainingOrZero(),
+                                               FRAME_IDLE_TIMEOUT)};
+
+      p = ReceiveSomeUnescape(port, {p, std::size_t(end - p)},
+                              env, idle_timeout);
+      if (p == nullptr)
+        return false;
+    }
+  } catch (const DeviceTimeout &) {
+#ifndef NDEBUG
+    if (p > dest.data())
+      /* the frame stopped arriving in the middle; over a Bluetooth
+         LE bridge, this typically means its buffer overflowed and
+         the rest of the frame was dropped */
+      LogFormat("FLARM: timeout after receiving %u of %u frame bytes",
+                unsigned(p - dest.data()), unsigned(dest.size()));
+#endif
+    throw;
   }
 
   return true;
-}
-
-void
-FlarmDevice::SendStartByte()
-{
-  port.Write(FLARM::START_FRAME);
 }
 
 inline void
@@ -174,14 +229,6 @@ FlarmDevice::PrepareFrameHeader(FLARM::MessageType message_type,
                                    payload);
 }
 
-void
-FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
-                             OperationEnvironment &env,
-                             std::chrono::steady_clock::duration timeout)
-{
-  SendEscaped(ReferenceAsBytes(header), env, timeout);
-}
-
 bool
 FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
                                 OperationEnvironment &env,
@@ -199,6 +246,8 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 {
   const TimeoutClock timeout(_timeout);
 
+  lost_frame_length = 0;
+
   // Receive frames until timeout or expected frame found
   while (!timeout.HasExpired()) {
     // Wait until the next start byte comes around
@@ -206,40 +255,84 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read the following FrameHeader
     FLARM::FrameHeader header;
-    if (!ReceiveFrameHeader(header, env, timeout.GetRemainingOrZero()))
+    if (!ReceiveFrameHeader(header, env, timeout.GetRemainingOrZero())) {
+#ifndef NDEBUG
+      LogFormat("FLARM: malformed frame header");
+#endif
       continue;
+    }
 
     // Read and check length of the FrameHeader
     length = header.length;
-    if (length <= sizeof(header))
+    if (length <= sizeof(header)) {
+#ifndef NDEBUG
+      LogFormat("FLARM: discarding short frame (type=0x%02x length=%u)",
+                unsigned(header.type), unsigned(length));
+#endif
       continue;
+    }
 
     // Calculate payload length
     length -= sizeof(header);
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped({data.data(), length},
-                        env, timeout.GetRemainingOrZero()))
-      continue;
+    try {
+      if (!ReceiveEscaped({data.data(), length},
+                          env, timeout.GetRemainingOrZero())) {
+#ifndef NDEBUG
+        LogFormat("FLARM: malformed frame payload (type=0x%02x length=%u)",
+                  unsigned(header.type), unsigned(length));
+#endif
+        continue;
+      }
+    } catch (const DeviceTimeout &) {
+      /* remember how much this frame would have carried: a restarted
+         flight download can step over it if that part of the file has
+         already been saved */
+      lost_frame_length = length;
+      throw;
+    }
 
     // Verify CRC
-    if (header.crc != FLARM::CalculateCRC(header, {data.data(), length}))
+    if (header.crc != FLARM::CalculateCRC(header, {data.data(), length})) {
+#ifndef NDEBUG
+      LogFormat("FLARM: discarding frame with bad CRC (type=0x%02x length=%u)",
+                unsigned(header.type), unsigned(length));
+#endif
       continue;
+    }
 
     // Check message type
     if (header.type != FLARM::MessageType::ACK &&
-        header.type != FLARM::MessageType::NACK)
+        header.type != FLARM::MessageType::NACK) {
+#ifndef NDEBUG
+      LogFormat("FLARM: ignoring frame (type=0x%02x length=%u)",
+                unsigned(header.type), unsigned(length));
+#endif
       continue;
+    }
 
     // Check payload length
-    if (length < 2)
+    if (length < 2) {
+#ifndef NDEBUG
+      LogFormat("FLARM: discarding %s without sequence number",
+                header.type == FLARM::MessageType::ACK ? "ACK" : "NACK");
+#endif
       continue;
+    }
 
     // Check whether the received ACK is for the right sequence number
-    if (FromLE16(*((const uint16_t *)(const void *)data.data())) ==
-        sequence_number)
+    const uint16_t received_sequence_number =
+      FromLE16(*((const uint16_t *)(const void *)data.data()));
+    if (received_sequence_number == sequence_number)
       return (FLARM::MessageType)header.type;
+
+#ifndef NDEBUG
+    LogFormat("FLARM: ignoring %s with sequence %u (expecting %u)",
+              header.type == FLARM::MessageType::ACK ? "ACK" : "NACK",
+              unsigned(received_sequence_number), unsigned(sequence_number));
+#endif
   }
 
   return FLARM::MessageType::ERROR;
@@ -274,8 +367,7 @@ try {
 
   // Send request and wait for positive answer
 
-  SendStartByte();
-  SendFrameHeader(header, env, timeout.GetRemainingOrZero());
+  SendFrame(header, {}, env, timeout.GetRemainingOrZero());
   return WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
 } catch (const DeviceTimeout &) {
   return false;
@@ -291,6 +383,5 @@ FlarmDevice::BinaryReset(OperationEnvironment &env,
   FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::EXIT);
 
   // Send request and wait for positive answer
-  SendStartByte();
-  SendFrameHeader(header, env, timeout.GetRemainingOrZero());
+  SendFrame(header, {}, env, timeout.GetRemainingOrZero());
 }

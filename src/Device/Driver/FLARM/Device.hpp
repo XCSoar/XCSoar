@@ -18,6 +18,7 @@ class OperationEnvironment;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class NMEAInputLine;
+class BufferedOutputStream;
 
 class FlarmDevice: public AbstractDevice
 {
@@ -34,6 +35,14 @@ class FlarmDevice: public AbstractDevice
   bool was_binary = false;
 
   uint16_t sequence_number = 0;
+
+  /**
+   * The announced payload size of the frame whose payload stopped
+   * arriving in the middle, or 0 if the last WaitForACKOrNACK() call
+   * did not lose a frame that way.  A restarted flight download uses
+   * it to skip a frame which it has already saved.
+   */
+  uint16_t lost_frame_length = 0;
 
   /**
    * Settings that were received in PDVSC sentences.
@@ -163,22 +172,11 @@ private:
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 
-  void SendEscaped(std::span<const std::byte> src,
-                   OperationEnvironment &env,
-                   std::chrono::steady_clock::duration timeout) {
-    FLARM::SendEscaped(port, src, env, timeout);
-  }
-
   bool ReceiveEscaped(std::span<std::byte> dest,
                       OperationEnvironment &env,
                       std::chrono::steady_clock::duration timeout) {
     return FLARM::ReceiveEscaped(port, dest, env, timeout);
   }
-
-  /**
-   * Send the byte that is used to signal that start of a new frame
-   */
-  void SendStartByte();
 
   /**
    * Waits for a certain amount of time until the next frame start signal byte
@@ -191,7 +189,7 @@ private:
 
   /**
    * Convenience function. Returns a pre-populated FrameHeader instance that is
-   * ready to be sent by the SendFrameHeader() function.
+   * ready to be sent by the SendFrame() function.
    * @param message_type Message type of the FrameHeader
    * @param data Optional pointer to the first byte of the payload. Used for
    * CRC calculations.
@@ -202,13 +200,14 @@ private:
                                         std::span<const std::byte> payload={}) noexcept;
 
   /**
-   * Sends a FrameHeader to the port. Remember that a StartByte should be
-   * sent first!
-   * @param header FrameHeader that should be sent.
+   * Send a complete frame in one write; see FLARM::SendFrame().
    */
-  void SendFrameHeader(const FLARM::FrameHeader &header,
-                       OperationEnvironment &env,
-                       std::chrono::steady_clock::duration timeout);
+  void SendFrame(const FLARM::FrameHeader &header,
+                 std::span<const std::byte> payload,
+                 OperationEnvironment &env,
+                 std::chrono::steady_clock::duration timeout) {
+    FLARM::SendFrame(port, header, payload, env, timeout);
+  }
 
   /**
    * Reads a FrameHeader from the port. This should only be done directly
@@ -285,12 +284,21 @@ private:
   bool ReadFlightInfo(RecordedFlightInfo &flight, OperationEnvironment &env);
 
   /**
-   * Sends GetIGCData messages to the Flarm and downloads the currently
-   * selected flight
-   * @param path Path to the IGC file to write into
+   * Sends GetIGCData messages to the Flarm and downloads the
+   * currently selected flight
+   *
+   * @param os the output stream to append the IGC data to
+   * @param offset the number of bytes which have already been
+   * written to the stream by a previous, failed transfer of the same
+   * flight; that part of the restarted stream is skipped instead of
+   * being written again.  Updated as data is written.
+   * @param max_progress the highest percentage reported so far; a
+   * restarted transfer makes the FLARM count from zero again, and the
+   * progress bar must not jump backwards.  Updated as data arrives.
    * @return True if received and written successfully, otherwise False
    */
-  bool DownloadFlight(Path path, OperationEnvironment &env);
+  bool DownloadFlight(BufferedOutputStream &os, std::size_t &offset,
+                      unsigned &max_progress, OperationEnvironment &env);
 
 public:
   /**

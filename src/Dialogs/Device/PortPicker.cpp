@@ -13,6 +13,7 @@
 #include "ui/event/Notify.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
+#include "Device/Features.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -20,6 +21,15 @@
 #include "Android/BluetoothHelper.hpp"
 #include "Android/UsbSerialHelper.hpp"
 #include "Android/DetectDeviceListener.hpp"
+#endif
+
+#ifdef HAVE_APPLE_BLUETOOTH
+#include "Apple/Services.hpp"
+#include "Apple/BluetoothHelper.hpp"
+#include "Apple/DetectDeviceListener.hpp"
+#endif
+
+#if defined(ANDROID) || defined(HAVE_APPLE_BLUETOOTH)
 #include "thread/Mutex.hxx"
 #include <list>
 #endif
@@ -66,7 +76,7 @@ private:
 
 class PortPickerWidget
   : public ListWidget
-#ifdef ANDROID
+#if defined(ANDROID) || defined(HAVE_APPLE_BLUETOOTH)
   , DetectDeviceListener
 #endif
 {
@@ -81,7 +91,9 @@ class PortPickerWidget
 #ifdef ANDROID
   Java::LocalObject detect_listener;
   Java::LocalObject usb_serial_detect_listener;
+#endif
 
+#if defined(ANDROID) || defined(HAVE_APPLE_BLUETOOTH)
   struct DetectedPort {
     DeviceConfig::PortType type;
     std::string address, name;
@@ -138,6 +150,11 @@ public:
   void Show(const PixelRect &rc) noexcept override {
     ListWidget::Show(rc);
 
+#ifdef HAVE_APPLE_BLUETOOTH
+    if (bluetooth_helper != nullptr)
+      bluetooth_helper->AddDetectDeviceListener(*this);
+#endif
+
 #ifdef ANDROID
     if (bluetooth_helper != nullptr) {
       const auto env = Java::GetEnv();
@@ -155,6 +172,11 @@ public:
   }
 
   void Hide() noexcept override {
+#ifdef HAVE_APPLE_BLUETOOTH
+    if (bluetooth_helper != nullptr)
+      bluetooth_helper->RemoveDetectDeviceListener(*this);
+#endif
+
 #ifdef ANDROID
     if (detect_listener) {
       bluetooth_helper->RemoveDetectDeviceListener(detect_listener.GetEnv(),
@@ -187,7 +209,7 @@ public:
     dialog.SetModalResult(mrOK);
   }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(HAVE_APPLE_BLUETOOTH)
 private:
   /* virtual methods from class DetectDeviceListener */
   void OnDeviceDetected(Type type, const char *address,
@@ -218,7 +240,7 @@ PortPickerWidget::ReloadComboList() noexcept
   list.Invalidate();
 }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(HAVE_APPLE_BLUETOOTH)
 
 void
 PortPickerWidget::OnDeviceDetected(Type type, const char *address,

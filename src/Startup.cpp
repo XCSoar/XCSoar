@@ -525,6 +525,9 @@ Startup(UI::Display &display)
     *context, permission_manager,
     bluetooth_helper, ioio_helper, usb_serial_helper,
 #endif
+#ifdef HAVE_APPLE_BLUETOOTH
+    bluetooth_helper,
+#endif
   };
 
   backend_components->devices = std::make_unique<MultipleDevices>(*backend_components->device_blackboard,

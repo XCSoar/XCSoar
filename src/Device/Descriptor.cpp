@@ -208,6 +208,10 @@ try {
 
   port = std::move(_port);
 
+  /* transfer the monitor to the new port, e.g. when the port monitor
+     dialog triggered a reconnect */
+  port->SetWriteMonitor(monitor);
+
   parser.Reset();
   parser.SetReal(!StringIsEqual(driver->name, "Condor") &&
                  !StringIsEqual(driver->name, "Condor3UDP"));
@@ -678,7 +682,13 @@ DeviceDescriptor::CanDeclare() const noexcept
 bool
 DeviceDescriptor::IsLogger() const noexcept
 {
-  return driver != nullptr && driver->IsLogger();
+  if (driver != nullptr && driver->IsLogger())
+    return true;
+
+  /* the flights are on the device behind a pass-through device, e.g.
+     a FLARM connected to an XCVario; ReadFlightList() and
+     DownloadFlight() use #second_device for those */
+  return second_driver != nullptr && second_driver->IsLogger();
 }
 
 bool
@@ -1733,6 +1743,15 @@ DeviceDescriptor::PortError(const char *msg) noexcept
 
   if (port_listener != nullptr)
     port_listener->PortError(msg);
+}
+
+void
+DeviceDescriptor::SetMonitor(DataHandler *_monitor) noexcept
+{
+  monitor = _monitor;
+
+  if (port != nullptr)
+    port->SetWriteMonitor(_monitor);
 }
 
 bool

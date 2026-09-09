@@ -43,11 +43,13 @@ set(CMAKE_AR {toolchain.ar})
 set(CMAKE_RANLIB {toolchain.ranlib})
 """)
 
-    if cmake_system_name == 'Darwin':
-        # On macOS, cmake forcibly adds an "-isysroot" flag even if
-        # one is already present in the flags variable; this breaks
-        # cross-compiling for iOS, and can be worked around by setting
-        # the CMAKE_OSX_SYSROOT variable
+    if cmake_system_name in ('Darwin', 'iOS'):
+        # On Apple platforms, cmake forcibly adds an "-isysroot" flag
+        # even if one is already present in the flags variable, using
+        # its own default SDK (the macOS SDK); since the last
+        # "-isysroot" wins, this breaks cross-compiling for iOS and
+        # the iOS simulator, and can be worked around by setting the
+        # CMAKE_OSX_SYSROOT variable
         # (https://cmake.org/cmake/help/latest/variable/CMAKE_OSX_SYSROOT.html).
         m = re.search(r'-isysroot +(\S+)', toolchain.cflags)
         if m:

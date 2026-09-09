@@ -143,7 +143,7 @@ struct DeviceConfig {
   /**
    * The Bluetooth MAC address of the peer.
    */
-  StaticString<32> bluetooth_mac;
+  StaticString<64> bluetooth_mac;
 
   /**
    * The IOIO UART ID.
@@ -361,6 +361,15 @@ struct DeviceConfig {
     }
 
     return false;
+  }
+
+  /**
+   * Is this a port which uses the Apple Bluetooth LE support?  Only
+   * serial bridges are supported there, BLE sensors and RFCOMM are
+   * not.
+   */
+  constexpr bool IsAppleBluetooth() const noexcept {
+    return port_type == PortType::BLE_SERIAL;
   }
 
   [[gnu::pure]]

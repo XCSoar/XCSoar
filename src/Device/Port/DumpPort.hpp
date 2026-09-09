@@ -20,6 +20,12 @@ class DumpPort final : public Port {
   std::chrono::steady_clock::time_point until =
     std::chrono::steady_clock::time_point::max();
 
+  /**
+   * An optional handler which receives a copy of all data written to
+   * the port; see SetWriteMonitor().
+   */
+  DataHandler *write_monitor = nullptr;
+
 public:
   /**
    * Initialises the new instance.  Dumping is enabled forever by
@@ -50,6 +56,16 @@ public:
 
   bool IsEnabled() const noexcept {
     return until > std::chrono::steady_clock::time_point{};
+  }
+
+  /**
+   * Install a handler which receives a copy of all data written to
+   * the port, independently of the log file dump; used by the port
+   * monitor dialog to display outgoing data.  Pass nullptr to
+   * remove the handler.
+   */
+  void SetWriteMonitor(DataHandler *monitor) noexcept {
+    write_monitor = monitor;
   }
 
   Port &GetInnerPort() noexcept {

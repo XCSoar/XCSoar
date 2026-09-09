@@ -299,6 +299,9 @@ final class BluetoothHelper
   /**
    * Identify the detected service UUIDs and convert it to a feature
    * flag bit set.
+   *
+   * Keep this in sync with FeaturesFromAdvertisedServices() in
+   * src/Apple/BluetoothHelper.cpp.
    */
   private static long getFeatures(Collection<ParcelUuid> serviceUuids) {
     long features = 0;

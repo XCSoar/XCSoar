@@ -16,7 +16,8 @@ HOST_IS_X86_64 := $(call bool_or,$(call string_contains,$(UNAME_M),x86_64),$(cal
 HOST_IS_ARM := $(call string_contains,$(UNAME_M),armv)
 HOST_IS_ARMV6 := $(call string_equals,$(UNAME_M),armv6l)
 HOST_IS_ARMV7 := $(call string_equals,$(UNAME_M),armv7l)
-HOST_IS_AARCH64 := $(call string_contains,$(UNAME_M),aarch64)
+# "aarch64" on Linux, "arm64" on Apple Silicon macOS
+HOST_IS_AARCH64 := $(call bool_or,$(call string_contains,$(UNAME_M),aarch64),$(call string_equals,$(UNAME_M),arm64))
 
 HOST_IS_ARM_OR_AARCH64 = $(call bool_or,$(HOST_IS_ARM),$(HOST_IS_AARCH64))
 

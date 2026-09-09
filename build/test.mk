@@ -1054,6 +1054,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/DataFilePath.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
@@ -1270,6 +1271,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
@@ -1628,6 +1630,7 @@ READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1640,6 +1643,7 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1652,6 +1656,7 @@ LOG_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1665,6 +1670,7 @@ RUN_LXNAV_POLAR_ECHO_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Version.cpp \
@@ -1680,6 +1686,7 @@ SPLICE_PORTS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1697,6 +1704,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
@@ -1724,6 +1732,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
@@ -1749,6 +1758,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
@@ -1772,6 +1782,7 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1788,6 +1799,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1802,6 +1814,7 @@ RUN_LX1600_UTILS_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
@@ -1817,6 +1830,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
@@ -1841,6 +1855,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
@@ -1862,6 +1877,7 @@ $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 CAI302_TOOL_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -2886,6 +2902,7 @@ FEED_NMEA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -2898,6 +2915,7 @@ FEED_VEGA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -2915,6 +2933,7 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Driver/FLARM/BinaryProtocol.cpp \
 	$(SRC)/Device/Driver/FLARM/CRC16.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/io/CSVLine.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
@@ -2932,6 +2951,7 @@ FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(TEST_SRC_DIR)/FakeSpectateFilePort.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(TEST_SRC_DIR)/FakeAppleBluetooth.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
