@@ -47,14 +47,34 @@ inline PFNGLDISCARDFRAMEBUFFEREXTPROC discard_framebuffer;
 
 #ifdef GL_EXT_multisampled_render_to_texture
 /**
- * Render a framebuffer object with multisampling, resolved implicitly
- * when the framebuffer is unbound.  Both pointers are loaded together
- * and are either both valid or both nullptr.
+ * Allocate multisampled renderbuffer storage.  Both multisample
+ * mechanisms need this, and both spell the entry point
+ * "glRenderbufferStorageMultisample" with an assortment of vendor
+ * suffixes; whichever one resolves is stored here.
+ */
+inline PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC
+  renderbuffer_storage_multisample;
+
+/**
+ * Attach a texture as a multisampled colour buffer, resolved
+ * implicitly when the framebuffer is unbound
+ * (GL_EXT_multisampled_render_to_texture).  nullptr if the
+ * implementation does not offer implicit resolve; tiled GPUs do,
+ * desktop GPUs generally do not.
  */
 inline PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC
   framebuffer_texture_2d_multisample;
-inline PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC
-  renderbuffer_storage_multisample;
 #endif // GL_EXT_multisampled_render_to_texture
+
+#ifdef GL_NV_framebuffer_blit
+/**
+ * Resolve a multisampled framebuffer explicitly by blitting it into a
+ * single-sampled one.  nullptr if the implementation cannot do that;
+ * the NV typedef is used because it is the spelling the GLES2 headers
+ * always provide, but the entry point loaded may be any of the core,
+ * EXT, NV or ANGLE variants, which share this signature.
+ */
+inline PFNGLBLITFRAMEBUFFERNVPROC blit_framebuffer;
+#endif // GL_NV_framebuffer_blit
 
 } // namespace GLExt
