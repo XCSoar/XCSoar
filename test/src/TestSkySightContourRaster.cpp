@@ -108,27 +108,84 @@ TestPaletteRejectsMissingSamples()
 }
 
 static void
-TestUpsampleBudget()
+TestRasterBudget()
 {
   constexpr unsigned MAX_AXIS = 4096;
   constexpr std::size_t MAX_CELLS = 4 * 1024 * 1024;
 
-  /* A small grid gets the full factor. */
-  ok1(SkySight::ChooseContourUpsample(10, 10, MAX_AXIS, MAX_CELLS) ==
-      SkySight::MAX_CONTOUR_UPSAMPLE);
+  /* A small patch gets the full factor. */
+  const auto small = SkySight::FitContourRaster({0, 0, 10, 10}, 8, MAX_AXIS,
+                                                MAX_CELLS);
+  ok1(small.raster_width == 80 && small.raster_height == 80);
 
-  /* 8x would exceed the axis limit, 4x the cell limit. */
-  ok1(SkySight::ChooseContourUpsample(1000, 1000, MAX_AXIS, MAX_CELLS) == 2);
+  /* A patch that would overrun the axis is shrunk to fit it. */
+  const auto wide = SkySight::FitContourRaster({0, 0, 1000, 10}, 8, MAX_AXIS,
+                                               MAX_CELLS);
+  ok1(wide.raster_width <= MAX_AXIS && wide.raster_height >= 1);
 
-  /* A grid that is already detailed is written unscaled. */
-  ok1(SkySight::ChooseContourUpsample(4000, 4000, MAX_AXIS, MAX_CELLS) == 1);
+  /* The cell budget binds even when both axes fit. */
+  const auto big = SkySight::FitContourRaster({0, 0, 1000, 1000}, 8, MAX_AXIS,
+                                              MAX_CELLS);
+  ok1(big.raster_width <= MAX_AXIS && big.raster_height <= MAX_AXIS);
+  ok1(std::size_t(big.raster_width) * big.raster_height <= MAX_CELLS);
 
-  /* Non-square grids are bounded by their longer axis. */
-  ok1(SkySight::ChooseContourUpsample(2000, 10, MAX_AXIS, MAX_CELLS) == 2);
+  /* A zoomed-out patch larger than the budget is decimated, not cropped:
+     it keeps every sample column it covers. */
+  const auto region = SkySight::FitContourRaster({0, 0, 3002, 1504}, 1,
+                                                 MAX_AXIS, MAX_CELLS);
+  ok1(region.width == 3002 && region.height == 1504);
+  ok1(region.raster_width < 3002);
+  ok1(std::size_t(region.raster_width) * region.raster_height <= MAX_CELLS);
 
-  /* Degenerate sizes never divide by zero. */
-  ok1(SkySight::ChooseContourUpsample(0, 10, MAX_AXIS, MAX_CELLS) == 1);
-  ok1(SkySight::ChooseContourUpsample(10, 0, MAX_AXIS, MAX_CELLS) == 1);
+  /* A device with a 2048 texture limit must not be handed more. */
+  const auto vc4 = SkySight::FitContourRaster({0, 0, 3002, 1504}, 1, 2048,
+                                              MAX_CELLS);
+  ok1(vc4.raster_width <= 2048 && vc4.raster_height <= 2048);
+  ok1(vc4.raster_height >= 1);
+
+  /* Aspect is preserved, so the patch is not squashed. */
+  const double source_aspect = 3002. / 1504;
+  const double raster_aspect = double(vc4.raster_width) / vc4.raster_height;
+  ok1(std::fabs(source_aspect - raster_aspect) < 0.01);
+
+  /* Degenerate input never divides by zero. */
+  ok1(SkySight::FitContourRaster({0, 0, 0, 10}, 4, MAX_AXIS,
+                                 MAX_CELLS).empty());
+  ok1(SkySight::FitContourRaster({0, 0, 10, 10}, 4, 0, MAX_CELLS).empty());
+  ok1(SkySight::FitContourRaster({0, 0, 10, 10}, 4, MAX_AXIS, 0).empty());
+
+  /* An upsample of zero behaves like one rather than collapsing. */
+  const auto zero = SkySight::FitContourRaster({0, 0, 10, 10}, 0, MAX_AXIS,
+                                               MAX_CELLS);
+  ok1(zero.raster_width == 10 && zero.raster_height == 10);
+}
+
+static void
+TestRasterizerDecimates()
+{
+  /* Eight samples into a four-pixel raster: each output pixel covers two
+     samples, and the whole patch is still represented.  The centres sit
+     clear of the edges, where sample repetition would bend the ramp. */
+  const auto field = MakeRow({0.f, 1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f});
+  const SkySight::ContourPalette palette{{
+    {0.5f, {10, 0, 0}}, {4.5f, {20, 0, 0}},
+  }};
+  const SkySight::ContourRasterizer rasterizer{field, palette,
+                                               {0, 0, 8, 1, 4, 1}};
+
+  ok1(rasterizer.GetWidth() == 4);
+  ok1(rasterizer.GetHeight() == 1);
+
+  /* Pixel i covers samples [2i, 2i+2), so its centre is at index
+     2i + 0.5.  Only the interior pixels are checked: at the rim the
+     repeated edge sample bends the ramp. */
+  ok1(equals(rasterizer.SampleAt(1, 0), 2.5));
+  ok1(equals(rasterizer.SampleAt(2, 0), 4.5));
+
+  uint8_t row[4 * 4];
+  rasterizer.RenderRow(0, row);
+  ok1(row[1 * 4] == 10 && row[1 * 4 + 3] == 255);
+  ok1(row[2 * 4] == 20 && row[2 * 4 + 3] == 255);
 }
 
 static void
@@ -193,7 +250,7 @@ TestRasterizerPlacesBandBoundary()
   const auto field = MakeRow({0.f, 1.f, 2.f, 3.f});
   const SkySight::ContourPalette palette{{{1.25f, {12, 34, 56}}}};
   const SkySight::ContourRasterizer rasterizer{
-    field, palette, {0, 0, 4, 1, UPSAMPLE}};
+    field, palette, {0, 0, 4, 1, 4 * UPSAMPLE, UPSAMPLE}};
 
   ok1(rasterizer.GetWidth() == 16);
   ok1(rasterizer.GetHeight() == UPSAMPLE);
@@ -224,8 +281,10 @@ TestRasterizerWindowMatchesWholeField()
     {4.f, {40, 0, 0}},
   }};
 
-  const SkySight::ContourRasterizer whole{field, palette, {0, 0, 6, 1, 4}};
-  const SkySight::ContourRasterizer patch{field, palette, {2, 0, 2, 1, 4}};
+  const SkySight::ContourRasterizer whole{field, palette,
+                                         {0, 0, 6, 1, 24, 4}};
+  const SkySight::ContourRasterizer patch{field, palette,
+                                         {2, 0, 2, 1, 8, 4}};
 
   uint8_t whole_row[6 * 4 * 4], patch_row[2 * 4 * 4];
   whole.RenderRow(0, whole_row);
@@ -242,7 +301,7 @@ TestRasterizerKeepsMissingDataTransparent()
   const auto field = MakeRow({std::nanf(""), std::nanf(""), 2.f, 3.f});
   const SkySight::ContourPalette palette{{{0.5f, {12, 34, 56}}}};
   const SkySight::ContourRasterizer rasterizer{
-    field, palette, {0, 0, 4, 1, 2}};
+    field, palette, {0, 0, 4, 1, 8, 2}};
 
   uint8_t row[8 * 4];
   rasterizer.RenderRow(0, row);
@@ -326,17 +385,18 @@ TestGeoFieldGrid()
 int
 main()
 {
-  plan_tests(11 + 3 + 5 + 5 + 6 + 8 + 3 + 4 + 5 + 2 + 3 + 11 + 12);
+  plan_tests(11 + 3 + 5 + 5 + 14 + 8 + 3 + 4 + 5 + 2 + 6 + 3 + 11 + 12);
   TestBipolarDeadZone();
   TestNegativeStopsStillPaint();
   TestAllPositiveLegend();
   TestPaletteRejectsMissingSamples();
-  TestUpsampleBudget();
+  TestRasterBudget();
   TestSampleFieldInterpolates();
   TestSampleFieldDoesNotOvershoot();
   TestSampleFieldSkipsMissingData();
   TestRasterizerPlacesBandBoundary();
   TestRasterizerWindowMatchesWholeField();
+  TestRasterizerDecimates();
   TestRasterizerKeepsMissingDataTransparent();
   TestQuantisationRoundTrip();
   TestGeoFieldGrid();

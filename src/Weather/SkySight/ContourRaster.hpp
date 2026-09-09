@@ -92,45 +92,41 @@ public:
   Find(float value) const noexcept;
 };
 
-/** The largest upsampling factor #ChooseContourUpsample may return. */
+/** The largest upsampling factor a window is built with. */
 inline constexpr unsigned MAX_CONTOUR_UPSAMPLE = 8;
-
-/**
- * Pick the integer factor by which a @p width x @p height patch of a
- * forecast grid is upsampled into a contour raster.
- *
- * Larger factors place the band boundaries more precisely; the caller's
- * @p max_axis and @p max_cells budget bounds the resulting image.
- */
-[[nodiscard]] constexpr unsigned
-ChooseContourUpsample(unsigned width, unsigned height, unsigned max_axis,
-                      std::size_t max_cells) noexcept
-{
-  if (width == 0 || height == 0)
-    return 1;
-
-  for (unsigned factor = MAX_CONTOUR_UPSAMPLE; factor > 1; --factor) {
-    const std::size_t scaled_width = std::size_t(width) * factor;
-    const std::size_t scaled_height = std::size_t(height) * factor;
-    if (scaled_width <= max_axis && scaled_height <= max_axis &&
-        scaled_width <= max_cells / scaled_height)
-      return factor;
-  }
-
-  return 1;
-}
 
 /** The patch of a #ScalarField that a contour raster covers. */
 struct ContourWindow {
   /** First sample column and row. */
   unsigned x = 0, y = 0;
 
-  /** Sample counts, so the raster spans [x, x + width) x [y, y + height). */
+  /** Sample counts, so the patch spans [x, x + width) x [y, y + height). */
   unsigned width = 0, height = 0;
 
-  /** Output pixels per sample and axis, see #ChooseContourUpsample. */
-  unsigned upsample = 1;
+  /** Size of the raster the patch is rendered into. */
+  unsigned raster_width = 0, raster_height = 0;
+
+  [[nodiscard]] constexpr bool empty() const noexcept {
+    return width == 0 || height == 0 ||
+      raster_width == 0 || raster_height == 0;
+  }
 };
+
+/**
+ * Size the raster for a patch of @p window.width x @p window.height
+ * samples, starting from @p upsample output pixels per sample and axis.
+ *
+ * The result always fits @p max_axis on both axes and @p max_cells in
+ * total, which the caller must derive from what the device can actually
+ * hold: a whole zoomed-out region is far larger than a magnified patch,
+ * and some drivers cap textures at 2048.
+ *
+ * Shrinking is uniform, so the patch keeps its full extent and only loses
+ * detail.  Cropping instead would leave part of the visible map bare.
+ */
+[[nodiscard]] ContourWindow
+FitContourRaster(ContourWindow window, unsigned upsample, unsigned max_axis,
+                 std::size_t max_cells) noexcept;
 
 /**
  * Renders part of a forecast grid as filled contour bands.
@@ -154,16 +150,19 @@ class ContourRasterizer {
   const ContourPalette &palette;
   ContourWindow window;
 
+  /** Samples per output pixel, below one when the patch is magnified. */
+  float x_step, y_step;
+
 public:
   ContourRasterizer(const ScalarField &_field, const ContourPalette &_palette,
                     ContourWindow _window) noexcept;
 
   [[nodiscard]] unsigned GetWidth() const noexcept {
-    return window.width * window.upsample;
+    return window.raster_width;
   }
 
   [[nodiscard]] unsigned GetHeight() const noexcept {
-    return window.height * window.upsample;
+    return window.raster_height;
   }
 
   /** The interpolated value at the centre of an output pixel. */
