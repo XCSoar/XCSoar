@@ -102,7 +102,7 @@ CheckStencil() noexcept
   return GL_NONE;
 }
 
-#ifdef GL_EXT_multisampled_render_to_texture
+#ifdef HAVE_MULTISAMPLE_FBO
 
 /**
  * Load the first of @a names that the GL implementation knows.  The
@@ -135,7 +135,7 @@ SetupFboAntialiasing() noexcept
   auto mode = FboAntialiasingMode::NONE;
   unsigned samples = 0;
 
-#ifdef GL_EXT_multisampled_render_to_texture
+#ifdef HAVE_MULTISAMPLE_FBO
   /* GL_MAX_SAMPLES_EXT, not GL_MAX_SAMPLES: this file includes
      Function.hpp, which on GLX pulls in <GL/gl.h> and defines the
      latter, but no other backend does */
@@ -150,15 +150,11 @@ SetupFboAntialiasing() noexcept
      nothing on its own (eglGetProcAddress() and glXGetProcAddress()
      may answer for functions the context does not have), but the
      GL_MAX_SAMPLES_EXT query below is what actually decides */
-#ifdef GL_NV_framebuffer_blit
   GLExt::blit_framebuffer = (PFNGLBLITFRAMEBUFFERNVPROC)
     GetAnyProcAddress({"glBlitFramebuffer", "glBlitFramebufferEXT",
                        "glBlitFramebufferANGLE", "glBlitFramebufferNV"});
 
   const bool blit = GLExt::blit_framebuffer != nullptr;
-#else
-  const bool blit = false;
-#endif
 
   if (implicit || blit) {
     GLExt::renderbuffer_storage_multisample =
@@ -182,10 +178,8 @@ SetupFboAntialiasing() noexcept
        the explicit blit would force a full tile write-out */
     if (GLExt::framebuffer_texture_2d_multisample != nullptr)
       mode = FboAntialiasingMode::IMPLICIT;
-#ifdef GL_NV_framebuffer_blit
     else if (GLExt::blit_framebuffer != nullptr)
       mode = FboAntialiasingMode::BLIT;
-#endif
 
     if (mode != FboAntialiasingMode::NONE) {
       GLint value = 0;
@@ -198,7 +192,7 @@ SetupFboAntialiasing() noexcept
         mode = FboAntialiasingMode::NONE;
     }
   }
-#endif // GL_EXT_multisampled_render_to_texture
+#endif // HAVE_MULTISAMPLE_FBO
 
   OpenGL::SetFboAntialiasing(mode, samples);
 }
