@@ -94,6 +94,22 @@ add/modify/remove features in the same patch.
 Don’t rewrite code unless you need to. Migrate incrementally to a new
 concept. Keep patches small and easy to understand.
 
+Reuse existing code. Search before adding a helper, wrapper, parser, or
+enum. Look in ``src/util``, ``Formatter/``, ``Math/``, ``Geo/``, and
+the same subsystem. Extend the existing class; do not introduce a
+parallel API or a new abstraction layer for a single call site.
+
+Keep the change as small as the problem. Avoid factories, managers, and
+extra files when a few functions next to the existing code would do.
+
+Unit tests. Add TAP tests under ``test/src/`` for new or changed logic
+that does not need a UI: parsers, formatters, protocol encode/decode,
+math and geo helpers, string/path helpers, and state-machine or policy
+functions. Extend an existing ``Test*.cpp`` when one already covers the
+area. Register new test binaries in ``build/test.mk``. Do not add unit
+tests for dialog layout, canvas drawing, JNI, or windowing. Run
+``make check``.
+
 Release notes (``NEWS.txt``)
 -----------------------------
 
@@ -120,6 +136,11 @@ are appropriate. Prefix bullets with a topic (``build system:``,
 
 See also ``.cursor/rules/news.txt.mdc`` for wording examples and a fuller
 checklist.
+
+User-facing behaviour must also update the English user manual under
+``doc/manual/en/`` (LaTeX chapters, not ``doc/*.rst``). See
+``.cursor/rules/user-manual.mdc``. Contributor-only docs stay in
+``doc/*.rst``.
 
 Code Style
 ==========

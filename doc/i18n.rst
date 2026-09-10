@@ -22,11 +22,12 @@ Marking strings in source
 and similar). Keep logs in English for consistency and debugging.
 
 Reuse existing English strings whenever the same wording fits.
-Slightly different spellings or punctuation create extra catalogue
-entries and more work for every language. Prefer matching an existing
-``msgid`` (or an existing ``msgctxt`` + ``msgid`` pair) over inventing
-a near-duplicate. Use ``msgctxt`` only when the same English text
-genuinely needs different translations by role.
+Search :file:`po/xcsoar.pot` and existing ``_()`` / ``N_()`` call sites
+before adding a new string. Slightly different spellings or punctuation
+create extra catalogue entries and more work for every language. Prefer
+matching an existing ``msgid`` (or an existing ``msgctxt`` + ``msgid``
+pair) over inventing a near-duplicate. Use ``msgctxt`` only when the
+same English text genuinely needs different translations by role.
 
 When to use ``msgctxt``
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,7 +96,8 @@ Filling translations
 --------------------
 
 1. Run ``make update-po``.
-2. Fill empty ``msgstr`` entries (all 33 languages when possible).
+2. Fill **only the new** empty ``msgstr`` entries (all 33 languages when
+   possible). Do not rewrite, rewrap, or reorder existing translations.
 3. Validate::
 
      msgfmt --check -o /dev/null po/<lang>.po
