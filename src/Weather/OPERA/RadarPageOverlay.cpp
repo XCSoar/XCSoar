@@ -249,7 +249,6 @@ IsWanted(const GeoBitmap::TileData &tile) noexcept
  * replacement lands.  Leaving an old tile under a new one would draw
  * the same ground twice, each at partial opacity, and darken it.
  */
-[[gnu::pure]]
 int
 ClaimSlotFor(const GeoBitmap::TileData &tile) noexcept
 {
