@@ -42,6 +42,12 @@ Version 7.46 - not yet released
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
+* task
+  - reduce the dashed leg to the first turn point, and the remaining
+    task distance, jumping between the start boundary and the aircraft
+    position while inside the start sector #3056
+  - fix the best cruise arrow and the bearing line pointing at
+    different places while inside the start sector
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847

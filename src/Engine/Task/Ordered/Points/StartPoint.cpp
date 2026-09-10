@@ -16,8 +16,21 @@ StartPoint::StartPoint(std::unique_ptr<ObservationZonePoint> &&_oz,
   :OrderedTaskPoint(TaskPointType::START, std::move(_oz), std::move(wp), false),
    safety_height(tb.safety_height_arrival),
    margins(tb.start_margins),
-   constraints(_constraints)
+   constraints(_constraints),
+   start_location(GeoPoint::Invalid())
 {
+}
+
+const GeoPoint &
+StartPoint::GetLocationRemaining() const noexcept
+{
+  if (IsCurrent() && start_location.IsValid())
+    /* the start has not been crossed yet: navigate to the boundary
+       point find_best_start() chose, not to whatever node the
+       distance searches last wrote */
+    return start_location;
+
+  return OrderedTaskPoint::GetLocationRemaining();
 }
 
 void
@@ -77,6 +90,7 @@ StartPoint::find_best_start(const AircraftState &state,
     }
   }
 
+  start_location = best_location;
   SetSearchMin(SearchPoint(best_location, projection));
 }
 

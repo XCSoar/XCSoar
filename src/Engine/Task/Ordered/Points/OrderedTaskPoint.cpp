@@ -77,6 +77,12 @@ OrderedTaskPoint::GetSearchPoints() const noexcept
   if (IsFuture())
     return GetBoundaryPoints();
 
+  if (GetType() == TaskPointType::START && IsCurrent())
+    /* the start has not been crossed yet: the aircraft must still
+       leave through the boundary, so the samples it collected
+       inside the sector are no constraint */
+    return GetBoundaryPoints();
+
   return SampledTaskPoint::GetSearchPoints();
 }
 

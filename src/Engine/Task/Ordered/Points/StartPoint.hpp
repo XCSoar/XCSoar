@@ -28,6 +28,20 @@ class StartPoint final : public OrderedTaskPoint {
    */
   StartConstraints constraints;
 
+  /**
+   * The point on the observation zone boundary the aircraft is
+   * expected to cross, as chosen by find_best_start().  This is what
+   * the task navigates to while the start is the active task point.
+   *
+   * It is kept apart from the search point written by the minimum
+   * distance search, which answers a different question and is
+   * updated on a different schedule.
+   *
+   * Invalid until find_best_start() has run, which does not happen
+   * before the aircraft is flying.
+   */
+  GeoPoint start_location;
+
 public:
   /**
    * Constructor.  Sets task area to non-scorable; distances
@@ -54,12 +68,19 @@ public:
   }
 
   /**
-   * Search for the min point on the boundary from
-   * the aircraft state to the next point.  Should only
-   * be performed when the aircraft state is inside the sector
+   * Search the observation zone boundary for the node which minimises
+   * the distance from the aircraft via that node to the next task
+   * point, and make it this task point's "remaining" location.
+   *
+   * This runs on every cycle while the start is the active task
+   * point, wherever the aircraft is; it does not require the aircraft
+   * to be inside the sector.  It does not run before takeoff, though:
+   * OrderedTask::CheckTransitions() returns early while the aircraft
+   * is not flying.
    *
    * @param state Current aircraft state
    * @param next Next task point following the start
+   * @param projection the projection used by the task
    */
   void find_best_start(const AircraftState &state,
                        const OrderedTaskPoint &next,
@@ -67,6 +88,7 @@ public:
 
   /* virtual methods from class TaskPoint */
   double GetElevation() const noexcept override;
+  const GeoPoint &GetLocationRemaining() const noexcept override;
 
   /* virtual methods from class ScoredTaskPoint */
   bool CheckExitTransition(const AircraftState &ref_now,
