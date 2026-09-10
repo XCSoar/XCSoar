@@ -123,6 +123,7 @@ TEST_NAMES = \
 	TestFileMetadataFormatter \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
+	TestNMEAChecksum \
 	TestGDL90 \
 	TestGDL90Driver \
 	TestLXNToIGC \
@@ -177,6 +178,12 @@ TEST_CRC16_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC16.cpp
 $(eval $(call link-program,TestCRC16,TEST_CRC16))
+
+TEST_NMEA_CHECKSUM_SOURCES = \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNMEAChecksum.cpp
+$(eval $(call link-program,TestNMEAChecksum,TEST_NMEA_CHECKSUM))
 
 TEST_CRC8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
