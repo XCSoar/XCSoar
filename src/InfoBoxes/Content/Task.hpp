@@ -44,6 +44,17 @@ public:
 };
 
 void
+UpdateInfoBoxSpeedVMG(InfoBoxData &data) noexcept;
+
+class InfoBoxContentSpeedVMG : public InfoBoxContentNextWaypointBase
+{
+public:
+  void Update(InfoBoxData &data) noexcept override {
+    UpdateInfoBoxSpeedVMG(data);
+  }
+};
+
+void
 UpdateInfoBoxRadial(InfoBoxData &data) noexcept;
 
 class InfoBoxContentRadial : public InfoBoxContentNextWaypointBase

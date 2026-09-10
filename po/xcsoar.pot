@@ -8992,6 +8992,20 @@ msgid "Previous waypoint: when an ordered task is loaded, automatically tracks t
 msgstr ""
 
 #, no-c-format
+msgctxt "InfoBox"
+msgid "Speed VMG"
+msgstr ""
+
+#, no-c-format
+msgctxt "Abbreviation"
+msgid "V VMG"
+msgstr ""
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+
+#, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr ""

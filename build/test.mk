@@ -94,6 +94,7 @@ TEST_NAMES = \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
+	TestVelocityMadeGood \
 	TestFlarmNet TestFlarmMessaging \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
@@ -651,6 +652,12 @@ TEST_CLIMB_AV_CALC_SOURCES = \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
+
+TEST_VELOCITY_MADE_GOOD_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestVelocityMadeGood.cpp
+TEST_VELOCITY_MADE_GOOD_DEPENDS = MATH
+$(eval $(call link-program,TestVelocityMadeGood,TEST_VELOCITY_MADE_GOOD))
 
 TEST_CIRCLING_WIND_SOURCES = \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
