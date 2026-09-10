@@ -7513,7 +7513,7 @@ msgid "no QNH"
 msgstr "όχι QNH"
 
 msgid "no wind"
-msgstr "όχι άνεμος"
+msgstr "χωρίς άνεμο"
 
 msgid "Not flying"
 msgstr "Χωρίς περιστροφή (κύκλωση)"
