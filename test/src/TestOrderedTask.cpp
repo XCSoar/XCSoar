@@ -206,6 +206,8 @@ CheckCurrentLegTravelled(const TaskStats &stats)
   ok1(stats.current_leg.travelled.IsDefined());
   ok1(stats.current_leg.travelled.GetDistance() > 1000);
   ok1(stats.current_leg.travelled.GetSpeed() > 0);
+  ok1(equals(stats.current_leg.travelled.GetDistance(),
+             stats.total.travelled.GetDistance()));
 }
 
 static void
@@ -532,7 +534,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 6);
+  plan_tests(746 + 8);
 
   task_behaviour.SetDefaults();
 
