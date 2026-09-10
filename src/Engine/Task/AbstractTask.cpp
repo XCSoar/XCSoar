@@ -203,8 +203,12 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
                          stats.current_leg.solution_remaining);
 
   Copy(stats.current_leg.remaining, stats.current_leg.solution_remaining);
-  Copy(stats.current_leg.travelled, stats.current_leg.solution_travelled);
   Copy(stats.current_leg.planned, stats.current_leg.solution_planned);
+
+  /* current_leg.travelled is the flown vector (set in
+     ScanDistanceTravelled), not the MacCready travelled solution.
+     Copying from solution_travelled made Speed Task Leg invalid
+     whenever that solution was NO_SOLUTION. */
 
   stats.total.gradient = ::AngleToGradient(CalcGradient(state));
   stats.current_leg.gradient = ::AngleToGradient(CalcLegGradient(state));
