@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <memory>
+#include <new>
 
 namespace {
 
@@ -203,7 +204,14 @@ EUMETView::Enhance(const UncompressedImage &image, ToneWindow window) noexcept
   /* work on luminance: one plane to blur instead of three, and the
      colour products keep their hue because the gain is applied to all
      channels alike */
-  auto plane = std::make_unique<uint8_t[]>(n);
+  /* Enhance() is noexcept and documents an invalid image as its answer
+     to failure, so the tile path can drop one tile instead of taking
+     the whole program down; these are the largest allocations on that
+     path, eight bytes per pixel for the two float planes alone */
+  const std::unique_ptr<uint8_t[]> plane{new (std::nothrow) uint8_t[n]};
+  if (plane == nullptr)
+    return {};
+
   for (unsigned y = 0; y < height; ++y) {
     const uint8_t *row = src + std::size_t(y) * pitch;
     uint8_t *out = plane.get() + std::size_t(y) * width;
@@ -214,8 +222,10 @@ EUMETView::Enhance(const UncompressedImage &image, ToneWindow window) noexcept
 
   /* separable Gaussian, two passes over the plane */
   const auto kernel = MakeKernel(SHARPEN_SIGMA);
-  auto tmp = std::make_unique<float[]>(n);
-  auto blur = std::make_unique<float[]>(n);
+  const std::unique_ptr<float[]> tmp{new (std::nothrow) float[n]};
+  const std::unique_ptr<float[]> blur{new (std::nothrow) float[n]};
+  if (tmp == nullptr || blur == nullptr)
+    return {};
 
   for (unsigned y = 0; y < height; ++y) {
     const uint8_t *row = plane.get() + std::size_t(y) * width;
@@ -245,7 +255,9 @@ EUMETView::Enhance(const UncompressedImage &image, ToneWindow window) noexcept
     }
   }
 
-  auto dest = std::make_unique<uint8_t[]>(n * bpp);
+  auto dest = std::unique_ptr<uint8_t[]>{new (std::nothrow) uint8_t[n * bpp]};
+  if (dest == nullptr)
+    return {};
 
   for (unsigned y = 0; y < height; ++y) {
     const uint8_t *row = src + std::size_t(y) * pitch;
