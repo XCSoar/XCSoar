@@ -8,6 +8,8 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+#include <cmath>
+
 AbstractTask::AbstractTask(TaskType _type,
                            const TaskBehaviour &tb) noexcept
   :TaskInterface(_type),
@@ -205,10 +207,16 @@ AbstractTask::UpdateGlideSolutions(const AircraftState &state,
   Copy(stats.current_leg.remaining, stats.current_leg.solution_remaining);
   Copy(stats.current_leg.planned, stats.current_leg.solution_planned);
 
-  /* current_leg.travelled is the flown vector (set in
-     ScanDistanceTravelled), not the MacCready travelled solution.
-     Copying from solution_travelled made Speed Task Leg invalid
-     whenever that solution was NO_SOLUTION. */
+  /* Same formula as total travelled: planned minus remaining.
+     Speed Task Leg used to copy the MacCready travelled solution,
+     which can be NO_SOLUTION after a valid start. */
+  if (stats.current_leg.planned.IsDefined() &&
+      stats.current_leg.remaining.IsDefined())
+    stats.current_leg.travelled.SetDistance(
+      std::fdim(stats.current_leg.planned.GetDistance(),
+                stats.current_leg.remaining.GetDistance()));
+  else
+    stats.current_leg.travelled.Reset();
 
   stats.total.gradient = ::AngleToGradient(CalcGradient(state));
   stats.current_leg.gradient = ::AngleToGradient(CalcLegGradient(state));

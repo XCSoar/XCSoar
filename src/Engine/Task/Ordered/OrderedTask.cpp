@@ -426,12 +426,6 @@ OrderedTask::ScanDistanceTravelled(const GeoPoint &location) noexcept
     const unsigned last = std::min(active_task_point, TaskSize() - 1);
     for (unsigned i = 0; i <= last; ++i)
       task_points[i]->UpdateVectorTravelled(location);
-
-    const GeoVector &v = task_points[last]->GetVectorTravelled();
-    if (v.IsValid())
-      stats.current_leg.travelled.SetDistance(v.distance);
-    else
-      stats.current_leg.travelled.Reset();
   }
 
   return stats.total.planned.GetDistance() - stats.total.remaining.GetDistance();
