@@ -1,4 +1,6 @@
 Version 7.45.2 - not yet released
+* iOS
+  - raise the 64-bit minimum version from 11 to 12
 * dialogs
   - fix crash when moving the keyboard focus on the waypoint picture
     page or in the flugwetter.de image view
