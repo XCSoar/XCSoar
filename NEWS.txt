@@ -1,15 +1,55 @@
 Version 7.45.2 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
+  - fix internal and Bluetooth sensors going silent right after they
+    are opened
 * iOS
   - raise the 64-bit minimum version from 11 to 12
+  - let Return submit text when using the system keyboard
+  - fix crash on exit from a late altimeter callback
+  - fix crash when a Task Manager button action fails
+* Kobo
+  - fix the power-off screen not listing flights after flights.log
+    moved into the logs directory #3001
+* weather
+  - fix UK XC Therm forecast overlays (met-ukv model and layer
+    catalog) #3029
+* airspace
+  - fix repetitive airspace warning sound only playing once instead
+    of repeating while inside or near airspace #3016
 * task
   - fix CUP FAI quadrants being loaded as plain sectors in gcc 15
     optimized builds
+  - fix achieved task distance (planned minus remaining), so task
+    speed InfoBoxes and Status stay consistent
+* infoboxen
+  - fix T Next Leg equivalent thermal with a headwind or tailwind
+* devices
+  - fix crash when opening the port monitor
+* ui
+  - support manual UTC offsets up to +14:00 in 15-minute increments
+  - keep automatic UTC offsets synchronized with the operating-system
+    time zone, including daylight-saving and travel changes
+  - fix blurry icons on high-DPI screens, most visible on the large
+    waypoint list icons, by rendering the icon set at a higher
+    resolution
+  - pressing the scroll bar of a list beside the slider now moves the
+    slider to that spot instead of stepping a row or a page, which
+    makes the short scroll bars in settings panels usable at all
+  - on touch screens, swiping a list scrolls it without dragging the
+    selection to the row the finger came down on
+  - fix dragging inside a settings panel, e.g. scrolling the list in
+    Setup / Look / Pages: the panel claimed every drag that started
+    on one of its controls, so the list and its scroll bar never
+    moved
+  - fix a settings panel going dead after a swipe: the control the
+    swipe had started on kept the mouse capture, so every later press
+    was delivered to it instead of to the control that was pressed
 * dialogs
   - fix crash when moving the keyboard focus on the waypoint picture
     page or in the flugwetter.de image view
 * documentation
+  - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox and how to use it at a turn
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
@@ -225,8 +265,6 @@ Version 7.45 - 2026-08-15
     list, Left/Right the action row
   - remove the ineffective “Unknown” row from airspace warning,
     display, and colour settings #1772
-  - fix repetitive airspace warning sound only playing once instead
-    of repeating while inside or near airspace #3016
 * infoboxen
   - add InfoBoxes: Altitude IGC, Home, Active Waypoint, Previous
     Waypoint, and QNH #2320 #2521
@@ -789,11 +827,6 @@ Version 7.43-rc1 - not yet released
 Version 7.43-rc0 - 2024-06-02
 * map
   - reachable map labels show correct altitude with head wind #1424
-* calculations
-  - Fix calculation of achieved task distance (making it total planned task
-    distance minus task distance remaining), thus fixing the values "Speed
-    task achieved", "Speed task average", and "Speed task last hour" shown in
-    infoboxes and/or Status-Task panel fields.
 * ui
   - TC 30s Infobox shows now climb rate since start of thermal
   - TL Gain Infobox shows now the overall climb rate of last thermal
