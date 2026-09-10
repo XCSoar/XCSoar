@@ -15,6 +15,7 @@
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
 #include "DisplaySettings.hpp"
+#include "UISettings.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/Settings/InfoBoxAreaStretchWidget.hpp"
@@ -35,6 +36,15 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
+
+#include <algorithm>
+
+/* the display backends may not include UISettings.hpp, so they carry
+   their own copy of the list; this is where both are visible */
+static_assert(std::ranges::equal(ANTIALIASING_SAMPLE_COUNTS,
+                                 OpenGL::ANTIALIASING_SAMPLE_COUNTS),
+              "The MSAA sample counts offered by the user interface and "
+              "the ones probed by the display backends must match");
 #endif
 
 #include <memory>
@@ -320,16 +330,14 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
     DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
 
 #ifdef ENABLE_OPENGL
-    using OpenGL::ANTIALIASING_SAMPLE_COUNTS;
     const unsigned available = OpenGL::available_antialiasing_samples;
     const unsigned active = OpenGL::antialiasing_samples;
 #else
-    static constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
     /* without OpenGL there is no antialiasing implemented */
     const unsigned available = 1, active = ~0u;
 #endif
 
-    AddAntialiasingChoice(df, 0, available, active);
+    AddAntialiasingChoice(df, ANTIALIASING_OFF, available, active);
     for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
       AddAntialiasingChoice(df, n, available, active);
 

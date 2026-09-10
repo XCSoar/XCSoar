@@ -45,6 +45,7 @@
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "Interface.hpp"
+#include "UISettings.hpp"
 #include "java/Global.hxx"
 #include "java/File.hxx"
 #include "java/InputStream.hxx"
@@ -291,7 +292,7 @@ try {
   // Look at the profile for the AA setting without modifying global
   // Profile state - Profile::GetPath() must remain nullptr so that
   // dlgStartupShowModal() is still shown later.
-  unsigned antialiasing_samples = 0;
+  unsigned antialiasing_samples = ANTIALIASING_OFF;
   try {
     Path path = Profile::GetPath();
     AllocatedPath default_path;
@@ -302,9 +303,8 @@ try {
     ProfileMap temp_map;
     Profile::LoadFile(temp_map, path);
     temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
-    if (antialiasing_samples != 2 && antialiasing_samples != 4 &&
-        antialiasing_samples != 8 && antialiasing_samples != 16)
-      antialiasing_samples = 0;
+    if (!IsValidAntialiasing(antialiasing_samples))
+      antialiasing_samples = ANTIALIASING_OFF;
   } catch (...) {
   }
 
