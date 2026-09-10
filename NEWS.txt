@@ -142,6 +142,10 @@ Version 7.45.1 - 2026-08-28
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
+  - keep the Wi-Fi connection state visible when the network name is
+    long
+  - let Left/Right still change settings pages on Services until Up
+    selects a service action
 * infoboxen
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the

@@ -45,6 +45,10 @@ public:
     buttons[selected_index]->SetSelected(true);
   }
 
+  /**
+   * Stop KEY_LEFT / KEY_RIGHT from selecting actions, so those keys
+   * can be used by the parent (for example to change settings pages).
+   */
   void DisableCursorSelection() noexcept {
     if (selected_index < 0)
       return;

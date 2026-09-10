@@ -288,14 +288,17 @@ ButtonPanel::ReselectToFirstEnabled() noexcept
   };
 
   if (selected_index < (int)buttons.size() &&
-      is_usable((unsigned)selected_index))
+      is_usable((unsigned)selected_index)) {
+    /* Keep or restore the highlight if it was cleared while this
+       action was briefly disabled. */
+    buttons[selected_index]->SetSelected(true);
     return;
-
-  if (selected_index < (int)buttons.size() && selected_index >= 0)
-    buttons[selected_index]->SetSelected(false);
+  }
 
   for (unsigned i = 0; i < buttons.size(); ++i) {
     if (is_usable(i)) {
+      if (selected_index < (int)buttons.size() && selected_index >= 0)
+        buttons[selected_index]->SetSelected(false);
       selected_index = (int)i;
       buttons[selected_index]->SetSelected(true);
       return;

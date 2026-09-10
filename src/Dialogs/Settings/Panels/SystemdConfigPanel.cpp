@@ -151,8 +151,6 @@ public:
     const auto &service = services[idx];
     const auto &status = statuses[idx];
 
-    row_renderer.DrawFirstRow(canvas, rc, service.display_name);
-
     const char *state_text = _("Unavailable");
     Color state_color = COLOR_RED;
     if (status.valid) {
@@ -184,10 +182,12 @@ public:
       }
     }
 
+    PixelRect name_rc = rc;
     const auto old_color = canvas.GetTextColor();
     canvas.SetTextColor(state_color);
-    row_renderer.DrawRightFirstRow(canvas, rc, state_text);
+    name_rc.right = row_renderer.DrawRightFirstRow(canvas, rc, state_text);
     canvas.SetTextColor(old_color);
+    row_renderer.DrawFirstRow(canvas, name_rc, service.display_name);
     row_renderer.DrawSecondRow(canvas, rc, service.description);
     row_renderer.DrawRightSecondRow(canvas, rc, service.unit_name.c_str());
   }
@@ -249,7 +249,7 @@ private:
     if (restart_button != nullptr)
       restart_button->SetEnabled(is_active);
 
-    if (actions_armed && can_toggle && button_panel != nullptr)
+    if (actions_armed && button_panel != nullptr)
       button_panel->GetButtonPanel().ReselectToFirstEnabled();
   }
 
