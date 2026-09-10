@@ -1,5 +1,5 @@
 Version 7.45.2 - not yet released
-* Weather/xctherm
+* weather
   - fix UK forecast overlays (met-ukv model and layer catalog) #3029
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn

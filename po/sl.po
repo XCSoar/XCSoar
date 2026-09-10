@@ -11169,5 +11169,5 @@ msgstr "Model UKV"
 
 #, no-c-format
 msgid "United Kingdom. UKV model."
-msgstr "Ujedinjeno Kraljevstvo. Model UKV."
+msgstr "Združeno kraljestvo. Model UKV."
 
