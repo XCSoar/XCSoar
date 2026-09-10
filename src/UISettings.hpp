@@ -18,6 +18,35 @@
 #include <type_traits>
 
 /**
+ * The value of UISettings::antialiasing which disables MSAA.
+ */
+inline constexpr unsigned ANTIALIASING_OFF = 0;
+
+/**
+ * The MSAA sample counts XCSoar offers in its user interface.  Keep
+ * in sync with OpenGL::ANTIALIASING_SAMPLE_COUNTS, which the display
+ * backends use; this copy exists because the setting must also be
+ * available in builds without OpenGL.
+ */
+inline constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
+
+/**
+ * Is this a value the user may store in UISettings::antialiasing?
+ */
+constexpr bool
+IsValidAntialiasing(unsigned samples) noexcept
+{
+  if (samples == ANTIALIASING_OFF)
+    return true;
+
+  for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
+    if (n == samples)
+      return true;
+
+  return false;
+}
+
+/**
  * User interface settings.
  */
 struct UISettings {
@@ -36,7 +65,7 @@ struct UISettings {
   /** Override OS dpi settings */
   unsigned custom_dpi;
 
-  /** Anti-aliasing (MSAA) samples: 0=off, 2, 4, 8, 16 */
+  /** Anti-aliasing (MSAA) samples; see IsValidAntialiasing() */
   unsigned antialiasing;
 
   /** Position ThermalAssistant */

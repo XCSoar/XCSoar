@@ -13,6 +13,7 @@
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
+#include "UISettings.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "ui/window/Init.hpp"
 #include "net/http/Init.hpp"
@@ -62,7 +63,7 @@ Main()
   // dlgStartupShowModal() is still shown later.  Unless a profile was
   // given on the command line, use the most recently used one: that is
   // what the startup dialog will preselect.
-  unsigned antialiasing_samples = 0;
+  unsigned antialiasing_samples = ANTIALIASING_OFF;
   try {
     Path path = Profile::GetPath();
     AllocatedPath default_path;
@@ -73,10 +74,8 @@ Main()
     ProfileMap temp_map;
     Profile::LoadFile(temp_map, path);
     temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
-    if (antialiasing_samples != 0 && antialiasing_samples != 2 &&
-        antialiasing_samples != 4 && antialiasing_samples != 8 &&
-        antialiasing_samples != 16)
-      antialiasing_samples = 0;
+    if (!IsValidAntialiasing(antialiasing_samples))
+      antialiasing_samples = ANTIALIASING_OFF;
   } catch (...) {
   }
 

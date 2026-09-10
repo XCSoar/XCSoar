@@ -117,10 +117,8 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
     settings.custom_dpi = 0;
 
   map.Get(ProfileKeys::AntiAliasing, settings.antialiasing);
-  if (settings.antialiasing != 0 && settings.antialiasing != 2 &&
-      settings.antialiasing != 4 && settings.antialiasing != 8 &&
-      settings.antialiasing != 16)
-    settings.antialiasing = 0;
+  if (!IsValidAntialiasing(settings.antialiasing))
+    settings.antialiasing = ANTIALIASING_OFF;
 
   /* Migrate old data if TA enabled */
   if (!map.GetEnum(ProfileKeys::TAPosition, settings.thermal_assistant_position)) {
