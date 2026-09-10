@@ -161,6 +161,12 @@ settings without opening the configuration dialog:
  * - ``N``
    - ``DarkMode toggle``
    - Layout / display
+ * - ``T``
+   - ``TextSize up``
+   - Layout / display
+ * - ``S``
+   - ``TextSize down``
+   - Layout / display
 
 File format
 -----------
@@ -504,6 +510,13 @@ Event list
      ``toggle`` (cycle all four states), ``show``.
  * - ``TerrainTopology``
    - Deprecated alias for ``TerrainTopography``.
+ * - ``TextSize``
+   - Adjusts the global UI text size scale (same as Configuration →
+     Display → Text size). Possible arguments: ``up`` / ``larger``
+     (increase by 5%), ``down`` / ``smaller`` (decrease by 5%),
+     ``show`` (display the current percentage). The scale is
+     clamped between 75% and 200%. The setting is saved to the
+     profile; look and layout are refreshed immediately.
  * - ``ThermalAssistant``
    - Opens the thermal assistant page.
  * - ``Traffic``

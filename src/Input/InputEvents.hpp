@@ -208,6 +208,7 @@ void eventAirspaceDisplayMode(const char *misc);
 void eventAutoLogger(const char *misc);
 void eventGotoLookup(const char *misc);
 void eventInfoBoxGeometry(const char *misc);
+void eventTextSize(const char *misc);
 void eventAddWaypoint(const char *misc);
 void eventTraffic(const char *misc);
 void eventFlarmTraffic(const char *misc);

@@ -28,6 +28,8 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
+#include <algorithm>
+
 static uint8_t last_unmuted_vario_volume = 80;
 
 static const char *
@@ -449,6 +451,48 @@ InputEvents::eventInfoBoxGeometry(const char *misc)
                     gettext(info_box_geometry_list[index].display_string));
 }
 
+
+
+void
+InputEvents::eventTextSize(const char *misc)
+{
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+  const unsigned old_scale = ui_settings.scale;
+  unsigned scale = old_scale;
+
+  if (StringIsEqual(misc, "show")) {
+    char value[16];
+    StringFormat(value, sizeof(value), "%u %%", scale);
+    ShowLabeledStatus(_("Text size"), value);
+    return;
+  }
+
+  if (StringIsEqual(misc, "up") || StringIsEqual(misc, "larger"))
+    scale = std::min(scale + UISettings::SCALE_STEP, UISettings::SCALE_MAX);
+  else if (StringIsEqual(misc, "down") || StringIsEqual(misc, "smaller"))
+    scale = scale > UISettings::SCALE_MIN + UISettings::SCALE_STEP
+      ? scale - UISettings::SCALE_STEP
+      : UISettings::SCALE_MIN;
+  else
+    return;
+
+  if (scale != old_scale) {
+    ui_settings.scale = scale;
+    Profile::Set(ProfileKeys::UIScale, scale);
+
+    if (CommonInterface::main_window != nullptr) {
+      /* Initialise() reloads the fonts at the new scale; the Look and
+         the layout then have to be rebuilt on top of them */
+      CommonInterface::main_window->Initialise();
+      CommonInterface::main_window->ReinitialiseLook();
+      CommonInterface::main_window->ReinitialiseLayout();
+    }
+  }
+
+  char value[16];
+  StringFormat(value, sizeof(value), "%u %%", scale);
+  ShowLabeledStatus(_("Text size"), value);
+}
 
 void
 InputEvents::eventDarkMode(const char *misc)
