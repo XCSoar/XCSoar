@@ -449,6 +449,62 @@ InputEvents::eventInfoBoxGeometry(const char *misc)
                     gettext(info_box_geometry_list[index].display_string));
 }
 
+
+void
+InputEvents::eventDarkMode(const char *misc)
+{
+  static const char *const msg[] = {
+    N_("Off"),
+    N_("On"),
+    N_("Auto"),
+  };
+  static_assert(ARRAY_SIZE(msg) == unsigned(UISettings::DarkMode::COUNT),
+                "Array size must match DarkMode enum");
+
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+
+  if (StringIsEqual(misc, "toggle")) {
+    switch (ui_settings.dark_mode) {
+    case UISettings::DarkMode::OFF:
+      ui_settings.dark_mode = UISettings::DarkMode::ON;
+      break;
+    case UISettings::DarkMode::ON:
+      ui_settings.dark_mode = UISettings::DarkMode::AUTO;
+      break;
+    case UISettings::DarkMode::AUTO:
+    case UISettings::DarkMode::COUNT:
+      ui_settings.dark_mode = UISettings::DarkMode::OFF;
+      break;
+    }
+  } else if (StringIsEqual(misc, "off"))
+    ui_settings.dark_mode = UISettings::DarkMode::OFF;
+  else if (StringIsEqual(misc, "on"))
+    ui_settings.dark_mode = UISettings::DarkMode::ON;
+  else if (StringIsEqual(misc, "auto"))
+    ui_settings.dark_mode = UISettings::DarkMode::AUTO;
+  else if (StringIsEqual(misc, "show")) {
+    const unsigned mode = unsigned(ui_settings.dark_mode);
+    if (mode >= unsigned(UISettings::DarkMode::COUNT))
+      return;
+    ShowLabeledStatus(_("Dark mode"), gettext(msg[mode]));
+    return;
+  } else
+    return;
+
+  Profile::Set(ProfileKeys::DarkMode,
+               EnumCast<UISettings::DarkMode>()(ui_settings.dark_mode));
+
+  /* do not call SettingsLeave() here: that path expects SettingsEnter()
+     and can reload map/airspace data from stale *FileChanged flags */
+  if (CommonInterface::main_window != nullptr) {
+    CommonInterface::main_window->ReinitialiseLook();
+    CommonInterface::main_window->ReinitialiseLayout();
+  }
+
+  ShowLabeledStatus(_("Dark mode"),
+                    gettext(msg[unsigned(ui_settings.dark_mode)]));
+}
+
 void
 InputEvents::eventDeclutterLabels(const char *misc)
 {

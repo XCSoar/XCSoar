@@ -25,6 +25,8 @@ Version 7.46 - not yet released
     OpenVario after the stick re-enumerates #2820
   - add InfoBoxGeometry input events (next/previous/toggle/show) so
     layout can be changed in flight; default key L
+  - add DarkMode input events (toggle/off/on/auto/show) so night mode
+    can be changed in flight; default key N
 * weather
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages

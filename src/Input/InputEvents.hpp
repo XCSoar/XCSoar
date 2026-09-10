@@ -213,6 +213,7 @@ void eventTraffic(const char *misc);
 void eventFlarmTraffic(const char *misc);
 void eventFlarmDetails(const char *misc);
 void eventCredits(const char *misc);
+void eventDarkMode(const char *misc);
 void eventWeather(const char *misc);
 void eventQuickMenu(const char *misc);
 void eventFileManager(const char *misc);

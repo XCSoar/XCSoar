@@ -24,6 +24,7 @@ GetDarkMode(const UISettings &settings) noexcept
 #else
   switch (settings.dark_mode) {
   case UISettings::DarkMode::OFF:
+  case UISettings::DarkMode::COUNT:
     break;
 
   case UISettings::DarkMode::ON:

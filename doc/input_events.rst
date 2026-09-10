@@ -158,6 +158,9 @@ settings without opening the configuration dialog:
  * - ``L``
    - ``InfoBoxGeometry next``
    - Layout / display
+ * - ``N``
+   - ``DarkMode toggle``
+   - Layout / display
 
 File format
 -----------
@@ -295,6 +298,12 @@ Event list
    - Acknowledges and clears all status message warnings.
  * - ``Credits``
    - Displays the credits dialog.
+ * - ``DarkMode``
+   - Controls the UI dark mode setting (same as Configuration →
+     Display → Dark mode). Possible arguments: ``toggle`` (cycle
+     Off → On → Auto), ``off``, ``on``, ``auto``, ``show``
+     (display the current mode). The setting is saved to the
+     profile; look and layout are refreshed immediately.
  * - ``DeclutterLabels``
    - Controls waypoint label display filtering. Possible arguments:
      ``toggle`` (cycle through modes), ``show`` (display current
