@@ -313,6 +313,8 @@ final class BluetoothHelper
         features |= DetectDeviceListener.FEATURE_BLE_SERIAL;
       else if (BluetoothUuids.HEART_RATE_SERVICE.equals(uuid))
         features |= DetectDeviceListener.FEATURE_HEART_RATE;
+      else if (BluetoothUuids.PULSE_OXIMETER_SERVICE.equals(uuid))
+        features |= DetectDeviceListener.FEATURE_PULSE_OXIMETER;
       else if (BluetoothUuids.FLYTEC_SENSBOX_SERVICE.equals(uuid))
         features |= DetectDeviceListener.FEATURE_FLYTEC_SENSBOX;
     }

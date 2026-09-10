@@ -134,8 +134,17 @@ public final class BluetoothSensor
     if (d == null)
       return false;
 
+    /* the PLX "Spot-check Measurement" characteristic is indicate-only,
+       and writing the notification bit to such a characteristic enables
+       nothing at all */
+    final boolean indicate =
+      (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0 &&
+      (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_INDICATE) != 0;
+
     gatt.setCharacteristicNotification(c, true);
-    d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+    d.setValue(indicate
+               ? BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
+               : BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
     return gatt.writeDescriptor(d);
   }
 
@@ -194,6 +203,98 @@ public final class BluetoothSensor
     listener.onHeartRateSensor(bpm);
   }
 
+  /**
+   * Bits of the PLX "Measurement Status" field which mean the value must
+   * not be shown to the pilot: the sensor either declares the
+   * measurement unusable, or marks it as demonstration or test data.
+   */
+  private static final int PLX_MEASUREMENT_REJECT =
+    (1 << 10) | /* Data for Demonstration */
+    (1 << 11) | /* Data for Testing */
+    (1 << 13) | /* Measurement Unavailable */
+    (1 << 14) | /* Questionable Measurement Detected */
+    (1 << 15);  /* Invalid Measurement Detected */
+
+  /**
+   * Locate the optional "Measurement Status" field, which sits behind a
+   * different number of optional fields in each of the two
+   * characteristics.
+   *
+   * @return the offset of the field, or -1 if the sensor did not send one
+   */
+  private static int findPLXMeasurementStatus(int flags, boolean spot_check) {
+    /* both characteristics begin with the flags byte and four bytes of
+       measurement, either SpO2 and pulse rate or the "SpO2PR-Normal"
+       pair */
+    int offset = 5;
+
+    if (spot_check) {
+      if ((flags & 0x02) == 0)
+        return -1;
+
+      if ((flags & 0x01) != 0)
+        /* skip the timestamp */
+        offset += 7;
+    } else {
+      if ((flags & 0x04) == 0)
+        return -1;
+
+      if ((flags & 0x01) != 0)
+        /* skip "SpO2PR-Fast" */
+        offset += 4;
+
+      if ((flags & 0x02) != 0)
+        /* skip "SpO2PR-Slow" */
+        offset += 4;
+    }
+
+    return offset;
+  }
+
+  /**
+   * Parse a PLX measurement and report the blood oxygen saturation.
+   *
+   * Both the "PLX Spot-Check Measurement" and the "PLX Continuous
+   * Measurement" characteristic start with a flags byte followed by
+   * SpO2 and the pulse rate, each an IEEE-11073 16 bit SFLOAT, so the
+   * same code handles both; only the optional fields behind them
+   * differ.
+   */
+  private void readPLXMeasurement(BluetoothGattCharacteristic c,
+                                  boolean spot_check) {
+    final Integer flags =
+      c.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+    if (flags == null)
+      return;
+
+    final int status_offset = findPLXMeasurementStatus(flags, spot_check);
+    if (status_offset >= 0) {
+      final Integer status =
+        c.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,
+                      status_offset);
+      if (status == null || (status & PLX_MEASUREMENT_REJECT) != 0)
+        /* truncated packet, or the sensor itself says the value is not
+           fit to be used */
+        return;
+    }
+
+    final Float spo2 = c.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT,
+                                       1);
+    if (spo2 == null || spo2.isNaN())
+      /* the sensor reports "not available" while it is still
+         measuring */
+      return;
+
+    final int percent = Math.round(spo2);
+    if (percent <= 0 || percent > 100)
+      /* SFLOAT has several reserved values (NaN, NRes, infinity)
+         which Android may pass through as numbers; those are outside
+         the plausible range and get dropped here */
+      return;
+
+    listener.onBloodOxygenSensor(percent);
+  }
+
   static long toUnsignedLong(int x) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
       // Android 7 "Nougat" supports Java 8
@@ -215,6 +316,14 @@ public final class BluetoothSensor
     try {
       if (BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
         readHeartRateMeasurement(c);
+      }
+
+      if (BluetoothUuids.PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
+        readPLXMeasurement(c, false);
+      }
+
+      if (BluetoothUuids.PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
+        readPLXMeasurement(c, true);
       }
 
       if (BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
