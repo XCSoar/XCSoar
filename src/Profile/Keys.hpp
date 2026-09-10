@@ -32,6 +32,8 @@ constexpr std::string_view DisplayText = "DisplayText";
 constexpr std::string_view WaypointArrivalHeightDisplay = "WaypointArrivalHeightDisplay";
 constexpr std::string_view WaypointLabelSelection = "WayPointLabelSelection";
 constexpr std::string_view WaypointLabelStyle = "WayPointLabelStyle";
+constexpr std::string_view WaypointDisplayNonIcaoAirports =
+  "WaypointDisplayNonIcaoAirports";
 constexpr std::string_view WeatherStations = "WeatherStations";
 constexpr std::string_view DisplayUpValue = "DisplayUp";
 constexpr std::string_view OrientationCruise = "OrientationCruise";

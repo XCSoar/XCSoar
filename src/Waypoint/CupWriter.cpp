@@ -109,6 +109,7 @@ GetSeeYouFlags(const Waypoint &wp) noexcept
     return "21"sv;
 
   case Waypoint::Type::THERMAL_HOTSPOT:
+  case Waypoint::Type::COUNT:
     break;
   }
 
