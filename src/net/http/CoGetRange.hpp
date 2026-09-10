@@ -25,8 +25,15 @@ namespace Net {
  * Throws on error, including when the server ignores the range and
  * offers the whole file instead.
  *
+ * The result may be shorter than @p length: a range that reaches past
+ * the end of the resource is answered with what there is, and a
+ * caller that reads a fixed-size header from a file of unknown size
+ * relies on that.  A caller that asked for a known extent has to
+ * check the size itself.  A body *longer* than the range is refused
+ * here, because that means the server disregarded the request.
+ *
  * @param offset the first byte to fetch
- * @param length how many bytes, which must not be zero
+ * @param length how many bytes to ask for, which must not be zero
  */
 Co::Task<std::string>
 CoGetRange(CurlGlobal &curl, const char *url,
