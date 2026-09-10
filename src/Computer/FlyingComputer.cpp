@@ -13,10 +13,9 @@ FlyingComputer::Reset()
 
   stationary_clock.Clear();
   moving_clock.Clear();
-  climbing_clock.Clear();
+  climbing.Reset();
   moving_since = TimeStamp::Undefined();
   stationary_since = TimeStamp::Undefined();
-  climbing_altitude = 0;
   sinking_since = TimeStamp::Undefined();
   powered_since = TimeStamp::Undefined();
   unpowered_since = TimeStamp::Undefined();
@@ -191,16 +190,24 @@ CheckAltitudeAGL(const DerivedInfo &calculated)
 }
 
 inline bool
-FlyingComputer::CheckClimbing(FloatDuration dt, double altitude) noexcept
+FlyingComputer::ClimbEvidence::Update(FloatDuration dt,
+                                      double altitude) noexcept
 {
-  if (altitude > climbing_altitude + 0.1)
-    climbing_clock.Add(dt);
+  if (altitude > previous_altitude + 0.1)
+    clock.Add(dt);
   else
-    climbing_clock.Subtract(dt);
+    clock.Subtract(dt);
 
-  climbing_altitude = altitude;
+  previous_altitude = altitude;
 
-  return climbing_clock >= dt + std::chrono::seconds{1};
+  return clock >= dt + std::chrono::seconds{1};
+}
+
+inline void
+FlyingComputer::ClimbEvidence::Reset(double altitude) noexcept
+{
+  clock.Clear();
+  previous_altitude = altitude;
 }
 
 inline void
@@ -280,7 +287,7 @@ FlyingComputer::Compute(double takeoff_speed,
            basic.GetAnyAltitude().value_or(0));
   else if (!flying.flying ||
            (CheckLandingSpeed(takeoff_speed, basic) &&
-            (!any_altitude || !CheckClimbing(dt, *any_altitude))))
+            (!any_altitude || !climbing.Update(dt, *any_altitude))))
     Stationary(flying, basic.time, dt, basic.location);
 
   if (basic.engine_noise_level_available)
