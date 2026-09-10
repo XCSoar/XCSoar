@@ -7400,7 +7400,7 @@ msgid "no QNH"
 msgstr "není QNH"
 
 msgid "no wind"
-msgstr "není vítr"
+msgstr "bezvětří"
 
 msgid "Not flying"
 msgstr "Neletím"

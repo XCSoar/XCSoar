@@ -7293,7 +7293,7 @@ msgid "no QNH"
 msgstr "QNH필요"
 
 msgid "no wind"
-msgstr "바람없음"
+msgstr "바람 없음"
 
 msgid "Not flying"
 msgstr "비행중이 아님"
