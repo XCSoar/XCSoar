@@ -76,17 +76,22 @@ LatToTileY(double lat, unsigned zoom) noexcept
   return uint32_t(std::clamp(y, 0.0, double(tiles_per_axis - 1)));
 }
 
+/* the inverse conversions have to use the same grid as LonToTileX()
+   and LatToTileY(), which go through TilesPerAxis(): shifting by the
+   raw zoom is undefined once it reaches the width of the type, and
+   for a zoom above MAX_TILE_ZOOM but below that it would silently
+   place the tile on a finer grid than the one it was taken from */
+
 static double
 TileXToLon(uint32_t x, unsigned zoom) noexcept
 {
-  return x / double(uint32_t{1} << zoom) * 360.0 - 180.0;
+  return x / double(TilesPerAxis(zoom)) * 360.0 - 180.0;
 }
 
 static double
 TileYToLat(uint32_t y, unsigned zoom) noexcept
 {
-  const double n = M_PI - 2.0 * M_PI * y /
-    double(uint32_t{1} << zoom);
+  const double n = M_PI - 2.0 * M_PI * y / double(TilesPerAxis(zoom));
   return 180.0 / M_PI * std::atan(0.5 * (std::exp(n) - std::exp(-n)));
 }
 
