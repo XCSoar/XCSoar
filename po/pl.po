@@ -7475,6 +7475,9 @@ msgstr "Symul."
 msgid "no QNH"
 msgstr "Brak QNH"
 
+msgid "no wind"
+msgstr "Brak wiatru"
+
 msgid "Not flying"
 msgstr "Nie krążysz"
 

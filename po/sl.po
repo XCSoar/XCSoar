@@ -7414,6 +7414,9 @@ msgstr "Simulacija"
 msgid "no QNH"
 msgstr "brez QNH"
 
+msgid "no wind"
+msgstr "brez vetra"
+
 msgid "Not flying"
 msgstr "Ne krožiš"
 

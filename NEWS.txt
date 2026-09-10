@@ -24,7 +24,10 @@ Version 7.45.2 - not yet released
   - fix achieved task distance (planned minus remaining), so task
     speed InfoBoxes and Status stay consistent
 * infoboxen
+  - show no wind in the T Next Leg comment when the box is blank
+    because wind is not available
   - fix T Next Leg equivalent thermal with a headwind or tailwind
+  - fix Speed Task Leg staying at zero after the task starts #3081
 * devices
   - fix crash when opening the port monitor
   - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too
@@ -58,7 +61,9 @@ Version 7.45.2 - not yet released
     selects a service action
 * documentation
   - document 15-minute UTC offset selection
-  - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe the T Next Leg InfoBox, how to use it at a turn, and that
+    the comment shows no wind when the box is blank because wind is
+    missing
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: use XTIFFOpenExt only with libgeotiff 1.7.2, so

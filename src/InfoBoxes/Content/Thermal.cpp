@@ -8,6 +8,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Renderer/ClimbPercentRenderer.hpp"
@@ -179,16 +180,21 @@ UpdateInfoBoxVarioDistance(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxNextLegEqThermal(InfoBoxData &data) noexcept
 {
-  const auto next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
+  const auto &calculated = CommonInterface::Calculated();
+  const auto next_leg_eq_thermal = calculated.next_leg_eq_thermal;
   if (next_leg_eq_thermal < 0) {
     data.SetInvalid();
+
+    if (!calculated.wind_available)
+      data.SetComment(_("no wind"));
+
     return;
   }
 
   SetVSpeed(data, next_leg_eq_thermal);
 
   const auto next_leg_eq_thermal_inverse =
-    CommonInterface::Calculated().next_leg_eq_thermal_inverse;
+    calculated.next_leg_eq_thermal_inverse;
   if (next_leg_eq_thermal_inverse >= 0)
     data.SetCommentFromVerticalSpeed(next_leg_eq_thermal_inverse, false);
   else
