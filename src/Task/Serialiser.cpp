@@ -14,6 +14,14 @@
 #include "util/Compiler.h"
 
 #include <cassert>
+
+/*
+ * This file and Deserialiser.cpp together define the XCSoar task file
+ * format (".tsk").  doc/task_file.rst describes it for the benefit of
+ * converters and other external tools; keep that page in sync when you
+ * add, rename or drop an attribute here.
+ */
+
 [[gnu::const]]
 static const char *
 GetName(TaskPointType type, bool mode_optional_start)
