@@ -145,6 +145,20 @@ In ``mode=default``, the number row currently uses this grouping:
    - ``ArmAdvance toggle``
    - Task control toggle
 
+In ``mode=default``, these letter keys adjust layout and display
+settings without opening the configuration dialog:
+
+.. list-table::
+ :widths: 15 45 40
+ :header-rows: 1
+
+ * - Key
+   - Default event (``mode=default``)
+   - Group
+ * - ``L``
+   - ``InfoBoxGeometry next``
+   - Layout / display
+
 File format
 -----------
 
@@ -328,6 +342,13 @@ Event list
      ``finish``: show finish points
 
      Unknown arguments are ignored.
+ * - ``InfoBoxGeometry``
+   - Cycles or reports the InfoBox layout (same list as
+     Configuration → Look → Screen Layout → InfoBox geometry).
+     Possible arguments: ``next``, ``previous``, ``toggle``
+     (same as ``next``), ``show`` (display the current layout
+     name). The setting is saved to the profile and the layout is
+     rebuilt immediately.
  * - ``LockScreen``
    - Displays the screen lock dialog.
  * - ``Logger C``

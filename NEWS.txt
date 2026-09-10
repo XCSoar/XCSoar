@@ -23,6 +23,8 @@ Version 7.46 - not yet released
 * input
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
+  - add InfoBoxGeometry input events (next/previous/toggle/show) so
+    layout can be changed in flight; default key L
 * weather
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages

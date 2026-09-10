@@ -3,8 +3,11 @@
 
 #include "InputEvents.hpp"
 #include "Dialogs/Error.hpp"
+#include "InfoBoxes/InfoBoxGeometryList.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
@@ -20,6 +23,7 @@
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
 #include "util/StaticString.hxx"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -399,6 +403,50 @@ InputEvents::eventAdjustForecastTemperature(const char *misc)
     StringFormatUnsafe(Temp, "%f", temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
+}
+
+
+static void
+ShowLabeledStatus(const char *label, const char *value) noexcept
+{
+  char tbuf[128];
+  StringFormat(tbuf, sizeof(tbuf), _("%s: %s"), label, value);
+  Message::AddMessage(tbuf);
+}
+
+void
+InputEvents::eventInfoBoxGeometry(const char *misc)
+{
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+  InfoBoxSettings::Geometry &geometry = ui_settings.info_boxes.geometry;
+
+  unsigned index = FindInfoBoxGeometryIndex(geometry);
+  const char *label =
+    InfoBoxSettings::Geometry(info_box_geometry_list[index].id) == geometry
+    ? info_box_geometry_list[index].display_string
+    : N_("Unknown");
+
+  if (StringIsEqual(misc, "show")) {
+    ShowLabeledStatus(_("InfoBox geometry"), gettext(label));
+    return;
+  }
+
+  if (StringIsEqual(misc, "previous"))
+    index = (index + INFO_BOX_GEOMETRY_COUNT - 1) % INFO_BOX_GEOMETRY_COUNT;
+  else if (StringIsEqual(misc, "next") || StringIsEqual(misc, "toggle"))
+    index = (index + 1) % INFO_BOX_GEOMETRY_COUNT;
+  else
+    return;
+
+  geometry = InfoBoxSettings::Geometry(info_box_geometry_list[index].id);
+  Profile::Set(ProfileKeys::InfoBoxGeometry,
+               EnumCast<InfoBoxSettings::Geometry>()(geometry));
+
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->ReinitialiseLayout();
+
+  ShowLabeledStatus(_("InfoBox geometry"),
+                    gettext(info_box_geometry_list[index].display_string));
 }
 
 void

@@ -532,6 +532,11 @@ type=key
 data=RIGHT
 event=ScreenModes next
 
+mode=default
+type=key
+data=L
+event=InfoBoxGeometry next
+
 # Gestures
 
 mode=default
