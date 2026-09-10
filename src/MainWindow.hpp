@@ -292,6 +292,13 @@ private:
   PixelRect GetMapAreaRect() const noexcept;
 
   /**
+   * The rectangle the map window really occupies: @p map_area
+   * extended over all InfoBox slots configured "invisible".
+   */
+  [[gnu::pure]]
+  PixelRect GetExtendedMapRect(PixelRect map_area) const noexcept;
+
+  /**
    * Move top/bottom widgets and the map into the area returned by
    * #GetMapAreaRect().
    */

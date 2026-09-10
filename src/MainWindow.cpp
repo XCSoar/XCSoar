@@ -312,6 +312,21 @@ MainWindow::EndCoalesceMapLayout() noexcept
   }
 }
 
+PixelRect
+MainWindow::GetExtendedMapRect(PixelRect map_area) const noexcept
+{
+  PixelRect rc = InfoBoxManager::ExpandOverInvisible(map_area);
+
+  if (rc.top < map_area.top && rc.top > GetClientRect().top)
+    /* the map window is a buffered window and its buffer reaches the
+       screen one row below the window's top edge, which would leave
+       the first row of an "invisible" slot unpainted; begin one row
+       higher, hidden behind the InfoBox above the slot */
+    --rc.top;
+
+  return rc;
+}
+
 void
 MainWindow::LayoutMapArea() noexcept
 {
@@ -338,7 +353,7 @@ MainWindow::LayoutMapArea() noexcept
      map window sits at the bottom of the z-order, so the remaining
      (visible) InfoBoxes are drawn on top of it */
   const PixelRect map_area = GetMapRectAbove(main_rect, bottom_rect);
-  const PixelRect extended = InfoBoxManager::ExpandOverInvisible(map_area);
+  const PixelRect extended = GetExtendedMapRect(map_area);
 
   map->Move(extended);
   map->BringToBottom();
@@ -563,8 +578,7 @@ MainWindow::InitialiseConfigured()
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
   map->SetUIState(CommonInterface::GetUIState());
-  const PixelRect extended_map_rect =
-    InfoBoxManager::ExpandOverInvisible(map_rect);
+  const PixelRect extended_map_rect = GetExtendedMapRect(map_rect);
   map->Create(*this, extended_map_rect);
 
   /* the map is created after the InfoBoxes, so it would be on top of
