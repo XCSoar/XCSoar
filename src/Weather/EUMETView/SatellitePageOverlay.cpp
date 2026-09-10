@@ -558,10 +558,22 @@ SatelliteDownloadGlue::OnCompleteNotify() noexcept
       const auto &layer = EUMETView::GetLayer(layer_index);
       if (const unsigned limit =
             layer.max_age_minutes / layer.cadence_minutes;
-          frame_offset < limit)
+          frame_offset < limit) {
         ++frame_offset;
+        EUMETView::ActivatePageOverlay(active_layer);
+        return;
+      }
 
-      EUMETView::ActivatePageOverlay(active_layer);
+      /* every frame back to the age limit is missing, so the layer
+         has stopped publishing.  Stepping back further is pointless
+         and asking again from here would be worse: the frame time no
+         longer changes, so the block is not rebuilt, and going
+         straight back into ActivatePageOverlay() would issue the next
+         request as fast as the link answers until the clock rolls
+         into the next nominal frame.  Count it like any other failed
+         tile instead, so the timer paces the retry and the block-wide
+         backoff below can settle it to the slow tick. */
+      ++consecutive_failures;
       return;
     }
 
