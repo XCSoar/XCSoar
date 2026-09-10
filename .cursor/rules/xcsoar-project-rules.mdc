@@ -53,12 +53,10 @@ alwaysApply: true
 
 ### Code Organization
 - In class declaration: attributes first, then constructor/destructor, then methods
-- Don't write large functions; split them up when they become too large
 - Avoid dynamic allocation; use `StaticArray` and `StaticString` if possible
 - Asterisks belong to variable name: `Foo *a, *b` not `Foo* a, b`
 - Avoid preprocessor macros; use `inline` functions and `constexpr` variables
 - Avoid expensive STL containers; prefer `StaticArray`/`StaticString` if size is predictable
-- Avoid template hell; keep templates readable
 
 ### Enums with Count Values
 - Enums that are used in multiple places (backend and UI) should include a `COUNT` sentinel value as the last enum member
@@ -93,8 +91,12 @@ alwaysApply: true
 
 ### String Translation
 - All strings displayed to the user must be marked as translatable
-- Use `_()` macro for strings that are translated immediately: `_("Text")`
-- Use `N_()` macro for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
+- **Reuse first:** search `po/xcsoar.pot` and existing `_()` / `N_()` / `C_()`
+  before adding a new English string. Matching wording reuses translations
+  in every language. Do not invent a near-duplicate (`OK` vs `Ok`, extra
+  punctuation, slightly different phrasing)
+- Use `_()` for strings translated immediately: `_("Text")`
+- Use `N_()` for strings in static arrays/initializers that are translated later via `gettext()`: `N_("Text")`
 - Example with `N_()`:
   ```cpp
   static constexpr const char *const names[] = {
@@ -104,13 +106,34 @@ alwaysApply: true
   // Later, when displaying: gettext(names[i])
   ```
 - `N_()` is commonly used with `StaticEnumChoice` arrays for enum dropdowns; `AddChoices()` automatically calls `gettext()` on these strings
-- Use `C_()` / `NC_()` (gettext `msgctxt`) for short ambiguous UI labels that share English text but differ by role — e.g. `C_("Button", "Setup")`, `NC_("Setting", "Auto")`, `C_("Status", "Live")`, `C_("Weather control", "Time")`
+- Use `C_()` / `NC_()` (gettext `msgctxt`) only when the same English text needs different translations by role — e.g. `C_("Button", "Setup")`, `NC_("Setting", "Auto")`, `C_("Status", "Live")`, `C_("Weather control", "Time")`
 - Prefer existing context names (`Button`, `Menu`, `Setting`, `Status`, `Weather control`, `Weather layer`, `Abbreviation`, `InfoBox`, …) over inventing new ones
 - **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
 - Log messages should remain in English for consistency and debugging
+- After source string changes, run `make update-po`. The `.po` diff must
+  **only add new msgid/msgstr entries** (and `xcsoar.pot`). Do not rewrap,
+  reorder, or rewrite existing translations. See `doc/i18n.rst`
 
-### Utilities
-- Use utility functions in `src/util` when available
+### Reuse existing code
+- Search the codebase before adding a helper, wrapper, enum, or parser
+- Prefer `src/util`, `Formatter/`, `Math/`, `Geo/`, and the same subsystem over a new copy
+- Extend the existing class or function; do not introduce a parallel API
+- If two call sites need the same logic, extract once — not a new layer for a single caller
+
+### Keep it simple
+- Solve the stated problem with the smallest change that fits existing patterns
+- Do not add factories, managers, strategy objects, or extra files for one behaviour
+- Prefer a few clear functions over a new abstraction hierarchy
+- Don't write large functions; split them when they become too large
+- Avoid template hell; keep templates readable
+
+### Unit tests
+- Add TAP tests under `test/src/` for new or changed **logic** that does not need a UI
+- Good targets: parsers, formatters, protocol encode/decode, math/geo helpers, string/UTF-8/path helpers, policy and state-machine functions
+- Extend an existing `Test*.cpp` when the behaviour already has a test file
+- Register new test binaries in `build/test.mk` (`TEST_NAMES` plus `*_SOURCES` / `link-program`)
+- Do **not** add unit tests for dialog layout, canvas drawing, JNI glue, or windowing
+- Follow `.cursor/rules/xcsoar-testing.mdc` (`plan_tests()`, `ok1()`, `make check`)
 
 ### Error Handling
 - Exceptions are used for error handling (std::exception, std::runtime_error, etc.)
@@ -192,6 +215,10 @@ alwaysApply: true
 - ❌ `WIP: testing stuff` - Clean up before PR submission
 
 ## Architecture
+
+Read `doc/architecture.rst` before changing layers, threads, blackboards,
+device drivers, network/HTTP, or where a type belongs. Other developer docs:
+`.cursor/rules/developer-docs.mdc` and `doc/index.rst`.
 
 ### Multi-Platform Considerations
 - XCSoar is a multi-platform project supporting: Windows (PC, WIN64), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
@@ -712,7 +739,9 @@ Key rules:
 - Avoid elements that encourage continuous screen staring
 - Avoid controls with significant risk if misconfigured
 - Check for color blindness compatibility
-- Follow aviation conventions (ICAO standards, IGC standards, NASA color usage, FAA guidelines)
+- Follow aviation human-factors conventions in
+  `doc/architecture.rst` (User interface guidelines): ICAO Annex 4,
+  NASA Colour Usage, FAA EFB DOT/FAA/AR-03/67, FAA HF design standards
 
 ## Look System
 
@@ -806,7 +835,9 @@ Key rules:
   ```
 
 ### Translation Best Practices
-- When adding new translatable strings, translate them into all 33 languages if possible
+- Prefer reusing an existing msgid over adding a new one
+- When a new string is unavoidable, fill only the **new** empty `msgstr`
+  entries (all 33 languages when possible). Do not rewrite existing `msgstr`
 - Check for empty `msgstr` values in c-format strings (these cause blank UI text)
 - Verify translations are semantically correct, not just syntactically valid
 - Be aware of common translation confusion patterns (e.g., "No alternates available" vs "Update available")
@@ -1066,14 +1097,24 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - **Translation issues**: Fix all languages, not just the one mentioned in review
 - Document what was changed in response to review (helps reviewers verify fixes)
 
+### Review for reuse and simplicity
+- Reject new helpers that duplicate `src/util` or an existing class in the same subsystem
+- Reject extra abstraction (factories, wrappers, extra files) when a small change to existing code would do
+- Require TAP tests for new parsers, formatters, protocol handling, and other UI-free logic
+- Size vs problem: a large patch for a small behaviour change is a design smell
+
 ### Pre-PR Checklist
+- Search for existing helpers before adding new ones
+- Add or extend TAP tests for new UI-free logic; run `make -j$(nproc) TARGET=UNIX check`
 - Run `make update-po` if any translatable strings were added/modified
+- Prefer reusing an existing msgid; `.po` diffs must only add new fields
 - Check that all `.po` files have valid syntax (no custom comments in wrong places)
 - Verify commit messages follow format: `<Component>: <Summary>`
 - Squash fixup commits and reword generic "Fix" messages
 - Ensure branch compiles on at least one platform
 - Check for accidentally committed debug code or temporary files
 - Verify all user-visible changes have corresponding NEWS.txt entries
+- Update `doc/manual/en/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
 - When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
 - Follow `.cursor/rules/news.txt.mdc` for NEWS.txt wording and audience
 - When adding Android drawable resources, check both `build/android.mk` and `build/android_bundle.mk`
@@ -1081,12 +1122,16 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 ## Common Mistakes and How to Avoid Them
 
 ### Translation File Mistakes
+- ❌ Adding a new `_("...")` when the same English already exists in `po/xcsoar.pot`
+- ✅ Reuse the existing msgid (add `msgctxt` only if the role truly differs)
+- ❌ Rewrapping or rewriting untouched `.po` entries
+- ✅ `make update-po` then fill **only new** empty `msgstr` fields
 - ❌ Adding custom comments between `msgid` and `msgstr`
 - ✅ Place comments before `msgid` or at entry start
 - ❌ Forgetting to run `make update-po` after source changes
 - ✅ Always run `make update-po` before committing translations
-- ❌ Translating only one language when fixing an issue
-- ✅ Fix the issue across all affected languages
+- ❌ Translating only one language when filling a **new** string
+- ✅ Fill the new empty `msgstr` across all affected languages
 
 ### Git Workflow Mistakes
 - ❌ Creating many small fixup commits during development
@@ -1109,6 +1154,10 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - ✅ Provide all resolution tiers the code can select (e.g., 320px + 640px)
 
 ### Code Organization Mistakes
+- ❌ Adding a new helper that already exists in `src/util` or the same subsystem
+- ✅ Search first; extend or call the existing function
+- ❌ New factory/manager/wrapper classes for a single call site
+- ✅ Change the existing class or add a small function next to it
 - ❌ Including platform-specific headers in cross-platform code
 - ✅ Keep platform code in platform-specific directories
 - ❌ Implementing platform features in `custom/` when platform-specific files exist
@@ -1119,6 +1168,8 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - ✅ Use `OpenLink()` with standard URIs (`geo:`, `https:`, `tel:`, `mailto:`) for cross-platform functionality
 
 ### Sanitizer and Testing Mistakes
+- ❌ Shipping new parser/formatter/protocol logic with no TAP test
+- ✅ Add `test/src/Test*.cpp` (or extend the existing test) and register it in `build/test.mk`
 - ❌ Assuming `unsigned` subtraction is safe without checking operand order
 - ✅ Guard `unsigned a - unsigned b` with `if (a <= b) return;` to prevent underflow
 - ❌ Dividing by image dimensions without zero checks

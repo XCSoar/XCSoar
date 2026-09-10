@@ -1,0 +1,41 @@
+---
+description: Reuse existing gettext msgids; low-churn po updates add only new fields
+globs:
+  - "po/**"
+  - "src/**/*.cpp"
+  - "src/**/*.hpp"
+alwaysApply: false
+---
+
+# Translations (reuse and low churn)
+
+Details: `doc/i18n.rst`. Catalogs: `po/xcsoar.pot` and `po/*.po`.
+
+## Reuse strings
+
+Do not add a new `_()` / `N_()` / `C_()` string if the same English already
+exists. Search `po/xcsoar.pot` and existing call sites first.
+
+Near-duplicates (`OK` vs `Ok`, extra punctuation, slightly different
+phrasing) create 33 extra translations. Match the existing msgid.
+
+Use `C_()` / `NC_()` only when the same English needs a different
+translation by role. Prefer existing contexts (`Button`, `Menu`,
+`Setting`, `Status`, `InfoBox`, …).
+
+Do not mark log messages for translation.
+
+## Low-churn catalog updates
+
+After source changes, run `make update-po` (`tools/update_po_low_churn.py`).
+
+The `.po` / `.pot` diff must **only add new msgid/msgstr entries** (and
+fill those new empty `msgstr` values). Do not:
+
+- rewrap or reorder untouched entries
+- rewrite existing `msgstr`
+- bulk-save with `polib` or any full-file rewrap
+- add `#:` location comments
+
+Fill new empty `msgstr` across languages when possible. Leave existing
+translations alone unless they are wrong.

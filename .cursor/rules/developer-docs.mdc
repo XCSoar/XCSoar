@@ -1,0 +1,39 @@
+---
+description: When to read developer documentation under doc/, especially architecture.rst
+alwaysApply: true
+---
+
+# Developer documentation (`doc/`)
+
+Index: `doc/index.rst`. Do not invent a parallel layout; follow these files.
+
+**Always** read `doc/architecture.rst` before changing layers, threads,
+blackboards, device drivers, network/HTTP, or where a type belongs.
+
+For UI colour, map overlays, dialogs, and in-flight safety, read
+**User interface guidelines** in `doc/architecture.rst`. That section
+adopts:
+
+- NASA Colour Usage recommendations
+- DOT/FAA/AR-03/67 (Electronic Flight Bags / EFB human factors)
+- ICAO Annex 4 (aeronautical charts) and FAA HF design standards
+
+Do not invent a parallel colour language. Reuse named colours in Look
+code; keep high saturation and contrast for warnings and cautions.
+
+User-facing behaviour also needs the **English user manual**
+(`doc/manual/en/`), not only `NEWS.txt`. See `.cursor/rules/user-manual.mdc`.
+
+| Topic | File |
+|-------|------|
+| Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
+| User interface, colour, EFB/NASA HF | `doc/architecture.rst` (User interface guidelines) |
+| Patches, code style | `doc/policy.rst` |
+| Build | `doc/build.rst` |
+| Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc` |
+| Weather overlays | `doc/weather_overlays.rst` |
+| On-disk data layout | `doc/data_directory.rst` |
+| Input events | `doc/input_events.rst` |
+| Tests and debug tools | `doc/test_debug_utilities.rst` |
+| Debugging | `doc/debugging.rst` |
+| User manual (pilots) | `doc/manual/en/` |

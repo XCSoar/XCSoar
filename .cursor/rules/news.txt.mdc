@@ -201,6 +201,9 @@ section.
 Do not use this for `doc/build.rst` or other contributor-only docs — those go
 under `* development` with a `documentation:` prefix.
 
+User-facing behaviour belongs in `doc/manual/en/` as well as `NEWS.txt`.
+See `.cursor/rules/user-manual.mdc`.
+
 ## `* development` section
 
 Use for people **building** or **hacking on** XCSoar. Introduced in 7.44 as a
