@@ -7462,6 +7462,9 @@ msgstr "Simulering"
 msgid "no QNH"
 msgstr "ingen QNH"
 
+msgid "no wind"
+msgstr "ingen vind"
+
 msgid "Not flying"
 msgstr "Kurver ikke"
 

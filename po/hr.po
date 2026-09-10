@@ -7435,6 +7435,9 @@ msgstr "Simulirac"
 msgid "no QNH"
 msgstr "bez QNH"
 
+msgid "no wind"
+msgstr "bez vjetra"
+
 msgid "Not flying"
 msgstr "Ne ljetim"
 

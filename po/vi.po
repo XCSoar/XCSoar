@@ -7404,6 +7404,9 @@ msgstr "Simulater"
 msgid "no QNH"
 msgstr "Không có QNH"
 
+msgid "no wind"
+msgstr "Không có gió"
+
 msgid "Not flying"
 msgstr "Không bay"
 

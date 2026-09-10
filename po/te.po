@@ -7255,6 +7255,9 @@ msgstr "సిములెటర్"
 msgid "no QNH"
 msgstr "నిష్పత్తి కోడ్ (QNH)"
 
+msgid "no wind"
+msgstr ""
+
 msgid "Not flying"
 msgstr "ప్రాచీనమైన గతి"
 

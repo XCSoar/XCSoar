@@ -7355,6 +7355,9 @@ msgstr "Simulator"
 msgid "no QNH"
 msgstr "QNH saknas"
 
+msgid "no wind"
+msgstr "Vind saknas"
+
 msgid "Not flying"
 msgstr "Flyger ej"
 

@@ -7409,6 +7409,9 @@ msgstr "Simulaattori"
 msgid "no QNH"
 msgstr "QNH virhe"
 
+msgid "no wind"
+msgstr "ei tuulta"
+
 msgid "Not flying"
 msgstr "Ei kaarrossa"
 

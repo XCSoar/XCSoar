@@ -91,6 +91,8 @@ Version 7.46 - not yet released
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
+  - show no wind in the T Next Leg comment when the box is blank
+    because wind is not available
 * ui
   - Support manual UTC offsets up to +14:00 in 15-minute increments
   - Keep automatic UTC offsets synchronized with the operating-system
@@ -114,7 +116,9 @@ Version 7.46 - not yet released
     was delivered to it instead of to the control that was pressed
 * documentation
   - document 15-minute UTC offset selection
-  - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe the T Next Leg InfoBox, how to use it at a turn, and that
+    the comment shows no wind when the box is blank because wind is
+    missing
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow

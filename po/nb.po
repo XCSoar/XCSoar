@@ -7378,6 +7378,9 @@ msgstr "Simulator"
 msgid "no QNH"
 msgstr "ingen QNH"
 
+msgid "no wind"
+msgstr "ingen vind"
+
 msgid "Not flying"
 msgstr "Sirkler ikke"
 

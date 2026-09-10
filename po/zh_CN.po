@@ -7162,6 +7162,9 @@ msgstr "模拟"
 msgid "no QNH"
 msgstr "无绝对高度"
 
+msgid "no wind"
+msgstr "无风"
+
 msgid "Not flying"
 msgstr "停飞"
 

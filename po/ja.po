@@ -7523,6 +7523,9 @@ msgstr "シュミレーター"
 msgid "no QNH"
 msgstr "QNHではない"
 
+msgid "no wind"
+msgstr "風なし"
+
 msgid "Not flying"
 msgstr "旋回していません"
 

@@ -7412,6 +7412,9 @@ msgstr "סימולטור"
 msgid "no QNH"
 msgstr "ללא QNH"
 
+msgid "no wind"
+msgstr "ללא רוח"
+
 msgid "Not flying"
 msgstr "לא מטרמל"
 

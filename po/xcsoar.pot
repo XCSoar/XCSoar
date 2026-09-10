@@ -9031,6 +9031,9 @@ msgstr ""
 msgid "no QNH"
 msgstr ""
 
+msgid "no wind"
+msgstr ""
+
 msgid "Not flying"
 msgstr ""
 

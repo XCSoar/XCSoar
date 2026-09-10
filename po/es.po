@@ -7520,6 +7520,9 @@ msgstr "Simulador"
 msgid "no QNH"
 msgstr "Sin QNH"
 
+msgid "no wind"
+msgstr "Sin viento"
+
 msgid "Not flying"
 msgstr "No está volando"
 

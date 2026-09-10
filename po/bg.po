@@ -7474,6 +7474,9 @@ msgstr "Симулатор"
 msgid "no QNH"
 msgstr "Няма QNH"
 
+msgid "no wind"
+msgstr "Няма вятър"
+
 msgid "Not flying"
 msgstr "Не лети"
 

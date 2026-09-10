@@ -7399,6 +7399,9 @@ msgstr "Simulátor"
 msgid "no QNH"
 msgstr "není QNH"
 
+msgid "no wind"
+msgstr "není vítr"
+
 msgid "Not flying"
 msgstr "Neletím"
 

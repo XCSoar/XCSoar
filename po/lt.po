@@ -7452,6 +7452,9 @@ msgstr "Sąrašas"
 msgid "no QNH"
 msgstr "Nėra QNH"
 
+msgid "no wind"
+msgstr "Nėra vėjo"
+
 msgid "Not flying"
 msgstr "Neveikia"
 

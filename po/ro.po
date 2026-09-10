@@ -7451,6 +7451,9 @@ msgstr "Simulare"
 msgid "no QNH"
 msgstr "fără QNH"
 
+msgid "no wind"
+msgstr "fără vânt"
+
 msgid "Not flying"
 msgstr "Nu spiralezi"
 

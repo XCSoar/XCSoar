@@ -7461,6 +7461,9 @@ msgstr "Імітатор"
 msgid "no QNH"
 msgstr "Нема QNH"
 
+msgid "no wind"
+msgstr "Нема вітру"
+
 msgid "Not flying"
 msgstr "Не літає"
 

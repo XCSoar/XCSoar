@@ -7518,6 +7518,9 @@ msgstr "Συμπύκνωση"
 msgid "no QNH"
 msgstr "όχι QNH"
 
+msgid "no wind"
+msgstr "όχι άνεμος"
+
 msgid "Not flying"
 msgstr "Χωρίς περιστροφή (κύκλωση)"
 

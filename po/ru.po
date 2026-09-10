@@ -7469,6 +7469,9 @@ msgstr "Симулятор"
 msgid "no QNH"
 msgstr "нет QNH"
 
+msgid "no wind"
+msgstr "нет ветра"
+
 msgid "Not flying"
 msgstr "Не в спирали"
 

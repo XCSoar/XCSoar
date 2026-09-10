@@ -7429,6 +7429,9 @@ msgstr "Simulater"
 msgid "no QNH"
 msgstr "Bez QNH"
 
+msgid "no wind"
+msgstr "Bez vetra"
+
 msgid "Not flying"
 msgstr "Ne letim"
 

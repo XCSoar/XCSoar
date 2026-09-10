@@ -7423,6 +7423,9 @@ msgstr "Szimulátor"
 msgid "no QNH"
 msgstr "nincs QNH"
 
+msgid "no wind"
+msgstr "nincs szél"
+
 msgid "Not flying"
 msgstr "Nem körözünk"
 
