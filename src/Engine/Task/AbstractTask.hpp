@@ -297,8 +297,8 @@ protected:
   /**
    * Calculate achieved task distance:
    *   total planned task distance minus task distance remaining.
-   * Ordered tasks also refresh per-leg travelled vectors used by
-   * the travelled glide solution.
+   * Ordered tasks also refresh travelled vectors from the start
+   * through the active point for the travelled glide solution.
    *
    * @param ref Location of aircraft
    *

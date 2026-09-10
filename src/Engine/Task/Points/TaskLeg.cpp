@@ -200,12 +200,10 @@ TaskLeg::ScanDistanceRemaining(const GeoPoint &ref) noexcept
     (GetNext() ? GetNext()->ScanDistanceRemaining(ref) : 0);
 }
 
-double
-TaskLeg::ScanDistanceTravelled(const GeoPoint &ref) noexcept
+void
+TaskLeg::UpdateVectorTravelled(const GeoPoint &ref) noexcept
 {
   vector_travelled = GetTravelledVector(ref);
-  return vector_travelled.distance +
-    (GetNext() ? GetNext()->ScanDistanceTravelled(ref) : 0);
 }
 
 double

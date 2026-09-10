@@ -116,19 +116,10 @@ public:
   double ScanDistanceScored(const GeoPoint &ref) const noexcept;
 
   /**
-   * Refresh each leg's travelled vector (origin to aircraft on the
+   * Refresh this leg's travelled vector (origin to aircraft on the
    * active leg, origin to destination on completed legs).
-   *
-   * The returned sum is not used for TaskStats::total.travelled,
-   * which is planned minus remaining; this scan exists so
-   * GetVectorTravelled() is valid for the travelled glide solution
-   * (Speed Task Leg InfoBox).
-   *
-   * @param ref Location of aircraft
-   *
-   * @return Distance (m) along travelled vectors
    */
-  double ScanDistanceTravelled(const GeoPoint &ref) noexcept;
+  void UpdateVectorTravelled(const GeoPoint &ref) noexcept;
 
   /**
    * Retrieve maximum distance for the task leg
