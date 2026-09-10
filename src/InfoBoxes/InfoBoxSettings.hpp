@@ -7,7 +7,45 @@
 #include "util/Compiler.h"
 #include "InfoBoxes/Content/Type.hpp"
 
+#include <cstddef>
 #include <cstdint>
+
+/**
+ * The three freely editable lines of an #InfoBoxFactory::e_CustomText
+ * InfoBox.
+ */
+struct InfoBoxCustomText {
+  static constexpr std::size_t MAX_LENGTH = 24;
+
+  /**
+   * All three lines share one profile value, separated by this
+   * character; it must therefore not occur in the text itself.
+   */
+  static constexpr char SEPARATOR = '|';
+
+  StaticString<MAX_LENGTH> title, value, comment;
+
+  void Clear() noexcept {
+    title.clear();
+    value.clear();
+    comment.clear();
+  }
+
+  [[gnu::pure]]
+  bool IsEmpty() const noexcept {
+    return title.empty() && value.empty() && comment.empty();
+  }
+
+  /**
+   * Copy one edited line, dropping the characters the profile cannot
+   * store: the quotation mark terminates the value, and #SEPARATOR
+   * separates the three lines.
+   *
+   * @return true if the line was modified
+   */
+  static bool AssignLine(StaticString<MAX_LENGTH> &dest,
+                         const char *src) noexcept;
+};
 
 struct InfoBoxSettings {
   enum PanelIndex {
@@ -22,6 +60,12 @@ struct InfoBoxSettings {
 
     StaticString<32u> name;
     InfoBoxFactory::Type contents[MAX_CONTENTS];
+
+    /**
+     * The free text of the #InfoBoxFactory::e_CustomText InfoBoxes;
+     * empty for every other type.
+     */
+    InfoBoxCustomText text[MAX_CONTENTS];
 
     void Clear() noexcept;
 

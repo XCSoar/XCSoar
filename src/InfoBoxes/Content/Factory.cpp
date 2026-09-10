@@ -1211,6 +1211,46 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentPreviousWaypoint>::Create,
   },
 
+  // e_ReleaseSpace
+  {
+    NC_("InfoBox", "Release space"),
+    NC_("Abbreviation", "Release"),
+    N_("Placeholder which is not displayed and claims no space of its own: the other InfoBoxes of the same line grow into the gap. A line is a row in portrait and a column in landscape. Use it for a line with fewer but wider InfoBoxes than the selected geometry provides."),
+    UpdateInfoBoxPlaceholder,
+  },
+
+  // e_MergeAlongLine
+  {
+    NC_("InfoBox", "Merge along line"),
+    NC_("Abbreviation", "Merge"),
+    N_("This slot is merged into the preceding InfoBox of the same line. That InfoBox then spans both and gets twice the space, which helps with long values such as waypoint names. The preceding InfoBox is the one to the left in portrait and the one above in landscape. Several in a row widen it further; in the first slot of a line it behaves like Release space."),
+    UpdateInfoBoxPlaceholder,
+  },
+
+  // e_MergeAcrossLines
+  {
+    NC_("InfoBox", "Merge across lines"),
+    NC_("Abbreviation", "Merge line"),
+    N_("This slot is merged into the InfoBox at the same position of the previous line. That InfoBox then spans both and gets twice the height, which helps the graphical InfoBoxes such as Barogram or Horizon. The previous line is the row above in portrait and the column to the left in landscape. If the two do not line up exactly, or if there is no InfoBox to merge into, this behaves like Release space."),
+    UpdateInfoBoxPlaceholder,
+  },
+
+  // e_Invisible
+  {
+    N_("Invisible"),
+    N_("Invisible"),
+    N_("This InfoBox is invisible: the map is extended over its slot and shows in its place."),
+    UpdateInfoBoxInvisible,
+  },
+
+  // e_CustomText
+  {
+    NC_("InfoBox", "Custom text"),
+    NC_("Abbreviation", "Text"),
+    N_("Title, value and comment of this InfoBox can be set by you instead of being computed from flight data. To edit them, tap this InfoBox on the map and choose Setup. Useful as a label for an InfoBox page or as a visual separator between groups of InfoBoxes."),
+    IBFHelper<InfoBoxContentCustomText>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

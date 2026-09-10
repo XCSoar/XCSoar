@@ -234,6 +234,18 @@ private:
 
   UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
+  /**
+   * Long press on an "invisible" InfoBox slot: those slots show the
+   * map, so this window receives their input.  A short press acts on
+   * the map as usual, a long press opens the InfoBox picker.
+   */
+  UI::Timer infobox_picker_timer{[this]{ OnInfoBoxPickerTimer(); }};
+
+  /**
+   * The InfoBox id #infobox_picker_timer was armed for, or -1.
+   */
+  int infobox_picker_id = -1;
+
   UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
   /**
@@ -396,7 +408,7 @@ private:
   void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                      const NMEAInfo &info) const noexcept;
   void DrawCrossHairs(Canvas &canvas) const noexcept;
-  void DrawPanInfo(Canvas &canvas) const noexcept;
+  void DrawPanInfo(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
@@ -499,6 +511,19 @@ protected:
 
 private:
   void OnMapItemTimer() noexcept;
+
+  /**
+   * Arm #infobox_picker_timer if the given point (in window
+   * coordinates) is inside an "invisible" InfoBox slot.
+   */
+  void ArmInfoBoxPicker(PixelPoint p) noexcept;
+
+  void CancelInfoBoxPicker() noexcept {
+    infobox_picker_timer.Cancel();
+    infobox_picker_id = -1;
+  }
+
+  void OnInfoBoxPickerTimer() noexcept;
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;

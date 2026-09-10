@@ -461,7 +461,10 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location) noexcept
 void
 GlueMapWindow::UpdateProjection() noexcept
 {
-  const PixelRect rc = GetClientRect();
+  /* not GetClientRect(): the window may be extended over "invisible"
+     InfoBox slots, and the aircraft belongs into the middle of the
+     area which is really visible */
+  const PixelRect rc = GetOverlayRect();
 
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */

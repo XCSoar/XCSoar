@@ -146,8 +146,10 @@ MapWindow::OnPaintBuffer(Canvas &canvas) noexcept
     const ScopeUnlock unlock{mutex};
 #endif
 
-    // Render the moving map
-    Render(canvas, GetClientRect());
+    /* Render the moving map; GetOverlayRect() (not GetClientRect())
+       keeps the HUD overlays inside the area which is not covered by
+       InfoBoxes */
+    Render(canvas, GetOverlayRect());
     draw_sw.Finish();
   }
 

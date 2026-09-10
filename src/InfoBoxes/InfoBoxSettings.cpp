@@ -3,15 +3,47 @@
 
 #include "InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
+#include "util/StringAPI.hxx"
 
 #include <algorithm>
+#include <cstddef>
 using namespace InfoBoxFactory;
+
+bool
+InfoBoxCustomText::AssignLine(StaticString<MAX_LENGTH> &dest,
+                              const char *src) noexcept
+{
+  /* RowFormWidget::GetValueString() returns nullptr for a #DataField
+     which does not implement GetAsString(); treat it like an empty
+     line */
+  if (src == nullptr)
+    src = "";
+
+  char buffer[MAX_LENGTH];
+  std::size_t length = 0;
+
+  for (; *src != '\0' && length + 1 < sizeof(buffer); ++src)
+    if (*src != '"' && *src != SEPARATOR)
+      buffer[length++] = *src;
+
+  buffer[length] = '\0';
+
+  if (StringIsEqual(buffer, dest))
+    return false;
+
+  dest = buffer;
+  dest.CropIncompleteUTF8();
+  return true;
+}
 
 void
 InfoBoxSettings::Panel::Clear() noexcept
 {
   name.clear();
   std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
+
+  for (auto &i : text)
+    i.Clear();
 }
 
 bool

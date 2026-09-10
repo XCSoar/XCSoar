@@ -262,9 +262,9 @@ ComputeMapAreaRect(const PixelRect &main_rect,
 PixelRect
 MainWindow::GetMapAreaRect() const noexcept
 {
-  if (map != nullptr)
-    return map->GetPosition();
-
+  /* deliberately not using map->GetPosition() here: the map window may
+     be extended over "invisible" InfoBoxes, but overlay buttons and
+     other decorations shall stay inside the regular map area */
   return ComputeMapAreaRect(GetMainRect(), top_widget, bottom_widget);
 }
 
@@ -300,6 +300,21 @@ MainWindow::EndCoalesceMapLayout() noexcept
   }
 }
 
+PixelRect
+MainWindow::GetExtendedMapRect(PixelRect map_area) const noexcept
+{
+  PixelRect rc = InfoBoxManager::ExpandOverInvisible(map_area);
+
+  if (rc.top < map_area.top && rc.top > GetClientRect().top)
+    /* the map window is a buffered window and its buffer reaches the
+       screen one row below the window's top edge, which would leave
+       the first row of an "invisible" slot unpainted; begin one row
+       higher, hidden behind the InfoBox above the slot */
+    --rc.top;
+
+  return rc;
+}
+
 void
 MainWindow::LayoutMapArea() noexcept
 {
@@ -322,7 +337,32 @@ MainWindow::LayoutMapArea() noexcept
   if (HaveBottomWidget())
     bottom_widget->Move(bottom_rect);
 
-  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  /* extend the map over all InfoBox slots configured "invisible"; the
+     map window sits at the bottom of the z-order, so the remaining
+     (visible) InfoBoxes are drawn on top of it */
+  const PixelRect map_area = GetMapRectAbove(main_rect, bottom_rect);
+  const PixelRect extended = GetExtendedMapRect(map_area);
+
+  map->Move(extended);
+  map->BringToBottom();
+
+  /* keep the HUD overlays (compass, map scale, final glide bar, ...)
+     inside the part of the map window which is not covered by
+     InfoBoxes */
+  PixelRect overlay_rect = map_area;
+  overlay_rect.Offset(-extended.left, -extended.top);
+  map->SetOverlayRect(overlay_rect);
+}
+
+void
+MainWindow::RelayoutMapArea() noexcept
+{
+  if (map == nullptr)
+    return;
+
+  LayoutMapArea();
+  UpdateMapOverlayButtonLayout();
+  map->FullRedraw();
 }
 
 void
@@ -332,42 +372,47 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
     widget == nullptr && map != nullptr &&
     PageActions::AllowMapOverlayButtons();
 
+  /* not map->GetPosition(): the map window may be extended over
+     "invisible" InfoBoxes, but the buttons belong into the regular map
+     area */
+  const PixelRect map_area = GetMapAreaRect();
+
   if (show_menu_button != nullptr) {
     show_menu_button->SetVisible(overlay_buttons_active);
     show_menu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_menu_button->Move(GetShowMenuButtonRect(map->GetPosition()));
+      show_menu_button->Move(GetShowMenuButtonRect(map_area));
   }
   if (show_quickmenu_button != nullptr) {
     show_quickmenu_button->SetVisible(overlay_buttons_active);
     show_quickmenu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(map->GetPosition()));
+      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(map_area));
   }
   if (show_zoom_out_button != nullptr) {
     show_zoom_out_button->SetVisible(overlay_buttons_active);
     show_zoom_out_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_out_button->Move(GetShowZoomButtonRect(map->GetPosition(),
+      show_zoom_out_button->Move(GetShowZoomButtonRect(map_area,
                                                        ShowZoomButton::Sign::ZOOM_OUT));
   }
   if (show_zoom_in_button != nullptr) {
     show_zoom_in_button->SetVisible(overlay_buttons_active);
     show_zoom_in_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_in_button->Move(GetShowZoomButtonRect(map->GetPosition(),
+      show_zoom_in_button->Move(GetShowZoomButtonRect(map_area,
                                                       ShowZoomButton::Sign::ZOOM_IN));
   }
 
 #ifdef ANDROID
   if (show_rotate_button != nullptr && overlay_buttons_active)
-    show_rotate_button->Move(GetShowRotateButtonRect(map->GetPosition()));
+    show_rotate_button->Move(GetShowRotateButtonRect(map_area));
 #endif
 
   if (map != nullptr)
     /* keep the north arrow clear of the overlay buttons */
     map->SetTopRightMargin(overlay_buttons_active
-                           ? GetMapOverlayTopRightWidth(map->GetPosition())
+                           ? GetMapOverlayTopRightWidth(map_area)
                            : 0);
 
   /* Newly created overlay buttons are added after the map; keep the map
@@ -520,7 +565,17 @@ MainWindow::InitialiseConfigured()
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
   map->SetUIState(CommonInterface::GetUIState());
-  map->Create(*this, map_rect);
+  const PixelRect extended_map_rect = GetExtendedMapRect(map_rect);
+  map->Create(*this, extended_map_rect);
+
+  /* the map is created after the InfoBoxes, so it would be on top of
+     them; it must be at the bottom because it may be extended over
+     "invisible" InfoBox slots */
+  map->BringToBottom();
+
+  PixelRect map_overlay_rect = map_rect;
+  map_overlay_rect.Offset(-extended_map_rect.left, -extended_map_rect.top);
+  map->SetOverlayRect(map_overlay_rect);
 
   popup = new PopupMessage(*this, look->dialog, ui_settings);
   popup->Create(map_rect);
@@ -1365,9 +1420,13 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
   }
 #endif
 
+  /* not map->GetPosition(): that may be extended over "invisible"
+     InfoBoxes */
+  const PixelRect map_area = GetMapAreaRect();
+
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
-    PixelRect rc = map->GetPosition();
+    PixelRect rc = map_area;
     rc.bottom = rc.top;
     rc.top -= separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
@@ -1375,11 +1434,17 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
 
   if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between main area and bottom area */
-    PixelRect rc = map->GetPosition();
+    PixelRect rc = map_area;
     rc.top = rc.bottom;
     rc.bottom += separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
+
+  if (look != nullptr && (map == nullptr || !map->IsVisible()))
+    /* an "invisible" InfoBox slot shows the map window below it, but
+       this page has no map: give the slot the InfoBox background
+       colour, because no window would paint it at all */
+    InfoBoxManager::PaintInvisible(canvas, look->info_box);
 
   SingleWindow::OnPaint(canvas);
 }

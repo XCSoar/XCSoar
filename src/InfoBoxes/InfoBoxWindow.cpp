@@ -188,34 +188,16 @@ InfoBoxWindow::Paint(Canvas &canvas)
   PaintComment(canvas);
   PaintValue(canvas, background_color);
 
-  if (border_kind != 0) {
-    canvas.Select(look.border_pen);
-
-    const int width = canvas.GetWidth(),
-      height = canvas.GetHeight();
-
-    if (border_kind & BORDERTOP) {
-      canvas.DrawExactLine({0, 0}, {width - 1, 0});
-    }
-
-    if (border_kind & BORDERRIGHT) {
-      canvas.DrawExactLine({width - 1, 0}, {width - 1, height});
-    }
-
-    if (border_kind & BORDERBOTTOM) {
-      canvas.DrawExactLine({0, height - 1}, {width - 1, height - 1});
-    }
-
-    if (border_kind & BORDERLEFT) {
-      canvas.DrawExactLine({0, 0}, {0, height - 1});
-    }
-  }
+  DrawBorder(canvas, border_kind, look.border_pen);
 }
 
 void
 InfoBoxWindow::SetContentProvider(std::unique_ptr<InfoBoxContent> _content)
 {
   content = std::move(_content);
+  if (content)
+    content->SetSlot(id);
+
   ++content_serial;
 
   data.SetInvalid();
@@ -301,10 +283,27 @@ InfoBoxWindow::OnDestroy() noexcept
 }
 
 void
+InfoBoxWindow::SetBorderKind(unsigned _border_kind) noexcept
+{
+  if (_border_kind == border_kind)
+    return;
+
+  border_kind = _border_kind;
+  CalculateRects();
+  Invalidate();
+}
+
+void
 InfoBoxWindow::OnResize(PixelSize new_size) noexcept
 {
   PaintWindow::OnResize(new_size);
 
+  CalculateRects();
+}
+
+void
+InfoBoxWindow::CalculateRects() noexcept
+{
   PixelRect rc = GetClientRect();
 
   if (border_kind & BORDERLEFT)

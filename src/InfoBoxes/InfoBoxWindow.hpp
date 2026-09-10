@@ -21,7 +21,12 @@ class InfoBoxWindow : public LazyPaintWindow
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
 
-  const unsigned border_kind;
+  /**
+   * Which of the four edges this InfoBox draws itself.  Not const
+   * because it follows a neighbour becoming "invisible" (or visible
+   * again); see #InfoBoxManager::CalculateBorder().
+   */
+  unsigned border_kind;
 
   const unsigned id;
 
@@ -89,6 +94,12 @@ class InfoBoxWindow : public LazyPaintWindow
    */
   void Paint(Canvas &canvas);
 
+  /**
+   * Recalculate the title, value and comment rectangles from the
+   * current window size and border flags.
+   */
+  void CalculateRects() noexcept;
+
 public:
   void PaintInto(Canvas &dest, int xoff, int yoff,
                  unsigned width, unsigned height);
@@ -115,6 +126,13 @@ public:
   const InfoBoxLook &GetLook() const {
     return look;
   }
+
+  /**
+   * Change which edges this InfoBox draws; see #border_kind.  Used
+   * when it grows over a collapsed neighbour and takes over its outer
+   * edge, or when a neighbour becomes "invisible".
+   */
+  void SetBorderKind(unsigned _border_kind) noexcept;
 
   void SetContentProvider(std::unique_ptr<InfoBoxContent> _content);
 

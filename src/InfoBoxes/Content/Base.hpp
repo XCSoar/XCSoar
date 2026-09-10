@@ -10,7 +10,19 @@ class Canvas;
 
 class InfoBoxContent
 {
+  /**
+   * The index of the InfoBox this content is displayed in.
+   */
+  unsigned slot = 0;
+
 public:
+  /**
+   * Called by #InfoBoxWindow when the content is installed.
+   */
+  void SetSlot(unsigned _slot) noexcept {
+    slot = _slot;
+  }
+
   enum InfoBoxKeyCodes {
     ibkLeft = -2,
     ibkDown = -1,
@@ -28,4 +40,9 @@ public:
 
   [[gnu::pure]]
   virtual const InfoBoxPanel *GetDialogContent() noexcept;
+
+protected:
+  unsigned GetSlot() const noexcept {
+    return slot;
+  }
 };

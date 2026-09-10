@@ -395,3 +395,41 @@ configured terrain clearance altitude.}
 
 \ibi{Active radio frequency}{Act Freq}{Currently active radio frequency.}
 \ibi{Standby radio frequency}{Stby Freq}{Currently standby radio frequency.}
+
+%%%%%%%%%%%
+\section{Miscellaneous}
+
+\ibi{Release space}{Release}{Not displayed and claims no space of its own:
+the other InfoBoxes of the same line grow into the gap.  A line is a row in
+portrait and a column in landscape.  Use it for a line with fewer but wider
+InfoBoxes than the selected geometry provides, for example four InfoBoxes in a
+row of five, without switching to a different InfoBox geometry.}
+
+\ibi{Merge along line}{Merge}{This slot is merged into the preceding InfoBox of
+the same line.  That InfoBox then spans both and gets twice the space, which
+helps with long values such as waypoint names.  The preceding InfoBox is the
+one to the left in portrait and the one above in landscape.  Several of them in
+a row widen it further.  In the first slot of a line it behaves like Release
+space.}
+
+\ibi{Merge across lines}{Merge line}{This slot is merged into the InfoBox at the
+same position of the previous line.  That InfoBox then spans both and gets
+twice the height, which helps the graphical InfoBoxes such as Barogram or
+Horizon.  The previous line is the row above in portrait and the column to the
+left in landscape.  Several of them next to each other let a wide InfoBox grow
+over all of them, which gives a 2x2 block.  If the two do not line up exactly,
+or if there is no InfoBox to merge into, this behaves like Release space.}
+
+\ibi{Invisible}{Invisible}{This InfoBox is invisible: the map is extended over
+its slot and shows in its place.  A short tap on an invisible InfoBox acts on
+the map underneath; a long press opens the InfoBox selection list, so a
+different InfoBox can be assigned to that slot again.}
+
+\ibi{Custom text}{Text}{Title, value and comment of this InfoBox can be set by
+the pilot instead of being computed from flight data.  To edit them, assign
+this InfoBox in the InfoBox set editor, then tap it on the map and choose
+Setup.  That makes it useful as a label for an InfoBox page or as a visual
+separator between groups of InfoBoxes.  Leave a line empty to hide it.  The
+Shaded InfoBox border style, for example, draws a grey bar behind the title
+whenever the title is not empty, so a title consisting of a single space shows
+that bar without any text.}

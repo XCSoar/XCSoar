@@ -91,6 +91,23 @@ Version 7.46 - not yet released
     from ground speed and wind instead of an instrument
   - replace light green on Alternate MANUAL final glide with blue,
     matching Next waypoint
+  - add a Release space InfoBox which is not displayed and hands its
+    space to the other InfoBoxes of the same line, so a line can hold
+    fewer but wider InfoBoxes than the chosen geometry provides
+  - add a Merge along line InfoBox which is not displayed and lets the
+    InfoBox before it in the same line grow over its place, giving long
+    values such as waypoint names more room
+  - add a Merge across lines InfoBox which is not displayed and lets
+    the InfoBox of the previous line grow over its place, giving the
+    graphical InfoBoxes such as Barogram or Horizon twice the height
+  - add an Invisible InfoBox which is not drawn at all; the map is
+    extended over its slot and shows in its place, a short tap acts on
+    the map and a long press picks a different InfoBox for the slot
+  - add a Custom text InfoBox whose title, value and comment are set
+    by tapping it on the map, for labelling a page or as a separator
+    between groups of InfoBoxes #613
+  - fix the InfoBox border style only taking effect after the next
+    layout change, so the map kept showing the previous style
 * ui
   - Support manual UTC offsets up to +14:00 in 15-minute increments
   - Keep automatic UTC offsets synchronized with the operating-system

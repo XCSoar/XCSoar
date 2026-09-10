@@ -25,6 +25,8 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Format.cpp \
 	$(SRC)/InfoBoxes/Units.cpp \
 	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/InfoBoxes/Border.cpp \
+	$(SRC)/InfoBoxes/BorderWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxWindow.cpp \
 	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
@@ -36,7 +38,8 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Panel/SpeedSimulator.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCSetup.cpp \
-	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp
+	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp \
+	$(SRC)/InfoBoxes/Panel/CustomTextEdit.cpp
 
 LIBINFOBOX_DEPENDS = SCREEN
 

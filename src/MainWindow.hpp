@@ -291,6 +291,13 @@ private:
   PixelRect GetMapAreaRect() const noexcept;
 
   /**
+   * The rectangle the map window really occupies: @p map_area
+   * extended over all InfoBox slots configured "invisible".
+   */
+  [[gnu::pure]]
+  PixelRect GetExtendedMapRect(PixelRect map_area) const noexcept;
+
+  /**
    * Move top/bottom widgets and the map into the area returned by
    * #GetMapAreaRect().
    */
@@ -298,6 +305,15 @@ private:
 
   void UpdateMapOverlayButtonLayout() noexcept;
 
+public:
+  /**
+   * Re-run #LayoutMapArea() and the dependent layouts.  Called by
+   * #InfoBoxManager when the set of "invisible" InfoBoxes changes,
+   * because those slots are covered by the map window.
+   */
+  void RelayoutMapArea() noexcept;
+
+private:
   /**
    * Adjust the flarm radar position
    */

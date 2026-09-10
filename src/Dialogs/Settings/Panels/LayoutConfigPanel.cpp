@@ -222,6 +222,9 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     SaveValueInteger(InfoBoxTitleScale, ProfileKeys::InfoBoxTitleScale,
                   ui_settings.info_boxes.scale_title_font);
 
+  /* anything that requires the InfoBox windows to be created again */
+  bool info_box_layout_changed = info_box_geometry_changed;
+
   changed |= info_box_geometry_changed;
 
   changed |= SaveValueEnum(AppStatusMessageAlignment, ProfileKeys::AppStatusMessageAlignment,
@@ -234,8 +237,12 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(AppInfoBoxTheme, ProfileKeys::AppInfoBoxTheme,
                            ui_settings.info_boxes.theme);
 
-  changed |= SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
-                           ui_settings.info_boxes.border_style);
+  if (SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder,
+                    ui_settings.info_boxes.border_style))
+    /* the border flags of an InfoBox are calculated when its window
+       is created, and the "Tab" style suppresses them altogether;
+       without new windows the map would keep showing the old style */
+    info_box_layout_changed = changed = true;
 
   bool overlay_buttons_changed = false;
   if (SaveValue(ShowMenuButton, ProfileKeys::ShowMenuButton,
@@ -253,7 +260,7 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
 
-  if (info_box_geometry_changed)
+  if (info_box_layout_changed)
     CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;

@@ -78,6 +78,7 @@ TEST_NAMES = \
 	test_pressure \
 	test_task \
 	TestInputTransformMode \
+	TestInfoBoxLayout \
 	TestOverwritingRingBuffer \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPolylineDecoder \
@@ -410,8 +411,10 @@ TEST_WRAP_CLOCK_DEPENDS = MATH TIME
 $(eval $(call link-program,TestWrapClock,TEST_WRAP_CLOCK))
 
 TEST_PROFILE_SOURCES = \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/WeatherProfile.cpp \
@@ -571,6 +574,15 @@ TEST_MATH_TABLES_SOURCES = \
 	$(TEST_SRC_DIR)/TestMathTables.cpp
 TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
+
+TEST_INFOBOX_LAYOUT_SOURCES = \
+	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/TestInfoBoxLayout.cpp
+TEST_INFOBOX_LAYOUT_DEPENDS = UTIL
+$(eval $(call link-program,TestInfoBoxLayout,TEST_INFOBOX_LAYOUT))
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

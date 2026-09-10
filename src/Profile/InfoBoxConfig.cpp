@@ -7,7 +7,9 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/StringFormat.hpp"
 
+#include <cstddef>
 #include <cstring>
+#include <string_view>
 
 using namespace InfoBoxFactory;
 
@@ -32,6 +34,56 @@ GetV60InfoBoxManagerConfig(const ProfileMap &map, InfoBoxSettings &settings)
       settings.panels[3].contents[i] = (Type)((temp >> 24) & 0xFF);
     }
   }
+}
+
+/**
+ * The three lines of a custom text InfoBox share one profile value,
+ * separated by #InfoBoxCustomText::SEPARATOR.  A missing separator
+ * leaves the remaining lines empty.
+ */
+static void
+ParseCustomText(const char *src, InfoBoxCustomText &text) noexcept
+{
+  text.Clear();
+
+  if (src == nullptr)
+    return;
+
+  std::string_view rest{src};
+
+  for (auto *field : {&text.title, &text.value, &text.comment}) {
+    const auto separator = rest.find(InfoBoxCustomText::SEPARATOR);
+
+    field->assign(separator == rest.npos
+                  ? rest
+                  : rest.substr(0, separator));
+    field->CropIncompleteUTF8();
+
+    if (separator == rest.npos)
+      return;
+
+    rest = rest.substr(separator + 1);
+  }
+}
+
+/**
+ * The inverse of ParseCustomText(); an empty text becomes an empty
+ * value, so that the profile of everybody who does not use this
+ * InfoBox stays as it was.
+ */
+static void
+FormatCustomText(const InfoBoxCustomText &text,
+                 char *buffer, std::size_t size) noexcept
+{
+  if (text.IsEmpty()) {
+    *buffer = '\0';
+    return;
+  }
+
+  StringFormat(buffer, size, "%s%c%s%c%s",
+               text.title.c_str(), InfoBoxCustomText::SEPARATOR,
+               text.value.c_str(), InfoBoxCustomText::SEPARATOR,
+               text.comment.c_str());
 }
 
 static bool
@@ -152,6 +204,13 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
         continue;
 
       GetIBType(map, profileKey, panel.contents[j]);
+
+      const int t = StringFormat(profileKey, sizeof(profileKey),
+                                 "InfoBoxPanel%uText%u", i, j);
+      if (t < 0 || static_cast<size_t>(t) >= sizeof(profileKey))
+        continue;
+
+      ParseCustomText(map.Get(profileKey), panel.text[j]);
     }
   }
 }
@@ -172,5 +231,16 @@ Profile::Save(ProfileMap &map,
     const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", index, j);
     if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
       map.Set(profileKey, panel.contents[j]);
+
+    const int t = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uText%u", index, j);
+    if (t < 0 || static_cast<size_t>(t) >= sizeof(profileKey))
+      continue;
+
+    char buffer[3 * InfoBoxCustomText::MAX_LENGTH + 3];
+    FormatCustomText(panel.text[j], buffer, sizeof(buffer));
+
+    /* do not add an empty value, but do overwrite one that exists */
+    if (buffer[0] != '\0' || map.Exists(profileKey))
+      map.Set(profileKey, buffer);
   }
 }

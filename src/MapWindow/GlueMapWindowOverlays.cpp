@@ -86,7 +86,8 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const noexcept
 }
 
 void
-GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
+GlueMapWindow::DrawPanInfo(Canvas &canvas,
+                           const PixelRect &rc) const noexcept
 {
   if (!render_projection.IsValid())
     return;
@@ -102,7 +103,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 
   unsigned padding = Layout::FastScale(4);
   unsigned height = font.GetHeight();
-  PixelPoint p(render_projection.GetScreenSize().width - padding, padding);
+  PixelPoint p(rc.right - (int)padding, rc.top + (int)padding);
 
   if (compass_visible)
     /* don't obscure the north arrow */
@@ -116,8 +117,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
       elevation_long.Format("%s: %s", _("Elevation"),
                             FormatUserAltitude(elevation.GetValue()).c_str());
 
-      TextInBox(canvas, elevation_long, p, mode,
-                render_projection.GetScreenSize());
+      TextInBox(canvas, elevation_long, p, mode, rc);
 
       p.y += height;
     }
@@ -132,7 +132,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
     if (newline != nullptr)
       *newline = '\0';
 
-    TextInBox(canvas, start, p, mode, render_projection.GetScreenSize());
+    TextInBox(canvas, start, p, mode, rc);
 
     p.y += height;
 
@@ -155,8 +155,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
       else
         rasp_line.Format("%s: %s", label, value.c_str());
 
-      TextInBox(canvas, rasp_line, p, mode,
-                render_projection.GetScreenSize());
+      TextInBox(canvas, rasp_line, p, mode, rc);
 
       p.y += height;
     }
@@ -418,7 +417,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
     mode.shape = LabelShape::OUTLINED;
 
-    TextInBox(canvas, buffer, {0, scale_pos.bottom - height}, mode, rc, nullptr);
+    TextInBox(canvas, buffer, {rc.left, scale_pos.bottom - height}, mode, rc,
+              nullptr);
   }
 }
 

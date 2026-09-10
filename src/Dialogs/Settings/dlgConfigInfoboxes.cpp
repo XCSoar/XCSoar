@@ -331,6 +331,7 @@ InfoBoxesConfigWidget::OnPaste()
       continue;
 
     data.contents[item] = content;
+    data.text[item] = clipboard.text[item];
 
     if (item < previews.size())
       previews[item].Invalidate();

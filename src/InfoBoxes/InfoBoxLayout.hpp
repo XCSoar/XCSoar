@@ -18,6 +18,17 @@ struct Layout {
   unsigned count;
   PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
 
+  /**
+   * The border flags (see #BorderKind_t) of each InfoBox.
+   */
+  int borders[InfoBoxSettings::Panel::MAX_CONTENTS];
+
+  /**
+   * Is this InfoBox displayed at all?  ApplyContents() clears this
+   * for InfoBoxes which have released their space.
+   */
+  bool visible[InfoBoxSettings::Panel::MAX_CONTENTS];
+
   PixelRect vario;
 
   PixelRect remaining;
@@ -40,5 +51,15 @@ Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
 int
 GetBorder(InfoBoxSettings::Geometry geometry, bool landscape,
           unsigned i) noexcept;
+
+/**
+ * Redistribute the InfoBox positions of the given layout according to
+ * the contents of the given panel.  An InfoBox which claims no space
+ * of its own (#InfoBoxFactory::e_ReleaseSpace) becomes invisible, and the
+ * remaining InfoBoxes of the same row (or column) grow into the gap.
+ */
+void
+ApplyContents(Layout &layout,
+              const InfoBoxSettings::Panel &panel) noexcept;
 
 } // namespace InfoBoxLayout
