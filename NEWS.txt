@@ -1,4 +1,7 @@
 Version 7.45.2 - not yet released
+* dialogs
+  - fix crash when moving the keyboard focus on the waypoint picture
+    page or in the flugwetter.de image view
 * documentation
   - describe the T Next Leg InfoBox and how to use it at a turn
 
