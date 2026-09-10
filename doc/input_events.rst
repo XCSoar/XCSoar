@@ -250,6 +250,10 @@ Event list
    - Controls waypoint advance trigger arming. Possible arguments:
      ``on`` (arm), ``off`` (disarm), ``toggle``, ``show``
      (display current state).
+ * - ``ArrangeInfoBoxes``
+   - Opens the InfoBox arrange mode, which edits the InfoBox set of
+     the page currently shown: an InfoBox can be dragged to another
+     slot or moved there with the cursor keys.
  * - ``AudioDeadband``
    - Adjusts the audio deadband of internal vario sounds. Possible
      arguments: ``+`` (increase deadband), ``-`` (decrease

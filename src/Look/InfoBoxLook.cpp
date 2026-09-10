@@ -31,6 +31,10 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     : Color(0xe0, 0xe0, 0xe0);
   focused_background_color = COLOR_XCSOAR_LIGHT;
   pressed_background_color = COLOR_YELLOW;
+  /* the arrange backdrop is the opposite of the InfoBox background,
+     so that the InfoBox cards stand out on it */
+  preview_backdrop_color = inverse ? COLOR_WHITE : COLOR_BLACK;
+  preview_active_color = COLOR_XCSOAR;
 
   if (inverse) {
     focused_background_color = DarkColor(focused_background_color);
@@ -57,6 +61,11 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 
   Color border_color = COLOR_GRAY;
   border_pen.Create(border_width, border_color);
+
+  preview_padding = Layout::Scale(4);
+  preview_radius = Layout::Scale(6);
+  preview_focus_width = Layout::ScaleFinePenWidth(3);
+
   unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), value.fg_color);
 
   FontDescription title_font_d(8);
@@ -65,6 +74,9 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 
   title_font.Load(title_font_d);
   title_font_bold.Load(title_font_d.WithBold(true));
+
+  preview_number_font.Load(FontDescription(std::max(title_font_d.GetHeight()
+                                                    * 2u / 3u, 7u)));
 
   FontDescription value_font_d(10, true);
   AutoSizeFont(value_font_d, width, "1234m");

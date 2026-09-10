@@ -19,6 +19,15 @@ struct InfoBoxLook {
   Color background_color, focused_background_color, pressed_background_color;
 
   /**
+   * The simplified InfoBox cards shown while the InfoBoxes are being
+   * arrangeed (see #InfoBoxArrange).  #preview_backdrop_color covers
+   * the whole screen, #preview_active_color fills the card which
+   * follows the finger.
+   */
+  Color preview_backdrop_color, preview_active_color;
+  unsigned preview_padding, preview_radius, preview_focus_width;
+
+  /**
    * Used only by #InfoBoxSettings::BorderStyle::SHADED.
    */
   Color caption_background_color;
@@ -38,6 +47,9 @@ struct InfoBoxLook {
 
   Font title_font;
   Font title_font_bold;
+
+  /** the small font for the slot number in the arrange preview */
+  Font preview_number_font;
 
   Color colors[6];
 

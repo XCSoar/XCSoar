@@ -1690,6 +1690,14 @@ event=Mode weather
 label=Forecast\nControls
 location=45
 
+mode=RemoteStick
+type=key
+data=0
+event=ArrangeInfoBoxes
+event=Mode default
+label=Arrange\nInfoBoxes
+location=46
+
 # -------------
 # Define gesture to open Quickmenu without keyboard or remote
 # ("Draw a button on the screen")

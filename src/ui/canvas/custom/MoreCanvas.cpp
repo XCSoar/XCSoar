@@ -168,11 +168,12 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
       }
     }
 
-    if (prev_p) {
+    if (prev_p)
+      /* keep wrapping the rest of the text even though it does not
+         fit; the loop below stops at the bottom of the rectangle, but
+         a line which was never wrapped would be drawn across the whole
+         canvas */
       lines++;
-      if (lines >= max_lines)
-        break;
-    }
   }
 
   if (format & DT_CALCRECT) {

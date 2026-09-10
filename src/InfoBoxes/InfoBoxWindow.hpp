@@ -48,9 +48,13 @@ class InfoBoxWindow : public LazyPaintWindow
 
   /**
    * Track whether a long press is pending (timer hasn't fired yet).
-   * Used to distinguish between long press (show picker) and short press (show dialog).
+   * Used to distinguish between long press (start arranging) and
+   * short press (show dialog).
    */
   bool long_press_pending = false;
+
+  /** the position of the press which #dialog_timer is watching */
+  PixelPoint press_point{0, 0};
 
   /** a timer which returns keyboard focus back to the map window after a while */
   UI::Timer focus_timer{[this]{ FocusParent(); }};

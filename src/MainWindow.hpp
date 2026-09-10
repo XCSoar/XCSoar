@@ -165,14 +165,15 @@ private:
 #else
   /**
    * Number of frames which must still be repainted with a cleared
-   * background to erase a gesture trail which the #GlueMapWindow has
-   * painted outside its own rectangle.  Sized from the swap-chain
-   * depth so every presentation buffer gets a clean frame.
+   * background to erase what the #GlueMapWindow (gesture trail) or
+   * the InfoBox arrange overlay (dragged InfoBox) has painted outside
+   * its own rectangle.  Sized from the swap-chain depth so every
+   * presentation buffer gets a clean frame.
    *
    * @see OnPaint()
    * @see TopWindow::GetPresentationBufferCount()
    */
-  unsigned clear_gesture_frames = 0;
+  unsigned clear_trail_frames = 0;
 #endif
 
   bool restore_page_pending = false;

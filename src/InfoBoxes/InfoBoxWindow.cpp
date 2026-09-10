@@ -14,12 +14,20 @@
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Asset.hpp"
 
 #include <algorithm>
 
 /** timeout of infobox focus */
 static constexpr std::chrono::steady_clock::duration FOCUS_TIMEOUT_MAX = std::chrono::seconds(20);
+
+/**
+ * How long the InfoBox has to be pressed before the arrange mode
+ * starts.  This is long enough to not get in the way of a tap, but
+ * short enough to stay comfortable.
+ */
+static constexpr auto REORDER_DELAY = std::chrono::milliseconds(600);
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
@@ -376,7 +384,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 bool
-InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
+InfoBoxWindow::OnMouseDown(PixelPoint p) noexcept
 {
   dialog_timer.Cancel();
 
@@ -387,8 +395,9 @@ InfoBoxWindow::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
     pressed = true;
     Invalidate();
 
+    press_point = p;
     long_press_pending = true;
-    dialog_timer.Schedule(std::chrono::seconds(1));
+    dialog_timer.Schedule(REORDER_DELAY);
   }
 
   return true;
@@ -408,19 +417,17 @@ InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 
     ReleaseCapture();
 
-    if (was_pressed) {
-      if (long_press_pending) {
-        long_press_pending = false;
-        
-        InfoBoxManager::ClearFocusExcept(id);
-        SetFocus();
+    if (was_pressed && long_press_pending) {
+      long_press_pending = false;
 
-        const bool click_handled = content != nullptr && content->HandleClick();
+      InfoBoxManager::ClearFocusExcept(id);
+      SetFocus();
 
-        if (!click_handled && GetDialogContent() != nullptr)
-          /* delay the dialog opening to prevent double click detection */
-          dialog_timer.Schedule(std::chrono::milliseconds(300));
-      }
+      const bool click_handled = content != nullptr && content->HandleClick();
+
+      if (!click_handled && GetDialogContent() != nullptr)
+        /* delay the dialog opening to prevent double click detection */
+        dialog_timer.Schedule(std::chrono::milliseconds(300));
     }
 
     return true;
@@ -497,20 +504,17 @@ InfoBoxWindow::OnKillFocus() noexcept
 void
 InfoBoxWindow::OnDialogTimer() noexcept
 {
-  if (long_press_pending) {
-    long_press_pending = false;
-    
-    dragging = pressed = false;
-    Invalidate();
-    ReleaseCapture();
-    
-    InfoBoxManager::ShowInfoBoxPicker(id);
-  } else {
-    dragging = pressed = false;
-    Invalidate();
-    ReleaseCapture();
-    
-    if (GetDialogContent() != nullptr)
-      ShowDialog();
-  }
+  const bool long_press = long_press_pending;
+  long_press_pending = false;
+
+  dragging = pressed = false;
+  Invalidate();
+  ReleaseCapture();
+
+  if (long_press)
+    /* the arrange overlay takes over the gesture which is still in
+       progress */
+    InfoBoxArrange::Begin(id, ToParentCoordinates(press_point));
+  else if (GetDialogContent() != nullptr)
+    ShowDialog();
 }

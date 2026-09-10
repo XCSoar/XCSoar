@@ -57,6 +57,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Projection/MapWindowProjection.hpp"
 #include "Audio/Sound.hpp"
 #include "UIActions.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
@@ -786,6 +787,12 @@ void
 InputEvents::eventQuickMenu([[maybe_unused]] const char *misc)
 {
  dlgQuickMenuShowModal(*CommonInterface::main_window);
+}
+
+void
+InputEvents::eventArrangeInfoBoxes([[maybe_unused]] const char *misc)
+{
+  InfoBoxArrange::Begin();
 }
 
 void

@@ -84,6 +84,12 @@ Version 7.46 - not yet released
   - let Left/Right still change settings pages on Services until Up
     selects a service action
 * infoboxen
+  - rearrange the InfoBoxes of a page by dragging one onto another;
+    a long press or the Quick Menu opens that mode, and the cursor
+    keys and a remote stick do the same
+  - compose the InfoBox sets in the configuration with the same view:
+    every InfoBox is a card which can be moved around, and Copy and
+    Paste stand next to its other buttons
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
     boxes toward square at 150%
@@ -115,6 +121,8 @@ Version 7.46 - not yet released
 * documentation
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox and how to use it at a turn
+  - describe how to rearrange the InfoBoxes, and correct how the
+    InfoBox dialogue is opened
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - documentation: document the release and post-release version workflow
