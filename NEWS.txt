@@ -116,6 +116,9 @@ Version 7.46 - not yet released
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+  - build system: add DEBUG_ALL_MAP_OVERLAYS=y make option to force
+    GlueMapWindow HUD overlays on with placeholder data for layout
+    testing
 
 Version 7.45 - 2026-08-15
 * highlights

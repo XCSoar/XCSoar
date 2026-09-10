@@ -738,7 +738,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
   MapWindow::OnPaintBuffer(canvas);
 
   DrawMapScale(canvas, GetClientRect(), render_projection);
-  if (IsPanChromeVisible())
+  if (IsPanChromeVisible() || DEBUG_ALL_MAP_OVERLAYS)
     DrawPanInfo(canvas);
 
 #ifdef ENABLE_OPENGL
@@ -782,9 +782,9 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   MapWindow::Render(canvas, rc);
 
-  if (IsNearSelf()) {
+  if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {
     draw_sw.Mark("DrawGlueMisc");
-    if (GetMapSettings().show_thermal_profile)
+    if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);
     DrawFlightMode(canvas, rc);

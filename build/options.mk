@@ -42,6 +42,12 @@ ifeq ($(DRAW_REDRAW_COUNTER),y)
   TARGET_CPPFLAGS += -DDRAW_REDRAW_COUNTER
 endif
 
+# Force every map overlay on with placeholder data (HUD layout debug)?
+DEBUG_ALL_MAP_OVERLAYS ?= n
+ifeq ($(DEBUG_ALL_MAP_OVERLAYS),y)
+  TARGET_CPPFLAGS += -DDEBUG_ALL_MAP_OVERLAYS=1
+endif
+
 # compile without UI?
 HEADLESS ?= n
 
