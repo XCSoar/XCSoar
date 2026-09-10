@@ -90,6 +90,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
+	TestPCMetGeoreference \
 	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -610,6 +611,13 @@ TEST_GEO_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/TestGeoBounds.cpp
 TEST_GEO_BOUNDS_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
+
+TEST_PCMET_GEOREFERENCE_SOURCES = \
+	$(SRC)/Weather/PCMet/Georeference.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPCMetGeoreference.cpp
+TEST_PCMET_GEOREFERENCE_DEPENDS = GEO MATH
+$(eval $(call link-program,TestPCMetGeoreference,TEST_PCMET_GEOREFERENCE))
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
