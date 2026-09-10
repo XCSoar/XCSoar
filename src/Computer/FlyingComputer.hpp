@@ -17,6 +17,15 @@ struct FlyingState;
  * Detect takeoff and landing.
  */
 class FlyingComputer {
+  class ClimbEvidence {
+    StateClock<20, 5> clock;
+    double previous_altitude;
+
+  public:
+    void Reset(double altitude=0) noexcept;
+    bool Update(FloatDuration dt, double altitude) noexcept;
+  };
+
   DeltaTime delta_time;
 
   /**
@@ -29,14 +38,8 @@ class FlyingComputer {
    */
   StateClock<30, 5> moving_clock;
 
-  /**
-   * Tracks the duration the aircraft has been climbing.  If the
-   * aircraft has been climbing for a certain amount of time, it is
-   * assumed that it is still flying, even if the ground speed is
-   * small (for example, when flying in a wave without airspeed
-   * input).
-   */
-  StateClock<20, 5> climbing_clock;
+  /** Rising evidence used to reject a landing at low speed. */
+  ClimbEvidence climbing;
 
   /**
    * If the aircraft is currenly assumed to be moving, then this
@@ -79,8 +82,6 @@ class FlyingComputer {
   TimeStamp unpowered_since;
   GeoPoint unpowered_at;
 
-  double climbing_altitude;
-
   TimeStamp sinking_since;
 
   GeoPoint sinking_location;
@@ -118,16 +119,6 @@ public:
 protected:
   void CheckRelease(FlyingState &state, TimeStamp time, const GeoPoint &location,
                     double altitude);
-
-  /**
-   * Check for monotonic climb.  This check is used for "flying"
-   * detection in a wave, when ground speed is low, no airspeed is
-   * available and no map was loaded.
-   *
-   * @return true if the aircraft has been climbing for more than 10
-   * seconds
-   */
-  bool CheckClimbing(FloatDuration dt, double altitude) noexcept;
 
   /**
    * Check for powered flight.
