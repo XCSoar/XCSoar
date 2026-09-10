@@ -45,8 +45,8 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const noexcept
       return GeoVector::Zero();
 
     // this leg totally included
-    return memo_travelled.calc(GetOrigin()->GetLocationMin(),
-                               destination.GetLocationMin());
+    return memo_travelled.calc(GetOrigin()->GetLocationScored(),
+                               destination.GetLocationScored());
 
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
@@ -57,12 +57,12 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const noexcept
                        : Angle::Zero());
 
     if (destination.HasEntered())
-      return memo_travelled.calc(GetOrigin()->GetLocationMin(),
-                                 destination.GetLocationMin());
+      return memo_travelled.calc(GetOrigin()->GetLocationScored(),
+                                 destination.GetLocationScored());
     else if (!ref.IsValid())
       return GeoVector::Zero();
     else
-      return memo_travelled.calc(GetOrigin()->GetLocationMin(), ref);
+      return memo_travelled.calc(GetOrigin()->GetLocationScored(), ref);
 
   case OrderedTaskPoint::AFTER_ACTIVE:
     if (!GetOrigin())
@@ -70,10 +70,10 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const noexcept
 
     // this leg may be partially included
     if (GetOrigin()->HasEntered())
-      return memo_travelled.calc(GetOrigin()->GetLocationMin(),
+      return memo_travelled.calc(GetOrigin()->GetLocationScored(),
                                  ref.IsValid()
                                  ? ref
-                                 : destination.GetLocationMin());
+                                 : destination.GetLocationScored());
 
     return GeoVector::Zero();
   }
