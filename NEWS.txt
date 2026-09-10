@@ -14,6 +14,7 @@ Version 7.45.2 - not yet released
 * weather
   - fix UK XC Therm forecast overlays (met-ukv model and layer
     catalog) #3029
+  - fix XC Therm polygons disappearing when the map is not north-up
 * airspace
   - fix repetitive airspace warning sound only playing once instead
     of repeating while inside or near airspace #3016
@@ -26,6 +27,8 @@ Version 7.45.2 - not yet released
   - fix T Next Leg equivalent thermal with a headwind or tailwind
 * devices
   - fix crash when opening the port monitor
+  - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too
+    low #3055
 * ui
   - support manual UTC offsets up to +14:00 in 15-minute increments
   - keep automatic UTC offsets synchronized with the operating-system
@@ -48,6 +51,11 @@ Version 7.45.2 - not yet released
 * dialogs
   - fix crash when moving the keyboard focus on the waypoint picture
     page or in the flugwetter.de image view
+  - fix NOTAM details text being truncated and unable to scroll #2943
+  - keep the Wi-Fi connection state visible when the network name is
+    long
+  - let Left/Right still change settings pages on Services until Up
+    selects a service action
 * documentation
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox and how to use it at a turn
@@ -119,7 +127,6 @@ Version 7.45.1 - 2026-08-28
   - skip estimated TAS from ground speed and wind when GPS track is
     missing
 * devices
-  - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too low #3055
   - fix the map ground track line following heading instead of ground
     track with Condor 3 UDP in a crosswind #2900
   - fix the Devices Debug button not writing port traffic to xcsoar.log
@@ -128,7 +135,6 @@ Version 7.45.1 - 2026-08-28
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
 * dialogs
-  - fix NOTAM details text being truncated and unable to scroll #2943
   - put the Close button on the right of the Status and Weather
     tab strips
   - label Close on the Quick Menu, BlueFly setup, and file Download
@@ -142,10 +148,6 @@ Version 7.45.1 - 2026-08-28
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
-  - keep the Wi-Fi connection state visible when the network name is
-    long
-  - let Left/Right still change settings pages on Services until Up
-    selects a service action
 * infoboxen
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
