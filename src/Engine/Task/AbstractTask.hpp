@@ -296,11 +296,15 @@ protected:
 
   /**
    * Calculate achieved task distance:
-   *   total planned task distance minus task distance remaining
+   *   total planned task distance minus task distance remaining.
+   * Ordered tasks also refresh per-leg travelled vectors used by
+   * the travelled glide solution.
+   *
+   * @param ref Location of aircraft
    *
    * @return Distance (m) achieved
    */
-  virtual double ScanDistanceTravelled() noexcept = 0;
+  virtual double ScanDistanceTravelled(const GeoPoint &ref) noexcept = 0;
 
   /**
    * Calculate maximum and minimum distances for task, achievable

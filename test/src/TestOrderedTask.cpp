@@ -201,6 +201,14 @@ CheckTravelledDistance(const TaskStats &stats)
 }
 
 static void
+CheckCurrentLegTravelled(const TaskStats &stats)
+{
+  ok1(stats.current_leg.travelled.IsDefined());
+  ok1(stats.current_leg.travelled.GetDistance() > 1000);
+  ok1(stats.current_leg.travelled.GetSpeed() > 0);
+}
+
+static void
 CheckLegEqualsTotal(const GlideResult &leg, const GlideResult &total)
 {
   ok1(total.IsOk());
@@ -477,6 +485,7 @@ TestTravelledDistance()
                                              FloatDuration{3780});
     task.Update(state_now, state_last, glide_polar);
     CheckTravelledDistance(task.GetStats());
+    CheckCurrentLegTravelled(task.GetStats());
   }
 
   {
@@ -505,6 +514,7 @@ TestTravelledDistance()
                                              FloatDuration{3780});
     task.Update(state_now, state_last, glide_polar);
     CheckTravelledDistance(task.GetStats());
+    CheckCurrentLegTravelled(task.GetStats());
   }
 }
 
@@ -522,7 +532,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746);
+  plan_tests(746 + 6);
 
   task_behaviour.SetDefaults();
 
