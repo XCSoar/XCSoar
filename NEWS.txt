@@ -102,6 +102,7 @@ Version 7.46 - not yet released
     binary mode if the logger dropped it while the flight list was
     open #3049
 * glide computer
+  - recognise slow launches in imported IGC files from sustained height gain
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft

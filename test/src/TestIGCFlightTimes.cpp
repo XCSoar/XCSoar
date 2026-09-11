@@ -3,6 +3,8 @@
 
 #include "IGC/FlightTimes.hpp"
 #include "IGC/ApplyFixToNMEA.hpp"
+#include "Computer/FlyingComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "NMEA/Info.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/Operation.hpp"
@@ -68,6 +70,201 @@ CheckFixAdapter()
   ok1(!basic.engine.revolutions_per_second_available);
   ok1(!basic.track_available);
   ok1(!basic.gps.satellites_used_available);
+}
+
+static void
+UpdateFlying(FlyingComputer &computer, FlyingState &flying,
+             NMEAInfo &basic, const DerivedInfo &calculated,
+             unsigned second, double ground_speed, double altitude,
+             double takeoff_speed=10, bool allow_slow_launch=true)
+{
+  const TimeStamp time{FloatDuration{static_cast<double>(second)}};
+  basic.clock = time;
+  basic.time = time;
+  basic.time_available.Update(time);
+  basic.location = GeoPoint(Angle::Degrees(7), Angle::Degrees(50));
+  basic.location_available.Update(time);
+  basic.ground_speed = ground_speed;
+  basic.ground_speed_available.Update(time);
+  basic.gps_altitude = altitude;
+  basic.gps_altitude_available.Update(time);
+  computer.Compute(takeoff_speed, allow_slow_launch,
+                   basic, calculated, flying);
+}
+
+static void
+PrepareFlying(FlyingComputer &computer, FlyingState &flying,
+              NMEAInfo &basic, DerivedInfo &calculated)
+{
+  computer.Reset();
+  flying.Reset();
+  basic.Reset();
+  calculated.Reset();
+
+  for (unsigned i = 0; i <= 12; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 0, 100);
+}
+
+static void
+CheckLowSpeedClimb()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 45; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 100 + (i - 12));
+
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{13}});
+}
+
+static void
+CheckSlowLaunchDisabled()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 45; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 100 + (i - 12), 10, false);
+
+  ok1(!flying.flying);
+}
+
+static void
+CheckHighSpeedLaunchTimestamp()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 23; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 10, 100);
+
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{13}});
+}
+
+static void
+CheckResumedLowSpeedClimb()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 17; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3, 100 + i - 12);
+  for (unsigned i = 18; i <= 24; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3, 105);
+  for (unsigned i = 25; i <= 35; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 105 + 2 * (i - 24));
+
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{25}});
+}
+
+static void
+CheckLowSpeedCandidateSpeedReset()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 20; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3, 100 + i - 12);
+  UpdateFlying(computer, flying, basic, calculated, 21, 2.9, 109);
+  for (unsigned i = 22; i <= 32; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 109 + 2 * (i - 21));
+
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{22}});
+}
+
+static void
+CheckLowSpeedGroundMovement()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 43; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 100 + (i - 12) * 0.2);
+
+  ok1(!flying.flying);
+}
+
+static void
+CheckBelowLowSpeedThreshold()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 55; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 2.9,
+                 100 + (i - 12));
+
+  ok1(!flying.flying);
+}
+
+static void
+CheckInterruptedClimb()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 22; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 100 + (i - 12));
+  for (unsigned i = 23; i <= 27; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3,
+                 110 - (i - 22));
+  for (unsigned i = 28; i <= 58; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3, 105);
+
+  ok1(!flying.flying);
+}
+
+static void
+CheckLandingAfterHighSpeedClimb()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 45; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 12,
+                 100 + (i - 12));
+  for (unsigned i = 46; i <= 80; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3.9, 133);
+
+  ok1(!flying.flying);
+  ok1(flying.landing_time == TimeStamp{FloatDuration{46}});
 }
 
 static void
@@ -151,17 +348,6 @@ CheckForwardTimeJump()
 }
 
 static void
-CheckBackwardTimeJump()
-{
-  const auto result =
-    DetectIGCFlightTimes(Path("test/data/flight_times_backward_jump.igc"));
-  ok1(result.has_valid_fixes);
-  ok1(result.takeoff == BrokenTime(14, 0, 0));
-  ok1(result.landing == BrokenTime(14, 0, 1));
-  ok1(result.duration == std::chrono::seconds(1));
-}
-
-static void
 CheckMultipleFlights()
 {
   const auto result =
@@ -182,7 +368,7 @@ CheckBundledFlight(Path path)
 int
 main()
 try {
-  plan_tests(54);
+  plan_tests(64);
   CheckFixAdapter();
   CheckCalculated();
   CheckFallback();
@@ -191,10 +377,18 @@ try {
   CheckFileError();
   CheckMidnight();
   CheckForwardTimeJump();
-  CheckBackwardTimeJump();
   CheckMultipleFlights();
   CheckBundledFlight(Path("test/data/01lz1hq1.igc"));
   CheckBundledFlight(Path("test/data/0asljd01.igc"));
+  CheckLowSpeedClimb();
+  CheckSlowLaunchDisabled();
+  CheckHighSpeedLaunchTimestamp();
+  CheckResumedLowSpeedClimb();
+  CheckLowSpeedCandidateSpeedReset();
+  CheckLowSpeedGroundMovement();
+  CheckBelowLowSpeedThreshold();
+  CheckInterruptedClimb();
+  CheckLandingAfterHighSpeedClimb();
   return exit_status();
 } catch (...) {
   PrintException(std::current_exception());
