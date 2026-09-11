@@ -631,12 +631,16 @@ ifeq ($(HAVE_WIN32),y)
 endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
+$(call SRC_TO_OBJ,$(SRC)/Weather/OPERA/Radar.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
 
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
-	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp
+	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp \
+	$(SRC)/Weather/OPERA/Radar.cpp \
+	$(SRC)/Weather/OPERA/RadarData.cpp \
+	$(SRC)/Weather/OPERA/RadarPageOverlay.cpp
 endif
 endif
 
