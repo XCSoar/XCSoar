@@ -146,7 +146,6 @@ Version 7.46 - not yet released
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
 * development
-  - tests: add TAP TestLayout for Screen/Layout DPI and scale math #3083
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132
