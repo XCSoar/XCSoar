@@ -8,6 +8,19 @@ const repo = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 export default defineNuxtConfig({
     devtools: false,
     extends: ['docus'],
+    app: {
+        head: {
+            script: [
+                {
+                    // Static hosts redirect "/manual/preface" to
+                    // "/manual/preface/", but the page was prerendered
+                    // without the slash. Drop it before Nuxt boots so the
+                    // prerendered payload is reused on hydration.
+                    innerHTML: "if (location.pathname.length > 1 && location.pathname.endsWith('/')) history.replaceState(null, '', location.pathname.replace(/\\/+$/, '') + location.search + location.hash)",
+                },
+            ],
+        },
+    },
     image: {
         // Figures come from nitro publicAssets outside docs/public, which the
         // IPX optimizer cannot read. Serve image URLs unchanged instead.
