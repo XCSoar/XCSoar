@@ -655,6 +655,157 @@ EDL imagery as a map overlay and does not expose additional model
 parameters beyond the forecast hour and the fixed isobar levels
 published by the EDL service.
 
+\section{Rain radar}\label{sec:rain-radar}
+
+XCSoar can draw the European weather radar composite on the map.  The
+data comes from EUMETNET's OPERA programme, is published under CC~BY
+4.0 and needs no account and no subscription.
+
+The layer is listed as \emph{Radar (EUMETNET OPERA)} on the
+``Overlay'' page of the
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} \bmenug{Info} menu.
+Select it and press \bmenug{Use}; \bmenug{Disable} switches it off
+again.
+
+Selecting it draws the part of the newest composite covering the area
+the map is currently showing, so pan and zoom the map first and select
+the layer afterwards.  \bmenug{Update} fetches a fresh image for the
+area now visible.  A new composite is published every five minutes.
+
+A map page can also carry the radar permanently: set \emph{Map
+overlay} to \emph{Rain radar} in
+\config{screenpages}.  The picture is then fetched
+in the background whenever the page is shown, without a progress
+dialog interrupting the flight.
+
+It arrives in pieces, nearest first.  XCSoar divides the area around
+the aircraft into a block of tiles and fetches them in rings growing
+outwards from underneath the glider, so on a slow or intermittent
+connection the weather you are flying into is drawn before the
+distant weather is.  Each tile stays on the map on its own: flying on
+fetches only the tiles that come into range, and panning or zooming
+keeps whatever still fits.
+
+This is also what keeps the feature affordable.  The composite is one
+file of about five megabytes covering the continent, but it is
+tiled and carries a pyramid of reduced-resolution copies, and the
+server serves byte ranges, so XCSoar reads its index and then only
+those tiles it actually needs, at the resolution the map is drawn at.
+At the scales one flies at that is between two and three per cent of
+the file -- typically a hundred and fifty kilobytes for the whole
+block, and about a hundred for the first tile, the one under the
+aircraft.  Zoomed out far enough to see half the continent it is more,
+because more ground is being asked for.
+
+While such a page is open, XCSoar watches how old the picture is.
+XCSoar asks for a frame seven minutes old, because one takes four to
+six minutes to reach the server after it is measured; frames are
+renewed every five minutes, so what is on the map is between seven and
+twelve minutes old.  Once a frame passes twenty minutes it is removed
+from the map \emph{before} a replacement is fetched, so a failing or
+slow connection can never leave a stale echo on display.  If the
+replacement then fails to arrive, a warning says so; that warning
+offers to stop appearing, and can be switched back on with
+\emph{Warn when radar expires} on the \emph{Look / Language, Input}
+configuration page (Section~\ref{sec:interface}).
+
+The colours are the classes the Deutscher Wetterdienst uses for its
+own radar images, from cyan for the weakest echo through green,
+yellow and orange to red and violet for the heaviest, so the picture
+reads the way German pilots are used to.  Areas the radar network
+does not reach are left transparent rather than shaded, because the
+map underneath should stay visible.
+
+Coverage reaches from the Azores to northern Scandinavia and from
+Iceland to eastern Europe; nineteen national weather services
+contribute.
+
+Note that this feature requires and uses an internet connection.
+
+\section{Satellite imagery}\label{sec:satellite}
+
+XCSoar can draw Meteosat imagery underneath the moving map, so that
+terrain, airspace and the task are read on top of the cloud picture,
+at the map's own scale and orientation.
+
+The imagery comes from EUMETView, EUMETSAT's public web map service.
+It needs no account and no subscription: the rendered products are
+CC~BY 4.0, and the service declares neither fees nor access
+constraints.  This is the same Meteosat data the Deutscher
+Wetterdienst sells on in its \emph{pc\_met} satellite images, taken
+one step earlier in the chain, and for the Meteosat Third Generation
+layers at a finer sampling than \emph{pc\_met} carries at all.
+
+To switch it on, set \emph{Map overlay} to \emph{Satellite} in
+\config{screenpages} and choose a product under \emph{Satellite
+layer}.  Each page keeps its own choice, so one page can carry visible
+light and another infrared.
+
+The products offered are:
+
+\begin{description}
+\item[European HRV RGB] the closest counterpart to the \emph{pc\_met}
+  \emph{vis\_hrv} images, and the default.
+\item[Visible 0.6\,\textmu m (MTG)] the Third Generation imager at its
+  finest solar sampling, about twice as detailed as the previous
+  generation's high resolution channel.
+\item[Infrared 10.5\,\textmu m (MTG)] cloud top temperature, which
+  works at night.
+\item[True colour (MTG)] and \textbf{Geo colour (MTG)}, composites
+  that read like a photograph.
+\item[Rapid scan natural colour] renewed every five minutes rather
+  than every ten, over Europe.
+\end{description}
+
+The imagery is fetched as a block of five by five tiles centred on
+the aircraft.  At the scales a glider is flown at, a tile is about
+twenty-five kilometres across, so the block reaches at least fifty
+kilometres in every direction.
+
+The tiles are requested \emph{nearest first}: the one the glider is
+over, then the ring around it, then the next ring outwards.  This is
+deliberate, because a glider's mobile connection is usually slow and
+often absent.  The tile under the aircraft is about three kilobytes
+and is on the map almost at once; after nine tiles, some thirty
+kilobytes, the picture already covers the area a glider can reach,
+and the full block costs about eighty.  If the connection dies part
+way through, what remains on the map is a complete picture of the
+ground that matters most, rather than a half-drawn one.
+
+Only one tile is requested at a time.  Stacking requests on a thin
+link makes every tile arrive late instead of the nearest one arriving
+early.
+
+The tiles sit on the standard map tile grid, so flying on does not
+throw the picture away: when the aircraft crosses into the next tile,
+the tiles the new block shares with the old one stay exactly where
+they are and only the ones that have come into range are fetched.
+Panning fetches nothing at all.
+
+Zooming the map \emph{in} fetches nothing either --- the satellite has
+no finer detail to give, so a closer look would only spend data
+enlarging what is already on the screen.  Zooming \emph{out} past what
+the block covers does move it to a coarser grid, so that the imagery
+keeps covering the map instead of shrinking to the middle of it.  Each
+step is a halving, so an ordinary change of scale does not move it,
+and the coarsest grid spans a couple of thousand kilometres.
+
+A frame is not on the server the moment it is taken; the delay runs
+from about thirteen minutes on the rapid scan product to half an hour
+on the slower composites, and XCSoar waits accordingly rather than
+asking for a picture that does not exist yet.  EUMETView answers a
+request for a frame it does not have with an error rather than an
+older picture, so this margin is measured rather than guessed.  As with the radar, a
+frame that grows too old for its layer is taken off the map before a
+replacement is requested, so a failing connection cannot leave
+yesterday's weather on display.
+
+EUMETSAT's data policy requires the source to be named wherever the
+imagery is shown.  XCSoar carries the attribution in the overlay's
+label, which the map shows when the image is tapped.
+
+Note that this feature requires and uses an internet connection.
+
 \section{pc\_met, Deutscher Wetterdienst}\label{sec:pcmet}
 
 German weather service ``Deutscher Wetterdienst'' provides several

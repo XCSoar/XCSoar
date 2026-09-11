@@ -17,6 +17,7 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
+#include "Weather/Features.hpp"
 #include "Weather/MapOverlay/ControlsFactory.hpp"
 #include "Weather/MapOverlay/ControlsWidget.hpp"
 #include "Weather/Rasp/FieldControls.hpp"
@@ -34,6 +35,10 @@
 #include "Weather/SkySight/SkySightClient.hpp"
 #include "Weather/xctherm/FieldControls.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
+#ifdef HAVE_WEATHER_OVERLAY
+#include "Weather/OPERA/RadarPageOverlay.hpp"
+#include "Weather/EUMETView/SatellitePageOverlay.hpp"
+#endif
 #endif
 
 #if defined(ENABLE_SDL) && defined(main)
@@ -69,6 +74,8 @@ namespace PageActions {
   static void LeaveEdlOverlay() noexcept;
   static void LeaveXcthermOverlay() noexcept;
   static void LeaveSkySightOverlay() noexcept;
+  static void LeaveRadarOverlay() noexcept;
+  static void LeaveSatelliteOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
@@ -76,6 +83,8 @@ namespace PageActions {
   static void ApplyEdlOverlay(const PageLayout &layout) noexcept;
   static void ApplyXcthermOverlay(const PageLayout &layout) noexcept;
   static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
+  static void ApplyRadarOverlay() noexcept;
+  static void ApplySatelliteOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 };
@@ -163,6 +172,39 @@ PageActions::LeaveSkySightOverlay() noexcept
 }
 
 void
+PageActions::LeaveRadarOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::DeactivatePageOverlay();
+#endif
+}
+
+void
+PageActions::ApplyRadarOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::ActivatePageOverlay();
+#endif
+}
+
+void
+PageActions::LeaveSatelliteOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  EUMETView::DeactivatePageOverlay();
+#endif
+}
+
+void
+PageActions::ApplySatelliteOverlay([[maybe_unused]] const PageLayout &layout)
+  noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  EUMETView::ActivatePageOverlay(layout.satellite_layer);
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -173,6 +215,10 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveXcthermOverlay();
   else if (layout.UsesSkySightOverlay())
     LeaveSkySightOverlay();
+  else if (layout.UsesRadarOverlay())
+    LeaveRadarOverlay();
+  else if (layout.UsesSatelliteOverlay())
+    LeaveSatelliteOverlay();
 }
 
 void
@@ -278,6 +324,12 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     weather.xctherm.SuspendForPan();
   if (layout.UsesSkySightOverlay())
     weather.skysight.SuspendForPan();
+#ifdef HAVE_WEATHER_OVERLAY
+  if (layout.UsesRadarOverlay())
+    OPERA::SuspendForPan();
+  if (layout.UsesSatelliteOverlay())
+    EUMETView::SuspendForPan();
+#endif
 }
 
 void
@@ -288,6 +340,10 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.rasp.ResumeAfterPan();
   weather.xctherm.ResumeAfterPan();
   weather.skysight.ResumeAfterPan();
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::ResumeAfterPan();
+  EUMETView::ResumeAfterPan();
+#endif
 }
 
 void
@@ -306,6 +362,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     LeaveXcthermOverlay();
   if (!layout.UsesSkySightOverlay())
     LeaveSkySightOverlay();
+  if (!layout.UsesRadarOverlay())
+    LeaveRadarOverlay();
+  if (!layout.UsesSatelliteOverlay())
+    LeaveSatelliteOverlay();
 
   ClearPageOverlays();
 
@@ -327,6 +387,14 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::SKYSIGHT:
     ApplySkySightOverlay(layout);
+    break;
+
+  case PageLayout::Overlay::RADAR:
+    ApplyRadarOverlay();
+    break;
+
+  case PageLayout::Overlay::SATELLITE:
+    ApplySatelliteOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:

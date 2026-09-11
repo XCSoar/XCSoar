@@ -798,9 +798,15 @@ When editing a page, the following options are available for map pages:
   \emph{Weather controls} to show in-flight RASP, EDL, or XC Therm forecast
   controls when the page uses a weather overlay.
 \item[Map overlay]  Optional weather overlay drawn on map pages: \emph{None},
-  \emph{RASP}, \emph{EDL}, or \emph{XC Therm}.  RASP requires a loaded RASP
-  file; EDL and XC Therm require network-capable builds with the respective
-  weather provider configured.
+  \emph{RASP}, \emph{EDL}, \emph{XC Therm}, \emph{Rain radar}, or
+  \emph{Satellite}.  RASP requires a loaded RASP file; EDL and XC Therm
+  require network-capable builds with the respective weather provider
+  configured.  \emph{Rain radar} draws the EUMETNET OPERA composite
+  (Section~\ref{sec:rain-radar}) and \emph{Satellite} draws Meteosat
+  imagery from EUMETView (Section~\ref{sec:satellite}); neither needs an
+  account, only an internet connection.
+\item[Satellite layer]  When \emph{Map overlay} is \emph{Satellite},
+  selects which EUMETView product this page draws.
 \item[Layer / Level]  When \emph{Map overlay} is \emph{RASP}, selects
   which RASP field is displayed on this page.  When the overlay is
   \emph{EDL}, selects the pressure level (altitude band): \emph{Auto}

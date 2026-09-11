@@ -29,7 +29,7 @@ GlueMapWindow *
 PreparePanFullscreen(bool abort_if_already_panning) noexcept
 {
   const bool suspending_weather =
-    PageActions::GetCurrentLayout().UsesWeatherOverlay();
+    PageActions::GetCurrentLayout().UsesSuspendableOverlay();
   if (suspending_weather)
     PageActions::SuspendWeatherOverlaysForPan();
 
