@@ -4,7 +4,8 @@ Version 7.45.2 - not yet released
   - fix internal and Bluetooth sensors going silent right after they
     are opened
 * iOS
-  - raise the 64-bit minimum version from 11 to 12
+  - raise the 64-bit minimum version from 11 to 15; App Store Connect
+    rejected uploads targeting 11 and 12
   - let Return submit text when using the system keyboard
   - fix crash on exit from a late altimeter callback
   - fix crash when a Task Manager button action fails
