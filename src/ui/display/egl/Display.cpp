@@ -46,6 +46,11 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
 {
   assert(display == EGL_NO_DISPLAY);
 
+  /* remember what the profile asked for: a framebuffer object can
+     still provide it even if the window surface configuration below
+     falls back to fewer samples (or none) */
+  OpenGL::requested_antialiasing_samples = requested_antialiasing_samples;
+
   display = eglGetDisplay(native_display);
   if (display == EGL_NO_DISPLAY)
     throw std::runtime_error("eglGetDisplay(EGL_DEFAULT_DISPLAY) failed");
@@ -80,8 +85,10 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
             GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0),
             samples, requested_antialiasing_samples);
 
-  OpenGL::SetAntialiasingSamples(samples);
+  /* the availability mask must be known before SetAntialiasingSamples()
+     logs it together with the value obtained here */
   OpenGL::SetAvailableAntialiasingSamples(ProbeAntialiasingSamples(display));
+  OpenGL::SetAntialiasingSamples(samples);
 }
 
 inline void

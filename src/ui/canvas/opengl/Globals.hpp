@@ -96,9 +96,9 @@ extern unsigned requested_antialiasing_samples;
 extern unsigned antialiasing_samples;
 
 /**
- * Publish the number of MSAA samples of the window surface. Called
- * by the platform code as soon as the surface configuration is
- * known, and before the first window is painted.
+ * Publish the number of MSAA samples of the window surface, and log.
+ * Called by the platform code as soon as the surface configuration 
+ * is known, and before the first window is painted.
  */
 void
 SetAntialiasingSamples(unsigned samples) noexcept;
@@ -145,8 +145,8 @@ extern FboAntialiasingMode fbo_antialiasing_mode;
 extern unsigned fbo_antialiasing_samples;
 
 /**
- * Publish the framebuffer object multisample capability.  Called by
- * OpenGL::SetupContext() once the context exists.
+ * Publish the framebuffer object multisample capability, and log.
+ * Called by OpenGL::SetupContext() once the context exists.
  */
 void
 SetFboAntialiasing(FboAntialiasingMode mode, unsigned samples) noexcept;
