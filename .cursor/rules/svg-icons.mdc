@@ -124,7 +124,7 @@ and verify on **light and dark** map themes.
 4. Rebuild icons: `make -j$(nproc) TARGET=UNIX` (or your target) so
    `output/.../icons/*_{ldpi,mdpi,xhdpi,xxhdpi}.bmp` regenerate.
 5. Check **Android** drawables if the icon is exposed in the Java UI
-   (`build/android.mk` + `build/android_bundle.mk`).
+   (`build/android.mk`).
 
 ## Review checklist
 

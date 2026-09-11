@@ -125,6 +125,8 @@ ifeq ($(TARGET),ANDROIDFAT)
   override TARGET_FLAVOR = ANDROID
 endif
 
+# Same aapt2/bundletool pipeline as a plain Android build; this only
+# selects output/ANDROID_BUNDLE/ (CI uses it next to PLAY=y).
 ifeq ($(ANDROID_BUNDLE_BUILD),y)
   override TARGET_FLAVOR = ANDROID_BUNDLE
 endif
