@@ -71,8 +71,8 @@ HandlePosition(BufferedOutputStream &os, Context &context,
            /* altitudes can be negative, so cast the uint16_t to
               int16_t to interpret the most significant bit as sign
               bit */
-           FromBE16(position.aalt),
-           FromBE16(position.galt));
+           (int16_t)FromBE16(position.aalt),
+           (int16_t)FromBE16(position.galt));
 
     if (context.b_ext.num == 0)
         os.Write("\r\n");

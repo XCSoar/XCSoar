@@ -72,6 +72,9 @@ Version 7.46 - not yet released
   - fix LXNAV polar sync writes that could zero the vario polar when
     crew or empty mass were sent before the device polar was known;
     preserve max weight and glider name when sending a polar #2397
+  - fix IGC downloads from LX Navigation loggers (Colibri, LX20,
+    LX7007 IGC) showing about 65000 m for negative pressure
+    altitudes #3075
 * dialogs
   - fix NOTAM details text being truncated and unable to scroll #2943
   - put the Close button on the right of the Status and Weather
