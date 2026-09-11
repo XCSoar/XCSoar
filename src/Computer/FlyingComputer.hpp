@@ -8,6 +8,8 @@
 #include "time/DeltaTime.hpp"
 #include "time/Stamp.hpp"
 
+#include <optional>
+
 struct NMEAInfo;
 struct DerivedInfo;
 struct AircraftState;
@@ -19,11 +21,31 @@ struct FlyingState;
 class FlyingComputer {
   class ClimbEvidence {
     StateClock<20, 5> clock;
-    double previous_altitude;
+    std::optional<double> previous_altitude;
 
   public:
-    void Reset(double altitude=0) noexcept;
+    void Reset(std::optional<double> baseline={}) noexcept;
+    bool IsActive() const noexcept { return clock.IsDefined(); }
     bool Update(FloatDuration dt, double altitude) noexcept;
+  };
+
+  struct LaunchEvidence {
+    TimeStamp time;
+    GeoPoint location;
+    double altitude;
+  };
+
+  class SlowLaunchDetector {
+    ClimbEvidence climb;
+    std::optional<LaunchEvidence> candidate;
+
+  public:
+    void Reset(std::optional<double> baseline={}) noexcept;
+
+    std::optional<LaunchEvidence>
+    Update(bool eligible, FloatDuration dt, TimeStamp time,
+           const GeoPoint &location,
+           std::optional<double> altitude) noexcept;
   };
 
   DeltaTime delta_time;
@@ -38,8 +60,10 @@ class FlyingComputer {
    */
   StateClock<30, 5> moving_clock;
 
-  /** Rising evidence used to reject a landing at low speed. */
-  ClimbEvidence climbing;
+  SlowLaunchDetector slow_launch;
+
+  /** Rising evidence used only to reject a landing at low speed. */
+  ClimbEvidence landing_climb;
 
   /**
    * If the aircraft is currenly assumed to be moving, then this
@@ -127,6 +151,12 @@ protected:
                     FlyingState &flying) noexcept;
 
   void Check(FlyingState &state, TimeStamp time) noexcept;
+
+  static void Takeoff(FlyingState &state, TimeStamp time,
+                      const GeoPoint &location, double altitude) noexcept;
+
+  void ConfirmSlowTakeoff(FlyingState &state,
+                          const LaunchEvidence &evidence) noexcept;
 
   /**
    * Update flying state when moving 

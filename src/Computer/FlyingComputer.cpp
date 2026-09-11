@@ -6,6 +6,9 @@
 #include "NMEA/Derived.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 
+static constexpr double LOW_TAKEOFF_SPEED = 3;
+static constexpr double LOW_SPEED_TAKEOFF_HEIGHT_GAIN = 20;
+
 void
 FlyingComputer::Reset()
 {
@@ -13,7 +16,8 @@ FlyingComputer::Reset()
 
   stationary_clock.Clear();
   moving_clock.Clear();
-  climbing.Reset();
+  slow_launch.Reset();
+  landing_climb.Reset();
   moving_since = TimeStamp::Undefined();
   stationary_since = TimeStamp::Undefined();
   sinking_since = TimeStamp::Undefined();
@@ -56,6 +60,40 @@ FlyingComputer::CheckRelease(FlyingState &state, TimeStamp time,
 }
 
 void
+FlyingComputer::Takeoff(FlyingState &state, TimeStamp time,
+                        const GeoPoint &location, double altitude) noexcept
+{
+  state.flying = true;
+  state.takeoff_time = time;
+  state.takeoff_location = location;
+  state.takeoff_altitude = altitude;
+  state.flight_time = {};
+
+  state.release_time = TimeStamp::Undefined();
+  state.power_on_time = TimeStamp::Undefined();
+  state.power_off_time = TimeStamp::Undefined();
+  state.landing_time = TimeStamp::Undefined();
+  state.landing_location.SetInvalid();
+  state.far_location.SetInvalid();
+  state.far_distance = -1;
+}
+
+void
+FlyingComputer::ConfirmSlowTakeoff(FlyingState &state,
+                                   const LaunchEvidence &evidence) noexcept
+{
+  /* Preserve enough airborne hysteresis for the independent landing-climb
+     clock to take over on subsequent low-speed samples.  StateClock caps
+     each Add() at its five-second max_delta, hence the two calls. */
+  moving_clock.Add(std::chrono::seconds{5});
+  moving_clock.Add(std::chrono::seconds{5});
+  moving_since = evidence.time;
+  moving_at = evidence.location;
+  moving_altitude = evidence.altitude;
+  Takeoff(state, evidence.time, evidence.location, evidence.altitude);
+}
+
+void
 FlyingComputer::Check(FlyingState &state, TimeStamp time) noexcept
 {
   // Logic to detect takeoff and landing is as follows:
@@ -69,20 +107,7 @@ FlyingComputer::Check(FlyingState &state, TimeStamp time) noexcept
       // We certainly must be flying after 10sec movement
       assert(moving_since.IsDefined());
 
-      state.flying = true;
-      state.takeoff_time = moving_since;
-      state.takeoff_location = moving_at;
-      state.takeoff_altitude = moving_altitude;
-      state.flight_time = {};
-
-      /* when a new flight starts, forget the old release and power-on/off time */
-      state.release_time = TimeStamp::Undefined();
-      state.power_on_time = TimeStamp::Undefined();
-      state.power_off_time = TimeStamp::Undefined();
-      state.landing_time = TimeStamp::Undefined();
-      state.landing_location.SetInvalid();
-      state.far_location.SetInvalid();
-      state.far_distance = -1;
+      Takeoff(state, moving_since, moving_at, moving_altitude);
     }
   } else {
     // update time of flight
@@ -153,10 +178,10 @@ FlyingComputer::Stationary(FlyingState &state,
 
 [[gnu::pure]]
 static bool
-CheckTakeOffSpeed(double takeoff_speed, const NMEAInfo &basic)
+CheckFlightSpeed(double threshold, const NMEAInfo &basic)
 {
   const auto speed = basic.airspeed_available
-    ? (basic.airspeed_real || basic.ground_speed >= takeoff_speed / 4
+    ? (basic.airspeed_real || basic.ground_speed >= threshold / 4
        ? std::max(basic.true_airspeed, basic.ground_speed)
        /* at low ground speeds and an (unreal) airspeed vector derived
           from the wind vector, take only half of the wind vector into
@@ -166,20 +191,7 @@ CheckTakeOffSpeed(double takeoff_speed, const NMEAInfo &basic)
     : basic.ground_speed;
 
   // Speed too high for being on the ground
-  return speed >= takeoff_speed;
-}
-
-/**
- * After take-off has been detected, we check if the ground speed goes
- * below a certain threshold that indicates the aircraft has ceased
- * flying.  To avoid false positives while wave/ridge soaring, this
- * threshold is half of the given take-off speed.
- */
-[[gnu::pure]]
-static bool
-CheckLandingSpeed(double takeoff_speed, const NMEAInfo &basic)
-{
-  return !CheckTakeOffSpeed(takeoff_speed / 2, basic);
+  return speed >= threshold;
 }
 
 [[gnu::pure]]
@@ -193,21 +205,58 @@ inline bool
 FlyingComputer::ClimbEvidence::Update(FloatDuration dt,
                                       double altitude) noexcept
 {
-  if (altitude > previous_altitude + 0.1)
+  if (!previous_altitude) {
+    previous_altitude = altitude;
+    return false;
+  }
+
+  if (altitude > *previous_altitude + 0.1)
     clock.Add(dt);
   else
     clock.Subtract(dt);
 
   previous_altitude = altitude;
 
-  return clock >= dt + std::chrono::seconds{1};
+  return clock >= std::chrono::seconds{10};
 }
 
 inline void
-FlyingComputer::ClimbEvidence::Reset(double altitude) noexcept
+FlyingComputer::ClimbEvidence::Reset(std::optional<double> baseline) noexcept
 {
   clock.Clear();
-  previous_altitude = altitude;
+  previous_altitude = baseline;
+}
+
+void
+FlyingComputer::SlowLaunchDetector::Reset(
+    std::optional<double> baseline) noexcept
+{
+  climb.Reset(baseline);
+  candidate.reset();
+}
+
+std::optional<FlyingComputer::LaunchEvidence>
+FlyingComputer::SlowLaunchDetector::Update(
+    bool eligible, FloatDuration dt, TimeStamp time,
+    const GeoPoint &location, std::optional<double> altitude) noexcept
+{
+  if (!eligible || !altitude) {
+    Reset(altitude);
+    return std::nullopt;
+  }
+
+  const bool was_active = climb.IsActive();
+  const bool confirmed = climb.Update(dt, *altitude);
+  if (!was_active && climb.IsActive())
+    candidate = LaunchEvidence{time, location, *altitude};
+  else if (!climb.IsActive())
+    candidate.reset();
+
+  if (confirmed && candidate &&
+      *altitude >= candidate->altitude + LOW_SPEED_TAKEOFF_HEIGHT_GAIN)
+    return candidate;
+
+  return std::nullopt;
 }
 
 inline void
@@ -263,6 +312,7 @@ FlyingComputer::Compute(double takeoff_speed,
     return;
 
   const auto any_altitude = basic.GetAnyAltitude();
+  double landing_takeoff_speed = takeoff_speed;
 
   if (!basic.airspeed_available && !calculated.altitude_agl_valid &&
       any_altitude && last_ground_altitude >= 0 &&
@@ -274,20 +324,35 @@ FlyingComputer::Compute(double takeoff_speed,
     auto dh = *any_altitude - last_ground_altitude;
 
     if (dh > 1000)
-      takeoff_speed /= 4;
+      landing_takeoff_speed /= 4;
     else if (dh > 500)
-      takeoff_speed /= 2;
+      landing_takeoff_speed /= 2;
     else
-      takeoff_speed = takeoff_speed * 2 / 3;
+      landing_takeoff_speed = landing_takeoff_speed * 2 / 3;
   }
 
-  if (CheckTakeOffSpeed(takeoff_speed, basic) ||
+  const bool low_launch_speed = CheckFlightSpeed(LOW_TAKEOFF_SPEED, basic);
+  const auto slow_takeoff = slow_launch.Update(
+    !flying.flying && low_launch_speed, dt, basic.time, basic.location,
+    any_altitude);
+
+  const bool below_landing_speed =
+    !CheckFlightSpeed(landing_takeoff_speed / 2, basic);
+  bool landing_climbing = false;
+  if (flying.flying && below_landing_speed && any_altitude)
+    landing_climbing = landing_climb.Update(dt, *any_altitude);
+  else
+    landing_climb.Reset();
+
+  if (slow_takeoff)
+    ConfirmSlowTakeoff(flying, *slow_takeoff);
+
+  if (CheckFlightSpeed(takeoff_speed, basic) || slow_takeoff ||
       CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, dt, basic.location,
            basic.GetAnyAltitude().value_or(0));
   else if (!flying.flying ||
-           (CheckLandingSpeed(takeoff_speed, basic) &&
-            (!any_altitude || !climbing.Update(dt, *any_altitude))))
+           (below_landing_speed && !landing_climbing))
     Stationary(flying, basic.time, dt, basic.location);
 
   if (basic.engine_noise_level_available)
