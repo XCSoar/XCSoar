@@ -4,7 +4,7 @@ export default defineContentConfig({
     collections: {
         docs: defineCollection({
             type: 'page',
-            source: '**/*.md',
+            source: '**/*.{md,yaml}',
             schema: z.object({
                 infoboxIndex: z.number().optional(),
                 infoboxId: z.string().optional(),
