@@ -28,6 +28,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DataManagement/StorageLocationPickerDialog.cpp \
 	$(SRC)/io/TarBackup.cpp \
 	$(SRC)/Dialogs/DataManagement/FileTransferUtil.cpp \
+	$(SRC)/IGC/FlightTimes.cpp \
 	$(SRC)/IGC/IgcMetaCache.cpp \
 	$(SRC)/Dialogs/Device/PortDataField.cpp \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
