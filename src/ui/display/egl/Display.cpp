@@ -70,6 +70,9 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
   if (!eglBindAPI(EGL_OPENGL_ES_API))
     throw std::runtime_error("eglBindAPI() failed");
 
+  /* this probes the display and publishes
+     OpenGL::available_antialiasing_samples as a side effect, before
+     picking the config; see its implementation for why */
   chosen_config = EGL::ChooseConfig(display, requested_antialiasing_samples);
 
   const unsigned samples = GetConfigAttrib(display, chosen_config,
@@ -85,9 +88,6 @@ Display::InitDisplay(EGLNativeDisplayType native_display,
             GetConfigAttrib(display, chosen_config, EGL_STENCIL_SIZE, 0),
             samples, requested_antialiasing_samples);
 
-  /* the availability mask must be known before SetAntialiasingSamples()
-     logs it together with the value obtained here */
-  OpenGL::SetAvailableAntialiasingSamples(ProbeAntialiasingSamples(display));
   OpenGL::SetAntialiasingSamples(samples);
 }
 

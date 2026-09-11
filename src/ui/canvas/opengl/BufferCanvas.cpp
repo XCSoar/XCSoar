@@ -17,8 +17,6 @@
 
 #include "LogFile.hpp"
 
-#include <algorithm>
-
 #include <cassert>
 
 /**
@@ -26,17 +24,21 @@
  * surface and the framebuffer objects each use as many as they can,
  * so this is not necessarily OpenGL::antialiasing_samples; a surface
  * which fell back to fewer samples must not limit the buffers.
+ *
+ * The chosen count is snapped down to the next lower level in
+ * OpenGL::ANTIALIASING_SAMPLE_COUNTS that #available_fbo_antialiasing_samples
+ * allows, rather than using every sample #fbo_antialiasing_samples
+ * happens to allow, so the actual result matches what the
+ * anti-aliasing selection dialog promises.
  */
 [[gnu::pure]]
 static GLsizei
 ChooseSamples() noexcept
 {
 #ifdef HAVE_MULTISAMPLE_FBO
-  if (OpenGL::fbo_antialiasing_mode == OpenGL::FboAntialiasingMode::NONE)
-    return 0;
-
-  return GLsizei(std::min(OpenGL::requested_antialiasing_samples,
-                          OpenGL::fbo_antialiasing_samples));
+  return GLsizei(OpenGL::SelectAntialiasingSamples(
+      OpenGL::requested_antialiasing_samples,
+      OpenGL::available_fbo_antialiasing_samples));
 #else
   return 0;
 #endif

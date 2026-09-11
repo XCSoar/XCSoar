@@ -29,6 +29,8 @@ FboAntialiasingMode fbo_antialiasing_mode;
 
 unsigned fbo_antialiasing_samples;
 
+unsigned available_fbo_antialiasing_samples;
+
 UnsignedPoint2D window_size, viewport_size;
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
@@ -115,6 +117,14 @@ SetFboAntialiasing(FboAntialiasingMode mode, unsigned samples) noexcept
 {
   fbo_antialiasing_mode = mode;
   fbo_antialiasing_samples = samples;
+
+  /* unlike the window surface, any level up to the hardware limit
+     works, so bit 0 ("known") is always set, and every level at or
+     below the limit joins it */
+  available_fbo_antialiasing_samples = 1u;
+  for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
+    if (n <= samples)
+      available_fbo_antialiasing_samples |= 1u << n;
 
   switch (mode) {
   case FboAntialiasingMode::NONE:

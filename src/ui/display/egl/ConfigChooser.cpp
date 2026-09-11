@@ -229,14 +229,34 @@ TryChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
 }
 
 EGLConfig
-ChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
+ChooseConfig(EGLDisplay display, unsigned requested_samples)
 {
-  if (antialiasing_samples > 0) {
-    if (const auto config = TryChooseConfig(display, antialiasing_samples))
+  /* probe first so the request can step down to the next lower
+     level this display actually offers, instead of jumping straight
+     from the request to "disabled" */
+  const unsigned mask = ProbeAntialiasingSamples(display);
+  OpenGL::SetAvailableAntialiasingSamples(mask);
+
+  const unsigned samples =
+    OpenGL::SelectAntialiasingSamples(requested_samples, mask);
+
+  if (requested_samples > 0 && samples != requested_samples) {
+    if (samples > 0)
+      LogFormat("Requested %ux anti-aliasing not available, using %ux",
+                requested_samples, samples);
+    else
+      LogFormat("Requested %ux anti-aliasing not available, disabling",
+                requested_samples);
+  }
+
+  if (samples > 0) {
+    if (const auto config = TryChooseConfig(display, samples))
       return *config;
 
-    LogFormat("Requested %ux anti-aliasing not available, disabling",
-              antialiasing_samples);
+    /* the probe said this level exists; if the driver still refuses
+       it, fall through to the "disabled" configuration below */
+    LogFormat("Failed to obtain the %ux anti-aliasing configuration "
+              "reported available, disabling", samples);
   }
 
   const auto config = TryChooseConfig(display, 0);
