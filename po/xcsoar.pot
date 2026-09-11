@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 22:41+0200\n"
+"POT-Creation-Date: 2026-08-28 09:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2590,6 +2590,7 @@ msgstr ""
 msgid "Select Color"
 msgstr ""
 
+#, no-c-format
 msgid "Display"
 msgstr ""
 
@@ -3006,7 +3007,7 @@ msgid "Language, Input"
 msgstr ""
 
 #, no-c-format
-msgid "Screen Layout"
+msgid "Layout"
 msgstr ""
 
 #, no-c-format
@@ -3015,6 +3016,10 @@ msgstr ""
 
 #, no-c-format
 msgid "Audio"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
 msgstr ""
 
 #, no-c-format
@@ -3042,6 +3047,9 @@ msgid "Expert"
 msgstr ""
 
 msgid "Configuration"
+msgstr ""
+
+msgid "Back"
 msgstr ""
 
 msgid "The name of this InfoBox panel configuration."
@@ -4177,6 +4185,125 @@ msgstr ""
 msgid "This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"
 msgstr ""
 
+#, no-c-format
+msgctxt "Setting"
+msgid "LCD"
+msgstr ""
+
+#, no-c-format
+msgid "Conventional LCD or OLED. Full scrolling animations."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "E-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Color e-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
+msgstr ""
+
+#, no-c-format
+msgid "Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Landscape"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Landscape"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#, no-c-format
+msgid "Use the system-wide setting"
+msgstr ""
+
+#, no-c-format
+msgid "Black text on white background"
+msgstr ""
+
+#, no-c-format
+msgid "White text on black background"
+msgstr ""
+
+msgid "Automatic"
+msgstr ""
+
+#, c-format
+msgid "%u dpi"
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Display type"
+msgstr ""
+
+msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr ""
+
+msgid "Display orientation"
+msgstr ""
+
+msgid "Rotate the display on devices that support it."
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+msgid "Full screen"
+msgstr ""
+
+msgid "Run XCSoar in full screen mode"
+msgstr ""
+
+msgid "Dark mode"
+msgstr ""
+
+msgid "Text size"
+msgstr ""
+
+msgid "Cursor zoom"
+msgstr ""
+
+msgid "Cursor zoom factor"
+msgstr ""
+
+msgid "Invert cursor color"
+msgstr ""
+
+msgid "Enable black cursor"
+msgstr ""
+
 msgid "Speed arrows"
 msgstr ""
 
@@ -4317,22 +4444,6 @@ msgstr ""
 msgid "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" pages."
 msgstr ""
 
-msgid "Text size"
-msgstr ""
-
-msgid "Display Resolution"
-msgstr ""
-
-msgid "The display resolution is used to adapt line widths, font size, landable size and more."
-msgstr ""
-
-msgid "Automatic"
-msgstr ""
-
-#, c-format
-msgid "%u dpi"
-msgstr ""
-
 msgid "Events"
 msgstr ""
 
@@ -4395,49 +4506,6 @@ msgid "Safety disclaimer accepted"
 msgstr ""
 
 msgid "Whether the safety disclaimer has been accepted for this version."
-msgstr ""
-
-#, no-c-format
-msgid "Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Landscape"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Landscape"
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "LCD"
-msgstr ""
-
-#, no-c-format
-msgid "Conventional LCD or OLED. Full scrolling animations."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "E-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Color e-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
 msgstr ""
 
 #, no-c-format
@@ -4577,18 +4645,6 @@ msgid "Glass"
 msgstr ""
 
 #, no-c-format
-msgid "Use the system-wide setting"
-msgstr ""
-
-#, no-c-format
-msgid "Black text on white background"
-msgstr ""
-
-#, no-c-format
-msgid "White text on black background"
-msgstr ""
-
-#, no-c-format
 msgid "Follow global"
 msgstr ""
 
@@ -4610,29 +4666,6 @@ msgstr ""
 
 #, no-c-format
 msgid "Always use light text on a dark InfoBox background."
-msgstr ""
-
-msgid "Full screen"
-msgstr ""
-
-msgid "Run XCSoar in full screen mode"
-msgstr ""
-
-msgid "Display orientation"
-msgstr ""
-
-msgid "Rotate the display on devices that support it."
-msgstr ""
-
-msgid "Dark mode"
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Display type"
-msgstr ""
-
-msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
 msgstr ""
 
 msgid "InfoBox geometry"
@@ -4683,18 +4716,6 @@ msgid "Show QuickMenu button"
 msgstr ""
 
 msgid "Show the QuickMenu button"
-msgstr ""
-
-msgid "Cursor zoom"
-msgstr ""
-
-msgid "Cursor zoom factor"
-msgstr ""
-
-msgid "Invert cursor color"
-msgstr ""
-
-msgid "Enable black cursor"
 msgstr ""
 
 #, no-c-format
@@ -5051,6 +5072,15 @@ msgid "Optional weather overlay on map pages. Use with Weather controls in the b
 msgstr ""
 
 msgid "Select a weather map overlay to configure its layer or level for this page."
+msgstr ""
+
+msgid "SkySight is unavailable."
+msgstr ""
+
+msgid "SkySight API rate-limited. Retrying shortly."
+msgstr ""
+
+msgid "Loading SkySight catalog..."
 msgstr ""
 
 #, no-c-format
@@ -6528,10 +6558,12 @@ msgstr ""
 msgid "Optimized"
 msgstr ""
 
-msgid "Altn mode: MANUAL"
-msgstr ""
-
-msgid "Altn mode: AUTO"
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
 msgstr ""
 
 #, no-c-format
@@ -6554,6 +6586,9 @@ msgstr ""
 #, no-c-format
 msgctxt "Menu"
 msgid "Alternates 2"
+msgstr ""
+
+msgid "Paste"
 msgstr ""
 
 msgid "Reset"
@@ -7066,12 +7101,6 @@ msgstr ""
 msgid "This function is not available on your platform yet."
 msgstr ""
 
-msgid "SkySight API rate-limited. Retrying shortly."
-msgstr ""
-
-msgid "Loading SkySight catalog..."
-msgstr ""
-
 msgid "No SkySight layers selected. Press Add to list to choose parameters."
 msgstr ""
 
@@ -7205,9 +7234,6 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Clear downloaded data"
-msgstr ""
-
-msgid "SkySight is unavailable."
 msgstr ""
 
 msgid "Failed to acknowledge airspace warning"
@@ -7486,6 +7512,57 @@ msgstr ""
 
 #, c-format
 msgid "Caching EDL forecast %s..."
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
 msgstr ""
 
 msgid "Could not contact the WiFi service."
