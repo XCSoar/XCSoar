@@ -113,7 +113,7 @@ TEST_NAMES = \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
 	TestMETARParser \
-	TestIGCParser \
+	TestIGCParser TestIGCFlightTimes \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
 	TestInputConfig \
@@ -246,6 +246,24 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
+
+TEST_IGC_FLIGHT_TIMES_SOURCES = \
+	$(SRC)/IGC/FlightTimes.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(SRC)/Computer/FlyingComputer.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Engine/GlideSolvers/GlidePolar.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
+	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalBand.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestIGCFlightTimes.cpp
+TEST_IGC_FLIGHT_TIMES_DEPENDS = LIBNMEA OPERATION IO OS THREAD GEO MATH UTIL TIME UNITS
+$(eval $(call link-program,TestIGCFlightTimes,TEST_IGC_FLIGHT_TIMES))
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
