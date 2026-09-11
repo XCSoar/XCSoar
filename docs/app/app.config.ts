@@ -12,6 +12,9 @@ export default defineAppConfig({
         rootDir: 'docs',
     },
     ui: {
+        colors: {
+            primary: 'xcsoar',
+        },
         prose: {
             h2: {
                 slots: {

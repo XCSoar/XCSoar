@@ -1,0 +1,16 @@
+/* XCSoar blue (#3f76a8, from Data/graphics/logo.svg) as the primary colour.
+   Nuxt UI expects the full 50-950 ramp; "static" keeps the variables in
+   the bundle even though only the primary aliases reference them. */
+@theme static {
+    --color-xcsoar-50: #f3f8fc;
+    --color-xcsoar-100: #e3eef7;
+    --color-xcsoar-200: #c8dcef;
+    --color-xcsoar-300: #9cc1e3;
+    --color-xcsoar-400: #609cd2;
+    --color-xcsoar-500: #3f76a8;
+    --color-xcsoar-600: #35638d;
+    --color-xcsoar-700: #2b5173;
+    --color-xcsoar-800: #23415d;
+    --color-xcsoar-900: #1c344a;
+    --color-xcsoar-950: #111f2d;
+}
