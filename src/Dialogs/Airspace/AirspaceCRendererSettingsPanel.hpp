@@ -13,14 +13,12 @@ class AirspaceClassRendererSettingsPanel:
   enum ControlIndex {
     BorderColor,
     FillColor,
-    FillBrush,
     BorderWidth,
     FillMode,
   };
 
   bool border_color_changed;
   bool fill_color_changed;
-  bool fill_brush_changed;
   AirspaceClass type;
   AirspaceClassRendererSettings settings;
 

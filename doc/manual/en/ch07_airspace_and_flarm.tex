@@ -24,21 +24,16 @@ computer.
 \section{Airspace display}
 
 Local special use airspace regions are drawn on the map as shaded
-areas with thick borders.  The colour and pattern of the areas are
-specific to different airspace categories and may be configured by the
+areas with thick borders.  The colour of the areas is specific to
+different airspace categories and may be configured by the
 user.  Depending on the settings, the user may choose to display all
 airspaces, only airspaces below a certain altitude, only airspace within a
 particular height separation, or only airspace below the glider.
 \sketch{figures/airspace.png}
 
-The patterns used to display airspace areas include opaque,
-transparent (hollow) and several hatched and stippled patterns.  The
-non-opaque patterns are partially transparent with respect to terrain
-and topography but are \emph{not} transparent with respect to overlapping
-airspace.  However, where overlapping airspace occurs, all borders are
-visible.  That is, even though airspace patterns are not mutually
-transparent, all airspace borders are drawn on top of the airspace
-areas.
+Airspace areas are filled with a transparent colour so terrain and
+topography remain visible.  Where airspaces overlap, all borders are
+drawn.
 
 Both the display and warning of airspace classes can be individually
 enabled or disabled by the user as described in
@@ -216,8 +211,8 @@ The general guidelines for using the dialogue are:
   over-stressing the pilot with extraneous warnings.
 \end{itemize}
 
-When an airspace region is acknowledged, the region is drawn on the
-screen without a pattern.
+When an airspace region is acknowledged, the region is drawn as an
+outline only.
 
 When the aircraft is predicted to enter an SUA region, or it actually
 enters an SUA region, a warning is raised, presented as an audio alert

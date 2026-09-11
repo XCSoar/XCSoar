@@ -16,7 +16,6 @@ constexpr std::string_view Password = "Password";
 constexpr std::string_view AirspaceWarning = "AirspaceWarn";
 constexpr std::string_view AirspaceWarningDialog = "AirspaceWarnDialog";
 constexpr std::string_view AirspaceBlackOutline = "AirspaceBlackOutline";
-constexpr std::string_view AirspaceTransparency = "AirspaceTransparency";
 constexpr std::string_view AirspaceFillMode = "AirspaceFillMode";
 constexpr std::string_view AirspaceLabelSelection = "AirspaceLabelSelection";
 constexpr std::string_view AirspaceShowNOTAMLabels =

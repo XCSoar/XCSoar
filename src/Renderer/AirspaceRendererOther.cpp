@@ -91,27 +91,7 @@ private:
   void SetBufferPens(const AbstractAirspace &airspace) {
     AirspaceClass as_type_or_class = settings.classes[airspace.GetTypeOrClass()].display ? airspace.GetTypeOrClass() : airspace.GetClass();
 
-#ifndef HAVE_HATCHED_BRUSH
     buffer.Select(look.classes[as_type_or_class].solid_brush);
-#else /* HAVE_HATCHED_BRUSH */
-
-#ifdef HAVE_ALPHA_BLEND
-    if (settings.transparency) {
-      buffer.Select(look.classes[as_type_or_class].solid_brush);
-    } else {
-#endif
-      // this color is used as the black bit
-      buffer.SetTextColor(LightColor(look.classes[as_type_or_class].fill_color));
-
-      // get brush, can be solid or a 1bpp bitmap
-      buffer.Select(look.brushes[settings.classes[as_type_or_class].brush]);
-
-      buffer.SetBackgroundOpaque();
-      buffer.SetBackgroundColor(COLOR_WHITE);
-#ifdef HAVE_ALPHA_BLEND
-    }
-#endif
-#endif /* HAVE_HATCHED_BRUSH */
 
     buffer.SelectNullPen();
 
@@ -236,16 +216,7 @@ AirspaceRenderer::DrawFillCached(Canvas &canvas, Canvas &stencil_canvas,
   }
 
 #ifdef HAVE_ALPHA_BLEND
-#ifdef HAVE_HATCHED_BRUSH
-  if (settings.transparency)
-#endif
-    fill_cache.AlphaBlendTo(canvas, projection, 60);
-#ifdef HAVE_HATCHED_BRUSH
-  else
-#endif
-#endif
-#ifdef HAVE_HATCHED_BRUSH
-    fill_cache.CopyAndTo(canvas, projection);
+  fill_cache.AlphaBlendTo(canvas, projection, 60);
 #endif
 }
 
