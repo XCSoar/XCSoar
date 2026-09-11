@@ -112,7 +112,7 @@ TEST_NAMES = \
 	TestMETARParser \
 	TestIGCParser \
 	TestTraceBounds \
-	TestStrings TestUnescapeCString TestUTF8 TestWrapText \
+	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -796,6 +796,16 @@ TEST_WRAP_TEXT_SOURCES = \
 	$(TEST_SRC_DIR)/TestWrapText.cpp
 TEST_WRAP_TEXT_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,TestWrapText,TEST_WRAP_TEXT))
+
+TEST_LAYOUT_SOURCES = \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Hardware/DisplayDPI.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLayout.cpp
+TEST_LAYOUT_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
+$(eval $(call link-program,TestLayout,TEST_LAYOUT))
 
 ifeq ($(HAVE_WIN32),y)
 TEST_UTF8WIN_SOURCES = \
