@@ -6,18 +6,19 @@
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
 #include "time/BrokenTime.hpp"
-#include "co/InjectTask.hxx"
 #include "thread/Mutex.hxx"
+#include "Job/Async.hpp"
+#include "Operation/Operation.hpp"
 
-#include <atomic>
 #include <deque>
-#include <string>
 #include <vector>
 #include <memory>
 
 namespace UI { class Notify; }
 
 class IgcMetaCache {
+  class FillJob;
+
   struct Meta {
     bool has_start{false};
     bool has_end{false};
@@ -33,47 +34,37 @@ class IgcMetaCache {
 
   mutable Mutex cache_mutex;
   std::deque<CacheEntry> cache;
-  std::unique_ptr<Co::InjectTask> inject_task;
-  std::atomic<UI::Notify *> current_notify{nullptr};
+  AsyncJobRunner async;
+  QuietOperationEnvironment operation;
+  std::unique_ptr<FillJob> fill_job;
 
-  CacheEntry ParseEntry(Path path) noexcept;
-  Co::InvokeTask FillCacheCoro(std::vector<AllocatedPath> paths) noexcept;
-  void OnFillComplete(std::exception_ptr error) noexcept;
-  CacheEntry *FindOrParse(Path path) noexcept;
+  CacheEntry ParseEntry(Path path, OperationEnvironment &env);
+  CacheEntry *Find(Path path) noexcept;
+  void Insert(CacheEntry entry);
 
 public:
+  IgcMetaCache();
   ~IgcMetaCache() noexcept;
 
   /**
-   * Get compact metadata for an IGC file: "HH:MM - HH:MM (duration)".
-   *
-   * Returns a safe copy of the cached metadata. The first call for a given
-   * path parses the file; subsequent calls return the cached result.
-   */
-  std::string GetCompactInfo(Path path) noexcept;
-
-  /**
-   * Like GetCompactInfo(), but returns a pointer directly into the
-   * cache entry.  The pointer remains valid for the lifetime of the
-   * cache (deque elements are never relocated or removed).
+   * Look up compact metadata without allocating or opening the file.
+   * Returns nullptr while no cache entry exists.  A non-null pointer
+   * remains valid for the lifetime of the cache because deque elements
+   * are never relocated or removed.
    */
   const char *GetCompactInfoPtr(Path path) noexcept;
 
   void StartBackgroundFill(std::vector<AllocatedPath> paths,
-                           UI::Notify *notify = nullptr) noexcept;
+                           UI::Notify *notify = nullptr);
   void CancelBackgroundFill() noexcept;
 
   /**
-   * Releases resources which reference the Asio event loop.  This must be
-   * called before that event loop is destroyed when the cache has static
-   * storage duration.
+   * Cancel and join the background worker.
    */
   void Shutdown() noexcept;
 
   /**
-   * Non-blocking. Returns immediately; completion is signalled via
-   * `OnFillComplete()` and the `UI::Notify` passed to
-   * `StartBackgroundFill()`.
+   * Reap a completed background fill after its UI notification.
    */
   void PollBackgroundFill() noexcept;
 };
