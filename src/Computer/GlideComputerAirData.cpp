@@ -279,7 +279,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
        arbitrary value, but better than nothing */
     : DEFAULT_TAKEOFF_SPEED;
 
-  flying_computer.Compute(v_takeoff, basic,
+  flying_computer.Compute(v_takeoff, false, basic,
                           calculated, flying);
 }
 
