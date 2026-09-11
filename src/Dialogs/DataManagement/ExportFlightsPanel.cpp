@@ -29,6 +29,7 @@
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
 #include "ui/event/Notify.hpp"
+#include "LogFile.hpp"
 
 #include <vector>
 #include <memory>
@@ -265,13 +266,19 @@ struct FlightContainer : public PropertyWidgetContainer {
 
   void StartIgcCacheFill() noexcept
   {
-    std::vector<AllocatedPath> paths;
-    const auto all_paths = file_list->GetAllPaths();
-    paths.reserve(all_paths.size());
-    for (const auto &path : all_paths)
-      paths.emplace_back(path);
+    try {
+      std::vector<AllocatedPath> paths;
+      const auto all_paths = file_list->GetAllPaths();
+      paths.reserve(all_paths.size());
+      for (const auto &path : all_paths)
+        if (path.EndsWithIgnoreCase(".igc"))
+          paths.emplace_back(path);
 
-    igc_cache.StartBackgroundFill(std::move(paths), &igc_notify);
+      igc_cache.StartBackgroundFill(std::move(paths), &igc_notify);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to start IGC metadata worker");
+      igc_cache.CancelBackgroundFill();
+    }
   }
 
   void CalculateLayout(const PixelRect &rc) noexcept override {

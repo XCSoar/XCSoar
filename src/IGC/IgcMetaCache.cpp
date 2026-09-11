@@ -5,33 +5,42 @@
 
 #include "IGC/IGCParser.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Job/Async.hpp"
+#include "Job/Job.hpp"
+#include "Operation/Cancelled.hpp"
+#include "Operation/Operation.hpp"
 #include "io/FileLineReader.hpp"
-#include "ui/event/Notify.hpp"
-#include "co/InvokeTask.hxx"
-#include "io/async/AsioThread.hpp"
-#include "io/async/GlobalAsioThread.hpp"
-#include "util/BindMethod.hxx"
+#include "LogFile.hpp"
 
 #include <chrono>
+#include <cstring>
 #include <utility>
 
-/**
- * Lightweight B-record parser that extracts only the time and GPS
- * validity flag, skipping the expensive location, altitude, and
- * extension parsing that IGCParseFix() performs.
- */
+class IgcMetaCache::FillJob final : public Job {
+  IgcMetaCache &cache;
+  std::vector<AllocatedPath> paths;
+
+public:
+  FillJob(IgcMetaCache &_cache, std::vector<AllocatedPath> &&_paths) noexcept
+    :cache(_cache), paths(std::move(_paths)) {}
+
+  void Run(OperationEnvironment &env) override {
+    for (const auto &path : paths) {
+      if (env.IsCancelled())
+        break;
+
+      if (cache.Find(Path(path.c_str())) == nullptr)
+        cache.Insert(cache.ParseEntry(Path(path.c_str()), env));
+    }
+  }
+};
+
 static bool
 ParseBRecordTime(const char *line, BrokenTime &time,
                  bool &gps_valid) noexcept
 {
-  if (line[0] != 'B')
-    return false;
-
-  /* time is at offset 1..6, validity char at offset 24 */
-  if (std::strlen(line) < 25)
-    return false;
-
-  if (!IGCParseTime(line + 1, time))
+  if (line[0] != 'B' || std::strlen(line) < 25 ||
+      !IGCParseTime(line + 1, time))
     return false;
 
   if (line[24] == 'A')
@@ -44,21 +53,27 @@ ParseBRecordTime(const char *line, BrokenTime &time,
   return true;
 }
 
+IgcMetaCache::IgcMetaCache() = default;
+
 IgcMetaCache::~IgcMetaCache() noexcept
 {
   Shutdown();
 }
 
 IgcMetaCache::CacheEntry
-IgcMetaCache::ParseEntry(Path path) noexcept
+IgcMetaCache::ParseEntry(Path path, OperationEnvironment &env)
 {
   CacheEntry entry;
   entry.path = path;
 
   try {
     FileLineReaderA reader(path);
+    unsigned line_count = 0;
     char *line;
     while ((line = reader.ReadLine()) != nullptr) {
+      if ((++line_count % 256) == 0 && env.IsCancelled())
+        throw OperationCancelled{};
+
       BrokenTime time;
       bool gps_valid;
       if (ParseBRecordTime(line, time, gps_valid) && gps_valid) {
@@ -70,8 +85,13 @@ IgcMetaCache::ParseEntry(Path path) noexcept
         entry.meta.has_end = true;
       }
     }
+
+    if (env.IsCancelled())
+      throw OperationCancelled{};
+  } catch (const OperationCancelled &) {
+    throw;
   } catch (...) {
-    // ignore parse errors
+    LogError(std::current_exception(), "Failed to read IGC metadata");
   }
 
   entry.text = "";
@@ -100,99 +120,86 @@ IgcMetaCache::ParseEntry(Path path) noexcept
 }
 
 IgcMetaCache::CacheEntry *
-IgcMetaCache::FindOrParse(Path path) noexcept
+IgcMetaCache::Find(Path path) noexcept
 {
-  {
-    const std::lock_guard lock{cache_mutex};
-    for (auto &e : cache) {
-      if (e.path == path)
-        return &e;
-    }
-  }
-
-  CacheEntry entry = ParseEntry(path);
-
   const std::lock_guard lock{cache_mutex};
   for (auto &e : cache) {
     if (e.path == path)
       return &e;
   }
 
-  cache.push_back(std::move(entry));
-  return &cache.back();
+  return nullptr;
 }
 
-std::string
-IgcMetaCache::GetCompactInfo(Path path) noexcept
+void
+IgcMetaCache::Insert(CacheEntry entry)
 {
-  CacheEntry *entry = FindOrParse(path);
-  return entry != nullptr ? std::string(entry->text.c_str()) : std::string();
+  const std::lock_guard lock{cache_mutex};
+  for (const auto &e : cache)
+    if (e.path == entry.path)
+      return;
+
+  cache.push_back(std::move(entry));
 }
 
 const char *
 IgcMetaCache::GetCompactInfoPtr(Path path) noexcept
 {
-  CacheEntry *entry = FindOrParse(path);
+  CacheEntry *entry = Find(path);
   return entry != nullptr ? entry->text.c_str() : nullptr;
-}
-
-Co::InvokeTask
-IgcMetaCache::FillCacheCoro(std::vector<AllocatedPath> paths) noexcept
-{
-  for (const auto &path : paths) {
-    GetCompactInfo(Path(path.c_str()));
-  }
-
-  co_return;
-}
-
-void
-IgcMetaCache::OnFillComplete([[maybe_unused]] std::exception_ptr error) noexcept
-{
-  // Notify UI that fill is complete (ignore any errors)
-  if (auto *notify = current_notify.exchange(nullptr))
-    notify->SendNotification();
 }
 
 void
 IgcMetaCache::StartBackgroundFill(std::vector<AllocatedPath> paths,
-                                  UI::Notify *notify) noexcept
+                                  UI::Notify *notify)
 {
-  if (!inject_task)
-    inject_task = std::make_unique<Co::InjectTask>(asio_thread->GetEventLoop());
-
-  if (*inject_task) {
+  if (async.IsBusy())
     CancelBackgroundFill();
-    inject_task.reset();
-    inject_task = std::make_unique<Co::InjectTask>(asio_thread->GetEventLoop());
-  }
 
-  current_notify.store(notify);
-  inject_task->Start(FillCacheCoro(std::move(paths)), BIND_THIS_METHOD(OnFillComplete));
+  fill_job = std::make_unique<FillJob>(*this, std::move(paths));
+  try {
+    async.Start(fill_job.get(), operation, notify);
+  } catch (...) {
+    fill_job.reset();
+    throw;
+  }
 }
 
 void
 IgcMetaCache::CancelBackgroundFill() noexcept
 {
-  if (!inject_task)
+  if (!async.IsBusy())
     return;
 
-  current_notify.store(nullptr);
-  inject_task->Cancel();
+  async.Cancel();
+  try {
+    async.Wait();
+  } catch (const OperationCancelled &) {
+  } catch (...) {
+    LogError(std::current_exception(), "IGC metadata worker failed");
+  }
+
+  fill_job.reset();
 }
 
 void
 IgcMetaCache::Shutdown() noexcept
 {
   CancelBackgroundFill();
-  inject_task.reset();
 }
 
 void
 IgcMetaCache::PollBackgroundFill() noexcept
 {
-  if (!inject_task || !*inject_task)
+  if (!async.IsBusy() || !async.HasFinished())
     return;
 
-  // No synchronous wait available; completion is reported via OnFillComplete().
+  try {
+    async.Wait();
+  } catch (const OperationCancelled &) {
+  } catch (...) {
+    LogError(std::current_exception(), "IGC metadata worker failed");
+  }
+
+  fill_job.reset();
 }
