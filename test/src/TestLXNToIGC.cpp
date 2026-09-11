@@ -2,13 +2,18 @@
 // Copyright The XCSoar Project
 
 #include "Device/Driver/LX/Convert.hpp"
+#include "Device/Driver/LX/LXN.hpp"
 #include "system/ConvertPathName.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "io/FileOutputStream.hxx"
+#include "io/StringOutputStream.hxx"
+#include "util/ByteOrder.hxx"
 #include "util/PrintException.hxx"
 #include "TestUtil.hpp"
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -119,9 +124,62 @@ CompareFiles()
   return memcmp(in_data.get(), out_data.get(), in_size) == 0;
 }
 
+static std::string
+ConvertLXN(const std::vector<std::byte> &data)
+{
+  StringOutputStream sos;
+  BufferedOutputStream bos(sos);
+  if (!LX::ConvertLXNToIGC(data.data(), data.size(), bos))
+    return {};
+
+  bos.Flush();
+  return std::move(sos).GetValue();
+}
+
+/**
+ * Negative LXN altitudes must become signed IGC fields, not uint16
+ * wrap (65479 m for -57 m).  Regression for #3075.
+ */
+static void
+TestSignedAltitude()
+{
+  std::vector<std::byte> lxn;
+
+  LXN::Origin origin{};
+  origin.cmd = LXN::ORIGIN;
+  origin.time = ToBE32(0);
+  origin.latitude = ToBE32(0);
+  origin.longitude = ToBE32(0);
+  const auto *origin_bytes =
+    reinterpret_cast<const std::byte *>(&origin);
+  lxn.insert(lxn.end(), origin_bytes, origin_bytes + sizeof(origin));
+
+  LXN::Position position{};
+  position.cmd = LXN::POSITION_OK;
+  position.time = ToBE16(0);
+  position.latitude = ToBE16(0);
+  position.longitude = ToBE16(0);
+  position.aalt = ToBE16((uint16_t)(int16_t)-57);
+  position.galt = ToBE16((uint16_t)(int16_t)-1);
+  const auto *position_bytes =
+    reinterpret_cast<const std::byte *>(&position);
+  lxn.insert(lxn.end(), position_bytes,
+             position_bytes + sizeof(position));
+
+  lxn.push_back(std::byte{LXN::END});
+
+  const std::string igc = ConvertLXN(lxn);
+  ok1(!igc.empty());
+  ok1(igc.find("EA-0057-0001") != std::string::npos);
+  ok1(igc.find("65479") == std::string::npos);
+  ok1(igc.find("65535") == std::string::npos);
+}
+
 int main()
 try {
-  plan_tests(2);
+  plan_tests(2 + 4);
+
+  TestSignedAltitude();
 
   if (!RunConversion())
     skip(1, 0, "conversion failed");

@@ -33,6 +33,9 @@ Version 7.45.2 - not yet released
   - fix crash when opening the port monitor
   - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too
     low #3055
+  - fix IGC downloads from LX Navigation loggers (Colibri, LX20,
+    LX7007 IGC) showing about 65000 m for negative pressure
+    altitudes #3075
 * ui
   - support manual UTC offsets up to +14:00 in 15-minute increments
   - keep automatic UTC offsets synchronized with the operating-system
