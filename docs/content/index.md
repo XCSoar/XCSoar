@@ -100,7 +100,7 @@ The manual is the complete reference. The quick guide brings you into the air wi
     icon: i-lucide-terminal
     title: Developers
     description: Building XCSoar, the architecture and how to contribute.
-    to: /dev
+    to: /dev/build
     variant: subtle
     ---
     ::::
