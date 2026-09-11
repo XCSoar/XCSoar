@@ -13,6 +13,7 @@
 #include "util/PrintException.hxx"
 
 #include <cstdlib>
+#include <utility>
 
 class CancelledOperationEnvironment final : public NullOperationEnvironment {
 public:
@@ -251,6 +252,197 @@ CheckLandingAfterHighSpeedClimb()
 }
 
 static void
+CheckPolarThresholds()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 23; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 6, 100, 6);
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{13}});
+
+  for (unsigned i = 24; i <= 94; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3.5, 100, 6);
+  ok1(flying.flying);
+}
+
+static void
+CheckRidgeTransition()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 25; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 12,
+                 100 + (i - 12) * 2);
+  ok1(flying.flying);
+
+  calculated.altitude_agl_valid = true;
+  calculated.altitude_agl = 60;
+  for (unsigned i = 26; i <= 96; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3.5, 126);
+
+  ok1(flying.flying);
+  ok1(!flying.landing_time.IsDefined());
+}
+
+static void
+CheckLandingThreshold()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 45; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 12, 150);
+
+  UpdateFlying(computer, flying, basic, calculated, 46, 4, 150);
+  for (unsigned i = 47; i <= 80; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3.9, 150);
+
+  ok1(!flying.flying);
+  ok1(flying.landing_time == TimeStamp{FloatDuration{47}});
+}
+
+static void
+CheckLandingAGLBoundary()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 45; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 12, 150);
+
+  calculated.altitude_agl_valid = true;
+  calculated.altitude_agl = 50;
+  for (unsigned i = 46; i <= 80; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 3.5, 150);
+
+  ok1(!flying.flying);
+  ok1(flying.landing_time == TimeStamp{FloatDuration{46}});
+}
+
+static void
+CheckLandingEitherSideOfAGLBoundary()
+{
+  for (const auto &[agl, expected_flying] : {
+         std::pair{49., false}, std::pair{51., true}}) {
+    FlyingComputer computer;
+    FlyingState flying;
+    NMEAInfo basic;
+    DerivedInfo calculated;
+    PrepareFlying(computer, flying, basic, calculated);
+
+    for (unsigned i = 13; i <= 45; ++i)
+      UpdateFlying(computer, flying, basic, calculated, i, 12, 150);
+
+    calculated.altitude_agl_valid = true;
+    calculated.altitude_agl = agl;
+    for (unsigned i = 46; i <= 116; ++i)
+      UpdateFlying(computer, flying, basic, calculated, i, 3.5, 150);
+
+    ok1(flying.flying == expected_flying);
+  }
+}
+
+static void
+CheckColdStartAt51MAboveGround()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  calculated.altitude_agl_valid = true;
+  calculated.altitude_agl = 51;
+  for (unsigned i = 13; i <= 83; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 0, 151);
+
+  ok1(!flying.flying);
+}
+
+static void
+CheckAirspeedHeadwind()
+{
+  for (const bool real : {false, true}) {
+    FlyingComputer computer;
+    FlyingState flying;
+    NMEAInfo basic;
+    DerivedInfo calculated;
+    PrepareFlying(computer, flying, basic, calculated);
+
+    for (unsigned i = 13; i <= 45; ++i)
+      UpdateFlying(computer, flying, basic, calculated, i, 12, 150);
+
+    basic.airspeed_available.Update(basic.clock);
+    basic.airspeed_real = real;
+    basic.true_airspeed = 8;
+    for (unsigned i = 46; i <= 116; ++i) {
+      UpdateFlying(computer, flying, basic, calculated, i, 0, 150);
+      basic.airspeed_available.Update(basic.clock);
+      basic.airspeed_real = real;
+      basic.true_airspeed = 8;
+    }
+
+    ok1(flying.flying);
+  }
+}
+
+static void
+CheckTimeDiscontinuities()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  UpdateFlying(computer, flying, basic, calculated, 100, 10, 100);
+  ok1(!flying.flying);
+  for (unsigned i = 101; i <= 105; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 10, 100);
+  ok1(flying.flying);
+  ok1(flying.takeoff_time == TimeStamp{FloatDuration{100}});
+
+  UpdateFlying(computer, flying, basic, calculated, 50, 10, 100);
+  ok1(!flying.flying);
+}
+
+static void
+CheckWaveFlight()
+{
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  for (unsigned i = 13; i <= 73; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 12,
+                 100 + (i - 12) * 20);
+  ok1(flying.flying);
+
+  for (unsigned i = 74; i <= 144; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 1, 1320);
+
+  ok1(flying.flying);
+  ok1(!flying.landing_time.IsDefined());
+}
+
+static void
 CheckCalculated()
 {
   const auto result = DetectIGCFlightTimes(Path("test/data/flight_times.igc"));
@@ -351,7 +543,7 @@ CheckBundledFlight(Path path)
 int
 main()
 try {
-  plan_tests(63);
+  plan_tests(85);
   CheckFixAdapter();
   CheckCalculated();
   CheckFallback();
@@ -371,6 +563,15 @@ try {
   CheckBelowLowSpeedThreshold();
   CheckInterruptedClimb();
   CheckLandingAfterHighSpeedClimb();
+  CheckPolarThresholds();
+  CheckRidgeTransition();
+  CheckLandingThreshold();
+  CheckLandingAGLBoundary();
+  CheckLandingEitherSideOfAGLBoundary();
+  CheckColdStartAt51MAboveGround();
+  CheckAirspeedHeadwind();
+  CheckTimeDiscontinuities();
+  CheckWaveFlight();
   return exit_status();
 } catch (...) {
   PrintException(std::current_exception());

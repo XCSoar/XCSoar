@@ -7,7 +7,9 @@
 #include "Engine/Navigation/Aircraft.hpp"
 
 static constexpr double LOW_TAKEOFF_SPEED = 3;
+static constexpr double LANDING_SPEED = 4;
 static constexpr double LOW_SPEED_TAKEOFF_HEIGHT_GAIN = 20;
+static constexpr double MIN_LANDING_AGL = 50;
 
 void
 FlyingComputer::Reset()
@@ -312,7 +314,12 @@ FlyingComputer::Compute(double takeoff_speed,
     return;
 
   const auto any_altitude = basic.GetAnyAltitude();
-  double landing_takeoff_speed = takeoff_speed;
+  const bool clearly_airborne = flying.flying &&
+    calculated.altitude_agl_valid &&
+    calculated.altitude_agl > MIN_LANDING_AGL;
+  /* Keep lower polar-derived thresholds for slow aircraft, but do not let
+     faster-aircraft polars raise the base landing threshold above 4 m/s. */
+  double landing_speed = std::min(LANDING_SPEED, takeoff_speed / 2);
 
   if (!basic.airspeed_available && !calculated.altitude_agl_valid &&
       any_altitude && last_ground_altitude >= 0 &&
@@ -324,11 +331,11 @@ FlyingComputer::Compute(double takeoff_speed,
     auto dh = *any_altitude - last_ground_altitude;
 
     if (dh > 1000)
-      landing_takeoff_speed /= 4;
+      landing_speed /= 4;
     else if (dh > 500)
-      landing_takeoff_speed /= 2;
+      landing_speed /= 2;
     else
-      landing_takeoff_speed = landing_takeoff_speed * 2 / 3;
+      landing_speed = landing_speed * 2 / 3;
   }
 
   const bool low_launch_speed = CheckFlightSpeed(LOW_TAKEOFF_SPEED, basic);
@@ -337,7 +344,7 @@ FlyingComputer::Compute(double takeoff_speed,
     any_altitude);
 
   const bool below_landing_speed =
-    !CheckFlightSpeed(landing_takeoff_speed / 2, basic);
+    !CheckFlightSpeed(landing_speed, basic);
   bool landing_climbing = false;
   if (flying.flying && below_landing_speed && any_altitude)
     landing_climbing = landing_climb.Update(dt, *any_altitude);
@@ -348,11 +355,13 @@ FlyingComputer::Compute(double takeoff_speed,
     ConfirmSlowTakeoff(flying, *slow_takeoff);
 
   if (CheckFlightSpeed(takeoff_speed, basic) || slow_takeoff ||
-      CheckAltitudeAGL(calculated))
+      CheckAltitudeAGL(calculated) || clearly_airborne)
     Moving(flying, basic.time, dt, basic.location,
            basic.GetAnyAltitude().value_or(0));
   else if (!flying.flying ||
            (below_landing_speed && !landing_climbing))
+    /* This AGL guard may only retain an existing flight.  It must not
+       declare takeoff from a cold start. */
     Stationary(flying, basic.time, dt, basic.location);
 
   if (basic.engine_noise_level_available)

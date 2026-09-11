@@ -17,6 +17,13 @@ struct FlyingState;
 
 /**
  * Detect takeoff and landing.
+ *
+ * GPS alone cannot distinguish stationary ground operation from a cold-start
+ * level wave flight, nor terrain contact from low-level ridge flight within
+ * the 0--50 m AGL landing band.  Airspeed or sustained climb evidence is
+ * needed to resolve those cases.  For an uphill foot launch, the beginning
+ * of sustained launch evidence may also precede actual separation from the
+ * terrain, and therefore so may the detected takeoff time.
  */
 class FlyingComputer {
   class ClimbEvidence {
