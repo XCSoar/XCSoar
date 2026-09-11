@@ -38,28 +38,57 @@ static_assert(std::ranges::equal(ANTIALIASING_SAMPLE_COUNTS,
 using namespace std::chrono;
 
 /**
- * Add one anti-aliasing choice, annotated with whether it is the
- * level currently in use, or one this display cannot provide.
+ * Format one channel's sample count as e.g. "4x", or the localised
+ * "Off" for zero.
+ */
+static StaticString<16>
+FormatSamples(unsigned samples) noexcept
+{
+  StaticString<16> label;
+  if (samples > 0)
+    label.Format("%ux", samples);
+  else
+    label = _("Off");
+  return label;
+}
+
+/**
+ * Add one anti-aliasing choice.  The window surface (which paints
+ * the gauges, dialogs and form controls directly) and the
+ * framebuffer objects (which paint the map, InfoBoxes and renderer
+ * caches) each fall back to the next lower level independently when
+ * @a samples is not available, so when the two would end up with
+ * different sample counts, both are shown, e.g. "8x (Map), 4x
+ * (Gauges)".
  *
- * @param available bit mask of usable sample counts; 0 means the
- * platform cannot enumerate them, in which case nothing is marked
- * @param active the number of samples actually in use
+ * @param window_available bit mask of sample counts the window
+ * surface can provide; 0 means the platform cannot enumerate them,
+ * in which case this channel is assumed to support everything
+ * @param fbo_available the same, for framebuffer objects
  */
 static void
 AddAntialiasingChoice(DataFieldEnum &df, unsigned samples,
-                      unsigned available, unsigned active) noexcept
+                      unsigned window_available,
+                      unsigned fbo_available) noexcept
 {
-  StaticString<64> label;
+  const unsigned window_actual =
+    SelectAntialiasingSamples(samples, window_available);
+  const unsigned fbo_actual =
+    SelectAntialiasingSamples(samples, fbo_available);
 
-  if (samples == 0)
-    label.Format("%s", _("Off"));
-  else
-    label.Format("%ux", samples);
+  const bool window_ok = window_available == 0 || window_actual == samples;
+  const bool fbo_ok = fbo_available == 0 || fbo_actual == samples;
 
-  if (samples == active)
-    label.AppendFormat(" (%s)", _("active"));
-  else if (available != 0 && (available & (1u << samples)) == 0)
+  StaticString<80> label(FormatSamples(samples));
+
+  if (!window_ok && !fbo_ok)
     label.AppendFormat(" (%s)", _("not available"));
+  else if (!window_ok)
+    label.AppendFormat(" (%s), %s (%s)", _("Map"),
+                       FormatSamples(window_actual).c_str(), _("Gauges"));
+  else if (!fbo_ok)
+    label.AppendFormat(" (%s), %s (%s)", _("Gauges"),
+                       FormatSamples(fbo_actual).c_str(), _("Map"));
 
   df.AddChoice(samples, label.c_str());
 }
@@ -123,16 +152,17 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
     DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
 
 #ifdef ENABLE_OPENGL
-    const unsigned available = OpenGL::available_antialiasing_samples;
-    const unsigned active = OpenGL::antialiasing_samples;
+    const unsigned window_available = OpenGL::available_antialiasing_samples;
+    const unsigned fbo_available = OpenGL::available_fbo_antialiasing_samples;
 #else
     /* without OpenGL there is no antialiasing implemented */
-    const unsigned available = 1, active = ~0u;
+    const unsigned window_available = 1, fbo_available = 1;
 #endif
 
-    AddAntialiasingChoice(df, ANTIALIASING_OFF, available, active);
+    AddAntialiasingChoice(df, ANTIALIASING_OFF,
+                          window_available, fbo_available);
     for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
-      AddAntialiasingChoice(df, n, available, active);
+      AddAntialiasingChoice(df, n, window_available, fbo_available);
 
     df.SetValue(settings.antialiasing);
     wp_antialiasing->RefreshDisplay();

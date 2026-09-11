@@ -14,7 +14,9 @@
 #include "Audio/Settings.hpp"
 
 #include <chrono>
+#include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <type_traits>
 
 /**
@@ -44,6 +46,37 @@ IsValidAntialiasing(unsigned samples) noexcept
       return true;
 
   return false;
+}
+
+/**
+ * Given the number of MSAA samples requested (0 = disabled, or one
+ * of #ANTIALIASING_SAMPLE_COUNTS) and a bit mask of the levels one
+ * channel (the window surface or a framebuffer object) can actually
+ * provide (bit n set means n samples work; bit 0 set means the mask
+ * is known at all), return the highest level that does not exceed
+ * the request: the "next lower available setting".  Returns 0 if
+ * nothing at or below the request is available.
+ *
+ * If @a available is 0 ("unknown", i.e. this channel could not be
+ * probed), the request is returned unchanged.
+ *
+ * Keep in sync with OpenGL::SelectAntialiasingSamples(), which the
+ * display backends use; this copy exists for the same reason as
+ * #ANTIALIASING_SAMPLE_COUNTS above.
+ */
+constexpr unsigned
+SelectAntialiasingSamples(unsigned requested, unsigned available) noexcept
+{
+  if (requested == 0 || available == 0)
+    return requested;
+
+  for (std::size_t i = std::size(ANTIALIASING_SAMPLE_COUNTS); i-- > 0;) {
+    const unsigned n = ANTIALIASING_SAMPLE_COUNTS[i];
+    if (n <= requested && (available & (1u << n)) != 0)
+      return n;
+  }
+
+  return 0;
 }
 
 /**
