@@ -60,6 +60,10 @@ Version 7.45.2 - not yet released
     long
   - let Left/Right still change settings pages on Services until Up
     selects a service action
+* data files
+  - skip the NMEA log and IGC file the loggers are writing, so a
+    Windows backup no longer fails the whole archive, and refuse
+    backup and restore while flying
 * documentation
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
