@@ -67,9 +67,10 @@ GetDisplaySize([[maybe_unused]] const UI::Display &display, [[maybe_unused]] Pix
 #endif
 }
 
-void
-Initialise(const UI::Display &display, PixelSize new_size,
-           unsigned ui_scale, unsigned custom_dpi) noexcept
+static void
+Apply(PixelSize new_size, UnsignedPoint2D dpi,
+      unsigned ui_scale, bool has_touch,
+      bool is_small_screen) noexcept
 {
   const unsigned width = new_size.width, height = new_size.height;
 
@@ -80,9 +81,6 @@ Initialise(const UI::Display &display, PixelSize new_size,
   if constexpr (!ScaleSupported())
     return;
 
-  const auto dpi = Display::GetDPI(display, custom_dpi);
-  const bool is_small_screen =
-    IsSmallScreen(GetDisplaySize(display, new_size), dpi);
   small_screen = is_small_screen;
 
   const auto SmallScreenAdjust = [is_small_screen](unsigned value) constexpr noexcept {
@@ -114,7 +112,7 @@ Initialise(const UI::Display &display, PixelSize new_size,
   minimum_control_height = std::min(FontScale(23),
                                     min_screen_pixels / 12);
 
-  if (HasTouchScreen()) {
+  if (has_touch) {
     /* larger rows for touch screens */
     maximum_control_height = PtScale(30);
     if (maximum_control_height < minimum_control_height)
@@ -123,7 +121,24 @@ Initialise(const UI::Display &display, PixelSize new_size,
     maximum_control_height = minimum_control_height;
   }
 
-  hit_radius = PtScale(HasTouchScreen() ? 28 : 6);
+  hit_radius = PtScale(has_touch ? 28 : 6);
+}
+
+void
+Initialise(PixelSize new_size, UnsignedPoint2D dpi,
+           unsigned ui_scale, bool has_touch) noexcept
+{
+  Apply(new_size, dpi, ui_scale, has_touch,
+        IsSmallScreen(new_size, dpi));
+}
+
+void
+Initialise(const UI::Display &display, PixelSize new_size,
+           unsigned ui_scale, unsigned custom_dpi) noexcept
+{
+  const auto dpi = Display::GetDPI(display, custom_dpi);
+  Apply(new_size, dpi, ui_scale, HasTouchScreen(),
+        IsSmallScreen(GetDisplaySize(display, new_size), dpi));
 }
 
 } // namespace Layout

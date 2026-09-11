@@ -83,6 +83,19 @@ Initialise(const UI::Display &display,
            unsigned custom_dpi=0) noexcept;
 
 /**
+ * Initialise layout from an explicit pixel size and DPI.  Does not
+ * require a live display; small-screen detection uses
+ * @p screen_size.
+ *
+ * @param dpi pixels per inch along x (pens) and y (points/fonts)
+ * @param ui_scale the UI scale setting in percent
+ * @param has_touch true to size controls and hit targets for touch
+ */
+void
+Initialise(PixelSize screen_size, UnsignedPoint2D dpi,
+           unsigned ui_scale=100, bool has_touch=false) noexcept;
+
+/**
  * Is scaling supported by this platform?
  */
 static constexpr bool
