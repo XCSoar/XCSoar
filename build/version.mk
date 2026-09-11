@@ -33,11 +33,20 @@ PRODUCT_NAME_CPPFLAGS = -DPRODUCT_NAME=\"$(PRODUCT_NAME)\" -DPRODUCT_NAME_LC=\"$
 VERSION_CPPFLAGS = -DXCSOAR_VERSION=\"$(VERSION)\" $(PRODUCT_NAME_CPPFLAGS)
 
 GIT_COMMIT_ID := $(shell git rev-parse --short --verify HEAD 2>$(NUL))
+ifeq ($(GIT_COMMIT_ID),)
+# git can fail in CI containers (dubious ownership) while GITHUB_SHA is set.
+# Do not fall back on v* tag builds, so releases stay unadorned.
+ifeq ($(patsubst refs/tags/v%,%,$(GITHUB_REF)),$(GITHUB_REF))
+GIT_COMMIT_ID := $(shell printf '%.7s' '$(GITHUB_SHA)')
+endif
+endif
 RELEASE_COMMIT_ID := $(shell git rev-parse --short --verify "v$(VERSION)^{commit}" 2>$(NUL))
 # only append the commit id for unreleased builds (no release tag)
+ifneq ($(GIT_COMMIT_ID),)
 ifneq ($(GIT_COMMIT_ID),$(RELEASE_COMMIT_ID))
 VERSION_CPPFLAGS += -DGIT_COMMIT_ID=\"$(GIT_COMMIT_ID)\"
 FULL_VERSION := $(FULL_VERSION)~$(GIT_COMMIT_ID)
+endif
 endif
 
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): $(topdir)/VERSION.txt
