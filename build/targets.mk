@@ -21,7 +21,7 @@ ifeq ($(TARGET),)
       TARGET = UNIX
     endif
   else
-    TARGET = PC
+    TARGET = WIN64OPENGL
   endif
 else
   ifeq ($(filter $(TARGET),$(TARGETS)),)
@@ -66,8 +66,7 @@ TARGET_ARCH :=
 # virtual targets ("flavors")
 
 ifeq ($(TARGET),WIN64)
-  X64 := y
-  override TARGET = PC
+  $(error TARGET=WIN64 (GDI) has been removed; use TARGET=WIN64OPENGL)
 endif
 
 ifeq ($(TARGET),WIN64OPENGL)

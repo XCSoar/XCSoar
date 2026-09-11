@@ -8,8 +8,6 @@
 #include "opengl/Color.hpp"
 #elif defined(USE_MEMORY_CANVAS)
 #include "memory/Color.hpp"
-#elif defined(USE_GDI)
-#include "gdi/Color.hpp"
 #else
 #error No Color implementation
 #endif

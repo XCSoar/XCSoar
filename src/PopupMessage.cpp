@@ -87,9 +87,6 @@ PopupMessage::Create(const PixelRect _rc) noexcept
   rc = _rc;
 
   WindowStyle style;
-#ifdef USE_WINUSER
-  style.Border();
-#endif
   style.Hide();
 
   PaintWindow::Create(parent, GetRect(), style);
@@ -110,10 +107,8 @@ PopupMessage::OnPaint(Canvas &canvas) noexcept
   canvas.Clear(look.dark_mode ? look.background_color : COLOR_WHITE);
 
   auto rc = GetClientRect();
-#ifndef USE_WINUSER
   canvas.DrawOutlineRectangle(rc,
                               look.dark_mode ? COLOR_GRAY : COLOR_BLACK);
-#endif
 
   const int padding = Layout::GetTextPadding();
   rc.Grow(-padding);

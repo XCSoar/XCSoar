@@ -28,10 +28,6 @@
 #include "opengl/Display.hpp"
 #endif
 
-#ifdef USE_GDI
-#include "gdi/Display.hpp"
-#endif
-
 namespace UI {
 
 /**
@@ -115,13 +111,6 @@ class Display
 {
 public:
   using SDL::Display::Display;
-};
-
-#elif defined(USE_GDI)
-
-class Display : public GDI::Display {
-public:
-  using GDI::Display::Display;
 };
 
 #else

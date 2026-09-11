@@ -478,7 +478,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
         if (data.empty())
           continue;
 
-#if !defined(USE_GDI) && !defined(ANDROID)
+#ifndef ANDROID
         if (!images.append().Load(std::span<const std::byte>(data)))
           images.shrink(images.size() - 1);
 #else
@@ -575,9 +575,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
 
   details_panel.Create(parent, look, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
-#ifndef USE_WINUSER
   details_text.SetFont(look.text_font);
-#endif
   details_text.SetColors(look.ReadOnlyValueBackground(), look.list.text_color,
                          look.ReadOnlyValueBorderColor());
   details_text.SetText(waypoint->details.c_str());

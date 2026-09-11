@@ -2,35 +2,15 @@
    Various Perl scripts convert it to a C header and target-specific
    files (e.g. the Windows RC format). */
 
-// Application Icons
-#ifdef USE_GDI
-app_icon IDI_XCSOAR "xcsoarswift"
-#endif
-
 // Bitmaps
 
 bitmap_icon_scaled IDB_ABORT "mode_abort"
-
-#ifdef USE_GDI
-hatch_bitmap IDB_ABOVETERRAIN "aboveterrain"
-#endif
 
 bitmap_icon_scaled IDB_AIRPORT_REACHABLE "alt_reachable_airport"
 bitmap_icon_scaled IDB_AIRPORT_MARGINAL "alt_marginal_airport"
 bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE "alt_landable_airport"
 bitmap_icon_scaled IDB_AIRPORT_MARGINAL2 "alt2_marginal_airport"
 bitmap_icon_scaled IDB_AIRPORT_UNREACHABLE2 "alt2_landable_airport"
-
-#ifdef USE_GDI
-hatch_bitmap IDB_AIRSPACE0 "airspace0"
-hatch_bitmap IDB_AIRSPACE1 "airspace1"
-hatch_bitmap IDB_AIRSPACE2 "airspace2"
-hatch_bitmap IDB_AIRSPACE3 "airspace3"
-hatch_bitmap IDB_AIRSPACE4 "airspace4"
-hatch_bitmap IDB_AIRSPACE5 "airspace5"
-hatch_bitmap IDB_AIRSPACE6 "airspace6"
-hatch_bitmap IDB_AIRSPACE7 "airspace7"
-#endif
 
 bitmap_icon_scaled IDB_AIRSPACEI "airspace_intercept"
 bitmap_icon_scaled IDB_CRUISE "mode_cruise"
@@ -69,17 +49,13 @@ bitmap_icon_scaled IDB_LANDABLE "winpilot_landable"
 #ifdef XCSOAR_TESTING
 bitmap_graphic IDB_LAUNCHER1 "launcher_red_640_1"
 bitmap_graphic IDB_LAUNCHER2 "launcher_red_640_2"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_LAUNCHER1_RGBA "launcher_red_640_rgba_1"
 bitmap_graphic IDB_LAUNCHER2_RGBA "launcher_red_640_rgba_2"
-#endif
 #else
 bitmap_graphic IDB_LAUNCHER1 "launcher_640_1"
 bitmap_graphic IDB_LAUNCHER2 "launcher_640_2"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_LAUNCHER1_RGBA "launcher_640_rgba_1"
 bitmap_graphic IDB_LAUNCHER2_RGBA "launcher_640_rgba_2"
-#endif
 #endif
 bitmap_icon_scaled IDB_MAPSCALE_LEFT "scalearrow_left"
 bitmap_icon_scaled IDB_MAPSCALE_RIGHT "scalearrow_right"
@@ -104,20 +80,16 @@ bitmap_icon_scaled IDB_SMALL "map_small"
 bitmap_graphic IDB_LOGO_UHD "logo_red_320"
 bitmap_graphic IDB_LOGO_HD "logo_red_160"
 bitmap_graphic IDB_LOGO "logo_red_80"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_LOGO_UHD_RGBA "logo_red_320_rgba"
 bitmap_graphic IDB_LOGO_HD_RGBA "logo_red_160_rgba"
 bitmap_graphic IDB_LOGO_RGBA "logo_red_80_rgba"
-#endif
 #else
 bitmap_graphic IDB_LOGO_UHD "logo_320"
 bitmap_graphic IDB_LOGO_HD "logo_160"
 bitmap_graphic IDB_LOGO "logo_80"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_LOGO_UHD_RGBA "logo_320_rgba"
 bitmap_graphic IDB_LOGO_HD_RGBA "logo_160_rgba"
 bitmap_graphic IDB_LOGO_RGBA "logo_80_rgba"
-#endif
 #endif
 bitmap_icon_scaled IDB_TARGET "map_target"
 bitmap_icon_scaled IDB_TEAMMATE_POS "map_teammate"
@@ -162,24 +134,20 @@ bitmap_graphic IDB_GESTURE_URDL "gesture_urdl"
 bitmap_graphic IDB_TITLE "title_red_110"
 bitmap_graphic IDB_TITLE_HD "title_red_320"
 bitmap_graphic IDB_TITLE_UHD "title_red_640"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_TITLE_RGBA "title_red_110_rgba"
 bitmap_graphic IDB_TITLE_HD_RGBA "title_red_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_RGBA "title_red_640_rgba"
 bitmap_graphic IDB_TITLE_HD_WHITE "title_red_white_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_WHITE "title_red_white_640_rgba"
-#endif
 #else
 bitmap_graphic IDB_TITLE "title_110"
 bitmap_graphic IDB_TITLE_HD "title_320"
 bitmap_graphic IDB_TITLE_UHD "title_640"
-#ifndef USE_WIN32_RESOURCES
 bitmap_graphic IDB_TITLE_RGBA "title_110_rgba"
 bitmap_graphic IDB_TITLE_HD_RGBA "title_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_RGBA "title_640_rgba"
 bitmap_graphic IDB_TITLE_HD_WHITE "title_white_320_rgba"
 bitmap_graphic IDB_TITLE_UHD_WHITE "title_white_640_rgba"
-#endif
 #endif
 bitmap_icon_scaled IDB_WEATHER_STATION "map_weather_station"
 

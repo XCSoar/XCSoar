@@ -4,10 +4,7 @@
 #pragma once
 
 #include "ContainerWindow.hpp"
-
-#ifndef USE_WINUSER
 #include "custom/DoubleClick.hpp"
-#endif
 
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
@@ -41,9 +38,7 @@ struct SDL_Window;
 #include "DisplayOrientation.hpp"
 #endif
 
-#ifndef USE_WINUSER
 class TopCanvas;
-#endif
 
 #ifdef USE_X11
 #define Font X11Font
@@ -119,9 +114,6 @@ public:
   void Resizable() {
 #ifdef ENABLE_SDL
     resizable = true;
-#elif defined(USE_WINUSER)
-    style &= ~WS_BORDER;
-    style |= WS_THICKFRAME;
 #endif
   }
 
@@ -185,7 +177,6 @@ public:
   std::chrono::steady_clock::time_point hz_window_start{};
 #endif
 
-#ifndef USE_WINUSER
   TopCanvas *screen = nullptr;
 
   bool invalidated;
@@ -279,15 +270,6 @@ public:
   bool FlushTouchMouseUp() noexcept;
 #endif
 
-#else /* USE_WINUSER */
-
-  /**
-   * On WM_ACTIVATE, the focus is returned to this window.
-   */
-  HWND hSavedFocus;
-
-#endif /* USE_WINUSER */
-
 #ifdef HAVE_HIGHDPI_SUPPORT
   float point_to_real_x = 1, point_to_real_y = 1;
 #endif
@@ -314,9 +296,7 @@ public:
     :display(_display) {}
 #endif
 
-#ifndef USE_WINUSER
   ~TopWindow() noexcept override;
-#endif
 
   auto &GetDisplay() const noexcept {
     return display;
@@ -325,13 +305,8 @@ public:
   /**
    * Throws on error.
    */
-#ifdef USE_WINUSER
-  void Create(const char *cls, const char *text, PixelSize size,
-              TopWindowStyle style=TopWindowStyle());
-#else
   void Create(const char *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
-#endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(ENABLE_SDL)
 private:
@@ -353,7 +328,7 @@ public:
   void CheckResize() noexcept {}
 #endif
 
-#if !defined(USE_WINUSER) && !defined(ENABLE_SDL)
+#ifndef ENABLE_SDL
 #if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
   void SetCaption(const char *) noexcept {}
 #else
@@ -367,34 +342,6 @@ public:
    */
   void CancelMode() noexcept;
 
-#if defined(USE_WINUSER)
-  [[gnu::pure]]
-  const PixelRect GetClientRect() const noexcept {
-    if (::IsIconic(hWnd)) {
-      /* for a minimized window, GetClientRect() returns the
-         dimensions of the icon, which is not what we want */
-      WINDOWPLACEMENT placement;
-      if (::GetWindowPlacement(hWnd, &placement) &&
-          (placement.showCmd == SW_MINIMIZE ||
-           placement.showCmd == SW_SHOWMINIMIZED)) {
-        const auto &r = placement.rcNormalPosition;
-        return PixelRect(0, 0, r.right - r.left, r.bottom - r.top);
-      }
-    }
-
-    return ContainerWindow::GetClientRect();
-  }
-
-  [[gnu::pure]]
-  const PixelSize GetSize() const noexcept {
-    /* this is implemented again because Window::get_size() would call
-       Window::GetClientRect() (method is not virtual) */
-    PixelRect rc = GetClientRect();
-    return {rc.right, rc.bottom};
-  }
-
-#endif
-    
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   [[gnu::pure]]
   const PixelSize GetSize() const noexcept {
@@ -440,7 +387,6 @@ public:
   }
 #endif
 
-#ifndef USE_WINUSER
   void Invalidate() noexcept override;
 
 protected:
@@ -452,7 +398,6 @@ protected:
 #endif
 
 public:
-#endif /* !USE_WINUSER */
 
   /**
    * Synchronously refresh the screen by handling all pending repaint
@@ -461,11 +406,7 @@ public:
   void Refresh() noexcept;
 
   void Close() noexcept {
-#ifndef USE_WINUSER
     OnClose();
-#else
-    ::SendMessage(hWnd, WM_CLOSE, 0, 0);
-#endif
   }
 
 #if defined(ANDROID) || defined(USE_POLL_EVENT)
@@ -557,14 +498,7 @@ protected:
   void OnDestroy() noexcept override;
 #endif
 
-#ifdef USE_WINUSER
-  LRESULT OnMessage(HWND _hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) noexcept override;
-#endif
-
-#ifndef USE_WINUSER
   void OnResize(PixelSize new_size) noexcept override;
-#endif
 
 #ifdef ANDROID
   virtual void OnLook() noexcept {}

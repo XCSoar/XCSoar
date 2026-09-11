@@ -11,10 +11,6 @@
 #include "ui/opengl/Features.hpp"
 #endif
 
-#ifdef USE_GDI
-#include "gdi/Features.hpp"
-#endif
-
 /**
  * Return true when the Canvas implements clipping against its
  * siblings and children.

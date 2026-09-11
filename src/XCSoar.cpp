@@ -16,7 +16,6 @@
 #include "Look/GlobalFonts.hpp"
 #include "ui/window/Init.hpp"
 #include "net/http/Init.hpp"
-#include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Simulator.hpp"
@@ -112,10 +111,6 @@ WinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevIn
 try {
 #if defined(ENABLE_SDL) && defined(SDL_MAIN_HANDLED)
   SDL_SetMainReady();
-#endif
-
-#ifdef USE_WIN32_RESOURCES
-  ResourceLoader::Init(hInstance);
 #endif
 
   // Read options from the command line

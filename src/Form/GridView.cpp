@@ -437,13 +437,7 @@ GridView::ShowNextPage(Direction direction)
   if (newPos != -1 && IsItemValid(newPos)) {
     items[newPos]->SetFocus();
     if (focusPos != -1 && IsItemValid(focusPos) && items[newPos]->HasFocus()) {
-#ifdef USE_WINUSER
-      HWND oldFocusHwnd = ::GetFocus();
-      if (oldFocusHwnd != nullptr)
-        ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
-#else
       items[focusPos]->ClearFocus();
-#endif /* USE_WINUSER */
     }
     RefreshLayout();
   }

@@ -24,25 +24,12 @@ class SingleWindow : public TopWindow {
 public:
   using TopWindow::TopWindow;
 
-#ifdef USE_WINUSER
-  static constexpr const char *class_name = "XCSoarMain";
-
-  /**
-   * Register the WIN32 window class.
-   */
-  static bool RegisterClass(HINSTANCE hInstance) noexcept;
-#endif
-
   /**
    * Throws on error.
    */
   void Create(const char *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle()) {
-#ifdef USE_WINUSER
-    TopWindow::Create(class_name, text, size, style);
-#else
     TopWindow::Create(text, size, style);
-#endif
   }
 
   void AddDialog(WndForm *dialog) noexcept;
@@ -74,11 +61,9 @@ public:
     return *dialogs.front();
   }
 
-#ifndef USE_WINUSER
 protected:
   [[gnu::pure]]
   bool FilterMouseEvent(PixelPoint pt, Window *allowed) const noexcept;
-#endif
 
 public:
   /**

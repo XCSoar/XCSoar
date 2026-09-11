@@ -15,10 +15,6 @@
 #include <jni.h>
 #endif
 
-#ifdef USE_GDI
-#include <windef.h>
-#endif
-
 #include <cassert>
 #include <span>
 
@@ -29,7 +25,7 @@ struct GeoQuadrilateral;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
-#elif !defined(USE_GDI)
+#elif defined(USE_MEMORY_CANVAS)
 #ifdef GREYSCALE
 using BitmapPixelTraits = GreyscalePixelTraits;
 #else
@@ -68,14 +64,11 @@ protected:
   bool flipped = false;
 #elif defined(USE_MEMORY_CANVAS)
   WritableImageBuffer<BitmapPixelTraits> buffer = WritableImageBuffer<BitmapPixelTraits>::Empty();
-#else
-  HBITMAP bitmap = nullptr;
 #endif
 
   /**
    * True if the decoded image contained non-grayscale pixels.
    * Set during Load() on platforms that go through UncompressedImage.
-   * Always false on GDI (icons are monochrome there).
    */
   bool has_colors = false;
 
@@ -83,7 +76,7 @@ public:
   Bitmap() = default;
   explicit Bitmap(ResourceId id);
 
-#if !defined(USE_GDI) && !defined(ANDROID)
+#ifndef ANDROID
   Bitmap(std::span<const std::byte> buffer);
 #endif
 
@@ -100,8 +93,6 @@ public:
     return texture != nullptr;
 #elif defined(USE_MEMORY_CANVAS)
     return buffer.data != nullptr;
-#else
-    return bitmap != nullptr;
 #endif
   }
 
@@ -148,27 +139,12 @@ public:
   unsigned GetHeight() const noexcept {
     return buffer.size.height;
   }
-#else
-  [[gnu::pure]]
-  PixelSize GetSize() const noexcept;
-
-  unsigned GetWidth() const noexcept {
-    return GetSize().width;
-  }
-
-  unsigned GetHeight() const noexcept {
-    return GetSize().height;
-  }
 #endif
 
-#if !defined(USE_GDI) || defined(ENABLE_OPENGL)
   bool Load(UncompressedImage &&uncompressed, Type type=Type::STANDARD);
-#endif
 
-#if !defined(USE_GDI) && !defined(ANDROID)
 #ifndef ANDROID
   bool Load(std::span<const std::byte> buffer, Type type=Type::STANDARD);
-#endif
 #endif
 
   bool Load(ResourceId id, Type type=Type::STANDARD);
@@ -197,12 +173,6 @@ public:
 #elif defined(USE_MEMORY_CANVAS)
   ConstImageBuffer<BitmapPixelTraits> GetNative() const noexcept {
     return buffer;
-  }
-#else
-  HBITMAP GetNative() const noexcept {
-    assert(IsDefined());
-
-    return bitmap;
   }
 #endif
 

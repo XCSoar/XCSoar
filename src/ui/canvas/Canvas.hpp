@@ -9,8 +9,6 @@
 #include "opengl/Canvas.hpp"
 #elif defined(USE_MEMORY_CANVAS)
 #include "memory/Canvas.hpp"
-#elif defined(USE_GDI)
-#include "gdi/Canvas.hpp"
 #else
 #error No Canvas implementation
 #endif

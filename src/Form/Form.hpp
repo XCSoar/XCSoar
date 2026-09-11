@@ -172,10 +172,6 @@ public:
   bool OnMouseUp(PixelPoint p) noexcept override;
   void OnCancelMode() noexcept override;
 
-#ifdef USE_WINUSER
-  bool OnCommand(unsigned id, unsigned code) noexcept override;
-#endif
-
   void SetKeyDownFunction(KeyDownFunction function) {
     key_down_function = function;
   }

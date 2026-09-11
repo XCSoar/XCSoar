@@ -19,10 +19,6 @@
 #define USAGE "-WxH"
 #endif
 
-#if defined(ENABLE_RESOURCE_LOADER) && defined(USE_GDI)
-#include "ResourceLoader.hpp"
-#endif
-
 #ifdef ENABLE_DIALOG
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
@@ -239,10 +235,6 @@ WinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINSTANCE hPrevIn
   ParseCommandLine(args);
 #endif
   args.ExpectEnd();
-#endif
-
-#if defined(ENABLE_RESOURCE_LOADER) && defined(USE_GDI)
-  ResourceLoader::Init(hInstance);
 #endif
 
 #ifdef ENABLE_SCREEN

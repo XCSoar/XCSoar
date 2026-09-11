@@ -24,13 +24,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i) noexcept
   PixelRect rc2 = rc;
   rc2.Grow(-(int)Layout::GetTextPadding());
 
-#ifdef USE_GDI
-  canvas.DrawFilledRectangle(rc2, color);
-  canvas.SelectHollowBrush();
-#else
   Brush brush(color);
   canvas.Select(brush);
-#endif
 
   const auto &look = UIGlobals::GetDialogLook();
   canvas.Select(Pen(Layout::ScaleFinePenWidth(1),

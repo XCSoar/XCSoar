@@ -8,11 +8,7 @@
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
 
-#ifdef USE_WINUSER
-#include "ui/canvas/AnyCanvas.hpp"
-#else
 #include "ui/canvas/Canvas.hpp"
-#endif
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
   :background_color(GlobalSettings::dark_mode
@@ -30,14 +26,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
   bitmap_progress_border.Load(IDB_PROGRESSBORDER);
 
   // Determine text height
-#ifndef USE_WINUSER
   font.Load(FontDescription(Layout::FontScale(10)));
   text_height = font.GetHeight();
-#else
-  {
-    AnyCanvas canvas;
-    text_height = canvas.GetFontHeight();  }
-#endif
 
   UpdateLayout(GetClientRect());
 
@@ -140,9 +130,7 @@ ProgressWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
                  bitmap_progress_border);
 
-#ifndef USE_WINUSER
   canvas.Select(font);
-#endif
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(dark_mode ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawFormattedText(message_position, message.c_str(),
