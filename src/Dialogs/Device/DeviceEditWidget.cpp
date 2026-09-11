@@ -23,6 +23,7 @@ enum ControlIndex {
   OwnCallsign,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
   SyncFromDevice, SyncToDevice, SendPosition, PolarSyncMode,
+  InstrumentAlignment,
   K6Bt,
 };
 
@@ -119,6 +120,17 @@ FillPolarSync(DataFieldEnum &dfe,
                     static_cast<unsigned>(DeviceConfig::PolarSync::SEND));
 }
 
+static void
+FillInstrumentAlignment(DataFieldEnum &dfe) noexcept
+{
+  dfe.addEnumText(_("Don't use"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::NONE);
+  dfe.addEnumText(_("Not aligned"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::NOT_ALIGNED);
+  dfe.addEnumText(_("Fixed & aligned"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::FIXED_AND_ALIGNED);
+}
+
 static bool
 EditPortCallback(const char *caption, DataField &df,
                  [[maybe_unused]] const char *help_text) noexcept
@@ -164,6 +176,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(PolarSyncMode, config.polar_sync);
   LoadValue(K6Bt, config.k6bt);
   LoadValueEnum(EngineTypes, config.engine_type);
+  LoadValueEnum(InstrumentAlignment, config.instrument_alignment);
 
   UpdateVisibilities();
 }
@@ -319,6 +332,9 @@ DeviceEditWidget::UpdateVisibilities() noexcept
   const bool can_send_polar = CanSendPolar(GetDataField(Driver));
   const bool polar_row_applicable = DeviceConfig::UsesDriver(type) &&
                                     (can_receive_polar || can_send_polar);
+  const bool is_internal = (type == DeviceConfig::PortType::INTERNAL);
+  SetRowAvailable(InstrumentAlignment, is_internal);
+  SetRowVisible(InstrumentAlignment, is_internal);
   /* Hide when the driver does not register polar receive/send capability. */
   SetRowAvailable(PolarSyncMode, polar_row_applicable);
   SetRowVisible(PolarSyncMode, polar_row_applicable);
@@ -464,6 +480,15 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
         "(e.g. for club gliders). 'Send' pushes XCSoar's polar to the "
         "device."),
       polar_sync_df);
+
+  DataFieldEnum *instrument_alignment_df = new DataFieldEnum(this);
+  FillInstrumentAlignment(*instrument_alignment_df);
+  instrument_alignment_df->SetValue((unsigned)config.instrument_alignment);
+  Add(_("IMU alignment"),
+      _("Whether the instrument housing is permanently fixed and its axes "
+        "are aligned to the aircraft axes. Set to 'Fixed & aligned' only "
+        "when the device is rigidly mounted. If in doubt, use 'Not aligned'."),
+      instrument_alignment_df);
 
   AddBoolean("K6Bt",
              _("Whether you use a K6Bt to connect the device."),
@@ -611,6 +636,9 @@ DeviceEditWidget::Save(bool &_changed) noexcept
                            config.driver2_name.capacity());
     }
   }
+
+  if (config.port_type == DeviceConfig::PortType::INTERNAL)
+    changed |= SaveValueEnum(InstrumentAlignment, config.instrument_alignment);
 
   if (CommonInterface::Basic().sensor_calibration_available)
     changed = true;
