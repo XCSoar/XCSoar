@@ -25,7 +25,7 @@
 class Path;
 class ResourceId;
 class UncompressedImage;
-struct GeoQuadrilateral;
+struct GeoReferencedGrid;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
@@ -186,7 +186,7 @@ public:
    * Load a georeferenced image and return its bounds.
    * Throws a std::runtime_error on error.
    */
-  GeoQuadrilateral LoadGeoFile(Path path);
+  GeoReferencedGrid LoadGeoFile(Path path);
 
   void Reset() noexcept;
 
