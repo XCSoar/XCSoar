@@ -21,6 +21,7 @@ export default defineNuxtConfig({
             { baseURL: '/img/figures', dir: repo('../doc/manual/en/figures') },
             { baseURL: '/img/drawings', dir: repo('../doc/manual/figures') },
             { baseURL: '/img/icons', dir: repo('../Data/icons') },
+            { baseURL: '/img/graphics', dir: repo('../Data/graphics') },
         ],
     },
 });

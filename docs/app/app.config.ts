@@ -6,6 +6,14 @@ export default defineAppConfig({
     navigation: {
         sub: 'header',
     },
+    header: {
+        title: 'XCSoar Docs',
+        logo: {
+            light: '/img/graphics/logo.svg',
+            dark: '/img/graphics/logo.svg',
+            alt: 'XCSoar',
+        },
+    },
     github: {
         url: 'https://github.com/XCSoar/XCSoar',
         branch: 'master',
