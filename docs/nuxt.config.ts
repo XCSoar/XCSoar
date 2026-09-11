@@ -21,6 +21,17 @@ export default defineNuxtConfig({
             ],
         },
     },
+    content: {
+        build: {
+            markdown: {
+                highlight: {
+                    // Docus ships only web languages; the developer docs
+                    // also show C++, Lua, XML and make snippets.
+                    langs: ['cpp', 'lua', 'xml', 'make'],
+                },
+            },
+        },
+    },
     image: {
         // Figures come from nitro publicAssets outside docs/public, which the
         // IPX optimizer cannot read. Serve image URLs unchanged instead.
