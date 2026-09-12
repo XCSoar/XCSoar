@@ -517,7 +517,6 @@ sdl2 = CmakeProject(
         "-DSDL_JOYSTICK=OFF",
         "-DSDL_XINPUT=OFF",
     ],
-    patches=abspath("lib/sdl2/patches"),
 )
 
 angle = AngleProject()
