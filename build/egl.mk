@@ -26,12 +26,9 @@ EGL = n
 else ifeq ($(TARGET),ANDROID)
 # Android uses EGL
 EGL = y
-else ifeq ($(GLES2),y)
-# use EGL if GLES2 was chosen explicitly
-EGL = y
 else
-# default to GLX/X11
-EGL ?= n
+# UNIX/X11 OpenGL uses EGL + OpenGL ES
+EGL = y
 endif
 
 ifeq ($(EGL),y)

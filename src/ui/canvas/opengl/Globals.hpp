@@ -43,7 +43,7 @@ inline constexpr unsigned DEFAULT_MAX_TEXTURE_SIZE = 2048;
 extern unsigned max_texture_size;
 
 /**
- * Is glMapBuffer() available?  May be implemented by the extension
+ * Is glMapBufferOES() available?  May be implemented by the extension
  * GL_OES_mapbuffer.
  */
 extern bool mapbuffer;

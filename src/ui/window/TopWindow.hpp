@@ -352,7 +352,7 @@ public:
 #endif
 
 #ifndef ENABLE_SDL
-#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_GLX) || defined(USE_VFB)
+#if defined(ANDROID) || defined(USE_FB) || defined(USE_EGL) || defined(USE_VFB)
   void SetCaption(const char *) noexcept {}
 #else
   void SetCaption(const char *caption) noexcept;
