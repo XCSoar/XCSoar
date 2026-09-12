@@ -132,6 +132,7 @@ TEST_NAMES = \
 	TestUriUtil \
 	TestThermalBand \
 	TestPackedFloat \
+	TestWaylandScale \
 	TestVersionNumber \
 	TestSlowCPU \
 	TestWeglideScoring \
@@ -3019,6 +3020,12 @@ TEST_PACKED_FLOAT_SOURCES = \
 	$(TEST_SRC_DIR)/TestPackedFloat.cpp
 TEST_PACKED_FLOAT_DEPENDS = MATH
 $(eval $(call link-program,TestPackedFloat,TEST_PACKED_FLOAT))
+
+TEST_WAYLAND_SCALE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWaylandScale.cpp
+TEST_WAYLAND_SCALE_DEPENDS = MATH
+$(eval $(call link-program,TestWaylandScale,TEST_WAYLAND_SCALE))
 
 TEST_WEGLIDE_SCORING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
