@@ -98,6 +98,27 @@ TopWindow::OnEvent(const Event &event)
     ResetUserIdle();
     return OnMouseWheel(event.point, (int)event.param);
 
+#ifdef USE_WAYLAND
+  case Event::MOUSE_CANCEL:
+    ResetUserIdle();
+    OnCancelMode();
+    return true;
+
+  case Event::POINTER_DOWN:
+    ResetUserIdle();
+    if (!OnMultiTouchDown())
+      return false;
+    return OnMultiTouchMove(event.point, event.point2);
+
+  case Event::POINTER_MOVE:
+    ResetUserIdle();
+    return OnMultiTouchMove(event.point, event.point2);
+
+  case Event::POINTER_UP:
+    ResetUserIdle();
+    return OnMultiTouchUp();
+#endif
+
 #ifdef USE_X11
   case Event::RESIZE:
     if (event.point.x <= 0 || event.point.y <= 0)

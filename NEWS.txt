@@ -125,6 +125,8 @@ Version 7.46 - not yet released
     and the map are rasterised at the panel DPI #3123
   - show the Wayland window without waiting for focus, and keep
     running when it is unfocused #3126
+  - let a Wayland touchscreen tap, drag, pinch-to-zoom, and
+    two-finger pan the map #3122
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution
