@@ -23,6 +23,8 @@ Version 7.46 - not yet released
 * Windows
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
+* Linux
+  - use OpenGL ES instead of desktop OpenGL #2140
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
@@ -159,6 +161,8 @@ Version 7.46 - not yet released
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132
+  - build system: drop the GLX desktop OpenGL backend; UNIX X11
+    OpenGL uses EGL and OpenGL ES #2140
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
