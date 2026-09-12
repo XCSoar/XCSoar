@@ -85,20 +85,30 @@ DrawTextHalo(Canvas &canvas, const char *text, const PixelPoint p,
 void
 RenderShadowedText(Canvas &canvas, const char *text,
                    PixelPoint p,
-                   bool inverted) noexcept
+                   Color text_color, Color outline_color) noexcept
 {
   if (text == nullptr || text[0] == '\0')
     return;
 
   canvas.SetBackgroundTransparent();
 
-  canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
+  canvas.SetTextColor(outline_color);
 
   /* at least 1px, or tiny fonts get no halo at all */
   DrawTextHalo(canvas, text, p, std::max(1u, canvas.GetFontHeight() / 12u));
 
-  canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
+  canvas.SetTextColor(text_color);
   canvas.DrawText(p, text);
+}
+
+void
+RenderShadowedText(Canvas &canvas, const char *text,
+                   PixelPoint p,
+                   bool inverted) noexcept
+{
+  RenderShadowedText(canvas, text, p,
+                     inverted ? COLOR_WHITE : COLOR_BLACK,
+                     inverted ? COLOR_BLACK : COLOR_WHITE);
 }
 
 // returns true if really wrote something
