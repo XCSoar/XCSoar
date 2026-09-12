@@ -210,10 +210,11 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
     if (length < 2)
       continue;
 
-    // Check whether the received ACK is for the right sequence number
-    if (FromLE16(*((const uint16_t *)(const void *)data.data())) ==
-        sequence_number)
-      return (FLARM::MessageType)header.type;
+    // Check whether the received ACK/NACK is for this request
+    if (FLARM::AckSequenceMatches(sequence_number,
+                                  {data.data(), length},
+                                  header.type == FLARM::MessageType::NACK))
+      return header.type;
   }
 
   return FLARM::MessageType::ERROR;
