@@ -25,6 +25,9 @@ Version 7.46 - not yet released
     version (installer or zip) #2132
 * Linux
   - use OpenGL ES instead of desktop OpenGL #2140
+  - termination: fix SIGTERM and Ctrl-C killing the program instead of
+    shutting it down, which lost the settings and the flight log that
+    are written on exit
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
