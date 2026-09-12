@@ -6,9 +6,10 @@
 
 int main()
 {
-  plan_tests(12);
+  plan_tests(13);
 
   ok1(FLARM::PROTOCOL_VERSION == 1);
+  ok1(FLARM::MAX_IGC_DOWNLOAD_ATTEMPTS == 2);
 
   /* spec-correct little-endian seqNo (GETIGCDATA NACK 238, list NACK 68) */
   const std::byte ee_00[]{std::byte{0xee}, std::byte{0x00}};
