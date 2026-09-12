@@ -21,6 +21,8 @@ public:
 private:
   StaticArray<Window *, MAX_ITEMS> items;
 
+  const DialogLook *look = nullptr;
+
   unsigned column_width;
   unsigned row_height;
 
@@ -33,9 +35,11 @@ private:
   StaticArray<unsigned, 16> saved_row_per_page;
 
 public:
-  void Create(ContainerWindow &parent, const DialogLook &look,
+  void Create(ContainerWindow &parent, const DialogLook &_look,
               const PixelRect &rc, const WindowStyle style,
               unsigned column_width, unsigned row_height);
+
+  void OnPaint(Canvas &canvas) noexcept override;
 
   void AddItem(Window &w) {
     items.push_back(&w);
