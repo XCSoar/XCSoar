@@ -29,6 +29,9 @@ static constexpr std::byte ESCAPE{0x78};
 static constexpr std::byte ESCAPE_ESCAPE{0x55};
 static constexpr std::byte ESCAPE_START{0x31};
 
+/** Binary protocol version (FTD-026). */
+static constexpr uint8_t PROTOCOL_VERSION = 1;
+
 enum class MessageType : uint8_t {
   ERROR = 0x00,
   ACK = 0xA0,
