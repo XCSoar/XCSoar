@@ -19,6 +19,7 @@
 #include "xdg-decoration-unstable-v1-client-protocol.h"
 #include "viewporter-client-protocol.h"
 #include "fractional-scale-v1-client-protocol.h"
+#include "pointer-constraints-unstable-v1-client-protocol.h"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "../shared/TransformCoordinates.hpp"
@@ -410,6 +411,10 @@ WaylandEventQueue::~WaylandEventQueue() noexcept
   /* Clean up Wayland protocol objects obtained via wl_registry_bind */
   /* Use wl_proxy_destroy for global objects (compositor, seat, shell, shm) */
   /* Use protocol-specific destroy functions for xdg and zxdg objects */
+  if (pointer_constraints != nullptr) {
+    zwp_pointer_constraints_v1_destroy(pointer_constraints);
+    pointer_constraints = nullptr;
+  }
   if (fractional_scale_manager != nullptr) {
     wp_fractional_scale_manager_v1_destroy(fractional_scale_manager);
     fractional_scale_manager = nullptr;
@@ -507,6 +512,9 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
                                    const char *interface,
                                    uint32_t version) noexcept
 {
+  if (interface == nullptr || *interface == '\0')
+    return;
+
   if (StringIsEqual(interface, "wl_compositor")) {
     compositor = (wl_compositor *)
       wl_registry_bind(registry, id, &wl_compositor_interface,
@@ -541,6 +549,12 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
     fractional_scale_manager = (struct wp_fractional_scale_manager_v1 *)
       wl_registry_bind(registry, id,
                        &wp_fractional_scale_manager_v1_interface, 1);
+  else if (StringIsEqual(interface,
+                          zwp_pointer_constraints_v1_interface.name) &&
+           pointer_constraints == nullptr && version >= 1)
+    pointer_constraints = (struct zwp_pointer_constraints_v1 *)
+      wl_registry_bind(registry, id,
+                       &zwp_pointer_constraints_v1_interface, 1);
 }
 
 inline void

@@ -56,11 +56,13 @@ class TopCanvas;
 #ifdef USE_WAYLAND
 struct wl_egl_window;
 struct wl_surface;
+struct wl_output;
 struct xdg_surface;
 struct xdg_toplevel;
 struct zxdg_toplevel_decoration_v1;
 struct wp_viewport;
 struct wp_fractional_scale_v1;
+struct zwp_confined_pointer_v1;
 #endif
 
 #if defined(__APPLE__)
@@ -153,6 +155,7 @@ class TopWindow : public ContainerWindow {
   struct zxdg_toplevel_decoration_v1 *xdg_decoration = nullptr;
   struct wp_viewport *viewport = nullptr;
   struct wp_fractional_scale_v1 *fractional_scale = nullptr;
+  struct zwp_confined_pointer_v1 *confined_pointer = nullptr;
   PixelSize initial_requested_size{0, 0};
   PixelSize compositor_size{0, 0};
   std::chrono::steady_clock::time_point last_resize_flush_time;
@@ -170,6 +173,7 @@ public:
   void OnToplevelConfigureSize(int32_t width, int32_t height) noexcept;
   void CommitNativeSurface() noexcept;
   void OnFractionalPreferredScale(unsigned scale_120) noexcept;
+  void OnSurfaceOutput(struct wl_output *output, bool entered) noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif

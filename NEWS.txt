@@ -127,6 +127,8 @@ Version 7.46 - not yet released
     running when it is unfocused #3126
   - let a Wayland touchscreen tap, drag, pinch-to-zoom, and
     two-finger pan the map #3122
+  - keep the pointer on a Wayland window while dragging, and size
+    the UI from the monitor the window is on #3124
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution

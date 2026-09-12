@@ -45,7 +45,7 @@ static constexpr struct wl_registry_listener registry_listener = {
 
 static void
 OutputGeometry(void *data,
-               [[maybe_unused]] struct wl_output *wl_output,
+               struct wl_output *wl_output,
                [[maybe_unused]] int32_t x,
                [[maybe_unused]] int32_t y,
                int32_t physical_width, int32_t physical_height,
@@ -55,17 +55,18 @@ OutputGeometry(void *data,
                int32_t transform) noexcept
 {
   auto &display = *static_cast<Display *>(data);
-  display.OutputGeometry(physical_width, physical_height, transform);
+  display.OutputGeometry(wl_output, physical_width, physical_height,
+                         transform);
 }
 
 static void
 OutputMode(void *data,
-           [[maybe_unused]] struct wl_output *wl_output,
+           struct wl_output *wl_output,
            uint32_t flags, int32_t width, int32_t height,
            [[maybe_unused]] int32_t refresh) noexcept
 {
   auto &display = *static_cast<Display *>(data);
-  display.OutputMode(flags, width, height);
+  display.OutputMode(wl_output, flags, width, height);
 }
 
 static void
@@ -76,11 +77,11 @@ OutputDone([[maybe_unused]] void *data,
 
 static void
 OutputScale(void *data,
-            [[maybe_unused]] struct wl_output *wl_output,
+            struct wl_output *wl_output,
             int32_t factor) noexcept
 {
   auto &display = *static_cast<Display *>(data);
-  display.OutputScale(factor);
+  display.OutputScale(wl_output, factor);
 }
 
 static constexpr struct wl_output_listener output_listener = {
@@ -100,11 +101,11 @@ XdgOutputLogicalPosition([[maybe_unused]] void *data,
 
 static void
 XdgOutputLogicalSize(void *data,
-                     [[maybe_unused]] struct zxdg_output_v1 *xdg_output,
+                     struct zxdg_output_v1 *xdg_output,
                      int32_t width, int32_t height) noexcept
 {
   auto &display = *static_cast<Display *>(data);
-  display.OutputLogicalSize(width, height);
+  display.OutputLogicalSize(xdg_output, width, height);
 }
 
 static void
@@ -150,10 +151,12 @@ Display::Display()
 
 Display::~Display() noexcept
 {
-  if (xdg_output != nullptr)
-    zxdg_output_v1_destroy(xdg_output);
-  if (output != nullptr)
-    wl_output_destroy(output);
+  for (auto &o : outputs) {
+    if (o.xdg_output != nullptr)
+      zxdg_output_v1_destroy(o.xdg_output);
+    if (o.output != nullptr)
+      wl_output_destroy(o.output);
+  }
   if (xdg_output_manager != nullptr)
     zxdg_output_manager_v1_destroy(xdg_output_manager);
 
@@ -170,20 +173,66 @@ OutputAxesSwapped(int32_t transform) noexcept
          transform == WL_OUTPUT_TRANSFORM_FLIPPED_270;
 }
 
+const Display::Output *
+Display::FindOutput(struct wl_output *wl_output) const noexcept
+{
+  if (wl_output == nullptr)
+    return nullptr;
+
+  for (const auto &o : outputs)
+    if (o.output == wl_output)
+      return &o;
+
+  return nullptr;
+}
+
+Display::Output *
+Display::FindOutput(struct wl_output *wl_output) noexcept
+{
+  return const_cast<Output *>(
+    static_cast<const Display *>(this)->FindOutput(wl_output));
+}
+
+Display::Output *
+Display::FindOutputByXdg(struct zxdg_output_v1 *xdg_output) noexcept
+{
+  if (xdg_output == nullptr)
+    return nullptr;
+
+  for (auto &o : outputs)
+    if (o.xdg_output == xdg_output)
+      return &o;
+
+  return nullptr;
+}
+
+const Display::Output *
+Display::Active() const noexcept
+{
+  if (const auto *o = FindOutput(active_output); o != nullptr)
+    return o;
+
+  return outputs.empty() ? nullptr : &outputs.front();
+}
+
 PixelSize
 Display::GetSize() const noexcept
 {
-  if (logical_width > 0 && logical_height > 0)
-    return {logical_width, logical_height};
+  const auto *o = Active();
+  if (o == nullptr)
+    return {0, 0};
 
-  unsigned w = width, h = height;
-  if (OutputAxesSwapped(transform)) {
-    w = height;
-    h = width;
+  if (o->logical_width > 0 && o->logical_height > 0)
+    return {o->logical_width, o->logical_height};
+
+  unsigned w = o->width, h = o->height;
+  if (OutputAxesSwapped(o->transform)) {
+    w = o->height;
+    h = o->width;
   }
 
-  if (w > 0 && h > 0 && scale > 1)
-    return {w / scale, h / scale};
+  if (w > 0 && h > 0 && o->scale > 1)
+    return {w / o->scale, h / o->scale};
 
   return {w, h};
 }
@@ -191,21 +240,26 @@ Display::GetSize() const noexcept
 PixelSize
 Display::GetHardwareSize() const noexcept
 {
-  return {width, height};
+  const auto *o = Active();
+  return o != nullptr ? PixelSize{o->width, o->height} : PixelSize{0, 0};
 }
 
 unsigned
 Display::GetScale120() const noexcept
 {
-  const unsigned physical_width = OutputAxesSwapped(transform)
-    ? height
-    : width;
+  const auto *o = Active();
+  if (o == nullptr)
+    return SCALE_100;
 
-  if (logical_width > 0 && physical_width > 0)
-    return ToScale120ths(physical_width, logical_width);
+  const unsigned physical_width = OutputAxesSwapped(o->transform)
+    ? o->height
+    : o->width;
 
-  if (scale > 1)
-    return FromIntegerScale(scale);
+  if (o->logical_width > 0 && physical_width > 0)
+    return ToScale120ths(physical_width, o->logical_width);
+
+  if (o->scale > 1)
+    return FromIntegerScale(o->scale);
 
   return SCALE_100;
 }
@@ -213,34 +267,64 @@ Display::GetScale120() const noexcept
 PixelSize
 Display::GetSizeMM() const noexcept
 {
-  return {mm_width, mm_height};
+  const auto *o = Active();
+  return o != nullptr
+    ? PixelSize{o->mm_width, o->mm_height}
+    : PixelSize{0, 0};
 }
 
 void
-Display::BindXdgOutput() noexcept
+Display::SetSurfaceOutput(struct wl_output *output, bool entered) noexcept
 {
-  if (xdg_output != nullptr ||
-      xdg_output_manager == nullptr ||
-      output == nullptr)
+  if (output == nullptr)
     return;
 
-  xdg_output = zxdg_output_manager_v1_get_xdg_output(xdg_output_manager,
-                                                     output);
-  if (xdg_output != nullptr)
-    zxdg_output_v1_add_listener(xdg_output, &xdg_output_listener, this);
+  if (entered) {
+    active_output = output;
+    return;
+  }
+
+  if (active_output != output)
+    return;
+
+  active_output = outputs.empty() ? nullptr : outputs.front().output;
+}
+
+void
+Display::BindXdgOutput(Output &o) noexcept
+{
+  if (o.xdg_output != nullptr ||
+      xdg_output_manager == nullptr ||
+      o.output == nullptr)
+    return;
+
+  o.xdg_output = zxdg_output_manager_v1_get_xdg_output(xdg_output_manager,
+                                                       o.output);
+  if (o.xdg_output != nullptr)
+    zxdg_output_v1_add_listener(o.xdg_output, &xdg_output_listener, this);
 }
 
 void
 Display::RegistryHandler(struct wl_registry *registry, uint32_t id,
                          const char *interface, uint32_t version) noexcept
 {
-  if (StringIsEqual(interface, "wl_output") && output == nullptr) {
+  if (interface == nullptr || *interface == '\0')
+    return;
+
+  if (StringIsEqual(interface, "wl_output") && !outputs.full()) {
     const uint32_t bind_version = version >= 2 ? 2 : 1;
-    output = (struct wl_output *)
+    auto *wl = (struct wl_output *)
       wl_registry_bind(registry, id, &wl_output_interface, bind_version);
-    if (output != nullptr)
-      wl_output_add_listener(output, &output_listener, this);
-    BindXdgOutput();
+    if (wl == nullptr)
+      return;
+
+    Output o;
+    o.output = wl;
+    outputs.push_back(o);
+    wl_output_add_listener(outputs.back().output, &output_listener, this);
+    BindXdgOutput(outputs.back());
+    if (active_output == nullptr)
+      active_output = outputs.back().output;
     return;
   }
 
@@ -250,45 +334,66 @@ Display::RegistryHandler(struct wl_registry *registry, uint32_t id,
     xdg_output_manager = (struct zxdg_output_manager_v1 *)
       wl_registry_bind(registry, id,
                        &zxdg_output_manager_v1_interface, bind_version);
-    BindXdgOutput();
+    for (auto &o : outputs)
+      BindXdgOutput(o);
   }
 }
 
 void
-Display::OutputGeometry(int32_t physical_width, int32_t physical_height,
+Display::OutputGeometry(struct wl_output *wl_output,
+                        int32_t physical_width, int32_t physical_height,
                         int32_t transform) noexcept
 {
-  this->transform = transform;
+  auto *o = FindOutput(wl_output);
+  if (o == nullptr)
+    return;
+
+  o->transform = transform;
   if (physical_width > 0 && physical_height > 0) {
-    mm_width = (unsigned)physical_width;
-    mm_height = (unsigned)physical_height;
+    o->mm_width = (unsigned)physical_width;
+    o->mm_height = (unsigned)physical_height;
   }
 }
 
 void
-Display::OutputMode(uint32_t flags, int32_t width, int32_t height) noexcept
+Display::OutputMode(struct wl_output *wl_output,
+                    uint32_t flags, int32_t width, int32_t height) noexcept
 {
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
+
+  auto *o = FindOutput(wl_output);
+  if (o == nullptr)
+    return;
+
   if (width > 0 && height > 0) {
-    this->width = (unsigned)width;
-    this->height = (unsigned)height;
+    o->width = (unsigned)width;
+    o->height = (unsigned)height;
   }
 }
 
 void
-Display::OutputScale(int32_t factor) noexcept
+Display::OutputScale(struct wl_output *wl_output, int32_t factor) noexcept
 {
+  auto *o = FindOutput(wl_output);
+  if (o == nullptr)
+    return;
+
   if (factor > 0)
-    scale = (unsigned)factor;
+    o->scale = (unsigned)factor;
 }
 
 void
-Display::OutputLogicalSize(int32_t width, int32_t height) noexcept
+Display::OutputLogicalSize(struct zxdg_output_v1 *xdg_output,
+                           int32_t width, int32_t height) noexcept
 {
+  auto *o = FindOutputByXdg(xdg_output);
+  if (o == nullptr)
+    return;
+
   if (width > 0 && height > 0) {
-    logical_width = (unsigned)width;
-    logical_height = (unsigned)height;
+    o->logical_width = (unsigned)width;
+    o->logical_height = (unsigned)height;
   }
 }
 

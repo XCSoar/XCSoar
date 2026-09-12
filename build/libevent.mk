@@ -29,6 +29,7 @@ else ifeq ($(USE_WAYLAND),y)
 EVENT_SOURCES += \
 	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c \
+	$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-public.c \
 	$(SRC)/ui/event/poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \

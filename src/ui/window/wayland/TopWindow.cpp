@@ -13,6 +13,7 @@
 #include "xdg-decoration-unstable-v1-client-protocol.h"
 #include "viewporter-client-protocol.h"
 #include "fractional-scale-v1-client-protocol.h"
+#include "pointer-constraints-unstable-v1-client-protocol.h"
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "DisplayOrientation.hpp"
 #include "ui/canvas/opengl/Globals.hpp"
@@ -166,6 +167,65 @@ fractional_scale_listener = {
 };
 
 static void
+handle_surface_enter(void *data,
+                      [[maybe_unused]] struct wl_surface *surface,
+                      struct wl_output *output) noexcept
+{
+  static_cast<TopWindow *>(data)->OnSurfaceOutput(output, true);
+}
+
+static void
+handle_surface_leave(void *data,
+                      [[maybe_unused]] struct wl_surface *surface,
+                      struct wl_output *output) noexcept
+{
+  static_cast<TopWindow *>(data)->OnSurfaceOutput(output, false);
+}
+
+#ifdef WL_SURFACE_PREFERRED_BUFFER_SCALE_SINCE_VERSION
+static void
+handle_preferred_buffer_scale([[maybe_unused]] void *data,
+                              [[maybe_unused]] struct wl_surface *surface,
+                              [[maybe_unused]] int32_t factor) noexcept
+{
+}
+
+static void
+handle_preferred_buffer_transform([[maybe_unused]] void *data,
+                                   [[maybe_unused]] struct wl_surface *surface,
+                                   [[maybe_unused]] uint32_t transform) noexcept
+{
+}
+#endif
+
+static const struct wl_surface_listener wl_surface_output_listener = {
+  .enter = handle_surface_enter,
+  .leave = handle_surface_leave,
+#ifdef WL_SURFACE_PREFERRED_BUFFER_SCALE_SINCE_VERSION
+  .preferred_buffer_scale = handle_preferred_buffer_scale,
+  .preferred_buffer_transform = handle_preferred_buffer_transform,
+#endif
+};
+
+static void
+handle_pointer_confined([[maybe_unused]] void *data,
+                        [[maybe_unused]] struct zwp_confined_pointer_v1 *p) noexcept
+{
+}
+
+static void
+handle_pointer_unconfined([[maybe_unused]] void *data,
+                          [[maybe_unused]] struct zwp_confined_pointer_v1 *p) noexcept
+{
+}
+
+static const struct zwp_confined_pointer_v1_listener
+confined_pointer_listener = {
+  .confined = handle_pointer_confined,
+  .unconfined = handle_pointer_unconfined,
+};
+
+static void
 SetBufferScale(struct wl_surface *surface, int32_t n) noexcept
 {
   if (wl_proxy_get_version((struct wl_proxy *)surface) >= 3)
@@ -201,6 +261,8 @@ TopWindow::CreateNative(const char *text, PixelSize size,
   wl_surface = wl_compositor_create_surface(compositor);
   if (wl_surface == nullptr)
     throw std::runtime_error("Failed to create Wayland surface");
+
+  wl_surface_add_listener(wl_surface, &wl_surface_output_listener, this);
 
   auto *const fractional_manager = event_queue->GetFractionalScaleManager();
   auto *const viewporter = event_queue->GetViewporter();
@@ -268,18 +330,42 @@ TopWindow::IsVisible() const noexcept
 void
 TopWindow::EnableCapture() noexcept
 {
-  /* Pointer focus is compositor-owned; locking needs
-     zwp_pointer_constraints_v1 (#3124). */
+  if (confined_pointer != nullptr ||
+      event_queue == nullptr ||
+      wl_surface == nullptr)
+    return;
+
+  auto *constraints = event_queue->GetPointerConstraints();
+  auto *pointer = event_queue->GetPointer();
+  if (constraints == nullptr || pointer == nullptr)
+    return;
+
+  confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
+    constraints, wl_surface, pointer, nullptr,
+    ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_PERSISTENT);
+  if (confined_pointer != nullptr)
+    zwp_confined_pointer_v1_add_listener(confined_pointer,
+                                         &confined_pointer_listener,
+                                         this);
 }
 
 void
 TopWindow::DisableCapture() noexcept
 {
+  if (confined_pointer == nullptr)
+    return;
+
+  zwp_confined_pointer_v1_destroy(confined_pointer);
+  confined_pointer = nullptr;
 }
 
 void
 TopWindow::DestroyNative() noexcept
 {
+  if (confined_pointer != nullptr) {
+    zwp_confined_pointer_v1_destroy(confined_pointer);
+    confined_pointer = nullptr;
+  }
   if (native_window != nullptr) {
     wl_egl_window_destroy(native_window);
     native_window = nullptr;
@@ -395,6 +481,17 @@ TopWindow::OnFractionalPreferredScale(unsigned new_scale_120) noexcept
     return;
 
   scale_120 = new_scale_120;
+  RefreshSurfaceScale();
+}
+
+void
+TopWindow::OnSurfaceOutput(struct wl_output *output, bool entered) noexcept
+{
+  display.SetSurfaceOutput(output, entered);
+
+  if (viewport == nullptr || fractional_scale == nullptr)
+    scale_120 = display.GetScale120();
+
   RefreshSurfaceScale();
 }
 

@@ -111,6 +111,10 @@ public:
   auto GetFractionalScaleManager() noexcept {
     return input_queue.GetFractionalScaleManager();
   }
+
+  auto GetPointerConstraints() noexcept {
+    return input_queue.GetPointerConstraints();
+  }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)

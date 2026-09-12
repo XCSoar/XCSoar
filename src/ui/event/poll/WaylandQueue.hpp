@@ -37,6 +37,7 @@ struct xdg_wm_base;
 struct zxdg_decoration_manager_v1;
 struct wp_viewporter;
 struct wp_fractional_scale_manager_v1;
+struct zwp_pointer_constraints_v1;
 
 namespace UI {
 
@@ -63,6 +64,7 @@ class WaylandEventQueue final {
   struct zxdg_decoration_manager_v1 *decoration_manager = nullptr;
   struct wp_viewporter *viewporter = nullptr;
   struct wp_fractional_scale_manager_v1 *fractional_scale_manager = nullptr;
+  struct zwp_pointer_constraints_v1 *pointer_constraints = nullptr;
   struct wl_shm *shm = nullptr;
 
   bool has_touchscreen = false;
@@ -129,6 +131,11 @@ public:
   struct wp_fractional_scale_manager_v1 *
   GetFractionalScaleManager() const noexcept {
     return fractional_scale_manager;
+  }
+
+  struct zwp_pointer_constraints_v1 *
+  GetPointerConstraints() const noexcept {
+    return pointer_constraints;
   }
 
   struct wl_pointer *GetPointer() const noexcept {

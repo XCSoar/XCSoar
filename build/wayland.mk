@@ -27,6 +27,7 @@ XDG_DECORATION_XML = $(WAYLAND_PROTOCOLS_DATADIR)/unstable/xdg-decoration/xdg-de
 XDG_OUTPUT_XML = $(WAYLAND_PROTOCOLS_DATADIR)/unstable/xdg-output/xdg-output-unstable-v1.xml
 VIEWPORTER_XML = $(WAYLAND_PROTOCOLS_DATADIR)/stable/viewporter/viewporter.xml
 FRACTIONAL_SCALE_XML = $(WAYLAND_PROTOCOLS_DATADIR)/staging/fractional-scale/fractional-scale-v1.xml
+POINTER_CONSTRAINTS_XML = $(WAYLAND_PROTOCOLS_DATADIR)/unstable/pointer-constraints/pointer-constraints-unstable-v1.xml
 
 # from Debian package "libwayland-bin"
 WAYLAND_SCANNER = wayland-scanner
@@ -77,6 +78,16 @@ $(WAYLAND_GENERATED)/fractional-scale-v1-client-protocol.h: $(FRACTIONAL_SCALE_X
 	@mv $@.tmp $@
 
 $(WAYLAND_GENERATED)/fractional-scale-v1-public.c: $(FRACTIONAL_SCALE_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-client-protocol.h: $(POINTER_CONSTRAINTS_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-public.c: $(POINTER_CONSTRAINTS_XML) | $(WAYLAND_GENERATED)/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
 	@mv $@.tmp $@
