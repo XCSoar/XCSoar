@@ -56,7 +56,8 @@ l_replay_fastforward(lua_State *L)
     return luaL_error(L, "Invalid parameters");
 
   FloatDuration delta_s{luaL_checknumber(L, 1)};
-  return !backend_components->replay->FastForward(delta_s);
+  Lua::Push(L, backend_components->replay->FastForward(delta_s));
+  return 1;
 }
 
 static int
