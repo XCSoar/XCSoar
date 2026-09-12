@@ -17,6 +17,12 @@ public:
     std::string display_string;
     std::string help_text;
 
+    /**
+     * Optional text drawn at the right edge of the row, e.g. a value
+     * derived from this item.
+     */
+    std::string annotation;
+
     Item(int _int_value, const char *_string_value,
          const char *_display_string,
          const char *_help_text = nullptr) noexcept;
@@ -87,6 +93,15 @@ public:
 
   unsigned Append(const char *string_value) noexcept {
     return Append(string_value, string_value);
+  }
+
+  /**
+   * Set the annotation of an item returned by Append().
+   */
+  void SetAnnotation(unsigned i, const char *annotation) noexcept {
+    items[i].annotation = annotation != nullptr
+      ? annotation
+      : "";
   }
 
   void Sort() noexcept;
