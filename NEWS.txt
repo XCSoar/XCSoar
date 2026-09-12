@@ -200,6 +200,8 @@ Version 7.46 - not yet released
     debug tools compile
   - lua: fix a timer callback that cancels its own timer aborting a
     debug build, and reading the Lua state after it had been closed
+  - lua: fix a Lua stack slot leaking on every input event handled by a
+    script
 
 Version 7.45 - 2026-08-15
 * highlights
