@@ -24,6 +24,7 @@ Version 7.46 - not yet released
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
 * Linux
+  - prefer 24-bit colour on Wayland instead of 16-bit
   - use OpenGL ES instead of desktop OpenGL #2140
 * Kobo
   - fix the power-off screen not listing flights after flights.log

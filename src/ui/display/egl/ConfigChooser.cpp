@@ -28,7 +28,7 @@ GetConfigAttrib(EGLDisplay display, EGLConfig config,
     : default_value;
 }
 
-#if defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
+#ifndef MESA_KMS
 
 [[gnu::pure]]
 static int
@@ -213,7 +213,10 @@ TryChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
     return std::nullopt;
 
   return i >= 0 ? configs[i] : configs[0];
-#elif defined(ANDROID) || (defined(USE_EGL) && defined(USE_X11))
+#else
+  /* Android, X11 and Wayland: pick 8/8/8 (and the requested sample
+     count) rather than eglChooseConfig()'s first result, which Mesa
+     often ranks as RGB 5/6/5. */
   const auto closest_config =
     FindClosestConfig(display, {configs.data(), std::size_t(num_configs)},
                       8, 8, 8, 0, 0, 1, antialiasing_samples);
@@ -221,10 +224,6 @@ TryChooseConfig(EGLDisplay display, unsigned antialiasing_samples)
     return std::nullopt;
 
   return closest_config;
-#else
-  /* eglChooseConfig() has sorted the configurations for us, and the
-     multisampling request (if any) was part of the attribute list */
-  return configs[0];
 #endif
 }
 
