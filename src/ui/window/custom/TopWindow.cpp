@@ -51,6 +51,10 @@ TopWindow::~TopWindow() noexcept
 #endif
 
   delete screen;
+  screen = nullptr;
+#ifdef USE_WAYLAND
+  DestroyNative();
+#endif
 }
 
 #ifdef ENABLE_OPENGL
@@ -114,6 +118,10 @@ TopWindow::Create([[maybe_unused]] const char *text, PixelSize size,
   if (native_size.width > 0 && native_size.height > 0)
     size = native_size;
   // else keep the original size (which should be from SystemWindowSize() with fallback)
+#endif
+
+#ifdef USE_WAYLAND
+  size = screen->GetSize();
 #endif
   ContainerWindow::Create(nullptr, PixelRect{size}, style);
 }

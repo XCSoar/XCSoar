@@ -120,6 +120,11 @@ Version 7.46 - not yet released
     device has no time zone setting at all
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - size the Wayland UI from the output's physical size, and draw at
+    the compositor's scale (including 125% / 150% / 200%) so fonts
+    and the map are rasterised at the panel DPI #3123
+  - show the Wayland window without waiting for focus, and keep
+    running when it is unfocused #3126
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution

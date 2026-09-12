@@ -8,6 +8,8 @@
 #include "Queue.hpp"
 #include "../shared/Event.hpp"
 #include "ui/display/Display.hpp"
+#include "ui/display/wayland/Scale.hpp"
+#include "ui/dim/Point.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "util/StringAPI.hxx"
 #include "util/EnvParser.hpp"
@@ -15,6 +17,8 @@
 #include "ui/event/KeyCode.hpp"
 #include "xdg-shell-client-protocol.h"
 #include "xdg-decoration-unstable-v1-client-protocol.h"
+#include "viewporter-client-protocol.h"
+#include "fractional-scale-v1-client-protocol.h"
 
 #ifdef SOFTWARE_ROTATE_DISPLAY
 #include "../shared/TransformCoordinates.hpp"
@@ -36,12 +40,19 @@
 
 namespace UI {
 
+[[gnu::const]]
+static uint32_t
+MinVersion(uint32_t advertised, uint32_t supported) noexcept
+{
+  return advertised < supported ? advertised : supported;
+}
+
 static void
 WaylandRegistryGlobal(void *data, struct wl_registry *registry, uint32_t id,
                       const char *interface, [[maybe_unused]] uint32_t version)
 {
   auto &q = *(WaylandEventQueue *)data;
-  q.RegistryHandler(registry, id, interface);
+  q.RegistryHandler(registry, id, interface, version);
 }
 
 static void
@@ -227,7 +238,9 @@ static constexpr struct wl_keyboard_listener keyboard_listener = {
 
 WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
   :queue(_queue),
+   ui_display(_display),
    display(_display.GetWaylandDisplay()),
+   scale_120(_display.GetScale120() > 0 ? _display.GetScale120() : 120u),
    socket_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnSocketReady)),
    flush_event(queue.GetEventLoop(), BIND_THIS_METHOD(OnFlush))
 {
@@ -335,6 +348,14 @@ WaylandEventQueue::~WaylandEventQueue() noexcept
   /* Clean up Wayland protocol objects obtained via wl_registry_bind */
   /* Use wl_proxy_destroy for global objects (compositor, seat, shell, shm) */
   /* Use protocol-specific destroy functions for xdg and zxdg objects */
+  if (fractional_scale_manager != nullptr) {
+    wp_fractional_scale_manager_v1_destroy(fractional_scale_manager);
+    fractional_scale_manager = nullptr;
+  }
+  if (viewporter != nullptr) {
+    wp_viewporter_destroy(viewporter);
+    viewporter = nullptr;
+  }
   if (decoration_manager != nullptr) {
     zxdg_decoration_manager_v1_destroy(decoration_manager);
     decoration_manager = nullptr;
@@ -402,14 +423,34 @@ WaylandEventQueue::OnFlush() noexcept
   }
 }
 
+bool
+WaylandEventQueue::IsVisible() const noexcept
+{
+  /* Unfocused is not pause.  Skip Flip() only while SUSPENDED. */
+  return !suspended;
+}
+
+void
+WaylandEventQueue::SetToplevelState(bool new_suspended) noexcept
+{
+  const bool was_visible = IsVisible();
+  suspended = new_suspended;
+
+  if (IsVisible() && !was_visible)
+    queue.Push(Event::EXPOSE);
+}
+
 inline void
 WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
-                                   const char *interface) noexcept
+                                   const char *interface,
+                                   uint32_t version) noexcept
 {
-  if (StringIsEqual(interface, "wl_compositor"))
+  if (StringIsEqual(interface, "wl_compositor")) {
     compositor = (wl_compositor *)
-      wl_registry_bind(registry, id, &wl_compositor_interface, 1);
-  else if (StringIsEqual(interface, "wl_seat")) {
+      wl_registry_bind(registry, id, &wl_compositor_interface,
+                        MinVersion(version,
+                                   (uint32_t)wl_compositor_interface.version));
+  } else if (StringIsEqual(interface, "wl_seat")) {
     seat = (wl_seat *)wl_registry_bind(registry, id,
                                          &wl_seat_interface, 1);
     wl_seat_add_listener(seat, &seat_listener, this);
@@ -419,13 +460,25 @@ WaylandEventQueue::RegistryHandler(struct wl_registry *registry, uint32_t id,
   else if (StringIsEqual(interface, "wl_shell"))
     shell = (wl_shell *)wl_registry_bind(registry, id,
                                          &wl_shell_interface, 1);
-  else if (StringIsEqual(interface, "xdg_wm_base"))
-    wm_base = (xdg_wm_base *)wl_registry_bind(registry, id,
-                                              &xdg_wm_base_interface, 1);
-  else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
+  else if (StringIsEqual(interface, "xdg_wm_base")) {
+    wm_base = (xdg_wm_base *)
+      wl_registry_bind(registry, id, &xdg_wm_base_interface,
+                        MinVersion(version,
+                                   (uint32_t)xdg_wm_base_interface.version));
+  } else if (StringIsEqual(interface, "zxdg_decoration_manager_v1"))
     decoration_manager = (zxdg_decoration_manager_v1 *)
       wl_registry_bind(registry, id,
                        &zxdg_decoration_manager_v1_interface, 1);
+  else if (StringIsEqual(interface, wp_viewporter_interface.name) &&
+           viewporter == nullptr && version >= 1)
+    viewporter = (struct wp_viewporter *)
+      wl_registry_bind(registry, id, &wp_viewporter_interface, 1);
+  else if (StringIsEqual(interface,
+                          wp_fractional_scale_manager_v1_interface.name) &&
+           fractional_scale_manager == nullptr && version >= 1)
+    fractional_scale_manager = (struct wp_fractional_scale_manager_v1 *)
+      wl_registry_bind(registry, id,
+                       &wp_fractional_scale_manager_v1_interface, 1);
 }
 
 inline void
@@ -480,6 +533,9 @@ WaylandEventQueue::MaybeTransformPoint(PixelPoint p) const noexcept
 inline void
 WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
+  new_pointer_position =
+    Wayland::ToPhysicalPoint(PixelPoint(new_pointer_position), scale_120);
+
   if (new_pointer_position == pointer_position)
     return;
 

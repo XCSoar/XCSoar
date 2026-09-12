@@ -59,6 +59,8 @@ struct wl_surface;
 struct xdg_surface;
 struct xdg_toplevel;
 struct zxdg_toplevel_decoration_v1;
+struct wp_viewport;
+struct wp_fractional_scale_v1;
 #endif
 
 #if defined(__APPLE__)
@@ -145,12 +147,16 @@ class TopWindow : public ContainerWindow {
   X11Window x_window;
 #elif defined(USE_WAYLAND)
   struct wl_surface *wl_surface = nullptr;
-  struct wl_egl_window *native_window;
+  struct wl_egl_window *native_window = nullptr;
   struct xdg_surface *xdg_surface = nullptr;
   struct xdg_toplevel *xdg_toplevel = nullptr;
   struct zxdg_toplevel_decoration_v1 *xdg_decoration = nullptr;
+  struct wp_viewport *viewport = nullptr;
+  struct wp_fractional_scale_v1 *fractional_scale = nullptr;
   PixelSize initial_requested_size{0, 0};
+  PixelSize compositor_size{0, 0};
   std::chrono::steady_clock::time_point last_resize_flush_time;
+  unsigned scale_120 = 120;
 
 private:
   bool received_first_configure = false;
@@ -161,6 +167,9 @@ public:
   }
 
   void OnNativeConfigure(PixelSize new_native_size) noexcept;
+  void OnToplevelConfigureSize(int32_t width, int32_t height) noexcept;
+  void CommitNativeSurface() noexcept;
+  void OnFractionalPreferredScale(unsigned scale_120) noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
@@ -315,6 +324,16 @@ private:
    */
   void CreateNative(const char *text, PixelSize size,
                     TopWindowStyle style);
+
+#ifdef USE_WAYLAND
+  void DestroyNative() noexcept;
+  void ApplySurfaceScale(PixelSize logical_size) noexcept;
+  void RefreshSurfaceScale() noexcept;
+  [[gnu::pure]]
+  PixelSize CompositorLogicalSize() const noexcept;
+  [[gnu::pure]]
+  unsigned EffectiveScale120() const noexcept;
+#endif
 
 public:
 #endif

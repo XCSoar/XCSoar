@@ -15,12 +15,13 @@
 #endif
 #endif
 
-#if defined(USE_X11) || defined(USE_WAYLAND)
+#ifdef USE_X11
 #include "ui/canvas/custom/TopCanvas.hpp"
 #endif
 
 namespace UI {
 
+#ifndef USE_WAYLAND
 void
 TopWindow::OnResize(PixelSize new_size) noexcept
 {
@@ -39,6 +40,7 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 
   ContainerWindow::OnResize(new_size);
 }
+#endif
 
 bool
 TopWindow::OnEvent(const Event &event)
@@ -73,12 +75,11 @@ TopWindow::OnEvent(const Event &event)
   case Event::MOUSE_MOTION:
     ResetUserIdle();
 #ifdef DRAW_MOUSE_CURSOR
-    cursor_visible_until = std::chrono::steady_clock::now() + std::chrono::seconds(10);
-    /* redraw to update the mouse cursor position */
+    cursor_visible_until = std::chrono::steady_clock::now() +
+      std::chrono::seconds(10);
     Invalidate();
 #endif
 
-    // XXX keys
     return OnMouseMove(event.point, 0);
 
   case Event::MOUSE_DOWN:
@@ -107,7 +108,7 @@ TopWindow::OnEvent(const Event &event)
     return true;
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
   case Event::EXPOSE:
     Invalidate();
     return true;
