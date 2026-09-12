@@ -82,6 +82,9 @@ ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
       else
         /* unknown escape */
         return nullptr;
+    } else if (*src == FLARM::START_FRAME) {
+      /* unescaped start byte begins a new frame, not payload */
+      return nullptr;
     } else
       /* "harmless" byte */
       *p++ = *src++;
