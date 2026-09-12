@@ -141,6 +141,8 @@ Version 7.47 - not yet released
     seconds, e.g. after a knock on the USB plug, instead of only when
     it is unplugged; drivers for devices that may stay silent, such as
     radios, are left out #3346
+* Linux
+  - prefer 24-bit colour on Wayland instead of 16-bit
 * dialogs
   - list thermal hotspots in the waypoint type editor. A CUP file
     has no style for them, so saving the file stores them as
