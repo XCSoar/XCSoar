@@ -198,6 +198,8 @@ Version 7.46 - not yet released
     RunMapWindow compile #3150
   - documentation: require make everything before pull requests so Run*
     debug tools compile
+  - lua: fix a timer callback that cancels its own timer aborting a
+    debug build, and reading the Lua state after it had been closed
 
 Version 7.45 - 2026-08-15
 * highlights

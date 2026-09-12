@@ -93,5 +93,9 @@ Lua::CheckPersistent(lua_State *L)
     return;
   }
 
+  lua_pop(L, 1); // pop table (lua_next() has popped the key)
+
+  /* this may close the lua_State (see Lua::AddBackground()), so
+     nothing may touch L after this call */
   callback(L);
 }
