@@ -94,7 +94,7 @@ TEST_NAMES = \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
-	TestFlarmNet TestFlarmMessaging \
+	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
@@ -178,6 +178,11 @@ TEST_CRC16_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCRC16.cpp
 $(eval $(call link-program,TestCRC16,TEST_CRC16))
+
+TEST_FLARM_BINARY_PROTOCOL_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmBinaryProtocol.cpp
+$(eval $(call link-program,TestFlarmBinaryProtocol,TEST_FLARM_BINARY_PROTOCOL))
 
 TEST_NMEA_CHECKSUM_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
