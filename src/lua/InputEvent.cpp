@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "InputEvent.hpp"
+#include "Assert.hxx"
 #include "Value.hxx"
 #include "Util.hxx"
 #include "Error.hxx"
@@ -115,14 +116,25 @@ public:
   }
 
   void OnEvent() {
-    if (PushTable()) {
+    {
+      const Lua::ScopeCheckStack check_stack(L);
+
+      if (!PushTable())
+        return;
+
       callback.Push();
       lua_getfield(L, -2, "input_event");
       if (lua_pcall(L, 1, 0, 0))
         Lua::ThrowError(L, Lua::PopError(L));
 
-      Lua::CheckPersistent(L);
+      lua_pop(L, 1); // pop the table pushed by PushTable()
     }
+
+    /* May destroy this object and close the lua_State when the last
+       persistent handle is gone, so the ScopeCheckStack above must
+       have ended before this call, and neither L nor this may be
+       touched afterwards. */
+    Lua::CheckPersistent(L);
   }
 
   void RemovePersistent() {
