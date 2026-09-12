@@ -85,6 +85,31 @@ static_assert(alignof(FrameHeader) == 1, "Wrong alignment");
 static_assert(std::is_trivial<FrameHeader>::value, "type is not trivial");
 
 /**
+ * True if an ACK/NACK payload refers to @p expected.
+ *
+ * Spec: payload starts with little-endian seqNo.  Some LXNAV
+ * PowerMouse firmware puts a non-sequence byte in seq_hi of a
+ * 2-byte NACK; accept that only for NACK with payload length 2.
+ * ACK always requires a full uint16 match (sequence wrap).
+ */
+[[nodiscard]] constexpr bool
+AckSequenceMatches(uint16_t expected,
+                   std::span<const std::byte> payload,
+                   bool nack) noexcept
+{
+  if (payload.size() < 2)
+    return false;
+
+  const uint16_t got = uint16_t(payload[0]) |
+                       (uint16_t(payload[1]) << 8);
+  if (got == expected)
+    return true;
+
+  return nack && payload.size() == 2 &&
+         uint8_t(payload[0]) == uint8_t(expected);
+}
+
+/**
  * Convenience function. Returns a pre-populated FrameHeader instance that is
  * ready to be sent by the SendFrameHeader() function.
  * @param message_type Message type of the FrameHeader
