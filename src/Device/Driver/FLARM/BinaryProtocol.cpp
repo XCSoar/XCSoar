@@ -133,7 +133,7 @@ FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
 {
   FrameHeader header;
   header.length = 8 + payload.size();
-  header.version = 0;
+  header.version = PROTOCOL_VERSION;
   header.sequence_number = sequence_number++;
   header.type = message_type;
   header.crc = CalculateCRC(header, payload);
