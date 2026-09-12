@@ -32,6 +32,12 @@ static constexpr std::byte ESCAPE_START{0x31};
 /** Binary protocol version (FTD-026). */
 static constexpr uint8_t PROTOCOL_VERSION = 1;
 
+/**
+ * GETIGCDATA cannot resume a lost chunk (FTD-026 3.3.9).  First try
+ * plus one full restart from SELECTRECORD.
+ */
+static constexpr unsigned MAX_IGC_DOWNLOAD_ATTEMPTS = 2;
+
 enum class MessageType : uint8_t {
   ERROR = 0x00,
   ACK = 0xA0,
