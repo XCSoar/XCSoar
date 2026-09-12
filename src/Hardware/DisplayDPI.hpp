@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include "ui/dim/Size.hpp"
+
 #if defined(USE_FB) || defined(ANDROID)
 #define HAVE_DPI_DETECTION
 #endif
-
-struct UnsignedPoint2D;
 
 namespace UI { class Display; }
 
@@ -35,6 +35,14 @@ void
 ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
              unsigned width_mm, unsigned height_mm) noexcept;
 #endif
+
+/**
+ * Pixel size paired with GetSizeMM() for DPI.  Wayland uses the
+ * wl_output mode so compositor scale does not halve the density.
+ */
+[[gnu::const]]
+PixelSize
+GetSizeForDPI(const UI::Display &display) noexcept;
 
 /**
  * Returns the number of pixels per logical inch along the screen

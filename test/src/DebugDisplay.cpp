@@ -4,6 +4,9 @@
 #include "Hardware/DisplayDPI.hpp"
 #include "ui/dim/Size.hpp"
 #include "ui/display/Display.hpp"
+#ifdef USE_WAYLAND
+#include "ui/display/wayland/Scale.hpp"
+#endif
 #include "Math/Point2D.hpp"
 #include "util/PrintException.hxx"
 
@@ -12,14 +15,20 @@
 static void
 PrintScreenSize([[maybe_unused]] const UI::Display &display) noexcept
 {
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
   const auto size = display.GetSize();
   printf("Width: %u px | Height: %u px\n", size.width, size.height);
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(MESA_KMS) || defined(USE_WAYLAND)
   const auto size_mm = display.GetSizeMM();
   printf("Width: %u mm | Height: %u mm\n", size_mm.width, size_mm.height);
+#endif
+
+#ifdef USE_WAYLAND
+  const auto hardware = display.GetHardwareSize();
+  printf("Hardware: %u px | %u px\n", hardware.width, hardware.height);
+  printf("Scale: %.2f\n", display.GetScale120() / (double)Wayland::SCALE_100);
 #endif
 }
 
