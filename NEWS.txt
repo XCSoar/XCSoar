@@ -205,6 +205,8 @@ Version 7.46 - not yet released
     debug build, and reading the Lua state after it had been closed
   - lua: fix a Lua stack slot leaking on every input event handled by a
     script
+  - lua: fix replay.fast_forward() returning a bogus value instead of
+    reporting whether it succeeded
 
 Version 7.45 - 2026-08-15
 * highlights

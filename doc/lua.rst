@@ -647,7 +647,8 @@ The following attributes are provided by ``xcsoar.replay``:
  * - ``stop()``
    - Stops replay.
  * - ``fast_forward(dt)``
-   - Fast forwards ``dt`` [s].
+   - Fast forwards ``dt`` [s].  Returns whether replay was already
+     running with a known virtual time.
  * - ``set_time_scale(r)``
    - Sets replay clock rate to ``r``.
  * - ``time_scale``
