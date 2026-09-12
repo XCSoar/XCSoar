@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <span>
+
 class EventLoop;
 
 #ifndef _WIN32
@@ -10,6 +12,18 @@ class EventLoop;
 #include "util/BindMethod.hxx"
 
 using SignalHandler = BoundMethod<void() noexcept>;
+
+/**
+ * Block the given signals in the calling thread, so they can later be
+ * received by SignalMonitorRegister() instead of being handled by the
+ * default disposition.
+ *
+ * This must be called before any other thread is created, because a
+ * new thread inherits the signal mask, and a process-directed signal
+ * is delivered to an arbitrary thread which does not block it.
+ */
+void
+SignalMonitorBlock(std::span<const int> signos) noexcept;
 
 /**
  * Initialise the signal monitor subsystem.
@@ -41,6 +55,11 @@ SignalMonitorInit(EventLoop &)
 
 static inline void
 SignalMonitorFinish() noexcept
+{
+}
+
+static inline void
+SignalMonitorBlock(std::span<const int>) noexcept
 {
 }
 

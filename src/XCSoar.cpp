@@ -15,6 +15,7 @@
 #include "Interface.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "ui/window/Init.hpp"
+#include "ui/event/Queue.hpp"
 #include "net/http/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "Language/Language.hpp"
@@ -54,6 +55,10 @@
 static int
 Main()
 {
+  /* must happen before any other thread is created; see
+     UI::BlockSignals() */
+  UI::BlockSignals();
+
   ScreenGlobalInit screen_init;
 
 #ifdef _WIN32
