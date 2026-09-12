@@ -16,10 +16,17 @@ WAYLAND_LDLIBS += $(WAYLAND_CURSOR_LDLIBS) $(XKBCOMMON_LDLIBS)
 WAYLAND_GENERATED = $(TARGET_OUTPUT_DIR)/wayland-generated
 INCLUDES += -isystem $(WAYLAND_GENERATED)
 
-# from Debian package "wayland-protocols"
+# from Debian package "wayland-protocols" (>= 1.31 for
+# fractional-scale-v1)
+ifeq ($(shell pkg-config --atleast-version=1.31 wayland-protocols && echo y),)
+$(error wayland-protocols >= 1.31 is required for fractional-scale-v1)
+endif
 WAYLAND_PROTOCOLS_DATADIR = $(shell pkg-config --variable=pkgdatadir wayland-protocols)
 XDG_SHELL_XML = $(WAYLAND_PROTOCOLS_DATADIR)/stable/xdg-shell/xdg-shell.xml
 XDG_DECORATION_XML = $(WAYLAND_PROTOCOLS_DATADIR)/unstable/xdg-decoration/xdg-decoration-unstable-v1.xml
+XDG_OUTPUT_XML = $(WAYLAND_PROTOCOLS_DATADIR)/unstable/xdg-output/xdg-output-unstable-v1.xml
+VIEWPORTER_XML = $(WAYLAND_PROTOCOLS_DATADIR)/stable/viewporter/viewporter.xml
+FRACTIONAL_SCALE_XML = $(WAYLAND_PROTOCOLS_DATADIR)/staging/fractional-scale/fractional-scale-v1.xml
 
 # from Debian package "libwayland-bin"
 WAYLAND_SCANNER = wayland-scanner
@@ -40,6 +47,36 @@ $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h: $(XDG_DECORAT
 	@mv $@.tmp $@
 
 $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c: $(XDG_DECORATION_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/xdg-output-unstable-v1-client-protocol.h: $(XDG_OUTPUT_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/xdg-output-unstable-v1-public.c: $(XDG_OUTPUT_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/viewporter-client-protocol.h: $(VIEWPORTER_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/viewporter-public.c: $(VIEWPORTER_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/fractional-scale-v1-client-protocol.h: $(FRACTIONAL_SCALE_XML) | $(WAYLAND_GENERATED)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)$(WAYLAND_SCANNER) client-header <$< >$@.tmp
+	@mv $@.tmp $@
+
+$(WAYLAND_GENERATED)/fractional-scale-v1-public.c: $(FRACTIONAL_SCALE_XML) | $(WAYLAND_GENERATED)/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(WAYLAND_SCANNER) public-code <$< >$@.tmp
 	@mv $@.tmp $@
