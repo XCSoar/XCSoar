@@ -29,6 +29,17 @@ struct PixelSize;
 
 namespace UI {
 
+/**
+ * Block the signals which #EventQueue receives through signalfd().
+ *
+ * This must be called in the main thread before any other thread is
+ * created: a new thread inherits the signal mask, and a
+ * process-directed signal is delivered to an arbitrary thread which
+ * does not block it.
+ */
+void
+BlockSignals() noexcept;
+
 class Display;
 
 class EventQueue final {

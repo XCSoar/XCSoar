@@ -13,15 +13,26 @@
 
 namespace UI {
 
+/**
+ * The signals which make XCSoar shut down cleanly.
+ */
+static constexpr int quit_signals[] = { SIGINT, SIGTERM, SIGQUIT };
+
+void
+BlockSignals() noexcept
+{
+  SignalMonitorBlock(quit_signals);
+}
+
 EventQueue::EventQueue([[maybe_unused]] Display &_display)
 #if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
   :display(_display)
 #endif
 {
   SignalMonitorInit(event_loop);
-  SignalMonitorRegister(SIGINT, BIND_THIS_METHOD(OnQuitSignal));
-  SignalMonitorRegister(SIGTERM, BIND_THIS_METHOD(OnQuitSignal));
-  SignalMonitorRegister(SIGQUIT, BIND_THIS_METHOD(OnQuitSignal));
+
+  for (const int signo : quit_signals)
+    SignalMonitorRegister(signo, BIND_THIS_METHOD(OnQuitSignal));
 }
 
 EventQueue::~EventQueue() noexcept
