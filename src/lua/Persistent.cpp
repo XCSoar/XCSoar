@@ -95,6 +95,14 @@ Lua::CheckPersistent(lua_State *L)
 
   lua_pop(L, 1); // pop table (lua_next() has popped the key)
 
+  /* A Lua call further up the C stack is still running when this
+     callback was reached from a nested event loop. Thus make sure 
+     closing the state is left to the outermost call, 
+     which will check again when it returns. */
+  lua_Debug ar;
+  if (lua_getstack(L, 0, &ar))
+    return;
+
   /* this may close the lua_State (see Lua::AddBackground()), so
      nothing may touch L after this call */
   callback(L);
