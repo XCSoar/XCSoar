@@ -51,8 +51,15 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
 bool
 FlarmDevice::BinaryMode(OperationEnvironment &env)
 {
-  if (mode == Mode::BINARY)
-    return true;
+  if (mode == Mode::BINARY) {
+    /* The logger can leave binary on its own while the flight list is
+       on screen.  Ping before reuse; on failure fall through to
+       $PFLAX. */
+    if (BinaryPing(env, std::chrono::milliseconds(500)))
+      return true;
+
+    mode = Mode::UNKNOWN;
+  }
 
   port.StopRxThread();
 

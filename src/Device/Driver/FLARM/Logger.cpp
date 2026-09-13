@@ -344,17 +344,16 @@ bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
                             Path path, OperationEnvironment &env)
 {
-  if (!BinaryMode(env))
-    return false;
-
   try {
     for (unsigned attempt = 0;
          attempt < FLARM::MAX_IGC_DOWNLOAD_ATTEMPTS; ++attempt) {
+      if (!BinaryMode(env))
+        return false;
+
       if (SelectFlight(flight.internal.flarm, env) !=
           FLARM::MessageType::ACK) {
-        if (attempt > 0)
-          mode = Mode::UNKNOWN;
-        return false;
+        mode = Mode::UNKNOWN;
+        continue;
       }
 
       if (DownloadFlight(path, env))
