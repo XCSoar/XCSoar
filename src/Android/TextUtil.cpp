@@ -8,7 +8,7 @@
 #include "ui/dim/Size.hpp"
 #include "Look/FontDescription.hpp"
 #include "Asset.hpp"
-
+#include "DisplayType.hpp"
 #include <array>
 
 JNIEnv *TextUtil::env;
@@ -17,6 +17,9 @@ jmethodID TextUtil::midTextUtil;
 jmethodID TextUtil::midGetFontMetrics;
 jmethodID TextUtil::midGetTextBounds;
 jmethodID TextUtil::midGetTextTextureGL;
+static jmethodID midSetCorrectedDpi;
+static bool oem_dpi_corrected{};
+static float text_letter_spacing{};
 
 void
 TextUtil::Initialise(JNIEnv *_env) noexcept
@@ -25,12 +28,25 @@ TextUtil::Initialise(JNIEnv *_env) noexcept
 
   cls.Find(_env, "org/xcsoar/TextUtil");
 
-  midTextUtil = _env->GetMethodID(cls, "<init>", "(IIIZ)V");
+  midTextUtil = _env->GetMethodID(cls, "<init>", "(IZZZZZZF)V");
   midGetFontMetrics = _env->GetMethodID(cls, "getFontMetrics", "([I)V");
   midGetTextBounds = _env->GetMethodID(cls, "getTextBounds",
                                        "(Ljava/lang/String;)[I");
   midGetTextTextureGL = _env->GetMethodID(cls, "getTextTextureGL",
                                           "(Ljava/lang/String;)[I");
+  midSetCorrectedDpi = _env->GetStaticMethodID(cls, "setCorrectedDpi",
+                                               "(FF)V");
+}
+
+void
+TextUtil::SetCorrectedDpi(float text_scale_y, float letter_spacing,
+                          bool corrected) noexcept
+{
+  oem_dpi_corrected = corrected;
+  text_letter_spacing = letter_spacing;
+  env->CallStaticVoidMethod(cls, midSetCorrectedDpi,
+                            (jfloat)text_scale_y,
+                            (jfloat)letter_spacing);
 }
 
 void
@@ -60,26 +76,35 @@ TextUtil::TextUtil(const Java::LocalObject &_obj) noexcept
 TextUtil *
 TextUtil::create(const FontDescription &d)
 {
-  jint paramStyle, paramTextSize;
+  const jint paramTextSize = d.GetHeight();
 
-  paramStyle = 0;
-  if (d.IsBold())
-    paramStyle |= 1;
-  if (d.IsItalic())
-    paramStyle |= 2;
-  paramTextSize = d.GetHeight();
+  const auto display_type = GetDisplayType();
 
-  int paint_flags = 0;
-  if (!IsDithered())
-    /* 1 = Paint.ANTI_ALIAS_FLAG */
-    paint_flags |= 1;
+  /* SkFont::Edging — alias on e-paper and Android OEM DPI fixes. */
+  const bool alias_edging = DisplayTypeUsesMonochromeFonts(display_type) ||
+    IsDithered();
+
+  /* SkFont hinting / linear metrics — off grid snap for fractional em
+     sizes (fitEmHeight, OEM textScaleY) and e-paper. */
+  const bool linear_metrics = alias_edging || oem_dpi_corrected;
+
+  /* Per-glyph layout was for skewed OEM advances; letter-spacing
+     widens runs without squashing counters like setTextScaleX(). */
+  const bool per_glyph = oem_dpi_corrected &&
+    text_letter_spacing < 0.001f;
 
   // construct org.xcsoar.TextUtil object
   auto &e = *env;
   Java::LocalObject localObject{&e,
     e.NewObject(cls, midTextUtil,
-                paramStyle, paramTextSize,
-                paint_flags, d.IsMonospace())};
+                (jint)paramTextSize,
+                (jboolean)d.IsBold(),
+                (jboolean)d.IsItalic(),
+                (jboolean)d.IsMonospace(),
+                (jboolean)alias_edging,
+                (jboolean)linear_metrics,
+                (jboolean)per_glyph,
+                (jfloat)d.GetLetterSpacing())};
   Java::RethrowException(&e);
 
   assert(localObject);

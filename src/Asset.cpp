@@ -21,6 +21,12 @@ SetDisplayType(DisplayType type) noexcept
   display_type = type;
 }
 
+DisplayType
+GetDisplayType() noexcept
+{
+  return display_type;
+}
+
 bool
 HasEPaper() noexcept
 {

@@ -43,7 +43,7 @@ struct Expected {
   static bool
   IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
   {
-    return size.width < size.height
+    return size.width > size.height
       ? size.width < dpi.x * 5
       : size.height < dpi.y * 5;
   }
@@ -137,7 +137,7 @@ TestCase(PixelSize size, UnsignedPoint2D dpi,
 /**
  * Literal goldens for square vs landscape.  Square is never
  * landscape, uses divisor 320, and small-screen on a square uses
- * y DPI.  Landscape is width>height and uses the short-edge (y)
+ * y DPI.  Landscape is width>height and uses the long-edge (x)
  * DPI; flipping 480x640 to 640x480 keeps the same scale_1024.
  */
 static constexpr unsigned SQUARE_LANDSCAPE_CHECKS = 25;
@@ -188,14 +188,14 @@ TestSquareAndLandscape() noexcept
   ok1(!Layout::landscape);
   ok1(!Layout::small_screen);
 
-  /* landscape small-screen uses y_dpi (the short edge) */
+  /* landscape small-screen uses x_dpi (the long edge) */
   Layout::Initialise({800, 480}, {96, 200}, 100, false);
   ok1(Layout::landscape);
-  ok1(Layout::small_screen);
+  ok1(!Layout::small_screen);
 
   Layout::Initialise({800, 480}, {200, 96}, 100, false);
   ok1(Layout::landscape);
-  ok1(!Layout::small_screen);
+  ok1(Layout::small_screen);
 }
 
 int
@@ -210,16 +210,16 @@ main()
     unsigned ui_scale;
     bool has_touch;
   } cases[] = {
-    /* 240x320 @ 96 DPI: historical base, 2.5" short edge, small */
+    /* 240x320 @ 96 DPI: historical base, 3.3" long edge, small */
     {{240, 320}, dpi96, 100, false},
     {{320, 240}, dpi96, 100, false},
     {{320, 320}, dpi96, 100, false},
     {{480, 480}, dpi96, 100, false},
     {{480, 640}, dpi96, 100, false},
 
-    /* 5 inch is size < dpi*5, not <= */
-    {{479, 800}, dpi96, 100, false},
-    {{480, 800}, dpi96, 100, false},
+    /* 5 inch is size < dpi*5, not <= (long edge) */
+    {{240, 479}, dpi96, 100, false},
+    {{240, 480}, dpi96, 100, false},
 
     {{1920, 1080}, dpi96, 100, false},
     {{1920, 1080}, dpi96, 200, false},
@@ -229,10 +229,13 @@ main()
 
     {{1080, 1920}, dpi400, 100, true},
     {{1080, 1920}, {96, 400}, 100, false},
+
+    /* HiBreak Pro: 6.13" 300 PPI, long edge 5.5", not small */
+    {{824, 1648}, {300, 300}, 100, true},
   };
 
   plan_tests(1 + ARRAY_SIZE(cases) * LAYOUT_CHECKS +
-             SQUARE_LANDSCAPE_CHECKS);
+             SQUARE_LANDSCAPE_CHECKS + 5);
 
   ok1(Layout::ScaleSupported());
 
@@ -240,6 +243,24 @@ main()
     TestCase(c.size, c.dpi, c.ui_scale, c.has_touch);
 
   TestSquareAndLandscape();
+
+  /* Android uses scale_1024 for pt/vpt/font; UNIX uses dpi.y for pt/vpt.
+     HiBreak Pro: OEM DPI is sanitized to 300 but framebuffer scaling is
+     the 240px reference (FontScale(12)=41 on Android, 49 on UNIX). */
+  {
+    constexpr PixelSize size{824, 1648};
+    constexpr unsigned ui_scale = 100;
+    const unsigned scale_1024 = std::max(1024U, size.width * 1024 / 240);
+    const unsigned android_pt_scale = scale_1024 * ui_scale / 100;
+
+    ok1(scale_1024 == 824u * 1024 / 240);
+    ok1((12u * android_pt_scale >> 10) == 41);
+
+    Layout::Initialise(size, {300, 300}, 100, true);
+    ok1(Layout::PtScale(12) == 49);
+    ok1(Layout::PtScale(12) == Layout::FontScale(12));
+    ok1((12u * android_pt_scale >> 10) < Layout::PtScale(12));
+  }
 
   return exit_status();
 }
