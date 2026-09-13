@@ -29,7 +29,10 @@
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
 #include "ui/event/Notify.hpp"
+#include "ui/event/DelayedNotify.hpp"
+#include "LogFile.hpp"
 
+#include <chrono>
 #include <vector>
 #include <memory>
 #include <string>
@@ -217,10 +220,15 @@ PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
 
 struct FlightContainer : public PropertyWidgetContainer {
   std::unique_ptr<FileMultiSelectWidget> file_list;
-  UI::Notify igc_notify{[this]() {
+  UI::DelayedNotify igc_progress_notify{std::chrono::milliseconds{100},
+                                        [this]() {
+    if (file_list)
+      file_list->InvalidateRows();
+  }};
+  UI::Notify igc_completion_notify{[this]() {
     igc_cache.PollBackgroundFill();
     if (file_list)
-      file_list->Refresh();
+      file_list->InvalidateRows();
   }};
   PixelRect checkbox_rect;
   AllocatedPath target_device_path;
@@ -265,13 +273,21 @@ struct FlightContainer : public PropertyWidgetContainer {
 
   void StartIgcCacheFill() noexcept
   {
-    std::vector<AllocatedPath> paths;
-    const auto all_paths = file_list->GetAllPaths();
-    paths.reserve(all_paths.size());
-    for (const auto &path : all_paths)
-      paths.emplace_back(path);
+    try {
+      std::vector<AllocatedPath> paths;
+      const auto all_paths = file_list->GetAllPaths();
+      paths.reserve(all_paths.size());
+      for (const auto &path : all_paths)
+        if (path.EndsWithIgnoreCase(".igc"))
+          paths.emplace_back(path);
 
-    igc_cache.StartBackgroundFill(std::move(paths), &igc_notify);
+      igc_cache.StartBackgroundFill(std::move(paths),
+                                    &igc_progress_notify,
+                                    &igc_completion_notify);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to start IGC metadata worker");
+      igc_cache.CancelBackgroundFill();
+    }
   }
 
   void CalculateLayout(const PixelRect &rc) noexcept override {
@@ -318,7 +334,8 @@ struct FlightContainer : public PropertyWidgetContainer {
 
   void Unprepare() noexcept override {
     igc_cache.CancelBackgroundFill();
-    igc_notify.ClearNotification();
+    igc_progress_notify.ClearNotification();
+    igc_completion_notify.ClearNotification();
     PropertyWidgetContainer::Unprepare();
     nmea_checkbox.reset();
   }

@@ -6,6 +6,8 @@
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "ui/event/Notify.hpp"
 
+#include <memory>
+
 void
 AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
                       UI::Notify *_notify)
@@ -14,11 +16,22 @@ AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
   assert(!IsBusy());
 
   job = _job;
-  env = new ThreadedOperationEnvironment(_env);
+  auto new_env = std::make_unique<ThreadedOperationEnvironment>(_env);
+  env = new_env.get();
   notify = _notify;
 
   running.store(true, std::memory_order_relaxed);
-  Thread::Start();
+  try {
+    Thread::Start();
+  } catch (...) {
+    running.store(false, std::memory_order_relaxed);
+    job = nullptr;
+    env = nullptr;
+    notify = nullptr;
+    throw;
+  }
+
+  new_env.release();
 }
 
 void
@@ -77,8 +90,8 @@ AsyncJobRunner::Run() noexcept
     exception = std::current_exception();
   }
 
+  running.store(false, std::memory_order_relaxed);
+
   if (notify != NULL && !env->IsCancelled())
     notify->SendNotification();
-
-  running.store(false, std::memory_order_relaxed);
 }

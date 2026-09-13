@@ -67,6 +67,8 @@ Version 7.46 - not yet released
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
 * glide computer
+  - detect slow winch and foot launches from sustained height gain,
+    and avoid false landings during low-speed wave or ridge flight
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
@@ -87,6 +89,8 @@ Version 7.46 - not yet released
     LX7007 IGC) showing about 65000 m for negative pressure
     altitudes #3075
 * dialogs
+  - show detected takeoff, landing and duration in the flight export
+    list as newest flights are scanned in the background
   - fix NOTAM details text being truncated and unable to scroll #2943
   - put the Close button on the right of the Status and Weather
     tab strips
@@ -155,6 +159,8 @@ Version 7.46 - not yet released
     the system appearance, including a scheduled switch while XCSoar
     is running
 * documentation
+  - describe background takeoff, landing and duration detection in the
+    flight export list
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
     the comment shows no wind when the box is blank because wind is
