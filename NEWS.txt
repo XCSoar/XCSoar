@@ -63,7 +63,9 @@ Version 7.46 - not yet released
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
   - fix IGC download aborting mid-file by restarting from the selected
-    record after a lost frame or a non-standard NACK #3049
+    record after a lost frame or a non-standard NACK, and re-entering
+    binary mode if the logger dropped it while the flight list was
+    open #3049
 * glide computer
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
