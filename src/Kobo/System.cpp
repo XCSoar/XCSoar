@@ -6,10 +6,13 @@
 #include "system/PathName.hpp"
 #include "system/Process.hpp"
 #include "system/Sleep.h"
+#include "util/EnvParser.hpp"
 #include "util/StaticString.hxx"
 
 #include <unistd.h>
 #include <sys/stat.h>
+
+#include <cstdio>
 
 #ifdef KOBO
 
@@ -21,6 +24,8 @@
 static constexpr const char *kobo_config_dir = "/mnt/onboard/XCSoarData/kobo";
 static constexpr const char *kobo_wifi_auto_on_path =
   "/mnt/onboard/XCSoarData/kobo/wifi_auto_on";
+static constexpr const char *kobo_power_off_fd_env =
+  "XCSOAR_KOBO_POWER_OFF_FD";
 
 static bool
 WaitForPath(const char *path, unsigned timeout_ms) noexcept
@@ -89,6 +94,21 @@ KoboPowerOff()
 
   /* fall back */
   return Run("/sbin/poweroff");
+#else
+  return false;
+#endif
+}
+
+bool
+KoboRequestPowerOff() noexcept
+{
+#ifdef KOBO
+  const int fd = GetEnvInt(kobo_power_off_fd_env, -1, 3, 1024);
+  if (fd < 0)
+    return false;
+
+  constexpr char value = 'P';
+  return write(fd, &value, 1) == 1;
 #else
   return false;
 #endif
@@ -367,7 +387,7 @@ KoboExecNickel()
 #endif
 }
 
-void
+bool
 KoboRunXCSoar([[maybe_unused]] const char *mode)
 {
 #ifdef KOBO
@@ -377,8 +397,33 @@ KoboRunXCSoar([[maybe_unused]] const char *mode)
   if (!SiblingPath("xcsoar", buffer, sizeof(buffer)))
     cmd = "/mnt/onboard/XCSoar/xcsoar";
 
+  int pipe_fds[2];
+  if (pipe(pipe_fds) != 0) {
+    Run(cmd, mode);
+    return false;
+  }
+
+  char fd_string[16];
+  snprintf(fd_string, sizeof(fd_string), "%d", pipe_fds[1]);
+  if (setenv(kobo_power_off_fd_env, fd_string, 1) != 0) {
+    close(pipe_fds[0]);
+    close(pipe_fds[1]);
+    Run(cmd, mode);
+    return false;
+  }
+
   Run(cmd, mode);
+  unsetenv(kobo_power_off_fd_env);
+
+  close(pipe_fds[1]);
+  char value;
+  const ssize_t nbytes = read(pipe_fds[0], &value, 1);
+  close(pipe_fds[0]);
+
+  return nbytes == 1 && value == 'P';
 #endif
+
+  return false;
 }
 
 void
