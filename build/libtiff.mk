@@ -25,13 +25,12 @@ ifeq ($(GEOTIFF),y)
 LIBTIFF_CPPFLAGS += -DUSE_GEOTIFF
 LIBGEOTIFF_USE_PKG_CONFIG := y
 LIBGEOTIFF_LDLIBS = -lgeotiff
-
 ifneq ($(USE_THIRDPARTY_LIBS),y)
 ifeq ($(HOST_IS_LINUX)$(TARGET_IS_LINUX),yy)
-ifeq ($(HOST_TRIPLET),)
-# Native Linux distributions may ship libgeotiff without libgeotiff.pc.
+# Native Linux distributions may ship libgeotiff without libgeotiff.pc,
+# no matter if compiling natively or cross-compiling for another CPU but still
+# for Linux on the target.
 LIBGEOTIFF_USE_PKG_CONFIG := n
-endif
 endif
 endif
 
