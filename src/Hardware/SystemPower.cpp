@@ -5,11 +5,15 @@
 
 #include <exception>
 
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(__linux__) && !defined(ANDROID)
 #include "LogFile.hpp"
+#ifdef KOBO
+#include "Kobo/System.hpp"
+#else
 #include "lib/dbus/Connection.hxx"
 #include "lib/dbus/Login1.hxx"
 #include "util/PrintException.hxx"
+#endif
 #endif
 
 namespace SystemPower {
@@ -17,7 +21,10 @@ namespace SystemPower {
 Capabilities
 GetCapabilities() noexcept
 {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(__linux__) && !defined(ANDROID)
+#ifdef KOBO
+  return {true, true};
+#else
   try {
     auto connection = ODBus::Connection::GetSystem();
     return {
@@ -29,6 +36,7 @@ GetCapabilities() noexcept
              "Failed to query system power capabilities");
   }
 #endif
+#endif
 
   return {};
 }
@@ -36,7 +44,10 @@ GetCapabilities() noexcept
 bool
 Reboot() noexcept
 {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(__linux__) && !defined(ANDROID)
+#ifdef KOBO
+  return KoboReboot();
+#else
   try {
     auto connection = ODBus::Connection::GetSystem();
     Login1::Reboot(connection);
@@ -45,6 +56,7 @@ Reboot() noexcept
     PrintException(std::current_exception());
   }
 #endif
+#endif
 
   return false;
 }
@@ -52,7 +64,10 @@ Reboot() noexcept
 bool
 PowerOff() noexcept
 {
-#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO)
+#if defined(__linux__) && !defined(ANDROID)
+#ifdef KOBO
+  return KoboRequestPowerOff() || KoboPowerOff();
+#else
   try {
     auto connection = ODBus::Connection::GetSystem();
     Login1::PowerOff(connection);
@@ -60,6 +75,7 @@ PowerOff() noexcept
   } catch (...) {
     PrintException(std::current_exception());
   }
+#endif
 #endif
 
   return false;

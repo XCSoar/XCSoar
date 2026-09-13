@@ -52,6 +52,7 @@ Version 7.46 - not yet released
     (OpenVario) when XCSoar runs on DRM/KMS (text console without graphical
     GUI framework), particularly on high-resolution monitors. #3177    
 * Kobo
+  - add restart and power-off controls to the Quit dialog
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
 * input
