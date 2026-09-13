@@ -36,6 +36,9 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
   altitude_gps = src.gps_altitude;
   gps_altitude_available = src.gps_altitude_available;
 
+  altitude_ellipsoid = src.gps_ellipsoid_altitude;
+  gps_ellipsoid_altitude_available = src.gps_ellipsoid_altitude_available;
+
   date_time_utc = src.date_time_utc;
   time = src.time;
 
@@ -136,6 +139,11 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     if (src.gps_altitude_available) {
       tmp_info.gps_altitude = src.altitude_gps;
       tmp_info.gps_altitude_available.Update(tmp_info.clock);
+    }
+
+    if (src.gps_ellipsoid_altitude_available) {
+      tmp_info.gps_ellipsoid_altitude = src.altitude_ellipsoid;
+      tmp_info.gps_ellipsoid_altitude_available.Update(tmp_info.clock);
     }
 
     if (src.pressure_altitude_available) {
