@@ -35,8 +35,10 @@ public:
     GeoPoint location;
     /** Barometric altitude (m STD) */
     double pressure_altitude;
-    /** GPS Altitude (m) */
+    /** GPS Altitude AMSL (m) */
     double altitude_gps;
+    /** GPS altitude above WGS84 ellipsoid (m) */
+    double altitude_ellipsoid;
     /** Date and time of fix */
     BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
@@ -59,6 +61,7 @@ public:
 
     bool pressure_altitude_available;
     bool gps_altitude_available;
+    bool gps_ellipsoid_altitude_available;
 
     /** 
      * Set buffer value from NMEA_INFO structure

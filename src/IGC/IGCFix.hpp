@@ -18,6 +18,13 @@ struct IGCFix
 
   int gps_altitude, gps_ellipsoid_altitude, pressure_altitude;
 
+  /**
+   * True if gps_ellipsoid_altitude is known.  Zero is a valid
+   * ellipsoid height, so availability must not be inferred from the
+   * numeric value.
+   */
+  bool gps_ellipsoid_altitude_available = false;
+
   /* extensions follow */
 
   /**

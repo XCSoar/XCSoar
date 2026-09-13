@@ -112,6 +112,7 @@ NMEAInfo::Reset() noexcept
   airspeed_real = false;
 
   gps_altitude_available.Clear();
+  gps_ellipsoid_altitude_available.Clear();
 
   static_pressure_available.Clear();
   dyn_pressure_available.Clear();
@@ -211,6 +212,7 @@ NMEAInfo::Expire() noexcept
     airspeed_real = false;
 
   gps_altitude_available.Expire(clock, std::chrono::seconds(30));
+  gps_ellipsoid_altitude_available.Expire(clock, std::chrono::seconds(30));
   static_pressure_available.Expire(clock, std::chrono::seconds(30));
   dyn_pressure_available.Expire(clock, std::chrono::seconds(30));
   pitot_pressure_available.Expire(clock, std::chrono::seconds(30));
@@ -282,6 +284,10 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
 
   if (gps_altitude_available.Complement(add.gps_altitude_available))
     gps_altitude = add.gps_altitude;
+
+  if (gps_ellipsoid_altitude_available.Complement(
+        add.gps_ellipsoid_altitude_available))
+    gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
 
   if (static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;

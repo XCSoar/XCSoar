@@ -3193,6 +3193,94 @@ TestTemperatureHumidityValidity()
 }
 
 /**
+ * GGA MSL + geoid separation fills ellipsoid altitude; missing
+ * geoid treats GGA altitude as ellipsoid; empty altitude clears
+ * ellipsoid Validity.
+ */
+static void
+TestGGAEllipsoidAltitude()
+{
+  NMEAParser parser;
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+  info.alive.Update(info.clock);
+
+  ok1(parser.ParseLine("$GPRMC,152144.00,A,4537.06717,N,07438.94746,W,000.0,000.0,051024,000.0,W*5F",
+                        info));
+
+  /* Issue #1605: MSL 47.4 m, geoid -33.4 m → ellipsoid 14 m */
+  ok1(parser.ParseLine("$GPGGA,152145.00,4537.06717,N,07438.94746,W,1,07,1.25,47.4,M,-33.4,M,,*55",
+                        info));
+  ok1(info.gps_altitude_available);
+  ok1(equals(info.gps_altitude, 47.4));
+  ok1(info.gps_ellipsoid_altitude_available);
+  ok1(equals(info.gps_ellipsoid_altitude, 14.0));
+
+  /* Missing geoid: GGA altitude is treated as ellipsoid height */
+  ok1(parser.ParseLine("$GPGGA,152146.00,4537.06717,N,07438.94746,W,1,07,1.25,100.0,M,,M,,*57",
+                        info));
+  ok1(info.gps_ellipsoid_altitude_available);
+  ok1(equals(info.gps_ellipsoid_altitude, 100.0));
+  ok1(equals(info.gps_altitude, 100.0));
+
+  /* Empty altitude clears both AMSL and ellipsoid Validity */
+  ok1(parser.ParseLine("$GPGGA,152147.00,4537.06717,N,07438.94746,W,1,07,1.25,,M,,M,,*79",
+                        info));
+  ok1(!info.gps_altitude_available);
+  ok1(!info.gps_ellipsoid_altitude_available);
+}
+
+/**
+ * gps_ellipsoid_altitude_available must use Validity: a real zero
+ * complements, AMSL-only sources must not clobber ellipsoid, and
+ * the flag expires.
+ */
+static void
+TestEllipsoidAltitudeValidity()
+{
+  NMEAInfo a, b;
+  a.Reset();
+  b.Reset();
+  a.clock = TimeStamp{FloatDuration{1}};
+  b.clock = TimeStamp{FloatDuration{1}};
+  b.alive.Update(b.clock);
+
+  b.gps_ellipsoid_altitude = 0;
+  b.gps_ellipsoid_altitude_available.Update(b.clock);
+  ok1(!a.gps_ellipsoid_altitude_available);
+  a.Complement(b);
+  ok1(a.gps_ellipsoid_altitude_available);
+  ok1(equals(a.gps_ellipsoid_altitude, 0));
+
+  NMEAInfo c, d;
+  c.Reset();
+  d.Reset();
+  c.clock = TimeStamp{FloatDuration{1}};
+  d.clock = TimeStamp{FloatDuration{1}};
+  c.gps_ellipsoid_altitude = 42;
+  c.gps_ellipsoid_altitude_available.Update(c.clock);
+  d.alive.Update(d.clock);
+  d.gps_altitude = 100;
+  d.gps_altitude_available.Update(d.clock);
+  c.Complement(d);
+  ok1(c.gps_ellipsoid_altitude_available);
+  ok1(equals(c.gps_ellipsoid_altitude, 42));
+  ok1(c.gps_altitude_available);
+  ok1(equals(c.gps_altitude, 100));
+
+  NMEAInfo e;
+  e.Reset();
+  e.clock = TimeStamp{FloatDuration{1}};
+  e.gps_ellipsoid_altitude = 14;
+  e.gps_ellipsoid_altitude_available.Update(e.clock);
+  ok1(e.gps_ellipsoid_altitude_available);
+  e.clock = TimeStamp{FloatDuration{60}};
+  e.Expire();
+  ok1(!e.gps_ellipsoid_altitude_available);
+}
+
+/**
  * Test that ReadGeoAngle handles NMEA fields without a decimal point
  * gracefully (no crash or undefined behavior).
  */
@@ -3556,6 +3644,7 @@ int main()
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
+             + 13 /* GGAEllipsoid */ + 9 /* EllipsoidComplement */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
              + 30 /* Condor3UDP */ + 10 /* Condor3Spectate */
              + 29 /* FlarmTrafficBuilder */
@@ -3626,6 +3715,8 @@ int main()
   TestMWVRelativeTrue();
   TestStallRatioComplement();
   TestTemperatureHumidityValidity();
+  TestGGAEllipsoidAltitude();
+  TestEllipsoidAltitudeValidity();
   TestReadGeoAngleNoDot();
   TestGLL();
   TestGSA();
