@@ -634,6 +634,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
           geoid_separation = 0;
     }
     info.gps_ellipsoid_altitude = info.gps_altitude + geoid_separation;
+    info.gps_ellipsoid_altitude_available.Update(info.clock);
   } else {
     // FLARM reports MSL altitude & geoid separation in GGA sentence.
     // Some others don't, or always report zero.
@@ -646,6 +647,10 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
       geoid_separation = EGM96::LookupSeparation(info.location);
       info.gps_altitude -= geoid_separation;
     }
+    if (altitude_available)
+      info.gps_ellipsoid_altitude_available.Update(info.clock);
+    else
+      info.gps_ellipsoid_altitude_available.Clear();
   }
 
   return true;

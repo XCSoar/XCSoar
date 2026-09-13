@@ -233,6 +233,7 @@ $(eval $(call link-program,TestOverwritingRingBuffer,TEST_OVERWRITING_RING_BUFFE
 
 TEST_IGC_PARSER_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(TEST_SRC_DIR)/FakeGeoidNonZero.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
@@ -1056,6 +1057,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLogger.cpp
 TEST_LOGGER_DEPENDS = IO OS GEO MATH UTIL UNITS
