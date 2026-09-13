@@ -6,6 +6,7 @@
 #include "ASTPoint.hpp"
 #include "AATPoint.hpp"
 #include "FinishPoint.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -24,6 +25,41 @@ OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
    ScoredTaskPoint(GetLocation(), b_scored),
    ObservationZoneClient(std::move(_oz))
 {
+}
+
+void
+OrderedTaskPoint::SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept
+{
+  navigate_nearest = otb.navigate_nearest;
+
+  if (!navigate_nearest)
+    nearest_point = GeoPoint::Invalid();
+}
+
+const GeoPoint &
+OrderedTaskPoint::GetLocationNavigation() const noexcept
+{
+  /* the nearest point is only meaningful while the aircraft is still
+     heading for this task point */
+  return active_state == CURRENT_ACTIVE && nearest_point.IsValid()
+    ? nearest_point
+    : TaskPoint::GetLocationNavigation();
+}
+
+void
+OrderedTaskPoint::UpdateNearestPoint(const GeoPoint &location,
+                                     const FlatProjection &projection) noexcept
+{
+  nearest_point = navigate_nearest
+    ? GetObservationZone().GetNearestPoint(projection, location)
+    : GeoPoint::Invalid();
+}
+
+void
+OrderedTaskPoint::Reset() noexcept
+{
+  ScoredTaskPoint::Reset();
+  nearest_point = GeoPoint::Invalid();
 }
 
 void
@@ -132,39 +168,51 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
   if (!waypoint)
     waypoint = GetWaypointPtr();
 
+  std::unique_ptr<OrderedTaskPoint> dest;
+
   switch (GetType()) {
   case TaskPointType::START:
-    return std::make_unique<StartPoint>(GetObservationZone().Clone(waypoint->location),
-                                        std::move(waypoint), task_behaviour,
-                                        ordered_task_settings.start_constraints);
+    dest =
+      std::make_unique<StartPoint>(GetObservationZone().Clone(waypoint->location),
+                                   std::move(waypoint), task_behaviour,
+                                   ordered_task_settings.start_constraints);
+    break;
 
   case TaskPointType::AST: {
     const ASTPoint &src = *(const ASTPoint *)this;
-    auto dest =
+    auto ast =
       std::make_unique<ASTPoint>(GetObservationZone().Clone(waypoint->location),
                    std::move(waypoint), task_behaviour, IsBoundaryScored());
-    dest->SetScoreExit(src.GetScoreExit());
-    return dest;
+    ast->SetScoreExit(src.GetScoreExit());
+    dest = std::move(ast);
+    break;
   }
 
   case TaskPointType::AAT:
-    return std::make_unique<AATPoint>(GetObservationZone().Clone(waypoint->location),
-                                      std::move(waypoint), task_behaviour);
+    dest =
+      std::make_unique<AATPoint>(GetObservationZone().Clone(waypoint->location),
+                                 std::move(waypoint), task_behaviour);
+    break;
 
   case TaskPointType::FINISH:
-    return std::make_unique<FinishPoint>(GetObservationZone().Clone(waypoint->location),
-                                         std::move(waypoint), task_behaviour,
-                                         ordered_task_settings.finish_constraints,
-                                         IsBoundaryScored());
+    dest =
+      std::make_unique<FinishPoint>(GetObservationZone().Clone(waypoint->location),
+                                    std::move(waypoint), task_behaviour,
+                                    ordered_task_settings.finish_constraints,
+                                    IsBoundaryScored());
+    break;
 
   case TaskPointType::UNORDERED:
     /* an OrderedTaskPoint must never be UNORDERED */
     gcc_unreachable();
     assert(false);
-    break;
+    return nullptr;
   }
 
-  return NULL;
+  /* the constructors take the start and finish constraints, but not
+     the settings which apply to every task point */
+  dest->SetOrderedTaskSettings(ordered_task_settings);
+  return dest;
 }
 
 void

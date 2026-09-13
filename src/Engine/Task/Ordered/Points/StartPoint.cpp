@@ -4,6 +4,7 @@
 #include "StartPoint.hpp"
 #include "Task/Ordered/Settings.hpp"
 #include "Task/ObservationZones/Boundary.hpp"
+#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Geo/Math.hpp"
 

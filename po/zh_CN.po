@@ -4280,6 +4280,12 @@ msgstr "开始参考高度。"
 msgid "Reference used for start max height rule."
 msgstr "参考用于开始的最大高度规则。"
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "最终滑翔最小高度"
 

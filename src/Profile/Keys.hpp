@@ -176,6 +176,7 @@ constexpr std::string_view TurnpointRadius = "TurnpointRadius";
 constexpr std::string_view FinishType = "FinishType";
 constexpr std::string_view FinishRadius = "FinishRadius";
 constexpr std::string_view TaskType = "TaskType";
+constexpr std::string_view NavigateNearest = "NavigateNearest";
 constexpr std::string_view AATMinTime = "AATMinTime";
 constexpr std::string_view AATTimeMargin = "AATTimeMargin";
 constexpr std::string_view PEVStartWaitTime = "PEVStartWaitTime";

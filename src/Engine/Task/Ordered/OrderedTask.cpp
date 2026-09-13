@@ -470,6 +470,12 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   if (!n_task)
     return false;
 
+  if (active_task_point == 0)
+    taskpoint_start->UpdateNearestPoint(state.location, task_projection);
+  else if (taskpoint_finish != nullptr &&
+           (int)active_task_point == n_task - 1)
+    taskpoint_finish->UpdateNearestPoint(state.location, task_projection);
+
   FlatBoundingBox bb_last(task_projection.ProjectInteger(state_last.location),
                           1);
   FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),

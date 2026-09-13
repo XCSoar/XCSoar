@@ -362,6 +362,9 @@ type allows the pilot to enter the following parameters
   \item [Arm start manually] If set to ``On'', some extra buttons are presented
   in order to let you \bmenug{Arm start} as well as \bmenug{Disarm start} in
   menu \bmenug{Nav 1/2}, controlling  the detection of the start condition.
+  \item [Navigate to nearest point] If set to ``On'', XCSoar aims at
+  the nearest point of the start and finish zone instead of the point
+  which makes the task shortest.  See Section~\ref{sec:task-rules}.
   \item [Start open time] This is the time when the start zone opens.
   \item [Start close time] This is the time when the start zone closes.
   \item [Start max.\ speed] This is the maximum speed allowed in the start observation
@@ -505,6 +508,25 @@ the configuration \config{taskrules} settings in
 For non-AAT tasks, an option is available to set the minimum finish
 altitude according to the FAI rule, whereby the minimum finish
 altitude is above 1000~meters below the start altitude.
+
+The page ``Task Rules'' also carries the option ``Navigate to nearest
+point'', which is ``Off'' by default.  Normally XCSoar aims at the
+point of the start and finish zone which makes the task shortest, on a
+line its centre.  While the option is set, it aims at the nearest point
+of the zone instead, which moves as the glider moves, so the distance,
+the estimated time and the arrival height describe the place the glider
+is going to cross.  Task distance, its optimisation and scoring are
+unchanged.  A sector is left alone, and so is a cylinder the glider is
+already inside, where the nearest point of the rim is the wrong way
+out.
+
+The arrival height is measured against the elevation of the waypoint,
+which is not necessarily the elevation under the nearest point.
+
+The option is stored in the task.  The ``Task Rules'' page sets the
+default for new tasks and for a task read from a file which carries no
+such attribute; the ``Rules'' page of the task manager changes the task
+in use.
 
 
 \section{Start a task}\label{sec:start-task}

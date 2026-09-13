@@ -4460,6 +4460,12 @@ msgstr "Стартовата височина е спрямо"
 msgid "Reference used for start max height rule."
 msgstr "Височина използвана като правило за макс. стартова стойност."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Мин. финална височина"
 

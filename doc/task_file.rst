@@ -80,6 +80,14 @@ the two start gate times, which are omitted when no gate is set.
    Minimum task time in **seconds**, as an integer.  Only meaningful for
    ``AAT`` and ``MAT``.
 
+``navigate_nearest``
+   ``0`` or ``1``.  Whether navigation to the start and to the finish
+   aims at the nearest point of their zone rather than at the point
+   which makes the task shortest.  Lines and cylinders honour it;
+   sectors and keyholes ignore it, and so does a cylinder the glider is
+   already inside.  Scoring and the planned task distance are not
+   affected.
+
 ``start_requires_arm``
    ``0`` or ``1``.  Whether the start has to be armed manually.
 
@@ -321,8 +329,9 @@ here.  They do not, and there is nothing in ``.tsk`` to map them onto:
    (``src/Device/Driver/LX/LXNavDeclare.hpp``), derived at declaration
    time, not something read back from or stored in the task file.
 
-Keep both out of converters: a ``.tsk`` that grew a ``near`` attribute
-would be silently ignored by XCSoar and misleading to everyone else.
+Keep both out of converters.  What XCSoar itself aims at is
+``navigate_nearest`` above; a ``.tsk`` that grew a ``near`` attribute
+would be silently ignored and misleading to everyone else.
 
 A complete example
 ------------------
@@ -334,8 +343,8 @@ sector, as XCSoar writes it::
          finish_min_height_ref="AGL" finish_min_height="0"
          start_close_time="16:00" start_open_time="11:30"
          start_max_height_ref="AGL" start_max_height="0" start_max_speed="0"
-         start_score_exit="1" start_requires_arm="0" aat_min_time="10800"
-         type="RT">
+         start_score_exit="1" start_requires_arm="0"
+         navigate_nearest="0" aat_min_time="10800" type="RT">
    	<Point type="Start">
    		<Waypoint altitude="187" comment="" id="1" name="Aachen Merzbrueck">
    			<Location latitude="50.8231" longitude="6.18639"/>

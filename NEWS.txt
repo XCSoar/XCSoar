@@ -61,6 +61,10 @@ Version 7.46 - not yet released
 * airspace
   - fill airspaces with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
+* task
+  - add a "Navigate to nearest point" task rule: aim at the start and
+    finish zone where the glider is going to cross it, not where the
+    task is shortest; off by default #2388
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847

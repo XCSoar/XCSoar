@@ -4444,6 +4444,12 @@ msgstr "Прив'язка висоти старту"
 msgid "Reference used for start max height rule."
 msgstr "Прив'язка, що використовується в правилах макс. висоти старту."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Мін. висота на фініші"
 

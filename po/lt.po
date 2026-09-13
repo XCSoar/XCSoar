@@ -4443,6 +4443,12 @@ msgstr "Pradžios lygis atsižvelgiant į"
 msgid "Reference used for start max height rule."
 msgstr "Naudoti pradžios maksimalaus lygio taisyklėse"
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Baigimo minimalus lygis"
 

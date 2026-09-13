@@ -4381,6 +4381,12 @@ msgstr "Starthöjd referens"
 msgid "Reference used for start max height rule."
 msgstr "Referens för max starthöjd enligt regler."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Min målgångshöjd"
 

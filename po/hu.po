@@ -4424,6 +4424,12 @@ msgstr "Start magasság referencia"
 msgid "Reference used for start max height rule."
 msgstr "A maximális startmagassághoz használt referencia."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Cél min magasság"
 

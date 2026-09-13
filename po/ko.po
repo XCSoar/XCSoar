@@ -4363,6 +4363,12 @@ msgstr ""
 "최고 스타트 고도(시작 포인트의 고도상승한계)에 사용하는 고도측정 방식을 선택"
 "한다."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "최종골 최저고도"
 

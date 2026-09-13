@@ -2,6 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "FinishPoint.hpp"
+#include "Task/Ordered/Settings.hpp"
+#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 
 #include <stdlib.h>

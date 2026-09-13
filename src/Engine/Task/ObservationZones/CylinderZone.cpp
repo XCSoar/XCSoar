@@ -15,6 +15,21 @@ CylinderZone::ScoreAdjustment() const noexcept
   return radius;
 }
 
+GeoPoint
+CylinderZone::GetNearestPoint(const FlatProjection &,
+                              const GeoPoint &location) const noexcept
+{
+  const GeoVector v{GetReference(), location};
+
+  /* inside the cylinder the nearest point of the rim is behind the
+     aircraft: for a start that is the wrong way out, away from the
+     next task point.  Leave those to the caller. */
+  if (v.distance <= radius)
+    return GeoPoint::Invalid();
+
+  return GeoVector{radius, v.bearing}.EndPoint(GetReference());
+}
+
 OZBoundary
 CylinderZone::GetBoundary() const noexcept
 {

@@ -4424,6 +4424,12 @@ msgstr "Başlangıç yükseklik referansı"
 msgid "Reference used for start max height rule."
 msgstr "Başlangıç maksimum yükseklik kuralı için kullanılan referans."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Bitiş minimum yükseklik"
 

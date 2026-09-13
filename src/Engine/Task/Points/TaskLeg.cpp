@@ -101,7 +101,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const noexcept
         ? GeoVector::Zero()
         : GetPlannedVector();
 
-    return memo_remaining.calc(ref, destination.GetLocationRemaining());
+    return memo_remaining.calc(ref, destination.GetLocationNavigation());
   }
 
   case OrderedTaskPoint::BEFORE_ACTIVE:

@@ -19,6 +19,7 @@ enum Controls {
   MIN_TIME,
   START_REQUIRES_ARM,
   START_SCORE_EXIT,
+  NAVIGATE_NEAREST,
   START_OPEN_TIME,
   START_CLOSE_TIME,
   START_MAX_SPEED,
@@ -54,6 +55,7 @@ TaskPropertiesPanel::RefreshView()
 
   LoadValue(START_REQUIRES_ARM, p.start_constraints.require_arm);
   LoadValue(START_SCORE_EXIT, p.start_constraints.score_exit);
+  LoadValue(NAVIGATE_NEAREST, p.navigate_nearest);
 
   LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetRoughStart());
   LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetRoughEnd());
@@ -109,6 +111,7 @@ TaskPropertiesPanel::ReadValues()
     changed = true;
 
   changed |= SaveValue(START_SCORE_EXIT, p.start_constraints.score_exit);
+  changed |= SaveValue(NAVIGATE_NEAREST, p.navigate_nearest);
 
   RoughTime new_open = p.start_constraints.open_time_span.GetRoughStart();
   RoughTime new_close = p.start_constraints.open_time_span.GetRoughEnd();
@@ -218,6 +221,10 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
              false);
 
   AddBoolean(_("Score start exit"), nullptr, false);
+
+  AddBoolean(_("Navigate to nearest point"),
+             _("Navigate to the nearest point of the start and finish zones."),
+             false);
 
   const RoughTimeDelta time_zone =
     CommonInterface::GetComputerSettings().utc_offset;

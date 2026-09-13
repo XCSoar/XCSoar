@@ -4423,6 +4423,12 @@ msgstr "Štartová výška ref."
 msgid "Reference used for start max height rule."
 msgstr "Referencia použitá pre pravidlo maximálnej štartovej výšky."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Minimálna výška príletu"
 
