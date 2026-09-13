@@ -207,6 +207,9 @@ Version 7.46 - not yet released
     script
   - lua: fix a crash when a callback opens a modal dialog and the last
     timer or input event handler goes away while it is open
+  - lua: xcsoar.replay.process_all() and process_until() now leave the
+    snail trail, the flight statistics and the contest filled in, as a
+    replay at normal speed does
   - lua: fix replay.fast_forward() returning a bogus value instead of
     reporting whether it succeeded
 
