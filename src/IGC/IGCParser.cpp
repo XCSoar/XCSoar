@@ -238,6 +238,7 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
 
   // B-records report WGS 84 ellipsoid altitude, convert to AMSL
   fix.gps_ellipsoid_altitude = gps_altitude;
+  fix.gps_ellipsoid_altitude_available = true;
   double geoid_separation = EGM96::LookupSeparation(fix.location);
   fix.gps_altitude = gps_altitude - static_cast<int>(geoid_separation);
 

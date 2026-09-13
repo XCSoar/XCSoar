@@ -117,6 +117,8 @@ struct NMEAInfo {
   /** GPS altitude AMSL (m) */
   double gps_altitude;
 
+  Validity gps_ellipsoid_altitude_available;
+
   /** GPS altitude above WGS84 ellipsoid (m) */
   double gps_ellipsoid_altitude;
 
@@ -386,6 +388,7 @@ struct NMEAInfo {
     location_available.Clear();
     gps_altitude = _altitude;
     gps_altitude_available.Clear();
+    gps_ellipsoid_altitude_available.Clear();
   }
 
   void ProvideTime(TimeStamp time) noexcept;
