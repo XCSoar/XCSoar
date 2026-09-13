@@ -489,6 +489,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Language/Table.cpp \
 	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/SystemTools.cpp \
 	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ActionInterface.cpp \
