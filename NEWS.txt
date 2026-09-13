@@ -61,6 +61,8 @@ Version 7.46 - not yet released
 * airspace
   - fill airspaces with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
+  - improve stable OpenGL airspace fills and padding while preserving
+    overlapping borders #2479
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
