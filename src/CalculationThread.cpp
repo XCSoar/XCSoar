@@ -133,6 +133,12 @@ CalculationThread::ProcessReplayFix() noexcept
   glide_computer.Expire();
   glide_computer.ProcessGPS(true);
 
+  /* unconditionally, unlike Tick(): ProcessGPS() gates the idle pass
+     on half a second of wall-clock time, which is meaningless here.
+     ProcessIdle is needed to fill the snail trail, the flight statistics
+     and the contest etc. */
+  glide_computer.ProcessIdle();
+
   {
     const std::lock_guard lock{device_blackboard.mutex};
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
