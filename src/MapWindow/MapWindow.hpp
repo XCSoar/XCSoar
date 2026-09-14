@@ -171,6 +171,12 @@ protected:
    */
   unsigned top_right_margin = 0;
 
+  /**
+   * The usable content area for overlays and aircraft centering:
+   * GetClientRect(), or the region the info boxes leave free.
+   */
+  PixelRect content_rect{0, 0, 0, 0};
+
 #ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use

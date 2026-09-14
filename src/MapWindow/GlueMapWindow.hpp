@@ -285,6 +285,12 @@ public:
   void SetTopRightMargin(unsigned margin) noexcept;
 
   /**
+   * Override the content rect used for HUD overlay placement and for
+   * aircraft centering.  Pass an empty rect to reset to GetClientRect().
+   */
+  void SetContentRect(PixelRect rc) noexcept;
+
+  /**
    * Update the blackboard from DeviceBlackboard and
    * InterfaceBlackboard.
    */

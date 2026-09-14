@@ -29,7 +29,9 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const noexcept
   if (!compass_visible)
     return;
 
-  PixelRect compass_rc = rc;
+  /* in OVERLAY InfoBox mode, keep the compass inside the non-InfoBox
+     area */
+  PixelRect compass_rc = content_rect.GetWidth() > 0 ? content_rect : rc;
   compass_rc.right -= std::min(int(top_right_margin),
                                int(compass_rc.GetWidth()));
 
