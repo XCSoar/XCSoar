@@ -1028,7 +1028,7 @@ MainWindow::ReinitialiseLayout() noexcept
   ReinitialiseLayout_vario(ib_layout);
 
   if (map != nullptr) {
-    if (FullScreen)
+    if (FullScreen || menu_hides_info_boxes)
       InfoBoxManager::Hide();
     else
       InfoBoxManager::Show();
@@ -1701,6 +1701,23 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+  if (menu_hides_info_boxes && look != nullptr &&
+      (map == nullptr || !map->IsVisible() ||
+       !map->GetPosition().Contains(GetClientRect()))) {
+    /* Fill the space of the hidden info boxes only where nothing
+       else paints it, in the widget's own background color so the
+       strip beside it does not stand out.  The client rect stops at
+       the display margins, which nothing repaints. */
+    const Color *widget_background = widget != nullptr
+      ? widget->GetBackgroundColor()
+      : nullptr;
+
+    canvas.DrawFilledRectangle(GetClientRect(),
+                               widget_background != nullptr
+                               ? *widget_background
+                               : look->dialog.background_color);
+  }
+
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
     PixelRect rc = map->GetPosition();
@@ -1773,7 +1790,7 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
 
   FullScreen = _full_screen;
 
-  if (FullScreen)
+  if (FullScreen || menu_hides_info_boxes)
     InfoBoxManager::Hide();
   else
     InfoBoxManager::Show();
@@ -2155,8 +2172,32 @@ MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
      area may have changed since the MenuBar was created */
   menu_bar->OnResize(GetInfoBoxAreaRect());
   MenuGlue::Set(*menu_bar, menu, overlay, full);
+  UpdateMenuInfoBoxes();
+
   /* Menus overlay the page; opening them must not move its bottom area. */
   RaiseBottomBannerWidget();
+}
+
+void
+MainWindow::UpdateMenuInfoBoxes() noexcept
+{
+  const bool menu_visible =
+    menu_bar != nullptr && menu_bar->IsAnyButtonVisible();
+  if (menu_visible == menu_hides_info_boxes)
+    return;
+
+  menu_hides_info_boxes = menu_visible;
+
+  if (menu_visible)
+    /* only hide them; deliberately no re-layout, so the map and
+       everything drawn on it stays where it is */
+    InfoBoxManager::Hide();
+  else if (!FullScreen)
+    /* in full screen mode they stay hidden anyway */
+    InfoBoxManager::Show();
+
+  /* repaint the area the boxes occupied */
+  Invalidate();
 }
 
 bool
