@@ -200,6 +200,9 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
                     ui_settings.display.display_type)) {
     changed = true;
     SetDisplayType(ui_settings.display.display_type);
+    /* Reload 1-bit vs anti-aliased glyphs (Kobo mono path). */
+    CommonInterface::main_window->Initialise();
+    CommonInterface::main_window->ReinitialiseLook();
   }
 
   if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,

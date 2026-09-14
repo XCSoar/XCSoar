@@ -36,19 +36,19 @@ IsSmallScreen(unsigned size, unsigned dpi) noexcept
 }
 
 /**
- * Is the small edge smaller than 5 inch?
+ * Is the long edge smaller than 5 inch?
  */
 static constexpr bool
 IsSmallScreen(unsigned width, unsigned height,
               unsigned x_dpi, unsigned y_dpi) noexcept
 {
-  return width < height
+  return width > height
     ? IsSmallScreen(width, x_dpi)
     : IsSmallScreen(height, y_dpi);
 }
 
 /**
- * Is the small edge smaller than 5 inch?
+ * Is the long edge smaller than 5 inch?
  */
 static constexpr bool
 IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
@@ -103,11 +103,19 @@ Apply(PixelSize new_size, UnsignedPoint2D dpi,
   pen_width_scale = std::max(1024u, dpi.x * 1024u / 80u);
   fine_pen_width_scale = std::max(1024u, dpi.x * 1024u / 160u);
 
-  pt_scale = 1024 * dpi.y / 72;
-
+#ifdef ANDROID
+  /* UI chrome uses Scale() from the 240px reference width; keep fonts
+     and point-based sizes on the same framebuffer basis instead of a
+     separate pt/DPI track that diverges when OEM xdpi/ydpi is
+     sanitized to densityDpi. */
+  pt_scale = scale_1024 * ui_scale / 100;
   vpt_scale = SmallScreenAdjust(pt_scale);
-
+  font_scale = SmallScreenAdjust(pt_scale);
+#else
+  pt_scale = 1024 * dpi.y / 72;
+  vpt_scale = SmallScreenAdjust(pt_scale);
   font_scale = SmallScreenAdjust(1024 * dpi.y * ui_scale / 72 / 100);
+#endif
 
   text_padding = VptScale(2);
 

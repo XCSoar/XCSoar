@@ -263,7 +263,6 @@ class NativeView extends SurfaceView
     final Context context = getContext();
 
     android.graphics.Rect r = getHolder().getSurfaceFrame();
-    android.util.Log.d(TAG, "runNative: getSurfaceFrame() size=" + r.width() + "x" + r.height());
     DisplayMetrics metrics = new DisplayMetrics();
     /* Physical display size and xdpi/ydpi; getMetrics() can follow reduced
        application window metrics on some devices (XCSoar #1784). */
@@ -286,6 +285,7 @@ class NativeView extends SurfaceView
         runNative(context, permissionManager,
                   r.width(), r.height(),
                   (int)metrics.xdpi, (int)metrics.ydpi,
+                  metrics.densityDpi,
                   Build.PRODUCT);
       } finally {
         /* Set shutdown flag before stopping service so it does not
@@ -346,7 +346,7 @@ class NativeView extends SurfaceView
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,
                                   int width, int height,
-                                  int xdpi, int ydpi,
+                                  int xdpi, int ydpi, int densityDpi,
                                   String product);
 
   protected native void resizedNative(int width, int height, int inset_left, int inset_top, int inset_right, int inset_bottom);

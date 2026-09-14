@@ -11,24 +11,31 @@
 #include "Resources.hpp"
 #endif
 
-#include <algorithm>
-
 void
 DialogLook::LoadFonts()
 {
-  const FontDescription text_font_d(std::min(Layout::FontScale(12),
-                                             Layout::min_screen_pixels / 20));
+  /* FontScale already applies DPI, Text size, and the close-view
+     shrink.  Display type only changes rasterisation (alias/weights),
+     not layout em. */
+  FontDescription text_font_d(Layout::FontScale(12));
+
   const FontDescription small_font_d =
     text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
 
   text_font.Load(text_font_d);
   small_font.Load(small_font_d);
 
+  /* QuickGuide **bold** and list emphasis use bold_font; buttons use
+     text_font on e-paper (see Initialise). */
   bold_font.Load(text_font_d.WithBold());
 
-  /* H1 = 150% of text size, H2 = 125% */
-  heading1_font.Load(text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 2u).WithBold());
-  heading2_font.Load(text_font_d.WithHeight(text_font_d.GetHeight() * 5u / 4u).WithBold());
+  /* H1 = 150% of text size, H2 = 125%. */
+  const FontDescription heading1_d =
+    text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 2u);
+  const FontDescription heading2_d =
+    text_font_d.WithHeight(text_font_d.GetHeight() * 5u / 4u);
+  heading1_font.Load(heading1_d.WithBold());
+  heading2_font.Load(heading2_d.WithBold());
 }
 
 void

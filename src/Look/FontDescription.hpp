@@ -10,6 +10,7 @@ class FontDescription {
   unsigned height;
   bool bold, italic;
   bool monospace;
+  float letter_spacing_em;
 
 public:
   FontDescription() = default;
@@ -19,8 +20,10 @@ public:
    */
   explicit constexpr FontDescription(unsigned _height,
                                      bool _bold=false, bool _italic=false,
-                                     bool _monospace=false)
-    :height(_height), bold(_bold), italic(_italic), monospace(_monospace) {}
+                                     bool _monospace=false,
+                                     float _letter_spacing_em=0.f)
+    :height(_height), bold(_bold), italic(_italic), monospace(_monospace),
+     letter_spacing_em(_letter_spacing_em) {}
 
   constexpr unsigned GetHeight() const {
     return height;
@@ -31,7 +34,8 @@ public:
   }
 
   constexpr FontDescription WithHeight(unsigned _height) const {
-    return FontDescription(_height, bold, italic, monospace);
+    return FontDescription(_height, bold, italic, monospace,
+                           letter_spacing_em);
   }
 
   constexpr bool IsBold() const {
@@ -43,7 +47,16 @@ public:
   }
 
   constexpr FontDescription WithBold(bool _bold=true) const {
-    return FontDescription(height, _bold, italic, monospace);
+    return FontDescription(height, _bold, italic, monospace,
+                           letter_spacing_em);
+  }
+
+  constexpr float GetLetterSpacing() const {
+    return letter_spacing_em;
+  }
+
+  void SetLetterSpacing(float em) {
+    letter_spacing_em = em;
   }
 
   constexpr bool IsItalic() const {

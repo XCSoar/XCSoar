@@ -6,6 +6,11 @@ Version 7.46 - not yet released
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
     the chip latency timer to 1 ms and sending each binary frame in
     one write #3047
+  - fix huge fonts and buttons when the device reports unusable
+    physical DPI; use Android's density instead
+  - on color e-ink, draw UI text without anti-aliasing; thin body
+    type and stronger emphasis keep counters open and QuickGuide bold
+    visible at the same layout size as LCD
 * iOS
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
@@ -131,6 +136,9 @@ Version 7.46 - not yet released
     device has no time zone setting at all
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - keep full-size type on 6 inch phones: shrink for close viewing
+    only when the long edge is under 5 inches, and size dialog text
+    from that scale rather than the short edge
   - size the Wayland UI from the output's physical size, and draw at
     the compositor's scale (including 125% / 150% / 200%) so fonts
     and the map are rasterised at the panel DPI #3123
@@ -169,6 +177,8 @@ Version 7.46 - not yet released
     missing
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
+  - describe Look / Display (text size, automatic density, and
+    e-ink text without anti-aliasing)
 * development
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and
@@ -375,9 +385,10 @@ Version 7.45 - 2026-08-15
   - fix crash wrapping unspaced UTF-8 help text (e.g. Chinese
     language picker) #2768
 * ui
-  - add Expert Look → Screen Layout setting “Display type” (LCD /
+  - add Expert Look → Display setting “Display type” (LCD /
     E-ink / Color e-ink); e-ink modes disable kinetic and smooth
-    scrolling (default E-ink on Kobo, LCD elsewhere)
+    scrolling and draw text without anti-aliasing as on Kobo
+    (default E-ink on Kobo, LCD elsewhere)
   - snap e-paper scrolling instead of animating at display refresh
     rate
   - add help text for plane Max. Cruise Speed; put Reference Mass
