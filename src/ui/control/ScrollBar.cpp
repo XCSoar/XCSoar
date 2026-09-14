@@ -149,7 +149,7 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
       { rc.right - arrow_padding, base_y },
     };
     canvas.Select(pressed
-                  ? look.focused.foreground_brush
+                  ? look.focused.pressed_foreground_brush
                   : look.standard.foreground_brush);
     canvas.DrawTriangleFan(tri, ARRAY_SIZE(tri));
   };
