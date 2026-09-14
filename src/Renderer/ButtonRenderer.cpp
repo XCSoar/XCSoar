@@ -17,6 +17,16 @@ ButtonFrameRenderer::GetMargin() noexcept
   return Layout::VptScale(2);
 }
 
+unsigned
+ButtonFrameRenderer::GetEdgeMargin(const PixelRect &rc) noexcept
+{
+  const unsigned margin = GetMargin();
+
+  return rc.GetWidth() > 4 * margin && rc.GetHeight() > 4 * margin
+    ? margin
+    : 0;
+}
+
 static constexpr const auto &
 GetStateLook(const ButtonLook &look, ButtonState state) noexcept
 {
