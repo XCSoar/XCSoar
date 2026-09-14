@@ -192,7 +192,7 @@ AfterStartup()
     else
       LogDebug("Optional {} not found", init_path.c_str());
   } catch (...) {
-    LogError(std::current_exception());
+    LogError(std::current_exception(), "Lua init script failed");
   }
 
   if (is_simulator()) {
