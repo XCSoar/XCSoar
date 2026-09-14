@@ -2,6 +2,9 @@
 // Copyright The XCSoar Project
 
 #pragma once
+
+#include "time/Validity.hpp"
+#include "time/Stamp.hpp"
 #include "Math/Angle.hpp"
 
 /**
@@ -10,9 +13,17 @@
 struct GyroscopeState
 {
   /**
+   * A monotonic wall clock time, in seconds, with an undefined
+   * reference.  This may get updated even if the device doesn't send
+   * any data.  It is used to update and check the #Validity
+   * attributes in this struct.
+   */
+  TimeStamp clock;
+
+  /**
    * Is angular rate information available?
    */
-  bool available;
+  Validity available;
 
   /**
    * Is the angular rate information coming from a connected device (true) or
@@ -42,7 +53,7 @@ struct GyroscopeState
 
   void Reset()
   {
-    available = false;
+    available.Clear();
   }
 
   void ProvideAngularRates(Angle _angular_rate_X,
@@ -56,7 +67,8 @@ struct GyroscopeState
     angular_rate_Z    = _angular_rate_Z;
     real              = _real;
     fixed_and_aligned = _fixed_and_aligned;
-    available         = true;
+    clock = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
+    available.Update(clock);
   }
 
   /**
