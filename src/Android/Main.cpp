@@ -37,9 +37,14 @@
 #include "ui/event/Queue.hpp"
 #include "Dialogs/Message.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/File.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Map.hpp"
+#include "system/Path.hpp"
 #include "MainWindow.hpp"
 #include "Startup.hpp"
 #include "Interface.hpp"
+#include "UISettings.hpp"
 #include "java/Global.hxx"
 #include "java/File.hxx"
 #include "java/InputStream.hxx"
@@ -259,6 +264,25 @@ try {
   InitialiseDataPath();
   AtScopeExit() { DeinitialiseDataPath(); };
 
+  // Look at the profile for the AA setting without modifying global
+  // Profile state - Profile::GetPath() must remain nullptr so that
+  // dlgStartupShowModal() is still shown later.
+  unsigned antialiasing_samples = ANTIALIASING_OFF;
+  try {
+    Path path = Profile::GetPath();
+    AllocatedPath default_path;
+    if (path == nullptr) {
+      default_path = Profile::GetMostRecentPath();
+      path = default_path;
+    }
+    ProfileMap temp_map;
+    Profile::LoadFile(temp_map, path);
+    temp_map.Get(ProfileKeys::AntiAliasing, antialiasing_samples);
+    if (!IsValidAntialiasing(antialiasing_samples))
+      antialiasing_samples = ANTIALIASING_OFF;
+  } catch (...) {
+  }
+
   LogFormat("Starting %s", XCSoar_ProductToken);
 
   TextUtil::Initialise(env);
@@ -334,7 +358,7 @@ try {
     saf_helper = nullptr;
   };
 
-  ScreenGlobalInit screen_init;
+  ScreenGlobalInit screen_init(antialiasing_samples);
   AtScopeExit() { Fonts::Deinitialize(); };
 
   AllowLanguage();

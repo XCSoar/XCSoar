@@ -29,6 +29,9 @@
 #include "UtilsSystem.hpp"
 #endif
 
+#include "ui/display/sdl/Display.hpp"
+#include "LogFile.hpp"
+
 namespace UI {
 
 #ifdef HAVE_MULTI_TOUCH
@@ -190,6 +193,17 @@ TopWindow::CreateNative(const char *_text, PixelSize new_size,
   window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
                               SDL_WINDOWPOS_UNDEFINED, new_size.width,
                               new_size.height, flags);
+  if (window == nullptr) {
+    // If window creation failed, try disabling anti-aliasing and retry
+    LogFmt("SDL_CreateWindow failed: {} - retrying without anti-aliasing",
+           ::SDL_GetError());
+
+    SDL::Display::DisableAntiAliasing();
+    window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, new_size.width,
+                                new_size.height, flags);
+  }
+
   if (window == nullptr)
     throw FmtRuntimeError("SDL_CreateWindow('{}', {}, {}, {}, {}, {:#x}) has failed: {}",
                           text, SDL_WINDOWPOS_UNDEFINED,

@@ -15,7 +15,7 @@ public:
   /**
    * Throws on error.
    */
-  Display();
+  explicit Display(unsigned antialiasing_samples = 0);
 
   ~Display() noexcept;
 

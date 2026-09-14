@@ -24,6 +24,23 @@ Path
 GetPath() noexcept;
 
 /**
+ * Returns the absolute path of the default profile file. Unlike
+ * GetPath(), this is available before the profile has been loaded.
+ */
+[[gnu::pure]]
+AllocatedPath
+GetDefaultPath() noexcept;
+
+/**
+ * Returns the profile file which was used most recently, i.e. the
+ * newest one in the profile directory.  The startup dialog touches a
+ * profile when it is selected, so this is the one it will preselect.
+ * Falls back to GetDefaultPath() if there is no profile at all.
+ */
+AllocatedPath
+GetMostRecentPath() noexcept;
+
+/**
  * Loads the profile files
  */
 void

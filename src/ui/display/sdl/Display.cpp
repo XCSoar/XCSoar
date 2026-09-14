@@ -6,12 +6,16 @@
 #include "Asset.hpp"
 #include "Math/Point2D.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+#endif
+
 #include <SDL.h>
 #include <SDL_hints.h>
 
 namespace SDL {
 
-Display::Display()
+Display::Display([[maybe_unused]] unsigned antialiasing_samples)
 {
 #ifdef _WIN32
   SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
@@ -47,8 +51,17 @@ Display::Display()
     SDL_ShowCursor (SDL_FALSE);
 
 #if defined(ENABLE_OPENGL)
+  /* remember what the profile asked for: a framebuffer object can
+     still provide it even if SDL_CreateWindow() falls back to fewer
+     samples (or none) and calls DisableAntiAliasing() */
+  OpenGL::requested_antialiasing_samples = antialiasing_samples;
+
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+  if (antialiasing_samples > 0) {
+    ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, antialiasing_samples);
+  }
 #endif
 }
 
@@ -66,6 +79,15 @@ Display::GetDPI() noexcept
     return {static_cast<unsigned>(hdpi), static_cast<unsigned>(vdpi)};
 
   return {96, 96};
+}
+
+void
+Display::DisableAntiAliasing() noexcept
+{
+#if defined(ENABLE_OPENGL)
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+  ::SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
+#endif
 }
 
 } // namespace SDL

@@ -9,6 +9,7 @@
 #include "util/StringCompare.hxx"
 #include "util/StaticString.hxx"
 #include "Interface.hpp"
+#include "UISettings.hpp"
 #include "Language/Table.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
@@ -21,9 +22,79 @@
 #include "Repository/FileType.hpp"
 #include "Version.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Globals.hpp"
+
+#include <algorithm>
+
+/* the display backends may not include UISettings.hpp, so they carry
+   their own copy of the list; this is where both are visible */
+static_assert(std::ranges::equal(ANTIALIASING_SAMPLE_COUNTS,
+                                 OpenGL::ANTIALIASING_SAMPLE_COUNTS),
+              "The MSAA sample counts offered by the user interface and "
+              "the ones probed by the display backends must match");
+#endif
+
 using namespace std::chrono;
 
+/**
+ * Format one channel's sample count as e.g. "4x", or the localised
+ * "Off" for zero.
+ */
+static StaticString<16>
+FormatSamples(unsigned samples) noexcept
+{
+  StaticString<16> label;
+  if (samples > 0)
+    label.Format("%ux", samples);
+  else
+    label = _("Off");
+  return label;
+}
+
+/**
+ * Add one anti-aliasing choice.  The window surface (which paints
+ * the gauges, dialogs and form controls directly) and the
+ * framebuffer objects (which paint the map, InfoBoxes and renderer
+ * caches) each fall back to the next lower level independently when
+ * @a samples is not available, so when the two would end up with
+ * different sample counts, both are shown, e.g. "8x (Map), 4x
+ * (Gauges)".
+ *
+ * @param window_available bit mask of sample counts the window
+ * surface can provide; 0 means the platform cannot enumerate them,
+ * in which case this channel is assumed to support everything
+ * @param fbo_available the same, for framebuffer objects
+ */
+static void
+AddAntialiasingChoice(DataFieldEnum &df, unsigned samples,
+                      unsigned window_available,
+                      unsigned fbo_available) noexcept
+{
+  const unsigned window_actual =
+    SelectAntialiasingSamples(samples, window_available);
+  const unsigned fbo_actual =
+    SelectAntialiasingSamples(samples, fbo_available);
+
+  const bool window_ok = window_available == 0 || window_actual == samples;
+  const bool fbo_ok = fbo_available == 0 || fbo_actual == samples;
+
+  StaticString<80> label(FormatSamples(samples));
+
+  if (!window_ok && !fbo_ok)
+    label.AppendFormat(" (%s)", _("not available"));
+  else if (!window_ok)
+    label.AppendFormat(" (%s), %s (%s)", _("Map"),
+                       FormatSamples(window_actual).c_str(), _("Gauges"));
+  else if (!fbo_ok)
+    label.AppendFormat(" (%s), %s (%s)", _("Gauges"),
+                       FormatSamples(fbo_actual).c_str(), _("Map"));
+
+  df.AddChoice(samples, label.c_str());
+}
+
 enum ControlIndex {
+  AntiAliasing,
   InputFile,
 #ifdef HAVE_NLS
   LanguageFile,
@@ -73,6 +144,30 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent,
   const UISettings &settings = CommonInterface::GetUISettings();
 
   RowFormWidget::Prepare(parent, rc);
+
+  WndProperty *wp_antialiasing = AddEnum(_("Anti-aliasing"),
+                                 _("Multi-sample anti-aliasing for smoother graphics. "
+                                   "Higher values improve quality but may reduce performance."));
+  if (wp_antialiasing != nullptr) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp_antialiasing->GetDataField();
+
+#ifdef ENABLE_OPENGL
+    const unsigned window_available = OpenGL::available_antialiasing_samples;
+    const unsigned fbo_available = OpenGL::available_fbo_antialiasing_samples;
+#else
+    /* without OpenGL there is no antialiasing implemented */
+    const unsigned window_available = 1, fbo_available = 1;
+#endif
+
+    AddAntialiasingChoice(df, ANTIALIASING_OFF,
+                          window_available, fbo_available);
+    for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
+      AddAntialiasingChoice(df, n, window_available, fbo_available);
+
+    df.SetValue(settings.antialiasing);
+    wp_antialiasing->RefreshDisplay();
+  }
+  SetExpertRow(AntiAliasing);
 
   AddFile(_("Events"),
           _("The Input Events file defines the menu system and how XCSoar responds to "
@@ -202,6 +297,10 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
 {
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
+
+  if (SaveValueEnum(AntiAliasing, ProfileKeys::AntiAliasing,
+                    settings.antialiasing))
+    require_restart = changed = true;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
     require_restart = changed = true;

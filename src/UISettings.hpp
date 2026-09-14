@@ -14,8 +14,70 @@
 #include "Audio/Settings.hpp"
 
 #include <chrono>
+#include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <type_traits>
+
+/**
+ * The value of UISettings::antialiasing which disables MSAA.
+ */
+inline constexpr unsigned ANTIALIASING_OFF = 0;
+
+/**
+ * The MSAA sample counts XCSoar offers in its user interface.  Keep
+ * in sync with OpenGL::ANTIALIASING_SAMPLE_COUNTS, which the display
+ * backends use; this copy exists because the setting must also be
+ * available in builds without OpenGL.
+ */
+inline constexpr unsigned ANTIALIASING_SAMPLE_COUNTS[] = { 2, 4, 8, 16 };
+
+/**
+ * Is this a value the user may store in UISettings::antialiasing?
+ */
+constexpr bool
+IsValidAntialiasing(unsigned samples) noexcept
+{
+  if (samples == ANTIALIASING_OFF)
+    return true;
+
+  for (const unsigned n : ANTIALIASING_SAMPLE_COUNTS)
+    if (n == samples)
+      return true;
+
+  return false;
+}
+
+/**
+ * Given the number of MSAA samples requested (0 = disabled, or one
+ * of #ANTIALIASING_SAMPLE_COUNTS) and a bit mask of the levels one
+ * channel (the window surface or a framebuffer object) can actually
+ * provide (bit n set means n samples work; bit 0 set means the mask
+ * is known at all), return the highest level that does not exceed
+ * the request: the "next lower available setting".  Returns 0 if
+ * nothing at or below the request is available.
+ *
+ * If @a available is 0 ("unknown", i.e. this channel could not be
+ * probed), the request is returned unchanged.
+ *
+ * Keep in sync with OpenGL::SelectAntialiasingSamples(), which the
+ * display backends use; this copy exists for the same reason as
+ * #ANTIALIASING_SAMPLE_COUNTS above.
+ */
+constexpr unsigned
+SelectAntialiasingSamples(unsigned requested, unsigned available) noexcept
+{
+  if (requested == 0 || available == 0)
+    return requested;
+
+  for (std::size_t i = std::size(ANTIALIASING_SAMPLE_COUNTS); i-- > 0;) {
+    const unsigned n = ANTIALIASING_SAMPLE_COUNTS[i];
+    if (n <= requested && (available & (1u << n)) != 0)
+      return n;
+  }
+
+  return 0;
+}
 
 /**
  * User interface settings.
@@ -35,6 +97,9 @@ struct UISettings {
 
   /** Override OS dpi settings */
   unsigned custom_dpi;
+
+  /** Anti-aliasing (MSAA) samples; see IsValidAntialiasing() */
+  unsigned antialiasing;
 
   /** Position ThermalAssistant */
   enum class ThermalAssistantPosition: uint8_t {
