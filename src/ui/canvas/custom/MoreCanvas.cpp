@@ -156,9 +156,24 @@ Canvas::DrawFormattedText(const PixelRect r, const std::string_view text,
     return lines * skip;
   }
 
-  int y = (format & DT_VCENTER) && lines < max_lines
-    ? (r.top + r.bottom - lines * skip) / 2
-    : r.top;
+  /* Optical centering: center the cap-height strip, then lift the
+     ink three eighths of the descent above it, the way native macOS
+     buttons do; exact centering reads as sitting too low */
+  int y = r.top;
+  if (format & DT_VCENTER) {
+    const unsigned ascent = font->GetAscentHeight();
+    const unsigned capital = font->GetCapitalHeight();
+    const unsigned descent = skip > ascent ? skip - ascent : 0;
+    const unsigned lift = 3 * descent / 8;
+    const unsigned last_line = capital > 0 && capital <= ascent
+      ? 2 * ascent - capital
+      : ascent;
+    const unsigned block_height = (lines - 1) * skip + last_line + 2 * lift;
+    if (r.GetHeight() > 0 &&
+        block_height <= (unsigned)r.GetHeight())
+      y = (r.top + r.bottom - (int)block_height) / 2;
+  }
+
   for (size_t i = 0; i < len; i += strlen(duplicated + i) + 1) {
     if (duplicated[i] != '\0') {
       int x;
