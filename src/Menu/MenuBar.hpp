@@ -47,6 +47,13 @@ public:
   }
 
   /**
+   * Is the menu currently on screen, i.e. is at least one button
+   * visible?
+   */
+  [[gnu::pure]]
+  bool IsAnyButtonVisible() const noexcept;
+
+  /**
    * To be called when the parent's size changes.  Moves all buttons
    * to a new position.
    */

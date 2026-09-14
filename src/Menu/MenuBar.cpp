@@ -161,6 +161,15 @@ MenuBar::HideButton(unsigned i)
   buttons[i].Hide();
 }
 
+bool
+MenuBar::IsAnyButtonVisible() const noexcept
+{
+  return std::any_of(std::begin(buttons), std::end(buttons),
+                     [](const Button &button) {
+                       return button.IsVisible();
+                     });
+}
+
 void
 MenuBar::OnResize(const PixelRect &rc)
 {
