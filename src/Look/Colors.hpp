@@ -16,20 +16,23 @@ static constexpr Color COLOR_XCSOAR_DARK = Color(0x00, 0x31, 0x5e);
 #endif
 
 /**
- * Dark mode color palette derived from the XCSoar brand color.
+ * Dark mode color palette: a cool neutral, so little of the brand
+ * blue left that it reads as a gray rather than as a color of its
+ * own.  Every surface carries the same tint; a button is a lighter
+ * step of the page, not a more colorful one.
  */
 static constexpr Color COLOR_DARK_THEME_BACKGROUND =
-  Color(0x0a, 0x15, 0x1f);
+  Color(0x15, 0x17, 0x1a);
 static constexpr Color COLOR_DARK_THEME_CAPTION =
-  Color(0x10, 0x10, 0x10);
+  Color(0x08, 0x09, 0x0b);
 static constexpr Color COLOR_DARK_THEME_CAPTION_INACTIVE =
-  Color(0x30, 0x30, 0x30);
+  Color(0x28, 0x2b, 0x2d);
 static constexpr Color COLOR_DARK_THEME_LIST =
-  Color(0x2a, 0x2a, 0x2a);
+  Color(0x21, 0x23, 0x25);
 static constexpr Color COLOR_DARK_THEME_LIST_SELECTED =
-  Color(0x3a, 0x3a, 0x3a);
+  Color(0x33, 0x36, 0x39);
 static constexpr Color COLOR_DARK_THEME_BUTTON =
-  Color(0x1e, 0x33, 0x48);
+  Color(0x2d, 0x30, 0x33);
 
 /**
  * Light mode dialog background color: a sand so far desaturated that
