@@ -30,16 +30,12 @@ static constexpr Color COLOR_DARK_THEME_LIST_SELECTED =
   Color(0x3a, 0x3a, 0x3a);
 static constexpr Color COLOR_DARK_THEME_BUTTON =
   Color(0x1e, 0x33, 0x48);
-static constexpr Color COLOR_DARK_THEME_GRADIENT_TOP =
-  Color(0x14, 0x22, 0x32);
 
 /**
- * Light mode dialog background colors (warm parchment tint).
+ * Light mode dialog background color (warm parchment tint).
  */
 static constexpr Color COLOR_DIALOG_BACKGROUND =
   Color(0xe2, 0xdc, 0xbe);
-static constexpr Color COLOR_DIALOG_GRADIENT_TOP =
-  Color(0xf0, 0xeb, 0xd4);
 
 /**
  * Admonition colors for Markdown rendering.
