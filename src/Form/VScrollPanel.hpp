@@ -239,7 +239,8 @@ public:
   void ScrollBy(int delta) noexcept;
 
   /**
-   * Get the scroll step size based on scroll bar width.
+   * Get the scroll step size ("one line").  It does not depend on the
+   * appearance of the scroll bar (see ScrollBar::GetScrollStep()).
    *
    * @return The scroll step size, minimum 1.
    */

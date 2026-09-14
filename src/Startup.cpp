@@ -13,6 +13,7 @@
 #include "Profile/Current.hpp"
 #include "Profile/Settings.hpp"
 #include "Asset.hpp"
+#include "ScrollBarConfig.hpp"
 #include "Hardware/CPU.hpp"
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -460,6 +461,7 @@ Startup(UI::Display &display)
   main_window->CheckResize();
 
   SetDisplayType(CommonInterface::GetUISettings().display.display_type);
+  ApplyScrollBars(CommonInterface::GetUISettings());
 
   {
     const PixelSize size = main_window->GetSize();

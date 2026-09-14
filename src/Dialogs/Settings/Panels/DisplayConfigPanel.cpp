@@ -14,6 +14,7 @@
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
+#include "ScrollBarConfig.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 #include "util/StaticString.hxx"
@@ -45,6 +46,7 @@ enum ControlIndex {
   FullScreen,
 #endif
   DarkMode,
+  ScrollBars,
   UIScale,
 #ifdef DRAW_MOUSE_CURSOR
   CursorSize,
@@ -89,6 +91,27 @@ static constexpr StaticEnumChoice dark_mode_list[] = {
     N_("Black text on white background") },
   { UISettings::DarkMode::ON, N_("On"),
     N_("White text on black background") },
+  nullptr
+};
+
+static constexpr StaticEnumChoice scroll_bars_list[] = {
+  { UISettings::ScrollBars::AUTO, N_("Automatic"),
+    N_("Let the device decide.  On a touch screen the content is "
+       "dragged, so the bar only shows while scrolling.  A device "
+       "operated by keys or a knob cannot press arrow buttons at "
+       "all, so it gets the slim bar, which has none.  Everything "
+       "else gets the standard scroll bar.") },
+  { UISettings::ScrollBars::WHEN_SCROLLING, N_("When scrolling"),
+    N_("A thin indicator on top of the content, shown while it is "
+       "being scrolled and hidden afterwards.  It leaves the full "
+       "width to the content.") },
+  { UISettings::ScrollBars::SLIM, N_("Slim"),
+    N_("A thin bar beside the content, always visible.  It shows the "
+       "position at a glance, has no arrow buttons and takes only a "
+       "narrow column.") },
+  { UISettings::ScrollBars::STANDARD, N_("Standard"),
+    N_("The scroll bar with arrow buttons beside the content, always "
+       "visible.") },
   nullptr
 };
 
@@ -174,6 +197,11 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
   AddEnum(_("Dark mode"), nullptr, dark_mode_list,
           (unsigned)ui_settings.dark_mode);
 
+  AddEnum(_("Scroll bars"),
+          _("How lists and long dialogs show their scroll bar."),
+          scroll_bars_list,
+          (unsigned)ui_settings.scroll_bars);
+
   AddInteger(_("Text size"),
              nullptr,
              "%d %%", "%d",
@@ -238,6 +266,12 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(DarkMode, ProfileKeys::DarkMode,
                            ui_settings.dark_mode);
+
+  if (SaveValueEnum(ScrollBars, ProfileKeys::ScrollBars,
+                    ui_settings.scroll_bars)) {
+    changed = true;
+    ApplyScrollBars(ui_settings);
+  }
 
   if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
                        ui_settings.scale))
