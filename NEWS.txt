@@ -159,6 +159,10 @@ Version 7.46 - not yet released
     the system appearance, including a scheduled switch while XCSoar
     is running
 * documentation
+  - drop Windows CE and Windows Mobile from the manuals; list iOS
+    and macOS among the supported platforms, the built-in barometer
+    on Android and iOS, and the Android accelerometer as a G-sensor;
+    Windows installs use the OpenGL 64-bit or 32-bit package
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
     the comment shows no wind when the box is blank because wind is
@@ -172,6 +176,8 @@ Version 7.46 - not yet released
   - build system: drop the GLX desktop OpenGL backend; UNIX X11
     OpenGL uses EGL and OpenGL ES #2140
   - documentation: document the release and post-release version workflow
+  - documentation: remove Windows CE and retired GDI target names from
+    the developer manuals
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
   - build system: add DEBUG_ALL_MAP_OVERLAYS=y make option to force

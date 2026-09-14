@@ -22,17 +22,17 @@ Um {\textsf  XCSoar} zum Laufen zu bringen benötigst Du folgendes:
 \item Handys und Tablets mit Android 1.6 oder neuer\\
   Beispiel: Dell Streak, Samsung Galaxy S II, HTC Desire HD, Samsung Tablet 10.1N
   Motorola Xoom
+\item iPhone und iPad (iOS)
 \item Windows 2000 oder neuer
 \item Linux
-\item Mac OS X
+\item macOS
 \end{itemize}
 
 \subsection*{GPS, Logger, Varios}
 
 {\textsf  XCSoar}  ist kompatibel zu allen Geräten, welche GPS-Daten im NMEA-Format ausgeben.
 
-Die meisten modernen Android Geräte haben einen eingebauten GPS-Empfänger, der diese Daten zur Verwendung 
-ausgibt. Mitunter jedoch ist es ratsam, diese Daten aus einem anderen Gerät zu verwenden, wenn man z..B.\ Luftverkehrsdaten aus einem 
+Die meisten modernen Android- und iOS-Geräte haben einen eingebauten GPS-Empfänger.  Viele dieser Telefone und Tablets haben auch einen barometrischen Drucksensor; {\textsf  XCSoar} verwendet ihn für die Höhe, wenn kein besseres externes Höhenmessgerät angeschlossen ist. Unter Android verwendet {\textsf  XCSoar} außerdem den Beschleunigungssensor des Telefons als G-Sensor (Lastvielfaches). Mitunter jedoch ist es ratsam, diese Daten aus einem anderen Gerät zu verwenden, wenn man z..B.\ Luftverkehrsdaten aus einem 
 \fl benutzen und anzeigen möchte oder aber noch weitere Features -wie nachfolgend aufgelistet- nutzen möchte:
 
 
@@ -65,8 +65,7 @@ NMEA Gerät &
 \end{tabular}}
 
 
-Während die meisten CE-basierten Geräte über eine serielle Schnittstelle verfügen, 
-ist diese Art der Schnittstelle bei den meisten, modernen Android-Geräten nicht mehr vorhanden. 
+Moderne Android-Geräte haben in der Regel keine serielle Schnittstelle.
 Diese können entweder Bluetooth oder aber das Android IOIO-Board verwenden. 
 
 
@@ -84,9 +83,25 @@ In diesem Kapitel wird behandelt, {\sl wie} die Software heruntergeladen und ins
 Suche nach {\textsf  XCSoar} in Googles Android-Marktplatz (PlayGround), oder installiere das \verb|apk|-
 File manuell.  Kopiere diese Datei auf eine SD-Karte in das Verzeichnis \verb|XCSoarData|.
 
+\subsection*{Unter iOS}\index{Installation!unter iOS}
+
+Installiere \textsf{XCSoar} aus dem Apple App Store.  Datendateien liegen in
+\texttt{Documents/XCSoarData} und können mit der Dateien-App kopiert werden.
+
+\subsection*{Unter macOS}\index{Installation!unter macOS}
+
+Installiere \textsf{XCSoar} aus dem Apple App Store oder lade das macOS-Paket
+von der XCSoar-Homepage.  Datendateien liegen in \texttt{XCSoarData} im
+Home-Verzeichnis.
+
 \subsection*{Auf einem Windows PC}\index{Installation!unter Windows}
   
-Lade das entsprechende File \verb|XCSoar.exe| (Ziel ''PC'') auf Deinen Rechner (Platte) herunter und führe es aus.
+Zwei Windows-Versionen stehen zur Verfügung:
+\begin{itemize}
+\item \textbf{64-bit} (Ziel ``WIN64OPENGL''): die empfohlene Version.
+  Installer oder \verb|.zip| für eine manuelle Installation.
+\item \textbf{32-bit} (Ziel ``WIN32OPENGL''): dasselbe für 32-bit-Windows.
+\end{itemize}
 
 
 \subsection*{Unter Unix/Linux}\index{Installation!unter Linux}
@@ -120,12 +135,11 @@ Daten-File suchen muß:
 \begin{description}
 \item[Windows PC]
 \texttt{XCSoarData} befindet sich im Persönlichen Verzeichnis (''\texttt{Eigene Dateien}'')
-\item[Windows Mobile PDA/PNA]
-- Wenn ein Verzeichnis \texttt{XCSoarData} im gleichen Verzeichnis wie {\textsf  XCSoar} existiert, dann wird dies benutzt.  
-
-
-- \texttt{XCSoarData} befindet sich auf der SD-Karte.  Wenn keine SD-Karte vorhanden ist, dann schaut {\textsf  XCSoar} in \texttt{Eigene Dateien} nach diesen Files
-
+\item[macOS]
+\texttt{XCSoarData} befindet sich im Home-Verzeichnis.
+\item[iOS]
+\texttt{XCSoarData} befindet sich im Documents-Ordner der App und ist
+über die Dateien-App erreichbar.
 \item[Unix/Linux]
 Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeichnis des Users. 
 \item[Android Geräte]
@@ -134,7 +148,7 @@ Das Verzeichnis heißt \verb|.xcsoar| und befindet sich im \verb|home| - Verzeic
 
 
 {\textsf  XCSoar} wird während der Laufzeit einige zusätzliche Files, wie z.B.\ eine Datei mit sämtlichen Konfigurationsdetails erzeugen.
-Diese werden ebenfalls im \texttt{XCSoarData} Verzeichnis (Windows PC und Windows Mobile Geräte), oder aber im \texttt{.xcsoar} 
+Diese werden ebenfalls im \texttt{XCSoarData} Verzeichnis (Windows, macOS, iOS und Android-Geräte), oder aber im \texttt{.xcsoar} 
 Verzeichnis(Unix/LinuxPC) abgelegt. 
 
 Beim ersten Start wird {\textsf  XCSoar}  folgende Files erzeugen und anlegen: 

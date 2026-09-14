@@ -62,7 +62,7 @@ the variometer is in climb audio mode.
 In addition to the variometer display XCSoar provides an acoustic variometer which transfers the 
 variometer measurements into sounds. The audio variometer is for now only available
 on Android devices. For proper performance connect your device to a barometric sensor or use the
-internal one of your Android device if provided.
+internal one of your Android or iOS device if it has one.
 The audio vario is enabled/disabled via the gauges configuration in the configuration.
 
 
@@ -79,6 +79,8 @@ in a separate InfoBox.  Key sensor measurements that XCSoar uses include:
  so that it may effectively show areas of lift and sink.
 \item[Aircraft acceleration] (load factor)  Used for netto variometer
   calculations where an external netto variometer is not provided.
+  On Android, XCSoar uses the phone's accelerometer when no external
+  G-sensor is connected.
 \item[Barometric altitude] Used for display
 \item[Indicated airspeed] Used for display, in compensating final glide
   calculations for aircraft kinetic energy, and in netto variometer

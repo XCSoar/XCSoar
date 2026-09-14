@@ -34,7 +34,7 @@ User-facing behaviour: update `doc/manual/en/` (not `doc/*.rst`) and
   user manual in `doc/manual/en/`. Style: `.cursor/rules/news.txt.mdc` and
   `.cursor/rules/user-manual.mdc`.
 - Style: 79 columns, 2-space indent, SPDX `GPL-2.0-or-later` headers.
-- UI must work on OpenGL, GDI, and memory canvas (Kobo). Scale with
+- UI must work on OpenGL and memory canvas (Kobo). Scale with
   `Layout::`. Use `IsDithered()` / `HasColors()` for e-paper. Colour and
   in-flight HF: `doc/architecture.rst` User interface guidelines (NASA,
   FAA EFB).
