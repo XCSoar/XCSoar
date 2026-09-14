@@ -1216,6 +1216,201 @@ static constexpr MetaData meta_data[] = {
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
               "Wrong InfoBox factory size");
 
+InfoBoxFactory::Category
+InfoBoxFactory::GetCategory(Type type) noexcept
+{
+  assert(type < NUM_TYPES);
+
+  switch (type) {
+  case e_HeightGPS:
+  case e_HeightAGL:
+  case e_H_Terrain:
+  case e_H_Baro:
+  case e_H_QFE:
+  case e_FlightLevel:
+  case NavAltitude:
+  case e_AltitudeIGC:
+  case e_QNH:
+  case e_Horizon:
+  case e_AirSpeed_Ext:
+  case e_Speed:
+  case e_Load_G:
+  case e_Act_Speed:
+  case e_MacCready:
+  case e_HeadWind:
+  case HeadWindSimplified:
+  case WIND_ARROW:
+  case CIRCLE_DIAMETER:
+  case TAKEOFF_DISTANCE:
+    return Category::FLIGHT;
+
+  case e_Bearing:
+  case e_Speed_GPS:
+  case e_Track_GPS:
+  case e_WindSpeed_Est:
+  case e_WindBearing_Est:
+  case e_WP_Distance:
+  case e_WP_AltDiff:
+  case e_WP_AltReq:
+  case e_WP_Name:
+  case e_WP_Speed_MC:
+  case e_WP_GR:
+  case e_WP_Time:
+  case e_WP_TimeLocal:
+  case e_WP_BearingDiff:
+  case e_WP_H:
+  case e_WP_MC0AltDiff:
+  case e_WP_ETE_VMG:
+  case e_WP_ETA_VMG:
+  case WP_NOMINAL_DIST:
+  case e_Home_Distance:
+  case e_Home_AltDiff:
+  case e_Home:
+  case e_Alternate_1_Name:
+  case e_Alternate_2_Name:
+  case e_Alternate_1_GR:
+  case e_Alternate_2_GR:
+  case e_Alternate_1_AltDiff:
+  case e_Alternate_2_AltDiff:
+  case e_ActiveWaypoint:
+  case e_PreviousWaypoint:
+  case NextLegEqThermal:
+  case NEXT_RADIAL:
+  case ATC_RADIAL:
+  case NEXT_ARROW:
+    return Category::NAVIGATION;
+
+  case e_Fin_AltDiff:
+  case e_Fin_AltReq:
+  case e_SpeedTaskAvg:
+  case e_Fin_Distance:
+  case e_Fin_GR_TE:
+  case e_AA_Time:
+  case e_AA_DistanceMax:
+  case e_AA_DistanceMin:
+  case e_AA_SpeedMax:
+  case e_AA_SpeedMin:
+  case e_Climb_Perc:
+  case e_Fin_Time:
+  case e_Fin_TimeLocal:
+  case e_Fin_AA_Distance:
+  case e_AA_SpeedAvg:
+  case e_CC_SpeedInst:
+  case e_CC_Speed:
+  case e_AA_TimeDiff:
+  case e_RH_Trend:
+  case e_Fin_GR:
+  case e_OC_Distance:
+  case e_TaskMaxHeightTime:
+  case e_Fin_ETE_VMG:
+  case e_TaskProgress:
+  case START_OPEN_TIME:
+  case START_OPEN_ARRIVAL_TIME:
+  case TASK_SPEED_HOUR:
+  case CONTEST_SPEED:
+  case FIN_MC0_ALTD:
+  case e_AAT_dT_or_ETA:
+  case e_SpeedTaskEst:
+  case e_SpeedTaskLeg:
+  case CruiseEfficiency:
+    return Category::TASK;
+
+  case e_Thermal_30s:
+  case e_GR_Instantaneous:
+  case e_GR_Cruise:
+  case e_TL_Avg:
+  case e_TL_Gain:
+  case e_TL_Time:
+  case e_Thermal_Avg:
+  case e_Thermal_Gain:
+  case e_VerticalSpeed_GPS:
+  case e_VerticalSpeed_Netto:
+  case e_LD:
+  case e_Climb_Avg:
+  case e_GR_Avg:
+  case e_Thermal_Time:
+  case e_NonCircling_Climb_Perc:
+  case THERMAL_ASSISTANT:
+    return Category::THERMAL;
+
+  case e_Temperature:
+  case e_HumidityRel:
+  case e_Home_Temperature:
+  case TerrainCollision:
+  case e_NearestAirspaceHorizontal:
+  case e_NearestAirspaceVertical:
+    return Category::WEATHER;
+
+  case e_Team_Code:
+  case e_Team_Bearing:
+  case e_Team_BearingDiff:
+  case e_Team_Range:
+  case e_ActiveRadio:
+  case e_StandbyRadio:
+  case e_HeartRate:
+  case e_TransponderCode:
+    return Category::TRAFFIC;
+
+  case e_TimeSinceTakeoff:
+  case e_TimeLocal:
+  case e_TimeUTC:
+  case e_Battery:
+  case e_CPU_Load:
+  case e_Free_RAM:
+  case e_NbrSat:
+  case e_EngineCHT:
+  case e_EngineEGT:
+  case e_EngineRPM:
+    return Category::SYSTEM;
+
+  case e_Barogram:
+  case e_Vario_spark:
+  case e_NettoVario_spark:
+  case e_CirclingAverage_spark:
+  case e_ThermalBand:
+  case e_Climb_Perc_Chart:
+    return Category::CHARTS;
+
+  case e_Experimental1:
+  case e_Experimental2:
+    return Category::OTHER;
+
+  case e_NUM_TYPES:
+    break;
+  }
+
+  return Category::OTHER;
+}
+
+const char *
+InfoBoxFactory::GetCategoryName(Category category) noexcept
+{
+  switch (category) {
+  case Category::FLIGHT:
+    return N_("Flight data");
+  case Category::NAVIGATION:
+    return N_("Navigation");
+  case Category::TASK:
+    return N_("Task and contest");
+  case Category::THERMAL:
+    return N_("Thermal and vario");
+  case Category::WEATHER:
+    return N_("Environment and airspace");
+  case Category::TRAFFIC:
+    return N_("Traffic and communication");
+  case Category::SYSTEM:
+    return N_("System and time");
+  case Category::CHARTS:
+    return N_("Charts");
+  case Category::OTHER:
+    return N_("Other");
+  case Category::NUM_CATEGORIES:
+    break;
+  }
+
+  return nullptr;
+}
+
 const char *
 InfoBoxFactory::GetName(Type type) noexcept
 {
