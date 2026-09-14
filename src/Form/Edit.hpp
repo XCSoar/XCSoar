@@ -46,6 +46,7 @@ public:
   Alignment alignment = Alignment::LEFT;
 
   bool dragging = false, pressed = false;
+  bool help_icon_pressed = false;
 
 public:
   /**
