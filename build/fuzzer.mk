@@ -2,6 +2,7 @@ FUZZER_SRC_DIR = $(topdir)/fuzzer/src
 
 FUZZ_IGC_PARSER_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(FUZZER_SRC_DIR)/FuzzIGCParser.cpp
 FUZZ_IGC_PARSER_DEPENDS = IO UTIL
 $(eval $(call link-program,FuzzIGCParser,FUZZ_IGC_PARSER))

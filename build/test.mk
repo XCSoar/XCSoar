@@ -65,6 +65,7 @@ $(1)_SOURCES = \
 	$(SRC)/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/$(1).cpp
 $(1)_DEPENDS = $(TEST1_DEPENDS)
 $$(eval $$(call link-program,$(1),$(1)))
@@ -476,6 +477,7 @@ TEST_TASKFILE_SEEYOU_PARSING_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskFileSeeYouParsing.cpp
 TEST_TASKFILE_SEEYOU_PARSING_OBJS = $(call SRC_TO_OBJ,$(TEST_TASKFILE_SEEYOU_PARSING_SOURCES))
@@ -561,6 +563,7 @@ TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TaskPrinting.cpp \
@@ -1114,6 +1117,7 @@ TEST_TRACE_SOURCES = \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp
 TEST_TRACE_DEPENDS = IO OS GEO MATH UTIL
@@ -1130,6 +1134,7 @@ $(eval $(call link-program,TestTraceBounds,TEST_TRACE_BOUNDS))
 FLIGHT_TABLE_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Repository/FileType.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FlightTable.cpp
 FLIGHT_TABLE_DEPENDS = GEO MATH IO OS UTIL
 $(eval $(call link-program,FlightTable,FLIGHT_TABLE))
@@ -2292,6 +2297,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
 ifeq ($(HAVE_HTTP),y)
@@ -2713,6 +2719,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_DEPENDS = \
@@ -2963,6 +2970,7 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Engine/Route/Config.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/DumpTaskFile.cpp
 DUMP_TASK_FILE_DEPENDS = TASKFILE GLIDE WAYPOINT WAYPOINTFILE OPERATION IO OS THREAD ZZIP GEO TIME MATH UTIL
 $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
