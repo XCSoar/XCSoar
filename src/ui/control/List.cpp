@@ -9,6 +9,7 @@
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+#include "Hardware/Vibrator.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -471,6 +472,12 @@ bool
 ListControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (scroll_bar.IsDragging()) {
+#ifdef HAVE_VIBRATOR
+    /* releasing the slider is the end of a deliberate drag; give it
+       the same feedback as a long press */
+    Vibrate(HapticFeedbackType::LONG_PRESS);
+#endif
+
     scroll_bar.DragEnd(this);
     return true;
   }
@@ -478,6 +485,13 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   if (drag_mode == DragMode::CURSOR &&
       p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
     drag_end();
+
+#ifdef HAVE_VIBRATOR
+    /* generate the feedback before activating the item, which may
+       open a modal dialog and thus return only much later */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     ActivateItem();
     return true;
   }
@@ -494,6 +508,14 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
     if (tapped >= 0) {
       /* undo the wobble of a finger that did not really scroll */
       SetPixelOrigin(drag_y - drag_y_window);
+
+#ifdef HAVE_VIBRATOR
+      /* a tap which only moves the cursor gets the lighter selection
+         feedback; a scroll gesture gets none */
+      if ((unsigned)tapped != GetCursorIndex())
+        Vibrate(HapticFeedbackType::SELECTION);
+#endif
+
       SetCursorIndex(tapped);
       return true;
     }
@@ -580,8 +602,17 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
   if (scroll_bar.IsInsideSlider(Pos)) {
     // if click is on scrollbar handle
     // -> start mouse drag
+#ifdef HAVE_VIBRATOR
+    /* only when grabbing the slider, not while dragging it */
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     scroll_bar.DragBegin(this, Pos.y);
   } else if (scroll_bar.IsInside(Pos)) {
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     /* Pressed beside the slider: move the slider there on the press
        itself, and let it follow the pointer from there.  Stepping a
        row or a page instead only works on a bar that is long enough

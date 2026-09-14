@@ -3,14 +3,52 @@
 
 #pragma once
 
-#ifdef ANDROID
+#include <cstdint>
+
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
 
 /**
- * This macro specifies whether this platform has support for a
- * vibrator.  Before actually using it, you have to check
+ * The macro HAVE_VIBRATOR specifies whether this platform has support
+ * for a vibrator.  Before actually using it, you have to check
  * HaveVibrator().
  */
+#ifdef ANDROID
 #define HAVE_VIBRATOR
+#elif defined(__APPLE__)
+#if TARGET_OS_IPHONE
+/* iOS generates haptic feedback with UIFeedbackGenerator */
+#define HAVE_VIBRATOR
+#endif
+#endif
+
+/**
+ * The kind of event the haptic feedback belongs to.  Each platform
+ * maps these to the strength and the pattern which is customary
+ * there.
+ */
+enum class HapticFeedbackType : uint_least8_t {
+  /** the selection moved to another item */
+  SELECTION,
+
+  /** a button or an InfoBox was pressed */
+  PRESS,
+
+  /** a long press was recognised */
+  LONG_PRESS,
+
+  /** a gesture was recognised */
+  GESTURE,
+
+  /** a message was shown to the user */
+  NOTIFICATION,
+
+  /** the pilot was warned about a collision or an airspace */
+  ALARM,
+};
+
+#ifdef HAVE_VIBRATOR
 
 /**
  * Check whether this device has a vibrator.
@@ -20,11 +58,12 @@ bool
 HaveVibrator() noexcept;
 
 /**
- * Vibrate for a very short amount of time.  This function has no
- * effect if the device does not have a vibrator.
+ * Generate haptic feedback for the given event.  This function has no
+ * effect if the device does not have a vibrator or if the user has
+ * disabled haptic feedback.
  */
 void
-VibrateShort() noexcept;
+Vibrate(HapticFeedbackType type) noexcept;
 
 #else
 

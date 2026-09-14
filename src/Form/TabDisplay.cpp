@@ -9,6 +9,7 @@
 #include "ui/canvas/Icon.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Hardware/Vibrator.hpp"
 #include "util/StaticString.hxx"
 #include "Asset.hpp"
 
@@ -378,6 +379,10 @@ TabDisplay::OnMouseDown(PixelPoint p) noexcept
 
   int i = GetButtonIndexAt(p);
   if (i >= 0) {
+#ifdef HAVE_VIBRATOR
+    Vibrate(HapticFeedbackType::PRESS);
+#endif
+
     dragging = true;
     drag_off_button = false;
     down_index = i;
