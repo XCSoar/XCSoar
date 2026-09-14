@@ -129,6 +129,10 @@ Version 7.46 - not yet released
     local time; XCSoar then knows the daylight-saving rules and switches
     on its own, which is the only way to get that on Kobo, where the
     device has no time zone setting at all
+  - add a Scroll bars setting (Config → Display): a thin indicator
+    shown on top of the content only while scrolling, a slim bar
+    beside it, or the standard scroll bar; Automatic picks the one
+    that fits the device #3142
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - size the Wayland UI from the output's physical size, and draw at
