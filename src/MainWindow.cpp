@@ -261,9 +261,9 @@ ComputeMapAreaRect(const PixelRect &main_rect,
 PixelRect
 MainWindow::GetMapAreaRect() const noexcept
 {
-  if (map != nullptr)
-    return map->GetPosition();
-
+  /* deliberately not map->GetPosition(): the map window covers the
+     whole client area including the info boxes, while this is the
+     part of it that is actually visible as map */
   return ComputeMapAreaRect(GetMainRect(), top_widget, bottom_widget);
 }
 
@@ -352,6 +352,10 @@ MainWindow::LayoutMapArea() noexcept
 void
 MainWindow::UpdateMapOverlayButtonLayout() noexcept
 {
+  /* the visible map area, not the map window, which covers the
+     info boxes as well */
+  const PixelRect map_area_rect = GetMapAreaRect();
+
   const bool overlay_buttons_active =
     widget == nullptr && map != nullptr &&
     PageActions::AllowMapOverlayButtons();
@@ -360,38 +364,38 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
     show_menu_button->SetVisible(overlay_buttons_active);
     show_menu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_menu_button->Move(GetShowMenuButtonRect(map->GetPosition()));
+      show_menu_button->Move(GetShowMenuButtonRect(map_area_rect));
   }
   if (show_quickmenu_button != nullptr) {
     show_quickmenu_button->SetVisible(overlay_buttons_active);
     show_quickmenu_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(map->GetPosition()));
+      show_quickmenu_button->Move(GetShowQuickMenuButtonRect(map_area_rect));
   }
   if (show_zoom_out_button != nullptr) {
     show_zoom_out_button->SetVisible(overlay_buttons_active);
     show_zoom_out_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_out_button->Move(GetShowZoomButtonRect(map->GetPosition(),
+      show_zoom_out_button->Move(GetShowZoomButtonRect(map_area_rect,
                                                        ShowZoomButton::Sign::ZOOM_OUT));
   }
   if (show_zoom_in_button != nullptr) {
     show_zoom_in_button->SetVisible(overlay_buttons_active);
     show_zoom_in_button->SetEnabled(overlay_buttons_active);
     if (overlay_buttons_active)
-      show_zoom_in_button->Move(GetShowZoomButtonRect(map->GetPosition(),
+      show_zoom_in_button->Move(GetShowZoomButtonRect(map_area_rect,
                                                       ShowZoomButton::Sign::ZOOM_IN));
   }
 
 #ifdef ANDROID
   if (show_rotate_button != nullptr && overlay_buttons_active)
-    show_rotate_button->Move(GetShowRotateButtonRect(map->GetPosition()));
+    show_rotate_button->Move(GetShowRotateButtonRect(map_area_rect));
 #endif
 
   if (map != nullptr)
     /* keep the north arrow clear of the overlay buttons */
     map->SetTopRightMargin(overlay_buttons_active
-                           ? GetMapOverlayTopRightWidth(map->GetPosition())
+                           ? GetMapOverlayTopRightWidth(map_area_rect)
                            : 0);
 
   /* Newly created overlay buttons are added after the map; keep the map
