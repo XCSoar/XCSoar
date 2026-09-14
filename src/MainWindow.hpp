@@ -140,6 +140,12 @@ private:
   bool FullScreen = false;
 
   /**
+   * Are the info boxes currently hidden because the menu is open?
+   * Unlike full screen mode the map keeps its size.
+   */
+  bool menu_hides_info_boxes = false;
+
+  /**
    * Nesting count for #BeginCoalesceMapLayout() /
    * #EndCoalesceMapLayout().  While non-zero, #LayoutMapArea() only
    * sets #map_layout_pending.
@@ -496,6 +502,12 @@ public:
 
   void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
                 bool full=true) noexcept;
+
+  /**
+   * Hide the info boxes while the menu is open, so the menu captions
+   * do not have to compete with them.
+   */
+  void UpdateMenuInfoBoxes() noexcept;
 
   [[gnu::pure]]
   bool IsMenuButtonEnabled(unsigned idx) noexcept;
