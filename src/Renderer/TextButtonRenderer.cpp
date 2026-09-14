@@ -28,8 +28,11 @@ TextButtonRenderer::DrawCaption(Canvas &canvas, const PixelRect &rc,
     break;
 
   case ButtonState::FOCUSED:
-  case ButtonState::PRESSED:
     canvas.SetTextColor(look.focused.foreground_color);
+    break;
+
+  case ButtonState::PRESSED:
+    canvas.SetTextColor(look.focused.pressed_foreground_color);
     break;
 
   case ButtonState::SELECTED:

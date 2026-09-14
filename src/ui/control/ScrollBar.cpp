@@ -141,9 +141,11 @@ ScrollBar::Paint(Canvas &canvas, ButtonState up_state,
       canvas.Select(look.disabled.brush);
       break;
     case ButtonState::FOCUSED:
-    case ButtonState::PRESSED:
-      /* match button rendering: focused and pressed share the same palette */
       canvas.Select(look.focused.foreground_brush);
+      break;
+
+    case ButtonState::PRESSED:
+      canvas.Select(look.focused.pressed_foreground_brush);
       break;
     case ButtonState::SELECTED:
       canvas.Select(look.selected.foreground_brush);
