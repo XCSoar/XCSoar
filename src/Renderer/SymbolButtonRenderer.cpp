@@ -47,8 +47,11 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
     break;
 
   case ButtonState::FOCUSED:
-  case ButtonState::PRESSED:
     canvas.Select(look.focused.foreground_brush);
+    break;
+
+  case ButtonState::PRESSED:
+    canvas.Select(look.focused.pressed_foreground_brush);
     break;
 
   case ButtonState::SELECTED:
@@ -101,7 +104,10 @@ SymbolButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 {
   frame_renderer.DrawButton(canvas, rc, state);
 
+  /* size the symbol relative to the whole button, not the padded
+     content rect: the face insets would shrink the arrows well below
+     their classic size; the face is centered inside the button, so
+     the symbol stays centered on it */
   if (!caption.empty())
-    DrawSymbol(canvas, frame_renderer.GetDrawingRect(rc, state),
-               state);
+    DrawSymbol(canvas, rc, state);
 }
