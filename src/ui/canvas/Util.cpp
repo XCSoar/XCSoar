@@ -8,14 +8,25 @@
 
 static constexpr unsigned CIRCLE_SEGS = 64;
 
+/**
+ * Divide and round to the nearest integer, towards zero on a tie.
+ * Truncating puts a vertex up to a whole pixel off the ideal arc.
+ */
+[[gnu::const]]
+static constexpr int
+RoundedDiv1024(int n) noexcept
+{
+  return n >= 0 ? (n + 512) / 1024 : -((-n + 512) / 1024);
+}
+
 [[gnu::const]]
 static PixelPoint
 CirclePoint(int radius, unsigned angle) noexcept
 {
   assert(angle < ISINETABLE.size());
 
-  return PixelPoint(ISINETABLE[angle] * radius / 1024,
-                    -ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius / 1024);
+  return PixelPoint(RoundedDiv1024(ISINETABLE[angle] * radius),
+                    -RoundedDiv1024(ISINETABLE[(angle + INT_QUARTER_CIRCLE) & INT_ANGLE_MASK] * radius));
 }
 
 [[gnu::const]]
