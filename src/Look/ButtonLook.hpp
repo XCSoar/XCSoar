@@ -13,6 +13,9 @@ class Font;
 struct ButtonLook {
   const Font *font;
 
+  /** Was this look initialised for the dark theme? */
+  bool dark_mode = false;
+
   struct StateLook {
     Color foreground_color;
     Brush foreground_brush;
@@ -34,5 +37,5 @@ struct ButtonLook {
     Brush brush;
   } disabled;
 
-  void Initialise(const Font &_font, bool dark_mode = false);
+  void Initialise(const Font &_font, bool _dark_mode = false);
 };
