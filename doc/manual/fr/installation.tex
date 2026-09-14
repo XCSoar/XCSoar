@@ -87,17 +87,23 @@ XCSoar tourne sur les plateformes suivantes~:
 \item téléphones portables et tablettes sous Android 1.6 ou plus récent \\
  Exemples~: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
  Motorola Xoom
+\item iPhone et iPad (iOS)
 \item eReader Kobo
 \item Windows 2000 ou plus récent
 \item Linux
-\item Mac OS X (obsolète)
+\item macOS
 \end{itemize}
 
 \subsection*{GPS, Enregistreur de Vol, Vario}
 
 XCSoar est compatible avec tous les GPS fournissant des données NMEA. La plupart
-des appareils Android intègre un GPS, mais, pour diverses raisons, il est désirable de
-se connecter à un ou plusieurs appareils externes~:
+des appareils Android et iOS intègrent un GPS. Beaucoup de ces téléphones et
+tablettes ont aussi un capteur de pression barométrique~; XCSoar l'utilise pour
+l'altitude lorsqu'aucun meilleur altimètre externe n'est connecté. Sous Android,
+XCSoar utilise aussi l'accéléromètre du téléphone comme capteur G (facteur de
+charge). Pour diverses
+raisons, il est néanmoins désirable de se connecter à un ou plusieurs appareils
+externes~:
 \begin{itemize}
 \item un récepteur GPS spécialisé possède une bien meilleure réception, fournissant de bien
 meilleures données pour les mesures et les calculs
@@ -187,9 +193,28 @@ vous vous y connaissez vous pouvez utiliser ce script pour effectuer des choses
 avant que \texttt{Nickel} n'est complètement démarré, comme envoyer des instructions
 à votre vario apparié (pour l'éteindre, pour baisser le volume, etc.).
 
+\subsection*{Sous iOS}
+
+Installez XCSoar depuis l'App Store d'Apple. Les fichiers de données sont
+dans \texttt{Documents/XCSoarData} et peuvent être copiés avec l'application
+Fichiers.
+
+\subsection*{Sous macOS}
+
+Installez XCSoar depuis l'App Store d'Apple, ou téléchargez le paquet macOS
+depuis le site XCSoar. Les fichiers de données vont dans \texttt{XCSoarData}
+dans votre répertoire personnel.
+
 \subsection*{Sur un PC sous Windows}
 
-Téléchargez le fichier programme \verb|XCSoar.exe| (cible ``PC'') sur votre disque dur.
+Deux versions Windows sont disponibles~:
+\begin{itemize}
+\item \textbf{64 bits} (cible ``WIN64OPENGL'')~: version recommandée.
+  Installez avec l'installateur, ou utilisez le fichier \verb|.zip|
+  pour une installation manuelle.
+\item \textbf{32 bits} (cible ``WIN32OPENGL'')~: identique pour Windows
+  32 bits.
+\end{itemize}
 
 \subsection*{Sous Unix/Linux}
 
@@ -238,11 +263,11 @@ de telle façon qu'XCSoar sache où rechercher des fichiers de données~:
 \item[PC sous Windows]
 \texttt{XCSoarData} est dans votre répertoire personnel (``\texttt{Mes
 Documents}'')
-\item[Windows Mobile PDA/PNA]
-S'il y a un répertoire nommé \texttt{XCSoarData} dans le même
-répertoire que \texttt{XCSoar.exe}, alors celui-ci sera utilisé.
-\texttt{XCSoarData} est sur une carte SD. Si il n'y a pas de carte SD, alors
-XCSoar le cherchera dans \texttt{Mes Documents}.
+\item[macOS]
+\texttt{XCSoarData} est dans votre répertoire personnel.
+\item[iOS]
+\texttt{XCSoarData} est dans le répertoire Documents de l'application,
+accessible via l'application Fichiers.
 \item[Unix/Linux]
 Le répertoire s'appelle \verb|.xcsoar| dans le répertoire principal de l'utilisateur.
 \item[Appareil Android]
@@ -250,8 +275,8 @@ Le répertoire s'appelle \verb|.xcsoar| dans le répertoire principal de l'utili
 \end{description}
 
 XCSoar générera un certain nombre de fichiers supplémentaires lors de l'exécution. Ils
-seront placés dans le répertoire \texttt{XCSoarData} (PS sous Windows, 
-appareils mobiles sous Windows et Android), ou dans le répertoire \texttt{.xcsoar} (PC sous
+seront placés dans le répertoire \texttt{XCSoarData} (PC sous Windows, macOS,
+iOS et appareils Android), ou dans le répertoire \texttt{.xcsoar} (PC sous
 Unix/Linux). Au moment du premier démarrage, XCSoar va créer et mettre à jour les fichiers
 \texttt{user.cup} (points de virage édités par l'utilisateur),
 \texttt{Default.tsk} (circuit par défaut), 

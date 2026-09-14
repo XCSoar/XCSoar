@@ -1,5 +1,5 @@
 \chapter{Atmosfera e Instrumentos}\label{cha:atmosph}
-O XCSoar mantém um modelo interno de atmosfera baseado nas estatísticas adquiridas dos vôos e outros instrumentos conectados ao dispositivo Pocket PC.  Estas estatísticas e medições são aproximadas e em alguns dias podemos ter uma rápida alteração do tempo.  O piloto deve observar a todo instante a condição de vôo.  Quando está se dirigindo para o pouso, o piloto deve procurar para indicadores no chão que confirmem a velocidade e direção do vento.
+O XCSoar mantém um modelo interno de atmosfera baseado nas estatísticas adquiridas dos vôos e outros instrumentos conectados ao dispositivo.  Estas estatísticas e medições são aproximadas e em alguns dias podemos ter uma rápida alteração do tempo.  O piloto deve observar a todo instante a condição de vôo.  Quando está se dirigindo para o pouso, o piloto deve procurar para indicadores no chão que confirmem a velocidade e direção do vento.
 
 \section{Variômetro}\label{sec:variometer}
 
@@ -24,7 +24,7 @@ Para Vega: um ícone pequeno mostrando um planador girando é indicado quando o 
 
 \section{Variômetro audível}
 
-Além do indicador do variômetro, o XCSoar fornece um variômetro acústico que transfere dados de medição em sons.  O variômetro audível está agora disponível para dispositivos Android.  Para um melhor desempenho conecte seu dispositivo a um sensor barométrico ou use o interno do seu dispositivo Android, se existir.  O som do variômetro pode ser ligado ou desligado através da configuração dos mostradores.
+Além do indicador do variômetro, o XCSoar fornece um variômetro acústico que transfere dados de medição em sons.  O variômetro audível está agora disponível para dispositivos Android.  Para um melhor desempenho conecte seu dispositivo a um sensor barométrico ou use o interno do seu dispositivo Android ou iOS, se existir.  O som do variômetro pode ser ligado ou desligado através da configuração dos mostradores.
 
 
 \section{Entrada de dados de ar}
@@ -33,7 +33,8 @@ Quando são fornecidos dados adicionais da aeronave ou dados da massa de ar pelo
 \begin{description}
 \item[Variômetro de energia total bruta] (taxa de mudança da energia total da aeronave).  Usado para mostrar e calcular o vario netto.
 \item[Variômetro Netto] (velocidade vertical estimada da massa de ar na aeronave).   Usado para mostrar e colorir a trilha, mostram as áreas de ascendentes e descendentes.
-\item[Aceleração da aeronave] (fator de carga) usado pelos cálculos variômetro netto quando não o variômetro netto não está conectado. 
+\item[Aceleração da aeronave] (fator de carga) usado pelos cálculos variômetro netto quando não o variômetro netto não está conectado.
+No Android, o XCSoar usa o acelerômetro do telefone quando nenhum sensor de G externo está conectado. 
 \item[Altitude barométrica] usada para mostrar a compensação de cálculos do planeio final da energia cinética da aeronave e cálculos do variômetro quando não há o variômetro netto conectado.
 \item[Densidade do ar] Usado para calcular a velocidade real do ar derivado da velocidade indicada.
 \end{description}
@@ -67,7 +68,7 @@ A magnitude do vento e sua direção podem também ser ajustadas manualmente na 
 
 As estatísticas são conseguidas gravando as propriedades do vento em diferentes altitudes e tempos.  Quando a altitude da aeronave muda significativamente, as estatísticas são consultadas para determinar a melhor estimativa para o vento de acordo com as medições realizadas.
 
-Para PC e Pocket PC com tela de toque, você pode também fazer isso selecionando a infobox do vento e usando as teclas (acima aumenta e abaixo diminui a magnitude, esquerda e direita rotacionam a direção do vento).
+Em dispositivos com tela de toque, você pode também fazer isso selecionando a infobox do vento e usando as teclas (acima aumenta e abaixo diminui a magnitude, esquerda e direita rotacionam a direção do vento).
 
 
 A janela de configuração \config{autowind} permite o controle de qual método de estimativa é usado para atualizar o vento, através do campo "Vento aut”:

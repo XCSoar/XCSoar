@@ -288,9 +288,6 @@ Use one of the following targets:
 ``WIN32OPENGL``  Windows 32-bit (i686), OpenGL via ANGLE
 ================ =================================================
 
-The GDI targets ``PC`` and ``WIN64`` have been removed. ``PC`` remains only
-as the internal MinGW toolchain name used by the OpenGL flavors.
-
 Typical OpenGL build commands::
 
   make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y everything

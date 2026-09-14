@@ -158,7 +158,7 @@ leave; do not rewrite history.
 
 ### Wording — avoid in new user bullets when a plain phrase exists
 
-- Build target names: `WIN64OPENGL`, `WIN32OPENGL`, `PC`, `WIN64`, `TARGET=…`
+- Build target names: `WIN64OPENGL`, `WIN32OPENGL`, `TARGET=…`
 - Internal stack terms users do not see: GDI, NSIS, ANGLE, SDL, `USE_*`
 - Source paths, class names, “targets” in the build-system sense
 - Code identifiers when the UI uses another name: `pc_met` →
@@ -177,12 +177,9 @@ version blocks.
 ```text
 # BAD (* Windows)
 - add NSIS installer for OpenGL builds (WIN64OPENGL, WIN32OPENGL)
-- deprecate GDI legacy builds (targets PC, WIN64)
 
 # GOOD (* Windows)
 - add installer for the OpenGL Windows version (64-bit and 32-bit)
-- deprecate the legacy single-file Windows executable; use the OpenGL
-  version instead
 ```
 
 ## `* documentation` section
@@ -235,11 +232,10 @@ user-facing and another adds separate technical detail (e.g. installer in
 ## Deprecations and removals
 
 - User sections: what is going away and what to use instead, in user terms
-- `* development`: target names and flags OK (e.g. `PC` / `WIN64` GDI
-  targets were removed; use `WIN64OPENGL` / `WIN32OPENGL`)
+- `* development`: target names and flags OK (e.g. `WIN64OPENGL` /
+  `WIN32OPENGL`)
 
 ## Platform notes (user sections)
 
 - Prefer “OpenGL Windows version” over naming the renderer stack
-- “Legacy” or “single-file” `.exe` is clearer than “GDI build”
 - Mention installer and zip when both are shipped

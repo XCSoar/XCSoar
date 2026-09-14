@@ -140,10 +140,9 @@ background.  It gets data from the devices (through :file:`MergeThread`) and
 forwards it together with calculation results to the drawing thread and
 the main thread.
 
-Each device has its own thread (:file:`SerialPort.cpp`).  This is
-needed because Windows CE does not support asynchronous COMM port
-I/O. The thread is stopped during task declaration (which happens in
-the UI thread).
+Each device has its own thread (:file:`SerialPort.cpp`).  Blocking
+serial I/O is isolated from the UI thread.  The thread is stopped
+during task declaration (which happens in the UI thread).
 
 When new data arrives on the serial port, the :file:`MergeThread` gets
 notified, which will merge all sensor values into one data structure. It
