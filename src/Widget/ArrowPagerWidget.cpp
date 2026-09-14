@@ -11,6 +11,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 
@@ -22,6 +23,10 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
+
+  /* the buttons keep the gap to the dialog edges that they have
+     between each other */
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
 
   if (width > height) {
     /* landscape */
@@ -42,7 +47,8 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
         left_column_width = max_size.width;
     }
 
-    auto left_column_rect = main.CutLeftSafe(left_column_width);
+    auto left_column_rect = main.CutLeftSafe(left_column_width + 2 * margin);
+    left_column_rect.Grow(-margin);
 
     /* close button on the bottom left */
 
@@ -60,7 +66,8 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
   } else {
     /* portrait */
 
-    auto bottom_row_rect = main.CutBottomSafe(button_height);
+    auto bottom_row_rect = main.CutBottomSafe(button_height + 2 * margin);
+    bottom_row_rect.Grow(-margin);
 
     /* buttons distributed on the bottom line */
 
