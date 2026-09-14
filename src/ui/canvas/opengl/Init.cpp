@@ -70,13 +70,8 @@ SupportsNonPowerOfTwoTextures() noexcept
 static GLenum
 CheckDepthStencil() noexcept
 {
-#ifdef USE_GLX
-  if (OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"))
-    return GL_DEPTH24_STENCIL8_OES;
-#else
   if (OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
     return GL_DEPTH24_STENCIL8_OES;
-#endif
 
   /* not supported */
   return GL_NONE;
@@ -90,11 +85,6 @@ CheckDepthStencil() noexcept
 static GLenum
 CheckStencil() noexcept
 {
-#ifdef USE_GLX
-  /* GL_STENCIL_INDEX8 is available on any desktop OpenGL
-     implementation that supports framebuffer objects */
-  return GL_STENCIL_INDEX8;
-#else
 #if !defined(__APPLE__) || !TARGET_OS_IPHONE
   if (OpenGL::IsExtensionSupported("GL_OES_stencil1"))
     return GL_STENCIL_INDEX1_OES;
@@ -109,7 +99,6 @@ CheckStencil() noexcept
 
   /* not supported */
   return GL_NONE;
-#endif
 }
 
 void

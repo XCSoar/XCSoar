@@ -29,6 +29,7 @@ else ifeq ($(USE_WAYLAND),y)
 EVENT_SOURCES += \
 	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c \
+	$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-public.c \
 	$(SRC)/ui/event/poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
 EVENT_SOURCES += \
@@ -67,7 +68,7 @@ EVENT_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
-	$(OPENGL_CPPFLAGS) $(EGL_FEATURE_CPPFLAGS) $(GLX_CPPFLAGS) \
+	$(OPENGL_CPPFLAGS) $(EGL_FEATURE_CPPFLAGS) \
 	$(MEMORY_CANVAS_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)

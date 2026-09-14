@@ -23,6 +23,8 @@ Version 7.46 - not yet released
 * Windows
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
+* Linux
+  - use OpenGL ES instead of desktop OpenGL #2140
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
@@ -59,6 +61,8 @@ Version 7.46 - not yet released
 * airspace
   - fill airspaces with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
+  - improve stable OpenGL airspace fills and padding while preserving
+    overlapping borders #2479
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
@@ -98,6 +102,8 @@ Version 7.46 - not yet released
   - let Select as Alternate pin a landing field from AUTO, and use
     Alternate Mode: Auto only to return the Alternate InfoBox to the
     computed list #2912
+  - surround dialogs with a soft drop shadow, replacing the narrow
+    shade that was cast along their bottom and right edges
   - fix keyboard wrap in the Checklist: Down from Close returns
     to the list and highlights an item so Enter acts on that row
     #2862
@@ -125,6 +131,15 @@ Version 7.46 - not yet released
     device has no time zone setting at all
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - size the Wayland UI from the output's physical size, and draw at
+    the compositor's scale (including 125% / 150% / 200%) so fonts
+    and the map are rasterised at the panel DPI #3123
+  - show the Wayland window without waiting for focus, and keep
+    running when it is unfocused #3126
+  - let a Wayland touchscreen tap, drag, pinch-to-zoom, and
+    two-finger pan the map #3122
+  - keep the pointer on a Wayland window while dragging, and size
+    the UI from the monitor the window is on #3124
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution
@@ -154,6 +169,8 @@ Version 7.46 - not yet released
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132
+  - build system: drop the GLX desktop OpenGL backend; UNIX X11
+    OpenGL uses EGL and OpenGL ES #2140
   - documentation: document the release and post-release version workflow
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour

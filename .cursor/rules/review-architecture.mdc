@@ -1,0 +1,47 @@
+---
+description: >-
+  When writing or reviewing code that touches layers, threads, blackboards,
+  devices, or HTTP, reject changes that violate doc/architecture.rst.
+globs:
+  - "**/*.cpp"
+  - "**/*.hpp"
+  - "**/*.c"
+  - "**/*.h"
+  - "**/*.java"
+alwaysApply: false
+---
+
+# Review: follows architecture
+
+Read `doc/architecture.rst` before judging layer, thread, blackboard,
+device, or HTTP changes. Do not invent a parallel architecture.
+
+## Layers
+
+Foundation (`util/`, `Math/`, `Geo/`, `io/`) → Engine → Backend
+(`Device/`, `Computer/`, `Blackboard/`) → UI. Lower layers must not
+include headers from higher ones.
+
+## Reject
+
+- Device drivers or CalculationThread including `Dialogs/`, `Form/`,
+  `Widget/`, or calling `CommonInterface` / `ActionInterface`
+- UI thread using `DeviceBlackboard`; draw thread using
+  `InterfaceBlackboard`; network/asio thread calling UI APIs
+- Putting a type in the wrong layer to avoid a dependency
+- Blocking HTTP on the UI thread; long-lived HTTP without
+  `Net::AsyncTask` and `NetComponents::BeginShutdown()`
+- Dialogs or message boxes from Backend (use
+  `InputEvents::processGlideComputer` or `UI::Notify`)
+
+```cpp
+// BAD: driver shows UI
+#include "Dialogs/Message.hpp"
+ShowMessageBox(_("IGC failed"), ...);
+
+// GOOD: queue a glide-computer event; UI thread handles it
+InputEvents::processGlideComputer(GCE_...);
+```
+
+Details: `.cursor/rules/xcsoar-project-rules.mdc` (Architectural Layers,
+Blackboard, Backend→UI Event Queue).

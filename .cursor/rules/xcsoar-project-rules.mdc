@@ -1097,6 +1097,9 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Reject extra abstraction (factories, wrappers, extra files) when a small change to existing code would do
 - Require TAP tests for new parsers, formatters, protocol handling, and other UI-free logic
 - Size vs problem: a large patch for a small behaviour change is a design smell
+- Human-readable: `.cursor/rules/review-human-readable.mdc`
+- Exponential / unbounded cost: `.cursor/rules/review-exponential.mdc`
+- Architecture (layers, threads, HTTP): `.cursor/rules/review-architecture.mdc`
 
 ### Pre-PR Checklist
 - Search for existing helpers before adding new ones

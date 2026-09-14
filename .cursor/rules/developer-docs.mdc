@@ -27,6 +27,7 @@ User-facing behaviour also needs the **English user manual**
 | Topic | File |
 |-------|------|
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
+| Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
 | User interface, colour, EFB/NASA HF | `doc/architecture.rst` (User interface guidelines) |
 | Patches, code style | `doc/policy.rst` |
 | Build | `doc/build.rst` |

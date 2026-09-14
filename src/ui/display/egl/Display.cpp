@@ -125,6 +125,16 @@ Display::MakeCurrent(EGLSurface surface)
 
   if (!eglMakeCurrent(display, surface, surface, context))
     throw FmtRuntimeError("eglMakeCurrent() failed: {:#x}", eglGetError());
+
+#ifdef USE_WAYLAND
+  /* Mesa waits in eglSwapBuffers for a compositor frame callback.
+     Hidden surfaces never get one, which stalls the UI thread.
+     Interval 0 draws without that wait.  eglSwapInterval applies to
+     the current draw surface, so this must run after MakeCurrent.
+     Refresh() still skips Flip() while the surface is SUSPENDED. */
+  if (!eglSwapInterval(display, 0))
+    LogFormat("eglSwapInterval(0) failed: %#x", eglGetError());
+#endif
 }
 
 } // namespace EGL

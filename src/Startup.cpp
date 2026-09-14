@@ -75,6 +75,10 @@
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/display/Display.hpp"
+#ifdef USE_WAYLAND
+#include "ui/display/wayland/Scale.hpp"
+#endif
 #include "util/Compiler.h"
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -466,6 +470,16 @@ Startup(UI::Display &display)
            dpi.x > 0 ? double(size.width) / dpi.x : 0.,
            dpi.y > 0 ? double(size.height) / dpi.y : 0.,
            Layout::small_screen);
+#ifdef USE_WAYLAND
+    const auto hardware = display.GetHardwareSize();
+    const auto logical = display.GetSize();
+    const auto output_mm = display.GetSizeMM();
+    LogFmt("Monitor: {}x{} dpi={},{} {}x{}mm logical={}x{} scale={:.2f}",
+           hardware.width, hardware.height, dpi.x, dpi.y,
+           output_mm.width, output_mm.height,
+           logical.width, logical.height,
+           display.GetScale120() / (double)Wayland::SCALE_100);
+#endif
   }
 
   /* Log device capabilities and features after initialization */

@@ -566,28 +566,28 @@ Defaults shown are from the build system (they can be overridden with
  * - ``UNIX``
    - Linux/Unix (native)
    - no
-   - OpenGL
+   - OpenGL ES (EGL)
    - Default on Unix-like hosts; main desktop build.
  * - ``UNIX32``
    - Linux/Unix 32-bit
    - no
-   - OpenGL
+   - OpenGL ES (EGL)
    - ``UNIX`` with ``-m32``.
  * - ``UNIX64``
    - Linux/Unix 64-bit
    - no
-   - OpenGL
+   - OpenGL ES (EGL)
    - ``UNIX`` with ``-m64``.
  * - ``OPT``
    - Linux/Unix optimized
    - no
-   - OpenGL
+   - OpenGL ES (EGL)
    - Alias for ``UNIX`` with ``DEBUG=n`` (set ``TARGET_OUTPUT_DIR`` if
      you want a separate output tree).
  * - ``WAYLAND``
    - Linux/Unix (Wayland)
    - no
-   - OpenGL (EGL)
+   - OpenGL ES (EGL)
    - Experimental Wayland display server build.
  * - ``FUZZER``
    - Linux/Unix (libFuzzer)
@@ -637,12 +637,12 @@ Defaults shown are from the build system (they can be overridden with
  * - ``MACOS``
    - macOS ARM64
    - yes
-   - OpenGL (ANGLE)
+   - OpenGL ES (ANGLE)
    - Apple Silicon (min macOS 12.0).
  * - ``OSX64``
    - macOS x86_64
    - yes
-   - OpenGL (ANGLE)
+   - OpenGL ES (ANGLE)
    - Intel (min macOS 12.0).
  * - ``IOS32``
    - iOS armv7

@@ -22,7 +22,7 @@ OPENGL ?= y
 else ifeq ($(TARGET_IS_CUBIE),y)
 OPENGL ?= y
 
-# UNIX/Linux defaults to OpenGL
+# UNIX/Linux defaults to OpenGL ES
 else ifeq ($(TARGET),UNIX)
 OPENGL ?= y
 
@@ -32,13 +32,11 @@ else
 OPENGL ?= n
 endif
 
-GLES2 ?= $(OPENGL)
-
 ifeq ($(OPENGL),y)
+# OpenGL is always OpenGL ES 2.0 (Mesa, ANGLE, or native ES).
 OPENGL_CPPFLAGS = -DENABLE_OPENGL
 
 ifeq ($(TARGET_IS_DARWIN),y)
-OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 # Use ANGLE on macOS (not iOS)
 ifeq ($(TARGET_IS_IOS),y)
 OPENGL_LDLIBS = -framework OpenGLES
@@ -49,7 +47,6 @@ OPENGL_CPPFLAGS += $(ANGLE_CPPFLAGS)
 OPENGL_LDLIBS = $(ANGLE_LDLIBS)
 endif
 else ifeq ($(HAVE_WIN32),y)
-OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 ifeq ($(USE_ANGLE),y)
 # Include ANGLE configuration
 include $(topdir)/build/angle.mk
@@ -59,7 +56,6 @@ else
 OPENGL_LDLIBS = -lGLESv2
 endif
 else
-OPENGL_CPPFLAGS += -DHAVE_GLES -DHAVE_GLES2
 OPENGL_LDLIBS = -lGLESv2 -ldl
 endif
 

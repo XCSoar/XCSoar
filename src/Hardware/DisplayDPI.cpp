@@ -29,7 +29,7 @@ static UnsignedPoint2D forced_dpi{};
 static UnsignedPoint2D detected_dpi{};
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS) || defined(HAVE_DPI_DETECTION)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS) || defined(HAVE_DPI_DETECTION)
 
 static constexpr unsigned
 MMToDPI(unsigned pixels, unsigned mm)
@@ -38,9 +38,23 @@ MMToDPI(unsigned pixels, unsigned mm)
   return pixels * 254 / (mm * 10);
 }
 
+[[gnu::const]]
+static UnsignedPoint2D
+SizeMMToDPI(PixelSize size, PixelSize mm) noexcept
+{
+  if (size.width == 0 || size.height == 0 ||
+      mm.width < 10 || mm.height < 10)
+    return {96, 96};
+
+  return {
+    MMToDPI(size.width, mm.width),
+    MMToDPI(size.height, mm.height),
+  };
+}
+
 #endif
 
-#if !defined(_WIN32) && !defined(USE_X11) && !defined(MESA_KMS)
+#if !defined(_WIN32) && !defined(USE_X11) && !defined(USE_WAYLAND) && !defined(MESA_KMS)
 #ifndef __APPLE__
 [[gnu::const]]
 #endif
@@ -104,13 +118,26 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
   assert(width_mm > 0);
   assert(height_mm > 0);
 
-  detected_dpi = {
-    MMToDPI(width_pixels, width_mm),
-    MMToDPI(height_pixels, height_mm),
-  };
+  detected_dpi = SizeMMToDPI({width_pixels, height_pixels},
+                             {width_mm, height_mm});
 }
 
 #endif
+
+PixelSize
+Display::GetSizeForDPI([[maybe_unused]] const UI::Display &display) noexcept
+{
+#ifdef USE_WAYLAND
+  const auto hardware = display.GetHardwareSize();
+  if (hardware.width > 0 && hardware.height > 0)
+    return hardware;
+#endif
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
+  return display.GetSize();
+#else
+  return {};
+#endif
+}
 
 UnsignedPoint2D
 Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi) noexcept
@@ -131,11 +158,8 @@ Display::GetDPI([[maybe_unused]] const UI::Display &display, unsigned custom_dpi
 
 #ifdef _WIN32
   return display.GetDPI();
-#elif defined(USE_X11) || defined(MESA_KMS)
-  return {
-    MMToDPI(display.GetSize().width, display.GetSizeMM().width),
-    MMToDPI(display.GetSize().height, display.GetSizeMM().height),
-  };
+#elif defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
+  return SizeMMToDPI(GetSizeForDPI(display), display.GetSizeMM());
 #else
   const auto dpi = ::GetDPI();
   return {dpi, dpi};

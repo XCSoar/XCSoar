@@ -33,7 +33,7 @@ struct Event {
      */
     MOUSE_WHEEL,
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_WAYLAND)
     MOUSE_CANCEL,
     POINTER_DOWN,
     POINTER_UP,
@@ -43,7 +43,9 @@ struct Event {
      * finger positions (view-relative pixels).
      */
     POINTER_MOVE,
+#endif
 
+#ifdef ANDROID
     /**
      * The NativeView was resized (e.g. by changing the screen
      * orientation).
@@ -85,7 +87,7 @@ struct Event {
     RESIZE,
 #endif
 
-#if defined(USE_X11) || defined(MESA_KMS)
+#if defined(USE_X11) || defined(USE_WAYLAND) || defined(MESA_KMS)
     /**
      * Redraw the screen.
      */
@@ -105,7 +107,7 @@ struct Event {
 
   PixelPoint point;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_WAYLAND)
   /**
    * Second finger position for #POINTER_DOWN / #POINTER_MOVE.
    */
@@ -128,7 +130,7 @@ struct Event {
     :type(CALLBACK), ptr(_ptr), callback(_callback) {}
   Event(Type _type, PixelPoint _point)
     :type(_type), point(_point) {}
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_WAYLAND)
   Event(Type _type, PixelPoint _point, PixelPoint _point2) noexcept
     :type(_type), point(_point), point2(_point2) {}
 #endif

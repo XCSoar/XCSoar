@@ -8,7 +8,7 @@ including legacy Raspberry Pi cross-compile in a privileged container.
 
 | Target | Description |
 |--------|-------------|
-| ``UNIX`` | Native Linux/Unix build (OpenGL, default desktop target) |
+| ``UNIX`` | Native Linux/Unix build (OpenGL ES, default desktop target) |
 | ``UNIX-SDL`` | Software rendering via SDL (useful with X11 forwarding) |
 | ``WAYLAND`` | Experimental Wayland display server build |
 | ``WIN64OPENGL`` | Windows x64, OpenGL ES via ANGLE (**recommended**) |

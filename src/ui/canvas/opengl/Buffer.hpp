@@ -71,20 +71,16 @@ public:
   static void *MapWrite() noexcept {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
     return GLExt::map_buffer(target, GL_WRITE_ONLY_OES);
-#elif defined(GL_OES_mapbuffer)
-    return glMapBufferOES(target, GL_WRITE_ONLY_OES);
 #else
-    return glMapBuffer(target, GL_WRITE_ONLY);
+    return glMapBufferOES(target, GL_WRITE_ONLY_OES);
 #endif
   }
 
   static void Unmap() noexcept {
 #ifdef HAVE_DYNAMIC_MAPBUFFER
     GLExt::unmap_buffer(target);
-#elif defined(GL_OES_mapbuffer)
-    glUnmapBufferOES(target);
 #else
-    glUnmapBuffer(target);
+    glUnmapBufferOES(target);
 #endif
   }
 

@@ -235,6 +235,20 @@ public:
   void DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexcept;
 
   /**
+   * Draw a filled triangle fan with sub-pixel coordinates.  The selected pen
+   * is ignored.
+   */
+  void DrawFilledTriangleFan(const FloatPoint2D *points,
+                             unsigned num_points) noexcept;
+
+  /**
+   * Draw independent filled triangles with sub-pixel coordinates.  The
+   * selected pen is ignored.
+   */
+  void DrawFilledTriangles(const FloatPoint2D *points,
+                           unsigned num_points) noexcept;
+
+  /**
    * Draw a solid thin horizontal line.
    */
   void DrawHLine(int x1, int x2, int y, Color color) noexcept;

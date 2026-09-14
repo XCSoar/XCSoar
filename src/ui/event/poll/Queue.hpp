@@ -103,6 +103,18 @@ public:
   auto GetDecorationManager() noexcept {
     return input_queue.GetDecorationManager();
   }
+
+  auto GetViewporter() noexcept {
+    return input_queue.GetViewporter();
+  }
+
+  auto GetFractionalScaleManager() noexcept {
+    return input_queue.GetFractionalScaleManager();
+  }
+
+  auto GetPointerConstraints() noexcept {
+    return input_queue.GetPointerConstraints();
+  }
 #endif
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
@@ -112,8 +124,12 @@ public:
 #endif
 
 #ifdef USE_WAYLAND
-  void SetActivated(bool activated) noexcept {
-    input_queue.SetActivated(activated);
+  void SetToplevelState(bool suspended) noexcept {
+    input_queue.SetToplevelState(suspended);
+  }
+
+  void SetSurfaceScale120(unsigned scale_120) noexcept {
+    input_queue.SetSurfaceScale120(scale_120);
   }
 #endif
 

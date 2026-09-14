@@ -1,0 +1,46 @@
+---
+description: >-
+  When writing or reviewing code, reject exponential, combinatorial, or
+  unbounded-cost work on hot paths and growing flight data.
+globs:
+  - "**/*.cpp"
+  - "**/*.hpp"
+  - "**/*.c"
+  - "**/*.h"
+alwaysApply: false
+---
+
+# Review: exponential and unbounded cost
+
+XCSoar runs on slow devices. Cost that grows with waypoints, airspaces,
+traffic, NOTAM, or tiles will stall flight. Flag algorithmic blow-ups,
+not micro-optimisations of cold setup code.
+
+## Hot paths (must stay cheap)
+
+- MergeThread (~50 ms): cheap merges only
+- CalculationThread (≤ 2 Hz): no nested scans of unbounded sets
+- Map paint / device NMEA parse / UI event handlers
+
+## Reject
+
+- Nested loops over two growing collections (waypoints × airspaces,
+  traffic × airspace, tiles × time steps) on a hot path
+- Recursion without a hard depth or size bound
+- Unbounded caches, maps, or overlay lists with no eviction
+- Retries, downloads, or timers that can pile up without a cap
+- Combinatorial search (task points × waypoints × routes) without the
+  existing Engine path/route solvers
+- Heavy templates that explode compile time for one call site
+
+```cpp
+// BAD: O(n*m) every calculation tick
+for (const auto &wp : waypoints)
+  for (const auto &as : *airspaces)
+    if (as.Inside(wp.location)) ...
+
+// GOOD: spatial query, or run only when the set changed
+```
+
+Prefer the existing Engine indexes and solvers. If the input can grow
+with a long flight or a large CUP/airspace file, state the complexity.
