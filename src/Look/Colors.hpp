@@ -32,10 +32,39 @@ static constexpr Color COLOR_DARK_THEME_BUTTON =
   Color(0x1e, 0x33, 0x48);
 
 /**
- * Light mode dialog background color (warm parchment tint).
+ * Light mode dialog background color: a sand so far desaturated that
+ * it keeps the warmth of paper without turning the page yellow, on
+ * the lightness that stops short of glaring.
  */
 static constexpr Color COLOR_DIALOG_BACKGROUND =
-  Color(0xe2, 0xdc, 0xbe);
+  Color(0xe9, 0xe4, 0xdc);
+
+/**
+ * Flat "card" button face (light mode): a white card with an almost
+ * neutral outline; a warm border on a warm page reads as dirt.
+ */
+static constexpr Color COLOR_BUTTON_FACE =
+  Color(0xff, 0xff, 0xff);
+static constexpr Color COLOR_BUTTON_RING =
+  Color(0xa8, 0xa7, 0xa5);
+static constexpr Color COLOR_BUTTON_PRESSED =
+  Color(0xd0, 0xcc, 0xc2);
+
+/**
+ * A disabled button stays between the page and the white cards,
+ * so it no longer reads as a raised, clickable card.
+ */
+static constexpr Color COLOR_BUTTON_DISABLED =
+  Color(0xf4, 0xf1, 0xec);
+static constexpr Color COLOR_BUTTON_DISABLED_TEXT =
+  Color(0x93, 0x90, 0x8b);
+
+/**
+ * The primary color further down its own scale, like going from a
+ * Tailwind `primary-600` to `primary-800`.
+ */
+static constexpr Color COLOR_XCSOAR_PRESSED =
+  MixColors(COLOR_XCSOAR, COLOR_XCSOAR_DARK, 0x4d);
 
 /**
  * Admonition colors for Markdown rendering.
