@@ -68,6 +68,7 @@
 #include "NMEA/GPSState.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
+#include "Geo/Gravity.hpp"
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
 #include "Protection.hpp"
@@ -2553,6 +2554,12 @@ TestOpenVario()
   ok1(equals(nmea_info.total_energy_vario, 2.15));
   nmea_info.Reset();
 
+  // uncomp vario is read
+  ok1(device->ParseNMEA("$POV,e,2.15*34", nmea_info));
+  ok1(nmea_info.noncomp_vario_available);
+  ok1(equals(nmea_info.noncomp_vario, 2.15));
+  nmea_info.Reset();
+
   // Static pressure is read
   ok1(device->ParseNMEA("$POV,P,1018.35*39", nmea_info));
   ok1(nmea_info.static_pressure_available);
@@ -2593,6 +2600,76 @@ TestOpenVario()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(),
              Temperature::FromCelsius(23.52).ToKelvin()));
+  nmea_info.Reset();
+
+  // Voltage is read
+  ok1(device->ParseNMEA("$POV,V,11.99*31", nmea_info));
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 11.99));
+  nmea_info.Reset();
+
+  // G-Load is read
+  ok1(device->ParseNMEA("$POV,L,0.9134*14", nmea_info));
+  ok1(nmea_info.acceleration.available);
+  ok1(equals(nmea_info.acceleration.g_load, 0.9134));
+  nmea_info.Reset();
+
+  // Acceleration is read, provide GLoad
+  ok1(device->ParseNMEA("$POV,a,-1.5099,-.0292,13.7134*38", nmea_info));
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  // test mix of aligned and unaligned
+  ok1(device->ParseNMEA("$POV,A,-1.5099,-.0292,13.7134*18", nmea_info));
+  ok1(!nmea_info.acceleration.available);
+  // needs 3 samples with same alignment
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,A,-1.5099,-.0292,13.7134*18", nmea_info));
+  ok1(!nmea_info.acceleration.available);
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,A,-1.5099,-.0292,13.7134*18", nmea_info));
+  ok1(nmea_info.acceleration.available);
+  ok1(equals(nmea_info.acceleration.g_load * GRAVITY, SpaceDiagonal(-1.5099,-.0292,13.7134)));
+  nmea_info.Reset();
+
+  // Angular rate (aka gyroscope) is read
+  ok1(device->ParseNMEA("$POV,G,4.165,-8.709,-10.479*1B", nmea_info));
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,G,4.165,-8.709,-10.479*1B", nmea_info));
+  ok1(!nmea_info.gyroscope.available);
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,G,4.165,-8.709,-10.479*1B", nmea_info));
+  ok1(nmea_info.gyroscope.available);
+  ok1(nmea_info.gyroscope.real);
+  ok1(nmea_info.gyroscope.fixed_and_aligned);
+  ok1(equals(nmea_info.gyroscope.angular_rate_X, 4.165));
+  ok1(equals(nmea_info.gyroscope.angular_rate_Y, -8.709));
+  ok1(equals(nmea_info.gyroscope.angular_rate_Z, -10.479));
+  nmea_info.Reset();
+
+  // Angular rate, aligned and unaligned mixed
+  ok1(device->ParseNMEA("$POV,G,4.165,-8.709,-10.479*1B", nmea_info));
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,g,4.165,-8.709,-10.479*3B", nmea_info));
+  ok1(!nmea_info.gyroscope.available);
+  nmea_info.Reset();
+
+  // Angular rate from unaligned sensor
+  ok1(device->ParseNMEA("$POV,g,4.165,-8.709,-10.479*3B", nmea_info));
+  ok1(!nmea_info.gyroscope.available);
+  nmea_info.clock = TimeStamp{FloatDuration{1}};
+  nmea_info.alive.Update(nmea_info.clock);
+  ok1(device->ParseNMEA("$POV,g,4.165,-8.709,-10.479*3B", nmea_info));
+  ok1(nmea_info.gyroscope.available);
+  ok1(nmea_info.gyroscope.real);
+  ok1(!nmea_info.gyroscope.fixed_and_aligned);
+  ok1(equals(nmea_info.gyroscope.angular_rate_X, 4.165));
+  ok1(equals(nmea_info.gyroscope.angular_rate_Y, -8.709));
+  ok1(equals(nmea_info.gyroscope.angular_rate_Z, -10.479));
   nmea_info.Reset();
 
   // Relative humidity is read
@@ -3650,7 +3727,8 @@ int main()
              + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
-             + 30 /* LXV7PolarWrite */);
+             + 30 /* LXV7PolarWrite */
+             + 39 /* POV */);
   TestGeneric();
   TestTasman();
   TestLK8EX1();
