@@ -1801,6 +1801,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "Choisir une couleur"
 
+#, no-c-format
 msgid "Display"
 msgstr "Affich."
 
@@ -1810,9 +1811,6 @@ msgstr "Alert."
 #, no-c-format
 msgid "Airspace"
 msgstr "Espace aérien"
-
-msgid "Select Pattern"
-msgstr "Select. Modèle"
 
 msgid "Squawk code"
 msgstr "Code squawk"
@@ -1868,9 +1866,6 @@ msgstr "Modifier la couleur de la bordure"
 
 msgid "Change Fill Color"
 msgstr "Modifier la couleur de remplissage"
-
-msgid "Change Fill Brush"
-msgstr "Changer la brosse de remplissage"
 
 msgid "Border Width"
 msgstr "Epaisseur de bordure"
@@ -2048,10 +2043,6 @@ msgstr "Types de point de virage"
 #, no-c-format
 msgid "Language, Input"
 msgstr "Langue, Entrées"
-
-#, no-c-format
-msgid "Screen Layout"
-msgstr "Agencement de l'écran"
 
 #, no-c-format
 msgid "Audio"
@@ -2971,12 +2962,6 @@ msgstr "Mode remplissage"
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Spécifie le mode de remplissage de l'espace aérien."
 
-msgid "Airspace transparency"
-msgstr "Transparence"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Si activé, alors les espaces sont colorés de façon transparente."
-
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "Désactive la barre d'arrivée."
@@ -3394,12 +3379,11 @@ msgstr ""
 msgid "Text size"
 msgstr "Taille du texte"
 
-msgid "Display Resolution"
-msgstr "Résolution de l'écran"
-
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "La résolution de l'affichage est utilisée pour adapter les largeurs de ligne, la taille de la police, la taille des terrains posables, etc."
 
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
 msgid "Automatic"
 msgstr "Automatique"
 
@@ -3460,90 +3444,6 @@ msgstr "Portrait inversé"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Paysage inversé"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 séparées"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 séparées"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 sur 3 lignes"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 sur 3 lignes"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 sur 3 lignes"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 en bas ou à droite"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 Bas + Vario (Portrait)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 en haut ou à gauche"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 Haut + Vario (Portrait)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 Droite + Vario (Paysage)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Gauche + Droite + Vario (Paysage)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 Gauche + 3 Droite Vario (Paysage)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 Droite (Carré)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 en bas ou à droite"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 en bas ou à droite"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 en haut ou à gauche"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 en haut ou à gauche"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 à droite (Paysage)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 en bas ou à droite"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 en haut ou à gauche"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 en bas ou à droite"
 
 #, no-c-format
 msgid "Text"
@@ -4831,15 +4731,6 @@ msgstr "Unité utilisée pour la rotation."
 #, no-c-format
 msgid "UTC offset"
 msgstr "Décalage UTC"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"Ce champ \"Fuseau Horaire\" permet de régler le décalage UTC pour déterminer "
-"l'heure locale. L'heure locale est affichée sous le champ \"Fuseau Horaire\" "
-"pour vérification."
 
 msgid "Use GPS time"
 msgstr "Heure du GPS"
@@ -7119,10 +7010,6 @@ msgid "T Next Leg"
 msgstr "Vz Moy. après WP"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Vz moyenne prévue sur la prochaine branche. Équivalent au calage MacCready de la branche courante."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Composante de vent de face (simplifiée)"
 
@@ -8370,12 +8257,6 @@ msgid "Size of waypoint symbols on the map as a percentage of the built-in artwo
 msgstr ""
 "Taille des symboles de waypoint sur la carte en pourcentage des graphismes "
 "intégrés (les listes de dialogue gardent une taille d'icône de ligne fixe)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Mode Altn : MANUEL"
-
-msgid "Altn mode: AUTO"
-msgstr "Mode Altn : AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -10066,14 +9947,6 @@ msgstr ""
 "Couvre l'arc alpin entier de Vienne à Perpignan, avec prévision d'onde sur "
 "toute la région alpine. Modèle ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Royaume-Uni. Modèle ICON-UK."
-
 msgid "XC Therm email"
 msgstr "E-mail XC Therm"
 
@@ -11260,4 +11133,151 @@ msgstr "Auto"
 msgctxt "Setting"
 msgid "Manual"
 msgstr "Manuel"
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+#. overwriting the data files under a flying program helps nobody
+#. the loggers are writing, half the files would be left out -
+#. and nobody needs a backup right now up there
+msgid "Not available while flying."
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
+msgstr ""
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
 
