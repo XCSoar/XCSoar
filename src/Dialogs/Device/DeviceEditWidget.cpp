@@ -612,8 +612,12 @@ DeviceEditWidget::Save(bool &_changed) noexcept
     }
   }
 
-  if (CommonInterface::Basic().sensor_calibration_available)
+  const auto &basic = CommonInterface::Basic();
+  if (basic.sensor_calibration_available) {
+    config.sensor_offset = basic.sensor_calibration_offset;
+    config.sensor_factor = basic.sensor_calibration_factor;
     changed = true;
+  }
 
   _changed |= changed;
   return true;
