@@ -198,6 +198,13 @@ SetTransponderMode(TransponderMode mode) noexcept;
 void
 SetQNH(AtmosphericPressure qnh, bool to_devices=true) noexcept;
 
+/**
+ * Place the aircraft at home (or the terrain center) when GPS is not
+ * yet available.  No-op while flying.
+ */
+void
+SetStartupLocation() noexcept;
+
 } // namespace ActionInterface
 
 /**

@@ -13,13 +13,9 @@
 #include "Task/MapTaskManager.hpp"
 #include "Interface.hpp"
 #include "Protection.hpp"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
-#include "DataComponents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Pan.hpp"
 #include "Simulator.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
@@ -190,10 +186,13 @@ SetHome(Waypoints *way_points, const Waypoint &waypoint)
 
   {
     ScopeSuspendAllThreads suspend;
-    if (way_points != nullptr)
-      WaypointGlue::SetHome(*way_points, data_components->terrain.get(),
-                            settings_computer.poi, settings_computer.team_code,
-                            backend_components->device_blackboard.get(), false);
+    if (way_points != nullptr) {
+      WaypointGlue::SetHome(*way_points,
+                            settings_computer.poi,
+                            settings_computer.team_code,
+                            false);
+      ActionInterface::SetStartupLocation();
+    }
     WaypointGlue::SaveHome(Profile::map,
                            settings_computer.poi, settings_computer.team_code);
   }

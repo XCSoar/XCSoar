@@ -106,8 +106,7 @@ LoadFiles(PlacesOfInterestSettings &poi_settings,
   terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
-  WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
-                        NULL, false);
+  WaypointGlue::SetHome(way_points, poi_settings, team_code_settings, false);
 
   const auto paths = Profile::GetMultiplePaths(ProfileKeys::AirspaceFileList,
                                                GetFileTypePatterns(FileType::AIRSPACE));
