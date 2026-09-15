@@ -81,6 +81,12 @@ class MainWindow : public UI::SingleWindow {
   Widget *bottom_widget = nullptr;
 
   /**
+   * Is #bottom_widget currently shown?  #Widget::Show() and
+   * #Widget::Hide() may only be called on a transition.
+   */
+  bool bottom_widget_visible = false;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
@@ -238,6 +244,18 @@ protected:
    * new bottom Widget.
    */
   void KillBottomWidget() noexcept;
+
+  /**
+   * The area the "bottom" #Widget occupies below the map.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomAreaRect() const noexcept;
+
+  /**
+   * Show or hide the "bottom" #Widget, depending on whether anything
+   * currently covers the area below the map.
+   */
+  void UpdateBottomWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {

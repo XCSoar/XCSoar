@@ -388,6 +388,17 @@ GlueMapWindow::SetTopRightMargin(unsigned margin) noexcept
 }
 
 void
+GlueMapWindow::SetMenuVisible(bool visible) noexcept
+{
+  if (visible == menu_visible)
+    /* no change, don't redraw */
+    return;
+
+  menu_visible = visible;
+  QuickRedraw();
+}
+
+void
 GlueMapWindow::SetContentRect(PixelRect rc) noexcept
 {
   content_rect = rc;

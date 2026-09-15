@@ -285,6 +285,12 @@ public:
   void SetTopRightMargin(unsigned margin) noexcept;
 
   /**
+   * Tell the map whether the menu bar is currently covering it, so
+   * that the HUD elements underneath it can step aside.
+   */
+  void SetMenuVisible(bool visible) noexcept;
+
+  /**
    * Override the content rect used for HUD overlay placement and for
    * aircraft centering.  Pass an empty rect to reset to GetClientRect().
    */
