@@ -4,6 +4,7 @@
 #include "ProgressDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "ui/window/SingleWindow.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 
@@ -14,8 +15,14 @@ using namespace UI;
 static PixelRect
 GetCancelButtonRect(const PixelRect &client_rc) noexcept
 {
+  /* the button keeps the gap to the dialog edges that buttons have
+     between each other */
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(client_rc);
+
   PixelRect rc = client_rc;
+  rc.right -= margin;
   rc.left = rc.right - Layout::Scale(75);
+  rc.top += margin;
   rc.bottom = rc.top + Layout::GetMaximumControlHeight();
   return rc;
 }
