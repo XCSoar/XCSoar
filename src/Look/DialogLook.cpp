@@ -49,19 +49,29 @@ DialogLook::Initialise(bool _dark_mode)
     caption.background_color = COLOR_DARK_THEME_CAPTION;
     caption.inactive_background_color = COLOR_DARK_THEME_CAPTION_INACTIVE;
 
-    SetBackgroundColor(COLOR_DARK_THEME_BACKGROUND);
+    /* a dithered display has no shade below the page: in dark mode
+       the page is the black level itself */
+    SetBackgroundColor(IsDithered()
+                       ? COLOR_BLACK
+                       : COLOR_DARK_THEME_BACKGROUND);
     text_color = COLOR_WHITE;
 
     focused.background_color = COLOR_XCSOAR;
     focused.text_color = COLOR_WHITE;
     focused.border_pen.Create(Layout::FastScale(1) + 2, COLOR_WHITE);
 
-    list.background_color = COLOR_DARK_THEME_LIST;
+    list.background_color = IsDithered()
+      ? COLOR_BLACK
+      : COLOR_DARK_THEME_LIST;
     list.text_color = COLOR_WHITE;
-    list.selected.background_color = COLOR_DARK_THEME_LIST_SELECTED;
+    list.selected.background_color = IsDithered()
+      ? COLOR_DARK_GRAY
+      : COLOR_DARK_THEME_LIST_SELECTED;
     list.selected.text_color = COLOR_WHITE;
-    list.focused.background_color = COLOR_XCSOAR_DARK;
-    list.focused.text_color = COLOR_WHITE;
+    list.focused.background_color = IsDithered()
+      ? COLOR_WHITE
+      : COLOR_XCSOAR_DARK;
+    list.focused.text_color = IsDithered() ? COLOR_BLACK : COLOR_WHITE;
     list.pressed.background_color = DarkColor(COLOR_YELLOW);
     list.pressed.text_color = COLOR_WHITE;
   } else {
