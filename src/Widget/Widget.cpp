@@ -4,6 +4,12 @@
 #include "Widget.hpp"
 #include "ui/dim/Size.hpp"
 
+const Color *
+Widget::GetBackgroundColor() const noexcept
+{
+  return nullptr;
+}
+
 PixelSize
 NullWidget::GetMinimumSize() const noexcept
 {
