@@ -10,6 +10,7 @@
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -204,7 +205,13 @@ InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
   info_boxes = InfoBoxLayout::Calculate(rc, geometry, title_scale);
 
   form = info_boxes.remaining;
-  auto buttons = form.CutTopSafe(::Layout::GetMaximumControlHeight());
+
+  /* the buttons keep the gap to the edges and to the form below that
+     they have between each other */
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(form);
+  auto buttons = form.CutTopSafe(::Layout::GetMaximumControlHeight()
+                                 + 2 * margin);
+  buttons.Grow(-margin);
 
   copy_button = paste_button = close_button = buttons;
   copy_button.right = paste_button.left =

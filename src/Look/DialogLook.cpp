@@ -49,21 +49,29 @@ DialogLook::Initialise(bool _dark_mode)
     caption.background_color = COLOR_DARK_THEME_CAPTION;
     caption.inactive_background_color = COLOR_DARK_THEME_CAPTION_INACTIVE;
 
-    SetBackgroundColor(COLOR_DARK_THEME_BACKGROUND);
-    /* subtle gradient: lighter at top, base color at bottom */
-    background_gradient_top_color = COLOR_DARK_THEME_GRADIENT_TOP;
+    /* a dithered display has no shade below the page: in dark mode
+       the page is the black level itself */
+    SetBackgroundColor(IsDithered()
+                       ? COLOR_BLACK
+                       : COLOR_DARK_THEME_BACKGROUND);
     text_color = COLOR_WHITE;
 
     focused.background_color = COLOR_XCSOAR;
     focused.text_color = COLOR_WHITE;
     focused.border_pen.Create(Layout::FastScale(1) + 2, COLOR_WHITE);
 
-    list.background_color = COLOR_DARK_THEME_LIST;
+    list.background_color = IsDithered()
+      ? COLOR_BLACK
+      : COLOR_DARK_THEME_LIST;
     list.text_color = COLOR_WHITE;
-    list.selected.background_color = COLOR_DARK_THEME_LIST_SELECTED;
+    list.selected.background_color = IsDithered()
+      ? COLOR_DARK_GRAY
+      : COLOR_DARK_THEME_LIST_SELECTED;
     list.selected.text_color = COLOR_WHITE;
-    list.focused.background_color = COLOR_XCSOAR_DARK;
-    list.focused.text_color = COLOR_WHITE;
+    list.focused.background_color = IsDithered()
+      ? COLOR_WHITE
+      : COLOR_XCSOAR_DARK;
+    list.focused.text_color = IsDithered() ? COLOR_BLACK : COLOR_WHITE;
     list.pressed.background_color = DarkColor(COLOR_YELLOW);
     list.pressed.text_color = COLOR_WHITE;
   } else {
@@ -71,13 +79,7 @@ DialogLook::Initialise(bool _dark_mode)
     caption.background_color = IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_DARK;
     caption.inactive_background_color = COLOR_GRAY;
 
-    if (IsDithered())
-      SetBackgroundColor(COLOR_WHITE);
-    else {
-      SetBackgroundColor(COLOR_DIALOG_BACKGROUND);
-      /* subtle gradient: lighter at top, base color at bottom */
-      background_gradient_top_color = COLOR_DIALOG_GRADIENT_TOP;
-    }
+    SetBackgroundColor(IsDithered() ? COLOR_WHITE : COLOR_DIALOG_BACKGROUND);
     text_color = COLOR_BLACK;
 
     focused.background_color = COLOR_XCSOAR_DARK;
@@ -97,34 +99,6 @@ DialogLook::Initialise(bool _dark_mode)
 
   button.Initialise(bold_font, dark_mode);
 
-  /* #ButtonState::SELECTED (action bar) matches a focused list row; in dark
-     mode use the same bright `focused` (COLOR_XCSOAR) as dialog/tab focus
-     list.focused in dark is darker (XCSOAR_DARK) */
-  {
-    if (dark_mode) {
-      button.selected.background_color = focused.background_color;
-      button.selected.foreground_color = focused.text_color;
-    } else {
-      const auto &h = list.focused;
-      button.selected.background_color = h.background_color;
-      button.selected.foreground_color = h.text_color;
-    }
-    button.selected.foreground_brush.Create(button.selected.foreground_color);
-    if (dark_mode) {
-      button.selected.CreateBorder(
-        LightColor(button.selected.background_color),
-        DarkColor(button.selected.background_color));
-    } else if (IsDithered()) {
-      button.selected.CreateBorder(COLOR_WHITE, COLOR_WHITE);
-    } else if (!HasColors()) {
-      button.selected.CreateBorder(LightColor(COLOR_DARK_GRAY), COLOR_BLACK);
-    } else {
-      button.selected.CreateBorder(
-        LightColor(button.selected.background_color),
-        DarkColor(button.selected.background_color));
-    }
-  }
-
   check_box.Initialise(text_font, dark_mode);
 
   list.font = &text_font;
@@ -135,7 +109,6 @@ void
 DialogLook::SetBackgroundColor(Color color)
 {
   background_color = color;
-  background_gradient_top_color = color;
   background_brush.Create(color);
 }
 

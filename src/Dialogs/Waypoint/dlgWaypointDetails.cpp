@@ -11,6 +11,7 @@
 #include "Form/Panel.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "Widget/ManagedWidget.hpp"
@@ -379,11 +380,15 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 {
   const unsigned width = rc.GetWidth(), height = rc.GetHeight();
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
+  /* the buttons keep the gap to the screen edges that they have
+     between each other */
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
 
   main = rc;
 
   if (width > height) {
-    auto buttons = main.CutLeftSafe(::Layout::Scale(70));
+    auto buttons = main.CutLeftSafe(::Layout::Scale(70) + 2 * margin);
+    buttons.Grow(-margin);
 
     goto_button = buttons.CutTopSafe(button_height);
     if (sim_jump_active)
@@ -394,8 +399,10 @@ WaypointDetailsWidget::Layout::Layout(const PixelRect &rc,
 
     std::tie(previous_button, next_button) = buttons.CutBottomSafe(button_height).VerticalSplit();
   } else {
-    auto buttons = main.CutBottomSafe(sim_jump_active ? 2 * button_height
-                                                      : button_height);
+    auto buttons = main.CutBottomSafe((sim_jump_active ? 2 * button_height
+                                                       : button_height)
+                                      + 2 * margin);
+    buttons.Grow(-margin);
 
     const unsigned one_third = (2 * buttons.left + buttons.right) / 3;
     const unsigned two_thirds = (buttons.left + 2 * buttons.right) / 3;

@@ -9,7 +9,10 @@
 #include "thread/Mutex.hxx"
 #endif
 
+#include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <memory>
 #include <stdexcept>
 
 #include <math.h>
@@ -41,6 +44,50 @@ using NativeFontT =
   UIFont;
 #endif
 
+/**
+ * Draw the string into the given alpha-only buffer.  The caller is
+ * responsible for locking #apple_font_mutex.
+ */
+static void
+RenderNSString(NSString *ns_str, NSDictionary *attributes,
+               const PixelSize size, void *buffer) noexcept
+{
+  memset(buffer, 0, size.width * size.height);
+
+  static CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
+  CGContextRef ctx = CGBitmapContextCreate(buffer, size.width, size.height, 8,
+                                           size.width, grey_colorspace,
+                                           kCGImageAlphaOnly);
+  assert(nullptr != ctx);
+
+  AtScopeExit(ctx) { CFRelease(ctx); };
+
+#ifdef USE_APPKIT
+  NSGraphicsContext *ns_ctx =
+      [NSGraphicsContext graphicsContextWithCGContext: ctx flipped: false];
+  assert(nil != ns_ctx);
+
+  [NSGraphicsContext saveGraphicsState];
+  [NSGraphicsContext setCurrentContext: ns_ctx];
+#else
+  CGContextTranslateCTM(ctx, 0, size.height);
+  CGContextScaleCTM(ctx, 1, -1);
+
+  UIGraphicsPushContext(ctx);
+#endif
+
+  AtScopeExit() {
+#ifdef USE_APPKIT
+    [NSGraphicsContext restoreGraphicsState];
+#else
+    UIGraphicsPopContext();
+#endif
+  };
+
+  static CGPoint p = CGPointMake(0, 0);
+  [ns_str drawAtPoint: p withAttributes: attributes];
+}
+
 void
 Font::Load(const FontDescription &d)
 {
@@ -68,7 +115,7 @@ Font::Load(const FontDescription &d)
   }
 
   if (nil == native_font)
-    throw std::runtime_error{"fontWithName named"};
+    throw std::runtime_error{"no native font"};
 
   if (d.IsItalic() || convert_bold) {
 #ifdef USE_APPKIT
@@ -101,6 +148,36 @@ Font::Load(const FontDescription &d)
   height = ceilf([@"ÄjX€µ" sizeWithAttributes: draw_attributes].height);
   ascent_height = static_cast<unsigned>(ceilf([native_font ascender]));
   capital_height = static_cast<unsigned>(ceilf([native_font capHeight]));
+
+  /* The metrics above describe the abstract line box, but the ink
+     drawAtPoint places can sit lower.  Measure a reference capital
+     so the metrics match the bitmaps this font actually produces. */
+  NSString *const reference = @"H";
+  const CGSize reference_size = [reference sizeWithAttributes: draw_attributes];
+  const PixelSize size(static_cast<int>(ceilf(reference_size.width)),
+                       static_cast<int>(ceilf(reference_size.height)));
+  if (size.width > 0 && size.height > 0) {
+    const std::unique_ptr<uint8_t[]> buffer{new uint8_t[size.width * size.height]};
+    RenderNSString(reference, draw_attributes, size, buffer.get());
+
+    int first = -1, last = -1;
+    for (unsigned y = 0; y < size.height; ++y) {
+      const uint8_t *row = buffer.get() + y * size.width;
+      /* ignore the faintest anti-aliasing smear */
+      if (std::any_of(row, row + size.width,
+                      [](uint8_t alpha) { return alpha > 0x10; })) {
+        if (first < 0)
+          first = y;
+        last = y;
+      }
+    }
+
+    if (first >= 0) {
+      /* the baseline sits directly below the capital's ink */
+      ascent_height = last + 1;
+      capital_height = last - first + 1;
+    }
+  }
 }
 
 bool
@@ -138,42 +215,9 @@ Font::Render(std::string_view text, const PixelSize size,
     [[NSString alloc] initWithBytes: text.data() length: text.size() encoding: NSUTF8StringEncoding];
   assert(nil != ns_str);
 
-  memset(buffer, 0, size.width * size.height);
-
-  static CGColorSpaceRef grey_colorspace = CGColorSpaceCreateDeviceGray();
-  CGContextRef ctx = CGBitmapContextCreate(buffer, size.width, size.height, 8,
-                                           size.width, grey_colorspace,
-                                           kCGImageAlphaOnly);
-  assert(nullptr != ctx);
-
-  AtScopeExit(ctx) { CFRelease(ctx); };
-
 #ifndef ENABLE_OPENGL
   const std::lock_guard lock{apple_font_mutex};
 #endif
 
-#ifdef USE_APPKIT
-  NSGraphicsContext *ns_ctx =
-      [NSGraphicsContext graphicsContextWithCGContext: ctx flipped: false];
-  assert(nil != ns_ctx);
-
-  [NSGraphicsContext saveGraphicsState];
-  [NSGraphicsContext setCurrentContext: ns_ctx];
-#else
-  CGContextTranslateCTM(ctx, 0, size.height);
-  CGContextScaleCTM(ctx, 1, -1);
-
-  UIGraphicsPushContext(ctx);
-#endif
-
-  AtScopeExit() {
-#ifdef USE_APPKIT
-    [NSGraphicsContext restoreGraphicsState];
-#else
-    UIGraphicsPopContext();
-#endif
-  };
-
-  static CGPoint p = CGPointMake(0, 0);
-  [ns_str drawAtPoint: p withAttributes: draw_attributes];
+  RenderNSString(ns_str, draw_attributes, size, buffer);
 }
