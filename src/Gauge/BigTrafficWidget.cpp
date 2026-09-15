@@ -950,6 +950,12 @@ TrafficWidget::UpdateButtons() noexcept
   windows->details_button.SetEnabled(unlocked && not_empty);
 }
 
+const Color *
+TrafficWidget::GetBackgroundColor() const noexcept
+{
+  return &UIGlobals::GetLook().flarm_dialog.background_color;
+}
+
 void
 TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc) noexcept
 {
