@@ -7,6 +7,7 @@
 #include "Util.hxx"
 #include "system/Path.hpp"
 #include "Replay/Replay.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "CalculationThread.hpp"
@@ -70,7 +71,8 @@ l_replay_start(lua_State *L)
     Path p(filename.data());
 
     try {
-      backend_components->replay->Start(p);
+      backend_components->replay->Start(p,
+        CommonInterface::GetSystemSettings().devices[0]);
       return 0;
     } catch (...) {
     }

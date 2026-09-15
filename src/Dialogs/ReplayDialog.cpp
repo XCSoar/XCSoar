@@ -6,6 +6,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
 #include "Form/DataField/Base.hpp"
@@ -77,7 +78,7 @@ ReplayControlWidget::OnStartClicked() noexcept
   const Path path = GetValueFile(FILE);
 
   try {
-    replay.Start(path);
+    replay.Start(path, CommonInterface::GetSystemSettings().devices[0]);
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
   }
