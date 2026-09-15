@@ -7,6 +7,7 @@
 #include "Widget/VScrollWidget.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/RichTextWidget.hpp"
+#include "ui/control/RichTextWindow.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
@@ -21,6 +22,8 @@
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
 
+#include <algorithm>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -127,14 +130,71 @@ try {
   return {};
 }
 
-static std::size_t checklist_current_page = 0;
+/**
+ * Survives dialog close so the last page and checkbox ticks come back
+ * on the next open.  Cleared when the Site Files checklist path changes.
+ */
+static struct {
+  std::size_t page = 0;
+  AllocatedPath path;
+  std::vector<std::string> texts;
+  std::vector<std::vector<uint8_t>> checks;
+} session;
+
+static RichTextWindow &
+GetPageWindow(Widget &page) noexcept
+{
+  auto &widget = static_cast<RichTextWidget &>(
+    static_cast<VScrollWidget &>(page).GetWidget());
+  return static_cast<RichTextWindow &>(widget.GetWindow());
+}
+
+static void
+RestoreSessionChecks(ArrowPagerWidget &pager, Path path,
+                     const Checklist &checklist) noexcept
+{
+  if (path != session.path)
+    return;
+
+  const unsigned n = std::min(pager.GetSize(),
+                              (unsigned)checklist.size());
+  for (unsigned i = 0; i < n; ++i) {
+    if (i >= session.texts.size() || i >= session.checks.size())
+      break;
+    if (session.texts[i] != checklist[i].text)
+      continue;
+
+    GetPageWindow(pager.GetWidget(i))
+      .SetCheckboxCheckedStates(session.checks[i]);
+  }
+}
+
+static void
+SaveSession(ArrowPagerWidget &pager, Path path,
+            const Checklist &checklist) noexcept
+{
+  session.page = pager.GetCurrentIndex();
+  session.path = path;
+  session.texts.clear();
+  session.checks.clear();
+
+  const unsigned n = std::min(pager.GetSize(),
+                              (unsigned)checklist.size());
+  session.texts.reserve(n);
+  session.checks.reserve(n);
+  for (unsigned i = 0; i < n; ++i) {
+    session.texts.push_back(checklist[i].text);
+    session.checks.push_back(
+      GetPageWindow(pager.GetWidget(i)).GetCheckboxCheckedStates());
+  }
+}
 
 void
 dlgChecklistNotifySiteFileChanged() noexcept
 {
-  /* Profile::GetPath(ChecklistFile) is already updated; reset page so a
-     different file's page count does not keep a stale index. */
-  checklist_current_page = 0;
+  /* Profile::GetPath(ChecklistFile) is already updated; drop page and
+     ticks so a different file does not keep stale state. */
+  session = {};
 }
 
 void
@@ -185,8 +245,8 @@ dlgChecklistShowModal()
         });
     }
 
-  if (checklist_current_page >= checklist.size())
-    checklist_current_page = 0;
+  if (session.page >= checklist.size())
+    session.page = 0;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
@@ -197,13 +257,12 @@ dlgChecklistShowModal()
                                                    dialog.MakeModalResultCallback(mrOK));
   ArrowPagerWidget *const pager_ptr = pager.get();
 
-  for (const auto &i : checklist) {
-    auto scroll = std::make_unique<VScrollWidget>(
-      std::make_unique<RichTextWidget>(look, i.text.c_str()), look, true);
-    pager->Add(std::move(scroll));
+  for (const auto &page : checklist) {
+    pager->Add(std::make_unique<VScrollWidget>(
+      std::make_unique<RichTextWidget>(look, page.text.c_str()), look, true));
   }
 
-  pager->SetCurrent(checklist_current_page);
+  pager->SetCurrent(session.page);
 
   const std::size_t total_pages = checklist.size();
 
@@ -217,8 +276,14 @@ dlgChecklistShowModal()
                 pager->GetCurrentIndex(), total_pages);
 
   dialog.FinishPreliminary(std::move(pager));
+  /* Full-screen dialogs do not Prepare() until Show(); do it here so
+     the page windows exist before ticks are restored. */
+  dialog.PrepareWidget();
+
+  auto &pager_widget = static_cast<ArrowPagerWidget &>(dialog.GetWidget());
+  RestoreSessionChecks(pager_widget, path, checklist);
+
   dialog.ShowModal();
 
-  checklist_current_page =
-    static_cast<ArrowPagerWidget &>(dialog.GetWidget()).GetCurrentIndex();
+  SaveSession(pager_widget, path, checklist);
 }
