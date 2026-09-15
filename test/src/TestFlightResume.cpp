@@ -130,7 +130,9 @@ Capture(const Harness &harness) noexcept
     .active_taskpoint_index = harness.task_manager.GetActiveTaskPointIndex(),
     /* rounded to the metre: the two passes must agree exactly, but the
        assertion should not be hostage to a floating-point last bit */
-    .travelled_metres = (int)stats.total.travelled.GetDistance(),
+    .travelled_metres = stats.total.travelled.IsDefined()
+      ? (int)stats.total.travelled.GetDistance()
+      : 0,
     .flight_time_seconds = (int)calculated.flight.flight_time.count(),
     .altitude_samples =
       (int)harness.computer.GetFlightStats().altitude.GetCount(),

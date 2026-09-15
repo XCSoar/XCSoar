@@ -250,6 +250,7 @@ $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
 TEST_CUT_SESSION_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/CutSession.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestCutSession.cpp
 TEST_CUT_SESSION_DEPENDS = IO OS TIME MATH UTIL
@@ -1956,6 +1957,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
+	$(SRC)/IGC/IGCRepair.cpp \
 	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \

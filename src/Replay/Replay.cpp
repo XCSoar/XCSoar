@@ -55,6 +55,7 @@ Replay::StartSweep(Path _path)
      needs a DeviceConfig after master stopped reading devices[0]
      from CommonInterface. */
   DeviceConfig device;
+  device.Clear();
   Open(_path, device);
 }
 
