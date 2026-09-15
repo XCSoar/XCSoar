@@ -19,14 +19,11 @@
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StringFormat.hpp"
 #include "util/StaticString.hxx"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
 
 #include <algorithm>
 
@@ -254,9 +251,6 @@ InputEvents::eventVarioAudioMode(const char *misc)
 void
 InputEvents::eventBugs(const char *misc)
 {
-  if (!backend_components || !backend_components->protected_task_manager)
-    return;
-
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
   auto BUGS = settings.bugs;
   auto oldBugs = BUGS;
@@ -279,11 +273,8 @@ InputEvents::eventBugs(const char *misc)
     Message::AddMessage(_("Bugs performance"), Temp);
   }
 
-  if (BUGS != oldBugs) {
-    settings.SetBugs(BUGS);
-    if (backend_components)
-      backend_components->SetTaskPolar(settings);
-  }
+  if (BUGS != oldBugs)
+    ActionInterface::SetBugs(BUGS);
 }
 
 // Ballast
@@ -297,9 +288,6 @@ InputEvents::eventBugs(const char *misc)
 void
 InputEvents::eventBallast(const char *misc)
 {
-  if (!backend_components || !backend_components->protected_task_manager)
-    return;
-
   auto &computer_settings = CommonInterface::SetComputerSettings();
   auto &settings = computer_settings.polar;
   GlidePolar &polar = settings.glide_polar_task;
@@ -346,11 +334,8 @@ InputEvents::eventBallast(const char *misc)
     Message::AddMessage(_("Ballast %"), Temp);
   }
 
-  if (ballast_fraction != old_ballast_fraction) {
-    polar.SetBallastFraction(ballast_fraction);
-    if (backend_components)
-      backend_components->SetTaskPolar(settings);
-  }
+  if (ballast_fraction != old_ballast_fraction)
+    ActionInterface::SetBallastFraction(ballast_fraction);
 }
 
 // ProfileLoad
