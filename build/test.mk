@@ -109,6 +109,7 @@ TEST_NAMES = \
 	TestZeroFinder \
 	TestAirspaceWarningManager \
 	TestAirspaceParser \
+	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser \
@@ -361,6 +362,16 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
 TEST_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE UNITS ZZIP GEO MATH UTIL UNITS
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
+
+TEST_AIRSPACE_LABEL_PLACEMENT_SOURCES = \
+	$(SRC)/Engine/Airspace/AirspaceWarningConfig.cpp \
+	$(SRC)/Renderer/AirspaceLabelList.cpp \
+	$(SRC)/Renderer/AirspaceLabelPlacement.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceLabelPlacement.cpp
+TEST_AIRSPACE_LABEL_PLACEMENT_DEPENDS = MATH
+$(eval $(call link-program,TestAirspaceLabelPlacement,TEST_AIRSPACE_LABEL_PLACEMENT))
 
 TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -2261,6 +2272,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRendererGL.cpp \
 	$(SRC)/Renderer/AirspaceRendererOther.cpp \
+	$(SRC)/Renderer/AirspaceLabelPlacement.cpp \
 	$(SRC)/Renderer/AirspaceLabelList.cpp \
 	$(SRC)/Renderer/AirspaceLabelRenderer.cpp \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
