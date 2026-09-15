@@ -118,9 +118,12 @@ MainWindow::GetShowQuickMenuButtonRect(const PixelRect rc) noexcept
   const UISettings &settings = CommonInterface::GetUISettings();
   const unsigned padding = Layout::GetTextPadding();
 
+  /* the buttons of the column touch: #ButtonFrameRenderer insets each
+     face by its margin, which makes the gap between two of them the
+     same as the one towards the screen edge */
   int top = rc.top + int(padding);
   if (settings.show_menu_button)
-    top = GetShowMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowMenuButtonRect(rc).bottom;
 
   return GetMapOverlayButtonRect(rc, top);
 }
@@ -135,14 +138,14 @@ MainWindow::GetShowZoomButtonRect(const PixelRect rc,
 
   int top = rc.top + int(padding);
   if (settings.show_quickmenu_button)
-    top = GetShowQuickMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowQuickMenuButtonRect(rc).bottom;
   else if (settings.show_menu_button)
-    top = GetShowMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowMenuButtonRect(rc).bottom;
 
   if (sign == ShowZoomButton::Sign::ZOOM_OUT) {
     const PixelRect zoom_in =
       GetShowZoomButtonRect(rc, ShowZoomButton::Sign::ZOOM_IN);
-    top = zoom_in.bottom + int(padding);
+    top = zoom_in.bottom;
   }
 
   return GetMapOverlayButtonRect(rc, top);
