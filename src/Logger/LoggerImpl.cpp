@@ -8,10 +8,8 @@
 #include "Repository/FileType.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
-#include "Simulator.hpp"
 #include "system/FileUtil.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
-#include "Interface.hpp"
 #include "IGC/IGCWriter.hpp"
 #include "util/CharUtil.hxx"
 
@@ -246,29 +244,14 @@ LoggerImpl::LoggerNote(const char *text)
     writer->LoggerNote(text);
 }
 
-[[gnu::pure]]
-static const char *
-GetGPSDeviceName() noexcept
-{
-  if (is_simulator())
-    return "Simulator";
-
-  const DeviceConfig &device = CommonInterface::GetSystemSettings().devices[0];
-  if (device.UsesDriver())
-    return device.driver_name;
-
-  if (device.IsAndroidInternalGPS())
-    return "Internal GPS (Android)";
-
-  return "Unknown";
-}
-
-// TODO: fix scope so only gui things can start it
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const LoggerSettings &settings,
-                        const char *asset_number, const Declaration &decl)
+                        const char *asset_number, const Declaration &decl,
+                        const char *gps_device_name)
 {
+  assert(gps_device_name != nullptr);
+
   if (!settings.logger_id.empty())
     asset_number = settings.logger_id.c_str();
 
@@ -287,7 +270,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name, decl.copilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
-                      logger_id, GetGPSDeviceName(), simulator);
+                      logger_id, gps_device_name, simulator);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !pre_takeoff_buffer.empty()

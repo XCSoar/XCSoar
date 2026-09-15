@@ -91,7 +91,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
@@ -1070,6 +1070,12 @@ TEST_LOGGER_SOURCES = \
 	$(TEST_SRC_DIR)/TestLogger.cpp
 TEST_LOGGER_DEPENDS = IO OS GEO MATH UTIL UNITS
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
+
+TEST_GPS_DEVICE_NAME_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGPSDeviceName.cpp
+TEST_GPS_DEVICE_NAME_DEPENDS = UTIL
+$(eval $(call link-program,TestGPSDeviceName,TEST_GPS_DEVICE_NAME))
 
 TEST_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
