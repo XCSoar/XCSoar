@@ -313,6 +313,12 @@ public:
   void SetTopRightMargin(unsigned margin) noexcept;
 
   /**
+   * Tell the map whether the menu bar is currently covering it, so
+   * that the HUD elements underneath it can step aside.
+   */
+  void SetMenuVisible(bool visible) noexcept;
+
+  /**
    * Edge-chrome slots for this paint: HUD, margins, vario column and
    * scale clearance.  Projection-space items are not included.
    */

@@ -574,6 +574,17 @@ GlueMapWindow::SetTopRightMargin(unsigned margin) noexcept
   QuickRedraw();
 }
 
+void
+GlueMapWindow::SetMenuVisible(bool visible) noexcept
+{
+  if (visible == menu_visible)
+    /* no change, don't redraw */
+    return;
+
+  menu_visible = visible;
+  QuickRedraw();
+}
+
 MapHudLayout
 GlueMapWindow::GetHudLayout(PixelRect hud_rc) const noexcept
 {

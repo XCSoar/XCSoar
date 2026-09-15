@@ -872,7 +872,9 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
     if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
       DrawThermalBand(canvas, layout);
     DrawStallRatio(canvas, layout);
-    DrawFlightMode(canvas, layout);
+    if (!menu_visible)
+      /* sits in the bottom right corner, right under the menu bar */
+      DrawFlightMode(canvas, layout);
     DrawFinalGlide(canvas, layout);
     DrawVario(canvas, layout);
     DrawGPSStatus(canvas, layout, Basic());
