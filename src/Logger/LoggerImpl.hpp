@@ -111,7 +111,8 @@ public:
   }
 
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
-                   const char *asset_number, const Declaration &decl);
+                   const char *asset_number, const Declaration &decl,
+                   const char *gps_device_name);
 
   /**
    * Stops the logger

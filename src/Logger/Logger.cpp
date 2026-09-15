@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Logger/Logger.hpp"
+#include "Logger/GPSDeviceName.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
 #include "Language/Language.hpp"
@@ -9,6 +10,8 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Computer/Settings.hpp"
+#include "Interface.hpp"
+#include "Simulator.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -94,7 +97,9 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   }
 
   const std::lock_guard protect{lock};
-  logger.StartLogger(gps_info, settings.logger, "", decl);
+  logger.StartLogger(gps_info, settings.logger, "", decl,
+                     GetGPSDeviceName(CommonInterface::GetSystemSettings().devices[0],
+                                      is_simulator()));
 }
 
 void
