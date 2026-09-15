@@ -3,6 +3,7 @@
 
 #include "Startup.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
@@ -638,14 +639,14 @@ Startup(UI::Display &display)
   }
 
   // Set the home waypoint
+  auto &settings = CommonInterface::SetComputerSettings();
   WaypointGlue::SetHome(*data_components->waypoints,
-                        data_components->terrain.get(),
-                        CommonInterface::SetComputerSettings().poi,
-                        CommonInterface::SetComputerSettings().team_code,
-                        backend_components->device_blackboard.get(),
+                        settings.poi, settings.team_code,
                         false);
+  ActionInterface::SetStartupLocation();
 
-  // ReSynchronise the blackboards here since SetHome touches them
+  // ReSynchronise the blackboards here since SetStartupLocation
+  // touches them
   backend_components->device_blackboard->Merge();
   CommonInterface::ReadBlackboardBasic(backend_components->device_blackboard->Basic());
 

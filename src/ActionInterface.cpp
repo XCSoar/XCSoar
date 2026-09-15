@@ -22,6 +22,9 @@
 #include "PageActions.hpp"
 #include "PageSettings.hpp"
 #include "Weather/Features.hpp"
+#include "DataComponents.hpp"
+#include "LogFile.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 using namespace CommonInterface;
 
@@ -501,5 +504,30 @@ ActionInterface::SetQNH(AtmosphericPressure qnh, bool to_devices) noexcept
   if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutQNH(qnh, env);
+  }
+}
+
+void
+ActionInterface::SetStartupLocation() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->device_blackboard == nullptr)
+    return;
+
+  const auto &poi = GetComputerSettings().poi;
+  if (poi.home_location_available) {
+    LogString("Start at home waypoint");
+    const double alt = poi.home_elevation_available
+      ? poi.home_elevation
+      : 0;
+    backend_components->device_blackboard->SetStartupLocation(poi.home_location,
+                                                              alt);
+  } else if (data_components != nullptr &&
+             data_components->terrain != nullptr) {
+    const auto &terrain = *data_components->terrain;
+    const GeoPoint loc = terrain.GetTerrainCenter();
+    LogString("Start at terrain center");
+    backend_components->device_blackboard->SetStartupLocation(
+        loc, terrain.GetTerrainHeight(loc).GetValueOr0());
   }
 }

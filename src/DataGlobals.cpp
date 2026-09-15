@@ -15,6 +15,7 @@
 #include "Computer/GlideComputer.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
@@ -106,12 +107,11 @@ DataGlobals::UpdateHome(bool reset) noexcept
     return;
   }
 
+  auto &settings = CommonInterface::SetComputerSettings();
   WaypointGlue::SetHome(*data_components->waypoints,
-                        data_components->terrain.get(),
-                        CommonInterface::SetComputerSettings().poi,
-                        CommonInterface::SetComputerSettings().team_code,
-                        backend_components->device_blackboard.get(),
+                        settings.poi, settings.team_code,
                         reset);
+  ActionInterface::SetStartupLocation();
   WaypointGlue::SaveHome(Profile::map,
                          CommonInterface::GetComputerSettings().poi,
                          CommonInterface::GetComputerSettings().team_code);
