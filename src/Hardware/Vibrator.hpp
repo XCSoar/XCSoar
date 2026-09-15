@@ -21,7 +21,8 @@ HaveVibrator() noexcept;
 
 /**
  * Vibrate for a very short amount of time.  This function has no
- * effect if the device does not have a vibrator.
+ * effect if the device does not have a vibrator.  The caller must
+ * check the haptic-feedback setting before calling.
  */
 void
 VibrateShort() noexcept;
