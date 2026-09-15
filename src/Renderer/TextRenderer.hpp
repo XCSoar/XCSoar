@@ -14,7 +14,6 @@ class Font;
  */
 class TextRenderer {
   bool center = false, vcenter = false;
-  bool control = false;
 
 public:
   constexpr void SetCenter(bool _center=true) noexcept {
@@ -23,10 +22,6 @@ public:
 
   constexpr void SetVCenter(bool _vcenter=true) noexcept {
     vcenter = _vcenter;
-  }
-
-  constexpr void SetControl(bool _control=true) noexcept {
-    control = _control;
   }
 
   void InvalidateLayout() noexcept {}
