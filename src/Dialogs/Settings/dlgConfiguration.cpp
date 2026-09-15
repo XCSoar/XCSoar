@@ -13,6 +13,7 @@
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "util/Macros.hpp"
@@ -199,7 +200,13 @@ class ConfigurationExtraButtons final
   struct Layout {
     PixelRect expert, button2, button1;
 
-    Layout(const PixelRect &rc):expert(rc), button2(rc), button1(rc) {
+    Layout(const PixelRect &_rc) {
+      /* the controls keep the gap to the edges that the buttons have
+         between each other */
+      PixelRect rc = _rc;
+      rc.Grow(-(int)ButtonFrameRenderer::GetEdgeMargin(rc));
+      expert = button2 = button1 = rc;
+
       const unsigned height = rc.GetHeight();
       const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 

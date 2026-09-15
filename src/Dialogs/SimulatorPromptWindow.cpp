@@ -12,6 +12,7 @@
 #include "Gauge/LogoView.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/BitmapButtonRenderer.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/GradientRenderer.hpp"
 #include "Simulator.hpp"
 #include "Resources.hpp"
@@ -80,8 +81,14 @@ SimulatorPromptWindow::OnResize(PixelSize new_size) noexcept
 #endif
 
   if (have_quit_button) {
+    /* the button keeps the gap to the edges that buttons have between
+       each other */
+    const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
+
     button_rc = rc;
+    button_rc.right -= margin;
     button_rc.left = button_rc.right - Layout::Scale(75);
+    button_rc.top += margin;
     button_rc.bottom = button_rc.top + Layout::GetMaximumControlHeight();
     quit_button.Move(button_rc);
   }
