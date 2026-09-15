@@ -389,6 +389,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Renderer/TurnBackMarkerRenderer.cpp \
 	$(SRC)/Renderer/TrafficRenderer.cpp \
+	$(SRC)/Renderer/AircraftTypeSymbolData.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/UnitSymbolRenderer.cpp \
 	$(SRC)/Renderer/WaypointListRenderer.cpp \
