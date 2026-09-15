@@ -17,6 +17,7 @@ class CatmullRomInterpolator;
 class MergeThread;
 class CalculationThread;
 class Error;
+struct DeviceConfig;
 
 class Replay final
 {
@@ -84,7 +85,7 @@ public:
   /**
    * Throws std::runtime_errror on error.
    */
-  void Start(Path _path);
+  void Start(Path _path, const DeviceConfig &device);
 
   Path GetFilename() const {
     return path;

@@ -585,7 +585,8 @@ Startup(UI::Display &display)
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
     try {
-      backend_components->replay->Start(Path(CommandLine::replay_path));
+      backend_components->replay->Start(Path(CommandLine::replay_path),
+        CommonInterface::GetSystemSettings().devices[0]);
     } catch (...) {
       LogError(std::current_exception());
     }
