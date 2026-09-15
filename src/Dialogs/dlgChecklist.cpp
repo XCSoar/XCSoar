@@ -62,6 +62,29 @@ UpdateCaption(WndForm &form, const Checklist &checklist,
   form.SetCaption(caption);
 }
 
+/**
+ * Commit @p page as a new page, or fold it into the last page when
+ * the pager child limit is reached.
+ */
+static void
+FlushPage(Checklist &c, ChecklistPage &page) noexcept
+{
+  if (page.empty())
+    return;
+
+  if (c.size() < MAX_CHECKLIST_PAGES) {
+    c.push_back(std::move(page));
+  } else if (!c.empty()) {
+    if (!page.title.empty()) {
+      c.back().text.append(page.title);
+      c.back().text.push_back('\n');
+    }
+    c.back().text.append(page.text);
+  }
+
+  page = {};
+}
+
 static Checklist
 LoadChecklist(Path path) noexcept
 try {
@@ -72,59 +95,33 @@ try {
 
   FileReader file_reader(path);
   BufferedReader reader{file_reader};
-  StringConverter string_converter{Charset::UTF8};
+  StringConverter conv{Charset::UTF8};
 
   ChecklistPage page;
+  while (char *raw = reader.ReadLine()) {
+    const std::string_view line{raw};
 
-  char *TempString;
-  while ((TempString = reader.ReadLine()) != nullptr) {
-    const std::string_view line{TempString};
+    if (raw[0] == '[') {
+      FlushPage(c, page);
 
-    // Look for start of new page
-    if (TempString[0] == '[') {
-      if (!page.empty()) {
-        if (c.size() < MAX_CHECKLIST_PAGES) {
-          c.emplace_back(std::move(page));
-        } else if (!c.empty()) {
-          c.back().text.append(page.title);
-          c.back().text.append("\n");
-          c.back().text.append(page.text);
-        }
-        page = {};
-      }
-
-      if (c.size() < MAX_CHECKLIST_PAGES) {
-        page.title.assign(string_converter.Convert(Split(line.substr(1), ']').first));
-      } else if (!c.empty()) {
-        // Already at page limit; append this line to last page instead
-        c.back().text.append(string_converter.Convert(line));
+      if (c.size() < MAX_CHECKLIST_PAGES)
+        page.title.assign(
+          conv.Convert(Split(line.substr(1), ']').first));
+      else if (!c.empty()) {
+        /* Extra [section] headers stay visible on the last page. */
+        c.back().text.append(conv.Convert(line));
         c.back().text.push_back('\n');
       }
     } else if (!line.empty() || !page.text.empty()) {
-      // append text to details string
-      if (c.size() < MAX_CHECKLIST_PAGES) {
-        page.text.append(string_converter.Convert(line));
-        page.text.push_back('\n');
-      } else if (!c.empty()) {
-        c.back().text.append(string_converter.Convert(line));
-        c.back().text.push_back('\n');
-      }
+      std::string &dest = c.size() < MAX_CHECKLIST_PAGES
+        ? page.text
+        : c.back().text;
+      dest.append(conv.Convert(line));
+      dest.push_back('\n');
     }
   }
 
-  if (!page.empty()) {
-    if (c.size() < MAX_CHECKLIST_PAGES) {
-      c.emplace_back(std::move(page));
-    } else if (!c.empty()) {
-      // At page limit; append final page content to last page
-      if (!page.title.empty()) {
-        c.back().text.append(page.title);
-        c.back().text.append("\n");
-      }
-      c.back().text.append(page.text);
-    }
-  }
-
+  FlushPage(c, page);
   return c;
 } catch (...) {
   return {};
