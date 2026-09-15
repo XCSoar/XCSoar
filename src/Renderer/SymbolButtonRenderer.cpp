@@ -55,7 +55,7 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
     break;
 
   case ButtonState::SELECTED:
-    canvas.Select(look.selected.foreground_brush);
+    canvas.Select(look.focused.pressed_foreground_brush);
     break;
 
   case ButtonState::ENABLED:
