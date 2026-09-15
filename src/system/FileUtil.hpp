@@ -219,6 +219,15 @@ std::chrono::system_clock::time_point
 GetLastModification(Path path) noexcept;
 
 /**
+ * Shorten an existing file to the given length, discarding everything
+ * beyond it.  Growing a file this way is not supported.
+ *
+ * @return true on success
+ */
+bool
+Truncate(Path path, uint64_t length) noexcept;
+
+/**
  * Sets the modification timestamp of the file to the current system time
  * @param path Path to the file
  * @return True in case of success, False otherwise

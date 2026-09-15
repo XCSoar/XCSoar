@@ -63,6 +63,13 @@ Logger::GetActivePath() const noexcept
 }
 
 void
+Logger::SetResumeTarget(Path path) noexcept
+{
+  const std::lock_guard protect{lock};
+  logger.SetResumeTarget(path);
+}
+
+void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const ComputerSettings& settings,
                        const ProtectedTaskManager *protected_task_manager,

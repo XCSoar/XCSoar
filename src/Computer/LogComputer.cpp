@@ -18,7 +18,7 @@ LogComputer::Reset() noexcept
 void
 LogComputer::StartTask(const NMEAInfo &basic) noexcept
 try {
-  if (logger != NULL)
+  if (logger != NULL && !suppressed)
     logger->LogStartEvent(basic);
 } catch (...) {
   LogError(std::current_exception(), "Logger I/O error");
@@ -48,7 +48,8 @@ try {
       ? std::chrono::seconds(settings_logger.time_step_circling)
       : std::chrono::seconds(settings_logger.time_step_cruise);
 
-  if (log_clock.CheckAdvance(basic.time, period) && logger != nullptr)
+  if (log_clock.CheckAdvance(basic.time, period) && logger != nullptr &&
+      !suppressed)
       logger->LogPoint(basic);
 
   return true;
