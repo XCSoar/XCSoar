@@ -23,11 +23,6 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
-#ifdef SOFTWARE_ROTATE_DISPLAY
-#include "UIGlobals.hpp"
-#include "ui/window/SingleWindow.hpp"
-#include "ui/canvas/opengl/Globals.hpp"
-#endif
 #endif
 
 #ifdef MESA_KMS
@@ -76,7 +71,7 @@ Display::RotateSupported()
 }
 
 bool
-Display::Rotate(DisplayOrientation orientation)
+Display::Rotate([[maybe_unused]] DisplayOrientation orientation)
 {
 #if !defined(ANDROID) && !defined(KOBO) && !defined(SOFTWARE_ROTATE_DISPLAY)
   if (orientation == DisplayOrientation::DEFAULT)
@@ -185,7 +180,6 @@ Display::Rotate(DisplayOrientation orientation)
     LogString("Failed to publish display rotation to fbcon");
 #endif
 
-  UIGlobals::GetMainWindow().SetDisplayOrientation(orientation);
   return true;
 #else
   return false;

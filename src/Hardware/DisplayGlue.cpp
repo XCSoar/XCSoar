@@ -49,6 +49,10 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
     return;
   }
 
+#ifdef SOFTWARE_ROTATE_DISPLAY
+  CommonInterface::main_window->SetDisplayOrientation(orientation);
+#endif
+
 #ifdef USE_POLL_EVENT
   UI::event_queue->SetDisplayOrientation(orientation);
 #endif
