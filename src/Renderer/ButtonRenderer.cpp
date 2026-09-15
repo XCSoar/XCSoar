@@ -36,8 +36,6 @@ GetStateLook(const ButtonLook &look, ButtonState state) noexcept
     break;
 
   case ButtonState::SELECTED:
-    return look.selected;
-
   case ButtonState::FOCUSED:
   case ButtonState::PRESSED:
     return look.focused;
@@ -154,7 +152,10 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
   const PixelRect face = GetFaceRect(rc);
   const unsigned diameter = GetCornerDiameter(face);
 
-  const Color fill = state == ButtonState::PRESSED
+  /* a selected button wears the pressed face: the cursor has armed
+     it, and the two states cannot appear on the same button */
+  const Color fill = state == ButtonState::PRESSED ||
+    state == ButtonState::SELECTED
     ? _look.pressed_background_color
     : state == ButtonState::DISABLED
     ? look.disabled.background_color
@@ -163,7 +164,8 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
   /* the border follows the face: a pressed button keeps the border
      it would otherwise outgrow, and a disabled one carries the page
      background color, which leaves it without a visible outline */
-  const Color border = state == ButtonState::PRESSED
+  const Color border = state == ButtonState::PRESSED ||
+    state == ButtonState::SELECTED
     ? fill
     : state == ButtonState::DISABLED
     ? look.disabled.ring_color
@@ -171,7 +173,7 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
 
   canvas.SelectNullPen();
 
-  if (state == ButtonState::FOCUSED || state == ButtonState::SELECTED) {
+  if (state == ButtonState::FOCUSED) {
     /* a solid ring hugging the face from the outside, like a
        Tailwind `ring-3`, drawn as a filled round rectangle because a
        fan rasterizes cleaner than a thick stroked outline */
@@ -181,9 +183,7 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
     PixelRect ring_rc = face;
     ring_rc.Grow((int)width);
 
-    const Brush ring_brush{state == ButtonState::FOCUSED
-        ? look.focus_ring_color
-        : look.selected_ring_color};
+    const Brush ring_brush{look.focus_ring_color};
     canvas.Select(ring_brush);
     canvas.DrawRoundRectangle(ring_rc, PixelSize{diameter + 2 * width});
 
