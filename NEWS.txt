@@ -7,6 +7,19 @@ Version 7.47 - not yet released
   - remember QNH and the maximum forecast temperature with that
     same question
 * ui
+  - draw buttons as flat faces with a thin outline instead of bevel
+    borders, mark the focused button with a ring around it, and centre
+    their captions optically instead of on the line box #2871
+  - drop the gradient behind dialogs, move dark mode off the navy tint
+    to a neutral grey, and give grey scale and e-paper screens shades
+    of their own
+  - space buttons evenly, so the gap between two buttons and the gap
+    towards the edge of the screen or dialog are the same everywhere,
+    and the menu buttons along the bottom come out the same width
+  - hide the info boxes while the menu is open, and keep the map
+    overlay buttons clear of the info boxes
+  - flatten the list scroll bar to a plain track with a rounded slider
+    that darkens only while it is dragged
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
