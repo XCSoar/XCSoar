@@ -3,7 +3,6 @@
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Device/MultipleDevices.hpp"
 #include "Computer/Settings.hpp"
 #include "Units/Units.hpp"
 #include "Units/Group.hpp"
@@ -15,16 +14,12 @@
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/InternalLink.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
-#include "Operation/MessageOperationEnvironment.hpp"
 #include "ui/event/PeriodicTimer.hpp"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
 
 #include <math.h>
 
@@ -62,29 +57,16 @@ public:
 
   void SetButtons();
   void SetCrewMass(double _crew_mass) {
-    polar_settings.glide_polar_task.SetCrewMass(_crew_mass);
-    PublishPolarSettings();
+    ActionInterface::SetCrewMass(_crew_mass);
     SetBallast();
-    
-    // Send to external devices
-    if (backend_components && backend_components->devices) {
-      MessageOperationEnvironment env;
-      backend_components->devices->PutCrewMass(_crew_mass, env);
-    }
   }
 
   void SetBallast();
   void SetBallastTimer(bool active);
   void FlipBallastTimer();
 
-  void PublishPolarSettings() {
-    if (backend_components)
-      backend_components->SetTaskPolar(polar_settings);
-  }
-
   void SetBallastLitres(double ballast_litres) {
-    polar_settings.glide_polar_task.SetBallastLitres(ballast_litres);
-    PublishPolarSettings();
+    ActionInterface::SetBallastLitres(ballast_litres);
     SetButtons();
     SetBallast();
   }
@@ -154,17 +136,6 @@ FlightSetupPanel::SetBallast()
   SetRowVisible(WingLoading, wl > 0);
   if (wl > 0)
     LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
-
-  if (backend_components && backend_components->devices) {
-    const auto &polar = polar_settings.glide_polar_task;
-    const double ref_mass = polar.GetReferenceMass();
-    if (ref_mass > 0) {
-      MessageOperationEnvironment env;
-      backend_components->devices->PutBallast(polar.GetBallastFraction(),
-                                              polar.GetBallastOverload(),
-                                              env);
-    }
-  }
 }
 
 void
@@ -226,13 +197,7 @@ FlightSetupPanel::RefreshAltitudeControl()
 
 void
 FlightSetupPanel::SetBugs(double bugs) {
-  polar_settings.SetBugs(bugs);
-  PublishPolarSettings();
-
-  if (backend_components && backend_components->devices) {
-    MessageOperationEnvironment env;
-    backend_components->devices->PutBugs(bugs, env);
-  }
+  ActionInterface::SetBugs(bugs);
 }
 
 void
@@ -248,7 +213,10 @@ FlightSetupPanel::OnTimer()
   const PolarSettings &settings = CommonInterface::GetComputerSettings().polar;
 
   if (settings.ballast_timer_active) {
-    /* display the new values on the screen */
+    /* dump updates the polar on the process timer; push that to
+       devices and refresh the dialog */
+    ActionInterface::SetBallastLitres(
+        polar_settings.glide_polar_task.GetBallastLitres());
     SetBallast();
   }
 
