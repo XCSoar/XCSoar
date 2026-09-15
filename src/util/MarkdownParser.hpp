@@ -146,3 +146,31 @@ struct ParsedMarkdown {
  */
 ParsedMarkdown
 ParseMarkdown(const char *input);
+
+[[gnu::const]]
+constexpr bool
+IsMarkdownCheckboxStyle(TextStyle style) noexcept
+{
+  return style == TextStyle::Checkbox ||
+         style == TextStyle::CheckboxChecked;
+}
+
+/**
+ * Checked state of each checkbox in document order (1 = checked).
+ * @p toggled is XOR'd with the original Markdown marker, indexed by
+ * style span.
+ */
+[[gnu::pure]]
+std::vector<uint8_t>
+ReadMarkdownCheckboxStates(const ParsedMarkdown &parsed,
+                           const std::vector<uint8_t> &toggled) noexcept;
+
+/**
+ * Set #toggled so each checkbox matches @p checked (document order).
+ * @return false if @p checked size does not match the checkbox count
+ * (toggled is left unchanged).
+ */
+bool
+ApplyMarkdownCheckboxStates(const ParsedMarkdown &parsed,
+                            std::vector<uint8_t> &toggled,
+                            const std::vector<uint8_t> &checked) noexcept;
