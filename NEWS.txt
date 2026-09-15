@@ -140,6 +140,19 @@ Version 7.46 - not yet released
     two-finger pan the map #3122
   - keep the pointer on a Wayland window while dragging, and size
     the UI from the monitor the window is on #3124
+  - draw buttons as flat faces with a thin outline instead of bevel
+    borders, mark the focused button with a ring around it, and centre
+    their captions optically instead of on the line box #2871
+  - drop the gradient behind dialogs, move dark mode off the navy tint
+    to a neutral grey, and give grey scale and e-paper screens shades
+    of their own
+  - space buttons evenly, so the gap between two buttons and the gap
+    towards the edge of the screen or dialog are the same everywhere,
+    and the menu buttons along the bottom come out the same width
+  - hide the info boxes while the menu is open and show the map behind
+    them, and keep the map overlay buttons clear of the info boxes
+  - flatten the list scroll bar to a plain track with a rounded slider
+    that darkens only while it is dragged
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution
