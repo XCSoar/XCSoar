@@ -441,6 +441,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/UIGlobals.cpp \
 	$(SRC)/UIState.cpp \
 	$(SRC)/UISettings.cpp \
+	$(SRC)/ScrollBarConfig.cpp \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/SystemSettings.cpp \
