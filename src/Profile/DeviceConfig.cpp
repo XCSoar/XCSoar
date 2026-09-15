@@ -5,7 +5,6 @@
 #include "Map.hpp"
 #include "util/Macros.hpp"
 #include "util/StringFormat.hpp"
-#include "Interface.hpp"
 #include "Device/Config.hpp"
 
 #ifdef ANDROID
@@ -331,16 +330,10 @@ Profile::SetDeviceConfig(ProfileMap &map,
     map.SetEnum(name, config.press_use);
 
   auto offset = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_offset : 0;
-  // Has new calibration data been delivered ?
-  if (CommonInterface::Basic().sensor_calibration_available)
-    offset = CommonInterface::Basic().sensor_calibration_offset;
   if (const char *name = make_port_name("SensorOffset"); name != nullptr)
     map.Set(name, offset);
 
   auto factor = DeviceConfig::UsesCalibration(config.port_type) ? config.sensor_factor : 0;
-  // Has new calibration data been delivered ?
-  if (CommonInterface::Basic().sensor_calibration_available)
-    factor = CommonInterface::Basic().sensor_calibration_factor;
   if (const char *name = make_port_name("SensorFactor"); name != nullptr)
     map.Set(name, factor);
 
