@@ -11,6 +11,12 @@
 #include "util/StringAPI.hxx"
 #include "Hardware/Vibrator.hpp"
 
+#ifdef HAVE_VIBRATOR
+#include "Interface.hpp"
+#include "UISettings.hpp"
+#include "GlobalSettings.hpp"
+#endif
+
 Button::Button(ContainerWindow &parent, const PixelRect &rc,
                WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
                Callback _callback) noexcept
@@ -134,7 +140,11 @@ Button::SetDown(bool _down)
     return;
 
 #ifdef HAVE_VIBRATOR
-  VibrateShort();
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+  if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
+      (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
+       GlobalSettings::haptic_feedback))
+    VibrateShort();
 #endif
 
   down = _down;
