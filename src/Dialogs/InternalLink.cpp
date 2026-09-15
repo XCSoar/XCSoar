@@ -135,11 +135,8 @@ HandleInternalLink(const char *url)
   /* ---- Special-case config dialogs ---- */
 
   if (StringIsEqual(path, "config/devices")) {
-    if (backend_components != nullptr &&
-        backend_components->device_blackboard != nullptr) {
-      ShowDeviceList(*backend_components->device_blackboard,
-                     backend_components->devices.get());
-    }
+    if (backend_components != nullptr)
+      ShowDeviceList(backend_components->devices.get());
     return true;
   }
 

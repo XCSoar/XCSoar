@@ -54,6 +54,5 @@ InputEvents::eventDevice(const char *misc)
   assert(misc != NULL);
 
   if (StringIsEqual(misc, "list"))
-    ShowDeviceList(*backend_components->device_blackboard,
-                   backend_components->devices.get());
+    ShowDeviceList(backend_components->devices.get());
 }
