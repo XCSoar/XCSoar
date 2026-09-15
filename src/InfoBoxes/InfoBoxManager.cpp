@@ -4,6 +4,7 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "InfoBoxes/Border.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
@@ -214,6 +215,21 @@ InfoBoxManager::Create(ContainerWindow &parent,
       /* layout.geometry is the effective layout, while
          settings.geometry is the configured layout */
       : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
+
+    if (settings.border_style != InfoBoxSettings::BorderStyle::TAB) {
+      /* an InfoBox at the outer edge of the layout has no border
+         there, because that edge usually is the screen border; give it
+         one when the layout was kept clear of the screen border */
+      if ((layout.outer_border & BORDERTOP) && rc.top == layout.rc.top)
+        Border |= BORDERTOP;
+      if ((layout.outer_border & BORDERBOTTOM) &&
+          rc.bottom == layout.rc.bottom)
+        Border |= BORDERBOTTOM;
+      if ((layout.outer_border & BORDERLEFT) && rc.left == layout.rc.left)
+        Border |= BORDERLEFT;
+      if ((layout.outer_border & BORDERRIGHT) && rc.right == layout.rc.right)
+        Border |= BORDERRIGHT;
+    }
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
                                      Border, settings, look,

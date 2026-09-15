@@ -22,6 +22,20 @@ struct Layout {
 
   PixelRect remaining;
 
+  /**
+   * The area this layout was calculated for.
+   */
+  PixelRect rc;
+
+  /**
+   * Border flags for the InfoBoxes at the outer edge of #rc.  Those
+   * edges usually coincide with the screen border and need no border
+   * of their own; while the safe area is kept clear of it, they do.
+   *
+   * @see DisplaySettings::safe_area_stretch
+   */
+  unsigned outer_border = 0;
+
   constexpr bool HasVario() const noexcept {
     return vario.right > vario.left && vario.bottom > vario.top;
   }

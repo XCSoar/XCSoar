@@ -15,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.os.Build;
 import android.os.Handler;
 import android.net.Uri;
@@ -153,7 +154,17 @@ class NativeView extends SurfaceView
     holder.addCallback(this);
     holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
 
-    setOnApplyWindowInsetsListener(edgeTouchFilter);
+    /* the insets can change without a surface change, e.g. when the
+       user switches to gesture navigation or rotates the device; keep
+       the native safe area up to date */
+    setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+      @Override
+      public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+        WindowInsets result = edgeTouchFilter.onApplyWindowInsets(v, insets);
+        reportSize();
+        return result;
+      }
+    });
     requestApplyInsets(); // trigger initial inset calculation
 
     rotationListener = new RotationListener(context);
@@ -229,27 +240,112 @@ class NativeView extends SurfaceView
       Window window = activity.getWindow();
       View decorView = window.getDecorView();
       
-      boolean is_fullscreen = false;
-      if (activity instanceof org.xcsoar.XCSoar) {
-        is_fullscreen = ((org.xcsoar.XCSoar)activity).wantFullScreen();
-      } else {
-        int systemUiVisibility = decorView.getSystemUiVisibility();
-        is_fullscreen = (systemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0 ||
-                       (systemUiVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
-      }
-      
+      boolean is_fullscreen = isFullScreen();
+
       if (is_fullscreen) {
         WindowUtil.enterFullScreenMode(window);
       } else {
         WindowUtil.leaveFullScreenMode(window, 0);
       }
-      
-      int display_width = width;
-      int display_height = height;
-      int inset_left = 0, inset_top = 0, inset_right = 0, inset_bottom = 0;
-      
-      resizedNative(display_width, display_height, inset_left, inset_top, inset_right, inset_bottom);
+
+      reportSize(width, height);
     }
+  }
+
+  /**
+   * Is the surface currently laid out edge to edge, i.e. does it
+   * extend into the areas covered by the system bars and the display
+   * cutout?
+   */
+  private boolean isFullScreen() {
+    Context context = getContext();
+    if (!(context instanceof Activity))
+      return false;
+
+    Activity activity = (Activity)context;
+    if (activity instanceof org.xcsoar.XCSoar)
+      return ((org.xcsoar.XCSoar)activity).wantFullScreen();
+
+    int systemUiVisibility = activity.getWindow().getDecorView()
+      .getSystemUiVisibility();
+    return (systemUiVisibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0 ||
+      (systemUiVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
+  }
+
+  /**
+   * Report the surface size and the area covered by system UI to the
+   * native code.
+   */
+  void reportSize(int width, int height) {
+    if (width <= 0 || height <= 0)
+      return;
+
+    /* Outside full screen mode the view is already laid out inside
+       the system bars and the display cutout, so the whole surface
+       is the safe area.  Only in full screen mode does the surface
+       extend into those areas. */
+    int[] insets = isFullScreen()
+      ? getSafeAreaInsets()
+      : new int[]{0, 0, 0, 0};
+
+    resizedNative(width, height, insets[0], insets[1], insets[2], insets[3]);
+  }
+
+  /**
+   * Report the current surface size, e.g. after the insets have
+   * changed without a surface change.
+   */
+  void reportSize() {
+    if (thread == null || !thread.isAlive())
+      return;
+
+    reportSize(getWidth(), getHeight());
+  }
+
+  /**
+   * Determine the area covered by system UI, as {left, top, right,
+   * bottom}.  Returns all zeroes on devices without a display cutout
+   * while the system bars are hidden.
+   */
+  private int[] getSafeAreaInsets() {
+    int[] result = new int[]{0, 0, 0, 0};
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+      return result;
+
+    WindowInsets insets = getRootWindowInsets();
+    if (insets == null)
+      return result;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      android.graphics.Insets i =
+        insets.getInsets(WindowInsets.Type.systemBars()|
+                         WindowInsets.Type.displayCutout());
+      result[0] = i.left;
+      result[1] = i.top;
+      result[2] = i.right;
+      result[3] = i.bottom;
+      return result;
+    }
+
+    /* Android 10 and below: getSystemWindowInsets() already contains
+       the visible system bars, but not the display cutout */
+    result[0] = insets.getSystemWindowInsetLeft();
+    result[1] = insets.getSystemWindowInsetTop();
+    result[2] = insets.getSystemWindowInsetRight();
+    result[3] = insets.getSystemWindowInsetBottom();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      android.view.DisplayCutout cutout = insets.getDisplayCutout();
+      if (cutout != null) {
+        result[0] = Math.max(result[0], cutout.getSafeInsetLeft());
+        result[1] = Math.max(result[1], cutout.getSafeInsetTop());
+        result[2] = Math.max(result[2], cutout.getSafeInsetRight());
+        result[3] = Math.max(result[3], cutout.getSafeInsetBottom());
+      }
+    }
+
+    return result;
   }
 
   @Override public void surfaceDestroyed(SurfaceHolder holder) {
