@@ -99,47 +99,6 @@ DialogLook::Initialise(bool _dark_mode)
 
   button.Initialise(bold_font, dark_mode);
 
-  /* #ButtonState::SELECTED (action bar) matches a focused list row; in dark
-     mode use the same bright `focused` (COLOR_XCSOAR) as dialog/tab focus
-     list.focused in dark is darker (XCSOAR_DARK) */
-  {
-    if (dark_mode && IsDithered()) {
-      /* the level the dark page does not use */
-      button.selected.background_color = COLOR_WHITE;
-      button.selected.foreground_color = COLOR_BLACK;
-    } else if (dark_mode && !HasColors()) {
-      /* the mirror of the light mode: one step further from the
-         button face than the focused card */
-      button.selected.background_color =
-        MixColors(COLOR_WHITE, button.standard.background_color, 0x50);
-      button.selected.foreground_color = COLOR_WHITE;
-    } else if (dark_mode) {
-      button.selected.background_color = focused.background_color;
-      button.selected.foreground_color = focused.text_color;
-    } else if (!HasColors() && !IsDithered()) {
-      /* without a hue the states line up on the lightness scale, one
-         step further from the white enabled face with every one; a
-         dithered display has no such scale */
-      button.selected.background_color = COLOR_BUTTON_RING;
-      button.selected.foreground_color = COLOR_BLACK;
-    } else {
-      const auto &h = list.focused;
-      button.selected.background_color = h.background_color;
-      button.selected.foreground_color = h.text_color;
-    }
-    button.selected.foreground_brush.Create(button.selected.foreground_color);
-    /* pressed goes down the primary scale; the state is told apart
-       from the focused one by #ButtonLook::selected_ring_color,
-       not by a border on the face */
-    button.selected.pressed_background_color =
-      HasColors() && !IsDithered()
-      ? COLOR_XCSOAR_PRESSED
-      : MixColors(dark_mode && !IsDithered() ? COLOR_WHITE : COLOR_BLACK,
-                  button.selected.background_color, 0x40);
-    /* solid faces have no border ring in Nuxt UI */
-    button.selected.ring_color = button.selected.background_color;
-  }
-
   check_box.Initialise(text_font, dark_mode);
 
   list.font = &text_font;

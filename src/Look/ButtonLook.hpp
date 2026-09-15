@@ -35,19 +35,13 @@ struct ButtonLook {
      * inset ring.
      */
     Color ring_color;
-  } standard, selected, focused;
+  } standard, focused;
 
   /**
    * Solid ring hugging the focused button face from the outside,
    * like a Tailwind `ring-3` in the palette's light primary.
    */
   Color focus_ring_color;
-
-  /**
-   * The same outside ring for the selected button, in a darker
-   * shade; the two share their face color.
-   */
-  Color selected_ring_color;
 
   struct {
     Color color;

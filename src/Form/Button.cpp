@@ -269,9 +269,10 @@ Button::GetState() const noexcept
   else if (down)
     return ButtonState::PRESSED;
   /* Real keyboard focus uses `look.focused`.  Armed cursor-selection
-     (list still focused, Left/Right chose an action) uses
-     `look.selected` so the list cursor and action stay visible
-     together — same model as Alternates. */
+     (list still focused, Left/Right chose an action) wears the
+     pressed face, so the list cursor and the armed action stay
+     visible together — same model as Alternates.  The two never meet
+     on one button: a key press never sets #down. */
   else if (HasCursorKeys() && HasFocus())
     return ButtonState::FOCUSED;
   else if (HasCursorKeys() && selected)
