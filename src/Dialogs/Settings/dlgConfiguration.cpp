@@ -12,6 +12,7 @@
 #include "Form/TabMenuData.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
@@ -348,12 +349,18 @@ protected:
 };
 
 void
-ConfigurationExtraButtons::Apply(const PixelRect &rc) noexcept
+ConfigurationExtraButtons::Apply(const PixelRect &outer) noexcept
 {
   if (!expert.IsDefined())
     return;
 
-  position = rc;
+  position = outer;
+
+  /* the controls keep the gap to the edges that the buttons have
+     between each other */
+  PixelRect rc = outer;
+  rc.Grow(-(int)ButtonFrameRenderer::GetEdgeMargin(rc));
+
   if (rc.top >= rc.bottom || rc.left >= rc.right)
     return;
 
