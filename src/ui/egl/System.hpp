@@ -37,4 +37,8 @@
 #undef Below
 #endif
 
+#ifdef Status
+#undef Status
+#endif
+
 #endif
