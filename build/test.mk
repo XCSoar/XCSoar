@@ -97,7 +97,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
-	TestFileUtil TestRepository TestFileType TestPath TestPolars TestCSVLine TestGlidePolar \
+	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestMacCready TestOrderedTask TestAATPoint TestTaskSave \
@@ -876,6 +876,14 @@ TEST_FILE_TYPE_SOURCES = \
 	$(TEST_SRC_DIR)/TestFileType.cpp
 TEST_FILE_TYPE_DEPENDS = UTIL
 $(eval $(call link-program,TestFileType,TEST_FILE_TYPE))
+
+TEST_MARKDOWN_CHECKBOX_SOURCES = \
+	$(SRC)/util/MarkdownParser.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMarkdownCheckbox.cpp
+TEST_MARKDOWN_CHECKBOX_DEPENDS = UTIL
+$(eval $(call link-program,TestMarkdownCheckbox,TEST_MARKDOWN_CHECKBOX))
 
 TEST_DATA_LAYOUT_MIGRATION_SOURCES = \
 	$(SRC)/DataFileLayout.cpp \

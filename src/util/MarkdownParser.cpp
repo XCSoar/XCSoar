@@ -713,3 +713,50 @@ ParseMarkdown(const char *input)
 
   return result;
 }
+
+std::vector<uint8_t>
+ReadMarkdownCheckboxStates(const ParsedMarkdown &parsed,
+                           const std::vector<uint8_t> &toggled) noexcept
+{
+  std::vector<uint8_t> out;
+  for (std::size_t i = 0; i < parsed.styles.size(); ++i) {
+    if (!IsMarkdownCheckboxStyle(parsed.styles[i].style))
+      continue;
+
+    const bool original =
+      parsed.styles[i].style == TextStyle::CheckboxChecked;
+    const bool flipped = i < toggled.size() && toggled[i] != 0;
+    out.push_back(original != flipped);
+  }
+  return out;
+}
+
+bool
+ApplyMarkdownCheckboxStates(const ParsedMarkdown &parsed,
+                            std::vector<uint8_t> &toggled,
+                            const std::vector<uint8_t> &checked) noexcept
+{
+  std::size_t count = 0;
+  for (const auto &span : parsed.styles)
+    if (IsMarkdownCheckboxStyle(span.style))
+      ++count;
+
+  if (count != checked.size())
+    return false;
+
+  if (toggled.size() < parsed.styles.size())
+    toggled.resize(parsed.styles.size(), 0);
+
+  std::size_t n = 0;
+  for (std::size_t i = 0; i < parsed.styles.size(); ++i) {
+    if (!IsMarkdownCheckboxStyle(parsed.styles[i].style))
+      continue;
+
+    const bool original =
+      parsed.styles[i].style == TextStyle::CheckboxChecked;
+    const bool want = checked[n++] != 0;
+    toggled[i] = original != want;
+  }
+
+  return true;
+}

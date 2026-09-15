@@ -1618,6 +1618,23 @@ RichTextWindow::ToggleCheckbox(std::size_t style_index) noexcept
   Invalidate();
 }
 
+std::vector<uint8_t>
+RichTextWindow::GetCheckboxCheckedStates() const noexcept
+{
+  return ReadMarkdownCheckboxStates(parsed, checkbox_toggled);
+}
+
+void
+RichTextWindow::SetCheckboxCheckedStates(
+  const std::vector<uint8_t> &checked) noexcept
+{
+  if (!ApplyMarkdownCheckboxStates(parsed, checkbox_toggled, checked))
+    return;
+
+  InvalidateContentCache();
+  Invalidate();
+}
+
 std::size_t
 RichTextWindow::FindCheckboxAt(PixelPoint p) const noexcept
 {
