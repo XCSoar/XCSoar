@@ -40,6 +40,8 @@
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Interface.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -804,12 +806,21 @@ DeviceListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 }
 
 void
-ShowDeviceList(DeviceBlackboard &device_blackboard, MultipleDevices *devices)
+ShowDeviceList(MultipleDevices *devices)
 {
+  /* Per-device NMEA (FLARM version, port flags) lives on
+     DeviceBlackboard, not the merged InterfaceBlackboard. */
+  DeviceBlackboard *device_blackboard =
+    backend_components != nullptr
+    ? backend_components->device_blackboard.get()
+    : nullptr;
+  if (device_blackboard == nullptr)
+    return;
+
   TWidgetDialog<DeviceListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Devices"));
-  dialog.SetWidget(device_blackboard, devices,
+  dialog.SetWidget(*device_blackboard, devices,
                    UIGlobals::GetDialogLook());
   dialog.GetWidget().CreateButtons(dialog);
   dialog.AddButton(_("Close"), mrOK);
