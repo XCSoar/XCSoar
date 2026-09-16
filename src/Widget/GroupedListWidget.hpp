@@ -271,7 +271,8 @@ public:
      * the value and above #subtitle: what the item is about, where a
      * subtitle is too short for it.  The caption, a value beside it,
      * the badge, the switch and the arrow then share the first line,
-     * and the subtitle runs over the whole width, too.
+     * and the subtitle runs over the whole width, too.  An item
+     * without a caption is this text alone.
      */
     const char *description = nullptr;
 
@@ -411,6 +412,10 @@ public:
   /**
    * Append a selectable item to the group which was opened by the
    * last AddGroup() call.
+   *
+   * @param caption nullptr for an item which has no caption: it shows
+   * its ItemOptions::description instead, which a detail view needs
+   * where the text is the item
    */
   void AddItem(const char *caption, Callback callback) noexcept;
 
