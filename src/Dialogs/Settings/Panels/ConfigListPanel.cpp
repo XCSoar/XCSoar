@@ -8,10 +8,6 @@
 #include "Math/Util.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
-#include "util/StaticString.hxx"
-
-#include <algorithm>
-#include <vector>
 
 ConfigListPanel::ConfigListPanel() noexcept
   :GroupedListWidget(UIGlobals::GetDialogLook()) {}
@@ -29,7 +25,7 @@ ConfigListPanel::Refresh() noexcept
 
 void
 ConfigListPanel::AddToggleItem(const char *caption, const char *help,
-                               bool &value) noexcept
+                               bool &value, const char *subtitle) noexcept
 {
   const unsigned item = GetItemCount();
 
@@ -38,44 +34,7 @@ ConfigListPanel::AddToggleItem(const char *caption, const char *help,
 
     /* other items may depend on this switch */
     Refresh();
-  }, {.toggle = true, .checked = value, .help = help});
-}
-
-/**
- * Let the user pick a number from @p min to @p max, one choice per
- * step; @p format writes the caption of a value.
- *
- * @return true if the value has changed
- */
-template<typename F>
-static bool
-PickNumber(const char *caption, const char *help,
-           int min, int max, int step, int &value, F &&format) noexcept
-{
-  const unsigned n = (max - min) / step + 1;
-
-  std::vector<StaticString<32>> captions(n);
-  std::vector<PickerChoice> choices(n);
-
-  for (unsigned i = 0; i < n; ++i) {
-    format(captions[i], min + step * (int)i);
-    choices[i] = {captions[i].c_str()};
-  }
-
-  /* the choice nearest to the value */
-  const int current = std::clamp((value - min + step / 2) / step,
-                                 0, (int)n - 1);
-
-  const int picked = PickChoice(caption, help, choices, current);
-  if (picked < 0)
-    return false;
-
-  const int new_value = min + step * picked;
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
+  }, {.subtitle = subtitle, .toggle = true, .checked = value, .help = help});
 }
 
 void
