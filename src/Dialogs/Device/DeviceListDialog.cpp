@@ -517,6 +517,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
     status = _("N/A");
+  } else if (flags.bluetooth_disabled) {
+    status = _("Bluetooth is disabled");
+  } else if (flags.duplicate) {
+    status = _("Duplicate");
   } else if (flags.connecting) {
     status = _("Connecting...");
   } else if (flags.open) {
@@ -528,10 +532,6 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     status = buffer;
-  } else if (flags.bluetooth_disabled) {
-    status = _("Bluetooth is disabled");
-  } else if (flags.duplicate) {
-    status = _("Duplicate");
   } else if (flags.error) {
     if (error_messages[idx].empty())
       status = _("Error");

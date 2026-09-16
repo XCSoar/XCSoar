@@ -287,7 +287,7 @@ CanSendPolar(const DataField &df) noexcept
 static bool
 ShowsEngineType(DeviceConfig::PortType type,
                 DeviceConfig::EngineType engine_type,
-                const char *bluetooth_mac) noexcept
+                [[maybe_unused]] const char *bluetooth_mac) noexcept
 {
   if (type != DeviceConfig::PortType::BLE_SENSOR)
     return false;
@@ -598,7 +598,8 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
   const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
   const auto engine_type = DeviceConfig::EngineType(engine_df.GetValue());
-  if (ShowsEngineType(config.port_type, engine_type, config.bluetooth_mac))
+  if (config.engine_type != DeviceConfig::EngineType::NONE ||
+      ShowsEngineType(config.port_type, engine_type, config.bluetooth_mac))
     changed |= SaveValueEnum(EngineTypes, config.engine_type);
 
   if (config.MaybeBluetooth())
