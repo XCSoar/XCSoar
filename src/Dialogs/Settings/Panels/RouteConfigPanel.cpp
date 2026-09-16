@@ -2,201 +2,174 @@
 // Copyright The XCSoar Project
 
 #include "RouteConfigPanel.hpp"
-#include "Profile/Keys.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/DataField/Base.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
-enum ControlIndex {
-  RoutePlannerMode,
-  RoutePlannerAllowClimb,
-  RoutePlannerUseCeiling,
-  empty_spacer,
-  TurningReach,
-  ReachPolarMode,
-  FinalGlideTerrain,
+static constexpr StaticEnumChoice route_mode_list[] = {
+  { RoutePlannerConfig::Mode::NONE, N_("None"),
+    N_("Neither airspace nor terrain is used for route planning.") },
+  { RoutePlannerConfig::Mode::TERRAIN, N_("Terrain"),
+    N_("Routes will avoid terrain.") },
+  { RoutePlannerConfig::Mode::AIRSPACE, N_("Airspace"),
+    N_("Routes will avoid airspace.") },
+  { RoutePlannerConfig::Mode::BOTH, N_("Both"),
+    N_("Routes will avoid airspace and terrain.") },
+  nullptr
 };
 
-class RouteConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-public:
-  RouteConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+static constexpr StaticEnumChoice turning_reach_list[] = {
+  { RoutePlannerConfig::ReachMode::OFF, N_("Off"),
+    N_("Disables map reach (terrain line and shade). Abort, "
+       "alternates and landable arrival still use the Reach polar.") },
+  { RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
+    N_("The reach is from straight line paths from the glider. "
+       "Landable colours and the Alternates list use this reach.") },
+  { RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
+    N_("The reach is calculated allowing turns around terrain obstacles. "
+       "Landable colours and the Alternates list use this reach.") },
+  nullptr
+};
+
+static constexpr StaticEnumChoice reach_polar_list[] = {
+  { RoutePlannerConfig::Polar::TASK, N_("Task MC"),
+    N_("Uses task MacCready value.") },
+  { RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
+    N_("Uses safety MacCready value.") },
+  nullptr
+};
+
+static constexpr StaticEnumChoice final_glide_terrain_list[] = {
+  { FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
+    N_("No reach overlay on the map.") },
+  { FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
+    N_("How far you can glide to the ground. Uses the Reach polar.") },
+  { FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
+    N_("Shades the map beyond glide to the ground. Uses the Reach polar.") },
+  { FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
+    N_("How far you can glide and still arrive at typical thermal-base "
+       "height from this flight. Always uses Task MC.") },
+  { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE,
+    N_("Working line, terrain line"),
+    N_("Working line to typical thermal-base height using Task MC, plus "
+       "terrain line to the ground using the Reach polar.") },
+  { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE,
+    N_("Working line, terrain shade"),
+    N_("Working line to typical thermal-base height using Task MC, plus "
+       "shade beyond the ground using the Reach polar.") },
+  nullptr
+};
+
+/**
+ * The route planner and the reach: what each avoids, and what the
+ * reach is drawn with.
+ */
+class RouteConfigPanel final : public ConfigListPanel {
+  RoutePlannerConfig::Mode route_mode;
+  bool allow_climb, use_ceiling;
+
+  RoutePlannerConfig::ReachMode reach_mode;
+  RoutePlannerConfig::Polar reach_polar;
+  FeaturesSettings::FinalGlideTerrain final_glide_terrain;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  void ShowRouteControls(bool show);
-  void ShowReachControls(bool show);
-
-  /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-RouteConfigPanel::ShowRouteControls(bool show)
+RouteConfigPanel::LoadSettings() noexcept
 {
-  SetRowAvailable(RoutePlannerAllowClimb, show);
-  SetRowAvailable(RoutePlannerUseCeiling, show);
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+  const RoutePlannerConfig &route_planner =
+    settings_computer.task.route_planner;
+
+  route_mode = route_planner.mode;
+  allow_climb = route_planner.allow_climb;
+  use_ceiling = route_planner.use_ceiling;
+
+  reach_mode = route_planner.reach_calc_mode;
+  reach_polar = route_planner.reach_polar_mode;
+  final_glide_terrain = settings_computer.features.final_glide_terrain;
 }
 
 void
-RouteConfigPanel::ShowReachControls(bool show)
+RouteConfigPanel::Fill() noexcept
 {
-  /* Reach polar still applies to abort, alternates and landable
-     arrival when map reach is Off. */
-  SetRowAvailable(FinalGlideTerrain, show);
-}
+  AddGroup(_("Route"));
 
-void
-RouteConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(RoutePlannerMode, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    RoutePlannerConfig::Mode mode =
-      (RoutePlannerConfig::Mode)dfe.GetValue();
-    ShowRouteControls(mode != RoutePlannerConfig::Mode::NONE);
-  } else if (IsDataField(TurningReach, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    RoutePlannerConfig::ReachMode mode =
-      (RoutePlannerConfig::ReachMode)dfe.GetValue();
-    ShowReachControls(mode != RoutePlannerConfig::ReachMode::OFF);
+  AddEnumItem(_("Route mode"), nullptr, route_mode_list, route_mode);
+
+  if (route_mode != RoutePlannerConfig::Mode::NONE && IsExpert()) {
+    AddToggleItem(_("Route climb"),
+                  _("When enabled and MC is positive, route planning allows climbs between the aircraft "
+                    "location and destination."),
+                  allow_climb);
+
+    AddToggleItem(_("Route ceiling"),
+                  _("When enabled, route planning climbs are limited to ceiling defined by greater of "
+                    "current aircraft altitude plus 500 m and the thermal ceiling. If disabled, "
+                    "climbs are unlimited."),
+                  use_ceiling);
   }
-}
 
-void
-RouteConfigPanel::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
-{
-  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
-  const RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
+  AddGroup(_("Reach"));
 
-  RowFormWidget::Prepare(parent, rc);
+  AddEnumItem(_("Reach mode"),
+              _("How calculations are performed of the reach of the glider with respect to terrain."),
+              turning_reach_list, reach_mode);
 
-  static constexpr StaticEnumChoice route_mode_list[] = {
-    { RoutePlannerConfig::Mode::NONE, N_("None"),
-      N_("Neither airspace nor terrain is used for route planning.") },
-    { RoutePlannerConfig::Mode::TERRAIN, N_("Terrain"),
-      N_("Routes will avoid terrain.") },
-    { RoutePlannerConfig::Mode::AIRSPACE, N_("Airspace"),
-      N_("Routes will avoid airspace.") },
-    { RoutePlannerConfig::Mode::BOTH, N_("Both"),
-      N_("Routes will avoid airspace and terrain.") },
-    nullptr
-  };
+  if (IsExpert())
+    AddEnumItem(_("Reach polar"),
+                _("Which MacCready is used for terrain reach, landable "
+                  "colours, abort and the Alternates list. This still "
+                  "applies when Reach mode is Off. The working line "
+                  "always uses Task MC. Alternate InfoBoxes and waypoint "
+                  "Alt. diff. Safety MC always use Safety MC."),
+                reach_polar_list, reach_polar);
 
-  AddEnum(_("Route mode"), nullptr, route_mode_list,
-          (unsigned)route_planner.mode, this);
-
-  AddBoolean(_("Route climb"),
-             _("When enabled and MC is positive, route planning allows climbs between the aircraft "
-                 "location and destination."),
-             route_planner.allow_climb);
-  SetExpertRow(RoutePlannerAllowClimb);
-
-  AddBoolean(_("Route ceiling"),
-             _("When enabled, route planning climbs are limited to ceiling defined by greater of "
-                 "current aircraft altitude plus 500 m and the thermal ceiling. If disabled, "
-                 "climbs are unlimited."),
-             route_planner.use_ceiling);
-  SetExpertRow(RoutePlannerUseCeiling);
-
-  static constexpr StaticEnumChoice turning_reach_list[] = {
-    { RoutePlannerConfig::ReachMode::OFF, N_("Off"),
-      N_("Disables map reach (terrain line and shade). Abort, "
-         "alternates and landable arrival still use the Reach polar.") },
-    { RoutePlannerConfig::ReachMode::STRAIGHT, N_("Straight"),
-      N_("The reach is from straight line paths from the glider. "
-         "Landable colours and the Alternates list use this reach.") },
-    { RoutePlannerConfig::ReachMode::TURNING, N_("Turning"),
-      N_("The reach is calculated allowing turns around terrain obstacles. "
-         "Landable colours and the Alternates list use this reach.") },
-    nullptr
-  };
-
-  AddSpacer(); // Spacer
-
-  AddEnum(_("Reach mode"),
-          _("How calculations are performed of the reach of the glider with respect to terrain."),
-          turning_reach_list, (unsigned)route_planner.reach_calc_mode,
-          this);
-
-  static constexpr StaticEnumChoice reach_polar_list[] = {
-    { RoutePlannerConfig::Polar::TASK, N_("Task MC"),
-      N_("Uses task MacCready value.") },
-    { RoutePlannerConfig::Polar::SAFETY, N_("Safety MC"),
-      N_("Uses safety MacCready value.") },
-    nullptr
-  };
-
-  AddEnum(_("Reach polar"),
-          _("Which MacCready is used for terrain reach, landable "
-            "colours, abort and the Alternates list. This still applies "
-            "when Reach mode is Off. The working line always uses Task MC. "
-            "Alternate InfoBoxes and waypoint Alt. diff. Safety MC always "
-            "use Safety MC."),
-          reach_polar_list, (unsigned)route_planner.reach_polar_mode);
-  SetExpertRow(ReachPolarMode);
-
-  static constexpr StaticEnumChoice final_glide_terrain_list[] = {
-    { FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
-      N_("No reach overlay on the map.") },
-    { FeaturesSettings::FinalGlideTerrain::TERRAIN_LINE, N_("Terrain line"),
-      N_("How far you can glide to the ground. Uses the Reach polar.") },
-    { FeaturesSettings::FinalGlideTerrain::TERRAIN_SHADE, N_("Terrain shade"),
-      N_("Shades the map beyond glide to the ground. Uses the Reach polar.") },
-    { FeaturesSettings::FinalGlideTerrain::WORKING, N_("Working line"),
-      N_("How far you can glide and still arrive at typical thermal-base "
-         "height from this flight. Always uses Task MC.") },
-    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_LINE,
-      N_("Working line, terrain line"),
-      N_("Working line to typical thermal-base height using Task MC, plus "
-         "terrain line to the ground using the Reach polar.") },
-    { FeaturesSettings::FinalGlideTerrain::WORKING_TERRAIN_SHADE,
-      N_("Working line, terrain shade"),
-      N_("Working line to typical thermal-base height using Task MC, plus "
-         "shade beyond the ground using the Reach polar.") },
-    nullptr
-  };
-
-  AddEnum(_("Reach display"), nullptr, final_glide_terrain_list,
-          (unsigned)settings_computer.features.final_glide_terrain);
-
-  ShowRouteControls(route_planner.mode != RoutePlannerConfig::Mode::NONE);
-  ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::ReachMode::OFF);
+  /* the overlay is the map reach; abort still uses the polar */
+  if (reach_mode != RoutePlannerConfig::ReachMode::OFF)
+    AddEnumItem(_("Reach display"), nullptr, final_glide_terrain_list,
+                final_glide_terrain);
 }
 
 bool
 RouteConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
+
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
-  changed |= SaveValueEnum(RoutePlannerMode, ProfileKeys::RoutePlannerMode,
-                           route_planner.mode);
+  changed |= Profile::Update(ProfileKeys::RoutePlannerMode,
+                             route_planner.mode, route_mode);
 
-  changed |= SaveValueEnum(ReachPolarMode, ProfileKeys::ReachPolarMode,
-                           route_planner.reach_polar_mode);
+  changed |= Profile::Update(ProfileKeys::RoutePlannerAllowClimb,
+                             route_planner.allow_climb, allow_climb);
 
-  changed |= SaveValueEnum(FinalGlideTerrain, ProfileKeys::FinalGlideTerrain,
-                           settings_computer.features.final_glide_terrain);
+  changed |= Profile::Update(ProfileKeys::RoutePlannerUseCeiling,
+                             route_planner.use_ceiling, use_ceiling);
 
-  changed |= SaveValue(RoutePlannerAllowClimb, ProfileKeys::RoutePlannerAllowClimb,
-                       route_planner.allow_climb);
+  changed |= Profile::Update(ProfileKeys::TurningReach,
+                             route_planner.reach_calc_mode, reach_mode);
 
-  changed |= SaveValue(RoutePlannerUseCeiling, ProfileKeys::RoutePlannerUseCeiling,
-                       route_planner.use_ceiling);
+  changed |= Profile::Update(ProfileKeys::ReachPolarMode,
+                             route_planner.reach_polar_mode, reach_polar);
 
-  changed |= SaveValueEnum(TurningReach, ProfileKeys::TurningReach,
-                           route_planner.reach_calc_mode);
+  changed |= Profile::Update(ProfileKeys::FinalGlideTerrain,
+                             settings_computer.features.final_glide_terrain,
+                             final_glide_terrain);
+
   _changed |= changed;
 
   return true;
