@@ -71,6 +71,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | C++ (`noexcept`, nullptr, enums) | `.cursor/rules/cpp-safety-patterns.mdc` |
 | NMEA, devices, Validity / time | `.cursor/rules/nmea-validity-patterns.mdc` |
 | Search / stacked dialogs | `.cursor/rules/search-dialog-ux.mdc` |
+| Touch / lift-off / hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
 | Waypoint types / CUP round-trip | `.cursor/rules/waypoint-types.mdc` |
 | SVG icons (`Data/icons/`) | `.cursor/rules/svg-icons.mdc` |
 | `NEWS.txt` | `.cursor/rules/news.txt.mdc` |
@@ -82,6 +83,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
 | UI colour, EFB / NASA HF | `doc/architecture.rst` (User interface guidelines) |
+| Touch / lift-off / hold | `.cursor/rules/ui-touch.mdc` |
 | Other developer docs | `.cursor/rules/developer-docs.mdc` |
 | User manual (pilots) | `.cursor/rules/user-manual.mdc` |
 | gettext / `po/` | `.cursor/rules/translations.mdc` |
