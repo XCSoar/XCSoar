@@ -96,6 +96,7 @@ static constexpr double CUT_RADIUS_FACTOR = 0.3;
  */
 static constexpr unsigned CHILD_BAR_PT = 3;
 
+
 /** Distance between a group and the group above it. */
 static constexpr unsigned GROUP_GAP_PT = 15;
 
@@ -2575,18 +2576,9 @@ GroupedListControl::UpdateLayout() noexcept
                           GetDescriptionMaxLines(element))
           : 0;
 
-        const unsigned subtitle_lines = element.subtitle_height
-          / GetSubtitleFont(element).GetLineSpacing();
-        const unsigned value_lines = element.value_height
-          / GetValueFont(element).GetLineSpacing();
-
         /* the caption, its second line and a value below them are one
            block; a value beside them is a block of its own */
         unsigned block = element.text_height;
-        unsigned lines = element.text.empty()
-          ? 0
-          : std::max(1u, element.text_height
-                     / look.list.font->GetLineSpacing());
 
         /* a gap stands between two rows of the block, never above the
            first one: an item without a caption begins with what
@@ -2606,10 +2598,8 @@ GroupedListControl::UpdateLayout() noexcept
              subtitle are rows of their own, over the whole width */
           unsigned row = element.text_height;
 
-          if (!element.value_is_below && element.value_height > row) {
+          if (!element.value_is_below && element.value_height > row)
             row = element.value_height;
-            lines = value_lines;
-          }
 
           row = std::max(row,
                          (unsigned)GetFirstRowDecorationHeight(element));
@@ -2617,35 +2607,22 @@ GroupedListControl::UpdateLayout() noexcept
           element.first_row_height = row;
           block = row;
 
-          if (element.value_is_below) {
+          if (element.value_is_below)
             stack(element.value_height);
-            lines += value_lines;
-          }
 
           stack(element.description_height);
-          lines += element.description_height
-            / GetDescriptionFont(element).GetLineSpacing();
 
-          if (element.subtitle_height > 0) {
+          if (element.subtitle_height > 0)
             stack(element.subtitle_height);
-            lines += subtitle_lines;
-          }
         } else {
-          if (element.subtitle_height > 0) {
+          if (element.subtitle_height > 0)
             stack(element.subtitle_height);
-            lines += subtitle_lines;
-          }
 
-          if (element.value_is_below) {
+          if (element.value_is_below)
             stack(element.value_height);
-            lines += value_lines;
-          } else if (element.value_height > block) {
+          else if (element.value_height > block)
             block = element.value_height;
-            lines = value_lines;
-          }
         }
-
-        lines = std::max(1u, lines);
 
         if (block == font_height) {
           /* one line, like most items */
@@ -2653,14 +2630,22 @@ GroupedListControl::UpdateLayout() noexcept
           break;
         }
 
-        /* the room above and below grows with the number of lines:
-           with the padding of a one-line item, a tall item would sit
-           cramped between the two separators.  It never grows beyond
-           the room which a one-line item has, where the minimum
-           height of a touch target is what pads the caption */
+        /* the room above and below follows the height of the text
+           the other way round: a row of one line is a target for a
+           finger and keeps the room which makes it easy to hit, while
+           a text of several rows is read rather than hit, and the
+           same room around it would only push the next item off the
+           screen.  Twice the text is half the room; it never grows
+           beyond the room of a one-line row, and never falls below
+           the padding which keeps a text off the line below it */
+        const int one_line = (int)font_height;
+        const int tight = (int)Layout::GetTextPadding();
+        const int roomy = std::max(tight,
+                                   ((int)item_height - one_line) / 2);
+
         const unsigned vertical_padding =
-          std::min(Layout::GetTextPadding() * lines,
-                   (item_height - font_height) / 2);
+          (unsigned)std::clamp(roomy * one_line / (int)std::max(block, 1u),
+                               tight, roomy);
 
         element.height = std::max(block + 2 * vertical_padding,
                                   Layout::GetMaximumControlHeight());
