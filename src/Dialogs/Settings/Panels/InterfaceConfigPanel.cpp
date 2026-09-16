@@ -2,12 +2,11 @@
 // Copyright The XCSoar Project
 
 #include "InterfaceConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Profile/Profile.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Form/DataField/File.hpp"
 #include "util/StringCompare.hxx"
-#include "util/StaticString.hxx"
 #include "Interface.hpp"
 #include "Language/Table.hpp"
 #include "Asset.hpp"
@@ -16,185 +15,305 @@
 #include "system/Path.hpp"
 #include "UtilsSettings.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "Hardware/Vibrator.hpp"
 #include "Repository/FileType.hpp"
 #include "Version.hpp"
 
+#include <string>
+#include <vector>
+
 using namespace std::chrono;
 
-enum ControlIndex {
-  InputFile,
+/**
+ * How XCSoar talks to the user: the language, the menus and the
+ * views it shows at startup.
+ */
+class InterfaceConfigPanel final : public ConfigListPanel {
+  FileDataField events_file;
+
 #ifdef HAVE_NLS
-  LanguageFile,
+  /** One language the user may choose. */
+  struct Language {
+    /** what the profile stores: "auto", "none" or the file name */
+    std::string value;
+
+    std::string display;
+  };
+
+  std::vector<Language> languages;
+
+  /** the index of the chosen language in #languages */
+  unsigned language;
 #endif
-  MenuTimeout,
-  TextInput,
+
+  /** the time until a menu closes, in seconds */
+  duration<unsigned> menu_timeout;
+
+  DialogSettings::TextInputStyle text_input_style;
+
 #ifdef HAVE_VIBRATOR
-  HapticFeedback,
+  UISettings::HapticFeedback haptic_feedback;
 #endif
-  ShowQuickGuideOnStartup,
-  ShowReleaseNotesOnStartup,
-  DisclaimerAccepted,
-};
 
-class InterfaceConfigPanel final : public RowFormWidget {
-public:
-  InterfaceConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+  bool show_quick_guide, show_release_notes, disclaimer_accepted;
+
+private:
+#ifdef HAVE_NLS
+  void LoadLanguages() noexcept;
+  bool SaveLanguage() noexcept;
+#endif
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
-#ifdef HAVE_BUILTIN_LANGUAGES
-
-class LanguageFileVisitor: public File::Visitor
+/** Is the What's New page shown on the next startup? */
+static bool
+IsNewsSeen() noexcept
 {
-private:
-  DataFieldEnum &df;
+  const char *last_seen_news =
+    Profile::Get(ProfileKeys::LastSeenNewsVersion);
+  return last_seen_news != nullptr &&
+    StringIsEqual(last_seen_news, XCSoar_Version);
+}
 
-public:
-  LanguageFileVisitor(DataFieldEnum &_df): df(_df) {}
+/** Has the safety disclaimer been accepted for this version? */
+static bool
+IsDisclaimerAcknowledged() noexcept
+{
+  const char *version =
+    Profile::Get(ProfileKeys::DisclaimerAcknowledgedVersion);
+  return version != nullptr && StringIsEqual(version, XCSoar_Version);
+}
 
-  void Visit([[maybe_unused]] Path path, Path filename) override {
-    if (!df.Exists(filename.c_str()))
-      df.addEnumText(filename.c_str());
-  }
-};
-
-#endif // HAVE_BUILTIN_LANGUAGES
+#ifdef HAVE_NLS
 
 void
-InterfaceConfigPanel::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+InterfaceConfigPanel::LoadLanguages() noexcept
+{
+  languages.clear();
+  languages.push_back({"auto", _("Automatic")});
+  languages.push_back({"none", "English"});
+
+  for (const BuiltinLanguage *l = language_table;
+       l->resource != nullptr; ++l) {
+    StaticString<100> display;
+    display.Format("%s (%s)", l->name, l->resource);
+    languages.push_back({l->resource, display.c_str()});
+  }
+
+#ifdef HAVE_BUILTIN_LANGUAGES
+  /* the translations the user has put into the data directory */
+  class LanguageFileVisitor final : public File::Visitor {
+    std::vector<Language> &languages;
+
+  public:
+    explicit LanguageFileVisitor(std::vector<Language> &_languages) noexcept
+      :languages(_languages) {}
+
+    void Visit([[maybe_unused]] Path path, Path filename) override {
+      for (const auto &l : languages)
+        if (l.value == filename.c_str())
+          return;
+
+      languages.push_back({filename.c_str(), filename.c_str()});
+    }
+  };
+
+  LanguageFileVisitor visitor(languages);
+  VisitDataFiles("*.mo", visitor);
+#endif
+
+  /* the languages by name, after the two fixed choices */
+  std::sort(languages.begin() + 2, languages.end(),
+            [](const Language &a, const Language &b){
+              return a.display < b.display;
+            });
+
+  language = 0;
+
+  const auto value = Profile::GetPath(ProfileKeys::LanguageFile);
+  if (value == nullptr || value.empty() || value == Path("auto"))
+    return;
+
+  if (value == Path("none")) {
+    language = 1;
+    return;
+  }
+
+  const Path base = value.GetBase();
+  if (base == nullptr)
+    return;
+
+  for (unsigned i = 2; i < languages.size(); ++i)
+    if (languages[i].value == base.c_str())
+      language = i;
+}
+
+bool
+InterfaceConfigPanel::SaveLanguage() noexcept
+{
+  /* Use AllocatedPath here: Path::empty() null-dereferences, while
+     AllocatedPath::empty() is safe. Missing / empty LanguageFile means
+     automatic - same as ReadLanguageFile(); do not persist "auto" just
+     because the key was absent (#1793). */
+  const auto old_value = Profile::GetPath(ProfileKeys::LanguageFile);
+  const bool old_is_auto =
+    old_value == nullptr || old_value.empty() || old_value == Path("auto");
+
+  Path old_base = old_is_auto ? Path("auto") : Path(old_value).GetBase();
+  if (old_base == nullptr)
+    old_base = old_value;
+
+  const char *new_value = languages[language].value.c_str();
+  if (old_base == Path(new_value))
+    return false;
+
+  Profile::Set(ProfileKeys::LanguageFile, new_value);
+  LanguageChanged = true;
+  return true;
+}
+
+#endif // HAVE_NLS
+
+void
+InterfaceConfigPanel::LoadSettings() noexcept
 {
   const UISettings &settings = CommonInterface::GetUISettings();
 
-  RowFormWidget::Prepare(parent, rc);
+  events_file.SetFileType(FileType::XCI);
+  events_file.AddNull();
+  events_file.ScanMultiplePatterns(GetFileTypePatterns(FileType::XCI));
+  events_file.Sort(FileDataField::SortOrder::ASCENDING, true);
 
-  AddFile(_("Events"),
-          _("The Input Events file defines the menu system and how XCSoar responds to "
-            "button presses and events from external devices."),
-          ProfileKeys::InputFile,
-          GetFileTypePatterns(FileType::XCI),
-          FileType::XCI);
-  SetExpertRow(InputFile);
+  if (const auto path = Profile::GetPath(ProfileKeys::InputFile);
+      path != nullptr)
+    events_file.SetValue(path);
 
 #ifdef HAVE_NLS
-  WndProperty *wp;
-  wp = AddEnum(_("Language"),
-               _("The language options selects translations for English texts to other "
-                   "languages. Select English for a native interface or Automatic to localise "
-                   "XCSoar according to the system settings."));
-  if (wp != nullptr) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    df.addEnumText(_("Automatic"));
-    df.addEnumText("English");
-
-    for (const BuiltinLanguage *l = language_table;
-         l->resource != nullptr; ++l) {
-      StaticString<100> display_string;
-      display_string.Format("%s (%s)", l->name, l->resource);
-      df.addEnumText(l->resource, display_string);
-    }
-
-#ifdef HAVE_BUILTIN_LANGUAGES
-    LanguageFileVisitor lfv(df);
-    VisitDataFiles("*.mo", lfv);
+  LoadLanguages();
 #endif
 
-    df.Sort(2);
-
-    auto value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
-    Path value = value_buffer;
-    if (value == nullptr)
-      value = Path("");
-
-    if (value == Path("none"))
-      df.SetValue(1);
-    else if (!value.empty() && value != Path("auto")) {
-      const Path base = value.GetBase();
-      if (base != nullptr)
-        df.SetValue(base.c_str());
-    }
-    wp->RefreshDisplay();
-  }
-#endif // HAVE_NLS
-
-  AddDuration(_("Menu timeout"),
-              _("This determines how long menus will appear on screen if the user does not make any button "
-                "presses or interacts with the computer."),
-              seconds{1}, minutes{1}, seconds{1},
-              settings.menu_timeout / 2);
-  SetExpertRow(MenuTimeout);
-
-  static constexpr StaticEnumChoice text_input_list[] = {
-    { DialogSettings::TextInputStyle::Default, N_("Default") },
-    { DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
-    { DialogSettings::TextInputStyle::HighScore,
-      N_("HighScore Style") },
-    nullptr
-  };
-
-  AddEnum(_("Text input style"),
-          _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
-          text_input_list, (unsigned)settings.dialog.text_input_style);
-  SetExpertRow(TextInput);
-
-  /* on-screen keyboard doesn't work without a pointing device
-     (mouse or touch screen) */
-  SetRowVisible(TextInput, HasPointer());
+  menu_timeout = settings.menu_timeout / 2;
+  text_input_style = settings.dialog.text_input_style;
 
 #ifdef HAVE_VIBRATOR
-  static constexpr StaticEnumChoice haptic_feedback_list[] = {
-    { UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
-    { UISettings::HapticFeedback::OFF, N_("Off") },
-    { UISettings::HapticFeedback::ON, N_("On") },
-    nullptr
-  };
-
-  wp = AddEnum(_("Haptic feedback"),
-               _("Determines if haptic feedback like vibration is used."),
-               haptic_feedback_list, (unsigned)settings.haptic_feedback);
-  SetExpertRow(HapticFeedback);
-#endif /* HAVE_VIBRATOR */
+  haptic_feedback = settings.haptic_feedback;
+#endif
 
   bool hide_quick_guide = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup,
                hide_quick_guide);
-  AddBoolean(C_("Setting", "Show Quick Guide"),
-             _("If enabled, the Quick Guide is shown when XCSoar starts."),
-             !hide_quick_guide);
+  show_quick_guide = !hide_quick_guide;
 
-  const char *last_seen_news =
-    Profile::Get(ProfileKeys::LastSeenNewsVersion);
-  const bool news_seen = last_seen_news != nullptr &&
-    StringIsEqual(last_seen_news, XCSoar_Version);
-  AddBoolean(C_("Setting", "Show release notes"),
-             _("If enabled, the What's New page is shown on the next "
-               "startup."),
-             !news_seen);
+  show_release_notes = !IsNewsSeen();
+  disclaimer_accepted = IsDisclaimerAcknowledged();
+}
 
-  const char *disclaimer_acknowledged_version =
-    Profile::Get(ProfileKeys::DisclaimerAcknowledgedVersion);
-  const bool disclaimer_acknowledged =
-    disclaimer_acknowledged_version != nullptr &&
-    StringIsEqual(disclaimer_acknowledged_version, XCSoar_Version);
+void
+InterfaceConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  static constexpr StaticEnumChoice disclaimer_accepted_list[] = {
-    { 0, N_("No") },
-    { 1, N_("Yes") },
-    nullptr
-  };
+#ifdef HAVE_NLS
+  AddItem(_("Language"), [this](){
+    std::vector<PickerChoice> choices;
+    for (const auto &l : languages)
+      choices.push_back({l.display.c_str()});
 
-  AddEnum(_("Safety disclaimer accepted"),
-          _("Whether the safety disclaimer has been accepted for this "
-            "version."),
-          disclaimer_accepted_list,
-          disclaimer_acknowledged ? 1u : 0u);
-  SetExpertRow(DisclaimerAccepted);
+    const int picked =
+      PickChoice(_("Language"),
+                 _("The language options selects translations for English texts to other "
+                   "languages. Select English for a native interface or Automatic to localise "
+                   "XCSoar according to the system settings."),
+                 choices, language);
+    if (picked >= 0 && unsigned(picked) != language) {
+      language = picked;
+      Refresh();
+    }
+  }, {.value = languages[language].display.c_str(), .chevron = true});
+#endif
+
+  if (IsExpert()) {
+    const char *caption = _("Events");
+    const char *help =
+      _("The Input Events file defines the menu system and how XCSoar responds to "
+        "button presses and events from external devices.");
+
+    /* the file as a small value, with every line of it */
+    ItemOptions options{.value_size = TextSize::SMALL,
+                        .value_all_lines = true,
+                        .chevron = true};
+
+    const char *name = events_file.GetAsDisplayString();
+    if (*name != '\0')
+      options.value = name;
+    else
+      options.badge = C_("Badge", "none");
+
+    AddItem(caption, [this, caption, help](){
+      PickFile(caption, help, events_file);
+      Refresh();
+    }, options);
+
+    AddDurationItem(_("Menu timeout"),
+                    _("This determines how long menus will appear on screen if the user does not make any button "
+                      "presses or interacts with the computer."),
+                    1, 60, 1, menu_timeout);
+
+    /* on-screen keyboard doesn't work without a pointing device
+       (mouse or touch screen) */
+    if (HasPointer()) {
+      static constexpr StaticEnumChoice text_input_list[] = {
+        { DialogSettings::TextInputStyle::Default, N_("Default") },
+        { DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
+        { DialogSettings::TextInputStyle::HighScore,
+          N_("HighScore Style") },
+        nullptr
+      };
+
+      AddEnumItem(_("Text input style"),
+                  _("Determines how the user is prompted for text input (filename, teamcode etc.)"),
+                  text_input_list, text_input_style);
+    }
+
+#ifdef HAVE_VIBRATOR
+    static constexpr StaticEnumChoice haptic_feedback_list[] = {
+      { UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
+      { UISettings::HapticFeedback::OFF, N_("Off") },
+      { UISettings::HapticFeedback::ON, N_("On") },
+      nullptr
+    };
+
+    AddEnumItem(_("Haptic feedback"),
+                _("Determines if haptic feedback like vibration is used."),
+                haptic_feedback_list, haptic_feedback);
+#endif
+  }
+
+  /* what XCSoar shows when it starts */
+  AddGroup();
+
+  AddToggleItem(C_("Setting", "Show Quick Guide"),
+                _("If enabled, the Quick Guide is shown when XCSoar starts."),
+                show_quick_guide);
+
+  AddToggleItem(C_("Setting", "Show release notes"),
+                _("If enabled, the What's New page is shown on the next "
+                  "startup."),
+                show_release_notes);
+
+  if (IsExpert())
+    AddToggleItem(_("Safety disclaimer accepted"),
+                  _("Whether the safety disclaimer has been accepted for this "
+                    "version."),
+                  disclaimer_accepted);
 }
 
 bool
@@ -203,106 +322,43 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   UISettings &settings = CommonInterface::SetUISettings();
   bool changed = false;
 
-  if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
+  if (Profile::SetPath(ProfileKeys::InputFile, events_file.GetValue()))
     require_restart = changed = true;
 
 #ifdef HAVE_NLS
-  WndProperty *wp = (WndProperty *)&GetControl(LanguageFile);
-  if (wp != nullptr) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+  changed |= SaveLanguage();
+#endif
 
-    /* Use AllocatedPath here: Path::empty() null-dereferences, while
-       AllocatedPath::empty() is safe. Missing / empty LanguageFile means
-       automatic — same as ReadLanguageFile(); do not persist "auto" just
-       because the key was absent (#1793). */
-    const auto old_value_buffer = Profile::GetPath(ProfileKeys::LanguageFile);
-    const bool old_is_auto =
-      old_value_buffer == nullptr || old_value_buffer.empty() ||
-      old_value_buffer == Path("auto");
-    Path old_value = old_is_auto ? Path("auto") : Path(old_value_buffer);
-
-    auto old_base = old_value.GetBase();
-    if (old_base == nullptr)
-      old_base = old_value;
-
-    AllocatedPath buffer = nullptr;
-    const char *new_value, *new_base;
-
-    switch (df.GetValue()) {
-    case 0:
-      new_value = new_base = "auto";
-      break;
-
-    case 1:
-      new_value = new_base = "none";
-      break;
-
-    default:
-      new_value = df.GetAsString();
-      buffer = ContractLocalPath(Path(new_value));
-      if (buffer != nullptr)
-        new_value = buffer.c_str();
-      new_base = Path(new_value).GetBase().c_str();
-      if (new_base == nullptr)
-        new_base = new_value;
-      break;
-    }
-
-    if (old_value != Path(new_value) &&
-        old_base != Path(new_base)) {
-      Profile::Set(ProfileKeys::LanguageFile, new_value);
-      LanguageChanged = changed = true;
-    }
-  }
-#endif // HAVE_NLS
-
-  duration<unsigned> menu_timeout = GetValueTime(MenuTimeout) * 2;
-  if (settings.menu_timeout != menu_timeout) {
-    settings.menu_timeout = menu_timeout;
-    Profile::Set(ProfileKeys::MenuTimeout, menu_timeout);
-    changed = true;
-  }
+  changed |= Profile::Update(ProfileKeys::MenuTimeout, settings.menu_timeout,
+                             duration<unsigned>{menu_timeout.count() * 2});
 
   if (HasPointer())
-    changed |= SaveValueEnum(TextInput, ProfileKeys::AppTextInputStyle, settings.dialog.text_input_style);
+    changed |= Profile::Update(ProfileKeys::AppTextInputStyle,
+                               settings.dialog.text_input_style,
+                               text_input_style);
 
 #ifdef HAVE_VIBRATOR
-  changed |= SaveValueEnum(HapticFeedback, ProfileKeys::HapticFeedback, settings.haptic_feedback);
+  changed |= Profile::Update(ProfileKeys::HapticFeedback,
+                             settings.haptic_feedback, haptic_feedback);
 #endif
 
   bool hide_quick_guide = false;
   Profile::Get(ProfileKeys::HideQuickGuideDialogOnStartup, hide_quick_guide);
-  if (SaveValue(ShowQuickGuideOnStartup,
-                ProfileKeys::HideQuickGuideDialogOnStartup,
-                hide_quick_guide, true))
-    changed = true;
-
-  const bool show_release_notes = GetValueBoolean(ShowReleaseNotesOnStartup);
-  const char *last_seen_news =
-    Profile::Get(ProfileKeys::LastSeenNewsVersion);
-  const bool news_seen = last_seen_news != nullptr &&
-    StringIsEqual(last_seen_news, XCSoar_Version);
-  if (show_release_notes != !news_seen) {
-    if (show_release_notes)
-      Profile::Set(ProfileKeys::LastSeenNewsVersion, "");
-    else
-      Profile::Set(ProfileKeys::LastSeenNewsVersion, XCSoar_Version);
+  if (hide_quick_guide != !show_quick_guide) {
+    Profile::Set(ProfileKeys::HideQuickGuideDialogOnStartup,
+                 !show_quick_guide);
     changed = true;
   }
 
-  const bool disclaimer_accepted =
-    GetValueEnum(DisclaimerAccepted) != 0;
-  const char *disclaimer_acknowledged_version =
-    Profile::Get(ProfileKeys::DisclaimerAcknowledgedVersion);
-  const bool disclaimer_acknowledged =
-    disclaimer_acknowledged_version != nullptr &&
-    StringIsEqual(disclaimer_acknowledged_version, XCSoar_Version);
-  if (disclaimer_accepted != disclaimer_acknowledged) {
-    if (disclaimer_accepted)
-      Profile::Set(ProfileKeys::DisclaimerAcknowledgedVersion,
-                   XCSoar_Version);
-    else
-      Profile::Set(ProfileKeys::DisclaimerAcknowledgedVersion, "");
+  if (show_release_notes != !IsNewsSeen()) {
+    Profile::Set(ProfileKeys::LastSeenNewsVersion,
+                 show_release_notes ? "" : XCSoar_Version);
+    changed = true;
+  }
+
+  if (disclaimer_accepted != IsDisclaimerAcknowledged()) {
+    Profile::Set(ProfileKeys::DisclaimerAcknowledgedVersion,
+                 disclaimer_accepted ? XCSoar_Version : "");
     changed = true;
   }
 
