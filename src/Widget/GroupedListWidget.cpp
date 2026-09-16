@@ -423,6 +423,9 @@ private:
     /** only for Type::ITEM: what opens it */
     ExpandTrigger expand_trigger = ExpandTrigger::ACTIVATE;
 
+    /** only for Type::ITEM: does its room follow the height of its text? */
+    bool shrink_vertical_padding = true;
+
     /**
      * How deep does this item sit below the one above it?  0 is an
      * item of the card itself, 1 a child of the item above it.  Only
@@ -1662,6 +1665,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .enter_action = group_options.enter_action,
     .expand_mode = group_options.expand_mode,
     .expand_trigger = group_options.expand_trigger,
+    .shrink_vertical_padding = group_options.shrink_vertical_padding,
   });
 
   Element &element = elements.back();
@@ -2639,13 +2643,15 @@ GroupedListControl::UpdateLayout() noexcept
            beyond the room of a one-line row, and never falls below
            the padding which keeps a text off the line below it */
         const int one_line = (int)font_height;
-        const int tight = (int)Layout::GetTextPadding();
-        const int roomy = std::max(tight,
-                                   ((int)item_height - one_line) / 2);
+        const int least_padding = (int)Layout::GetTextPadding();
+        const int full_padding = std::max(least_padding,
+                                          ((int)item_height - one_line) / 2);
 
-        const unsigned vertical_padding =
-          (unsigned)std::clamp(roomy * one_line / (int)std::max(block, 1u),
-                               tight, roomy);
+        const unsigned vertical_padding = element.shrink_vertical_padding
+          ? (unsigned)std::clamp(full_padding * one_line
+                                 / (int)std::max(block, 1u),
+                                 least_padding, full_padding)
+          : (unsigned)full_padding;
 
         element.height = std::max(block + 2 * vertical_padding,
                                   Layout::GetMaximumControlHeight());
