@@ -25,6 +25,19 @@ public final class BluetoothUuids {
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
 
   /**
+   * Bluetooth SIG Battery Service.  Not used as a scan filter:
+   * almost every LE device advertises it.
+   */
+  static final UUID BATTERY_SERVICE =
+    UUID.fromString("0000180F-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Battery Level: uint8 percent, 0-100; 0xFF means unknown.
+   */
+  static final UUID BATTERY_LEVEL_CHARACTERISTIC =
+    UUID.fromString("00002A19-0000-1000-8000-00805F9B34FB");
+
+  /**
    * @see https://sites.google.com/view/ppgmeter/startpage
    * Engine sensors service and characteristic
    */
