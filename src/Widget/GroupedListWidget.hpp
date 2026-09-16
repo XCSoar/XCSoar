@@ -9,6 +9,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <initializer_list>
 #include <memory>
 #include <tuple>
 
@@ -363,6 +364,61 @@ public:
    * only there to be checked.
    */
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /** One button of a row which AddButtonRow() creates. */
+  struct ButtonDefinition {
+    const char *caption;
+
+    Callback callback;
+
+    /**
+     * Draw the button greyed out and let nothing press it.  It stays
+     * on the page, where it says what is not possible now.
+     */
+    bool disabled = false;
+  };
+
+  /** What a button carries besides its caption. */
+  struct ButtonOptions {
+    /**
+     * A text below the button which says what it does, in the column
+     * of the captions.  Unlike ItemOptions::help it is always on the
+     * screen: a button which cannot be pressed must say why without
+     * being selected first.
+     */
+    const char *description = nullptr;
+
+    /** @see ButtonDefinition::disabled */
+    bool disabled = false;
+  };
+
+  /**
+   * Append a button to the group which was opened by the last
+   * AddGroup() call.  It ends the card of that group and stands below
+   * it on the page, in the width of a card: a button is a control and
+   * needs the background around it, which a row of a card cannot
+   * offer.  The group is still what it belongs to - its caption
+   * stands above it and its footer below it.
+   *
+   * Use a button for an action which has no destination: refreshing a
+   * download, applying something to the page, clearing a cache.  An
+   * item with a chevron is what opens another page.
+   */
+  void AddButton(const char *caption, Callback callback) noexcept;
+
+  void AddButton(const char *caption, Callback callback,
+                 const ButtonOptions &options) noexcept;
+
+  /**
+   * Append several buttons side by side, which share the width of a
+   * card.  They belong together, like the two halves of a question;
+   * buttons which do not should be added one by one, and stand below
+   * each other.
+   */
+  void AddButtonRow(std::initializer_list<ButtonDefinition> buttons) noexcept;
+
+  void AddButtonRow(std::initializer_list<ButtonDefinition> buttons,
+                    const ButtonOptions &options) noexcept;
 
   /**
    * Add a group which shows a view instead of items, e.g. a button or

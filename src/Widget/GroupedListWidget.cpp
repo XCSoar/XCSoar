@@ -26,6 +26,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -39,6 +40,7 @@
 #include <iterator>
 #include <limits>
 #include <memory>
+#include <span>
 #include <string>
 #include <utility>
 #include <vector>
@@ -78,6 +80,14 @@ static constexpr unsigned NARROW_SMALL_SCREEN_PIXELS = 700;
 
 /** Corner radius of the card which holds the items of one group. */
 static constexpr unsigned RADIUS_PT = 8;
+
+/**
+ * How round is a corner at a cut which a row of buttons has made in
+ * the middle of a group, as a factor of the radius of an outer
+ * corner?  Much less than one: a round corner is what says that a
+ * card ends, and at a cut the group goes on.
+ */
+static constexpr double CUT_RADIUS_FACTOR = 0.3;
 
 /** Distance between a group and the group above it. */
 static constexpr unsigned GROUP_GAP_PT = 15;
@@ -184,14 +194,47 @@ public:
   using TextSize = GroupedListWidget::TextSize;
   using ToggleHitArea = GroupedListWidget::ToggleHitArea;
   using GroupOptions = GroupedListWidget::GroupOptions;
+  using ButtonDefinition = GroupedListWidget::ButtonDefinition;
+  using ButtonOptions = GroupedListWidget::ButtonOptions;
 
 private:
+  /**
+   * One button of a #Element::Type::BUTTONS row.  It draws itself
+   * with the renderer of the dialog, so that it looks like every
+   * other button of XCSoar without being a window of its own: a
+   * window would join the focus chain, where Up and Down belong to
+   * the list.
+   */
+  struct ElementButton {
+    Callback callback;
+
+    TextButtonRenderer renderer;
+
+    bool disabled;
+
+    ElementButton(const ButtonLook &look, const char *caption,
+                  Callback _callback, bool _disabled) noexcept
+      :callback(std::move(_callback)), renderer(look, caption),
+       disabled(_disabled) {}
+  };
+
   struct Element {
-    enum class Type : uint_least8_t { HERO, CAPTION, FOOTER, ITEM, WIDGET };
+    enum class Type : uint_least8_t {
+      HERO, CAPTION, FOOTER, ITEM, WIDGET,
+
+      /** a row of one or more buttons, below the card of its group */
+      BUTTONS,
+    };
 
     Type type;
 
     std::string text;
+
+    /**
+     * only for Type::BUTTONS: the buttons of this row, which share
+     * the width of a card
+     */
+    std::vector<ElementButton> buttons{};
 
     /** only for Type::ITEM: drawn at the left edge */
     ResourceId icon_id = ResourceId::Null();
@@ -326,8 +369,16 @@ private:
     /** only for Type::ITEM: what Enter does on it */
     EnterAction enter_action = EnterAction::ITEM;
 
-    /** the first / the last item of its group */
+    /** the first / the last item of its card */
     bool first_in_group = false, last_in_group = false;
+
+    /**
+     * Is this edge of the card a cut which a row of buttons has made
+     * in the middle of a group, with items on the other side of it?
+     * Such an edge is rounded less, so that the two halves still read
+     * as one group.
+     */
+    bool cut_top = false, cut_bottom = false;
 
     /**
      * Does any item of this group have a check mark at this edge?
@@ -339,9 +390,9 @@ private:
     /** does any item of this group have an icon? */
     bool icon_column = false;
 
-    /** does this element fill the card of a group? */
+    /** does this element belong to the group which is open? */
     bool IsGroupContent() const noexcept {
-      return IsItem() || type == Type::WIDGET;
+      return IsItem() || IsButtons() || type == Type::WIDGET;
     }
 
     /** does this element have something to draw in the icon column? */
@@ -360,6 +411,10 @@ private:
       return type == Type::ITEM;
     }
 
+    bool IsButtons() const noexcept {
+      return type == Type::BUTTONS;
+    }
+
     /** is this element an item which is drawn? */
     bool IsShownItem() const noexcept {
       return IsItem() && !hidden;
@@ -367,6 +422,14 @@ private:
 
     /** may the cursor be moved to this element? */
     bool IsSelectable() const noexcept {
+      if (IsButtons())
+        /* a row of buttons which are all disabled is a row the cursor
+           has nothing to do on */
+        return std::any_of(buttons.begin(), buttons.end(),
+                           [](const ElementButton &button){
+                             return !button.disabled;
+                           });
+
       return IsShownItem() && (!disabled || selectable_when_disabled);
     }
 
@@ -399,6 +462,12 @@ private:
    */
   int saved_cursor = -1;
 
+  /** does #saved_cursor count rows of buttons instead of items? */
+  bool saved_buttons = false;
+
+  /** the button which was armed when Clear() saved the cursor */
+  unsigned saved_column = 0;
+
   /**
    * Has the cursor been taken off the list on purpose - a tap beside
    * the items, a page which has none to point at?  Then UpdateLayout()
@@ -420,6 +489,14 @@ private:
    */
   int pressed_element = -1;
 
+  /**
+   * Which button of a #Element::Type::BUTTONS row is armed, and which
+   * one the finger is on.  Left and Right walk along a row the way
+   * they walk along the action bar.
+   */
+  unsigned button_column = 0;
+  int pressed_column = -1;
+
   /** the virtual pixel row which was grabbed */
   int drag_y = 0;
 
@@ -440,6 +517,8 @@ public:
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
   void AddItem(const char *caption, Callback callback,
                const GroupedListWidget::ItemOptions &options) noexcept;
+  void AddButtons(std::span<const ButtonDefinition> buttons,
+                  const ButtonOptions &options) noexcept;
   void AddWidget(std::unique_ptr<Widget> widget,
                  unsigned height_pt) noexcept;
 
@@ -451,8 +530,16 @@ public:
    * the cursor was on, and the scroll position follows the contents.
    */
   void Clear() noexcept {
-    saved_cursor = GetCursorIndex();
+    /* a row of buttons is not an item and has no item index; count
+       the rows instead, so that a page which fills itself again
+       keeps the cursor and the armed button where they were */
+    saved_buttons = cursor >= 0 && (std::size_t)cursor < elements.size() &&
+      elements[cursor].IsButtons();
+    saved_cursor = saved_buttons ? GetButtonsIndex() : GetCursorIndex();
+    saved_column = button_column;
+
     pressed_element = -1;
+    pressed_column = -1;
 
     /* the views are windows: hide them before their #Widget goes */
     for (auto &element : elements)
@@ -542,6 +629,15 @@ public:
   }
 
   /**
+   * Arm the next button of the row under the cursor.
+   *
+   * @return false if the cursor is not on a row of buttons, or if the
+   * row has none left in this direction; Left and Right then belong
+   * to the action bar
+   */
+  bool MoveButtonColumn(bool forward) noexcept;
+
+  /**
    * Hand one call of the #Widget protocol to the views of the widget
    * groups.  A view which edits something is saved like the widgets
    * around the list, and it may know a key which the list does not.
@@ -580,6 +676,36 @@ private:
    */
   [[gnu::pure]]
   int FindItemByIndex(unsigned i) const noexcept;
+
+  /** How many rows of buttons stand above the cursor? */
+  [[gnu::pure]]
+  int GetButtonsIndex() const noexcept {
+    int n = 0;
+
+    for (int j = 0; j < cursor; ++j)
+      if (elements[j].IsButtons())
+        ++n;
+
+    return n;
+  }
+
+  /** The element which holds the i-th row of buttons; -1 if there is none. */
+  [[gnu::pure]]
+  int FindButtonsByIndex(unsigned i) const noexcept {
+    unsigned n = 0;
+
+    for (std::size_t j = 0; j < elements.size(); ++j) {
+      if (!elements[j].IsButtons())
+        continue;
+
+      if (n == i)
+        return (int)j;
+
+      ++n;
+    }
+
+    return -1;
+  }
 
   /** Check the given item and uncheck the others of its group. */
   void CheckOnly(std::size_t i) noexcept;
@@ -771,6 +897,116 @@ private:
   }
 
   /**
+   * The gap above a row of buttons.  A row which follows the card it
+   * belongs to keeps the distance of a footer, and one which follows
+   * another row stands right below it, the way the buttons of a
+   * dialog do.
+   */
+  [[gnu::pure]]
+  int GetButtonsLeadingGap(std::size_t i) const noexcept {
+    if (i > 0) {
+      const Element &previous = elements[i - 1];
+
+      if (previous.IsButtons())
+        /* two rows stand right below each other, like the buttons of
+           a dialog; a description between them needs the same air
+           below it as it has above it */
+        return previous.text.empty()
+          ? 0
+          : Layout::VptScale(CAPTION_GAP_PT);
+
+      if (previous.IsItem())
+        return Layout::VptScale(FOOTER_GAP_PT);
+
+      if (previous.type == Element::Type::CAPTION)
+        /* the caption of the group carries the gap above it */
+        return 0;
+    }
+
+    return GetLeadingGap(i);
+  }
+
+  /**
+   * How many buttons of a row stand next to each other?  They share
+   * the width of a card, and where the widest caption does not fit
+   * into its share, they stand below each other instead.
+   */
+  [[gnu::pure]]
+  unsigned GetButtonColumns(const Element &element) const noexcept {
+    const unsigned count = element.buttons.size();
+    if (count <= 1)
+      return 1;
+
+    unsigned widest = 0;
+    for (const auto &button : element.buttons)
+      widest = std::max(widest, button.renderer.GetMinimumButtonWidth());
+
+    const int room = GetContentWidth() - 2 * GetCardMargin();
+
+    return (int)(widest * count) <= room ? count : 1;
+  }
+
+  /** How many rows the buttons of this element need. */
+  [[gnu::pure]]
+  unsigned GetButtonLines(const Element &element) const noexcept {
+    const unsigned columns = GetButtonColumns(element);
+
+    return (element.buttons.size() + columns - 1) / columns;
+  }
+
+  /** The place of one button within the card rectangle of its row. */
+  [[gnu::pure]]
+  PixelRect GetButtonRect(const Element &element, unsigned j,
+                          PixelRect rc, int top) const noexcept {
+    const unsigned columns = GetButtonColumns(element);
+    const int height = (int)GetItemHeight();
+    const int width = rc.GetWidth();
+
+    const unsigned line = j / columns, column = j % columns;
+
+    return {rc.left + (int)(width * column / columns),
+            top + (int)line * height,
+            rc.left + (int)(width * (column + 1) / columns),
+            top + (int)(line + 1) * height};
+  }
+
+  /** The card rectangle of an element, in the window. */
+  [[gnu::pure]]
+  PixelRect GetCardRect(const Element &element) const noexcept {
+    const int margin = GetCardMargin();
+
+    return {margin, element.top - origin,
+            GetContentWidth() - margin, element.GetBottom() - origin};
+  }
+
+  /**
+   * Which button of a row is at this position; -1 beside all of
+   * them.
+   */
+  [[gnu::pure]]
+  int FindButtonAt(std::size_t i, PixelPoint p) const noexcept {
+    const Element &element = elements[i];
+    const PixelRect rc = GetCardRect(element);
+    const int top = rc.top + GetButtonsLeadingGap(i);
+
+    for (std::size_t j = 0; j < element.buttons.size(); ++j)
+      if (GetButtonRect(element, j, rc, top).Contains(p))
+        return (int)j;
+
+    return -1;
+  }
+
+  /** The first button of a row which can be pressed; 0 if there is none. */
+  [[gnu::pure]]
+  static unsigned GetFirstButton(const Element &element) noexcept {
+    for (std::size_t i = 0; i < element.buttons.size(); ++i)
+      if (!element.buttons[i].disabled)
+        return (unsigned)i;
+
+    return 0;
+  }
+
+  /**
    * The thickness of the line which separates two items.  It is a
    * hair line: half of the thinnest pen, but at least one pixel.
    */
@@ -892,7 +1128,7 @@ private:
    */
   static void DrawCardBorder(Canvas &canvas, const PixelRect &rc,
                              bool first, bool last, Color color,
-                             int radius) noexcept;
+                             int top_radius, int bottom_radius) noexcept;
 
   void DrawElement(Canvas &canvas, std::size_t i,
                    PixelRect rc) const noexcept;
@@ -996,7 +1232,8 @@ GroupedListControl::FinishGroup() noexcept
      in, even if the group has no text of its own */
   bool needed = *footer != '\0';
 
-  for (auto i = elements.rbegin(); i != elements.rend() && i->IsItem(); ++i)
+  for (auto i = elements.rbegin();
+       i != elements.rend() && (i->IsItem() || i->IsButtons()); ++i)
     /* the help of a hidden item is never shown: the cursor cannot
        reach it, and an empty footer would be a gap below the card */
     if (i->IsShownItem() && !i->help.empty())
@@ -1025,7 +1262,7 @@ GroupedListControl::GetFooter(std::size_t i) const noexcept
     bool in_group = true;
 
     for (std::size_t j = i; j-- > (std::size_t)cursor;)
-      if (!elements[j].IsItem()) {
+      if (!elements[j].IsItem() && !elements[j].IsButtons()) {
         in_group = false;
         break;
       }
@@ -1229,6 +1466,29 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
 
   Element &element = elements.back();
   element.help = ParseLinks(options.help, element.links);
+}
+
+void
+GroupedListControl::AddButtons(std::span<const ButtonDefinition> definitions,
+                               const ButtonOptions &options) noexcept
+{
+  assert(!definitions.empty());
+
+  elements.push_back(Element{
+    .type = Element::Type::BUTTONS,
+    .text = options.description != nullptr ? options.description : "",
+  });
+
+  Element &element = elements.back();
+  element.buttons.reserve(definitions.size());
+
+  for (const auto &definition : definitions) {
+    assert(definition.caption != nullptr);
+
+    element.buttons.emplace_back(look.button, definition.caption,
+                                 definition.callback,
+                                 definition.disabled || options.disabled);
+  }
 }
 
 void
@@ -1546,6 +1806,39 @@ GroupedListControl::UpdateGroupFlags() noexcept
       !elements[j + 1].IsItem();
   }
 
+  /* a row of buttons cuts a group in two; the edges at the cut are
+     rounded less than the outer ones, which keeps the halves
+     together.  A group which ends with a row of buttons keeps the
+     full rounding: nothing follows which the card belongs to */
+  for (std::size_t i = 0; i < elements.size(); ++i) {
+    Element &element = elements[i];
+    if (!element.IsShownItem())
+      continue;
+
+    element.cut_top = element.cut_bottom = false;
+
+    if (element.first_in_group) {
+      std::size_t j = i;
+      while (j > 0 && (elements[j - 1].IsButtons() ||
+                       (elements[j - 1].IsItem() &&
+                        !elements[j - 1].IsShownItem())))
+        --j;
+
+      element.cut_top = j > 0 && j < i && elements[j - 1].IsShownItem();
+    }
+
+    if (element.last_in_group) {
+      std::size_t j = i;
+      while (j + 1 < elements.size() && (elements[j + 1].IsButtons() ||
+                                         (elements[j + 1].IsItem() &&
+                                          !elements[j + 1].IsShownItem())))
+        ++j;
+
+      element.cut_bottom = j > i && j + 1 < elements.size() &&
+        elements[j + 1].IsShownItem();
+    }
+  }
+
   /* find the groups which have check marks; all their items reserve
      the room for one, even those which cannot be checked */
   for (std::size_t i = 0; i < elements.size();) {
@@ -1799,15 +2092,26 @@ GroupedListControl::UpdateLayout() noexcept
     /* the same item as before the list was rebuilt, or its neighbour
        if the list has become shorter or the item cannot be selected
        any more */
-    cursor = FindItemByIndex(saved_cursor);
+    cursor = saved_buttons
+      ? FindButtonsByIndex(saved_cursor)
+      : FindItemByIndex(saved_cursor);
 
     if (cursor < 0)
       cursor = FindItem(elements.size(), false);
     else if (!elements[cursor].IsSelectable())
       cursor = FindItem(cursor, true);
+
+    if (cursor >= 0 && elements[cursor].IsButtons())
+      /* and the same button of that row, as long as it is still
+         there and can be pressed */
+      button_column = saved_column < elements[cursor].buttons.size() &&
+        !elements[cursor].buttons[saved_column].disabled
+        ? saved_column
+        : GetFirstButton(elements[cursor]);
   }
 
   saved_cursor = -1;
+  saved_buttons = false;
 
   if (cursor >= 0 && (std::size_t)cursor < elements.size() &&
       !elements[cursor].IsSelectable())
@@ -1918,6 +2222,26 @@ GroupedListControl::UpdateLayout() noexcept
       case Element::Type::CAPTION:
         element.height = GetLeadingGap(i)
           + (element.text.empty() ? 0u : caption_height + caption_gap);
+        break;
+
+      case Element::Type::BUTTONS:
+        element.height = GetButtonsLeadingGap(i)
+          + GetButtonLines(element) * item_height;
+
+        /* the description belongs to the buttons and is always on the
+           screen, so that a button which is greyed out can say why */
+        if (!element.text.empty())
+          element.height += caption_gap +
+            text_renderer.GetHeight(*look.list.font,
+                                    std::max(text_width, 1),
+                                    element.text.c_str());
+
+        /* the group goes on below this row: the card which continues
+           it keeps the distance which the row keeps to the card
+           above it */
+        if (i + 1 < elements.size() && elements[i + 1].IsItem())
+          element.height += footer_gap;
+
         break;
 
       case Element::Type::WIDGET:
@@ -2031,7 +2355,7 @@ GroupedListControl::ScrollAhead(unsigned i, bool forward) noexcept
 
     ahead = next_edge;
 
-    if (next.IsShownItem())
+    if (next.IsShownItem() || next.IsButtons())
       ++items_ahead;
   }
 
@@ -2057,6 +2381,11 @@ GroupedListControl::SetCursor(int i) noexcept
 
   cursor = i;
   cursor_removed = false;
+
+  if (elements[i].IsButtons())
+    /* the cursor arrives on the button it would reach first, from
+       wherever it comes */
+    button_column = GetFirstButton(elements[i]);
 
   /* the footer of a group shows the help of the item under the
      cursor, and its height changes with that text; measuring the
@@ -2122,6 +2451,30 @@ GroupedListControl::MoveCursor(bool forward) noexcept
      until it is at the edge: this way the list shows where the next
      presses lead before the cursor gets there */
   ScrollAhead(next, forward);
+}
+
+bool
+GroupedListControl::MoveButtonColumn(bool forward) noexcept
+{
+  if (cursor < 0 || (std::size_t)cursor >= elements.size())
+    return false;
+
+  const Element &element = elements[cursor];
+  if (!element.IsButtons())
+    return false;
+
+  for (int i = (int)button_column + (forward ? 1 : -1);
+       i >= 0 && i < (int)element.buttons.size();
+       i += forward ? 1 : -1) {
+    if (element.buttons[i].disabled)
+      continue;
+
+    button_column = (unsigned)i;
+    Invalidate();
+    return true;
+  }
+
+  return false;
 }
 
 void
@@ -2194,6 +2547,27 @@ GroupedListControl::ActivateItem() noexcept
   Element &element = elements[cursor];
   if (element.disabled)
     return;
+
+  if (element.IsButtons()) {
+    if (button_column >= element.buttons.size())
+      return;
+
+    const ElementButton &button = element.buttons[button_column];
+    if (button.disabled)
+      return;
+
+    /* the button is drawn pressed and the release does not reach the
+       screen before the next repaint: show it now, the callback may
+       take a while */
+    if (auto *top = dynamic_cast<UI::TopWindow *>(GetRootOwner()))
+      top->Refresh();
+
+    /* a copy, because the callback may rebuild the list */
+    if (auto callback = button.callback)
+      callback();
+
+    return;
+  }
 
   if (element.toggle) {
     /* the switch is the state of this item; the check mark of the
@@ -2326,14 +2700,15 @@ GroupedListControl::DrawRoundedCorner(Canvas &canvas, const PixelRect &rc,
 void
 GroupedListControl::DrawCardBorder(Canvas &canvas, const PixelRect &rc,
                                    bool first, bool last, Color color,
-                                   int radius) noexcept
+                                   int top_radius,
+                                   int bottom_radius) noexcept
 {
   const int thickness = GetSeparatorThickness();
 
   /* the two sides; the rows of a rounded corner get their pixels from
      DrawRoundedCorner() instead */
-  const int top = rc.top + (first ? radius : 0);
-  const int bottom = rc.bottom - (last ? radius : 0);
+  const int top = rc.top + (first ? top_radius : 0);
+  const int bottom = rc.bottom - (last ? bottom_radius : 0);
 
   canvas.DrawFilledRectangle({rc.left, top, rc.left + thickness, bottom},
                              color);
@@ -2341,22 +2716,22 @@ GroupedListControl::DrawCardBorder(Canvas &canvas, const PixelRect &rc,
                              color);
 
   if (first)
-    canvas.DrawFilledRectangle({rc.left + radius, rc.top,
-                                rc.right - radius, rc.top + thickness},
+    canvas.DrawFilledRectangle({rc.left + top_radius, rc.top,
+                                rc.right - top_radius, rc.top + thickness},
                                color);
 
   /* the lower edge of the card, or the line which separates this item
      from the next one */
-  const int inset = last ? radius : 0;
+  const int inset = last ? bottom_radius : 0;
   canvas.DrawFilledRectangle({rc.left + inset, rc.bottom - thickness,
                               rc.right - inset, rc.bottom},
                              color);
 
   if (first)
-    DrawRoundedCorner(canvas, rc, true, color, radius, thickness);
+    DrawRoundedCorner(canvas, rc, true, color, top_radius, thickness);
 
   if (last)
-    DrawRoundedCorner(canvas, rc, false, color, radius, thickness);
+    DrawRoundedCorner(canvas, rc, false, color, bottom_radius, thickness);
 }
 
 void
@@ -2532,18 +2907,26 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     const int radius = GetCardRadius();
 
+    /* an edge which a row of buttons has cut into the group is
+       barely rounded: the group goes on beyond it */
+    const int cut_radius = (int)std::lround(radius * CUT_RADIUS_FACTOR);
+    const int top_radius = element.cut_top ? cut_radius : radius;
+    const int bottom_radius = element.cut_bottom ? cut_radius : radius;
+
     if (element.first_in_group)
-      DrawRoundedEdge(canvas, rc, true, look.background_color, radius);
+      DrawRoundedEdge(canvas, rc, true, look.background_color, top_radius);
 
     if (element.last_in_group)
-      DrawRoundedEdge(canvas, rc, false, look.background_color, radius);
+      DrawRoundedEdge(canvas, rc, false, look.background_color,
+                      bottom_radius);
 
     /* a display which knows two colors paints the card in the same
        white as the page behind it: draw its edge, or there would be
        no card at all.  The line to the next item is part of it */
     if (IsDithered())
       DrawCardBorder(canvas, rc, element.first_in_group,
-                     element.last_in_group, look.list.text_color, radius);
+                     element.last_in_group, look.list.text_color,
+                     top_radius, bottom_radius);
 
     /* a thin line separates the items of a card; like the gap between
        two cards, it shows the page behind them.  The selected item
@@ -2854,7 +3237,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     /* this card is as white as the page, too */
     if (IsDithered())
       DrawCardBorder(canvas, card_rc, true, true, look.list.text_color,
-                     radius);
+                     radius, radius);
 
     text_rc.top = card_rc.top + padding;
     text_rc.bottom = card_rc.bottom - padding;
@@ -2890,6 +3273,42 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                             - (int)Layout::VptScale(CAPTION_GAP_PT)
                             - (int)look.list.font_bold->GetHeight()},
                            text_rc, element.text.c_str());
+    break;
+
+  case Element::Type::BUTTONS: {
+    const int top = rc.top + GetButtonsLeadingGap(i);
+
+    for (std::size_t j = 0; j < element.buttons.size(); ++j) {
+      const ElementButton &button = element.buttons[j];
+
+      /* the buttons share the width of the card; the renderer keeps
+         the gap between two of them and towards the edges */
+      const ButtonState state = button.disabled
+        ? ButtonState::DISABLED
+        : (int)i == pressed_element && (int)j == pressed_column
+        ? ButtonState::PRESSED
+        : (int)i == cursor && j == button_column
+        ? (HasCursorKeys() && !HasFocus()
+           ? ButtonState::SELECTED
+           : ButtonState::FOCUSED)
+        : ButtonState::ENABLED;
+
+      button.renderer.DrawButton(canvas, GetButtonRect(element, j, rc, top),
+                                 state);
+    }
+
+    if (!element.text.empty()) {
+      PixelRect description_rc = text_rc;
+      description_rc.top = top
+        + (int)(GetButtonLines(element) * GetItemHeight())
+        + (int)Layout::VptScale(CAPTION_GAP_PT);
+
+      canvas.Select(*look.list.font);
+      canvas.SetTextColor(look.text_color);
+      canvas.SetBackgroundTransparent();
+      text_renderer.Draw(canvas, description_rc, element.text.c_str());
+    }
+  }
     break;
 
   case Element::Type::FOOTER: {
@@ -3091,13 +3510,20 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
     kinetic.MouseDown(origin);
 
   const int i = FindElementAt(p.y);
-  if (i >= 0 && elements[i].IsSelectable()) {
+  const int column = i >= 0 && elements[i].IsButtons()
+    ? FindButtonAt(i, p)
+    : -1;
+
+  if (i >= 0 && elements[i].IsButtons()
+      ? column >= 0 && !elements[i].buttons[column].disabled
+      : i >= 0 && elements[i].IsSelectable()) {
     /* the item is drawn pressed right away, so that the finger gets
        an answer; the cursor follows only when the finger is lifted
        without having wandered off.  Moving it here would select an
        item on every scroll gesture, and the explanation below the
        group would jump while the list is still moving */
     pressed_element = i;
+    pressed_column = column;
     drag_mode = DragMode::CURSOR;
     Invalidate();
   } else
@@ -3130,6 +3556,7 @@ GroupedListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
        item which the cursor was on all the while keeps it */
     drag_mode = DragMode::SCROLL;
     pressed_element = -1;
+    pressed_column = -1;
     Invalidate();
   }
 
@@ -3167,11 +3594,22 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
     ? pressed_element
     : -1;
 
+  const int press_column = pressed_column;
+
   pressed_element = -1;
+  pressed_column = -1;
 
   bool activate = drag_mode == DragMode::CURSOR && tapped && press >= 0;
 
-  if (activate) {
+  if (activate && elements[press].IsButtons()) {
+    /* a button is a control, not a choice: it acts on the first tap,
+       wherever the cursor was, like the switch of an item.  The
+       cursor comes first, it arms the button the finger is on */
+    SetCursor(press);
+
+    if (press_column >= 0)
+      button_column = (unsigned)press_column;
+  } else if (activate) {
     const Element &element = elements[press];
 
     /* the switch is a control of its own: a tap on it does what it
@@ -3259,9 +3697,11 @@ GroupedListControl::OnKeyCheck(unsigned key_code) const noexcept
        here; the button which is marked there gets it instead, and
        the list keeps the cursor which that button acts on.  Should
        no button be marked, the key comes back to #OnKeyDown() and
-       activates the item after all */
+       activates the item after all.  A button of the page takes
+       Enter in any case: it is what the cursor is on */
     return cursor >= 0 &&
-      elements[cursor].enter_action == EnterAction::ITEM;
+      (elements[cursor].IsButtons() ||
+       elements[cursor].enter_action == EnterAction::ITEM);
 
   case KEY_SPACE:
     /* the item itself, whoever owns Enter.  A control stick has no
@@ -3371,6 +3811,35 @@ GroupedListWidget::AddItem(const char *caption, Callback callback,
                            const ItemOptions &options) noexcept
 {
   control.AddItem(caption, std::move(callback), options);
+}
+
+void
+GroupedListWidget::AddButton(const char *caption, Callback callback) noexcept
+{
+  AddButton(caption, std::move(callback), ButtonOptions{});
+}
+
+void
+GroupedListWidget::AddButton(const char *caption, Callback callback,
+                             const ButtonOptions &options) noexcept
+{
+  const ButtonDefinition button{caption, std::move(callback)};
+  control.AddButtons({&button, 1}, options);
+}
+
+void
+GroupedListWidget::AddButtonRow(std::initializer_list<ButtonDefinition>
+                                buttons) noexcept
+{
+  AddButtonRow(buttons, ButtonOptions{});
+}
+
+void
+GroupedListWidget::AddButtonRow(std::initializer_list<ButtonDefinition>
+                                buttons,
+                                const ButtonOptions &options) noexcept
+{
+  control.AddButtons({buttons.begin(), buttons.size()}, options);
 }
 
 void
@@ -3716,6 +4185,12 @@ GroupedListWidget::KeyPress(unsigned key_code) noexcept
 
     case KEY_LEFT:
     case KEY_RIGHT:
+      /* a row of buttons on the page is walked along first: it is
+         what the cursor is on, and only its last button hands the
+         key on */
+      if (control.MoveButtonColumn(key_code == KEY_RIGHT))
+        return true;
+
       /* out of the list and onto the buttons; Left reaches the last
          one of them, which is where a dialog puts Close */
       if (action_bar != nullptr && MoveFocus(key_code == KEY_RIGHT))
