@@ -1,6 +1,8 @@
 Version 7.46 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
+  - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
+    timing out and then showing Not connected
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
@@ -170,6 +172,7 @@ Version 7.46 - not yet released
 * documentation
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
+  - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer

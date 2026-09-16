@@ -8,8 +8,12 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.io.IOException;
 
 import android.os.ParcelUuid;
@@ -17,6 +21,7 @@ import android.util.Log;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -281,6 +286,135 @@ final class BluetoothHelper
     }
   }
 
+  /**
+   * Xiaomi (and other DUAL) bands pair as a public BR/EDR address
+   * but talk GATT on a random LE address.  Prefer that exact address;
+   * use the advertised name only when it matches one live device.
+   */
+  private static boolean addressEquals(BluetoothDevice other, String address) {
+    return other != null && address != null &&
+      address.equalsIgnoreCase(other.getAddress());
+  }
+
+  private static boolean nameEquals(BluetoothDevice other, String name) {
+    if (other == null || name == null || name.isEmpty())
+      return false;
+    try {
+      return name.equals(getName(other));
+    } catch (SecurityException e) {
+      return false;
+    }
+  }
+
+  private static BluetoothDevice uniqueNameMatch(Iterable<BluetoothDevice> devices,
+                                                 String name) {
+    BluetoothDevice unique = null;
+    for (BluetoothDevice d : devices) {
+      if (!nameEquals(d, name))
+        continue;
+      if (unique == null)
+        unique = d;
+      else if (!unique.getAddress().equalsIgnoreCase(d.getAddress()))
+        return null;
+    }
+    return unique;
+  }
+
+  private BluetoothDevice findConnectedLeDevice(BluetoothDevice configured) {
+    BluetoothManager manager = (BluetoothManager)
+      context.getSystemService(Context.BLUETOOTH_SERVICE);
+    if (manager == null)
+      return null;
+
+    final String address = configured.getAddress();
+    final String name = getName(configured);
+    final int[] profiles = {
+      BluetoothProfile.GATT, BluetoothProfile.GATT_SERVER
+    };
+    final int[] states = {
+      BluetoothProfile.STATE_CONNECTED,
+      BluetoothProfile.STATE_CONNECTING
+    };
+    final List<BluetoothDevice> named = new ArrayList<BluetoothDevice>();
+
+    try {
+      for (int profile : profiles)
+        for (BluetoothDevice d :
+               manager.getDevicesMatchingConnectionStates(profile, states)) {
+          if (addressEquals(d, address))
+            return d;
+          if (nameEquals(d, name))
+            named.add(d);
+        }
+    } catch (SecurityException e) {
+      return null;
+    }
+    return uniqueNameMatch(named, name);
+  }
+
+  private BluetoothDevice scanForLeDevice(final BluetoothDevice configured,
+                                          int timeout_ms) {
+    final BluetoothLeScanner le_scanner = adapter.getBluetoothLeScanner();
+    if (le_scanner == null)
+      return configured;
+
+    final String address = configured.getAddress();
+    final String name = getName(configured);
+    final BluetoothDevice[] by_address = new BluetoothDevice[1];
+    final Map<String, BluetoothDevice> by_name =
+      new LinkedHashMap<String, BluetoothDevice>();
+    final CountDownLatch done = new CountDownLatch(1);
+    final ScanCallback cb = new ScanCallback() {
+      @Override
+      public void onScanResult(int callbackType, ScanResult result) {
+        BluetoothDevice d = result.getDevice();
+        if (addressEquals(d, address)) {
+          by_address[0] = d;
+          done.countDown();
+          return;
+        }
+        if (nameEquals(d, name))
+          synchronized (by_name) {
+            by_name.put(d.getAddress().toUpperCase(), d);
+          }
+      }
+    };
+
+    List<ScanFilter> filters = new ArrayList<>();
+    try {
+      filters.add(new ScanFilter.Builder().setDeviceAddress(address).build());
+    } catch (IllegalArgumentException e) {
+      /* keep name filter */
+    }
+    if (name != null && !name.isEmpty())
+      filters.add(new ScanFilter.Builder().setDeviceName(name).build());
+
+    ScanSettings settings = new ScanSettings.Builder()
+      .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+      .build();
+
+    try {
+      le_scanner.startScan(filters, settings, cb);
+      done.await(timeout_ms, TimeUnit.MILLISECONDS);
+    } catch (Exception e) {
+      Log.e(TAG, "BLE sensor scan failed", e);
+    } finally {
+      try {
+        le_scanner.stopScan(cb);
+      } catch (Exception e) {
+      }
+    }
+
+    if (by_address[0] != null)
+      return by_address[0];
+
+    synchronized (by_name) {
+      if (by_name.size() == 1)
+        return by_name.values().iterator().next();
+    }
+    return configured;
+  }
+
   public BluetoothSensor connectSensor(String address, SensorListener listener)
     throws IOException
   {
@@ -289,12 +423,30 @@ final class BluetoothHelper
 
     // TODO wait for permission to be granted
     requestConnectPermission(null);
+    requestScanPermission(null);
 
-    BluetoothDevice device = adapter.getRemoteDevice(address);
-    if (device == null)
+    BluetoothDevice configured = adapter.getRemoteDevice(address);
+    if (configured == null)
       throw new IOException("Bluetooth device not found");
 
-    return new BluetoothSensor(context, device, listener);
+    BluetoothDevice device = findConnectedLeDevice(configured);
+    boolean auto_connect = true;
+    if (device != null) {
+      auto_connect = false;
+      Log.i(TAG, "BLE sensor " + address + " using connected " +
+            device.getAddress());
+    } else {
+      device = scanForLeDevice(configured, 4000);
+      if (!device.getAddress().equalsIgnoreCase(address)) {
+        auto_connect = false;
+        Log.i(TAG, "BLE sensor " + address + " using advertised " +
+              device.getAddress());
+      } else {
+        Log.i(TAG, "BLE sensor " + address + " using configured address");
+      }
+    }
+
+    return new BluetoothSensor(context, device, listener, auto_connect);
   }
 
   public AndroidPort connectBleSerial(String address)
