@@ -266,6 +266,27 @@ public:
      */
     unsigned value_max_lines = 0;
 
+    /**
+     * A text over the whole width of the item, below the caption and
+     * the value and above #subtitle: what the item is about, where a
+     * subtitle is too short for it.  The caption, a value beside it,
+     * the badge, the switch and the arrow then share the first line,
+     * and the subtitle runs over the whole width, too.
+     */
+    const char *description = nullptr;
+
+    /** the font of #description */
+    TextFont description_font = TextFont::DEFAULT;
+
+    /** the size of #description */
+    TextSize description_size = TextSize::DEFAULT;
+
+    /**
+     * How many lines #description may use; 0 for all of them.  The
+     * last line ends with an ellipsis where the text goes on.
+     */
+    unsigned description_max_lines = 0;
+
     /** a short label in a rounded box, e.g. "active" */
     const char *badge = nullptr;
 

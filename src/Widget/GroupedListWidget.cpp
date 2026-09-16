@@ -325,6 +325,43 @@ private:
     /** the height of the caption, which may need more than one line */
     unsigned text_height = 0;
 
+    /** only for Type::ITEM: a text over the whole width, between the
+        value and #subtitle */
+    std::string description{};
+
+    /** only for Type::ITEM: the font of #description */
+    TextFont description_font = TextFont::DEFAULT;
+
+    /** only for Type::ITEM: the size of #description */
+    TextSize description_size = TextSize::DEFAULT;
+
+    /** only for Type::ITEM: how many lines #description may use; 0
+        for all of them */
+    unsigned description_max_lines = 0;
+
+    /** the lines of #description, broken for #wrapped_description_width */
+    WrappedText wrapped_description{};
+
+    /** the width for which #wrapped_description was broken; -1 if never */
+    int wrapped_description_width = -1;
+
+    /** the height of #description, which may need more than one line */
+    unsigned description_height = 0;
+
+    /**
+     * The height of the first row, which the caption shares with what
+     * stands at the right edge; only while HasRows()
+     */
+    unsigned first_row_height = 0;
+
+    /**
+     * Is the item a stack of rows over the whole width, below a
+     * first row which holds the caption and the decorations?
+     */
+    bool HasRows() const noexcept {
+      return !description.empty();
+    }
+
     /** only for Type::ITEM: drawn in a rounded box */
     std::string badge{};
 
@@ -774,13 +811,31 @@ private:
   int GetDecorationWidth(const Element &element) const noexcept;
 
   /**
+   * The width which the decorations at the left edge and the inset at
+   * the right edge take away from every row of an item: what a row
+   * below the first one loses in an item which is a stack of rows.
+   */
+  [[gnu::pure]]
+  int GetRowDecorationWidth(const Element &element) const noexcept;
+
+  /**
+   * The height which the decorations at the right edge need when they
+   * share the first row with the caption.
+   */
+  [[gnu::pure]]
+  int GetFirstRowDecorationHeight(const Element &element) const noexcept;
+
+  /**
    * Divide the room of an item between the caption and the value:
    * both may wrap, and the one which needs more of it gets more.
    *
    * @param room the width which the caption and the value share
+   * @param wide_room the width of a value below the caption; the
+   * same as @p room unless the item is a stack of rows
    * @return the width of the box which holds the caption
    */
-  int UpdateTextLayout(Element &element, int room) const noexcept;
+  int UpdateTextLayout(Element &element, int room,
+                       int wide_room) const noexcept;
 
   /**
    * Draw a text into its box; a text which is too wide wraps, and the
@@ -802,6 +857,14 @@ private:
     return element.value_max_lines > 0
       ? element.value_max_lines
       : MAX_TEXT_LINES;
+  }
+
+  /** How many lines the description of the given item may use. */
+  [[gnu::pure]]
+  static std::size_t GetDescriptionMaxLines(const Element &element) noexcept {
+    return element.description_max_lines > 0
+      ? element.description_max_lines
+      : std::numeric_limits<std::size_t>::max();
   }
 
   /**
@@ -923,12 +986,12 @@ private:
       : look.small_font;
   }
 
-  /** The font which draws the value of the given item. */
+  /** The font of the given family and size, as far as the look has it. */
   [[gnu::pure]]
-  const Font &GetValueFont(const Element &element) const noexcept {
-    const bool mono = element.value_font == TextFont::MONO;
+  const Font &GetFont(TextFont font, TextSize size) const noexcept {
+    const bool mono = font == TextFont::MONO;
 
-    if (element.value_size == TextSize::SMALL)
+    if (size == TextSize::SMALL)
       return mono && look.small_mono_font.IsDefined()
         ? look.small_mono_font
         : look.small_font;
@@ -938,12 +1001,37 @@ private:
       : *look.list.font;
   }
 
+  /** The font which draws the value of the given item. */
+  [[gnu::pure]]
+  const Font &GetValueFont(const Element &element) const noexcept {
+    return GetFont(element.value_font, element.value_size);
+  }
+
+  /** The font which draws the description of the given item. */
+  [[gnu::pure]]
+  const Font &GetDescriptionFont(const Element &element) const noexcept {
+    return GetFont(element.description_font, element.description_size);
+  }
+
   /** The font which draws the badge of an item. */
   [[gnu::pure]]
   const Font &GetBadgeFont(const Element &element) const noexcept {
     return element.badge_font == TextFont::MONO && look.mono_font.IsDefined()
       ? look.mono_font
       : *look.list.font;
+  }
+
+  /**
+   * The height of the box of the badge: as tall as the list font, so
+   * that the badges of a group are the same size, and taller where
+   * another font needs the room.
+   */
+  [[gnu::pure]]
+  int GetBadgeHeight(const Element &element) const noexcept {
+    const int badge_pad_y = Layout::VptScale(BADGE_PADDING_PT) / 2;
+    return std::max((int)look.list.font->GetHeight(),
+                    (int)GetBadgeFont(element).GetHeight())
+      + 2 * badge_pad_y;
   }
 
   /**
@@ -1551,6 +1639,10 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .value_size = options.value_size,
     .value_all_lines = options.value_all_lines,
     .value_max_lines = options.value_max_lines,
+    .description = options.description != nullptr ? options.description : "",
+    .description_font = options.description_font,
+    .description_size = options.description_size,
+    .description_max_lines = options.description_max_lines,
     .badge = GetBadge(options),
     .badge_style = options.badge_style,
     .badge_font = options.badge_font,
@@ -2108,13 +2200,11 @@ GroupedListControl::UpdateGroupFlags() noexcept
 }
 
 int
-GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
+GroupedListControl::GetRowDecorationWidth(const Element &element)
+  const noexcept
 {
   /* this mirrors DrawElement(), which lays the decorations out while
      it draws them */
-
-  const int padding = GetPadding();
-  const Font &font = *look.list.font;
 
   int width = Layout::VptScale(EDGE_INSET_PT);
 
@@ -2123,6 +2213,17 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
 
   if (element.check_left)
     width += Layout::VptScale(EDGE_INSET_PT) + GetCheckWidth();
+
+  return width;
+}
+
+int
+GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
+{
+  const int padding = GetPadding();
+  const Font &font = *look.list.font;
+
+  int width = GetRowDecorationWidth(element);
 
   if (element.check_right && !element.has_children)
     /* an item which opens and closes carries no check mark, and its
@@ -2144,6 +2245,24 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
       + 2 * (int)Layout::VptScale(BADGE_PADDING_PT) + padding;
 
   return width;
+}
+
+int
+GroupedListControl::GetFirstRowDecorationHeight(const Element &element)
+  const noexcept
+{
+  int height = 0;
+
+  if (!element.badge.empty())
+    height = GetBadgeHeight(element);
+
+  if (element.toggle && !element.disabled)
+    height = std::max(height, GetToggleHeight());
+
+  if (element.check_right && !element.has_children)
+    height = std::max(height, GetCheckSize());
+
+  return height;
 }
 
 /**
@@ -2183,8 +2302,8 @@ GetTextHeight(const Font &font, int width, const std::string &text,
 }
 
 int
-GroupedListControl::UpdateTextLayout(Element &element,
-                                     int room) const noexcept
+GroupedListControl::UpdateTextLayout(Element &element, int room,
+                                     int wide_room) const noexcept
 {
   const Font &font = *look.list.font;
   const Font &value_font = GetValueFont(element);
@@ -2215,8 +2334,9 @@ GroupedListControl::UpdateTextLayout(Element &element,
      caption_natural > available / 2 && value_natural > available / 2);
 
   if (below) {
-    element.value_width = room;
-    element.value_height = GetTextHeight(value_font, room, element.value,
+    element.value_width = wide_room;
+    element.value_height = GetTextHeight(value_font, wide_room,
+                                         element.value,
                                          element.wrapped_value,
                                          element.wrapped_value_width,
                                          GetValueMaxLines(element));
@@ -2416,13 +2536,36 @@ GroupedListControl::UpdateLayout() noexcept
         const int room = std::max(text_width
                                   - GetDecorationWidth(element), 1);
 
-        const int caption_width = UpdateTextLayout(element, room);
+        /* the rows below the first one of an item which is a stack
+           of rows: only the decorations at the left edge take from
+           their width */
+        const bool rows = element.HasRows();
+        const int wide_room = rows
+          ? std::max(text_width - GetRowDecorationWidth(element), 1)
+          : room;
+
+        const int caption_width = UpdateTextLayout(element, room,
+                                                   wide_room);
 
         element.subtitle_height = element.subtitle.empty()
           ? 0
           : text_renderer.GetHeight(GetSubtitleFont(element),
-                                        std::max(caption_width, 1),
-                                        element.subtitle.c_str());
+                                    std::max(rows ? wide_room
+                                             : caption_width, 1),
+                                    element.subtitle.c_str());
+
+        element.description_height = rows
+          ? GetTextHeight(GetDescriptionFont(element), wide_room,
+                          element.description,
+                          element.wrapped_description,
+                          element.wrapped_description_width,
+                          GetDescriptionMaxLines(element))
+          : 0;
+
+        const unsigned subtitle_lines = element.subtitle_height
+          / GetSubtitleFont(element).GetLineSpacing();
+        const unsigned value_lines = element.value_height
+          / GetValueFont(element).GetLineSpacing();
 
         /* the caption, its second line and a value below them are one
            block; a value beside them is a block of its own */
@@ -2430,20 +2573,51 @@ GroupedListControl::UpdateLayout() noexcept
         unsigned lines = std::max(1u, element.text_height
                                   / look.list.font->GetLineSpacing());
 
-        if (element.subtitle_height > 0) {
-          block += subtitle_gap + element.subtitle_height;
-          lines += element.subtitle_height
-            / GetSubtitleFont(element).GetLineSpacing();
-        }
+        element.first_row_height = 0;
 
-        if (element.value_is_below) {
-          block += subtitle_gap + element.value_height;
-          lines += element.value_height
-            / GetValueFont(element).GetLineSpacing();
-        } else if (element.value_height > block) {
-          block = element.value_height;
-          lines = element.value_height
-            / GetValueFont(element).GetLineSpacing();
+        if (rows) {
+          /* what stands at the right edge shares the first row with
+             the caption; a value below it, the description and the
+             subtitle are rows of their own, over the whole width */
+          unsigned row = element.text_height;
+
+          if (!element.value_is_below && element.value_height > row) {
+            row = element.value_height;
+            lines = value_lines;
+          }
+
+          row = std::max(row,
+                         (unsigned)GetFirstRowDecorationHeight(element));
+
+          element.first_row_height = row;
+          block = row;
+
+          if (element.value_is_below) {
+            block += subtitle_gap + element.value_height;
+            lines += value_lines;
+          }
+
+          block += subtitle_gap + element.description_height;
+          lines += element.description_height
+            / GetDescriptionFont(element).GetLineSpacing();
+
+          if (element.subtitle_height > 0) {
+            block += subtitle_gap + element.subtitle_height;
+            lines += subtitle_lines;
+          }
+        } else {
+          if (element.subtitle_height > 0) {
+            block += subtitle_gap + element.subtitle_height;
+            lines += subtitle_lines;
+          }
+
+          if (element.value_is_below) {
+            block += subtitle_gap + element.value_height;
+            lines += value_lines;
+          } else if (element.value_height > block) {
+            block = element.value_height;
+            lines = value_lines;
+          }
         }
 
         if (block == font_height) {
@@ -3258,23 +3432,47 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
        centred as one block */
     const int gap = Layout::VptScale(SUBTITLE_GAP_PT);
 
-    int block_height = (int)element.text_height;
+    /* an item which is a stack of rows keeps what stands at the right
+       edge in its first row, so that the rows below it have the whole
+       width */
+    const bool rows = element.HasRows();
+    const int row_height = rows
+      ? (int)element.first_row_height
+      : (int)element.text_height;
 
-    if (!element.subtitle.empty())
-      block_height += gap + (int)element.subtitle_height;
+    int block_height = row_height;
 
     if (element.value_is_below)
       block_height += gap + (int)element.value_height;
 
+    if (rows)
+      block_height += gap + (int)element.description_height;
+
+    if (!element.subtitle.empty())
+      block_height += gap + (int)element.subtitle_height;
+
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - block_height) / 2;
 
+    /* the caption sits in the middle of the first row, which a badge
+       may make taller than the caption is */
+    const int caption_y = text_y
+      + (row_height - (int)element.text_height) / 2;
+
     /* the value belongs to the caption and comes right after it; the
-       second line, which explains the item, closes the block */
-    const int value_y = text_y + (int)element.text_height + gap;
-    const int subtitle_y = element.value_is_below
+       description follows, and the second line, which explains the
+       item, closes the block */
+    const int value_y = text_y + row_height + gap;
+    const int description_y = element.value_is_below
       ? value_y + (int)element.value_height + gap
       : value_y;
+    const int subtitle_y = rows
+      ? description_y + (int)element.description_height + gap
+      : description_y;
+
+    /* the middle of the row which holds what stands at the right
+       edge: the item itself, or its first row */
+    const int row_centre_y = rows ? text_y + row_height / 2 : centre_y;
 
     /* the caption uses the room which is left of the check mark, the
        arrow, the value and the badge */
@@ -3301,7 +3499,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
           ? caption_rc.left
           : caption_rc.right - size;
         check_rc.right = check_rc.left + size;
-        check_rc.top = centre_y - size / 2;
+        check_rc.top = (left ? centre_y : row_centre_y) - size / 2;
         check_rc.bottom = check_rc.top + size;
 
         DrawCheck(canvas, check_rc, text_color);
@@ -3325,7 +3523,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       PixelRect toggle_rc;
       toggle_rc.right = caption_rc.right;
       toggle_rc.left = toggle_rc.right - width;
-      toggle_rc.top = centre_y - height / 2;
+      toggle_rc.top = row_centre_y - height / 2;
       toggle_rc.bottom = toggle_rc.top + height;
 
       DrawToggle(canvas, toggle_rc, element.checked, look,
@@ -3404,7 +3602,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
            page, and these two must not look alike.  Down says that
            the children come out below, up that they go back in */
         const int x = caption_rc.right - size;
-        const int y = centre_y + (element.expanded ? size / 2 : -size / 2);
+        const int y = row_centre_y
+          + (element.expanded ? size / 2 : -size / 2);
         const int dy = element.expanded ? -size : size;
 
         canvas.DrawLine({x - size, y}, {x, y + dy});
@@ -3412,10 +3611,10 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
         caption_rc.right -= 2 * size + padding;
       } else {
-        canvas.DrawLine({caption_rc.right - size, centre_y - size},
-                        {caption_rc.right, centre_y});
-        canvas.DrawLine({caption_rc.right, centre_y},
-                        {caption_rc.right - size, centre_y + size});
+        canvas.DrawLine({caption_rc.right - size, row_centre_y - size},
+                        {caption_rc.right, row_centre_y});
+        canvas.DrawLine({caption_rc.right, row_centre_y},
+                        {caption_rc.right - size, row_centre_y + size});
 
         caption_rc.right -= size + padding;
       }
@@ -3431,8 +3630,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
       /* it sits in the middle of the item, like the badge and the
          arrow, even when the caption has been pushed up by a second
-         line */
-      value_rc.top = centre_y - (int)element.value_height / 2;
+         line; in the middle of the first row of a stack of rows */
+      value_rc.top = row_centre_y - (int)element.value_height / 2;
       value_rc.bottom = value_rc.top + (int)element.value_height;
 
       caption_rc.right = value_rc.left - padding;
@@ -3444,23 +3643,17 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
          background of the item itself.  On an item which is not
          available, the box is grey, like its text */
       const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
-      const int badge_pad_y = badge_pad_x / 2;
 
       const Font &badge_font = GetBadgeFont(element);
       canvas.Select(badge_font);
 
-      /* the box is as tall as the list font, so that the badges of a
-         group are the same size, and taller where another font needs
-         the room */
-      const int badge_height = std::max(font_height,
-                                        (int)badge_font.GetHeight())
-        + 2 * badge_pad_y;
+      const int badge_height = GetBadgeHeight(element);
 
       PixelRect badge_rc;
       badge_rc.right = caption_rc.right;
       badge_rc.left = badge_rc.right
         - canvas.CalcTextWidth(element.badge.c_str()) - 2 * badge_pad_x;
-      badge_rc.top = centre_y - badge_height / 2;
+      badge_rc.top = row_centre_y - badge_height / 2;
       badge_rc.bottom = badge_rc.top + badge_height;
 
       const BadgeColors badge_colors = GetBadgeColors(look,
@@ -3497,10 +3690,15 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       canvas.SetTextColor(text_color);
     }
 
+    /* the rows below the first one run up to the right edge, below
+       what stands there */
+    PixelRect wide_rc = caption_rc;
+    wide_rc.right = text_rc.right - edge_inset;
+
     if (element.value_width > 0) {
       if (element.value_is_below) {
         /* below the caption, the value has the whole width */
-        value_rc = caption_rc;
+        value_rc = rows ? wide_rc : caption_rc;
         value_rc.top = value_y;
         value_rc.bottom = value_y + (int)element.value_height;
       }
@@ -3512,16 +3710,28 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     }
 
     PixelRect text_box = caption_rc;
-    text_box.top = text_y;
-    text_box.bottom = text_y + (int)element.text_height;
+    text_box.top = caption_y;
+    text_box.bottom = caption_y + (int)element.text_height;
 
     DrawWrappedText(canvas, *look.list.font, text_box, element.text,
                     element.wrapped_text, element.wrapped_text_width, false);
 
+    if (rows) {
+      PixelRect description_rc = wide_rc;
+      description_rc.top = description_y;
+      description_rc.bottom = description_y
+        + (int)element.description_height;
+
+      DrawWrappedText(canvas, GetDescriptionFont(element), description_rc,
+                      element.description, element.wrapped_description,
+                      element.wrapped_description_width, false,
+                      GetDescriptionMaxLines(element));
+    }
+
     if (!element.subtitle.empty()) {
       canvas.Select(GetSubtitleFont(element));
 
-      PixelRect subtitle_rc = caption_rc;
+      PixelRect subtitle_rc = rows ? wide_rc : caption_rc;
       subtitle_rc.top = subtitle_y;
       subtitle_rc.bottom = subtitle_y + (int)element.subtitle_height;
 
