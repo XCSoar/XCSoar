@@ -74,7 +74,7 @@ struct TrailSettings {
   bool wind_drift_enabled;
   bool scaling_enabled;
 
-  /** 0: standard, 1: seeyou colors */
+  /** Vario #1: green/brown; Vario #2 (default): SeeYou orange/cyan */
   enum class Type: uint8_t {
     VARIO_1,
     VARIO_2,
