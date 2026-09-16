@@ -32,6 +32,7 @@
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Dialogs/dlgQuickGuide.hpp"
+#include "Dialogs/GroupedListTestDialog.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Language/Language.hpp"
 #include "Protection.hpp"
@@ -945,6 +946,8 @@ Startup(UI::Display &display)
   if (terrain_loader == nullptr)
     RepositoryAutoUpdateTerrainIdle();
 #endif
+
+  ShowGroupedListTestDialog();
 
   return true;
 }
