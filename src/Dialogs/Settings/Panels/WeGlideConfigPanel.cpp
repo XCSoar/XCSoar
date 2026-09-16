@@ -2,93 +2,100 @@
 // Copyright The XCSoar Project
 
 #include "WeGlideConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
+#include "Dialogs/DateEntry.hpp"
+#include "Dialogs/NumberEntry.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
 
-#include <stdio.h>
+/** The WeGlide account: whether it is used, and who the pilot is. */
+class WeGlideConfigPanel final : public ConfigListPanel {
+  bool enabled, automatic_upload;
+  unsigned pilot_id;
+  BrokenDate pilot_birthdate;
 
-// #define HAVE_WEGLIDE_PILOTNAME
-
-enum ControlIndex {
-  WeGlideEnabled,
-  WeGlideAutomaticUpload,
-  WeGlidePilotID,
-  WeGlidePilotBirthDate,
-};
-
-
-class WeGlideConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-  /** Help text; %s is the untranslated service name. */
-  StaticString<512> automatic_upload_help;
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  WeGlideConfigPanel() noexcept
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void SetEnabled(bool enabled) noexcept;
-
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-WeGlideConfigPanel::SetEnabled(bool enabled) noexcept
+WeGlideConfigPanel::LoadSettings() noexcept
 {
-  SetRowEnabled(WeGlideAutomaticUpload, enabled);
-  SetRowEnabled(WeGlidePilotBirthDate, enabled);
-  SetRowEnabled(WeGlidePilotID, enabled);
+  const WeGlideSettings &weglide =
+    CommonInterface::GetComputerSettings().weglide;
+
+  enabled = weglide.enabled;
+  automatic_upload = weglide.automatic_upload;
+  pilot_id = weglide.pilot_id;
+  pilot_birthdate = weglide.pilot_birthdate;
 }
 
 void
-WeGlideConfigPanel::OnModified(DataField &df) noexcept
+WeGlideConfigPanel::Fill() noexcept
 {
-  if (IsDataField(WeGlideEnabled, df)) {
-    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetEnabled(dfb.GetValue());
-  }
-}
+  AddGroup();
 
-void
-WeGlideConfigPanel::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
-{
-  const WeGlideSettings &weglide = CommonInterface::GetComputerSettings().weglide;
+  AddToggleItem(_("Enable"),
+                _("Allow download of declared tasks from Weglide in the Task Manager."),
+                enabled);
 
-  RowFormWidget::Prepare(parent, rc);
-
-  AddBoolean(
-      _("Enable"),
-      _("Allow download of declared tasks from Weglide in the Task Manager."),
-      weglide.enabled, this);
-
+  StaticString<256> automatic_upload_help;
   automatic_upload_help.Format(
       _("Asks whether to upload flight to %s, after flight is "
         "downloaded from external logger."),
       "WeGlide");
-  AddBoolean(_("Automatic Upload"), automatic_upload_help.c_str(),
-             weglide.automatic_upload, this);
+  AddToggleItem(_("Automatic Upload"), automatic_upload_help.c_str(),
+                automatic_upload, nullptr, !enabled);
 
-  AddInteger(_("Pilot"),
-             _("Take this from your WeGlide Profile. Or set to 0 if not used."),
-             "%d", "%d", 1, 99999, 1, weglide.pilot_id);
+  /* the pilot */
+  AddGroup();
 
-  AddDate(_("Pilot date of birth"), nullptr,
-          weglide.pilot_birthdate);
+  StaticString<16> id;
+  id.Format("%u", pilot_id);
 
-  SetEnabled(weglide.enabled);
+  ItemOptions id_options{.chevron = true,
+                         .help = _("Take this from your WeGlide Profile. Or set to 0 if not used."),
+                         .disabled = !enabled};
+  if (pilot_id != 0)
+    id_options.value = id.c_str();
+  else
+    id_options.badge = C_("Badge", "none");
+
+  AddItem(_("Pilot"), [this](){
+    unsigned value = pilot_id;
+    if (NumberEntryDialog(_("Pilot"), value, 5) && value != pilot_id) {
+      pilot_id = value;
+      Refresh();
+    }
+  }, id_options);
+
+  char date[0x10];
+  ItemOptions date_options{.chevron = true, .disabled = !enabled};
+  if (pilot_birthdate.IsPlausible()) {
+    FormatISO8601(date, pilot_birthdate);
+    date_options.value = date;
+  } else
+    date_options.badge = C_("Badge", "none");
+
+  AddItem(_("Pilot date of birth"), [this](){
+    BrokenDate value = pilot_birthdate;
+    if (DateEntryDialog(_("Pilot date of birth"), value) &&
+        value.IsPlausible() && value != pilot_birthdate) {
+      pilot_birthdate = value;
+      Refresh();
+    }
+  }, date_options);
 }
 
 bool
@@ -98,19 +105,23 @@ WeGlideConfigPanel::Save(bool &_changed) noexcept
 
   auto &weglide = CommonInterface::SetComputerSettings().weglide;
 
-  changed |= SaveValue(WeGlideAutomaticUpload,
-                       ProfileKeys::WeGlideAutomaticUpload,
-                       weglide.automatic_upload);
+  changed |= Profile::Update(ProfileKeys::WeGlideAutomaticUpload,
+                             weglide.automatic_upload, automatic_upload);
+  changed |= Profile::Update(ProfileKeys::WeGlidePilotID,
+                             weglide.pilot_id, uint32_t(pilot_id));
 
-  changed |= SaveValueInteger(WeGlidePilotID, ProfileKeys::WeGlidePilotID,
-                              weglide.pilot_id);
+  if (pilot_birthdate.IsPlausible() &&
+      pilot_birthdate != weglide.pilot_birthdate) {
+    weglide.pilot_birthdate = pilot_birthdate;
 
-  changed |= SaveValue(WeGlidePilotBirthDate,
-                       ProfileKeys::WeGlidePilotBirthDate,
-                       weglide.pilot_birthdate);
+    char buffer[0x10];
+    FormatISO8601(buffer, pilot_birthdate);
+    Profile::Set(ProfileKeys::WeGlidePilotBirthDate, buffer);
+    changed = true;
+  }
 
-  changed |= SaveValue(WeGlideEnabled, ProfileKeys::WeGlideEnabled,
-                       weglide.enabled);
+  changed |= Profile::Update(ProfileKeys::WeGlideEnabled,
+                             weglide.enabled, enabled);
 
   _changed |= changed;
 
