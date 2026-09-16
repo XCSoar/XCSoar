@@ -6,6 +6,7 @@ package org.xcsoar;
 import java.util.UUID;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.LinkedList;
@@ -116,14 +117,52 @@ final class BluetoothHelper
     }
   }
 
+  /**
+   * BlueFly Vario BLE uses the Microchip/ISSC transparent UART, but
+   * bonded devices often have no cached service UUIDs.  The advertised
+   * name is enough to offer them as a BLE serial port.
+   */
+  private static boolean isBlueFlyName(String name) {
+    return name != null && name.regionMatches(true, 0, "BlueFly", 0, 7);
+  }
+
+  private static long getBondedLeFeatures(BluetoothDevice device, String name) {
+    long features = 0;
+
+    if (isBlueFlyName(name))
+      features |= DetectDeviceListener.FEATURE_BLE_SERIAL;
+
+    try {
+      ParcelUuid[] uuids = device.getUuids();
+      if (uuids != null)
+        features |= getFeatures(Arrays.asList(uuids));
+    } catch (SecurityException e) {
+      /* BLUETOOTH_CONNECT may still be missing on Android 12+ */
+    }
+
+    return features;
+  }
+
   private static void submitBondedDevices(Collection<BluetoothDevice> devices,
                                           DetectDeviceListener l) {
-    for (BluetoothDevice device : devices)
-      l.onDeviceDetected(device.getType() == BluetoothDevice.DEVICE_TYPE_LE
-                         ? DetectDeviceListener.TYPE_BLUETOOTH_LE
-                         : DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
-                         device.getAddress(), getName(device),
-                         0);
+    for (BluetoothDevice device : devices) {
+      final int hwType = device.getType();
+      final String name = getName(device);
+      final String address = device.getAddress();
+
+      /* Dual-mode modules (e.g. BlueFly RN4678) are not DEVICE_TYPE_LE
+         only; still offer the classic SPP entry when Android reports
+         classic or dual. */
+      if (hwType != BluetoothDevice.DEVICE_TYPE_LE)
+        l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_CLASSIC,
+                           address, name, 0);
+
+      if (hwType == BluetoothDevice.DEVICE_TYPE_LE ||
+          hwType == BluetoothDevice.DEVICE_TYPE_DUAL)
+        l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
+                           address, name,
+                           getBondedLeFeatures(device, name));
+    }
   }
 
   private synchronized void broadcastBondedDevices(Collection<BluetoothDevice> devices) {
@@ -336,11 +375,14 @@ final class BluetoothHelper
 
   private synchronized void broadcastScanResult(ScanResult result) {
     BluetoothDevice device = result.getDevice();
+    String name = getName(device);
     long features = getFeatures(result);
+    if (isBlueFlyName(name))
+      features |= DetectDeviceListener.FEATURE_BLE_SERIAL;
 
     for (DetectDeviceListener l : detectListeners)
       l.onDeviceDetected(DetectDeviceListener.TYPE_BLUETOOTH_LE,
-                         device.getAddress(), getName(device),
+                         device.getAddress(), name,
                          features);
   }
 
