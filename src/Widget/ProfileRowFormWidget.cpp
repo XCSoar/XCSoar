@@ -175,17 +175,7 @@ bool
 RowFormWidget::SaveValueFileReader(unsigned i,
                                    std::string_view profile_key) noexcept
 {
-  Path new_value = GetValueFile(i);
-  const auto contracted = ContractLocalPath(new_value);
-  if (contracted != nullptr)
-    new_value = contracted;
-
-  const char *old_value = Profile::Get(profile_key, "");
-  if (StringIsEqual(old_value, new_value.c_str()))
-    return false;
-
-  Profile::Set(profile_key, new_value.c_str());
-  return true;
+  return Profile::SetPath(profile_key, GetValueFile(i));
 }
 
 bool
