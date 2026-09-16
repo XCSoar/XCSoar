@@ -5,82 +5,155 @@
 
 #ifdef HAVE_HTTP
 
+#include "ConfigListPanel.hpp"
 #include "DataGlobals.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/SkySight/Regions.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 
-enum ControlIndex {
-  SKYSIGHT_EMAIL,
-  SKYSIGHT_PASSWORD,
-  SKYSIGHT_REGION,
-};
+#include <string>
+#include <vector>
 
-class SkySightConfigPanel final : public RowFormWidget {
+/** The account and the region of SkySight. */
+class SkySightConfigPanel final : public ConfigListPanel {
+  StaticString<64> email, password;
+  StaticString<32> region;
+
+  /** One region which may be chosen. */
+  struct Region {
+    std::string id, name;
+  };
+
+  /** the regions of the client, or the built-in ones without it */
+  std::vector<Region> regions;
+
+private:
+  void LoadRegions() noexcept;
+  void PickRegion() noexcept;
+
+  /** The name of the region which is chosen; its id if it is unknown. */
+  [[gnu::pure]]
+  const char *GetRegionName() const noexcept;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
 public:
-  SkySightConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-SkySightConfigPanel::Prepare(ContainerWindow &parent,
-                             const PixelRect &rc) noexcept
+SkySightConfigPanel::LoadRegions() noexcept
+{
+  regions.clear();
+
+  if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
+    for (const auto &candidate : skysight->GetRegions())
+      regions.push_back({candidate.id, gettext(candidate.name.c_str())});
+
+    /* the client falls back to its own region for an unknown one */
+    bool known = false;
+    for (const auto &candidate : regions)
+      known |= candidate.id == region.c_str();
+
+    if (!known)
+      region = skysight->GetRegion();
+  } else {
+    for (const auto &candidate : SKYSIGHT_REGIONS)
+      regions.push_back({candidate.id, gettext(candidate.name)});
+
+    region = FindSkySightRegionById(region.c_str()).id;
+  }
+}
+
+const char *
+SkySightConfigPanel::GetRegionName() const noexcept
+{
+  for (const auto &candidate : regions)
+    if (candidate.id == region.c_str())
+      return candidate.name.c_str();
+
+  return region.c_str();
+}
+
+void
+SkySightConfigPanel::PickRegion() noexcept
+{
+  std::vector<PickerChoice> choices;
+  int current = -1;
+
+  for (const auto &candidate : regions) {
+    if (candidate.id == region.c_str())
+      current = choices.size();
+
+    choices.push_back({candidate.name.c_str()});
+  }
+
+  const int picked =
+    PickChoice(C_("Setting", "SkySight Region"),
+               _("Select the SkySight region used for live weather layers."),
+               choices, current);
+  if (picked < 0 || picked == current)
+    return;
+
+  region = regions[picked].id.c_str();
+  Refresh();
+}
+
+void
+SkySightConfigPanel::LoadSettings() noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 
-  RowFormWidget::Prepare(parent, rc);
+  email = settings.skysight.email;
+  password = settings.skysight.password;
+  region = settings.skysight.region;
 
-  AddText(C_("Setting", "SkySight Email"),
-          _("The e-mail address you use to sign in to skysight.io."),
-          settings.skysight.email);
-  AddPassword(C_("Setting", "SkySight Password"),
+  LoadRegions();
+}
+
+void
+SkySightConfigPanel::Fill() noexcept
+{
+  AddGroup();
+
+  AddTextItem(C_("Setting", "SkySight Email"),
+              _("The e-mail address you use to sign in to skysight.io."),
+              email);
+
+  AddTextItem(C_("Setting", "SkySight Password"),
               _("Your SkySight password."),
-              settings.skysight.password);
+              password, true);
 
-  auto *region = AddEnum(C_("Setting", "SkySight Region"),
-                         _("Select the SkySight region used for live weather layers."));
-  if (region == nullptr)
-    return;
+  AddGroup();
 
-  auto &df = *(DataFieldEnum *)region->GetDataField();
-  if (const auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
-    for (const auto &candidate : skysight->GetRegions())
-      df.addEnumText(candidate.id.c_str(), gettext(candidate.name.c_str()));
-
-    if (!df.SetValue(settings.skysight.region.c_str()))
-      df.SetValue(skysight->GetRegion().data());
-  } else {
-    for (const auto &candidate : SKYSIGHT_REGIONS)
-      df.addEnumText(candidate.id, gettext(candidate.name));
-
-    df.SetValue(FindSkySightRegionById(settings.skysight.region.c_str()).id);
-  }
-
-  region->RefreshDisplay();
+  AddItem(C_("Setting", "SkySight Region"), [this](){ PickRegion(); },
+          {.value = GetRegionName(), .chevron = true});
 }
 
 bool
 SkySightConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
   auto &settings = CommonInterface::SetComputerSettings().weather;
 
-  changed |= SaveValue(SKYSIGHT_EMAIL, ProfileKeys::SkySightEmail,
-                       settings.skysight.email);
-  changed |= SaveValue(SKYSIGHT_PASSWORD, ProfileKeys::SkySightPassword,
-                       settings.skysight.password);
-  changed |= SaveValue(SKYSIGHT_REGION, ProfileKeys::SkySightRegion,
-                       settings.skysight.region);
+  const bool email_changed =
+    Profile::Update(ProfileKeys::SkySightEmail, settings.skysight.email,
+                    email);
+  const bool password_changed =
+    Profile::Update(ProfileKeys::SkySightPassword,
+                    settings.skysight.password, password);
+  const bool region_changed =
+    Profile::Update(ProfileKeys::SkySightRegion, settings.skysight.region,
+                    region);
+
+  const bool changed = email_changed || password_changed || region_changed;
 
   if (changed)
     if (auto skysight = DataGlobals::GetSkySight())
