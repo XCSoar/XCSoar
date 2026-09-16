@@ -39,6 +39,9 @@ struct DialogLook {
   /** Fixed width, for a text whose columns shall line up */
   Font mono_font;
 
+  /** #small_font with a fixed width */
+  Font small_mono_font;
+
   /** Bold font scaled up for H1 headings in rich text */
   Font heading1_font;
 

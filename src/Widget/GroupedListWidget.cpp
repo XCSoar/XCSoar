@@ -225,6 +225,9 @@ private:
     /** only for Type::ITEM: a second line below #text; it may wrap */
     std::string subtitle{};
 
+    /** only for Type::ITEM: the font of #subtitle */
+    TextFont subtitle_font = TextFont::DEFAULT;
+
     /**
      * only for Type::ITEM: replaces the footer of the group while
      * the cursor is on this item
@@ -712,6 +715,15 @@ private:
   /** Move the views to where the list has scrolled them. */
   void MoveWidgets() noexcept;
 
+  /** The font which draws the subtitle of the given item. */
+  [[gnu::pure]]
+  const Font &GetSubtitleFont(const Element &element) const noexcept {
+    return element.subtitle_font == TextFont::MONO &&
+      look.small_mono_font.IsDefined()
+      ? look.small_mono_font
+      : look.small_font;
+  }
+
   /** The font which draws the value of the given item. */
   [[gnu::pure]]
   const Font &GetValueFont(const Element &element) const noexcept {
@@ -1180,6 +1192,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .icon_id = options.icon,
     .icon_text = options.icon_text != nullptr ? options.icon_text : "",
     .subtitle = options.subtitle != nullptr ? options.subtitle : "",
+    .subtitle_font = options.subtitle_font,
 
     .value = options.value != nullptr ? options.value : "",
     .value_below = options.value_below,
@@ -1831,7 +1844,7 @@ GroupedListControl::UpdateLayout() noexcept
 
         element.subtitle_height = element.subtitle.empty()
           ? 0
-          : text_renderer.GetHeight(look.small_font,
+          : text_renderer.GetHeight(GetSubtitleFont(element),
                                         std::max(caption_width, 1),
                                         element.subtitle.c_str());
 
@@ -1843,7 +1856,8 @@ GroupedListControl::UpdateLayout() noexcept
 
         if (element.subtitle_height > 0) {
           block += subtitle_gap + element.subtitle_height;
-          lines += element.subtitle_height / look.small_font.GetLineSpacing();
+          lines += element.subtitle_height
+            / GetSubtitleFont(element).GetLineSpacing();
         }
 
         if (element.value_is_below) {
@@ -2793,7 +2807,7 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                     element.wrapped_text, element.wrapped_text_width, false);
 
     if (!element.subtitle.empty()) {
-      canvas.Select(look.small_font);
+      canvas.Select(GetSubtitleFont(element));
 
       PixelRect subtitle_rc = caption_rc;
       subtitle_rc.top = subtitle_y;
