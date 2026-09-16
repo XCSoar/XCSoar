@@ -196,6 +196,8 @@ Version 7.46 - not yet released
     (splash, log) so testers can identify snapshot builds #3117
   - Linux: undefine X11 Status after EGL includes so test tools such as
     RunMapWindow compile #3150
+  - documentation: require make everything before pull requests so Run*
+    debug tools compile
 
 Version 7.45 - 2026-08-15
 * highlights

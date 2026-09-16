@@ -85,7 +85,9 @@ description of what is changed, followed by an empty line. Then write a
 longer description if needed, and explain why this change is needed.
 
 Each patch must compile and must not introduce a regression (as far as
-we know at the time).
+we know at the time). Before a pull request, compile with
+``everything`` so debug tools are included, not only the main binary
+(see :ref:`development-workflow` in :doc:`build`).
 
 Each patch must be self-contained and should only change one thing.
 Split larger patches into smaller pieces. Don’t refactor and

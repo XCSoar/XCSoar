@@ -788,8 +788,10 @@ Incremental build::
 
   make -j$(nproc) USE_CCACHE=y
 
-Full build with unit tests (matches what many contributors run locally
-before submitting changes)::
+Before submitting a pull request, compile with ``everything``, not only
+the main binary. Plain ``make`` does not build debug tools
+(``RunMapWindow`` and other ``Run*`` programs); include-order bugs often
+show up only there. ``everything check`` also runs the unit tests::
 
   make -j$(nproc) USE_CCACHE=y everything check
 

@@ -1109,7 +1109,8 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
 - Check that all `.po` files have valid syntax (no custom comments in wrong places)
 - Verify commit messages follow format: `<Component>: <Summary>`
 - Squash fixup commits and reword generic "Fix" messages
-- Ensure branch compiles on at least one platform
+- Compile with `make -j$(nproc) TARGET=UNIX USE_CCACHE=y everything`
+  (not only the main binary); see `.cursor/rules/pr-compilation.mdc`
 - Check for accidentally committed debug code or temporary files
 - Verify all user-visible changes have corresponding NEWS.txt entries
 - Update `doc/manual/en/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
