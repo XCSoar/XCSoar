@@ -37,6 +37,7 @@
 #include <cmath>
 #include <cstdint>
 #include <iterator>
+#include <limits>
 #include <memory>
 #include <string>
 #include <utility>
@@ -244,6 +245,13 @@ private:
 
     /** only for Type::ITEM: the font of #value */
     TextFont value_font = TextFont::DEFAULT;
+
+    /** only for Type::ITEM: show every line of #value */
+    bool value_all_lines = false;
+
+    /** only for Type::ITEM: how many lines #value may use; 0 for
+        #MAX_TEXT_LINES */
+    unsigned value_max_lines = 0;
 
     /** is #value drawn below the caption?  (the option, or too little room) */
     bool value_is_below = false;
@@ -593,7 +601,19 @@ private:
    */
   void DrawWrappedText(Canvas &canvas, const Font &font, const PixelRect &rc,
                        const std::string &text, const WrappedText &cached,
-                       int cached_width, bool right) const noexcept;
+                       int cached_width, bool right,
+                       std::size_t max_lines=MAX_TEXT_LINES) const noexcept;
+
+  /** How many lines the value of the given item may use. */
+  [[gnu::pure]]
+  static std::size_t GetValueMaxLines(const Element &element) noexcept {
+    if (element.value_all_lines)
+      return std::numeric_limits<std::size_t>::max();
+
+    return element.value_max_lines > 0
+      ? element.value_max_lines
+      : MAX_TEXT_LINES;
+  }
 
   /**
    * Does the view have so little room that the cards are better off
@@ -1164,6 +1184,8 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .value = options.value != nullptr ? options.value : "",
     .value_below = options.value_below,
     .value_font = options.value_font,
+    .value_all_lines = options.value_all_lines,
+    .value_max_lines = options.value_max_lines,
     .badge = GetBadge(options),
     .badge_style = options.badge_style,
     .badge_font = options.badge_font,
@@ -1596,10 +1618,11 @@ WrapCached(const Font &font, int width, const std::string &text,
  */
 static unsigned
 GetTextHeight(const Font &font, int width, const std::string &text,
-              WrappedText &cache, int &cache_width) noexcept
+              WrappedText &cache, int &cache_width,
+              std::size_t max_lines=MAX_TEXT_LINES) noexcept
 {
   const auto &wrapped = WrapCached(font, width, text, cache, cache_width);
-  const std::size_t lines = std::min(wrapped.lines.size(), MAX_TEXT_LINES);
+  const std::size_t lines = std::min(wrapped.lines.size(), max_lines);
 
   return lines <= 1
     ? font.GetHeight()
@@ -1630,7 +1653,8 @@ GroupedListControl::UpdateTextLayout(Element &element,
     element.value_width = room;
     element.value_height = GetTextHeight(value_font, room, element.value,
                                          element.wrapped_value,
-                                         element.wrapped_value_width);
+                                         element.wrapped_value_width,
+                                         GetValueMaxLines(element));
     element.value_is_below = true;
     element.text_height = GetTextHeight(font, room, element.text,
                                         element.wrapped_text,
@@ -1666,7 +1690,8 @@ GroupedListControl::UpdateTextLayout(Element &element,
   element.value_height = GetTextHeight(value_font, value_width,
                                        element.value,
                                        element.wrapped_value,
-                                       element.wrapped_value_width);
+                                       element.wrapped_value_width,
+                                       GetValueMaxLines(element));
   element.text_height = GetTextHeight(font, caption_width, element.text,
                                       element.wrapped_text,
                                       element.wrapped_text_width);
@@ -1680,7 +1705,8 @@ GroupedListControl::DrawWrappedText(Canvas &canvas, const Font &font,
                                     const std::string &text,
                                     const WrappedText &cached,
                                     int cached_width,
-                                    bool right) const noexcept
+                                    bool right,
+                                    std::size_t max_lines) const noexcept
 {
   canvas.Select(font);
 
@@ -1697,7 +1723,7 @@ GroupedListControl::DrawWrappedText(Canvas &canvas, const Font &font,
   int y = rc.top;
 
   for (std::size_t i = 0; i < wrapped.lines.size(); ++i) {
-    if (i + 1 == MAX_TEXT_LINES && wrapped.lines.size() > MAX_TEXT_LINES) {
+    if (i + 1 == max_lines && wrapped.lines.size() > max_lines) {
       /* the last line says that the text goes on */
       const std::string_view rest =
         std::string_view{text}.substr(wrapped.lines[i].start);
@@ -2755,7 +2781,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
       DrawWrappedText(canvas, GetValueFont(element), value_rc,
                       element.value, element.wrapped_value,
-                      element.wrapped_value_width, true);
+                      element.wrapped_value_width, true,
+                      GetValueMaxLines(element));
     }
 
     PixelRect text_box = caption_rc;

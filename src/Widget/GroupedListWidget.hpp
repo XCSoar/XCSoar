@@ -198,6 +198,20 @@ public:
     /** the font of #value */
     TextFont value_font = TextFont::DEFAULT;
 
+    /**
+     * Show every line of #value.  Without it, a value ends after a
+     * few lines with an ellipsis, which keeps a text that was filled
+     * by accident from blowing up the card.
+     */
+    bool value_all_lines = false;
+
+    /**
+     * How many lines #value may use; 0 for the default of the list.
+     * The last line ends with an ellipsis if the text goes on.
+     * #value_all_lines wins over it.
+     */
+    unsigned value_max_lines = 0;
+
     /** a short label in a rounded box, e.g. "active" */
     const char *badge = nullptr;
 
