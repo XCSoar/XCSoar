@@ -3,6 +3,8 @@ Version 7.46 - not yet released
   - target Android 16 so Google Play still accepts updates #2874
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)
+  - show remaining battery in the Devices list for BLE sensors
+    that expose the standard Battery Service #3157
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
     timing out and then showing Not connected
   - fix crash when exiting the app #2873
@@ -177,6 +179,7 @@ Version 7.46 - not yet released
   - document that Engine Type is only shown for engine-sensor BLE
     devices
   - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
+  - document BLE sensor battery percent on the Devices list
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer
