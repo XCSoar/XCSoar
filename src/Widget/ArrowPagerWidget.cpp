@@ -76,12 +76,16 @@ ArrowPagerWidget::Layout::Layout(const ButtonLook &look, PixelRect rc,
     std::tie(previous_button, next_button) = a.VerticalSplit();
     close_button = b;
 
-    /* "extra" gets another row */
+    /* "extra" gets another row, as long as it asks for room */
 
-    if (extra_widget != nullptr) {
+    if (extra_widget != nullptr &&
+        extra_widget->GetMinimumSize().height > 0) {
       extra = main.BottomAligned(button_height);
       main = rc.RemainingAboveSafe(extra);
-    }
+    } else
+      /* an empty rectangle, so that the widget is still placed
+         somewhere */
+      extra = main.BottomAligned(0);
   }
 }
 
