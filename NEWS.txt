@@ -50,6 +50,10 @@ Version 7.46 - not yet released
   - fix UK XC Therm forecast overlays (met-ukv model and layer
     catalog) #3029
 * map
+  - use Vario #2 snail trail colours by default so climb and sink
+    stand out on typical terrain #2988
+  - leave Trail drift off by default so the displayed track matches
+    the ground until the option is turned on #2995
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
