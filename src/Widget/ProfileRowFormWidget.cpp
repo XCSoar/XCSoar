@@ -220,26 +220,5 @@ RowFormWidget::SaveValueMultiFileReader(unsigned i,
   const auto *dfe =
       static_cast<const MultiFileDataField *>(GetControl(i).GetDataField());
 
-  std::vector<Path> new_values = dfe->GetPathFiles();
-
-  std::string new_output = "";
-
-  for (const auto& value : new_values) {
-
-    const auto contracted = ContractLocalPath(value);
-    Path final_path = contracted != nullptr ? Path(contracted) : value;
-
-    if (final_path.empty()) continue;
-
-    new_output += final_path.c_str();
-    new_output += "|";
-  }
-  if (!new_output.empty())
-    new_output.pop_back();  // Removes the last "|"
-
-  std::string old_value = Profile::Get(registry_key, "");
-  if (old_value == new_output) return false;
-
-  Profile::Set(registry_key, new_output.c_str());
-  return true;
+  return Profile::SetMultiplePaths(registry_key, dfe->GetPathFiles());
 }

@@ -206,6 +206,15 @@ public:
   std::vector<AllocatedPath> GetMultiplePaths(std::string_view key,
                                               const char *patterns) const;
 
+  /**
+   * Store several paths under one key, separated by '|', each one
+   * contracted with ContractLocalPath().
+   *
+   * @return true if the value has changed
+   */
+  bool SetMultiplePaths(std::string_view key,
+                        std::span<const Path> values) noexcept;
+
   [[gnu::pure]]
   bool GetPathIsEqual(std::string_view key, Path value) const noexcept;
 
