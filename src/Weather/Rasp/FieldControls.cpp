@@ -7,6 +7,7 @@
 #include "RaspStore.hpp"
 #include "DataGlobals.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/GroupedListPicker.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -27,6 +28,7 @@
 #endif
 
 #include <cstdio>
+#include <string>
 #include <vector>
 
 namespace Rasp {
@@ -76,6 +78,49 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
 
     field.AddChoice(i, item.name, GetFieldLabel(item), help);
   }
+}
+
+bool
+PickField(const char *caption, const char *help, const RaspStore &rasp,
+          int &field, bool include_none) noexcept
+{
+  const unsigned n = rasp.GetItemCount();
+  const unsigned first = include_none ? 1 : 0;
+
+  std::vector<std::string> helps(n);
+  std::vector<PickerChoice> choices;
+  choices.reserve(first + n);
+
+  if (include_none)
+    choices.push_back({_("None")});
+
+  for (unsigned i = 0; i < n; ++i) {
+    const auto &item = rasp.GetItemInfo(i);
+
+    if (StringIsEqual(item.name.c_str(), "dwcrit") ||
+        StringIsEqual(item.name.c_str(), "hwcrit")) {
+      StaticString<512> buffer;
+      FormatRaspHeightCritHelp(buffer,
+                               StringIsEqual(item.name.c_str(), "dwcrit"));
+      helps[i] = buffer.c_str();
+    } else if (item.help != nullptr)
+      helps[i] = gettext(item.help);
+
+    choices.push_back({GetFieldLabel(item),
+                       helps[i].empty() ? nullptr : helps[i].c_str()});
+  }
+
+  /* the index of the choice; "None" is the first one */
+  const int current = field >= 0 && unsigned(field) < n
+    ? int(first + field)
+    : (include_none ? 0 : -1);
+
+  const int picked = PickChoice(caption, help, choices, current);
+  if (picked < 0 || picked == current)
+    return false;
+
+  field = picked - int(first);
+  return true;
 }
 
 BrokenTime

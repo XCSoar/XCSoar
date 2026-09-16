@@ -29,6 +29,19 @@ FillFieldChoices(DataFieldEnum &field, const RaspStore *rasp,
                  FieldChoicesOptions options={}) noexcept;
 
 /**
+ * Let the user pick one of the fields of @p rasp from a grouped
+ * list, with the explanation of each; "None" comes first when
+ * @p include_none is set.
+ *
+ * @param help an explanation of the setting, shown above the choices
+ * @param field the index of the field; -1 for none
+ * @return true if the field has changed
+ */
+bool
+PickField(const char *caption, const char *help, const RaspStore &rasp,
+          int &field, bool include_none=false) noexcept;
+
+/**
  * RASP field index for @p layout, or @c -1 when unavailable.
  */
 [[gnu::pure]]
