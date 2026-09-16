@@ -6,6 +6,9 @@ Version 7.46 - not yet released
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
     the chip latency timer to 1 ms and sending each binary frame in
     one write #3047
+  - fix BlueFly Vario BLE being offered only as a BLE sensor, which
+    cannot open the serial UART; choose BLE port and the BlueFly
+    driver #3146
 * iOS
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
@@ -168,6 +171,8 @@ Version 7.46 - not yet released
     the system appearance, including a scheduled switch while XCSoar
     is running
 * documentation
+  - document that a BlueFly Vario on Android uses BLE port, not BLE
+    sensor
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer
