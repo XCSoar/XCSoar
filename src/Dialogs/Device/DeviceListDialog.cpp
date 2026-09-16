@@ -70,6 +70,7 @@ class DeviceListWidget final
     bool foreflight_ahrs:1;
     bool temperature:1;
     bool humidity:1;
+    bool pressure:1;
     bool imu:1;
     bool accel:1;
     bool heart_rate:1;
@@ -116,8 +117,8 @@ class DeviceListWidget final
       location = basic.location_available;
       gps = basic.gps.fix_quality_available;
       baro = basic.baro_altitude_available ||
-        basic.pressure_altitude_available ||
-        basic.static_pressure_available;
+        basic.pressure_altitude_available;
+      pressure = basic.static_pressure_available;
       pitot = basic.pitot_pressure_available;
       airspeed = basic.airspeed_available ||
         basic.dyn_pressure_available;
@@ -436,6 +437,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Baro"));
     }
 
+    if (flags.pressure) {
+      buffer.append("; ");
+      buffer.append(_("Pressure"));
+    }
+
     if (flags.pitot) {
       buffer.append("; ");
       buffer.append(_("Pitot"));
@@ -462,9 +468,14 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.foreflight_id)
       buffer.append("; ForeFlight ID");
 
-    if (flags.temperature || flags.humidity) {
+    if (flags.temperature) {
       buffer.append("; ");
-      buffer.append("Environment");
+      buffer.append(_("Temperature"));
+    }
+
+    if (flags.humidity) {
+      buffer.append("; ");
+      buffer.append(_("Relative humidity"));
     }
 
     if (flags.imu) {
