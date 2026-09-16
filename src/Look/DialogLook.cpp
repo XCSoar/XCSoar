@@ -26,6 +26,7 @@ DialogLook::LoadFonts()
 
   bold_font.Load(text_font_d.WithBold());
   mono_font.Load(text_font_d.WithMonospace());
+  small_mono_font.Load(small_font_d.WithMonospace());
 
   /* H1 = 150% of text size, H2 = 125% */
   heading1_font.Load(text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 2u).WithBold());

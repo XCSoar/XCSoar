@@ -185,6 +185,9 @@ public:
      */
     const char *subtitle = nullptr;
 
+    /** the font of #subtitle */
+    TextFont subtitle_font = TextFont::DEFAULT;
+
     /** a text at the right edge, e.g. the current value of a setting */
     const char *value = nullptr;
 
