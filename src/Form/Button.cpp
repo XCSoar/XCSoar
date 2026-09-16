@@ -5,6 +5,7 @@
 #include "Form/ButtonPanel.hpp"
 #include "LogFile.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
@@ -185,6 +186,8 @@ Button::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
+  case KEY_UP:
+  case KEY_DOWN:
     return true;
 
   default:
@@ -201,9 +204,21 @@ Button::OnKeyDown(unsigned key_code) noexcept
     Click();
     return true;
 
-  default:
-    return PaintWindow::OnKeyDown(key_code);
+  case KEY_UP:
+    /* WndForm remaps unhandled Up/Down to tab order, but a Button
+       outside a modal form (map overlay, and Up from the first
+       chrome button) never got that path back to the widget */
+    if (auto *parent = GetParent())
+      return parent->FocusPreviousControl();
+    break;
+
+  case KEY_DOWN:
+    if (auto *parent = GetParent())
+      return parent->FocusNextControl();
+    break;
   }
+
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
