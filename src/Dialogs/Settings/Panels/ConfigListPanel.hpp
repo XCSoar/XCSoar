@@ -4,8 +4,10 @@
 #pragma once
 
 #include "Dialogs/GroupedListPicker.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Language/Language.hpp"
 #include "Math/Util.hpp"
 #include "Units/Units.hpp"
 #include "Widget/GroupedListWidget.hpp"
@@ -112,6 +114,33 @@ protected:
    */
   void AddToggleItem(const char *caption, const char *help,
                      bool &value, const char *subtitle=nullptr) noexcept;
+
+  /**
+   * Add an item which opens the text entry for a string; a password
+   * is shown as asterisks.
+   */
+  template<std::size_t N>
+  void AddTextItem(const char *caption, const char *help,
+                   StaticString<N> &value, bool password=false) noexcept {
+    ItemOptions options{.chevron = true, .help = help};
+
+    /* one asterisk per character, like the password fields */
+    StaticString<N> masked;
+    if (value.empty())
+      options.badge = C_("Badge", "none");
+    else if (password) {
+      masked.clear();
+      for (std::size_t i = 0, n = value.length(); i < n; ++i)
+        masked.push_back('*');
+      options.value = masked.c_str();
+    } else
+      options.value = value.c_str();
+
+    AddItem(caption, [this, caption, &value](){
+      if (TextEntryDialog(value, caption))
+        Refresh();
+    }, options);
+  }
 
   /**
    * Add an item which opens the choice of a percentage, one choice
