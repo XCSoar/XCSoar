@@ -2,11 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "LoggerConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Logger/GlueFlightLogger.hpp"
@@ -19,29 +18,6 @@
 
 using namespace std::chrono;
 
-enum ControlIndex {
-  PilotName,
-  CoPilotName,
-  CrewWeightTemplate,
-  SPACER_LOG,
-  LoggerTimeStepCruise,
-  LoggerTimeStepCircling,
-  DisableAutoLogger,
-  EnableNMEALogger,
-  EnableFlightLogger,
-  LoggerID,
-};
-
-class LoggerConfigPanel final : public RowFormWidget {
-public:
-  LoggerConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-};
-
 static constexpr StaticEnumChoice auto_logger_list[] = {
   { LoggerSettings::AutoLogger::ON, N_("On") },
   { LoggerSettings::AutoLogger::START_ONLY, N_("Start only") },
@@ -49,97 +25,150 @@ static constexpr StaticEnumChoice auto_logger_list[] = {
   nullptr
 };
 
+/**
+ * The IGC flight log: who flies, how often a point is logged and
+ * when the logger starts.
+ */
+class LoggerConfigPanel final : public ConfigListPanel {
+  StaticString<64> pilot_name, copilot_name;
+  StaticString<32> logger_id;
+
+  /** in kg */
+  unsigned crew_mass_template;
+
+  duration<unsigned> time_step_cruise, time_step_circling;
+  LoggerSettings::AutoLogger auto_logger;
+  bool enable_nmea_logger, enable_flight_logger;
+
+private:
+  void AddCrewMassItem() noexcept;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
+  bool Save(bool &changed) noexcept override;
+};
+
 void
-LoggerConfigPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+LoggerConfigPanel::LoadSettings() noexcept
 {
-  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
-  const LoggerSettings &logger = settings_computer.logger;
+  const LoggerSettings &logger =
+    CommonInterface::GetComputerSettings().logger;
 
-  RowFormWidget::Prepare(parent, rc);
-  AddText(_("Pilot name"),
-          _("Name of the pilot in command, recorded in the IGC flight log."),
-          logger.pilot_name);
+  pilot_name = logger.pilot_name;
+  copilot_name = logger.copilot_name;
+  logger_id = logger.logger_id;
+  crew_mass_template = logger.crew_mass_template;
+  time_step_cruise = logger.time_step_cruise;
+  time_step_circling = logger.time_step_circling;
+  auto_logger = logger.auto_logger;
+  enable_nmea_logger = logger.enable_nmea_logger;
+  enable_flight_logger = logger.enable_flight_logger;
+}
 
-  AddText(_("CoPilot name"),
-          _("The co-pilot name recorded in the IGC flight log."),
-          logger.copilot_name);
+void
+LoggerConfigPanel::AddCrewMassItem() noexcept
+{
+  const char *caption = _("Crew weight default");
+  const char *help =
+    _("Default for all weight loaded to the glider beyond the empty weight and besides "
+      "the water ballast.");
 
-  AddFloat(_("Crew weight default"),
-            _("Default for all weight loaded to the glider beyond the empty weight and besides "
-                "the water ballast."),
-            "%.0f %s", "%.0f",
-            0, Units::ToUserMass(300), 5, false, UnitGroup::MASS,
-            logger.crew_mass_template);
+  StaticString<32> mass;
+  FormatUserMass(crew_mass_template, mass.buffer());
 
-  AddSpacer();
-  SetExpertRow(SPACER_LOG);
+  /* one choice per 5 units of the user, up to 300 kg */
+  AddItem(caption, [this, caption, help](){
+    int user_value = iround(Units::ToUserMass(crew_mass_template));
+    if (PickNumber(caption, help,
+                   0, iround(Units::ToUserMass(300)), 5, user_value,
+                   [](StaticString<32> &s, int v){
+                     FormatUserMass(Units::ToSysMass(v), s.buffer());
+                   })) {
+      crew_mass_template = iround(Units::ToSysMass(user_value));
+      Refresh();
+    }
+  }, {.value = mass.c_str(), .chevron = true});
+}
 
-  AddDuration(_("Time step cruise"),
-              _("This is the time interval between logged points when not circling."),
-              seconds{1}, seconds{30}, seconds{1}, logger.time_step_cruise);
-  SetExpertRow(LoggerTimeStepCruise);
+void
+LoggerConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddDuration(_("Time step circling"),
-              _("This is the time interval between logged points when circling."),
-              seconds{1}, seconds{30}, seconds{1}, logger.time_step_circling);
-  SetExpertRow(LoggerTimeStepCircling);
+  AddTextItem(_("Pilot name"),
+              _("Name of the pilot in command, recorded in the IGC flight log."),
+              pilot_name);
 
-  AddEnum(_("Auto. logger"),
-          _("Enables the automatic starting and stopping of logger on takeoff and landing "
-            "respectively. Disable when flying paragliders."),
-          auto_logger_list, (unsigned)logger.auto_logger);
-  SetExpertRow(DisableAutoLogger);
+  AddTextItem(_("CoPilot name"),
+              _("The co-pilot name recorded in the IGC flight log."),
+              copilot_name);
 
-  AddBoolean(_("NMEA Logger"),
-             _("Enable the NMEA logger on startup? If this option is disabled, "
-                 "the NMEA logger can still be started manually."),
-             logger.enable_nmea_logger);
-  SetExpertRow(EnableNMEALogger);
+  AddCrewMassItem();
 
-  AddBoolean(_("Log book"), _("Logs each start and landing."),
-             logger.enable_flight_logger);
-  SetExpertRow(EnableFlightLogger);
+  if (!IsExpert())
+    return;
 
-  AddText(_("Logger ID"),
-          _("The three-letter logger ID used in the IGC filename."),
-          logger.logger_id);
-  SetExpertRow(LoggerID);
+  /* when and how often the logger writes */
+  AddGroup();
+
+  AddDurationItem(_("Time step cruise"),
+                  _("This is the time interval between logged points when not circling."),
+                  1, 30, 1, time_step_cruise);
+
+  AddDurationItem(_("Time step circling"),
+                  _("This is the time interval between logged points when circling."),
+                  1, 30, 1, time_step_circling);
+
+  AddEnumItem(_("Auto. logger"),
+              _("Enables the automatic starting and stopping of logger on takeoff and landing "
+                "respectively. Disable when flying paragliders."),
+              auto_logger_list, auto_logger);
+
+  AddGroup();
+
+  AddToggleItem(_("NMEA Logger"),
+                _("Enable the NMEA logger on startup? If this option is disabled, "
+                  "the NMEA logger can still be started manually."),
+                enable_nmea_logger);
+
+  AddToggleItem(_("Log book"), _("Logs each start and landing."),
+                enable_flight_logger);
+
+  AddTextItem(_("Logger ID"),
+              _("The three-letter logger ID used in the IGC filename."),
+              logger_id);
 }
 
 bool
 LoggerConfigPanel::Save(bool &changed) noexcept
 {
-  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
-  LoggerSettings &logger = settings_computer.logger;
+  LoggerSettings &logger = CommonInterface::SetComputerSettings().logger;
 
-  changed |= SaveValue(PilotName, ProfileKeys::PilotName,
-                       logger.pilot_name);
-
-  changed |= SaveValue(CoPilotName, ProfileKeys::CoPilotName,
-                       logger.copilot_name);
-
-  changed |= SaveValue(CrewWeightTemplate, UnitGroup::MASS, ProfileKeys::CrewWeightTemplate,
-                       logger.crew_mass_template);
-
-  changed |= SaveValue(LoggerTimeStepCruise, ProfileKeys::LoggerTimeStepCruise,
-                       logger.time_step_cruise);
-
-  changed |= SaveValue(LoggerTimeStepCircling, ProfileKeys::LoggerTimeStepCircling,
-                       logger.time_step_circling);
-
-  /* GUI label is "Enable Auto Logger" */
-  changed |= SaveValueEnum(DisableAutoLogger, ProfileKeys::AutoLogger,
-                           logger.auto_logger);
-
-  changed |= SaveValue(EnableNMEALogger, ProfileKeys::EnableNMEALogger,
-                       logger.enable_nmea_logger);
+  changed |= Profile::Update(ProfileKeys::PilotName, logger.pilot_name,
+                             pilot_name);
+  changed |= Profile::Update(ProfileKeys::CoPilotName, logger.copilot_name,
+                             copilot_name);
+  changed |= Profile::Update(ProfileKeys::CrewWeightTemplate,
+                             logger.crew_mass_template, crew_mass_template);
+  changed |= Profile::Update(ProfileKeys::LoggerTimeStepCruise,
+                             logger.time_step_cruise, time_step_cruise);
+  changed |= Profile::Update(ProfileKeys::LoggerTimeStepCircling,
+                             logger.time_step_circling, time_step_circling);
+  changed |= Profile::Update(ProfileKeys::AutoLogger, logger.auto_logger,
+                             auto_logger);
+  changed |= Profile::Update(ProfileKeys::EnableNMEALogger,
+                             logger.enable_nmea_logger, enable_nmea_logger);
 
   if (logger.enable_nmea_logger && backend_components->nmea_logger != nullptr)
     backend_components->nmea_logger->Enable();
 
-  if (SaveValue(EnableFlightLogger, ProfileKeys::EnableFlightLogger,
-                logger.enable_flight_logger)) {
+  if (Profile::Update(ProfileKeys::EnableFlightLogger,
+                      logger.enable_flight_logger, enable_flight_logger)) {
     changed = true;
 
     /* Same as startup: the simulator has no log book. */
@@ -157,7 +186,8 @@ LoggerConfigPanel::Save(bool &changed) noexcept
     }
   }
 
-  changed |= SaveValue(LoggerID, ProfileKeys::LoggerID, logger.logger_id);
+  changed |= Profile::Update(ProfileKeys::LoggerID, logger.logger_id,
+                             logger_id);
 
   return true;
 }
