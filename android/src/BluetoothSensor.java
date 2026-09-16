@@ -83,6 +83,12 @@ public final class BluetoothSensor
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
     new LinkedList<BluetoothGattCharacteristic>();
 
+  /**
+   * One GATT read waiting until outstanding CCCD writes finish.
+   * Android allows only one GATT request at a time.
+   */
+  private BluetoothGattCharacteristic pendingRead;
+
   private boolean haveFlytecMovement = false;
   private double flytecGroundSpeed, flytecTrack;
   private int flytecSatellites = 0;
@@ -258,6 +264,41 @@ public final class BluetoothSensor
   }
 
   /**
+   * Read after notify CCCD writes so the request is not dropped.
+   */
+  private void requestRead(BluetoothGattCharacteristic c) {
+    synchronized(enableNotificationQueue) {
+      if (currentEnableNotification == null)
+        gatt.readCharacteristic(c);
+      else
+        pendingRead = c;
+    }
+  }
+
+  private static boolean hasNotify(BluetoothGattCharacteristic c) {
+    return (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0;
+  }
+
+  private static BluetoothGattCharacteristic findBatteryLevel(BluetoothGatt gatt) {
+    BluetoothGattService service =
+      gatt.getService(BluetoothUuids.BATTERY_SERVICE);
+    if (service == null)
+      return null;
+    return service.getCharacteristic(
+      BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC);
+  }
+
+  /**
+   * SIG Battery Level is a single uint8 (0-100).  0xFF is unknown.
+   */
+  private void readBatteryLevel(BluetoothGattCharacteristic c) {
+    Integer value = c.getIntValue(c.FORMAT_UINT8, 0);
+    if (value == null || value < 0 || value > 100)
+      return;
+    listener.onBatteryPercent(value);
+  }
+
+  /**
    * Data in the characteristic has little endian byteorder.
    * Lowest bit of flags indicates valid ignitions_per_sec reading.
    * 0 Kelvin indicates invalid temperatures e.g 
@@ -322,6 +363,10 @@ public final class BluetoothSensor
     try {
       if (BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
         readHeartRateMeasurement(c);
+      }
+
+      if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid())) {
+        readBatteryLevel(c);
       }
 
       if (BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
@@ -458,6 +503,23 @@ public final class BluetoothSensor
   }
 
   @Override
+  public void onCharacteristicRead(BluetoothGatt gatt,
+                                   BluetoothGattCharacteristic c,
+                                   int status) {
+    if (status != BluetoothGatt.GATT_SUCCESS || !safeDestruct.increment())
+      return;
+
+    try {
+      if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid()))
+        readBatteryLevel(c);
+    } catch (NullPointerException e) {
+      /* malformed value */
+    } finally {
+      safeDestruct.decrement();
+    }
+  }
+
+  @Override
   public void onDescriptorWrite(BluetoothGatt gatt,
                                 BluetoothGattDescriptor descriptor,
                                 int status) {
@@ -466,6 +528,11 @@ public final class BluetoothSensor
       if (currentEnableNotification != null) {
         if (!doEnableNotification(currentEnableNotification))
           currentEnableNotification = null;
+      }
+      if (currentEnableNotification == null && pendingRead != null) {
+        BluetoothGattCharacteristic c = pendingRead;
+        pendingRead = null;
+        gatt.readCharacteristic(c);
       }
     }
   }
@@ -497,7 +564,13 @@ public final class BluetoothSensor
        }
     }
 
+    BluetoothGattCharacteristic batteryLevel = findBatteryLevel(gatt);
+    if (batteryLevel != null && hasNotify(batteryLevel))
+      enableNotification(batteryLevel);
+
     if (state == STATE_LIMBO)
       submitError("Unsupported Bluetooth device");
+    else if (batteryLevel != null)
+      requestRead(batteryLevel);
   }
 }
