@@ -30,8 +30,13 @@ class GroupedListControl;
  * Use this where a page has more entries than fit into one flat list,
  * but splitting them over several pages (as #TabWidget or the
  * configuration menu do) would hide the structure from the user.
+ *
+ * A page which has settings of its own derives from this class: it
+ * fills the list in its Prepare() before calling
+ * GroupedListWidget::Prepare(), and writes the settings in its
+ * Save().
  */
-class GroupedListWidget final : public WindowWidget {
+class GroupedListWidget : public WindowWidget {
 public:
   using Callback = std::function<void()>;
 
