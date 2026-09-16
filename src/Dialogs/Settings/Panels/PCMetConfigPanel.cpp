@@ -2,85 +2,100 @@
 // Copyright The XCSoar Project
 
 #include "PCMetConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "util/StaticString.hxx"
 
-enum ControlIndex {
+/** The account of flugwetter.de. */
+class PCMetConfigPanel final : public ConfigListPanel {
 #ifdef HAVE_PCMET
-  PCMET_USER,
-  PCMET_PASSWORD,
-  MOSMIX_FORECAST_TEMPERATURE,
-#endif
-};
+  StaticString<64> username, password;
+  bool mosmix_forecast_temperature = false;
 
-class PCMetConfigPanel final : public RowFormWidget {
   /** the forecast switch belongs to the configuration dialogue only */
   const bool with_forecast_switch;
+#endif
 
 public:
+#ifdef HAVE_PCMET
   explicit PCMetConfigPanel(bool _with_forecast_switch) noexcept
-    :RowFormWidget(UIGlobals::GetDialogLook()),
-     with_forecast_switch(_with_forecast_switch) {}
+    :with_forecast_switch(_with_forecast_switch) {}
+#else
+  explicit PCMetConfigPanel(bool) noexcept {}
+#endif
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-PCMetConfigPanel::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+PCMetConfigPanel::LoadSettings() noexcept
 {
 #ifdef HAVE_PCMET
   const auto &settings = CommonInterface::GetComputerSettings().weather;
+
+  username = settings.pcmet.www_credentials.username;
+  password = settings.pcmet.www_credentials.password;
+  mosmix_forecast_temperature = settings.mosmix_forecast_temperature;
 #endif
+}
 
-  RowFormWidget::Prepare(parent, rc);
-
+void
+PCMetConfigPanel::Fill() noexcept
+{
 #ifdef HAVE_PCMET
-  AddText(_("pc_met Username"), "",
-          settings.pcmet.www_credentials.username);
-  AddPassword(_("pc_met Password"), "",
-              settings.pcmet.www_credentials.password);
+  AddGroup();
+
+  AddTextItem(_("pc_met Username"), nullptr, username);
+  AddTextItem(_("pc_met Password"), nullptr, password, true);
 
   /* No account of its own: MOSMIX is open data.  It sits here because
      it is the DWD, which is what a pilot looking for it will read. */
   if (with_forecast_switch)
-    AddBoolean(_("Max. temp. from forecast"),
-               _("Fill Max. temp. in the flight setup from the day's "
-                 "DWD forecast for the nearest MOSMIX station.  Needs "
-                 "a position fix, and fetches once a day; no account."),
-               settings.mosmix_forecast_temperature);
+    AddToggleItem(_("Max. temp. from forecast"),
+                  _("Fill Max. temp. in the flight setup from the day's "
+                    "DWD forecast for the nearest MOSMIX station.  Needs "
+                    "a position fix, and fetches once a day; no account."),
+                  mosmix_forecast_temperature);
 #endif
 }
 
 bool
 PCMetConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
-
 #ifdef HAVE_PCMET
   auto &settings = CommonInterface::SetComputerSettings().weather;
 
-  changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetUsername,
-                       settings.pcmet.www_credentials.username);
+  const bool username_changed =
+    Profile::Update(ProfileKeys::PCMetUsername,
+                    settings.pcmet.www_credentials.username, username);
+  const bool password_changed =
+    Profile::Update(ProfileKeys::PCMetPassword,
+                    settings.pcmet.www_credentials.password, password);
 
-  changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
-                       settings.pcmet.www_credentials.password);
+  bool changed = username_changed || password_changed;
 
   if (with_forecast_switch)
-    changed |= SaveValue(MOSMIX_FORECAST_TEMPERATURE,
-                         ProfileKeys::MosmixForecastTemperature,
-                         settings.mosmix_forecast_temperature);
-#endif
+    changed |= Profile::Update(ProfileKeys::MosmixForecastTemperature,
+                               settings.mosmix_forecast_temperature,
+                               mosmix_forecast_temperature);
 
   _changed |= changed;
+#else
+  (void)_changed;
+#endif
+
   return true;
 }
 
