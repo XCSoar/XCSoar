@@ -77,7 +77,10 @@ GetPath(std::string_view key) noexcept;
 std::vector<AllocatedPath> GetMultiplePaths(std::string_view key,
                                             const char *patterns);
 
-void
+/**
+ * @see ProfileMap::SetPath()
+ */
+bool
 SetPath(std::string_view key, Path value) noexcept;
 
 [[gnu::pure]]

@@ -215,7 +215,13 @@ public:
   [[gnu::pure]]
   StringPointer<char> GetPathBase(std::string_view key) const noexcept;
 
-  void SetPath(std::string_view key, Path value) noexcept;
+  /**
+   * Store a path, contracted with ContractLocalPath(); an empty path
+   * clears the key.
+   *
+   * @return true if the value has changed
+   */
+  bool SetPath(std::string_view key, Path value) noexcept;
 
   // geo value
 
