@@ -36,6 +36,7 @@ protected:
 
 public:
   /* virtual methods from class Widget */
+  bool Leave() noexcept override;
   bool Save(bool &changed) noexcept override;
 };
 
@@ -69,6 +70,20 @@ PCMetConfigPanel::Fill() noexcept
                     "a position fix, and fetches once a day; no account."),
                   mosmix_forecast_temperature);
 #endif
+}
+
+bool
+PCMetConfigPanel::Leave() noexcept
+{
+  /* the list of the Weather group says whether the account is set
+     up: store it as soon as the page is left, not only when the
+     configuration is closed */
+  bool changed = false;
+  Save(changed);
+  if (changed)
+    Profile::Save();
+
+  return ConfigListPanel::Leave();
 }
 
 bool

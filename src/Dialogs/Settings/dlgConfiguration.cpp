@@ -15,6 +15,8 @@
 #include "Screen/Layout.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "DataGlobals.hpp"
+#include "Weather/Rasp/RaspStore.hpp"
 #include "Weather/Settings.hpp"
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
@@ -128,6 +130,12 @@ struct ConfigPage {
 
   /** A switch in the group list; nullptr for a page. */
   const ConfigToggle *toggle = nullptr;
+
+  /**
+   * Is the service this page sets up in use?  The list of the group
+   * says so next to the page; nullptr for a page which is no service.
+   */
+  bool (*is_active)() noexcept = nullptr;
 };
 
 /** The pages which one item of the menu leads to. */
@@ -213,16 +221,57 @@ static constexpr ConfigToggle thermal_information_map_toggle{
 
 #endif
 
+/* the services are in use as soon as they are set up: a RASP file
+   with fields, or an account */
+
+static bool
+IsRaspActive() noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  return rasp != nullptr && rasp->GetItemCount() > 0;
+}
+
+#ifdef HAVE_HTTP
+
+static bool
+IsSkySightActive() noexcept
+{
+  return CommonInterface::GetComputerSettings().weather.skysight.IsDefined();
+}
+
+static bool
+IsXCThermActive() noexcept
+{
+  return CommonInterface::GetComputerSettings()
+    .weather.xctherm.credentials.IsDefined();
+}
+
+#endif
+
+#ifdef HAVE_PCMET
+
+static bool
+IsPCMetActive() noexcept
+{
+  return CommonInterface::GetComputerSettings()
+    .weather.pcmet.www_credentials.IsDefined();
+}
+
+#endif
+
 static constexpr ConfigPage weather_pages[] = {
 #ifdef HAVE_PCMET
-  { "Flugwetter (pc_met)", CreatePCMetConfigPanel },
+  { "Flugwetter (pc_met)", CreatePCMetConfigPanel, nullptr, nullptr,
+    IsPCMetActive },
 #endif
-  { "RASP", CreateRaspConfigPanel },
+  { "RASP", CreateRaspConfigPanel, nullptr, nullptr, IsRaspActive },
 #ifdef HAVE_HTTP
-  { "SkySight", CreateSkySightConfigPanel },
+  { "SkySight", CreateSkySightConfigPanel, nullptr, nullptr,
+    IsSkySightActive },
   { N_("Thermal Information Map"), nullptr, nullptr,
     &thermal_information_map_toggle },
-  { "XC Therm", CreateXCThermConfigPanel },
+  { "XC Therm", CreateXCThermConfigPanel, nullptr, nullptr,
+    IsXCThermActive },
 #endif
   { nullptr, nullptr }
 };
@@ -621,10 +670,21 @@ ShowGroupList(const ConfigGroup &group, unsigned first, unsigned cursor)
       continue;
     }
 
+    GroupedListWidget::ItemOptions options{.chevron = true};
+
+    /* a service says whether it is in use */
+    if (page->is_active != nullptr) {
+      if (page->is_active()) {
+        options.badge = C_("Badge", "active");
+        options.badge_style = GroupedListWidget::BadgeStyle::SUCCESS;
+      } else
+        options.badge = C_("Badge", "off");
+    }
+
     list.AddItem(gettext(page->caption), [&dialog, &picked, i](){
       picked = i;
       dialog.SetModalResult(mrOK);
-    }, {.chevron = true});
+    }, options);
     ++i;
   }
 
