@@ -51,7 +51,8 @@ Building Run* Utilities
 
 These utilities are **not** built by plain ``make``; use the ``debug`` target
 (see :ref:`development-workflow` in :doc:`build`). They are defined in
-:file:`build/test.mk` and compiled as the ``debug`` make target.
+:file:`build/test.mk` and compiled as the ``debug`` make target. Before a
+pull request, build them with ``everything`` so they compile.
 
 To build all Run* utilities:
 

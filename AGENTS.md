@@ -47,6 +47,8 @@ User-facing behaviour: update `doc/manual/en/` (not `doc/*.rst`) and
   `.cursor/rules/review-exponential.mdc`,
   `.cursor/rules/review-architecture.mdc`.
 - Do not create git commits unless the user explicitly asks.
+- Before submitting a PR, compile with `make everything` (not only the
+  main binary). Details: `.cursor/rules/pr-compilation.mdc`.
 
 ## Tests
 
@@ -76,6 +78,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | Test harness CLI (`--help`) | `.cursor/rules/cli-test-utilities.mdc` |
 | TAP tests | `.cursor/rules/xcsoar-testing.mdc` |
 | Architecture, i18n, build, platforms | `.cursor/rules/xcsoar-project-rules.mdc` |
+| Pull requests / compile-before-PR | `.cursor/rules/pr-compilation.mdc` |
 | Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
 | UI colour, EFB / NASA HF | `doc/architecture.rst` (User interface guidelines) |
