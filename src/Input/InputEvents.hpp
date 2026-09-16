@@ -183,6 +183,7 @@ void eventRepeatStatusMessage(const char *misc);
 void eventRun(const char *misc);
 void eventQuickGuide(const char *misc);
 void eventGestureHelp(const char *misc);
+void eventGroupedListTest(const char *misc);
 void eventScreenModes(const char *misc);
 void eventDevice(const char *misc);
 void eventSendNMEA(const char *misc);
