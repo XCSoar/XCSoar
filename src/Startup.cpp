@@ -190,7 +190,7 @@ AfterStartup()
     if (File::Exists(init_path))
       Lua::StartFile(init_path);
     else
-      LogDebug("Optional %s not found", init_path.c_str());
+      LogDebug("Optional {} not found", init_path.c_str());
   } catch (...) {
     LogError(std::current_exception());
   }
