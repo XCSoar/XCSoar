@@ -2594,10 +2594,13 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - block_height) / 2;
-    const int subtitle_y = text_y + (int)element.text_height + gap;
-    const int value_y = element.subtitle.empty()
-      ? subtitle_y
-      : subtitle_y + (int)element.subtitle_height + gap;
+
+    /* the value belongs to the caption and comes right after it; the
+       second line, which explains the item, closes the block */
+    const int value_y = text_y + (int)element.text_height + gap;
+    const int subtitle_y = element.value_is_below
+      ? value_y + (int)element.value_height + gap
+      : value_y;
 
     /* the caption uses the room which is left of the check mark, the
        arrow, the value and the badge */
