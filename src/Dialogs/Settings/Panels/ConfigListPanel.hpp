@@ -5,8 +5,11 @@
 
 #include "Dialogs/GroupedListPicker.hpp"
 #include "Widget/GroupedListWidget.hpp"
+#include "util/StaticString.hxx"
 
+#include <algorithm>
 #include <chrono>
+#include <vector>
 
 /**
  * A page of the configuration which is a #GroupedListWidget.  It
@@ -62,12 +65,51 @@ protected:
   }
 
   /**
+   * Let the user pick a number from @p min to @p max, one choice per
+   * step; @p format writes the caption of a value.
+   *
+   * @return true if the value has changed
+   */
+  template<typename F>
+  static bool
+  PickNumber(const char *caption, const char *help,
+             int min, int max, int step, int &value, F &&format) noexcept
+  {
+    const unsigned n = (max - min) / step + 1;
+
+    std::vector<StaticString<32>> captions(n);
+    std::vector<PickerChoice> choices(n);
+
+    for (unsigned i = 0; i < n; ++i) {
+      format(captions[i], min + step * (int)i);
+      choices[i] = {captions[i].c_str()};
+    }
+
+    /* the choice nearest to the value */
+    const int current = std::clamp((value - min + step / 2) / step,
+                                   0, (int)n - 1);
+
+    const int picked = PickChoice(caption, help, choices, current);
+    if (picked < 0)
+      return false;
+
+    const int new_value = min + step * picked;
+    if (new_value == value)
+      return false;
+
+    value = new_value;
+    return true;
+  }
+
+  /**
    * Add a switch which writes its state into @p value and fills the
    * list again, for the items which depend on it.  A tap beside the
    * switch only shows the explanation.
+   *
+   * @param subtitle a text below the caption; nullptr for none
    */
   void AddToggleItem(const char *caption, const char *help,
-                     bool &value) noexcept;
+                     bool &value, const char *subtitle=nullptr) noexcept;
 
   /**
    * Add an item which opens the choice of a percentage, one choice
