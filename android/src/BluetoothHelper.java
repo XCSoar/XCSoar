@@ -375,7 +375,7 @@ final class BluetoothHelper
                                           int timeout_ms) {
     final BluetoothLeScanner le_scanner = adapter.getBluetoothLeScanner();
     if (le_scanner == null)
-      return configured;
+      return null;
 
     final String address = configured.getAddress();
     final String name = getName(configured);
@@ -431,7 +431,7 @@ final class BluetoothHelper
       if (by_name.size() == 1)
         return by_name.values().iterator().next();
     }
-    return configured;
+    return null;
   }
 
   public BluetoothSensor connectSensor(String address, SensorListener listener)
@@ -456,11 +456,12 @@ final class BluetoothHelper
             device.getAddress());
     } else {
       device = scanForLeDevice(configured, 4000);
-      if (!device.getAddress().equalsIgnoreCase(address)) {
+      if (device != null) {
         auto_connect = false;
         Log.i(TAG, "BLE sensor " + address + " using advertised " +
               device.getAddress());
       } else {
+        device = configured;
         Log.i(TAG, "BLE sensor " + address + " using configured address");
       }
     }

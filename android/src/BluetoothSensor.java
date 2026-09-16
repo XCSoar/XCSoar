@@ -254,12 +254,28 @@ public final class BluetoothSensor
     return gatt.writeDescriptor(d);
   }
 
+  /**
+   * Start the next CCCD write, skipping characteristics that have no
+   * CCCD.  Caller holds enableNotificationQueue.
+   */
+  private void enableNextNotification() {
+    while (currentEnableNotification == null) {
+      currentEnableNotification = enableNotificationQueue.poll();
+      if (currentEnableNotification == null)
+        return;
+      if (!doEnableNotification(currentEnableNotification))
+        currentEnableNotification = null;
+    }
+  }
+
   private void enableNotification(BluetoothGattCharacteristic c) {
     synchronized(enableNotificationQueue) {
       if (currentEnableNotification == null) {
         currentEnableNotification = c;
-        if (!doEnableNotification(c))
+        if (!doEnableNotification(c)) {
           currentEnableNotification = null;
+          enableNextNotification();
+        }
       } else
         enableNotificationQueue.add(c);
     }
@@ -622,11 +638,8 @@ public final class BluetoothSensor
                                 BluetoothGattDescriptor descriptor,
                                 int status) {
     synchronized(enableNotificationQueue) {
-      currentEnableNotification = enableNotificationQueue.poll();
-      if (currentEnableNotification != null) {
-        if (!doEnableNotification(currentEnableNotification))
-          currentEnableNotification = null;
-      }
+      currentEnableNotification = null;
+      enableNextNotification();
       if (currentEnableNotification == null)
         pumpReadQueue();
     }
