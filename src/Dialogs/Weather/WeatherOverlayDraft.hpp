@@ -24,6 +24,10 @@ struct State {
   [[nodiscard]] [[gnu::pure]]
   bool IsDirty() const noexcept;
 
+  /** May #draft become a new page? */
+  [[nodiscard]] [[gnu::pure]]
+  bool CanAddPage() const noexcept;
+
   void SyncButtons(Button *apply_button, Button *add_button) const noexcept;
 
   /** Apply when dirty; reload draft/baseline from the live page. */
