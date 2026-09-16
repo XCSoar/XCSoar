@@ -111,6 +111,8 @@ Version 7.46 - not yet released
 * dialogs
   - show Heart Rate as a Devices list sensor flag when a device
     reports it
+  - show Pressure, Temperature, and Relative humidity as Devices
+    list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
   - fix NOTAM details text being truncated and unable to scroll #2943
@@ -187,6 +189,8 @@ Version 7.46 - not yet released
     devices
   - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
   - document BLE sensor battery percent and heart rate on the
+    Devices list
+  - document Pressure, Temperature, and Relative humidity on the
     Devices list
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
