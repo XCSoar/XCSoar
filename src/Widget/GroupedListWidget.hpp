@@ -190,7 +190,8 @@ public:
     /**
      * A second line below the caption, in a smaller font; the same
      * shape the device list and the WiFi list use today.  It makes
-     * the item taller.
+     * the item taller.  A value which is below the caption stands
+     * between the two.
      */
     const char *subtitle = nullptr;
 
