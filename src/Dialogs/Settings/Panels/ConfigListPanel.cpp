@@ -3,9 +3,14 @@
 
 #include "ConfigListPanel.hpp"
 #include "Dialogs/DialogSettings.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Math/Util.hpp"
 #include "UIGlobals.hpp"
+#include "Units/Units.hpp"
 #include "util/StaticString.hxx"
 
+#include <algorithm>
 #include <vector>
 
 ConfigListPanel::ConfigListPanel() noexcept
@@ -37,34 +42,39 @@ ConfigListPanel::AddToggleItem(const char *caption, const char *help,
 }
 
 /**
- * Let the user pick a percentage, one choice per step.
+ * Let the user pick a number from @p min to @p max, one choice per
+ * step; @p format writes the caption of a value.
  *
  * @return true if the value has changed
  */
+template<typename F>
 static bool
-PickPercent(const char *caption, const char *help,
-            int min, int max, int step, int &value) noexcept
+PickNumber(const char *caption, const char *help,
+           int min, int max, int step, int &value, F &&format) noexcept
 {
   const unsigned n = (max - min) / step + 1;
 
-  std::vector<StaticString<8>> captions(n);
+  std::vector<StaticString<32>> captions(n);
   std::vector<PickerChoice> choices(n);
-  int current = -1;
 
   for (unsigned i = 0; i < n; ++i) {
-    const int percent = min + step * i;
-    captions[i].Format("%d %%", percent);
+    format(captions[i], min + step * (int)i);
     choices[i] = {captions[i].c_str()};
-
-    if (percent == value)
-      current = i;
   }
 
+  /* the choice nearest to the value */
+  const int current = std::clamp((value - min + step / 2) / step,
+                                 0, (int)n - 1);
+
   const int picked = PickChoice(caption, help, choices, current);
-  if (picked < 0 || picked == current)
+  if (picked < 0)
     return false;
 
-  value = min + step * picked;
+  const int new_value = min + step * picked;
+  if (new_value == value)
+    return false;
+
+  value = new_value;
   return true;
 }
 
@@ -77,9 +87,46 @@ ConfigListPanel::AddPercentItem(const char *caption, const char *help,
   percent.Format("%d %%", value);
 
   AddItem(caption, [this, caption, help, min, max, step, &value](){
-    if (PickPercent(caption, help, min, max, step, value))
+    if (PickNumber(caption, help, min, max, step, value,
+                   [](StaticString<32> &s, int v){ s.Format("%d %%", v); }))
       Refresh();
   }, {.value = percent.c_str(), .chevron = true});
+}
+
+void
+ConfigListPanel::AddAltitudeItem(const char *caption, const char *help,
+                                 unsigned min, unsigned max, unsigned step,
+                                 unsigned &value) noexcept
+{
+  AddItem(caption, [this, caption, help, min, max, step, &value](){
+    int user_value = iround(Units::ToUserAltitude(value));
+    if (PickNumber(caption, help, min, max, step, user_value,
+                   [](StaticString<32> &s, int v){
+                     s = FormatUserAltitude(Units::ToSysAltitude(v)).c_str();
+                   })) {
+      value = iround(Units::ToSysAltitude(user_value));
+      Refresh();
+    }
+  }, {.value = FormatUserAltitude(value).c_str(), .chevron = true});
+}
+
+void
+ConfigListPanel::AddDurationItem(const char *caption, const char *help,
+                                 unsigned min, unsigned max, unsigned step,
+                                 Duration &value) noexcept
+{
+  AddItem(caption, [this, caption, help, min, max, step, &value](){
+    int seconds = value.count();
+    if (PickNumber(caption, help, min, max, step, seconds,
+                   [](StaticString<32> &s, int v){
+                     s = FormatTimespanSmart(std::chrono::seconds{v},
+                                             2).c_str();
+                   })) {
+      value = Duration{(unsigned)seconds};
+      Refresh();
+    }
+  }, {.value = FormatTimespanSmart(std::chrono::seconds{value}, 2).c_str(),
+      .chevron = true});
 }
 
 void
