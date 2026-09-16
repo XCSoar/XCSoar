@@ -194,6 +194,8 @@ Version 7.46 - not yet released
     builds can force all map overlays
   - build system: include the git commit in unreleased version strings
     (splash, log) so testers can identify snapshot builds #3117
+  - Linux: undefine X11 Status after EGL includes so test tools such as
+    RunMapWindow compile #3150
 
 Version 7.45 - 2026-08-15
 * highlights
