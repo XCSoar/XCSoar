@@ -4,19 +4,17 @@
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
-#include "Widget/CreateWindowWidget.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "ui/event/KeyCode.hpp"
-#include "Form/TabMenuDisplay.hpp"
-#include "Form/TabMenuData.hpp"
-#include "Form/CheckBox.hpp"
 #include "Form/Button.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
-#include "util/Macros.hpp"
+#include "util/StaticArray.hxx"
+#include "util/StaticString.hxx"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"
@@ -87,17 +85,27 @@
 
 #include <cassert>
 
-static unsigned current_page;
+/** One page of the configuration: a panel which edits some settings. */
+struct ConfigPage {
+  const char *caption;
 
-// TODO: eliminate global variables
-static ArrowPagerWidget *pager;
+  std::unique_ptr<Widget> (*create)();
+};
 
-static constexpr TabMenuPage files_pages[] = {
+/** The pages which one item of the menu leads to. */
+struct ConfigGroup {
+  const char *caption;
+
+  /** terminated by a page without a caption */
+  const ConfigPage *pages;
+};
+
+static constexpr ConfigPage files_pages[] = {
   { N_("Site Files"), CreateSiteConfigPanel },
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage map_pages[] = {
+static constexpr ConfigPage map_pages[] = {
   { N_("Orientation"), CreateMapDisplayConfigPanel },
   { N_("Elements"), CreateSymbolsConfigPanel },
   { N_("Waypoints"), CreateWaypointDisplayConfigPanel },
@@ -109,7 +117,7 @@ static constexpr TabMenuPage map_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage computer_pages[] = {
+static constexpr ConfigPage computer_pages[] = {
   { N_("Safety Factors"), CreateSafetyFactorsConfigPanel },
   { N_("Glide Computer"), CreateGlideComputerConfigPanel },
   { N_("Wind"), CreateWindConfigPanel },
@@ -118,7 +126,7 @@ static constexpr TabMenuPage computer_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage gauge_pages[] = {
+static constexpr ConfigPage gauge_pages[] = {
   { N_("FLARM, Other"), CreateGaugesConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
 #ifdef HAVE_PCM_PLAYER
@@ -127,13 +135,13 @@ static constexpr TabMenuPage gauge_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage task_pages[] = {
+static constexpr ConfigPage task_pages[] = {
   { N_("Task Rules"), CreateTaskRulesConfigPanel },
   { N_("Turnpoint Types"), CreateTaskDefaultsConfigPanel },
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage look_pages[] = {
+static constexpr ConfigPage look_pages[] = {
   { N_("Language, Input"), CreateInterfaceConfigPanel },
   { N_("Display"), CreateDisplayConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
@@ -142,7 +150,7 @@ static constexpr TabMenuPage look_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage weather_pages[] = {
+static constexpr ConfigPage weather_pages[] = {
 #ifdef HAVE_HTTP
   { N_("Thermal Information Map"), CreateWeatherConfigPanel },
 #endif
@@ -159,12 +167,13 @@ static constexpr TabMenuPage weather_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuPage setup_pages[] = {
+static constexpr ConfigPage setup_pages[] = {
   { N_("Logger"), CreateLoggerConfigPanel },
   { N_("Units"), CreateUnitsConfigPanel },
-  // Important: all pages after Units in this list must not have data fields that are
-  // unit-dependent because they will be saved after their units may have changed.
-  // ToDo: implement API that controls order in which pages are saved
+  /* Important: all pages after Units in this list must not have data
+     fields that are unit-dependent because they will be saved after
+     their units may have changed.  ToDo: implement API that controls
+     order in which pages are saved */
   { NC_("Setting", "Time"), CreateTimeConfigPanel },
 #ifdef HAVE_TRACKING
   { N_("Tracking"), CreateTrackingConfigPanel },
@@ -181,7 +190,7 @@ static constexpr TabMenuPage setup_pages[] = {
   { nullptr, nullptr }
 };
 
-static constexpr TabMenuGroup main_menu_captions[] = {
+static constexpr ConfigGroup groups[] = {
   { N_("Site Files"), files_pages },
   { N_("Map Display"), map_pages },
   { N_("Glide Computer"), computer_pages },
@@ -192,39 +201,63 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { NC_("Menu", "Setup"), setup_pages },
 };
 
-static void
-OnUserLevel(bool expert) noexcept;
+/**
+ * What one page of the pager shows.  The pager holds the menu and
+ * the pages of the configuration, nothing else: the arrows walk
+ * through the pages, the list of a group is a dialog above the menu.
+ */
+struct PagerPage {
+  /** the group of this page; nullptr on the menu */
+  const ConfigGroup *group;
+
+  /** the page of the configuration; nullptr on the menu */
+  const ConfigPage *page;
+
+  /** the index of the first page of #group in the pager */
+  unsigned first;
+};
+
+/** does the group have a list of its pages, or only one page? */
+static constexpr bool
+HasList(const ConfigGroup &group) noexcept
+{
+  return group.pages[1].caption != nullptr;
+}
+
+/** the item of the menu the cursor rests on, kept for the next time */
+static unsigned current_item;
+
+// TODO: eliminate global variables
+static ArrowPagerWidget *pager;
+
+static StaticArray<PagerPage, 48u> pager_pages;
 
 class ConfigurationExtraButtons final
   : public NullWidget {
   struct Layout {
-    PixelRect expert, button2, button1;
+    PixelRect button2, button1;
 
     Layout(const PixelRect &_rc) {
       /* the controls keep the gap to the edges that the buttons have
          between each other */
       PixelRect rc = _rc;
       rc.Grow(-(int)ButtonFrameRenderer::GetEdgeMargin(rc));
-      expert = button2 = button1 = rc;
+      button2 = button1 = rc;
 
       const unsigned height = rc.GetHeight();
       const unsigned max_control_height = ::Layout::GetMaximumControlHeight();
 
-      if (height >= 3 * max_control_height) {
-        expert.bottom = expert.top + max_control_height;
-
+      if (height >= 2 * max_control_height) {
         button1.top = button2.bottom = rc.bottom - max_control_height;
         button2.top = button2.bottom - max_control_height;
       } else {
-        expert.right = button2.left = unsigned(rc.left * 2 + rc.right) / 3;
-        button2.right = button1.left = unsigned(rc.left + rc.right * 2) / 3;
+        button2.right = button1.left = unsigned(rc.left + rc.right) / 2;
       }
     }
   };
 
   const DialogLook &look;
 
-  CheckBoxControl expert;
   Button button2, button1;
   bool borrowed2, borrowed1;
 
@@ -233,7 +266,27 @@ public:
     :look(_look),
      borrowed2(false), borrowed1(false) {}
 
-  Button &GetButton(unsigned number) {
+  /** does a page show one of the buttons at the moment? */
+  bool HasButtons() const noexcept {
+    return borrowed2 || borrowed1;
+  }
+
+  void Borrow(unsigned i, const char *caption,
+              std::function<void()> callback) noexcept {
+    Button &button = GetButton(i);
+    button.SetCaption(caption);
+    button.SetCallback(std::move(callback));
+    button.Show();
+    GetBorrowed(i) = true;
+  }
+
+  void Return(unsigned i) noexcept {
+    GetButton(i).Hide();
+    GetBorrowed(i) = false;
+  }
+
+private:
+  Button &GetButton(unsigned number) noexcept {
     switch (number) {
     case 1:
       return button1;
@@ -247,23 +300,34 @@ public:
     }
   }
 
+  bool &GetBorrowed(unsigned number) noexcept {
+    switch (number) {
+    case 1:
+      return borrowed1;
+
+    case 2:
+      return borrowed2;
+
+    default:
+      assert(false);
+      gcc_unreachable();
+    }
+  }
+
 protected:
   /* virtual methods from Widget */
   PixelSize GetMinimumSize() const noexcept override {
+    /* no room while no page borrows a button: the pager leaves the
+       row out then */
     return {
-      CheckBoxControl::GetMinimumWidth(look,
-                                       ::Layout::GetMaximumControlHeight(),
-                                       _("Expert")),
-      ::Layout::GetMaximumControlHeight() * 3,
+      ::Layout::GetMaximumControlHeight() * 2,
+      HasButtons() ? ::Layout::GetMaximumControlHeight() : 0u,
     };
   }
 
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override {
     Layout layout(rc);
-
-    expert.CreateInDialogForm(parent, look, _("Expert"), layout.expert,
-                              [](bool value){ OnUserLevel(value); });
 
     WindowStyle style;
     style.Hide();
@@ -274,10 +338,12 @@ protected:
   }
 
   void Show(const PixelRect &rc) noexcept override {
-    Layout layout(rc);
+    /* the pager gives no room while no button is borrowed, and a
+       window cannot be moved into none */
+    if (rc.GetHeight() == 0)
+      return;
 
-    expert.SetState(CommonInterface::GetUISettings().dialog.expert);
-    expert.MoveAndShow(layout.expert);
+    Layout layout(rc);
 
     if (borrowed2)
       button2.MoveAndShow(layout.button2);
@@ -291,14 +357,15 @@ protected:
   }
 
   void Hide() noexcept override {
-    expert.FastHide();
     button2.FastHide();
     button1.FastHide();
   }
 
   void Move(const PixelRect &rc) noexcept override {
+    if (rc.GetHeight() == 0)
+      return;
+
     Layout layout(rc);
-    expert.Move(layout.expert);
     button2.Move(layout.button2);
     button1.Move(layout.button1);
   }
@@ -310,10 +377,7 @@ ConfigPanel::BorrowExtraButton(unsigned i, const char *caption,
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
-  Button &button = extra.GetButton(i);
-  button.SetCaption(caption);
-  button.SetCallback(std::move(callback));
-  button.Show();
+  extra.Borrow(i, caption, std::move(callback));
 }
 
 void
@@ -321,49 +385,127 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 {
   ConfigurationExtraButtons &extra =
     (ConfigurationExtraButtons &)pager->GetExtra();
-  Button &button = extra.GetButton(i);
-  button.Hide();
-}
-
-static void
-OnUserLevel(bool expert) noexcept
-{
-  CommonInterface::SetUISettings().dialog.expert = expert;
-
-  /* Keep Profile I/O out of this checkbox callback (pager is mid-
-     relayout). Persist UserLevel when the dialog closes instead. */
-
-  /* force layout update */
-  pager->PagerWidget::Move(pager->GetPosition());
+  extra.Return(i);
 }
 
 /**
- * Close on the menu page commits (mrOK).  On a settings page, return
- * to the menu (Back).
+ * Show the pages of one group as a list above the menu, and open the
+ * page the user picks.
+ *
+ * @param first the index of the first page of the group in the pager
+ * @param cursor the page the cursor starts on, counted in the group
+ */
+static void
+ShowGroupList(const ConfigGroup &group, unsigned first, unsigned cursor)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, gettext(group.caption));
+
+  auto list = std::make_unique<GroupedListWidget>(look);
+  list->AddGroup();
+
+  int picked = -1;
+  unsigned i = first;
+  for (const ConfigPage *page = group.pages; page->caption != nullptr;
+       ++page, ++i)
+    list->AddItem(gettext(page->caption), [&dialog, &picked, i](){
+      picked = i;
+      dialog.SetModalResult(mrOK);
+    }, {.chevron = true});
+
+  list->SetCursorIndex(cursor);
+
+  dialog.FinishPreliminary(std::move(list));
+  dialog.AddButton(_("Back"), mrCancel);
+  dialog.ShowModal();
+
+  if (picked >= 0)
+    pager->ClickPage(picked);
+}
+
+/**
+ * Close on the menu page commits (mrOK).  On a page of the
+ * configuration, return to the menu, and to the list of the group
+ * the page belongs to (Back).
  */
 static void
 OnCloseClicked(WidgetDialog &dialog)
 {
-  if (pager->GetCurrentIndex() == 0)
+  const unsigned i = pager->GetCurrentIndex();
+  if (i == 0) {
     dialog.SetModalResult(mrOK);
-  else
-    pager->ClickPage(0);
+    return;
+  }
+
+  const PagerPage &current = pager_pages[i];
+  if (pager->ClickPage(0) && HasList(*current.group))
+    ShowGroupList(*current.group, current.first,
+                  current.page - current.group->pages);
 }
 
+/**
+ * @param extra_row does the layout of the pager hold the row of the
+ * extra buttons?
+ */
 static void
-OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
+OnPageFlipped(WidgetDialog &dialog, GroupedListWidget &menu,
+              bool &extra_row)
 {
-  menu.OnPageFlipped();
+  const unsigned i = pager->GetCurrentIndex();
+  const PagerPage &current = pager_pages[i];
 
-  char buffer[128];
-  const char *caption = menu.GetCaption(buffer, ARRAY_SIZE(buffer));
-  if (caption == nullptr)
+  /* the row of the extra buttons comes and goes with the page which
+     borrows them */
+  const bool need_extra_row =
+    ((const ConfigurationExtraButtons &)pager->GetExtra()).HasButtons();
+  if (need_extra_row != extra_row) {
+    extra_row = need_extra_row;
+
+    /* the dialog has no buttons of its own: the whole client area is
+       the pager's.  Its GetPosition() is only the page inside it */
+    pager->Move(dialog.GetClientAreaWindow().GetClientRect());
+  }
+
+  StaticString<128> caption;
+  if (current.page == nullptr)
     caption = _("Configuration");
+  else if (HasList(*current.group))
+    caption.Format("%s > %s", gettext(current.group->caption),
+                   gettext(current.page->caption));
+  else
+    /* the only page of its group: its name says it all */
+    caption = gettext(current.page->caption);
   dialog.SetCaption(caption);
 
-  pager->SetCloseButtonCaption(pager->GetCurrentIndex() == 0
-                               ? _("Close")
-                               : _("Back"));
+  pager->SetCloseButtonCaption(i == 0 ? _("Close") : _("Back"));
+
+  /* the arrows reach a page without the menu: let its cursor follow,
+     so that Back returns to the item of this page */
+  if (current.group != nullptr)
+    menu.SetCursorIndex(current.group - groups);
+}
+
+/**
+ * Add the item of one group to the menu, and its pages to the pager.
+ */
+static void
+AddGroup(GroupedListWidget &menu, const ConfigGroup &group) noexcept
+{
+  const unsigned first = pager->GetSize();
+
+  menu.AddItem(gettext(group.caption), [&group, first](){
+    if (HasList(group))
+      ShowGroupList(group, first, 0);
+    else
+      pager->ClickPage(first);
+  }, {.chevron = true});
+
+  for (const ConfigPage *page = group.pages; page->caption != nullptr; ++page) {
+    pager_pages.append({&group, page, first});
+    pager->Add(page->create());
+  }
 }
 
 void dlgConfigurationShowModal()
@@ -377,23 +519,34 @@ void dlgConfigurationShowModal()
                                [&dialog](){ OnCloseClicked(dialog); },
                                std::make_unique<ConfigurationExtraButtons>(look));
 
-  auto _menu = std::make_unique<TabMenuDisplay>(*pager, look);
+  auto _menu = std::make_unique<GroupedListWidget>(look);
   auto &menu = *_menu;
-  pager->Add(std::make_unique<CreateWindowWidget>([&_menu](ContainerWindow &parent,
-                                                           const PixelRect &rc,
-                                                           WindowStyle style) {
-    style.TabStop();
-    _menu->Create(parent, rc, style);
-    return std::move(_menu);
-  }));
+  pager_pages.clear();
+  pager_pages.append({nullptr, nullptr, 0});
+  pager->Add(std::move(_menu));
 
-  menu.InitMenu(main_menu_captions, ARRAY_SIZE(main_menu_captions));
+  menu.AddGroup();
+  for (const ConfigGroup &group : groups)
+    AddGroup(menu, group);
+
+  /* a page lays itself out again whenever it is shown, and reads the
+     user level then */
+  menu.AddGroup();
+  const unsigned expert_item = menu.GetItemCount();
+  menu.AddItem(_("Expert"), [&menu, expert_item](){
+    CommonInterface::SetUISettings().dialog.expert =
+      menu.IsItemChecked(expert_item);
+  }, {.toggle = true,
+      .toggle_hit_area = GroupedListWidget::ToggleHitArea::ROW,
+      .checked = CommonInterface::GetUISettings().dialog.expert,
+      .help = _("Show the advanced settings, which are hidden otherwise.")});
 
   /* restore last selected menu item */
-  menu.SetCursor(current_page);
+  menu.SetCursorIndex(current_item);
 
-  pager->SetPageFlippedCallback([&dialog, &menu](){
-    OnPageFlipped(dialog, menu);
+  bool extra_row = false;
+  pager->SetPageFlippedCallback([&dialog, &menu, &extra_row](){
+    OnPageFlipped(dialog, menu, extra_row);
   });
 
   dialog.FinishPreliminary(pager);
@@ -410,10 +563,11 @@ void dlgConfigurationShowModal()
 
   const int result = dialog.ShowModal();
 
-  /* save page number for next time this dialog is opened */
-  current_page = menu.GetCursor();
+  /* save the menu item for next time this dialog is opened */
+  if (menu.GetCursorIndex() >= 0)
+    current_item = menu.GetCursorIndex();
 
-  /* Persist Expert only on OK. Missing UserLevel means beginner —
+  /* Persist Expert only on OK. Missing UserLevel means beginner:
      write "1" when enabling Expert; remove the key when returning to
      beginner (do not leave UserLevel=0 cruft) (#1793). */
   bool expert_changed = false;
