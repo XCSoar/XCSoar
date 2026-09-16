@@ -42,6 +42,8 @@ public final class BluetoothSensor
   private volatile boolean shutdown = false;
 
   private int state = STATE_LIMBO;
+  private boolean reached_ready = false;
+  private boolean initial_retry_used = false;
 
   private BluetoothGattCharacteristic currentEnableNotification;
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
@@ -183,6 +185,8 @@ public final class BluetoothSensor
       return;
 
     state = _state;
+    if (state == STATE_READY)
+      reached_ready = true;
 
     if (safeDestruct.increment()) {
       try {
@@ -217,12 +221,28 @@ public final class BluetoothSensor
     return gatt.writeDescriptor(d);
   }
 
+  /**
+   * Start the next CCCD write, skipping characteristics that have no
+   * CCCD.  Caller holds enableNotificationQueue.
+   */
+  private void enableNextNotification() {
+    while (currentEnableNotification == null) {
+      currentEnableNotification = enableNotificationQueue.poll();
+      if (currentEnableNotification == null)
+        return;
+      if (!doEnableNotification(currentEnableNotification))
+        currentEnableNotification = null;
+    }
+  }
+
   private void enableNotification(BluetoothGattCharacteristic c) {
     synchronized(enableNotificationQueue) {
       if (currentEnableNotification == null) {
         currentEnableNotification = c;
-        if (!doEnableNotification(c))
+        if (!doEnableNotification(c)) {
           currentEnableNotification = null;
+          enableNextNotification();
+        }
       } else
         enableNotificationQueue.add(c);
     }
@@ -483,15 +503,19 @@ public final class BluetoothSensor
     }
 
     /* Heart-rate bands often drop the first attempt (status 147
-       timeout).  Reconnect instead of failing the port; a FAILED
-       sensor is closed and shown as Not connected. */
+       timeout).  Retry that once; later drops use the normal
+       failure path. */
     if (BluetoothProfile.STATE_DISCONNECTED == newState) {
-      Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
-            ", reconnecting");
-      if (!gatt.connect())
+      if (!reached_ready && !initial_retry_used) {
+        initial_retry_used = true;
+        Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
+              ", retrying initial connect");
+        if (!gatt.connect())
+          submitError("GATT disconnected");
+        else
+          setStateSafe(STATE_LIMBO);
+      } else
         submitError("GATT disconnected");
-      else
-        setStateSafe(STATE_LIMBO);
     }
   }
 
@@ -527,11 +551,8 @@ public final class BluetoothSensor
                                 BluetoothGattDescriptor descriptor,
                                 int status) {
     synchronized(enableNotificationQueue) {
-      currentEnableNotification = enableNotificationQueue.poll();
-      if (currentEnableNotification != null) {
-        if (!doEnableNotification(currentEnableNotification))
-          currentEnableNotification = null;
-      }
+      currentEnableNotification = null;
+      enableNextNotification();
       if (currentEnableNotification == null)
         pumpReadQueue();
     }
