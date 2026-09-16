@@ -1055,6 +1055,11 @@ lists.
 \begin{description}
 \item[Port]  This setting maps an existing interface (port) of your 
   glide computer to one of the available slots A to D.
+  On Android, Bluetooth LE devices appear as {\it BLE port} (a
+  serial UART used by varios such as BlueFly) or {\it BLE sensor}
+  (heart-rate monitors, SensBox, and engine sensors).  A BlueFly Vario
+  must be selected as {\it BLE port} with the BlueFly driver; {\it BLE
+  sensor} cannot carry its serial protocol.
 \item[Baudrate]  Set this to the communication speed of the connected device.
 \item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.
