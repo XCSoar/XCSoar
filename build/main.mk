@@ -93,6 +93,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/InfoBoxPicker.cpp \
 	$(SRC)/Dialogs/InfoBoxGroupPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
+	$(SRC)/Dialogs/GroupedListPicker.cpp \
 	$(SRC)/Dialogs/EmptyDownloadList.cpp \
 	$(SRC)/Dialogs/MultiFilePicker.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
