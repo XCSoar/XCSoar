@@ -9,12 +9,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Button.hpp"
-#include "Widget/ListWidget.hpp"
-#include "ui/control/List.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "Renderer/TwoTextRowsRenderer.hpp"
-#include "Look/DialogLook.hpp"
-#include "util/Compiler.h"
+#include "Widget/GroupedListWidget.hpp"
 #include "Language/Language.hpp"
 #include "Language/FormatText.hpp"
 #include "UIGlobals.hpp"
@@ -35,17 +30,11 @@
 #include "Profile/Keys.hpp"
 #include "Protection.hpp"
 #include "util/StringFormat.hpp"
-#include "util/TruncateString.hpp"
-#include "Operation/Operation.hpp"
 #include "util/UTF8.hpp"
 #include "util/StringAPI.hxx"
-#include "system/FileUtil.hpp"
 
-#include <array>
 #include <algorithm>
-#include <cassert>
 #include <ctime>
-#include <iterator>
 #include <string>
 #include <string_view>
 
@@ -264,318 +253,267 @@ GetCurrentNOTAMTimeUTC() noexcept
     : std::chrono::system_clock::now();
 }
 
-[[nodiscard]]
-static std::string
-EllipsizeText(Canvas &canvas, const std::string &text,
-              const unsigned max_width)
-{
-  if (max_width == 0)
-    return {};
+/**
+ * The NOTAMs which are loaded, below what is known about the
+ * download.  An item shows the number, the location and whether the
+ * NOTAM is in effect in its first line, the beginning of the text
+ * below it, and why the filter hides it, if it does.  A tap on a
+ * NOTAM opens its details; the button of the dialog hides or shows
+ * the Q-code of the NOTAM under the cursor.
+ */
+class NOTAMListWidget final : public GroupedListWidget {
+  /** how many lines of the text of a NOTAM the item shows */
+  static constexpr unsigned TEXT_LINES = 3;
 
-  if (canvas.CalcTextWidth(text) <= max_width)
-    return text;
+  /** the NOTAMs the items show, in their order */
+  std::vector<NOTAMStruct> notams;
 
-  constexpr std::string_view ellipsis = "...";
-  const unsigned ellipsis_width = canvas.CalcTextWidth(ellipsis);
-  if (ellipsis_width >= max_width)
-    return std::string{ellipsis};
+  /** the index of the item of the first NOTAM */
+  unsigned first_notam_item = 0;
 
-  std::string result;
-  result.reserve(text.size());
-
-  for (std::string_view remaining = text; !remaining.empty();) {
-    const std::size_t sequence = SequenceLengthUTF8(remaining.front());
-    if (sequence == 0 || sequence > remaining.size())
-      break;
-
-    std::string candidate = result;
-    candidate.append(remaining.substr(0, sequence));
-    candidate += ellipsis;
-
-    if (canvas.CalcTextWidth(candidate) > max_width)
-      break;
-
-    result.append(remaining.substr(0, sequence));
-    remaining.remove_prefix(sequence);
-  }
-
-  result += ellipsis;
-  return result;
-}
-
-[[nodiscard]]
-static unsigned
-GetTextWidth(const PixelRect &rc, const TwoTextRowsRenderer &row_renderer)
-{
-  const int width = rc.GetWidth() - row_renderer.GetX();
-  return width > 0 ? unsigned(width) : 0u;
-}
-
-class NOTAMListWidget final : public ListWidget {
-  static constexpr unsigned HEADER_COUNT = 4;
-  std::vector<NOTAMStruct> items;
-  TwoTextRowsRenderer row_renderer;
-  Button *details_button = nullptr;
   Button *filter_qcode_button = nullptr;
-  Button *toggle_filter_button = nullptr;
+
+  /** show the NOTAMs which the filter hides, too? */
   bool show_all = false;
 
 public:
-  NOTAMListWidget() = default;
-
-  void UpdateList();
-
-  void SetDetailsButton(Button *_details_button) noexcept {
-    details_button = _details_button;
-    if (details_button != nullptr)
-      details_button->SetEnabled(false);
-  }
+  NOTAMListWidget() noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()) {}
 
   void SetFilterQCodeButton(Button *_filter_qcode_button) noexcept {
     filter_qcode_button = _filter_qcode_button;
-    if (filter_qcode_button != nullptr)
-      filter_qcode_button->SetEnabled(false);
-  }
-
-  void SetToggleFilterButton(Button *_toggle_filter_button) noexcept {
-    toggle_filter_button = _toggle_filter_button;
-    UpdateToggleFilterButton();
-  }
-
-  void ShowDetails() noexcept {
-    OnActivateItem(GetList().GetCursorIndex());
+    UpdateButtons(GetCursorIndex());
   }
 
   void FilterSelectedQCode() noexcept;
 
-  void ToggleFilter() noexcept {
-    show_all = !show_all;
-    UpdateToggleFilterButton();
-    try {
-      UpdateList();
-    } catch (...) {
-      LogError(std::current_exception(), "Failed to toggle NOTAM filter");
-      ResetListAfterUpdateFailure();
-    }
-  }
-
-  void UpdateButtons() noexcept {
-    const unsigned index = GetList().GetCursorIndex();
-
-    if (details_button != nullptr)
-      details_button->SetEnabled(CanActivateItem(index));
-
-    if (filter_qcode_button != nullptr) {
-      const auto *notam = GetSelectableNOTAM(index);
-      const auto &settings =
-        CommonInterface::GetComputerSettings().airspace.notam;
-      const bool has_qcode = notam != nullptr && !notam->feature_type.empty();
-      filter_qcode_button->SetEnabled(has_qcode);
-      if (has_qcode)
-        filter_qcode_button->SetCaption(
-          NOTAMFilter::IsQCodeHidden(notam->feature_type,
-                                     settings.hidden_qcodes)
-          ? C_("Button", "Show Q-code")
-          : C_("Button", "Hide Q-code"));
-    }
-  }
-
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override;
-
-  void Show(const PixelRect &rc) noexcept override {
-    ListWidget::Show(rc);
-    try {
-      UpdateList();
-    } catch (...) {
-      LogError(std::current_exception(), "Failed to update NOTAM list");
-      ResetListAfterUpdateFailure();
-    }
+               const PixelRect &rc) noexcept override {
+    SetCursorCallback([this](int index){ UpdateButtons(index); });
+    Refresh();
+    GroupedListWidget::Prepare(parent, rc);
   }
-
-  /* virtual methods from ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) noexcept override;
-
-  /* virtual methods from ListCursorHandler */
-  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
-    UpdateButtons();
-  }
-
-  bool CanActivateItem(unsigned index) const noexcept override {
-    return index >= HEADER_COUNT && index < items.size();
-  }
-
-  void OnActivateItem(unsigned index) noexcept override;
 
 private:
-  void ResetListAfterUpdateFailure() noexcept {
-    items.clear();
-    GetList().SetLength(1);
-    GetList().Invalidate();
-    UpdateButtons();
+  /** Fill the list from the NOTAMs which are loaded now. */
+  void Fill();
+
+  /** Fill() again, and show an empty list if that fails. */
+  void Refresh() noexcept;
+
+  void AddNOTAMItem(const NOTAMStruct &notam, const NOTAMSettings &settings,
+                    std::chrono::system_clock::time_point now) noexcept;
+
+  [[gnu::pure]]
+  const NOTAMStruct *GetSelectedNOTAM(int index) const noexcept {
+    return index >= (int)first_notam_item &&
+      index < (int)(first_notam_item + notams.size())
+      ? &notams[index - first_notam_item]
+      : nullptr;
   }
 
-  void UpdateToggleFilterButton() noexcept {
-    if (toggle_filter_button != nullptr)
-      toggle_filter_button->SetCaption(show_all
-                                       ? C_("Button", "Hide Filtered")
-                                       : C_("Button", "Show All"));
-  }
-
-  const NOTAMStruct *GetSelectableNOTAM(unsigned index) const noexcept {
-    return CanActivateItem(index) ? &items[index] : nullptr;
-  }
+  void UpdateButtons(int index) noexcept;
+  void ShowDetails(const NOTAMStruct &notam) noexcept;
 };
 
 void
-NOTAMListWidget::Prepare(ContainerWindow &parent,
-                         const PixelRect &rc) noexcept
+NOTAMListWidget::UpdateButtons(int index) noexcept
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  CreateList(parent, look, rc,
-             row_renderer.CalculateLayout(*look.list.font,
-                                          look.small_font));
-}
+  if (filter_qcode_button == nullptr)
+    return;
 
-void
-NOTAMListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                             unsigned i) noexcept
-{
-  try {
-    if (items.empty()) {
-      assert(i == 0);
-      row_renderer.DrawFirstRow(canvas, rc, _("No NOTAMs available"));
-      row_renderer.DrawSecondRow(canvas, rc, "");
-      return;
-    }
-
-    if (i >= items.size())
-      return;
-
-    assert(i < items.size());
-
-    const auto &notam = items[i];
-
-    // Check if this is a metadata header (first HEADER_COUNT items)
-    const bool is_header = i < HEADER_COUNT;
-
-    // Build user-friendly first row: "A1234/24 • EDDF • Active" or
-    // "Future: starts in 2h"
-    std::string first_row_text =
-      SafeString(notam.number.empty() ? notam.id : notam.number);
-
-    if (is_header) {
-      // For headers, just show "Label: Value" format
-      first_row_text += ": ";
-      first_row_text += SafeString(notam.text);
-    } else {
-      // For actual NOTAMs, add location if available
-      if (!notam.location.empty()) {
-        first_row_text += " • ";
-        first_row_text += SafeString(notam.location);
-      }
-
-      // Add status indicator
-      const auto now = GetCurrentNOTAMTimeUTC();
-      const bool is_perm = notam.end_time_permanent;
-      if (now < notam.start_time) {
-        const auto starts_in = FormatRelativeNotamTime(notam.start_time - now);
-        StaticString<64> status;
-        FormatStartsIn(status, starts_in.c_str());
-        first_row_text += " • ";
-        first_row_text += status.c_str();
-      } else if (!is_perm && now > notam.end_time) {
-        first_row_text += " • ";
-        first_row_text += C_("Status", "Expired");
-      } else {
-        first_row_text += " • ";
-        first_row_text += _("Active");
-      }
-
-      // Add filtered indicator
-      const auto &settings =
-        CommonInterface::GetComputerSettings().airspace.notam;
-      const bool is_filtered =
-        !NOTAMFilter::ShouldDisplay(notam, settings, now, false);
-
-      if (is_filtered) {
-        first_row_text += " • ";
-        first_row_text += C_("Status", "Filtered");
-      const auto reasons = FormatFilterReasons(notam, settings, now);
-        if (!reasons.empty()) {
-          first_row_text += ": ";
-          first_row_text += reasons;
-        }
-      }
-    }
-
-    canvas.Select(row_renderer.GetFirstFont());
-    first_row_text =
-      EllipsizeText(canvas, first_row_text, GetTextWidth(rc, row_renderer));
-
-    StaticString<512> first_row;
-    CopyTruncateStringUTF8({first_row.buffer(), first_row.capacity()},
-                 first_row_text.c_str(),
-                 first_row.capacity() - 1);
-    row_renderer.DrawFirstRow(canvas, rc, first_row.c_str());
-
-    // For headers, skip the second row (text is already shown in first row)
-    if (is_header) {
-      row_renderer.DrawSecondRow(canvas, rc, "");
-      return;
-    }
-
-    // Build user-friendly second row: truncated text with Q-code if available
-    std::string second_row_text;
-
-    // Add Q-code/feature type if available
-    if (!notam.feature_type.empty()) {
-      second_row_text = SafeString(notam.feature_type);
-      second_row_text += ": ";
-    }
-
-    // Add text, truncated to fit
-    if (!notam.text.empty()) {
-      std::string text = SafeString(notam.text);
-      // Remove newlines and extra spaces for better display
-      for (auto &ch : text) {
-        if (ch == '\n' || ch == '\r') ch = ' ';
-      }
-      second_row_text += text;
-    }
-
-    if (!second_row_text.empty()) {
-      canvas.Select(row_renderer.GetSecondFont());
-      second_row_text =
-        EllipsizeText(canvas, second_row_text, GetTextWidth(rc, row_renderer));
-
-      StaticString<512> second_row;
-      CopyTruncateStringUTF8({second_row.buffer(), second_row.capacity()},
-                             second_row_text.c_str(),
-                             second_row.capacity() - 1);
-      row_renderer.DrawSecondRow(canvas, rc, second_row.c_str());
-    } else {
-      row_renderer.DrawSecondRow(canvas, rc, "");
-    }
-  } catch (...) {
-#ifndef NDEBUG
-    LogError(std::current_exception(), "Failed to paint NOTAM list item");
-#endif
-    row_renderer.DrawFirstRow(canvas, rc, _("NOTAM render error"));
-    row_renderer.DrawSecondRow(canvas, rc, "");
+  const auto *notam = GetSelectedNOTAM(index);
+  const bool has_qcode = notam != nullptr && !notam->feature_type.empty();
+  filter_qcode_button->SetEnabled(has_qcode);
+  if (has_qcode) {
+    const auto &settings =
+      CommonInterface::GetComputerSettings().airspace.notam;
+    filter_qcode_button->SetCaption(
+      NOTAMFilter::IsQCodeHidden(notam->feature_type, settings.hidden_qcodes)
+      ? C_("Button", "Show Q-code")
+      : C_("Button", "Hide Q-code"));
   }
 }
 
 void
-NOTAMListWidget::OnActivateItem(unsigned i) noexcept
+NOTAMListWidget::AddNOTAMItem(const NOTAMStruct &notam,
+                              const NOTAMSettings &settings,
+                              const std::chrono::system_clock::time_point now)
+  noexcept
 {
-  if (!CanActivateItem(i))
-    return;
+  const unsigned i = notams.size();
+  notams.push_back(notam);
 
+  /* the badge says whether the NOTAM is in effect */
+  StaticString<64> badge;
+  BadgeStyle badge_style;
+  if (now < notam.start_time) {
+    FormatStartsIn(badge,
+                   FormatRelativeNotamTime(notam.start_time - now).c_str());
+    badge_style = BadgeStyle::PRIMARY;
+  } else if (!notam.end_time_permanent && now > notam.end_time) {
+    badge = C_("Status", "Expired");
+    badge_style = BadgeStyle::DANGER;
+  } else {
+    badge = _("Active");
+    badge_style = BadgeStyle::SUCCESS;
+  }
+
+  /* the description: the Q-code and the text, cut to a few lines */
+  std::string description;
+  if (!notam.feature_type.empty()) {
+    description = SafeString(notam.feature_type);
+    description += ": ";
+  }
+
+  if (!notam.text.empty()) {
+    std::string text = SafeString(notam.text);
+    for (auto &ch : text)
+      if (ch == '\n' || ch == '\r')
+        ch = ' ';
+
+    description += text;
+  }
+
+  /* the second line says why the filter hides the NOTAM */
+  std::string subtitle;
+  if (!NOTAMFilter::ShouldDisplay(notam, settings, now, false)) {
+    subtitle = C_("Status", "Filtered");
+
+    const auto reasons = FormatFilterReasons(notam, settings, now);
+    if (!reasons.empty()) {
+      subtitle += ": ";
+      subtitle += reasons;
+    }
+  }
+
+  const std::string caption =
+    SafeString(notam.number.empty() ? notam.id : notam.number);
+  const std::string location = SafeString(notam.location);
+
+  AddItem(caption.c_str(), [this, i](){
+    ShowDetails(notams[i]);
+  }, {.subtitle = subtitle.empty() ? nullptr : subtitle.c_str(),
+      .value = location.empty() ? nullptr : location.c_str(),
+      .value_font = TextFont::MONO,
+      .description = description.empty() ? nullptr : description.c_str(),
+      .description_font = TextFont::MONO,
+      .description_size = TextSize::SMALL,
+      .description_max_lines = TEXT_LINES,
+      .badge = badge.c_str(),
+      .badge_style = badge_style,
+      .chevron = true});
+}
+
+void
+NOTAMListWidget::Fill()
+{
+  Clear();
+  notams.clear();
+
+  NOTAMGlue::Snapshot snapshot;
+  if (net_components != nullptr && net_components->notam != nullptr)
+    snapshot = net_components->notam->GetSnapshot();
+  else
+    LogFmt("NOTAM: UpdateList - net_components or notam is null");
+
+  const auto &all = snapshot.notams;
+  const auto now = GetCurrentNOTAMTimeUTC();
+  const auto &settings =
+    CommonInterface::GetComputerSettings().airspace.notam;
+  const unsigned visible_count =
+    static_cast<unsigned>(std::count_if(all.begin(), all.end(),
+      [&](const auto &notam) {
+        return NOTAMFilter::ShouldDisplay(notam, settings, now, false);
+      }));
+
+  /* what is known about the download */
+  AddGroup();
+
+  StaticString<64> value;
+  const std::time_t last_update = snapshot.last_update_time;
+  if (last_update > 0) {
+    struct tm tm_buf;
+#ifdef _WIN32
+    const auto *tm =
+      (localtime_s(&tm_buf, &last_update) == 0) ? &tm_buf : nullptr;
+#else
+    const auto *tm = localtime_r(&last_update, &tm_buf);
+#endif
+    if (tm != nullptr)
+      value.Format("%04d-%02d-%02d %02d:%02d",
+                   tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
+                   tm->tm_hour, tm->tm_min);
+    else
+      value = _("Unknown");
+  } else
+    value = C_("Status", "Never");
+
+  AddItem(_("Last Update (local)"), {.value = value.c_str()});
+
+  const auto &basic = CommonInterface::Basic();
+  const GeoPoint last_loc = snapshot.last_update_location;
+  if (basic.location_available && basic.location.IsValid() &&
+      last_loc.IsValid())
+    value = FormatUserDistanceSmart(basic.location.Distance(last_loc)).c_str();
+  else
+    value = _("Unknown");
+
+  AddItem(_("Distance"), {.value = value.c_str()});
+
+  value.Format(_("%u total"), static_cast<unsigned>(all.size()));
+  AddItem(C_("Menu", "NOTAMs"), {.value = value.c_str()});
+
+  value.Format(_("%u visible"), visible_count);
+  AddItem(_("After Filtering"), {.value = value.c_str()});
+
+  const unsigned show_all_item = GetItemCount();
+  AddItem(C_("Button", "Show All"), [this, show_all_item](){
+    show_all = IsItemChecked(show_all_item);
+    Refresh();
+  }, {.toggle = true,
+      .checked = show_all,
+      .help = _("List the NOTAMs which the filter hides, too, and say why they are hidden.")});
+
+  /* the NOTAMs */
+  AddGroup();
+  first_notam_item = GetItemCount();
+
+  for (const auto &notam : all)
+    if (show_all || NOTAMFilter::ShouldDisplay(notam, settings, now, false))
+      AddNOTAMItem(notam, settings, now);
+
+  if (notams.empty())
+    AddItem(_("No NOTAMs available"), {.disabled = true});
+
+  UpdateLayout();
+}
+
+void
+NOTAMListWidget::Refresh() noexcept
+{
   try {
-    auto airspace = NOTAMConverter::BuildNOTAMAirspace(items[i], true);
+    Fill();
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to update NOTAM list");
+
+    Clear();
+    notams.clear();
+    AddGroup();
+    first_notam_item = GetItemCount();
+    AddItem(_("No NOTAMs available"), {.disabled = true});
+    UpdateLayout();
+  }
+
+  UpdateButtons(GetCursorIndex());
+}
+
+void
+NOTAMListWidget::ShowDetails(const NOTAMStruct &notam) noexcept
+{
+  try {
+    auto airspace = NOTAMConverter::BuildNOTAMAirspace(notam, true);
     if (!airspace)
       return;
 
@@ -591,7 +529,7 @@ NOTAMListWidget::OnActivateItem(unsigned i) noexcept
 void
 NOTAMListWidget::FilterSelectedQCode() noexcept
 {
-  const auto *notam = GetSelectableNOTAM(GetList().GetCursorIndex());
+  const auto *notam = GetSelectedNOTAM(GetCursorIndex());
   if (notam == nullptr || notam->feature_type.empty())
     return;
 
@@ -613,12 +551,7 @@ NOTAMListWidget::FilterSelectedQCode() noexcept
       return;
 
     ApplyNOTAMFilterSettings(settings);
-    try {
-      UpdateList();
-    } catch (...) {
-      LogError(std::current_exception(), "Failed to refresh NOTAM list");
-      ResetListAfterUpdateFailure();
-    }
+    Refresh();
     return;
   }
 
@@ -642,112 +575,7 @@ NOTAMListWidget::FilterSelectedQCode() noexcept
   }
 
   ApplyNOTAMFilterSettings(settings);
-  try {
-    UpdateList();
-  } catch (...) {
-    LogError(std::current_exception(), "Failed to refresh NOTAM list");
-    ResetListAfterUpdateFailure();
-  }
-}
-
-void
-NOTAMListWidget::UpdateList()
-{
-  items.clear();
-
-  if (net_components && net_components->notam) {
-    const auto snapshot = net_components->notam->GetSnapshot();
-    const auto &notams = snapshot.notams;
-    const auto now = GetCurrentNOTAMTimeUTC();
-    const auto &settings =
-      CommonInterface::GetComputerSettings().airspace.notam;
-    const unsigned visible_count =
-      static_cast<unsigned>(std::count_if(notams.begin(), notams.end(),
-        [&](const auto &notam) {
-          return NOTAMFilter::ShouldDisplay(notam, settings, now, false);
-        }));
-
-    // Add header items with statistics
-    NOTAMStruct header1, header2, header3, header4;
-    
-    // Last Update time
-    std::time_t last_update = snapshot.last_update_time;
-    header1.number = _("Last Update (local)");
-    if (last_update > 0) {
-      struct tm tm_buf;
-#ifdef _WIN32
-      const auto *tm =
-        (localtime_s(&tm_buf, &last_update) == 0) ? &tm_buf : nullptr;
-#else
-      const auto *tm = localtime_r(&last_update, &tm_buf);
-#endif
-      if (tm != nullptr) {
-        char time_buffer[64];
-        StringFormat(time_buffer, sizeof(time_buffer),
-                     "%04d-%02d-%02d %02d:%02d",
-                     tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
-                     tm->tm_hour, tm->tm_min);
-        header1.text = time_buffer;
-      } else {
-        header1.text = _("Unknown");
-      }
-    } else {
-      header1.text = C_("Status", "Never");
-    }
-    
-    // Distance from last update
-    const auto &basic = CommonInterface::Basic();
-    GeoPoint last_loc = snapshot.last_update_location;
-    header2.number = _("Distance");
-    if (basic.location_available && basic.location.IsValid() &&
-        last_loc.IsValid()) {
-      double dist_m = basic.location.Distance(last_loc);
-      header2.text = FormatUserDistanceSmart(dist_m).c_str();
-    } else {
-      header2.text = _("Unknown");
-    }
-    
-    // NOTAM counts
-    char count_buffer[64];
-    header3.number = C_("Menu", "NOTAMs");
-    StringFormat(count_buffer, sizeof(count_buffer), _("%u total"),
-                 static_cast<unsigned>(notams.size()));
-    header3.text = count_buffer;
-    
-    header4.number = _("After Filtering");
-    StringFormat(count_buffer, sizeof(count_buffer), _("%u visible"),
-                 visible_count);
-    header4.text = count_buffer;
-    
-    const std::array<NOTAMStruct, HEADER_COUNT> headers = {
-      header1, header2, header3, header4,
-    };
-    items.insert(items.end(), headers.begin(), headers.end());
-    
-    if (!show_all) {
-      std::copy_if(notams.begin(), notams.end(), std::back_inserter(items),
-                   [&](const auto &notam) {
-                     return NOTAMFilter::ShouldDisplay(notam, settings, now,
-                                                       false);
-                   });
-    } else {
-      items.insert(items.end(), notams.begin(), notams.end());
-    }
-  } else {
-    LogFmt("NOTAM: UpdateList - net_components or notam is null");
-  }
-
-#ifndef NDEBUG
-  LogFmt("NOTAM: UpdateList - rows={} (headers={}, notams={})",
-         static_cast<unsigned>(items.size()),
-         HEADER_COUNT,
-         static_cast<unsigned>(items.size() >= HEADER_COUNT
-                               ? items.size() - HEADER_COUNT
-                               : 0));
-#endif
-  GetList().SetLength(std::max(static_cast<size_t>(1), items.size()));
-  GetList().Invalidate();
-  UpdateButtons();
+  Refresh();
 }
 
 void
@@ -756,16 +584,12 @@ ShowNOTAMListDialog(UI::SingleWindow &parent)
   const DialogLook &look = UIGlobals::GetDialogLook();
   auto list_widget = std::make_unique<NOTAMListWidget>();
   NOTAMListWidget *const list = list_widget.get();
-  WidgetDialog dialog(WidgetDialog::Auto{}, parent, look, C_("Menu", "NOTAMs"),
-                      list_widget.release());
-  list->SetDetailsButton(dialog.AddButton(_("Details"),
-                                          [list](){ list->ShowDetails(); }));
+  WidgetDialog dialog(WidgetDialog::Full{}, parent, look,
+                      C_("Menu", "NOTAMs"));
+  dialog.FinishPreliminary(std::move(list_widget));
   list->SetFilterQCodeButton(
     dialog.AddButton(C_("Button", "Hide Q-code"),
                      [list](){ list->FilterSelectedQCode(); }));
-  list->SetToggleFilterButton(
-    dialog.AddButton(C_("Button", "Show All"),
-                     [list](){ list->ToggleFilter(); }));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }
