@@ -81,6 +81,33 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
 }
 
 bool
+ProfileMap::SetMultiplePaths(std::string_view key,
+                             std::span<const Path> values) noexcept
+{
+  std::string joined;
+
+  for (Path value : values) {
+    const auto contracted = ContractLocalPath(value);
+    if (contracted != nullptr)
+      value = contracted;
+
+    if (value.empty())
+      continue;
+
+    if (!joined.empty())
+      joined.push_back('|');
+
+    joined += value.c_str();
+  }
+
+  if (StringIsEqual(Get(key, ""), joined.c_str()))
+    return false;
+
+  Set(key, joined.c_str());
+  return true;
+}
+
+bool
 ProfileMap::GetPathIsEqual(std::string_view key, Path value) const noexcept
 {
   const auto saved_value = GetPath(key);
@@ -141,6 +168,13 @@ std::vector<AllocatedPath>
 Profile::GetMultiplePaths(std::string_view key, const char *patterns)
 {
   return map.GetMultiplePaths(key, patterns);
+}
+
+bool
+Profile::SetMultiplePaths(std::string_view key,
+                          std::span<const Path> values) noexcept
+{
+  return map.SetMultiplePaths(key, values);
 }
 
 bool
