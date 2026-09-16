@@ -41,6 +41,7 @@ protected:
 
 public:
   /* virtual methods from class Widget */
+  bool Leave() noexcept override;
   bool Save(bool &changed) noexcept override;
 };
 
@@ -79,6 +80,20 @@ XCThermConfigPanel::Fill() noexcept
                 _("Automatically switch altitude layer based on GPS altitude "
                   "and forecast time based on UTC clock."),
                 auto_switch);
+}
+
+bool
+XCThermConfigPanel::Leave() noexcept
+{
+  /* the list of the Weather group says whether the account is set
+     up: store it as soon as the page is left, not only when the
+     configuration is closed */
+  bool changed = false;
+  Save(changed);
+  if (changed)
+    Profile::Save();
+
+  return ConfigListPanel::Leave();
 }
 
 bool

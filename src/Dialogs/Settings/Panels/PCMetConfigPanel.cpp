@@ -23,6 +23,7 @@ protected:
 
 public:
   /* virtual methods from class Widget */
+  bool Leave() noexcept override;
   bool Save(bool &changed) noexcept override;
 };
 
@@ -46,6 +47,20 @@ PCMetConfigPanel::Fill() noexcept
   AddTextItem(_("pc_met Username"), nullptr, username);
   AddTextItem(_("pc_met Password"), nullptr, password, true);
 #endif
+}
+
+bool
+PCMetConfigPanel::Leave() noexcept
+{
+  /* the list of the Weather group says whether the account is set
+     up: store it as soon as the page is left, not only when the
+     configuration is closed */
+  bool changed = false;
+  Save(changed);
+  if (changed)
+    Profile::Save();
+
+  return ConfigListPanel::Leave();
 }
 
 bool
