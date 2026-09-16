@@ -120,6 +120,15 @@ public:
     MONO,
   };
 
+  /** The size of a short text of an item. */
+  enum class TextSize : uint_least8_t {
+    /** the size of the list font, like the caption */
+    DEFAULT,
+
+    /** the small font, like the subtitle */
+    SMALL,
+  };
+
   /**
    * The colors of a badge.  An item which is #ItemOptions::disabled is
    * grey no matter which style it carries, and grey is reserved for
@@ -200,6 +209,9 @@ public:
 
     /** the font of #value */
     TextFont value_font = TextFont::DEFAULT;
+
+    /** the size of #value */
+    TextSize value_size = TextSize::DEFAULT;
 
     /**
      * Show every line of #value.  Without it, a value ends after a
