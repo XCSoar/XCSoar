@@ -7,6 +7,9 @@ void
 ConditionMonitors::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
                           const ComputerSettings &settings) noexcept
 {
+  if (suppressed)
+    return;
+
   wind.Update(basic, calculated, settings);
   finalglide.Update(basic, calculated, settings);
   sunset.Update(basic, calculated, settings);
