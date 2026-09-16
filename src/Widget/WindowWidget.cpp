@@ -83,7 +83,7 @@ WindowWidget::SetFocus() noexcept
   assert(window->IsDefined());
 
   /* Prefer a child TabStop (e.g. form rows).  Fall back to the window
-     itself when it is a TabStop (e.g. Configuration TabMenuDisplay).
+     itself when it is a TabStop (e.g. a list).
      Returning false lets ArrowPager put focus on Close instead. */
   if (auto *container = dynamic_cast<ContainerWindow *>(window.get()))
     if (container->FocusFirstControl())
