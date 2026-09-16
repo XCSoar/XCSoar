@@ -2,66 +2,70 @@
 // Copyright The XCSoar Project
 
 #include "PCMetConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
-enum ControlIndex {
+/** The account of flugwetter.de. */
+class PCMetConfigPanel final : public ConfigListPanel {
 #ifdef HAVE_PCMET
-  PCMET_USER,
-  PCMET_PASSWORD,
+  StaticString<64> username, password;
 #endif
-};
 
-class PCMetConfigPanel final : public RowFormWidget {
-public:
-  PCMetConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-PCMetConfigPanel::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+PCMetConfigPanel::LoadSettings() noexcept
 {
 #ifdef HAVE_PCMET
   const auto &settings = CommonInterface::GetComputerSettings().weather;
+
+  username = settings.pcmet.www_credentials.username;
+  password = settings.pcmet.www_credentials.password;
 #endif
+}
 
-  RowFormWidget::Prepare(parent, rc);
-
+void
+PCMetConfigPanel::Fill() noexcept
+{
 #ifdef HAVE_PCMET
-  AddText(_("pc_met Username"), "",
-          settings.pcmet.www_credentials.username);
-  AddPassword(_("pc_met Password"), "",
-              settings.pcmet.www_credentials.password);
+  AddGroup();
+
+  AddTextItem(_("pc_met Username"), nullptr, username);
+  AddTextItem(_("pc_met Password"), nullptr, password, true);
 #endif
 }
 
 bool
 PCMetConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
-
 #ifdef HAVE_PCMET
   auto &settings = CommonInterface::SetComputerSettings().weather;
 
-  changed |= SaveValue(PCMET_USER, ProfileKeys::PCMetUsername,
-                       settings.pcmet.www_credentials.username);
+  const bool username_changed =
+    Profile::Update(ProfileKeys::PCMetUsername,
+                    settings.pcmet.www_credentials.username, username);
+  const bool password_changed =
+    Profile::Update(ProfileKeys::PCMetPassword,
+                    settings.pcmet.www_credentials.password, password);
 
-  changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
-                       settings.pcmet.www_credentials.password);
+  _changed |= username_changed || password_changed;
+#else
+  (void)_changed;
 #endif
 
-  _changed |= changed;
   return true;
 }
 
