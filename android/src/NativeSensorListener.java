@@ -87,6 +87,9 @@ final class NativeSensorListener implements SensorListener {
   public native void onTemperature(double temperature_kelvin);
 
   @Override
+  public native void onHumidity(double humidity_percent);
+
+  @Override
   public native void onBatteryPercent(double battery_percent);
 
   @Override
