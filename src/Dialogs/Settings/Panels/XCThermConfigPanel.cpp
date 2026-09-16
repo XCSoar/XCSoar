@@ -5,23 +5,15 @@
 
 #ifdef HAVE_HTTP
 
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
-
-enum ControlIndex {
-  XCTHERM_EMAIL,
-  XCTHERM_PASSWORD,
-  XCTHERM_REGION,
-  XCTHERM_AUTO_SWITCH,
-};
 
 static constexpr StaticEnumChoice xctherm_region_list[] = {
   { unsigned(XCTherm::Region::CH), N_("CH (Alps)"),
@@ -33,65 +25,84 @@ static constexpr StaticEnumChoice xctherm_region_list[] = {
   nullptr
 };
 
-class XCThermConfigPanel final : public RowFormWidget {
-public:
-  XCThermConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+/**
+ * The account and the region of XC Therm, and whether its overlay
+ * follows the flight.
+ */
+class XCThermConfigPanel final : public ConfigListPanel {
+  StaticString<64> email, password;
+  unsigned model;
+  bool auto_switch;
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-XCThermConfigPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+XCThermConfigPanel::LoadSettings() noexcept
 {
   const auto &settings = CommonInterface::GetComputerSettings().weather;
 
-  RowFormWidget::Prepare(parent, rc);
+  email = settings.xctherm.credentials.email;
+  password = settings.xctherm.credentials.password;
+  model = settings.xctherm.model;
+  auto_switch = settings.xctherm.auto_switch;
+}
 
-  AddText(_("XC Therm email"),
-          _("Email address for your XC Therm account."),
-          settings.xctherm.credentials.email);
+void
+XCThermConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddPassword(_("XC Therm password"),
+  AddTextItem(_("XC Therm email"),
+              _("Email address for your XC Therm account."),
+              email);
+
+  AddTextItem(_("XC Therm password"),
               _("Password for your XC Therm account."),
-              settings.xctherm.credentials.password);
+              password, true);
 
-  AddEnum(_("XC Therm region"),
-          _("Forecast region. Changes which model XC Therm fetches data "
-            "from. Restart or re-download after changing."),
-          xctherm_region_list,
-          settings.xctherm.model);
+  AddGroup();
 
-  AddBoolean(_("XC Therm Auto Layer/Time"),
-             _("Automatically switch altitude layer based on GPS altitude "
-               "and forecast time based on UTC clock."),
-             settings.xctherm.auto_switch);
+  AddEnumItem(_("XC Therm region"),
+              _("Forecast region. Changes which model XC Therm fetches data "
+                "from. Restart or re-download after changing."),
+              xctherm_region_list, model);
+
+  AddToggleItem(_("XC Therm Auto Layer/Time"),
+                _("Automatically switch altitude layer based on GPS altitude "
+                  "and forecast time based on UTC clock."),
+                auto_switch);
 }
 
 bool
 XCThermConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
   auto &settings = CommonInterface::SetComputerSettings().weather;
 
-  changed |= SaveValue(XCTHERM_AUTO_SWITCH,
-                       ProfileKeys::XCThermAutoSwitch,
-                       settings.xctherm.auto_switch);
-
-  changed |= SaveValue(XCTHERM_EMAIL, ProfileKeys::XCThermEmail,
-                       settings.xctherm.credentials.email);
-
-  changed |= SaveValue(XCTHERM_PASSWORD, ProfileKeys::XCThermPassword,
-                       settings.xctherm.credentials.password);
-
-  changed |= SaveValueEnum(XCTHERM_REGION, ProfileKeys::XCThermModel,
-                           settings.xctherm.model);
+  const bool auto_switch_changed =
+    Profile::Update(ProfileKeys::XCThermAutoSwitch,
+                    settings.xctherm.auto_switch, auto_switch);
+  const bool email_changed =
+    Profile::Update(ProfileKeys::XCThermEmail,
+                    settings.xctherm.credentials.email, email);
+  const bool password_changed =
+    Profile::Update(ProfileKeys::XCThermPassword,
+                    settings.xctherm.credentials.password, password);
+  const bool model_changed =
+    Profile::Update(ProfileKeys::XCThermModel, settings.xctherm.model,
+                    model);
 
   XCThermAPI::Instance().ApplySessionSettings(settings.xctherm);
 
-  _changed |= changed;
+  _changed |= auto_switch_changed || email_changed || password_changed ||
+    model_changed;
 
   return true;
 }
