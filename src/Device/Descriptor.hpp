@@ -677,6 +677,7 @@ private:
                            double gspeed, double vspeed,
                            unsigned bearing) noexcept override;
   void OnTemperature(Temperature temperature) noexcept override;
+  void OnHumidity(double humidity_percent) noexcept override;
   void OnBatteryPercent(double battery_percent) noexcept override;
   void OnSensorStateChanged() noexcept override;
 #endif // ANDROID

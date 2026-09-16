@@ -84,10 +84,12 @@ public final class BluetoothSensor
     new LinkedList<BluetoothGattCharacteristic>();
 
   /**
-   * One GATT read waiting until outstanding CCCD writes finish.
+   * GATT reads waiting until outstanding CCCD writes finish.
    * Android allows only one GATT request at a time.
    */
-  private BluetoothGattCharacteristic pendingRead;
+  private BluetoothGattCharacteristic currentRead;
+  private final Queue<BluetoothGattCharacteristic> readQueue =
+    new LinkedList<BluetoothGattCharacteristic>();
 
   private boolean haveFlytecMovement = false;
   private double flytecGroundSpeed, flytecTrack;
@@ -268,15 +270,32 @@ public final class BluetoothSensor
    */
   private void requestRead(BluetoothGattCharacteristic c) {
     synchronized(enableNotificationQueue) {
-      if (currentEnableNotification == null)
-        gatt.readCharacteristic(c);
-      else
-        pendingRead = c;
+      if (currentEnableNotification != null || currentRead != null)
+        readQueue.add(c);
+      else {
+        currentRead = c;
+        if (!gatt.readCharacteristic(c))
+          currentRead = null;
+      }
+    }
+  }
+
+  private void pumpReadQueue() {
+    if (currentEnableNotification != null || currentRead != null)
+      return;
+    currentRead = readQueue.poll();
+    if (currentRead != null && !gatt.readCharacteristic(currentRead)) {
+      currentRead = null;
+      pumpReadQueue();
     }
   }
 
   private static boolean hasNotify(BluetoothGattCharacteristic c) {
     return (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0;
+  }
+
+  private static boolean hasRead(BluetoothGattCharacteristic c) {
+    return (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ) != 0;
   }
 
   private static BluetoothGattCharacteristic findBatteryLevel(BluetoothGatt gatt) {
@@ -296,6 +315,63 @@ public final class BluetoothSensor
     if (value == null || value < 0 || value > 100)
       return;
     listener.onBatteryPercent(value);
+  }
+
+  /**
+   * ESS Pressure (2A6D): uint32 in 0.1 Pa.
+   */
+  private void readEssPressure(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_UINT32, 0);
+    if (raw == null || raw == 0)
+      return;
+    float hpa = raw / 1000.0f;
+    if (hpa < 100 || hpa > 1200)
+      return;
+    listener.onBarometricPressureSensor(hpa, 0.01f);
+  }
+
+  /**
+   * ESS Temperature (2A6E): sint16 in 0.01 C.  0x8000 is unknown.
+   */
+  private void readEssTemperature(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_SINT16, 0);
+    if (raw == null || raw == -32768)
+      return;
+    double celsius = raw / 100.0;
+    if (celsius < -273.15)
+      return;
+    listener.onTemperature(273.15 + celsius);
+  }
+
+  /**
+   * ESS Humidity (2A6F): uint16 in 0.01 percent.
+   */
+  private void readEssHumidity(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_UINT16, 0);
+    if (raw == null)
+      return;
+    double percent = raw / 100.0;
+    if (percent < 0 || percent > 100)
+      return;
+    listener.onHumidity(percent);
+  }
+
+  private void queueEnvironmentalReads(BluetoothGatt gatt) {
+    BluetoothGattService ess =
+      gatt.getService(BluetoothUuids.ENVIRONMENTAL_SENSING_SERVICE);
+    if (ess == null)
+      return;
+
+    UUID[] ids = {
+      BluetoothUuids.PRESSURE_CHARACTERISTIC,
+      BluetoothUuids.TEMPERATURE_CHARACTERISTIC,
+      BluetoothUuids.HUMIDITY_CHARACTERISTIC
+    };
+    for (UUID id : ids) {
+      BluetoothGattCharacteristic c = ess.getCharacteristic(id);
+      if (c != null && hasRead(c))
+        requestRead(c);
+    }
   }
 
   /**
@@ -367,6 +443,18 @@ public final class BluetoothSensor
 
       if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid())) {
         readBatteryLevel(c);
+      }
+
+      if (BluetoothUuids.PRESSURE_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssPressure(c);
+      }
+
+      if (BluetoothUuids.TEMPERATURE_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssTemperature(c);
+      }
+
+      if (BluetoothUuids.HUMIDITY_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssHumidity(c);
       }
 
       if (BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
@@ -506,16 +594,26 @@ public final class BluetoothSensor
   public void onCharacteristicRead(BluetoothGatt gatt,
                                    BluetoothGattCharacteristic c,
                                    int status) {
-    if (status != BluetoothGatt.GATT_SUCCESS || !safeDestruct.increment())
-      return;
+    if (status == BluetoothGatt.GATT_SUCCESS && safeDestruct.increment()) {
+      try {
+        if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid()))
+          readBatteryLevel(c);
+        else if (BluetoothUuids.PRESSURE_CHARACTERISTIC.equals(c.getUuid()))
+          readEssPressure(c);
+        else if (BluetoothUuids.TEMPERATURE_CHARACTERISTIC.equals(c.getUuid()))
+          readEssTemperature(c);
+        else if (BluetoothUuids.HUMIDITY_CHARACTERISTIC.equals(c.getUuid()))
+          readEssHumidity(c);
+      } catch (NullPointerException e) {
+        /* malformed value */
+      } finally {
+        safeDestruct.decrement();
+      }
+    }
 
-    try {
-      if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid()))
-        readBatteryLevel(c);
-    } catch (NullPointerException e) {
-      /* malformed value */
-    } finally {
-      safeDestruct.decrement();
+    synchronized(enableNotificationQueue) {
+      currentRead = null;
+      pumpReadQueue();
     }
   }
 
@@ -529,11 +627,8 @@ public final class BluetoothSensor
         if (!doEnableNotification(currentEnableNotification))
           currentEnableNotification = null;
       }
-      if (currentEnableNotification == null && pendingRead != null) {
-        BluetoothGattCharacteristic c = pendingRead;
-        pendingRead = null;
-        gatt.readCharacteristic(c);
-      }
+      if (currentEnableNotification == null)
+        pumpReadQueue();
     }
   }
 
@@ -570,7 +665,10 @@ public final class BluetoothSensor
 
     if (state == STATE_LIMBO)
       submitError("Unsupported Bluetooth device");
-    else if (batteryLevel != null)
-      requestRead(batteryLevel);
+    else {
+      if (batteryLevel != null)
+        requestRead(batteryLevel);
+      queueEnvironmentalReads(gatt);
+    }
   }
 }

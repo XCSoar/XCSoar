@@ -62,6 +62,8 @@ public interface SensorListener {
 
   void onTemperature(double temperature_kelvin);
 
+  void onHumidity(double humidity_percent);
+
   void onBatteryPercent(double battery_percent);
 
   /**
