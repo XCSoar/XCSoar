@@ -1623,11 +1623,13 @@ void
 GroupedListControl::AddItem(const char *caption, Callback callback,
                             const GroupedListWidget::ItemOptions &options) noexcept
 {
-  assert(caption != nullptr);
+  /* an item without a caption shows its description instead; one
+     which shows neither would be an empty row */
+  assert(caption != nullptr || options.description != nullptr);
 
   elements.push_back(Element{
     .type = Element::Type::ITEM,
-    .text = caption,
+    .text = caption != nullptr ? caption : "",
     .icon_id = options.icon,
     .icon_text = options.icon_text != nullptr ? options.icon_text : "",
     .subtitle = options.subtitle != nullptr ? options.subtitle : "",
@@ -2262,6 +2264,12 @@ GroupedListControl::GetFirstRowDecorationHeight(const Element &element)
   if (element.check_right && !element.has_children)
     height = std::max(height, GetCheckSize());
 
+  if ((element.chevron || element.has_children) && !element.disabled)
+    /* the arrow reaches as far above the middle of its row as below
+       it */
+    height = std::max(height,
+                      2 * std::max(2, (int)look.list.font->GetHeight() / 4));
+
   return height;
 }
 
@@ -2293,6 +2301,11 @@ GetTextHeight(const Font &font, int width, const std::string &text,
               WrappedText &cache, int &cache_width,
               std::size_t max_lines=MAX_TEXT_LINES) noexcept
 {
+  if (text.empty())
+    /* an item without a caption is a text of its own: it keeps no
+       room for the line which is not there */
+    return 0;
+
   const auto &wrapped = WrapCached(font, width, text, cache, cache_width);
   const std::size_t lines = std::min(wrapped.lines.size(), max_lines);
 
@@ -2570,8 +2583,20 @@ GroupedListControl::UpdateLayout() noexcept
         /* the caption, its second line and a value below them are one
            block; a value beside them is a block of its own */
         unsigned block = element.text_height;
-        unsigned lines = std::max(1u, element.text_height
-                                  / look.list.font->GetLineSpacing());
+        unsigned lines = element.text.empty()
+          ? 0
+          : std::max(1u, element.text_height
+                     / look.list.font->GetLineSpacing());
+
+        /* a gap stands between two rows of the block, never above the
+           first one: an item without a caption begins with what
+           follows it */
+        const auto stack = [&block, subtitle_gap](unsigned height) {
+          if (block > 0)
+            block += subtitle_gap;
+
+          block += height;
+        };
 
         element.first_row_height = 0;
 
@@ -2593,32 +2618,34 @@ GroupedListControl::UpdateLayout() noexcept
           block = row;
 
           if (element.value_is_below) {
-            block += subtitle_gap + element.value_height;
+            stack(element.value_height);
             lines += value_lines;
           }
 
-          block += subtitle_gap + element.description_height;
+          stack(element.description_height);
           lines += element.description_height
             / GetDescriptionFont(element).GetLineSpacing();
 
           if (element.subtitle_height > 0) {
-            block += subtitle_gap + element.subtitle_height;
+            stack(element.subtitle_height);
             lines += subtitle_lines;
           }
         } else {
           if (element.subtitle_height > 0) {
-            block += subtitle_gap + element.subtitle_height;
+            stack(element.subtitle_height);
             lines += subtitle_lines;
           }
 
           if (element.value_is_below) {
-            block += subtitle_gap + element.value_height;
+            stack(element.value_height);
             lines += value_lines;
           } else if (element.value_height > block) {
             block = element.value_height;
             lines = value_lines;
           }
         }
+
+        lines = std::max(1u, lines);
 
         if (block == font_height) {
           /* one line, like most items */
@@ -3440,16 +3467,30 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       ? (int)element.first_row_height
       : (int)element.text_height;
 
+    /* the rows of the block stand below each other with a gap between
+       two of them, never above the first one: an item without a
+       caption begins with the row which follows it.  This is the same
+       stack which UpdateLayout() has measured */
     int block_height = row_height;
+    int value_dy = 0, description_dy = 0, subtitle_dy = 0;
+
+    const auto stack = [&block_height, gap](int height) {
+      if (block_height > 0)
+        block_height += gap;
+
+      const int y = block_height;
+      block_height += height;
+      return y;
+    };
 
     if (element.value_is_below)
-      block_height += gap + (int)element.value_height;
+      value_dy = stack((int)element.value_height);
 
     if (rows)
-      block_height += gap + (int)element.description_height;
+      description_dy = stack((int)element.description_height);
 
     if (!element.subtitle.empty())
-      block_height += gap + (int)element.subtitle_height;
+      subtitle_dy = stack((int)element.subtitle_height);
 
     const int text_y = text_rc.top
       + ((int)text_rc.GetHeight() - block_height) / 2;
@@ -3462,13 +3503,9 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     /* the value belongs to the caption and comes right after it; the
        description follows, and the second line, which explains the
        item, closes the block */
-    const int value_y = text_y + row_height + gap;
-    const int description_y = element.value_is_below
-      ? value_y + (int)element.value_height + gap
-      : value_y;
-    const int subtitle_y = rows
-      ? description_y + (int)element.description_height + gap
-      : description_y;
+    const int value_y = text_y + value_dy;
+    const int description_y = text_y + description_dy;
+    const int subtitle_y = text_y + subtitle_dy;
 
     /* the middle of the row which holds what stands at the right
        edge: the item itself, or its first row */
@@ -3709,12 +3746,15 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                       GetValueMaxLines(element));
     }
 
-    PixelRect text_box = caption_rc;
-    text_box.top = caption_y;
-    text_box.bottom = caption_y + (int)element.text_height;
+    if (!element.text.empty()) {
+      PixelRect text_box = caption_rc;
+      text_box.top = caption_y;
+      text_box.bottom = caption_y + (int)element.text_height;
 
-    DrawWrappedText(canvas, *look.list.font, text_box, element.text,
-                    element.wrapped_text, element.wrapped_text_width, false);
+      DrawWrappedText(canvas, *look.list.font, text_box, element.text,
+                      element.wrapped_text, element.wrapped_text_width,
+                      false);
+    }
 
     if (rows) {
       PixelRect description_rc = wide_rc;
