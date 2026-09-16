@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Dialogs/GroupedListPicker.hpp"
+#include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Math/Util.hpp"
 #include "Units/Units.hpp"
@@ -26,9 +27,6 @@ class ConfigListPanel : public GroupedListWidget {
   bool expert;
 
 protected:
-  /** a duration in seconds, as the settings hold them */
-  using Duration = std::chrono::duration<unsigned>;
-
   ConfigListPanel() noexcept;
 
   /** Is the page filled for the expert user level? */
@@ -161,11 +159,27 @@ protected:
 
   /**
    * Add an item which opens the choice of a duration, one choice per
-   * step from @p min to @p max seconds.
+   * step from @p min to @p max seconds; the value is any
+   * std::chrono::duration.
    */
+  template<typename D>
   void AddDurationItem(const char *caption, const char *help,
                        unsigned min, unsigned max, unsigned step,
-                       Duration &value) noexcept;
+                       D &value) noexcept {
+    const auto seconds = std::chrono::round<std::chrono::seconds>(value);
+
+    AddItem(caption, [this, caption, help, min, max, step, &value](){
+      int s = std::chrono::round<std::chrono::seconds>(value).count();
+      if (PickNumber(caption, help, min, max, step, s,
+                     [](StaticString<32> &buffer, int v){
+                       buffer = FormatTimespanSmart(std::chrono::seconds{v},
+                                                    2).c_str();
+                     })) {
+        value = std::chrono::duration_cast<D>(std::chrono::seconds{s});
+        Refresh();
+      }
+    }, {.value = FormatTimespanSmart(seconds, 2).c_str(), .chevron = true});
+  }
 
 public:
   /* virtual methods from class Widget */
