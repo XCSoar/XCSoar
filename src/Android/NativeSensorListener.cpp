@@ -303,6 +303,20 @@ Java_org_xcsoar_NativeSensorListener_onTemperature(JNIEnv *env,
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onHumidity(JNIEnv *env,
+                                                jobject obj,
+                                                jdouble humidity_percent)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnHumidity(humidity_percent);
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onBatteryPercent(JNIEnv *env,
                                                       jobject obj,
                                                       jdouble battery_percent)

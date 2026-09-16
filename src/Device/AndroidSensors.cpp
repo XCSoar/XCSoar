@@ -355,6 +355,20 @@ DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
 }
 
 void
+DeviceDescriptor::OnHumidity(double humidity_percent) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.humidity = humidity_percent;
+  basic.humidity_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnBatteryPercent(double battery_percent) noexcept
 {
   const auto e = BeginEdit();

@@ -38,6 +38,30 @@ public final class BluetoothUuids {
     UUID.fromString("00002A19-0000-1000-8000-00805F9B34FB");
 
   /**
+   * Bluetooth SIG Environmental Sensing Service.
+   */
+  static final UUID ENVIRONMENTAL_SENSING_SERVICE =
+    UUID.fromString("0000181A-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Pressure: uint32, 0.1 Pa (divide by 1000 for hPa).
+   */
+  static final UUID PRESSURE_CHARACTERISTIC =
+    UUID.fromString("00002A6D-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Temperature: sint16, 0.01 C.  0x8000 means unknown.
+   */
+  static final UUID TEMPERATURE_CHARACTERISTIC =
+    UUID.fromString("00002A6E-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Humidity: uint16, 0.01 percent.
+   */
+  static final UUID HUMIDITY_CHARACTERISTIC =
+    UUID.fromString("00002A6F-0000-1000-8000-00805F9B34FB");
+
+  /**
    * @see https://sites.google.com/view/ppgmeter/startpage
    * Engine sensors service and characteristic
    */
@@ -115,6 +139,7 @@ public final class BluetoothUuids {
   public static final UUID[] getAllServiceUuids() {
       return new UUID[] { GENERIC_ACCESS_SERVICE,
                           HEART_RATE_SERVICE,
+                          ENVIRONMENTAL_SENSING_SERVICE,
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
                           NORDIC_UART_SERVICE,
@@ -128,6 +153,9 @@ public final class BluetoothUuids {
     return new UUID[] { CLIENT_CHARACTERISTIC_CONFIGURATION,
                         DEVICE_NAME_CHARACTERISTIC,
                         HEART_RATE_MEASUREMENT_CHARACTERISTIC,
+                        PRESSURE_CHARACTERISTIC,
+                        TEMPERATURE_CHARACTERISTIC,
+                        HUMIDITY_CHARACTERISTIC,
                         ENGINE_SENSORS_CHARACTERISTIC,
                         HM10_RX_TX_CHARACTERISTIC,
                         NORDIC_UART_RX_CHARACTERISTIC,

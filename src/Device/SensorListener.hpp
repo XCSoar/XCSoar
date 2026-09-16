@@ -71,6 +71,8 @@ public:
 
   virtual void OnTemperature(Temperature temperature) noexcept = 0;
 
+  virtual void OnHumidity(double humidity_percent) noexcept = 0;
+
   virtual void OnBatteryPercent(double battery_percent) noexcept = 0;
 
   virtual void OnSensorStateChanged() noexcept = 0;
