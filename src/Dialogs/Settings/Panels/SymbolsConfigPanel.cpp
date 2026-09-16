@@ -2,65 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "SymbolsConfigPanel.hpp"
-#include "Profile/Keys.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
 #include "MapSettings.hpp"
-
-enum ControlIndex {
-  DISPLAY_TRACK_BEARING,
-  ENABLE_FLARM_MAP,
-  FADE_TRAFFIC,
-  TRAIL_LENGTH,
-  TRAIL_DRIFT,
-  TRAIL_TYPE,
-  TRAIL_WIDTH,
-  ENABLE_DETOUR_COST_MARKERS,
-  AIRCRAFT_SYMBOL,
-  WIND_ARROW_STYLE,
-  SKYLINES_TRAFFIC_MAP_MODE,
-  DISTANCE_RINGS_ENABLED,
-};
-
-class SymbolsConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-public:
-  SymbolsConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-public:
-  void ShowTrailControls(bool show);
-
-  /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
-};
-
-void
-SymbolsConfigPanel::ShowTrailControls(bool show)
-{
-  SetRowVisible(TRAIL_DRIFT, show);
-  SetRowVisible(TRAIL_TYPE, show);
-  SetRowVisible(TRAIL_WIDTH, show);
-}
-
-void
-SymbolsConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(TRAIL_LENGTH, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    TrailSettings::Length trail_length = (TrailSettings::Length)dfe.GetValue();
-    ShowTrailControls(trail_length != TrailSettings::Length::OFF);
-  }
-}
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 static constexpr StaticEnumChoice ground_track_mode_list[] = {
   { DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of ground track line.") },
@@ -126,69 +74,113 @@ static constexpr StaticEnumChoice online_traffic_map_mode_list[] = {
   nullptr
 };
 
+/**
+ * The symbols the map draws: the aircraft, the traffic and the
+ * trail.
+ */
+class SymbolsConfigPanel final : public ConfigListPanel {
+  DisplayGroundTrack display_ground_track;
+  bool show_flarm_on_map, fade_traffic;
+  TrailSettings trail;
+  bool detour_cost_markers_enabled;
+  AircraftSymbol aircraft_symbol;
+  WindArrowStyle wind_arrow_style;
+  DisplayOnlineTrafficMapMode online_traffic_map_mode;
+  bool distance_rings_enabled;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
+  bool Save(bool &changed) noexcept override;
+};
+
 void
-SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
-                            [[maybe_unused]] const PixelRect &rc) noexcept
+SymbolsConfigPanel::LoadSettings() noexcept
 {
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
-  AddEnum(_("Ground track"),
-          _("Display the ground track as a grey line on the map."),
-          ground_track_mode_list, (unsigned)settings_map.display_ground_track);
+  display_ground_track = settings_map.display_ground_track;
+  show_flarm_on_map = settings_map.show_flarm_on_map;
+  fade_traffic = settings_map.fade_traffic;
+  trail = settings_map.trail;
+  detour_cost_markers_enabled = settings_map.detour_cost_markers_enabled;
+  aircraft_symbol = settings_map.aircraft_symbol;
+  wind_arrow_style = settings_map.wind_arrow_style;
+  online_traffic_map_mode = settings_map.online_traffic_map_mode;
+  distance_rings_enabled = settings_map.distance_rings_enabled;
+}
 
-  AddBoolean(_("FLARM Traffic"), _("This enables the display of FLARM traffic on the map window."),
-             settings_map.show_flarm_on_map);
+void
+SymbolsConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddBoolean(_("Fade traffic"), _("Keep showing traffic for a while after it has disappeared."),
-             settings_map.fade_traffic);
+  if (IsExpert())
+    AddEnumItem(_("Aircraft symbol"), nullptr, aircraft_symbol_list,
+                aircraft_symbol);
 
-  AddEnum(_("Trail length"),
-          _("Determines whether and how long a snail trail is drawn behind the glider."),
-          trail_length_list,
-          (unsigned)settings_map.trail.length, this);
-  SetExpertRow(TRAIL_LENGTH);
+  AddEnumItem(_("Ground track"),
+              _("Display the ground track as a grey line on the map."),
+              ground_track_mode_list, display_ground_track);
 
-  AddBoolean(_("Trail drift"),
-             _("Determines whether the snail trail is drifted with the wind "
-               "when displayed in circling mode at near map scales. Switched "
-               "Off, the snail trail stays uncompensated for wind drift."),
-             settings_map.trail.wind_drift_enabled);
-  SetExpertRow(TRAIL_DRIFT);
+  if (IsExpert())
+    AddEnumItem(_("Wind arrow"),
+                _("Determines the way the wind arrow is drawn on the map."),
+                wind_arrow_list, wind_arrow_style);
 
-  AddEnum(_("Trail type"),
-          _("Sets the type of the snail trail display."), trail_type_list, (int)settings_map.trail.type);
-  SetExpertRow(TRAIL_TYPE);
+  AddToggleItem(C_("Setting", "Distance rings"),
+                _("Display distance rings around the aircraft on the map."),
+                distance_rings_enabled);
 
-  AddBoolean(_("Trail scaled"),
-             _("If set to ON the snail trail width is scaled according to the vario signal."),
-             settings_map.trail.scaling_enabled);
-  SetExpertRow(TRAIL_WIDTH);
+  if (IsExpert())
+    AddToggleItem(_("Detour cost markers"),
+                  _("If the aircraft heading deviates from the current waypoint, markers are displayed "
+                    "at points ahead of the aircraft. The value of each marker is the extra distance "
+                    "required to reach that point as a percentage of straight-line distance to the waypoint."),
+                  detour_cost_markers_enabled);
 
-  AddBoolean(_("Detour cost markers"),
-             _("If the aircraft heading deviates from the current waypoint, markers are displayed "
-                 "at points ahead of the aircraft. The value of each marker is the extra distance "
-                 "required to reach that point as a percentage of straight-line distance to the waypoint."),
-             settings_map.detour_cost_markers_enabled);
-  SetExpertRow(ENABLE_DETOUR_COST_MARKERS);
+  AddGroup(_("Traffic"));
 
-  AddEnum(_("Aircraft symbol"), nullptr, aircraft_symbol_list,
-          (unsigned)settings_map.aircraft_symbol);
-  SetExpertRow(AIRCRAFT_SYMBOL);
+  AddToggleItem(_("FLARM Traffic"),
+                _("This enables the display of FLARM traffic on the map window."),
+                show_flarm_on_map);
 
-  AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),
-          wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
-  SetExpertRow(WIND_ARROW_STYLE);
+  AddToggleItem(_("Fade traffic"),
+                _("Keep showing traffic for a while after it has disappeared."),
+                fade_traffic);
 
-  AddEnum(C_("Setting", "Online traffic on map"),
-          _("Show traffic from SkyLines and XCSoar Cloud on the map."),
-          online_traffic_map_mode_list,
-          (unsigned)settings_map.online_traffic_map_mode);
+  AddEnumItem(C_("Setting", "Online traffic on map"),
+              _("Show traffic from SkyLines and XCSoar Cloud on the map."),
+              online_traffic_map_mode_list, online_traffic_map_mode);
 
-  AddBoolean(C_("Setting", "Distance rings"),
-             _("Display distance rings around the aircraft on the map."),
-             settings_map.distance_rings_enabled);
+  if (IsExpert()) {
+    AddGroup(_("Trail"));
 
-  ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
+    AddEnumItem(_("Trail length"),
+                _("Determines whether and how long a snail trail is drawn behind the glider."),
+                trail_length_list, trail.length);
+
+    /* the rest of the trail is only drawn while there is one */
+    if (trail.length != TrailSettings::Length::OFF) {
+      AddToggleItem(_("Trail drift"),
+                    _("Determines whether the snail trail is drifted with the wind "
+                      "when displayed in circling mode at near map scales. Switched "
+                      "Off, the snail trail stays uncompensated for wind drift."),
+                    trail.wind_drift_enabled);
+
+      AddEnumItem(_("Trail type"),
+                  _("Sets the type of the snail trail display."),
+                  trail_type_list, trail.type);
+
+      AddToggleItem(_("Trail scaled"),
+                    _("If set to ON the snail trail width is scaled according to the vario signal."),
+                    trail.scaling_enabled);
+    }
+  }
 }
 
 bool
@@ -198,36 +190,49 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, ProfileKeys::DisplayTrackBearing,
-                           settings_map.display_ground_track);
+  changed |= Profile::Update(ProfileKeys::DisplayTrackBearing,
+                             settings_map.display_ground_track,
+                             display_ground_track);
 
-  changed |= SaveValue(ENABLE_FLARM_MAP, ProfileKeys::EnableFLARMMap,
-                       settings_map.show_flarm_on_map);
+  changed |= Profile::Update(ProfileKeys::EnableFLARMMap,
+                             settings_map.show_flarm_on_map,
+                             show_flarm_on_map);
 
-  changed |= SaveValue(FADE_TRAFFIC, ProfileKeys::FadeTraffic,
-                       settings_map.fade_traffic);
+  changed |= Profile::Update(ProfileKeys::FadeTraffic,
+                             settings_map.fade_traffic, fade_traffic);
 
-  changed |= SaveValueEnum(TRAIL_LENGTH, ProfileKeys::SnailTrail, settings_map.trail.length);
+  changed |= Profile::Update(ProfileKeys::SnailTrail,
+                             settings_map.trail.length, trail.length);
 
-  changed |= SaveValue(TRAIL_DRIFT, ProfileKeys::TrailDrift, settings_map.trail.wind_drift_enabled);
+  changed |= Profile::Update(ProfileKeys::TrailDrift,
+                             settings_map.trail.wind_drift_enabled,
+                             trail.wind_drift_enabled);
 
-  changed |= SaveValueEnum(TRAIL_TYPE, ProfileKeys::SnailType, settings_map.trail.type);
+  changed |= Profile::Update(ProfileKeys::SnailType,
+                             settings_map.trail.type, trail.type);
 
-  changed |= SaveValue(TRAIL_WIDTH, ProfileKeys::SnailWidthScale,
-                       settings_map.trail.scaling_enabled);
+  changed |= Profile::Update(ProfileKeys::SnailWidthScale,
+                             settings_map.trail.scaling_enabled,
+                             trail.scaling_enabled);
 
-  changed |= SaveValue(ENABLE_DETOUR_COST_MARKERS, ProfileKeys::DetourCostMarker,
-                       settings_map.detour_cost_markers_enabled);
+  changed |= Profile::Update(ProfileKeys::DetourCostMarker,
+                             settings_map.detour_cost_markers_enabled,
+                             detour_cost_markers_enabled);
 
-  changed |= SaveValueEnum(AIRCRAFT_SYMBOL, ProfileKeys::AircraftSymbol, settings_map.aircraft_symbol);
+  changed |= Profile::Update(ProfileKeys::AircraftSymbol,
+                             settings_map.aircraft_symbol, aircraft_symbol);
 
-  changed |= SaveValueEnum(WIND_ARROW_STYLE, ProfileKeys::WindArrowStyle, settings_map.wind_arrow_style);
+  changed |= Profile::Update(ProfileKeys::WindArrowStyle,
+                             settings_map.wind_arrow_style,
+                             wind_arrow_style);
 
-  changed |= SaveValueEnum(SKYLINES_TRAFFIC_MAP_MODE, ProfileKeys::OnlineTrafficMapMode,
-                           settings_map.online_traffic_map_mode);
+  changed |= Profile::Update(ProfileKeys::OnlineTrafficMapMode,
+                             settings_map.online_traffic_map_mode,
+                             online_traffic_map_mode);
 
-  changed |= SaveValue(DISTANCE_RINGS_ENABLED, ProfileKeys::DistanceRingsEnabled,
-                       settings_map.distance_rings_enabled);
+  changed |= Profile::Update(ProfileKeys::DistanceRingsEnabled,
+                             settings_map.distance_rings_enabled,
+                             distance_rings_enabled);
 
   _changed |= changed;
 
