@@ -1673,8 +1673,20 @@ GroupedListControl::UpdateTextLayout(Element &element,
     return room;
   }
 
-  if (element.value_below) {
-    /* the value has the whole width, below the caption */
+  /* the caption and the value are two columns which share the room,
+     with nothing but the padding between them */
+  const int available = std::max(room - padding, 2);
+  const int caption_natural = (int)font.TextSize(element.text).width;
+  const int value_natural = (int)value_font.TextSize(element.value).width;
+
+  /* a value which leaves too little room for the caption moves below
+     it, where it has the whole width: two narrow columns which both
+     break their words are worse than a taller item */
+  const bool below = element.value_below ||
+    (caption_natural + value_natural > available &&
+     caption_natural > available / 2 && value_natural > available / 2);
+
+  if (below) {
     element.value_width = room;
     element.value_height = GetTextHeight(value_font, room, element.value,
                                          element.wrapped_value,
@@ -1687,12 +1699,6 @@ GroupedListControl::UpdateTextLayout(Element &element,
     return room;
   }
 
-  /* the caption and the value are two columns which share the room,
-     with nothing but the padding between them */
-  const int available = std::max(room - padding, 2);
-  const int caption_natural = (int)font.TextSize(element.text).width;
-  const int value_natural = (int)value_font.TextSize(element.value).width;
-
   int value_width;
 
   if (caption_natural + value_natural <= available ||
@@ -1700,14 +1706,9 @@ GroupedListControl::UpdateTextLayout(Element &element,
     /* both fit, or the value is the short one: it keeps its width and
        the caption takes the rest */
     value_width = value_natural;
-  else if (caption_natural <= available / 2)
+  else
     /* the caption is the short one */
     value_width = available - caption_natural;
-  else
-    /* both are too wide: they share the room in the proportion of
-       what they would need */
-    value_width = available
-      - available * caption_natural / (caption_natural + value_natural);
 
   const int caption_width = available - value_width;
 
