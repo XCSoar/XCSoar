@@ -3283,14 +3283,15 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
       /* the buttons share the width of the card; the renderer keeps
          the gap between two of them and towards the edges */
+      /* the cursor is shown on a button only where keys move it, as
+         #Button does: on a touch screen, a button which stays marked
+         after the tap would look pressed */
       const ButtonState state = button.disabled
         ? ButtonState::DISABLED
         : (int)i == pressed_element && (int)j == pressed_column
         ? ButtonState::PRESSED
-        : (int)i == cursor && j == button_column
-        ? (HasCursorKeys() && !HasFocus()
-           ? ButtonState::SELECTED
-           : ButtonState::FOCUSED)
+        : (int)i == cursor && j == button_column && HasCursorKeys()
+        ? (HasFocus() ? ButtonState::FOCUSED : ButtonState::SELECTED)
         : ButtonState::ENABLED;
 
       button.renderer.DrawButton(canvas, GetButtonRect(element, j, rc, top),
