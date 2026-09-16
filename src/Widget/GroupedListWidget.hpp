@@ -109,6 +109,37 @@ public:
     ROW,
   };
 
+  /**
+   * How many items of a group may show their children at the same
+   * time.
+   */
+  enum class ExpandMode : uint_least8_t {
+    /** every item which has been opened stays open */
+    MULTIPLE,
+
+    /** opening one closes the others of this group, like an accordion */
+    SINGLE,
+  };
+
+  /** What opens an item which has children. */
+  enum class ExpandTrigger : uint_least8_t {
+    /** Enter, Space or a tap on the item */
+    ACTIVATE,
+
+    /**
+     * The cursor, as soon as it arrives, and the item closes again
+     * when the cursor leaves it and its children.  What is open is
+     * therefore what the cursor is on, which is what a menu of pages
+     * wants: Up and Down walk through everything the page has.
+     *
+     * Enter and a tap still close the item under the cursor, and
+     * leaving it and coming back opens it again.  The first tap on
+     * another item only carries the cursor there, because arriving
+     * is what opens it.
+     */
+    CURSOR,
+  };
+
   /** The font which draws a short text of an item. */
   enum class TextFont : uint_least8_t {
     /** the font of the list, like the caption */
@@ -170,6 +201,12 @@ public:
      * setting acts on its own, a choice waits for the action bar.
      */
     EnterAction enter_action = EnterAction::ITEM;
+
+    /** how many items of this group may be open at the same time */
+    ExpandMode expand_mode = ExpandMode::MULTIPLE;
+
+    /** what opens an item of this group which has children */
+    ExpandTrigger expand_trigger = ExpandTrigger::ACTIVATE;
   };
 
   /** The contents and the decorations of an item. */
@@ -364,6 +401,36 @@ public:
    * only there to be checked.
    */
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /** One child for AddChildItems(). */
+  struct ChildDefinition {
+    const char *caption;
+
+    Callback callback;
+
+    ItemOptions options;
+  };
+
+  /**
+   * Append an item below the one which was added last, which opens
+   * and closes with it.  The item above becomes a parent by getting
+   * children; it needs no option of its own for that, and activating
+   * it opens it instead of calling its callback.  A child is an item
+   * like any other, only indented: it carries a value, a badge, a
+   * check mark or a switch just the same.
+   *
+   * A child is hidden while its parent is closed, which keeps the
+   * index of every item of the page the same however much is open.
+   */
+  void AddChildItem(const char *caption, Callback callback) noexcept;
+
+  void AddChildItem(const char *caption, Callback callback,
+                    const ItemOptions &options) noexcept;
+
+  void AddChildItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /** Append several children at once, which reads like the block it is. */
+  void AddChildItems(std::initializer_list<ChildDefinition> children) noexcept;
 
   /** One button of a row which AddButtonRow() creates. */
   struct ButtonDefinition {

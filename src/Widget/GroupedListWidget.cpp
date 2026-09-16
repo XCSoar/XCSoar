@@ -89,6 +89,13 @@ static constexpr unsigned RADIUS_PT = 8;
  */
 static constexpr double CUT_RADIUS_FACTOR = 0.3;
 
+/**
+ * The width of the bar which marks a child, in the same unit as the
+ * padding: a third of it, which is a mark of its own next to the
+ * caption and takes no room from it.
+ */
+static constexpr unsigned CHILD_BAR_PT = 3;
+
 /** Distance between a group and the group above it. */
 static constexpr unsigned GROUP_GAP_PT = 15;
 
@@ -196,6 +203,9 @@ public:
   using GroupOptions = GroupedListWidget::GroupOptions;
   using ButtonDefinition = GroupedListWidget::ButtonDefinition;
   using ButtonOptions = GroupedListWidget::ButtonOptions;
+  using ItemOptions = GroupedListWidget::ItemOptions;
+  using ExpandMode = GroupedListWidget::ExpandMode;
+  using ExpandTrigger = GroupedListWidget::ExpandTrigger;
 
 private:
   /**
@@ -369,6 +379,29 @@ private:
     /** only for Type::ITEM: what Enter does on it */
     EnterAction enter_action = EnterAction::ITEM;
 
+    /** only for Type::ITEM: how many items of its group may be open */
+    ExpandMode expand_mode = ExpandMode::MULTIPLE;
+
+    /** only for Type::ITEM: what opens it */
+    ExpandTrigger expand_trigger = ExpandTrigger::ACTIVATE;
+
+    /**
+     * How deep does this item sit below the one above it?  0 is an
+     * item of the card itself, 1 a child of the item above it.  Only
+     * one level is built today; the field is a number so that a
+     * deeper tree costs nothing but the rules which go with it.
+     */
+    uint_least8_t depth = 0;
+
+    /** does an item follow this one which is deeper than it? */
+    bool has_children = false;
+
+    /** are the children of this item shown? */
+    bool expanded = false;
+
+    /** is this item a child of one which is closed? */
+    bool collapsed = false;
+
     /** the first / the last item of its card */
     bool first_in_group = false, last_in_group = false;
 
@@ -417,7 +450,7 @@ private:
 
     /** is this element an item which is drawn? */
     bool IsShownItem() const noexcept {
-      return IsItem() && !hidden;
+      return IsItem() && !hidden && !collapsed;
     }
 
     /** may the cursor be moved to this element? */
@@ -468,6 +501,12 @@ private:
   /** the button which was armed when Clear() saved the cursor */
   unsigned saved_column = 0;
 
+  /** the items which were open when Clear() saved them, as item indexes */
+  std::vector<unsigned> saved_expanded;
+
+  /** does #saved_expanded wait to be applied? */
+  bool restore_expanded = false;
+
   /**
    * Has the cursor been taken off the list on purpose - a tap beside
    * the items, a page which has none to point at?  Then UpdateLayout()
@@ -517,6 +556,8 @@ public:
   void AddGroup(const char *caption, const GroupOptions &options) noexcept;
   void AddItem(const char *caption, Callback callback,
                const GroupedListWidget::ItemOptions &options) noexcept;
+  void AddChildItem(const char *caption, Callback callback,
+                    const ItemOptions &options) noexcept;
   void AddButtons(std::span<const ButtonDefinition> buttons,
                   const ButtonOptions &options) noexcept;
   void AddWidget(std::unique_ptr<Widget> widget,
@@ -537,6 +578,21 @@ public:
       elements[cursor].IsButtons();
     saved_cursor = saved_buttons ? GetButtonsIndex() : GetCursorIndex();
     saved_column = button_column;
+
+    /* a page which fills itself again keeps what the user has opened */
+    saved_expanded.clear();
+    restore_expanded = true;
+
+    unsigned n = 0;
+    for (const auto &element : elements) {
+      if (!element.IsItem())
+        continue;
+
+      if (element.expanded)
+        saved_expanded.push_back(n);
+
+      ++n;
+    }
 
     pressed_element = -1;
     pressed_column = -1;
@@ -813,6 +869,19 @@ private:
   [[gnu::pure]]
   int GetIconWidth() const noexcept {
     return GetIconSize() + GetPadding();
+  }
+
+  /**
+   * The width of the bar which stands at the left edge of a child, in
+   * the color of the brand.  A child keeps the width and the columns
+   * of the item it belongs to: the bar says what an indent would say
+   * and costs the caption nothing.  It is never as thin as the line
+   * between two items, which would read as a hairline.
+   */
+  [[gnu::pure]]
+  int GetChildBarWidth() const noexcept {
+    return std::max((int)Layout::VptScale(CHILD_BAR_PT),
+                    2 * GetSeparatorThickness());
   }
 
   /** Load the icons, and find out which ones can be drawn. */
@@ -1101,6 +1170,40 @@ private:
   std::pair<int, int> GetToggleHitArea(const Element &element) const noexcept;
 
   void UpdateGroupFlags() noexcept;
+
+  /**
+   * Find out which items have children and hide the children of
+   * those which are closed.
+   */
+  void UpdateExpansion() noexcept;
+
+  /**
+   * Open or close the item under the given element index.  The row
+   * stays where it is on the screen, and what opens below it is
+   * shown as far as it fits.
+   */
+  void ToggleExpanded(std::size_t i) noexcept;
+
+  /**
+   * The item which holds this element: the element itself when it is
+   * not a child, and -1 when it is no item at all.
+   */
+  [[gnu::pure]]
+  int FindParentItem(int i) const noexcept {
+    if (i < 0 || (std::size_t)i >= elements.size() || !elements[i].IsItem())
+      return -1;
+
+    while (i > 0 && elements[i].depth > 0)
+      --i;
+
+    return i;
+  }
+
+  /**
+   * Open what the cursor has arrived at and close what it has left,
+   * in a group where the cursor is what opens an item.
+   */
+  void UpdateCursorExpansion(int previous) noexcept;
 
   /**
    * Paint the two corners of one edge with the color behind the
@@ -1462,10 +1565,35 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .selection_mode = group_options.selection_mode,
     .check_position = group_options.check_position,
     .enter_action = group_options.enter_action,
+    .expand_mode = group_options.expand_mode,
+    .expand_trigger = group_options.expand_trigger,
   });
 
   Element &element = elements.back();
   element.help = ParseLinks(options.help, element.links);
+}
+
+void
+GroupedListControl::AddChildItem(const char *caption, Callback callback,
+                                 const ItemOptions &options) noexcept
+{
+  assert(!elements.empty());
+  assert(elements.back().IsItem());
+
+  /* the item above is the parent, or a sibling which has been added
+     to it already */
+  const uint_least8_t depth = elements.back().depth == 0
+    ? 1
+    : elements.back().depth;
+
+  AddItem(caption, std::move(callback), options);
+
+  Element &element = elements.back();
+  element.depth = depth;
+
+  /* a child is not on the screen before its parent has been opened;
+     UpdateLayout() decides that again from the parent */
+  element.collapsed = true;
 }
 
 void
@@ -1782,6 +1910,107 @@ GroupedListControl::PrepareIcons() noexcept
 }
 
 void
+GroupedListControl::UpdateExpansion() noexcept
+{
+  for (std::size_t i = 0; i < elements.size(); ++i) {
+    Element &element = elements[i];
+    if (!element.IsItem() || element.depth > 0)
+      continue;
+
+    /* the items below it which are deeper are its children */
+    std::size_t j = i + 1;
+
+    for (; j < elements.size() && elements[j].IsItem() &&
+           elements[j].depth > element.depth; ++j)
+      elements[j].collapsed = !element.expanded;
+
+    element.has_children = j > i + 1;
+
+    if (!element.has_children)
+      element.expanded = false;
+  }
+}
+
+void
+GroupedListControl::ToggleExpanded(std::size_t i) noexcept
+{
+  assert(i < elements.size());
+
+  Element &element = elements[i];
+  if (!element.has_children)
+    return;
+
+  const bool expand = !element.expanded;
+  const unsigned depth = element.depth;
+
+  if (expand && element.expand_mode == ExpandMode::SINGLE) {
+    /* like an accordion: the group shows the children of one item */
+    for (std::size_t j = 0; j < elements.size(); ++j) {
+      if (!elements[j].IsItem())
+        continue;
+
+      if (elements[j].depth == 0 && j != i)
+        elements[j].expanded = false;
+    }
+  }
+
+  element.expanded = expand;
+
+  if (!expand && cursor > (int)i && (std::size_t)cursor < elements.size() &&
+      elements[cursor].depth > depth)
+    /* the cursor was on a child which is about to go: it follows the
+       item it belonged to */
+    cursor = (int)i;
+
+  /* the row under the cursor keeps its place on the screen, whatever
+     opens or closes above it */
+  const int anchor = cursor >= 0 && (std::size_t)cursor < elements.size()
+    ? elements[cursor].top - origin
+    : -1;
+
+  UpdateLayout();
+
+  if (anchor >= 0 && cursor >= 0 && (std::size_t)cursor < elements.size())
+    SetOrigin(elements[cursor].top - anchor);
+
+  if (!expand)
+    return;
+
+  /* show as much of what has opened as fits, without pushing the item
+     itself off the top of the view */
+  std::size_t last = i;
+  while (last + 1 < elements.size() && elements[last + 1].IsItem() &&
+         elements[last + 1].depth > depth)
+    ++last;
+
+  const int bottom = elements[last].GetBottom();
+  const int room = GetViewHeight();
+
+  if (bottom > origin + room)
+    SetOrigin(std::min(bottom - room, elements[i].top));
+}
+
+void
+GroupedListControl::UpdateCursorExpansion(int previous) noexcept
+{
+  const int here = FindParentItem(cursor);
+
+  /* what the cursor has left closes again: in such a group, what is
+     open is what the cursor is on, and nothing else */
+  const int left = FindParentItem(previous);
+
+  if (left >= 0 && left != here && elements[left].expanded &&
+      elements[left].expand_trigger == ExpandTrigger::CURSOR)
+    ToggleExpanded((std::size_t)left);
+
+  /* and what it has arrived at opens */
+  if (here >= 0 && here == cursor && elements[here].has_children &&
+      !elements[here].expanded &&
+      elements[here].expand_trigger == ExpandTrigger::CURSOR)
+    ToggleExpanded((std::size_t)here);
+}
+
+void
 GroupedListControl::UpdateGroupFlags() noexcept
 {
   for (std::size_t i = 0; i < elements.size(); ++i) {
@@ -1895,13 +2124,19 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
   if (element.check_left)
     width += Layout::VptScale(EDGE_INSET_PT) + GetCheckWidth();
 
-  if (element.check_right)
+  if (element.check_right && !element.has_children)
+    /* an item which opens and closes carries no check mark, and its
+       arrow moves into the column which the mark would have */
     width += GetCheckWidth();
 
   if (element.toggle && !element.disabled)
     width += GetToggleWidth() + padding;
 
-  if (element.chevron && !element.disabled)
+  if (element.has_children && !element.disabled)
+    /* the arrow which points down or up is as wide as it is tall
+       twice over */
+    width += 2 * std::max(2, (int)font.GetHeight() / 4) + padding;
+  else if (element.chevron && !element.disabled)
     width += std::max(2, (int)font.GetHeight() / 4) + padding;
 
   if (!element.badge.empty())
@@ -2080,6 +2315,28 @@ GroupedListControl::UpdateLayout() noexcept
   FinishGroup();
   PrepareIcons();
   PrepareWidgets();
+
+  if (restore_expanded) {
+    /* the page has been filled again: open the items which were open
+       before, counted in item indexes, which do not move when
+       something opens or closes */
+    restore_expanded = false;
+
+    unsigned n = 0;
+    for (auto &element : elements) {
+      if (!element.IsItem())
+        continue;
+
+      if (element.depth == 0)
+        element.expanded = std::find(saved_expanded.begin(),
+                                     saved_expanded.end(),
+                                     n) != saved_expanded.end();
+
+      ++n;
+    }
+  }
+
+  UpdateExpansion();
   UpdateGroupFlags();
 
   if (!IsDefined())
@@ -2146,7 +2403,8 @@ GroupedListControl::UpdateLayout() noexcept
 
       switch (element.type) {
       case Element::Type::ITEM: {
-        if (element.hidden) {
+        if (!element.IsShownItem()) {
+          /* hidden by the page, or a child whose parent is closed */
           element.height = 0;
           break;
         }
@@ -2155,7 +2413,8 @@ GroupedListControl::UpdateLayout() noexcept
 
         /* the room which the caption, the value and the second line
            share, once the decorations have taken theirs */
-        const int room = std::max(text_width - GetDecorationWidth(element), 1);
+        const int room = std::max(text_width
+                                  - GetDecorationWidth(element), 1);
 
         const int caption_width = UpdateTextLayout(element, room);
 
@@ -2399,6 +2658,10 @@ GroupedListControl::SetCursor(int i) noexcept
 
   EnsureVisible(i);
 
+  /* a group whose items open under the cursor does it now, after the
+     cursor has arrived and before anybody is told about it */
+  UpdateCursorExpansion(previous);
+
   if (cursor_callback)
     cursor_callback(GetCursorIndex());
 }
@@ -2547,6 +2810,13 @@ GroupedListControl::ActivateItem() noexcept
   Element &element = elements[cursor];
   if (element.disabled)
     return;
+
+  if (element.has_children) {
+    /* the item is a parent: it opens and closes instead of acting,
+       and its callback is never called */
+    ToggleExpanded((std::size_t)cursor);
+    return;
+  }
 
   if (element.IsButtons()) {
     if (button_column >= element.buttons.size())
@@ -2905,6 +3175,26 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
     canvas.DrawFilledRectangle(background_rc, background);
 
+    /* a child wears a bar at the left edge of the card instead of an
+       indent; the bars of the children of one item stand below each
+       other and become one.  The corner which DrawRoundedEdge() takes
+       away below takes the end of the bar with it, so that it cannot
+       reach out of the card */
+    if (element.depth > 0 && !selected) {
+      /* the item under the cursor wears no bar: its background is the
+         accent color itself, and a bar would only cut an edge into
+         it.  A display which knows two colors has no accent color and
+         takes the color of the text */
+      const Color bar_color = IsDithered()
+        ? row_colors.text_color
+        : (look.dark_mode ? COLOR_XCSOAR_LIGHT : COLOR_XCSOAR);
+
+      canvas.DrawFilledRectangle({background_rc.left, background_rc.top,
+                                  background_rc.left + GetChildBarWidth(),
+                                  background_rc.bottom},
+                                 bar_color);
+    }
+
     const int radius = GetCardRadius();
 
     /* an edge which a row of buttons has cut into the group is
@@ -3004,7 +3294,8 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       /* an item which carries a switch keeps the room of the column,
          so that all captions of the group stay aligned, but the
          switch says its state, not a check mark */
-      if (element.checked && !element.disabled && !element.toggle) {
+      if (element.checked && !element.disabled && !element.toggle &&
+          !element.has_children) {
         PixelRect check_rc;
         check_rc.left = left
           ? caption_rc.left
@@ -3016,10 +3307,14 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
         DrawCheck(canvas, check_rc, text_color);
       }
 
+      /* the column at the left edge is what the captions of the group
+         line up behind, so every item keeps it; the one at the right
+         edge is only room for a mark, and an item which opens and
+         closes has none to show */
       if (element.check_left)
         caption_rc.left += GetCheckWidth();
 
-      if (element.check_right)
+      if (element.check_right && !element.has_children)
         caption_rc.right -= GetCheckWidth();
     }
 
@@ -3097,17 +3392,33 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       caption_rc.left += GetIconWidth();
     }
 
-    if (element.chevron && !element.disabled) {
+    if ((element.chevron || element.has_children) && !element.disabled) {
       const int size = std::max(2, font_height / 4);
 
       const Pen pen(Layout::ScalePenWidth(1), text_color);
       canvas.Select(pen);
-      canvas.DrawLine({caption_rc.right - size, centre_y - size},
-                      {caption_rc.right, centre_y});
-      canvas.DrawLine({caption_rc.right, centre_y},
-                      {caption_rc.right - size, centre_y + size});
 
-      caption_rc.right -= size + padding;
+      if (element.has_children) {
+        /* an arrow which points down or up, never to the right: the
+           arrow to the right belongs to an item which opens another
+           page, and these two must not look alike.  Down says that
+           the children come out below, up that they go back in */
+        const int x = caption_rc.right - size;
+        const int y = centre_y + (element.expanded ? size / 2 : -size / 2);
+        const int dy = element.expanded ? -size : size;
+
+        canvas.DrawLine({x - size, y}, {x, y + dy});
+        canvas.DrawLine({x, y + dy}, {x + size, y});
+
+        caption_rc.right -= 2 * size + padding;
+      } else {
+        canvas.DrawLine({caption_rc.right - size, centre_y - size},
+                        {caption_rc.right, centre_y});
+        canvas.DrawLine({caption_rc.right, centre_y},
+                        {caption_rc.right - size, centre_y + size});
+
+        caption_rc.right -= size + padding;
+      }
     }
 
     /* the value keeps a box of its own, which begins where the
@@ -3602,7 +3913,22 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
 
   bool activate = drag_mode == DragMode::CURSOR && tapped && press >= 0;
 
-  if (activate && elements[press].IsButtons()) {
+  if (activate && elements[press].has_children) {
+    /* an item which opens and closes is a control like the switch: it
+       does what it says on the first tap, wherever the cursor was.
+       Where the cursor is what opens it, the first tap only carries
+       the cursor there, because the item opens with it; a second tap
+       on the same item closes it again */
+    const bool arrived = press != cursor &&
+      elements[press].expand_trigger == ExpandTrigger::CURSOR;
+
+    SetCursor(press);
+
+    if (!arrived)
+      ActivateItem();
+
+    activate = false;
+  } else if (activate && elements[press].IsButtons()) {
     /* a button is a control, not a choice: it acts on the first tap,
        wherever the cursor was, like the switch of an item.  The
        cursor comes first, it arms the button the finger is on */
@@ -3812,6 +4138,34 @@ GroupedListWidget::AddItem(const char *caption, Callback callback,
                            const ItemOptions &options) noexcept
 {
   control.AddItem(caption, std::move(callback), options);
+}
+
+void
+GroupedListWidget::AddChildItem(const char *caption, Callback callback) noexcept
+{
+  control.AddChildItem(caption, std::move(callback), ItemOptions{});
+}
+
+void
+GroupedListWidget::AddChildItem(const char *caption, Callback callback,
+                                const ItemOptions &options) noexcept
+{
+  control.AddChildItem(caption, std::move(callback), options);
+}
+
+void
+GroupedListWidget::AddChildItem(const char *caption,
+                                const ItemOptions &options) noexcept
+{
+  control.AddChildItem(caption, {}, options);
+}
+
+void
+GroupedListWidget::AddChildItems(std::initializer_list<ChildDefinition>
+                                 children) noexcept
+{
+  for (const auto &child : children)
+    control.AddChildItem(child.caption, child.callback, child.options);
 }
 
 void
