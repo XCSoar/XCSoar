@@ -3,7 +3,6 @@
 
 #include "ConfigListPanel.hpp"
 #include "Dialogs/DialogSettings.hpp"
-#include "Formatter/TimeFormatter.hpp"
 #include "UIGlobals.hpp"
 
 #include <cmath>
@@ -100,25 +99,6 @@ ConfigListPanel::AddVerticalSpeedItem(const char *caption, const char *help,
     if (PickVerticalSpeed(caption, help, min, max, value, include_sign))
       Refresh();
   }, {.value = FormatUserVerticalSpeed(value, true, include_sign).c_str(),
-      .chevron = true});
-}
-
-void
-ConfigListPanel::AddDurationItem(const char *caption, const char *help,
-                                 unsigned min, unsigned max, unsigned step,
-                                 Duration &value) noexcept
-{
-  AddItem(caption, [this, caption, help, min, max, step, &value](){
-    int seconds = value.count();
-    if (PickNumber(caption, help, min, max, step, seconds,
-                   [](StaticString<32> &s, int v){
-                     s = FormatTimespanSmart(std::chrono::seconds{v},
-                                             2).c_str();
-                   })) {
-      value = Duration{(unsigned)seconds};
-      Refresh();
-    }
-  }, {.value = FormatTimespanSmart(std::chrono::seconds{value}, 2).c_str(),
       .chevron = true});
 }
 
