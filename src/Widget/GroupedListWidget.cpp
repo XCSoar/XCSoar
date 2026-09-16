@@ -181,6 +181,7 @@ public:
   using EnterAction = GroupedListWidget::EnterAction;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
   using TextFont = GroupedListWidget::TextFont;
+  using TextSize = GroupedListWidget::TextSize;
   using ToggleHitArea = GroupedListWidget::ToggleHitArea;
   using GroupOptions = GroupedListWidget::GroupOptions;
 
@@ -248,6 +249,9 @@ private:
 
     /** only for Type::ITEM: the font of #value */
     TextFont value_font = TextFont::DEFAULT;
+
+    /** only for Type::ITEM: the size of #value */
+    TextSize value_size = TextSize::DEFAULT;
 
     /** only for Type::ITEM: show every line of #value */
     bool value_all_lines = false;
@@ -727,7 +731,14 @@ private:
   /** The font which draws the value of the given item. */
   [[gnu::pure]]
   const Font &GetValueFont(const Element &element) const noexcept {
-    return element.value_font == TextFont::MONO && look.mono_font.IsDefined()
+    const bool mono = element.value_font == TextFont::MONO;
+
+    if (element.value_size == TextSize::SMALL)
+      return mono && look.small_mono_font.IsDefined()
+        ? look.small_mono_font
+        : look.small_font;
+
+    return mono && look.mono_font.IsDefined()
       ? look.mono_font
       : *look.list.font;
   }
@@ -1197,6 +1208,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .value = options.value != nullptr ? options.value : "",
     .value_below = options.value_below,
     .value_font = options.value_font,
+    .value_size = options.value_size,
     .value_all_lines = options.value_all_lines,
     .value_max_lines = options.value_max_lines,
     .badge = GetBadge(options),
@@ -1862,10 +1874,12 @@ GroupedListControl::UpdateLayout() noexcept
 
         if (element.value_is_below) {
           block += subtitle_gap + element.value_height;
-          lines += element.value_height / look.list.font->GetLineSpacing();
+          lines += element.value_height
+            / GetValueFont(element).GetLineSpacing();
         } else if (element.value_height > block) {
           block = element.value_height;
-          lines = element.value_height / look.list.font->GetLineSpacing();
+          lines = element.value_height
+            / GetValueFont(element).GetLineSpacing();
         }
 
         if (block == font_height) {
