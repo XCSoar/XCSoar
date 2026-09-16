@@ -13,7 +13,9 @@
 #include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
+#include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "Weather/Settings.hpp"
 #include "util/StaticArray.hxx"
 #include "util/StaticString.hxx"
 #include "util/ScopeExit.hxx"
@@ -69,7 +71,6 @@
 #endif
 
 #ifdef HAVE_HTTP
-#include "Panels/WeatherConfigPanel.hpp"
 #endif
 #include "Panels/RaspConfigPanel.hpp"
 #ifdef HAVE_PCMET
@@ -98,14 +99,35 @@
 #include <algorithm>
 #include <cassert>
 
-/** One page of the configuration: a panel which edits some settings. */
+/**
+ * A setting which is a switch in the list of its group, where a
+ * page would be too much for it.
+ */
+struct ConfigToggle {
+  /** an explanation of the setting */
+  const char *help;
+
+  bool (*get)() noexcept;
+
+  /** Store the new state in the settings and in the profile. */
+  void (*set)(bool value) noexcept;
+};
+
+/**
+ * One page of the configuration: a panel which edits some settings,
+ * or a #ConfigToggle in its place.
+ */
 struct ConfigPage {
   const char *caption;
 
+  /** nullptr for a #ConfigToggle */
   std::unique_ptr<Widget> (*create)();
 
   /** An unavailable page is left out of the menu and the pager. */
   bool (*IsAvailable)() = nullptr;
+
+  /** A switch in the group list; nullptr for a page. */
+  const ConfigToggle *toggle = nullptr;
 };
 
 /** The pages which one item of the menu leads to. */
@@ -163,6 +185,34 @@ static constexpr ConfigPage look_pages[] = {
   { nullptr, nullptr }
 };
 
+#ifdef HAVE_HTTP
+
+static bool
+GetThermalInformationMap() noexcept
+{
+  return CommonInterface::GetComputerSettings().weather.enable_tim;
+}
+
+static void
+SetThermalInformationMap(bool value) noexcept
+{
+  auto &settings = CommonInterface::SetComputerSettings().weather;
+
+  /* the list of the group closes without a Save() of a page: write
+     the profile here */
+  if (Profile::Update(ProfileKeys::EnableThermalInformationMap,
+                      settings.enable_tim, value))
+    Profile::Save();
+}
+
+static constexpr ConfigToggle thermal_information_map_toggle{
+  N_("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
+  GetThermalInformationMap,
+  SetThermalInformationMap,
+};
+
+#endif
+
 static constexpr ConfigPage weather_pages[] = {
 #ifdef HAVE_PCMET
   { "Flugwetter (pc_met)", CreatePCMetConfigPanel },
@@ -170,7 +220,8 @@ static constexpr ConfigPage weather_pages[] = {
   { "RASP", CreateRaspConfigPanel },
 #ifdef HAVE_HTTP
   { "SkySight", CreateSkySightConfigPanel },
-  { N_("Thermal Information Map"), CreateWeatherConfigPanel },
+  { N_("Thermal Information Map"), nullptr, nullptr,
+    &thermal_information_map_toggle },
   { "XC Therm", CreateXCThermConfigPanel },
 #endif
   { nullptr, nullptr }
@@ -275,8 +326,8 @@ FindConfigPage(std::unique_ptr<Widget> (*load)()) noexcept
 {
   unsigned index = 1;
   for (const auto &group : groups) {
-    for (auto page = group.pages; page->create != nullptr; ++page) {
-      if (!PageAvailable(*page))
+    for (auto page = group.pages; page->caption != nullptr; ++page) {
+      if (page->toggle != nullptr || !PageAvailable(*page))
         continue;
       if (page->create == load)
         return index;
@@ -547,25 +598,39 @@ ShowGroupList(const ConfigGroup &group, unsigned first, unsigned cursor)
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, gettext(group.caption));
 
-  auto list = std::make_unique<GroupedListWidget>(look);
-  list->AddGroup();
+  auto _list = std::make_unique<GroupedListWidget>(look);
+  GroupedListWidget &list = *_list;
+  list.AddGroup();
 
   int picked = -1;
   unsigned i = first;
-  for (const ConfigPage *page = group.pages; page->create != nullptr; ++page) {
+  for (const ConfigPage *page = group.pages; page->caption != nullptr;
+       ++page) {
     if (!PageAvailable(*page))
       continue;
 
-    list->AddItem(gettext(page->caption), [&dialog, &picked, i](){
+    if (page->toggle != nullptr) {
+      /* a switch in the list, which acts right away */
+      const ConfigToggle &toggle = *page->toggle;
+      const unsigned item = list.GetItemCount();
+      list.AddItem(gettext(page->caption), [&list, &toggle, item](){
+        toggle.set(list.IsItemChecked(item));
+      }, {.toggle = true,
+          .checked = toggle.get(),
+          .help = gettext(toggle.help)});
+      continue;
+    }
+
+    list.AddItem(gettext(page->caption), [&dialog, &picked, i](){
       picked = i;
       dialog.SetModalResult(mrOK);
     }, {.chevron = true});
     ++i;
   }
 
-  list->SetCursorIndex(cursor);
+  list.SetCursorIndex(cursor);
 
-  dialog.FinishPreliminary(std::move(list));
+  dialog.FinishPreliminary(std::move(_list));
   dialog.AddButton(_("Back"), mrCancel);
   dialog.ShowModal();
 
@@ -641,9 +706,10 @@ AddGroup(GroupedListWidget &menu, const ConfigGroup &group) noexcept
       pager->ClickPage(first);
   }, {.chevron = true});
 
-  for (const ConfigPage *page = group.pages; page->create != nullptr;
+  for (const ConfigPage *page = group.pages; page->caption != nullptr;
        ++page) {
-    if (!PageAvailable(*page))
+    /* a switch lives in the list of the group, not in the pager */
+    if (page->toggle != nullptr || !PageAvailable(*page))
       continue;
 
     pager_pages.append({&group, page, first});
