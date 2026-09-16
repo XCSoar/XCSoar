@@ -6,6 +6,8 @@
 #include "Dialogs/GroupedListPicker.hpp"
 #include "Widget/GroupedListWidget.hpp"
 
+#include <chrono>
+
 /**
  * A page of the configuration which is a #GroupedListWidget.  It
  * keeps copies of the settings it edits, fills its list from them,
@@ -17,6 +19,9 @@ class ConfigListPanel : public GroupedListWidget {
   bool expert;
 
 protected:
+  /** a duration in seconds, as the settings hold them */
+  using Duration = std::chrono::duration<unsigned>;
+
   ConfigListPanel() noexcept;
 
   /** Is the page filled for the expert user level? */
@@ -70,6 +75,23 @@ protected:
    */
   void AddPercentItem(const char *caption, const char *help,
                       int min, int max, int step, int &value) noexcept;
+
+  /**
+   * Add an item which opens the choice of an altitude, one choice
+   * per step from @p min to @p max in the unit of the user; the
+   * value is in metres.
+   */
+  void AddAltitudeItem(const char *caption, const char *help,
+                       unsigned min, unsigned max, unsigned step,
+                       unsigned &value) noexcept;
+
+  /**
+   * Add an item which opens the choice of a duration, one choice per
+   * step from @p min to @p max seconds.
+   */
+  void AddDurationItem(const char *caption, const char *help,
+                       unsigned min, unsigned max, unsigned step,
+                       Duration &value) noexcept;
 
 public:
   /* virtual methods from class Widget */
