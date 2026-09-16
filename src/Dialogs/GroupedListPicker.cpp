@@ -4,10 +4,18 @@
 #include "GroupedListPicker.hpp"
 #include "WidgetDialog.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/File.hpp"
 #include "Language/Language.hpp"
 #include "Look/DialogLook.hpp"
+#include "Repository/Glue.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/GroupedListWidget.hpp"
+#include "net/http/Features.hpp"
+#include "system/Path.hpp"
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "DownloadFilePicker.hpp"
+#endif
 
 #include <algorithm>
 #include <memory>
@@ -107,4 +115,50 @@ PickEnum(const char *caption, const char *help,
 
   value = list[picked].id;
   return true;
+}
+
+void
+PickFile(const char *caption, const char *help, FileDataField &df) noexcept
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, caption);
+
+  auto list = std::make_unique<GroupedListWidget>(look);
+  list->AddHero(caption, help);
+  list->AddGroup(nullptr,
+                 {.selection_mode = GroupedListWidget::SelectionMode::SINGLE});
+
+  const Path value = df.GetValue();
+
+  for (unsigned i = 0, n = df.size(); i < n; ++i) {
+    const auto &item = df.GetItem(i);
+    const bool checked = item.path == value;
+    if (checked)
+      list->SetCursorIndex(i);
+
+    /* the first item is the empty one, which stands for no file */
+    list->AddItem(item.path.empty() ? _("(none)") : item.filename.c_str(),
+                  [&df, &dialog, i](){
+      df.SetIndex(i);
+      dialog.SetModalResult(mrOK);
+    }, {.checked = checked});
+  }
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (FileTypeSupportsDownload(df.GetFileType()))
+    list->AddButton(_("Download"), [&df, &dialog](){
+      const auto path = DownloadFilePicker(df.GetFileType());
+      if (path == nullptr)
+        return;
+
+      df.ForceModify(path);
+      dialog.SetModalResult(mrOK);
+    });
+#endif
+
+  dialog.FinishPreliminary(std::move(list));
+  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.ShowModal();
 }

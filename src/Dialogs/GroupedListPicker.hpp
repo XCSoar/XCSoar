@@ -6,6 +6,7 @@
 #include <span>
 
 struct StaticEnumChoice;
+class FileDataField;
 
 /** One choice for PickChoice(). */
 struct PickerChoice {
@@ -52,3 +53,13 @@ GetEnumCaption(const StaticEnumChoice *list, unsigned value) noexcept;
 bool
 PickEnum(const char *caption, const char *help,
          const StaticEnumChoice *list, unsigned &value) noexcept;
+
+/**
+ * Let the user pick one of the files the field knows, or none.  A
+ * tap on a file chooses it and closes the view, like the combo
+ * picker does; the field is left alone if the user cancels.
+ *
+ * @param help an explanation of the setting, shown above the list
+ */
+void
+PickFile(const char *caption, const char *help, FileDataField &df) noexcept;

@@ -3,6 +3,7 @@
 
 #include "SiteConfigPanel.hpp"
 #include "Dialogs/DialogSettings.hpp"
+#include "Dialogs/GroupedListPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/DataField/File.hpp"
@@ -35,56 +36,6 @@ using SelectionMode = GroupedListWidget::SelectionMode;
 using ItemOptions = GroupedListWidget::ItemOptions;
 using TextFont = GroupedListWidget::TextFont;
 using TextSize = GroupedListWidget::TextSize;
-
-/**
- * Let the user pick one of the files the field knows, or none.  A
- * tap on a file chooses it and closes the view, like the combo
- * picker does.  The explanation of the setting introduces the page.
- */
-static void
-PickFile(const char *caption, const char *help, FileDataField &df)
-{
-  const DialogLook &look = UIGlobals::GetDialogLook();
-
-  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, caption);
-
-  auto list = std::make_unique<GroupedListWidget>(look);
-  list->AddHero(caption, help);
-  list->AddGroup(nullptr, {.selection_mode = SelectionMode::SINGLE});
-
-  const Path value = df.GetValue();
-
-  for (unsigned i = 0, n = df.size(); i < n; ++i) {
-    const auto &item = df.GetItem(i);
-    const bool checked = item.path == value;
-    if (checked)
-      list->SetCursorIndex(i);
-
-    /* the first item is the empty one, which stands for no file */
-    list->AddItem(item.path.empty() ? _("(none)") : item.filename.c_str(),
-                  [&df, &dialog, i](){
-      df.SetIndex(i);
-      dialog.SetModalResult(mrOK);
-    }, {.checked = checked});
-  }
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-  if (FileTypeSupportsDownload(df.GetFileType()))
-    list->AddButton(_("Download"), [&df, &dialog](){
-      const auto path = DownloadFilePicker(df.GetFileType());
-      if (path == nullptr)
-        return;
-
-      df.ForceModify(path);
-      dialog.SetModalResult(mrOK);
-    });
-#endif
-
-  dialog.FinishPreliminary(std::move(list));
-  dialog.AddButton(_("Cancel"), mrCancel);
-  dialog.ShowModal();
-}
 
 /**
  * Let the user check the files the field shall use.  The choice is
