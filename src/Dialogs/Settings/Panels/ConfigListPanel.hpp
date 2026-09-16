@@ -111,9 +111,12 @@ protected:
    * switch only shows the explanation.
    *
    * @param subtitle a text below the caption; nullptr for none
+   * @param disabled grey the switch out, for a setting which depends
+   * on another one which is off
    */
   void AddToggleItem(const char *caption, const char *help,
-                     bool &value, const char *subtitle=nullptr) noexcept;
+                     bool &value, const char *subtitle=nullptr,
+                     bool disabled=false) noexcept;
 
   /**
    * Add an item which opens the text entry for a string; a password

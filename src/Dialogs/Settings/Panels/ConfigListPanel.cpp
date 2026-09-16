@@ -23,7 +23,8 @@ ConfigListPanel::Refresh() noexcept
 
 void
 ConfigListPanel::AddToggleItem(const char *caption, const char *help,
-                               bool &value, const char *subtitle) noexcept
+                               bool &value, const char *subtitle,
+                               bool disabled) noexcept
 {
   const unsigned item = GetItemCount();
 
@@ -32,7 +33,8 @@ ConfigListPanel::AddToggleItem(const char *caption, const char *help,
 
     /* other items may depend on this switch */
     Refresh();
-  }, {.subtitle = subtitle, .toggle = true, .checked = value, .help = help});
+  }, {.subtitle = subtitle, .toggle = true, .checked = value, .help = help,
+      .disabled = disabled});
 }
 
 void
