@@ -72,6 +72,7 @@ class DeviceListWidget final
     bool humidity:1;
     bool imu:1;
     bool accel:1;
+    bool heart_rate:1;
     bool radio:1, transponder:1;
     bool engine:1;
     bool debug:1;
@@ -138,6 +139,7 @@ class DeviceListWidget final
       humidity = basic.humidity_available;
       imu = basic.gyroscope.available;
       accel = basic.acceleration.available;
+      heart_rate = basic.heart_rate_available;
       debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
@@ -159,7 +161,7 @@ class DeviceListWidget final
   union Item {
   private:
     Flags flags;
-    uint32_t i;
+    uint64_t i;
 
     static_assert(sizeof(flags) <= sizeof(i), "wrong size");
 
@@ -191,7 +193,7 @@ class DeviceListWidget final
     }
   };
 
-  static_assert(sizeof(Item) == 4, "wrong size");
+  static_assert(sizeof(Item) == 8, "wrong size");
 
   Item items[NUMDEV];
   std::string error_messages[NUMDEV];
@@ -472,6 +474,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     if (flags.accel)
       buffer.append("; G");
+
+    if (flags.heart_rate) {
+      buffer.append("; ");
+      buffer.append(_("Heart Rate"));
+    }
 
     if (flags.radio) {
       buffer.append("; ");
