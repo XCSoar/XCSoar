@@ -4,11 +4,15 @@
 #pragma once
 
 #include "Dialogs/GroupedListPicker.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Math/Util.hpp"
+#include "Units/Units.hpp"
 #include "Widget/GroupedListWidget.hpp"
 #include "util/StaticString.hxx"
 
 #include <algorithm>
 #include <chrono>
+#include <type_traits>
 #include <vector>
 
 /**
@@ -119,13 +123,41 @@ protected:
                       int min, int max, int step, int &value) noexcept;
 
   /**
+   * Add an item which opens the choice of a vertical speed, one
+   * choice per step of the unit of the user from @p min to @p max;
+   * all three are in m/s.
+   *
+   * @param include_sign show the sign of the value, for a range which
+   * has a negative part
+   */
+  void AddVerticalSpeedItem(const char *caption, const char *help,
+                            double min, double max, double &value,
+                            bool include_sign=false) noexcept;
+
+  /**
    * Add an item which opens the choice of an altitude, one choice
    * per step from @p min to @p max in the unit of the user; the
-   * value is in metres.
+   * value is in metres, an integer or a floating point number.
    */
+  template<typename T>
   void AddAltitudeItem(const char *caption, const char *help,
                        unsigned min, unsigned max, unsigned step,
-                       unsigned &value) noexcept;
+                       T &value) noexcept {
+    AddItem(caption, [this, caption, help, min, max, step, &value](){
+      int user_value = iround(Units::ToUserAltitude(value));
+      if (PickNumber(caption, help, min, max, step, user_value,
+                     [](StaticString<32> &s, int v){
+                       s = FormatUserAltitude(Units::ToSysAltitude(v)).c_str();
+                     })) {
+        if constexpr (std::is_integral_v<T>)
+          value = iround(Units::ToSysAltitude(user_value));
+        else
+          value = Units::ToSysAltitude(user_value);
+
+        Refresh();
+      }
+    }, {.value = FormatUserAltitude(value).c_str(), .chevron = true});
+  }
 
   /**
    * Add an item which opens the choice of a duration, one choice per
