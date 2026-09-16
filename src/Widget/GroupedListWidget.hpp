@@ -207,6 +207,15 @@ public:
 
     /** what opens an item of this group which has children */
     ExpandTrigger expand_trigger = ExpandTrigger::ACTIVATE;
+
+    /**
+     * Let the room above and below the text of an item shrink as the
+     * text grows: a row of one line keeps the room which makes it
+     * easy to hit, and twice the text keeps half of it.  Turn it off
+     * where the tall items of the group are targets for a finger,
+     * too; every item then keeps the room of a one-line row.
+     */
+    bool shrink_vertical_padding = true;
   };
 
   /** The contents and the decorations of an item. */
