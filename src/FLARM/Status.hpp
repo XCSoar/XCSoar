@@ -5,7 +5,7 @@
 
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Id.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 
 #include <type_traits>
 #include <cstdint>

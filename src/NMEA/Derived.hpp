@@ -15,7 +15,7 @@
 #include "Engine/ThermalBand/ThermalEncounterBand.hpp"
 #include "Engine/ThermalBand/ThermalEncounterCollection.hpp"
 #include "NMEA/ThermalLocator.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "NMEA/ClimbHistory.hpp"
 #include "TeamCode/TeamCode.hpp"
 #include "Engine/Navigation/TraceHistory.hpp"

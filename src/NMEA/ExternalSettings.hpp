@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "RadioFrequency.hpp"
 #include "TransponderCode.hpp"

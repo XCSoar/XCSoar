@@ -4,7 +4,7 @@
 #pragma once
 
 #include "FLARM/Id.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "util/StaticString.hxx"
 
 #include <type_traits>

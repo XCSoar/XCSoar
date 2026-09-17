@@ -5,7 +5,7 @@
 
 #include "GliderLinkId.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "util/StaticString.hxx"
 #include "Rough/RoughAltitude.hpp"
 #include "Rough/RoughSpeed.hpp"

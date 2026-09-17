@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Blackboard/BlackboardListener.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 
 /**
  * This class listens for #LiveBlackboard changes and emits glide

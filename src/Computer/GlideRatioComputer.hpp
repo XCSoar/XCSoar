@@ -5,7 +5,7 @@
 
 #include "GlideRatioCalculator.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 
 struct MoreData;
 struct DerivedInfo;
