@@ -301,6 +301,14 @@ TopWindow::Refresh() noexcept
     /* the application is paused/suspended, and we don't have an
        OpenGL surface - ignore all drawing requests */
     return;
+	
+#ifdef MESA_KMS
+  if (!screen->CheckAndFinishPendingFlip()) {
+    /* A buffer flip is ongoing. Refrain from rendering now.*/
+    return;
+  }
+#endif
+
 
 #if defined(USE_X11) || defined(USE_WAYLAND)
   if (!IsVisible())

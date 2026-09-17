@@ -268,7 +268,18 @@ public:
   void Unlock() noexcept;
 
   void Flip();
-
+#ifdef MESA_KMS
+  /** \brief Try to finish a pending flip. Return true when no flip is on-going.
+   * 
+   * When a page flip is on-going, try to process any pending DRM events.
+   * When a DRM event is pending it indicates that the latest scheduled flip 
+   * has finished. Update the buffers and internal flip status.
+   *
+   * \return \p true when no flip was pending, or an on-going flip could be finished.
+   *         \p false when a flip is still pending. 
+   */
+  bool CheckAndFinishPendingFlip();
+#endif
 #ifdef KOBO
   /**
    * Wait until the screen update is complete.
