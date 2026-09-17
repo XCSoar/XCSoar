@@ -18,6 +18,7 @@
 #include <utility>
 
 #ifdef HAVE_POSIX
+#include <limits.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -196,39 +197,67 @@ ParseDescriptor(NLineReader &reader, std::string_view language)
 #ifdef HAVE_POSIX
 
 static bool
-IsTrustedDirectory(Path path) noexcept
+HasUnsafeWritePermissions(const struct stat &st,
+                          bool trust_group = false) noexcept
 {
-  struct stat st;
-  return lstat(path.c_str(), &st) == 0 && S_ISDIR(st.st_mode) &&
-    st.st_uid == 0 && (st.st_mode & (S_IWGRP | S_IWOTH)) == 0;
+  return (st.st_mode & S_IWOTH) != 0 ||
+    ((st.st_mode & S_IWGRP) != 0 &&
+     (!trust_group || st.st_gid != getegid()));
 }
 
 static bool
-IsTrustedFile(Path path, bool executable) noexcept
+IsTrustedDirectory(Path path, uid_t owner, bool trust_group = false) noexcept
+{
+  struct stat st;
+  return lstat(path.c_str(), &st) == 0 && S_ISDIR(st.st_mode) &&
+    st.st_uid == owner && !HasUnsafeWritePermissions(st, trust_group);
+}
+
+static bool
+IsTrustedFile(Path path, uid_t owner, bool executable,
+              bool trust_group = false) noexcept
 {
   struct stat st;
   return lstat(path.c_str(), &st) == 0 && S_ISREG(st.st_mode) &&
-    st.st_uid == 0 && (st.st_mode & (S_IWGRP | S_IWOTH)) == 0 &&
+    st.st_uid == owner && !HasUnsafeWritePermissions(st, trust_group) &&
     (!executable || ((st.st_mode & (S_ISUID | S_ISGID)) == 0 &&
+                     (st.st_mode & S_IXUSR) != 0 &&
                      access(path.c_str(), X_OK) == 0));
 }
 
 static bool
-IsTrustedInstallationDirectory(Path directory) noexcept
+IsTrustedDirectoryTree(Path directory, uid_t owner,
+                       bool user_directory = false,
+                       bool trust_group = false) noexcept
 {
-  if (!directory.IsAbsolute())
-    return false;
-
   AllocatedPath current{directory};
-  while (true) {
-    if (!IsTrustedDirectory(current))
+  if (!directory.IsAbsolute()) {
+    if (!user_directory)
       return false;
 
-    AllocatedPath parent = current.GetParent();
-    if (parent == current)
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) == nullptr)
+      return false;
+    current = AllocatedPath::Build(Path{cwd}, directory);
+  }
+
+  bool first = true;
+  while (true) {
+    struct stat st;
+    if (lstat(current.c_str(), &st) != 0 || !S_ISDIR(st.st_mode) ||
+        (st.st_uid != 0 && st.st_uid != owner) ||
+        (HasUnsafeWritePermissions(st, trust_group) &&
+         !(user_directory && !first && (st.st_mode & S_ISVTX) != 0)))
+      return false;
+
+    if (current == Path{"/"})
       return true;
 
-    current = std::move(parent);
+    // Path::GetParent() returns "." for an immediate child of root.
+    auto parent = current.GetParent();
+    current = parent == Path{"."} ? AllocatedPath{Path{"/"}}
+                                  : std::move(parent);
+    first = false;
   }
 }
 
@@ -236,17 +265,18 @@ class DescriptorVisitor final : public File::Visitor {
   std::vector<InstalledTool> &tools;
   const Path directory;
   const std::string_view language;
+  const uid_t owner;
+  const Origin origin;
 
 public:
   DescriptorVisitor(std::vector<InstalledTool> &_tools,
                     Path _directory,
-                    std::string_view _language) noexcept
-    :tools(_tools), directory(_directory), language(_language) {}
+                    std::string_view _language, uid_t _owner,
+                    Origin _origin) noexcept
+    :tools(_tools), directory(_directory), language(_language),
+     owner(_owner), origin(_origin) {}
 
   void Visit(Path path, Path filename) override {
-    if (tools.size() >= MAX_INSTALLED_TOOLS)
-      return;
-
     constexpr std::string_view suffix{".tool"};
     std::string_view basename{filename.c_str()};
     if (!basename.ends_with(suffix))
@@ -261,69 +291,111 @@ public:
     const std::string id{basename};
     AllocatedPath executable =
       AllocatedPath::Build(directory, id.c_str());
-    if (!IsTrustedFile(path, false) ||
-        !IsTrustedFile(executable, true)) {
-      LogFormat("Ignoring untrusted system tool: %s", path.c_str());
+    if (origin == Origin::USER) {
+      auto shell_script = AllocatedPath::Build(directory, (id + ".sh").c_str());
+      struct stat st;
+      const bool have_exact = lstat(executable.c_str(), &st) == 0;
+      const bool have_shell = lstat(shell_script.c_str(), &st) == 0;
+      if (have_exact && have_shell) {
+        LogFormat("Ignoring ambiguous user tool: %s", path.c_str());
+        return;
+      }
+      if (!have_exact && have_shell)
+        executable = std::move(shell_script);
+    }
+
+    if (!IsTrustedFile(path, owner, false, origin == Origin::USER) ||
+        !IsTrustedFile(executable, owner, true, origin == Origin::USER)) {
+      LogFormat("Ignoring untrusted tool: %s", path.c_str());
       return;
     }
 
+    Descriptor descriptor;
     try {
       FileReader file{path};
       // Stay below the buffered reader's line limit to avoid false EOF.
       if (file.GetSize() > MAX_DESCRIPTOR_SIZE)
         throw std::runtime_error{"System-tool descriptor too large"};
       BufferedLineReader reader{file};
-      tools.push_back({id, ParseDescriptor(reader, language),
-                       std::move(executable)});
+      descriptor = ParseDescriptor(reader, language);
     } catch (...) {
-      LogFormat("Ignoring malformed system tool: %s", path.c_str());
-      LogError(std::current_exception(), "Failed to load system tool");
+      LogFormat("Ignoring malformed tool: %s", path.c_str());
+      LogError(std::current_exception(), "Failed to load tool");
+      return;
     }
+
+    // A partial catalogue could hide a duplicate in another directory.
+    if (tools.size() >= MAX_INSTALLED_TOOLS)
+      throw std::runtime_error{"Too many system tools"};
+
+    tools.push_back({id, std::move(descriptor),
+                     std::move(executable), origin});
   }
 };
 
 static std::vector<InstalledTool>
-LoadDirectory(Path directory, std::string_view language) noexcept
+LoadDirectory(Path directory, std::string_view language, uid_t owner,
+              Origin origin, bool validate_parents)
 {
   std::vector<InstalledTool> result;
 
   if (!Directory::Exists(directory))
     return result;
 
-  if (!IsTrustedInstallationDirectory(directory)) {
-    LogFormat("Ignoring untrusted system-tool directory: %s",
+  const bool trusted = validate_parents
+    ? IsTrustedDirectoryTree(directory, owner)
+    : IsTrustedDirectory(directory, owner, origin == Origin::USER);
+  if (!trusted) {
+    LogFormat("Ignoring untrusted tool directory after recheck: %s",
               directory.c_str());
     return result;
   }
 
-  try {
-    DescriptorVisitor visitor{result, directory, language};
-    Directory::VisitSpecificFiles(directory, "*.tool", visitor);
-  } catch (...) {
-    LogError(std::current_exception(), "Failed to scan system tools");
-    result.clear();
-  }
+  DescriptorVisitor visitor{result, directory, language, owner, origin};
+  Directory::VisitSpecificFiles(directory, "*.tool", visitor);
 
   return result;
+}
+
+static std::vector<InstalledTool>
+LoadUserDirectory(Path directory, std::string_view language)
+{
+  if (directory == nullptr)
+    return {};
+
+  struct stat st;
+  if (lstat(directory.c_str(), &st) != 0 || !S_ISDIR(st.st_mode))
+    return {};
+
+  const uid_t effective_uid = geteuid();
+  if (st.st_uid != effective_uid || (st.st_mode & S_IXUSR) == 0 ||
+      HasUnsafeWritePermissions(st, true) ||
+      !IsTrustedDirectoryTree(directory, effective_uid, true, true)) {
+    LogFormat("Ignoring untrusted tool directory: %s "
+              "(uid=%lu mode=%o euid=%lu)",
+              directory.c_str(), static_cast<unsigned long>(st.st_uid),
+              static_cast<unsigned>(st.st_mode & 07777),
+              static_cast<unsigned long>(effective_uid));
+    return {};
+  }
+
+  return LoadDirectory(directory, language, effective_uid,
+                       Origin::USER, false);
 }
 
 #endif
 
 std::vector<InstalledTool>
-LoadInstalled(std::string_view language) noexcept
+LoadInstalled(std::string_view language, Path user_directory) noexcept
+try
 {
   std::vector<InstalledTool> result;
 
 #ifdef HAVE_POSIX
   std::vector<std::string> duplicate_ids;
-  Path previous_directory{nullptr};
+  std::vector<AllocatedPath> loaded_directories;
 
-  for (const Path directory : INSTALLATION_DIRECTORIES) {
-    if (directory == previous_directory)
-      continue;
-
-    previous_directory = directory;
-    auto installed = LoadDirectory(directory, language);
+  const auto merge_tools = [&](std::vector<InstalledTool> installed) {
     for (auto &tool : installed) {
       if (std::find(duplicate_ids.begin(), duplicate_ids.end(), tool.id) !=
           duplicate_ids.end())
@@ -334,11 +406,48 @@ LoadInstalled(std::string_view language) noexcept
           return other.id == tool.id;
         });
       if (existing != result.end()) {
-        LogFormat("Ignoring duplicate system tool ID: %s", tool.id.c_str());
+        LogFormat("Ignoring duplicate tool ID: %s", tool.id.c_str());
         duplicate_ids.push_back(tool.id);
         result.erase(existing);
-      } else if (result.size() < MAX_INSTALLED_TOOLS)
+      } else
         result.push_back(std::move(tool));
+    }
+  };
+
+  for (const Path directory : INSTALLATION_DIRECTORIES) {
+    if (std::find(loaded_directories.begin(), loaded_directories.end(),
+                  directory) != loaded_directories.end())
+      continue;
+
+    loaded_directories.emplace_back(directory);
+    merge_tools(LoadDirectory(directory, language, 0,
+                              Origin::SYSTEM, true));
+  }
+
+  if (result.size() > MAX_INSTALLED_TOOLS)
+    throw std::runtime_error{"Too many system tools"};
+
+  if (user_directory != nullptr &&
+      std::find(loaded_directories.begin(), loaded_directories.end(),
+                user_directory) == loaded_directories.end()) {
+    try {
+      auto personal = LoadUserDirectory(user_directory, language);
+      const auto overridden = [&](const auto &tool) {
+        return std::any_of(personal.begin(), personal.end(),
+                           [&](const auto &other) {
+                             return other.id == tool.id;
+                           });
+      };
+      const std::size_t combined_size = result.size() + personal.size() -
+        std::count_if(result.begin(), result.end(), overridden);
+      if (combined_size > MAX_INSTALLED_TOOLS)
+        throw std::runtime_error{"Too many system tools"};
+      result.reserve(combined_size);
+      std::erase_if(result, overridden);
+      for (auto &tool : personal)
+        result.push_back(std::move(tool));
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to load personal tools");
     }
   }
 
@@ -349,9 +458,15 @@ LoadInstalled(std::string_view language) noexcept
             });
 #else
   (void)language;
+  (void)user_directory;
 #endif
 
   return result;
+}
+catch (...)
+{
+  LogError(std::current_exception(), "Failed to load system tools");
+  return {};
 }
 
 } // namespace SystemTools

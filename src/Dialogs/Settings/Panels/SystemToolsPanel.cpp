@@ -7,12 +7,14 @@
 #include "Dialogs/ProcessDialog.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "SystemTools.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/ListWidget.hpp"
+#include "util/StaticString.hxx"
 
 #include <algorithm>
 #include <cstdlib>
@@ -41,7 +43,8 @@ static std::vector<SystemTools::InstalledTool>
 LoadSystemTools() noexcept
 try
 {
-  return SystemTools::LoadInstalled(GetSystemToolLanguage());
+  return SystemTools::LoadInstalled(GetSystemToolLanguage(),
+                                    LocalPath("tools"));
 }
 catch (...)
 {
@@ -69,9 +72,18 @@ ConfirmSystemTool(const SystemTools::InstalledTool &tool)
     {_("Start"), IDOK},
     {_("Back"), IDCANCEL},
   };
-  return ShowMessageBox(tool.descriptor.instructions.c_str(),
+  std::string instructions = tool.descriptor.instructions;
+
+  return ShowMessageBox(instructions.c_str(),
                         tool.descriptor.name.c_str(), buttons,
                         IDCANCEL) == IDOK;
+}
+
+static bool
+RequiresConfirmation(const SystemTools::InstalledTool &tool) noexcept
+{
+  return tool.descriptor.confirmation ==
+    SystemTools::Confirmation::REQUIRED;
 }
 
 static void
@@ -84,8 +96,7 @@ try
     return;
   }
 
-  if (tool.descriptor.confirmation == SystemTools::Confirmation::REQUIRED &&
-      !ConfirmSystemTool(tool))
+  if (RequiresConfirmation(tool) && !ConfirmSystemTool(tool))
     return;
 
   // The confirmation may have remained open until after take-off.
@@ -147,8 +158,12 @@ SystemToolsPanel::OnPaintItem(Canvas &canvas, PixelRect rc,
     return;
 
   row_renderer.DrawFirstRow(canvas, rc, tools[index].descriptor.name.c_str());
-  row_renderer.DrawSecondRow(canvas, rc,
-                             tools[index].descriptor.description.c_str());
+  StaticString<320> second_row;
+  second_row.Format("%s: %s",
+                    tools[index].origin == SystemTools::Origin::USER
+                      ? _("User") : _("System"),
+                    tools[index].descriptor.description.c_str());
+  row_renderer.DrawSecondRow(canvas, rc, second_row);
 }
 
 bool
