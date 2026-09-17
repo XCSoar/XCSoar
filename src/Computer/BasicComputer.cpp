@@ -170,7 +170,8 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated) noexcept
       available = dyn >= 0.31;
     }
     if (available) {
-      basic.indicated_airspeed = sqrt(double(163.2653061) * dyn);
+      basic.indicated_airspeed =
+        IndicatedAirspeedFromDynamicPressure(dyn);
       basic.true_airspeed = basic.indicated_airspeed *
                             AirDensityRatio(*any_altitude);
 
