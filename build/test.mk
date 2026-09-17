@@ -2311,6 +2311,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/TeamCode/Settings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
+	$(SRC)/Computer/WaypointReach.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
