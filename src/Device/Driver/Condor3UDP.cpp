@@ -5,7 +5,7 @@
 #include "Device/Driver.hpp"
 #include "NMEA/Info.hpp"
 #include "Math/Angle.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "util/StringStrip.hxx"

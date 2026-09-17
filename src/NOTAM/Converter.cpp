@@ -15,7 +15,7 @@
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/TransponderCode.hpp"
 #include <cmath>
 #include <memory>
 #include <optional>

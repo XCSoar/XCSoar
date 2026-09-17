@@ -4,7 +4,7 @@
 #include "Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
 
 #include <memory>

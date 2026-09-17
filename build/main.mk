@@ -217,9 +217,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/ValidationErrorStrings.cpp \
 	$(SRC)/Task/Summary.cpp \
 	\
-	$(SRC)/RadioFrequency.cpp \
-	$(SRC)/TransponderCode.cpp \
-	$(SRC)/TransponderMode.cpp \
+	$(SRC)/Radio/RadioFrequency.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Radio/TransponderMode.cpp \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \

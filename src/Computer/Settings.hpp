@@ -18,9 +18,9 @@
 #include "Plane/Plane.hpp"
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
-#include "TransponderMode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
+#include "Radio/TransponderMode.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "util/StaticString.hxx"
 

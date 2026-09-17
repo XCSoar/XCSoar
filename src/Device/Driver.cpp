@@ -4,8 +4,8 @@
 #include "Device/Driver.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
 #include "system/Path.hpp"
 
 Device::~Device() {}

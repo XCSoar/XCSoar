@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "TransponderCode.hpp"
+#include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
 #include "util/StringAPI.hxx"
 

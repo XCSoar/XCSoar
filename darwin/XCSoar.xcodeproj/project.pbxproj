@@ -6576,6 +6576,8 @@
 		5CBFED7E2D742FA600F05795 /* Protection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Protection.cpp; sourceTree = "<group>"; };
 		5CBFED7F2D742FA600F05795 /* RadioFrequency.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RadioFrequency.hpp; sourceTree = "<group>"; };
 		5CBFED802D742FA600F05795 /* RadioFrequency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RadioFrequency.cpp; sourceTree = "<group>"; };
+		5CBFEF112D742FA600F05795 /* TransponderMode.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TransponderMode.hpp; sourceTree = "<group>"; };
+		5CBFEF122D742FA600F05795 /* TransponderMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TransponderMode.cpp; sourceTree = "<group>"; };
 		5CBFED812D742FA600F05795 /* RateLimiter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RateLimiter.hpp; sourceTree = "<group>"; };
 		5CBFED822D742FA600F05795 /* RateLimiter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RateLimiter.cpp; sourceTree = "<group>"; };
 		5CBFED832D742FA600F05795 /* resource-launch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "resource-launch.h"; sourceTree = "<group>"; };
@@ -14806,6 +14808,19 @@
 			path = Apple;
 			sourceTree = "<group>";
 		};
+		5CBFEF102D742FA600F05795 /* Radio */ = {
+			isa = PBXGroup;
+			children = (
+				5CBFED7F2D742FA600F05795 /* RadioFrequency.hpp */,
+				5CBFED802D742FA600F05795 /* RadioFrequency.cpp */,
+				5CBFED932D742FA600F05795 /* TransponderCode.hpp */,
+				5CBFED942D742FA600F05795 /* TransponderCode.cpp */,
+				5CBFEF112D742FA600F05795 /* TransponderMode.hpp */,
+				5CBFEF122D742FA600F05795 /* TransponderMode.cpp */,
+			);
+			path = Radio;
+			sourceTree = "<group>";
+		};
 		5CBFDFEF2D742FA600F05795 /* Atmosphere */ = {
 			isa = PBXGroup;
 			children = (
@@ -19579,6 +19594,7 @@
 				5CBFE8872D742FA600F05795 /* Polar */,
 				5CBFE8BA2D742FA600F05795 /* Profile */,
 				5CBFE8C52D742FA600F05795 /* Projection */,
+				5CBFEF102D742FA600F05795 /* Radio */,
 				5CBFE9532D742FA600F05795 /* Renderer */,
 				5CBFE9652D742FA600F05795 /* Replay */,
 				5CBFE96E2D742FA600F05795 /* Repository */,
@@ -19676,8 +19692,6 @@
 				5CBFED7C2D742FA600F05795 /* ProgressWindow.cpp */,
 				5CBFED7D2D742FA600F05795 /* Protection.hpp */,
 				5CBFED7E2D742FA600F05795 /* Protection.cpp */,
-				5CBFED7F2D742FA600F05795 /* RadioFrequency.hpp */,
-				5CBFED802D742FA600F05795 /* RadioFrequency.cpp */,
 				5CBFED812D742FA600F05795 /* RateLimiter.hpp */,
 				5CBFED822D742FA600F05795 /* RateLimiter.cpp */,
 				5CBFED832D742FA600F05795 /* resource-launch.h */,
@@ -19696,8 +19710,6 @@
 				5CBFED902D742FA600F05795 /* SystemSettings.cpp */,
 				5CBFED912D742FA600F05795 /* TeamActions.hpp */,
 				5CBFED922D742FA600F05795 /* TeamActions.cpp */,
-				5CBFED932D742FA600F05795 /* TransponderCode.hpp */,
-				5CBFED942D742FA600F05795 /* TransponderCode.cpp */,
 				5CBFED952D742FA600F05795 /* UIActions.hpp */,
 				5CBFED962D742FA600F05795 /* UIActions.cpp */,
 				5CBFED972D742FA600F05795 /* UIGlobals.hpp */,

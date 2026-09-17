@@ -4,7 +4,7 @@
 #include "Device/Driver/XCOM760.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 
 #include <stdio.h>
 

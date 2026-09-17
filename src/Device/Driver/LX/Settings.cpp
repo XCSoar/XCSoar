@@ -6,8 +6,8 @@
 #include "LX1600.hpp"
 #include "LXNAVVario.hpp"
 #include "NMEA/Info.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
 
 #include <fmt/format.h>
 #include <cstdlib>

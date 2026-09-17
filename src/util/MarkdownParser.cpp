@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MarkdownParser.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "util/StringCompare.hxx"
 #include "util/UriSchemes.hpp"
 

@@ -4,7 +4,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "Simulator.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 
 #include <algorithm>
 

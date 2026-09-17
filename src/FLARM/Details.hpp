@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 
 #include <string>
 
