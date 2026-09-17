@@ -5,6 +5,7 @@
 #include "Internal.hpp"
 #include "../TaskDialogs.hpp"
 #include "../dlgTaskHelpers.hpp"
+#include "Task/Summary.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Layout.hpp"

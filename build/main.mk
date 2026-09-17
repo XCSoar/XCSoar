@@ -215,6 +215,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/TaskStore.cpp \
 	$(SRC)/Task/TypeStrings.cpp \
 	$(SRC)/Task/ValidationErrorStrings.cpp \
+	$(SRC)/Task/Summary.cpp \
 	\
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/TransponderCode.cpp \
