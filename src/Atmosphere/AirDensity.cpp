@@ -5,7 +5,6 @@
 
 #include <math.h>
 
-static constexpr double isa_sea_level_density = 1.225;
 static constexpr double k4 = 44330.8;
 static constexpr double k6 = 1.0 / 42266.5;
 static constexpr double k7 = 1.0 / 0.234969;
@@ -19,5 +18,11 @@ AirDensity(const double altitude) noexcept
 double
 AirDensityRatio(const double altitude) noexcept
 {
-  return sqrt(isa_sea_level_density / AirDensity(altitude));
+  return sqrt(ISA_SEA_LEVEL_DENSITY / AirDensity(altitude));
+}
+
+double
+IndicatedAirspeedFromDynamicPressure(double dynamic_pressure_hpa) noexcept
+{
+  return sqrt(2 * 100 * dynamic_pressure_hpa / ISA_SEA_LEVEL_DENSITY);
 }
