@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Math/Angle.hpp"
-#include "Validity.hpp"
+#include "time/Validity.hpp"
 
 /**
  * A container holding the aircraft current attitude state.

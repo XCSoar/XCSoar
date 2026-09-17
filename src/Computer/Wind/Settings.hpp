@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Geo/SpeedVector.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 
 #include <type_traits>
 

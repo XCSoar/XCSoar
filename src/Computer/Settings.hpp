@@ -11,7 +11,7 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Weather/Settings.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCode/Settings.hpp"

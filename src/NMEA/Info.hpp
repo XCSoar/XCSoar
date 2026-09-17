@@ -4,7 +4,7 @@
 #pragma once
 
 #include "GPSState.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Gyroscope.hpp"

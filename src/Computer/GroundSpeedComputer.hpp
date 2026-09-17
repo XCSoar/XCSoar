@@ -4,7 +4,7 @@
 #pragma once
 
 #include "time/DeltaTime.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Geo/GeoPoint.hpp"
 
 struct NMEAInfo;

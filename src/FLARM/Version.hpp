@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "time/Stamp.hpp"
 #include "util/StaticString.hxx"
 
