@@ -18,6 +18,16 @@ section tries to give a rough overview where you can find what.
 
 -  :file:`Geo/`: geographic data structures and formulas
 
+-  :file:`time/`: clocks, civil time, and :file:`Validity` (last-changed
+   timestamps)
+
+-  :file:`Atmosphere/`: ICAO ISA pressure, density, and indicated
+   airspeed from pitot
+
+-  :file:`Units/`: SI conversion factors and user-unit tables
+
+-  :file:`Operation/`: cancel/progress for long-running work
+
 -  :file:`Formatter/`: code that formats internal values to strings
 
 -  :file:`Units/`: conversion from SI units (“System” units) to configured
@@ -92,7 +102,8 @@ Rough dependency direction (see also project rules in
 :file:`.cursor/rules/xcsoar-project-rules.mdc`):
 
 - **Foundation** (:file:`util/`, :file:`Math/`, :file:`Geo/`, :file:`io/`,
-  :file:`system/`) must not include Engine, Backend, or UI headers.
+  :file:`system/`, :file:`time/`, :file:`Atmosphere/`, :file:`Units/`,
+  :file:`Operation/`) must not include Engine, Backend, or UI headers.
 
 - **Engine** uses Foundation only.
 
