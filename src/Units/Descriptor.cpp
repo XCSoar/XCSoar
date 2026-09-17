@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Units/Descriptor.hpp"
+#include "Units/Conversion.hpp"
 #include "Units/Units.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "util/Macros.hpp"
@@ -22,8 +23,8 @@ const UnitDescriptor Units::unit_descriptors[] = {
   { "m/s", 1, 0 },
   { "fpm", 196.850394, 0 },
   { "m", 1, 0 },
-  { "ft", 3.2808399, 0 },
-  { "FL", 0.032808399, 0 },
+  { "ft", Units::METERS_TO_FEET, 0 },
+  { "FL", Units::METERS_TO_FLIGHT_LEVEL, 0 },
   { "K", 1, 0 },
   { DEG "C", 1, -CELSIUS_OFFSET },
   { DEG "F", 1.8, -459.67 },

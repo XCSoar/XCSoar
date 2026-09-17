@@ -4,6 +4,7 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Units/Conversion.hpp"
 #include "util/CharUtil.hxx"
 
 #include <string_view>
@@ -12,10 +13,9 @@ using std::string_view_literals::operator""sv;
 
 namespace {
 
-// Match Units::unit_descriptors factors; keep Engine independent of Units.
-static constexpr double FEET_TO_METERS = 1.0 / 3.2808399;
-static constexpr double METERS_TO_FLIGHT_LEVEL = 0.032808399;
-static constexpr double FLIGHT_LEVEL_TO_METERS = 1.0 / 0.032808399;
+using Units::FEET_TO_METERS;
+using Units::METERS_TO_FLIGHT_LEVEL;
+using Units::FLIGHT_LEVEL_TO_METERS;
 
 [[gnu::const]]
 static double
@@ -130,9 +130,9 @@ ParseAirspaceAltitude(StringParser<> &input,
 void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure press) noexcept
 {
-  static constexpr double fl_feet_to_m(30.48);
   if (reference == AltitudeReference::STD)
-    altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
+    altitude = press.PressureAltitudeToQNHAltitude(
+      flight_level * Units::FLIGHT_LEVEL_TO_METERS);
 }
 
 void
