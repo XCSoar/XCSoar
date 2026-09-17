@@ -6,6 +6,7 @@
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
@@ -25,7 +26,9 @@ BigThermalAssistantWidget::UpdateLayout() noexcept
   const PixelRect rc = GetContainer().GetClientRect();
   view->Move(rc);
 
-  const unsigned margin = Layout::Scale(1);
+  /* the button keeps the gap to the edges that buttons have between
+     each other */
+  const unsigned margin = ButtonFrameRenderer::GetEdgeMargin(rc);
   const unsigned button_height = Layout::GetMinimumControlHeight();
 
   PixelRect button_rc;

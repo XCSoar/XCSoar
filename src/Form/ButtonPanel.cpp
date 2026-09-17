@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Form/ButtonPanel.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "ui/window/ContainerWindow.hpp"
@@ -107,13 +108,19 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end) noexcept
   assert(n > 0);
 
   const unsigned width = RangeMaxWidth(start, end);
-  const unsigned total_height = rc.GetHeight();
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
+
+  /* the column keeps its width; the two extra margins become the gap
+     towards the edge of the dialog and towards the widget next to it,
+     which is the gap the buttons have between each other */
+  auto column_rc = rc.CutLeftSafe(width + 2 * margin);
+  column_rc.Grow(-margin);
+
+  const unsigned total_height = column_rc.GetHeight();
   const unsigned max_height = n * Layout::GetMaximumControlHeight();
   /* Cap the stack so landscape left bars stay control-sized; only the
      few leftover pixels from used_height / n go to the last button. */
   const unsigned used_height = std::min(total_height, max_height);
-
-  auto column_rc = rc.CutLeftSafe(width);
 
   /* Proportional tops/bottoms keep every rect non-inverted even when
      used_height < n (integer division would otherwise overrun). */
@@ -138,7 +145,6 @@ ButtonPanel::HorizontalRange(PixelRect rc,
   const unsigned n = end - start;
   assert(n > 0);
 
-  const unsigned total_width = rc.GetWidth();
   const unsigned total_height = rc.GetHeight();
   const unsigned max_row_height = Layout::GetMaximumControlHeight();
   const unsigned row_height = std::max(1u,
@@ -147,6 +153,13 @@ ButtonPanel::HorizontalRange(PixelRect rc,
       : std::max(Layout::GetMinimumControlHeight(),
                  total_height / 2));
   auto row_rc = rc.CutBottomSafe(row_height);
+
+  /* the buttons keep the gap to the dialog edges that they have
+     between each other; the row is measured, not the shrinking
+     remainder, so every row gets the same inset */
+  row_rc.Grow(-(int)ButtonFrameRenderer::GetEdgeMargin(row_rc), 0);
+
+  const unsigned total_width = row_rc.GetWidth();
 
   /* Proportional left/right absorbs the total_width % n remainder into
      later buttons (no empty strip) and avoids inverted rects. */
@@ -207,7 +220,13 @@ ButtonPanel::BottomLayout(PixelRect rc) noexcept
     return rc;
 
   const unsigned n_buttons = buttons.size();
-  const unsigned total_width = rc.GetWidth();
+  const unsigned margin = ButtonFrameRenderer::GetEdgeMargin(rc);
+
+  /* leave the same gap below the bottom row as between two rows */
+  rc.CutBottomSafe(margin);
+
+  /* what a row has left once both dialog edges have got their gap */
+  const unsigned total_width = rc.GetWidth() - 2 * margin;
 
   /* naive button distribution algorithm: distribute as many buttons
      as possible into each row; weakness: the last row may have only
@@ -267,6 +286,9 @@ ButtonPanel::BottomLayout(PixelRect rc) noexcept
 
     rc = HorizontalRange(rc, row.start, row.end);
   }
+
+  /* and the same gap above the top row, towards the widget */
+  rc.CutBottomSafe(margin);
 
   return rc;
 }

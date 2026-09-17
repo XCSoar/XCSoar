@@ -81,6 +81,12 @@ class MainWindow : public UI::SingleWindow {
   Widget *bottom_widget = nullptr;
 
   /**
+   * Is #bottom_widget currently shown?  #Widget::Show() and
+   * #Widget::Hide() may only be called on a transition.
+   */
+  bool bottom_widget_visible = false;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
@@ -138,6 +144,12 @@ private:
 
   PixelRect map_rect;
   bool FullScreen = false;
+
+  /**
+   * Are the info boxes currently hidden because the menu is open?
+   * Unlike full screen mode the map keeps its size.
+   */
+  bool menu_hides_info_boxes = false;
 
   /**
    * Nesting count for #BeginCoalesceMapLayout() /
@@ -232,6 +244,18 @@ protected:
    * new bottom Widget.
    */
   void KillBottomWidget() noexcept;
+
+  /**
+   * The area the "bottom" #Widget occupies below the map.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomAreaRect() const noexcept;
+
+  /**
+   * Show or hide the "bottom" #Widget, depending on whether anything
+   * currently covers the area below the map.
+   */
+  void UpdateBottomWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -496,6 +520,12 @@ public:
 
   void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
                 bool full=true) noexcept;
+
+  /**
+   * Hide the info boxes while the menu is open, so the menu captions
+   * do not have to compete with them.
+   */
+  void UpdateMenuInfoBoxes() noexcept;
 
   [[gnu::pure]]
   bool IsMenuButtonEnabled(unsigned idx) noexcept;

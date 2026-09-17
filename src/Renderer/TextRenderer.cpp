@@ -5,7 +5,6 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/TextFormat.hpp"
-#include "Asset.hpp"
 
 unsigned
 TextRenderer::GetHeight(Canvas &canvas, PixelRect rc,
@@ -38,10 +37,6 @@ TextRenderer::Draw(Canvas &canvas, PixelRect rc,
 
   if (vcenter)
     format |= DT_VCENTER;
-
-  if (control && IsDithered())
-    /* button texts are underlined on the Kobo */
-    format |= DT_UNDERLINE;
 
   canvas.DrawFormattedText(rc, text, format);
 }

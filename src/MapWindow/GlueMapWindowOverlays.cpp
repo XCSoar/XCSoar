@@ -133,7 +133,12 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const noexcept
 
   unsigned padding = Layout::FastScale(4);
   unsigned height = font.GetHeight();
-  PixelPoint p(render_projection.GetScreenSize().width - padding, padding);
+
+  /* in OVERLAY InfoBox mode, anchor to the non-InfoBox area */
+  PixelRect hud_rc(PixelPoint(0, 0), render_projection.GetScreenSize());
+  if (content_rect.GetWidth() > 0)
+    hud_rc = content_rect;
+  PixelPoint p(hud_rc.right - int(padding), hud_rc.top + int(padding));
 
   if (compass_visible)
     /* don't obscure the north arrow */
@@ -383,6 +388,24 @@ GlueMapWindow::SetTopRightMargin(unsigned margin) noexcept
 }
 
 void
+GlueMapWindow::SetMenuVisible(bool visible) noexcept
+{
+  if (visible == menu_visible)
+    /* no change, don't redraw */
+    return;
+
+  menu_visible = visible;
+  QuickRedraw();
+}
+
+void
+GlueMapWindow::SetContentRect(PixelRect rc) noexcept
+{
+  content_rect = rc;
+  QuickRedraw();
+}
+
+void
 GlueMapWindow::SetBottomMarginFactor(unsigned margin_factor) noexcept
 {
   if (follow_mode != FOLLOW_PAN || Layout::landscape) {
@@ -479,7 +502,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
     mode.shape = LabelShape::OUTLINED;
 
-    TextInBox(canvas, buffer, {0, scale_pos.bottom - height}, mode, rc, nullptr);
+    TextInBox(canvas, buffer, {scale_pos.left, scale_pos.bottom - height},
+              mode, rc, nullptr);
   }
 }
 
@@ -552,8 +576,8 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas,
   PixelRect tb_rect;
   tb_rect.left = rc.left;
   tb_rect.right = rc.left+Layout::Scale(25);
-  tb_rect.top = Layout::Scale(2);
-  tb_rect.bottom = (rc.bottom-rc.top)/5 - Layout::Scale(2);
+  tb_rect.top = rc.top + Layout::Scale(2);
+  tb_rect.bottom = rc.top + (rc.bottom-rc.top)/5 - Layout::Scale(2);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != nullptr) {
