@@ -6,7 +6,7 @@
 #include "Origin.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/Flat/FlatGeoPoint.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "Runway.hpp"
 #include "system/RunFile.hpp"
 

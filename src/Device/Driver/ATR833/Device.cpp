@@ -4,7 +4,7 @@
 #include "Device.hpp"
 #include "Buffer.hpp"
 #include "Protocol.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "NMEA/Info.hpp"
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
