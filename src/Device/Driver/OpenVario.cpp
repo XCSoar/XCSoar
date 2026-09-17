@@ -453,6 +453,10 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
         info.voltage_available.Update(info.clock);
         break;
       }
+      case 'x': {
+        // ignore this value
+        break;
+      }
     }
   }
 
