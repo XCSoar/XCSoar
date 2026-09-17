@@ -35,6 +35,14 @@ extern GLProgram *alpha_shader;
 extern GLint alpha_projection, alpha_texture, alpha_translate;
 
 /**
+ * A shader that copies the texture's alpha channel, but replaces
+ * the *constant* color (uniform alpha_fix_color_color).
+ */
+extern GLProgram *alpha_fix_color_shader;
+extern GLint alpha_fix_color_projection, alpha_fix_color_texture, 
+  alpha_fix_color_translate, alpha_fix_color_color;
+
+/**
  * A shader that multiplies the texture with #Attribute::COLOR.
  */
 extern GLProgram *combine_texture_shader;
