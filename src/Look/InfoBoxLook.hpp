@@ -19,6 +19,18 @@ struct InfoBoxLook {
   Color background_color, focused_background_color, pressed_background_color;
 
   /**
+   * The simplified InfoBox cards shown while the InfoBoxes are being
+   * arranged (see #InfoBoxArrange).  The backdrop is the dialog
+   * background.  #preview_active_color fills the card which follows
+   * the finger, and #preview_focus_width is the filled selection
+   * halo outside the hairline.  #preview_border_color is the
+   * InfoBox separator gray in inverse, black in light.
+   */
+  Color preview_active_color, preview_border_color;
+  unsigned preview_padding, preview_radius, preview_border_width,
+    preview_focus_width;
+
+  /**
    * Used only by #InfoBoxSettings::BorderStyle::SHADED.
    */
   Color caption_background_color;
@@ -39,12 +51,19 @@ struct InfoBoxLook {
   Font title_font;
   Font title_font_bold;
 
+  /** the small font for the slot number in the arrange preview */
+  Font preview_number_font;
+
   Color colors[6];
 
   void Initialise(bool inverse, bool use_colors,
                   unsigned width, unsigned scale_title_font);
 
   void ReinitialiseLayout(unsigned width, unsigned scale_title_font);
+
+  /** Colour of the long-press fill on an InfoBox or arrange card. */
+  [[gnu::pure]]
+  Color GetPreviewGlowColor() const noexcept;
 
   Color GetColor(int i, Color default_color) const {
     if (i < 0)
