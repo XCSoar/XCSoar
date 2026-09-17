@@ -16,12 +16,12 @@ namespace UI {
 /**
  * The signals which make XCSoar shut down cleanly.
  */
-static constexpr int quit_signals[] = { SIGINT, SIGTERM, SIGQUIT };
+static constexpr int QUIT_SIGNALS[] = { SIGINT, SIGTERM, SIGQUIT };
 
 void
 BlockSignals() noexcept
 {
-  SignalMonitorBlock(quit_signals);
+  SignalMonitorBlock(QUIT_SIGNALS);
 }
 
 EventQueue::EventQueue([[maybe_unused]] Display &_display)
@@ -31,7 +31,7 @@ EventQueue::EventQueue([[maybe_unused]] Display &_display)
 {
   SignalMonitorInit(event_loop);
 
-  for (const int signo : quit_signals)
+  for (const int signo : QUIT_SIGNALS)
     SignalMonitorRegister(signo, BIND_THIS_METHOD(OnQuitSignal));
 }
 
