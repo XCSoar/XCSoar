@@ -45,12 +45,12 @@ struct ArchiveItem {
 [[nodiscard]] std::string
 MakeArchiveName(Path full, Path root)
 {
-  Path rel = full.RelativeTo(root);
-  if (rel != nullptr) {
-    std::string name = rel.c_str();
-    std::replace(name.begin(), name.end(), '\\', '/');
+  if (full == nullptr)
+    return {};
+
+  auto name = MakeArchiveNameIfUnderRoot(full, root);
+  if (!name.empty())
     return name;
-  }
 
   /* fallback: return bare filename */
   Path base = full.GetBase();
