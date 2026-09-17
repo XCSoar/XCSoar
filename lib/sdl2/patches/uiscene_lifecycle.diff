@@ -1,0 +1,90 @@
+--- SDL2-2.30.0.orig/src/video/uikit/SDL_uikitappdelegate.h
++++ SDL2-2.30.0/src/video/uikit/SDL_uikitappdelegate.h
+@@ -29,7 +29,17 @@
+ 
+ @end
+ 
++/* Applications built with the iOS 27 SDK or later only launch with the
++ * scene-based life cycle, which exists since iOS 13. */
++#if !TARGET_OS_TV && defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
++#define SDL_UIKIT_SCENE_LIFECYCLE 1
++#endif
++
++#ifdef SDL_UIKIT_SCENE_LIFECYCLE
++@interface SDLUIKitDelegate : NSObject<UIApplicationDelegate, UIWindowSceneDelegate>
++#else
+ @interface SDLUIKitDelegate : NSObject<UIApplicationDelegate>
++#endif
+ 
+ + (id)sharedAppDelegate;
+ + (NSString *)getAppDelegateClassName;
+--- SDL2-2.30.0.orig/src/video/uikit/SDL_uikitappdelegate.m
++++ SDL2-2.30.0/src/video/uikit/SDL_uikitappdelegate.m
+@@ -464,11 +464,45 @@
+                         SDL_IdleTimerDisabledChanged, NULL);
+ 
+     SDL_SetMainReady();
++
++#ifdef SDL_UIKIT_SCENE_LIFECYCLE
++    if (@available(iOS 13.0, *)) {
++        /* postFinishLaunch is scheduled by scene:willConnectToSession: */
++        return YES;
++    }
++#endif
++
+     [self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
+ 
+     return YES;
+ }
+ 
++#ifdef SDL_UIKIT_SCENE_LIFECYCLE
++
++/* Implementing this method makes UIKit use the scene-based life cycle. */
++- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0))
++{
++    UISceneConfiguration *config = [[UISceneConfiguration alloc] initWithName:@"SDLSceneConfiguration" sessionRole:connectingSceneSession.role];
++    config.delegateClass = [self class];
++    return config;
++}
++
++- (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions API_AVAILABLE(ios(13.0))
++{
++    /* UIKit may use another instance of this class as the scene delegate */
++    SDLUIKitDelegate *delegate = [SDLUIKitDelegate sharedAppDelegate];
++
++    if ([scene isKindOfClass:[UIWindowScene class]]) {
++        /* the launch screen was created before the scene existed */
++        delegate->launchWindow.windowScene = (UIWindowScene *)scene;
++    }
++
++    /* run SDL_main now that SDL_CreateWindow() can find the scene */
++    [delegate performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
++}
++
++#endif /* SDL_UIKIT_SCENE_LIFECYCLE */
++
+ - (UIWindow *)window
+ {
+     SDL_VideoDevice *_this = SDL_GetVideoDevice();
+--- SDL2-2.30.0.orig/src/video/uikit/SDL_uikitwindow.m
++++ SDL2-2.30.0/src/video/uikit/SDL_uikitwindow.m
+@@ -206,6 +206,19 @@
+         /* !!! FIXME: can we have a smaller view? */
+         UIWindow *uiwindow = [[SDL_uikitwindow alloc] initWithFrame:data.uiscreen.bounds];
+ 
++#ifdef SDL_UIKIT_SCENE_LIFECYCLE
++        if (@available(iOS 13.0, *)) {
++            /* with the scene-based life cycle, only windows which belong
++             * to a scene are shown */
++            for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
++                if ([scene isKindOfClass:[UIWindowScene class]]) {
++                    uiwindow.windowScene = (UIWindowScene *)scene;
++                    break;
++                }
++            }
++        }
++#endif
++
+         /* put the window on an external display if appropriate. */
+         if (data.uiscreen != [UIScreen mainScreen]) {
+             [uiwindow setScreen:data.uiscreen];
