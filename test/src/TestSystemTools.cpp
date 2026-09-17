@@ -6,10 +6,19 @@
 #include "io/MemoryReader.hxx"
 #include "TestUtil.hpp"
 
+#include <algorithm>
 #include <cstring>
+#include <cstdio>
 #include <span>
 #include <stdexcept>
 #include <string>
+
+#ifdef HAVE_POSIX
+#include <fcntl.h>
+#include <limits.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
 
 static bool
 Rejects(char *input)
@@ -24,10 +33,286 @@ Rejects(char *input)
   }
 }
 
+#ifdef HAVE_POSIX
+
+static bool
+HasTool(const std::vector<SystemTools::InstalledTool> &tools,
+        std::string_view id, SystemTools::Origin origin)
+{
+  return std::any_of(tools.begin(), tools.end(),
+                     [id, origin](const auto &tool) {
+                       return tool.id == id && tool.origin == origin;
+                     });
+}
+
+static bool
+WriteTestFile(const std::string &path, const char *contents, mode_t mode)
+{
+  FILE *file = std::fopen(path.c_str(), "w");
+  if (file == nullptr)
+    return false;
+
+  bool success = std::fputs(contents, file) >= 0;
+  success = std::fclose(file) == 0 && success;
+  return chmod(path.c_str(), mode) == 0 && success;
+}
+
+static void
+TestUserCatalogue()
+{
+  char directory_template[] = "/tmp/xcsoar-tools-XXXXXX";
+  char resolved_directory[PATH_MAX];
+  const char *const temporary = mkdtemp(directory_template);
+  const char *const directory = temporary != nullptr
+    ? realpath(temporary, resolved_directory) : nullptr;
+  ok1(directory != nullptr);
+  if (directory == nullptr) {
+    skip(48 + (geteuid() == 0 ? 19 : 0), 0, "mkdtemp failed");
+    return;
+  }
+
+  // BSD systems inherit the parent's group, not the process's group.
+  ok1(chown(directory, static_cast<uid_t>(-1), getegid()) == 0);
+
+  const std::string id{"xcsoar-test-user-command"};
+  const std::string executable = std::string{directory} + "/" + id;
+  const std::string descriptor = executable + ".tool";
+  static constexpr const char descriptor_contents[] =
+    "name=Test user command\n"
+    "description=Test the user catalogue\n"
+    "instructions=Run the test command.\n"
+    "mode=job\n";
+
+  ok1(WriteTestFile(executable, "#!/bin/sh\nexit 0\n", 0700));
+  ok1(WriteTestFile(descriptor, descriptor_contents, 0600));
+
+  const uid_t owner = geteuid();
+  if (owner == 0) {
+    const auto root_owned =
+      SystemTools::LoadInstalled({}, Path{directory});
+    ok1(HasTool(root_owned, id, SystemTools::Origin::USER));
+
+    ok1(chown(directory, 65534, 65534) == 0);
+    ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+                 SystemTools::Origin::USER));
+    ok1(chown(directory, owner, getegid()) == 0);
+
+    ok1(chown(executable.c_str(), 65534, 65534) == 0);
+    ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+                 SystemTools::Origin::USER));
+    ok1(chown(executable.c_str(), owner, getegid()) == 0);
+  }
+
+  auto tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(HasTool(tools, id, SystemTools::Origin::USER));
+
+  const int cwd_fd = open(".", O_RDONLY);
+  bool relative_loaded = false;
+  if (cwd_fd >= 0) {
+    if (chdir("/tmp") == 0) {
+      relative_loaded = HasTool(
+        SystemTools::LoadInstalled({},
+                                   Path{std::strrchr(directory, '/') + 1}),
+        id,
+        SystemTools::Origin::USER);
+      relative_loaded = fchdir(cwd_fd) == 0 && relative_loaded;
+    }
+    close(cwd_fd);
+  }
+  ok1(relative_loaded);
+
+  const std::string nested = std::string{directory} + "/tools";
+  ok1(mkdir(nested.c_str(), 0700) == 0 &&
+      rename(executable.c_str(), (nested + "/" + id).c_str()) == 0 &&
+      rename(descriptor.c_str(), (nested + "/" + id + ".tool").c_str()) == 0);
+  chmod(directory, 0777);
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{nested.c_str()}), id,
+               SystemTools::Origin::USER));
+  chmod(directory, 0775);
+  ok1(HasTool(SystemTools::LoadInstalled({}, Path{nested.c_str()}), id,
+               SystemTools::Origin::USER));
+  if (owner == 0) {
+    const gid_t foreign_group = getegid() == 65534 ? 65533 : 65534;
+    ok1(chown(directory, owner, foreign_group) == 0);
+    ok1(!HasTool(SystemTools::LoadInstalled({}, Path{nested.c_str()}), id,
+                 SystemTools::Origin::USER));
+    ok1(chown(directory, owner, getegid()) == 0);
+  }
+  chmod(directory, 01777);
+  ok1(HasTool(SystemTools::LoadInstalled({}, Path{nested.c_str()}), id,
+              SystemTools::Origin::USER));
+  chmod(directory, 0700);
+  ok1(HasTool(SystemTools::LoadInstalled({}, Path{nested.c_str()}), id,
+              SystemTools::Origin::USER));
+  const std::string link = std::string{directory} + "/link";
+  ok1(symlink(".", link.c_str()) == 0);
+  const std::string linked = link + "/tools";
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{linked.c_str()}), id,
+               SystemTools::Origin::USER));
+  ok1(unlink(link.c_str()) == 0 &&
+      rename((nested + "/" + id).c_str(), executable.c_str()) == 0 &&
+      rename((nested + "/" + id + ".tool").c_str(), descriptor.c_str()) == 0 &&
+      rmdir(nested.c_str()) == 0);
+
+  chmod(directory, 0775);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(HasTool(tools, id, SystemTools::Origin::USER));
+
+  ok1(chmod(directory, 0775) == 0 &&
+      chmod(executable.c_str(), 0775) == 0 &&
+      chmod(descriptor.c_str(), 0664) == 0);
+  ok1(HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+              SystemTools::Origin::USER));
+  if (owner == 0) {
+    const gid_t foreign_group = getegid() == 65534 ? 65533 : 65534;
+    for (const auto &path : {std::string{directory}, executable, descriptor}) {
+      ok1(chown(path.c_str(), owner, foreign_group) == 0);
+      ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+                   SystemTools::Origin::USER));
+      ok1(chown(path.c_str(), owner, getegid()) == 0);
+    }
+  }
+  chmod(descriptor.c_str(), 0600);
+
+  chmod(directory, 0777);
+  chmod(executable.c_str(), 0755);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(!HasTool(tools, id, SystemTools::Origin::USER));
+
+  chmod(directory, 0755);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(HasTool(tools, id, SystemTools::Origin::USER));
+
+  chmod(executable.c_str(), 0777);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(!HasTool(tools, id, SystemTools::Origin::USER));
+
+  for (const mode_t mode : {04700, 02700}) {
+    ok1(chmod(executable.c_str(), mode) == 0);
+    ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+                 SystemTools::Origin::USER));
+  }
+
+  chmod(executable.c_str(), 0001);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(!HasTool(tools, id, SystemTools::Origin::USER));
+
+  chmod(executable.c_str(), 0700);
+  chmod(descriptor.c_str(), 0666);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(!HasTool(tools, id, SystemTools::Origin::USER));
+
+  chmod(descriptor.c_str(), 0600);
+  chmod(directory, 0666);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(!HasTool(tools, id, SystemTools::Origin::USER));
+
+  chmod(directory, 0755);
+  // A long line must not hide a duplicate field after a valid prefix.
+  const std::string oversized = std::string{descriptor_contents} +
+    "future-field=" + std::string(600000, 'x') + "\nmode=exclusive\n";
+  ok1(WriteTestFile(descriptor, oversized.c_str(), 0600));
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+               SystemTools::Origin::USER));
+  ok1(WriteTestFile(descriptor, descriptor_contents, 0600));
+
+  const std::string shell_script = executable + ".sh";
+  ok1(rename(executable.c_str(), shell_script.c_str()) == 0);
+  tools = SystemTools::LoadInstalled({}, Path{directory});
+  ok1(std::any_of(tools.begin(), tools.end(), [&](const auto &tool) {
+    return tool.id == id && tool.origin == SystemTools::Origin::USER &&
+      tool.executable == Path{shell_script.c_str()};
+  }));
+
+  chmod(shell_script.c_str(), 0777);
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+               SystemTools::Origin::USER));
+  chmod(shell_script.c_str(), 0700);
+
+  ok1(WriteTestFile(executable, "#!/bin/sh\nexit 0\n", 0700));
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+               SystemTools::Origin::USER));
+  // An unsafe exact-name entry must not enable the alternate script.
+  chmod(executable.c_str(), 0000);
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+               SystemTools::Origin::USER));
+  unlink(executable.c_str());
+  ok1(symlink(shell_script.c_str(), executable.c_str()) == 0);
+  ok1(!HasTool(SystemTools::LoadInstalled({}, Path{directory}), id,
+               SystemTools::Origin::USER));
+  unlink(executable.c_str());
+  ok1(rename(shell_script.c_str(), executable.c_str()) == 0);
+
+  const auto system_tools = SystemTools::LoadInstalled();
+  if (!system_tools.empty()) {
+    const auto duplicate = std::string{directory} + "/" +
+      system_tools.front().id;
+    ok1(WriteTestFile(duplicate, "#!/bin/sh\nexit 0\n", 0700) &&
+        WriteTestFile(duplicate + ".tool", descriptor_contents, 0600));
+    const auto merged = SystemTools::LoadInstalled({}, Path{directory});
+    ok1(!HasTool(merged, system_tools.front().id, SystemTools::Origin::SYSTEM));
+    ok1(HasTool(merged, system_tools.front().id, SystemTools::Origin::USER));
+    ok1(HasTool(merged, id, SystemTools::Origin::USER));
+    chmod(duplicate.c_str(), 0777);
+    const auto unsafe = SystemTools::LoadInstalled({}, Path{directory});
+    ok1(HasTool(unsafe, system_tools.front().id, SystemTools::Origin::SYSTEM));
+    ok1(!HasTool(unsafe, system_tools.front().id, SystemTools::Origin::USER));
+    unlink(duplicate.c_str());
+    unlink((duplicate + ".tool").c_str());
+  } else
+    skip(6, 1, "No packaged tool installed");
+
+  for (unsigned i = 0; i < 64; ++i) {
+    const std::string extra = std::string{directory} + "/extra-" +
+      std::to_string(i);
+    if (!WriteTestFile(extra, "#!/bin/sh\nexit 0\n", 0700) ||
+        !WriteTestFile(extra + ".tool", descriptor_contents, 0600))
+      std::abort();
+  }
+
+  // Reject an overflowing personal catalogue without losing system tools.
+  ok1(SystemTools::LoadInstalled({}, Path{directory}).size() ==
+      system_tools.size());
+  unlink((std::string{directory} + "/extra-63.tool").c_str());
+  ok1(SystemTools::LoadInstalled({}, Path{directory}).size() ==
+      (system_tools.empty() ? 64 : system_tools.size()));
+  if (system_tools.size() == 1) {
+    const std::string extra = std::string{directory} + "/extra-62";
+    const std::string override = std::string{directory} + "/" +
+      system_tools.front().id;
+    ok1(rename(extra.c_str(), override.c_str()) == 0 &&
+        rename((extra + ".tool").c_str(), (override + ".tool").c_str()) == 0);
+    const auto full = SystemTools::LoadInstalled({}, Path{directory});
+    ok1(full.size() == 64 &&
+        HasTool(full, system_tools.front().id, SystemTools::Origin::USER) &&
+        !HasTool(full, system_tools.front().id, SystemTools::Origin::SYSTEM));
+    unlink(override.c_str());
+    unlink((override + ".tool").c_str());
+  } else
+    skip(2, 1, "Requires one packaged tool");
+
+  for (unsigned i = 0; i < 64; ++i) {
+    const std::string extra = std::string{directory} + "/extra-" +
+      std::to_string(i);
+    unlink(extra.c_str());
+    unlink((extra + ".tool").c_str());
+  }
+
+  unlink(descriptor.c_str());
+  unlink(executable.c_str());
+  rmdir(directory);
+}
+
+#endif
+
 int
 main()
 {
+#ifdef HAVE_POSIX
+  plan_tests(84 + (geteuid() == 0 ? 19 : 0));
+#else
   plan_tests(35);
+#endif
 
   ok1(SystemTools::IsValidId("sensor-calibration"));
   ok1(SystemTools::IsValidId("vendor.tool_2"));
@@ -220,6 +505,10 @@ main()
   BufferedLineReader omitted_input_reader{omitted_input_memory};
   ok1(SystemTools::ParseDescriptor(omitted_input_reader).mode ==
       SystemTools::Mode::JOB);
+
+#ifdef HAVE_POSIX
+  TestUserCatalogue();
+#endif
 
   return exit_status();
 }

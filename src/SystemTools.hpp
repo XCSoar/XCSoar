@@ -5,6 +5,7 @@
 
 #include "system/Path.hpp"
 
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -25,6 +26,11 @@ enum class Confirmation {
   COUNT,
 };
 
+enum class Origin {
+  SYSTEM,
+  USER,
+};
+
 struct Descriptor {
   std::string name;
   std::string description;
@@ -37,6 +43,7 @@ struct InstalledTool {
   std::string id;
   Descriptor descriptor;
   AllocatedPath executable;
+  Origin origin;
 };
 
 /**
@@ -60,12 +67,14 @@ Descriptor
 ParseDescriptor(NLineReader &reader, std::string_view language = {});
 
 /**
- * Load usable tools from the configured installation directories.
+ * Load usable tools from the configured installation directories and the
+ * optional user directory.
  *
  * Unsafe or malformed entries are ignored and logged.  This function never
  * throws because it is also used to decide whether the UI page is available.
  */
 std::vector<InstalledTool>
-LoadInstalled(std::string_view language = {}) noexcept;
+LoadInstalled(std::string_view language = {},
+              Path user_directory = Path{nullptr}) noexcept;
 
 } // namespace SystemTools
