@@ -89,6 +89,7 @@ TEST_NAMES = \
 	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
+	TestBackupPaths \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
@@ -882,6 +883,14 @@ TEST_PATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestPath.cpp
 TEST_PATH_DEPENDS = UTIL
 $(eval $(call link-program,TestPath,TEST_PATH))
+
+TEST_BACKUP_PATHS_SOURCES = \
+	$(SRC)/io/BackupPaths.cpp \
+	$(SRC)/system/Path.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBackupPaths.cpp
+TEST_BACKUP_PATHS_DEPENDS = OS UTIL
+$(eval $(call link-program,TestBackupPaths,TEST_BACKUP_PATHS))
 
 TEST_REPOSITORY_SOURCES = \
 	$(SRC)/Repository/Parser.cpp \

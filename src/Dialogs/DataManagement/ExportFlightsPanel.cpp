@@ -3,7 +3,6 @@
 
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "StorageLocationPickerDialog.hpp"
-#include "Dialogs/DataManagement/FileTransferUtil.hpp"
 #include "Formatter/FileMetadataFormatter.hpp"
 #include "Storage/StorageUtil.hpp"
 #include "Widget/FileMultiSelectWidget.hpp"
@@ -370,8 +369,7 @@ ShowExportFlightsDialog()
   auto df = std::make_unique<MultiFileDataField>();
   auto logs_path = MakeLocalPath("logs");
   if (logs_path != nullptr && Directory::Exists(logs_path)) {
-    ScanFilesIntoDataField(logs_path, *df,
-                           {FileType::IGC, FileType::NMEA}, true);
+    df->Scan(logs_path, {FileType::IGC, FileType::NMEA}, true);
   }
 
   auto container = std::make_unique<FlightContainer>(*df);

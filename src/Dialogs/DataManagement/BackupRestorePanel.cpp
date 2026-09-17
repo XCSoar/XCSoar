@@ -32,7 +32,6 @@
 #include "Logger/NMEALogger.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
-#include "util/StringCompare.hxx"
 
 #include <algorithm>
 #include <memory>
@@ -40,48 +39,6 @@
 #include <string_view>
 #include <thread>
 #include <vector>
-
-// Patterns of files/directories to exclude from backup/restore operations
-static constexpr std::string_view kExcludedPaths[] = {
-  "*.log",
-  "*.tar",
-  "cache/",
-};
-
-static bool
-IsExcludedPath(std::string_view path) noexcept
-{
-  for (const auto pattern : kExcludedPaths) {
-    if (pattern.ends_with('/')) {
-      /* Directory: matches the name itself and all children. */
-      const auto dir = pattern.substr(0, pattern.size() - 1);
-      if (path == dir || path.starts_with(pattern))
-        return true;
-    } else if (WildcardMatchIgnoreCase(pattern.data(), path.data())) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * The archive name (relative to the data directory, '/' separators)
- * of a file, or an empty string if it is not below the directory.
- */
-static std::string
-MakeArchiveName(Path path, Path root)
-{
-  if (path == nullptr)
-    return {};
-
-  const Path relative = path.RelativeTo(root);
-  if (relative == nullptr)
-    return {};
-
-  std::string name = relative.c_str();
-  std::replace(name.begin(), name.end(), '\\', '/');
-  return name;
-}
 
 /**
  * The files the running program is writing right now: the NMEA log
@@ -97,7 +54,7 @@ CollectFilesInUse(Path root)
     return names;
 
   const auto add = [&names, root](Path path){
-    auto name = MakeArchiveName(path, root);
+    auto name = MakeArchiveNameIfUnderRoot(path, root);
     if (!name.empty())
       names.emplace_back(std::move(name));
   };
@@ -148,7 +105,7 @@ struct BackupJob final : public Job {
     try {
       files_in_use = CollectFilesInUse(primary);
       const ArchiveExcludePathFn exclude = [this](std::string_view name){
-        return IsExcludedPath(name) ||
+        return IsBackupExcludedPath(name) ||
           std::find(files_in_use.begin(), files_in_use.end(),
                     name) != files_in_use.end();
       };
@@ -204,7 +161,7 @@ struct RestoreJob final : public Job {
     try {
       auto reader = dev->OpenRead(tar_name);
 
-      if (!RestoreBackup(*reader, primary, IsExcludedPath, env,
+      if (!RestoreBackup(*reader, primary, IsBackupExcludedPath, env,
                          restored_files, failed_files, error_message))
         aborted = true;
     } catch (const std::exception &e) {
