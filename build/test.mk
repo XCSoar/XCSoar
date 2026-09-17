@@ -89,7 +89,7 @@ TEST_NAMES = \
 	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
-	TestBackupPaths \
+	TestWaypointReachability TestBackupPaths \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
@@ -1037,6 +1037,11 @@ TEST_VALIDITY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestValidity.cpp
 $(eval $(call link-program,TestValidity,TEST_VALIDITY))
+
+TEST_WAYPOINT_REACHABILITY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWaypointReachability.cpp
+$(eval $(call link-program,TestWaypointReachability,TEST_WAYPOINT_REACHABILITY))
 
 TEST_VARIO_SYNTHESISER_SOURCES = \
 	$(SRC)/Audio/ToneSynthesiser.cpp \
