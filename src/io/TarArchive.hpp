@@ -29,7 +29,12 @@ public:
    * Advance to the next entry.
    * @return true if an entry was found; false at end-of-archive.
    */
-  bool Next(std::string &name, uint64_t &size);
+  bool Next(std::string &name, uint64_t &size, unsigned &mode);
+
+  bool Next(std::string &name, uint64_t &size) {
+    unsigned mode;
+    return Next(name, size, mode);
+  }
 
   /** Extract the current entry to the given output stream. */
   void ReadData(OutputStream &out,
@@ -53,6 +58,10 @@ public:
 
   /** Add a file from the given reader with the specified size. */
   void Add(std::string_view name, Reader &in, uint64_t size,
+           const std::function<void(uint64_t)> &on_bytes = {});
+
+  /** Add a file and store its ordinary Unix permission bits. */
+  void Add(std::string_view name, Reader &in, uint64_t size, unsigned mode,
            const std::function<void(uint64_t)> &on_bytes = {});
 
   /** Write end-of-archive marker. Must be called exactly once. */
