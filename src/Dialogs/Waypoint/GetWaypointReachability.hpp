@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Renderer/WaypointReachability.hpp"
+#include "Engine/Route/WaypointReachability.hpp"
 
 struct Waypoint;
 
