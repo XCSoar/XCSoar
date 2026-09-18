@@ -1213,6 +1213,18 @@ msgstr ""
 msgid "Quit program?"
 msgstr ""
 
+msgid "Restart"
+msgstr ""
+
+msgid "Power off"
+msgstr ""
+
+msgid "Restart the device?"
+msgstr ""
+
+msgid "Power off the device?"
+msgstr ""
+
 #, no-c-format
 msgid "European"
 msgstr ""

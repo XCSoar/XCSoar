@@ -43,6 +43,7 @@ Version 7.46 - not yet released
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
 * Linux
+  - add restart and power-off controls to the Quit dialog
   - use OpenGL ES instead of desktop OpenGL #2140
   - termination: fix SIGTERM and Ctrl-C killing the program instead of
     shutting it down, which lost the settings and the flight log that
@@ -279,6 +280,7 @@ Version 7.46 - not yet released
   - describe the flight count and total time as hours:minutes, for
     flights with a detected launch and landing, under the flight
     export, WeGlide Upload and Replay lists
+  - document Linux restart and power-off controls
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
     the comment shows no wind when the box is blank because wind is
