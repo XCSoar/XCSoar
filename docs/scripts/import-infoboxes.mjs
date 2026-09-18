@@ -185,6 +185,7 @@ function splitFields(entry) {
     let inString = false;
     let escape = false;
     let templateDepth = 0;
+    let parenDepth = 0;
 
     for (let i = 0; i < inner.length; i++) {
         const c = inner[i];
@@ -210,9 +211,11 @@ function splitFields(entry) {
         if (!inString) {
             if (c === '<') templateDepth++;
             if (c === '>') templateDepth--;
+            if (c === '(') parenDepth++;
+            if (c === ')') parenDepth--;
         }
 
-        if (c === ',' && !inString && templateDepth === 0) {
+        if (c === ',' && !inString && templateDepth === 0 && parenDepth === 0) {
             fields.push(current.trim());
             current = '';
         } else {
@@ -248,10 +251,12 @@ function extractSymbol(handlerField) {
 function clean(field) {
     if (!field) return null;
 
-    // Unwrap N_(...) if present
+    // Unwrap N_(...) or NC_(context, ...) if present
     let inner = field;
     const nMatch = field.match(/^N_\(([\s\S]*)\)$/);
     if (nMatch) inner = nMatch[1];
+    const ncMatch = field.match(/^NC_\(\s*"(?:[^"\\]|\\.)*"\s*,([\s\S]*)\)$/);
+    if (ncMatch) inner = ncMatch[1];
 
     if (inner.trim() === 'NULL') return null;
 
