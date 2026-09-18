@@ -75,6 +75,8 @@ Version 7.45.2 - 2026-09-12
     the comment shows no wind when the box is blank because wind is
     missing
 * development
+  - build system: embed VERSIONINFO in XCSoar.exe and the NSIS
+    installer from VERSION.txt
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: use XTIFFOpenExt only with libgeotiff 1.7.2, so
     SkySight builds on Ubuntu 24.04

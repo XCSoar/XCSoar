@@ -1,6 +1,78 @@
-// Minimal resource file for OpenGL/SDL builds
-// Contains only the application icon for Windows Explorer/taskbar display
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+// Minimal resource file for OpenGL/SDL builds: the application icon
+// (Explorer / taskbar) and VERSIONINFO (file properties).  Version
+// tokens come from VERSION.txt via WINDRES_VERSIONFLAGS (windres -D
+// does not keep C-string quotes, so stringify them here).
 
 #define IDI_XCSOAR 101
 
 IDI_XCSOAR ICON DISCARDABLE "bitmaps/xcsoarswift.ico"
+
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
+#ifndef XCSOAR_VERSION_MAJOR
+#define XCSOAR_VERSION_MAJOR 0
+#endif
+#ifndef XCSOAR_VERSION_MINOR
+#define XCSOAR_VERSION_MINOR 0
+#endif
+#ifndef XCSOAR_VERSION_PATCH
+#define XCSOAR_VERSION_PATCH 0
+#endif
+#ifndef XCSOAR_VERSION_BUILD
+#define XCSOAR_VERSION_BUILD 0
+#endif
+#ifndef XCSOAR_VERSION
+#define XCSOAR_VERSION 0.0
+#endif
+#ifndef XCSOAR_FILE_VERSION
+#define XCSOAR_FILE_VERSION XCSOAR_VERSION
+#endif
+#ifndef PRODUCT_NAME
+#define PRODUCT_NAME XCSoar
+#endif
+#ifndef XCSOAR_ORIGINAL_FILENAME
+#define XCSOAR_ORIGINAL_FILENAME XCSoar.exe
+#endif
+
+#ifdef GIT_COMMIT_ID
+#define XCSOAR_FILEFLAGS 0x2
+#else
+#define XCSOAR_FILEFLAGS 0
+#endif
+
+#define XCSOAR_FILEVERSION \
+  XCSOAR_VERSION_MAJOR,XCSOAR_VERSION_MINOR, \
+  XCSOAR_VERSION_PATCH,XCSOAR_VERSION_BUILD
+
+1 VERSIONINFO
+FILEVERSION XCSOAR_FILEVERSION
+PRODUCTVERSION XCSOAR_FILEVERSION
+FILEFLAGSMASK 0x3f
+FILEFLAGS XCSOAR_FILEFLAGS
+FILEOS 0x40004
+FILETYPE 0x1
+FILESUBTYPE 0x0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904b0"
+    BEGIN
+      VALUE "CompanyName", "The XCSoar Project"
+      VALUE "FileDescription", XSTR(PRODUCT_NAME)
+      VALUE "FileVersion", XSTR(XCSOAR_FILE_VERSION)
+      VALUE "InternalName", XSTR(PRODUCT_NAME)
+      VALUE "LegalCopyright", "Copyright The XCSoar Project"
+      VALUE "OriginalFilename", XSTR(XCSOAR_ORIGINAL_FILENAME)
+      VALUE "ProductName", XSTR(PRODUCT_NAME)
+      VALUE "ProductVersion", XSTR(XCSOAR_VERSION)
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1200
+  END
+END

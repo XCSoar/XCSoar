@@ -311,11 +311,12 @@ libraries are fetched automatically on first build by
 Build outputs (64-bit example; 32-bit uses ``WIN32OPENGL`` and ``x86`` ANGLE
 arch instead):
 
-- ``output/WIN64OPENGL/bin/XCSoar.exe`` — main executable
+- ``output/WIN64OPENGL/bin/XCSoar.exe`` — main executable (Windows
+  version resource from :file:`VERSION.txt`)
 - ``output/WIN64OPENGL/bin/XCSoar.zip`` — portable package (exe, ANGLE DLLs,
   bundled fonts)
 - ``output/WIN64OPENGL/bin/XCSoar-<version>-WIN64OPENGL-Installer.exe`` —
-  NSIS installer (``installer`` target only)
+  NSIS installer (``installer`` target only; same version resource)
 - ``output/WIN64OPENGL/bin/libEGL.dll``,
   ``output/WIN64OPENGL/bin/libGLESv2.dll`` — ANGLE runtime (also inside zip
   and installer)

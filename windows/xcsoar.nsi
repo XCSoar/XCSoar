@@ -12,6 +12,11 @@
 !define PRODUCT_VERSION "dev"
 !endif
 
+; Four-component PE version (major.minor.patch.build) for file properties
+!ifndef VI_PRODUCT_VERSION
+!define VI_PRODUCT_VERSION "0.0.0.0"
+!endif
+
 ; Installer label (e.g., "XCSoar" or "XCSoar Testing")
 !ifndef INSTALLER_LABEL
 !define INSTALLER_LABEL "${PRODUCT_NAME}"
@@ -43,6 +48,14 @@ OutFile "..\output\${TARGET_FLAVOR}\XCSoar-Installer.exe"
 !else
 OutFile "${OUTPUT_FILE}"
 !endif
+
+VIProductVersion "${VI_PRODUCT_VERSION}"
+VIAddVersionKey /LANG=1033 "ProductName" "${PRODUCT_NAME}"
+VIAddVersionKey /LANG=1033 "CompanyName" "The XCSoar Project"
+VIAddVersionKey /LANG=1033 "FileDescription" "${INSTALLER_LABEL} installer"
+VIAddVersionKey /LANG=1033 "FileVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=1033 "ProductVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=1033 "LegalCopyright" "Copyright The XCSoar Project"
 
 !if "${TARGET_FLAVOR}" == "WIN32OPENGL"
 InstallDir "$PROGRAMFILES\XCSoar"
