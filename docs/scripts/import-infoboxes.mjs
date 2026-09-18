@@ -1,13 +1,15 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { kebabCase } from 'scule';
 
-const SRC_DIR = '../src/InfoBoxes/Content';
+const DOCS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SRC_DIR = path.join(DOCS_DIR, '..', 'src', 'InfoBoxes', 'Content');
 
 const FACTORY_FILE = path.join(SRC_DIR, 'Factory.cpp');
 const TYPE_FILE = path.join(SRC_DIR, 'Type.hpp');
 
-const OUT_DIR = 'content/3.infobox';
+const OUT_DIR = path.join(DOCS_DIR, 'content', '3.infobox');
 
 function readFile(filePath) {
     return fs.readFileSync(filePath, 'utf-8');
