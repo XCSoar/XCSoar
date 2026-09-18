@@ -19,6 +19,7 @@
 #include "LogFile.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
+#include <cassert>
 #endif
 
 #ifdef ENABLE_OPENGL
