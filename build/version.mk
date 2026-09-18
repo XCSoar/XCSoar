@@ -11,7 +11,8 @@ VERSION_BUILD ?= 0
 # Always three components for stores that require X.Y.Z (iOS / macOS).
 VERSION_SHORT = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 
-# Four components for Windows PE VERSIONINFO and NSIS VIProductVersion.
+# Four components for Windows PE VERSIONINFO, the application
+# manifest assemblyIdentity, and NSIS VIProductVersion.
 VERSION_QUAD = $(VERSION_SHORT).$(VERSION_BUILD)
 
 # Android versionName omits a trailing .0; versionCode uses

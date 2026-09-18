@@ -33,7 +33,7 @@ Version 7.46 - not yet released
     the display edge
 * Windows
   - show the program version in the file properties of XCSoar.exe and
-    the installer
+    the installer #3173
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
 * Linux
@@ -208,6 +208,8 @@ Version 7.46 - not yet released
 * development
   - build system: embed VERSIONINFO in XCSoar.exe and the NSIS
     installer from VERSION.txt
+  - build system: embed a Windows application manifest (asInvoker,
+    Windows 10 OS context, PerMonitorV2 DPI)
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: remove the GDI Windows backend (TARGET=WIN64 and
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132

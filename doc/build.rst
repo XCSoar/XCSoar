@@ -306,7 +306,8 @@ Build outputs (64-bit example; 32-bit uses ``WIN32OPENGL`` and ``x86`` ANGLE
 arch instead):
 
 - ``output/WIN64OPENGL/bin/XCSoar.exe`` — main executable (Windows
-  version resource from :file:`VERSION.txt`)
+  version resource from :file:`VERSION.txt`, plus an application
+  manifest: asInvoker, Windows 10+ OS context, PerMonitorV2 DPI)
 - ``output/WIN64OPENGL/bin/XCSoar.zip`` — portable package (exe, ANGLE DLLs,
   bundled fonts)
 - ``output/WIN64OPENGL/bin/XCSoar-<version>-WIN64OPENGL-Installer.exe`` —
