@@ -1,6 +1,9 @@
 Version 7.46 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
+  - Use acceleration and gyroscope data from the built-in IMU sensor.
+    If the NMEA logger is enabled, write data to the NMEA logger,
+    using the OpenVario protocol.
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)
   - show remaining battery in the Devices list for BLE sensors
@@ -14,6 +17,7 @@ Version 7.46 - not yet released
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
     the chip latency timer to 1 ms and sending each binary frame in
     one write #3047
+  - use built-in IMU and log to NMEA logger if enabled
   - fix BlueFly Vario BLE being offered only as a BLE sensor, which
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
