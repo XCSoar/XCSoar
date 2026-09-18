@@ -63,15 +63,17 @@ class DeviceListWidget final
 
   struct Flags {
     bool duplicate:1;
-    bool open:1, error:1;
+    bool open:1, error:1, connecting:1;
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool gdl90:1;
     bool foreflight_id:1;
     bool foreflight_ahrs:1;
     bool temperature:1;
     bool humidity:1;
+    bool pressure:1;
     bool imu:1;
     bool accel:1;
+    bool heart_rate:1;
     bool radio:1, transponder:1;
     bool engine:1;
     bool debug:1;
@@ -95,16 +97,19 @@ class DeviceListWidget final
       case PortState::READY:
         open = true;
         error = false;
+        connecting = false;
         break;
 
       case PortState::FAILED:
         open = false;
         error = true;
+        connecting = false;
         break;
 
       case PortState::LIMBO:
         open = false;
         error = false;
+        connecting = true;
         break;
       }
 
@@ -112,8 +117,8 @@ class DeviceListWidget final
       location = basic.location_available;
       gps = basic.gps.fix_quality_available;
       baro = basic.baro_altitude_available ||
-        basic.pressure_altitude_available ||
-        basic.static_pressure_available;
+        basic.pressure_altitude_available;
+      pressure = basic.static_pressure_available;
       pitot = basic.pitot_pressure_available;
       airspeed = basic.airspeed_available ||
         basic.dyn_pressure_available;
@@ -135,6 +140,7 @@ class DeviceListWidget final
       humidity = basic.humidity_available;
       imu = basic.gyroscope.available;
       accel = basic.acceleration.available;
+      heart_rate = basic.heart_rate_available;
       debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
@@ -156,7 +162,7 @@ class DeviceListWidget final
   union Item {
   private:
     Flags flags;
-    uint32_t i;
+    uint64_t i;
 
     static_assert(sizeof(flags) <= sizeof(i), "wrong size");
 
@@ -188,7 +194,7 @@ class DeviceListWidget final
     }
   };
 
-  static_assert(sizeof(Item) == 4, "wrong size");
+  static_assert(sizeof(Item) == 8, "wrong size");
 
   Item items[NUMDEV];
   std::string error_messages[NUMDEV];
@@ -431,6 +437,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       buffer.append(_("Baro"));
     }
 
+    if (flags.pressure) {
+      buffer.append("; ");
+      buffer.append(_("Pressure"));
+    }
+
     if (flags.pitot) {
       buffer.append("; ");
       buffer.append(_("Pitot"));
@@ -457,9 +468,14 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.foreflight_id)
       buffer.append("; ForeFlight ID");
 
-    if (flags.temperature || flags.humidity) {
+    if (flags.temperature) {
       buffer.append("; ");
-      buffer.append("Environment");
+      buffer.append(_("Temperature"));
+    }
+
+    if (flags.humidity) {
+      buffer.append("; ");
+      buffer.append(_("Relative humidity"));
     }
 
     if (flags.imu) {
@@ -469,6 +485,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
     if (flags.accel)
       buffer.append("; G");
+
+    if (flags.heart_rate) {
+      buffer.append("; ");
+      buffer.append(_("Heart Rate"));
+    }
 
     if (flags.radio) {
       buffer.append("; ");
@@ -498,6 +519,12 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
     status = _("N/A");
+  } else if (flags.bluetooth_disabled) {
+    status = _("Bluetooth is disabled");
+  } else if (flags.duplicate) {
+    status = _("Duplicate");
+  } else if (flags.connecting) {
+    status = _("Connecting...");
   } else if (flags.open) {
     buffer = _("No data");
 
@@ -507,10 +534,6 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     status = buffer;
-  } else if (flags.bluetooth_disabled) {
-    status = _("Bluetooth is disabled");
-  } else if (flags.duplicate) {
-    status = _("Duplicate");
   } else if (flags.error) {
     if (error_messages[idx].empty())
       status = _("Error");

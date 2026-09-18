@@ -19,6 +19,7 @@ static jmethodID ctor;
 static jfieldID hasLe_field;
 static jmethodID isEnabled_method;
 static jmethodID getNameFromAddress_method;
+static jmethodID hasEngineSensors_method;
 static jmethodID connect_method, createServer_method;
 static jmethodID bleSerialConnect_method;
 static jmethodID connectSensor_method;
@@ -52,6 +53,10 @@ BluetoothHelper::Initialise(JNIEnv *env) noexcept
   isEnabled_method = env->GetMethodID(cls, "isEnabled", "()Z");
   getNameFromAddress_method = env->GetMethodID(cls, "getNameFromAddress",
                                                "(Ljava/lang/String;)Ljava/lang/String;");
+  hasEngineSensors_method = env->GetMethodID(cls, "hasEngineSensors",
+                                             "(Ljava/lang/String;)Z");
+  if (Java::DiscardException(env))
+    hasEngineSensors_method = nullptr;
   connectSensor_method = env->GetMethodID(cls, "connectSensor",
                                           "(Ljava/lang/String;Lorg/xcsoar/SensorListener;)"
                                           "Lorg/xcsoar/BluetoothSensor;");
@@ -116,6 +121,28 @@ BluetoothHelper::GetNameFromAddress(JNIEnv *env,
 
   auto j = address_to_name.emplace(x_address, std::move(name));
   return j.first->second.c_str();
+}
+
+bool
+BluetoothHelper::HasEngineSensors(JNIEnv *env,
+                                  const char *address) const noexcept
+{
+  assert(env != nullptr);
+
+  if (address == nullptr || *address == '\0')
+    return false;
+
+  if (hasEngineSensors_method == nullptr)
+    return false;
+
+  const Java::String j_address(env, address);
+  const jboolean result =
+    env->CallBooleanMethod(Get(), hasEngineSensors_method,
+                           j_address.Get());
+  if (Java::DiscardException(env))
+    return false;
+
+  return result;
 }
 
 bool

@@ -66,16 +66,20 @@ protected:
     if (L == nullptr)
       return;
 
-    const Lua::ScopeCheckStack check_stack(L);
+    {
+      const Lua::ScopeCheckStack check_stack(L);
 
-    callback.Push();
-    timer.Push();
-    if (lua_pcall(L, 1, 0, 0))
-      Lua::ThrowError(L, Lua::PopError(L));
+      callback.Push();
+      timer.Push();
+      if (lua_pcall(L, 1, 0, 0))
+        Lua::ThrowError(L, Lua::PopError(L));
+    }
 
     /* May destroy this object (and the PeriodicTimer) when the last
        persistent handle is gone -- PeriodicTimer::Invoke tolerates
-       that via invoke_alive. */
+       that via invoke_alive. It may also close the lua_State, so the
+       ScopeCheckStack above must have ended before this call, and
+       neither L nor this may be touched afterwards. */
     Lua::CheckPersistent(L);
   }
 

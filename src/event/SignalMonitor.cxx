@@ -112,6 +112,19 @@ SignalCallback(int signo) noexcept
 #endif
 
 void
+SignalMonitorBlock([[maybe_unused]] std::span<const int> signos) noexcept
+{
+#ifdef USE_SIGNALFD
+	sigset_t mask;
+	sigemptyset(&mask);
+	for (const int signo : signos)
+		sigaddset(&mask, signo);
+
+	sigprocmask(SIG_BLOCK, &mask, nullptr);
+#endif
+}
+
+void
 SignalMonitorInit(EventLoop &loop)
 {
 #ifdef USE_SIGNALFD

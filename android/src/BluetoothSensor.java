@@ -7,6 +7,9 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -20,6 +23,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 /**
  * Read Bluetooth LE sensor values and report them to a
@@ -29,15 +33,28 @@ public final class BluetoothSensor
   extends BluetoothGattCallback
   implements AndroidSensor
 {
+  private static final String TAG = "XCSoar";
+
   private final SensorListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   private BluetoothGatt gatt;
+  private volatile boolean shutdown = false;
 
   private int state = STATE_LIMBO;
+  private boolean reached_ready = false;
+  private boolean initial_retry_used = false;
 
   private BluetoothGattCharacteristic currentEnableNotification;
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
+    new LinkedList<BluetoothGattCharacteristic>();
+
+  /**
+   * GATT reads waiting until outstanding CCCD writes finish.
+   * Android allows only one GATT request at a time.
+   */
+  private BluetoothGattCharacteristic currentRead;
+  private final Queue<BluetoothGattCharacteristic> readQueue =
     new LinkedList<BluetoothGattCharacteristic>();
 
   private boolean haveFlytecMovement = false;
@@ -48,47 +65,110 @@ public final class BluetoothSensor
                          SensorListener listener)
     throws IOException
   {
+    this(context, device, listener, true);
+  }
+
+  public BluetoothSensor(final Context context, final BluetoothDevice device,
+                         SensorListener listener, final boolean autoConnect)
+    throws IOException
+  {
     this.listener = listener;
 
-    if (Build.VERSION.SDK_INT >= 23){
-      /**
-       * Run GATT connect, discover etc. on main thread. If not,
-       * recent Android os will call close() before connection
-       * is fully established.
-       */
-      new Handler(Looper.getMainLooper()).post(new Runnable() {
+    /**
+     * Run GATT connect on the main thread on API 23+: some Android
+     * versions close the client if connectGatt() is issued from a
+     * worker.  Wait for that posted work so this constructor does not
+     * throw "GATT connect failed" while gatt is still null.
+     */
+    if (Build.VERSION.SDK_INT >= 23 &&
+        Looper.myLooper() != Looper.getMainLooper()) {
+      final Handler handler = new Handler(Looper.getMainLooper());
+      final AtomicBoolean abandoned = new AtomicBoolean(false);
+      final CountDownLatch done = new CountDownLatch(1);
+      final IOException[] error = new IOException[1];
+      final Runnable start = new Runnable() {
         @Override
         public void run() {
-          /**
-           * Change auto connect = false and remove transport hint, which
-           * should be more stable and widespread supported.
-           */
-          try {
-            gatt = device.connectGatt(context, false, BluetoothSensor.this);
-          } catch (SecurityException e) {
-            /* Android 12+: BLUETOOTH_CONNECT required; may be denied or revoked. */
-            submitError("Bluetooth connect not permitted");
+          if (abandoned.get())
             return;
+          try {
+            connectGatt(context, device, autoConnect);
+          } catch (IOException e) {
+            error[0] = e;
+          } finally {
+            if (abandoned.get()) {
+              if (gatt != null) {
+                gatt.close();
+                gatt = null;
+              }
+              return;
+            }
+            done.countDown();
           }
-          if (gatt == null)
-            submitError("Bluetooth GATT connect failed");
         }
-      });
-    }
-    else {
+      };
+      handler.post(start);
       try {
-        gatt = device.connectGatt(context, true, this);
-      } catch (SecurityException e) {
-        throw new IOException("Bluetooth GATT connect not permitted", e);
+        if (!done.await(5, TimeUnit.SECONDS)) {
+          abandonGattConnect(handler, start, abandoned);
+          throw new IOException("Bluetooth GATT connect timed out");
+        }
+      } catch (InterruptedException e) {
+        abandonGattConnect(handler, start, abandoned);
+        Thread.currentThread().interrupt();
+        throw new IOException("Bluetooth GATT connect interrupted", e);
       }
+      if (error[0] != null)
+        throw error[0];
+    } else {
+      connectGatt(context, device, autoConnect);
     }
+  }
 
+  /**
+   * LE transport, matching BleSerialPort.  autoConnect waits for the
+   * next advertisement; a live/scanned device uses a direct connect.
+   */
+  private void connectGatt(Context context, BluetoothDevice device,
+                           boolean autoConnect)
+    throws IOException
+  {
+    try {
+      if (Build.VERSION.SDK_INT >= 23)
+        gatt = device.connectGatt(context, autoConnect, this,
+                                  BluetoothDevice.TRANSPORT_LE);
+      else
+        gatt = device.connectGatt(context, autoConnect, this);
+    } catch (SecurityException e) {
+      /* Android 12+: BLUETOOTH_CONNECT required; may be denied. */
+      throw new IOException("Bluetooth GATT connect not permitted", e);
+    }
     if (gatt == null)
       throw new IOException("Bluetooth GATT connect failed");
   }
 
+  /**
+   * Drop a connectGatt posted to the main looper if this constructor
+   * fails, so a late callback cannot keep a GATT client open.
+   */
+  private void abandonGattConnect(Handler handler, Runnable start,
+                                  AtomicBoolean abandoned) {
+    abandoned.set(true);
+    handler.removeCallbacks(start);
+    handler.post(new Runnable() {
+      @Override
+      public void run() {
+        if (gatt != null) {
+          gatt.close();
+          gatt = null;
+        }
+      }
+    });
+  }
+
   @Override
   public void close() {
+    shutdown = true;
     safeDestruct.beginShutdown();
     if (gatt != null)
       gatt.close();
@@ -105,6 +185,8 @@ public final class BluetoothSensor
       return;
 
     state = _state;
+    if (state == STATE_READY)
+      reached_ready = true;
 
     if (safeDestruct.increment()) {
       try {
@@ -139,14 +221,139 @@ public final class BluetoothSensor
     return gatt.writeDescriptor(d);
   }
 
+  /**
+   * Start the next CCCD write, skipping characteristics that have no
+   * CCCD.  Caller holds enableNotificationQueue.
+   */
+  private void enableNextNotification() {
+    while (currentEnableNotification == null) {
+      currentEnableNotification = enableNotificationQueue.poll();
+      if (currentEnableNotification == null)
+        return;
+      if (!doEnableNotification(currentEnableNotification))
+        currentEnableNotification = null;
+    }
+  }
+
   private void enableNotification(BluetoothGattCharacteristic c) {
     synchronized(enableNotificationQueue) {
       if (currentEnableNotification == null) {
         currentEnableNotification = c;
-        if (!doEnableNotification(c))
+        if (!doEnableNotification(c)) {
           currentEnableNotification = null;
+          enableNextNotification();
+        }
       } else
         enableNotificationQueue.add(c);
+    }
+  }
+
+  /**
+   * Read after notify CCCD writes so the request is not dropped.
+   */
+  private void requestRead(BluetoothGattCharacteristic c) {
+    synchronized(enableNotificationQueue) {
+      if (currentEnableNotification != null || currentRead != null)
+        readQueue.add(c);
+      else {
+        currentRead = c;
+        if (!gatt.readCharacteristic(c))
+          currentRead = null;
+      }
+    }
+  }
+
+  private void pumpReadQueue() {
+    if (currentEnableNotification != null || currentRead != null)
+      return;
+    currentRead = readQueue.poll();
+    if (currentRead != null && !gatt.readCharacteristic(currentRead)) {
+      currentRead = null;
+      pumpReadQueue();
+    }
+  }
+
+  private static boolean hasNotify(BluetoothGattCharacteristic c) {
+    return (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0;
+  }
+
+  private static boolean hasRead(BluetoothGattCharacteristic c) {
+    return (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ) != 0;
+  }
+
+  private static BluetoothGattCharacteristic findBatteryLevel(BluetoothGatt gatt) {
+    BluetoothGattService service =
+      gatt.getService(BluetoothUuids.BATTERY_SERVICE);
+    if (service == null)
+      return null;
+    return service.getCharacteristic(
+      BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC);
+  }
+
+  /**
+   * SIG Battery Level is a single uint8 (0-100).  0xFF is unknown.
+   */
+  private void readBatteryLevel(BluetoothGattCharacteristic c) {
+    Integer value = c.getIntValue(c.FORMAT_UINT8, 0);
+    if (value == null || value < 0 || value > 100)
+      return;
+    listener.onBatteryPercent(value);
+  }
+
+  /**
+   * ESS Pressure (2A6D): uint32 in 0.1 Pa.
+   */
+  private void readEssPressure(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_UINT32, 0);
+    if (raw == null || raw == 0)
+      return;
+    float hpa = raw / 1000.0f;
+    if (hpa < 100 || hpa > 1200)
+      return;
+    listener.onBarometricPressureSensor(hpa, 0.01f);
+  }
+
+  /**
+   * ESS Temperature (2A6E): sint16 in 0.01 C.  0x8000 is unknown.
+   */
+  private void readEssTemperature(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_SINT16, 0);
+    if (raw == null || raw == -32768)
+      return;
+    double celsius = raw / 100.0;
+    if (celsius < -273.15)
+      return;
+    listener.onTemperature(273.15 + celsius);
+  }
+
+  /**
+   * ESS Humidity (2A6F): uint16 in 0.01 percent.
+   */
+  private void readEssHumidity(BluetoothGattCharacteristic c) {
+    Integer raw = c.getIntValue(c.FORMAT_UINT16, 0);
+    if (raw == null)
+      return;
+    double percent = raw / 100.0;
+    if (percent < 0 || percent > 100)
+      return;
+    listener.onHumidity(percent);
+  }
+
+  private void queueEnvironmentalReads(BluetoothGatt gatt) {
+    BluetoothGattService ess =
+      gatt.getService(BluetoothUuids.ENVIRONMENTAL_SENSING_SERVICE);
+    if (ess == null)
+      return;
+
+    UUID[] ids = {
+      BluetoothUuids.PRESSURE_CHARACTERISTIC,
+      BluetoothUuids.TEMPERATURE_CHARACTERISTIC,
+      BluetoothUuids.HUMIDITY_CHARACTERISTIC
+    };
+    for (UUID id : ids) {
+      BluetoothGattCharacteristic c = ess.getCharacteristic(id);
+      if (c != null && hasRead(c))
+        requestRead(c);
     }
   }
 
@@ -217,6 +424,22 @@ public final class BluetoothSensor
         readHeartRateMeasurement(c);
       }
 
+      if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid())) {
+        readBatteryLevel(c);
+      }
+
+      if (BluetoothUuids.PRESSURE_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssPressure(c);
+      }
+
+      if (BluetoothUuids.TEMPERATURE_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssTemperature(c);
+      }
+
+      if (BluetoothUuids.HUMIDITY_CHARACTERISTIC.equals(c.getUuid())) {
+        readEssHumidity(c);
+      }
+
       if (BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
         engineSensorDataToListeners(c);
       }
@@ -268,12 +491,58 @@ public final class BluetoothSensor
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
+    if (shutdown)
+      return;
+
     if (BluetoothProfile.STATE_CONNECTED == newState) {
-      if (!gatt.discoverServices()) {
+      if (Build.VERSION.SDK_INT >= 21)
+        gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
+      if (!gatt.discoverServices())
         submitError("Discovering GATT services request failed");
+      return;
+    }
+
+    /* Heart-rate bands often drop the first attempt (status 147
+       timeout).  Retry that once; later drops use the normal
+       failure path. */
+    if (BluetoothProfile.STATE_DISCONNECTED == newState) {
+      if (!reached_ready && !initial_retry_used) {
+        initial_retry_used = true;
+        Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
+              ", retrying initial connect");
+        if (!gatt.connect())
+          submitError("GATT disconnected");
+        else
+          setStateSafe(STATE_LIMBO);
+      } else
+        submitError("GATT disconnected");
+    }
+  }
+
+  @Override
+  public void onCharacteristicRead(BluetoothGatt gatt,
+                                   BluetoothGattCharacteristic c,
+                                   int status) {
+    if (status == BluetoothGatt.GATT_SUCCESS && safeDestruct.increment()) {
+      try {
+        if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid()))
+          readBatteryLevel(c);
+        else if (BluetoothUuids.PRESSURE_CHARACTERISTIC.equals(c.getUuid()))
+          readEssPressure(c);
+        else if (BluetoothUuids.TEMPERATURE_CHARACTERISTIC.equals(c.getUuid()))
+          readEssTemperature(c);
+        else if (BluetoothUuids.HUMIDITY_CHARACTERISTIC.equals(c.getUuid()))
+          readEssHumidity(c);
+      } catch (NullPointerException e) {
+        /* malformed value */
+      } finally {
+        safeDestruct.decrement();
       }
-    } else {
-      submitError("GATT disconnected");
+    }
+
+    synchronized(enableNotificationQueue) {
+      currentRead = null;
+      pumpReadQueue();
     }
   }
 
@@ -282,11 +551,10 @@ public final class BluetoothSensor
                                 BluetoothGattDescriptor descriptor,
                                 int status) {
     synchronized(enableNotificationQueue) {
-      currentEnableNotification = enableNotificationQueue.poll();
-      if (currentEnableNotification != null) {
-        if (!doEnableNotification(currentEnableNotification))
-          currentEnableNotification = null;
-      }
+      currentEnableNotification = null;
+      enableNextNotification();
+      if (currentEnableNotification == null)
+        pumpReadQueue();
     }
   }
 
@@ -317,7 +585,16 @@ public final class BluetoothSensor
        }
     }
 
+    BluetoothGattCharacteristic batteryLevel = findBatteryLevel(gatt);
+    if (batteryLevel != null && hasNotify(batteryLevel))
+      enableNotification(batteryLevel);
+
     if (state == STATE_LIMBO)
       submitError("Unsupported Bluetooth device");
+    else {
+      if (batteryLevel != null)
+        requestRead(batteryLevel);
+      queueEnvironmentalReads(gatt);
+    }
   }
 }

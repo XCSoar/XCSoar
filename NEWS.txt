@@ -4,11 +4,22 @@ Version 7.46 - not yet released
   - use built-in GNSS sensor data to write GPRMC and GPGGA sentences
     to NMEA log, if satellite coverage is sufficient and NMEA logger
     enabled
+  - hide Engine Type on BLE sensors that are not an engine sensor
+    (for example a heart-rate band)
+  - show remaining battery in the Devices list for BLE sensors
+    that expose the standard Battery Service #3157
+  - read BLE Environmental Sensing pressure, temperature, and
+    humidity #3156
+  - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
+    timing out and then showing Not connected
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
   - fix unreliable FLARM IGC download over FTDI USB-serial by setting
     the chip latency timer to 1 ms and sending each binary frame in
     one write #3047
+  - fix BlueFly Vario BLE being offered only as a BLE sensor, which
+    cannot open the serial UART; choose BLE port and the BlueFly
+    driver #3146
 * iOS
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
@@ -28,6 +39,9 @@ Version 7.46 - not yet released
     version (installer or zip) #2132
 * Linux
   - use OpenGL ES instead of desktop OpenGL #2140
+  - termination: fix SIGTERM and Ctrl-C killing the program instead of
+    shutting it down, which lost the settings and the flight log that
+    are written on exit
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
@@ -98,6 +112,10 @@ Version 7.46 - not yet released
     LX7007 IGC) showing about 65000 m for negative pressure
     altitudes #3075
 * dialogs
+  - show Heart Rate as a Devices list sensor flag when a device
+    reports it
+  - show Pressure, Temperature, and Relative humidity as Devices
+    list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
   - fix NOTAM details text being truncated and unable to scroll #2943
@@ -168,6 +186,15 @@ Version 7.46 - not yet released
     the system appearance, including a scheduled switch while XCSoar
     is running
 * documentation
+  - document that a BlueFly Vario on Android uses BLE port, not BLE
+    sensor
+  - document that Engine Type is only shown for engine-sensor BLE
+    devices
+  - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
+  - document BLE sensor battery percent and heart rate on the
+    Devices list
+  - document Pressure, Temperature, and Relative humidity on the
+    Devices list
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer
@@ -201,6 +228,17 @@ Version 7.46 - not yet released
     RunMapWindow compile #3150
   - documentation: require make everything before pull requests so Run*
     debug tools compile
+  - lua: fix a timer callback that cancels its own timer aborting a
+    debug build, and reading the Lua state after it had been closed
+  - lua: fix a Lua stack slot leaking on every input event handled by a
+    script
+  - lua: fix a crash when a callback opens a modal dialog and the last
+    timer or input event handler goes away while it is open
+  - lua: xcsoar.replay.process_all() and process_until() now leave the
+    snail trail, the flight statistics and the contest filled in, as a
+    replay at normal speed does
+  - lua: fix replay.fast_forward() returning a bogus value instead of
+    reporting whether it succeeded
 
 Version 7.45 - 2026-08-15
 * highlights
