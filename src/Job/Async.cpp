@@ -85,8 +85,8 @@ AsyncJobRunner::Run() noexcept
     exception = std::current_exception();
   }
 
+  running.store(false, std::memory_order_relaxed);
+
   if (notify != NULL && !env->IsCancelled())
     notify->SendNotification();
-
-  running.store(false, std::memory_order_relaxed);
 }
