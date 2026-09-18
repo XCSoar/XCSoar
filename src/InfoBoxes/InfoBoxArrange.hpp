@@ -33,10 +33,13 @@ constexpr auto LONG_PRESS = std::chrono::milliseconds(500);
  */
 constexpr auto TAP = std::chrono::milliseconds(150);
 
-/** How often the long-press fill is redrawn while it grows.
- *  64 ms is about four 60 Hz frames; 32 ms fought vsync and
- *  each tick presents the whole OpenGL window. */
-constexpr auto LONG_PRESS_FADE = std::chrono::milliseconds(64);
+/**
+ * How often the long-press fill is redrawn while it grows.  One
+ * 60 Hz frame: the fill runs for only #LONG_PRESS minus #TAP, and
+ * a coarser tick moves its edge by a visible step.  The OpenGL
+ * swap waits for vsync, so the timer cannot outrun the display.
+ */
+constexpr auto LONG_PRESS_FADE = std::chrono::milliseconds(16);
 
 /**
  * 0…256 from #TAP to #LONG_PRESS.  Zero while the press can
