@@ -18,52 +18,44 @@ const [{ data: page }, { data: surround }] = await Promise.all([
     useAsyncData(kebabCase(route.path), () => queryCollection(collectionName.value).path(route.path).first()),
     useAsyncData(`${kebabCase(route.path)}-surround`, () => {
         return queryCollectionItemSurroundings(collectionName.value, route.path, {
-            fields: ['description'],
+            fields: ['infobox'],
         });
     }),
 ]);
-
-const isIndexPage = computed(() => {
-    return page.value.id === 'docs/3.infobox/0.index.md';
-});
 
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true });
 }
 
+const isIndexPage = computed(() => {
+    return page.value.id === 'docs/3.infobox/0.index.md';
+});
+
 const github = computed(() => appConfig.github ? appConfig.github : null);
 const headline = ref(findPageHeadline(navigation?.value, page.value?.path));
 
-const details = [
-    {
-        label: 'Index',
-        value: page.value.infobox?.index,
-    },
-    {
-        label: 'ID',
-        value: page.value.infobox?.id,
-    },
-    {
-        label: 'Category',
-        value: page.value.infobox?.category,
-    },
-    {
-        label: 'Name',
-        value: page.value.title,
-    },
-    {
-        label: 'Caption',
-        value: page.value.infobox?.caption,
-    },
-    {
-        label: 'Description',
-        value: page.value.description,
-    },
-    {
-        label: 'ID Comment',
-        value: page.value.infobox?.comment,
-    },
-];
+const infobox = computed(() => page.value.infobox ?? {});
+
+useSeo({
+    title: page.value.title,
+    description: infobox.value.help ?? page.value.description,
+    type: 'article',
+});
+
+// The surround cards show the help text where Docus shows the description.
+const surroundLinks = computed(() => (surround.value ?? []).map(link => {
+    return link ? { ...link, description: link.infobox?.help } : link;
+}));
+
+// Facts shown below the help text. Name is the title in the InfoBox
+// configuration dialogue, caption the label drawn in the InfoBox itself.
+const facts = computed(() => [
+    { label: 'Name', value: page.value.title },
+    { label: 'Caption', value: infobox.value.caption },
+    { label: 'Category', value: infobox.value.category },
+    { label: 'ID', value: infobox.value.id, code: true },
+    { label: 'Index', value: infobox.value.index, code: true },
+]);
 </script>
 
 <template>
@@ -81,17 +73,30 @@ const details = [
         </UPageHeader>
 
         <UPageBody>
-            <UCard v-if="!isIndexPage" class="my-4">
-                <dl class="divide-y divide-(--ui-border)">
-                    <div v-for="item in details" :key="item.label" class="flex py-3 gap-4">
-                        <dt class="font-bold w-1/4 shrink-0">{{ item.label }}</dt>
-                        <dd>
-                            <ProseCode v-if="['Index', 'ID'].includes(item.label)">{{ item.value }}</ProseCode>
-                            <template v-else>{{ item.value }}</template>
-                        </dd>
+            <template v-if="!isIndexPage">
+                <div class="my-6 flex flex-col gap-6 sm:flex-row sm:items-start">
+                    <InfoBoxPreview :caption="infobox.caption" />
+                    <div class="min-w-0 flex-1">
+                        <div class="mb-3 flex flex-wrap items-center gap-2">
+                            <UBadge v-if="infobox.category" color="primary" variant="subtle">{{ infobox.category }}</UBadge>
+                            <UBadge color="neutral" variant="outline" class="font-mono">{{ infobox.id }}</UBadge>
+                        </div>
+                        <p class="text-base/7 text-default">{{ infobox.help }}</p>
                     </div>
-                </dl>
-            </UCard>
+                </div>
+
+                <table class="my-6 w-full text-sm">
+                    <tbody class="divide-y divide-default">
+                        <tr v-for="fact in facts" :key="fact.label">
+                            <th scope="row" class="w-40 py-2 pr-4 text-left font-medium text-muted">{{ fact.label }}</th>
+                            <td class="py-2">
+                                <code v-if="fact.code" class="rounded-md bg-muted px-1.5 py-0.5 font-mono text-sm">{{ fact.value }}</code>
+                                <template v-else>{{ fact.value }}</template>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
 
             <ContentRenderer v-if="page" :value="page" />
 
@@ -122,7 +127,7 @@ const details = [
                     </template>
                 </div>
             </USeparator>
-            <UContentSurround :surround="surround" />
+            <UContentSurround :surround="surroundLinks" />
         </UPageBody>
 
         <template #right>
