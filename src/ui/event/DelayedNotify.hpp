@@ -35,6 +35,12 @@ public:
   void SendNotification() {
     notify.SendNotification();
   }
+
+  /** Clear both the cross-thread notification and its delayed callback. */
+  void ClearNotification() noexcept {
+    notify.ClearNotification();
+    timer.Cancel();
+  }
 };
 
 } // namespace UI
