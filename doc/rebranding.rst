@@ -140,6 +140,12 @@ Android Files
 - :file:`android/res/values/strings.xml` - App display name
 - :file:`android/AndroidManifest.xml.template` - Android manifest template
 
+Windows Files
+-------------
+
+- :file:`Data/XCSoar.manifest.in` - application manifest (identity
+  name and version come from ``PRODUCT_NAME`` / :file:`VERSION.txt`)
+
 
 What Needs Manual Changes
 ==========================
