@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -5,6 +6,16 @@ import { fileURLToPath } from 'node:url';
 // instead of keeping copies in docs/public. Paths must be absolute because
 // nitro resolves relative publicAssets dirs against its own srcDir.
 const repo = (path: string) => fileURLToPath(new URL(path, import.meta.url));
+
+// Commit of the documentation build, shown on the PDF title page.
+const gitCommit = () => {
+    try {
+        return execSync('git rev-parse --short=12 HEAD', { cwd: repo('..'), stdio: ['ignore', 'pipe', 'ignore'] })
+            .toString().trim();
+    } catch {
+        return '';
+    }
+};
 
 export default defineNuxtConfig({
     devtools: false,
@@ -41,6 +52,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             xcsoarVersion: readFileSync(repo('../VERSION.txt'), 'utf8').trim(),
+            xcsoarCommit: gitCommit(),
         },
     },
     routeRules: {
