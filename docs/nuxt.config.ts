@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // Serve the manual figures and map icons straight from the repository
@@ -37,9 +38,19 @@ export default defineNuxtConfig({
         // IPX optimizer cannot read. Serve image URLs unchanged instead.
         provider: 'none',
     },
+    runtimeConfig: {
+        public: {
+            xcsoarVersion: readFileSync(repo('../VERSION.txt'), 'utf8').trim(),
+        },
+    },
+    routeRules: {
+        // Print views for scripts/build-pdf.mjs, not for search engines.
+        '/print/**': { robots: false },
+    },
     nitro: {
         prerender: {
             autoSubfolderIndex: true,
+            routes: ['/print/manual', '/print/quick-guide', '/print/dev'],
         },
         publicAssets: [
             { baseURL: '/img/figures', dir: repo('../doc/manual/en/figures') },

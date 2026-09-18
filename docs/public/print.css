@@ -1,0 +1,307 @@
+/* Stylesheet of the /print/<section> views. Page boxes, running headers
+   and the page numbers in the table of contents are produced by Paged.js
+   in scripts/build-pdf.mjs. Pages are numbered continuously from the
+   title page. */
+
+@page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+
+    @top-left {
+        content: string(doc-title);
+        font-size: 9pt;
+        color: #666;
+    }
+
+    @top-right {
+        content: string(chapter-title);
+        font-size: 9pt;
+        color: #666;
+    }
+
+    @bottom-center {
+        content: counter(page);
+        font-size: 9pt;
+    }
+}
+
+@page cover {
+    margin: 0;
+
+    @top-left { content: none; }
+    @top-right { content: none; }
+    @bottom-center { content: none; }
+}
+
+@page toc {
+    @top-right { content: none; }
+}
+
+.print-root {
+    max-width: 174mm;
+    margin: 0 auto;
+    padding: 0 8mm;
+    font-size: 11pt;
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+.print-doc-title {
+    string-set: doc-title content(text);
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Title page, after the LaTeX manual's title page. */
+.print-cover {
+    page: cover;
+    break-after: page;
+    height: 297mm;
+    box-sizing: border-box;
+    padding: 30mm 20mm 25mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.print-cover-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 10mm;
+}
+
+.print-cover-logo {
+    width: 50%;
+}
+
+.print-cover-wordmark {
+    width: 66%;
+    margin-top: 5mm;
+}
+
+.print-cover-tagline,
+.print-cover-title {
+    font-size: 22pt;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.print-cover-tagline {
+    margin-top: 6mm;
+}
+
+.print-cover-title {
+    margin-top: 12mm;
+}
+
+.print-cover-bottom {
+    text-align: right;
+    font-size: 12pt;
+    line-height: 1.6;
+}
+
+.print-cover-bottom p {
+    margin: 0;
+}
+
+/* Table of contents. */
+.print-toc {
+    page: toc;
+    break-after: page;
+}
+
+.print-toc h1 {
+    font-size: 20pt;
+    font-weight: 700;
+    margin: 0 0 8mm;
+}
+
+.print-toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.print-toc li {
+    margin: 0;
+}
+
+.print-toc-chapters > li {
+    margin-top: 3mm;
+    font-weight: 700;
+}
+
+.print-toc-pages > li {
+    font-weight: 400;
+    padding-left: 8mm;
+}
+
+.print-toc a {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+    text-decoration: none;
+    color: inherit;
+}
+
+.print-toc-number {
+    flex: none;
+    min-width: 8mm;
+}
+
+.print-toc-title {
+    flex: 1;
+    border-bottom: 1px dotted #999;
+    margin-bottom: 1mm;
+}
+
+.print-toc a::after {
+    content: target-counter(attr(href url), page);
+    flex: none;
+    font-weight: 400;
+}
+
+/* Chapters and pages. */
+.print-chapter {
+    break-before: page;
+}
+
+.print-chapter-title {
+    string-set: chapter-title content(text);
+    font-size: 26pt;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 10mm;
+}
+
+.print-page-title {
+    font-size: 18pt;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 8mm 0 3mm;
+    break-after: avoid;
+}
+
+/* The prose components carry their own Tailwind line heights and font
+   sizes (leading-7, text-base/7, text-sm, …); the print typography
+   replaces them. */
+.print-page-body * {
+    line-height: 1.3;
+}
+
+.print-page-body :not(pre, code, h1, h2, h3, h4, h5, h6, sub, sup) {
+    font-size: inherit;
+}
+
+.print-page-body h2,
+.print-page-body h3,
+.print-page-body h4,
+.print-page-body h5,
+.print-page-body h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 5mm 0 2mm;
+    break-after: avoid;
+}
+
+.print-page-body h2 { font-size: 16pt; }
+.print-page-body h3 { font-size: 14pt; }
+.print-page-body h4 { font-size: 12pt; }
+.print-page-body h5,
+.print-page-body h6 { font-size: 11pt; }
+
+.print-page-body h1 a,
+.print-page-body h2 a,
+.print-page-body h3 a,
+.print-page-body h4 a,
+.print-page-body h5 a,
+.print-page-body h6 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.print-page-body a {
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+.print-page-body p,
+.print-page-body ul,
+.print-page-body ol {
+    margin: 0 0 2mm;
+}
+
+.print-page-body li {
+    margin: 0 0 0.5mm;
+}
+
+.print-page-body figcaption {
+    font-size: 10pt;
+}
+
+.print-page-body img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Screenshots at roughly the size the LaTeX manual used. */
+.print-page-body figure img:not([width]) {
+    max-width: 110mm;
+    max-height: 100mm;
+}
+
+/* Tables of screenshots share the page width between their columns. */
+.print-page-body table:has(img) {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.print-page-body table figure {
+    display: block;
+}
+
+.print-page-body table img {
+    width: 100%;
+    height: auto;
+}
+
+.print-page-body figure,
+.print-page-body pre,
+.print-page-body table,
+.print-page-body li,
+.print-page-body [data-slot="root"] {
+    break-inside: avoid;
+}
+
+.print-page-body pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 9pt;
+}
+
+.print-page-body code {
+    font-size: 9.5pt;
+}
+
+.print-page-body table {
+    font-size: 9.5pt;
+}
+
+.print-page-body thead {
+    display: table-header-group;
+}
+
+.print-page-body tr {
+    break-inside: avoid;
+}
+
+.print-page-body [aria-haspopup="dialog"] {
+    cursor: default;
+}

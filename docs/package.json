@@ -3,11 +3,16 @@
   "scripts": {
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "build": "nuxt build"
+    "build": "nuxt build",
+    "pdf": "node scripts/build-pdf.mjs"
   },
   "dependencies": {
-    "docus": "latest",
     "better-sqlite3": "^12.6.2",
+    "docus": "latest",
     "nuxt": "^4.5.2"
+  },
+  "devDependencies": {
+    "pagedjs": "^0.4.3",
+    "puppeteer": "^25.11.0"
   }
 }
