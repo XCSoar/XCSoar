@@ -375,12 +375,14 @@ RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
 RESOURCE_BINARY = $(RESOURCES_BIN)
 
-# Windows SDL builds: embed the exe icon via a minimal .rc
+# Windows SDL builds: embed the exe icon and VERSIONINFO via a .rc
 ifeq ($(HAVE_WIN32),y)
 $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc $(WIN_ICON_ICO) \
+	$(topdir)/VERSION.txt \
 	| $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir $(DATA) -o $@ $<
+	$(Q)$(WINDRES) $(WINDRESFLAGS) $(WINDRES_VERSIONFLAGS) \
+		--include-dir $(DATA) -o $@ $<
 
 RESOURCE_BINARY += $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc
 endif
