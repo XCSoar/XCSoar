@@ -1,7 +1,6 @@
-
 export function useInfoBoxNavigation() {
     const { data: navigationData } = useAsyncData('infobox-navigation', () => {
-        return queryCollectionNavigation('docs', ['infoboxCategory', 'infoboxIndex', 'infoboxCaption']);
+        return queryCollectionNavigation('docs', ['infobox']);
     });
 
     const navigationByCategory = computed(() => {
@@ -15,7 +14,7 @@ export function useInfoBoxNavigation() {
         const groups = new Map();
 
         for (const page of pages) {
-            const cat = page.infoboxCategory ?? 'other';
+            const cat = page.infobox?.category ?? 'other';
             if (cat === 'hidden') continue;
             if (!groups.has(cat)) {
                 groups.set(cat, {
@@ -28,8 +27,8 @@ export function useInfoBoxNavigation() {
             groups.get(cat).children.push({
                 title: page.title ?? '',
                 path: page.path ?? '',
-                infoboxIndex: page.infoboxIndex ?? '',
-                infoboxCaption: page.infoboxCaption ?? '',
+                infoboxIndex: page.infobox?.index ?? '',
+                infoboxCaption: page.infobox?.caption ?? '',
             });
         }
 

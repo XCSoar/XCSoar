@@ -37,15 +37,15 @@ const headline = ref(findPageHeadline(navigation?.value, page.value?.path));
 const details = [
     {
         label: 'Index',
-        value: page.value.infoboxIndex,
+        value: page.value.infobox?.index,
     },
     {
         label: 'ID',
-        value: page.value.infoboxId,
+        value: page.value.infobox?.id,
     },
     {
         label: 'Category',
-        value: page.value.infoboxCategory,
+        value: page.value.infobox?.category,
     },
     {
         label: 'Name',
@@ -53,7 +53,7 @@ const details = [
     },
     {
         label: 'Caption',
-        value: page.value.infoboxCaption,
+        value: page.value.infobox?.caption,
     },
     {
         label: 'Description',
@@ -61,7 +61,7 @@ const details = [
     },
     {
         label: 'ID Comment',
-        value: page.value.infoboxIdComment,
+        value: page.value.infobox?.comment,
     },
 ];
 </script>

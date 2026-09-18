@@ -1,3 +1,10 @@
+// Imports the InfoBox metadata from src/InfoBoxes/Content into the
+// frontmatter of content/3.infobox/*.md. The markdown body of each page is
+// kept; it should only contain what goes beyond the help text (screenshots,
+// gestures, cross references), never a copy of it.
+//
+//   node scripts/import-infoboxes.mjs
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -273,7 +280,8 @@ function clean(field) {
     return parts
         .join('')
         .replace(/\\"/g, '"')
-        .replace(/\\\\/g, '\\');
+        .replace(/\\\\/g, '\\')
+        .trim();
 }
 
 function parseEntry(entry) {
@@ -282,7 +290,7 @@ function parseEntry(entry) {
     return {
         title: clean(fields[0]),
         caption: clean(fields[1]),
-        description: clean(fields[2]),
+        help: clean(fields[2]),
         handler: fields[3]?.trim() ?? null,
     };
 }
@@ -324,14 +332,40 @@ function escapeYamlString(value) {
     return str;
 }
 
+// The InfoBox name from Factory.cpp becomes the page title; every other
+// source field lives in the infobox object so nothing is stored twice.
 function formatYamlBlock(item) {
-    return `title: ${escapeYamlString(item.title ?? '')}
-description: ${escapeYamlString(item.description ?? '')}
-infoboxIndex: ${escapeYamlString(item.index ?? '')}
-infoboxId: ${escapeYamlString(item.id ?? 'unknown')}
-infoboxIdComment: ${escapeYamlString(item.idComment ?? '')}
-infoboxCaption: ${escapeYamlString(item.caption ?? '')}
-infoboxCategory: ${escapeYamlString(item.category ?? '')}`;
+    const line = (key, value) => {
+        const str = escapeYamlString(value);
+        return str === '' ? `${key}:` : `${key}: ${str}`;
+    };
+
+    return [
+        line('title', item.title),
+        'infobox:',
+        line('  index', item.index),
+        line('  id', item.id ?? 'unknown'),
+        line('  comment', item.idComment),
+        line('  caption', item.caption),
+        line('  help', item.help),
+        line('  category', item.category),
+    ].join('\n');
+}
+
+// Similarity of two texts, 0 to 1 (normalised Levenshtein distance).
+function similarity(a, b) {
+    const x = a.replace(/\s+/g, ' ').trim().toLowerCase();
+    const y = b.replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!x || !y) return 0;
+    let previous = Array.from({ length: y.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= x.length; i++) {
+        const current = [i];
+        for (let j = 1; j <= y.length; j++) {
+            current[j] = Math.min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (x[i - 1] === y[j - 1] ? 0 : 1));
+        }
+        previous = current;
+    }
+    return 1 - previous[y.length] / Math.max(x.length, y.length);
 }
 
 function main() {
@@ -392,6 +426,10 @@ function main() {
             if (match) {
                 existingBody = match[1];
             }
+        }
+
+        if (item.help && similarity(existingBody, item.help) > 0.9) {
+            console.warn(`[WARN] ${fileName}: the body repeats the help text`);
         }
 
         const content = `---\n${formatYamlBlock(item)}\n---\n${existingBody}`;

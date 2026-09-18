@@ -6,11 +6,15 @@ export default defineContentConfig({
             type: 'page',
             source: '**/*.{md,yaml}',
             schema: z.object({
-                infoboxIndex: z.number().optional(),
-                infoboxId: z.string().optional(),
-                infoboxIdComment: z.string().optional(),
-                infoboxCategory: z.string().optional(),
-                infoboxCaption: z.string().optional(),
+                // InfoBox metadata imported by scripts/import-infoboxes.mjs.
+                infobox: z.object({
+                    index: z.number(),
+                    id: z.string(),
+                    comment: z.string().optional(),
+                    caption: z.string(),
+                    help: z.string().optional(),
+                    category: z.string().optional(),
+                }).optional(),
             }),
         }),
     },
