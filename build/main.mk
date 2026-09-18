@@ -477,6 +477,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Hardware/RotateDisplay.cpp \
 	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/Hardware/DisplayGlue.cpp \
+	$(SRC)/Hardware/SystemPower.cpp \
 	$(SRC)/Hardware/Vibrator.cpp \
 	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/Language/Language.cpp \
