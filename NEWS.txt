@@ -115,6 +115,7 @@ Version 7.46 - not yet released
     list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
+  - keep message dialogs usable when the application window is resized
   - fix NOTAM details text being truncated and unable to scroll #2943
   - put the Close button on the right of the Status and Weather
     tab strips
