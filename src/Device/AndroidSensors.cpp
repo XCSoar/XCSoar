@@ -1,46 +1,197 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Descriptor.hpp"
-#include "SmartDeviceSensors.hpp"
 #include "DataEditor.hpp"
+#include "Descriptor.hpp"
+#include "Logger/NMEALogger.hpp"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
+#include "SmartDeviceSensors.hpp"
 #include "time/FloatDuration.hxx"
 
 using namespace std::chrono;
 
 #ifdef ANDROID
+static constexpr auto SAMPLE_TIME_INCR = std::chrono::milliseconds(1000);
+static constexpr int  SAMPLE_SKIP_THRESHOLD = 3;
 
 void
 DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
 {
+  if (config.instrument_alignment == DeviceConfig::InstrumentAlignment::NONE)
+    return;
+
   const auto e = BeginEdit();
   NMEAInfo &basic = *e;
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
 
-  basic.acceleration.ProvideGLoad(acceleration);
+  static int accu_cnt = 0;
+  static double accumulator = 0;
+  static auto next_sample_time = TimeStamp{};
+  static auto previous_time = TimeStamp{};
+  static bool is_first_time = true;
 
-  e.Commit();
+  const  auto current_time = basic.time;
+  if (!current_time.IsDefined())
+    return;
+
+  // initialize for first loop and after time wrap
+  if (current_time < previous_time || is_first_time) {
+    previous_time = current_time;
+    next_sample_time = current_time + SAMPLE_TIME_INCR;
+    accu_cnt = 0;
+    accumulator = 0;
+    is_first_time = false;
+  }
+
+  accumulator += acceleration;
+  accu_cnt += 1;
+  // about 124 readings per sec, to 1 value per sec
+  if (current_time >= next_sample_time && accu_cnt > 0) {
+    // we might have skipped several samples?
+    if (current_time >
+        (next_sample_time + SAMPLE_SKIP_THRESHOLD * SAMPLE_TIME_INCR))
+      next_sample_time = current_time + SAMPLE_TIME_INCR;
+    else
+      next_sample_time += SAMPLE_TIME_INCR;
+    basic.UpdateClock();
+    basic.alive.Update(basic.clock);
+
+    const double g_load = accumulator / (double)accu_cnt;
+    basic.acceleration.ProvideGLoad(g_load);
+    e.Commit();
+    if (nmea_logger != nullptr && nmea_logger->IsEnabled()) {
+      char sentence[80];
+      const int length =
+          snprintf(sentence, sizeof(sentence),
+               // use OpenVario protocol for now
+               "$POV,L,%.3f", g_load);
+      if (length >= 0 && length <= static_cast<int>(sizeof(sentence)) - 4) {
+        AppendNMEAChecksum(sentence);
+        nmea_logger->Log(sentence);
+      }
+    }
+    accu_cnt = 0;
+    accumulator = 0;
+    previous_time = current_time;
+  }
 }
 
 void
-DeviceDescriptor::OnAccelerationSensor([[maybe_unused]] float ddx, [[maybe_unused]] float ddy,
+DeviceDescriptor::OnAccelerationSensor([[maybe_unused]] float ddx,
+                                       [[maybe_unused]] float ddy,
                                        [[maybe_unused]] float ddz) noexcept
 {
   // TODO
 }
 
 void
-DeviceDescriptor::OnRotationSensor([[maybe_unused]] float dtheta_x, [[maybe_unused]] float dtheta_y,
+DeviceDescriptor::OnRotationSensor([[maybe_unused]] float dtheta_x,
+                                   [[maybe_unused]] float dtheta_y,
                                    [[maybe_unused]] float dtheta_z) noexcept
 {
-  // TODO
+  bool fixed_and_aligned = false;
+  char NMEA_qualifier = '?';
+
+  switch (config.instrument_alignment) {
+    case DeviceConfig::InstrumentAlignment::NONE :
+    return;
+
+    case DeviceConfig::InstrumentAlignment::FIXED_AND_ALIGNED :
+      fixed_and_aligned = true;
+      NMEA_qualifier = 'G';
+    break;
+
+    case DeviceConfig::InstrumentAlignment::NOT_ALIGNED :
+      fixed_and_aligned = false;
+      NMEA_qualifier = 'g';
+    break;
+
+    // this is an invalid configuration
+    default:
+      config.instrument_alignment = DeviceConfig::InstrumentAlignment::NONE;
+    return;
+  }
+
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  static int accu_cnt = 0;
+  static double accumulator_x = 0;
+  static double accumulator_y = 0;
+  static double accumulator_z = 0;
+  static auto next_sample_time = TimeStamp{};
+  static auto previous_time = TimeStamp{};
+  static bool is_first_time = true;
+
+  const  auto current_time = basic.time;
+  if (!current_time.IsDefined())
+    return;
+
+  // initialize for first loop and after time wrap
+  if (current_time < previous_time || is_first_time) {
+    previous_time = current_time;
+    next_sample_time = current_time + SAMPLE_TIME_INCR;
+    accu_cnt = 0;
+    accumulator_x = 0;
+    accumulator_y = 0;
+    accumulator_z = 0;
+    is_first_time = false;
+  }
+
+  // convert dtheta from rad/sec to deg/sec
+  accumulator_x += dtheta_x * -RAD_TO_DEG;
+  accumulator_y += dtheta_y * -RAD_TO_DEG;
+  accumulator_z += dtheta_z * -RAD_TO_DEG;
+  accu_cnt += 1;
+  // about 6 readings per sec, to 1 value per sec
+  if (current_time >= next_sample_time && accu_cnt > 0) {
+    // we might have skipped several samples?
+    if (current_time >
+        (next_sample_time + SAMPLE_SKIP_THRESHOLD * SAMPLE_TIME_INCR))
+      next_sample_time = current_time + SAMPLE_TIME_INCR;
+    else
+      next_sample_time += SAMPLE_TIME_INCR;
+    basic.UpdateClock();
+    basic.alive.Update(basic.clock);
+    basic.gyroscope.ProvideAngularRates(
+      Angle::Degrees(accumulator_x / accu_cnt),
+      Angle::Degrees(accumulator_y / accu_cnt),
+      Angle::Degrees(accumulator_z / accu_cnt),
+      fixed_and_aligned,
+      true); // is real
+    e.Commit();
+    if (nmea_logger != nullptr && nmea_logger->IsEnabled()) {
+      char sentence[80];
+      const int length =
+        snprintf(sentence, sizeof(sentence),
+               // use OpenVario protocol for now
+               "$POV,%c,%.3f,%.3f,%.3f",
+               NMEA_qualifier,
+               accumulator_x / accu_cnt,
+               accumulator_y / accu_cnt,
+               accumulator_z / accu_cnt);
+      if (length >= 0 && length <= static_cast<int>(sizeof(sentence)) - 4) {
+        AppendNMEAChecksum(sentence);
+        nmea_logger->Log(sentence);
+      }
+    }
+    accu_cnt = 0;
+    accumulator_x = 0;
+    accumulator_y = 0;
+    accumulator_z = 0;
+    previous_time = current_time;
+  }
 }
 
 void
 DeviceDescriptor::OnMagneticFieldSensor([[maybe_unused]] float h_x, [[maybe_unused]] float h_y,
                                         [[maybe_unused]] float h_z) noexcept
+{
+  // TODO
+}
+
+void
+DeviceDescriptor::OnHumidity([[maybe_unused]] double humidity_percent) noexcept
 {
   // TODO
 }
@@ -350,20 +501,6 @@ DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
 
   basic.temperature = temperature;
   basic.temperature_available.Update(basic.clock);
-
-  e.Commit();
-}
-
-void
-DeviceDescriptor::OnHumidity(double humidity_percent) noexcept
-{
-  const auto e = BeginEdit();
-  NMEAInfo &basic = *e;
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
-
-  basic.humidity = humidity_percent;
-  basic.humidity_available.Update(basic.clock);
 
   e.Commit();
 }
