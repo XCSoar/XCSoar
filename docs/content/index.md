@@ -43,10 +43,10 @@ The open-source glide computer for cross-country, competition, and training flig
 
 ::u-page-section
 #headline
-Find your way around
+Where to start
 
 #title
-From the first start to the last InfoBox
+Manuals and references for pilots and developers
 
 #description
 The manual is the complete reference. The quick guide brings you into the air with the fewest steps.
@@ -57,7 +57,7 @@ The manual is the complete reference. The quick guide brings you into the air wi
     ---
     icon: i-lucide-book-open
     title: User Manual
-    description: Installation, user interface, navigation, cross country tasks, glide computer, airspace, configuration and data files, chapter by chapter.
+    description: Every feature explained in depth, from installation and the user interface to tasks, the glide computer, airspace and configuration.
     to: /manual/preface
     variant: subtle
     ---
