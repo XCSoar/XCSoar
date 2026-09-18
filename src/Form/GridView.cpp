@@ -2,16 +2,22 @@
 // Copyright The XCSoar Project
 
 #include "Form/GridView.hpp"
+#include "Look/DialogLook.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Color.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "Math/Util.hpp"
 
 void
-GridView::Create(ContainerWindow &parent, const DialogLook &look,
+GridView::Create(ContainerWindow &parent, const DialogLook &_look,
                  const PixelRect &rc, const WindowStyle style,
                  unsigned _column_width, unsigned _row_height)
 {
   column_width = _column_width;
   row_height = _row_height;
-  PanelControl::Create(parent, look, rc, style);
+  look = &_look;
+  PanelControl::Create(parent, _look, rc, style);
   current_page = 0;
   previous_page = 0;
   saved_row_from_previous_page = 0;
@@ -65,6 +71,74 @@ GridView::RefreshLayout()
                    PixelSize(column_width, row_height));
     items[i]->SetVisible(itemPage == current_page);
   }
+}
+
+void
+GridView::OnPaint(Canvas &canvas) noexcept
+{
+  // Let base class draw background and children.
+  PanelControl::OnPaint(canvas);
+
+  if (look == nullptr || items.empty())
+    return;
+
+  const unsigned page_size = GetPageSize();
+  if (page_size == 0)
+    return;
+
+  const auto page_start = current_page * page_size;
+  const auto page_end = std::min(page_start + page_size,
+                                (unsigned)items.size());
+
+  unsigned max_col = 0, max_row = 0;
+  for (unsigned i = page_start; i < page_end; ++i) {
+    if (!IsItemValid(i))
+      continue;
+
+    const unsigned page_pos = i % page_size;
+    const unsigned col = page_pos % num_columns;
+    const unsigned row = page_pos / num_columns;
+    max_col = std::max(max_col, col + 1u);
+    max_row = std::max(max_row, row + 1u);
+  }
+
+  if (max_col == 0 || max_row == 0)
+    return;
+
+  const PixelRect rc = GetClientRect();
+  const unsigned width = rc.GetWidth(), height = rc.GetHeight();
+  constexpr unsigned horizontal_spacing = 0;
+  constexpr unsigned vertical_spacing = 0;
+
+  const unsigned grid_w = max_col * column_width +
+    std::max<unsigned>(0, max_col - 1) * horizontal_spacing;
+  const unsigned grid_h = max_row * row_height +
+    std::max<unsigned>(0, max_row - 1) * vertical_spacing;
+
+  const unsigned reminder_h = width + horizontal_spacing
+    - num_columns * (column_width + horizontal_spacing);
+  const unsigned reminder_v = height + vertical_spacing
+    - num_rows * (row_height + vertical_spacing);
+  const PixelPoint top_left = rc.GetTopLeft() + PixelSize{reminder_h, reminder_v} / 2U;
+
+  const Color sep_color = look->dark_mode ? COLOR_GRAY : COLOR_BLACK;
+  canvas.Select(Pen(Layout::ScaleFinePenWidth(1), sep_color));
+
+  const int left = top_left.x;
+  const int top = top_left.y;
+  const int right = left + (int)grid_w;
+  const int bottom = top + (int)grid_h;
+
+  for (unsigned c = 1; c < max_col; ++c)
+    canvas.DrawLine({left + (int)(c * column_width), top},
+                    {left + (int)(c * column_width), bottom});
+
+  for (unsigned r = 1; r < max_row; ++r)
+    canvas.DrawLine({left, top + (int)(r * row_height)},
+                    {right, top + (int)(r * row_height)});
+
+  canvas.DrawLine({left, top}, {right, top});
+  canvas.DrawLine({left, bottom}, {right, bottom});
 }
 
 signed
