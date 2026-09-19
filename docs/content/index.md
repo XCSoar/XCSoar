@@ -100,10 +100,67 @@ The manual is the complete reference. The quick guide brings you into the air wi
     icon: i-lucide-terminal
     title: Developers
     description: Building XCSoar, the architecture and how to contribute.
-    to: /dev/build
+    to: /dev
     variant: subtle
     ---
     ::::
+  :::
+::
+
+::u-page-section
+---
+orientation: horizontal
+---
+#headline
+Download
+
+#title
+Manuals as PDF
+
+#description
+The manual and the quick guide of the stable version 7.45.2.
+
+#default
+  :::u-page-grid{class="lg:grid-cols-2"}
+    :::u-page-feature
+    ---
+    icon: i-lucide-file-text
+    title: English
+    ---
+    #description
+    [XCSoar Manual](https://download.xcsoar.org/releases/7.45.2/XCSoar-manual.pdf)\
+    [XCSoar in a flash](https://download.xcsoar.org/releases/7.45.2/XCSoar-in-a-flash.pdf)
+    :::
+
+    :::u-page-feature
+    ---
+    icon: i-lucide-file-text
+    title: Deutsch
+    ---
+    #description
+    [XCSoar Handbuch](https://download.xcsoar.org/releases/7.45.2/XCSoar-manual-de.pdf)\
+    [XCSoar Blitzeinstieg](https://download.xcsoar.org/releases/7.45.2/XCSoar-Blitzeinstieg.pdf)
+    :::
+
+    :::u-page-feature
+    ---
+    icon: i-lucide-file-text
+    title: Français
+    ---
+    #description
+    [XCSoar Manuel de l'utilisateur](https://download.xcsoar.org/releases/7.45.2/XCSoar-manual-fr.pdf) (mostly complete)\
+    [XCSoar Prise en main](https://download.xcsoar.org/releases/7.45.2/XCSoar-Prise-en-main.pdf)
+    :::
+
+    :::u-page-feature
+    ---
+    icon: i-lucide-file-text
+    title: Português
+    ---
+    #description
+    [XCSoar Manual do Usuário](https://download.xcsoar.org/releases/7.45.2/XCSoar-manual-pt_BR.pdf)\
+    [XCSoar em um flash](https://download.xcsoar.org/releases/7.45.2/XCSoar-in-a-flash-pt_BR.pdf)
+    :::
   :::
 ::
 
