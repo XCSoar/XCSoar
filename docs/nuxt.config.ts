@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -30,24 +31,43 @@ const xcsoarVersion = git('tag', '--points-at', 'HEAD').split('\n')
 // Staged or unstaged changes below docs/: the build matches no commit.
 const xcsoarDirty = git('status', '--porcelain', '--untracked-files=no', '--', 'docs') !== '';
 
-// Last commit of every content file (author, not committer), from one
-// walk of the history below docs/content.
-type LastCommit = { commit: string, date: string, author: string };
-let lastCommits: Map<string, LastCommit> | undefined;
-const lastCommit = (path: string) => {
-    if (!lastCommits) {
-        lastCommits = new Map();
-        let current: LastCommit | undefined;
-        for (const line of git('log', '--format=@%H %as %an', '--name-only', '--', 'docs/content').split('\n')) {
+// Last commit of every content file (author, not committer) and its
+// position in the history, 0 being the newest commit, from one walk of
+// the history below docs/content.
+type Commit = { commit: string, date: string, author: string };
+let commits: Map<string, { last: Commit, position: number }> | undefined;
+const fileCommit = (path: string) => {
+    if (!commits) {
+        commits = new Map();
+        let current: Commit | undefined;
+        let position = -1;
+        for (const line of git('log', '--format=@%H %as %an', '--name-only', '--', 'docs/content', 'docs/content-history.json').split('\n')) {
             if (line.startsWith('@')) {
                 const [commit, date, ...author] = line.slice(1).split(' ');
                 current = { commit, date, author: author.join(' ') };
-            } else if (line && current && !lastCommits.has(line)) {
-                lastCommits.set(line, current);
+                position++;
+            } else if (line && current && !commits.has(line)) {
+                commits.set(line, { last: current, position });
             }
         }
     }
-    return lastCommits.get(relative(repo('..'), path));
+    return commits.get(relative(repo('..'), path));
+};
+
+// Pages migrated from the LaTeX manual, the RST developer docs or the
+// InfoBox sources show the last commit of that source, collected by
+// scripts/import-history.mjs, unless the page was changed after the
+// last commit of content-history.json.
+const history: Record<string, Commit> = JSON.parse(readFileSync(repo('content-history.json'), 'utf8'));
+const lastCommit = (path: string) => {
+    const own = fileCommit(path);
+    const migrated = history[relative(repo('content'), path)];
+    const historyPosition = fileCommit(repo('content-history.json'))?.position ?? -1;
+    if (migrated && (!own || own.position >= historyPosition)) {
+        const { commit, date, author } = migrated;
+        return { commit, date, author };
+    }
+    return own?.last;
 };
 
 export default defineNuxtConfig({

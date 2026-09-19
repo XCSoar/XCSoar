@@ -1,0 +1,1784 @@
+{
+  "1.manual/00.preface.md": {
+    "commit": "2747749a37af7788e752c30f1223d9c98e8cbad6",
+    "date": "2019-02-04",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/XCSoar-manual.tex"
+  },
+  "1.manual/01.introduction/1.organization-of-this-manual.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/01.introduction/2.notes.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/01.introduction/3.platforms.md": {
+    "commit": "4cfed9ead24d6117d2731f15601c4725735a7595",
+    "date": "2024-12-16",
+    "author": "kobedegeest",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/01.introduction/4.technical-support.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/01.introduction/5.training.md": {
+    "commit": "1b83b4010243950e8e5b71e149878ae65e3769f6",
+    "date": "2020-01-21",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/01.introduction/6.using-xcsoar-safely.md": {
+    "commit": "8aa132912e6abe0544955b6a0a326b827aeba09f",
+    "date": "2013-12-27",
+    "author": "Wolfram Zirngibl",
+    "source": "doc/manual/en/ch01_introduction.tex"
+  },
+  "1.manual/02.installation/1.getting-started.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/installation.tex"
+  },
+  "1.manual/02.installation/2.compatibility.md": {
+    "commit": "4cfed9ead24d6117d2731f15601c4725735a7595",
+    "date": "2024-12-16",
+    "author": "kobedegeest",
+    "source": "doc/manual/en/installation.tex"
+  },
+  "1.manual/02.installation/3.software-installation.md": {
+    "commit": "ea011ab2f95edd6a4cb3f44f25c76435d7b82240",
+    "date": "2026-06-16",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/installation.tex"
+  },
+  "1.manual/02.installation/4.data-files.md": {
+    "commit": "a334b4773134365e87b256dedd940c2295e99ad9",
+    "date": "2015-07-13",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/installation.tex"
+  },
+  "1.manual/02.installation/5.running-xcsoar.md": {
+    "commit": "debcffb453a36d3735297e0b40c68c457367fd14",
+    "date": "2026-05-01",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/installation.tex"
+  },
+  "1.manual/03.user-interface/00.interface-overview.md": {
+    "commit": "99b59400052f40705b774b649e45539798e9892b",
+    "date": "2026-08-02",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/01.display-elements.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/02.interaction.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/03.main-menu.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/04.menu-item-overview.md": {
+    "commit": "0b79fe23771b455db009ba13046d566e41ae77b3",
+    "date": "2025-06-26",
+    "author": "Andres Totorica",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/05.menu-buttons.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/06.infoboxes.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/07.status-messages.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/08.dialogs.md": {
+    "commit": "ebc7eb17358782c4b5c87b693a2c519f17ad8699",
+    "date": "2019-10-03",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/09.sounds.md": {
+    "commit": "53444f6e280cfb7d8ca6c30524492ad39c2a5a2e",
+    "date": "2012-12-29",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/10.screen-visuals.md": {
+    "commit": "ab43aaa998ec5a2ade1cdb265f3cb9fdc63e12cd",
+    "date": "2012-09-22",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/11.help-system.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/03.user-interface/12.gestures.md": {
+    "commit": "99b59400052f40705b774b649e45539798e9892b",
+    "date": "2026-08-02",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch02_user_interface.tex"
+  },
+  "1.manual/04.navigation/01.map-display-elements.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/02.glider-symbol-map-orientation.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/03.zoom-and-map-scale.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/04.panning-the-map.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/05.waypoints.md": {
+    "commit": "506de14dc0a59aa82f3be256ab7ee3ec17f1387e",
+    "date": "2025-08-24",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/06.active-task.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/07.terrain-and-topography.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/08.trail.md": {
+    "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
+    "date": "2019-10-12",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/09.markers.md": {
+    "commit": "ab91867f277ad77b14c5d1c17ca9750a1a608574",
+    "date": "2014-01-02",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/10.pilot-event.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/11.thermals.md": {
+    "commit": "62be4bf311537f463b2199ca650b86cd1c138d2a",
+    "date": "2014-08-28",
+    "author": "Joey Orrin",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/12.glide-range-line.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/13.status-tabs-flight-and-time.md": {
+    "commit": "0b79fe23771b455db009ba13046d566e41ae77b3",
+    "date": "2025-06-26",
+    "author": "Andres Totorica",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/04.navigation/14.route.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch03_navigation.tex"
+  },
+  "1.manual/05.cross-country-tasks/00.overview.md": {
+    "commit": "902705397bcc93910a18611e9b0106f941b9c542",
+    "date": "2026-08-22",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/01.goto-tasks.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/02.editing-tasks.md": {
+    "commit": "ab993ca35cb86fe773358df583fa20d5a51f1973",
+    "date": "2025-10-23",
+    "author": "Benjamin Girard",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/03.waypoint-information.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/04.waypoint-selector-dialogue.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/05.task-manager.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/06.task-types.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/07.turn-points-task-rules.md": {
+    "commit": "902705397bcc93910a18611e9b0106f941b9c542",
+    "date": "2026-08-22",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/08.start-a-task.md": {
+    "commit": "9d79827d481986471d98a76b83b6ef3a07cc7100",
+    "date": "2019-12-26",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/09.advancing-and-restarting-tasks.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/10.alternate-starts.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/11.abort-resume-the-task-and-alternates.md": {
+    "commit": "902705397bcc93910a18611e9b0106f941b9c542",
+    "date": "2026-08-22",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/12.task-status.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/13.assigned-area-tasks.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/14.contest.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/15.logger.md": {
+    "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
+    "date": "2026-07-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/16.flight-analysis.md": {
+    "commit": "9d79827d481986471d98a76b83b6ef3a07cc7100",
+    "date": "2019-12-26",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/05.cross-country-tasks/17.sunlight-and-time.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch04_xc_tasks.tex"
+  },
+  "1.manual/06.glide-computer/01.flight-modes.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/02.maccready-setting.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/03.thermal-next-leg-equivalent.md": {
+    "commit": "25b2bbc24df242b8bcebf18e4247d83251a4523b",
+    "date": "2026-09-11",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/04.glide-polar.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/05.flight-setup-dialogue.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/06.speed-command-display.md": {
+    "commit": "efed0ee2e70881c6ce670f32ab8c0b34194cac1a",
+    "date": "2013-05-26",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/07.speed-to-fly.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/08.speed-to-fly-with-risk.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/09.safety-heights.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/10.final-glide-calculator.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/11.display-of-required-altitude-difference.md": {
+    "commit": "78de380b707549e4f5084a0ef5bc61bfb6a66b32",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/12.task-speed-estimation.md": {
+    "commit": "0c8dccc9b7a1328f3206a0604814b0987a5d6812",
+    "date": "2026-08-28",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/13.optimal-cruise-track.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/14.auto-maccready.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/15.analysis-dialogue.md": {
+    "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
+    "date": "2019-12-30",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/06.glide-computer/16.flight-notifications.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch05_glide_computer.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/01.variometer.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/02.audio-variometer.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/03.air-data-inputs.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/04.wind-display.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/05.wind-estimation.md": {
+    "commit": "5f8deb787de7239a41b92549b12f8cd4e38fa773",
+    "date": "2026-02-06",
+    "author": "bomilkar",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/06.wind-settings-dialogue.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/07.thermal-profile.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/08.thermal-locator.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/09.thermal-assistant.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/10.convection-forecast.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/11.analysis-dialogue.md": {
+    "commit": "ab91867f277ad77b14c5d1c17ca9750a1a608574",
+    "date": "2014-01-02",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/12.weather-metar-taf.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/13.weather-forecast-rasp.md": {
+    "commit": "b5e06b5736e94634b6137b11cb2610f09743e3e3",
+    "date": "2026-07-20",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/14.weather-forecast-edl-soaring.md": {
+    "commit": "5be7ee2e8e29df5fb4e15db1827302fb4170fced",
+    "date": "2026-03-15",
+    "author": "Benjamin Girard",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/07.atmosphere-and-instruments/15.pc-met-deutscher-wetterdienst.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
+  "1.manual/08.airspace/1.airspace-display.md": {
+    "commit": "8ff36a793fcc41cd9525bedc69b5f36edcdff1eb",
+    "date": "2026-06-20",
+    "author": "Yorick Reum",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/08.airspace/2.airspace-warnings.md": {
+    "commit": "b82f9d47e4361ad78dbe63598048c4298378678f",
+    "date": "2020-02-02",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/08.airspace/3.airspace-query-and-details.md": {
+    "commit": "b82f9d47e4361ad78dbe63598048c4298378678f",
+    "date": "2020-02-02",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/08.airspace/4.analysis-dialogue.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/08.airspace/5.flarm-traffic.md": {
+    "commit": "575ac61d58d362f79decbd2addc92ff2b139575c",
+    "date": "2025-01-19",
+    "author": "Andreas Lüthi",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/08.airspace/6.team-flying.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
+  "1.manual/09.integration/1.building-an-xcsoar-system.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/integration.tex"
+  },
+  "1.manual/09.integration/2.exemplary-xcsoar-system-setups.md": {
+    "commit": "898ece4dc116c702dce8a18fb40d86f8bb3d661a",
+    "date": "2026-02-10",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/integration.tex"
+  },
+  "1.manual/10.avionics-and-airframe/1.battery-life.md": {
+    "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
+    "date": "2015-08-18",
+    "author": "Max Kellermann",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/2.gps-connection.md": {
+    "commit": "e95da2232a9e0ee3f2bbc3866aed4a65764f1a7f",
+    "date": "2020-02-04",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/3.switch-inputs.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/4.vega-switch-dialogue.md": {
+    "commit": "ab91867f277ad77b14c5d1c17ca9750a1a608574",
+    "date": "2014-01-02",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/5.slave-mode.md": {
+    "commit": "e95da2232a9e0ee3f2bbc3866aed4a65764f1a7f",
+    "date": "2020-02-04",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/6.system-status.md": {
+    "commit": "e95da2232a9e0ee3f2bbc3866aed4a65764f1a7f",
+    "date": "2020-02-04",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/7.multiple-devices.md": {
+    "commit": "e7f2730369a2feeb1550f9686357659223cd6714",
+    "date": "2014-06-17",
+    "author": "Fabian Bartschke",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/10.avionics-and-airframe/8.managing-external-devices.md": {
+    "commit": "e95da2232a9e0ee3f2bbc3866aed4a65764f1a7f",
+    "date": "2020-02-04",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
+  },
+  "1.manual/11.quickstart/1.local-flight.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch09_quickstart.tex"
+  },
+  "1.manual/11.quickstart/2.fai-task.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch09_quickstart.tex"
+  },
+  "1.manual/11.quickstart/3.aat-task-manual-arm.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch09_quickstart.tex"
+  },
+  "1.manual/12.configuration/01.configure-system.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/02.site-files.md": {
+    "commit": "d3dc106e50680c009c1a0dafde3aa89ced192a33",
+    "date": "2026-02-25",
+    "author": "Simon GH",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/03.map-display.md": {
+    "commit": "8ff36a793fcc41cd9525bedc69b5f36edcdff1eb",
+    "date": "2026-06-20",
+    "author": "Yorick Reum",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/04.glide-computer.md": {
+    "commit": "506de14dc0a59aa82f3be256ab7ee3ec17f1387e",
+    "date": "2025-08-24",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/05.gauges.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/06.task-defaults.md": {
+    "commit": "0a86fd9138a0e627561906a3347236633e7bb3d1",
+    "date": "2026-03-28",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/07.look.md": {
+    "commit": "dee1d4c66e7362ec656a8e424b91b6f5dd59e36d",
+    "date": "2026-08-20",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/08.setup.md": {
+    "commit": "0ca3863a638cce8e146a0d8eaeb90017df830f4c",
+    "date": "2026-09-08",
+    "author": "Yorick Reum",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/09.configure-plane.md": {
+    "commit": "3d856bde265caf974b956fc7ec28479f1c4270fc",
+    "date": "2026-08-03",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/12.configuration/10.configure-devices.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch11_configuration.tex"
+  },
+  "1.manual/13.data-files/01.file-management.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/02.map-database.md": {
+    "commit": "898ece4dc116c702dce8a18fb40d86f8bb3d661a",
+    "date": "2026-02-10",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/03.waypoints.md": {
+    "commit": "4d05eb058d71d674401c20626007c8ba1086a5c2",
+    "date": "2020-03-06",
+    "author": "scls19fr",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/04.airspace.md": {
+    "commit": "50031098837394fbca9d2eaf5b15307602f4e8af",
+    "date": "2021-10-18",
+    "author": "Pascal BAZILE",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/05.airfields-or-waypoint-details.md": {
+    "commit": "ab993ca35cb86fe773358df583fa20d5a51f1973",
+    "date": "2025-10-23",
+    "author": "Benjamin Girard",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/06.glide-polar.md": {
+    "commit": "3d856bde265caf974b956fc7ec28479f1c4270fc",
+    "date": "2026-08-03",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/07.profiles.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/08.checklist.md": {
+    "commit": "3493cdcfc3290564009af2602ae5952e4b645afe",
+    "date": "2026-03-22",
+    "author": "Dominic Spreitz",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/09.tasks.md": {
+    "commit": "404758dfba2569722251f1ca4b3f7b54fa6b1efb",
+    "date": "2026-09-10",
+    "author": "Dominic Spreitz",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/10.flight-logs.md": {
+    "commit": "78c18edba080a89003e8ccfd91c895cde3a136ea",
+    "date": "2012-04-01",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/11.flarm-identification.md": {
+    "commit": "4b46e261eefabaa77dbbe7c461d1fe1123723c26",
+    "date": "2012-03-29",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/12.input-events.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/13.data-files/13.status.md": {
+    "commit": "53444f6e280cfb7d8ca6c30524492ad39c2a5a2e",
+    "date": "2012-12-29",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch12_data_files.tex"
+  },
+  "1.manual/14.history-development/1.product-history.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch13_history.tex"
+  },
+  "1.manual/14.history-development/2.contribute.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch13_history.tex"
+  },
+  "1.manual/14.history-development/3.open-source.md": {
+    "commit": "efed0ee2e70881c6ce670f32ab8c0b34194cac1a",
+    "date": "2013-05-26",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch13_history.tex"
+  },
+  "1.manual/14.history-development/4.development.md": {
+    "commit": "efed0ee2e70881c6ce670f32ab8c0b34194cac1a",
+    "date": "2013-05-26",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch13_history.tex"
+  },
+  "1.manual/14.history-development/5.user-base.md": {
+    "commit": "59cfe2e1327b86f3eabbe33c98c9675e178e0594",
+    "date": "2012-04-01",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch13_history.tex"
+  },
+  "1.manual/15.license.md": {
+    "commit": "2747749a37af7788e752c30f1223d9c98e8cbad6",
+    "date": "2019-02-04",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/gpl.tex"
+  },
+  "2.quick-guide/1.xcsoar-in-a-flash.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/2.xcsoar-installation.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/3.finish-configuration-setup.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/4.pre-flight-check.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/5.start-check.md": {
+    "commit": "4b03f1406f0edd309da45dc2d1a56ea9514f5dba",
+    "date": "2014-03-02",
+    "author": "Wolfram Zirngibl",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/6.fly.md": {
+    "commit": "4b03f1406f0edd309da45dc2d1a56ea9514f5dba",
+    "date": "2014-03-02",
+    "author": "Wolfram Zirngibl",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/7.after-flight-check.md": {
+    "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
+    "date": "2021-11-09",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "2.quick-guide/8.tasks.md": {
+    "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/XCSoar-in-a-flash.tex"
+  },
+  "3.infobox/0.index.md": {
+    "commit": "25b2bbc24df242b8bcebf18e4247d83251a4523b",
+    "date": "2026-09-11",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/000.height-gps.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/001.height-agl.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/002.thermal-30s.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/003.bearing.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/004.gr-instantaneous.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/005.gr-cruise.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/006.speed-gps.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/007.tl-avg.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/008.tl-gain.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/009.tl-time.md": {
+    "commit": "2ed41207d9df231d6c280e59ef0473637c543d90",
+    "date": "2010-08-23",
+    "author": "Max Kellermann",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/010.mac-cready.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/011.wp-distance.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/012.wp-alt-diff.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/013.wp-alt-req.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/014.wp-name.md": {
+    "commit": "ab993ca35cb86fe773358df583fa20d5a51f1973",
+    "date": "2025-10-23",
+    "author": "Benjamin Girard",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/015.fin-alt-diff.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/016.fin-alt-req.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/017.speed-task-avg.md": {
+    "commit": "74c54f8d659f6dcda1f84fb5115f2c68515ec13e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/018.fin-distance.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/019.fin-gr-te.md": {
+    "commit": "f09e3298e048cb8c0426767c58e8920e53b6edda",
+    "date": "2026-02-16",
+    "author": "August2111",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/020.h-terrain.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/021.thermal-avg.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/022.thermal-gain.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/023.track-gps.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/024.vertical-speed-gps.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/025.wind-speed-est.md": {
+    "commit": "4cfe02fe8b2f547b35b49bebb6d2e68c5e2da913",
+    "date": "2021-12-03",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/026.wind-bearing-est.md": {
+    "commit": "4cfe02fe8b2f547b35b49bebb6d2e68c5e2da913",
+    "date": "2021-12-03",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/027.aa-time.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/028.aa-distance-max.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/029.aa-distance-min.md": {
+    "commit": "2ed41207d9df231d6c280e59ef0473637c543d90",
+    "date": "2010-08-23",
+    "author": "Max Kellermann",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/030.aa-speed-max.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/031.aa-speed-min.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/032.air-speed-ext.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/033.h-baro.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/034.wp-speed-mc.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/035.climb-perc.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/036.time-since-takeoff.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/037.load-g.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/038.wp-gr.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/039.time-local.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/040.time-utc.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/041.fin-time.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/042.wp-time.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/043.act-speed.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/044.vertical-speed-netto.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/045.fin-time-local.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/046.wp-time-local.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/047.wp-bearing-diff.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/048.temperature.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/049.humidity-rel.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/050.home-temperature.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/051.fin-aa-distance.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/052.aa-speed-avg.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/053.ld.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/054.speed.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/055.team-code.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/056.team-bearing.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/057.team-bearing-diff.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/058.team-range.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/059.cc-speed-inst.md": {
+    "commit": "74c54f8d659f6dcda1f84fb5115f2c68515ec13e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/060.home-distance.md": {
+    "commit": "3933e899657c0833219479376d8e4b24b2c56a53",
+    "date": "2025-08-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/061.cc-speed.md": {
+    "commit": "74c54f8d659f6dcda1f84fb5115f2c68515ec13e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/062.aa-time-diff.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/063.climb-avg.md": {
+    "commit": "6032b5a7de23d829e371a0696c7557787979b0f4",
+    "date": "2013-02-19",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/064.rh-trend.md": {
+    "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
+    "date": "2019-07-17",
+    "author": "Bruce Duncan",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/065.battery.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/066.fin-gr.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/067.alternate-1-name.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/068.alternate-2-name.md": {
+    "commit": "322c1b8e302e7be5ab457abb668521160f479d0c",
+    "date": "2025-09-09",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/069.alternate-1-gr.md": {
+    "commit": "322c1b8e302e7be5ab457abb668521160f479d0c",
+    "date": "2025-09-09",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/070.h-qfe.md": {
+    "commit": "6032b5a7de23d829e371a0696c7557787979b0f4",
+    "date": "2013-02-19",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/071.gr-avg.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/072.experimental1.md": {
+    "commit": "332acb23220f3f6d718b1aa9909ff4fc08d66140",
+    "date": "2011-03-20",
+    "author": "Helmut J. Rohs",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/073.oc-distance.md": {
+    "commit": "c040f65fa59a8bc1b259b28660c6d134cf965c52",
+    "date": "2021-04-09",
+    "author": "Stefan Schumann",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/074.experimental2.md": {
+    "commit": "332acb23220f3f6d718b1aa9909ff4fc08d66140",
+    "date": "2011-03-20",
+    "author": "Helmut J. Rohs",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/075.cpu-load.md": {
+    "commit": "288073484189f3992d146707ef28fbeefe91ff39",
+    "date": "2011-05-09",
+    "author": "John Wharington",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/076.wp-h.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/077.free-ram.md": {
+    "commit": "672ce8993c4aac809a453cf47829bbebbc4fdf93",
+    "date": "2012-04-10",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/078.flight-level.md": {
+    "commit": "3be3e6800224a3f92749b55dc1fda66f787c8517",
+    "date": "2020-01-17",
+    "author": "dD",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/079.barogram.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/080.vario-spark.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/081.netto-vario-spark.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/082.circling-average-spark.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/083.thermal-band.md": {
+    "commit": "6032b5a7de23d829e371a0696c7557787979b0f4",
+    "date": "2013-02-19",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/084.task-progress.md": {
+    "commit": "cbc7d742d46661d5191728c21f54915d0c72586b",
+    "date": "2012-09-16",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/085.task-max-height-time.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/086.fin-ete-vmg.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/087.wp-ete-vmg.md": {
+    "commit": "cbc7d742d46661d5191728c21f54915d0c72586b",
+    "date": "2012-09-16",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/088.horizon.md": {
+    "commit": "cbc7d742d46661d5191728c21f54915d0c72586b",
+    "date": "2012-09-16",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/089.nearest-airspace-horizontal.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/090.nearest-airspace-vertical.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/091.wp-mc0-alt-diff.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/092.head-wind.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/093.terrain-collision.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/094.nav-altitude.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/095.next-leg-eq-thermal.md": {
+    "commit": "25b2bbc24df242b8bcebf18e4247d83251a4523b",
+    "date": "2026-09-11",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/096.head-wind-simplified.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/097.cruisefficiency.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/098.wind-arrow.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/099.thermal-assistant.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/100.start-open-time.md": {
+    "commit": "0b79fe23771b455db009ba13046d566e41ae77b3",
+    "date": "2025-06-26",
+    "author": "Andres Totorica",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/101.start-open-arrival-time.md": {
+    "commit": "0b79fe23771b455db009ba13046d566e41ae77b3",
+    "date": "2025-06-26",
+    "author": "Andres Totorica",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/102.next-radial.md": {
+    "commit": "1ad814f08e347bfc84ef881de679d6ea745114bc",
+    "date": "2013-02-17",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/103.atc-radial.md": {
+    "commit": "d560d6761ccf12ad953e3c1f313ac4e863f851b6",
+    "date": "2022-09-24",
+    "author": "unknown",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/104.task-speed-hour.md": {
+    "commit": "a7aee01f0713a3a11275cddd682f9a6e42456a8e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/105.wp-nominal-dist.md": {
+    "commit": "680a875628f95be951f5c3a69787930382fdf243",
+    "date": "2025-09-17",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/106.circldiameter.md": {
+    "commit": "4bfe44a13fbc902c928e8e2a8e1ccd4ee061b3de",
+    "date": "2013-09-07",
+    "author": "Adrien Ott",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/107.takeoff-distance.md": {
+    "commit": "2348b6d33629b5642bad4fba371c171e0886a854",
+    "date": "2013-08-31",
+    "author": "Max Kellermann",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/108.contest-speed.md": {
+    "commit": "ba16b0c70c79c3756b02791c0ae0844059d3dcd4",
+    "date": "2025-09-06",
+    "author": "Sundown3867",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/109.fin-mc0-altd.md": {
+    "commit": "623e20c7ca40522051aefeaaf2b2b6285bd0aefe",
+    "date": "2013-11-30",
+    "author": "Andreas Pfaller",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/110.next-arrow.md": {
+    "commit": "d718f01cb347e049bc2c1ff1eff9c881590c22be",
+    "date": "2015-07-07",
+    "author": "Håkan Lindqvist",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/111.wp-eta-vmg.md": {
+    "commit": "d8c839f2923faf23398b1a5cb1111a0b914f8f4d",
+    "date": "2016-03-01",
+    "author": "Andreas Pfaller",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/112.non-circling-climb-perc.md": {
+    "commit": "88058838a2ad4b0959a2c862d3ce7a4e166ced34",
+    "date": "2016-05-10",
+    "author": "John Wharington",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/113.climb-perc-chart.md": {
+    "commit": "93a623b5d4c2aeebbcb73737f8730e1b34d02818",
+    "date": "2016-05-10",
+    "author": "John Wharington",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/114.nbr-sat.md": {
+    "commit": "2be79c15a50f14079a25d7a1d549bb0a360f6877",
+    "date": "2025-09-24",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/115.active-radio.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/116.standby-radio.md": {
+    "commit": "ef28fa7150ddddc13ca25d2955ae2248a6df8dd8",
+    "date": "2025-07-18",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/117.thermal-time.md": {
+    "commit": "680a875628f95be951f5c3a69787930382fdf243",
+    "date": "2025-09-17",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/118.alternate-2-gr.md": {
+    "commit": "322c1b8e302e7be5ab457abb668521160f479d0c",
+    "date": "2025-09-09",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/119.heart-rate.md": {
+    "commit": "32254ac214f781780c5a10aadc2a4131b05b4756",
+    "date": "2021-07-24",
+    "author": "Max Kellermann",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/120.transponder-code.md": {
+    "commit": "680a875628f95be951f5c3a69787930382fdf243",
+    "date": "2025-09-17",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/121.engine-cht.md": {
+    "commit": "a052e2eb11391874f80ea2ae126ef6179e0b8bfa",
+    "date": "2025-09-07",
+    "author": "Sundown3867",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/122.engine-egt.md": {
+    "commit": "a052e2eb11391874f80ea2ae126ef6179e0b8bfa",
+    "date": "2025-09-07",
+    "author": "Sundown3867",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/123.engine-rpm.md": {
+    "commit": "a052e2eb11391874f80ea2ae126ef6179e0b8bfa",
+    "date": "2025-09-07",
+    "author": "Sundown3867",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/124.aat-d-t-or-eta.md": {
+    "commit": "2be79c15a50f14079a25d7a1d549bb0a360f6877",
+    "date": "2025-09-24",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/125.speed-task-est.md": {
+    "commit": "74c54f8d659f6dcda1f84fb5115f2c68515ec13e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/126.home-alt-diff.md": {
+    "commit": "3933e899657c0833219479376d8e4b24b2c56a53",
+    "date": "2025-08-21",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/127.speed-task-leg.md": {
+    "commit": "a7aee01f0713a3a11275cddd682f9a6e42456a8e",
+    "date": "2024-05-21",
+    "author": "Eric Carden",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/128.alternate-1-alt-diff.md": {
+    "commit": "322c1b8e302e7be5ab457abb668521160f479d0c",
+    "date": "2025-09-09",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/129.alternate-2-alt-diff.md": {
+    "commit": "322c1b8e302e7be5ab457abb668521160f479d0c",
+    "date": "2025-09-09",
+    "author": "Eric Carden",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/130.home.md": {
+    "commit": "dd90320e41d9272c191d6dd34c7fd825dde3057b",
+    "date": "2026-03-22",
+    "author": "Joe Capra",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/131.altitude-igc.md": {
+    "commit": "1b41f727cf1da7f0659d1ebd5151f4f9e2d13056",
+    "date": "2026-05-02",
+    "author": "Philipp Wollschlegel",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/132.qnh.md": {
+    "commit": "9280398188fd58a5cca41869c2a47edea53054b0",
+    "date": "2026-05-22",
+    "author": "Philipp Wollschlegel",
+    "source": "src/InfoBoxes/Content/Factory.cpp"
+  },
+  "3.infobox/133.active-waypoint.md": {
+    "commit": "7a61fde88b138537668f9ac84322e5f45d825e52",
+    "date": "2026-05-22",
+    "author": "Joe Capra",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "3.infobox/134.previous-waypoint.md": {
+    "commit": "378a1ff9656ca60eaf90d61683be075898133c7d",
+    "date": "2026-05-25",
+    "author": "Joe Capra",
+    "source": "doc/manual/en/ch10_infobox_reference.tex"
+  },
+  "5.dev/01.build.md": {
+    "commit": "7e8bbfb329f518892e6793b2eff7088ebf845241",
+    "date": "2026-09-11",
+    "author": "Wolfgang Drescher",
+    "source": "doc/build.rst"
+  },
+  "5.dev/02.devsetup.md": {
+    "commit": "bca57fb2fddaddaa1ea123406bedb0321a957416",
+    "date": "2026-06-29",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/devsetup.rst"
+  },
+  "5.dev/03.rebranding.md": {
+    "commit": "2b660e739fdc897059e60820c51a8cb131fa2f90",
+    "date": "2026-05-01",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/rebranding.rst"
+  },
+  "5.dev/04.policy.md": {
+    "commit": "d55a95cba1861c873b947ea2b62e0302844eb368",
+    "date": "2026-09-10",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/policy.rst"
+  },
+  "5.dev/05.release.md": {
+    "commit": "8c8a674f8add2ff9b9f3cdab52c4362e9e995c05",
+    "date": "2026-08-17",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/release.rst"
+  },
+  "5.dev/06.architecture.md": {
+    "commit": "bca57fb2fddaddaa1ea123406bedb0321a957416",
+    "date": "2026-06-29",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/architecture.rst"
+  },
+  "5.dev/07.weather-overlays.md": {
+    "commit": "ce0ec3d374efc5e020d1e11c874333f410494d5d",
+    "date": "2026-08-01",
+    "author": "Stefan Schumann",
+    "source": "doc/weather_overlays.rst"
+  },
+  "5.dev/08.data-directory.md": {
+    "commit": "ce0ec3d374efc5e020d1e11c874333f410494d5d",
+    "date": "2026-08-01",
+    "author": "Stefan Schumann",
+    "source": "doc/data_directory.rst"
+  },
+  "5.dev/09.input-events.md": {
+    "commit": "0892aeace93c118a9841f3fa780c743dac78f551",
+    "date": "2026-09-10",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/input_events.rst"
+  },
+  "5.dev/10.i18n.md": {
+    "commit": "d55a95cba1861c873b947ea2b62e0302844eb368",
+    "date": "2026-09-10",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/i18n.rst"
+  },
+  "5.dev/11.lua.md": {
+    "commit": "f2935bd59e56a6076f88fe5138470b3c80183b4e",
+    "date": "2026-06-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/lua.rst"
+  },
+  "5.dev/12.mapfile.md": {
+    "commit": "804c0857f5f0b1455ad0a020a2049630d7663c83",
+    "date": "2026-09-05",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/mapfile.rst"
+  },
+  "5.dev/13.task-file.md": {
+    "commit": "404758dfba2569722251f1ca4b3f7b54fa6b1efb",
+    "date": "2026-09-10",
+    "author": "Dominic Spreitz",
+    "source": "doc/task_file.rst"
+  },
+  "5.dev/14.checklist.md": {
+    "commit": "f2935bd59e56a6076f88fe5138470b3c80183b4e",
+    "date": "2026-06-15",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/checklist.rst"
+  },
+  "5.dev/15.debugging.md": {
+    "commit": "7e8bbfb329f518892e6793b2eff7088ebf845241",
+    "date": "2026-09-11",
+    "author": "Wolfgang Drescher",
+    "source": "doc/debugging.rst"
+  },
+  "5.dev/16.test-debug-utilities.md": {
+    "commit": "9abb41984ef6d15dddd4d12b1b2e2b4dbd687453",
+    "date": "2026-08-03",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/test_debug_utilities.rst"
+  },
+  "5.dev/17.git-tips.md": {
+    "commit": "37f8152648d1096388a9dc5abf11bb3f6435fc8f",
+    "date": "2026-06-20",
+    "author": "Philipp Wollschlegel",
+    "source": "doc/git_tips.rst"
+  }
+}
