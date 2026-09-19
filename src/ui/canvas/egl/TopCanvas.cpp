@@ -176,6 +176,7 @@ bool TopCanvas::CheckAndFinishPendingFlip() {
 	    gbm_surface_release_buffer(gbm_surface, current_bo);
 	
 	  current_bo = next_bo;
+	  next_bo = nullptr;
 	}
 	
 	return true;
