@@ -206,6 +206,8 @@ Version 7.46 - not yet released
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
 * development
+  - build system: package Android APK and AAB from one
+    aapt2/bundletool pipeline and one CI job #2021
   - build system: embed VERSIONINFO in XCSoar.exe and the NSIS
     installer from VERSION.txt
   - build system: embed a Windows application manifest (asInvoker,
