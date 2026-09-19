@@ -267,6 +267,14 @@ public:
   Canvas Lock();
   void Unlock() noexcept;
 
+  /** \brief Bring the background drawing buffer to the foreground and display it on the screen.
+   *
+   * \note For DRM/KMS: \p Flip() *schedules* a page flip for the next vertical gap of the display.
+   *   When another \p Flip() is called before the previous one is being finished the call returns
+   *   without action. It leaves the current draw back-buffer active. The next rendering of the scene
+   *   will overwrite the current content. 
+   * 
+   */
   void Flip();
 #ifdef MESA_KMS
   /** \brief Try to finish a pending flip. Return true when no flip is on-going.
