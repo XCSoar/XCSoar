@@ -15,12 +15,6 @@
 #include "Device/Driver.hpp"
 #include "Interface.hpp"
 
-#ifdef ANDROID
-#include "java/Global.hxx"
-#include "Android/Main.hpp"
-#include "Android/BluetoothHelper.hpp"
-#endif
-
 enum ControlIndex {
   Port, EngineTypes, BaudRate, BulkBaudRate,
   IP_ADDRESS,
@@ -29,6 +23,7 @@ enum ControlIndex {
   OwnCallsign,
   I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
   SyncFromDevice, SyncToDevice, SendPosition, PolarSyncMode,
+  InstrumentAlignment,
   K6Bt,
 };
 
@@ -125,6 +120,17 @@ FillPolarSync(DataFieldEnum &dfe,
                     static_cast<unsigned>(DeviceConfig::PolarSync::SEND));
 }
 
+static void
+FillInstrumentAlignment(DataFieldEnum &dfe) noexcept
+{
+  dfe.addEnumText(_("Don't use"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::NONE);
+  dfe.addEnumText(_("Not aligned"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::NOT_ALIGNED);
+  dfe.addEnumText(_("Fixed & aligned"),
+                  (unsigned)DeviceConfig::InstrumentAlignment::FIXED_AND_ALIGNED);
+}
+
 static bool
 EditPortCallback(const char *caption, DataField &df,
                  [[maybe_unused]] const char *help_text) noexcept
@@ -170,6 +176,7 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
   LoadValueEnum(PolarSyncMode, config.polar_sync);
   LoadValue(K6Bt, config.k6bt);
   LoadValueEnum(EngineTypes, config.engine_type);
+  LoadValueEnum(InstrumentAlignment, config.instrument_alignment);
 
   UpdateVisibilities();
 }
@@ -279,32 +286,6 @@ CanSendPolar(const DataField &df) noexcept
   return driver->CanSendPolar();
 }
 
-/**
- * Engine Type is only for the PPG engine-sensor GATT service, not for
- * heart-rate BLE sensors (e.g. a Xiaomi band).
- */
-[[gnu::pure]]
-static bool
-ShowsEngineType(DeviceConfig::PortType type,
-                DeviceConfig::EngineType engine_type,
-                [[maybe_unused]] const char *bluetooth_mac) noexcept
-{
-  if (type != DeviceConfig::PortType::BLE_SENSOR)
-    return false;
-
-  if (engine_type != DeviceConfig::EngineType::NONE)
-    return true;
-
-#ifdef ANDROID
-  if (bluetooth_helper != nullptr &&
-      bluetooth_mac != nullptr && bluetooth_mac[0] != '\0')
-    return bluetooth_helper->HasEngineSensors(Java::GetEnv(),
-                                              bluetooth_mac);
-#endif
-
-  return false;
-}
-
 void
 DeviceEditWidget::UpdateVisibilities() noexcept
 {
@@ -314,11 +295,7 @@ DeviceEditWidget::UpdateVisibilities() noexcept
     DeviceConfig::MaybeBluetooth(type, port_df.GetAsString());
   const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
   const bool uses_speed = DeviceConfig::UsesSpeed(type) || k6bt;
-  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
-  const auto engine_type =
-    DeviceConfig::EngineType(engine_df.GetValue());
-  const bool maybe_engine_sensor =
-    ShowsEngineType(type, engine_type, port_df.GetAsString());
+  const bool maybe_engine_sensor = type == DeviceConfig::PortType::BLE_SENSOR;
 
   SetRowAvailable(BaudRate, uses_speed);
   SetRowAvailable(BulkBaudRate, uses_speed &&
@@ -355,6 +332,9 @@ DeviceEditWidget::UpdateVisibilities() noexcept
   const bool can_send_polar = CanSendPolar(GetDataField(Driver));
   const bool polar_row_applicable = DeviceConfig::UsesDriver(type) &&
                                     (can_receive_polar || can_send_polar);
+  const bool is_internal = (type == DeviceConfig::PortType::INTERNAL);
+  SetRowAvailable(InstrumentAlignment, is_internal);
+  SetRowVisible(InstrumentAlignment, is_internal);
   /* Hide when the driver does not register polar receive/send capability. */
   SetRowAvailable(PolarSyncMode, polar_row_applicable);
   SetRowVisible(PolarSyncMode, polar_row_applicable);
@@ -501,6 +481,15 @@ DeviceEditWidget::Prepare(ContainerWindow &parent,
         "device."),
       polar_sync_df);
 
+  DataFieldEnum *instrument_alignment_df = new DataFieldEnum(this);
+  FillInstrumentAlignment(*instrument_alignment_df);
+  instrument_alignment_df->SetValue((unsigned)config.instrument_alignment);
+  Add(_("Built-in IMU"),
+      _("Whether the instrument housing the IMU is permanently fixed and its axes "
+        "are aligned to the aircraft axes. Set to 'Fixed & aligned' only "
+        "when the device is rigidly mounted. If in doubt, use 'Not aligned'."),
+      instrument_alignment_df);
+
   AddBoolean("K6Bt",
              _("Whether you use a K6Bt to connect the device."),
              config.k6bt, this);
@@ -596,10 +585,8 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
   changed |= FinishPortField(config, (const DataFieldEnum &)GetDataField(Port));
 
-  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
-  const auto engine_type = DeviceConfig::EngineType(engine_df.GetValue());
-  if (config.engine_type != DeviceConfig::EngineType::NONE ||
-      ShowsEngineType(config.port_type, engine_type, config.bluetooth_mac))
+  const bool maybe_engine_sensor = config.port_type == DeviceConfig::PortType::BLE_SENSOR;
+  if (maybe_engine_sensor)
     changed |= SaveValueEnum(EngineTypes, config.engine_type);
 
   if (config.MaybeBluetooth())
@@ -649,6 +636,9 @@ DeviceEditWidget::Save(bool &_changed) noexcept
                            config.driver2_name.capacity());
     }
   }
+
+  if (config.port_type == DeviceConfig::PortType::INTERNAL)
+    changed |= SaveValueEnum(InstrumentAlignment, config.instrument_alignment);
 
   const auto &basic = CommonInterface::Basic();
   if (basic.sensor_calibration_available) {
