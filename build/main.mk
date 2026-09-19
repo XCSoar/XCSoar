@@ -842,7 +842,7 @@ endif
 endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
-XCSOAR_LDLIBS += -framework CoreLocation -lSDL2main # include SDL2main for main() on MacOS and iOS (otherwise linking fails)
+XCSOAR_LDLIBS += -framework CoreLocation
 endif
 
 ifeq ($(HAVE_HTTP),y)

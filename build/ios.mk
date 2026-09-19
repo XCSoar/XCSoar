@@ -1,6 +1,7 @@
 ifeq ($(TARGET_IS_IOS),y)
 
 TARGET_LDLIBS += -framework UIKit
+TARGET_LDLIBS += -framework CoreMotion
 
 IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 

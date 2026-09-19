@@ -299,9 +299,10 @@ WndForm::ShowModal()
 #ifdef ENABLE_SDL
       if (event.GetKeyCode() == SDLK_TAB) {
         /* the Tab key moves the keyboard focus */
-        const Uint8 *keystate = ::SDL_GetKeyboardState(nullptr);
-        event.event.key.keysym.sym =
-            keystate[SDL_SCANCODE_LSHIFT] || keystate[SDL_SCANCODE_RSHIFT]
+        const bool *key_state = ::SDL_GetKeyboardState(nullptr);
+        event.event.key.key =
+            key_state[SDL_SCANCODE_LSHIFT] ||
+            key_state[SDL_SCANCODE_RSHIFT]
           ? SDLK_UP : SDLK_DOWN;
       }
 #endif

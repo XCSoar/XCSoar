@@ -5,9 +5,9 @@
 #include "ui/dim/Rect.hpp"
 
 #ifdef ENABLE_SDL
-#include <SDL_clipboard.h>
-#include <SDL_keyboard.h>
-#include <SDL_stdinc.h>
+#include <SDL3/SDL_clipboard.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_stdinc.h>
 #endif
 
 namespace UI::TextInput {
@@ -30,7 +30,8 @@ ShowScreenKeyboard() noexcept
      keyboard; on desktops, text input is enabled permanently and
      switching it off would break the physical keyboard */
   if (HasScreenKeyboard())
-    ::SDL_StartTextInput();
+    if (auto *window = SDL_GetKeyboardFocus())
+      ::SDL_StartTextInput(window);
 #endif
 }
 
@@ -39,7 +40,8 @@ HideScreenKeyboard() noexcept
 {
 #ifdef ENABLE_SDL
   if (HasScreenKeyboard())
-    ::SDL_StopTextInput();
+    if (auto *window = SDL_GetKeyboardFocus())
+      ::SDL_StopTextInput(window);
 #endif
 }
 
@@ -51,7 +53,8 @@ SetScreenKeyboardRect([[maybe_unused]] const PixelRect &rc) noexcept
     return;
 
   SDL_Rect r{rc.left, rc.top, int(rc.GetWidth()), int(rc.GetHeight())};
-  ::SDL_SetTextInputRect(&r);
+  if (auto *window = SDL_GetKeyboardFocus())
+    ::SDL_SetTextInputArea(window, &r, 0);
 #endif
 }
 

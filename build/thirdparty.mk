@@ -12,14 +12,14 @@ else ifeq ($(TARGET),ANDROID)
 else ifeq ($(TARGET_IS_IOS),y)
   USE_THIRDPARTY_LIBS = y
 else ifeq ($(TARGET_IS_OSX),y)
-  # macOS always uses the pinned SDL2 build; ANGLE is enabled by default.
+  # macOS always uses the pinned SDL3 build; ANGLE is enabled by default.
   # Omitted packages are discovered on the system.
   USE_THIRDPARTY_LIBS = y
   USE_ANGLE ?= y
   ifeq ($(USE_ANGLE),y)
-    THIRDPARTY_PACKAGES ?= angle,sdl2
+    THIRDPARTY_PACKAGES ?= angle,sdl3
   else
-    THIRDPARTY_PACKAGES ?= sdl2
+    THIRDPARTY_PACKAGES ?= sdl3
   endif
 else
   USE_THIRDPARTY_LIBS = n

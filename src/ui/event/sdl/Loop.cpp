@@ -13,8 +13,10 @@ bool
 EventLoop::Get(Event &event)
 {
   if (bulk) {
-    if (queue.Pop(event))
+    if (queue.Pop(event)) {
+      event.CopyText();
       return true;
+    }
 
     /* that was the last event for now, refresh the screen now */
     if (top_window != nullptr)
@@ -24,6 +26,7 @@ EventLoop::Get(Event &event)
   }
 
   if (queue.Wait(event)) {
+    event.CopyText();
     bulk = true;
     return true;
   }
@@ -34,7 +37,9 @@ EventLoop::Get(Event &event)
 void
 EventLoop::Dispatch(const Event &_event)
 {
-  const SDL_Event &event = _event.event;
+  SDL_Event event = _event.event;
+  if (event.type == SDL_EVENT_TEXT_INPUT)
+    event.text.text = _event.text.c_str();
 
   if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;

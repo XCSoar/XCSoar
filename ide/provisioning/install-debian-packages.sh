@@ -68,7 +68,7 @@ install_linux() {
     liblua5.4-dev \
     libxml-parser-perl \
     libasound2-dev \
-    libsdl2-dev \
+    libsdl3-dev \
     librsvg2-bin xsltproc \
     imagemagick gettext \
     mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev \
@@ -76,6 +76,8 @@ install_linux() {
     ttf-bitstream-vera \
     fonts-roboto-unhinted \
     xz-utils
+
+  pkg-config --atleast-version=3.2.10 sdl3
   echo
 }
 

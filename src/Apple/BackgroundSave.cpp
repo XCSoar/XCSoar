@@ -10,7 +10,7 @@
 #include "Startup.hpp"
 #include "LogFile.hpp"
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 /**
  * Unlike events which are dispatched by our event loop, an SDL event
@@ -20,19 +20,19 @@
  * method has returned, the process gets suspended and may never be
  * resumed.
  */
-static int SDLCALL
+static bool SDLCALL
 OnApplicationEvent([[maybe_unused]] void *ctx, SDL_Event *event) noexcept
 {
   switch (event->type) {
-  case SDL_APP_DIDENTERBACKGROUND:
-  case SDL_APP_TERMINATING:
+  case SDL_EVENT_DID_ENTER_BACKGROUND:
+  case SDL_EVENT_TERMINATING:
     LogString("Entering background, saving user state");
     SaveUserState();
     break;
   }
 
   /* keep the event, it is none of our business */
-  return 1;
+  return true;
 }
 
 void
@@ -44,7 +44,7 @@ InitializeAppleBackgroundSave() noexcept
 void
 DeinitializeAppleBackgroundSave() noexcept
 {
-  SDL_DelEventWatch(OnApplicationEvent, nullptr);
+  SDL_RemoveEventWatch(OnApplicationEvent, nullptr);
 }
 
 #else /* !TARGET_OS_IPHONE */
