@@ -227,21 +227,33 @@ Straight to the chapter you need
   :::
 ::
 
-::u-page-c-t-a
----
-title: Get XCSoar
-description: XCSoar is free software. Downloads, hardware advice and news are on xcsoar.org.
-variant: subtle
-links:
-  - label: xcsoar.org
-    to: https://xcsoar.org
-    target: _blank
-    icon: i-lucide-globe
-  - label: Source on GitHub
-    to: https://github.com/XCSoar/XCSoar
-    target: _blank
-    color: neutral
-    variant: outline
-    icon: i-simple-icons-github
----
+::u-page-section
+#title
+Get XCSoar
+
+#description
+XCSoar is free software. Downloads, hardware advice and news are on xcsoar.org.
+
+#links
+  :::u-button
+  ---
+  size: lg
+  to: https://xcsoar.org
+  target: _blank
+  icon: i-lucide-globe
+  ---
+  xcsoar.org
+  :::
+
+  :::u-button
+  ---
+  color: neutral
+  size: lg
+  to: https://github.com/XCSoar/XCSoar
+  target: _blank
+  variant: outline
+  icon: i-simple-icons-github
+  ---
+  Source on GitHub
+  :::
 ::
