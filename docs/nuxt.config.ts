@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // Serve the manual figures and map icons straight from the repository
@@ -29,9 +30,38 @@ const xcsoarVersion = git('tag', '--points-at', 'HEAD').split('\n')
 // Staged or unstaged changes below docs/: the build matches no commit.
 const xcsoarDirty = git('status', '--porcelain', '--untracked-files=no', '--', 'docs') !== '';
 
+// Last commit of every content file (author, not committer), from one
+// walk of the history below docs/content.
+type LastCommit = { commit: string, date: string, author: string };
+let lastCommits: Map<string, LastCommit> | undefined;
+const lastCommit = (path: string) => {
+    if (!lastCommits) {
+        lastCommits = new Map();
+        let current: LastCommit | undefined;
+        for (const line of git('log', '--format=@%H %as %an', '--name-only', '--', 'docs/content').split('\n')) {
+            if (line.startsWith('@')) {
+                const [commit, date, ...author] = line.slice(1).split(' ');
+                current = { commit, date, author: author.join(' ') };
+            } else if (line && current && !lastCommits.has(line)) {
+                lastCommits.set(line, current);
+            }
+        }
+    }
+    return lastCommits.get(relative(repo('..'), path));
+};
+
 export default defineNuxtConfig({
     devtools: false,
     extends: ['docus'],
+    hooks: {
+        // Append the last commit of the page to its body; PageMeta.vue
+        // renders it below the content. The landing page has none.
+        'content:file:afterParse'({ file, content }) {
+            const body = content.body as { type?: string, value?: unknown[] } | undefined;
+            const last = body?.type === 'minimark' && content.stem !== 'index' ? lastCommit(file.path) : undefined;
+            if (last) body.value!.push(['page-meta', last]);
+        },
+    },
     app: {
         head: {
             script: [
@@ -53,6 +83,11 @@ export default defineNuxtConfig({
                     // also show C++, Lua, XML and make snippets.
                     langs: ['cpp', 'lua', 'xml', 'make'],
                 },
+                // Nuxt Content caches parsed pages by file content and
+                // these options. The commit makes every page re-parse after
+                // a new commit, so the last-commit line below the page (see
+                // hooks) does not go stale.
+                ...({ gitHead: xcsoarCommit } as object),
             },
         },
     },

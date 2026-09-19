@@ -54,7 +54,9 @@ function printable(page, pageId, number) {
         return [tag, props, ...children.map(transform)];
     }
 
-    return { ...page, body: { ...page.body, value: page.body.value.map(transform) } };
+    // The last-commit line of the web page has no place in the PDF.
+    const value = page.body.value.filter(node => node[0] !== 'page-meta');
+    return { ...page, body: { ...page.body, value: value.map(transform) } };
 }
 
 // Chapters follow the navigation tree: a folder becomes a numbered
