@@ -78,6 +78,36 @@ struct UISettings {
     COUNT
   } dark_mode;
 
+  /**
+   * When to show the scroll bar of lists and scrollable dialogs.
+   */
+  enum class ScrollBars : uint_least8_t {
+    /**
+     * Let the device decide: #WHEN_SCROLLING on touch screens, #SLIM
+     * where there is no pointer to press arrow buttons with, and
+     * #STANDARD elsewhere.
+     */
+    AUTO,
+
+    /**
+     * A thin translucent overlay on top of the content, shown while
+     * it is being scrolled and faded out afterwards.
+     */
+    WHEN_SCROLLING,
+
+    /**
+     * A thin bar beside the content, always visible, without arrow
+     * buttons; it reserves only a narrow column.
+     */
+    SLIM,
+
+    /**
+     * The scroll bar with arrow buttons beside the content, always
+     * visible; it reserves a column for itself.
+     */
+    STANDARD,
+  } scroll_bars;
+
   FormatSettings format;
   MapSettings map;
   InfoBoxSettings info_boxes;

@@ -151,6 +151,8 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   settings.dark_mode = UISettings::DarkMode::OFF;
 #endif
 
+  map.GetEnum(ProfileKeys::ScrollBars, settings.scroll_bars);
+
   Load(map, settings.format);
   Load(map, settings.map);
   Load(map, settings.info_boxes);

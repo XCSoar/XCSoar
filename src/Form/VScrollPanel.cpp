@@ -23,7 +23,7 @@ VScrollPanel::VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                            VScrollPanelListener &_listener) noexcept
   :PanelControl(parent, look, rc, style),
    listener(_listener),
-   scroll_bar(look.button)
+   scroll_bar(*this, look.button)
 {
   gesture_look.Initialise();
 }
@@ -56,8 +56,7 @@ VScrollPanel::SetupScrollBar() noexcept
 int
 VScrollPanel::GetScrollStep() const noexcept
 {
-  const int step = scroll_bar.GetWidth();
-  return step > 0 ? step : 1;
+  return std::max(1, (int)ScrollBar::GetScrollStep());
 }
 
 /**
@@ -159,6 +158,7 @@ VScrollPanel::SetOriginClamped(int new_origin) noexcept
     return;
 
   origin = (unsigned)new_origin;
+  scroll_bar.NotifyScroll();
   listener.OnVScrollPanelChange();
   Invalidate();
 }
@@ -178,6 +178,7 @@ VScrollPanel::OnDestroy() noexcept
   smooth_scroll_timer.Cancel();
   defer_swipe_timer.Cancel();
   defer_swipe_queue.clear();
+  scroll_bar.HideOverlay();
   PanelControl::OnDestroy();
 }
 
@@ -237,6 +238,10 @@ VScrollPanel::OnKeyDown(unsigned key_code) noexcept
 bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
+  /* the fade-out of the overlay starts here, not at the last pixel
+     the content moved */
+  scroll_bar.ReleaseOverlay();
+
   /* Finish gesture tracking and check for horizontal swipe */
   const bool had_gesture_trail = gesture_tracking;
 
@@ -299,6 +304,11 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 bool
 VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (!scroll_bar.IsDragging() && !dragging && !potential_tap)
+    /* a move with no drag in progress is a hover: let the overlay
+       grow under the pointer */
+    scroll_bar.NotifyMouseMove(p);
+
   if (gesture_tracking) {
     gestures.Update(p);
     Invalidate();
@@ -347,6 +357,15 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     scroll_bar.DragBegin(this, p.y);
     return true;
   } else if (scroll_bar.IsInside(p)) {
+    if (!scroll_bar.HasArrowButtons()) {
+      /* a slim bar has no arrows: pressing it picks the slider up
+         there and lets it follow the pointer */
+      scroll_bar.DragBeginCentred(this);
+      SetOriginClamped(scroll_bar.DragMove(virtual_height,
+                                           GetSize().height, p.y));
+      return true;
+    }
+
     /* click in the scroll bar area (arrows or track) */
     if (scroll_bar.IsInsideUpArrow(p.y)) {
       ScrollBy(-GetScrollStep());
@@ -377,6 +396,8 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
       potential_tap = true;
       drag_start = p;
       StartGestureTracking(p);
+      /* keep the overlay standing for the whole drag */
+      scroll_bar.HoldOverlay();
       SetCapture();
       return true;
     }
@@ -387,6 +408,9 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     drag_y = (int)origin + p.y;
     if (UsePixelPan())
       kinetic.MouseDown(origin);
+
+    /* keep the overlay standing for the whole drag */
+    scroll_bar.HoldOverlay();
     SetCapture();
     return true;
   }
@@ -429,6 +453,8 @@ void
 VScrollPanel::OnCancelMode() noexcept
 {
   PanelControl::OnCancelMode();
+
+  scroll_bar.ReleaseOverlay();
 
   defer_swipe_timer.Cancel();
   defer_swipe_queue.clear();
