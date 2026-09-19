@@ -107,7 +107,7 @@ useHead({
             </div>
             <div class="print-cover-bottom">
                 <p>{{ date }}</p>
-                <p>For XCSoar version {{ config.public.xcsoarVersion }}</p>
+                <p v-if="config.public.xcsoarVersion">For XCSoar version {{ config.public.xcsoarVersion }}</p>
                 <p v-if="config.public.xcsoarCommit">Commit {{ config.public.xcsoarCommit }}</p>
                 <p>https://xcsoar.org</p>
             </div>

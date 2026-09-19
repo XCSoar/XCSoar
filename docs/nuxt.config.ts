@@ -1,5 +1,4 @@
-import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 // Serve the manual figures and map icons straight from the repository
@@ -7,15 +6,28 @@ import { fileURLToPath } from 'node:url';
 // nitro resolves relative publicAssets dirs against its own srcDir.
 const repo = (path: string) => fileURLToPath(new URL(path, import.meta.url));
 
-// Commit of the documentation build, shown on the PDF title page.
-const gitCommit = () => {
+// Runs git in the repository without a shell; '' when git or the
+// repository is missing.
+const git = (...args: string[]) => {
     try {
-        return execSync('git rev-parse --short=12 HEAD', { cwd: repo('..'), stdio: ['ignore', 'pipe', 'ignore'] })
+        return execFileSync('git', args, { cwd: repo('..'), stdio: ['ignore', 'pipe', 'ignore'] })
             .toString().trim();
     } catch {
         return '';
     }
 };
+
+// Commit of the documentation build, shown on the PDF title page.
+const xcsoarCommit = git('rev-parse', '--short=12', 'HEAD');
+
+// Like the XCSoar build system: a commit tagged v<version> is the release
+// of that version, anything else a development build without a version.
+const xcsoarVersion = git('tag', '--points-at', 'HEAD').split('\n')
+    .map(tag => /^v(\d[\w.]*)$/.exec(tag)?.[1])
+    .find(Boolean) ?? '';
+
+// Staged or unstaged changes below docs/: the build matches no commit.
+const xcsoarDirty = git('status', '--porcelain', '--untracked-files=no', '--', 'docs') !== '';
 
 export default defineNuxtConfig({
     devtools: false,
@@ -51,8 +63,9 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            xcsoarVersion: readFileSync(repo('../VERSION.txt'), 'utf8').trim(),
-            xcsoarCommit: gitCommit(),
+            xcsoarVersion,
+            xcsoarCommit,
+            xcsoarDirty,
         },
     },
     routeRules: {
