@@ -373,6 +373,7 @@ $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE_DIR) \
 		$(JAVA_SOURCES)
+	$(Q)rm -f $(NO_ARCH_OUTPUT_DIR)/classes.zip
 	$(Q)$(ZIP) -0 -r $(NO_ARCH_OUTPUT_DIR)/classes.zip $(JAVA_CLASSFILES_DIR)
 
 # Note: Using Java 17, but desugaring is still needed because Java 17
@@ -503,7 +504,10 @@ ANDROID_KEY_ALIAS ?= mk
 # keystore password; if you don't set it, you will be asked interactively
 ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
 JARSIGNER_RELEASE_PASSWD = -storepass:env ANDROID_KEYSTORE_PASS
-BUNDLETOOL_RELEASE_PASSWD = "--ks-pass=pass:$(ANDROID_KEYSTORE_PASS)"
+# bundletool has no env: prefix; do not put the password on argv
+# (make V=2 and /proc/pid/cmdline).  The APK recipe writes this file.
+BUNDLE_KS_PASS_FILE = $(NO_ARCH_OUTPUT_DIR)/.ks-pass
+BUNDLETOOL_RELEASE_PASSWD = --ks-pass=file:$(BUNDLE_KS_PASS_FILE)
 endif
 
 ifeq ($(ANDROID_KEYSTORE),)
@@ -533,6 +537,11 @@ $(BUNDLE_CONFIG): | $(NO_ARCH_OUTPUT_DIR)/dirstamp
 
 $(BUNDLE_BUILD_DIR)/base.zip: $(PROTOBUF_OUT_DIR)/dirstamp $(NO_ARCH_OUTPUT_DIR)/classes.dex $(ANDROID_LIB_BUILD) | $(BUNDLE_BUILD_DIR)/dirstamp
 	@$(NQ)echo "  ZIP     $(notdir $@)"
+	$(Q)rm -f $@ && \
+		rm -rf $(ANDROID_BUNDLE_BASE)/res \
+			$(ANDROID_BUNDLE_BASE)/resources.pb \
+			$(ANDROID_BUNDLE_BASE)/manifest \
+			$(ANDROID_BUNDLE_BASE)/dex
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE) && \
 		cp -r $(PROTOBUF_OUT_DIR)/res $(PROTOBUF_OUT_DIR)/resources.pb $(ANDROID_BUNDLE_BASE)
 	$(Q)mkdir -p $(ANDROID_BUNDLE_BASE)/manifest && \
@@ -571,10 +580,16 @@ $(ANDROID_BIN)/XCSoar.aab: $(BUNDLE_BUILD_DIR)/unsigned.aab $(ANDROID_SIGN_KEYST
 
 $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar.aab
 	@$(NQ)echo "  APK     $@"
-	$(Q)$(BUNDLETOOL) build-apks --overwrite --mode=universal \
+	$(Q)set -e; \
+	if [ -n "$(BUNDLE_KS_PASS_FILE)" ]; then \
+		umask 077; \
+		printf '%s\n' "$$ANDROID_KEYSTORE_PASS" > $(BUNDLE_KS_PASS_FILE); \
+	fi; \
+	trap 'rm -f $(BUNDLE_KS_PASS_FILE)' EXIT; \
+	$(BUNDLETOOL) build-apks --overwrite --mode=universal \
 		--ks=$(ANDROID_SIGN_KEYSTORE) --ks-key-alias=$(ANDROID_SIGN_ALIAS) $(BUNDLETOOL_SIGN_PASSWD) \
 		--bundle=$< \
-		--output=$(BUNDLE_BUILD_DIR)/apkset-release.apks
-	$(Q)$(UNZIP) -p $(BUNDLE_BUILD_DIR)/apkset-release.apks universal.apk > $@
+		--output=$(BUNDLE_BUILD_DIR)/apkset-release.apks; \
+	$(UNZIP) -p $(BUNDLE_BUILD_DIR)/apkset-release.apks universal.apk > $@
 
 endif
