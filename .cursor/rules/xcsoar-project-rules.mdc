@@ -977,7 +977,7 @@ make -j$(nproc) TARGET=UNIX USE_CCACHE=y WERROR=y
 - Check `build/options.mk` for feature flags that might need to be enabled
 
 ### Android Resource Pipeline
-- Android APK and AAB share `build/android.mk` (aapt2 + bundletool). `ANDROID_BUNDLE_BUILD=y` only selects `output/ANDROID_BUNDLE/`
+- Android APK and AAB share `build/android.mk` (aapt2 + bundletool). CI uses one `ANDROID` job: fat-binary APK, then `PLAY=y` for the Play AAB
 - Generated RGBA PNGs (from SVG sources) go to `output/data/graphics2/` and need explicit copy rules to `$(DRAWABLE_DIR)` in `build/android.mk`
 - Resource copy rules use numbered variables (`PNG1`..`PNG9` etc.) and must be listed in the `PNG_FILES` aggregate variable
 - When adding a new bitmap resource variant (e.g., white title for dark mode), all resolution tiers that the code can select must be provided; if the code has `huge`/`big`/`standard` selection logic, the new variant needs matching sizes or the highest-resolution tier will fall back to a lower-resolution variant and appear blurry
