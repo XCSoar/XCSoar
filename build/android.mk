@@ -1,8 +1,5 @@
 # Package Android as an App Bundle (.aab) and a universal APK derived
 # from it.  Single-ABI and ANDROIDFAT builds use the same pipeline.
-#
-# ANDROID_BUNDLE_BUILD=y only selects the output directory
-# (TARGET_FLAVOR=ANDROID_BUNDLE).  Packaging is the same.
 
 ifeq ($(TARGET),ANDROID)
 

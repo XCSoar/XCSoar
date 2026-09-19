@@ -251,9 +251,9 @@ To compile, run::
 That writes ``XCSoar-debug.apk`` and ``XCSoar-debug.aab`` to
 ``output/ANDROID/bin/``.  Both single-ABI and ``ANDROIDFAT`` builds use
 the same aapt2/bundletool pipeline: the APK is a universal package
-extracted from the App Bundle.  ``ANDROID_BUNDLE_BUILD=y`` keeps that
-pipeline and only changes the output directory to
-``output/ANDROID_BUNDLE/`` (CI uses this next to ``PLAY=y``).
+extracted from the App Bundle.  CI builds ``TARGET=ANDROIDFAT`` once for
+the sideload APK (``org.xcsoar.foss``), then ``PLAY=y`` in the same output
+tree to produce the Play Store AAB (``org.xcsoar.play``).
 
 Use one of the following targets:
 
