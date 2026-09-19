@@ -1085,16 +1085,17 @@ lists.
   Environmental Sensing, and Battery services.
   XCSoar uses the first device that supplies each value (device~A
   before~B, and so on).  Winning sensor flags such as {\it GPS fix}
-  and {\it Baro} are drawn in bold; the same flag in regular weight
+  and {\it Baro} are drawn in bold; the same flag that is not bold
   on a later device is present but ignored.
   {\it Bad GPS} is shown in red when the device sends GPS sentences
   without a valid fix.
   {\it Battery=N\%} is shown in red when remaining charge is below
   10~percent.
-  {\it FLARM} is bold while that device's FLARM status is fresh
-  (a recent PFLAU heartbeat), and {\it GDL90} is bold while the
-  protocol is alive; leftover targets alone are not enough.
+  The {\it FLARM} flag is shown while that device is sending
+  updates.
+  {\it GDL90} is shown while the connection is alive.
   Traffic from every such device is used.
+  The {\it Help} button on the Devices list repeats this.
 \item[Baudrate]  Set this to the communication speed of the connected device.
 \item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.

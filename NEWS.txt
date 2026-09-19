@@ -115,13 +115,15 @@ Version 7.46 - not yet released
     list sensor flags when a device reports them
   - draw Devices list sensor flags in bold when XCSoar uses that
     device's value: first source for GPS, baro, vario and the like
-    (A before B), and FLARM or GDL90 while that device's traffic
-    heartbeat is fresh; regular weight means an earlier device
-    already supplies the same data, or FLARM status has expired
+    (A before B); flags that are not bold mean an earlier device
+    already supplies the same data. FLARM is shown only while the
+    device is sending updates
   - show Bad GPS in red on the Devices list when a device reports a
     GPS sentence without a valid fix
   - show Battery=N% in red on the Devices list when remaining charge
     is below 10%
+  - add Help on the Devices list explaining first-device priority,
+    bold flags, and red Bad GPS or low battery
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
   - fix NOTAM details text being truncated and unable to scroll #2943
@@ -201,8 +203,9 @@ Version 7.46 - not yet released
     Devices list
   - document Pressure, Temperature, and Relative humidity on the
     Devices list
-  - document Devices list flag weight: bold means XCSoar uses that
+  - document Devices list flags: bold means XCSoar uses that
     device's value, and red Bad GPS or Battery=N% below 10%
+  - document the Devices list Help button
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer
