@@ -65,6 +65,8 @@ GetDeviceListHelp() noexcept
            "Bold flags are the values XCSoar is using from this device. "
            "Flags that are not bold mean an earlier device already "
            "supplies the same data. "
+           "Baro is height with the current QNH; QNE is pressure "
+           "altitude; Alt IGC is the altitude the logger writes. "
            "Bad GPS and a battery below 10% are shown in red.");
 }
 
@@ -107,7 +109,8 @@ class DeviceListWidget final
   struct Flags {
     bool duplicate:1;
     bool open:1, error:1, connecting:1;
-    bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
+    bool alive:1, location:1, gps:1, baro:1, pressure_altitude:1;
+    bool igc_altitude:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool gdl90:1;
     bool foreflight_id:1;
     bool foreflight_ahrs:1;
@@ -159,8 +162,9 @@ class DeviceListWidget final
       alive = basic.alive;
       location = basic.location_available;
       gps = basic.gps.fix_quality_available;
-      baro = basic.baro_altitude_available ||
-        basic.pressure_altitude_available;
+      baro = basic.baro_altitude_available;
+      pressure_altitude = basic.pressure_altitude_available;
+      igc_altitude = basic.igc_pressure_altitude_available;
       pressure = basic.static_pressure_available;
       pitot = basic.pitot_pressure_available;
       airspeed = basic.airspeed_available ||
@@ -470,6 +474,19 @@ DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
     DrawStatusToken(canvas, p, regular, bold, _("Baro"),
                     !EarlierHas(idx, [](const Flags &f) {
                       return f.baro;
+                    }), need_sep);
+
+  if (flags.pressure_altitude)
+    DrawStatusToken(canvas, p, regular, bold, _("QNE"),
+                    !EarlierHas(idx, [](const Flags &f) {
+                      return f.pressure_altitude;
+                    }), need_sep);
+
+  if (flags.igc_altitude)
+    DrawStatusToken(canvas, p, regular, bold,
+                    C_("Abbreviation", "Alt IGC"),
+                    !EarlierHas(idx, [](const Flags &f) {
+                      return f.igc_altitude;
                     }), need_sep);
 
   if (flags.pressure)
