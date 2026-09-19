@@ -15,6 +15,7 @@
 #include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
@@ -56,6 +57,17 @@ using namespace UI;
 /* Same threshold as BatteryTimer::BATTERY_WARNING (host "Battery low"). */
 static constexpr int BATTERY_WARNING_PERCENT = 10;
 
+static const char *
+GetDeviceListHelp() noexcept
+{
+  return _("XCSoar uses the first device that supplies each value "
+           "(device A before B, and so on). "
+           "Bold flags are the values XCSoar is using from this device. "
+           "Flags that are not bold mean an earlier device already "
+           "supplies the same data. "
+           "Bad GPS and a battery below 10% are shown in red.");
+}
+
 static void
 DrawStatusToken(Canvas &canvas, PixelPoint &p,
                 const Font &regular, const Font &bold,
@@ -96,7 +108,6 @@ class DeviceListWidget final
     bool duplicate:1;
     bool open:1, error:1, connecting:1;
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
-    bool flarm_status:1;
     bool gdl90:1;
     bool foreflight_id:1;
     bool foreflight_ahrs:1;
@@ -157,9 +168,8 @@ class DeviceListWidget final
       vario = basic.netto_vario_available ||
         basic.total_energy_vario_available ||
         basic.noncomp_vario_available;
-      traffic = basic.flarm.IsDetected();
-      /* PFLAU heartbeat; expires after 10 s, unlike leftover targets */
-      flarm_status = basic.flarm.status.available;
+      /* PFLAU heartbeat; expires after 10 s */
+      traffic = basic.flarm.status.available;
       /* GDL90 status follows protocol activity (heartbeat / any frame
          sets alive), not traffic presence — SoftRF may have ownship
          with an empty traffic list. */
@@ -491,7 +501,7 @@ DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
                     flags.alive, need_sep);
   else if (flags.traffic)
     DrawStatusToken(canvas, p, regular, bold, "FLARM",
-                    flags.flarm_status, need_sep);
+                    true, need_sep);
 
   if (flags.foreflight_ahrs)
     DrawStatusToken(canvas, p, regular, bold, "ForeFlight AHRS",
@@ -936,6 +946,9 @@ ShowDeviceList(MultipleDevices *devices)
   dialog.SetWidget(*device_blackboard, devices,
                    UIGlobals::GetDialogLook());
   dialog.GetWidget().CreateButtons(dialog);
+  dialog.AddButton(_("Help"), [](){
+    HelpDialog(_("Devices"), GetDeviceListHelp());
+  });
   dialog.AddButton(_("Close"), mrOK);
   dialog.EnableCursorSelection();
 
