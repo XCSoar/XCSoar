@@ -246,6 +246,8 @@ TopWindow::DrawRedrawCounter(Canvas &canvas) noexcept
 
 #endif
 
+/** \brief Draw the entire scene onto the screen canvas.
+ */
 void
 TopWindow::Expose() noexcept
 {
