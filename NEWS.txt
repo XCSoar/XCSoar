@@ -41,6 +41,9 @@ Version 7.46 - not yet released
   - termination: fix SIGTERM and Ctrl-C killing the program instead of
     shutting it down, which lost the settings and the flight log that
     are written on exit
+  - fix temporary freezing the display when moving the mouse on Cubieboards
+    (OpenVario) when XCSoar runs on DRM/KMS (text console without graphical
+    GUI framework), particularly on high-resolution monitors. #3177    
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
