@@ -78,6 +78,13 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 
 TopCanvas::~TopCanvas() noexcept
 {
+
+#ifdef MESA_KMS
+  // In case that a flip is on-going wait for it to finishing.	
+  while (!CheckAndFinishPendingFlip()){
+	;
+  }
+#endif	
   ReleaseSurface();
 
 #ifdef MESA_KMS
