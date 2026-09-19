@@ -23,6 +23,7 @@ DialogLook::LoadFonts()
 
   text_font.Load(text_font_d);
   small_font.Load(small_font_d);
+  small_font_bold.Load(small_font_d.WithBold());
 
   bold_font.Load(text_font_d.WithBold());
 
