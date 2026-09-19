@@ -8,7 +8,7 @@
 #include "thread/Mutex.hxx"
 #include "time/ClockCache.hxx"
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 #include <chrono>
 

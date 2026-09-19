@@ -176,6 +176,9 @@ public:
   void OnSurfaceOutput(struct wl_output *output, bool entered) noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
+
+  /** Unconsumed fractional vertical mouse wheel delta. */
+  float wheel_delta = 0;
 #endif
 #ifdef DRAW_MOUSE_CURSOR
   uint8_t cursor_size = 1;

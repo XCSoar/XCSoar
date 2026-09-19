@@ -39,13 +39,11 @@ toolchain = Toolchain(xcsoar_path, lib_path,
 # a list of third-party libraries to be used by XCSoar
 from build.libs import *
 
-# The pinned SDL2 build defaults to no Cocoa driver for iOS.  Enable the
+# The pinned SDL3 build defaults to no Cocoa driver for iOS.  Enable the
 # desktop macOS video driver without changing the iOS configuration.
 if toolchain.is_darwin and not toolchain.is_target_ios:
-    sdl2.configure_args.append("-DSDL_COCOA=ON")
-    sdl2.configure_args.append("-DSDL_OPENGL=ON")
-    # SDL's EGL backend loads XCSoar's bundled ANGLE libraries at runtime.
-    sdl2.configure_args.append("-DSDL_LOADSO=ON")
+    sdl3.configure_args.append("-DSDL_COCOA=ON")
+    sdl3.configure_args.append("-DSDL_OPENGL=ON")
 
 geotiff_enabled = os.environ.get('GEOTIFF', 'n') == 'y'
 use_angle_env = os.environ.get('USE_ANGLE', 'auto')
@@ -77,7 +75,7 @@ thirdparty_projects = {
     'libsalsa': libsalsa,
     'libusb': libusb,
     'simple-usbmodeswitch': simple_usbmodeswitch,
-    'sdl2': sdl2,
+    'sdl3': sdl3,
     'angle': angle,
 }
 
@@ -95,14 +93,14 @@ if toolchain.is_windows:
             angle,
         ]
 
-    # Add SDL2 and image/font prerequisites for OpenGL/ANGLE builds.
+    # Add SDL3 and image/font prerequisites for OpenGL/ANGLE builds.
     if enable_sdl:
         thirdparty_libs.extend([
             sqlite3,
             freetype,
             libpng,
             libjpeg,
-            sdl2,
+            sdl3,
         ])
 
     if geotiff_enabled:
@@ -135,7 +133,7 @@ elif toolchain.is_darwin:
             angle,
         ]
     thirdparty_libs += [
-        sdl2
+        sdl3
     ]
     if geotiff_enabled:
         thirdparty_libs += [

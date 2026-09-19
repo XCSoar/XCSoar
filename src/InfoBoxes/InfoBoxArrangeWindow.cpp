@@ -30,7 +30,7 @@
 #endif
 
 #ifdef ENABLE_SDL
-#include <SDL_keyboard.h>
+#include <SDL3/SDL_keyboard.h>
 #endif
 
 #include <algorithm>
@@ -128,7 +128,7 @@ bool
 IsShiftKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
-  return SDL_GetModState() & (KMOD_LSHIFT | KMOD_RSHIFT);
+  return SDL_GetModState() & (SDL_KMOD_LSHIFT | SDL_KMOD_RSHIFT);
 #else
   /* X11 sends XK_ISO_Left_Tab instead; elsewhere Tab only moves
      forwards */

@@ -2,12 +2,18 @@
 // Copyright The XCSoar Project
 
 #include "Input/InputConfig.hpp"
+#include "Input/InputKeys.hpp"
 #include "TestUtil.hpp"
 #include "ui/event/KeyCode.hpp"
 
-int main()
+int
+main()
 {
-  plan_tests(37);
+#ifdef ENABLE_SDL
+  plan_tests(37 + 12 + 6);
+#else
+  plan_tests(37 + 12);
+#endif
 
   InputConfig config;
   config.SetDefaults();
@@ -113,6 +119,29 @@ int main()
   /* Test that non-existent bindings return 0 */
   ok1(config.GetKeyEvent(0, 'X') == 0);
   ok1(config.GetKeyEvent(0, 999) == 0);
+
+  /* Exercise names read from .xci files through the complete lookup. */
+  static constexpr const char *names[] = {"UP", "F1", "RETURN", "a"};
+  for (unsigned i = 0; i < 4; ++i) {
+    const unsigned key = ParseKeyCode(names[i]);
+    ok1(key != 0);
+    config.SetKeyEvent(0, key, 1000 + i);
+    ok1(config.GetKeyEvent(2, key) == 1000 + i);
+    ok1(config.GetKeyEventInModeNoFallback(2, key) == 0);
+  }
+
+#ifdef ENABLE_SDL
+  /* Extended keycodes must not alias ASCII or scancode bindings. */
+  const unsigned extended = (1u << 29) | 'A';
+  config.SetKeyEvent(0, extended, 2000);
+  ok1(config.GetKeyEvent(0, extended) == 0);
+  ok1(config.GetKeyEventInModeNoFallback(0, extended) == 0);
+  ok1(config.GetKeyEvent(0, 'A') == 1003);
+  config.SetKeyEvent(1, ParseKeyCode("F1"), 2001);
+  ok1(config.GetKeyEvent(1, SDLK_F1) == 2001);
+  ok1(config.GetKeyEventInModeNoFallback(1, SDLK_F1) == 2001);
+  ok1(config.GetKeyEvent(2, SDLK_F1) == 1001);
+#endif
 
   return exit_status();
 }

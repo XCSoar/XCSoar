@@ -236,13 +236,13 @@ public:
   /**
    * Request a resize operation, called from event thread.
    * This does not immediately reallocate
-   * the buffer, but flags it for processing in the draw thread.
+   * the buffer, but flags it for processing in the UI thread.
    */
   void RequestResize(PixelSize new_size) noexcept;
 
   /**
    * Process any pending resize request. Should be called from the
-   * draw thread before locking the canvas.
+   * UI thread before locking the canvas.
    * @return true if a resize was processed
    */
   bool ProcessPendingResize() noexcept;

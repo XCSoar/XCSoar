@@ -6,8 +6,8 @@
 #include "Features.hpp"
 
 #ifdef ENABLE_SDL
-#include <SDL_platform.h>
-#include <SDL_opengles2.h>
+#include <SDL3/SDL_platform.h>
+#include <SDL3/SDL_opengles2.h>
 #else
 #include <GLES2/gl2.h>
 #endif

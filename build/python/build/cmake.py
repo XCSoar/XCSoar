@@ -43,7 +43,7 @@ set(CMAKE_AR {toolchain.ar})
 set(CMAKE_RANLIB {toolchain.ranlib})
 """)
 
-    if cmake_system_name == 'Darwin':
+    if toolchain.is_darwin:
         # On macOS, cmake forcibly adds an "-isysroot" flag even if
         # one is already present in the flags variable; this breaks
         # cross-compiling for iOS, and can be worked around by setting
@@ -118,8 +118,8 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
         cmake_system_name = 'Linux'
         if toolchain.is_darwin:
             cmake_system_name = 'Darwin'
-            if toolchain.is_target_ios and 'SDL2' in src:
-                # SDL2 needs CMAKE_SYSTEM_NAME set to iOS, otherwise it will build for macOS
+            if toolchain.is_target_ios and 'SDL3' in src:
+                # SDL3 needs CMAKE_SYSTEM_NAME set to iOS, otherwise it will build for macOS
                 # but OpenSSL needs CMAKE_SYSTEM_NAME set to Darwin, otherwise it will fail to build
                 cmake_system_name = 'iOS'
         elif toolchain.is_windows:

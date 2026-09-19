@@ -21,16 +21,11 @@
 #include "ui/canvas/memory/Dither.hpp"
 #endif
 
-#include <SDL_platform.h>
-#include <SDL_video.h>
-#include <SDL_hints.h>
+#include <SDL3/SDL_platform.h>
+#include <SDL3/SDL_video.h>
+#include <SDL3/SDL_hints.h>
 #ifdef USE_MEMORY_CANVAS
-#include <SDL_render.h>
-#endif
-#if defined(__MACOSX__) && __MACOSX__
-#include <SDL_syswm.h>
-#import <AppKit/AppKit.h>
-#include <alloca.h>
+#include <SDL3/SDL_render.h>
 #endif
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
@@ -43,10 +38,10 @@
 
 [[gnu::pure]]
 static int
-GetConfigAttrib(SDL_GLattr attribute, int default_value) noexcept
+GetConfigAttrib(SDL_GLAttr attribute, int default_value) noexcept
 {
   int value;
-  return SDL_GL_GetAttribute(attribute, &value) == 0
+  return SDL_GL_GetAttribute(attribute, &value)
     ? value
     : default_value;
 }
@@ -57,23 +52,29 @@ TopCanvas::TopCanvas(UI::Display &_display, SDL_Window *_window)
   :display(_display), window(_window)
 {
 #ifdef USE_MEMORY_CANVAS
-  renderer = SDL_CreateRenderer(window, -1, 0);
+  renderer = SDL_CreateRenderer(window, nullptr);
   if (renderer == nullptr)
-    throw FmtRuntimeError("SDL_CreateRenderer({}, {}, {}) has failed: {}",
-                          (const void *)window, -1, 0, ::SDL_GetError());
+    throw FmtRuntimeError("SDL_CreateRenderer({}) has failed: {}",
+                          (const void *)window, ::SDL_GetError());
 
-  int width, height;
-  SDL_GetRendererOutputSize(renderer, &width, &height);
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888,
+  int width = 0, height = 0;
+  if (!SDL_GetCurrentRenderOutputSize(renderer, &width, &height)) {
+    SDL_DestroyRenderer(renderer);
+    throw FmtRuntimeError("SDL_GetCurrentRenderOutputSize() failed: {}",
+                          SDL_GetError());
+  }
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_XRGB8888,
                               SDL_TEXTUREACCESS_STREAMING,
                               width, height);
-  if (texture == nullptr)
+  if (texture == nullptr) {
+    SDL_DestroyRenderer(renderer);
     throw FmtRuntimeError("SDL_CreateTexture({}, {}, {}, {}, {}) has failed: {}",
                           (const void *)renderer,
                           (unsigned)SDL_PIXELFORMAT_UNKNOWN,
                           (unsigned)SDL_TEXTUREACCESS_STREAMING,
                           width, height,
                           ::SDL_GetError());
+  }
 #endif
 
 #ifdef ENABLE_OPENGL
@@ -109,6 +110,7 @@ TopCanvas::~TopCanvas() noexcept
 
 #ifdef USE_MEMORY_CANVAS
   SDL_DestroyTexture(texture);
+  SDL_DestroyRenderer(renderer);
 #endif
 }
 
@@ -117,8 +119,8 @@ TopCanvas::~TopCanvas() noexcept
 PixelSize
 TopCanvas::GetNativeSize() const noexcept
 {
-  int w, h;
-  SDL_GL_GetDrawableSize(window, &w, &h);
+  int w = 0, h = 0;
+  SDL_GetWindowSizeInPixels(window, &w, &h);
   return PixelSize(w, h);
 }
 
@@ -131,11 +133,11 @@ TopCanvas::GetNativeSize() const noexcept
 PixelSize
 TopCanvas::GetSize() const noexcept
 {
-  int width, height;
-  if (SDL_QueryTexture(texture, nullptr, nullptr, &width, &height) != 0)
+  float width = 0, height = 0;
+  if (!SDL_GetTextureSize(texture, &width, &height))
     return {};
 
-  return PixelSize(width, height);
+  return PixelSize(unsigned(width), unsigned(height));
 }
 
 #endif // !GREYSCALE
@@ -143,14 +145,10 @@ TopCanvas::GetSize() const noexcept
 void
 TopCanvas::OnResize(PixelSize new_size) noexcept
 {
-  int texture_width, texture_height;
-  Uint32 texture_format;
-  if (SDL_QueryTexture(texture, &texture_format, NULL, &texture_width, &texture_height) != 0)
-    return;
-  if ((int)new_size.width == texture_width && (int)new_size.height == texture_height)
+  if (new_size == GetSize())
     return;
 
-  SDL_Texture *t = SDL_CreateTexture(renderer, texture_format,
+  SDL_Texture *t = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_XRGB8888,
                                      SDL_TEXTUREACCESS_STREAMING,
                                      new_size.width, new_size.height);
   if (t == nullptr)
@@ -191,7 +189,7 @@ TopCanvas::ProcessPendingResize() noexcept
     pending_height.load(std::memory_order_relaxed)
   };
 
-  // Perform the actual resize in the draw thread
+  // Perform the actual resize in the UI thread
   OnResize(new_size);
 
   return true;
@@ -215,14 +213,19 @@ CopyFromGreyscale(
                   ConstImageBuffer<GreyscalePixelTraits> src)
 {
   uint8_t *dest_pixels;
-  int pitch_as_int, dest_width, dest_height;
-  SDL_QueryTexture(dest, nullptr, nullptr, &dest_width, &dest_height);
-  if (SDL_LockTexture(dest, nullptr,
-                      reinterpret_cast<void**>(&dest_pixels),
-                      &pitch_as_int) != 0)
+  float dest_width = 0;
+  float ignored_height = 0;
+  if (!SDL_GetTextureSize(dest, &dest_width, &ignored_height) ||
+      dest_width <= 0)
     return;
 
-  int bytes_per_pixel = pitch_as_int / dest_width;
+  int pitch_as_int;
+  if (!SDL_LockTexture(dest, nullptr,
+                       reinterpret_cast<void **>(&dest_pixels),
+                       &pitch_as_int))
+    return;
+
+  int bytes_per_pixel = pitch_as_int / int(dest_width);
 
   assert(bytes_per_pixel == 4 || bytes_per_pixel == 2);
 
@@ -282,13 +285,12 @@ TopCanvas::Lock()
 #ifndef GREYSCALE
   WritableImageBuffer<ActivePixelTraits> buffer;
   void* pixels;
-  int pitch, width, height;
-  SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-  if (SDL_LockTexture(texture, nullptr, &pixels, &pitch) != 0)
+  int pitch;
+  if (!SDL_LockTexture(texture, nullptr, &pixels, &pitch))
     return Canvas();
   buffer.data = (ActivePixelTraits::pointer)pixels;
   buffer.pitch = (unsigned) pitch;
-  buffer.size = PixelSize(width, height);
+  buffer.size = GetSize();
 #endif
 
   return Canvas(buffer);
@@ -319,7 +321,7 @@ TopCanvas::Flip()
                     texture, buffer);
 #endif
 
-  ::SDL_RenderCopy(renderer, texture, nullptr, nullptr);
+  ::SDL_RenderTexture(renderer, texture, nullptr, nullptr);
   ::SDL_RenderPresent(renderer);
 
 #endif

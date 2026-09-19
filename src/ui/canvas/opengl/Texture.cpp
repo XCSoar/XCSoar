@@ -10,7 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #ifdef ENABLE_SDL
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #endif
 
 #include <cassert>

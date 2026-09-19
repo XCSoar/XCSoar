@@ -46,8 +46,8 @@ struct InputConfig {
   // Key map to Event - Keys (per mode) mapped to events
   unsigned short Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 #ifdef ENABLE_SDL
-  /* In SDL2, keycodes without character representations are large values,
-  AND-ed with SDLK_SCANCODE_MASK (0x40000000). A seperate array is therefore
+  /* In SDL, keycodes without character representations are large values,
+  AND-ed with SDLK_SCANCODE_MASK (0x40000000). A separate array is therefore
   used here and the keycode is stored here with an index without
   SDLK_SCANCODE_MASK. */
   unsigned short Key2EventNonChar[MAX_MODE][MAX_KEY];

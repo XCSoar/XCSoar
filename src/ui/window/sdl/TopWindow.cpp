@@ -7,9 +7,10 @@
 #include "lib/fmt/RuntimeError.hxx"
 #include "util/UTF8.hpp"
 
-#include <SDL_video.h>
-#include <SDL_events.h>
-#include <SDL_version.h>
+#include <SDL3/SDL_video.h>
+#include <SDL3/SDL_events.h>
+#include <SDL3/SDL_keyboard.h>
+#include <SDL3/SDL_properties.h>
 
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
 #include "ui/event/shared/TransformCoordinates.hpp"
@@ -19,10 +20,8 @@
 #include <TargetConditionals.h>
 #endif
 
-#if defined(__MACOSX__) && __MACOSX__
-#include <SDL_syswm.h>
+#ifdef SDL_PLATFORM_MACOS
 #import <AppKit/AppKit.h>
-#include <alloca.h>
 #endif
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
@@ -43,16 +42,12 @@ namespace UI {
 static bool
 IsTouchScreen([[maybe_unused]] SDL_TouchID touch_id) noexcept
 {
-#if SDL_VERSION_ATLEAST(2, 0, 10)
   return SDL_GetTouchDeviceType(touch_id) == SDL_TOUCH_DEVICE_DIRECT;
-#else
-  return true;
-#endif
 }
 
 /**
  * Count the fingers currently touching @p touch_id.  Depending on the
- * SDL version, the finger that triggered a SDL_FINGERUP event may still
+ * SDL version, the finger that triggered a SDL_EVENT_FINGER_UP event may still
  * be listed; pass its id in @p lifted to exclude it.
  *
  * Not [[gnu::pure]]: SDL touch state can change between identical calls.
@@ -60,21 +55,20 @@ IsTouchScreen([[maybe_unused]] SDL_TouchID touch_id) noexcept
 static unsigned
 CountFingers(SDL_TouchID touch_id, const SDL_FingerID *lifted) noexcept
 {
-  const int n = SDL_GetNumTouchFingers(touch_id);
-  if (n <= 0)
+  int n = 0;
+  SDL_Finger **fingers = SDL_GetTouchFingers(touch_id, &n);
+  if (fingers == nullptr)
     return 0;
 
   unsigned count = unsigned(n);
-
   if (lifted != nullptr)
-    for (int i = 0; i < n; ++i) {
-      const SDL_Finger *f = SDL_GetTouchFinger(touch_id, i);
-      if (f != nullptr && f->id == *lifted) {
+    for (int i = 0; i < n; ++i)
+      if (fingers[i]->id == *lifted) {
         --count;
         break;
       }
-    }
 
+  SDL_free(fingers);
   return count;
 }
 
@@ -88,13 +82,16 @@ static unsigned
 CountAllFingers() noexcept
 {
   unsigned count = 0;
-  const int devices = SDL_GetNumTouchDevices();
-  for (int i = 0; i < devices; ++i) {
-    const SDL_TouchID id = SDL_GetTouchDevice(i);
-    if (IsTouchScreen(id))
-      count += CountFingers(id, nullptr);
-  }
+  int n = 0;
+  SDL_TouchID *devices = SDL_GetTouchDevices(&n);
+  if (devices == nullptr)
+    return 0;
 
+  for (int i = 0; i < n; ++i)
+    if (IsTouchScreen(devices[i]))
+      count += CountFingers(devices[i], nullptr);
+
+  SDL_free(devices);
   return count;
 }
 
@@ -107,17 +104,15 @@ static bool
 CaptureTwoFingerIds(SDL_TouchID touch_id,
                     SDL_FingerID &id_a, SDL_FingerID &id_b) noexcept
 {
-  if (SDL_GetNumTouchFingers(touch_id) < 2)
-    return false;
-
-  const SDL_Finger *f0 = SDL_GetTouchFinger(touch_id, 0);
-  const SDL_Finger *f1 = SDL_GetTouchFinger(touch_id, 1);
-  if (f0 == nullptr || f1 == nullptr)
-    return false;
-
-  id_a = f0->id;
-  id_b = f1->id;
-  return true;
+  int n = 0;
+  SDL_Finger **fingers = SDL_GetTouchFingers(touch_id, &n);
+  const bool found = fingers != nullptr && n >= 2;
+  if (found) {
+    id_a = fingers[0]->id;
+    id_b = fingers[1]->id;
+  }
+  SDL_free(fingers);
+  return found;
 }
 
 /**
@@ -131,38 +126,41 @@ GetFingerPoint(SDL_Window *window, SDL_TouchID touch_id,
   if (window == nullptr)
     return false;
 
-  const int n = SDL_GetNumTouchFingers(touch_id);
+  int w = 0, h = 0;
+  if (!SDL_GetWindowSize(window, &w, &h) || w <= 0 || h <= 0)
+    return false;
+
+  int n = 0;
+  SDL_Finger **fingers = SDL_GetTouchFingers(touch_id, &n);
+  if (fingers == nullptr)
+    return false;
+
+  bool found = false;
   for (int i = 0; i < n; ++i) {
-    const SDL_Finger *f = SDL_GetTouchFinger(touch_id, i);
-    if (f == nullptr || f->id != finger_id)
-      continue;
-
-    int w = 0, h = 0;
-    SDL_GetWindowSize(window, &w, &h);
-    if (w <= 0 || h <= 0)
-      return false;
-
-    p = {int(f->x * w), int(f->y * h)};
-    return true;
+    const SDL_Finger &f = *fingers[i];
+    if (f.id == finger_id) {
+      p = {int(f.x * w), int(f.y * h)};
+      found = true;
+      break;
+    }
   }
 
-  return false;
+  SDL_free(fingers);
+  return found;
 }
 
 #endif
 
-static constexpr Uint32
+static constexpr SDL_WindowFlags
 MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
 {
-  Uint32 flags = 0;
+  SDL_WindowFlags flags = 0;
 
 #ifdef ENABLE_OPENGL
   flags |= SDL_WINDOW_OPENGL;
-#else /* !ENABLE_OPENGL */
-  flags |= SDL_SWSURFACE;
-#endif /* !ENABLE_OPENGL */
+#endif
 
-#if !defined(__MACOSX__) || !(__MACOSX__)
+#ifndef SDL_PLATFORM_MACOS
   if (full_screen)
     flags |= SDL_WINDOW_FULLSCREEN;
 #endif
@@ -171,7 +169,7 @@ MakeSDLFlags([[maybe_unused]] bool full_screen, bool resizable) noexcept
     flags |= SDL_WINDOW_RESIZABLE;
 
 #ifdef HAVE_HIGHDPI_SUPPORT
-  flags |= SDL_WINDOW_ALLOW_HIGHDPI;
+  flags |= SDL_WINDOW_HIGH_PIXEL_DENSITY;
 #endif
 
   return flags;
@@ -185,31 +183,29 @@ TopWindow::CreateNative(const char *_text, PixelSize new_size,
 
   const bool full_screen = style.GetFullScreen();
   const bool resizable = style.GetResizable();
-  const Uint32 flags = MakeSDLFlags(full_screen, resizable);
+  const auto flags = MakeSDLFlags(full_screen, resizable);
 
-  window = ::SDL_CreateWindow(text, SDL_WINDOWPOS_UNDEFINED,
-                              SDL_WINDOWPOS_UNDEFINED, new_size.width,
-                              new_size.height, flags);
+  window = ::SDL_CreateWindow(text, new_size.width, new_size.height, flags);
   if (window == nullptr)
-    throw FmtRuntimeError("SDL_CreateWindow('{}', {}, {}, {}, {}, {:#x}) has failed: {}",
-                          text, SDL_WINDOWPOS_UNDEFINED,
-                          SDL_WINDOWPOS_UNDEFINED, new_size.width,
-                          new_size.height, flags,
+    throw FmtRuntimeError("SDL_CreateWindow('{}', {}, {}, {:#x}) failed: {}",
+                          text, new_size.width, new_size.height, flags,
                           ::SDL_GetError());
 
-#if defined(__MACOSX__) && __MACOSX__
-  SDL_SysWMinfo *wm_info =
-      reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
-  SDL_VERSION(&wm_info->version);
-  if ((SDL_GetWindowWMInfo(window, wm_info)) &&
-      (wm_info->subsystem == SDL_SYSWM_COCOA)) {
-    if (resizable) {
-      [wm_info->info.cocoa.window
-          setCollectionBehavior: NSWindowCollectionBehaviorFullScreenPrimary];
-    }
-    if (full_screen) {
-      [wm_info->info.cocoa.window toggleFullScreen: nil];
-    }
+  /* SDL3 starts with text input disabled.  Desktop character events
+     must remain available even outside the on-screen keyboard dialog. */
+  if (!SDL_HasScreenKeyboardSupport())
+    SDL_StartTextInput(window);
+
+#ifdef SDL_PLATFORM_MACOS
+  NSWindow *native_window = (__bridge NSWindow *)SDL_GetPointerProperty(
+    SDL_GetWindowProperties(window), SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,
+    nullptr);
+  if (native_window != nil) {
+    if (resizable)
+      [native_window setCollectionBehavior:
+        NSWindowCollectionBehaviorFullScreenPrimary];
+    if (full_screen)
+      [native_window toggleFullScreen:nil];
   }
 #endif
 
@@ -247,7 +243,7 @@ TopWindow::OnEvent(const SDL_Event &event)
   switch (event.type) {
     Window *w;
 
-  case SDL_KEYDOWN:
+  case SDL_EVENT_KEY_DOWN:
     w = GetFocusedWindow();
     if (w == nullptr)
       w = this;
@@ -255,9 +251,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-    return w->OnKeyDown(event.key.keysym.sym);
+    return w->OnKeyDown(event.key.key);
 
-  case SDL_TEXTINPUT:
+  case SDL_EVENT_TEXT_INPUT:
     w = GetFocusedWindow();
     if (w == nullptr)
       w = this;
@@ -276,7 +272,7 @@ TopWindow::OnEvent(const SDL_Event &event)
     } else
       return false;
 
-  case SDL_KEYUP:
+  case SDL_EVENT_KEY_UP:
     w = GetFocusedWindow();
     if (w == nullptr)
       w = this;
@@ -284,34 +280,34 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-    return w->OnKeyUp(event.key.keysym.sym);
+    return w->OnKeyUp(event.key.key);
 
 #ifdef HAVE_MULTI_TOUCH
-  case SDL_FINGERDOWN:
-  case SDL_FINGERMOTION:
-  case SDL_FINGERUP:
+  case SDL_EVENT_FINGER_DOWN:
+  case SDL_EVENT_FINGER_MOTION:
+  case SDL_EVENT_FINGER_UP:
     {
-      if (!IsTouchScreen(event.tfinger.touchId))
+      if (!IsTouchScreen(event.tfinger.touchID))
         return false;
 
       /* trust SDL's live finger count instead of an incrementally
          maintained counter, so a dropped event cannot leave the count
-         stuck; the finger that triggered SDL_FINGERUP may still be
+         stuck; the finger that triggered SDL_EVENT_FINGER_UP may still be
          listed and is excluded explicitly */
-      touch_fingers = event.type == SDL_FINGERUP
-        ? CountFingers(event.tfinger.touchId, &event.tfinger.fingerId)
-        : CountFingers(event.tfinger.touchId, nullptr);
+      touch_fingers = event.type == SDL_EVENT_FINGER_UP
+        ? CountFingers(event.tfinger.touchID, &event.tfinger.fingerID)
+        : CountFingers(event.tfinger.touchID, nullptr);
 
       if (touch_fingers >= 2)
         touch_multi = true;
-      else if (event.type == SDL_FINGERDOWN && touch_fingers <= 1) {
+      else if (event.type == SDL_EVENT_FINGER_DOWN && touch_fingers <= 1) {
         /* first finger of a new sequence: forget any stale flag from a
            previous gesture that did not tear down cleanly */
         touch_multi = false;
         touch_pair_valid = false;
       }
 
-      if (event.type == SDL_FINGERUP) {
+      if (event.type == SDL_EVENT_FINGER_UP) {
         bool result = false;
 
         if (touch_fingers == 1 && touch_pair_valid) {
@@ -334,11 +330,11 @@ TopWindow::OnEvent(const SDL_Event &event)
       }
 
       if (!touch_pair_valid) {
-        if (event.type != SDL_FINGERDOWN || touch_fingers != 2)
+        if (event.type != SDL_EVENT_FINGER_DOWN || touch_fingers != 2)
           return false;
 
         SDL_FingerID id_a, id_b;
-        if (!CaptureTwoFingerIds(event.tfinger.touchId, id_a, id_b) ||
+        if (!CaptureTwoFingerIds(event.tfinger.touchID, id_a, id_b) ||
             !OnMultiTouchDown()) {
           /* rejected start: do not treat the sequence as multi-touch */
           touch_multi = false;
@@ -351,9 +347,9 @@ TopWindow::OnEvent(const SDL_Event &event)
       }
 
       PixelPoint a, b;
-      if (!GetFingerPoint(window, event.tfinger.touchId,
+      if (!GetFingerPoint(window, event.tfinger.touchID,
                           SDL_FingerID(touch_finger_a), a) ||
-          !GetFingerPoint(window, event.tfinger.touchId,
+          !GetFingerPoint(window, event.tfinger.touchID,
                           SDL_FingerID(touch_finger_b), b))
         return false;
 
@@ -361,7 +357,7 @@ TopWindow::OnEvent(const SDL_Event &event)
     }
 #endif
 
-  case SDL_MOUSEMOTION:
+  case SDL_EVENT_MOUSE_MOTION:
     // XXX keys
     {
 #ifdef HAVE_MULTI_TOUCH
@@ -370,29 +366,29 @@ TopWindow::OnEvent(const SDL_Event &event)
         return true;
 #endif
 
-      return OnMouseMove(event_to_window(PixelPoint(event.motion.x,
-                                                    event.motion.y)),
+      return OnMouseMove(event_to_window(PixelPoint(int(event.motion.x),
+                                                    int(event.motion.y))),
                          0);
     }
 
-  case SDL_MOUSEBUTTONDOWN:
+  case SDL_EVENT_MOUSE_BUTTON_DOWN:
     {
 #ifdef HAVE_MULTI_TOUCH
       /* safety net: never let a postponed release outlive its drag */
       FlushTouchMouseUp();
 #endif
 
-      const auto p = event_to_window(PixelPoint(event.button.x,
-                                                event.button.y));
+      const auto p = event_to_window(PixelPoint(int(event.button.x),
+                                                int(event.button.y)));
       return double_click.Check(p)
         ? OnMouseDouble(p)
         : OnMouseDown(p);
     }
 
-  case SDL_MOUSEBUTTONUP:
+  case SDL_EVENT_MOUSE_BUTTON_UP:
     {
-      const auto p = event_to_window(PixelPoint(event.button.x,
-                                                event.button.y));
+      const auto p = event_to_window(PixelPoint(int(event.button.x),
+                                                int(event.button.y)));
 #ifdef HAVE_MULTI_TOUCH
       if (event.button.which == SDL_TOUCH_MOUSEID) {
         /* SDL emulates the mouse with the first finger only.  Base the
@@ -414,100 +410,59 @@ TopWindow::OnEvent(const SDL_Event &event)
       return OnMouseUp(p);
     }
 
-  case SDL_QUIT:
+  case SDL_EVENT_QUIT:
     return OnClose();
 
-  case SDL_MOUSEWHEEL:
+  case SDL_EVENT_MOUSE_WHEEL:
     {
-      PixelPoint p;
-      SDL_GetMouseState(&p.x, &p.y);
-#ifdef HAVE_HIGHDPI_SUPPORT
-      p = PointToReal(p);
-#endif
-      return OnMouseWheel(p, event.wheel.y);
+      const auto p = event_to_window({int(event.wheel.mouse_x),
+                                      int(event.wheel.mouse_y)});
+      wheel_delta += event.wheel.y;
+      const int delta = int(wheel_delta);
+      if (delta == 0)
+        return true;
+
+      wheel_delta -= delta;
+      return OnMouseWheel(p, delta);
     }
 
-  case SDL_WINDOWEVENT:
-    switch (event.window.event) {
-
-    case SDL_WINDOWEVENT_RESIZED:
-#if defined(HAVE_HIGHDPI_SUPPORT) && defined(_WIN32)
-      {
-        int w = static_cast<int>(event.window.data1 *
-                                 point_to_real_x);
-        int h = static_cast<int>(event.window.data2 *
-                                 point_to_real_y);
-
-        if (screen->CheckResize(PixelSize(w, h)))
-          Resize(screen->GetSize());
-        Refresh();
-
+  case SDL_EVENT_WINDOW_RESIZED:
+  case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+  case SDL_EVENT_WINDOW_DISPLAY_SCALE_CHANGED:
+  case SDL_EVENT_WINDOW_RESTORED:
+  case SDL_EVENT_WINDOW_MOVED:
+  case SDL_EVENT_WINDOW_SHOWN:
+  case SDL_EVENT_WINDOW_MAXIMIZED:
+    {
+      int w = 0, h = 0;
+      if (!SDL_GetWindowSize(window, &w, &h) || w <= 0 || h <= 0)
         return true;
-      }
-#elif !defined(HAVE_HIGHDPI_SUPPORT)
+
+#ifdef HAVE_HIGHDPI_SUPPORT
+      int real_w = 0, real_h = 0;
+      if (!SDL_GetWindowSizeInPixels(window, &real_w, &real_h) ||
+          real_w <= 0 || real_h <= 0)
+        return true;
+
+      point_to_real_x = float(real_w) / float(w);
+      point_to_real_y = float(real_h) / float(h);
+      w = real_w;
+      h = real_h;
+#endif
 #ifdef ENABLE_OPENGL
-      if (screen->CheckResize(PixelSize(event.window.data1, event.window.data2)))
+      if (screen->CheckResize(PixelSize(w, h)))
         Resize(screen->GetSize());
 #else
-      Resize({event.window.data1, event.window.data2});
+      Resize({unsigned(w), unsigned(h)});
 #endif
-      return true;
-#endif
-    case SDL_WINDOWEVENT_RESTORED:
-    case SDL_WINDOWEVENT_MOVED:
-    case SDL_WINDOWEVENT_SHOWN:
-    case SDL_WINDOWEVENT_MAXIMIZED:
-      if (auto *event_window = SDL_GetWindowFromID(event.window.windowID)) {
-        int w, h;
-        SDL_GetWindowSize(event_window, &w, &h);
-        if ((w >= 0) && (h >= 0)) {
-#ifdef HAVE_HIGHDPI_SUPPORT
-          int real_w, real_h;
-          SDL_GL_GetDrawableSize(event_window, &real_w, &real_h);
-          point_to_real_x = static_cast<float>(real_w) /
-            static_cast<float>(w);
-          point_to_real_y = static_cast<float>(real_h) /
-            static_cast<float>(h);
-          w = real_w;
-          h = real_h;
-#endif
-#ifdef ENABLE_OPENGL
-#if defined(__APPLE__) && TARGET_OS_IPHONE
-          PixelSize size = SystemWindowSize();
-          if (screen->CheckResize(size))
-            Resize(size);
-#else
-          if (screen->CheckResize(PixelSize(w, h)))
-            Resize(screen->GetSize());
-#endif
-#else
-          Resize({w, h});
-#endif
-        }
-
-#if defined(__MACOSX__) && __MACOSX__
-        SDL_SysWMinfo *wm_info =
-          reinterpret_cast<SDL_SysWMinfo *>(alloca(sizeof(SDL_SysWMinfo)));
-        SDL_VERSION(&wm_info->version);
-        if ((SDL_GetWindowWMInfo(event_window, wm_info)) &&
-            (wm_info->subsystem == SDL_SYSWM_COCOA)) {
-          [wm_info->info.cocoa.window
-           setCollectionBehavior:
-           NSWindowCollectionBehaviorFullScreenPrimary];
-        }
-        Invalidate();
-#endif
-#ifdef _WIN32
-        Refresh();
-#endif
-      }
-      return true;
-
-    case SDL_WINDOWEVENT_EXPOSED:
-      invalidated = false;
-      Expose();
+      Invalidate();
       return true;
     }
+
+  case SDL_EVENT_WINDOW_EXPOSED:
+    invalidated = false;
+    Expose();
+    return true;
   }
 
   return false;
@@ -520,7 +475,7 @@ TopWindow::OnResize(PixelSize new_size) noexcept
 
 #ifdef USE_MEMORY_CANVAS
   // Request resize instead of doing it immediately
-  // The actual resize will happen in the draw thread (Expose)
+  // The actual resize will happen in the UI thread (Expose)
   screen->RequestResize(new_size);
 #endif
 }
