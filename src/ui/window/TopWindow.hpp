@@ -422,9 +422,20 @@ protected:
 
 public:
 
-  /**
-   * Synchronously refresh the screen by handling all pending repaint
+  /** \brief Synchronously refresh the screen by handling all pending repaint
    * requests.
+   *
+   * This call re-draws the screen conditionally:
+   * 
+   * - When the application is not suspended
+   * - When the application has a valid screen canvas
+   * - When \ref invalidated is true 
+   *
+   * DRM/KMS: When the previous frame has not been brought forward to the screen,
+   * this call to \p Refresh() will return immediately without action.
+   *
+   * \see TopCanvas::CheckAndFinishPendingFlip() for DRM/KMS
+   * \see TopWindow::Expose()
    */
   void Refresh() noexcept;
 
