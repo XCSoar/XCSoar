@@ -7,6 +7,7 @@ DBUS_SOURCES = \
 	$(SRC)/lib/dbus/CallMethodSync.cxx \
 	$(SRC)/lib/dbus/Connection.cxx \
 	$(SRC)/lib/dbus/Error.cxx \
+	$(SRC)/lib/dbus/Login1.cxx \
 	$(SRC)/lib/dbus/Message.cxx \
 	$(SRC)/lib/dbus/Properties.cxx \
 	$(SRC)/lib/dbus/ScopeMatch.cxx \

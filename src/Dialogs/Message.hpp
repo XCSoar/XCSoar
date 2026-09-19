@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <span>
+
 /* Portable copies of the Win32 message-box constants.  ShowMessageBox
    is XCSoar's own dialog; these names match the Win32 values so a
    prior windows.h include is harmless. */
@@ -18,6 +20,11 @@ enum {
   IDNO = 7,
 };
 #endif
+
+struct MessageBoxButton {
+  const char *caption;
+  int result;
+};
 
 #ifndef MB_OK
 enum {
@@ -46,3 +53,15 @@ enum {
 int
 ShowMessageBox(const char *text, const char *caption,
                unsigned flags) noexcept;
+
+/**
+ * Displays a message box with caller-defined buttons.
+ *
+ * @param buttons one to four actions shown in the message box
+ * @param default_result result of the button which receives initial focus;
+ * zero keeps the normal first-control behavior
+ */
+int
+ShowMessageBox(const char *text, const char *caption,
+               std::span<const MessageBoxButton> buttons,
+               int default_result = 0) noexcept;

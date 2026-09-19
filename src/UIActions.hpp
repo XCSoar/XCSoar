@@ -10,9 +10,19 @@
  * API is meant to be lean, without too many header dependencies.
  */
 namespace UIActions {
+  enum class ExitAction {
+    NONE,
+    QUIT,
+    REBOOT,
+    POWER_OFF,
+  };
+
   void SignalShutdown(bool force);
 
-  bool CheckShutdown();
+  bool CheckShutdown() noexcept;
+
+  [[gnu::pure]]
+  ExitAction GetExitAction() noexcept;
 
   /**
    * Switch to the traffic radar page.
