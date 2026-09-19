@@ -1083,6 +1083,23 @@ lists.
   sensor flags, and {\it Battery=N\%} when remaining charge is
   known, including BLE sensors that expose the standard heart-rate,
   Environmental Sensing, and Battery services.
+  XCSoar uses the first device that supplies each value (device~A
+  before~B, and so on).  Winning sensor flags such as {\it GPS fix},
+  {\it Baro} (QNH height), {\it QNE} (pressure altitude), and
+  {\it Alt IGC} (the altitude written to the IGC log) are
+  drawn in bold; the same flag that is not bold on a later device is
+  present but ignored.  {\it Baro}, {\it QNE}, and {\it Alt IGC} are
+  separate values, so one device can supply QNH height while another
+  supplies pressure altitude or the logger altitude.
+  {\it Bad GPS} is shown in red when the device sends GPS sentences
+  without a valid fix.
+  {\it Battery=N\%} is shown in red when remaining charge is below
+  10~percent.
+  The {\it FLARM} flag is shown while that device is sending
+  updates.
+  {\it GDL90} is shown while the connection is alive.
+  Traffic from every such device is used.
+  The {\it Help} button on the Devices list repeats this.
 \item[Baudrate]  Set this to the communication speed of the connected device.
 \item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.

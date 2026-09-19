@@ -34,7 +34,7 @@ struct DialogLook {
 
   Brush background_brush;
 
-  Font text_font, bold_font, small_font;
+  Font text_font, bold_font, small_font, small_font_bold;
 
   /** Bold font scaled up for H1 headings in rich text */
   Font heading1_font;
