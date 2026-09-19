@@ -220,6 +220,10 @@ Version 7.46 - not yet released
     the developer manuals
   - macOS/iOS: read TESTING=y from darwin/.env, so Xcode builds can
     produce the testing flavour
+  - iOS: adopt the UIKit scene-based life cycle in the bundled SDL2, so
+    the app launches when built with Xcode 27
+  - iOS: raise the deployment target of darwin/XCSoar.xcodeproj to 15.0,
+    which Xcode 27 requires
   - build system: add DEBUG_ALL_MAP_OVERLAYS=y make option to force
     GlueMapWindow HUD overlays on with placeholder data for layout
     testing
