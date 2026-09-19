@@ -40,6 +40,7 @@ MapSettings::SetDefaults() noexcept
   circling_scale = 0.5;
   cruise_scale = 1 / 60.;
   show_flarm_on_map = true;
+  traffic_symbol = TrafficSymbol::AIRCRAFT_TYPE;
   show_flarm_alarm_level = true;
   fade_traffic = true;
   show_thermal_profile = true;

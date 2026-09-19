@@ -330,7 +330,7 @@ static void
 Draw(Canvas &canvas, PixelRect rc,
      const TrafficMapItem &item,
      const TwoTextRowsRenderer &row_renderer,
-     const TrafficLook &traffic_look,
+     const TrafficLook &traffic_look, TrafficSymbol traffic_symbol,
      const TrafficList *traffic_list)
 {
   const unsigned line_height = rc.GetHeight();
@@ -349,7 +349,7 @@ Draw(Canvas &canvas, PixelRect rc,
 
   // Render the representation of the traffic icon
   if (traffic != nullptr)
-    TrafficRenderer::DrawList(canvas, traffic_look,
+    TrafficRenderer::DrawList(canvas, traffic_look, traffic_symbol,
                               *traffic, traffic->track,
                               item.color, pt, icon_size);
 
@@ -498,7 +498,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   case MapItem::Type::TRAFFIC:
     ::Draw(canvas, rc, (const TrafficMapItem &)item,
-           row_renderer, traffic_look, traffic_list);
+           row_renderer, traffic_look, settings.traffic_symbol,
+           traffic_list);
     break;
 
   case MapItem::Type::THERMAL:

@@ -257,6 +257,7 @@ constexpr std::string_view TurningReach = "TurningReach";
 constexpr std::string_view ReachPolarMode = "ReachPolarMode";
 
 constexpr std::string_view AircraftSymbol = "AircraftSymbol";
+constexpr std::string_view TrafficSymbol = "TrafficSymbol";
 
 constexpr std::string_view FlarmLocation = "FlarmLocation";
 
