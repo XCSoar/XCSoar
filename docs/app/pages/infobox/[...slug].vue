@@ -32,6 +32,19 @@ const isIndexPage = computed(() => {
 });
 
 const github = computed(() => appConfig.github ? appConfig.github : null);
+
+// Same "Edit this page" link as the Docus page.
+const editLink = computed(() => {
+    if (!github.value) return;
+    return [
+        github.value.url,
+        'edit',
+        github.value.branch,
+        github.value.rootDir,
+        'content',
+        `${page.value?.stem}.${page.value?.extension}`,
+    ].filter(Boolean).join('/');
+});
 const headline = ref(findPageHeadline(navigation?.value, page.value?.path));
 
 const infobox = computed(() => page.value.infobox ?? {});
