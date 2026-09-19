@@ -5,6 +5,8 @@
 #include "Event.hpp"
 #include "../Timer.hpp"
 
+#include <SDL3/SDL_error.h>
+
 namespace UI {
 
 EventQueue::EventQueue() noexcept
@@ -13,7 +15,7 @@ EventQueue::EventQueue() noexcept
 void
 EventQueue::InjectCall(EventLoop::Callback callback, void *ctx) noexcept
 {
-  SDL_Event event;
+  SDL_Event event{};
   event.type = EVENT_CALLBACK;
   event.user.data1 = (void *)callback;
   event.user.data2 = ctx;
@@ -65,12 +67,15 @@ EventQueue::Wait(Event &event) noexcept
 
     const auto timeout = timers.GetTimeout(SteadyNow());
 
-    int result = timeout.count() >= 0
+    SDL_ClearError();
+    const bool result = timeout.count() >= 0
       ? SDL_WaitEventTimeout(&event.event,
                              std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count())
       : SDL_WaitEvent(&event.event);
-    if (result != 0)
-      return result > 0;
+    if (result)
+      return true;
+    if (*SDL_GetError() != '\0')
+      return false;
 
     FlushClockCaches();
   }

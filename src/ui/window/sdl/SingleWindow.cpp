@@ -5,7 +5,7 @@
 #include "../Features.hpp"
 #include "ui/event/sdl/Event.hpp"
 
-#include <SDL_events.h>
+#include <SDL3/SDL_events.h>
 
 #if defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY)
 #include "ui/event/shared/TransformCoordinates.hpp"
@@ -25,20 +25,20 @@ SingleWindow::FilterEvent(const UI::Event &_event, Window *allowed) const noexce
   PixelPoint p{};
 
   switch (event.type) {
-  case SDL_MOUSEMOTION:
+  case SDL_EVENT_MOUSE_MOTION:
 #ifdef HAVE_HIGHDPI_SUPPORT
-      p = PointToReal(PixelPoint(event.motion.x, event.motion.y));
+      p = PointToReal(PixelPoint(int(event.motion.x), int(event.motion.y)));
 #else
-      p = PixelPoint(event.motion.x, event.motion.y);
+      p = PixelPoint(int(event.motion.x), int(event.motion.y));
 #endif
     break;
 
-  case SDL_MOUSEBUTTONDOWN:
-  case SDL_MOUSEBUTTONUP:
+  case SDL_EVENT_MOUSE_BUTTON_DOWN:
+  case SDL_EVENT_MOUSE_BUTTON_UP:
 #ifdef HAVE_HIGHDPI_SUPPORT
-    p = PointToReal(PixelPoint(event.button.x, event.button.y));
+    p = PointToReal(PixelPoint(int(event.button.x), int(event.button.y)));
 #else
-    p = PixelPoint(event.button.x, event.button.y);
+    p = PixelPoint(int(event.button.x), int(event.button.y));
 #endif
     break;
 

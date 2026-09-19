@@ -6,23 +6,18 @@
 #include "Asset.hpp"
 #include "Math/Point2D.hpp"
 
-#include <SDL.h>
-#include <SDL_hints.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_hints.h>
 
 namespace SDL {
 
 Display::Display()
 {
-#ifdef _WIN32
-  SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
-              "permonitorv2");
-#endif
-
   Uint32 flags = SDL_INIT_VIDEO;
   if (!IsKobo())
     flags |= SDL_INIT_AUDIO;
 
-  if (::SDL_Init(flags) != 0)
+  if (!::SDL_Init(flags))
     throw FmtRuntimeError("SDL_Init() has failed: {}", ::SDL_GetError());
 
 #ifdef ENABLE_OPENGL
@@ -31,8 +26,8 @@ Display::Display()
   SDL_SetHint(SDL_HINT_OPENGL_ES_DRIVER, "1");
 #ifdef __APPLE__
   // SDL's EGL loader does not search the app bundle for bare dylib names.
-  SDL_setenv("SDL_VIDEO_GL_DRIVER", "@rpath/libGLESv2.dylib", 0);
-  SDL_setenv("SDL_VIDEO_EGL_DRIVER", "@rpath/libEGL.dylib", 0);
+  SDL_SetHint(SDL_HINT_OPENGL_LIBRARY, "@rpath/libGLESv2.dylib");
+  SDL_SetHint(SDL_HINT_EGL_LIBRARY, "@rpath/libEGL.dylib");
 #endif
 #endif
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
@@ -41,10 +36,10 @@ Display::Display()
 #endif
 
   // Keep screen on (works on iOS, and maybe for other platforms)
-  SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1");
+  SDL_DisableScreenSaver();
 
   if (HasTouchScreen())
-    SDL_ShowCursor (SDL_FALSE);
+    SDL_HideCursor();
 
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -60,12 +55,9 @@ Display::~Display() noexcept
 UnsignedPoint2D
 Display::GetDPI() noexcept
 {
-  float ddpi, hdpi, vdpi;
-
-  if (SDL_GetDisplayDPI(0, &ddpi, &hdpi, &vdpi) == 0)
-    return {static_cast<unsigned>(hdpi), static_cast<unsigned>(vdpi)};
-
-  return {96, 96};
+  const float scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+  const unsigned dpi = scale > 0 ? unsigned(scale * 96) : 96;
+  return {dpi, dpi};
 }
 
 } // namespace SDL

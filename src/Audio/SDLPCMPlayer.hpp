@@ -5,29 +5,24 @@
 
 #include "PCMPlayer.hpp"
 
-#include <SDL_audio.h>
-
-#include <cstddef>
-#include <cstdint>
-#include <vector>
+#include <SDL3/SDL_audio.h>
 
 /**
- * PCMPlayer implementation based on SDL
+ * PCMPlayer implementation based on SDL audio streams.
  */
 class SDLPCMPlayer : public PCMPlayer {
-  SDL_AudioDeviceID device = -1;
-  SDL_AudioFormat format = AUDIO_S16SYS;
-  std::vector<int16_t> convert_buffer;
+  SDL_AudioStream *stream = nullptr;
 
-  inline void AudioCallback(Uint8 *stream, size_t len_bytes);
-  inline size_t AudioCallback(int16_t *stream, size_t len_bytes);
-  inline size_t AudioCallback(float *stream, size_t len_bytes);
+  /** Protected by the stream lock, including inside the callback. */
+  bool exhausted = false;
+
+  static void SDLCALL AudioCallback(void *ctx, SDL_AudioStream *stream,
+                                   int additional_amount, int total_amount);
 
 public:
   SDLPCMPlayer() = default;
-  virtual ~SDLPCMPlayer();
+  ~SDLPCMPlayer() override;
 
-  /* virtual methods from class PCMPlayer */
   bool Start(PCMDataSource &source) override;
   void Stop() override;
 };

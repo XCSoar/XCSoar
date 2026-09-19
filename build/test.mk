@@ -163,6 +163,12 @@ ifeq ($(HAVE_HTTP),y)
 TEST_NAMES += TestNOTAM
 endif
 
+ifeq ($(ENABLE_SDL),y)
+TEST_NAMES += \
+	TestSDLEvent \
+	TestSDLPCMPlayer
+endif
+
 TESTS = $(call name-to-bin,$(TEST_NAMES))
 
 TEST_HEX_STRING_SOURCES = \
@@ -828,12 +834,37 @@ endif
 TEST_INPUT_CONFIG_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(SRC)/Input/InputConfig.cpp \
+	$(SRC)/Input/InputKeys.cpp \
 	$(SRC)/Menu/MenuData.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestInputConfig.cpp
 TEST_INPUT_CONFIG_CPPFLAGS = $(SCREEN_CPPFLAGS)
 TEST_INPUT_CONFIG_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestInputConfig,TEST_INPUT_CONFIG))
+
+ifeq ($(ENABLE_SDL),y)
+TEST_SDL_EVENT_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSDLEvent.cpp
+TEST_SDL_EVENT_CPPFLAGS = $(SDL_CPPFLAGS)
+TEST_SDL_EVENT_DEPENDS = UTIL
+TEST_SDL_EVENT_LDLIBS = $(SDL_LDLIBS)
+$(eval $(call link-program,TestSDLEvent,TEST_SDL_EVENT))
+
+TEST_SDL_PCM_PLAYER_SOURCES = \
+	$(SRC)/Audio/PCMPlayer.cpp \
+	$(SRC)/Audio/SDLPCMPlayer.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestSDLPCMPlayer.cpp
+TEST_SDL_PCM_PLAYER_CPPFLAGS = $(SDL_CPPFLAGS)
+TEST_SDL_PCM_PLAYER_DEPENDS = FMT UTIL
+TEST_SDL_PCM_PLAYER_LDLIBS = $(SDL_LDLIBS)
+ifeq ($(TARGET_IS_IOS),y)
+TEST_SDL_PCM_PLAYER_SOURCES += $(SRC)/Apple/Services.cpp
+endif
+$(eval $(call link-program,TestSDLPCMPlayer,TEST_SDL_PCM_PLAYER))
+endif
 
 TEST_INPUT_TRANSFORM_MODE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -1187,7 +1218,7 @@ check-no-build: $(OUT)/test/dirstamp
 	$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
 
 check-ios-sim:
-	$(Q)/usr/bin/env python3 $(topdir)/darwin/check-ios-sim.py
+	$(Q)/usr/bin/python3 $(topdir)/darwin/check-ios-sim.py
 
 DEBUG_PROGRAM_NAMES = \
 	test_reach \

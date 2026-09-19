@@ -467,57 +467,37 @@ netcdf = CmakeProject(
     patches=abspath("lib/netcdf/patches"),
 )
 
-sdl2 = CmakeProject(
+sdl3 = CmakeProject(
     (
-        "http://www.libsdl.org/release/SDL2-2.30.0.tar.gz",
-        # GitHub release tarball mirror
-        "https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz",
+        "https://www.libsdl.org/release/SDL3-3.4.14.tar.gz",
+        "https://github.com/libsdl-org/SDL/releases/download/release-3.4.14/SDL3-3.4.14.tar.gz",
     ),
-    "36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0",
-    "lib/libSDL2.a",
+    "30d4aa2b3037718142b32dffd4e72f917ebb6cc5227150e7bb9c45efb2153aeb",
+    "lib/libSDL3.a",
     [
-        "-DBUILD_SHARED_LIBS=OFF",
-        "-DSDL_TEST=OFF",
-        # subsystems
+        "-DSDL_SHARED=OFF",
+        "-DSDL_STATIC=ON",
+        "-DSDL_TEST_LIBRARY=OFF",
+        "-DSDL_TESTS=OFF",
+        "-DSDL_EXAMPLES=OFF",
         "-DSDL_RENDER=OFF",
-        "-DSDL_JOYSTICK=ON", # won't compile for iOS without SDL_JOYSTICK
+        "-DSDL_GPU=OFF",
+        "-DSDL_JOYSTICK=OFF",
         "-DSDL_HAPTIC=OFF",
         "-DSDL_HIDAPI=OFF",
-        "-DSDL_POWER=OFF",
-        "-DSDL_TIMERS=ON", # needs to be enabled for SDL_Delay() to work on iOS
-        "-DSDL_FILE=OFF",
-        "-DSDL_LOADSO=OFF",
-        "-DSDL_CPUINFO=OFF",
-        "-DSDL_FILESYSTEM=OFF",
         "-DSDL_SENSOR=OFF",
-        "-DSDL_LOCALE=OFF",
-        "-DSDL_MISC=OFF",
-        "-DSDL2_DISABLE_SDL2MAIN=OFF",
-        "-DSDL_DISKAUDIO=OFF",
-        "-DSDL_DUMMYAUDIO=OFF",
-        "-DSDL_DUMMYVIDEO=OFF",
+        "-DSDL_CAMERA=OFF",
         "-DSDL_OPENGL=OFF",
         "-DSDL_OPENGLES=ON",
-        "-DSDL_OSS=OFF",
-        "-DSDL_JACK=OFF",
-        "-DSDL_ESD=OFF",
-        "-DSDL_ARTS=OFF",
-        "-DSDL_NAS=OFF",
-        "-DSDL_SNDIO=OFF",
-        "-DSDL_LIBSAMPLERATE=OFF",
+        "-DSDL_METAL=OFF",
+        "-DSDL_VULKAN=OFF",
         "-DSDL_COCOA=OFF",
     ],
     windows_configure_args=[
-        # Windows-specific SDL2 options for OpenGL ES via ANGLE
+        # Use WASAPI for audio and load ANGLE for OpenGL ES.
         "-DSDL_DIRECTX=OFF",
-        "-DSDL_WASAPI=OFF",
-        "-DSDL_RENDER_D3D=OFF",
-        "-DSDL_LOADSO=ON",  # Required for SDL_VIDEO on Windows
-        # Disable joystick/xinput to avoid mingw-w64 header conflicts
-        "-DSDL_JOYSTICK=OFF",
         "-DSDL_XINPUT=OFF",
     ],
-    patches=abspath("lib/sdl2/patches"),
 )
 
 angle = AngleProject()

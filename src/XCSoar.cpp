@@ -30,16 +30,10 @@
 #include "util/PrintException.hxx"
 
 #ifdef ENABLE_SDL
-#ifdef SDL_MAIN_HANDLED
-/* When SDL_MAIN_HANDLED is defined, we must call SDL_SetMainReady()
-   before using SDL to avoid SDL's -Dmain=SDL_main
-   macro which conflicts with "main" in the XCSoar code */
-#include <SDL.h>
-#else
-/* this is necessary on macOS, to let libSDL bootstrap Quartz
-   before entering our main() */
-#include <SDL_main.h>
-#endif
+/* Include after XCSoar headers: SDL's iOS entry point renames main,
+   which would otherwise clash with PageLayout::main.  Windows provides
+   WinMain itself and uses SDL_MAIN_HANDLED. */
+#include <SDL3/SDL_main.h>
 #endif
 
 #ifdef __APPLE__

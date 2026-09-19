@@ -7,7 +7,7 @@
 #include "ui/event/KeyCode.hpp"
 
 #ifdef ENABLE_SDL
-#include <SDL_keycode.h>
+#include <SDL3/SDL_keycode.h>
 #endif
 
 #include <algorithm>

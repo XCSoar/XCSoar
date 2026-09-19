@@ -189,9 +189,13 @@ For headless builds (CI, no GPU), use the virtual framebuffer::
   make TARGET=UNIX VFB=y
 
 For software rendering with SDL (same as Docker ``UNIX-SDL``), disable
-OpenGL and enable SDL2::
+OpenGL and enable SDL3 (version 3.2.10 or newer)::
 
-  make TARGET=UNIX OPENGL=n ENABLE_SDL=y USE_SDL2=y
+  make TARGET=UNIX OPENGL=n ENABLE_SDL=y
+
+Install the SDL3 development package (``libsdl3-dev`` on Debian), or build
+SDL3 from source if your distribution does not provide it. SDL2 and
+sdl2-compat cannot be used for this build.
 
 ``VFB`` and SDL are mutually exclusive with the default OpenGL/EGL path.
 
@@ -297,7 +301,7 @@ To build the NSIS installer as well (64-bit or 32-bit)::
 
   make -j$(nproc) TARGET=WIN64OPENGL USE_CCACHE=y everything installer
 
-OpenGL Windows builds use SDL2 and GLES2 via ANGLE (D3D11 backend). ANGLE
+OpenGL Windows builds use SDL3 and GLES2 via ANGLE (D3D11 backend). ANGLE
 libraries are fetched automatically on first build by
 :file:`windows/fetch-angle-from-github.sh` into the target output tree (see
 :file:`build/angle.mk`).
@@ -361,9 +365,9 @@ Optional environment variables::
   SIM_SMOKE_TESTS="TestCRC8 ..."  # Override smoke test selection
   SIM_SKIP_TESTS="TestWrapText"    # Space-separated tests to skip in simulator
 
-To compile for iOS / ARMv7, run::
+To compile for iOS / ARM64, run::
 
-  make TARGET=IOS32 ipa
+  make TARGET=IOS64 ipa
 
 Compiling for macOS (with Homebrew)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -641,21 +645,16 @@ Defaults shown are from the build system (they can be overridden with
    - yes
    - OpenGL ES (ANGLE)
    - Intel (min macOS 12.0).
- * - ``IOS32``
-   - iOS armv7
-   - yes
-   - OpenGL ES
-   - Legacy 32-bit iOS (min iOS 10.0).
  * - ``IOS64``
    - iOS arm64
    - yes
    - OpenGL ES
-   - Device build (min iOS 11.0).
+   - Device build (min iOS 15.0).
  * - ``IOS64SIM``
    - iOS simulator arm64
    - yes
    - OpenGL ES
-   - Simulator SDK (min iOS 11.0).
+   - Simulator SDK (min iOS 15.0).
  * - ``PI``
    - Raspberry Pi 1
    - no

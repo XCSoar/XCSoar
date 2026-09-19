@@ -6,15 +6,15 @@
 #include "LogFile.hpp"
 #include "PCMDataSource.hpp"
 
-#include <SDL_error.h>
+#include <SDL3/SDL_error.h>
 
 #if defined(__APPLE__)
 #include <TargetConditionals.h>
 #include "Apple/Services.hpp"
 #endif
 
-#include <cassert>
 #include <algorithm>
+#include <iterator>
 
 SDLPCMPlayer::~SDLPCMPlayer()
 {
@@ -24,83 +24,59 @@ SDLPCMPlayer::~SDLPCMPlayer()
 bool
 SDLPCMPlayer::Start(PCMDataSource &_source)
 {
-  const unsigned new_sample_rate = _source.GetSampleRate();
+  const unsigned sample_rate = _source.GetSampleRate();
+  const bool big_endian = _source.IsBigEndian();
 
-  if ((nullptr != source) && (device > 0)) {
-    if (source->GetSampleRate() == new_sample_rate) {
-      /* already open, just change the synthesiser */
-      SDL_LockAudioDevice(device);
-      source = &_source;
-      SDL_PauseAudioDevice(device, 0);
-      SDL_UnlockAudioDevice(device);
-      return true;
+  if (stream != nullptr &&
+      (source->GetSampleRate() != sample_rate ||
+       source->IsBigEndian() != big_endian))
+    Stop();
+
+  if (stream != nullptr) {
+    /* The callback holds this same lock while using the source.  Do not
+       resume the device under it: the device has its own lock. */
+    SDL_LockAudioStream(stream);
+    if (source != &_source || exhausted)
+      SDL_ClearAudioStream(stream);
+    source = &_source;
+    exhausted = false;
+    SDL_UnlockAudioStream(stream);
+  } else {
+    /* SDL converts our mono signed 16-bit samples to the device format,
+       including float output on iOS. */
+    const SDL_AudioFormat format = big_endian
+      ? SDL_AUDIO_S16BE
+      : SDL_AUDIO_S16LE;
+    const SDL_AudioSpec spec{format, 1, int(sample_rate)};
+    stream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
+                                      &spec, AudioCallback, this);
+    if (stream == nullptr) {
+      LogFmt("SDLPCMPlayer: SDL_OpenAudioDeviceStream failed: {}",
+             SDL_GetError());
+      return false;
     }
 
-    /* the sample rate has changed, so the device needs to be reopened */
-    Stop();
+    /* SDL_OpenAudioDeviceStream opens paused, so the callback cannot run
+       until both the source and the iOS audio session are ready. */
+    channels = 1;
+    source = &_source;
+    exhausted = false;
   }
-
-  SDL_AudioSpec wanted, actual;
-  wanted.freq = static_cast<int>(new_sample_rate);
-#if defined(__APPLE__) && TARGET_OS_IPHONE
-  wanted.format = AUDIO_F32SYS;
-#else
-  wanted.format = AUDIO_S16SYS;
-#endif
-  wanted.channels = 1;
-  wanted.samples = 4096;
-  wanted.callback = [](void *ud, Uint8 *stream, int len_bytes) {
-    assert(nullptr != ud);
-    assert(nullptr != stream);
-    assert(len_bytes > 0);
-
-    reinterpret_cast<SDLPCMPlayer *>(ud)->AudioCallback(
-        stream,
-        static_cast<size_t>(len_bytes));
-  };
-  wanted.userdata = this;
-
-  device = SDL_OpenAudioDevice(nullptr, 0, &wanted, &actual,
-                               SDL_AUDIO_ALLOW_CHANNELS_CHANGE |
-                               SDL_AUDIO_ALLOW_FORMAT_CHANGE);
-  if (device < 1) {
-    LogFmt("SDLPCMPlayer: SDL_OpenAudioDevice failed: {}", SDL_GetError());
-    return false;
-  }
-
-  LogFmt("SDLPCMPlayer: opened audio device rate={} format={} channels={}",
-         actual.freq, actual.format, actual.channels);
-
-  channels = static_cast<size_t>(actual.channels);
-  format = actual.format;
-
-  if (format != AUDIO_S16SYS && format != AUDIO_F32SYS) {
-    LogFmt("SDLPCMPlayer: unsupported audio format {}", format);
-    SDL_CloseAudioDevice(device);
-    device = -1;
-    return false;
-  }
-
-  if (format == AUDIO_F32SYS)
-    convert_buffer.resize(actual.samples * channels);
-
-  source = &_source;
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
-  // SDL's CoreAudio backend may reset the AVAudioSession category and
-  // options when (re-)opening the audio device, so re-apply XCSoar's
-  // preferred configuration and mark the audio vario as active so that
-  // one-shot sound effects don't deactivate the shared AVAudioSession
-  // (which would also silence the audio vario).
-  //
-  // Both must happen before the device is unpaused: otherwise a one-shot
-  // sound finishing in that window would deactivate the session while the
-  // audio vario is already playing, and SDL would not resume on its own.
+  /* CoreAudio may reset the shared AVAudioSession when opening a device.
+     Mark the vario active before resuming so one-shot sound effects do
+     not deactivate its session. */
   SetAudioVarioSessionActive(true);
   ActivateAudioSession();
 #endif
 
-  SDL_PauseAudioDevice(device, 0);
+  if (!SDL_ResumeAudioStreamDevice(stream)) {
+    LogFmt("SDLPCMPlayer: SDL_ResumeAudioStreamDevice failed: {}",
+           SDL_GetError());
+    Stop();
+    return false;
+  }
 
   return true;
 }
@@ -108,53 +84,47 @@ SDLPCMPlayer::Start(PCMDataSource &_source)
 void
 SDLPCMPlayer::Stop()
 {
-  if (device > 0)
-    SDL_CloseAudioDevice(device);
+  /* Destroying the stream closes its device and waits for its callback.
+     Keep the source alive until that has completed. */
+  if (stream != nullptr)
+    SDL_DestroyAudioStream(stream);
 
-  device = -1;
+  stream = nullptr;
   source = nullptr;
-  convert_buffer.clear();
 
 #if defined(__APPLE__) && TARGET_OS_IPHONE
   SetAudioVarioSessionActive(false);
 #endif
 }
 
-inline void
-SDLPCMPlayer::AudioCallback(Uint8 *stream, size_t len_bytes)
+void SDLCALL
+SDLPCMPlayer::AudioCallback(void *ctx, SDL_AudioStream *stream,
+                            int additional_amount,
+                            [[maybe_unused]] int total_amount)
 {
-  const size_t read_frames = format == AUDIO_F32SYS
-    ? AudioCallback(reinterpret_cast<float *>(stream), len_bytes)
-    : AudioCallback(reinterpret_cast<int16_t *>(stream), len_bytes);
+  auto &player = *static_cast<SDLPCMPlayer *>(ctx);
+  if (additional_amount <= 0 || player.exhausted)
+    return;
 
-  if (0 == read_frames)
-    SDL_PauseAudioDevice(device, 1);
-}
+  /* Use a bounded scratch buffer even when SDL requests a large block.
+     additional_amount is measured in our input format, not the device's. */
+  int16_t buffer[4096];
+  size_t remaining = (size_t(additional_amount) + sizeof(buffer[0]) - 1) /
+    sizeof(buffer[0]);
+  while (remaining > 0) {
+    const size_t frames = std::min(remaining, std::size(buffer));
+    const size_t n = player.FillPCMBuffer(buffer, frames);
+    if (n > 0 &&
+        !SDL_PutAudioStreamData(stream, buffer, int(n * sizeof(buffer[0]))))
+      return;
 
-inline size_t
-SDLPCMPlayer::AudioCallback(int16_t *stream, size_t len_bytes)
-{
-  const size_t num_frames = len_bytes / (channels * sizeof(stream[0]));
-  const size_t read_frames = FillPCMBuffer(stream, num_frames);
-  return read_frames;
-}
-
-inline size_t
-SDLPCMPlayer::AudioCallback(float *stream, size_t len_bytes)
-{
-  const size_t num_frames = len_bytes / (channels * sizeof(stream[0]));
-  const size_t num_samples = num_frames * channels;
-
-  if (convert_buffer.size() < num_samples)
-    convert_buffer.resize(num_samples);
-
-  /* SDL/CoreAudio on iOS uses float output even though XCSoar's PCM pipeline
-     produces signed 16-bit samples. */
-  const size_t read_frames = FillPCMBuffer(convert_buffer.data(), num_frames);
-  std::transform(convert_buffer.begin(), convert_buffer.begin() + num_samples,
-                 stream, [](int16_t value) {
-                   return (float)value / 32768.f;
-                 });
-
-  return read_frames;
+    if (n < frames) {
+      /* Let the last samples drain; pausing here would cut off the tail.
+         SDL supplies silence afterwards until Start() or Stop(). */
+      player.exhausted = true;
+      SDL_FlushAudioStream(stream);
+      return;
+    }
+    remaining -= frames;
+  }
 }

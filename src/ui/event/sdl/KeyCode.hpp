@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <SDL_keyboard.h>
+#include <SDL3/SDL_keyboard.h>
 
 enum {
   KEY_SPACE = SDLK_SPACE,
