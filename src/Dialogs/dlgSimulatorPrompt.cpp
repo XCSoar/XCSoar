@@ -8,6 +8,7 @@
 #include "UIGlobals.hpp"
 #include "Simulator.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/window/SingleWindow.hpp"
 
 #ifdef SIMULATOR_AVAILABLE
 
@@ -58,9 +59,13 @@ dlgSimulatorPromptShowModal()
 {
 #ifdef SIMULATOR_AVAILABLE
   const DialogLook &look = UIGlobals::GetDialogLook();
+  auto &main_window = UIGlobals::GetMainWindow();
   TWidgetDialog<SimulatorPromptWidget> dialog(WidgetDialog::Full{},
-                                              UIGlobals::GetMainWindow(),
-                                              look, nullptr);
+                                              main_window, look, nullptr);
+  /* Full{} uses the safe area; expand to the client so the gradient
+     can paint edge to edge.  SimulatorPromptWindow keeps Quit, Fly,
+     Simulator and the version string inside the safe area. */
+  dialog.Move(main_window.GetClientRect());
 
   SimulatorPromptResult result = SPR_QUIT;
   dialog.SetWidget(look, [&](SimulatorPromptWindow::Result r){
@@ -80,6 +85,7 @@ dlgSimulatorPromptShowModal()
 
     dialog.SetModalResult(mrOK);
   });
+  dialog.ForceLayout();
 
   dialog.ShowModal();
 

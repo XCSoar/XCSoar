@@ -42,6 +42,7 @@ class NativeView {
   static jmethodID getPhysicalOrientation_method;
   static jmethodID startMyService_method;
   static jmethodID launchSAFTreePicker_method;
+  static jmethodID reportSize_method;
 
   static Java::TrivialClass clsBitmap;
   static jmethodID createBitmap_method;
@@ -110,6 +111,16 @@ public:
 
   void SetFullScreen(JNIEnv *env, bool full_screen) const noexcept {
     env->CallVoidMethod(obj, setFullScreen_method, full_screen);
+  }
+
+  /**
+   * Ask Java to report the current surface size and system insets.
+   * Uses the last stored surface size: View.getWidth() is still 0
+   * when this is called from the native thread at startup.
+   */
+  void ReportSize(JNIEnv *env) const noexcept {
+    env->CallVoidMethod(obj, reportSize_method,
+                        (jint)width, (jint)height);
   }
 
   bool SetRequestedOrientation(JNIEnv *env, ScreenOrientation so) {

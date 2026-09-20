@@ -393,9 +393,11 @@ Startup(UI::Display &display)
   main_window->Initialise();
 
 #ifdef ANDROID
-  /* apply insets announced while the window was created, so the
-     Fly/Simulator dialog is laid out in the safe area even though
-     this is before the first RESIZE event is processed */
+  /* surfaceChanged may have reported insets before the event queue
+     existed; ask again and apply them before the Fly/Simulator
+     dialog is created */
+  if (native_view != nullptr)
+    native_view->ReportSize(Java::GetEnv());
   main_window->PublishSafeAreaInsets();
 #endif
 

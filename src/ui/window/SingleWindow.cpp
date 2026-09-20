@@ -65,9 +65,8 @@ FillsDialogArea(const Window &dialog, const PixelRect &dialog_rect) noexcept
 {
   const PixelSize size = dialog.GetSize();
   const PixelSize available = dialog_rect.GetSize();
-  /* >= so a Full dialog created before the first inset report (when
-     the "safe" area was still the whole window) shrinks into the
-     real safe area instead of staying edge-to-edge */
+  /* >= so a Full dialog created before the first inset report shrinks
+     into the real safe area instead of staying edge-to-edge */
   return size.width >= available.width && size.height >= available.height;
 }
 
@@ -84,39 +83,45 @@ SingleWindow::HasMaximisedDialog() const noexcept
   return false;
 }
 
+bool
+SingleWindow::HasFullScreenDialog() const noexcept
+{
+  const PixelRect rc = GetClientRect();
+  for (const WndForm *dialog : dialogs)
+    if (FillsDialogArea(*dialog, rc))
+      return true;
+
+  return false;
+}
+
 void
 SingleWindow::OnResize(PixelSize new_size) noexcept
 {
-  /* Resize dialogs BEFORE calling TopWindow::OnResize, so they're at the
-   * correct size when TopWindow::OnResize calls Expose(). This is especially
-   * important for maximised dialogs (like the Fly/Simulator start
-   * screen) which cover the safe area.
-   *
-   * Use the new_size to construct the client rect, since GetClientRect()
-   * would return the old size at this point. */
-  /* dialogs stay inside the safe area: a title or a button behind the
-     display cutout or the home indicator is hard to read and hard to
-     hit, and unlike the map they cannot be moved out of the way */
+  /* Resize dialogs before TopWindow::OnResize so they have the right
+     size when Expose() runs.  GetClientRect() still returns the old
+     size here, so build the rects from new_size.
+
+     Dialogs stay in the safe area.  The Fly/Simulator start screen is
+     the exception: it fills the client so its gradient can paint
+     edge to edge, and only its controls follow the insets. */
+  const PixelRect full_rc{new_size};
   const PixelRect rc = GetSafeAreaRect(new_size);
   for (WndForm *dialog : dialogs) {
-    if (FillsDialogArea(*dialog, dialog_rect))
-      /* the dialog filled the (old) safe area; grow or shrink it to
-         the new one instead of only moving it, because
-         ReinitialiseLayout() never resizes.  This happens during
-         startup, where the Fly/Simulator dialog is created before
-         the system reports the display cutout and the system bars. */
+    if (FillsDialogArea(*dialog, full_rc)) {
+      dialog->Move(full_rc);
+      dialog->ForceLayout();
+    } else if (FillsDialogArea(*dialog, dialog_rect))
+      /* filled the previous safe area; grow or shrink with it.
+         ReinitialiseLayout() never resizes. */
       dialog->Move(rc);
     else
       dialog->ReinitialiseLayout(rc);
 
-    /* Invalidate dialog to ensure it's redrawn with the new layout */
     dialog->Invalidate();
   }
 
   dialog_rect = rc;
-  
-  /* Now resize the main window, which will call Expose() to redraw everything
-   * including the resized dialogs. */
+
   TopWindow::OnResize(new_size);
 }
 
