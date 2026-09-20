@@ -392,6 +392,13 @@ Startup(UI::Display &display)
   CommonInterface::SetUISettings().SetDefaults();
   main_window->Initialise();
 
+#ifdef ANDROID
+  /* apply insets announced while the window was created, so the
+     Fly/Simulator dialog is laid out in the safe area even though
+     this is before the first RESIZE event is processed */
+  main_window->PublishSafeAreaInsets();
+#endif
+
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
   if (!sim_set_in_cmd_line_flag) {

@@ -286,7 +286,16 @@ TopWindow::OnEvent(const Event &event)
     PixelSize event_size(event.point.x, event.point.y);
     screen->CheckResize(event_size);
     PixelSize screen_size = screen->GetSize();
+    const bool size_changed = screen_size != GetSize();
     Resize(screen_size);
+    if (!size_changed)
+      /* Window::Resize() is a no-op when the surface size did not
+         change, but the safe-area insets may have.  That is typical
+         at startup: the Fly/Simulator dialog is created before the
+         first inset report, when the "safe" area is still the whole
+         window.  Relayout so maximised dialogs stay inside the safe
+         area. */
+      OnResize(screen_size);
 
     /* it seems the first page flip after a display orientation change
        is ignored on Android (tested on a Dell Streak / Android

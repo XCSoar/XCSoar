@@ -63,7 +63,12 @@ SingleWindow::OnDestroy() noexcept
 static bool
 FillsDialogArea(const Window &dialog, const PixelRect &dialog_rect) noexcept
 {
-  return dialog.GetSize() == dialog_rect.GetSize();
+  const PixelSize size = dialog.GetSize();
+  const PixelSize available = dialog_rect.GetSize();
+  /* >= so a Full dialog created before the first inset report (when
+     the "safe" area was still the whole window) shrinks into the
+     real safe area instead of staying edge-to-edge */
+  return size.width >= available.width && size.height >= available.height;
 }
 
 bool
@@ -84,9 +89,9 @@ SingleWindow::OnResize(PixelSize new_size) noexcept
 {
   /* Resize dialogs BEFORE calling TopWindow::OnResize, so they're at the
    * correct size when TopWindow::OnResize calls Expose(). This is especially
-   * important for fullscreen dialogs (like dlgSimulatorPrompt) which cover
-   * the entire window.
-   * 
+   * important for maximised dialogs (like the Fly/Simulator start
+   * screen) which cover the safe area.
+   *
    * Use the new_size to construct the client rect, since GetClientRect()
    * would return the old size at this point. */
   /* dialogs stay inside the safe area: a title or a button behind the
@@ -95,11 +100,11 @@ SingleWindow::OnResize(PixelSize new_size) noexcept
   const PixelRect rc = GetSafeAreaRect(new_size);
   for (WndForm *dialog : dialogs) {
     if (FillsDialogArea(*dialog, dialog_rect))
-      /* the dialog filled the safe area; grow it into the new one
-         instead of only moving it, because ReinitialiseLayout() never
-         resizes.  This happens during startup, where the system
-         applies the window flags we asked for only after the dialog
-         has been created. */
+      /* the dialog filled the (old) safe area; grow or shrink it to
+         the new one instead of only moving it, because
+         ReinitialiseLayout() never resizes.  This happens during
+         startup, where the Fly/Simulator dialog is created before
+         the system reports the display cutout and the system bars. */
       dialog->Move(rc);
     else
       dialog->ReinitialiseLayout(rc);

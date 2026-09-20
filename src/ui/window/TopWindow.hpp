@@ -638,8 +638,9 @@ public:
 
   /**
    * Copy the insets announced by the Android UI thread to the main
-   * thread.  Called while handling the RESIZE event, before anything
-   * is laid out or drawn with them.
+   * thread.  Called while handling the RESIZE event, and also just
+   * before the Fly/Simulator dialog so that dialog can use them
+   * before the first RESIZE is processed.
    */
   void PublishSafeAreaInsets() noexcept;
 
