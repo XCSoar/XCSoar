@@ -358,6 +358,18 @@ $(GEN_DIR)/org/xcsoar/R.java: $(PROTOBUF_OUT_DIR)/dirstamp
 
 ### Java build
 
+# Everything below lands in $(NO_ARCH_OUTPUT_DIR), which every ABI shares.
+# A fat-binary build reaches it from each of its four per-ABI submakes, and
+# make can serialise a target only within one make instance: with -j the
+# four would run javac, zip and D8 over the same files at the same time.
+# The zip recipe removes classes.zip before writing it, so a concurrent D8
+# can find no input at all and the build dies on a missing file.
+#
+# The parent builds these once -- they are prerequisites of the rule that
+# starts the submake -- and passes NO_ARCH_READY=y, which leaves the
+# submake with no recipe for them and so nothing to write here.
+ifneq ($(NO_ARCH_READY),y)
+
 # Note: Requires JDK 17 or later. JAVA_HOME should point to JDK 17 installation.
 $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java | $(JAVA_CLASSFILES_DIR)/dirstamp
 	@$(NQ)echo "  JAVAC   $(JAVA_CLASSFILES_DIR)"
@@ -385,7 +397,12 @@ $(NO_ARCH_OUTPUT_DIR)/classes.dex: $(NO_ARCH_OUTPUT_DIR)/classes.zip
 		--lib $(ANDROID_SDK_PLATFORM_DIR)/android.jar \
 		--output $(NO_ARCH_OUTPUT_DIR) $(NO_ARCH_OUTPUT_DIR)/classes.zip
 
-# Native headers generated at Java compile step
+endif # !NO_ARCH_READY
+
+# Native headers generated at Java compile step.  This rule carries no
+# recipe -- javac -h writes them as a side effect above -- so it stays
+# outside the guard: it is what tells a submake that an absent header is
+# accounted for, and it can write nothing itself.
 $(NATIVE_HEADERS): $(NO_ARCH_OUTPUT_DIR)/classes.dex
 
 
@@ -412,8 +429,10 @@ $$(TARGET_OUTPUT_DIR)/$(2)/thirdparty.stamp: FORCE
 	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) libs
 
 # build libxcsoar.so
+# NO_ARCH_READY=y: the noarch outputs are prerequisites above, so they are
+# already built; without it all four submakes would rebuild them at once.
 $$(TARGET_OUTPUT_DIR)/$(2)/$$(XCSOAR_ABI)/bin/lib$(1).so: $(NATIVE_HEADERS) generate boost FORCE
-	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) $$@
+	$$(Q)$$(MAKE) TARGET_OUTPUT_DIR=$$(TARGET_OUTPUT_DIR) TARGET=$(3) DEBUG=$$(DEBUG) USE_CCACHE=$$(USE_CCACHE) NO_ARCH_READY=y $$@
 
 # Unstripped .so (paths lib/<ABI>/) for Google Play; must retain debug info.
 # Rely on lib$(1).so (submake) not lib$(1)-ns.so: fat-binary build omits -ns in
