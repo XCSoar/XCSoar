@@ -54,11 +54,14 @@ class FlightSetupPanel final
   double last_altitude;
 
   /**
-   * The temperature a forecast offered when the dialog opened, if one
-   * did.  Save() compares against it to tell a value the pilot typed
-   * from one that was merely accepted.
+   * The temperature a forecast put into the field, if one arrived.
+   * Save() compares against it to tell a value the pilot typed from
+   * one that was merely accepted.
    */
   std::optional<TemperatureValue> offered_temperature;
+
+  /** fetches in the background; cancelled when this panel goes away */
+  ForecastTemperatureFetcher forecast_fetcher;
 
 public:
   FlightSetupPanel()
@@ -68,9 +71,6 @@ public:
      last_altitude(-2)
   {}
 
-  void SetOfferedTemperature(TemperatureValue value) noexcept {
-    offered_temperature = value;
-  }
 
   void SetDumpButton(Button *_dump_button) {
     dump_button = _dump_button;
@@ -324,13 +324,28 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
                 Temperature::FromCelsius(-50).ToUser(),
                 Temperature::FromCelsius(60).ToUser(),
                 1, false,
-                (offered_temperature.value_or(settings.forecast_temperature))
-                .ToUser());
+                settings.forecast_temperature.ToUser());
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }
+
+  /* Started rather than waited for: the dialog opens on the value it
+     has, and the field changes under the pilot only if an answer
+     turns up.  Nothing happens at all when one was already fetched
+     today, or the pilot has set the value by hand today, or there is
+     no fix to pick a station by. */
+  const auto opened_with = settings.forecast_temperature;
+  forecast_fetcher.Start([this, opened_with](TemperatureValue value){
+    if (fabs(GetValueFloat(Temperature) - opened_with.ToUser()) > 0.01)
+      /* the pilot has typed something in the meantime; a forecast
+         does not get to overwrite that */
+      return;
+
+    offered_temperature = value;
+    LoadValue(Temperature, value.ToKelvin(), UnitGroup::TEMPERATURE);
+  });
 }
 
 bool
@@ -364,11 +379,6 @@ void
 dlgBasicSettingsShowModal()
 {
   FlightSetupPanel *instance = new FlightSetupPanel();
-
-  /* before the dialog is built, so the field opens on the forecast
-     rather than jumping once it arrives */
-  if (const auto forecast = MaybeFetchForecastTemperature())
-    instance->SetOfferedTemperature(*forecast);
 
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
   StaticString<128> caption(_("Flight Setup"));

@@ -2,64 +2,98 @@
 // Copyright The XCSoar Project
 
 #include "MosmixTemperature.hpp"
-#include "Dialogs/CoFunctionDialog.hpp"
-#include "LogFile.hpp"
 #include "Interface.hpp"
-#include "Language/Language.hpp"
-#include "UIGlobals.hpp"
+#include "LogFile.hpp"
+#include "Operation/Operation.hpp"
 #include "Weather/MOSMIX/AutoUpdate.hpp"
 #include "Weather/MOSMIX/Download.hpp"
 #include "net/http/Features.hpp"
 #include "net/http/Init.hpp"
-#include "Operation/PluggableOperationEnvironment.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "UIGlobals.hpp"
+#include "io/async/AsioThread.hpp"
+#include "io/async/GlobalAsioThread.hpp"
 
-std::optional<Temperature>
-MaybeFetchForecastTemperature() noexcept
-try {
+Co::InvokeTask
+ForecastTemperatureFetcher::Run()
+{
 #ifdef HAVE_HTTP
+  const BrokenDate date{uint16_t(year), uint8_t(month), uint8_t(day)};
+  NullOperationEnvironment env;
+  result = co_await MOSMIX::CoFetchForecastMaximum(
+    *Net::curl, CommonInterface::Basic().location, date, env);
+#else
+  co_return;
+#endif
+}
+
+void
+ForecastTemperatureFetcher::OnCompletion(std::exception_ptr _error) noexcept
+{
+  error = std::move(_error);
+  complete_notify.SendNotification();
+}
+
+void
+ForecastTemperatureFetcher::OnCompleteNotify() noexcept
+{
+  if (error) {
+    /* Logged, not shown.  The usual reason is that there is no
+       network, and a dialog about it on the first opening of every
+       day -- about something the pilot did not ask for -- would be a
+       nuisance in its own right.  The field keeps the value it had. */
+    LogError(std::move(error), "MOSMIX forecast temperature");
+    error = {};
+    return;
+  }
+
+  const BrokenDate date{uint16_t(year), uint8_t(month), uint8_t(day)};
+
+  /* Remembered even when the forecast carried no value: asking again
+     the same day would only repeat the answer. */
+  MOSMIX::RememberFetch(date, result);
+
+  if (result.has_value() && on_result)
+    on_result(*result);
+}
+
+void
+ForecastTemperatureFetcher::Start(std::function<void(Temperature)>
+                                  &&callback) noexcept
+{
+#ifdef HAVE_HTTP
+  if (Net::curl == nullptr)
+    return;
+
   const auto now = BrokenDateTime::NowUTC();
   if (!now.IsPlausible())
-    return std::nullopt;
+    return;
 
   const BrokenDate today = now;
+
+  /* already answered today: show that, and stay off the network */
+  if (const auto stored = MOSMIX::GetStoredForecast(today)) {
+    if (callback)
+      callback(*stored);
+    return;
+  }
+
   if (!MOSMIX::ShouldFetchToday(today))
-    return std::nullopt;
+    return;
 
-  const auto &basic = CommonInterface::Basic();
-  if (!basic.location_available)
+  if (!CommonInterface::Basic().location_available)
     /* the station is picked by distance, so there is nothing to pick
-       it from; try again once there is a fix */
-    return std::nullopt;
+       it from; the next opening with a fix will try again */
+    return;
 
-  if (Net::curl == nullptr)
-    return std::nullopt;
+  year = today.year;
+  month = today.month;
+  day = today.day;
+  on_result = std::move(callback);
 
-  PluggableOperationEnvironment env;
-  const auto result = ShowCoFunctionDialog(
-    UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-    _("Forecast temperature"),
-    MOSMIX::CoFetchForecastMaximum(*Net::curl, basic.location, today, env),
-    &env);
-
-  if (!result)
-    /* cancelled; leave the day open so the next try is not blocked */
-    return std::nullopt;
-
-  /* Remember the day even when the forecast carried no value: asking
-     again on the same day would only repeat the same answer, and the
-     pilot did not ask for this in the first place. */
-  MOSMIX::RememberFetch(today);
-
-  return *result;
+  task.emplace(asio_thread->GetEventLoop());
+  task->Start(Run(), BIND_THIS_METHOD(OnCompletion));
 #else
-  return std::nullopt;
+  (void)callback;
 #endif
-} catch (...) {
-  /* Logged, not shown.  The usual reason is that there is no network,
-     and a dialog about it on the first opening of every day would be
-     a nuisance about something the pilot did not ask for.  The flight
-     setup opens with the value it already had. */
-  LogError(std::current_exception(), "MOSMIX forecast temperature");
-  return std::nullopt;
 }
