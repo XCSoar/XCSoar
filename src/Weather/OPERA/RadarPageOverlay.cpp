@@ -487,6 +487,17 @@ RadarDownloadGlue::OnCompleteNotify() noexcept
 void
 RadarDownloadGlue::ScheduleAgeCheck() noexcept
 {
+  if (age_timer.IsActive())
+    /* Already running, and it repeats on its own.  Scheduling it
+       again would restart the period, and this runs from
+       ActivatePageOverlay(), which the map now calls on every
+       projection change -- about once a second in flight.  The
+       deadline would be pushed out for ever, taking both the jobs it
+       carries with it: retiring an echo older than MAX_AGE_MINUTES,
+       and clearing consecutive_failures so a dropped tile is tried
+       again. */
+    return;
+
   /* the composite changes every five minutes, so checking once a
      minute is often enough to catch a new one and cheap enough to run
      for as long as the page is open */
@@ -614,6 +625,16 @@ OPERA::ClearMapOverlay() noexcept
   wanted.clear();
   consecutive_failures = 0;
   EndProgress();
+}
+
+void
+OPERA::OnProjectionModified() noexcept
+{
+  if (!active)
+    /* some other page is up; the radar has nothing on the map */
+    return;
+
+  ActivatePageOverlay();
 }
 
 void

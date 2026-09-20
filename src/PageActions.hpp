@@ -74,6 +74,18 @@ namespace PageActions
   void Restore();
 
   /**
+   * The map's projection has been edited -- the pilot zoomed, panned
+   * or rotated, or the map followed the aircraft.
+   *
+   * Overlays that fetch imagery for the visible area need to know, or
+   * they would keep showing the section that was on screen when they
+   * last looked.  Called from GlueMapWindow, which knows nothing about
+   * the individual providers; each decides for itself whether it is on
+   * the map at all.
+   */
+  void OnMapProjectionModified() noexcept;
+
+  /**
    * Schedule a call to Restore().  The function returns immediately,
    * and there is no guarantee that it succeeds.
    */
