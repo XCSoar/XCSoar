@@ -16,12 +16,22 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/InternalLink.hpp"
+#include "Dialogs/Weather/MosmixTemperature.hpp"
+#include "Weather/MOSMIX/AutoUpdate.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <math.h>
+
+#include <optional>
+
+/* the enumerator Temperature below hides the class of the same
+   name; give the class a second name while it is still
+   reachable */
+using TemperatureValue = Temperature;
 
 enum ControlIndex {
   Crew,
@@ -43,6 +53,13 @@ class FlightSetupPanel final
 
   double last_altitude;
 
+  /**
+   * The temperature a forecast offered when the dialog opened, if one
+   * did.  Save() compares against it to tell a value the pilot typed
+   * from one that was merely accepted.
+   */
+  std::optional<TemperatureValue> offered_temperature;
+
 public:
   FlightSetupPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()),
@@ -50,6 +67,10 @@ public:
      polar_settings(CommonInterface::SetComputerSettings().polar),
      last_altitude(-2)
   {}
+
+  void SetOfferedTemperature(TemperatureValue value) noexcept {
+    offered_temperature = value;
+  }
 
   void SetDumpButton(Button *_dump_button) {
     dump_button = _dump_button;
@@ -303,7 +324,8 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
                 Temperature::FromCelsius(-50).ToUser(),
                 Temperature::FromCelsius(60).ToUser(),
                 1, false,
-                settings.forecast_temperature.ToUser());
+                (offered_temperature.value_or(settings.forecast_temperature))
+                .ToUser());
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetTemperatureName());
@@ -318,7 +340,20 @@ FlightSetupPanel::Save(bool &changed) noexcept
 
   double forecast_temperature = settings.forecast_temperature.ToKelvin();
   if (SaveValue(Temperature, UnitGroup::TEMPERATURE, forecast_temperature)) {
-    settings.forecast_temperature = Temperature::FromKelvin(forecast_temperature);
+    const auto value =
+      TemperatureValue::FromKelvin(forecast_temperature);
+
+    /* A value the pilot typed outranks the forecast for the rest of
+       the day.  Merely closing the dialog on a value a forecast put
+       there is not that, so the two are told apart by comparison. */
+    if (!offered_temperature.has_value() ||
+        fabs(offered_temperature->ToKelvin() - forecast_temperature) > 0.01) {
+      if (const BrokenDate today = BrokenDateTime::NowUTC();
+          today.IsPlausible())
+        MOSMIX::RememberManualEntry(today);
+    }
+
+    settings.forecast_temperature = value;
     changed = true;
   }
 
@@ -329,6 +364,11 @@ void
 dlgBasicSettingsShowModal()
 {
   FlightSetupPanel *instance = new FlightSetupPanel();
+
+  /* before the dialog is built, so the field opens on the forecast
+     rather than jumping once it arrives */
+  if (const auto forecast = MaybeFetchForecastTemperature())
+    instance->SetOfferedTemperature(*forecast);
 
   const Plane &plane = CommonInterface::GetComputerSettings().plane;
   StaticString<128> caption(_("Flight Setup"));
