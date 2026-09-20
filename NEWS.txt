@@ -10,7 +10,9 @@ Version 7.46 - not yet released
   - keep dialogs inside the safe area, whatever the edge settings, so
     the display cutout, the system bars (even while full screen
     hides them) and the rounded corners cannot hide a title or a
-    button, including the Fly/Simulator start screen #2466
+    button. The Fly/Simulator start screen may fill the screen
+    with its background; Quit, Fly, Simulator and the version stay
+    in the safe area #2466
   - use built-in IMU and log to NMEA logger if enabled
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)

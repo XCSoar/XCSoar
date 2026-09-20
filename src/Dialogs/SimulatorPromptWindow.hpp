@@ -39,6 +39,9 @@ private:
 
   PixelPoint label_position;
 
+  /** Last safe-area rect used for the buttons; empty until laid out. */
+  PixelRect layout_rc{};
+
 public:
   SimulatorPromptWindow(const DialogLook &_look,
                         std::function<void(Result)> _callback,
@@ -55,6 +58,8 @@ public:
   }
 
 protected:
+  void LayoutControls() noexcept;
+
   /* virtual methods from class Window */
   void OnCreate() override;
   void OnResize(PixelSize new_size) noexcept override;

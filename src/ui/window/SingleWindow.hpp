@@ -53,6 +53,13 @@ public:
   [[gnu::pure]]
   bool HasMaximisedDialog() const noexcept;
 
+  /**
+   * Is any dialog open that covers the whole client area (edge to
+   * edge), not only the safe area?
+   */
+  [[gnu::pure]]
+  bool HasFullScreenDialog() const noexcept;
+
   [[gnu::pure]]
   bool HasDialog() const noexcept {
     return !dialogs.empty();

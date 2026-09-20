@@ -211,6 +211,15 @@ public:
   }
 
   /**
+   * Run OnResize() even when the window size did not change.  Used
+   * when only the safe-area insets have changed, so a fullscreen
+   * dialog can move its controls without changing its own size.
+   */
+  void ForceLayout() noexcept {
+    OnResize(GetSize());
+  }
+
+  /**
    * Reposition window, if possible.  Will be called whenever the
    * parent window changes.
    *

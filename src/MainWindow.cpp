@@ -1556,9 +1556,11 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
 
   SingleWindow::OnPaint(canvas);
 
-  if (HasMaximisedDialog()) {
+  if (HasMaximisedDialog() && !HasFullScreenDialog()) {
     /* the dialog covers the safe area only; painting the map and the
-       InfoBoxes around it would be restless */
+       InfoBoxes around it would be restless.  A fullscreen dialog
+       (Fly/Simulator) paints its own gradient into the unsafe
+       edges. */
     const PixelRect rc = GetClientRect(), safe_rc = GetSafeAreaRect();
 
     if (safe_rc.top > rc.top)
