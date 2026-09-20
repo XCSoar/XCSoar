@@ -69,14 +69,17 @@ int main()
   ok1(ProjectsTo(*europe, -6.2701, 53.4213, 394.36, 294.64, 2));  // EIDW
 
   /* the central meridian runs straight up the image */
-  const auto a = germany->ToPixel(MakeGeoPoint(10, 48));
-  const auto b = germany->ToPixel(MakeGeoPoint(10, 54));
+  const auto a = germany->ToPixel(MakeGeoPoint(PCMet::CENTRAL_MERIDIAN, 48));
+  const auto b = germany->ToPixel(MakeGeoPoint(PCMet::CENTRAL_MERIDIAN, 54));
   ok1(equals(a.x, b.x));
   ok1(a.y > b.y);
 
-  /* the meridians converge, so north is up on 10E only */
-  ok1(equals(germany->GetUpBearing(MakeGeoPoint(10, 50)).Degrees(), 0));
-  ok1(equals(germany->GetUpBearing(MakeGeoPoint(15, 50)).Degrees(), 5));
+  /* the meridians converge, so north is up on the central meridian
+     only, and the bearing grows with the distance from it */
+  ok1(equals(germany->GetUpBearing(
+    MakeGeoPoint(PCMet::CENTRAL_MERIDIAN, 50)).Degrees(), 0));
+  ok1(equals(germany->GetUpBearing(
+    MakeGeoPoint(PCMet::CENTRAL_MERIDIAN + 5, 50)).Degrees(), 5));
 
   /* IsInside() */
   ok1(germany->IsInside(germany->ToPixel(MakeGeoPoint(11, 48))));
