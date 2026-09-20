@@ -360,4 +360,9 @@ constexpr std::string_view DisclaimerAcknowledgedVersion =
   "DisclaimerAcknowledgedVersion";
 constexpr std::string_view LastSeenNewsVersion =
   "LastSeenNewsVersion";
+
+/* the day, as 20260920, on which the forecast maximum temperature was
+   last fetched and on which the pilot last set it by hand */
+constexpr std::string_view MosmixLastFetch = "MosmixLastFetch";
+constexpr std::string_view MosmixManualEntry = "MosmixManualEntry";
 }

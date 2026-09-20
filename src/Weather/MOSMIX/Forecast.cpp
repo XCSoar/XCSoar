@@ -3,14 +3,14 @@
 
 #include "Forecast.hpp"
 #include "io/Reader.hxx"
-#include "io/ZipArchive.hpp"
-#include "io/ZipReader.hpp"
-#include "system/Path.hpp"
+#include "io/MemoryReader.hxx"
+#include "lib/zlib/GunzipReader.hxx"
 #include "time/BrokenDate.hpp"
 #include "util/DecimalParser.hxx"
 
 #include <fmt/format.h>
 
+#include <cstdint>
 #include <string>
 
 namespace {
@@ -53,8 +53,21 @@ public:
 
     const std::size_t before = data.size();
     data.resize(before + CHUNK);
-    const std::size_t n =
-      reader.Read(std::as_writable_bytes(std::span{data}.subspan(before)));
+
+    std::size_t n;
+    try {
+      n = reader.Read(std::as_writable_bytes(std::span{data}.subspan(before)));
+    } catch (...) {
+      /* A stream that stops in the middle is expected here: the
+         forecast may be fetched as a byte range, which leaves the
+         deflate stream without its end.  Everything read so far
+         stands, and if the maximum was not among it the parse below
+         simply finds nothing. */
+      data.resize(before);
+      eof = true;
+      return false;
+    }
+
     data.resize(before + n);
 
     if (n == 0) {
@@ -216,25 +229,35 @@ MOSMIX::ReadForecastMaximum(Reader &reader, const BrokenDate &date)
 }
 
 std::optional<Temperature>
-MOSMIX::ReadForecastMaximum(Path kmz, const BrokenDate &date) noexcept
+MOSMIX::ReadForecastMaximumFromPrefix(std::span<const std::byte> prefix,
+                                      const BrokenDate &date) noexcept
 try {
-  ZipArchive archive{kmz};
+  /* A ZIP local file header: the signature, the compression method at
+     offset 8, and at offsets 26 and 28 the lengths of the name and
+     extra fields, after which the entry's stream begins.  The central
+     directory that would normally say where entries are lives at the
+     end of the file and is not here -- which is the point, since not
+     fetching that end is the saving. */
+  static constexpr std::size_t LOCAL_HEADER = 30;
+  if (prefix.size() <= LOCAL_HEADER)
+    return std::nullopt;
 
-  /* the single entry is named after the model run, so it is found
-     rather than known */
-  std::string name;
-  while (true) {
-    name = archive.NextName();
-    if (name.empty())
-      return std::nullopt;
+  const auto *p = reinterpret_cast<const uint8_t *>(prefix.data());
+  if (p[0] != 'P' || p[1] != 'K' || p[2] != 3 || p[3] != 4)
+    return std::nullopt;
 
-    if (name.size() > 4 &&
-        name.compare(name.size() - 4, 4, ".kml") == 0)
-      break;
-  }
+  if (unsigned(p[8] | (p[9] << 8)) != 8)
+    /* stored, or something we do not inflate */
+    return std::nullopt;
 
-  ZipReader reader{archive.get(), name.c_str()};
-  return ReadForecastMaximum(reader, date);
+  const std::size_t offset = LOCAL_HEADER +
+    std::size_t(p[26] | (p[27] << 8)) + std::size_t(p[28] | (p[29] << 8));
+  if (offset >= prefix.size())
+    return std::nullopt;
+
+  MemoryReader memory{prefix.subspan(offset)};
+  GunzipReader inflate{memory, true};
+  return ReadForecastMaximum(inflate, date);
 } catch (...) {
   return std::nullopt;
 }
