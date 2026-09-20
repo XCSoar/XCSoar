@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include "Atmosphere/Temperature.hpp"
+
+#include <optional>
+
 struct BrokenDate;
 
 namespace MOSMIX {
@@ -22,8 +26,26 @@ namespace MOSMIX {
 [[gnu::pure]]
 bool ShouldFetchToday(const BrokenDate &today) noexcept;
 
-/** A forecast was fetched today; do not fetch another. */
-void RememberFetch(const BrokenDate &today) noexcept;
+/**
+ * The forecast fetched today, if one was and it carried a value.
+ *
+ * Kept so that opening the dialog a second time on the same day shows
+ * the same number without asking the network again -- and so that
+ * cancelling the dialog does not throw the answer away.
+ */
+[[gnu::pure]]
+std::optional<Temperature>
+GetStoredForecast(const BrokenDate &today) noexcept;
+
+/**
+ * A forecast was fetched today; do not fetch another.
+ *
+ * @param value what it said, or nothing when it carried no value for
+ * today -- which still counts as the day's fetch, because asking
+ * again would only repeat the answer
+ */
+void RememberFetch(const BrokenDate &today,
+                   std::optional<Temperature> value) noexcept;
 
 /**
  * The pilot set the temperature by hand.  Stops the automatic update

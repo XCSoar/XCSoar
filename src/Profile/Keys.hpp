@@ -365,4 +365,7 @@ constexpr std::string_view LastSeenNewsVersion =
    last fetched and on which the pilot last set it by hand */
 constexpr std::string_view MosmixLastFetch = "MosmixLastFetch";
 constexpr std::string_view MosmixManualEntry = "MosmixManualEntry";
+
+/* what that fetch said, in Kelvin; zero when it said nothing */
+constexpr std::string_view MosmixForecast = "MosmixForecast";
 }
