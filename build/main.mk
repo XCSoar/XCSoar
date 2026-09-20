@@ -753,6 +753,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFilter.cpp \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
+	$(SRC)/Weather/MOSMIX/Station.cpp \
+	$(SRC)/Weather/MOSMIX/Forecast.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Georeference.cpp \
 	$(SRC)/Weather/PCMet/Overlays.cpp \

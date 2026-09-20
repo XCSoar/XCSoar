@@ -134,6 +134,8 @@ TEST_NAMES = \
 	TestNMEAChecksum \
 	TestDewPoint \
 	TestCuSonde \
+	TestMosmixStation \
+	TestMosmixForecast \
 	TestGDL90 \
 	TestGDL90Driver \
 	TestLXNToIGC \
@@ -195,6 +197,20 @@ TEST_FLARM_BINARY_PROTOCOL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmBinaryProtocol.cpp
 $(eval $(call link-program,TestFlarmBinaryProtocol,TEST_FLARM_BINARY_PROTOCOL))
+
+TEST_MOSMIX_STATION_SOURCES = \
+	$(SRC)/Weather/MOSMIX/Station.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMosmixStation.cpp
+TEST_MOSMIX_STATION_DEPENDS = GEO MATH IO OS UTIL
+$(eval $(call link-program,TestMosmixStation,TEST_MOSMIX_STATION))
+
+TEST_MOSMIX_FORECAST_SOURCES = \
+	$(SRC)/Weather/MOSMIX/Forecast.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMosmixForecast.cpp
+TEST_MOSMIX_FORECAST_DEPENDS = TIME IO OS UTIL FMT ZZIP
+$(eval $(call link-program,TestMosmixForecast,TEST_MOSMIX_FORECAST))
 
 TEST_NMEA_CHECKSUM_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
