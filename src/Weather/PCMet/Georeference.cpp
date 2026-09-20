@@ -11,15 +11,6 @@
 
 namespace {
 
-/* The parameters of the DWD polar stereographic grid, as published in
-   "RADOLAN und RADVOR: Beschreibung des Kompositformats" version
-   2.5.8, chapter 1.3 "Georeferenzierung": the projection plane cuts
-   the sphere at 60°N, is aligned with the 10°E meridian, and the
-   earth is a sphere of radius 6370.04km with zero eccentricity. */
-constexpr double EARTH_RADIUS = 6370.04;
-constexpr double STANDARD_PARALLEL = 60;
-constexpr double CENTRAL_MERIDIAN = 10;
-
 struct AreaGeoreference {
   const char *area;
   PCMet::ImageGeoreference georeference;
