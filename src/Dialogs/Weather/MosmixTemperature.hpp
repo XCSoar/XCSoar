@@ -4,21 +4,60 @@
 #pragma once
 
 #include "Atmosphere/Temperature.hpp"
+#include "co/InjectTask.hxx"
+#include "ui/event/Notify.hpp"
 
+#include <exception>
+#include <functional>
 #include <optional>
 
 /**
- * Fetch today's forecast maximum temperature, if that is due.
+ * Fetches today's forecast maximum temperature in the background.
  *
- * Due means: today, and neither fetched already nor overridden by
- * hand -- see MOSMIX::ShouldFetchToday().  A fetch shows a modal
- * progress dialog the pilot can cancel.
+ * The flight setup dialog is opened to set the QNH as much as
+ * anything else, often in a hurry and sometimes in the air, so it
+ * must not wait for a network.  It opens on the value it has, and the
+ * field is filled in if and when an answer arrives.
  *
- * Failures are shown and swallowed: the flight setup dialog has
- * nothing to do about them but open with the value it already had.
- *
- * @return nothing when no fetch was due, none was possible, or the
- * forecast carries no value for today
+ * Owned by the widget that wants the answer.  Destroying it cancels
+ * the fetch, so the callback cannot reach a window that is gone.
  */
-std::optional<Temperature>
-MaybeFetchForecastTemperature() noexcept;
+class ForecastTemperatureFetcher final {
+  /* constructed on first use: Co::InjectTask wants an
+     #EventLoop, and there may be none to give it */
+  std::optional<Co::InjectTask> task;
+
+  UI::Notify complete_notify{[this]{ OnCompleteNotify(); }};
+
+  std::function<void(Temperature)> on_result;
+
+  std::optional<Temperature> result;
+  std::exception_ptr error;
+
+  /** the day the answer is about, remembered for the profile */
+  unsigned year = 0, month = 0, day = 0;
+
+  Co::InvokeTask Run();
+  void OnCompletion(std::exception_ptr error) noexcept;
+  void OnCompleteNotify() noexcept;
+
+public:
+  ForecastTemperatureFetcher() noexcept = default;
+
+  ~ForecastTemperatureFetcher() noexcept {
+    if (task)
+      task->Cancel();
+  }
+
+  ForecastTemperatureFetcher(const ForecastTemperatureFetcher &) = delete;
+  ForecastTemperatureFetcher &
+  operator=(const ForecastTemperatureFetcher &) = delete;
+
+  /**
+   * Start fetching, if a fetch is due at all.
+   *
+   * @param callback run on the UI thread when a temperature arrives;
+   * never run when none does
+   */
+  void Start(std::function<void(Temperature)> &&callback) noexcept;
+};

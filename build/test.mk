@@ -136,6 +136,7 @@ TEST_NAMES = \
 	TestCuSonde \
 	TestMosmixStation \
 	TestMosmixForecast \
+	TestMosmixAutoUpdate \
 	TestGDL90 \
 	TestGDL90Driver \
 	TestLXNToIGC \
@@ -203,6 +204,13 @@ TEST_MOSMIX_STATION_SOURCES = \
 	$(TEST_SRC_DIR)/TestMosmixStation.cpp
 TEST_MOSMIX_STATION_DEPENDS = GEO MATH IO OS UTIL
 $(eval $(call link-program,TestMosmixStation,TEST_MOSMIX_STATION))
+
+TEST_MOSMIX_AUTO_UPDATE_SOURCES = \
+	$(SRC)/Weather/MOSMIX/AutoUpdate.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMosmixAutoUpdate.cpp
+TEST_MOSMIX_AUTO_UPDATE_DEPENDS = PROFILE TIME MATH IO OS UTIL
+$(eval $(call link-program,TestMosmixAutoUpdate,TEST_MOSMIX_AUTO_UPDATE))
 
 TEST_MOSMIX_FORECAST_SOURCES = \
 	$(SRC)/Weather/MOSMIX/Forecast.cpp \
