@@ -167,7 +167,7 @@ TEST_NAMES = \
 	TestWeglideScoring \
 	TestNetCoupeScoring \
 	TestDMStScoring
-	# TestHttpsVerify â€” disabled: live HTTPS fetch to download.xcsoar.org
+	# TestHttpsVerify — disabled: live HTTPS fetch to download.xcsoar.org
 	# is unreliable in CI (network/infrastructure flake)
 
 ifeq ($(TARGET_IS_ANDROID),n)
