@@ -244,6 +244,9 @@ Version 7.46 - not yet released
     replay at normal speed does
   - lua: fix replay.fast_forward() returning a bogus value instead of
     reporting whether it succeeded
+  - build system: fix the fat-binary Android build failing at random when
+    its four per-ABI submakes rebuilt the shared arch-independent outputs
+    at the same time #3186
 
 Version 7.45 - 2026-08-15
 * highlights
