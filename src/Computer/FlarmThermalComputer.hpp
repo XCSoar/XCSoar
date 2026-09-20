@@ -7,7 +7,7 @@
 #include "FlarmThermalCluster.hpp"
 #include "FLARM/List.hpp"
 #include "NMEA/TrafficThermal.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "time/Stamp.hpp"
 #include "util/TrivialArray.hxx"
 
