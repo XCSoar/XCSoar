@@ -195,6 +195,7 @@ ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/XCThermDialog.cpp \
 	$(SRC)/Dialogs/Weather/WeatherCredentialGateWidget.cpp \
+	$(SRC)/Dialogs/Weather/MosmixTemperature.cpp \
 	$(SRC)/Dialogs/Weather/PCMetDialog.cpp \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp
@@ -755,6 +756,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/MOSMIX/Station.cpp \
 	$(SRC)/Weather/MOSMIX/Forecast.cpp \
+	$(SRC)/Weather/MOSMIX/Download.cpp \
+	$(SRC)/Weather/MOSMIX/AutoUpdate.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Georeference.cpp \
 	$(SRC)/Weather/PCMet/Overlays.cpp \

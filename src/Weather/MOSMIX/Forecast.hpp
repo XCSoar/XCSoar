@@ -6,11 +6,11 @@
 #include "Atmosphere/Temperature.hpp"
 
 #include <optional>
+#include <span>
 #include <string>
 #include <string_view>
 
 class Reader;
-class Path;
 struct BrokenDate;
 
 namespace MOSMIX {
@@ -50,16 +50,22 @@ std::optional<Temperature>
 ReadForecastMaximum(Reader &reader, const BrokenDate &date);
 
 /**
- * Read the forecast maximum temperature from a downloaded .kmz, which
- * is a ZIP archive holding one KML document under a name that carries
- * the model run time.
+ * Read the maximum out of a .kmz, whole or as a byte range request
+ * returns it: a ZIP local file header followed by as much of the
+ * single deflate stream as was asked for.
  *
- * @return nothing on any error; a missing or damaged file is not
- * worth an exception to the caller, which has nothing to do about it
- * but leave the setting alone
+ * A complete file works too -- inflating stops at the end of the
+ * stream and never looks at the central directory behind it -- so
+ * there is one path for both and no temporary file to write.
+ *
+ * The timesteps stand at the head of the document and the maximum
+ * early among the forecasts, so a few kilobytes of the seventeen a
+ * whole file costs are enough.  Returns nothing when they are not,
+ * which is the caller's cue to fetch the file entire.
  */
 std::optional<Temperature>
-ReadForecastMaximum(Path kmz, const BrokenDate &date) noexcept;
+ReadForecastMaximumFromPrefix(std::span<const std::byte> prefix,
+                              const BrokenDate &date) noexcept;
 
 /**
  * Build the URL of a station's latest MOSMIX_L forecast.

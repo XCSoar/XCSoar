@@ -4,7 +4,7 @@
 #include "GunzipReader.hxx"
 #include "Error.hxx"
 
-GunzipReader::GunzipReader(Reader &_next)
+GunzipReader::GunzipReader(Reader &_next, bool raw)
 	:next(_next)
 {
 	z.next_in = nullptr;
@@ -13,7 +13,7 @@ GunzipReader::GunzipReader(Reader &_next)
 	z.zfree = Z_NULL;
 	z.opaque = Z_NULL;
 
-	int result = inflateInit2(&z, 16 + MAX_WBITS);
+	int result = inflateInit2(&z, raw ? -MAX_WBITS : 16 + MAX_WBITS);
 	if (result != Z_OK)
 		throw ZlibError(result);
 }
