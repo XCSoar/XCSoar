@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <span>
 
 namespace {
 
@@ -31,15 +32,48 @@ struct AreaGeoreference {
  */
 constexpr AreaGeoreference sat_georeferences[] = {
   /* "Europa" */
-  { "eu", { {1000, 750}, 6.4813, { 563.728, -287.134 } } },
+  { "eu", { {1000, 750}, 750, 6.4813, { 563.728, -287.134 } } },
 
   /* "Mitteleuropa" */
-  { "ce", { {1000, 750}, 2.5819, { 566.107, -1249.418 } } },
+  { "ce", { {1000, 750}, 750, 2.5819, { 566.107, -1249.418 } } },
 
   /* "Deutschland" and its northern and southern half */
-  { "mdl", { {1000, 750}, 1.1987, { 488.056, -3148.038 } } },
-  { "ndl", { {1000, 750}, 1.1984, { 510.923, -2816.887 } } },
-  { "sdl", { {1000, 750}, 1.1993, { 460.644, -3586.498 } } },
+  { "mdl", { {1000, 750}, 750, 1.1987, { 488.056, -3148.038 } } },
+  { "ndl", { {1000, 750}, 750, 1.1984, { 510.923, -2816.887 } } },
+  { "sdl", { {1000, 750}, 750, 1.1993, { 460.644, -3586.498 } } },
+};
+
+/**
+ * The RADAR composites.  Unlike the satellite images these carry a
+ * legend strip below the map, so #map_height stops short of the image
+ * height.
+ *
+ * Measured the same way as the satellite sections: the central
+ * meridian is the only one drawn vertically, which fixes pole.x, and
+ * the latitude circles are arcs about the pole, which fixes pole.y
+ * and the resolution once their latitudes are read off the margin.
+ */
+constexpr AreaGeoreference rad_georeferences[] = {
+  /* "Deutschland", the only product that is not 1000 pixels wide */
+  { "rx", { {600, 750}, 698, 1.5493, { 288.000, -2367.354 } } },
+
+  /* "Deutschland Nord", "Mitte" and "Süd" */
+  { "rxn", { {1000, 750}, 698, 0.8864, { 479.000, -4123.050 } } },
+  { "rxm", { {1000, 750}, 698, 0.8605, { 477.000, -4597.030 } } },
+  { "rxs", { {1000, 750}, 698, 0.8581, { 492.000, -4829.360 } } },
+
+  /* "Europa"; the graticule is drawn every ten degrees here, so this
+     one rests on fewer reference points than the others */
+  { "eu", { {1000, 750}, 697, 3.2799, { 581.000, -968.000 } } },
+
+  /* "Alpen" */
+  { "fa", { {1000, 750}, 697, 1.0745, { 457.000, -4099.720 } } },
+};
+
+/** The combined satellite, radar and lightning image. */
+constexpr AreaGeoreference satradblitz_georeferences[] = {
+  /* "Europa" */
+  { "eh", { {1000, 750}, 727, 2.3699, { 625.000, -1446.530 } } },
 };
 
 /**
@@ -86,7 +120,7 @@ bool
 PCMet::ImageGeoreference::IsInside(const DoublePoint2D pixel) const noexcept
 {
   return pixel.x >= 0 && pixel.x < nominal_size.width &&
-    pixel.y >= 0 && pixel.y < nominal_size.height;
+    pixel.y >= 0 && pixel.y < map_height;
 }
 
 const PCMet::ImageGeoreference *
@@ -98,17 +132,27 @@ PCMet::FindImageGeoreference(const char *type_uri,
        walking one past the end would land here */
     return nullptr;
 
-  if (!StringIsEqual(type_uri, "sat/index.htm"))
-    /* only the satellite images are georeferenced so far */
+  std::span<const AreaGeoreference> table;
+  const char *key = area_name;
+
+  if (StringIsEqual(type_uri, "sat/index.htm")) {
+    table = sat_georeferences;
+    /* the satellite areas name the channel as well, e.g. "ir_108_mdl",
+       but all channels of one area show the same map section */
+    key = GetSatAreaSuffix(area_name);
+  } else if (StringIsEqual(type_uri, "rad/index.htm")) {
+    table = rad_georeferences;
+  } else if (StringIsEqual(type_uri, "satradblitz/index.htm")) {
+    table = satradblitz_georeferences;
+  } else
+    /* the local radar images and the lightning map are not
+       georeferenced */
     return nullptr;
 
-  const char *suffix = GetSatAreaSuffix(area_name);
-
-  const auto i = std::find_if(std::begin(sat_georeferences),
-                              std::end(sat_georeferences),
-                              [suffix](const AreaGeoreference &a){
-                                return StringIsEqual(a.area, suffix);
+  const auto i = std::find_if(table.begin(), table.end(),
+                              [key](const AreaGeoreference &a){
+                                return StringIsEqual(a.area, key);
                               });
 
-  return i != std::end(sat_georeferences) ? &i->georeference : nullptr;
+  return i != table.end() ? &i->georeference : nullptr;
 }
