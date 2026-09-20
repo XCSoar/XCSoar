@@ -254,6 +254,27 @@ The maximum forecast ground temperature is used by the convection
 forecast algorithm (see Section~\ref{sec:convection-forecast}) in its
 determination of estimated convection height and cloud base.
 
+XCSoar fills this field from the forecast published by the Deutscher
+Wetterdienst, so that it reflects the day rather than whatever it was
+last set to.  Opening the dialogue starts the lookup in the
+background: the dialogue appears at once with the value it had, and
+the field changes only if an answer arrives.  The station nearest the
+aircraft is used, which requires a GPS fix, and the forecast is
+fetched once a day and then kept, so opening the dialogue again costs
+nothing.
+
+A temperature entered by hand takes precedence and is not overwritten
+for the rest of that day.  The following day the forecast is about a
+different sky and the lookup resumes.  Where there is no network the
+attempt is abandoned after a few seconds and the field simply keeps
+its value; nothing is reported, because the lookup was not asked for.
+
+\tip{} The station catalogue covers about 5600 stations worldwide,
+roughly half of them in Germany and three quarters in Europe.  Outside
+Europe the nearest station may be some distance away, and over
+mountainous terrain a station in a valley can read warmer than the
+airfield.
+
 \tip{} It is possible to configure XCSoar to display the basic
 settings dialogue when it starts up.
 
