@@ -747,15 +747,20 @@ This page configures how XCSoar uses the screen of the device.
   behind the system bars and the display cutout (the ``notch''). The map
   always fills it completely; \emph{Stretch InfoBox area} decides which
   edges
-  the InfoBoxes, gauges and map overlays may reach.
+  the InfoBoxes, gauges, map overlays and the menu may reach.
   Only available on Android and iOS.
 \item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
-  that is available to the InfoBoxes, gauges and map overlays. Selecting
+  that is available to the InfoBoxes, gauges, map overlays and the
+  menu. Selecting
   this entry opens a picker in which you choose the screen edges on which
   the InfoBox area is stretched out to the screen border, so that they
   reach the very edge
-  there. Dialogues (including the Fly/Simulator start screen) and the
-  menu buttons always stay inside the safe area.
+  there. Edges you leave unstretched stay clear of the display
+  cutout and of the space the system bars occupy, including the
+  home indicator while full screen hides it. Rounded corners stay
+  clear on unstretched edges. Dialogues
+  (including the Fly/Simulator start screen) always stay inside the
+  safe area.
   Only relevant while \emph{Full screen} is enabled.
 \item[System status bar]  Whether the system status bar with the clock and
   the battery level stays visible. \\

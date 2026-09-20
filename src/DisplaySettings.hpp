@@ -20,8 +20,8 @@ struct DisplaySettings {
 
   /**
    * The screen edges up to which everything except the map itself -
-   * the InfoBoxes, the gauges, the overlay buttons, the compass, the
-   * final glide bar - may extend.
+   * the InfoBoxes, the gauges, the overlay buttons, the menu, the
+   * compass, the final glide bar - may extend.
    *
    * @see infobox_area_stretch
    */
@@ -39,9 +39,10 @@ struct DisplaySettings {
 
   /**
    * Bit mask of #InfoBoxAreaStretchEdge: on these edges, the InfoBoxes,
-   * gauges and map overlays use the whole screen.  On the others they
-   * stay inside the safe area, clear of the display cutout ("notch")
-   * and the system bars.
+   * gauges, map overlays and the menu use the whole screen.  On the
+   * others they stay inside the safe area, clear of the display
+   * cutout ("notch") and the system bars.  Stretched edges use the
+   * screen border.
    *
    * Each edge is decided separately because the insets move when the
    * device is rotated: leaving an edge on the safe area costs nothing
