@@ -45,11 +45,44 @@ MOSMIX::ShouldFetchToday(const BrokenDate &today) noexcept
     !IsToday(ProfileKeys::MosmixLastFetch, day);
 }
 
-void
-MOSMIX::RememberFetch(const BrokenDate &today) noexcept
+std::optional<Temperature>
+MOSMIX::GetStoredForecast(const BrokenDate &today) noexcept
 {
-  if (today.IsPlausible())
-    Profile::map.Set(ProfileKeys::MosmixLastFetch, ToDayNumber(today));
+  if (!today.IsPlausible())
+    return std::nullopt;
+
+  const int day = ToDayNumber(today);
+
+  /* the pilot's own number wins for the rest of the day.  This is
+     checked here and not only in ShouldFetchToday(), because the
+     caller asks this question first: after a fetch earlier today the
+     stored forecast would otherwise be handed back and put into the
+     field, over the value that was typed in. */
+  if (IsToday(ProfileKeys::MosmixManualEntry, day) ||
+      !IsToday(ProfileKeys::MosmixLastFetch, day))
+    return std::nullopt;
+
+  double kelvin;
+  if (!Profile::map.Get(ProfileKeys::MosmixForecast, kelvin) || kelvin <= 0)
+    /* fetched today, but it had nothing to say */
+    return std::nullopt;
+
+  return Temperature::FromKelvin(kelvin);
+}
+
+void
+MOSMIX::RememberFetch(const BrokenDate &today,
+                      std::optional<Temperature> value) noexcept
+{
+  if (!today.IsPlausible())
+    return;
+
+  Profile::map.Set(ProfileKeys::MosmixLastFetch, ToDayNumber(today));
+
+  /* zero rather than absent, so that yesterday's number cannot be
+     mistaken for today's silence */
+  Profile::map.Set(ProfileKeys::MosmixForecast,
+                   value.has_value() ? value->ToKelvin() : 0.0);
 }
 
 void
