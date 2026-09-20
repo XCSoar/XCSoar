@@ -2,11 +2,14 @@ Version 7.46 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
   - add the "Stretch InfoBox area" setting (Config → Look → Display,
-    expert): pick the screen edges on which the InfoBoxes reach the
-    screen border instead of keeping clear of the display cutout and
-    the system bars; all edges by default, as before
+    expert): pick the screen edges on which the InfoBoxes, gauges,
+    map overlays and the menu reach the screen border instead of
+    keeping clear of the display cutout and the system bars;
+    unstretched edges also stay clear of rounded corners; all edges
+    by default, as before
   - keep dialogs inside the safe area, whatever the edge settings, so
-    the display cutout and the system bars cannot hide a title or a
+    the display cutout, the system bars (even while full screen
+    hides them) and the rounded corners cannot hide a title or a
     button, including the Fly/Simulator start screen #2466
   - use built-in IMU and log to NMEA logger if enabled
   - hide Engine Type on BLE sensors that are not an engine sensor

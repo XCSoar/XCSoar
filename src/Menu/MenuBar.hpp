@@ -36,9 +36,9 @@ protected:
 
 public:
   /**
-   * @param rc the area the buttons are laid out in; the caller passes
-   * the safe area so that the display cutout and the system bars
-   * cannot hide a menu button
+   * @param rc the area the buttons are laid out in (the InfoBox
+   * stretch rect: screen border on stretched edges, safe area on
+   * the others)
    */
   MenuBar(ContainerWindow &parent, const PixelRect &rc,
           const ButtonLook &look);

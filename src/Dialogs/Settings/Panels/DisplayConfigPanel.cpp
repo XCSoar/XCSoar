@@ -90,10 +90,12 @@ static constexpr const char *infobox_area_stretch_hint =
 
 static constexpr const char *infobox_area_stretch_help =
   N_("The InfoBox area is the part of the screen available to the "
-     "InfoBoxes, gauges and map overlays. Pick the edges on which it "
-     "is stretched out to the screen border. The map always uses the "
-     "whole screen, and dialogs and the menu always stay inside the "
-     "safe area. Only relevant while full screen mode is enabled.");
+     "InfoBoxes, gauges, map overlays and the menu. Pick the edges on "
+     "which it is stretched out to the screen border. Unstretched "
+     "edges stay clear of the system bars and rounded corners. The "
+     "map always uses the whole screen, "
+     "and dialogs always stay inside the safe area. Only relevant "
+     "while full screen mode is enabled.");
 
 /**
  * Describe the enabled edges for the settings list, e.g. "Top, Bottom".
@@ -299,7 +301,8 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
              _("Let XCSoar use the whole screen, including the areas behind "
                "the system bars and the display cutout. The map fills it "
                "completely, while \"Stretch InfoBox area\" decides which "
-               "edges the InfoBoxes, gauges and map overlays may reach."),
+               "edges the InfoBoxes, gauges, map overlays and the menu "
+               "may reach."),
              ui_settings.display.full_screen);
 
   const auto edges = FormatInfoBoxAreaStretch(ui_settings.display

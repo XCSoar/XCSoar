@@ -15,7 +15,6 @@
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
 #include "ProcessTimer.hpp"
-#include "LogFile.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
@@ -35,6 +34,7 @@
 #include "UISettings.hpp"
 #include "Interface.hpp"
 
+#include <algorithm>
 #include <utility>
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -299,30 +299,27 @@ PixelRect
 MainWindow::GetInfoBoxAreaRect() const noexcept
 {
   const PixelRect rc = GetClientRect();
-
-  const DisplaySettings &settings = CommonInterface::GetUISettings().display;
+  const PixelRect safe_rc = GetSafeAreaRect();
+  const DisplaySettings &settings =
+    CommonInterface::GetUISettings().display;
 
   unsigned edges = settings.infobox_area_stretch;
   if (settings.IsStatusBarVisible())
-    /* the status bar overlays the top of the screen; drawing
-       InfoBoxes underneath the clock helps nobody */
+    /* the status bar overlays the top of the screen */
     edges &= ~unsigned(DisplaySettings::INFOBOX_AREA_STRETCH_TOP);
 
-  if (edges == DisplaySettings::INFOBOX_AREA_STRETCH_ALL)
-    return rc;
-
-  /* on the remaining edges, stay clear of the display cutout and
-     the system bars */
-  const PixelRect safe_rc = GetSafeAreaRect();
-
-  return {edges & DisplaySettings::INFOBOX_AREA_STRETCH_LEFT
-          ? rc.left : std::max(rc.left, safe_rc.left),
-          edges & DisplaySettings::INFOBOX_AREA_STRETCH_TOP
-          ? rc.top : std::max(rc.top, safe_rc.top),
-          edges & DisplaySettings::INFOBOX_AREA_STRETCH_RIGHT
-          ? rc.right : std::min(rc.right, safe_rc.right),
-          edges & DisplaySettings::INFOBOX_AREA_STRETCH_BOTTOM
-          ? rc.bottom : std::min(rc.bottom, safe_rc.bottom)};
+  /* unstretched edges stay in the safe area (cutout, system bars,
+     rounded corners); a stretched edge uses the screen border */
+  return {
+    edges & DisplaySettings::INFOBOX_AREA_STRETCH_LEFT
+      ? rc.left : std::max(rc.left, safe_rc.left),
+    edges & DisplaySettings::INFOBOX_AREA_STRETCH_TOP
+      ? rc.top : std::max(rc.top, safe_rc.top),
+    edges & DisplaySettings::INFOBOX_AREA_STRETCH_RIGHT
+      ? rc.right : std::min(rc.right, safe_rc.right),
+    edges & DisplaySettings::INFOBOX_AREA_STRETCH_BOTTOM
+      ? rc.bottom : std::min(rc.bottom, safe_rc.bottom),
+  };
 }
 
 void
@@ -492,10 +489,9 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
     widget == nullptr && map != nullptr &&
     PageActions::AllowMapOverlayButtons();
 
-  /* keep the overlay buttons inside the HUD rect even if the map
-     extends beyond it */
+  /* overlay buttons follow the same stretch edges as the InfoBoxes */
   const PixelRect button_rc = overlay_buttons_active
-    ? map->GetPosition().Intersection(GetHudRect())
+    ? map->GetPosition().Intersection(GetInfoBoxAreaRect())
     : PixelRect{};
 
   if (show_menu_button != nullptr) {
@@ -645,11 +641,13 @@ MainWindow::InitialiseConfigured()
     Initialise();
 
   PixelRect rc = GetClientRect();
+  const PixelRect infobox_area_rc = GetInfoBoxAreaRect();
 
   const InfoBoxSettings &ib_settings = CommonInterface::GetUISettings().info_boxes;
   const InfoBoxLayout::Layout ib_layout =
-    InfoBoxLayout::Calculate(rc, GetActiveInfoBoxGeometry(),
-                             ib_settings.scale_title_font);
+    InfoBoxLayout::Calculate(infobox_area_rc, GetActiveInfoBoxGeometry(),
+                             ib_settings.scale_title_font,
+                             rc.GetSize());
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
@@ -657,13 +655,15 @@ MainWindow::InitialiseConfigured()
                              ib_layout.control_size.width);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box);
-  map_rect = ib_layout.remaining;
+  map_rect = infobox_area_rc.Contains(rc)
+    ? ib_layout.remaining
+    : rc;
 
-  menu_bar = new MenuBar(*this, GetSafeAreaRect(), look->dialog.button);
+  menu_bar = new MenuBar(*this, infobox_area_rc, look->dialog.button);
 
   ReinitialiseLayout_vario(ib_layout);
-  ReinitialiseLayoutTA(rc, ib_layout);
-  ReinitialiseLayout_flarm(rc, ib_layout);
+  ReinitialiseLayoutTA(infobox_area_rc, ib_layout);
+  ReinitialiseLayout_flarm(infobox_area_rc, ib_layout);
 
   ReinitialiseMapOverlayButtons();
 
@@ -691,6 +691,10 @@ MainWindow::InitialiseConfigured()
 
   popup = new PopupMessage(*this, look->dialog, ui_settings);
   popup->Create(GetHudRect());
+
+  UpdateMapOverlayButtonLayout();
+  if (menu_bar != nullptr)
+    menu_bar->OnResize(GetInfoBoxAreaRect());
 }
 
 void
@@ -926,6 +930,9 @@ MainWindow::ReinitialiseLayout() noexcept
   LayoutHudElements();
 
   UpdateMapOverlayButtonLayout();
+
+  if (menu_bar != nullptr)
+    menu_bar->OnResize(infobox_area_rc);
 
   if (map != nullptr)
     map->BringToBottom();
@@ -1231,15 +1238,12 @@ MainWindow::OnResize(PixelSize new_size) noexcept
 
   ReinitialiseLayout();
 
-  /* the menu buttons and the progress bar are laid out like dialogs:
-     inside the safe area, where they cannot be hidden by the display
-     cutout or the system bars */
-  const PixelRect rc = GetSafeAreaRect();
-
+  /* the overlay menu follows the InfoBox stretch edges; the
+     progress bar stays inside the safe area */
   if (menu_bar != nullptr)
-    menu_bar->OnResize(rc);
+    menu_bar->OnResize(GetInfoBoxAreaRect());
 
-  ProgressGlue::Move(rc);
+  ProgressGlue::Move(GetSafeAreaRect());
 }
 
 void
@@ -1906,6 +1910,9 @@ MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
 {
   assert(menu_bar != nullptr);
 
+  /* place the buttons now, not only at resize: the InfoBox stretch
+     area may have changed since the MenuBar was created */
+  menu_bar->OnResize(GetInfoBoxAreaRect());
   MenuGlue::Set(*menu_bar, menu, overlay, full);
 }
 
