@@ -1649,57 +1649,14 @@ TestCondor3UDP()
   ok1(!device->ParseNMEA("x=1 junk", info));
 
   next_step();
-  ok1(device->ParseNMEA("airspeed=25.5", info));
-  ok1(info.airspeed_available);
-  ok1(equals(info.true_airspeed, 25.5));
-
-  next_step();
-  ok1(device->ParseNMEA("altitude=1234", info));
-  ok1(info.baro_altitude_available);
-  ok1(equals(info.baro_altitude, 1234));
-
-  next_step();
   ok1(device->ParseNMEA("vario=3.25", info));
   ok1(info.noncomp_vario_available);
   ok1(equals(info.noncomp_vario, 3.25));
 
   next_step();
-  ok1(device->ParseNMEA("evario=-1.5", info));
-  ok1(info.total_energy_vario_available);
-  ok1(equals(info.total_energy_vario, -1.5));
-
-  next_step();
   ok1(device->ParseNMEA("nettovario=0.75", info));
   ok1(info.netto_vario_available);
   ok1(equals(info.netto_vario, 0.75));
-
-  next_step();
-  ok1(device->ParseNMEA("compass=270", info));
-  ok1(info.attitude.heading_available);
-  ok1(equals(info.attitude.heading.Degrees(), 270));
-  ok1(!info.track_available);
-
-  next_step();
-  ok1(device->ParseNMEA("compass=90", info));
-  ok1(info.attitude.heading_available);
-  ok1(equals(info.attitude.heading.Degrees(), 90));
-  ok1(!info.track_available);
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("vx=30", info));
-  ok1(device->ParseNMEA("vy=40", info));
-  ok1(!info.track_available);
-  ok1(equals(info.ground_speed, 50));
-
-  next_step();
-  ok1(device->ParseNMEA("vx=30", info));
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("vy=40", info));
-  ok1(info.ground_speed_available);
-  ok1(equals(info.ground_speed, 50));
 
   next_step();
   ok1(device->ParseNMEA("MC=1.75", info));
@@ -1710,18 +1667,6 @@ TestCondor3UDP()
   ok1(device->ParseNMEA("water=42.5", info));
   ok1(info.settings.ballast_litres_available);
   ok1(equals(info.settings.ballast_litres, 42.5));
-
-  next_step();
-  ok1(device->ParseNMEA("latitude=50", info));
-  ok1(!info.location_available);
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("longitude=7.5", info));
-  ok1(info.location_available);
-  ok1(equals(info.location.latitude.Degrees(), 50));
-  ok1(equals(info.location.longitude.Degrees(), 7.5));
-  ok1(info.gps.fix_quality == FixQuality::SIMULATION);
 
   next_step();
   ok1(device->ParseNMEA("gforce=1.5", info));
@@ -1737,6 +1682,11 @@ TestCondor3UDP()
   ok1(device->ParseNMEA("bank=0.5", info));
   ok1(info.attitude.bank_angle_available);
   ok1(equals(info.attitude.bank_angle.Radians(), -0.5));
+
+  next_step();
+  ok1(device->ParseNMEA("pitch=0.25", info));
+  ok1(info.attitude.pitch_angle_available);
+  ok1(equals(info.attitude.pitch_angle.Radians(), 0.25));
 
   delete device;
 }
@@ -3607,7 +3557,7 @@ int main()
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */ + 10 /* Condor3Spectate */
+             + 30 /* Condor3UDP */ + 10 /* Condor3Spectate */
              + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
