@@ -87,10 +87,14 @@ TopWindow::ResumeSurface() noexcept
 
 void
 TopWindow::AnnounceSafeAreaInsets(unsigned left, unsigned top,
-                                  unsigned right, unsigned bottom) noexcept
+                                  unsigned right, unsigned bottom,
+                                  unsigned shape_left, unsigned shape_top,
+                                  unsigned shape_right,
+                                  unsigned shape_bottom) noexcept
 {
   const std::lock_guard lock{paused_mutex};
   pending_safe_area_insets = {left, top, right, bottom};
+  pending_shape_insets = {shape_left, shape_top, shape_right, shape_bottom};
 }
 
 void
@@ -98,6 +102,7 @@ TopWindow::PublishSafeAreaInsets() noexcept
 {
   const std::lock_guard lock{paused_mutex};
   safe_area_insets = pending_safe_area_insets;
+  shape_insets = pending_shape_insets;
 }
 
 void
@@ -290,11 +295,7 @@ TopWindow::OnEvent(const Event &event)
     Resize(screen_size);
     if (!size_changed)
       /* Window::Resize() is a no-op when the surface size did not
-         change, but the safe-area insets may have.  That is typical
-         at startup: the Fly/Simulator dialog is created before the
-         first inset report, when the "safe" area is still the whole
-         window.  Relayout so maximised dialogs stay inside the safe
-         area. */
+         change, but the safe-area insets may have */
       OnResize(screen_size);
 
     /* it seems the first page flip after a display orientation change
