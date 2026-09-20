@@ -204,7 +204,11 @@ public:
 
     if (georeference != nullptr)
       image_window.SetOverlayRenderer(
-        [this](Canvas &canvas, const ImageZoomView::Layout &layout) {
+        [this](Canvas &canvas,
+               const ImageZoomView::Layout &layout) noexcept {
+          /* ImageZoomFrame::OnPaint() is noexcept and calls this
+             through a std::function, so the contract has to be
+             visible here; DrawAircraft() is noexcept too */
           DrawAircraft(canvas, layout);
         });
 
