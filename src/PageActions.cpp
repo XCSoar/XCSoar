@@ -184,6 +184,14 @@ PageActions::LeaveRadarOverlay() noexcept
 }
 
 void
+PageActions::OnMapProjectionModified() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  OPERA::OnProjectionModified();
+#endif
+}
+
+void
 PageActions::ApplyRadarOverlay() noexcept
 {
 #ifdef HAVE_WEATHER_OVERLAY
