@@ -45,6 +45,14 @@ struct ImageGeoreference {
    */
   PixelSize nominal_size;
 
+  /**
+   * The height of the map within the image.  The radar products draw
+   * a legend below the map, and a location that projects into it is
+   * not on the map; equal to nominal_size.height where the whole
+   * image is map.
+   */
+  unsigned map_height;
+
   /** the width of one pixel in the projection plane [km] */
   double resolution;
 
@@ -67,7 +75,8 @@ struct ImageGeoreference {
   DoublePoint2D ToPixel(const GeoPoint &p) const noexcept;
 
   /**
-   * Is this pixel position inside the image?
+   * Is this pixel position on the map?  Positions below #map_height
+   * fall into the legend and count as outside.
    */
   [[gnu::pure]]
   bool IsInside(DoublePoint2D pixel) const noexcept;
