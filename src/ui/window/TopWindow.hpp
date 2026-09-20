@@ -25,6 +25,8 @@
 #include "thread/Mutex.hxx"
 #include "thread/Cond.hxx"
 
+#include <algorithm>
+
 namespace UI { struct Event; }
 
 #elif defined(USE_POLL_EVENT)
@@ -290,9 +292,9 @@ public:
   };
 
   /**
-   * The area covered by system UI (status bar, navigation bar,
-   * display cutout), as reported by Java via
-   * NativeView.resizedNative().
+   * System UI (status bar, navigation bar, display cutout), as
+   * reported by Java via NativeView.resizedNative().  Stretching
+   * an InfoBox edge ignores these.
    *
    * Protected by #paused_mutex.
    *
@@ -301,12 +303,25 @@ public:
   SafeAreaInsets pending_safe_area_insets;
 
   /**
+   * Physical display shape (rounded corners, waterfall edges).
+   * These are never optional: drawing there only clips the pixels.
+   *
+   * Protected by #paused_mutex.
+   */
+  SafeAreaInsets pending_shape_insets;
+
+  /**
    * The insets the main thread works with.  Only #PublishSafeAreaInsets()
-   * writes it, so readers need no lock.
+   * writes them, so readers need no lock.
    *
    * @see GetSafeAreaRect()
    */
   SafeAreaInsets safe_area_insets;
+
+  /**
+   * @see pending_shape_insets
+   */
+  SafeAreaInsets shape_insets;
 #endif
 
   DoubleClick double_click;
@@ -515,6 +530,15 @@ public:
     return rc;
   }
 
+  /**
+   * iOS has no public rounded-corner inset; the UIKit safe area is
+   * used for dialogs, and InfoBox stretch uses the client area.
+   */
+  [[gnu::pure]]
+  PixelRect GetShapeSafeRect() const noexcept {
+    return GetClientRect();
+  }
+
   [[gnu::pure]]
   const PixelRect GetClientRect() const noexcept override {
     assert(IsDefined());
@@ -529,18 +553,38 @@ public:
   /**
    * The part of the window that is not covered by system UI such as
    * the status bar, the navigation bar, the display cutout ("notch")
-   * or the home indicator.  Equals GetClientRect() on platforms and
-   * devices without such areas.
+   * or the home indicator, and not clipped by rounded corners.
+   * Equals GetClientRect() on platforms and devices without such
+   * areas.
    */
   [[gnu::pure]]
   PixelRect GetSafeAreaRect() const noexcept {
     PixelRect rc = GetClientRect();
 
 #ifdef ANDROID
-    rc.left += int(safe_area_insets.left);
-    rc.top += int(safe_area_insets.top);
-    rc.right -= int(safe_area_insets.right);
-    rc.bottom -= int(safe_area_insets.bottom);
+    rc.left += int(std::max(safe_area_insets.left, shape_insets.left));
+    rc.top += int(std::max(safe_area_insets.top, shape_insets.top));
+    rc.right -= int(std::max(safe_area_insets.right, shape_insets.right));
+    rc.bottom -= int(std::max(safe_area_insets.bottom, shape_insets.bottom));
+#endif
+
+    return rc;
+  }
+
+  /**
+   * The part of the window that is not clipped by the physical
+   * display shape (rounded corners, waterfall edges).  Equals
+   * GetClientRect() when the display is rectangular.
+   */
+  [[gnu::pure]]
+  PixelRect GetShapeSafeRect() const noexcept {
+    PixelRect rc = GetClientRect();
+
+#ifdef ANDROID
+    rc.left += int(shape_insets.left);
+    rc.top += int(shape_insets.top);
+    rc.right -= int(shape_insets.right);
+    rc.bottom -= int(shape_insets.bottom);
 #endif
 
     return rc;
@@ -555,10 +599,10 @@ public:
     PixelRect rc{size};
 
 #ifdef ANDROID
-    rc.left += int(safe_area_insets.left);
-    rc.top += int(safe_area_insets.top);
-    rc.right -= int(safe_area_insets.right);
-    rc.bottom -= int(safe_area_insets.bottom);
+    rc.left += int(std::max(safe_area_insets.left, shape_insets.left));
+    rc.top += int(std::max(safe_area_insets.top, shape_insets.top));
+    rc.right -= int(std::max(safe_area_insets.right, shape_insets.right));
+    rc.bottom -= int(std::max(safe_area_insets.bottom, shape_insets.bottom));
 #endif
 
     return rc;
@@ -634,7 +678,10 @@ public:
    * thread.  This method is thread-safe.
    */
   void AnnounceSafeAreaInsets(unsigned left, unsigned top,
-                              unsigned right, unsigned bottom) noexcept;
+                              unsigned right, unsigned bottom,
+                              unsigned shape_left, unsigned shape_top,
+                              unsigned shape_right,
+                              unsigned shape_bottom) noexcept;
 
   /**
    * Copy the insets announced by the Android UI thread to the main

@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.RoundedCorner;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.os.Build;
@@ -231,25 +232,19 @@ class NativeView extends SurfaceView
                                        int width, int height) {
     if (thread == null || !thread.isAlive())
       start();
-    else {
-      Context context = getContext();
-      if (!(context instanceof Activity))
-        return;
-      
+
+    Context context = getContext();
+    if (context instanceof Activity) {
       Activity activity = (Activity)context;
       Window window = activity.getWindow();
-      View decorView = window.getDecorView();
-      
-      boolean is_fullscreen = isFullScreen();
 
-      if (is_fullscreen) {
+      if (isFullScreen())
         WindowUtil.enterFullScreenMode(window);
-      } else {
+      else
         WindowUtil.leaveFullScreenMode(window, 0);
-      }
-
-      reportSize(width, height);
     }
+
+    reportSize(width, height);
   }
 
   /**
@@ -283,12 +278,19 @@ class NativeView extends SurfaceView
     /* Outside full screen mode the view is already laid out inside
        the system bars and the display cutout, so the whole surface
        is the safe area.  Only in full screen mode does the surface
-       extend into those areas. */
-    int[] insets = isFullScreen()
-      ? getSafeAreaInsets()
-      : new int[]{0, 0, 0, 0};
+       extend into those areas.  Rounded corners and waterfall
+       edges are a property of the display: they still clip the
+       surface once it is edge-to-edge. */
+    int[] overlay = new int[]{0, 0, 0, 0};
+    int[] shape = new int[]{0, 0, 0, 0};
+    if (isFullScreen()) {
+      overlay = getOverlayInsets();
+      shape = getShapeInsets();
+    }
 
-    resizedNative(width, height, insets[0], insets[1], insets[2], insets[3]);
+    resizedNative(width, height,
+                  overlay[0], overlay[1], overlay[2], overlay[3],
+                  shape[0], shape[1], shape[2], shape[3]);
   }
 
   /**
@@ -303,11 +305,13 @@ class NativeView extends SurfaceView
   }
 
   /**
-   * Determine the area covered by system UI, as {left, top, right,
-   * bottom}.  Returns all zeroes on devices without a display cutout
-   * while the system bars are hidden.
+   * Area reserved for system UI (status bar, navigation bar, display
+   * cutout), as {left, top, right, bottom}.  These edges can be
+   * stretched into.  Rounded corners are not included.  The reserved
+   * bar size is reported even while full screen hides the bars, so
+   * unstretched InfoBoxes still sit above the home indicator.
    */
-  private int[] getSafeAreaInsets() {
+  private int[] getOverlayInsets() {
     int[] result = new int[]{0, 0, 0, 0};
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -318,22 +322,29 @@ class NativeView extends SurfaceView
       return result;
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-      android.graphics.Insets i =
-        insets.getInsets(WindowInsets.Type.systemBars()|
-                         WindowInsets.Type.displayCutout());
-      result[0] = i.left;
-      result[1] = i.top;
-      result[2] = i.right;
-      result[3] = i.bottom;
+      /* systemBars() is 0 while the bars are hidden; ignoringVisibility
+         keeps the reserved size so unstretched InfoBoxes stay clear */
+      android.graphics.Insets bars =
+        insets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+      android.graphics.Insets cutout =
+        insets.getInsets(WindowInsets.Type.displayCutout());
+      result[0] = Math.max(bars.left, cutout.left);
+      result[1] = Math.max(bars.top, cutout.top);
+      result[2] = Math.max(bars.right, cutout.right);
+      result[3] = Math.max(bars.bottom, cutout.bottom);
       return result;
     }
 
-    /* Android 10 and below: getSystemWindowInsets() already contains
-       the visible system bars, but not the display cutout */
-    result[0] = insets.getSystemWindowInsetLeft();
-    result[1] = insets.getSystemWindowInsetTop();
-    result[2] = insets.getSystemWindowInsetRight();
-    result[3] = insets.getSystemWindowInsetBottom();
+    /* Android 10 and below: getSystemWindowInsets() is 0 in
+       immersive mode; getStableInset*() is the reserved bar size */
+    result[0] = Math.max(insets.getSystemWindowInsetLeft(),
+                         insets.getStableInsetLeft());
+    result[1] = Math.max(insets.getSystemWindowInsetTop(),
+                         insets.getStableInsetTop());
+    result[2] = Math.max(insets.getSystemWindowInsetRight(),
+                         insets.getStableInsetRight());
+    result[3] = Math.max(insets.getSystemWindowInsetBottom(),
+                         insets.getStableInsetBottom());
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       android.view.DisplayCutout cutout = insets.getDisplayCutout();
@@ -343,6 +354,74 @@ class NativeView extends SurfaceView
         result[2] = Math.max(result[2], cutout.getSafeInsetRight());
         result[3] = Math.max(result[3], cutout.getSafeInsetBottom());
       }
+    }
+
+    return result;
+  }
+
+  /**
+   * Inset so the corner of an axis-aligned rectangle sits on a
+   * quarter-circle of the given radius: R * (1 - 1/sqrt(2)).
+   */
+  private static int roundedCornerInset(int radius) {
+    if (radius <= 0)
+      return 0;
+    return (int)Math.ceil(radius * (1.0 - 1.0 / Math.sqrt(2.0)));
+  }
+
+  private static void applyRoundedCorner(WindowInsets insets, int position,
+                                         int[] result,
+                                         boolean left, boolean top) {
+    RoundedCorner corner = insets.getRoundedCorner(position);
+    if (corner == null)
+      return;
+
+    final int inset = roundedCornerInset(corner.getRadius());
+    if (inset <= 0)
+      return;
+
+    if (left)
+      result[0] = Math.max(result[0], inset);
+    else
+      result[2] = Math.max(result[2], inset);
+    if (top)
+      result[1] = Math.max(result[1], inset);
+    else
+      result[3] = Math.max(result[3], inset);
+  }
+
+  /**
+   * Physical display shape: waterfall edges and rounded corners.
+   * Stretching into these only clips the pixels; they are never
+   * optional.
+   */
+  private int[] getShapeInsets() {
+    int[] result = new int[]{0, 0, 0, 0};
+
+    WindowInsets insets = getRootWindowInsets();
+    if (insets == null)
+      return result;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      android.view.DisplayCutout cutout = insets.getDisplayCutout();
+      if (cutout != null) {
+        android.graphics.Insets w = cutout.getWaterfallInsets();
+        result[0] = Math.max(result[0], w.left);
+        result[1] = Math.max(result[1], w.top);
+        result[2] = Math.max(result[2], w.right);
+        result[3] = Math.max(result[3], w.bottom);
+      }
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      applyRoundedCorner(insets, RoundedCorner.POSITION_TOP_LEFT,
+                         result, true, true);
+      applyRoundedCorner(insets, RoundedCorner.POSITION_TOP_RIGHT,
+                         result, false, true);
+      applyRoundedCorner(insets, RoundedCorner.POSITION_BOTTOM_LEFT,
+                         result, true, false);
+      applyRoundedCorner(insets, RoundedCorner.POSITION_BOTTOM_RIGHT,
+                         result, false, false);
     }
 
     return result;
@@ -445,7 +524,11 @@ class NativeView extends SurfaceView
                                   int xdpi, int ydpi,
                                   String product);
 
-  protected native void resizedNative(int width, int height, int inset_left, int inset_top, int inset_right, int inset_bottom);
+  protected native void resizedNative(int width, int height,
+                                      int inset_left, int inset_top,
+                                      int inset_right, int inset_bottom,
+                                      int shape_left, int shape_top,
+                                      int shape_right, int shape_bottom);
 
   protected native void surfaceDestroyedNative();
 
