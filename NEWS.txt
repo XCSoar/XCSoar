@@ -7,7 +7,7 @@ Version 7.46 - not yet released
     the system bars; all edges by default, as before
   - keep dialogs inside the safe area, whatever the edge settings, so
     the display cutout and the system bars cannot hide a title or a
-    button #2466
+    button, including the Fly/Simulator start screen #2466
   - use built-in IMU and log to NMEA logger if enabled
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)
