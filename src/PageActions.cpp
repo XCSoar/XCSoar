@@ -184,6 +184,7 @@ PageActions::OnMapProjectionModified() noexcept
 {
 #ifdef HAVE_WEATHER_OVERLAY
   OPERA::OnProjectionModified();
+  EUMETView::OnProjectionModified();
 #endif
 }
 

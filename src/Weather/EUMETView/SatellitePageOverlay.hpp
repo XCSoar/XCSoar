@@ -54,6 +54,12 @@ class SatelliteDownloadGlue final {
    */
   UI::PeriodicTimer timer{[this]{ OnTimer(); }};
 
+  /**
+   * The tick length #timer is running at, so that Schedule() can tell
+   * a change of pace from a repetition of the current one.
+   */
+  bool scheduled_soon = false;
+
   Co::InvokeTask RunDownload();
   void OnCompletion(std::exception_ptr error) noexcept;
   void OnCompleteNotify() noexcept;
@@ -107,6 +113,16 @@ namespace EUMETView {
  * Show the imagery around the aircraft, fetching what is missing.
  */
 void ActivatePageOverlay(int layer_index) noexcept;
+
+/**
+ * The map's projection has been edited: the pilot zoomed, panned or
+ * rotated, or the map followed the aircraft.
+ *
+ * Recomputes the block, which ends after a little trigonometry unless
+ * the grid actually moved.  Does nothing unless a page is showing the
+ * imagery, so the map window can call this whatever page is up.
+ */
+void OnProjectionModified() noexcept;
 
 /**
  * Take our tiles off the map, leaving any overlay somebody else put

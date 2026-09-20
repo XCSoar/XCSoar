@@ -639,6 +639,18 @@ SatelliteDownloadGlue::Schedule(bool soon) noexcept
      and the block is centred on the aircraft, so it can do nothing
      but wait; a minute of that is most of the delay before any
      imagery appears. */
+  if (timer.IsActive() && soon == scheduled_soon)
+    /* Already ticking at this pace, and it repeats on its own.
+       Scheduling it again would restart the period, and this runs
+       from ActivatePageOverlay(), which the map calls on every
+       projection change -- about once a second in flight.  The slow
+       tick would never elapse, and with it neither the removal of a
+       frame older than max_age_minutes nor the clearing of
+       consecutive_failures that retries a dropped tile.  A change of
+       pace still reschedules, which is the point of the flag. */
+    return;
+
+  scheduled_soon = soon;
   timer.Schedule(soon
                  ? std::chrono::steady_clock::duration{std::chrono::seconds{1}}
                  : std::chrono::steady_clock::duration{std::chrono::minutes{1}});
@@ -671,6 +683,16 @@ SatelliteDownloadGlue::OnTimer() noexcept
   consecutive_failures = 0;
 
   EUMETView::ActivatePageOverlay(active_layer);
+}
+
+void
+EUMETView::OnProjectionModified() noexcept
+{
+  if (active_layer < 0)
+    /* some other page is up; we have nothing on the map */
+    return;
+
+  ActivatePageOverlay(active_layer);
 }
 
 void
