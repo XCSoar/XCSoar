@@ -426,8 +426,14 @@ private:
 
   /**
    * The attribute visible_projection has been edited.
+   *
+   * Tells the page overlays, which fetch imagery for the visible area
+   * and would otherwise keep showing the section that was on screen
+   * when they last looked.  Runs on the main thread before the redraw
+   * is deferred, so it must stay cheap: it is called on every
+   * projection update, roughly once a second in flight.
    */
-  void OnProjectionModified() noexcept {}
+  void OnProjectionModified() noexcept;
 
   /**
    * Invoke WindowProjection::UpdateScreenBounds() and trigger updates

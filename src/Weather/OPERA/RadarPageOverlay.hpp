@@ -125,6 +125,17 @@ namespace OPERA {
 void ActivatePageOverlay() noexcept;
 
 /**
+ * The map's projection has been edited: the pilot zoomed, panned or
+ * rotated, or the map followed the aircraft.
+ *
+ * Recomputes the block, which costs a handful of trigonometry and
+ * ends right there unless the grid actually moved.  Does nothing
+ * unless the radar page is showing, so the map window can call this
+ * whatever page is up.
+ */
+void OnProjectionModified() noexcept;
+
+/**
  * Take the radar off the map, leaving alone any overlay somebody else
  * installed.
  */
