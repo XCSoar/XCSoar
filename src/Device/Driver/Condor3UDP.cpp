@@ -30,11 +30,18 @@ using std::string_view_literals::operator""sv;
  * often 55278).  Input is line-split like a serial stream, then each line is
  * parsed here (not NMEA `$…*CS` — the method name is the generic device hook).
  *
- * Implemented parameters from the manual table: airspeed, altitude, vario,
- * evario, nettovario, compass, yaw, pitch, bank, vx, vy, rollrate,
- * pitchrate, yawrate, gforce, radiofrequency (MHz → active radio), MC,
- * water (**).  Latitude/longitude are not in
- * the published UDP table; optional keys are accepted if Condor adds them.
+ * UDP.ini is the analog panel / Simkits stream.  Nav (GPS, baro, TAS,
+ * heading, wind, TE climb) comes from Condor NMEA (`$GPRMC`/`$GPGGA` +
+ * `$LXWP0`).  Cockpit keys that duplicate or contradict that stream are
+ * ignored: airspeed, altitude (altimeter QNH/QFE), evario (SC/Vario
+ * needle), compass, yaw, vx, vy, and optional latitude/longitude.
+ *
+ * Mapped parameters: vario, nettovario, pitch, bank, rollrate, pitchrate,
+ * yawrate, gforce, radiofrequency (MHz → active radio), MC, water (**).
+ *
+ * Do not set gps.simulator: that flag is the built-in Simulator overlay.
+ * Condor NMEA already clears gps.real via parser.SetReal(), which is the
+ * SkyLines / Cloud / LiveTrack24 gate.
  *
  * Polar sync (device dialog) is not offered for this driver; Condor UDP does
  * not carry full polar coefficients, and XCSoar does not send polars to Condor.
@@ -45,71 +52,24 @@ using std::string_view_literals::operator""sv;
  * (integer).
  */
 class Condor3UDPDevice final : public AbstractDevice {
-  double vx = 0, vy = 0;
-  bool have_vx = false, have_vy = false;
-
   double roll_rate = 0, pitch_rate = 0, yaw_rate = 0;
 
-  bool have_latitude = false, have_longitude = false;
-
   void
-  MarkSimulator(NMEAInfo &info) noexcept {
-    info.gps.simulator = true;
-    info.gps.real = false;
-  }
-
-  void
-  UpdateGroundVelocity(NMEAInfo &info) noexcept {
-    if (!have_vx || !have_vy)
-      return;
-
-    const double h = std::hypot(vx, vy);
-    info.ground_speed = h;
-    info.ground_speed_available.Update(info.clock);
-    /* Do not derive track from Condor vx/vy: documented as ground
-       velocity but not reliable earth-frame N/E.  Using them after
-       compass expired made FLARM traffic radar bearing jump ~120°. */
+  PushGyro(NMEAInfo &info) noexcept {
+    info.gyroscope.ProvideAngularRates(
+      Angle::Radians(roll_rate), Angle::Radians(pitch_rate),
+      Angle::Radians(yaw_rate), true, true);
   }
 
   bool
   ApplyKey(std::string_view key, double value, NMEAInfo &info) noexcept {
-    MarkSimulator(info);
-
-    if (StringIsEqualIgnoreCase(key, "airspeed"sv)) {
-      /* Documented as true airspeed (m/s). */
-      info.ProvideTrueAirspeed(value);
-      return true;
-    }
-
-    if (StringIsEqualIgnoreCase(key, "altitude"sv)) {
-      /* Altimeter / pressure altitude indication (m, SI in Condor 3). */
-      info.ProvideBaroAltitudeTrue(value);
-      return true;
-    }
-
     if (StringIsEqualIgnoreCase(key, "vario"sv)) {
       info.ProvideNoncompVario(value);
       return true;
     }
 
-    if (StringIsEqualIgnoreCase(key, "evario"sv)) {
-      info.ProvideTotalEnergyVario(value);
-      return true;
-    }
-
     if (StringIsEqualIgnoreCase(key, "nettovario"sv)) {
       info.ProvideNettoVario(value);
-      return true;
-    }
-
-    if (StringIsEqualIgnoreCase(key, "compass"sv)) {
-      info.attitude.heading = Angle::Degrees(value);
-      info.attitude.heading_available.Update(info.clock);
-      /* Heading only.  Copying compass into track made the ground
-         track line follow heading in a crosswind (#2900).  Condor
-         vx/vy are not reliable earth-frame N/E either; leave track
-         unset so GPS RMC or ComputeTrack() from position can supply
-         ground track. */
       return true;
     }
 
@@ -144,20 +104,6 @@ class Condor3UDPDevice final : public AbstractDevice {
       return true;
     }
 
-    if (StringIsEqualIgnoreCase(key, "vx"sv)) {
-      vx = value;
-      have_vx = true;
-      UpdateGroundVelocity(info);
-      return true;
-    }
-
-    if (StringIsEqualIgnoreCase(key, "vy"sv)) {
-      vy = value;
-      have_vy = true;
-      UpdateGroundVelocity(info);
-      return true;
-    }
-
     if (StringIsEqualIgnoreCase(key, "gforce"sv)) {
       info.acceleration.ProvideGLoad(value, true);
       return true;
@@ -185,57 +131,7 @@ class Condor3UDPDevice final : public AbstractDevice {
       return true;
     }
 
-    if (StringIsEqualIgnoreCase(key, "yaw"sv)) {
-      /* Heading from body yaw [rad]; compass [deg] preferred when both sent. */
-      if (!info.attitude.heading_available) {
-        info.attitude.heading = Angle::Radians(value);
-        info.attitude.heading_available.Update(info.clock);
-      }
-      return true;
-    }
-
-    if (StringIsEqualIgnoreCase(key, "latitude"sv)) {
-      info.location.latitude = Angle::Degrees(value);
-      have_latitude = true;
-      FinishLocationIfComplete(info);
-      return true;
-    }
-
-    if (StringIsEqualIgnoreCase(key, "longitude"sv)) {
-      info.location.longitude = Angle::Degrees(value);
-      have_longitude = true;
-      FinishLocationIfComplete(info);
-      return true;
-    }
-
     return false;
-  }
-
-  void
-  PushGyro(NMEAInfo &info) noexcept {
-    info.gyroscope.ProvideAngularRates(
-      Angle::Radians(roll_rate), Angle::Radians(pitch_rate),
-      Angle::Radians(yaw_rate), true, true);
-  }
-
-  void
-  FinishLocationIfComplete(NMEAInfo &info) noexcept {
-    if (!have_latitude || !have_longitude)
-      return;
-
-    if (!info.location.Check()) {
-      have_latitude = false;
-      have_longitude = false;
-      return;
-    }
-
-    info.location.Normalize();
-    info.location_available.Update(info.clock);
-    info.gps.fix_quality = FixQuality::SIMULATION;
-    info.gps.fix_quality_available.Update(info.clock);
-    MarkSimulator(info);
-    have_latitude = false;
-    have_longitude = false;
   }
 
 public:
