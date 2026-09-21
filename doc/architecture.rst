@@ -97,7 +97,18 @@ section tries to give a rough overview where you can find what.
    glide computer, and thread-specific data copies
 
 -  :file:`Dialogs/DataManagement/`: data management UI (import, export,
-   backup, file explorer)
+   backup, file explorer, download manager)
+
+:file:`Dialogs/` is clicks, layout, and ``Save()``. Download clients,
+repository scans, and file walkers belong in :file:`Weather/`,
+:file:`Repository/`, :file:`Storage/`, or :file:`Device/`. Do not add a
+second settings shell or a View/Presenter layer; settings stay in
+:file:`Dialogs/Settings/Panels/` until ``GroupedListWidget`` is in
+master. When that widget lands, migrate one Settings group per pull
+request (Terrain is already prototyped on that branch). Weather overlay
+pages share :file:`WeatherOverlayDraft` rather than a new
+``*Dialog.cpp`` per provider. See
+:file:`.cursor/rules/dialogs-freeze.mdc`.
 
 Layer dependencies
 ~~~~~~~~~~~~~~~~~~

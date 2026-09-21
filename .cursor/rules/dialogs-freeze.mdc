@@ -1,0 +1,40 @@
+---
+description: Keep Dialogs/ thin — no new settings shell, UI layer, or download clients
+globs:
+  - "src/Dialogs/**/*.cpp"
+  - "src/Dialogs/**/*.hpp"
+alwaysApply: false
+---
+
+# Dialogs stay UI-only
+
+`src/Dialogs/` is clicks, layout, and `Save()`. It is product surface, not
+a second toolkit.
+
+## Freeze
+
+- **Settings:** add rows to the existing `*ConfigPanel` in
+  `Dialogs/Settings/Panels/`. Do not invent another configuration shell
+  or port Configuration to `GroupedListWidget` until that widget is in
+  `master` (Wolfgang’s branch). Then migrate one config group per PR.
+- **No new UI layer:** `Widget` + `RowFormWidget` / `ListWidget` remain
+  the page API. Do not add View/Presenter/layout-engine types.
+- **No new download clients, parsers, or file-walkers** in Dialogs.
+  Fetch and scan live in `Weather/`, `Storage/`, `Repository/`,
+  `Device/`. Dialogs start/cancel/bind status and call `ShowCoDialog`.
+
+## Allowed
+
+- `CommonInterface`, `ActionInterface`, `ShowCoDialog`, `UI::Notify`
+- Hosting existing glue (`*DownloadGlue`, repository helpers, waypoint
+  helpers) without reimplementing them
+
+## Weather overlays
+
+Share `WeatherOverlayDraft` and one overlay-page host. A new provider
+is a client plus a fill callback, not a new `*Dialog.cpp`.
+
+## Search lists
+
+Reuse list + filter + browse/pick close rules (see
+`search-dialog-ux.mdc`). Do not copy another 400-line `*ListWidget`.
