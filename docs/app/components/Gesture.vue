@@ -52,7 +52,7 @@ const file = computed(() => files[props.id.toLowerCase()])
     :src="`/img/drawings/${file}.svg`"
     :alt="`Gesture ${id}`"
     class="w-auto"
-    :class="[sizes[size], float ? 'float-left mr-3 mb-1' : 'inline-block align-middle']"
+    :class="[sizes[size], float ? 'gesture-float float-left mr-3 mb-1' : 'inline-block align-middle']"
   />
   <span v-else class="inline-block align-middle font-mono text-xs text-red-500">
     {{ `Unknown gesture: ${id}` }}

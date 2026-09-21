@@ -251,6 +251,13 @@
     height: auto;
 }
 
+/* Gesture drawings beside a paragraph at the size of the LaTeX margin
+   icons. */
+.print-page-body .gesture-aside img,
+.print-page-body .gesture-float {
+    height: 9mm;
+}
+
 /* Screenshots at roughly the size the LaTeX manual used. */
 .print-page-body figure img:not([width]) {
     max-width: 110mm;

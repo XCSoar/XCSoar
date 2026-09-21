@@ -16,7 +16,7 @@ const ids = computed(() => props.id.trim().split(/\s+/))
 </script>
 
 <template>
-  <div class="my-5 flex items-start gap-4">
+  <div class="gesture-aside my-5 flex items-start gap-4">
     <div class="flex shrink-0 flex-col gap-2 mt-1">
       <Gesture v-for="gesture in ids" :key="gesture" :id="gesture" />
     </div>
