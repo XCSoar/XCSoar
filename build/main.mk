@@ -34,6 +34,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
 	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
 	$(SRC)/Dialogs/Device/DeviceListDialog.cpp \
+	$(SRC)/Dialogs/Device/DeviceListActions.cpp \
 	$(SRC)/Dialogs/Device/PortMonitor.cpp \
 	$(SRC)/Dialogs/Device/ManageCAI302Dialog.cpp \
 	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
