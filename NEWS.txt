@@ -79,6 +79,9 @@ Version 7.46 - not yet released
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
 * airspace
+  - avoid overlapping airspace altitude labels by trying eight nearby
+    positions, remembering the last slot so labels do not jump while
+    panning #771
   - fill airspaces with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
   - improve stable OpenGL airspace fills and padding while preserving
@@ -188,6 +191,8 @@ Version 7.46 - not yet released
     the system appearance, including a scheduled switch while XCSoar
     is running
 * documentation
+  - document that airspace altitude labels move to nearby positions
+    when they would overlap
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
   - document that Engine Type is only shown for engine-sensor BLE
