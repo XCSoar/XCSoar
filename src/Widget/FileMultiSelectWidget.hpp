@@ -78,6 +78,27 @@ public:
    */
   void SetNavigateCallback(std::function<void(AllocatedPath)> cb) noexcept;
 
+  /**
+   * When set, activating a file calls this with that file instead of
+   * toggling its tick. Enter and a click both activate the highlighted row.
+   */
+  void SetFileActivateCallback(std::function<void(Path path)> cb) noexcept {
+    file_activate_callback_ = std::move(cb);
+  }
+
+  /** Replay lists the highlighted row only, with no tick boxes. */
+  void SetShowCheckmarks(bool show) noexcept {
+    show_checkmarks_ = show;
+  }
+
+  /** Highlight a row. No effect before the list window exists. */
+  void SetCursorIndex(unsigned i) noexcept;
+
+  /**
+   * Activate the highlighted row. Returns false when the list is empty.
+   */
+  bool ActivateCursor() noexcept;
+
   /* Provider setters for optional rendering text */
   void SetFirstRightProvider(TextProvider p) noexcept { first_right_provider_ = std::move(p); }
   void SetSecondLeftProvider(TextProvider p) noexcept { second_left_provider_ = std::move(p); }
@@ -139,9 +160,11 @@ private:
 
   bool use_two_rows_ = false;
   bool refreshed_ = false;
+  bool show_checkmarks_ = true;
   const char *caption_ = nullptr;
   const char *help_text_ = nullptr;
   std::function<void()> selection_changed_callback_;
+  std::function<void(Path path)> file_activate_callback_;
   std::function<bool(const Path &)> filter_;
   std::function<void(AllocatedPath)> navigate_callback_;
   std::function<void()> empty_download_activate_;
