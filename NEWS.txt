@@ -125,8 +125,9 @@ Version 7.46 - not yet released
     different checklist file is selected
   - show detected takeoff, landing and duration in the flight export
     list as newest flights are scanned in the background
-  - let WeGlide Upload send the highlighted IGC file from that list,
-    showing takeoff, landing and duration as the file is scanned
+  - let WeGlide Upload send the highlighted IGC file from that list
+    with the Upload Flight button, showing takeoff, landing and
+    duration as the file is scanned
   - let Replay choose one IGC or NMEA log from that list, showing
     takeoff, landing and duration for each IGC file
   - show the flight count and total time as hours:minutes for IGC
@@ -219,7 +220,8 @@ Version 7.46 - not yet released
   - describe background takeoff, landing and duration detection in the
     flight export list
   - describe WeGlide Upload as that IGC list, with takeoff and
-    landing times, uploading the highlighted flight
+    landing times, and the Upload Flight button for the highlighted
+    flight
   - describe the Replay file list of IGC and NMEA logs, with takeoff
     and landing times for IGC files
   - describe the flight count and total time as hours:minutes, for
