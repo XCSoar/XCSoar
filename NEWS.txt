@@ -2,6 +2,10 @@ Version 7.45.3 - not yet released
 * android
   - hide Engine Type on BLE heart-rate sensors; it is only for engine
     sensors
+  - show remaining battery in the Devices list for BLE sensors
+    that expose the standard Battery Service #3157
+  - read BLE Environmental Sensing pressure, temperature, and
+    humidity #3156
   - fix BlueFly Vario BLE being offered only as a BLE sensor, so it
     would not connect; choose BLE port and the BlueFly driver #3146
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
@@ -25,6 +29,10 @@ Version 7.45.3 - not yet released
   - ignore Condor 3 UDP air-data so it cannot override the NMEA GPS
     and climb #3184
 * dialogs
+  - show Heart Rate as a Devices list sensor flag when a device
+    reports it
+  - show Pressure, Temperature, and Relative humidity as Devices
+    list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
 * ui
