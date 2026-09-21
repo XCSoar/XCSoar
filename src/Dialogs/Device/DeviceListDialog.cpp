@@ -61,7 +61,7 @@ class DeviceListWidget final
 
   struct Flags {
     bool duplicate:1;
-    bool open:1, error:1;
+    bool open:1, error:1, connecting:1;
     bool alive:1, location:1, gps:1, baro:1, pitot:1, airspeed:1, vario:1, traffic:1;
     bool gdl90:1;
     bool foreflight_id:1;
@@ -93,16 +93,19 @@ class DeviceListWidget final
       case PortState::READY:
         open = true;
         error = false;
+        connecting = false;
         break;
 
       case PortState::FAILED:
         open = false;
         error = true;
+        connecting = false;
         break;
 
       case PortState::LIMBO:
         open = false;
         error = false;
+        connecting = true;
         break;
       }
 
@@ -496,6 +499,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
     status = _("N/A");
+  } else if (flags.connecting) {
+    status = _("Connecting...");
   } else if (flags.open) {
     buffer = _("No data");
 

@@ -7,6 +7,9 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.IOException;
 
 import android.bluetooth.BluetoothDevice;
@@ -20,6 +23,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 /**
  * Read Bluetooth LE sensor values and report them to a
@@ -29,12 +33,16 @@ public final class BluetoothSensor
   extends BluetoothGattCallback
   implements AndroidSensor
 {
+  private static final String TAG = "XCSoar";
+
   private final SensorListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
   /** kept for reconnecting after a failed connection attempt */
   private final Context context;
   private final BluetoothDevice device;
+  private final boolean auto_connect;
+  private volatile boolean shutdown = false;
 
   /**
    * Assigned on the main thread, read on the Binder thread that
@@ -83,52 +91,111 @@ public final class BluetoothSensor
                          SensorListener listener)
     throws IOException
   {
+    this(context, device, listener, true);
+  }
+
+  public BluetoothSensor(final Context context, final BluetoothDevice device,
+                         SensorListener listener, final boolean autoConnect)
+    throws IOException
+  {
     this.listener = listener;
     this.context = context;
     this.device = device;
+    this.auto_connect = autoConnect;
 
-    if (Build.VERSION.SDK_INT >= 23){
-      /**
-       * Run GATT connect, discover etc. on main thread. If not,
-       * recent Android os will call close() before connection
-       * is fully established.
-       */
-      new Handler(Looper.getMainLooper()).post(new Runnable() {
+    /**
+     * Run GATT connect on the main thread on API 23+: some Android
+     * versions close the client if connectGatt() is issued from a
+     * worker.  Wait for that posted work so this constructor does not
+     * throw "GATT connect failed" while gatt is still null.
+     */
+    if (Build.VERSION.SDK_INT >= 23 &&
+        Looper.myLooper() != Looper.getMainLooper()) {
+      final Handler handler = new Handler(Looper.getMainLooper());
+      final AtomicBoolean abandoned = new AtomicBoolean(false);
+      final CountDownLatch done = new CountDownLatch(1);
+      final IOException[] error = new IOException[1];
+      final Runnable start = new Runnable() {
         @Override
         public void run() {
-          /**
-           * Change auto connect = false and remove transport hint, which
-           * should be more stable and widespread supported.
-           */
-          try {
-            gatt = device.connectGatt(context, false, BluetoothSensor.this);
-          } catch (SecurityException e) {
-            /* Android 12+: BLUETOOTH_CONNECT required; may be denied or revoked. */
-            submitError("Bluetooth connect not permitted");
+          if (abandoned.get())
             return;
+          try {
+            connectGatt();
+          } catch (IOException e) {
+            error[0] = e;
+          } finally {
+            if (abandoned.get()) {
+              if (gatt != null) {
+                gatt.close();
+                gatt = null;
+              }
+              return;
+            }
+            done.countDown();
           }
-          if (gatt == null)
-            submitError("Bluetooth GATT connect failed");
         }
-      });
-    }
-    else {
+      };
+      handler.post(start);
       try {
-        gatt = device.connectGatt(context, true, this);
-      } catch (SecurityException e) {
-        throw new IOException("Bluetooth GATT connect not permitted", e);
+        if (!done.await(5, TimeUnit.SECONDS)) {
+          abandonGattConnect(handler, start, abandoned);
+          throw new IOException("Bluetooth GATT connect timed out");
+        }
+      } catch (InterruptedException e) {
+        abandonGattConnect(handler, start, abandoned);
+        Thread.currentThread().interrupt();
+        throw new IOException("Bluetooth GATT connect interrupted", e);
       }
-
-      /* only this branch has connected synchronously and can say
-         whether it worked; the posted one reports its own failure
-         through submitError() once it has actually run */
-      if (gatt == null)
-        throw new IOException("Bluetooth GATT connect failed");
+      if (error[0] != null)
+        throw error[0];
+    } else {
+      connectGatt();
     }
+  }
+
+  /**
+   * LE transport, matching BleSerialPort.  autoConnect waits for the
+   * next advertisement; a live/scanned device uses a direct connect.
+   */
+  private void connectGatt()
+    throws IOException
+  {
+    try {
+      if (Build.VERSION.SDK_INT >= 23)
+        gatt = device.connectGatt(context, auto_connect, this,
+                                  BluetoothDevice.TRANSPORT_LE);
+      else
+        gatt = device.connectGatt(context, auto_connect, this);
+    } catch (SecurityException e) {
+      throw new IOException("Bluetooth GATT connect not permitted", e);
+    }
+    if (gatt == null)
+      throw new IOException("Bluetooth GATT connect failed");
+  }
+
+  /**
+   * Drop a connectGatt posted to the main looper if this constructor
+   * fails, so a late callback cannot keep a GATT client open.
+   */
+  private void abandonGattConnect(Handler handler, Runnable start,
+                                  AtomicBoolean abandoned) {
+    abandoned.set(true);
+    handler.removeCallbacks(start);
+    handler.post(new Runnable() {
+      @Override
+      public void run() {
+        if (gatt != null) {
+          gatt.close();
+          gatt = null;
+        }
+      }
+    });
   }
 
   @Override
   public void close() {
+    shutdown = true;
     safeDestruct.beginShutdown();
     if (gatt != null)
       gatt.close();
@@ -326,14 +393,13 @@ public final class BluetoothSensor
           }
 
           try {
-            gatt = device.connectGatt(context, false, BluetoothSensor.this);
-          } catch (SecurityException e) {
-            submitError("Bluetooth connect not permitted");
+            connectGatt();
+          } catch (IOException e) {
+            submitError(e.getMessage() != null
+                        ? e.getMessage()
+                        : "Bluetooth GATT connect failed");
             return;
           }
-
-          if (gatt == null)
-            submitError("Bluetooth GATT connect failed");
         } finally {
           safeDestruct.decrement();
         }
@@ -344,6 +410,9 @@ public final class BluetoothSensor
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
+    if (shutdown)
+      return;
+
     final BluetoothGatt current = this.gatt;
     if (gatt == retired || (current != null && gatt != current))
       /* a disconnect still in flight from the client retryConnect()
@@ -360,6 +429,9 @@ public final class BluetoothSensor
       everConnected = true;
       connectRetries = 0;
 
+      if (Build.VERSION.SDK_INT >= 21)
+        gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
+
       if (!gatt.discoverServices())
         submitError("Discovering GATT services request failed");
 
@@ -374,6 +446,8 @@ public final class BluetoothSensor
     if (!everConnected && status != BluetoothGatt.GATT_SUCCESS &&
         connectRetries < MAX_CONNECT_RETRIES) {
       ++connectRetries;
+      Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
+            ", retry " + connectRetries);
       retryConnect();
       return;
     }
