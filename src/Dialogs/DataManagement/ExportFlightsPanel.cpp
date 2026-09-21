@@ -552,7 +552,7 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, weglide
-                      ? "IGC-FilePicker"
+                      ? _("WeGlide Upload")
                       : C_("Menu", "Export flights"));
 
   auto df = ScanLogs(weglide);
@@ -571,7 +571,7 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
     file_list.SetFileActivateCallback([](Path picked) {
       UploadOneIGCFile(picked);
     });
-    dialog.AddButton(_("WeGlide Upload"), [&file_list]() {
+    dialog.AddButton(_("Upload Flight"), [&file_list]() {
       UseHighlightedFlight(file_list);
     });
     dialog.AddButton(_("Cancel"), mrCancel);
