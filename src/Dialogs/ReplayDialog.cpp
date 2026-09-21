@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ReplayDialog.hpp"
+#include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -39,6 +40,9 @@ private:
   void OnStartClicked() noexcept;
   void OnFastForwardClicked() noexcept;
 
+  static bool EditReplayFile(const char *caption, DataField &df,
+                             const char *help_text);
+
 public:
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent,
@@ -49,11 +53,12 @@ void
 ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  AddFile(_("File"),
+  WndProperty &file = *AddFile(_("Flight"),
           _("Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (.nmea). Leave blank to run the demo."),
           {},
           {FileType::NMEA, FileType::IGC},
           true);
+  file.SetEditCallback(EditReplayFile);
   LoadValue(FILE, replay.GetFilename());
   GetFileDataField(FILE).Sort(FileDataField::SortOrder::DESCENDING, true);
 
@@ -88,6 +93,29 @@ inline void
 ReplayControlWidget::OnFastForwardClicked() noexcept
 {
   replay.FastForward(std::chrono::minutes{10});
+}
+
+bool
+ReplayControlWidget::EditReplayFile([[maybe_unused]] const char *caption,
+                                    DataField &df,
+                                    [[maybe_unused]] const char *help_text)
+{
+  auto &file = static_cast<FileDataField &>(df);
+  AllocatedPath path(file.GetValue());
+  switch (PickReplayFlight(_("Flight"), path)) {
+  case ReplayFlightChoice::CANCEL:
+    return false;
+
+  case ReplayFlightChoice::DEMO:
+    file.SetIndex(0);
+    return true;
+
+  case ReplayFlightChoice::FILE:
+    file.ForceModify(path);
+    return true;
+  }
+
+  return false;
 }
 
 void
