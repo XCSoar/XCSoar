@@ -3,16 +3,27 @@
 
 #pragma once
 
+#include "time/Validity.hpp"
+#include "time/Stamp.hpp"
+
 /**
  * State of acceleration of aircraft
  */
 struct AccelerationState
 {
   /**
+   * A monotonic wall clock time, in seconds, with an undefined
+   * reference.  This may get updated even if the device doesn't send
+   * any data.  It is used to update and check the #Validity
+   * attributes in this struct.
+   */
+  TimeStamp clock;
+
+  /**
    * Is G-load information available?
    * @see Gload
    */
-  bool available;
+  Validity available;
 
   /**
    * Is the G-load information coming from a connected device (true) or
@@ -28,13 +39,14 @@ struct AccelerationState
   double g_load;
 
   void Reset() {
-    available = false;
+    available.Clear();
   }
 
   void ProvideGLoad(double _g_load, bool _real=true) noexcept {
     g_load = _g_load;
     real = _real;
-    available = true;
+    clock = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
+    available.Update(clock);
   }
 
   /**
