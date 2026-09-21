@@ -281,6 +281,12 @@
     break-inside: avoid;
 }
 
+/* Long tables continue on the next page under a repeated header row
+   instead of leaving the rest of the page empty. */
+.print-page-body table:has(tbody tr:nth-child(12)) {
+    break-inside: auto;
+}
+
 .print-page-body pre {
     white-space: pre-wrap;
     word-break: break-word;
@@ -296,14 +302,23 @@
     max-width: 100%;
 }
 
-/* Wide tables like the menu overview share the page width between their
-   columns; the labels in their cells wrap instead of widening the table. */
 .print-page-body td,
 .print-page-body th {
     padding: 1.5mm 2mm;
 }
 
-.print-page-body table:has(tr > :nth-child(5)) {
+/* Wide tables of icons and check marks: the column headings are turned
+   sideways, as in the LaTeX manual, so the columns stay narrow. */
+.print-page-body table:has(tr > :nth-child(7)) thead tr:last-child th:not(:first-child) {
+    writing-mode: sideways-lr;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+/* Wide tables of labels like the menu overview share the page width
+   between their columns; the labels in their cells wrap instead of
+   widening the table. Tables of check marks keep their content width. */
+.print-page-body table:has(tr > :nth-child(5)):has(td code) {
     table-layout: fixed;
     width: 100%;
 }
