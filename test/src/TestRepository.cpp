@@ -3,6 +3,7 @@
 
 #include "Repository/Parser.hpp"
 #include "Repository/FileRepository.hpp"
+#include "Repository/Glue.hpp"
 #include "io/LineReader.hpp"
 #include "TestUtil.hpp"
 
@@ -384,6 +385,30 @@ TestFieldsBeforeName()
 }
 
 static void
+TestRaspForecastOutOfDate()
+{
+  const BrokenDate today(2026, 9, 21);
+  const BrokenDate yesterday(2026, 9, 20);
+  const BrokenDate frozen(2023, 1, 1);
+  const BrokenDate tomorrow(2026, 9, 22);
+
+  /* implausible mtime (including a missing/failed stat) is stale */
+  ok1(IsRaspForecastOutOfDate(BrokenDate::Invalid(), today, frozen));
+
+  /* first-download mtime that a replace can leave behind */
+  ok1(IsRaspForecastOutOfDate(yesterday, today, frozen));
+  ok1(IsRaspForecastOutOfDate(frozen, today, frozen));
+
+  /* written today: frozen repository update= must not fetch again */
+  ok1(!IsRaspForecastOutOfDate(today, today, frozen));
+  ok1(!IsRaspForecastOutOfDate(today, today, yesterday));
+  ok1(!IsRaspForecastOutOfDate(today, today, BrokenDate::Invalid()));
+
+  /* repository advertised a newer publication date */
+  ok1(IsRaspForecastOutOfDate(today, today, tomorrow));
+}
+
+static void
 TestAvailableFile()
 {
   AvailableFile f;
@@ -429,6 +454,7 @@ int main()
     4 +   // TestWhitespaceHandling
     5 +   // TestFindByName
     3 +   // TestFieldsBeforeName
+    7 +   // TestRaspForecastOutOfDate
     10    // TestAvailableFile
   );
 
@@ -449,6 +475,7 @@ int main()
   TestWhitespaceHandling();
   TestFindByName();
   TestFieldsBeforeName();
+  TestRaspForecastOutOfDate();
   TestAvailableFile();
 
   return exit_status();
