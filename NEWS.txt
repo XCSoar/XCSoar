@@ -11,6 +11,7 @@ Version 7.45.3 - not yet released
 * Windows
   - show the program version in the file properties of XCSoar.exe and
     the installer #3173
+  - show --help and --version in the Command Prompt window #3194
 * weather
   - fix RASP Auto update downloading the same forecast again every
     time the page changes #3166

@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <cstdlib>
 #ifdef _WIN32
-#include <windows.h> /* for AllocConsole() */
+#include <windows.h> /* for AllocConsole() and AttachConsole() */
 #endif
 
 namespace CommandLine {
@@ -79,9 +79,40 @@ CommandLine::OptionSummary() noexcept
   return option_summary;
 }
 
+#ifndef _WIN32
+static void AttachOutputConsole() noexcept {}
+#else
+/**
+ * GUI builds have no console. Attach the parent one so --help and
+ * --version are visible. Leave redirected stdout (a file or pipe) alone.
+ */
+static void
+AttachOutputConsole() noexcept
+{
+  HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+  if (handle != nullptr && handle != INVALID_HANDLE_VALUE) {
+    const DWORD type = GetFileType(handle);
+    DWORD mode;
+    if (type == FILE_TYPE_DISK || type == FILE_TYPE_PIPE ||
+        (type == FILE_TYPE_CHAR && GetConsoleMode(handle, &mode)))
+      return;
+  }
+
+  if (!AttachConsole(ATTACH_PARENT_PROCESS))
+    return;
+
+  if (std::freopen("CONOUT$", "w", stdout) == nullptr)
+    return;
+
+  std::setvbuf(stdout, nullptr, _IONBF, 0);
+}
+#endif
+
 void
 CommandLine::PrintHelp() noexcept
 {
+  AttachOutputConsole();
+
   std::printf("Usage: %s [OPTION]...\n\n"
               "Options:\n",
               PRODUCT_NAME_LC);
@@ -116,6 +147,7 @@ CommandLine::Parse(Args &args)
     }
 
     if (StringIsEqual(s, "-version")) {
+      AttachOutputConsole();
       PrintStandardVersion(PRODUCT_NAME_LC, XCSoar_VersionString);
       exit(EXIT_SUCCESS);
     } else if (StringIsEqual(s, "-profile=", 9)) {
