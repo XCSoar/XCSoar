@@ -895,7 +895,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '4.0.6'
+          ruby-version: '4.0.7'
           bundler-cache: true
 
       - name: Create Play Store key
