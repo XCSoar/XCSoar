@@ -312,6 +312,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/SaveGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
+	$(SRC)/Waypoint/LoadWaypointImages.cpp \
+	$(SRC)/Waypoint/SourcePath.cpp \
+	$(SRC)/Waypoint/OpenAssociatedFile.cpp \
 	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	\
