@@ -188,6 +188,8 @@ Version 7.46 - not yet released
   - fix Dark mode Auto on macOS and iOS always staying light: follow
     the system appearance, including a scheduled switch while XCSoar
     is running
+  - fix quitting from the Fly / Simulator screen with -profile=
+    emptying the profile file #3190
 * documentation
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor

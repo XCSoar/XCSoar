@@ -24,7 +24,10 @@ Path
 GetPath() noexcept;
 
 /**
- * Loads the profile files
+ * Loads the profile files.
+ *
+ * Marks the in-memory map as loaded so Save() may write it.  A failed
+ * or missing file still counts as loaded (first-run / empty profile).
  */
 void
 Load() noexcept;
@@ -36,7 +39,11 @@ void
 LoadFile(Path path) noexcept;
 
 /**
- * Saves the profile into the profile files
+ * Saves the profile into the profile files.
+ *
+ * No-op if Load() has not run, even when the map is marked modified.
+ * That keeps an unused -profile= path from being overwritten with an
+ * empty map (for example Quit on the Fly / Simulator screen).
  *
  * Errors will be caught and logged.
  */
