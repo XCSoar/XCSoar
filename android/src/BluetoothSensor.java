@@ -43,7 +43,20 @@ public final class BluetoothSensor
   private final BluetoothDevice device;
   private final boolean autoConnect;
 
-  private BluetoothGatt gatt;
+  /**
+   * Assigned on the main thread, read on the Binder thread that
+   * delivers the GATT callbacks, so the two have to agree on what
+   * they see.
+   */
+  private volatile BluetoothGatt gatt;
+
+  /**
+   * The client retryConnect() has closed.  It is cleared from #gatt
+   * before the replacement exists, so without remembering it here a
+   * callback arriving in that gap would look like the constructor's
+   * first one.
+   */
+  private volatile BluetoothGatt retired;
   private volatile boolean shutdown = false;
 
   private int state = STATE_LIMBO;
@@ -528,6 +541,7 @@ public final class BluetoothSensor
 
         try {
           if (gatt != null) {
+            retired = gatt;
             gatt.close();
             gatt = null;
           }
@@ -550,6 +564,17 @@ public final class BluetoothSensor
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
     if (shutdown)
+      return;
+
+    final BluetoothGatt current = this.gatt;
+    if (gatt == retired || (current != null && gatt != current))
+      /* a disconnect still in flight from the client retryConnect()
+         has already closed.  Acting on it would close its replacement
+         and spend another retry on a connection that is fine.  The
+         first test catches the gap in retryConnect() where the old
+         client is closed and #gatt is not yet reassigned; without it
+         a stale callback in that gap would pass as the constructor's
+         first one, which is the only case the null #gatt means. */
       return;
 
     if (BluetoothProfile.STATE_CONNECTED == newState &&
