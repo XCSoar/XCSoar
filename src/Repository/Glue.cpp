@@ -245,13 +245,11 @@ IsRaspFileOutOfDate(const AvailableFile &file) noexcept
 
   const BrokenDate modified =
     BrokenDateTime{File::GetLastModification(path)};
-  if (!modified.IsPlausible())
-    return true;
 
   /* the system clock, not GPS time: this also runs at startup, before
      a fix is available */
-  const BrokenDate today = BrokenDateTime::NowUTC();
-  return modified < today || modified < file.update_date;
+  return IsRaspForecastOutOfDate(modified, BrokenDateTime::NowUTC(),
+                                 file.update_date);
 }
 
 bool
