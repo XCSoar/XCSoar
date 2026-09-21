@@ -40,11 +40,18 @@ export default defineAppConfig({
                     icon: 'size-5',
                 },
             },
-            // Tables take the width of their content, not the whole page.
+            // Tables take the width of their content, not the whole page,
+            // with denser cells so that wide tables fit the text column.
             table: {
                 slots: {
                     base: 'w-auto max-w-full',
                 },
+            },
+            th: {
+                base: 'px-3 py-2',
+            },
+            td: {
+                base: 'px-3 py-2',
             },
             fieldGroup: {
                 base: 'my-5 space-y-4 divide-y-0',
