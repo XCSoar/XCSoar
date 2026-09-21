@@ -2,7 +2,7 @@
 // Paragraph with gesture drawings in a column on its left, like the margin
 // notes of the LaTeX manual. Several gestures are separated by spaces:
 //
-//   ::gesture-note{id="L R"}
+//   ::gesture-aside{id="L R"}
 //   To go through the various screen pages ...
 //   ::
 const props = defineProps({

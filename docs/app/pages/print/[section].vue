@@ -45,7 +45,7 @@ function printable(page, pageId, number) {
         if (level) tag = `h${Math.min(6, Number(level[1]) + shift)}`;
         if (number && tag === 'h3') children.unshift(`${number}.${++sections}  `);
         // Gesture components use "id" for the gesture name, not as anchor.
-        if (props.id && !['gesture', 'gesture-note'].includes(tag)) props.id = `${pageId}-${props.id}`;
+        if (props.id && !['gesture', 'gesture-aside'].includes(tag)) props.id = `${pageId}-${props.id}`;
         if (typeof props.href === 'string' && props.href.startsWith(`/${section}`)) {
             const [path, hash] = props.href.split('#');
             const target = path === `/${section}` ? section : anchorId(path);
