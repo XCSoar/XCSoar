@@ -85,11 +85,23 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   introduction of its own does it get a first page named after that content
   (`00.concepts.md`, `00.task-modes.md`), never `index` or `overview`.
 - Every page starts with a YAML frontmatter with `title` and `description`.
-  The title is the name of the page in the navigation and the browser tab. The
+  The title is the heading of the page, the browser tab and the print. The
   description is the meta description and the text on cards, at most 220
   characters. Put the essential information into its first 82 characters:
   the previous/next links below every page show only that much of it. Quote
   it when it contains a colon, otherwise `nuxt generate` fails.
+- A page has up to three names, each as short as its place allows:
+  - `title`: the full name, at most 40 characters, without quotes
+    (`Status tabs Flight and Time`, not `Status tabs ‘Flight’ and ‘Time’`).
+  - `navigation.title`: the name in the sidebar, at most 22 characters, the
+    width the sidebar shows. Set it when the title is longer, or when a
+    shorter name says the same (`Abort and alternates` for `Abort/resume the
+    task and Alternates`, `Analysis` for `Analysis dialogue`). A folder sets
+    it as `title` in its `.navigation.yaml` (`Atmosphere`), which is also the
+    chapter heading in the print.
+  - The file or folder name: the navigation title as a slug, at most 25
+    characters, without filler words (`11.abort-and-alternates.md`,
+    `05.tasks/`). The whole URL stays under 60 characters.
 - No `# H1` in the text; the title comes from the frontmatter. Headings start
   at `##`. No numbering in headings. Three empty lines before every `##`
   heading, two before `###`, one before `####` and below, and one after the
@@ -144,8 +156,8 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
 - Internal links are absolute paths: `/manual/navigation/waypoints`,
   `/manual/configuration/map-display#conf-waypointicons`,
   `/infobox/thermal-30s`. Never relative paths or `.md`.
-- The link text is the title of the target. Do not repeat the title after the
-  link.
+- The link text is the navigation title of the target, or its title when it
+  has none. Do not repeat the title after the link.
 - Settings link to `#conf-...` anchors declared on the field that describes
   them: `:::field{name="Landable symbols" #conf-waypointicons}`. Anchors need
   to be unique within a page only.
