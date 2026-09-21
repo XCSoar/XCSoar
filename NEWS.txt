@@ -65,6 +65,8 @@ Version 7.46 - not yet released
     silently switching back to None
   - fix UK XC Therm forecast overlays (met-ukv model and layer
     catalog) #3029
+  - fix RASP Auto update downloading again on every page switch
+    because the file date stayed at the first download #3166
 * map
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
