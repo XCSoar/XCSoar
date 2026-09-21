@@ -1,6 +1,6 @@
 <script setup>
 const sizes = {
-  sm: 'h-8',
+  sm: 'h-7',
   md: 'h-12',
   lg: 'h-16',
 };
