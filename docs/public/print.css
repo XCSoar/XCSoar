@@ -292,6 +292,23 @@
 
 .print-page-body table {
     font-size: 9.5pt;
+    max-width: 100%;
+}
+
+/* Wide tables like the menu overview share the page width between their
+   columns; the labels in their cells wrap instead of widening the table. */
+.print-page-body td,
+.print-page-body th {
+    padding: 1.5mm 2mm;
+}
+
+.print-page-body table:has(tr > :nth-child(5)) {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.print-page-body td code {
+    white-space: normal;
 }
 
 .print-page-body thead {
