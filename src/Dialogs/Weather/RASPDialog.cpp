@@ -372,22 +372,19 @@ RASPSettingsPanel::UpdateTimeControl() noexcept
 void
 RASPSettingsPanel::RefreshPageSection() noexcept
 {
-  overlay.Load(PageLayout::Overlay::RASP);
+  overlay.Reload(PageLayout::Overlay::RASP,
+                 apply_to_page_button, add_page_button);
   UpdateLayerControl();
   UpdateTimeControl();
   UpdateColorbar();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
 RASPSettingsPanel::ApplyToPageClicked() noexcept
 {
-  if (!overlay.ApplyIfDirty())
-    return;
-
+  overlay.ApplyClicked(apply_to_page_button, add_page_button);
   UpdateLayerControl();
   UpdateTimeControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
@@ -611,17 +608,14 @@ RASPSettingsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   UpdateColorbar();
 
-  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
-    ApplyToPageClicked();
-  });
-  add_page_button = AddButton(C_("Button", "Add page"), [this]{
-    AddPageClicked();
-  });
+  WeatherOverlayDraft::AddApplyAddButtons(*this, apply_to_page_button,
+                                          add_page_button,
+                                          [this]{ ApplyToPageClicked(); },
+                                          [this]{ AddPageClicked(); });
   RefreshPageSection();
   AddSpacer();
 
-  AddButton(C_("Button", "Pages setup"), [this]{
-    WeatherOverlayDraft::OpenPagesConfig();
+  WeatherOverlayDraft::AddPagesSetupButton(*this, [this]{
     RefreshPageSection();
   });
 }

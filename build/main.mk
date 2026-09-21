@@ -668,6 +668,7 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp \
 	$(SRC)/Weather/SkySight/SkySightClient.cpp \
+	$(SRC)/Weather/SkySight/LayerStatus.cpp \
 	$(SRC)/Weather/SkySight/SkySightCache.cpp \
 	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
 	$(SRC)/Weather/SkySight/SkySightRequest.cpp
@@ -785,6 +786,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermAPI.cpp \
 	$(SRC)/Weather/xctherm/XCThermDownload.cpp \
 	$(SRC)/Weather/xctherm/XCThermDownloadGlue.cpp \
+	$(SRC)/Weather/xctherm/LayerDownloadStatus.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \

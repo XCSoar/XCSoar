@@ -26,58 +26,18 @@
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/StaticString.hxx"
 #include "Weather/xctherm/FieldControls.hpp"
+#include "Weather/xctherm/LayerDownloadStatus.hpp"
 #include "Weather/xctherm/XCThermAPI.hpp"
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
 #include "Weather/xctherm/XCThermDownloadJob.hpp"
 #include "Weather/xctherm/XCThermForecastTime.hpp"
 #include "Weather/xctherm/XCThermMapOverlay.hpp"
-#include "LogFile.hpp"
-#include "lib/fmt/ToBuffer.hxx"
 #include "net/http/Init.hpp"
 
-#include <chrono>
-#include <ctime>
 #include <memory>
 
 namespace {
-
-/**
- * Download metadata for a layer — shown in the Status row.
- * For a span download, sizes/speed are totals across all hourly slices,
- * span_hours is the number of slices successfully fetched, and
- * pending_index/pending_total animate progress during the loop.
- */
-struct LayerDownloadInfo {
-  enum Status { NONE, PENDING, DONE, FAILED, CANCELED };
-  Status status = NONE;
-  double wire_mb = 0.0;
-  double speed_mbs = 0.0;
-  unsigned span_hours = 0;
-  unsigned future_hours = 0;
-  unsigned new_downloads = 0;
-  unsigned pending_index = 0;
-  unsigned pending_total = 0;
-  uint64_t pending_bytes_now = 0;
-  uint64_t pending_bytes_total = 0;
-  unsigned retry_attempt = 0;
-  unsigned retry_seconds_left = 0;
-  std::string download_time;
-  std::string issued_utc;
-};
-
-static LayerDownloadInfo download_info_ch[
-  XCTherm::GetRegion(XCTherm::Region::CH).layer_count];
-static LayerDownloadInfo download_info_uk[
-  XCTherm::GetRegion(XCTherm::Region::UK).layer_count];
-
-static LayerDownloadInfo *
-GetDownloadInfo(unsigned model) noexcept
-{
-  if (XCTherm::ToRegion(model) == XCTherm::Region::UK)
-    return download_info_uk;
-  return download_info_ch;
-}
 
 static constexpr StaticEnumChoice span_list[] = {
   { 1, N_("1 hour") },
@@ -87,74 +47,6 @@ static constexpr StaticEnumChoice span_list[] = {
   { 18, N_("18 hours") },
   nullptr
 };
-
-StaticString<200>
-FormatLayerStatus(unsigned model, unsigned layer_index,
-                  unsigned span_hours_setting) noexcept
-{
-  StaticString<200> text;
-  const auto &region = XCTherm::GetRegion(model);
-  if (layer_index >= region.layer_count) {
-    text = _("None");
-    return text;
-  }
-
-  const auto *info = GetDownloadInfo(model);
-  switch (info[layer_index].status) {
-  case LayerDownloadInfo::PENDING: {
-    const auto &p = info[layer_index];
-    if (p.retry_seconds_left > 0)
-      text.Format(_("Slot %u: reconnect in %us (try #%u)"),
-                  p.pending_index,
-                  p.retry_seconds_left,
-                  p.retry_attempt + 1);
-    else if (p.pending_bytes_total > 0) {
-      const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
-      const double tot_mb = (double)p.pending_bytes_total / (1024.0 * 1024.0);
-      text.Format(_("Slot %u/%u: %.2f / %.2f MB"),
-                  p.pending_index, p.pending_total, now_mb, tot_mb);
-    } else if (p.pending_bytes_now > 0) {
-      const double now_mb = (double)p.pending_bytes_now / (1024.0 * 1024.0);
-      text.Format(_("Slot %u/%u: %.2f MB"),
-                  p.pending_index, p.pending_total, now_mb);
-    } else if (p.pending_total > 0)
-      text.Format(_("Slot %u/%u: connecting..."),
-                  p.pending_index, p.pending_total);
-    else
-      text = _("Connecting...");
-    break;
-  }
-  case LayerDownloadInfo::DONE: {
-    const unsigned future = info[layer_index].future_hours;
-    if (info[layer_index].new_downloads == 0)
-      text.Format(_("%u/%uh | Issued %s | %s"),
-                  future, span_hours_setting,
-                  info[layer_index].issued_utc.c_str(),
-                  info[layer_index].download_time.c_str());
-    else
-      text.Format(_("%u/%uh (%u new) | Issued %s | %.2f MB wire "
-                    "%.1f MB/s | %s"),
-                  future, span_hours_setting,
-                  info[layer_index].new_downloads,
-                  info[layer_index].issued_utc.c_str(),
-                  info[layer_index].wire_mb,
-                  info[layer_index].speed_mbs,
-                  info[layer_index].download_time.c_str());
-    break;
-  }
-  case LayerDownloadInfo::FAILED:
-    text = _("Download failed");
-    break;
-  case LayerDownloadInfo::CANCELED:
-    text = C_("Status", "Cancelled");
-    break;
-  default:
-    text = _("Not downloaded");
-    break;
-  }
-
-  return text;
-}
 
 class XCThermWidget final : public RowFormWidget {
   enum Controls {
@@ -279,8 +171,8 @@ XCThermWidget::UpdateStatusControl() noexcept
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
   SetText(STATUS,
-          FormatLayerStatus(settings.model, selected_layer,
-                            settings.download_span_hours).c_str());
+          XCTherm::FormatLayerStatus(settings.model, selected_layer,
+                                     settings.download_span_hours).c_str());
 }
 
 void
@@ -328,10 +220,10 @@ XCThermWidget::UpdateAltitudeControl() noexcept
 void
 XCThermWidget::RefreshPageSection() noexcept
 {
-  overlay.Load(PageLayout::Overlay::XCTHERM);
+  overlay.Reload(PageLayout::Overlay::XCTHERM,
+                 apply_to_page_button, add_page_button);
   UpdateTimeControl();
   UpdateAltitudeControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
@@ -360,12 +252,9 @@ XCThermWidget::OnSpanModified() noexcept
 void
 XCThermWidget::ApplyToPageClicked() noexcept
 {
-  if (!overlay.ApplyIfDirty())
-    return;
-
+  overlay.ApplyClicked(apply_to_page_button, add_page_button);
   UpdateTimeControl();
   UpdateAltitudeControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
@@ -471,15 +360,7 @@ XCThermWidget::StartDownload() noexcept
     return;
   }
 
-  auto *info = GetDownloadInfo(settings.model);
-  auto &row_info = info[selected_layer];
-  row_info.status = LayerDownloadInfo::PENDING;
-  row_info.pending_total = span_hours + 1;
-  row_info.pending_index = 0;
-  row_info.pending_bytes_now = 0;
-  row_info.pending_bytes_total = 0;
-  row_info.retry_attempt = 0;
-  row_info.retry_seconds_left = 0;
+  XCTherm::MarkLayerPending(settings.model, selected_layer, span_hours);
 
   SyncUpdateButtons();
   UpdateStatusControl();
@@ -492,15 +373,8 @@ XCThermWidget::PollDownload() noexcept
   if (!active_job)
     return;
 
-  auto &job = *active_job;
-  auto *info = GetDownloadInfo(job.model);
-  auto &row_info = info[job.target_index];
-  row_info.pending_index = job.current_offset.load();
-  row_info.pending_total = job.span_hours + 1;
-  row_info.pending_bytes_now = job.bytes_now.load();
-  row_info.pending_bytes_total = job.bytes_total.load();
-  row_info.retry_attempt = job.retry_attempt.load();
-  row_info.retry_seconds_left = job.retry_seconds_left.load();
+  auto *info = XCTherm::GetLayerDownloadInfo(active_job->model);
+  XCTherm::CopyJobProgress(info[active_job->target_index], *active_job);
 
   UpdateStatusControl();
 }
@@ -516,100 +390,38 @@ XCThermWidget::FinishDownload() noexcept
   auto job = std::move(active_job);
   active_job.reset();
 
-  auto *info = GetDownloadInfo(job->model);
-  auto &row_info = info[job->target_index];
-
   const unsigned span = job->span_hours;
   const unsigned ok = job->succeeded_or_cached.load();
   const unsigned nu = job->newly_downloaded.load();
   const bool canceled = job->cancel.load();
-  const bool any_miss = job->any_slot_missing.load();
-
-  if (ok == 0) {
-    row_info.status = canceled
-      ? LayerDownloadInfo::CANCELED
-      : LayerDownloadInfo::FAILED;
-    row_info.pending_index = 0;
-    row_info.pending_total = 0;
-    row_info.pending_bytes_now = 0;
-    row_info.pending_bytes_total = 0;
-    row_info.retry_attempt = 0;
-    row_info.retry_seconds_left = 0;
-    SyncUpdateButtons();
-    UpdateStatusControl();
-    if (!canceled) {
-      if (job->index_no_parameters.load()) {
-        ShowMessageBox(_("Forecast index has no XC Therm parameters."),
-                       "XC Therm", MB_OK);
-      } else if (job->error_eptr) {
-        ShowError(job->error_eptr, "XC Therm");
-      } else {
-        ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
-                       "XC Therm", MB_OK);
-      }
-    }
-    return;
-  }
-
-  XCTherm::ApplyJobPreviewToMap(job);
-
-  const double span_secs = std::chrono::duration<double>(
-    std::chrono::steady_clock::now() - job->started_at).count();
-  const double wire_mb =
-    (double)job->total_wire_bytes.load() / (1024.0 * 1024.0);
-  const double speed_mbs = span_secs > 0 ? wire_mb / span_secs : 0.0;
-
-  row_info.status = LayerDownloadInfo::DONE;
-  row_info.wire_mb = wire_mb;
-  row_info.speed_mbs = speed_mbs;
-  row_info.span_hours = ok;
-  row_info.new_downloads = nu;
-  row_info.future_hours = XCThermAPI::Instance()
-    .GetCachedLayerSummary(job->param).future_hours;
-  row_info.pending_index = 0;
-  row_info.pending_total = 0;
-  row_info.pending_bytes_now = 0;
-  row_info.pending_bytes_total = 0;
-  row_info.retry_attempt = 0;
-  row_info.retry_seconds_left = 0;
-
-  if (job->latest_run_date.size() == 8 && job->latest_run_hour.size() == 2) {
-    const std::string &d = job->latest_run_date;
-    row_info.issued_utc = std::string(FmtBuffer<32>("{}-{}-{} {} UTC",
-                                                    d.substr(0, 4),
-                                                    d.substr(4, 2),
-                                                    d.substr(6, 2),
-                                                    job->latest_run_hour).c_str());
-  } else {
-    row_info.issued_utc = "?";
-  }
-
-  std::time_t now = std::time(nullptr);
-  std::tm *lt = std::localtime(&now);
-  char tbuf[16];
-  if (lt != nullptr && std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt) > 0)
-    row_info.download_time = tbuf;
-
-  if (nu > 0) {
-    const unsigned current_utc = XCTherm::GetUtcTimeParts().hour;
-    const unsigned dropped =
-      XCThermAPI::Instance().PruneStaleRuns(job->param, current_utc);
-    if (dropped > 0)
-      LogFmt("xctherm: stale-run sweep dropped {} entries for {}",
-             dropped, job->param);
-  }
+  const auto result = XCTherm::ApplyFinishedDownload(job);
 
   SyncUpdateButtons();
   UpdateStatusControl();
   UpdateTimeControl();
   UpdateAltitudeControl();
 
+  if (result == XCTherm::FinishDownloadResult::FAILED) {
+    if (job->index_no_parameters.load())
+      ShowMessageBox(_("Forecast index has no XC Therm parameters."),
+                     "XC Therm", MB_OK);
+    else if (job->error_eptr)
+      ShowError(job->error_eptr, "XC Therm");
+    else
+      ShowMessageBox(_("Forecast download failed.\nKeeping previous data."),
+                     "XC Therm", MB_OK);
+    return;
+  }
+
+  if (result == XCTherm::FinishDownloadResult::CANCELED)
+    return;
+
   if (nu > 0)
     PageActions::Update();
 
-  if (job->error_eptr && !canceled) {
+  if (job->error_eptr && !canceled)
     ShowError(job->error_eptr, "XC Therm");
-  } else if (any_miss && !canceled) {
+  else if (result == XCTherm::FinishDownloadResult::PARTIAL) {
     StaticString<128> msg;
     msg.Format(_("Got %u of %u hourly slices (%u newly downloaded).\n"
                  "Some slots were unavailable."),
@@ -636,8 +448,8 @@ XCThermWidget::DeleteClicked() noexcept
   const auto &target = region.layers[selected_layer];
   XCThermAPI::Instance().ClearLayer(target.api_parameter);
 
-  auto *info = GetDownloadInfo(settings.model);
-  info[selected_layer] = LayerDownloadInfo{};
+  auto *info = XCTherm::GetLayerDownloadInfo(settings.model);
+  info[selected_layer] = XCTherm::LayerDownloadInfo{};
 
   /* Clear the map only when the deleted layer is what the live cursor
      (or legacy activated settings) is showing — not the Layer row. */
@@ -662,61 +474,7 @@ XCThermWidget::RehydrateRowsFromCache() noexcept
 {
   const auto &settings =
     CommonInterface::GetComputerSettings().weather.xctherm;
-  const auto &region = XCTherm::GetRegion(settings.model);
-  auto *info = GetDownloadInfo(settings.model);
-  auto &api = XCThermAPI::Instance();
-
-  /* Make sure the disk index is built before we read it — otherwise a
-     fresh session that opens this dialog without having downloaded
-     anything yet would show "Not downloaded" for slices that are in
-     fact sitting in the on-disk cache. Idempotent. */
-  api.EnableDiskCache();
-
-  for (unsigned i = 0; i < region.layer_count; ++i) {
-    /* Don't overwrite session state — a row that's mid-download
-       (PENDING) or failed/canceled should keep its visible status. */
-    if (info[i].status != LayerDownloadInfo::NONE)
-      continue;
-
-    const auto summary =
-      api.GetCachedLayerSummary(region.layers[i].api_parameter);
-    if (summary.hours.empty())
-      continue;
-
-    LayerDownloadInfo &row = info[i];
-    row.status = LayerDownloadInfo::DONE;
-    row.span_hours = (unsigned)summary.hours.size();
-    row.future_hours = summary.future_hours;
-    row.new_downloads = 0;
-    row.wire_mb = 0.0;
-    row.speed_mbs = 0.0;
-    row.pending_index = 0;
-    row.pending_total = 0;
-    row.pending_bytes_now = 0;
-    row.pending_bytes_total = 0;
-    row.retry_attempt = 0;
-    row.retry_seconds_left = 0;
-
-    if (summary.latest_run_date.size() == 8 &&
-        summary.latest_run_hour.size() == 2) {
-      const std::string &d = summary.latest_run_date;
-      row.issued_utc = std::string(FmtBuffer<32>("{}-{}-{} {} UTC",
-                                                 d.substr(0, 4),
-                                                 d.substr(4, 2),
-                                                 d.substr(6, 2),
-                                                 summary.latest_run_hour).c_str());
-    } else {
-      row.issued_utc = "?";
-    }
-
-    if (summary.latest_downloaded_at > 0) {
-      const std::time_t t = (std::time_t)summary.latest_downloaded_at;
-      std::tm *lt = std::localtime(&t);
-      char tbuf[16];
-      if (lt && std::strftime(tbuf, sizeof(tbuf), "%H:%M:%S", lt) > 0)
-        row.download_time = tbuf;
-    }
-  }
+  XCTherm::RehydrateLayerRowsFromCache(settings.model);
 }
 
 void
@@ -765,16 +523,13 @@ XCThermWidget::Prepare(ContainerWindow &parent,
                              "Use Apply to page to commit changes."));
   altitude->SetEditCallback(EditAltitudeCallback);
 
-  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
-    ApplyToPageClicked();
-  });
-  add_page_button = AddButton(C_("Button", "Add page"), [this]{
-    AddPageClicked();
-  });
+  WeatherOverlayDraft::AddApplyAddButtons(*this, apply_to_page_button,
+                                          add_page_button,
+                                          [this]{ ApplyToPageClicked(); },
+                                          [this]{ AddPageClicked(); });
   AddSpacer();
 
-  AddButton(C_("Button", "Pages setup"), [this]{
-    WeatherOverlayDraft::OpenPagesConfig();
+  WeatherOverlayDraft::AddPagesSetupButton(*this, [this]{
     RefreshPageSection();
   });
 }
