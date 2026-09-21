@@ -326,6 +326,11 @@
     font-size: 9pt;
 }
 
+/* The licence text runs over several pages. */
+.print-page-body pre.license {
+    break-inside: auto;
+}
+
 .print-page-body code {
     font-size: 9.5pt;
 }

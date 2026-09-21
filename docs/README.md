@@ -43,6 +43,7 @@ the pages and the PDFs to the download server.
 | `content/` | All pages, markdown with frontmatter; the folder and file names give the URLs |
 | `content/index.md` | Landing page |
 | `content/1.manual/` | User manual, one folder per chapter |
+| `content/1.manual/15.license.md` | Frontmatter only; the page shows `COPYING` verbatim, inserted by `nuxt.config.ts` |
 | `content/2.quick-guide/` | Quick guide |
 | `content/3.infobox/` | InfoBox reference, frontmatter generated (see below) |
 | `content/4.hardware/`, `content/5.dev/` | Hardware and developer pages |

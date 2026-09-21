@@ -74,10 +74,14 @@ export default defineNuxtConfig({
     devtools: false,
     extends: ['docus'],
     hooks: {
+        // The licence page shows COPYING verbatim, not parsed as markdown.
         // Append the last commit of the page to its body; PageMeta.vue
         // renders it below the content. The landing page has none.
         'content:file:afterParse'({ file, content }) {
             const body = content.body as { type?: string, value?: unknown[] } | undefined;
+            if (body?.type === 'minimark' && content.stem === '1.manual/15.license') {
+                body.value = [['pre', { copy: false, class: 'license' }, readFileSync(repo('../COPYING'), 'utf8')]];
+            }
             const last = body?.type === 'minimark' && content.stem !== 'index' ? lastCommit(file.path) : undefined;
             if (last) body.value!.push(['page-meta', last]);
         },
