@@ -118,7 +118,29 @@ struct ExportJob final : public Job {
   }
 };
 
-static const char*
+static std::unique_ptr<MultiFileDataField>
+ScanLogs(bool igc_only)
+{
+  auto df = std::make_unique<MultiFileDataField>();
+  auto logs_path = MakeLocalPath("logs");
+  if (logs_path == nullptr || !Directory::Exists(logs_path))
+    return df;
+
+  if (igc_only)
+    df->Scan(logs_path, {FileType::IGC}, true);
+  else
+    df->Scan(logs_path, {FileType::IGC, FileType::NMEA}, true);
+  return df;
+}
+
+static void
+UseHighlightedFlight(FileMultiSelectWidget &files) noexcept
+{
+  if (!files.ActivateCursor())
+    ShowMessageBox(_("Select at least one flight."), "",
+                   MB_OK | MB_ICONINFORMATION);
+}
+static const char *
 GetIgcMetadata(const FileMultiSelectWidget::FileItem &it) noexcept
 {
   return igc_cache.GetCompactInfoPtr(it.path);
@@ -172,14 +194,41 @@ PerformExport(FileMultiSelectWidget *file_widget)
                  MB_OK | (failed ? MB_ICONERROR : MB_ICONINFORMATION));
 }
 
-static void
-PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
+static bool
+EnsureWeGlideConfigured() noexcept
 {
-  if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
-    ShowMessageBox(_("WeGlide is not configured. Please set your pilot ID and birthdate in the settings."),
+  if (CommonInterface::GetComputerSettings().weglide.IsConfigured())
+    return true;
+
+  ShowMessageBox(_("WeGlide is not configured. Please set your pilot ID and birthdate in the settings."),
+                 _("WeGlide Upload"), MB_OK | MB_ICONERROR);
+  return false;
+}
+
+static void
+UploadOneIGCFile(Path path) noexcept
+{
+  if (!EnsureWeGlideConfigured())
+    return;
+
+  if (path == nullptr || path.empty())
+    return;
+
+  if (!path.EndsWithIgnoreCase(".igc")) {
+    ShowMessageBox(_("Only .igc files can be uploaded to WeGlide."),
                    _("WeGlide Upload"), MB_OK | MB_ICONERROR);
     return;
   }
+
+  /* UploadIGCFile() shows its own progress dialog and result. */
+  WeGlide::UploadIGCFile(path);
+}
+
+static void
+PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
+{
+  if (!EnsureWeGlideConfigured())
+    return;
 
   const auto selected = file_widget->GetSelectedPaths();
   if (selected.empty()) {
@@ -233,17 +282,39 @@ struct FlightContainer : public PropertyWidgetContainer {
   AllocatedPath target_device_path;
   std::unique_ptr<CheckBoxControl> nmea_checkbox;
   bool show_nmea_files{false};
+  /** No export target and no NMEA checkbox. The list fills the dialog. */
+  const bool list_only;
+  Path initial_path{nullptr};
   FileMetadataFormatter file_metadata;
 
-  explicit FlightContainer(MultiFileDataField &df)
+  explicit FlightContainer(MultiFileDataField &df, bool _list_only)
     : PropertyWidgetContainer(_("Target")),
-      file_list(std::make_unique<FileMultiSelectWidget>(df, nullptr, C_("Setting", "Flights"), nullptr))
+      file_list(std::make_unique<FileMultiSelectWidget>(
+          df, nullptr, C_("Setting", "Flights"), nullptr)),
+      list_only(_list_only)
   {
     file_metadata.Build(df.GetAllPaths());
     file_list->SetSecondRightProvider([this](const FileMultiSelectWidget::FileItem &it) noexcept {
       return GetFileSizeText(it);
     });
     file_list->SetSecondLeftProvider(GetIgcMetadata);
+  }
+
+  void SetInitialPath(Path path) noexcept {
+    initial_path = path;
+  }
+
+  void SelectInitialPath() noexcept {
+    if (initial_path == nullptr || initial_path.empty())
+      return;
+
+    const auto paths = file_list->GetAllPaths();
+    for (unsigned i = 0; i < paths.size(); ++i) {
+      if (paths[i] == initial_path) {
+        file_list->SetCursorIndex(i);
+        return;
+      }
+    }
   }
 
   Widget &GetContentWidget() noexcept override { return *file_list; }
@@ -290,6 +361,11 @@ struct FlightContainer : public PropertyWidgetContainer {
   }
 
   void CalculateLayout(const PixelRect &rc) noexcept override {
+    if (list_only) {
+      content_rect = rc;
+      return;
+    }
+
     PropertyWidgetContainer::CalculateLayout(rc);
     const unsigned prop_height = Layout::GetMinimumControlHeight();
     const unsigned spacing = Layout::GetTextPadding();
@@ -301,33 +377,43 @@ struct FlightContainer : public PropertyWidgetContainer {
 
   void Initialise(ContainerWindow &parent,
                   const PixelRect &rc) noexcept override {
+    if (list_only)
+      return;
+
     PropertyWidgetContainer::Initialise(parent, rc);
     if (!nmea_checkbox)
       nmea_checkbox = std::make_unique<CheckBoxControl>();
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override {
-    PropertyWidgetContainer::Prepare(parent, rc);
+    if (list_only) {
+      CalculateLayout(rc);
+      GetContentWidget().Prepare(parent, content_rect);
+    } else {
+      PropertyWidgetContainer::Prepare(parent, rc);
 
-    const DialogLook &look = UIGlobals::GetDialogLook();
-    if (!nmea_checkbox)
-      nmea_checkbox = std::make_unique<CheckBoxControl>();
-    WindowStyle style;
-    style.TabStop();
-    nmea_checkbox->Create(parent, look, _("Show .nmea files"), checkbox_rect,
-                         style, [this](bool value) {
-      show_nmea_files = value;
+      const DialogLook &look = UIGlobals::GetDialogLook();
+      if (!nmea_checkbox)
+        nmea_checkbox = std::make_unique<CheckBoxControl>();
+      WindowStyle style;
+      style.TabStop();
+      nmea_checkbox->Create(parent, look, _("Show .nmea files"), checkbox_rect,
+                           style, [this](bool value) {
+        show_nmea_files = value;
+        ApplyNmeaFilter();
+        if (file_list)
+          file_list->Refresh();
+        StartIgcCacheFill();
+      });
+      nmea_checkbox->SetState(show_nmea_files);
+
       ApplyNmeaFilter();
-      if (file_list)
-        file_list->Refresh();
-      StartIgcCacheFill();
-    });
-    nmea_checkbox->SetState(show_nmea_files);
+      UpdateTargetCaption();
+    }
 
-    ApplyNmeaFilter();
-    UpdateTargetCaption();
     file_list->Refresh();
     file_list->ClearSelection();
+    SelectInitialPath();
     StartIgcCacheFill();
   }
 
@@ -372,46 +458,105 @@ struct FlightContainer : public PropertyWidgetContainer {
 };
 
 void
-ShowExportFlightsDialog()
+ShowExportFlightsDialog(ExportFlightsMode mode)
+{
+  const bool weglide = mode == ExportFlightsMode::WEGLIDE;
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, weglide
+                      ? "IGC-FilePicker"
+                      : C_("Menu", "Export flights"));
+
+  auto df = ScanLogs(weglide);
+  auto container = std::make_unique<FlightContainer>(*df, weglide);
+  FlightContainer &flight_container = *container;
+  FileMultiSelectWidget &file_list = *flight_container.file_list;
+
+  if (!weglide) {
+    const AllocatedPath &last = GetLastStorageTarget();
+    if (last != nullptr)
+      flight_container.SetTargetDevice(Path(last));
+  }
+
+  if (weglide) {
+    file_list.SetShowCheckmarks(false);
+    file_list.SetFileActivateCallback([](Path picked) {
+      UploadOneIGCFile(picked);
+    });
+    dialog.AddButton(_("WeGlide Upload"), [&file_list]() {
+      UseHighlightedFlight(file_list);
+    });
+    dialog.AddButton(_("Cancel"), mrCancel);
+  } else {
+    dialog.AddButton(C_("Button", "Choose location"), [&flight_container]() {
+      PickStorageLocationAndApply([&flight_container](AllocatedPath chosen) {
+        flight_container.SetTargetDevice(std::move(chosen));
+      });
+    });
+
+    dialog.AddButton(_("WeGlide Upload"), [&file_list]() {
+      PerformWeGlideUpload(&file_list);
+    });
+    dialog.AddButton(C_("Button", "Export"), [&file_list]() {
+      PerformExport(&file_list);
+    });
+    dialog.AddButton(C_("Button", "Select all"), [&file_list]() {
+      file_list.SelectAll();
+    });
+    dialog.AddButton(C_("Button", "Select none"), [&file_list]() {
+      file_list.ClearSelection();
+    });
+    dialog.AddButton(C_("Button", "Back"), mrCancel);
+  }
+
+  dialog.FinishPreliminary(std::move(container));
+  dialog.ShowModal();
+}
+
+ReplayFlightChoice
+PickReplayFlight(const char *caption, AllocatedPath &path)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, C_("Menu", "Export flights"));
+                      look,
+                      caption != nullptr ? caption : _("Replay"));
 
-  /**
-   * Prepare MultiFileDataField with available log files from the XCSoar
-   * logs folder only (collect, sort externally, then populate)
-   */
-  auto df = std::make_unique<MultiFileDataField>();
-  auto logs_path = MakeLocalPath("logs");
-  if (logs_path != nullptr && Directory::Exists(logs_path)) {
-    df->Scan(logs_path, {FileType::IGC, FileType::NMEA}, true);
-  }
-
-  auto container = std::make_unique<FlightContainer>(*df);
+  auto df = ScanLogs(false);
+  auto container = std::make_unique<FlightContainer>(*df, true);
   FlightContainer &flight_container = *container;
+  flight_container.SetInitialPath(path);
   FileMultiSelectWidget &file_list = *flight_container.file_list;
+  file_list.SetShowCheckmarks(false);
 
-  {
-    const AllocatedPath &last = GetLastStorageTarget();
-    if (last != nullptr) {
-      flight_container.SetTargetDevice(Path(last));
-    }
-  }
+  AllocatedPath chosen;
+  bool demo = false;
 
-  dialog.AddButton(C_("Button", "Choose location"), [&flight_container]() {
-    PickStorageLocationAndApply([&flight_container](AllocatedPath chosen) {
-      flight_container.SetTargetDevice(std::move(chosen));
-    });
+  file_list.SetFileActivateCallback([&](Path picked) {
+    if (picked == nullptr || picked.empty())
+      return;
+
+    chosen = AllocatedPath(picked);
+    demo = false;
+    dialog.SetModalResult(mrOK);
   });
 
-  dialog.AddButton(_("WeGlide Upload"), [&file_list]() { PerformWeGlideUpload(&file_list); });
-  dialog.AddButton(C_("Button", "Export"), [&file_list]() { PerformExport(&file_list); });
-  dialog.AddButton(C_("Button", "Select all"), [&file_list]() { file_list.SelectAll(); });
-  dialog.AddButton(C_("Button", "Select none"), [&file_list]() { file_list.ClearSelection(); });
-  dialog.AddButton(C_("Button", "Back"), mrCancel);
+  dialog.AddButton(_("Select"), [&file_list]() {
+    UseHighlightedFlight(file_list);
+  });
+  dialog.AddButton(_("Demo"), [&]() {
+    demo = true;
+    dialog.SetModalResult(mrOK);
+  });
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   dialog.FinishPreliminary(std::move(container));
-  dialog.ShowModal();
+  if (dialog.ShowModal() != mrOK)
+    return ReplayFlightChoice::CANCEL;
+  if (demo)
+    return ReplayFlightChoice::DEMO;
+
+  path = std::move(chosen);
+  return ReplayFlightChoice::FILE;
 }
