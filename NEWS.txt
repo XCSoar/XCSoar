@@ -1,4 +1,57 @@
 Version 7.45.3 - not yet released
+* android
+  - fix BlueFly Vario BLE being offered only as a BLE sensor, so it
+    would not connect; choose BLE port and the BlueFly driver #3146
+  - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
+    failing on the first try and showing Not connected #1836
+  - fix unreliable FLARM IGC download over a USB cable #3047
+* Linux
+  - fix Ctrl-C and a system stop killing XCSoar without saving the
+    settings or the flight log
+* Windows
+  - show the program version in the file properties of XCSoar.exe and
+    the installer #3173
+* weather
+  - fix RASP Auto update downloading the same forecast again every
+    time the page changes #3166
+* FLARM
+  - fix IGC download stopping in the middle of the file #3049
+* devices
+  - write GPS ellipsoid altitude in IGC files when the receiver
+    reports it #1605
+  - ignore Condor 3 UDP air-data so it cannot override the NMEA GPS
+    and climb #3184
+* dialogs
+  - remember checklist checkbox ticks until XCSoar exits or a
+    different checklist file is selected
+* ui
+  - fix Quit on the Fly / Simulator screen emptying a profile that
+    was given on the command line #3190
+  - fix Dark mode Auto on macOS and iOS always staying light: follow
+    the system appearance, including a scheduled switch while XCSoar
+    is running
+* documentation
+  - document that a BlueFly Vario on Android uses BLE port, not BLE
+    sensor
+  - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
+  - document that checklist checkbox ticks last until XCSoar exits
+* development
+  - build system: embed VERSIONINFO in XCSoar.exe and the NSIS
+    installer from VERSION.txt
+  - lua: fix a timer callback that cancels its own timer aborting a
+    debug build, and reading the Lua state after it had been closed
+  - lua: fix a Lua stack slot leaking on every input event handled by a
+    script
+  - lua: fix a crash when a callback opens a modal dialog and the last
+    timer or input event handler goes away while it is open
+  - lua: xcsoar.replay.process_all() and process_until() now leave the
+    snail trail, the flight statistics and the contest filled in, as a
+    replay at normal speed does
+  - lua: fix replay.fast_forward() returning a bogus value instead of
+    reporting whether it succeeded
+  - build system: fix the fat-binary Android build failing at random when
+    its four per-ABI submakes rebuilt the shared arch-independent outputs
+    at the same time #3186
 
 Version 7.45.2 - 2026-09-12
 * android
@@ -75,8 +128,6 @@ Version 7.45.2 - 2026-09-12
     the comment shows no wind when the box is blank because wind is
     missing
 * development
-  - build system: embed VERSIONINFO in XCSoar.exe and the NSIS
-    installer from VERSION.txt
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: use XTIFFOpenExt only with libgeotiff 1.7.2, so
     SkySight builds on Ubuntu 24.04
@@ -90,9 +141,6 @@ Version 7.45.1 - 2026-08-28
 * android
   - fix crash when exiting the app #2873
   - fix crash when restarting the app immediately after exit
-  - fix unreliable FLARM IGC download over FTDI USB-serial by setting
-    the chip latency timer to 1 ms and sending each binary frame in
-    one write #3047
 * iOS
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
@@ -138,10 +186,6 @@ Version 7.45.1 - 2026-08-28
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
-  - fix IGC download aborting mid-file by restarting from the selected
-    record after a lost frame or a non-standard NACK, and re-entering
-    binary mode if the logger dropped it while the flight list was
-    open #3049
 * glide computer
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
