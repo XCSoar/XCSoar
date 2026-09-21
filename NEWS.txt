@@ -79,7 +79,7 @@ Version 7.46 - not yet released
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
 * airspace
-  - keep airspace altitude labels from covering each other #771
+  - keep airspace altitude labels readable when they would overlap #771
   - fill airspaces with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
   - improve stable OpenGL airspace fills and padding while preserving
