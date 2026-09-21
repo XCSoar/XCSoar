@@ -257,8 +257,9 @@
     max-height: 100mm;
 }
 
-/* Tables of screenshots share the page width between their columns. */
-.print-page-body table:has(img) {
+/* Tables of screenshots share the page width between their columns;
+   icons with an explicit width keep it. */
+.print-page-body table:has(img:not([width])) {
     table-layout: fixed;
     width: 100%;
 }
@@ -267,7 +268,7 @@
     display: block;
 }
 
-.print-page-body table img {
+.print-page-body table img:not([width]) {
     width: 100%;
     height: auto;
 }

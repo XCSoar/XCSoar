@@ -40,6 +40,12 @@ export default defineAppConfig({
                     icon: 'size-5',
                 },
             },
+            // Tables take the width of their content, not the whole page.
+            table: {
+                slots: {
+                    base: 'w-auto max-w-full',
+                },
+            },
             fieldGroup: {
                 base: 'my-5 space-y-4 divide-y-0',
             },
