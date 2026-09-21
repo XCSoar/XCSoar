@@ -31,16 +31,16 @@ const CHAPTERS = {
     '02.installation': 'installation.tex',
     '03.user-interface': 'ch02_user_interface.tex',
     '04.navigation': 'ch03_navigation.tex',
-    '05.cross-country-tasks': 'ch04_xc_tasks.tex',
+    '05.tasks': 'ch04_xc_tasks.tex',
     '06.glide-computer': 'ch05_glide_computer.tex',
-    '07.atmosphere-and-instruments': 'ch06_atmosphere_and_instruments.tex',
+    '07.atmosphere': 'ch06_atmosphere_and_instruments.tex',
     '08.airspace': 'ch07_airspace_and_flarm.tex',
     '09.integration': 'integration.tex',
     '10.avionics-and-airframe': 'ch08_avionics_and_airframe.tex',
     '11.quickstart': 'ch09_quickstart.tex',
     '12.configuration': 'ch11_configuration.tex',
     '13.data-files': 'ch12_data_files.tex',
-    '14.history-development': 'ch13_history.tex',
+    '14.history': 'ch13_history.tex',
 };
 
 function git(...args) {

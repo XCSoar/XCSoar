@@ -206,7 +206,7 @@ Straight to the chapter you need
   icon: i-lucide-route
   title: Cross Country Tasks
   description: Ordered, goto and abort tasks, the task manager and flight analysis.
-  to: /manual/cross-country-tasks/task-modes
+  to: /manual/tasks/task-modes
   ---
   :::
 

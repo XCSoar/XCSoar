@@ -5,7 +5,7 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/XCSoar-manual.tex"
   },
-  "1.manual/01.introduction/1.organization-of-this-manual.md": {
+  "1.manual/01.introduction/1.about.md": {
     "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
     "date": "2025-08-20",
     "author": "Eric Carden",
@@ -119,7 +119,7 @@
     "author": "Max Kellermann",
     "source": "doc/manual/en/ch02_user_interface.tex"
   },
-  "1.manual/03.user-interface/08.dialogs.md": {
+  "1.manual/03.user-interface/08.dialogues.md": {
     "commit": "ebc7eb17358782c4b5c87b693a2c519f17ad8699",
     "date": "2019-10-03",
     "author": "MLEP",
@@ -149,13 +149,13 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch02_user_interface.tex"
   },
-  "1.manual/04.navigation/01.map-display-elements.md": {
+  "1.manual/04.navigation/01.map-elements.md": {
     "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
     "date": "2019-10-12",
     "author": "MLEP",
     "source": "doc/manual/en/ch03_navigation.tex"
   },
-  "1.manual/04.navigation/02.glider-symbol-map-orientation.md": {
+  "1.manual/04.navigation/02.map-orientation.md": {
     "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
     "date": "2011-02-20",
     "author": "Helmut J. Rohs",
@@ -167,7 +167,7 @@
     "author": "MLEP",
     "source": "doc/manual/en/ch03_navigation.tex"
   },
-  "1.manual/04.navigation/04.panning-the-map.md": {
+  "1.manual/04.navigation/04.pan-mode.md": {
     "commit": "51f194efff73f134d17bb2c14de1c80139569dce",
     "date": "2019-10-12",
     "author": "MLEP",
@@ -221,7 +221,7 @@
     "author": "Eric Carden",
     "source": "doc/manual/en/ch03_navigation.tex"
   },
-  "1.manual/04.navigation/13.status-tabs-flight-and-time.md": {
+  "1.manual/04.navigation/13.status-flight-time.md": {
     "commit": "0b79fe23771b455db009ba13046d566e41ae77b3",
     "date": "2025-06-26",
     "author": "Andres Totorica",
@@ -233,109 +233,109 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch03_navigation.tex"
   },
-  "1.manual/05.cross-country-tasks/00.task-modes.md": {
+  "1.manual/05.tasks/00.task-modes.md": {
     "commit": "2747749a37af7788e752c30f1223d9c98e8cbad6",
     "date": "2019-02-04",
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/01.goto-tasks.md": {
+  "1.manual/05.tasks/01.goto-tasks.md": {
     "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
     "date": "2019-07-17",
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/02.editing-tasks.md": {
+  "1.manual/05.tasks/02.editing-tasks.md": {
     "commit": "ab993ca35cb86fe773358df583fa20d5a51f1973",
     "date": "2025-10-23",
     "author": "Benjamin Girard",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/03.waypoint-information.md": {
+  "1.manual/05.tasks/03.waypoint-information.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/04.waypoint-selector-dialogue.md": {
+  "1.manual/05.tasks/04.waypoint-selector.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/05.task-manager.md": {
+  "1.manual/05.tasks/05.task-manager.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/06.task-types.md": {
+  "1.manual/05.tasks/06.task-types.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/07.turn-points-task-rules.md": {
+  "1.manual/05.tasks/07.task-rules.md": {
     "commit": "902705397bcc93910a18611e9b0106f941b9c542",
     "date": "2026-08-22",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/08.start-a-task.md": {
+  "1.manual/05.tasks/08.start-a-task.md": {
     "commit": "9d79827d481986471d98a76b83b6ef3a07cc7100",
     "date": "2019-12-26",
     "author": "MLEP",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/09.advancing-and-restarting-tasks.md": {
+  "1.manual/05.tasks/09.advancing-tasks.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/10.alternate-starts.md": {
+  "1.manual/05.tasks/10.alternate-starts.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/11.abort-resume-the-task-and-alternates.md": {
+  "1.manual/05.tasks/11.abort-and-alternates.md": {
     "commit": "902705397bcc93910a18611e9b0106f941b9c542",
     "date": "2026-08-22",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/12.task-status.md": {
+  "1.manual/05.tasks/12.task-status.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/13.assigned-area-tasks.md": {
+  "1.manual/05.tasks/13.assigned-area-tasks.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/14.contest.md": {
+  "1.manual/05.tasks/14.contest.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/15.logger.md": {
+  "1.manual/05.tasks/15.logger.md": {
     "commit": "1d128ac24910558c6f3f91fe4e076da52d8496a9",
     "date": "2026-07-15",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/16.flight-analysis.md": {
+  "1.manual/05.tasks/16.flight-analysis.md": {
     "commit": "9d79827d481986471d98a76b83b6ef3a07cc7100",
     "date": "2019-12-26",
     "author": "MLEP",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
-  "1.manual/05.cross-country-tasks/17.sunlight-and-time.md": {
+  "1.manual/05.tasks/17.sunlight-and-time.md": {
     "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
     "date": "2015-08-18",
     "author": "Max Kellermann",
@@ -353,7 +353,7 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
-  "1.manual/06.glide-computer/03.thermal-next-leg-equivalent.md": {
+  "1.manual/06.glide-computer/03.next-leg-equivalent.md": {
     "commit": "25b2bbc24df242b8bcebf18e4247d83251a4523b",
     "date": "2026-09-11",
     "author": "Philipp Wollschlegel",
@@ -365,7 +365,7 @@
     "author": "MLEP",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
-  "1.manual/06.glide-computer/05.flight-setup-dialogue.md": {
+  "1.manual/06.glide-computer/05.flight-setup.md": {
     "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
     "date": "2019-12-30",
     "author": "MLEP",
@@ -401,7 +401,7 @@
     "author": "MLEP",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
-  "1.manual/06.glide-computer/11.display-of-required-altitude-difference.md": {
+  "1.manual/06.glide-computer/11.altitude-difference.md": {
     "commit": "78de380b707549e4f5084a0ef5bc61bfb6a66b32",
     "date": "2025-08-20",
     "author": "Eric Carden",
@@ -425,7 +425,7 @@
     "author": "Eric Carden",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
-  "1.manual/06.glide-computer/15.analysis-dialogue.md": {
+  "1.manual/06.glide-computer/15.analysis.md": {
     "commit": "ec8102a32ef3e5b1f7f3b56eb9f0cd3631647885",
     "date": "2019-12-30",
     "author": "MLEP",
@@ -437,97 +437,97 @@
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/00.atmospheric-model.md": {
+  "1.manual/07.atmosphere/00.atmospheric-model.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/01.variometer.md": {
+  "1.manual/07.atmosphere/01.variometer.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/02.audio-variometer.md": {
+  "1.manual/07.atmosphere/02.audio-variometer.md": {
     "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
     "date": "2019-07-17",
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/03.air-data-inputs.md": {
+  "1.manual/07.atmosphere/03.air-data-inputs.md": {
     "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
     "date": "2011-02-20",
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/04.wind-display.md": {
+  "1.manual/07.atmosphere/04.wind-display.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/05.wind-estimation.md": {
+  "1.manual/07.atmosphere/05.wind-estimation.md": {
     "commit": "5f8deb787de7239a41b92549b12f8cd4e38fa773",
     "date": "2026-02-06",
     "author": "bomilkar",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/06.wind-settings-dialogue.md": {
+  "1.manual/07.atmosphere/06.wind-settings.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/07.thermal-profile.md": {
+  "1.manual/07.atmosphere/07.thermal-profile.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/08.thermal-locator.md": {
+  "1.manual/07.atmosphere/08.thermal-locator.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/09.thermal-assistant.md": {
+  "1.manual/07.atmosphere/09.thermal-assistant.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/10.convection-forecast.md": {
+  "1.manual/07.atmosphere/10.convection-forecast.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/11.analysis-dialogue.md": {
+  "1.manual/07.atmosphere/11.analysis.md": {
     "commit": "ab91867f277ad77b14c5d1c17ca9750a1a608574",
     "date": "2014-01-02",
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/12.weather-metar-taf.md": {
+  "1.manual/07.atmosphere/12.metar-taf.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/13.weather-forecast-rasp.md": {
+  "1.manual/07.atmosphere/13.rasp.md": {
     "commit": "b5e06b5736e94634b6137b11cb2610f09743e3e3",
     "date": "2026-07-20",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/14.weather-forecast-edl-soaring.md": {
+  "1.manual/07.atmosphere/14.edl-soaring.md": {
     "commit": "5be7ee2e8e29df5fb4e15db1827302fb4170fced",
     "date": "2026-03-15",
     "author": "Benjamin Girard",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
-  "1.manual/07.atmosphere-and-instruments/15.pc-met-deutscher-wetterdienst.md": {
+  "1.manual/07.atmosphere/15.pc-met.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
     "author": "MLEP",
@@ -551,13 +551,13 @@
     "author": "MLEP",
     "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
   },
-  "1.manual/08.airspace/3.airspace-query-and-details.md": {
+  "1.manual/08.airspace/3.airspace-details.md": {
     "commit": "b82f9d47e4361ad78dbe63598048c4298378678f",
     "date": "2020-02-02",
     "author": "MLEP",
     "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
   },
-  "1.manual/08.airspace/4.analysis-dialogue.md": {
+  "1.manual/08.airspace/4.analysis.md": {
     "commit": "e14f805d97328f7766f4fa8fc75f916f0cb584f9",
     "date": "2019-07-17",
     "author": "Bruce Duncan",
@@ -575,13 +575,13 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
   },
-  "1.manual/09.integration/1.building-an-xcsoar-system.md": {
+  "1.manual/09.integration/1.building-a-system.md": {
     "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
     "date": "2019-07-17",
     "author": "Bruce Duncan",
     "source": "doc/manual/en/integration.tex"
   },
-  "1.manual/09.integration/2.exemplary-xcsoar-system-setups.md": {
+  "1.manual/09.integration/2.example-setups.md": {
     "commit": "898ece4dc116c702dce8a18fb40d86f8bb3d661a",
     "date": "2026-02-10",
     "author": "Philipp Wollschlegel",
@@ -611,7 +611,7 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
   },
-  "1.manual/10.avionics-and-airframe/4.vega-switch-dialogue.md": {
+  "1.manual/10.avionics-and-airframe/4.vega-switch.md": {
     "commit": "ab91867f277ad77b14c5d1c17ca9750a1a608574",
     "date": "2014-01-02",
     "author": "Helmut J. Rohs",
@@ -635,7 +635,7 @@
     "author": "Fabian Bartschke",
     "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
   },
-  "1.manual/10.avionics-and-airframe/8.managing-external-devices.md": {
+  "1.manual/10.avionics-and-airframe/8.external-devices.md": {
     "commit": "e95da2232a9e0ee3f2bbc3866aed4a65764f1a7f",
     "date": "2020-02-04",
     "author": "MLEP",
@@ -653,7 +653,7 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch09_quickstart.tex"
   },
-  "1.manual/11.quickstart/3.aat-task-manual-arm.md": {
+  "1.manual/11.quickstart/3.aat-task.md": {
     "commit": "b2ae619d507419cd92f0fb629dc078a5b36be9fe",
     "date": "2019-07-17",
     "author": "Bruce Duncan",
@@ -743,7 +743,7 @@
     "author": "Pascal BAZILE",
     "source": "doc/manual/en/ch12_data_files.tex"
   },
-  "1.manual/13.data-files/05.airfields-or-waypoint-details.md": {
+  "1.manual/13.data-files/05.waypoint-details.md": {
     "commit": "ab993ca35cb86fe773358df583fa20d5a51f1973",
     "date": "2025-10-23",
     "author": "Benjamin Girard",
@@ -797,31 +797,31 @@
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch12_data_files.tex"
   },
-  "1.manual/14.history-development/1.product-history.md": {
+  "1.manual/14.history/1.product-history.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/ch13_history.tex"
   },
-  "1.manual/14.history-development/2.contribute.md": {
+  "1.manual/14.history/2.contribute.md": {
     "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
     "date": "2025-08-20",
     "author": "Eric Carden",
     "source": "doc/manual/en/ch13_history.tex"
   },
-  "1.manual/14.history-development/3.open-source.md": {
+  "1.manual/14.history/3.open-source.md": {
     "commit": "efed0ee2e70881c6ce670f32ab8c0b34194cac1a",
     "date": "2013-05-26",
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch13_history.tex"
   },
-  "1.manual/14.history-development/4.development.md": {
+  "1.manual/14.history/4.development.md": {
     "commit": "efed0ee2e70881c6ce670f32ab8c0b34194cac1a",
     "date": "2013-05-26",
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch13_history.tex"
   },
-  "1.manual/14.history-development/5.user-base.md": {
+  "1.manual/14.history/5.user-base.md": {
     "commit": "59cfe2e1327b86f3eabbe33c98c9675e178e0594",
     "date": "2012-04-01",
     "author": "Helmut J. Rohs",
@@ -845,7 +845,7 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/3.finish-configuration-setup.md": {
+  "2.quick-guide/3.finish-configuration.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",

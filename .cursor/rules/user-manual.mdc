@@ -49,9 +49,9 @@ APIs; those belong in `docs/content/5.dev/` and under `* development` in
 | Install / platforms | `1.manual/02.installation/` |
 | UI, menus, gestures | `1.manual/03.user-interface/` |
 | Navigation, map, Goto | `1.manual/04.navigation/` |
-| Tasks | `1.manual/05.cross-country-tasks/` |
+| Tasks | `1.manual/05.tasks/` |
 | MacCready, polar, final glide | `1.manual/06.glide-computer/` |
-| Atmosphere, thermal, wind | `1.manual/07.atmosphere-and-instruments/` |
+| Atmosphere, thermal, wind | `1.manual/07.atmosphere/` |
 | Airspace, FLARM, traffic | `1.manual/08.airspace/` |
 | Third-party devices | `1.manual/09.integration/` |
 | Devices, radios, logger | `1.manual/10.avionics-and-airframe/` |
