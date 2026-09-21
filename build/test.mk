@@ -3084,6 +3084,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
+	$(SRC)/Dialogs/Analysis/AnalysisPages.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/CrossSection/AirspaceXSRenderer.cpp \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \

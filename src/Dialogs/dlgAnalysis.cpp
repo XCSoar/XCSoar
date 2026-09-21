@@ -2,8 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Dialogs/dlgAnalysis.hpp"
-#include "Dialogs/Dialogs.h"
-#include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
+#include "Dialogs/Analysis/AnalysisPages.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/Widget.hpp"
 #include "Form/Form.hpp"
@@ -672,44 +671,7 @@ AnalysisWidget::KeyPress(unsigned key_code) noexcept
 inline void
 AnalysisWidget::OnCalcClicked()
 {
-  switch (page) {
-  case AnalysisPage::BAROGRAPH:
-    dlgBasicSettingsShowModal();
-    break;
-
-  case AnalysisPage::CLIMB:
-  case AnalysisPage::TASK:
-  case AnalysisPage::TASK_SPEED:
-    dlgStatusShowModal(2);
-    break;
-
-  case AnalysisPage::WIND:
-    ShowWindSettingsDialog();
-    break;
-
-  case AnalysisPage::POLAR:
-    dlgBasicSettingsShowModal();
-    break;
-
-  case AnalysisPage::TEMPTRACE:
-    dlgBasicSettingsShowModal();
-    break;
-
-  case AnalysisPage::MACCREADY:
-    dlgBasicSettingsShowModal();
-    break;
-
-  case AnalysisPage::AIRSPACE:
-    dlgAirspaceWarningsShowModal(glide_computer.GetAirspaceWarnings());
-    break;
-
-  case AnalysisPage::THERMAL_BAND:
-  case AnalysisPage::VARIO_HISTOGRAM:
-  case AnalysisPage::CONTEST:
-  case AnalysisPage::COUNT:
-    break;
-  }
-
+  OpenAnalysisPageDetails(page, glide_computer);
   Update();
 }
 
