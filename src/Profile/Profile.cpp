@@ -24,6 +24,9 @@
 
 static AllocatedPath startProfileFile = nullptr;
 
+/** True after Load() has been called for startProfileFile. */
+static bool loaded = false;
+
 static AllocatedPath
 BuildProfilePath(Path base_name) noexcept
 {
@@ -37,12 +40,21 @@ Profile::GetPath() noexcept
 }
 
 void
+Profile::Clear() noexcept
+{
+  map.Clear();
+  SetModified(false);
+  loaded = false;
+}
+
+void
 Profile::Load() noexcept
 {
   assert(startProfileFile != nullptr);
 
   LogString("Loading profiles");
   LoadFile(startProfileFile);
+  loaded = true;
   SetModified(false);
 }
 
@@ -60,6 +72,12 @@ Profile::LoadFile(Path path) noexcept
 void
 Profile::Save() noexcept
 {
+  if (!loaded) {
+    if (startProfileFile != nullptr)
+      LogString("Skipping profile save: profile was never loaded");
+    return;
+  }
+
   if (!IsModified())
     return;
 
@@ -86,9 +104,10 @@ Profile::SaveFile(Path path)
 void
 Profile::SetFiles(Path override_path) noexcept
 {
-  /* set the "modified" flag, because we are potentially saving to a
-     new file now */
-  SetModified(true);
+  /* only dirty the map after Load(): SetFiles() from -profile= runs
+     while the map is still empty, and Save() must not persist that */
+  if (loaded)
+    SetModified(true);
 
   if (override_path != nullptr) {
     if (override_path.IsBase()) {
