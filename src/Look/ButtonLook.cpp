@@ -6,9 +6,10 @@
 #include "Asset.hpp"
 
 void
-ButtonLook::Initialise(const Font &_font, bool dark_mode)
+ButtonLook::Initialise(const Font &_font, bool _dark_mode)
 {
   font = &_font;
+  dark_mode = _dark_mode;
 
   if (dark_mode) {
     standard.foreground_color = COLOR_WHITE;

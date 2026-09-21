@@ -32,7 +32,7 @@ UsePixelPan() noexcept
 
 ListControl::ListControl(const DialogLook &_look) noexcept
   :look(_look),
-   scroll_bar(look.button)
+   scroll_bar(*this, look.button)
 {
 }
 
@@ -341,6 +341,7 @@ ListControl::SetPixelPan(unsigned _pixel_pan) noexcept
     return;
 
   pixel_pan = _pixel_pan;
+  scroll_bar.NotifyScroll();
   Invalidate();
 }
 
@@ -359,6 +360,8 @@ ListControl::SetOrigin(int i) noexcept
     return;
 
   origin = i;
+
+  scroll_bar.NotifyScroll();
 
   Invalidate();
 }
@@ -476,7 +479,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      p.x >= 0 && p.x <= ((int)GetSize().width - scroll_bar.GetWidth())) {
+      p.x >= 0 && p.x <= (int)scroll_bar.GetLeft(GetSize())) {
     drag_end();
     ActivateItem();
     return true;
@@ -514,6 +517,10 @@ ListControl::drag_end() noexcept
   pending_cursor = -1;
   drag_scrolled = false;
 
+  /* the fade-out of the overlay starts here, not at the last pixel
+     the content moved */
+  scroll_bar.ReleaseOverlay();
+
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
       InvalidateItem(cursor);
@@ -526,6 +533,11 @@ ListControl::drag_end() noexcept
 bool
 ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (!scroll_bar.IsDragging() && drag_mode == DragMode::NONE)
+    /* a move with no drag in progress is a hover: let the overlay
+       grow under the pointer */
+    scroll_bar.NotifyMouseMove(p);
+
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
@@ -630,6 +642,9 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     }
     if (UsePixelPan())
       kinetic.MouseDown(GetPixelOrigin());
+
+    /* keep the overlay standing for the whole drag */
+    scroll_bar.HoldOverlay();
     SetCapture();
   }
 
@@ -681,6 +696,7 @@ void
 ListControl::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
+  scroll_bar.HideOverlay();
 
   PaintWindow::OnDestroy();
 }

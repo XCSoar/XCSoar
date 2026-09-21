@@ -37,6 +37,8 @@ UISettings::SetDefaults() noexcept
   dark_mode = DarkMode::AUTO;
 #endif
 
+  scroll_bars = ScrollBars::AUTO;
+
   format.SetDefaults();
   map.SetDefaults();
   info_boxes.SetDefaults();
