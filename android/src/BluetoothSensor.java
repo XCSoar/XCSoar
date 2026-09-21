@@ -38,12 +38,34 @@ public final class BluetoothSensor
   private final SensorListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
+  /** kept for reconnecting after a failed connection attempt */
+  private final Context context;
+  private final BluetoothDevice device;
+  private final boolean autoConnect;
+
   private BluetoothGatt gatt;
   private volatile boolean shutdown = false;
 
   private int state = STATE_LIMBO;
   private boolean reached_ready = false;
-  private boolean initial_retry_used = false;
+
+  /**
+   * Android drops the first connection attempt to a BLE device often
+   * enough that treating it as fatal is wrong: reporting a failure
+   * makes DeviceDescriptor::OnSysTicker() close the whole device and
+   * reopen it seconds later, which the pilot sees as an error message
+   * followed by a connection that works anyway.  Retry in place
+   * instead, and only give up once the device has had its chances.
+   */
+  private static final int MAX_CONNECT_RETRIES = 2;
+  private int connectRetries = 0;
+
+  /**
+   * Has this object ever reached STATE_CONNECTED?  A drop before that
+   * is a failed attempt and worth retrying; one after it is the
+   * device going away, which is not.
+   */
+  private boolean everConnected = false;
 
   private BluetoothGattCharacteristic currentEnableNotification;
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
@@ -73,6 +95,9 @@ public final class BluetoothSensor
     throws IOException
   {
     this.listener = listener;
+    this.context = context;
+    this.device = device;
+    this.autoConnect = autoConnect;
 
     /**
      * Run GATT connect on the main thread on API 23+: some Android
@@ -488,35 +513,75 @@ public final class BluetoothSensor
     }
   }
 
+  /**
+   * Close the failed connection and ask for a new one.  Android needs
+   * the old client interface released before it will hand out
+   * another, so the close is not optional.
+   */
+  private void retryConnect() {
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+      @Override
+      public void run() {
+        if (!safeDestruct.increment())
+          /* close() got there first */
+          return;
+
+        try {
+          if (gatt != null) {
+            gatt.close();
+            gatt = null;
+          }
+
+          try {
+            connectGatt(context, device, autoConnect);
+          } catch (IOException e) {
+            submitError(e.getMessage() != null
+                        ? e.getMessage()
+                        : "Bluetooth GATT connect failed");
+          }
+        } finally {
+          safeDestruct.decrement();
+        }
+      }
+    });
+  }
+
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
     if (shutdown)
       return;
 
-    if (BluetoothProfile.STATE_CONNECTED == newState) {
+    if (BluetoothProfile.STATE_CONNECTED == newState &&
+        BluetoothGatt.GATT_SUCCESS == status) {
+      everConnected = true;
+      connectRetries = 0;
+
       if (Build.VERSION.SDK_INT >= 21)
         gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
       if (!gatt.discoverServices())
         submitError("Discovering GATT services request failed");
+
       return;
     }
 
-    /* Heart-rate bands often drop the first attempt (status 147
-       timeout).  Retry that once; later drops use the normal
-       failure path. */
-    if (BluetoothProfile.STATE_DISCONNECTED == newState) {
-      if (!reached_ready && !initial_retry_used) {
-        initial_retry_used = true;
-        Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
-              ", retrying initial connect");
-        if (!gatt.connect())
-          submitError("GATT disconnected");
-        else
-          setStateSafe(STATE_LIMBO);
-      } else
-        submitError("GATT disconnected");
+    if (BluetoothProfile.STATE_DISCONNECTED != newState)
+      /* CONNECTING or DISCONNECTING: on the way somewhere, and not a
+         state worth reporting either way */
+      return;
+
+    if (!everConnected && status != BluetoothGatt.GATT_SUCCESS &&
+        connectRetries < MAX_CONNECT_RETRIES) {
+      ++connectRetries;
+      Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
+            ", retrying initial connect");
+      retryConnect();
+      return;
     }
+
+    submitError(BluetoothGatt.GATT_SUCCESS == status
+                ? "GATT disconnected"
+                : "GATT connection failed (status " + status + ")");
   }
 
   @Override
