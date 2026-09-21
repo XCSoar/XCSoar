@@ -151,6 +151,17 @@ CheckForwardTimeJump()
 }
 
 static void
+CheckBackwardTimeJump()
+{
+  const auto result =
+    DetectIGCFlightTimes(Path("test/data/flight_times_backward_jump.igc"));
+  ok1(result.has_valid_fixes);
+  ok1(result.takeoff == BrokenTime(14, 0, 0));
+  ok1(result.landing == BrokenTime(14, 0, 1));
+  ok1(result.duration == std::chrono::seconds(1));
+}
+
+static void
 CheckMultipleFlights()
 {
   const auto result =
@@ -171,7 +182,7 @@ CheckBundledFlight(Path path)
 int
 main()
 try {
-  plan_tests(50);
+  plan_tests(54);
   CheckFixAdapter();
   CheckCalculated();
   CheckFallback();
@@ -180,6 +191,7 @@ try {
   CheckFileError();
   CheckMidnight();
   CheckForwardTimeJump();
+  CheckBackwardTimeJump();
   CheckMultipleFlights();
   CheckBundledFlight(Path("test/data/01lz1hq1.igc"));
   CheckBundledFlight(Path("test/data/0asljd01.igc"));
