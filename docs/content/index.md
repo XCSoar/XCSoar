@@ -195,7 +195,7 @@ Straight to the chapter you need
   icon: i-lucide-route
   title: Cross Country Tasks
   description: Ordered, goto and abort tasks, the task manager and flight analysis.
-  to: /manual/cross-country-tasks/overview
+  to: /manual/cross-country-tasks/task-modes
   ---
   :::
 
@@ -213,7 +213,7 @@ Straight to the chapter you need
   icon: i-lucide-shield-alert
   title: Airspace and Traffic
   description: Airspace display and warnings, FLARM traffic and team flying.
-  to: /manual/airspace/airspace-display
+  to: /manual/airspace/capabilities
   ---
   :::
 

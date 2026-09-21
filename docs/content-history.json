@@ -71,10 +71,10 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/installation.tex"
   },
-  "1.manual/03.user-interface/00.interface-overview.md": {
-    "commit": "99b59400052f40705b774b649e45539798e9892b",
-    "date": "2026-08-02",
-    "author": "Philipp Wollschlegel",
+  "1.manual/03.user-interface/00.concepts.md": {
+    "commit": "1f1355c6d55dd01b1d4fe0f1ceebc1d444bc6ec5",
+    "date": "2025-08-20",
+    "author": "Eric Carden",
     "source": "doc/manual/en/ch02_user_interface.tex"
   },
   "1.manual/03.user-interface/01.display-elements.md": {
@@ -233,10 +233,10 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/ch03_navigation.tex"
   },
-  "1.manual/05.cross-country-tasks/00.overview.md": {
-    "commit": "902705397bcc93910a18611e9b0106f941b9c542",
-    "date": "2026-08-22",
-    "author": "Philipp Wollschlegel",
+  "1.manual/05.cross-country-tasks/00.task-modes.md": {
+    "commit": "2747749a37af7788e752c30f1223d9c98e8cbad6",
+    "date": "2019-02-04",
+    "author": "Bruce Duncan",
     "source": "doc/manual/en/ch04_xc_tasks.tex"
   },
   "1.manual/05.cross-country-tasks/01.goto-tasks.md": {
@@ -437,6 +437,12 @@
     "author": "Helmut J. Rohs",
     "source": "doc/manual/en/ch05_glide_computer.tex"
   },
+  "1.manual/07.atmosphere-and-instruments/00.atmospheric-model.md": {
+    "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
+    "date": "2019-12-31",
+    "author": "MLEP",
+    "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
+  },
   "1.manual/07.atmosphere-and-instruments/01.variometer.md": {
     "commit": "3cf5da71086e79e47e338e62bf0b5685c2fb9f41",
     "date": "2019-12-31",
@@ -527,6 +533,12 @@
     "author": "MLEP",
     "source": "doc/manual/en/ch06_atmosphere_and_instruments.tex"
   },
+  "1.manual/08.airspace/0.capabilities.md": {
+    "commit": "633e18330ed9685b778e4a2c66e234b23c065b2f",
+    "date": "2025-06-13",
+    "author": "Benjamin Girard",
+    "source": "doc/manual/en/ch07_airspace_and_flarm.tex"
+  },
   "1.manual/08.airspace/1.airspace-display.md": {
     "commit": "8ff36a793fcc41cd9525bedc69b5f36edcdff1eb",
     "date": "2026-06-20",
@@ -574,6 +586,12 @@
     "date": "2026-02-10",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/integration.tex"
+  },
+  "1.manual/10.avionics-and-airframe/0.aircraft-integration.md": {
+    "commit": "bc0e1b44c068652b4fc434e9d4cefab14914b184",
+    "date": "2011-02-20",
+    "author": "Helmut J. Rohs",
+    "source": "doc/manual/en/ch08_avionics_and_airframe.tex"
   },
   "1.manual/10.avionics-and-airframe/1.battery-life.md": {
     "commit": "f4eae815a8a58e875909b3a226eb6a3ee7898eb4",
