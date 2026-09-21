@@ -164,6 +164,9 @@ function pageCommit(relative) {
             return { file, commit: fileCommit(file) };
         }
         const file = `${MANUAL_DIR}/${CHAPTERS[rest[0]]}`;
+        // A page numbered 0 holds the text between \\chapter and the
+        // first \\section.
+        if (/^0+\./.test(rest[1])) return { file, commit: rangeCommit(file, '\\\\chapter{', '^\\\\section') };
         const commit = sectionCommit(file, [page.title, ...page.headings]);
         if (!commit) console.warn(`[FILE] ${relative}: no section matches, using the whole file`);
         return { file, commit: commit ?? fileCommit(file) };
