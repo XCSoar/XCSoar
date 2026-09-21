@@ -5,31 +5,35 @@
 
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
-#include "time/BrokenTime.hpp"
 #include "thread/Mutex.hxx"
 #include "Job/Async.hpp"
 #include "Operation/Operation.hpp"
 
+#include <chrono>
 #include <deque>
-#include <vector>
 #include <memory>
+#include <optional>
+#include <vector>
 
 namespace UI { class DelayedNotify; class Notify; }
+
+/**
+ * One scanned IGC file. @c detected is set only when both takeoff and
+ * landing were found. @c duration is then the time between those two.
+ */
+struct IgcCachedFlight {
+  std::chrono::seconds duration{};
+  bool detected{false};
+};
 
 class IgcMetaCache {
   class FillJob;
 
-  struct Meta {
-    bool has_start{false};
-    bool has_end{false};
-    BrokenTime start;
-    BrokenTime end;
-  };
-
   struct CacheEntry {
     AllocatedPath path;
-    Meta meta;
     StaticString<64> text;
+    std::chrono::seconds duration{};
+    bool detected{false};
   };
 
   mutable Mutex cache_mutex;
@@ -39,8 +43,10 @@ class IgcMetaCache {
   std::unique_ptr<FillJob> fill_job;
 
   CacheEntry ParseEntry(Path path, OperationEnvironment &env);
+  CacheEntry *FindUnlocked(Path path) noexcept;
   CacheEntry *Find(Path path) noexcept;
   void Insert(CacheEntry entry);
+  void JoinFill() noexcept;
 
 public:
   IgcMetaCache();
@@ -53,6 +59,9 @@ public:
    * are never relocated or removed.
    */
   const char *GetCompactInfoPtr(Path path) noexcept;
+
+  /** Empty until this file has been scanned. */
+  std::optional<IgcCachedFlight> GetFlight(Path path) noexcept;
 
   void StartBackgroundFill(std::vector<AllocatedPath> paths,
                            UI::DelayedNotify *progress_notify,

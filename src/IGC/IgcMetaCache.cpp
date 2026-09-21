@@ -55,23 +55,20 @@ IgcMetaCache::ParseEntry(Path path, OperationEnvironment &env)
 
   try {
     const auto times = DetectIGCFlightTimes(path, &env);
-    entry.meta.has_start = times.has_valid_fixes;
-    entry.meta.has_end = times.has_valid_fixes;
-    if (times.has_valid_fixes)
-      entry.meta.start = times.takeoff;
-    if (times.has_valid_fixes)
-      entry.meta.end = times.landing;
+    entry.detected = times.takeoff_detected && times.landing_detected;
+    if (entry.detected)
+      entry.duration = times.duration;
 
-    if (entry.meta.has_start && entry.meta.has_end) {
+    if (times.has_valid_fixes) {
       StaticString<32> lbuf;
       lbuf.Format("%02u:%02u - %02u:%02u",
-                  (unsigned)entry.meta.start.hour,
-                  (unsigned)entry.meta.start.minute,
-                  (unsigned)entry.meta.end.hour,
-                  (unsigned)entry.meta.end.minute);
+                  (unsigned)times.takeoff.hour,
+                  (unsigned)times.takeoff.minute,
+                  (unsigned)times.landing.hour,
+                  (unsigned)times.landing.minute);
       entry.text = lbuf.c_str();
 
-      auto dur = FormatTimespanSmart(times.duration, 2);
+      const auto dur = FormatTimespanSmart(times.duration, 2);
       entry.text.append(" (");
       entry.text.append(dur.c_str());
       entry.text.append(")");
@@ -86,24 +83,28 @@ IgcMetaCache::ParseEntry(Path path, OperationEnvironment &env)
 }
 
 IgcMetaCache::CacheEntry *
+IgcMetaCache::FindUnlocked(Path path) noexcept
+{
+  for (auto &e : cache)
+    if (e.path == path)
+      return &e;
+
+  return nullptr;
+}
+
+IgcMetaCache::CacheEntry *
 IgcMetaCache::Find(Path path) noexcept
 {
   const std::lock_guard lock{cache_mutex};
-  for (auto &e : cache) {
-    if (e.path == path)
-      return &e;
-  }
-
-  return nullptr;
+  return FindUnlocked(path);
 }
 
 void
 IgcMetaCache::Insert(CacheEntry entry)
 {
   const std::lock_guard lock{cache_mutex};
-  for (const auto &e : cache)
-    if (e.path == entry.path)
-      return;
+  if (FindUnlocked(entry.path) != nullptr)
+    return;
 
   cache.push_back(std::move(entry));
 }
@@ -113,6 +114,16 @@ IgcMetaCache::GetCompactInfoPtr(Path path) noexcept
 {
   CacheEntry *entry = Find(path);
   return entry != nullptr ? entry->text.c_str() : nullptr;
+}
+
+std::optional<IgcCachedFlight>
+IgcMetaCache::GetFlight(Path path) noexcept
+{
+  const CacheEntry *entry = Find(path);
+  if (entry == nullptr)
+    return std::nullopt;
+
+  return IgcCachedFlight{entry->duration, entry->detected};
 }
 
 void
@@ -134,12 +145,11 @@ IgcMetaCache::StartBackgroundFill(std::vector<AllocatedPath> paths,
 }
 
 void
-IgcMetaCache::CancelBackgroundFill() noexcept
+IgcMetaCache::JoinFill() noexcept
 {
   if (!async.IsBusy())
     return;
 
-  async.Cancel();
   try {
     async.Wait();
   } catch (const OperationCancelled &) {
@@ -148,6 +158,16 @@ IgcMetaCache::CancelBackgroundFill() noexcept
   }
 
   fill_job.reset();
+}
+
+void
+IgcMetaCache::CancelBackgroundFill() noexcept
+{
+  if (!async.IsBusy())
+    return;
+
+  async.Cancel();
+  JoinFill();
 }
 
 void
@@ -162,12 +182,5 @@ IgcMetaCache::PollBackgroundFill() noexcept
   if (!async.IsBusy() || !async.HasFinished())
     return;
 
-  try {
-    async.Wait();
-  } catch (const OperationCancelled &) {
-  } catch (...) {
-    LogError(std::current_exception(), "IGC metadata worker failed");
-  }
-
-  fill_job.reset();
+  JoinFill();
 }
