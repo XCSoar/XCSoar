@@ -1113,7 +1113,7 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
   (not only the main binary); see `.cursor/rules/pr-compilation.mdc`
 - Check for accidentally committed debug code or temporary files
 - Verify all user-visible changes have corresponding NEWS.txt entries
-- Update `doc/manual/en/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
+- Update `docs/content/1.manual/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
 - When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
 - Follow `.cursor/rules/news.txt.mdc` for NEWS.txt wording and audience
 - When adding Android drawable resources, register the copy rule in `build/android.mk`

@@ -12,8 +12,8 @@ overlays, dialogs, and in-flight safety, read **User interface guidelines**
 in that file (NASA colour usage, FAA EFB DOT/FAA/AR-03/67, ICAO Annex 4).
 Index of other developer docs: `.cursor/rules/developer-docs.mdc`.
 
-User-facing behaviour: update `doc/manual/en/` (not `doc/*.rst`) and
-`NEWS.txt`. See `.cursor/rules/user-manual.mdc`.
+User-facing behaviour: update `docs/content/1.manual/` (not
+`docs/content/5.dev/`) and `NEWS.txt`. See `.cursor/rules/user-manual.mdc`.
 
 ## Always
 
@@ -31,8 +31,8 @@ User-facing behaviour: update `doc/manual/en/` (not `doc/*.rst`) and
   or rewrite existing translations. Details: `doc/i18n.rst`.
   Log messages stay in English.
 - User-visible behaviour: add a `NEWS.txt` bullet **and** update the English
-  user manual in `doc/manual/en/`. Style: `.cursor/rules/news.txt.mdc` and
-  `.cursor/rules/user-manual.mdc`.
+  user manual in `docs/content/1.manual/`. Style: `.cursor/rules/news.txt.mdc`
+  and `.cursor/rules/user-manual.mdc`.
 - Style: 79 columns, 2-space indent, SPDX `GPL-2.0-or-later` headers.
 - UI must work on OpenGL and memory canvas (Kobo). Scale with
   `Layout::`. Use `IsDithered()` / `HasColors()` for e-paper. Colour and

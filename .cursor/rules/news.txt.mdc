@@ -198,7 +198,8 @@ section.
 Do not use this for `doc/build.rst` or other contributor-only docs — those go
 under `* development` with a `documentation:` prefix.
 
-User-facing behaviour belongs in `doc/manual/en/` as well as `NEWS.txt`.
+User-facing behaviour belongs in `docs/content/1.manual/` as well as
+`NEWS.txt`.
 See `.cursor/rules/user-manual.mdc`.
 
 ## `* development` section

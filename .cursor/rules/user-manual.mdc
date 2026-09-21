@@ -1,50 +1,215 @@
 ---
-description: User-facing changes must update the English user manual under doc/manual/en/
+description: User-facing changes must update the English user manual under docs/content/1.manual/
 globs:
-  - "doc/manual/**"
+  - "docs/content/**"
   - "src/Dialogs/**"
   - "src/InfoBoxes/**"
   - "src/Menu/**"
   - "src/Input/**"
+  - "Data/Input/**"
 alwaysApply: false
 ---
 
-# User manual (`doc/manual/`)
+# Documentation (`docs/content/`)
 
-Pilots read the LaTeX user manual, not `doc/*.rst`. Those `.rst` files are
-contributor docs.
+The documentation is built from `docs/`: a Nuxt 4 application with the Docus
+layer, which renders the markdown in `docs/content/` through Nuxt Content (MDC
+syntax for components) and Nuxt UI; the few own components are Vue single-file
+components in `docs/app/components/`. The same content is printed to the PDF
+manuals. How it is built, where the images come from and how the version badge
+and the "Last updated" line work is described in `docs/README.md`.
+
+| Section | Folder | Content |
+|---------|--------|---------|
+| User manual | `docs/content/1.manual/` | The complete reference for pilots |
+| Quick guide | `docs/content/2.quick-guide/` | The shortest path from installation to the first flights |
+| InfoBox reference | `docs/content/3.infobox/` | One page per InfoBox, see below |
+| Hardware | `docs/content/4.hardware/` | Devices XCSoar runs on and connects to |
+| Developers | `docs/content/5.dev/` | Building, hacking on and contributing to XCSoar |
+
+The rules in **Files and frontmatter**, **Text conventions** and
+**Components** apply to all five sections.
 
 ## When to update
 
 If a change is **user-visible** (new or changed UI, setting, InfoBox, menu,
 gesture, file format a pilot uses, installation step), update the **English**
-manual in `doc/manual/en/` and add a `NEWS.txt` bullet.
+user manual in `docs/content/1.manual/` (not `docs/content/5.dev/`) and add a
+`NEWS.txt` bullet under `* documentation` (see `.cursor/rules/news.txt.mdc`).
+A new or changed InfoBox also updates `docs/content/3.infobox/`, see below.
 
-Do **not** update the manual for pure refactors, CI, or developer-only APIs.
+Do **not** update the user manual for pure refactors, CI, or developer-only
+APIs; those belong in `docs/content/5.dev/` and under `* development` in
+`NEWS.txt`. There are no translations in `docs/`; do not translate.
 
-## Where to edit
-
-Edit English first (`doc/manual/en/`). Do not require `de/`, `fr/`, or
-`pt_BR/` in the same change unless you are doing a translation pass.
+## User manual
 
 | Topic | Chapter |
-|-------|--------|
-| UI, menus, gestures | `ch02_user_interface.tex` |
-| Navigation, map, Goto | `ch03_navigation.tex` |
-| Tasks | `ch04_xc_tasks.tex` |
-| MacCready, polar, final glide | `ch05_glide_computer.tex` |
-| Atmosphere, thermal, wind | `ch06_atmosphere_and_instruments.tex` |
-| Airspace, FLARM, traffic | `ch07_airspace_and_flarm.tex` |
-| Devices, radios, logger | `ch08_avionics_and_airframe.tex` |
-| InfoBoxes | `ch10_infobox_reference.tex` |
-| Configuration / Setup | `ch11_configuration.tex` |
-| Waypoints, airspace files, maps | `ch12_data_files.tex` |
-| Install / platforms | `installation.tex` |
-| Third-party devices | `integration.tex` |
+|-------|---------|
+| Install / platforms | `1.manual/02.installation/` |
+| UI, menus, gestures | `1.manual/03.user-interface/` |
+| Navigation, map, Goto | `1.manual/04.navigation/` |
+| Tasks | `1.manual/05.cross-country-tasks/` |
+| MacCready, polar, final glide | `1.manual/06.glide-computer/` |
+| Atmosphere, thermal, wind | `1.manual/07.atmosphere-and-instruments/` |
+| Airspace, FLARM, traffic | `1.manual/08.airspace/` |
+| Third-party devices | `1.manual/09.integration/` |
+| Devices, radios, logger | `1.manual/10.avionics-and-airframe/` |
+| Configuration / Setup | `1.manual/12.configuration/` |
+| Waypoints, airspace files, maps | `1.manual/13.data-files/` |
 
-Master file: `doc/manual/en/XCSoar-manual.tex`. Build with `make manual`.
+Each folder is a chapter of the manual, each page in it one topic of that
+chapter. A new topic gets its own page in the matching chapter; a new chapter
+gets a new folder.
 
-## NEWS.txt
+## Developer documentation
 
-Manual updates that pilots would notice also get a `* documentation` bullet.
-See `.cursor/rules/news.txt.mdc`.
+`docs/content/5.dev/` holds the contributor documentation: build, development
+setup, architecture, policies, file formats, debugging. It is written for
+people who build or hack on XCSoar, never for pilots. Update it when the build,
+the tooling, an internal format or a development process changes; the user
+manual stays untouched by that. Which page covers which topic, and which of
+them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
+
+## Files and frontmatter
+
+- The number prefix of a folder or file only sets the order; the rest of the
+  name is the URL: `1.manual/04.navigation/05.waypoints.md` is
+  `/manual/navigation/waypoints`.
+- Within one folder, all prefixes have the same number of digits, as many as
+  the largest number needs, with leading zeros (`00.preface.md` to
+  `15.license.md`, `000.height-gps.md` to `134.previous-waypoint.md`). The
+  order is sorted as text, and `10` would come before `2` otherwise. Renumber
+  the folder when the largest number gains a digit.
+- A folder starts with its first page. Only when a chapter needs an
+  introduction of its own does it get a first page named after that content
+  (`00.concepts.md`, `00.task-modes.md`), never `index` or `overview`.
+- Every page starts with a YAML frontmatter with `title` and `description`.
+  The title is the name of the page in the navigation and the browser tab. The
+  description is the meta description and the text on cards, at most 220
+  characters. Put the essential information into its first 82 characters:
+  the previous/next links below every page show only that much of it. Quote
+  it when it contains a colon, otherwise `nuxt generate` fails.
+- No `# H1` in the text; the title comes from the frontmatter. Headings start
+  at `##`. No numbering in headings. Three empty lines before every `##`
+  heading, two before `###`, one before `####` and below, and one after the
+  frontmatter when the page starts with a heading.
+
+### InfoBox pages
+
+`docs/content/3.infobox/*.md` are two parts:
+
+- The **frontmatter** (`title`, `infobox.*`) is generated from
+  `src/InfoBoxes/Content/Factory.cpp` and `Type.hpp`. Never edit it by hand.
+  After any change to an InfoBox in the code, run
+  `node docs/scripts/import-infoboxes.mjs` and commit the result.
+  `infobox.help` is the help text of the app and the meta description of the
+  page. `infobox.comment` is the comment next to the enumerator in
+  `src/InfoBoxes/Content/Type.hpp`; it is kept although the pages do not show
+  it yet.
+- The **markdown body** is written by hand and kept by the script. A new
+  InfoBox gets a body that goes beyond the help text: how the value is
+  computed, what it needs (polar, wind, task, connected device), when it is
+  useful, what its colours mean when the value is drawn in colour, and what
+  happens when it is tapped or long-pressed when the InfoBox reacts to that.
+  Never repeat the help text; the script warns when the body does.
+
+## Text conventions
+
+- Hard wrap at 80 columns, filling each line. Exceptions: table rows, lines
+  with a link or URL that cannot be broken, and the frontmatter.
+- One space between sentences, never two. A hard line break is a backslash at
+  the end of the line, not two spaces.
+- Typographic apostrophe ’. Unicode instead of LaTeX maths and symbols: `°`,
+  `×`, `γ`, `≥`. Hyphen-minus as in the sources, no dashes.
+- Open questions as `<!-- TODO ... -->` at the end of a line, never on a line
+  of its own inside a paragraph: a comment line splits the paragraph in the
+  rendered page.
+
+### Markup with one meaning each
+
+| Markup | Meaning | Examples |
+|--------|---------|----------|
+| `` `Backticks` `` | Shown on screen, or typed: buttons, menu items, dialogue and page names, settings, option values, messages, gesture IDs, file names, paths, commands, code, build targets | `Task`, `Arrival height`, `Site Files / Site Files`, `On`, `REPLAY`, `DR`, `XCSoarData`, `make TARGET=UNIX` |
+| `*italic*` | A term where it is introduced, jargon, emphasis | *gestures*, *snail trail*, *dolphin* style, *by how much* |
+| `**bold**` | Leads of list items, highlighted letters | **Task**: ..., **T**ask manager |
+| `“...”` | A real quotation or a word used loosely | “as is”, “armed”, a paper title |
+| nothing | Product, company and example names, abbreviations | SkyLines, Vega, Bern TMA, (AGL) |
+
+- Menu paths: `Nav 1/2` → `Task`, with the arrow →.
+- Never ‘single quotes’, and no mixed forms like ‘*Circling zoom*’.
+
+### Links
+
+- Internal links are absolute paths: `/manual/navigation/waypoints`,
+  `/manual/configuration/map-display#conf-waypointicons`,
+  `/infobox/thermal-30s`. Never relative paths or `.md`.
+- The link text is the title of the target. Do not repeat the title after the
+  link.
+- Settings link to `#conf-...` anchors declared on the field that describes
+  them: `:::field{name="Landable symbols" #conf-waypointicons}`. Anchors need
+  to be unique within a page only.
+- External URLs as `<https://...>` or `[text](https://...)`.
+
+## Components
+
+Each section is also printed to a PDF (`npm run pdf -- manual`). The print
+view is rendered without JavaScript and paginated by Paged.js, so there is no
+interaction in the PDF: nothing can be opened, hovered, scrolled or played.
+The components below render correctly on the web and in the PDF.
+
+MDC syntax: a block component is written as `::name` on a line of its own,
+optionally with `{attributes}`, its content on the following lines, and `::`
+on a line of its own to close it. The number of colons is the nesting depth:
+a component inside another block component uses one colon more, opening and
+closing with the same number. `::field-group` contains `:::field` blocks,
+which are closed with `:::`; a component inside a `:::field` would use four.
+An inline component is `:name{attributes}` inside a sentence.
+
+| Syntax | Use for |
+|--------|---------|
+| `::field-group` with `:::field{name="..."}` | Description lists (settings, buttons, dialogue fields), not data tables |
+| `::tip`, `::note`, `::warning` | Hints and warnings set apart from the text |
+| `::gesture-aside{id="DR"}` ... `::` | A paragraph with the gesture drawing in a column beside it; `id` takes one or several gesture IDs separated by spaces |
+| `:gesture{id="U" size="sm"}` | A gesture drawing inside a sentence |
+| `:gesture{id="DU" float}` | A gesture drawing floated at the start of a paragraph inside a `:::field`, the text wraps around it |
+| `![Alt](/img/figures/x.png "Caption")` | A figure with caption; `{width=32}` for icons; never scaled above natural size |
+| GFM tables | Data; they take the width of their content, no HTML, no colspan |
+| `::card`, `::u-page-*` | Cards and page sections, as on the landing page |
+
+Gesture IDs are those of `Data/Input/default.xci`. Images are referenced by
+their URL (`/img/figures/`, `/img/drawings/`, `/img/icons/`); where the files
+live is configured in `nuxt.config.ts` and described in `docs/README.md`.
+Prefer SVG for icons.
+
+Wide tables (seven or more columns of icons or check marks) get sideways
+headings in print; tables with more rows than a page break across pages. Menu
+tables use `| Menu page | Key 6 | Key 7 | Key 8 | Key 9 | Key 0 |`.
+
+Prefer these components. Other components of Nuxt UI or Docus, or an own Vue
+component, are fine where they make a page clearly better; then give the PDF
+something to show, such as a link or a still image next to a video, and check
+the print output.
+
+## Screenshots
+
+- Take them from the UNIX build at its default size:
+  `xcsoar -640x480 -touchscreen` for landscape, `xcsoar -portrait -touchscreen`
+  for portrait, dialogues cropped without window frame. PNG at 1:1, no HiDPI,
+  no device frame. This matches the existing figures and stays sharp in the
+  PDF, where figures are at most 110 mm wide.
+- Use the same demo profile, map and task for all figures.
+- Name them `<topic>_<detail>.png` in the figures directory and replace an
+  existing figure of the same view instead of adding a variant.
+
+## Check before a patch
+
+```bash
+cd docs
+npm run generate          # fails on invalid frontmatter
+npm run pdf -- manual     # after changes to tables, images or components
+```
+
+The PDF is written to `output/manual/XCSoar-manual.pdf`. The "Last updated"
+line below a page comes from git; it does not change after `git apply`, only
+after a commit. Never regenerate `docs/content-history.json`.

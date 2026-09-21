@@ -22,7 +22,8 @@ Do not invent a parallel colour language. Reuse named colours in Look
 code; keep high saturation and contrast for warnings and cautions.
 
 User-facing behaviour also needs the **English user manual**
-(`doc/manual/en/`), not only `NEWS.txt`. See `.cursor/rules/user-manual.mdc`.
+(`docs/content/1.manual/`), not only `NEWS.txt`. See
+`.cursor/rules/user-manual.mdc`.
 
 | Topic | File |
 |-------|------|
@@ -38,4 +39,4 @@ User-facing behaviour also needs the **English user manual**
 | Input events | `doc/input_events.rst` |
 | Tests and debug tools | `doc/test_debug_utilities.rst` |
 | Debugging | `doc/debugging.rst` |
-| User manual (pilots) | `doc/manual/en/` |
+| User manual (pilots) | `docs/content/1.manual/`, `.cursor/rules/user-manual.mdc` |
