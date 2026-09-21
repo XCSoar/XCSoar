@@ -35,6 +35,12 @@ public:
                                  const char *address) const noexcept;
 
   /**
+   * True when the device caches the PPG engine-sensor GATT service.
+   */
+  [[gnu::pure]]
+  bool HasEngineSensors(JNIEnv *env, const char *address) const noexcept;
+
+  /**
    * Does the device support Bluetooth LE?
    */
   [[gnu::const]]

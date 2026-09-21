@@ -123,6 +123,25 @@ final class BluetoothHelper
   }
 
   /**
+   * True when the bonded device caches the PPG engine-sensor GATT
+   * service.  Used to hide Engine Type for heart-rate BLE sensors.
+   */
+  public boolean hasEngineSensors(String address) {
+    try {
+      BluetoothDevice device = adapter.getRemoteDevice(address);
+      ParcelUuid[] uuids = device.getUuids();
+      if (uuids == null)
+        return false;
+      for (ParcelUuid puuid : uuids)
+        if (BluetoothUuids.ENGINE_SENSORS_SERVICE.equals(puuid.getUuid()))
+          return true;
+    } catch (IllegalArgumentException | SecurityException e) {
+      return false;
+    }
+    return false;
+  }
+
+  /**
    * BlueFly Vario BLE uses the Microchip/ISSC transparent UART, but
    * bonded devices often have no cached service UUIDs.  The advertised
    * name is enough to offer them as a BLE serial port.

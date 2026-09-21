@@ -1,5 +1,7 @@
 Version 7.45.3 - not yet released
 * android
+  - hide Engine Type on BLE heart-rate sensors; it is only for engine
+    sensors
   - fix BlueFly Vario BLE being offered only as a BLE sensor, so it
     would not connect; choose BLE port and the BlueFly driver #3146
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
@@ -34,6 +36,8 @@ Version 7.45.3 - not yet released
 * documentation
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
+  - document that Engine Type is only shown for engine-sensor BLE
+    devices
   - document Xiaomi Smart Band heart-rate broadcast for BLE sensor
   - document that checklist checkbox ticks last until XCSoar exits
 * development
