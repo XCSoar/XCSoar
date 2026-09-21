@@ -10,6 +10,7 @@
 #include "Resources.hpp"
 #include "ui/dim/Rect.hpp"
 #include "ui/dim/Point.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
@@ -357,23 +358,24 @@ FileMultiSelectWidget::PaintFileItem(Canvas &canvas, PixelRect rc,
                                      unsigned idx,
                                      const FileItem &item) noexcept
 {
-  const bool selected = IsSelected(idx);
   const unsigned padding = Layout::GetTextPadding();
-
-  // Draw checkbox at left and then render text columns/rows according to
-  // configured providers and selected renderer.
-  unsigned box_size = rc.GetHeight() > 2 * padding ? rc.GetHeight() - 2 * padding : 0;
-  PixelRect box_rc;
-  box_rc.left = rc.left + (int)padding;
-  box_rc.top = rc.top + (int)padding;
-  box_rc.right = box_rc.left + (int)box_size;
-  box_rc.bottom = box_rc.top + (int)box_size;
-
-  const bool focused = !HasCursorKeys() || GetList().HasFocus();
-  DrawCheckBox(canvas, UIGlobals::GetDialogLook(), box_rc, selected, focused, false, true);
-
   PixelRect text_rc = rc;
-  text_rc.left = box_rc.right + 2 * (int)padding;
+
+  if (show_checkmarks_) {
+    const bool selected = IsSelected(idx);
+    unsigned box_size = rc.GetHeight() > 2 * padding
+      ? rc.GetHeight() - 2 * padding : 0;
+    PixelRect box_rc;
+    box_rc.left = rc.left + (int)padding;
+    box_rc.top = rc.top + (int)padding;
+    box_rc.right = box_rc.left + (int)box_size;
+    box_rc.bottom = box_rc.top + (int)box_size;
+
+    const bool focused = !HasCursorKeys() || GetList().HasFocus();
+    DrawCheckBox(canvas, UIGlobals::GetDialogLook(), box_rc,
+                 selected, focused, false, true);
+    text_rc.left = box_rc.right + 2 * (int)padding;
+  }
 
   // Helper to invoke provider and check for valid text
   auto resolve_text = [&item](const TextProvider &provider,
@@ -416,6 +418,22 @@ FileMultiSelectWidget::PaintFileItem(Canvas &canvas, PixelRect rc,
 }
 
 void
+FileMultiSelectWidget::SetCursorIndex(unsigned i) noexcept
+{
+  if (IsDefined())
+    GetList().SetCursorIndex(i);
+}
+
+bool
+FileMultiSelectWidget::ActivateCursor() noexcept
+{
+  if (!IsDefined() || GetList().IsEmpty())
+    return false;
+
+  return GetList().OnKeyFromWidgetParent(KEY_RETURN);
+}
+
+void
 FileMultiSelectWidget::SetNavigateCallback(std::function<void(AllocatedPath)> cb) noexcept
 {
   navigate_callback_ = std::move(cb);
@@ -437,6 +455,8 @@ FileMultiSelectWidget::OnActivateItem(unsigned index) noexcept
   const auto &item = items_[index];
   if (item.is_dir)
     ActivateDirectoryItem(item);
+  else if (file_activate_callback_)
+    file_activate_callback_(item.path);
   else
     ToggleSelection(index);
 }
