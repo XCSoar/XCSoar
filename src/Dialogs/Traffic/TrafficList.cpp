@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TrafficDialogs.hpp"
+#include "Dialogs/SearchFilterList.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
@@ -557,6 +558,8 @@ TrafficListWidget::OpenDetails(unsigned index)
   Item &item = items[index];
 
   if (item.IsFlarm()) {
+    /* browse mode: details close without dismissing this list
+       (#DetailsNesting / search-dialog-ux) */
     (void)dlgFlarmTrafficDetailsShowModal(item.id);
     UpdateList();
   }
@@ -605,16 +608,10 @@ TrafficListDialog()
   filter_widget->SetListener(list_widget.get());
   buttons_widget->SetList(list_widget.get());
 
-  auto left_widget =
-    std::make_unique<TwoWidgets>(std::move(filter_widget),
-                                 std::move(buttons_widget),
-                                 true);
-
-  auto widget = std::make_unique<TwoWidgets>(std::move(left_widget),
-                                             std::move(list_widget),
-                                             false);
-
-  dialog.FinishPreliminary(widget.release());
+  dialog.FinishPreliminary(
+    MakeFilterButtonsAndList(std::move(filter_widget),
+                             std::move(buttons_widget),
+                             std::move(list_widget)).release());
   dialog.ShowModal();
 }
 
