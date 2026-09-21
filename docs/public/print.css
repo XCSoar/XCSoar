@@ -258,6 +258,27 @@
     height: 9mm;
 }
 
+/* A paragraph with a floating gesture drawing keeps its text beside the
+   drawing instead of wrapping under it. */
+.print-page-body :has(> .gesture-float) {
+    position: relative;
+    min-height: 9mm;
+    padding-left: 12mm;
+}
+
+.print-page-body .gesture-float {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: none;
+    margin: 0;
+}
+
+/* Gesture drawings in the text at little more than the line height. */
+.print-page-body .gesture-inline {
+    height: 5mm;
+}
+
 /* Screenshots at roughly the size the LaTeX manual used. */
 .print-page-body figure img:not([width]) {
     max-width: 110mm;
