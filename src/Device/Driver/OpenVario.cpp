@@ -346,7 +346,8 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
           } else {
             acceleration_valid_cnt = 0;
           }
-          info.acceleration.available = acceleration_valid_cnt >= 2;
+          if (acceleration_valid_cnt >= 2) info.acceleration.available.Update(info.clock);
+          else info.acceleration.available.Clear();
           previous_acceleration_x = value;
           previous_acceleration_y = y;
           previous_acceleration_z = z;
@@ -389,7 +390,8 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
           } else {
             gyro_valid_cnt = 0;
           }
-          info.gyroscope.available = gyro_valid_cnt >= 2;
+          if (gyro_valid_cnt >= 2) info.gyroscope.available.Update(info.clock);
+          else info.gyroscope.available.Clear();
           previous_rotation_x = value;
           previous_rotation_y = y;
           previous_rotation_z = z;
@@ -451,10 +453,6 @@ OpenVarioDevice::POV(NMEAInputLine &line, NMEAInfo &info)
       case 'V': {
         info.voltage = value;
         info.voltage_available.Update(info.clock);
-        break;
-      }
-      case 'x': {
-        // ignore this value
         break;
       }
     }
