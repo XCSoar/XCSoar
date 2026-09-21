@@ -29,13 +29,6 @@ extern GLint invert_projection, invert_texture, invert_translate;
 
 /**
  * A shader that copies the texture's alpha channel, but replaces
- * the color (#Attribute::COLOR).
- */
-extern GLProgram *alpha_shader;
-extern GLint alpha_projection, alpha_texture, alpha_translate;
-
-/**
- * A shader that copies the texture's alpha channel, but replaces
  * the *constant* color (uniform alpha_fix_color_color).
  */
 extern GLProgram *alpha_fix_color_shader;
