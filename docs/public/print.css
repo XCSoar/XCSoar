@@ -274,9 +274,14 @@
     margin: 0;
 }
 
-/* Gesture drawings in the text at little more than the line height. */
+/* Gesture drawings in the text at little more than the line height,
+   larger in the gesture table. */
 .print-page-body .gesture-inline {
     height: 5mm;
+}
+
+.print-page-body td > .gesture-inline {
+    height: 10mm;
 }
 
 /* Screenshots at roughly the size the LaTeX manual used. */
@@ -286,8 +291,8 @@
 }
 
 /* Tables of screenshots share the page width between their columns;
-   icons with an explicit width keep it. */
-.print-page-body table:has(img:not([width])) {
+   icons with an explicit width and gesture drawings keep their size. */
+.print-page-body table:has(figure img:not([width])) {
     table-layout: fixed;
     width: 100%;
 }
@@ -296,7 +301,7 @@
     display: block;
 }
 
-.print-page-body table img:not([width]) {
+.print-page-body table figure img:not([width]) {
     width: 100%;
     height: auto;
 }
@@ -346,7 +351,7 @@
 /* Wide tables of labels like the menu overview share the page width
    between their columns; the labels in their cells wrap instead of
    widening the table. Tables of check marks keep their content width. */
-.print-page-body table:has(tr > :nth-child(5)):has(td code) {
+.print-page-body table:has(tr > :nth-child(6)):has(td code) {
     table-layout: fixed;
     width: 100%;
 }
