@@ -25,6 +25,7 @@ public:
   void Prepare([[maybe_unused]] ContainerWindow &parent,
                [[maybe_unused]] const PixelRect &rc) noexcept override {
     AddButton(C_("Button", "Navigation & Flight Resources"), [](){ ShowConfigPanel(_("Site Files"), CreateSiteConfigPanel); });
+    /* File Manager is this hub's download panel, not a parallel product. */
     AddButton(C_("Button", "Download manager"), [](){ ShowFileManager(); });
     AddButton(C_("Button", "Export flights"), [](){ ShowExportFlightsDialog(); });
     AddButton(C_("Button", "Import data"), [](){ ShowImportDataDialog(); });

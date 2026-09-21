@@ -70,6 +70,13 @@ IsRaspForecastOutOfDate(BrokenDate modified, BrokenDate today,
   return modified < today || modified < update_date;
 }
 
+/**
+ * Local data-directory path for a typed repository file name.
+ */
+[[gnu::pure]]
+AllocatedPath
+LocalPathForTypedName(const char *name, FileType type) noexcept;
+
 #ifdef HAVE_DOWNLOAD_MANAGER
 
 /**
@@ -78,6 +85,20 @@ IsRaspForecastOutOfDate(BrokenDate modified, BrokenDate today,
  */
 AllocatedPath
 GetFileDownloadRelativePath(const AvailableFile &file) noexcept;
+
+[[gnu::pure]]
+AllocatedPath
+LocalPathForRepositoryFile(const AvailableFile &file) noexcept;
+
+[[gnu::pure]]
+bool
+RepositoryFileCanDownload(const FileRepository &repository,
+                          const char *name) noexcept;
+
+[[gnu::pure]]
+bool
+RepositoryFileUpdateAvailable(const FileRepository &repository,
+                              const char *name) noexcept;
 
 /**
  * Return true when the local copy of @p file is older than the

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "FileManager.hpp"
-#include "EmptyDownloadList.hpp"
-#include "WidgetDialog.hpp"
-#include "Message.hpp"
+#include "Dialogs/FileManager.hpp"
+#include "Dialogs/EmptyDownloadList.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "LogFile.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
@@ -22,10 +22,10 @@
 #include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
 #include "UtilsSettings.hpp"
+#include "Repository/Glue.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-#include "Repository/Glue.hpp"
-#include "ListPicker.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "Form/Button.hpp"
 #include "net/http/DownloadManager.hpp"
 #include "ui/event/Notify.hpp"
@@ -40,55 +40,6 @@
 #include <cassert>
 
 using std::string_view_literals::operator""sv;
-
-[[gnu::pure]]
-static AllocatedPath
-LocalPathByType(const char *name, FileType type)
-{
-  if (name == nullptr)
-    return nullptr;
-
-  const AllocatedPath subdir = GetFileTypeDefaultDir(type);
-  const AllocatedPath path = (subdir == nullptr) ?
-                                    AllocatedPath(name) :
-                                    AllocatedPath::Build(subdir, Path(name));
-  return LocalPath(path);
-}
-
-static AllocatedPath
-LocalPathByType(const AvailableFile &file)
-{
-  const char *name = file.GetName();
-
-  return LocalPathByType(name, file.type);
-}
-
-#ifdef HAVE_DOWNLOAD_MANAGER
-
-[[gnu::pure]]
-static const AvailableFile *
-FindRemoteFile(const FileRepository &repository, const char *name)
-{
-  return repository.FindByName(name);
-}
-
-[[gnu::pure]]
-static bool
-CanDownload(const FileRepository &repository, const char *name)
-{
-  return FindRemoteFile(repository, name) != nullptr;
-}
-
-static bool
-UpdateAvailable(const FileRepository &repository, const char *name)
-{
-  const AvailableFile *remote_file = FindRemoteFile(repository, name);
-  if (remote_file == nullptr)
-    return false;
-
-  return IsRemoteFileOutOfDate(*remote_file);
-}
-#endif
 
 class ManagedFileListWidget
   : public ListWidget
@@ -115,7 +66,7 @@ class ManagedFileListWidget
       name = _name;
       type = _type;
 
-      const auto path = LocalPathByType(name, type);
+      const auto path = LocalPathForTypedName(name, type);
 
       if (File::Exists(path)) {
         FormatByteSize(size.buffer(), size.capacity(),
@@ -375,7 +326,7 @@ ManagedFileListWidget::RefreshList()
     DownloadStatus download_status;
     const bool is_downloading = IsDownloading(remote_file, download_status);
 
-    const AllocatedPath path = LocalPathByType(remote_file);
+    const AllocatedPath path = LocalPathForRepositoryFile(remote_file);
 
     const bool file_exists = File::Exists(path);
 
@@ -451,7 +402,8 @@ ManagedFileListWidget::UpdateButtons()
 
     const unsigned current = GetList().GetCursorIndex();
 
-    download_button->SetEnabled(CanDownload(repository, items[current].name));
+    download_button->SetEnabled(RepositoryFileCanDownload(repository,
+                                                         items[current].name));
     cancel_button->SetEnabled(items[current].downloading);
     update_button->SetEnabled(some_out_of_date);
   }
@@ -544,7 +496,7 @@ ManagedFileListWidget::Download()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  const AvailableFile *remote_file_p = FindRemoteFile(repository, item.name);
+  const AvailableFile *remote_file_p = repository.FindByName(item.name);
   if (remote_file_p == nullptr)
     return;
 
@@ -661,8 +613,8 @@ ManagedFileListWidget::UpdateFiles() {
   assert(Net::DownloadManager::IsAvailable());
 
   for (const auto &file : items) {
-    if (UpdateAvailable(repository, file.name)) {
-      const AvailableFile *remote_file = FindRemoteFile(repository, file.name);
+    if (RepositoryFileUpdateAvailable(repository, file.name)) {
+      const AvailableFile *remote_file = repository.FindByName(file.name);
 
       if (remote_file != nullptr) {
         const auto relative_path = GetFileDownloadRelativePath(*remote_file);
@@ -690,7 +642,7 @@ ManagedFileListWidget::Cancel()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  const AvailableFile *remote_file = FindRemoteFile(repository, item.name);
+  const AvailableFile *remote_file = repository.FindByName(item.name);
   if (remote_file != nullptr) {
     if (const auto relative_path = GetFileDownloadRelativePath(*remote_file);
         relative_path != nullptr) {

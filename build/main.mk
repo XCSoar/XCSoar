@@ -19,7 +19,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/CoDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
-	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/DataManagement/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/BackupRestorePanel.cpp \
