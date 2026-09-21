@@ -15,7 +15,9 @@
 #include "Repository/FileRepository.hpp"
 #include "Repository/FileType.hpp"
 #include "Repository/Glue.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "system/FileUtil.hpp"
 #include "util/StringCompare.hxx"
 #include "net/http/DownloadManager.hpp"
 #include "ActionInterface.hpp"
@@ -306,6 +308,14 @@ RaspDownloadGlue::Listener::OnDownloadComplete(Path path_relative) noexcept
     owner.pending_completion.store(PendingCompletion::REPOSITORY);
     owner.download_notify.SendNotification();
     return;
+  }
+
+  if (FilenameMatchesFileType(name.c_str(), FileType::RASP)) {
+    /* Daily freshness is "written today", not the repository
+       update= date (frozen for some providers).  Replacing the same
+       path can keep the previous mtime, so Auto update would fetch
+       again on every RASP page. */
+    File::Touch(LocalPath(path_relative));
   }
 
   if (!IsRaspDownload(path_relative))
