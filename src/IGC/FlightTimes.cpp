@@ -27,6 +27,12 @@ namespace {
 static constexpr double IMPORT_TAKEOFF_SPEED = 10;
 static constexpr int64_t DAY_SECONDS = 24 * 60 * 60;
 
+/* A real midnight wrap is a short step after adding one day.  A
+   multi-hour jump backwards is a bad timestamp; committing the day
+   offset would place every later fix more than half a day ahead and
+   drop the rest of the file. */
+static constexpr int64_t MAX_MIDNIGHT_STEP = 60 * 60;
+
 struct AbsoluteFlightTimes {
   std::optional<int64_t> first_fix;
   std::optional<int64_t> last_fix;
@@ -96,8 +102,12 @@ Scan(Path path, OperationEnvironment *operation)
     const int64_t second_of_day = fix.time.GetSecondOfDay();
     int64_t absolute_time = day_offset + second_of_day;
     if (previous_time && absolute_time + DAY_SECONDS / 2 < *previous_time) {
-      day_offset += DAY_SECONDS;
-      absolute_time += DAY_SECONDS;
+      const int64_t rolled = absolute_time + DAY_SECONDS;
+      const int64_t step = rolled - *previous_time;
+      if (step > 0 && step <= MAX_MIDNIGHT_STEP) {
+        day_offset += DAY_SECONDS;
+        absolute_time = rolled;
+      }
     }
 
     if (!result.first_fix)
