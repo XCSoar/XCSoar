@@ -74,6 +74,13 @@ export default defineNuxtConfig({
     devtools: false,
     extends: ['docus'],
     hooks: {
+        // The landing page gets the docs layout, which shows the row of
+        // sections below the header; app/layouts/docs.vue leaves out the
+        // sidebar for it.
+        'pages:resolved'(pages) {
+            const landing = pages.find(page => page.path === '/');
+            if (landing) landing.meta = { ...landing.meta, layout: 'docs' };
+        },
         // The licence page shows COPYING verbatim, not parsed as markdown.
         // Append the last commit of the page to its body; PageMeta.vue
         // renders it below the content. The landing page has none.
