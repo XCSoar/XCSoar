@@ -102,6 +102,11 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   - The file or folder name: the navigation title as a slug, at most 25
     characters, without filler words (`11.abort-and-alternates.md`,
     `05.tasks/`). The whole URL stays under 60 characters.
+- `permalink: <id>` in the frontmatter gives a page a short, stable URL
+  `/go/<id>` for links from the XCSoar app (lower-case letters, digits and
+  hyphens; unique, the build fails otherwise). Only pages the app links to
+  get one, and only when the link is needed; never rename or remove an id
+  the app uses. The app appends an anchor itself: `/go/map-display#conf-...`.
 - No `# H1` in the text; the title comes from the frontmatter. Headings start
   at `##`. No numbering in headings. Three empty lines before every `##`
   heading, two before `###`, one before `####` and below, and one after the

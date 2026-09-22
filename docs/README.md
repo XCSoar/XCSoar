@@ -78,6 +78,19 @@ removed:
 
 
 
+## Permalinks
+
+The XCSoar app links into the documentation with short URLs that survive
+renamed pages: `/go/<id>`, with an anchor appended where needed
+(`/go/map-display#conf-waypointicons`). A page gets its id with `permalink:`
+in the frontmatter, only when the app links to it. `nuxt generate` writes the
+redirects to `.output/public/.htaccess` and fails on a duplicate or invalid
+id. Apache serves them as 302, so a changed target is not cached by browsers;
+the site directory needs `AllowOverride FileInfo`. The dev server does not
+redirect.
+
+
+
 ## Version badge and "Last updated"
 
 Both come from git at build time (`nuxt.config.ts`), so they are only correct in

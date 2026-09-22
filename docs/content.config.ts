@@ -6,6 +6,9 @@ export default defineContentConfig({
             type: 'page',
             source: '**/*.{md,yaml}',
             schema: z.object({
+                // The id of the page in /go/<id> links from the XCSoar app,
+                // see nuxt.config.ts.
+                permalink: z.string().optional(),
                 // InfoBox metadata imported by scripts/import-infoboxes.mjs.
                 infobox: z.object({
                     index: z.number(),
