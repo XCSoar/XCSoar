@@ -131,6 +131,8 @@ Version 7.46 - not yet released
     list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
+  - toggle a Markdown checkbox from a tap on its line. A link on
+    that line, such as a VHF frequency, still opens the link
   - show detected takeoff, landing and duration in the flight export
     list as newest flights are scanned in the background
   - let WeGlide Upload send the highlighted IGC file from that list
