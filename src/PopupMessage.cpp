@@ -9,7 +9,7 @@
 #include "Audio/Sound.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 
 #include <algorithm>
 
@@ -229,7 +229,7 @@ PopupMessage::Render() noexcept
   /* a burst of messages shall not turn into a burst of vibrations */
   if (appeared && now >= last_haptic + HAPTIC_INTERVAL) {
     last_haptic = now;
-    Vibrate(HapticFeedbackType::NOTIFICATION);
+    PlayHapticFeedback(HapticFeedbackType::NOTIFICATION);
   }
 #endif
 

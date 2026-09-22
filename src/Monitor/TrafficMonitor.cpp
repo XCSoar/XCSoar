@@ -3,7 +3,7 @@
 
 #include "TrafficMonitor.hpp"
 #include "Interface.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 
 void
 TrafficMonitor::Check() noexcept
@@ -32,6 +32,6 @@ TrafficMonitor::Check() noexcept
     return;
 
 #ifdef HAVE_VIBRATOR
-  Vibrate(HapticFeedbackType::ALARM);
+  PlayHapticFeedback(HapticFeedbackType::ALARM);
 #endif
 }

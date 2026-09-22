@@ -9,7 +9,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 #include "Look/Colors.hpp"
 #include "ResourceLookup.hpp"
 #include "Form/CheckBox.hpp"
@@ -1888,7 +1888,7 @@ RichTextWindow::OnMouseUp(PixelPoint p) noexcept
   std::size_t cb_index = FindCheckboxAt(p);
   if (cb_index != SIZE_MAX) {
 #ifdef HAVE_VIBRATOR
-    Vibrate(HapticFeedbackType::PRESS);
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
     ToggleCheckbox(cb_index);
