@@ -41,22 +41,6 @@ export default defineNuxtConfig({
             if (landing) landing.meta = { ...landing.meta, layout: 'docs' };
         },
     },
-    app: {
-        head: {
-            script: [
-                {
-                    // Every page is prerendered as a directory with an
-                    // index.html, so a static host redirects
-                    // "/manual/preface" to "/manual/preface/". The router
-                    // then loads the payload of the page a second time,
-                    // because no page has the path with the slash. Drop it
-                    // before Nuxt boots so the route matches the
-                    // prerendered one.
-                    innerHTML: "if (location.pathname.length > 1 && location.pathname.endsWith('/')) history.replaceState(null, '', location.pathname.replace(/\\/+$/, '') + location.search + location.hash)",
-                },
-            ],
-        },
-    },
     content: {
         build: {
             markdown: {
