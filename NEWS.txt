@@ -157,6 +157,7 @@ Version 7.46 - not yet released
   - let Left/Right still change settings pages on Services until Up
     selects a service action
 * infoboxen
+  - group InfoBox types by function when selecting an InfoBox
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
     boxes toward square at 150%
