@@ -1298,6 +1298,7 @@ RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
         x += list_indent;
     }
 
+    std::size_t line_checkbox = SIZE_MAX;
     for (const TextSegment &seg : line.segments) {
       if (RenderInlineImage(canvas, seg, x, y,
                             cur_line_height, text_line_height))
@@ -1312,13 +1313,34 @@ RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
         RenderLinkSegment(canvas, seg, text_data,
                           x, text_y, seg_font.GetLineSpacing(),
                           y_origin);
-      else if (seg.IsCheckbox())
+      else if (seg.IsCheckbox()) {
         RenderCheckboxSegment(canvas, seg,
                               x, y, cur_line_height,
                               y_origin);
-      else
+        if (!content_hits.empty() && content_hits.back().is_checkbox)
+          line_checkbox = content_hits.size() - 1;
+      } else
         RenderPlainSegment(canvas, seg, text_data,
                            x, text_y);
+    }
+
+    /* The tick is only a square; the rest of the row is what gets
+       tapped.  Stop at a link on this line so that link still wins
+       (rects are half-open on the right). */
+    if (line_checkbox != SIZE_MAX) {
+      auto &box = content_hits[line_checkbox];
+      int limit = static_cast<int>(widget_size.width) - padding;
+      for (const auto &hit : content_hits) {
+        if (hit.is_checkbox)
+          continue;
+        if (hit.content_rect.bottom <= box.content_rect.top ||
+            hit.content_rect.top >= box.content_rect.bottom)
+          continue;
+        if (hit.content_rect.left > box.content_rect.left)
+          limit = std::min(limit, hit.content_rect.left);
+      }
+      if (limit > box.content_rect.right)
+        box.content_rect.right = limit;
     }
   }
 }
