@@ -7,6 +7,8 @@ Version 7.46 - not yet released
     that expose the standard Battery Service #3157
   - read BLE Environmental Sensing pressure, temperature, and
     humidity #3156
+  - read Bluetooth LE pulse oximeters and show SpO2 in a Blood
+    Oxygen InfoBox and on the Devices list #3158
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
     timing out and then showing Not connected
   - fix crash when exiting the app #2873

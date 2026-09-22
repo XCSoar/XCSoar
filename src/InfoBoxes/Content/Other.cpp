@@ -30,6 +30,27 @@ UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept
 }
 
 void
+UpdateInfoBoxBloodOxygen(InfoBoxData &data) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+
+  if (!basic.blood_oxygen_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.FmtValue("{}%", basic.blood_oxygen);
+
+  /* Usual hypoxia thresholds for high flying. */
+  if (basic.blood_oxygen < 90)
+    data.SetValueColor(1);
+  else if (basic.blood_oxygen < 95)
+    data.SetValueColor(4);
+  else
+    data.SetValueColor(0);
+}
+
+void
 UpdateInfoBoxGLoad(InfoBoxData &data) noexcept
 {
   if (!CommonInterface::Basic().acceleration.available) {
