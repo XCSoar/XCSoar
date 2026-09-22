@@ -43,13 +43,14 @@ the pages and the PDFs to the download server.
 | `content/` | All pages, markdown with frontmatter; the folder and file names give the URLs |
 | `content/index.md` | Landing page |
 | `content/1.manual/` | User manual, one folder per chapter |
-| `content/1.manual/15.license.md` | Frontmatter only; the page shows `COPYING` verbatim, inserted by `nuxt.config.ts` |
+| `content/1.manual/15.license.md` | Frontmatter only; the page shows `COPYING` verbatim, inserted by `modules/page-meta.ts` |
 | `content/2.quick-guide/` | Quick guide |
 | `content/3.infobox/` | InfoBox reference, frontmatter generated (see below) |
 | `content/4.hardware/`, `content/5.dev/` | Hardware and developer pages |
 | `content-history.json` | Last commit of the sources each migrated page came from (see below) |
 | `app/` | Components, layouts and configuration of Nuxt |
 | `app/pages/print/[section].vue` | The print view of one section, input of the PDF |
+| `modules/` | Local Nuxt modules run at build time: the licence page and the "Last updated" line, the permalink redirects |
 | `public/print.css` | Page boxes, headers and print layout for the PDF |
 | `scripts/` | Build and import scripts |
 
@@ -93,8 +94,8 @@ redirect.
 
 ## Version badge and "Last updated"
 
-Both come from git at build time (`nuxt.config.ts`), so they are only correct in
-a build from a git checkout.
+Both come from git at build time (`nuxt.config.ts` and `modules/page-meta.ts`),
+so they are only correct in a build from a git checkout.
 
 - The badge in the header shows the release version when `HEAD` carries a
   `v<version>` tag, otherwise the short commit hash, and links to the release or
