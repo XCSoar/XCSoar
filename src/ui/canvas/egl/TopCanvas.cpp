@@ -17,6 +17,8 @@
 
 #include <cassert>
 #include <stdexcept>
+#include <chrono>
+#include <thread>
 
 #include <cerrno>
 #include <stdio.h>
@@ -80,9 +82,15 @@ TopCanvas::~TopCanvas() noexcept
 {
 
 #ifdef MESA_KMS
-  // In case that a flip is on-going wait for it to finishing.	
-  while (!CheckAndFinishPendingFlip()){
-	;
+  // In case that a flip is on-going wait for it to finish.
+  // Wait for max. 1 second until progressing with releasing resources
+  for (int i = 0; i<20;++i) {
+    if (CheckAndFinishPendingFlip()) {
+      break;
+    }
+    using namespace std::chrono_literals;
+
+    std::this_thread::sleep_for(50ms);
   }
 #endif	
   ReleaseSurface();
