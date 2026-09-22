@@ -1860,6 +1860,9 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 
   case KEY_RETURN:
     if (focused_checkbox_style.has_value()) {
+#ifdef HAVE_VIBRATOR
+      PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
       ToggleCheckbox(focused_checkbox_style.value());
       /* Advance like Down when possible. */
       if (current_pos.has_value() &&
@@ -1882,15 +1885,25 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 bool
+RichTextWindow::OnMouseDown(PixelPoint p) noexcept
+{
+  /* Same moment as CheckBoxControl: the fingertip is still on the
+     glass.  A pulse on release is lost on a weak tablet motor. */
+  if (FindCheckboxAt(p) != SIZE_MAX) {
+#ifdef HAVE_VIBRATOR
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+  }
+
+  return LinkableWindow::OnMouseDown(p);
+}
+
+bool
 RichTextWindow::OnMouseUp(PixelPoint p) noexcept
 {
   // Check for checkbox click first
   std::size_t cb_index = FindCheckboxAt(p);
   if (cb_index != SIZE_MAX) {
-#ifdef HAVE_VIBRATOR
-    PlayHapticFeedback(HapticFeedbackType::PRESS);
-#endif
-
     ToggleCheckbox(cb_index);
     return true;
   }
