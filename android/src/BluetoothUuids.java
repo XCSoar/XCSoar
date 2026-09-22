@@ -25,6 +25,20 @@ public final class BluetoothUuids {
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
 
   /**
+   * Bluetooth SIG Pulse Oximeter Service (PLXS, 0x1822).
+   */
+  static final UUID PULSE_OXIMETER_SERVICE =
+    UUID.fromString("00001822-0000-1000-8000-00805F9B34FB");
+
+  /** PLX Spot-check Measurement (indicate). */
+  static final UUID PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5E-0000-1000-8000-00805F9B34FB");
+
+  /** PLX Continuous Measurement (notify). */
+  static final UUID PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5F-0000-1000-8000-00805F9B34FB");
+
+  /**
    * Bluetooth SIG Battery Service.  Not used as a scan filter:
    * almost every LE device advertises it.
    */
@@ -139,6 +153,7 @@ public final class BluetoothUuids {
   public static final UUID[] getAllServiceUuids() {
       return new UUID[] { GENERIC_ACCESS_SERVICE,
                           HEART_RATE_SERVICE,
+                          PULSE_OXIMETER_SERVICE,
                           ENVIRONMENTAL_SENSING_SERVICE,
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
@@ -153,6 +168,8 @@ public final class BluetoothUuids {
     return new UUID[] { CLIENT_CHARACTERISTIC_CONFIGURATION,
                         DEVICE_NAME_CHARACTERISTIC,
                         HEART_RATE_MEASUREMENT_CHARACTERISTIC,
+                        PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC,
+                        PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC,
                         PRESSURE_CHARACTERISTIC,
                         TEMPERATURE_CHARACTERISTIC,
                         HUMIDITY_CHARACTERISTIC,

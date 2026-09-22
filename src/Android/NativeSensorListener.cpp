@@ -231,6 +231,20 @@ Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
   listener.OnHeartRateSensor(bpm);
 }
 
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onBloodOxygenSensor(JNIEnv *env,
+                                                         jobject obj,
+                                                         jint spo2_percent)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnBloodOxygenSensor(spo2_percent);
+}
+
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
                                                      jint temp_adc,

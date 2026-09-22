@@ -42,6 +42,7 @@ public:
                                AtmosphericPressure pressure) noexcept = 0;
   virtual void OnVarioSensor(float vario) noexcept = 0;
   virtual void OnHeartRateSensor(unsigned bpm) noexcept = 0;
+  virtual void OnBloodOxygenSensor(unsigned spo2_percent) noexcept = 0;
   /**
    * @param[in] has_cht Is the Engine Cylinder Head Temperature sensor present?
    * @param[in] cht Engine Cylinder Head Temperature.

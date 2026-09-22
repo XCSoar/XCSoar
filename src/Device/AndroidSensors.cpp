@@ -158,6 +158,20 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 }
 
 void
+DeviceDescriptor::OnBloodOxygenSensor(unsigned spo2_percent) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  basic.blood_oxygen = spo2_percent;
+  basic.blood_oxygen_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnEngineSensors(bool has_cht,
                                   Temperature cht,
                                   bool has_egt,

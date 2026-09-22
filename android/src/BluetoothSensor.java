@@ -255,7 +255,13 @@ public final class BluetoothSensor
       return false;
 
     gatt.setCharacteristicNotification(c, true);
-    d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+    /* PLX spot-check (2A5E) indicates; continuous (2A5F) notifies. */
+    final int props = c.getProperties();
+    if ((props & BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0 &&
+        (props & BluetoothGattCharacteristic.PROPERTY_INDICATE) != 0)
+      d.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+    else
+      d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
     return gatt.writeDescriptor(d);
   }
 
@@ -425,6 +431,51 @@ public final class BluetoothSensor
                              ignitions_per_second);
   }
 
+  /**
+   * IEEE-11073 16-bit SFLOAT.  NaN for the reserved special values.
+   */
+  private static double readSFloat(BluetoothGattCharacteristic c,
+                                   int offset) {
+    final Integer value = c.getIntValue(c.FORMAT_UINT16, offset);
+    if (value == null)
+      return Double.NaN;
+
+    final int raw = value & 0xffff;
+    if (raw == 0x07ff || raw == 0x0800 || raw == 0x07fe ||
+        raw == 0x0802 || raw == 0x0801)
+      return Double.NaN;
+
+    int mantissa = raw & 0x0fff;
+    if ((mantissa & 0x0800) != 0)
+      mantissa -= 0x1000;
+
+    int exponent = (raw >> 12) & 0x0f;
+    if ((exponent & 0x08) != 0)
+      exponent -= 0x10;
+
+    return mantissa * Math.pow(10.0, exponent);
+  }
+
+  /**
+   * PLX Spot-check (2A5E) and Continuous (2A5F), GATT Specification
+   * Supplement.  Both start with a flags byte, then a mandatory SpO2
+   * SFLOAT and pulse-rate SFLOAT.  The flags only mark optional
+   * fields that follow that pair.
+   */
+  private void readPLXMeasurement(BluetoothGattCharacteristic c) {
+    final byte[] value = c.getValue();
+    if (value == null || value.length < 5)
+      return;
+
+    final double spo2 = readSFloat(c, 1);
+    if (!Double.isNaN(spo2) && spo2 > 0 && spo2 <= 100)
+      listener.onBloodOxygenSensor((int)Math.round(spo2));
+
+    final double pulse = readSFloat(c, 3);
+    if (!Double.isNaN(pulse) && pulse > 0 && pulse < 300)
+      listener.onHeartRateSensor((int)Math.round(pulse));
+  }
+
   private void readHeartRateMeasurement(BluetoothGattCharacteristic c) {
     int offset = 0;
     final int flags = c.getIntValue(c.FORMAT_UINT8, offset);
@@ -460,6 +511,13 @@ public final class BluetoothSensor
     try {
       if (BluetoothUuids.HEART_RATE_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
         readHeartRateMeasurement(c);
+      }
+
+      if (BluetoothUuids.PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC
+            .equals(c.getUuid()) ||
+          BluetoothUuids.PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC
+            .equals(c.getUuid())) {
+        readPLXMeasurement(c);
       }
 
       if (BluetoothUuids.BATTERY_LEVEL_CHARACTERISTIC.equals(c.getUuid())) {
