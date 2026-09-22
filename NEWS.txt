@@ -7,6 +7,8 @@ Version 7.46 - not yet released
     that expose the standard Battery Service #3157
   - read BLE Environmental Sensing pressure, temperature, and
     humidity #3156
+  - read blood oxygen saturation from a Bluetooth pulse oximeter
+    and show it in the Blood Oxygen InfoBox #1836
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
     timing out and then showing Not connected
   - fix crash when exiting the app #2873
@@ -216,6 +218,7 @@ Version 7.46 - not yet released
     Devices list
   - document Pressure, Temperature, and Relative humidity on the
     Devices list
+  - document Bluetooth pulse oximeters and the Blood Oxygen InfoBox
   - document that checklist checkbox ticks last until XCSoar exits
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported platforms, the built-in barometer
