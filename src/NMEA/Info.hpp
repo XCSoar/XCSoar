@@ -327,6 +327,13 @@ struct NMEAInfo {
   Validity heart_rate_available;
   unsigned heart_rate;
 
+  /**
+   * Blood oxygen saturation (SpO2) from a pulse oximeter, in percent
+   * (0-100).
+   */
+  Validity blood_oxygen_available;
+  unsigned blood_oxygen;
+
   Validity engine_noise_level_available;
   unsigned engine_noise_level;
 
