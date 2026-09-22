@@ -1,6 +1,6 @@
 <script setup>
 // Docus shows either the logo image or the title. Show both: the XCSoar
-// emblem next to the site name.
+// emblem next to the name.
 const appConfig = useAppConfig();
 </script>
 

@@ -31,8 +31,11 @@ paginates it with Paged.js; the print styles are `public/print.css`. Set
 Puppeteer downloads.
 
 The workflow `.github/workflows/build-docs.yml` builds the pages and the PDFs on
-every change to `docs/`, uploads the PDFs as artifact and, for a release, copies
-the pages and the PDFs to the download server.
+every change to `docs/` and uploads the PDFs as artifact. For a release it also
+attaches the PDFs to the GitHub release, copies them to the download server and
+copies the pages to the documentation server with rsync over ssh, using the
+repository secrets `DOCS_HOST`, `DOCS_SSH_USER`, `DOCS_SSH_KEY` and
+`DOCS_REMOTE_PATH`; the optional `DOCS_SSH_KNOWN_HOSTS` pins the host key.
 
 
 
@@ -87,7 +90,7 @@ renamed pages: `/go/<id>`, with an anchor appended where needed
 in the frontmatter, only when the app links to it. `nuxt generate` writes the
 redirects to `.output/public/.htaccess` and fails on a duplicate or invalid
 id. Apache serves them as 302, so a changed target is not cached by browsers;
-the site directory needs `AllowOverride FileInfo`. The dev server does not
+the deployed directory needs `AllowOverride FileInfo`. The dev server does not
 redirect.
 
 

@@ -1,6 +1,6 @@
 // Print one documentation section to PDF.
 //
-// Serves the static site from .output/public (run `npx nuxt generate`
+// Serves the generated pages from .output/public (run `npx nuxt generate`
 // first), opens /print/<section> in headless Chromium, paginates it with
 // Paged.js and writes the PDF. The page scripts are blocked so the
 // prerendered HTML is printed as is.
