@@ -20,6 +20,8 @@ Version 7.46 - not yet released
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
 * iOS
+  - add haptic feedback for button presses; the Haptic feedback
+    setting controls it
   - use the system keyboard for text entry so special characters
     can be typed, and add a Paste button for the clipboard; the
     Keyboard text-input style keeps XCSoar's own grid #2894
@@ -167,6 +169,8 @@ Version 7.46 - not yet released
     Menu opens the mode without picking a box up; the cursor keys
     and a remote stick leave the cards toward Help and Close; the
     overlay uses the same colours as the InfoBox set dialog
+  - vibrate on an InfoBox press, and more strongly once a hold
+    is armed, on devices with haptic feedback
   - compose the InfoBox sets in the configuration with the same view:
     every InfoBox is a card which can be moved around; Copy Set, Paste
     Set and Rename are the dialog buttons

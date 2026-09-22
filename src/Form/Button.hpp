@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Hardware/Vibrator.hpp"
 #include "ui/window/PaintWindow.hpp"
 
 #include <functional>
@@ -145,4 +146,5 @@ private:
  * not read those settings; every press that should click goes
  * through here.
  */
-void PlayHapticFeedback() noexcept;
+void PlayHapticFeedback(HapticFeedbackType type =
+                       HapticFeedbackType::PRESS) noexcept;
