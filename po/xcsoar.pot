@@ -9804,3 +9804,15 @@ msgid ""
 "Forecast\n"
 "Controls"
 msgstr ""
+
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""
