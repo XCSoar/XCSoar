@@ -76,7 +76,7 @@ export default defineNuxtConfig({
     nitro: {
         prerender: {
             autoSubfolderIndex: true,
-            routes: ['/print/manual', '/print/quick-guide', '/print/dev'],
+            routes: ['/print/manual', '/print/quick-guide', '/print/infobox', '/print/dev'],
         },
         publicAssets: [
             { baseURL: '/img/figures', dir: repo('../doc/manual/en/figures') },

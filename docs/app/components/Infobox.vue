@@ -32,8 +32,8 @@ defineProps({
 </script>
 
 <template>
-    <div class="w-44 shrink-0 aspect-[3/2] flex flex-col rounded-sm border-2 border-neutral-800 bg-white text-neutral-900 font-sans select-none">
-        <div class="pt-1 text-center text-[11px] font-medium leading-none tracking-wide">
+    <div class="infobox w-44 shrink-0 aspect-[3/2] flex flex-col rounded-sm border-2 border-neutral-800 bg-white text-neutral-900 font-sans select-none">
+        <div class="infobox-title pt-1 text-center text-[11px] font-medium leading-none tracking-wide">
             {{ title }}
         </div>
         <div class="flex flex-1 items-center justify-center overflow-hidden">
@@ -41,15 +41,15 @@ defineProps({
                 v-if="graphic"
                 :src="`/img/infobox/${graphic}.svg`"
                 :alt="title"
-                class="h-full w-full object-cover"
+                class="infobox-graphic h-full w-full object-cover"
             >
             <span v-else class="flex items-baseline gap-1" :class="colors[color]">
-                <span class="text-4xl font-semibold leading-none">{{ value }}</span>
-                <span v-if="unit" class="text-sm">{{ unit }}</span>
+                <span class="infobox-value text-4xl font-semibold leading-none">{{ value }}</span>
+                <span v-if="unit" class="infobox-unit text-sm">{{ unit }}</span>
             </span>
         </div>
         <div
-            class="h-4 pb-1 text-center text-[11px] leading-none"
+            class="infobox-comment h-4 pb-1 text-center text-[11px] leading-none"
             :class="commentColor ? colors[commentColor] : 'text-neutral-500'"
         >
             {{ comment }}

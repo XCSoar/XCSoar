@@ -24,7 +24,8 @@ npm run generate             # the pages alone, in .output/public
 npm run pdf -- manual        # one section as PDF, in .output/public/pdfs
 ```
 
-The PDFs are written next to the pages, so the documentation offers the
+`build:docs` prints three PDFs: the manual, the quick guide and the InfoBox
+reference. They are written next to the pages, so the documentation offers the
 manuals of the version it was built from. Deploy what `npm run build:docs`
 leaves in `.output/public`; after `npm run generate` alone the links to the
 manuals lead nowhere, and so they do under `npm run dev`.

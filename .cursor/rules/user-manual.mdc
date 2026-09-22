@@ -286,7 +286,9 @@ and the PDFs to `.output/public`. Read the pages you changed there, and the
 PDF of the section you changed when the change shows in print, such as a
 table, a figure or a component. `npm run generate` builds the pages alone,
 and `npm run pdf -- <section>` makes the PDF of one of them, `manual`,
-`quick-guide` or `dev`, from the pages already generated.
+`quick-guide`, `infobox` or `dev`, from the pages already generated. A new
+section that should also become a PDF needs its route in the prerender list
+of `nuxt.config.ts` and its own `npm run pdf` in `build:docs`.
 
 The "Last updated" line below a page comes from git; it does not change after
 `git apply`, only after a commit. Never regenerate

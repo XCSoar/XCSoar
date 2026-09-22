@@ -16,9 +16,11 @@ import puppeteer from 'puppeteer';
 const docsDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const section = process.argv[2] ?? 'manual';
 const root = join(docsDir, '.output', 'public');
-// Next to the pages, so that the documentation offers the PDF of the
-// version it was built from.
-const output = resolve(process.argv[3] ?? join(root, 'pdfs', `XCSoar-${section}.pdf`));
+// The file name says what the PDF is, where the route of the section is
+// short. Next to the pages, so that the documentation offers the PDF of
+// the version it was built from.
+const names = { infobox: 'infobox-reference' };
+const output = resolve(process.argv[3] ?? join(root, 'pdfs', `XCSoar-${names[section] ?? section}.pdf`));
 
 if (!existsSync(join(root, 'print', section, 'index.html'))) {
     console.error(`${root}/print/${section} not found, run "npx nuxt generate" first`);

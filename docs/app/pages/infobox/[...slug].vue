@@ -59,16 +59,6 @@ useSeo({
 const surroundLinks = computed(() => (surround.value ?? []).map(link => {
     return link ? { ...link, description: link.infobox?.help } : link;
 }));
-
-// Facts shown below the help text. Name is the title in the InfoBox
-// configuration dialogue, caption the label drawn in the InfoBox itself.
-const facts = computed(() => [
-    { label: 'Name', value: page.value.title },
-    { label: 'Caption', value: infobox.value.caption },
-    { label: 'Category', value: infobox.value.category },
-    { label: 'ID', value: infobox.value.id, code: true },
-    { label: 'Index', value: infobox.value.index, code: true },
-]);
 </script>
 
 <template>
@@ -86,38 +76,7 @@ const facts = computed(() => [
         </UPageHeader>
 
         <UPageBody>
-            <template v-if="!isIndexPage">
-                <div class="my-6 flex flex-col gap-6 sm:flex-row sm:items-start">
-                    <Infobox
-                        :title="infobox.demo?.title ?? infobox.caption"
-                        :value="infobox.demo?.value ?? '---'"
-                        :unit="infobox.demo?.unit ?? ''"
-                        :comment="infobox.demo?.comment ?? ''"
-                        :color="infobox.demo?.color ?? ''"
-                        :comment-color="infobox.demo?.commentColor ?? ''"
-                        :graphic="infobox.demo?.graphic ?? ''"
-                    />
-                    <div class="min-w-0 flex-1">
-                        <div class="mb-3 flex flex-wrap items-center gap-2">
-                            <UBadge v-if="infobox.category" color="primary" variant="subtle">{{ infobox.category }}</UBadge>
-                            <UBadge color="neutral" variant="outline" class="font-mono">{{ infobox.id }}</UBadge>
-                        </div>
-                        <p class="text-base/7 text-default">{{ infobox.help }}</p>
-                    </div>
-                </div>
-
-                <table class="my-6 w-full text-sm">
-                    <tbody class="divide-y divide-default">
-                        <tr v-for="fact in facts" :key="fact.label">
-                            <th scope="row" class="w-40 py-2 pr-4 text-left font-medium text-muted">{{ fact.label }}</th>
-                            <td class="py-2">
-                                <code v-if="fact.code" class="rounded-md bg-muted px-1.5 py-0.5 font-mono text-sm">{{ fact.value }}</code>
-                                <template v-else>{{ fact.value }}</template>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </template>
+            <InfoboxSummary v-if="!isIndexPage" :title="page.title" :infobox="infobox" />
 
             <ContentRenderer v-if="page" :value="page" />
 

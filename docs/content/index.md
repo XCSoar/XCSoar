@@ -120,8 +120,8 @@ Download
 Manuals as PDF
 
 #description
-The manual and the quick guide of version :xcsoar-version, printed from these
-pages.
+The manual, the quick guide and the InfoBox reference of version
+:xcsoar-version, printed from these pages.
 
 #default
   :::u-page-grid{class="lg:grid-cols-2"}
@@ -143,6 +143,16 @@ pages.
     ---
     #description
     The shortest path from installation to the first flights.
+    :::
+
+    :::u-page-feature
+    ---
+    icon: i-lucide-file-text
+    title: InfoBox reference
+    to: /pdfs/XCSoar-infobox-reference.pdf
+    ---
+    #description
+    Every InfoBox with its value, its help text and its facts.
     :::
   :::
 ::

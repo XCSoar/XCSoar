@@ -386,3 +386,119 @@
 .print-page-body [aria-haspopup="dialog"] {
     cursor: default;
 }
+
+/* A category of the InfoBox reference holds many short entries: they
+   follow each other and fill the page, only the box with its facts
+   stays together. */
+.print-root[data-section="infobox"] .print-page-title {
+    font-size: 16pt;
+}
+
+/* Above its text, an InfoBox page shows the box as XCSoar draws it, the
+   help text of the app beside it and the facts of the InfoBox below.
+   The selectors carry .print-root so that they win over the utility
+   classes of the web page. */
+.print-root .infobox-summary {
+    margin: 0 0 4mm;
+}
+
+/* The help text keeps its column beside the box, as on the web, and
+   may run onto the next page; the box is taken out of the flow for
+   that, like the gesture drawings of the manual. */
+.print-root .infobox-summary-head {
+    display: block;
+    position: relative;
+    min-height: 20mm;
+    padding-left: 34mm;
+    margin: 0 0 3mm;
+}
+
+.print-root .infobox-summary-head .infobox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: none;
+    margin: 0;
+}
+
+.print-root .infobox-summary-head p {
+    margin: 0;
+    line-height: 1.3;
+}
+
+.print-root .infobox-summary-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2mm;
+    margin: 0 0 2mm;
+}
+
+/* The cells of the table draw their own borders, so that the line
+   survives a page break inside the table. */
+.print-root .infobox-summary-facts {
+    width: 100%;
+    margin: 0;
+    font-size: inherit;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.print-root .infobox-summary-facts th,
+.print-root .infobox-summary-facts td {
+    padding: 1mm 2mm 1mm 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 0.2mm solid #ddd;
+}
+
+/* The class marks the last row of the table, where :last-child would
+   also match the last row of a fragment when the table breaks across
+   pages, and that one keeps its line. */
+.print-root .infobox-summary-facts .infobox-summary-last th,
+.print-root .infobox-summary-facts .infobox-summary-last td {
+    border-bottom: 0;
+}
+
+.print-root .infobox-summary-facts th {
+    width: 30mm;
+    font-weight: 500;
+    color: #555;
+}
+
+.print-root .infobox-summary-facts code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* The box keeps the proportions of the app, at the size of a printed
+   illustration. */
+.print-root .infobox {
+    width: 30mm;
+    flex: none;
+    border-width: 0.4mm;
+}
+
+.print-root .infobox-title {
+    padding-top: 1mm;
+    font-size: 8pt;
+}
+
+.print-root .infobox-value {
+    font-size: 18pt;
+}
+
+.print-root .infobox-unit {
+    font-size: 9pt;
+}
+
+.print-root .infobox-comment {
+    height: 4mm;
+    padding-bottom: 1mm;
+    font-size: 8pt;
+}
+
+/* The text of an entry follows its summary, not the table above it. */
+.print-root[data-section="infobox"] .print-page-body > :first-child {
+    margin-top: 0;
+}
