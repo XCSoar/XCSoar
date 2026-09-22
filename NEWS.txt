@@ -34,6 +34,7 @@ Version 7.46 - not yet released
 * Windows
   - show the program version in the file properties of XCSoar.exe and
     the installer #3173
+  - show --help and --version in the Command Prompt window #3194
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
 * Linux
