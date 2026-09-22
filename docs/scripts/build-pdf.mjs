@@ -2,8 +2,8 @@
 //
 // Serves the generated pages from .output/public (run `npx nuxt generate`
 // first), opens /print/<section> in headless Chromium, paginates it with
-// Paged.js and writes the PDF. The page scripts are blocked so the
-// prerendered HTML is printed as is.
+// Paged.js and writes the PDF to .output/public/pdfs. The page scripts are
+// blocked so the prerendered HTML is printed as is.
 //
 //   node scripts/build-pdf.mjs [section] [output.pdf]
 
@@ -15,8 +15,10 @@ import puppeteer from 'puppeteer';
 
 const docsDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const section = process.argv[2] ?? 'manual';
-const output = resolve(process.argv[3] ?? join(docsDir, '..', 'output', 'manual', `XCSoar-${section}.pdf`));
 const root = join(docsDir, '.output', 'public');
+// Next to the pages, so that the documentation offers the PDF of the
+// version it was built from.
+const output = resolve(process.argv[3] ?? join(root, 'pdfs', `XCSoar-${section}.pdf`));
 
 if (!existsSync(join(root, 'print', section, 'index.html'))) {
     console.error(`${root}/print/${section} not found, run "npx nuxt generate" first`);

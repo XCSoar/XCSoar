@@ -19,16 +19,22 @@ Node 22 or newer.
 cd docs
 npm ci
 npm run dev                  # http://localhost:3000, live reload
-npm run generate             # static pages in .output/public
-npm run pdf -- manual        # output/manual/XCSoar-manual.pdf
-npm run pdf -- quick-guide   # output/manual/XCSoar-quick-guide.pdf
+npm run build:docs           # the pages and the PDFs, ready to deploy
+npm run generate             # the pages alone, in .output/public
+npm run pdf -- manual        # one section as PDF, in .output/public/pdfs
 ```
+
+The PDFs are written next to the pages, so the documentation offers the
+manuals of the version it was built from. Deploy what `npm run build:docs`
+leaves in `.output/public`; after `npm run generate` alone the links to the
+manuals lead nowhere, and so they do under `npm run dev`.
 
 `npm run pdf` needs the generated pages. It serves `.output/public`, opens
 `/print/<section>` in headless Chromium (Puppeteer) with scripts blocked and
-paginates it with Paged.js; the print styles are `public/print.css`. Set
-`PUPPETEER_EXECUTABLE_PATH` to use an installed Chromium instead of the one
-Puppeteer downloads.
+paginates it with Paged.js; the print styles are `public/print.css`. The PDF
+is written next to the pages, so the documentation offers the manuals of the
+version it was built from. Set `PUPPETEER_EXECUTABLE_PATH` to use an installed
+Chromium instead of the one Puppeteer downloads.
 
 The workflow `.github/workflows/build-docs.yml` builds the pages and the PDFs on
 every change to `docs/` and uploads the PDFs as artifact. For a release it also

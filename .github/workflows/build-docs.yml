@@ -72,19 +72,14 @@ jobs:
      - name: Install dependencies
        run: npm ci
 
-     - name: Generate the pages
-       run: npm run generate
-
-     - name: Generate the PDFs
-       run: |
-         npm run pdf -- manual
-         npm run pdf -- quick-guide
+     - name: Generate the pages and the PDFs
+       run: npm run build:docs
 
      - name: Upload the PDFs artifact
        uses: actions/upload-artifact@v7
        with:
          name: XCSoar-docs-pdfs-${{ steps.githash.outputs.git_hash }}
-         path: output/manual/*.pdf
+         path: docs/.output/public/pdfs/*.pdf
 
      - name: Upload the pages artifact
        if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}

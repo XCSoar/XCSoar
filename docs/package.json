@@ -4,7 +4,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "build": "nuxt build",
-    "pdf": "node scripts/build-pdf.mjs"
+    "pdf": "node scripts/build-pdf.mjs",
+    "build:docs": "npm run generate && npm run pdf -- manual && npm run pdf -- quick-guide"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
