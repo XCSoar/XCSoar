@@ -138,7 +138,7 @@ The manual, the quick guide and the InfoBox reference of version
     :::u-page-feature
     ---
     icon: i-lucide-file-text
-    title: XCSoar in a flash
+    title: XCSoar Quick Guide
     to: /pdfs/XCSoar-quick-guide.pdf
     ---
     #description
