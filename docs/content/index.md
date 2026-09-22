@@ -148,7 +148,7 @@ The manual, the quick guide and the InfoBox reference of version
     :::u-page-feature
     ---
     icon: i-lucide-file-text
-    title: InfoBox reference
+    title: XCSoar InfoBox Reference
     to: /pdfs/XCSoar-infobox-reference.pdf
     ---
     #description
