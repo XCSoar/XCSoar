@@ -44,6 +44,9 @@ Version 7.46 - not yet released
   - fix temporary freezing the display when moving the mouse on Cubieboards
     (OpenVario) when XCSoar runs on DRM/KMS (text console without graphical
     GUI framework), particularly on high-resolution monitors. #3177    
+  - fix text not being displayed by Mali 400 GPUs. This affects OpenVario which
+    use Cubieboards with Allwinner A7 SoCs. This is a regression which affects
+    MESA version 25 and onwards. #3008
 * Kobo
   - fix the power-off screen not listing flights after flights.log
     moved into the logs directory #3001
