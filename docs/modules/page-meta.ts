@@ -3,8 +3,8 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-// The licence page and the "Last updated" line below every page, both
-// filled in while the pages are parsed.
+// The "Last updated" line below every page, filled in while the pages are
+// parsed.
 
 type Commit = { commit: string, date: string, author: string };
 
@@ -63,11 +63,6 @@ export default defineNuxtModule({
         nuxt.hook('content:file:afterParse', ({ file, content }) => {
             const body = content.body as { type?: string, value?: unknown[] } | undefined;
             if (body?.type !== 'minimark') return;
-            if (content.stem === '1.manual/15.license') {
-                // The licence page shows COPYING verbatim, not parsed as
-                // markdown.
-                body.value = [['pre', { copy: false, class: 'license' }, readFileSync(join(repo, 'COPYING'), 'utf8')]];
-            }
             if (content.stem !== 'index') {
                 // The last commit of the page ends its body; PageMeta.vue
                 // renders it below the content. The landing page has none.

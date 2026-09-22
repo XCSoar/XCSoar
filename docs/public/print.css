@@ -326,9 +326,19 @@
     font-size: 9pt;
 }
 
-/* The licence text runs over several pages. */
-.print-page-body pre.license {
+/* The licence is plain text over several pages, one paragraph per block:
+   the frame of the web version would be drawn around every fragment. */
+.print-page-body .license {
+    border: 0;
+    background: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
     break-inside: auto;
+}
+
+.print-page-body .license-paragraph {
+    font-size: 9pt;
 }
 
 .print-page-body code {

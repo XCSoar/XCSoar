@@ -14,3 +14,18 @@
     --color-xcsoar-900: #1c344a;
     --color-xcsoar-950: #111f2d;
 }
+
+/* The licence page shows COPYING verbatim, as one box of paragraphs; see
+   modules/page-meta.ts. The prose code block cannot be used for it, it
+   would print as a single unbreakable element. */
+.license {
+    @apply my-5 border border-muted bg-muted rounded-md px-4 py-3 overflow-x-auto;
+}
+
+.license-paragraph {
+    @apply font-mono text-sm/6 whitespace-pre-wrap wrap-break-word;
+}
+
+.license-paragraph + .license-paragraph {
+    @apply mt-[1lh];
+}
