@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Thermal climb trace">
+  <path d="M2 47 2 39C30 39 30 25 58 25 86 25 86 15 114 15L114 47Z" fill="#199403"/>
+  <path d="M2 47H114" stroke="#808080" stroke-width="1"/>
+</svg>

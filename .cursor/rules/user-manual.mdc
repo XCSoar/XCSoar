@@ -114,7 +114,7 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
 
 ### InfoBox pages
 
-`docs/content/3.infobox/*.md` are two parts:
+`docs/content/3.infobox/*.md` are three parts:
 
 - The **frontmatter** (`title`, `infobox.*`) is generated from
   `src/InfoBoxes/Content/Factory.cpp` and `Type.hpp`. Never edit it by hand.
@@ -124,6 +124,56 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   page. `infobox.comment` is the comment next to the enumerator in
   `src/InfoBoxes/Content/Type.hpp`; it is kept although the pages do not show
   it yet.
+- The **demo values** (`infobox.demo`) are written by hand and kept by the
+  script, like the body. They show one typical reading of the InfoBox at the
+  top of its page, drawn as XCSoar draws it:
+
+  ```yaml
+    demo:
+      title: MC MANUAL   # only when the InfoBox replaces its own title
+      value: "2.9"       # the number alone, as the box prints it
+      unit: m/s          # drawn small next to the value, none for none
+      comment: +2.6 m/s  # the small line below, with its unit
+      color: green       # red, blue, green, yellow or magenta
+      commentColor: red  # the same for the comment
+      graphic: barogram  # instead of a value, see below
+  ```
+
+  Read `src/InfoBoxes/Content/*.cpp` for the InfoBox before writing them:
+  `SetValueFrom*` says how the number is formatted, `SetComment*` what the
+  small line shows, `SetValueColor` and `SetTitle` when the colour or the
+  title changes. The colours are those of `Look/InfoBoxLook.cpp`. Follow the
+  formatters in `Formatter/` rather than a guess; the ones that are easy to
+  get wrong:
+
+  | Value | Written as |
+  |-------|------------|
+  | Glide ratio | one decimal below 100, unit `:1` |
+  | Bearing difference | `12°»` to the right, `«12°` to the left, `«»` ahead |
+  | Bearing | no leading zero, `73°` |
+  | Vertical speed as a value | no plus sign, the sign is stripped |
+  | Vertical speed as a comment | with plus sign, unless the call passes `false` |
+  | Task speed | one decimal below 100, plain speed none |
+  | Distance | two decimals below 10, one below 100, none above |
+  | Arrival altitude | always signed, `+340` |
+  | Duration | `mm'ss`, or `hh:mm` with the seconds as the comment |
+
+  All pages share one flight, a Ventus on a cross-country task in southern
+  Germany in metric units, so the values fit together across the reference;
+  take the numbers from that flight, not from a new one. An InfoBox whose
+  value is never drawn, like Free RAM, carries no demo.
+
+  Quote a value only where YAML needs it: numbers, times such as `"12:30"`,
+  `"070"` and anything that would otherwise read back as a number, a boolean
+  or an indicator.
+
+  An InfoBox that draws a diagram instead of a value (barogram, traces,
+  climb band, task progress, horizon, thermal assistant, wind arrow, next
+  arrow, climb chart) names a schematic drawing from
+  `docs/public/img/infobox/` in `graphic`, without the extension; it fills
+  the value area. The drawings are plain SVG of `0 0 120 50`, a few strokes
+  in the colours of the app, enough to recognise the diagram, not a copy of
+  it. A new one of these InfoBoxes gets a new drawing there.
 - The **markdown body** is written by hand and kept by the script. A new
   InfoBox gets a body that goes beyond the help text: how the value is
   computed, what it needs (polar, wind, task, connected device), when it is
@@ -190,11 +240,15 @@ An inline component is `:name{attributes}` inside a sentence.
 | `::tip`, `::note`, `::warning` | Hints and warnings set apart from the text |
 | `::gesture-aside{id="DR"}` ... `::` | A paragraph with the gesture drawing in a column beside it; `id` takes one or several gesture IDs separated by spaces |
 | `:gesture{id="U" size="sm"}` | A gesture drawing inside a sentence |
+| `:infobox{title="MC" value="1.8" unit="m/s"}` | An InfoBox as XCSoar draws it, for a reading the page describes |
+| `::infobox-aside{title="WP AltD" value="+340" unit="m"}` ... `::` | A paragraph with an InfoBox in a column beside it |
 | `:gesture{id="DU" float}` | A gesture drawing floated at the start of a paragraph inside a `:::field`, the text wraps around it |
 | `![Alt](/img/figures/x.png "Caption")` | A figure with caption; `{width=32}` for icons; never scaled above natural size |
 | GFM tables | Data; they take the width of their content, no HTML, no colspan |
 | `::card`, `::u-page-*` | Cards and page sections, as on the landing page |
 
+`:infobox` takes the same fields as `infobox.demo` above; use it where a page
+explains what different readings of an InfoBox mean, one box per reading.
 Gesture IDs are those of `Data/Input/default.xci`. Images are referenced by
 their URL (`/img/figures/`, `/img/drawings/`, `/img/icons/`); where the files
 live is configured in `nuxt.config.ts` and described in `docs/README.md`.

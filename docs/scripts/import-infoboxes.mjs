@@ -304,6 +304,11 @@ function escapeYamlString(value) {
         return '';
     }
 
+    // The index is a number in the schema and stays one here.
+    if (typeof value === 'number') {
+        return String(value);
+    }
+
     let str = String(value);
 
     str = str.replace(/\r\n/g, '\n');
@@ -314,22 +319,34 @@ function escapeYamlString(value) {
         .replace(/\n/g, '\\n')
         .replace(/\t/g, '\\t');
 
-    if (
-        str.startsWith('-') ||
-        str.startsWith(':') ||
-        str.startsWith('?') ||
-        str.startsWith('@') ||
-        str.startsWith('`') ||
-        str.includes(':') ||
-        str.includes('\\"') ||
-        str.includes('\\\\') ||
-        str.includes('\\n') ||
-        str.trim() === '---'
-    ) {
-        return `"${str}"`;
+    // A string is safe without quotes when it carries no indicator that
+    // YAML would read as syntax and holds a letter, so that numbers,
+    // dates and times keep their quotes. Everything else, "% Climb" or
+    // "---" among it, is quoted.
+    const plain = /^[A-Za-z0-9]([^:#\n\t\\"]*[^\s:#])?$/;
+    const booleanWord = /^(y|yes|n|no|true|false|on|off|null)$/i;
+
+    if (plain.test(str) && /[A-Za-z]/.test(str) && !booleanWord.test(str)) {
+        return str;
     }
 
-    return str;
+    return `"${str}"`;
+}
+
+// The demo block of an existing page: a typical reading of the InfoBox,
+// written by hand and not derived from the source, so it is kept.
+function readDemoBlock(text) {
+    const lines = text.split('\n');
+    const start = lines.findIndex(line => line === '  demo:');
+
+    if (start < 0) return null;
+
+    // Everything indented deeper than the key belongs to the block, so
+    // nested mappings and blank lines survive.
+    const end = lines.findIndex((line, index) =>
+        index > start && line.trim() !== '' && !/^ {3}/.test(line));
+
+    return lines.slice(start, end < 0 ? lines.length : end).join('\n');
 }
 
 // The InfoBox name from Factory.cpp becomes the page title; every other
@@ -349,7 +366,8 @@ function formatYamlBlock(item) {
         line('  caption', item.caption),
         line('  help', item.help),
         line('  category', item.category),
-    ].join('\n');
+        item.demo,
+    ].filter(line => line !== null && line !== undefined).join('\n');
 }
 
 // Similarity of two texts, 0 to 1 (normalised Levenshtein distance).
@@ -418,13 +436,15 @@ function main() {
         const filePath = path.join(OUT_DIR, fileName);
 
         let existingBody = '';
+        let demo = null;
 
         if (fs.existsSync(filePath)) {
             const existing = fs.readFileSync(filePath, 'utf-8');
             // extract everything after the closing ---
-            const match = existing.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
+            const match = existing.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
             if (match) {
-                existingBody = match[1];
+                demo = readDemoBlock(match[1]);
+                existingBody = match[2];
             }
         }
 
@@ -432,7 +452,7 @@ function main() {
             console.warn(`[WARN] ${fileName}: the body repeats the help text`);
         }
 
-        const content = `---\n${formatYamlBlock(item)}\n---\n${existingBody}`;
+        const content = `---\n${formatYamlBlock({ ...item, demo })}\n---\n${existingBody}`;
         fs.writeFileSync(filePath, content, 'utf-8');
     }
 

@@ -79,7 +79,8 @@ removed:
 
 - `scripts/import-infoboxes.mjs` writes the frontmatter of
   `content/3.infobox/*.md` from `src/InfoBoxes/Content/Factory.cpp` and keeps
-  the markdown body of each page. Run it after changing an InfoBox.
+  the demo values and the markdown body of each page. Run it after changing
+  an InfoBox.
 - `scripts/build-pdf.mjs [section] [output.pdf]` prints one section, see above.
 - `scripts/import-history.mjs` collects `content-history.json` from the LaTeX
   and RST sources at the commit named in its `BASE` constant. It is run once
