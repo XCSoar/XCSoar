@@ -9,7 +9,7 @@
 #include "ui/dim/Rect.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -475,7 +475,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
 #ifdef HAVE_VIBRATOR
     /* releasing the slider is the end of a deliberate drag; give it
        the same feedback as a long press */
-    Vibrate(HapticFeedbackType::LONG_PRESS);
+    PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
 #endif
 
     scroll_bar.DragEnd(this);
@@ -489,7 +489,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
 #ifdef HAVE_VIBRATOR
     /* generate the feedback before activating the item, which may
        open a modal dialog and thus return only much later */
-    Vibrate(HapticFeedbackType::PRESS);
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
     ActivateItem();
@@ -513,7 +513,7 @@ ListControl::OnMouseUp(PixelPoint p) noexcept
       /* a tap which only moves the cursor gets the lighter selection
          feedback; a scroll gesture gets none */
       if ((unsigned)tapped != GetCursorIndex())
-        Vibrate(HapticFeedbackType::SELECTION);
+        PlayHapticFeedback(HapticFeedbackType::SELECTION);
 #endif
 
       SetCursorIndex(tapped);
@@ -604,13 +604,13 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     // -> start mouse drag
 #ifdef HAVE_VIBRATOR
     /* only when grabbing the slider, not while dragging it */
-    Vibrate(HapticFeedbackType::PRESS);
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
     scroll_bar.DragBegin(this, Pos.y);
   } else if (scroll_bar.IsInside(Pos)) {
 #ifdef HAVE_VIBRATOR
-    Vibrate(HapticFeedbackType::PRESS);
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
     /* Pressed beside the slider: move the slider there on the press

@@ -17,7 +17,7 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "UserMapScale.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -640,7 +640,7 @@ GlueMapWindow::OnMouseGesture(const char *gesture) noexcept
   /* generate the feedback before running the event, which may open a
      modal dialog and thus return only much later */
   if (InputEvents::IsGesture(gesture))
-    Vibrate(HapticFeedbackType::GESTURE);
+    PlayHapticFeedback(HapticFeedbackType::GESTURE);
 #endif
 
   return InputEvents::processGesture(gesture);

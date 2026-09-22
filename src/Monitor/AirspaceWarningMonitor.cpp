@@ -5,7 +5,7 @@
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Audio/Sound.hpp"
-#include "Hardware/Vibrator.hpp"
+#include "Form/Button.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "ui/event/Idle.hpp"
 #include "Look/Colors.hpp"
@@ -332,7 +332,7 @@ AirspaceWarningMonitor::Check() noexcept
     ResetUserIdle();
     PlayResource("IDR_WAV_BEEPBWEEP");
 #ifdef HAVE_VIBRATOR
-    Vibrate(HapticFeedbackType::ALARM);
+    PlayHapticFeedback(HapticFeedbackType::ALARM);
 #endif
 
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
@@ -374,7 +374,7 @@ AirspaceWarningMonitor::Check() noexcept
   ResetUserIdle();
   PlayResource("IDR_WAV_BEEPBWEEP");
 #ifdef HAVE_VIBRATOR
-  Vibrate(HapticFeedbackType::ALARM);
+  PlayHapticFeedback(HapticFeedbackType::ALARM);
 #endif
 
   if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
