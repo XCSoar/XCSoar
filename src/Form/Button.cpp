@@ -38,14 +38,14 @@ Button::Button() = default;
 Button::~Button() noexcept = default;
 
 void
-PlayHapticFeedback() noexcept
+PlayHapticFeedback([[maybe_unused]] HapticFeedbackType type) noexcept
 {
 #ifdef HAVE_VIBRATOR
   const UISettings &ui_settings = CommonInterface::GetUISettings();
   if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
       (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
        GlobalSettings::haptic_feedback))
-    Vibrate(HapticFeedbackType::PRESS);
+    Vibrate(type);
 #endif
 }
 

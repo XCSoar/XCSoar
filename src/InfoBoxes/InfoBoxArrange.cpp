@@ -210,8 +210,6 @@ InfoBoxArrange::Begin(unsigned id) noexcept
   if (!IsActive())
     Enter();
 
-  PlayHapticFeedback();
-
   overlay->GetArrange().SelectSlot(id);
   overlay->RestartTimeout();
 }

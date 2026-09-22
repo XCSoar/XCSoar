@@ -728,17 +728,16 @@ InfoBoxArrangeWindow::OnPickerTimer() noexcept
   if (!drag || drag->following)
     return;
 
-  /* the hold is armed; the picker waits for lift-off */
+  /* the hold is armed; lifting now opens the content list */
   picker_armed = true;
   fade_timer.Cancel();
+  PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
   Invalidate();
 }
 
 void
 InfoBoxArrangeWindow::ShowPicker(unsigned slot) noexcept
 {
-  PlayHapticFeedback();
-
   OnArrangeSuspend();
 
   if (InfoBoxManager::ShowInfoBoxPicker(*panel, slot)) {
@@ -929,10 +928,12 @@ InfoBoxArrangeWindow::Activate() noexcept
 
   Invalidate();
 
-  if (unmoved)
+  if (unmoved) {
     /* taking and putting down without moving means the user wants to
        change the InfoBox instead */
+    PlayHapticFeedback();
     ShowPicker(described_slot);
+  }
 
   return true;
 }
@@ -975,10 +976,12 @@ InfoBoxArrangeWindow::BeginDrag(unsigned slot, PixelPoint pointer,
 
   card_floating = follow;
 
-  if (!follow)
+  if (!follow) {
     /* Material race: still until LONG_PRESS opens the picker;
        movement past slop starts a drag and cancels it */
+    PlayHapticFeedback();
     SchedulePicker();
+  }
 
   SetCapture();
   OnArrangeActivity();

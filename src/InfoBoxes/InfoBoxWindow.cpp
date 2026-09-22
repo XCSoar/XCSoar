@@ -15,6 +15,7 @@
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxArrange.hpp"
+#include "Form/Button.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
 
@@ -394,6 +395,8 @@ InfoBoxWindow::OnMouseDown(PixelPoint p) noexcept
     dragging = true;
     SetCapture();
 
+    PlayHapticFeedback();
+
     pressed = true;
     Invalidate();
 
@@ -573,8 +576,9 @@ InfoBoxWindow::OnDialogTimer() noexcept
   fade_timer.Cancel();
 
   if (long_press_pending) {
-    /* the hold is armed; the action waits for lift-off */
+    /* the hold is armed; lifting now opens arrange */
     hold_armed = true;
+    PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
     Invalidate();
     return;
   }
