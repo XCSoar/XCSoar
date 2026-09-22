@@ -67,10 +67,10 @@ with the fewest steps.
 
     ::::u-page-card
     ---
-    icon: i-lucide-zap
-    title: Quick Guide
-    description: XCSoar in a flash. A checklist from installation to the after flight check for your first flights with XCSoar.
-    to: /quick-guide/xcsoar-in-a-flash
+    icon: i-lucide-terminal
+    title: Developers
+    description: Building XCSoar, the architecture and how to contribute.
+    to: /dev
     variant: subtle
     ---
     ::::
@@ -99,10 +99,10 @@ with the fewest steps.
 
     ::::u-page-card
     ---
-    icon: i-lucide-terminal
-    title: Developers
-    description: Building XCSoar, the architecture and how to contribute.
-    to: /dev
+    icon: i-lucide-zap
+    title: Quick Guide
+    description: XCSoar in a flash. A checklist from installation to the after flight check for your first flights with XCSoar.
+    to: /quick-guide/xcsoar-in-a-flash
     variant: subtle
     ---
     ::::
