@@ -137,6 +137,7 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   with a link or URL that cannot be broken, and the frontmatter.
 - One space between sentences, never two. A hard line break is a backslash at
   the end of the line, not two spaces.
+- Every file ends with a newline, markdown, YAML and JSON alike.
 - Typographic apostrophe ’. Unicode instead of LaTeX maths and symbols: `°`,
   `×`, `γ`, `≥`. Hyphen-minus as in the sources, no dashes.
 - Open questions as `<!-- TODO ... -->` at the end of a line, never on a line
