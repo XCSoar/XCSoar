@@ -10701,3 +10701,15 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "手冊"
 
+
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation from a Bluetooth pulse oximeter, in percent."
+msgstr ""
