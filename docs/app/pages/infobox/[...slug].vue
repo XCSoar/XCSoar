@@ -88,7 +88,15 @@ const facts = computed(() => [
         <UPageBody>
             <template v-if="!isIndexPage">
                 <div class="my-6 flex flex-col gap-6 sm:flex-row sm:items-start">
-                    <InfoBoxPreview :caption="infobox.caption" />
+                    <Infobox
+                        :title="infobox.demo?.title ?? infobox.caption"
+                        :value="infobox.demo?.value ?? '---'"
+                        :unit="infobox.demo?.unit ?? ''"
+                        :comment="infobox.demo?.comment ?? ''"
+                        :color="infobox.demo?.color ?? ''"
+                        :comment-color="infobox.demo?.commentColor ?? ''"
+                        :graphic="infobox.demo?.graphic ?? ''"
+                    />
                     <div class="min-w-0 flex-1">
                         <div class="mb-3 flex flex-wrap items-center gap-2">
                             <UBadge v-if="infobox.category" color="primary" variant="subtle">{{ infobox.category }}</UBadge>
