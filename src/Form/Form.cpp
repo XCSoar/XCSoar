@@ -111,7 +111,6 @@ WndForm::OnCreate()
   WindowStyle client_style;
   client_style.ControlParent();
   client_area.Create(*this, client_rect, look.background_color, client_style);
-  client_area.SetGradientTopColor(look.background_gradient_top_color);
 }
 
 void

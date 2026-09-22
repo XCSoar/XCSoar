@@ -165,11 +165,23 @@ protected:
   bool compass_visible = true;
 
   /**
+   * Is the menu bar currently covering the map?  While it is, the HUD
+   * items that would end up underneath it are not drawn.
+   */
+  bool menu_visible = false;
+
+  /**
    * Width at the right edge of the map covered by the overlay buttons
    * (menu, quick menu, zoom).  HUD items in the top right corner are
    * moved left by this amount so the buttons do not hide them.
    */
   unsigned top_right_margin = 0;
+
+  /**
+   * The usable content area for overlays and aircraft centering:
+   * GetClientRect(), or the region the info boxes leave free.
+   */
+  PixelRect content_rect{0, 0, 0, 0};
 
 #ifndef ENABLE_OPENGL
   /**

@@ -17,6 +17,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
@@ -233,11 +234,14 @@ AnalysisWidget::Layout::Layout(const DialogLook &look,
     : TextButtonRenderer::GetMinimumButtonWidth(look.button,
                                                 _("Task Calc"));
 
-  /* close button on the bottom left */
+  /* close button on the bottom left; the buttons keep the gap to the
+     screen edges that they have between each other */
 
-  close_button.left = rc.left;
-  close_button.right = rc.left + info_width;
-  close_button.bottom = rc.bottom;
+  const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
+
+  close_button.left = rc.left + margin;
+  close_button.right = close_button.left + info_width;
+  close_button.bottom = rc.bottom - margin;
   close_button.top = close_button.bottom - button_height;
 
   /* previous/next buttons above the close button */
@@ -273,7 +277,7 @@ AnalysisWidget::Layout::Layout(const DialogLook &look,
     /* use the larger of info_height or button_stack_height to avoid overlap */
     const unsigned bottom_area_height = std::max(info_height, button_stack_height);
 
-    main.bottom = rc.bottom - bottom_area_height - padding;
+    main.bottom = rc.bottom - margin - bottom_area_height - padding;
     info.left = close_button.right + padding;
     info.right = rc.right;
     info.top = main.bottom + padding;

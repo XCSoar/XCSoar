@@ -8,6 +8,7 @@
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "UIState.hpp"
 #include "UIGlobals.hpp"
@@ -669,51 +670,52 @@ TrafficWidget::Windows::UpdateLayout(const PixelRect &rc) noexcept
 {
   view.Move(rc);
 
-  const unsigned margin = Layout::Scale(1);
+  /* the buttons keep the gap to the edges that they have between each
+     other: two neighbouring windows touch, and #ButtonFrameRenderer
+     insets each face by its margin */
+  const unsigned margin = ButtonFrameRenderer::GetEdgeMargin(rc);
   const unsigned button_height =
     std::max(1u, Layout::GetMinimumControlHeight());
-  const unsigned button_width = std::max({unsigned(rc.right / 6),
-                                          button_height, margin + 1u});
+  const unsigned button_width = std::max(unsigned(rc.right / 6),
+                                         button_height);
 
   const int x1 = rc.right / 2;
   const int x0 = x1 - button_width;
 
-  const int y0 = margin;
+  const int y0 = rc.top + (int)margin;
   const int y1 = y0 + button_height;
-  const int y3 = rc.bottom - margin;
+  const int y3 = rc.bottom - (int)margin;
   const int y2 = y3 - button_height;
 
   PixelRect button_rc;
 
-  const int btn_w = std::max(1, int(button_width) - int(margin));
-
   button_rc.left = x0;
   button_rc.top = y0;
-  button_rc.right = button_rc.left + btn_w;
+  button_rc.right = x1;
   button_rc.bottom = y1;
   zoom_in_button.Move(button_rc);
 
   button_rc.left = x1;
-  button_rc.right = button_rc.left + btn_w;
+  button_rc.right = x1 + (int)button_width;
   zoom_out_button.Move(button_rc);
 
   button_rc.left = x0;
   button_rc.top = y2;
-  button_rc.right = button_rc.left + btn_w;
+  button_rc.right = x1;
   button_rc.bottom = y3;
   previous_item_button.Move(button_rc);
 
   button_rc.left = x1;
-  button_rc.right = button_rc.left + btn_w;
+  button_rc.right = x1 + (int)button_width;
   next_item_button.Move(button_rc);
 
-  button_rc.left = margin;
+  button_rc.left = rc.left + (int)margin;
   button_rc.top = button_height * 3 / 2;
   button_rc.right = button_rc.left + Layout::Scale(50);
   button_rc.bottom = button_rc.top + button_height;
   details_button.Move(button_rc);
 
-  button_rc.right = rc.right - margin;
+  button_rc.right = rc.right - (int)margin;
   button_rc.left = button_rc.right - Layout::Scale(50);
   close_button.Move(button_rc);
 }
@@ -946,6 +948,12 @@ TrafficWidget::UpdateButtons() noexcept
   windows->previous_item_button.SetEnabled(unlocked && two_or_more);
   windows->next_item_button.SetEnabled(unlocked && two_or_more);
   windows->details_button.SetEnabled(unlocked && not_empty);
+}
+
+const Color *
+TrafficWidget::GetBackgroundColor() const noexcept
+{
+  return &UIGlobals::GetLook().flarm_dialog.background_color;
 }
 
 void
