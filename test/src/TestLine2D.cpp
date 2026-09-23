@@ -32,6 +32,15 @@ TestLine2D()
   ok1(a.SquareDistanceTo({2, 0}) == 0);
   ok1(a.SquareDistanceTo({6, 10}) == 100);
 
+  /* InterpolateClip() keeps the result between a and b */
+  ok1(a.InterpolateClip(0.25) == DoublePoint2D(1, 0));
+  ok1(a.InterpolateClip(0) == DoublePoint2D(0, 0));
+  ok1(a.InterpolateClip(1) == DoublePoint2D(4, 0));
+  ok1(a.InterpolateClip(-1) == DoublePoint2D(0, 0));
+  ok1(a.InterpolateClip(2) == DoublePoint2D(4, 0));
+  ok1(a.InterpolateClip(a.ProjectedRatio({6, 10})) == DoublePoint2D(4, 0));
+  ok1(a.InterpolateClip(a.ProjectedRatio({-3, 5})) == DoublePoint2D(0, 0));
+
   const DoubleLine2D b({0, 0}, {0, 4});
   ok1(b.GetSquaredDistance() == 16);
   ok1(b.GetMiddle() == DoublePoint2D(0, 2));
@@ -63,4 +72,13 @@ TestLine2D()
   ok1(c.SquareDistanceTo({1, 5}) == 0);
   ok1(c.SquareDistanceTo({5, 2}) == 5);
   ok1(c.SquareDistanceTo({0, 2}) == 5);
+  ok1(c.InterpolateClip(0.5) == DoublePoint2D(2, 3));
+
+  /* a line of zero length collapses every ratio onto its only
+     point; ProjectedRatio() is undefined there, so callers must not
+     feed its result into InterpolateClip() */
+  const DoubleLine2D d({2, 3}, {2, 3});
+  ok1(d.InterpolateClip(0.5) == DoublePoint2D(2, 3));
+  ok1(d.InterpolateClip(-1) == DoublePoint2D(2, 3));
+  ok1(d.InterpolateClip(2) == DoublePoint2D(2, 3));
 }
