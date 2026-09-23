@@ -29,3 +29,10 @@
 .license-paragraph + .license-paragraph {
     @apply mt-[1lh];
 }
+
+/* Field groups whose names are identifiers from the source (build macros,
+   XML attributes, file names): draw the name like inline code, the way
+   backticks would in running text. */
+.name-code > div > div > span:first-child {
+    @apply inline-block rounded-md border border-muted bg-muted px-1.5 py-0.5 font-mono text-sm font-medium text-highlighted;
+}
