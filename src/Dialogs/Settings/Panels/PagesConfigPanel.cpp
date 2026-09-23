@@ -34,11 +34,6 @@
 #include "Weather/SkySight/SkySightClient.hpp"
 #endif
 
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
-
 class PageLayoutEditWidget final
   : public RowFormWidget, private DataFieldListener {
 public:

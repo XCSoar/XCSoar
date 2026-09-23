@@ -29,11 +29,6 @@
 #include <vector>
 #include <cassert>
 
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
-
 class PlaneListWidget final
   : public ListWidget {
 

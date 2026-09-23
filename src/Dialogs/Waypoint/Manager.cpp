@@ -22,11 +22,6 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
-
 class WaypointManagerWidget final
   : public ListWidget {
 
