@@ -53,6 +53,20 @@ private:
   OrderedTaskPoint *tp_previous = nullptr;
   FlatBoundingBox flat_bb{}; // empty, not initialised
 
+  /**
+   * A copy of OrderedTaskSettings::navigate_nearest, managed by
+   * SetOrderedTaskSettings().
+   */
+  bool navigate_nearest = false;
+
+  /**
+   * The point of the observation zone nearest to the aircraft, or an
+   * invalid location when navigation refers to the point the task
+   * refers to.  Only OrderedTask fills this in, and only for the start
+   * and the finish.
+   */
+  GeoPoint nearest_point = GeoPoint::Invalid();
+
 public:
   /**
    * Constructor.
@@ -104,7 +118,17 @@ public:
   }
 
   virtual void SetTaskBehaviour([[maybe_unused]] const TaskBehaviour &tb) noexcept {}
-  virtual void SetOrderedTaskSettings([[maybe_unused]] const OrderedTaskSettings &otb) noexcept {}
+  virtual void SetOrderedTaskSettings(const OrderedTaskSettings &otb) noexcept;
+
+  /**
+   * Update the point navigation refers to, according to the current
+   * aircraft position and the OrderedTaskSettings.
+   *
+   * @param location the current aircraft location
+   * @param projection the projection used by the task
+   */
+  void UpdateNearestPoint(const GeoPoint &location,
+                          const FlatProjection &projection) noexcept;
 
   /**
    * Set previous/next task points.
@@ -272,10 +296,14 @@ public:
   const GeoPoint &GetLocationRemaining() const noexcept override {
     return ScoredTaskPoint::GetLocationRemaining();
   }
+  const GeoPoint &GetLocationNavigation() const noexcept override;
   GeoVector GetVectorRemaining(const GeoPoint &) const noexcept override {
     return TaskLeg::GetVectorRemaining();
   }
   GeoVector GetNextLegVector() const noexcept override;
+
+  /* virtual methods from class ScoredTaskPoint */
+  void Reset() noexcept override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */

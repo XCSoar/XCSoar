@@ -86,6 +86,9 @@ public:
   double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
+  GeoPoint GetNearestPoint(const FlatProjection &projection,
+                           const GeoPoint &location) const noexcept override;
+
   bool Equals(const ObservationZonePoint &other) const noexcept override;
   GeoPoint GetRandomPointInSector(const double mag) const noexcept override;
 

@@ -62,6 +62,9 @@ public:
   double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
+  GeoPoint GetNearestPoint(const FlatProjection &projection,
+                           const GeoPoint &location) const noexcept override;
+
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
     return std::make_unique<LineSectorZone>(*this, _reference);
   }
