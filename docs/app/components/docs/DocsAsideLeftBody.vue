@@ -3,8 +3,6 @@ const route = useRoute();
 const { sidebarNavigation } = useSubNavigation();
 const { navigationByCategory } = useInfoBoxNavigation();
 
-console.log(route.path);
-
 const isInfoBoxes = computed(() => route.path.startsWith('/infobox'));
 
 const searchTerm = ref('');
