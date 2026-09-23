@@ -4,9 +4,14 @@
 #pragma once
 
 #include "Device/Driver.hpp"
+#include "thread/Cond.hxx"
+#include "thread/Mutex.hxx"
 #include "time/PeriodClock.hpp"
+#include "util/StaticString.hxx"
 
 #include <atomic>
+#include <string>
+#include <string_view>
 
 class NMEAInputLine;
 
@@ -24,6 +29,18 @@ class ACDDevice : public AbstractDevice {
    */
   std::atomic<unsigned> cached_com_standby_khz{0};
   std::atomic<bool> com_standby_khz_known{false};
+
+  Mutex response_mutex;
+  Cond response_cond;
+  std::string_view pending_code, pending_item;
+  StaticString<65> response_value;
+  bool response_pending = false, response_ready = false;
+  bool response_ok = false;
+
+  bool ParseConfiguration(NMEAInputLine &line) noexcept;
+  bool RequestConfiguration(const char *request, const char *code,
+                            const char *item, std::string &value,
+                            OperationEnvironment &env);
 
 public:
   ACDDevice(Port &_port):port(_port) {}
@@ -44,4 +61,16 @@ public:
   bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
   void OnCalculatedUpdate(const MoreData &basic,
                           [[maybe_unused]] const DerivedInfo &calculated) override;
+
+  /** Query an ACD configuration item while this device is borrowed. */
+  bool ReadConfiguration(const char *code, const char *item,
+                         std::string &value, OperationEnvironment &env);
+
+  bool ReadConfigurationUnsigned(const char *code, const char *item,
+                                 unsigned &value, unsigned max,
+                                 OperationEnvironment &env);
+
+  /** Set an item and wait for the device's acknowledgement. */
+  bool WriteConfiguration(const char *code, const char *item,
+                          unsigned value, OperationEnvironment &env);
 };
