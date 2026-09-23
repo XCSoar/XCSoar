@@ -9,8 +9,6 @@
 #include "poll/Queue.hpp"
 #elif defined(ENABLE_SDL)
 #include "sdl/Queue.hpp"
-#elif defined(_WIN32)
-#include "windows/Queue.hpp"
 #else
 #error No EventQueue implementation
 #endif
