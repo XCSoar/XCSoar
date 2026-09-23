@@ -31,11 +31,6 @@
 
 static unsigned task_list_serial;
 
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
-
 class TaskListPanel final
   : public ListWidget {
 
