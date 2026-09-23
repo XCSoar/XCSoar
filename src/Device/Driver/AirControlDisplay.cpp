@@ -2,7 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device/Driver/AirControlDisplay.hpp"
-#include "Device/Driver.hpp"
+#include "Device/Driver/AirControlDisplay/Internal.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -18,48 +18,10 @@
 #include "Formatter/NMEAFormatter.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Operation/Operation.hpp"
-#include "time/PeriodClock.hpp"
 
-#include <atomic>
 #include <cassert>
 
 using std::string_view_literals::operator""sv;
-
-class ACDDevice : public AbstractDevice {
-  friend bool ParsePAAVS(NMEAInputLine &line, NMEAInfo &info,
-                         ACDDevice *dev) noexcept;
-
-  Port &port;
-  PeriodClock status_clock;
-
-  /**
-   * Last COM standby channel (kHz) from the panel or from our own
-   * PutStandbyFrequency.  CHN1 is read-only on the ACD; tuning active uses
-   * CHN2 + swap + restore (see PutActiveFrequency).
-   */
-  std::atomic<unsigned> cached_com_standby_khz{0};
-  std::atomic<bool> com_standby_khz_known{false};
-
-public:
-  ACDDevice(Port &_port):port(_port) {}
-
-  /* virtual methods from class Device */
-  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  bool PutQNH(const AtmosphericPressure &pres,
-              OperationEnvironment &env) override;
-  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-  bool PutActiveFrequency(RadioFrequency frequency,
-                          const char *name,
-                          OperationEnvironment &env) override;
-  bool PutStandbyFrequency(RadioFrequency frequency,
-                           const char *name,
-                           OperationEnvironment &env) override;
-  bool ExchangeRadioFrequencies(OperationEnvironment &env,
-                                NMEAInfo &info) override;
-  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
-  void OnCalculatedUpdate(const MoreData &basic,
-                          [[maybe_unused]] const DerivedInfo &calculated) override;
-};
 
 bool
 ParsePAAVS(NMEAInputLine &line, NMEAInfo &info, ACDDevice *dev) noexcept
