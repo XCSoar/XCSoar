@@ -51,10 +51,6 @@ DrawRoundProgressBar(Canvas &canvas, const PixelRect &r,
                      unsigned min_value, unsigned max_value,
                      const Color *background_color) noexcept
 {
-  const unsigned position =
-    CalcProgressBarPosition(current_value, min_value, max_value,
-                            r.GetWidth());
-
   canvas.SelectNullPen();
   if (background_color != nullptr) {
     Brush bg_brush(*background_color);
@@ -64,20 +60,35 @@ DrawRoundProgressBar(Canvas &canvas, const PixelRect &r,
   }
   canvas.DrawRoundRectangle(r, PixelSize{r.GetHeight()});
 
+  /* Inset the fill on every side.  Scaling it to the full width and
+     then shifting it right by the margin draws the end cap past the
+     track. */
+  const unsigned margin = r.GetHeight() / 9;
+  const unsigned width = r.GetWidth();
+  if (width <= 2 * margin)
+    return;
+
+  const unsigned position =
+    CalcProgressBarPosition(current_value, min_value, max_value,
+                            width - 2 * margin);
+  if (position == 0)
+    return;
+
   Brush progress_brush(IsDithered() ? COLOR_BLACK : COLOR_XCSOAR_LIGHT);
   canvas.Select(progress_brush);
-  unsigned margin = r.GetHeight() / 9;
   unsigned top, bottom;
   if (position <= r.GetHeight() - 2 * margin) {
-    // Use a centered "circle" for small position values. This keeps the progress
-    // bar inside the background.
-    unsigned center_y = r.GetHeight() / 2;
+    /* A short fill is a circle, so it stays inside the track cap. */
+    const unsigned center_y = r.GetHeight() / 2;
     top = center_y - position / 2;
     bottom = center_y + position / 2;
   } else {
     top = margin;
     bottom = r.GetHeight() - margin;
   }
-  canvas.DrawRoundRectangle(PixelRect(margin, top, margin + position, bottom),
+  canvas.DrawRoundRectangle(PixelRect(r.left + int(margin),
+                                      r.top + int(top),
+                                      r.left + int(margin + position),
+                                      r.top + int(bottom)),
                             PixelSize{r.GetHeight()});
 }
