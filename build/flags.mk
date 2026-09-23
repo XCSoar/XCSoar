@@ -54,7 +54,8 @@ ifneq ($(MAKECMDGOALS),python)
   endif
 endif
 
-ifeq ($(DEBUG)$(HAVE_WIN32)$(TARGET_IS_DARWIN),nnn)
+# MinGW ld accepts --gc-sections. Darwin's linker does not.
+ifeq ($(DEBUG)$(TARGET_IS_DARWIN),nn)
   CXX_FEATURES += -ffunction-sections
   C_FEATURES += -ffunction-sections
   TARGET_LDFLAGS += -Wl,--gc-sections
