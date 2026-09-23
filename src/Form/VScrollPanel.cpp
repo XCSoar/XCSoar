@@ -22,7 +22,7 @@ VScrollPanel::VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                            const PixelRect &rc,
                            const WindowStyle style,
                            VScrollPanelListener &_listener) noexcept
-  :PanelControl(parent, look, rc, style),
+  :PanelControl(parent, rc, style),
    listener(_listener),
    scroll_bar(look.button)
 {

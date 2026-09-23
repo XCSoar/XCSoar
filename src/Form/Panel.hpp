@@ -5,8 +5,6 @@
 
 #include "ui/window/ContainerWindow.hpp"
 
-struct DialogLook;
-
 /**
  * The PanelControl class implements the simplest form of a ContainerControl.
  *
@@ -22,13 +20,11 @@ public:
    * Constructor of the PanelControl class
    * @param owner Parent ContainerControl
    */
-  PanelControl(ContainerWindow &parent, const DialogLook &look,
-               const PixelRect &rc,
+  PanelControl(ContainerWindow &parent, const PixelRect &rc,
                const WindowStyle style=WindowStyle()) {
-    Create(parent, look, rc, style);
+    Create(parent, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const DialogLook &look,
-              const PixelRect &rc,
+  void Create(ContainerWindow &parent, const PixelRect &rc,
               const WindowStyle style=WindowStyle());
 };

@@ -171,7 +171,7 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
 
   const PixelRect constrained_grid_rc = CalculateConstrainedGridRect(client_rc);
   auto grid_view = std::make_unique<GridView>();
-  grid_view->Create(parent, dialog_look, constrained_grid_rc, grid_view_style,
+  grid_view->Create(parent, constrained_grid_rc, grid_view_style,
                     column_width, row_height);
 
   WindowStyle buttonStyle;

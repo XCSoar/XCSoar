@@ -573,7 +573,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
   info_widget.Initialise(parent, layout.main);
   info_widget.Prepare();
 
-  details_panel.Create(parent, look, layout.main, dock_style);
+  details_panel.Create(parent, layout.main, dock_style);
   details_text.Create(details_panel, layout.details_text);
   details_text.SetFont(look.text_font);
   details_text.SetColors(look.ReadOnlyValueBackground(), look.list.text_color,
