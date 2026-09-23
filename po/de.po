@@ -4464,6 +4464,12 @@ msgstr "Abflughöhe bezogen auf"
 msgid "Reference used for start max height rule."
 msgstr "Bezug für die Regel über die max. Abflughöhe."
 
+msgid "Navigate to nearest point"
+msgstr "Zum nächstgelegenen Punkt navigieren"
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr "Navigiert zum nächstgelegenen Punkt der Abflug- und Zielzone."
+
 msgid "Finish min. height"
 msgstr "Min. Ankunftshöhe"
 

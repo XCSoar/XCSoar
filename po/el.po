@@ -4490,6 +4490,12 @@ msgstr "Αναφορά αρχικού ύψ."
 msgid "Reference used for start max height rule."
 msgstr "Αναφέρεται για την αρχική περιοχή ωρολόγιας μέγιστης."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Μέγιστη ωρολόγια βάθους"
 

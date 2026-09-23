@@ -4465,6 +4465,12 @@ msgstr "Înalțime de referință la început"
 msgid "Reference used for start max height rule."
 msgstr "Referința folosită pentru regulă maximă de înălțime la început."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "Înalțime minima la finalizare"
 

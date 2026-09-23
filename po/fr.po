@@ -4475,6 +4475,12 @@ msgstr "Réf. hauteur départ"
 msgid "Reference used for start max height rule."
 msgstr "Référence utilisée par la règle de hauteur max. de départ."
 
+msgid "Navigate to nearest point"
+msgstr "Naviguer vers le point le plus proche"
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr "Navigue vers le point le plus proche des zones de départ et d'arrivée."
+
 msgid "Finish min. height"
 msgstr "Hauteur min. d'arrivée"
 

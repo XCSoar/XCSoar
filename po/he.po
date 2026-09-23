@@ -4455,6 +4455,12 @@ msgstr "בסיס ההתחלה"
 msgid "Reference used for start max height rule."
 msgstr "הבסיס משמש עבור חוק maksימלי של הגובה של התחלה."
 
+msgid "Navigate to nearest point"
+msgstr ""
+
+msgid "Navigate to the nearest point of the start and finish zones."
+msgstr ""
+
 msgid "Finish min. height"
 msgstr "הגובה המינימלי הסופי"
 
