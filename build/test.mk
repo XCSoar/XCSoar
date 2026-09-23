@@ -2934,40 +2934,6 @@ DUMP_VARIO_SOURCES = \
 DUMP_VARIO_DEPENDS = $(DEBUG_REPLAY_DEPENDS) AUDIO GEO MATH SCREEN EVENT UTIL OS TIME
 $(eval $(call link-program,DumpVario,DUMP_VARIO))
 
-RUN_TASK_EDITOR_DIALOG_SOURCES = \
-	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
-	$(SRC)/Dialogs/Inflate.cpp \
-	$(SRC)/Dialogs/ComboPicker.cpp \
-	$(SRC)/Dialogs/HelpDialog.cpp \
-	$(SRC)/Dialogs/dlgTaskOverview.cpp \
-	$(SRC)/Dialogs/WaypointList.cpp \
-	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
-	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
-	$(SRC)/Math/SunEphemeris.cpp \
-	$(SRC)/Airspace/AirspaceParser.cpp \
-	$(MORE_SCREEN_SOURCES) \
-	$(SRC)/Look/GlobalFonts.cpp \
-	$(SRC)/Task/ProtectedTaskManager.cpp \
-	$(SRC)/LocalPath.cpp \
-	$(SRC)/UtilsFont.cpp \
-	$(SRC)/Units/Units.cpp \
-	$(SRC)/Units/Settings.cpp \
-	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Formatter/Units.cpp \
-	$(SRC)/Repository/FileType.cpp \
-	$(SRC)/Waypoint/WaypointGlue.cpp \
-	$(SRC)/Waypoint/Factory.cpp \
-	$(TEST_SRC_DIR)/FakeAsset.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeTerrain.cpp \
-	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
-RUN_TASK_EDITOR_DIALOG_LDADD = $(FAKE_LIBS)
-RUN_TASK_EDITOR_DIALOG_DEPENDS = WAYPOINTFILE TASKFILE OPERATION FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE IO OS THREAD ZZIP UTIL GEO
-$(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
-
 TEST_NOTIFY_SOURCES = \
 	$(SRC)/Hardware/CPU.cpp \
 	$(SRC)/ui/event/Idle.cpp \
