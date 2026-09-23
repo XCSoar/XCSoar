@@ -129,8 +129,6 @@ IsShiftKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
   return SDL_GetModState() & (KMOD_LSHIFT | KMOD_RSHIFT);
-#elif defined(USE_WINUSER)
-  return GetKeyState(VK_SHIFT) & 0x8000;
 #else
   /* X11 sends XK_ISO_Left_Tab instead; elsewhere Tab only moves
      forwards */
@@ -159,12 +157,10 @@ InfoBoxArrangeWindow::Create(ContainerWindow &parent,
   window_style.TabStop();
   PaintWindow::Create(parent, rc, window_style);
 
-#ifndef USE_WINUSER
   if (style == Style::MAP)
     /* the map below must still be painted (and invalidated), even
        though this window covers the whole screen */
     SetTransparent();
-#endif
 }
 
 void
