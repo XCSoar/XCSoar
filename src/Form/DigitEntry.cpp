@@ -981,9 +981,6 @@ DigitEntry::OnPaint(Canvas &canvas) noexcept
 
   const bool focused = HasCursorKeys() && HasFocus();
 
-  if (HaveClipping())
-    canvas.Clear(look.background_color);
-
   canvas.Select(look.text_font);
   canvas.SetBackgroundOpaque();
 

@@ -5,7 +5,6 @@
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Button.hpp"
 #include "ui/event/KeyCode.hpp"
@@ -320,10 +319,6 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     canvas.Clear(look.list.pressed.background_color);
   else if (focused)
     canvas.Clear(look.focused.background_color);
-  else if (HaveClipping())
-    /* with clipping, the parent's background does not extend into
-       child windows, so we must fill the background ourselves */
-    canvas.Clear(look.background_color);
 
   if (!caption.empty()) {
     canvas.SetTextColor(focused && !pressed
@@ -349,11 +344,8 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     if (org.x < 1)
       org.x = 1;
 
-    if (HaveClipping())
-      canvas.DrawText(org, caption.c_str());
-    else
-      canvas.DrawClippedText(org, clip_width - org.x,
-                             caption.c_str());
+    canvas.DrawClippedText(org, clip_width - org.x,
+                           caption.c_str());
   }
 
   Color background_color, text_color;

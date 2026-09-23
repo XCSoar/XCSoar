@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "ProgressBar.hpp"
-#include "ui/canvas/Features.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/ProgressBarRenderer.hpp"
 #include "thread/Debug.hpp"
@@ -49,9 +48,9 @@ ProgressBar::Step()
   Invalidate();
 }
 
-#if defined(EYE_CANDY) && !defined(HAVE_CLIPPING)
-/* when the Canvas is clipped, we can't render rounded corners,
-   because the parent's background would not be left visible then */
+#ifdef EYE_CANDY
+/* Rounded corners leave the parent's background visible in the
+   corner pixels. */
 #define ROUND_PROGRESS_BAR
 #endif
 
