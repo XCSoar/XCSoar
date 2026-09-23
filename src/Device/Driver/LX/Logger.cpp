@@ -248,7 +248,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
     }
 
     p += lengths[i];
-    env.SetProgressPosition(p - data.get());
+    env.SetProgressBytes(unsigned(p - data.get()));
+    env.SetProgressPosition(unsigned(p - data.get()));
   }
 
   return LX::ConvertLXNToIGC(data.get(), total_length, os);

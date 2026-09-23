@@ -97,6 +97,8 @@ LXEosDevice::DownloadFlight(const RecordedFlightInfo& flight,
         throw std::runtime_error("Oversize read");
 
       bytes_remaining -= block.size();
+      env.SetProgressBytes(flight.internal.lx_eos.file_size
+                           - bytes_remaining);
 
       // Progress in percents downloaded
       float progress =
