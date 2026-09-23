@@ -5,8 +5,9 @@
 
 #include <Python.h>
 
-#include "util/tstring.hpp"
 #include "time/Stamp.hpp"
+
+#include <string>
 
 struct BrokenDateTime;
 struct GeoPoint;
@@ -65,9 +66,9 @@ namespace Python {
   bool PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix);
 
   /**
-   * Convert a python string/unicode object to a tstring (aka std::[w]string)
+   * Convert a python string/unicode object to a UTF-8 std::string
    */
-  bool PyStringToString(PyObject *py_string, tstring &string);
+  bool PyStringToString(PyObject *py_string, std::string &string);
 
   TimeStamp PyLongToTimeStamp(PyObject* clock);
 };

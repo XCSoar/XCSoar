@@ -16,11 +16,11 @@
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "util/tstring.hpp"
 #include "util/Macros.hpp"
 
-#include <vector>
 #include <algorithm>
+#include <string>
+#include <vector>
 
 static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { "CLASSA", CLASSA },
@@ -109,7 +109,7 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
   }
 
   /* Parse airspace name */
-  tstring name;
+  std::string name;
 
   if (!Python::PyStringToString(py_name, name)) {
     PyErr_SetString(PyExc_ValueError, "Can't parse airspace name.");
@@ -117,7 +117,7 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
   }
 
   /* Parse airspace class */
-  tstring as_class;
+  std::string as_class;
   AirspaceClass type = AirspaceClass::OTHER;
 
   if (!Python::PyStringToString(py_as_class, as_class)) {
@@ -131,7 +131,7 @@ PyObject* xcsoar_Airspaces_addPolygon(Pyxcsoar_Airspaces *self, PyObject *args) 
   }
 
   /* Parse airspace base and top */
-  tstring base_ref, top_ref;
+  std::string base_ref, top_ref;
   AirspaceAltitude base, top;
 
   if (!Python::PyStringToString(py_base_ref, base_ref)) {

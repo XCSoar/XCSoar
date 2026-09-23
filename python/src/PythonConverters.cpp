@@ -394,7 +394,7 @@ bool Python::PyTupleToIGCFixEnhanced(PyObject *py_fix, IGCFixEnhanced &fix) {
   return true;
 }
 
-bool Python::PyStringToString(PyObject *py_string, tstring &string) {
+bool Python::PyStringToString(PyObject *py_string, std::string &string) {
 #if PY_MAJOR_VERSION >= 3
   if (PyUnicode_Check(py_string)) {
     string.assign(PyUnicode_AsUTF8(py_string));
