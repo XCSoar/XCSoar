@@ -9,7 +9,12 @@
 #include "Convert.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
+#include "Device/Util/NMEAReader.hpp"
+#include "Device/Util/NMEAWriter.hpp"
+#include "NMEA/DeviceInfo.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Operation/Operation.hpp"
+#include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
 #include "system/Path.hpp"
 #include "io/BufferedOutputStream.hxx"
@@ -17,10 +22,42 @@
 #include "util/ScopeExit.hxx"
 #include "util/SpanCast.hxx"
 
+#include <chrono>
 #include <memory>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+/**
+ * Ask for PLXVC,INFO and apply the answer.  Returns as soon as
+ * the reply arrives, or when the read times out.
+ */
+static void
+WaitForLoggerInfo(LXDevice &device, Port &port,
+                  OperationEnvironment &env)
+{
+  port.StopRxThread();
+
+  PortNMEAReader reader(port, env);
+  PortWriteNMEA(port, "PLXVC,INFO,R", env);
+
+  const char *payload =
+    reader.ExpectLine("PLXVC,INFO,A,",
+                      TimeoutClock(std::chrono::seconds(2)));
+  if (payload == nullptr)
+    return;
+
+  NMEAInputLine line(payload);
+  DeviceInfo info;
+  info.product.SetASCII(line.ReadView());
+  if (info.product.empty())
+    return;
+
+  info.software_version.SetASCII(line.ReadView());
+  line.Skip(); /* version date */
+  info.serial.SetASCII(line.ReadView());
+  device.IdDeviceByName(info.product, info);
+}
 
 static bool
 ParseDate(BrokenDate &date, const char *p)
@@ -131,6 +168,11 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
+  /* Until INFO,A arrives, an S-series logger still looks like a
+     Colibri.  Wait for that sentence before choosing a protocol. */
+  if (!IsLXNAVLogger() && !is_colibri)
+    WaitForLoggerInfo(*this, port, env);
+
   if (IsLXNAVLogger()) {
     if (!EnableLoggerNMEA(env))
       return false;
