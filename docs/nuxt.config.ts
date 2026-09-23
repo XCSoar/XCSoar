@@ -41,6 +41,12 @@ export default defineNuxtConfig({
             if (landing) landing.meta = { ...landing.meta, layout: 'docs' };
         },
     },
+    components: [
+        // Nuxt Content resolves prose components by their global name, so an
+        // override of one (app/components/prose/) has to be global as well.
+        { path: '~/components/prose', pathPrefix: false, global: true },
+        '~/components',
+    ],
     content: {
         build: {
             markdown: {

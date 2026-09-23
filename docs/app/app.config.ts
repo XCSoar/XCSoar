@@ -69,7 +69,10 @@ export default defineAppConfig({
                     root: 'my-0 scroll-mt-[calc(48px+45px+var(--ui-header-height))] lg:scroll-mt-[calc(48px+var(--ui-header-height))]',
                     container: 'font-sans text-base',
                     name: 'font-semibold text-highlighted',
-                    description: 'mt-1 ml-5 text-base text-default [&_code]:text-sm',
+                    // A field description keeps its paragraphs (see
+                    // app/components/ProseField.vue); they sit tight
+                    // under the name and apart from each other.
+                    description: 'mt-1 ml-5 text-base text-default [&_code]:text-sm [&_p]:my-0 [&_p+p]:mt-3',
                 },
             },
         },
