@@ -12,6 +12,7 @@
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
+#include "Engine/Task/ObservationZones/SectorZone.hpp"
 
 #define ACCURACY 500
 
@@ -520,6 +521,250 @@ TestTravelledDistance()
   }
 }
 
+struct StartLegStats {
+  double remaining, planned, distance_min;
+};
+
+/**
+ * Fly towards a start observation zone, with a finish point due north,
+ * and collect the values the option is supposed to affect.
+ */
+static StartLegStats
+FlyToStart(std::unique_ptr<ObservationZonePoint> start_zone,
+           bool navigate_nearest, const AircraftState &aircraft)
+{
+  OrderedTaskSettings settings = task_behaviour.ordered_defaults;
+  settings.navigate_nearest = navigate_nearest;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+
+  const StartPoint tp1(std::move(start_zone), WaypointPtr(wp1),
+                       task_behaviour, settings.start_constraints);
+  task.Append(tp1);
+  const FinishPoint tp2(std::make_unique<LineSectorZone>(wp3->location),
+                        WaypointPtr(wp3), task_behaviour,
+                        settings.finish_constraints, false);
+  task.Append(tp2);
+  task.UpdateGeometry();
+
+  ok1(!IsError(task.CheckTask()));
+
+  task.Update(aircraft, aircraft, glide_polar);
+
+  const TaskStats &stats = task.GetStats();
+  const StartLegStats result{stats.current_leg.vector_remaining.distance,
+                             stats.total.planned.GetDistance(),
+                             stats.distance_min};
+
+  /* once the start is no longer the active task point, navigation
+     must let go of the observation zone again */
+  task.SetActiveTaskPoint(1);
+  task.Update(aircraft, aircraft, glide_polar);
+  ok1(task.GetPoint(0).GetLocationNavigation() ==
+      task.GetPoint(0).GetLocationRemaining());
+
+  return result;
+}
+
+/**
+ * Fly towards a finish observation zone, with the start already behind,
+ * and return the remaining distance of the current leg.
+ */
+static double
+FlyToFinish(std::unique_ptr<ObservationZonePoint> finish_zone,
+            bool navigate_nearest, const AircraftState &aircraft)
+{
+  OrderedTaskSettings settings = task_behaviour.ordered_defaults;
+  settings.navigate_nearest = navigate_nearest;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+
+  const StartPoint tp1(std::make_unique<LineSectorZone>(wp1->location, 1000),
+                       WaypointPtr(wp1), task_behaviour,
+                       settings.start_constraints);
+  task.Append(tp1);
+  const FinishPoint tp2(std::move(finish_zone), WaypointPtr(wp3),
+                        task_behaviour, settings.finish_constraints, false);
+  task.Append(tp2);
+  task.UpdateGeometry();
+
+  ok1(!IsError(task.CheckTask()));
+
+  task.SetActiveTaskPoint(1);
+  task.Update(aircraft, aircraft, glide_polar);
+
+  return task.GetStats().current_leg.vector_remaining.distance;
+}
+
+/**
+ * With "navigate to nearest point" enabled, a start line and a start
+ * cylinder are navigated to at their nearest point, while the task keeps
+ * referring to the start waypoint.  A sector, and a cylinder the
+ * aircraft is inside of, are left alone.
+ */
+static void
+TestStartNearestPoint()
+{
+  /* the aircraft is behind the start line, well east of its center */
+  const auto aircraft = MakeTimedAircraft(0.05, 44.95, 1500,
+                                          FloatDuration{3600});
+
+  const auto line_off =
+    FlyToStart(std::make_unique<LineSectorZone>(wp1->location, 20000),
+               false, aircraft);
+  const auto line_on =
+    FlyToStart(std::make_unique<LineSectorZone>(wp1->location, 20000),
+               true, aircraft);
+
+  ok1(equals(line_off.remaining, aircraft.location.Distance(wp1->location)));
+
+  /* The line runs east/west through wp1, thus its nearest point is due
+     north of the aircraft.  Its ends follow a great circle and bulge
+     about 7.8 m north of the latitude of wp1, so the expected value is
+     only good to a few tens of metres; ACCURACY 500 would spend most
+     of its relative budget on that. */
+  ok1(equals(line_on.remaining,
+             aircraft.location.Distance(MakeGeoPoint(0.05, 45)), 100));
+
+  /* the option changes navigation only, not the task */
+  ok1(equals(line_off.planned, line_on.planned));
+  ok1(equals(line_off.distance_min, line_on.distance_min));
+
+  /* a start cylinder is navigated to at its near edge, one radius
+     short of the center on the bearing to the aircraft; the radius is
+     small enough to leave the aircraft outside the cylinder */
+  const auto cylinder_off =
+    FlyToStart(std::make_unique<CylinderZone>(wp1->location, 5000),
+               false, aircraft);
+  const auto cylinder_on =
+    FlyToStart(std::make_unique<CylinderZone>(wp1->location, 5000),
+               true, aircraft);
+
+  ok1(equals(cylinder_on.remaining,
+             aircraft.location.Distance(wp1->location) - 5000, 100));
+  ok1(cylinder_on.remaining < cylinder_off.remaining);
+  ok1(equals(cylinder_off.planned, cylinder_on.planned));
+
+  /* a sector covers only part of the circle, so it keeps the node
+     find_best_start() picks for it */
+  const auto sector_off =
+    FlyToStart(std::make_unique<SectorZone>(wp1->location, 10000),
+               false, aircraft);
+  const auto sector_on =
+    FlyToStart(std::make_unique<SectorZone>(wp1->location, 10000),
+               true, aircraft);
+
+  ok1(equals(sector_off.remaining, sector_on.remaining));
+
+  /* inside a start cylinder the nearest point of the rim is behind the
+     aircraft, away from the next task point, so the node
+     find_best_start() picks is kept */
+  const auto inside_off =
+    FlyToStart(std::make_unique<CylinderZone>(wp1->location, 20000),
+               false, aircraft);
+  const auto inside_on =
+    FlyToStart(std::make_unique<CylinderZone>(wp1->location, 20000),
+               true, aircraft);
+
+  ok1(equals(inside_off.remaining, inside_on.remaining));
+}
+
+/**
+ * With "navigate to nearest point" enabled, a finish line is reached at
+ * its nearest point.  A finish cylinder already refers to its rim.
+ */
+static void
+TestFinishNearestPoint()
+{
+  /* the aircraft is short of the finish, well east of its center */
+  const auto aircraft = MakeTimedAircraft(0.05, 45.95, 1500,
+                                          FloatDuration{3600});
+
+  const auto line_off =
+    FlyToFinish(std::make_unique<LineSectorZone>(wp3->location, 20000),
+                false, aircraft);
+  const auto line_on =
+    FlyToFinish(std::make_unique<LineSectorZone>(wp3->location, 20000),
+                true, aircraft);
+
+  ok1(equals(line_off, aircraft.location.Distance(wp3->location), 100));
+  ok1(equals(line_on,
+             aircraft.location.Distance(MakeGeoPoint(0.05, 46)), 100));
+
+  const auto cylinder_on =
+    FlyToFinish(std::make_unique<CylinderZone>(wp3->location, 3000),
+                true, aircraft);
+
+  /* the minimum distance path already picks a point on the rim of a
+     finish cylinder rather than its center, so the option only makes
+     that point the nearest one */
+  ok1(equals(cylinder_on,
+             aircraft.location.Distance(wp3->location) - 3000, 100));
+}
+
+/**
+ * With "navigate to nearest point" enabled, the remaining distance runs
+ * on through the start: before it, the leg after the start begins at
+ * the nearest point of the line, where the glider is going to cross it,
+ * rather than at the point the task refers to.
+ */
+static void
+TestStartNearestPointContinuity()
+{
+  OrderedTaskSettings settings = task_behaviour.ordered_defaults;
+  settings.navigate_nearest = true;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+
+  const StartPoint tp1(std::make_unique<LineSectorZone>(wp1->location, 20000),
+                       WaypointPtr(wp1), task_behaviour,
+                       settings.start_constraints);
+  task.Append(tp1);
+  /* a tiny turn point cylinder, so the leg after the start ends at a
+     fixed point */
+  const ASTPoint tp2(std::make_unique<CylinderZone>(wp2->location, 10),
+                     WaypointPtr(wp2), task_behaviour);
+  task.Append(tp2);
+  const FinishPoint tp3(std::make_unique<LineSectorZone>(wp3->location),
+                        WaypointPtr(wp3), task_behaviour,
+                        settings.finish_constraints, false);
+  task.Append(tp3);
+  task.UpdateGeometry();
+
+  ok1(!IsError(task.CheckTask()));
+
+  /* about 5 km east of the center of the start line, which is still
+     the point making the task shortest; the turn point is close enough
+     for the two start points to be some 300 m apart in distance */
+  const auto before = MakeTimedAircraft(0.06, 44.999, 1500,
+                                        FloatDuration{3600});
+  const auto after = MakeTimedAircraft(0.06, 45.001, 1500,
+                                       FloatDuration{3610});
+
+  task.Update(before, before, glide_polar);
+  ok1(!task.GetStats().start.HasStarted());
+  const auto remaining_before =
+    task.GetStats().total.remaining.GetDistance();
+
+  const auto nearest = MakeGeoPoint(0.06, 45);
+  const auto tail = nearest.Distance(wp2->location) +
+    wp2->location.Distance(wp3->location);
+  ok1(fabs(remaining_before - before.location.Distance(nearest) - tail)
+      < 30);
+
+  task.Update(after, before, glide_polar);
+  ok1(task.GetStats().start.HasStarted());
+  const auto remaining_after = task.GetStats().total.remaining.GetDistance();
+
+  /* the remaining distance drops by the distance flown, without a jump
+     when the start is crossed */
+  ok1(fabs(remaining_before - remaining_after -
+           before.location.Distance(after.location)) < 30);
+}
+
 static void
 TestAll()
 {
@@ -534,7 +779,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8);
+  plan_tests(746 + 8 + 31 + 5);
 
   task_behaviour.SetDefaults();
 
@@ -549,6 +794,10 @@ int main()
 
   glide_polar.SetMC(4);
   TestAll();
+
+  TestStartNearestPoint();
+  TestFinishNearestPoint();
+  TestStartNearestPointContinuity();
 
   return exit_status();
 }

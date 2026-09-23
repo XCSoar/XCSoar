@@ -253,6 +253,7 @@ static void
 Serialise(WritableDataNode &node, const OrderedTaskSettings &data)
 {
   node.SetAttribute("aat_min_time", data.aat_min_time);
+  node.SetAttribute("navigate_nearest", data.navigate_nearest);
   node.SetAttribute("start_requires_arm",
                     data.start_constraints.require_arm);
   node.SetAttribute("start_score_exit",

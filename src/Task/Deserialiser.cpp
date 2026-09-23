@@ -253,6 +253,7 @@ static void
 Deserialise(OrderedTaskSettings &data, const ConstDataNode &node)
 {
   node.GetAttribute("aat_min_time", data.aat_min_time);
+  node.GetAttribute("navigate_nearest", data.navigate_nearest);
   node.GetAttribute("start_requires_arm",
                     data.start_constraints.require_arm);
   node.GetAttribute("start_score_exit",

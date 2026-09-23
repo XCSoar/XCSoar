@@ -101,6 +101,10 @@ Version 7.46 - not yet released
     Airspace transparency setting are gone
   - improve stable OpenGL airspace fills and padding while preserving
     overlapping borders #2479
+* task
+  - add a "Navigate to nearest point" task rule: aim at the start and
+    finish zone where the glider is going to cross it, not where the
+    task is shortest; off by default #2388
 * FLARM
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
@@ -296,6 +300,7 @@ Version 7.46 - not yet released
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
   - describe the gesture trail, its label and its vibration
+  - describe the "Navigate to nearest point" task rule
 * development
   - build system: keep each CI target's download cache to itself; a
     bare downloads-$os- restore key handed one target another

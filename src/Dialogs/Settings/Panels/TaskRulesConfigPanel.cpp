@@ -18,6 +18,7 @@ enum ControlIndex {
   StartMaxHeight,
   StartMaxHeightMargin,
   StartHeightRef,
+  NavigateNearest,
   spacer_2,
   FinishMinHeight,
   FinishHeightRef,
@@ -86,6 +87,11 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
           (unsigned)task_behaviour.ordered_defaults.start_constraints.max_height_ref);
   SetExpertRow(StartHeightRef);
 
+  AddBoolean(_("Navigate to nearest point"),
+             _("Navigate to the nearest point of the start and finish zones."),
+             task_behaviour.ordered_defaults.navigate_nearest);
+  SetExpertRow(NavigateNearest);
+
   AddSpacer();
   SetExpertRow(spacer_2);
 
@@ -147,6 +153,9 @@ TaskRulesConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValueEnum(StartHeightRef, ProfileKeys::StartHeightRef,
                            otb.start_constraints.max_height_ref);
+
+  changed |= SaveValue(NavigateNearest, ProfileKeys::NavigateNearest,
+                       otb.navigate_nearest);
 
   changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE,
                        ProfileKeys::FinishMinHeight,

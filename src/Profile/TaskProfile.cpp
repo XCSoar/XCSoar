@@ -62,6 +62,7 @@ Profile::Load(const ProfileMap &map, OrderedTaskSettings &settings)
 {
   Load(map, settings.start_constraints);
   Load(map, settings.finish_constraints);
+  map.Get(ProfileKeys::NavigateNearest, settings.navigate_nearest);
   map.Get(ProfileKeys::AATMinTime, settings.aat_min_time);
 }
 

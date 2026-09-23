@@ -3,6 +3,13 @@
 
 #include "ObservationZonePoint.hpp"
 
+GeoPoint
+ObservationZonePoint::GetNearestPoint(const FlatProjection &,
+                                      const GeoPoint &) const noexcept
+{
+  return GeoPoint::Invalid();
+}
+
 bool
 ObservationZonePoint::Equals(const ObservationZonePoint &other) const noexcept
 {

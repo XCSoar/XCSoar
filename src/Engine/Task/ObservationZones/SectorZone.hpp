@@ -139,6 +139,18 @@ public:
   double ScoreAdjustment() const noexcept override;
 
   /* virtual methods from class ObservationZonePoint */
+
+  /**
+   * A sector covers only part of the circle, so the rim point
+   * CylinderZone returns can fall outside it.
+   *
+   * \todo implement the sector geometry
+   */
+  GeoPoint GetNearestPoint(const FlatProjection &,
+                           const GeoPoint &) const noexcept override {
+    return GeoPoint::Invalid();
+  }
+
   bool Equals(const ObservationZonePoint &other) const noexcept override;
   std::unique_ptr<ObservationZonePoint> Clone(const GeoPoint &_reference) const noexcept override {
     return std::make_unique<SectorZone>(*this, _reference);
