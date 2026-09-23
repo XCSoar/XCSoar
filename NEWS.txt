@@ -64,6 +64,9 @@ Version 7.47 - not yet released
   - show the WeGlide task manager page only while WeGlide is enabled,
     and use one Upload Flight action for WeGlide and SoaringScoring
 * devices
+  - add an ACD Manage dialog for software version, available radio,
+    transponder and altitude functions, and supported radio and audio
+    settings; retain unsent edits if a save fails
   - Larus: pass on the instantaneous wind of ``$PLARW`` (``I``) next
     to the average wind (``A``)
 * android
