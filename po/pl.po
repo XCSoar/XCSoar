@@ -1117,10 +1117,6 @@ msgstr "Port TE"
 msgid "Bluetooth server"
 msgstr "Serwer Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Pośredni sterownik GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Wbudowany GPS i czujniki"
 

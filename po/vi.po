@@ -1093,10 +1093,6 @@ msgstr "Cổng BLE"
 msgid "Bluetooth server"
 msgstr "Server Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Driver Trung gian GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS tích hợp & cảm biến"
 

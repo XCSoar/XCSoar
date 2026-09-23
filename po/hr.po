@@ -1097,10 +1097,6 @@ msgstr "port BLE"
 msgid "Bluetooth server"
 msgstr "server Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS srednji vodič"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integrirani GPS i senzori"
 

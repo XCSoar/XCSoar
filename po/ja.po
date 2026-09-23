@@ -1121,10 +1121,6 @@ msgstr "TEポート"
 msgid "Bluetooth server"
 msgstr "ブルーツース　サーバー"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS　ドライバー"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "内蔵GPSセンサー"
 

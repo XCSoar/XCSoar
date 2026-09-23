@@ -27,7 +27,6 @@ static const char *const port_type_strings[] = {
   "nunchuck",
   "i2c_baro",
   "ioio_voltage",
-  "auto",
   "internal",
   "tcp_client",
   "tcp_listener",

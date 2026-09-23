@@ -251,6 +251,9 @@ InfoBoxManager::ShowInfoBoxPicker(InfoBoxSettings::Panel &panel,
 
   ComboList list;
   for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
+    if (j == InfoBoxFactory::e_Free_RAM)
+      continue;
+
     const char *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type)j);
     list.Append(j, gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
                 gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),

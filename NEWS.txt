@@ -186,6 +186,9 @@ Version 7.46 - not yet released
   - show no wind in the T Next Leg comment when the box is blank
     because wind is not available
 * ui
+  - remove the Free RAM InfoBox from the picker; it has shown no value
+    since Windows CE support ended. A layout that still selects it
+    stays blank
   - Support manual UTC offsets up to +14:00 in 15-minute increments
   - Keep automatic UTC offsets synchronized with the operating-system
     time zone, including daylight-saving and travel changes
@@ -263,6 +266,8 @@ Version 7.46 - not yet released
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
 * development
+  - drop the Windows CE GPS Intermediate Driver port type and the
+    unused HAVE_CE pkg-config path
   - build system: package Android APK and AAB from one
     aapt2/bundletool pipeline and one CI job #2021
   - build system: embed VERSIONINFO in XCSoar.exe and the NSIS

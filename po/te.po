@@ -1080,10 +1080,6 @@ msgstr "BLE పార్టు"
 msgid "Bluetooth server"
 msgstr "బ్లైథ్యూట్ సర్వర్"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS మధ్య డ్రివర్"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "ఇంబ్-బైన్రి GPS & సెన్సర్‌లు"
 

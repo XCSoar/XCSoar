@@ -1118,10 +1118,6 @@ msgstr "BLE Anschluss"
 msgid "Bluetooth server"
 msgstr "Bluetoothserver"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS Adapter"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Eingebautes GPS & Sensoren"
 

@@ -1114,10 +1114,6 @@ msgstr "Portul BLE"
 msgid "Bluetooth server"
 msgstr "Serviciu Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Driver Intermediar GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS integrat și senzori"
 

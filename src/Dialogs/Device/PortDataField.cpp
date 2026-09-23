@@ -290,7 +290,6 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config) noexcept
 {
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
-  case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:

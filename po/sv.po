@@ -1106,10 +1106,6 @@ msgstr "BLE-port"
 msgid "Bluetooth server"
 msgstr "Bluetooth-server"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS mellandrivrutin"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Inbyggd GPS och sensorer"
 

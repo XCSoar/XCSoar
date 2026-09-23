@@ -226,7 +226,8 @@ UpdateInfoBoxCPULoad(InfoBoxData &data) noexcept
 void
 UpdateInfoBoxFreeRAM(InfoBoxData &data) noexcept
 {
-  // used to be implemented on WinCE
+  /* The numeric id stays so saved layouts do not shift. The value was
+     only available on Windows CE. */
   data.SetInvalid();
 }
 

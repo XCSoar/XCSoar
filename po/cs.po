@@ -1103,10 +1103,6 @@ msgstr "BLE port"
 msgid "Bluetooth server"
 msgstr "Bluetooth server"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS zprostředkující ovladač"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Vestavěné GPS @ sensory"
 

@@ -1106,10 +1106,6 @@ msgstr "BLE 포트"
 msgid "Bluetooth server"
 msgstr "블루투스서버"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS중계드라이버"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "내장GPS&센서"
 

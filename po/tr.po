@@ -1090,10 +1090,6 @@ msgstr "BLE Portu"
 msgid "Bluetooth server"
 msgstr "Bluetooth sunucu"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS Araslık Sürücüsü"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "İçerikli GPS & Sensörler"
 
