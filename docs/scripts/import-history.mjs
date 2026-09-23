@@ -106,6 +106,17 @@ function regexTitle(title) {
     return regexEscape(title).replace(/[&%#_]/g, '\\\\$&');
 }
 
+// The quick guide pages are named after the phase of the flight they
+// belong to; these came from a LaTeX section with another name.
+const FLASH_SECTIONS = {
+    '2.installation.md': 'XCSoar Installation',
+    '3.configuration.md': 'Finish Configuration Setup',
+    '4.pre-flight-check.md': 'Pre-flight Check',
+    '5.pre-take-off-check.md': 'Start Check',
+    '6.in-flight.md': 'Fly',
+    '7.post-flight-check.md': 'After Flight Check',
+};
+
 // The developer pages are named after their content, the RST files they
 // came from after their topic; these are the ones that differ.
 const RST_FILES = {
@@ -184,7 +195,7 @@ function pageCommit(relative) {
     if (section === '2.quick-guide') {
         const file = `${MANUAL_DIR}/XCSoar-in-a-flash.tex`;
         if (rest[0] === '1.index.md') return { file, commit: fileCommit(file) };
-        const commit = sectionCommit(file, [page.title]);
+        const commit = sectionCommit(file, [FLASH_SECTIONS[rest[0]] ?? page.title]);
         if (!commit) console.warn(`[FILE] ${relative}: no section matches, using the whole file`);
         return { file, commit: commit ?? fileCommit(file) };
     }

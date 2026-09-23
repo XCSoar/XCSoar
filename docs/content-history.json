@@ -839,13 +839,13 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/2.xcsoar-installation.md": {
+  "2.quick-guide/2.installation.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/3.finish-configuration.md": {
+  "2.quick-guide/3.configuration.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",
@@ -857,19 +857,19 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/5.start-check.md": {
+  "2.quick-guide/5.pre-take-off-check.md": {
     "commit": "4b03f1406f0edd309da45dc2d1a56ea9514f5dba",
     "date": "2014-03-02",
     "author": "Wolfram Zirngibl",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/6.fly.md": {
+  "2.quick-guide/6.in-flight.md": {
     "commit": "4b03f1406f0edd309da45dc2d1a56ea9514f5dba",
     "date": "2014-03-02",
     "author": "Wolfram Zirngibl",
     "source": "doc/manual/en/XCSoar-in-a-flash.tex"
   },
-  "2.quick-guide/7.after-flight-check.md": {
+  "2.quick-guide/7.post-flight-check.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",

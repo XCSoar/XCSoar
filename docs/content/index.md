@@ -101,7 +101,7 @@ with the fewest steps.
     ---
     icon: i-lucide-zap
     title: Quick Guide
-    description: XCSoar in a flash. A checklist from installation to the after flight check for your first flights with XCSoar.
+    description: XCSoar in a flash. A checklist from installation to the post-flight check for your first flights with XCSoar.
     to: /quick-guide
     variant: subtle
     ---
