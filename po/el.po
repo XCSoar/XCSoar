@@ -1116,10 +1116,6 @@ msgstr "BLE υπολογιστικό"
 msgid "Bluetooth server"
 msgstr "Bluetooth διαδραστής"
 
-msgid "GPS Intermediate Driver"
-msgstr "Διαδυναμικός Ιντρόδραμος GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Περιεχόμενο για το GPS & συνοπτικά"
 

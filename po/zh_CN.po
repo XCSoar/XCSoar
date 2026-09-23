@@ -1080,10 +1080,6 @@ msgstr "BLE端口"
 msgid "Bluetooth server"
 msgstr "蓝牙服务器"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS中间驱动程序"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "内置GPS和传感器"
 

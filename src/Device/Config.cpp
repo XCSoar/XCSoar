@@ -41,9 +41,6 @@ DeviceConfig::IsAvailable() const noexcept
   case PortType::IOIOVOLTAGE:
     return HasIOIOLib();
 
-  case PortType::AUTO:
-    return false;
-
   case PortType::INTERNAL:
     return IsAndroid() || IsApple();
 
@@ -75,8 +72,6 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
     return false;
 
   case PortType::SERIAL:
-  case PortType::AUTO:
-    /* TODO: old branch for Windows CE due to its quirks */
     return false;
 
   case PortType::RFCOMM:
@@ -273,9 +268,6 @@ DeviceConfig::GetPortName(char *buffer, size_t max_size) const noexcept
 
   case PortType::IOIOVOLTAGE:
     return "IOIO voltage sensor";
-
-  case PortType::AUTO:
-    return _("GPS Intermediate Driver");
 
   case PortType::INTERNAL:
     return _("Built-in GPS & sensors");

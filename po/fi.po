@@ -1104,10 +1104,6 @@ msgstr "Vienti"
 msgid "Bluetooth server"
 msgstr "Bluetooth-palvelin"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS-mediaanjohtaja"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Sisäänrakennettu GPS ja anturit"
 

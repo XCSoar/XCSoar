@@ -1113,10 +1113,6 @@ msgstr "BLE порт"
 msgid "Bluetooth server"
 msgstr "Bluetooth сървър"
 
-msgid "GPS Intermediate Driver"
-msgstr "Междинен драйвер за ГПС"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Вграден ГПС и други датчици"
 

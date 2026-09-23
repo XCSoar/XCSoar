@@ -1122,10 +1122,6 @@ msgstr "Eksporter"
 msgid "Bluetooth server"
 msgstr "Bluetooth-server"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS mellomdriver"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Innebygd GPS og sensorer"
 

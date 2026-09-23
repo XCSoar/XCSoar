@@ -49,7 +49,6 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
     return a.i2c_bus == b.i2c_bus && a.i2c_addr == b.i2c_addr;
 
   case DeviceConfig::PortType::DISABLED:
-  case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::RFCOMM_SERVER:

@@ -1348,10 +1348,6 @@ msgstr ""
 msgid "Bluetooth server"
 msgstr ""
 
-msgid "GPS Intermediate Driver"
-msgstr ""
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr ""
 

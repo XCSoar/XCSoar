@@ -524,7 +524,6 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
     (DeviceConfig::PortType)(value >> 16);
   switch (new_type) {
   case DeviceConfig::PortType::DISABLED:
-  case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
   case DeviceConfig::PortType::NUNCHUCK:

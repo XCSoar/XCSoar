@@ -1114,10 +1114,6 @@ msgstr "TE pripojenie"
 msgid "Bluetooth server"
 msgstr "Bluetooth server"
 
-msgid "GPS Intermediate Driver"
-msgstr "Prídavný ovládač GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Zabudované GPS & senzory"
 

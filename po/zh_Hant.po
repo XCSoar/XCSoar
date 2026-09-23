@@ -1080,10 +1080,6 @@ msgstr "TE埠"
 msgid "Bluetooth server"
 msgstr "藍牙伺服器"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS中間驅動程式"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "內置GPS和感測器"
 

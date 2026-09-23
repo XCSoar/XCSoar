@@ -1104,10 +1104,6 @@ msgstr "יצוא"
 msgid "Bluetooth server"
 msgstr "שרת בלוטות"
 
-msgid "GPS Intermediate Driver"
-msgstr "שדרן GPS אמצעי"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "גי פי אס מובנה"
 

@@ -1109,10 +1109,6 @@ msgstr "TCP порт"
 msgid "Bluetooth server"
 msgstr "Сервер блютуз"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS промежуточный драйвер"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Встроенный GPS и другие сенсоры"
 

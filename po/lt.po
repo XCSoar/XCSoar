@@ -1101,10 +1101,6 @@ msgstr "BLE portas"
 msgid "Bluetooth server"
 msgstr "Bluetooth serveris"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS vidinis kiekinatorius"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integruotas GPS ir sensoriai"
 

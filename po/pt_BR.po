@@ -1109,10 +1109,6 @@ msgstr "Exportar"
 msgid "Bluetooth server"
 msgstr "Servidor Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Driver GPS Intermediário"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS embutido & sensores"
 
