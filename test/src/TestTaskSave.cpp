@@ -58,6 +58,13 @@ static void
 TestTaskSave()
 {
   OrderedTask task_saved(task_behaviour);
+
+  /* a non-default task rule, to check that the task carries it
+     instead of falling back to the TaskBehaviour defaults on load */
+  OrderedTaskSettings settings = ordered_task_settings;
+  settings.navigate_nearest = true;
+  task_saved.SetOrderedTaskSettings(settings);
+
   task_saved.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 500),
                          WaypointPtr(wp1),
                          task_behaviour,
@@ -87,6 +94,8 @@ TestTaskSave()
   ok1(task_loaded.get()->GetTaskPoint(0).GetWaypoint() == *wp1);
   ok1(task_loaded.get()->GetTaskPoint(1).GetWaypoint() == *wp2);
   ok1(task_loaded.get()->GetTaskPoint(2).GetWaypoint() == *wp3);
+
+  ok1(task_loaded.get()->GetOrderedTaskSettings().navigate_nearest);
 }
 
 static void
@@ -99,7 +108,7 @@ int main()
 {
   Directory::Create(Path{"output/results"});
 
-  plan_tests(10);
+  plan_tests(11);
   task_behaviour.SetDefaults();
   ordered_task_settings.SetDefaults();
   TestAll();

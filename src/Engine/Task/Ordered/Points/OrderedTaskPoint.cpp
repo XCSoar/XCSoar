@@ -6,6 +6,7 @@
 #include "ASTPoint.hpp"
 #include "AATPoint.hpp"
 #include "FinishPoint.hpp"
+#include "Task/Ordered/Settings.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -24,6 +25,42 @@ OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
    ScoredTaskPoint(GetLocation(), b_scored),
    ObservationZoneClient(std::move(_oz))
 {
+}
+
+void
+OrderedTaskPoint::SetOrderedTaskSettings(
+  const OrderedTaskSettings &otb) noexcept
+{
+  navigate_nearest = otb.navigate_nearest;
+
+  if (!navigate_nearest)
+    nearest_point = GeoPoint::Invalid();
+}
+
+const GeoPoint &
+OrderedTaskPoint::GetLocationNavigation() const noexcept
+{
+  /* the nearest point is only meaningful while the aircraft is still
+     heading for this task point */
+  return active_state == CURRENT_ACTIVE && nearest_point.IsValid()
+    ? nearest_point
+    : TaskPoint::GetLocationNavigation();
+}
+
+void
+OrderedTaskPoint::UpdateNearestPoint(const GeoPoint &location,
+                                     const FlatProjection &projection) noexcept
+{
+  nearest_point = navigate_nearest
+    ? GetObservationZone().GetNearestPoint(projection, location)
+    : GeoPoint::Invalid();
+}
+
+void
+OrderedTaskPoint::Reset() noexcept
+{
+  ScoredTaskPoint::Reset();
+  nearest_point = GeoPoint::Invalid();
 }
 
 void
@@ -175,6 +212,9 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
     return nullptr;
   }
 
+  /* the constructors take the start and finish constraints, but not
+     the settings which apply to every task point */
+  dest->SetOrderedTaskSettings(ordered_task_settings);
   return dest;
 }
 

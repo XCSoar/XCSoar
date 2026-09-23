@@ -17,6 +17,14 @@ struct OrderedTaskSettings {
   /** Desired AAT minimum task time (s) */
   std::chrono::duration<unsigned> aat_min_time;
 
+  /**
+   * Navigate to the point of the start and finish observation zones
+   * which is nearest to the aircraft, instead of the point the task
+   * refers to.  The shapes which do not implement
+   * ObservationZonePoint::GetNearestPoint() are left alone.
+   */
+  bool navigate_nearest;
+
   StartConstraints start_constraints;
   FinishConstraints finish_constraints;
 

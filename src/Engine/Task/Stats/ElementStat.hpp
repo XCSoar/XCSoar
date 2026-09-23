@@ -20,7 +20,7 @@ struct ElementStat
 {
   /**
    * The remaining location, i.e. the result of
-   * ScoredTaskPoint::GetLocationRemaining().  Always check
+   * TaskPoint::GetLocationNavigation().  Always check
    * GeoPoint::IsValid() before using this attribute.  This is only
    * implemented for one leg (TaskStats::current_leg).
    */
