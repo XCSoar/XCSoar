@@ -4,9 +4,7 @@
 #include "Form/Panel.hpp"
 
 void
-PanelControl::Create(ContainerWindow &parent,
-                     [[maybe_unused]] const DialogLook &look,
-                     const PixelRect &rc,
+PanelControl::Create(ContainerWindow &parent, const PixelRect &rc,
                      const WindowStyle style)
 {
   ContainerWindow::Create(parent, rc, style);

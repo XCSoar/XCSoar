@@ -5,13 +5,13 @@
 #include "Math/Util.hpp"
 
 void
-GridView::Create(ContainerWindow &parent, const DialogLook &look,
-                 const PixelRect &rc, const WindowStyle style,
+GridView::Create(ContainerWindow &parent, const PixelRect &rc,
+                 const WindowStyle style,
                  unsigned _column_width, unsigned _row_height)
 {
   column_width = _column_width;
   row_height = _row_height;
-  PanelControl::Create(parent, look, rc, style);
+  PanelControl::Create(parent, rc, style);
   current_page = 0;
   previous_page = 0;
   saved_row_from_previous_page = 0;

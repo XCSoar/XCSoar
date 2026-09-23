@@ -14,6 +14,7 @@
 #include <deque>
 
 class Canvas;
+struct DialogLook;
 
 class VScrollPanelListener {
 public:
