@@ -103,6 +103,8 @@ Version 7.46 - not yet released
     open #3049
 * glide computer
   - recognise slow launches in imported IGC files from sustained height gain
+  - detect slow launches in live flight when no aircraft polar is configured
+    or received; configured aircraft keep their polar-based takeoff speed
   - avoid false landings during low-speed climbs and cap the base landing
     threshold at 4 m/s for faster aircraft
   - fix best-glide speed and speed-to-fly at altitude when MacCready

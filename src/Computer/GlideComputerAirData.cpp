@@ -263,23 +263,27 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
     /* time warp: reset the computer */
     ResetFlight(calculated, true);
 
+  /* The built-in glide polar is valid even without a known aircraft. */
   FlightState(basic, calculated, calculated.flight,
-              settings.polar.glide_polar_task);
+              settings.polar.glide_polar_task,
+              settings.plane.polar_shape.reference_mass <= 0 &&
+              !settings.polar.polar_from_device);
 }
 
 inline void
 GlideComputerAirData::FlightState(const NMEAInfo &basic,
                                   const DerivedInfo &calculated,
                                   FlyingState &flying,
-                                  const GlidePolar &glide_polar)
+                                  const GlidePolar &glide_polar,
+                                  bool allow_slow_launch)
 {
-  auto v_takeoff = glide_polar.IsValid()
+  auto v_takeoff = !allow_slow_launch && glide_polar.IsValid()
     ? glide_polar.GetVTakeoff()
-    /* if there's no valid polar, assume 10 m/s (36 km/h); that's an
-       arbitrary value, but better than nothing */
+    /* Without a known polar, use 10 m/s (36 km/h) for the normal
+       speed path; the separate slow-launch path remains available. */
     : DEFAULT_TAKEOFF_SPEED;
 
-  flying_computer.Compute(v_takeoff, false, basic,
+  flying_computer.Compute(v_takeoff, allow_slow_launch, basic,
                           calculated, flying);
 }
 

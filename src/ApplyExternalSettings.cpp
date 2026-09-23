@@ -292,6 +292,7 @@ PolarProcessTimer() noexcept
 
   polar.SetVMax(DEFAULT_MAX_SPEED, false);
   polar.Update();
+  SetComputerSettings().polar.polar_from_device = true;
 
   if (backend_components)
     backend_components->SetTaskPolar(GetComputerSettings().polar);
