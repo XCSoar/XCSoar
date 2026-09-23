@@ -227,10 +227,6 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
 
   if (focused)
     canvas.Clear(cb_look.focus_background_brush);
-  else if (HaveClipping())
-    /* with clipping, the parent's background does not extend into
-       child windows, so we must fill the background ourselves */
-    canvas.Clear(look->background_brush);
 
   const auto &state_look = IsEnabled()
     ? (pressed

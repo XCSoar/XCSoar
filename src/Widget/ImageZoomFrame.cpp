@@ -3,11 +3,8 @@
 
 #include "ImageZoomFrame.hpp"
 #include "ImageZoomView.hpp"
-#include "UIGlobals.hpp"
-#include "Look/DialogLook.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/Features.hpp"
 #include "ui/event/KeyCode.hpp"
 
 void
@@ -44,10 +41,6 @@ ImageZoomFrame::NudgeViewByPixelOffset(const PixelPoint o) noexcept
 void
 ImageZoomFrame::OnPaint(Canvas &canvas) noexcept
 {
-  const auto &look = UIGlobals::GetDialogLook();
-  if (HaveClipping())
-    canvas.Clear(look.background_color);
-
   if (bitmap == nullptr || zoom_level == nullptr)
     return;
 

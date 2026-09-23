@@ -72,14 +72,10 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   case ButtonState::SELECTED:
   case ButtonState::ENABLED:
-    if (HaveClipping())
-      canvas.DrawFilledRectangle(rc, look.background_brush);
     canvas.SetTextColor(look.text_color);
     break;
 
   case ButtonState::DISABLED:
-    if (HaveClipping())
-      canvas.DrawFilledRectangle(rc, look.background_brush);
     canvas.SetTextColor(look.button.disabled.color);
     break;
   }

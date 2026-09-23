@@ -3,29 +3,17 @@
 
 #pragma once
 
-#include "ui/canvas/Features.hpp"
-
-#ifdef HAVE_CLIPPING
-#include "PanelWidget.hpp"
-#else
 #include "Widget.hpp"
-#endif
 
 #include <functional>
 
 /**
  * A #Widget implementation that calls a function when clicked.
+ *
+ * A #NullWidget avoids creating a panel window. The parent already
+ * paints the dialog background.
  */
-class ActionWidget
-#ifdef HAVE_CLIPPING
-/* need PanelWidget when HAVE_CLIPPING so dialog background gets
-   rendered in the Widget area just in case this Widget becomes
-   "visible", to avoid uninitialised screen area */
-  : public PanelWidget
-#else
-/* on OpenGL, we can avoid the overhead of creating a panel window */
-  : public NullWidget
-#endif
+class ActionWidget : public NullWidget
 {
   const std::function<void()> callback;
 
@@ -37,8 +25,6 @@ public:
   bool Click() noexcept override;
   void ReClick() noexcept override;
 
-#ifndef HAVE_CLIPPING
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
-#endif
 };
