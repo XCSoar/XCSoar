@@ -83,7 +83,10 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   the folder when the largest number gains a digit.
 - A folder starts with its first page. Only when a chapter needs an
   introduction of its own does it get a first page named after that content
-  (`00.concepts.md`, `00.task-modes.md`), never `index` or `overview`.
+  (`00.concepts.md`, `00.task-modes.md`), never `index` or `overview`. A
+  section that is linked under its own URL needs an `index.md` for that URL
+  (`5.dev/00.index.md` for `/dev`); its title names the content all the same
+  (`Where to start`).
 - Every page starts with a YAML frontmatter with `title` and `description`.
   The title is the heading of the page, the browser tab and the print. The
   description is the meta description and the text on cards, at most 220

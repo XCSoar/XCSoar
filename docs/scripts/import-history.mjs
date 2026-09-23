@@ -106,6 +106,15 @@ function regexTitle(title) {
     return regexEscape(title).replace(/[&%#_]/g, '\\\\$&');
 }
 
+// The developer pages are named after their content, the RST files they
+// came from after their topic; these are the ones that differ.
+const RST_FILES = {
+    environment: 'devsetup',
+    translations: 'i18n',
+    map_file: 'mapfile',
+    test_utilities: 'test_debug_utilities',
+};
+
 // Matches letters in either case, for titles the LaTeX manual spells
 // differently.
 function anyCase(regex) {
@@ -208,7 +217,7 @@ function pageCommit(relative) {
         // The overview came from the website, not from index.rst.
         if (rest[0] === '00.index.md') return null;
         const name = rest[0].replace(/^\d+\./, '').replace(/\.md$/, '').replaceAll('-', '_');
-        const file = `doc/${name}.rst`;
+        const file = `doc/${RST_FILES[name] ?? name}.rst`;
         if (!git('rev-parse', '--verify', '--quiet', `${BASE}:${file}`)) return null;
         return { file, commit: fileCommit(file) };
     }

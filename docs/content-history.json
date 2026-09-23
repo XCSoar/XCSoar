@@ -1703,7 +1703,7 @@
     "author": "Wolfgang Drescher",
     "source": "doc/build.rst"
   },
-  "5.dev/02.devsetup.md": {
+  "5.dev/02.environment.md": {
     "commit": "bca57fb2fddaddaa1ea123406bedb0321a957416",
     "date": "2026-06-29",
     "author": "Philipp Wollschlegel",
@@ -1751,7 +1751,7 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/input_events.rst"
   },
-  "5.dev/10.i18n.md": {
+  "5.dev/10.translations.md": {
     "commit": "d55a95cba1861c873b947ea2b62e0302844eb368",
     "date": "2026-09-10",
     "author": "Philipp Wollschlegel",
@@ -1763,7 +1763,7 @@
     "author": "Philipp Wollschlegel",
     "source": "doc/lua.rst"
   },
-  "5.dev/12.mapfile.md": {
+  "5.dev/12.map-file.md": {
     "commit": "804c0857f5f0b1455ad0a020a2049630d7663c83",
     "date": "2026-09-05",
     "author": "Philipp Wollschlegel",
@@ -1787,7 +1787,7 @@
     "author": "Wolfgang Drescher",
     "source": "doc/debugging.rst"
   },
-  "5.dev/16.test-debug-utilities.md": {
+  "5.dev/16.test-utilities.md": {
     "commit": "9abb41984ef6d15dddd4d12b1b2e2b4dbd687453",
     "date": "2026-08-03",
     "author": "Philipp Wollschlegel",
