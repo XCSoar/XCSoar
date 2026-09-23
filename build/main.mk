@@ -36,6 +36,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/Device/PortMonitor.cpp \
 	$(SRC)/Dialogs/Device/ManageCAI302Dialog.cpp \
+	$(SRC)/Dialogs/Device/ManageACDDialog.cpp \
 	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
 	$(SRC)/Dialogs/Device/CAI302/WaypointUploader.cpp \
 	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
