@@ -20,4 +20,10 @@ public:
    * than the configured range.
    */
   virtual void SetProgressPosition(unsigned position) noexcept = 0;
+
+  /**
+   * Bytes received so far, when the caller knows them.  The progress
+   * position may be lines or a percent; this is only the speed.
+   */
+  virtual void SetProgressBytes(unsigned) noexcept {}
 };

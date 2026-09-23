@@ -44,3 +44,9 @@ ProxyOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 {
   other.SetProgressPosition(position);
 }
+
+void
+ProxyOperationEnvironment::SetProgressBytes(unsigned bytes) noexcept
+{
+  other.SetProgressBytes(bytes);
+}

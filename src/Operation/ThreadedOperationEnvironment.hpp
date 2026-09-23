@@ -19,18 +19,21 @@ class ThreadedOperationEnvironment
   : public OperationEnvironment{
   struct Data {
     StaticString<256u> error;
-    StaticString<128u> text;
+    StaticString<512u> text;
 
-    unsigned progress_range, progress_position;
+    unsigned progress_range, progress_position, progress_bytes;
 
     bool update_error;
-    bool update_text, update_progress_range, update_progress_position;
+    bool update_text;
+    bool update_progress_range, update_progress_position;
+    bool update_progress_bytes;
 
     Data() noexcept
       :text(""),
-       progress_range(0u), progress_position(0u),
+       progress_range(0u), progress_position(0u), progress_bytes(0u),
        update_error(false), update_text(false),
-       update_progress_range(false), update_progress_position(false) {}
+       update_progress_range(false), update_progress_position(false),
+       update_progress_bytes(false) {}
 
     void SetErrorMessage(const char *_error) noexcept {
       error = _error;
@@ -60,10 +63,20 @@ class ThreadedOperationEnvironment
       return true;
     }
 
+    bool SetProgressBytes(unsigned bytes) noexcept {
+      if (bytes == progress_bytes)
+        return false;
+
+      progress_bytes = bytes;
+      update_progress_bytes = true;
+      return true;
+    }
+
     void ClearUpdate() noexcept {
       update_error = false;
       update_text = false;
       update_progress_range = update_progress_position = false;
+      update_progress_bytes = false;
     }
   };
 
@@ -102,6 +115,11 @@ private:
     return data.SetProgressPosition(position);
   }
 
+  bool LockSetProgressBytes(unsigned bytes) noexcept {
+    const std::lock_guard lock{mutex};
+    return data.SetProgressBytes(bytes);
+  }
+
   Data LockReceiveData() noexcept {
     const std::lock_guard lock{mutex};
     Data new_data = data;
@@ -118,6 +136,7 @@ public:
   void SetText(const char *text) noexcept override;
   void SetProgressRange(unsigned range) noexcept override;
   void SetProgressPosition(unsigned position) noexcept override;
+  void SetProgressBytes(unsigned bytes) noexcept override;
 
 protected:
   virtual void OnNotification();

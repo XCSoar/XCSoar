@@ -2664,6 +2664,7 @@ $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -2676,6 +2677,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Job/Thread.cpp \
 	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
