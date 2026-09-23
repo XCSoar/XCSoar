@@ -374,6 +374,10 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         /* Line was successfully processed and written to buffer */
         lines_since_last_flush++;
 
+        /* This range has delivered a row.  A later bad line must
+           start a new range instead of tripping the retry limit. */
+        request_retry_count = 0;
+
         /* Periodic flush: write buffered data to disk */
         if (lines_since_last_flush >= FLUSH_INTERVAL) {
           try {
