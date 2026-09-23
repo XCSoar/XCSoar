@@ -18,11 +18,10 @@
 #include "system/FileUtil.hpp"
 #include "util/TextFile.hxx"
 #include "io/FileLineReader.hpp"
-#include "util/StaticString.hxx"
 #include "LogFile.hpp"
-#include "Language/Language.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <stdlib.h>
 #include <fstream>
 #include <exception>
@@ -265,7 +264,11 @@ RequestFlight(Port &port, const char *filename,
   PortWriteNMEA(port, cmd.c_str(), env);
 }
 
-static bool
+/**
+ * Write one flight row.  Returns the number of bytes written, or 0
+ * when the row is rejected.
+ */
+static unsigned
 HandleFlightLine(const char *_line, BufferedOutputStream &os,
                  unsigned &i, unsigned &row_count_r)
 {
@@ -278,22 +281,23 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
   unsigned row, row_count;
   if (!line.ReadChecked(row) || !line.ReadChecked(row_count) ||
       row < 1 || row > row_count)
-    return false;
+    return 0;
 
   if (row != i)
     /* wrong row index, what happened here? */
-    return false;
+    return 0;
 
   if (row_count_r == 0)
     row_count_r = row_count;
   else if (row_count != row_count_r)
     /* don't allow changes in file size */
-    return false;
+    return 0;
 
-  os.Write(AsBytes(line.Rest()));
+  const std::string_view payload = line.Rest();
+  os.Write(AsBytes(payload));
   os.Write("\r\n");
   ++i;
-  return true;
+  return unsigned(payload.size() + 2);
 }
 
 static bool
@@ -304,14 +308,8 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
   unsigned row_count = 0, i = (resume_row && *resume_row > 0) ? *resume_row : 1;
   const unsigned FLUSH_INTERVAL = 500;  // Flush to disk every 500 lines
   unsigned lines_since_last_flush = 0;
+  unsigned bytes_written = 0;
   bool range_set = false;
-
-  StaticString<60> text;
-  if (resume_row && *resume_row > 1) {
-    text.Format("%s: %s.", _("Resuming flight log download"),
-                "LXNAV");
-    env.SetText(text);
-  }
 
   while (true) {
     /* read up to 50 lines at a time */
@@ -350,7 +348,10 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         LogError(std::current_exception(), "NanoLogger: download failing");
       }
 
-      if (line == nullptr || !HandleFlightLine(line, os, i, row_count)) {
+      const unsigned wrote = line == nullptr
+        ? 0
+        : HandleFlightLine(line, os, i, row_count);
+      if (wrote == 0) {
         if (request_retry_count > MAX_REQUEST_RETRY_COUNT) {
           /* Update resume point before throwing - but note that buffered data
              may not be flushed to disk yet, so resume will restart from last flush */
@@ -372,6 +373,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
         /* No valid reply received (i==start) - request same range again */
       } else {
         /* Line was successfully processed and written to buffer */
+        bytes_written += wrote;
         lines_since_last_flush++;
 
         /* This range has delivered a row.  A later bad line must
@@ -407,6 +409,13 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
                  "NanoLogger: failed to flush final data to disk");
         throw;
       }
+
+      if (row_count > 0) {
+        if (!range_set)
+          env.SetProgressRange(row_count);
+        env.SetProgressBytes(bytes_written);
+        env.SetProgressPosition(row_count);
+      }
       /* finished successfully */
       return true;
     }
@@ -418,6 +427,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
       range_set = true;
     }
 
+    env.SetProgressBytes(bytes_written);
     env.SetProgressPosition(i - 1);
   }
 }
