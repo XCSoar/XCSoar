@@ -27,9 +27,10 @@ if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true });
 }
 
-const isIndexPage = computed(() => {
-    return page.value.id === 'docs/3.infobox/0.index.md';
-});
+// The page of the section itself: it carries InfoBox frontmatter like
+// every page here, with the id "index" instead of one from the sources,
+// and shows no InfoBox of its own.
+const isIndexPage = computed(() => page.value?.infobox?.id === 'index');
 
 const github = computed(() => appConfig.github ? appConfig.github : null);
 

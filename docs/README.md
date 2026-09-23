@@ -60,7 +60,7 @@ repository secrets `DOCS_HOST`, `DOCS_SSH_USER`, `DOCS_SSH_KEY` and
 | `content-history.json` | Last commit of the sources each migrated page came from (see below) |
 | `app/` | Components, layouts and configuration of Nuxt |
 | `app/pages/print/[section].vue` | The print view of one section, input of the PDF |
-| `modules/` | Local Nuxt modules run at build time: the licence page, the "Last updated" line, the permalink redirects |
+| `modules/` | Local Nuxt modules run at build time: the licence page, the "Last updated" line, the permalink redirects, the language in the routes and in the page paths |
 | `public/print.css` | Page boxes, headers and print layout for the PDF |
 | `scripts/` | Build and import scripts |
 
