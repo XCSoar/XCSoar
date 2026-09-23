@@ -9,6 +9,9 @@ void
 UpdateInfoBoxHeartRate(InfoBoxData &data) noexcept;
 
 void
+UpdateInfoBoxBloodOxygen(InfoBoxData &data) noexcept;
+
+void
 UpdateInfoBoxGLoad(InfoBoxData &data) noexcept;
 
 void

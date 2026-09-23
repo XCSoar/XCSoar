@@ -53,6 +53,23 @@ void LoadAllRepositories(FileRepository &repository);
 void
 EnqueueRepositoryDownload(bool force=false, bool main_repo=true, bool user_repo=true);
 
+/**
+ * Daily RASP freshness from civil dates.  The local copy is out of
+ * date when its modification date is implausible, older than @p today,
+ * or older than the repository update= date.  A missing file is
+ * handled by the caller.
+ */
+[[nodiscard]] [[gnu::const]]
+constexpr bool
+IsRaspForecastOutOfDate(BrokenDate modified, BrokenDate today,
+                        BrokenDate update_date) noexcept
+{
+  if (!modified.IsPlausible())
+    return true;
+
+  return modified < today || modified < update_date;
+}
+
 #ifdef HAVE_DOWNLOAD_MANAGER
 
 /**

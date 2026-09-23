@@ -4,7 +4,7 @@
 #pragma once
 
 #include "WindEKF.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "time/Stamp.hpp"
 

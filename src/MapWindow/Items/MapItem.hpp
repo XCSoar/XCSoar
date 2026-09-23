@@ -13,7 +13,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Airspace/Ptr.hpp"
 #include "Engine/Route/ReachResult.hpp"
-#include "Renderer/WaypointReachability.hpp"
+#include "Engine/Route/WaypointReachability.hpp"
 #include "Tracking/SkyLines/Features.hpp"
 #include "util/StaticString.hxx"
 

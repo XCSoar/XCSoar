@@ -1,0 +1,63 @@
+---
+description: EFB lift-off, tap vs hold vs drag, and hold-progress feedback
+globs:
+  - "src/InfoBoxes/**"
+  - "src/Dialogs/**"
+  - "src/Form/**"
+  - "src/MapWindow/**"
+  - "src/ui/**"
+alwaysApply: false
+---
+
+# Touch interaction
+
+Source of truth: **Touch interaction** in `doc/architecture.rst`
+(DOT/FAA/AR-03/67, FAA flight-deck HF). Do not invent a parallel
+gesture language or copy consumer Material timings as if they were
+EFB.
+
+## Commit
+
+- Prefer **lift-off**. The action fires when the finger leaves the
+  target. Sliding off cancels.
+- Do not run a hold action on the timer while the finger is still
+  down. The timer only **arms** the hold; lift commits.
+- Acknowledge the press within 100 ms (pressed look; haptic if the
+  user setting allows). That is “touch received”, not a hold.
+
+## One press, one winner
+
+| Outcome | Rule |
+|---------|------|
+| Tap | Lift on the target before the hold is armed |
+| Drag | Movement past `Layout::Scale(HasTouchScreen() ? 20 : 10)` before the hold is armed |
+| Hold | Still until `InfoBoxArrange::LONG_PRESS`, then lift |
+| Cancel | Slide off the target |
+
+After a drag has started, a further hold does nothing.
+
+`InfoBoxArrange::LONG_PRESS` (500 ms) is a deliberate hold. EFB’s
+0.5 s is a **busy** indicator (SAE ARP 4791), not a gesture. Hold
+progress may start only after a tap (`InfoBoxArrange::TAP`).
+
+## Feedback
+
+- Hold progress is a **one-way fill** that follows the control’s
+  shape. No pulse, flash, or warning colour for a normal hold.
+- E-paper / slow CPU: no hold animation (`HasEPaper()`,
+  `IsSlowCPU()`).
+- Cursor keys and a remote stick must reach the same actions.
+
+## Example
+
+```cpp
+// BAD: open the picker when the timer fires
+void OnHoldTimer() { ShowPicker(slot); }
+
+// GOOD: arm on the timer, commit on lift-off
+void OnHoldTimer() { hold_armed = true; }
+bool OnMouseUp(PixelPoint p) {
+  if (hold_armed && StillOnTarget(p))
+    ShowPicker(slot);
+}
+```

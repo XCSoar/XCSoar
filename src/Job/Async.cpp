@@ -6,6 +6,12 @@
 #include "Operation/ThreadedOperationEnvironment.hpp"
 #include "ui/event/Notify.hpp"
 
+#ifdef __GNUC__
+/* AsyncJobRunner only allocates and deletes this exact type. */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
 void
 AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
                       UI::Notify *_notify)
@@ -18,7 +24,16 @@ AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env,
   notify = _notify;
 
   running.store(true, std::memory_order_relaxed);
-  Thread::Start();
+  try {
+    Thread::Start();
+  } catch (...) {
+    running.store(false, std::memory_order_relaxed);
+    job = nullptr;
+    notify = nullptr;
+    delete env;
+    env = nullptr;
+    throw;
+  }
 }
 
 void
@@ -33,13 +48,6 @@ AsyncJobRunner::Cancel()
        this method was invoked too late */
     notify->ClearNotification();
 }
-
-#ifdef __GNUC__
-/* no, ThreadedOperationEnvironment really doesn't need a virtual
-   destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
 
 Job *
 AsyncJobRunner::Wait()
@@ -77,8 +85,8 @@ AsyncJobRunner::Run() noexcept
     exception = std::current_exception();
   }
 
+  running.store(false, std::memory_order_relaxed);
+
   if (notify != NULL && !env->IsCancelled())
     notify->SendNotification();
-
-  running.store(false, std::memory_order_relaxed);
 }

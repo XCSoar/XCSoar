@@ -375,12 +375,32 @@ RESOURCES_SOURCES = $(TARGET_OUTPUT_DIR)/resources.c
 $(eval $(call link-library,resources,RESOURCES))
 RESOURCE_BINARY = $(RESOURCES_BIN)
 
-# Windows SDL builds: embed the exe icon via a minimal .rc
+# Windows SDL builds: embed the exe icon, VERSIONINFO, and application
+# manifest via a .rc.  assemblyIdentity processorArchitecture matches
+# the PE machine type (amd64 vs x86).
 ifeq ($(HAVE_WIN32),y)
+ifeq ($(X64),y)
+WIN_MANIFEST_ARCH = amd64
+else
+WIN_MANIFEST_ARCH = x86
+endif
+
+$(TARGET_OUTPUT_DIR)/XCSoar.manifest: Data/XCSoar.manifest.in \
+	$(topdir)/VERSION.txt | $(TARGET_OUTPUT_DIR)/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)sed -e 's/VERSION_QUAD_PLACEHOLDER/$(VERSION_QUAD)/g' \
+		-e 's/PRODUCT_NAME_PLACEHOLDER/$(PRODUCT_NAME)/g' \
+		-e 's/PROCESSOR_ARCHITECTURE_PLACEHOLDER/$(WIN_MANIFEST_ARCH)/g' \
+		$< >$@.$(RANDOM_NUMBER).tmp
+	$(Q)mv $@.$(RANDOM_NUMBER).tmp $@
+
 $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc: Data/XCSoarIcon.rc $(WIN_ICON_ICO) \
+	$(topdir)/VERSION.txt $(TARGET_OUTPUT_DIR)/XCSoar.manifest \
 	| $(TARGET_OUTPUT_DIR)/dirstamp $(BUILD_TOOLCHAIN_TARGET)
 	@$(NQ)echo "  WINDRES $@"
-	$(Q)$(WINDRES) $(WINDRESFLAGS) --include-dir $(DATA) -o $@ $<
+	$(Q)$(WINDRES) $(WINDRESFLAGS) $(WINDRES_VERSIONFLAGS) \
+		--include-dir $(DATA) \
+		--include-dir $(TARGET_OUTPUT_DIR) -o $@ $<
 
 RESOURCE_BINARY += $(TARGET_OUTPUT_DIR)/XCSoarIcon.rsc
 endif

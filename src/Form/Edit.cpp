@@ -7,6 +7,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Button.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/DataField.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -214,6 +215,10 @@ bool
 WndProperty::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (!IsReadOnly() || HasHelp()) {
+#ifdef HAVE_VIBRATOR
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+
     dragging = true;
     pressed = true;
     Invalidate();

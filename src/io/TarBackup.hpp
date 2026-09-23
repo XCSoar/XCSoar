@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "BackupPaths.hpp"
+
 #include <functional>
 #include <string>
 #include <string_view>
 
 class OperationEnvironment;
-class Path;
 class OutputStream;
 class Reader;
 

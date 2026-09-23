@@ -460,6 +460,7 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
   bool OnKeyCheck(unsigned key_code) const noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
 
   /**

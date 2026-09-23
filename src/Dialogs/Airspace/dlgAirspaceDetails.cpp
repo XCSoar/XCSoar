@@ -25,7 +25,7 @@
 #include "Geo/AltitudeReference.hpp"
 #include "Language/Language.hpp"
 #include "Language/FormatText.hpp"
-#include "TransponderMode.hpp"
+#include "Radio/TransponderMode.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
 #include "util/UTF8.hpp"

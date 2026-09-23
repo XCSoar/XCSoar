@@ -21,7 +21,7 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Dialogs/Task/dlgTaskHelpers.hpp"
+#include "Task/Summary.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Language/Language.hpp"

@@ -7,6 +7,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Button.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 
@@ -165,6 +166,10 @@ CheckBoxControl::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
 {
   if (IsTabStop())
     SetFocus();
+
+#ifdef HAVE_VIBRATOR
+  PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
 
   SetPressed(true);
   SetCapture();

@@ -9,9 +9,9 @@
 #include "Port/State.hpp"
 #include "Port/Listener.hpp"
 #include "Device/Parser.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
-#include "TransponderMode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
+#include "Radio/TransponderMode.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "time/PeriodClock.hpp"
 #include "Job/Async.hpp"
@@ -661,6 +661,7 @@ private:
                        AtmosphericPressure pressure) noexcept override;
   void OnVarioSensor(float vario) noexcept override;
   void OnHeartRateSensor(unsigned bpm) noexcept override;
+  void OnBloodOxygenSensor(unsigned spo2) noexcept override;
   void OnEngineSensors(bool has_cht,
                        Temperature cht,
                        bool has_egt,

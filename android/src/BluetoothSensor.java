@@ -38,12 +38,47 @@ public final class BluetoothSensor
   private final SensorListener listener;
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
-  private BluetoothGatt gatt;
+  /** kept for reconnecting after a failed connection attempt */
+  private final Context context;
+  private final BluetoothDevice device;
+  private final boolean autoConnect;
+
+  /**
+   * Assigned on the main thread, read on the Binder thread that
+   * delivers the GATT callbacks, so the two have to agree on what
+   * they see.
+   */
+  private volatile BluetoothGatt gatt;
+
+  /**
+   * The client retryConnect() has closed.  It is cleared from #gatt
+   * before the replacement exists, so without remembering it here a
+   * callback arriving in that gap would look like the constructor's
+   * first one.
+   */
+  private volatile BluetoothGatt retired;
   private volatile boolean shutdown = false;
 
   private int state = STATE_LIMBO;
   private boolean reached_ready = false;
-  private boolean initial_retry_used = false;
+
+  /**
+   * Android drops the first connection attempt to a BLE device often
+   * enough that treating it as fatal is wrong: reporting a failure
+   * makes DeviceDescriptor::OnSysTicker() close the whole device and
+   * reopen it seconds later, which the pilot sees as an error message
+   * followed by a connection that works anyway.  Retry in place
+   * instead, and only give up once the device has had its chances.
+   */
+  private static final int MAX_CONNECT_RETRIES = 2;
+  private int connectRetries = 0;
+
+  /**
+   * Has this object ever reached STATE_CONNECTED?  A drop before that
+   * is a failed attempt and worth retrying; one after it is the
+   * device going away, which is not.
+   */
+  private boolean everConnected = false;
 
   private BluetoothGattCharacteristic currentEnableNotification;
   private final Queue<BluetoothGattCharacteristic> enableNotificationQueue =
@@ -73,6 +108,9 @@ public final class BluetoothSensor
     throws IOException
   {
     this.listener = listener;
+    this.context = context;
+    this.device = device;
+    this.autoConnect = autoConnect;
 
     /**
      * Run GATT connect on the main thread on API 23+: some Android
@@ -216,8 +254,17 @@ public final class BluetoothSensor
     if (d == null)
       return false;
 
+    /* the PLX "Spot-check Measurement" characteristic is indicate-only,
+       and writing the notification bit to such a characteristic enables
+       nothing at all */
+    final boolean indicate =
+      (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) == 0 &&
+      (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_INDICATE) != 0;
+
     gatt.setCharacteristicNotification(c, true);
-    d.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+    d.setValue(indicate
+               ? BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
+               : BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
     return gatt.writeDescriptor(d);
   }
 
@@ -401,6 +448,98 @@ public final class BluetoothSensor
     listener.onHeartRateSensor(bpm);
   }
 
+  /**
+   * Bits of the PLX "Measurement Status" field which mean the value must
+   * not be shown to the pilot: the sensor either declares the
+   * measurement unusable, or marks it as demonstration or test data.
+   */
+  private static final int PLX_MEASUREMENT_REJECT =
+    (1 << 10) | /* Data for Demonstration */
+    (1 << 11) | /* Data for Testing */
+    (1 << 13) | /* Measurement Unavailable */
+    (1 << 14) | /* Questionable Measurement Detected */
+    (1 << 15);  /* Invalid Measurement Detected */
+
+  /**
+   * Locate the optional "Measurement Status" field, which sits behind a
+   * different number of optional fields in each of the two
+   * characteristics.
+   *
+   * @return the offset of the field, or -1 if the sensor did not send one
+   */
+  private static int findPLXMeasurementStatus(int flags, boolean spot_check) {
+    /* both characteristics begin with the flags byte and four bytes of
+       measurement, either SpO2 and pulse rate or the "SpO2PR-Normal"
+       pair */
+    int offset = 5;
+
+    if (spot_check) {
+      if ((flags & 0x02) == 0)
+        return -1;
+
+      if ((flags & 0x01) != 0)
+        /* skip the timestamp */
+        offset += 7;
+    } else {
+      if ((flags & 0x04) == 0)
+        return -1;
+
+      if ((flags & 0x01) != 0)
+        /* skip "SpO2PR-Fast" */
+        offset += 4;
+
+      if ((flags & 0x02) != 0)
+        /* skip "SpO2PR-Slow" */
+        offset += 4;
+    }
+
+    return offset;
+  }
+
+  /**
+   * Parse a PLX measurement and report the blood oxygen saturation.
+   *
+   * Both the "PLX Spot-Check Measurement" and the "PLX Continuous
+   * Measurement" characteristic start with a flags byte followed by
+   * SpO2 and the pulse rate, each an IEEE-11073 16 bit SFLOAT, so the
+   * same code handles both; only the optional fields behind them
+   * differ.
+   */
+  private void readPLXMeasurement(BluetoothGattCharacteristic c,
+                                  boolean spot_check) {
+    final Integer flags =
+      c.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+    if (flags == null)
+      return;
+
+    final int status_offset = findPLXMeasurementStatus(flags, spot_check);
+    if (status_offset >= 0) {
+      final Integer status =
+        c.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16,
+                      status_offset);
+      if (status == null || (status & PLX_MEASUREMENT_REJECT) != 0)
+        /* truncated packet, or the sensor itself says the value is not
+           fit to be used */
+        return;
+    }
+
+    final Float spo2 = c.getFloatValue(BluetoothGattCharacteristic.FORMAT_SFLOAT,
+                                       1);
+    if (spo2 == null || spo2.isNaN())
+      /* the sensor reports "not available" while it is still
+         measuring */
+      return;
+
+    final int percent = Math.round(spo2);
+    if (percent <= 0 || percent > 100)
+      /* SFLOAT has several reserved values (NaN, NRes, infinity)
+         which Android may pass through as numbers; those are outside
+         the plausible range and get dropped here */
+      return;
+
+    listener.onBloodOxygenSensor(percent);
+  }
+
   static long toUnsignedLong(int x) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
       // Android 7 "Nougat" supports Java 8
@@ -438,6 +577,14 @@ public final class BluetoothSensor
 
       if (BluetoothUuids.HUMIDITY_CHARACTERISTIC.equals(c.getUuid())) {
         readEssHumidity(c);
+      }
+
+      if (BluetoothUuids.PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
+        readPLXMeasurement(c, false);
+      }
+
+      if (BluetoothUuids.PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC.equals(c.getUuid())) {
+        readPLXMeasurement(c, true);
       }
 
       if (BluetoothUuids.ENGINE_SENSORS_CHARACTERISTIC.equals(c.getUuid())) {
@@ -488,35 +635,87 @@ public final class BluetoothSensor
     }
   }
 
+  /**
+   * Close the failed connection and ask for a new one.  Android needs
+   * the old client interface released before it will hand out
+   * another, so the close is not optional.
+   */
+  private void retryConnect() {
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+      @Override
+      public void run() {
+        if (!safeDestruct.increment())
+          /* close() got there first */
+          return;
+
+        try {
+          if (gatt != null) {
+            retired = gatt;
+            gatt.close();
+            gatt = null;
+          }
+
+          try {
+            connectGatt(context, device, autoConnect);
+          } catch (IOException e) {
+            submitError(e.getMessage() != null
+                        ? e.getMessage()
+                        : "Bluetooth GATT connect failed");
+          }
+        } finally {
+          safeDestruct.decrement();
+        }
+      }
+    });
+  }
+
   @Override
   public void onConnectionStateChange(BluetoothGatt gatt,
                                       int status, int newState) {
     if (shutdown)
       return;
 
-    if (BluetoothProfile.STATE_CONNECTED == newState) {
+    final BluetoothGatt current = this.gatt;
+    if (gatt == retired || (current != null && gatt != current))
+      /* a disconnect still in flight from the client retryConnect()
+         has already closed.  Acting on it would close its replacement
+         and spend another retry on a connection that is fine.  The
+         first test catches the gap in retryConnect() where the old
+         client is closed and #gatt is not yet reassigned; without it
+         a stale callback in that gap would pass as the constructor's
+         first one, which is the only case the null #gatt means. */
+      return;
+
+    if (BluetoothProfile.STATE_CONNECTED == newState &&
+        BluetoothGatt.GATT_SUCCESS == status) {
+      everConnected = true;
+      connectRetries = 0;
+
       if (Build.VERSION.SDK_INT >= 21)
         gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
       if (!gatt.discoverServices())
         submitError("Discovering GATT services request failed");
+
       return;
     }
 
-    /* Heart-rate bands often drop the first attempt (status 147
-       timeout).  Retry that once; later drops use the normal
-       failure path. */
-    if (BluetoothProfile.STATE_DISCONNECTED == newState) {
-      if (!reached_ready && !initial_retry_used) {
-        initial_retry_used = true;
-        Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
-              ", retrying initial connect");
-        if (!gatt.connect())
-          submitError("GATT disconnected");
-        else
-          setStateSafe(STATE_LIMBO);
-      } else
-        submitError("GATT disconnected");
+    if (BluetoothProfile.STATE_DISCONNECTED != newState)
+      /* CONNECTING or DISCONNECTING: on the way somewhere, and not a
+         state worth reporting either way */
+      return;
+
+    if (!everConnected && status != BluetoothGatt.GATT_SUCCESS &&
+        connectRetries < MAX_CONNECT_RETRIES) {
+      ++connectRetries;
+      Log.d(TAG, "BLE sensor GATT disconnected status=" + status +
+            ", retrying initial connect");
+      retryConnect();
+      return;
     }
+
+    submitError(BluetoothGatt.GATT_SUCCESS == status
+                ? "GATT disconnected"
+                : "GATT connection failed (status " + status + ")");
   }
 
   @Override

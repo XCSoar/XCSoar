@@ -512,7 +512,7 @@ To go through the various screen pages, use gesture left/right (touch-screen), o
 
 (This section applies only when a touch-screen or mouse is present.)
 
-Some InfoBox values can be changed by the user by selecting (i.e.\ long-pressing) the
+Some InfoBox values can be changed by the user by tapping the
 InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue:
 
 \begin{description}
@@ -531,6 +531,40 @@ InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue
 Examples of InfoBoxes that can
 be adjusted include MacCready setting, wind speed, and altitude (QNH).
 
+
+\subsection*{Rearranging InfoBoxes}\label{sec:arrange_infoboxes}
+
+Press and hold an InfoBox past a tap; it fills from the bottom.
+Lift while it is full to enter the arrange mode with that InfoBox
+selected, or slide off to cancel.  The `\emph{Arrange InfoBoxes}'
+item of the Quick Menu opens the same mode without picking a box up.
+The screen uses the same backdrop as the InfoBox set dialog, with the
+map still showing through, and every InfoBox is replaced by a card
+showing only its number and its caption.
+
+A tap on a card explains what that InfoBox shows.  Drag it onto
+another one to exchange the two; the InfoBox which makes way slides
+over into the slot the dragged one has left.  Hold still and the card fills from the bottom; lift to open the
+list of all available InfoBoxes, or slide off to cancel.  Once the
+card follows the finger, holding no longer opens the list.  A second
+finger on the screen aborts the drag.
+
+Without a touch-screen the cursor keys and a remote stick select an
+InfoBox.  Enter takes the selected InfoBox, the cursor keys then move
+it, and Enter puts it down again.  Taking an InfoBox and putting it
+down without having moved it opens the list of available InfoBoxes
+instead.  Tab leaves the cards and reaches the Help and Close
+buttons; so does a cursor step toward them (down on a portrait page,
+left on a landscape one).
+
+`\emph{Help}' explains how an InfoBox is moved and how it is replaced.
+`\emph{Close}' leaves the mode and keeps the new order, and so does the
+timeout after the same time as the menu; the Escape key leaves the mode
+and restores the order the page had before.
+
+The InfoBox sets are composed in the same view; the dialog buttons
+copy a set and paste it into another one
+(see Section~\ref{conf:infobox_sets}).
 
 \subsection*{Changing InfoBox sets}
 
@@ -626,6 +660,15 @@ of each airspace class
 \item[Setup Plane]  Easy reconfiguration of the plane-dependent settings (e.g. 
   polar, competition ID, etc.) by choosing from a list of previously-created 
   plane profiles.
+\item[Data Management] Provides file downloads, import, backup and flight
+  export.  The Export Flights list scans IGC files in the background and adds
+  detected takeoff, landing and duration information as it becomes available.
+  A line under the list shows how many IGC files have a detected launch and
+  landing, and their total time as hours:minutes. It keeps updating while
+  files are still being scanned.
+  WeGlide Upload opens that
+  list with only IGC files. The Upload Flight button sends the
+  highlighted flight.
 \end{description}
 
 These dialogues are described in later chapters, with the exception of the
@@ -645,7 +688,9 @@ out-landing, pre-landing, radio procedures, and aircraft rigging and
 de-rigging instructions.  Since the check-lists may be long, the
 up/down keys may be used to scroll through the text. Clicking the
 \bmenuw{$<$} and \bmenuw{$>$} buttons selects the previous/next
-checklist.  Checkbox ticks stay until you leave XCSoar or choose a
+checklist.  Tapping the text of a checkbox line toggles it.  A link
+on that line, such as a VHF frequency, still opens the link.
+Checkbox ticks stay until you leave XCSoar or choose a
 different checklist file. Editing a page's text clears its saved ticks.
 
 

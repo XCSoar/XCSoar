@@ -50,13 +50,13 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Dialogs/dlgQuickGuide.hpp"
 #include "Dialogs/dlgGestureHelp.hpp"
 #include "Message.hpp"
-#include "Repository/FileType.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
 #include "PopupMessage.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "Audio/Sound.hpp"
 #include "UIActions.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Interface.hpp"
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
@@ -73,10 +73,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Formatter/TimeFormatter.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/MultipleDevices.hpp"
-#include "Form/DataField/File.hpp"
-#include "Dialogs/FilePicker.hpp"
 #include "Dialogs/InternalLink.hpp"
-#include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
@@ -786,6 +783,12 @@ InputEvents::eventQuickMenu([[maybe_unused]] const char *misc)
 }
 
 void
+InputEvents::eventArrangeInfoBoxes([[maybe_unused]] const char *misc)
+{
+  InfoBoxArrange::Begin();
+}
+
+void
 InputEvents::eventFileManager([[maybe_unused]] const char *misc)
 {
   ShowFileManager();
@@ -810,21 +813,12 @@ InputEvents::eventExchangeFrequencies([[maybe_unused]] const char *misc)
 }
 
 void
-InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc) {
+InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc)
+{
   if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
     HandleInternalLink("xcsoar://config/weglide");
     return;
   }
 
-  FileDataField df;
-  df.ScanMultiplePatterns(GetFileTypePatterns(FileType::IGC));
-  df.SetFileType(FileType::IGC);
-  df.Sort(FileDataField::SortOrder::DESCENDING, false);
-  if (FilePicker("IGC-FilePicker", df)) {
-    auto path = df.GetValue();
-    if (!path.empty())
-      if (WeGlide::UploadIGCFile(path)) {
-        // success!
-      }
-  }
+  ShowExportFlightsDialog(ExportFlightsMode::WEGLIDE);
 }

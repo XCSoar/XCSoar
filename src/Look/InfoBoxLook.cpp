@@ -31,6 +31,15 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     : Color(0xe0, 0xe0, 0xe0);
   focused_background_color = COLOR_XCSOAR_LIGHT;
   pressed_background_color = COLOR_YELLOW;
+  /* the arrange backdrop is the dialog background; on e-paper the
+     XCSoar fill becomes a mid-tone, so use the opposite of the
+     card so the text stays black-on-white or the reverse */
+  preview_active_color = HasColors()
+    ? COLOR_XCSOAR
+    : (inverse ? COLOR_WHITE : COLOR_BLACK);
+  /* same COLOR_GRAY as border_pen; white on dark is focus-level
+     contrast and NASA reserves that for important items */
+  preview_border_color = inverse ? COLOR_GRAY : COLOR_BLACK;
 
   if (inverse) {
     focused_background_color = DarkColor(focused_background_color);
@@ -44,7 +53,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
     colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
     colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_LIGHT_GREEN;
-    colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
+    colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_AMBER;
     colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
   } else
     std::fill(colors + 1, colors + 6, inverse ? COLOR_WHITE : COLOR_BLACK);
@@ -57,6 +66,15 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 
   Color border_color = COLOR_GRAY;
   border_pen.Create(border_width, border_color);
+  /* one device pixel; ScaleFinePenWidth(1) is the live InfoBox
+     chrome and looks like a frame on a tablet */
+  preview_border_width = 1;
+  /* halo outside the card hairline; filled, not a thick stroke */
+  preview_focus_width = Layout::ScalePenWidth(1);
+
+  preview_padding = Layout::Scale(4);
+  preview_radius = Layout::Scale(6);
+
   unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), value.fg_color);
 
   FontDescription title_font_d(8);
@@ -65,6 +83,9 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 
   title_font.Load(title_font_d);
   title_font_bold.Load(title_font_d.WithBold(true));
+
+  preview_number_font.Load(FontDescription(std::max(title_font_d.GetHeight()
+                                                    * 2u / 3u, 7u)));
 
   FontDescription value_font_d(10, true);
   AutoSizeFont(value_font_d, width, "1234m");
@@ -80,4 +101,12 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
 #ifdef HAVE_TEXT_CACHE
   TextCache::Flush();
 #endif
+}
+
+Color
+InfoBoxLook::GetPreviewGlowColor() const noexcept
+{
+  return HasColors()
+    ? LightColor(preview_active_color)
+    : title.fg_color;
 }

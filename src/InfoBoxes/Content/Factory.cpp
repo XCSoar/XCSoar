@@ -1211,6 +1211,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentPreviousWaypoint>::Create,
   },
 
+  // e_BloodOxygen
+  {
+    N_("Blood Oxygen"),
+    N_("SpO2"),
+    N_("Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."),
+    UpdateInfoBoxBloodOxygen,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

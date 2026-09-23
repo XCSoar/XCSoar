@@ -350,7 +350,7 @@ The available terrain colour schemes are illustrated in the table below.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Map Display / Airspace}
+\section{Map Display / Airspace}\label{sec:map-airspace}
 
 This page is used to determine how the airspace information is
 displayed and how warnings are issued.
@@ -365,6 +365,10 @@ displayed and how warnings are issued.
     definable margin is shown.
 \sketch{figures/config-airspace.png} \\
   {\bf All below}:  Like auto plus every airspace below the glider is shown.
+\item[Label visibility*]  Shows the ceiling and base of each airspace
+  on the map. \\
+  {\bf None}:  No labels. \\
+  {\bf All}:  A label on every displayed airspace.
 \item[Clip altitude] For clip mode, this is the altitude below which airspace 
   is displayed.
 \item[Margin]  For auto and all below airspace mode, this is the height 
@@ -714,8 +718,9 @@ XCSoar.
   character to the relevant letter. \\
   {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
   {\bf Default}: Uses the default input style for your platform.
-\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
-  when the device accepts your finger press as valid input on the touch-screen.
+\item[Haptic feedback*]  Let you switch on or off the vibration
+  when the device accepts a finger press.  Available on Android
+  and iOS.
 \end{description}
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.
@@ -826,20 +831,25 @@ This page shows and let you customise the available InfoBox sets.
 
 \subsection*{InfoBox Set Customisation}
 
-\begin{description}
-\item[Name]  Sets the name of the currently customized InfoBox set. The 
-  button starts the text input dialogue of XCSoar.
-\item[InfoBox]  The number identifying the current box.
-\item[Content]  Select the information you want to see in the current box.
-\end{description}
+The dialogue shows the set the way it is laid out on the screen: every
+InfoBox is a card with its number and its caption, and the set is
+composed by moving these cards around, exactly as on the map (see
+Section~\ref{sec:arrange_infoboxes}).
 
-The right side of the dialogue always gives the overview on the composed set. 
-When composing at the PC you can use the mouse to select the individual boxes 
-right from the overview.
+\begin{description}
+\item[Rename]  Sets the name of the currently customized InfoBox set.
+  The button starts the text input dialogue of XCSoar. Only the sets
+  you have made yourself can be renamed.
+\item[Help]  Explains how an InfoBox is moved and how it is replaced.
+\item[Copy Set]  Remembers all InfoBoxes of this set.
+\item[Paste Set]  Replaces the InfoBoxes of another set with them.
+\end{description}
 
 See Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
 
-To change a set press on one of the InfoBoxes labeled with it's current content.
+To change the content of an InfoBox in the set, long-press its card.
+Without a touch-screen, press Enter twice without moving the selected
+InfoBox.
 The InfoBoxes are numbered; the location of the InfoBoxes depends on the screen layout.  
 The tables below show the InfoBox enumeration scheme for the
 landscape and portrait screen layout.
@@ -1069,15 +1079,17 @@ lists.
   glide computer to one of the available slots A to D.
   On Android, Bluetooth LE devices appear as {\it BLE port} (a
   serial UART used by varios such as BlueFly) or {\it BLE sensor}
-  (heart-rate monitors, SensBox, and engine sensors).  A BlueFly Vario
-  must be selected as {\it BLE port} with the BlueFly driver; {\it BLE
-  sensor} cannot carry its serial protocol.
+  (heart-rate monitors, pulse oximeters, SensBox, and engine sensors).
+  A BlueFly Vario must be selected as {\it BLE port} with the BlueFly
+  driver; {\it BLE sensor} cannot carry its serial protocol.
   {\it Engine Type} appears only for an engine-sensor BLE device
   (ignition scaling); heart-rate bands do not show it.
   A Xiaomi Smart Band talks GATT on a random LE address; XCSoar
   follows that live device.  Enable {\it Heart rate broadcast} and
   leave the Xiaomi app (and a second XCSoar copy) disconnected so the
   standard heart-rate service is free.
+  A pulse oximeter is selected as {\it BLE sensor} as well.  The
+  Blood Oxygen InfoBox shows its saturation.
   The Devices list shows {\it Heart Rate}, {\it Pressure},
   {\it Temperature}, and {\it Relative humidity} among the other
   sensor flags, and {\it Battery=N\%} when remaining charge is

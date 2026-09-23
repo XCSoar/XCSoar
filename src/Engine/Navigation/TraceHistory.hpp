@@ -4,7 +4,7 @@
 #pragma once
 
 #include "util/OverwritingRingBuffer.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 
 #include <type_traits>
 

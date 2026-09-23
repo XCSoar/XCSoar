@@ -36,8 +36,8 @@ static_assert(POLYGON_STENCIL < (1u << EVEN_ODD_STENCIL_BITS));
  * renderer.  Larger clipped polygons fall back to the generic renderer.
  */
 static constexpr unsigned MAX_AIRSPACE_VERTICES = 64000;
-// Six vertices draw the edge rectangle and three draw its miter or bevel.
-static constexpr unsigned MAX_PADDING_VERTICES = MAX_AIRSPACE_VERTICES * 9;
+// 6 edge vertices + 6 miter-join vertices = 12 vertices per input point.
+static constexpr unsigned MAX_PADDING_VERTICES = MAX_AIRSPACE_VERTICES * 12;
 
 static_assert(MAX_AIRSPACE_VERTICES + 2 <=
               unsigned(std::numeric_limits<GLsizei>::max()));
@@ -146,16 +146,33 @@ BuildPaddingLoop(const BulkPixelPoint *src, unsigned src_size,
       const auto miter = previous_offset + previous_direction * t;
       const float miter_length = std::hypot(miter.x - a.x, miter.y - a.y);
       if (miter_length <= PADDING_MITER_LIMIT * half_width) {
-        append(previous_offset);
-        append(miter);
-        append(next_offset);
+        if (bend > 0) {
+          append(a);
+          append(previous_offset);
+          append(miter);
+          append(a);
+          append(miter);
+          append(next_offset);
+        } else {
+          append(a);
+          append(miter);
+          append(previous_offset);
+          append(a);
+          append(next_offset);
+          append(miter);
+        }
         continue;
       }
     }
 
     append(a);
-    append(previous_offset);
-    append(next_offset);
+    if (bend > 0) {
+      append(previous_offset);
+      append(next_offset);
+    } else {
+      append(next_offset);
+      append(previous_offset);
+    }
   }
 
   return n;

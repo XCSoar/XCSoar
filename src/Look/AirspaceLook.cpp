@@ -62,4 +62,5 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
   label_text_color = COLOR_BLUE;
 
   name_font = &_name_font;
+  ++name_font_serial;
 }

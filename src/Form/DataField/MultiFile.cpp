@@ -4,8 +4,12 @@
 #include "MultiFile.hpp"
 #include "ComboList.hpp"
 #include "Language/Language.hpp"
+#include "Repository/FileType.hpp"
+#include "system/FileUtil.hpp"
 
 #include <algorithm>
+#include <cstring>
+#include <string>
 
 MultiFileDataField::MultiFileDataField(DataFieldListener *listener)
     : DataField(Type::MULTI_FILE, false, listener)
@@ -75,6 +79,59 @@ void
 MultiFileDataField::ScanMultiplePatterns(const char *patterns)
 {
   file_datafield.ScanMultiplePatterns(patterns);
+}
+
+void
+MultiFileDataField::Scan(Path path,
+                         std::initializer_list<std::string_view> patterns,
+                         bool recursive) noexcept
+{
+  struct FileScanner : File::Visitor {
+    FileDataField &df;
+    explicit FileScanner(FileDataField &d) : df(d) {}
+    void Visit(Path file, Path /*filename*/) override {
+      if (file == nullptr)
+        return;
+      df.ForceModify(file);
+    }
+  } scanner(file_datafield);
+
+  for (const auto pattern : patterns) {
+    if (pattern.empty())
+      continue;
+    std::string pattern_str(pattern);
+    Directory::VisitSpecificFiles(path, pattern_str.c_str(), scanner,
+                                  recursive);
+  }
+
+  file_datafield.Sort(FileDataField::SortOrder::DESCENDING);
+}
+
+void
+MultiFileDataField::Scan(Path path,
+                         std::initializer_list<FileType> file_types,
+                         bool recursive) noexcept
+{
+  struct FileScanner : File::Visitor {
+    FileDataField &df;
+    explicit FileScanner(FileDataField &d) : df(d) {}
+    void Visit(Path file, Path /*filename*/) override {
+      if (file == nullptr)
+        return;
+      df.ForceModify(file);
+    }
+  } scanner(file_datafield);
+
+  for (const auto file_type : file_types) {
+    const char *patterns = GetFileTypePatterns(file_type);
+    size_t length;
+    while ((length = strlen(patterns)) > 0) {
+      Directory::VisitSpecificFiles(path, patterns, scanner, recursive);
+      patterns += length + 1;
+    }
+  }
+
+  file_datafield.Sort(FileDataField::SortOrder::DESCENDING);
 }
 
 void

@@ -196,15 +196,6 @@ jobs:
             ndk: r26d
             target_container: debian:trixie-slim
           - os: ubuntu-24.04
-            target: ANDROID_BUNDLE
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .apk
-            target_upload: false
-            ndk: r26d
-            target_container: debian:trixie-slim
-          - os: ubuntu-24.04
             target: WIN64OPENGL
             target_bin: XCSoar
             target_bin_path: bin
@@ -271,13 +262,13 @@ jobs:
       - name: Cache ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
-          key: ${{ matrix.target == 'ANDROID_BUNDLE' && format('ANDROID_BUNDLE-{0}-ccache', env.DEBUG) || (matrix.target == 'ANDROID' && format('ANDROIDFAT-{0}-ccache', env.DEBUG)) || format('{0}-{1}-ccache', matrix.target, env.DEBUG) }}
+          key: ${{ matrix.target == 'ANDROID' && format('ANDROIDFAT-{0}-ccache', env.DEBUG) || format('{0}-{1}-ccache', matrix.target, env.DEBUG) }}
           restore-keys: |
-            ${{ matrix.target == 'ANDROID_BUNDLE' && 'ANDROID_BUNDLE-ccache' || (matrix.target == 'ANDROID' && 'ANDROIDFAT-ccache' || format('{0}-ccache', matrix.target)) }}
+            ${{ matrix.target == 'ANDROID' && 'ANDROIDFAT-ccache' || format('{0}-ccache', matrix.target) }}
           max-size: 3G
 
       - name: Configure ccache for cross-compilation
-        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        if: ${{ matrix.target == 'KOBO' || matrix.target == 'ANDROID' }}
         run: |
           ccache --set-config compiler_check=content
           ccache --set-config hard_link=false
@@ -344,10 +335,10 @@ jobs:
             ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
 
       - name: "Cache Android SDK/NDK"
-        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        if: ${{ matrix.target == 'ANDROID' }}
         uses: actions/cache@v6
         with:
-          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/android_bundle.mk', 'build/targets.mk') }}
+          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/targets.mk') }}
           restore-keys: |
             android-tools-${{ matrix.ndk }}-
             android-tools-
@@ -357,7 +348,7 @@ jobs:
             ~/opt/bundletool
 
       - name: "Cache third-party libraries (Android)"
-        if: ${{ matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE' }}
+        if: ${{ matrix.target == 'ANDROID' }}
         uses: actions/cache@v6
         with:
           key: thirdparty-${{ matrix.target }}-${{ hashFiles('build/thirdparty.py', 'build/pkg-config.sh', 'build/python/build/cmake.py', 'build/python/build/libs.py', 'build/python/build/project.py', 'build/python/build/*.py', 'build/thirdparty.mk', 'build/targets.mk', 'ide/provisioning/install-android-tools.sh', 'lib/**/patches/**') }}
@@ -394,7 +385,7 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh WIN
             fi
-            if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target}} = 'ANDROID_BUNDLE' ]; then
+            if [ ${{ matrix.target }} = 'ANDROID' ]; then
               ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh LLVM
@@ -416,7 +407,7 @@ jobs:
 
       - name: Prepare signing key
         shell: bash
-        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master') }}
+        if: ${{ matrix.target == 'ANDROID' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master') }}
         run: |
           if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ]; then
             mkdir -p ~/.android/
@@ -425,7 +416,7 @@ jobs:
           fi
 
       - name: Set Android version for master and tags
-        if: ${{ (matrix.target == 'ANDROID' || matrix.target == 'ANDROID_BUNDLE') && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
+        if: ${{ matrix.target == 'ANDROID' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
         shell: bash
         run: |
           if [ "${GITHUB_REF#refs/tags/v}" != "${GITHUB_REF}" ]; then
@@ -524,6 +515,8 @@ jobs:
 
       - name: Compile XCSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          ANDROID_KEYSTORE_PASS: ${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}
         run: |
           if [ ${{ matrix.target }} = "IOS64" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
@@ -535,30 +528,50 @@ jobs:
             export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
             export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
           fi
-          if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
-              BUNDLE=y
-              PLAY=y
-            fi
+          if [ ${{ matrix.target }} = 'ANDROID' ]; then
+            # Sideload APK is org.xcsoar.foss; Play AAB is org.xcsoar.play.
+            # Same output/ANDROID/ tree so the second make only repackages.
+            OUT="output/ANDROID"
+            BIN="$OUT/bin"
+            APK="$BIN/${{ matrix.target_bin }}${{ matrix.target_ext }}"
+            AAB="$BIN/${{ matrix.target_bin }}.aab"
+            DEBUG_APK="$BIN/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}"
+            DEBUG_AAB="$BIN/${{ matrix.target_bin }}-debug.aab"
+            SYMBOLS="$OUT/symbols.zip"
+            SIDELOAD="$BIN/XCSoar-sideload.apk"
+            SIGNED=n
             if [ "${{ github.ref }}" = "refs/heads/master" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_BASE64 }}" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] &&
                [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
-              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=n USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
-              output/${{ matrix.target }}/symbols.zip \
-              ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
-            else
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
-              output/${{ matrix.target }}/symbols.zip
-              mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
-              if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
-                mv output/${{ matrix.target }}/bin/${{ matrix.target_bin }}-debug.aab \
-                output/${{ matrix.target }}/bin/${{ matrix.target_bin }}.aab
+              SIGNED=y
+            fi
+            android_make() {
+              local play="$1" dest="$2"
+              if [ "$SIGNED" = y ]; then
+                ANDROID_KEYSTORE_PASS="$ANDROID_KEYSTORE_PASS" \
+                make -j$(nproc) PLAY="$play" TARGET=ANDROIDFAT DEBUG=n \
+                  USE_CCACHE=y V=2 \
+                  ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks \
+                  ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }} \
+                  "$dest" "$SYMBOLS"
+              else
+                make -j$(nproc) PLAY="$play" TARGET=ANDROIDFAT \
+                  DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+                  "$dest" "$SYMBOLS"
               fi
+            }
+            if [ "$SIGNED" = y ]; then
+              android_make "" "$APK"
+              cp "$APK" "$SIDELOAD"
+              android_make y "$AAB"
+              mv "$SIDELOAD" "$APK"
+            else
+              android_make "" "$DEBUG_APK"
+              cp "$DEBUG_APK" "$SIDELOAD"
+              android_make y "$DEBUG_AAB"
+              mv "$SIDELOAD" "$APK"
+              mv "$DEBUG_AAB" "$AAB"
             fi
           elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
@@ -584,6 +597,8 @@ jobs:
 
       - name: Compile XCSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          ANDROID_KEYSTORE_PASS: ${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}
         run: |
           if [ ${{ matrix.target }} = "IOS64" ]; then
             export IOS_APP_BUNDLE_IDENTIFIER="${{ vars.IOS_APP_BUNDLE_IDENTIFIER || 'org.xcsoar.XCSoar' }}"
@@ -595,22 +610,37 @@ jobs:
             export MACOS_APP_BUILD_NUMBER="${{ vars.MACOS_APP_BUILD_NUMBER || github.run_number }}"
             export MACOS_PATCH_VERSION="${{ vars.MACOS_PATCH_VERSION || 0 }}"
           fi
-          if [ ${{ matrix.target }} = 'ANDROID' ] || [ ${{ matrix.target }} = "ANDROID_BUNDLE" ]; then
-            if [ "${{ matrix.target }}" = "ANDROID_BUNDLE" ]; then
-              BUNDLE=y
-              PLAY=y
+          if [ ${{ matrix.target }} = 'ANDROID' ]; then
+            OUT="output/ANDROID"
+            BIN="$OUT/bin"
+            APK="$BIN/${{ matrix.target_bin }}${{ matrix.target_ext }}"
+            AAB="$BIN/${{ matrix.target_bin }}.aab"
+            SYMBOLS="$OUT/symbols.zip"
+            SIDELOAD="$BIN/XCSoar-sideload.apk"
+            SIGNED=n
+            if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] &&
+               [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
+              SIGNED=y
             fi
-            if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
-              ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
-              output/${{ matrix.target }}/symbols.zip \
-              ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
-            else
-              make -j$(nproc) ANDROID_BUNDLE_BUILD="$BUNDLE" PLAY="$PLAY" TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
-              output/${{ matrix.target }}/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
-              output/${{ matrix.target }}/symbols.zip
-            fi
+            android_make() {
+              local play="$1" dest="$2"
+              if [ "$SIGNED" = y ]; then
+                ANDROID_KEYSTORE_PASS="$ANDROID_KEYSTORE_PASS" \
+                make -j$(nproc) PLAY="$play" TARGET=ANDROIDFAT \
+                  DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+                  ANDROID_KEYSTORE=$(eval echo ~)/.android/signing-key.jks \
+                  ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }} \
+                  "$dest" "$SYMBOLS"
+              else
+                make -j$(nproc) PLAY="$play" TARGET=ANDROIDFAT \
+                  DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+                  "$dest" "$SYMBOLS"
+              fi
+            }
+            android_make "" "$APK"
+            cp "$APK" "$SIDELOAD"
+            android_make y "$AAB"
+            mv "$SIDELOAD" "$APK"
           elif [ ${{ matrix.target }} = 'WIN64OPENGL' ] || [ ${{ matrix.target }} = 'WIN32OPENGL' ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything installer
           elif [ ${{ matrix.target }} = "KOBO" ]; then
@@ -724,7 +754,7 @@ jobs:
 
       - name: Upload artifact (Bundle)
         uses: actions/upload-artifact@v7
-        if: ${{ matrix.target == 'ANDROID_BUNDLE' }}
+        if: ${{ matrix.target == 'ANDROID' }}
         with:
           name: android-bundle
           path: |
@@ -858,14 +888,14 @@ jobs:
         with:
           name: android-bundle
           # upload-artifact uses the least common ancestor of the uploaded paths
-          # (output/ANDROID_BUNDLE/) as the artifact root, so the zip contains
-          # bin/XCSoar.aab and symbols.zip — not output/ANDROID_BUNDLE/...
+          # (output/ANDROID/) as the artifact root, so the zip contains
+          # bin/XCSoar.aab and symbols.zip — not output/ANDROID/...
           path: android-bundle
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '4.0.6'
+          ruby-version: '4.0.7'
           bundler-cache: true
 
       - name: Create Play Store key

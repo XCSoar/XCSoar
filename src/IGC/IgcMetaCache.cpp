@@ -3,46 +3,43 @@
 
 #include "IgcMetaCache.hpp"
 
-#include "IGC/IGCParser.hpp"
+#include "IGC/FlightTimes.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "io/FileLineReader.hpp"
+#include "Job/Async.hpp"
+#include "Job/Job.hpp"
+#include "Operation/Cancelled.hpp"
+#include "Operation/Operation.hpp"
 #include "ui/event/Notify.hpp"
-#include "co/InvokeTask.hxx"
-#include "io/async/AsioThread.hpp"
-#include "io/async/GlobalAsioThread.hpp"
-#include "util/BindMethod.hxx"
-
-#include <chrono>
+#include "ui/event/DelayedNotify.hpp"
+#include "LogFile.hpp"
 #include <utility>
 
-/**
- * Lightweight B-record parser that extracts only the time and GPS
- * validity flag, skipping the expensive location, altitude, and
- * extension parsing that IGCParseFix() performs.
- */
-static bool
-ParseBRecordTime(const char *line, BrokenTime &time,
-                 bool &gps_valid) noexcept
-{
-  if (line[0] != 'B')
-    return false;
+class IgcMetaCache::FillJob final : public Job {
+  IgcMetaCache &cache;
+  std::vector<AllocatedPath> paths;
+  UI::DelayedNotify *progress_notify;
 
-  /* time is at offset 1..6, validity char at offset 24 */
-  if (std::strlen(line) < 25)
-    return false;
+public:
+  FillJob(IgcMetaCache &_cache, std::vector<AllocatedPath> &&_paths,
+          UI::DelayedNotify *_progress_notify) noexcept
+    :cache(_cache), paths(std::move(_paths)),
+     progress_notify(_progress_notify) {}
 
-  if (!IGCParseTime(line + 1, time))
-    return false;
+  void Run(OperationEnvironment &env) override {
+    for (const auto &path : paths) {
+      if (env.IsCancelled())
+        break;
 
-  if (line[24] == 'A')
-    gps_valid = true;
-  else if (line[24] == 'V')
-    gps_valid = false;
-  else
-    return false;
+      if (cache.Find(Path(path.c_str())) == nullptr) {
+        cache.Insert(cache.ParseEntry(Path(path.c_str()), env));
+        if (progress_notify != nullptr)
+          progress_notify->SendNotification();
+      }
+    }
+  }
+};
 
-  return true;
-}
+IgcMetaCache::IgcMetaCache() = default;
 
 IgcMetaCache::~IgcMetaCache() noexcept
 {
@@ -50,149 +47,140 @@ IgcMetaCache::~IgcMetaCache() noexcept
 }
 
 IgcMetaCache::CacheEntry
-IgcMetaCache::ParseEntry(Path path) noexcept
+IgcMetaCache::ParseEntry(Path path, OperationEnvironment &env)
 {
   CacheEntry entry;
   entry.path = path;
-
-  try {
-    FileLineReaderA reader(path);
-    char *line;
-    while ((line = reader.ReadLine()) != nullptr) {
-      BrokenTime time;
-      bool gps_valid;
-      if (ParseBRecordTime(line, time, gps_valid) && gps_valid) {
-        if (!entry.meta.has_start) {
-          entry.meta.start = time;
-          entry.meta.has_start = true;
-        }
-        entry.meta.end = time;
-        entry.meta.has_end = true;
-      }
-    }
-  } catch (...) {
-    // ignore parse errors
-  }
-
   entry.text = "";
 
-  if (entry.meta.has_start && entry.meta.has_end) {
-    StaticString<32> lbuf;
-    lbuf.Format("%02u:%02u - %02u:%02u",
-                (unsigned)entry.meta.start.hour,
-                (unsigned)entry.meta.start.minute,
-                (unsigned)entry.meta.end.hour,
-                (unsigned)entry.meta.end.minute);
-    entry.text = lbuf.c_str();
+  try {
+    const auto times = DetectIGCFlightTimes(path, &env);
+    entry.detected = times.takeoff_detected && times.landing_detected;
+    if (entry.detected)
+      entry.duration = times.duration;
 
-    int64_t s = (int64_t)entry.meta.start.GetSecondOfDay();
-    int64_t e = (int64_t)entry.meta.end.GetSecondOfDay();
-    int64_t diff = e - s;
-    if (diff < 0)
-      diff += 24 * 3600;
-    auto dur = FormatTimespanSmart(std::chrono::seconds(diff), 2);
-    entry.text.append(" (");
-    entry.text.append(dur.c_str());
-    entry.text.append(")");
+    if (times.has_valid_fixes) {
+      StaticString<32> lbuf;
+      lbuf.Format("%02u:%02u - %02u:%02u",
+                  (unsigned)times.takeoff.hour,
+                  (unsigned)times.takeoff.minute,
+                  (unsigned)times.landing.hour,
+                  (unsigned)times.landing.minute);
+      entry.text = lbuf.c_str();
+
+      const auto dur = FormatTimespanSmart(times.duration, 2);
+      entry.text.append(" (");
+      entry.text.append(dur.c_str());
+      entry.text.append(")");
+    }
+  } catch (const OperationCancelled &) {
+    throw;
+  } catch (...) {
+    LogError(std::current_exception(), "Failed to read IGC metadata");
   }
 
   return entry;
 }
 
 IgcMetaCache::CacheEntry *
-IgcMetaCache::FindOrParse(Path path) noexcept
+IgcMetaCache::FindUnlocked(Path path) noexcept
 {
-  {
-    const std::lock_guard lock{cache_mutex};
-    for (auto &e : cache) {
-      if (e.path == path)
-        return &e;
-    }
-  }
-
-  CacheEntry entry = ParseEntry(path);
-
-  const std::lock_guard lock{cache_mutex};
-  for (auto &e : cache) {
+  for (auto &e : cache)
     if (e.path == path)
       return &e;
-  }
 
-  cache.push_back(std::move(entry));
-  return &cache.back();
+  return nullptr;
 }
 
-std::string
-IgcMetaCache::GetCompactInfo(Path path) noexcept
+IgcMetaCache::CacheEntry *
+IgcMetaCache::Find(Path path) noexcept
 {
-  CacheEntry *entry = FindOrParse(path);
-  return entry != nullptr ? std::string(entry->text.c_str()) : std::string();
+  const std::lock_guard lock{cache_mutex};
+  return FindUnlocked(path);
+}
+
+void
+IgcMetaCache::Insert(CacheEntry entry)
+{
+  const std::lock_guard lock{cache_mutex};
+  if (FindUnlocked(entry.path) != nullptr)
+    return;
+
+  cache.push_back(std::move(entry));
 }
 
 const char *
 IgcMetaCache::GetCompactInfoPtr(Path path) noexcept
 {
-  CacheEntry *entry = FindOrParse(path);
+  CacheEntry *entry = Find(path);
   return entry != nullptr ? entry->text.c_str() : nullptr;
 }
 
-Co::InvokeTask
-IgcMetaCache::FillCacheCoro(std::vector<AllocatedPath> paths) noexcept
+std::optional<IgcCachedFlight>
+IgcMetaCache::GetFlight(Path path) noexcept
 {
-  for (const auto &path : paths) {
-    GetCompactInfo(Path(path.c_str()));
-  }
+  const CacheEntry *entry = Find(path);
+  if (entry == nullptr)
+    return std::nullopt;
 
-  co_return;
-}
-
-void
-IgcMetaCache::OnFillComplete([[maybe_unused]] std::exception_ptr error) noexcept
-{
-  // Notify UI that fill is complete (ignore any errors)
-  if (auto *notify = current_notify.exchange(nullptr))
-    notify->SendNotification();
+  return IgcCachedFlight{entry->duration, entry->detected};
 }
 
 void
 IgcMetaCache::StartBackgroundFill(std::vector<AllocatedPath> paths,
-                                  UI::Notify *notify) noexcept
+                                  UI::DelayedNotify *progress_notify,
+                                  UI::Notify *completion_notify)
 {
-  if (!inject_task)
-    inject_task = std::make_unique<Co::InjectTask>(asio_thread->GetEventLoop());
-
-  if (*inject_task) {
+  if (async.IsBusy())
     CancelBackgroundFill();
-    inject_task.reset();
-    inject_task = std::make_unique<Co::InjectTask>(asio_thread->GetEventLoop());
+
+  fill_job = std::make_unique<FillJob>(*this, std::move(paths),
+                                       progress_notify);
+  try {
+    async.Start(fill_job.get(), operation, completion_notify);
+  } catch (...) {
+    fill_job.reset();
+    throw;
+  }
+}
+
+void
+IgcMetaCache::JoinFill() noexcept
+{
+  if (!async.IsBusy())
+    return;
+
+  try {
+    async.Wait();
+  } catch (const OperationCancelled &) {
+  } catch (...) {
+    LogError(std::current_exception(), "IGC metadata worker failed");
   }
 
-  current_notify.store(notify);
-  inject_task->Start(FillCacheCoro(std::move(paths)), BIND_THIS_METHOD(OnFillComplete));
+  fill_job.reset();
 }
 
 void
 IgcMetaCache::CancelBackgroundFill() noexcept
 {
-  if (!inject_task)
+  if (!async.IsBusy())
     return;
 
-  current_notify.store(nullptr);
-  inject_task->Cancel();
+  async.Cancel();
+  JoinFill();
 }
 
 void
 IgcMetaCache::Shutdown() noexcept
 {
   CancelBackgroundFill();
-  inject_task.reset();
 }
 
 void
 IgcMetaCache::PollBackgroundFill() noexcept
 {
-  if (!inject_task || !*inject_task)
+  if (!async.IsBusy() || !async.HasFinished())
     return;
 
-  // No synchronous wait available; completion is reported via OnFillComplete().
+  JoinFill();
 }

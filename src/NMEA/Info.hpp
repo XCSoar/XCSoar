@@ -4,7 +4,7 @@
 #pragma once
 
 #include "GPSState.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Gyroscope.hpp"
@@ -326,6 +326,11 @@ struct NMEAInfo {
 
   Validity heart_rate_available;
   unsigned heart_rate;
+
+  Validity blood_oxygen_available;
+
+  /** blood oxygen saturation (SpO2) [percent] */
+  unsigned blood_oxygen;
 
   Validity engine_noise_level_available;
   unsigned engine_noise_level;

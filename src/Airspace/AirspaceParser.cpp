@@ -5,7 +5,7 @@
 #include "AirspaceParser.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Operation/ProgressListener.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/TransponderCode.hpp"
 #include "Units/System.hpp"
 #include "Language/Language.hpp"
 #include "util/CharUtil.hxx"

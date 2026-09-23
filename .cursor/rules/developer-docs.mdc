@@ -10,9 +10,9 @@ Index: `doc/index.rst`. Do not invent a parallel layout; follow these files.
 **Always** read `doc/architecture.rst` before changing layers, threads,
 blackboards, device drivers, network/HTTP, or where a type belongs.
 
-For UI colour, map overlays, dialogs, and in-flight safety, read
-**User interface guidelines** in `doc/architecture.rst`. That section
-adopts:
+For UI colour, map overlays, dialogs, touch/hold, and in-flight
+safety, read **User interface guidelines** in
+`doc/architecture.rst`. That section adopts:
 
 - NASA Colour Usage recommendations
 - DOT/FAA/AR-03/67 (Electronic Flight Bags / EFB human factors)
@@ -29,6 +29,7 @@ User-facing behaviour also needs the **English user manual**
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
 | Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
 | User interface, colour, EFB/NASA HF | `doc/architecture.rst` (User interface guidelines) |
+| Touch, lift-off, tap vs hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
 | Patches, code style | `doc/policy.rst` |
 | Build | `doc/build.rst` |
 | Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc` |

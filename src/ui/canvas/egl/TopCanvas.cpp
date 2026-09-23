@@ -17,6 +17,8 @@
 
 #include <cassert>
 #include <stdexcept>
+#include <chrono>
+#include <thread>
 
 #include <cerrno>
 #include <stdio.h>
@@ -78,6 +80,19 @@ TopCanvas::CreateSurface(EGLNativeWindowType native_window)
 
 TopCanvas::~TopCanvas() noexcept
 {
+
+#ifdef MESA_KMS
+  // In case that a flip is on-going wait for it to finish.
+  // Wait for max. 1 second until progressing with releasing resources
+  for (int i = 0; i<20;++i) {
+    if (CheckAndFinishPendingFlip()) {
+      break;
+    }
+    using namespace std::chrono_literals;
+
+    std::this_thread::sleep_for(50ms);
+  }
+#endif	
   ReleaseSurface();
 
 #ifdef MESA_KMS
@@ -145,6 +160,44 @@ TopCanvas::ReleaseSurface() noexcept
   surface = EGL_NO_SURFACE;
 }
 
+#ifdef MESA_KMS
+bool TopCanvas::CheckAndFinishPendingFlip() {
+	const FileDescriptor dri_fd = display.GetDriFD();
+	
+	const auto process_drm_events = [&]() {
+	  while (true) {
+	    const int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
+	    if (handle_event_ret == 0)
+		continue;
+	
+	    if (errno == EAGAIN)
+	      break;
+	
+	    fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
+	    exit(EXIT_FAILURE);
+	  }
+	};
+	
+	process_drm_events();
+	
+	if (page_flip_pending) {
+	  if (!page_flip_finished) {
+	    return false;
+      }
+	  page_flip_pending = false;
+	  page_flip_finished = false;
+	
+	  if (current_bo != nullptr)
+	    gbm_surface_release_buffer(gbm_surface, current_bo);
+	
+	  current_bo = next_bo;
+	  next_bo = nullptr;
+	}
+	
+	return true;
+}
+#endif /* #ifdef MESA_KMS */
+
 void
 TopCanvas::Flip()
 {
@@ -152,35 +205,8 @@ TopCanvas::Flip()
 
 #ifdef MESA_KMS
   const FileDescriptor dri_fd = display.GetDriFD();
-
-  const auto process_drm_events = [&]() {
-    while (true) {
-      const int handle_event_ret = drmHandleEvent(dri_fd.Get(), &evctx);
-      if (handle_event_ret == 0)
-        continue;
-
-      if (errno == EAGAIN)
-        break;
-
-      fprintf(stderr, "drmHandleEvent() failed: %d\n", handle_event_ret);
-      exit(EXIT_FAILURE);
-    }
-  };
-
-  process_drm_events();
-
-  if (page_flip_pending) {
-    if (!page_flip_finished)
-      return;
-
-    page_flip_pending = false;
-    page_flip_finished = false;
-
-    if (current_bo != nullptr)
-      gbm_surface_release_buffer(gbm_surface, current_bo);
-
-    current_bo = next_bo;
-    next_bo = nullptr;
+  if (!CheckAndFinishPendingFlip()) {
+    return;
   }
 #endif
 
@@ -220,7 +246,7 @@ TopCanvas::Flip()
                                              &page_flip_finished);
     if (0 != page_flip_ret) {
       fprintf(stderr, "drmModePageFlip() failed: %d\n", page_flip_ret);
-      exit(EXIT_FAILURE);
+      exit(EXIT_FAILURE);	
     }
     next_bo = new_bo;
     page_flip_pending = true;
