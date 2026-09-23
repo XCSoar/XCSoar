@@ -93,6 +93,16 @@ struct Line2D {
   }
 
   /**
+   * Like Interpolate(), but clip the ratio to [0..1], so the result
+   * is always between #a and #b.
+   */
+  constexpr Point InterpolateClip(double ratio) const {
+    return ratio <= 0
+      ? a
+      : (ratio >= 1 ? b : Interpolate(ratio));
+  }
+
+  /**
    * Calculate the position of the projection of #p onto this line,
    * expressed as ratio where 0=#a and 1=#b.
    */

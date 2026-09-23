@@ -100,20 +100,6 @@ IsRatioInRange(double ratio) noexcept
   return ratio > -0.1 && ratio < 1.1;
 }
 
-/**
- * Wrapper for FlatLine::Interpolate() which will clip the ratio to
- * [0..1] so the result stays within the [a..b] bounds.
- */
-static constexpr FlatPoint
-InterpolateClip(const FlatLine line, double ratio) noexcept
-{
-  return ratio <= 0
-    ? line.a
-    : (ratio >= 1
-       ? line.b
-       : line.Interpolate(ratio));
-}
-
 struct RatioAndDistance {
   double ratio, squared_distance;
 };
@@ -124,7 +110,7 @@ CalcRatioAndDistance(const FlatLine line, const FlatPoint point) noexcept
 {
   RatioAndDistance result;
   result.ratio = line.ProjectedRatio(point);
-  FlatPoint projected = InterpolateClip(line, result.ratio);
+  FlatPoint projected = line.InterpolateClip(result.ratio);
   result.squared_distance = (point - projected).MagnitudeSquared();
   return result;
 }
