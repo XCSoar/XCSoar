@@ -2,7 +2,9 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "LXNAVVario.hpp"
 #include "NanoLogger.hpp"
+#include "LogFile.hpp"
 #include "Protocol.hpp"
 #include "Convert.hpp"
 #include "Device/Port/Port.hpp"
@@ -212,6 +214,27 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
     assert(!busy);
     busy = true;
     AtScopeExit(this) { busy = false; };
+
+    bool restore_nmea = false;
+    AtScopeExit(&) {
+      if (!restore_nmea)
+        return;
+
+      try {
+        LXNAVVario::SetupNMEA(port, env);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "LXNAV: failed to restore NMEA rates after flight download");
+      }
+    };
+
+    if (IsLXNAVVario()) {
+      /* PLXVF at 10 Hz shares this port with the flight rows and can
+         be written into the middle of a line.  GPS sentences are not
+         part of NMEARATE and keep the port alive. */
+      LXNAVVario::SilenceNMEA(port, env);
+      restore_nmea = true;
+    }
 
     return Nano::DownloadFlight(port, flight, path, env);
   }

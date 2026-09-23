@@ -124,6 +124,9 @@ Version 7.46 - not yet released
   - fix IGC downloads from LX Navigation loggers (Colibri, LX20,
     LX7007 IGC) showing about 65000 m for negative pressure
     altitudes #3075
+  - fix LXNAV S-series flight download aborting after valid rows when
+    the same 50-line block had already used its retries, and pause
+    periodic vario sentences during the download #3201
 * dialogs
   - show Heart Rate as a Devices list sensor flag when a device
     reports it

@@ -60,6 +60,17 @@ namespace LXNAVVario {
   }
 
   /**
+   * Stop the periodic sentences configured by SetupNMEA().
+   * PLXVC request/response (flight download) still works.  Call
+   * SetupNMEA() afterwards to restore the normal rates.
+   */
+  static inline void
+  SilenceNMEA(Port &port, OperationEnvironment &env)
+  {
+    PortWriteNMEA(port, "PLXV0,NMEARATE,W,0,0,0,0,0,0,0", env);
+  }
+
+  /**
    * Set the MC setting of the vario
    * @param mc in m/s (clamped to [0.0, 5.0] per S80 firmware limits)
    */
