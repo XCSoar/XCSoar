@@ -209,6 +209,13 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
 
 - Menu paths: `Nav 1/2` → `Task`, with the arrow →.
 - Never ‘single quotes’, and no mixed forms like ‘*Circling zoom*’.
+- Bold is rare; the manual hardly uses it. It leads a list item or a labelled
+  block (`- **Vega** – …`, `**Usage**:`). Nothing inside a running sentence is
+  bold: what is shown on screen or typed goes in backticks, a term is *italic*
+  where it is introduced, and everything else stays plain. Never bold for
+  emphasis, for units, numbers or words like “not”, “deprecated” or
+  “important”. When the lead is a whole sentence, the whole sentence is bold,
+  not a word of it (`- **Booleans are integers.** ...`).
 
 ### Links
 
