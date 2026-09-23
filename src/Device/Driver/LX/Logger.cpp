@@ -7,6 +7,7 @@
 #include "LogFile.hpp"
 #include "Protocol.hpp"
 #include "Convert.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Util/NMEAReader.hpp"
@@ -41,9 +42,15 @@ WaitForLoggerInfo(LXDevice &device, Port &port,
   PortNMEAReader reader(port, env);
   PortWriteNMEA(port, "PLXVC,INFO,R", env);
 
-  const char *payload =
-    reader.ExpectLine("PLXVC,INFO,A,",
-                      TimeoutClock(std::chrono::seconds(2)));
+  /* A logger that never answers INFO,A is not an S-series.  A
+     timeout must not abort the Colibri list; cancel still throws. */
+  const char *payload = nullptr;
+  try {
+    payload = reader.ExpectLine("PLXVC,INFO,A,",
+                                TimeoutClock(std::chrono::seconds(2)));
+  } catch (const DeviceTimeout &) {
+    return;
+  }
   if (payload == nullptr)
     return;
 
