@@ -1,18 +1,21 @@
 ---
-description: When to read developer documentation under doc/, especially architecture.rst
+description: When to read developer documentation under docs/content/5.dev/, especially 06.architecture.md
 alwaysApply: true
 ---
 
-# Developer documentation (`doc/`)
+# Developer documentation (`docs/content/5.dev/`)
 
-Index: `doc/index.rst`. Do not invent a parallel layout; follow these files.
+The contributor documentation is one page per topic in
+`docs/content/5.dev/`, listed below. Do not invent a parallel layout;
+follow these pages.
 
-**Always** read `doc/architecture.rst` before changing layers, threads,
-blackboards, device drivers, network/HTTP, or where a type belongs.
+**Always** read `docs/content/5.dev/06.architecture.md` before changing
+layers, threads, blackboards, device drivers, network/HTTP, or where a
+type belongs.
 
-For UI colour, map overlays, dialogs, touch/hold, and in-flight
-safety, read **User interface guidelines** in
-`doc/architecture.rst`. That section adopts:
+For UI colour, map overlays, dialogs, touch/hold, and in-flight safety,
+read **User interface guidelines** in
+`docs/content/5.dev/06.architecture.md`. That section adopts:
 
 - NASA Colour Usage recommendations
 - DOT/FAA/AR-03/67 (Electronic Flight Bags / EFB human factors)
@@ -25,18 +28,58 @@ User-facing behaviour also needs the **English user manual**
 (`docs/content/1.manual/`), not only `NEWS.txt`. See
 `.cursor/rules/user-manual.mdc`.
 
+## The pages
+
 | Topic | File |
 |-------|------|
-| Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
-| Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
-| User interface, colour, EFB/NASA HF | `doc/architecture.rst` (User interface guidelines) |
-| Touch, lift-off, tap vs hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
-| Patches, code style | `doc/policy.rst` |
-| Build | `doc/build.rst` |
-| Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc` |
-| Weather overlays | `doc/weather_overlays.rst` |
-| On-disk data layout | `doc/data_directory.rst` |
-| Input events | `doc/input_events.rst` |
-| Tests and debug tools | `doc/test_debug_utilities.rst` |
-| Debugging | `doc/debugging.rst` |
-| User manual (pilots) | `docs/content/1.manual/`, `.cursor/rules/user-manual.mdc` |
+| Where to start, file formats, device protocols | `docs/content/5.dev/00.index.md` |
+| Build system, targets, options, Docker, Vagrant | `docs/content/5.dev/01.build.md` |
+| Getting the source, a build environment on Debian | `docs/content/5.dev/02.environment.md` |
+| Product name macros, rebranding a fork | `docs/content/5.dev/03.rebranding.md` |
+| Patches, commit messages, code style, GUI wording | `docs/content/5.dev/04.policy.md` |
+| Version files, tagging, the release cycle | `docs/content/5.dev/05.release.md` |
+| Layers, threads, blackboards, HTTP, UI guidelines | `docs/content/5.dev/06.architecture.md` |
+| Weather overlay providers and their glue | `docs/content/5.dev/07.weather-overlays.md` |
+| On-disk data layout, typed subdirectories, cache | `docs/content/5.dev/08.data-directory.md` |
+| `.xci` input events, modes, keys, GCEs | `docs/content/5.dev/09.input-events.md` |
+| `gettext`, `po/`, the low-churn catalogue policy | `docs/content/5.dev/10.translations.md` |
+| The Lua API inside XCSoar | `docs/content/5.dev/11.lua.md` |
+| `.xcm` map file, topography, icon names | `docs/content/5.dev/12.map-file.md` |
+| `.tsk` task file, its elements and load rules | `docs/content/5.dev/13.task-file.md` |
+| Checklist file format for pilots | `docs/content/5.dev/14.checklist.md` |
+| Replay, simulator, gdb, redraw counter | `docs/content/5.dev/15.debugging.md` |
+| `Run*` utilities, DebugReplay, socat, renderers | `docs/content/5.dev/16.test-utilities.md` |
+| Interactive rebase, fixups, common workflows | `docs/content/5.dev/17.git-tips.md` |
+
+Related rules: `.cursor/rules/translations.mdc` (`po/` mechanics),
+`.cursor/rules/xcsoar-testing.mdc` (TAP tests),
+`.cursor/rules/xcsoar-project-rules.mdc` (layers, platforms, build),
+`.cursor/rules/ui-touch.mdc` (touch, lift-off, tap vs hold),
+`.cursor/rules/review-human-readable.mdc`,
+`.cursor/rules/review-exponential.mdc` and
+`.cursor/rules/review-architecture.mdc` (code review).
+
+## Writing these pages
+
+The developer pages are part of the documentation site and follow the
+same conventions as the other four sections; they are written once, in
+`.cursor/rules/user-manual.mdc`. Read that rule before editing a page
+here: it defines the frontmatter, the three names a page has (title,
+navigation title, file name), the text conventions (80 columns, one
+space between sentences, typographic apostrophe, when to use backticks,
+italics, bold and quotation marks), the components (`::field-group`,
+callouts, tables, figures) and how to check a change.
+
+What is specific to `5.dev/`:
+
+- The audience is people who build or hack on XCSoar, never pilots.
+  Build, tooling, internal formats and processes belong here and go
+  under `* development` in `NEWS.txt`.
+- A page documents what the code does. When a page and the code
+  disagree, the code wins; fix the page in the same patch.
+- Data with a fixed shape (build targets, event names, attributes with
+  one line of description) is a table. `::field-group` stays for
+  description lists whose entries need a paragraph. A field group whose
+  names are identifiers from the source (macros, XML attributes, file
+  names) is written `::field-group{.name-code}`, which draws the names
+  like inline code.

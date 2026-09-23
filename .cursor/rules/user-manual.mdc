@@ -248,6 +248,7 @@ An inline component is `:name{attributes}` inside a sentence.
 | Syntax | Use for |
 |--------|---------|
 | `::field-group` with `:::field{name="..."}` | Description lists (settings, buttons, dialogue fields), not data tables |
+| `::field-group{.name-code}` | A description list whose names are identifiers from the source (macros, XML attributes, file names); they are drawn like inline code |
 | `::tip`, `::note`, `::warning` | Hints and warnings set apart from the text |
 | `::gesture-aside{id="DR"}` ... `::` | A paragraph with the gesture drawing in a column beside it; `id` takes one or several gesture IDs separated by spaces |
 | `:gesture{id="U" size="sm"}` | A gesture drawing inside a sentence |
