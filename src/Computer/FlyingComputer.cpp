@@ -7,6 +7,7 @@
 #include "Engine/Navigation/Aircraft.hpp"
 
 static constexpr double LOW_TAKEOFF_SPEED = 3;
+static constexpr double LANDING_SPEED = 4;
 static constexpr double LOW_SPEED_TAKEOFF_HEIGHT_GAIN = 20;
 
 void
@@ -312,7 +313,9 @@ FlyingComputer::Compute(double takeoff_speed, bool allow_slow_launch,
     return;
 
   const auto any_altitude = basic.GetAnyAltitude();
-  double landing_takeoff_speed = takeoff_speed;
+  /* Keep lower polar-derived thresholds for slow aircraft, but do not let
+     faster-aircraft polars raise the base landing threshold above 4 m/s. */
+  double landing_speed = std::min(LANDING_SPEED, takeoff_speed / 2);
 
   if (!basic.airspeed_available && !calculated.altitude_agl_valid &&
       any_altitude && last_ground_altitude >= 0 &&
@@ -324,11 +327,11 @@ FlyingComputer::Compute(double takeoff_speed, bool allow_slow_launch,
     auto dh = *any_altitude - last_ground_altitude;
 
     if (dh > 1000)
-      landing_takeoff_speed /= 4;
+      landing_speed /= 4;
     else if (dh > 500)
-      landing_takeoff_speed /= 2;
+      landing_speed /= 2;
     else
-      landing_takeoff_speed = landing_takeoff_speed * 2 / 3;
+      landing_speed = landing_speed * 2 / 3;
   }
 
   const bool low_launch_speed = CheckFlightSpeed(LOW_TAKEOFF_SPEED, basic);
@@ -337,7 +340,7 @@ FlyingComputer::Compute(double takeoff_speed, bool allow_slow_launch,
     basic.time, basic.location, any_altitude);
 
   const bool below_landing_speed =
-    !CheckFlightSpeed(landing_takeoff_speed / 2, basic);
+    !CheckFlightSpeed(landing_speed, basic);
   bool landing_climbing = false;
   if (flying.flying && below_landing_speed && any_altitude)
     landing_climbing = landing_climb.Update(dt, *any_altitude);

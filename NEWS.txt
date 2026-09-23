@@ -103,6 +103,8 @@ Version 7.46 - not yet released
     open #3049
 * glide computer
   - recognise slow launches in imported IGC files from sustained height gain
+  - avoid false landings during low-speed climbs and cap the base landing
+    threshold at 4 m/s for faster aircraft
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
