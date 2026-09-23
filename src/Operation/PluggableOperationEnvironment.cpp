@@ -53,3 +53,10 @@ PluggableOperationEnvironment::SetProgressPosition(unsigned position) noexcept
   if (other != nullptr)
     other->SetProgressPosition(position);
 }
+
+void
+PluggableOperationEnvironment::SetProgressBytes(unsigned bytes) noexcept
+{
+  if (other != nullptr)
+    other->SetProgressBytes(bytes);
+}

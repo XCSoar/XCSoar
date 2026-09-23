@@ -84,6 +84,13 @@ ThreadedOperationEnvironment::SetProgressPosition(unsigned position) noexcept
 }
 
 void
+ThreadedOperationEnvironment::SetProgressBytes(unsigned bytes) noexcept
+{
+  if (LockSetProgressBytes(bytes))
+    notify.SendNotification();
+}
+
+void
 ThreadedOperationEnvironment::OnNotification()
 {
   const Data new_data = LockReceiveData();
@@ -98,6 +105,9 @@ ThreadedOperationEnvironment::OnNotification()
 
   if (new_data.update_progress_range)
     other.SetProgressRange(new_data.progress_range);
+
+  if (new_data.update_progress_bytes)
+    other.SetProgressBytes(new_data.progress_bytes);
 
   if (new_data.update_progress_position)
     other.SetProgressPosition(new_data.progress_position);
