@@ -53,6 +53,14 @@ export default defineAppConfig({
             td: {
                 base: 'px-3 py-2',
             },
+            // Code examples scroll sideways instead of wrapping; a wrapped
+            // XML or shell line hides where the real lines end. The PDF
+            // keeps the wrap, it cannot scroll (public/print.css).
+            pre: {
+                slots: {
+                    base: 'whitespace-pre',
+                },
+            },
             fieldGroup: {
                 base: 'my-5 space-y-4 divide-y-0',
             },
