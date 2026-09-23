@@ -97,7 +97,6 @@ NATIVE_CLASSES := \
 	EventBridge \
 	NativeSensorListener \
 	NativeInputListener \
-	DownloadUtil \
 	BatteryReceiver \
 	NativePortListener \
 	NativeDetectDeviceListener
@@ -476,7 +475,6 @@ $(call SRC_TO_OBJ,$(SRC)/Android/NativeDetectDeviceListener.cpp): $(NATIVE_HEADE
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativePortListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
-$(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/TextEntryDialog.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/FileProvider.cpp): $(NATIVE_HEADERS)
 
