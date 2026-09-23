@@ -183,7 +183,7 @@ function pageCommit(relative) {
 
     if (section === '2.quick-guide') {
         const file = `${MANUAL_DIR}/XCSoar-in-a-flash.tex`;
-        if (rest[0] === '1.xcsoar-in-a-flash.md') return { file, commit: fileCommit(file) };
+        if (rest[0] === '1.index.md') return { file, commit: fileCommit(file) };
         const commit = sectionCommit(file, [page.title]);
         if (!commit) console.warn(`[FILE] ${relative}: no section matches, using the whole file`);
         return { file, commit: commit ?? fileCommit(file) };

@@ -32,7 +32,7 @@ flights.
   ---
   color: neutral
   size: xl
-  to: /quick-guide/xcsoar-in-a-flash
+  to: /quick-guide
   variant: outline
   ---
   Quick guide
@@ -102,7 +102,7 @@ with the fewest steps.
     icon: i-lucide-zap
     title: Quick Guide
     description: XCSoar in a flash. A checklist from installation to the after flight check for your first flights with XCSoar.
-    to: /quick-guide/xcsoar-in-a-flash
+    to: /quick-guide
     variant: subtle
     ---
     ::::

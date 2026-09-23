@@ -833,7 +833,7 @@
     "author": "Bruce Duncan",
     "source": "doc/manual/en/gpl.tex"
   },
-  "2.quick-guide/1.xcsoar-in-a-flash.md": {
+  "2.quick-guide/1.index.md": {
     "commit": "9d1fedc59c93d68035a97fc67389423670b6ddc6",
     "date": "2021-11-09",
     "author": "Philipp Wollschlegel",
