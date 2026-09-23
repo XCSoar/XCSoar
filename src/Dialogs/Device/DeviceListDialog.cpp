@@ -9,6 +9,7 @@
 #include "GDL90/ConfigurationDialog.hpp"
 #include "ManageI2CPitotDialog.hpp"
 #include "ManageCAI302Dialog.hpp"
+#include "ManageACDDialog.hpp"
 #include "ManageFlarmDialog.hpp"
 #include "LX/ManageLXNAVVarioDialog.hpp"
 #include "LX/ManageNanoDialog.hpp"
@@ -875,6 +876,8 @@ DeviceListWidget::ManageCurrent()
 
   if (descriptor.IsDriver("CAI 302"))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
+  else if (descriptor.IsDriver("ACD"))
+    ManageACDDialog(*device);
   else if (descriptor.IsDriver("Stratux"))
     ManageStratuxDialog(*device);
   else if (descriptor.IsDriver("FLARM")) {

@@ -11525,3 +11525,43 @@ msgstr ""
 
 msgid "login rejected:"
 msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Primary volume"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Secondary volume"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Dual watch"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Squelch"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Squelch off"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Intercom 1 volume"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Intercom 1 VOX"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Intercom 2 volume"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Intercom 2 VOX"
+msgstr ""
+
+#: src/Dialogs/Device/ManageACDDialog.cpp
+msgid "Auxiliary volume"
+msgstr ""
