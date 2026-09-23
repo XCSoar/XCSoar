@@ -310,6 +310,37 @@ CheckPolarThresholds()
 }
 
 static void
+CheckConfiguredPolarOnUphillTow()
+{
+  for (const bool allow_slow_launch : {false, true}) {
+    FlyingComputer computer;
+    FlyingState flying;
+    NMEAInfo basic;
+    DerivedInfo calculated;
+    PrepareFlying(computer, flying, basic, calculated);
+
+    /* 3.5 m/s on a 10% slope gains over 20 m within 250 m. */
+    for (unsigned i = 13; i <= 83; ++i)
+      UpdateFlying(computer, flying, basic, calculated, i, 3.5,
+                   100 + (i - 12) * 0.35, 10, allow_slow_launch);
+
+    ok1(flying.flying == allow_slow_launch);
+  }
+
+  FlyingComputer computer;
+  FlyingState flying;
+  NMEAInfo basic;
+  DerivedInfo calculated;
+  PrepareFlying(computer, flying, basic, calculated);
+
+  /* A configured paraglider still uses its lower polar speed. */
+  for (unsigned i = 13; i <= 25; ++i)
+    UpdateFlying(computer, flying, basic, calculated, i, 4, 100, 4, false);
+
+  ok1(flying.flying);
+}
+
+static void
 CheckRidgeTransition()
 {
   FlyingComputer computer;
@@ -582,7 +613,7 @@ CheckBundledFlight(Path path)
 int
 main()
 try {
-  plan_tests(88);
+  plan_tests(91);
   CheckFixAdapter();
   CheckCalculated();
   CheckFallback();
@@ -605,6 +636,7 @@ try {
   CheckLandingAfterHighSpeedClimb();
   CheckLandingAfterLevelLowSpeedFlight();
   CheckPolarThresholds();
+  CheckConfiguredPolarOnUphillTow();
   CheckRidgeTransition();
   CheckLandingThreshold();
   CheckLandingAt50M();
