@@ -106,7 +106,8 @@ and verify on **light and dark** map themes.
 - **Readable in flight**: simple silhouettes, no fine interior detail; test at
   14 px on a map screenshot.
 - **Distinct at glance**: new map symbols must not duplicate an existing
-  waypoint icon shape (see `doc/mapfile.rst` and `waypoint-types.mdc`).
+  waypoint icon shape (see `docs/content/5.dev/12.map-file.md` and
+  `waypoint-types.mdc`).
 - **Aviation conventions** where applicable (ICAO town symbol, obstacle colour,
   navaid palette).
 - **Stroke vs fill**: turnpoint-style symbols may use thick stroke +

@@ -195,8 +195,9 @@ section.
   - lua reference updated
 ```
 
-Do not use this for `doc/build.rst` or other contributor-only docs — those go
-under `* development` with a `documentation:` prefix.
+Do not use this for `docs/content/5.dev/01.build.md` or other
+contributor-only docs — those go under `* development` with a
+`documentation:` prefix.
 
 User-facing behaviour belongs in `docs/content/1.manual/` as well as
 `NEWS.txt`.
@@ -212,8 +213,8 @@ Technical terms and target names are fine here.
 
 - Prefix bullets with a topic: `build system:`, `documentation:`, `iOS:`,
   `Linux:`, … (match 7.44 style)
-- Examples: new targets, makefile/CI changes, `doc/build.rst`, dev guides,
-  contributor scripting APIs
+- Examples: new targets, makefile/CI changes, `docs/content/5.dev/01.build.md`,
+  dev guides, contributor scripting APIs
 
 ```text
 * development

@@ -112,7 +112,8 @@ alwaysApply: true
 - Log messages should remain in English for consistency and debugging
 - After source string changes, run `make update-po`. The `.po` diff must
   **only add new msgid/msgstr entries** (and `xcsoar.pot`). Do not rewrap,
-  reorder, or rewrite existing translations. See `doc/i18n.rst`
+  reorder, or rewrite existing translations. See
+  `docs/content/5.dev/10.translations.md`
 
 ### Reuse existing code
 - Search the codebase before adding a helper, wrapper, enum, or parser
@@ -216,9 +217,10 @@ alwaysApply: true
 
 ## Architecture
 
-Read `doc/architecture.rst` before changing layers, threads, blackboards,
-device drivers, network/HTTP, or where a type belongs. Other developer docs:
-`.cursor/rules/developer-docs.mdc` and `doc/index.rst`.
+Read `docs/content/5.dev/06.architecture.md` before changing layers, threads,
+blackboards, device drivers, network/HTTP, or where a type belongs. Other
+developer docs: `.cursor/rules/developer-docs.mdc` and
+`docs/content/5.dev/00.index.md`.
 
 ### Multi-Platform Considerations
 - XCSoar is a multi-platform project supporting: Windows (WIN64OPENGL, WIN32OPENGL), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
@@ -312,7 +314,7 @@ XCSoar follows a layered architecture with clear separation of concerns:
 **Component Separation:**
 - `BackendComponents`: manages backend resources (devices, computers, threads)
 - `DataComponents`: manages data stores (waypoints, airspaces, terrain)
-- `NetComponents`: manages network resources (NOTAM, TIM, tracking, EDL `DownloadGlue`, …); long-lived HTTP uses `Net::AsyncTask` and `BeginShutdown()` before UI teardown (see `doc/architecture.rst`, Network thread and background HTTP)
+- `NetComponents`: manages network resources (NOTAM, TIM, tracking, EDL `DownloadGlue`, …); long-lived HTTP uses `Net::AsyncTask` and `BeginShutdown()` before UI teardown (see `docs/content/5.dev/06.architecture.md`, Network thread and background HTTP)
 - Components are accessed through global pointers, not direct dependencies
 
 **Interface Access Patterns:**
@@ -571,7 +573,7 @@ if (data_components != nullptr) {
   - MapWindow (DrawThread): `MapWindowBlackboard`
   - Device drivers: write to `DeviceBlackboard::per_device_data[i]`, can implement `OnSensorUpdate()` (called from MergeThread) or `OnCalculatedUpdate()` (called from UI thread)
   - CalculationThread: lock `DeviceBlackboard` or use `GlideComputerBlackboard`
-  - Network thread: asio event loop; see `doc/architecture.rst` (Network thread and background HTTP)
+  - Network thread: asio event loop; see `docs/content/5.dev/06.architecture.md` (Network thread and background HTTP)
 
 ### Background HTTP and NetComponents
 
@@ -737,8 +739,9 @@ Key rules:
 - Avoid controls with significant risk if misconfigured
 - Check for color blindness compatibility
 - Follow aviation human-factors conventions in
-  `doc/architecture.rst` (User interface guidelines): ICAO Annex 4,
-  NASA Colour Usage, FAA EFB DOT/FAA/AR-03/67, FAA HF design standards
+  `docs/content/5.dev/06.architecture.md` (User interface guidelines):
+  ICAO Annex 4, NASA Colour Usage, FAA EFB DOT/FAA/AR-03/67, FAA HF
+  design standards
 
 ## Look System
 

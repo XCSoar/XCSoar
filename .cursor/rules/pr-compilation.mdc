@@ -23,4 +23,5 @@ build is not enough.
 
 When the change includes UI-free logic, prefer `everything check`.
 
-`WERROR=y` is already the default when `DEBUG=y`. Details: `doc/build.rst`.
+`WERROR=y` is already the default when `DEBUG=y`. Details:
+`docs/content/5.dev/01.build.md`.
