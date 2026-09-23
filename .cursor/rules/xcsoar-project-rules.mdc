@@ -113,7 +113,7 @@ alwaysApply: true
 - After source string changes, run `make update-po`. The `.po` diff must
   **only add new msgid/msgstr entries** (and `xcsoar.pot`). Do not rewrap,
   reorder, or rewrite existing translations. See
-  `docs/content/5.dev/10.translations.md`
+  `docs/content/en/5.dev/10.translations.md`
 
 ### Reuse existing code
 - Search the codebase before adding a helper, wrapper, enum, or parser
@@ -217,10 +217,10 @@ alwaysApply: true
 
 ## Architecture
 
-Read `docs/content/5.dev/06.architecture.md` before changing layers, threads,
+Read `docs/content/en/5.dev/06.architecture.md` before changing layers, threads,
 blackboards, device drivers, network/HTTP, or where a type belongs. Other
 developer docs: `.cursor/rules/developer-docs.mdc` and
-`docs/content/5.dev/00.index.md`.
+`docs/content/en/5.dev/00.index.md`.
 
 ### Multi-Platform Considerations
 - XCSoar is a multi-platform project supporting: Windows (WIN64OPENGL, WIN32OPENGL), Linux/UNIX, Android, iOS, macOS, Kobo e-readers, Raspberry Pi, and other embedded platforms
@@ -314,7 +314,7 @@ XCSoar follows a layered architecture with clear separation of concerns:
 **Component Separation:**
 - `BackendComponents`: manages backend resources (devices, computers, threads)
 - `DataComponents`: manages data stores (waypoints, airspaces, terrain)
-- `NetComponents`: manages network resources (NOTAM, TIM, tracking, EDL `DownloadGlue`, …); long-lived HTTP uses `Net::AsyncTask` and `BeginShutdown()` before UI teardown (see `docs/content/5.dev/06.architecture.md`, Network thread and background HTTP)
+- `NetComponents`: manages network resources (NOTAM, TIM, tracking, EDL `DownloadGlue`, …); long-lived HTTP uses `Net::AsyncTask` and `BeginShutdown()` before UI teardown (see `docs/content/en/5.dev/06.architecture.md`, Network thread and background HTTP)
 - Components are accessed through global pointers, not direct dependencies
 
 **Interface Access Patterns:**
@@ -573,7 +573,7 @@ if (data_components != nullptr) {
   - MapWindow (DrawThread): `MapWindowBlackboard`
   - Device drivers: write to `DeviceBlackboard::per_device_data[i]`, can implement `OnSensorUpdate()` (called from MergeThread) or `OnCalculatedUpdate()` (called from UI thread)
   - CalculationThread: lock `DeviceBlackboard` or use `GlideComputerBlackboard`
-  - Network thread: asio event loop; see `docs/content/5.dev/06.architecture.md` (Network thread and background HTTP)
+  - Network thread: asio event loop; see `docs/content/en/5.dev/06.architecture.md` (Network thread and background HTTP)
 
 ### Background HTTP and NetComponents
 
@@ -739,7 +739,7 @@ Key rules:
 - Avoid controls with significant risk if misconfigured
 - Check for color blindness compatibility
 - Follow aviation human-factors conventions in
-  `docs/content/5.dev/06.architecture.md` (User interface guidelines):
+  `docs/content/en/5.dev/06.architecture.md` (User interface guidelines):
   ICAO Annex 4, NASA Colour Usage, FAA EFB DOT/FAA/AR-03/67, FAA HF
   design standards
 
@@ -1116,7 +1116,7 @@ make -j$(nproc) TARGET=UNIX VFB=y SANITIZE=y DEBUG_GLIBCXX=y everything check
   (not only the main binary); see `.cursor/rules/pr-compilation.mdc`
 - Check for accidentally committed debug code or temporary files
 - Verify all user-visible changes have corresponding NEWS.txt entries
-- Update `docs/content/1.manual/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
+- Update `docs/content/en/1.manual/` for user-visible behaviour (see `.cursor/rules/user-manual.mdc`)
 - When a NEWS.txt entry relates to a GitHub issue, include the issue number at the end (e.g., `#2145`)
 - Follow `.cursor/rules/news.txt.mdc` for NEWS.txt wording and audience
 - When adding Android drawable resources, register the copy rule in `build/android.mk`

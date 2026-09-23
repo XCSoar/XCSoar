@@ -16,6 +16,10 @@ import { fileURLToPath } from 'node:url';
 const DOCS_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_DIR = path.join(DOCS_DIR, '..');
 const CONTENT_DIR = path.join(DOCS_DIR, 'content');
+
+// The pages were migrated from the English sources, so only the English
+// pages have a history here; a translation gets its own commits.
+const LOCALE = 'en';
 const OUT_FILE = path.join(DOCS_DIR, 'content-history.json');
 
 // Last commit on master with the sources in place. The sources are
@@ -170,8 +174,9 @@ function readPage(file) {
 }
 
 // Source commit of one page, or null when the source has no usable history.
+// The path starts with the language folder, see content.config.ts.
 function pageCommit(relative) {
-    const [section, ...rest] = relative.split('/');
+    const [, section, ...rest] = relative.split('/');
     const page = readPage(path.join(CONTENT_DIR, relative));
 
     if (section === '1.manual') {
@@ -237,7 +242,7 @@ function pageCommit(relative) {
     return null;
 }
 
-function* pages(dir = CONTENT_DIR) {
+function* pages(dir = path.join(CONTENT_DIR, LOCALE)) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
         const file = path.join(dir, entry.name);
         if (entry.isDirectory()) yield* pages(file);

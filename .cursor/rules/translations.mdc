@@ -9,7 +9,7 @@ alwaysApply: false
 
 # Translations (reuse and low churn)
 
-Details: `docs/content/5.dev/10.translations.md`. Catalogs:
+Details: `docs/content/en/5.dev/10.translations.md`. Catalogs:
 `po/xcsoar.pot` and `po/*.po`.
 
 ## Reuse strings

@@ -8,6 +8,7 @@
     "build:docs": "npm run generate && npm run pdf -- manual && npm run pdf -- quick-guide && npm run pdf -- infobox"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^10.6.0",
     "better-sqlite3": "^12.6.2",
     "docus": "latest",
     "nuxt": "^4.5.2"

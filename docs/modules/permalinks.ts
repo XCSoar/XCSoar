@@ -7,7 +7,8 @@ import { join } from 'node:path';
 // by the caller survives the redirect). Apache serves the redirects from
 // .htaccess, as 302 so that a changed target is not cached by browsers.
 // The pages are read from disk, not from the parsed content, because Nuxt
-// Content parses only the pages that changed since the last build.
+// Content parses only the pages that changed since the last build. The ids
+// are those of the default language, whose pages keep the bare paths.
 // A duplicate or invalid id throws before prerendering and fails the build.
 const htaccess = (content: string) => {
     const ids = new Map<string, string>();
@@ -37,7 +38,9 @@ export default defineNuxtModule({
     meta: { name: 'permalinks' },
     setup(_, nuxt) {
         nuxt.hook('nitro:build:public-assets', (nitro) => {
-            writeFileSync(join(nitro.options.output.publicDir, '.htaccess'), htaccess(join(nuxt.options.rootDir, 'content')));
+            const locale = (nuxt.options.i18n as { defaultLocale?: string } | undefined)?.defaultLocale ?? 'en';
+            const content = join(nuxt.options.rootDir, 'content', locale);
+            writeFileSync(join(nitro.options.output.publicDir, '.htaccess'), htaccess(content));
         });
     },
 });

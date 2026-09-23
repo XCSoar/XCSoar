@@ -63,7 +63,7 @@ export default defineNuxtModule({
         nuxt.hook('content:file:afterParse', ({ file, content }) => {
             const body = content.body as { type?: string, value?: unknown[] } | undefined;
             if (body?.type !== 'minimark') return;
-            if (content.stem !== 'index') {
+            if (!(content.stem as string).endsWith('/index')) {
                 // The last commit of the page ends its body; PageMeta.vue
                 // renders it below the content. The landing page has none.
                 const last = lastCommit(file.path);

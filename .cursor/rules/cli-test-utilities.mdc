@@ -52,7 +52,7 @@ reasonable), without implying FSF/GNU affiliation.
 
 - Shared replay helpers live under `test/src/` (e.g. `DebugReplay`,
   `CreateDebugReplay`); keep CLI parsing in the tool’s `main` / option scanner.
-- Document new harness programs in `docs/content/5.dev/16.test-utilities.md`.
+- Document new harness programs in `docs/content/en/5.dev/16.test-utilities.md`.
 - **RunFlyingComputer**: built-in default glide polar when `--polar` is omitted;
   do **not** add a `--polar-default` flag — omission is the only way to select
   that default.

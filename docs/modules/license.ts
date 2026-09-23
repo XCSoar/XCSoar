@@ -12,7 +12,9 @@ export default defineNuxtModule({
     setup(_, nuxt) {
         nuxt.hook('content:file:afterParse', ({ content }) => {
             const body = content.body as { type?: string, value?: unknown[] } | undefined;
-            if (body?.type !== 'minimark' || content.stem !== '1.manual/15.license') return;
+            // The stem starts with the language folder, see content.config.ts.
+            if (body?.type !== 'minimark'
+                || !/(^|\/)1\.manual\/15\.license$/.test(content.stem as string)) return;
             const paragraphs = readFileSync(join(nuxt.options.rootDir, '..', 'COPYING'), 'utf8')
                 .trimEnd().split(/\n{2,}/)
                 .map(paragraph => ['div', { class: 'license-paragraph' }, paragraph]);

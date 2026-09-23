@@ -50,13 +50,13 @@ repository secrets `DOCS_HOST`, `DOCS_SSH_USER`, `DOCS_SSH_KEY` and
 
 | Path | Content |
 |------|---------|
-| `content/` | All pages, markdown with frontmatter; the folder and file names give the URLs |
-| `content/index.md` | Landing page |
-| `content/1.manual/` | User manual, one folder per chapter |
-| `content/1.manual/15.license.md` | Frontmatter only; the page shows `COPYING` verbatim, inserted by `modules/license.ts` |
-| `content/2.quick-guide/` | Quick guide |
-| `content/3.infobox/` | InfoBox reference, frontmatter generated (see below) |
-| `content/4.hardware/`, `content/5.dev/` | Hardware and developer pages |
+| `content/` | All pages, markdown with frontmatter; one folder per language, then the folder and file names give the URLs |
+| `content/en/index.md` | Landing page |
+| `content/en/1.manual/` | User manual, one folder per chapter |
+| `content/en/1.manual/15.license.md` | Frontmatter only; the page shows `COPYING` verbatim, inserted by `modules/license.ts` |
+| `content/en/2.quick-guide/` | Quick guide |
+| `content/en/3.infobox/` | InfoBox reference, frontmatter generated (see below) |
+| `content/en/4.hardware/`, `content/en/5.dev/` | Hardware and developer pages |
 | `content-history.json` | Last commit of the sources each migrated page came from (see below) |
 | `app/` | Components, layouts and configuration of Nuxt |
 | `app/pages/print/[section].vue` | The print view of one section, input of the PDF |
@@ -76,10 +76,31 @@ removed:
 
 
 
+## Languages
+
+The pages live in one folder per language below `content/`; so far there is
+only `content/en/`. `@nuxtjs/i18n` routes them: the default language keeps
+the bare paths (`/manual/…`), every other language sits below its code
+(`/de/manual/…`). `content.config.ts` builds one collection per language
+folder, named `docs_<code>` and `landing_<code>` as Docus queries them, and
+`modules/i18n-strategy.ts` puts back the routing strategy that Docus forces
+to a prefix for every language, the default one included.
+
+A new language needs the pages in `content/<code>/`, with the same file
+names as in `content/en/` so that navigation and links match, and its locale
+in `nuxt.config.ts` next to `en`. Docus ships the translations of its own
+strings ("On this page", the search, the error page) and skips a language it
+has none for; `node_modules/docus/i18n/locales/` lists them.
+
+`content-history.json`, the permalink redirects and the PDFs cover the
+default language.
+
+
+
 ## Scripts
 
 - `scripts/import-infoboxes.mjs` writes the frontmatter of
-  `content/3.infobox/*.md` from `src/InfoBoxes/Content/Factory.cpp` and keeps
+  `content/en/3.infobox/*.md` from `src/InfoBoxes/Content/Factory.cpp` and keeps
   the demo values and the markdown body of each page. Run it after changing
   an InfoBox.
 - `scripts/build-pdf.mjs [section] [output.pdf]` prints one section, see above.

@@ -1,6 +1,7 @@
 export function useInfoBoxNavigation() {
+    const collection = useDocsCollection();
     const { data: navigationData } = useAsyncData('infobox-navigation', () => {
-        return queryCollectionNavigation('docs', ['infobox']);
+        return queryCollectionNavigation(collection.value, ['infobox']);
     });
 
     const navigationByCategory = computed(() => {

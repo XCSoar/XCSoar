@@ -1,21 +1,21 @@
 ---
-description: When to read developer documentation under docs/content/5.dev/, especially 06.architecture.md
+description: When to read developer documentation under docs/content/en/5.dev/, especially 06.architecture.md
 alwaysApply: true
 ---
 
-# Developer documentation (`docs/content/5.dev/`)
+# Developer documentation (`docs/content/en/5.dev/`)
 
 The contributor documentation is one page per topic in
-`docs/content/5.dev/`, listed below. Do not invent a parallel layout;
+`docs/content/en/5.dev/`, listed below. Do not invent a parallel layout;
 follow these pages.
 
-**Always** read `docs/content/5.dev/06.architecture.md` before changing
+**Always** read `docs/content/en/5.dev/06.architecture.md` before changing
 layers, threads, blackboards, device drivers, network/HTTP, or where a
 type belongs.
 
 For UI colour, map overlays, dialogs, touch/hold, and in-flight safety,
 read **User interface guidelines** in
-`docs/content/5.dev/06.architecture.md`. That section adopts:
+`docs/content/en/5.dev/06.architecture.md`. That section adopts:
 
 - NASA Colour Usage recommendations
 - DOT/FAA/AR-03/67 (Electronic Flight Bags / EFB human factors)
@@ -25,31 +25,31 @@ Do not invent a parallel colour language. Reuse named colours in Look
 code; keep high saturation and contrast for warnings and cautions.
 
 User-facing behaviour also needs the **English user manual**
-(`docs/content/1.manual/`), not only `NEWS.txt`. See
+(`docs/content/en/1.manual/`), not only `NEWS.txt`. See
 `.cursor/rules/user-manual.mdc`.
 
 ## The pages
 
 | Topic | File |
 |-------|------|
-| Where to start, file formats, device protocols | `docs/content/5.dev/00.index.md` |
-| Build system, targets, options, Docker, Vagrant | `docs/content/5.dev/01.build.md` |
-| Getting the source, a build environment on Debian | `docs/content/5.dev/02.environment.md` |
-| Product name macros, rebranding a fork | `docs/content/5.dev/03.rebranding.md` |
-| Patches, commit messages, code style, GUI wording | `docs/content/5.dev/04.policy.md` |
-| Version files, tagging, the release cycle | `docs/content/5.dev/05.release.md` |
-| Layers, threads, blackboards, HTTP, UI guidelines | `docs/content/5.dev/06.architecture.md` |
-| Weather overlay providers and their glue | `docs/content/5.dev/07.weather-overlays.md` |
-| On-disk data layout, typed subdirectories, cache | `docs/content/5.dev/08.data-directory.md` |
-| `.xci` input events, modes, keys, GCEs | `docs/content/5.dev/09.input-events.md` |
-| `gettext`, `po/`, the low-churn catalogue policy | `docs/content/5.dev/10.translations.md` |
-| The Lua API inside XCSoar | `docs/content/5.dev/11.lua.md` |
-| `.xcm` map file, topography, icon names | `docs/content/5.dev/12.map-file.md` |
-| `.tsk` task file, its elements and load rules | `docs/content/5.dev/13.task-file.md` |
-| Checklist file format for pilots | `docs/content/5.dev/14.checklist.md` |
-| Replay, simulator, gdb, redraw counter | `docs/content/5.dev/15.debugging.md` |
-| `Run*` utilities, DebugReplay, socat, renderers | `docs/content/5.dev/16.test-utilities.md` |
-| Interactive rebase, fixups, common workflows | `docs/content/5.dev/17.git-tips.md` |
+| Where to start, file formats, device protocols | `docs/content/en/5.dev/00.index.md` |
+| Build system, targets, options, Docker, Vagrant | `docs/content/en/5.dev/01.build.md` |
+| Getting the source, a build environment on Debian | `docs/content/en/5.dev/02.environment.md` |
+| Product name macros, rebranding a fork | `docs/content/en/5.dev/03.rebranding.md` |
+| Patches, commit messages, code style, GUI wording | `docs/content/en/5.dev/04.policy.md` |
+| Version files, tagging, the release cycle | `docs/content/en/5.dev/05.release.md` |
+| Layers, threads, blackboards, HTTP, UI guidelines | `docs/content/en/5.dev/06.architecture.md` |
+| Weather overlay providers and their glue | `docs/content/en/5.dev/07.weather-overlays.md` |
+| On-disk data layout, typed subdirectories, cache | `docs/content/en/5.dev/08.data-directory.md` |
+| `.xci` input events, modes, keys, GCEs | `docs/content/en/5.dev/09.input-events.md` |
+| `gettext`, `po/`, the low-churn catalogue policy | `docs/content/en/5.dev/10.translations.md` |
+| The Lua API inside XCSoar | `docs/content/en/5.dev/11.lua.md` |
+| `.xcm` map file, topography, icon names | `docs/content/en/5.dev/12.map-file.md` |
+| `.tsk` task file, its elements and load rules | `docs/content/en/5.dev/13.task-file.md` |
+| Checklist file format for pilots | `docs/content/en/5.dev/14.checklist.md` |
+| Replay, simulator, gdb, redraw counter | `docs/content/en/5.dev/15.debugging.md` |
+| `Run*` utilities, DebugReplay, socat, renderers | `docs/content/en/5.dev/16.test-utilities.md` |
+| Interactive rebase, fixups, common workflows | `docs/content/en/5.dev/17.git-tips.md` |
 
 Related rules: `.cursor/rules/translations.mdc` (`po/` mechanics),
 `.cursor/rules/xcsoar-testing.mdc` (TAP tests),

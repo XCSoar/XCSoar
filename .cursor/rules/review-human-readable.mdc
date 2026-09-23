@@ -13,7 +13,7 @@ alwaysApply: false
 
 # Review: human-readable code
 
-`docs/content/5.dev/04.policy.md`: everybody must understand the code
+`docs/content/en/5.dev/04.policy.md`: everybody must understand the code
 when the author is gone. Size vs problem: a large patch for a small
 behaviour change is a design smell.
 

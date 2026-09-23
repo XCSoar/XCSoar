@@ -1,5 +1,5 @@
 // Imports the InfoBox metadata from src/InfoBoxes/Content into the
-// frontmatter of content/3.infobox/*.md. The markdown body of each page is
+// frontmatter of content/en/3.infobox/*.md. The markdown body of each page is
 // kept; it should only contain what goes beyond the help text (screenshots,
 // gestures, cross references), never a copy of it.
 //
@@ -16,7 +16,7 @@ const SRC_DIR = path.join(DOCS_DIR, '..', 'src', 'InfoBoxes', 'Content');
 const FACTORY_FILE = path.join(SRC_DIR, 'Factory.cpp');
 const TYPE_FILE = path.join(SRC_DIR, 'Type.hpp');
 
-const OUT_DIR = path.join(DOCS_DIR, 'content', '3.infobox');
+const OUT_DIR = path.join(DOCS_DIR, 'content', 'en', '3.infobox');
 
 function readFile(filePath) {
     return fs.readFileSync(filePath, 'utf-8');

@@ -5,14 +5,14 @@ import { kebabCase } from 'scule'
 const navigation = inject('navigation');
 
 const route = useRoute();
-const { locale, isEnabled, t } = useDocusI18n();
+const { t } = useDocusI18n();
 const appConfig = useAppConfig();
 
 definePageMeta({
   layout: 'docs',
 });
 
-const collectionName = computed(() => isEnabled.value ? `docs_${locale.value}` : 'docs');
+const collectionName = useDocsCollection();
 
 const [{ data: page }, { data: surround }] = await Promise.all([
     useAsyncData(kebabCase(route.path), () => queryCollection(collectionName.value).path(route.path).first()),

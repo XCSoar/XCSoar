@@ -1,5 +1,5 @@
 ---
-description: User-facing changes must update the English user manual under docs/content/1.manual/
+description: User-facing changes must update the English user manual under docs/content/en/1.manual/
 globs:
   - "docs/content/**"
   - "src/Dialogs/**"
@@ -21,11 +21,15 @@ and the "Last updated" line work is described in `docs/README.md`.
 
 | Section | Folder | Content |
 |---------|--------|---------|
-| User manual | `docs/content/1.manual/` | The complete reference for pilots |
-| Quick guide | `docs/content/2.quick-guide/` | The shortest path from installation to the first flights |
-| InfoBox reference | `docs/content/3.infobox/` | One page per InfoBox, see below |
-| Hardware | `docs/content/4.hardware/` | Devices XCSoar runs on and connects to |
-| Developers | `docs/content/5.dev/` | Building, hacking on and contributing to XCSoar |
+| User manual | `docs/content/en/1.manual/` | The complete reference for pilots |
+| Quick guide | `docs/content/en/2.quick-guide/` | The shortest path from installation to the first flights |
+| InfoBox reference | `docs/content/en/3.infobox/` | One page per InfoBox, see below |
+| Hardware | `docs/content/en/4.hardware/` | Devices XCSoar runs on and connects to |
+| Developers | `docs/content/en/5.dev/` | Building, hacking on and contributing to XCSoar |
+
+The `en` in the paths is the language. Every language has its own folder
+below `docs/content/`, and the pages of the default language keep the bare
+URLs (`/manual/…`). English is the only language so far.
 
 The rules in **Files and frontmatter**, **Text conventions** and
 **Components** apply to all five sections.
@@ -34,13 +38,14 @@ The rules in **Files and frontmatter**, **Text conventions** and
 
 If a change is **user-visible** (new or changed UI, setting, InfoBox, menu,
 gesture, file format a pilot uses, installation step), update the **English**
-user manual in `docs/content/1.manual/` (not `docs/content/5.dev/`) and add a
-`NEWS.txt` bullet under `* documentation` (see `.cursor/rules/news.txt.mdc`).
-A new or changed InfoBox also updates `docs/content/3.infobox/`, see below.
+user manual in `docs/content/en/1.manual/` (not `docs/content/en/5.dev/`) and
+add a `NEWS.txt` bullet under `* documentation` (see
+`.cursor/rules/news.txt.mdc`).
+A new or changed InfoBox also updates `docs/content/en/3.infobox/`, see below.
 
 Do **not** update the user manual for pure refactors, CI, or developer-only
-APIs; those belong in `docs/content/5.dev/` and under `* development` in
-`NEWS.txt`. There are no translations in `docs/`; do not translate.
+APIs; those belong in `docs/content/en/5.dev/` and under `* development` in
+`NEWS.txt`. English is the only language; do not translate.
 
 ## User manual
 
@@ -64,7 +69,7 @@ gets a new folder.
 
 ## Developer documentation
 
-`docs/content/5.dev/` holds the contributor documentation: build, development
+`docs/content/en/5.dev/` holds the contributor documentation: build, development
 setup, architecture, policies, file formats, debugging. It is written for
 people who build or hack on XCSoar, never for pilots. Update it when the build,
 the tooling, an internal format or a development process changes; the user
@@ -118,7 +123,7 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
 
 ### InfoBox pages
 
-`docs/content/3.infobox/*.md` are three parts:
+`docs/content/en/3.infobox/*.md` are three parts:
 
 - The **frontmatter** (`title`, `infobox.*`) is generated from
   `src/InfoBoxes/Content/Factory.cpp` and `Type.hpp`. Never edit it by hand.

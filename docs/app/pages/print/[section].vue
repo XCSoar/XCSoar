@@ -11,15 +11,16 @@ definePageMeta({ layout: false, header: false, footer: false });
 const route = useRoute();
 const section = String(route.params.section);
 const config = useRuntimeConfig();
+const collection = useDocsCollection();
 
 const [{ data: pages }, { data: navigation }] = await Promise.all([
     useAsyncData(`print-pages-${section}`, () =>
         // The pattern also takes the page of the section itself
         // (/manual for content/1.manual/00.index.md), which the print
         // shows as its first, unnumbered chapter.
-        queryCollection('docs').where('path', 'LIKE', `/${section}%`).all()),
+        queryCollection(collection.value).where('path', 'LIKE', `/${section}%`).all()),
     useAsyncData(`print-navigation-${section}`, () =>
-        queryCollectionNavigation('docs')),
+        queryCollectionNavigation(collection.value)),
 ]);
 
 const sectionNav = navigation.value?.find(item => item.path === `/${section}`);

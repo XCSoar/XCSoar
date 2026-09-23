@@ -12,7 +12,7 @@ alwaysApply: false
 # Touch interaction
 
 Source of truth: **Touch interaction** in
-`docs/content/5.dev/06.architecture.md` (DOT/FAA/AR-03/67, FAA
+`docs/content/en/5.dev/06.architecture.md` (DOT/FAA/AR-03/67, FAA
 flight-deck HF). Do not invent a parallel gesture language or copy
 consumer Material timings as if they were EFB.
 
