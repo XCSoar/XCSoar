@@ -77,7 +77,7 @@ them to read before a change, is listed in `.cursor/rules/developer-docs.mdc`.
   name is the URL: `1.manual/04.navigation/05.waypoints.md` is
   `/manual/navigation/waypoints`.
 - Within one folder, all prefixes have the same number of digits, as many as
-  the largest number needs, with leading zeros (`00.preface.md` to
+  the largest number needs, with leading zeros (`00.index.md` to
   `15.license.md`, `000.height-gps.md` to `134.previous-waypoint.md`). The
   order is sorted as text, and `10` would come before `2` otherwise. Renumber
   the folder when the largest number gains a digit.

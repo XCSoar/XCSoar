@@ -164,7 +164,7 @@ function pageCommit(relative) {
     const page = readPage(path.join(CONTENT_DIR, relative));
 
     if (section === '1.manual') {
-        if (rest[0] === '00.preface.md') {
+        if (rest[0] === '00.index.md') {
             const file = `${MANUAL_DIR}/XCSoar-manual.tex`;
             return { file, commit: rangeCommit(file, '\\\\chapter\\*{Preface}', '^\\\\chapter{') };
         }

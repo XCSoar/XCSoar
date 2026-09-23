@@ -60,7 +60,7 @@ with the fewest steps.
     icon: i-lucide-book-open
     title: User Manual
     description: Every feature explained in depth, from installation and the user interface to tasks, the glide computer, airspace and configuration.
-    to: /manual/preface
+    to: /manual
     variant: subtle
     ---
     ::::

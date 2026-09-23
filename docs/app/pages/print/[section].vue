@@ -14,7 +14,10 @@ const config = useRuntimeConfig();
 
 const [{ data: pages }, { data: navigation }] = await Promise.all([
     useAsyncData(`print-pages-${section}`, () =>
-        queryCollection('docs').where('path', 'LIKE', `/${section}/%`).all()),
+        // The pattern also takes the page of the section itself
+        // (/manual for content/1.manual/00.index.md), which the print
+        // shows as its first, unnumbered chapter.
+        queryCollection('docs').where('path', 'LIKE', `/${section}%`).all()),
     useAsyncData(`print-navigation-${section}`, () =>
         queryCollectionNavigation('docs')),
 ]);
@@ -109,6 +112,8 @@ function categoryChapters(items) {
         const page = byPath.get(item.path);
         if (!page?.infobox?.caption) continue;
         const category = page.infobox.category ?? 'Other';
+        // The index of the reference is a page of its own, not an entry.
+        if (category === 'hidden') continue;
         categories.set(category, [...(categories.get(category) ?? []), page]);
     }
 
