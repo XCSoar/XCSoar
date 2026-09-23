@@ -30,6 +30,7 @@
 #include "LogFile.hpp"
 #include "Job/Job.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
+#include "Device/RecordedFlight.hpp"
 
 #ifdef ANDROID
 #include "java/Closeable.hxx"
@@ -1555,13 +1556,56 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
   if (port == nullptr || driver == nullptr || device == nullptr)
     return false;
 
-  StaticString<60> text;
+  /* Same name as the Devices list, so two loggers on one driver
+     stay distinct. */
+  char name_buffer[128];
+  const char *device_name =
+    config.GetPortName(name_buffer, std::size(name_buffer));
 
+  const struct DeviceRegister *logger = driver;
+  if (driver->HasPassThrough() && second_device != nullptr)
+    logger = second_driver;
+
+  /* The internal union is driver-specific.  Read a file name only
+     for the logger that owns that arm. */
+  const char *flight_name = nullptr;
+  StaticString<64> flight_name_buf;
+  if (StringIsEqual(logger->name, "LX") &&
+      flight.internal.lx.nano_filename[0] != 0)
+    flight_name = flight.internal.lx.nano_filename;
+  else if (StringIsEqual(logger->name, "BlueFly") &&
+           flight.internal.bluefly.filename[0] != 0)
+    flight_name = flight.internal.bluefly.filename;
+  else if (flight.date.IsPlausible()) {
+    flight_name_buf.Format("%04u-%02u-%02u %02u:%02u-%02u:%02u",
+                           flight.date.year, flight.date.month,
+                           flight.date.day,
+                           flight.start_time.hour, flight.start_time.minute,
+                           flight.end_time.hour, flight.end_time.minute);
+    flight_name = flight_name_buf;
+  } else {
+    flight_name_buf.Format("%02u:%02u-%02u:%02u",
+                           flight.start_time.hour, flight.start_time.minute,
+                           flight.end_time.hour, flight.end_time.minute);
+    flight_name = flight_name_buf;
+  }
+
+  /* Labels already in the catalog: the download action, the port,
+     and the driver. */
+  StaticString<160> flight_line;
+  flight_line.Format(_("%s: %s"), _("Flight download"), flight_name);
+  StaticString<160> port_line;
+  port_line.Format(_("%s: %s"), _("Port"), device_name);
+  StaticString<128> driver_line;
+  driver_line.Format(_("%s: %s"), _("Driver"), logger->display_name);
+
+  StaticString<512> text;
+  text.Format("%s\n%s\n%s",
+              flight_line.c_str(), port_line.c_str(),
+              driver_line.c_str());
+  env.SetText(text);
 
   if (driver->HasPassThrough() && (second_device != nullptr)) {
-    text.Format("%s: %s.", _("Downloading flight log"),
-                second_driver->display_name);
-    env.SetText(text);
 
     ScopeRestorePassThroughBaud restore_baud;
     if (!EnablePassThroughWithLXGPSBaud(*device, *port, env, restore_baud,
@@ -1575,10 +1619,6 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
     restore_baud.Restore(env);
     return result;
   } else {
-    text.Format("%s: %s.", _("Downloading flight log"),
-                driver->display_name);
-    env.SetText(text);
-
     return device->DownloadFlight(flight, path, env);
   }
 }
