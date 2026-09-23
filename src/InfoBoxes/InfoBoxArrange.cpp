@@ -97,10 +97,8 @@ public:
     style.ControlParent();
     ContainerWindow::Create(parent, parent.GetClientRect(), style);
 
-#ifndef USE_WINUSER
     /* the map below must still be painted */
     SetTransparent();
-#endif
 
     arrange.Create(*this, GetClientRect());
     buttons.Add(_("Help"), [this]{ arrange.ShowHelp(); });
