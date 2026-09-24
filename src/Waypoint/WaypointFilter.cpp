@@ -156,3 +156,13 @@ WaypointFilter::Matches(const Waypoint &waypoint, GeoPoint location,
          (distance <= 0 || CompareName(waypoint)) &&
          CompareDirection(waypoint, location);
 }
+
+bool
+WaypointFilter::MatchesAll(const Waypoint &waypoint, GeoPoint location,
+                           const FAITrianglePointValidator &triangle_validator) const
+{
+  return Matches(waypoint, location, triangle_validator) &&
+         (distance <= 0 ||
+          location.DistanceS(waypoint.location) <= distance) &&
+         CompareName(waypoint);
+}
