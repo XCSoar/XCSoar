@@ -59,6 +59,7 @@ repository secrets `DOCS_HOST`, `DOCS_SSH_USER`, `DOCS_SSH_KEY` and
 | `content/en/4.hardware/`, `content/en/5.dev/` | Hardware and developer pages |
 | `content-history.json` | Last commit of the sources each migrated page came from (see below) |
 | `app/` | Components, layouts and configuration of Nuxt |
+| `app/components/app/AppSearch.vue` | The search dialogue, see below |
 | `app/pages/print/[section].vue` | The print view of one section, input of the PDF |
 | `modules/` | Local Nuxt modules run at build time: the licence page, the "Last updated" line, the permalink redirects, the language in the routes and in the page paths |
 | `public/print.css` | Page boxes, headers and print layout for the PDF |
@@ -94,6 +95,25 @@ has none for; `node_modules/docus/i18n/locales/` lists them.
 
 `content-history.json`, the permalink redirects and the PDFs cover the
 default language.
+
+
+
+## Search
+
+The dialogue is the one of Docus, filled by `app/components/app/AppSearch.vue`:
+the pages are searched with the full-text search of Nuxt Content, which ranks
+a section by how well it matches and returns the passage around the match.
+
+The results are then arranged for the pilot. A section that contains the
+words as they were typed comes first, under **Exact match** and with the
+passage around that wording, a title before a mention in the text. The rest
+follows grouped by documentation section, in the order of the navigation.
+There the section is the heading of the group, so the path in front of a
+result starts below it; the exact matches, which stand before the groups,
+name it.
+
+The search asks for every word, so a search with a word that appears nowhere
+finds nothing; a typo is not corrected.
 
 
 
