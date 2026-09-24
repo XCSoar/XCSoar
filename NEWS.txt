@@ -215,6 +215,12 @@ Version 7.46 - not yet released
     settings field, tab, digit, list item, or scroll bar is pressed
   - add a distinct haptic pattern for pop-up messages, airspace
     warnings, and FLARM collision alarms
+  - draw the gesture and swipe trail as a smooth red line with a
+    soft shadow, slightly transparent until the gesture is recognised
+  - while a gesture is drawn, show a label with the name of the
+    action it triggers
+  - vibrate lightly while a gesture is drawn when it turns into another
+    known gesture, for example from Analysis to Pan
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - size the Wayland UI from the output's physical size, and draw at
@@ -280,6 +286,7 @@ Version 7.46 - not yet released
     InfoBox dialogue is opened
   - describe airspace fill as a transparent colour, without hatch
     patterns or the Airspace transparency setting
+  - describe the gesture trail, its label and its vibration
 * development
   - drop the Windows CE GPS Intermediate Driver port type and the
     unused HAVE_CE pkg-config path
