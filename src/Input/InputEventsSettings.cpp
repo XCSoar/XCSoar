@@ -3,8 +3,11 @@
 
 #include "InputEvents.hpp"
 #include "Dialogs/Error.hpp"
+#include "InfoBoxes/InfoBoxGeometryList.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "MainWindow.hpp"
 #include "ActionInterface.hpp"
 #include "Message.hpp"
 #include "Profile/Profile.hpp"
@@ -16,13 +19,13 @@
 #include "Units/Units.hpp"
 #include "Protection.hpp"
 #include "UtilsSettings.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "system/Path.hpp"
 #include "util/StringCompare.hxx"
+#include "util/StringFormat.hpp"
 #include "util/StaticString.hxx"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
+
+#include <algorithm>
 
 static uint8_t last_unmuted_vario_volume = 80;
 
@@ -248,9 +251,6 @@ InputEvents::eventVarioAudioMode(const char *misc)
 void
 InputEvents::eventBugs(const char *misc)
 {
-  if (!backend_components || !backend_components->protected_task_manager)
-    return;
-
   PolarSettings &settings = CommonInterface::SetComputerSettings().polar;
   auto BUGS = settings.bugs;
   auto oldBugs = BUGS;
@@ -273,11 +273,8 @@ InputEvents::eventBugs(const char *misc)
     Message::AddMessage(_("Bugs performance"), Temp);
   }
 
-  if (BUGS != oldBugs) {
-    settings.SetBugs(BUGS);
-    if (backend_components)
-      backend_components->SetTaskPolar(settings);
-  }
+  if (BUGS != oldBugs)
+    ActionInterface::SetBugs(BUGS);
 }
 
 // Ballast
@@ -291,9 +288,6 @@ InputEvents::eventBugs(const char *misc)
 void
 InputEvents::eventBallast(const char *misc)
 {
-  if (!backend_components || !backend_components->protected_task_manager)
-    return;
-
   auto &computer_settings = CommonInterface::SetComputerSettings();
   auto &settings = computer_settings.polar;
   GlidePolar &polar = settings.glide_polar_task;
@@ -340,11 +334,8 @@ InputEvents::eventBallast(const char *misc)
     Message::AddMessage(_("Ballast %"), Temp);
   }
 
-  if (ballast_fraction != old_ballast_fraction) {
-    polar.SetBallastFraction(ballast_fraction);
-    if (backend_components)
-      backend_components->SetTaskPolar(settings);
-  }
+  if (ballast_fraction != old_ballast_fraction)
+    ActionInterface::SetBallastFraction(ballast_fraction);
 }
 
 // ProfileLoad
@@ -399,6 +390,148 @@ InputEvents::eventAdjustForecastTemperature(const char *misc)
     StringFormatUnsafe(Temp, "%f", temperature.ToUser());
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
+}
+
+
+static void
+ShowLabeledStatus(const char *label, const char *value) noexcept
+{
+  char tbuf[128];
+  StringFormat(tbuf, sizeof(tbuf), _("%s: %s"), label, value);
+  Message::AddMessage(tbuf);
+}
+
+void
+InputEvents::eventInfoBoxGeometry(const char *misc)
+{
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+  InfoBoxSettings::Geometry &geometry = ui_settings.info_boxes.geometry;
+
+  unsigned index = FindInfoBoxGeometryIndex(geometry);
+  const char *label =
+    InfoBoxSettings::Geometry(info_box_geometry_list[index].id) == geometry
+    ? info_box_geometry_list[index].display_string
+    : N_("Unknown");
+
+  if (StringIsEqual(misc, "show")) {
+    ShowLabeledStatus(_("InfoBox geometry"), gettext(label));
+    return;
+  }
+
+  if (StringIsEqual(misc, "previous"))
+    index = (index + INFO_BOX_GEOMETRY_COUNT - 1) % INFO_BOX_GEOMETRY_COUNT;
+  else if (StringIsEqual(misc, "next") || StringIsEqual(misc, "toggle"))
+    index = (index + 1) % INFO_BOX_GEOMETRY_COUNT;
+  else
+    return;
+
+  geometry = InfoBoxSettings::Geometry(info_box_geometry_list[index].id);
+  Profile::Set(ProfileKeys::InfoBoxGeometry,
+               EnumCast<InfoBoxSettings::Geometry>()(geometry));
+
+  if (CommonInterface::main_window != nullptr)
+    CommonInterface::main_window->ReinitialiseLayout();
+
+  ShowLabeledStatus(_("InfoBox geometry"),
+                    gettext(info_box_geometry_list[index].display_string));
+}
+
+
+
+void
+InputEvents::eventTextSize(const char *misc)
+{
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+  const unsigned old_scale = ui_settings.scale;
+  unsigned scale = old_scale;
+
+  if (StringIsEqual(misc, "show")) {
+    char value[16];
+    StringFormat(value, sizeof(value), "%u %%", scale);
+    ShowLabeledStatus(_("Text size"), value);
+    return;
+  }
+
+  if (StringIsEqual(misc, "up") || StringIsEqual(misc, "larger"))
+    scale = std::min(scale + UISettings::SCALE_STEP, UISettings::SCALE_MAX);
+  else if (StringIsEqual(misc, "down") || StringIsEqual(misc, "smaller"))
+    scale = scale > UISettings::SCALE_MIN + UISettings::SCALE_STEP
+      ? scale - UISettings::SCALE_STEP
+      : UISettings::SCALE_MIN;
+  else
+    return;
+
+  if (scale != old_scale) {
+    ui_settings.scale = scale;
+    Profile::Set(ProfileKeys::UIScale, scale);
+
+    if (CommonInterface::main_window != nullptr) {
+      /* Initialise() reloads the fonts at the new scale; the Look and
+         the layout then have to be rebuilt on top of them */
+      CommonInterface::main_window->Initialise();
+      CommonInterface::main_window->ReinitialiseLook();
+      CommonInterface::main_window->ReinitialiseLayout();
+    }
+  }
+
+  char value[16];
+  StringFormat(value, sizeof(value), "%u %%", scale);
+  ShowLabeledStatus(_("Text size"), value);
+}
+
+void
+InputEvents::eventDarkMode(const char *misc)
+{
+  static const char *const msg[] = {
+    N_("Off"),
+    N_("On"),
+    N_("Auto"),
+  };
+  static_assert(ARRAY_SIZE(msg) == unsigned(UISettings::DarkMode::COUNT),
+                "Array size must match DarkMode enum");
+
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+
+  if (StringIsEqual(misc, "toggle")) {
+    switch (ui_settings.dark_mode) {
+    case UISettings::DarkMode::OFF:
+      ui_settings.dark_mode = UISettings::DarkMode::ON;
+      break;
+    case UISettings::DarkMode::ON:
+      ui_settings.dark_mode = UISettings::DarkMode::AUTO;
+      break;
+    case UISettings::DarkMode::AUTO:
+    case UISettings::DarkMode::COUNT:
+      ui_settings.dark_mode = UISettings::DarkMode::OFF;
+      break;
+    }
+  } else if (StringIsEqual(misc, "off"))
+    ui_settings.dark_mode = UISettings::DarkMode::OFF;
+  else if (StringIsEqual(misc, "on"))
+    ui_settings.dark_mode = UISettings::DarkMode::ON;
+  else if (StringIsEqual(misc, "auto"))
+    ui_settings.dark_mode = UISettings::DarkMode::AUTO;
+  else if (StringIsEqual(misc, "show")) {
+    const unsigned mode = unsigned(ui_settings.dark_mode);
+    if (mode >= unsigned(UISettings::DarkMode::COUNT))
+      return;
+    ShowLabeledStatus(_("Dark mode"), gettext(msg[mode]));
+    return;
+  } else
+    return;
+
+  Profile::Set(ProfileKeys::DarkMode,
+               EnumCast<UISettings::DarkMode>()(ui_settings.dark_mode));
+
+  /* do not call SettingsLeave() here: that path expects SettingsEnter()
+     and can reload map/airspace data from stale *FileChanged flags */
+  if (CommonInterface::main_window != nullptr) {
+    CommonInterface::main_window->ReinitialiseLook();
+    CommonInterface::main_window->ReinitialiseLayout();
+  }
+
+  ShowLabeledStatus(_("Dark mode"),
+                    gettext(msg[unsigned(ui_settings.dark_mode)]));
 }
 
 void

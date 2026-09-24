@@ -13,9 +13,9 @@ MapItemListSettings::SetDefaults() noexcept
 void
 TrailSettings::SetDefaults() noexcept
 {
-  wind_drift_enabled = true;
+  wind_drift_enabled = false;
   scaling_enabled = true;
-  type = Type::VARIO_1;
+  type = Type::VARIO_2;
   length = Length::LONG;
 }
 

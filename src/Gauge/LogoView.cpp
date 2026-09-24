@@ -19,7 +19,6 @@ LogoView::LogoView() noexcept try
   :logo(IDB_LOGO), big_logo(IDB_LOGO_HD), huge_logo(IDB_LOGO_UHD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD), huge_title(IDB_TITLE_UHD)
 {
-#ifndef USE_WIN32_RESOURCES
   /* Load RGBA logo variants (transparent background) */
   logo_rgba.Load(IDB_LOGO_RGBA);
   big_logo_rgba.Load(IDB_LOGO_HD_RGBA);
@@ -30,14 +29,11 @@ LogoView::LogoView() noexcept try
   huge_title_rgba.Load(IDB_TITLE_UHD_RGBA);
   white_title.Load(IDB_TITLE_HD_WHITE);
   huge_white_title.Load(IDB_TITLE_UHD_WHITE);
-#endif
-#ifndef USE_GDI
   font.Load(FontDescription(Layout::FontScale(10)));
 #ifndef NDEBUG
   FontDescription bold_desc(Layout::FontScale(16));
   bold_desc.SetBold(true);
   bold_font.Load(bold_desc);
-#endif
 #endif
 } catch (...) {
   /* ignore Bitmap/Font loader exceptions */
@@ -198,7 +194,6 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   // Draw 'XCSoar N.N' title
   if (orientation != LogoViewOrientation::SQUARE) {
     const Bitmap *draw_title = bitmap_title;
-#ifndef USE_WIN32_RESOURCES
     /* Opaque title BMPs have a white fill.  Prefer matching-size RGBA
        variants so the title composites over parchment / dark dialog
        backgrounds (OpenGL and memory canvas). */
@@ -216,7 +211,6 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
       draw_title = &big_title_rgba;
     else if (bitmap_title == &title && title_rgba.IsDefined())
       draw_title = &title_rgba;
-#endif
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
@@ -233,12 +227,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
 
   // Draw full XCSoar version number
 
-#ifndef USE_GDI
   if (!font.IsDefined())
     return;
 
   canvas.Select(font);
-#endif
 
   canvas.SetTextColor(dark_mode ? COLOR_WHITE : COLOR_BLACK);
   canvas.SetBackgroundTransparent();
@@ -246,10 +238,8 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
 
 #ifndef NDEBUG
   /* Draw debug build warning banner below logo (like "Remove before flight") */
-#ifndef USE_GDI
   if (bold_font.IsDefined())
     canvas.Select(bold_font);
-#endif
   
   const char *warning_text = "DEBUG BUILD - DO NOT FLY!";
   const auto text_size = canvas.CalcTextSize(warning_text);

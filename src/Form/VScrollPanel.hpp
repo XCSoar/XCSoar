@@ -14,6 +14,7 @@
 #include <deque>
 
 class Canvas;
+struct DialogLook;
 
 class VScrollPanelListener {
 public:
@@ -28,6 +29,15 @@ public:
    */
   virtual bool OnVScrollPanelGesture(const char *gesture) noexcept {
     (void)gesture;
+    return false;
+  }
+
+  /**
+   * Returns true if this panel should track and display horizontal swipe
+   * gestures.
+   */
+  [[gnu::pure]]
+  virtual bool IsVScrollPanelGestureEnabled() const noexcept {
     return false;
   }
 };

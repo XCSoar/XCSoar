@@ -5,7 +5,7 @@
 #include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringCompare.hxx"
 

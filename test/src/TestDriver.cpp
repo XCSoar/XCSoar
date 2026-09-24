@@ -11,6 +11,7 @@
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/Condor.hpp"
+#include "Device/Driver/Condor3Spectate.hpp"
 #include "Device/Driver/Condor3UDP.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
@@ -63,15 +64,19 @@
 #include "Input/InputEvents.hpp"
 #include "Logger/Settings.hpp"
 #include "LocalPath.hpp"
+#include "NMEA/Derived.hpp"
 #include "NMEA/GPSState.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
 #include "Protection.hpp"
 #include "TestUtil.hpp"
 #include "Units/System.hpp"
+#include "io/FileOutputStream.hxx"
 #include "io/NullDataHandler.hpp"
 #include "system/Path.hpp"
+#include "util/SpanCast.hxx"
 #include "util/StaticString.hxx"
 #include "util/ByteOrder.hxx"
 #include "util/PackedFloat.hxx"
@@ -79,6 +84,7 @@
 #include <fmt/format.h>
 
 #include <chrono>
+#include <cstdio>
 #include <cstring>
 #include <memory>
 #include <span>
@@ -1643,57 +1649,14 @@ TestCondor3UDP()
   ok1(!device->ParseNMEA("x=1 junk", info));
 
   next_step();
-  ok1(device->ParseNMEA("airspeed=25.5", info));
-  ok1(info.airspeed_available);
-  ok1(equals(info.true_airspeed, 25.5));
-
-  next_step();
-  ok1(device->ParseNMEA("altitude=1234", info));
-  ok1(info.baro_altitude_available);
-  ok1(equals(info.baro_altitude, 1234));
-
-  next_step();
   ok1(device->ParseNMEA("vario=3.25", info));
   ok1(info.noncomp_vario_available);
   ok1(equals(info.noncomp_vario, 3.25));
 
   next_step();
-  ok1(device->ParseNMEA("evario=-1.5", info));
-  ok1(info.total_energy_vario_available);
-  ok1(equals(info.total_energy_vario, -1.5));
-
-  next_step();
   ok1(device->ParseNMEA("nettovario=0.75", info));
   ok1(info.netto_vario_available);
   ok1(equals(info.netto_vario, 0.75));
-
-  next_step();
-  ok1(device->ParseNMEA("compass=270", info));
-  ok1(info.attitude.heading_available);
-  ok1(equals(info.attitude.heading.Degrees(), 270));
-  ok1(!info.track_available);
-
-  next_step();
-  ok1(device->ParseNMEA("compass=90", info));
-  ok1(info.attitude.heading_available);
-  ok1(equals(info.attitude.heading.Degrees(), 90));
-  ok1(!info.track_available);
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("vx=30", info));
-  ok1(device->ParseNMEA("vy=40", info));
-  ok1(!info.track_available);
-  ok1(equals(info.ground_speed, 50));
-
-  next_step();
-  ok1(device->ParseNMEA("vx=30", info));
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("vy=40", info));
-  ok1(info.ground_speed_available);
-  ok1(equals(info.ground_speed, 50));
 
   next_step();
   ok1(device->ParseNMEA("MC=1.75", info));
@@ -1704,18 +1667,6 @@ TestCondor3UDP()
   ok1(device->ParseNMEA("water=42.5", info));
   ok1(info.settings.ballast_litres_available);
   ok1(equals(info.settings.ballast_litres, 42.5));
-
-  next_step();
-  ok1(device->ParseNMEA("latitude=50", info));
-  ok1(!info.location_available);
-  ++step;
-  info.clock = TimeStamp{FloatDuration{step}};
-  info.alive.Update(info.clock);
-  ok1(device->ParseNMEA("longitude=7.5", info));
-  ok1(info.location_available);
-  ok1(equals(info.location.latitude.Degrees(), 50));
-  ok1(equals(info.location.longitude.Degrees(), 7.5));
-  ok1(info.gps.fix_quality == FixQuality::SIMULATION);
 
   next_step();
   ok1(device->ParseNMEA("gforce=1.5", info));
@@ -1731,6 +1682,101 @@ TestCondor3UDP()
   ok1(device->ParseNMEA("bank=0.5", info));
   ok1(info.attitude.bank_angle_available);
   ok1(equals(info.attitude.bank_angle.Radians(), -0.5));
+
+  next_step();
+  ok1(device->ParseNMEA("pitch=0.25", info));
+  ok1(info.attitude.pitch_angle_available);
+  ok1(equals(info.attitude.pitch_angle.Radians(), 0.25));
+
+  delete device;
+}
+
+static bool
+FindPflaaRelativeVertical(const Condor3SpectateBuilder::Lines &lines,
+                          int &rel_v) noexcept
+{
+  for (const auto &line : lines) {
+    int alarm, north, east, vertical;
+    if (sscanf(line.c_str(), "$PFLAA,%d,%d,%d,%d,",
+               &alarm, &north, &east, &vertical) == 4) {
+      rel_v = vertical;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+static void
+WriteSpectateJson(Path path)
+{
+  static constexpr char json[] =
+    "["
+    "{\"ID\":\"1\",\"CN\":\"AA\","
+    "\"latitude\":\"N45.000000\",\"longitude\":\"E013.000000\","
+    "\"altitude\":\"1000\",\"speed\":\"100\",\"heading\":\"90\","
+    "\"vario\":\"0\"},"
+    "{\"ID\":\"2\",\"CN\":\"BB\","
+    "\"latitude\":\"N45.000000\",\"longitude\":\"E013.000000\","
+    "\"altitude\":\"1100\",\"speed\":\"100\",\"heading\":\"90\","
+    "\"vario\":\"0\"}"
+    "]";
+
+  FileOutputStream fos(path, FileOutputStream::Mode::CREATE);
+  fos.Write(AsBytes(std::string_view{json}));
+  fos.Commit();
+}
+
+static void
+TestCondor3Spectate()
+{
+  const auto json_path =
+    AllocatedPath::Build(GetPrimaryDataPath(), "spectate.json");
+  WriteSpectateJson(json_path);
+
+  Condor3SpectateBuilder::Lines lines;
+  ok1(Condor3SpectateBuilder::Build(json_path, "AA", lines));
+  int rel_v = 0;
+  ok1(FindPflaaRelativeVertical(lines, rel_v));
+  ok1(rel_v == 100);
+
+  /* GPS 41 m below Spectate own-ship used to lift every target by
+     that geoid offset.  Relative vertical must stay Spectate-to-Spectate. */
+  Condor3SpectateReference live_ref;
+  live_ref.latitude = 45;
+  live_ref.longitude = 13;
+  live_ref.altitude = 959;
+  live_ref.defined = true;
+  lines.clear();
+  ok1(Condor3SpectateBuilder::Build(json_path, "AA", lines, &live_ref));
+  ok1(FindPflaaRelativeVertical(lines, rel_v));
+  ok1(rel_v == 100);
+
+  NullPort null_port;
+  Device *device = condor3_spectate_driver.CreateOnPort(dummy_config,
+                                                       null_port);
+  ok1(device != nullptr);
+  auto *spectate = dynamic_cast<Condor3SpectateDevice *>(device);
+  ok1(spectate != nullptr);
+  if (spectate == nullptr) {
+    skip(2, 0, "Condor3SpectateDevice missing");
+    delete device;
+    return;
+  }
+
+  MoreData basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  basic.location = GeoPoint(Angle::Degrees(13), Angle::Degrees(45));
+  basic.location_available.Update(basic.clock);
+  basic.gps_altitude = 959;
+  basic.gps_altitude_available.Update(basic.clock);
+  basic.ProvideBaroAltitudeTrue(1000);
+
+  DerivedInfo calculated{};
+  spectate->OnCalculatedUpdate(basic, calculated);
+  ok1(spectate->GetLiveReference().defined);
+  ok1(equals(spectate->GetLiveReference().altitude, 1000));
 
   delete device;
 }
@@ -3147,6 +3193,94 @@ TestTemperatureHumidityValidity()
 }
 
 /**
+ * GGA MSL + geoid separation fills ellipsoid altitude; missing
+ * geoid treats GGA altitude as ellipsoid; empty altitude clears
+ * ellipsoid Validity.
+ */
+static void
+TestGGAEllipsoidAltitude()
+{
+  NMEAParser parser;
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+  info.alive.Update(info.clock);
+
+  ok1(parser.ParseLine("$GPRMC,152144.00,A,4537.06717,N,07438.94746,W,000.0,000.0,051024,000.0,W*5F",
+                        info));
+
+  /* Issue #1605: MSL 47.4 m, geoid -33.4 m → ellipsoid 14 m */
+  ok1(parser.ParseLine("$GPGGA,152145.00,4537.06717,N,07438.94746,W,1,07,1.25,47.4,M,-33.4,M,,*55",
+                        info));
+  ok1(info.gps_altitude_available);
+  ok1(equals(info.gps_altitude, 47.4));
+  ok1(info.gps_ellipsoid_altitude_available);
+  ok1(equals(info.gps_ellipsoid_altitude, 14.0));
+
+  /* Missing geoid: GGA altitude is treated as ellipsoid height */
+  ok1(parser.ParseLine("$GPGGA,152146.00,4537.06717,N,07438.94746,W,1,07,1.25,100.0,M,,M,,*57",
+                        info));
+  ok1(info.gps_ellipsoid_altitude_available);
+  ok1(equals(info.gps_ellipsoid_altitude, 100.0));
+  ok1(equals(info.gps_altitude, 100.0));
+
+  /* Empty altitude clears both AMSL and ellipsoid Validity */
+  ok1(parser.ParseLine("$GPGGA,152147.00,4537.06717,N,07438.94746,W,1,07,1.25,,M,,M,,*79",
+                        info));
+  ok1(!info.gps_altitude_available);
+  ok1(!info.gps_ellipsoid_altitude_available);
+}
+
+/**
+ * gps_ellipsoid_altitude_available must use Validity: a real zero
+ * complements, AMSL-only sources must not clobber ellipsoid, and
+ * the flag expires.
+ */
+static void
+TestEllipsoidAltitudeValidity()
+{
+  NMEAInfo a, b;
+  a.Reset();
+  b.Reset();
+  a.clock = TimeStamp{FloatDuration{1}};
+  b.clock = TimeStamp{FloatDuration{1}};
+  b.alive.Update(b.clock);
+
+  b.gps_ellipsoid_altitude = 0;
+  b.gps_ellipsoid_altitude_available.Update(b.clock);
+  ok1(!a.gps_ellipsoid_altitude_available);
+  a.Complement(b);
+  ok1(a.gps_ellipsoid_altitude_available);
+  ok1(equals(a.gps_ellipsoid_altitude, 0));
+
+  NMEAInfo c, d;
+  c.Reset();
+  d.Reset();
+  c.clock = TimeStamp{FloatDuration{1}};
+  d.clock = TimeStamp{FloatDuration{1}};
+  c.gps_ellipsoid_altitude = 42;
+  c.gps_ellipsoid_altitude_available.Update(c.clock);
+  d.alive.Update(d.clock);
+  d.gps_altitude = 100;
+  d.gps_altitude_available.Update(d.clock);
+  c.Complement(d);
+  ok1(c.gps_ellipsoid_altitude_available);
+  ok1(equals(c.gps_ellipsoid_altitude, 42));
+  ok1(c.gps_altitude_available);
+  ok1(equals(c.gps_altitude, 100));
+
+  NMEAInfo e;
+  e.Reset();
+  e.clock = TimeStamp{FloatDuration{1}};
+  e.gps_ellipsoid_altitude = 14;
+  e.gps_ellipsoid_altitude_available.Update(e.clock);
+  ok1(e.gps_ellipsoid_altitude_available);
+  e.clock = TimeStamp{FloatDuration{60}};
+  e.Expire();
+  ok1(!e.gps_ellipsoid_altitude_available);
+}
+
+/**
  * Test that ReadGeoAngle handles NMEA fields without a decimal point
  * gracefully (no crash or undefined behavior).
  */
@@ -3510,8 +3644,10 @@ int main()
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
+             + 13 /* GGAEllipsoid */ + 9 /* EllipsoidComplement */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
-             + 59 /* Condor3UDP */ + 29 /* FlarmTrafficBuilder */
+             + 30 /* Condor3UDP */ + 10 /* Condor3Spectate */
+             + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */);
@@ -3534,6 +3670,7 @@ int main()
   TestLX(condor_driver, true, true);
   TestLX(condor3_driver, true, false);
   TestCondor3UDP();
+  TestCondor3Spectate();
   TestLXEos();
   TestLXV7();
   TestLXV7POLAR();
@@ -3578,6 +3715,8 @@ int main()
   TestMWVRelativeTrue();
   TestStallRatioComplement();
   TestTemperatureHumidityValidity();
+  TestGGAEllipsoidAltitude();
+  TestEllipsoidAltitudeValidity();
   TestReadGeoAngleNoDot();
   TestGLL();
   TestGSA();

@@ -1,0 +1,42 @@
+---
+description: >-
+  When writing or reviewing code, keep it human-readable. Reject clever,
+  generated-looking, or over-abstracted changes a maintainer cannot follow.
+globs:
+  - "**/*.cpp"
+  - "**/*.hpp"
+  - "**/*.c"
+  - "**/*.h"
+  - "**/*.java"
+alwaysApply: false
+---
+
+# Review: human-readable code
+
+`doc/policy.rst`: everybody must understand the code when the author is
+gone. Size vs problem: a large patch for a small behaviour change is a
+design smell.
+
+## Reject
+
+- Factories, managers, visitors, or extra files for one call site
+- Parallel helpers that duplicate `src/util`, `Formatter/`, `Math/`,
+  `Geo/`, or the same subsystem
+- Template metaprogramming, deep lambdas, or macros that hide control
+  flow when a function would do
+- Walls of similar generated-looking functions a human did not need
+- Rewrites of working code that is not part of the stated change
+
+## Prefer
+
+- The smallest change that matches the surrounding file
+- A few clear functions over a new abstraction hierarchy
+- Names and linear control flow over comments that restate the code
+- Comments only for *why*, workarounds, and device/protocol quirks
+
+```cpp
+// BAD: new layer for one dialog
+class AlternatePickerFactory { ... };
+
+// GOOD: extend the existing list/dialog code
+```

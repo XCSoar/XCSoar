@@ -180,16 +180,17 @@ This page provides options relating to screen elements overlayed to the map disp
   {\bf Short}: A short trail is drawn (approx 10 minutes). \\
   {\bf Full}: A trail for the entire flight is drawn.
 \item[Trail drift*] \label{conf:traildrift} Determines whether the
-  snail trail is drifted with the wind when displayed in circling mode.  Switched Off,
-  the snail trail stays uncompensated for wind drift.
+  snail trail is drifted with the wind when displayed in circling mode.  Off by
+  default.  Switched Off, the snail trail stays uncompensated for wind drift.
 \item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail display. \\
   {\bf Vario \#1}: Within lift areas lines get displayed green and
   thicker, while sinking lines are shown brown and thin.  Zero lift
   is presented as a grey line. \\
   {\bf Vario \#1 (with dots)}: The same colour scheme as the previous, but with dotted 
   lines while sinking. \\
-  {\bf Vario \#2}: The climb colour for this scheme is orange to red, sinking is
-  displayed as light blue to dark blue. Zero lift is presented as a yellow line. \\
+  {\bf Vario \#2} (default): The climb colour for this scheme is orange to red,
+  sinking is displayed as light blue to dark blue. Zero lift is presented as a
+  yellow line. \\
   {\bf Vario \#2 (with dots)}: The same colour scheme as the previous, but with dotted 
   lines while sinking. \\
   {\bf Altitude}: The colour scheme corresponds to the altitude.
@@ -349,7 +350,7 @@ The available terrain colour schemes are illustrated in the table below.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Map Display / Airspace}
+\section{Map Display / Airspace}\label{sec:map-airspace}
 
 This page is used to determine how the airspace information is
 displayed and how warnings are issued.
@@ -364,6 +365,10 @@ displayed and how warnings are issued.
     definable margin is shown.
 \sketch{figures/config-airspace.png} \\
   {\bf All below}:  Like auto plus every airspace below the glider is shown.
+\item[Label visibility*]  Shows the ceiling and base of each airspace
+  on the map. \\
+  {\bf None}:  No labels. \\
+  {\bf All}:  A label on every displayed airspace.
 \item[Clip altitude] For clip mode, this is the altitude below which airspace 
   is displayed.
 \item[Margin]  For auto and all below airspace mode, this is the height 
@@ -380,22 +385,19 @@ displayed and how warnings are issued.
     around the airspace. \\
   {\bf Default}:  This selects the best performing option for your hardware. In fact 
     it favours `{\it Fill padding}'.
-\item[Airspace transparency*]  If enabled, then airspaces are filled transparently.
 \end{description}
 
 This page also has \button{Colours} and \button{Filter} buttons which
-can be used to review or change the colours/patterns used by each
+can be used to review or change the colours used by each
 airspace class, and whether each airspace class will be filtered out
-of warnings and/or display. Depending on the airspace transparency setting it is 
-no longer needed to define patterns. The availability of transparency relies 
-on the capabilities of the used hardware and may differ. 
+of warnings and/or display. 
 
 \subsection*{Colours}
 This function is used to determine the colours used to draw each class of
 airspaces.
 
-First select the airspace class you wish to change. Then select the colour and 
-pattern you wish the selected airspace class to be drawn in.
+First select the airspace class you wish to change. Then select the colour
+you wish the selected airspace class to be drawn in.
 
 \subsection*{Filters}
 The filter function is described in Section~\ref{sec:airspace-filter}.
@@ -716,8 +718,9 @@ XCSoar.
   character to the relevant letter. \\
   {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
   {\bf Default}: Uses the default input style for your platform.
-\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
-  when the device accepts your finger press as valid input on the touch-screen.
+\item[Haptic feedback*]  Let you switch on or off the vibration
+  when the device accepts a finger press.  Available on Android
+  and iOS.
 \end{description}
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.
@@ -828,20 +831,25 @@ This page shows and let you customise the available InfoBox sets.
 
 \subsection*{InfoBox Set Customisation}
 
-\begin{description}
-\item[Name]  Sets the name of the currently customized InfoBox set. The 
-  button starts the text input dialogue of XCSoar.
-\item[InfoBox]  The number identifying the current box.
-\item[Content]  Select the information you want to see in the current box.
-\end{description}
+The dialogue shows the set the way it is laid out on the screen: every
+InfoBox is a card with its number and its caption, and the set is
+composed by moving these cards around, exactly as on the map (see
+Section~\ref{sec:arrange_infoboxes}).
 
-The right side of the dialogue always gives the overview on the composed set. 
-When composing at the PC you can use the mouse to select the individual boxes 
-right from the overview.
+\begin{description}
+\item[Rename]  Sets the name of the currently customized InfoBox set.
+  The button starts the text input dialogue of XCSoar. Only the sets
+  you have made yourself can be renamed.
+\item[Help]  Explains how an InfoBox is moved and how it is replaced.
+\item[Copy Set]  Remembers all InfoBoxes of this set.
+\item[Paste Set]  Replaces the InfoBoxes of another set with them.
+\end{description}
 
 See Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
 
-To change a set press on one of the InfoBoxes labeled with it's current content.
+To change the content of an InfoBox in the set, long-press its card.
+Without a touch-screen, press Enter twice without moving the selected
+InfoBox.
 The InfoBoxes are numbered; the location of the InfoBoxes depends on the screen layout.  
 The tables below show the InfoBox enumeration scheme for the
 landscape and portrait screen layout.
@@ -935,14 +943,28 @@ will be referenced as `Custom' set and will also be stored in your profile.
 Set the local time offset with respect to UTC.
 
 \begin{description}
-\item[Automatic UTC offset]  If enabled, the UTC offset is taken from the time zone
-  configured in the operating system and is kept up to date, so it follows daylight
-  saving time changes and travelling to another time zone.  Disable this option to
-  enter the offset manually.
-\item[UTC offset]  The field allows the UTC local time offset to be specified.  It is
-  only editable while `Automatic UTC offset' is disabled.
+\item[Local time source]  Selects where XCSoar gets the offset between UTC and local
+  time from:
+  \begin{description}
+  \item[Automatic]  The offset is taken from the time zone configured in the operating
+    system and is kept up to date, so it follows daylight saving time changes and
+    travelling to another time zone.  This option is not available on Kobo, because
+    those devices have no time zone setting at all.
+  \item[Time zone]  The offset is calculated from the time zone selected below.  A time
+    zone includes the daylight saving time rules, which means XCSoar applies the
+    transitions on its own; the setting does not have to be corrected twice a year.
+  \item[Manual UTC offset]  The fixed offset entered below is used.  It has to be
+    corrected manually whenever daylight saving time begins or ends.  This option is
+    offered in expert mode only, unless it is the one in use.
+  \end{description}
+\item[Time zone]  The time zone of the airfield you are flying at, e.g.
+  `Europe/Berlin'.  It is only editable while the local time source is `Time zone'.
+\item[Manual UTC offset]  The field allows the UTC local time offset to be specified.
+  It is only editable while the local time source is `Manual UTC offset', and it keeps
+  the value you entered while another source is selected.
 \item[Local time]  The local time is displayed below in order to make it easier to verify
-  the correct offset has been entered.  Offsets to the quarter-hour may be set.
+  the correct offset has been entered, followed by the UTC offset which is currently in
+  effect.  Offsets to the quarter-hour may be set.
 \item[Use GPS time*] This option, if enabled sets the clock of the computer to 
   the GPS time once a fix is set. This is only necessary if your computer does 
   not have a real-time clock with battery backup or your computer 
@@ -1055,6 +1077,24 @@ lists.
 \begin{description}
 \item[Port]  This setting maps an existing interface (port) of your 
   glide computer to one of the available slots A to D.
+  On Android, Bluetooth LE devices appear as {\it BLE port} (a
+  serial UART used by varios such as BlueFly) or {\it BLE sensor}
+  (heart-rate monitors, pulse oximeters, SensBox, and engine sensors).
+  A BlueFly Vario must be selected as {\it BLE port} with the BlueFly
+  driver; {\it BLE sensor} cannot carry its serial protocol.
+  {\it Engine Type} appears only for an engine-sensor BLE device
+  (ignition scaling); heart-rate bands do not show it.
+  A Xiaomi Smart Band talks GATT on a random LE address; XCSoar
+  follows that live device.  Enable {\it Heart rate broadcast} and
+  leave the Xiaomi app (and a second XCSoar copy) disconnected so the
+  standard heart-rate service is free.
+  A pulse oximeter is selected as {\it BLE sensor} as well.  The
+  Blood Oxygen InfoBox shows its saturation.
+  The Devices list shows {\it Heart Rate}, {\it Pressure},
+  {\it Temperature}, and {\it Relative humidity} among the other
+  sensor flags, and {\it Battery=N\%} when remaining charge is
+  known, including BLE sensors that expose the standard heart-rate,
+  Environmental Sensing, and Battery services.
 \item[Baudrate]  Set this to the communication speed of the connected device.
 \item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.

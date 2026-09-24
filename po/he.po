@@ -1104,10 +1104,6 @@ msgstr "יצוא"
 msgid "Bluetooth server"
 msgstr "שרת בלוטות"
 
-msgid "GPS Intermediate Driver"
-msgstr "שדרן GPS אמצעי"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "גי פי אס מובנה"
 
@@ -7412,6 +7408,9 @@ msgstr "סימולטור"
 msgid "no QNH"
 msgstr "ללא QNH"
 
+msgid "no wind"
+msgstr "ללא רוח"
+
 msgid "Not flying"
 msgstr "לא מטרמל"
 
@@ -11012,3 +11011,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "ידנית"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

@@ -91,18 +91,23 @@ discover/manual.html}.
 XCSoar runs on the following platforms:
 
 \begin{itemize}
-\item Android mobile phones and tablets with Android 6.0 or newer 
+\item Android mobile phones and tablets with Android 6.0 or newer
+\item iPhone and iPad (iOS)
 \item eReader Kobo
-\item Windows 2000 or newer
+\item Windows
 \item Linux
-\item Mac OS X (outdated)
+\item macOS
 \end{itemize}
 
 \subsection*{GPS, Logger, Vario}
 
 XCSoar is compatible with any GPS emitting NMEA data.  Most modern
-Android devices have a built-in GPS, but for several reasons it is favorable to
-connect to one or more external devices:
+Android and iOS devices have a built-in GPS.  Many of those phones and
+tablets also have a barometric pressure sensor; XCSoar uses it for
+altitude when no better external altimeter is connected.  On Android,
+XCSoar also uses the phone's accelerometer as a G-sensor (load
+factor).  For several reasons it is still favorable to connect to one
+or more external devices:
 
 \begin{itemize}
 \item a specialized GPS receiver gains much better reception providing much 
@@ -139,8 +144,7 @@ NMEA Device &
 \input{supported_devices_table.tex}
 \end{tabular}}
 
-While most Windows CE based devices have a serial port, such legacy
-hardware is not present in modern Android devices.  Those can either
+Modern Android devices typically have no serial port.  Those can either
 use Bluetooth or the Android IOIO board.  To use Bluetooth, you need
 to connect the external device to a Bluetooth-to-Serial adapter, such
 as the K6-Bt or the SoarTronic-BT1/2. %Glidertools is defunct.
@@ -206,25 +210,32 @@ the screen.  Additionally, if present, it shows the contents of the
 file \texttt{XCSoarData/kobo/poweroff.txt} at the bottom.  This file
 can contain arbitrary text, e.g. contact/owner/emergency information.
 
+\subsection*{On iOS}
+
+Install XCSoar from the Apple App Store.  Data files are stored in
+\texttt{Documents/XCSoarData} and can be copied with the Files app
+(or iTunes file sharing).
+
+\subsection*{On macOS}
+
+Install XCSoar from the Apple App Store, or download the macOS package
+from the XCSoar website.  Data files go in \texttt{XCSoarData} in your
+home folder.
+
 \subsection*{On a Windows PC}
 
-Two OpenGL builds are recommended; older GDI builds are deprecated:
+Two Windows builds are available:
 \begin{itemize}
-\item \textbf{64-bit OpenGL} (target ``WIN64OPENGL''): the recommended
+\item \textbf{64-bit} (target ``WIN64OPENGL''): the recommended
   version. Run the installer, or use the \verb|.zip| file for a manual
   install. Supports high-DPI displays, GPU acceleration, and matches the
   Unix and Android versions in features and visuals.
-\item \textbf{32-bit OpenGL} (target ``WIN32OPENGL''): same as the 64-bit
-  OpenGL build for 32-bit Windows; installer or \verb|.zip| available.
-\item \textbf{64-bit legacy GDI} (target ``WIN64''): \emph{deprecated.}
-  Download \verb|XCSoar.exe| and place it on your hard disk; no installer.
-  This single-file build works on very old computers without GPU
-  acceleration, but will be removed in a future release; use
-  ``WIN64OPENGL'' instead.
-\item \textbf{32-bit legacy GDI} (target ``PC''): \emph{deprecated.}
-  Download \verb|XCSoar.exe| and place it on your hard disk; no installer.
-  Will be removed in a future release; use ``WIN32OPENGL'' instead.
+\item \textbf{32-bit} (target ``WIN32OPENGL''): same as the 64-bit
+  build for 32-bit Windows; installer or \verb|.zip| available.
 \end{itemize}
+
+The version is visible in Windows file properties of
+\texttt{XCSoar.exe} and the installer.
 
 \subsection*{On Unix/Linux}
 
@@ -284,11 +295,11 @@ so that XCSoar knows where to look for data files:
 \item[Windows PC]
 \texttt{XCSoarData} is in your personal folder (``\texttt{My
 Documents}'')
-\item[Windows Mobile PDA/PNA]
-If there is a directory named \texttt{XCSoarData} in the same
-directory as \texttt{XCSoar.exe}, then this one will be used.
-\texttt{XCSoarData} is on the SD card.  If there is no SD card, then
-XCSoar looks for it in \texttt{My Documents}.
+\item[macOS]
+\texttt{XCSoarData} is in your home folder.
+\item[iOS]
+\texttt{XCSoarData} is in the app's Documents folder, accessible via
+the Files app.
 \item[Unix/Linux]
 The directory is called \verb|.xcsoar| in the user's home directory.
 \item[Android Devices]
@@ -297,8 +308,8 @@ The directory is called \verb|.xcsoar| in the user's home directory.
 
 
 XCSoar will generate a number of additional files at run time.  These
-will be placed in the  \texttt{XCSoarData} directory (Windows PC, 
-Windows and Android mobile devices), or the \texttt{.xcsoar} directory (Unix/Linux
+will be placed in the  \texttt{XCSoarData} directory (Windows, macOS,
+iOS, and Android devices), or the \texttt{.xcsoar} directory (Unix/Linux
 PC).  From the first run, XCSoar will create and maintain the files
 \texttt{user.cup} (user-edited waypoints),
 \texttt{Default.tsk} (Default Task),  
@@ -321,6 +332,8 @@ Two modes are available inside the XCSoar application:
 \item[SIM] This starts XCSoar in simulator mode, no serial communications
   are attempted.
 \end{description}
+Quitting from this prompt leaves the profile file unchanged, including
+when XCSoar was started with \verb|-profile=...|.
 
 \subsection*{XCSoar PC version}
 The program can be run by opening the explorer window, finding the directory
@@ -445,7 +458,7 @@ activity, and a short line of text describing the action that is being performed
 This screen also displays the software version information.
 
 \subsection*{Exiting the program}
-For PDA and PC versions, XCSoar is shut down from the menu. The menu can be
+XCSoar is shut down from the menu. The menu can be
 opened by double-clicking on the map or the \InfoBox es.
 \begin{quote}
 \bmenug{QUIT}

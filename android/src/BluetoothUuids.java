@@ -25,6 +25,60 @@ public final class BluetoothUuids {
     UUID.fromString("00002A37-0000-1000-8000-00805F9B34FB");
 
   /**
+   * Bluetooth SIG Battery Service.  Not used as a scan filter:
+   * almost every LE device advertises it.
+   */
+  static final UUID BATTERY_SERVICE =
+    UUID.fromString("0000180F-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Battery Level: uint8 percent, 0-100; 0xFF means unknown.
+   */
+  static final UUID BATTERY_LEVEL_CHARACTERISTIC =
+    UUID.fromString("00002A19-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Bluetooth SIG Environmental Sensing Service.
+   */
+  static final UUID ENVIRONMENTAL_SENSING_SERVICE =
+    UUID.fromString("0000181A-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Pressure: uint32, 0.1 Pa (divide by 1000 for hPa).
+   */
+  static final UUID PRESSURE_CHARACTERISTIC =
+    UUID.fromString("00002A6D-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Temperature: sint16, 0.01 C.  0x8000 means unknown.
+   */
+  static final UUID TEMPERATURE_CHARACTERISTIC =
+    UUID.fromString("00002A6E-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * Humidity: uint16, 0.01 percent.
+   */
+  static final UUID HUMIDITY_CHARACTERISTIC =
+    UUID.fromString("00002A6F-0000-1000-8000-00805F9B34FB");
+
+  /**
+   * The Bluetooth SIG "Pulse Oximeter Service", used by sensors which
+   * measure the blood oxygen saturation (SpO2).
+   *
+   * @see https://www.bluetooth.com/specifications/specs/pulse-oximeter-service-1-0-1/
+   */
+  static final UUID PULSE_OXIMETER_SERVICE =
+    UUID.fromString("00001822-0000-1000-8000-00805F9B34FB");
+
+  /** a single measurement, sent when the sensor has finished measuring */
+  static final UUID PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5E-0000-1000-8000-00805F9B34FB");
+
+  /** a continuous stream of measurements */
+  static final UUID PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC =
+    UUID.fromString("00002A5F-0000-1000-8000-00805F9B34FB");
+
+  /**
    * @see https://sites.google.com/view/ppgmeter/startpage
    * Engine sensors service and characteristic
    */
@@ -102,6 +156,8 @@ public final class BluetoothUuids {
   public static final UUID[] getAllServiceUuids() {
       return new UUID[] { GENERIC_ACCESS_SERVICE,
                           HEART_RATE_SERVICE,
+                          ENVIRONMENTAL_SENSING_SERVICE,
+                          PULSE_OXIMETER_SERVICE,
                           ENGINE_SENSORS_SERVICE,
                           HM10_SERVICE,
                           NORDIC_UART_SERVICE,
@@ -115,6 +171,11 @@ public final class BluetoothUuids {
     return new UUID[] { CLIENT_CHARACTERISTIC_CONFIGURATION,
                         DEVICE_NAME_CHARACTERISTIC,
                         HEART_RATE_MEASUREMENT_CHARACTERISTIC,
+                        PRESSURE_CHARACTERISTIC,
+                        TEMPERATURE_CHARACTERISTIC,
+                        HUMIDITY_CHARACTERISTIC,
+                        PLX_SPOT_CHECK_MEASUREMENT_CHARACTERISTIC,
+                        PLX_CONTINUOUS_MEASUREMENT_CHARACTERISTIC,
                         ENGINE_SENSORS_CHARACTERISTIC,
                         HM10_RX_TX_CHARACTERISTIC,
                         NORDIC_UART_RX_CHARACTERISTIC,

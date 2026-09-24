@@ -6,7 +6,7 @@
 #include "DeviceEmulator.hpp"
 #include "io/DataHandler.hpp"
 #include "util/StaticFifoBuffer.hxx"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 
 #include <cstddef> // for std::byte
 

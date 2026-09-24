@@ -10,21 +10,3 @@
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/Features.hpp"
 #endif
-
-#ifdef USE_GDI
-#include "gdi/Features.hpp"
-#endif
-
-/**
- * Return true when the Canvas implements clipping against its
- * siblings and children.
- */
-constexpr bool
-HaveClipping()
-{
-#ifdef HAVE_CLIPPING
-  return true;
-#else
-  return false;
-#endif
-}

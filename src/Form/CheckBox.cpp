@@ -7,6 +7,7 @@
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Button.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 
@@ -166,6 +167,10 @@ CheckBoxControl::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
   if (IsTabStop())
     SetFocus();
 
+#ifdef HAVE_VIBRATOR
+  PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+
   SetPressed(true);
   SetCapture();
   dragging = true;
@@ -222,10 +227,6 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
 
   if (focused)
     canvas.Clear(cb_look.focus_background_brush);
-  else if (HaveClipping())
-    /* with clipping, the parent's background does not extend into
-       child windows, so we must fill the background ourselves */
-    canvas.Clear(look->background_brush);
 
   const auto &state_look = IsEnabled()
     ? (pressed

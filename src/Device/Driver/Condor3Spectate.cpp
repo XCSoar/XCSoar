@@ -386,14 +386,35 @@ Condor3SpectateBuilder::Build(Path path, const char *own_cn,
     const boost::json::object *own = FindOwnShip(players, own_cn_view);
 
     double ref_lat = 0, ref_lon = 0, ref_alt = 0;
+    bool have_pos = false;
+
     if (live_ref != nullptr && live_ref->defined) {
+      /* Horizontal only: live UDP/NMEA updates faster than the
+         Spectate.json poll.  Do not take altitude from here: GPS
+         may have EGM96 subtracted, while Spectate.json is Condor's
+         altimeter (MSL).  Mixing them made every target ~40 m high. */
       ref_lat = live_ref->latitude;
       ref_lon = live_ref->longitude;
       ref_alt = live_ref->altitude;
-    } else if (own != nullptr) {
-      if (!PlayerCoords(*own, ref_lat, ref_lon, ref_alt))
-        return false;
-    } else {
+      have_pos = true;
+    }
+
+    if (own != nullptr) {
+      double own_lat, own_lon, own_alt;
+      if (!PlayerCoords(*own, own_lat, own_lon, own_alt)) {
+        if (!have_pos)
+          return false;
+      } else {
+        ref_alt = own_alt;
+        if (!have_pos) {
+          ref_lat = own_lat;
+          ref_lon = own_lon;
+          have_pos = true;
+        }
+      }
+    }
+
+    if (!have_pos) {
       bool found_ref = false;
       for (const auto &item : players) {
         if (!item.is_object())
@@ -454,10 +475,10 @@ Condor3SpectateDevice::OnCalculatedUpdate(const MoreData &basic,
 
   live_ref.latitude = basic.location.latitude.Degrees();
   live_ref.longitude = basic.location.longitude.Degrees();
-  if (basic.gps_altitude_available)
-    live_ref.altitude = basic.gps_altitude;
-  else if (basic.baro_altitude_available)
-    live_ref.altitude = basic.baro_altitude;
+  /* Same preference as FlarmComputer / GetAnyAltitude: Condor
+     altimeter (baro) matches Spectate.json, unlike GPS-with-geoid. */
+  if (const auto altitude = basic.GetAnyAltitude())
+    live_ref.altitude = *altitude;
   else
     live_ref.altitude = 0;
   live_ref.defined = true;

@@ -3,6 +3,7 @@
 
 #include "Startup.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
@@ -75,6 +76,10 @@
 #include "Hardware/DisplayDPI.hpp"
 #include "Hardware/DisplayGlue.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/display/Display.hpp"
+#ifdef USE_WAYLAND
+#include "ui/display/wayland/Scale.hpp"
+#endif
 #include "util/Compiler.h"
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -131,6 +136,7 @@
 #ifdef __APPLE__
 #include "Apple/Services.hpp"
 #include "Apple/BackgroundSave.hpp"
+#include "Apple/DarkMode.hpp"
 #endif
 
 #ifdef HAVE_EDL
@@ -190,9 +196,9 @@ AfterStartup()
     if (File::Exists(init_path))
       Lua::StartFile(init_path);
     else
-      LogDebug("Optional %s not found", init_path.c_str());
+      LogDebug("Optional {} not found", init_path.c_str());
   } catch (...) {
-    LogError(std::current_exception());
+    LogError(std::current_exception(), "Lua init script failed");
   }
 
   if (is_simulator()) {
@@ -352,6 +358,14 @@ Startup(UI::Display &display)
   if (!main_window->IsDefined())
     return false;
 
+#ifdef __APPLE__
+  /* inherit the system appearance; this must happen after the window
+     exists, because on iOS the appearance is read from the window
+     scene, and before anything builds a Look or shows the progress
+     window */
+  UpdateAppleDarkMode();
+#endif
+
 #ifdef ENABLE_OPENGL
   LogFmt("OpenGL: "
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
@@ -457,6 +471,16 @@ Startup(UI::Display &display)
            dpi.x > 0 ? double(size.width) / dpi.x : 0.,
            dpi.y > 0 ? double(size.height) / dpi.y : 0.,
            Layout::small_screen);
+#ifdef USE_WAYLAND
+    const auto hardware = display.GetHardwareSize();
+    const auto logical = display.GetSize();
+    const auto output_mm = display.GetSizeMM();
+    LogFmt("Monitor: {}x{} dpi={},{} {}x{}mm logical={}x{} scale={:.2f}",
+           hardware.width, hardware.height, dpi.x, dpi.y,
+           output_mm.width, output_mm.height,
+           logical.width, logical.height,
+           display.GetScale120() / (double)Wayland::SCALE_100);
+#endif
   }
 
   /* Log device capabilities and features after initialization */
@@ -562,7 +586,8 @@ Startup(UI::Display &display)
 #ifdef HAVE_CMDLINE_REPLAY
   if (CommandLine::replay_path != nullptr) {
     try {
-      backend_components->replay->Start(Path(CommandLine::replay_path));
+      backend_components->replay->Start(Path(CommandLine::replay_path),
+        CommonInterface::GetSystemSettings().devices[0]);
     } catch (...) {
       LogError(std::current_exception());
     }
@@ -615,14 +640,14 @@ Startup(UI::Display &display)
   }
 
   // Set the home waypoint
+  auto &settings = CommonInterface::SetComputerSettings();
   WaypointGlue::SetHome(*data_components->waypoints,
-                        data_components->terrain.get(),
-                        CommonInterface::SetComputerSettings().poi,
-                        CommonInterface::SetComputerSettings().team_code,
-                        backend_components->device_blackboard.get(),
+                        settings.poi, settings.team_code,
                         false);
+  ActionInterface::SetStartupLocation();
 
-  // ReSynchronise the blackboards here since SetHome touches them
+  // ReSynchronise the blackboards here since SetStartupLocation
+  // touches them
   backend_components->device_blackboard->Merge();
   CommonInterface::ReadBlackboardBasic(backend_components->device_blackboard->Basic());
 

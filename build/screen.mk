@@ -115,11 +115,16 @@ ifeq ($(USE_WAYLAND),y)
 SCREEN_SOURCES += \
 	$(WAYLAND_GENERATED)/xdg-shell-public.c \
 	$(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-public.c \
+	$(WAYLAND_GENERATED)/xdg-output-unstable-v1-public.c \
+	$(WAYLAND_GENERATED)/viewporter-public.c \
+	$(WAYLAND_GENERATED)/fractional-scale-v1-public.c \
+	$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-public.c \
 	$(SRC)/ui/display/wayland/Display.cpp \
 	$(WINDOW_SRC_DIR)/wayland/TopWindow.cpp
 
-$(call SRC_TO_OBJ,$(SRC)/ui/window/wayland/TopWindow.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h
-$(call SRC_TO_OBJ,$(SRC)/ui/event/poll/WaylandQueue.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/window/wayland/TopWindow.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h $(WAYLAND_GENERATED)/viewporter-client-protocol.h $(WAYLAND_GENERATED)/fractional-scale-v1-client-protocol.h $(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/event/poll/WaylandQueue.cpp): $(WAYLAND_GENERATED)/xdg-shell-client-protocol.h $(WAYLAND_GENERATED)/xdg-decoration-unstable-v1-client-protocol.h $(WAYLAND_GENERATED)/viewporter-client-protocol.h $(WAYLAND_GENERATED)/fractional-scale-v1-client-protocol.h $(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-client-protocol.h
+$(call SRC_TO_OBJ,$(SRC)/ui/display/wayland/Display.cpp): $(WAYLAND_GENERATED)/xdg-output-unstable-v1-client-protocol.h
 endif
 
 ifeq ($(OPENGL),y)
@@ -178,18 +183,6 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
-else ifeq ($(GLX),y)
-SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
-SCREEN_SOURCES += \
-	$(SCREEN_CUSTOM_SOURCES) \
-	$(CANVAS_FILES_CPP) \
-	$(CANVAS_SRC_DIR)/custom/Bitmap.cpp \
-	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
-	$(CANVAS_SRC_DIR)/glx/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
@@ -218,46 +211,8 @@ SCREEN_SOURCES += \
 	$(WINDOW_SRC_DIR)/fb/Window.cpp \
 	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
 FB_CPPFLAGS = -DUSE_FB
-else ifeq ($(HAVE_WIN32)$(ENABLE_SDL),yn)
-SCREEN_SOURCES += \
-	$(SRC)/ui/display/gdi/Display.cpp \
-	$(CANVAS_SRC_DIR)/gdi/WindowCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/VirtualCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Font.cpp \
-	$(WINDOW_SRC_DIR)/gdi/Window.cpp \
-	$(WINDOW_SRC_DIR)/gdi/PaintWindow.cpp \
-	$(WINDOW_SRC_DIR)/gdi/ContainerWindow.cpp \
-	$(CONTROL_SRC_DIR)/gdi/LargeTextWindow.cpp \
-	$(CONTROL_SRC_DIR)/RichTextWindow.cpp \
-	$(CONTROL_SRC_DIR)/LinkableWindow.cpp \
-	$(CANVAS_SRC_DIR)/TextWrapper.cpp \
-	$(WINDOW_SRC_DIR)/gdi/SingleWindow.cpp \
-	$(WINDOW_SRC_DIR)/gdi/TopWindow.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Pen.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Brush.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Bitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/GdiPlusBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/ResourceBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/RawBitmap.cpp \
-	$(CANVAS_SRC_DIR)/gdi/Canvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/SubCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/BufferCanvas.cpp \
-	$(CANVAS_SRC_DIR)/gdi/PaintCanvas.cpp \
-
-ifeq ($(OPENGL),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/GeoBitmap.cpp
-ifeq ($(TIFF),y)
-SCREEN_SOURCES += $(CANVAS_SRC_DIR)/custom/LibTiff.cpp
-endif
-endif
-
-GDI_CPPFLAGS = -DUSE_GDI
-WINUSER_CPPFLAGS = -DUSE_WINUSER
-GDI_LDLIBS = -luser32 -lgdi32 -lmsimg32 -lgdiplus
-
-ifeq ($(TARGET),PC)
-GDI_LDLIBS += -Wl,-subsystem,windows
-endif
+else ifeq ($(HAVE_WIN32),y)
+$(error Windows GDI support has been removed; use TARGET=WIN64OPENGL or TARGET=WIN32OPENGL)
 endif
 
 ifeq ($(TARGET_IS_LINUX),y)
@@ -279,7 +234,6 @@ SCREEN_CPPFLAGS = \
 	$(LINUX_INPUT_CPPFLAGS) \
 	$(LIBINPUT_CPPFLAGS) \
 	$(SDL_CPPFLAGS) \
-	$(GDI_CPPFLAGS) $(WINUSER_CPPFLAGS) \
 	$(FREETYPE_FEATURE_CPPFLAGS) \
 	$(APPKIT_CPPFLAGS) \
 	$(UIKIT_CPPFLAGS) \
@@ -288,11 +242,10 @@ SCREEN_CPPFLAGS = \
 	$(WAYLAND_CPPFLAGS) \
 	$(EGL_CPPFLAGS) \
 	$(EGL_FEATURE_CPPFLAGS) \
-	$(GLX_CPPFLAGS) \
 	$(POLL_EVENT_CPPFLAGS) \
 	$(CONSOLE_CPPFLAGS) $(FB_CPPFLAGS) $(VFB_CPPFLAGS)
 
-SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS GDI OPENGL WAYLAND EGL GLX APPKIT UIKIT
+SCREEN_DEPENDS = SDL FB FREETYPE LIBPNG LIBJPEG COREGRAPHICS OPENGL WAYLAND EGL APPKIT UIKIT
 
 ifeq ($(TIFF),y)
 SCREEN_DEPENDS += LIBTIFF
@@ -313,20 +266,12 @@ ifeq ($(USE_FB)$(EGL),yy)
 $(error USE_FB and EGL are mutually exclusive)
 endif
 
-ifeq ($(USE_FB)$(GLX),yy)
-$(error USE_FB and GLX are mutually exclusive)
-endif
-
 ifeq ($(USE_FB)$(ENABLE_SDL),yy)
 $(error USE_FB and SDL are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(EGL),yy)
 $(error VFB and EGL are mutually exclusive)
-endif
-
-ifeq ($(VFB)$(GLX),yy)
-$(error VFB and GLX are mutually exclusive)
 endif
 
 ifeq ($(VFB)$(ENABLE_SDL),yy)
@@ -337,16 +282,18 @@ ifeq ($(EGL)$(ENABLE_SDL),yy)
 $(error EGL and SDL are mutually exclusive)
 endif
 
-ifeq ($(GLX)$(ENABLE_SDL),yy)
-$(error GLX and SDL are mutually exclusive)
-endif
-
 ifeq ($(EGL)$(OPENGL),yn)
 $(error EGL requires OpenGL)
 endif
 
-ifeq ($(GLX)$(OPENGL),yn)
-$(error GLX requires OpenGL)
+ifeq ($(OPENGL),y)
+ifeq ($(filter y,$(EGL) $(ENABLE_SDL)),)
+$(error OpenGL requires EGL or SDL; the GLX backend has been removed)
+endif
+endif
+
+ifeq ($(GLX),y)
+$(error Desktop GLX has been removed; UNIX OpenGL uses EGL and OpenGL ES)
 endif
 
 ifeq ($(USE_MEMORY_CANVAS)$(OPENGL),yy)

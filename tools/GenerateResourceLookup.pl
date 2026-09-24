@@ -8,7 +8,7 @@ use strict;
 while (<>) {
     next if /^\s*(?:#.*)?$/;
 
-    if (/^(?:bitmap_bitmap|bitmap_graphic|hatch_bitmap|app_icon)\s+([\w_]+)\s+"([^"]+)"\s*$/) {
+    if (/^bitmap_graphic\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         print qq|  { "$1", $1 },\n|;
     } elsif (/^bitmap_icon_scaled\s+([\w_]+)\s+"([^"]+)"\s*$/) {
         print qq|  { "$1", $1 },\n|;

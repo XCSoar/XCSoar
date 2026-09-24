@@ -1119,10 +1119,6 @@ msgstr "Порт BLE"
 msgid "Bluetooth server"
 msgstr "Сервер Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Драйвер GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Вбудований GPS і датники"
 
@@ -7461,6 +7457,9 @@ msgstr "Імітатор"
 msgid "no QNH"
 msgstr "Нема QNH"
 
+msgid "no wind"
+msgstr "Нема вітру"
+
 msgid "Not flying"
 msgstr "Не літає"
 
@@ -11190,3 +11189,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Вручну"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

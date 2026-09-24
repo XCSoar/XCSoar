@@ -15,22 +15,24 @@ public:
   [[gnu::pure]]
   bool operator() (const AirspaceLabelList::Label &label1,
                    const AirspaceLabelList::Label &label2) noexcept {
-    bool en1 = config.IsClassEnabled(label1.cls);
-    bool en2 = config.IsClassEnabled(label2.cls);
+    const bool en1 = config.IsClassEnabled(label1.cls);
+    const bool en2 = config.IsClassEnabled(label2.cls);
 
-    if(en1 == en2)
-      return AirspaceAltitude::SortHighest(label2.base, label1.base);
-    else if(en1)
-      return false;
-    else
-      return true;
+    if (en1 != en2)
+      return en1;
+
+    if (label1.base.altitude != label2.base.altitude)
+      return AirspaceAltitude::SortHighest(label1.base, label2.base);
+
+    return label1.identity < label2.identity;
   }
 };
 
 void
 AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
                        const AirspaceAltitude &base,
-                       const AirspaceAltitude &top) noexcept
+                       const AirspaceAltitude &top,
+                       const Identity identity) noexcept
 {
   if (labels.full())
     return;
@@ -40,6 +42,7 @@ AirspaceLabelList::Add(const GeoPoint &pos, AirspaceClass cls,
   label.pos = pos;
   label.base = base;
   label.top = top;
+  label.identity = identity;
 }
 
 void

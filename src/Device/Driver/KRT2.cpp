@@ -5,7 +5,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "NMEA/Info.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 #include "thread/Cond.hxx"
 #include "thread/Mutex.hxx"
 #include "util/CharUtil.hxx"

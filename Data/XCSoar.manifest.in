@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1"
+          manifestVersion="1.0"
+          xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
+  <assemblyIdentity
+      type="win32"
+      name="PRODUCT_NAME_PLACEHOLDER.PRODUCT_NAME_PLACEHOLDER"
+      version="VERSION_QUAD_PLACEHOLDER"
+      processorArchitecture="PROCESSOR_ARCHITECTURE_PLACEHOLDER"/>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="asInvoker"
+                                 uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <compatibility
+      xmlns="urn:schemas-microsoft-com:compatibility.v1">
+    <application>
+      <!-- Windows 10 and later (including Windows 11) -->
+      <supportedOS
+          Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}"/>
+    </application>
+  </compatibility>
+  <application xmlns="urn:schemas-microsoft-com:asm.v3">
+    <windowsSettings
+        xmlns:ws05="http://schemas.microsoft.com/SMI/2005/WindowsSettings"
+        xmlns:ws16="http://schemas.microsoft.com/SMI/2016/WindowsSettings">
+      <ws05:dpiAware>true/pm</ws05:dpiAware>
+      <ws16:dpiAwareness>PerMonitorV2</ws16:dpiAwareness>
+    </windowsSettings>
+  </application>
+</assembly>

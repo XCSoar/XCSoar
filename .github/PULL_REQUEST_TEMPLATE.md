@@ -8,8 +8,11 @@ This checklist is here to help guide you through the submission process.
 Don't worry if you're not sure about something—feel free to ask questions
 or submit your PR, and we'll work together to get it ready.
 
-For coding, style guide, architecture information please see our
-[development guide](https://xcsoar.readthedocs.io/en/latest/index.html).
+For coding, style, and architecture see the
+[development guide](https://xcsoar.readthedocs.io/en/latest/index.html),
+especially
+[architecture](https://xcsoar.readthedocs.io/en/latest/architecture.html)
+and [policy](https://xcsoar.readthedocs.io/en/latest/policy.html).
 
 For Git tips and tricks, including interactive rebase, fixup commits, and
 common workflows, see the
@@ -52,6 +55,18 @@ Please verify the following before submitting your PR:
   `git rebase -i`)
 - [ ] No duplicate commits (check with `git log --oneline`)
 - [ ] No "WIP" or "testing" commits (clean up before PR)
+
+### Code, tests & docs (where it applies)
+
+- [ ] Reuses existing helpers and UI strings (no parallel API, extra
+  abstraction, or near-duplicate `_()` msgid)
+- [ ] TAP tests for new UI-free logic (parsers, formatters, protocol,
+  math/geo); registered in `build/test.mk`
+- [ ] User-visible behaviour: `NEWS.txt` and English manual
+  (`doc/manual/en/`)
+- [ ] New gettext strings: `make update-po`; `.po` diff only adds new
+  fields (see
+  [i18n](https://xcsoar.readthedocs.io/en/latest/i18n.html))
 
 ---
 

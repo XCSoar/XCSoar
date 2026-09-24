@@ -6,6 +6,29 @@ alwaysApply: false
 
 # XCSoar Testing Conventions
 
+## When to add tests
+
+Add or extend TAP tests for **UI-free logic**:
+
+- Parsers (NMEA, airspace, waypoint, IGC, METAR, …)
+- Formatters and string/UTF-8/path helpers
+- Protocol encode/decode
+- Math, geo, and scoring helpers
+- Policy and state-machine functions
+
+Do **not** add unit tests for dialog layout, canvas drawing, JNI glue,
+or windowing. Prefer extending an existing `Test*.cpp` over a new binary
+when the area already has tests.
+
+## Registering a new test
+
+1. Add `test/src/TestFoo.cpp` with `plan_tests()`, `ok1()`, `exit_status()`
+2. Add `TestFoo` to `TEST_NAMES` in `build/test.mk`
+3. Add `TEST_FOO_SOURCES` and `$(eval $(call link-program,TestFoo,TEST_FOO))`
+   next to similar tests (include `tap.c` and the production `.cpp` files
+   the test needs)
+4. Run `make -j$(nproc) TARGET=UNIX check`
+
 ## Test Framework (TAP)
 
 Tests use the TAP (Test Anything Protocol) framework with `ok1()` assertions:

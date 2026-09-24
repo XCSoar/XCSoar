@@ -3,11 +3,8 @@
 
 #include "MapWindow.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
-#include "Look/MapLook.hpp"
 
-#ifndef ENABLE_OPENGL
-#include "ui/canvas/BufferCanvas.hpp"
-#else
+#ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
 #endif
 
@@ -32,7 +29,6 @@ MapWindow::DrawContest(Canvas &canvas) noexcept
 
     /* draw FAI triangle areas */
     static constexpr Color fill_color = COLOR_YELLOW;
-#if defined(ENABLE_OPENGL) || defined(USE_MEMORY_CANVAS)
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
 #endif
@@ -42,22 +38,5 @@ MapWindow::DrawContest(Canvas &canvas) noexcept
     RenderFAISectors(canvas, render_projection,
                      flying.release_location, flying.far_location,
                      settings);
-#else
-    BufferCanvas buffer_canvas;
-    buffer_canvas.Create(canvas);
-    buffer_canvas.ClearWhite();
-#ifdef HAVE_HATCHED_BRUSH
-    buffer_canvas.Select(look.airspace.brushes[3]);
-    buffer_canvas.SetTextColor(fill_color);
-    buffer_canvas.SetBackgroundColor(COLOR_WHITE);
-#else
-    buffer_canvas.Select(Brush(fill_color));
-#endif
-    buffer_canvas.SelectBlackPen();
-    RenderFAISectors(buffer_canvas, render_projection,
-                     flying.release_location, flying.far_location,
-                     settings);
-    canvas.CopyAnd(buffer_canvas);
-#endif
   }
 }

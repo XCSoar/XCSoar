@@ -2,12 +2,20 @@
 // Copyright The XCSoar Project
 
 #include "Internal.hpp"
+#include "LXNAVVario.hpp"
 #include "NanoLogger.hpp"
+#include "LogFile.hpp"
 #include "Protocol.hpp"
 #include "Convert.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
+#include "Device/Util/NMEAReader.hpp"
+#include "Device/Util/NMEAWriter.hpp"
+#include "NMEA/DeviceInfo.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Operation/Operation.hpp"
+#include "time/TimeoutClock.hpp"
 #include "util/ByteOrder.hxx"
 #include "system/Path.hpp"
 #include "io/BufferedOutputStream.hxx"
@@ -15,10 +23,48 @@
 #include "util/ScopeExit.hxx"
 #include "util/SpanCast.hxx"
 
+#include <chrono>
 #include <memory>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+/**
+ * Ask for PLXVC,INFO and apply the answer.  Returns as soon as
+ * the reply arrives, or when the read times out.
+ */
+static void
+WaitForLoggerInfo(LXDevice &device, Port &port,
+                  OperationEnvironment &env)
+{
+  port.StopRxThread();
+
+  PortNMEAReader reader(port, env);
+  PortWriteNMEA(port, "PLXVC,INFO,R", env);
+
+  /* A logger that never answers INFO,A is not an S-series.  A
+     timeout must not abort the Colibri list; cancel still throws. */
+  const char *payload = nullptr;
+  try {
+    payload = reader.ExpectLine("PLXVC,INFO,A,",
+                                TimeoutClock(std::chrono::seconds(2)));
+  } catch (const DeviceTimeout &) {
+    return;
+  }
+  if (payload == nullptr)
+    return;
+
+  NMEAInputLine line(payload);
+  DeviceInfo info;
+  info.product.SetASCII(line.ReadView());
+  if (info.product.empty())
+    return;
+
+  info.software_version.SetASCII(line.ReadView());
+  line.Skip(); /* version date */
+  info.serial.SetASCII(line.ReadView());
+  device.IdDeviceByName(info.product, info);
+}
 
 static bool
 ParseDate(BrokenDate &date, const char *p)
@@ -129,6 +175,11 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
+  /* Until INFO,A arrives, an S-series logger still looks like a
+     Colibri.  Wait for that sentence before choosing a protocol. */
+  if (!IsLXNAVLogger() && !is_colibri)
+    WaitForLoggerInfo(*this, port, env);
+
   if (IsLXNAVLogger()) {
     if (!EnableLoggerNMEA(env))
       return false;
@@ -197,7 +248,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
     }
 
     p += lengths[i];
-    env.SetProgressPosition(p - data.get());
+    env.SetProgressBytes(unsigned(p - data.get()));
+    env.SetProgressPosition(unsigned(p - data.get()));
   }
 
   return LX::ConvertLXNToIGC(data.get(), total_length, os);
@@ -212,6 +264,27 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
     assert(!busy);
     busy = true;
     AtScopeExit(this) { busy = false; };
+
+    bool restore_nmea = false;
+    AtScopeExit(&) {
+      if (!restore_nmea)
+        return;
+
+      try {
+        LXNAVVario::SetupNMEA(port, env);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "LXNAV: failed to restore NMEA rates after flight download");
+      }
+    };
+
+    if (IsLXNAVVario()) {
+      /* PLXVF at 10 Hz shares this port with the flight rows and can
+         be written into the middle of a line.  GPS sentences are not
+         part of NMEARATE and keep the port alive. */
+      LXNAVVario::SilenceNMEA(port, env);
+      restore_nmea = true;
+    }
 
     return Nano::DownloadFlight(port, flight, path, env);
   }

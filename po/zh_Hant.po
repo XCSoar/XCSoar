@@ -1080,10 +1080,6 @@ msgstr "TE埠"
 msgid "Bluetooth server"
 msgstr "藍牙伺服器"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS中間驅動程式"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "內置GPS和感測器"
 
@@ -7160,6 +7156,9 @@ msgstr "模擬"
 msgid "no QNH"
 msgstr "無絕對高度"
 
+msgid "no wind"
+msgstr "無風"
+
 msgid "Not flying"
 msgstr "不盤轉"
 
@@ -10698,3 +10697,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "手冊"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

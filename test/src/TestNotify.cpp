@@ -18,9 +18,6 @@
 #elif defined(ENABLE_SDL)
 #include "ui/event/sdl/Event.hpp"
 #include "ui/event/sdl/Loop.hpp"
-#else
-#include "ui/event/windows/Event.hpp"
-#include "ui/event/windows/Loop.hpp"
 #endif
 
 #ifdef USE_FB
@@ -36,7 +33,7 @@ Display::Rotate([[maybe_unused]] DisplayOrientation orientation)
 
 namespace UI {
 
-#if defined(USE_EGL) || defined(USE_GLX)
+#if defined(USE_EGL)
 /* avoid TopWindow.cpp from being linked, as it brings some heavy
    dependencies */
 void TopWindow::Refresh() noexcept {}

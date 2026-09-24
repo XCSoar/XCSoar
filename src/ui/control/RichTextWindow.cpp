@@ -9,6 +9,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Button.hpp"
 #include "Look/Colors.hpp"
 #include "ResourceLookup.hpp"
 #include "Form/CheckBox.hpp"
@@ -216,15 +217,14 @@ RichTextWindow::LoadImage(const std::string &url) const noexcept
   if (StringStartsWith(url.c_str(), "resource:")) {
     const char *name = url.c_str() + 9;
 
-#ifdef ENABLE_OPENGL
-    /* On OpenGL, prefer the _RGBA variant (PNG with alpha channel)
-       over the base resource (BMP with white background) so that
-       images composite correctly on non-white backgrounds. */
+    /* Prefer the _RGBA PNG (alpha) over the opaque fallback so images
+       composite on non-white backgrounds.  Both OpenGL and the
+       memory canvas load PNG via LoadPNG(); the memory canvas
+       pre-composites alpha against white. */
     const std::string rgba_name = std::string(name) + "_RGBA";
     ResourceId rgba_id = LookupResourceByName(rgba_name.c_str());
     if (rgba_id.IsDefined())
       bitmap.Load(rgba_id);
-#endif
 
     if (!bitmap.IsDefined()) {
       ResourceId id = LookupResourceByName(name);
@@ -1298,6 +1298,7 @@ RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
         x += list_indent;
     }
 
+    std::size_t line_checkbox = SIZE_MAX;
     for (const TextSegment &seg : line.segments) {
       if (RenderInlineImage(canvas, seg, x, y,
                             cur_line_height, text_line_height))
@@ -1312,13 +1313,34 @@ RichTextWindow::PaintContent(Canvas &canvas, int y_origin,
         RenderLinkSegment(canvas, seg, text_data,
                           x, text_y, seg_font.GetLineSpacing(),
                           y_origin);
-      else if (seg.IsCheckbox())
+      else if (seg.IsCheckbox()) {
         RenderCheckboxSegment(canvas, seg,
                               x, y, cur_line_height,
                               y_origin);
-      else
+        if (!content_hits.empty() && content_hits.back().is_checkbox)
+          line_checkbox = content_hits.size() - 1;
+      } else
         RenderPlainSegment(canvas, seg, text_data,
                            x, text_y);
+    }
+
+    /* The tick is only a square; the rest of the row is what gets
+       tapped.  Stop at a link on this line so that link still wins
+       (rects are half-open on the right). */
+    if (line_checkbox != SIZE_MAX) {
+      auto &box = content_hits[line_checkbox];
+      int limit = static_cast<int>(widget_size.width) - padding;
+      for (const auto &hit : content_hits) {
+        if (hit.is_checkbox)
+          continue;
+        if (hit.content_rect.bottom <= box.content_rect.top ||
+            hit.content_rect.top >= box.content_rect.bottom)
+          continue;
+        if (hit.content_rect.left > box.content_rect.left)
+          limit = std::min(limit, hit.content_rect.left);
+      }
+      if (limit > box.content_rect.right)
+        box.content_rect.right = limit;
     }
   }
 }
@@ -1618,6 +1640,23 @@ RichTextWindow::ToggleCheckbox(std::size_t style_index) noexcept
   Invalidate();
 }
 
+std::vector<uint8_t>
+RichTextWindow::GetCheckboxCheckedStates() const noexcept
+{
+  return ReadMarkdownCheckboxStates(parsed, checkbox_toggled);
+}
+
+void
+RichTextWindow::SetCheckboxCheckedStates(
+  const std::vector<uint8_t> &checked) noexcept
+{
+  if (!ApplyMarkdownCheckboxStates(parsed, checkbox_toggled, checked))
+    return;
+
+  InvalidateContentCache();
+  Invalidate();
+}
+
 std::size_t
 RichTextWindow::FindCheckboxAt(PixelPoint p) const noexcept
 {
@@ -1843,6 +1882,9 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
 
   case KEY_RETURN:
     if (focused_checkbox_style.has_value()) {
+#ifdef HAVE_VIBRATOR
+      PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
       ToggleCheckbox(focused_checkbox_style.value());
       /* Advance like Down when possible. */
       if (current_pos.has_value() &&
@@ -1862,6 +1904,20 @@ RichTextWindow::OnKeyDown(unsigned key_code) noexcept
   }
 
   return LinkableWindow::OnKeyDown(key_code);
+}
+
+bool
+RichTextWindow::OnMouseDown(PixelPoint p) noexcept
+{
+  /* Same moment as CheckBoxControl: the fingertip is still on the
+     glass.  A pulse on release is lost on a weak tablet motor. */
+  if (FindCheckboxAt(p) != SIZE_MAX) {
+#ifdef HAVE_VIBRATOR
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+  }
+
+  return LinkableWindow::OnMouseDown(p);
 }
 
 bool

@@ -6,9 +6,9 @@
 #include "Widget/PagerWidget.hpp"
 #include "Widget/VScrollWidget.hpp"
 #include "Screen/Layout.hpp"
+#include "Form/Button.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
 #include "util/StringFormat.hpp"
@@ -290,6 +290,10 @@ TabMenuDisplay::OnMouseDown(PixelPoint Pos) noexcept
   down_index = IsPointOverButton(Pos, GetPageMainIndex(cursor));
 
   if (!down_index.IsNone()) {
+#ifdef HAVE_VIBRATOR
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+
     dragging = true;
     SetCapture();
 
@@ -427,9 +431,6 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas) const noexcept
 void
 TabMenuDisplay::OnPaint(Canvas &canvas) noexcept
 {
-  if (HaveClipping())
-    canvas.Clear(look.background_color);
-
   PaintMainMenuItems(canvas);
   PaintSubMenuItems(canvas);
 }

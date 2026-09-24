@@ -369,6 +369,7 @@ BlueFlyDevice::DownloadFlight(const RecordedFlightInfo &flight,
     os.Write(line);
     os.Write("\r\n");
     bytes_written += strlen(line) + 2;
+    env.SetProgressBytes(bytes_written);
     env.SetProgressPosition(std::min(bytes_written, usable_bytes));
   }
 

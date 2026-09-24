@@ -68,6 +68,9 @@ final class NativeSensorListener implements SensorListener {
   public native void onHeartRateSensor(int bpm);
 
   @Override
+  public native void onBloodOxygenSensor(int spo2);
+
+  @Override
   public native void onVoltageValues(int temp_adc, int voltage_index,
                                      int volt_adc);
 
@@ -85,6 +88,9 @@ final class NativeSensorListener implements SensorListener {
 
   @Override
   public native void onTemperature(double temperature_kelvin);
+
+  @Override
+  public native void onHumidity(double humidity_percent);
 
   @Override
   public native void onBatteryPercent(double battery_percent);

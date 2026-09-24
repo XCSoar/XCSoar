@@ -1114,10 +1114,6 @@ msgstr "TE pripojenie"
 msgid "Bluetooth server"
 msgstr "Bluetooth server"
 
-msgid "GPS Intermediate Driver"
-msgstr "Prídavný ovládač GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Zabudované GPS & senzory"
 
@@ -7414,6 +7410,9 @@ msgstr "Simulátor"
 msgid "no QNH"
 msgstr "žiadne QNH"
 
+msgid "no wind"
+msgstr "žiadny vietor"
+
 msgid "Not flying"
 msgstr "Nekrúži sa"
 
@@ -11117,3 +11116,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Ručne"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

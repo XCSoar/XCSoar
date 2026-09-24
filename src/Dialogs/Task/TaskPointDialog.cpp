@@ -284,7 +284,7 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   WindowStyle button_style;
   button_style.TabStop();
 
-  waypoint_panel.Create(parent, look, layout.waypoint_panel, panel_style);
+  waypoint_panel.Create(parent, layout.waypoint_panel, panel_style);
   waypoint_name.Create(waypoint_panel, layout.waypoint_name);
   waypoint_details.Create(waypoint_panel, look.button, _("Details"),
                           layout.waypoint_details,
@@ -296,7 +296,7 @@ TaskPointWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                            layout.waypoint_relocate,
                            button_style, [this](){ OnRelocateClicked(); });
 
-  tp_panel.Create(parent, look, layout.tp_panel, panel_style);
+  tp_panel.Create(parent, layout.tp_panel, panel_style);
 
   /* Same control shape as RowFormWidget::AddEnum in config panels. */
   type_field.Create(tp_panel, layout.type_field, _("Type"),

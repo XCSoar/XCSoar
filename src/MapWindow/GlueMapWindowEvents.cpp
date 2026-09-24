@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "GlueMapWindow.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
 #include "Input/InputEvents.hpp"
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
@@ -16,6 +17,7 @@
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "UserMapScale.hpp"
+#include "Form/Button.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -151,8 +153,6 @@ IsCtrlKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
   return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
-#elif defined(USE_WINUSER)
-  return GetKeyState(VK_CONTROL) & 0x8000;
 #elif defined(USE_X11)
   return UI::event_queue->WasCtrlClick();
 #else
@@ -163,6 +163,9 @@ IsCtrlKeyPressed() noexcept
 bool
 GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   map_item_timer.Cancel();
 
   bool was_kinetic_motion = false;
@@ -365,6 +368,9 @@ bool
 GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p,
                             [[maybe_unused]] int delta) noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   map_item_timer.Cancel();
 
 #ifdef ENABLE_OPENGL
@@ -390,6 +396,9 @@ GlueMapWindow::OnMouseWheel([[maybe_unused]] PixelPoint p,
 bool
 GlueMapWindow::OnMultiTouchDown() noexcept
 {
+  if (InfoBoxArrange::IsActive())
+    return true;
+
   if (!visible_projection.IsValid())
     return false;
 
@@ -627,6 +636,13 @@ GlueMapWindow::OnMultiTouchUp() noexcept
 bool
 GlueMapWindow::OnMouseGesture(const char *gesture) noexcept
 {
+#ifdef HAVE_VIBRATOR
+  /* generate the feedback before running the event, which may open a
+     modal dialog and thus return only much later */
+  if (InputEvents::IsGesture(gesture))
+    PlayHapticFeedback(HapticFeedbackType::GESTURE);
+#endif
+
   return InputEvents::processGesture(gesture);
 }
 
@@ -738,7 +754,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
   MapWindow::OnPaintBuffer(canvas);
 
   DrawMapScale(canvas, GetClientRect(), render_projection);
-  if (IsPanChromeVisible())
+  if (IsPanChromeVisible() || DEBUG_ALL_MAP_OVERLAYS)
     DrawPanInfo(canvas);
 
 #ifdef ENABLE_OPENGL
@@ -782,9 +798,9 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   MapWindow::Render(canvas, rc);
 
-  if (IsNearSelf()) {
+  if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {
     draw_sw.Mark("DrawGlueMisc");
-    if (GetMapSettings().show_thermal_profile)
+    if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);
     DrawFlightMode(canvas, rc);

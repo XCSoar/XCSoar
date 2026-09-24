@@ -32,7 +32,9 @@ Projection::ScreenToGeo(PixelPoint src) const noexcept
 
   g.longitude = geo_location.longitude + g.longitude * latitude.invfastcosine();
 
-  return g;
+  /* Keep longitude in (-180°, 180°]; unnormalized values (e.g. -188°)
+     break GeoBounds wrap detection and cartesian overlay clipping. */
+  return g.Normalize();
 }
 
 PixelPoint

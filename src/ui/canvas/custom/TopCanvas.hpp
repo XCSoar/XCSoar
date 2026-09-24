@@ -30,10 +30,6 @@
 #endif
 #endif
 
-#ifdef USE_GLX
-#include "ui/glx/System.hpp"
-#endif
-
 #ifdef DITHER
 #include "../memory/Dither.hpp"
 #endif
@@ -95,10 +91,6 @@ class TopCanvas
   EGLSurface surface = EGL_NO_SURFACE;
 #endif // USE_EGL
 
-#ifdef USE_GLX
-  GLXWindow glx_window;
-#endif // USE_GLX
-
 #ifdef ENABLE_SDL
   SDL_Window *const window;
 
@@ -148,9 +140,6 @@ class TopCanvas
 public:
 #ifdef ENABLE_SDL
   TopCanvas(UI::Display &_display, SDL_Window *_window);
-#elif defined(USE_GLX)
-  TopCanvas(UI::Display &_display,
-            X11Window x_window);
 #elif defined(USE_X11) || defined(USE_WAYLAND)
   TopCanvas(UI::Display &_display, EGLNativeWindowType native_window)
     :display(_display)
@@ -181,7 +170,7 @@ public:
 #endif
   }
 
-#if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(USE_GLX) || defined(ENABLE_SDL)))
+#if defined(USE_FB) || (defined(ENABLE_OPENGL) && (defined(USE_EGL) || defined(ENABLE_SDL)))
   /**
    * Obtain the native (non-software-rotated) size of the OpenGL
    * drawable.
@@ -278,8 +267,27 @@ public:
   Canvas Lock();
   void Unlock() noexcept;
 
+  /** \brief Bring the background drawing buffer to the foreground and display it on the screen.
+   *
+   * \note For DRM/KMS: \p Flip() *schedules* a page flip for the next vertical gap of the display.
+   *   When another \p Flip() is called before the previous one is being finished the call returns
+   *   without action. It leaves the current draw back-buffer active. The next rendering of the scene
+   *   will overwrite the current content. 
+   * 
+   */
   void Flip();
-
+#ifdef MESA_KMS
+  /** \brief Try to finish a pending flip. Return true when no flip is on-going.
+   * 
+   * When a page flip is on-going, try to process any pending DRM events.
+   * When a DRM event is pending it indicates that the latest scheduled flip 
+   * has finished. Update the buffers and internal flip status.
+   *
+   * \return \p true when no flip was pending, or an on-going flip could be finished.
+   *         \p false when a flip is still pending. 
+   */
+  bool CheckAndFinishPendingFlip();
+#endif
 #ifdef KOBO
   /**
    * Wait until the screen update is complete.

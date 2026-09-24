@@ -961,16 +961,18 @@ Es ist jedoch möglich, die angegebenen Werte nach Belieben zu mischen und so z.
 Einstellen der Uhr mit Referenz zur UTC-Zeit.
 
 \begin{description}
-\item[\textit{Automatische Zeitzonenverschiebung}] {\bf Ein /Aus}:\\
-{\bf Ein}: Die Zeitzonenverschiebung wird aus der im Betriebssystem eingestellten Zeitzone übernommen und laufend nachgeführt. Damit folgt sie automatisch der Sommer-/Winterzeitumstellung und einem Wechsel in eine andere Zeitzone.\\
-{\bf Aus}: Die Zeitzonenverschiebung wird im folgenden Feld von Hand eingegeben.
-\item[\textit{Zeitzonenverschiebung}]  {\bf -13 ..+14h}: In diesem Feld wird die Zeitzonenverscheibung zur UTC zeit eingebeben. Das Feld ist nur bearbeitbar, wenn die automatische Zeitzonenverschiebung ausgeschaltet ist. Die Differenz kann im 15-Minuten-Intervall eingegeben werden.
+\item[\textit{Quelle der Lokalzeit}] {\bf Automatisch / Zeitzone / Manueller UTC-Offset}: Legt fest, woher \xc den Offset zwischen UTC und Lokalzeit bezieht.\\
+{\bf Automatisch}: Der Offset wird aus der im Betriebssystem eingestellten Zeitzone übernommen und laufend nachgeführt. Damit folgt er automatisch der Sommer-/Winterzeitumstellung und einem Wechsel in eine andere Zeitzone. Auf dem Kobo steht diese Einstellung nicht zur Verfügung, weil das Gerät gar keine Zeitzone kennt.\\
+{\bf Zeitzone}: Der Offset wird aus der unten gewählten Zeitzone berechnet. Eine Zeitzone enthält die Regeln für die Sommerzeit, \xc schaltet also selbst um. Die Einstellung muss nicht zweimal im Jahr angefasst werden.\\
+{\bf Manueller UTC-Offset}: Es wird der unten von Hand eingegebene Offset benutzt. Er muss zu jeder Zeitumstellung korrigiert werden. Diese Möglichkeit wird nur im Expertenmodus angeboten, ausser sie ist gerade eingestellt.
+\item[\textit{Zeitzone}] Die Zeitzone des Flugplatzes, auf dem geflogen wird, z.\,B. ''Europe/Berlin``. Das Feld ist nur bearbeitbar, wenn als Quelle der Lokalzeit ''Zeitzone`` gewählt ist.
+\item[\textit{Manueller UTC-Offset}]  {\bf -13 ..+14h}: In diesem Feld wird der Offset der Lokalzeit zur UTC-Zeit eingegeben. Das Feld ist nur bearbeitbar, wenn als Quelle der Lokalzeit ''Manueller UTC-Offset`` gewählt ist, und behält den eingegebenen Wert, solange eine andere Quelle gewählt ist. Die Differenz kann im 15-Minuten-Intervall eingegeben werden.
 Zur Kontrolle wird im Feld darunter die entsprechende Lokalzeit angegeben -- um Mißverständnisse zu verhindern.
 
 Achtung! 
 
 Große Falle, wenn ihr versucht, das Starzeitfenster (z.B. per ''sofort'') einzustellen, und Ihr habt \warning hier nicht richtig die Zeitverschiebung eingestellt !! (Siehe z.B. ~\ref{sec:start-gate})
-\item[\textit{Lokalzeit}]  Das ist die oben errechnete Lokalzeit -- nur zur Kontrolle.
+\item[\textit{Lokalzeit}]  Das ist die oben errechnete Lokalzeit -- nur zur Kontrolle. Dahinter steht in Klammern der gerade gültige UTC-Offset.
 \item[\textit{Benutze GPS-Zeit$^{\textcolor{blue}{\star}}$}] {\bf Ein /Aus}: Einstellung des Empfanges des Zeitsingales über das angeschlossene GPS\\
 {\bf Ein}: Wenn eingeschaltet wird die Uhr des Gerätes auf dem \xc läuft \textsl{bei jedem Fix} durch das empfangene Zeitsignal des GPS neu gesetzt.
 \achtung

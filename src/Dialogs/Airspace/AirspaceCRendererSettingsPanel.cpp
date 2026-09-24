@@ -2,22 +2,19 @@
 // Copyright The XCSoar Project
 
 #include "AirspaceCRendererSettingsPanel.hpp"
-#include "Airspace.hpp"
 #include "../ColorListDialog.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
-#include "Look/Look.hpp"
 
 #include <cassert>
 
 AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type) noexcept
   :RowFormWidget(UIGlobals::GetDialogLook()), border_color_changed(false),
-   fill_color_changed(false), fill_brush_changed(false), type(_type)
+   fill_color_changed(false), type(_type)
 {
   assert(type < AIRSPACECLASSCOUNT);
 }
@@ -39,28 +36,6 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent,
   AddButton(_("Change Fill Color"), [this](){
     fill_color_changed |= ShowColorListDialog(settings.fill_color);
   });
-
-#ifdef HAVE_HATCHED_BRUSH
-#ifdef HAVE_ALPHA_BLEND
-  bool transparency = CommonInterface::GetMapSettings().airspace.transparency;
-  if (!transparency)
-#endif
-    AddButton(_("Change Fill Brush"), [this](){
-      int pattern_index =
-        dlgAirspacePatternsShowModal(UIGlobals::GetLook().map.airspace);
-
-      if (pattern_index >= 0 && pattern_index != settings.brush) {
-        settings.brush = pattern_index;
-        fill_brush_changed = true;
-      }
-    });
-#ifdef HAVE_ALPHA_BLEND
-  else
-    AddDummy();
-#endif
-#else
-  AddDummy();
-#endif
 
   AddInteger(_("Border Width"),
              _("The width of the border drawn around each airspace. "
@@ -91,13 +66,6 @@ AirspaceClassRendererSettingsPanel::Save(bool &changed) noexcept
     Profile::SetAirspaceFillColor(Profile::map, type, settings.fill_color);
     changed = true;
   }
-
-#ifdef HAVE_HATCHED_BRUSH
-  if (fill_brush_changed) {
-    Profile::SetAirspaceBrush(Profile::map, type, settings.brush);
-    changed = true;
-  }
-#endif
 
   if (SaveValueInteger(BorderWidth, settings.border_width)) {
     Profile::SetAirspaceBorderWidth(Profile::map, type, settings.border_width);

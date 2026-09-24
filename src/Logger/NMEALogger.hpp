@@ -4,13 +4,14 @@
 #pragma once
 
 #include "thread/Mutex.hxx"
+#include "system/Path.hpp"
 
 #include <memory>
 
 class FileOutputStream;
 
 class NMEALogger {
-  Mutex mutex;
+  mutable Mutex mutex;
   std::unique_ptr<FileOutputStream> file;
 
   bool enabled = false;
@@ -30,6 +31,14 @@ public:
   void ToggleEnabled() noexcept {
     enabled = !enabled;
   }
+
+  /**
+   * The file being written right now, or nullptr if none is open.
+   * A backup leaves it out: it is not sharable on Windows, and
+   * incomplete anyway.
+   */
+  [[gnu::pure]]
+  AllocatedPath GetPath() const noexcept;
 
   /**
    * Logs NMEA string to log file

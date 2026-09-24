@@ -4,16 +4,17 @@
 #include "Quadrilateral.hpp"
 #include "GeoBounds.hpp"
 
-#include <algorithm>
-
 GeoBounds
 GeoQuadrilateral::GetBounds() const noexcept
 {
-  // TODO: not wraparound-safe
+  GeoBounds bounds = GeoBounds::Invalid();
 
-  const auto longitude = std::minmax({top_left.longitude, top_right.longitude, bottom_left.longitude, bottom_right.longitude});
-  const auto latitude = std::minmax({top_left.latitude, top_right.latitude, bottom_left.latitude, bottom_right.latitude});
+  /* Normalize longitudes so antimeridian wrap is detected correctly
+     (ScreenToGeo can yield values outside ±180° while panning). */
+  for (GeoPoint p : {top_left, top_right, bottom_left, bottom_right}) {
+    p.Normalize();
+    bounds.Extend(p);
+  }
 
-  return GeoBounds(GeoPoint(longitude.first, latitude.second),
-                   GeoPoint(longitude.second, latitude.first));
+  return bounds;
 }

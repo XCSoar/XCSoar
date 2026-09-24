@@ -9,13 +9,24 @@
 #include "poll/Queue.hpp"
 #elif defined(ENABLE_SDL)
 #include "sdl/Queue.hpp"
-#elif defined(_WIN32)
-#include "windows/Queue.hpp"
 #else
 #error No EventQueue implementation
 #endif
 
 namespace UI {
+
+#ifndef USE_POLL_EVENT
+
+/**
+ * Stub for backends which do not receive signals through the event
+ * loop; see poll/Queue.hpp.
+ */
+static inline void
+BlockSignals() noexcept
+{
+}
+
+#endif
 
 /**
  * Suspend the EventQueue and resume it at the end of the scope.  This

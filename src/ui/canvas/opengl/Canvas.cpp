@@ -255,6 +255,34 @@ Canvas::DrawTriangleFan(const BulkPixelPoint *points, unsigned num_points) noexc
 }
 
 void
+Canvas::DrawFilledTriangleFan(const FloatPoint2D *points,
+                              unsigned num_points) noexcept
+{
+  if (points == nullptr || brush.IsHollow() || num_points < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+
+  ScopeVertexPointer vp(points);
+  brush.Bind();
+  glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
+}
+
+void
+Canvas::DrawFilledTriangles(const FloatPoint2D *points,
+                            unsigned num_points) noexcept
+{
+  if (points == nullptr || brush.IsHollow() || num_points < 3)
+    return;
+
+  OpenGL::solid_shader->Use();
+
+  ScopeVertexPointer vp(points);
+  brush.Bind();
+  glDrawArrays(GL_TRIANGLES, 0, num_points);
+}
+
+void
 Canvas::DrawHLine(int x1, int x2, int y, Color color) noexcept
 {
   color.Bind();
@@ -796,9 +824,8 @@ Canvas::StretchMono(PixelPoint dest_position, PixelSize dest_size,
 {
   /* note that this implementation ignores the background color; it is
      not mandatory, and we can assume that the background is already
-     set; it is only being passed to this function because the GDI
-     implementation will be faster when erasing the background
-     again */
+     set; it is only being passed to this function because some
+     backends are faster when erasing the background again */
 
   PrepareColoredAlphaTexture(fg_color);
 

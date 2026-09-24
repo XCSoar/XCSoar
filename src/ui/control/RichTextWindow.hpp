@@ -422,6 +422,16 @@ public:
    */
   void ToggleCheckbox(std::size_t style_index) noexcept;
 
+  /** Checked state of each checkbox in document order (1 = checked). */
+  [[gnu::pure]]
+  std::vector<uint8_t> GetCheckboxCheckedStates() const noexcept;
+
+  /**
+   * Apply checked states in document order.  Ignored when the count
+   * does not match the current document.
+   */
+  void SetCheckboxCheckedStates(const std::vector<uint8_t> &checked) noexcept;
+
   /**
    * Find the style index of the checkbox span containing text_pos.
    * @return index into parsed.styles, or SIZE_MAX if not found
@@ -450,6 +460,7 @@ protected:
   void OnPaint(Canvas &canvas) noexcept override;
   bool OnKeyCheck(unsigned key_code) const noexcept override;
   bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
 
   /**

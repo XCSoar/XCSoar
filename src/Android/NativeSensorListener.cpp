@@ -231,6 +231,20 @@ Java_org_xcsoar_NativeSensorListener_onHeartRateSensor(JNIEnv *env,
   listener.OnHeartRateSensor(bpm);
 }
 
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onBloodOxygenSensor(JNIEnv *env,
+                                                         jobject obj,
+                                                         jint spo2)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnBloodOxygenSensor(spo2);
+}
+
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeSensorListener_onVoltageValues(JNIEnv *env, jobject obj,
                                                      jint temp_adc,
@@ -299,6 +313,20 @@ Java_org_xcsoar_NativeSensorListener_onTemperature(JNIEnv *env,
 
   auto &listener = *(SensorListener *)ptr;
   listener.OnTemperature(Temperature::FromKelvin(temperature_kelvin));
+}
+
+gcc_visibility_default
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativeSensorListener_onHumidity(JNIEnv *env,
+                                                jobject obj,
+                                                jdouble humidity_percent)
+{
+  jlong ptr = env->GetLongField(obj, NativeSensorListener::ptr_field);
+  if (ptr == 0)
+    return;
+
+  auto &listener = *(SensorListener *)ptr;
+  listener.OnHumidity(humidity_percent);
 }
 
 gcc_visibility_default

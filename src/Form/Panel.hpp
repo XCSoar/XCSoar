@@ -3,30 +3,15 @@
 
 #pragma once
 
-#include "ui/canvas/Features.hpp"
-
-#ifdef HAVE_CLIPPING
-#include "ui/window/SolidContainerWindow.hpp"
-#else
 #include "ui/window/ContainerWindow.hpp"
-#endif
-
-struct DialogLook;
 
 /**
- * The PanelControl class implements the simplest form of a ContainerControl
+ * The PanelControl class implements the simplest form of a ContainerControl.
+ *
+ * The window stays transparent. The parent has already painted the
+ * background, and a second fill would restart the dialog gradient.
  */
-class PanelControl :
-#ifdef HAVE_CLIPPING
-  /* need explicit background erasing with clipping because the
-     parent's background does not extend into child windows */
-  public SolidContainerWindow
-#else
-  /* don't need to erase the background when it has been done by the
-     parent window already; staying transparent lets the parent's
-     gradient flow through uninterrupted */
-  public ContainerWindow
-#endif
+class PanelControl : public ContainerWindow
 {
 public:
   PanelControl() = default;
@@ -35,13 +20,11 @@ public:
    * Constructor of the PanelControl class
    * @param owner Parent ContainerControl
    */
-  PanelControl(ContainerWindow &parent, const DialogLook &look,
-               const PixelRect &rc,
+  PanelControl(ContainerWindow &parent, const PixelRect &rc,
                const WindowStyle style=WindowStyle()) {
-    Create(parent, look, rc, style);
+    Create(parent, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const DialogLook &look,
-              const PixelRect &rc,
+  void Create(ContainerWindow &parent, const PixelRect &rc,
               const WindowStyle style=WindowStyle());
 };

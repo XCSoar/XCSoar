@@ -71,7 +71,7 @@ install_linux() {
     libsdl2-dev \
     librsvg2-bin xsltproc \
     imagemagick gettext \
-    mesa-common-dev libgl1-mesa-dev libegl1-mesa-dev \
+    mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev \
     fonts-dejavu \
     ttf-bitstream-vera \
     fonts-roboto-unhinted \

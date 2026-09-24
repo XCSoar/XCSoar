@@ -287,8 +287,6 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 bool
 FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 {
-  static constexpr unsigned get_igcdata_retries = 3;
-
   FileOutputStream fos(path);
   BufferedOutputStream os(fos);
 
@@ -299,29 +297,22 @@ FlarmDevice::DownloadFlight(Path path, OperationEnvironment &env)
 
     AllocatedArray<std::byte> data;
     uint16_t length = 0;
-    bool ack = false;
 
-    for (unsigned retry = 0; retry < get_igcdata_retries; ++retry) {
-      // Send request
-      SendStartByte();
-      SendFrameHeader(header, env, std::chrono::seconds(1));
+    SendStartByte();
+    SendFrameHeader(header, env, std::chrono::seconds(1));
 
-      // Wait for an answer and save the payload for further processing
-      try {
-        ack = WaitForACKOrNACK(header.sequence_number, data,
-                               length, env,
-                               std::chrono::seconds(10)) ==
-          FLARM::MessageType::ACK;
-      } catch (const DeviceTimeout &) {
-        ack = false;
-      }
-
-      if (ack)
-        break;
+    FLARM::MessageType result = FLARM::MessageType::ERROR;
+    try {
+      result = WaitForACKOrNACK(header.sequence_number, data,
+                                length, env,
+                                std::chrono::seconds(10));
+    } catch (const DeviceTimeout &) {
+      result = FLARM::MessageType::ERROR;
     }
 
-    // If no ACK was received
-    if (!ack || length <= 3)
+    /* timeout, NACK, or ACK payload too short (need sequence,
+       progress, data); caller restarts from SELECTRECORD */
+    if (result != FLARM::MessageType::ACK || length <= 3)
       return false;
 
     length -= 3;
@@ -353,18 +344,21 @@ bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
                             Path path, OperationEnvironment &env)
 {
-  if (!BinaryMode(env))
-    return false;
-
-  FLARM::MessageType ack_result = SelectFlight(flight.internal.flarm, env);
-
-  // If no ACK was received -> cancel
-  if (ack_result != FLARM::MessageType::ACK)
-    return false;
-
   try {
-    if (DownloadFlight(path, env))
-      return true;
+    for (unsigned attempt = 0;
+         attempt < FLARM::MAX_IGC_DOWNLOAD_ATTEMPTS; ++attempt) {
+      if (!BinaryMode(env))
+        return false;
+
+      if (SelectFlight(flight.internal.flarm, env) !=
+          FLARM::MessageType::ACK) {
+        mode = Mode::UNKNOWN;
+        continue;
+      }
+
+      if (DownloadFlight(path, env))
+        return true;
+    }
   } catch (...) {
     mode = Mode::UNKNOWN;
     throw;

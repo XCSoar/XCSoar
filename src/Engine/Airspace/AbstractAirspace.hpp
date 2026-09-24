@@ -9,8 +9,8 @@
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SearchPointVector.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
 
 #ifdef DO_PRINT
 #include <iosfwd>

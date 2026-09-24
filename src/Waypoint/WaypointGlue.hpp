@@ -10,7 +10,6 @@ class RasterTerrain;
 class ProgressListener;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
-class DeviceBlackboard;
 class ProfileMap;
 
 /**
@@ -58,19 +57,16 @@ FindFlaggedHome(Waypoints &waypoints,
  * This functions checks if the home and teamcode waypoint
  * indices exist and if necessary tries to find new ones in the waypoint list
  * @param way_points Waypoint list
- * @param terrain RasterTerrain (for placing the aircraft
- * in the middle of the terrain if no home was found)
  * @param settings SETTING_COMPUTER (for determining the
  * special waypoint indices)
  * @param reset This should be true if the waypoint file was changed,
  * it resets all special waypoints indices
  */
 void
-SetHome(Waypoints &way_points, const RasterTerrain *terrain,
+SetHome(Waypoints &way_points,
         PlacesOfInterestSettings &poi_settings,
         TeamCodeSettings &team_code_settings,
-        DeviceBlackboard *device_blackboard,
-        const bool reset) noexcept;
+        bool reset) noexcept;
 
 /**
  * Save the home waypoint and the teamcode reference location to the

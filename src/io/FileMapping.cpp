@@ -18,6 +18,7 @@
 
 #include <fileapi.h>
 #include <handleapi.h> // for INVALID_HANDLE_VALUE
+#include <windef.h> // for HWND (needed by winbase.h)
 #include <winbase.h> // for CreateFileMapping(), UnmapViewOfFile()
 #endif
 

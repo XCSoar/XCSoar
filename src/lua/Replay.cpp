@@ -7,6 +7,7 @@
 #include "Util.hxx"
 #include "system/Path.hpp"
 #include "Replay/Replay.hpp"
+#include "Interface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "CalculationThread.hpp"
@@ -56,7 +57,8 @@ l_replay_fastforward(lua_State *L)
     return luaL_error(L, "Invalid parameters");
 
   FloatDuration delta_s{luaL_checknumber(L, 1)};
-  return !backend_components->replay->FastForward(delta_s);
+  Lua::Push(L, backend_components->replay->FastForward(delta_s));
+  return 1;
 }
 
 static int
@@ -70,7 +72,8 @@ l_replay_start(lua_State *L)
     Path p(filename.data());
 
     try {
-      backend_components->replay->Start(p);
+      backend_components->replay->Start(p,
+        CommonInterface::GetSystemSettings().devices[0]);
       return 0;
     } catch (...) {
     }

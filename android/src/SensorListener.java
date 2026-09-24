@@ -34,6 +34,11 @@ public interface SensorListener {
   void onI2CbaroSensor(int index, int sensorType, int pressure);
   void onVarioSensor(float vario);
   void onHeartRateSensor(int bpm);
+
+  /**
+   * @param spo2 the blood oxygen saturation [percent]
+   */
+  void onBloodOxygenSensor(int spo2);
   /**
    * @param[in] has_cht_temp Is the Engine Cylinder Head Temperature sensor present?
    * @param[in] cht_temp Engine Cylinder Head Temperature.
@@ -61,6 +66,8 @@ public interface SensorListener {
                            int bearing);
 
   void onTemperature(double temperature_kelvin);
+
+  void onHumidity(double humidity_percent);
 
   void onBatteryPercent(double battery_percent);
 

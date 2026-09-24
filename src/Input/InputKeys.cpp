@@ -50,18 +50,6 @@ static constexpr struct string_to_key string_to_key[] = {
   { "VOLUME_DOWN", KEY_VOLUME_DOWN },  
 #endif
 
-#ifdef USE_WINUSER
-  /* These Keys are used for the Triadis-RemoteStick, as well as for
-     expanded Keyboard-Events */
-  { "F13", KEY_F13 },
-  { "F14", KEY_F14 },
-  { "F15", KEY_F15 },
-  { "F16", KEY_F16 },
-  { "F17", KEY_F17 },
-  { "F18", KEY_F18 },
-  { "F19", KEY_F19 },
-  { "F20", KEY_F20 },
-#endif
   { "LEFT", KEY_LEFT },
   { "RIGHT", KEY_RIGHT },
   { "UP", KEY_UP },

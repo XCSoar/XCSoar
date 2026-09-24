@@ -7,6 +7,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+#include "LogFile.hpp"
 
 /**
  * Constructor of the CalculationThread class
@@ -132,6 +133,16 @@ CalculationThread::ProcessReplayFix() noexcept
 
   glide_computer.Expire();
   glide_computer.ProcessGPS(true);
+
+  /* unconditionally, unlike Tick(): ProcessGPS() gates the idle pass
+     on half a second of wall-clock time, which is meaningless here.
+     ProcessIdle is needed to fill the snail trail, the flight statistics
+     and the contest etc. */
+  try {
+    glide_computer.ProcessIdle();
+  } catch (...) {
+    LogError(std::current_exception(), "ProcessIdle");
+  }
 
   {
     const std::lock_guard lock{device_blackboard.mutex};

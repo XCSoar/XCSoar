@@ -10,7 +10,7 @@
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
 #include "Logger/Logger.hpp"
-#include "Interface.hpp"
+#include "Device/Config.hpp"
 #include "Repository/FileType.hpp"
 #include "CatmullRomInterpolator.hpp"
 #include "time/Cast.hxx"
@@ -40,7 +40,7 @@ Replay::Stop()
 }
 
 void
-Replay::Start(Path _path)
+Replay::Start(Path _path, const DeviceConfig &device)
 {
   assert(_path != nullptr);
 
@@ -60,7 +60,7 @@ Replay::Start(Path _path)
     cli->Reset();
   } else {
     replay = new NmeaReplay(std::make_unique<FileLineReaderA>(path),
-                            CommonInterface::GetSystemSettings().devices[0]);
+                            device);
   }
 
   if (logger != nullptr)

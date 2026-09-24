@@ -2,12 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "Units/Units.hpp"
+#include "Units/Conversion.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "TestUtil.hpp"
 
 int main()
 {
-  plan_tests(12);
+  plan_tests(12 + 3);
 
   UnitSetting &config = Units::current;
 
@@ -33,6 +34,12 @@ int main()
 
   ok1(equals(Units::ToUserUnit(1013.25, Unit::TORR), 760));
   ok1(equals(Units::ToUserUnit(1013.25, Unit::INCH_MERCURY), 29.92));
+
+  ok1(equals(Units::ToUserUnit(1, Unit::FEET), Units::METERS_TO_FEET));
+  ok1(equals(Units::ToUserUnit(1, Unit::FLIGHT_LEVEL),
+             Units::METERS_TO_FLIGHT_LEVEL));
+  ok1(equals(Units::FLIGHT_LEVEL_TO_METERS,
+             Units::FEET_PER_FLIGHT_LEVEL * Units::FEET_TO_METERS));
 
   return exit_status();
 }

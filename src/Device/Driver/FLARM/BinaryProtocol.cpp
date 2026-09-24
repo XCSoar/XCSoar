@@ -7,30 +7,7 @@
 #include "Device/Port/Port.hpp"
 #include "time/TimeoutClock.hpp"
 #include "util/SpanCast.hxx"
-
-#include <algorithm> // for std::find_if()
-
-static constexpr auto
-FindSpecial(std::span<const std::byte>::iterator begin,
-            std::span<const std::byte>::iterator end) noexcept
-{
-  return std::find_if(begin, end, [](std::byte b){
-    return b == FLARM::START_FRAME || b == FLARM::ESCAPE;
-  });
-}
-
-/* kludge because several constructor overloads are missing in Apple
-   Xcode */
-static constexpr std::span<const std::byte>
-MakeSpan(typename std::span<const std::byte>::iterator begin,
-         typename std::span<const std::byte>::iterator end) noexcept
-{
-#if defined(__APPLE__)
-  return {&*begin, (std::size_t)std::distance(begin, end)};
-#else
-  return {begin, end};
-#endif
-}
+#include "util/StaticArray.hxx"
 
 void
 FLARM::SendEscaped(Port &port, std::span<const std::byte> src,
@@ -41,38 +18,35 @@ FLARM::SendEscaped(Port &port, std::span<const std::byte> src,
 
   const TimeoutClock timeout(_timeout);
 
-  // Send data byte-by-byte including escaping
-  auto p = src.begin();
-  const auto end = src.end();
-  while (true) {
-    const auto special = FindSpecial(p, end);
+  /* Worst case: every byte is escaped.  Typical frames are an 8-byte
+     header; keep this on the stack so USB-serial gets one write
+     instead of one packet per escaped 0x73/0x78. */
+  StaticArray<std::byte, 256> buffer;
 
-    if (special != p) {
-      /* bulk write of "harmless" characters */
+  const auto flush = [&]() {
+    if (buffer.empty())
+      return;
 
-      port.FullWrite(MakeSpan(p, special), env,
-                     timeout.GetRemainingOrZero());
+    port.FullWrite(buffer, env, timeout.GetRemainingOrZero());
+    buffer.clear();
+  };
 
-      p = special;
-    }
+  for (const auto b : src) {
+    const unsigned need = (b == START_FRAME || b == ESCAPE) ? 2 : 1;
+    if (buffer.size() + need > buffer.capacity())
+      flush();
 
-    if (p == end)
-      break;
-
-    // Check for bytes that need to be escaped and send
-    // the appropriate replacements
-    if (*p == START_FRAME) {
-      port.Write(ESCAPE);
-      port.Write(ESCAPE_START);
-    } else if (*p == ESCAPE) {
-      port.Write(ESCAPE);
-      port.Write(ESCAPE_ESCAPE);
+    if (b == START_FRAME) {
+      buffer.append(ESCAPE);
+      buffer.append(ESCAPE_START);
+    } else if (b == ESCAPE) {
+      buffer.append(ESCAPE);
+      buffer.append(ESCAPE_ESCAPE);
     } else
-      // Otherwise just send the original byte
-      port.Write(*p);
-
-    p++;
+      buffer.append(b);
   }
+
+  flush();
 }
 
 static std::byte *
@@ -108,6 +82,9 @@ ReceiveSomeUnescape(Port &port, std::span<std::byte> dest,
       else
         /* unknown escape */
         return nullptr;
+    } else if (*src == FLARM::START_FRAME) {
+      /* unescaped start byte begins a new frame, not payload */
+      return nullptr;
     } else
       /* "harmless" byte */
       *p++ = *src++;
@@ -159,7 +136,7 @@ FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
 {
   FrameHeader header;
   header.length = 8 + payload.size();
-  header.version = 0;
+  header.version = PROTOCOL_VERSION;
   header.sequence_number = sequence_number++;
   header.type = message_type;
   header.crc = CalculateCRC(header, payload);
@@ -236,10 +213,11 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
     if (length < 2)
       continue;
 
-    // Check whether the received ACK is for the right sequence number
-    if (FromLE16(*((const uint16_t *)(const void *)data.data())) ==
-        sequence_number)
-      return (FLARM::MessageType)header.type;
+    // Check whether the received ACK/NACK is for this request
+    if (FLARM::AckSequenceMatches(sequence_number,
+                                  {data.data(), length},
+                                  header.type == FLARM::MessageType::NACK))
+      return header.type;
   }
 
   return FLARM::MessageType::ERROR;

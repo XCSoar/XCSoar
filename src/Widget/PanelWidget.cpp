@@ -3,7 +3,6 @@
 
 #include "PanelWidget.hpp"
 #include "ui/window/Window.hpp"
-#include "UIGlobals.hpp"
 #include "Form/Panel.hpp"
 
 void
@@ -13,8 +12,5 @@ PanelWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
   style.ControlParent();
   style.Hide();
 
-  SetWindow(std::make_unique<PanelControl>(parent,
-                                           UIGlobals::GetDialogLook(),
-                                           rc,
-                                           style));
+  SetWindow(std::make_unique<PanelControl>(parent, rc, style));
 }

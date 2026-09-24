@@ -38,6 +38,18 @@ case "$(printf '%s' "${TESTING:-n}" | tr '[:upper:]' '[:lower:]')" in
 esac
 export TESTING
 
+# Normalise the DEBUG_ALL_MAP_OVERLAYS flag (see doc/debugging.rst)
+case "$(printf '%s' "${DEBUG_ALL_MAP_OVERLAYS:-n}" | tr '[:upper:]' '[:lower:]')" in
+    y|yes|true|1)
+        DEBUG_ALL_MAP_OVERLAYS="y"
+        echo "build.sh: Forcing all map overlays (DEBUG_ALL_MAP_OVERLAYS=y)"
+        ;;
+    *)
+        DEBUG_ALL_MAP_OVERLAYS="n"
+        ;;
+esac
+export DEBUG_ALL_MAP_OVERLAYS
+
 # Set debug flag based on configuration
 DEBUG="n"
 if [ "${CONFIGURATION}" = "Debug" ]; then
@@ -99,7 +111,8 @@ echo "Building with $NUM_CPUS parallel jobs..."
 # Execute make with error checking
 # TESTING must be passed on the command line: build/options.mk assigns a
 # default with "=", which would override the value from the environment.
-if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" TARGET="$TARGET" $IPA_TARGET; then
+# DEBUG_ALL_MAP_OVERLAYS is passed the same way for consistency.
+if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" DEBUG_ALL_MAP_OVERLAYS="$DEBUG_ALL_MAP_OVERLAYS" TARGET="$TARGET" $IPA_TARGET; then
     echo "Error: Build failed" >&2
     exit 1
 fi

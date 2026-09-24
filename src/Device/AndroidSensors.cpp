@@ -158,6 +158,20 @@ DeviceDescriptor::OnHeartRateSensor(unsigned bpm) noexcept
 }
 
 void
+DeviceDescriptor::OnBloodOxygenSensor(unsigned spo2) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+  basic.blood_oxygen = spo2;
+  basic.blood_oxygen_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
 DeviceDescriptor::OnEngineSensors(bool has_cht,
                                   Temperature cht,
                                   bool has_egt,
@@ -350,6 +364,20 @@ DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
 
   basic.temperature = temperature;
   basic.temperature_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
+DeviceDescriptor::OnHumidity(double humidity_percent) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.humidity = humidity_percent;
+  basic.humidity_available.Update(basic.clock);
 
   e.Commit();
 }

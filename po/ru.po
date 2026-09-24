@@ -1109,10 +1109,6 @@ msgstr "TCP порт"
 msgid "Bluetooth server"
 msgstr "Сервер блютуз"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS промежуточный драйвер"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Встроенный GPS и другие сенсоры"
 
@@ -7469,6 +7465,9 @@ msgstr "Симулятор"
 msgid "no QNH"
 msgstr "нет QNH"
 
+msgid "no wind"
+msgstr "нет ветра"
+
 msgid "Not flying"
 msgstr "Не в спирали"
 
@@ -11189,3 +11188,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Вручную"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

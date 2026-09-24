@@ -72,14 +72,10 @@ QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
 
   case ButtonState::SELECTED:
   case ButtonState::ENABLED:
-    if (HaveClipping())
-      canvas.DrawFilledRectangle(rc, look.background_brush);
     canvas.SetTextColor(look.text_color);
     break;
 
   case ButtonState::DISABLED:
-    if (HaveClipping())
-      canvas.DrawFilledRectangle(rc, look.background_brush);
     canvas.SetTextColor(look.button.disabled.color);
     break;
   }
@@ -175,7 +171,7 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
 
   const PixelRect constrained_grid_rc = CalculateConstrainedGridRect(client_rc);
   auto grid_view = std::make_unique<GridView>();
-  grid_view->Create(parent, dialog_look, constrained_grid_rc, grid_view_style,
+  grid_view->Create(parent, constrained_grid_rc, grid_view_style,
                     column_width, row_height);
 
   WindowStyle buttonStyle;

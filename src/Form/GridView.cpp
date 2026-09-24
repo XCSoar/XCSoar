@@ -5,13 +5,13 @@
 #include "Math/Util.hpp"
 
 void
-GridView::Create(ContainerWindow &parent, const DialogLook &look,
-                 const PixelRect &rc, const WindowStyle style,
+GridView::Create(ContainerWindow &parent, const PixelRect &rc,
+                 const WindowStyle style,
                  unsigned _column_width, unsigned _row_height)
 {
   column_width = _column_width;
   row_height = _row_height;
-  PanelControl::Create(parent, look, rc, style);
+  PanelControl::Create(parent, rc, style);
   current_page = 0;
   previous_page = 0;
   saved_row_from_previous_page = 0;
@@ -437,13 +437,7 @@ GridView::ShowNextPage(Direction direction)
   if (newPos != -1 && IsItemValid(newPos)) {
     items[newPos]->SetFocus();
     if (focusPos != -1 && IsItemValid(focusPos) && items[newPos]->HasFocus()) {
-#ifdef USE_WINUSER
-      HWND oldFocusHwnd = ::GetFocus();
-      if (oldFocusHwnd != nullptr)
-        ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
-#else
       items[focusPos]->ClearFocus();
-#endif /* USE_WINUSER */
     }
     RefreshLayout();
   }

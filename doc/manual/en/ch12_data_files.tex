@@ -19,33 +19,13 @@ is good practice to make sure that the file names are recognisable so
 that when making configuration changes there is less risk of confusion
 between different files and different file types.
 
-Regarding older Pocket PC devices it is a good idea to have data files located in
-nonvolatile memory, the use of SD cards and other removable media in
-PDAs can cause performance issues; for smaller files, and files that
-are only accessed at start-up (waypoints, airspace, glide polars,
-configuration files), this is acceptable.  However, terrain and
-topography files are accessed continuously while XCSoar is running, so
-these should be located in faster storage memory.
-For newer Windows Mobile or Android devices this is not an issue any 
-more. The access to modern memory cards usually meets the required performance.   
+Terrain and topography files are accessed continuously while XCSoar is
+running, so they should be located on reasonably fast storage.
+Modern memory cards usually meet the required performance.
 
-Many PDAs provide a `file store' which is nonvolatile; the same
-arguments above apply regarding their use and performance.
-
-All data files should be copied into the directory: 
-\begin{verbatim}
-My Documents/XCSoarData
-\end{verbatim}
-
-On PDAs data can also be stored on the operating system file
-store, on Compact Flash cards or SD cards under the directory
-\verb|XCSoarData|.
-
-For example:
-\begin{verbatim}
-SD Card/XCSoarData
-IPAQ File Store/XCSoarData
-\end{verbatim}
+All data files should be copied into the directory
+\verb|XCSoarData|.  See Chapter~\ref{cha:installation} for where that
+directory lives on each platform.
 
 If unsure, just start the newly installed XCSoar and it creates the \verb|XCSoarData|
 directory at the right place.
@@ -296,6 +276,8 @@ Remove tape from wings and tail
 
 Task files (extension \verb|.tsk|) are stored in XCSoar's own XML format,
 whereas SeeYou tasks can also be loaded from file (extension \verb|.cup|).
+The task file format is documented for developers and authors of
+converters at \url{https://xcsoar.readthedocs.io/en/latest/task_file.html}.
 
 \section{Flight logs} \label{sec:logfiles}
 

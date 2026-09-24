@@ -16,7 +16,6 @@ ActionWidget::ReClick() noexcept
   callback();
 }
 
-#ifndef HAVE_CLIPPING
 void
 ActionWidget::Show([[maybe_unused]] const PixelRect &rc) noexcept
 {
@@ -26,4 +25,3 @@ void
 ActionWidget::Hide() noexcept
 {
 }
-#endif

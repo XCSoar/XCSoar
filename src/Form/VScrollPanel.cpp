@@ -7,6 +7,7 @@
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Point2D.hpp"
 #include "util/StringAPI.hxx"
@@ -21,7 +22,7 @@ VScrollPanel::VScrollPanel(ContainerWindow &parent, const DialogLook &look,
                            const PixelRect &rc,
                            const WindowStyle style,
                            VScrollPanelListener &_listener) noexcept
-  :PanelControl(parent, look, rc, style),
+  :PanelControl(parent, rc, style),
    listener(_listener),
    scroll_bar(look.button)
 {
@@ -267,6 +268,12 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
   }
 
   if (scroll_bar.IsDragging()) {
+#ifdef HAVE_VIBRATOR
+    /* releasing the slider is the end of a deliberate drag; give it
+       the same feedback as a long press */
+    PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
+#endif
+
     scroll_bar.DragEnd(this);
     return true;
   }
@@ -344,10 +351,19 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
   smooth_scroll_target = -1;
 
   if (scroll_bar.IsInsideSlider(p)) {
+#ifdef HAVE_VIBRATOR
+    /* only when grabbing the slider, not while dragging it */
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+
     scroll_bar.DragBegin(this, p.y);
     return true;
   } else if (scroll_bar.IsInside(p)) {
     /* click in the scroll bar area (arrows or track) */
+#ifdef HAVE_VIBRATOR
+    PlayHapticFeedback(HapticFeedbackType::PRESS);
+#endif
+
     if (scroll_bar.IsInsideUpArrow(p.y)) {
       ScrollBy(-GetScrollStep());
     } else if (scroll_bar.IsInsideDownArrow(p.y)) {
@@ -395,6 +411,9 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
 void
 VScrollPanel::StartGestureTracking(PixelPoint p) noexcept
 {
+  if (!listener.IsVScrollPanelGestureEnabled())
+    return;
+
   /* Track swipes only in the content area — not on the scrollbar,
      where slight horizontal finger movement during a tap would
      misfire as a page-change swipe (especially noticeable on e-ink

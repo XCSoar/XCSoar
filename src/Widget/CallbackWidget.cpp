@@ -16,7 +16,6 @@ CallbackWidget::ReClick() noexcept
   callback();
 }
 
-#ifndef HAVE_CLIPPING
 void
 CallbackWidget::Show([[maybe_unused]] const PixelRect &rc) noexcept
 {
@@ -26,4 +25,3 @@ void
 CallbackWidget::Hide() noexcept
 {
 }
-#endif

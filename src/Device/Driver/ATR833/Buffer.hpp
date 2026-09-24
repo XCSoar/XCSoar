@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Protocol.hpp"
-#include "RadioFrequency.hpp"
+#include "Radio/RadioFrequency.hpp"
 
 #include <cstdint>
 #include <cstddef>

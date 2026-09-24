@@ -176,7 +176,9 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Text size"),
              nullptr,
-             "%d %%", "%d", 75, 200, 5,
+             "%d %%", "%d",
+             UISettings::SCALE_MIN, UISettings::SCALE_MAX,
+             UISettings::SCALE_STEP,
              ui_settings.scale);
 
 #ifdef DRAW_MOUSE_CURSOR
@@ -211,6 +213,11 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
 
     if (!Display::Rotate(ui_settings.display.orientation))
       LogString("Display rotation failed");
+
+#ifdef SOFTWARE_ROTATE_DISPLAY
+    CommonInterface::main_window->SetDisplayOrientation(
+        ui_settings.display.orientation);
+#endif
 
 #ifdef USE_POLL_EVENT
     UI::event_queue->SetDisplayOrientation(ui_settings.display.orientation);

@@ -127,6 +127,30 @@ The same make flag works for ``TARGET=KOBO`` and ``OPENGL=n`` builds.
 Clean or rebuild affected objects when toggling the flag; mixed objects
 with and without ``-DDRAW_REDRAW_COUNTER`` are not reliable.
 
+Force all map overlays
+----------------------
+
+To exercise map HUD overlays drawn by ``GlueMapWindow`` at once,
+build with ``DEBUG_ALL_MAP_OVERLAYS=y``::
+
+  make -j$(nproc) TARGET=UNIX USE_CCACHE=y DEBUG_ALL_MAP_OVERLAYS=y
+
+For Xcode builds on iOS and macOS, set ``DEBUG_ALL_MAP_OVERLAYS=y`` in
+:file:`darwin/.env` instead; :file:`darwin/build.sh` passes it to make.
+
+The flag is defined in :file:`build/options.mk` (default ``n``) and
+adds ``-DDEBUG_ALL_MAP_OVERLAYS=1``. When enabled, it forces the
+thermal band, FLARM alarm-level icon (not the FLARM traffic gauge
+widget), stall-ratio line, pan chrome, GPS-status and map-title
+placeholders, final-glide bar, and vario bar. Missing sensor data is
+filled with placeholders so layout and collision can be tested
+without live traffic or a real flight. Separate MainWindow gauges
+(``GaugeFLARM``, thermal assistant) are unchanged.
+
+Clean or rebuild affected map-window objects when toggling the flag;
+mixed objects with and without the define are not reliable. Do not
+ship production builds with this option enabled.
+
 iOS and macOS
 -------------
 

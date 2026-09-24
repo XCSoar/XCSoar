@@ -48,3 +48,18 @@ endif
 endif
 
 $(eval $(call link-library,libmapwindow,LIBMAPWINDOW))
+
+# Rebuild the objects which evaluate DEBUG_ALL_MAP_OVERLAYS when the
+# option is toggled; make does not track preprocessor flag changes.
+MAP_OVERLAYS_FLAGS_STAMP = $(ABI_OUTPUT_DIR)/.debug_all_map_overlays.stamp
+$(MAP_OVERLAYS_FLAGS_STAMP): FORCE | $(ABI_OUTPUT_DIR)/dirstamp
+	@value=$(DEBUG_ALL_MAP_OVERLAYS); \
+	if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$$value" ]; then \
+		echo "$$value" > $@.$(RANDOM_NUMBER).tmp && \
+			mv $@.$(RANDOM_NUMBER).tmp $@; \
+	fi
+
+MAP_OVERLAYS_FLAGS_SOURCES = \
+	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
+	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp
+$(call SRC_TO_OBJ,$(MAP_OVERLAYS_FLAGS_SOURCES)): $(MAP_OVERLAYS_FLAGS_STAMP)

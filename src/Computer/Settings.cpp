@@ -4,6 +4,7 @@
 #include "Settings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "time/SystemTimeZone.hpp"
+#include "time/TimeZones.hpp"
 
 void
 PolarSettings::SetDefaults()
@@ -57,8 +58,20 @@ ComputerSettings::SetDefaults()
 
   average_eff_time = ae30seconds;
   set_system_time_from_gps = false;
-  auto_utc_offset = true;
-  utc_offset = RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
+
+#ifdef KOBO
+  /* the Kobo has no time zone configuration at all: its clock runs in
+     UTC, so the automatic source could only ever yield UTC */
+  local_time_source = LocalTimeSource::TIME_ZONE;
+#else
+  local_time_source = LocalTimeSource::AUTOMATIC;
+#endif
+
+  time_zone = "UTC";
+
+  /* #local_time_source was just set to one of the two automatic ones,
+     so this does not read #utc_offset back */
+  utc_offset = GetCurrentUTCOffset();
   forecast_temperature = Temperature::FromCelsius(25);
   pressure = AtmosphericPressure::Standard();
   pressure_available.Clear();
@@ -74,4 +87,27 @@ ComputerSettings::SetDefaults()
   radio.SetDefaults();
   transponder.SetDefaults();
   weglide.SetDefaults();
+}
+
+RoughTimeDelta
+ComputerSettings::GetCurrentUTCOffset() const noexcept
+{
+  switch (local_time_source) {
+  case LocalTimeSource::AUTOMATIC:
+    return RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
+
+  case LocalTimeSource::TIME_ZONE:
+    if (const auto offset = FindTimeZoneOffset(time_zone.c_str(),
+                                               std::chrono::system_clock::now()))
+      return RoughTimeDelta::FromSeconds(offset->count());
+
+    /* a time zone which is not in our table (e.g. because it was
+       removed from the zoneinfo database): fall back to UTC */
+    return RoughTimeDelta::FromSeconds(0);
+
+  case LocalTimeSource::MANUAL_UTC_OFFSET:
+    break;
+  }
+
+  return utc_offset;
 }

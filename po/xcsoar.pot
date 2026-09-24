@@ -1348,10 +1348,6 @@ msgstr ""
 msgid "Bluetooth server"
 msgstr ""
 
-msgid "GPS Intermediate Driver"
-msgstr ""
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr ""
 
@@ -9031,6 +9027,9 @@ msgstr ""
 msgid "no QNH"
 msgstr ""
 
+msgid "no wind"
+msgstr ""
+
 msgid "Not flying"
 msgstr ""
 
@@ -9800,4 +9799,16 @@ msgstr ""
 msgid ""
 "Forecast\n"
 "Controls"
+msgstr ""
+
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""

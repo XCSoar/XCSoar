@@ -21,7 +21,7 @@ ifeq ($(TARGET),)
       TARGET = UNIX
     endif
   else
-    TARGET = PC
+    TARGET = WIN64OPENGL
   endif
 else
   ifeq ($(filter $(TARGET),$(TARGETS)),)
@@ -66,8 +66,7 @@ TARGET_ARCH :=
 # virtual targets ("flavors")
 
 ifeq ($(TARGET),WIN64)
-  X64 := y
-  override TARGET = PC
+  $(error TARGET=WIN64 (GDI) has been removed; use TARGET=WIN64OPENGL)
 endif
 
 ifeq ($(TARGET),WIN64OPENGL)
@@ -123,10 +122,6 @@ ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
   override TARGET = ANDROID
   override TARGET_FLAVOR = ANDROID
-endif
-
-ifeq ($(ANDROID_BUNDLE_BUILD),y)
-  override TARGET_FLAVOR = ANDROID_BUNDLE
 endif
 
 # real targets
@@ -298,7 +293,7 @@ ifeq ($(TARGET),IOS64)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 11.0
+  IOS_MIN_SUPPORTED_VERSION = 15.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
@@ -313,7 +308,7 @@ ifeq ($(TARGET),IOS64SIM)
   override TARGET = UNIX
   TARGET_IS_DARWIN = y
   TARGET_IS_IOS = y
-  IOS_MIN_SUPPORTED_VERSION = 11.0
+  IOS_MIN_SUPPORTED_VERSION = 15.0
   HOST_TRIPLET = aarch64-apple-darwin
   LLVM_TARGET = $(HOST_TRIPLET)
   ifeq ($(HOST_IS_DARWIN),y)
@@ -570,7 +565,7 @@ ifeq ($(TARGET),PC)
   TARGET_LDFLAGS += -Wl,--minor-subsystem-version=0
 
   # default to "console"; overridden to "windows" by
-  # GDI_LDLIBS (screen.mk) or SDL_LDLIBS (sdl.mk) for GUI programs
+  # SDL_LDLIBS (sdl.mk) for GUI programs
   TARGET_LDFLAGS += -Wl,-subsystem,console
 
   ifeq ($(X64),y)

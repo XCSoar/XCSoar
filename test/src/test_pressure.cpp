@@ -94,6 +94,20 @@ test_isa_density(const double alt, const double prat)
   return fabs(p0/1.225-prat)<0.001;
 }
 
+static bool
+test_ias_from_dynamic_pressure()
+{
+  /* IAS = sqrt(2 q / rho0) with q in Pa; 10 m/s → 0.6125 hPa */
+  const double q_hpa = ISA_SEA_LEVEL_DENSITY * 10 * 10 / 200;
+  return fabs(IndicatedAirspeedFromDynamicPressure(q_hpa) - 10) < 1e-9;
+}
+
+static bool
+test_ias_zero()
+{
+  return IndicatedAirspeedFromDynamicPressure(0) == 0;
+}
+
 int main(int argc, char** argv)
 {
 
@@ -101,7 +115,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(9);
+  plan_tests(9 + 2);
 
   ok(test_find_qnh(),"find qnh 0-0",0);
   ok(test_find_qnh2(),"find qnh 100-120",0);
@@ -116,6 +130,9 @@ int main(int argc, char** argv)
 
   ok(test_isa_density(1524, 0.8617), "isa density at 1524m",0);
   ok(test_isa_density(6096, 0.5328), "isa density at 6096m",0);
+
+  ok(test_ias_from_dynamic_pressure(), "ias from dynamic pressure", 0);
+  ok(test_ias_zero(), "ias zero dynamic pressure", 0);
 
   return exit_status();
 }

@@ -65,8 +65,6 @@ WndFrame::OnPaint(Canvas &canvas) noexcept
 {
   if (background_color)
     canvas.Clear(*background_color);
-  else if (HaveClipping())
-    canvas.Clear(look.background_brush);
 
   if (top_separator) {
     /* Filled strip instead of DrawLine at y=0: OpenGL often clips a

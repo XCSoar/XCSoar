@@ -2,7 +2,8 @@ ifeq ($(TARGET),ANDROID)
 # Android must use OpenGL
 ENABLE_SDL = n
 else ifeq ($(HAVE_WIN32),y)
-# Windows defaults to GDI
+# OpenGL Windows flavors set ENABLE_SDL=y in targets.mk first.
+# Bare TARGET=PC leaves SDL off and is rejected later.
 ENABLE_SDL ?= n
 else ifeq ($(TARGET_IS_KOBO),y)
 # the Kobo uses the frame buffer

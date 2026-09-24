@@ -551,11 +551,27 @@ Há seleções separada para todos os itens.  Uma vez alterado alguma pré-confi
 Ajusta a hora local compensada relativa ao fuso horário.
 
 \begin{description}
-\item[Offset UTC automático]  se ativado, o offset UTC é obtido do fuso horário
-  configurado no sistema operacional e é mantido atualizado, seguindo mudanças
-  de horário de verão e viagens para outro fuso horário.  Desative esta opção
-  para inserir o offset UTC manualmente.
-\item[Hora local]  a hora local é mostrada para que verifique mais facilmente se o fuso horário está correto.  Fusos horários de quinze minutos podem ser configurados.
+\item[Fonte da hora local]  seleciona de onde o XCSoar obtém o offset entre UTC e a
+  hora local:
+  \begin{description}
+  \item[Automático]  o offset é obtido do fuso horário configurado no sistema
+    operacional e é mantido atualizado, seguindo mudanças de horário de verão e
+    viagens para outro fuso horário.  Esta opção não está disponível no Kobo, pois
+    esses aparelhos não têm configuração de fuso horário.
+  \item[Fuso horário]  o offset é calculado a partir do fuso horário selecionado
+    abaixo.  Um fuso horário contém as regras do horário de verão, de modo que o
+    XCSoar faz a mudança sozinho, sem correção duas vezes por ano.
+  \item[Offset UTC manual]  é usado o offset fixo inserido abaixo.  Ele precisa ser
+    corrigido manualmente a cada mudança de horário de verão.  Esta opção só é
+    oferecida no modo especialista, a menos que seja a que está em uso.
+  \end{description}
+\item[Fuso horário]  o fuso horário do aeródromo em que você voa, p.ex.
+  `Europe/Berlin'.  Só é editável enquanto a fonte da hora local for `Fuso horário'.
+\item[Offset UTC manual]  {\bf -13 ..+14h}: o offset da hora local em relação ao
+  UTC, ajustável em intervalos de quinze minutos.  Só é editável enquanto a fonte
+  da hora local for `Offset UTC manual', e mantém o valor inserido enquanto outra
+  fonte estiver selecionada.
+\item[Hora local]  a hora local é mostrada para que verifique mais facilmente se o fuso horário está correto, seguida do offset UTC em vigor.  Fusos horários de quinze minutos podem ser configurados.
 \item[Usar hora GPS*] esta opção, se ativada, ajusta o relógio do computador à hora do GPS.  Isto é necessário somente se o seu computador não tiver um relógio com bateria de reserva ou seu computador frequentemente perde a energia da bateria.
 \end{description}
 

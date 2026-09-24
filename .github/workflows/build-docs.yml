@@ -43,7 +43,8 @@ jobs:
      - name: Install checkout dependencies
        run: |
          apt-get update
-         apt-get install -y --no-install-recommends git ca-certificates
+         apt-get install -y --no-install-recommends git \
+         ca-certificates rsync openssh-client
 
      - id: checkout
        uses: actions/checkout@v7

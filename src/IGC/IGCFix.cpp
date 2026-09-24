@@ -23,9 +23,18 @@ IGCFix::Apply(const NMEAInfo &basic) noexcept
 
   time = basic.date_time_utc;
 
-  gps_altitude = basic.gps_altitude_available
-    ? (int)basic.gps_altitude
-    : 0;
+  if (basic.gps_altitude_available)
+    gps_altitude = (int)basic.gps_altitude;
+  else
+    gps_altitude = 0;
+
+  if (basic.gps_ellipsoid_altitude_available) {
+    gps_ellipsoid_altitude = (int)basic.gps_ellipsoid_altitude;
+    gps_ellipsoid_altitude_available = true;
+  } else {
+    gps_ellipsoid_altitude = 0;
+    gps_ellipsoid_altitude_available = false;
+  }
 
   /* Use IGC pressure altitude if available (device's IGC recording value),
      otherwise fall back to standard pressure altitude, then baro altitude,

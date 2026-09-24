@@ -1121,10 +1121,6 @@ msgstr "TEポート"
 msgid "Bluetooth server"
 msgstr "ブルーツース　サーバー"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS　ドライバー"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "内蔵GPSセンサー"
 
@@ -7523,6 +7519,9 @@ msgstr "シュミレーター"
 msgid "no QNH"
 msgstr "QNHではない"
 
+msgid "no wind"
+msgstr "風なし"
+
 msgid "Not flying"
 msgstr "旋回していません"
 
@@ -11088,3 +11087,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "手動"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

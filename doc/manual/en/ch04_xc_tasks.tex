@@ -49,7 +49,7 @@ You can edit tasks in several ways.  Some methods are more useful for
 editing prior to flight, and others allow tasks to be modified whilst
 in flight for casual cross-country touring.  Tasks can be saved to
 files and reloaded later, and can be transferred between any XCSoar
-platform (Android, Windows, Linux\textellipsis).
+platform (Android, iOS, Windows, Linux, macOS\textellipsis).
 
 \tip{} It is also possible to save a `default' task and have this task loaded
 automatically upon start-up of XCSoar.  One application of this is to
@@ -1006,7 +1006,12 @@ are being received by a GPS.\@  The logger replay dialogue does not need
 to be open during replay.
 
 To start a log replay, first select the file to load, and then select the
-\button{Start} button.  The replay can be performed in accelerated time
+\button{Start} button.  The file selector lists IGC and NMEA logs.  IGC
+files show detected takeoff, landing and duration as the list is scanned.
+The number of IGC files with a detected launch and landing, and their
+total time as hours:minutes, are shown under the list.
+Leave the file blank, or choose Demo, to run the demo.  The replay can be
+performed in accelerated time
 by changing the time scale from 1x to a higher number, and paused by
 setting the time scale to zero.  High time scales can result in degraded
 performance of the wind estimation and other statistics/analysis routines.

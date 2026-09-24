@@ -116,6 +116,12 @@ public:
   double ScanDistanceScored(const GeoPoint &ref) const noexcept;
 
   /**
+   * Refresh this leg's travelled vector (origin to aircraft on the
+   * active leg, origin to destination on completed legs).
+   */
+  void UpdateVectorTravelled(const GeoPoint &ref) noexcept;
+
+  /**
    * Retrieve maximum distance for the task leg
    *
    * @return Distance (m)
@@ -176,6 +182,9 @@ public:
 private:
   [[gnu::pure]]
   GeoVector GetPlannedVector() const noexcept;
+
+  [[gnu::pure]]
+  GeoVector GetTravelledVector(const GeoPoint &ref) const noexcept;
 
   [[gnu::pure]]
   GeoVector GetRemainingVector(const GeoPoint &ref) const noexcept;

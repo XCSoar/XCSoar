@@ -1090,10 +1090,6 @@ msgstr "BLE Portu"
 msgid "Bluetooth server"
 msgstr "Bluetooth sunucu"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS Araslık Sürücüsü"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "İçerikli GPS & Sensörler"
 
@@ -7429,6 +7425,9 @@ msgstr "Simgesi"
 msgid "no QNH"
 msgstr "QNH Yok"
 
+msgid "no wind"
+msgstr "Rüzgar Yok"
+
 msgid "Not flying"
 msgstr "Yükselmeyen"
 
@@ -11120,3 +11119,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "El ile"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

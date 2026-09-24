@@ -165,14 +165,15 @@ private:
 #else
   /**
    * Number of frames which must still be repainted with a cleared
-   * background to erase a gesture trail which the #GlueMapWindow has
-   * painted outside its own rectangle.  Sized from the swap-chain
-   * depth so every presentation buffer gets a clean frame.
+   * background to erase what the #GlueMapWindow (gesture trail) or
+   * the InfoBox arrange overlay (dragged InfoBox) has painted outside
+   * its own rectangle.  Sized from the swap-chain depth so every
+   * presentation buffer gets a clean frame.
    *
    * @see OnPaint()
    * @see TopWindow::GetPresentationBufferCount()
    */
-  unsigned clear_gesture_frames = 0;
+  unsigned clear_trail_frames = 0;
 #endif
 
   bool restore_page_pending = false;
@@ -540,11 +541,6 @@ protected:
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;
   void OnCancelMode() noexcept override;
-
-#ifdef USE_WINUSER
-  LRESULT OnMessage(HWND hWnd, UINT message,
-                    WPARAM wParam, LPARAM lParam) noexcept override;
-#endif
   bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
   bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;

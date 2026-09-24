@@ -14,7 +14,7 @@ else ifeq ($(TARGET_IS_DARWIN),y)
 # SDL handles OpenGL context creation and will use ANGLE libraries if available
 EGL = n
 else ifneq ($(HAVE_WIN32)$(TARGET_IS_KOBO),nn)
-# Windows uses GDI
+# Windows uses SDL + ANGLE
 # Kobo uses software renderer on /dev/fb0
 EGL = n
 else ifeq ($(OPENGL),n)
@@ -26,12 +26,9 @@ EGL = n
 else ifeq ($(TARGET),ANDROID)
 # Android uses EGL
 EGL = y
-else ifeq ($(GLES2),y)
-# use EGL if GLES2 was chosen explicitly
-EGL = y
 else
-# default to GLX/X11
-EGL ?= n
+# UNIX/X11 OpenGL uses EGL + OpenGL ES
+EGL = y
 endif
 
 ifeq ($(EGL),y)

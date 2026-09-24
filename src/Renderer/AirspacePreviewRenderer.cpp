@@ -3,7 +3,6 @@
 
 #include "AirspacePreviewRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/Features.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -11,10 +10,6 @@
 #include "Projection/WindowProjection.hpp"
 
 #include <vector>
-
-#if defined(USE_GDI) && !defined(NDEBUG)
-#include "util/PrintException.hxx"
-#endif
 
 static void
 GetPolygonPoints(std::vector<BulkPixelPoint> &pts,
@@ -65,16 +60,6 @@ AirspacePreviewRenderer::PrepareFill(
 #elif defined(USE_MEMORY_CANVAS)
   Color color = class_look.fill_color;
   canvas.Select(Brush(LightColor(color)));
-#else
-  unsigned brush = class_settings.brush;
-#ifdef HAVE_ALPHA_BLEND
-  if (settings.transparency)
-    brush = 3;
-#endif
-
-  canvas.Select(look.brushes[brush]);
-  canvas.SetTextColor(LightColor(class_look.fill_color));
-  canvas.SetMixMask();
 #endif
 
   canvas.SelectNullPen();
@@ -88,17 +73,6 @@ AirspacePreviewRenderer::UnprepareFill([[maybe_unused]] Canvas &canvas,
 {
 #ifdef ENABLE_OPENGL
   ::glDisable(GL_BLEND);
-#elif defined(USE_GDI)
-  try {
-    canvas.SetMixCopy();
-    canvas.SetTextColor(text_color);
-  } catch (...) {
-    // These GDI state reset calls are not expected to throw; keep this as a
-    // defensive guard for noexcept and only print details in debug builds.
-#ifndef NDEBUG
-    PrintException(std::current_exception());
-#endif
-  }
 #endif
 }
 

@@ -7,7 +7,6 @@
 #include "OpenSpectateFilePort.hpp"
 #include "K6BtPort.hpp"
 #include "Device/Config.hpp"
-#include "LogFile.hpp"
 #include "TCPClientPort.hpp"
 
 #ifdef ANDROID
@@ -33,19 +32,6 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
-
-#include <windef.h> /* for MAX_PATH */
-
-/**
- * Attempt to detect the GPS device.
- *
- * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
- */
-static bool
-DetectGPS([[maybe_unused]] char *path, [[maybe_unused]] std::size_t path_max_size)
-{
-  return false;
-}
 
 static std::unique_ptr<Port>
 WrapPort(const DeviceConfig &config, PortListener *listener,
@@ -74,7 +60,6 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
                  DataHandler &handler)
 {
   const char *path = nullptr;
-  char buffer[MAX_PATH];
 
   switch (config.port_type) {
   case DeviceConfig::PortType::DISABLED:
@@ -140,15 +125,6 @@ OpenPortInternal(EventLoop &event_loop, Cares::Channel &cares,
 #else
     throw std::runtime_error("IOIO driver not available");
 #endif
-
-  case DeviceConfig::PortType::AUTO:
-    if (!DetectGPS(buffer, sizeof(buffer)))
-      throw std::runtime_error("No GPS detected");
-
-    LogFormat("GPS detected: %s", buffer);
-
-    path = buffer;
-    break;
 
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::BLE_SENSOR:

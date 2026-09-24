@@ -6,9 +6,14 @@ VERSION_WORDS := $(subst ., ,$(VERSION))
 VERSION_MAJOR := $(word 1,$(VERSION_WORDS))
 VERSION_MINOR := $(word 2,$(VERSION_WORDS))
 VERSION_PATCH := $(or $(word 3,$(VERSION_WORDS)),0)
+VERSION_BUILD ?= 0
 
 # Always three components for stores that require X.Y.Z (iOS / macOS).
 VERSION_SHORT = $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
+
+# Four components for Windows PE VERSIONINFO, the application
+# manifest assemblyIdentity, and NSIS VIProductVersion.
+VERSION_QUAD = $(VERSION_SHORT).$(VERSION_BUILD)
 
 # Android versionName omits a trailing .0; versionCode uses
 # major*10^7 + minor*10^5 + patch*10^4 + build (build 0 for tags).
@@ -33,11 +38,35 @@ PRODUCT_NAME_CPPFLAGS = -DPRODUCT_NAME=\"$(PRODUCT_NAME)\" -DPRODUCT_NAME_LC=\"$
 VERSION_CPPFLAGS = -DXCSOAR_VERSION=\"$(VERSION)\" $(PRODUCT_NAME_CPPFLAGS)
 
 GIT_COMMIT_ID := $(shell git rev-parse --short --verify HEAD 2>$(NUL))
+ifeq ($(GIT_COMMIT_ID),)
+# git can fail in CI containers (dubious ownership) while GITHUB_SHA is set.
+# Do not fall back on v* tag builds, so releases stay unadorned.
+ifeq ($(patsubst refs/tags/v%,%,$(GITHUB_REF)),$(GITHUB_REF))
+GIT_COMMIT_ID := $(shell printf '%.7s' '$(GITHUB_SHA)')
+endif
+endif
 RELEASE_COMMIT_ID := $(shell git rev-parse --short --verify "v$(VERSION)^{commit}" 2>$(NUL))
 # only append the commit id for unreleased builds (no release tag)
+ifneq ($(GIT_COMMIT_ID),)
 ifneq ($(GIT_COMMIT_ID),$(RELEASE_COMMIT_ID))
 VERSION_CPPFLAGS += -DGIT_COMMIT_ID=\"$(GIT_COMMIT_ID)\"
 FULL_VERSION := $(FULL_VERSION)~$(GIT_COMMIT_ID)
+endif
+endif
+
+# windres -D does not keep C-string quotes; stringify these tokens in
+# Data/XCSoarIcon.rc.  Do not pass VERSION_CPPFLAGS to windres.
+WINDRES_VERSIONFLAGS = \
+	-DXCSOAR_VERSION_MAJOR=$(VERSION_MAJOR) \
+	-DXCSOAR_VERSION_MINOR=$(VERSION_MINOR) \
+	-DXCSOAR_VERSION_PATCH=$(VERSION_PATCH) \
+	-DXCSOAR_VERSION_BUILD=$(VERSION_BUILD) \
+	-DXCSOAR_VERSION=$(VERSION) \
+	-DPRODUCT_NAME=$(PRODUCT_NAME) \
+	-DXCSOAR_FILE_VERSION=$(FULL_VERSION) \
+	-DXCSOAR_ORIGINAL_FILENAME=$(PRODUCT_NAME).exe
+ifneq ($(FULL_VERSION),$(VERSION))
+WINDRES_VERSIONFLAGS += -DGIT_COMMIT_ID
 endif
 
 $(call SRC_TO_OBJ,$(SRC)/Version.cpp): $(topdir)/VERSION.txt

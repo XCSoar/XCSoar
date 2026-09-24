@@ -1107,10 +1107,6 @@ msgstr "BLE port"
 msgid "Bluetooth server"
 msgstr "Bluetooth szerver"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS köztes meghajtó"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Beépített GPS és érzékelők"
 
@@ -7423,6 +7419,9 @@ msgstr "Szimulátor"
 msgid "no QNH"
 msgstr "nincs QNH"
 
+msgid "no wind"
+msgstr "nincs szél"
+
 msgid "Not flying"
 msgstr "Nem körözünk"
 
@@ -11152,3 +11151,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Kézi"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

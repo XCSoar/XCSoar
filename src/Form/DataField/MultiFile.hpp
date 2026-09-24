@@ -8,7 +8,9 @@
 #include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 
+#include <initializer_list>
 #include <string>
+#include <string_view>
 #include <vector>
 
 /**
@@ -74,6 +76,16 @@ public:
    * null byte, and the list ends with an empty pattern.
    */
   void ScanMultiplePatterns(const char *patterns);
+
+  /**
+   * Scan @p path for files matching any of the patterns and add them
+   * to the embedded file list (newest first).
+   */
+  void Scan(Path path, std::initializer_list<std::string_view> patterns,
+            bool recursive = true) noexcept;
+
+  void Scan(Path path, std::initializer_list<FileType> file_types,
+            bool recursive = true) noexcept;
 
   Path GetItem(unsigned index) const;
 

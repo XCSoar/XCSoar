@@ -14,6 +14,8 @@ namespace SDL {
 Display::Display()
 {
 #ifdef _WIN32
+  /* Matches the PE application manifest (PerMonitorV2).  Keep the
+     hint so SDL still requests it when that resource is missing. */
   SDL_SetHint(SDL_HINT_WINDOWS_DPI_AWARENESS,
               "permonitorv2");
 #endif

@@ -1116,10 +1116,6 @@ msgstr "BLE υπολογιστικό"
 msgid "Bluetooth server"
 msgstr "Bluetooth διαδραστής"
 
-msgid "GPS Intermediate Driver"
-msgstr "Διαδυναμικός Ιντρόδραμος GPS"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Περιεχόμενο για το GPS & συνοπτικά"
 
@@ -7518,6 +7514,9 @@ msgstr "Συμπύκνωση"
 msgid "no QNH"
 msgstr "όχι QNH"
 
+msgid "no wind"
+msgstr "χωρίς άνεμο"
+
 msgid "Not flying"
 msgstr "Χωρίς περιστροφή (κύκλωση)"
 
@@ -11238,3 +11237,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Χειροκίνητα"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

@@ -3,6 +3,7 @@
 
 #include "GetWaypointReachability.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Computer/WaypointReach.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "BackendComponents.hpp"
 #include "Components.hpp"

@@ -112,6 +112,7 @@ NMEAInfo::Reset() noexcept
   airspeed_real = false;
 
   gps_altitude_available.Clear();
+  gps_ellipsoid_altitude_available.Clear();
 
   static_pressure_available.Clear();
   dyn_pressure_available.Clear();
@@ -144,6 +145,7 @@ NMEAInfo::Reset() noexcept
   humidity_available.Clear();
 
   heart_rate_available.Clear();
+  blood_oxygen_available.Clear();
 
   engine_noise_level_available.Clear();
 
@@ -211,6 +213,7 @@ NMEAInfo::Expire() noexcept
     airspeed_real = false;
 
   gps_altitude_available.Expire(clock, std::chrono::seconds(30));
+  gps_ellipsoid_altitude_available.Expire(clock, std::chrono::seconds(30));
   static_pressure_available.Expire(clock, std::chrono::seconds(30));
   dyn_pressure_available.Expire(clock, std::chrono::seconds(30));
   pitot_pressure_available.Expire(clock, std::chrono::seconds(30));
@@ -224,6 +227,11 @@ NMEAInfo::Expire() noexcept
   settings.Expire(clock);
   external_wind_available.Expire(clock, std::chrono::minutes(10));
   heart_rate_available.Expire(clock, std::chrono::seconds(10));
+
+  /* a finger pulse oximeter already lags the actual saturation by two
+     minutes or more, and a glider reaches a very different altitude
+     within a few minutes, so an old value misleads rather than informs */
+  blood_oxygen_available.Expire(clock, std::chrono::minutes(3));
   temperature_available.Expire(clock, std::chrono::seconds(30));
   humidity_available.Expire(clock, std::chrono::seconds(30));
   engine_noise_level_available.Expire(clock, std::chrono::seconds(30));
@@ -283,6 +291,10 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
   if (gps_altitude_available.Complement(add.gps_altitude_available))
     gps_altitude = add.gps_altitude;
 
+  if (gps_ellipsoid_altitude_available.Complement(
+        add.gps_ellipsoid_altitude_available))
+    gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
+
   if (static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
 
@@ -331,6 +343,9 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
 
   if (heart_rate_available.Complement(add.heart_rate_available))
     heart_rate = add.heart_rate;
+
+  if (blood_oxygen_available.Complement(add.blood_oxygen_available))
+    blood_oxygen = add.blood_oxygen;
 
   if (engine_noise_level_available.Complement(add.engine_noise_level_available))
     engine_noise_level = add.engine_noise_level;

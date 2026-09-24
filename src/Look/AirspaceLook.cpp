@@ -5,7 +5,6 @@
 #include "Screen/Layout.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Resources.hpp"
-#include "util/Macros.hpp"
 
 const RGB8Color AirspaceLook::preset_colors[] = {
   RGB8_RED,
@@ -33,9 +32,7 @@ AirspaceClassLook::Initialise(const AirspaceClassRendererSettings &settings)
 {
   fill_color = Color(settings.fill_color);
 
-#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
   solid_brush.Create(fill_color);
-#endif
 
   if (settings.border_width != 0)
     border_pen.Create(Layout::ScalePenWidth(settings.border_width),
@@ -55,21 +52,6 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
 {
   Reinitialise(settings);
 
-  // airspace brushes and colors
-#ifdef HAVE_HATCHED_BRUSH
-  bitmaps[0].Load(IDB_AIRSPACE0);
-  bitmaps[1].Load(IDB_AIRSPACE1);
-  bitmaps[2].Load(IDB_AIRSPACE2);
-  bitmaps[3].Load(IDB_AIRSPACE3);
-  bitmaps[4].Load(IDB_AIRSPACE4);
-  bitmaps[5].Load(IDB_AIRSPACE5);
-  bitmaps[6].Load(IDB_AIRSPACE6);
-  bitmaps[7].Load(IDB_AIRSPACE7);
-
-  for (unsigned i = 0; i < ARRAY_SIZE(AirspaceLook::brushes); i++)
-    brushes[i].Create(bitmaps[i]);
-#endif
-
   thick_pen.Create(Layout::ScalePenWidth(10), COLOR_BLACK);
 
   intercept_icon.LoadResource(IDB_AIRSPACEI_ALL);
@@ -80,4 +62,5 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings,
   label_text_color = COLOR_BLUE;
 
   name_font = &_name_font;
+  ++name_font_serial;
 }

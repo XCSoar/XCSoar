@@ -51,7 +51,7 @@ Pour le Vega~: un petit icône représentant un planeur en spirale est affiché 
 \section{Variomètre sonore}
 
 En plus de l'affichage du variomètre, \xc{} fournit un variomètre acoustique qui convertit les valeurs du variomètre en sons. Le variomètre sonore est pour l'instant uniquement disponible pour les appareils sous Android.
-Pour de bonnes performances, connectez à votre appareil un capteur barométrique ou utilisez celui de votre appareil Android s'il en dispose. 
+Pour de bonnes performances, connectez à votre appareil un capteur barométrique ou utilisez celui de votre appareil Android ou iOS s'il en dispose. 
 Le variomètre sonore peut être activé/désactivé dans la configuration des jauges.
 
 
@@ -64,6 +64,7 @@ Les valeurs des capteurs clefs que \xc{} utilise incluent~:
 \item[Variometre brut à énergie totale] (taux de changement de l'énergie totale du planeur) Utilisé pour l'affichage, et pour le calcul du variomètre netto.
 \item[Variomètre Netto] (vitesse verticale estimée de la masse d'air autour du planeur) Utilisé pour l'affichage, et pour colorer la trace de cheminement de façon à montrer les zones d'ascendances et de descendances.
 \item[Accélération du planeur] (facteur de charge) Utilisé pour les calculs du vario netto quand un variomètre externe netto n'est pas disponible.
+Sous Android, XCSoar utilise l'accéléromètre du téléphone lorsqu'aucun capteur~G externe n'est connecté.
 \item[Altitude barométrique] Utilisé pour l'affichage.
 \item[Vitesse indiquée] Utilisé pour l'affichage, dans les calculs de compensation en arrivée pour l'énergie cinétique, et pour les calculs de variomètre netto quand un variomètre netto externe n'est pas disponible.
 \item[Densité de l'air] Utilisé pour calculer la vitesse air réelle à partir de la vitesse indiquée.

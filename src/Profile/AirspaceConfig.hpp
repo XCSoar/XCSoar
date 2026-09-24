@@ -30,5 +30,4 @@ namespace Profile
   void SetAirspaceFillColor(ProfileMap &map,
                             unsigned i, const RGB8Color &color);
   void SetAirspaceFillMode(ProfileMap &map, unsigned i, uint8_t mode);
-  void SetAirspaceBrush(ProfileMap &map, unsigned i, int c);
 };

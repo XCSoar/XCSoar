@@ -18,6 +18,18 @@ section tries to give a rough overview where you can find what.
 
 -  :file:`Geo/`: geographic data structures and formulas
 
+-  :file:`time/`: clocks, civil time, and :file:`Validity` (last-changed
+   timestamps)
+
+-  :file:`Atmosphere/`: ICAO ISA pressure, density, and indicated
+   airspeed from pitot
+
+-  :file:`Radio/`: VHF frequency and transponder code/mode values
+
+-  :file:`Units/`: SI conversion factors and user-unit tables
+
+-  :file:`Operation/`: cancel/progress for long-running work
+
 -  :file:`Formatter/`: code that formats internal values to strings
 
 -  :file:`Units/`: conversion from SI units (“System” units) to configured
@@ -92,7 +104,9 @@ Rough dependency direction (see also project rules in
 :file:`.cursor/rules/xcsoar-project-rules.mdc`):
 
 - **Foundation** (:file:`util/`, :file:`Math/`, :file:`Geo/`, :file:`io/`,
-  :file:`system/`) must not include Engine, Backend, or UI headers.
+  :file:`system/`, :file:`time/`, :file:`Atmosphere/`, :file:`Radio/`,
+  :file:`Units/`, :file:`Operation/`) must not include Engine, Backend,
+  or UI headers.
 
 - **Engine** uses Foundation only.
 
@@ -140,10 +154,9 @@ background.  It gets data from the devices (through :file:`MergeThread`) and
 forwards it together with calculation results to the drawing thread and
 the main thread.
 
-Each device has its own thread (:file:`SerialPort.cpp`).  This is
-needed because Windows CE does not support asynchronous COMM port
-I/O. The thread is stopped during task declaration (which happens in
-the UI thread).
+Each device has its own thread (:file:`SerialPort.cpp`).  Blocking
+serial I/O is isolated from the UI thread.  The thread is stopped
+during task declaration (which happens in the UI thread).
 
 When new data arrives on the serial port, the :file:`MergeThread` gets
 notified, which will merge all sensor values into one data structure. It
@@ -599,6 +612,43 @@ Usability
 -  Ensure the focussed item is clearly identified. The rectangle of the
    widget on the canvas may be drawn using the ``fill_focus`` method of
    ``Canvas``.
+
+Touch interaction
+~~~~~~~~~~~~~~~~~
+
+Adopt DOT/FAA/AR-03/67 (EFB) and FAA flight-deck HF (Cardosi and
+Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
+
+-  Acknowledge a press within 100 ms (pressed look, and haptic if the
+   user setting allows).  That is “touch received”, not a hold.
+
+-  Prefer **lift-off** (last contact).  The action commits when the
+   finger leaves the target.  Sliding off cancels.  Do not fire a hold
+   action while the finger is still down; the timer only arms the hold.
+
+-  One press has one winner: tap (lift before the hold is armed),
+   drag (movement past slop before the hold is armed), or hold then
+   lift.  After a drag has started, a further hold does nothing.
+
+-  Show a busy indicator if input cannot be processed for more than
+   0.5 s (SAE ARP 4791).  That 0.5 s is “the system is occupied”, not
+   a gesture timeout.  XCSoar’s hold-to-arm time
+   (``InfoBoxArrange::LONG_PRESS``, 500 ms) is a deliberate hold, not
+   that busy limit.
+
+-  Hold progress is a one-way fill that follows the control’s shape.
+   Do not pulse, flash, or use warning colours for a normal hold.
+   Progress must be truthful; pilots ignore misleading bars
+   (AR-03/67).
+
+-  Size hit targets with ``Layout::`` for touch and turbulence.  Leave
+   a dead band: movement of about ``Layout::Scale(20)`` on a touch
+   screen, or ``Layout::Scale(10)`` with a mouse, before the hold
+   is armed is a drag or a cancel, not a tap.
+
+-  Cursor keys and a remote stick must reach the same actions as
+   touch.  E-paper skips hold animation (``HasEPaper()`` /
+   ``IsSlowCPU()``).
 
 Main graphics
 ~~~~~~~~~~~~~

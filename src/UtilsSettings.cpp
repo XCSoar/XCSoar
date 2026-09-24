@@ -49,6 +49,10 @@
 #include "Repository/Glue.hpp"
 #include "net/http/Features.hpp"
 
+#ifdef __APPLE__
+#include "Apple/DarkMode.hpp"
+#endif
+
 bool DevicePortChanged = false;
 bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
@@ -216,9 +220,17 @@ SettingsLeave(const UISettings &old_ui_settings)
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;
 
+#ifdef __APPLE__
+  /* the system appearance is not polled while "Auto" is disabled;
+     refresh it now, because it may have changed since */
+  UpdateAppleDarkMode();
+#endif
+
   if (ui_settings.dark_mode != old_ui_settings.dark_mode ||
-      ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
-      ui_settings.info_boxes.theme != old_ui_settings.info_boxes.theme ||
+      ui_settings.info_boxes.theme != old_ui_settings.info_boxes.theme) {
+    main_window.ReinitialiseLook();
+    main_window.ReinitialiseLayout();
+  } else if (ui_settings.info_boxes.use_colors != old_ui_settings.info_boxes.use_colors ||
       settings_map.trail.type != old_settings_map.trail.type ||
       settings_map.trail.scaling_enabled != old_settings_map.trail.scaling_enabled ||
       settings_map.waypoint.landable_style != old_settings_map.waypoint.landable_style)

@@ -1104,10 +1104,6 @@ msgstr "BLE vmesnik"
 msgid "Bluetooth server"
 msgstr "Bluetooth strežnik"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS srednjejsevni vodilnik"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Vgrajeni GPS in senzori"
 
@@ -7420,6 +7416,9 @@ msgstr "Simulacija"
 msgid "no QNH"
 msgstr "brez QNH"
 
+msgid "no wind"
+msgstr "brez vetra"
+
 msgid "Not flying"
 msgstr "Ne krožiš"
 
@@ -11094,3 +11093,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Ročno"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

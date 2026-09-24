@@ -26,6 +26,11 @@ struct UISettings {
   /** timeout in quarter seconds of menu button */
   std::chrono::duration<unsigned> menu_timeout;
 
+  /** UI scale in percent; same bounds as the Text size setting. */
+  static constexpr unsigned SCALE_MIN = 75;
+  static constexpr unsigned SCALE_MAX = 200;
+  static constexpr unsigned SCALE_STEP = 5;
+
   unsigned scale;
 
   /** Override OS dpi settings */
@@ -70,6 +75,7 @@ struct UISettings {
     OFF,
     ON,
     AUTO,
+    COUNT
   } dark_mode;
 
   FormatSettings format;

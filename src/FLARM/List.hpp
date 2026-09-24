@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Traffic.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "util/TrivialArray.hxx"
 
 #include <type_traits>

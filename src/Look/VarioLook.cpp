@@ -47,7 +47,7 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   thick_sink_pen.Create(Layout::Scale(5), sink_color);
   thick_lift_pen.Create(Layout::Scale(5), lift_color);
 
-  climb_bitmap.Load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
+  climb_icon.LoadResource(IDB_CLIMB_ALL);
 
   text_font = &_text_font;
 

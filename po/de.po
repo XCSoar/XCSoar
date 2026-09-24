@@ -1118,10 +1118,6 @@ msgstr "BLE Anschluss"
 msgid "Bluetooth server"
 msgstr "Bluetoothserver"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS Adapter"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Eingebautes GPS & Sensoren"
 
@@ -7466,6 +7462,9 @@ msgstr "Simulator"
 msgid "no QNH"
 msgstr "kein QNH"
 
+msgid "no wind"
+msgstr "kein Wind"
+
 msgid "Not flying"
 msgstr "Nicht fliegend"
 
@@ -11224,3 +11223,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Manuell"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

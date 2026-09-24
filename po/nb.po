@@ -1122,10 +1122,6 @@ msgstr "Eksporter"
 msgid "Bluetooth server"
 msgstr "Bluetooth-server"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS mellomdriver"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Innebygd GPS og sensorer"
 
@@ -7378,6 +7374,9 @@ msgstr "Simulator"
 msgid "no QNH"
 msgstr "ingen QNH"
 
+msgid "no wind"
+msgstr "ingen vind"
+
 msgid "Not flying"
 msgstr "Sirkler ikke"
 
@@ -11047,3 +11046,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Man"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

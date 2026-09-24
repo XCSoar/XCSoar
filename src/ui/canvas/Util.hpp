@@ -3,7 +3,7 @@
 
 /**
  * @file
- * @brief Small Windows GDI helper functions
+ * @brief Small canvas helper functions
  */
 
 #pragma once

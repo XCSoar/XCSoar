@@ -58,12 +58,26 @@ GeoFrom2D(DoublePoint2D p) noexcept
 
 /**
  * Convert a #GeoBounds instance to a boost::geometry box.
+ *
+ * Longitude must not wrap (west native <= east native).  Callers that
+ * may pass antimeridian-wrapping bounds must split first.
  */
 [[gnu::const]]
 static boost::geometry::model::box<DoublePoint2D>
 ToBox(const GeoBounds b) noexcept
 {
   return {GeoTo2D(b.GetSouthWest()), GeoTo2D(b.GetNorthEast())};
+}
+
+/**
+ * True when #GeoBounds longitude crosses ±180° in native coordinates
+ * (west > east), so a single cartesian box would be inverted/empty.
+ */
+[[gnu::const]]
+static bool
+LongitudeWraps(const GeoBounds &b) noexcept
+{
+  return b.GetWest().Native() > b.GetEast().Native();
 }
 
 /**
@@ -80,24 +94,53 @@ ToArrayQuadrilateral(const GeoQuadrilateral q) noexcept
 }
 
 /**
+ * Intersect @p geo with one non-wrapping screen box; append into @p out.
+ */
+static void
+ClipAgainstBox(const ArrayQuadrilateral &geo,
+               const GeoBounds &box,
+               ClippedMultiPolygon &out) noexcept
+{
+  ClippedMultiPolygon piece;
+  try {
+    boost::geometry::intersection(geo, ToBox(box), piece);
+  } catch (const boost::geometry::exception &) {
+    /* self-intersecting geometries → skip this piece */
+    return;
+  }
+
+  for (auto &polygon : piece)
+    out.push_back(std::move(polygon));
+}
+
+/**
  * Clip the quadrilateral inside the screen bounds.
+ *
+ * Screen bounds that wrap the antimeridian are split into two ordinary
+ * boxes (±180° seam); a single boost box cannot represent that wrap.
  */
 [[gnu::pure]]
 static ClippedMultiPolygon
 Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
 {
   const auto geo = ToArrayQuadrilateral(_geo);
-  const auto bounds = ToBox(_bounds);
-
   ClippedMultiPolygon clipped;
 
-  try {
-    boost::geometry::intersection(geo, bounds, clipped);
-  } catch (const boost::geometry::exception &) {
-    /* this can (theoretically) occur with self-intersecting
-       geometries; in that case, return an empty polygon */
+  if (!LongitudeWraps(_bounds)) {
+    ClipAgainstBox(geo, _bounds, clipped);
+    return clipped;
   }
 
+  /* west..+180° and -180°..east */
+  const GeoBounds west_side(
+    GeoPoint(_bounds.GetWest(), _bounds.GetNorth()),
+    GeoPoint(Angle::HalfCircle(), _bounds.GetSouth()));
+  const GeoBounds east_side(
+    GeoPoint(-Angle::HalfCircle(), _bounds.GetNorth()),
+    GeoPoint(_bounds.GetEast(), _bounds.GetSouth()));
+
+  ClipAgainstBox(geo, west_side, clipped);
+  ClipAgainstBox(geo, east_side, clipped);
   return clipped;
 }
 

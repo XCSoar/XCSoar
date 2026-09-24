@@ -17,6 +17,11 @@
 
 #include <memory>
 
+/*
+ * The format read here is described in doc/task_file.rst; see the
+ * comment in Serialiser.cpp.
+ */
+
 static void
 Deserialise(GeoPoint &data, const ConstDataNode &node)
 {

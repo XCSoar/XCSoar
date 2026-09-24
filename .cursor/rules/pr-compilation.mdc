@@ -1,0 +1,26 @@
+---
+description: >-
+  Before creating or submitting a pull request, compile with make everything
+  (not only the main binary). Debug tools such as RunMapWindow are in everything.
+alwaysApply: true
+---
+
+# Compile before pull requests
+
+`make` / `make all` builds only the main XCSoar binary. Include-order and
+header collisions often fail only in debug tools (`RunMapWindow` and other
+`Run*` programs in `build/test.mk`).
+
+Before creating or submitting a PR, compile the full tree on UNIX:
+
+```bash
+make -j$(nproc) TARGET=UNIX USE_CCACHE=y everything
+```
+
+`everything` builds the main binary plus optional outputs, `debug` (`Run*`
+tools), unit-test binaries, and `build-harness`. A successful main-binary
+build is not enough.
+
+When the change includes UI-free logic, prefer `everything check`.
+
+`WERROR=y` is already the default when `DEBUG=y`. Details: `doc/build.rst`.

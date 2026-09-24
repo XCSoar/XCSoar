@@ -4,6 +4,7 @@
 #include "TaskListPanel.hpp"
 #include "Internal.hpp"
 #include "../dlgTaskHelpers.hpp"
+#include "Task/Summary.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Button.hpp"
@@ -29,11 +30,6 @@
 #include <cassert>
 
 static unsigned task_list_serial;
-
-/* this macro exists in the WIN32 API */
-#ifdef DELETE
-#undef DELETE
-#endif
 
 class TaskListPanel final
   : public ListWidget {

@@ -75,6 +75,12 @@ DebugReplayVector::CopyFromFix(const IGCFixEnhanced &fix)
     basic.gps_altitude_available.Clear();
   }
 
+  if (fix.gps_ellipsoid_altitude_available) {
+    basic.gps_ellipsoid_altitude = fix.gps_ellipsoid_altitude;
+    basic.gps_ellipsoid_altitude_available.Update(basic.clock);
+  } else
+    basic.gps_ellipsoid_altitude_available.Clear();
+
   if (fix.pressure_altitude != 0) {
     basic.pressure_altitude = fix.pressure_altitude;
     basic.pressure_altitude_available.Update(basic.clock);

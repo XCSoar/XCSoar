@@ -19,10 +19,6 @@ ifeq ($(TARGET_IS_DARWIN),y)
   endif
 endif
 
-ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE),nyn)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
-endif
-
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   PI_PKG_CONFIG_LIBDIR := $(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig:$(PI)/usr/share/pkgconfig
   PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI_PKG_CONFIG_LIBDIR) $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr

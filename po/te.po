@@ -1080,10 +1080,6 @@ msgstr "BLE పార్టు"
 msgid "Bluetooth server"
 msgstr "బ్లైథ్యూట్ సర్వర్"
 
-msgid "GPS Intermediate Driver"
-msgstr "GPS మధ్య డ్రివర్"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "ఇంబ్-బైన్రి GPS & సెన్సర్‌లు"
 
@@ -7255,6 +7251,9 @@ msgstr "సిములెటర్"
 msgid "no QNH"
 msgstr "నిష్పత్తి కోడ్ (QNH)"
 
+msgid "no wind"
+msgstr ""
+
 msgid "Not flying"
 msgstr "ప్రాచీనమైన గతి"
 
@@ -10937,3 +10936,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "మానిలోయిక్"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

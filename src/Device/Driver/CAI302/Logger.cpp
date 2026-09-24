@@ -112,6 +112,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   const std::byte *data = reinterpret_cast<const std::byte *>(header + 1);
 
   unsigned current_block = 0;
+  unsigned bytes_written = 0;
   unsigned valid_bytes;
   do {
     int i = CAI302::UploadFileData(port, true, {(std::byte *)header, allocated_size}, env);
@@ -125,6 +126,8 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
       return false;
 
     os.Write({data, valid_bytes});
+    bytes_written += valid_bytes;
+    env.SetProgressBytes(bytes_written);
 
     env.SetProgressPosition(current_block++);
   } while (valid_bytes == bytes_per_block);

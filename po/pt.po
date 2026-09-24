@@ -1109,10 +1109,6 @@ msgstr "Porta TCP"
 msgid "Bluetooth server"
 msgstr "Servidor Bluetooth"
 
-msgid "GPS Intermediate Driver"
-msgstr "Driver GPS Intermediário"
-
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS embutido & sensores"
 
@@ -7442,6 +7438,9 @@ msgstr "Simulador"
 msgid "no QNH"
 msgstr "sem QNH"
 
+msgid "no wind"
+msgstr "sem vento"
+
 msgid "Not flying"
 msgstr "Não Girando"
 
@@ -11174,3 +11173,14 @@ msgctxt "Setting"
 msgid "Manual"
 msgstr "Manual"
 
+#, no-c-format
+msgid "Blood Oxygen"
+msgstr ""
+
+#, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""

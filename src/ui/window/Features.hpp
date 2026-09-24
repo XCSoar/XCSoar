@@ -10,3 +10,7 @@
 #ifdef ENABLE_SDL
 #include "sdl/Features.hpp"
 #endif
+
+#ifdef USE_WAYLAND
+#define HAVE_MULTI_TOUCH
+#endif

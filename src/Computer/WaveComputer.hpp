@@ -7,7 +7,7 @@
 #include "StateClock.hpp"
 #include "time/DeltaTime.hpp"
 #include "Math/LeastSquares.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Geo/Flat/FlatProjection.hpp"
 
 #include <list>

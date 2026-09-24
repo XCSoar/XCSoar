@@ -11,22 +11,48 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Weather/Settings.hpp"
-#include "NMEA/Validity.hpp"
+#include "time/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCode/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "Wind/Settings.hpp"
 #include "WaveSettings.hpp"
-#include "RadioFrequency.hpp"
-#include "TransponderCode.hpp"
-#include "TransponderMode.hpp"
+#include "Radio/RadioFrequency.hpp"
+#include "Radio/TransponderCode.hpp"
+#include "Radio/TransponderMode.hpp"
 #include "net/client/WeGlide/Settings.hpp"
+#include "util/StaticString.hxx"
 
 #include <cstdint>
 #include <type_traits>
 
 struct Waypoint;
+
+/**
+ * Where does XCSoar get the UTC offset from?
+ */
+enum class LocalTimeSource : uint8_t {
+  /**
+   * Follow the time zone which is configured in the operating system.
+   * That is the right choice wherever the operating system knows its
+   * own time zone, but not on Kobo, where the clock runs in UTC and
+   * there is no time zone setting at all.
+   */
+  AUTOMATIC,
+
+  /**
+   * Use the time zone selected by the user.  Unlike a UTC offset, a
+   * time zone carries the daylight saving time rules, which means
+   * XCSoar can follow the transitions on its own.
+   */
+  TIME_ZONE,
+
+  /**
+   * Use the fixed UTC offset entered by the user.
+   */
+  MANUAL_UTC_OFFSET,
+};
 
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
@@ -211,15 +237,33 @@ struct ComputerSettings {
   /** Update system time from GPS time */
   bool set_system_time_from_gps;
 
-  /**
-   * Keep #utc_offset synchronised with the time zone configured in the
-   * operating system?  This follows daylight saving time transitions
-   * and time zone changes while travelling.
-   */
-  bool auto_utc_offset;
+  /** where does the UTC offset come from? */
+  LocalTimeSource local_time_source;
 
-  /** local time adjustment (in seconds) */
+  /**
+   * The IANA id of the time zone (e.g. "Europe/Berlin"), used by
+   * #LocalTimeSource::TIME_ZONE.
+   */
+  StaticString<64> time_zone;
+
+  /**
+   * The local time adjustment [seconds] which is currently in effect.
+   * Except with #LocalTimeSource::MANUAL_UTC_OFFSET, where it is the
+   * value the user entered, it is derived from #local_time_source and
+   * updated regularly.
+   */
   RoughTimeDelta utc_offset;
+
+  /**
+   * Determine the UTC offset which is currently in effect according to
+   * #local_time_source.  With #LocalTimeSource::MANUAL_UTC_OFFSET, this
+   * is #utc_offset.
+   *
+   * The return value is not constant: it depends on the current time,
+   * and it changes at daylight saving time transitions.  Therefore this
+   * is not a pure function and its result must not be cached.
+   */
+  RoughTimeDelta GetCurrentUTCOffset() const noexcept;
 
   /**
    * The forecasted maximum ground temperature [Kelvin].

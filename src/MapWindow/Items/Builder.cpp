@@ -9,7 +9,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Renderer/WaypointReachability.hpp"
+#include "Computer/WaypointReach.hpp"
 #include "Computer/Settings.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"

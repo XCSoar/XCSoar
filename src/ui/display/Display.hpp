@@ -28,10 +28,6 @@
 #include "opengl/Display.hpp"
 #endif
 
-#ifdef USE_GDI
-#include "gdi/Display.hpp"
-#endif
-
 namespace UI {
 
 /**
@@ -54,13 +50,6 @@ class Display
 public:
   Display()
     :EGL::Display(X11::Display::GetXDisplay()) {}
-};
-
-#elif defined(USE_GLX) && defined(USE_X11)
-
-class Display : public X11::Display, public OpenGL::Display {
-public:
-  using X11::Display::Display;
 };
 
 #elif defined(MESA_KMS)
@@ -115,13 +104,6 @@ class Display
 {
 public:
   using SDL::Display::Display;
-};
-
-#elif defined(USE_GDI)
-
-class Display : public GDI::Display {
-public:
-  using GDI::Display::Display;
 };
 
 #else

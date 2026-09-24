@@ -14,7 +14,7 @@ alwaysApply: false
 
 XCSoar icons are **SVG sources** built into masked BMP tiles (ldpi / mdpi /
 xhdpi / xxhdpi density buckets)
-via `build/resource.mk`. They render on **OpenGL, GDI, and memory canvas**
+via `build/resource.mk`. They render on **OpenGL and memory canvas**
 (including Kobo e-paper). Follow these rules so icons stay sharp, invert
 correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
 
@@ -124,7 +124,7 @@ and verify on **light and dark** map themes.
 4. Rebuild icons: `make -j$(nproc) TARGET=UNIX` (or your target) so
    `output/.../icons/*_{ldpi,mdpi,xhdpi,xxhdpi}.bmp` regenerate.
 5. Check **Android** drawables if the icon is exposed in the Java UI
-   (`build/android.mk` + `build/android_bundle.mk`).
+   (`build/android.mk`).
 
 ## Review checklist
 

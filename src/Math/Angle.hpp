@@ -376,7 +376,10 @@ public:
   /**
    * Check whether the two angles are roughly equal.
    */
-  [[gnu::const]]
+  /* pure, not const: a member function that reads *this must not
+     promise the compiler that memory does not matter - gcc 15 starts
+     eliminating the store into the temporary the caller made */
+  [[gnu::pure]]
   bool CompareRoughly(Angle other, Angle threshold = Angle::Degrees(10)) const noexcept;
 };
 

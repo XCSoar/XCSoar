@@ -8,10 +8,6 @@
 
 #include <utility>
 
-#ifdef USE_WINUSER
-#include <windef.h>
-#endif
-
 /**
  * @brief PixelRect structure and operations
  *
@@ -416,18 +412,4 @@ struct PixelRect {
     *this = RemainingAboveSafe(r, remaining_min_height);
     return r;
   }
-
-#ifdef USE_WINUSER
-  constexpr PixelRect(RECT src) noexcept
-    :left(src.left), top(src.top), right(src.right), bottom(src.bottom) {}
-
-  constexpr operator RECT() const noexcept {
-    RECT r{};
-    r.left = left;
-    r.top = top;
-    r.right = right;
-    r.bottom = bottom;
-    return r;
-  }
-#endif
 };

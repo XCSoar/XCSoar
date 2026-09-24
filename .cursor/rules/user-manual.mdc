@@ -1,0 +1,50 @@
+---
+description: User-facing changes must update the English user manual under doc/manual/en/
+globs:
+  - "doc/manual/**"
+  - "src/Dialogs/**"
+  - "src/InfoBoxes/**"
+  - "src/Menu/**"
+  - "src/Input/**"
+alwaysApply: false
+---
+
+# User manual (`doc/manual/`)
+
+Pilots read the LaTeX user manual, not `doc/*.rst`. Those `.rst` files are
+contributor docs.
+
+## When to update
+
+If a change is **user-visible** (new or changed UI, setting, InfoBox, menu,
+gesture, file format a pilot uses, installation step), update the **English**
+manual in `doc/manual/en/` and add a `NEWS.txt` bullet.
+
+Do **not** update the manual for pure refactors, CI, or developer-only APIs.
+
+## Where to edit
+
+Edit English first (`doc/manual/en/`). Do not require `de/`, `fr/`, or
+`pt_BR/` in the same change unless you are doing a translation pass.
+
+| Topic | Chapter |
+|-------|--------|
+| UI, menus, gestures | `ch02_user_interface.tex` |
+| Navigation, map, Goto | `ch03_navigation.tex` |
+| Tasks | `ch04_xc_tasks.tex` |
+| MacCready, polar, final glide | `ch05_glide_computer.tex` |
+| Atmosphere, thermal, wind | `ch06_atmosphere_and_instruments.tex` |
+| Airspace, FLARM, traffic | `ch07_airspace_and_flarm.tex` |
+| Devices, radios, logger | `ch08_avionics_and_airframe.tex` |
+| InfoBoxes | `ch10_infobox_reference.tex` |
+| Configuration / Setup | `ch11_configuration.tex` |
+| Waypoints, airspace files, maps | `ch12_data_files.tex` |
+| Install / platforms | `installation.tex` |
+| Third-party devices | `integration.tex` |
+
+Master file: `doc/manual/en/XCSoar-manual.tex`. Build with `make manual`.
+
+## NEWS.txt
+
+Manual updates that pilots would notice also get a `* documentation` bullet.
+See `.cursor/rules/news.txt.mdc`.

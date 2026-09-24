@@ -36,6 +36,13 @@ NMEALogger::Start()
                                             FileOutputStream::Mode::APPEND_OR_CREATE);
 }
 
+AllocatedPath
+NMEALogger::GetPath() const noexcept
+{
+  const std::lock_guard lock{mutex};
+  return file != nullptr ? AllocatedPath(file->GetPath()) : nullptr;
+}
+
 static void
 WriteLine(OutputStream &os, std::string_view text)
 {

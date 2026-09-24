@@ -5,14 +5,17 @@
 
 #include "InfoBoxes/Content/Base.hpp"
 #include "ui/window/LazyPaintWindow.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Timer.hpp"
 #include "Data.hpp"
 
+#include <chrono>
 #include <memory>
 
 struct InfoBoxSettings;
 struct InfoBoxLook;
 class Color;
+class Canvas;
 
 class InfoBoxWindow : public LazyPaintWindow
 {
@@ -47,10 +50,25 @@ class InfoBoxWindow : public LazyPaintWindow
   bool force_draw_selector = false;
 
   /**
-   * Track whether a long press is pending (timer hasn't fired yet).
-   * Used to distinguish between long press (show picker) and short press (show dialog).
+   * A press is still down and has not become a drag.  Lift before
+   * #hold_armed is a tap; lift after it opens arrange.
    */
   bool long_press_pending = false;
+
+  /** the hold finished; the action waits for lift-off */
+  bool hold_armed = false;
+
+  /** the position of the press which #dialog_timer is watching */
+  PixelPoint press_point{0, 0};
+
+  /** when the long-press glow started */
+  std::chrono::steady_clock::time_point press_start{};
+
+  /** starts the fill once the press is past a tap */
+  UI::Timer hold_timer{[this]{ OnHoldArmed(); }};
+
+  /** fades the long-press fill while the hold is running */
+  UI::PeriodicTimer fade_timer{[this]{ Invalidate(); }};
 
   /** a timer which returns keyboard focus back to the map window after a while */
   UI::Timer focus_timer{[this]{ FocusParent(); }};
@@ -151,6 +169,9 @@ public:
 
 private:
   void OnDialogTimer() noexcept;
+  void OnHoldArmed() noexcept;
+  void StopLongPress() noexcept;
+  void PaintLongPressGlow(Canvas &canvas) noexcept;
 
 protected:
   void OnDestroy() noexcept override;

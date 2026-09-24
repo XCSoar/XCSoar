@@ -19,6 +19,7 @@
 #include "lib/dbus/Systemd.hxx"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Color.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/ScopeExit.hxx"
 
@@ -86,6 +87,7 @@ class SystemdListWidget final : public ListWidget {
   Button *toggle_button = nullptr;
   Button *restart_button = nullptr;
   ButtonPanelWidget *button_panel = nullptr;
+  bool actions_armed = false;
   UI::PeriodicTimer refresh_timer{[this]{ Refresh(); }};
 
 public:
@@ -111,12 +113,26 @@ public:
 
   void Hide() noexcept override {
     refresh_timer.Cancel();
+    DisarmActions();
     ListWidget::Hide();
   }
 
   void Unprepare() noexcept override {
     refresh_timer.Cancel();
+    DisarmActions();
     ListWidget::Unprepare();
+  }
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    if (key_code == KEY_UP && !actions_armed && !services.empty() &&
+        button_panel != nullptr && GetList().HasFocus()) {
+      button_panel->GetButtonPanel().EnableCursorSelection();
+      actions_armed = true;
+      UpdateButtons();
+      return true;
+    }
+
+    return ListWidget::KeyPress(key_code);
   }
 
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -134,8 +150,6 @@ public:
 
     const auto &service = services[idx];
     const auto &status = statuses[idx];
-
-    row_renderer.DrawFirstRow(canvas, rc, service.display_name);
 
     const char *state_text = _("Unavailable");
     Color state_color = COLOR_RED;
@@ -168,10 +182,12 @@ public:
       }
     }
 
+    PixelRect name_rc = rc;
     const auto old_color = canvas.GetTextColor();
     canvas.SetTextColor(state_color);
-    row_renderer.DrawRightFirstRow(canvas, rc, state_text);
+    name_rc.right = row_renderer.DrawRightFirstRow(canvas, rc, state_text);
     canvas.SetTextColor(old_color);
+    row_renderer.DrawFirstRow(canvas, name_rc, service.display_name);
     row_renderer.DrawSecondRow(canvas, rc, service.description);
     row_renderer.DrawRightSecondRow(canvas, rc, service.unit_name.c_str());
   }
@@ -196,9 +212,6 @@ private:
     restart_button = buttons.Add(_("Restart"), [this]{
       Restart(GetList().GetCursorIndex());
     });
-
-    if (!services.empty())
-      buttons.EnableCursorSelection();
 
     UpdateButtons();
   }
@@ -236,12 +249,16 @@ private:
     if (restart_button != nullptr)
       restart_button->SetEnabled(is_active);
 
-    /* Moving between an active and an inactive unit can disable the
-       currently selected Restart action.  Keep cursor-key selection on an
-       operable action so Up/Down list navigation and Left/Right action
-       selection continue to work together. */
-    if (can_toggle && button_panel != nullptr)
+    if (actions_armed && button_panel != nullptr)
       button_panel->GetButtonPanel().ReselectToFirstEnabled();
+  }
+
+  void DisarmActions() noexcept {
+    if (!actions_armed || button_panel == nullptr)
+      return;
+
+    button_panel->GetButtonPanel().DisableCursorSelection();
+    actions_armed = false;
   }
 
   void Refresh() noexcept {

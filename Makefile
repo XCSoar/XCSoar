@@ -103,7 +103,6 @@ include $(topdir)/build/vfb.mk
 include $(topdir)/build/fb.mk
 include $(topdir)/build/wayland.mk
 include $(topdir)/build/egl.mk
-include $(topdir)/build/glx.mk
 include $(topdir)/build/opengl.mk
 endif
 
@@ -121,11 +120,7 @@ include $(topdir)/build/link.mk
 include $(topdir)/build/resource.mk
 include $(topdir)/build/libdata.mk
 include $(topdir)/build/java.mk
-ifeq ($(ANDROID_BUNDLE_BUILD),y)
-include $(topdir)/build/android_bundle.mk
-else
 include $(topdir)/build/android.mk
-endif
 include $(topdir)/build/llvm.mk
 include $(topdir)/build/tools.mk
 include $(topdir)/build/version.mk
@@ -266,6 +261,7 @@ endif
 
 ifeq ($(TARGET),ANDROID)
 OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.apk
+OUTPUTS += $(ANDROID_BIN)/XCSoar-debug.aab
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)

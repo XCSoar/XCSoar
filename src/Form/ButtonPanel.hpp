@@ -46,6 +46,18 @@ public:
   }
 
   /**
+   * Stop KEY_LEFT / KEY_RIGHT from selecting actions, so those keys
+   * can be used by the parent (for example to change settings pages).
+   */
+  void DisableCursorSelection() noexcept {
+    if (selected_index < 0)
+      return;
+
+    buttons[selected_index]->SetSelected(false);
+    selected_index = -1;
+  }
+
+  /**
    * After the enabled/visible state of a button has changed, move
    * #selected_index to the first enabled one if the current
    * selection is no longer operable.  (Otherwise KEY_RETURN on the
@@ -108,6 +120,9 @@ public:
 
   void ShowAll() noexcept;
   void HideAll() noexcept;
+
+  /** Paint and hit-test these buttons above a sibling that covers them. */
+  void Raise() noexcept;
 
   [[gnu::pure]]
   bool HasFocus() const noexcept;

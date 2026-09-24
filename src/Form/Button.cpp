@@ -5,11 +5,18 @@
 #include "Form/ButtonPanel.hpp"
 #include "LogFile.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "Asset.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "util/StringAPI.hxx"
 #include "Hardware/Vibrator.hpp"
+
+#ifdef HAVE_VIBRATOR
+#include "Interface.hpp"
+#include "UISettings.hpp"
+#include "GlobalSettings.hpp"
+#endif
 
 Button::Button(ContainerWindow &parent, const PixelRect &rc,
                WindowStyle style, std::unique_ptr<ButtonRenderer> _renderer,
@@ -29,6 +36,18 @@ Button::Button(ContainerWindow &parent, const ButtonLook &look,
 Button::Button() = default;
 
 Button::~Button() noexcept = default;
+
+void
+PlayHapticFeedback([[maybe_unused]] HapticFeedbackType type) noexcept
+{
+#ifdef HAVE_VIBRATOR
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+  if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
+      (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
+       GlobalSettings::haptic_feedback))
+    Vibrate(type);
+#endif
+}
 
 void
 Button::Create(ContainerWindow &parent,
@@ -133,9 +152,8 @@ Button::SetDown(bool _down)
   if (_down == down)
     return;
 
-#ifdef HAVE_VIBRATOR
-  VibrateShort();
-#endif
+  if (_down)
+    PlayHapticFeedback();
 
   down = _down;
   Invalidate();
@@ -169,6 +187,8 @@ Button::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
+  case KEY_UP:
+  case KEY_DOWN:
     return true;
 
   default:
@@ -185,9 +205,21 @@ Button::OnKeyDown(unsigned key_code) noexcept
     Click();
     return true;
 
-  default:
-    return PaintWindow::OnKeyDown(key_code);
+  case KEY_UP:
+    /* WndForm remaps unhandled Up/Down to tab order, but a Button
+       outside a modal form (map overlay, and Up from the first
+       chrome button) never got that path back to the widget */
+    if (auto *parent = GetParent())
+      return parent->FocusPreviousControl();
+    break;
+
+  case KEY_DOWN:
+    if (auto *parent = GetParent())
+      return parent->FocusNextControl();
+    break;
   }
+
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
