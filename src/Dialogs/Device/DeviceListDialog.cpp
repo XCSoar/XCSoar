@@ -74,6 +74,7 @@ class DeviceListWidget final
     bool imu:1;
     bool accel:1;
     bool heart_rate:1;
+    bool blood_oxygen:1;
     bool radio:1, transponder:1;
     bool engine:1;
     bool debug:1;
@@ -141,6 +142,7 @@ class DeviceListWidget final
       imu = basic.gyroscope.available;
       accel = basic.acceleration.available;
       heart_rate = basic.heart_rate_available;
+      blood_oxygen = basic.blood_oxygen_available;
       debug = device != nullptr && device->IsDumpEnabled();
       radio = basic.settings.has_active_frequency ||
         basic.settings.has_standby_frequency;
@@ -489,6 +491,11 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (flags.heart_rate) {
       buffer.append("; ");
       buffer.append(_("Heart Rate"));
+    }
+
+    if (flags.blood_oxygen) {
+      buffer.append("; ");
+      buffer.append(_("Blood Oxygen"));
     }
 
     if (flags.radio) {

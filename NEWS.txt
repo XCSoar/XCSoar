@@ -9,6 +9,7 @@ Version 7.46 - not yet released
     humidity #3156
   - read blood oxygen saturation from a Bluetooth pulse oximeter
     and show it in the Blood Oxygen InfoBox #1836
+  - show Blood Oxygen in the Devices list for BLE pulse oximeters
   - fix BLE heart-rate sensors (for example Xiaomi Smart Band)
     timing out and then showing Not connected
   - fix crash when exiting the app #2873
