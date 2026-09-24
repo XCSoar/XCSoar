@@ -43,6 +43,8 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Menu/MenuBar.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Language/Language.hpp"
+#include "util/StringAPI.hxx"
 
 #ifdef KOBO
 #include "ui/event/KeyCode.hpp"
@@ -407,6 +409,62 @@ bool
 InputEvents::IsGesture(const char *data) noexcept
 {
   return (Lua::IsGesture(data)) || (gesture_to_event(data) != 0);
+}
+
+/**
+ * The names of the actions a gesture can trigger, see
+ * GetGestureLabel(); mostly the same as in the gesture help, see
+ * dlgGestureHelp.cpp.
+ */
+static constexpr struct {
+  InputConfig::pt2Event event;
+
+  /** the event's argument; nullptr matches any argument */
+  const char *misc;
+
+  const char *label;
+} gesture_labels[] = {
+  { InputEvents::eventZoom, "in", N_("Zoom in") },
+  { InputEvents::eventZoom, "out", N_("Zoom out") },
+  { InputEvents::eventZoom, "auto on", N_("Auto zoom") },
+  { InputEvents::eventScreenModes, "next", N_("Next page") },
+  { InputEvents::eventScreenModes, "previous", N_("Previous page") },
+  { InputEvents::eventWaypointDetails, "select", N_("Waypoint list") },
+  { InputEvents::eventSetup, "Alternates", N_("Alternates") },
+  { InputEvents::eventMode, "Menu", N_("Menu") },
+  { InputEvents::eventCalculator, nullptr, N_("Task manager") },
+  { InputEvents::eventAnalysis, nullptr, N_("Analysis") },
+  { InputEvents::eventChecklist, nullptr, N_("Checklist") },
+  { InputEvents::eventPan, "on", N_("Pan mode") },
+  { InputEvents::eventPan, "toggle", N_("Pan mode") },
+  { InputEvents::eventStatus, nullptr, N_("Status") },
+  { InputEvents::eventGotoLookup, "recent", N_("Recently used waypoints") },
+  { InputEvents::eventGotoLookup, "last_used",
+    N_("Recently used waypoints") },
+  { InputEvents::eventQuickMenu, nullptr, N_("Quick menu") },
+};
+
+const char *
+InputEvents::GetGestureLabel(const char *data) noexcept
+{
+  if (Lua::IsGesture(data))
+    /* Lua takes precedence, see processGesture() */
+    return nullptr;
+
+  /* the first event of the chain which has a name; others, like
+     "Zoom auto show", only prepare it */
+  for (unsigned id = gesture_to_event(data); id > 0;
+       id = input_config.events[id].next) {
+    const InputConfig::Event &event = input_config.events[id];
+
+    for (const auto &i : gesture_labels)
+      if (event.event == i.event &&
+          (i.misc == nullptr ||
+           (event.misc != nullptr && StringIsEqual(event.misc, i.misc))))
+        return gettext(i.label);
+  }
+
+  return nullptr;
 }
 
 bool

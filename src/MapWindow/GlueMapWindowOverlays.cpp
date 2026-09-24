@@ -69,6 +69,25 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const noexcept
   const bool valid = gesture == nullptr || InputEvents::IsGesture(gesture);
 
   GestureRenderer::Draw(canvas, gesture_look, gestures.GetPoints(), valid);
+
+  /* name the action which lifting the finger now would trigger */
+  const char *label = gesture != nullptr
+    ? InputEvents::GetGestureLabel(gesture)
+    : nullptr;
+  if (label == nullptr)
+    return;
+
+  canvas.Select(*look.overlay.overlay_font);
+
+  const PixelRect rc = GetClientRect();
+
+  TextInBoxMode mode;
+  mode.shape = LabelShape::PILL;
+  mode.align = TextInBoxMode::Alignment::CENTER;
+  mode.move_in_view = true;
+
+  TextInBox(canvas, label, {rc.GetCenter().x, rc.top + Layout::Scale(12)},
+            mode, rc);
 }
 
 void
