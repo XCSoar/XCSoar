@@ -37,18 +37,21 @@ const schema = z.object({
 })
 
 const collections = Object.fromEntries(locales.flatMap((code) => {
+    // The language folder is the source of its collections, so the pages
+    // below it keep the paths they have there, behind the prefix.
+    const source = join(cwd, code)
     const prefix = code === defaultLocale ? '/' : `/${code}`
     return [
         [`landing_${code}`, defineCollection({
             type: 'page',
-            source: { cwd, include: `${code}/index.md`, prefix },
+            source: { cwd: source, include: 'index.md', prefix },
         })],
         [`docs_${code}`, defineCollection({
             type: 'page',
             source: {
-                cwd,
-                include: `${code}/**/*.{md,yaml}`,
-                exclude: [`${code}/index.md`],
+                cwd: source,
+                include: '**/*.{md,yaml}',
+                exclude: ['index.md'],
                 prefix,
             },
             schema,
