@@ -12,6 +12,7 @@
 #include "Look/DialogLook.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "SystemTools.hpp"
+#include "UIActions.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/ListWidget.hpp"
 #include "util/StaticString.hxx"
@@ -55,7 +56,12 @@ catch (...)
 static bool
 IsSupportedSystemTool(const SystemTools::InstalledTool &tool) noexcept
 {
-  return tool.descriptor.mode == SystemTools::Mode::JOB;
+  if (tool.descriptor.mode == SystemTools::Mode::JOB)
+    return true;
+
+  return tool.descriptor.mode == SystemTools::Mode::EXCLUSIVE &&
+    tool.origin == SystemTools::Origin::SYSTEM &&
+    SystemTools::HasExclusiveHandoff();
 }
 
 bool
@@ -72,18 +78,9 @@ ConfirmSystemTool(const SystemTools::InstalledTool &tool)
     {_("Start"), IDOK},
     {_("Back"), IDCANCEL},
   };
-  std::string instructions = tool.descriptor.instructions;
-
-  return ShowMessageBox(instructions.c_str(),
+  return ShowMessageBox(tool.descriptor.instructions.c_str(),
                         tool.descriptor.name.c_str(), buttons,
                         IDCANCEL) == IDOK;
-}
-
-static bool
-RequiresConfirmation(const SystemTools::InstalledTool &tool) noexcept
-{
-  return tool.descriptor.confirmation ==
-    SystemTools::Confirmation::REQUIRED;
 }
 
 static void
@@ -96,13 +93,25 @@ try
     return;
   }
 
-  if (RequiresConfirmation(tool) && !ConfirmSystemTool(tool))
+  if (tool.descriptor.confirmation ==
+      SystemTools::Confirmation::REQUIRED && !ConfirmSystemTool(tool))
     return;
 
   // The confirmation may have remained open until after take-off.
   if (CommonInterface::Calculated().flight.flying) {
     ShowMessageBox(_("Not available while flying."),
                    tool.descriptor.name.c_str(), MB_OK | MB_ICONWARNING);
+    return;
+  }
+
+  if (tool.descriptor.mode == SystemTools::Mode::EXCLUSIVE) {
+    if (!SystemTools::RequestExclusiveHandoff(tool.id)) {
+      ShowMessageBox(_("Failed"), tool.descriptor.name.c_str(),
+                     MB_OK | MB_ICONERROR);
+      return;
+    }
+
+    UIActions::SignalShutdown(true);
     return;
   }
 
@@ -122,6 +131,41 @@ try
 catch (...)
 {
   ShowError(std::current_exception(), tool.descriptor.name.c_str());
+}
+
+void
+ShowPendingSystemToolResult() noexcept
+try
+{
+  auto result = SystemTools::ConsumeExclusiveResult();
+  if (!result)
+    return;
+
+  const auto tools = LoadSystemTools();
+  const auto match = std::find_if(tools.begin(), tools.end(),
+                                  [&result](const auto &tool) {
+    return tool.id == result->id &&
+      tool.origin == SystemTools::Origin::SYSTEM;
+  });
+  const char *const caption = match != tools.end()
+    ? match->descriptor.name.c_str()
+    : _("System Tools");
+
+  while (!result->message.empty() &&
+         (result->message.back() == '\n' || result->message.back() == '\r'))
+    result->message.pop_back();
+  if (!result->message.empty())
+    result->message.append("\n\n");
+  result->message.append(result->success ? _("Complete") : _("Failed"));
+
+  ShowMessageBox(result->message.c_str(), caption,
+                 MB_OK | (result->success ? MB_ICONINFORMATION
+                                          : MB_ICONERROR));
+}
+catch (...)
+{
+  LogError(std::current_exception(),
+           "Failed to display exclusive system-tool result");
 }
 
 class SystemToolsPanel final : public ListWidget {
