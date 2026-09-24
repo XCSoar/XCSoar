@@ -174,6 +174,10 @@ Version 7.46 - not yet released
     long
   - let Left/Right still change settings pages on Services until Up
     selects a service action
+  - fix the Waypoint List (DR gesture) losing its filter after the
+    recently used waypoints (LU gesture) were opened #3207
+  - filter only the recently used waypoints in the LU gesture list,
+    and add waypoints selected with Goto to it #3207
 * infoboxen
   - rearrange the InfoBoxes of a page by dragging one onto another;
     a long press and lift opens that mode with the box selected;
