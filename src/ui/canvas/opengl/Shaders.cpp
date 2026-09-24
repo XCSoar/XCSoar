@@ -42,6 +42,10 @@ GLint filled_circle_projection, filled_circle_translate,
   filled_circle_center, filled_circle_radius1, filled_circle_radius2,
   filled_circle_color1, filled_circle_color2;
 
+GLProgram *round_line_shader;
+GLint round_line_projection, round_line_translate,
+  round_line_softness, round_line_min_coverage, round_line_color;
+
 } // namespace OpenGL
 
 #define GLSL_VERSION "#version 100\n"
@@ -240,6 +244,58 @@ static constexpr char filled_circle_fragment_shader[] =
     }
 )glsl";
 
+static constexpr char round_line_vertex_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    attribute vec4 texcoord;
+    attribute float radius;
+    varying highp vec2 vert_pos;
+    varying highp vec4 segment;
+    varying highp float radiusvar;
+    void main() {
+      vert_pos = position.xy;
+      segment = texcoord;
+      radiusvar = radius;
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+    }
+)glsl";
+
+static constexpr char round_line_fragment_shader[] =
+  GLSL_VERSION
+  GLSL_PRECISION
+  R"glsl(
+    uniform float softness;
+    uniform float min_coverage;
+    uniform vec4 color;
+    varying highp vec2 vert_pos;
+    varying highp vec4 segment;
+    varying highp float radiusvar;
+    void main() {
+      highp vec2 a = segment.xy;
+      highp vec2 ab = segment.zw - a;
+      highp float length2 = dot(ab, ab);
+      highp float t = length2 > 0.0
+        ? clamp(dot(vert_pos - a, ab) / length2, 0.0, 1.0)
+        : 0.0;
+      highp float d = distance(vert_pos, a + t * ab);
+
+      /* how much of the pixel is inside, faded over the soft edge;
+         the S curve makes a wide soft edge look like a gradient
+         instead of a flat band */
+      float coverage = smoothstep(0.0, 1.0,
+                                  (radiusvar - d) / softness + 0.5);
+      if (coverage <= 0.0 || coverage < min_coverage) discard;
+
+      gl_FragColor = vec4(color.rgb, color.a * coverage);
+    }
+)glsl";
+
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 {
@@ -383,11 +439,27 @@ OpenGL::InitShaders()
   filled_circle_radius2 = filled_circle_shader->GetUniformLocation("radius2");
   filled_circle_color1 = filled_circle_shader->GetUniformLocation("color1");
   filled_circle_color2 = filled_circle_shader->GetUniformLocation("color2");
+
+  round_line_shader = CompileProgram(round_line_vertex_shader,
+                                     round_line_fragment_shader);
+  round_line_shader->BindAttribLocation(Attribute::POSITION, "position");
+  round_line_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+  round_line_shader->BindAttribLocation(Attribute::RADIUS, "radius");
+  LinkProgram(*round_line_shader);
+
+  round_line_projection = round_line_shader->GetUniformLocation("projection");
+  round_line_translate = round_line_shader->GetUniformLocation("translate");
+  round_line_softness = round_line_shader->GetUniformLocation("softness");
+  round_line_min_coverage =
+    round_line_shader->GetUniformLocation("min_coverage");
+  round_line_color = round_line_shader->GetUniformLocation("color");
 }
 
 void
 OpenGL::DeinitShaders() noexcept
 {
+  delete round_line_shader;
+  round_line_shader = nullptr;
   delete filled_circle_shader;
   filled_circle_shader = nullptr;
   delete circle_outline_shader;
@@ -441,6 +513,10 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   filled_circle_shader->Use();
   glUniformMatrix4fv(filled_circle_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
+
+  round_line_shader->Use();
+  glUniformMatrix4fv(round_line_projection, 1, GL_FALSE,
+                     glm::value_ptr(projection_matrix));
 }
 
 void
@@ -471,4 +547,7 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   filled_circle_shader->Use();
   glUniform2f(filled_circle_translate, t.x, t.y);
+
+  round_line_shader->Use();
+  glUniform2f(round_line_translate, t.x, t.y);
 }

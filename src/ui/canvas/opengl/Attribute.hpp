@@ -14,4 +14,7 @@ static constexpr GLuint POSITION = 1;
 static constexpr GLuint TEXCOORD = 2;
 static constexpr GLuint COLOR = 3;
 
+/** the radius of a round line, see #round_line_shader */
+static constexpr GLuint RADIUS = 4;
+
 } // namespace OpenGL::Attribute
