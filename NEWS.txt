@@ -24,7 +24,7 @@ Version 7.46 - not yet released
   - fix USB HID remotes (e.g. SteFly) that stop sending keys on
     OpenVario after the stick re-enumerates #2820
 * weather
-  - draw SkySight forecast overlays as smooth contour bands instead of
+  - SkySight: draw forecast overlays as smooth contour bands instead of
     one coloured square per forecast grid point, so layer boundaries
     stay sharp at every zoom level; forecasts already downloaded are
     fetched again once, and use slightly less storage than before
