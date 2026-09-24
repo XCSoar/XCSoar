@@ -226,7 +226,18 @@ individually or not at all.
 \item[Type] Filters out waypoints that are not of the specified type
 (Landable point, Airport, Turnpoint, etc.) or that appear in the specified File~1 or
 File~2 (primary or secondary waypoint file respectively), or in recently-used files.
+Recently Used lists the waypoints whose details were opened or which
+were selected as Goto target, the most recent first.
 \end{description}
+The filters are kept when the selector is opened again.  Waypoint
+selections from other dialogues do not change them.
+
+The Left-Up gesture opens the same dialogue with the title Recently
+used waypoints.  It lists the same waypoints as the type
+\emph{Recently Used}, and all filters only search these waypoints,
+not the whole waypoint database.  For example, Type Airport shows the
+recently used airports. \gesturespec{lu}
+
 When filtering by name and type, the list of matching waypoints is
 sorted by name. When (in addition) filtering by distance or direction,
  the list of matching waypoints is sorted by distance.
