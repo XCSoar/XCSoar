@@ -2706,6 +2706,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
+	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Radio/RadioFrequency.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
