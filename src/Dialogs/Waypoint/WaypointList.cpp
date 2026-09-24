@@ -25,6 +25,7 @@
 #include "Form/DataField/Enum.hpp"
 #include "util/StringPointer.hxx"
 #include "util/AllocatedString.hxx"
+#include "util/ScopeExit.hxx"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
@@ -741,6 +742,10 @@ ShowWaypointListDialog(Waypoints &waypoints, const GeoPoint &_location,
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   const Angle heading = CommonInterface::Basic().attitude.heading;
+
+  /* Keep the filter of the persistent waypoint list dialog. */
+  const auto saved_state = dialog_state;
+  AtScopeExit(&saved_state) { dialog_state = saved_state; };
 
   dialog_state = {};
 
