@@ -3,6 +3,7 @@
 
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
+#include "BoxShadowRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "Math/Angle.hpp"
@@ -14,6 +15,7 @@
 #include <math.h>
 
 #ifdef ENABLE_OPENGL
+#include "Hardware/CPU.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/Triangulate.hpp"
 #endif
@@ -101,6 +103,63 @@ RenderShadowedText(Canvas &canvas, const char *text,
   canvas.DrawText(p, text);
 }
 
+/**
+ * The opacity of a #LabelShape::PILL.
+ */
+static constexpr uint8_t PILL_ALPHA = 0xf2;
+
+/**
+ * Draw the box of a #LabelShape::PILL and its shadow.
+ */
+static void
+DrawPill(Canvas &canvas, const PixelRect &rc) noexcept
+{
+  /* a pill: the diameter of the corners is the box's height */
+  const PixelSize ellipse{unsigned(rc.GetHeight())};
+
+  canvas.SelectNullPen();
+
+#ifdef ENABLE_OPENGL
+  /* Android may choose an EGL config without a stencil buffer */
+  GLint stencil_bits = 0;
+  glGetIntegerv(GL_STENCIL_BITS, &stencil_bits);
+
+  if (!IsSlowCPU() && stencil_bits > 0) {
+    /* the pill is translucent, so keep its shadow out from under it:
+       mark the pill's area in the stencil buffer, and draw the shadow
+       only around it */
+    const GLEnable<GL_STENCIL_TEST> stencil_test;
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectWhiteBrush();
+    canvas.DrawRoundRectangle(rc, ellipse);
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilFunc(GL_NOTEQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    DrawBoxShadow(rc, BoxShadowStyle::FLOATING, rc.GetHeight() / 2);
+  } else
+    /* no shadow on a slow CPU or without a stencil buffer: a black
+       outline sets the pill off the map */
+    canvas.SelectBlackPen();
+
+  const ScopeAlphaBlend alpha_blend;
+  canvas.Select(Brush(COLOR_WHITE.WithAlpha(PILL_ALPHA)));
+#else
+  /* no shadow without OpenGL: a black outline sets the pill off the
+     map */
+  canvas.SelectBlackPen();
+  canvas.SelectWhiteBrush();
+#endif
+
+  canvas.DrawRoundRectangle(rc, ellipse);
+}
+
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const char *text, PixelPoint p,
@@ -125,9 +184,15 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
     p.y -= tsize.height / 2;
 
   const unsigned padding = Layout::GetTextPadding();
+
+  /* the round ends of a pill need room of their own */
+  const unsigned side_padding = mode.shape == LabelShape::PILL
+    ? (tsize.height + 2 * padding) / 2
+    : padding;
+
   PixelRect rc;
-  rc.left = p.x - padding - 1;
-  rc.right = p.x + tsize.width + padding;
+  rc.left = p.x - side_padding - 1;
+  rc.right = p.x + tsize.width + side_padding;
   rc.top = p.y - (int)padding;
   rc.bottom = p.y + tsize.height + padding;
 
@@ -177,6 +242,12 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
                  std::max(2u, (unsigned)rc.GetHeight() / 2));
       canvas.DrawRoundRectangle(rc, PixelSize{ellipse});
     }
+
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(COLOR_BLACK);
+    canvas.DrawText(p, text);
+  } else if (mode.shape == LabelShape::PILL) {
+    DrawPill(canvas, rc);
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
