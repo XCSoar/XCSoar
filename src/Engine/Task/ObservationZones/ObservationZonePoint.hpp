@@ -8,6 +8,8 @@
 
 #include <memory>
 
+class FlatProjection;
+
 /**
  * \todo 
  * - add arc type for future use
@@ -42,6 +44,20 @@ public:
    */
   virtual void SetLegs([[maybe_unused]] const GeoPoint *previous,
                        [[maybe_unused]] const GeoPoint *next) noexcept {}
+
+  /**
+   * Calculate the point on the boundary of this observation zone
+   * which is nearest to the given location.  Not every shape
+   * implements this; the default returns an invalid location, and the
+   * caller falls back to the point the task refers to.
+   *
+   * @param projection the projection used by the task
+   * @param location the location to measure from
+   * @return the nearest point, or an invalid location
+   */
+  [[gnu::pure]]
+  virtual GeoPoint GetNearestPoint(const FlatProjection &projection,
+                                   const GeoPoint &location) const noexcept;
 
   /**
    * Test whether an OZ is equivalent to this one

@@ -48,6 +48,21 @@ public:
   }
 
   /**
+   * Retrieve the location the aircraft is navigated to.  The remaining
+   * vectors of the current leg and of the leg after it, the bearing
+   * line drawn on the map and
+   * TaskStats::current_leg::location_remaining use this; the planned,
+   * nominal, minimum, maximum and scored legs keep using
+   * GetLocationRemaining().
+   *
+   * @return Location
+   */
+  [[gnu::pure]]
+  virtual const GeoPoint &GetLocationNavigation() const noexcept {
+    return GetLocationRemaining();
+  }
+
+  /**
    * Calculate vector from aircraft to destination
    *
    * @return Vector for task leg

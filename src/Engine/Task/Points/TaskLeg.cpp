@@ -88,8 +88,12 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const noexcept
 {
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
-    // this leg totally included
-    return GetPlannedVector();
+    /* this leg totally included; it starts where navigation to the
+       active task point ends, which may be a nearer point than the
+       one the planned leg starts from */
+    assert(GetOrigin() != nullptr);
+    return memo_remaining.calc(GetOrigin()->GetLocationNavigation(),
+                               destination.GetLocationRemaining());
 
   case OrderedTaskPoint::CURRENT_ACTIVE: {
     // this leg partially included
@@ -101,7 +105,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const noexcept
         ? GeoVector::Zero()
         : GetPlannedVector();
 
-    return memo_remaining.calc(ref, destination.GetLocationRemaining());
+    return memo_remaining.calc(ref, destination.GetLocationNavigation());
   }
 
   case OrderedTaskPoint::BEFORE_ACTIVE:

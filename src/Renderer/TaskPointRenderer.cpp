@@ -95,7 +95,7 @@ TaskPointRenderer::DrawBearing(const TaskPoint &tp) noexcept
     return;
 
   canvas.Select(task_look.bearing_pen);
-  map_canvas.DrawLineWithOffset(location, tp.GetLocationRemaining());
+  map_canvas.DrawLineWithOffset(location, tp.GetLocationNavigation());
 }
 
 void
