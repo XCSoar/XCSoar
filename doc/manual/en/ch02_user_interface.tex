@@ -756,6 +756,15 @@ To use this feature hold down the finger on the
 touch-screen (or mouse button at the PC), draw a certain figure and release 
 the touch-screen / mouse button. Depending on the figure that was drawn 
 a certain function is activated. \sketch{figures/gesture1.png}
+While you draw, XCSoar shows the path as a red line with a soft
+shadow.  The line is slightly transparent while the figure drawn so
+far is not a known gesture.  Once it is, a label at the top of the map names
+what the gesture does, for example ``Zoom in'' or ``Analysis''; it
+changes as you continue drawing, and what it names happens when you
+lift the finger.  With haptic feedback enabled, a light tick tells you
+that the figure has turned into another known gesture, for example
+from ``Analysis'' to ``Pan''; lifting the finger to run the gesture
+gives a stronger one.
 
 A specific gesture is defined by movements of the finger or the 
 cursor in the four directions Up, Down, Left and Right. This means if 
