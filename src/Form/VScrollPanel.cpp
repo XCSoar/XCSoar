@@ -3,6 +3,7 @@
 
 #include "VScrollPanel.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/GestureRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Asset.hpp"
@@ -493,14 +494,7 @@ VScrollPanel::DrawGesture(Canvas &canvas) const noexcept
   if (!gestures.HasPoints())
     return;
 
-  canvas.Select(gesture_look.pen);
-  canvas.SelectHollowBrush();
-
-  const auto &points = gestures.GetPoints();
-  auto it = points.begin();
-  auto it_last = it++;
-  for (auto it_end = points.end(); it != it_end; it_last = it++)
-    canvas.DrawLinePiece(*it_last, *it);
+  GestureRenderer::Draw(canvas, gesture_look, gestures.GetPoints(), true);
 }
 
 void

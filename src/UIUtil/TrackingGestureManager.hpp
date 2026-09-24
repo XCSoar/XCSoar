@@ -21,6 +21,17 @@ public:
 private:
   PointVector points;
 
+  /** Lower bound for #trail_spacing in pixels */
+  static constexpr int MIN_TRAIL_SPACING = 1;
+
+  /**
+   * Minimum distance in pixels between two trail points.  This is
+   * much smaller than the gesture detection threshold, so the trail
+   * follows the finger closely instead of being a coarse polyline
+   * through the detection points.
+   */
+  int trail_spacing = MIN_TRAIL_SPACING;
+
 public:
   /**
    * Stops the GestureManager and returns the recognized gesture
