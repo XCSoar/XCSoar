@@ -367,7 +367,7 @@ WndForm::OnPaint(Canvas &canvas) noexcept
 #ifdef ENABLE_OPENGL
   if (!IsDithered() && !IsMaximised() && is_active)
     /* draw a soft shadow around the current dialog to emphasise it */
-    DrawBoxShadow(GetClientRect());
+    DrawBoxShadow(GetClientRect(), BoxShadowStyle::DIALOG);
 #endif
 
   ContainerWindow::OnPaint(canvas);

@@ -3,11 +3,13 @@
 
 #include "BoxShadowRenderer.hpp"
 #include "ui/dim/Rect.hpp"
+#include "Screen/Layout.hpp"
+
+#include <cstdlib>
 
 #ifdef ENABLE_OPENGL
 
 #include "Math/Point2D.hpp"
-#include "Screen/Layout.hpp"
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/opengl/Program.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
@@ -21,25 +23,6 @@
 #include <numbers>
 
 namespace {
-
-/**
- * How far the opaque core of the shadow reaches beyond the box, in
- * virtual points.
- */
-constexpr int SHADOW_SPREAD = 6;
-
-/**
- * The width of the blurred transition, in virtual points.  It is
- * centered on the edge of the shadow's shape, i.e. the shadow fades
- * out over the last SHADOW_BLUR/2 points and reaches
- * SHADOW_SPREAD+SHADOW_BLUR/2 beyond the box.
- */
-constexpr int SHADOW_BLUR = 32;
-
-/**
- * The opacity of the black shadow where it is darkest.
- */
-constexpr uint8_t SHADOW_ALPHA = 115;
 
 /**
  * The number of segments each corner arc of a contour is approximated
@@ -139,33 +122,65 @@ AppendContour(FloatPoint2D *dest, const PixelRect &centers,
 
 #endif /* ENABLE_OPENGL */
 
-void
-DrawBoxShadow([[maybe_unused]] const PixelRect &rc) noexcept
+int
+BoxShadowStyle::Layer::GetScaledSpread() const noexcept
 {
-#ifdef ENABLE_OPENGL
-  /* the shape which gets blurred: the box, inflated by the spread */
-  PixelRect shape = rc;
-  shape.Grow(Layout::VptScale(SHADOW_SPREAD));
+  const int scaled = Layout::VptScale(unsigned(std::abs(spread)));
+  return spread < 0 ? -scaled : scaled;
+}
 
-  const int blur = Layout::VptScale(SHADOW_BLUR);
+unsigned
+BoxShadowStyle::Layer::GetScaledBlur() const noexcept
+{
+  return Layout::VptScale(blur);
+}
+
+#ifdef ENABLE_OPENGL
+
+/**
+ * Draw one layer of a shadow.
+ */
+static void
+DrawLayer(const PixelRect &rc, const BoxShadowStyle::Layer &shadow,
+          unsigned corner_radius) noexcept
+{
+  /* the shape which gets blurred: the box, moved out by the spread;
+     its corners stay concentric with the box's */
+  const int spread = shadow.GetScaledSpread();
+  PixelRect shape = rc;
+  shape.Grow(spread);
+  if (shape.right < shape.left)
+    shape.left = shape.right = rc.GetCenter().x;
+  if (shape.bottom < shape.top)
+    shape.top = shape.bottom = rc.GetCenter().y;
+
+  const int half_size = std::min(shape.GetWidth(), shape.GetHeight()) / 2;
+  const int shape_radius =
+    std::clamp(int(corner_radius) + spread, 0, half_size);
+
+  const int blur = shadow.GetScaledBlur();
 
   /* the blur transition reaches this far outside and inside of the
      shape's edge */
   const int outer = blur / 2;
-  const int inner = std::min<int>(outer,
-                                  std::min(shape.GetWidth(),
-                                           shape.GetHeight()) / 2);
 
   /* the corner arcs of all contours are centered on these four
-     points; the innermost contour collapses onto them, and the
-     outermost is #inner+#outer away */
+     points, #edge inside the shape; the shape's edge is the contour
+     at radius #edge.  A sharp corner is rounded by the blur, which
+     reaches #outer inside, as far as the shape allows. */
+  const int edge = std::max(shape_radius, std::min(outer, half_size));
   const PixelRect centers{
-    shape.left + inner, shape.top + inner,
-    shape.right - inner, shape.bottom - inner,
+    shape.left + edge, shape.top + edge,
+    shape.right - edge, shape.bottom - edge,
   };
 
+  /* the innermost contour is where the shadow is fully opaque, or
+     the centre points if the blur reaches that far in */
+  const int first = std::max(0, edge - outer);
+  const int last = edge + outer;
+
   /* one contour every two pixels is plenty for a smooth gradient */
-  const unsigned n_intervals = std::clamp<unsigned>((outer + inner) / 2,
+  const unsigned n_intervals = std::clamp<unsigned>((last - first) / 2,
                                                     1, MAX_CONTOURS - 1);
   const unsigned n_contours = n_intervals + 1;
 
@@ -175,15 +190,14 @@ DrawBoxShadow([[maybe_unused]] const PixelRect &rc) noexcept
   std::array<Color, MAX_VERTICES> colors;
 
   for (unsigned i = 0; i < n_contours; ++i) {
-    const float radius = float(outer + inner) * i / n_intervals;
+    const float radius = first + float(last - first) * i / n_intervals;
 
     AppendContour(&vertices[i * CONTOUR_VERTICES], centers, radius);
 
-    /* the opacity depends on the distance to the shape's edge, which
-       this contour crosses at radius==inner */
-    const float opacity = BlurOpacity((radius - inner + blur / 2.f) / blur);
+    /* the opacity depends on the distance to the shape's edge */
+    const float opacity = BlurOpacity((radius - edge + blur / 2.f) / blur);
     const Color color =
-      COLOR_BLACK.WithAlpha(uint8_t(std::lround(SHADOW_ALPHA * opacity)));
+      COLOR_BLACK.WithAlpha(uint8_t(std::lround(shadow.alpha * opacity)));
     std::fill_n(&colors[i * CONTOUR_VERTICES], CONTOUR_VERTICES, color);
   }
 
@@ -225,5 +239,18 @@ DrawBoxShadow([[maybe_unused]] const PixelRect &rc) noexcept
   OpenGL::solid_shader->Use();
   glDrawElements(GL_TRIANGLES, GLsizei(n_indices),
                  GL_UNSIGNED_SHORT, indices.data());
+}
+
+#endif /* ENABLE_OPENGL */
+
+void
+DrawBoxShadow([[maybe_unused]] const PixelRect &rc,
+              [[maybe_unused]] const BoxShadowStyle &style,
+              [[maybe_unused]] unsigned corner_radius) noexcept
+{
+#ifdef ENABLE_OPENGL
+  for (const auto &layer : style.layers)
+    if (layer.alpha > 0)
+      DrawLayer(rc, layer, corner_radius);
 #endif
 }
