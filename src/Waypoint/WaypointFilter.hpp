@@ -89,6 +89,15 @@ struct WaypointFilter
   bool Matches(const Waypoint &waypoint, GeoPoint location,
                const FAITrianglePointValidator &triangle_validator) const;
 
+  /**
+   * Like Matches(), but also check the name and the distance.  For
+   * lists not built by #WaypointListBuilder, such as the recently
+   * used waypoints.
+   */
+  [[gnu::pure]]
+  bool MatchesAll(const Waypoint &waypoint, GeoPoint location,
+                  const FAITrianglePointValidator &triangle_validator) const;
+
 private:
   static bool CompareType(const Waypoint &waypoint, TypeFilter type,
                           const FAITrianglePointValidator &triangle_validator);
