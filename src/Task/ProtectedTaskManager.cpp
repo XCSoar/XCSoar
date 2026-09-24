@@ -8,6 +8,8 @@
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
+#include "Waypoint/LastUsed.hpp"
+#include "Waypoint/Waypoint.hpp"
 
 ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
                                            const TaskBehaviour &tb) noexcept
@@ -121,6 +123,9 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset) noexcept
 bool 
 ProtectedTaskManager::DoGoto(WaypointPtr &&wp) noexcept
 {
+  if (wp != nullptr)
+    LastUsedWaypoints::Add(*wp);
+
   ExclusiveLease lease(*this);
   return lease->DoGoto(std::move(wp));
 }
