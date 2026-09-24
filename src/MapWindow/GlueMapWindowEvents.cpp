@@ -18,6 +18,7 @@
 #include "ActionInterface.hpp"
 #include "UserMapScale.hpp"
 #include "Form/Button.hpp"
+#include "util/StringAPI.hxx"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -129,8 +130,33 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     return true;
 #endif
 
-  case DRAG_GESTURE:
+  case DRAG_GESTURE: {
+#ifdef HAVE_VIBRATOR
+    const char *old_gesture = gestures.GetGesture();
+    const std::size_t old_length = old_gesture != nullptr
+      ? StringLength(old_gesture)
+      : 0;
+
+    /* an empty figure or a single stroke is only the start of a
+       gesture: continuing it is not worth a tick, so a quick gesture
+       (for example "D" to "DU") vibrates only once, when lifting the
+       finger runs it */
+    const bool tick = old_gesture != nullptr &&
+      (old_length > 1 || !InputEvents::IsGesture(old_gesture));
+#endif
+
     gestures.Update(p);
+
+#ifdef HAVE_VIBRATOR
+    /* a light tick when the figure drawn so far becomes another known
+       gesture: when the trail turns from translucent back to opaque,
+       or when one gesture of several strokes turns into another (for
+       example "Analysis" into "Pan") */
+    const char *gesture = gestures.GetGesture();
+    if (tick && StringLength(gesture) != old_length &&
+        InputEvents::IsGesture(gesture))
+      PlayHapticFeedback(HapticFeedbackType::SELECTION);
+#endif
 
     /* invoke PaintWindow's Invalidate() implementation instead of
        DoubleBufferWindow's in order to reuse the buffered map */
@@ -139,6 +165,7 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     NoteTerrainQuantisationUserActivity();
 #endif
     return true;
+  }
 
   case DRAG_SIMULATOR:
     return true;
