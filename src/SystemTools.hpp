@@ -46,6 +46,12 @@ struct InstalledTool {
   Origin origin;
 };
 
+struct ExclusiveResult {
+  std::string id;
+  bool success;
+  std::string message;
+};
+
 /**
  * Is this a valid descriptor base name?
  *
@@ -76,5 +82,24 @@ ParseDescriptor(NLineReader &reader, std::string_view language = {});
 std::vector<InstalledTool>
 LoadInstalled(std::string_view language = {},
               Path user_directory = Path{nullptr}) noexcept;
+
+/**
+ * Is a trusted launcher available for exclusive system tools?
+ */
+bool
+HasExclusiveHandoff() noexcept;
+
+/**
+ * Atomically ask the launcher to run an exclusive system tool after XCSoar
+ * has shut down.  The identifier is written, never a command line.
+ */
+bool
+RequestExclusiveHandoff(std::string_view id) noexcept;
+
+/**
+ * Consume the result left by the launcher after an exclusive handoff.
+ */
+std::optional<ExclusiveResult>
+ConsumeExclusiveResult() noexcept;
 
 } // namespace SystemTools

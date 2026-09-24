@@ -4,9 +4,11 @@
 #include "SystemTools.hpp"
 #include "io/BufferedLineReader.hpp"
 #include "io/MemoryReader.hxx"
+#include "system/FileUtil.hpp"
 #include "TestUtil.hpp"
 
 #include <algorithm>
+#include <cstdlib>
 #include <cstring>
 #include <cstdio>
 #include <span>
@@ -46,13 +48,14 @@ HasTool(const std::vector<SystemTools::InstalledTool> &tools,
 }
 
 static bool
-WriteTestFile(const std::string &path, const char *contents, mode_t mode)
+WriteTestFile(const std::string &path, std::string_view contents, mode_t mode)
 {
   FILE *file = std::fopen(path.c_str(), "w");
   if (file == nullptr)
     return false;
 
-  bool success = std::fputs(contents, file) >= 0;
+  bool success = std::fwrite(contents.data(), 1, contents.size(), file) ==
+    contents.size();
   success = std::fclose(file) == 0 && success;
   return chmod(path.c_str(), mode) == 0 && success;
 }
@@ -303,13 +306,109 @@ TestUserCatalogue()
   rmdir(directory);
 }
 
+static void
+TestExclusiveHandoff()
+{
+  static constexpr const char *env_name =
+    "XCSOAR_EXCLUSIVE_HANDOFF_DIR";
+  const char *const old_value = std::getenv(env_name);
+  const std::string saved_value = old_value != nullptr ? old_value : "";
+
+  char directory_template[] = "/tmp/xcsoar-handoff-XXXXXX";
+  char resolved_directory[PATH_MAX];
+  const char *const temporary = mkdtemp(directory_template);
+  const char *const directory = temporary != nullptr
+    ? realpath(temporary, resolved_directory) : nullptr;
+  ok1(directory != nullptr);
+  if (directory == nullptr) {
+    skip(16 + 12 + 5, 0, "mkdtemp failed");
+    return;
+  }
+
+  unsetenv(env_name);
+  ok1(!SystemTools::HasExclusiveHandoff());
+  setenv(env_name, "relative", 1);
+  ok1(!SystemTools::HasExclusiveHandoff());
+  setenv(env_name, directory, 1);
+  ok1(SystemTools::HasExclusiveHandoff());
+  ok1(!SystemTools::RequestExclusiveHandoff("bad/id"));
+  ok1(SystemTools::RequestExclusiveHandoff("touchscreen-calibration"));
+
+  const std::string request = std::string{directory} + "/request";
+  char request_contents[64];
+  ok1(File::ReadString(Path{request.c_str()}, request_contents,
+                       sizeof(request_contents)) &&
+      std::strcmp(request_contents, "touchscreen-calibration\n") == 0);
+
+  const std::string result = std::string{directory} + "/result";
+  static constexpr char success_text[] =
+    "touchscreen-calibration\nsuccess\nCalibration\a saved.\r\n"
+    "\tGrüße!\0\x1b\x7f\n";
+  ok1(WriteTestFile(result, {success_text, sizeof(success_text) - 1}, 0600));
+  const auto parsed = SystemTools::ConsumeExclusiveResult();
+  ok1(parsed && parsed->id == "touchscreen-calibration" &&
+      parsed->success &&
+      parsed->message == "Calibration saved.\r\n\tGrüße!\n");
+  ok1(!File::Exists(Path{result.c_str()}));
+  ok1(!SystemTools::ConsumeExclusiveResult());
+
+  ok1(WriteTestFile(result,
+                    "touchscreen-calibration\nfailure\nCalibration failed.\n",
+                    0600));
+  const auto failed = SystemTools::ConsumeExclusiveResult();
+  ok1(failed && failed->id == "touchscreen-calibration" &&
+      !failed->success && failed->message == "Calibration failed.\n");
+  ok1(!File::Exists(Path{result.c_str()}));
+
+  ok1(WriteTestFile(result, "invalid\nstatus\nBad result\n", 0600));
+  ok1(!SystemTools::ConsumeExclusiveResult());
+
+  ok1(WriteTestFile(result, "test\nsuccess\nUnsafe result\n", 0664));
+  ok1(!SystemTools::ConsumeExclusiveResult());
+  ok1(!File::Exists(Path{result.c_str()}));
+
+  ok1(symlink(request.c_str(), result.c_str()) == 0);
+  ok1(!SystemTools::ConsumeExclusiveResult());
+  ok1(File::Exists(Path{request.c_str()}) && unlink(result.c_str()) == 0);
+  ok1(mkfifo(result.c_str(), 0600) == 0);
+  ok1(!SystemTools::ConsumeExclusiveResult());
+  ok1(!File::Exists(Path{result.c_str()}));
+
+  const std::string nested = std::string{directory} + "/handoff";
+  ok1(mkdir(nested.c_str(), 0700) == 0);
+  setenv(env_name, nested.c_str(), 1);
+  ok1(SystemTools::HasExclusiveHandoff());
+  chmod(directory, 0777);
+  ok1(!SystemTools::HasExclusiveHandoff());
+  chmod(directory, 0775);
+  ok1(!SystemTools::HasExclusiveHandoff());
+  chmod(directory, 01777);
+  ok1(SystemTools::HasExclusiveHandoff());
+  chmod(directory, 0700);
+  ok1(SystemTools::HasExclusiveHandoff());
+  ok1(rmdir(nested.c_str()) == 0);
+  setenv(env_name, directory, 1);
+
+  chmod(directory, 0775);
+  ok1(!SystemTools::HasExclusiveHandoff());
+  chmod(directory, 0777);
+  ok1(!SystemTools::HasExclusiveHandoff());
+
+  if (old_value != nullptr)
+    setenv(env_name, saved_value.c_str(), 1);
+  else
+    unsetenv(env_name);
+  unlink(request.c_str());
+  rmdir(directory);
+}
+
 #endif
 
 int
 main()
 {
 #ifdef HAVE_POSIX
-  plan_tests(84 + (geteuid() == 0 ? 19 : 0));
+  plan_tests(118 + (geteuid() == 0 ? 19 : 0));
 #else
   plan_tests(35);
 #endif
@@ -323,10 +422,10 @@ main()
 
   char valid[] =
     "# Installed by the platform package\n"
-    " name = Sensor calibration \n"
-    "description=Calibrate the pressure sensors\n"
-    "instructions=Keep the device still.\n"
-    "mode=job\n"
+    "\t name \t= Sensor calibration \t\r\n"
+    "description=Calibrate the pressure sensors\r\n"
+    "instructions=Keep the device still.\r\n"
+    "mode=job\r\n"
     "input=none\n"
     "confirmation=required\n"
     "future-field=ignored\n";
@@ -508,6 +607,7 @@ main()
 
 #ifdef HAVE_POSIX
   TestUserCatalogue();
+  TestExclusiveHandoff();
 #endif
 
   return exit_status();

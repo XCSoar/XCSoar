@@ -10,5 +10,8 @@ class Widget;
 bool
 HasSystemTools() noexcept;
 
+void
+ShowPendingSystemToolResult() noexcept;
+
 std::unique_ptr<Widget>
 CreateSystemToolsPanel();

@@ -23,7 +23,11 @@ UIActions::SignalShutdown(bool force)
 {
   force_shutdown = force;
   exit_action = force ? ExitAction::QUIT : ExitAction::NONE;
-  CommonInterface::main_window->Close();
+  if (force)
+    // Unwind modal dialogs too, then perform normal application shutdown.
+    CommonInterface::main_window->PostQuit();
+  else
+    CommonInterface::main_window->Close();
 }
 
 #if defined(__linux__) && !defined(ANDROID)

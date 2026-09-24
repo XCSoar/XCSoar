@@ -3,8 +3,10 @@
 
 #include "SystemTools.hpp"
 #include "LogFile.hpp"
+#include "io/BufferedOutputStream.hxx"
 #include "io/BufferedLineReader.hpp"
 #include "io/FileReader.hxx"
+#include "io/FileOutputStream.hxx"
 #include "io/LineReader.hpp"
 #include "system/FileUtil.hpp"
 #include "util/CharUtil.hxx"
@@ -13,11 +15,17 @@
 #include "util/UTF8.hpp"
 
 #include <algorithm>
+#include <array>
+#include <cstdlib>
 #include <exception>
 #include <stdexcept>
 #include <utility>
 
 #ifdef HAVE_POSIX
+#include "io/UniqueFileDescriptor.hxx"
+
+#include <cerrno>
+#include <fcntl.h>
 #include <limits.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -49,6 +57,9 @@ static constexpr std::size_t MAX_DESCRIPTION_LENGTH = 240;
 static constexpr std::size_t MAX_INSTRUCTIONS_LENGTH = 1000;
 static constexpr std::size_t MAX_INSTALLED_TOOLS = 64;
 static constexpr std::size_t MAX_DESCRIPTOR_SIZE = 64 * 1024;
+static constexpr std::size_t MAX_EXCLUSIVE_RESULT_SIZE = 8192;
+static constexpr const char *EXCLUSIVE_HANDOFF_ENV =
+  "XCSOAR_EXCLUSIVE_HANDOFF_DIR";
 
 bool
 IsValidId(std::string_view id) noexcept
@@ -261,6 +272,28 @@ IsTrustedDirectoryTree(Path directory, uid_t owner,
   }
 }
 
+static AllocatedPath
+GetExclusiveHandoffDirectory() noexcept
+{
+  const char *const value = std::getenv(EXCLUSIVE_HANDOFF_ENV);
+  if (value == nullptr || *value == '\0')
+    return nullptr;
+
+  const Path path{value};
+  if (!path.IsAbsolute())
+    return nullptr;
+
+  struct stat st;
+  if (lstat(path.c_str(), &st) != 0 || !S_ISDIR(st.st_mode) ||
+      st.st_uid != geteuid() ||
+      (st.st_mode & (S_IWGRP | S_IWOTH)) != 0 ||
+      access(path.c_str(), W_OK | X_OK) != 0 ||
+      !IsTrustedDirectoryTree(path, geteuid(), true))
+    return nullptr;
+
+  return AllocatedPath{path};
+}
+
 class DescriptorVisitor final : public File::Visitor {
   std::vector<InstalledTool> &tools;
   const Path directory;
@@ -467,6 +500,114 @@ catch (...)
 {
   LogError(std::current_exception(), "Failed to load system tools");
   return {};
+}
+
+bool
+HasExclusiveHandoff() noexcept
+{
+#ifdef HAVE_POSIX
+  return GetExclusiveHandoffDirectory() != nullptr;
+#else
+  return false;
+#endif
+}
+
+bool
+RequestExclusiveHandoff(std::string_view id) noexcept
+{
+#ifdef HAVE_POSIX
+  if (!IsValidId(id))
+    return false;
+
+  const auto directory = GetExclusiveHandoffDirectory();
+  if (directory == nullptr)
+    return false;
+
+  try {
+    FileOutputStream file{
+      AllocatedPath::Build(directory, "request")};
+    BufferedOutputStream writer{file};
+    writer.Write(id);
+    writer.NewLine();
+    writer.Flush();
+    file.Commit();
+    return true;
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to request exclusive system tool");
+  }
+#else
+  (void)id;
+#endif
+
+  return false;
+}
+
+std::optional<ExclusiveResult>
+ConsumeExclusiveResult() noexcept
+{
+#ifdef HAVE_POSIX
+  const auto directory = GetExclusiveHandoffDirectory();
+  if (directory == nullptr)
+    return std::nullopt;
+
+  const auto path = AllocatedPath::Build(directory, "result");
+  UniqueFileDescriptor fd;
+  if (!fd.Open(path.c_str(), O_RDONLY | O_CLOEXEC | O_NOFOLLOW | O_NONBLOCK))
+    return std::nullopt;
+
+  struct stat st;
+  if (fstat(fd.Get(), &st) != 0 || !S_ISREG(st.st_mode) ||
+      st.st_uid != geteuid() ||
+      (st.st_mode & (S_IWGRP | S_IWOTH)) != 0 || st.st_size < 0 ||
+      static_cast<std::size_t>(st.st_size) > MAX_EXCLUSIVE_RESULT_SIZE) {
+    LogFormat("Ignoring invalid exclusive system-tool result: %s",
+              path.c_str());
+    File::Delete(path);
+    return std::nullopt;
+  }
+
+  std::array<char, MAX_EXCLUSIVE_RESULT_SIZE + 1> buffer;
+  ssize_t nbytes;
+  do {
+    nbytes = fd.Read(buffer.data(), buffer.size());
+  } while (nbytes < 0 && errno == EINTR);
+  if (nbytes < 0 || nbytes != st.st_size) {
+    LogFormat("Failed to read exclusive system-tool result: %s",
+              path.c_str());
+    File::Delete(path);
+    return std::nullopt;
+  }
+  File::Delete(path);
+  std::string_view source{buffer.data(), static_cast<std::size_t>(nbytes)};
+  const auto id_end = source.find('\n');
+  if (id_end == std::string_view::npos)
+    return std::nullopt;
+
+  auto id = source.substr(0, id_end);
+  source.remove_prefix(id_end + 1);
+  const auto status_end = source.find('\n');
+  if (status_end == std::string_view::npos)
+    return std::nullopt;
+
+  auto status = source.substr(0, status_end);
+  source.remove_prefix(status_end + 1);
+  if (!id.empty() && id.back() == '\r')
+    id.remove_suffix(1);
+  if (!status.empty() && status.back() == '\r')
+    status.remove_suffix(1);
+
+  if (!IsValidId(id) || (status != "success" && status != "failure") ||
+      !ValidateUTF8(source))
+    return std::nullopt;
+
+  std::string message{source};
+  std::erase_if(message, [](char ch) { return !IsTextByte(ch); });
+  return ExclusiveResult{std::string{id}, status == "success",
+                         std::move(message)};
+#else
+  return std::nullopt;
+#endif
 }
 
 } // namespace SystemTools

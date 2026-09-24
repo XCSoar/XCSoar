@@ -24,6 +24,10 @@
 #include "Audio/GlobalPCMResourcePlayer.hpp"
 #include "Audio/GlobalVolumeController.hpp"
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
+#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO) && \
+  defined(USE_POLL_EVENT)
+#include "Dialogs/Settings/Panels/SystemToolsPanel.hpp"
+#endif
 #include "system/Args.hpp"
 #include "io/async/GlobalAsioThread.hpp"
 #include "io/async/AsioThread.hpp"
@@ -85,9 +89,13 @@ Main()
 
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
-  if (Startup(screen_init.GetDisplay()))
+  if (Startup(screen_init.GetDisplay())) {
+#if defined(__linux__) && !defined(ANDROID) && !defined(KOBO) && \
+  defined(USE_POLL_EVENT)
+    ShowPendingSystemToolResult();
+#endif
     ret = CommonInterface::main_window->RunEventLoop();
-  else if (WasStartupCancelledByUser())
+  } else if (WasStartupCancelledByUser())
     /* quitting from the startup dialogs is a deliberate user action,
        not an error */
     ret = EXIT_SUCCESS;
