@@ -322,7 +322,13 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
               UnitGroup::ALTITUDE, 0);
 
   wp = AddFloat(_("Max. temp."),
-                _("Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."),
+                _("The day's maximum ground temperature. A dry adiabat "
+                  "from it against the outside air temperature measured "
+                  "while climbing gives the estimated thermal ceiling; "
+                  "the cloud base needs a humidity probe as well. Both "
+                  "are drawn on the temperature trace page of the "
+                  "Analysis dialog, once the glider has climbed through "
+                  "the layer."),
                 "%.0f %s", "%.0f",
                 Temperature::FromCelsius(-50).ToUser(),
                 Temperature::FromCelsius(60).ToUser(),
