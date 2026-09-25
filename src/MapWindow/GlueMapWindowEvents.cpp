@@ -29,7 +29,7 @@
 #endif
 
 #ifdef ENABLE_SDL
-#include <SDL_keyboard.h>
+#include <SDL3/SDL_keyboard.h>
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -179,7 +179,7 @@ static bool
 IsCtrlKeyPressed() noexcept
 {
 #ifdef ENABLE_SDL
-  return SDL_GetModState() & (KMOD_LCTRL|KMOD_RCTRL);
+  return SDL_GetModState() & (SDL_KMOD_LCTRL|SDL_KMOD_RCTRL);
 #elif defined(USE_X11)
   return UI::event_queue->WasCtrlClick();
 #else

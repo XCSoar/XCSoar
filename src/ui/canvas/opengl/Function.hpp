@@ -6,7 +6,7 @@
 #ifdef USE_EGL
 #include "ui/egl/System.hpp"
 #elif defined(ENABLE_SDL)
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 #else
 #include <dlfcn.h>
 #endif

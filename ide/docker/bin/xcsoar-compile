@@ -29,7 +29,7 @@ case "${TARGET}" in
         make TARGET="${TARGET}" -j"${CPUS}" "${ARGS[@]}"
       ;;
       "UNIX-SDL")
-        make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y USE_SDL2=y "${ARGS[@]}"
+        make TARGET="UNIX" -j"${CPUS}" OPENGL=n ENABLE_SDL=y "${ARGS[@]}"
       ;;
       "UNIX-DEBIAN")
         dpkg-buildpackage -uc -us -j"${CPUS}" "${ARGS[@]}"

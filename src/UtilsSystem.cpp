@@ -14,7 +14,7 @@
 #include "ui/display/sdl/Display.hpp"
 #include <windef.h> // for HWND (needed by winuser.h)
 #include <winuser.h>
-#include <SDL_video.h>
+#include <SDL3/SDL_video.h>
 #include <algorithm>
 #endif
 
@@ -101,7 +101,7 @@ SystemWindowSize() noexcept
     CommandLine::height * dpi.y / 96u,
   } + overhead;
   SDL_Rect usable;
-  if (SDL_GetDisplayUsableBounds(0, &usable) == 0 &&
+  if (SDL_GetDisplayUsableBounds(SDL_GetPrimaryDisplay(), &usable) &&
       usable.w > 0 && usable.h > 0) {
     if (unsigned(usable.w) > overhead.width)
       size.width = std::min(size.width, unsigned(usable.w) - overhead.width);
