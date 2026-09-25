@@ -70,7 +70,7 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
      chrome and looks like a frame on a tablet */
   preview_border_width = 1;
   /* halo outside the card hairline; filled, not a thick stroke */
-  preview_focus_width = Layout::ScalePenWidth(1);
+  preview_focus_width = Layout::ScalePenWidth(2);
 
   preview_padding = Layout::Scale(4);
   preview_radius = Layout::Scale(6);
