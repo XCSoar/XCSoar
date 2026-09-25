@@ -20,6 +20,7 @@
 #include "Weather/MOSMIX/AutoUpdate.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "util/StaticString.hxx"
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "ui/event/PeriodicTimer.hpp"
@@ -62,6 +63,8 @@ class FlightSetupPanel final
 
   /** fetches in the background; cancelled when this panel goes away */
   ForecastTemperatureFetcher forecast_fetcher;
+
+  void ShowForecastTemperature() noexcept;
 
 public:
   FlightSetupPanel()
@@ -345,7 +348,42 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
 
     offered_temperature = value;
     LoadValue(Temperature, value.ToKelvin(), UnitGroup::TEMPERATURE);
+    ShowForecastTemperature();
   });
+}
+
+void
+FlightSetupPanel::ShowForecastTemperature() noexcept
+{
+  auto &df = (DataFieldFloat &)GetDataField(Temperature);
+
+  /* The row states the number and names where it came from:
+     "18.6 degC  DWD MOSMIX".  A greyed field says the pilot did not
+     set this, but not who did.
+
+     DataFieldFloat renders its display format with (value, unit), so
+     the unit symbol moves into the literal and the field's own unit is
+     cleared -- the " %s" SetFormat() appends then formats to nothing.
+     A unit symbol cannot carry a per cent sign, so the result is still
+     a safe format string.
+
+     One decimal, because that is what the forecast resolves to.
+     Rounding it to the whole degree the selection list steps in is
+     what made the same number appear twice in that list. */
+  StaticString<64> format;
+  format.Format("%%.1f %s  DWD MOSMIX", Units::GetTemperatureName());
+
+  df.SetUnits("");
+  df.SetFormat(format);
+
+  /* Disabled rather than read-only.  A read-only row still takes the
+     tap and answers it with WndProperty::ShowFullContent() -- a
+     full-screen dialog holding one short number, which is not what
+     pressing a field that says "not yours to set" should do.  A
+     disabled row is skipped by WindowList::FindAt(), so the tap lands
+     nowhere, and it cannot be reached with the cursor keys either. */
+  SetRowEnabled(Temperature, false);
+  GetControl(Temperature).RefreshDisplay();
 }
 
 bool
