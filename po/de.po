@@ -11237,3 +11237,11 @@ msgstr ""
 
 msgid "Recently used waypoints"
 msgstr ""
+
+#, no-c-format
+msgid "Max. temp. from forecast"
+msgstr "Max. Temp. aus Vorhersage"
+
+#, no-c-format
+msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
+msgstr "Füllt Max. Temp. in den Flug Einstellungen aus der DWD-Vorhersage von heute für die nächste MOSMIX-Station.  Braucht eine Position und lädt einmal am Tag; kein Konto nötig."
