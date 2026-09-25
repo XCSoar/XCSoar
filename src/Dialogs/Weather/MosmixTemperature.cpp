@@ -20,8 +20,8 @@ ForecastTemperatureFetcher::Run()
 #ifdef HAVE_HTTP
   const BrokenDate date{uint16_t(year), uint8_t(month), uint8_t(day)};
   NullOperationEnvironment env;
-  result = co_await MOSMIX::CoFetchForecastMaximum(
-    *Net::curl, CommonInterface::Basic().location, date, env);
+  result = co_await MOSMIX::CoFetchForecastMaximum(*Net::curl, location,
+                                                   date, env);
 #else
   co_return;
 #endif
@@ -89,6 +89,7 @@ ForecastTemperatureFetcher::Start(std::function<void(Temperature)>
   year = today.year;
   month = today.month;
   day = today.day;
+  location = CommonInterface::Basic().location;
   on_result = std::move(callback);
 
   task.emplace(asio_thread->GetEventLoop());
