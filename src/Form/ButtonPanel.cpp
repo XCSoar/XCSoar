@@ -47,6 +47,8 @@ Button *
 ButtonPanel::Add(std::unique_ptr<ButtonRenderer> &&renderer,
                  Button::Callback callback) noexcept
 {
+  assert(!buttons.full());
+
   auto *button = new Button(parent, dummy_rc, style,
                             std::move(renderer), std::move(callback));
   button->SetCursorKeyGroup(this);
