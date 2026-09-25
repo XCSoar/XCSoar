@@ -286,9 +286,11 @@ jobs:
         uses: actions/cache@v6
         with:
           key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
+          # Only this target's own cache, or the shared one.  A bare
+          # "downloads-$os-" would also match another target's cache,
+          # which restores 190 MB without the files this target needs.
           restore-keys: |
             downloads-${{ runner.os }}-${{ matrix.target }}-
-            downloads-${{ runner.os }}-
             downloads-common-${{ runner.os }}-
           path: ${{ github.workspace }}/output/download
 
