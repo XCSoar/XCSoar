@@ -254,9 +254,16 @@ The maximum forecast ground temperature is used by the convection
 forecast algorithm (see Section~\ref{sec:convection-forecast}) in its
 determination of estimated convection height and cloud base.
 
-XCSoar fills this field from the forecast published by the Deutscher
+XCSoar can fill this field from the forecast published by the Deutscher
 Wetterdienst, so that it reflects the day rather than whatever it was
-last set to.  Opening the dialogue starts the lookup in the
+last set to.  The lookup is off until it is switched on with
+\button{Config 1}\blink\button{System}\blink\button{Weather}%
+\blink\button{Flugwetter (pc\_met)}\blink\button{Max. temp. from
+forecast}, next to the pc\_met account details.  It contacts the
+Deutscher Wetterdienst on its own, so it is the pilot's to enable; it
+needs no account of its own.
+
+Once it is on, opening the dialogue starts the lookup in the
 background: the dialogue appears at once with the value it had, and
 the field changes only if an answer arrives.  The station nearest the
 aircraft is used, which requires a GPS fix, and the forecast is

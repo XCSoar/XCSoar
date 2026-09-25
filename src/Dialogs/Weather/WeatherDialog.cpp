@@ -72,7 +72,7 @@ CreatePCMetTabWidget() noexcept
       return CommonInterface::GetComputerSettings()
         .weather.pcmet.www_credentials.IsDefined();
     },
-    CreatePCMetConfigPanel,
+    CreatePCMetCredentialsPanel,
     CreatePCMetMainWidget);
 }
 #endif

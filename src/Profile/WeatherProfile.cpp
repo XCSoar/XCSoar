@@ -48,6 +48,8 @@ Profile::Load(const ProfileMap &map, WeatherSettings &settings)
 
 #ifdef HAVE_HTTP
   map.Get(ProfileKeys::EnableThermalInformationMap, settings.enable_tim);
+  map.Get(ProfileKeys::MosmixForecastTemperature,
+          settings.mosmix_forecast_temperature);
   map.Get(ProfileKeys::XCThermAutoSwitch, settings.xctherm.auto_switch);
 #endif
 

@@ -15,13 +15,18 @@ enum ControlIndex {
 #ifdef HAVE_PCMET
   PCMET_USER,
   PCMET_PASSWORD,
+  MOSMIX_FORECAST_TEMPERATURE,
 #endif
 };
 
 class PCMetConfigPanel final : public RowFormWidget {
+  /** the forecast switch belongs to the configuration dialogue only */
+  const bool with_forecast_switch;
+
 public:
-  PCMetConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+  explicit PCMetConfigPanel(bool _with_forecast_switch) noexcept
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     with_forecast_switch(_with_forecast_switch) {}
 
 public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -43,6 +48,15 @@ PCMetConfigPanel::Prepare(ContainerWindow &parent,
           settings.pcmet.www_credentials.username);
   AddPassword(_("pc_met Password"), "",
               settings.pcmet.www_credentials.password);
+
+  /* No account of its own: MOSMIX is open data.  It sits here because
+     it is the DWD, which is what a pilot looking for it will read. */
+  if (with_forecast_switch)
+    AddBoolean(_("Max. temp. from forecast"),
+               _("Fill Max. temp. in the flight setup from the day's "
+                 "DWD forecast for the nearest MOSMIX station.  Needs "
+                 "a position fix, and fetches once a day; no account."),
+               settings.mosmix_forecast_temperature);
 #endif
 }
 
@@ -59,6 +73,11 @@ PCMetConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(PCMET_PASSWORD, ProfileKeys::PCMetPassword,
                        settings.pcmet.www_credentials.password);
+
+  if (with_forecast_switch)
+    changed |= SaveValue(MOSMIX_FORECAST_TEMPERATURE,
+                         ProfileKeys::MosmixForecastTemperature,
+                         settings.mosmix_forecast_temperature);
 #endif
 
   _changed |= changed;
@@ -68,5 +87,11 @@ PCMetConfigPanel::Save(bool &_changed) noexcept
 std::unique_ptr<Widget>
 CreatePCMetConfigPanel()
 {
-  return std::make_unique<PCMetConfigPanel>();
+  return std::make_unique<PCMetConfigPanel>(true);
+}
+
+std::unique_ptr<Widget>
+CreatePCMetCredentialsPanel()
+{
+  return std::make_unique<PCMetConfigPanel>(false);
 }
