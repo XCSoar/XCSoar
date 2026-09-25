@@ -68,7 +68,9 @@ Version 7.46 - not yet released
     nearest MOSMIX station; a value entered by hand takes precedence
     for the rest of the day.  Off by default; turn it on with
     Max. temp. from forecast in Config → System → Weather →
-    Flugwetter (pc_met)
+    Flugwetter (pc_met).  While a forecast is in effect the field
+    states it to one decimal, names DWD MOSMIX beside it, and cannot
+    be edited
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
   - fix the weather cursor bar keeping light colours in dark mode,
