@@ -30,16 +30,6 @@ constexpr const char *CATALOGUE_URL =
   "/mosmix_stationskatalog.cfg?view=nasPublication&nn=495490";
 
 /**
- * How much of the .kmz to ask for before falling back to all of it.
- *
- * The timesteps stand at the head of the document and the maximum
- * early among the forecasts, so three kilobytes of the seventeen
- * carried the answer when this was measured.  Eight leaves room for
- * the DWD to shift things about without costing a second request.
- */
-constexpr std::size_t PREFIX_BYTES = 8 * 1024;
-
-/**
  * How long to wait for a connection.
  *
  * XCSoar has no way to ask whether there is a network: the download
@@ -88,12 +78,9 @@ IsFresh(Path path, std::chrono::system_clock::duration max_age) noexcept
 
 /**
  * Fetch a URL into memory, giving up quickly when nothing answers.
- *
- * @param range how many bytes from the start to ask for, or zero for
- * all of them
  */
 Co::Task<Curl::CoResponse>
-CoGet(CurlGlobal &curl, const char *url, std::size_t range,
+CoGet(CurlGlobal &curl, const char *url,
       long timeout_seconds, ProgressListener &progress)
 {
   CurlEasy easy{url};
@@ -102,12 +89,6 @@ CoGet(CurlGlobal &curl, const char *url, std::size_t range,
   easy.SetFailOnError();
   easy.SetConnectTimeout(CONNECT_TIMEOUT_SECONDS);
   easy.SetTimeout(timeout_seconds);
-
-  char range_buffer[32];
-  if (range > 0) {
-    snprintf(range_buffer, sizeof(range_buffer), "0-%zu", range - 1);
-    easy.SetOption(CURLOPT_RANGE, range_buffer);
-  }
 
   co_return co_await Curl::CoRequest(curl, std::move(easy));
 }
@@ -129,7 +110,7 @@ MOSMIX::CoFetchForecastMaximum(CurlGlobal &curl, const GeoPoint &location,
   if (!IsFresh(catalogue, CATALOGUE_MAX_AGE)) {
     /* about 300 kB, and only once a month */
     const auto response = co_await
-      CoGet(curl, CATALOGUE_URL, 0, CATALOGUE_TIMEOUT_SECONDS, progress);
+      CoGet(curl, CATALOGUE_URL, CATALOGUE_TIMEOUT_SECONDS, progress);
 
     FileOutputStream file{catalogue};
     file.Write(std::as_bytes(std::span{response.body}));
@@ -152,32 +133,10 @@ MOSMIX::CoFetchForecastMaximum(CurlGlobal &curl, const GeoPoint &location,
 
   const auto url = MakeForecastURL(station->id.c_str());
 
-  /* Ask for the head of the file first.  It is a ZIP, so this is the
-     local header and the beginning of the one deflate stream inside
-     -- enough to reach the maximum, and about a fifth of the
-     transfer. */
-  const auto prefix = co_await
-    CoGet(curl, url.c_str(), PREFIX_BYTES, TRANSFER_TIMEOUT_SECONDS,
-          progress);
+  /* The whole file, about 17 kB, once a day. */
+  const auto response = co_await
+    CoGet(curl, url.c_str(), TRANSFER_TIMEOUT_SECONDS, progress);
 
-  if (prefix.status == 200)
-    /* the server ignored the range and sent everything, which is the
-       same bytes a fallback would ask for a second time */
-    co_return ReadForecastMaximumFromPrefix(
-      std::as_bytes(std::span{prefix.body}), date);
-
-  if (const auto from_prefix = ReadForecastMaximumFromPrefix(
-        std::as_bytes(std::span{prefix.body}), date);
-      from_prefix.has_value())
-    co_return from_prefix;
-
-  /* The head did not carry it: the document is laid out differently
-     than it was, or the run does not reach this day -- the last of
-     which makes this second request a waste, but only on a day the
-     forecast could not have answered anyway. */
-  const auto whole = co_await
-    CoGet(curl, url.c_str(), 0, TRANSFER_TIMEOUT_SECONDS, progress);
-
-  co_return ReadForecastMaximumFromPrefix(
-    std::as_bytes(std::span{whole.body}), date);
+  co_return ReadForecastMaximumFromKmz(
+    std::as_bytes(std::span{response.body}), date);
 }

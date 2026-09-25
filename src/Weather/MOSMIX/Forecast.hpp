@@ -50,22 +50,21 @@ std::optional<Temperature>
 ReadForecastMaximum(Reader &reader, const BrokenDate &date);
 
 /**
- * Read the maximum out of a .kmz, whole or as a byte range request
- * returns it: a ZIP local file header followed by as much of the
- * single deflate stream as was asked for.
+ * Read the maximum out of a .kmz held in memory.
  *
- * A complete file works too -- inflating stops at the end of the
- * stream and never looks at the central directory behind it -- so
- * there is one path for both and no temporary file to write.
+ * The archive carries exactly one member, so its local file header is
+ * read for the offset of the deflate stream and the stream is
+ * inflated from there.  ZipArchive is not used for this: it addresses
+ * a member by name, and the name carries the run timestamp
+ * (MOSMIX_L_2026092515_10738.kml), which the caller does not know --
+ * and the file would have to be written out to open it at all.
  *
- * The timesteps stand at the head of the document and the maximum
- * early among the forecasts, so a few kilobytes of the seventeen a
- * whole file costs are enough.  Returns nothing when they are not,
- * which is the caller's cue to fetch the file entire.
+ * @return nothing when the bytes are not such an archive, or the
+ * document inside does not carry the element for that date
  */
 std::optional<Temperature>
-ReadForecastMaximumFromPrefix(std::span<const std::byte> prefix,
-                              const BrokenDate &date) noexcept;
+ReadForecastMaximumFromKmz(std::span<const std::byte> kmz,
+                           const BrokenDate &date) noexcept;
 
 /**
  * Build the URL of a station's latest MOSMIX_L forecast.
