@@ -151,8 +151,8 @@ public:
 
   void Leave() noexcept {
     arrange.Drop();
-    FocusParent();
     Hide();
+    FocusParent();
     timeout_timer.Cancel();
 
     ShowInfoBoxes();
