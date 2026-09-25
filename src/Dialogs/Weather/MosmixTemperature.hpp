@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Atmosphere/Temperature.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "co/InjectTask.hxx"
 #include "ui/event/Notify.hpp"
 
@@ -36,6 +37,10 @@ class ForecastTemperatureFetcher final {
 
   /** the day the answer is about, remembered for the profile */
   unsigned year = 0, month = 0, day = 0;
+
+  /* read in Start() on the main thread: Run() is a coroutine on the
+     AsioThread's event loop, where CommonInterface must not be touched */
+  GeoPoint location = GeoPoint::Invalid();
 
   Co::InvokeTask Run();
   void OnCompletion(std::exception_ptr error) noexcept;
