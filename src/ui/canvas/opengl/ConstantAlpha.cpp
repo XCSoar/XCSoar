@@ -60,3 +60,24 @@ ScopeTextureConstantAlpha::~ScopeTextureConstantAlpha()
   /* restore default shader */
   OpenGL::solid_shader->Use();
 }
+
+ScopeTextureMultiplyAlpha::ScopeTextureMultiplyAlpha(float alpha)
+{
+  /* combine_texture_shader emits colorvar * texture; with
+     colorvar=alpha the fragment is alpha*src. Blending then yields
+     dst*(alpha*src) + dst*(1-alpha) = dst*(1 - alpha*(1-src)). */
+  glVertexAttrib4f(OpenGL::Attribute::COLOR, alpha, alpha, alpha, alpha);
+  OpenGL::combine_texture_shader->Use();
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_CONSTANT_ALPHA);
+  glBlendColor(0, 0, 0, alpha);
+}
+
+ScopeTextureMultiplyAlpha::~ScopeTextureMultiplyAlpha()
+{
+  glDisable(GL_BLEND);
+
+  /* restore default shader */
+  OpenGL::solid_shader->Use();
+}
