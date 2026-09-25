@@ -120,6 +120,13 @@ struct WeatherSettings {
    * Enable Thermal Information Map?
    */
   bool enable_tim;
+
+  /**
+   * Fill "Max. temp." in the flight setup from the day's MOSMIX
+   * forecast?  Off by default: the lookup contacts the DWD on its
+   * own, and a network feature is the pilot's to turn on.
+   */
+  bool mosmix_forecast_temperature;
 #endif
 
   RaspSettings rasp;
@@ -137,6 +144,7 @@ struct WeatherSettings {
 
 #ifdef HAVE_HTTP
     enable_tim = false;
+    mosmix_forecast_temperature = false;
 #endif
 
     rasp.SetDefaults();

@@ -62,6 +62,12 @@ ForecastTemperatureFetcher::Start(std::function<void(Temperature)>
                                   &&callback) noexcept
 {
 #ifdef HAVE_HTTP
+  if (!CommonInterface::GetComputerSettings()
+       .weather.mosmix_forecast_temperature)
+    /* off unless the pilot asked for it: this contacts the DWD by
+       itself, which is not something to do unannounced */
+    return;
+
   if (Net::curl == nullptr)
     return;
 
