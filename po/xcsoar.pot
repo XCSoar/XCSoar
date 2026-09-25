@@ -9980,3 +9980,11 @@ msgstr ""
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+
+#, no-c-format
+msgid "Max. temp. from forecast"
+msgstr ""
+
+#, no-c-format
+msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
+msgstr ""
