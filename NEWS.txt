@@ -288,6 +288,9 @@ Version 7.46 - not yet released
     patterns or the Airspace transparency setting
   - describe the gesture trail, its label and its vibration
 * development
+  - build system: keep each CI target's download cache to itself; a
+    bare downloads-$os- restore key handed one target another
+    target's cache, without the files it needed
   - drop the Windows CE GPS Intermediate Driver port type and the
     unused HAVE_CE pkg-config path
   - build system: package Android APK and AAB from one
