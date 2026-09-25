@@ -57,7 +57,7 @@ Read(std::string_view document, unsigned year, unsigned month, unsigned day)
 
 int main()
 {
-  plan_tests(17);
+  plan_tests(16);
 
   /* the 18:00 UTC timestep of the day asked for */
   const auto today = Read(DOCUMENT, 2026, 9, 20);
@@ -148,33 +148,17 @@ int main()
 
     const BrokenDate today(2026, 9, 20);
 
-    /* the whole thing */
-    const auto full = MOSMIX::ReadForecastMaximumFromPrefix(kmz, today);
+    /* the whole archive, which is what the fetch now asks for */
+    const auto full = MOSMIX::ReadForecastMaximumFromKmz(kmz, today);
     ok1(full.has_value() && equals(full->ToKelvin(), 298.15));
 
-    /* A range request returns a stream that stops in the middle.  The
-       point of fetching one is that the maximum stands near the head,
-       so find the shortest prefix that still carries it and check
-       that it is well short of the whole: the exact figure depends on
-       how the document compresses, the property does not. */
-    std::size_t shortest = kmz.size();
-    for (std::size_t n = 32; n < kmz.size(); n += 32) {
-      const auto partial =
-        MOSMIX::ReadForecastMaximumFromPrefix(std::span{kmz}.first(n), today);
-      if (partial.has_value() && equals(partial->ToKelvin(), 298.15)) {
-        shortest = n;
-        break;
-      }
-    }
-
-    ok1(shortest < kmz.size() * 3 / 4);
-
-    /* cut so short that nothing useful survives */
-    ok1(!MOSMIX::ReadForecastMaximumFromPrefix(
+    /* truncated: a transfer that broke off must not be read as an
+       answer, however plausible its head looks */
+    ok1(!MOSMIX::ReadForecastMaximumFromKmz(
           std::span{kmz}.first(40), today).has_value());
 
     /* not a ZIP at all */
-    ok1(!MOSMIX::ReadForecastMaximumFromPrefix(
+    ok1(!MOSMIX::ReadForecastMaximumFromKmz(
           std::as_bytes(std::span{DOCUMENT}), today).has_value());
   }
 
