@@ -7,16 +7,12 @@ TARGETS = PC WIN64 \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
-	OSX64 MACOS IOS64 IOS64SIM
+	MACOS IOS64 IOS64SIM
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
     ifeq ($(HOST_IS_DARWIN),y)
-      ifeq ($(HOST_IS_AARCH64),y)
-        TARGET = MACOS
-      else
-        TARGET = OSX64
-      endif
+      TARGET = MACOS
     else
       TARGET = UNIX
     endif
@@ -247,17 +243,6 @@ ifeq ($(TARGET),NEON)
   TARGET_IS_ARMHF = y
   ARMV7 := y
   NEON := y
-endif
-
-ifeq ($(TARGET),OSX64)
-  override TARGET = UNIX
-  TARGET_IS_DARWIN = y
-  TARGET_IS_OSX = y
-  OSX_MIN_SUPPORTED_VERSION = 12.0
-  HOST_TRIPLET = x86_64-apple-darwin
-  LLVM_TARGET = $(HOST_TRIPLET)
-  CLANG = y
-  TARGET_ARCH += -mmacosx-version-min=$(OSX_MIN_SUPPORTED_VERSION)
 endif
 
 ifeq ($(TARGET),MACOS)

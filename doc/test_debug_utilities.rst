@@ -31,7 +31,7 @@ target:
 - **Unix/Linux**: ``output/UNIX/bin/`` (default, and for flavors like WAYLAND, FUZZER)
 - **Unix/Linux (optimized)**: ``output/OPT/bin/`` (``TARGET=OPT`` convenience target)
 - **Windows**: ``output/WIN64OPENGL/bin/`` or ``output/WIN32OPENGL/bin/``
-- **macOS**: ``output/OSX64/bin/`` or ``output/MACOS/bin/`` (default)
+- **macOS**: ``output/MACOS/bin/`` (default)
 
 **Important**: Many build "targets" are actually flavors that override the base
 target internally. For example, ``TARGET=WAYLAND`` builds as ``UNIX`` with
@@ -42,7 +42,7 @@ directory (``output/WIN64OPENGL/``, etc.).
 
 **Note**: In the examples below, ``output/UNIX/bin/`` is used (typical for Linux
 development). Replace ``UNIX`` with your flavor output directory if different
-(e.g. ``WIN64OPENGL`` for Windows OpenGL development, ``OSX64`` for macOS). To
+(e.g. ``WIN64OPENGL`` for Windows OpenGL development, ``MACOS`` for macOS). To
 find your output directory, check what was created in the ``output/`` folder
 after building.
 
@@ -1190,4 +1190,3 @@ Additional Resources
 - ``test/src/DebugPort.hpp``: Device port utilities
 - ``test/data/``: Sample flight data files for testing
 - ``build/test.mk``: Build system definitions for all utilities
-

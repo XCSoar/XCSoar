@@ -390,10 +390,6 @@ To compile for macOS / ARM64, run::
 
   make TARGET=MACOS dmg
 
-To compile for macOS / x86_64, run::
-
-  make TARGET=OSX64 dmg
-
 Debugging for iOS and macOS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -648,11 +644,6 @@ Defaults shown are from the build system (they can be overridden with
    - yes
    - OpenGL ES (ANGLE)
    - Apple Silicon (min macOS 12.0).
- * - ``OSX64``
-   - macOS x86_64
-   - yes
-   - OpenGL ES (ANGLE)
-   - Intel (min macOS 12.0).
  * - ``IOS32``
    - iOS armv7
    - yes
