@@ -229,20 +229,20 @@ MOSMIX::ReadForecastMaximum(Reader &reader, const BrokenDate &date)
 }
 
 std::optional<Temperature>
-MOSMIX::ReadForecastMaximumFromPrefix(std::span<const std::byte> prefix,
-                                      const BrokenDate &date) noexcept
+MOSMIX::ReadForecastMaximumFromKmz(std::span<const std::byte> kmz,
+                                   const BrokenDate &date) noexcept
 try {
   /* A ZIP local file header: the signature, the compression method at
      offset 8, and at offsets 26 and 28 the lengths of the name and
-     extra fields, after which the entry's stream begins.  The central
-     directory that would normally say where entries are lives at the
-     end of the file and is not here -- which is the point, since not
-     fetching that end is the saving. */
+     extra fields, after which the entry's stream begins.  The archive
+     holds one member, so this is all that is needed to find it -- the
+     central directory at the end of the file says the same thing
+     about the same single entry. */
   static constexpr std::size_t LOCAL_HEADER = 30;
-  if (prefix.size() <= LOCAL_HEADER)
+  if (kmz.size() <= LOCAL_HEADER)
     return std::nullopt;
 
-  const auto *p = reinterpret_cast<const uint8_t *>(prefix.data());
+  const auto *p = reinterpret_cast<const uint8_t *>(kmz.data());
   if (p[0] != 'P' || p[1] != 'K' || p[2] != 3 || p[3] != 4)
     return std::nullopt;
 
@@ -252,10 +252,10 @@ try {
 
   const std::size_t offset = LOCAL_HEADER +
     std::size_t(p[26] | (p[27] << 8)) + std::size_t(p[28] | (p[29] << 8));
-  if (offset >= prefix.size())
+  if (offset >= kmz.size())
     return std::nullopt;
 
-  MemoryReader memory{prefix.subspan(offset)};
+  MemoryReader memory{kmz.subspan(offset)};
   GunzipReader inflate{memory, true};
   return ReadForecastMaximum(inflate, date);
 } catch (...) {
