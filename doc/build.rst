@@ -653,12 +653,12 @@ Defaults shown are from the build system (they can be overridden with
    - iOS arm64
    - yes
    - OpenGL ES
-   - Device build (min iOS 11.0).
+   - Device build (min iOS 15.0).
  * - ``IOS64SIM``
    - iOS simulator arm64
    - yes
    - OpenGL ES
-   - Simulator SDK (min iOS 11.0).
+   - Simulator SDK (min iOS 15.0).
  * - ``PI``
    - Raspberry Pi 1
    - no
