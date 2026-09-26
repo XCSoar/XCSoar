@@ -130,9 +130,35 @@ BoxShadowStyle::Layer::GetScaledSpread() const noexcept
 }
 
 unsigned
+BoxShadowExtent(const BoxShadowStyle &style) noexcept
+{
+  int extent = 0;
+
+  for (const auto &layer : style.layers) {
+    if (layer.alpha == 0)
+      continue;
+
+    const int reach = layer.GetScaledSpread() +
+                      int(layer.GetScaledBlur() / 2) +
+                      std::abs(layer.GetScaledOffsetY());
+    if (reach > extent)
+      extent = reach;
+  }
+
+  return unsigned(extent);
+}
+
+unsigned
 BoxShadowStyle::Layer::GetScaledBlur() const noexcept
 {
   return Layout::VptScale(blur);
+}
+
+int
+BoxShadowStyle::Layer::GetScaledOffsetY() const noexcept
+{
+  const int scaled = Layout::VptScale(unsigned(std::abs(offset_y)));
+  return offset_y < 0 ? -scaled : scaled;
 }
 
 #ifdef ENABLE_OPENGL
@@ -148,6 +174,7 @@ DrawLayer(const PixelRect &rc, const BoxShadowStyle::Layer &shadow,
      its corners stay concentric with the box's */
   const int spread = shadow.GetScaledSpread();
   PixelRect shape = rc;
+  shape.Offset(0, shadow.GetScaledOffsetY());
   shape.Grow(spread);
   if (shape.right < shape.left)
     shape.left = shape.right = rc.GetCenter().x;
