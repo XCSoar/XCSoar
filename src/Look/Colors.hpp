@@ -36,15 +36,17 @@ static constexpr Color COLOR_DARK_THEME_BUTTON =
 
 /**
  * Light mode dialog background color: a sand so far desaturated that
- * it keeps the warmth of paper without turning the page yellow, on
- * the lightness that stops short of glaring.
+ * it keeps the warmth of paper without turning the page yellow.
+ * Dark enough that a white button is a lighter step of the page, the
+ * same direction as the dark-mode face.
  */
 static constexpr Color COLOR_DIALOG_BACKGROUND =
-  Color(0xe9, 0xe4, 0xdc);
+  Color(0xc9, 0xc4, 0xbc);
 
 /**
- * Flat "card" button face (light mode): a white card with an almost
- * neutral outline; a warm border on a warm page reads as dirt.
+ * Flat "card" button face (light mode): a white card, the lighter
+ * step of the sand page.  The outline is the hairline on that white;
+ * a warm border on a warm page reads as dirt.
  */
 static constexpr Color COLOR_BUTTON_FACE =
   Color(0xff, 0xff, 0xff);
