@@ -13,6 +13,7 @@
 #include "Buffer.hpp"
 #include "ActivePixelTraits.hpp"
 
+#include <memory>
 #include <string_view>
 
 #ifdef _WIN32
@@ -452,4 +453,24 @@ public:
                               ConstImageBuffer src,
                               PixelPoint src_position, PixelSize src_size,
                               uint8_t alpha) noexcept;
+
+  /**
+   * Puts back the pixels that lie outside a rounded rectangle, after
+   * the caller has painted over @p rc.  The saved pixels are the ones
+   * that were there when this guard was created.
+   */
+  class RoundCornerGuard final {
+    Canvas &canvas;
+    PixelRect rc;
+    unsigned radius = 0;
+    std::unique_ptr<ActivePixelTraits::color_type[]> saved;
+
+  public:
+    RoundCornerGuard(Canvas &canvas, PixelRect rc,
+                     unsigned radius) noexcept;
+    ~RoundCornerGuard() noexcept;
+
+    RoundCornerGuard(const RoundCornerGuard &) = delete;
+    RoundCornerGuard &operator=(const RoundCornerGuard &) = delete;
+  };
 };
