@@ -1087,9 +1087,6 @@ msgstr "Posiljanje različice"
 msgid "Reading flight list"
 msgstr "Čitanje seznama let"
 
-msgid "Downloading flight log"
-msgstr "Prenematanje zapisa leta"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Onemogošeno"
@@ -1104,6 +1101,7 @@ msgstr "BLE vmesnik"
 msgid "Bluetooth server"
 msgstr "Bluetooth strežnik"
 
+#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Vgrajeni GPS in senzori"
 
@@ -1783,6 +1781,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "Izberite barvo"
 
+#, no-c-format
 msgid "Display"
 msgstr "Prikaz"
 
@@ -1792,9 +1791,6 @@ msgstr "Upozorenje"
 #, no-c-format
 msgid "Airspace"
 msgstr "zračni prostor"
-
-msgid "Select Pattern"
-msgstr "Izberi vzponno linijo"
 
 msgid "Squawk code"
 msgstr "Spuščevalna koda"
@@ -1850,9 +1846,6 @@ msgstr "Spremenite barvo obsega"
 
 msgid "Change Fill Color"
 msgstr "Spremenite barvo napolnitve"
-
-msgid "Change Fill Brush"
-msgstr "Spremenite nacrtovalni črnilnik"
 
 msgid "Border Width"
 msgstr "Širina obsega"
@@ -2029,10 +2022,6 @@ msgid "Language, Input"
 msgstr "Jezik, vnos | Language, Input"
 
 #, no-c-format
-msgid "Screen Layout"
-msgstr "Prikaz zaslona | Screen Layout"
-
-#, no-c-format
 msgid "Audio"
 msgstr "Zvok | Audio"
 
@@ -2058,14 +2047,8 @@ msgstr "Ekspert"
 msgid "Configuration"
 msgstr "Konfiguracija"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Ime te konfiguracije plošče InfoBox."
-
 msgid "InfoBox"
 msgstr "Informacijska plošča"
-
-msgid "Content"
-msgstr "Vsebina"
 
 msgid "Copy Set"
 msgstr "Kopiraj zbirko"
@@ -2168,6 +2151,7 @@ msgstr "Družinska koda"
 msgid "Task Calc"
 msgstr "Racunalo za nalogo"
 
+#, no-c-format
 msgid "Analysis"
 msgstr "Analiza"
 
@@ -2204,6 +2188,7 @@ msgstr "Hitrost naloge"
 msgid "Warnings"
 msgstr "Upozornitve"
 
+#, no-c-format
 msgid "Checklist"
 msgstr "Spisak preverilnikov"
 
@@ -2411,6 +2396,7 @@ msgstr "Nespravno geslo."
 msgid "Enter a new password"
 msgstr "Vnesi novo geslo"
 
+#, no-c-format
 msgid "Status"
 msgstr "Stanje"
 
@@ -2943,12 +2929,6 @@ msgstr "Način napolnjanja zračnega prostora"
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Ustrezni način napolnjanja oblasti zračnega prostora."
 
-msgid "Airspace transparency"
-msgstr "Prohodnost zračnega prostora"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Če je omogočeno, se zračni prostori natančno napolnijo."
-
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "Onemogoči končni drs baro."
@@ -3361,12 +3341,11 @@ msgstr ""
 msgid "Text size"
 msgstr "Velikost besedila"
 
-msgid "Display Resolution"
-msgstr "Rešitev zaslona"
-
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Rešitev zaslona se uporablja za dostosovanje širine vrstic, velikosti pismenosti, velikosti letalnih območij in več."
 
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
 msgid "Automatic"
 msgstr "Avtomatiziran"
 
@@ -3427,90 +3406,6 @@ msgstr "Reversni portret"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Povratna vzhodnica"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 delitev"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 delitev"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 delitev v tri vrstice"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 delitev v tri vrstice"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 delitev v tri vrstice"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 spodnje ali desno"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 spodnje + variometer (priklicno)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 zgornje ali leve"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 zgornje + variometer (priklicno)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 desno + variometer (vzhodnična)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 levo + desno + variometer (vzhodnična)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 levo + 3 desne delitve (vzhodnična)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 desno (kvadratna)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 spodnje ali desno"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 spodnje ali desno"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 zgornje ali leve"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 zgornje ali leve"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 desno (vzhodnična)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 spodnje ali desno"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 Gornje ali Levo"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 Spodnje ali Desno"
 
 #, no-c-format
 msgid "Text"
@@ -4780,15 +4675,6 @@ msgstr "Enota za rotacijo."
 msgid "UTC offset"
 msgstr "UTC odstevanje"
 
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"Polje za UTC odstevanje omogoča določbo razlike med lokalno časom in UTC-om. "
-"Prikazan je lokalni čas, da bo bilo enostavnejše preveriti pravilnost "
-"vnesenega odstevanja."
-
 msgid "Use GPS time"
 msgstr "Uporaba GPS časa"
 
@@ -5346,6 +5232,7 @@ msgstr "Optimizirano"
 msgid "No alternates available"
 msgstr "Ni alternativ"
 
+#, no-c-format
 msgid "Alternates"
 msgstr "Alternative"
 
@@ -7038,10 +6925,6 @@ msgid "T Next Leg"
 msgstr "T Naslednja stopa"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Povezanost termike na naslednjem stopu enakovrnih s povezanostjo termike na trenutnem stopu, ki je nastavljena z MacCready postavko."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Vjeterni komponent (simplificiran)"
 
@@ -8253,12 +8136,6 @@ msgid "Size of waypoint symbols on the map as a percentage of the built-in artwo
 msgstr ""
 "Veličina simbola točk poti na zemljevidu kao postotak ugrađene grafike "
 "(dijalozi seznama zadržavaju fiksnu veličinu ikone retka)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -9916,14 +9793,6 @@ msgstr ""
 "Pokriva cijeli alpski luk od Beča do Perpignana, prognozirajući val u "
 "cijeloj alpskoj regiji. Model ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11105,5 +10974,214 @@ msgstr ""
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
 
+#, no-c-format
 msgid "Recently used waypoints"
 msgstr ""
+
+#, no-c-format
+msgid "Zoom in"
+msgstr ""
+
+#, no-c-format
+msgid "Zoom out"
+msgstr ""
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr ""
+
+#, no-c-format
+msgid "Next page"
+msgstr ""
+
+#, no-c-format
+msgid "Previous page"
+msgstr ""
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr ""
+
+#, no-c-format
+msgid "Menu"
+msgstr ""
+
+#, no-c-format
+msgid "Task manager"
+msgstr ""
+
+#, no-c-format
+msgid "Pan mode"
+msgstr ""
+
+#, no-c-format
+msgid "Quick menu"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Power off"
+msgstr ""
+
+#. overwriting the data files under a flying program helps nobody
+#. the loggers are writing, half the files would be left out -
+#. and nobody needs a backup right now up there
+msgid "Not available while flying."
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
+msgstr ""
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+
+msgid "Arrange InfoBoxes"
+msgstr ""
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr ""
+
