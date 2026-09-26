@@ -65,6 +65,14 @@ Version 7.46 - not yet released
   - add TextSize input events (up/down/show) so UI text size can be
     changed in flight; default keys T and S step by 5%
 * weather
+  - fill Max. temp. in the flight setup dialog from the DWD forecast
+    for the day, fetched once daily in the background from the
+    nearest MOSMIX station; a value entered by hand takes precedence
+    for the rest of the day.  Off by default; turn it on with
+    Max. temp. from forecast in Config → System → Weather →
+    Flugwetter (pc_met).  While a forecast is in effect the field
+    states it to one decimal, names DWD MOSMIX beside it, and cannot
+    be edited
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
   - fix the weather cursor bar keeping light colours in dark mode,

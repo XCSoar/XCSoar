@@ -254,6 +254,56 @@ The maximum forecast ground temperature is used by the convection
 forecast algorithm (see Section~\ref{sec:convection-forecast}) in its
 determination of estimated convection height and cloud base.
 
+XCSoar can fill this field from the forecast published by the Deutscher
+Wetterdienst, so that it reflects the day rather than whatever it was
+last set to.  The lookup is off until it is switched on with
+\button{Config 1}\blink\button{System}\blink\button{Weather}%
+\blink\button{Flugwetter (pc\_met)}\blink\button{Max. temp. from
+forecast}, next to the pc\_met account details.  It contacts the
+Deutscher Wetterdienst on its own, so it is the pilot's to enable; it
+needs no account of its own.
+
+Once it is on, opening the dialogue starts the lookup in the
+background: the dialogue appears at once with the value it had, and
+the field changes only if an answer arrives.  The station nearest the
+aircraft is used, which requires a GPS fix, and the forecast is
+fetched once a day and then kept, so opening the dialogue again costs
+nothing.
+
+Where there is no network the attempt is abandoned after a few seconds
+and the field simply keeps its value; nothing is reported, because the
+lookup was not asked for.
+
+The element read is \textbf{TX}, which the Deutscher Wetterdienst
+defines as the highest air temperature over the twelve hours before
+the timestep.  The entry stamped 18:00~UTC therefore covers the
+daylight half of the day -- the half a convection estimate is about.
+It is deliberately not the highest of the hourly temperatures: a
+statistical forecast states each element in its own right, and
+sampling the hourly series reads a degree or more low, which is a few
+hundred feet of estimated cloud base.
+
+While a forecast is in effect the field states the value with the
+source beside it, \button{18.6 °C\ \ DWD MOSMIX}, and cannot
+be edited -- a number nobody typed should not look like one somebody
+did.  To enter a temperature by hand, switch the lookup off.
+
+\tip{} What the number buys is only visible once the glider has
+climbed.  The estimate compares the dry adiabat from this ground
+temperature against the outside air temperature the probe measures on
+the way up, so before the aircraft has sampled the layer there is
+nothing to compare and neither the ceiling nor the cloud base is
+reported.  The ceiling needs an outside temperature probe; the cloud
+base needs a humidity probe as well.  Both appear on the temperature
+trace page of the Analysis dialogue
+(Section~\ref{sec:convection-forecast}).
+
+\tip{} The station catalogue covers about 5600 stations worldwide,
+roughly half of them in Germany and three quarters in Europe.  Outside
+Europe the nearest station may be some distance away, and over
+mountainous terrain a station in a valley can read warmer than the
+airfield.
+
 \tip{} It is possible to configure XCSoar to display the basic
 settings dialogue when it starts up.
 

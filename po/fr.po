@@ -11271,3 +11271,15 @@ msgstr ""
 
 msgid "Recently used waypoints"
 msgstr ""
+
+#, no-c-format
+msgid "Max. temp. from forecast"
+msgstr "Temp. max. de la prévision"
+
+#, no-c-format
+msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
+msgstr "Renseigne la temp. max. dans Configuration vol d'après la prévision DWD du jour pour la station MOSMIX la plus proche.  Nécessite une position GPS ; un seul chargement par jour, sans compte."
+
+#, no-c-format
+msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
+msgstr "La température maximale au sol de la journée. Une adiabatique sèche partant de cette valeur, comparée à la température extérieure mesurée en montée, donne la hauteur des thermiques estimée ; la base des nuages demande en plus une sonde d'humidité. Les deux sont tracés sur la page Courbe de température du dialogue Analyses, une fois que le planeur a traversé la couche."

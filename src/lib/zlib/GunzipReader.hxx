@@ -24,9 +24,12 @@ public:
 	/**
 	 * Construct the filter.
 	 *
+	 * @param raw the stream is a bare deflate stream with no gzip
+	 * header, as stored inside a ZIP archive
+	 *
 	 * Throws on error.
 	 */
-	explicit GunzipReader(Reader &_next);
+	explicit GunzipReader(Reader &_next, bool raw=false);
 
 	~GunzipReader() noexcept {
 		inflateEnd(&z);
