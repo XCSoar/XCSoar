@@ -899,8 +899,10 @@ purposes.
 \item[Time step circling*]  This is the time interval between logged points when 
   circling. 
 \item[Auto logger*]  Enables the automatic starting and stopping of the logger
-  on takeoff and landing respectively. Disable when flying paragliders to prevent 
-  the low ground speeds from triggering the automatic logger.
+  on takeoff and landing respectively. With a configured polar, takeoff
+  detection uses half its minimum speed. Without a configured or received
+  polar, sustained movement and height gain can also indicate a slow launch.
+  Configure the correct polar for your aircraft before flight.
 \item[NMEA logger*]  Enable the NMEA logger on startup? If this option is disabled, 
   the NMEA logger can still be started manually.
 \item[Log book*]  Logs each start and landing.

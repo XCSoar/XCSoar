@@ -102,7 +102,7 @@ private:
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
   void FlightState(const NMEAInfo &basic,
                    const DerivedInfo &calculated, FlyingState &flying,
-                   const GlidePolar &glide_polar);
+                   const GlidePolar &glide_polar, bool allow_slow_launch);
 
    void ThermalSources(const MoreData &basic, const DerivedInfo &calculated,
                        ThermalLocatorInfo &thermal_locator);

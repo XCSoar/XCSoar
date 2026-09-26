@@ -84,6 +84,9 @@ struct PolarSettings {
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;
 
+  /** A polar was explicitly received from an instrument this session. */
+  bool polar_from_device;
+
   /** Whether the ballast countdown timer is active */
   bool ballast_timer_active;
 
