@@ -11,18 +11,6 @@
 #include <stdlib.h> /* for abs() */
 #include <algorithm>
 
-/**
- * Dry adiabatic lapse rate (degrees C per meter)
- *
- * DALR = dT/dz = g/c_p =
- * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
- * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
- */
-static constexpr double DALR = -0.00974;
-
-/** ThermalIndex threshold in degrees C */
-static constexpr double TITHRESHOLD = -1.6;
-
 using std::max;
 
 void
@@ -32,6 +20,7 @@ CuSonde::Reset() noexcept
   thermal_height = 0;
   cloud_base = 0;
   ground_height = 0;
+  has_ground_height = false;
   max_ground_temperature = Temperature::FromCelsius(25);
 
   for (auto &i : cslevels)
@@ -123,8 +112,31 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   if (abs(level - last_level) == 0)
     return;
 
-  // calculate ground height
-  ground_height = calculated.altitude_agl;
+  /* The dry adiabat starts at the ground, so this has to be an
+     elevation -- not the aircraft's height above it, which used to be
+     assigned here.  With that complement, h_agl below came out as
+     level * HEIGHT_STEP - (altitude - terrain), the terrain elevation
+     for every level: the adiabat was flat, the thermal index compared
+     the profile against a constant, and the cloud base was usually
+     never found.
+
+     Taken once per flight.  The forecast maximum is a surface
+     temperature at the place the pilot took it for, and every level
+     has to be measured against the same adiabat: re-anchoring at the
+     terrain under the aircraft would give each level its own origin
+     as the ground rises and falls, and FindCloudBase() would then
+     compare levels from different adiabats.  The terrain elevation at
+     the first measurement is the take-off site or close to it; without
+     a terrain file the take-off altitude stands in for it. */
+  if (!has_ground_height) {
+    if (calculated.terrain_valid) {
+      ground_height = calculated.terrain_altitude;
+      has_ground_height = true;
+    } else if (calculated.flight.HasTakenOff()) {
+      ground_height = calculated.flight.takeoff_altitude;
+      has_ground_height = true;
+    }
+  }
 
   // if (going up)
   if (level > last_level) {

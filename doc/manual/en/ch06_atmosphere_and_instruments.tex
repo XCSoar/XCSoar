@@ -332,8 +332,11 @@ the atmospheric temperature equals the maximum forecast temperature on
 the ground, cooled adiabatically as it rises according to the dry
 adiabatic lapse rate.  Typically, the glider will not climb as far as
 the convection ceiling and so the measured values are extrapolated to
-find the ceiling.  If the atmosphere is stable, the convection ceiling
-is reported as zero altitude.
+find the ceiling.  The dry adiabat starts at the elevation of the
+ground where the sounding began, taken from the terrain file at the
+first measurement after take-off, or from the take-off altitude
+without one.  If the atmosphere is stable, no ceiling is found and the
+analysis page shows ``---'' in its place.
 
 The maximum forecast temperature on the ground is entered using the
 flight settings dialogue described in Section~\ref{sec:flight-setup}.
@@ -346,7 +349,8 @@ flight settings dialogue described in Section~\ref{sec:flight-setup}.
 The forecast cloud base is determined by the altitude at which the dew
 point intersects the maximum forecast temperature on the ground,
 cooled adiabatically as it rises according to the dry adiabatic lapse
-rate.  If no clouds are forecast, the cloud base is reported as zero.
+rate.  If no clouds are forecast, no cloud base is found and the
+analysis page shows ``---'' in its place.
 
 %TODO{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH NO CLOUDS}
 
