@@ -114,7 +114,7 @@ FlyTheSounding(CuSonde &cu_sonde, Terrain terrain) noexcept
 int
 main()
 {
-  plan_tests(13);
+  plan_tests(15);
 
   /* the crossings, from the construction rather than from the code;
      CuSonde::DALR is negative going up */
@@ -186,6 +186,19 @@ main()
   no_terrain.Reset();
   FlyTheSounding(no_terrain, Terrain::NONE);
   ok1(equals(no_terrain.ground_height, AIRFIELD_MSL));
+
+  /* #3218: a measurement in the top level, then a forecast change.
+     SetForecastTemperature() walks every level with data and the two
+     finders look one level higher; for level 99 that was one past the
+     end of the array.  On macOS the read lands in the doubles that
+     follow the array inside the object and nothing notices; the UNIX
+     CI job builds with AddressSanitizer, which does. */
+  CuSonde top;
+  top.Reset();
+  top.cslevels[99].UpdateTemps(false, 0, Temperature::FromCelsius(-40));
+  top.SetForecastTemperature(Temperature::FromCelsius(20));
+  ok1(top.thermal_height < 0);
+  ok1(top.cloud_base < 0);
 
   return exit_status();
 }

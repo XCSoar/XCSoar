@@ -180,6 +180,9 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
 void
 CuSonde::FindThermalHeight(unsigned short level) noexcept
 {
+  /* this and the level above; the top level has none */
+  if (level + 1u >= cslevels.size())
+    return;
   if (cslevels[level + 1].empty())
     return;
   if (cslevels[level].empty())
@@ -223,6 +226,8 @@ CuSonde::FindThermalHeight(unsigned short level) noexcept
 void
 CuSonde::FindCloudBase(unsigned short level) noexcept
 {
+  if (level + 1u >= cslevels.size())
+    return;
   if (cslevels[level + 1].dewpoint_empty())
     return;
   if (cslevels[level].dewpoint_empty())
