@@ -32,6 +32,21 @@ TestAltitude()
 
   FormatAltitude(buffer, -1234, Unit::METER, false);
   ok1(StringIsEqual(buffer, "-1234"));
+
+  FormatAltitudeRange(buffer, sizeof(buffer), 1200, 1550, Unit::METER);
+  ok1(StringIsEqual(buffer, "1200–1550 m"));
+
+  FormatAltitudeRange(buffer, sizeof(buffer), 1200, 1200, Unit::METER);
+  ok1(StringIsEqual(buffer, "1200 m"));
+
+  FormatAltitudeRange(buffer, sizeof(buffer),
+                      Units::ToSysUnit(1200, Unit::FEET),
+                      Units::ToSysUnit(1550, Unit::FEET), Unit::FEET);
+  ok1(StringIsEqual(buffer, "1200–1550 ft"));
+
+  FormatAltitudeRange(buffer, sizeof(buffer), 1200, 1550, Unit::METER,
+                      false);
+  ok1(StringIsEqual(buffer, "1200–1550"));
 }
 
 static void
@@ -502,7 +517,7 @@ TestPressure()
 
 int main()
 {
-  plan_tests(205);
+  plan_tests(209);
 
   TestAltitude();
   TestRelativeAltitude();

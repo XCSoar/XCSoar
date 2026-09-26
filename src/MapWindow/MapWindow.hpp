@@ -343,6 +343,7 @@ protected:
   void DrawTaskOffTrackIndicator(Canvas &canvas) noexcept;
   void DrawWaves(Canvas &canvas) noexcept;
   virtual void DrawThermalEstimate(Canvas &canvas) const noexcept;
+  void DrawFlarmThermals(Canvas &canvas) const noexcept;
 
   void DrawGlideThroughTerrain(Canvas &canvas) const noexcept;
   void DrawTerrainAbove(Canvas &canvas) noexcept;

@@ -28,6 +28,15 @@ FormatUserAltitude(double value, char *buffer, bool include_unit) noexcept
   FormatAltitude(buffer, value, Units::GetUserAltitudeUnit(), include_unit);
 }
 
+void
+FormatUserAltitudeRange(double minimum, double maximum,
+                        char *buffer, size_t buffer_size,
+                        bool include_unit)
+{
+  FormatAltitudeRange(buffer, buffer_size, minimum, maximum,
+                      Units::GetUserAltitudeUnit(), include_unit);
+}
+
 static constexpr Unit
 GetAlternateAltitudeUnit(Unit unit) noexcept
 {

@@ -7,6 +7,10 @@
 #include "Atmosphere/Pressure.hpp"
 #include "Math/Util.hpp"
 #include "util/StringFormat.hpp"
+#include "util/StringUtil.hpp"
+
+#include <cstring>
+#include <string>
 
 static void
 FormatInteger(char *buffer,
@@ -52,6 +56,36 @@ FormatAltitude(char *buffer, double value, Unit unit,
                bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, false);
+}
+
+void
+FormatAltitudeRange(char *buffer, size_t buffer_size,
+                    double minimum, double maximum, Unit unit,
+                    bool include_unit)
+{
+  if (buffer == nullptr || buffer_size == 0)
+    return;
+
+  char minimum_text[32], maximum_text[32];
+  FormatAltitude(minimum_text, minimum, unit, false);
+  FormatAltitude(maximum_text, maximum, unit, false);
+
+  if (std::strcmp(minimum_text, maximum_text) == 0) {
+    char value[32];
+    FormatAltitude(value, minimum, unit, include_unit);
+    StringFormat(buffer, buffer_size, "%s", value);
+    return;
+  }
+
+  std::string range_text{minimum_text};
+  range_text += "–";
+  range_text += maximum_text;
+  if (include_unit) {
+    range_text += ' ';
+    range_text += Units::GetUnitName(unit);
+  }
+
+  CopyString(buffer, buffer_size, range_text);
 }
 
 void

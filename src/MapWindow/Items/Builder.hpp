@@ -19,6 +19,7 @@ struct DerivedInfo;
 class ProtectedTaskManager;
 struct TrafficList;
 struct ThermalLocatorInfo;
+struct TrafficThermalInfo;
 struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
@@ -53,6 +54,9 @@ public:
   void AddTraffic(const TrafficList &flarm);
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
+  void AddTrafficThermals(const TrafficThermalInfo &thermals,
+                          const MoreData &basic,
+                          const DerivedInfo &calculated);
 
   void AddThermals(std::span<const TIM::Thermal> thermals) noexcept;
 
