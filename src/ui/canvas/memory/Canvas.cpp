@@ -19,6 +19,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <new>
 #include <string.h>
 
 class SDLRasterCanvas : public RasterCanvas<ActivePixelTraits> {
@@ -719,4 +720,106 @@ Canvas::StretchWithSourceAlpha(PixelPoint dest_position, PixelSize dest_size,
                         src.At(src_position.x, src_position.y),
                         src.pitch, src_size,
                         operations);
+}
+
+/**
+ * True when @p p lies in a corner of @p rc and outside the quarter
+ * circle of @p radius centred on that corner.
+ */
+static bool
+OutsideRoundCorner(PixelPoint p, const PixelRect &rc,
+                   unsigned radius) noexcept
+{
+  const int r = (int)radius;
+  int cx = 0, cy = 0;
+
+  if (p.x < rc.left + r && p.y < rc.top + r) {
+    cx = rc.left + r;
+    cy = rc.top + r;
+  } else if (p.x >= rc.right - r && p.y < rc.top + r) {
+    cx = rc.right - r;
+    cy = rc.top + r;
+  } else if (p.x >= rc.right - r && p.y >= rc.bottom - r) {
+    cx = rc.right - r;
+    cy = rc.bottom - r;
+  } else if (p.x < rc.left + r && p.y >= rc.bottom - r) {
+    cx = rc.left + r;
+    cy = rc.bottom - r;
+  } else
+    return false;
+
+  const int dx = p.x - cx, dy = p.y - cy;
+  return dx * dx + dy * dy > r * r;
+}
+
+Canvas::RoundCornerGuard::RoundCornerGuard(Canvas &_canvas, PixelRect _rc,
+                                            unsigned _radius) noexcept
+  :canvas(_canvas), rc(_rc)
+{
+  if (rc.left >= rc.right || rc.top >= rc.bottom || _radius < 1)
+    return;
+
+  radius = std::min(_radius,
+                    std::min(rc.GetWidth(), rc.GetHeight()) / 2);
+  if (radius < 1)
+    return;
+
+  const unsigned n = 4 * radius * radius;
+  saved.reset(new (std::nothrow) ActivePixelTraits::color_type[n]);
+  if (!saved)
+    return;
+
+  const auto save_corner = [this](unsigned index, int origin_x,
+                                  int origin_y) {
+    for (unsigned y = 0; y < radius; ++y) {
+      for (unsigned x = 0; x < radius; ++x) {
+        const int px = origin_x + (int)x;
+        const int py = origin_y + (int)y;
+        auto &slot = saved[index * radius * radius + y * radius + x];
+        if (px >= 0 && py >= 0 &&
+            canvas.buffer.Check((unsigned)px, (unsigned)py))
+          slot = ActivePixelTraits::ReadPixel(
+            canvas.buffer.At((unsigned)px, (unsigned)py));
+      }
+    }
+  };
+
+  save_corner(0, rc.left, rc.top);
+  save_corner(1, rc.right - (int)radius, rc.top);
+  save_corner(2, rc.right - (int)radius, rc.bottom - (int)radius);
+  save_corner(3, rc.left, rc.bottom - (int)radius);
+}
+
+Canvas::RoundCornerGuard::~RoundCornerGuard() noexcept
+{
+  if (!saved || radius < 1)
+    return;
+
+  const auto restore_corner = [this](unsigned index, int origin_x,
+                                     int origin_y) {
+    for (unsigned y = 0; y < radius; ++y) {
+      for (unsigned x = 0; x < radius; ++x) {
+        const int px = origin_x + (int)x;
+        const int py = origin_y + (int)y;
+        if (px < 0 || py < 0)
+          continue;
+
+        if (!OutsideRoundCorner({px, py}, rc, radius))
+          continue;
+
+        if (!canvas.buffer.Check((unsigned)px, (unsigned)py))
+          continue;
+
+        const auto slot =
+          saved[index * radius * radius + y * radius + x];
+        ActivePixelTraits::WritePixel(
+          canvas.buffer.At((unsigned)px, (unsigned)py), slot);
+      }
+    }
+  };
+
+  restore_corner(0, rc.left, rc.top);
+  restore_corner(1, rc.right - (int)radius, rc.top);
+  restore_corner(2, rc.right - (int)radius, rc.bottom - (int)radius);
+  restore_corner(3, rc.left, rc.bottom - (int)radius);
 }
