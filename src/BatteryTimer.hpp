@@ -6,11 +6,11 @@
 #include "time/PeriodClock.hpp"
 
 class BatteryTimer {
-  // Battery status for SIMULATOR mode
-  // 10% reminder, 5% exit, 5 minute reminders on warnings
+  /* Remind when the internal battery is below 10%, at most every
+     5 minutes.  Do not quit: a flight must keep running, and the
+     simulator must not exit either. */
 
   static constexpr unsigned BATTERY_WARNING = 10;
-  static constexpr unsigned BATTERY_EXIT = 5;
   static constexpr auto BATTERY_REMINDER = std::chrono::minutes(5);
 
   PeriodClock last_warning;
