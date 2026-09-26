@@ -67,7 +67,8 @@ ButtonLook::Initialise(const Font &_font, bool dark_mode)
     standard.background_color = IsDithered() ? COLOR_WHITE : COLOR_BUTTON_FACE;
     /* a gray scale display needs no palette of its own: it turns the
        colors into the very shades they were picked for.  Only a
-       dithered one, which has two levels and no shades at all, does */
+       dithered one, which has two levels and no shades at all, does.
+       The hairline sits on the white face */
     standard.ring_color = IsDithered() ? COLOR_BLACK : COLOR_BUTTON_RING;
 
     /* gray scale has the shades, but not the hue that lets a primary
