@@ -13,9 +13,9 @@ alwaysApply: false
 
 # Review: human-readable code
 
-`doc/policy.rst`: everybody must understand the code when the author is
-gone. Size vs problem: a large patch for a small behaviour change is a
-design smell.
+`docs/content/en/5.dev/04.policy.md`: everybody must understand the code
+when the author is gone. Size vs problem: a large patch for a small
+behaviour change is a design smell.
 
 ## Reject
 

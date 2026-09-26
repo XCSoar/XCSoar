@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Barogram">
+  <path d="M2 48 2 43C30 45 50 39 70 40 90 41 100 38 118 40L118 48Z" fill="#804515"/>
+  <path d="M2 44C26 42 32 32 50 29 68 26 74 16 90 13 100 11 106 10 114 9" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

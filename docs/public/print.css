@@ -1,0 +1,504 @@
+/* Stylesheet of the /print/<section> views. Page boxes, running headers
+   and the page numbers in the table of contents are produced by Paged.js
+   in scripts/build-pdf.mjs. Pages are numbered continuously from the
+   title page. */
+
+@page {
+    size: A4;
+    margin: 20mm 18mm 22mm 18mm;
+
+    @top-left {
+        content: string(doc-title);
+        font-size: 9pt;
+        color: #666;
+    }
+
+    @top-right {
+        content: string(chapter-title);
+        font-size: 9pt;
+        color: #666;
+    }
+
+    @bottom-center {
+        content: counter(page);
+        font-size: 9pt;
+    }
+}
+
+@page cover {
+    margin: 0;
+
+    @top-left { content: none; }
+    @top-right { content: none; }
+    @bottom-center { content: none; }
+}
+
+@page toc {
+    @top-right { content: none; }
+}
+
+.print-root {
+    max-width: 174mm;
+    margin: 0 auto;
+    padding: 0 8mm;
+    font-size: 11pt;
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+.print-doc-title {
+    string-set: doc-title content(text);
+    display: block;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Title page, after the LaTeX manual's title page. */
+.print-cover {
+    page: cover;
+    break-after: page;
+    height: 297mm;
+    box-sizing: border-box;
+    padding: 30mm 20mm 25mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.print-cover-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 10mm;
+}
+
+.print-cover-logo {
+    width: 50%;
+}
+
+.print-cover-wordmark {
+    width: 66%;
+    margin-top: 5mm;
+}
+
+.print-cover-tagline,
+.print-cover-title {
+    font-size: 22pt;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.print-cover-tagline {
+    margin-top: 6mm;
+}
+
+.print-cover-title {
+    margin-top: 12mm;
+}
+
+.print-cover-bottom {
+    text-align: right;
+    font-size: 12pt;
+    line-height: 1.6;
+}
+
+.print-cover-bottom p {
+    margin: 0;
+}
+
+/* Table of contents. */
+.print-toc {
+    page: toc;
+    break-after: page;
+}
+
+.print-toc h1 {
+    font-size: 20pt;
+    font-weight: 700;
+    margin: 0 0 8mm;
+}
+
+.print-toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.print-toc li {
+    margin: 0;
+}
+
+.print-toc-chapters > li {
+    margin-top: 3mm;
+    font-weight: 700;
+}
+
+.print-toc-pages > li {
+    font-weight: 400;
+    padding-left: 8mm;
+}
+
+.print-toc a {
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+    text-decoration: none;
+    color: inherit;
+}
+
+.print-toc-number {
+    flex: none;
+    min-width: 8mm;
+}
+
+.print-toc-title {
+    flex: 1;
+    border-bottom: 1px dotted #999;
+    margin-bottom: 1mm;
+}
+
+.print-toc a::after {
+    content: target-counter(attr(href url), page);
+    flex: none;
+    font-weight: 400;
+}
+
+/* Chapters and pages. */
+.print-chapter {
+    break-before: page;
+}
+
+.print-chapter-title {
+    string-set: chapter-title content(text);
+    font-size: 26pt;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 10mm;
+}
+
+.print-page-title {
+    font-size: 18pt;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 8mm 0 3mm;
+    break-after: avoid;
+}
+
+/* The prose components carry their own Tailwind line heights and font
+   sizes (leading-7, text-base/7, text-sm, …); the print typography
+   replaces them. */
+.print-page-body * {
+    line-height: 1.3;
+}
+
+.print-page-body :not(pre, code, h1, h2, h3, h4, h5, h6, sub, sup) {
+    font-size: inherit;
+}
+
+.print-page-body h2,
+.print-page-body h3,
+.print-page-body h4,
+.print-page-body h5,
+.print-page-body h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 5mm 0 2mm;
+    break-after: avoid;
+}
+
+.print-page-body h2 { font-size: 16pt; }
+.print-page-body h3 { font-size: 14pt; }
+.print-page-body h4 { font-size: 12pt; }
+.print-page-body h5,
+.print-page-body h6 { font-size: 11pt; }
+
+.print-page-body h1 a,
+.print-page-body h2 a,
+.print-page-body h3 a,
+.print-page-body h4 a,
+.print-page-body h5 a,
+.print-page-body h6 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.print-page-body a {
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+.print-page-body p,
+.print-page-body ul,
+.print-page-body ol {
+    margin: 0 0 2mm;
+}
+
+.print-page-body li {
+    margin: 0 0 0.5mm;
+}
+
+.print-page-body figcaption {
+    font-size: 10pt;
+}
+
+.print-page-body img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Gesture drawings beside a paragraph at the size of the LaTeX margin
+   icons. */
+.print-page-body .gesture-aside img,
+.print-page-body .gesture-float {
+    height: 9mm;
+}
+
+/* A paragraph with a floating gesture drawing keeps its text beside the
+   drawing instead of wrapping under it. */
+.print-page-body :has(> .gesture-float) {
+    position: relative;
+    min-height: 9mm;
+    padding-left: 12mm;
+}
+
+.print-page-body .gesture-float {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: none;
+    margin: 0;
+}
+
+/* Gesture drawings in the text at little more than the line height,
+   larger in the gesture table. */
+.print-page-body .gesture-inline {
+    height: 5mm;
+}
+
+.print-page-body td > .gesture-inline {
+    height: 10mm;
+}
+
+/* Screenshots at roughly the size the LaTeX manual used. */
+.print-page-body figure img:not([width]) {
+    max-width: 110mm;
+    max-height: 100mm;
+}
+
+/* Tables of screenshots share the page width between their columns;
+   icons with an explicit width and gesture drawings keep their size. */
+.print-page-body table:has(figure img:not([width])) {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.print-page-body table figure {
+    display: block;
+}
+
+.print-page-body table figure img:not([width]) {
+    width: 100%;
+    height: auto;
+}
+
+.print-page-body figure,
+.print-page-body pre,
+.print-page-body table,
+.print-page-body li,
+.print-page-body [data-slot="root"] {
+    break-inside: avoid;
+}
+
+/* Long tables continue on the next page under a repeated header row
+   instead of leaving the rest of the page empty. */
+.print-page-body table:has(tbody tr:nth-child(12)) {
+    break-inside: auto;
+}
+
+.print-page-body pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 9pt;
+}
+
+/* The licence is plain text over several pages, one paragraph per block:
+   the frame of the web version would be drawn around every fragment. */
+.print-page-body .license {
+    border: 0;
+    background: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    break-inside: auto;
+}
+
+.print-page-body .license-paragraph {
+    font-size: 9pt;
+}
+
+.print-page-body code {
+    font-size: 9.5pt;
+}
+
+.print-page-body table {
+    font-size: 9.5pt;
+    max-width: 100%;
+}
+
+.print-page-body td,
+.print-page-body th {
+    padding: 1.5mm 2mm;
+}
+
+/* Wide tables of icons and check marks: the column headings are turned
+   sideways, as in the LaTeX manual, so the columns stay narrow. */
+.print-page-body table:has(tr > :nth-child(7)) thead tr:last-child th:not(:first-child) {
+    writing-mode: sideways-lr;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+/* Wide tables of labels like the menu overview share the page width
+   between their columns; the labels in their cells wrap instead of
+   widening the table. Tables of check marks keep their content width. */
+.print-page-body table:has(tr > :nth-child(6)):has(td code) {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.print-page-body td code {
+    white-space: normal;
+}
+
+.print-page-body thead {
+    display: table-header-group;
+}
+
+.print-page-body tr {
+    break-inside: avoid;
+}
+
+.print-page-body [aria-haspopup="dialog"] {
+    cursor: default;
+}
+
+/* A category of the InfoBox reference holds many short entries: they
+   follow each other and fill the page, only the box with its facts
+   stays together. */
+.print-root[data-section="infobox"] .print-page-title {
+    font-size: 16pt;
+}
+
+/* Above its text, an InfoBox page shows the box as XCSoar draws it, the
+   help text of the app beside it and the facts of the InfoBox below.
+   The selectors carry .print-root so that they win over the utility
+   classes of the web page. */
+.print-root .infobox-summary {
+    margin: 0 0 4mm;
+}
+
+/* The help text keeps its column beside the box, as on the web, and
+   may run onto the next page; the box is taken out of the flow for
+   that, like the gesture drawings of the manual. */
+.print-root .infobox-summary-head {
+    display: block;
+    position: relative;
+    min-height: 20mm;
+    padding-left: 34mm;
+    margin: 0 0 3mm;
+}
+
+.print-root .infobox-summary-head .infobox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    float: none;
+    margin: 0;
+}
+
+.print-root .infobox-summary-head p {
+    margin: 0;
+    line-height: 1.3;
+}
+
+.print-root .infobox-summary-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2mm;
+    margin: 0 0 2mm;
+}
+
+/* The cells of the table draw their own borders, so that the line
+   survives a page break inside the table. */
+.print-root .infobox-summary-facts {
+    width: 100%;
+    margin: 0;
+    font-size: inherit;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.print-root .infobox-summary-facts th,
+.print-root .infobox-summary-facts td {
+    padding: 1mm 2mm 1mm 0;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 0.2mm solid #ddd;
+}
+
+/* The class marks the last row of the table, where :last-child would
+   also match the last row of a fragment when the table breaks across
+   pages, and that one keeps its line. */
+.print-root .infobox-summary-facts .infobox-summary-last th,
+.print-root .infobox-summary-facts .infobox-summary-last td {
+    border-bottom: 0;
+}
+
+.print-root .infobox-summary-facts th {
+    width: 30mm;
+    font-weight: 500;
+    color: #555;
+}
+
+.print-root .infobox-summary-facts code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* The box keeps the proportions of the app, at the size of a printed
+   illustration. */
+.print-root .infobox {
+    width: 30mm;
+    flex: none;
+    border-width: 0.4mm;
+}
+
+.print-root .infobox-title {
+    padding-top: 1mm;
+    font-size: 8pt;
+}
+
+.print-root .infobox-value {
+    font-size: 18pt;
+}
+
+.print-root .infobox-unit {
+    font-size: 9pt;
+}
+
+.print-root .infobox-comment {
+    height: 4mm;
+    padding-bottom: 1mm;
+    font-size: 8pt;
+}
+
+/* The text of an entry follows its summary, not the table above it. */
+.print-root[data-section="infobox"] .print-page-body > :first-child {
+    margin-top: 0;
+}

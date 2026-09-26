@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Climb band">
+  <path d="M0 44C26 42 62 36 88 26 98 22 96 16 72 12 52 9 22 8 0 8Z" fill="#a0d0f3" fill-opacity="0.63"/>
+  <path d="M0 6H120M0 46H120" stroke="#808080" stroke-width="1.5"/>
+  <path d="M0 26H72" stroke="#000000" stroke-width="1.5"/>
+</svg>

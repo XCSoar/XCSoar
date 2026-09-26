@@ -8,6 +8,16 @@ on:
         default: ''
         type: string
     secrets:
+      DOCS_SSH_KEY:
+        required: false
+      DOCS_HOST:
+        required: false
+      DOCS_SSH_USER:
+        required: false
+      DOCS_REMOTE_PATH:
+        required: false
+      DOCS_SSH_KNOWN_HOSTS:
+        required: false
       REPOSITORY_SSH_KEY:
         required: false
       REPOSITORY_HOST:
@@ -16,99 +26,128 @@ on:
         required: false
       REPOSITORY_REMOTE_PATH:
         required: false
+      REPOSITORY_SSH_KNOWN_HOSTS:
+        required: false
   workflow_dispatch:
   push:
     paths:
-      - 'doc/**'
-      - '.readthedocs.yaml'
+      - 'docs/**'
       - '.github/workflows/build-docs.yml'
     branches:
       - master
   pull_request:
     paths:
-      - 'doc/**'
-      - '.readthedocs.yaml'
+      - 'docs/**'
       - '.github/workflows/build-docs.yml'
     branches:
       - master
-env:
-  DOC_OUTPUT: manual
-  TARGET_FINAL: XCSoar-docs
-  TARGET_EXT: pdf
 jobs:
-  manual-pdf:
+  build:
+    name: "Build documentation"
     runs-on: ubuntu-24.04
-    container: debian:trixie-slim
-    steps:
-     - name: Install checkout dependencies
-       run: |
-         apt-get update
-         apt-get install -y --no-install-recommends git \
-         ca-certificates rsync openssh-client
-
-     - id: checkout
-       uses: actions/checkout@v7
-       with:
-         submodules: false
-
-     - name: find githash
-       run: |
-         echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
-
-     - name: Install build dependencies
-       run: |
-         ./ide/provisioning/install-debian-packages.sh UPDATE BASE MANUAL
-
-     - name: XCSoar generate Docs
-       run: make manual V=2
-
-     - name: upload artifact
-       uses: actions/upload-artifact@v7
-       with:
-         name: ${{ env.TARGET_FINAL }}-${{ env.git_hash }}
-         path: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
-
-     - name: Upload manuals to GitHub Release
-       if: ${{ inputs.release_version != '' }}
-       uses: ncipollo/release-action@v1
-       with:
-         allowUpdates: true
-         artifactErrorsFailBuild: true
-         artifacts: output/${{ env.DOC_OUTPUT }}/*.${{ env.TARGET_EXT }}
-         omitBodyDuringUpdate: true
-         omitNameDuringUpdate: true
-         omitPrereleaseDuringUpdate: true
-         replacesArtifacts: true
-         tag: ${{ github.ref_name }}
-
-     - name: Deploy manuals to Download server
-       if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}
-       uses: easingthemes/ssh-deploy@main
-       env:
-         SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-         ARGS: "-rltgoDzvO"
-         SOURCE: output/${{ env.DOC_OUTPUT }}/
-         REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-         REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-         TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ inputs.release_version }}/
-         SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ inputs.release_version }}
-
-  readthedocs-sphinx:
-    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: docs
+    outputs:
+      git_hash: ${{ steps.githash.outputs.git_hash }}
     steps:
      - uses: actions/checkout@v7
        with:
          submodules: false
+         # The full history: every page shows its last commit, and the
+         # version badge needs the release tags.
+         fetch-depth: 0
 
-     - uses: actions/setup-python@v7
+     - name: Find the git hash
+       id: githash
+       run: |
+         echo "git_hash=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+     - uses: actions/setup-node@v7
        with:
-         python-version: '3.14'
+         node-version: 22
+         cache: npm
+         cache-dependency-path: docs/package-lock.json
 
-     - name: Install Graphviz
-       run: sudo apt-get update && sudo apt-get install -y --no-install-recommends graphviz
+     - name: Install dependencies
+       run: npm ci
 
-     - name: Install Sphinx dependencies
-       run: pip install -r doc/requirements.txt
+     - name: Generate the pages and the PDFs
+       run: npm run build:docs
 
-     - name: Build Sphinx HTML
-       run: sphinx-build -b html doc/ output/sphinx-html
+     - name: Upload the PDFs artifact
+       uses: actions/upload-artifact@v7
+       with:
+         name: XCSoar-docs-pdfs-${{ steps.githash.outputs.git_hash }}
+         path: docs/.output/public/pdfs/*.pdf
+
+     - name: Upload the pages artifact
+       if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}
+       uses: actions/upload-artifact@v7
+       with:
+         name: XCSoar-docs-pages-${{ steps.githash.outputs.git_hash }}
+         path: docs/.output/public
+         # The .htaccess with the permalink redirects.
+         include-hidden-files: true
+         retention-days: 1
+
+  deploy-docs:
+    name: "Deploy the documentation"
+    needs: build
+    if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}
+    runs-on: ubuntu-24.04
+    steps:
+     - uses: actions/download-artifact@v7
+       with:
+         name: XCSoar-docs-pages-${{ needs.build.outputs.git_hash }}
+         path: pages
+
+     - name: Deploy to the documentation server
+       env:
+         SSH_KEY: ${{ secrets.DOCS_SSH_KEY }}
+         KNOWN_HOSTS: ${{ secrets.DOCS_SSH_KNOWN_HOSTS }}
+         HOST: ${{ secrets.DOCS_HOST }}
+         USERNAME: ${{ secrets.DOCS_SSH_USER }}
+         REMOTE_PATH: ${{ secrets.DOCS_REMOTE_PATH }}
+       run: |
+         mkdir -p ~/.ssh
+         echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+         echo "$SSH_KEY" > ~/.ssh/deploy_key
+         chmod 600 ~/.ssh/deploy_key
+         ssh="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new"
+         $ssh "$USERNAME@$HOST" mkdir -p "$REMOTE_PATH"
+         rsync -rltzv --delete -e "$ssh" pages/ "$USERNAME@$HOST:$REMOTE_PATH/"
+
+  deploy-pdfs:
+    name: "Publish the manual PDFs"
+    needs: build
+    if: ${{ inputs.release_version != '' && github.repository == 'XCSoar/XCSoar' }}
+    runs-on: ubuntu-24.04
+    steps:
+     - uses: actions/download-artifact@v7
+       with:
+         name: XCSoar-docs-pdfs-${{ needs.build.outputs.git_hash }}
+         path: pdfs
+
+     - name: Upload the manual PDFs to the GitHub Release
+       env:
+         GH_TOKEN: ${{ github.token }}
+       run: |
+         gh release upload "$GITHUB_REF_NAME" pdfs/*.pdf --clobber
+
+     - name: Deploy the manual PDFs to the Download server
+       env:
+         SSH_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
+         KNOWN_HOSTS: ${{ secrets.REPOSITORY_SSH_KNOWN_HOSTS }}
+         HOST: ${{ secrets.REPOSITORY_HOST }}
+         USERNAME: ${{ secrets.REPOSITORY_SSH_USER }}
+         REMOTE_PATH: ${{ secrets.REPOSITORY_REMOTE_PATH }}
+         VERSION: ${{ inputs.release_version }}
+       run: |
+         mkdir -p ~/.ssh
+         echo "$KNOWN_HOSTS" >> ~/.ssh/known_hosts
+         echo "$SSH_KEY" > ~/.ssh/deploy_key
+         chmod 600 ~/.ssh/deploy_key
+         ssh="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new"
+         $ssh "$USERNAME@$HOST" mkdir -p "$REMOTE_PATH/releases/$VERSION"
+         rsync -rltzv -e "$ssh" pdfs/ "$USERNAME@$HOST:$REMOTE_PATH/releases/$VERSION/"
