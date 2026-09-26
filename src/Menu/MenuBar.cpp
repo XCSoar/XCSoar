@@ -121,6 +121,32 @@ MenuBar::Button::OnClicked() noexcept
   return true;
 }
 
+void
+MenuBar::Button::OnPaint(Canvas &canvas) noexcept
+{
+  const PixelRect rc = GetClientRect();
+  PixelRect neighbors[MAX_BUTTONS];
+  unsigned n_neighbors = 0;
+
+  if (bar != nullptr) {
+    const PixelPoint origin = GetTopLeft();
+    for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
+      const Button &other = bar->buttons[i];
+      if (i == index || !other.IsVisible())
+        continue;
+
+      PixelRect neighbor = other.GetClientRect();
+      neighbor.Offset(other.GetTopLeft().x - origin.x,
+                      other.GetTopLeft().y - origin.y);
+      neighbors[n_neighbors++] = neighbor;
+    }
+  }
+
+  ButtonFrameRenderer::DrawFaceShadow(canvas, rc,
+                                      {neighbors, n_neighbors});
+  ::Button::OnPaint(canvas);
+}
+
 MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &_look)
   :look(_look)
 {
@@ -131,6 +157,7 @@ MenuBar::MenuBar(ContainerWindow &parent, const ButtonLook &_look)
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
     PixelRect button_rc = GetButtonPosition(i, rc);
+    buttons[i].Bind(*this, i);
     buttons[i].Create(parent, look, "", button_rc, style);
 #ifndef USE_WINUSER
     /* Let the map show through rounded corners / translucent fill. */

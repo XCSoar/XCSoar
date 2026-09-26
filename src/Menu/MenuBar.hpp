@@ -21,14 +21,23 @@ public:
 
 protected:
   class Button : public ::Button {
+    MenuBar *bar = nullptr;
+    unsigned index = 0;
     unsigned event;
 
   public:
+    void Bind(MenuBar &_bar, unsigned _index) noexcept {
+      bar = &_bar;
+      index = _index;
+    }
+
     void SetEvent(unsigned _event) {
       event = _event;
     }
 
     bool OnClicked() noexcept override;
+
+    void OnPaint(Canvas &canvas) noexcept override;
   };
 
   Button buttons[MAX_BUTTONS];

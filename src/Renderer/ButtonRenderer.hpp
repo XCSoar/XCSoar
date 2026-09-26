@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <span>
+
 struct PixelRect;
 struct ButtonLook;
 class Canvas;
@@ -58,8 +60,25 @@ public:
   [[gnu::pure]]
   static unsigned GetEdgeMargin(const PixelRect &rc) noexcept;
 
+  /**
+   * Corner ellipse of a button face, passed to
+   * Canvas::DrawRoundRectangle().  OpenGL treats it as a diameter.
+   */
+  [[gnu::pure]]
+  static unsigned GetCornerDiameter(const PixelRect &face) noexcept;
+
   void DrawButton(Canvas &canvas, PixelRect rc,
                   ButtonState state) const noexcept;
+
+  /**
+   * The dialog drop shadow around the button face inside @p rc.
+   * @p neighbors are other buttons' client rectangles in the same
+   * coordinates; the shadow stays off their rounded faces.
+   * Nothing on a dithered display, and nothing without OpenGL.
+   */
+  static void DrawFaceShadow(Canvas &canvas, const PixelRect &rc,
+                             std::span<const PixelRect> neighbors = {})
+    noexcept;
 
   [[gnu::pure]]
   PixelRect GetDrawingRect(PixelRect rc, ButtonState state) const noexcept;

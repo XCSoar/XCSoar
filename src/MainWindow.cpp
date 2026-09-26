@@ -381,6 +381,36 @@ MainWindow::LayoutMapArea() noexcept
   map->SetContentRect(map_content_rect);
 }
 
+unsigned
+MainWindow::CollectOverlayShadowNeighbors(const Window &button,
+                                          std::span<PixelRect> neighbors)
+  const noexcept
+{
+  const Window *const others[] = {
+    show_menu_button,
+    show_quickmenu_button,
+    show_zoom_out_button,
+    show_zoom_in_button,
+  };
+
+  const PixelPoint origin = button.GetTopLeft();
+  unsigned n = 0;
+
+  for (const Window *other : others) {
+    if (other == nullptr || other == &button || !other->IsVisible())
+      continue;
+    if (n >= neighbors.size())
+      break;
+
+    PixelRect neighbor = other->GetClientRect();
+    neighbor.Offset(other->GetTopLeft().x - origin.x,
+                    other->GetTopLeft().y - origin.y);
+    neighbors[n++] = neighbor;
+  }
+
+  return n;
+}
+
 void
 MainWindow::UpdateMapOverlayButtonLayout() noexcept
 {

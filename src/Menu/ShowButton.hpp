@@ -21,6 +21,7 @@ public:
 protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 /* map overlay QuickMenu button (bolt icon) */
@@ -33,6 +34,7 @@ public:
 protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 };
 
 /* map overlay zoom button (+ or -) */
@@ -50,6 +52,7 @@ public:
 protected:
   /* virtual methods from class ButtonWindow */
   bool OnClicked() noexcept override;
+  void OnPaint(Canvas &canvas) noexcept override;
 
 private:
   Sign sign;
