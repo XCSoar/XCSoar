@@ -4,6 +4,7 @@
 #include "RowFormWidget.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Form/HLine.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/DialogSettings.hpp"
@@ -14,6 +15,37 @@
 
 #include <algorithm>
 #include <cassert>
+
+/**
+ * Inset @p rc on each side that lies on the dialog edge, by the
+ * same edge margin the button strip uses.  A side that already
+ * borders the button strip is left alone; that gap is already there.
+ */
+static void
+InsetDialogEdges(const Window &window, PixelRect &rc) noexcept
+{
+  const unsigned edge = ButtonFrameRenderer::GetEdgeMargin(rc);
+  if (edge == 0)
+    return;
+
+  const Window *parent = window.GetParent();
+  if (parent == nullptr)
+    return;
+
+  const PixelRect parent_rc = parent->GetClientRect();
+  const PixelPoint at = window.GetTopLeft();
+  const PixelSize size = window.GetSize();
+  const int e = (int)edge;
+
+  if (at.x <= e)
+    rc.left += e;
+  if (at.y <= e)
+    rc.top += e;
+  if (at.x + (int)size.width >= parent_rc.right - e)
+    rc.right -= e;
+  if (at.y + (int)size.height >= parent_rc.bottom - e)
+    rc.bottom -= e;
+}
 
 [[gnu::pure]]
 static unsigned
@@ -348,6 +380,8 @@ void
 RowFormWidget::UpdateLayout() noexcept
 {
   PixelRect current_rect = GetWindow().GetClientRect();
+  InsetDialogEdges(GetWindow(), current_rect);
+
   const unsigned total_width = current_rect.GetWidth();
   const unsigned total_height = current_rect.GetHeight();
   current_rect.bottom = current_rect.top;
@@ -446,6 +480,10 @@ RowFormWidget::GetMinimumSize() const noexcept
     }
   }
 
+  const unsigned edge = ButtonFrameRenderer::GetEdgeMargin(
+      PixelRect{0, 0, (int)size.width, (int)size.height});
+  size.width += 2 * edge;
+  size.height += 2 * edge;
   return size;
 }
 
@@ -475,6 +513,10 @@ RowFormWidget::GetMaximumSize() const noexcept
     }
   }
 
+  const unsigned edge = ButtonFrameRenderer::GetEdgeMargin(
+      PixelRect{0, 0, (int)size.width, (int)size.height});
+  size.width += 2 * edge;
+  size.height += 2 * edge;
   return size;
 }
 

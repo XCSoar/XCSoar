@@ -7,6 +7,8 @@
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
+#include "ui/canvas/Brush.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/DataField.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -184,7 +186,8 @@ WndProperty::UpdateLayout() noexcept
 {
   edit_rc = GetClientRect();
 
-  const unsigned margin = Layout::VptScale(1u);
+  /* the same inset a button leaves around its face */
+  const unsigned margin = ButtonFrameRenderer::GetMargin();
 
   if (caption_width >= 0) {
     edit_rc.left += caption_width + margin;
@@ -314,11 +317,48 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
 
   const bool focused = HasCursorKeys() && HasFocus();
 
-  /* background and selector */
-  if (pressed)
-    canvas.Clear(look.list.pressed.background_color);
-  else if (focused)
-    canvas.Clear(look.focused.background_color);
+  /* the button face outline: same width and the same hairline */
+  const unsigned border_width =
+    std::max(1u, Layout::ScaleFinePenWidth(2));
+  const Color frame_color = IsEnabled()
+    ? look.button.standard.ring_color
+    : look.button.disabled.ring_color;
+
+  /* two filled round rectangles, as on a button: a stroke wobbles
+     around the corners */
+  const auto draw_face = [&](PixelRect rc, Color border, Color fill) {
+    if (rc.left >= rc.right || rc.top >= rc.bottom)
+      return;
+
+    unsigned diameter = ButtonFrameRenderer::GetCornerDiameter(rc);
+    canvas.SelectNullPen();
+    {
+      const Brush brush{border};
+      canvas.Select(brush);
+      canvas.DrawRoundRectangle(rc, PixelSize{diameter});
+      canvas.SelectHollowBrush();
+    }
+
+    rc.Grow(-(int)border_width);
+    if (rc.left >= rc.right || rc.top >= rc.bottom)
+      return;
+
+    diameter = diameter > 2 * border_width
+      ? diameter - 2 * border_width
+      : 2u;
+    const Brush brush{fill};
+    canvas.Select(brush);
+    canvas.DrawRoundRectangle(rc, PixelSize{diameter});
+    canvas.SelectHollowBrush();
+  };
+
+  if (pressed || focused) {
+    const PixelRect rc{0, 0, canvas_width, canvas_height};
+    const Color highlight = pressed
+      ? look.list.pressed.background_color
+      : look.focused.background_color;
+    draw_face(rc, frame_color, highlight);
+  }
 
   if (!caption.empty()) {
     canvas.SetTextColor(focused && !pressed
@@ -370,29 +410,28 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
     text_color = look.dark_mode ? COLOR_GRAY : COLOR_DARK_GRAY;
   }
 
-  if (!visible_edit_rc.IsEmpty()) {
-    canvas.DrawFilledRectangle(visible_edit_rc, background_color);
+  const unsigned diameter =
+    ButtonFrameRenderer::GetCornerDiameter(visible_edit_rc);
 
-    canvas.SelectHollowBrush();
-    canvas.Select(Pen(Layout::ScaleFinePenWidth(1),
-                      look.ReadOnlyValueBorderColor()));
-    canvas.DrawRectangle(visible_edit_rc);
-  }
+  if (!visible_edit_rc.IsEmpty())
+    draw_face(visible_edit_rc, frame_color, background_color);
 
   if (!value.empty() && !visible_edit_rc.IsEmpty()) {
     canvas.SetTextColor(text_color);
     canvas.SetBackgroundTransparent();
     canvas.Select(look.text_font);
 
-    const int x = visible_edit_rc.left + Layout::GetTextPadding() * 2;
+    /* keep the caption clear of the rounded corners */
+    const int inset = std::max(int(Layout::GetTextPadding() * 2),
+                               int(diameter / 2));
+    const int x = visible_edit_rc.left + inset;
     const int control_height = visible_edit_rc.GetHeight();
     const int text_height = canvas.GetFontHeight();
     const int y = visible_edit_rc.top + (control_height - text_height) / 2;
 
     // determine available pixel width for text inside edit rect
     const int avail = std::max(0,
-                  static_cast<int>(visible_edit_rc.GetWidth()) -
-                  static_cast<int>(Layout::GetTextPadding()) * 4);
+                  static_cast<int>(visible_edit_rc.GetWidth()) - 2 * inset);
 
     // measure full text width
     PixelSize tsize = canvas.CalcTextSize(value.c_str());
