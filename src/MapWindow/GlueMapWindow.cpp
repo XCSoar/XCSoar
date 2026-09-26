@@ -6,6 +6,7 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
+#include "PageActions.hpp"
 #include "time/PeriodClock.hpp"
 #include "ui/event/Idle.hpp"
 #include "Topography/Thread.hpp"
@@ -186,6 +187,12 @@ GlueMapWindow::FullRedraw() noexcept
 #ifdef ENABLE_OPENGL
   NoteTerrainQuantisationUserActivity();
 #endif
+}
+
+void
+GlueMapWindow::OnProjectionModified() noexcept
+{
+  PageActions::OnMapProjectionModified();
 }
 
 void
