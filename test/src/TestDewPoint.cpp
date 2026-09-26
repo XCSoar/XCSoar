@@ -10,6 +10,7 @@
  * range -10..35 degC and 10..99 % relative humidity.
  */
 
+#include "Atmosphere/CuSonde.hpp"
 #include "Atmosphere/DewPoint.hpp"
 #include "TestUtil.hpp"
 
@@ -32,7 +33,7 @@ static constexpr Reference REFERENCE[] = {
 int
 main()
 {
-  plan_tests(11);
+  plan_tests(14);
 
   for (const auto &i : REFERENCE) {
     const auto dewpoint =
@@ -54,6 +55,22 @@ main()
   /* Above saturation the result is unphysical but finite, which is why
      the caller needs a range check and not merely a zero check. */
   ok1(CalculateDewPoint(t, 120) > t);
+
+  /* and the check itself, where it sits: a level offered an
+     implausible humidity keeps no dew point, so FindCloudBase() skips
+     it.  The temperature of that sample is still recorded -- only the
+     humidity was unusable. */
+  CuSonde::Level zero{};
+  zero.UpdateTemps(true, 0, t);
+  ok1(zero.dewpoint_empty());
+
+  CuSonde::Level supersaturated{};
+  supersaturated.UpdateTemps(true, 120, t);
+  ok1(supersaturated.dewpoint_empty());
+
+  CuSonde::Level good{};
+  good.UpdateTemps(true, 60, t);
+  ok1(!good.dewpoint_empty());
 
   /* The other end of the domain cannot be asserted here.  At zero
      humidity the formula takes log10(0) and the result is NaN, but

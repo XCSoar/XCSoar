@@ -196,6 +196,7 @@ TEST_NMEA_CHECKSUM_SOURCES = \
 $(eval $(call link-program,TestNMEAChecksum,TEST_NMEA_CHECKSUM))
 
 TEST_DEW_POINT_SOURCES = \
+	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestDewPoint.cpp
 $(eval $(call link-program,TestDewPoint,TEST_DEW_POINT))
