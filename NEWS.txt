@@ -112,6 +112,9 @@ Version 7.46 - not yet released
     min-sink can lower GPS-only wind quality #2905
   - skip estimated TAS from ground speed and wind when GPS track is
     missing
+  - fix the convection estimate being spoiled for the rest of the
+    flight by a single implausible humidity reading; a probe reporting
+    0 % made the dew point for that level not a number #3217
 * devices
   - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too low #3055
   - ignore Condor 3 UDP electronic vario, altimeter, airspeed,
