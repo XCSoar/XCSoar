@@ -120,14 +120,32 @@ RenderTemperatureChart(Canvas &canvas, const PixelRect rc,
   chart.Finish();
 }
 
+/**
+ * CuSonde marks a height it has not found (or has invalidated after a
+ * forecast change) with -1, and zero before anything was measured.
+ * Neither is an altitude to show.
+ */
+static void
+FormatEstimatedHeight(char *buffer, size_t size, double height) noexcept
+{
+  if (height > 0)
+    StringFormat(buffer, size, "%5.0f %s",
+                 (double)Units::ToUserAltitude(height),
+                 Units::GetAltitudeName());
+  else
+    StringFormat(buffer, size, "%s", "---");
+}
+
 void
 TemperatureChartCaption(char *sTmp, const CuSonde &cu_sonde)
 {
-  StringFormatUnsafe(sTmp, "%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n",
-                     _("Thermal height"),
-                     (double)Units::ToUserAltitude(cu_sonde.thermal_height),
-                     Units::GetAltitudeName(),
-                     _("Cloud base"),
-                     (double)Units::ToUserAltitude(cu_sonde.cloud_base),
-                     Units::GetAltitudeName());
+  char thermal_height[32], cloud_base[32];
+  FormatEstimatedHeight(thermal_height, sizeof(thermal_height),
+                        cu_sonde.thermal_height);
+  FormatEstimatedHeight(cloud_base, sizeof(cloud_base),
+                        cu_sonde.cloud_base);
+
+  StringFormatUnsafe(sTmp, "%s:\r\n  %s\r\n\r\n%s:\r\n  %s\r\n",
+                     _("Thermal height"), thermal_height,
+                     _("Cloud base"), cloud_base);
 }
