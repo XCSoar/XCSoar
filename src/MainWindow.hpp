@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <cassert>
 #include <memory>
+#include <span>
 
 #include "Menu/ShowButton.hpp"
 
@@ -460,6 +461,16 @@ public:
    * keep the north arrow's clearance in step with them.
    */
   void UpdateMapOverlayButtonLayout() noexcept;
+
+  /**
+   * Other map-overlay buttons, as client rectangles in @p button's
+   * coordinates, so its drop shadow can stay off their rounded faces.
+   *
+   * @return how many rectangles were written
+   */
+  unsigned
+  CollectOverlayShadowNeighbors(const Window &button,
+                                std::span<PixelRect> neighbors) const noexcept;
 
   /**
    * Called by XCSoarInterface::Startup() after startup has been

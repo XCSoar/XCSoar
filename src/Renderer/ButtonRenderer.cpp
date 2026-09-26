@@ -2,13 +2,171 @@
 // Copyright The XCSoar Project
 
 #include "ButtonRenderer.hpp"
+#include "Renderer/BoxShadowRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/ButtonLook.hpp"
 #include "Asset.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
+#endif
+
+#include <algorithm>
 #include <cmath>
 #include <numbers>
+#include <span>
+
+/**
+ * Inset the face from the window edges so adjacent buttons get
+ * breathing room and rounded corners reveal the background.
+ */
+[[gnu::pure]]
+static PixelRect
+GetFaceRect(PixelRect rc) noexcept
+{
+  rc.Grow(-(int)ButtonFrameRenderer::GetMargin());
+  return rc;
+}
+
+unsigned
+ButtonFrameRenderer::GetCornerDiameter(const PixelRect &face) noexcept
+{
+  /* comparable to a Tailwind "rounded-lg" card; the cap keeps
+     small buttons from turning into pills */
+  return std::min(Layout::VptScale(14),
+                  std::min(std::max(2u, (unsigned)face.GetWidth() / 2),
+                           std::max(2u, (unsigned)face.GetHeight() / 2)));
+}
+
+/**
+ * Tailwind's default "shadow", in virtual points.  The blur value
+ * is twice the CSS radius:
+ *   0 1px 3px     rgba(0,0,0,.10)
+ *   0 1px 2px -1px rgba(0,0,0,.10)
+ */
+static constexpr BoxShadowStyle BUTTON_SHADOW{{{
+  /* spread, blur, alpha, offset_y */
+  {0, 6, 26, 1},
+  {-1, 4, 26, 1},
+}}};
+
+[[gnu::pure]]
+static PixelRect
+ShadowClip(const PixelRect &rc) noexcept
+{
+  PixelRect clip = rc;
+  clip.Grow((int)BoxShadowExtent(BUTTON_SHADOW));
+  return clip;
+}
+
+/**
+ * Without a stencil buffer, stop the shadow on the neighbour's face
+ * box.  A control merely somewhere to the left must not cut the
+ * shadow over the map.
+ */
+static void
+ExcludeNeighbor(PixelRect &clip, const PixelRect &rc,
+                PixelRect neighbor) noexcept
+{
+  const int margin = (int)ButtonFrameRenderer::GetMargin();
+  PixelRect face = rc;
+  face.Grow(-margin);
+  neighbor.Grow(-margin);
+
+  if (neighbor.right <= face.left)
+    clip.left = std::max(clip.left, neighbor.right);
+  else if (neighbor.left >= face.right)
+    clip.right = std::min(clip.right, neighbor.left);
+
+  if (neighbor.bottom <= face.top)
+    clip.top = std::max(clip.top, neighbor.bottom);
+  else if (neighbor.top >= face.bottom)
+    clip.bottom = std::min(clip.bottom, neighbor.top);
+}
+
+#ifdef ENABLE_OPENGL
+
+/**
+ * Mark a rounded button face so the shadow is not drawn inside it.
+ * A straight scissor at the face box cuts through the corner.
+ */
+static void
+StencilFace(Canvas &canvas, PixelRect face) noexcept
+{
+  if (face.left >= face.right || face.top >= face.bottom)
+    return;
+
+  canvas.DrawRoundRectangle(
+      face, PixelSize{ButtonFrameRenderer::GetCornerDiameter(face)});
+}
+
+#endif
+
+void
+ButtonFrameRenderer::DrawFaceShadow(
+    Canvas &canvas, const PixelRect &rc,
+    std::span<const PixelRect> neighbors) noexcept
+{
+  /* the face is inset by the margin, and the shadow has to follow
+     that or it floats off the corners */
+  if (IsDithered())
+    return;
+
+  const PixelRect face = GetFaceRect(rc);
+  if (face.left >= face.right || face.top >= face.bottom)
+    return;
+
+#ifdef ENABLE_OPENGL
+  PixelRect clip = ShadowClip(rc);
+
+  GLint stencil_bits = 0;
+  glGetIntegerv(GL_STENCIL_BITS, &stencil_bits);
+  const bool stencil = stencil_bits > 0;
+
+  /* a rectangular clip is the fallback; it slices a rounded corner */
+  if (!stencil) {
+    for (const PixelRect &neighbor : neighbors)
+      ExcludeNeighbor(clip, rc, neighbor);
+  }
+
+  if (clip.right <= clip.left || clip.bottom <= clip.top)
+    return;
+
+  const GLCanvasScissor scissor(clip);
+  const unsigned radius = GetCornerDiameter(face) / 2;
+
+  if (stencil) {
+    const GLEnable<GL_STENCIL_TEST> stencil_test;
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectNullPen();
+    canvas.SelectWhiteBrush();
+    StencilFace(canvas, face);
+    for (PixelRect neighbor : neighbors)
+      StencilFace(canvas, GetFaceRect(neighbor));
+    canvas.SelectHollowBrush();
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilFunc(GL_NOTEQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    DrawBoxShadow(face, BUTTON_SHADOW, radius);
+
+    glStencilFunc(GL_ALWAYS, 0, ~0u);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+  } else
+    DrawBoxShadow(face, BUTTON_SHADOW, radius);
+#else
+  (void)canvas;
+  (void)neighbors;
+#endif
+}
 
 unsigned
 ButtonFrameRenderer::GetMargin() noexcept
@@ -42,19 +200,6 @@ GetStateLook(const ButtonLook &look, ButtonState state) noexcept
   }
 
   return look.standard;
-}
-
-/**
- * Inset the face from the window edges so adjacent buttons get
- * breathing room and rounded corners reveal the background.
- */
-[[gnu::pure]]
-static PixelRect
-GetFaceRect(PixelRect rc) noexcept
-{
-  rc.Grow(-(int)ButtonFrameRenderer::GetMargin());
-
-  return rc;
 }
 
 /**
@@ -133,17 +278,6 @@ DrawDashedRoundRectangle(Canvas &canvas, const PixelRect &rc,
   }
 }
 
-[[gnu::pure]]
-static unsigned
-GetCornerDiameter(const PixelRect &face) noexcept
-{
-  /* radius comparable to a Tailwind "rounded-lg" card; the cap keeps
-     small buttons from turning into pills */
-  return std::min(Layout::VptScale(14),
-                  std::min(std::max(2u, (unsigned)face.GetWidth() / 2),
-                           std::max(2u, (unsigned)face.GetHeight() / 2)));
-}
-
 void
 ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
                                 ButtonState state) const noexcept
@@ -195,7 +329,7 @@ ButtonFrameRenderer::DrawButton(Canvas &canvas, PixelRect rc,
   /* No drop shadow: a border on the face outline, like a Tailwind
      `ring ring-inset`.  Two filled round rectangles, not a stroke,
      whose width would wobble around the corners */
-  const unsigned border_width = std::max(1u, Layout::ScaleFinePenWidth(1));
+  const unsigned border_width = std::max(1u, Layout::ScaleFinePenWidth(2));
 
   PixelRect inner = face;
   unsigned inner_diameter = diameter;
