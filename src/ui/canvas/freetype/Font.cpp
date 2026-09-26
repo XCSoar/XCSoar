@@ -141,6 +141,38 @@ GetCapitalHeight(FT_Face face) noexcept
   return FT_CEIL(face->glyph->metrics.height);
 }
 
+/**
+ * How far the ink extends below the baseline.  The face's line
+ * spacing can stop short of that, which clips the tail.
+ */
+[[gnu::pure]]
+static unsigned
+GetDescentHeight(FT_Face face) noexcept
+{
+#ifndef ENABLE_OPENGL
+  const std::lock_guard lock{freetype_mutex};
+#endif
+
+  unsigned descent = 0;
+
+  for (const unsigned ch : {'g', 'j', 'y', 'p', 'q'}) {
+    const FT_UInt i = FT_Get_Char_Index(face, ch);
+    if (i == 0)
+      continue;
+
+    if (::FT_Load_Glyph(face, i, load_flags))
+      continue;
+
+    const FT_Glyph_Metrics &metrics = face->glyph->metrics;
+    const int below = (int)FT_CEIL(metrics.height)
+      - (int)FT_FLOOR(metrics.horiBearingY);
+    if (below > (int)descent)
+      descent = (unsigned)below;
+  }
+
+  return descent;
+}
+
 void
 Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[maybe_unused]] bool italic)
 {
@@ -161,6 +193,11 @@ Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[
 
   height = FT_CEIL(FT_MulFix(new_face->height, y_scale));
   ascent_height = FT_CEIL(FT_MulFix(new_face->ascender, y_scale));
+
+  /* keep the tail below the baseline inside the line box */
+  const unsigned descent = GetDescentHeight(new_face);
+  if (ascent_height + descent > height)
+    height = ascent_height + descent;
 
   capital_height = ::GetCapitalHeight(new_face);
   if (capital_height == 0)
