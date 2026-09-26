@@ -92,6 +92,7 @@ TEST_NAMES = \
 	TestWaypointReachability TestBackupPaths \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
+	TestOperaRadar \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -630,6 +631,14 @@ TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
 TEST_ANGLE_DEPENDS = MATH
 $(eval $(call link-program,TestAngle,TEST_ANGLE))
+
+TEST_OPERA_RADAR_SOURCES = \
+	$(SRC)/Weather/OPERA/RadarData.cpp \
+	$(SRC)/ui/canvas/custom/GeoBitmapTile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestOperaRadar.cpp
+TEST_OPERA_RADAR_DEPENDS = GEO MATH TIME FMT UTIL
+$(eval $(call link-program,TestOperaRadar,TEST_OPERA_RADAR))
 
 TEST_ARANGE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
