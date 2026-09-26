@@ -1089,9 +1089,6 @@ msgstr "선언을 보냄"
 msgid "Reading flight list"
 msgstr "비행리스트 읽기"
 
-msgid "Downloading flight log"
-msgstr "비행 로그 다운로드"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "사용 안함"
@@ -1106,6 +1103,7 @@ msgstr "BLE 포트"
 msgid "Bluetooth server"
 msgstr "블루투스서버"
 
+#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "내장GPS&센서"
 
@@ -1783,6 +1781,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "색상선택"
 
+#, no-c-format
 msgid "Display"
 msgstr "화면"
 
@@ -1792,9 +1791,6 @@ msgstr "경고"
 #, no-c-format
 msgid "Airspace"
 msgstr "공역"
-
-msgid "Select Pattern"
-msgstr "패턴선택"
 
 msgid "Squawk code"
 msgstr "코드 설정"
@@ -1850,9 +1846,6 @@ msgstr "테두리색상변경"
 
 msgid "Change Fill Color"
 msgstr "채우기색변경"
-
-msgid "Change Fill Brush"
-msgstr "채움브러시변경"
 
 msgid "Border Width"
 msgstr "테두리폭"
@@ -2025,10 +2018,6 @@ msgid "Language, Input"
 msgstr "언어, 입력"
 
 #, no-c-format
-msgid "Screen Layout"
-msgstr "화면표시"
-
-#, no-c-format
 msgid "Audio"
 msgstr "소리"
 
@@ -2054,14 +2043,8 @@ msgstr "고급설정"
 msgid "Configuration"
 msgstr "설정"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "이 InfoBox 패널 구성의 이름입니다."
-
 msgid "InfoBox"
 msgstr "정보창"
-
-msgid "Content"
-msgstr "목차"
 
 msgid "Copy Set"
 msgstr "복사"
@@ -2168,6 +2151,7 @@ msgstr "팀코드"
 msgid "Task Calc"
 msgstr "타스크계산"
 
+#, no-c-format
 msgid "Analysis"
 msgstr "비행분석"
 
@@ -2204,6 +2188,7 @@ msgstr "타스크속도"
 msgid "Warnings"
 msgstr "경고"
 
+#, no-c-format
 msgid "Checklist"
 msgstr "체크리스트"
 
@@ -2408,6 +2393,7 @@ msgstr "잘못된 암호."
 msgid "Enter a new password"
 msgstr "새 비밀번호 입력"
 
+#, no-c-format
 msgid "Status"
 msgstr "상태"
 
@@ -2927,12 +2913,6 @@ msgstr "공역 채우기 모드"
 msgid "Specifies the mode for filling the airspace area."
 msgstr "공역 채우기 유형을 선택하시오."
 
-msgid "Airspace transparency"
-msgstr "공역투명도"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "선택하면 공역을 투명하게 채움."
-
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "골러시(FinalGlide)바를 표시하지 않음."
@@ -3327,12 +3307,11 @@ msgstr "골포인트 비행일때, 정보창을 골러시(Final Glide)로 자동
 msgid "Text size"
 msgstr "글자 크기"
 
-msgid "Display Resolution"
-msgstr "화면해상도"
-
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "해상도조정: 표시되는 선의 굵기와 글자크기가 달라진다."
 
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
 msgid "Automatic"
 msgstr "자동"
 
@@ -3393,90 +3372,6 @@ msgstr "세로(역방향)"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "가로(역방향)"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "정보창 10개 (5개씩 분할)"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "정보창 8개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "정보창 8개 + 바리오 (세로)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "정보창 8개 (위 혹은 왼쪽)"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "정보창 8개 + 바리오 (세로)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "정보창 9개 + 바리오 (가로)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "정보창 9개(좌우나뉨) + 바리오 (가로)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12개 왼쪽 + 바리오 3개 오른쪽 (가로)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "정보창 5개"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "정보창 10개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "정보창 12개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "정보창 10개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "정보창 12개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "정보창 16개 (가로)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "정보창 4개 (아래쪽 혹은 오른쪽)"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "정보창 4개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "정보창 4개 (아래쪽 혹은 오른쪽)"
 
 #, no-c-format
 msgid "Text"
@@ -4709,12 +4604,6 @@ msgstr "익면하중의 단위."
 msgid "UTC offset"
 msgstr "UTC 오프셋"
 
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr "UTC에 대한 현지시간 보정값을 입력한다. 한국은 UTC + 9h이다."
-
 msgid "Use GPS time"
 msgstr "GPS 시간보정"
 
@@ -5272,6 +5161,7 @@ msgstr "최적화"
 msgid "No alternates available"
 msgstr "대체 항목이 없습니다"
 
+#, no-c-format
 msgid "Alternates"
 msgstr "대체지"
 
@@ -6910,10 +6800,6 @@ msgid "T Next Leg"
 msgstr "필요상승(다음)"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "필요상승(다음): 다음포인트(leg)까지 필요한 상승률, 현재의 맥크레디 설정으로 예측한다."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "바람(정풍 수치 - 심플)"
 
@@ -8133,12 +8019,6 @@ msgstr "Veličina ikone točke"
 
 msgid "Size of waypoint symbols on the map as a percentage of the built-in artwork (list dialogs keep a fixed row icon size)."
 msgstr "지도 위 웨이포인트 기호 크기(내장 그래픽 대비 백분율; 목록 대화상자는 고정 행 아이콘 크기 유지)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -9751,14 +9631,6 @@ msgid ""
 "throughout the whole Alps region. ICON-CH model."
 msgstr "비엔나에서 페르피냥까지 알프스 전 구간을 다루며 알프스 전역의 웨이브를 예보합니다. ICON-CH 모델."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -10882,5 +10754,214 @@ msgstr ""
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
 
+#, no-c-format
 msgid "Recently used waypoints"
 msgstr ""
+
+#, no-c-format
+msgid "Zoom in"
+msgstr ""
+
+#, no-c-format
+msgid "Zoom out"
+msgstr ""
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr ""
+
+#, no-c-format
+msgid "Next page"
+msgstr ""
+
+#, no-c-format
+msgid "Previous page"
+msgstr ""
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr ""
+
+#, no-c-format
+msgid "Menu"
+msgstr ""
+
+#, no-c-format
+msgid "Task manager"
+msgstr ""
+
+#, no-c-format
+msgid "Pan mode"
+msgstr ""
+
+#, no-c-format
+msgid "Quick menu"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Power off"
+msgstr ""
+
+#. overwriting the data files under a flying program helps nobody
+#. the loggers are writing, half the files would be left out -
+#. and nobody needs a backup right now up there
+msgid "Not available while flying."
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
+msgstr ""
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+
+msgid "Arrange InfoBoxes"
+msgstr ""
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr ""
+

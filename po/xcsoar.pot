@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 22:41+0200\n"
+"POT-Creation-Date: 2026-09-26 10:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -295,6 +295,81 @@ msgstr ""
 
 #, no-c-format
 msgid "Wrong shape"
+msgstr ""
+
+#. valid but unknown number of sats
+#, no-c-format
+msgid "Unknown"
+msgstr ""
+
+msgid "Goal"
+msgstr ""
+
+msgid "Out and return"
+msgstr ""
+
+msgid "Two legs"
+msgstr ""
+
+msgid "Three legs"
+msgstr ""
+
+msgid "non-FAI triangle"
+msgstr ""
+
+#, c-format
+msgid "%d legs"
+msgstr ""
+
+#, c-format
+msgid "Task is empty (%s)"
+msgstr ""
+
+msgid "max."
+msgstr ""
+
+msgid "min."
+msgstr ""
+
+msgid "dist."
+msgstr ""
+
+msgid "Sector"
+msgstr ""
+
+#, no-c-format
+msgid "Radius"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+#, no-c-format
+msgid "Gate width"
+msgstr ""
+
+msgid "Cylinder"
+msgstr ""
+
+msgid "MAT cylinder"
+msgstr ""
+
+msgid "Keyhole"
+msgstr ""
+
+msgid "DAeC Keyhole"
+msgstr ""
+
+msgid "BGA Fixed Course"
+msgstr ""
+
+msgid "BGA Enhanced Option"
+msgstr ""
+
+msgid "BGA Start Sector"
+msgstr ""
+
+msgid "Angle"
 msgstr ""
 
 msgid "Loading Airspace File..."
@@ -640,6 +715,66 @@ msgstr ""
 msgid "Task & Airfields"
 msgstr ""
 
+#, no-c-format
+msgid "Zoom in"
+msgstr ""
+
+#, no-c-format
+msgid "Zoom out"
+msgstr ""
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr ""
+
+#, no-c-format
+msgid "Next page"
+msgstr ""
+
+#, no-c-format
+msgid "Previous page"
+msgstr ""
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr ""
+
+#, no-c-format
+msgid "Alternates"
+msgstr ""
+
+#, no-c-format
+msgid "Menu"
+msgstr ""
+
+#, no-c-format
+msgid "Task manager"
+msgstr ""
+
+#, no-c-format
+msgid "Analysis"
+msgstr ""
+
+#, no-c-format
+msgid "Checklist"
+msgstr ""
+
+#, no-c-format
+msgid "Pan mode"
+msgstr ""
+
+#, no-c-format
+msgid "Status"
+msgstr ""
+
+#, no-c-format
+msgid "Recently used waypoints"
+msgstr ""
+
+#, no-c-format
+msgid "Quick menu"
+msgstr ""
+
 msgid "Failed to save waypoints"
 msgstr ""
 
@@ -859,6 +994,19 @@ msgstr ""
 msgid "%s: %s"
 msgstr ""
 
+msgid "InfoBox geometry"
+msgstr ""
+
+msgid "Text size"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Dark mode"
+msgstr ""
+
 msgid "Waypoint labels"
 msgstr ""
 
@@ -969,11 +1117,6 @@ msgid "Avg. lift"
 msgstr ""
 
 msgid "Traffic"
-msgstr ""
-
-#. valid but unknown number of sats
-#, no-c-format
-msgid "Unknown"
 msgstr ""
 
 msgid "Arrival Alt"
@@ -1210,7 +1353,7 @@ msgstr ""
 msgid "Vest"
 msgstr ""
 
-msgid "Quit program?"
+msgid "Quit"
 msgstr ""
 
 msgid "Restart"
@@ -1219,10 +1362,13 @@ msgstr ""
 msgid "Power off"
 msgstr ""
 
-msgid "Restart the device?"
+msgid "Cancel"
 msgstr ""
 
-msgid "Power off the device?"
+msgid "What do you want to do?"
+msgstr ""
+
+msgid "Quit program?"
 msgstr ""
 
 #, no-c-format
@@ -1343,7 +1489,13 @@ msgstr ""
 msgid "Reading flight list"
 msgstr ""
 
-msgid "Downloading flight log"
+msgid "Flight download"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Driver"
 msgstr ""
 
 #, no-c-format
@@ -1360,6 +1512,7 @@ msgstr ""
 msgid "Bluetooth server"
 msgstr ""
 
+#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr ""
 
@@ -1466,9 +1619,6 @@ msgid "No"
 msgstr ""
 
 msgid "Retry"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "Ignore"
@@ -1622,6 +1772,12 @@ msgctxt "Button"
 msgid "Select none"
 msgstr ""
 
+msgid "Replay"
+msgstr ""
+
+msgid "Demo"
+msgstr ""
+
 msgid "Creating backup"
 msgstr ""
 
@@ -1636,12 +1792,18 @@ msgctxt "Setting"
 msgid "Source"
 msgstr ""
 
-msgid "Restoring will overwrite existing data. Continue?"
+#. overwriting the data files under a flying program helps nobody
+#. the loggers are writing, half the files would be left out -
+#. and nobody needs a backup right now up there
+msgid "Not available while flying."
 msgstr ""
 
 #, no-c-format
 msgctxt "Button"
 msgid "Restore"
+msgstr ""
+
+msgid "Restoring will overwrite existing data. Continue?"
 msgstr ""
 
 msgid "Restore failed."
@@ -1668,6 +1830,14 @@ msgid "Select a target first."
 msgstr ""
 
 msgid "Backup failed."
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
 msgstr ""
 
 #, no-c-format
@@ -1959,9 +2129,6 @@ msgstr ""
 msgid "Send to device"
 msgstr ""
 
-msgid "Port"
-msgstr ""
-
 msgid "Engine Type"
 msgstr ""
 
@@ -2011,9 +2178,6 @@ msgstr ""
 msgid "Select the purpose of this pressure sensor. This sensor measures some pressure. Here you tell the system what pressure this is and what it should be used for."
 msgstr ""
 
-msgid "Driver"
-msgstr ""
-
 #. for a passthrough device, offer additional driver
 msgid "Passthrough device"
 msgstr ""
@@ -2057,9 +2221,6 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Flight download"
-msgstr ""
-
 msgid "Manage"
 msgstr ""
 
@@ -2095,13 +2256,32 @@ msgstr ""
 msgid "Baro"
 msgstr ""
 
+msgid "Pressure"
+msgstr ""
+
 msgid "Pitot"
 msgstr ""
 
 msgid "Airspeed"
 msgstr ""
 
+#, no-c-format
+msgid "Temperature"
+msgstr ""
+
+#, no-c-format
+msgid "Relative humidity"
+msgstr ""
+
 msgid "IMU"
+msgstr ""
+
+#, no-c-format
+msgid "Heart Rate"
+msgstr ""
+
+#, no-c-format
+msgid "Blood Oxygen"
 msgstr ""
 
 #, no-c-format
@@ -2115,6 +2295,9 @@ msgid "Bluetooth is disabled"
 msgstr ""
 
 msgid "Duplicate"
+msgstr ""
+
+msgid "Connecting..."
 msgstr ""
 
 msgid "Not connected"
@@ -2160,13 +2343,6 @@ msgid "Do you really want to delete all flights from the device?"
 msgstr ""
 
 msgid "Reboot"
-msgstr ""
-
-#, no-c-format
-msgid "Temperature"
-msgstr ""
-
-msgid "Pressure"
 msgstr ""
 
 msgid "Sink tone"
@@ -2364,9 +2540,6 @@ msgid "Enable NMEA"
 msgstr ""
 
 msgid "Recording interval"
-msgstr ""
-
-msgid "Demo"
 msgstr ""
 
 msgid "Set new audio scheme? Old values will be lost."
@@ -2598,6 +2771,7 @@ msgstr ""
 msgid "Select Color"
 msgstr ""
 
+#, no-c-format
 msgid "Display"
 msgstr ""
 
@@ -2606,9 +2780,6 @@ msgstr ""
 
 #, no-c-format
 msgid "Airspace"
-msgstr ""
-
-msgid "Select Pattern"
 msgstr ""
 
 msgid "[Invalid text]"
@@ -2695,9 +2866,6 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "Status"
-msgstr ""
-
 #, no-c-format
 msgid "NOTAM Affected Area"
 msgstr ""
@@ -2725,9 +2893,6 @@ msgid "Change Border Color"
 msgstr ""
 
 msgid "Change Fill Color"
-msgstr ""
-
-msgid "Change Fill Brush"
 msgstr ""
 
 msgid "Border Width"
@@ -3014,7 +3179,7 @@ msgid "Language, Input"
 msgstr ""
 
 #, no-c-format
-msgid "Screen Layout"
+msgid "Layout"
 msgstr ""
 
 #, no-c-format
@@ -3023,6 +3188,10 @@ msgstr ""
 
 #, no-c-format
 msgid "Audio"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
 msgstr ""
 
 #, no-c-format
@@ -3052,19 +3221,10 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "The name of this InfoBox panel configuration."
+msgid "Back"
 msgstr ""
 
-msgid "InfoBox"
-msgstr ""
-
-msgid "Content"
-msgstr ""
-
-msgid "Copy Set"
-msgstr ""
-
-msgid "Paste Set"
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
 
 msgid "Overwrite all InfoBoxes in this set?"
@@ -3073,7 +3233,10 @@ msgstr ""
 msgid "InfoBox paste set"
 msgstr ""
 
-msgid "Invalid"
+msgid "Copy Set"
+msgstr ""
+
+msgid "Paste Set"
 msgstr ""
 
 msgid "Competition ID"
@@ -3162,9 +3325,6 @@ msgstr ""
 msgid "Task Calc"
 msgstr ""
 
-msgid "Analysis"
-msgstr ""
-
 msgid "Barograph"
 msgstr ""
 
@@ -3196,9 +3356,6 @@ msgid "Task Speed"
 msgstr ""
 
 msgid "Warnings"
-msgstr ""
-
-msgid "Checklist"
 msgstr ""
 
 #, no-c-format
@@ -3353,6 +3510,9 @@ msgstr ""
 msgid "List"
 msgstr ""
 
+msgid "Invalid"
+msgstr ""
+
 msgid "Reference Mass"
 msgstr ""
 
@@ -3419,7 +3579,7 @@ msgstr ""
 msgid "Switch InfoBox"
 msgstr ""
 
-msgid "File"
+msgid "Flight"
 msgstr ""
 
 msgid "Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (.nmea). Leave blank to run the demo."
@@ -3429,15 +3589,6 @@ msgid "Rate"
 msgstr ""
 
 msgid "Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."
-msgstr ""
-
-msgid "Replay"
-msgstr ""
-
-msgid "Quit"
-msgstr ""
-
-msgid "What do you want to do?"
 msgstr ""
 
 msgid "Profile"
@@ -3453,9 +3604,6 @@ msgid "Wrong password."
 msgstr ""
 
 msgid "Enter a new password"
-msgstr ""
-
-msgid "Flight"
 msgstr ""
 
 msgid "System"
@@ -3943,12 +4091,6 @@ msgstr ""
 msgid "Specifies the mode for filling the airspace area."
 msgstr ""
 
-msgid "Airspace transparency"
-msgstr ""
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
-
 msgid "NOTAM Support"
 msgstr ""
 
@@ -4185,6 +4327,117 @@ msgstr ""
 msgid "This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"
 msgstr ""
 
+#, no-c-format
+msgctxt "Setting"
+msgid "LCD"
+msgstr ""
+
+#, no-c-format
+msgid "Conventional LCD or OLED. Full scrolling animations."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "E-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Color e-ink"
+msgstr ""
+
+#, no-c-format
+msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
+msgstr ""
+
+#, no-c-format
+msgid "Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Landscape"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Portrait"
+msgstr ""
+
+#, no-c-format
+msgid "Reverse Landscape"
+msgstr ""
+
+#, no-c-format
+msgid "Use the system-wide setting"
+msgstr ""
+
+#, no-c-format
+msgid "Black text on white background"
+msgstr ""
+
+#, no-c-format
+msgid "White text on black background"
+msgstr ""
+
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
+msgid "Automatic"
+msgstr ""
+
+#, c-format
+msgid "%u dpi"
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Display type"
+msgstr ""
+
+msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "The display resolution is used to adapt line widths, font size, landable size and more."
+msgstr ""
+
+msgid "Display orientation"
+msgstr ""
+
+msgid "Rotate the display on devices that support it."
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+msgid "Full screen"
+msgstr ""
+
+msgid "Run XCSoar in full screen mode"
+msgstr ""
+
+msgid "Cursor zoom"
+msgstr ""
+
+msgid "Cursor zoom factor"
+msgstr ""
+
+msgid "Invert cursor color"
+msgstr ""
+
+msgid "Enable black cursor"
+msgstr ""
+
 msgid "Speed arrows"
 msgstr ""
 
@@ -4325,22 +4578,6 @@ msgstr ""
 msgid "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" pages."
 msgstr ""
 
-msgid "Text size"
-msgstr ""
-
-msgid "Display Resolution"
-msgstr ""
-
-msgid "The display resolution is used to adapt line widths, font size, landable size and more."
-msgstr ""
-
-msgid "Automatic"
-msgstr ""
-
-#, c-format
-msgid "%u dpi"
-msgstr ""
-
 msgid "Events"
 msgstr ""
 
@@ -4406,133 +4643,6 @@ msgid "Whether the safety disclaimer has been accepted for this version."
 msgstr ""
 
 #, no-c-format
-msgid "Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Landscape"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Portrait"
-msgstr ""
-
-#, no-c-format
-msgid "Reverse Landscape"
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "LCD"
-msgstr ""
-
-#, no-c-format
-msgid "Conventional LCD or OLED. Full scrolling animations."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "E-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Monochrome electronic paper. Disables kinetic and smooth scrolling."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Color e-ink"
-msgstr ""
-
-#, no-c-format
-msgid "Color electronic paper. Disables kinetic and smooth scrolling like monochrome e-ink."
-msgstr ""
-
-#, no-c-format
-msgid "8 Split"
-msgstr ""
-
-#, no-c-format
-msgid "10 Split"
-msgstr ""
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr ""
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr ""
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr ""
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr ""
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr ""
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr ""
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr ""
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr ""
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr ""
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr ""
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr ""
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr ""
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr ""
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr ""
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr ""
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr ""
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr ""
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr ""
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr ""
-
-#, no-c-format
 msgid "Text"
 msgstr ""
 
@@ -4585,18 +4695,6 @@ msgid "Glass"
 msgstr ""
 
 #, no-c-format
-msgid "Use the system-wide setting"
-msgstr ""
-
-#, no-c-format
-msgid "Black text on white background"
-msgstr ""
-
-#, no-c-format
-msgid "White text on black background"
-msgstr ""
-
-#, no-c-format
 msgid "Follow global"
 msgstr ""
 
@@ -4618,32 +4716,6 @@ msgstr ""
 
 #, no-c-format
 msgid "Always use light text on a dark InfoBox background."
-msgstr ""
-
-msgid "Full screen"
-msgstr ""
-
-msgid "Run XCSoar in full screen mode"
-msgstr ""
-
-msgid "Display orientation"
-msgstr ""
-
-msgid "Rotate the display on devices that support it."
-msgstr ""
-
-msgid "Dark mode"
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Display type"
-msgstr ""
-
-msgid "Select the display technology. E-ink modes disable kinetic and smooth scrolling for slow refresh screens."
-msgstr ""
-
-msgid "InfoBox geometry"
 msgstr ""
 
 msgid "A list of possible InfoBox layouts. Do some trials to find the best for your screen size."
@@ -4691,18 +4763,6 @@ msgid "Show QuickMenu button"
 msgstr ""
 
 msgid "Show the QuickMenu button"
-msgstr ""
-
-msgid "Cursor zoom"
-msgstr ""
-
-msgid "Cursor zoom factor"
-msgstr ""
-
-msgid "Invert cursor color"
-msgstr ""
-
-msgid "Enable black cursor"
 msgstr ""
 
 #, no-c-format
@@ -5059,6 +5119,15 @@ msgid "Optional weather overlay on map pages. Use with Weather controls in the b
 msgstr ""
 
 msgid "Select a weather map overlay to configure its layer or level for this page."
+msgstr ""
+
+msgid "SkySight is unavailable."
+msgstr ""
+
+msgid "SkySight API rate-limited. Retrying shortly."
+msgstr ""
+
+msgid "Loading SkySight catalog..."
 msgstr ""
 
 #, no-c-format
@@ -5587,14 +5656,6 @@ msgstr ""
 msgid "Number of minutes start remains open after Pilot Event and PEV wait time.0 means start will never close after it opens."
 msgstr ""
 
-#, no-c-format
-msgid "Gate width"
-msgstr ""
-
-#, no-c-format
-msgid "Radius"
-msgstr ""
-
 msgid "Default start type for new tasks you create."
 msgstr ""
 
@@ -5976,10 +6037,35 @@ msgid "Unit used for rotation."
 msgstr ""
 
 #, no-c-format
-msgid "UTC offset"
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
 msgstr ""
 
-msgid "The UTC offset field allows the UTC local time offset to be specified. The local time is displayed below in order to make it easier to verify the correct offset has been entered."
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
 msgstr ""
 
 msgid "Use GPS time"
@@ -6184,11 +6270,11 @@ msgid "Covers the entire Alpine arc from Vienna to Perpignan, forecasting wave t
 msgstr ""
 
 #, no-c-format
-msgid "UK"
+msgid "UKV Model"
 msgstr ""
 
 #, no-c-format
-msgid "United Kingdom. ICON-UK model."
+msgid "United Kingdom. UKV model."
 msgstr ""
 
 msgid "XC Therm email"
@@ -6237,9 +6323,6 @@ msgid "Width of the start/finish gate."
 msgstr ""
 
 msgid "Radius of the OZ sector."
-msgstr ""
-
-msgid "Angle"
 msgstr ""
 
 msgid "Angle of the OZ sector"
@@ -6440,65 +6523,6 @@ msgstr ""
 msgid "Task Point Type"
 msgstr ""
 
-msgid "Goal"
-msgstr ""
-
-msgid "Out and return"
-msgstr ""
-
-msgid "Two legs"
-msgstr ""
-
-msgid "Three legs"
-msgstr ""
-
-msgid "non-FAI triangle"
-msgstr ""
-
-#, c-format
-msgid "%d legs"
-msgstr ""
-
-#, c-format
-msgid "Task is empty (%s)"
-msgstr ""
-
-msgid "max."
-msgstr ""
-
-msgid "min."
-msgstr ""
-
-msgid "dist."
-msgstr ""
-
-msgid "Sector"
-msgstr ""
-
-msgid "Line"
-msgstr ""
-
-msgid "Cylinder"
-msgstr ""
-
-msgid "MAT cylinder"
-msgstr ""
-
-msgid "Keyhole"
-msgstr ""
-
-msgid "DAeC Keyhole"
-msgstr ""
-
-msgid "BGA Fixed Course"
-msgstr ""
-
-msgid "BGA Enhanced Option"
-msgstr ""
-
-msgid "BGA Start Sector"
-msgstr ""
-
 msgid "Enter a task name"
 msgstr ""
 
@@ -6536,10 +6560,12 @@ msgstr ""
 msgid "Optimized"
 msgstr ""
 
-msgid "Altn mode: MANUAL"
-msgstr ""
-
-msgid "Altn mode: AUTO"
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
 msgstr ""
 
 #, no-c-format
@@ -6549,9 +6575,6 @@ msgstr ""
 
 #. no alternates: don't show the dialog
 msgid "No alternates available"
-msgstr ""
-
-msgid "Alternates"
 msgstr ""
 
 #, no-c-format
@@ -6564,6 +6587,9 @@ msgctxt "Menu"
 msgid "Alternates 2"
 msgstr ""
 
+msgid "Paste"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -6571,6 +6597,9 @@ msgid "EDL weather"
 msgstr ""
 
 msgid "METAR and TAF"
+msgstr ""
+
+msgid "File"
 msgstr ""
 
 #, no-c-format
@@ -6988,9 +7017,6 @@ msgstr ""
 msgid "Slot %u/%u: connecting..."
 msgstr ""
 
-msgid "Connecting..."
-msgstr ""
-
 #, c-format
 msgid "%u/%uh | Issued %s | %s"
 msgstr ""
@@ -7072,12 +7098,6 @@ msgid "Please enter four letters or digits only (ICAO station code)."
 msgstr ""
 
 msgid "This function is not available on your platform yet."
-msgstr ""
-
-msgid "SkySight API rate-limited. Retrying shortly."
-msgstr ""
-
-msgid "Loading SkySight catalog..."
 msgstr ""
 
 msgid "No SkySight layers selected. Press Add to list to choose parameters."
@@ -7213,9 +7233,6 @@ msgstr ""
 #, no-c-format
 msgctxt "Button"
 msgid "Clear downloaded data"
-msgstr ""
-
-msgid "SkySight is unavailable."
 msgstr ""
 
 msgid "Failed to acknowledge airspace warning"
@@ -7494,6 +7511,54 @@ msgstr ""
 
 #, c-format
 msgid "Caching EDL forecast %s..."
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
 msgstr ""
 
 msgid "Could not contact the WiFi service."
@@ -8050,10 +8115,6 @@ msgid "Outside air temperature measured by a probe if supported by a connected i
 msgstr ""
 
 #, no-c-format
-msgid "Relative humidity"
-msgstr ""
-
-#, no-c-format
 msgid "Rel Hum"
 msgstr ""
 
@@ -8578,7 +8639,7 @@ msgid "T Next Leg"
 msgstr ""
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
 msgstr ""
 
 #, no-c-format
@@ -8818,10 +8879,6 @@ msgid "Geometric gradient to the arrival height above the second-best alternate 
 msgstr ""
 
 #, no-c-format
-msgid "Heart Rate"
-msgstr ""
-
-#, no-c-format
 msgid "Heart"
 msgstr ""
 
@@ -9000,6 +9057,14 @@ msgid "Previous waypoint: when an ordered task is loaded, automatically tracks t
 msgstr ""
 
 #, no-c-format
+msgid "SpO2"
+msgstr ""
+
+#, no-c-format
+msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
+msgstr ""
+
+#, no-c-format
 msgctxt "InfoBox caption (gravity/load factor)"
 msgid "G"
 msgstr ""
@@ -9037,9 +9102,6 @@ msgid "Simulator"
 msgstr ""
 
 msgid "no QNH"
-msgstr ""
-
-msgid "no wind"
 msgstr ""
 
 msgid "Not flying"
@@ -9111,12 +9173,27 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
+msgid "no wind"
+msgstr ""
+
 #, no-c-format
 msgid "Cruise"
 msgstr ""
 
 #, no-c-format
 msgid "FinalGlide"
+msgstr ""
+
+msgid "InfoBox"
+msgstr ""
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+
+msgid "Arrange InfoBoxes"
 msgstr ""
 
 msgid "Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."
@@ -9533,6 +9610,10 @@ msgid "V flap"
 msgstr ""
 
 #, no-c-format
+msgid "UTC offset"
+msgstr ""
+
+#, no-c-format
 msgid "IGC logging"
 msgstr ""
 
@@ -9813,17 +9894,7 @@ msgid ""
 "Controls"
 msgstr ""
 
-#, no-c-format
-msgid "Blood Oxygen"
-msgstr ""
-
-#, no-c-format
-msgid "SpO2"
-msgstr ""
-
-#, no-c-format
-msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
-
-msgid "Recently used waypoints"
+msgid ""
+"Arrange\n"
+"InfoBoxes"
 msgstr ""
