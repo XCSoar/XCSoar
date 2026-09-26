@@ -78,6 +78,9 @@ Version 7.46 - not yet released
     catalog) #3029
   - fix RASP Auto update downloading again on every page switch
     because the file date stayed at the first download #3166
+  - pc_met: draw the aircraft at its GPS position in the radar and
+    satellite images, and in Sat Rad Blitz; nothing is drawn when
+    there is no fix or the position lies outside the image #2966
 * map
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
