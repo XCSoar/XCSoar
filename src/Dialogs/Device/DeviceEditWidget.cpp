@@ -15,6 +15,12 @@
 #include "Device/Driver.hpp"
 #include "Interface.hpp"
 
+#ifdef ANDROID
+#include "java/Global.hxx"
+#include "Android/Main.hpp"
+#include "Android/BluetoothHelper.hpp"
+#endif
+
 enum ControlIndex {
   Port, EngineTypes, BaudRate, BulkBaudRate,
   IP_ADDRESS,
@@ -286,6 +292,32 @@ CanSendPolar(const DataField &df) noexcept
   return driver->CanSendPolar();
 }
 
+/**
+ * Engine Type is only for the PPG engine-sensor GATT service, not for
+ * heart-rate BLE sensors (e.g. a Xiaomi band).
+ */
+[[gnu::pure]]
+static bool
+ShowsEngineType(DeviceConfig::PortType type,
+                DeviceConfig::EngineType engine_type,
+                [[maybe_unused]] const char *bluetooth_mac) noexcept
+{
+  if (type != DeviceConfig::PortType::BLE_SENSOR)
+    return false;
+
+  if (engine_type != DeviceConfig::EngineType::NONE)
+    return true;
+
+#ifdef ANDROID
+  if (bluetooth_helper != nullptr &&
+      bluetooth_mac != nullptr && bluetooth_mac[0] != '\0')
+    return bluetooth_helper->HasEngineSensors(Java::GetEnv(),
+                                              bluetooth_mac);
+#endif
+
+  return false;
+}
+
 void
 DeviceEditWidget::UpdateVisibilities() noexcept
 {
@@ -295,7 +327,11 @@ DeviceEditWidget::UpdateVisibilities() noexcept
     DeviceConfig::MaybeBluetooth(type, port_df.GetAsString());
   const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
   const bool uses_speed = DeviceConfig::UsesSpeed(type) || k6bt;
-  const bool maybe_engine_sensor = type == DeviceConfig::PortType::BLE_SENSOR;
+  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
+  const auto engine_type =
+    DeviceConfig::EngineType(engine_df.GetValue());
+  const bool maybe_engine_sensor =
+    ShowsEngineType(type, engine_type, port_df.GetAsString());
 
   SetRowAvailable(BaudRate, uses_speed);
   SetRowAvailable(BulkBaudRate, uses_speed &&
@@ -585,8 +621,10 @@ DeviceEditWidget::Save(bool &_changed) noexcept
 
   changed |= FinishPortField(config, (const DataFieldEnum &)GetDataField(Port));
 
-  const bool maybe_engine_sensor = config.port_type == DeviceConfig::PortType::BLE_SENSOR;
-  if (maybe_engine_sensor)
+  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
+  const auto engine_type = DeviceConfig::EngineType(engine_df.GetValue());
+  if (config.engine_type != DeviceConfig::EngineType::NONE ||
+      ShowsEngineType(config.port_type, engine_type, config.bluetooth_mac))
     changed |= SaveValueEnum(EngineTypes, config.engine_type);
 
   if (config.MaybeBluetooth())

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "DataEditor.hpp"
 #include "Descriptor.hpp"
+#include "SmartDeviceSensors.hpp"
+#include "DataEditor.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
-#include "SmartDeviceSensors.hpp"
 #include "time/FloatDuration.hxx"
 
 using namespace std::chrono;
@@ -77,17 +77,15 @@ DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
 }
 
 void
-DeviceDescriptor::OnAccelerationSensor([[maybe_unused]] float ddx,
-                                       [[maybe_unused]] float ddy,
+DeviceDescriptor::OnAccelerationSensor([[maybe_unused]] float ddx, [[maybe_unused]] float ddy,
                                        [[maybe_unused]] float ddz) noexcept
 {
   // TODO
 }
 
 void
-DeviceDescriptor::OnRotationSensor([[maybe_unused]] float dtheta_x,
-                                   [[maybe_unused]] float dtheta_y,
-                                   [[maybe_unused]] float dtheta_z) noexcept
+DeviceDescriptor::OnRotationSensor(float dtheta_x, float dtheta_y,
+                                   float dtheta_z) noexcept
 {
   bool fixed_and_aligned = false;
   char NMEA_qualifier = '?';
@@ -188,20 +186,6 @@ DeviceDescriptor::OnMagneticFieldSensor([[maybe_unused]] float h_x, [[maybe_unus
                                         [[maybe_unused]] float h_z) noexcept
 {
   // TODO
-}
-
-void
-DeviceDescriptor::OnHumidity([[maybe_unused]] double humidity_percent) noexcept
-{
-  const auto e = BeginEdit();
-  NMEAInfo &basic = *e;
-
-  basic.UpdateClock();
-  basic.alive.Update(basic.clock);
-  basic.humidity = humidity_percent;
-  basic.humidity_available.Update(basic.clock);
-
-  e.Commit();
 }
 
 void
@@ -509,6 +493,20 @@ DeviceDescriptor::OnTemperature(Temperature temperature) noexcept
 
   basic.temperature = temperature;
   basic.temperature_available.Update(basic.clock);
+
+  e.Commit();
+}
+
+void
+DeviceDescriptor::OnHumidity(double humidity_percent) noexcept
+{
+  const auto e = BeginEdit();
+  NMEAInfo &basic = *e;
+  basic.UpdateClock();
+  basic.alive.Update(basic.clock);
+
+  basic.humidity = humidity_percent;
+  basic.humidity_available.Update(basic.clock);
 
   e.Commit();
 }
