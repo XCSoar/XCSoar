@@ -127,6 +127,8 @@ TEST_NAMES = \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
 	TestNMEAChecksum \
+	TestDewPoint \
+	TestCuSonde \
 	TestGDL90 \
 	TestGDL90Driver \
 	TestLXNToIGC \
@@ -193,6 +195,19 @@ TEST_NMEA_CHECKSUM_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNMEAChecksum.cpp
 $(eval $(call link-program,TestNMEAChecksum,TEST_NMEA_CHECKSUM))
+
+TEST_DEW_POINT_SOURCES = \
+	$(SRC)/Atmosphere/CuSonde.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDewPoint.cpp
+$(eval $(call link-program,TestDewPoint,TEST_DEW_POINT))
+
+TEST_CU_SONDE_SOURCES = \
+	$(SRC)/Atmosphere/CuSonde.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestCuSonde.cpp
+TEST_CU_SONDE_DEPENDS = LIBNMEA GEO TIME MATH UTIL UNITS
+$(eval $(call link-program,TestCuSonde,TEST_CU_SONDE))
 
 TEST_CRC8_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

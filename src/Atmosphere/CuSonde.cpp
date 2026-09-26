@@ -11,18 +11,6 @@
 #include <stdlib.h> /* for abs() */
 #include <algorithm>
 
-/**
- * Dry adiabatic lapse rate (degrees C per meter)
- *
- * DALR = dT/dz = g/c_p =
- * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
- * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
- */
-static constexpr double DALR = -0.00974;
-
-/** ThermalIndex threshold in degrees C */
-static constexpr double TITHRESHOLD = -1.6;
-
 using std::max;
 
 void
@@ -32,6 +20,7 @@ CuSonde::Reset() noexcept
   thermal_height = 0;
   cloud_base = 0;
   ground_height = 0;
+  has_ground_height = false;
   max_ground_temperature = Temperature::FromCelsius(25);
 
   for (auto &i : cslevels)
@@ -123,8 +112,31 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
   if (abs(level - last_level) == 0)
     return;
 
-  // calculate ground height
-  ground_height = calculated.altitude_agl;
+  /* The dry adiabat starts at the ground, so this has to be an
+     elevation -- not the aircraft's height above it, which used to be
+     assigned here.  With that complement, h_agl below came out as
+     level * HEIGHT_STEP - (altitude - terrain), the terrain elevation
+     for every level: the adiabat was flat, the thermal index compared
+     the profile against a constant, and the cloud base was usually
+     never found.
+
+     Taken once per flight.  The forecast maximum is a surface
+     temperature at the place the pilot took it for, and every level
+     has to be measured against the same adiabat: re-anchoring at the
+     terrain under the aircraft would give each level its own origin
+     as the ground rises and falls, and FindCloudBase() would then
+     compare levels from different adiabats.  The terrain elevation at
+     the first measurement is the take-off site or close to it; without
+     a terrain file the take-off altitude stands in for it. */
+  if (!has_ground_height) {
+    if (calculated.terrain_valid) {
+      ground_height = calculated.terrain_altitude;
+      has_ground_height = true;
+    } else if (calculated.flight.HasTakenOff()) {
+      ground_height = calculated.flight.takeoff_altitude;
+      has_ground_height = true;
+    }
+  }
 
   // if (going up)
   if (level > last_level) {
@@ -168,6 +180,9 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
 void
 CuSonde::FindThermalHeight(unsigned short level) noexcept
 {
+  /* this and the level above; the top level has none */
+  if (level + 1u >= cslevels.size())
+    return;
   if (cslevels[level + 1].empty())
     return;
   if (cslevels[level].empty())
@@ -211,6 +226,8 @@ CuSonde::FindThermalHeight(unsigned short level) noexcept
 void
 CuSonde::FindCloudBase(unsigned short level) noexcept
 {
+  if (level + 1u >= cslevels.size())
+    return;
   if (cslevels[level + 1].dewpoint_empty())
     return;
   if (cslevels[level].dewpoint_empty())
@@ -255,7 +272,14 @@ void
 CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity,
                             Temperature temperature) noexcept
 {
-  if (humidity_valid)
+  /* A humidity outside (0, 100] is not a measurement.  Zero in
+     particular is what a probe reports when it has failed or has not
+     produced a reading yet, and CalculateDewPoint() takes its
+     logarithm: the dew point would be -inf, the averaging below keeps
+     it that way for the rest of the flight, and FindCloudBase() would
+     go on to subtract infinities.  Skipping leaves the level without a
+     dew point, which that function already handles. */
+  if (humidity_valid && humidity > 0 && humidity <= 100)
   {
     auto _dewpoint = CalculateDewPoint(temperature, humidity);
 
