@@ -32,6 +32,13 @@ ImageZoomFrame::SetTryKeyInput(std::function<bool(unsigned)> &&f) noexcept
 }
 
 void
+ImageZoomFrame::SetOverlayRenderer(std::function<void(Canvas &,
+                                                      const ImageZoomView::Layout &)> &&f) noexcept
+{
+  overlay_renderer = std::move(f);
+}
+
+void
 ImageZoomFrame::NudgeViewByPixelOffset(const PixelPoint o) noexcept
 {
   pending_offset += o;
@@ -44,8 +51,12 @@ ImageZoomFrame::OnPaint(Canvas &canvas) noexcept
   if (bitmap == nullptr || zoom_level == nullptr)
     return;
 
-  ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_level,
-                                   view_pos, pending_offset);
+  const auto layout =
+    ImageZoomView::PaintZoomedBitmap(canvas, *bitmap, *zoom_level,
+                                     view_pos, pending_offset);
+
+  if (overlay_renderer && layout.IsDefined())
+    overlay_renderer(canvas, layout);
 }
 
 bool
