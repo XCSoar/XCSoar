@@ -65,6 +65,10 @@ Version 7.46 - not yet released
   - add TextSize input events (up/down/show) so UI text size can be
     changed in flight; default keys T and S step by 5%
 * weather
+  - SkySight: draw forecast overlays as smooth contour bands instead of
+    one coloured square per forecast grid point, so layer boundaries
+    stay sharp at every zoom level; forecasts already downloaded are
+    fetched again once, and use slightly less storage than before
   - show the overlay name as XC Therm (with a space) in setup, weather
     dialogs, map titles, and download messages
   - fix the weather cursor bar keeping light colours in dark mode,
