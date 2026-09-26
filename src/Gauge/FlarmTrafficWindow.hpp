@@ -142,6 +142,13 @@ private:
   static unsigned RadarTargetRingRadius(unsigned index,
                                         unsigned radar_radius) noexcept;
 
+  /**
+   * Height of the aircraft-type symbol box for the given arrow icon
+   * slot size.
+   */
+  [[gnu::const]]
+  static unsigned RadarSymbolSize(unsigned icon_size) noexcept;
+
   [[gnu::pure]]
   static int RadarArrowScale(bool small_radar,
                              unsigned radar_radius) noexcept;

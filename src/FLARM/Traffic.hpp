@@ -201,6 +201,7 @@ struct FlarmTraffic {
   void Clear() noexcept {
     valid.Clear();
     name.clear();
+    type = AircraftType::UNKNOWN;
     source = SourceType::FLARM;
     id_type = IdType::UNKNOWN;
     rssi = 0;

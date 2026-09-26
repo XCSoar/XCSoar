@@ -9,6 +9,7 @@
 #include "ui/canvas/Icon.hpp"
 
 class Font;
+struct FlarmTraffic;
 
 struct TrafficLook {
   static constexpr Color safe_above_color{0x1d,0x9b,0xc5};
@@ -16,6 +17,12 @@ struct TrafficLook {
   static constexpr Color warning_color{0xfe,0x84,0x38};
   static constexpr Color warning_in_altitude_range_color{0xff,0x00,0xff};
   static constexpr Color alarm_color{0xfb,0x35,0x2f};
+
+  /** Glyph colour of the aircraft-type symbols (coloured-halo style) */
+  static constexpr Color symbol_glyph_color = COLOR_BLACK;
+
+  /** Halo colour of the aircraft-type symbols (white-halo style) */
+  static constexpr Color symbol_halo_color = COLOR_WHITE;
 
   Brush safe_above_brush;
   Brush safe_below_brush;
@@ -41,9 +48,25 @@ struct TrafficLook {
   Pen team_pen_yellow;
   Pen team_pen_magenta;
 
+  /** Hairline border around the aircraft-type symbols */
+  Pen symbol_border_pen;
+
   MaskedIcon teammate_icon;
 
   const Font *font;
 
   void Initialise(const Font &font);
+
+  /**
+   * The body colour of a traffic symbol: alarm level first, then the
+   * relative altitude (above / within +-50 m / below).
+   */
+  [[gnu::pure]]
+  Color GetBodyColor(const FlarmTraffic &traffic) const noexcept;
+
+  /**
+   * The brush matching GetBodyColor().
+   */
+  [[gnu::pure]]
+  const Brush &GetBodyBrush(const FlarmTraffic &traffic) const noexcept;
 };

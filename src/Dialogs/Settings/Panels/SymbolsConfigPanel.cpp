@@ -14,6 +14,7 @@
 enum ControlIndex {
   DISPLAY_TRACK_BEARING,
   ENABLE_FLARM_MAP,
+  TRAFFIC_SYMBOL,
   FADE_TRAFFIC,
   TRAIL_LENGTH,
   TRAIL_DRIFT,
@@ -112,6 +113,16 @@ static constexpr StaticEnumChoice  aircraft_symbol_list[] = {
   nullptr
 };
 
+static constexpr StaticEnumChoice traffic_symbol_list[] = {
+  { TrafficSymbol::ARROW, N_("Arrow"),
+    N_("All traffic is drawn as an arrow head pointing in the direction of travel.") },
+  { TrafficSymbol::AIRCRAFT_TYPE, N_("Aircraft type"),
+    N_("Traffic is drawn as a glider, powered aircraft, helicopter, paraglider "
+       "or other symbol according to the aircraft type reported by FLARM, ADS-B "
+       "or OGN. Targets of unknown type get a generic symbol.") },
+  nullptr
+};
+
 static constexpr StaticEnumChoice wind_arrow_list[] = {
   { WindArrowStyle::NO_ARROW, N_("Off"), N_("No wind arrow is drawn.") },
   { WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
@@ -138,6 +149,10 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddBoolean(_("FLARM Traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
+
+  AddEnum(_("Traffic symbol"),
+          _("Determines how FLARM, ADS-B and online traffic is drawn on the map and the traffic radar."),
+          traffic_symbol_list, (unsigned)settings_map.traffic_symbol);
 
   AddBoolean(_("Fade traffic"), _("Keep showing traffic for a while after it has disappeared."),
              settings_map.fade_traffic);
@@ -203,6 +218,9 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(ENABLE_FLARM_MAP, ProfileKeys::EnableFLARMMap,
                        settings_map.show_flarm_on_map);
+
+  changed |= SaveValueEnum(TRAFFIC_SYMBOL, ProfileKeys::TrafficSymbol,
+                           settings_map.traffic_symbol);
 
   changed |= SaveValue(FADE_TRAFFIC, ProfileKeys::FadeTraffic,
                        settings_map.fade_traffic);
