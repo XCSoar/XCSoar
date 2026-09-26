@@ -255,7 +255,14 @@ void
 CuSonde::Level::UpdateTemps(bool humidity_valid, double humidity,
                             Temperature temperature) noexcept
 {
-  if (humidity_valid)
+  /* A humidity outside (0, 100] is not a measurement.  Zero in
+     particular is what a probe reports when it has failed or has not
+     produced a reading yet, and CalculateDewPoint() takes its
+     logarithm: the dew point would be -inf, the averaging below keeps
+     it that way for the rest of the flight, and FindCloudBase() would
+     go on to subtract infinities.  Skipping leaves the level without a
+     dew point, which that function already handles. */
+  if (humidity_valid && humidity > 0 && humidity <= 100)
   {
     auto _dewpoint = CalculateDewPoint(temperature, humidity);
 
