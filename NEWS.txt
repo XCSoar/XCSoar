@@ -1,6 +1,9 @@
 Version 7.46 - not yet released
 * android
   - target Android 16 so Google Play still accepts updates #2874
+  - use acceleration and gyroscope data from the built-in IMU.
+    When the NMEA logger is enabled, write that data using the
+    OpenVario protocol.
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)
   - show remaining battery in the Devices list for BLE sensors
