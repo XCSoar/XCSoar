@@ -18,8 +18,9 @@ static constexpr Color COLOR_XCSOAR_DARK = Color(0x00, 0x31, 0x5e);
 /**
  * Dark mode color palette: a cool neutral, so little of the brand
  * blue left that it reads as a gray rather than as a color of its
- * own.  Every surface carries the same tint; a button is a lighter
- * step of the page, not a more colorful one.
+ * own.  The card and the button are one lighter step of the page,
+ * the same step a white face takes on the sand page.  A selected
+ * row is one step lighter than the card.
  */
 static constexpr Color COLOR_DARK_THEME_BACKGROUND =
   Color(0x15, 0x17, 0x1a);
@@ -28,11 +29,15 @@ static constexpr Color COLOR_DARK_THEME_CAPTION =
 static constexpr Color COLOR_DARK_THEME_CAPTION_INACTIVE =
   Color(0x28, 0x2b, 0x2d);
 static constexpr Color COLOR_DARK_THEME_LIST =
-  Color(0x21, 0x23, 0x25);
+  Color(0x3a, 0x3e, 0x44);
 static constexpr Color COLOR_DARK_THEME_LIST_SELECTED =
-  Color(0x33, 0x36, 0x39);
+  Color(0x4c, 0x51, 0x58);
 static constexpr Color COLOR_DARK_THEME_BUTTON =
-  Color(0x2d, 0x30, 0x33);
+  COLOR_DARK_THEME_LIST;
+
+/** A pressed row: one step lighter than the card. */
+static constexpr Color COLOR_DARK_THEME_LIST_PRESSED =
+  MixColors(COLOR_WHITE, COLOR_DARK_THEME_LIST, 0x28);
 
 /**
  * Light mode dialog background color: a sand so far desaturated that
