@@ -1107,6 +1107,7 @@ MainWindow::ReinitialiseLayout() noexcept
     map->BringToBottom();
 
   RaiseBottomBannerWidget();
+  ReinitialiseDialogs();
 }
 
 void
