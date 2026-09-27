@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <iterator>
@@ -57,6 +58,26 @@ UseKineticScrolling() noexcept
 {
   return !HasEPaper() && !IsSlowCPU();
 }
+
+/**
+ * How long an explanation takes to open or close.
+ *
+ * A change shorter than about 100 ms is seen as instant, so the row
+ * highlight stays immediate and this motion is what the eye can
+ * follow.  200 ms is still inside the flow of a selection.  E-paper
+ * and a slow CPU snap, as they do for scrolling.
+ */
+static constexpr auto HELP_OPEN = std::chrono::milliseconds(200);
+
+/**
+ * How long the cursor must stay on a row, after a cursor key, before
+ * its explanation starts to open.
+ *
+ * A key repeat is quicker than this, so a run down the list does not
+ * open every row.  The highlight itself is immediate.  A tap does not
+ * wait.
+ */
+static constexpr auto HELP_DWELL = std::chrono::milliseconds(400);
 
 /**
  * A view this narrow lets its cards fill it: the margin beside them,
@@ -294,10 +315,19 @@ private:
     int wrapped_help_width = -1;
 
     /**
-     * only for Type::ITEM: the room below the row which holds #help;
-     * 0 while the cursor is elsewhere
+     * only for Type::ITEM: the room below the row which holds #help.
+     * This is the height on the screen, which eases toward #help_full.
      */
     unsigned help_height = 0;
+
+    /** only for Type::ITEM: the height #help_height is moving toward */
+    unsigned help_full = 0;
+
+    /** #help_height at the moment #help_full last changed */
+    unsigned help_from = 0;
+
+    /** when #help_full last changed */
+    std::chrono::steady_clock::time_point help_since{};
 
     /** the links of #help (Type::ITEM) or of #text (Type::FOOTER) */
     std::vector<Link> links{};
@@ -614,6 +644,14 @@ private:
   KineticManager kinetic;
 
   UI::PeriodicTimer kinetic_timer{[this]{ OnKineticTimer(); }};
+
+  UI::PeriodicTimer help_timer{[this]{ OnHelpTimer(); }};
+
+  /**
+   * After a cursor key, the explanation stays shut until this time.
+   * The epoch means it may open at once, which is what a tap does.
+   */
+  std::chrono::steady_clock::time_point help_dwell_until{};
 
 public:
   explicit GroupedListControl(const DialogLook &_look) noexcept
@@ -1325,7 +1363,7 @@ private:
    */
   void ScrollAhead(unsigned i, bool forward) noexcept;
 
-  void SetCursor(int i) noexcept;
+  void SetCursor(int i, bool defer_help = false) noexcept;
 
   /**
    * Take the cursor off the list, e.g. because the user has tapped
@@ -1347,14 +1385,14 @@ private:
     return forward ? 0 : (int)elements.size();
   }
 
-  void MoveCursor(bool forward) noexcept;
+  void MoveCursor(bool forward, bool defer_help = false) noexcept;
 
   /**
    * Move the cursor by one screen full of items.  A page without a
    * single item the cursor may rest on has nothing to move: it
    * scrolls instead.
    */
-  void MoveCursorPage(bool forward) noexcept;
+  void MoveCursorPage(bool forward, bool defer_help = false) noexcept;
 
   void ActivateItem() noexcept;
 
@@ -1446,6 +1484,17 @@ private:
   void DrawScrollBar(Canvas &canvas) noexcept;
 
   void OnKineticTimer() noexcept;
+
+  void OnHelpTimer() noexcept;
+
+  /** Start or stop the explanation motion. */
+  void SyncHelpTimer() noexcept;
+
+  /**
+   * Point #help_height at #full.  A display which animates eases
+   * from the height already on the screen.
+   */
+  void SetHelpFull(Element &element, unsigned full) noexcept;
 
 protected:
   /* virtual methods from class Window */
@@ -1586,6 +1635,10 @@ GroupedListControl::WalkWrapped(const std::string &text,
   int y = rc.top;
 
   for (const auto &line : wrapped.lines) {
+    /* a band which is still opening is shorter than the text */
+    if (y >= rc.bottom)
+      break;
+
     const std::size_t line_end = line.start + line.length;
     std::size_t position = line.start;
     int x = rc.left;
@@ -2677,8 +2730,10 @@ GroupedListControl::UpdateLayout() noexcept
   UpdateGroupFlags();
   MarkSharedChevrons();
 
-  if (!IsDefined())
+  if (!IsDefined()) {
+    help_timer.Cancel();
     return;
+  }
 
   /* the help under the selected item changes the height of that
      row: restore the cursor before the elements are measured */
@@ -2924,24 +2979,38 @@ GroupedListControl::UpdateLayout() noexcept
       }
 
       /* the explanation of the selected item sits under its row, so
-         the rows below it move down while it is selected */
-      if (element.type == Element::Type::ITEM && element.height > 0 &&
-          (int)i == cursor && !element.help.empty()) {
-        const int help_width = std::max(text_width, 1);
-        element.wrapped_help = WrapText(*look.list.font, help_width,
-                                        element.help);
-        element.wrapped_help_width = text_width;
+         the rows below it move down while it is selected.  The height
+         on the screen eases toward the wrapped height. */
+      if (element.type == Element::Type::ITEM) {
+        unsigned full = 0;
 
-        const unsigned lines = element.wrapped_help.lines.size();
-        const int pad = (int)Layout::GetTextPadding();
-        element.help_height = lines == 0
-          ? 0
-          : (unsigned)(pad
-                       + (int)lines * (int)look.list.font->GetLineSpacing()
-                       + pad);
-        element.height += element.help_height;
-      } else if (element.type == Element::Type::ITEM)
-        element.help_height = 0;
+        if (element.height > 0 && (int)i == cursor &&
+            !element.help.empty() &&
+            std::chrono::steady_clock::now() >= help_dwell_until) {
+          const int help_width = std::max(text_width, 1);
+          element.wrapped_help = WrapText(*look.list.font, help_width,
+                                          element.help);
+          element.wrapped_help_width = text_width;
+
+          const unsigned lines = element.wrapped_help.lines.size();
+          const int pad = (int)Layout::GetTextPadding();
+          full = lines == 0
+            ? 0
+            : (unsigned)(pad
+                         + (int)lines * (int)look.list.font->GetLineSpacing()
+                         + pad);
+        }
+
+        if (element.height == 0) {
+          /* a hidden row has no band to close */
+          element.help_full = 0;
+          element.help_from = 0;
+          element.help_height = 0;
+        } else {
+          SetHelpFull(element, full);
+          element.height += element.help_height;
+        }
+      }
 
       element.top = y;
       y += (int)element.height;
@@ -2961,6 +3030,8 @@ GroupedListControl::UpdateLayout() noexcept
   SetOrigin(origin);
 
   MoveWidgets();
+
+  SyncHelpTimer();
 
   /* a cursor which was asked for before the window had a size is
      applied above, once the rows have a place: bring that row into
@@ -3051,10 +3122,16 @@ GroupedListControl::ScrollAhead(unsigned i, bool forward) noexcept
 }
 
 void
-GroupedListControl::SetCursor(int i) noexcept
+GroupedListControl::SetCursor(int i, bool defer_help) noexcept
 {
   if (i < 0 || i == cursor)
     return;
+
+  /* a run of cursor keys keeps the explanation shut until the row
+     has stayed.  A tap opens it at once. */
+  help_dwell_until = defer_help
+    ? std::chrono::steady_clock::now() + HELP_DWELL
+    : std::chrono::steady_clock::time_point{};
 
   const int previous = cursor;
 
@@ -3132,13 +3209,13 @@ GroupedListControl::ClearCursor() noexcept
 }
 
 void
-GroupedListControl::MoveCursor(bool forward) noexcept
+GroupedListControl::MoveCursor(bool forward, bool defer_help) noexcept
 {
   const int next = FindItem(GetSearchStart(forward), forward);
   if (next < 0)
     return;
 
-  SetCursor(next);
+  SetCursor(next, defer_help);
 
   /* the view follows the cursor with a margin, instead of waiting
      until it is at the edge: this way the list shows where the next
@@ -3171,7 +3248,7 @@ GroupedListControl::MoveButtonColumn(bool forward) noexcept
 }
 
 void
-GroupedListControl::MoveCursorPage(bool forward) noexcept
+GroupedListControl::MoveCursorPage(bool forward, bool defer_help) noexcept
 {
   const int room = GetViewHeight();
 
@@ -3206,7 +3283,7 @@ GroupedListControl::MoveCursorPage(bool forward) noexcept
        is nothing to point at */
     ClearCursor();
   else if (next != cursor)
-    SetCursor(next);
+    SetCursor(next, defer_help);
 }
 
 std::pair<int, int>
@@ -4328,6 +4405,92 @@ GroupedListControl::OnPaint(Canvas &canvas) noexcept
 }
 
 void
+GroupedListControl::SetHelpFull(Element &element, unsigned full) noexcept
+{
+  if (!UseKineticScrolling()) {
+    element.help_full = full;
+    element.help_from = full;
+    element.help_height = full;
+    return;
+  }
+
+  if (element.help_full == full)
+    return;
+
+  element.help_from = element.help_height;
+  element.help_since = std::chrono::steady_clock::now();
+  element.help_full = full;
+}
+
+void
+GroupedListControl::SyncHelpTimer() noexcept
+{
+  const auto now = std::chrono::steady_clock::now();
+  const bool dwelling = now < help_dwell_until &&
+    cursor >= 0 && (std::size_t)cursor < elements.size() &&
+    !elements[cursor].help.empty();
+
+  for (const auto &element : elements)
+    if (element.type == Element::Type::ITEM &&
+        element.help_height != element.help_full) {
+      /* the close, or the open once the row has stayed, steps
+         on this period.  A dwell that was waiting one long
+         interval has to give way to it. */
+      help_timer.Schedule(std::chrono::milliseconds(16));
+      return;
+    }
+
+  if (dwelling) {
+    help_timer.Schedule(help_dwell_until - now);
+    return;
+  }
+
+  help_timer.Cancel();
+}
+
+void
+GroupedListControl::OnHelpTimer() noexcept
+{
+  /* the last slice of the wait opens on this tick, so the timer
+     does not have to be asked again for a millisecond or two */
+  const auto now = std::chrono::steady_clock::now();
+  if (help_dwell_until > now &&
+      help_dwell_until - now <= std::chrono::milliseconds(16))
+    help_dwell_until = now;
+
+  for (auto &element : elements) {
+    if (element.type != Element::Type::ITEM ||
+        element.help_height == element.help_full)
+      continue;
+
+    const auto elapsed = now - element.help_since;
+    if (elapsed >= HELP_OPEN) {
+      element.help_height = element.help_full;
+      continue;
+    }
+
+    const float t = std::chrono::duration<float>(elapsed) /
+                    std::chrono::duration<float>(HELP_OPEN);
+    const float remain = 1.f - t;
+    /* ease out: the rows start moving at once and settle */
+    const float eased = 1.f - remain * remain * remain;
+    const float from = (float)element.help_from;
+    const float to = (float)element.help_full;
+    element.help_height =
+      (unsigned)std::lround(from + (to - from) * eased);
+  }
+
+  UpdateLayout();
+
+  if (cursor >= 0 && (std::size_t)cursor < elements.size())
+    EnsureVisible((unsigned)cursor);
+
+  /* a floating dialog sizes itself to this list */
+  if (cursor_callback != nullptr && cursor >= 0)
+    cursor_callback(GetCursorIndex());
+}
+
+void
 GroupedListControl::OnKineticTimer() noexcept
 {
   if (kinetic.IsSteady()) {
@@ -4347,6 +4510,7 @@ void
 GroupedListControl::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();
+  help_timer.Cancel();
 
   /* the views are child windows of this one */
   for (auto &element : elements)
@@ -4675,18 +4839,18 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
     if (FindItem(GetSearchStart(false), false) < 0)
       break;
 
-    MoveCursor(false);
+    MoveCursor(false, true);
     return true;
 
   case KEY_DOWN:
     if (FindItem(GetSearchStart(true), true) < 0)
       break;
 
-    MoveCursor(true);
+    MoveCursor(true, true);
     return true;
 
   case KEY_HOME:
-    SetCursor(FindItem(0, true));
+    SetCursor(FindItem(0, true), true);
 
     /* the beginning of the page, not only the first item: what is
        above it - a hero card, the caption of the first group - is
@@ -4695,7 +4859,7 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_END:
-    SetCursor(FindItem(elements.size(), false));
+    SetCursor(FindItem(elements.size(), false), true);
 
     /* and the end of it, including the explanation below the last
        group */
@@ -4703,11 +4867,11 @@ GroupedListControl::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_PRIOR:
-    MoveCursorPage(false);
+    MoveCursorPage(false, true);
     return true;
 
   case KEY_NEXT:
-    MoveCursorPage(true);
+    MoveCursorPage(true, true);
     return true;
   }
 

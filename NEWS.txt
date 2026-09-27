@@ -209,8 +209,32 @@ Version 7.46 - not yet released
     bar
   - draw the Quick Menu as a grid of buttons
   - show a grouped list's explanation under the selected row, on
-    the page. A row can keep a tap on its label as selection only,
-    so the value opens it, and Enter still opens the selected row
+    the page. It eases open so the rows below it can be followed.
+    Cursor keys open it once the row has stayed, so a quick run
+    down the list does not open every row. A row can keep a tap
+    on its label as selection only, so the value opens it, and
+    Enter still opens the selected row
+  - show Flight Setup as a floating list of values; select a row to
+    choose a number from a list, and read that row's explanation
+    below the selected row. A tap on the label selects the row; a tap
+    on the value opens it. Wing loading stays on the list; select it to
+    open the plane profile. A red badge names a missing empty mass
+    or wing area, because the polar cannot be calculated without
+    them. Ballast of zero shows an Empty badge and no number, and a
+    glider with no ballast keeps that row, with a badge. When the
+    plane profile has no dump time, that row shows a No dump time
+    badge before the volume, and Empty as well when the volume is
+    zero. The Dump button reads No dump time when the plane profile
+    has none, and the plane profile dump time list includes 0. Bugs
+    of zero shows a Clean badge and no number
+  - show Plane Details as a floating list of values; select a row to
+    change it, and read that row's explanation below the selected
+    row. A tap on the label selects the row; a tap on the value opens
+    it. A red badge names a missing empty mass or wing area. A max
+    ballast of zero shows a No max ballast badge. Dump time of zero
+    shows a No dump time badge, and a max cruise speed of zero shows
+    a No max cruise speed badge. WeGlide is one row: the aircraft
+    name with its type number, or a No WeGlide type badge when unset
   - stop quitting the simulator when the device battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no value
     since Windows CE support ended. A layout that still selects it
