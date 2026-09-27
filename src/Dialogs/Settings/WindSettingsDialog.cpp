@@ -18,25 +18,11 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 
-#include <algorithm>
 #include <cmath>
 
 namespace {
-
-static unsigned
-PreferredClientWidth(const DialogLook &look) noexcept
-{
-  const unsigned help = look.list.font->TextSize(
-    "Estimate the wind vector during glides.").width;
-  const unsigned value =
-    look.list.font->TextSize("Direction   000°").width;
-  const unsigned text = std::max(help, value);
-  return text + 2 * Layout::VptScale(10) +
-    2 * Layout::GetTextPadding();
-}
 
 /**
  * Wind Settings as one group.  The four switches are kept here until
@@ -48,6 +34,7 @@ PreferredClientWidth(const DialogLook &look) noexcept
  * again when the list or the screen layout changes.
  */
 class WindSetup final : private NullBlackboardListener {
+  using ValueState = GroupedListWidget::ValueState;
   GroupedListWidget *list = nullptr;
   WidgetDialog *dialog = nullptr;
   Button *clear_button = nullptr;
@@ -103,7 +90,6 @@ public:
   void SetButtons() noexcept;
   void Start() noexcept;
   void Stop() noexcept;
-  void Refit() noexcept;
   void Commit() noexcept;
   void ClearManual() noexcept;
 
@@ -120,11 +106,10 @@ private:
   [[nodiscard]]
   Drawn Collect() const noexcept;
 
+  void Build() noexcept;
+
   void AddSwitch(const char *caption, const char *help,
                  bool checked, bool &field) noexcept;
-
-  void AddValue(const char *caption, const char *help,
-                const char *text, GroupedListWidget::Callback edit) noexcept;
 
   void SetManual(SpeedVector wind) noexcept;
 };
@@ -137,21 +122,7 @@ WindSetup::AddSwitch(const char *caption, const char *help,
      it.  Close is what keeps the four switches. */
   list->AddItem(caption, [this, &field]{
     field = !field;
-    Refresh();
   }, {.toggle = true, .checked = checked, .help = help});
-}
-
-void
-WindSetup::AddValue(const char *caption, const char *help,
-                       const char *text,
-                       GroupedListWidget::Callback edit) noexcept
-{
-  GroupedListWidget::ItemOptions options;
-  options.help = help;
-  options.value = text;
-  options.chevron = true;
-  options.label_selects = true;
-  list->AddItem(caption, std::move(edit), options);
 }
 
 static void
@@ -223,51 +194,69 @@ WindSetup::Collect() const noexcept
 }
 
 void
-WindSetup::Refresh() noexcept
+WindSetup::Build() noexcept
 {
-  const Drawn next = Collect();
-  const SpeedVector shown = Shown();
-
-  list->Clear();
   list->AddGroup(nullptr);
 
   /* the wind in use, then the ways it is estimated, then the map.
-     Source names where the two rows under it came from. */
-  list->AddItem(C_("Wind source", "Source"),
-                {.value = WindSourceText(next.source),
-                 .disabled = true});
+     Source names where the two rows under it came from.  It stays
+     grey: it is the wind in use, not a setting. */
+  list->AddItem(C_("Wind source", "Source"), {}, {
+    .value_callback = [this](ValueState &state) {
+      state.text = WindSourceText(drawn.source);
+    },
+    .disabled = true,
+  });
 
-  StaticString<64> text;
-  FormatUserWindSpeed(shown.norm, text.data(), true, false);
-  AddValue(_("Speed"), _("Manual adjustment of wind speed."),
-           text.c_str(), [this]{ EditSpeed(); });
+  list->AddValue(_("Speed"),
+                 _("Manual adjustment of wind speed."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatUserWindSpeed(Shown().norm, text.data(),
+                                       true, false);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditSpeed(); });
 
-  FormatBearing(text.data(), text.capacity(), shown.bearing);
-  AddValue(_("Direction"), _("Manual adjustment of wind direction."),
-           text.c_str(), [this]{ EditDirection(); });
+  list->AddValue(_("Direction"),
+                 _("Manual adjustment of wind direction."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatBearing(text.data(), text.capacity(),
+                                 Shown().bearing);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditDirection(); });
 
   AddSwitch(_("Circling wind"),
             _("Estimate the wind vector while circling. Requires only a GPS."),
-            next.circling, circling_wind);
+            circling_wind, circling_wind);
   AddSwitch(_("ZigZag wind"),
             _("Estimate the wind vector during glides. "
               "Requires an airspeed sensor."),
-            next.zigzag, zig_zag_wind);
+            zig_zag_wind, zig_zag_wind);
   AddSwitch(_("External wind"),
             _("Should XCSoar accept wind estimates from other instruments?"),
-            next.external, external_wind);
+            external_wind, external_wind);
   AddSwitch(_("Trail drift"),
             _("Determines whether the snail trail is drifted with the wind "
               "when displayed in circling mode at near map scales. Switched "
               "Off, the snail trail stays uncompensated for wind drift."),
-            next.trail, trail_drift);
+            trail_drift, trail_drift);
+}
 
-  drawn = next;
+void
+WindSetup::Refresh() noexcept
+{
+  drawn = Collect();
   have_drawn = true;
 
-  list->UpdateLayout();
+  if (list->GetItemCount() == 0)
+    Build();
+
   SetButtons();
-  Refit();
+  if (list->UpdateValues() && dialog != nullptr)
+    dialog->RefitList();
 }
 
 void
@@ -290,14 +279,6 @@ void
 WindSetup::Stop() noexcept
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
-}
-
-void
-WindSetup::Refit() noexcept
-{
-  if (dialog != nullptr)
-    dialog->FitToList(dialog->GetParentClientRect(),
-                      PreferredClientWidth(dialog->GetLook()));
 }
 
 void
@@ -409,23 +390,15 @@ ShowWindSettingsDialog()
   WindSetup setup;
   setup.SetList(*list);
 
-  const PixelRect rc{Layout::Scale(PixelSize{220u, 220u})};
-  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, rc,
-                            _("Wind Settings"), list);
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, _("Wind Settings"), list);
   setup.SetDialog(dialog);
   setup.SetClearButton(dialog.AddButton(_("Clear"), [&setup]{
     setup.ClearManual();
   }));
   dialog.AddButton(_("Close"), mrOK);
 
-  dialog.EnableCursorSelection();
-  dialog.ResyncButtonPanelSelection();
-  list->SetActionBar(dialog.GetButtonPanel());
-  list->SetCursorCallback([&setup](int){
-    setup.Refit();
-  });
-
-  dialog.PrepareWidget();
+  dialog.PrepareFloatingList();
   setup.Refresh();
   setup.Start();
   const int result = dialog.ShowModal();

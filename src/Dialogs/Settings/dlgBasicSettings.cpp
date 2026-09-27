@@ -22,7 +22,6 @@
 #include "Widget/GroupedListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "util/StaticString.hxx"
 
@@ -64,8 +63,8 @@ BallastUiMax() noexcept
  * again when the list or the screen layout changes.
  */
 class FlightSetup final {
-  using Callback = GroupedListWidget::Callback;
   using BadgeStyle = GroupedListWidget::BadgeStyle;
+  using ValueState = GroupedListWidget::ValueState;
 
   GroupedListWidget *list = nullptr;
   WidgetDialog *dialog = nullptr;
@@ -126,7 +125,6 @@ public:
   void SetButtons() noexcept;
   void Start() noexcept;
   void Stop() noexcept;
-  void Refit() noexcept;
   void CommitForecast() noexcept;
   void FlipBallastTimer();
 
@@ -142,25 +140,8 @@ private:
   [[nodiscard]]
   Drawn Collect() const noexcept;
 
-  void AddRow(const char *caption, const char *help, const char *text,
-              bool hidden, Callback edit,
-              const char *badge = nullptr,
-              BadgeStyle badge_style = BadgeStyle::PRIMARY,
-              const char *badge2 = nullptr,
-              BadgeStyle badge_style2 = BadgeStyle::PRIMARY) noexcept;
+  void Build() noexcept;
 };
-
-static unsigned
-PreferredClientWidth(const DialogLook &look) noexcept
-{
-  const unsigned loading =
-    look.list.font->TextSize("Wing loading   000.0 kg/m2").width;
-  const unsigned error = look.list.font->TextSize(
-    "Wing loading   No empty mass or wing area (m2)").width;
-  const unsigned text = std::max(loading, error);
-  return text + 2 * Layout::VptScale(10) +
-    2 * Layout::GetTextPadding();
-}
 
 FlightSetup::Drawn
 FlightSetup::Collect() const noexcept
@@ -199,176 +180,167 @@ FlightSetup::Collect() const noexcept
 }
 
 void
-FlightSetup::AddRow(const char *caption, const char *help,
-                    const char *text, bool hidden,
-                    Callback edit, const char *badge,
-                    BadgeStyle badge_style,
-                    const char *badge2,
-                    BadgeStyle badge_style2) noexcept
+FlightSetup::Build() noexcept
 {
-  /* a tap on the label selects the row and draws an arrow.  A tap
-     on the value opens it.  Without an action the row stays grey
-     and the cursor may rest on it so its help can be read.  A badge
-     on that row says why it cannot be used. */
-  GroupedListWidget::ItemOptions options;
-  options.help = help;
-  options.hidden = hidden;
-  options.value = text;
-  options.badge_style = badge_style;
-  options.badge2 = badge2;
-  options.badge_style2 = badge_style2;
-  options.chevron = static_cast<bool>(edit);
-  options.label_selects = static_cast<bool>(edit);
+  list->AddGroup(nullptr);
 
-  if (edit) {
-    options.badge = badge;
-    list->AddItem(caption, std::move(edit), options);
-  } else {
-    options.disabled = true;
-    options.selectable_when_disabled = true;
-    options.disabled_badge_label = badge;
-    list->AddItem(caption, options);
-  }
+  list->AddValue(_("Crew"),
+                 _("All masses loaded to the glider beyond the empty "
+                   "weight including pilot and copilot, but not water "
+                   "ballast."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatUserMass(drawn.crew_kg, text.data(), true);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditCrew(); });
+
+  list->AddValue(_("Ballast"),
+                 _("Ballast of the glider. Press \"Dump/Stop\" to toggle "
+                   "count-down of the ballast volume according to the dump "
+                   "rate specified in the configuration settings."),
+                 [this](ValueState &state) {
+                   state.disabled = !drawn.show_ballast;
+                   if (!drawn.show_ballast) {
+                     state.badge = _("No ballast");
+                     return;
+                   }
+
+                   if (drawn.ballast_l > 0) {
+                     StaticString<64> text;
+                     text.Format("%.0f l", drawn.ballast_l);
+                     state.text = text.c_str();
+                     if (drawn.no_dump_time) {
+                       state.badge = _("No dump time");
+                       state.badge_style = BadgeStyle::WARNING;
+                     }
+                     return;
+                   }
+
+                   /* Empty is the right-hand badge.  No dump time
+                      sits to its left. */
+                   state.badge = _("Empty");
+                   if (drawn.no_dump_time) {
+                     state.badge2 = _("No dump time");
+                     state.badge_style2 = BadgeStyle::WARNING;
+                   }
+                 },
+                 [this]{ EditBallast(); });
+
+  /* wing loading is mass divided by wing area; a missing input is a
+     badge, so the row stays on the list */
+  list->AddValue(_("Wing loading"), nullptr,
+                 [this](ValueState &state) {
+                   const bool have_mass = drawn.empty_mass > 0;
+                   const bool have_area = drawn.wing_area > 0;
+                   if (have_mass && have_area) {
+                     StaticString<64> text;
+                     FormatUserWingLoading(drawn.wing, text.data(),
+                                           text.capacity(), true);
+                     state.text = text.c_str();
+                     const auto &plane =
+                       CommonInterface::GetComputerSettings().plane;
+                     const auto &polar =
+                       CommonInterface::GetComputerSettings()
+                       .polar.glide_polar_task;
+                     if (plane.IsOverMaxTakeoffMass(polar.GetTotalMass())) {
+                       state.badge = _("MTOW");
+                       state.badge_style = BadgeStyle::DANGER;
+                     }
+                     state.help =
+                       _("The current wing loading, calculated from the "
+                         "glider's empty weight, crew weight, and ballast. "
+                         "Shown in red when the glider is heavier than "
+                         "its MTOW.");
+                     return;
+                   }
+
+                   if (!have_mass && !have_area)
+                     state.badge = _("No empty mass or wing area (m²)");
+                   else if (!have_mass)
+                     state.badge = _("No empty mass");
+                   else
+                     state.badge = _("No wing area (m²)");
+                   state.badge_style = BadgeStyle::DANGER;
+                   state.help =
+                     _("Wing loading needs the empty mass and the wing "
+                       "area (m²). Without them the polar cannot be "
+                       "calculated. Select the row to open the plane "
+                       "profile.");
+                 },
+                 [this]{ EditPlane(); });
+
+  list->AddValue(_("Bugs"),
+                 /* xgettext:no-c-format */
+                 _("How clean the glider is. Set to 0% for clean, larger "
+                   "numbers as the wings pick up bugs or get wet. 50% "
+                   "indicates the glider's sink rate is doubled."),
+                 [this](ValueState &state) {
+                   const double bugs_percent = (1 - drawn.bugs) * 100;
+                   if (bugs_percent > 0.5) {
+                     StaticString<64> text;
+                     text.Format("%.0f %%", bugs_percent);
+                     state.text = text.c_str();
+                   } else
+                     state.badge = _("Clean");
+                 },
+                 [this]{ EditBugs(); });
+
+  list->AddValue(_("QNH"),
+                 _("Area pressure for barometric altimeter calibration. "
+                   "This is set automatically if Vega is connected."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatUserPressure(
+                     AtmosphericPressure::HectoPascal(drawn.qnh),
+                     text.data(), true);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditQNH(); });
+
+  list->AddValue(_("Altitude"), nullptr,
+                 [this](ValueState &state) {
+                   state.hidden = !drawn.show_altitude;
+                   if (!drawn.show_altitude)
+                     return;
+
+                   StaticString<64> text;
+                   FormatUserAltitude(drawn.altitude, text.data(), true);
+                   state.text = text.c_str();
+                 });
+
+  list->AddValue(_("Max. temp."),
+                 _("The day's maximum ground temperature. A dry adiabat "
+                   "from it against the outside air temperature measured "
+                   "while climbing gives the estimated thermal ceiling; "
+                   "the cloud base needs a humidity probe as well. Both "
+                   "are drawn on the temperature trace page of the "
+                   "Analysis dialog, once the glider has climbed through "
+                   "the layer."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatUserTemperature(drawn.temp_k, text.data(), true);
+                   if (offered_temperature && !forecast_edited &&
+                       std::fabs(offered_temperature->ToKelvin() -
+                                 drawn.temp_k) < 0.05)
+                     text += "  DWD MOSMIX";
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditForecast(); });
 }
 
 void
 FlightSetup::Refresh() noexcept
 {
-  const Drawn next = Collect();
-
-  list->Clear();
-
-  list->AddGroup(nullptr);
-
-  StaticString<128> text;
-
-  FormatUserMass(next.crew_kg, text.data(), true);
-  AddRow(_("Crew"),
-         _("All masses loaded to the glider beyond the empty "
-           "weight including pilot and copilot, but not water ballast."),
-         text.c_str(), false, [this]{ EditCrew(); });
-
-  const char *ballast_help =
-    _("Ballast of the glider. Press \"Dump/Stop\" to toggle "
-      "count-down of the ballast volume according to the dump "
-      "rate specified in the configuration settings.");
-  const char *ballast_value = nullptr;
-  const char *ballast_badge = nullptr;
-  const char *ballast_badge2 = nullptr;
-  auto ballast_style = BadgeStyle::PRIMARY;
-  auto ballast_style2 = BadgeStyle::PRIMARY;
-  if (next.show_ballast && next.ballast_l > 0) {
-    text.Format("%.0f l", next.ballast_l);
-    ballast_value = text.c_str();
-  }
-  if (!next.show_ballast)
-    ballast_badge = _("No ballast");
-  else if (ballast_value == nullptr) {
-    /* Empty is the right-hand badge.  No dump time sits to its left. */
-    ballast_badge = _("Empty");
-    if (next.no_dump_time) {
-      ballast_badge2 = _("No dump time");
-      ballast_style2 = BadgeStyle::WARNING;
-    }
-  } else if (next.no_dump_time) {
-    ballast_badge = _("No dump time");
-    ballast_style = BadgeStyle::WARNING;
-  }
-
-  Callback ballast_edit;
-  if (next.show_ballast)
-    ballast_edit = [this]{ EditBallast(); };
-  AddRow(_("Ballast"), ballast_help, ballast_value, false,
-         std::move(ballast_edit), ballast_badge, ballast_style,
-         ballast_badge2, ballast_style2);
-
-  /* wing loading is mass divided by wing area; a missing input is a
-     badge, so the row stays on the list */
-  const bool have_mass = next.empty_mass > 0;
-  const bool have_area = next.wing_area > 0;
-  const char *wing_help;
-  const char *wing_badge = nullptr;
-  if (have_mass && have_area) {
-    FormatUserWingLoading(next.wing, text.data(), text.capacity(), true);
-    wing_help = _("The current wing loading, calculated from the glider's "
-                  "empty weight, crew weight, and ballast. Shown in red "
-                  "when the glider is heavier than its MTOW.");
-  } else {
-    text.clear();
-    if (!have_mass && !have_area)
-      wing_badge = _("No empty mass or wing area (m²)");
-    else if (!have_mass)
-      wing_badge = _("No empty mass");
-    else
-      wing_badge = _("No wing area (m²)");
-    wing_help = _("Wing loading needs the empty mass and the wing area (m²). "
-                  "Without them the polar cannot be calculated. "
-                  "Select the row to open the plane profile.");
-  }
-  const auto wing_style = wing_badge != nullptr
-    ? BadgeStyle::DANGER
-    : BadgeStyle::PRIMARY;
-  const char *over_badge = nullptr;
-  if (wing_badge == nullptr) {
-    const auto &plane = CommonInterface::GetComputerSettings().plane;
-    const auto &polar =
-      CommonInterface::GetComputerSettings().polar.glide_polar_task;
-    if (plane.IsOverMaxTakeoffMass(polar.GetTotalMass()))
-      over_badge = _("MTOW");
-  }
-  AddRow(_("Wing loading"), wing_help,
-         wing_badge != nullptr ? nullptr : text.c_str(), false,
-         [this]{ EditPlane(); },
-         over_badge != nullptr ? over_badge : wing_badge,
-         over_badge != nullptr ? BadgeStyle::DANGER : wing_style);
-
-  const char *bugs_help =
-    /* xgettext:no-c-format */
-    _("How clean the glider is. Set to 0% for clean, larger "
-      "numbers as the wings pick up bugs or get wet. 50% "
-      "indicates the glider's sink rate is doubled.");
-  const double bugs_percent = (1 - next.bugs) * 100;
-  if (bugs_percent > 0.5) {
-    text.Format("%.0f %%", bugs_percent);
-    AddRow(_("Bugs"), bugs_help, text.c_str(), false,
-           [this]{ EditBugs(); });
-  } else
-    AddRow(_("Bugs"), bugs_help, nullptr, false,
-           [this]{ EditBugs(); }, _("Clean"));
-
-  FormatUserPressure(AtmosphericPressure::HectoPascal(next.qnh),
-                     text.data(), true);
-  AddRow(_("QNH"),
-         _("Area pressure for barometric altimeter calibration. "
-           "This is set automatically if Vega is connected."),
-         text.c_str(), false, [this]{ EditQNH(); });
-
-  if (next.show_altitude)
-    FormatUserAltitude(next.altitude, text.data(), true);
-  else
-    text.clear();
-  AddRow(_("Altitude"), nullptr, text.c_str(), !next.show_altitude, {});
-
-  FormatUserTemperature(next.temp_k, text.data(), true);
-  if (offered_temperature && !forecast_edited &&
-      std::fabs(offered_temperature->ToKelvin() - next.temp_k) < 0.05)
-    text += "  DWD MOSMIX";
-  AddRow(_("Max. temp."),
-         _("The day's maximum ground temperature. A dry adiabat "
-           "from it against the outside air temperature measured "
-           "while climbing gives the estimated thermal ceiling; "
-           "the cloud base needs a humidity probe as well. Both "
-           "are drawn on the temperature trace page of the "
-           "Analysis dialog, once the glider has climbed through "
-           "the layer."),
-         text.c_str(), false, [this]{ EditForecast(); });
-
-  drawn = next;
+  drawn = Collect();
   have_drawn = true;
 
+  if (list->GetItemCount() == 0)
+    Build();
+
   SetButtons();
-  list->UpdateLayout();
-  Refit();
+  if (list->UpdateValues() && dialog != nullptr)
+    dialog->RefitList();
 }
 
 void
@@ -408,15 +380,12 @@ FlightSetup::Start() noexcept
 
   /* Started rather than waited for: the dialog opens on the value it
      has, and the row changes under the pilot only if an answer
-     turns up.  Nothing happens at all when one was already fetched
-     today, or the pilot has set the value by hand today, or there is
-     no fix to pick a station by. */
+     turns up. */
   const auto opened_with = forecast;
   forecast_fetcher.Start([this, opened_with](Temperature value){
     if (forecast_edited)
       return;
     if (std::fabs(forecast.ToUser() - opened_with.ToUser()) > 0.01)
-      /* the pilot has chosen something in the meantime */
       return;
 
     offered_temperature = value;
@@ -432,14 +401,6 @@ FlightSetup::Stop() noexcept
 }
 
 void
-FlightSetup::Refit() noexcept
-{
-  if (dialog != nullptr)
-    dialog->FitToList(dialog->GetParentClientRect(),
-                      PreferredClientWidth(dialog->GetLook()));
-}
-
-void
 FlightSetup::CommitForecast() noexcept
 {
   if (!forecast_edited && !offered_temperature)
@@ -451,8 +412,6 @@ FlightSetup::CommitForecast() noexcept
       std::fabs(forecast.ToKelvin() - stored.ToKelvin()) < 0.01)
     return;
 
-  /* A value the pilot chose outranks the forecast for the rest of
-     the day.  Closing on a value a forecast put there is not that. */
   if (forecast_edited &&
       (!offered_temperature ||
        std::fabs(offered_temperature->ToKelvin() - forecast.ToKelvin()) > 0.01)) {
@@ -623,9 +582,8 @@ dlgBasicSettingsShowModal()
   FlightSetup setup;
   setup.SetList(*list);
 
-  const PixelRect rc{Layout::Scale(PixelSize{220u, 220u})};
-  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, rc,
-                           caption, list);
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, caption, list);
   setup.SetDialog(dialog);
   setup.SetDumpButton(dialog.AddButton(_("Dump"), [&setup]{
     setup.FlipBallastTimer();
@@ -634,14 +592,7 @@ dlgBasicSettingsShowModal()
 
   setup.SetButtonPanel(dialog.GetButtonPanel());
   setup.SetButtons();
-  dialog.EnableCursorSelection();
-  dialog.ResyncButtonPanelSelection();
-  list->SetActionBar(dialog.GetButtonPanel());
-  list->SetCursorCallback([&setup](int){
-    setup.Refit();
-  });
-
-  dialog.PrepareWidget();
+  dialog.PrepareFloatingList();
   setup.Refresh();
 
   setup.Start();

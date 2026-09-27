@@ -10,6 +10,7 @@
 #include <memory>
 #include <type_traits>
 class Widget;
+class GroupedListWidget;
 
 class WidgetDialog : public WndForm {
 protected:
@@ -74,6 +75,15 @@ public:
   WidgetDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
                const char *caption, Widget *widget) noexcept;
 
+  struct Floating {};
+
+  /**
+   * A short grouped list, centred, with the buttons under the list.
+   * The width comes from the rows, once they have a value.
+   */
+  WidgetDialog(Floating, UI::SingleWindow &parent, const DialogLook &look,
+               const char *caption, GroupedListWidget *list) noexcept;
+
   virtual ~WidgetDialog();
 
   const ButtonLook &GetButtonLook() const {
@@ -104,6 +114,18 @@ public:
    */
   void FitToList(const PixelRect &parent_rc,
                  unsigned preferred_client_width) noexcept;
+
+  /**
+   * Fit again to the width of the rows.  The explanation opening
+   * under a row uses this.
+   */
+  void RefitList() noexcept;
+
+  /**
+   * Cursor keys, the button bar, and a refit while the explanation
+   * opens.  Call it after the buttons have been added.
+   */
+  void PrepareFloatingList() noexcept;
 
   /**
    * Ensure that the widget is prepared.
