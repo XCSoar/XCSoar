@@ -40,6 +40,13 @@ Version 7.47 - not yet released
     shows a No dump time badge, and a max cruise speed of zero shows
     a No max cruise speed badge. WeGlide is one row: the aircraft
     name with its type number, or a No WeGlide type badge when unset
+  - show Wind Settings as a floating list. The source of the current
+    wind is the first row and cannot be changed, with speed and
+    direction under it. A tap on the label selects the row; a tap
+    on the value opens it. Circling wind, ZigZag wind and External
+    wind are switches, and Trail drift is last. The row's
+    explanation sits below the selected row. Clear drops a wind
+    the pilot has entered. A speed of 0 does the same
   - draw buttons as flat faces with a thin outline instead of bevel
     borders, mark the focused button with a ring around it, and centre
     their captions optically instead of on the line box #2871
