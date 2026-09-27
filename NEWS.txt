@@ -248,6 +248,10 @@ Version 7.46 - not yet released
     Rate opens a list from 0x to 10x. A tap on the label selects
     the row; a tap on the value opens it. Start, Stop and +10'
     stay dialog buttons
+  - show Team code as a floating list. Reference, Mate code and
+    Flarm Lock open when the value is tapped; a tap on the label
+    selects the row. Own code, range and the bearings stay on the
+    list and follow the other pilot. Close stays the dialog button
   - stop quitting the simulator when the device battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no value
     since Windows CE support ended. A layout that still selects it
