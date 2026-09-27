@@ -3526,10 +3526,14 @@ GroupedListControl::DrawBadge(Canvas &canvas, const PixelRect &caption_rc,
 
   const BadgeColors badge_colors = GetBadgeColors(look, style);
 
-  /* grey means the row cannot be used.  A failure stays red on
-     that row, and while the row is selected */
-  const bool mute = style != BadgeStyle::DANGER &&
-    (selected || element.disabled);
+  /* a disabled row is grey, except a failure, which stays red.
+     The dialog accent is the selection, so that badge goes grey
+     while the row is selected.  A warning stays yellow, as the
+     failure stays red. */
+  const bool mute = element.disabled
+    ? style != BadgeStyle::DANGER
+    : selected && style != BadgeStyle::WARNING
+      && style != BadgeStyle::DANGER;
 
   canvas.DrawFilledRectangle(badge_rc, mute
                              ? text_color
