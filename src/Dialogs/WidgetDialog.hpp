@@ -79,6 +79,13 @@ public:
   }
 
   /**
+   * Place the button strip and return the rectangle left for the
+   * widget.  A short dialog can keep the strip along the bottom
+   * when the client is wider than it is tall.
+   */
+  virtual PixelRect LayoutButtons() noexcept;
+
+  /**
    * Ensure that the widget is prepared.
    */
   void PrepareWidget() {
