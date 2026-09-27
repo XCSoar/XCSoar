@@ -3263,11 +3263,11 @@ GetRowColors(const DialogLook &look, bool selected, bool focused,
              bool pressed) noexcept
 {
   if (pressed && !IsDithered())
-    /* zinc-200 and zinc-700 of the Tailwind palette; a phone dims the
-       row under the finger instead of coloring it.  A dithered
-       display has no dim gray and takes the color of the look */
+    /* a phone dims the row under the finger instead of coloring it.
+       A dithered display has no dim gray and takes the color of the
+       look */
     return {look.dark_mode
-            ? Color(0x3f, 0x3f, 0x46)
+            ? COLOR_DARK_THEME_LIST_PRESSED
             : Color(0xe4, 0xe4, 0xe7),
             look.list.text_color};
 
