@@ -600,6 +600,16 @@ private:
   /** the button which was armed when Clear() saved the cursor */
   unsigned saved_column = 0;
 
+  /**
+   * The explanation already on the screen when Clear() ran, so a
+   * rebuilt row does not open it again.  It belongs to #saved_cursor.
+   */
+  bool saved_help = false;
+  unsigned saved_help_height = 0;
+  unsigned saved_help_full = 0;
+  unsigned saved_help_from = 0;
+  std::chrono::steady_clock::time_point saved_help_since{};
+
   /** the items which were open when Clear() saved them, as item indexes */
   std::vector<unsigned> saved_expanded;
 
@@ -685,6 +695,22 @@ public:
       elements[cursor].IsButtons();
     saved_cursor = saved_buttons ? GetButtonsIndex() : GetCursorIndex();
     saved_column = button_column;
+
+    /* an explanation which is already open stays open when this
+       same item is filled in again */
+    saved_help = false;
+    if (!saved_buttons && cursor >= 0 &&
+        (std::size_t)cursor < elements.size() &&
+        elements[cursor].IsItem() &&
+        (elements[cursor].help_height > 0 ||
+         elements[cursor].help_full > 0)) {
+      const Element &element = elements[cursor];
+      saved_help = true;
+      saved_help_height = element.help_height;
+      saved_help_full = element.help_full;
+      saved_help_from = element.help_from;
+      saved_help_since = element.help_since;
+    }
 
     /* a page which fills itself again keeps what the user has opened */
     saved_expanded.clear();
@@ -2760,6 +2786,9 @@ GroupedListControl::UpdateLayout() noexcept
         : GetFirstButton(elements[cursor]);
   }
 
+  const int restored_item = saved_cursor;
+  const bool restored_item_cursor = !saved_buttons && saved_cursor >= 0;
+
   saved_cursor = -1;
   saved_buttons = false;
 
@@ -2770,6 +2799,12 @@ GroupedListControl::UpdateLayout() noexcept
 
   if (cursor < 0 && !cursor_removed)
     cursor = FindItem(0, true);
+
+  /* the same item as before: keep the explanation where it was,
+     instead of opening it from nothing */
+  const bool keep_help = saved_help && restored_item_cursor &&
+    cursor >= 0 && GetCursorIndex() == restored_item;
+  saved_help = false;
 
   const int margin = GetCardMargin();
   const int caption_gap = Layout::VptScale(CAPTION_GAP_PT);
@@ -3007,6 +3042,14 @@ GroupedListControl::UpdateLayout() noexcept
           element.help_from = 0;
           element.help_height = 0;
         } else {
+          if (keep_help && (int)i == cursor &&
+              element.help_height == 0 && element.help_full == 0) {
+            element.help_height = saved_help_height;
+            element.help_full = saved_help_full;
+            element.help_from = saved_help_from;
+            element.help_since = saved_help_since;
+          }
+
           SetHelpFull(element, full);
           element.height += element.help_height;
         }
