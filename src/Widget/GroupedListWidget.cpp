@@ -1646,17 +1646,14 @@ GetBadgeColors(const DialogLook &look,
   case GroupedListWidget::BadgeStyle::PRIMARY:
     break;
 
-    /* the three shades below are yellow-500, red-600 and green-700
-       of the Tailwind palette */
-
   case GroupedListWidget::BadgeStyle::WARNING:
-    return {Color(0xea, 0xb3, 0x08), COLOR_WHITE};
+    return {COLOR_BADGE_WARNING, COLOR_WHITE};
 
   case GroupedListWidget::BadgeStyle::DANGER:
-    return {Color(0xdc, 0x26, 0x26), COLOR_WHITE};
+    return {COLOR_BADGE_DANGER, COLOR_WHITE};
 
   case GroupedListWidget::BadgeStyle::SUCCESS:
-    return {Color(0x15, 0x80, 0x3d), COLOR_WHITE};
+    return {COLOR_BADGE_SUCCESS, COLOR_WHITE};
   }
 
   return accent;
