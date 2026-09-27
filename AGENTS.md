@@ -71,6 +71,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | C++ (`noexcept`, nullptr, enums) | `.cursor/rules/cpp-safety-patterns.mdc` |
 | NMEA, devices, Validity / time | `.cursor/rules/nmea-validity-patterns.mdc` |
 | Search / stacked dialogs | `.cursor/rules/search-dialog-ux.mdc` |
+| Floating list dialogs / grouped settings pages | `.cursor/rules/floating-list-dialog.mdc` |
 | Touch / lift-off / hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
 | Waypoint types / CUP round-trip | `.cursor/rules/waypoint-types.mdc` |
 | SVG icons (`Data/icons/`) | `.cursor/rules/svg-icons.mdc` |
