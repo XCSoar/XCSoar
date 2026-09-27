@@ -207,6 +207,10 @@ Version 7.46 - not yet released
   - show a floating dialog's title as a heading on the page, in line
     with the contents. A dialog that fills the screen keeps a title
     bar
+  - draw the Quick Menu as a grid of buttons
+  - show a grouped list's explanation under the selected row, on
+    the page. A row can keep a tap on its label as selection only,
+    so the value opens it, and Enter still opens the selected row
   - stop quitting the simulator when the device battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no value
     since Windows CE support ended. A layout that still selects it
