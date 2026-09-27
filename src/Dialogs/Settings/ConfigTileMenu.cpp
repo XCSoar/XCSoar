@@ -248,7 +248,7 @@ ConfigTileMenu::OnKeyDown(unsigned key_code) noexcept
 
   unsigned focus = 0;
   if (submenu_main < 0) {
-    focus = std::min(cursor < main_menu_buttons.size()
+    focus = std::min(cursor < buttons.size()
                      ? buttons[cursor].main_menu_index
                      : 0u,
                      n - 1);
