@@ -847,6 +847,8 @@ MainWindow::ReinitialiseLayout() noexcept
 
   if (map != nullptr)
     map->BringToBottom();
+
+  ReinitialiseDialogs();
 }
 
 void
