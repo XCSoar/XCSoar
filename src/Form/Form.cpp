@@ -136,6 +136,17 @@ WndForm::GetMainWindow()
   return *(SingleWindow *)GetRootOwner();
 }
 
+/**
+ * A floating dialog draws its title as a heading on the page.
+ * A full-screen dialog, and e-paper, keep the title bar.
+ */
+[[gnu::pure]]
+static bool
+UseHeadingTitle(bool maximised) noexcept
+{
+  return !maximised && !IsDithered();
+}
+
 void
 WndForm::UpdateLayout()
 {
@@ -151,10 +162,15 @@ WndForm::UpdateLayout()
 
   /* from the inset top, so the border does not eat the tail
      below the baseline.  The line height is that tail plus the
-     ascent. */
+     ascent.  A heading keeps a little air above and below that
+     line. */
+  const bool heading = UseHeadingTitle(IsMaximised());
+  const unsigned air = heading ? Layout::GetTextPadding() : 0;
+  const Font &title_font = heading ? look.bold_font : *look.caption.font;
+
   title_rect.bottom = title_rect.top;
   if (!caption.empty())
-    title_rect.bottom += (int)look.caption.font->GetHeight();
+    title_rect.bottom += (int)air + (int)title_font.GetHeight() + (int)air;
 
   client_rect = rc.RemainingBelowSafe(title_rect);
 
@@ -474,7 +490,25 @@ WndForm::OnPaint(Canvas &canvas) noexcept
     }
   }
 
-  if (!caption.empty()) {
+  if (!caption.empty() && round) {
+    /* the page already fills the rounded top; the title is a
+       heading on it, in line with the cards */
+    canvas.SetTextColor(look.text_color);
+    canvas.Select(look.bold_font);
+    canvas.SetBackgroundTransparent();
+
+    const int inset = (int)(2 * ButtonFrameRenderer::GetMargin());
+    const int air = (int)Layout::GetTextPadding();
+    const PixelPoint text_at =
+      title_rect.GetTopLeft().At(inset, air);
+
+    PixelRect clip = title_rect;
+    clip.left = text_at.x;
+    if (clip.right > clip.left + inset)
+      clip.right -= inset;
+
+    canvas.DrawClippedText(text_at, clip, caption.c_str());
+  } else if (!caption.empty()) {
     // Set the colors
     canvas.SetTextColor(COLOR_WHITE);
 
