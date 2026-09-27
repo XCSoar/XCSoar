@@ -244,6 +244,10 @@ Version 7.46 - not yet released
     wind are switches, and Trail drift is last. The row's
     explanation sits below the selected row. Clear drops a wind
     the pilot has entered. A speed of 0 does the same
+  - show Replay as a floating list. Flight opens the log list, and
+    Rate opens a list from 0x to 10x. A tap on the label selects
+    the row; a tap on the value opens it. Start, Stop and +10'
+    stay dialog buttons
   - stop quitting the simulator when the device battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no value
     since Windows CE support ended. A layout that still selects it
