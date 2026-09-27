@@ -282,16 +282,22 @@ private:
     TextFont subtitle_font = TextFont::DEFAULT;
 
     /**
-     * only for Type::ITEM: replaces the footer of the group while
-     * the cursor is on this item
+     * only for Type::ITEM: shown below this item while the cursor
+     * is on it
      */
     std::string help{};
 
+    /** only for Type::ITEM: #help broken into lines */
+    WrappedText wrapped_help{};
+
+    /** the width for which #wrapped_help was broken; -1 if never */
+    int wrapped_help_width = -1;
+
     /**
-     * only for Type::FOOTER: as tall as the longest explanation in
-     * the group, not only the one on the screen
+     * only for Type::ITEM: the room below the row which holds #help;
+     * 0 while the cursor is elsewhere
      */
-    bool stable_footer = false;
+    unsigned help_height = 0;
 
     /** the links of #help (Type::ITEM) or of #text (Type::FOOTER) */
     std::vector<Link> links{};
@@ -387,6 +393,12 @@ private:
 
     /** only for Type::ITEM: draw an arrow at the right edge */
     bool chevron = false;
+
+    /**
+     * only for Type::ITEM: a tap on the label only moves the cursor
+     * here; a tap on the value, the badges or the arrow runs the item
+     */
+    bool label_selects = false;
 
     /**
      * Some row of this card draws an arrow.  A badge on a row which
@@ -706,6 +718,10 @@ public:
   [[gnu::pure]]
   PixelRect GetFooterRect(std::size_t i) const noexcept;
 
+  /** The area which the help of an item occupies, below its row. */
+  [[gnu::pure]]
+  PixelRect GetItemHelpRect(std::size_t i) const noexcept;
+
   /**
    * Walk the pieces of the text of a footer element: each call gets
    * the area of one piece, its text, and the link it belongs to, or
@@ -715,7 +731,14 @@ public:
     std::function<void(PixelRect rc, std::string_view text,
                        const Link *link)>;
 
+  void WalkWrapped(const std::string &text,
+                   const std::vector<Link> &links,
+                   const WrappedText &wrapped, PixelRect rc,
+                   FooterCallback f) const noexcept;
+
   void WalkFooter(std::size_t i, FooterCallback f) const noexcept;
+
+  void WalkItemHelp(std::size_t i, FooterCallback f) const noexcept;
 
   /**
    * @return the link at the given position, or nullptr if there is
@@ -1343,6 +1366,15 @@ private:
   [[gnu::pure]]
   std::pair<int, int> GetToggleHitArea(const Element &element) const noexcept;
 
+  /** The left edge of the value, the badges and the arrow. */
+  int ActionLeft(const Element &element) const noexcept;
+
+  /**
+   * Does this point lie on the value, the badges or the arrow,
+   * rather than on the label or the explanation?
+   */
+  bool OnActionSide(const Element &element, PixelPoint p) const noexcept;
+
   void UpdateGroupFlags() noexcept;
 
   /**
@@ -1505,18 +1537,9 @@ GroupedListControl::FinishGroup() noexcept
     ? group_options.footer
     : "";
 
-  /* an item which explains itself needs a footer to be explained
-     in, even if the group has no text of its own */
-  bool needed = *footer != '\0';
-
-  for (auto i = elements.rbegin();
-       i != elements.rend() && (i->IsItem() || i->IsButtons()); ++i)
-    /* the help of a hidden item is never shown: the cursor cannot
-       reach it, and an empty footer would be a gap below the card */
-    if (i->IsShownItem() && !i->help.empty())
-      needed = true;
-
-  if (!needed)
+  /* the explanation of an item is drawn under that item, so a group
+     with no text of its own needs no footer */
+  if (*footer == '\0')
     return;
 
   Element &element = elements.emplace_back(Element{
@@ -1525,7 +1548,6 @@ GroupedListControl::FinishGroup() noexcept
   });
 
   element.text = ParseLinks(footer, element.links);
-  element.stable_footer = group_options.stable_footer;
 }
 
 GroupedListControl::Footer
@@ -1533,21 +1555,6 @@ GroupedListControl::GetFooter(std::size_t i) const noexcept
 {
   assert(i < elements.size());
   assert(elements[i].type == Element::Type::FOOTER);
-
-  /* the items of this group are the elements right above it */
-  if (cursor >= 0 && (std::size_t)cursor < i &&
-      !elements[cursor].help.empty()) {
-    bool in_group = true;
-
-    for (std::size_t j = i; j-- > (std::size_t)cursor;)
-      if (!elements[j].IsItem() && !elements[j].IsButtons()) {
-        in_group = false;
-        break;
-      }
-
-    if (in_group)
-      return {&elements[cursor].help, &elements[cursor].links};
-  }
 
   return {&elements[i].text, &elements[i].links};
 }
@@ -1566,29 +1573,16 @@ GroupedListControl::GetFooterRect(std::size_t i) const noexcept
 }
 
 void
-GroupedListControl::WalkFooter(std::size_t i,
+GroupedListControl::WalkWrapped(const std::string &text,
+                                 const std::vector<Link> &links,
+                                 const WrappedText &wrapped, PixelRect rc,
                                  FooterCallback f) const noexcept
 {
-  const auto footer = GetFooter(i);
-  if (footer.text->empty())
+  if (text.empty())
     return;
 
-  const std::string &text = *footer.text;
   const Font &font = *look.list.font;
   const int line_spacing = font.GetLineSpacing();
-
-  const PixelRect rc = GetFooterRect(i);
-  const int width = std::max((int)rc.GetWidth(), 1);
-
-  /* the layout has broken this text already */
-  WrappedText fallback;
-  if (elements[i].wrapped_text_width != width)
-    fallback = WrapText(font, width, text);
-
-  const WrappedText &wrapped = elements[i].wrapped_text_width == width
-    ? elements[i].wrapped_text
-    : fallback;
-
   int y = rc.top;
 
   for (const auto &line : wrapped.lines) {
@@ -1602,7 +1596,7 @@ GroupedListControl::WalkFooter(std::size_t i,
       const Link *link = nullptr;
       std::size_t end = line_end;
 
-      for (const auto &l : *footer.links) {
+      for (const auto &l : links) {
         if (l.end <= position || l.start >= line_end)
           continue;
 
@@ -1629,20 +1623,88 @@ GroupedListControl::WalkFooter(std::size_t i,
   }
 }
 
+void
+GroupedListControl::WalkFooter(std::size_t i,
+                                 FooterCallback f) const noexcept
+{
+  const auto footer = GetFooter(i);
+  if (footer.text->empty())
+    return;
+
+  const std::string &text = *footer.text;
+  const Font &font = *look.list.font;
+
+  const PixelRect rc = GetFooterRect(i);
+  const int width = std::max((int)rc.GetWidth(), 1);
+
+  /* the layout has broken this text already */
+  WrappedText fallback;
+  if (elements[i].wrapped_text_width != width)
+    fallback = WrapText(font, width, text);
+
+  const WrappedText &wrapped = elements[i].wrapped_text_width == width
+    ? elements[i].wrapped_text
+    : fallback;
+
+  WalkWrapped(text, *footer.links, wrapped, rc, std::move(f));
+}
+
+PixelRect
+GroupedListControl::GetItemHelpRect(std::size_t i) const noexcept
+{
+  const Element &element = elements[i];
+  const int margin = GetCardMargin();
+  const int padding = GetPadding();
+  const int pad = (int)Layout::GetTextPadding();
+  const int top = element.GetBottom() - origin
+    - (int)element.help_height + pad;
+
+  return {margin + padding, top,
+          GetContentWidth() - margin - padding,
+          top + (int)element.help_height - 2 * pad};
+}
+
+void
+GroupedListControl::WalkItemHelp(std::size_t i,
+                                  FooterCallback f) const noexcept
+{
+  const Element &element = elements[i];
+  if (element.help.empty() || element.help_height == 0)
+    return;
+
+  const PixelRect rc = GetItemHelpRect(i);
+  const int width = std::max((int)rc.GetWidth(), 1);
+
+  WrappedText fallback;
+  if (element.wrapped_help_width != width)
+    fallback = WrapText(*look.list.font, width, element.help);
+
+  const WrappedText &wrapped = element.wrapped_help_width == width
+    ? element.wrapped_help
+    : fallback;
+
+  WalkWrapped(element.help, element.links, wrapped, rc, std::move(f));
+}
+
 const GroupedListControl::Link *
 GroupedListControl::FindLinkAt(PixelPoint p) const noexcept
 {
   const int i = FindElementAt(p.y);
-  if (i < 0 || elements[i].type != Element::Type::FOOTER)
+  if (i < 0)
     return nullptr;
 
   const Link *result = nullptr;
 
-  WalkFooter(i, [&result, p](PixelRect rc, std::string_view,
-                               const Link *link){
+  const auto pick = [&result, p](PixelRect rc, std::string_view,
+                                  const Link *link){
     if (link != nullptr && rc.Contains(p))
       result = link;
-  });
+  };
+
+  if (elements[i].type == Element::Type::FOOTER)
+    WalkFooter(i, pick);
+  else if (elements[i].help_height > 0)
+    WalkItemHelp(i, pick);
 
   return result;
 }
@@ -1739,6 +1801,7 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .badge_font = options.badge_font,
     .callback = std::move(callback),
     .chevron = options.chevron,
+    .label_selects = options.label_selects,
     .checked = options.checked,
     .disabled = options.disabled,
     .selectable_when_disabled = options.selectable_when_disabled,
@@ -2617,9 +2680,8 @@ GroupedListControl::UpdateLayout() noexcept
   if (!IsDefined())
     return;
 
-  /* the footer of a group shows the help of the item under the
-     cursor, and the height of the footer depends on that text:
-     restore the cursor before the elements are measured */
+  /* the help under the selected item changes the height of that
+     row: restore the cursor before the elements are measured */
   const bool scroll_to_cursor = cursor < 0 && saved_cursor >= 0;
   if (scroll_to_cursor) {
     /* the same item as before the list was rebuilt, or its neighbour
@@ -2853,34 +2915,33 @@ GroupedListControl::UpdateLayout() noexcept
                                         *footer.text);
         element.wrapped_text_width = text_width;
 
-        unsigned lines = element.wrapped_text.lines.size();
-        if (element.stable_footer) {
-          /* the page keeps the room of the longest explanation, so
-             a shorter one does not pull the dialog in */
-          const auto measure = [&](const std::string &text) {
-            if (text.empty())
-              return;
-
-            lines = std::max(lines,
-                             (unsigned)WrapText(*look.list.font,
-                                                footer_width,
-                                                text).lines.size());
-          };
-
-          measure(element.text);
-          for (std::size_t j = i; j-- > 0;) {
-            if (!elements[j].IsItem() && !elements[j].IsButtons())
-              break;
-            if (elements[j].IsShownItem())
-              measure(elements[j].help);
-          }
-        }
+        const unsigned lines = element.wrapped_text.lines.size();
 
         element.height = footer_gap +
           lines * look.list.font->GetLineSpacing();
       }
         break;
       }
+
+      /* the explanation of the selected item sits under its row, so
+         the rows below it move down while it is selected */
+      if (element.type == Element::Type::ITEM && element.height > 0 &&
+          (int)i == cursor && !element.help.empty()) {
+        const int help_width = std::max(text_width, 1);
+        element.wrapped_help = WrapText(*look.list.font, help_width,
+                                        element.help);
+        element.wrapped_help_width = text_width;
+
+        const unsigned lines = element.wrapped_help.lines.size();
+        const int pad = (int)Layout::GetTextPadding();
+        element.help_height = lines == 0
+          ? 0
+          : (unsigned)(pad
+                       + (int)lines * (int)look.list.font->GetLineSpacing()
+                       + pad);
+        element.height += element.help_height;
+      } else if (element.type == Element::Type::ITEM)
+        element.help_height = 0;
 
       element.top = y;
       y += (int)element.height;
@@ -3005,9 +3066,9 @@ GroupedListControl::SetCursor(int i) noexcept
        wherever it comes */
     button_column = GetFirstButton(elements[i]);
 
-  /* the footer of a group shows the help of the item under the
-     cursor, and its height changes with that text; measuring the
-     whole list again is only needed when such a text comes or goes */
+  /* the help under an item changes the height of that row; measuring
+     the whole list again is only needed when such a text comes or
+     goes */
   if ((previous >= 0 && (std::size_t)previous < elements.size() &&
        !elements[previous].help.empty()) ||
       !elements[i].help.empty())
@@ -3062,8 +3123,8 @@ GroupedListControl::ClearCursor() noexcept
   saved_cursor = -1;
   cursor_removed = true;
 
-  /* the footer of the group showed the help of that item; the
-     elements below it move up */
+  /* the help under that item goes away, and the rows below it
+     move up */
   UpdateLayout();
 
   if (cursor_callback)
@@ -3168,6 +3229,59 @@ GroupedListControl::GetToggleHitArea(const Element &element) const noexcept
   /* a finger is wider than the switch: let the padding around it
      count, so that a tap next to it is not lost */
   return {left - padding, right + padding};
+}
+
+/**
+ * The left edge of the value, the badges and the arrow.  A label
+ * which only selects keeps everything to the left of this.  A row
+ * whose value is narrow still gives the finger the right third.
+ */
+int
+GroupedListControl::ActionLeft(const Element &element) const noexcept
+{
+  const int padding = GetPadding();
+  const int row_left = GetCardMargin() + padding;
+  const int row_right = GetContentWidth() - GetCardMargin() - padding;
+
+  int left = row_right - (int)Layout::VptScale(EDGE_INSET_PT);
+
+  if (element.check_right && !element.has_children)
+    left -= GetCheckWidth();
+
+  const bool chevron = (element.chevron && !element.disabled) ||
+    (HasBadge(element) && element.share_chevron);
+  if (chevron) {
+    const int size = std::max(2, (int)look.list.font->GetHeight() / 4);
+    left -= size + padding;
+  }
+
+  if (element.value_width > 0 && !element.value_is_below)
+    left -= (int)element.value_width + padding;
+
+  const int badges = GetBadgesWidth(element);
+  if (badges > 0)
+    left -= badges + padding;
+
+  const int min_width = std::max((row_right - row_left) / 3, 1);
+  if (row_right - left < min_width)
+    left = row_right - min_width;
+
+  if (left < row_left)
+    left = row_left;
+
+  return left;
+}
+
+bool
+GroupedListControl::OnActionSide(const Element &element,
+                                 PixelPoint p) const noexcept
+{
+  /* the explanation under the row belongs to the label */
+  if (element.help_height > 0 &&
+      p.y >= element.GetBottom() - origin - (int)element.help_height)
+    return false;
+
+  return p.x >= ActionLeft(element);
 }
 
 void
@@ -3595,14 +3709,25 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                                               pressed);
     const Color background = row_colors.background_color;
 
+    /* the explanation sits under the row on the page, and the card
+       stops at the row */
+    const bool opened_below = element.help_height > 0;
+    const bool opened_above = i > 0 && elements[i - 1].help_height > 0;
+    if (opened_below) {
+      rc.bottom -= (int)element.help_height;
+      text_rc.bottom = rc.bottom;
+    }
+
     /* the thin line above this item belongs to the item above it, and
        it must not cut into the selected item: swallow it, so that the
        background covers it.  The elements are drawn from top to
-       bottom, and therefore the line is already there */
+       bottom, and therefore the line is already there.  A row which
+       opens after an explanation is the top of a card, and the page
+       above it stays */
     const int separator = GetSeparatorThickness();
 
     PixelRect background_rc = rc;
-    if (selected && !element.first_in_group)
+    if (selected && !element.first_in_group && !opened_above)
       background_rc.top -= separator;
 
     canvas.DrawFilledRectangle(background_rc, background);
@@ -3630,15 +3755,22 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
     const int radius = GetCardRadius();
 
     /* an edge which a row of buttons has cut into the group is
-       barely rounded: the group goes on beyond it */
+       barely rounded: the group goes on beyond it.  An explanation
+       opens the page between two rows, so each of those edges is a
+       real end of the card */
     const int cut_radius = (int)std::lround(radius * CUT_RADIUS_FACTOR);
-    const int top_radius = element.cut_top ? cut_radius : radius;
-    const int bottom_radius = element.cut_bottom ? cut_radius : radius;
+    const bool round_top = element.first_in_group || opened_above;
+    const bool round_bottom = element.last_in_group || opened_below;
+    const int top_radius = element.cut_top && !opened_above
+      ? cut_radius : radius;
+    const int bottom_radius = element.cut_bottom && !opened_below
+      ? cut_radius : radius;
 
-    if (element.first_in_group)
-      DrawRoundedEdge(canvas, rc, true, look.background_color, top_radius);
+    if (round_top)
+      DrawRoundedEdge(canvas, rc, true, look.background_color,
+                      top_radius);
 
-    if (element.last_in_group)
+    if (round_bottom)
       DrawRoundedEdge(canvas, rc, false, look.background_color,
                       bottom_radius);
 
@@ -3646,15 +3778,14 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
        white as the page behind it: draw its edge, or there would be
        no card at all.  The line to the next item is part of it */
     if (IsDithered())
-      DrawCardBorder(canvas, rc, element.first_in_group,
-                     element.last_in_group, look.list.text_color,
-                     top_radius, bottom_radius);
+      DrawCardBorder(canvas, rc, round_top, round_bottom,
+                     look.list.text_color, top_radius, bottom_radius);
 
     /* a thin line separates the items of a card; like the gap between
        two cards, it shows the page behind them.  The selected item
        needs no line, its background already separates it from its
        neighbours */
-    if (!element.last_in_group && !selected && !IsDithered()) {
+    if (!round_bottom && !selected && !IsDithered()) {
       /* the line begins where the caption does, like the lists of a
          phone; the check mark is a state of the whole item and stays
          outside */
@@ -3981,6 +4112,29 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       subtitle_rc.bottom = subtitle_y + (int)element.subtitle_height;
 
       text_renderer.Draw(canvas, subtitle_rc, element.subtitle.c_str());
+    }
+
+    if (element.help_height > 0) {
+      const Color link_color = look.dark_mode
+        ? COLOR_XCSOAR_LIGHT
+        : COLOR_XCSOAR;
+
+      canvas.Select(*look.list.font);
+      WalkItemHelp(i, [this, &canvas, link_color](PixelRect piece_rc,
+                                                  std::string_view piece,
+                                                  const Link *link){
+        canvas.SetTextColor(link != nullptr
+                            ? link_color
+                            : look.text_color);
+        canvas.DrawText(piece_rc.GetTopLeft(), piece);
+
+        if (link != nullptr) {
+          const int underline = piece_rc.top
+            + (int)look.list.font->GetAscentHeight() + 1;
+          canvas.DrawHLine(piece_rc.left, piece_rc.right,
+                           underline, link_color);
+        }
+      });
     }
 
     break;
@@ -4368,6 +4522,12 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
 
   bool activate = drag_mode == DragMode::CURSOR && tapped && press >= 0;
 
+  /* a tap on a link in an explanation opens it, including the
+     explanation under a row, which is part of that item */
+  const Link *const link = tapped ? FindLinkAt(p) : nullptr;
+  if (link != nullptr)
+    activate = false;
+
   if (activate && elements[press].has_children) {
     /* an item which opens and closes is a control like the switch: it
        does what it says on the first tap, wherever the cursor was.
@@ -4407,6 +4567,11 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
          does, and that is all it does */
       SetCursor(press);
       activate = false;
+    } else if (element.label_selects && !OnActionSide(element, p)) {
+      /* the label and the explanation only select the row.  The
+         value, the badges and the arrow run it */
+      SetCursor(press);
+      activate = false;
     } else if (!on_switch && press != cursor &&
                element.enter_action == EnterAction::ACTION_BAR) {
       /* the items of this group are a choice, and choosing one is
@@ -4419,13 +4584,6 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
       activate = false;
     }
   }
-
-  /* a tap on a link in an explanatory text opens it, as long as the
-     finger has not moved and the tap has become a scroll gesture */
-  const Link *const link =
-    drag_mode == DragMode::SCROLL && tapped
-    ? FindLinkAt(p)
-    : nullptr;
 
   /* a tap beside the items - on the gap between two cards, on a
      caption or on an explanation - means "none of them", with a

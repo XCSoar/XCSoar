@@ -22,9 +22,10 @@ class GroupedListControl;
  *
  * The items of a group are drawn as a card with rounded corners; the
  * caption of a group sits above its card, an optional footer below
- * it.  Unlike #ListWidget, every element has its own height: captions
- * and footers are only as tall as their text, while the items keep
- * the height of a comfortable touch target.
+ * it.  The explanation of an item is shown under that item while it
+ * is selected.  Unlike #ListWidget, every element has its own height:
+ * captions and footers are only as tall as their text, while the
+ * items keep the height of a comfortable touch target.
  *
  * Use this where a page has more entries than fit into one flat list,
  * but splitting them over several pages (as #TabWidget or the
@@ -187,8 +188,8 @@ public:
   struct GroupOptions {
     /**
      * An explanatory text below the card of the group.  It is
-     * word-wrapped and gets as much room as it needs; an item with
-     * an #ItemOptions::help replaces it while the cursor is on it.
+     * word-wrapped and gets as much room as it needs.  The
+     * explanation of an item is shown under that item instead.
      */
     const char *footer = nullptr;
 
@@ -219,13 +220,6 @@ public:
      * too; every item then keeps the room of a one-line row.
      */
     bool shrink_vertical_padding = true;
-
-    /**
-     * Keep the explanation below the card as tall as the longest one
-     * in the group.  A shorter text leaves the rest empty, and the
-     * page does not grow and shrink as the cursor moves.
-     */
-    bool stable_footer = false;
   };
 
   /** The contents and the decorations of an item. */
@@ -333,6 +327,13 @@ public:
     bool chevron = false;
 
     /**
+     * A tap on the label only moves the cursor here, so the
+     * explanation can be read.  A tap on the value, the badges or
+     * the arrow runs the item.  Enter still runs it.
+     */
+    bool label_selects = false;
+
+    /**
      * A switch at the right edge which shows whether the setting is
      * on, for an item which is nothing but a boolean.  Tapping the
      * item flips the switch and then calls the callback, which reads
@@ -354,9 +355,8 @@ public:
     bool checked = false;
 
     /**
-     * An explanation of this item, shown below the card of its group
-     * while the cursor is on this item; it replaces
-     * #GroupOptions::footer.
+     * An explanation of this item, shown below the item while the
+     * cursor is on it.
      */
     const char *help = nullptr;
 

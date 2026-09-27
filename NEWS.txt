@@ -10,6 +10,10 @@ Version 7.47 - not yet released
   - show a floating dialog's title as a heading on the page, in line
     with the contents. A dialog that fills the screen keeps a title
     bar
+  - draw the Quick Menu as a grid of buttons
+  - show a grouped list's explanation under the selected row, on
+    the page. A row can keep a tap on its label as selection only,
+    so the value opens it, and Enter still opens the selected row
   - draw buttons as flat faces with a thin outline instead of bevel
     borders, mark the focused button with a ring around it, and centre
     their captions optically instead of on the line box #2871
