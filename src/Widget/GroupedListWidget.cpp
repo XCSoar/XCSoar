@@ -26,6 +26,7 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -56,9 +57,6 @@ UseKineticScrolling() noexcept
 {
   return !HasEPaper() && !IsSlowCPU();
 }
-
-/** Distance between the cards and the edges of the widget area. */
-static constexpr unsigned MARGIN_PT = 10;
 
 /**
  * A view this narrow lets its cards fill it: the margin beside them,
@@ -107,13 +105,12 @@ static constexpr unsigned CAPTION_GAP_PT = 4;
 /**
  * Horizontal padding of the contents of a card, the distance between
  * the icon and the caption, and the one between the value and the
- * arrow at its right edge.  As much as the card itself keeps to the
- * edges of the list, unless the items are shorter than a touch
- * target asks for.
+ * arrow at its right edge.  It stays this wide unless the items are
+ * shorter than a touch target asks for.
  *
  * @see GroupedListControl::GetPadding()
  */
-static constexpr unsigned PADDING_PT = MARGIN_PT;
+static constexpr unsigned PADDING_PT = 10;
 
 /**
  * Additional distance which the arrow, the check mark, the badge and
@@ -913,12 +910,41 @@ private:
 
   /**
    * The distance which the cards keep to the left and to the right
-   * edge of the view.  A narrow view has none: there the cards go
-   * from edge to edge.
+   * edge of the view.  A button face keeps the same distance: one
+   * margin inside its window, and that window one margin inside the
+   * dialog.  A narrow view has none: there the cards go from edge
+   * to edge.
    */
   [[gnu::pure]]
   int GetCardMargin() const noexcept {
-    return IsNarrowView() ? 0 : (int)Layout::VptScale(MARGIN_PT);
+    if (IsNarrowView())
+      return 0;
+
+    return 2 * (int)ButtonFrameRenderer::GetMargin();
+  }
+
+  /**
+   * The distance under the last card.  When a button strip sits
+   * below the list, that strip already keeps the gap a button keeps
+   * to the dialog, and the card adds none of its own.
+   */
+  [[gnu::pure]]
+  int GetTrailingMargin() const noexcept {
+    const int margin = GetCardMargin();
+    if (margin <= 0)
+      return 0;
+
+    const Window *parent = GetParent();
+    if (parent == nullptr)
+      return margin;
+
+    const int edge = (int)ButtonFrameRenderer::GetEdgeMargin(
+        GetClientRect());
+    const int bottom = GetTopLeft().y + (int)GetSize().height;
+    if (bottom < parent->GetClientRect().bottom - edge)
+      return 0;
+
+    return margin;
   }
 
   /**
@@ -1108,8 +1134,9 @@ private:
    * keep to both sides.
    */
   [[gnu::pure]]
-  static int GetLeadingGap(std::size_t i) noexcept {
-    return Layout::VptScale(i == 0 ? MARGIN_PT : GROUP_GAP_PT);
+  int GetLeadingGap(std::size_t i) const noexcept {
+    return i == 0 ? GetCardMargin()
+                  : (int)Layout::VptScale(GROUP_GAP_PT);
   }
 
   /**
@@ -2861,7 +2888,7 @@ GroupedListControl::UpdateLayout() noexcept
 
     content_height = elements.empty()
       ? 0
-      : (unsigned)(y + (int)Layout::VptScale(MARGIN_PT));
+      : (unsigned)(y + GetTrailingMargin());
 
     if (scroll_bar.IsDefined() ||
         content_height <= (unsigned)GetViewHeight())

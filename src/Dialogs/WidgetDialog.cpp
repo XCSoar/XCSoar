@@ -175,13 +175,19 @@ WidgetDialog::AutoSize(const PixelRect &parent_rc)
         parent_rc.top + (int(parent_size.height) - int(GetSize().height)) / 2});
 }
 
+PixelRect
+WidgetDialog::LayoutButtons() noexcept
+{
+  return buttons.UpdateLayout();
+}
+
 int
 WidgetDialog::ShowModal()
 {
   if (auto_size)
     AutoSize();
   else
-    widget.Move(buttons.UpdateLayout());
+    widget.Move(LayoutButtons());
 
   widget.Show();
   if (!auto_size) {
@@ -189,7 +195,7 @@ WidgetDialog::ShowModal()
        become available when the widget was shown (fixes caption clipping on
        some scaled/font configurations).  Keep this non-auto dialogs only,
        so AutoSize()'s LeftLayout()/BottomLayout() decision remains intact. */
-    widget.Move(buttons.UpdateLayout());
+    widget.Move(LayoutButtons());
   }
   int result = WndForm::ShowModal();
   widget.Hide();
@@ -223,7 +229,7 @@ WidgetDialog::OnResize(PixelSize new_size) noexcept
   if (auto_size)
     return;
 
-  widget.Move(buttons.UpdateLayout());
+  widget.Move(LayoutButtons());
 }
 
 void
