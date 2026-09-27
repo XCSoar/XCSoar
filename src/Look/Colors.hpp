@@ -72,6 +72,15 @@ static constexpr Color COLOR_XCSOAR_PRESSED =
   MixColors(COLOR_XCSOAR, COLOR_XCSOAR_DARK, 0x4d);
 
 /**
+ * Grouped-list badge fills.  The label on each is white.  The accent
+ * badge uses the dialog focus colours instead of a constant here.
+ * Yellow-500, red-600 and green-700.
+ */
+static constexpr Color COLOR_BADGE_WARNING = Color(0xea, 0xb3, 0x08);
+static constexpr Color COLOR_BADGE_DANGER = Color(0xdc, 0x26, 0x26);
+static constexpr Color COLOR_BADGE_SUCCESS = Color(0x15, 0x80, 0x3d);
+
+/**
  * Admonition colors for Markdown rendering.
  */
 static constexpr Color COLOR_ADMONITION_IMPORTANT =
