@@ -70,6 +70,13 @@ struct IBFHelperInt {
 using namespace InfoBoxFactory;
 
 struct MetaData {
+  /**
+   * The topic under which the content picker lists this type.  It is
+   * the first constructor argument, so a new entry cannot be added
+   * without choosing one.
+   */
+  Group group;
+
   const char *name;
   const char *caption;
   const char *description;
@@ -84,26 +91,29 @@ struct MetaData {
    */
   MetaData() = delete;
 
-  constexpr MetaData(const char *_name,
+  constexpr MetaData(Group _group,
+                     const char *_name,
                      const char *_caption,
                      const char *_description,
                      InfoBoxContent *(*_create)() noexcept) noexcept
-    :name(_name), caption(_caption), description(_description),
+    :group(_group), name(_name), caption(_caption), description(_description),
      create(_create), update(nullptr), panels(nullptr) {}
 
-  constexpr MetaData(const char *_name,
+  constexpr MetaData(Group _group,
+                     const char *_name,
                      const char *_caption,
                      const char *_description,
                      void (*_update)(InfoBoxData &data) noexcept) noexcept
-    :name(_name), caption(_caption), description(_description),
+    :group(_group), name(_name), caption(_caption), description(_description),
      create(nullptr), update(_update), panels(nullptr) {}
 
-  constexpr MetaData(const char *_name,
+  constexpr MetaData(Group _group,
+                     const char *_name,
                      const char *_caption,
                      const char *_description,
                      void (*_update)(InfoBoxData &data) noexcept,
                      const InfoBoxPanel _panels[]) noexcept
-    :name(_name), caption(_caption), description(_description),
+    :group(_group), name(_name), caption(_caption), description(_description),
      create(nullptr), update(_update), panels(_panels) {}
 };
 
@@ -114,6 +124,7 @@ struct MetaData {
 static constexpr MetaData meta_data[] = {
   // e_HeightGPS
   {
+    Group::ALTITUDE,
     N_("Altitude GPS"),
     N_("Alt GPS"),
     N_("Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In simulation mode, this value is adjustable with the up/down arrow keys; the right/left arrow keys cause the glider to turn."),
@@ -122,6 +133,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HeightAGL
   {
+    Group::ALTITUDE,
     N_("Height AGL"),
     N_("H AGL"),
     N_("Navigation altitude minus the terrain elevation obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
@@ -131,6 +143,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Thermal_30s
   {
+    Group::VARIO,
     N_("Thermal climb, last 30 s"),
     N_("TC 30s"),
     N_("30-second rolling average climb rate based on reported GPS altitude, or vario if available. The number in smaller font reflects the climb rate for the current thermal since circling started."),
@@ -139,6 +152,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Bearing
   {
+    Group::WAYPOINT,
     N_("Next bearing"),
     N_("Bearing"),
     N_("True bearing of the next waypoint. For AAT tasks, this is the true bearing to the target within the AAT sector."),
@@ -147,6 +161,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_GR_Instantaneous
   {
+    Group::GLIDE,
     N_("GR instantaneous"),
     N_("GR Inst"),
     N_("Instantaneous glide ratio over ground, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
@@ -155,6 +170,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_GR_Cruise
   {
+    Group::GLIDE,
     N_("GR cruise"),
     N_("GR Cruise"),
     N_("Distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
@@ -163,6 +179,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Speed_GPS
   {
+    Group::SPEED,
     N_("Speed ground"),
     N_("V GND"),
     N_("Ground speed measured by the GPS. The small value shows the head or tail wind difference to TAS for the current vector. If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
@@ -171,6 +188,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TL_Avg
   {
+    Group::VARIO,
     N_("Last thermal average"),
     N_("TL Avg"),
     N_("Total altitude gain/loss in the last thermal divided by the time spent circling."),
@@ -179,6 +197,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TL_Gain
   {
+    Group::VARIO,
     N_("Last thermal gain"),
     N_("TL Gain"),
     N_("Total altitude gain/loss in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."),
@@ -187,6 +206,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TL_Time
   {
+    Group::VARIO,
     N_("Last thermal duration"),
     N_("TL duration"),
     N_("Time spent circling in the last thermal."),
@@ -195,6 +215,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_MacCready
   {
+    Group::TASK,
     N_("MacCready setting"),
     N_("MC"),
     N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
@@ -203,6 +224,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_Distance
   {
+    Group::WAYPOINT,
     N_("Next distance"),
     N_("WP Dist"),
     N_("Distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
@@ -211,6 +233,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_AltDiff
   {
+    Group::GLIDE,
     N_("Next altitude difference"),
     N_("WP AltD"),
     N_("Arrival altitude at the next waypoint relative to the safety arrival height. For AAT tasks, the target within the AAT sector is used."),
@@ -219,6 +242,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_AltReq
   {
+    Group::GLIDE,
     N_("Next altitude required"),
     N_("WP AltR"),
     N_("Additional altitude required to reach the next turn point. For AAT tasks, the target within the AAT sector is used."),
@@ -227,6 +251,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_Name
   {
+    Group::WAYPOINT,
     N_("Next waypoint"),
     N_("Next WP"),
     N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the Airfields/waypoint details."),
@@ -235,6 +260,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_AltDiff
   {
+    Group::GLIDE,
     N_("Final altitude difference"),
     N_("Fin AltD"),
     N_("Arrival altitude at the final task turn point relative to the safety arrival height."),
@@ -243,6 +269,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_AltReq
   {
+    Group::GLIDE,
     N_("Final altitude required"),
     N_("Fin AltR"),
     N_("Additional altitude required to finish the task."),
@@ -251,6 +278,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_SpeedTaskAvg
   {
+    Group::TASK,
     N_("Speed task average"),
     N_("V Task Avg"),
     N_("Average cross-country speed while on current task, not compensated for altitude."),
@@ -259,6 +287,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_Distance
   {
+    Group::TASK,
     N_("Final distance"),
     N_("Fin Dist"),
     N_("Distance to finish around remaining turn points."),
@@ -267,6 +296,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_GR_TE
   {
+    Group::GLIDE,
     "Final GR (TE) deprecated",
     "---",
     "Deprecated, there is no TE compensation on GR, you should switch to the \"Final GR\" info box.",
@@ -275,6 +305,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_H_Terrain
   {
+    Group::ALTITUDE,
     N_("Terrain elevation"),
     N_("Terr Elev"),
     N_("Elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location."),
@@ -283,6 +314,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Thermal_Avg
   {
+    Group::VARIO,
     N_("Thermal average"),
     N_("TC Avg"),
     N_("Altitude gained/lost in the current thermal, divided by time spent thermalling."),
@@ -291,6 +323,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Thermal_Gain
   {
+    Group::VARIO,
     N_("Thermal gain"),
     N_("TC Gain"),
     N_("Altitude gained/lost in the current thermal."),
@@ -299,6 +332,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Track_GPS
   {
+    Group::SPEED,
     N_("Track"),
     N_("Track"),
     N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up/down arrows adjusts the track."),
@@ -307,6 +341,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_VerticalSpeed_GPS
   {
+    Group::VARIO,
     N_("Vario"),
     N_("Vario"),
     N_("Instantaneous vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
@@ -315,6 +350,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WindSpeed_Est
   {
+    Group::WIND,
     N_("Wind speed"),
     N_("Wind"),
     N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
@@ -323,6 +359,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WindBearing_Est
   {
+    Group::WIND,
     N_("Wind bearing"),
     N_("Wind"),
     N_("Wind bearing estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
@@ -331,6 +368,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_Time
   {
+    Group::TASK,
     N_("AAT time"),
     N_("AAT Time"),
     N_("Assigned Area Task time remaining. Goes red when time remaining has expired."),
@@ -339,6 +377,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_DistanceMax
   {
+    Group::TASK,
     N_("AAT max. distance "),
     N_("AAT Dmax"),
     N_("Assigned Area Task maximum distance possible for remainder of task."),
@@ -347,6 +386,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_DistanceMin
   {
+    Group::TASK,
     N_("AAT min. distance"),
     N_("AAT Dmin"),
     N_("Assigned Area Task minimum distance possible for remainder of task."),
@@ -355,6 +395,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_SpeedMax
   {
+    Group::TASK,
     N_("AAT speed max. distance"),
     N_("AAT Vmax"),
     N_("Assigned Area Task average speed achievable if flying maximum possible distance remaining in minimum AAT time."),
@@ -363,6 +404,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_SpeedMin
   {
+    Group::TASK,
     N_("AAT speed min. distance"),
     N_("AAT Vmin"),
     N_("Assigned Area Task average speed achievable if flying minimum possible distance remaining in minimum AAT time."),
@@ -371,6 +413,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AirSpeed_Ext
   {
+    Group::SPEED,
     N_("Airspeed IAS"),
     N_("V IAS"),
     N_("Indicated Airspeed reported by a supported external intelligent vario."),
@@ -379,6 +422,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_H_Baro
   {
+    Group::ALTITUDE,
     N_("Barometric altitude"),
     N_("Alt Baro"),
     N_("Barometric altitude obtained from a device equipped with a pressure sensor."),
@@ -388,6 +432,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_Speed_MC
   {
+    Group::WAYPOINT,
     N_("Speed MacCready"),
     N_("V MC"),
     N_("MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. At MacCready 0, with a task or Goto active, this speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used."),
@@ -396,6 +441,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Climb_Perc
   {
+    Group::VARIO,
     N_("Percentage climb"),
     N_("% Climb"),
     N_("Percentage of time spent in climb mode. These statistics are reset upon starting the task."),
@@ -404,6 +450,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TimeSinceTakeoff
   {
+    Group::TIME,
     N_("Flight duration"),
     N_("Flt Duration"),
     N_("Time elapsed since takeoff was detected."),
@@ -412,6 +459,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Load_G
   {
+    Group::SPEED,
     N_("G load"),
     "G",
     N_("Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres."),
@@ -420,6 +468,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_GR
   {
+    Group::GLIDE,
     N_("Next GR"),
     N_("WP GR"),
     N_("Required glide ratio over ground to reach the next waypoint, given by the distance to the next waypoint divided by the height required to arrive at the safety arrival height."),
@@ -428,6 +477,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TimeLocal
   {
+    Group::TIME,
     N_("Time local"),
     N_("Time loc"),
     N_("GPS time expressed in local time zone."),
@@ -436,6 +486,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TimeUTC
   {
+    Group::TIME,
     N_("Time UTC"),
     N_("Time UTC"),
     N_("GPS time expressed in UTC."),
@@ -444,6 +495,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_Time
   {
+    Group::TASK,
     N_("Task time to go"),
     N_("Fin ETE"),
     N_("Estimated time required to complete task, assuming performance of ideal MacCready cruise/climb cycle."),
@@ -452,6 +504,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_Time
   {
+    Group::WAYPOINT,
     N_("Next time to go"),
     N_("WP ETE"),
     N_("Estimated time required to reach next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
@@ -460,6 +513,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Act_Speed
   {
+    Group::SPEED,
     N_("Speed dolphin"),
     N_("Vopt"),
     N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed on the glider's current track. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed-to-fly is selected, this InfoBox displays the MacCready speed. At MacCready 0, with a task or Goto active, this speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used."),
@@ -468,6 +522,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_VerticalSpeed_Netto
   {
+    Group::VARIO,
     N_("Netto vario"),
     N_("Netto"),
     N_("Instantaneous vertical speed of air-mass, equal to vario value less the glider's estimated sink rate. Best used if airspeed, accelerometers and vario are connected, otherwise calculations are based on GPS measurements and wind estimates."),
@@ -476,6 +531,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_TimeLocal
   {
+    Group::TASK,
     N_("Task arrival time"),
     N_("Fin ETA"),
     N_("Estimated arrival local time at task completion, assuming performance of ideal MacCready cruise/climb cycle."),
@@ -484,6 +540,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_TimeLocal
   {
+    Group::WAYPOINT,
     N_("Next arrival time"),
     N_("WP ETA"),
     N_("Estimated arrival local time at next waypoint, assuming performance of ideal MacCready cruise/climb cycle."),
@@ -492,6 +549,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_BearingDiff
   {
+    Group::WAYPOINT,
     N_("Bearing difference"),
     N_("Brng D"),
     N_("Difference between the glider's track (direction of motion across the ground) and the bearing to the next waypoint, or for AAT tasks, the bearing to the target within the AAT sector. GPS navigation is based on the track, and the track may differ from the glider's heading when there is wind. Chevrons point to the direction the glider needs to alter course to correct the bearing difference, that is, to make it so that the glider is tracking directly toward the next waypoint. This calculation accounts for the curvature of the Earth."),
@@ -500,6 +558,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Temperature
   {
+    Group::WIND,
     N_("Outside air temperature"),
     N_("OAT"),
     N_("Outside air temperature measured by a probe if supported by a connected intelligent variometer."),
@@ -508,6 +567,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HumidityRel
   {
+    Group::WIND,
     N_("Relative humidity"),
     N_("Rel Hum"),
     N_("Relative humidity of the air in percent as measured by a probe if supported by a connected intelligent variometer."),
@@ -516,6 +576,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Home_Temperature
   {
+    Group::WIND,
     N_("Forecast temperature"),
     N_("Max Temp"),
     N_("Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. (Touch-screen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature."),
@@ -524,6 +585,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_AA_Distance
   {
+    Group::TASK,
     N_("AAT distance around target"),
     N_("AAT Dtgt"),
     N_("Assigned Area Task distance around target points for remainder of task."),
@@ -532,6 +594,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_SpeedAvg
   {
+    Group::TASK,
     N_("AAT speed around target"),
     N_("AAT Vtgt"),
     N_("Assigned Area Task average speed achievable around target points remaining in minimum AAT time."),
@@ -540,6 +603,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_LD
   {
+    Group::GLIDE,
     N_("L/D vario"),
     N_("L/D Vario"),
     N_("Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
@@ -548,6 +612,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Speed
   {
+    Group::SPEED,
     N_("Airspeed TAS"),
     N_("V TAS"),
     N_("True Airspeed reported by a supported external intelligent vario."),
@@ -556,6 +621,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Team_Code
   {
+    Group::AIRSPACE_TEAM,
     N_("Team code"),
     N_("Team Code"),
     N_("Current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath."),
@@ -564,6 +630,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Team_Bearing
   {
+    Group::AIRSPACE_TEAM,
     N_("Team bearing"),
     N_("Team Brng"),
     N_("Bearing to the team aircraft location at the last team code report."),
@@ -572,6 +639,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Team_BearingDiff
   {
+    Group::AIRSPACE_TEAM,
     N_("Team bearing difference"),
     N_("Team BrngD"),
     N_("Relative bearing to the team aircraft location at the last reported team code."),
@@ -580,6 +648,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Team_Range
   {
+    Group::AIRSPACE_TEAM,
     N_("Team range"),
     N_("Team Dist"),
     N_("Range to the team aircraft location at the last reported team code."),
@@ -588,6 +657,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_CC_SpeedInst
   {
+    Group::TASK,
     N_("Speed task instantaneous"),
     N_("V Task Inst"),
     N_("Instantaneous cross-country speed while on current task, compensated for altitude. Equivalent to instantaneous Pirker cross-country speed."),
@@ -596,6 +666,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Home_Distance
   {
+    Group::WAYPOINT,
     N_("Distance home"),
     N_("Home Dist"),
     N_("Distance to home waypoint (if defined)."),
@@ -604,6 +675,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_CC_Speed
   {
+    Group::TASK,
     N_("Speed task achieved"),
     N_("V Task Ach"),
     N_("Achieved cross-country speed while on current task, compensated for altitude. Equivalent to Pirker cross-country speed remaining."),
@@ -612,6 +684,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AA_TimeDiff
   {
+    Group::TASK,
     N_("AAT delta time"),
     N_("AAT dT"),
     N_("Difference between estimated task time and AAT minimum time. Coloured red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."),
@@ -620,6 +693,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Climb_Avg
   {
+    Group::VARIO,
     N_("Thermal average over all"),
     N_("T Avg"),
     N_("Time-average climb rate in all thermals."),
@@ -628,6 +702,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_RH_Trend
   {
+    Group::GLIDE,
     N_("Task req. total height trend"),
     N_("RH Trend"),
     N_("Trend (or neg. of the variation) of the total required height to complete the task."),
@@ -636,6 +711,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Battery
   {
+    Group::SYSTEM,
     N_("Battery percent"),
     N_("Battery"),
     N_("Percentage of device battery remaining (where applicable) and status/voltage of external power supply."),
@@ -644,6 +720,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_GR
   {
+    Group::GLIDE,
     N_("Final GR"),
     N_("Fin GR"),
     N_("Required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height."),
@@ -652,6 +729,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_1_Name
   {
+    Group::WAYPOINT,
     N_("Alternate 1"),
     N_("Altn 1"),
     N_("Name and bearing to the best alternate landing location."),
@@ -662,6 +740,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_2_Name
   {
+    Group::WAYPOINT,
     N_("Alternate 2"),
     N_("Altn 2"),
     N_("Name and bearing to the second-best alternate landing location."),
@@ -672,6 +751,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_1_GR
   {
+    Group::WAYPOINT,
     N_("Alternate 1 GR"),
     N_("Altn 1 GR"),
     N_("Geometric gradient to the arrival height above the best alternate landing location. This is not adjusted for total energy."),
@@ -682,6 +762,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_H_QFE
   {
+    Group::ALTITUDE,
     N_("Height above take-off"),
     N_("H T/O"),
     N_("Height based on an automatic take-off reference elevation (like a QFE reference)."),
@@ -691,6 +772,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_GR_Avg
   {
+    Group::GLIDE,
     N_("GR average"),
     N_("GR Avg"),
     N_("Distance flown during the configured averaging period divided by the altitude lost during that period. Negative values are shown as ^^^ and indicate climbing cruise (height gain). For GR >200, the value is shown as +++. You can configure the averaging period in the system setup (suggested: 60, 90 or 120s). Lower values will be closer to GR Inst, and higher values will be closer to GR Cruise. Note: The distance is not the straight line between your previous and current positions; it is the actual path distance flown (including zigzags). This value is not calculated while circling."),
@@ -699,6 +781,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Experimental
   {
+    Group::OTHER,
     N_("Experimental 1"),
     N_("Exp1"),
     NULL,
@@ -707,6 +790,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_OC_Distance
   {
+    Group::TASK,
     N_("Contest distance"),
     N_("Cont Dist"),
     N_("Instantaneous evaluation of the flown distance according to the configured Contest rule set."),
@@ -715,6 +799,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Experimental2
   {
+    Group::OTHER,
     N_("Experimental 2"),
     N_("Exp2"),
     NULL,
@@ -723,6 +808,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_CPU_Load
   {
+    Group::SYSTEM,
     N_("CPU load"),
     N_("CPU"),
     N_("CPU load consumed by XCSoar averaged over 5 seconds."),
@@ -731,6 +817,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_H
   {
+    Group::ALTITUDE,
     N_("Next altitude arrival"),
     N_("WP AltA"),
     N_("Absolute arrival altitude at the next waypoint in final glide. For AAT tasks, the target within the AAT sector is used."),
@@ -739,6 +826,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Free_RAM
   {
+    Group::SYSTEM,
     N_("Free RAM"),
     N_("Free RAM"),
     N_("Free RAM as reported by OS."),
@@ -747,6 +835,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_FlightLevel
   {
+    Group::ALTITUDE,
     N_("Flight level"),
     N_("FL"),
     N_("Pressure Altitude given as Flight Level. If barometric altitude is not available, FL is calculated from GPS altitude, given that the correct QNH is set. In case the FL is calculated from the GPS altitude, the FL label is coloured red."),
@@ -756,6 +845,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Barogram
   {
+    Group::ALTITUDE,
     N_("Barogram"),
     N_("Barogram"),
     N_("Trace of altitude during flight."),
@@ -764,6 +854,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Vario_spark
   {
+    Group::VARIO,
     N_("Vario trace"),
     N_("Vario Trace"),
     N_("Trace of vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
@@ -772,6 +863,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_NettoVario_spark
   {
+    Group::VARIO,
     N_("Netto vario trace"),
     N_("Netto Trace"),
     N_("Trace of vertical speed of air-mass, equal to vario value less the glider's estimated sink rate."),
@@ -780,6 +872,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_CirclingAverage_spark
   {
+    Group::VARIO,
     N_("Thermal climb trace"),
     N_("TC Trace"),
     N_("Trace of average climb rate each turn in circling, based of the reported GPS altitude, or vario if available."),
@@ -788,6 +881,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_ThermalBand
   {
+    Group::VARIO,
     N_("Climb band"),
     N_("Climb Band"),
     N_("Graph of average circling climb rate (horizontal axis) as a function of altitude (vertical axis)."),
@@ -796,6 +890,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TaskProgress
   {
+    Group::TASK,
     N_("Task progress"),
     N_("Progress"),
     N_("Clock-like display of distance remaining along task, showing achieved task points."),
@@ -804,6 +899,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_TaskMaxHeightTime
   {
+    Group::TASK,
     N_("Time under max. start height"),
     N_("Start Height"),
     N_("Contiguous period during which the aircraft has been below the task start maximum height."),
@@ -812,6 +908,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Fin_ETE_VMG
   {
+    Group::TASK,
     N_("Task time to go (ground speed)"),
     N_("Fin ETE VMG"),
     N_("Estimated time required to complete task, assuming current ground speed is maintained."),
@@ -820,6 +917,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_ETE_VMG
   {
+    Group::WAYPOINT,
     N_("Next time to go (ground speed)"),
     N_("WP ETE VMG"),
     N_("Estimated time required to reach next waypoint, assuming current ground speed is maintained."),
@@ -828,6 +926,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Horizon
   {
+    Group::SPEED,
     N_("Attitude indicator"),
     N_("Horizon"),
     N_("Attitude indicator (artificial horizon) display calculated from flight path, supplemented with acceleration and variometer data if available."),
@@ -836,6 +935,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_NearestAirspaceHorizontal
   {
+    Group::AIRSPACE_TEAM,
     N_("Nearest airspace horizontal"),
     N_("Near AS H"),
     N_("Horizontal distance to the nearest airspace."),
@@ -844,6 +944,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_NearestAirspaceVertical
   {
+    Group::AIRSPACE_TEAM,
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
     N_("Vertical distance to the nearest airspace. A positive value means the airspace is above you; a negative value means the airspace is below you."),
@@ -852,6 +953,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_MC0AltDiff
   {
+    Group::GLIDE,
     N_("Next MC0 altitude difference"),
     N_("WP MC0 AltD"),
     N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height. For AAT tasks, the target within the AAT sector is used."),
@@ -860,6 +962,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HeadWind
   {
+    Group::WIND,
     N_("Wind, head component"),
     N_("Head Wind"),
     N_("Current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from an external device; otherwise, the estimated wind is used."),
@@ -868,6 +971,7 @@ static constexpr MetaData meta_data[] = {
 
   // TerrainCollision
   {
+    Group::ALTITUDE,
     N_("Terrain collision"),
     N_("Terr Coll"),
     N_("Distance to the next terrain collision along the current task leg. At this location, the altitude will be below the configured terrain clearance altitude."),
@@ -875,6 +979,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::ALTITUDE,
     N_("Altitude (Auto)"),
     N_("Alt Auto"),
     N_("Barometric altitude obtained from a device equipped with a pressure sensor, or GPS altitude if barometric altitude is not available."),
@@ -884,6 +989,7 @@ static constexpr MetaData meta_data[] = {
 
   // NextLegEqThermal
   {
+    Group::VARIO,
     N_("Thermal next leg equivalent"),
     N_("T Next Leg"),
     N_("Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."),
@@ -892,6 +998,7 @@ static constexpr MetaData meta_data[] = {
 
   // HeadWindSimplified
   {
+    Group::WIND,
     N_("Wind, head component (simplified)"),
     N_("Head Wind *"),
     N_("Current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from TAS if airspeed is available from an external device."),
@@ -899,6 +1006,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::GLIDE,
     N_("Task cruise efficiency"),
     N_("Cruise Eff"),
     N_("Efficiency of cruise. 100 indicates perfect MacCready performance. "
@@ -908,6 +1016,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::WIND,
     N_("Wind arrow"),
     N_("Wind"),
     N_("Wind speed estimated by XCSoar. Manual adjustment is possible with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through settings, adjust the values with left/right cursor keys."),
@@ -915,6 +1024,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::VARIO,
     N_("Thermal Assistant"),
     N_("Thermal"),
     N_("Circular thermal assistant that shows the lift distribution over each part of the circle."),
@@ -922,6 +1032,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::TASK,
     N_("Start open/close countdown"),
     N_("Start open"),
     N_("Signed countdown until the start gate opens or closes (now). "
@@ -932,6 +1043,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::TASK,
     N_("Start open/close countdown at reaching"),
     N_("Start reach"),
     N_("Same gate as Start open. Main value is estimated time to reach the "
@@ -942,6 +1054,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::WAYPOINT,
     N_("Next radial"),
     N_("Radial"),
     N_("True bearing from the next waypoint to your position."),
@@ -949,6 +1062,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::WAYPOINT,
     N_("ATC radial"),
     N_("ATC radial"),
     N_("Bearing from the selected reference location to your position. The distance is displayed in nautical miles for communication with ATC. If declination is entered, magnetic bearing is given to match VOR radials."),
@@ -957,6 +1071,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::TASK,
     N_("Speed task last hour"),
     N_("V Task H"),
     N_("Average cross-country speed while on current task over the last hour, not compensated for altitude."),
@@ -965,6 +1080,7 @@ static constexpr MetaData meta_data[] = {
 
   // WP_NOMINAL_DIST
   {
+    Group::WAYPOINT,
     N_("Next distance (nominal)"),
     N_("WP Dist-N"),
     N_("Distance to the currently selected waypoint. For AAT tasks, this is the distance to the origin of the AAT sector."),
@@ -972,6 +1088,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::SPEED,
     N_("Circle diameter"),
     N_("Circle D"),
     N_("Circle diameter. Displays estimated circle diameter and full circle flight time. Useful for evaluating best thermalling mode with a glider at different wing loading."),
@@ -979,6 +1096,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::WAYPOINT,
     N_("Distance takeoff"),
     N_("Takeoff Dist"),
     N_("Distance to where take-off was detected."),
@@ -987,6 +1105,7 @@ static constexpr MetaData meta_data[] = {
 
   // CONTEST_SPEED
   {
+    Group::TASK,
     N_("Contest speed"),
     N_("Cont Speed"),
     N_("Instantaneous evaluation of the flown speed according to the configured contest rule set."),
@@ -994,6 +1113,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::GLIDE,
     N_("Final MC0 altitude difference"),
     N_("Fin MC0 AltD"),
     N_("Arrival altitude at the final waypoint with MC 0 setting relative to the safety arrival height."),
@@ -1002,6 +1122,7 @@ static constexpr MetaData meta_data[] = {
 
   // NEXT_ARROW
   {
+    Group::WAYPOINT,
     N_("Next arrow"),
     N_("Next arrow"),
     N_("Arrow pointing to the currently selected waypoint. The name of the "
@@ -1014,6 +1135,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_ETA_VMG
   {
+    Group::WAYPOINT,
     N_("Next waypoint arrival time (ground speed)"),
     N_("WP ETA VMG"),
     N_("Estimated arrival time at next waypoint, assuming current ground speed is maintained."),
@@ -1022,6 +1144,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_NonCircling_Climb_Perc
   {
+    Group::VARIO,
     N_("Percentage non-circling climb"),
     N_("% Str Climb"),
     N_("Percentage of time spent climbing without circling. These statistics are reset upon starting the task."),
@@ -1030,6 +1153,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Climb_Perc_Chart
   {
+    Group::VARIO,
     N_("Percentage climb chart"),
     N_("Climb %"),
     N_("Pie chart of time circling and climbing, circling and descending, and climbing non-circling."),
@@ -1038,6 +1162,7 @@ static constexpr MetaData meta_data[] = {
 
   // NbrSat
   {
+    Group::SYSTEM,
     N_("Number of used satellites"),
     N_("Satellites"),
     N_("Number of satellites currently used by the GPS module. If this information is unavailable, the displayed value is '---'."),
@@ -1046,6 +1171,7 @@ static constexpr MetaData meta_data[] = {
 
   // Radio
   {
+    Group::SETTING,
     N_("Active Radio Frequency"),
     N_("Act Freq"),
     N_("Active radio frequency."),
@@ -1053,6 +1179,7 @@ static constexpr MetaData meta_data[] = {
   },
 
   {
+    Group::SETTING,
     N_("Standby Radio Frequency"),
     N_("Stby Freq"),
     N_("Standby radio frequency."),
@@ -1061,6 +1188,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Thermal_Time
   {
+    Group::VARIO,
     N_("Thermal time"),
     N_("TC Time"),
     N_("Time spent in the current thermal."),
@@ -1069,6 +1197,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_2_GR
   {
+    Group::WAYPOINT,
     N_("Alternate 2 GR"),
     N_("Altn 2 GR"),
     N_("Geometric gradient to the arrival height above the second-best alternate landing location. This is not adjusted for total energy."),
@@ -1079,6 +1208,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_HeartRate
   {
+    Group::SYSTEM,
     N_("Heart Rate"),
     N_("Heart"),
     N_("Heart rate in beats per minute."),
@@ -1087,6 +1217,7 @@ static constexpr MetaData meta_data[] = {
 
   // Transponder code
   {
+    Group::SETTING,
     N_("Transponder Code"),
     N_("XPDR Code"),
     N_("Currently set transponder code."),
@@ -1095,6 +1226,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_EngineTempCHT
   {
+    Group::SYSTEM,
     N_("Engine CHT"),
     N_("CHT"),
     N_("Engine cylinder head temperature."),
@@ -1103,6 +1235,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_EngineTempEGT
   {
+    Group::SYSTEM,
     N_("Engine EGT"),
     N_("EGT"),
     N_("Engine exhaust gas temperature."),
@@ -1111,6 +1244,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_EngineRPM
   {
+    Group::SYSTEM,
     N_("Engine Revolutions Per Minute"),
     N_("RPM"),
     N_("Engine revolutions per minute."),
@@ -1119,6 +1253,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AAT_dT_or_ETA
   {
+    Group::TASK,
     N_("AAT dT and task ETA"),
     N_("AATdeltaOrETA"),
     N_("For AAT tasks: AAT delta time and estimated time of arrival; for racing tasks: estimated time of arrival."),
@@ -1127,6 +1262,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_SpeedTaskEst
   {
+    Group::TASK,
     N_("Speed task estimated"),
     N_("V Task Est"),
     N_("Estimated average cross-country speed for current task as of task completion, assuming performance of ideal MacCready cruise/climb cycle."),
@@ -1135,6 +1271,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Home_AltDiff
   {
+    Group::WAYPOINT,
     N_("Home altitude difference"),
     N_("Home AltD"),
     N_("Arrival altitude at the home waypoint relative to the safety arrival height."),
@@ -1143,6 +1280,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_SpeedTaskLeg
   {
+    Group::TASK,
     N_("Speed task leg"),
     N_("V Task Leg"),
     N_("Average cross-country speed while on current task leg, not compensated for altitude."),
@@ -1151,6 +1289,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_1_AltDiff
   {
+    Group::WAYPOINT,
     N_("Alternate 1 altitude difference"),
     N_("Altn 1 AltD"),
     N_("Arrival altitude at the best alternate landing location relative to the safety arrival height."),
@@ -1161,6 +1300,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Alternate_2_AltDiff
   {
+    Group::WAYPOINT,
     N_("Alternate 2 altitude difference"),
     N_("Altn 2 AltD"),
     N_("Arrival altitude at the second-best alternate landing location relative to the safety arrival height."),
@@ -1171,6 +1311,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Home
   {
+    Group::WAYPOINT,
     N_("Home"),
     N_("Home"),
     N_("Home waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to change the home waypoint."),
@@ -1179,6 +1320,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_AltitudeIGC
   {
+    Group::ALTITUDE,
     NC_("InfoBox", "Altitude IGC"),
     NC_("Abbreviation", "Alt IGC"),
     N_("Logger pressure altitude when the device provides it (igc_pressure_altitude), otherwise ISA pressure altitude only (1013.25 hPa; not QNH-corrected). Does not show barometric AMSL or GPS height — use other InfoBoxes for navigation."),
@@ -1188,6 +1330,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_QNH
   {
+    Group::ALTITUDE,
     N_("QNH"),
     N_("QNH"),
     N_("Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."),
@@ -1197,6 +1340,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_ActiveWaypoint
   {
+    Group::WAYPOINT,
     NC_("InfoBox", "Active Waypoint"),
     NC_("Abbreviation", "Active WP"),
     N_("Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."),
@@ -1205,6 +1349,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_PreviousWaypoint
   {
+    Group::WAYPOINT,
     NC_("InfoBox", "Previous Waypoint"),
     NC_("Abbreviation", "Prev WP"),
     N_("Previous waypoint: when an ordered task is loaded, automatically tracks the task waypoint before the active leg (the start waypoint when on the first leg). Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint to display (task waypoints when a task is loaded, otherwise the full waypoint list); selection is informational only and never advances the task or sets a Goto. With a task loaded, choose \"Resume auto tracking\" at the top of the list to revert to automatic tracking."),
@@ -1213,6 +1358,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_BloodOxygen
   {
+    Group::SYSTEM,
     N_("Blood Oxygen"),
     N_("SpO2"),
     N_("Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."),
@@ -1221,6 +1367,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_Ballast
   {
+    Group::TASK,
     N_("Ballast"),
     N_("Ballast"),
     N_("Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."),
@@ -1229,6 +1376,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_WP_VMG
   {
+    Group::SPEED,
     N_("Speed VMG"),
     N_("V VMG"),
     N_("The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."),
@@ -1237,6 +1385,7 @@ static constexpr MetaData meta_data[] = {
 
   // e_CustomText
   {
+    Group::OTHER,
     N_("Fixed text"),
     N_("Text"),
     N_("Title, value and comment entered by the pilot. Tap to edit."),
@@ -1276,6 +1425,37 @@ InfoBoxFactory::GetDescription(Type type) noexcept
   assert(type < NUM_TYPES);
 
   return meta_data[type].description;
+}
+
+Group
+InfoBoxFactory::GetGroup(Type type) noexcept
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].group;
+}
+
+const char *
+InfoBoxFactory::GetGroupName(Group group) noexcept
+{
+  switch (group) {
+  case Group::ALTITUDE: return N_("Altitude");
+  case Group::VARIO: return N_("Vario and thermal");
+  case Group::GLIDE: return N_("Glide");
+  case Group::SPEED: return N_("Speed and attitude");
+  case Group::WIND: return N_("Wind and weather");
+  case Group::WAYPOINT: return N_("Waypoint");
+  case Group::TASK: return N_("Task");
+  case Group::TIME: return N_("Time");
+  case Group::AIRSPACE_TEAM: return N_("Airspace and team");
+  case Group::SETTING: return N_("Settings");
+  case Group::SYSTEM: return N_("System");
+  case Group::OTHER:
+  case Group::COUNT:
+    break;
+  }
+
+  return N_("Other");
 }
 
 std::unique_ptr<InfoBoxContent>
