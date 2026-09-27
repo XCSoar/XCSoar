@@ -16,7 +16,6 @@
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Renderer/BoxShadowRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 
@@ -24,123 +23,23 @@
 
 namespace {
 
-/**
- * A dialog which stays smaller than the screen, so it floats, and
- * which measures its list again when the layout changes.
- */
-class PlaneDetailsDialog final : public WidgetDialog {
-  bool fitting = false;
-
-  static unsigned PreferredClientWidth(const DialogLook &look) noexcept {
-    const unsigned speed =
-      look.list.font->TextSize("Max. Cruise Speed   000 km/h").width;
-    const unsigned help = look.list.font->TextSize(
-      "Seconds to empty the ballast tanks.").width;
-    const unsigned text = std::max(speed, help);
-    return text + 2 * Layout::VptScale(10) +
-      2 * Layout::GetTextPadding();
-  }
-
-  static unsigned OuterLimit(unsigned parent, unsigned inset) noexcept {
-    if (parent <= inset * 2)
-      return parent > 1 ? parent - 1 : parent;
-
-    return parent - 2 * inset;
-  }
-
-public:
-  using WidgetDialog::WidgetDialog;
-
-  void Fit(const PixelRect &parent_rc) noexcept {
-    if (fitting)
-      return;
-
-    fitting = true;
-    FitTo(parent_rc);
-    fitting = false;
-  }
-
-  void ReinitialiseLayout(const PixelRect &parent_rc) noexcept override {
-    Fit(parent_rc);
-  }
-
-  /* keep the strip under the list, including when the dialog is
-     wider than it is tall */
-  PixelRect LayoutButtons() noexcept override {
-    return GetButtonPanel().BottomLayout();
-  }
-
-private:
-  void FitTo(const PixelRect &parent_rc) noexcept;
-};
-
-void
-PlaneDetailsDialog::FitTo(const PixelRect &parent_rc) noexcept
+static unsigned
+PreferredClientWidth(const DialogLook &look) noexcept
 {
-  auto &list = static_cast<GroupedListWidget &>(GetWidget());
-
-  const unsigned parent_w = parent_rc.GetWidth();
-  const unsigned parent_h = parent_rc.GetHeight();
-  unsigned inset = BoxShadowExtent(BoxShadowStyle::DIALOG);
-  if (inset < 1)
-    inset = 1;
-
-  const unsigned max_w = OuterLimit(parent_w, inset);
-  const unsigned max_h = OuterLimit(parent_h, inset);
-  const unsigned frame_w = ClientAreaToDialogSize({}).width;
-  const unsigned frame_h = ClientAreaToDialogSize({}).height;
-
-  unsigned client_w = PreferredClientWidth(GetLook());
-  if (client_w + frame_w > max_w)
-    client_w = max_w > frame_w ? max_w - frame_w : max_w;
-
-  unsigned client_h = max_h > frame_h ? max_h - frame_h : 1;
-  const unsigned min_client_h = Layout::GetMaximumControlHeight();
-
-  for (unsigned pass = 0; pass < 2; ++pass) {
-    const PixelSize outer = ClientAreaToDialogSize({client_w, client_h});
-    if (GetSize() != outer)
-      Resize(outer);
-
-    const PixelRect widget_rc = LayoutButtons();
-    list.Move(widget_rc);
-    list.UpdateLayout();
-
-    unsigned content = list.GetContentHeight();
-    if (content == 0)
-      content = list.GetMinimumSize().height;
-
-    const unsigned widget_h = widget_rc.GetHeight();
-    if (widget_h > content && client_h > content) {
-      const unsigned spare = widget_h - content;
-      client_h = client_h > spare ? client_h - spare : content;
-    }
-
-    if (client_h < min_client_h)
-      client_h = min_client_h;
-
-    if (client_h + frame_h > max_h)
-      client_h = max_h > frame_h ? max_h - frame_h : client_h;
-  }
-
-  const PixelSize size = GetSize();
-  int x = (int)parent_rc.left +
-    ((int)parent_w - (int)size.width) / 2;
-  int y = (int)parent_rc.top +
-    ((int)parent_h - (int)size.height) / 2;
-  if (x < (int)parent_rc.left)
-    x = parent_rc.left;
-  if (y < (int)parent_rc.top)
-    y = parent_rc.top;
-
-  Move(PixelPoint{x, y});
+  const unsigned speed =
+    look.list.font->TextSize("Max. Cruise Speed   000 km/h").width;
+  const unsigned help = look.list.font->TextSize(
+    "Seconds to empty the ballast tanks.").width;
+  const unsigned text = std::max(speed, help);
+  return text + 2 * Layout::VptScale(10) +
+    2 * Layout::GetTextPadding();
 }
 
 class PlaneDetails {
   using Callback = GroupedListWidget::Callback;
 
   GroupedListWidget *list = nullptr;
-  PlaneDetailsDialog *dialog = nullptr;
+  WidgetDialog *dialog = nullptr;
   Plane plane;
 
 public:
@@ -155,7 +54,7 @@ public:
     list = &_list;
   }
 
-  void SetDialog(PlaneDetailsDialog &_dialog) noexcept {
+  void SetDialog(WidgetDialog &_dialog) noexcept {
     dialog = &_dialog;
   }
 
@@ -476,7 +375,8 @@ void
 PlaneDetails::Refit() noexcept
 {
   if (dialog != nullptr)
-    dialog->Fit(dialog->GetParentClientRect());
+    dialog->FitToList(dialog->GetParentClientRect(),
+                      PreferredClientWidth(dialog->GetLook()));
 }
 
 } // namespace
@@ -495,7 +395,7 @@ dlgPlaneDetailsShowModal(Plane &_plane) noexcept
                  _plane.registration.c_str());
 
   const PixelRect rc{Layout::Scale(PixelSize{220u, 220u})};
-  PlaneDetailsDialog dialog(UIGlobals::GetMainWindow(), look, rc,
+  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, rc,
                             caption, list);
   details.SetDialog(dialog);
   dialog.AddButton(_("OK"), mrOK);
