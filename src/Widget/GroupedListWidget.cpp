@@ -34,6 +34,7 @@
 #endif
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -289,6 +290,12 @@ private:
      */
     std::string help{};
 
+    /**
+     * only for Type::FOOTER: as tall as the longest explanation in
+     * the group, not only the one on the screen
+     */
+    bool stable_footer = false;
+
     /** the links of #help (Type::ITEM) or of #text (Type::FOOTER) */
     std::vector<Link> links{};
 
@@ -363,13 +370,19 @@ private:
       return !description.empty();
     }
 
-    /** only for Type::ITEM: drawn in a rounded box */
-    std::string badge{};
+    /** One badge.  An empty #text means this place is unused. */
+    struct DrawnBadge {
+      std::string text;
+      BadgeStyle style = BadgeStyle::PRIMARY;
+    };
 
-    /** only for Type::ITEM: the colors of #badge */
-    BadgeStyle badge_style = BadgeStyle::PRIMARY;
+    /**
+     * Up to two badges.  The first is the right-hand one, nearest
+     * the value.
+     */
+    std::array<DrawnBadge, 2> badges{};
 
-    /** only for Type::ITEM: the font of #badge */
+    /** only for Type::ITEM: the font of the badges */
     TextFont badge_font = TextFont::DEFAULT;
 
     /** only for Type::ITEM */
@@ -377,6 +390,12 @@ private:
 
     /** only for Type::ITEM: draw an arrow at the right edge */
     bool chevron = false;
+
+    /**
+     * Some row of this card draws an arrow.  A badge on a row which
+     * draws none still leaves that column, so the badges share an edge.
+     */
+    bool share_chevron = false;
 
     /** only for Type::ITEM: draw a check mark */
     bool checked = false;
@@ -717,6 +736,11 @@ public:
                     Layout::GetMaximumControlHeight());
   }
 
+  [[gnu::pure]]
+  unsigned GetContentHeight() const noexcept {
+    return content_height;
+  }
+
   /**
    * Forward a key from #GroupedListWidget::KeyPress(), before the
    * dialog's normal key dispatch.
@@ -813,6 +837,9 @@ private:
    */
   [[gnu::pure]]
   int GetDecorationWidth(const Element &element) const noexcept;
+
+  /** Remember which cards draw an arrow, for #Element::share_chevron. */
+  void MarkSharedChevrons() noexcept;
 
   /**
    * The width which the decorations at the left edge and the inset at
@@ -1016,6 +1043,34 @@ private:
   const Font &GetDescriptionFont(const Element &element) const noexcept {
     return GetFont(element.description_font, element.description_size);
   }
+
+  /** Does this item draw a badge? */
+  [[gnu::pure]]
+  static bool HasBadge(const Element &element) noexcept {
+    for (const auto &badge : element.badges)
+      if (!badge.text.empty())
+        return true;
+
+    return false;
+  }
+
+  /**
+   * The width of the badges, including the gap between two of them.
+   * The padding which separates them from the caption or the value
+   * is not included.
+   */
+  [[gnu::pure]]
+  int GetBadgesWidth(const Element &element) const noexcept;
+
+  /**
+   * Draw one badge against the right of @p caption_rc.  Returns the
+   * left edge of the box.
+   */
+  int DrawBadge(Canvas &canvas, const PixelRect &caption_rc,
+                const Element &element, const std::string &text,
+                BadgeStyle style, bool selected,
+                Color text_color, Color background,
+                int row_centre_y) const noexcept;
 
   /** The font which draws the badge of an item. */
   [[gnu::pure]]
@@ -1443,6 +1498,7 @@ GroupedListControl::FinishGroup() noexcept
   });
 
   element.text = ParseLinks(footer, element.links);
+  element.stable_footer = group_options.stable_footer;
 }
 
 GroupedListControl::Footer
@@ -1607,18 +1663,25 @@ GetBadgeColors(const DialogLook &look,
 }
 
 /**
- * An item which is not available always says so on its badge, and
- * replaces the badge which the caller has set: that a setting cannot
- * be reached at all matters more than the state it is in.
+ * An item which is not available and has no value says so on its
+ * badge, replacing the badge which the caller has set.  A value
+ * stays: it is what the row is there to show.
  */
 [[gnu::pure]]
 static const char *
 GetBadge(const GroupedListWidget::ItemOptions &options) noexcept
 {
-  if (options.disabled)
-    return options.disabled_badge_label != nullptr
-      ? options.disabled_badge_label
-      : _("Disabled");
+  if (options.disabled) {
+    if (options.disabled_badge_label != nullptr)
+      return options.disabled_badge_label;
+
+    /* a value is what the row shows; the badge would take its place.
+       A row with neither says that it cannot be reached */
+    if (options.value == nullptr || options.value[0] == '\0')
+      return _("Disabled");
+
+    return "";
+  }
 
   return options.badge != nullptr ? options.badge : "";
 }
@@ -1649,8 +1712,6 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
     .description_font = options.description_font,
     .description_size = options.description_size,
     .description_max_lines = options.description_max_lines,
-    .badge = GetBadge(options),
-    .badge_style = options.badge_style,
     .badge_font = options.badge_font,
     .callback = std::move(callback),
     .chevron = options.chevron,
@@ -1669,6 +1730,9 @@ GroupedListControl::AddItem(const char *caption, Callback callback,
   });
 
   Element &element = elements.back();
+  element.badges[0] = {GetBadge(options), options.badge_style};
+  if (!options.disabled && options.badge2 != nullptr)
+    element.badges[1] = {options.badge2, options.badge_style2};
   element.help = ParseLinks(options.help, element.links);
 }
 
@@ -2224,6 +2288,27 @@ GroupedListControl::GetRowDecorationWidth(const Element &element)
   return width;
 }
 
+void
+GroupedListControl::MarkSharedChevrons() noexcept
+{
+  for (std::size_t i = 0; i < elements.size();) {
+    if (!elements[i].IsItem()) {
+      ++i;
+      continue;
+    }
+
+    const std::size_t begin = i;
+    bool any = false;
+    for (; i < elements.size() && elements[i].IsItem(); ++i)
+      if (elements[i].IsShownItem() && elements[i].chevron &&
+          !elements[i].disabled)
+        any = true;
+
+    for (std::size_t j = begin; j < i; ++j)
+      elements[j].share_chevron = any;
+  }
+}
+
 int
 GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
 {
@@ -2244,12 +2329,33 @@ GroupedListControl::GetDecorationWidth(const Element &element) const noexcept
     /* the arrow which points down or up is as wide as it is tall
        twice over */
     width += 2 * std::max(2, (int)font.GetHeight() / 4) + padding;
-  else if (element.chevron && !element.disabled)
+  else if ((element.chevron && !element.disabled) ||
+           (HasBadge(element) && element.share_chevron))
+    /* a badge on a row which draws no arrow still leaves that
+       column, so it shares the edge of the other badges */
     width += std::max(2, (int)font.GetHeight() / 4) + padding;
 
-  if (!element.badge.empty())
-    width += (int)GetBadgeFont(element).TextSize(element.badge).width
-      + 2 * (int)Layout::VptScale(BADGE_PADDING_PT) + padding;
+  return width;
+}
+
+int
+GroupedListControl::GetBadgesWidth(const Element &element) const noexcept
+{
+  const int padding = GetPadding();
+  unsigned count = 0;
+  int width = 0;
+
+  for (const auto &badge : element.badges) {
+    if (badge.text.empty())
+      continue;
+
+    if (count > 0)
+      width += padding;
+
+    width += (int)GetBadgeFont(element).TextSize(badge.text).width
+      + 2 * (int)Layout::VptScale(BADGE_PADDING_PT);
+    ++count;
+  }
 
   return width;
 }
@@ -2260,7 +2366,7 @@ GroupedListControl::GetFirstRowDecorationHeight(const Element &element)
 {
   int height = 0;
 
-  if (!element.badge.empty())
+  if (HasBadge(element))
     height = GetBadgeHeight(element);
 
   if (element.toggle && !element.disabled)
@@ -2331,16 +2437,22 @@ GroupedListControl::UpdateTextLayout(Element &element, int room,
   element.value_width = 0;
   element.value_height = 0;
 
-  if (element.value.empty() || element.disabled) {
-    element.text_height = GetTextHeight(font, room, element.text,
+  /* badges sit to the left of the value, so the caption gives up
+     that width; the value keeps the right edge */
+  const int badges = GetBadgesWidth(element);
+  const int badge_gap = badges > 0 ? badges + padding : 0;
+  const int caption_room = std::max(room - badge_gap, 1);
+
+  if (element.value.empty()) {
+    element.text_height = GetTextHeight(font, caption_room, element.text,
                                         element.wrapped_text,
                                         element.wrapped_text_width);
-    return room;
+    return caption_room;
   }
 
   /* the caption and the value are two columns which share the room,
      with nothing but the padding between them */
-  const int available = std::max(room - padding, 2);
+  const int available = std::max(caption_room - padding, 2);
   const int caption_natural = (int)font.TextSize(element.text).width;
   const int value_natural = (int)value_font.TextSize(element.value).width;
 
@@ -2359,10 +2471,10 @@ GroupedListControl::UpdateTextLayout(Element &element, int room,
                                          element.wrapped_value_width,
                                          GetValueMaxLines(element));
     element.value_is_below = true;
-    element.text_height = GetTextHeight(font, room, element.text,
+    element.text_height = GetTextHeight(font, caption_room, element.text,
                                         element.wrapped_text,
                                         element.wrapped_text_width);
-    return room;
+    return caption_room;
   }
 
   int value_width;
@@ -2476,6 +2588,7 @@ GroupedListControl::UpdateLayout() noexcept
 
   UpdateExpansion();
   UpdateGroupFlags();
+  MarkSharedChevrons();
 
   if (!IsDefined())
     return;
@@ -2483,7 +2596,8 @@ GroupedListControl::UpdateLayout() noexcept
   /* the footer of a group shows the help of the item under the
      cursor, and the height of the footer depends on that text:
      restore the cursor before the elements are measured */
-  if (cursor < 0 && saved_cursor >= 0) {
+  const bool scroll_to_cursor = cursor < 0 && saved_cursor >= 0;
+  if (scroll_to_cursor) {
     /* the same item as before the list was rebuilt, or its neighbour
        if the list has become shorter or the item cannot be selected
        any more */
@@ -2710,14 +2824,36 @@ GroupedListControl::UpdateLayout() noexcept
 
         /* the cursor decides which text this is, so it may be another
            one than the last time: break it again in any case */
-        element.wrapped_text = WrapText(*look.list.font,
-                                        std::max(text_width, 1),
+        const int footer_width = std::max(text_width, 1);
+        element.wrapped_text = WrapText(*look.list.font, footer_width,
                                         *footer.text);
         element.wrapped_text_width = text_width;
 
+        unsigned lines = element.wrapped_text.lines.size();
+        if (element.stable_footer) {
+          /* the page keeps the room of the longest explanation, so
+             a shorter one does not pull the dialog in */
+          const auto measure = [&](const std::string &text) {
+            if (text.empty())
+              return;
+
+            lines = std::max(lines,
+                             (unsigned)WrapText(*look.list.font,
+                                                footer_width,
+                                                text).lines.size());
+          };
+
+          measure(element.text);
+          for (std::size_t j = i; j-- > 0;) {
+            if (!elements[j].IsItem() && !elements[j].IsButtons())
+              break;
+            if (elements[j].IsShownItem())
+              measure(elements[j].help);
+          }
+        }
+
         element.height = footer_gap +
-          element.wrapped_text.lines.size() *
-          look.list.font->GetLineSpacing();
+          lines * look.list.font->GetLineSpacing();
       }
         break;
       }
@@ -2740,6 +2876,13 @@ GroupedListControl::UpdateLayout() noexcept
   SetOrigin(origin);
 
   MoveWidgets();
+
+  /* a cursor which was asked for before the window had a size is
+     applied above, once the rows have a place: bring that row into
+     the view */
+  if (scroll_to_cursor && cursor >= 0 &&
+      (std::size_t)cursor < elements.size())
+    EnsureVisible((unsigned)cursor);
 
   Invalidate();
 }
@@ -2861,6 +3004,16 @@ GroupedListControl::SetCursor(int i) noexcept
 void
 GroupedListControl::SetCursorByIndex(unsigned i) noexcept
 {
+  if (!IsDefined()) {
+    /* the window has no size yet, so SetCursor() cannot repaint.
+       UpdateLayout() moves the cursor here once the window exists */
+    saved_cursor = (int)i;
+    saved_buttons = false;
+    cursor_removed = false;
+    cursor = -1;
+    return;
+  }
+
   const int j = FindItemByIndex(i);
   if (j >= 0)
     SetCursor(j);
@@ -3323,6 +3476,65 @@ GroupedListControl::DrawToggle(Canvas &canvas, const PixelRect &rc,
                      rc.top + radius}, thumb_radius);
 }
 
+int
+GroupedListControl::DrawBadge(Canvas &canvas, const PixelRect &caption_rc,
+                              const Element &element, const std::string &text,
+                              BadgeStyle style, bool selected,
+                              Color text_color, Color background,
+                              int row_centre_y) const noexcept
+{
+  /* a short label on a filled rounded box.  On an item which is not
+     available, the box is grey, like its text, unless the badge
+     reports a failure: that red stays */
+  const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
+
+  const Font &badge_font = GetBadgeFont(element);
+  canvas.Select(badge_font);
+
+  const int badge_height = GetBadgeHeight(element);
+
+  PixelRect badge_rc;
+  badge_rc.right = caption_rc.right;
+  badge_rc.left = badge_rc.right
+    - canvas.CalcTextWidth(text.c_str()) - 2 * badge_pad_x;
+  badge_rc.top = row_centre_y - badge_height / 2;
+  badge_rc.bottom = badge_rc.top + badge_height;
+
+  const BadgeColors badge_colors = GetBadgeColors(look, style);
+
+  /* grey means the row cannot be used.  A failure stays red on
+     that row, and while the row is selected */
+  const bool mute = style != BadgeStyle::DANGER &&
+    (selected || element.disabled);
+
+  canvas.DrawFilledRectangle(badge_rc, mute
+                             ? text_color
+                             : badge_colors.background_color);
+
+  const int badge_radius = std::min((int)Layout::VptScale(BADGE_RADIUS_PT),
+                                    badge_height / 2);
+  DrawRoundedEdge(canvas, badge_rc, true, background, badge_radius);
+  DrawRoundedEdge(canvas, badge_rc, false, background, badge_radius);
+
+  canvas.SetTextColor(mute
+                      ? background
+                      : badge_colors.text_color);
+
+  /* the text is centered by its box, which is what the font
+     renders into.  Aiming at the capitals instead would look
+     better for a short label, but it needs the distance from the
+     top of that box to the baseline, and a font whose ascent does
+     not include its leading - Courier on macOS - does not tell
+     it: the label would sit low by that leading */
+  const int badge_text_y = badge_rc.top
+    + (badge_height - (int)badge_font.GetHeight()) / 2;
+
+  canvas.DrawClippedText({badge_rc.left + badge_pad_x, badge_text_y},
+                         badge_rc, text.c_str());
+
+  return badge_rc.left;
+}
+
 void
 GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
                                 PixelRect rc) const noexcept
@@ -3618,13 +3830,18 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       caption_rc.left += GetIconWidth();
     }
 
-    if ((element.chevron || element.has_children) && !element.disabled) {
+    const bool draw_arrow = (element.chevron || element.has_children) &&
+      !element.disabled;
+    const bool reserve_badge = !draw_arrow && HasBadge(element) &&
+      element.share_chevron;
+
+    if (draw_arrow || reserve_badge) {
       const int size = std::max(2, font_height / 4);
 
-      const Pen pen(Layout::ScalePenWidth(1), text_color);
-      canvas.Select(pen);
+      if (draw_arrow && element.has_children) {
+        const Pen pen(Layout::ScalePenWidth(1), text_color);
+        canvas.Select(pen);
 
-      if (element.has_children) {
         /* an arrow which points down or up, never to the right: the
            arrow to the right belongs to an item which opens another
            page, and these two must not look alike.  Down says that
@@ -3639,17 +3856,21 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
 
         caption_rc.right -= 2 * size + padding;
       } else {
-        canvas.DrawLine({caption_rc.right - size, row_centre_y - size},
-                        {caption_rc.right, row_centre_y});
-        canvas.DrawLine({caption_rc.right, row_centre_y},
-                        {caption_rc.right - size, row_centre_y + size});
+        if (draw_arrow) {
+          const Pen pen(Layout::ScalePenWidth(1), text_color);
+          canvas.Select(pen);
+          canvas.DrawLine({caption_rc.right - size, row_centre_y - size},
+                          {caption_rc.right, row_centre_y});
+          canvas.DrawLine({caption_rc.right, row_centre_y},
+                          {caption_rc.right - size, row_centre_y + size});
+        }
 
         caption_rc.right -= size + padding;
       }
     }
 
-    /* the value keeps a box of its own, which begins where the
-       caption ends; it never covers the caption */
+    /* the value keeps the right edge.  Badges sit to its left, so
+       the row reads badge, then value */
     PixelRect value_rc{};
 
     if (element.value_width > 0 && !element.value_is_below) {
@@ -3665,55 +3886,20 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       caption_rc.right = value_rc.left - padding;
     }
 
-    if (!element.badge.empty()) {
-      /* a short label on a filled rounded box; on the selected item
-         the colors are swapped, where the accent color is the
-         background of the item itself.  On an item which is not
-         available, the box is grey, like its text */
-      const int badge_pad_x = Layout::VptScale(BADGE_PADDING_PT);
+    /* the right-hand badge first, nearest the value; a second badge
+       sits to its left */
+    for (const auto &badge : element.badges) {
+      if (badge.text.empty())
+        continue;
 
-      const Font &badge_font = GetBadgeFont(element);
-      canvas.Select(badge_font);
+      caption_rc.right = DrawBadge(canvas, caption_rc, element,
+                                   badge.text, badge.style,
+                                   selected, text_color, background,
+                                   row_centre_y)
+        - padding;
+    }
 
-      const int badge_height = GetBadgeHeight(element);
-
-      PixelRect badge_rc;
-      badge_rc.right = caption_rc.right;
-      badge_rc.left = badge_rc.right
-        - canvas.CalcTextWidth(element.badge.c_str()) - 2 * badge_pad_x;
-      badge_rc.top = row_centre_y - badge_height / 2;
-      badge_rc.bottom = badge_rc.top + badge_height;
-
-      const BadgeColors badge_colors = GetBadgeColors(look,
-                                                      element.badge_style);
-
-      canvas.DrawFilledRectangle(badge_rc, selected || element.disabled
-                                 ? text_color
-                                 : badge_colors.background_color);
-
-      const int badge_radius = std::min((int)Layout::VptScale(BADGE_RADIUS_PT),
-                                        badge_height / 2);
-      DrawRoundedEdge(canvas, badge_rc, true, background, badge_radius);
-      DrawRoundedEdge(canvas, badge_rc, false, background, badge_radius);
-
-      canvas.SetTextColor(selected || element.disabled
-                          ? background
-                          : badge_colors.text_color);
-
-      /* the text is centered by its box, which is what the font
-         renders into.  Aiming at the capitals instead would look
-         better for a short label, but it needs the distance from the
-         top of that box to the baseline, and a font whose ascent does
-         not include its leading - Courier on macOS - does not tell
-         it: the label would sit low by that leading */
-      const int badge_text_y = badge_rc.top
-        + (badge_height - (int)badge_font.GetHeight()) / 2;
-
-      canvas.DrawClippedText({badge_rc.left + badge_pad_x, badge_text_y},
-                             badge_rc, element.badge.c_str());
-
-      caption_rc.right = badge_rc.left - padding;
-
+    if (HasBadge(element)) {
       canvas.Select(*look.list.font);
       canvas.SetTextColor(text_color);
     }
@@ -4541,6 +4727,12 @@ void
 GroupedListWidget::UpdateLayout() noexcept
 {
   control.UpdateLayout();
+}
+
+unsigned
+GroupedListWidget::GetContentHeight() const noexcept
+{
+  return control.GetContentHeight();
 }
 
 void
