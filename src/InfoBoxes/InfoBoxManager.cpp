@@ -7,8 +7,7 @@
 #include "InfoBoxes/InfoBoxArrange.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Language/Language.hpp"
-#include "Form/DataField/ComboList.hpp"
-#include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/InfoBoxPicker.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
@@ -249,31 +248,17 @@ InfoBoxManager::ShowInfoBoxPicker(InfoBoxSettings::Panel &panel,
 {
   const InfoBoxFactory::Type old_type = panel.contents[i];
 
-  ComboList list;
-  for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
-    if (j == InfoBoxFactory::e_Free_RAM)
-      continue;
+  /* name the set this goes into: from the map it is the set of the
+     current flight mode, which is not necessarily the one on the
+     screen a minute later */
+  StaticString<96> caption;
+  caption.Format("%s %u (%s)", _("InfoBox"), i + 1, gettext(panel.name));
 
-    const char *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type)j);
-    list.Append(j, gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
-                gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
-                desc != NULL ? gettext(desc) : NULL);
-  }
-
-  list.Sort();
-  list.current_index = list.LookUp(old_type);
-
-  /* let the user select */
-
-  StaticString<20> caption;
-  caption.Format("%s: %u", _("InfoBox"), i + 1);
-  int result = ComboPicker(caption, list, nullptr, true);
-  if (result < 0)
+  InfoBoxFactory::Type new_type = old_type;
+  if (!InfoBoxPicker(caption, new_type))
     return false;
 
   /* was there a modification? */
-
-  InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].int_value;
   if (new_type == old_type)
     return false;
 
