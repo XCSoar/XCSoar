@@ -47,6 +47,10 @@ Version 7.47 - not yet released
     wind are switches, and Trail drift is last. The row's
     explanation sits below the selected row. Clear drops a wind
     the pilot has entered. A speed of 0 does the same
+  - show Replay as a floating list. Flight opens the log list, and
+    Rate opens a list from 0x to 10x. A tap on the label selects
+    the row; a tap on the value opens it. Start, Stop and +10'
+    stay dialog buttons
   - draw buttons as flat faces with a thin outline instead of bevel
     borders, mark the focused button with a ring around it, and centre
     their captions optically instead of on the line box #2871
