@@ -165,7 +165,9 @@ public:
    * The colors of a badge.  An item which is #ItemOptions::disabled is
    * grey, and grey is reserved for "not available", except a #DANGER
    * badge: that failure stays red, because the row can be read and
-   * the failure still has to be seen.
+   * the failure still has to be seen.  Selecting a row greys a badge
+   * in the dialog accent, which is the selection itself.  A #WARNING
+   * stays yellow, as a failure stays red.
    */
   enum class BadgeStyle : uint_least8_t {
     /** the accent color of the dialog; the state which shall be seen */
