@@ -16,27 +16,13 @@
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
-
-#include <algorithm>
 
 namespace {
 
-static unsigned
-PreferredClientWidth(const DialogLook &look) noexcept
-{
-  const unsigned speed =
-    look.list.font->TextSize("Max. Cruise Speed   000 km/h").width;
-  const unsigned help = look.list.font->TextSize(
-    "Seconds to empty the ballast tanks.").width;
-  const unsigned text = std::max(speed, help);
-  return text + 2 * Layout::VptScale(10) +
-    2 * Layout::GetTextPadding();
-}
-
 class PlaneDetails {
-  using Callback = GroupedListWidget::Callback;
+  using BadgeStyle = GroupedListWidget::BadgeStyle;
+  using ValueState = GroupedListWidget::ValueState;
 
   GroupedListWidget *list = nullptr;
   WidgetDialog *dialog = nullptr;
@@ -59,7 +45,6 @@ public:
   }
 
   void Refresh() noexcept;
-  void Refit() noexcept;
 
   void EditRegistration() noexcept;
   void EditCompetitionId() noexcept;
@@ -75,12 +60,7 @@ public:
 
 private:
   void UpdateCaption() noexcept;
-
-  void AddRow(const char *caption, const char *help,
-              const char *text, Callback edit,
-              const char *badge = nullptr,
-              GroupedListWidget::BadgeStyle badge_style =
-                GroupedListWidget::BadgeStyle::PRIMARY) noexcept;
+  void Build() noexcept;
 
   template<size_t N>
   void EditText(StaticString<N> &field, const char *caption) noexcept;
@@ -95,34 +75,6 @@ PlaneDetails::UpdateCaption() noexcept
   StaticString<128> tmp;
   tmp.Format("%s: %s", _("Plane Details"), plane.registration.c_str());
   dialog->SetCaption(tmp);
-}
-
-void
-PlaneDetails::AddRow(const char *caption, const char *help,
-                     const char *text, Callback edit,
-                     const char *badge,
-                     GroupedListWidget::BadgeStyle badge_style) noexcept
-{
-  /* a tap on the label selects the row and draws an arrow.  A tap
-     on the value opens it.  Without an action the row stays grey
-     and the cursor may rest on it so its help can be read.  A badge
-     on that row says why it cannot be used. */
-  GroupedListWidget::ItemOptions options;
-  options.help = help;
-  options.value = text;
-  options.badge_style = badge_style;
-  options.chevron = static_cast<bool>(edit);
-  options.label_selects = static_cast<bool>(edit);
-
-  if (edit) {
-    options.badge = badge;
-    list->AddItem(caption, std::move(edit), options);
-  } else {
-    options.disabled = true;
-    options.selectable_when_disabled = true;
-    options.disabled_badge_label = badge;
-    list->AddItem(caption, options);
-  }
 }
 
 template<size_t N>
@@ -264,119 +216,135 @@ PlaneDetails::EditWeGlideType() noexcept
 }
 
 void
-PlaneDetails::Refresh() noexcept
+PlaneDetails::Build() noexcept
 {
-  list->Clear();
-
   list->AddGroup(nullptr);
 
-  StaticString<64> text;
+  list->AddValue(_("Registration"), nullptr,
+                 [this](ValueState &state) {
+                   state.text = plane.registration.c_str();
+                 },
+                 [this]{ EditRegistration(); });
+  list->AddValue(_("Comp. ID"), nullptr,
+                 [this](ValueState &state) {
+                   state.text = plane.competition_id.c_str();
+                 },
+                 [this]{ EditCompetitionId(); });
+  list->AddValue(_("Polar"), nullptr,
+                 [this](ValueState &state) {
+                   state.text = plane.polar_name.c_str();
+                 },
+                 [this]{ EditPolar(); });
+  list->AddValue(_("Type"), nullptr,
+                 [this](ValueState &state) {
+                   state.text = plane.type.c_str();
+                 },
+                 [this]{ EditType(); });
+  list->AddValue(_("Handicap"), nullptr,
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   text.Format("%u %%", plane.handicap);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditHandicap(); });
+  list->AddValue(_("Wing Area"), nullptr,
+                 [this](ValueState &state) {
+                   if (plane.wing_area > 0) {
+                     StaticString<64> text;
+                     text.Format("%.1f m²", plane.wing_area);
+                     state.text = text.c_str();
+                   } else {
+                     state.badge = _("No wing area (m²)");
+                     state.badge_style = BadgeStyle::DANGER;
+                   }
+                 },
+                 [this]{ EditWingArea(); });
+  list->AddValue(_("Empty Mass"),
+                 _("Net mass of the rigged plane."),
+                 [this](ValueState &state) {
+                   if (plane.empty_mass > 0) {
+                     StaticString<64> text;
+                     FormatUserMass(plane.empty_mass, text.data(), true);
+                     state.text = text.c_str();
+                   } else {
+                     state.badge = _("No empty mass");
+                     state.badge_style = BadgeStyle::DANGER;
+                   }
+                 },
+                 [this]{ EditEmptyMass(); });
+  list->AddValue(_("Max. Ballast"), nullptr,
+                 [this](ValueState &state) {
+                   if (plane.max_ballast > 0) {
+                     StaticString<64> text;
+                     text.Format("%.0f l", plane.max_ballast);
+                     state.text = text.c_str();
+                   } else {
+                     state.badge = _("No max ballast");
+                     state.badge_style = BadgeStyle::WARNING;
+                   }
+                 },
+                 [this]{ EditMaxBallast(); });
+  list->AddValue(_("Dump Time"),
+                 _("Seconds to empty the ballast tanks. Set to 0 for no "
+                   "dump time."),
+                 [this](ValueState &state) {
+                   if (plane.dump_time > 0) {
+                     StaticString<64> text;
+                     text.Format("%u s", plane.dump_time);
+                     state.text = text.c_str();
+                   } else {
+                     state.badge = _("No dump time");
+                     state.badge_style = BadgeStyle::WARNING;
+                   }
+                 },
+                 [this]{ EditDumpTime(); });
+  list->AddValue(_("Max. Cruise Speed"),
+                 _("Upper limit for MacCready speed-to-fly, including final "
+                   "glide. Prevents the glide computer from commanding "
+                   "unrealistically high cruise speeds. A typical choice is "
+                   "the rough-air / green-arc limit from the flight manual."),
+                 [this](ValueState &state) {
+                   if (plane.max_speed > 0) {
+                     StaticString<64> text;
+                     FormatUserSpeed(plane.max_speed, text.data(), true);
+                     state.text = text.c_str();
+                   } else {
+                     state.badge = _("No max cruise speed");
+                     state.badge_style = BadgeStyle::WARNING;
+                   }
+                 },
+                 [this]{ EditMaxSpeed(); });
+  list->AddValue(_("WeGlide Aircraft"), nullptr,
+                 [this](ValueState &state) {
+                   if (plane.weglide_glider_type == 0) {
+                     state.badge = _("No WeGlide type");
+                     state.badge_style = BadgeStyle::WARNING;
+                     return;
+                   }
 
-  AddRow(_("Registration"), nullptr, plane.registration.c_str(),
-         [this]{ EditRegistration(); });
-  AddRow(_("Comp. ID"), nullptr, plane.competition_id.c_str(),
-         [this]{ EditCompetitionId(); });
-  AddRow(_("Polar"), nullptr, plane.polar_name.c_str(),
-         [this]{ EditPolar(); });
-  AddRow(_("Type"), nullptr, plane.type.c_str(),
-         [this]{ EditType(); });
-
-  text.Format("%u %%", plane.handicap);
-  AddRow(_("Handicap"), nullptr, text.c_str(),
-         [this]{ EditHandicap(); });
-
-  if (plane.wing_area > 0) {
-    text.Format("%.1f m²", plane.wing_area);
-    AddRow(_("Wing Area"), nullptr, text.c_str(),
-           [this]{ EditWingArea(); });
-  } else
-    AddRow(_("Wing Area"), nullptr, nullptr,
-           [this]{ EditWingArea(); },
-           _("No wing area (m²)"),
-           GroupedListWidget::BadgeStyle::DANGER);
-
-  if (plane.empty_mass > 0) {
-    FormatUserMass(plane.empty_mass, text.data(), true);
-    AddRow(_("Empty Mass"), _("Net mass of the rigged plane."),
-           text.c_str(), [this]{ EditEmptyMass(); });
-  } else
-    AddRow(_("Empty Mass"), _("Net mass of the rigged plane."),
-           nullptr, [this]{ EditEmptyMass(); },
-           _("No empty mass"),
-           GroupedListWidget::BadgeStyle::DANGER);
-
-  if (plane.max_ballast > 0) {
-    text.Format("%.0f l", plane.max_ballast);
-    AddRow(_("Max. Ballast"), nullptr, text.c_str(),
-           [this]{ EditMaxBallast(); });
-  } else
-    AddRow(_("Max. Ballast"), nullptr, nullptr,
-           [this]{ EditMaxBallast(); },
-           _("No max ballast"),
-           GroupedListWidget::BadgeStyle::WARNING);
-
-  if (plane.dump_time > 0) {
-    text.Format("%u s", plane.dump_time);
-    AddRow(_("Dump Time"),
-           _("Seconds to empty the ballast tanks. Set to 0 for no "
-             "dump time."),
-           text.c_str(), [this]{ EditDumpTime(); });
-  } else
-    AddRow(_("Dump Time"),
-           _("Seconds to empty the ballast tanks. Set to 0 for no "
-             "dump time."),
-           nullptr, [this]{ EditDumpTime(); },
-           _("No dump time"),
-           GroupedListWidget::BadgeStyle::WARNING);
-
-  if (plane.max_speed > 0) {
-    FormatUserSpeed(plane.max_speed, text.data(), true);
-    AddRow(_("Max. Cruise Speed"),
-           _("Upper limit for MacCready speed-to-fly, including final "
-             "glide. Prevents the glide computer from commanding "
-             "unrealistically high cruise speeds. A typical choice is "
-             "the rough-air / green-arc limit from the flight manual."),
-           text.c_str(), [this]{ EditMaxSpeed(); });
-  } else
-    AddRow(_("Max. Cruise Speed"),
-           _("Upper limit for MacCready speed-to-fly, including final "
-             "glide. Prevents the glide computer from commanding "
-             "unrealistically high cruise speeds. A typical choice is "
-             "the rough-air / green-arc limit from the flight manual."),
-           nullptr, [this]{ EditMaxSpeed(); },
-           _("No max cruise speed"),
-           GroupedListWidget::BadgeStyle::WARNING);
-
-  if (plane.weglide_glider_type == 0)
-    AddRow(_("WeGlide Aircraft"), nullptr, nullptr,
-           [this]{ EditWeGlideType(); },
-           _("No WeGlide type"),
-           GroupedListWidget::BadgeStyle::WARNING);
-  else {
-    StaticString<128> aircraft;
-    StaticString<96> name;
-    if (WeGlide::LookupAircraftTypeName(plane.weglide_glider_type,
-                                        name))
-      aircraft.Format("%s (%u)", name.c_str(),
-                      plane.weglide_glider_type);
-    else
-      aircraft.Format("%s (%u)", _("Unknown"),
-                      plane.weglide_glider_type);
-    AddRow(_("WeGlide Aircraft"), nullptr, aircraft.c_str(),
-           [this]{ EditWeGlideType(); });
-  }
-
-  UpdateCaption();
-  list->UpdateLayout();
-  Refit();
+                   StaticString<128> aircraft;
+                   StaticString<96> name;
+                   if (WeGlide::LookupAircraftTypeName(
+                         plane.weglide_glider_type, name))
+                     aircraft.Format("%s (%u)", name.c_str(),
+                                     plane.weglide_glider_type);
+                   else
+                     aircraft.Format("%s (%u)", _("Unknown"),
+                                     plane.weglide_glider_type);
+                   state.text = aircraft.c_str();
+                 },
+                 [this]{ EditWeGlideType(); });
 }
 
 void
-PlaneDetails::Refit() noexcept
+PlaneDetails::Refresh() noexcept
 {
-  if (dialog != nullptr)
-    dialog->FitToList(dialog->GetParentClientRect(),
-                      PreferredClientWidth(dialog->GetLook()));
+  if (list->GetItemCount() == 0)
+    Build();
+
+  UpdateCaption();
+  if (list->UpdateValues() && dialog != nullptr)
+    dialog->RefitList();
 }
 
 } // namespace
@@ -394,21 +362,13 @@ dlgPlaneDetailsShowModal(Plane &_plane) noexcept
   caption.Format("%s: %s", _("Plane Details"),
                  _plane.registration.c_str());
 
-  const PixelRect rc{Layout::Scale(PixelSize{220u, 220u})};
-  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, rc,
-                            caption, list);
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, caption, list);
   details.SetDialog(dialog);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
-  dialog.EnableCursorSelection();
-  dialog.ResyncButtonPanelSelection();
-  list->SetActionBar(dialog.GetButtonPanel());
-  list->SetCursorCallback([&details](int){
-    details.Refit();
-  });
-
-  dialog.PrepareWidget();
+  dialog.PrepareFloatingList();
   details.Refresh();
 
   const int result = dialog.ShowModal();

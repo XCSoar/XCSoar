@@ -12,25 +12,11 @@
 #include "Interface.hpp"
 #include "Replay/Replay.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 
-#include <algorithm>
 #include <chrono>
 
 namespace {
-
-static unsigned
-PreferredClientWidth(const DialogLook &look) noexcept
-{
-  const unsigned help = look.list.font->TextSize(
-    "Set to 0 for pause, 1 for normal real-time replay.").width;
-  const unsigned value =
-    look.list.font->TextSize("Flight   Demo").width;
-  const unsigned text = std::max(help, value);
-  return text + 2 * Layout::VptScale(10) +
-    2 * Layout::GetTextPadding();
-}
 
 /**
  * Replay as one group.  Flight opens the log list.  An empty choice
@@ -41,6 +27,7 @@ PreferredClientWidth(const DialogLook &look) noexcept
  * again when the list or the screen layout changes.
  */
 class ReplaySetup final {
+  using ValueState = GroupedListWidget::ValueState;
   GroupedListWidget *list = nullptr;
   WidgetDialog *dialog = nullptr;
   Replay &replay;
@@ -61,34 +48,19 @@ public:
   }
 
   void Refresh() noexcept;
-  void Refit() noexcept;
   void Start() noexcept;
   void Stop() noexcept;
   void FastForward() noexcept;
 
 private:
+  void Build() noexcept;
   void EditFlight();
   void EditRate();
 
   [[nodiscard]]
   const char *FlightValue() const noexcept;
 
-  void AddValue(const char *caption, const char *help,
-                const char *text, GroupedListWidget::Callback edit) noexcept;
 };
-
-void
-ReplaySetup::AddValue(const char *caption, const char *help,
-                      const char *text,
-                      GroupedListWidget::Callback edit) noexcept
-{
-  GroupedListWidget::ItemOptions options;
-  options.help = help;
-  options.value = text;
-  options.chevron = true;
-  options.label_selects = true;
-  list->AddItem(caption, std::move(edit), options);
-}
 
 static void
 FormatReplayRate(double value, StaticString<64> &text)
@@ -106,33 +78,38 @@ ReplaySetup::FlightValue() const noexcept
 }
 
 void
-ReplaySetup::Refresh() noexcept
+ReplaySetup::Build() noexcept
 {
-  list->Clear();
   list->AddGroup(nullptr);
 
-  AddValue(_("Flight"),
-           _("Name of file to replay. May be an IGC file (.igc) or a raw NMEA "
-             "log file (.nmea). Leave blank to run the demo."),
-           FlightValue(), [this]{ EditFlight(); });
+  list->AddValue(_("Flight"),
+                 _("Name of file to replay. May be an IGC file (.igc) "
+                   "or a raw NMEA log file (.nmea). "
+                   "Leave blank to run the demo."),
+                 [this](ValueState &state) {
+                   state.text = FlightValue();
+                 },
+                 [this]{ EditFlight(); });
 
-  StaticString<64> text;
-  FormatReplayRate(replay.GetTimeScale(), text);
-  AddValue(_("Rate"),
-           _("Time acceleration of replay. Set to 0 for pause, "
-             "1 for normal real-time replay."),
-           text.c_str(), [this]{ EditRate(); });
-
-  list->UpdateLayout();
-  Refit();
+  list->AddValue(_("Rate"),
+                 _("Time acceleration of replay. Set to 0 for pause, "
+                   "1 for normal real-time replay."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatReplayRate(replay.GetTimeScale(), text);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditRate(); });
 }
 
 void
-ReplaySetup::Refit() noexcept
+ReplaySetup::Refresh() noexcept
 {
-  if (dialog != nullptr)
-    dialog->FitToList(dialog->GetParentClientRect(),
-                      PreferredClientWidth(dialog->GetLook()));
+  if (list->GetItemCount() == 0)
+    Build();
+
+  if (list->UpdateValues() && dialog != nullptr)
+    dialog->RefitList();
 }
 
 void
@@ -205,23 +182,15 @@ ShowReplayDialog(Replay &replay) noexcept
   ReplaySetup setup(replay);
   setup.SetList(*list);
 
-  const PixelRect rc{Layout::Scale(PixelSize{220u, 220u})};
-  WidgetDialog dialog(UIGlobals::GetMainWindow(), look, rc,
-                      _("Replay"), list);
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, _("Replay"), list);
   setup.SetDialog(dialog);
   dialog.AddButton(_("Start"), [&setup]{ setup.Start(); });
   dialog.AddButton(_("Stop"), [&setup]{ setup.Stop(); });
   dialog.AddButton(_("+10'"), [&setup]{ setup.FastForward(); });
   dialog.AddButton(_("Close"), mrOK);
 
-  dialog.EnableCursorSelection();
-  dialog.ResyncButtonPanelSelection();
-  list->SetActionBar(dialog.GetButtonPanel());
-  list->SetCursorCallback([&setup](int){
-    setup.Refit();
-  });
-
-  dialog.PrepareWidget();
+  dialog.PrepareFloatingList();
   setup.Refresh();
   dialog.ShowModal();
 }

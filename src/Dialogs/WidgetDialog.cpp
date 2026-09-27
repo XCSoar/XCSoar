@@ -79,6 +79,21 @@ WidgetDialog::WidgetDialog(Full tag, SingleWindow &parent, const DialogLook &loo
   widget.Move(buttons.UpdateLayout());
 }
 
+WidgetDialog::WidgetDialog(Floating, SingleWindow &parent,
+                           const DialogLook &look,
+                           const char *caption,
+                           GroupedListWidget *list) noexcept
+  :WndForm(parent, look,
+           PixelRect{Layout::Scale(PixelSize{220u, 220u})},
+           caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), look.button),
+   widget(GetClientAreaWindow()),
+   full(false), auto_size(false)
+{
+  widget.Set(list);
+  widget.Move(LayoutButtons());
+}
+
 WidgetDialog::~WidgetDialog()
 {
   /* we must override ~Window(), because in ~Window(), our own
@@ -258,6 +273,34 @@ WidgetDialog::FitToList(const PixelRect &parent_rc,
   Move(PixelPoint{x, y});
 
   fitting = false;
+}
+
+void
+WidgetDialog::RefitList() noexcept
+{
+  if (fitting)
+    return;
+
+  auto &list = static_cast<GroupedListWidget &>(GetWidget());
+  const unsigned text = list.PreferredTextWidth();
+  if (text == 0)
+    return;
+
+  const unsigned width = text + 2 * Layout::VptScale(10) +
+    2 * Layout::GetTextPadding();
+  FitToList(GetParentClientRect(), width);
+}
+
+void
+WidgetDialog::PrepareFloatingList() noexcept
+{
+  EnableCursorSelection();
+  ResyncButtonPanelSelection();
+
+  auto &list = static_cast<GroupedListWidget &>(GetWidget());
+  list.SetActionBar(buttons);
+  list.SetCursorCallback([this](int){ RefitList(); });
+  PrepareWidget();
 }
 
 int
