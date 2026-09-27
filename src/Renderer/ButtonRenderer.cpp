@@ -33,9 +33,7 @@ GetFaceRect(PixelRect rc) noexcept
 unsigned
 ButtonFrameRenderer::GetCornerDiameter(const PixelRect &face) noexcept
 {
-  /* comparable to a Tailwind "rounded-lg" card; the cap keeps
-     small buttons from turning into pills */
-  return std::min(Layout::VptScale(14),
+  return std::min(Layout::VptScale(Layout::corner_diameter_pt),
                   std::min(std::max(2u, (unsigned)face.GetWidth() / 2),
                            std::max(2u, (unsigned)face.GetHeight() / 2)));
 }

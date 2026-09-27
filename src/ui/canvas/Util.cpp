@@ -163,24 +163,30 @@ KeyHole(Canvas &canvas, PixelPoint center, unsigned radius,
 void
 RoundRect(Canvas &canvas, PixelRect r, unsigned radius) noexcept
 {
+  /* the four corner centres, and the start of each quarter turn,
+     clockwise from the top-left.  The arc stops one step before the
+     next corner's first vertex so the fan does not repeat it */
+  const PixelPoint centers[] = {
+    r.GetTopLeft().At(radius, radius),
+    r.GetTopRight().At(-(int)radius, radius),
+    r.GetBottomRight().At(-(int)radius, -(int)radius),
+    r.GetBottomLeft().At(radius, -(int)radius),
+  };
+  const unsigned start[] = {
+    3 * INT_QUARTER_CIRCLE,
+    0,
+    INT_QUARTER_CIRCLE,
+    2 * INT_QUARTER_CIRCLE,
+  };
+
   unsigned npoly = 0;
   BulkPixelPoint pt[(CIRCLE_SEGS+2)*4];
 
-  segment_poly(pt, r.GetTopLeft().At(radius, radius), radius,
-               INT_ANGLE_RANGE * 3 / 4,
-               INT_ANGLE_RANGE - 1,
-               npoly);
-  segment_poly(pt, r.GetTopRight().At(-(int)radius, radius), radius,
-               0, INT_ANGLE_RANGE / 4 - 1,
-               npoly);
-  segment_poly(pt, r.GetBottomRight().At(-(int)radius, -(int)radius), radius,
-               INT_ANGLE_RANGE / 4,
-               INT_ANGLE_RANGE / 2 - 1,
-               npoly);
-  segment_poly(pt, r.GetBottomLeft().At(radius, -(int)radius), radius,
-               INT_ANGLE_RANGE / 2,
-               INT_ANGLE_RANGE * 3 / 4 - 1,
-               npoly);
+  for (unsigned i = 0; i < 4; ++i) {
+    const unsigned next = start[(i + 1) % 4];
+    const unsigned end = (next == 0 ? INT_ANGLE_RANGE : next) - 1;
+    segment_poly(pt, centers[i], radius, start[i], end, npoly);
+  }
 
   assert(npoly <= ARRAY_SIZE(pt));
   if (npoly)
