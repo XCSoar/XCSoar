@@ -163,8 +163,9 @@ public:
 
   /**
    * The colors of a badge.  An item which is #ItemOptions::disabled is
-   * grey no matter which style it carries, and grey is reserved for
-   * it: it must stay the one thing which means "not available".
+   * grey, and grey is reserved for "not available", except a #DANGER
+   * badge: that failure stays red, because the row can be read and
+   * the failure still has to be seen.
    */
   enum class BadgeStyle : uint_least8_t {
     /** the accent color of the dialog; the state which shall be seen */
@@ -216,6 +217,13 @@ public:
      * too; every item then keeps the room of a one-line row.
      */
     bool shrink_vertical_padding = true;
+
+    /**
+     * Keep the explanation below the card as tall as the longest one
+     * in the group.  A shorter text leaves the rest empty, and the
+     * page does not grow and shrink as the cursor moves.
+     */
+    bool stable_footer = false;
   };
 
   /** The contents and the decorations of an item. */
@@ -304,6 +312,15 @@ public:
     BadgeStyle badge_style = BadgeStyle::PRIMARY;
 
     /**
+     * A second badge, drawn to the left of #badge.  The right-hand
+     * badge stays in the column the other rows use.
+     */
+    const char *badge2 = nullptr;
+
+    /** the colors of #badge2 */
+    BadgeStyle badge_style2 = BadgeStyle::PRIMARY;
+
+    /**
      * The font of #badge.  A code which is read letter by letter, a
      * frequency or an identifier is easier to compare from one item
      * to the next when its characters line up.
@@ -343,8 +360,10 @@ public:
 
     /**
      * Is this item currently not available?  It is drawn greyed out,
-     * the cursor skips it, and it carries a badge which says so,
-     * replacing #badge.
+     * the cursor skips it, and activating it does nothing.  Without
+     * a value it carries a badge which says so, replacing #badge.
+     * A value stays, faded with the caption: the row can be read
+     * and cannot be changed.
      */
     bool disabled = false;
 
@@ -628,6 +647,13 @@ public:
    * after the contents of a prepared widget have been changed.
    */
   void UpdateLayout() noexcept;
+
+  /**
+   * The height of the laid-out page.  Zero before the window has
+   * been laid out.  A dialog uses it to stay as tall as its list.
+   */
+  [[gnu::pure]]
+  unsigned GetContentHeight() const noexcept;
 
   /**
    * Show another view above the list, e.g. the row which names the
