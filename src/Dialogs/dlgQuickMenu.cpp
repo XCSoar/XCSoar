@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#include "Asset.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Form/Button.hpp"
 #include "Form/GridView.hpp"
@@ -11,79 +10,17 @@
 #include "Math/Util.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Menu/MenuData.hpp"
-#include "Renderer/ButtonRenderer.hpp"
-#include "Renderer/TextRenderer.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "WidgetDialog.hpp"
-#include "ui/canvas/Canvas.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "util/StaticString.hxx"
 
 #include <boost/container/static_vector.hpp>
 #include <cstdlib>
 #include <memory>
-
-class QuickMenuButtonRenderer final : public ButtonRenderer {
-  const DialogLook &look;
-
-  TextRenderer text_renderer;
-
-  const StaticString<64> caption;
-
-public:
-  explicit QuickMenuButtonRenderer(const DialogLook &_look,
-                                   const char *_caption) noexcept
-    :look(_look), caption(_caption) {
-    text_renderer.SetCenter();
-    text_renderer.SetVCenter();
-  }
-
-  [[gnu::pure]]
-  unsigned GetMinimumButtonWidth() const noexcept override;
-
-  void DrawButton(Canvas &canvas, const PixelRect &rc,
-                  ButtonState state) const noexcept override;
-};
-
-unsigned
-QuickMenuButtonRenderer::GetMinimumButtonWidth() const noexcept
-{
-  return 2 * Layout::GetTextPadding() + look.button.font->TextSize(caption).width;
-}
-
-void
-QuickMenuButtonRenderer::DrawButton(Canvas &canvas, const PixelRect &rc,
-                                    ButtonState state) const noexcept
-{
-  // Draw focus rectangle
-  switch (state) {
-  case ButtonState::PRESSED:
-    canvas.DrawFilledRectangle(rc, look.list.pressed.background_color);
-    canvas.SetTextColor(look.list.pressed.text_color);
-    break;
-
-  case ButtonState::FOCUSED:
-    canvas.DrawFilledRectangle(rc, look.focused.background_color);
-    canvas.SetTextColor(look.focused.text_color);
-    break;
-
-  case ButtonState::SELECTED:
-  case ButtonState::ENABLED:
-    canvas.SetTextColor(look.text_color);
-    break;
-
-  case ButtonState::DISABLED:
-    canvas.SetTextColor(look.button.disabled.color);
-    break;
-  }
-
-  canvas.Select(*look.button.font);
-  canvas.SetBackgroundTransparent();
-
-  text_renderer.Draw(canvas, rc, caption);
-}
 
 class QuickMenu final : public WindowWidget {
   WndForm &dialog;
@@ -198,13 +135,14 @@ QuickMenu::Prepare(ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc
     button_rc.right = Layout::Scale(80);
     button_rc.bottom = Layout::Scale(30);
 
-    auto &button = buttons.emplace_back(*grid_view, button_rc, buttonStyle,
-                                        std::make_unique<QuickMenuButtonRenderer>(dialog_look,
-                                                                                  expanded.text),
-                                        [this, &menuItem](){
-                                          clicked_event = menuItem.event;
-                                          dialog.SetModalResult(mrOK);
-                                        });
+    auto &button = buttons.emplace_back(
+      *grid_view, button_rc, buttonStyle,
+      std::make_unique<TextButtonRenderer>(dialog_look.button,
+                                           expanded.text),
+      [this, &menuItem](){
+        clicked_event = menuItem.event;
+        dialog.SetModalResult(mrOK);
+      });
     button.SetEnabled(expanded.enabled);
 
     grid_view->AddItem(button);
