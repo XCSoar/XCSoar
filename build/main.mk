@@ -83,6 +83,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Plane/PolarShapeEditWidget.cpp \
 	$(SRC)/Dialogs/DataField.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
+	$(SRC)/Dialogs/InfoBoxPicker.cpp \
+	$(SRC)/Dialogs/InfoBoxGroupPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
 	$(SRC)/Dialogs/EmptyDownloadList.cpp \
 	$(SRC)/Dialogs/MultiFilePicker.cpp \
