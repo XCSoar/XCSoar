@@ -302,6 +302,35 @@ GetInflightButtonHeight() noexcept
 }
 
 /**
+ * Columns × rows for a full-screen (or dialog) tile menu.
+ *
+ * Portrait → 3×4, landscape → 4×3, square-ish → 3×3.  Cell size should
+ * be derived from this fixed capacity, not from the number of tiles.
+ */
+struct TileGridGeometry {
+  unsigned columns;
+  unsigned rows;
+};
+
+/**
+ * Choose a tile grid for the given area (client size of the menu).
+ */
+[[gnu::const]]
+static inline TileGridGeometry
+GetTileGridGeometry(PixelSize area) noexcept
+{
+  if (area.width == 0 || area.height == 0)
+    return {3, 3};
+
+  /* Avoid float: portrait if w/h < 0.85, landscape if w/h > 1.18. */
+  if (area.width * 100 < area.height * 85)
+    return {3, 4};
+  if (area.width * 100 > area.height * 118)
+    return {4, 3};
+  return {3, 3};
+}
+
+/**
  * Returns the radius (in pixels) of the hit circle around map
  * items.
  */

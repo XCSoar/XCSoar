@@ -18,6 +18,7 @@ enum ControlIndex {
   AppInfoBoxGeom,
   InfoBoxTitleScale,
   TabDialogStyle,
+  TiledMenu,
   AppStatusMessageAlignment,
   AppInfoBoxColors,
   AppInfoBoxTheme,
@@ -102,6 +103,11 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
 
   AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
+
+  AddBoolean(_("Tiled menu"),
+             _("Show Configuration as a tile grid instead of the "
+               "two-column list."),
+             ui_settings.dialog.tiled_menu);
 
   AddEnum(_("Message display"), nullptr,
           popup_msg_position_list,
@@ -206,7 +212,10 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
     CommonInterface::main_window->ReinitialiseMapOverlayButtons();
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
-  changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
+  changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle,
+                           dialog_settings.tab_style);
+  changed |= SaveValue(TiledMenu, ProfileKeys::AppDialogTiledMenu,
+                       dialog_settings.tiled_menu);
 
   if (info_box_geometry_changed)
     CommonInterface::main_window->ReinitialiseLayout();

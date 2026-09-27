@@ -232,7 +232,7 @@ main()
   };
 
   plan_tests(1 + ARRAY_SIZE(cases) * LAYOUT_CHECKS +
-             SQUARE_LANDSCAPE_CHECKS);
+             SQUARE_LANDSCAPE_CHECKS + 10);
 
   ok1(Layout::ScaleSupported());
 
@@ -240,6 +240,30 @@ main()
     TestCase(c.size, c.dpi, c.ui_scale, c.has_touch);
 
   TestSquareAndLandscape();
+
+  /* Tile grid: portrait 3×4, landscape 4×3, square-ish 3×3. */
+  {
+    const auto portrait = Layout::GetTileGridGeometry({1080, 1920});
+    ok1(portrait.columns == 3);
+    ok1(portrait.rows == 4);
+
+    const auto landscape = Layout::GetTileGridGeometry({1920, 1080});
+    ok1(landscape.columns == 4);
+    ok1(landscape.rows == 3);
+
+    const auto square = Layout::GetTileGridGeometry({1024, 1024});
+    ok1(square.columns == 3);
+    ok1(square.rows == 3);
+
+    /* Near-square phone / Kobo-ish */
+    const auto nearly = Layout::GetTileGridGeometry({800, 760});
+    ok1(nearly.columns == 3);
+    ok1(nearly.rows == 3);
+
+    const auto empty = Layout::GetTileGridGeometry({0, 0});
+    ok1(empty.columns == 3);
+    ok1(empty.rows == 3);
+  }
 
   return exit_status();
 }

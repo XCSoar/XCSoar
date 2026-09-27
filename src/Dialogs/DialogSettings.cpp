@@ -9,4 +9,5 @@ DialogSettings::SetDefaults() noexcept
   text_input_style = TextInputStyle::Default;
   tab_style = TabStyle::Text;
   expert = false;
+  tiled_menu = false;
 }

@@ -35,5 +35,10 @@ struct DialogSettings {
    */
   bool expert;
 
+  /**
+   * Use a tile grid for Configuration instead of the two-column list.
+   */
+  bool tiled_menu;
+
   void SetDefaults() noexcept;
 };

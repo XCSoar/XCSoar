@@ -69,6 +69,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
+	$(SRC)/Dialogs/Settings/ConfigTileMenu.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/Traffic/TrafficList.cpp \
 	$(SRC)/Dialogs/Traffic/FlarmTrafficDetails.cpp \
