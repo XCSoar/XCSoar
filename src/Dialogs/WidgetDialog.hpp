@@ -21,6 +21,15 @@ private:
   bool auto_size;
   bool changed = false;
 
+  /** FitToList() is on the stack */
+  bool fitting = false;
+
+  /**
+   * Client width asked for by FitToList().  Zero means this dialog
+   * is not sized to a list.
+   */
+  unsigned fit_client_width = 0;
+
 protected:
   // Expose auto_size to derived classes
   bool IsAutoSize() const noexcept {
@@ -84,6 +93,17 @@ public:
    * when the client is wider than it is tall.
    */
   virtual PixelRect LayoutButtons() noexcept;
+
+  /**
+   * Size this dialog to a short grouped list and keep it centred on
+   * #parent_rc.  The buttons stay under the list.  A later layout
+   * change repeats this fit.
+   *
+   * @param preferred_client_width the width the list asks for,
+   * before the frame and the shadow
+   */
+  void FitToList(const PixelRect &parent_rc,
+                 unsigned preferred_client_width) noexcept;
 
   /**
    * Ensure that the widget is prepared.
