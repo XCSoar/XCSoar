@@ -30,7 +30,7 @@ DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
   static auto previous_time = TimeStamp{};
   static bool is_first_time = true;
 
-  const  auto current_time = basic.time;
+  const  auto current_time = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
   if (!current_time.IsDefined())
     return;
 
@@ -123,7 +123,7 @@ DeviceDescriptor::OnRotationSensor([[maybe_unused]] float dtheta_x,
   static auto previous_time = TimeStamp{};
   static bool is_first_time = true;
 
-  const  auto current_time = basic.time;
+  const  auto current_time = TimeStamp{std::chrono::steady_clock::now().time_since_epoch()};
   if (!current_time.IsDefined())
     return;
 
