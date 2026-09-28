@@ -120,7 +120,7 @@ WindSetup::AddSwitch(const char *caption, const char *help,
 {
   /* a tap on the label selects the row.  A tap on the switch flips
      it.  Close is what keeps the four switches. */
-  list->AddItem(caption, [this, &field]{
+  list->AddItem(caption, [&field]{
     field = !field;
   }, {.toggle = true, .checked = checked, .help = help});
 }

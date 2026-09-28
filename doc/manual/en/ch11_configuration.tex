@@ -528,18 +528,17 @@ This page allows glide computer algorithms to be configured.
 %%%%%%%%%%%%%%%%%%
 \section{Glide Computer / Wind} \label{sec:wind}
 
-This page sets the base for wind computations.
+Circling wind, ZigZag wind and External wind. They are the same
+switches as in the wind dialogue (Section~\ref{sec:wind-setup}). The
+configuration dialogue keeps them when it closes. The wind vector and
+trail drift stay in the wind dialogue.
 
 \begin{description}
-\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
-  automatic wind algorithm. \\
-  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate. \\
-  {\bf Circling}: Circling mode requires only a GPS source. \\
-  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
-  {\bf Both}:  Uses Circling and ZigZag.
-\item[Prefere external wind]  If enabled, the wind vector received from external
-  devices overrides XCSoar's internal wind calculation.
+\item[Circling wind]  \label{conf:autowind} Estimate the wind vector while
+  circling. Requires only a GPS.
+\item[ZigZag wind]  Estimate the wind vector during glides. Requires an
+  airspeed sensor.
+\item[External wind]  Accept wind estimates from other instruments.
 \end{description}
 
 

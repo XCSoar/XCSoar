@@ -204,6 +204,9 @@ Version 7.46 - not yet released
   - show no wind in the T Next Leg comment when the box is blank
     because wind is not available
 * ui
+  - show the configuration menu and its pages as the same list as
+    Wind Settings. A group opens its pages. A page scrolls only
+    when the rows do not fit
   - show a floating dialog's title as a heading on the page, in line
     with the contents. A dialog that fills the screen keeps a title
     bar
@@ -240,6 +243,9 @@ Version 7.46 - not yet released
     shows a No dump time badge, and a max cruise speed of zero shows
     a No max cruise speed badge. WeGlide is one row: the aircraft
     name with its type number, or a No WeGlide type badge when unset
+  - show Circling wind, ZigZag wind and External wind in
+    configuration as the same switches as Wind Settings. They are
+    kept when the configuration dialogue closes
   - show Wind Settings as a floating list. The source of the current
     wind is the first row and cannot be changed, with speed and
     direction under it. A tap on the label selects the row; a tap
