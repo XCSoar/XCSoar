@@ -8,6 +8,7 @@ FORM_SOURCES = \
 	$(SRC)/Renderer/TabRenderer.cpp \
 	$(SRC)/Renderer/BoxShadowRenderer.cpp \
 	$(SRC)/Renderer/ButtonRenderer.cpp \
+	$(SRC)/Renderer/ToggleRenderer.cpp \
 	$(SRC)/Renderer/TextButtonRenderer.cpp \
 	$(SRC)/Renderer/SymbolRenderer.cpp \
 	$(SRC)/Renderer/SymbolButtonRenderer.cpp \

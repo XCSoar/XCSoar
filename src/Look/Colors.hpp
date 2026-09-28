@@ -86,6 +86,16 @@ static constexpr Color COLOR_BADGE_DANGER = Color(0xdc, 0x26, 0x26);
 static constexpr Color COLOR_BADGE_SUCCESS = Color(0x15, 0x80, 0x3d);
 
 /**
+ * The switch which shows a boolean.  Green-500 for the track which
+ * is on: lighter than the accent blue of a selected row, and far
+ * enough from it in hue that the two do not read as one color.
+ * Zinc-600 and zinc-300 for the track which is off.
+ */
+static constexpr Color COLOR_TOGGLE_ON = Color(0x22, 0xc5, 0x5e);
+static constexpr Color COLOR_TOGGLE_TRACK_DARK = Color(0x52, 0x52, 0x5b);
+static constexpr Color COLOR_TOGGLE_TRACK_LIGHT = Color(0xd4, 0xd4, 0xd8);
+
+/**
  * Admonition colors for Markdown rendering.
  */
 static constexpr Color COLOR_ADMONITION_IMPORTANT =
