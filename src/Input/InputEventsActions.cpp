@@ -31,7 +31,6 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Computer/Settings.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Error.hpp"
-#include "Dialogs/GroupedListTestDialog.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #ifdef HAVE_HTTP
@@ -344,14 +343,6 @@ InputEvents::eventAnalysis([[maybe_unused]] const char *misc)
                        *backend_components->glide_computer,
                        data_components->airspaces.get(),
                        data_components->terrain.get());
-}
-
-// GroupedListTest
-// Opens the test view which shows a #GroupedListWidget
-void
-InputEvents::eventGroupedListTest([[maybe_unused]] const char *misc)
-{
-  ShowGroupedListTestDialog();
 }
 
 // WaypointDetails
