@@ -60,7 +60,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/FLARM/RangeStatisticsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
-	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
 	$(SRC)/Dialogs/ColorListDialog.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspace.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceDetails.cpp \
