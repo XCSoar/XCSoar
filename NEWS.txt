@@ -208,6 +208,8 @@ Version 7.46 - not yet released
     Tapping it, or pressing enter, flips the setting
   - show Map Item List Settings as a floating list of its two
     switches. OK keeps them
+  - show SkySight Auto update, the cache size, and the cache and
+    pages buttons as the same list, under the layer list
   - show the configuration menu and its pages as the same list as
     Wind Settings. A group opens its pages. A page scrolls only
     when the rows do not fit

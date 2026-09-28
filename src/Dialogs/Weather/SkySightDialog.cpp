@@ -29,7 +29,7 @@
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Widget/MultiSelectListWidget.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
@@ -518,29 +518,69 @@ private:
 
 };
 
-class SkySightOptionsPanel final : public RowFormWidget {
-  enum Controls {
-    AUTO_UPDATE,
-    CACHE_SIZE,
-  };
-
+/**
+ * The strip under the SkySight layer list: Auto update, the cache
+ * size, and the two actions.  The switch is written as soon as it
+ * changes.  The size of this strip is the list, so the layers keep
+ * the rest of the page.
+ */
+class SkySightOptionsPanel final : public GroupedListWidget {
   std::shared_ptr<SkySightClient> skysight;
 
+  unsigned auto_update_item = 0;
+
 public:
+  explicit SkySightOptionsPanel(
+      std::shared_ptr<SkySightClient> _skysight) noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()),
+     skysight(std::move(_skysight)) {}
+
   void UpdateCacheSize() noexcept {
-    if (skysight == nullptr)
+    if (GetItemCount() == 0)
       return;
 
-    const auto usage = skysight->GetCacheUsage();
-    char size[32];
-    FormatByteSize(size, sizeof(size), usage.bytes, false);
+    UpdateValues();
+  }
 
-    StaticString<64> value;
-    value.Format(_("%s in %u files"), size, usage.files);
-    SetText(CACHE_SIZE, value.c_str());
+  /* the shared list asks for the whole screen; this strip is only
+     as tall as its rows, so the layer list keeps the room above */
+  PixelSize GetMinimumSize() const noexcept override {
+    const unsigned height = GetContentHeight();
+    PixelSize size = GroupedListWidget::GetMinimumSize();
+    if (height != 0)
+      size.height = height;
+    return size;
+  }
+
+  PixelSize GetMaximumSize() const noexcept override {
+    return GetMinimumSize();
+  }
+
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override {
+    Fill();
+    GroupedListWidget::Prepare(parent, rc);
+    UpdateCacheSize();
+  }
+
+  void Show(const PixelRect &rc) noexcept override {
+    GroupedListWidget::Show(rc);
+    UpdateCacheSize();
   }
 
 private:
+  void OnAutoUpdate() noexcept {
+    const bool on = IsItemChecked(auto_update_item);
+    auto &weather = CommonInterface::SetComputerSettings().weather;
+    if (!Profile::Update(ProfileKeys::SkySightAutoUpdate,
+                         weather.skysight.auto_update, on))
+      return;
+
+    Profile::Save();
+    if (skysight != nullptr)
+      skysight->OnAutoUpdateChanged();
+  }
+
   void ClearCache() noexcept {
     if (skysight == nullptr)
       return;
@@ -569,42 +609,38 @@ private:
     ShowMessageBox(result.c_str(), _("Clear SkySight cache"), MB_OK);
   }
 
-public:
-  explicit SkySightOptionsPanel(std::shared_ptr<SkySightClient> _skysight) noexcept
-    :RowFormWidget(UIGlobals::GetDialogLook()),
-     skysight(std::move(_skysight)) {}
+  void Fill() noexcept {
+    const bool auto_update =
+      CommonInterface::GetComputerSettings().weather.skysight.auto_update;
 
-  void Prepare([[maybe_unused]] ContainerWindow &parent,
-               [[maybe_unused]] const PixelRect &rc) noexcept override {
-    const auto &settings =
-      CommonInterface::GetComputerSettings().weather.skysight;
-    AddBoolean(
-      C_("Setting", "Auto update"),
-      _("Automatically download missing or newer SkySight data for the "
-        "current map page. Manual preload remains available."),
-      settings.auto_update);
-    GetControl(AUTO_UPDATE).GetDataField()->SetOnModified([this] {
-      auto &weather = CommonInterface::SetComputerSettings().weather;
-      if (SaveValue(AUTO_UPDATE, ProfileKeys::SkySightAutoUpdate,
-                    weather.skysight.auto_update)) {
-        Profile::Save();
-        if (skysight != nullptr)
-          skysight->OnAutoUpdateChanged();
-      }
-    });
+    AddGroup();
 
-    AddReadOnly(C_("Setting", "Cache"),
-                _("Total disk space used by the SkySight cache folder."));
-    UpdateCacheSize();
-    AddButton(C_("Button", "Clear downloaded data"), [this] { ClearCache(); });
+    auto_update_item = GetItemCount();
+    AddItem(C_("Setting", "Auto update"), [this]{ OnAutoUpdate(); },
+            {.toggle = true, .checked = auto_update,
+             .help = _("Automatically download missing or newer SkySight "
+                       "data for the current map page. Manual preload "
+                       "remains available.")});
+
+    AddValue(C_("Setting", "Cache"),
+             _("Total disk space used by the SkySight cache folder."),
+             [this](ValueState &state) {
+               if (skysight == nullptr)
+                 return;
+
+               const auto usage = skysight->GetCacheUsage();
+               char size[32];
+               FormatByteSize(size, sizeof(size), usage.bytes, false);
+
+               StaticString<64> value;
+               value.Format(_("%s in %u files"), size, usage.files);
+               state.text = value.c_str();
+             });
+
+    AddButton(C_("Button", "Clear downloaded data"), [this]{ ClearCache(); });
     AddButton(C_("Button", "Pages setup"), [] {
       WeatherOverlayDraft::OpenPagesConfig();
     });
-  }
-
-  void Show(const PixelRect &rc) noexcept override {
-    RowFormWidget::Show(rc);
-    UpdateCacheSize();
   }
 };
 
