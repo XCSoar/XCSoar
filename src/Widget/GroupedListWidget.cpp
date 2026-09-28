@@ -436,6 +436,9 @@ private:
     /** only for Type::ITEM */
     Callback callback{};
 
+    /** only for Type::ITEM: refreshes the value without rebuilding */
+    GroupedListWidget::ValueCallback value_callback{};
+
     /** only for Type::ITEM: draw an arrow at the right edge */
     bool chevron = false;
 
@@ -783,6 +786,11 @@ public:
   void SetCursorByIndex(unsigned i) noexcept;
 
   void SetItemChecked(unsigned i, bool checked) noexcept;
+
+  bool UpdateValues() noexcept;
+
+  [[nodiscard]]
+  unsigned PreferredTextWidth() const noexcept;
 
   [[gnu::pure]]
   bool IsItemChecked(unsigned i) const noexcept;
