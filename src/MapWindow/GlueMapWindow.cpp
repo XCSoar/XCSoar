@@ -95,9 +95,25 @@ GlueMapWindow::SetUIState(const UIState &new_value) noexcept
 #ifdef ENABLE_OPENGL
   ReadUIState(new_value);
 #else
-  const std::lock_guard lock{next_mutex};
-  next_ui_state = new_value;
+  {
+    const std::lock_guard lock{next_mutex};
+    next_ui_state = new_value;
+  }
 #endif
+
+  page_indicator_count = new_value.pages.special_page.IsDefined()
+    ? 0
+    : new_value.page_indicator_count;
+  page_indicator_index = new_value.pages.current_index;
+
+  if (new_value.page_indicator_time != page_indicator_time) {
+    page_indicator_time = new_value.page_indicator_time;
+    OnPageIndicatorTimer();
+
+    /* the page indicator is painted over the buffered map, which need
+       not be rendered again for it */
+    PaintWindow::Invalidate();
+  }
 }
 
 void
