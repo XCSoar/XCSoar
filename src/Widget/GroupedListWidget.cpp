@@ -1580,6 +1580,15 @@ private:
 
 protected:
   /* virtual methods from class Window */
+  /**
+   * Like #ListControl: while this list has a scroll bar, a surrounding
+   * #VScrollPanel must not capture the drag after our OnMouseDown, or
+   * swipes never reach OnMouseMove here.
+   */
+  bool HandlesDragging() const noexcept override {
+    return scroll_bar.IsDefined();
+  }
+
   void OnDestroy() noexcept override;
   void OnResize(PixelSize new_size) noexcept override;
   void OnSetFocus() noexcept override;
