@@ -26,6 +26,16 @@ private:
   bool fitting = false;
 
   /**
+   * Set by the floating-list code, which the debug tools do not
+   * link.  Null leaves a fitted dialog where it is.
+   */
+  static void (*layout_refit)(WidgetDialog &dialog,
+                              const PixelRect &rc);
+
+  static void RefitLayout(WidgetDialog &dialog,
+                          const PixelRect &rc) noexcept;
+
+  /**
    * Client width asked for by FitToList().  Zero means this dialog
    * is not sized to a list.
    */
