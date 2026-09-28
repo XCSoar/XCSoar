@@ -72,6 +72,19 @@ struct SpeedVector {
   SpeedVector Reciprocal() const noexcept {
     return SpeedVector(bearing.Reciprocal(), norm);
   }
+
+  /**
+   * Return the component of this vector along the given direction,
+   * e.g. the velocity made good (VMG) towards a target when passed
+   * the bearing to it.
+   *
+   * @return the component [m/s]; the full norm along the vector's
+   * own bearing, zero at right angles to it and negative against it
+   */
+  [[gnu::pure]]
+  double ComponentAlong(Angle direction) const noexcept {
+    return norm * (direction - bearing).cos();
+  }
 };
 
 static_assert(std::is_trivial<SpeedVector>::value, "type is not trivial");
