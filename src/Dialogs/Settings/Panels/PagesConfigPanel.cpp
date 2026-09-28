@@ -96,7 +96,8 @@ GetInfoBoxesCaption(const PageLayout::InfoBoxConfig &config) noexcept
  * @return the text, or nullptr if the overlay has none
  */
 static const char *
-GetOverlayDetail(const PageLayout &value, StaticString<64> &buffer) noexcept
+GetOverlayDetail(const PageLayout &value,
+                 [[maybe_unused]] StaticString<64> &buffer) noexcept
 {
   if (!value.IsMapMain())
     return nullptr;
