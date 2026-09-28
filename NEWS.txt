@@ -215,6 +215,9 @@ Version 7.46 - not yet released
   - show the XC Therm weather page as the same list: the layer
     to download, its status, and the time and altitude of the
     current page
+  - show Edit device as the same list. The port still opens the
+    scanner, and the other rows appear only when that port uses
+    them
   - show the configuration menu and its pages as the same list as
     Wind Settings. A group opens its pages. A page scrolls only
     when the rows do not fit

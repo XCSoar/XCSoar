@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "Widget/RowFormWidget.hpp"
-#include "Form/DataField/Listener.hpp"
+#include "Widget/GroupedListWidget.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Device/Config.hpp"
 
 #include <cassert>
 
-class DeviceEditWidget : public RowFormWidget, DataFieldListener {
+class DeviceEditWidget : public GroupedListWidget {
 public:
   struct Listener {
     virtual void OnModified(DeviceEditWidget &widget) noexcept = 0;
@@ -18,7 +18,20 @@ public:
 private:
   DeviceConfig config;
 
+  /** the values this page was opened with, so Save() can ignore a
+      row which the chosen port does not use */
+  DeviceConfig baseline;
+
+  /** the port scanner edits this field; the list only shows it */
+  DataFieldEnum port_df;
+
   Listener *listener = nullptr;
+
+  unsigned passthrough_item = 0;
+  unsigned sync_from_item = 0;
+  unsigned sync_to_item = 0;
+  unsigned send_position_item = 0;
+  unsigned k6bt_item = 0;
 
 public:
   DeviceEditWidget(const DeviceConfig &_config) noexcept;
@@ -46,6 +59,9 @@ public:
   bool Save(bool &changed) noexcept override;
 
 private:
-  /* virtual methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
+  void Fill() noexcept;
+  void Notify() noexcept;
+
+  void PickPort() noexcept;
+  void PickDriver(bool second) noexcept;
 };

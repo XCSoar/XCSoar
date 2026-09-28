@@ -4,13 +4,13 @@
 #include "DeviceEditWidget.hpp"
 #include "PortDataField.hpp"
 #include "PortPicker.hpp"
+#include "Dialogs/GroupedListPicker.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "UIGlobals.hpp"
 #include "util/Compiler.h"
 #include "util/NumberParser.hpp"
+#include "util/StringAPI.hxx"
 #include "Language/Language.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/String.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 #include "Interface.hpp"
@@ -21,262 +21,154 @@
 #include "Android/BluetoothHelper.hpp"
 #endif
 
-enum ControlIndex {
-  Port, EngineTypes, BaudRate, BulkBaudRate,
-  IP_ADDRESS,
-  TCPPort,
-  SpectatePath,
-  OwnCallsign,
-  I2CBus, I2CAddr, PressureUsage, Driver, UseSecondDriver, SecondDriver,
-  SyncFromDevice, SyncToDevice, SendPosition, PolarSyncMode,
-  K6Bt,
+#include <algorithm>
+#include <span>
+#include <vector>
+
+namespace {
+
+struct IdChoice {
+  unsigned id;
+  const char *caption;
 };
 
-static void
-FillBaudRates(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("1200", 1200);
-  dfe.addEnumText("2400", 2400);
-  dfe.addEnumText("4800", 4800);
-  dfe.addEnumText("9600", 9600);
-  dfe.addEnumText("19200", 19200);
-  dfe.addEnumText("38400", 38400);
-  dfe.addEnumText("57600", 57600);
-  dfe.addEnumText("115200", 115200);
-  dfe.addEnumText("230400", 230400);
-  dfe.addEnumText("256000", 256000);
-  dfe.addEnumText("460800", 460800);
-  dfe.addEnumText("500000", 500000);
-  dfe.addEnumText("921600", 921600);
-  dfe.addEnumText("1000000", 1000000);
-}
+static constexpr IdChoice baud_rates[] = {
+  {1200, "1200"},
+  {2400, "2400"},
+  {4800, "4800"},
+  {9600, "9600"},
+  {19200, "19200"},
+  {38400, "38400"},
+  {57600, "57600"},
+  {115200, "115200"},
+  {230400, "230400"},
+  {256000, "256000"},
+  {460800, "460800"},
+  {500000, "500000"},
+  {921600, "921600"},
+  {1000000, "1000000"},
+};
 
-static void
-FillTCPPorts(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("55278 (Condor UDP)", 55278);
-  dfe.addEnumText("4353", 4353);
-  dfe.addEnumText("10110", 10110);
-  dfe.addEnumText("4352", 4352);
-  dfe.addEnumText("2000", 2000);
-  dfe.addEnumText("4000", 4000);
-  dfe.addEnumText("23", 23);
-  dfe.addEnumText("8880", 8880);
-  dfe.addEnumText("8881", 8881);
-  dfe.addEnumText("8882", 8882);
-}
+static constexpr IdChoice bulk_rates[] = {
+  {0, "Default"},
+  {1200, "1200"},
+  {2400, "2400"},
+  {4800, "4800"},
+  {9600, "9600"},
+  {19200, "19200"},
+  {38400, "38400"},
+  {57600, "57600"},
+  {115200, "115200"},
+  {230400, "230400"},
+  {256000, "256000"},
+  {460800, "460800"},
+  {500000, "500000"},
+  {921600, "921600"},
+  {1000000, "1000000"},
+};
 
-static void
-FillI2CBus(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("0", 0U);
-  dfe.addEnumText("1", 1U);
-  dfe.addEnumText("2", 2U);
-}
+static constexpr IdChoice tcp_ports[] = {
+  {55278, "55278 (Condor UDP)"},
+  {4353, "4353"},
+  {10110, "10110"},
+  {4352, "4352"},
+  {2000, "2000"},
+  {4000, "4000"},
+  {23, "23"},
+  {8880, "8880"},
+  {8881, "8881"},
+  {8882, "8882"},
+};
 
-/* Only lists possible addresses of supported devices */
-static void
-FillI2CAddr(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("0x76 (MS5611)", 0x76);
-  dfe.addEnumText("0x77 (BMP085 and MS5611)", 0x77);
-//  dfe.addEnumText("0x52 (Nunchuck)", 0x52); Is implied by device, no choice
-//  dfe.addEnumText("0x69 (MPU6050)", 0x69); Is implied by device, no choice
-//  dfe.addEnumText("0x1e (HMC5883)", 0x1e); Is implied by device, no choice
-}
+static constexpr IdChoice i2c_buses[] = {
+  {0, "0"},
+  {1, "1"},
+  {2, "2"},
+};
 
-static void
-FillPress(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("Static & Vario", (unsigned)DeviceConfig::PressureUse::STATIC_WITH_VARIO);
-  dfe.addEnumText("Static", (unsigned)DeviceConfig::PressureUse::STATIC_ONLY);
-  dfe.addEnumText("TE probe (compensated vario)", (unsigned)DeviceConfig::PressureUse::TEK_PRESSURE);
-  dfe.addEnumText("Pitot (airspeed)", (unsigned)DeviceConfig::PressureUse::PITOT);
-}
+static constexpr IdChoice i2c_addrs[] = {
+  {0x76, "0x76 (MS5611)"},
+  {0x77, "0x77 (BMP085 and MS5611)"},
+};
 
-/**
- * The user can choose from the following engine types:
- * None.
- * 2S1I, 2-stroke one ignition per revolution.
- * 2S2I, 2-stroke two ignitions per revolution.
- * 4S1I, 4-stroke one ignition per revolution.
-*/
-static void
-FillEngineType(DataFieldEnum &dfe) noexcept
-{
-  dfe.addEnumText("None", static_cast<unsigned>(DeviceConfig::EngineType::NONE));
-  dfe.addEnumText("2S1I", static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_1_IGN));
-  dfe.addEnumText("2S2I", static_cast<unsigned>(DeviceConfig::EngineType::TWO_STROKE_2_IGN));
-  dfe.addEnumText("4S1I", static_cast<unsigned>(DeviceConfig::EngineType::FOUR_STROKE_1_IGN));
-}
+static constexpr IdChoice pressure_uses[] = {
+  {unsigned(DeviceConfig::PressureUse::STATIC_WITH_VARIO),
+   "Static & Vario"},
+  {unsigned(DeviceConfig::PressureUse::STATIC_ONLY), "Static"},
+  {unsigned(DeviceConfig::PressureUse::TEK_PRESSURE),
+   "TE probe (compensated vario)"},
+  {unsigned(DeviceConfig::PressureUse::PITOT), "Pitot (airspeed)"},
+};
 
-static void
-FillPolarSync(DataFieldEnum &dfe,
-              bool can_receive, bool can_send) noexcept
+static constexpr IdChoice engine_types[] = {
+  {unsigned(DeviceConfig::EngineType::NONE), "None"},
+  {unsigned(DeviceConfig::EngineType::TWO_STROKE_1_IGN), "2S1I"},
+  {unsigned(DeviceConfig::EngineType::TWO_STROKE_2_IGN), "2S2I"},
+  {unsigned(DeviceConfig::EngineType::FOUR_STROKE_1_IGN), "4S1I"},
+};
+
+[[gnu::pure]]
+static const char *
+IdCaption(std::span<const IdChoice> list, unsigned id) noexcept
 {
-  dfe.ClearChoices();
-  dfe.addEnumText(_("Off"),
-                  static_cast<unsigned>(DeviceConfig::PolarSync::OFF));
-  if (can_receive)
-    dfe.addEnumText(_("Receive from device"),
-                    static_cast<unsigned>(DeviceConfig::PolarSync::RECEIVE));
-  if (can_send)
-    dfe.addEnumText(_("Send to device"),
-                    static_cast<unsigned>(DeviceConfig::PolarSync::SEND));
+  for (const auto &choice : list)
+    if (choice.id == id)
+      return choice.caption;
+
+  return nullptr;
 }
 
 static bool
-EditPortCallback(const char *caption, DataField &df,
-                 [[maybe_unused]] const char *help_text) noexcept
+PickId(const char *caption, const char *help,
+       std::span<const IdChoice> list, unsigned &value) noexcept
 {
-  return PortPicker((DataFieldEnum &)df, caption);
+  std::vector<PickerChoice> choices;
+  choices.reserve(list.size());
+
+  int current = -1;
+  for (unsigned i = 0; i < list.size(); ++i) {
+    choices.push_back({list[i].caption});
+    if (list[i].id == value)
+      current = int(i);
+  }
+
+  const int picked = PickChoice(caption, help, choices, current);
+  if (picked < 0 || list[picked].id == value)
+    return false;
+
+  value = list[picked].id;
+  return true;
 }
 
-DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
-  :RowFormWidget(UIGlobals::GetDialogLook()),
-   config(_config) {}
-
-void
-DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
+template<std::size_t N>
+static bool
+EditText(StaticString<N> &value, const char *caption) noexcept
 {
-  config = _config;
+  StaticString<N> edited = value;
+  if (!TextEntryDialog(edited.data(), edited.capacity(), caption))
+    return false;
 
-  if (config.port_type == DeviceConfig::PortType::DISABLED)
-    /* if the user configures a new device, forget the old "enabled"
-       flag and re-enable the device */
-    config.enabled = true;
+  if (StringIsEqual(edited, value))
+    return false;
 
-  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE)
-    config.ApplySpectateDefaults();
-
-  WndProperty &port_control = GetControl(Port);
-  DataFieldEnum &port_df = *(DataFieldEnum *)port_control.GetDataField();
-  SetPort(port_df, config);
-  port_control.RefreshDisplay();
-
-  LoadValueEnum(BaudRate, config.baud_rate);
-  LoadValueEnum(BulkBaudRate, config.bulk_baud_rate);
-  LoadValueEnum(IP_ADDRESS, config.ip_address);
-  LoadValueEnum(TCPPort, config.tcp_port);
-  LoadValue(SpectatePath, config.path);
-  LoadValue(OwnCallsign, config.port_name);
-  LoadValueEnum(I2CBus, config.i2c_bus);
-  LoadValueEnum(I2CAddr, config.i2c_addr);
-  LoadValueEnum(PressureUsage, config.press_use);
-  LoadValueEnum(Driver, config.driver_name);
-  LoadValue(SyncFromDevice, config.sync_from_device);
-  LoadValue(SyncToDevice, config.sync_to_device);
-  LoadValue(SendPosition, config.send_position);
-  LoadValueEnum(PolarSyncMode, config.polar_sync);
-  LoadValue(K6Bt, config.k6bt);
-  LoadValueEnum(EngineTypes, config.engine_type);
-
-  UpdateVisibilities();
+  value = edited;
+  return true;
 }
 
 [[gnu::pure]]
-static bool
-SupportsBulkBaudRate(const DataField &df) noexcept
+static const DeviceRegister &
+DriverOf(const char *name) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->SupportsBulkBaudRate();
+  return *FindDriverByName(name != nullptr ? name : "");
 }
 
 [[gnu::pure]]
-static bool
-CanReceiveSettings(const DataField &df) noexcept
+static const char *
+DriverLabel(const DeviceRegister &driver) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanReceiveSettings();
-}
-
-[[gnu::pure]]
-static bool
-CanSendSettings(const DataField &df) noexcept
-{
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendSettings();
-}
-
-[[gnu::pure]]
-static bool
-CanSendPosition(const DataField &df) noexcept
-{
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendPosition();
-}
-
-[[gnu::pure]]
-static bool
-CanPassThrough(const DataField &df) noexcept
-{
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->HasPassThrough();
-}
-
-[[gnu::pure]]
-static bool
-CanReceivePolar(const DataField &df) noexcept
-{
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanReceivePolar();
-}
-
-[[gnu::pure]]
-static bool
-CanSendPolar(const DataField &df) noexcept
-{
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendPolar();
+  return driver.display_name != nullptr
+    ? driver.display_name
+    : driver.name;
 }
 
 /**
@@ -305,208 +197,95 @@ ShowsEngineType(DeviceConfig::PortType type,
   return false;
 }
 
-void
-DeviceEditWidget::UpdateVisibilities() noexcept
+struct Shown {
+  bool baud;
+  bool bulk;
+  bool ip;
+  bool tcp;
+  bool spectate;
+  bool i2c_bus;
+  bool i2c_addr;
+  bool pressure;
+  bool driver;
+  bool passthrough;
+  bool second_driver;
+  bool sync_from;
+  bool sync_to;
+  bool send_position;
+  bool polar;
+  bool receive_polar;
+  bool send_polar;
+  bool k6bt;
+  bool engine;
+};
+
+[[gnu::pure]]
+static Shown
+WhatIsShown(const DeviceConfig &config,
+            const char *port_string) noexcept
 {
-  const auto &port_df = (const DataFieldEnum &)GetDataField(Port);
-  const DeviceConfig::PortType type = GetPortType(port_df);
+  const auto type = config.port_type;
+  const auto &driver = DriverOf(config.driver_name);
+  const bool uses_driver = DeviceConfig::UsesDriver(type);
   const bool maybe_bluetooth =
-    DeviceConfig::MaybeBluetooth(type, port_df.GetAsString());
-  const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
-  const bool uses_speed = DeviceConfig::UsesSpeed(type) || k6bt;
-  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
-  const auto engine_type =
-    DeviceConfig::EngineType(engine_df.GetValue());
-  const bool maybe_engine_sensor =
-    ShowsEngineType(type, engine_type, port_df.GetAsString());
+    DeviceConfig::MaybeBluetooth(type, port_string);
+  const bool can_pass = driver.HasPassThrough();
 
-  SetRowAvailable(BaudRate, uses_speed);
-  SetRowAvailable(BulkBaudRate, uses_speed &&
-                  DeviceConfig::UsesDriver(type));
-  SetRowVisible(BulkBaudRate, uses_speed &&
-                DeviceConfig::UsesDriver(type) &&
-                SupportsBulkBaudRate(GetDataField(Driver)));
-  SetRowAvailable(IP_ADDRESS, DeviceConfig::UsesIPAddress(type));
-  SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
-  SetRowAvailable(SpectatePath, type == DeviceConfig::PortType::SPECTATE_FILE);
-  SetRowAvailable(OwnCallsign, type == DeviceConfig::PortType::SPECTATE_FILE);
-  SetRowAvailable(I2CBus, DeviceConfig::UsesI2C(type));
-  SetRowAvailable(I2CAddr, DeviceConfig::UsesI2C(type) &&
-                type != DeviceConfig::PortType::NUNCHUCK);
-  SetRowAvailable(PressureUsage, DeviceConfig::IsPressureSensor(type));
-  SetRowVisible(Driver, DeviceConfig::UsesDriver(type));
-
-  SetRowVisible(UseSecondDriver, DeviceConfig::UsesDriver(type)
-                && CanPassThrough(GetDataField(Driver)));
-  SetRowVisible(SecondDriver, DeviceConfig::UsesDriver(type)
-                && CanPassThrough(GetDataField(Driver))
-                && GetValueBoolean(UseSecondDriver));
-
-  const bool can_receive = CanReceiveSettings(GetDataField(Driver));
-  const bool can_send = CanSendSettings(GetDataField(Driver));
-  const bool can_send_position = CanSendPosition(GetDataField(Driver));
-  SetRowVisible(SyncFromDevice, DeviceConfig::UsesDriver(type) &&
-                can_receive);
-  SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
-                can_send);
-  SetRowVisible(SendPosition, DeviceConfig::UsesDriver(type) &&
-                can_send_position);
-  const bool can_receive_polar = CanReceivePolar(GetDataField(Driver));
-  const bool can_send_polar = CanSendPolar(GetDataField(Driver));
-  const bool polar_row_applicable = DeviceConfig::UsesDriver(type) &&
-                                    (can_receive_polar || can_send_polar);
-  /* Hide when the driver does not register polar receive/send capability. */
-  SetRowAvailable(PolarSyncMode, polar_row_applicable);
-  SetRowVisible(PolarSyncMode, polar_row_applicable);
-  if (can_receive_polar || can_send_polar) {
-    auto &polar_df = (DataFieldEnum &)GetDataField(PolarSyncMode);
-    const auto prev = polar_df.GetValue();
-    FillPolarSync(polar_df, can_receive_polar, can_send_polar);
-    polar_df.SetValue(prev);
-  }
-  SetRowAvailable(K6Bt, maybe_bluetooth);
-  SetRowAvailable(EngineTypes, maybe_engine_sensor);
+  Shown shown{};
+  shown.baud = DeviceConfig::UsesSpeed(type) ||
+    (maybe_bluetooth && config.k6bt);
+  shown.bulk = shown.baud && uses_driver && driver.SupportsBulkBaudRate();
+  shown.ip = DeviceConfig::UsesIPAddress(type);
+  shown.tcp = DeviceConfig::UsesTCPPort(type);
+  shown.spectate = type == DeviceConfig::PortType::SPECTATE_FILE;
+  shown.i2c_bus = DeviceConfig::UsesI2C(type);
+  shown.i2c_addr = shown.i2c_bus &&
+    type != DeviceConfig::PortType::NUNCHUCK;
+  shown.pressure = DeviceConfig::IsPressureSensor(type);
+  shown.driver = uses_driver;
+  shown.passthrough = uses_driver && can_pass;
+  shown.second_driver = shown.passthrough && config.use_second_device;
+  shown.sync_from = uses_driver && driver.CanReceiveSettings();
+  shown.sync_to = uses_driver && driver.CanSendSettings();
+  shown.send_position = uses_driver && driver.CanSendPosition();
+  shown.receive_polar = uses_driver && driver.CanReceivePolar();
+  shown.send_polar = uses_driver && driver.CanSendPolar();
+  shown.polar = shown.receive_polar || shown.send_polar;
+  shown.k6bt = maybe_bluetooth;
+  shown.engine = ShowsEngineType(type, config.engine_type, port_string);
+  return shown;
 }
 
-void
-DeviceEditWidget::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+static DeviceConfig::PolarSync
+ShownPolar(DeviceConfig::PolarSync mode,
+           bool receive, bool send) noexcept
 {
-  RowFormWidget::Prepare(parent, rc);
+  if (mode == DeviceConfig::PolarSync::RECEIVE && receive)
+    return mode;
 
-  DataFieldEnum *port_df = new DataFieldEnum(this);
-  FillPorts(*port_df, config);
-  auto *port_control = Add(_("Port"), nullptr, port_df);
-  port_control->SetEditCallback(EditPortCallback);
+  if (mode == DeviceConfig::PolarSync::SEND && send)
+    return mode;
 
-  DataFieldEnum *engine_type_df = new DataFieldEnum(this);
-  FillEngineType(*engine_type_df);
-  engine_type_df->SetValue(config.engine_type);
-  Add(_("Engine Type"), nullptr, engine_type_df);
+  return DeviceConfig::PolarSync::OFF;
+}
 
-  DataFieldEnum *baud_rate_df = new DataFieldEnum(this);
-  FillBaudRates(*baud_rate_df);
-  baud_rate_df->SetValue(config.baud_rate);
-  Add(_("Baud rate"), nullptr, baud_rate_df);
+[[gnu::pure]]
+static const char *
+PolarCaption(DeviceConfig::PolarSync mode) noexcept
+{
+  switch (mode) {
+  case DeviceConfig::PolarSync::RECEIVE:
+    return _("Receive from device");
 
-  DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(this);
-  bulk_baud_rate_df->addEnumText("Default", 0u);
-  FillBaudRates(*bulk_baud_rate_df);
-  bulk_baud_rate_df->SetValue(config.bulk_baud_rate);
-  Add(_("Bulk baud rate"),
-      _("The baud rate used for bulk transfers, such as task declaration or flight download."),
-      bulk_baud_rate_df);
+  case DeviceConfig::PolarSync::SEND:
+    return _("Send to device");
 
-  DataFieldString *ip_address_df = new DataFieldString("", this);
-  ip_address_df->SetValue(config.ip_address);
-  Add(_("IP address"), nullptr, ip_address_df);
+  case DeviceConfig::PolarSync::OFF:
+  case DeviceConfig::PolarSync::COUNT:
+    break;
+  }
 
-  DataFieldEnum *tcp_port_df = new DataFieldEnum(this);
-  FillTCPPorts(*tcp_port_df);
-  tcp_port_df->SetValue(config.tcp_port);
-  Add(_("TCP port"), nullptr, tcp_port_df);
-
-  DataFieldString *spectate_path_df = new DataFieldString("", this);
-  spectate_path_df->SetValue(config.path);
-  Add(C_("Setting", "Spectate file"),
-      _("Full path to Condor 3 Spectate.json. "
-        "Default: c:\\condor3\\logs\\spectate.json"),
-      spectate_path_df);
-
-  DataFieldString *own_callsign_df = new DataFieldString("", this);
-  own_callsign_df->SetValue(config.port_name);
-  Add(C_("Setting", "Own callsign"),
-      _("Competition number of your glider in Spectate.json "
-        "(excluded from traffic, used as position reference)."),
-      own_callsign_df);
-
-  DataFieldEnum *i2c_bus_df = new DataFieldEnum(this);
-  FillI2CBus(*i2c_bus_df);
-  i2c_bus_df->SetValue(config.i2c_bus);
-  Add(_("I²C bus"), _("Select the description or bus number that matches your configuration."),
-                      i2c_bus_df);
-
-  DataFieldEnum *i2c_addr_df = new DataFieldEnum(this);
-  FillI2CAddr(*i2c_addr_df);
-  i2c_addr_df->SetValue(config.i2c_addr);
-  Add(_("I²C addr"), _("The I²C address that matches your configuration. "
-                        "This field is not used when your selection in the \"I²C bus\" field is not an I²C bus number. "
-                        "Assume this field is not in use if that doesn\'t make sense to you."),
-                        i2c_addr_df);
-
-  DataFieldEnum *press_df = new DataFieldEnum(this);
-  FillPress(*press_df);
-  press_df->SetValue(config.press_use);
-  Add(_("Pressure use"), _("Select the purpose of this pressure sensor. "
-                           "This sensor measures some pressure. Here you tell the system "
-                           "what pressure this is and what it should be used for."),
-                           press_df);
-
-  DataFieldEnum *driver_df = new DataFieldEnum(this);
-
-  const struct DeviceRegister *driver;
-  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != nullptr; i++)
-    driver_df->addEnumText(driver->name, driver->display_name);
-
-  driver_df->Sort(1);
-  driver_df->SetValue(config.driver_name);
-
-  Add(_("Driver"), nullptr, driver_df);
-
-  // for a passthrough device, offer additional driver
-  AddBoolean(_("Passthrough device"),
-             _("Whether the device has a passed-"
-               "through device connected."),
-             config.use_second_device, this);
-
-  DataFieldEnum *driver2_df = new DataFieldEnum(this);
-  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != nullptr; i++)
-    driver2_df->addEnumText(driver->name, driver->display_name);
-
-  driver2_df->Sort(1);
-  driver2_df->SetValue(config.driver2_name);
-
-  Add(_("Second Driver"), nullptr, driver2_df);
-
-  AddBoolean(_("Sync. from device"),
-             _("Tells XCSoar to use settings "
-               "like the MacCready value, bugs and ballast from the device."),
-             config.sync_from_device, this);
-  SetExpertRow(SyncFromDevice);
-
-  AddBoolean(_("Sync. to device"),
-             _("Tells XCSoar to send settings "
-               "like the MacCready value, bugs and ballast to the device."),
-             config.sync_to_device, this);
-  SetExpertRow(SyncToDevice);
-
-  AddBoolean(C_("Setting", "Emit GPGGA/GPRMC"),
-             _("Tells XCSoar to send its current GPS position to the "
-               "device as $GPGGA and $GPRMC sentences. Turn off when "
-               "another GPS source is already feeding the device on "
-               "the same line. Changes take effect after reconnecting "
-               "the device."),
-             config.send_position, this);
-  SetExpertRow(SendPosition);
-
-  DataFieldEnum *polar_sync_df = new DataFieldEnum(this);
-  FillPolarSync(*polar_sync_df,
-                CanReceivePolar(*driver_df),
-                CanSendPolar(*driver_df));
-  polar_sync_df->SetValue(config.polar_sync);
-  Add(_("Polar sync"),
-      _("Synchronize the glide polar between XCSoar and the device "
-        "(LXNAV varios). 'Receive' adopts the polar from the device "
-        "(e.g. for club gliders). 'Send' pushes XCSoar's polar to the "
-        "device."),
-      polar_sync_df);
-
-  AddBoolean("K6Bt",
-             _("Whether you use a K6Bt to connect the device."),
-             config.k6bt, this);
-  SetExpertRow(K6Bt);
-
-  UpdateVisibilities();
+  return _("Off");
 }
 
 /**
@@ -551,7 +330,6 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
   case DeviceConfig::PortType::SERIAL:
   case DeviceConfig::PortType::PTY:
   case DeviceConfig::PortType::ANDROID_USB_SERIAL:
-    /* Serial Port */
     if (new_type == config.port_type &&
         StringIsEqual(config.path, df.GetAsString()))
       return false;
@@ -563,7 +341,6 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
   case DeviceConfig::PortType::RFCOMM:
   case DeviceConfig::PortType::BLE_SERIAL:
   case DeviceConfig::PortType::BLE_SENSOR:
-    /* Bluetooth */
     if (new_type == config.port_type &&
         StringIsEqual(config.bluetooth_mac, df.GetAsString()))
       return false;
@@ -573,7 +350,6 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
     return true;
 
   case DeviceConfig::PortType::IOIOUART:
-    /* IOIO UART */
     if (new_type == config.port_type &&
         config.ioio_uart_id == (unsigned)ParseUnsigned(df.GetAsString()))
       return false;
@@ -588,95 +364,642 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df) noexcept
   return false;
 }
 
+static bool
+AssignString(StaticString<64> &dest, const StaticString<64> &value) noexcept
+{
+  if (StringIsEqual(dest, value))
+    return false;
+
+  dest = value;
+  return true;
+}
+
+static bool
+AssignCallsign(StaticString<128> &dest,
+               const StaticString<128> &value) noexcept
+{
+  if (StringIsEqual(dest, value))
+    return false;
+
+  dest = value;
+  return true;
+}
+
+} // namespace
+
+DeviceEditWidget::DeviceEditWidget(const DeviceConfig &_config) noexcept
+  :GroupedListWidget(UIGlobals::GetDialogLook()),
+   config(_config),
+   baseline(_config),
+   port_df(nullptr)
+{
+  FillPorts(port_df, config);
+}
+
+void
+DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
+{
+  config = _config;
+
+  if (config.port_type == DeviceConfig::PortType::DISABLED)
+    /* if the user configures a new device, forget the old "enabled"
+       flag and re-enable the device */
+    config.enabled = true;
+
+  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE)
+    config.ApplySpectateDefaults();
+
+  baseline = config;
+  SetPort(port_df, config);
+
+  if (GetItemCount() == 0)
+    return;
+
+  SetItemChecked(passthrough_item, config.use_second_device);
+  SetItemChecked(sync_from_item, config.sync_from_device);
+  SetItemChecked(sync_to_item, config.sync_to_device);
+  SetItemChecked(send_position_item, config.send_position);
+  SetItemChecked(k6bt_item, config.k6bt);
+  UpdateVisibilities();
+}
+
+void
+DeviceEditWidget::UpdateVisibilities() noexcept
+{
+  UpdateValues();
+}
+
+void
+DeviceEditWidget::Notify() noexcept
+{
+  if (listener != nullptr)
+    listener->OnModified(*this);
+}
+
+void
+DeviceEditWidget::PickPort() noexcept
+{
+  if (!PortPicker(port_df, _("Port")))
+    return;
+
+  const auto type = GetPortType(port_df);
+  if (type == DeviceConfig::PortType::SPECTATE_FILE) {
+    if (config.port_type != DeviceConfig::PortType::SPECTATE_FILE)
+      config.path.clear();
+
+    config.ApplySpectateDefaults();
+  }
+
+  FinishPortField(config, port_df);
+  UpdateVisibilities();
+  Notify();
+}
+
+void
+DeviceEditWidget::PickDriver(bool second) noexcept
+{
+  std::vector<const DeviceRegister *> drivers;
+  for (unsigned i = 0;; ++i) {
+    const auto *driver = GetDriverByIndex(i);
+    if (driver == nullptr)
+      break;
+
+    drivers.push_back(driver);
+  }
+
+  if (drivers.size() > 1)
+    std::sort(std::next(drivers.begin()), drivers.end(),
+              [](const DeviceRegister *a, const DeviceRegister *b) {
+                return StringCollate(DriverLabel(*a), DriverLabel(*b)) < 0;
+              });
+
+  std::vector<PickerChoice> choices;
+  choices.reserve(drivers.size());
+
+  const char *selected = second
+    ? config.driver2_name.c_str()
+    : config.driver_name.c_str();
+  int current = -1;
+  for (unsigned i = 0; i < drivers.size(); ++i) {
+    choices.push_back({DriverLabel(*drivers[i])});
+    if (StringIsEqual(drivers[i]->name, selected))
+      current = int(i);
+  }
+
+  const char *caption = second ? _("Second Driver") : _("Driver");
+  const int picked = PickChoice(caption, nullptr, choices, current);
+  if (picked < 0 || StringIsEqual(drivers[picked]->name, selected))
+    return;
+
+  if (second)
+    config.driver2_name = drivers[picked]->name;
+  else {
+    config.driver_name = drivers[picked]->name;
+    const auto &driver = DriverOf(config.driver_name);
+    config.polar_sync = ShownPolar(config.polar_sync,
+                                   driver.CanReceivePolar(),
+                                   driver.CanSendPolar());
+  }
+
+  UpdateVisibilities();
+  Notify();
+}
+
+void
+DeviceEditWidget::Fill() noexcept
+{
+  AddGroup();
+
+  AddItem(_("Port"), [this]{ PickPort(); }, {
+    .chevron = true,
+    .value_callback = [this](ValueState &state) {
+      const char *label = port_df.GetAsDisplayString();
+      state.text = label != nullptr ? label : "";
+    },
+  });
+
+  AddValue(_("Engine Type"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.engine;
+             const char *caption =
+               IdCaption(engine_types, unsigned(config.engine_type));
+             state.text = caption != nullptr ? caption : "None";
+           },
+           [this]{
+             unsigned value = unsigned(config.engine_type);
+             if (!PickId(_("Engine Type"), nullptr, engine_types, value))
+               return;
+
+             config.engine_type = DeviceConfig::EngineType(value);
+             UpdateVisibilities();
+             Notify();
+           });
+
+  AddValue(_("Baud rate"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.baud;
+             const char *caption = IdCaption(baud_rates, config.baud_rate);
+             if (caption != nullptr)
+               state.text = caption;
+             else {
+               StaticString<16> fallback;
+               fallback.Format("%u", config.baud_rate);
+               state.text = fallback.c_str();
+             }
+           },
+           [this]{
+             if (!PickId(_("Baud rate"), nullptr, baud_rates,
+                         config.baud_rate))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("Bulk baud rate"),
+           _("The baud rate used for bulk transfers, such as task "
+             "declaration or flight download."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.bulk;
+             const char *caption =
+               IdCaption(bulk_rates, config.bulk_baud_rate);
+             state.text = caption != nullptr ? caption : "Default";
+           },
+           [this]{
+             if (!PickId(_("Bulk baud rate"),
+                         _("The baud rate used for bulk transfers, such as "
+                           "task declaration or flight download."),
+                         bulk_rates, config.bulk_baud_rate))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("IP address"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.ip;
+             state.text = config.ip_address.c_str();
+           },
+           [this]{
+             if (!EditText(config.ip_address, _("IP address")))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("TCP port"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.tcp;
+             const char *caption = IdCaption(tcp_ports, config.tcp_port);
+             if (caption != nullptr)
+               state.text = caption;
+             else {
+               StaticString<16> fallback;
+               fallback.Format("%u", config.tcp_port);
+               state.text = fallback.c_str();
+             }
+           },
+           [this]{
+             if (!PickId(_("TCP port"), nullptr, tcp_ports, config.tcp_port))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(C_("Setting", "Spectate file"),
+           _("Full path to Condor 3 Spectate.json. "
+             "Default: c:\\condor3\\logs\\spectate.json"),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.spectate;
+             state.text = config.path.c_str();
+           },
+           [this]{
+             if (!EditText(config.path, C_("Setting", "Spectate file")))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(C_("Setting", "Own callsign"),
+           _("Competition number of your glider in Spectate.json "
+             "(excluded from traffic, used as position reference)."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.spectate;
+             state.text = config.port_name.c_str();
+           },
+           [this]{
+             if (!EditText(config.port_name,
+                           C_("Setting", "Own callsign")))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("I²C bus"),
+           _("Select the description or bus number that matches your "
+             "configuration."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.i2c_bus;
+             const char *caption = IdCaption(i2c_buses, config.i2c_bus);
+             state.text = caption != nullptr ? caption : "0";
+           },
+           [this]{
+             if (!PickId(_("I²C bus"),
+                         _("Select the description or bus number that "
+                           "matches your configuration."),
+                         i2c_buses, config.i2c_bus))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("I²C addr"),
+           _("The I²C address that matches your configuration. "
+             "This field is not used when your selection in the \"I²C bus\" "
+             "field is not an I²C bus number. "
+             "Assume this field is not in use if that doesn't make sense "
+             "to you."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.i2c_addr;
+             const char *caption = IdCaption(i2c_addrs, config.i2c_addr);
+             state.text = caption != nullptr ? caption : "";
+           },
+           [this]{
+             if (!PickId(_("I²C addr"),
+                         _("The I²C address that matches your configuration. "
+                           "This field is not used when your selection in "
+                           "the \"I²C bus\" field is not an I²C bus number. "
+                           "Assume this field is not in use if that doesn't "
+                           "make sense to you."),
+                         i2c_addrs, config.i2c_addr))
+               return;
+
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("Pressure use"),
+           _("Select the purpose of this pressure sensor. "
+             "This sensor measures some pressure. Here you tell the system "
+             "what pressure this is and what it should be used for."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.pressure;
+             const char *caption =
+               IdCaption(pressure_uses, unsigned(config.press_use));
+             state.text = caption != nullptr ? caption : "";
+           },
+           [this]{
+             unsigned value = unsigned(config.press_use);
+             if (!PickId(_("Pressure use"),
+                         _("Select the purpose of this pressure sensor. "
+                           "This sensor measures some pressure. Here you "
+                           "tell the system what pressure this is and what "
+                           "it should be used for."),
+                         pressure_uses, value))
+               return;
+
+             config.press_use = DeviceConfig::PressureUse(value);
+             UpdateValues();
+             Notify();
+           });
+
+  AddValue(_("Driver"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.driver;
+             const char *label =
+               FindDriverDisplayName(config.driver_name.c_str());
+             state.text = label != nullptr
+               ? label
+               : config.driver_name.c_str();
+           },
+           [this]{ PickDriver(false); });
+
+  passthrough_item = GetItemCount();
+  AddItem(_("Passthrough device"), [this]{
+    config.use_second_device = IsItemChecked(passthrough_item);
+    UpdateVisibilities();
+    Notify();
+  }, {
+    .toggle = true,
+    .checked = config.use_second_device,
+    .help = _("Whether the device has a passed-"
+              "through device connected."),
+    .value_callback = [this](ValueState &state) {
+      const auto shown = WhatIsShown(config, port_df.GetAsString());
+      state.hidden = !shown.passthrough;
+    },
+  });
+
+  AddValue(_("Second Driver"), nullptr,
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.second_driver;
+             const char *label =
+               FindDriverDisplayName(config.driver2_name.c_str());
+             state.text = label != nullptr
+               ? label : config.driver2_name.c_str();
+           },
+           [this]{ PickDriver(true); });
+
+  sync_from_item = GetItemCount();
+  AddItem(_("Sync. from device"), [this]{
+    config.sync_from_device = IsItemChecked(sync_from_item);
+    UpdateValues();
+    Notify();
+  }, {
+    .toggle = true,
+    .checked = config.sync_from_device,
+    .help = _("Tells XCSoar to use settings "
+              "like the MacCready value, bugs and ballast from the device."),
+    .value_callback = [this](ValueState &state) {
+      const auto shown = WhatIsShown(config, port_df.GetAsString());
+      state.hidden = !shown.sync_from;
+    },
+    .expert = true,
+  });
+
+  sync_to_item = GetItemCount();
+  AddItem(_("Sync. to device"), [this]{
+    config.sync_to_device = IsItemChecked(sync_to_item);
+    UpdateValues();
+    Notify();
+  }, {
+    .toggle = true,
+    .checked = config.sync_to_device,
+    .help = _("Tells XCSoar to send settings "
+              "like the MacCready value, bugs and ballast to the device."),
+    .value_callback = [this](ValueState &state) {
+      const auto shown = WhatIsShown(config, port_df.GetAsString());
+      state.hidden = !shown.sync_to;
+    },
+    .expert = true,
+  });
+
+  send_position_item = GetItemCount();
+  AddItem(C_("Setting", "Emit GPGGA/GPRMC"), [this]{
+    config.send_position = IsItemChecked(send_position_item);
+    UpdateValues();
+    Notify();
+  }, {
+    .toggle = true,
+    .checked = config.send_position,
+    .help = _("Tells XCSoar to send its current GPS position to the "
+              "device as $GPGGA and $GPRMC sentences. Turn off when "
+              "another GPS source is already feeding the device on "
+              "the same line. Changes take effect after reconnecting "
+              "the device."),
+    .value_callback = [this](ValueState &state) {
+      const auto shown = WhatIsShown(config, port_df.GetAsString());
+      state.hidden = !shown.send_position;
+    },
+    .expert = true,
+  });
+
+  AddValue(_("Polar sync"),
+           _("Synchronize the glide polar between XCSoar and the device "
+             "(LXNAV varios). 'Receive' adopts the polar from the device "
+             "(e.g. for club gliders). 'Send' pushes XCSoar's polar to the "
+             "device."),
+           [this](ValueState &state) {
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             state.hidden = !shown.polar;
+             state.text = PolarCaption(ShownPolar(config.polar_sync,
+                                                  shown.receive_polar,
+                                                  shown.send_polar));
+           },
+           [this]{
+             const auto shown = WhatIsShown(config, port_df.GetAsString());
+             std::vector<IdChoice> choices;
+             choices.push_back({unsigned(DeviceConfig::PolarSync::OFF),
+                                _("Off")});
+             if (shown.receive_polar)
+               choices.push_back({
+                 unsigned(DeviceConfig::PolarSync::RECEIVE),
+                 _("Receive from device")});
+             if (shown.send_polar)
+               choices.push_back({
+                 unsigned(DeviceConfig::PolarSync::SEND),
+                 _("Send to device")});
+
+             unsigned value = unsigned(ShownPolar(config.polar_sync,
+                                                  shown.receive_polar,
+                                                  shown.send_polar));
+             if (!PickId(_("Polar sync"),
+                         _("Synchronize the glide polar between XCSoar and "
+                           "the device (LXNAV varios). 'Receive' adopts the "
+                           "polar from the device (e.g. for club gliders). "
+                           "'Send' pushes XCSoar's polar to the device."),
+                         choices, value))
+               return;
+
+             config.polar_sync = DeviceConfig::PolarSync(value);
+             UpdateValues();
+             Notify();
+           });
+
+  k6bt_item = GetItemCount();
+  AddItem("K6Bt", [this]{
+    config.k6bt = IsItemChecked(k6bt_item);
+    UpdateVisibilities();
+    Notify();
+  }, {
+    .toggle = true,
+    .checked = config.k6bt,
+    .help = _("Whether you use a K6Bt to connect the device."),
+    .value_callback = [this](ValueState &state) {
+      const auto shown = WhatIsShown(config, port_df.GetAsString());
+      state.hidden = !shown.k6bt;
+    },
+    .expert = true,
+  });
+}
+
+void
+DeviceEditWidget::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  Fill();
+  GroupedListWidget::Prepare(parent, rc);
+  UpdateValues();
+}
+
 bool
 DeviceEditWidget::Save(bool &_changed) noexcept
 {
+  DeviceConfig out = baseline;
   bool changed = false;
 
-  changed |= FinishPortField(config, (const DataFieldEnum &)GetDataField(Port));
+  changed |= FinishPortField(out, port_df);
 
-  const auto &engine_df = (const DataFieldEnum &)GetDataField(EngineTypes);
-  const auto engine_type = DeviceConfig::EngineType(engine_df.GetValue());
-  if (config.engine_type != DeviceConfig::EngineType::NONE ||
-      ShowsEngineType(config.port_type, engine_type, config.bluetooth_mac))
-    changed |= SaveValueEnum(EngineTypes, config.engine_type);
-
-  if (config.MaybeBluetooth())
-    changed |= SaveValue(K6Bt, config.k6bt);
-
-  if (config.UsesSpeed()) {
-    changed |= SaveValueEnum(BaudRate, config.baud_rate);
-    changed |= SaveValueEnum(BulkBaudRate, config.bulk_baud_rate);
+  if (baseline.engine_type != DeviceConfig::EngineType::NONE ||
+      ShowsEngineType(out.port_type, config.engine_type,
+                      out.bluetooth_mac.c_str())) {
+    if (out.engine_type != config.engine_type) {
+      out.engine_type = config.engine_type;
+      changed = true;
+    }
   }
 
-  if (config.UsesIPAddress())
-    changed |= SaveValue(IP_ADDRESS, config.ip_address);
-
-  if (config.UsesTCPPort())
-    changed |= SaveValueEnum(TCPPort, config.tcp_port);
-
-  if (config.port_type == DeviceConfig::PortType::SPECTATE_FILE) {
-    changed |= SaveValue(SpectatePath, config.path);
-    changed |= SaveValue(OwnCallsign, config.port_name);
+  if (out.MaybeBluetooth() && out.k6bt != config.k6bt) {
+    out.k6bt = config.k6bt;
+    changed = true;
   }
 
-  if (config.UsesI2C()) {
-    changed |= SaveValueEnum(I2CBus, config.i2c_bus);
-    changed |= SaveValueEnum(I2CAddr, config.i2c_addr);
-    changed |= SaveValueEnum(PressureUsage, config.press_use);
+  if (out.UsesSpeed()) {
+    if (out.baud_rate != config.baud_rate) {
+      out.baud_rate = config.baud_rate;
+      changed = true;
+    }
+
+    if (out.bulk_baud_rate != config.bulk_baud_rate) {
+      out.bulk_baud_rate = config.bulk_baud_rate;
+      changed = true;
+    }
   }
 
-  if (config.UsesDriver()) {
-    changed |= SaveValue(Driver, config.driver_name);
+  if (out.UsesIPAddress())
+    changed |= AssignString(out.ip_address, config.ip_address);
 
-    if (CanReceiveSettings(GetDataField(Driver)))
-      changed |= SaveValue(SyncFromDevice, config.sync_from_device);
+  if (out.UsesTCPPort() && out.tcp_port != config.tcp_port) {
+    out.tcp_port = config.tcp_port;
+    changed = true;
+  }
 
-    if (CanSendSettings(GetDataField(Driver)))
-      changed |= SaveValue(SyncToDevice, config.sync_to_device);
+  if (out.port_type == DeviceConfig::PortType::SPECTATE_FILE) {
+    changed |= AssignString(out.path, config.path);
+    changed |= AssignCallsign(out.port_name, config.port_name);
+  }
 
-    if (CanSendPosition(GetDataField(Driver)))
-      changed |= SaveValue(SendPosition, config.send_position);
+  if (out.UsesI2C()) {
+    if (out.i2c_bus != config.i2c_bus) {
+      out.i2c_bus = config.i2c_bus;
+      changed = true;
+    }
 
-    if (CanReceivePolar(GetDataField(Driver)) ||
-        CanSendPolar(GetDataField(Driver)))
-      changed |= SaveValueEnum(PolarSyncMode, config.polar_sync);
+    if (out.i2c_addr != config.i2c_addr) {
+      out.i2c_addr = config.i2c_addr;
+      changed = true;
+    }
 
-    if (CanPassThrough(GetDataField(Driver))) {
-      changed |= SaveValue(UseSecondDriver, config.use_second_device);
-      changed |= SaveValue(SecondDriver, config.driver2_name.buffer(),
-                           config.driver2_name.capacity());
+    if (out.press_use != config.press_use) {
+      out.press_use = config.press_use;
+      changed = true;
+    }
+  }
+
+  if (out.UsesDriver()) {
+    if (!StringIsEqual(out.driver_name, config.driver_name)) {
+      out.driver_name = config.driver_name;
+      changed = true;
+    }
+
+    const auto &driver = DriverOf(out.driver_name);
+    if (driver.CanReceiveSettings() &&
+        out.sync_from_device != config.sync_from_device) {
+      out.sync_from_device = config.sync_from_device;
+      changed = true;
+    }
+
+    if (driver.CanSendSettings() &&
+        out.sync_to_device != config.sync_to_device) {
+      out.sync_to_device = config.sync_to_device;
+      changed = true;
+    }
+
+    if (driver.CanSendPosition() &&
+        out.send_position != config.send_position) {
+      out.send_position = config.send_position;
+      changed = true;
+    }
+
+    if (driver.CanReceivePolar() || driver.CanSendPolar()) {
+      const auto polar = ShownPolar(config.polar_sync,
+                                   driver.CanReceivePolar(),
+                                   driver.CanSendPolar());
+      if (out.polar_sync != polar) {
+        out.polar_sync = polar;
+        changed = true;
+      }
+    }
+
+    if (driver.HasPassThrough()) {
+      if (out.use_second_device != config.use_second_device) {
+        out.use_second_device = config.use_second_device;
+        changed = true;
+      }
+
+      if (!StringIsEqual(out.driver2_name, config.driver2_name)) {
+        out.driver2_name = config.driver2_name;
+        changed = true;
+      }
     }
   }
 
   const auto &basic = CommonInterface::Basic();
   if (basic.sensor_calibration_available) {
-    config.sensor_offset = basic.sensor_calibration_offset;
-    config.sensor_factor = basic.sensor_calibration_factor;
+    out.sensor_offset = basic.sensor_calibration_offset;
+    out.sensor_factor = basic.sensor_calibration_factor;
     changed = true;
   }
 
+  config = out;
   _changed |= changed;
   return true;
-}
-
-void
-DeviceEditWidget::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(Port, df)) {
-    const auto type = GetPortType((const DataFieldEnum &)df);
-    if (type == DeviceConfig::PortType::SPECTATE_FILE) {
-      if (config.port_type != DeviceConfig::PortType::SPECTATE_FILE)
-        config.path.clear();
-      config.ApplySpectateDefaults();
-      LoadValue(SpectatePath, config.path);
-    }
-  }
-
-  if (IsDataField(Port, df) || IsDataField(Driver, df) ||
-      IsDataField(UseSecondDriver, df) || IsDataField(K6Bt, df))
-    UpdateVisibilities();
-
-  if (listener != nullptr)
-    listener->OnModified(*this);
 }
