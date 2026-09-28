@@ -516,6 +516,23 @@ class NativeView extends SurfaceView
       ? rotationListener.getPhysicalOrientation() : 0;
   }
 
+  /**
+   * How far this view still extends into the system swipe-down band.
+   * A view that already starts below the band reports zero.
+   */
+  int getTopGestureClearance() {
+    if (!isShown())
+      return 0;
+
+    if (getWindowToken() == null)
+      return 0;
+
+    final int[] location = new int[2];
+    getLocationOnScreen(location);
+    return Math.max(0,
+                    edgeTouchFilter.getGestureInsetTop() - location[1]);
+  }
+
   static native String onReceiveXCTrackTask(String data);
 
   protected native void runNative(Context context,

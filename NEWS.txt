@@ -1,5 +1,7 @@
 Version 7.46 - not yet released
 * android
+  - on the InfoBox arrange page, lay the cards, the text and
+    the buttons below the area that opens the notification shade
   - target Android 16 so Google Play still accepts updates #2874
   - add the "Stretch InfoBox area" setting (Config → Look → Display,
     expert): pick the screen edges on which the InfoBoxes, gauges,

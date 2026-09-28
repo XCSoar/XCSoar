@@ -26,6 +26,7 @@ jmethodID NativeView::getNetState_method;
 jmethodID NativeView::getWifiIpAddress_method;
 jmethodID NativeView::isAutoRotateEnabled_method;
 jmethodID NativeView::getPhysicalOrientation_method;
+jmethodID NativeView::getTopGestureClearance_method;
 jmethodID NativeView::startMyService_method;
 jmethodID NativeView::launchSAFTreePicker_method;
 jmethodID NativeView::reportSize_method;
@@ -84,6 +85,9 @@ NativeView::Initialise(JNIEnv *env)
 
   getPhysicalOrientation_method =
     env->GetMethodID(cls, "getPhysicalOrientation", "()I");
+
+  getTopGestureClearance_method =
+    env->GetMethodID(cls, "getTopGestureClearance", "()I");
 
   startMyService_method =
     env->GetMethodID(cls, "startMyService", "()V");
