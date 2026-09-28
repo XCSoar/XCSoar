@@ -745,6 +745,10 @@ GlueMapWindow::OnPaint(Canvas &canvas) noexcept
   if (IsPanChromeVisible())
     DrawCrossHairs(canvas);
 
+  /* over the buffered map, so fading it out does not render the whole
+     map again */
+  DrawPageIndicator(canvas);
+
   /* the trail may leave this window (the pointer is captured); under
      OpenGL it is painted over the InfoBoxes, and MainWindow::OnPaint()
      takes care of erasing it afterwards */

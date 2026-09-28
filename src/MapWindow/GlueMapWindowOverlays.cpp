@@ -25,6 +25,14 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Replay/Replay.hpp"
+#include "ui/canvas/Pen.hpp"
+#include "ui/canvas/Brush.hpp"
+
+#ifdef ENABLE_OPENGL
+#include "Asset.hpp"
+#include "Hardware/CPU.hpp"
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
 
 #include <algorithm> // for std::clamp()
 
@@ -88,6 +96,128 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const noexcept
 
   TextInBox(canvas, label, {rc.GetCenter().x, rc.top + Layout::Scale(12)},
             mode, rc);
+}
+
+/**
+ * How long the page indicator is visible after a page switch,
+ * including #PAGE_INDICATOR_FADE_DURATION.
+ */
+static constexpr std::chrono::milliseconds PAGE_INDICATOR_DURATION{2000};
+
+/**
+ * How long the page indicator takes to fade out.
+ */
+static constexpr std::chrono::milliseconds PAGE_INDICATOR_FADE_DURATION{300};
+
+/**
+ * Does the page indicator fade out, or does it just disappear?  Each
+ * step of the fade repaints the map window, which a slow CPU would
+ * only stutter through, and e-paper would only show ghosting.
+ */
+[[gnu::pure]]
+static bool
+PageIndicatorFades() noexcept
+{
+#ifdef ENABLE_OPENGL
+  return !HasEPaper() && !IsSlowCPU();
+#else
+  return false;
+#endif
+}
+
+void
+GlueMapWindow::DrawPageIndicator(Canvas &canvas) const noexcept
+{
+  const unsigned n_pages = page_indicator_count;
+  const unsigned current = page_indicator_index;
+  if (n_pages < 2 || current >= n_pages)
+    return;
+
+  const auto remaining = PAGE_INDICATOR_DURATION -
+    (std::chrono::steady_clock::now() - page_indicator_time);
+  if (remaining <= remaining.zero())
+    return;
+
+  uint8_t opacity = 0xff;
+  if (PageIndicatorFades() && remaining < PAGE_INDICATOR_FADE_DURATION)
+    opacity = uint8_t(0xff * (std::chrono::duration<double>(remaining) /
+                              PAGE_INDICATOR_FADE_DURATION));
+
+  const Color color = ColorWithAlpha(COLOR_BLACK, opacity);
+
+  /* dots of about 2.5 mm, 1.8 mm apart */
+  const unsigned dot = Layout::VptScale(7);
+  const unsigned gap = Layout::VptScale(5);
+  const unsigned height = dot + 2 * Layout::VptScale(5);
+
+  /* the round ends of the pill are half its height wide */
+  const unsigned width = n_pages * dot + (n_pages - 1) * gap + height;
+
+  /* bottom centre, as far from the bottom as the gesture label is from
+     the top (see DrawGesture()); the map scale is on the left, the
+     flight mode icon on the right */
+  const PixelRect rc = GetClientRect();
+  PixelRect pill;
+  pill.left = rc.GetCenter().x - int(width / 2);
+  pill.right = pill.left + int(width);
+  pill.bottom = rc.bottom - int(bottom_margin) -
+    (Layout::Scale(12) - int(Layout::GetTextPadding()));
+  pill.top = pill.bottom - int(height);
+
+  DrawPill(canvas, pill, opacity);
+
+#ifdef ENABLE_OPENGL
+  const ScopeAlphaBlend alpha_blend;
+#endif
+
+  /* the current page is a filled dot, the others are rings: the shape
+     tells them apart, not the colour, which works on e-paper, too */
+  const unsigned pen_width = Layout::ScaleFinePenWidth(1);
+  canvas.Select(Pen(pen_width, color));
+  const Brush brush(color);
+
+  const unsigned radius = (dot - pen_width) / 2;
+  PixelPoint center{pill.left + int(height / 2 + dot / 2),
+                    pill.GetCenter().y};
+
+  for (unsigned i = 0; i < n_pages; ++i) {
+    if (i == current)
+      canvas.Select(brush);
+    else
+      canvas.SelectHollowBrush();
+
+    canvas.DrawCircle(center, radius);
+    center.x += int(dot + gap);
+  }
+}
+
+void
+GlueMapWindow::OnPageIndicatorTimer() noexcept
+{
+  const auto remaining = PAGE_INDICATOR_DURATION -
+    (std::chrono::steady_clock::now() - page_indicator_time);
+
+  if (remaining <= remaining.zero()) {
+    /* remove the page indicator */
+    PaintWindow::Invalidate();
+    return;
+  }
+
+  using Duration = std::chrono::steady_clock::duration;
+  const Duration fade = PageIndicatorFades()
+    ? Duration{PAGE_INDICATOR_FADE_DURATION}
+    : Duration::zero();
+
+  if (remaining > fade) {
+    /* keep it until it starts fading out (or disappears) */
+    page_indicator_timer.Schedule(remaining - fade);
+    return;
+  }
+
+  /* one step of the fade */
+  PaintWindow::Invalidate();
+  page_indicator_timer.Schedule(std::min<Duration>(
+    remaining, std::chrono::milliseconds{40}));
 }
 
 void

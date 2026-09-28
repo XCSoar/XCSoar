@@ -246,6 +246,26 @@ private:
 
   UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
+  /**
+   * Repaints the page indicator while it fades out, and when it
+   * disappears.
+   */
+  UI::Timer page_indicator_timer{[this]{ OnPageIndicatorTimer(); }};
+
+  /**
+   * The UIState::page_indicator_time #page_indicator_timer runs for.
+   * Only used in the main thread.
+   */
+  std::chrono::steady_clock::time_point page_indicator_time{};
+
+  /**
+   * The number of configured pages and the current one, copied from
+   * #UIState for the page indicator.  The count is zero on a "special"
+   * page (e.g. "only map", or panning), which has no position in the
+   * list.  Only used in the main thread.
+   */
+  unsigned page_indicator_count = 0, page_indicator_index = 0;
+
   UI::Notify redraw_notify{[this]{ PartialRedraw(); }};
 
   /**
@@ -414,6 +434,13 @@ private:
   void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const noexcept;
 
+  /**
+   * Draw the position of the current page in the list of configured
+   * pages for a short while after switching pages, over the buffered
+   * map (see OnPaint()).
+   */
+  void DrawPageIndicator(Canvas &canvas) const noexcept;
+
   void SwitchZoomClimb() noexcept;
 
   void SaveDisplayModeScales() noexcept;
@@ -511,6 +538,7 @@ protected:
 
 private:
   void OnMapItemTimer() noexcept;
+  void OnPageIndicatorTimer() noexcept;
 
 #ifdef ENABLE_OPENGL
   void OnKineticTimer() noexcept;

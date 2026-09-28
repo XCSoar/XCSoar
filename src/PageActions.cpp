@@ -78,6 +78,13 @@ namespace PageActions {
   static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
+
+  /**
+   * Let the map show the position of the current page for a short
+   * while.  Call this after switching between configured pages, before
+   * the new #UIState is sent to the map.
+   */
+  static void ShowPageIndicator() noexcept;
 };
 
 const PageLayout &
@@ -470,14 +477,31 @@ PageActions::NextIndex()
 
 
 void
+PageActions::ShowPageIndicator() noexcept
+{
+  const unsigned n_pages = CommonInterface::GetUISettings().pages.n_pages;
+  if (n_pages < 2)
+    return;
+
+  UIState &ui_state = CommonInterface::SetUIState();
+  ui_state.page_indicator_time = std::chrono::steady_clock::now();
+  ui_state.page_indicator_count = n_pages;
+}
+
+void
 PageActions::Next()
 {
   LeavePage();
 
   PagesState &state = CommonInterface::SetUIState().pages;
 
+  const unsigned old_index = state.current_index;
   state.current_index = NextIndex();
   state.special_page.SetUndefined();
+
+  /* not when just returning from a "special" page */
+  if (state.current_index != old_index)
+    ShowPageIndicator();
 
   Update();
   RestoreMapZoom();
@@ -506,8 +530,13 @@ PageActions::Prev()
 
   PagesState &state = CommonInterface::SetUIState().pages;
 
+  const unsigned old_index = state.current_index;
   state.current_index = PrevIndex();
   state.special_page.SetUndefined();
+
+  /* not when just returning from a "special" page */
+  if (state.current_index != old_index)
+    ShowPageIndicator();
 
   Update();
   RestoreMapZoom();
