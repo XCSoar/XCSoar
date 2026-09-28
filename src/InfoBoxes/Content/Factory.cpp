@@ -1227,6 +1227,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentBallast>::Create,
   },
 
+  // e_WP_VMG
+  {
+    N_("Speed VMG"),
+    N_("V VMG"),
+    N_("The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."),
+    IBFHelper<InfoBoxContentSpeedVMG>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
