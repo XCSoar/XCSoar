@@ -209,7 +209,9 @@ Version 7.46 - not yet released
     bar
   - draw the Quick Menu as a grid of buttons
   - show a grouped list's explanation under the selected row, on
-    the page. It eases open so the rows below it can be followed.
+    the page, when the page scrolls or the text does not fit below
+    the settings. When both fit, the explanation stays below the
+    settings. It eases open so the rows below it can be followed.
     Cursor keys open it once the row has stayed, so a quick run
     down the list does not open every row. A row can keep a tap
     on its label as selection only, so the value opens it, and

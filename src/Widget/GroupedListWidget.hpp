@@ -24,8 +24,10 @@ class GroupedListControl;
  *
  * The items of a group are drawn as a card with rounded corners; the
  * caption of a group sits above its card, an optional footer below
- * it.  The explanation of an item is shown under that item while it
- * is selected.  Unlike #ListWidget, every element has its own height:
+ * it.  The explanation of the selected item sits below the settings
+ * when the rows and the text both fit.  When the page scrolls, or
+ * the text does not fit there, it sits under that item instead.
+ * Unlike #ListWidget, every element has its own height:
  * captions and footers are only as tall as their text, while the
  * items keep the height of a comfortable touch target.
  *
