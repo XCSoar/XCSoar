@@ -997,7 +997,10 @@ purposes.
   on takeoff and landing respectively. Disable when flying paragliders to prevent 
   the low ground speeds from triggering the automatic logger.
 \item[NMEA logger*]  Enable the NMEA logger on startup? If this option is disabled, 
-  the NMEA logger can still be started manually.
+  the NMEA logger can still be started manually.  On Android and iOS,
+  the built-in satellite receiver is written to that log as GPRMC and
+  GPGGA sentences when the logger is running and at least four
+  satellites are in use.
 \item[Log book*]  Logs each start and landing.
 \item[Logger ID]  This is the logger registration.
 \end{description}

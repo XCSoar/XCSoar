@@ -31,14 +31,30 @@ FormatGPRMC(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   FormatTime(time_buffer, sizeof(time_buffer), date_time);
   FormatDate(date_buffer, sizeof(date_buffer), date_time);
 
+  /* Empty fields when the value was not measured.  A cleared validity
+     flag can still leave a stale number in the struct. */
+  char speed_buffer[16];
+  char track_buffer[16];
+  if (info.ground_speed_available)
+    snprintf(speed_buffer, sizeof(speed_buffer), "%05.1f",
+             (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS));
+  else
+    speed_buffer[0] = '\0';
+
+  if (info.track_available)
+    snprintf(track_buffer, sizeof(track_buffer), "%05.1f",
+             (double)info.track.Degrees());
+  else
+    track_buffer[0] = '\0';
+
   if (info.time_available && info.location_available) {
     StringFormat(buffer, buffer_size,
-                 "GPRMC,%s,A,%s,%s,%05.1f,%05.1f,%s,%s",
+                 "GPRMC,%s,A,%s,%s,%s,%s,%s,%s",
                  time_buffer,
                  lat_buffer,
                  long_buffer,
-                 (double)Units::ToUserUnit(info.ground_speed, Unit::KNOTS),
-                 (double)info.track.Degrees(),
+                 speed_buffer,
+                 track_buffer,
                  date_buffer,
                  info.variation_available ? var_buffer : ",");
   } else {
@@ -62,16 +78,30 @@ FormatGPGGA(char *buffer, size_t buffer_size, const NMEAInfo &info) noexcept
   FormatLongitude(long_buffer, sizeof(long_buffer), location.longitude);
   FormatTime(time_buffer, sizeof(time_buffer), date_time);
 
+  /* Negative HDOP means unknown.  Altitude is omitted when its
+     validity flag is clear, even if a previous fix left a number. */
+  char hdop_buffer[16];
+  char alt_buffer[16];
+  if (info.gps.hdop >= 0)
+    snprintf(hdop_buffer, sizeof(hdop_buffer), "%.1f", info.gps.hdop);
+  else
+    hdop_buffer[0] = '\0';
+
+  if (info.gps_altitude_available)
+    snprintf(alt_buffer, sizeof(alt_buffer), "%.3f", info.gps_altitude);
+  else
+    alt_buffer[0] = '\0';
+
   if (info.time_available && info.location_available) {
     StringFormat(buffer, buffer_size,
-                 "GPGGA,%s,%s,%s,%u,%02u,%.1f,%.3f,M,,,,0000",
+                 "GPGGA,%s,%s,%s,%u,%02u,%s,%s,M,,,,0000",
                  time_buffer,
                  lat_buffer,
                  long_buffer,
                  (unsigned)info.gps.fix_quality,
                  info.gps.satellites_used_available ? info.gps.satellites_used : 0,
-                 info.gps.hdop,
-                 info.gps_altitude);
+                 hdop_buffer,
+                 alt_buffer);
   } else {
     StringFormat(buffer, buffer_size,
                  "%s",
