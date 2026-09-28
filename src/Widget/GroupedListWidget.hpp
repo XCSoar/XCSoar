@@ -12,6 +12,7 @@
 #include <functional>
 #include <initializer_list>
 #include <memory>
+#include <string>
 #include <tuple>
 
 struct DialogLook;
@@ -192,6 +193,36 @@ public:
     SUCCESS,
   };
 
+  /**
+   * The face of a value row.  #text is copied.  The badge pointers
+   * are copied too, before the call returns.  #help nullptr leaves
+   * the explanation given when the row was added.
+   */
+  struct ValueState {
+    std::string text;
+
+    const char *help = nullptr;
+
+    const char *badge = nullptr;
+
+    BadgeStyle badge_style = BadgeStyle::PRIMARY;
+
+    const char *badge2 = nullptr;
+
+    BadgeStyle badge_style2 = BadgeStyle::PRIMARY;
+
+    bool hidden = false;
+
+    /**
+     * Grey the row out.  Applied only when the row has an action,
+     * so a status row stays as it was added.
+     */
+    bool disabled = false;
+  };
+
+  /** Writes the current face of one row. */
+  using ValueCallback = std::function<void(ValueState &state)>;
+
   /** The contents and the behaviour of a group. */
   struct GroupOptions {
     /**
@@ -367,6 +398,12 @@ public:
      * cursor is on it.
      */
     const char *help = nullptr;
+
+    /**
+     * Called by UpdateValues() to refresh the value, the badges and
+     * whether the row is hidden.  The row stays put.
+     */
+    ValueCallback value_callback;
 
     /**
      * Is this item currently not available?  It is drawn greyed out,
