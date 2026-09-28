@@ -96,6 +96,7 @@ TEST_NAMES = \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
+	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
@@ -1043,6 +1044,12 @@ TEST_THERMALBASE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp
 TEST_THERMALBASE_DEPENDS = GEO MATH THREAD
 $(eval $(call link-program,TestThermalBase,TEST_THERMALBASE))
+
+TEST_SPEED_VECTOR_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSpeedVector.cpp
+TEST_SPEED_VECTOR_DEPENDS = MATH
+$(eval $(call link-program,TestSpeedVector,TEST_SPEED_VECTOR))
 
 TEST_EARTH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
