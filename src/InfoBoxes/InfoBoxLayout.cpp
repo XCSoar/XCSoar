@@ -104,21 +104,24 @@ MakeRightColumn(const InfoBoxLayout::Layout &layout,
 
 InfoBoxLayout::Layout
 InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry,
-                         unsigned scale_title_font) noexcept
+                         unsigned scale_title_font,
+                         PixelSize orientation_size) noexcept
 {
-  const PixelSize screen_size = rc.GetSize();
+  const PixelSize placed = rc.GetSize();
+  if (orientation_size.width == 0 && orientation_size.height == 0)
+    orientation_size = placed;
 
-  geometry = ValidateGeometry(geometry, screen_size);
+  geometry = ValidateGeometry(geometry, orientation_size);
 
   Layout layout;
 
   layout.rc = rc;
   layout.geometry = geometry;
-  layout.landscape = screen_size.width > screen_size.height;
+  layout.landscape = orientation_size.width > orientation_size.height;
   layout.count = geometry_counts[(unsigned)geometry];
   assert(layout.count <= InfoBoxSettings::Panel::MAX_CONTENTS);
 
-  CalcInfoBoxSizes(layout, screen_size, geometry, scale_title_font);
+  CalcInfoBoxSizes(layout, placed, geometry, scale_title_font);
 
   layout.ClearVario();
 
@@ -577,7 +580,9 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
                                 InfoBoxSettings::Geometry geometry,
                                 unsigned scale_title_font) noexcept
 {
-  const bool landscape = screen_size.width > screen_size.height;
+  /* follow the geometry's orientation, not a page that was only
+     shortened by an inset */
+  const bool landscape = layout.landscape;
 
   switch (geometry) {
   case InfoBoxSettings::Geometry::SPLIT_8:
