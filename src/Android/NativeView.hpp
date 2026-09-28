@@ -40,6 +40,7 @@ class NativeView {
   static jmethodID getWifiIpAddress_method;
   static jmethodID isAutoRotateEnabled_method;
   static jmethodID getPhysicalOrientation_method;
+  static jmethodID getTopGestureClearance_method;
   static jmethodID startMyService_method;
   static jmethodID launchSAFTreePicker_method;
 
@@ -133,6 +134,14 @@ public:
   [[gnu::pure]]
   int GetPhysicalOrientation(JNIEnv *env) const noexcept {
     return env->CallIntMethod(obj, getPhysicalOrientation_method);
+  }
+
+  /**
+   * Pixels of the system swipe-down band that still cover this view.
+   * Zero when the view already starts below that band.
+   */
+  int GetTopGestureClearance(JNIEnv *env) const noexcept {
+    return env->CallIntMethod(obj, getTopGestureClearance_method);
   }
 
   Java::LocalObject LoadResourceBitmap(JNIEnv *env, const char *name) {

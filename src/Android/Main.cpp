@@ -13,6 +13,7 @@
 #include "InternalSensors.hpp"
 #include "GliderLink.hpp"
 #include "Sensor.hpp"
+#include "SystemGesture.hpp"
 #include "PortBridge.hpp"
 #include "BluetoothHelper.hpp"
 #include "UsbSerialHelper.hpp"
@@ -74,6 +75,15 @@ using namespace UI;
 Context *context;
 
 NativeView *native_view;
+
+int
+Android::GetTopGestureClearance() noexcept
+{
+  if (native_view == nullptr)
+    return 0;
+
+  return native_view->GetTopGestureClearance(Java::GetEnv());
+}
 
 Vibrator *vibrator;
 

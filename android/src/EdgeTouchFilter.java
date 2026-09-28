@@ -40,6 +40,11 @@ class EdgeTouchFilter implements View.OnApplyWindowInsetsListener {
   private int gestureInsetTop = 0;
   private int gestureInsetBottom = 0;
 
+  /** Height of the system swipe-down band, in pixels. */
+  int getGestureInsetTop() {
+    return gestureInsetTop;
+  }
+
   private int screenWidth = 0;
   private int screenHeight = 0;
 

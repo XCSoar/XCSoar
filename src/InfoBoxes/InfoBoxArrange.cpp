@@ -20,6 +20,10 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "ui/window/SingleWindow.hpp"
 
+#ifdef ANDROID
+#include "Android/SystemGesture.hpp"
+#endif
+
 #include <memory>
 
 using namespace UI;
@@ -66,6 +70,12 @@ class OverlayWindow final : public ContainerWindow {
   ButtonPanel buttons;
   UI::Timer timeout_timer{[]{ InfoBoxArrange::Save(); }};
 
+  /**
+   * The cards, the description and Help/Close.  On Android they are
+   * laid out below the swipe-down band.  The map keeps its own layout.
+   */
+  InfoBoxLayout::Layout page_layout;
+
   static void HideInfoBoxes() noexcept {
     for (unsigned i = 0; i < InfoBoxManager::layout.count; ++i)
       if (auto *window = InfoBoxManager::GetWindow(i))
@@ -105,32 +115,68 @@ public:
     buttons.Add(_("Close"), []{ InfoBoxArrange::Save(); });
   }
 
+  /**
+   * Where the cards, the description and the buttons are laid out.
+   * On Android this starts below the system swipe-down band.  The
+   * overlay itself stays full screen, so the backdrop still covers
+   * that band.
+   */
+  [[nodiscard]]
+  static PixelRect GetContentRect(PixelRect full) noexcept {
+#ifdef ANDROID
+    const int clearance = Android::GetTopGestureClearance();
+    if (clearance > 0 && full.bottom - full.top > clearance)
+      full.top += clearance;
+#endif
+
+    return full;
+  }
+
   void UpdateLayout() noexcept {
+    if (!arrange.IsDefined())
+      return;
+
+    const PixelRect full = GetParent() != nullptr
+      ? GetParent()->GetClientRect()
+      : GetClientRect();
+    const PixelRect here = GetPosition();
+    if (here.left != full.left || here.top != full.top ||
+        here.right != full.right || here.bottom != full.bottom) {
+      /* OnResize runs this again once the overlay covers the screen */
+      Move(full);
+      return;
+    }
+
     arrange.Move(GetClientRect());
 
-    /* Help/Close sit in the map remaining, above a bottom InfoBox
-       row; left vs bottom follows the page, not the hole */
+    const unsigned title_scale =
+      CommonInterface::GetUISettings().info_boxes.scale_title_font;
+    const PixelRect page = GetContentRect(full);
+    page_layout =
+      InfoBoxLayout::Calculate(page, InfoBoxManager::layout.geometry,
+                               title_scale, full.GetSize());
+
+    /* Help/Close sit in the hole between the cards; left vs bottom
+       follows the screen, not the hole */
     const auto origin = GetPosition().GetTopLeft();
-    PixelRect remaining = InfoBoxManager::layout.remaining;
+    PixelRect remaining = page_layout.remaining;
     remaining.Offset(-origin.x, -origin.y);
 
-    const PixelRect full = GetClientRect();
-    PixelRect content = full.GetWidth() > full.GetHeight()
+    const bool landscape = full.GetWidth() > full.GetHeight();
+    PixelRect content = landscape
       ? buttons.LeftLayout(remaining)
       : buttons.BottomLayout(remaining);
     content.Offset(origin.x, origin.y);
 
-    arrange.SetLayout(InfoBoxManager::layout, content);
-    /* the card window fills the overlay; keep Help/Close above it */
+    arrange.SetLayout(page_layout, content);
+    /* the card window fills the page; keep Help/Close above it */
     buttons.Raise();
   }
 
   /** Show the overlay and hide the InfoBox windows behind it. */
   void Enter() noexcept {
     auto &parent = UIGlobals::GetMainWindow();
-    if (IsDefined())
-      Move(parent.GetClientRect());
-    else
+    if (!IsDefined())
       Create(parent);
 
     arrange.SetPanel(InfoBoxManager::GetPanel(saved_panel_index));
