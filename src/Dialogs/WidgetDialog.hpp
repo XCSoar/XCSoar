@@ -116,8 +116,8 @@ public:
                  unsigned preferred_client_width) noexcept;
 
   /**
-   * Fit again to the width of the rows.  The explanation opening
-   * under a row uses this.
+   * Fit again to the width of the rows.  A short explanation is
+   * included.  A longer one scrolls inside the list.
    */
   void RefitList() noexcept;
 

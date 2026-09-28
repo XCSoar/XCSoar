@@ -786,6 +786,12 @@ public:
   void SetCursorCallback(CursorCallback callback) noexcept;
 
   /**
+   * The dialog keeps room for a short explanation.  A shorter
+   * text does not shrink it, and a longer one scrolls.
+   */
+  void SetSizeFollowsHelp(bool enable) noexcept;
+
+  /**
    * Let Left and Right move the keyboard focus between the list and
    * the buttons of the dialog, in the order in which the dialog has
    * created them.  Without this, both keys stay free.
@@ -851,6 +857,13 @@ public:
    */
   [[gnu::pure]]
   unsigned GetContentHeight() const noexcept;
+
+  /**
+   * The height a floating dialog should use.  It includes a short
+   * explanation and stops there, so a longer one scrolls.
+   */
+  [[gnu::pure]]
+  unsigned GetFitContentHeight() const noexcept;
 
   /**
    * Show another view above the list, e.g. the row which names the

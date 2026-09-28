@@ -47,8 +47,10 @@ returns; the list copies it. A badge pointer is a `_()` literal.
 `state.help == nullptr` leaves the explanation passed to
 `AddValue`. That text sits below the settings when the rows and
 the text both fit. When the page scrolls, or the text does not
-fit there, it sits under the selected row. `state.hidden` drops
-the row. `state.disabled` greys a row that has `edit`.
+fit there, it sits under the selected row. A floating dialog
+keeps room for a short explanation, so a shorter text does not
+shrink it. A longer one scrolls inside that room. `state.hidden`
+drops the row. `state.disabled` greys a row that has `edit`.
 
 No `edit`: the row stays grey and the cursor may rest so the
 explanation can be read. With `edit`: the label selects, the value
