@@ -80,7 +80,7 @@ TeamSetup::Build() noexcept
 
   list->AddValue(_("Reference"),
                  _("The waypoint the codes are measured from."),
-                 [this](ValueState &state) {
+                 [](ValueState &state) {
                    const int id = CommonInterface::GetComputerSettings()
                      .team_code.team_code_reference_waypoint;
                    const WaypointPtr wp =

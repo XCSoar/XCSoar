@@ -66,12 +66,28 @@ bools until Close or `Save()`.
 
 ## Configuration page
 
-`GroupedListWidget` is `final`. The page owns one and forwards
-`Widget`, as `WindConfigPanel` does. `Save()` writes the settings
-when the configuration dialogue closes.
+The page derives from `ConfigListPanel`. `Create*()` returns that
+widget. `LoadSettings()` copies the settings, `Fill()` adds the
+rows, and `Save()` writes them when the dialogue closes.
+
+A switch is `AddToggleItem`. It writes the bool and fills the
+list again, so rows which depend on it appear and disappear. An
+enumeration is `AddEnumItem`. Text is `AddTextItem`. A number is
+`AddPercentItem`, `AddAltitudeItem`, `AddDurationItem` or
+`AddVerticalSpeedItem`. A file stays the picker that page already
+used.
+
+`Profile::Update` writes one setting and its profile entry when
+the value has changed.
+
+The menu is the same list. A group opens its pages. The list
+draws a bar only when the rows, including an open explanation,
+do not fit. Leave the list's minimum and maximum size as they
+are.
 
 ## Leave the shared list alone
 
-`Clear()` still rebuilds device and weather lists. These pages do
-not use it to change a value. An explanation that already exists
-in `po/xcsoar.pot` stays that msgid.
+`Clear()` still rebuilds device and weather lists. A configuration
+page fills itself again through `ConfigListPanel::Refresh()` when
+a value or the user level changes. An explanation that already
+exists in `po/xcsoar.pot` stays that msgid.
