@@ -92,6 +92,9 @@ Version 7.46 - not yet released
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
     circling or cruise scale when leaving pan mode
+  - show a page indicator with one dot per configured screen page at
+    the bottom of the map for two seconds after switching pages; the
+    filled dot marks the current page
 * airspace
   - keep airspace altitude labels readable when they would overlap #771
   - fill airspaces with a transparent colour; hatch patterns and the
