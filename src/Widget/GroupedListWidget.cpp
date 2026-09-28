@@ -26,12 +26,6 @@
 #include "ui/window/ContainerWindow.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/Button.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Dialogs/ComboPicker.hpp"
-#include "Dialogs/DataField.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Form/DataField/Float.hpp"
-#include "Form/DataField/Integer.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Renderer/ButtonRenderer.hpp"
@@ -5439,195 +5433,10 @@ GroupedListWidget::PreferredTextWidth() const noexcept
 }
 
 void
-GroupedListWidget::SetSaveCallback(SaveCallback callback) noexcept
-{
-  save_callback = std::move(callback);
-}
-
-void
 GroupedListWidget::SetVisibilityCallback(std::function<void(bool visible)>
                                          callback) noexcept
 {
   visibility_callback = std::move(callback);
-}
-
-void
-GroupedListWidget::SetLeaveCallback(std::function<bool()> callback) noexcept
-{
-  leave_callback = std::move(callback);
-}
-
-void
-GroupedListWidget::SetUnprepareCallback(std::function<void()>
-                                        callback) noexcept
-{
-  unprepare_callback = std::move(callback);
-}
-
-void
-GroupedListWidget::AddSwitch(const char *caption, const char *help,
-                             bool &field, bool expert,
-                             std::function<bool()> shown) noexcept
-{
-  ItemOptions options;
-  options.toggle = true;
-  options.checked = field;
-  options.help = help;
-  options.expert = expert;
-  if (shown) {
-    options.value_callback =
-      [shown = std::move(shown)](ValueState &state) {
-        state.hidden = !shown();
-      };
-  }
-
-  AddItem(caption, [this, &field] {
-    field = !field;
-    UpdateValues();
-  }, options);
-}
-
-static const char *
-EnumText(const StaticEnumChoice *list, unsigned value) noexcept
-{
-  if (list == nullptr)
-    return "";
-
-  for (auto i = list; i->display_string != nullptr; ++i)
-    if (i->id == value)
-      return gettext(i->display_string);
-
-  return "";
-}
-
-void
-GroupedListWidget::AddEnumValue(const char *caption, const char *help,
-                                const StaticEnumChoice *list,
-                                std::function<unsigned()> get,
-                                std::function<void(unsigned)> set,
-                                bool expert,
-                                std::function<bool()> shown) noexcept
-{
-  ItemOptions options;
-  options.help = help;
-  options.expert = expert;
-  options.value_callback =
-    [list, get, shown = std::move(shown)](ValueState &state) {
-      state.text = EnumText(list, get());
-      if (shown)
-        state.hidden = !shown();
-    };
-
-  AddValue(caption,
-           [this, caption, help, list, get, set = std::move(set)] {
-    DataFieldEnum df;
-    if (list != nullptr && list->display_string != nullptr &&
-        list->help != nullptr)
-      df.EnableItemHelp(true);
-
-    df.AddChoices(list);
-    df.SetValue(get());
-    if (!ComboPicker(caption, df, help) || df.GetValue() == get())
-      return;
-
-    set(df.GetValue());
-    UpdateValues();
-  }, std::move(options));
-}
-
-void
-GroupedListWidget::AddText(const char *caption, const char *help,
-                           char *buffer, std::size_t capacity,
-                           bool expert,
-                           std::function<bool()> shown) noexcept
-{
-  ItemOptions options;
-  options.help = help;
-  options.expert = expert;
-  options.value_callback =
-    [buffer, shown = std::move(shown)](ValueState &state) {
-      state.text = buffer != nullptr ? buffer : "";
-      if (shown)
-        state.hidden = !shown();
-    };
-
-  AddValue(caption, [this, caption, buffer, capacity] {
-    if (buffer == nullptr || capacity == 0)
-      return;
-
-    if (!TextEntryDialog(buffer, capacity, caption))
-      return;
-
-    UpdateValues();
-  }, std::move(options));
-}
-
-void
-GroupedListWidget::AddInteger(const char *caption, const char *help,
-                             const char *display_format,
-                             const char *edit_format,
-                             int min_value, int max_value, int step,
-                             int &value, bool expert,
-                             std::function<bool()> shown) noexcept
-{
-  ItemOptions options;
-  options.help = help;
-  options.expert = expert;
-  options.value_callback =
-    [&value, display_format, edit_format, min_value, max_value, step,
-     shown = std::move(shown)](ValueState &state) {
-      DataFieldInteger df(edit_format, display_format,
-                          min_value, max_value, value, step);
-      state.text = df.GetAsDisplayString();
-      if (shown)
-        state.hidden = !shown();
-    };
-
-  AddValue(caption,
-           [this, caption, help, display_format, edit_format,
-            min_value, max_value, step, &value] {
-    DataFieldInteger df(edit_format, display_format,
-                        min_value, max_value, value, step);
-    if (!EditDataFieldDialog(caption, df, help))
-      return;
-
-    value = df.GetValue();
-    UpdateValues();
-  }, std::move(options));
-}
-
-void
-GroupedListWidget::AddFloat(const char *caption, const char *help,
-                           const char *display_format,
-                           const char *edit_format,
-                           double min_value, double max_value, double step,
-                           bool fine, double &value, bool expert,
-                           std::function<bool()> shown) noexcept
-{
-  ItemOptions options;
-  options.help = help;
-  options.expert = expert;
-  options.value_callback =
-    [&value, display_format, edit_format, min_value, max_value, step, fine,
-     shown = std::move(shown)](ValueState &state) {
-      DataFieldFloat df(edit_format, display_format,
-                        min_value, max_value, value, step, fine);
-      state.text = df.GetAsDisplayString();
-      if (shown)
-        state.hidden = !shown();
-    };
-
-  AddValue(caption,
-           [this, caption, help, display_format, edit_format,
-            min_value, max_value, step, fine, &value] {
-    DataFieldFloat df(edit_format, display_format,
-                      min_value, max_value, value, step, fine);
-    if (!EditDataFieldDialog(caption, df, help))
-      return;
-
-    value = df.GetValue();
-    UpdateValues();
-  }, std::move(options));
 }
 
 void
@@ -5979,9 +5788,6 @@ GroupedListWidget::Unprepare() noexcept
   if (visibility_callback)
     visibility_callback(false);
 
-  if (unprepare_callback)
-    unprepare_callback();
-
   if (top_widget != nullptr)
     top_widget->Unprepare();
 
@@ -5992,9 +5798,6 @@ GroupedListWidget::Unprepare() noexcept
 bool
 GroupedListWidget::Save(bool &changed) noexcept
 {
-  if (save_callback && !save_callback(changed))
-    return false;
-
   return (top_widget == nullptr || top_widget->Save(changed)) &&
     control.SaveWidgets(changed) &&
     (bottom_widget == nullptr || bottom_widget->Save(changed));
@@ -6003,9 +5806,6 @@ GroupedListWidget::Save(bool &changed) noexcept
 bool
 GroupedListWidget::Leave() noexcept
 {
-  if (leave_callback && !leave_callback())
-    return false;
-
   return (top_widget == nullptr || top_widget->Leave()) &&
     control.LeaveWidgets() &&
     (bottom_widget == nullptr || bottom_widget->Leave());

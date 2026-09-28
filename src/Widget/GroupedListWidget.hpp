@@ -40,8 +40,6 @@ class GroupedListControl;
  * GroupedListWidget::Prepare(), and writes the settings in its
  * Save().
  */
-struct StaticEnumChoice;
-
 class GroupedListWidget : public WindowWidget {
 public:
   using Callback = std::function<void()>;
@@ -466,15 +464,7 @@ private:
   /** the buttons which Left and Right reach, or nullptr */
   ButtonPanel *action_bar = nullptr;
 
-  std::function<bool(bool &changed)> save_callback;
-
   std::function<void(bool visible)> visibility_callback;
-
-  /** Called from Leave(). Return false to stay on the page. */
-  std::function<bool()> leave_callback;
-
-  /** Called from Unprepare(), once, after the page is finished. */
-  std::function<void()> unprepare_callback;
 
 public:
   explicit GroupedListWidget(const DialogLook &look) noexcept;
@@ -556,100 +546,12 @@ public:
   unsigned PreferredTextWidth() const noexcept;
 
   /**
-   * Called from Save() before the embedded views are saved.
-   * Return false to keep the dialogue open.
-   */
-  using SaveCallback = std::function<bool(bool &changed)>;
-
-  void SetSaveCallback(SaveCallback callback) noexcept;
-
-  /**
    * Called from Show() with true and from Hide() with false.
    * Use it for a clock or a blackboard listener.  The false call
    * can happen twice, so it must be safe to repeat.
    */
   void SetVisibilityCallback(std::function<void(bool visible)>
                              callback) noexcept;
-
-  /**
-   * Called from Leave(), when the user moves to another page.
-   * Return false to stay here.
-   */
-  void SetLeaveCallback(std::function<bool()> callback) noexcept;
-
-  /**
-   * Called from Unprepare(), after the dialogue has finished
-   * with this page. Hide() does not call it.
-   */
-  void SetUnprepareCallback(std::function<void()> callback) noexcept;
-
-  /**
-   * A switch.  #field flips with the switch and is what Save()
-   * writes.  #expert hides the row until expert mode is on.
-   * #shown hides it while the predicate is false.
-   */
-  void AddSwitch(const char *caption, const char *help,
-                 bool &field, bool expert = false,
-                 std::function<bool()> shown = {}) noexcept;
-
-  /**
-   * A choice.  #value is one of #list, and a tap opens the picker.
-   * #list is a nullptr-terminated #StaticEnumChoice array.
-   * #shown hides the row while the predicate is false.
-   */
-  template<typename T>
-  void AddEnum(const char *caption, const char *help,
-               const StaticEnumChoice *list, T &value,
-               bool expert = false,
-               std::function<bool()> shown = {}) noexcept {
-    AddEnumValue(caption, help, list,
-                 [&value]() -> unsigned {
-                   return static_cast<unsigned>(value);
-                 },
-                 [&value](unsigned v) noexcept {
-                   value = static_cast<T>(v);
-                 },
-                 expert, std::move(shown));
-  }
-
-  /**
-   * A text row.  A tap edits #buffer, which has room for
-   * #capacity bytes including the terminator.
-   * #shown hides the row while the predicate is false.
-   */
-  void AddText(const char *caption, const char *help,
-               char *buffer, std::size_t capacity,
-               bool expert = false,
-               std::function<bool()> shown = {}) noexcept;
-
-  /**
-   * A whole number, edited with the same dialog the row form used.
-   */
-  void AddInteger(const char *caption, const char *help,
-                  const char *display_format, const char *edit_format,
-                  int min_value, int max_value, int step, int &value,
-                  bool expert = false,
-                  std::function<bool()> shown = {}) noexcept;
-
-  /**
-   * A real number, edited with the same dialog the row form used.
-   */
-  void AddFloat(const char *caption, const char *help,
-                const char *display_format, const char *edit_format,
-                double min_value, double max_value, double step,
-                bool fine, double &value,
-                bool expert = false,
-                std::function<bool()> shown = {}) noexcept;
-
-private:
-  void AddEnumValue(const char *caption, const char *help,
-                    const StaticEnumChoice *list,
-                    std::function<unsigned()> get,
-                    std::function<void(unsigned)> set,
-                    bool expert,
-                    std::function<bool()> shown) noexcept;
-
-public:
 
   /** One child for AddChildItems(). */
   struct ChildDefinition {
