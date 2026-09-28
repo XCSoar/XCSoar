@@ -72,6 +72,12 @@ jobs:
      - name: Install dependencies
        run: npm ci
 
+     - name: Allow the sandbox of the browser
+       # Ubuntu 24.04 forbids unprivileged user namespaces, which the
+       # sandbox of the browser needs that prints the PDFs; without this
+       # it dies with "No usable sandbox".
+       run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
      - name: Generate the pages and the PDFs
        run: npm run build:docs
 
