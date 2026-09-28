@@ -157,6 +157,7 @@ namespace InfoBoxFactory
     e_PreviousWaypoint, /* Previous waypoint infobox: shows the task waypoint before the active leg (start when on the first leg) with arrival altitude diff and distance; selection is informational only and never advances the task or sets a Goto */
     e_BloodOxygen, /* Blood oxygen saturation (SpO2) from a BLE pulse oximeter */
     e_Ballast, /* Water ballast on board; the comment shows the wing loading; tap to open the flight setup */
+    e_WP_VMG, /* Speed VMG: the component of ground speed made good towards the next waypoint */
     e_NUM_TYPES /* Last item */
   };
 

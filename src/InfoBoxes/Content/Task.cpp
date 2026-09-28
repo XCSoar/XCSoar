@@ -9,6 +9,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
@@ -95,6 +96,32 @@ UpdateInfoBoxBearingDiff(InfoBoxData &data) noexcept
 
   Angle Value = vector_remaining.bearing - basic.track;
   data.SetValueFromBearingDifference(Value);
+  data.SetValueColor(task_stats.inside_oz ? 3 : 0);
+}
+
+void
+UpdateInfoBoxSpeedVMG(InfoBoxData &data) noexcept
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
+  if (!basic.track_available || !basic.ground_speed_available ||
+      !task_stats.task_valid || !vector_remaining.IsValid() ||
+      vector_remaining.distance <= 10) {
+    data.SetInvalid();
+    return;
+  }
+
+  const SpeedVector ground_velocity{basic.track, basic.ground_speed};
+  auto vmg = ground_velocity.ComponentAlong(vector_remaining.bearing);
+
+  /* no decimals: the value is noisy enough that a tenth of a unit
+     would only flicker; and flying abeam should read "0", not
+     alternate with "-0" */
+  if (std::abs(Units::ToUserSpeed(vmg)) < 0.5)
+    vmg = 0;
+
+  data.SetValueFromSpeed(vmg, false);
   data.SetValueColor(task_stats.inside_oz ? 3 : 0);
 }
 

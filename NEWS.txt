@@ -227,6 +227,8 @@ Version 7.46 - not yet released
     matching Next waypoint
   - show no wind in the T Next Leg comment when the box is blank
     because wind is not available
+  - add "Speed VMG" InfoBox: the part of the ground speed that closes
+    the distance to the next waypoint
 * ui
   - show the MacCready setting beside L/D on the Analysis glide
     polar page #2035
@@ -327,6 +329,8 @@ Version 7.46 - not yet released
     patterns or the Airspace transparency setting
   - describe the gesture trail, its label and its vibration
   - describe the "Navigate to nearest point" task rule
+  - describe the Speed VMG InfoBox in the English, German and Brazilian
+    Portuguese manuals
 * development
   - build system: keep each CI target's download cache to itself; a
     bare downloads-$os- restore key handed one target another
