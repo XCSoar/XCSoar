@@ -7,6 +7,7 @@
 #include "ResourceId.hpp"
 #include "ui/dim/Rect.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <initializer_list>
@@ -36,6 +37,8 @@ class GroupedListControl;
  * GroupedListWidget::Prepare(), and writes the settings in its
  * Save().
  */
+struct StaticEnumChoice;
+
 class GroupedListWidget : public WindowWidget {
 public:
   using Callback = std::function<void()>;
@@ -395,6 +398,12 @@ public:
      * items behind it do not move while it is hidden.
      */
     bool hidden = false;
+
+    /**
+     * Shown only while the configuration dialogue is in expert
+     * mode.  A page which is not that dialogue leaves this false.
+     */
+    bool expert = false;
   };
 
 private:
@@ -417,6 +426,16 @@ private:
 
   /** the buttons which Left and Right reach, or nullptr */
   ButtonPanel *action_bar = nullptr;
+
+  std::function<bool(bool &changed)> save_callback;
+
+  std::function<void(bool visible)> visibility_callback;
+
+  /** Called from Leave(). Return false to stay on the page. */
+  std::function<bool()> leave_callback;
+
+  /** Called from Unprepare(), once, after the page is finished. */
+  std::function<void()> unprepare_callback;
 
 public:
   explicit GroupedListWidget(const DialogLook &look) noexcept;
@@ -462,6 +481,136 @@ public:
    * only there to be checked.
    */
   void AddItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /**
+   * A setting row.  With a callback, a tap on the label selects the
+   * row and a tap on the value opens it.  Without one, the row stays
+   * grey and the cursor may rest on it so its help can be read.  A
+   * badge on that row says why it cannot be used.
+   */
+  void AddValue(const char *caption, ItemOptions options) noexcept;
+
+  void AddValue(const char *caption, Callback callback,
+                ItemOptions options) noexcept;
+
+  /**
+   * A setting row whose value comes from #value.  Later refreshes
+   * call #value again instead of adding the row a second time.
+   */
+  void AddValue(const char *caption, const char *help,
+                ValueCallback value, Callback edit = {}) noexcept;
+
+  /**
+   * Call each #ValueCallback and draw what changed.
+   *
+   * @return true when the list needs to be fitted again, because a
+   * row grew or was hidden
+   */
+  bool UpdateValues() noexcept;
+
+  /**
+   * The widest caption, value, badge or explanation currently on
+   * the list.  A floating dialog uses it as its client width,
+   * plus the list padding.
+   */
+  [[nodiscard]]
+  unsigned PreferredTextWidth() const noexcept;
+
+  /**
+   * Called from Save() before the embedded views are saved.
+   * Return false to keep the dialogue open.
+   */
+  using SaveCallback = std::function<bool(bool &changed)>;
+
+  void SetSaveCallback(SaveCallback callback) noexcept;
+
+  /**
+   * Called from Show() with true and from Hide() with false.
+   * Use it for a clock or a blackboard listener.  The false call
+   * can happen twice, so it must be safe to repeat.
+   */
+  void SetVisibilityCallback(std::function<void(bool visible)>
+                             callback) noexcept;
+
+  /**
+   * Called from Leave(), when the user moves to another page.
+   * Return false to stay here.
+   */
+  void SetLeaveCallback(std::function<bool()> callback) noexcept;
+
+  /**
+   * Called from Unprepare(), after the dialogue has finished
+   * with this page. Hide() does not call it.
+   */
+  void SetUnprepareCallback(std::function<void()> callback) noexcept;
+
+  /**
+   * A switch.  #field flips with the switch and is what Save()
+   * writes.  #expert hides the row until expert mode is on.
+   * #shown hides it while the predicate is false.
+   */
+  void AddSwitch(const char *caption, const char *help,
+                 bool &field, bool expert = false,
+                 std::function<bool()> shown = {}) noexcept;
+
+  /**
+   * A choice.  #value is one of #list, and a tap opens the picker.
+   * #list is a nullptr-terminated #StaticEnumChoice array.
+   * #shown hides the row while the predicate is false.
+   */
+  template<typename T>
+  void AddEnum(const char *caption, const char *help,
+               const StaticEnumChoice *list, T &value,
+               bool expert = false,
+               std::function<bool()> shown = {}) noexcept {
+    AddEnumValue(caption, help, list,
+                 [&value]() -> unsigned {
+                   return static_cast<unsigned>(value);
+                 },
+                 [&value](unsigned v) noexcept {
+                   value = static_cast<T>(v);
+                 },
+                 expert, std::move(shown));
+  }
+
+  /**
+   * A text row.  A tap edits #buffer, which has room for
+   * #capacity bytes including the terminator.
+   * #shown hides the row while the predicate is false.
+   */
+  void AddText(const char *caption, const char *help,
+               char *buffer, std::size_t capacity,
+               bool expert = false,
+               std::function<bool()> shown = {}) noexcept;
+
+  /**
+   * A whole number, edited with the same dialog the row form used.
+   */
+  void AddInteger(const char *caption, const char *help,
+                  const char *display_format, const char *edit_format,
+                  int min_value, int max_value, int step, int &value,
+                  bool expert = false,
+                  std::function<bool()> shown = {}) noexcept;
+
+  /**
+   * A real number, edited with the same dialog the row form used.
+   */
+  void AddFloat(const char *caption, const char *help,
+                const char *display_format, const char *edit_format,
+                double min_value, double max_value, double step,
+                bool fine, double &value,
+                bool expert = false,
+                std::function<bool()> shown = {}) noexcept;
+
+private:
+  void AddEnumValue(const char *caption, const char *help,
+                    const StaticEnumChoice *list,
+                    std::function<unsigned()> get,
+                    std::function<void(unsigned)> set,
+                    bool expert,
+                    std::function<bool()> shown) noexcept;
+
+public:
 
   /** One child for AddChildItems(). */
   struct ChildDefinition {
@@ -567,11 +716,13 @@ public:
    * than the window.
    */
   void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
-                      unsigned height_pt=0) noexcept;
+                      unsigned height_pt=0, bool fill_view=false,
+                      std::function<bool()> shown={}) noexcept;
 
   void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
                       const GroupOptions &options,
-                      unsigned height_pt=0) noexcept;
+                      unsigned height_pt=0, bool fill_view=false,
+                      std::function<bool()> shown={}) noexcept;
 
   /**
    * Remove all elements.  The item the cursor is on and the scroll
