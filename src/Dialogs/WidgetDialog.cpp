@@ -243,7 +243,9 @@ WidgetDialog::FitToList(const PixelRect &parent_rc,
     list.Move(widget_rc);
     list.UpdateLayout();
 
-    unsigned content = list.GetContentHeight();
+    /* a short explanation is part of the dialog.  A longer one
+       scrolls in the list, so the dialog does not grow with it */
+    unsigned content = list.GetFitContentHeight();
     if (content == 0)
       content = list.GetMinimumSize().height;
 
@@ -299,6 +301,7 @@ WidgetDialog::PrepareFloatingList() noexcept
 
   auto &list = static_cast<GroupedListWidget &>(GetWidget());
   list.SetActionBar(buttons);
+  list.SetSizeFollowsHelp(true);
   list.SetCursorCallback([this](int){ RefitList(); });
   PrepareWidget();
 }

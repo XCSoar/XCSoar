@@ -613,6 +613,12 @@ private:
   unsigned content_height = 0;
 
   /**
+   * The height a floating dialog should take.  A short explanation
+   * is included.  A longer one is not: the list scrolls instead.
+   */
+  unsigned fit_content_height = 0;
+
+  /**
    * The selected explanation is drawn below the settings, in the
    * room the page has left.  It is not part of an item.
    */
@@ -704,6 +710,13 @@ private:
    */
   std::chrono::steady_clock::time_point help_dwell_until{};
 
+  /**
+   * A floating dialog sizes itself to a short explanation.  The
+   * height it takes is the finished one, so the open and the close
+   * do not move the window a second time.
+   */
+  bool size_follows_help = false;
+
 public:
   explicit GroupedListControl(const DialogLook &_look) noexcept
     :look(_look), scroll_bar(_look.button) {}
@@ -789,6 +802,10 @@ public:
 
   void SetCursorCallback(CursorCallback callback) noexcept {
     cursor_callback = std::move(callback);
+  }
+
+  void SetSizeFollowsHelp(bool enable) noexcept {
+    size_follows_help = enable;
   }
 
   [[gnu::pure]]
@@ -879,6 +896,22 @@ public:
   [[gnu::pure]]
   unsigned GetContentHeight() const noexcept {
     return content_height;
+  }
+
+  /**
+   * How tall the explanation may grow before a floating dialog
+   * stops following it.  Three lines is a short footer.
+   */
+  [[gnu::pure]]
+  unsigned HelpFitCap() const noexcept {
+    const int pad = (int)Layout::GetTextPadding();
+    const int line = (int)look.list.font->GetLineSpacing();
+    return (unsigned)(pad + 3 * line + pad);
+  }
+
+  [[gnu::pure]]
+  unsigned GetFitContentHeight() const noexcept {
+    return fit_content_height;
   }
 
   /**
@@ -3130,6 +3163,7 @@ GroupedListControl::UpdateLayout() noexcept
 
     int y = 0;
     unsigned cursor_help_full = 0;
+    unsigned cursor_help_measured = 0;
 
     for (std::size_t i = 0; i < elements.size(); ++i) {
       Element &element = elements[i];
@@ -3337,8 +3371,7 @@ GroupedListControl::UpdateLayout() noexcept
         unsigned full = 0;
 
         if (element.height > 0 && (int)i == cursor &&
-            !element.help.empty() &&
-            std::chrono::steady_clock::now() >= help_dwell_until) {
+            !element.help.empty()) {
           const int help_width = std::max(text_width, 1);
           element.wrapped_help = WrapText(*look.list.font, help_width,
                                           element.help);
@@ -3367,7 +3400,19 @@ GroupedListControl::UpdateLayout() noexcept
             element.help_since = saved_help_since;
           }
 
+          cursor_help_measured = full;
+          /* a cursor key keeps the text shut until the row has
+             stayed.  The dialog still keeps the footer's room. */
+          if (std::chrono::steady_clock::now() < help_dwell_until)
+            full = 0;
           cursor_help_full = full;
+        } else if (size_follows_help) {
+          /* the dialog takes the new explanation's height now.
+             Easing the old one shut would move the window again
+             when that animation ended. */
+          element.help_full = 0;
+          element.help_from = 0;
+          element.help_height = 0;
         } else {
           SetHelpFull(element, 0);
           element.height += element.help_height;
@@ -3386,15 +3431,16 @@ GroupedListControl::UpdateLayout() noexcept
     const unsigned room = !settings_scroll && view > settings_height
       ? view - settings_height
       : 0;
-    const unsigned open_height =
-      cursor >= 0 && (std::size_t)cursor < elements.size()
-      ? elements[cursor].help_height
-      : 0;
-    /* a dialog which grew to fit the explanation under the row is
-       not spare room: that explanation stays under the row */
-    const bool grown_for_row = open_height > 0 && room <= open_height;
-    const bool below_settings = cursor_help_full > 0 &&
-      !settings_scroll && cursor_help_full <= room && !grown_for_row;
+    const unsigned cap = HelpFitCap();
+    const bool short_help =
+      cursor_help_full > 0 && cursor_help_full <= cap;
+    /* a floating dialog will grow to a short explanation.  The room
+       left by the previous one is not that size, and waiting for the
+       open to finish is what resizes the window twice. */
+    const bool below_settings = size_follows_help
+      ? short_help && !settings_scroll
+      : cursor_help_full > 0 && !settings_scroll &&
+        cursor_help_full <= room;
 
     if (below_settings) {
       Element &item = elements[cursor];
@@ -3424,6 +3470,20 @@ GroupedListControl::UpdateLayout() noexcept
     content_height = elements.empty()
       ? 0
       : (unsigned)(y + GetTrailingMargin());
+
+    /* a short explanation keeps one slot, the height it has to fit
+       in.  A shorter text does not shrink the dialog, and a longer
+       one scrolls inside that slot. */
+    if (elements.empty())
+      fit_content_height = 0;
+    else if (size_follows_help && cursor_help_measured > 0)
+      fit_content_height = settings_height + cap;
+    else {
+      unsigned extra = cursor_help_full;
+      if (extra > cap)
+        extra = cap;
+      fit_content_height = settings_height + extra;
+    }
 
     if (scroll_bar.IsDefined() ||
         content_height <= (unsigned)GetViewHeight())
@@ -4906,13 +4966,16 @@ GroupedListControl::OnHelpTimer() noexcept
       (unsigned)std::lround(from + (to - from) * eased);
   }
 
+  const unsigned fit_before = fit_content_height;
   UpdateLayout();
 
   if (cursor >= 0 && (std::size_t)cursor < elements.size())
     EnsureVisible((unsigned)cursor);
 
-  /* a floating dialog sizes itself to this list */
-  if (cursor_callback != nullptr && cursor >= 0)
+  /* the dialog already has the finished height.  Following the
+     ease would move it again when the explanation settles. */
+  if (cursor_callback != nullptr && cursor >= 0 &&
+      fit_content_height != fit_before)
     cursor_callback(GetCursorIndex());
 }
 
@@ -5694,6 +5757,12 @@ GroupedListWidget::SetCursorCallback(CursorCallback callback) noexcept
 }
 
 void
+GroupedListWidget::SetSizeFollowsHelp(bool enable) noexcept
+{
+  control.SetSizeFollowsHelp(enable);
+}
+
+void
 GroupedListWidget::SetActionBar(ButtonPanel &buttons) noexcept
 {
   action_bar = &buttons;
@@ -5759,6 +5828,12 @@ unsigned
 GroupedListWidget::GetContentHeight() const noexcept
 {
   return control.GetContentHeight();
+}
+
+unsigned
+GroupedListWidget::GetFitContentHeight() const noexcept
+{
+  return control.GetFitContentHeight();
 }
 
 void
