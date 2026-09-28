@@ -3,14 +3,13 @@
 
 #include "EdlSettingsWidget.hpp"
 
+#include "Dialogs/GroupedListPicker.hpp"
 #include "Dialogs/Message.hpp"
 #include "WeatherOverlayDraft.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
-#include "Form/Button.hpp"
-#include "Form/DataField/Enum.hpp"
-#include "Form/Edit.hpp"
 #include "Interface.hpp"
+#include "UIState.hpp"
 #include "Language/Language.hpp"
 #include "Language/FormatText.hpp"
 #include "PageSettings.hpp"
@@ -26,7 +25,7 @@
 #include "Weather/EDL/Glue.hpp"
 #include "Weather/EDL/DownloadGlue.hpp"
 #endif
-#include "Widget/RowFormWidget.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "util/StaticString.hxx"
 
 #include <memory>
@@ -54,58 +53,42 @@ FormatCachedDayLabel(const EDL::CachedDay &day) noexcept
   StaticString<40> label;
   label.Format("%04u-%02u-%02u (%s, %u)",
                day.day.year, day.day.month, day.day.day,
-               day.IsComplete() ? C_("Status", "Complete") : C_("Status", "Partial"),
+               day.IsComplete()
+                 ? C_("Status", "Complete")
+                 : C_("Status", "Partial"),
                day.file_count);
   return label;
 }
 
 } // namespace
 
+/**
+ * The EDL weather page: which day is cached, whether tiles download
+ * by themselves, and the time and level of the page the map shows.
+ */
 class EdlSettingsWidget final
-  : public RowFormWidget
+  : public GroupedListWidget
 #ifdef HAVE_EDL
   , private EDL::DownloadListener
 #endif
 {
-  enum Controls {
-    CACHED_DAY,
-    AUTO_UPDATE,
-#ifdef HAVE_HTTP
-    PRECACHE_DAY,
-#endif
-    CLEAN_OTHER_DAYS,
-    SPACER_AFTER_CACHE,
-#ifdef HAVE_EDL
-    TIME,
-    LEVEL,
-    APPLY_TO_PAGE,
-    ADD_PAGE,
-#endif
-    SPACER_AFTER_ADD,
-  };
-
   std::vector<EDL::CachedDay> cached_days;
+  unsigned selected_day = 0;
 
-  Button *precache_day_button = nullptr;
-  Button *clean_other_days_button = nullptr;
+  bool auto_update = false;
+
 #ifdef HAVE_EDL
-  Button *apply_to_page_button = nullptr;
-  Button *add_page_button = nullptr;
   EDL::DownloadGlue *edl_listener_glue = nullptr;
   WeatherOverlayDraft::State overlay;
-
-  static EdlSettingsWidget *active;
 #endif
 
 public:
   EdlSettingsWidget() noexcept
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+    :GroupedListWidget(UIGlobals::GetDialogLook()) {}
 
   ~EdlSettingsWidget() noexcept override {
 #ifdef HAVE_EDL
     UnregisterEdlDownloadListener();
-    if (active == this)
-      active = nullptr;
 #endif
   }
 
@@ -118,32 +101,20 @@ public:
 private:
 #ifdef HAVE_EDL
   void UnregisterEdlDownloadListener() noexcept;
-  void UpdateTimeControl() noexcept;
-  void UpdateLevelControl() noexcept;
-  void RefreshPageSection() noexcept;
-  void ApplyToPageClicked() noexcept;
-  void AddPageClicked() noexcept;
-  bool EditTime(DataField &df) noexcept;
-  bool EditLevel(DataField &df) noexcept;
-
-  static bool EditTimeCallback(const char *caption, DataField &df,
-                               const char *help_text) noexcept;
-  static bool EditLevelCallback(const char *caption, DataField &df,
-                                const char *help_text) noexcept;
 #endif
-  void SyncPrecacheButtonEnabled() noexcept;
-  void RefreshControls();
+  void ReloadCachedDays() noexcept;
+  void Refresh() noexcept;
+  void Fill() noexcept;
+  void PickCachedDay() noexcept;
   void PrecacheDay();
   void CleanOtherDays();
 
 #ifdef HAVE_EDL
-  void OnDownloadFinished(const EDL::DownloadNotification &notification) noexcept override;
+  void OnDownloadFinished(const EDL::DownloadNotification &) noexcept override;
 #endif
 };
 
 #ifdef HAVE_EDL
-EdlSettingsWidget *EdlSettingsWidget::active = nullptr;
-
 void
 EdlSettingsWidget::UnregisterEdlDownloadListener() noexcept
 {
@@ -153,223 +124,204 @@ EdlSettingsWidget::UnregisterEdlDownloadListener() noexcept
   edl_listener_glue->RemoveListener(*this);
   edl_listener_glue = nullptr;
 }
-
-void
-EdlSettingsWidget::UpdateTimeControl() noexcept
-{
-  StaticString<64> label;
-  EDL::FormatTimeLabelForPage(label, overlay.draft);
-  WeatherOverlayDraft::SetAxisLabel(GetControl(TIME), label.c_str(), true);
-}
-
-void
-EdlSettingsWidget::UpdateLevelControl() noexcept
-{
-  StaticString<64> label;
-  EDL::FormatLevelLabelForPage(label, overlay.draft);
-  WeatherOverlayDraft::SetAxisLabel(GetControl(LEVEL), label.c_str(), true);
-}
-
-void
-EdlSettingsWidget::RefreshPageSection() noexcept
-{
-  overlay.Load(PageLayout::Overlay::EDL);
-  UpdateTimeControl();
-  UpdateLevelControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
-}
-
-void
-EdlSettingsWidget::ApplyToPageClicked() noexcept
-{
-  if (!overlay.ApplyIfDirty())
-    return;
-
-  UpdateTimeControl();
-  UpdateLevelControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
-}
-
-void
-EdlSettingsWidget::AddPageClicked() noexcept
-{
-  overlay.AddPage(apply_to_page_button, add_page_button);
-}
-
-bool
-EdlSettingsWidget::EditTime([[maybe_unused]] DataField &df) noexcept
-{
-  if (!EDL::EditTimeOnLayout(overlay.draft))
-    return true;
-
-  UpdateTimeControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
-  return true;
-}
-
-bool
-EdlSettingsWidget::EditLevel([[maybe_unused]] DataField &df) noexcept
-{
-  const auto result = EDL::EditLevelOnLayout(overlay.draft, false);
-  if (result == EDL::LevelPickerResult::OPEN_SETUP)
-    return false;
-  if (result != EDL::LevelPickerResult::CHANGED)
-    return true;
-
-  UpdateLevelControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
-  return true;
-}
-
-bool
-EdlSettingsWidget::EditTimeCallback([[maybe_unused]] const char *caption,
-                                    DataField &df,
-                                    [[maybe_unused]] const char *help_text) noexcept
-{
-  return active != nullptr ? active->EditTime(df) : false;
-}
-
-bool
-EdlSettingsWidget::EditLevelCallback([[maybe_unused]] const char *caption,
-                                     DataField &df,
-                                     [[maybe_unused]] const char *help_text) noexcept
-{
-  return active != nullptr ? active->EditLevel(df) : false;
-}
 #endif
 
 void
-EdlSettingsWidget::RefreshControls()
+EdlSettingsWidget::ReloadCachedDays() noexcept
 {
-  auto &control = GetControl(CACHED_DAY);
-  auto &df = (DataFieldEnum &)*control.GetDataField();
-  df.ClearChoices();
-
   try {
     cached_days = EDL::ListDownloadedDays();
   } catch (...) {
     cached_days.clear();
   }
 
-  if (cached_days.empty()) {
-    df.AddChoice(unsigned(-1), _("None"));
-    df.SetValue(unsigned(-1));
-    control.SetEnabled(false);
-    if (clean_other_days_button != nullptr)
-      clean_other_days_button->SetEnabled(false);
-  } else {
-    control.SetEnabled(true);
-    if (clean_other_days_button != nullptr)
-      clean_other_days_button->SetEnabled(true);
-
-    const unsigned selected_index =
-      SelectedCachedDayIndex(cached_days);
-    for (unsigned i = 0; i < cached_days.size(); ++i)
-      df.AddChoice(i, FormatCachedDayLabel(cached_days[i]).c_str());
-
-    df.SetValue(selected_index);
-  }
-
-  control.RefreshDisplay();
-
-  SyncPrecacheButtonEnabled();
-
-#ifdef HAVE_EDL
-  RefreshPageSection();
-#endif
+  selected_day = SelectedCachedDayIndex(cached_days);
 }
 
 void
-EdlSettingsWidget::SyncPrecacheButtonEnabled() noexcept
+EdlSettingsWidget::Refresh() noexcept
 {
-  if (precache_day_button == nullptr)
+  ReloadCachedDays();
+  Clear();
+  Fill();
+
+  /* the day, the time and the level are filled by their callbacks.
+     A layout before that leaves them blank */
+  UpdateValues();
+  UpdateLayout();
+}
+
+void
+EdlSettingsWidget::PickCachedDay() noexcept
+{
+  if (cached_days.empty())
     return;
 
+  std::vector<StaticString<40>> labels;
+  std::vector<PickerChoice> choices;
+  labels.reserve(cached_days.size());
+  choices.reserve(cached_days.size());
+
+  for (const auto &day : cached_days) {
+    labels.push_back(FormatCachedDayLabel(day));
+    choices.push_back({labels.back().c_str()});
+  }
+
+  const int current = selected_day < cached_days.size()
+    ? (int)selected_day : -1;
+  const int picked = PickChoice(C_("Setting", "Cached day"), nullptr,
+                                choices, current);
+  if (picked < 0)
+    return;
+
+  selected_day = (unsigned)picked;
+  UpdateValues();
+}
+
+void
+EdlSettingsWidget::Fill() noexcept
+{
+  AddGroup();
+
+  AddValue(C_("Setting", "Cached day"), nullptr,
+           [this](ValueState &state) {
+             if (cached_days.empty() ||
+                 selected_day >= cached_days.size()) {
+               state.text = _("None");
+               state.disabled = true;
+               return;
+             }
+
+             const auto label =
+               FormatCachedDayLabel(cached_days[selected_day]);
+             state.text = label.c_str();
+           },
+           [this]{ PickCachedDay(); });
+
+  const unsigned auto_update_item = GetItemCount();
+  AddItem(C_("Setting", "Auto update"), [this, auto_update_item]{
+    auto_update = IsItemChecked(auto_update_item);
+
+    auto &weather = CommonInterface::SetComputerSettings().weather;
+    if (Profile::Update(ProfileKeys::EdlAutoUpdate,
+                        weather.edl.auto_update, auto_update))
+      Profile::Save();
+
+    /* Precache day is off while this switch is on */
+    Refresh();
+  }, {.toggle = true, .checked = auto_update,
+      .help = _("Automatically download missing EDL overlay tiles when "
+                "an EDL page is opened or the forecast time/level changes. "
+                "When Auto update is on, the Precache day button is "
+                "disabled.")});
+
+#ifdef HAVE_HTTP
   const bool can_precache =
 #ifdef HAVE_EDL
-    net_components != nullptr && net_components->edl != nullptr &&
-    !GetValueBoolean(AUTO_UPDATE);
+    !auto_update &&
+    net_components != nullptr && net_components->edl != nullptr;
 #else
     false;
 #endif
-  precache_day_button->SetEnabled(can_precache);
+  AddButton(C_("Button", "Precache day"), [this]{ PrecacheDay(); },
+            {.disabled = !can_precache});
+#endif
+
+  AddButton(C_("Button", "Clean other days"), [this]{ CleanOtherDays(); },
+            {.disabled = cached_days.empty()});
+
+#ifdef HAVE_EDL
+  const auto &ui_state = CommonInterface::GetUIState();
+  const auto &ui_settings = CommonInterface::GetUISettings();
+  const unsigned page_index = ui_state.pages.current_index;
+  const PageLayout &page = ui_settings.pages.pages[page_index];
+
+  StaticString<64> title_buffer;
+  const char *title =
+    page.MakeTitle(ui_settings.info_boxes,
+                   std::span{title_buffer.data(), title_buffer.capacity()});
+
+  StaticString<128> caption;
+  caption.Format("%s %u: %s", _("Page"), page_index + 1, title);
+  AddGroup(caption);
+
+  AddValue(C_("Weather control", "Time"),
+           _("Forecast time for the current map page. "
+             "Opens the same picker as the weather controls "
+             "(Auto, Now, or a UTC hour)."),
+           [this](ValueState &state) {
+             StaticString<64> label;
+             EDL::FormatTimeLabelForPage(label, overlay.draft);
+             state.text = label.c_str();
+           },
+           [this]{
+             if (EDL::EditTimeOnLayout(overlay.draft))
+               Refresh();
+           });
+
+  AddValue(C_("Weather control", "Level"),
+           _("Pressure level / altitude band for the current "
+             "map page. Opens the same picker as the weather "
+             "controls."),
+           [this](ValueState &state) {
+             StaticString<64> label;
+             EDL::FormatLevelLabelForPage(label, overlay.draft);
+             state.text = label.c_str();
+           },
+           [this]{
+             const auto result =
+               EDL::EditLevelOnLayout(overlay.draft, false);
+             if (result == EDL::LevelPickerResult::CHANGED)
+               Refresh();
+           });
+
+  AddButtonRow({
+    {C_("Button", "Apply to page"), [this]{
+      if (overlay.ApplyIfDirty())
+        Refresh();
+    }, !overlay.IsDirty()},
+    {C_("Button", "Add page"), [this]{
+      overlay.AddPage(nullptr, nullptr);
+      Refresh();
+    }, !overlay.CanAddPage()},
+  });
+#endif
+
+  AddGroup();
+  AddButton(C_("Button", "Pages setup"), [this]{
+    WeatherOverlayDraft::OpenPagesConfig();
+#ifdef HAVE_EDL
+    overlay.Load(PageLayout::Overlay::EDL);
+    Refresh();
+#endif
+  });
 }
 
 void
 EdlSettingsWidget::Prepare(ContainerWindow &parent,
                            const PixelRect &rc) noexcept
 {
-  RowFormWidget::Prepare(parent, rc);
+  auto_update =
+    CommonInterface::GetComputerSettings().weather.edl.auto_update;
 
 #ifdef HAVE_EDL
-  active = this;
+  overlay.Load(PageLayout::Overlay::EDL);
 #endif
 
-  const auto &settings =
-    CommonInterface::GetComputerSettings().weather;
-
-  AddEnum(C_("Setting", "Cached day"), nullptr);
-
-  AddBoolean(C_("Setting", "Auto update"),
-             _("Automatically download missing EDL overlay tiles when "
-               "an EDL page is opened or the forecast time/level changes. "
-               "When Auto update is on, the Precache day button is "
-               "disabled."),
-             settings.edl.auto_update);
-  GetControl(AUTO_UPDATE).GetDataField()->SetOnModified([this]{
-    auto &weather = CommonInterface::SetComputerSettings().weather;
-    if (SaveValue(AUTO_UPDATE, ProfileKeys::EdlAutoUpdate,
-                  weather.edl.auto_update))
-      Profile::Save();
-    SyncPrecacheButtonEnabled();
-  });
-
-#ifdef HAVE_HTTP
-  precache_day_button = AddButton(C_("Button", "Precache day"), [this]{ PrecacheDay(); });
-  SyncPrecacheButtonEnabled();
-#endif
-
-  clean_other_days_button = AddButton(C_("Button", "Clean other days"),
-                                      [this]{ CleanOtherDays(); });
-  AddSpacer();
-
-#ifdef HAVE_EDL
-  auto *time = AddEnum(C_("Weather control", "Time"),
-                       _("Forecast time for the current map page. "
-                         "Opens the same picker as the weather controls "
-                         "(Auto, Now, or a UTC hour)."));
-  time->SetEditCallback(EditTimeCallback);
-
-  auto *level = AddEnum(C_("Weather control", "Level"),
-                        _("Pressure level / altitude band for the current "
-                          "map page. Opens the same picker as the weather "
-                          "controls."));
-  level->SetEditCallback(EditLevelCallback);
-
-  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
-    ApplyToPageClicked();
-  });
-  add_page_button = AddButton(C_("Button", "Add page"), [this]{
-    AddPageClicked();
-  });
-#endif
-
-  AddSpacer();
-
-  AddButton(C_("Button", "Pages setup"), [this]{
-    WeatherOverlayDraft::OpenPagesConfig();
-#ifdef HAVE_EDL
-    RefreshPageSection();
-#endif
-  });
+  ReloadCachedDays();
+  Fill();
+  GroupedListWidget::Prepare(parent, rc);
 }
 
 void
 EdlSettingsWidget::Show(const PixelRect &rc) noexcept
 {
-  RowFormWidget::Show(rc);
+  GroupedListWidget::Show(rc);
 
-  RefreshControls();
+#ifdef HAVE_EDL
+  overlay.Load(PageLayout::Overlay::EDL);
+#endif
+  Refresh();
 
 #ifdef HAVE_EDL
   if (net_components != nullptr && net_components->edl != nullptr) {
@@ -386,28 +338,27 @@ EdlSettingsWidget::Hide() noexcept
   UnregisterEdlDownloadListener();
 #endif
 
-  WindowWidget::Hide();
+  GroupedListWidget::Hide();
 }
 
 void
 EdlSettingsWidget::Unprepare() noexcept
 {
 #ifdef HAVE_EDL
-  if (active == this)
-    active = nullptr;
+  UnregisterEdlDownloadListener();
 #endif
-  precache_day_button = nullptr;
-  clean_other_days_button = nullptr;
   cached_days.clear();
-  RowFormWidget::Unprepare();
+  GroupedListWidget::Unprepare();
 }
 
 bool
 EdlSettingsWidget::Save(bool &_changed) noexcept
 {
   auto &weather = CommonInterface::SetComputerSettings().weather;
-  _changed |= SaveValue(AUTO_UPDATE, ProfileKeys::EdlAutoUpdate,
-                        weather.edl.auto_update);
+  if (Profile::Update(ProfileKeys::EdlAutoUpdate,
+                      weather.edl.auto_update, auto_update))
+    _changed = true;
+
   return true;
 }
 
@@ -429,31 +380,27 @@ void
 EdlSettingsWidget::OnDownloadFinished(
   const EDL::DownloadNotification &) noexcept
 {
-  RefreshControls();
+  Refresh();
 }
 #endif
 
 void
 EdlSettingsWidget::CleanOtherDays()
 {
-  if (cached_days.empty())
+  if (cached_days.empty() || selected_day >= cached_days.size())
     return;
 
-  const auto selected_index = GetValueEnum(CACHED_DAY);
-  if (selected_index >= cached_days.size())
-    return;
+  const auto &day = cached_days[selected_day].day;
 
   StaticString<96> message;
-  message.Format(_("Keep only %04u-%02u-%02u and delete the other cached days?"),
-                 cached_days[selected_index].day.year,
-                 cached_days[selected_index].day.month,
-                 cached_days[selected_index].day.day);
+  message.Format(
+    _("Keep only %04u-%02u-%02u and delete the other cached days?"),
+    day.year, day.month, day.day);
   if (ShowMessageBox(message, _("Weather"), MB_YESNO) != IDYES)
     return;
 
-  const unsigned deleted =
-    EDL::DeleteOtherDownloadedDays(cached_days[selected_index].day);
-  RefreshControls();
+  const unsigned deleted = EDL::DeleteOtherDownloadedDays(day);
+  Refresh();
 
   StaticString<64> result;
   result.Format(_("Deleted %u cached files."), deleted);
