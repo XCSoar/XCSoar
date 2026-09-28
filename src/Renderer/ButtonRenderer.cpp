@@ -52,6 +52,8 @@ static constexpr BoxShadowStyle BUTTON_SHADOW{{{
   {-1, 4, 26, 1},
 }}};
 
+#ifdef ENABLE_OPENGL
+
 [[gnu::pure]]
 static PixelRect
 ShadowClip(const PixelRect &rc) noexcept
@@ -85,8 +87,6 @@ ExcludeNeighbor(PixelRect &clip, const PixelRect &rc,
   else if (neighbor.top >= face.bottom)
     clip.bottom = std::min(clip.bottom, neighbor.top);
 }
-
-#ifdef ENABLE_OPENGL
 
 /**
  * Mark a rounded button face so the shadow is not drawn inside it.
