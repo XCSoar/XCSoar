@@ -9,7 +9,7 @@
 
 int main()
 {
-  plan_tests(12);
+  plan_tests(14);
 
   char buffer[100];
   NMEAParser parser;
@@ -60,6 +60,19 @@ int main()
   FormatPGRMZ(buffer, sizeof(buffer), info);
   ok1(StringIsEqual(buffer,
                     "PGRMZ,746,m,3"));
+
+  /* Stale numbers must not be emitted once the measurement is gone. */
+  info.ground_speed_available.Clear();
+  info.track_available.Clear();
+  FormatGPRMC(buffer, sizeof(buffer), info);
+  ok1(StringIsEqual(buffer,
+                    "GPRMC,082311.00,A,5103.540,N,00741.574,E,,,230610,000.3,W"));
+
+  info.gps_altitude_available.Clear();
+  info.gps.hdop = -1;
+  FormatGPGGA(buffer, sizeof(buffer), info);
+  ok1(StringIsEqual(buffer,
+                    "GPGGA,082311.00,5103.540,N,00741.574,E,2,06,,,M,,,,0000"));
 
   return exit_status();
 }

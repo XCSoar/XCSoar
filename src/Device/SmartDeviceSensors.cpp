@@ -7,7 +7,34 @@
 #include "DataEditor.hpp"
 #include "NMEA/Info.hpp"
 #include "Geo/Geoid.hpp"
+#include "Logger/NMEALogger.hpp"
+#include "NMEA/Checksum.hpp"
+#include "NMEA/Info.hpp"
+#include "Formatter/NMEAFormatter.hpp"
 
+#include <cstdio>
+
+static constexpr int MIN_SATELLITES_FOR_3D_FIX = 4;
+
+/**
+ * Prefix '$', append NMEA checksum, and write to the NMEA logger.
+ * @param body sentence without '$' or checksum (as from FormatGPRMC/GPGGA)
+ */
+static void
+LogNMEABody(NMEALogger &logger, const char *body) noexcept
+{
+  if (body == nullptr || *body == '\0')
+    return;
+
+  char sentence[160];
+  const int length = snprintf(sentence, sizeof(sentence), "$%s", body);
+  if (length < 0 ||
+      length > static_cast<int>(sizeof(sentence)) - 4)
+    return;
+
+  AppendNMEAChecksum(sentence);
+  logger.Log(sentence);
+}
 
 void
 DeviceDescriptor::OnConnected(int connected) noexcept
@@ -46,6 +73,10 @@ DeviceDescriptor::OnSensorError(const char *msg) noexcept
   PortError(msg);
 }
 
+/**
+ * Is called when built-in location sensor has a new fix.
+ * @param from the location sensor.
+ */
 void
 DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
                                    int n_satellites,
@@ -80,6 +111,14 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   basic.location = location;
   basic.location_available.Update(basic.clock);
 
+  if (n_satellites >= MIN_SATELLITES_FOR_3D_FIX) {
+    basic.gps.fix_quality = FixQuality::GPS;
+    basic.gps.fix_quality_available.Update(basic.clock);
+  } else {
+    basic.gps.fix_quality = FixQuality::NO_FIX;
+    basic.gps.fix_quality_available.Clear();
+  }
+
   if (hasAltitude) {
     if (geoid_altitude) {   // sensor reports AMSL altitude
       basic.gps_altitude = altitude;
@@ -106,11 +145,28 @@ DeviceDescriptor::OnLocationSensor(std::chrono::system_clock::time_point time,
   if (hasSpeed) {
     basic.ground_speed = ground_speed;
     basic.ground_speed_available.Update(basic.clock);
-  }
+  } else
+    basic.ground_speed_available.Clear();
 
   basic.gps.hdop = hasAccuracy ? accuracy : -1;
 
-  e.Commit();
+  const bool log_nmea =
+    nmea_logger != nullptr &&
+    nmea_logger->IsEnabled() &&
+    n_satellites >= MIN_SATELLITES_FOR_3D_FIX;
+  NMEAInfo log_basic{};
+  if (log_nmea)
+    log_basic = basic;
+
+   e.Commit();
+
+  if (log_nmea) {
+    char body[128];
+    FormatGPRMC(body, sizeof(body), log_basic);
+    LogNMEABody(*nmea_logger, body);
+    FormatGPGGA(body, sizeof(body), log_basic);
+    LogNMEABody(*nmea_logger, body);
+  }
 }
 
 

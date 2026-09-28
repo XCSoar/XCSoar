@@ -17,6 +17,9 @@ Version 7.46 - not yet released
     with its background; Quit, Fly, Simulator and the version stay
     in the safe area #2466
   - use built-in IMU and log to NMEA logger if enabled
+  - use built-in GNSS sensor data to write GPRMC and GPGGA sentences
+    to NMEA log, if satellite coverage is sufficient and NMEA logger
+    enabled
   - hide Engine Type on BLE sensors that are not an engine sensor
     (for example a heart-rate band)
   - show remaining battery in the Devices list for BLE sensors
@@ -54,6 +57,9 @@ Version 7.46 - not yet released
     the status bar visible in full screen mode, or hide it without
     going full screen; "Auto" shows it unless the InfoBox area is
     stretched to the top screen edge
+  - use built-in GNSS sensor data to write GPRMC and GPGGA sentences
+    to NMEA log, if satellite coverage is sufficient and NMEA logger
+    enabled
   - fix other apps' audio staying ducked after XCSoar plays a sound,
     and the audio vario cutting out when leaving settings #2609
   - fix crash on exit after opening the flight export dialog
