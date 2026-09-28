@@ -45,8 +45,10 @@ that returns true. A value that still fits is redrawn in place.
 `value` fills a `ValueState`. Assign `state.text` before the call
 returns; the list copies it. A badge pointer is a `_()` literal.
 `state.help == nullptr` leaves the explanation passed to
-`AddValue`. `state.hidden` drops the row. `state.disabled` greys a
-row that has `edit`.
+`AddValue`. That text sits below the settings when the rows and
+the text both fit. When the page scrolls, or the text does not
+fit there, it sits under the selected row. `state.hidden` drops
+the row. `state.disabled` greys a row that has `edit`.
 
 No `edit`: the row stays grey and the cursor may rest so the
 explanation can be read. With `edit`: the label selects, the value

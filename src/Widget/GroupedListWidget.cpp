@@ -612,6 +612,17 @@ private:
   /** the height of all elements, including the margin below them */
   unsigned content_height = 0;
 
+  /**
+   * The selected explanation is drawn below the settings, in the
+   * room the page has left.  It is not part of an item.
+   */
+  bool help_below_settings = false;
+
+  /** document y of #help_below_settings, like #Element::top */
+  int help_below_top = 0;
+
+  unsigned help_below_height = 0;
+
   /** the first visible pixel row of the virtual contents */
   int origin = 0;
 
@@ -839,6 +850,12 @@ public:
   void WalkFooter(std::size_t i, FooterCallback f) const noexcept;
 
   void WalkItemHelp(std::size_t i, FooterCallback f) const noexcept;
+
+  /** the explanation drawn below the settings, when it fits there */
+  void WalkHelpBelow(FooterCallback f) const noexcept;
+
+  [[nodiscard]]
+  bool InHelpBelow(int y) const noexcept;
 
   /**
    * @return the link at the given position, or nullptr if there is
@@ -1804,9 +1821,61 @@ GroupedListControl::WalkItemHelp(std::size_t i,
   WalkWrapped(element.help, element.links, wrapped, rc, std::move(f));
 }
 
+void
+GroupedListControl::WalkHelpBelow(FooterCallback f) const noexcept
+{
+  if (!help_below_settings || help_below_height == 0 ||
+      cursor < 0 || (std::size_t)cursor >= elements.size())
+    return;
+
+  const Element &element = elements[cursor];
+  if (element.help.empty())
+    return;
+
+  const int margin = GetCardMargin();
+  const int padding = GetPadding();
+  const int pad = (int)Layout::GetTextPadding();
+  const int top = help_below_top - origin + pad;
+  const PixelRect rc{margin + padding, top,
+                     GetContentWidth() - margin - padding,
+                     top + (int)help_below_height - 2 * pad};
+  const int width = std::max((int)rc.GetWidth(), 1);
+
+  WrappedText fallback;
+  if (element.wrapped_help_width != width)
+    fallback = WrapText(*look.list.font, width, element.help);
+
+  const WrappedText &wrapped = element.wrapped_help_width == width
+    ? element.wrapped_help
+    : fallback;
+
+  WalkWrapped(element.help, element.links, wrapped, rc, std::move(f));
+}
+
+bool
+GroupedListControl::InHelpBelow(int y) const noexcept
+{
+  if (!help_below_settings || help_below_height == 0)
+    return false;
+
+  const int virtual_y = y + origin;
+  return virtual_y >= help_below_top &&
+    virtual_y < help_below_top + (int)help_below_height;
+}
+
 const GroupedListControl::Link *
 GroupedListControl::FindLinkAt(PixelPoint p) const noexcept
 {
+  const Link *below = nullptr;
+  if (InHelpBelow(p.y)) {
+    WalkHelpBelow([&below, p](PixelRect rc, std::string_view,
+                              const Link *link){
+      if (link != nullptr && rc.Contains(p))
+        below = link;
+    });
+    return below;
+  }
+
   const int i = FindElementAt(p.y);
   if (i < 0)
     return nullptr;
@@ -3051,6 +3120,7 @@ GroupedListControl::UpdateLayout() noexcept
     const int text_width = GetContentWidth() - 2 * margin - 2 * padding;
 
     int y = 0;
+    unsigned cursor_help_full = 0;
 
     for (std::size_t i = 0; i < elements.size(); ++i) {
       Element &element = elements[i];
@@ -3251,9 +3321,9 @@ GroupedListControl::UpdateLayout() noexcept
         break;
       }
 
-      /* the explanation of the selected item sits under its row, so
-         the rows below it move down while it is selected.  The height
-         on the screen eases toward the wrapped height. */
+      /* measure the selected explanation, but do not spend its
+         height yet: it goes below the settings when that fits, and
+         under the row when the page scrolls or the text does not */
       if (element.type == Element::Type::ITEM) {
         unsigned full = 0;
 
@@ -3279,8 +3349,8 @@ GroupedListControl::UpdateLayout() noexcept
           element.help_full = 0;
           element.help_from = 0;
           element.help_height = 0;
-        } else {
-          if (keep_help && (int)i == cursor &&
+        } else if ((int)i == cursor) {
+          if (keep_help &&
               element.help_height == 0 && element.help_full == 0) {
             element.help_height = saved_help_height;
             element.help_full = saved_help_full;
@@ -3288,13 +3358,58 @@ GroupedListControl::UpdateLayout() noexcept
             element.help_since = saved_help_since;
           }
 
-          SetHelpFull(element, full);
+          cursor_help_full = full;
+        } else {
+          SetHelpFull(element, 0);
           element.height += element.help_height;
         }
       }
 
       element.top = y;
       y += (int)element.height;
+    }
+
+    /* the settings on their own, including the margin under them */
+    const unsigned settings_height =
+      (unsigned)y + GetTrailingMargin();
+    const unsigned view = (unsigned)std::max(GetViewHeight(), 0);
+    const bool settings_scroll = settings_height > view;
+    const unsigned room = !settings_scroll && view > settings_height
+      ? view - settings_height
+      : 0;
+    const unsigned open_height =
+      cursor >= 0 && (std::size_t)cursor < elements.size()
+      ? elements[cursor].help_height
+      : 0;
+    /* a dialog which grew to fit the explanation under the row is
+       not spare room: that explanation stays under the row */
+    const bool grown_for_row = open_height > 0 && room <= open_height;
+    const bool below_settings = cursor_help_full > 0 &&
+      !settings_scroll && cursor_help_full <= room && !grown_for_row;
+
+    if (below_settings) {
+      Element &item = elements[cursor];
+      item.help_full = 0;
+      item.help_from = 0;
+      item.help_height = 0;
+      help_below_settings = true;
+      help_below_top = y;
+      help_below_height = cursor_help_full;
+      y += (int)cursor_help_full;
+    } else if (cursor >= 0 && (std::size_t)cursor < elements.size() &&
+               elements[cursor].type == Element::Type::ITEM) {
+      help_below_settings = false;
+      help_below_height = 0;
+      Element &item = elements[cursor];
+      SetHelpFull(item, cursor_help_full);
+      item.height += item.help_height;
+      for (std::size_t j = (std::size_t)cursor + 1;
+           j < elements.size(); ++j)
+        elements[j].top += (int)item.help_height;
+      y += (int)item.help_height;
+    } else {
+      help_below_settings = false;
+      help_below_height = 0;
     }
 
     content_height = elements.empty()
@@ -4658,6 +4773,26 @@ GroupedListControl::DrawElements(Canvas &canvas) noexcept
     DrawElement(canvas, i,
                 PixelRect{0, top, right, top + (int)element.height});
   }
+
+  if (!help_below_settings || help_below_height == 0 ||
+      cursor < 0 || (std::size_t)cursor >= elements.size())
+    return;
+
+  canvas.Select(*look.list.font);
+  const Color link_color = look.dark_mode
+    ? COLOR_XCSOAR_LIGHT
+    : COLOR_XCSOAR;
+  WalkHelpBelow([this, &canvas, link_color](PixelRect piece_rc,
+                                            std::string_view piece,
+                                            const Link *link){
+    canvas.SetTextColor(link != nullptr ? link_color : look.text_color);
+    canvas.DrawText(piece_rc.GetTopLeft(), piece);
+
+    if (link != nullptr)
+      canvas.DrawHLine(piece_rc.left, piece_rc.right,
+                       piece_rc.top + look.list.font->GetAscentHeight() + 1,
+                       link_color);
+  });
 }
 
 void
@@ -5058,7 +5193,7 @@ GroupedListControl::OnMouseUp(PixelPoint p) noexcept
        scroll gesture leaves it where it was */
     SetCursor(press);
     ActivateItem();
-  } else if (clear_cursor)
+  } else if (clear_cursor && !InHelpBelow(p.y))
     ClearCursor();
 
   return true;
