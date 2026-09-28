@@ -204,6 +204,8 @@ Version 7.46 - not yet released
   - show no wind in the T Next Leg comment when the box is blank
     because wind is not available
 * ui
+  - show a yes/no field as the same switch as on a settings list.
+    Tapping it, or pressing enter, flips the setting
   - show the configuration menu and its pages as the same list as
     Wind Settings. A group opens its pages. A page scrolls only
     when the rows do not fit

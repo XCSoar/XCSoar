@@ -30,6 +30,7 @@
 #include "UIGlobals.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/TextButtonRenderer.hpp"
+#include "Renderer/ToggleRenderer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scissor.hpp"
@@ -186,14 +187,6 @@ static constexpr unsigned FOOTER_GAP_PT = 4;
  * they are.
  */
 static constexpr unsigned LOOK_AHEAD_PERCENT[] = {50, 20};
-
-/**
- * The height of the switch which shows a boolean value, and the
- * distance between its track and its thumb.  The width follows from
- * the height: the track of such a switch is much wider than tall.
- */
-static constexpr unsigned TOGGLE_HEIGHT_PT = 22;
-static constexpr unsigned TOGGLE_INSET_PT = 2;
 
 /**
  * The renderer of the texts which may take more than one line, the
@@ -1437,30 +1430,16 @@ private:
   /** The height of the switch which shows a boolean value. */
   [[gnu::pure]]
   int GetToggleHeight() const noexcept {
-    /* it must not touch the edges of the item on a device whose rows
-       are shorter than the switch would like to be; the room it
-       leaves is the one the text keeps, which is a vertical measure.
-       The padding of the card is the horizontal one and much larger:
-       on a device without a touch screen, where a row is only as
-       tall as one line of text, it would leave nothing at all.  An
-       even height lets the two half circles meet the rectangle
-       between them without a step */
-    return std::max(6, std::min((int)Layout::VptScale(TOGGLE_HEIGHT_PT),
-                                (int)GetItemHeight()
-                                - 2 * (int)Layout::GetTextPadding())) & ~1;
+    return ToggleHeight((int)GetItemHeight());
   }
 
   /** The width of that switch; the track is much wider than tall. */
   [[gnu::pure]]
   int GetToggleWidth() const noexcept {
-    return GetToggleHeight() * 33 / 20;
+    return ToggleWidth(GetToggleHeight());
   }
 
   static void DrawCheck(Canvas &canvas, PixelRect rc, Color color) noexcept;
-
-  static void DrawToggle(Canvas &canvas, const PixelRect &rc, bool checked,
-                         const DialogLook &look,
-                         Color background_color, Color text_color) noexcept;
 
   void SetOrigin(int _origin) noexcept;
   void EnsureVisible(unsigned i) noexcept;
@@ -4042,113 +4021,6 @@ GroupedListControl::DrawCheck(Canvas &canvas, PixelRect rc,
 
   canvas.DrawLine({left, bottom - (int)rc.GetHeight() / 2}, corner);
   canvas.DrawLine(corner, {right, rc.top});
-}
-
-/** The colors of the switch which shows a boolean value. */
-struct ToggleColors {
-  /** the pill behind the thumb */
-  Color track_color;
-
-  /** the thumb which sits at one of its ends */
-  Color thumb_color;
-
-  /** the outline of the pill; the same as #track_color draws none */
-  Color outline_color;
-};
-
-[[gnu::pure]]
-static ToggleColors
-GetToggleColors(const DialogLook &look, bool checked,
-                Color background_color, Color text_color) noexcept
-{
-  if (IsDithered())
-    /* a display which knows two colors has nothing but the two colors
-       of the row it sits on: the switch which is on is filled with
-       the color of the text, the one which is off shows the row
-       through it and draws its outline instead.  Both of them turn
-       around with the item under the cursor, as its icon does.  Gray
-       levels are enough for the colors below */
-    return {checked ? text_color : background_color,
-            checked ? background_color : text_color,
-            text_color};
-
-  if (checked)
-    /* green-500 of the Tailwind palette: it is much lighter and more
-       saturated than the accent blue which the item under the cursor
-       wears, and it keeps its distance from that blue in hue as well.
-       The darker green of a badge sits too close to it: on the item
-       under the cursor the two read as one muddy color */
-    return {Color(0x22, 0xc5, 0x5e), COLOR_WHITE, Color(0x22, 0xc5, 0x5e)};
-
-  /* zinc-600 and zinc-300 of the same palette */
-  const Color track = look.dark_mode
-    ? Color(0x52, 0x52, 0x5b)
-    : Color(0xd4, 0xd4, 0xd8);
-
-  return {track, COLOR_WHITE, track};
-}
-
-void
-GroupedListControl::DrawToggle(Canvas &canvas, const PixelRect &rc,
-                               bool checked, const DialogLook &look,
-                               Color background_color,
-                               Color text_color) noexcept
-{
-  const auto colors = GetToggleColors(look, checked,
-                                      background_color, text_color);
-
-  /* the pill is a rectangle between two half circles; other than a
-     rounded rectangle whose corners are painted over, this touches no
-     pixel outside the switch, and the background may be anything.
-
-     Only the circles take their color from the brush; it and the pen
-     have a name because a temporary would be gone at the semicolon,
-     and a canvas which selects the object itself rather than a copy
-     of it would draw with a deleted one.  The pen paints the rim of
-     the circle: give it the color of the brush, because a null pen is
-     black and the rim would be a frayed dark edge */
-  const auto draw_pill = [&canvas](const PixelRect &r, Color color){
-    const int radius = (int)r.GetHeight() / 2;
-    const int centre_y = r.top + radius;
-
-    canvas.DrawFilledRectangle({r.left + radius, r.top,
-                                r.right - radius, r.bottom},
-                               color);
-
-    const Brush brush(color);
-    const Pen pen(0, color);
-    canvas.Select(brush);
-    canvas.Select(pen);
-
-    canvas.DrawCircle({r.left + radius, centre_y}, radius);
-    canvas.DrawCircle({r.right - radius, centre_y}, radius);
-  };
-
-  if (colors.outline_color == colors.track_color)
-    draw_pill(rc, colors.track_color);
-  else {
-    /* the switch which is off has the color of the row behind it:
-       draw it one line larger in the color of the outline, and let
-       the track cover all but that line */
-    draw_pill(rc, colors.outline_color);
-
-    PixelRect inner = rc;
-    inner.Grow(-GetSeparatorThickness());
-    draw_pill(inner, colors.track_color);
-  }
-
-  const int radius = (int)rc.GetHeight() / 2;
-  const int inset = std::max(1, (int)Layout::VptScale(TOGGLE_INSET_PT));
-  const int thumb_radius = radius - inset;
-
-  const Brush thumb_brush(colors.thumb_color);
-  const Pen thumb_pen(0, colors.thumb_color);
-  canvas.Select(thumb_brush);
-  canvas.Select(thumb_pen);
-  canvas.DrawCircle({checked
-                     ? rc.right - radius
-                     : rc.left + radius,
-                     rc.top + radius}, thumb_radius);
 }
 
 int

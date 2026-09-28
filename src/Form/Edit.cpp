@@ -7,7 +7,9 @@
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Button.hpp"
+#include "DataField/Boolean.hpp"
 #include "Renderer/ButtonRenderer.hpp"
+#include "Renderer/ToggleRenderer.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/event/KeyCode.hpp"
 #include "Dialogs/DataField.hpp"
@@ -145,13 +147,22 @@ WndProperty::BeginEditing() noexcept
     
     OnHelp();
     return false;
-  } else {
-    if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
-      return false;
+  }
 
+  /* a boolean is the switch: tapping it flips it, as on a grouped
+     list, instead of opening a menu of On and Off */
+  if (data_field->GetType() == DataField::Type::BOOLEAN) {
+    auto &field = static_cast<DataFieldBoolean &>(*data_field);
+    field.ModifyValue(!field.GetValue());
     RefreshDisplay();
     return true;
   }
+
+  if (!edit_callback(GetCaption(), *data_field, GetHelpText()))
+    return false;
+
+  RefreshDisplay();
+  return true;
 }
 
 void
@@ -386,6 +397,38 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
 
     canvas.DrawClippedText(org, clip_width - org.x,
                            caption.c_str());
+  }
+
+  /* a boolean is the switch at the right edge, not an On/Off field */
+  if (data_field != nullptr &&
+      data_field->GetType() == DataField::Type::BOOLEAN) {
+    Color background_color = look.background_color;
+    Color text_color = look.text_color;
+    if (pressed) {
+      background_color = look.list.pressed.background_color;
+      text_color = look.list.pressed.text_color;
+    } else if (focused) {
+      background_color = look.focused.background_color;
+      text_color = look.focused.text_color;
+    }
+
+    PixelRect slot = edit_rc;
+    if (slot.IsEmpty())
+      slot = {0, 0, canvas_width, canvas_height};
+    const int height = ToggleHeight(slot.GetHeight());
+    const int width = ToggleWidth(height);
+
+    PixelRect toggle_rc;
+    toggle_rc.right = slot.right;
+    toggle_rc.left = std::max(slot.left, toggle_rc.right - width);
+    toggle_rc.top = slot.top + (slot.GetHeight() - height) / 2;
+    toggle_rc.bottom = toggle_rc.top + height;
+
+    const bool checked =
+      static_cast<const DataFieldBoolean &>(*data_field).GetValue();
+    DrawToggle(canvas, toggle_rc, checked, look,
+               background_color, text_color);
+    return;
   }
 
   Color background_color, text_color;
