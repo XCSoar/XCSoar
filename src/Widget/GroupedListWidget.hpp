@@ -1,0 +1,825 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#pragma once
+
+#include "WindowWidget.hpp"
+#include "ResourceId.hpp"
+#include "ui/dim/Rect.hpp"
+
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <tuple>
+
+struct DialogLook;
+class ButtonPanel;
+class GroupedListControl;
+
+/**
+ * A #Widget which divides one page into several captioned groups.
+ *
+ * The items of a group are drawn as a card with rounded corners; the
+ * caption of a group sits above its card, an optional footer below
+ * it.  The explanation of the selected item sits below the settings
+ * when the rows and the text both fit.  When the page scrolls, or
+ * the text does not fit there, it sits under that item instead.
+ * Unlike #ListWidget, every element has its own height:
+ * captions and footers are only as tall as their text, while the
+ * items keep the height of a comfortable touch target.
+ *
+ * Use this where a page has more entries than fit into one flat list,
+ * but splitting them over several pages (as #TabWidget or the
+ * configuration menu do) would hide the structure from the user.
+ *
+ * A page which has settings of its own derives from this class: it
+ * fills the list in its Prepare() before calling
+ * GroupedListWidget::Prepare(), and writes the settings in its
+ * Save().
+ */
+class GroupedListWidget : public WindowWidget {
+public:
+  using Callback = std::function<void()>;
+
+  /**
+   * @param index the index of the item the cursor has moved to,
+   * counting only items; -1 if the cursor has been taken off the
+   * list, which happens when the user taps beside the items
+   */
+  using CursorCallback = std::function<void(int index)>;
+
+  /** How many items the user may check. */
+  enum class SelectionMode : uint_least8_t {
+    /** no check marks; an item only invokes its callback */
+    NONE,
+
+    /**
+     * At most one item of each group carries a check mark, like a
+     * group of radio buttons.  Checking an item unchecks the item
+     * which was checked before, but only within the same group.
+     */
+    SINGLE,
+
+    /** any number of items carries a check mark */
+    MULTIPLE,
+  };
+
+  /** The edge of the item where the check mark is drawn. */
+  enum class CheckPosition : uint_least8_t { LEFT, RIGHT };
+
+  /** What Enter does on an item. */
+  enum class EnterAction : uint_least8_t {
+    /**
+     * The item itself: it flips its switch, sets its check mark and
+     * calls its callback.  This is what a page of settings needs.
+     */
+    ITEM,
+
+    /**
+     * The button of the dialog which the action bar has marked,
+     * which then acts on the item under the cursor.  Use it for a
+     * group whose items are nothing but a choice, as the Alternates
+     * dialog is: the cursor picks one, Left and Right pick what to
+     * do with it, and Enter does it.  Without a marked button, the
+     * item is activated after all, so that Enter is never lost.
+     *
+     * The finger follows the same rule: a tap on an item which the
+     * cursor is not on only moves it there, so that a button can be
+     * aimed at the item without the tap setting anything off.  The
+     * second tap on the same item activates it.  A tap on the switch
+     * of an item is not a choice but the switch itself, and flips it
+     * as it always does.
+     *
+     * Space activates the item under the cursor whatever this says,
+     * for a keyboard which has that key.  A control stick has four
+     * directions and one button: give its user the action of the
+     * item as a button of the action bar.
+     */
+    ACTION_BAR,
+  };
+
+  /**
+   * The part of an item where a tap flips its
+   * #ItemOptions::toggle.  It says nothing about the keyboard:
+   * Enter always flips the switch of the item under the cursor.
+   */
+  enum class ToggleHitArea : uint_least8_t {
+    /**
+     * The switch itself.  A tap on the rest of the item only moves
+     * the cursor there, which shows the #ItemOptions::help of the
+     * item; this lets the user read what a setting does before
+     * changing it.
+     */
+    SWITCH,
+
+    /** anywhere on the item, which is the larger target */
+    ROW,
+  };
+
+  /**
+   * How many items of a group may show their children at the same
+   * time.
+   */
+  enum class ExpandMode : uint_least8_t {
+    /** every item which has been opened stays open */
+    MULTIPLE,
+
+    /** opening one closes the others of this group, like an accordion */
+    SINGLE,
+  };
+
+  /** What opens an item which has children. */
+  enum class ExpandTrigger : uint_least8_t {
+    /** Enter, Space or a tap on the item */
+    ACTIVATE,
+
+    /**
+     * The cursor, as soon as it arrives, and the item closes again
+     * when the cursor leaves it and its children.  What is open is
+     * therefore what the cursor is on, which is what a menu of pages
+     * wants: Up and Down walk through everything the page has.
+     *
+     * Enter and a tap still close the item under the cursor, and
+     * leaving it and coming back opens it again.  The first tap on
+     * another item only carries the cursor there, because arriving
+     * is what opens it.
+     */
+    CURSOR,
+  };
+
+  /** The font which draws a short text of an item. */
+  enum class TextFont : uint_least8_t {
+    /** the font of the list, like the caption */
+    DEFAULT,
+
+    /**
+     * Fixed width, for a text whose characters shall line up, e.g. a
+     * path, a serial number, a checksum or a code of four letters.
+     */
+    MONO,
+  };
+
+  /** The size of a short text of an item. */
+  enum class TextSize : uint_least8_t {
+    /** the size of the list font, like the caption */
+    DEFAULT,
+
+    /** the small font, like the subtitle */
+    SMALL,
+  };
+
+  /**
+   * The colors of a badge.  An item which is #ItemOptions::disabled is
+   * grey, and grey is reserved for "not available", except a #DANGER
+   * badge: that failure stays red, because the row can be read and
+   * the failure still has to be seen.  Selecting a row greys a badge
+   * in the dialog accent, which is the selection itself.  A #WARNING
+   * stays yellow, as a failure stays red.
+   */
+  enum class BadgeStyle : uint_least8_t {
+    /** the accent color of the dialog; the state which shall be seen */
+    PRIMARY,
+
+    /** something needs attention, but works, e.g. "outdated" */
+    WARNING,
+
+    /** something is broken, e.g. "no fix" */
+    DANGER,
+
+    /** something has succeeded, e.g. "connected" */
+    SUCCESS,
+  };
+
+  /**
+   * The face of a value row.  #text is copied.  The badge pointers
+   * are copied too, before the call returns.  #help nullptr leaves
+   * the explanation given when the row was added.
+   */
+  struct ValueState {
+    std::string text;
+
+    const char *help = nullptr;
+
+    const char *badge = nullptr;
+
+    BadgeStyle badge_style = BadgeStyle::PRIMARY;
+
+    const char *badge2 = nullptr;
+
+    BadgeStyle badge_style2 = BadgeStyle::PRIMARY;
+
+    bool hidden = false;
+
+    /**
+     * Grey the row out.  Applied only when the row has an action,
+     * so a status row stays as it was added.
+     */
+    bool disabled = false;
+  };
+
+  /** Writes the current face of one row. */
+  using ValueCallback = std::function<void(ValueState &state)>;
+
+  /** The contents and the behaviour of a group. */
+  struct GroupOptions {
+    /**
+     * An explanatory text below the card of the group.  It is
+     * word-wrapped and gets as much room as it needs.  The
+     * explanation of an item is shown under that item instead.
+     */
+    const char *footer = nullptr;
+
+    /** how many items of this group may be checked at the same time */
+    SelectionMode selection_mode = SelectionMode::NONE;
+
+    /** the edge which holds the check mark */
+    CheckPosition check_position = CheckPosition::RIGHT;
+
+    /**
+     * What Enter does on an item of this group.  It is a property of
+     * the group because it follows from what its items are: a
+     * setting acts on its own, a choice waits for the action bar.
+     */
+    EnterAction enter_action = EnterAction::ITEM;
+
+    /** how many items of this group may be open at the same time */
+    ExpandMode expand_mode = ExpandMode::MULTIPLE;
+
+    /** what opens an item of this group which has children */
+    ExpandTrigger expand_trigger = ExpandTrigger::ACTIVATE;
+
+    /**
+     * Let the room above and below the text of an item shrink as the
+     * text grows: a row of one line keeps the room which makes it
+     * easy to hit, and twice the text keeps half of it.  Turn it off
+     * where the tall items of the group are targets for a finger,
+     * too; every item then keeps the room of a one-line row.
+     */
+    bool shrink_vertical_padding = true;
+  };
+
+  /** The contents and the decorations of an item. */
+  struct ItemOptions {
+    /**
+     * An icon at the left edge, e.g. IDB_TEAMMATE_POS.  It is scaled
+     * into a square which is as tall as one and a half lines of text,
+     * no matter how tall the item is.
+     */
+    ResourceId icon = ResourceId::Null();
+
+    /**
+     * A character which is drawn where #icon would be, e.g. an emoji.
+     * It is left out on a display whose font does not have it, and
+     * the column is then not reserved either.
+     */
+    const char *icon_text = nullptr;
+
+    /**
+     * A second line below the caption, in a smaller font; the same
+     * shape the device list and the WiFi list use today.  It makes
+     * the item taller.  A value which is below the caption stands
+     * between the two.
+     */
+    const char *subtitle = nullptr;
+
+    /** the font of #subtitle */
+    TextFont subtitle_font = TextFont::DEFAULT;
+
+    /** a text at the right edge, e.g. the current value of a setting */
+    const char *value = nullptr;
+
+    /**
+     * Draw #value below the caption instead of beside it, over the
+     * whole width of the item.  A value which leaves too little room
+     * for the caption moves there by itself.
+     */
+    bool value_below = false;
+
+    /** the font of #value */
+    TextFont value_font = TextFont::DEFAULT;
+
+    /** the size of #value */
+    TextSize value_size = TextSize::DEFAULT;
+
+    /**
+     * Show every line of #value.  Without it, a value ends after a
+     * few lines with an ellipsis, which keeps a text that was filled
+     * by accident from blowing up the card.
+     */
+    bool value_all_lines = false;
+
+    /**
+     * How many lines #value may use; 0 for the default of the list.
+     * The last line ends with an ellipsis if the text goes on.
+     * #value_all_lines wins over it.
+     */
+    unsigned value_max_lines = 0;
+
+    /**
+     * A text over the whole width of the item, below the caption and
+     * the value and above #subtitle: what the item is about, where a
+     * subtitle is too short for it.  The caption, a value beside it,
+     * the badge, the switch and the arrow then share the first line,
+     * and the subtitle runs over the whole width, too.  An item
+     * without a caption is this text alone.
+     */
+    const char *description = nullptr;
+
+    /** the font of #description */
+    TextFont description_font = TextFont::DEFAULT;
+
+    /** the size of #description */
+    TextSize description_size = TextSize::DEFAULT;
+
+    /**
+     * How many lines #description may use; 0 for all of them.  The
+     * last line ends with an ellipsis where the text goes on.
+     */
+    unsigned description_max_lines = 0;
+
+    /** a short label in a rounded box, e.g. "active" */
+    const char *badge = nullptr;
+
+    /** the colors of #badge */
+    BadgeStyle badge_style = BadgeStyle::PRIMARY;
+
+    /**
+     * A second badge, drawn to the left of #badge.  The right-hand
+     * badge stays in the column the other rows use.
+     */
+    const char *badge2 = nullptr;
+
+    /** the colors of #badge2 */
+    BadgeStyle badge_style2 = BadgeStyle::PRIMARY;
+
+    /**
+     * The font of #badge.  A code which is read letter by letter, a
+     * frequency or an identifier is easier to compare from one item
+     * to the next when its characters line up.
+     */
+    TextFont badge_font = TextFont::DEFAULT;
+
+    /** an arrow, marking an item which opens another page */
+    bool chevron = false;
+
+    /**
+     * A tap on the label only moves the cursor here, so the
+     * explanation can be read.  A tap on the value, the badges or
+     * the arrow runs the item.  Enter still runs it.
+     */
+    bool label_selects = false;
+
+    /**
+     * A switch at the right edge which shows whether the setting is
+     * on, for an item which is nothing but a boolean.  Tapping the
+     * item flips the switch and then calls the callback, which reads
+     * the new state with GroupedListWidget::IsItemChecked().  The
+     * switch takes the place of the value, and of the check mark of a
+     * group which has a #SelectionMode: an item with a switch keeps
+     * the room of that column, but neither shows a check mark nor
+     * takes part in the selection of its group.
+     */
+    bool toggle = false;
+
+    /** the part of the item where a tap flips #toggle */
+    ToggleHitArea toggle_hit_area = ToggleHitArea::SWITCH;
+
+    /**
+     * Is this item checked?  It is the state of the check mark (with
+     * a #SelectionMode) or of the #toggle.
+     */
+    bool checked = false;
+
+    /**
+     * An explanation of this item, shown below the item while the
+     * cursor is on it.
+     */
+    const char *help = nullptr;
+
+    /**
+     * Called by UpdateValues() to refresh the value, the badges and
+     * whether the row is hidden.  The row stays put.
+     */
+    ValueCallback value_callback;
+
+    /**
+     * Is this item currently not available?  It is drawn greyed out,
+     * the cursor skips it, and activating it does nothing.  Without
+     * a value it carries a badge which says so, replacing #badge.
+     * A value stays, faded with the caption: the row can be read
+     * and cannot be changed.
+     */
+    bool disabled = false;
+
+    /**
+     * May the cursor rest on this item while it is #disabled?
+     * Activating it still does nothing, but its help text can be
+     * read, and a button of the dialog can act on it - a button
+     * which makes the item available again could not be aimed at it
+     * otherwise.
+     */
+    bool selectable_when_disabled = false;
+
+    /**
+     * The badge of an item which is #disabled; nullptr for the
+     * default label.  Use it to say why the item is not available.
+     */
+    const char *disabled_badge_label = nullptr;
+
+    /**
+     * Leave this item out.  It is not drawn, it occupies no room and
+     * the cursor skips it, but it keeps its index: the indices of the
+     * items behind it do not move while it is hidden.
+     */
+    bool hidden = false;
+
+    /**
+     * Shown only while the configuration dialogue is in expert
+     * mode.  A page which is not that dialogue leaves this false.
+     */
+    bool expert = false;
+  };
+
+private:
+  /** owns the window until Prepare() hands it to #WindowWidget */
+  std::unique_ptr<GroupedListControl> pending;
+
+  GroupedListControl &control;
+
+  /** the view above the list, or nullptr */
+  std::unique_ptr<Widget> top_widget;
+
+  /** the height of #top_widget; 0 asks the view itself */
+  unsigned top_widget_height_pt = 0;
+
+  /** the view below the list, or nullptr */
+  std::unique_ptr<Widget> bottom_widget;
+
+  /** the height of #bottom_widget; 0 asks the view itself */
+  unsigned bottom_widget_height_pt = 0;
+
+  /** the buttons which Left and Right reach, or nullptr */
+  ButtonPanel *action_bar = nullptr;
+
+  std::function<void(bool visible)> visibility_callback;
+
+public:
+  explicit GroupedListWidget(const DialogLook &look) noexcept;
+  ~GroupedListWidget() noexcept override;
+
+  /**
+   * Add a hero card which introduces the page or a part of it, with a
+   * title in a larger font and an optional description below it.
+   */
+  void AddHero(const char *title, const char *description=nullptr) noexcept;
+
+  /**
+   * Begin a new group.  All items added afterwards belong to it.
+   *
+   * @param caption the group caption; nullptr for a group which is
+   * only separated from the previous one, without a caption
+   */
+  void AddGroup(const char *caption=nullptr) noexcept;
+
+  /**
+   * Begin a new group which lets the user check its items.  Inside
+   * one group, items with and without a check mark may be mixed;
+   * those without one still reserve the room for it, which keeps
+   * their captions aligned.
+   */
+  void AddGroup(const char *caption, const GroupOptions &options) noexcept;
+
+  /**
+   * Append a selectable item to the group which was opened by the
+   * last AddGroup() call.
+   *
+   * @param caption nullptr for an item which has no caption: it shows
+   * its ItemOptions::description instead, which a detail view needs
+   * where the text is the item
+   */
+  void AddItem(const char *caption, Callback callback) noexcept;
+
+  void AddItem(const char *caption, Callback callback,
+               const ItemOptions &options) noexcept;
+
+  /**
+   * Append an item which has no callback; useful for a list which is
+   * only there to be checked.
+   */
+  void AddItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /**
+   * A setting row.  With a callback, a tap on the label selects the
+   * row and a tap on the value opens it.  Without one, the row stays
+   * grey and the cursor may rest on it so its help can be read.  A
+   * badge on that row says why it cannot be used.
+   */
+  void AddValue(const char *caption, ItemOptions options) noexcept;
+
+  void AddValue(const char *caption, Callback callback,
+                ItemOptions options) noexcept;
+
+  /**
+   * A setting row whose value comes from #value.  Later refreshes
+   * call #value again instead of adding the row a second time.
+   */
+  void AddValue(const char *caption, const char *help,
+                ValueCallback value, Callback edit = {}) noexcept;
+
+  /**
+   * Call each #ValueCallback and draw what changed.
+   *
+   * @return true when the list needs to be fitted again, because a
+   * row grew or was hidden
+   */
+  bool UpdateValues() noexcept;
+
+  /**
+   * The widest caption, value, badge or explanation currently on
+   * the list.  A floating dialog uses it as its client width,
+   * plus the list padding.
+   */
+  [[nodiscard]]
+  unsigned PreferredTextWidth() const noexcept;
+
+  /**
+   * Called from Show() with true and from Hide() with false.
+   * Use it for a clock or a blackboard listener.  The false call
+   * can happen twice, so it must be safe to repeat.
+   */
+  void SetVisibilityCallback(std::function<void(bool visible)>
+                             callback) noexcept;
+
+  /** One child for AddChildItems(). */
+  struct ChildDefinition {
+    const char *caption;
+
+    Callback callback;
+
+    ItemOptions options;
+  };
+
+  /**
+   * Append an item below the one which was added last, which opens
+   * and closes with it.  The item above becomes a parent by getting
+   * children; it needs no option of its own for that, and activating
+   * it opens it instead of calling its callback.  A child is an item
+   * like any other, only indented: it carries a value, a badge, a
+   * check mark or a switch just the same.
+   *
+   * A child is hidden while its parent is closed, which keeps the
+   * index of every item of the page the same however much is open.
+   */
+  void AddChildItem(const char *caption, Callback callback) noexcept;
+
+  void AddChildItem(const char *caption, Callback callback,
+                    const ItemOptions &options) noexcept;
+
+  void AddChildItem(const char *caption, const ItemOptions &options) noexcept;
+
+  /** Append several children at once, which reads like the block it is. */
+  void AddChildItems(std::initializer_list<ChildDefinition> children) noexcept;
+
+  /** One button of a row which AddButtonRow() creates. */
+  struct ButtonDefinition {
+    const char *caption;
+
+    Callback callback;
+
+    /**
+     * Draw the button greyed out and let nothing press it.  It stays
+     * on the page, where it says what is not possible now.
+     */
+    bool disabled = false;
+  };
+
+  /** What a button carries besides its caption. */
+  struct ButtonOptions {
+    /**
+     * A text below the button which says what it does, in the column
+     * of the captions.  Unlike ItemOptions::help it is always on the
+     * screen: a button which cannot be pressed must say why without
+     * being selected first.
+     */
+    const char *description = nullptr;
+
+    /** @see ButtonDefinition::disabled */
+    bool disabled = false;
+  };
+
+  /**
+   * Append a button to the group which was opened by the last
+   * AddGroup() call.  It ends the card of that group and stands below
+   * it on the page, in the width of a card: a button is a control and
+   * needs the background around it, which a row of a card cannot
+   * offer.  The group is still what it belongs to - its caption
+   * stands above it and its footer below it.
+   *
+   * Use a button for an action which has no destination: refreshing a
+   * download, applying something to the page, clearing a cache.  An
+   * item with a chevron is what opens another page.
+   */
+  void AddButton(const char *caption, Callback callback) noexcept;
+
+  void AddButton(const char *caption, Callback callback,
+                 const ButtonOptions &options) noexcept;
+
+  /**
+   * Append several buttons side by side, which share the width of a
+   * card.  They belong together, like the two halves of a question;
+   * buttons which do not should be added one by one, and stand below
+   * each other.
+   */
+  void AddButtonRow(std::initializer_list<ButtonDefinition> buttons) noexcept;
+
+  void AddButtonRow(std::initializer_list<ButtonDefinition> buttons,
+                    const ButtonOptions &options) noexcept;
+
+  /**
+   * Add a group which shows a view instead of items, e.g. a button or
+   * a preview of what the page changes.  Its caption and its footer
+   * work as they do for a group of items, and the view keeps the
+   * margins of a card and scrolls with the list.
+   *
+   * The view may edit something: Save(), Leave() and KeyPress() reach
+   * it like they reach the widgets above and below the list.  Click()
+   * and ReClick() do not, they belong to the activation area of a tab
+   * container, and the focus of this widget stays on the list.
+   *
+   * @param caption the group caption; nullptr for a group which shows
+   * nothing but the view
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  Other than the widget below the list, it may be taller
+   * than the window.
+   */
+  void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
+                      unsigned height_pt=0, bool fill_view=false,
+                      std::function<bool()> shown={}) noexcept;
+
+  void AddWidgetGroup(const char *caption, std::unique_ptr<Widget> widget,
+                      const GroupOptions &options,
+                      unsigned height_pt=0, bool fill_view=false,
+                      std::function<bool()> shown={}) noexcept;
+
+  /**
+   * Remove all elements.  The item the cursor is on and the scroll
+   * position survive the next UpdateLayout(), so that a list which
+   * refreshes itself does not jump back to the top.
+   */
+  void Clear() noexcept;
+
+  /**
+   * @return the number of items; a hidden item counts too, because it
+   * keeps its index
+   */
+  [[gnu::pure]]
+  unsigned GetItemCount() const noexcept;
+
+  /**
+   * Install a function which is called whenever the cursor moves to
+   * another item; a dialog uses it to enable and disable the buttons
+   * which act on the current item.  It is not called while the list
+   * is being built.
+   */
+  void SetCursorCallback(CursorCallback callback) noexcept;
+
+  /**
+   * The dialog keeps room for a short explanation.  A shorter
+   * text does not shrink it, and a longer one scrolls.
+   */
+  void SetSizeFollowsHelp(bool enable) noexcept;
+
+  /**
+   * Let Left and Right move the keyboard focus between the list and
+   * the buttons of the dialog, in the order in which the dialog has
+   * created them.  Without this, both keys stay free.
+   *
+   * A control stick has four directions and one button, and Up and
+   * Down belong to the list: this gives the user of such a device a
+   * way to reach a button which acts on the item under the cursor
+   * without scrolling to the end of the list first.  The focus is
+   * what decides where Enter goes, so there is no second, invisible
+   * state to keep in mind.  Combine it with
+   * WidgetDialog::EnableCursorSelection(), which marks the button
+   * which the focus is on: both keys then lead out of the list to
+   * the button which was used last, and only walk along the bar once
+   * the focus is there.
+   */
+  void SetActionBar(ButtonPanel &buttons) noexcept;
+
+  /**
+   * Move the keyboard focus to the next or the previous control of
+   * the dialog, which is a button of the action bar or the list
+   * itself.
+   */
+  bool MoveFocus(bool forward) noexcept;
+
+  /**
+   * @return the index of the item the cursor is on, counting only
+   * items; -1 if there is no cursor
+   */
+  [[gnu::pure]]
+  int GetCursorIndex() const noexcept;
+
+  /**
+   * Move the cursor to one item, counting only items.  A dialog which
+   * rearranges the list calls it to let the cursor follow the item
+   * the user has moved.  It may be called while the list is being
+   * filled: the cursor moves as soon as the list has been laid out.
+   */
+  void SetCursorIndex(unsigned i) noexcept;
+
+  /**
+   * Check or uncheck one item.  In #SelectionMode::SINGLE, checking
+   * an item unchecks the other items of its group.
+   *
+   * @param i the index of the item, counting only items
+   */
+  void SetItemChecked(unsigned i, bool checked=true) noexcept;
+
+  /**
+   * @param i the index of the item, counting only items
+   */
+  [[gnu::pure]]
+  bool IsItemChecked(unsigned i) const noexcept;
+
+  /**
+   * Lay out the elements again.  Called by Prepare(); call it again
+   * after the contents of a prepared widget have been changed.
+   */
+  void UpdateLayout() noexcept;
+
+  /**
+   * The height of the laid-out page.  Zero before the window has
+   * been laid out.  A dialog uses it to stay as tall as its list.
+   */
+  [[gnu::pure]]
+  unsigned GetContentHeight() const noexcept;
+
+  /**
+   * The height a floating dialog should use.  It includes a short
+   * explanation and stops there, so a longer one scrolls.
+   */
+  [[gnu::pure]]
+  unsigned GetFitContentHeight() const noexcept;
+
+  /**
+   * Show another view above the list, e.g. the row which names the
+   * directory a file list is in.  It sits between the title of the
+   * dialog and the list; it does not scroll with the list, and it
+   * does not cover it either, it takes its room from it.  Call this
+   * before Prepare().
+   *
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  The list always keeps half of the room.
+   */
+  void SetTopWidget(std::unique_ptr<Widget> widget,
+                    unsigned height_pt=0) noexcept;
+
+  /**
+   * Show another view below the list, e.g. a preview of what the
+   * items above it change.  It sits between the list and the buttons
+   * of the dialog; it does not scroll with the list, and it does not
+   * cover it either, it takes its room from it.  Call this before
+   * Prepare().
+   *
+   * @param height_pt the height of the view; 0 asks the view itself,
+   * which means its maximum size, or its minimum size if it has no
+   * maximum.  The list always keeps half of the room.
+   */
+  void SetBottomWidget(std::unique_ptr<Widget> widget,
+                       unsigned height_pt=0) noexcept;
+
+private:
+  /**
+   * The room which one of the two views takes; 0 if there is none.
+   */
+  [[gnu::pure]]
+  static unsigned GetWidgetHeight(const Widget *widget,
+                                  unsigned height_pt) noexcept;
+
+  /** @return the rectangles of #top_widget, of the list and of
+      #bottom_widget */
+  [[gnu::pure]]
+  std::tuple<PixelRect, PixelRect, PixelRect>
+  SplitRect(const PixelRect &rc) const noexcept;
+
+public:
+  /* virtual methods from class Widget */
+  PixelSize GetMinimumSize() const noexcept override;
+  PixelSize GetMaximumSize() const noexcept override;
+  void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Unprepare() noexcept override;
+  bool Save(bool &changed) noexcept override;
+  bool Leave() noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
+};

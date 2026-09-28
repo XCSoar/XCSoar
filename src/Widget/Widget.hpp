@@ -6,6 +6,7 @@
 struct PixelSize;
 struct PixelRect;
 class ContainerWindow;
+class Color;
 
 /**
  * A Widget is an area on the screen that the user can interact with
@@ -30,6 +31,14 @@ public:
    */
   [[gnu::pure]]
   virtual PixelSize GetMinimumSize() const noexcept = 0;
+
+  /**
+   * The color this Widget fills its own background with, or nullptr.
+   * A container may use it for space beside the Widget that no
+   * window paints.
+   */
+  [[gnu::pure]]
+  virtual const Color *GetBackgroundColor() const noexcept;
 
   /**
    * Estimate the maximum recommended size; the Widget may become

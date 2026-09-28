@@ -30,11 +30,17 @@ struct DialogLook {
     Color inactive_background_color;
   } caption;
 
-  Color background_color, background_gradient_top_color, text_color;
+  Color background_color, text_color;
 
   Brush background_brush;
 
   Font text_font, bold_font, small_font;
+
+  /** Fixed width, for a text whose columns shall line up */
+  Font mono_font;
+
+  /** #small_font with a fixed width */
+  Font small_mono_font;
 
   /** Bold font scaled up for H1 headings in rich text */
   Font heading1_font;

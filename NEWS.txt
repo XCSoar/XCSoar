@@ -205,6 +205,63 @@ Version 7.46 - not yet released
   - show no wind in the T Next Leg comment when the box is blank
     because wind is not available
 * ui
+  - show the configuration menu and its pages as the same list as
+    Wind Settings. A group opens its pages. A page scrolls only
+    when the rows do not fit
+  - show a floating dialog's title as a heading on the page, in line
+    with the contents. A dialog that fills the screen keeps a title
+    bar
+  - draw the Quick Menu as a grid of buttons
+  - show a grouped list's explanation under the selected row, on
+    the page, when the page scrolls or the text does not fit below
+    the settings. When both fit, the explanation stays below the
+    settings. A floating dialog keeps room for a short explanation,
+    so a shorter text does not shrink it, and scrolls when the
+    text is longer. It eases open so the rows
+    below it can be followed.
+    Cursor keys open it once the row has stayed, so a quick run
+    down the list does not open every row. A row can keep a tap
+    on its label as selection only, so the value opens it, and
+    Enter still opens the selected row
+  - show Flight Setup as a floating list of values; select a row to
+    choose a number from a list, and read that row's explanation
+    below the selected row. A tap on the label selects the row; a tap
+    on the value opens it. Wing loading stays on the list; select it to
+    open the plane profile. A red badge names a missing empty mass
+    or wing area, because the polar cannot be calculated without
+    them. Ballast of zero shows an Empty badge and no number, and a
+    glider with no ballast keeps that row, with a badge. When the
+    plane profile has no dump time, that row shows a No dump time
+    badge before the volume, and Empty as well when the volume is
+    zero. The Dump button reads No dump time when the plane profile
+    has none, and the plane profile dump time list includes 0. Bugs
+    of zero shows a Clean badge and no number
+  - show Plane Details as a floating list of values; select a row to
+    change it, and read that row's explanation below the selected
+    row. A tap on the label selects the row; a tap on the value opens
+    it. A red badge names a missing empty mass or wing area. A max
+    ballast of zero shows a No max ballast badge. Dump time of zero
+    shows a No dump time badge, and a max cruise speed of zero shows
+    a No max cruise speed badge. WeGlide is one row: the aircraft
+    name with its type number, or a No WeGlide type badge when unset
+  - show Circling wind, ZigZag wind and External wind in
+    configuration as the same switches as Wind Settings. They are
+    kept when the configuration dialogue closes
+  - show Wind Settings as a floating list. The source of the current
+    wind is the first row and cannot be changed, with speed and
+    direction under it. A tap on the label selects the row; a tap
+    on the value opens it. Circling wind, ZigZag wind and External
+    wind are switches, and Trail drift is last. The row's
+    explanation sits below the selected row. Clear drops a wind
+    the pilot has entered. A speed of 0 does the same
+  - show Replay as a floating list. Flight opens the log list, and
+    Rate opens a list from 0x to 10x. A tap on the label selects
+    the row; a tap on the value opens it. Start, Stop and +10'
+    stay dialog buttons
+  - show Team code as a floating list. Reference, Mate code and
+    Flarm Lock open when the value is tapped; a tap on the label
+    selects the row. Own code, range and the bearings stay on the
+    list and follow the other pilot. Close stays the dialog button
   - stop quitting the simulator when the device battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no value
     since Windows CE support ended. A layout that still selects it
@@ -237,6 +294,19 @@ Version 7.46 - not yet released
     two-finger pan the map #3122
   - keep the pointer on a Wayland window while dragging, and size
     the UI from the monitor the window is on #3124
+  - draw buttons as flat faces with a thin outline instead of bevel
+    borders, mark the focused button with a ring around it, and centre
+    their captions optically instead of on the line box #2871
+  - drop the gradient behind dialogs, move dark mode off the navy tint
+    to a neutral grey, and give grey scale and e-paper screens shades
+    of their own
+  - space buttons evenly, so the gap between two buttons and the gap
+    towards the edge of the screen or dialog are the same everywhere,
+    and the menu buttons along the bottom come out the same width
+  - hide the info boxes while the menu is open and show the map behind
+    them, and keep the map overlay buttons clear of the info boxes
+  - flatten the list scroll bar to a plain track with a rounded slider
+    that darkens only while it is dragged
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution

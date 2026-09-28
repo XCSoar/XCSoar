@@ -2,13 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "PagesConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Dialogs/Message.hpp"
-#include "Look/DialogLook.hpp"
-#include "Renderer/TextRowRenderer.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "PageActions.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"
@@ -19,279 +18,130 @@
 #include "Weather/Rasp/FieldControls.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
 #ifdef HAVE_EDL
-#include "Formatter/UserUnits.hpp"
 #include "Weather/EDL/Levels.hpp"
 #include "Weather/EDL/StateController.hpp"
 #endif
-#include "Widget/RowFormWidget.hpp"
-#include "Widget/ListWidget.hpp"
-#include "Widget/TwoWidgets.hpp"
-#include "Widget/ButtonPanelWidget.hpp"
 #include "UIGlobals.hpp"
-#include "util/StaticString.hxx"
+#include "Widget/ButtonPanelWidget.hpp"
 
 #ifdef HAVE_HTTP
 #include "Weather/SkySight/SkySightClient.hpp"
 #endif
 
-class PageLayoutEditWidget final
-  : public RowFormWidget, private DataFieldListener {
-public:
-  class Listener {
-  public:
-    virtual void OnModified(const PageLayout &new_value) noexcept = 0;
-  };
+#include <vector>
 
-private:
-  enum Controls {
-    MAIN,
-    INFO_BOX_PANEL,
-    BOTTOM,
-    OVERLAY,
-    OVERLAY_DETAIL,
-  };
-
-  static constexpr unsigned IBP_NONE = 0x7000;
-  static constexpr unsigned IBP_AUTO = 0x7001;
-
-  PageLayout value;
-
-  Listener &listener;
-
-  void UpdateOverlayControls() noexcept;
-  void FillOverlayDetailControl() noexcept;
-  void ApplyValueToForm() noexcept;
-
-public:
-  PageLayoutEditWidget(const DialogLook &_look, Listener &_listener)
-    :RowFormWidget(_look), value(PageLayout::Default()),
-     listener(_listener) {}
-
-  void SetValue(const PageLayout &_value);
-
-  /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-
-private:
-  /* virtual methods from class DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
+static constexpr StaticEnumChoice main_list[] = {
+  { PageLayout::Main::MAP, N_("Map") },
+  { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
+  { PageLayout::Main::FLARM_RADAR, N_("FLARM Radar") },
+  { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal Assistant") },
+  { PageLayout::Main::HORIZON, N_("Horizon") },
+  nullptr
 };
 
-class PageListWidget
-  : public ListWidget,
-    public PageLayoutEditWidget::Listener {
-
-  TextRowRenderer row_renderer;
-
-  PageLayoutEditWidget *editor;
-
-  PageSettings settings;
-
-  ButtonPanelWidget *buttons;
-  Button *add_button, *delete_button;
-  Button *move_up_button, *move_down_button;
-
-public:
-  ~PageListWidget() {
-    if (IsDefined())
-      DeleteWindow();
-  }
-
-  void SetEditor(PageLayoutEditWidget &_editor) {
-    editor = &_editor;
-  }
-
-  void SetButtonPanel(ButtonPanelWidget &_buttons) {
-    buttons = &_buttons;
-  }
-
-  void CreateButtons(ButtonPanel &buttons) {
-    add_button = buttons.Add(C_("Button", "Add"), [this](){
-      const unsigned n = GetList().GetLength();
-      if (n < PageSettings::MAX_PAGES) {
-        auto &page = settings.pages[n];
-        page = PageLayout::Default();
-        GetList().SetLength(n + 1);
-        GetList().SetCursorIndex(n);
-      }
-    });
-
-    delete_button = buttons.Add(C_("Button", "Delete"), [this](){
-      const unsigned n = GetList().GetLength();
-      const unsigned cursor = GetList().GetCursorIndex();
-      if (n >= 2 && GetList().GetCursorIndex() < n) {
-        std::copy(settings.pages.begin() + cursor + 1,
-                  settings.pages.begin() + n,
-                  settings.pages.begin() + cursor);
-        GetList().SetLength(n - 1);
-
-        if (cursor == n - 1)
-          GetList().SetCursorIndex(cursor - 1);
-        else
-          editor->SetValue(settings.pages[cursor]);
-      }
-    });
-
-    move_up_button = buttons.AddSymbol("^", [this](){
-      const unsigned cursor = GetList().GetCursorIndex();
-      if (cursor > 0) {
-        std::swap(settings.pages[cursor], settings.pages[cursor - 1]);
-        GetList().SetCursorIndex(cursor - 1);
-      }
-    });
-
-    move_down_button = buttons.AddSymbol("v", [this](){
-      const unsigned n = GetList().GetLength();
-      const unsigned cursor = GetList().GetCursorIndex();
-      if (cursor + 1 < n) {
-        std::swap(settings.pages[cursor], settings.pages[cursor + 1]);
-        GetList().SetCursorIndex(cursor + 1);
-      }
-    });
-  }
-
-  void UpdateButtons() {
-    unsigned length = GetList().GetLength();
-    unsigned cursor = GetList().GetCursorIndex();
-
-    add_button->SetEnabled(length < settings.MAX_PAGES);
-    delete_button->SetEnabled(length >= 2);
-    move_up_button->SetEnabled(cursor > 0);
-    move_down_button->SetEnabled(cursor + 1 < length);
-  }
-
-  /* virtual methods from class Widget */
-  void Initialise(ContainerWindow &parent,
-                  const PixelRect &rc) noexcept override;
-  void Show(const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-  /* virtual methods from class ListItemRenderer */
-  void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                   unsigned idx) noexcept override;
-
-  /* virtual methods from class ListCursorHandler */
-  void OnCursorMoved(unsigned index) noexcept override;
-  bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
-    return true;
-  }
-  void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
-
-  /* virtual methods from class PageLayoutEditWidget::Listener */
-  void OnModified(const PageLayout &new_value) noexcept override;
+static constexpr StaticEnumChoice bottom_list[] = {
+  { PageLayout::Bottom::NOTHING, N_("Nothing") },
+  { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
+  /* Always available: RASP does not require OpenGL, and the shared
+     weather cursor bar works for RASP on memory canvas / Kobo. */
+  { PageLayout::Bottom::WEATHER_CONTROLS, NC_("Setting", "Weather controls") },
+  nullptr
 };
 
-void
-PageLayoutEditWidget::FillOverlayDetailControl() noexcept
+static constexpr StaticEnumChoice overlay_list[] = {
+  { PageLayout::Overlay::NONE, N_("None") },
+  { PageLayout::Overlay::RASP, NC_("Abbreviation", "RASP") },
+#ifdef HAVE_EDL
+  { PageLayout::Overlay::EDL, NC_("Abbreviation", "EDL") },
+#endif
+#ifdef HAVE_HTTP
+  { PageLayout::Overlay::XCTHERM, "XC Therm" },
+  { PageLayout::Overlay::SKYSIGHT, "SkySight" },
+#endif
+  nullptr
+};
+
+static const char *const Caption_MainArea = N_("Main area");
+static const char *const Caption_InfoBoxes = N_("InfoBoxes");
+static const char *const Caption_BottomArea = N_("Bottom area");
+static const char *const Caption_Overlay = NC_("Setting", "Map overlay");
+
+static const char *const Help_Overlay =
+  N_("Optional weather overlay on map pages. "
+     "Use with Weather controls in the bottom area for in-flight adjustment.");
+
+/**
+ * The caption of the choice of the InfoBoxes of a page: the
+ * automatic set, none at all, or the name of one set.
+ */
+static const char *
+GetInfoBoxesCaption(const PageLayout::InfoBoxConfig &config) noexcept
 {
-  auto &control = GetControl(OVERLAY_DETAIL);
-  auto &df = (DataFieldEnum &)*control.GetDataField();
+  if (!config.enabled)
+    return _("None");
 
-  df.ClearChoices();
+  if (config.auto_switch || config.panel >= InfoBoxSettings::MAX_PANELS)
+    return C_("Setting", "Auto");
+
+  const InfoBoxSettings &info_box_settings =
+    CommonInterface::GetUISettings().info_boxes;
+  return gettext(info_box_settings.panels[config.panel].name);
+}
+
+/**
+ * The layer or the level the weather overlay of a page shows, for
+ * the item which picks it and for the list of the pages: the RASP
+ * field, the EDL level or the SkySight layer.
+ *
+ * @return the text, or nullptr if the overlay has none
+ */
+static const char *
+GetOverlayDetail(const PageLayout &value,
+                 [[maybe_unused]] StaticString<64> &buffer) noexcept
+{
+  if (!value.IsMapMain())
+    return nullptr;
 
   switch (value.overlay) {
   case PageLayout::Overlay::RASP: {
-    control.SetCaption(_("RASP Layer"));
-    control.SetHelpText(
-      _("RASP weather layer to display on this map page."));
-
     const auto rasp = DataGlobals::GetRasp();
-    if (rasp == nullptr || rasp->GetItemCount() == 0) {
-      df.AddChoice(-1, _("No RASP file loaded"));
-      df.SetValue(-1);
-      break;
-    }
+    if (rasp == nullptr || value.rasp_field < 0 ||
+        unsigned(value.rasp_field) >= rasp->GetItemCount())
+      return nullptr;
 
-    Rasp::FillFieldChoices(df, rasp.get());
-
-    if (value.rasp_field >= 0 &&
-        unsigned(value.rasp_field) < rasp->GetItemCount())
-      df.SetValue(value.rasp_field);
-    else
-      df.SetValue(0U);
-    break;
+    const auto &item = rasp->GetItemInfo(value.rasp_field);
+    return item.label != nullptr ? gettext(item.label) : item.name.c_str();
   }
 
 #ifdef HAVE_EDL
   case PageLayout::Overlay::EDL:
-    control.SetCaption(_("EDL Level"));
-    control.SetHelpText(
-      _("EDL pressure level / altitude band for this map page. "
-        "Auto follows aircraft altitude when the page is opened."));
-
-    df.AddChoice(0, C_("Weather control", "Auto"),
-                 _("Follow altitude on page enter (auto level)."));
-
-    for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
-      const unsigned isobar = EDL::ISOBARS[i];
-      char alt[32];
-      FormatUserAltitude(EDL::GetAltitudeForIsobar(isobar), alt);
-
-      StaticString<64> label;
-      if (alt[0] != '\0')
-        label.Format("%u hPa (%s)", isobar / 100, alt);
-      else
-        label.Format("%u hPa", isobar / 100);
-
-      df.AddChoice(int(isobar), label.c_str());
-    }
-
     if (value.edl_isobar > 0 &&
-        EDL::IsSupportedIsobar(unsigned(value.edl_isobar)))
-      df.SetValue(unsigned(value.edl_isobar));
-    else
-      df.SetValue(0U);
-    break;
+        EDL::IsSupportedIsobar(unsigned(value.edl_isobar))) {
+      const unsigned isobar = value.edl_isobar;
+      const auto altitude =
+        FormatUserAltitude(EDL::GetAltitudeForIsobar(isobar));
+      buffer.Format("%u hPa (%s)", isobar / 100, altitude.c_str());
+      return buffer.c_str();
+    }
+
+    return C_("Weather control", "Auto");
 #endif
 
-  case PageLayout::Overlay::SKYSIGHT: {
-    control.SetCaption(C_("Setting", "SkySight layer"));
-    control.SetHelpText(
-      _("SkySight layer used when this page overlay is SkySight."));
-
+  case PageLayout::Overlay::SKYSIGHT:
 #ifdef HAVE_HTTP
-    const auto skysight = DataGlobals::GetSkySight();
-    if (skysight != nullptr) {
-      unsigned selected_value = 1;
-      bool has_choices = false;
-      bool stored_layer_is_selected = false;
+    if (const auto skysight = DataGlobals::GetSkySight();
+        skysight != nullptr && !value.skysight_overlay.empty()) {
+      /* the name of the layer, or its identifier while it is not
+         among the selected layers */
+      if (const auto *layer =
+            skysight->GetSelectedLayer(value.skysight_overlay.c_str());
+          layer != nullptr)
+        return layer->name.c_str();
 
-      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
-        if (const auto *layer = skysight->GetSelectedLayer(i);
-            layer != nullptr &&
-            layer->id == value.skysight_overlay.c_str()) {
-          stored_layer_is_selected = true;
-          selected_value = unsigned(i + 1);
-          break;
-        }
-
-      if (!value.skysight_overlay.empty() && !stored_layer_is_selected) {
-        df.AddChoice(0, value.skysight_overlay.c_str(),
-                     value.skysight_overlay.c_str());
-        has_choices = true;
-        selected_value = 0;
-      }
-
-      for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
-        const auto *layer = skysight->GetSelectedLayer(i);
-        if (layer == nullptr)
-          continue;
-
-        df.AddChoice(unsigned(i + 1), layer->name.c_str());
-        has_choices = true;
-      }
-
-      if (has_choices) {
-        df.SetValue(selected_value);
-        break;
-      }
+      return value.skysight_overlay.c_str();
     }
 #endif
-
-    df.AddChoice(0, _("No SkySight layers selected"));
-    df.SetValue(0U);
-    break;
-  }
+    return nullptr;
 
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::XCTHERM:
@@ -299,41 +149,193 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
   case PageLayout::Overlay::EDL:
 #endif
   case PageLayout::Overlay::MAX:
-    control.SetCaption(C_("Setting", "Layer / Level"));
-    control.SetHelpText(
-      _("Select a RASP or EDL map overlay to configure its "
-        "layer or level for this page."));
-    df.AddChoice(-1, _("N/A"));
-    df.SetValue(-1);
     break;
   }
 
-  control.RefreshDisplay();
+  return nullptr;
+}
+
+/**
+ * The layout of one page in a dialog: what the main area, the
+ * InfoBoxes and the bottom area show, and the weather overlay of a
+ * map page.  It edits the page in place, and it deletes the page
+ * from the settings.
+ */
+class PageLayoutEditWidget final : public GroupedListWidget {
+  PageSettings &settings;
+
+  /** the index of the page which is edited */
+  unsigned index;
+
+  WidgetDialog &dialog;
+
+  /**
+   * The choice of the InfoBoxes of a page: the automatic set and
+   * none, then the sets of the user.
+   */
+  static constexpr unsigned IBP_AUTO = 0, IBP_NONE = 1, IBP_FIRST_PANEL = 2;
+
+public:
+  PageLayoutEditWidget(PageSettings &_settings, unsigned _index,
+                       WidgetDialog &_dialog) noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()),
+     settings(_settings), index(_index), dialog(_dialog) {}
+
+  /**
+   * The index of the page, or the index of the page which takes its
+   * place after it was deleted.
+   */
+  unsigned GetIndex() const noexcept {
+    return index;
+  }
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+
+private:
+  PageLayout &GetValue() noexcept {
+    return settings.pages[index];
+  }
+
+  void Fill() noexcept;
+  void Refresh() noexcept;
+
+  void AddOverlayItems() noexcept;
+  void AddOverlayDetailItem() noexcept;
+
+  void PickMain() noexcept;
+  void PickInfoBoxes() noexcept;
+  void PickBottom() noexcept;
+  void PickOverlay() noexcept;
+  void PickRaspField(const char *caption) noexcept;
+#ifdef HAVE_EDL
+  void PickEdlLevel(const char *caption) noexcept;
+#endif
+#ifdef HAVE_HTTP
+  void PickSkySightLayer(const char *caption) noexcept;
+#endif
+
+  void DeletePage() noexcept;
+};
+
+void
+PageLayoutEditWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
+{
+  Refresh();
+
+  GroupedListWidget::Prepare(parent, rc);
 }
 
 void
-PageLayoutEditWidget::UpdateOverlayControls() noexcept
+PageLayoutEditWidget::Refresh() noexcept
 {
-  const bool map_page = value.IsMapMain();
-  bool detail_enabled = false;
+  StaticString<32> caption;
+  caption.Format("%s %u", _("Page"), index + 1);
+  dialog.SetCaption(caption);
 
-  if (map_page) {
+  Clear();
+  Fill();
+  UpdateLayout();
+}
+
+void
+PageLayoutEditWidget::Fill() noexcept
+{
+  const PageLayout &value = GetValue();
+
+  AddGroup();
+
+  AddItem(gettext(Caption_MainArea), [this](){ PickMain(); },
+          {.value = GetEnumCaption(main_list, (unsigned)value.main),
+           .chevron = true});
+
+  AddItem(gettext(Caption_InfoBoxes), [this](){ PickInfoBoxes(); },
+          {.value = GetInfoBoxesCaption(value.infobox_config),
+           .chevron = true});
+
+  AddItem(gettext(Caption_BottomArea), [this](){ PickBottom(); },
+          {.value = GetEnumCaption(bottom_list, (unsigned)value.bottom),
+           .chevron = true});
+
+  AddOverlayItems();
+
+  /* the last page cannot be deleted */
+  AddGroup();
+  AddButton(C_("Button", "Delete"), [this](){ DeletePage(); },
+            {.disabled = settings.n_pages < 2});
+}
+
+void
+PageLayoutEditWidget::AddOverlayItems() noexcept
+{
+  const PageLayout &value = GetValue();
+
+  /* the explanation stays on the page: it says why the items are
+     not available on a page which shows no map */
+  AddGroup(_("Weather"), {.footer = gettext(Help_Overlay)});
+
+  AddItem(gettext(Caption_Overlay), [this](){ PickOverlay(); },
+          {.value = GetEnumCaption(overlay_list, (unsigned)value.overlay),
+           .chevron = true,
+           .disabled = !value.IsMapMain()});
+
+  AddOverlayDetailItem();
+}
+
+void
+PageLayoutEditWidget::AddOverlayDetailItem() noexcept
+{
+  const PageLayout &value = GetValue();
+
+  StaticString<64> buffer;
+  const char *detail = GetOverlayDetail(value, buffer);
+
+  if (value.IsMapMain()) {
     switch (value.overlay) {
     case PageLayout::Overlay::RASP: {
+      const char *caption = _("RASP Layer");
+
       const auto rasp = DataGlobals::GetRasp();
-      detail_enabled = rasp != nullptr && rasp->GetItemCount() > 0;
-      break;
+      if (rasp == nullptr || rasp->GetItemCount() == 0) {
+        AddItem(caption, {.value = _("No RASP file loaded"),
+                          .disabled = true});
+        return;
+      }
+
+      AddItem(caption, [this, caption](){ PickRaspField(caption); },
+              {.value = detail != nullptr ? detail : _("None"),
+               .chevron = true});
+      return;
     }
+
 #ifdef HAVE_EDL
-    case PageLayout::Overlay::EDL:
-      detail_enabled = true;
-      break;
+    case PageLayout::Overlay::EDL: {
+      const char *caption = _("EDL Level");
+      AddItem(caption, [this, caption](){ PickEdlLevel(caption); },
+              {.value = detail, .chevron = true});
+      return;
+    }
 #endif
-    case PageLayout::Overlay::SKYSIGHT:
+
+    case PageLayout::Overlay::SKYSIGHT: {
+      const char *caption = C_("Setting", "SkySight layer");
+
 #ifdef HAVE_HTTP
-      detail_enabled = DataGlobals::GetSkySight() != nullptr;
+      const auto skysight = DataGlobals::GetSkySight();
+      if (skysight != nullptr &&
+          (skysight->NumSelectedLayers() > 0 || detail != nullptr)) {
+        AddItem(caption, [this, caption](){ PickSkySightLayer(caption); },
+                {.value = detail, .chevron = true});
+        return;
+      }
 #endif
-      break;
+
+      AddItem(caption, {.value = _("No SkySight layers selected"),
+                        .disabled = true});
+      return;
+    }
+
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::XCTHERM:
 #ifndef HAVE_EDL
@@ -344,303 +346,511 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
     }
   }
 
-  SetRowEnabled(OVERLAY, map_page);
-  SetRowEnabled(OVERLAY_DETAIL, detail_enabled);
+  AddItem(C_("Setting", "Layer / Level"),
+          {.value = _("N/A"), .disabled = true});
 }
 
 void
-PageLayoutEditWidget::ApplyValueToForm() noexcept
+PageLayoutEditWidget::PickMain() noexcept
 {
-  LoadValueEnum(BOTTOM, value.bottom);
-  GetControl(BOTTOM).RefreshDisplay();
-  LoadValueEnum(OVERLAY, value.overlay);
-  GetControl(OVERLAY).RefreshDisplay();
-  FillOverlayDetailControl();
-  UpdateOverlayControls();
+  PageLayout &value = GetValue();
+
+  unsigned main = (unsigned)value.main;
+  if (!PickEnum(gettext(Caption_MainArea),
+                _("Specifies what should be displayed in the main area."),
+                main_list, main))
+    return;
+
+  value.main = (PageLayout::Main)main;
+  value.Normalise();
+  Refresh();
 }
 
 void
-PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
+PageLayoutEditWidget::PickInfoBoxes() noexcept
 {
   const InfoBoxSettings &info_box_settings =
     CommonInterface::GetUISettings().info_boxes;
 
-  static constexpr StaticEnumChoice main_list[] = {
-    { PageLayout::Main::MAP, N_("Map") },
-    { PageLayout::Main::MAP_NORTH_UP, N_("Map (north-up)") },
-    { PageLayout::Main::FLARM_RADAR, N_("FLARM Radar") },
-    { PageLayout::Main::THERMAL_ASSISTANT, N_("Thermal Assistant") },
-    { PageLayout::Main::HORIZON, N_("Horizon") },
-    nullptr
-  };
-  AddEnum(_("Main area"),
-          _("Specifies what should be displayed in the main area."),
-          main_list,
-          (unsigned)PageLayout::Main::MAP, this);
-
-  static constexpr StaticEnumChoice ib_list[] = {
-    { IBP_AUTO, NC_("Setting", "Auto"), N_("Displays either the Circling, Cruise, or Final glide InfoBoxes.") },
-    { IBP_NONE, N_("None"), N_("Show fullscreen (no InfoBoxes)") },
-    nullptr
+  static constexpr const char *panel_help[] = {
+    N_("For circling mode. Displayed when 'Auto' is selected and glider is circling."),
+    N_("For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude."),
+    N_("For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude."),
   };
 
-  WndProperty *wp = AddEnum(_("InfoBoxes"),
-                            _("Specifies which InfoBoxes should be displayed on this page."),
-                            ib_list, IBP_AUTO, this);
-  DataFieldEnum &ib = *(DataFieldEnum *)wp->GetDataField();
-  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i) {
-    const char cruise_help[] = N_("For cruise mode. Displayed when 'Auto' is selected and glider is below final glide altitude.");
-    const char circling_help[] = N_("For circling mode. Displayed when 'Auto' is selected and glider is circling.");
-    const char final_glide_help[] = N_("For final glide mode. Displayed when 'Auto' is selected and glider is above final glide altitude.");
-    const char *display_text = gettext(info_box_settings.panels[i].name);
-    const char *help_text = N_("A custom InfoBox set");
-    switch (i) {
-    case 0:
-      help_text = circling_help;
-      break;
-    case 1:
-      help_text = cruise_help;
-      break;
-    case 2:
-      help_text = final_glide_help;
-      break;
-    default:
-      break;
-    }
-    ib.AddChoice(i, display_text, display_text, help_text);
-  }
-
-  static constexpr StaticEnumChoice bottom_list[] = {
-    { PageLayout::Bottom::NOTHING, N_("Nothing") },
-    { PageLayout::Bottom::CROSS_SECTION, N_("Cross section") },
-    /* Always available: RASP does not require OpenGL, and the shared
-       weather cursor bar works for RASP on memory canvas / Kobo. */
-    { PageLayout::Bottom::WEATHER_CONTROLS, NC_("Setting", "Weather controls") },
-    nullptr
+  std::vector<PickerChoice> choices{
+    {C_("Setting", "Auto"),
+     _("Displays either the Circling, Cruise, or Final glide InfoBoxes.")},
+    {_("None"), _("Show fullscreen (no InfoBoxes)")},
   };
-  AddEnum(_("Bottom area"),
-          _("Specifies what should be displayed below the main area. "
-            "Weather controls require a weather map "
-            "overlay."),
-          bottom_list,
-          (unsigned)PageLayout::Bottom::NOTHING, this);
 
-  static constexpr StaticEnumChoice overlay_list[] = {
-    { PageLayout::Overlay::NONE, N_("None") },
-    { PageLayout::Overlay::RASP, NC_("Abbreviation", "RASP") },
-#ifdef HAVE_EDL
-    { PageLayout::Overlay::EDL, NC_("Abbreviation", "EDL") },
-#endif
-#ifdef HAVE_HTTP
-    { PageLayout::Overlay::XCTHERM, "XC Therm" },
-    { PageLayout::Overlay::SKYSIGHT, "SkySight" },
-#endif
-    nullptr
-  };
-  AddEnum(C_("Setting", "Map overlay"),
-          _("Optional weather overlay on map pages. "
-            "Use with Weather controls in the bottom area for in-flight adjustment."),
-          overlay_list,
-          (unsigned)PageLayout::Overlay::NONE, this);
+  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; ++i)
+    choices.push_back({gettext(info_box_settings.panels[i].name),
+                       i < std::size(panel_help)
+                       ? gettext(panel_help[i])
+                       : _("A custom InfoBox set")});
 
-  AddEnum(C_("Setting", "Layer / Level"),
-          _("Select a weather map overlay to configure its "
-            "layer or level for this page."),
-          this);
-  GetControl(OVERLAY_DETAIL).GetDataField()->EnableItemHelp(true);
-  FillOverlayDetailControl();
-  UpdateOverlayControls();
-}
+  PageLayout &value = GetValue();
+  auto &config = value.infobox_config;
 
-void
-PageLayoutEditWidget::SetValue(const PageLayout &_value)
-{
-  value = _value;
-  value.Normalise();
-
-  LoadValueEnum(MAIN, value.main);
-  LoadValueEnum(BOTTOM, value.bottom);
-  LoadValueEnum(OVERLAY, value.overlay);
-
-  unsigned ib = IBP_NONE;
-  if (value.infobox_config.enabled) {
-    if (value.infobox_config.auto_switch)
-      ib = IBP_AUTO;
-    else if (value.infobox_config.panel < InfoBoxSettings::MAX_PANELS)
-      ib = value.infobox_config.panel;
+  unsigned current = IBP_NONE;
+  if (config.enabled) {
+    if (config.auto_switch)
+      current = IBP_AUTO;
+    else if (config.panel < InfoBoxSettings::MAX_PANELS)
+      current = IBP_FIRST_PANEL + config.panel;
     else
       /* fix up illegal value */
-      ib = 0;
+      current = IBP_FIRST_PANEL;
   }
 
-  LoadValueEnum(INFO_BOX_PANEL, ib);
+  const int picked =
+    PickChoice(gettext(Caption_InfoBoxes),
+               _("Specifies which InfoBoxes should be displayed on this page."),
+               choices, current);
+  if (picked < 0 || unsigned(picked) == current)
+    return;
 
-  FillOverlayDetailControl();
-  UpdateOverlayControls();
-}
-
-void
-PageLayoutEditWidget::OnModified(DataField &df) noexcept
-{
-  if (&df == &GetDataField(MAIN)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.main = (PageLayout::Main)dfe.GetValue();
-    if (!value.IsMapMain())
-      value.overlay = PageLayout::Overlay::NONE;
-  } else if (&df == &GetDataField(INFO_BOX_PANEL)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    const unsigned ibp = dfe.GetValue();
-    if (ibp == IBP_AUTO) {
-      value.infobox_config.enabled = true;
-      value.infobox_config.auto_switch = true;
-      value.infobox_config.panel = 0;
-    } else if (ibp == IBP_NONE)
-      value.infobox_config.enabled = false;
-    else if (ibp < InfoBoxSettings::MAX_PANELS) {
-      value.infobox_config.enabled = true;
-      value.infobox_config.auto_switch = false;
-      value.infobox_config.panel = ibp;
-    }
-  } else if (&df == &GetDataField(BOTTOM)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    value.bottom = (PageLayout::Bottom)dfe.GetValue();
-
-    if (value.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
-        value.IsMapMain() &&
-        !value.UsesWeatherOverlay()) {
-#ifdef HAVE_EDL
-      value.overlay = PageLayout::Overlay::EDL;
-#else
-      const auto rasp = DataGlobals::GetRasp();
-      if (rasp != nullptr && rasp->GetItemCount() > 0)
-        value.overlay = PageLayout::Overlay::RASP;
-      else
-        value.bottom = PageLayout::Bottom::NOTHING;
-#endif
-    }
-  } else if (&df == &GetDataField(OVERLAY)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    const auto overlay = (PageLayout::Overlay)dfe.GetValue();
-    if (overlay == PageLayout::Overlay::SKYSIGHT) {
-#ifdef HAVE_HTTP
-      const auto skysight = DataGlobals::GetSkySight();
-      const SkySight::Layer *layer = nullptr;
-      if (skysight != nullptr) {
-        if (!value.skysight_overlay.empty() &&
-            skysight->IsSelectedLayer(value.skysight_overlay.c_str()))
-          layer = skysight->GetSelectedLayer(value.skysight_overlay.c_str());
-
-        for (std::size_t i = 0; layer == nullptr &&
-             i < skysight->NumSelectedLayers(); ++i)
-          layer = skysight->GetSelectedLayer(i);
-      }
-
-      if (layer != nullptr) {
-        value.skysight_overlay = layer->id;
-      } else if (value.skysight_overlay.empty()) {
-        const char *message;
-        if (skysight == nullptr)
-          message = _("SkySight is unavailable.");
-        else if (skysight->IsThrottled())
-          message = _("SkySight API rate-limited. Retrying shortly.");
-        else if (!skysight->HasForecastLayers())
-          message = _("Loading SkySight catalog...");
-        else
-          message = _("No SkySight layers selected");
-
-        ShowMessageBox(message, "SkySight", MB_OK | MB_ICONINFORMATION);
-        ApplyValueToForm();
-        return;
-      }
-
-      if (layer == nullptr)
-        value.skysight_overlay.clear();
-#else
-      value.skysight_overlay.clear();
-#endif
-    }
-    value.overlay = overlay;
-  } else if (&df == &GetDataField(OVERLAY_DETAIL)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    if (value.overlay == PageLayout::Overlay::RASP)
-      value.rasp_field = dfe.GetValue();
-#ifdef HAVE_EDL
-    else if (value.overlay == PageLayout::Overlay::EDL)
-      value.edl_isobar = dfe.GetValue();
-#endif
-    else if (value.overlay == PageLayout::Overlay::SKYSIGHT) {
-#ifdef HAVE_HTTP
-      if (auto skysight = DataGlobals::GetSkySight(); skysight != nullptr) {
-        const unsigned selected = dfe.GetValue();
-
-        bool stored_layer_is_selected = false;
-        for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i)
-          if (const auto *layer = skysight->GetSelectedLayer(i);
-              layer != nullptr &&
-              layer->id == value.skysight_overlay.c_str()) {
-            stored_layer_is_selected = true;
-            break;
-          }
-
-        if (selected == 0 && !stored_layer_is_selected)
-          return;
-
-        if (selected > 0)
-          if (const auto *layer =
-                skysight->GetSelectedLayer(selected - 1);
-              layer != nullptr &&
-              value.skysight_overlay != layer->id.c_str()) {
-            value.skysight_overlay = layer->id;
-            value.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
-          }
-      }
-#endif
-    }
-  } else {
-    gcc_unreachable();
+  const unsigned choice = picked;
+  if (choice == IBP_AUTO) {
+    config.enabled = true;
+    config.auto_switch = true;
+    config.panel = 0;
+  } else if (choice == IBP_NONE)
+    config.enabled = false;
+  else {
+    config.enabled = true;
+    config.auto_switch = false;
+    config.panel = choice - IBP_FIRST_PANEL;
   }
 
   value.Normalise();
-  ApplyValueToForm();
-  listener.OnModified(value);
+  Refresh();
 }
 
 void
-PageListWidget::Initialise(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+PageLayoutEditWidget::PickBottom() noexcept
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
+  PageLayout &value = GetValue();
 
-  settings = CommonInterface::GetUISettings().pages;
+  unsigned bottom = (unsigned)value.bottom;
+  if (!PickEnum(gettext(Caption_BottomArea),
+                _("Specifies what should be displayed below the main area. "
+                  "Weather controls require a weather map "
+                  "overlay."),
+                bottom_list, bottom))
+    return;
 
-  CreateList(parent, UIGlobals::GetDialogLook(), rc,
-             row_renderer.CalculateLayout(*look.list.font))
-    .SetLength(settings.n_pages);
+  value.bottom = (PageLayout::Bottom)bottom;
 
-  CreateButtons(buttons->GetButtonPanel());
+  if (value.bottom == PageLayout::Bottom::WEATHER_CONTROLS &&
+      value.IsMapMain() &&
+      !value.UsesWeatherOverlay()) {
+#ifdef HAVE_EDL
+    value.overlay = PageLayout::Overlay::EDL;
+#else
+    const auto rasp = DataGlobals::GetRasp();
+    if (rasp != nullptr && rasp->GetItemCount() > 0)
+      value.overlay = PageLayout::Overlay::RASP;
+    else
+      value.bottom = PageLayout::Bottom::NOTHING;
+#endif
+  }
+
+  value.Normalise();
+  Refresh();
+}
+
+void
+PageLayoutEditWidget::PickOverlay() noexcept
+{
+  PageLayout &value = GetValue();
+
+  unsigned _overlay = (unsigned)value.overlay;
+  if (!PickEnum(gettext(Caption_Overlay), gettext(Help_Overlay),
+                overlay_list, _overlay))
+    return;
+
+  const auto overlay = (PageLayout::Overlay)_overlay;
+  if (overlay == PageLayout::Overlay::SKYSIGHT) {
+#ifdef HAVE_HTTP
+    const auto skysight = DataGlobals::GetSkySight();
+    const SkySight::Layer *layer = nullptr;
+    if (skysight != nullptr) {
+      if (!value.skysight_overlay.empty() &&
+          skysight->IsSelectedLayer(value.skysight_overlay.c_str()))
+        layer = skysight->GetSelectedLayer(value.skysight_overlay.c_str());
+
+      for (std::size_t i = 0; layer == nullptr &&
+             i < skysight->NumSelectedLayers(); ++i)
+        layer = skysight->GetSelectedLayer(i);
+    }
+
+    if (layer != nullptr) {
+      value.skysight_overlay = layer->id;
+    } else if (value.skysight_overlay.empty()) {
+      const char *message;
+      if (skysight == nullptr)
+        message = _("SkySight is unavailable.");
+      else if (skysight->IsThrottled())
+        message = _("SkySight API rate-limited. Retrying shortly.");
+      else if (!skysight->HasForecastLayers())
+        message = _("Loading SkySight catalog...");
+      else
+        message = _("No SkySight layers selected");
+
+      ShowMessageBox(message, "SkySight", MB_OK | MB_ICONINFORMATION);
+      return;
+    } else
+      value.skysight_overlay.clear();
+#else
+    value.skysight_overlay.clear();
+#endif
+  }
+
+  value.overlay = overlay;
+  value.Normalise();
+  Refresh();
+}
+
+void
+PageLayoutEditWidget::PickRaspField(const char *caption) noexcept
+{
+  const auto rasp = DataGlobals::GetRasp();
+  if (rasp == nullptr)
+    return;
+
+  PageLayout &value = GetValue();
+  if (!Rasp::PickField(caption,
+                       _("RASP weather layer to display on this map page."),
+                       *rasp, value.rasp_field))
+    return;
+
+  value.Normalise();
+  Refresh();
+}
+
+#ifdef HAVE_EDL
+
+void
+PageLayoutEditWidget::PickEdlLevel(const char *caption) noexcept
+{
+  StaticString<64> captions[EDL::NUM_ISOBARS];
+  std::vector<PickerChoice> choices{
+    {C_("Weather control", "Auto"),
+     _("Follow altitude on page enter (auto level).")},
+  };
+
+  for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i) {
+    const unsigned isobar = EDL::ISOBARS[i];
+    const auto altitude =
+      FormatUserAltitude(EDL::GetAltitudeForIsobar(isobar));
+
+    if (!altitude.empty())
+      captions[i].Format("%u hPa (%s)", isobar / 100, altitude.c_str());
+    else
+      captions[i].Format("%u hPa", isobar / 100);
+
+    choices.push_back({captions[i].c_str()});
+  }
+
+  PageLayout &value = GetValue();
+
+  int current = 0;
+  for (unsigned i = 0; i < EDL::NUM_ISOBARS; ++i)
+    if (value.edl_isobar > 0 &&
+        unsigned(value.edl_isobar) == EDL::ISOBARS[i])
+      current = i + 1;
+
+  const int picked =
+    PickChoice(caption,
+               _("EDL pressure level / altitude band for this map page. "
+                 "Auto follows aircraft altitude when the page is opened."),
+               choices, current);
+  if (picked < 0 || picked == current)
+    return;
+
+  value.edl_isobar = picked == 0 ? 0 : EDL::ISOBARS[picked - 1];
+  value.Normalise();
+  Refresh();
+}
+
+#endif
+
+#ifdef HAVE_HTTP
+
+void
+PageLayoutEditWidget::PickSkySightLayer(const char *caption) noexcept
+{
+  const auto skysight = DataGlobals::GetSkySight();
+  if (skysight == nullptr)
+    return;
+
+  PageLayout &value = GetValue();
+
+  /* the selected layers, and the stored one first while it is not
+     among them */
+  std::vector<PickerChoice> choices;
+  std::vector<const SkySight::Layer *> layers;
+  int current = -1;
+
+  if (!value.skysight_overlay.empty() &&
+      !skysight->IsSelectedLayer(value.skysight_overlay.c_str())) {
+    choices.push_back({value.skysight_overlay.c_str()});
+    layers.push_back(nullptr);
+    current = 0;
+  }
+
+  for (std::size_t i = 0; i < skysight->NumSelectedLayers(); ++i) {
+    const auto *layer = skysight->GetSelectedLayer(i);
+    if (layer == nullptr)
+      continue;
+
+    if (layer->id == value.skysight_overlay.c_str())
+      current = choices.size();
+
+    choices.push_back({layer->name.c_str()});
+    layers.push_back(layer);
+  }
+
+  const int picked =
+    PickChoice(caption,
+               _("SkySight layer used when this page overlay is SkySight."),
+               choices, current);
+  if (picked < 0 || picked == current || layers[picked] == nullptr)
+    return;
+
+  value.skysight_overlay = layers[picked]->id;
+  value.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+  value.Normalise();
+  Refresh();
+}
+
+#endif
+
+void
+PageLayoutEditWidget::DeletePage() noexcept
+{
+  const unsigned n = settings.n_pages;
+  if (n < 2)
+    return;
+
+  std::copy(settings.pages.begin() + index + 1,
+            settings.pages.begin() + n,
+            settings.pages.begin() + index);
+  settings.pages[n - 1] = PageLayout::Undefined();
+  settings.n_pages = n - 1;
+
+  if (index == settings.n_pages)
+    --index;
+
+  dialog.SetModalResult(mrOK);
+}
+
+/**
+ * The pages the user switches between in flight: their order, and
+ * what each of them shows.  The buttons below the list act on the
+ * page the cursor is on: a tap on a page only selects it, the second
+ * tap or Enter opens it, and Left and Right lead to the buttons.
+ */
+class PagesConfigPanel final : public ConfigListPanel {
+  PageSettings settings;
+
+  /** the widget which holds the buttons below the list */
+  ButtonPanelWidget *button_panel = nullptr;
+
+  Button *move_up_button = nullptr, *move_down_button = nullptr,
+    *add_button = nullptr;
+
+public:
+  PagesConfigPanel() noexcept {
+    SetCursorCallback([this](int){ UpdateButtons(); });
+  }
+
+  void SetButtonPanel(ButtonPanelWidget &_button_panel) noexcept {
+    button_panel = &_button_panel;
+  }
+
+private:
+  /** Open the dialog which edits the page @p index. */
+  void EditPage(unsigned index) noexcept;
+
+  /** Append a page and open the dialog which edits it. */
+  void AddPage() noexcept;
+
+  /**
+   * Swap the page the cursor is on with the one above (@p delta -1)
+   * or below it (@p delta 1); the cursor follows the page.
+   */
+  void MovePage(int delta) noexcept;
+
+  /** Enable the buttons which make sense for the page under the cursor. */
+  void UpdateButtons() noexcept;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
+};
+
+void
+PagesConfigPanel::Prepare(ContainerWindow &parent,
+                          const PixelRect &rc) noexcept
+{
+  ButtonPanel &buttons = button_panel->GetButtonPanel();
+
+  move_up_button = buttons.Add(_("Move up"), [this](){ MovePage(-1); });
+  move_down_button = buttons.Add(_("Move down"), [this](){ MovePage(1); });
+  add_button = buttons.Add(C_("Button", "Add"), [this](){ AddPage(); });
+
+  ConfigListPanel::Prepare(parent, rc);
+
+  /* Left and Right lead from the list to the buttons, and Up and
+     Down back to it */
+  SetActionBar(buttons);
   UpdateButtons();
 }
 
 void
-PageListWidget::Show(const PixelRect &rc) noexcept
+PagesConfigPanel::LoadSettings() noexcept
 {
-  editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
-
-  ListWidget::Show(rc);
-}
-
-bool
-PageListWidget::Save(bool &_changed) noexcept
-{
-  bool changed = false;
-
-  settings.n_pages = GetList().GetLength();
-  std::fill(settings.pages.begin() + settings.n_pages,
-            settings.pages.end(),
-            PageLayout::Undefined());
+  settings = CommonInterface::GetUISettings().pages;
 
   for (unsigned i = 0; i < settings.n_pages; ++i)
     settings.pages[i].Normalise();
+}
+
+void
+PagesConfigPanel::Fill() noexcept
+{
+  /* a tap selects a page for the buttons below; the second tap
+     opens it */
+  AddGroup(_("Pages"), {.enter_action = EnterAction::ACTION_BAR});
+
+  for (unsigned i = 0; i < settings.n_pages; ++i) {
+    const PageLayout &page = settings.pages[i];
+
+    StaticString<4> number;
+    number.Format("%u", i + 1);
+
+    /* the layer of the overlay and the bottom area, over the whole
+       width below the caption */
+    StaticString<64> detail_buffer;
+    StaticString<128> description;
+    description.clear();
+    if (const char *detail = GetOverlayDetail(page, detail_buffer);
+        detail != nullptr)
+      description = detail;
+
+    const char *bottom = nullptr;
+    if (page.bottom == PageLayout::Bottom::CROSS_SECTION)
+      bottom = _("Cross section");
+    else if (page.bottom == PageLayout::Bottom::WEATHER_CONTROLS)
+      bottom = C_("Setting", "Weather controls");
+
+    if (bottom != nullptr) {
+      if (!description.empty())
+        description += ", ";
+      description += bottom;
+    }
+
+    const bool overlay = page.IsMapMain() &&
+      page.overlay != PageLayout::Overlay::NONE;
+
+    AddItem(GetEnumCaption(main_list, (unsigned)page.main),
+            [this, i](){ EditPage(i); },
+            {.icon_text = number.c_str(),
+             .value = GetInfoBoxesCaption(page.infobox_config),
+             .description = description.empty()
+             ? nullptr
+             : description.c_str(),
+             .description_size = TextSize::SMALL,
+             .badge = overlay
+             ? GetEnumCaption(overlay_list, (unsigned)page.overlay)
+             : nullptr,
+             .chevron = true});
+  }
+}
+
+void
+PagesConfigPanel::UpdateButtons() noexcept
+{
+  if (move_up_button == nullptr)
+    return;
+
+  /* the pages are the only items of the list, so the index of a page
+     is its item index */
+  const int cursor = GetCursorIndex();
+  const bool on_page = cursor >= 0 && unsigned(cursor) < settings.n_pages;
+
+  move_up_button->SetEnabled(on_page && cursor > 0);
+  move_down_button->SetEnabled(on_page &&
+                               unsigned(cursor) + 1 < settings.n_pages);
+  add_button->SetEnabled(settings.n_pages < PageSettings::MAX_PAGES);
+}
+
+void
+PagesConfigPanel::AddPage() noexcept
+{
+  const unsigned n = settings.n_pages;
+  if (n >= PageSettings::MAX_PAGES)
+    return;
+
+  settings.pages[n] = PageLayout::Default();
+  settings.n_pages = n + 1;
+  EditPage(n);
+}
+
+void
+PagesConfigPanel::MovePage(int delta) noexcept
+{
+  const int cursor = GetCursorIndex();
+  if (cursor < 0 || unsigned(cursor) >= settings.n_pages)
+    return;
+
+  const unsigned other = cursor + delta;
+  if (other >= settings.n_pages)
+    return;
+
+  std::swap(settings.pages[cursor], settings.pages[other]);
+  Refresh();
+  SetCursorIndex(other);
+  UpdateButtons();
+}
+
+void
+PagesConfigPanel::EditPage(unsigned index) noexcept
+{
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      UIGlobals::GetDialogLook(), _("Page"));
+
+  auto editor =
+    std::make_unique<PageLayoutEditWidget>(settings, index, dialog);
+  const PageLayoutEditWidget &_editor = *editor;
+
+  dialog.FinishPreliminary(std::move(editor));
+  dialog.AddButton(_("Close"), mrOK);
+  dialog.ShowModal();
+
+  /* the page may have been deleted */
+  Refresh();
+  SetCursorIndex(_editor.GetIndex());
+  UpdateButtons();
+}
+
+bool
+PagesConfigPanel::Save(bool &_changed) noexcept
+{
+  bool changed = false;
+
+  std::fill(settings.pages.begin() + settings.n_pages,
+            settings.pages.end(),
+            PageLayout::Undefined());
 
   PageSettings &_settings = CommonInterface::SetUISettings().pages;
   for (unsigned int i = 0; i < PageSettings::MAX_PAGES; ++i) {
@@ -661,69 +871,15 @@ PageListWidget::Save(bool &_changed) noexcept
   return true;
 }
 
-void
-PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                            unsigned idx) noexcept
-{
-  const InfoBoxSettings &info_box_settings =
-    CommonInterface::GetUISettings().info_boxes;
-
-  assert(idx < PageSettings::MAX_PAGES);
-  const auto &value = settings.pages[idx];
-
-  StaticString<64> buffer;
-  row_renderer.DrawTextRow(canvas, rc,
-                           value.MakeTitle(info_box_settings,
-                                           std::span{buffer.data(), buffer.capacity()},
-                                           DataGlobals::GetRasp().get()));
-}
-
-void
-PageListWidget::OnCursorMoved[[maybe_unused]] (unsigned idx) noexcept
-{
-  UpdateButtons();
-
-  editor->SetValue(settings.pages[idx]);
-}
-
-void
-PageListWidget::OnActivateItem([[maybe_unused]] unsigned idx) noexcept
-{
-  editor->SetFocus();
-}
-
-void
-PageListWidget::OnModified(const PageLayout &new_value) noexcept
-{
-  unsigned i = GetList().GetCursorIndex();
-  assert(i < PageSettings::MAX_PAGES);
-
-  if (i == 0 && !new_value.IsDefined()) {
-    /* refuse to delete the first page (kludge) */
-    editor->SetValue(settings.pages[i]);
-    return;
-  }
-
-  settings.pages[i] = new_value;
-  GetList().Invalidate();
-}
-
 std::unique_ptr<Widget>
 CreatePagesConfigPanel()
 {
-  auto _list = std::make_unique<PageListWidget>();
-  auto _editor = std::make_unique<PageLayoutEditWidget>(UIGlobals::GetDialogLook(),
-                                                        *_list);
+  auto panel = std::make_unique<PagesConfigPanel>();
+  auto &_panel = *panel;
 
-  auto two = std::make_unique<TwoWidgets>(std::move(_list),
-                                          std::move(_editor));
-  auto &list = (PageListWidget &)two->GetFirst();
-  auto &editor = (PageLayoutEditWidget &)two->GetSecond();
-  list.SetEditor(editor);
-
-  auto buttons = std::make_unique<ButtonPanelWidget>(std::move(two),
-                                                     ButtonPanelWidget::Alignment::BOTTOM);
-  list.SetButtonPanel(*buttons);
-
+  auto buttons =
+    std::make_unique<ButtonPanelWidget>(std::move(panel),
+                                        ButtonPanelWidget::Alignment::BOTTOM);
+  _panel.SetButtonPanel(*buttons);
   return buttons;
 }

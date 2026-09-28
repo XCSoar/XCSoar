@@ -461,7 +461,7 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location) noexcept
 void
 GlueMapWindow::UpdateProjection() noexcept
 {
-  const PixelRect rc = GetClientRect();
+  const PixelRect rc = content_rect.IsEmpty() ? GetClientRect() : content_rect;
 
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */

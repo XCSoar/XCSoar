@@ -46,6 +46,8 @@ public:
   void ToggleNorthUp() noexcept;
 
   /* virtual methods from class Widget */
+  [[gnu::pure]]
+  const Color *GetBackgroundColor() const noexcept override;
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;

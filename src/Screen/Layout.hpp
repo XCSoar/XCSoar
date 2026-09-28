@@ -292,6 +292,14 @@ GetMaximumControlHeight() noexcept
 static constexpr unsigned inflight_button_pt = 56;
 
 /**
+ * Corner diameter of a button, a dialog, and a value box, in points.
+ * Canvas::DrawRoundRectangle() takes this as the ellipse size.
+ * A face smaller than the diameter is capped so it does not
+ * become a pill.
+ */
+static constexpr unsigned corner_diameter_pt = 14;
+
+/**
  * Pixel size of #inflight_button_pt.
  */
 [[gnu::pure]]

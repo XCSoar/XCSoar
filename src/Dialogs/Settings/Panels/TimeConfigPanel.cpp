@@ -2,27 +2,21 @@
 // Copyright The XCSoar Project
 
 #include "TimeConfigPanel.hpp"
-#include "Form/DataField/Boolean.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
-#include "Form/DataField/Time.hpp"
 #include "Formatter/LocalTimeFormatter.hpp"
-#include "Formatter/TimeFormatter.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Dialogs/DialogSettings.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "time/SystemTimeZone.hpp"
 #include "time/TimeZones.hpp"
-#include "util/StaticString.hxx"
 
 #include <cstdlib>
+#include <vector>
 
 using namespace std::chrono;
 
@@ -55,86 +49,75 @@ static constexpr StaticEnumChoice manual_utc_offset_list[] = {
   nullptr
 };
 
-enum ControlIndex {
-  LOCAL_TIME_SOURCE,
-  TIME_ZONE,
-  UTC_OFFSET,
-  LOCAL_TIME,
-  SYSTEM_TIME_FROM_GPS
-};
+/** "+01:00" or "-03:30". */
+static void
+FormatUTCOffset(StaticString<32> &buffer, RoughTimeDelta offset) noexcept
+{
+  const int s = offset.AsSeconds();
+  buffer.Format("UTC%c%s", s < 0 ? '-' : '+',
+                FormatSignedTimeHHMM(seconds{std::abs(s)}).c_str());
+}
 
-class TimeConfigPanel final
-  : public RowFormWidget, DataFieldListener {
+/**
+ * Where the local time comes from: the operating system, a time zone
+ * or a fixed offset; and whether the GPS sets the clock.
+ */
+class TimeConfigPanel final : public ConfigListPanel {
+  LocalTimeSource local_time_source;
+  StaticString<64> time_zone;
   RoughTimeDelta manual_utc_offset;
   bool manual_utc_offset_modified = false;
+  bool set_system_time_from_gps;
 
-  /** is #manual_utc_offset_list part of the #LOCAL_TIME_SOURCE field? */
-  bool manual_utc_offset_offered;
-
-  UI::PeriodicTimer local_time_timer{[this]{ UpdateLocalTime(); }};
-
-public:
-  TimeConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-public:
-  void SetLocalTime(RoughTimeDelta utc_offset);
-
-  /**
-   * Enable the fields which the given source uses, and show the UTC
-   * offset it currently yields.
-   */
-  void UpdateLocalTimeSource(LocalTimeSource source);
-
-  /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  void Show(const PixelRect &rc) noexcept override;
-  void Hide() noexcept override;
-  void Move(const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
+  /** the local time is a clock: it moves while the page is open */
+  UI::PeriodicTimer local_time_timer{[this]{ Refresh(); }};
 
 private:
-  /**
-   * Recalculate the local time for the source which is selected in the
-   * form.
-   */
-  void UpdateLocalTime() noexcept {
-    SetLocalTime(GetUTCOffset(GetLocalTimeSource()));
-  }
+  void PickLocalTimeSource() noexcept;
+  void PickTimeZone() noexcept;
+  void PickManualUTCOffset() noexcept;
 
-  /**
-   * Add or remove the manual UTC offset, which is an expert setting.
-   */
-  void UpdateSourceChoices() noexcept;
-
-  /**
-   * Returns the time zone which is selected in the form.
-   */
-  [[gnu::pure]]
-  const char *GetTimeZone() const noexcept;
-
-  /**
-   * Calculate the UTC offset which the given source currently yields.
-   */
+  /** Calculate the UTC offset which the given source currently yields. */
   [[gnu::pure]]
   RoughTimeDelta GetUTCOffset(LocalTimeSource source) const noexcept;
 
-  [[gnu::pure]]
-  LocalTimeSource GetLocalTimeSource() const noexcept {
-    return (LocalTimeSource)
-      ((const DataFieldEnum &)GetDataField(LOCAL_TIME_SOURCE)).GetValue();
-  }
+  void AddLocalTimeItem() noexcept;
 
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
+  void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
-const char *
-TimeConfigPanel::GetTimeZone() const noexcept
+void
+TimeConfigPanel::LoadSettings() noexcept
 {
-  const char *id =
-    ((const DataFieldEnum &)GetDataField(TIME_ZONE)).GetAsString();
-  return id != nullptr ? id : "UTC";
+  const ComputerSettings &settings_computer =
+    CommonInterface::GetComputerSettings();
+
+  manual_utc_offset = settings_computer.utc_offset;
+  Profile::LoadUTCOffset(Profile::map, manual_utc_offset);
+
+  local_time_source = settings_computer.local_time_source;
+
+#ifdef KOBO
+  if (local_time_source == LocalTimeSource::AUTOMATIC)
+    /* the profile was written on another platform */
+    local_time_source = LocalTimeSource::TIME_ZONE;
+#endif
+
+  /* a time zone which is not in our table: fall back to UTC */
+  time_zone = FindTimeZone(settings_computer.time_zone.c_str()) != nullptr
+    ? settings_computer.time_zone.c_str()
+    : "UTC";
+
+  set_system_time_from_gps = settings_computer.set_system_time_from_gps;
 }
 
 RoughTimeDelta
@@ -145,7 +128,7 @@ TimeConfigPanel::GetUTCOffset(LocalTimeSource source) const noexcept
     return RoughTimeDelta::FromSeconds(GetCurrentTimeZoneOffset());
 
   case LocalTimeSource::TIME_ZONE:
-    if (const auto offset = FindTimeZoneOffset(GetTimeZone(),
+    if (const auto offset = FindTimeZoneOffset(time_zone.c_str(),
                                                system_clock::now()))
       return RoughTimeDelta::FromSeconds(offset->count());
 
@@ -159,7 +142,93 @@ TimeConfigPanel::GetUTCOffset(LocalTimeSource source) const noexcept
 }
 
 void
-TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
+TimeConfigPanel::PickLocalTimeSource() noexcept
+{
+  /* the manual offset is offered to experts, and kept for a profile
+     which uses it */
+  std::vector<PickerChoice> choices;
+  std::vector<LocalTimeSource> sources;
+  int current = -1;
+
+  const auto add = [&](const StaticEnumChoice *list){
+    for (auto i = list; i->display_string != nullptr; ++i) {
+      if (LocalTimeSource(i->id) == local_time_source)
+        current = choices.size();
+
+      choices.push_back({gettext(i->display_string), gettext(i->help)});
+      sources.push_back(LocalTimeSource(i->id));
+    }
+  };
+
+  add(local_time_source_list);
+  if (IsExpert() || local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET)
+    add(manual_utc_offset_list);
+
+  const int picked =
+    PickChoice(_("Local time source"),
+               _("Selects where XCSoar gets the offset between "
+                 "UTC and local time from."),
+               choices, current);
+  if (picked < 0 || picked == current)
+    return;
+
+  local_time_source = sources[picked];
+  Refresh();
+}
+
+void
+TimeConfigPanel::PickTimeZone() noexcept
+{
+  const auto zones = GetTimeZones();
+
+  std::vector<PickerChoice> choices;
+  choices.reserve(zones.size());
+  int current = -1;
+
+  for (const auto &i : zones) {
+    if (time_zone == i.id)
+      current = choices.size();
+
+    choices.push_back({i.id});
+  }
+
+  const int picked =
+    PickChoice(_("Time zone"),
+               _("The time zone of the airfield you are flying at."),
+               choices, current);
+  if (picked < 0 || picked == current)
+    return;
+
+  time_zone = zones[picked].id;
+  Refresh();
+}
+
+void
+TimeConfigPanel::PickManualUTCOffset() noexcept
+{
+  /* one choice per quarter hour */
+  int value = manual_utc_offset.AsSeconds() / 60;
+  if (!PickNumber(_("Manual UTC offset"),
+                  _("The UTC offset field allows the UTC local time offset to be specified. It keeps "
+                    "the value you entered even while another local time source is selected. The "
+                    "local time is displayed below, along with the UTC offset which is currently in "
+                    "effect."),
+                  duration_cast<minutes>(Profile::MIN_UTC_OFFSET).count(),
+                  duration_cast<minutes>(Profile::MAX_UTC_OFFSET).count(),
+                  UTC_OFFSET_STEP.count(), value,
+                  [](StaticString<32> &s, int v){
+                    FormatUTCOffset(s,
+                                    RoughTimeDelta::FromDuration(minutes{v}));
+                  }))
+    return;
+
+  manual_utc_offset = RoughTimeDelta::FromDuration(minutes{value});
+  manual_utc_offset_modified = true;
+  Refresh();
+}
+
+void
+TimeConfigPanel::AddLocalTimeItem() noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -170,76 +239,72 @@ TimeConfigPanel::SetLocalTime(RoughTimeDelta utc_offset)
     : TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()};
 
   /* the offset which is actually in effect goes with the local time:
-     the field above shows the value of the source it belongs to, which
+     the item above shows the value of the source it belongs to, which
      is not the one in use unless that source is selected */
-  const int seconds = utc_offset.AsSeconds();
-  StaticString<32> buffer;
-  buffer.Format("%s (UTC%c%s)",
-                FormatLocalTimeHHMM(time, utc_offset).c_str(),
-                seconds < 0 ? '-' : '+',
-                FormatSignedTimeHHMM(std::chrono::seconds{std::abs(seconds)}).c_str());
+  const RoughTimeDelta utc_offset = GetUTCOffset(local_time_source);
 
-  SetText(LOCAL_TIME, buffer);
+  StaticString<32> offset;
+  FormatUTCOffset(offset, utc_offset);
+
+  StaticString<64> buffer;
+  buffer.Format("%s (%s)", FormatLocalTimeHHMM(time, utc_offset).c_str(),
+                offset.c_str());
+
+  AddItem(_("Local time"), {.value = buffer.c_str()});
 }
 
 void
-TimeConfigPanel::UpdateLocalTimeSource(LocalTimeSource source)
+TimeConfigPanel::Fill() noexcept
 {
-  SetRowEnabled(TIME_ZONE, source == LocalTimeSource::TIME_ZONE);
-  SetRowEnabled(UTC_OFFSET, source == LocalTimeSource::MANUAL_UTC_OFFSET);
+  AddGroup();
 
-  /* the field keeps what the user entered, whichever source is
-     selected; the offset which is in effect is shown with the local
-     time below */
-  LoadValueDuration(UTC_OFFSET, manual_utc_offset.ToDuration());
+  AddItem(_("Local time source"), [this](){ PickLocalTimeSource(); },
+          {.value = local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET
+           ? GetEnumCaption(manual_utc_offset_list,
+                            (unsigned)local_time_source)
+           : GetEnumCaption(local_time_source_list,
+                            (unsigned)local_time_source),
+           .chevron = true});
 
-  SetLocalTime(GetUTCOffset(source));
-}
+  AddItem(_("Time zone"), [this](){ PickTimeZone(); },
+          {.value = time_zone.c_str(),
+           .chevron = true,
+           .disabled = local_time_source != LocalTimeSource::TIME_ZONE});
 
-void
-TimeConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(UTC_OFFSET, df)) {
-    const auto &tdf = static_cast<const DataFieldTime &>(df);
-    manual_utc_offset = RoughTimeDelta::FromDuration(tdf.GetValue());
-    manual_utc_offset_modified = true;
-    SetLocalTime(manual_utc_offset);
-  } else if (IsDataField(LOCAL_TIME_SOURCE, df) || IsDataField(TIME_ZONE, df)) {
-    UpdateLocalTimeSource(GetLocalTimeSource());
+  /* the offset keeps what the user entered, whichever source is
+     selected; the one in effect is shown with the local time */
+  StaticString<32> offset;
+  FormatUTCOffset(offset, manual_utc_offset);
+
+  AddItem(_("Manual UTC offset"), [this](){ PickManualUTCOffset(); },
+          {.value = offset.c_str(),
+           .chevron = true,
+           .disabled =
+           local_time_source != LocalTimeSource::MANUAL_UTC_OFFSET});
+
+  AddLocalTimeItem();
+
+  if (IsExpert()) {
+    AddGroup();
+
+    AddToggleItem(_("Use GPS time"),
+                  _("If enabled sets the clock of the computer to the GPS time once a fix "
+                    "is set. This is only necessary if your computer does not have a "
+                    "real-time clock with battery backup or your computer frequently runs "
+                    "out of battery power or otherwise loses time."),
+                  set_system_time_from_gps);
   }
-}
-
-void
-TimeConfigPanel::UpdateSourceChoices() noexcept
-{
-  auto &df = (DataFieldEnum &)GetDataField(LOCAL_TIME_SOURCE);
-  const auto source = (LocalTimeSource)df.GetValue();
-
-  const bool offer = UIGlobals::GetDialogSettings().expert ||
-    source == LocalTimeSource::MANUAL_UTC_OFFSET;
-  if (offer == manual_utc_offset_offered)
-    return;
-
-  manual_utc_offset_offered = offer;
-
-  df.ClearChoices();
-  df.AddChoices(local_time_source_list);
-  if (offer)
-    df.AddChoices(manual_utc_offset_list);
-
-  df.SetValue(source);
-  GetControl(LOCAL_TIME_SOURCE).RefreshDisplay();
 }
 
 void
 TimeConfigPanel::Show(const PixelRect &rc) noexcept
 {
-  RowFormWidget::Show(rc);
+  ConfigListPanel::Show(rc);
 
   /* the local time is a clock, and the dialog may stay open for a
      while: without this, it would keep showing the time the page was
      opened */
-  UpdateLocalTime();
+  Refresh();
   local_time_timer.Schedule(seconds{1});
 }
 
@@ -248,95 +313,7 @@ TimeConfigPanel::Hide() noexcept
 {
   local_time_timer.Cancel();
 
-  RowFormWidget::Hide();
-}
-
-void
-TimeConfigPanel::Move(const PixelRect &rc) noexcept
-{
-  RowFormWidget::Move(rc);
-
-  /* toggling "Expert" in the configuration dialog only forces a layout
-     update, so this is where the choice list has to follow */
-  UpdateSourceChoices();
-}
-
-void
-TimeConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
-{
-  RowFormWidget::Prepare(parent, rc);
-
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-
-  manual_utc_offset = settings_computer.utc_offset;
-  Profile::LoadUTCOffset(Profile::map, manual_utc_offset);
-
-  auto local_time_source = settings_computer.local_time_source;
-
-#ifdef KOBO
-  if (local_time_source == LocalTimeSource::AUTOMATIC)
-    /* the profile was written on another platform */
-    local_time_source = LocalTimeSource::TIME_ZONE;
-#endif
-
-  WndProperty *wp = AddEnum(_("Local time source"),
-                            _("Selects where XCSoar gets the offset between "
-                              "UTC and local time from."),
-                            this);
-  {
-    auto &df = *(DataFieldEnum *)wp->GetDataField();
-    df.EnableItemHelp(true);
-    df.AddChoices(local_time_source_list);
-
-    manual_utc_offset_offered = UIGlobals::GetDialogSettings().expert ||
-      local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET;
-    if (manual_utc_offset_offered)
-      df.AddChoices(manual_utc_offset_list);
-
-    df.SetValue(local_time_source);
-    wp->RefreshDisplay();
-  }
-
-  wp = AddEnum(_("Time zone"),
-                            _("The time zone of the airfield you are flying "
-                              "at."),
-                            this);
-  {
-    auto &df = *(DataFieldEnum *)wp->GetDataField();
-
-    for (const auto &i : GetTimeZones())
-      df.addEnumText(i.id);
-
-    if (!df.SetValue(settings_computer.time_zone.c_str()))
-      /* a time zone which is not in our table: fall back to UTC */
-      df.SetValue("UTC");
-
-    wp->RefreshDisplay();
-  }
-
-  AddDuration(_("Manual UTC offset"),
-          _("The UTC offset field allows the UTC local time offset to be specified. It keeps "
-            "the value you entered even while another local time source is selected. The "
-            "local time is displayed below, along with the UTC offset which is currently in "
-            "effect."),
-              Profile::MIN_UTC_OFFSET,
-              Profile::MAX_UTC_OFFSET,
-              UTC_OFFSET_STEP,
-              manual_utc_offset.ToDuration(),
-              2, this);
-
-  Add(_("Local time"), 0, true);
-
-  UpdateLocalTimeSource(local_time_source);
-
-  AddBoolean(_("Use GPS time"),
-             _("If enabled sets the clock of the computer to the GPS time once a fix "
-               "is set. This is only necessary if your computer does not have a "
-               "real-time clock with battery backup or your computer frequently runs "
-               "out of battery power or otherwise loses time."),
-             settings_computer.set_system_time_from_gps);
-  SetExpertRow(SYSTEM_TIME_FROM_GPS);
+  ConfigListPanel::Hide();
 }
 
 bool
@@ -346,21 +323,24 @@ TimeConfigPanel::Save(bool &_changed) noexcept
 
   ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
 
-  changed |= SaveValueEnum(LOCAL_TIME_SOURCE, settings_computer.local_time_source);
-  changed |= SaveValue(TIME_ZONE, ProfileKeys::TimeZone,
-                       settings_computer.time_zone);
+  if (settings_computer.local_time_source != local_time_source) {
+    settings_computer.local_time_source = local_time_source;
+    changed = true;
+  }
+
+  changed |= Profile::Update(ProfileKeys::TimeZone,
+                             settings_computer.time_zone, time_zone);
 
   /* the source is written even if it did not change: without this key, a
      stored UTC offset means "manual" to Profile::Load(), because that
      is what it meant in older versions */
-  Profile::SetEnum(ProfileKeys::LocalTimeSource, settings_computer.local_time_source);
+  Profile::SetEnum(ProfileKeys::LocalTimeSource,
+                   settings_computer.local_time_source);
 
-  if (settings_computer.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET) {
-    const auto ival = GetValueTime(UTC_OFFSET);
-
-    if (const auto new_utc_offset = RoughTimeDelta::FromDuration(ival);
-        new_utc_offset != settings_computer.utc_offset) {
-      settings_computer.utc_offset = new_utc_offset;
+  if (settings_computer.local_time_source ==
+      LocalTimeSource::MANUAL_UTC_OFFSET) {
+    if (manual_utc_offset != settings_computer.utc_offset) {
+      settings_computer.utc_offset = manual_utc_offset;
       changed = true;
     }
   } else {
@@ -374,7 +354,8 @@ TimeConfigPanel::Save(bool &_changed) noexcept
     }
   }
 
-  if (settings_computer.local_time_source == LocalTimeSource::MANUAL_UTC_OFFSET ||
+  if (settings_computer.local_time_source ==
+      LocalTimeSource::MANUAL_UTC_OFFSET ||
       manual_utc_offset_modified) {
     /* remember the manual offset even while another source is active, so
        the user does not have to enter it again */
@@ -383,8 +364,9 @@ TimeConfigPanel::Save(bool &_changed) noexcept
     changed = true;
   }
 
-  changed |= SaveValue(SYSTEM_TIME_FROM_GPS, ProfileKeys::SetSystemTimeFromGPS,
-                       settings_computer.set_system_time_from_gps);
+  changed |= Profile::Update(ProfileKeys::SetSystemTimeFromGPS,
+                             settings_computer.set_system_time_from_gps,
+                             set_system_time_from_gps);
 
   _changed |= changed;
 

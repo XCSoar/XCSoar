@@ -465,32 +465,29 @@ relative to a common waypoint.  The pilots call each other reporting
 these codes, and entering the codes into the computer allows their 
 mates to be located accurately by the computer. 
 
-To use the team code, all pilots in the team should select a waypoint to 
-be used as the reference.  This is all done on the team code dialogue. 
+To use the team code, all pilots in the team should select a waypoint to
+be used as the reference.  This is all done on the team code dialogue.
 \menulabel{\bmenug{Info 2}\blink\bmenut{Team}{Code}}
-The reference waypoint is set 
-via the \button{Set WP} button. Select a waypoint from the lookup dialogue 
-and it will be the team reference.
+The dialogue floats over the map and stays fitted to the list when the
+display layout changes. Tap the label to select a row; its explanation
+eases open below it. Cursor keys open the row once it has stayed
+selected. Tap the value to change it.
 
-During flight, the pilot can read out his `Own code' from the team 
-code dialogue to his team mate, in order to report his position.  When 
-the pilot hears a code report from a team mate, he presses the \button{Set Code} 
-button to open the text entry dialogue to allow entry of the mate's code.
+Reference opens the list of waypoints. The chosen waypoint is the
+origin of the code. Own code is the position of this aircraft; read it
+to the other pilots. Mate code opens a text entry for the code a team
+mate has reported. Range, bearing and the relative bearing then follow
+that code, and they keep updating while the dialogue is open.
 \sketch{figures/dialog-teamcode.png}
-
-After entering the mate's code, the relative distance and 
-bearing to the mate is calculated and updated in the dialogue.
-
 
 \subsection*{FLARM ID lookup}
 
 XCSoar also supports the encrypted team codes from the FlarmNet initiative.
-The \button{Flarm Lock} button allows you to access the FlarmNet database as well
-as XCSoar's database for FLARM to find a team mate. A simple
-lookup for a competition ID delivers potentially the desired 
-FLARM identity. Selecting the desired data base entry from the found items allows you 
-to `lock' your buddy from afar. See Section~\ref{sec:flarm-ident-file} for
-where to find the FlarmNet database etc.\ explained in detail.
+Flarm Lock opens a lookup of a competition number in the FlarmNet
+database and in XCSoar's FLARM database. Selecting an entry locks that
+aircraft, and an empty entry clears the lock. See
+Section~\ref{sec:flarm-ident-file} for where to find the FlarmNet
+database etc.\ explained in detail.
 
 \menulabel{\bmenug{Info 2}\blink\bmenut{FLARM}{Details}}
 Similar functionality provides the FLARM details dialogue. It also lets

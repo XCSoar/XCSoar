@@ -5,12 +5,16 @@
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "Widget/Widget.hpp"
 #include "Language/Language.hpp"
 #include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 
 using namespace UI;
+
+void (*WidgetDialog::layout_refit)(WidgetDialog &, const PixelRect &) =
+  nullptr;
 
 [[gnu::const]]
 static WindowStyle
@@ -75,6 +79,21 @@ WidgetDialog::WidgetDialog(Full tag, SingleWindow &parent, const DialogLook &loo
 {
   widget.Set(_widget);
   widget.Move(buttons.UpdateLayout());
+}
+
+WidgetDialog::WidgetDialog(Floating, SingleWindow &parent,
+                           const DialogLook &look,
+                           const char *caption,
+                           GroupedListWidget *list) noexcept
+  :WndForm(parent, look,
+           PixelRect{Layout::Scale(PixelSize{220u, 220u})},
+           caption, GetDialogStyle()),
+   buttons(GetClientAreaWindow(), look.button),
+   widget(GetClientAreaWindow()),
+   full(false), auto_size(false)
+{
+  widget.Set(list);
+  widget.Move(LayoutButtons());
 }
 
 WidgetDialog::~WidgetDialog()
@@ -167,13 +186,24 @@ WidgetDialog::AutoSize()
   MoveToCenter();
 }
 
+PixelRect
+WidgetDialog::LayoutButtons() noexcept
+{
+  /* a list this dialog was fitted to is short, so the client is
+     wider than it is tall.  The strip stays under the list. */
+  if (fit_client_width > 0)
+    return buttons.BottomLayout();
+
+  return buttons.UpdateLayout();
+}
+
 int
 WidgetDialog::ShowModal()
 {
   if (auto_size)
     AutoSize();
   else
-    widget.Move(buttons.UpdateLayout());
+    widget.Move(LayoutButtons());
 
   widget.Show();
   if (!auto_size) {
@@ -181,7 +211,7 @@ WidgetDialog::ShowModal()
        become available when the widget was shown (fixes caption clipping on
        some scaled/font configurations).  Keep this non-auto dialogs only,
        so AutoSize()'s LeftLayout()/BottomLayout() decision remains intact. */
-    widget.Move(buttons.UpdateLayout());
+    widget.Move(LayoutButtons());
   }
   int result = WndForm::ShowModal();
   widget.Hide();
@@ -215,13 +245,18 @@ WidgetDialog::OnResize(PixelSize new_size) noexcept
   if (auto_size)
     return;
 
-  widget.Move(buttons.UpdateLayout());
+  widget.Move(LayoutButtons());
 }
 
 void
 WidgetDialog::ReinitialiseLayout(const PixelRect &parent_rc) noexcept
 {
-  if (full)
+  if (fit_client_width > 0) {
+    if (layout_refit != nullptr)
+      layout_refit(*this, parent_rc);
+    return;
+  }
+  else if (full)
     /* make it full-screen again on the resized main window */
     Move(parent_rc);
   else

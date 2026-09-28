@@ -73,6 +73,14 @@ public:
    */
   void OnButtonGainedFocus(Button &b) noexcept;
 
+  /**
+   * The button which cursor selection has marked, which is the one
+   * which was used last; nullptr if there is none, or if it cannot be
+   * pressed at the moment.
+   */
+  [[gnu::pure]]
+  Button *GetSelectedButton() noexcept;
+
   const ButtonLook &GetLook() const noexcept {
     return look;
   }

@@ -6,41 +6,41 @@
 
 #ifdef HAVE_VOLUME_CONTROLLER
 
+#include "ConfigListPanel.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
-#include "Audio/GlobalVolumeController.hpp"
 #include "Audio/VolumeController.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Keys.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Profile/Profile.hpp"
 
-enum ControlIndex {
-  MasterVolume,
-};
+/** The volume of everything XCSoar plays. */
+class AudioConfigPanel final : public ConfigListPanel {
+  int master_volume;
 
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
-class AudioConfigPanel final : public RowFormWidget {
 public:
-  AudioConfigPanel() : RowFormWidget(UIGlobals::GetDialogLook()) {
-  }
-
-public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-AudioConfigPanel::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
+AudioConfigPanel::LoadSettings() noexcept
 {
-  RowFormWidget::Prepare(parent, rc);
+  master_volume = CommonInterface::GetUISettings().sound.master_volume;
+}
 
-  const auto &settings = CommonInterface::GetUISettings().sound;
+void
+AudioConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddInteger(_("Master Volume"),
-             _("The overall audio output volume."),
-             "%d %%", "%d",
-             0, VolumeController::GetMaxValue(), 1, settings.master_volume);
+  AddPercentItem(_("Master Volume"),
+                 _("The overall audio output volume."),
+                 0, VolumeController::GetMaxValue(), 5, master_volume);
 }
 
 bool
@@ -48,8 +48,9 @@ AudioConfigPanel::Save(bool &changed) noexcept
 {
   auto &settings = CommonInterface::SetUISettings().sound;
 
-  changed |= SaveValueInteger(MasterVolume, ProfileKeys::MasterAudioVolume,
-                              settings.master_volume);
+  changed |= Profile::Update(ProfileKeys::MasterAudioVolume,
+                             settings.master_volume,
+                             uint8_t(master_volume));
 
   return true;
 }

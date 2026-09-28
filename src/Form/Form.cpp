@@ -10,11 +10,71 @@
 #include "ui/event/KeyCode.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/BoxShadowRenderer.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/window/custom/Reference.hpp"
 
+#include <optional>
+
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
+#include "ui/opengl/System.hpp"
+
+/**
+ * While this is alive, drawing is limited to a rounded rectangle.
+ * The pixels outside the curve keep whatever was painted there
+ * before, which is the map and the dialog's shadow.
+ */
+class DialogRoundClip final {
+  bool active = false;
+
+public:
+  DialogRoundClip(Canvas &canvas, const PixelRect &rc,
+                  unsigned diameter) noexcept {
+    if (diameter < 2 || rc.left >= rc.right || rc.top >= rc.bottom)
+      return;
+
+    active = true;
+    glEnable(GL_STENCIL_TEST);
+
+    {
+      const GLCanvasScissor scissor(rc);
+      glStencilMask(~0u);
+      glClear(GL_STENCIL_BUFFER_BIT);
+    }
+
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+    glStencilFunc(GL_ALWAYS, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    canvas.SelectNullPen();
+    {
+      const Brush brush{COLOR_WHITE};
+      canvas.Select(brush);
+      canvas.DrawRoundRectangle(rc, PixelSize{diameter});
+      canvas.SelectHollowBrush();
+    }
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilFunc(GL_EQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+  }
+
+  ~DialogRoundClip() noexcept {
+    if (!active)
+      return;
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glStencilFunc(GL_ALWAYS, 0, ~0u);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilMask(~0u);
+    glDisable(GL_STENCIL_TEST);
+  }
+
+  DialogRoundClip(const DialogRoundClip &) = delete;
+  DialogRoundClip &operator=(const DialogRoundClip &) = delete;
+};
 #endif
 
 #ifdef ANDROID
@@ -76,6 +136,17 @@ WndForm::GetMainWindow()
   return *(SingleWindow *)GetRootOwner();
 }
 
+/**
+ * A floating dialog draws its title as a heading on the page.
+ * A full-screen dialog, and e-paper, keep the title bar.
+ */
+[[gnu::pure]]
+static bool
+UseHeadingTitle(bool maximised) noexcept
+{
+  return !maximised && !IsDithered();
+}
+
 void
 WndForm::UpdateLayout()
 {
@@ -89,8 +160,17 @@ WndForm::UpdateLayout()
     --title_rect.right;
   }
 
-  title_rect.bottom = rc.top +
-    (caption.empty() ? 0 : look.caption.font->GetHeight());
+  /* from the inset top, so the border does not eat the tail
+     below the baseline.  The line height is that tail plus the
+     ascent.  A heading keeps a little air above and below that
+     line. */
+  const bool heading = UseHeadingTitle(IsMaximised());
+  const unsigned air = heading ? Layout::GetTextPadding() : 0;
+  const Font &title_font = heading ? look.bold_font : *look.caption.font;
+
+  title_rect.bottom = title_rect.top;
+  if (!caption.empty())
+    title_rect.bottom += (int)air + (int)title_font.GetHeight() + (int)air;
 
   client_rect = rc.RemainingBelowSafe(title_rect);
 
@@ -111,7 +191,6 @@ WndForm::OnCreate()
   WindowStyle client_style;
   client_style.ControlParent();
   client_area.Create(*this, client_rect, look.background_color, client_style);
-  client_area.SetGradientTopColor(look.background_gradient_top_color);
 }
 
 void
@@ -364,50 +443,108 @@ WndForm::OnPaint(Canvas &canvas) noexcept
   const SingleWindow &main_window = GetMainWindow();
   [[maybe_unused]] const bool is_active = main_window.IsTopDialog(*this);
 
+  const PixelRect rc_client = GetClientRect();
+  const unsigned corner_diameter =
+    ButtonFrameRenderer::GetCornerDiameter(rc_client);
+
+  /* same corner curve as a button; a full-screen dialog stays
+     square, and e-paper keeps its hard rectangular outline */
+  bool round = !IsMaximised() && !IsDithered() && corner_diameter >= 2;
+
 #ifdef ENABLE_OPENGL
+  if (round) {
+    GLint stencil_bits = 0;
+    glGetIntegerv(GL_STENCIL_BITS, &stencil_bits);
+    if (stencil_bits <= 0)
+      round = false;
+  }
+
   if (!IsDithered() && !IsMaximised() && is_active)
-    /* draw a soft shadow around the current dialog to emphasise it */
-    DrawBoxShadow(GetClientRect(), BoxShadowStyle::DIALOG);
+    /* the shadow follows the same curve, so it does not square
+       off the corners */
+    DrawBoxShadow(rc_client, BoxShadowStyle::DIALOG,
+                  round ? corner_diameter / 2 : 0);
+
+  const DialogRoundClip clip(canvas, round ? rc_client : PixelRect{},
+                             round ? corner_diameter : 0);
+#else
+  std::optional<Canvas::RoundCornerGuard> round_guard;
+  if (round)
+    round_guard.emplace(canvas, rc_client, corner_diameter / 2);
 #endif
+
+  if (round)
+    /* the page colour under the client, including the bottom
+       corners the client window does not cover */
+    canvas.DrawFilledRectangle(rc_client, look.background_color);
 
   ContainerWindow::OnPaint(canvas);
 
-  // Get window coordinates
-  PixelRect rcClient = GetClientRect();
-
   // Draw the borders
-  if (!IsMaximised()) {
+  if (!IsMaximised() && !round) {
     if (IsDithered())
-      canvas.DrawOutlineRectangle(rcClient, COLOR_BLACK);
-    else
-      canvas.DrawRaisedEdge(rcClient);
+      canvas.DrawOutlineRectangle(rc_client, COLOR_BLACK);
+    else {
+      PixelRect edge = rc_client;
+      canvas.DrawRaisedEdge(edge);
+    }
   }
 
-  if (!caption.empty()) {
+  if (!caption.empty() && round) {
+    /* the page already fills the rounded top; the title is a
+       heading on it, in line with the cards */
+    canvas.SetTextColor(look.text_color);
+    canvas.Select(look.bold_font);
+    canvas.SetBackgroundTransparent();
+
+    const int inset = (int)(2 * ButtonFrameRenderer::GetMargin());
+    const int air = (int)Layout::GetTextPadding();
+    const PixelPoint text_at =
+      title_rect.GetTopLeft().At(inset, air);
+
+    PixelRect clip = title_rect;
+    clip.left = text_at.x;
+    if (clip.right > clip.left + inset)
+      clip.right -= inset;
+
+    canvas.DrawClippedText(text_at, clip, caption.c_str());
+  } else if (!caption.empty()) {
     // Set the colors
     canvas.SetTextColor(COLOR_WHITE);
 
     // Set the titlebar font and font-size
     canvas.Select(*look.caption.font);
 
+    /* top of the bitmap is the top of the line; the tail below
+       the baseline then sits inside the bar */
+    const PixelPoint text_at =
+      title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0);
+
     // JMW todo add here icons?
+
+    /* the band reaches the window edge so the rounded top corners
+       are the title, not the page colour underneath */
+    const PixelRect title_band = round
+      ? PixelRect{rc_client.left, rc_client.top,
+                  rc_client.right, title_rect.bottom}
+      : title_rect;
 
 #ifdef EYE_CANDY
     if (!IsDithered() && is_active) {
       canvas.SetBackgroundTransparent();
-      canvas.Stretch(title_rect.GetTopLeft(), title_rect.GetSize(),
+      canvas.Stretch(title_band.GetTopLeft(), title_band.GetSize(),
                      look.caption.background_bitmap);
 
-      // Draw titlebar text
-      canvas.DrawText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
-                      caption.c_str());
+      canvas.DrawText(text_at, caption.c_str());
     } else {
 #endif
       canvas.SetBackgroundColor(is_active
                                 ? look.caption.background_color
                                 : look.caption.inactive_background_color);
-      canvas.DrawOpaqueText(title_rect.GetTopLeft().At(Layout::GetTextPadding(), 0),
-                            title_rect, caption.c_str());
+      if (round)
+        canvas.DrawFilledRectangle(title_band,
+                                   canvas.GetBackgroundColor());
+      canvas.DrawOpaqueText(text_at, title_rect, caption.c_str());
 #ifdef EYE_CANDY
     }
 #endif

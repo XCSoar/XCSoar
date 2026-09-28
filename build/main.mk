@@ -15,10 +15,12 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/Error.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Dialogs/PickList.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/CoDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Dialogs/WidgetDialogFloating.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
@@ -65,7 +67,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Airspace/NOTAMList.cpp) \
-	$(SRC)/Dialogs/Settings/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/Settings/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
@@ -84,6 +85,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DataField.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
+	$(SRC)/Dialogs/GroupedListPicker.cpp \
 	$(SRC)/Dialogs/EmptyDownloadList.cpp \
 	$(SRC)/Dialogs/MultiFilePicker.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
@@ -124,6 +126,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LayoutConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LoggerConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/ConfigListPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/NetworkConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \

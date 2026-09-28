@@ -528,18 +528,17 @@ This page allows glide computer algorithms to be configured.
 %%%%%%%%%%%%%%%%%%
 \section{Glide Computer / Wind} \label{sec:wind}
 
-This page sets the base for wind computations.
+Circling wind, ZigZag wind and External wind. They are the same
+switches as in the wind dialogue (Section~\ref{sec:wind-setup}). The
+configuration dialogue keeps them when it closes. The wind vector and
+trail drift stay in the wind dialogue.
 
 \begin{description}
-\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
-  automatic wind algorithm. \\
-  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate. \\
-  {\bf Circling}: Circling mode requires only a GPS source. \\
-  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
-  {\bf Both}:  Uses Circling and ZigZag.
-\item[Prefere external wind]  If enabled, the wind vector received from external
-  devices overrides XCSoar's internal wind calculation.
+\item[Circling wind]  \label{conf:autowind} Estimate the wind vector while
+  circling. Requires only a GPS.
+\item[ZigZag wind]  Estimate the wind vector during glides. Requires an
+  airspeed sensor.
+\item[External wind]  Accept wind estimates from other instruments.
 \end{description}
 
 
@@ -1014,6 +1013,17 @@ for details on this setup.
 %%%%%%%%%%%%%%%%%%
 \section{Configure Plane}
 
+The plane profile lists the current values. Tap the label to select a
+row; its explanation eases open below it. Cursor keys open it once the
+row has stayed selected. Tap the value to change it.
+Enter does the same once the row is selected. Polar opens
+the polar dialogue. A red badge names a missing empty mass or wing area,
+because the polar cannot be calculated without them. A max.\ ballast
+of zero shows a No max ballast badge. Dump time of zero
+shows a No dump time badge, and a max.\ cruise speed of zero shows a
+No max cruise speed badge. WeGlide is one row: the aircraft name with
+its type number in parentheses, or a No WeGlide type badge when unset.
+
 This dialogue allows the glide polar to be defined. For a large variety of glider
 \marginlabel{\bmenug{Config 2/3}\blink\bmenug{Plane}} 
 types XCSoar provides a predefined glide polar, they could be modified if 
@@ -1047,6 +1057,7 @@ for every glide performance relevant computation of XCSoar.
 \item[Max.\ ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
   Set to zero if it does not apply.
 \item[Dump time]  The time in seconds needed for dumping full ballast.
+  Set to 0 for no dump time.
 \end{description}
 
 

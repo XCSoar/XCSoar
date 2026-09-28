@@ -2,60 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "ScoringConfigPanel.hpp"
-#include "Profile/Keys.hpp"
-#include "Profile/Profile.hpp"
+#include "ConfigListPanel.hpp"
+#include "Engine/Contest/Solvers/Contests.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Engine/Contest/Solvers/Contests.hpp"
-
-enum ControlIndex {
-  Contests,
-  PREDICT_CONTEST,
-  SPACER,
-  SHOW_FAI_TRIANGLE_AREAS,
-  FAI_TRIANGLE_THRESHOLD,
-  SPACER2,
-  SHOW_95_PERCENT_RULE_HELPERS
-};
-
-class ScoringConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-public:
-  ScoringConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-protected:
-  void ShowFAITriangleControls(bool show);
-
-public:
-  /* methods from Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
-};
-
-void
-ScoringConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(SHOW_FAI_TRIANGLE_AREAS, df)) {
-    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    ShowFAITriangleControls(dfb.GetValue());
-  }
-}
-
-void
-ScoringConfigPanel::ShowFAITriangleControls(bool show)
-{
-  SetRowVisible(FAI_TRIANGLE_THRESHOLD, show);
-}
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
   { FAITriangleSettings::Threshold::FAI, "750km (FAI)" },
@@ -63,15 +16,16 @@ static constexpr StaticEnumChoice fai_triangle_threshold_list[] = {
   nullptr
 };
 
-void
-ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
-                            [[maybe_unused]] const PixelRect &rc) noexcept
-{
-  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
-  const ContestSettings &contest_settings = settings_computer.contest;
-  const MapSettings &map_settings = CommonInterface::GetMapSettings();
-
-  const StaticEnumChoice contests_list[] = {
+/**
+ * The contest which is scored, and the helpers the map draws for it.
+ */
+class ScoringConfigPanel final : public ConfigListPanel {
+  /**
+   * The contests, with their names from ContestToString(): the list
+   * lives as long as the page, because the item which opens the
+   * choice keeps a pointer to it.
+   */
+  const StaticEnumChoice contests_list[14] = {
     { Contest::NONE, ContestToString(Contest::NONE),
       N_("Disable contest calculations") },
     { Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
@@ -115,41 +69,75 @@ ScoringConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
       N_("LVZC Charron.online, 5 legs under 200km 6 legs above. Minimum leg distance is 20km, 5 points per km.") },
     nullptr
   };
-  AddEnum(_("Contest"),
-      _("Select the rules used for calculating optimal points for a contest."),
-          contests_list, (unsigned)contest_settings.contest);
 
-  AddBoolean(_("Predict Contest"),
-             _("If enabled, then the next task point is included in the "
-               "score calculation, assuming that you will reach it."),
-             contest_settings.predict);
+  Contest contest;
+  bool predict;
 
-  AddSpacer();
-  SetExpertRow(SPACER);
+  bool show_fai_triangle_areas;
+  FAITriangleSettings::Threshold fai_triangle_threshold;
+  bool show_95_percent_rule_helpers;
 
-  AddBoolean(_("FAI triangle areas"),
-             _("Show FAI triangle areas on the map."),
-             map_settings.show_fai_triangle_areas, this);
-  SetExpertRow(SHOW_FAI_TRIANGLE_AREAS);
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
-  AddEnum(_("FAI triangle threshold"),
-          _("Specifies which threshold is used for \"large\" FAI triangles."),
-          fai_triangle_threshold_list,
-          (unsigned)map_settings.fai_triangle_settings.threshold);
-  SetExpertRow(FAI_TRIANGLE_THRESHOLD);
+public:
+  /* virtual methods from class Widget */
+  bool Save(bool &changed) noexcept override;
+};
 
-  AddSpacer();
-  SetExpertRow(SPACER2);
+void
+ScoringConfigPanel::LoadSettings() noexcept
+{
+  const ContestSettings &contest_settings =
+    CommonInterface::GetComputerSettings().contest;
+  const MapSettings &map_settings = CommonInterface::GetMapSettings();
+
+  contest = contest_settings.contest;
+  predict = contest_settings.predict;
+
+  show_fai_triangle_areas = map_settings.show_fai_triangle_areas;
+  fai_triangle_threshold = map_settings.fai_triangle_settings.threshold;
+  show_95_percent_rule_helpers = map_settings.show_95_percent_rule_helpers;
+}
+
+void
+ScoringConfigPanel::Fill() noexcept
+{
+  AddGroup();
+
+  AddEnumItem(_("Contest"),
+              _("Select the rules used for calculating optimal points for a contest."),
+              contests_list, contest);
+
+  AddToggleItem(_("Predict Contest"),
+                _("If enabled, then the next task point is included in the "
+                  "score calculation, assuming that you will reach it."),
+                predict);
+
+  if (!IsExpert())
+    return;
+
+  AddGroup();
+
+  AddToggleItem(_("FAI triangle areas"),
+                _("Show FAI triangle areas on the map."),
+                show_fai_triangle_areas);
+
+  if (show_fai_triangle_areas)
+    AddEnumItem(_("FAI triangle threshold"),
+                _("Specifies which threshold is used for \"large\" FAI triangles."),
+                fai_triangle_threshold_list, fai_triangle_threshold);
+
+  AddGroup();
 
   // xgettext:no-c-format
-  AddBoolean(_("95% dist. rule helpers"),
-             _("Show helpers for Argentinean Federation \"95% distance\" rule. "
-               "The AAT Distance Around Target InfoBox will show projected "
-               "distance vs. maximum and change colors as you approach 95%."),
-             map_settings.show_95_percent_rule_helpers);
-  SetExpertRow(SHOW_95_PERCENT_RULE_HELPERS);
-
-  ShowFAITriangleControls(map_settings.show_fai_triangle_areas);
+  AddToggleItem(_("95% dist. rule helpers"),
+                _("Show helpers for Argentinean Federation \"95% distance\" rule. "
+                  "The AAT Distance Around Target InfoBox will show projected "
+                  "distance vs. maximum and change colors as you approach 95%."),
+                show_95_percent_rule_helpers);
 }
 
 bool
@@ -157,26 +145,26 @@ ScoringConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-  ComputerSettings &settings_computer = CommonInterface::SetComputerSettings();
-  ContestSettings &contest_settings = settings_computer.contest;
+  ContestSettings &contest_settings =
+    CommonInterface::SetComputerSettings().contest;
   MapSettings &map_settings = CommonInterface::SetMapSettings();
 
-  changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules,
-                           contest_settings.contest);
-  changed |= SaveValue(PREDICT_CONTEST, ProfileKeys::PredictContest,
-                       contest_settings.predict);
+  changed |= Profile::Update(ProfileKeys::OLCRules,
+                             contest_settings.contest, contest);
+  changed |= Profile::Update(ProfileKeys::PredictContest,
+                             contest_settings.predict, predict);
 
-  changed |= SaveValue(SHOW_FAI_TRIANGLE_AREAS,
-                       ProfileKeys::ShowFAITriangleAreas,
-                       map_settings.show_fai_triangle_areas);
+  changed |= Profile::Update(ProfileKeys::ShowFAITriangleAreas,
+                             map_settings.show_fai_triangle_areas,
+                             show_fai_triangle_areas);
 
-  changed |= SaveValueEnum(FAI_TRIANGLE_THRESHOLD,
-                           ProfileKeys::FAITriangleThreshold,
-                           map_settings.fai_triangle_settings.threshold);
+  changed |= Profile::Update(ProfileKeys::FAITriangleThreshold,
+                             map_settings.fai_triangle_settings.threshold,
+                             fai_triangle_threshold);
 
-  changed |= SaveValue(SHOW_95_PERCENT_RULE_HELPERS,
-                       ProfileKeys::Show95PercentRuleHelpers,
-                       map_settings.show_95_percent_rule_helpers);
+  changed |= Profile::Update(ProfileKeys::Show95PercentRuleHelpers,
+                             map_settings.show_95_percent_rule_helpers,
+                             show_95_percent_rule_helpers);
 
   /* ContestEnumLayout=2 = current Contest encoding (see ContestProfile).
      Only stamp when OLCRules is present — do not add the key to

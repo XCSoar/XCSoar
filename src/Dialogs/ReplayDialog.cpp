@@ -5,128 +5,192 @@
 #include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Dialogs/PickList.hpp"
+#include "Widget/GroupedListWidget.hpp"
+#include "Look/DialogLook.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
-#include "Components.hpp"
 #include "Replay/Replay.hpp"
-#include "Form/DataField/Base.hpp"
 #include "Language/Language.hpp"
-#include "Repository/FileType.hpp"
-#include "Form/DataField/File.hpp"
+#include "util/StaticString.hxx"
 
-class ReplayControlWidget final
-  : public RowFormWidget
-{
-  enum Controls {
-    FILE,
-    RATE,
-  };
+#include <chrono>
 
+namespace {
+
+/**
+ * Replay as one group.  Flight opens the log list.  An empty choice
+ * is the demo.  Rate is written as soon as a value is chosen.
+ * Start, Stop and fast forward stay dialog buttons.
+ *
+ * The dialog floats over the map, sized to this list, and is fitted
+ * again when the list or the screen layout changes.
+ */
+class ReplaySetup final {
+  using ValueState = GroupedListWidget::ValueState;
+  GroupedListWidget *list = nullptr;
+  WidgetDialog *dialog = nullptr;
   Replay &replay;
 
-public:
-  ReplayControlWidget(Replay &_replay, const DialogLook &look) noexcept
-    :RowFormWidget(look), replay(_replay) {}
+  /** nullptr until a log is chosen; empty runs the demo */
+  AllocatedPath path;
 
-  void CreateButtons(WidgetDialog &dialog) noexcept {
-    dialog.AddButton(_("Start"), [this](){ OnStartClicked(); });
-    dialog.AddButton(_("Stop"), [this](){ OnStopClicked(); });
-    dialog.AddButton("+10'", [this](){ OnFastForwardClicked(); });
+public:
+  explicit ReplaySetup(Replay &_replay) noexcept
+    :replay(_replay), path(replay.GetFilename()) {}
+
+  void SetList(GroupedListWidget &_list) noexcept {
+    list = &_list;
   }
 
+  void SetDialog(WidgetDialog &_dialog) noexcept {
+    dialog = &_dialog;
+  }
+
+  void Refresh() noexcept;
+  void Start() noexcept;
+  void Stop() noexcept;
+  void FastForward() noexcept;
+
 private:
-  void OnStopClicked() noexcept;
-  void OnStartClicked() noexcept;
-  void OnFastForwardClicked() noexcept;
+  void Build() noexcept;
+  void EditFlight();
+  void EditRate();
 
-  static bool EditReplayFile(const char *caption, DataField &df,
-                             const char *help_text);
+  [[nodiscard]]
+  const char *FlightValue() const noexcept;
 
-public:
-  /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent,
-               const PixelRect &rc) noexcept override;
 };
 
+static void
+FormatReplayRate(double value, StaticString<64> &text)
+{
+  text.Format("%.0f x", value);
+}
+
+const char *
+ReplaySetup::FlightValue() const noexcept
+{
+  if (path == nullptr || path.empty())
+    return _("Demo");
+
+  return path.GetBase().c_str();
+}
+
 void
-ReplayControlWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
-                             [[maybe_unused]] const PixelRect &rc) noexcept
+ReplaySetup::Build() noexcept
 {
-  WndProperty &file = *AddFile(_("Flight"),
-          _("Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (.nmea). Leave blank to run the demo."),
-          {},
-          {FileType::NMEA, FileType::IGC},
-          true);
-  file.SetEditCallback(EditReplayFile);
-  LoadValue(FILE, replay.GetFilename());
-  GetFileDataField(FILE).Sort(FileDataField::SortOrder::DESCENDING, true);
+  list->AddGroup(nullptr);
 
-  AddFloat(_("Rate"),
-           _("Time acceleration of replay. Set to 0 for pause, 1 for normal real-time replay."),
-           "%.0f x", "%.0f",
-           0, 10, 1, false, replay.GetTimeScale());
-  GetDataField(RATE).SetOnModified([this]{
-    replay.SetTimeScale(GetValueFloat(RATE));
-  });
+  list->AddValue(_("Flight"),
+                 _("Name of file to replay. May be an IGC file (.igc) "
+                   "or a raw NMEA log file (.nmea). "
+                   "Leave blank to run the demo."),
+                 [this](ValueState &state) {
+                   state.text = FlightValue();
+                 },
+                 [this]{ EditFlight(); });
+
+  list->AddValue(_("Rate"),
+                 _("Time acceleration of replay. Set to 0 for pause, "
+                   "1 for normal real-time replay."),
+                 [this](ValueState &state) {
+                   StaticString<64> text;
+                   FormatReplayRate(replay.GetTimeScale(), text);
+                   state.text = text.c_str();
+                 },
+                 [this]{ EditRate(); });
 }
 
-inline void
-ReplayControlWidget::OnStopClicked() noexcept
+void
+ReplaySetup::Refresh() noexcept
 {
-  replay.Stop();
+  if (list->GetItemCount() == 0)
+    Build();
+
+  if (list->UpdateValues() && dialog != nullptr)
+    dialog->RefitList();
 }
 
-inline void
-ReplayControlWidget::OnStartClicked() noexcept
+void
+ReplaySetup::Start() noexcept
 {
-  const Path path = GetValueFile(FILE);
+  const Path start_path = path == nullptr || path.empty()
+    ? Path{""}
+    : Path{path};
 
   try {
-    replay.Start(path, CommonInterface::GetSystemSettings().devices[0]);
+    replay.Start(start_path,
+                 CommonInterface::GetSystemSettings().devices[0]);
   } catch (...) {
     ShowError(std::current_exception(), _("Replay"));
   }
 }
 
-inline void
-ReplayControlWidget::OnFastForwardClicked() noexcept
+void
+ReplaySetup::Stop() noexcept
+{
+  replay.Stop();
+}
+
+void
+ReplaySetup::FastForward() noexcept
 {
   replay.FastForward(std::chrono::minutes{10});
 }
 
-bool
-ReplayControlWidget::EditReplayFile([[maybe_unused]] const char *caption,
-                                    DataField &df,
-                                    [[maybe_unused]] const char *help_text)
+void
+ReplaySetup::EditFlight()
 {
-  auto &file = static_cast<FileDataField &>(df);
-  AllocatedPath path(file.GetValue());
-  switch (PickReplayFlight(_("Flight"), path)) {
+  AllocatedPath chosen = path == nullptr
+    ? nullptr
+    : AllocatedPath(Path(path));
+  switch (PickReplayFlight(_("Flight"), chosen)) {
   case ReplayFlightChoice::CANCEL:
-    return false;
+    return;
 
   case ReplayFlightChoice::DEMO:
-    file.SetIndex(0);
-    return true;
+    path = nullptr;
+    break;
 
   case ReplayFlightChoice::FILE:
-    file.ForceModify(path);
-    return true;
+    path = std::move(chosen);
+    break;
   }
 
-  return false;
+  Refresh();
 }
+
+void
+ReplaySetup::EditRate()
+{
+  double value = replay.GetTimeScale();
+  if (!PickList(_("Rate"), value, 0, 10, 1, FormatReplayRate))
+    return;
+
+  replay.SetTimeScale(value);
+  Refresh();
+}
+
+} // namespace
 
 void
 ShowReplayDialog(Replay &replay) noexcept
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  ReplayControlWidget *widget = new ReplayControlWidget(replay, look);
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look, _("Replay"), widget);
-  widget->CreateButtons(dialog);
+  auto *list = new GroupedListWidget(look);
+  ReplaySetup setup(replay);
+  setup.SetList(*list);
+
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, _("Replay"), list);
+  setup.SetDialog(dialog);
+  dialog.AddButton(_("Start"), [&setup]{ setup.Start(); });
+  dialog.AddButton(_("Stop"), [&setup]{ setup.Stop(); });
+  dialog.AddButton(_("+10'"), [&setup]{ setup.FastForward(); });
   dialog.AddButton(_("Close"), mrOK);
 
+  dialog.PrepareFloatingList();
+  setup.Refresh();
   dialog.ShowModal();
 }

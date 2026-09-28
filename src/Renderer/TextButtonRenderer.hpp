@@ -23,7 +23,6 @@ public:
     :frame_renderer(_look) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
-    text_renderer.SetControl();
   }
 
   TextButtonRenderer(const ButtonLook &_look,
@@ -31,7 +30,6 @@ public:
     :frame_renderer(_look), caption(_caption) {
     text_renderer.SetCenter();
     text_renderer.SetVCenter();
-    text_renderer.SetControl();
   }
 
   [[gnu::pure]]

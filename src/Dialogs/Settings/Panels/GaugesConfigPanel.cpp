@@ -2,26 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "GaugesConfigPanel.hpp"
-#include "Profile/Keys.hpp"
-#include "Interface.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "MainWindow.hpp"
-
-enum ControlIndex {
-  EnableFLARMGauge,
-  AutoCloseFlarmDialog,
-  AppFlarmLocation,
-  TAPosition,
-  EnableThermalProfile,
-  FinalGlideBarDisplayModeControl,
-  EnableFinalGlideBarMC0,
-  EnableVarioBar,
-  NoPositionTargetDistanceRing
-};
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
   { FinalGlideBarDisplayMode::OFF, N_("Off"),
@@ -100,88 +87,101 @@ static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
   nullptr
 };
 
-class GaugesConfigPanel final : public RowFormWidget, DataFieldListener {
+/**
+ * The gauges which lie over the map: the FLARM radar, the thermal
+ * assistant and the bars at its edges.
+ */
+class GaugesConfigPanel final : public ConfigListPanel {
+  bool flarm_gauge, auto_close_flarm, no_position_target;
+  TrafficSettings::GaugeLocation flarm_location;
+
+  UISettings::ThermalAssistantPosition thermal_assistant_position;
+  bool thermal_profile;
+
+  FinalGlideBarDisplayMode final_glide_bar_display_mode;
+  bool final_glide_bar_mc0, vario_bar;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
 public:
-  GaugesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-GaugesConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(FinalGlideBarDisplayModeControl, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    FinalGlideBarDisplayMode fgbdm = (FinalGlideBarDisplayMode)dfe.GetValue();
-    SetRowVisible(EnableFinalGlideBarMC0, fgbdm != FinalGlideBarDisplayMode::OFF);
-  }
-}
-
-void
-GaugesConfigPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+GaugesConfigPanel::LoadSettings() noexcept
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
-  RowFormWidget::Prepare(parent, rc);
+  flarm_gauge = ui_settings.traffic.enable_gauge;
+  auto_close_flarm = ui_settings.traffic.auto_close_dialog;
+  flarm_location = ui_settings.traffic.gauge_location;
+  no_position_target = ui_settings.traffic.no_position_target_distance_ring;
 
-  AddBoolean(_("FLARM Radar"),
-             _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
-             ui_settings.traffic.enable_gauge);
+  thermal_assistant_position = ui_settings.thermal_assistant_position;
+  thermal_profile = map_settings.show_thermal_profile;
 
-  AddBoolean(_("Auto close FLARM"),
-             _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
-             ui_settings.traffic.auto_close_dialog);
-  SetExpertRow(AutoCloseFlarmDialog);
+  final_glide_bar_display_mode = map_settings.final_glide_bar_display_mode;
+  final_glide_bar_mc0 = map_settings.final_glide_bar_mc0_enabled;
+  vario_bar = map_settings.vario_bar_enabled;
+}
 
-  AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
-          flarm_display_location_list,
-          (unsigned)ui_settings.traffic.gauge_location);
-  SetExpertRow(AppFlarmLocation);
+void
+GaugesConfigPanel::Fill() noexcept
+{
+  AddGroup(_("Traffic"));
 
-  AddEnum(_("Thermal Assistant"),
-            _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
-            thermal_assistant_position_list,
-            (unsigned)ui_settings.thermal_assistant_position,
-            this);
+  AddToggleItem(_("FLARM Radar"),
+                _("This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level."),
+                flarm_gauge);
 
-  AddBoolean(_("Thermal Band"),
-             _("This enables the display of the thermal profile (climb band) display on the map."),
-             map_settings.show_thermal_profile);
+  if (IsExpert()) {
+    AddToggleItem(_("Auto close FLARM"),
+                  _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
+                  auto_close_flarm);
 
-  AddEnum(_("Final glide bar"),
-          _("If set to \"On\" the final glide will always be shown, if set to \"Auto\" it will be shown when approaching the final glide possibility."),
-          final_glide_bar_display_mode_list,
-          (unsigned)map_settings.final_glide_bar_display_mode,
-          this);
-  SetExpertRow(FinalGlideBarDisplayModeControl);
+    AddEnumItem(_("FLARM display"),
+                _("Choose a location for the FLARM display."),
+                flarm_display_location_list, flarm_location);
+  }
 
-  AddBoolean(_("Final glide bar MC0"),
-             _("If set to \"On\" the final glide bar will show a second arrow indicating the required height "
-                 "to reach the final waypoint at MC zero."),
-             map_settings.final_glide_bar_mc0_enabled);
-  SetExpertRow(EnableFinalGlideBarMC0);
+  AddToggleItem(_("No position target"),
+                _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
+                no_position_target);
 
-  SetRowVisible(EnableFinalGlideBarMC0,
-                map_settings.final_glide_bar_display_mode !=
-                  FinalGlideBarDisplayMode::OFF);
+  AddGroup(_("Thermal"));
 
-  AddBoolean(_("Vario bar"),
-             _("If set to \"On\" the vario bar will be shown."),
-             map_settings.vario_bar_enabled);
+  AddEnumItem(_("Thermal Assistant"),
+              _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
+              thermal_assistant_position_list, thermal_assistant_position);
 
-  AddBoolean(_("No position target"),
-             _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
-             ui_settings.traffic.no_position_target_distance_ring);
+  AddToggleItem(_("Thermal Band"),
+                _("This enables the display of the thermal profile (climb band) display on the map."),
+                thermal_profile);
 
-  SetExpertRow(EnableVarioBar);
+  if (!IsExpert())
+    return;
+
+  AddGroup();
+
+  AddEnumItem(_("Final glide bar"),
+              _("If set to \"On\" the final glide will always be shown, if set to \"Auto\" it will be shown when approaching the final glide possibility."),
+              final_glide_bar_display_mode_list,
+              final_glide_bar_display_mode);
+
+  if (final_glide_bar_display_mode != FinalGlideBarDisplayMode::OFF)
+    AddToggleItem(_("Final glide bar MC0"),
+                  _("If set to \"On\" the final glide bar will show a second arrow indicating the required height "
+                    "to reach the final waypoint at MC zero."),
+                  final_glide_bar_mc0);
+
+  AddToggleItem(_("Vario bar"),
+                _("If set to \"On\" the vario bar will be shown."),
+                vario_bar);
 }
 
 bool
@@ -190,35 +190,44 @@ GaugesConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
+  TrafficSettings &traffic = ui_settings.traffic;
   MapSettings &map_settings = CommonInterface::SetMapSettings();
 
-  changed |= SaveValue(EnableFLARMGauge, ProfileKeys::EnableFLARMGauge,
-                       ui_settings.traffic.enable_gauge);
+  changed |= Profile::Update(ProfileKeys::EnableFLARMGauge,
+                             traffic.enable_gauge, flarm_gauge);
 
-  changed |= SaveValue(AutoCloseFlarmDialog, ProfileKeys::AutoCloseFlarmDialog,
-                       ui_settings.traffic.auto_close_dialog);
+  changed |= Profile::Update(ProfileKeys::AutoCloseFlarmDialog,
+                             traffic.auto_close_dialog, auto_close_flarm);
 
-  if (SaveValueEnum(TAPosition, ProfileKeys::TAPosition,
-                    ui_settings.thermal_assistant_position) ||
-      SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
-                    ui_settings.traffic.gauge_location))
+  /* the gauges move: the main window lays itself out again */
+  const bool thermal_assistant_moved =
+    Profile::Update(ProfileKeys::TAPosition,
+                    ui_settings.thermal_assistant_position,
+                    thermal_assistant_position);
+  const bool flarm_moved =
+    Profile::Update(ProfileKeys::FlarmLocation,
+                    traffic.gauge_location, flarm_location);
+  if (thermal_assistant_moved || flarm_moved)
     CommonInterface::main_window->ReinitialiseLayout();
 
-  changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
-                       map_settings.show_thermal_profile);
+  changed |= Profile::Update(ProfileKeys::EnableThermalProfile,
+                             map_settings.show_thermal_profile,
+                             thermal_profile);
 
-  changed |= SaveValueEnum(FinalGlideBarDisplayModeControl,
-                           ProfileKeys::FinalGlideBarDisplayMode,
-                           map_settings.final_glide_bar_display_mode);
+  changed |= Profile::Update(ProfileKeys::FinalGlideBarDisplayMode,
+                             map_settings.final_glide_bar_display_mode,
+                             final_glide_bar_display_mode);
 
-  changed |= SaveValue(EnableFinalGlideBarMC0, ProfileKeys::EnableFinalGlideBarMC0,
-                       map_settings.final_glide_bar_mc0_enabled);
+  changed |= Profile::Update(ProfileKeys::EnableFinalGlideBarMC0,
+                             map_settings.final_glide_bar_mc0_enabled,
+                             final_glide_bar_mc0);
 
-  changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
-                       map_settings.vario_bar_enabled);
+  changed |= Profile::Update(ProfileKeys::EnableVarioBar,
+                             map_settings.vario_bar_enabled, vario_bar);
 
-  changed |= SaveValue(NoPositionTargetDistanceRing, ProfileKeys::NoPositionTargetDistanceRing,
-                       ui_settings.traffic.no_position_target_distance_ring);
+  changed |= Profile::Update(ProfileKeys::NoPositionTargetDistanceRing,
+                             traffic.no_position_target_distance_ring,
+                             no_position_target);
 
   _changed |= changed;
 

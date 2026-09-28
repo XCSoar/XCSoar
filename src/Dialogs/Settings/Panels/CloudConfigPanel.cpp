@@ -2,19 +2,17 @@
 // Copyright The XCSoar Project
 
 #include "CloudConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
+#include "Dialogs/NumberEntry.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/SkyLines/Key.hpp"
 #include "Tracking/CloudSettings.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
-#include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "Tracking/TrackingGlue.hpp"
-#include "Form/DataField/Boolean.hpp"
-#include "Form/DataField/Listener.hpp"
 #include "net/State.hpp"
 #include "util/StringStrip.hxx"
 
@@ -24,107 +22,52 @@
 #include <string>
 #include <string_view>
 
-enum ControlIndex {
-  ENABLED,
-  SHOW_TRAFFIC,
+/**
+ * The XCSoar Cloud: whether to take part, what to receive, and the
+ * server.
+ */
+class CloudConfigPanel final : public ConfigListPanel {
+  bool enabled, show_traffic;
 #ifdef HAVE_NET_STATE_ROAMING
-  ROAMING,
+  bool roaming;
 #endif
-  SHOW_THERMALS,
-  HOST,
-  PORT,
-  OWN_FLARM_ID,
-};
+  bool show_thermals;
+  StaticString<64> host;
+  unsigned port;
+  StaticString<CloudSettings::OWN_FLARM_IDS_TEXT_SIZE> own_flarm_ids;
 
-class CloudConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-  /** Help text for Own FLARM IDs (holds fmt result for SetHelpText). */
+  /** Help text for Own FLARM IDs (holds fmt result). */
   std::string own_flarm_help;
 
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
 public:
-  CloudConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void SetEnabled(bool enabled);
-
   /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-CloudConfigPanel::SetEnabled(bool enabled)
+CloudConfigPanel::LoadSettings() noexcept
 {
-  SetRowEnabled(SHOW_TRAFFIC, enabled);
-#ifdef HAVE_NET_STATE_ROAMING
-  SetRowEnabled(ROAMING, enabled);
-#endif
-  SetRowEnabled(SHOW_THERMALS, enabled);
-  SetRowEnabled(HOST, enabled);
-  SetRowEnabled(PORT, enabled);
-  SetRowEnabled(OWN_FLARM_ID, enabled);
-}
-
-void
-CloudConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(ENABLED, df)) {
-    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetEnabled(dfb.GetValue());
-  }
-}
-
-void
-CloudConfigPanel::Prepare(ContainerWindow &parent,
-                          const PixelRect &rc) noexcept
-{
-  RowFormWidget::Prepare(parent, rc);
-
   const auto &settings =
     CommonInterface::GetComputerSettings().tracking.cloud;
 
-  AddBoolean("XCSoar Cloud",
-             _("Participate in the XCSoar Cloud? This transmits your "
-               "position while flying and allows receiving traffic from "
-               "other XCSoar Cloud participants and OGN, as well as "
-               "thermal and wave locations from the cloud server."),
-             settings.enabled == TriState::TRUE,
-             this);
-
-  AddBoolean(C_("Setting", "Show traffic"),
-             _("Receive traffic from the XCSoar Cloud server and OGN. "
-               "Requires flying with a real GPS fix."),
-             settings.show_traffic, this);
-
+  enabled = settings.enabled == TriState::TRUE;
+  show_traffic = settings.show_traffic;
 #ifdef HAVE_NET_STATE_ROAMING
-  AddBoolean(_("Roaming"),
-             _("Allow XCSoar Cloud communication when on a roaming "
-               "mobile data connection."),
-             settings.roaming, this);
+  roaming = settings.roaming;
 #endif
+  show_thermals = settings.show_thermals;
+  host = settings.host;
+  port = settings.port;
 
-  AddBoolean(_("Show thermals"),
-             _("Obtain and show thermal locations reported by others."),
-             settings.show_thermals);
-
-  AddText(_("Server"),
-          _("Hostname or IP address of the XCSoar Cloud server."),
-          settings.host.c_str());
-  SetExpertRow(HOST);
-
-  AddInteger(_("Port"),
-             _("UDP port of the XCSoar Cloud server."),
-             "%u", "%u",
-             1, 65535, 1, int(settings.port));
-  SetExpertRow(PORT);
-
-  char own_flarm_text[CloudSettings::OWN_FLARM_IDS_TEXT_SIZE] = "";
   CloudSettings::FormatOwnFlarmIds(settings.own_flarm_ids,
-                                   own_flarm_text, sizeof(own_flarm_text));
+                                   own_flarm_ids.buffer(),
+                                   own_flarm_ids.capacity());
+
   own_flarm_help = fmt::format(
     fmt::runtime(
       _("Comma-separated hex FLARM / ICAO addresses (up to {}) "
@@ -134,12 +77,71 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
         "additional own aircraft. Leave empty to use the "
         "device id when known.")),
     CloudSettings::MAX_OWN_FLARM_IDS);
-  AddText(C_("Setting", "Own FLARM IDs"),
-          own_flarm_help.c_str(),
-          own_flarm_text);
-  SetExpertRow(OWN_FLARM_ID);
+}
 
-  SetEnabled(settings.enabled == TriState::TRUE);
+void
+CloudConfigPanel::Fill() noexcept
+{
+  AddGroup();
+
+  AddToggleItem("XCSoar Cloud",
+                _("Participate in the XCSoar Cloud? This transmits your "
+                  "position while flying and allows receiving traffic from "
+                  "other XCSoar Cloud participants and OGN, as well as "
+                  "thermal and wave locations from the cloud server."),
+                enabled);
+
+  /* what is received; greyed out while the cloud is off */
+  AddGroup();
+
+  AddToggleItem(C_("Setting", "Show traffic"),
+                _("Receive traffic from the XCSoar Cloud server and OGN. "
+                  "Requires flying with a real GPS fix."),
+                show_traffic, nullptr, !enabled);
+
+#ifdef HAVE_NET_STATE_ROAMING
+  AddToggleItem(_("Roaming"),
+                _("Allow XCSoar Cloud communication when on a roaming "
+                  "mobile data connection."),
+                roaming, nullptr, !enabled);
+#endif
+
+  AddToggleItem(_("Show thermals"),
+                _("Obtain and show thermal locations reported by others."),
+                show_thermals, nullptr, !enabled);
+
+  if (!IsExpert())
+    return;
+
+  /* the server */
+  AddGroup();
+
+  StaticString<16> port_text;
+  port_text.Format("%u", port);
+
+  if (enabled) {
+    AddTextItem(_("Server"),
+                _("Hostname or IP address of the XCSoar Cloud server."),
+                host);
+
+    AddItem(_("Port"), [this](){
+      unsigned value = port;
+      if (NumberEntryDialog(_("Port"), value, 5) && value != port &&
+          value >= 1 && value <= 65535) {
+        port = value;
+        Refresh();
+      }
+    }, {.value = port_text.c_str(), .chevron = true,
+        .help = _("UDP port of the XCSoar Cloud server.")});
+
+    AddTextItem(C_("Setting", "Own FLARM IDs"), own_flarm_help.c_str(),
+                own_flarm_ids);
+  } else {
+    AddItem(_("Server"), {.value = host.c_str(), .disabled = true});
+    AddItem(_("Port"), {.value = port_text.c_str(), .disabled = true});
+    AddItem(C_("Setting", "Own FLARM IDs"),
+            {.value = own_flarm_ids.c_str(), .disabled = true});
+  }
 }
 
 bool
@@ -150,11 +152,9 @@ CloudConfigPanel::Save(bool &_changed) noexcept
   auto &settings =
     CommonInterface::SetComputerSettings().tracking.cloud;
 
-  bool cloud_enabled = settings.enabled == TriState::TRUE;
-  if (SaveValue(ENABLED, ProfileKeys::CloudEnabled, cloud_enabled)) {
-    settings.enabled = cloud_enabled
-      ? TriState::TRUE
-      : TriState::FALSE;
+  if (enabled != (settings.enabled == TriState::TRUE)) {
+    settings.enabled = enabled ? TriState::TRUE : TriState::FALSE;
+    Profile::Set(ProfileKeys::CloudEnabled, enabled);
 
     if (settings.enabled == TriState::TRUE && settings.key == 0) {
       settings.key = SkyLinesTracking::GenerateKey();
@@ -168,35 +168,34 @@ CloudConfigPanel::Save(bool &_changed) noexcept
     changed = true;
   }
 
-  changed |= SaveValue(SHOW_TRAFFIC, ProfileKeys::CloudShowTraffic,
-                       settings.show_traffic);
+  changed |= Profile::Update(ProfileKeys::CloudShowTraffic,
+                             settings.show_traffic, show_traffic);
 
 #ifdef HAVE_NET_STATE_ROAMING
-  changed |= SaveValue(ROAMING, ProfileKeys::CloudRoaming,
-                       settings.roaming);
+  changed |= Profile::Update(ProfileKeys::CloudRoaming,
+                             settings.roaming, roaming);
 #endif
 
-  changed |= SaveValue(SHOW_THERMALS, ProfileKeys::CloudShowThermals,
-                       settings.show_thermals);
+  changed |= Profile::Update(ProfileKeys::CloudShowThermals,
+                             settings.show_thermals, show_thermals);
 
-  if (SaveValue(HOST, ProfileKeys::CloudHost, settings.host)) {
+  if (Profile::Update(ProfileKeys::CloudHost, settings.host, host)) {
     if (settings.host.empty())
       settings.host = CloudSettings::DEFAULT_HOST;
     changed = true;
   }
 
-  if (SaveValueInteger(PORT, ProfileKeys::CloudPort, settings.port)) {
+  if (Profile::Update(ProfileKeys::CloudPort, settings.port, port)) {
     if (settings.port == 0 || settings.port > 65535u)
       settings.port = CloudSettings::DEFAULT_PORT;
     changed = true;
   }
 
-  StaticString<CloudSettings::OWN_FLARM_IDS_TEXT_SIZE> own_flarm_text;
-  if (SaveValue(OWN_FLARM_ID, own_flarm_text)) {
+  {
     const auto ids =
-      CloudSettings::ParseOwnFlarmIds(own_flarm_text.c_str());
-    const bool input_blank = Strip(std::string_view{own_flarm_text.c_str()})
-      .empty();
+      CloudSettings::ParseOwnFlarmIds(own_flarm_ids.c_str());
+    const bool input_blank =
+      Strip(std::string_view{own_flarm_ids.c_str()}).empty();
 
     /* Non-empty garbage must not wipe a previously valid list. */
     if (input_blank || !ids.empty()) {
@@ -217,7 +216,8 @@ CloudConfigPanel::Save(bool &_changed) noexcept
   _changed |= changed;
 
 #ifdef HAVE_TRACKING
-  if (changed && net_components != nullptr && net_components->tracking != nullptr)
+  if (changed && net_components != nullptr &&
+      net_components->tracking != nullptr)
     net_components->tracking->SetSettings(
       CommonInterface::GetComputerSettings().tracking);
 #endif

@@ -48,6 +48,14 @@ SingleWindow::OnDestroy() noexcept
 }
 
 void
+SingleWindow::ReinitialiseDialogs() noexcept
+{
+  const PixelRect rc = GetClientRect();
+  for (WndForm *dialog : dialogs)
+    dialog->ReinitialiseLayout(rc);
+}
+
+void
 SingleWindow::OnResize(PixelSize new_size) noexcept
 {
   /* Resize dialogs BEFORE calling TopWindow::OnResize, so they're at the

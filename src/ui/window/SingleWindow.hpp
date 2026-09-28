@@ -61,6 +61,12 @@ public:
     return *dialogs.front();
   }
 
+  /**
+   * Ask every open dialog to lay itself out again, for a change of
+   * the screen or of the UI layout.
+   */
+  void ReinitialiseDialogs() noexcept;
+
 protected:
   [[gnu::pure]]
   bool FilterMouseEvent(PixelPoint pt, Window *allowed) const noexcept;

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "ShowButton.hpp"
+#include "MainWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Look/ButtonLook.hpp"
@@ -43,6 +44,19 @@ public:
   }
 };
 
+static void
+DrawMapOverlayShadow(Canvas &canvas, Button &button) noexcept
+{
+  PixelRect neighbors[4];
+  unsigned n_neighbors = 0;
+
+  if (auto *main = dynamic_cast<MainWindow *>(button.GetParent()))
+    n_neighbors = main->CollectOverlayShadowNeighbors(button, neighbors);
+
+  ButtonFrameRenderer::DrawFaceShadow(canvas, button.GetClientRect(),
+                                      {neighbors, n_neighbors});
+}
+
 static std::unique_ptr<ButtonRenderer>
 MakeMapOverlaySymbolButton(const ButtonLook &look,
                            const char *caption) noexcept
@@ -66,6 +80,13 @@ ShowMenuButton::OnClicked() noexcept
 }
 
 void
+ShowMenuButton::OnPaint(Canvas &canvas) noexcept
+{
+  DrawMapOverlayShadow(canvas, *this);
+  Button::OnPaint(canvas);
+}
+
+void
 ShowQuickMenuButton::Create(ContainerWindow &parent, const ButtonLook &look,
                             const PixelRect &rc,
                             WindowStyle style) noexcept
@@ -78,6 +99,13 @@ ShowQuickMenuButton::OnClicked() noexcept
 {
   InputEvents::eventQuickMenu(nullptr);
   return true;
+}
+
+void
+ShowQuickMenuButton::OnPaint(Canvas &canvas) noexcept
+{
+  DrawMapOverlayShadow(canvas, *this);
+  Button::OnPaint(canvas);
 }
 
 void
@@ -96,6 +124,13 @@ ShowZoomButton::OnClicked() noexcept
 {
   InputEvents::eventZoom(sign == Sign::ZOOM_IN ? "in" : "out");
   return true;
+}
+
+void
+ShowZoomButton::OnPaint(Canvas &canvas) noexcept
+{
+  DrawMapOverlayShadow(canvas, *this);
+  Button::OnPaint(canvas);
 }
 
 #ifdef ANDROID

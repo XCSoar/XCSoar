@@ -3,16 +3,14 @@
 
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "Widget/RowFormWidget.hpp"
-#include "Widget/ScrollableLargeTextWidget.hpp"
-#include "Widget/VScrollWidget.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "Screen/Layout.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
@@ -31,16 +29,11 @@
 #include "util/UTF8.hpp"
 
 #include <cstring>
-#include <cassert>
-#include <algorithm>
 #include <exception>
+#include <optional>
 #include <string>
 
 namespace {
-
-static constexpr unsigned SCROLLABLE_TEXT_MIN_ROWS = 3;
-static constexpr unsigned SCROLLABLE_TEXT_MAX_ROWS = 10;
-static constexpr unsigned SCROLLABLE_TEXT_PREFERRED_HEIGHT_DIVISOR = 3;
 
 [[nodiscard]]
 static std::string
@@ -84,39 +77,39 @@ FormatAltitudeWithReference(char *buffer, size_t buffer_size,
   }
 }
 
-[[nodiscard]]
-static unsigned
-GetScrollableTextRowMaximumHeight(const PixelRect &rc) noexcept
+/**
+ * Acknowledge the airspace for the day, or take that back, and close
+ * the dialog.
+ */
+static void
+AckDayOrEnable(ProtectedAirspaceWarningManager &warnings,
+               const ConstAirspacePtr &airspace, WndForm &dialog) noexcept
 {
-  const unsigned row_height = Layout::GetMinimumControlHeight();
-  const unsigned minimum = row_height * SCROLLABLE_TEXT_MIN_ROWS;
-  const unsigned maximum = row_height * SCROLLABLE_TEXT_MAX_ROWS;
-  const unsigned preferred =
-    rc.GetHeight() / SCROLLABLE_TEXT_PREFERRED_HEIGHT_DIVISOR;
+  try {
+    const bool acked = warnings.GetAckDay(*airspace);
+    warnings.AcknowledgeDay(airspace, !acked);
+  } catch (...) {
+    LogError(std::current_exception(),
+             "Failed to update airspace day acknowledgement");
+    Message::AddMessage(_("Failed to update airspace acknowledgement"));
+    return;
+  }
 
-  return std::clamp(preferred, minimum, maximum);
+  dialog.SetModalResult(mrOK);
 }
 
 } // namespace
 
-class AirspaceDetailsWidget
+class AirspaceDetailsWidget final
   : public RowFormWidget {
-protected:
   ConstAirspacePtr airspace;
   ProtectedAirspaceWarningManager *warnings;
 
 public:
-  /**
-   * Hack to allow the widget to close its surrounding dialog.
-   */
-  WndForm *dialog;
-
   AirspaceDetailsWidget(ConstAirspacePtr _airspace,
                         ProtectedAirspaceWarningManager *_warnings)
     :RowFormWidget(UIGlobals::GetDialogLook()),
      airspace(std::move(_airspace)), warnings(_warnings) {}
-
-  void AckDayOrEnable() noexcept;
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -190,46 +183,182 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
   }
 }
 
-void
-AirspaceDetailsWidget::AckDayOrEnable() noexcept
-{
-  assert(warnings != nullptr);
-
-  try {
-    const bool acked = warnings->GetAckDay(*airspace);
-    warnings->AcknowledgeDay(airspace, !acked);
-  } catch (...) {
-    LogError(std::current_exception(),
-             "Failed to update airspace day acknowledgement");
-    Message::AddMessage(_("Failed to update airspace acknowledgement"));
-    return;
-  }
-
-  dialog->SetModalResult(mrOK);
-}
-
 /**
- * Extended widget for displaying NOTAM-specific information
+ * The details of a NOTAM: its text, what identifies it, when it is
+ * in effect, and where it is.
  */
-class NOTAMDetailsWidget final : public AirspaceDetailsWidget {
-  VScrollWidget *text_widget = nullptr;
+class NOTAMDetailsWidget final : public GroupedListWidget {
+  const ConstAirspacePtr airspace;
+  ProtectedAirspaceWarningManager *const warnings;
 
 public:
   NOTAMDetailsWidget(ConstAirspacePtr _airspace,
-                     ProtectedAirspaceWarningManager *_warnings)
-    : AirspaceDetailsWidget(std::move(_airspace), _warnings) {}
+                     ProtectedAirspaceWarningManager *_warnings) noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()),
+     airspace(std::move(_airspace)), warnings(_warnings) {}
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool KeyPress(unsigned key_code) noexcept override;
 
 private:
-  void AddNOTAMIdentifiers(const char *notam_number,
-                           const std::optional<struct NOTAM> &notam_opt);
-  void AddNOTAMValidity(const std::optional<struct NOTAM> &notam_opt,
-                        StaticString<128> &buffer);
-  void AddNOTAMAltitudes(StaticString<128> &buffer);
+  void AddValidity(const struct NOTAM &notam) noexcept;
 };
+
+/**
+ * A short "2h" or "3d": how far a point in time is away.
+ */
+static void
+FormatRelativeTime(StaticString<32> &buffer,
+                   std::chrono::system_clock::duration duration) noexcept
+{
+  const auto minutes =
+    std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+
+  if (minutes < 60)
+    // Translators: %d is number of minutes, keep format short.
+    buffer.Format(_("%dm"), static_cast<int>(minutes));
+  else if (const auto hours = (minutes + 59) / 60; hours < 48)
+    // Translators: %d is number of hours, keep format short.
+    buffer.Format(_("%dh"), static_cast<int>(hours));
+  else
+    // Translators: %d is number of days, keep format short.
+    buffer.Format(_("%dd"), static_cast<int>(minutes / 1440));
+}
+
+void
+NOTAMDetailsWidget::AddValidity(const struct NOTAM &notam) noexcept
+{
+  char time_buffer[64];
+
+  BrokenDateTime start_dt(notam.start_time);
+  FormatISO8601(time_buffer, start_dt);
+  AddItem(C_("Setting", "Valid From"), {.value = time_buffer});
+
+  if (notam.end_time_permanent)
+    AddItem(C_("Setting", "Valid Until"), {.value = "PERM"});
+  else {
+    BrokenDateTime end_dt(notam.end_time);
+    FormatISO8601(time_buffer, end_dt);
+    AddItem(C_("Setting", "Valid Until"), {.value = time_buffer});
+  }
+
+  /* the badge says whether the NOTAM is in effect */
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const auto now = basic.time_available &&
+    basic.date_time_utc.IsDatePlausible()
+    ? basic.date_time_utc.ToTimePoint()
+    : std::chrono::system_clock::now();
+
+  StaticString<32> time_str;
+  StaticString<64> badge;
+  BadgeStyle badge_style;
+
+  if (now < notam.start_time) {
+    FormatRelativeTime(time_str, notam.start_time - now);
+    FormatStartsIn(badge, time_str.c_str());
+    badge_style = BadgeStyle::PRIMARY;
+  } else if (!notam.end_time_permanent && now > notam.end_time) {
+    FormatRelativeTime(time_str, now - notam.end_time);
+    badge.Format(_("Expired %s ago"), time_str.c_str());
+    badge_style = BadgeStyle::DANGER;
+  } else {
+    badge = _("Active");
+    badge_style = BadgeStyle::SUCCESS;
+  }
+
+  AddItem(_("Status"), {.badge = badge.c_str(), .badge_style = badge_style});
+}
+
+void
+NOTAMDetailsWidget::Prepare(ContainerWindow &parent,
+                            const PixelRect &rc) noexcept
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  StaticString<128> buffer;
+
+  /* the NOTAM itself, found by the stable key stored in the station
+     name */
+  const char *notam_number = airspace->GetStationName();
+  std::optional<struct NOTAM> notam_opt;
+
+#ifdef HAVE_HTTP
+  if (net_components && net_components->notam && notam_number &&
+      notam_number[0] != '\0') {
+    try {
+      notam_opt =
+        net_components->notam->FindNOTAMByNumber(notam_number);
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to lookup NOTAM");
+    }
+  }
+#endif
+
+  /* the number heads the group of the text, which is the item: it
+     has no caption */
+  const auto safe_number =
+    SafeString(std::string{notam_number != nullptr ? notam_number : ""});
+
+  const char *const airspace_name = airspace->GetName();
+  const auto text =
+    notam_opt && !notam_opt->text.empty()
+    ? SafeString(notam_opt->text)
+    : SafeString(airspace_name != nullptr ? airspace_name : "");
+
+  if (!text.empty()) {
+    /* the text is not a target for a finger: it keeps the room of a
+       one-line row around it */
+    AddGroup(safe_number.empty() ? nullptr : safe_number.c_str(),
+             {.shrink_vertical_padding = false});
+    AddItem(nullptr, {.description = text.c_str(),
+                      .description_font = TextFont::MONO});
+  }
+
+  if (notam_opt) {
+    const auto location = SafeString(notam_opt->location);
+    const auto feature_type = SafeString(notam_opt->feature_type);
+    const auto series = SafeString(notam_opt->series);
+
+    if (!location.empty() || !feature_type.empty() || !series.empty()) {
+      AddGroup();
+
+      if (!location.empty())
+        AddItem(_("Location"), {.value = location.c_str(),
+                                .value_font = TextFont::MONO});
+
+      if (!feature_type.empty())
+        AddItem(C_("Setting", "Q-Code"), {.value = feature_type.c_str(),
+                                          .value_font = TextFont::MONO});
+
+      if (!series.empty())
+        AddItem(C_("Setting", "Series"), {.value = series.c_str()});
+    }
+
+    AddGroup();
+    AddValidity(*notam_opt);
+  }
+
+  AddGroup();
+
+  FormatAltitudeWithReference(buffer.data(), buffer.capacity(),
+                              airspace->GetTop());
+  AddItem(_("Top"), {.value = buffer.c_str()});
+
+  FormatAltitudeWithReference(buffer.data(), buffer.capacity(),
+                              airspace->GetBase());
+  AddItem(_("Base"), {.value = buffer.c_str()});
+
+  if (warnings != nullptr && basic.location_available &&
+      basic.location.IsValid()) {
+    const GeoPoint closest =
+      airspace->ClosestPoint(basic.location, warnings->GetProjection());
+    const auto distance = closest.Distance(basic.location);
+    AddItem(_("Distance"), {.value = FormatUserDistance(distance).c_str()});
+  }
+
+  UpdateLayout();
+
+  GroupedListWidget::Prepare(parent, rc);
+}
 
 static bool
 dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
@@ -238,18 +367,24 @@ dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
 {
   const bool is_notam = airspace->GetType() == AirspaceClass::NOTAM;
 
-  AirspaceDetailsWidget *widget = is_notam
-    ? new NOTAMDetailsWidget(airspace, warnings)
-    : new AirspaceDetailsWidget(airspace, warnings);
+  UI::SingleWindow &parent = UIGlobals::GetMainWindow();
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  const char *title = is_notam ? _("NOTAM Details") : _("Airspace Details");
-
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      title, widget);
+  /* the details of an airspace are a few rows which fit into a small
+     dialog; a NOTAM brings its text and fills the screen */
+  std::optional<WidgetDialog> dialog;
+  if (is_notam) {
+    dialog.emplace(WidgetDialog::Full{}, parent, look, _("NOTAM Details"));
+    dialog->FinishPreliminary(
+      std::make_unique<NOTAMDetailsWidget>(airspace, warnings));
+  } else {
+    dialog.emplace(WidgetDialog::Auto{}, parent, look,
+                   _("Airspace Details"));
+    dialog->FinishPreliminary(
+      std::make_unique<AirspaceDetailsWidget>(airspace, warnings));
+  }
 
   if (warnings != nullptr) {
-    widget->dialog = &dialog;
     const char *label = _("Ack Day");
     try {
       label = warnings->GetAckDay(*airspace) ? _("Enable") : _("Ack Day");
@@ -260,17 +395,19 @@ dlgAirspaceDetailsModal(ConstAirspacePtr airspace,
                "Failed to query airspace day acknowledgement");
     }
 
-    dialog.AddButton(label, [widget](){ widget->AckDayOrEnable(); });
+    dialog->AddButton(label, [warnings, &airspace, &dialog](){
+      AckDayOrEnable(*warnings, airspace, *dialog);
+    });
   }
 
-  dialog.AddButton(_("Close"), browse_parent ? mrCancel : mrOK);
+  dialog->AddButton(_("Close"), browse_parent ? mrCancel : mrOK);
 
   if (!browse_parent) {
-    dialog.ShowModal();
+    dialog->ShowModal();
     return false;
   }
 
-  return dialog.ShowModal() == mrOK;
+  return dialog->ShowModal() == mrOK;
 }
 
 void
@@ -286,180 +423,4 @@ dlgAirspaceDetailsForBrowseParent(
   ProtectedAirspaceWarningManager *warnings) noexcept
 {
   return dlgAirspaceDetailsModal(std::move(airspace), warnings, true);
-}
-
-void
-NOTAMDetailsWidget::AddNOTAMIdentifiers(const char *notam_number,
-                                        const std::optional<struct NOTAM> &notam_opt)
-{
-  // Display NOTAM number
-  if (notam_number && notam_number[0] != '\0') {
-    const auto safe_notam_number = SafeString(std::string{notam_number});
-    AddReadOnly(C_("Setting", "NOTAM"), nullptr, safe_notam_number.c_str());
-  }
-
-  // Display ICAO location if we found the NOTAM
-  if (notam_opt && !notam_opt->location.empty()) {
-    const auto location = SafeString(notam_opt->location);
-    AddReadOnly(_("Location"), nullptr, location.c_str());
-  }
-
-  // Display Q-code (feature type)
-  if (notam_opt && !notam_opt->feature_type.empty()) {
-    const auto feature_type = SafeString(notam_opt->feature_type);
-    AddReadOnly(C_("Setting", "Q-Code"), nullptr, feature_type.c_str());
-  }
-
-  // NOTAM Series (if available)
-  if (notam_opt && !notam_opt->series.empty()) {
-    const auto series = SafeString(notam_opt->series);
-    AddReadOnly(C_("Setting", "Series"), nullptr, series.c_str());
-  }
-}
-
-void
-NOTAMDetailsWidget::AddNOTAMValidity(
-    const std::optional<struct NOTAM> &notam_opt,
-    StaticString<128> &buffer)
-{
-  if (!notam_opt)
-    return;
-
-  char time_buffer[64];
-
-  // Effective start - format as friendly date/time
-  BrokenDateTime start_dt(notam_opt->start_time);
-  FormatISO8601(time_buffer, start_dt);
-  AddReadOnly(C_("Setting", "Valid From"), nullptr, time_buffer);
-
-  // Check if it's a far future date (PERM = permanent)
-  if (notam_opt->end_time_permanent) {
-    AddReadOnly(C_("Setting", "Valid Until"), nullptr, "PERM");
-  } else {
-    BrokenDateTime end_dt(notam_opt->end_time);
-    FormatISO8601(time_buffer, end_dt);
-    AddReadOnly(C_("Setting", "Valid Until"), nullptr, time_buffer);
-  }
-
-  // Status indicator
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const auto now = basic.time_available && basic.date_time_utc.IsDatePlausible()
-    ? basic.date_time_utc.ToTimePoint()
-    : std::chrono::system_clock::now();
-  StaticString<32> time_str;
-  if (now < notam_opt->start_time) {
-    // Not yet active
-    const auto starts_in =
-      std::chrono::duration_cast<std::chrono::minutes>(
-        notam_opt->start_time - now);
-    if (starts_in.count() < 60) {
-      // Translators: %d is number of minutes, keep format short.
-      time_str.Format(_("%dm"), static_cast<int>(starts_in.count()));
-    } else {
-      const auto starts_in_hours = (starts_in.count() + 59) / 60;
-      if (starts_in_hours < 48) {
-        // Translators: %d is number of hours, keep format short.
-        time_str.Format(_("%dh"), static_cast<int>(starts_in_hours));
-      } else {
-        const auto days = starts_in_hours / 24;
-        // Translators: %d is number of days, keep format short.
-        time_str.Format(_("%dd"), static_cast<int>(days));
-      }
-    }
-    FormatStartsIn(buffer, time_str.c_str());
-  } else if (!notam_opt->end_time_permanent && now > notam_opt->end_time) {
-    // Expired
-    const auto expired_ago =
-      std::chrono::duration_cast<std::chrono::minutes>(
-        now - notam_opt->end_time);
-    if (expired_ago.count() < 60) {
-      // Translators: %d is number of minutes, keep format short.
-      time_str.Format(_("%dm"), static_cast<int>(expired_ago.count()));
-    } else {
-      const auto expired_minutes = expired_ago.count();
-      const auto expired_hours = expired_minutes / 60;
-      if (expired_hours < 48) {
-        // Translators: %d is number of hours, keep format short.
-        time_str.Format(_("%dh"), static_cast<int>(expired_hours));
-      } else {
-        const auto days = expired_minutes / 1440;
-        // Translators: %d is number of days, keep format short.
-        time_str.Format(_("%dd"), static_cast<int>(days));
-      }
-    }
-    buffer.Format(_("Expired %s ago"), time_str.c_str());
-  } else {
-    // Currently active
-    buffer = _("Active");
-  }
-  AddReadOnly(_("Status"), nullptr, buffer);
-}
-
-void
-NOTAMDetailsWidget::AddNOTAMAltitudes(StaticString<128> &buffer)
-{
-  FormatAltitudeWithReference(buffer.data(), buffer.capacity(),
-                              airspace->GetTop());
-  AddReadOnly(_("Top"), nullptr, buffer);
-
-  FormatAltitudeWithReference(buffer.data(), buffer.capacity(),
-                              airspace->GetBase());
-  AddReadOnly(_("Base"), nullptr, buffer);
-}
-
-void
-NOTAMDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
-{
-  const NMEAInfo &basic = CommonInterface::Basic();
-  StaticString<128> buffer;
-  
-  // Look up the NOTAM data using the stable key stored in station_name.
-  const char *notam_number = airspace->GetStationName();
-  std::optional<struct NOTAM> notam_opt;
-  
-#ifdef HAVE_HTTP
-  if (net_components && net_components->notam && notam_number &&
-      notam_number[0] != '\0') {
-    try {
-      notam_opt =
-        net_components->notam->FindNOTAMByNumber(notam_number);
-    } catch (...) {
-      LogError(std::current_exception(), "Failed to lookup NOTAM");
-    }
-  }
-#endif
-  
-  AddNOTAMIdentifiers(notam_number, notam_opt);
-  
-  // NOTAM text (stored in name field)
-  const char *const airspace_name = airspace->GetName();
-  const auto text =
-    notam_opt && !notam_opt->text.empty()
-    ? SafeString(notam_opt->text)
-    : SafeString(airspace_name != nullptr ? airspace_name : "");
-  auto scroll = std::make_unique<VScrollWidget>(
-    std::make_unique<ScrollableLargeTextWidget>(GetLook(), text.c_str()),
-    GetLook(), true, GetScrollableTextRowMaximumHeight(rc),
-    VScrollWidget::ScrollMode::MOVE);
-  text_widget = scroll.get();
-  Add(std::move(scroll));
-
-  AddNOTAMValidity(notam_opt, buffer);
-  AddNOTAMAltitudes(buffer);
-  
-  // Distance calculation
-  if (warnings != nullptr && basic.location_available &&
-      basic.location.IsValid()) {
-    const GeoPoint closest =
-      airspace->ClosestPoint(basic.location, warnings->GetProjection());
-    const auto distance = closest.Distance(basic.location);
-    AddReadOnly(_("Distance"), nullptr, FormatUserDistance(distance));
-  }
-}
-
-bool
-NOTAMDetailsWidget::KeyPress(unsigned key_code) noexcept
-{
-  return text_widget != nullptr && text_widget->KeyPress(key_code);
 }

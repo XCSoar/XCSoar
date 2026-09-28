@@ -193,6 +193,38 @@ TestDrawFormattedTextUTF8(const Font &font)
   ok1(height == 8 * font.GetLineSpacing());
 }
 
+/**
+ * A text which is exactly as wide as the room it gets must not be
+ * wrapped.  The wrapper decides without measuring when a text has
+ * more characters than the room could hold at the width of the
+ * narrowest glyph; that bound was calibrated with a single glyph,
+ * whose fractional advance is rounded up, and a text of nothing but
+ * narrow characters, or any text in a monospace font, was broken
+ * although it fitted.
+ */
+static void
+TestExactFit(const Font &font) noexcept
+{
+  AnyCanvas canvas;
+  canvas.Select(font);
+
+  static constexpr const char *cases[] = {
+    "iiiiiiii",
+    "alps.txt",
+  };
+
+  for (const char *text : cases) {
+    const unsigned width = canvas.CalcTextSize(text).width;
+    const auto result = WrapText(font, width, text);
+
+    if (result.lines.size() != 1)
+      diag("\"%s\" was broken into %zu lines at its own width of %u pixels",
+           text, result.lines.size(), width);
+
+    ok1(result.lines.size() == 1);
+  }
+}
+
 int main()
 {
   /* Avoid creating a full UI Display (and OpenGL/EGL) for this unit
@@ -214,7 +246,7 @@ int main()
 
   InitialiseFonts();
 
-  plan_tests(39);
+  plan_tests(41);
 
   TestASCII(normal_font);
   TestUTF8NoWrap(normal_font);
@@ -222,6 +254,7 @@ int main()
   TestMultiParagraphUTF8(normal_font);
   TestLongUTF8Line(normal_font);
   TestDrawFormattedTextUTF8(normal_font);
+  TestExactFit(normal_font);
 
   DeinitialiseFonts();
 
