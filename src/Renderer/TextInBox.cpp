@@ -108,11 +108,8 @@ RenderShadowedText(Canvas &canvas, const char *text,
  */
 static constexpr uint8_t PILL_ALPHA = 0xf2;
 
-/**
- * Draw the box of a #LabelShape::PILL and its shadow.
- */
-static void
-DrawPill(Canvas &canvas, const PixelRect &rc) noexcept
+void
+DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity) noexcept
 {
   /* a pill: the diameter of the corners is the box's height */
   const PixelSize ellipse{unsigned(rc.GetHeight())};
@@ -142,15 +139,21 @@ DrawPill(Canvas &canvas, const PixelRect &rc) noexcept
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    DrawBoxShadow(rc, BoxShadowStyle::FLOATING, rc.GetHeight() / 2);
+    BoxShadowStyle shadow = BoxShadowStyle::FLOATING;
+    for (auto &layer : shadow.layers)
+      layer.alpha = layer.alpha * opacity / 0xff;
+
+    DrawBoxShadow(rc, shadow, rc.GetHeight() / 2);
   } else
     /* no shadow on a slow CPU or without a stencil buffer: a black
        outline sets the pill off the map */
-    canvas.SelectBlackPen();
+    canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(opacity)));
 
   const ScopeAlphaBlend alpha_blend;
-  canvas.Select(Brush(COLOR_WHITE.WithAlpha(PILL_ALPHA)));
+  canvas.Select(Brush(COLOR_WHITE.WithAlpha(PILL_ALPHA * opacity / 0xff)));
 #else
+  (void)opacity;
+
   /* no shadow without OpenGL: a black outline sets the pill off the
      map */
   canvas.SelectBlackPen();
