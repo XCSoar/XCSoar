@@ -625,11 +625,6 @@ type=gesture
 data=LU
 event=GotoLookup recent
 
-mode=default
-type=gesture
-data=RU
-event=GroupedListTest
-
 ###
 
 mode=default

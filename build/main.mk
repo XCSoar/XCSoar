@@ -21,8 +21,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialogFloating.cpp \
-	$(SRC)/Dialogs/GroupedListTestDialog.cpp \
-	$(SRC)/Dialogs/GroupedListMenuDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
