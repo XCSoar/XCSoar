@@ -197,7 +197,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("MacCready setting"),
     N_("MC"),
-    N_("Current MacCready setting and mode (manual or auto). (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
+    N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
     IBFHelper<InfoBoxContentMacCready>::Create,
   },
 
@@ -390,7 +390,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed MacCready"),
     N_("V MC"),
-    N_("MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent."),
+    N_("MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. At MacCready 0, with a task or Goto active, this speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used."),
     UpdateInfoBoxSpeedMacCready,
   },
 
@@ -462,7 +462,7 @@ static constexpr MetaData meta_data[] = {
   {
     N_("Speed dolphin"),
     N_("Vopt"),
-    N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed on the glider's current track. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed-to-fly is selected, this InfoBox displays the MacCready speed."),
+    N_("Instantaneous MacCready speed-to-fly, making use of netto vario calculations to determine dolphin cruise speed on the glider's current track. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude. In final glide mode, this speed-to-fly is calculated for descent. In climb mode, this switches to the speed for minimum sink at the current load factor (if an accelerometer is connected). When Block mode speed-to-fly is selected, this InfoBox displays the MacCready speed. At MacCready 0, with a task or Goto active, this speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used."),
     UpdateInfoBoxSpeedDolphin,
   },
 

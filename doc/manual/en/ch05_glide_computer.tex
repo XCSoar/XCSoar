@@ -289,12 +289,24 @@ gauge.
 
 XCSoar continuously calculates two types of speed to fly:
 \begin{description}
-\item[MacCready speed]  This is the best speed to fly during cruise
-  in still air, adjusted for wind if in final glide mode.
-\item[Dolphin speed]  This is the instantaneous, best speed to fly
-  in rising or descending air, adjusted for wind if in final glide
-  mode.
-\end{description}  
+\item[MacCready speed]  The best speed to fly in cruise for the
+  current MacCready setting, in still air.  When MacCready is 0 and a
+  task or Goto is active, the speed is adjusted for wind so the glide
+  over the ground toward the waypoint is as good as it can be.  Into
+  a headwind the command is faster than the polar's still-air best
+  glide, because less time is then spent in the headwind; with a
+  tailwind it is slower.  The final-glide symbol does not turn this
+  adjustment on.  With MacCready above 0, during cruise between
+  thermals, wind is not used: the polar is flown in the air mass.
+\item[Dolphin speed]  The instantaneous best speed to fly in rising
+  or descending air.  Wind is used on the same rule: only when
+  MacCready is 0 and a task or Goto is active.
+\end{description}
+
+The best L/D speed on the polar chart is the still-air figure for the
+current MacCready setting.  Speed-to-fly matches it when the wind is
+zero, or when there is no task or Goto.  At MacCready 0 with a
+headwind it is higher.  
 
 The user can specify a maximum maneuvering speed in the configuration
 settings, which limits the speed-to-fly in MacCready calculations to

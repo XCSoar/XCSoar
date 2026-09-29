@@ -187,16 +187,21 @@ temperature.}
 %%%%%%%%%%%
 \section{MacCready}
 
-\ibi{MacCready Setting}{MC $<$mode$>$}{Current MacCready setting, current 
-MacCready mode (manual or auto), and recommended speed-to-fly. 
+\ibi{MacCready Setting}{MC $<$mode$>$}{Current MacCready setting, current
+MacCready mode (manual or auto), and recommended speed-to-fly.
+At MacCready 0, with a task or Goto active, that speed is adjusted
+for wind toward the waypoint and need not match the polar's still-air
+best glide.  With MacCready above 0, wind is not used.
 (Touch-screen/PC only) Also used
 to adjust the MacCready setting if the InfoBox is active, by using the up/down
-cursor keys. Pressing the enter cursor key toggles `Auto MacCready' mode. 
+cursor keys. Pressing the enter cursor key toggles `Auto MacCready' mode.
 An InfoBox dialogue is available}
 \ibi{Speed MacCready}{V MC}{MacCready speed-to-fly for optimal flight to the
 next waypoint. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
-descent.}
+descent. At MacCready 0, with a task or Goto active, this speed is
+adjusted for wind toward the waypoint and need not match the polar's
+still-air best glide. With MacCready above 0, wind is not used.}
 \ibi{Percentage climb}{\% Climb}{Percentage of time spent in climb mode. These
 statistics are reset upon starting the task.}
 \ibi{Speed dolphin}{V opt.}{Instantaneous MacCready speed-to-fly, making use
@@ -205,7 +210,10 @@ current bearing. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
 descent. In climb mode, this switches to the speed for minimum sink at the
 current load factor (if an accelerometer is connected). When `Block' mode speed to
-fly is selected, this InfoBox displays the MacCready speed.}
+fly is selected, this InfoBox displays the MacCready speed. At MacCready 0,
+with a task or Goto active, this speed is adjusted for wind toward the
+waypoint and need not match the polar's still-air best glide. With
+MacCready above 0, wind is not used.}
 \ibi{Thermal next leg equivalent}{T Next Leg}{Climb on the next task
 leg that gives the same average cross-country speed as flying the
 current leg at the MacCready setting, using the polar and the headwind

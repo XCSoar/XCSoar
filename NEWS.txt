@@ -276,6 +276,9 @@ Version 7.46 - not yet released
   - fix quitting from the Fly / Simulator screen with -profile=
     emptying the profile file #3190
 * documentation
+  - explain that speed-to-fly uses wind at MacCready 0 when a task
+    or Goto is active, in the manual and in the MacCready, V MC,
+    and V opt InfoBox help #2977
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
   - document that Engine Type is only shown for engine-sensor BLE
