@@ -125,6 +125,7 @@ constexpr std::string_view AppStatusMessageAlignment = "AppStatusMessageAlignmen
 constexpr std::string_view AppTextInputStyle = "AppTextInputStyle";
 constexpr std::string_view HapticFeedback = "HapticFeedback";
 constexpr std::string_view AppDialogTabStyle = "AppDialogTabStyle";
+constexpr std::string_view AppDialogTiledMenu = "AppDialogTiledMenu";
 constexpr std::string_view AppDialogStyle = "AppDialogStyle";
 constexpr std::string_view AppInfoBoxColors = "AppInfoBoxColors";
 constexpr std::string_view AppInfoBoxTheme = "AppInfoBoxTheme";

@@ -68,6 +68,7 @@ Profile::Load(const ProfileMap &map, DialogSettings &settings)
   map.GetEnum(ProfileKeys::AppTextInputStyle, settings.text_input_style);
   map.GetEnum(ProfileKeys::AppDialogTabStyle, settings.tab_style);
   map.Get(ProfileKeys::UserLevel, settings.expert);
+  map.Get(ProfileKeys::AppDialogTiledMenu, settings.tiled_menu);
 }
 
 void

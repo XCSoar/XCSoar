@@ -91,4 +91,23 @@ static constexpr Color COLOR_XCTHERM_RED_ORANGE = Color(0xff, 0x40, 0x00);
 static constexpr Color COLOR_XCTHERM_RED = Color(0xff, 0x00, 0x00);
 static constexpr Color COLOR_XCTHERM_PURPLE = Color(0xa0, 0x20, 0xf0);
 
+/* Configuration tiled menu (Look / Layout → Tiled menu) */
+static constexpr Color COLOR_CONFIG_MENU_TILE =
+  Color(0x2a, 0x30, 0x38);
+static constexpr Color COLOR_CONFIG_MENU_TILE_BORDER =
+  Color(0x4a, 0x52, 0x5c);
+static constexpr Color COLOR_CONFIG_MENU_TILE_PRESSED =
+  Color(0x3a, 0x44, 0x52);
+static constexpr Color COLOR_CONFIG_MENU_TILE_FOCUSED =
+  Color(0x3f, 0x76, 0xa8);
+
+static constexpr Color COLOR_CONFIG_MENU_TILE_LIGHT =
+  Color(0xfa, 0xfa, 0xfa);
+static constexpr Color COLOR_CONFIG_MENU_TILE_BORDER_LIGHT =
+  Color(0xa8, 0xa8, 0xa8);
+static constexpr Color COLOR_CONFIG_MENU_TILE_PRESSED_LIGHT =
+  Color(0xe0, 0xe0, 0xe0);
+static constexpr Color COLOR_CONFIG_MENU_TILE_FOCUSED_LIGHT =
+  Color(0x3f, 0x76, 0xa8);
+
 static constexpr uint8_t ALPHA_OVERLAY = 0xA0;
