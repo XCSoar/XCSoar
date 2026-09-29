@@ -124,12 +124,10 @@ public:
   [[nodiscard]]
   static PixelRect GetContentRect(PixelRect full) noexcept {
 #ifdef ANDROID
-    const int clearance = Android::GetTopGestureClearance();
-    if (clearance > 0 && full.bottom - full.top > clearance)
-      full.top += clearance;
-#endif
-
+    return Android::ContentRectBelowTopGesture(full);
+#else
     return full;
+#endif
   }
 
   void UpdateLayout() noexcept {

@@ -1,7 +1,8 @@
 Version 7.46 - not yet released
 * android
-  - on the InfoBox arrange page, lay the cards, the text and
-    the buttons below the area that opens the notification shade
+  - on the InfoBox arrange page and the InfoBox Sets editor, lay
+    the cards, the text and the buttons below the area that opens
+    the notification shade
   - target Android 16 so Google Play still accepts updates #2874
   - use built-in IMU and log to NMEA logger if enabled
   - hide Engine Type on BLE sensors that are not an engine sensor
