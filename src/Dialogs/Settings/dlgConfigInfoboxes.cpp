@@ -18,6 +18,10 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
+#ifdef ANDROID
+#include "Android/SystemGesture.hpp"
+#endif
+
 using namespace UI;
 
 static InfoBoxSettings::Panel clipboard;
@@ -28,7 +32,8 @@ class InfoBoxesConfigWidget final : public NullWidget {
     InfoBoxLayout::Layout info_boxes;
 
     Layout() = default;
-    Layout(PixelRect rc, InfoBoxSettings::Geometry geometry);
+    Layout(PixelRect content, InfoBoxSettings::Geometry geometry,
+           PixelSize orientation_size);
   };
 
   /** the InfoBoxes of this set; it reports every change back */
@@ -96,10 +101,25 @@ private:
       paste_button->SetEnabled(clipboard_size > 0);
   }
 
+  /**
+   * Where the cards and the description are laid out.  On Android
+   * this starts below the system swipe-down band; the arrange
+   * window still fills @p rc so the dialog backdrop covers that
+   * band.
+   */
+  [[nodiscard]]
+  static PixelRect GetContentRect(PixelRect full) noexcept {
+#ifdef ANDROID
+    return Android::ContentRectBelowTopGesture(full);
+#else
+    return full;
+#endif
+  }
+
   /** Recalculate the layout for @p rc and hand it to #arrange. */
   void UpdateLayout(const PixelRect &rc) noexcept {
     client_rc = rc;
-    layout = Layout(rc, geometry);
+    layout = Layout(GetContentRect(rc), geometry, rc.GetSize());
     arrange.SetLayout(layout.info_boxes, layout.info_boxes.remaining);
   }
 
@@ -129,12 +149,14 @@ public:
   }
 };
 
-InfoBoxesConfigWidget::Layout::Layout(PixelRect rc,
-                                      InfoBoxSettings::Geometry geometry)
+InfoBoxesConfigWidget::Layout::Layout(PixelRect content,
+                                      InfoBoxSettings::Geometry geometry,
+                                      PixelSize orientation_size)
 {
   const unsigned title_scale =
     CommonInterface::GetUISettings().info_boxes.scale_title_font;
-  info_boxes = InfoBoxLayout::Calculate(rc, geometry, title_scale);
+  info_boxes = InfoBoxLayout::Calculate(content, geometry, title_scale,
+                                        orientation_size);
 }
 
 void
