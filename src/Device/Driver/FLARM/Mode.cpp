@@ -20,6 +20,7 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     Send("PFLAE,R", env);
     Send("PFLAV,R", env);
     Send("PFLAC,R,RADIOID", env);
+    Send("PFLAC,R,DEVTYPE", env);
     return true;
 
   case Mode::NMEA:

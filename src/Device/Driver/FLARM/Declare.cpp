@@ -102,11 +102,23 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
      * parameter of CopyCleanFlarmString() allows us to trim off excess characters
      * so that a dodgy waypoint configuration doesn't cause an overflow.
      */
+
+    /* PowerFLARM task declaration max waypoint name is limited to 58 characters
+     * Max IGC record 76, less Record Indicator 1, Latitude 8, Longtitude 9 = 58
+     */
+
     StaticString<90> buffer;
     buffer.Format("%02d%05.0f%c,%03d%05.0f%c,",
                   DegLat, (double)MinLat, NoS,
                   DegLon, (double)MinLon, EoW);
-    CopyCleanFlarmString(buffer.buffer() + buffer.length(), declaration.GetShortName(i), 6);
+
+    if (IsPowerFlarm()) {
+      // Appends full name strings (up to 58 characters) for PowerFLARM units
+      CopyCleanFlarmString(buffer.buffer() + buffer.length(), declaration.GetName(i), 58);
+    } else {
+      // Appends legacy short codes (limited to 6 characters) for Classic FLARM units
+      CopyCleanFlarmString(buffer.buffer() + buffer.length(), declaration.GetShortName(i), 6);
+    }
 
     if (!SetConfig("ADDWP", buffer, env))
       return false;
