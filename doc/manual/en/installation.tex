@@ -258,12 +258,19 @@ Install the Debian package as described above.  However, unlike on
 ``regular'' Linux, XCSoar will not use X11.  Instead, it runs
 full-screen on the Linux console.
 
-On the Raspberry Pi 4, you need to enable the VC4 display driver by
-adding the following line to \texttt{/boot/config.txt}:
+On the Raspberry Pi 4 and later, Raspberry Pi OS already enables the
+VC4 display driver.  In \texttt{/boot/firmware/config.txt} (on older
+images, \texttt{/boot/config.txt}) the line is:
 
 \begin{verbatim*}
-dtoverlay=vc4-fkms-v3d
+dtoverlay=vc4-kms-v3d
 \end{verbatim*}
+
+Leave that line as it is.  XCSoar draws through this driver.  Do not
+add a second line, \texttt{dtoverlay=vc4-fkms-v3d}: the two overlays
+together stop the Pi from booting.  If the file still has
+\texttt{dtoverlay=vc4-fkms-v3d}, edit that existing line so it reads
+\texttt{dtoverlay=vc4-kms-v3d}.  Do not add another overlay line.
 
 XCSoar requires access to your input devices
 (\texttt{/dev/input/event*}).  By default, only \texttt{root} is

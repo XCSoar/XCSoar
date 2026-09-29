@@ -281,6 +281,8 @@ Version 7.46 - not yet released
   - explain that speed-to-fly uses wind at MacCready 0 when a task
     or Goto is active, in the manual and in the MacCready, V MC,
     and V opt InfoBox help #2977
+  - correct the Raspberry Pi display-driver step: edit the existing
+    VC4 line instead of adding another, and keep vc4-kms-v3d #1082
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
   - document that Engine Type is only shown for engine-sensor BLE
