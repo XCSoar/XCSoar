@@ -40,9 +40,24 @@ class FlarmDevice: public AbstractDevice
    */
   DeviceSettingsMap<std::string> settings;
 
+private:
+  bool is_power_flarm = false;
+
 public:
   FlarmDevice(Port &_port)
     :port(_port) {}
+
+  /**
+   * Sets the PowerFLARM device capabilities status.
+   */
+  void SetPowerFlarm(bool state) { is_power_flarm = state; }
+
+  /**
+   * Checks if the connected hardware features PowerFLARM capabilities.
+   *
+   * @return True if task declaration limits can safely be bypassed.
+   */
+  bool IsPowerFlarm() const { return is_power_flarm; }
 
   /**
    * Write a setting to the FLARM.

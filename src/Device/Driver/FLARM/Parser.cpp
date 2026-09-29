@@ -55,6 +55,19 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line, NMEAInfo &info)
     return true;
   }
 
+  if (name == "DEVTYPE"sv) {
+    const auto value = line.Rest();
+
+    // Check if the hardware is a PowerFLARM variant
+    if (value.find("Power"sv) != std::string_view::npos) {
+      this->SetPowerFlarm(true);
+    }
+
+    const std::lock_guard<Mutex> lock(settings);
+    settings.Set(std::string{name}, std::string{value});
+    return true;
+  }
+
   const auto value = line.Rest();
 
   const std::lock_guard<Mutex> lock(settings);
