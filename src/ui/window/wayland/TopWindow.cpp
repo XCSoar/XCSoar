@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "../TopWindow.hpp"
+#include "../MinimumSize.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Globals.hpp"
 #include "ui/event/poll/Queue.hpp"
@@ -298,6 +299,11 @@ TopWindow::CreateNative(const char *text, PixelSize size,
 
     if (style.GetFullScreen())
       xdg_toplevel_set_fullscreen(xdg_toplevel, nullptr);
+
+    const PixelSize min_size = MinimumWindowSize(size);
+    xdg_toplevel_set_min_size(xdg_toplevel,
+                              (int32_t)min_size.width,
+                              (int32_t)min_size.height);
 
     wl_surface_commit(wl_surface);
     wl_display_roundtrip(display.GetWaylandDisplay());

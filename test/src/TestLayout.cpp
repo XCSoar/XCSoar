@@ -3,6 +3,7 @@
 
 #include "Screen/Layout.hpp"
 #include "TestUtil.hpp"
+#include "ui/window/MinimumSize.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm>
@@ -142,6 +143,9 @@ TestCase(PixelSize size, UnsignedPoint2D dpi,
  */
 static constexpr unsigned SQUARE_LANDSCAPE_CHECKS = 25;
 
+/** ClampToMinimumSize width/height plus MinimumWindowSize width/height. */
+static constexpr unsigned MINIMUM_SIZE_CHECKS = 12 * 4;
+
 static void
 TestSquareAndLandscape() noexcept
 {
@@ -198,6 +202,37 @@ TestSquareAndLandscape() noexcept
   ok1(!Layout::small_screen);
 }
 
+static void
+TestMinimumWindowSize() noexcept
+{
+  const auto check = [](PixelSize in, PixelSize clamped,
+                        PixelSize native_min) {
+    const PixelSize got = UI::ClampToMinimumSize(in);
+    ok1(got.width == clamped.width);
+    ok1(got.height == clamped.height);
+
+    const PixelSize min = UI::MinimumWindowSize(in);
+    ok1(min.width == native_min.width);
+    ok1(min.height == native_min.height);
+  };
+
+  /* Square and landscape use 320x240. A wide window keeps its width. */
+  check({0, 0}, {320, 240}, {320, 240});
+  check({10, 10}, {320, 240}, {320, 240});
+  check({11, 10}, {320, 240}, {320, 240});
+  check({319, 240}, {320, 240}, {320, 240});
+  check({320, 240}, {320, 240}, {320, 240});
+  check({500, 100}, {500, 240}, {320, 240});
+  check({800, 600}, {800, 600}, {320, 240});
+
+  /* Portrait uses 240x320. A tall window keeps its height. */
+  check({10, 11}, {240, 320}, {240, 320});
+  check({100, 500}, {240, 500}, {240, 320});
+  check({240, 319}, {240, 320}, {240, 320});
+  check({240, 320}, {240, 320}, {240, 320});
+  check({400, 800}, {400, 800}, {240, 320});
+}
+
 int
 main()
 {
@@ -232,7 +267,7 @@ main()
   };
 
   plan_tests(1 + ARRAY_SIZE(cases) * LAYOUT_CHECKS +
-             SQUARE_LANDSCAPE_CHECKS);
+             SQUARE_LANDSCAPE_CHECKS + MINIMUM_SIZE_CHECKS);
 
   ok1(Layout::ScaleSupported());
 
@@ -240,6 +275,7 @@ main()
     TestCase(c.size, c.dpi, c.ui_scale, c.has_touch);
 
   TestSquareAndLandscape();
+  TestMinimumWindowSize();
 
   return exit_status();
 }

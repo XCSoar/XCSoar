@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "../TopWindow.hpp"
+#include "../MinimumSize.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "ui/event/Globals.hpp"
@@ -13,6 +14,7 @@
 #endif
 
 #include <X11/Xatom.h>
+#include <X11/Xutil.h>
 
 namespace UI {
 
@@ -44,6 +46,15 @@ TopWindow::CreateNative(const char *text, PixelSize size,
                            &swa);
   if (x_window == 0)
     throw std::runtime_error("XCreateWindow() failed");
+
+  if (XSizeHints *hints = XAllocSizeHints()) {
+    const PixelSize min_size = MinimumWindowSize(size);
+    hints->flags = PMinSize;
+    hints->min_width = (int)min_size.width;
+    hints->min_height = (int)min_size.height;
+    XSetWMNormalHints(x_display, x_window, hints);
+    XFree(hints);
+  }
 
   if (XClassHint *class_hint = XAllocClassHint()) {
     class_hint->res_name = class_hint->res_class = const_cast<char *>("xcsoar");

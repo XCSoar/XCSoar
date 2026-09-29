@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "../TopWindow.hpp"
+#include "../MinimumSize.hpp"
 #include "../Features.hpp"
 #include "ui/canvas/custom/TopCanvas.hpp"
 #include "lib/fmt/RuntimeError.hxx"
@@ -196,6 +197,12 @@ TopWindow::CreateNative(const char *_text, PixelSize new_size,
                           SDL_WINDOWPOS_UNDEFINED, new_size.width,
                           new_size.height, flags,
                           ::SDL_GetError());
+
+  if (resizable) {
+    const PixelSize min_size = MinimumWindowSize(new_size);
+    SDL_SetWindowMinimumSize(window, (int)min_size.width,
+                             (int)min_size.height);
+  }
 
 #if defined(__MACOSX__) && __MACOSX__
   SDL_SysWMinfo *wm_info =

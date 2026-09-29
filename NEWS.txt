@@ -278,6 +278,9 @@ Version 7.46 - not yet released
     is running
   - fix quitting from the Fly / Simulator screen with -profile=
     emptying the profile file #3190
+  - fix a crash when the desktop window is resized to a few
+    pixels, by refusing a size below 320x240 (240x320 when
+    taller than wide) #2110
 * documentation
   - explain that speed-to-fly uses wind at MacCready 0 when a task
     or Goto is active, in the manual and in the MacCready, V MC,
