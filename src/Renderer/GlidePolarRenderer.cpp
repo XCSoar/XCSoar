@@ -28,15 +28,21 @@ GlidePolarCaption(char *sTmp, size_t buffer_size,
     return;
   }
 
+  const auto mc =
+    FormatUserVerticalSpeed(glide_polar.GetMC(), true, false);
+
+  /* Portrait info area is five lines.  Landscape uses the side panel. */
   const char *const format = Layout::landscape
-    ? "{}:\r\n  {}\r\n  at {} {}\r\n\r\n{}:\r\n  {:.2f} {}\r\n  at {} {}"
-    : "{}:\r\n  {} at {} {}\r\n{}:\r\n  {:.2f} {} at {} {}";
+    ? "{}:\r\n  {}\r\n  at {} {}\r\n  {} {}\r\n\r\n{}:\r\n  {:.2f} {}\r\n  at {} {}"
+    : "{}:\r\n  {} at {} {}\r\n  {} {}\r\n{}:\r\n  {:.2f} {} at {} {}";
 
   auto result = fmt::format_to_n(sTmp, buffer_size - 1, fmt::runtime(format),
                                  _("L/D"),
                                  (int)glide_polar.GetBestLD(),
                                  (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
                                  Units::GetSpeedName(),
+                                 _("MC"),
+                                 mc.c_str(),
                                  _("Min. sink"),
                                  (double)Units::ToUserVSpeed(glide_polar.GetSMin()),
                                  Units::GetVerticalSpeedName(),
