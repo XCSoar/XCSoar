@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=XCSoar
+GenericName=Tactical glide computer
+Comment=Tactical glide computer for soaring and paragliding
+Exec=xcsoar
+Icon=xcsoar
+Terminal=false
+Categories=Science;
+Keywords=gliding;soaring;paragliding;navigation;
+StartupNotify=false

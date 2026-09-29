@@ -49,4 +49,4 @@ override_dh_auto_clean:
 
 .PHONY: override_dh_auto_install
 override_dh_auto_install:
-	$(MAKE) $(OPTIONS) install-bin install-mo DESTDIR=`pwd`/debian/tmp
+	$(MAKE) $(OPTIONS) install-bin install-mo install-desktop DESTDIR=`pwd`/debian/tmp

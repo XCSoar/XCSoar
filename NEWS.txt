@@ -44,6 +44,7 @@ Version 7.46 - not yet released
   - remove the legacy single-file Windows executable; use the OpenGL
     version (installer or zip) #2132
 * Linux
+  - add a desktop menu entry and icon for the Unix package #1496
   - add restart and power-off controls to the Quit dialog
   - use OpenGL ES instead of desktop OpenGL #2140
   - termination: fix SIGTERM and Ctrl-C killing the program instead of
