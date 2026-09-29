@@ -3503,11 +3503,34 @@ GroupedListControl::EnsureVisible(unsigned i) noexcept
   assert(i < elements.size());
 
   const Element &element = elements[i];
+  const int room = GetViewHeight();
+  if (room <= 0)
+    return;
 
-  if (element.top < origin)
-    SetOrigin(element.top);
-  else if (element.GetBottom() > origin + GetViewHeight())
-    SetOrigin(element.GetBottom() - GetViewHeight());
+  /* the explanation hangs under the row and may be taller than the
+     view.  Scrolling to the bottom of it carries the row off the
+     top, and a tap then lands on the text instead of the value.
+     Keep the row on the screen, and show as much of the text as
+     fits under it. */
+  const int row_top = element.top;
+  const int row_bottom = element.GetBottom() - (int)element.help_height;
+
+  if (row_bottom <= row_top)
+    return;
+
+  if (row_bottom - row_top >= room) {
+    SetOrigin(row_top);
+    return;
+  }
+
+  if (row_top < origin)
+    SetOrigin(row_top);
+  else if (row_bottom > origin + room)
+    SetOrigin(row_bottom - room);
+
+  const int help_bottom = element.GetBottom();
+  if (help_bottom > origin + room && row_top > origin)
+    SetOrigin(std::min(help_bottom - room, row_top));
 }
 
 void
@@ -3547,13 +3570,19 @@ GroupedListControl::ScrollAhead(unsigned i, bool forward) noexcept
       ++items_ahead;
   }
 
-  /* the item under the cursor stays on the screen as a whole */
+  /* the row under the cursor stays on the screen.  Its explanation
+     may be taller than the view, and scrolling to the end of that
+     text would carry the row off */
+  const int row_bottom = element.GetBottom() - (int)element.help_height;
+
   if (forward) {
     const int target = std::min(ahead - room, element.top);
     if (target > origin)
       SetOrigin(target);
   } else {
-    const int target = std::max(ahead, element.GetBottom() - room);
+    int target = std::max(ahead, row_bottom - room);
+    if (target > element.top)
+      target = element.top;
     if (target < origin)
       SetOrigin(target);
   }
@@ -4835,7 +4864,10 @@ GroupedListControl::OnHelpTimer() noexcept
   const unsigned fit_before = fit_content_height;
   UpdateLayout();
 
-  if (cursor >= 0 && (std::size_t)cursor < elements.size())
+  /* a finger which is scrolling must not be pulled back onto the
+     row while the explanation is still opening */
+  if (drag_mode == DragMode::NONE && kinetic.IsSteady() &&
+      cursor >= 0 && (std::size_t)cursor < elements.size())
     EnsureVisible((unsigned)cursor);
 
   /* the dialog already has the finished height.  Following the

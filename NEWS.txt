@@ -236,6 +236,9 @@ Version 7.46 - not yet released
     down the list does not open every row. A row can keep a tap
     on its label as selection only, so the value opens it, and
     Enter still opens the selected row
+  - keep the selected row on the screen when its explanation opens.
+    A long text scrolls under the row, so a tap still reaches the
+    value
   - show Flight Setup as a floating list of values; select a row to
     choose a number from a list, and read that row's explanation
     below the selected row. A tap on the label selects the row; a tap
