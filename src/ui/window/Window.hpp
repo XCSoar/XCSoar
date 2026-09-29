@@ -210,12 +210,14 @@ public:
   void Resize(PixelSize _size) noexcept {
     AssertThread();
 
-    if (_size == size)
-      return;
-
-    // Enforce minimum size only for top-level windows (issue #2110)
+    /* Top-level only: a child may be smaller than the screen
+       minimum. A size the clamp does not change must not run
+       OnResize again (issue #2110). */
     if (parent == nullptr)
       _size = UI::ClampToMinimumSize(_size);
+
+    if (_size == size)
+      return;
 
     size = _size;
 
