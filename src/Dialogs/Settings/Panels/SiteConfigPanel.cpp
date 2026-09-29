@@ -35,7 +35,6 @@
 using SelectionMode = GroupedListWidget::SelectionMode;
 using ItemOptions = GroupedListWidget::ItemOptions;
 using TextFont = GroupedListWidget::TextFont;
-using TextSize = GroupedListWidget::TextSize;
 using ToggleHitArea = GroupedListWidget::ToggleHitArea;
 
 /**
@@ -150,9 +149,8 @@ void
 SiteConfigPanel::AddFileItem(const char *caption, const char *help,
                              FileDataField &df) noexcept
 {
-  /* the file as a small value, with every line of it */
-  ItemOptions options{.value_size = TextSize::SMALL,
-                      .value_all_lines = true,
+  /* the file, with every line of it */
+  ItemOptions options{.value_all_lines = true,
                       .chevron = true};
 
   const char *name = df.GetAsDisplayString();
@@ -182,8 +180,7 @@ SiteConfigPanel::AddFilesItem(const char *caption, const char *help,
     names += (base != nullptr ? base : path).c_str();
   }
 
-  ItemOptions options{.value_size = TextSize::SMALL,
-                      .value_all_lines = true,
+  ItemOptions options{.value_all_lines = true,
                       .chevron = true};
   if (!names.empty())
     options.value = names.c_str();
@@ -209,7 +206,6 @@ SiteConfigPanel::Fill() noexcept
           {.value = GetPrimaryDataPath().c_str(),
            .value_below = true,
            .value_font = TextFont::MONO,
-           .value_size = TextSize::SMALL,
            .value_all_lines = true});
 
   AddGroup();
@@ -271,7 +267,6 @@ SiteConfigPanel::Fill() noexcept
     std::replace(uris.begin(), uris.end(), '|', '\n');
 
     ItemOptions options{
-      .value_size = TextSize::SMALL,
       .value_all_lines = true,
       .chevron = true,
       .help = _("List of additional user repository URIs, separated by '|' character."),
