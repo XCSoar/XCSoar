@@ -12,6 +12,7 @@
 #include "Widget/GroupedListWidget.hpp"
 #include "net/http/Features.hpp"
 #include "system/Path.hpp"
+#include "util/StringAPI.hxx"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "DownloadFilePicker.hpp"
@@ -55,11 +56,24 @@ PickChoice(const char *caption, const char *help,
 
   int picked = -1;
 
-  for (std::size_t i = 0; i < choices.size(); ++i)
-    list.AddItem(choices[i].caption, [&dialog, &picked, i](){
+  for (std::size_t i = 0; i < choices.size(); ++i) {
+    const char *caption = choices[i].caption;
+
+    /* Off is a state, like the other badges, not a name of a mode */
+    GroupedListWidget::ItemOptions options{
+      .checked = (int)i == current,
+      .help = choices[i].help,
+    };
+    if (caption != nullptr && StringIsEqual(caption, _("Off"))) {
+      options.badge = C_("Badge", "off");
+      caption = "";
+    }
+
+    list.AddItem(caption, [&dialog, &picked, i](){
       picked = i;
       dialog.SetModalResult(mrOK);
-    }, {.checked = (int)i == current, .help = choices[i].help});
+    }, options);
+  }
 
   if (current >= 0)
     list.SetCursorIndex(current);
