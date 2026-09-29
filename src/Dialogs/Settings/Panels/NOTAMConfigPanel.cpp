@@ -162,7 +162,6 @@ NOTAMConfigPanel::AddQCodesItem() noexcept
   }, {.subtitle = FormatFilterCount(count, stats.filtered_by_qcode),
       .value = settings.hidden_qcodes.c_str(),
       .value_font = TextFont::MONO,
-      .value_size = TextSize::SMALL,
       .value_all_lines = true,
       .chevron = true,
       .help = _("Space-separated Q-code prefixes to hide (e.g., QA QK QN QOA QOL).")});
@@ -205,7 +204,6 @@ NOTAMConfigPanel::Fill() noexcept
   }, {.value = settings.api_base_url.c_str(),
       .value_below = true,
       .value_font = TextFont::MONO,
-      .value_size = TextSize::SMALL,
       .value_all_lines = true,
       .chevron = true,
       .help = _("Base URL of the NOTAM proxy API. Must be configured before NOTAMs can be fetched.")});

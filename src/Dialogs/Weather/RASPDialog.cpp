@@ -346,8 +346,7 @@ RaspSettingsWidget::AddFileItems() noexcept
 {
   AddGroup(_("File"));
 
-  ItemOptions file_options{.value_size = TextSize::SMALL,
-                           .value_all_lines = true,
+  ItemOptions file_options{.value_all_lines = true,
                            .chevron = true};
 
   const char *name = file.GetAsDisplayString();

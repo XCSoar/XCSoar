@@ -246,9 +246,8 @@ InterfaceConfigPanel::Fill() noexcept
       _("The Input Events file defines the menu system and how XCSoar responds to "
         "button presses and events from external devices.");
 
-    /* the file as a small value, with every line of it */
-    ItemOptions options{.value_size = TextSize::SMALL,
-                        .value_all_lines = true,
+    /* the file, with every line of it */
+    ItemOptions options{.value_all_lines = true,
                         .chevron = true};
 
     const char *name = events_file.GetAsDisplayString();
