@@ -243,20 +243,70 @@ FlarmDevice::WaitForACK(uint16_t sequence_number,
 
 bool
 FlarmDevice::BinaryPing(OperationEnvironment &env,
-                        std::chrono::steady_clock::duration _timeout)
+                        std::chrono::steady_clock::duration timeout)
+{
+  FLARM::PFLAXNotSupportedMatcher matcher;
+  return BinaryPingWatch(env, timeout, matcher) == BinaryPingResult::ACK;
+}
+
+FlarmDevice::BinaryPingResult
+FlarmDevice::BinaryPingWatch(OperationEnvironment &env,
+                             std::chrono::steady_clock::duration _timeout,
+                             FLARM::PFLAXNotSupportedMatcher &matcher)
 try {
   const TimeoutClock timeout(_timeout);
 
-  // Create header for sending a binary ping request
-  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MessageType::PING);
-
-  // Send request and wait for positive answer
+  /* WaitForACK() discards every byte that is not a frame start.
+     The refusal is an NMEA sentence, so this ping has to read those
+     bytes itself. */
+  const FLARM::FrameHeader header =
+    PrepareFrameHeader(FLARM::MessageType::PING);
 
   SendStartByte();
   SendFrameHeader(header, env, timeout.GetRemainingOrZero());
-  return WaitForACK(header.sequence_number, env, timeout.GetRemainingOrZero());
+
+  while (!timeout.HasExpired()) {
+    port.WaitRead(env, timeout.GetRemainingOrZero());
+    const std::byte b = port.ReadByte();
+
+    if (b == FLARM::START_FRAME) {
+      matcher.Reset();
+
+      FLARM::FrameHeader reply;
+      if (!ReceiveFrameHeader(reply, env, timeout.GetRemainingOrZero()))
+        continue;
+
+      uint16_t length = reply.length;
+      if (length <= sizeof(reply))
+        continue;
+
+      length -= sizeof(reply);
+
+      AllocatedArray<std::byte> data;
+      data.GrowDiscard(length);
+      if (!ReceiveEscaped({data.data(), length},
+                          env, timeout.GetRemainingOrZero()))
+        continue;
+
+      if (reply.crc != FLARM::CalculateCRC(reply, {data.data(), length}))
+        continue;
+
+      if (reply.type == FLARM::MessageType::ACK &&
+          FLARM::AckSequenceMatches(header.sequence_number,
+                                    {data.data(), length},
+                                    false))
+        return BinaryPingResult::ACK;
+
+      continue;
+    }
+
+    if (matcher.Feed(b))
+      return BinaryPingResult::REFUSED;
+  }
+
+  return BinaryPingResult::TIMEOUT;
 } catch (const DeviceTimeout &) {
-  return false;
+  return BinaryPingResult::TIMEOUT;
 }
 
 void

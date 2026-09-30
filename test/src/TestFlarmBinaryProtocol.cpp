@@ -4,9 +4,47 @@
 #include "Device/Driver/FLARM/BinaryProtocol.hpp"
 #include "TestUtil.hpp"
 
+static bool
+FeedAll(FLARM::PFLAXNotSupportedMatcher &matcher,
+        const char *text) noexcept
+{
+  bool found = false;
+  for (const char *p = text; *p != '\0'; ++p)
+    found = matcher.Feed(std::byte(static_cast<unsigned char>(*p))) || found;
+  return found;
+}
+
+static void
+TestPFLAXNotSupported()
+{
+  FLARM::PFLAXNotSupportedMatcher matcher;
+
+  /* PowerFLARM Flex: NMEA keeps flowing, then the refusal. */
+  ok1(FeedAll(matcher,
+              "$GPRMC,133100,V,,,,,,,,,,N*00\r\n"
+              "$PFLAX,A,ERROR,NOTSUPPORTED*6D\r\n"));
+
+  /* BLE answers $PFLAX,A and does not switch.  That is not a refusal
+     sentence, so the binary pings still run. */
+  matcher.Reset();
+  ok1(!FeedAll(matcher, "$PFLAX,A*2E\r\n"));
+
+  /* A broken prefix must not stick across the real sentence. */
+  matcher.Reset();
+  ok1(!FeedAll(matcher, "$PFLAX,A,ERRX"));
+  ok1(FeedAll(matcher, "$PFLAX,A,ERROR,NOTSUPPORTED"));
+
+  /* Split across two reads, as the port returns one byte at a time. */
+  matcher.Reset();
+  ok1(!FeedAll(matcher, "$PFLAX,A,ERROR,NOT"));
+  ok1(FeedAll(matcher, "SUPPORTED"));
+}
+
 int main()
 {
-  plan_tests(13);
+  plan_tests(13 + 6);
+
+  TestPFLAXNotSupported();
 
   ok1(FLARM::PROTOCOL_VERSION == 1);
   ok1(FLARM::MAX_IGC_DOWNLOAD_ATTEMPTS == 2);

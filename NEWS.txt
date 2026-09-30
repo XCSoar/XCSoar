@@ -110,6 +110,9 @@ Version 7.46 - not yet released
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
 * FLARM
+  - fail flight download immediately when the device answers that
+    binary mode is not supported, instead of waiting out ping
+    timeouts #1882
   - fix ADS-B traffic ground speed wrapping above 457 km/h #2887
   - fix no-position targets missing from the radar and map #2847
   - fix IGC download aborting mid-file by restarting from the selected
