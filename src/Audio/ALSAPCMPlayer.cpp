@@ -63,13 +63,19 @@ ALSAPCMPlayer::WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
   assert(n > 0);
   assert(nullptr != buffer);
 
-  snd_pcm_sframes_t write_ret =
-      snd_pcm_writei(&alsa_handle, buffer, static_cast<snd_pcm_uframes_t>(n));
-  if (write_ret < static_cast<snd_pcm_sframes_t>(n)) {
+  /* snd_pcm_recover() prepares the device and discards the ring.
+     Retry the same frames once; returning success without that
+     retry is what made every clip underrun again. */
+  bool recovered = false;
+  while (true) {
+    const snd_pcm_sframes_t write_ret =
+        snd_pcm_writei(&alsa_handle, buffer,
+                       static_cast<snd_pcm_uframes_t>(n));
+    if (write_ret == static_cast<snd_pcm_sframes_t>(n))
+      return true;
+
     if (write_ret < 0) {
-      if (try_recover_on_error) {
-        return TryRecoverFromError(alsa_handle, static_cast<int>(write_ret));
-      } else {
+      if (!try_recover_on_error || recovered) {
         LogFormat("snd_pcm_writei(0x%p, 0x%p, %u) failed: %d - %s",
                   &alsa_handle,
                   buffer,
@@ -78,18 +84,20 @@ ALSAPCMPlayer::WriteFrames(snd_pcm_t &alsa_handle, int16_t *buffer,
                   snd_strerror(static_cast<int>(write_ret)));
         return false;
       }
-    } else {
-      // Never observed this case. Should not happen? Cannot happen?
-      LogFormat("Only %u of %u ALSA PCM frames written",
-                static_cast<unsigned>(write_ret),
-                static_cast<unsigned>(n));
+
+      if (!TryRecoverFromError(alsa_handle, static_cast<int>(write_ret)))
+        return false;
+
+      recovered = true;
+      continue;
     }
+
+    // Never observed this case. Should not happen? Cannot happen?
+    LogFormat("Only %u of %u ALSA PCM frames written",
+              static_cast<unsigned>(write_ret),
+              static_cast<unsigned>(n));
     return false;
   }
-
-  assert(write_ret == static_cast<snd_pcm_sframes_t>(n));
-
-  return true;
 }
 
 void
@@ -106,20 +114,30 @@ ALSAPCMPlayer::OnEvent()
     if (!TryRecoverFromError(static_cast<int>(n_available)))
       return false;
 
-    n_available = static_cast<snd_pcm_sframes_t>(buffer_size / channels);
+    n_available = snd_pcm_avail(alsa_handle.get());
+    if (n_available < 0)
+      return false;
   }
 
-  if (n_available < 0)
+  if (channels == 0)
     return false;
-  else if (0 == n_available)
+
+  const auto buffer_frames =
+      static_cast<snd_pcm_sframes_t>(buffer_size / channels);
+  if (n_available > buffer_frames)
+    n_available = buffer_frames;
+  if (n_available <= 0)
     return true;
 
-  size_t n_read = FillPCMBuffer(buffer.get(),
-                                static_cast<size_t>(n_available));
-  if (!WriteFrames(static_cast<size_t>(n_available)))
+  const size_t n_frames = static_cast<size_t>(n_available);
+  const size_t n_read = FillPCMBuffer(buffer.get(), n_frames);
+  if (n_read == 0)
     return false;
 
-  return (n_read == static_cast<size_t>(n_available));
+  if (!WriteFrames(n_frames))
+    return false;
+
+  return n_read == n_frames;
 }
 
 void
@@ -382,6 +400,33 @@ ALSAPCMPlayer::SetParameters(snd_pcm_t &alsa_handle, unsigned sample_rate,
     return false;
   }
 
+  /* A plugin can consume the whole ring in one cycle. The default
+     stop threshold then reports EPIPE after a write that succeeded. */
+  snd_pcm_uframes_t boundary;
+  alsa_error = snd_pcm_sw_params_get_boundary(sw_params, &boundary);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params_get_boundary(0x%p, 0x%p) failed: %d - %s",
+              sw_params,
+              &boundary,
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
+  alsa_error = snd_pcm_sw_params_set_stop_threshold(&alsa_handle,
+                                                    sw_params,
+                                                    boundary);
+  if (0 != alsa_error) {
+    LogFormat("snd_pcm_sw_params_set_stop_threshold(0x%p, 0x%p, %llu) "
+                  "failed: %d - %s",
+              &alsa_handle,
+              sw_params,
+              static_cast<unsigned long long>(boundary),
+              alsa_error,
+              snd_strerror(alsa_error));
+    return false;
+  }
+
   alsa_error = snd_pcm_sw_params(&alsa_handle, sw_params);
   if (0 != alsa_error) {
     LogFormat("snd_pcm_sw_params(0x%p, 0x%p) failed: %d - %s",
@@ -412,10 +457,9 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
       case SND_PCM_STATE_XRUN:
         if (0 != snd_pcm_prepare(alsa_handle.get()))
           return;
-        else {
-          recovered_from_underrun = true;
-          success = true;
-        }
+
+        recovered_from_underrun = true;
+        success = true;
         break;
 
       case SND_PCM_STATE_RUNNING:
@@ -432,7 +476,10 @@ ALSAPCMPlayer::Start(PCMDataSource &_source)
         if (recovered_from_underrun) {
           const size_t n = buffer_size / channels;
           const size_t n_read = FillPCMBuffer(buffer.get(), n);
-          if (!WriteFrames(n_read)) {
+          /* Write the silence-padded buffer, not just n_read.
+             start_threshold is the whole ring; a short write
+             never starts playback. */
+          if (n == 0 || n_read == 0 || !WriteFrames(n)) {
             success = false;
             return;
           }

@@ -55,6 +55,7 @@ Version 7.46 - not yet released
     GUI framework), particularly on high-resolution monitors. #3177    
   - fix missing text on OpenVario with Mali-400 GPUs (Mesa 25 and
     later) #3008
+  - fix UI sounds underrunning on every ALSA playback #2909
 * Kobo
   - add restart and power-off controls to the Quit dialog
   - fix the power-off screen not listing flights after flights.log
