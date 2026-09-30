@@ -7,7 +7,28 @@
 #include "time/Validity.hpp"
 #include "util/StaticString.hxx"
 
+#include <string_view>
 #include <type_traits>
+
+namespace FLARM {
+
+/**
+ * PowerFLARM Flex and Fusion give out the flight log only through
+ * FLARM Hub on the device Wi-Fi.  FTD-014 names the Fusion
+ * "PowerFLARM-Fusion"; Flex follows that hyphenated form.
+ *
+ * Portable, Core and a classic Flarm stay on the binary data port.
+ * Matching the whole "PowerFLARM" name would send those there too.
+ */
+[[nodiscard]] [[gnu::pure]]
+constexpr bool
+DeviceTypeNeedsWifiDownload(std::string_view device_type) noexcept
+{
+  return device_type.find("Flex") != std::string_view::npos ||
+         device_type.find("Fusion") != std::string_view::npos;
+}
+
+} // namespace FLARM
 
 /**
  * The FLARM hardware read-out from PFLAC config sentences.

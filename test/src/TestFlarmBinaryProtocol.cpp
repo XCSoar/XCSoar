@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Device/Driver/FLARM/BinaryProtocol.hpp"
+#include "FLARM/Hardware.hpp"
 #include "TestUtil.hpp"
 
 static bool
@@ -42,7 +43,14 @@ TestPFLAXNotSupported()
 
 int main()
 {
-  plan_tests(13 + 6);
+  plan_tests(13 + 6 + 6);
+
+  ok1(FLARM::DeviceTypeNeedsWifiDownload("PowerFLARM-Flex"));
+  ok1(FLARM::DeviceTypeNeedsWifiDownload("PowerFLARM-Fusion"));
+  ok1(!FLARM::DeviceTypeNeedsWifiDownload("PowerFLARM-Portable"));
+  ok1(!FLARM::DeviceTypeNeedsWifiDownload("PowerFLARM-Core"));
+  ok1(!FLARM::DeviceTypeNeedsWifiDownload("Flarm06"));
+  ok1(!FLARM::DeviceTypeNeedsWifiDownload(""));
 
   TestPFLAXNotSupported();
 
