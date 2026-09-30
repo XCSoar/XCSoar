@@ -205,6 +205,8 @@ Version 7.46 - not yet released
   - filter only the recently used waypoints in the LU gesture list,
     and add waypoints selected with Goto to it #3207
 * infoboxen
+  - add a Ballast InfoBox showing the water ballast on board in litres
+    and the wing loading; tap it to open the flight setup
   - rearrange the InfoBoxes of a page by dragging one onto another;
     a long press and lift opens that mode with the box selected;
     sliding off cancels; a tap explains a card, a short move
