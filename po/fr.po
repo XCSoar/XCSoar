@@ -11304,3 +11304,6 @@ msgstr ""
 
 msgid "Recently used waypoints"
 msgstr ""
+
+msgid "Connect to the device Wi-Fi to download flights from this FLARM."
+msgstr ""
