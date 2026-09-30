@@ -53,6 +53,14 @@ struct FlarmTraffic {
     FLARM = 3,
   };
 
+  /** How the latest target update affected the shared 30-second history. */
+  enum class Average30sUpdate : uint8_t {
+    NONE,
+    IGNORED,
+    APPENDED,
+    REPLACED,
+  };
+
   /**
    * FLARM aircraft types
    * @see FTD-012 Data Port ICD
@@ -86,6 +94,9 @@ struct FlarmTraffic {
 
   /** Average climb rate over 30s */
   double climb_rate_avg30s;
+
+  /** Actual sample span used for #climb_rate_avg30s. */
+  FloatDuration climb_rate_avg30s_time_span;
 
   /** Latitude-based distance of the FLARM target */
   double relative_north;
@@ -179,6 +190,12 @@ struct FlarmTraffic {
   /** Has the averaged climb rate of the target been calculated yet? */
   bool climb_rate_avg30s_available;
 
+  /** Sampling action produced by FlarmCalculations for this update. */
+  Average30sUpdate climb_rate_avg30s_update;
+
+  /** Whether this update began a new average observation window. */
+  bool climb_rate_avg30s_reset;
+
   /** Was the RSSI value received from the device? */
   bool rssi_available;
 
@@ -208,6 +225,10 @@ struct FlarmTraffic {
     no_track = false;
     absolute_location = false;
     absolute_altitude = false;
+    climb_rate_avg30s_time_span = FloatDuration::zero();
+    climb_rate_avg30s_available = false;
+    climb_rate_avg30s_update = Average30sUpdate::NONE;
+    climb_rate_avg30s_reset = false;
   }
 
   Angle Bearing() const noexcept {
