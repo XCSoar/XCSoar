@@ -1219,6 +1219,14 @@ static constexpr MetaData meta_data[] = {
     UpdateInfoBoxBloodOxygen,
   },
 
+  // e_Ballast
+  {
+    N_("Ballast"),
+    N_("Ballast"),
+    N_("Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."),
+    IBFHelper<InfoBoxContentBallast>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
