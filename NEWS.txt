@@ -205,6 +205,8 @@ Version 7.46 - not yet released
   - filter only the recently used waypoints in the LU gesture list,
     and add waypoints selected with Goto to it #3207
 * infoboxen
+  - let each InfoBox set use its own geometry, or inherit the layout
+    from Look → Layout #1863
   - add a Ballast InfoBox showing the water ballast on board in litres
     and the wing loading; tap it to open the flight setup
   - rearrange the InfoBoxes of a page by dragging one onto another;
@@ -216,9 +218,6 @@ Version 7.46 - not yet released
     overlay uses the same colours as the InfoBox set dialog
   - vibrate on an InfoBox press, and more strongly once a hold
     is armed, on devices with haptic feedback
-  - compose the InfoBox sets in the configuration with the same view:
-    every InfoBox is a card which can be moved around; Copy Set, Paste
-    Set and Rename are the dialog buttons
   - pack portrait InfoBoxes on tall screens so title, value, and
     comment sit closer together; InfoBox title size still grows the
     boxes toward square at 150%
