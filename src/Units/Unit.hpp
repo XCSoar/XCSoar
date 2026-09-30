@@ -35,6 +35,11 @@ enum class Unit: uint8_t {
   HZ,
   RPM,
   /**
+   * Volume in litres.  Water ballast is already stored in litres
+   * (1 l of water = 1 kg), so the conversion factor is 1.
+   */
+  LITRE,
+  /**
    * The sentinel: the number of units in this enum.
    */
   COUNT

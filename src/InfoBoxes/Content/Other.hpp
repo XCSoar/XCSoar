@@ -38,6 +38,12 @@ public:
   bool HandleClick() noexcept override;
 };
 
+class InfoBoxContentBallast final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+  bool HandleClick() noexcept override;
+};
+
 class InfoBoxContentHorizon : public InfoBoxContent
 {
 public:
