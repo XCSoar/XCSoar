@@ -7,6 +7,15 @@
 #include "Form/Form.hpp"
 #include "InfoBoxes/Content/Alternate.hpp"
 #include "Widget/ListWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Widget/ButtonWidget.hpp"
+#include "Form/Button.hpp"
+#include "Renderer/ButtonRenderer.hpp"
+#include "Renderer/TextRenderer.hpp"
+#include "Look/ButtonLook.hpp"
+#include "Screen/Layout.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Look/DialogLook.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
@@ -17,6 +26,8 @@
 #include "Look/MapLook.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
+#include "util/StaticString.hxx"
+#include "util/IterableSplitString.hxx"
 #include "Language/Language.hpp"
 #include "ActionInterface.hpp"
 #include "Message.hpp"
@@ -26,16 +37,26 @@
 #include "Protection.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
+#include <algorithm>
+#include <array>
 #include <cassert>
 #include <optional>
+#include <string>
+#include <utility>
 
+namespace {
 class AlternatesListWidget final
   : public ListWidget {
   const DialogLook &dialog_look;
   const bool select_mode;
-  const std::optional<AlternateInfoBoxSlot> slot;
 
   TwoTextRowsRenderer row_renderer;
+
+  /**
+   * The waypoints the alternate InfoBox slots currently refer to,
+   * indexed by slot; nullptr for a slot without a target.
+   */
+  std::array<WaypointPtr, alternate_info_box_slot_count> slot_waypoints;
 
   Button *details_button = nullptr;
   Button *cancel_button = nullptr;
@@ -55,18 +76,30 @@ public:
 public:
   explicit
   AlternatesListWidget(const DialogLook &_dialog_look,
-                       bool _select_mode = false,
-                       std::optional<AlternateInfoBoxSlot> _slot =
-                         std::nullopt) noexcept
-    :dialog_look(_dialog_look), select_mode(_select_mode), slot(_slot) {}
+                       bool _select_mode = false) noexcept
+    :dialog_look(_dialog_look), select_mode(_select_mode) {}
 
   unsigned GetCursorIndex() const {
     return GetList().GetCursorIndex();
   }
 
   bool Update() {
-    ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
-    alternates = lease->GetAlternates();
+    {
+      ProtectedTaskManager::Lease lease(*backend_components->protected_task_manager);
+      alternates = lease->GetAlternates();
+    }
+
+    /* a manually pinned alternate is not necessarily among the
+       computed ones; append it so the pilot sees what the InfoBox
+       refers to */
+    for (const auto slot : all_alternate_info_box_slots) {
+      auto waypoint = GetAlternateSlotWaypoint(slot);
+      slot_waypoints[ToAlternateInfoBoxSlotIndex(slot)] = waypoint;
+
+      if (waypoint != nullptr && !Contains(*waypoint))
+        alternates.emplace_back(waypoint, SolveAlternateGlide(*waypoint));
+    }
+
     return !alternates.empty();
   }
 
@@ -77,16 +110,51 @@ private:
     return !alternates.empty() && GetCursorIndex() < alternates.size();
   }
 
-  /**
-   * Returns the configured alternate slot for the slot-aware dialog
-   * path.  This must only be used when slot-specific controls have
-   * been created.
-   */
   [[nodiscard]] [[gnu::pure]]
-  AlternateInfoBoxSlot
-  GetConfiguredSlot() const noexcept {
-    assert(slot.has_value());
-    return *slot;
+  bool
+  Contains(const Waypoint &waypoint) const noexcept {
+    return std::any_of(alternates.begin(), alternates.end(),
+                       [&waypoint](const AlternatePoint &alternate){
+                         return *alternate.waypoint == waypoint;
+                       });
+  }
+
+  [[nodiscard]] [[gnu::pure]]
+  static bool
+  HasManualAlternate() noexcept {
+    return std::any_of(all_alternate_info_box_slots.begin(),
+                       all_alternate_info_box_slots.end(),
+                       [](AlternateInfoBoxSlot slot){
+                         return GetAlternateInfoBoxMode(slot) ==
+                           AlternateInfoBoxMode::MANUAL;
+                       });
+  }
+
+  /**
+   * Formats the "ALT1"/"ALT2" markers of the alternate slots
+   * referring to the specified waypoint.
+   *
+   * @return false if no slot refers to it
+   */
+  [[nodiscard]]
+  bool
+  FormatSlotMarkers(const Waypoint &waypoint,
+                    StaticString<16> &buffer) const noexcept {
+    buffer.clear();
+
+    for (const auto slot : all_alternate_info_box_slots) {
+      const auto &slot_waypoint =
+        slot_waypoints[ToAlternateInfoBoxSlotIndex(slot)];
+      if (slot_waypoint == nullptr || !(*slot_waypoint == waypoint))
+        continue;
+
+      if (!buffer.empty())
+        buffer.push_back(' ');
+
+      buffer.AppendFormat("ALT%u", GetAlternateInfoBoxSlotDisplayNumber(slot));
+    }
+
+    return !buffer.empty();
   }
 
   [[nodiscard]] [[gnu::pure]]
@@ -116,7 +184,21 @@ public:
     const Waypoint &waypoint = *alternates[index].waypoint;
     const GlideResult& solution = alternates[index].solution;
 
-    WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
+    PixelRect row_rc = rc;
+    StaticString<16> markers;
+    if (FormatSlotMarkers(waypoint, markers))
+      row_rc.right = row_renderer.DrawRightFirstRow(canvas, rc, markers.c_str());
+
+    if (!solution.IsDefined()) {
+      /* a manually pinned alternate while the glide computer has no
+         solution (yet); the glide figures would be undefined */
+      WaypointListRenderer::Draw(canvas, row_rc, waypoint, row_renderer,
+                                 UIGlobals::GetMapLook().waypoint,
+                                 CommonInterface::GetMapSettings().waypoint);
+      return;
+    }
+
+    WaypointListRenderer::Draw(canvas, row_rc, waypoint, solution.vector.distance,
                                solution.SelectAltitudeDifference(settings.task.glide),
                                row_renderer,
                                UIGlobals::GetMapLook().waypoint,
@@ -134,7 +216,20 @@ public:
   void OnActivateItem([[maybe_unused]] unsigned index) noexcept override;
 
 private:
-  void UpdateButtons() noexcept {
+  /**
+   * Rebuilds the list after the alternate slots have been modified.
+   */
+  void RefreshList() noexcept {
+    Update();
+
+    auto &list = GetList();
+    list.SetLength(alternates.size());
+    list.Invalidate();
+
+    UpdateButtons();
+  }
+
+  void UpdateButtons() const noexcept {
 
     // Check if window is initialized (widget is prepared)
     if (!IsDefined())
@@ -143,10 +238,8 @@ private:
     if (set_active_freq_button == nullptr || set_standby_freq_button == nullptr)
       return;
 
-    if (auto_button != nullptr) {
-      auto_button->SetEnabled(GetAlternateInfoBoxMode(GetConfiguredSlot()) ==
-                              AlternateInfoBoxMode::MANUAL);
-    }
+    if (auto_button != nullptr)
+      auto_button->SetEnabled(HasManualAlternate());
 
     if (!HasValidSelection()) {
       if (goto_button != nullptr)
@@ -172,6 +265,7 @@ private:
       manual_button->SetEnabled(true);
   }
 };
+}
 
 void
 AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
@@ -198,26 +292,28 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
     select_button = dialog.AddButton(_("Select"), mrOK);
   }
 
-  if (!select_mode && slot.has_value()) {
-    /* Alternate Mode: Auto returns a MANUAL slot to the computed
-       list. Pinning is Select as Alternate, which is always
-       available and sets MANUAL. */
-    auto_button = dialog.AddButton(C_("Button", "Alternate Mode: Auto"), [this](){
-      const auto slot = GetConfiguredSlot();
-      if (GetAlternateInfoBoxMode(slot) != AlternateInfoBoxMode::MANUAL)
+  if (!select_mode) {
+    auto_button = dialog.AddButton(C_("Button", "Alternate AUTO"), [this](){
+      const auto slot =
+        dlgAlternateSlotShowModal(_("AUTO mode"), true);
+      if (!slot.has_value() ||
+          GetAlternateInfoBoxMode(*slot) != AlternateInfoBoxMode::MANUAL)
         return;
 
-      SetAlternateInfoBoxMode(slot, AlternateInfoBoxMode::AUTO);
-      UpdateButtons();
+      SetAlternateInfoBoxMode(*slot, AlternateInfoBoxMode::AUTO);
+      RefreshList();
     });
 
     manual_button = dialog.AddButton(C_("Button", "Select as Alternate"), [this](){
       if (!HasValidSelection())
         return;
 
-      const auto slot = GetConfiguredSlot();
-      SetManualAlternateWaypoint(slot, GetSelectedWaypointPtr());
-      SetAlternateInfoBoxMode(slot, AlternateInfoBoxMode::MANUAL);
+      const auto slot =
+        dlgAlternateSlotShowModal(GetSelectedWaypoint().name.c_str());
+      if (!slot.has_value())
+        return;
+
+      SelectManualAlternateWaypoint(*slot, GetSelectedWaypointPtr());
       cancel_button->Click();
     });
   }
@@ -293,34 +389,219 @@ AlternatesListWidget::OnActivateItem([[maybe_unused]] unsigned index) noexcept
     details_button->Click();
 }
 
+namespace {
+
+[[gnu::pure]]
+Color
+GetButtonTextColor(const ButtonLook &look, ButtonState state) noexcept
+{
+  switch (state) {
+  case ButtonState::DISABLED:
+    return look.disabled.color;
+
+  case ButtonState::FOCUSED:
+  case ButtonState::PRESSED:
+    return look.focused.foreground_color;
+
+  case ButtonState::SELECTED:
+    return look.selected.foreground_color;
+
+  case ButtonState::ENABLED:
+    break;
+  }
+
+  return look.standard.foreground_color;
+}
+
+/**
+ * A #ButtonRenderer for a caption spanning several lines; the lines
+ * are separated by '\n'.
+ */
+class MultiLineTextButtonRenderer final : public ButtonRenderer {
+  ButtonFrameRenderer frame_renderer;
+
+  TextRenderer text_renderer;
+
+  const std::string caption;
+
+public:
+  MultiLineTextButtonRenderer(const ButtonLook &_look,
+                              std::string &&_caption) noexcept
+    :frame_renderer(_look), caption(std::move(_caption)) {
+    text_renderer.SetCenter();
+    text_renderer.SetVCenter();
+    text_renderer.SetControl();
+  }
+
+  /* virtual methods from class ButtonRenderer */
+  unsigned GetMinimumButtonWidth() const noexcept override {
+    const Font &font = *frame_renderer.GetLook().font;
+
+    unsigned width = 0;
+    for (const auto line : IterableSplitString(caption.c_str(), '\n'))
+      width = std::max(width, font.TextSize(line).width);
+
+    return 2 * (ButtonFrameRenderer::GetMargin() + Layout::GetTextPadding())
+      + width;
+  }
+
+  void DrawButton(Canvas &canvas, const PixelRect &rc,
+                  ButtonState state) const noexcept override {
+    frame_renderer.DrawButton(canvas, rc, state);
+
+    const ButtonLook &look = frame_renderer.GetLook();
+
+    canvas.SetBackgroundTransparent();
+    canvas.SetTextColor(GetButtonTextColor(look, state));
+    canvas.Select(*look.font);
+
+    text_renderer.Draw(canvas, frame_renderer.GetDrawingRect(rc, state),
+                       caption);
+  }
+};
+
+/**
+ * One alternate slot button: twice as tall as a regular button,
+ * because its caption has two rows.
+ */
+class AlternateSlotButtonWidget final : public ButtonWidget {
+  const bool enabled;
+
+public:
+  AlternateSlotButtonWidget(std::unique_ptr<ButtonRenderer> _renderer,
+                            std::function<void()> _callback,
+                            bool _enabled) noexcept
+    :ButtonWidget(std::move(_renderer), std::move(_callback)),
+     enabled(_enabled) {}
+
+  /* virtual methods from class Widget */
+  PixelSize GetMinimumSize() const noexcept override {
+    auto size = ButtonWidget::GetMinimumSize();
+    size.height *= 2;
+    return size;
+  }
+
+  PixelSize GetMaximumSize() const noexcept override {
+    auto size = ButtonWidget::GetMaximumSize();
+    size.height *= 2;
+    return size;
+  }
+
+  void Initialise(ContainerWindow &parent,
+                  const PixelRect &rc) noexcept override {
+    ButtonWidget::Initialise(parent, rc);
+
+    if (!enabled)
+      GetWindow().SetEnabled(false);
+  }
+
+  bool SetFocus() noexcept override {
+    return enabled && ButtonWidget::SetFocus();
+  }
+};
+
+/**
+ * Asks the pilot which alternate InfoBox slot shall receive the
+ * action: one button per slot, showing what the slot currently
+ * refers to.
+ */
+class AlternateSlotWidget final : public RowFormWidget {
+  WndForm &dialog;
+
+  const char *const target_name;
+
+  /**
+   * Offer only the slots that are currently in MANUAL mode?
+   */
+  const bool manual_slots_only;
+
+  std::optional<AlternateInfoBoxSlot> &value;
+
+public:
+  AlternateSlotWidget(const DialogLook &look, WndForm &_dialog,
+                      const char *_target_name, bool _manual_slots_only,
+                      std::optional<AlternateInfoBoxSlot> &_value) noexcept
+    :RowFormWidget(look), dialog(_dialog), target_name(_target_name),
+     manual_slots_only(_manual_slots_only), value(_value) {}
+
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+};
+
 void
-dlgAlternatesListShowModal(Waypoints *waypoints,
-                           std::optional<AlternateInfoBoxSlot> slot) noexcept
+AlternateSlotWidget::Prepare(ContainerWindow &parent,
+                             const PixelRect &rc) noexcept
+{
+  RowFormWidget::Prepare(parent, rc);
+
+  StaticString<256> text;
+  text.Format("%s\n%s", _("Select alternate slot for"), target_name);
+  AddMultiLine(text);
+
+  for (const auto slot : all_alternate_info_box_slots) {
+    const auto mode = GetAlternateInfoBoxMode(slot);
+    const auto waypoint = GetAlternateSlotWaypoint(slot);
+
+    text.Format("%s\n%s: %s / %s", GetAlternateSlotName(slot), _("Current"),
+                GetAlternateModeShortLabel(mode),
+                waypoint != nullptr ? waypoint->name.c_str() : _("None"));
+
+    const bool enabled =
+      !manual_slots_only || mode == AlternateInfoBoxMode::MANUAL;
+
+    Add(std::make_unique<AlternateSlotButtonWidget>(
+          std::make_unique<MultiLineTextButtonRenderer>(GetLook().button,
+                                                        std::string{text.c_str()}),
+          [this, slot](){
+            value = slot;
+            dialog.SetModalResult(mrOK);
+          },
+          enabled));
+  }
+}
+
+} // namespace
+
+std::optional<AlternateInfoBoxSlot>
+dlgAlternateSlotShowModal(const char *target_name,
+                          bool manual_slots_only) noexcept
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  std::optional<AlternateInfoBoxSlot> value;
+
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look,
+                      _("Alternate slot"));
+  dialog.FinishPreliminary(std::make_unique<AlternateSlotWidget>(look, dialog,
+                                                                target_name,
+                                                                manual_slots_only,
+                                                                value));
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  if (dialog.ShowModal() != mrOK)
+    return std::nullopt;
+
+  return value;
+}
+
+void
+dlgAlternatesListShowModal(Waypoints *waypoints) noexcept
 {
   if (!backend_components->protected_task_manager)
     return;
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  auto widget = std::make_unique<AlternatesListWidget>(dialog_look, false,
-                                                       slot);
-  const bool has_alternates = widget->Update();
-  if (!has_alternates && !slot.has_value()) {
+  auto widget = std::make_unique<AlternatesListWidget>(dialog_look);
+  if (!widget->Update()) {
     /* no alternates: don't show the dialog */
     Message::AddMessage(_("No alternates available"));
     return;
   }
 
-  const auto *title = _("Alternates");
-  if (slot.has_value()) {
-    title = C_("Menu", "Alternates 1");
-    if (*slot == AlternateInfoBoxSlot::SECOND)
-      title = C_("Menu", "Alternates 2");
-  }
-
   TWidgetDialog<AlternatesListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(), dialog_look,
-           title);
+           _("Alternates"));
   widget->CreateButtons(dialog, waypoints);
   dialog.FinishPreliminary(std::move(widget));
   dialog.EnableCursorSelection();
