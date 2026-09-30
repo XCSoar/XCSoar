@@ -3,6 +3,7 @@
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "LogFile.hpp"
 #include "util/StaticString.hxx"
 #include "util/TruncateString.hpp"
 #include "util/Macros.hpp"
@@ -173,6 +174,22 @@ FlarmDevice::SetCompetitionClass(const char *competition_class,
                                  OperationEnvironment &env)
 {
   return SetConfig("COMPCLASS", competition_class, env);
+}
+
+bool
+FlarmDevice::ReadDeviceType(char *buffer, size_t length,
+                            OperationEnvironment &env)
+{
+  if (!TextMode(env))
+    return false;
+
+  if (!GetConfig("DEVTYPE", buffer, length, env)) {
+    LogFormat("FLARM: DEVTYPE request failed");
+    return false;
+  }
+
+  LogFormat("FLARM: DEVTYPE '%s'", buffer);
+  return true;
 }
 
 bool

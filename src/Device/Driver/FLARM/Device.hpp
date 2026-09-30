@@ -144,6 +144,13 @@ public:
   bool SetCompetitionClass(const char *competition_class,
                            OperationEnvironment &env);
 
+  /**
+   * Read PFLAC DEVTYPE.  Stops the port thread first, so the answer
+   * is not consumed by the NMEA parser.
+   */
+  bool ReadDeviceType(char *buffer, size_t length,
+                      OperationEnvironment &env);
+
   bool GetStealthMode(bool &enabled, OperationEnvironment &env);
   bool SetStealthMode(bool enabled, OperationEnvironment &env);
   bool GetRange(unsigned &range, OperationEnvironment &env);
