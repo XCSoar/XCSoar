@@ -116,6 +116,41 @@ AckSequenceMatches(uint16_t expected,
 }
 
 /**
+ * Streaming match for "$PFLAX,A,ERROR,NOTSUPPORTED".
+ *
+ * PowerFLARM Flex answers this to $PFLAX and stays in NMEA.  Classic
+ * FLARM switches to binary without that sentence.
+ */
+class PFLAXNotSupportedMatcher {
+  static constexpr char sentence[] = "$PFLAX,A,ERROR,NOTSUPPORTED";
+
+  unsigned matched = 0;
+
+public:
+  void Reset() noexcept {
+    matched = 0;
+  }
+
+  /**
+   * @return true when @p b completes the refusal sentence
+   */
+  [[nodiscard]] bool Feed(std::byte b) noexcept {
+    const auto ch = static_cast<unsigned char>(b);
+    if (ch == static_cast<unsigned char>(sentence[matched])) {
+      ++matched;
+      if (sentence[matched] == '\0') {
+        matched = 0;
+        return true;
+      }
+      return false;
+    }
+
+    matched = ch == static_cast<unsigned char>(sentence[0]) ? 1u : 0u;
+    return false;
+  }
+};
+
+/**
  * Convenience function. Returns a pre-populated FrameHeader instance that is
  * ready to be sent by the SendFrameHeader() function.
  * @param message_type Message type of the FrameHeader

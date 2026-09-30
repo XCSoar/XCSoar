@@ -262,6 +262,22 @@ private:
   bool BinaryPing(OperationEnvironment &env,
                   std::chrono::steady_clock::duration timeout);
 
+  enum class BinaryPingResult : uint8_t {
+    ACK,
+    REFUSED,
+    TIMEOUT,
+  };
+
+  /**
+   * Binary ping that also watches @p matcher.  A completed
+   * "$PFLAX,A,ERROR,NOTSUPPORTED" sentence is REFUSED; the device
+   * stayed in NMEA and further binary frames will not be answered.
+   */
+  BinaryPingResult
+  BinaryPingWatch(OperationEnvironment &env,
+                  std::chrono::steady_clock::duration timeout,
+                  FLARM::PFLAXNotSupportedMatcher &matcher);
+
   /**
    * "Resets the device. The only way to resume normal operation."
    */

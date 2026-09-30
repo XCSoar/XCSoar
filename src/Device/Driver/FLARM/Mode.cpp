@@ -3,6 +3,7 @@
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "LogFile.hpp"
 #include "Operation/Operation.hpp"
 
 bool
@@ -73,14 +74,26 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
   // Testing has revealed that switching the protocol takes a certain amount
   // of time (around 1.5 sec). Due to that it is recommended to issue new pings
   // for a certain time until the ping is ACKed properly or a timeout occurs.
+  // "$PFLAX,A,ERROR,NOTSUPPORTED" means the device stayed in NMEA
+  // (PowerFLARM Flex).  Stop; further binary pings will also time out.
+  FLARM::PFLAXNotSupportedMatcher refusal;
   for (unsigned i = 0; i < 10; ++i) {
-    if (BinaryPing(env, std::chrono::milliseconds(500))) {
+    switch (BinaryPingWatch(env, std::chrono::milliseconds(500), refusal)) {
+    case BinaryPingResult::ACK:
       // We are now in binary mode and have verified that with a binary ping
 
       // Remember that we should now be in binary mode (for further assert() calls)
       was_binary = true;
       mode = Mode::BINARY;
       return true;
+
+    case BinaryPingResult::REFUSED:
+      LogFormat("FLARM: the device refused binary mode: "
+                "$PFLAX,A,ERROR,NOTSUPPORTED");
+      return false;
+
+    case BinaryPingResult::TIMEOUT:
+      break;
     }
   }
 
