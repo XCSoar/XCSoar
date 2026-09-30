@@ -97,14 +97,32 @@ function toItem({ result, text, phrase }, exact = false) {
     };
 }
 
-// A result the pilot typed the words of: the whole term in the title, or
-// in the text of the section. A title says more than a mention in the
-// text, so it comes first in the group.
-function exactness(result, text, phrase) {
+// A result the pilot typed the words of: the whole term in the title of
+// the section or in what an InfoBox calls itself, which is what the page
+// is about, or somewhere in its text. The first says more, so it comes
+// first in the group.
+function exactness(result, label, text, phrase) {
     if (!phrase) return 0;
-    if (collapse(result.title).toLowerCase().includes(phrase)) return 2;
+    if (collapse(`${result.title} ${label ?? ''}`).toLowerCase().includes(phrase)) return 2;
     if (phrase.includes(' ') && text.toLowerCase().includes(phrase)) return 1;
     return 0;
+}
+
+// An InfoBox page says what it is in its frontmatter, the label on the
+// screen and the help text of the app (see content.config.ts), and often
+// has little text of its own. The full-text search indexes the text, so
+// the labels are read here, once, and searched along with it.
+let labels;
+async function infoboxLabels() {
+    labels ??= new Map((await queryCollection(collectionName.value)
+        .select('path', 'title', 'infobox')
+        .all())
+        .filter(page => page.infobox?.caption)
+        .map(page => [page.path, {
+            title: page.title,
+            label: [page.infobox.caption, page.infobox.help].filter(Boolean).join(': '),
+        }]));
+    return labels;
 }
 
 async function runSearch(term) {
@@ -115,9 +133,21 @@ async function runSearch(term) {
     }
     const found = await searchSections(query, { limit: LIMIT, snippet: { columns: ['content'], around: 20 } });
     const phrase = collapse(query).toLowerCase();
-    results.value = found.map(result => {
-        const text = collapse(result.content);
-        return { result, text, exact: exactness(result, text, phrase), phrase };
+    const words = phrase.split(' ').filter(Boolean);
+
+    // The InfoBox pages the full-text search could not find, because what
+    // the pilot typed is in the label of the InfoBox, not in the text.
+    const pages = await infoboxLabels();
+    const seen = new Set(found.map(result => result.id.split('#')[0]));
+    const missed = [...pages]
+        .filter(([path, page]) => !seen.has(path)
+            && words.every(word => collapse(`${page.title} ${page.label}`).toLowerCase().includes(word)))
+        .map(([path, page]) => ({ id: path, title: page.title, titles: [], level: 1, content: '' }));
+
+    results.value = [...found, ...missed].map(result => {
+        const { label } = pages.get(result.id.split('#')[0]) ?? {};
+        const text = collapse([label, result.content].filter(Boolean).join(' '));
+        return { result, text, exact: exactness(result, label, text, phrase), phrase };
     });
 }
 
