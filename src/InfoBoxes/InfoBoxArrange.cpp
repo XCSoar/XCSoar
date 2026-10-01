@@ -105,7 +105,8 @@ public:
     WindowStyle style;
     style.Hide();
     style.ControlParent();
-    ContainerWindow::Create(parent, parent.GetClientRect(), style);
+    ContainerWindow::Create(parent, parent.ContainerWindow::GetClientRect(),
+                            style);
 
     /* the map below must still be painted */
     SetTransparent();
@@ -134,14 +135,20 @@ public:
     if (!arrange.IsDefined())
       return;
 
+    /* the overlay covers the whole window, including the areas outside
+       the client rect (e.g. behind the iOS notch); the cards and the
+       buttons stay inside the client rect */
+    const PixelRect window = GetParent() != nullptr
+      ? GetParent()->ContainerWindow::GetClientRect()
+      : GetClientRect();
     const PixelRect full = GetParent() != nullptr
       ? GetParent()->GetClientRect()
       : GetClientRect();
     const PixelRect here = GetPosition();
-    if (here.left != full.left || here.top != full.top ||
-        here.right != full.right || here.bottom != full.bottom) {
+    if (here.left != window.left || here.top != window.top ||
+        here.right != window.right || here.bottom != window.bottom) {
       /* OnResize runs this again once the overlay covers the screen */
-      Move(full);
+      Move(window);
       return;
     }
 

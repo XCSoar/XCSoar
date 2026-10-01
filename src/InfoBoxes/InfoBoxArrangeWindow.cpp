@@ -587,7 +587,10 @@ InfoBoxArrangeWindow::OnPaint(Canvas &canvas) noexcept
     /* the same dialog colour as the settings page, with the map
        still showing through */
     const ScopeAlphaBlend alpha_blend;
-    canvas.DrawFilledRectangle(canvas.GetRect(),
+    /* the window covers the whole screen, but what lies outside the client
+       rect (e.g. behind the notch while full screen is off) stays black */
+    canvas.DrawFilledRectangle(ToLocal(UIGlobals::GetMainWindow()
+                                       .GetClientRect()),
                                dialog_look.background_color
                                .WithAlpha(OVERLAY_ALPHA));
   } else
