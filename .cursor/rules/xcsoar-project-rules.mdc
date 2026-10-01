@@ -739,6 +739,9 @@ Key rules:
 - Follow aviation human-factors conventions in
   `doc/architecture.rst` (User interface guidelines): ICAO Annex 4,
   NASA Colour Usage, FAA EFB DOT/FAA/AR-03/67, FAA HF design standards
+- Screen rectangles (client, safe area, InfoBox area, HUD, shade):
+  `doc/architecture.rst` (Screen rectangles). Do not invent a parallel
+  set of layout rectangles.
 
 ## Look System
 

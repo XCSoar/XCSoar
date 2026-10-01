@@ -394,12 +394,16 @@ Version 7.46 - not yet released
     testing
   - macOS/iOS: read DEBUG_ALL_MAP_OVERLAYS=y from darwin/.env, so Xcode
     builds can force all map overlays
+  - build system: also force the gesture pill and the page indicator
+    on in DEBUG_ALL_MAP_OVERLAYS builds
   - build system: include the git commit in unreleased version strings
     (splash, log) so testers can identify snapshot builds #3117
   - Linux: undefine X11 Status after EGL includes so test tools such as
     RunMapWindow compile #3150
   - documentation: require make everything before pull requests so Run*
     debug tools compile
+  - documentation: describe which screen rectangle to use for the map,
+    the HUD, dialogues, InfoBoxes and the Android shade band
   - lua: fix a timer callback that cancels its own timer aborting a
     debug build, and reading the Lua state after it had been closed
   - lua: fix a Lua stack slot leaking on every input event handled by a
@@ -454,8 +458,14 @@ Version 7.45 - 2026-08-15
   - add an optional map overlay QuickMenu button (Config → Look →
     Layout), on by default when a touch screen is detected #2610
   - keep overlay zoom with the menu/QuickMenu buttons top-right, keep
-    the north arrow clear of those buttons, and draw GPS status above
-    the map scale / title line
+    the north arrow clear of those buttons and close that gap when pan
+    hides them, keep the pan elevation and coordinates below that arrow
+    and up at the HUD corner when it is hidden, and draw GPS status
+    above the map scale / title line
+  - keep the map title (Simulator, PAN, replay and the page name) with
+    the map scale, in the HUD
+  - inset the map overlays by the same margin as the menu, QuickMenu
+    and zoom buttons
   - swap map overlay sides: vario bar on the left, final glide bar on
     the right #1210
   - show replay speed on the map scale overlay (e.g. REPLAY 2x) #2281

@@ -613,6 +613,100 @@ Usability
    widget on the canvas may be drawn using the ``fill_focus`` method of
    ``Canvas``.
 
+Screen rectangles
+~~~~~~~~~~~~~~~~~
+
+Full screen draws the map to the edge of the glass.  Several
+rectangles are smaller than that window, and they are not the same
+rectangle.  Use the one that matches the element.
+
+A rectangle from ``MainWindow`` is in main-window coordinates.
+``MapWindow::GetHudRect()`` is in map-window coordinates.  Intersect
+``map->GetPosition()`` with a main-window rectangle before placing a
+child of the main window on the map.
+
+``GetClientRect()``
+  The whole window.  On Android in full screen this includes the
+  status bar, the display cutout, the home indicator and the rounded
+  corners.  On iOS it is that full screen only while full screen mode
+  is on; otherwise it is already the safe area.  Use it for pixels
+  that are allowed to run under system UI: the map itself, a
+  screen-filling backdrop (the Fly/Simulator background, the dimming
+  behind the InfoBox arrange cards).
+
+``GetSafeAreaRect()``
+  The window minus the status bar, the navigation bar, the display
+  cutout and the rounded corners.  On a rectangular display with no
+  system bars it equals ``GetClientRect()``.  Android reports these
+  insets only while full screen is on, because outside full screen
+  the surface is already laid out inside them.  The reserved bar size
+  is kept even while full screen hides the bars.  Use it for anything
+  the pilot must be able to read or press that is not allowed to
+  slide under system UI: dialogue windows (title and buttons
+  included) and the Fly/Simulator controls.  Do not inset a dialogue
+  by the shade band as well; it is already below the status bar.
+
+``MainWindow::GetInfoBoxAreaRect()``
+  Per edge, the screen border where *Stretch InfoBox area* is on, and
+  the safe edge where it is off.  A visible status bar clears the top
+  stretch, because nothing can be drawn behind that bar.  Use it for
+  the InfoBoxes, the menu, and gauge positions that do not avoid the
+  InfoBoxes.  Positions that do avoid them, and a page that replaces
+  the map, use the HUD rectangle below.
+
+``MainWindow::GetAreaStackRect()``
+  The hole the InfoBoxes leave inside the InfoBox area.  When the
+  InfoBoxes are hidden, or before the first layout, it is the InfoBox
+  area.  The top and bottom areas (cross section, airspace and NOTAM
+  warnings) are placed in this rectangle.  Callers rarely need it
+  directly; it is the input to the HUD rectangle.
+
+``MainWindow::GetHudRect()``
+  The area stack minus the top and bottom areas.  This is where
+  in-flight map chrome belongs: the compass, the map scale and the
+  title beside it (Simulator, PAN, replay, the page name), the final
+  glide bar, the vario bar, the thermal profile, the GPS status, the
+  flight mode icon, the gesture label, the page indicator, the pan
+  elevation and coordinates, the overlay buttons (menu, QuickMenu,
+  zoom), status messages, and a widget that replaces the map.
+  ``LayoutMapArea()`` then stores the same hole on the map as
+  ``MapWindow::GetHudRect()``.  Draw map overlays with that function,
+  not with the map's ``GetClientRect()``: the map is larger than the
+  hole and runs under the InfoBoxes and the system UI.
+
+  Two extra margins sit inside the map HUD and are not part of the
+  rectangle itself.  ``top_right_margin`` is the overlay-button
+  column; the north arrow and the pan readout move left by it, and
+  the margin goes to zero when those buttons are hidden.  ``bottom_margin``
+  is the portrait pan menu (and the InfoBox access dialogue).
+
+  Edge chrome is laid out once in ``MapHudLayout`` (via
+  ``GlueMapWindow::GetHudLayout()``): HUD, text-padding inset (the
+  same gap the overlay buttons leave), optional top-right and bottom
+  clearances, the compass slot height, and the scale/title clearance
+  for the GPS status.  Draw code reads those slots; it does not
+  recompose the insets.  The compass slot comes from
+  ``CompassRenderer``, and the GPS clearance from
+  ``GetMapScaleAndTitleClearance()``.  The gesture label and the page
+  indicator keep their own optical offset from the HUD edge.
+  Projection-space items (crosshair, aircraft, wind at the aircraft)
+  stay off this layout.
+
+``Android::ContentRectBelowTopGesture()``
+  The notification-shade swipe band.  It is not the safe area: it can
+  extend below the status bar, and it remains when full screen hides
+  the bars.  The value is how far the top of the XCSoar view still
+  lies inside that band, or zero when the surface already starts
+  below it.  Use it only for content the pilot drags in that band.
+
+  The InfoBox arrange overlay fills the client rectangle, so the
+  backdrop still covers the band, and its cards, text and buttons use
+  the one-argument helper (the whole band).  The Sets editor is a
+  dialogue already placed in the safe area; pass the two-argument
+  helper the dialogue's Y in the view, so only the part of the band
+  that still covers the dialogue moves the cards.  A band that ends
+  at the status bar does not move them.
+
 Touch interaction
 ~~~~~~~~~~~~~~~~~
 
