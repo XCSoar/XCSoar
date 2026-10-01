@@ -477,8 +477,10 @@ TEST_WRAP_CLOCK_DEPENDS = MATH TIME
 $(eval $(call link-program,TestWrapClock,TEST_WRAP_CLOCK))
 
 TEST_PROFILE_SOURCES = \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/PageSettings.cpp \
+	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/PageProfile.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/WeatherProfile.cpp \

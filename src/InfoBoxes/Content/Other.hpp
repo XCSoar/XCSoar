@@ -44,6 +44,18 @@ public:
   bool HandleClick() noexcept override;
 };
 
+/**
+ * Shows the free text configured for this InfoBox slot; see
+ * #InfoBoxSettings::Panel::text.
+ */
+class InfoBoxContentCustomText final : public InfoBoxContent {
+public:
+  void Update(InfoBoxData &data) noexcept override;
+
+  [[gnu::pure]]
+  const InfoBoxPanel *GetDialogContent() noexcept override;
+};
+
 class InfoBoxContentHorizon : public InfoBoxContent
 {
 public:

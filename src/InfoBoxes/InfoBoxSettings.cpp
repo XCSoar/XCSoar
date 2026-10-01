@@ -3,9 +3,39 @@
 
 #include "InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
+#include "util/StringAPI.hxx"
+#include "util/TruncateString.hpp"
 
 #include <algorithm>
 using namespace InfoBoxFactory;
+
+bool
+InfoBoxCustomText::AssignLine(StaticString<MAX_LENGTH> &dest,
+                              const char *src) noexcept
+{
+  /* RowFormWidget::GetValueString() returns nullptr for a #DataField
+     which does not implement GetAsString(); treat it like an empty
+     line */
+  if (src == nullptr)
+    src = "";
+
+  char buffer[MAX_LENGTH];
+  CopyTruncateString(buffer, sizeof(buffer), src);
+
+  /* KeyValueFileWriter stores an empty value when the text contains
+     a quotation mark or a line break */
+  char *out = buffer;
+  for (const char *in = buffer; *in != '\0'; ++in)
+    if (*in != '"' && *in != '\n' && *in != '\r')
+      *out++ = *in;
+  *out = '\0';
+
+  if (StringIsEqual(buffer, dest))
+    return false;
+
+  dest = buffer;
+  return true;
+}
 
 void
 InfoBoxSettings::Panel::Clear() noexcept
@@ -13,6 +43,9 @@ InfoBoxSettings::Panel::Clear() noexcept
   name.clear();
   std::fill_n(contents, MAX_CONTENTS, InfoBoxFactory::MIN_TYPE_VAL);
   geometry = INHERIT_GEOMETRY;
+
+  for (auto &i : text)
+    i.Clear();
 }
 
 bool

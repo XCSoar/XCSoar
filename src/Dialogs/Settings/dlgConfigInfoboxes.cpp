@@ -235,6 +235,7 @@ InfoBoxesConfigWidget::OnPaste() noexcept
       continue;
 
     data.contents[item] = content;
+    data.text[item] = clipboard.text[item];
   }
 
   changed = true;

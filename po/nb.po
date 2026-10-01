@@ -2778,6 +2778,20 @@ msgstr "PG-landingsområde"
 msgid "Comment"
 msgstr "Kommentar"
 
+#, no-c-format
+msgid "Fixed text"
+msgstr ""
+
+#, no-c-format
+msgid "Title, value and comment entered by the pilot. Tap to edit."
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."

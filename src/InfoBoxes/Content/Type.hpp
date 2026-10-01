@@ -158,6 +158,7 @@ namespace InfoBoxFactory
     e_BloodOxygen, /* Blood oxygen saturation (SpO2) from a BLE pulse oximeter */
     e_Ballast, /* Water ballast on board; the comment shows the wing loading; tap to open the flight setup */
     e_WP_VMG, /* Speed VMG: the component of ground speed made good towards the next waypoint */
+    e_CustomText, /* Shows the free text configured for this slot instead of a value */
     e_NUM_TYPES /* Last item */
   };
 

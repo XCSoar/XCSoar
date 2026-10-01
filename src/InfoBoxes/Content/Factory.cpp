@@ -1235,6 +1235,14 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentSpeedVMG>::Create,
   },
 
+  // e_CustomText
+  {
+    N_("Fixed text"),
+    N_("Text"),
+    N_("Title, value and comment entered by the pilot. Tap to edit."),
+    IBFHelper<InfoBoxContentCustomText>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,
