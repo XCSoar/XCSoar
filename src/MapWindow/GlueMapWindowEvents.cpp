@@ -784,9 +784,10 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
 
   MapWindow::OnPaintBuffer(canvas);
 
-  DrawMapScale(canvas, GetHudRect(), render_projection);
+  const auto layout = GetHudLayout();
+  DrawMapScale(canvas, layout, render_projection);
   if (IsPanChromeVisible() || DEBUG_ALL_MAP_OVERLAYS)
-    DrawPanInfo(canvas);
+    DrawPanInfo(canvas, layout);
 
 #ifdef ENABLE_OPENGL
   LeaveDrawThread();
@@ -832,15 +833,14 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
   if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {
     draw_sw.Mark("DrawGlueMisc");
 
-    /* the HUD elements stay clear of the areas covered by system UI */
-    const PixelRect hud_rc = GetHudRect(rc);
+    const auto layout = GetHudLayout(GetHudRect(rc));
 
     if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
-      DrawThermalBand(canvas, hud_rc);
-    DrawStallRatio(canvas, hud_rc);
-    DrawFlightMode(canvas, hud_rc);
-    DrawFinalGlide(canvas, hud_rc);
-    DrawVario(canvas, hud_rc);
-    DrawGPSStatus(canvas, hud_rc, Basic());
+      DrawThermalBand(canvas, layout);
+    DrawStallRatio(canvas, layout);
+    DrawFlightMode(canvas, layout);
+    DrawFinalGlide(canvas, layout);
+    DrawVario(canvas, layout);
+    DrawGPSStatus(canvas, layout, Basic());
   }
 }

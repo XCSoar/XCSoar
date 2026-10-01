@@ -4,6 +4,7 @@
 #pragma once
 
 #include "MapWindow.hpp"
+#include "MapHudLayout.hpp"
 #include "time/PeriodClock.hpp"
 #include "UIUtil/TrackingGestureManager.hpp"
 #include "UIUtil/KineticManager.hpp"
@@ -30,7 +31,9 @@ class TerrainThread;
  * placeholder data, ignoring the conditions that normally make them
  * mutually exclusive — the GPS status only appears without a fix, the
  * pan info only while panning, the final glide bar only with a valid
- * task, and so on.  Enable with:
+ * task, the thermal profile only after climbs, the gesture pill only
+ * while a finger traces a gesture, the page indicator only for a
+ * moment after a page switch, and so on.  Enable with:
  *   make DEBUG_ALL_MAP_OVERLAYS=y …
  */
 #ifndef DEBUG_ALL_MAP_OVERLAYS
@@ -305,6 +308,18 @@ public:
   void SetTopRightMargin(unsigned margin) noexcept;
 
   /**
+   * Edge-chrome slots for this paint: HUD, margins, vario column and
+   * scale clearance.  Projection-space items are not included.
+   */
+  [[gnu::pure]]
+  MapHudLayout GetHudLayout(PixelRect hud_rc) const noexcept;
+
+  [[gnu::pure]]
+  MapHudLayout GetHudLayout() const noexcept {
+    return GetHudLayout(GetHudRect());
+  }
+
+  /**
    * Update the blackboard from DeviceBlackboard and
    * InterfaceBlackboard.
    */
@@ -422,17 +437,23 @@ protected:
 
 private:
   void DrawGesture(Canvas &canvas) const noexcept;
-  void DrawMapScale(Canvas &canvas, const PixelRect &rc,
+  void DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
                     const MapWindowProjection &projection) const noexcept;
-  void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const noexcept;
-  void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
+  void DrawFlightMode(Canvas &canvas,
+                      const MapHudLayout &layout) const noexcept;
+  void DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
                      const NMEAInfo &info) const noexcept;
   void DrawCrossHairs(Canvas &canvas) const noexcept;
-  void DrawPanInfo(Canvas &canvas) const noexcept;
-  void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const noexcept;
-  void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const noexcept;
-  void DrawVario(Canvas &canvas, const PixelRect &rc) const noexcept;
-  void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const noexcept;
+  void DrawPanInfo(Canvas &canvas,
+                   const MapHudLayout &layout) const noexcept;
+  void DrawThermalBand(Canvas &canvas,
+                       const MapHudLayout &layout) const noexcept;
+  void DrawFinalGlide(Canvas &canvas,
+                      const MapHudLayout &layout) const noexcept;
+  void DrawVario(Canvas &canvas,
+                 const MapHudLayout &layout) const noexcept;
+  void DrawStallRatio(Canvas &canvas,
+                      const MapHudLayout &layout) const noexcept;
 
   /**
    * Draw the position of the current page in the list of configured
