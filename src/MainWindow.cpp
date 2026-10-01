@@ -646,10 +646,11 @@ MainWindow::InitialiseConfigured()
   const PixelRect infobox_area_rc = GetInfoBoxAreaRect();
 
   const InfoBoxSettings &ib_settings = CommonInterface::GetUISettings().info_boxes;
-  const InfoBoxLayout::Layout ib_layout =
+  InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(infobox_area_rc, GetActiveInfoBoxGeometry(),
                              ib_settings.scale_title_font,
                              rc.GetSize());
+  ib_layout.outer_border = GetOuterBorder(infobox_area_rc, rc);
 
   assert(look != nullptr);
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
