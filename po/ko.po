@@ -10931,7 +10931,7 @@ msgid "Starting..."
 msgstr ""
 
 msgid "Stopping..."
-msgstr ""
+msgstr "중지 중…"
 
 msgid "Reloading..."
 msgstr ""
@@ -11018,3 +11018,13 @@ msgstr ""
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+
+#, no-c-format
+msgid "System Tools"
+msgstr "시스템 도구"
+
+msgid "Not available while flying."
+msgstr "비행 중에는 사용할 수 없습니다."
+
+msgid "User"
+msgstr "사용자"
