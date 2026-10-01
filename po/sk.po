@@ -2086,6 +2086,12 @@ msgstr "Zmazat všetky InfoBoxy v tejto súbore?"
 msgid "InfoBox paste set"
 msgstr "Vlož informačné okná"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Neplatný"
 

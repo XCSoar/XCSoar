@@ -2067,6 +2067,12 @@ msgstr "Bu kümedeki tüm Bilgi Kutularını geçersiz kıl?"
 msgid "InfoBox paste set"
 msgstr "Bilgi kutusu yapıştırma kümesi"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Geçersiz"
 

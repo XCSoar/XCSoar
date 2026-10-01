@@ -2045,6 +2045,12 @@ msgstr "是否覆盖此组中的所有InfoBox？"
 msgid "InfoBox paste set"
 msgstr "信息框粘貼"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "無效"
 

@@ -2066,6 +2066,12 @@ msgstr "Xóa tất cả các InfoBox trong bộ này?"
 msgid "InfoBox paste set"
 msgstr "Bộ.InfoBox dán"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Không hợp lệ"
 

@@ -2124,6 +2124,12 @@ msgstr "האם להחליף את כל InfoBoxes בקבוצה זו?"
 msgid "InfoBox paste set"
 msgstr "כותרות תיבות מידע"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "חסר תוקף"
 

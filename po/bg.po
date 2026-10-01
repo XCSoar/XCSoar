@@ -2089,6 +2089,12 @@ msgstr "Да презапиша ли всички инфо-полета в то�
 msgid "InfoBox paste set"
 msgstr "Поставяне на набор инфо-полета"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Невалиден"
 

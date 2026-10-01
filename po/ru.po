@@ -2083,6 +2083,12 @@ msgstr "Заменить все InfoBox в этом наборе?"
 msgid "InfoBox paste set"
 msgstr "Вставить ИнфоБлок"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Неверный"
 

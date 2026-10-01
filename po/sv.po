@@ -2077,6 +2077,12 @@ msgstr "Övervinn alla InfoBox i detta sätt?"
 msgid "InfoBox paste set"
 msgstr "Info-ruta klistra in"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Ogiltig"
 
