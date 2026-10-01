@@ -3,8 +3,11 @@
 
 #pragma once
 
+#include "system/Path.hpp"
+
 #include <string>
 #include <string_view>
+#include <vector>
 
 class NLineReader;
 
@@ -30,6 +33,12 @@ struct Descriptor {
   Confirmation confirmation = Confirmation::REQUIRED;
 };
 
+struct InstalledTool {
+  std::string id;
+  Descriptor descriptor;
+  AllocatedPath executable;
+};
+
 /**
  * Is this a valid descriptor base name?
  *
@@ -49,5 +58,14 @@ IsValidId(std::string_view id) noexcept;
  */
 Descriptor
 ParseDescriptor(NLineReader &reader, std::string_view language = {});
+
+/**
+ * Load usable tools from the configured installation directories.
+ *
+ * Unsafe or malformed entries are ignored and logged.  This function never
+ * throws because it is also used to decide whether the UI page is available.
+ */
+std::vector<InstalledTool>
+LoadInstalled(std::string_view language = {}) noexcept;
 
 } // namespace SystemTools
