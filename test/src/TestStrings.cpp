@@ -1,13 +1,22 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "TestUtil.hpp"
 
+#include <algorithm>
+#include <string>
+
 int main()
 {
-  plan_tests(29);
+  plan_tests(30);
+
+  constexpr char raw[] = "A\0\a\b\v\f\x1b\x7f\t\r\nGrüße €";
+  std::string text{raw, sizeof(raw) - 1};
+  std::erase_if(text, [](char ch) { return !IsTextByte(ch); });
+  ok1(text == "A\t\r\nGrüße €");
 
   // Test StringIsEqual()
 
