@@ -356,6 +356,9 @@ public:
 
   void QuickRedraw() noexcept;
 
+  void SetHudMargins(unsigned left, unsigned top,
+                     unsigned right, unsigned bottom) noexcept override;
+
 #ifdef ENABLE_OPENGL
   /**
    * Re-evaluate idle terrain quantisation; called from the main timer
