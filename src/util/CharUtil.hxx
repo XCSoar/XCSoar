@@ -62,6 +62,14 @@ IsNonPrintableASCII(char ch) noexcept
 	return (unsigned char)ch < 0x20;
 }
 
+/** Allow UTF-8 bytes and ASCII text layout, but no other ASCII controls. */
+constexpr bool
+IsTextByte(char ch) noexcept
+{
+	return ((unsigned char)ch >= 0x20 && ch != 0x7f) ||
+		ch == '\t' || ch == '\n' || ch == '\r';
+}
+
 constexpr bool
 IsDigitASCII(char ch) noexcept
 {
