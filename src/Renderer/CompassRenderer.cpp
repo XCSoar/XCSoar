@@ -17,9 +17,21 @@ void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                       const PixelRect rc) noexcept
 {
-  PixelPoint pos(rc.right - Layout::Scale(19),
-                 Layout::Scale(19) + rc.top);
+  PixelPoint pos(rc.right - int(GetCenterInset()),
+                 int(GetCenterInset()) + rc.top);
   Draw(canvas, screen_angle, pos);
+}
+
+unsigned
+CompassRenderer::GetCenterInset() noexcept
+{
+  return Layout::Scale(19);
+}
+
+unsigned
+CompassRenderer::GetGlyphRadius() noexcept
+{
+  return Layout::Scale(13);
 }
 
 void

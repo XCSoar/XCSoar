@@ -3,11 +3,25 @@
 
 #include "MapScaleRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Look/OverlayLook.hpp"
 #include "util/StaticString.hxx"
 #include "Formatter/UserUnits.hpp"
+
+unsigned
+GetMapScaleBandHeight(const Font &font) noexcept
+{
+  return font.GetCapitalHeight() + Layout::GetTextPadding();
+}
+
+unsigned
+GetMapScaleAndTitleClearance(const Font &font) noexcept
+{
+  return GetMapScaleBandHeight(font)
+    + font.GetHeight() + Layout::GetTextPadding();
+}
 
 void
 RenderMapScale(Canvas &canvas,
@@ -33,8 +47,7 @@ RenderMapScale(Canvas &canvas,
     return;
 
   const int text_padding_x = Layout::GetTextPadding();
-  const int height = font.GetCapitalHeight()
-      + Layout::GetTextPadding();
+  const int height = int(GetMapScaleBandHeight(font));
 
   const int top = rc.bottom - height - 1;
 

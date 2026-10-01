@@ -10,6 +10,7 @@ LIBMAPWINDOW_SOURCES = \
 	$(SRC)/MapWindow/Items/TrafficBuilder.cpp \
 	$(SRC)/MapWindow/Items/WeatherBuilder.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
+	$(SRC)/MapWindow/MapHudLayout.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \

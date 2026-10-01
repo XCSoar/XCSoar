@@ -2,14 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "MapWindow.hpp"
+#include "MapHudLayout.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/BestCruiseArrowRenderer.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
 #include "Renderer/TurnBackMarkerRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
-
-#include <algorithm> // for std::min()
 
 void
 MapWindow::DrawWind(Canvas &canvas, const PixelPoint &Start,
@@ -29,13 +28,13 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const noexcept
   if (!compass_visible)
     return;
 
-  PixelRect compass_rc = rc;
-  compass_rc.right -= std::min(int(top_right_margin),
-                               int(compass_rc.GetWidth()));
+  const auto layout = MapHudLayout::Build(rc, top_right_margin, 0,
+                                          CompassRenderer::GetSlotHeight(),
+                                          0);
 
   CompassRenderer compass_renderer(look);
   compass_renderer.Draw(canvas, render_projection.GetScreenAngle(),
-                        compass_rc);
+                        layout.top_right);
 }
 
 void
