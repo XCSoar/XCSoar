@@ -253,7 +253,8 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   const int banner_height = text_size.height + padding * 2;
   const int banner_width = text_size.width + padding * 2;
   
-  /* Position banner below the logo/title with some spacing */
+  /* Position banner below the logo/title with some spacing.
+     logo_position and title_position already include origin. */
   int banner_y;
   if (orientation == LogoViewOrientation::PORTRAIT) {
     // Below title in portrait mode
@@ -268,12 +269,12 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   }
   
   /* Only draw if banner fits within the visible area */
-  if (banner_y + banner_height <= int(height)) {
+  if (banner_y + banner_height <= rc.bottom) {
     const PixelRect warning_rect{
       origin.x + Center(width, banner_width),
-      origin.y + banner_y,
+      banner_y,
       origin.x + Center(width, banner_width) + banner_width,
-      origin.y + banner_y + banner_height
+      banner_y + banner_height
     };
     
     canvas.DrawFilledRectangle(warning_rect, COLOR_RED);
