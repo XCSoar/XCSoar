@@ -489,7 +489,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Language/Table.cpp \
 	$(SRC)/DataFilePath.cpp \
 	$(SRC)/LocalPath.cpp \
-	$(SRC)/SystemTools.cpp \
 	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ActionInterface.cpp \
@@ -824,11 +823,23 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
 endif
 
-# Selected systemd unit controls for desktop/embedded Linux.
+# Installed system tools and selected systemd unit controls for Linux.
 ifeq ($(TARGET_IS_LINUX)$(TARGET_IS_KOBO)$(TARGET_IS_ANDROID),ynn)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/SystemdConfigPanel.cpp \
 	$(SRC)/Linux/SystemdServiceList.cpp
+
+ifeq ($(USE_POLL_EVENT),y)
+SYSTEM_TOOLS_DIRECTORY ?= /usr/libexec/xcsoar/system-tools
+LOCAL_SYSTEM_TOOLS_DIRECTORY ?= /usr/local/libexec/xcsoar/system-tools
+XCSOAR_CPPFLAGS += \
+	-DSYSTEM_TOOLS_DIRECTORY=\"$(SYSTEM_TOOLS_DIRECTORY)\" \
+	-DLOCAL_SYSTEM_TOOLS_DIRECTORY=\"$(LOCAL_SYSTEM_TOOLS_DIRECTORY)\"
+XCSOAR_SOURCES += \
+	$(SRC)/Dialogs/ProcessDialog.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SystemToolsPanel.cpp \
+	$(SRC)/SystemTools.cpp
+endif
 endif
 
 include $(topdir)/build/net-wifi.mk
