@@ -17,20 +17,33 @@ int
 GetTopGestureClearance() noexcept;
 
 /**
- * Where arrange cards and their text may sit.  The top moves down by
- * #GetTopGestureClearance() so a downward drag is not taken by the
- * notification shade.  The caller keeps its own window full screen
- * when the backdrop must still cover that band.
+ * Where cards and their text may sit.  @p top_on_view is the Y of
+ * @p rc.top in the XCSoar view.  The top moves down only by the part
+ * of the swipe-down band that still covers @p rc, so a dialog already
+ * placed in the safe area is not inset a second time.  The caller
+ * keeps its own window full screen when the backdrop must still cover
+ * that band.
+ */
+[[nodiscard]]
+inline PixelRect
+ContentRectBelowTopGesture(PixelRect rc, int top_on_view) noexcept
+{
+  const int overlap = GetTopGestureClearance() - top_on_view;
+  if (overlap > 0 && rc.bottom - rc.top > overlap)
+    rc.top += overlap;
+
+  return rc;
+}
+
+/**
+ * Like the overload above, for a rectangle already in view
+ * coordinates.
  */
 [[nodiscard]]
 inline PixelRect
 ContentRectBelowTopGesture(PixelRect full) noexcept
 {
-  const int clearance = GetTopGestureClearance();
-  if (clearance > 0 && full.bottom - full.top > clearance)
-    full.top += clearance;
-
-  return full;
+  return ContentRectBelowTopGesture(full, full.top);
 }
 
 } // namespace Android
