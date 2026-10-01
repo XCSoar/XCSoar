@@ -66,6 +66,7 @@ dlgSimulatorPromptShowModal()
      can paint edge to edge.  SimulatorPromptWindow keeps Quit, Fly,
      Simulator and the version string inside the safe area. */
   dialog.Move(main_window.GetClientRect());
+  dialog.SetFillsClient(true);
 
   SimulatorPromptResult result = SPR_QUIT;
   dialog.SetWidget(look, [&](SimulatorPromptWindow::Result r){

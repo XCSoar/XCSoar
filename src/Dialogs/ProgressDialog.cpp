@@ -26,6 +26,8 @@ ProgressDialog::ProgressDialog(SingleWindow &parent,
   :WndForm(parent, dialog_look, parent.GetClientRect(), caption),
    progress(GetClientAreaWindow())
 {
+  SetFillsClient(true);
+
   auto layout_client = [this]() noexcept {
     const PixelRect rc = GetClientAreaWindow().GetClientRect();
     progress.Move(rc);
@@ -37,10 +39,11 @@ ProgressDialog::ProgressDialog(SingleWindow &parent,
 }
 
 void
-ProgressDialog::ReinitialiseLayout(const PixelRect &rc) noexcept
+ProgressDialog::ReinitialiseLayout([[maybe_unused]] const PixelRect &rc) noexcept
 {
-  /* Cover the area available to dialogs when the geometry changes. */
-  Move(rc);
+  /* Stay edge-to-edge on the client; the safe-area rect is only for
+     ordinary dialogs. */
+  Move(GetMainWindow().GetClientRect());
 }
 
 void

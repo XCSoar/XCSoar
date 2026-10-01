@@ -47,6 +47,13 @@ protected:
    */
   bool modeless = false;
 
+  /**
+   * Laid out edge-to-edge on the main window's client area (not only
+   * the safe area).  OnResize keeps that intent instead of inferring
+   * it from the dialog size.
+   */
+  bool fills_client = false;
+
   bool dragging = false;
 
   /** The ClientWindow */
@@ -130,6 +137,20 @@ public:
    */
   [[gnu::pure]]
   bool IsMaximised() const noexcept;
+
+  /**
+   * Does this dialog cover the main window's client area edge to
+   * edge?  Set with #SetFillsClient when the dialog is created that
+   * way (Fly/Simulator, progress).
+   */
+  [[gnu::pure]]
+  bool FillsClient() const noexcept {
+    return fills_client;
+  }
+
+  void SetFillsClient(bool value) noexcept {
+    fills_client = value;
+  }
 
   const DialogLook &GetLook() const {
     return look;
