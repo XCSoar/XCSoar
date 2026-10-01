@@ -18,7 +18,7 @@ enum Controls {
   GPS,
   NumSat,
   Vario,
-  FLARM,
+  FlarmStatus,
   Logger,
   Battery,
   Network,
@@ -79,7 +79,7 @@ SystemStatusPanel::Refresh() noexcept
     Temp.push_back(')');
   }
 
-  SetText(FLARM, Temp);
+  SetText(FlarmStatus, Temp);
 
   SetText(Logger, backend_components->igc_logger != nullptr &&
           backend_components->igc_logger->IsLoggerActive()
