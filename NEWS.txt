@@ -210,6 +210,9 @@ Version 7.46 - not yet released
   - filter only the recently used waypoints in the LU gesture list,
     and add waypoints selected with Goto to it #3207
 * infoboxen
+  - add a Fixed text InfoBox whose title, value and comment are set
+    by tapping it on the map, for labelling a page or as a separator
+    between groups of InfoBoxes #613
   - let each InfoBox set use its own geometry, or inherit the layout
     from Look → Layout #1863
   - add a Ballast InfoBox showing the water ballast on board in litres

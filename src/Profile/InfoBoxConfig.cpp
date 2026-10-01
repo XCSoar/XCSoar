@@ -6,9 +6,12 @@
 #include "Map.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "util/StringFormat.hpp"
+#include "util/TruncateString.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <string_view>
 
 using namespace InfoBoxFactory;
 
@@ -33,6 +36,45 @@ GetV60InfoBoxManagerConfig(const ProfileMap &map, InfoBoxSettings &settings)
       settings.panels[3].contents[i] = (Type)((temp >> 24) & 0xFF);
     }
   }
+}
+
+/**
+ * One profile value per line. An empty line is not written, and a
+ * missing value leaves that line empty.
+ */
+static bool
+FormatTextKey(char *buffer, std::size_t size,
+              unsigned panel, unsigned slot,
+              const char *which) noexcept
+{
+  const int n = StringFormat(buffer, size, "InfoBoxPanel%u%s%u",
+                             panel, which, slot);
+  return n >= 0 && static_cast<std::size_t>(n) < size;
+}
+
+static void
+LoadTextField(const ProfileMap &map, char *key, std::size_t key_size,
+              unsigned panel, unsigned slot, const char *which,
+              StaticString<InfoBoxCustomText::MAX_LENGTH> &dest) noexcept
+{
+  if (!FormatTextKey(key, key_size, panel, slot, which))
+    return;
+
+  const char *value = map.Get(key);
+  if (value != nullptr)
+    CopyTruncateString(dest.data(), dest.capacity(), value);
+}
+
+static void
+SaveTextField(ProfileMap &map, char *key, std::size_t key_size,
+              unsigned panel, unsigned slot, const char *which,
+              const StaticString<InfoBoxCustomText::MAX_LENGTH> &src) noexcept
+{
+  if (!FormatTextKey(key, key_size, panel, slot, which))
+    return;
+
+  if (!src.empty() || map.Exists(key))
+    map.Set(key, src.c_str());
 }
 
 static bool
@@ -163,6 +205,14 @@ Profile::Load(const ProfileMap &map, InfoBoxSettings &settings)
         continue;
 
       GetIBType(map, profileKey, panel.contents[j]);
+
+      InfoBoxCustomText &text = panel.text[j];
+      LoadTextField(map, profileKey, sizeof(profileKey), i, j,
+                    "Title", text.title);
+      LoadTextField(map, profileKey, sizeof(profileKey), i, j,
+                    "Value", text.value);
+      LoadTextField(map, profileKey, sizeof(profileKey), i, j,
+                    "Comment", text.comment);
     }
   }
 }
@@ -190,5 +240,13 @@ Profile::Save(ProfileMap &map,
     const int n = StringFormat(profileKey, sizeof(profileKey), "InfoBoxPanel%uBox%u", index, j);
     if (n >= 0 && static_cast<size_t>(n) < sizeof(profileKey))
       map.Set(profileKey, panel.contents[j]);
+
+    const InfoBoxCustomText &text = panel.text[j];
+    SaveTextField(map, profileKey, sizeof(profileKey), index, j,
+                  "Title", text.title);
+    SaveTextField(map, profileKey, sizeof(profileKey), index, j,
+                  "Value", text.value);
+    SaveTextField(map, profileKey, sizeof(profileKey), index, j,
+                  "Comment", text.comment);
   }
 }

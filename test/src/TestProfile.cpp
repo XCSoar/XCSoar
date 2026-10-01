@@ -8,6 +8,8 @@
 #include "PageSettings.hpp"
 #include "Profile/Map.hpp"
 #include "Profile/WeatherProfile.hpp"
+#include "Profile/InfoBoxConfig.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Weather/Settings.hpp"
 #include "io/FileLineReader.hpp"
 #include "system/FileUtil.hpp"
@@ -353,10 +355,77 @@ TestSkySightProfileCompatibility()
 
 #endif
 
+static void
+TestInfoBoxCustomText()
+{
+  /* a quotation mark or a line break cannot be stored; other
+     characters, including '|', can */
+  {
+    InfoBoxCustomText text{};
+
+    ok1(InfoBoxCustomText::AssignLine(text.title, "a|b\"c\n"));
+    ok1(text.title == "a|bc");
+
+    /* the same text again is not a modification */
+    ok1(!InfoBoxCustomText::AssignLine(text.title, "a|bc"));
+
+    /* a null string clears the line, like an empty one */
+    ok1(InfoBoxCustomText::AssignLine(text.title, nullptr));
+    ok1(text.title.empty());
+  }
+
+  /* each line is its own profile value */
+  {
+    ProfileMap map;
+
+    InfoBoxSettings::Panel panel;
+    panel.Clear();
+    panel.contents[0] = InfoBoxFactory::e_CustomText;
+    panel.text[0].title = "Page";
+    panel.text[0].value = "Cruise";
+    panel.text[0].comment = "one more thing";
+
+    Profile::Save(map, panel, 7);
+
+    ok1(map.Get("InfoBoxPanel7Title0") != nullptr &&
+        StringIsEqual(map.Get("InfoBoxPanel7Title0"), "Page"));
+    ok1(map.Get("InfoBoxPanel7Value0") != nullptr &&
+        StringIsEqual(map.Get("InfoBoxPanel7Value0"), "Cruise"));
+    ok1(map.Get("InfoBoxPanel7Comment0") != nullptr &&
+        StringIsEqual(map.Get("InfoBoxPanel7Comment0"), "one more thing"));
+
+    /* a slot without text does not add a value */
+    ok1(map.Get("InfoBoxPanel7Title1") == nullptr);
+
+    InfoBoxSettings settings;
+    settings.SetDefaults();
+    Profile::Load(map, settings);
+
+    ok1(settings.panels[7].text[0].title == "Page");
+    ok1(settings.panels[7].text[0].value == "Cruise");
+    ok1(settings.panels[7].text[0].comment == "one more thing");
+  }
+
+  /* a missing line stays empty */
+  {
+    ProfileMap map;
+    map.Set("InfoBoxPanel7Title0", "only a title");
+
+    InfoBoxSettings settings;
+    settings.SetDefaults();
+    Profile::Load(map, settings);
+
+    ok1(settings.panels[7].text[0].title == "only a title");
+    ok1(settings.panels[7].text[0].value.empty());
+    ok1(settings.panels[7].text[0].comment.empty());
+  }
+}
+
 int main()
 try {
   plan_tests(50
              + 5 + 5 + 4
+             + 15
 #ifdef HAVE_HTTP
              + 8
 #endif
@@ -367,6 +436,7 @@ try {
   TestReader();
   TestMigration();
   TestWeatherPageCursorRoundTrip();
+  TestInfoBoxCustomText();
   TestSaveBeforeLoad();
   TestLoadThenSave();
   TestFailedLoadThenSave();

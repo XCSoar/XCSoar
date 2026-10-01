@@ -7,7 +7,33 @@
 #include "util/Compiler.h"
 #include "InfoBoxes/Content/Type.hpp"
 
+#include <cstddef>
 #include <cstdint>
+
+/**
+ * The three freely editable lines of an #InfoBoxFactory::e_CustomText
+ * InfoBox.
+ */
+struct InfoBoxCustomText {
+  static constexpr std::size_t MAX_LENGTH = 24;
+
+  StaticString<MAX_LENGTH> title, value, comment;
+
+  void Clear() noexcept {
+    title.clear();
+    value.clear();
+    comment.clear();
+  }
+
+  /**
+   * Copy one edited line. A quotation mark or a line break would make
+   * the profile writer store an empty value, so those are dropped.
+   *
+   * @return true if the line was modified
+   */
+  static bool AssignLine(StaticString<MAX_LENGTH> &dest,
+                         const char *src) noexcept;
+};
 
 struct InfoBoxSettings {
   enum PanelIndex {
@@ -102,6 +128,12 @@ struct InfoBoxSettings {
 
     StaticString<32u> name;
     InfoBoxFactory::Type contents[MAX_CONTENTS];
+
+    /**
+     * The free text of the #InfoBoxFactory::e_CustomText InfoBoxes;
+     * empty for every other type.
+     */
+    InfoBoxCustomText text[MAX_CONTENTS];
 
     /**
      * Geometry override for this panel. The value

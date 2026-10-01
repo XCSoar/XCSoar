@@ -38,7 +38,8 @@ LIBINFOBOX_SOURCES = \
 	$(SRC)/InfoBoxes/Panel/SpeedSimulator.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCReference.cpp \
 	$(SRC)/InfoBoxes/Panel/ATCSetup.cpp \
-	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp
+	$(SRC)/InfoBoxes/Panel/RadioEdit.cpp \
+	$(SRC)/InfoBoxes/Panel/CustomTextEdit.cpp
 
 LIBINFOBOX_DEPENDS = SCREEN
 

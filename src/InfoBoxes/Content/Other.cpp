@@ -5,6 +5,9 @@
 #include "InfoBoxes/Data.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
+#include "UIState.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
+#include "InfoBoxes/Panel/CustomTextEdit.hpp"
 #include "Input/InputEvents.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Math/Util.hpp"
@@ -335,4 +338,27 @@ InfoBoxContentBallast::HandleClick() noexcept
 {
   InputEvents::eventSetup("Basic");
   return true;
+}
+
+void
+InfoBoxContentCustomText::Update(InfoBoxData &data) noexcept
+{
+  const auto &settings = CommonInterface::GetUISettings().info_boxes;
+  const unsigned panel = CommonInterface::GetUIState().panel_index;
+  const InfoBoxCustomText &text = settings.panels[panel].text[GetSlot()];
+
+  data.SetTitle(text.title.c_str());
+  data.SetValue(text.value.c_str());
+  data.SetComment(text.comment.c_str());
+}
+
+static constexpr InfoBoxPanel custom_text_infobox_panels[] = {
+  { NC_("Menu", "Setup"), LoadCustomTextEditPanel },
+  { nullptr, nullptr }
+};
+
+const InfoBoxPanel *
+InfoBoxContentCustomText::GetDialogContent() noexcept
+{
+  return custom_text_infobox_panels;
 }
