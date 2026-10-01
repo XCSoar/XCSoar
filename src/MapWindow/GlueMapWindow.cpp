@@ -217,6 +217,21 @@ GlueMapWindow::PartialRedraw() noexcept
 }
 
 void
+GlueMapWindow::SetHudMargins(unsigned left, unsigned top,
+                             unsigned right, unsigned bottom) noexcept
+{
+  if (left == hud_margin_left && top == hud_margin_top &&
+      right == hud_margin_right && bottom == hud_margin_bottom)
+    return;
+
+  MapWindow::SetHudMargins(left, top, right, bottom);
+
+  /* UpdateProjection() centres on GetHudRect().  Invalidate() alone
+     leaves published_projection on the DrawThread at the old origin. */
+  QuickRedraw();
+}
+
+void
 GlueMapWindow::QuickRedraw() noexcept
 {
   UpdateScreenAngle();

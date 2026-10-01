@@ -238,11 +238,13 @@ public:
 
   /**
    * Keep the HUD elements this far away from the window borders.
+   * The projection origin follows #GetHudRect(); #GlueMapWindow
+   * republishes it when these margins change.
    *
    * @see GetHudRect()
    */
-  void SetHudMargins(unsigned left, unsigned top,
-                          unsigned right, unsigned bottom) noexcept;
+  virtual void SetHudMargins(unsigned left, unsigned top,
+                             unsigned right, unsigned bottom) noexcept;
 
   /**
    * The part of the given rectangle in which the HUD elements
