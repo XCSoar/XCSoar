@@ -111,7 +111,7 @@ public:
     /* Help/Close sit in the map remaining, above a bottom InfoBox
        row; left vs bottom follows the page, not the hole */
     const auto origin = GetPosition().GetTopLeft();
-    PixelRect remaining = InfoBoxManager::layout.remaining;
+    PixelRect remaining = InfoBoxManager::GetGeometryLayout().remaining;
     remaining.Offset(-origin.x, -origin.y);
 
     const PixelRect full = GetClientRect();
@@ -120,7 +120,10 @@ public:
       : buttons.BottomLayout(remaining);
     content.Offset(origin.x, origin.y);
 
-    arrange.SetLayout(InfoBoxManager::layout, content);
+    /* one card per cell of the geometry: an InfoBox which has grown
+       over a collapsed neighbour must not cover that neighbour's card
+       here, or the slot could not be reached any more */
+    arrange.SetLayout(InfoBoxManager::GetGeometryLayout(), content);
     /* the card window fills the overlay; keep Help/Close above it */
     buttons.Raise();
   }

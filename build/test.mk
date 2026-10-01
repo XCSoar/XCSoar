@@ -78,6 +78,7 @@ TEST_NAMES = \
 	test_pressure \
 	test_task \
 	TestInputTransformMode \
+	TestInfoBoxLayout \
 	TestOverwritingRingBuffer \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPosixTimeZone \
@@ -642,6 +643,15 @@ TEST_MATH_TABLES_SOURCES = \
 	$(TEST_SRC_DIR)/TestMathTables.cpp
 TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
+
+TEST_INFOBOX_LAYOUT_SOURCES = \
+	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/TestInfoBoxLayout.cpp
+TEST_INFOBOX_LAYOUT_DEPENDS = UTIL
+$(eval $(call link-program,TestInfoBoxLayout,TEST_INFOBOX_LAYOUT))
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

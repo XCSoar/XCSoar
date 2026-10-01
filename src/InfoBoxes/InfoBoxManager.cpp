@@ -4,6 +4,8 @@
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "InfoBoxes/Border.hpp"
+#include "InfoBoxes/BorderWindow.hpp"
 #include "InfoBoxes/InfoBoxArrange.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "Language/Language.hpp"
@@ -12,13 +14,30 @@
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Current.hpp"
 #include "Interface.hpp"
+#include "Look/InfoBoxLook.hpp"
+#include "MainWindow.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "UIState.hpp"
 
+#include <algorithm> // for std::equal()
 #include <cassert>
+#include <cstdint>
 
 namespace InfoBoxManager {
 
 InfoBoxLayout::Layout layout;
+
+/**
+ * The layout as calculated from the geometry alone, before the
+ * contents of the current panel were applied to it.
+ */
+static InfoBoxLayout::Layout base_layout;
+
+/**
+ * The panel contents which #layout was derived from.
+ */
+static InfoBoxFactory::Type
+layout_contents[InfoBoxSettings::Panel::MAX_CONTENTS];
 
 /**
  * Is this the initial DisplayInfoBox() call?  If yes, then all
@@ -32,10 +51,28 @@ DisplayInfoBox() noexcept;
 static void
 InfoBoxDrawIfDirty() noexcept;
 
+/**
+ * Apply the contents of the given panel to #layout.  Returns true if
+ * the layout was recalculated, which means the InfoBox slots may have
+ * moved.
+ */
+static bool
+UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept;
+
 } // namespace InfoBoxManager
 
 static bool infoboxes_dirty = false;
 static bool infoboxes_hidden = false;
+
+/**
+ * Bit mask of the InfoBox slots which are currently configured as
+ * #InfoBoxFactory::e_Invisible.  Kept up to date by DisplayInfoBox();
+ * a change of this mask means the map window needs to be resized.
+ */
+static uint_least32_t invisible_mask = 0;
+
+static_assert(InfoBoxSettings::Panel::MAX_CONTENTS <= 32,
+              "invisible_mask is too small");
 
 /* True after Create() finishes and until Destroy() runs.  Startup can
    re-enter layout (terrain load, PageActions::Update) while windows
@@ -44,6 +81,219 @@ static bool infoboxes_hidden = false;
 static bool infoboxes_ready = false;
 
 static InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
+
+/**
+ * One per slot; only those of "invisible" slots are ever shown.  They
+ * draw the border lines of a slot whose #InfoBoxWindow is hidden, on
+ * top of the map which shows through.
+ */
+static InfoBoxBorderWindow *
+border_windows[InfoBoxSettings::Panel::MAX_CONTENTS];
+
+const InfoBoxLayout::Layout &
+InfoBoxManager::GetGeometryLayout() noexcept
+{
+  return base_layout;
+}
+
+[[gnu::pure]]
+static const InfoBoxSettings::Panel &
+GetCurrentPanel() noexcept
+{
+  const unsigned panel = CommonInterface::GetUIState().panel_index;
+  return CommonInterface::GetUISettings().info_boxes.panels[panel];
+}
+
+/**
+ * Is the given slot of the current panel configured as
+ * #InfoBoxFactory::e_Invisible?  Such an InfoBox is never shown; the
+ * map window is extended over it instead.
+ */
+[[gnu::pure]]
+static bool
+IsInvisible(const InfoBoxSettings::Panel &panel, unsigned i) noexcept
+{
+  return panel.contents[i] == InfoBoxFactory::e_Invisible;
+}
+
+/**
+ * Recalculate #invisible_mask; returns true if it has changed, which
+ * means the map window needs to be moved.
+ */
+static bool
+UpdateInvisibleMask() noexcept
+{
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
+  uint_least32_t mask = 0;
+  for (unsigned i = 0; i < InfoBoxManager::layout.count; ++i)
+    if (IsInvisible(panel, i))
+      mask |= uint_least32_t(1) << i;
+
+  if (mask == invisible_mask)
+    return false;
+
+  invisible_mask = mask;
+  return true;
+}
+
+/**
+ * Determine which edges of slot @p i touch a visible InfoBox.  Any
+ * other edge faces an "invisible" slot or the map outside the InfoBox
+ * area.  This is purely geometric and therefore works for every
+ * InfoBox geometry without knowing anything about it.
+ */
+[[gnu::pure]]
+static unsigned
+GetVisibleNeighbourEdges(unsigned i) noexcept
+{
+  const auto &layout = InfoBoxManager::layout;
+  const PixelRect &rc = layout.positions[i];
+
+  unsigned edges = 0;
+
+  for (unsigned j = 0; j < layout.count; ++j) {
+    if (j == i || !layout.visible[j] ||
+        (invisible_mask & (uint_least32_t(1) << j)) != 0)
+      /* a collapsed slot keeps its rectangle from the geometry, which
+         its neighbours have grown over, and an "invisible" slot draws
+         no border of its own; neither is an edge */
+      continue;
+
+    const PixelRect &other = layout.positions[j];
+
+    /* do the two rectangles share a section of the edge, or do they
+       just touch in a corner? */
+    const bool overlaps_x = rc.left < other.right && other.left < rc.right;
+    const bool overlaps_y = rc.top < other.bottom && other.top < rc.bottom;
+
+    if (overlaps_x && rc.top == other.bottom)
+      edges |= BORDERTOP;
+    if (overlaps_x && rc.bottom == other.top)
+      edges |= BORDERBOTTOM;
+    if (overlaps_y && rc.left == other.right)
+      edges |= BORDERLEFT;
+    if (overlaps_y && rc.right == other.left)
+      edges |= BORDERRIGHT;
+  }
+
+  return edges;
+}
+
+/**
+ * The border flags the layout assigns to slot @p i.
+ */
+[[gnu::pure]]
+static unsigned
+GetLayoutBorder(unsigned i) noexcept
+{
+  /* these have been adjusted by InfoBoxLayout::ApplyContents() where
+     an InfoBox has grown over a collapsed neighbour */
+  return unsigned(InfoBoxManager::layout.borders[i]);
+}
+
+/**
+ * Calculate the border flags for the #InfoBoxWindow of slot @p i.
+ */
+[[gnu::pure]]
+static unsigned
+CalculateBorder(const InfoBoxSettings &settings,
+                const InfoBoxSettings::Panel &panel, unsigned i) noexcept
+{
+  if (settings.border_style == InfoBoxSettings::BorderStyle::TAB)
+    /* this style draws no borders at all */
+    return 0;
+
+  if (IsInvisible(panel, i))
+    /* the window is hidden; an #InfoBoxBorderWindow draws the edges
+       of this slot */
+    return 0;
+
+  return GetLayoutBorder(i);
+}
+
+/**
+ * Calculate the border flags for the #InfoBoxBorderWindow of slot
+ * @p i: the edges the layout assigns to this slot, but only where the
+ * slot borders a visible InfoBox.
+ *
+ * An edge towards another invisible slot is dropped so that a group of
+ * invisible slots forms one uninterrupted hole, and an edge which
+ * faces the map outside the InfoBox area is dropped as well, because
+ * there the map simply continues.
+ */
+[[gnu::pure]]
+static unsigned
+CalculateSlotBorder(const InfoBoxSettings &settings,
+                    const InfoBoxSettings::Panel &panel, unsigned i) noexcept
+{
+  if (settings.border_style == InfoBoxSettings::BorderStyle::TAB ||
+      !IsInvisible(panel, i))
+    return 0;
+
+  return GetLayoutBorder(i) & GetVisibleNeighbourEdges(i);
+}
+
+/**
+ * Apply CalculateBorder() and CalculateSlotBorder() to all windows,
+ * and show or hide the border windows.  Called when the set of
+ * "invisible" InfoBoxes has changed.
+ */
+static void
+UpdateBorders() noexcept
+{
+  const InfoBoxSettings &settings =
+    CommonInterface::GetUISettings().info_boxes;
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
+  for (unsigned i = 0; i < InfoBoxManager::layout.count; ++i) {
+    if (infoboxes[i] != nullptr)
+      infoboxes[i]->SetBorderKind(CalculateBorder(settings, panel, i));
+
+    if (border_windows[i] != nullptr) {
+      const unsigned border = CalculateSlotBorder(settings, panel, i);
+      border_windows[i]->SetBorderKind(border);
+
+      if (border != 0 && !infoboxes_hidden)
+        border_windows[i]->Show();
+      else
+        border_windows[i]->FastHide();
+    }
+  }
+}
+
+PixelRect
+InfoBoxManager::ExpandOverInvisible(PixelRect rc) noexcept
+{
+  if (invisible_mask == 0)
+    return rc;
+
+  for (unsigned i = 0; i < layout.count; ++i) {
+    if ((invisible_mask & (uint_least32_t(1) << i)) == 0)
+      continue;
+
+    const PixelRect &ib = layout.positions[i];
+    rc.left = std::min(rc.left, ib.left);
+    rc.top = std::min(rc.top, ib.top);
+    rc.right = std::max(rc.right, ib.right);
+    rc.bottom = std::max(rc.bottom, ib.bottom);
+  }
+
+  return rc;
+}
+
+void
+InfoBoxManager::PaintInvisible(Canvas &canvas,
+                               const InfoBoxLook &look) noexcept
+{
+  if (!infoboxes_ready || infoboxes_hidden || invisible_mask == 0)
+    return;
+
+  for (unsigned i = 0; i < layout.count; ++i)
+    if ((invisible_mask & (uint_least32_t(1) << i)) != 0)
+      canvas.DrawFilledRectangle(layout.positions[i],
+                                 look.background_color);
+}
 
 // TODO locking
 void
@@ -62,6 +312,9 @@ InfoBoxManager::Hide() noexcept
   for (unsigned i = 0; i < layout.count; i++) {
     if (infoboxes[i] != nullptr)
       infoboxes[i]->FastHide();
+
+    if (border_windows[i] != nullptr)
+      border_windows[i]->FastHide();
   }
 }
 
@@ -76,12 +329,58 @@ InfoBoxManager::Show() noexcept
   if (!infoboxes_ready)
     return;
 
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
   for (unsigned i = 0; i < layout.count; i++) {
-    if (infoboxes[i] != nullptr)
+    /* "invisible" InfoBoxes stay hidden (the map is drawn there), and
+       so do those which have released their space */
+    if (infoboxes[i] != nullptr && layout.visible[i] &&
+        !IsInvisible(panel, i))
       infoboxes[i]->Show();
   }
 
+  /* ... but their borders are drawn */
+  UpdateBorders();
+
   SetDirty();
+}
+
+bool
+InfoBoxManager::UpdateLayout(const InfoBoxSettings::Panel &panel) noexcept
+{
+  if (std::equal(layout_contents, layout_contents + layout.count,
+                 panel.contents))
+    return false;
+
+  std::copy_n(panel.contents, layout.count, layout_contents);
+
+  layout = base_layout;
+  InfoBoxLayout::ApplyContents(layout, panel);
+
+  for (unsigned i = 0; i < layout.count; ++i) {
+    if (infoboxes[i] == nullptr)
+      continue;
+
+    if (!layout.visible[i]) {
+      infoboxes[i]->Hide();
+      if (border_windows[i] != nullptr)
+        border_windows[i]->FastHide();
+      continue;
+    }
+
+    infoboxes[i]->Move(layout.positions[i]);
+
+    if (border_windows[i] != nullptr)
+      border_windows[i]->Move(layout.positions[i]);
+
+    if (!infoboxes_hidden && !IsInvisible(panel, i))
+      infoboxes[i]->Show();
+  }
+
+  /* the collapsed slots have handed their edges to their neighbours */
+  UpdateBorders();
+
+  return true;
 }
 
 void
@@ -101,6 +400,8 @@ InfoBoxManager::DisplayInfoBox() noexcept
 
   const InfoBoxSettings::Panel &settings =
     CommonInterface::GetUISettings().info_boxes.panels[panel];
+
+  const bool layout_changed = UpdateLayout(settings);
 
   for (unsigned i = 0; i < layout.count; i++) {
     if (infoboxes[i] == nullptr)
@@ -122,11 +423,34 @@ InfoBoxManager::DisplayInfoBox() noexcept
       DisplayTypeLast[i] = DisplayType;
     }
 
+    /* apply the visibility on every pass: Show() may have run while
+       UIState::panel_index still pointed at the previous page, and
+       would then have shown an InfoBox which this page collapses or
+       draws the map over */
+    if (DisplayType == InfoBoxFactory::e_Invisible || !layout.visible[i])
+      infoboxes[i]->FastHide();
+    else if (!infoboxes_hidden)
+      infoboxes[i]->Show();
+
     infoboxes[i]->UpdateContent();
   }
 
   first = false;
   displaying = false;
+
+  const bool mask_changed = UpdateInvisibleMask();
+
+  if (mask_changed)
+    /* the set of "invisible" InfoBoxes has changed: the neighbours
+       must draw the now unpainted shared edges themselves */
+    UpdateBorders();
+
+  if ((mask_changed || (layout_changed && invisible_mask != 0)) &&
+      CommonInterface::main_window != nullptr)
+    /* the map window covers the "invisible" slots: follow both a
+       change of the set and a move of the slots which the new
+       contents of the panel may have caused */
+    CommonInterface::main_window->RelayoutMapArea();
 }
 
 void
@@ -200,12 +524,24 @@ InfoBoxManager::Create(ContainerWindow &parent,
   const InfoBoxSettings &settings =
     CommonInterface::GetUISettings().info_boxes;
 
+  const InfoBoxSettings::Panel &panel = GetCurrentPanel();
+
   infoboxes_ready = false;
   first = true;
+  base_layout = _layout;
   layout = _layout;
+  InfoBoxLayout::ApplyContents(layout, panel);
+  std::copy_n(panel.contents, layout.count, layout_contents);
 
-  for (unsigned i = layout.count; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
+  /* determine the "invisible" slots before the caller queries
+     ExpandOverInvisible() to position the map window */
+  invisible_mask = 0;
+  UpdateInvisibleMask();
+
+  for (unsigned i = layout.count; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i) {
     infoboxes[i] = nullptr;
+    border_windows[i] = nullptr;
+  }
 
   WindowStyle style;
   style.Hide();
@@ -213,17 +549,21 @@ InfoBoxManager::Create(ContainerWindow &parent,
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {
     const PixelRect &rc = layout.positions[i];
-    int Border =
-      settings.border_style == InfoBoxSettings::BorderStyle::TAB
-      ? 0
-      /* layout.geometry is the effective layout, while
-         settings.geometry is the configured layout */
-      : InfoBoxLayout::GetBorder(layout.geometry, layout.landscape, i);
 
     infoboxes[i] = new InfoBoxWindow(parent, rc,
-                                     Border, settings, look,
+                                     CalculateBorder(settings, panel, i),
+                                     settings, look,
                                      i, style);
   }
+
+  /* create the border windows after the InfoBox windows so they end up
+     in front of them; they are shown only for "invisible" slots (by
+     UpdateBorders(), from Show()) */
+  for (unsigned i = layout.count; i-- > 0;)
+    border_windows[i] =
+      new InfoBoxBorderWindow(parent, layout.positions[i],
+                              CalculateSlotBorder(settings, panel, i),
+                              look);
 
   infoboxes_hidden = true;
   infoboxes_ready = true;
@@ -240,6 +580,9 @@ InfoBoxManager::Destroy() noexcept
   for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i) {
     delete infoboxes[i];
     infoboxes[i] = nullptr;
+
+    delete border_windows[i];
+    border_windows[i] = nullptr;
   }
 }
 

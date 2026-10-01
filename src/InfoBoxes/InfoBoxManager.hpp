@@ -4,8 +4,10 @@
 #pragma once
 
 #include "InfoBoxSettings.hpp"
+#include "ui/dim/Rect.hpp"
 
 struct InfoBoxLook;
+class Canvas;
 class ContainerWindow;
 class InfoBoxWindow;
 
@@ -15,6 +17,41 @@ namespace InfoBoxManager
 {
 
 extern InfoBoxLayout::Layout layout;
+
+/**
+ * The layout as the geometry alone defines it, before the contents of
+ * the current panel were applied: every slot keeps the rectangle of
+ * its own cell, even where an InfoBox has grown over a collapsed
+ * neighbour.  #InfoBoxArrange offers one card per cell and therefore
+ * uses this instead of #layout.
+ */
+[[gnu::pure]]
+const InfoBoxLayout::Layout &
+GetGeometryLayout() noexcept;
+
+/**
+ * Expand the given map area rectangle so that it also covers all
+ * InfoBox slots of the current panel which are configured as
+ * #InfoBoxFactory::e_Invisible.  Those InfoBox windows are never
+ * shown, and because the map window is kept at the bottom of the
+ * z-order, the map becomes visible in their place.
+ *
+ * Returns @p rc unmodified if there is no invisible InfoBox.
+ */
+[[gnu::pure]] PixelRect
+ExpandOverInvisible(PixelRect rc) noexcept;
+
+/**
+ * Fill the area of all "invisible" InfoBox slots with the InfoBox
+ * background colour.
+ *
+ * Their own window is hidden and usually the map window shows through,
+ * but a page which replaces the map by a #Widget leaves this area to
+ * no window at all: it would keep whatever pixels happened to be there
+ * before.  #MainWindow::OnPaint() calls this for those pages.
+ */
+void
+PaintInvisible(Canvas &canvas, const InfoBoxLook &look) noexcept;
 
 void
 ProcessTimer() noexcept;
