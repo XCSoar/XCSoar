@@ -651,6 +651,11 @@ PageActions::LoadLayout(const PageLayout &layout)
   ActionInterface::UpdateDisplayMode();
   ActionInterface::SendUIState(false);
   main_window.ScheduleRefreshInfoBoxes();
+
+  /* SetFullScreen() skips this when the page was already fullscreen.
+     Pan still marks a special page, and the overlay buttons stop
+     drawing, so the north arrow's clearance has to be refreshed. */
+  main_window.UpdateMapOverlayButtonLayout();
 }
 
 void
