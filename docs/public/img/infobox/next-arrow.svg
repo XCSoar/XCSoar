@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Next waypoint arrow">
+  <g transform="rotate(20 60 25)">
+    <path d="M60 0 78 18 68 18 68 46 52 46 52 18 42 18Z" fill="#ff00ff" fill-opacity="0.63" stroke="#ff00ff" stroke-width="1"/>
+  </g>
+</svg>

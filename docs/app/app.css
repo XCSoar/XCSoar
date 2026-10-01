@@ -1,0 +1,38 @@
+/* XCSoar blue (#3f76a8, from Data/graphics/logo.svg) as the primary colour.
+   Nuxt UI expects the full 50-950 ramp; "static" keeps the variables in
+   the bundle even though only the primary aliases reference them. */
+@theme static {
+    --color-xcsoar-50: #f3f8fc;
+    --color-xcsoar-100: #e3eef7;
+    --color-xcsoar-200: #c8dcef;
+    --color-xcsoar-300: #9cc1e3;
+    --color-xcsoar-400: #609cd2;
+    --color-xcsoar-500: #3f76a8;
+    --color-xcsoar-600: #35638d;
+    --color-xcsoar-700: #2b5173;
+    --color-xcsoar-800: #23415d;
+    --color-xcsoar-900: #1c344a;
+    --color-xcsoar-950: #111f2d;
+}
+
+/* The licence page shows COPYING verbatim, as one box of paragraphs; see
+   modules/page-meta.ts. The prose code block cannot be used for it, it
+   would print as a single unbreakable element. */
+.license {
+    @apply my-5 border border-muted bg-muted rounded-md px-4 py-3 overflow-x-auto;
+}
+
+.license-paragraph {
+    @apply font-mono text-sm/6 whitespace-pre-wrap wrap-break-word;
+}
+
+.license-paragraph + .license-paragraph {
+    @apply mt-[1lh];
+}
+
+/* Field groups whose names are identifiers from the source (build macros,
+   XML attributes, file names): draw the name like inline code, the way
+   backticks would in running text. */
+.name-code > div > div > span:first-child {
+    @apply inline-block rounded-md border border-muted bg-muted px-1.5 py-0.5 font-mono text-sm font-medium text-highlighted;
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Artificial horizon">
+  <path d="M0 40.3 0 0 120 0 120 14.8Z" fill="#139cff"/>
+  <path d="M0 40.3 0 50 120 50 120 14.8Z" fill="#78512a"/>
+  <path d="M0 40.3 120 14.8" stroke="#ffffff" stroke-width="1"/>
+  <path d="M79.2 25H62.4M40.8 25H57.6M62.4 27.4V25M57.6 27.4V25" stroke="#f2f219" stroke-width="1.5"/>
+  <circle cx="60" cy="25" r="1.2" fill="#f2f219"/>
+</svg>

@@ -1,7 +1,8 @@
 ---
 description: >-
   When writing or reviewing code that touches layers, threads, blackboards,
-  devices, or HTTP, reject changes that violate doc/architecture.rst.
+  devices, or HTTP, reject changes that violate
+  docs/content/en/5.dev/06.architecture.md.
 globs:
   - "**/*.cpp"
   - "**/*.hpp"
@@ -13,8 +14,9 @@ alwaysApply: false
 
 # Review: follows architecture
 
-Read `doc/architecture.rst` before judging layer, thread, blackboard,
-device, or HTTP changes. Do not invent a parallel architecture.
+Read `docs/content/en/5.dev/06.architecture.md` before judging layer,
+thread, blackboard, device, or HTTP changes. Do not invent a parallel
+architecture.
 
 ## Layers
 

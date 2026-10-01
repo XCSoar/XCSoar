@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Wind arrow">
+  <g transform="rotate(250 60 25)">
+    <path d="M60 48.1 46.8 1.9 60 15.1 73.2 1.9Z" fill="#808080" fill-opacity="0.63" stroke="#404040" stroke-width="1"/>
+  </g>
+</svg>

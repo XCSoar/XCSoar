@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Thermal assistant">
+  <circle cx="60" cy="25" r="12.5" fill="none" stroke="#b0b0b0" stroke-width="1"/>
+  <circle cx="60" cy="25" r="25" fill="none" stroke="#b0b0b0" stroke-width="1" stroke-dasharray="19 13"/>
+  <path d="M63 9C73 9 80 16 79 25 78 33 70 35 63 33 57 31 55 28 55 24 55 15 57 9 63 9Z" fill="#ccccff" fill-opacity="0.5" stroke="#0000ff" stroke-width="1"/>
+  <path d="M56.3 24H46.3M51.3 22V28M53.3 27H49.3" stroke="#000000" stroke-width="1"/>
+</svg>

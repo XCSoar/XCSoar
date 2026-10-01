@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 50" role="img" aria-label="Netto vario trace">
+  <defs>
+    <path id="trace" d="M2 25 2 27C16 27 16 11 30 11 44 11 44 29 58 29 72 29 72 10 86 10 100 10 100 16 114 16L114 25Z"/>
+    <clipPath id="lift"><rect x="0" y="0" width="120" height="25"/></clipPath>
+    <clipPath id="sink"><rect x="0" y="25" width="120" height="25"/></clipPath>
+  </defs>
+  <use href="#trace" fill="#199403" clip-path="url(#lift)"/>
+  <use href="#trace" fill="#a3690d" clip-path="url(#sink)"/>
+  <path d="M2 25H114" stroke="#808080" stroke-width="1"/>
+</svg>
