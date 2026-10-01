@@ -122,6 +122,15 @@ Version 7.46 - not yet released
   - show a page indicator with one dot per configured screen page at
     the bottom of the map for two seconds after switching pages; the
     filled dot marks the current page
+  - keep overlay zoom with the menu/QuickMenu buttons top-right, keep
+    the north arrow clear of those buttons and close that gap when pan
+    hides them, keep the pan elevation and coordinates below that arrow
+    and up at the HUD corner when it is hidden, and draw GPS status
+    above the map scale / title line
+  - keep the map title (Simulator, PAN, replay and the page name) with
+    the map scale, in the HUD
+  - inset the map overlays by the same margin as the menu, QuickMenu
+    and zoom buttons
 * airspace
   - keep airspace altitude labels readable when they would overlap #771
   - fill airspaces with a transparent colour; hatch patterns and the
@@ -457,15 +466,6 @@ Version 7.45 - 2026-08-15
     once close to a list value
   - add an optional map overlay QuickMenu button (Config → Look →
     Layout), on by default when a touch screen is detected #2610
-  - keep overlay zoom with the menu/QuickMenu buttons top-right, keep
-    the north arrow clear of those buttons and close that gap when pan
-    hides them, keep the pan elevation and coordinates below that arrow
-    and up at the HUD corner when it is hidden, and draw GPS status
-    above the map scale / title line
-  - keep the map title (Simulator, PAN, replay and the page name) with
-    the map scale, in the HUD
-  - inset the map overlays by the same margin as the menu, QuickMenu
-    and zoom buttons
   - swap map overlay sides: vario bar on the left, final glide bar on
     the right #1210
   - show replay speed on the map scale overlay (e.g. REPLAY 2x) #2281
