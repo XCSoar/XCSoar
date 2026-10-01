@@ -222,18 +222,7 @@ InfoBoxArrangeWindow::GetFloatingRect() const noexcept
      up and grows a little */
   rc.Grow(GetDragLift() - (int)look.preview_padding);
 
-  /* stay on the parent, including Help/Close; the floating card
-     paints over those buttons */
-  PixelRect bounds = GetLayoutBounds();
-  if (const auto *parent = GetParent()) {
-    PixelRect parent_rc = parent->GetClientRect();
-    parent_rc.Offset(GetMapOrigin().x, GetMapOrigin().y);
-    bounds = parent_rc;
-  }
-  rc.left = std::max(rc.left, bounds.left);
-  rc.top = std::max(rc.top, bounds.top);
-  rc.right = std::min(rc.right, bounds.right);
-  rc.bottom = std::min(rc.bottom, bounds.bottom);
+  /* the card keeps its size at the screen edge; the window clips it */
   return rc;
 }
 
@@ -332,14 +321,6 @@ InfoBoxArrangeWindow::ToLayoutPoint(PixelPoint local) const noexcept
     if (const auto *parent = GetParent())
       p = parent->ToParentCoordinates(p);
   return p;
-}
-
-PixelRect
-InfoBoxArrangeWindow::GetLayoutBounds() const noexcept
-{
-  PixelRect rc = GetPosition();
-  rc.Offset(GetMapOrigin().x, GetMapOrigin().y);
-  return rc;
 }
 
 bool
