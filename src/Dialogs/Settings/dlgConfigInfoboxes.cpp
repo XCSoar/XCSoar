@@ -101,18 +101,35 @@ private:
       paste_button->SetEnabled(clipboard_size > 0);
   }
 
+#ifdef ANDROID
   /**
-   * Where the cards and the description are laid out.  On Android
-   * this starts below the system swipe-down band; the arrange
-   * window still fills @p rc so the dialog backdrop covers that
-   * band.
+   * Y of @p local_top in the XCSoar view.  @p origin is the window
+   * @p local_top is relative to.
    */
   [[nodiscard]]
-  static PixelRect GetContentRect(PixelRect full) noexcept {
+  static int TopOnView(const Window &origin, int local_top) noexcept {
+    int y = local_top;
+    for (const Window *window = &origin;
+         window->GetParent() != nullptr;
+         window = window->GetParent())
+      y += window->GetPosition().top;
+    return y;
+  }
+#endif
+
+  /**
+   * Where the cards and the description are laid out.  On Android
+   * this drops only the part of the swipe-down band that still
+   * covers this dialog.  The dialog is already in the safe area, so
+   * a band that ends at the status bar does not move the cards.
+   */
+  [[nodiscard]]
+  PixelRect GetContentRect(PixelRect rc) noexcept {
 #ifdef ANDROID
-    return Android::ContentRectBelowTopGesture(full);
+    return Android::ContentRectBelowTopGesture(rc,
+      TopOnView(dialog.GetClientAreaWindow(), rc.top));
 #else
-    return full;
+    return rc;
 #endif
   }
 
