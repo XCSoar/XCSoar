@@ -320,10 +320,6 @@ private:
   [[gnu::pure]]
   PixelPoint ToLayoutPoint(PixelPoint local) const noexcept;
 
-  /** This window's rectangle in layout coordinates. */
-  [[gnu::pure]]
-  PixelRect GetLayoutBounds() const noexcept;
-
   /**
    * Is this cursor step toward the Help/Close (or dialog) buttons?
    * Those sit below the cards on a portrait page and to the left on
