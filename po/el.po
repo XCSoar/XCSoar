@@ -2092,6 +2092,12 @@ msgstr "Επιτρέψτε την κατασκευή όλων των InfoBox σ�
 msgid "InfoBox paste set"
 msgstr "Σύνολο InfoBox πάστες"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Αριθμητικά λάθη"
 

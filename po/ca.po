@@ -2086,6 +2086,12 @@ msgstr "Sobrescriure tots els InfoBoxes d'aquest conjunt?"
 msgid "InfoBox paste set"
 msgstr "Pegar conjunt d'InfoBox"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "ID de competició"
 

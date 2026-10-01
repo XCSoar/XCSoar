@@ -2082,6 +2082,12 @@ msgstr "Sobrescrever todos os InfoBoxes neste conjunto?"
 msgid "InfoBox paste set"
 msgstr "Colar InfoBox"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Inválido"
 

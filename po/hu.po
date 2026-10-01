@@ -2077,6 +2077,12 @@ msgstr "Íme az ezenkívül töltött információk?"
 msgid "InfoBox paste set"
 msgstr "InfóDoboz beillesztése"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Érvénytelen"
 

@@ -2079,6 +2079,12 @@ msgstr "Zameni vse informacijske plošče v tej zbirki?"
 msgid "InfoBox paste set"
 msgstr "Informacijska plošča prilepi zbirko"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "Neveljaven"
 

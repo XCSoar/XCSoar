@@ -2048,6 +2048,12 @@ msgstr "ఈ శాఖల్లోని సమాచార బ్యాక్స
 msgid "InfoBox paste set"
 msgstr "సమాచార బ్యాక్స్‌ కొనైపెట్‌ని తిరిగి చేరుతో"
 
+msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
+msgstr ""
+
+msgid "Inherit from global settings"
+msgstr ""
+
 msgid "Invalid"
 msgstr "అసలూకూరు"
 
