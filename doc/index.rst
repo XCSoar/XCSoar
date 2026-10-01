@@ -20,6 +20,7 @@ XCSoar
    task_file
    checklist
    debugging
+   system_tools
    test_debug_utilities
    git_tips
 

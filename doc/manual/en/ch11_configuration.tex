@@ -1195,6 +1195,47 @@ Set the local time offset with respect to UTC.
 
 
 %%%%%%%%%%%%%%%%%%
+\section{Setup / System Tools}
+
+On supported Linux versions, this page shows installed maintenance tools,
+their origin and a short description.  It is hidden when no supported tools
+are available and is unavailable in SDL versions.  Tools cannot start while
+flying.
+
+Read the preparation instructions, then press \button{Start} or
+\button{Back}.  Harmless information reports may start directly.
+Output remains visible with \emph{Complete} or \emph{Failed} when finished.
+Nonprinting controls are removed; line breaks and tabs are kept.
+Cancelling allows the job and its child processes ten seconds to clean up
+before sending a forced-stop request and returning to XCSoar, even if the
+job remains blocked by the system.  Unread output may then be discarded.
+For exclusive tools such as touchscreen
+calibration, XCSoar saves its state, closes, and restarts with the result.
+These tools require support from the flight computer's system image.
+
+Install personal commands in \texttt{tools} below the active data folder.
+Pair \texttt{system-info.tool} with either \texttt{system-info} or
+\texttt{system-info.sh}; if both executables exist, the command is hidden.
+Scripts need an interpreter line (for example \texttt{\#!/bin/sh}) and
+executable permissions.  A minimal descriptor for an information report is:
+\begin{verbatim}
+name=Storage information
+description=Show available disk space
+instructions=This command does not change settings.
+mode=job
+confirmation=none
+\end{verbatim}
+Use \texttt{confirmation=none} only for harmless information reports.
+The folder and files must belong to XCSoar's user, without symlinks or world
+write access.  Group write is allowed for XCSoar's effective group; its
+members are trusted to modify commands.  Parent folders must also prevent
+replacement by users outside that group.  Trusted personal commands override
+system tools with the same ID; an overflowing personal catalogue is ignored.
+Commands run as XCSoar's user, including root if applicable, and must not
+have setuid/setgid bits.  Install only commands you trust.  Data backups
+preserve executable permissions; review restored commands before running them.
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Configure Plane}
 
