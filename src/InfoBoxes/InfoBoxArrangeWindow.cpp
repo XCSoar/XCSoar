@@ -629,6 +629,9 @@ void
 InfoBoxArrangeWindow::Exchange(unsigned a, unsigned b) noexcept
 {
   std::swap(panel->contents[a], panel->contents[b]);
+  /* the free text belongs to the slot, not to the type, so it has to
+     follow its InfoBox */
+  std::swap(panel->text[a], panel->text[b]);
   std::swap(card_number[a], card_number[b]);
   OnArrangeModified();
 }
