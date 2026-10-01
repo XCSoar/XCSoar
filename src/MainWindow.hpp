@@ -381,8 +381,6 @@ private:
    */
   void LayoutHudElements() noexcept;
 
-  void UpdateMapOverlayButtonLayout() noexcept;
-
   /**
    * Adjust the flarm radar position
    *
@@ -412,6 +410,12 @@ public:
    * UISettings, then update their positions.
    */
   void ReinitialiseMapOverlayButtons() noexcept;
+
+  /**
+   * Show or hide the map overlay buttons for the current page and
+   * keep the north arrow's clearance in step with them.
+   */
+  void UpdateMapOverlayButtonLayout() noexcept;
 
   /**
    * Called by XCSoarInterface::Startup() after startup has been

@@ -489,9 +489,11 @@ MainWindow::UpdateMapOverlayButtonLayout() noexcept
     widget == nullptr && map != nullptr &&
     PageActions::AllowMapOverlayButtons();
 
-  /* overlay buttons follow the same stretch edges as the InfoBoxes */
+  /* the HUD rectangle: clear of the InfoBoxes, the top and bottom
+     areas, and the system UI.  The same area as the compass and the
+     gesture label */
   const PixelRect button_rc = overlay_buttons_active
-    ? map->GetPosition().Intersection(GetInfoBoxAreaRect())
+    ? map->GetPosition().Intersection(GetHudRect())
     : PixelRect{};
 
   if (show_menu_button != nullptr) {
