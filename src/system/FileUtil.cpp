@@ -4,6 +4,7 @@
 #include "FileUtil.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
+#include "util/ScopeExit.hxx"
 #include "Compatibility/path.h"
 
 #ifdef _WIN32
@@ -231,6 +232,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
   if (dir == nullptr)
     return false;
 
+  AtScopeExit(dir) { closedir(dir); };
+
   char FileName[MAX_PATH];
   strcpy(FileName, sPath.c_str());
   size_t FileNameLength = strlen(FileName);
@@ -269,7 +272,6 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
     }
   }
 
-  closedir(dir);
 #else /* !HAVE_POSIX */
   std::string dir;
   if (sPath != nullptr)

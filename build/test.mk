@@ -206,7 +206,8 @@ $(eval $(call link-program,TestUriUtil,TEST_URI_UTIL))
 TEST_SYSTEM_TOOLS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestSystemTools.cpp \
-	$(SRC)/SystemTools.cpp
+	$(SRC)/SystemTools.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp
 TEST_SYSTEM_TOOLS_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestSystemTools,TEST_SYSTEM_TOOLS))
 
