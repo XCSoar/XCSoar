@@ -1,8 +1,8 @@
 Version 7.46 - not yet released
 * android
-  - on the InfoBox arrange page and the InfoBox Sets editor, lay
-    the cards, the text and the buttons below the area that opens
-    the notification shade
+  - lay the cards, the text and the buttons on the InfoBox arrange
+    page and the InfoBox Sets editor below the area that opens the
+    notification shade
   - target Android 16 so Google Play still accepts updates #2874
   - use built-in IMU and log to NMEA logger if enabled
   - hide Engine Type on BLE sensors that are not an engine sensor
@@ -261,6 +261,8 @@ Version 7.46 - not yet released
   - fix quitting from the Fly / Simulator screen with -profile=
     emptying the profile file #3190
 * documentation
+  - document that on Android the InfoBox arrange page and the
+    InfoBox Sets editor keep content below the notification shade
   - document that a BlueFly Vario on Android uses BLE port, not BLE
     sensor
   - document that Engine Type is only shown for engine-sensor BLE
