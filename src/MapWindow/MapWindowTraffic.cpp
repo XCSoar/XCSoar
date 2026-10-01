@@ -16,7 +16,8 @@
 
 static void
 DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
-                 const TrafficLook &look, bool fading,
+                 const TrafficLook &look, TrafficSymbol symbol,
+                 bool fading,
                  const PixelPoint aircraft_pos,
                  const FlarmTraffic &traffic,
                  DisplayOnlineTrafficMapMode online_mode) noexcept
@@ -68,7 +69,7 @@ DrawFlarmTraffic(Canvas &canvas, const WindowProjection &projection,
 
   auto color = FlarmFriends::GetFriendColor(traffic.id);
 
-  TrafficRenderer::Draw(canvas, look, fading, traffic,
+  TrafficRenderer::Draw(canvas, look, symbol, fading, traffic,
                         traffic.track - projection.GetScreenAngle(),
                         color, sc);
 }
@@ -100,6 +101,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   const DisplayOnlineTrafficMapMode online_mode =
     GetMapSettings().online_traffic_map_mode;
+  const TrafficSymbol symbol = GetMapSettings().traffic_symbol;
 
   // Circle through the traffic targets
   for (const auto &traffic : flarm.list) {
@@ -124,7 +126,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     if (traffic.absolute_location ||
         (traffic.relative_north != 0 && traffic.relative_east != 0))
-      DrawFlarmTraffic(canvas, projection, traffic_look, false,
+      DrawFlarmTraffic(canvas, projection, traffic_look, symbol, false,
                        aircraft_pos, traffic, online_mode);
   }
 
@@ -138,7 +140,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
       if (traffic.absolute_location ||
           (traffic.relative_north != 0 && traffic.relative_east != 0))
-        DrawFlarmTraffic(canvas, projection, traffic_look, true,
+        DrawFlarmTraffic(canvas, projection, traffic_look, symbol, true,
                          aircraft_pos, traffic, online_mode);
     }
   }
@@ -227,7 +229,8 @@ MapWindow::DrawGLinkTraffic([[maybe_unused]] Canvas &canvas) const noexcept
       TextInBox(canvas, label_alt, sc_alt, mode, GetClientRect());
     }
 
-    TrafficRenderer::Draw(canvas, traffic_look, traf,
+    TrafficRenderer::Draw(canvas, traffic_look,
+                          GetMapSettings().traffic_symbol, traf,
                           traf.track - projection.GetScreenAngle(), sc);
   }
 #endif

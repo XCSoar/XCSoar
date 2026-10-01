@@ -338,13 +338,20 @@ to locate the traffic.
 
 \subsection*{FLARM map display}
 
-The FLARM targets on the map are drawn as red coloured 
-arrow heads to indicate the direction the FLARM target is
-heading, as well as the collision risk\config{flarm-on-map}.  Note that these
-arrow heads are oriented according to the display orientation.  For example, if 
-the orientation is track-up, then the arrows show the relative track bearing of
-the target to the aircraft.  If the orientation is north-up, then the arrows show the
-absolute track bearing of the target.
+The FLARM targets on the map are drawn as symbols that indicate the
+direction the FLARM target is heading, as well as the collision
+risk\config{flarm-on-map}.  By default the symbol shows the aircraft
+type reported by FLARM, ADS-B or OGN: a glider, a powered aircraft, a
+helicopter, a hang glider, a paraglider, a balloon and so on.  Targets
+of unknown type get a generic chevron symbol.  The classic arrow head
+for all targets can be selected instead\config{traffic-symbol}.
+Note that these symbols are oriented according to the display
+orientation.  For example, if the orientation is track-up, then the
+symbols show the relative track bearing of the target to the aircraft.
+If the orientation is north-up, then the symbols show the absolute
+track bearing of the target.  In the map item list opened with
+`What's here?' the symbols are always drawn north-up, so the course of
+each target can be read directly from its symbol.
 \sketch{figures/flarmmap.png}
 
 Display on the map FLARM of aircraft registration or pilot name is
@@ -360,7 +367,7 @@ To remedy this situation, when FLARM traffic is received, XCSoar shows a
 small radar-style view of the FLARM
 traffic from the perspective of the aircraft.  The FLARM traffic is
 displayed in identical style, except that the threatening traffic is emphasized 
-with one or two red circles around the arrow head icon.  The display corner used 
+with one or two red circles around the traffic symbol.  The display corner used
 for the small radar view can be configured\config{flarmradar-place}.
 
 This FLARM display is oriented track-up and a small glider icon

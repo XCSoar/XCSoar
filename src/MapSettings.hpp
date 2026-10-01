@@ -24,6 +24,16 @@ enum class AircraftSymbol : uint8_t {
   PARAGLIDER,
 };
 
+/**
+ * How FLARM / ADS-B / online traffic is drawn on the map and radar.
+ */
+enum class TrafficSymbol : uint8_t {
+  /** the classic arrow head for every target */
+  ARROW,
+  /** a glyph per FLARM aircraft type, a generic one for unknown types */
+  AIRCRAFT_TYPE,
+};
+
 enum class MapOrientation : uint8_t {
   TRACK_UP,
   NORTH_UP,
@@ -146,6 +156,9 @@ struct MapSettings {
   MapShiftBias map_shift_bias;
 
   bool show_flarm_on_map;
+
+  /** The symbol style of traffic on the map, radar and in lists */
+  TrafficSymbol traffic_symbol;
 
   /**
    * This is an inverted copy of TrafficSettings::enable_gauge.  The

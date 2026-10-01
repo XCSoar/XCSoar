@@ -4,11 +4,14 @@
 #include "TrafficLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Resources.hpp"
+#include "FLARM/Traffic.hpp"
 
 constexpr Color TrafficLook::team_color_green;
 constexpr Color TrafficLook::team_color_magenta;
 constexpr Color TrafficLook::team_color_blue;
 constexpr Color TrafficLook::team_color_yellow;
+constexpr Color TrafficLook::symbol_glyph_color;
+constexpr Color TrafficLook::symbol_halo_color;
 
 void
 TrafficLook::Initialise(const Font &_font)
@@ -31,7 +34,57 @@ TrafficLook::Initialise(const Font &_font)
   team_pen_yellow.Create(width, team_color_yellow);
   team_pen_magenta.Create(width, team_color_magenta);
 
+  symbol_border_pen.Create(Layout::ScalePenWidth(1), symbol_glyph_color);
+
   teammate_icon.LoadResource(IDB_TEAMMATE_POS_ALL);
 
   font = &_font;
+}
+
+Color
+TrafficLook::GetBodyColor(const FlarmTraffic &traffic) const noexcept
+{
+  switch (traffic.alarm_level) {
+  case FlarmTraffic::AlarmType::LOW:
+  case FlarmTraffic::AlarmType::INFO_ALERT:
+    return warning_color;
+
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
+    return alarm_color;
+
+  case FlarmTraffic::AlarmType::NONE:
+    break;
+  }
+
+  if (traffic.relative_altitude > (const RoughAltitude)50)
+    return safe_above_color;
+  else if (traffic.relative_altitude > (const RoughAltitude)-50)
+    return warning_in_altitude_range_color;
+  else
+    return safe_below_color;
+}
+
+const Brush &
+TrafficLook::GetBodyBrush(const FlarmTraffic &traffic) const noexcept
+{
+  switch (traffic.alarm_level) {
+  case FlarmTraffic::AlarmType::LOW:
+  case FlarmTraffic::AlarmType::INFO_ALERT:
+    return warning_brush;
+
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
+    return alarm_brush;
+
+  case FlarmTraffic::AlarmType::NONE:
+    break;
+  }
+
+  if (traffic.relative_altitude > (const RoughAltitude)50)
+    return safe_above_brush;
+  else if (traffic.relative_altitude > (const RoughAltitude)-50)
+    return warning_in_altitude_range_brush;
+  else
+    return safe_below_brush;
 }

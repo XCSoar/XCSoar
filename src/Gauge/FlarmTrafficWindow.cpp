@@ -12,6 +12,8 @@
 #include "Language/Language.hpp"
 #include "util/Macros.hpp"
 #include "Look/FlarmTrafficLook.hpp"
+#include "Renderer/TrafficRenderer.hpp"
+#include "MapSettings.hpp"
 #include "Interface.hpp"
 
 #include <algorithm>
@@ -42,6 +44,14 @@ FlarmTrafficWindow::RadarTargetRingRadius(unsigned index,
     ? TARGET_RING_PERMILLE
     : TARGET_RING_OUTER_PERMILLE;
   return ScaleRadarPermille(radar_radius, permille);
+}
+
+unsigned
+FlarmTrafficWindow::RadarSymbolSize(unsigned icon_size) noexcept
+{
+  /* the glyph box is smaller than the arrow slot so that the alarm
+     rings (TARGET_RING_PERMILLE) still enclose it */
+  return std::max(icon_size / 2, 1u);
 }
 
 int
@@ -366,6 +376,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   const Color *text_color;
   const Pen *target_pen, *circle_pen;
   const Brush *target_brush = nullptr, *arrow_brush;
+  /* body and glyph colours for the aircraft-type symbol; the glyph is
+     drawn in the default colour except for passive targets */
+  const Color *glyph_color = &look.default_color;
+  const Color *target_brush_color = nullptr;
   unsigned circles = 0;
 
   // Set the arrow color depending on alarm level
@@ -375,6 +389,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     text_color = &look.default_color;
     target_pen = circle_pen = &look.warning_pen;
     target_brush = &look.warning_brush;
+    target_brush_color = &look.warning_color;
     arrow_brush = &look.default_brush;
     circles = 1;
     break;
@@ -383,6 +398,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     text_color = &look.default_color;
     target_pen = circle_pen = &look.alarm_pen;
     target_brush = &look.alarm_brush;
+    target_brush_color = &look.alarm_color;
     arrow_brush = &look.default_brush;
     circles = 2;
     break;
@@ -391,6 +407,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     if (WarningMode()) {
       text_color = &look.passive_color;
       target_pen = &look.passive_pen;
+      glyph_color = &look.passive_color;
       arrow_brush = &look.passive_brush;
     } else {
       // Search for team color
@@ -411,10 +428,13 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
       if (traffic.relative_altitude > (const RoughAltitude)50) {
         target_brush = &look.safe_above_brush;
+        target_brush_color = &look.safe_above_color;
       } else if (traffic.relative_altitude > (const RoughAltitude)-50) {
         target_brush = &look.warning_in_altitude_range_brush;
+        target_brush_color = &look.warning_in_altitude_range_color;
       } else {
         target_brush = &look.safe_below_brush;
+        target_brush_color = &look.safe_below_color;
       }
 
       if (!small && static_cast<unsigned> (selection) == i)
@@ -456,15 +476,17 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   }
 
   // Rotate and shift the arrow
-  PolygonRotateShift(Arrow, sc[i],
-                     traffic.track - (enable_north_up ?
-                                      Angle::Zero() : heading),
+  const Angle symbol_angle =
+    traffic.track - (enable_north_up ? Angle::Zero() : heading);
+  PolygonRotateShift(Arrow, sc[i], symbol_angle,
                      RadarArrowScale(small, radar_renderer.GetRadius()));
 
   // Select pen and brush
   if (target_brush == nullptr) {
     target_brush = &look.passive_brush;
+    target_brush_color = &look.passive_color;
     target_pen = &look.passive_pen;
+    glyph_color = &look.passive_color;
     text_color = &look.passive_color;
   }
   canvas.Select(*target_pen);
@@ -479,6 +501,19 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     // No position targets - Paint the dot
     PaintNoPositionTarget(canvas, sc[i], radar_mid, scale, small,
                           target_pen, text_color);
+  } else if (CommonInterface::GetMapSettings().traffic_symbol ==
+             TrafficSymbol::AIRCRAFT_TYPE &&
+             TrafficRenderer::HasAircraftTypeSymbol(traffic.type)) {
+    // Draw the aircraft-type symbol in the arrow's colours
+    const unsigned icon_size =
+      ScaleRadarPermille(radar_renderer.GetRadius(), ARROW_ICON_PERMILLE);
+    TrafficRenderer::DrawAircraftTypeSymbol(canvas, traffic.type,
+                                            symbol_angle, sc[i],
+                                            RadarSymbolSize(icon_size),
+                                            *target_brush_color,
+                                            *glyph_color,
+                                            look.background_color,
+                                            *target_pen);
   } else
     // All other targets - Draw the polygon
     canvas.DrawPolygon(Arrow, 4);
