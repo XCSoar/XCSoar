@@ -86,9 +86,8 @@ SingleWindow::HasMaximisedDialog() const noexcept
 bool
 SingleWindow::HasFullScreenDialog() const noexcept
 {
-  const PixelRect rc = GetClientRect();
   for (const WndForm *dialog : dialogs)
-    if (FillsDialogArea(*dialog, rc))
+    if (dialog->FillsClient())
       return true;
 
   return false;
@@ -107,7 +106,7 @@ SingleWindow::OnResize(PixelSize new_size) noexcept
   const PixelRect full_rc{new_size};
   const PixelRect rc = GetSafeAreaRect(new_size);
   for (WndForm *dialog : dialogs) {
-    if (FillsDialogArea(*dialog, full_rc)) {
+    if (dialog->FillsClient()) {
       dialog->Move(full_rc);
       dialog->ForceLayout();
     } else if (FillsDialogArea(*dialog, dialog_rect))
