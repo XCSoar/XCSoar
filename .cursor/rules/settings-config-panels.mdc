@@ -16,10 +16,10 @@ alwaysApply: false
 
 ```cpp
 // BAD: blank hole when the parent is off
-SetRowVisible(TRAIL_DRIFT, trail_on);
+SetRowVisible(TRAIL_TYPE, trail_on);
 
 // GOOD
-SetRowAvailable(TRAIL_DRIFT, trail_on);
+SetRowAvailable(TRAIL_TYPE, trail_on);
 ```
 
 Use **`SetRowEnabled`** (grey-out) for a **master enable** whose children still apply once on (credentials, intervals). Use **collapse** when the child does not apply (trail type when trail is Off).

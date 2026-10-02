@@ -203,7 +203,8 @@ Version 7.46 - not yet released
     Glide Computer
   - list pages inside each configuration menu in English alphabetical
     order; Setup keeps Units before the pages that use those units
-  - hide the audio vario settings while Audio Vario is off
+  - hide the audio vario settings while Audio Vario is off, and
+    hide the deadband thresholds while Deadband is off
   - move Dark mode and Text size from Display to Layout
   - rename Look Display to Screen and move it to Setup, so it is
     not confused with Map Display
