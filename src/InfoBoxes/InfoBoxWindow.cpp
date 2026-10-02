@@ -562,7 +562,10 @@ InfoBoxWindow::PaintLongPressGlow(Canvas &canvas) noexcept
   const unsigned t = fade
     ? InfoBoxArrange::LongPressFade(press_start)
     : 256;
-  const PixelRect rc = GetClientRect();
+  /* inside the borders: they are drawn on top of the window edge, so
+     the glow must not reach into the space they reserve */
+  PixelRect rc = title_rect;
+  rc.bottom = comment_rect.bottom;
   const int height = int(rc.GetHeight() * t / 256);
   if (height <= 0)
     return;
