@@ -13,6 +13,7 @@
 
 enum ControlIndex {
   DISPLAY_TRACK_BEARING,
+  TURN_BACK_MARKER,
   ENABLE_FLARM_MAP,
   FADE_TRAFFIC,
   TRAIL_LENGTH,
@@ -131,10 +132,21 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
                             [[maybe_unused]] const PixelRect &rc) noexcept
 {
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
+  const TaskBehaviour &task_behaviour =
+    CommonInterface::GetComputerSettings().task;
 
   AddEnum(_("Ground track"),
           _("Display the ground track as a grey line on the map."),
           ground_track_mode_list, (unsigned)settings_map.display_ground_track);
+
+  AddBoolean(C_("Setting", "Turn back marker"),
+             _("Show a green triangle on the map along the current track "
+               "indicating the furthest point from which the active task "
+               "waypoint or Goto target can still be reached with the "
+               "current altitude and conditions. "
+               "The triangle is only shown during cruise when the target "
+               "is reachable."),
+             task_behaviour.turn_back_marker_enabled);
 
   AddBoolean(_("FLARM Traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
@@ -199,9 +211,14 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
+  TaskBehaviour &task_behaviour =
+    CommonInterface::SetComputerSettings().task;
 
   changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, ProfileKeys::DisplayTrackBearing,
                            settings_map.display_ground_track);
+
+  changed |= SaveValue(TURN_BACK_MARKER, ProfileKeys::TurnBackMarkerEnabled,
+                       task_behaviour.turn_back_marker_enabled);
 
   changed |= SaveValue(ENABLE_FLARM_MAP, ProfileKeys::EnableFLARMMap,
                        settings_map.show_flarm_on_map);

@@ -198,6 +198,12 @@ Version 7.46 - not yet released
     Services configuration menu
   - rename Setup Services to System Services
   - move Language, Input from Look to Setup
+  - move the Turn back marker from Safety Factors to Map Elements
+  - rename Task Defaults to Task, and move Scoring there from
+    Glide Computer
+  - list pages inside each configuration menu in English alphabetical
+    order; Setup keeps Units before the pages that use those units
+  - hide the audio vario settings while Audio Vario is off
   - move Dark mode and Text size from Display to Layout
   - rename Look Display to Screen, so it is not confused with
     Map Display
@@ -205,7 +211,9 @@ Version 7.46 - not yet released
     keep PEV start and the speed/height margins as expert
   - move Audio Vario from Gauges to Setup Audio, together with
     master volume
-  - split Gauges FLARM, Other into Traffic and Overlays
+  - keep FLARM and the Thermal Assistant under Gauges, move the
+    analog vario to Look with the InfoBoxes, and move the final
+    glide bar, vario bar and thermal band to Map Display
   - combine FLARM Radar on/off and position into one setting, like
     Thermal Assistant
   - show analog vario speed arrows, average, MacCready, gross, and
