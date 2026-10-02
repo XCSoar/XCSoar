@@ -136,8 +136,7 @@ public:
       return;
 
     /* the overlay covers the whole window, including the areas outside
-       the client rect (e.g. behind the iOS notch); the cards and the
-       buttons stay inside the client rect */
+       the client rect (e.g. behind the iOS notch) */
     const PixelRect window = GetParent() != nullptr
       ? GetParent()->ContainerWindow::GetClientRect()
       : GetClientRect();
@@ -156,7 +155,9 @@ public:
 
     const unsigned title_scale =
       CommonInterface::GetUISettings().info_boxes.scale_title_font;
-    const PixelRect page = GetContentRect(full);
+    /* the cards lie exactly over the InfoBoxes on the screen, which
+       follow the InfoBox area and not the client rect */
+    const PixelRect page = GetContentRect(InfoBoxManager::layout.rc);
     page_layout =
       InfoBoxLayout::Calculate(page, InfoBoxManager::layout.geometry,
                                title_scale, full.GetSize());
