@@ -1073,9 +1073,6 @@ msgstr "Tanımlama Gönderiliyor"
 msgid "Reading flight list"
 msgstr "Uçuş Listesi Okunuyor"
 
-msgid "Downloading flight log"
-msgstr "Uçuş Günlüğü Indiriliyor"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Devre Dışı"
@@ -1090,6 +1087,7 @@ msgstr "BLE Portu"
 msgid "Bluetooth server"
 msgstr "Bluetooth sunucu"
 
+#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "İçerikli GPS & Sensörler"
 
@@ -1769,6 +1767,7 @@ msgstr ""
 msgid "Select Color"
 msgstr "Renk Seç"
 
+#, no-c-format
 msgid "Display"
 msgstr "Görünüm"
 
@@ -1778,9 +1777,6 @@ msgstr "Uyarı"
 #, no-c-format
 msgid "Airspace"
 msgstr "Hava Sahası"
-
-msgid "Select Pattern"
-msgstr "Şekil Seç"
 
 msgid "Squawk code"
 msgstr "SQUAWK kodu"
@@ -1836,9 +1832,6 @@ msgstr "Kare Çerçeve Renkini Değiştir"
 
 msgid "Change Fill Color"
 msgstr "Kare Doldurma Renkini Değiştir"
-
-msgid "Change Fill Brush"
-msgstr "Doldurma Kalemını Değiştir"
 
 msgid "Border Width"
 msgstr "Kare Çerçeve Genişliği"
@@ -1939,6 +1932,7 @@ msgstr "Personel"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Boş ağırlıkten itibaren giderde yüklenen tüm ağırlıklar, pilot ve kopyolar dahil ancak su balastı hariç."
 
+#, no-c-format
 msgid "Ballast"
 msgstr "Balast"
 
@@ -2017,10 +2011,6 @@ msgid "Language, Input"
 msgstr "Dil, Giriş"
 
 #, no-c-format
-msgid "Screen Layout"
-msgstr "Ekran Düzeni"
-
-#, no-c-format
 msgid "Audio"
 msgstr "Ses"
 
@@ -2046,14 +2036,8 @@ msgstr "Uzman"
 msgid "Configuration"
 msgstr "Yapılandırma"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Bu InfoBox paneli yapılandırmasının adı."
-
 msgid "InfoBox"
 msgstr "Bilgi Kutusu"
-
-msgid "Content"
-msgstr "İçerik"
 
 msgid "Copy Set"
 msgstr "Kopya Seti"
@@ -2162,6 +2146,7 @@ msgstr "Takım Kodu"
 msgid "Task Calc"
 msgstr "Görev Hesaplama"
 
+#, no-c-format
 msgid "Analysis"
 msgstr "Analiz"
 
@@ -2198,6 +2183,7 @@ msgstr "Görev Hızı"
 msgid "Warnings"
 msgstr "Uyarılar"
 
+#, no-c-format
 msgid "Checklist"
 msgstr "Kontrol Listesi"
 
@@ -2404,6 +2390,7 @@ msgstr "Yanlış parola."
 msgid "Enter a new password"
 msgstr "Yeni bir parola girin"
 
+#, no-c-format
 msgid "Status"
 msgstr "Durum"
 
@@ -2953,12 +2940,6 @@ msgstr "Hava sahası doldurma modu"
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Hava sahasının doldurulma modunu belirtir."
 
-msgid "Airspace transparency"
-msgstr "Hava sahası şeffaflık"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Etkinleştirildiğinde, hava sahasları şeffaf olarak doldurulur."
-
 #, no-c-format
 msgid "Disable final glide bar."
 msgstr "Final suzulus barını devre dışı bırak."
@@ -3376,12 +3357,11 @@ msgstr ""
 msgid "Text size"
 msgstr "Metin boyutu"
 
-msgid "Display Resolution"
-msgstr "Görüntü çözünürlüğü"
-
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Görüntü çözünürlüğü, çizgi kalınlıklarını, yazı tipi boyutlarını ve atlanabilir alanları ayarlama gibi kullanılır."
 
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
 msgid "Automatic"
 msgstr "Otomatik"
 
@@ -3442,90 +3422,6 @@ msgstr "Döndürülmüş Düz"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Döndürülmüş Yatay"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 Bölüm"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 Parçalama"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 Parçalama 3 satıra bölünmüş"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 Parçalama 3 satıra bölünmüş"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 Parçalama 3 satıra bölünmüş"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 Alt veya Sağ"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 Alt + Vario (Portret)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 Üst veya Sol"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 Üst + Vario (Portret)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 Sağ + Vario (Yatay)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Sol + Sağ + Vario (Yatay)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 Sol + 3 Sağ Vario (Yatay)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 Sağ (Kare)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 Alt veya Sağ"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 Alt veya Sağ"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 Üst veya Sol"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 Üst veya Sol"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 Sağ (Yatay)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 Alt veya Sağ"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 Üst veya Sol"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 Alt veya Sağ"
 
 #, no-c-format
 msgid "Text"
@@ -3619,9 +3515,6 @@ msgstr "Her zaman koyu InfoBox arka planı üzerinde açık renkli metin kullan�
 
 msgid "Full screen"
 msgstr "Tam Ekran"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "XCSoar'u tam ekran modunda çalıştır."
 
 msgid "Display orientation"
 msgstr "Görüntü yönelimleri"
@@ -4800,15 +4693,6 @@ msgstr "Dönen açı"
 msgid "UTC offset"
 msgstr "UTC zıtlığı"
 
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"UTC zıtlığı alanına yerel saat UTC zıtlığını belirleyebilirsiniz. Yerel saat "
-"aşağıda gösterildiği gibi görüntülenerek doğru zıtlık girildiğinin "
-"doğrulanması kolaylaştırılır."
-
 msgid "Use GPS time"
 msgstr "GPS zamanı kullanın"
 
@@ -5369,6 +5253,7 @@ msgstr "Optimizasyon"
 msgid "No alternates available"
 msgstr "Alternatiler mevcut değil"
 
+#, no-c-format
 msgid "Alternates"
 msgstr "Alternatifler"
 
@@ -7082,10 +6967,6 @@ msgid "T Next Leg"
 msgstr "T Son Adım"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Mevcut adımdaki MacCready ayarına eşdeğer olan son adımdaki termik yükseltme oranı."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Rüzgar, başlık bileşeni (simplified)"
 
@@ -8298,12 +8179,6 @@ msgid "Size of waypoint symbols on the map as a percentage of the built-in artwo
 msgstr ""
 "Yerleşik resmin yüzdesi olarak haritadaki yol noktası sembollerinin boyutu "
 "(liste iletişim kutuları sabit bir satır simgesi boyutunu korur)."
-
-msgid "Altn mode: MANUAL"
-msgstr "Altn način: RUČNI"
-
-msgid "Altn mode: AUTO"
-msgstr "Altn način: AUTO"
 
 msgid ""
 "# Gesture Navigation\n"
@@ -9972,14 +9847,6 @@ msgstr ""
 "Viyana'dan Perpignan'a kadar Alp yayının tamamını kapsıyor ve tüm Alpler "
 "bölgesi boyunca dalga tahmini yapıyor. ICON-CH modeli."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Birleşik Krallık. ICON-UK modeli."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11166,8 +11033,315 @@ msgstr ""
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
 
+#, no-c-format
 msgid "Recently used waypoints"
 msgstr ""
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+
+#, no-c-format
+msgid "Zoom in"
+msgstr ""
+
+#, no-c-format
+msgid "Zoom out"
+msgstr ""
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr ""
+
+#, no-c-format
+msgid "Next page"
+msgstr ""
+
+#, no-c-format
+msgid "Previous page"
+msgstr ""
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr ""
+
+#, no-c-format
+msgid "Menu"
+msgstr ""
+
+#, no-c-format
+msgid "Task manager"
+msgstr ""
+
+#, no-c-format
+msgid "Pan mode"
+msgstr ""
+
+#, no-c-format
+msgid "Quick menu"
+msgstr ""
+
+#, no-c-format
+msgid "Auto"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
+msgid "Power off"
+msgstr ""
+
+#. overwriting the data files under a flying program helps nobody
+#. the loggers are writing, half the files would be left out -
+#. and nobody needs a backup right now up there
+msgid "Not available while flying."
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
+msgstr ""
+
+msgid "Don't use"
+msgstr ""
+
+msgid "Not aligned"
+msgstr ""
+
+msgid "Fixed & aligned"
+msgstr ""
+
+msgid "Built-in IMU"
+msgstr ""
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
+msgstr ""
+
+#, c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+
+msgid "QNE"
+msgstr ""
+
+msgid "Engine"
+msgstr ""
+
+#, no-c-format
+msgid "Layout"
+msgstr ""
+
+#, no-c-format
+msgid "Services"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr ""
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr ""
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+
+msgid "Stretch InfoBox area"
+msgstr ""
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+
+#, no-c-format
+msgid "Visible"
+msgstr ""
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+
+#, no-c-format
+msgid "Hidden"
+msgstr ""
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr ""
+
+msgid "Display resolution"
+msgstr ""
+
+msgid "Screen brightness"
+msgstr ""
+
+msgid "Adjust the screen brightness."
+msgstr ""
+
+msgid "Screen brightness is read-only because writing requires additional permissions."
+msgstr ""
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+
+msgid "System status bar"
+msgstr ""
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr ""
+
+#. Alternate Mode: Auto returns a MANUAL slot to the computed
+#. list. Pinning is Select as Alternate, which is always
+#. available and sets MANUAL.
+#, no-c-format
+msgctxt "Button"
+msgid "Alternate Mode: Auto"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "No supported services found"
+msgstr ""
+
+msgid "No selected systemd units are installed."
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "Stopping..."
+msgstr ""
+
+msgid "Reloading..."
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "System service"
+msgstr ""
+
+msgid "SSH server"
+msgstr ""
+
+msgid "Remote terminal access"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "OpenVario sensor daemon"
+msgstr ""
+
+msgid "Audio vario"
+msgstr ""
+
+msgid "OpenVario audio vario daemon"
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr ""
+
+#, no-c-format
+msgid "V VMG"
+msgstr ""
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+
+msgid "Arrange InfoBoxes"
+msgstr ""
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr ""
+
