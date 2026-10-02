@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Type.hpp"
+#include "Group.hpp"
 
 #include <memory>
 class InfoBoxContent;
@@ -32,6 +33,14 @@ namespace InfoBoxFactory
   [[gnu::const]]
   const char *
   GetDescription(Type type) noexcept;
+
+  /**
+   * Returns the topic under which the content picker lists the info
+   * box type.
+   */
+  [[gnu::const]]
+  Group
+  GetGroup(Type type) noexcept;
 
   std::unique_ptr<InfoBoxContent> Create(Type infobox_type) noexcept;
 };
