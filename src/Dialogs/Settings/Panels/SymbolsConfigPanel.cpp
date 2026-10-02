@@ -48,7 +48,8 @@ private:
 void
 SymbolsConfigPanel::ShowTrailControls(bool show)
 {
-  SetRowAvailable(TRAIL_DRIFT, show);
+  /* Trail drift also sets the projected track curve while circling,
+     including when the snail trail itself is off. */
   SetRowAvailable(TRAIL_TYPE, show);
   SetRowAvailable(TRAIL_WIDTH, show);
 }

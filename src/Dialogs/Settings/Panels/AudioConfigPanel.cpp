@@ -55,6 +55,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
   void ShowAudioVarioControls(bool show) noexcept;
+  void ShowDeadBandThresholds(bool show) noexcept;
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
@@ -73,6 +74,11 @@ AudioConfigPanel::ShowAudioVarioControls(bool show) noexcept
   SetRowAvailable(MIN_FREQUENCY, show);
   SetRowAvailable(ZERO_FREQUENCY, show);
   SetRowAvailable(MAX_FREQUENCY, show);
+}
+
+void
+AudioConfigPanel::ShowDeadBandThresholds(bool show) noexcept
+{
   SetRowAvailable(SPACER2, show);
   SetRowAvailable(DEAD_BAND_MIN, show);
   SetRowAvailable(DEAD_BAND_MAX, show);
@@ -82,8 +88,16 @@ void
 AudioConfigPanel::OnModified(DataField &df) noexcept
 {
   if (IsDataField(ENABLED, df)) {
-    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    ShowAudioVarioControls(dfb.GetValue());
+    const DataFieldBoolean &enabled = (const DataFieldBoolean &)df;
+    ShowAudioVarioControls(enabled.GetValue());
+    const DataFieldBoolean &dead_band =
+      (const DataFieldBoolean &)GetDataField(DEAD_BAND_ENABLED);
+    ShowDeadBandThresholds(enabled.GetValue() && dead_band.GetValue());
+  } else if (IsDataField(DEAD_BAND_ENABLED, df)) {
+    const DataFieldBoolean &dead_band = (const DataFieldBoolean &)df;
+    const DataFieldBoolean &enabled =
+      (const DataFieldBoolean &)GetDataField(ENABLED);
+    ShowDeadBandThresholds(enabled.GetValue() && dead_band.GetValue());
   }
 }
 
@@ -125,7 +139,8 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
 
   AddBoolean(_("Enable Deadband"),
              _("Mute the audio output in when the current lift is in a "
-               "certain range around zero"), settings.dead_band_enabled);
+               "certain range around zero"), settings.dead_band_enabled,
+             this);
 
   AddSpacer();
   SetExpertRow(SPACER);
@@ -172,6 +187,7 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
   db_max.SetFormat(GetUserVerticalSpeedFormat(false, true));
 
   ShowAudioVarioControls(settings.enabled);
+  ShowDeadBandThresholds(settings.enabled && settings.dead_band_enabled);
 }
 
 bool
