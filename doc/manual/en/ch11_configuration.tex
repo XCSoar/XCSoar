@@ -835,57 +835,6 @@ When editing a page, the following options are available for map pages:
 \end{description}
 
 
-%%%%%%%%%%
-\section{Look / Screen}\label{sec:look-screen}
-\label{sec:interface-display}
-
-This page configures the physical screen: technology, resolution,
-orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
-
-\begin{description}
-\item[Display type*]  Select the display technology. E-ink modes disable
-  kinetic and smooth scrolling for slow refresh screens.
-\item[Display resolution*]  Used to adapt line widths, font size, landable
-  size and more.
-\item[Display orientation]  Rotate the display on devices that support it.
-\item[Screen brightness]  Adjust the screen brightness, where the platform
-  allows it.
-\item[Full screen]  Let XCSoar use the whole screen, including the areas
-  behind the system bars and the display cutout (the ``notch''). The map
-  always fills it completely; \emph{Stretch InfoBox area} decides which
-  edges
-  the InfoBoxes, gauges, map overlays and the menu may reach.
-  Only available on Android and iOS.
-\item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
-  that is available to the InfoBoxes, gauges, map overlays and the
-  menu. Selecting
-  this entry opens a picker in which you choose the screen edges on which
-  the InfoBox area is stretched out to the screen border, so that they
-  reach the very edge
-  there. Edges you leave unstretched stay clear of the display
-  cutout and of the space the system bars occupy, including the
-  home indicator while full screen hides it. Rounded corners stay
-  clear on unstretched edges. Dialogues always stay inside the
-  safe area. The Fly/Simulator start screen may fill the screen
-  with its background; Quit, Fly, Simulator and the version stay
-  in the safe area.
-  Only relevant while \emph{Full screen} is enabled.
-\item[System status bar]  Whether the system status bar with the clock and
-  the battery level stays visible. \\
-  {\bf Auto}: Show it unless the InfoBox area is stretched to the top
-  screen edge. \\
-  {\bf Visible}: Always show it, even in full screen mode. \\
-  {\bf Hidden}: Never show it. \\
-  While the status bar is visible, the InfoBoxes keep clear of the top screen
-  edge, because they cannot be drawn behind it.
-  Only available on iOS.
-\item[Cursor zoom]  Control the size of the cursor. Default is 1.
-  Only available if the cursor is drawn by XCSoar.
-\item[Invert cursor color]  Use a black cursor. Default is {\bf Off}
-  (white cursor). Only available if the cursor is drawn by XCSoar.
-\end{description}
-
-
 %%%%%%%%%%%%%%%%%%
 \section{Look / Vario}\label{sec:vario-gauge}
 
@@ -1072,6 +1021,57 @@ will be referenced as `Custom' set and will also be stored in your profile.
 \item[Lat./Lon.*]  Units, or better formats used for latitude and longitude. 
   Supported are several `degree/minutes/seconds' formats, respectively 
   their decimal fraction, and the  UTM WGS 84 format.
+\end{description}
+
+
+%%%%%%%%%%
+\section{Setup / Screen}\label{sec:look-screen}
+\label{sec:interface-display}
+
+This page configures the physical screen: technology, resolution,
+orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
+
+\begin{description}
+\item[Display type*]  Select the display technology. E-ink modes disable
+  kinetic and smooth scrolling for slow refresh screens.
+\item[Display resolution*]  Used to adapt line widths, font size, landable
+  size and more.
+\item[Display orientation]  Rotate the display on devices that support it.
+\item[Screen brightness]  Adjust the screen brightness, where the platform
+  allows it.
+\item[Full screen]  Let XCSoar use the whole screen, including the areas
+  behind the system bars and the display cutout (the ``notch''). The map
+  always fills it completely; \emph{Stretch InfoBox area} decides which
+  edges
+  the InfoBoxes, gauges, map overlays and the menu may reach.
+  Only available on Android and iOS.
+\item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
+  that is available to the InfoBoxes, gauges, map overlays and the
+  menu. Selecting
+  this entry opens a picker in which you choose the screen edges on which
+  the InfoBox area is stretched out to the screen border, so that they
+  reach the very edge
+  there. Edges you leave unstretched stay clear of the display
+  cutout and of the space the system bars occupy, including the
+  home indicator while full screen hides it. Rounded corners stay
+  clear on unstretched edges. Dialogues always stay inside the
+  safe area. The Fly/Simulator start screen may fill the screen
+  with its background; Quit, Fly, Simulator and the version stay
+  in the safe area.
+  Hidden while \emph{Full screen} is off.
+\item[System status bar]  Whether the system status bar with the clock and
+  the battery level stays visible. \\
+  {\bf Auto}: Show it unless the InfoBox area is stretched to the top
+  screen edge. \\
+  {\bf Visible}: Always show it, even in full screen mode. \\
+  {\bf Hidden}: Never show it. \\
+  While the status bar is visible, the InfoBoxes keep clear of the top screen
+  edge, because they cannot be drawn behind it.
+  Only available on iOS.
+\item[Cursor zoom]  Control the size of the cursor. Default is 1.
+  Only available if the cursor is drawn by XCSoar.
+\item[Invert cursor color]  Use a black cursor. Default is {\bf Off}
+  (white cursor). Only available if the cursor is drawn by XCSoar.
 \end{description}
 
 

@@ -138,7 +138,6 @@ static constexpr TabMenuPage look_pages[] = {
   { N_("InfoBox Sets"), CreateInfoBoxesConfigPanel },
   { N_("Layout"), CreateLayoutConfigPanel },
   { N_("Pages"), CreatePagesConfigPanel },
-  { N_("Screen"), CreateDisplayConfigPanel },
   { N_("Vario"), CreateVarioConfigPanel },
   { nullptr, nullptr }
 };
@@ -182,6 +181,7 @@ static constexpr TabMenuPage setup_pages[] = {
   // unit-dependent because they will be saved after their units may have changed.
   // ToDo: implement API that controls order in which pages are saved
   { N_("Network"), CreateNetworkConfigPanel },
+  { N_("Screen"), CreateDisplayConfigPanel },
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
   { N_("System Services"), CreateSystemdConfigPanel },
 #endif
