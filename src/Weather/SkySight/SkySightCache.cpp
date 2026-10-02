@@ -50,8 +50,8 @@ template<typename V>
 void
 VisitForecastImageFiles(Path directory, V &visitor)
 {
-  /* Decoded NetCDF overlays use the versioned .v2.tif suffix.  Plain *.tif
-     files from earlier decoders are ignored so near-zero washes are not
+  /* Decoded NetCDF overlays carry a versioned suffix.  Plain *.tif files
+     and products of earlier decoder versions are ignored so they are not
      selected as the active overlay. */
   for (const auto glob : SkySight::DISPLAY_IMAGE_GLOBS)
     Directory::VisitSpecificFiles(directory, glob.data(), visitor);
@@ -406,6 +406,11 @@ Cleanup(Path directory) noexcept
       OlderThanForecastTimeVisitor delete_forecasts{
         std::chrono::system_clock::to_time_t(now - FORECAST_RETENTION)};
       VisitForecastImageFiles(directory, delete_forecasts);
+      /* Overlays from superseded decoders are never displayed again;
+         let them expire with the forecasts they were rendered from. */
+      for (const auto glob : SkySight::LEGACY_DECODED_OVERLAY_GLOBS)
+        Directory::VisitSpecificFiles(directory, glob.data(),
+                                      delete_forecasts);
       for (const auto glob : SkySight::RAW_FORECAST_GLOBS)
         Directory::VisitSpecificFiles(directory, glob.data(),
                                       delete_forecasts);

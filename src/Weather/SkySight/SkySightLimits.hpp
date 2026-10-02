@@ -19,6 +19,15 @@ inline constexpr std::size_t MAX_ID_LENGTH = 63;
 inline constexpr std::size_t MAX_NETCDF_GRID_AXIS = 8192;
 inline constexpr std::size_t MAX_NETCDF_GRID_CELLS = 8 * 1024 * 1024;
 
+/**
+ * Budget for the raster that the visible patch of a forecast field is
+ * contoured into.  It bounds the texture the map uploads; the patch is
+ * far smaller than the region, so this is a safety net rather than the
+ * usual limit.
+ */
+inline constexpr unsigned MAX_CONTOUR_RASTER_AXIS = 4096;
+inline constexpr std::size_t MAX_CONTOUR_RASTER_CELLS = 4 * 1024 * 1024;
+
 class ResourceLimitError final : public std::runtime_error {
 public:
   using std::runtime_error::runtime_error;

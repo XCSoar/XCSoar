@@ -25,6 +25,8 @@
 #include "UIGlobals.hpp"
 #include "LocalPath.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
+#include "ContourOverlay.hpp"
+#include "SkySightPayloadSuffixes.hpp"
 #include "MapWindow/OverlayBitmap.hpp"
 #include "system/FileUtil.hpp"
 #include "thread/Debug.hpp"
@@ -1027,15 +1029,6 @@ SkySightClient::UpdateActiveLayer(unsigned index, Path path,
   if (map == nullptr)
     return false;
 
-  std::unique_ptr<MapOverlayBitmap> bitmap;
-  try {
-    bitmap = std::make_unique<MapOverlayBitmap>(path);
-  } catch (...) {
-    return false;
-  }
-
-  bitmap->SetAlpha(active_layer->alpha);
-
   StaticString<160> label;
   label.Format("SkySight: %s", active_layer->name.c_str());
   if (active_layer->SupportsLiveTiles()) {
@@ -1047,9 +1040,46 @@ SkySightClient::UpdateActiveLayer(unsigned index, Path path,
     label.AppendFormat(" (%s)", forecast_time.c_str());
   }
 
-  bitmap->SetLabel(label.c_str());
+  std::unique_ptr<MapOverlay> overlay;
 
-  map->SetOverlay(index, std::move(bitmap));
+  /* A decoded forecast is a scalar field, contoured for the visible
+     patch; provider images (live tiles) stay plain bitmaps. */
+  const bool is_decoded_forecast =
+    path.EndsWithIgnoreCase(SkySight::DECODED_OVERLAY_SUFFIX.data());
+
+#ifdef USE_GEOTIFF
+  if (is_decoded_forecast) {
+    try {
+      auto contour = std::make_unique<SkySightContourOverlay>(
+        path, active_layer->legend);
+      contour->SetAlpha(active_layer->alpha);
+      contour->SetLabel(label.c_str());
+      overlay = std::move(contour);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "SkySight contour overlay could not be loaded");
+    }
+  }
+#endif
+
+  /* Never show a decoded forecast as a plain image: one written by an
+     earlier decoder holds colours, not a field, and drawing it would
+     silently bring back the smearing this overlay exists to avoid. */
+  if (overlay == nullptr && is_decoded_forecast)
+    return false;
+
+  if (overlay == nullptr) {
+    try {
+      auto bitmap = std::make_unique<MapOverlayBitmap>(path);
+      bitmap->SetAlpha(active_layer->alpha);
+      bitmap->SetLabel(label.c_str());
+      overlay = std::move(bitmap);
+    } catch (...) {
+      return false;
+    }
+  }
+
+  map->SetOverlay(index, std::move(overlay));
   return true;
 #endif
 }

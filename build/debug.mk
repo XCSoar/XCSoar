@@ -25,11 +25,14 @@ HOST_OPTIMIZE := -g
 # the difference between -0 and +0.  This allows using non-conforming
 # vector units on some platforms, e.g. ARM NEON.
 OPTIMIZE += -ffast-math
-ifeq ($(CLANG),y)
-  # Clang 18+ warns that -ffast-math's -ffinite-math-only breaks isfinite/isnan/isinf.
-  # Override just that sub-flag to keep NaN/Inf checks working.
-  OPTIMIZE += -fno-finite-math-only
-endif
+
+# -ffast-math implies -ffinite-math-only, which lets the compiler fold
+# isfinite() to true and isnan() to false.  That assumption does not hold
+# here: XCSoar uses both to reject bad sensor samples (WindEKF,
+# GlidePolar) and to mark missing weather data, so override just that
+# sub-flag.  Clang 18+ warns about it and GCC does not, which is why this
+# was applied to Clang alone while GCC builds silently lost the checks.
+OPTIMIZE += -fno-finite-math-only
 
 ifeq ($(CLANG)$(DEBUG),nn)
   # Enable gcc auto-vectorisation on some architectures (e.g. ARM

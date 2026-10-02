@@ -12,7 +12,21 @@
 namespace SkySight {
 
 /** Versioned NetCDF→GeoTIFF product (plain .tif is legacy). */
-inline constexpr std::string_view DECODED_OVERLAY_SUFFIX = ".v2.tif";
+inline constexpr std::string_view DECODED_OVERLAY_SUFFIX = ".v3.tif";
+
+/**
+ * Products of superseded decoders.  They are still recognised so cache
+ * bookkeeping finds their forecast stem, but never displayed: .v2.tif
+ * holds one flat pixel per grid sample instead of contour bands.
+ */
+inline constexpr std::string_view LEGACY_DECODED_OVERLAY_SUFFIXES[] = {
+  ".v2.tif",
+};
+
+/** #LEGACY_DECODED_OVERLAY_SUFFIXES as directory globs, for cleanup. */
+inline constexpr std::string_view LEGACY_DECODED_OVERLAY_GLOBS[] = {
+  "*.v2.tif",
+};
 
 /** TIFF path endings (provider images and legacy overlays). */
 inline constexpr std::string_view TIFF_SUFFIXES[] = {
@@ -34,10 +48,11 @@ inline constexpr std::string_view DISPLAY_IMAGE_SUFFIXES[] = {
 
 /**
  * Directory globs for selectable forecast overlays.
- * Omits plain *.tif so legacy near-zero washes are not chosen.
+ * Omits plain *.tif and superseded decoder versions, so only the current
+ * NetCDF product is chosen.
  */
 inline constexpr std::string_view DISPLAY_IMAGE_GLOBS[] = {
-  "*.v2.tif", "*.png", "*.jpg", "*.jpeg",
+  "*.v3.tif", "*.png", "*.jpg", "*.jpeg",
 };
 
 /**
@@ -60,7 +75,7 @@ inline constexpr std::string_view MIN_WRAPPED_INNER_SUFFIXES[] = {
 
 /**
  * Simple forecast artifact suffixes peeled for cache stem parsing
- * (after .v2.tif and .min handling).
+ * (after decoded-overlay and .min handling).
  */
 inline constexpr std::string_view FORECAST_ARTIFACT_SUFFIXES[] = {
   ".zip", ".nc", ".jpg", ".tif", ".tiff", ".png", ".jpeg",
@@ -78,7 +93,7 @@ inline constexpr std::string_view FORECAST_DATA_PATH_SUFFIXES[] = {
 
 /** Overlay products removed when invalidating a payload. */
 inline constexpr std::string_view DERIVED_OVERLAY_SUFFIXES[] = {
-  ".v2.tif", ".tif", ".tiff", ".png", ".jpg", ".jpeg",
+  ".v3.tif", ".v2.tif", ".tif", ".tiff", ".png", ".jpg", ".jpeg",
 };
 
 /** Extra siblings removed when invalidating a zip extract. */
@@ -150,7 +165,8 @@ StripForecastArtifactSuffix(std::string_view filename) noexcept
 {
   auto stem = filename;
 
-  if (RemoveSuffix(stem, DECODED_OVERLAY_SUFFIX))
+  if (RemoveSuffix(stem, DECODED_OVERLAY_SUFFIX) ||
+      RemoveAnySuffix(stem, LEGACY_DECODED_OVERLAY_SUFFIXES))
     return stem;
 
   /* Compressed downloads end in ".nc.min", ".tif.min", … */
