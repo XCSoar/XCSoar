@@ -5,6 +5,7 @@
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
+#include "Tracking/Features.hpp"
 #include "Tracking/SkyLines/Key.hpp"
 #include "Tracking/CloudSettings.hpp"
 #include "Widget/RowFormWidget.hpp"
@@ -23,6 +24,8 @@
 #include <stdio.h>
 #include <string>
 #include <string_view>
+
+#ifdef HAVE_TRACKING
 
 enum ControlIndex {
   ENABLED,
@@ -216,17 +219,22 @@ CloudConfigPanel::Save(bool &_changed) noexcept
 
   _changed |= changed;
 
-#ifdef HAVE_TRACKING
-  if (changed && net_components != nullptr && net_components->tracking != nullptr)
+  if (changed && net_components != nullptr &&
+      net_components->tracking != nullptr)
     net_components->tracking->SetSettings(
       CommonInterface::GetComputerSettings().tracking);
-#endif
 
   return true;
 }
 
+#endif /* HAVE_TRACKING */
+
 std::unique_ptr<Widget>
 CreateCloudConfigPanel()
 {
+#ifdef HAVE_TRACKING
   return std::make_unique<CloudConfigPanel>();
+#else
+  return nullptr;
+#endif
 }
