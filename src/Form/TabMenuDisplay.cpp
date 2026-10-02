@@ -30,16 +30,17 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
   assert(n_groups > 0);
   assert(n_groups <= MAX_MAIN_MENU_ITEMS);
 
-  main_menu_buttons.resize(n_groups);
   for (unsigned i = 0; i < n_groups; i++) {
     const auto &g = groups[i];
-    auto &mb = main_menu_buttons[i];
-    mb.caption = gettext(g.caption);
-    mb.first_page_index = buttons.size();
+    const unsigned first_page_index = buttons.size();
+    const unsigned main_menu_index = main_menu_buttons.size();
 
     for (auto p = g.pages; p->Load != nullptr; ++p) {
+      if (p->IsAvailable != nullptr && !p->IsAvailable())
+        continue;
+
       auto &page_button = buttons.append();
-      page_button.main_menu_index = i;
+      page_button.main_menu_index = main_menu_index;
       page_button.caption = gettext(p->menu_caption);
 
       /* Wrap panel in VScrollWidget for automatic scrolling when needed */
@@ -48,6 +49,12 @@ TabMenuDisplay::InitMenu(const TabMenuGroup groups[],
       pager.Add(std::move(scroll_panel));
     }
 
+    if (buttons.size() == first_page_index)
+      continue;
+
+    auto &mb = main_menu_buttons.append();
+    mb.caption = gettext(g.caption);
+    mb.first_page_index = first_page_index;
     mb.last_page_index = buttons.size() - 1;
   }
 }
@@ -187,6 +194,10 @@ TabMenuDisplay::OnPageFlipped() noexcept
 void
 TabMenuDisplay::SetCursor(unsigned i) noexcept
 {
+  if (GetNumPages() == 0)
+    return;
+
+  i = std::min(i, GetNumPages() - 1);
   if (i == cursor)
     return;
 

@@ -11,6 +11,9 @@ struct TabMenuPage {
   const char *menu_caption;
 
   std::unique_ptr<Widget> (*Load)();
+
+  /** Called when building the menu; an unavailable page is omitted. */
+  bool (*IsAvailable)() = nullptr;
 };
 
 struct TabMenuGroup {
