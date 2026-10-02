@@ -12,6 +12,7 @@ PolarSettings::SetDefaults()
   degradation_factor = 1;
   bugs = 1;
   glide_polar_task = GlidePolar::Invalid();
+  polar_from_device = false;
   ballast_timer_active = false;
   auto_bugs = false;
 }

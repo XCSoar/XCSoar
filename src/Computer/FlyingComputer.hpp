@@ -8,6 +8,8 @@
 #include "time/DeltaTime.hpp"
 #include "time/Stamp.hpp"
 
+#include <optional>
+
 struct NMEAInfo;
 struct DerivedInfo;
 struct AircraftState;
@@ -15,8 +17,44 @@ struct FlyingState;
 
 /**
  * Detect takeoff and landing.
+ *
+ * GPS alone cannot distinguish stationary ground operation from a cold-start
+ * level wave flight, nor terrain contact from low-level ridge flight when
+ * altitude above ground is uncertain.  Airspeed or sustained climb evidence
+ * is needed to resolve those cases.  For an uphill foot launch, the beginning
+ * of sustained launch evidence may also precede actual separation from the
+ * terrain, and therefore so may the detected takeoff time.
  */
 class FlyingComputer {
+  class ClimbEvidence {
+    StateClock<20, 5> clock;
+    std::optional<double> previous_altitude;
+
+  public:
+    void Reset(std::optional<double> baseline={}) noexcept;
+    bool IsActive() const noexcept { return clock.IsDefined(); }
+    bool Update(FloatDuration dt, double altitude) noexcept;
+  };
+
+  struct LaunchEvidence {
+    TimeStamp time;
+    GeoPoint location;
+    double altitude;
+  };
+
+  class SlowLaunchDetector {
+    ClimbEvidence climb;
+    std::optional<LaunchEvidence> candidate;
+
+  public:
+    void Reset(std::optional<double> baseline={}) noexcept;
+
+    std::optional<LaunchEvidence>
+    Update(bool eligible, FloatDuration dt, TimeStamp time,
+           const GeoPoint &location,
+           std::optional<double> altitude) noexcept;
+  };
+
   DeltaTime delta_time;
 
   /**
@@ -29,14 +67,10 @@ class FlyingComputer {
    */
   StateClock<30, 5> moving_clock;
 
-  /**
-   * Tracks the duration the aircraft has been climbing.  If the
-   * aircraft has been climbing for a certain amount of time, it is
-   * assumed that it is still flying, even if the ground speed is
-   * small (for example, when flying in a wave without airspeed
-   * input).
-   */
-  StateClock<20, 5> climbing_clock;
+  SlowLaunchDetector slow_launch;
+
+  /** Rising evidence used only to reject a landing at low speed. */
+  ClimbEvidence landing_climb;
 
   /**
    * If the aircraft is currenly assumed to be moving, then this
@@ -79,8 +113,6 @@ class FlyingComputer {
   TimeStamp unpowered_since;
   GeoPoint unpowered_at;
 
-  double climbing_altitude;
-
   TimeStamp sinking_since;
 
   GeoPoint sinking_location;
@@ -99,7 +131,8 @@ class FlyingComputer {
 public:
   void Reset();
 
-  void Compute(double takeoff_speed,
+  /** Allow slow-launch detection when aircraft performance is unknown. */
+  void Compute(double takeoff_speed, bool allow_slow_launch,
                const NMEAInfo &basic,
                const DerivedInfo &calculated,
                FlyingState &flying);
@@ -120,22 +153,18 @@ protected:
                     double altitude);
 
   /**
-   * Check for monotonic climb.  This check is used for "flying"
-   * detection in a wave, when ground speed is low, no airspeed is
-   * available and no map was loaded.
-   *
-   * @return true if the aircraft has been climbing for more than 10
-   * seconds
-   */
-  bool CheckClimbing(FloatDuration dt, double altitude) noexcept;
-
-  /**
    * Check for powered flight.
    */
   void CheckPowered(FloatDuration dt, const NMEAInfo &basic,
                     FlyingState &flying) noexcept;
 
   void Check(FlyingState &state, TimeStamp time) noexcept;
+
+  static void Takeoff(FlyingState &state, TimeStamp time,
+                      const GeoPoint &location, double altitude) noexcept;
+
+  void ConfirmSlowTakeoff(FlyingState &state,
+                          const LaunchEvidence &evidence) noexcept;
 
   /**
    * Update flying state when moving 

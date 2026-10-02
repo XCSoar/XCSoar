@@ -287,6 +287,10 @@ document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.
 
 Log-files are stored in the `logs' subdirectory of the XCSoarData directory.
 These files can be imported into other programs for analysis after flight.
+The flight list estimates takeoff and landing times from recorded fixes.
+For IGC files with unknown aircraft performance, sustained climb and height
+gain can indicate a slow launch.
+Sustained climbs can also prevent a premature landing estimate at low speed.
 
 \section{FLARM Identification}\label{sec:flarm-ident-file}
 

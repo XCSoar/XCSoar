@@ -174,9 +174,8 @@ test_replay(const Contest olc_type,
   while (sim.Update(basic)) {
     n_samples++;
 
-    flying_computer.Compute(glide_polar.GetVTakeoff(),
-			    basic, calculated,
-			    flying_state);
+    flying_computer.Compute(glide_polar.GetVTakeoff(), false,
+                            basic, calculated, flying_state);
 
     calculated.flight.flying = true;
     
