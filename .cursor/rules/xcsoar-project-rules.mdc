@@ -256,9 +256,11 @@ device drivers, network/HTTP, or where a type belongs. Other developer docs:
   - Kobo e-readers use e-paper (E-Ink) displays which are non-color and have special rendering requirements
   - Use `IsKobo()` or `HasEPaper()` from `Asset.hpp` to detect e-paper displays
   - E-paper displays are slow to refresh and show ghosting; animations should be disabled
+  - On Kobo, `TopCanvas::Flip` sends `UPDATE_MODE_FULL` for the whole framebuffer, so `Invalidate()` flashes the entire page
+  - A timer must not call `Invalidate()` when `HasEPaper()` unless the pixels that will be painted have changed
+  - Skip the refresh when `HasEPaper()` or `IsSlowCPU()`, as kinetic pan and hold animation already do, or stretch it to tens of seconds when the content moves slowly
   - The renderer uses greyscale mode with optional dithering for better visual quality
   - Use `IsDithered()` to check if dithering is enabled for conditional styling
-  - Consider display refresh limitations when implementing UI updates on Kobo
 
 ### Architectural Layers
 
