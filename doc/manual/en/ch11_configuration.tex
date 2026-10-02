@@ -125,236 +125,6 @@ See Section~\ref{sec:map} for more details on map files.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Map Display / Orientation}\label{sec:map-projection}
-
-This page let you specify the favoured map orientation and view.
-
-\begin{description}
-\item[Cruise/Circling orientation]  \label{conf:orientation} This determines how
-  the screen is rotated with the glider, depending on it's current display mode. \\
-  {\bf Track up}: The moving map display will be rotated so the glider's track
-  is oriented up. The north arrow symbol points to true north. The glider symbol 
-  may be shown rotated according to the computed heading of the glider taking 
-  wind into account. \\
-  \sketch{figures/config-map_projection.png}
-  {\bf Heading up}: The moving map display will be rotated so the glider's 
-  heading is oriented up. \\
-  {\bf North up}: The moving map display will always be orientated true north to
-  south and the glider icon will be rotated to show its course (corrected for
-  wind). \\
-  {\bf Target up}: The moving map display will be rotated so the current target
-  direction is oriented up. \\
-  {\bf Wind up} The moving map display will be rotated so the wind is always 
-  oriented top-down (might be useful for wave flying).
-\item[Circling zoom]  \label{conf:circlingzoom} This determines whether separate
-  zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
-  map will zoom in automatically when entering circling mode and zoom out
-  automatically when leaving circling mode.
-\item[Map shift reference]  The direction according to the map will be displaced 
-  in order to present a meaningful map section. \\
-  {\bf None}: Disable any adjustment. \\
-  {\bf Track}: Use a recent average of the ground track as basis. \\
-  {\bf Target}: Use the current target waypoint as basis.
-\item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
-  glider drawn on the screen in percent from the screen edge.
-\item[Max.\ auto zoom distance]  The upper limit for auto zoom distance.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Map Display / Elements}\label{sec:map-elements}
-
-This page provides options relating to screen elements overlayed to the map display.
-
-\begin{description}
-\item[Ground track]  Display the ground track (ground track projection) on the map.
-  The setting ``Auto'' displays the ground track only if there is a significant
-  difference to plane heading.
-\item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM 
-  traffic on the map.
-\item[Trail length*] \label{conf:snailtrail} Determines whether and how long a
-  snail trail is drawn behind the glider. \\
-\sketch{figures/config-map_elements.png}
-  {\bf Off}: No trail is drawn. \\
-  {\bf Long}: A long trail is drawn (approx 60 minutes). \\
-  {\bf Short}: A short trail is drawn (approx 10 minutes). \\
-  {\bf Full}: A trail for the entire flight is drawn.
-\item[Trail drift*] \label{conf:traildrift} Determines whether the
-  snail trail is drifted with the wind when displayed in circling mode.  Off by
-  default.  Switched Off, the snail trail stays uncompensated for wind drift.
-  In circling this also applies to the projected track curve: On keeps it
-  relative to the air mass; Off includes wind.
-\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail display. \\
-  {\bf Vario \#1}: Within lift areas lines get displayed green and
-  thicker, while sinking lines are shown brown and thin.  Zero lift
-  is presented as a grey line. \\
-  {\bf Vario \#1 (with dots)}: The same colour scheme as the previous, but with dotted 
-  lines while sinking. \\
-  {\bf Vario \#2} (default): The climb colour for this scheme is orange to red,
-  sinking is displayed as light blue to dark blue. Zero lift is presented as a
-  yellow line. \\
-  {\bf Vario \#2 (with dots)}: The same colour scheme as the previous, but with dotted 
-  lines while sinking. \\
-  {\bf Altitude}: The colour scheme corresponds to the altitude.
-\item[Trail scaled*] \label{conf:trailscaled} If set to ON the snail trail 
-  width is scaled according to the vario signal.
-\item[Detour cost markers*]  If enabled this displays in cruise flight some
-  figures projected in front of the nose of the glider icon.  This is the
-  additional distance in percent if you fly up the position of the figure and
-  after that again straight towards the target, compared to the straight distance
-  to target.
-\item[Aircraft symbol*]  Sets the symbol used for the aircraft. \\
-  {\bf Simple}: Simplified line graphics, a black glider shape with white contours. \\
-  {\bf Simple (large)}: Enlarged simple graphics for better visibility on a small display. \\
-  {\bf Detailed}: Rendered aircraft graphics. \\
-  {\bf HangGlider}: Simplified hang glider as line graphics, white with black contours. \\
-  {\bf ParaGlider}: Simplified para glider as line graphics, white with black contours.
-\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map. \\
-  {\bf Off}: No wind arrow is drawn. \\
-  {\bf Arrow head}: Draws an arrow head only. \\
-  {\bf Full arrow}: Draws an arrow head with a dashed arrow line.
-\item[FAI triangle areas] Whether to show FAI triangle areas on the map.
-  
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Map Display / Waypoints}\label{sec:waypoint-display}
-
-This page provides options for how waypoints are displayed on the map.
-
-\begin{description}
-\item[Label format]  This setting \label{conf:labels} determines the label format 
-  displayed with each waypoint. There are four different format options. \\
-  {\bf Full name}: The full name of each waypoint is displayed. \\
-  {\bf First word of name}: Only the first word (up to the first space) of the 
-  waypoint name is displayed.
-\sketch{figures/config-map_waypoint.png} \\
-  {\bf First 3 letters}: The first 3 letters of the waypoint name are displayed. \\
-  {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
-  {\bf None}: No name is displayed with the waypoint.
-
-\item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints
-  are displayed with names and arrival altitudes on the map: \\
-  {\bf All}: All waypoint labels will be displayed. \\
-  {\bf Task waypoints and landables}: All waypoints part of a task and all landables
-  will be displayed. \\
-  {\bf Task waypoints}: All waypoints part of a task will be displayed. \\
-  {\bf None}:  No waypoint labels will be displayed.
-
-\item[Arrival height*] \label{conf:arrivalheight} This setting allows arrival height
-and/or required glide ratio to also be shown in labels for landable waypoints. See Section~\ref{sec:waypoint-schemes} for more information.\\
-  {\bf None}: Neither arrival height nor required glide ratio is displayed. \\
-  {\bf Straight glide}: Straight glide arrival height (no terrain is considered). (default option) \\
-  {\bf Terrain avoidance glide}: Arrival height considering any detour needed to avoid terrain. \\
-  {\bf Straight \& terrain glide}: Both arrival heights. \\
-  {\bf Required glide ratio}: Glide ratio over the ground required to reach the waypoint. \\
-  {\bf Required GR \& terrain glide}: Both required glide ratio and terrain avoidance glide arrival height.
-
-  For any option including terrain avoidance glide arrival height, the 'Reach
-  mode' setting (on the 'Glide Computer / Route' configuration page,
-  ~\ref{sec:glide-comp-route}) must be set to 'Turning'.
-
-  Glide ratio will be shown whenever the aircraft is higher than the waypoint
-  regardless of how shallow the glide is and
-  regardless of which configured waypoint file contains the waypoint. Negative
-  straight glide arrival heights, however, will only be shown for
-  waypoints in the 'Watched waypoints' file (selected on the
-  'Site Files / Site Files' configuration page, \ref{sec:site-files}). Negative
-  \emph{terrain avoidance} arrival heights will never be shown for any waypoints.
-
-  \warning
-  Also, if the 'Straight \& terrain glide' option is selected and only one
-  arrival height (a positive one) is shown for a waypoint (e.g.,
-  'Moontown:100m'), either no detour around terrain is needed or there's
-  interfering terrain and no possible detour will get you to the waypoint at
-  an acceptable height (the configured safety 'Arrival height'
-  (\ref{sec:safety-factors}) above the ground at the waypoint). These are two
-  \emph{very different situations} safety-wise!
-  Use other clues, like the reach line or the waypoint
-  appearance (e.g., color), to determine which is the case in this scenario.
-  Both arrival altitudes will be shown only if there's a detour that
-  will get you there at an acceptable height but a direct route is blocked
-  by terrain.
-  For example, 'Moontown:200/50m' means (1) you could reach Moontown 200m above the
-  minimum acceptable height if not for terrain that's in your way but (2) there's a detour
-  that will get you there 50m above the minimum acceptable height. So in this case,
-  you must detour, and the detour will cost you 150m (compared to if there were
-  no terrain in your way).
-
-\item[Label style*]  Labels for landables can be shown on a rounded rectangle with
-  white background, or with outlined letters.
-\item[Waypoint icon size] Size of waypoint symbols on the map as a percentage of
-  the built-in artwork. List dialogs keep a fixed row icon size.
-\item[Landable symbols]  \label{conf:waypointicons} Three styles are available:
-  Purple circles (WinPilot style), a high contrast style with icons,
-  and icons with a traffic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
-\item[Detailed landables*]  Enabling details on landables displays instead of fixed icons 
-  variable information like runway length and heading.
-\item[Landable size*]  A percentage to select the size landables are displayed on the map.
-\item[Scale runway length*]  Enabling this option will display for detailed landables 
-  additionally a scaled runway length based on real length.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Map Display / Terrain}\label{sec:terrain-display}
-
-This page sets how terrain and topography is drawn on the map window. The effect of the 
-\sketch{figures/config-terrain.png}
-changed terrain settings are directly visible at the small preview below.
-
-\begin{description}
-\item[Terrain display]  Draws digital elevation terrain on the map.
-\item[Topography display]  Draws topographical features (roads, rivers, lakes etc.) on
-  the map.
-\item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various 
-  schemes are available, which works best for you will depend on how mountainous your region is.
-\item[Slope shading*]  \label{conf:shading} The terrain can be shaded to indicate slopes and 
-  other terrain features. The illumination direction for the shading can be either: geographically
-  fixed from the north-west, screen-relative fixed from the top left, or the shading can be 
-  according to the actual current sun position. In addition, the illumination can be set to indicate 
-  the wind direction, with upwind slopes bright, and downwind slopes shaded.
-\item[Terrain contrast*]  Defines the amount of Phong shading in the terrain rendering. 
-  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
-\item[Terrain brightness*]  Defines the brightness (whiteness) of the terrain rendering.
-  This controls the average illumination of the terrain.
-\item[Contours*]  Draws contour lines on the terrain.  Two groups of
-  modes are available.
-  The adaptive modes ({\bf Mountains}, {\bf Highlands}, {\bf Lowlands},
-  {\bf Superfine}) set a base line density that is automatically scaled
-  with the zoom level to avoid over-cluttering at small scales.
-  {\bf Mountains} is for areas with steep slopes, with a 256\,m base
-  spacing; the other adaptive modes provide progressively smaller
-  spacing and higher line density.
-  The fixed modes ({\bf Fixed 256\,m}, {\bf Fixed 128\,m},
-  {\bf Fixed 64\,m}) use a constant contour spacing regardless of zoom
-  level.
-\end{description}
-
-
-The available terrain colour schemes are illustrated in the table below.
-
-\begin{longtable}{c c c c}
-\em{Low Lands [m]} & \em{Mountainous [m]} & \em{ICAO [m]} & \em{Grey [m]} \\
-\nopagebreak[4]
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
-\end{longtable}
-
-\begin{longtable}{c c c c}
-\em{Imhof 4 [m]} & \em{Imhof 7 [m]} & \em{Imhof 12 [m]} & \em{Imhof Atlas [m]} \\
-\nopagebreak[4]
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
-\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
-\end{longtable}
-
-
-%%%%%%%%%%%%%%%%%%
 \section{Map Display / Airspace}\label{sec:map-airspace}
 
 This page is used to determine how the airspace information is
@@ -444,38 +214,255 @@ review.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Glide Computer / Safety Factors}\label{sec:safety-factors}
+\section{Map Display / Elements}\label{sec:map-elements}
 
-This page allows the safety heights and behaviour for the alternates mode to be defined.
+This page provides options relating to screen elements overlayed to the map display.
 
 \begin{description}
-\item[Arrival height]  \label{conf:safetyarrival} The height above terrain that the glider
-  should arrive at for a safe landing.
-\item[Terrain height]  \label{conf:safetyterrain} The height above terrain that 
-  the glider must clear during final glide. \\
-See Section~\ref{sec:safety-heights} for more details on the meanings
-of the safety heights. \\
-\item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
-  in the alternates dialogue. \\
-  {\bf Simple}: The alternates will only be sorted by arrival height. 
-    The first waypoint in the list is therefore the most reachable waypoint. \\
-  {\bf Task}: The sorting will also take the current task direction into account, 
-    such that the sort order is according to minimum extra distance travelled to 
-    the respective field and onwards to the task. \\
-  {\bf Home}: The sorting will try to find landing options in the current direction 
-    to the configured home waypoint.  Similar to `task' but with 
-    the home field as the desired destination.
-\item[Polar degradation*]  A permanent polar degradation. 0\% means no degradation, 
-  50\% indicates the glider's sink rate is doubled.
-\item[Safety MC*]  When safety MC is enabled, this MacCready setting is used for reach 
-  calculations, task abort, alternates and for determining arrival altitude at airfields.\label{conf:safetyMC} 
-\item[STF risk factor*] 
-  The STF risk factor reduces the MacCready setting used to calculate
-  speed to fly as the glider gets low, in order to compensate for
-  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
-\sketch{figures/config-safety.png}
-  height (with reference to height of the maximum climb). If considered, 0.3 is recommended.  
-  See Section~\ref{sec:safety-factor} for more details.
+\item[Ground track]  Display the ground track (ground track projection) on the map.
+  The setting ``Auto'' displays the ground track only if there is a significant
+  difference to plane heading.
+\item[Turn back marker]  Show a green triangle on the map along the current
+  track. It marks the furthest point from which the active task waypoint or
+  Goto target can still be reached with the current altitude and conditions,
+  and is drawn only in cruise while that target is reachable.
+\item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM 
+  traffic on the map.
+\item[Trail length*] \label{conf:snailtrail} Determines whether and how long a
+  snail trail is drawn behind the glider. \\
+\sketch{figures/config-map_elements.png}
+  {\bf Off}: No trail is drawn. \\
+  {\bf Long}: A long trail is drawn (approx 60 minutes). \\
+  {\bf Short}: A short trail is drawn (approx 10 minutes). \\
+  {\bf Full}: A trail for the entire flight is drawn.
+\item[Trail drift*] \label{conf:traildrift} Determines whether the
+  snail trail is drifted with the wind when displayed in circling mode.  Off by
+  default.  Switched Off, the snail trail stays uncompensated for wind drift.
+  In circling this also applies to the projected track curve: On keeps it
+  relative to the air mass; Off includes wind.
+\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail display. \\
+  {\bf Vario \#1}: Within lift areas lines get displayed green and
+  thicker, while sinking lines are shown brown and thin.  Zero lift
+  is presented as a grey line. \\
+  {\bf Vario \#1 (with dots)}: The same colour scheme as the previous, but with dotted 
+  lines while sinking. \\
+  {\bf Vario \#2} (default): The climb colour for this scheme is orange to red,
+  sinking is displayed as light blue to dark blue. Zero lift is presented as a
+  yellow line. \\
+  {\bf Vario \#2 (with dots)}: The same colour scheme as the previous, but with dotted 
+  lines while sinking. \\
+  {\bf Altitude}: The colour scheme corresponds to the altitude.
+\item[Trail scaled*] \label{conf:trailscaled} If set to ON the snail trail 
+  width is scaled according to the vario signal.
+\item[Detour cost markers*]  If enabled this displays in cruise flight some
+  figures projected in front of the nose of the glider icon.  This is the
+  additional distance in percent if you fly up the position of the figure and
+  after that again straight towards the target, compared to the straight distance
+  to target.
+\item[Aircraft symbol*]  Sets the symbol used for the aircraft. \\
+  {\bf Simple}: Simplified line graphics, a black glider shape with white contours. \\
+  {\bf Simple (large)}: Enlarged simple graphics for better visibility on a small display. \\
+  {\bf Detailed}: Rendered aircraft graphics. \\
+  {\bf HangGlider}: Simplified hang glider as line graphics, white with black contours. \\
+  {\bf ParaGlider}: Simplified para glider as line graphics, white with black contours.
+\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map. \\
+  {\bf Off}: No wind arrow is drawn. \\
+  {\bf Arrow head}: Draws an arrow head only. \\
+  {\bf Full arrow}: Draws an arrow head with a dashed arrow line.
+\item[FAI triangle areas] Whether to show FAI triangle areas on the map.
+  
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Map Display / Orientation}\label{sec:map-projection}
+
+This page let you specify the favoured map orientation and view.
+
+\begin{description}
+\item[Cruise/Circling orientation]  \label{conf:orientation} This determines how
+  the screen is rotated with the glider, depending on it's current display mode. \\
+  {\bf Track up}: The moving map display will be rotated so the glider's track
+  is oriented up. The north arrow symbol points to true north. The glider symbol 
+  may be shown rotated according to the computed heading of the glider taking 
+  wind into account. \\
+  \sketch{figures/config-map_projection.png}
+  {\bf Heading up}: The moving map display will be rotated so the glider's 
+  heading is oriented up. \\
+  {\bf North up}: The moving map display will always be orientated true north to
+  south and the glider icon will be rotated to show its course (corrected for
+  wind). \\
+  {\bf Target up}: The moving map display will be rotated so the current target
+  direction is oriented up. \\
+  {\bf Wind up} The moving map display will be rotated so the wind is always 
+  oriented top-down (might be useful for wave flying).
+\item[Circling zoom]  \label{conf:circlingzoom} This determines whether separate
+  zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
+  map will zoom in automatically when entering circling mode and zoom out
+  automatically when leaving circling mode.
+\item[Map shift reference]  The direction according to the map will be displaced 
+  in order to present a meaningful map section. \\
+  {\bf None}: Disable any adjustment. \\
+  {\bf Track}: Use a recent average of the ground track as basis. \\
+  {\bf Target}: Use the current target waypoint as basis.
+\item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
+  glider drawn on the screen in percent from the screen edge.
+\item[Max.\ auto zoom distance]  The upper limit for auto zoom distance.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Map Display / Overlays}
+
+The final glide bar, the vario bar and the thermal band are drawn on
+the map. They stay at the edge of the map area.
+
+\begin{description}
+\item[Thermal band] \label{conf:thermalband} Enables the display of the
+  thermal profile (climb band) overlay on the map.
+\item[Final glide bar*]  If set to {\bf On} the final glide bar is always
+  shown. If set to {\bf Auto} it is shown when approaching the final glide
+  possibility. {\bf Off} hides it.
+\item[Final glide bar MC0*]  If set to ON the final glide bar will show a second arrow
+  indicating the required altitude to reach the final waypoint at MC zero.
+  Hidden while the final glide bar is off.
+\item[Vario bar*]  Shows the vario bar on the map.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Map Display / Terrain}\label{sec:terrain-display}
+
+This page sets how terrain and topography is drawn on the map window. The effect of the 
+\sketch{figures/config-terrain.png}
+changed terrain settings are directly visible at the small preview below.
+
+\begin{description}
+\item[Terrain display]  Draws digital elevation terrain on the map.
+\item[Topography display]  Draws topographical features (roads, rivers, lakes etc.) on
+  the map.
+\item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various 
+  schemes are available, which works best for you will depend on how mountainous your region is.
+\item[Slope shading*]  \label{conf:shading} The terrain can be shaded to indicate slopes and 
+  other terrain features. The illumination direction for the shading can be either: geographically
+  fixed from the north-west, screen-relative fixed from the top left, or the shading can be 
+  according to the actual current sun position. In addition, the illumination can be set to indicate 
+  the wind direction, with upwind slopes bright, and downwind slopes shaded.
+\item[Terrain contrast*]  Defines the amount of Phong shading in the terrain rendering. 
+  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
+\item[Terrain brightness*]  Defines the brightness (whiteness) of the terrain rendering.
+  This controls the average illumination of the terrain.
+\item[Contours*]  Draws contour lines on the terrain.  Two groups of
+  modes are available.
+  The adaptive modes ({\bf Mountains}, {\bf Highlands}, {\bf Lowlands},
+  {\bf Superfine}) set a base line density that is automatically scaled
+  with the zoom level to avoid over-cluttering at small scales.
+  {\bf Mountains} is for areas with steep slopes, with a 256\,m base
+  spacing; the other adaptive modes provide progressively smaller
+  spacing and higher line density.
+  The fixed modes ({\bf Fixed 256\,m}, {\bf Fixed 128\,m},
+  {\bf Fixed 64\,m}) use a constant contour spacing regardless of zoom
+  level.
+\end{description}
+
+
+The available terrain colour schemes are illustrated in the table below.
+
+\begin{longtable}{c c c c}
+\em{Low Lands [m]} & \em{Mountainous [m]} & \em{ICAO [m]} & \em{Grey [m]} \\
+\nopagebreak[4]
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
+\end{longtable}
+
+\begin{longtable}{c c c c}
+\em{Imhof 4 [m]} & \em{Imhof 7 [m]} & \em{Imhof 12 [m]} & \em{Imhof Atlas [m]} \\
+\nopagebreak[4]
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
+\includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
+\end{longtable}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Map Display / Waypoints}\label{sec:waypoint-display}
+
+This page provides options for how waypoints are displayed on the map.
+
+\begin{description}
+\item[Label format]  This setting \label{conf:labels} determines the label format 
+  displayed with each waypoint. There are four different format options. \\
+  {\bf Full name}: The full name of each waypoint is displayed. \\
+  {\bf First word of name}: Only the first word (up to the first space) of the 
+  waypoint name is displayed.
+\sketch{figures/config-map_waypoint.png} \\
+  {\bf First 3 letters}: The first 3 letters of the waypoint name are displayed. \\
+  {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
+  {\bf None}: No name is displayed with the waypoint.
+
+\item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints
+  are displayed with names and arrival altitudes on the map: \\
+  {\bf All}: All waypoint labels will be displayed. \\
+  {\bf Task waypoints and landables}: All waypoints part of a task and all landables
+  will be displayed. \\
+  {\bf Task waypoints}: All waypoints part of a task will be displayed. \\
+  {\bf None}:  No waypoint labels will be displayed.
+
+\item[Arrival height*] \label{conf:arrivalheight} This setting allows arrival height
+and/or required glide ratio to also be shown in labels for landable waypoints. See Section~\ref{sec:waypoint-schemes} for more information.\\
+  {\bf None}: Neither arrival height nor required glide ratio is displayed. \\
+  {\bf Straight glide}: Straight glide arrival height (no terrain is considered). (default option) \\
+  {\bf Terrain avoidance glide}: Arrival height considering any detour needed to avoid terrain. \\
+  {\bf Straight \& terrain glide}: Both arrival heights. \\
+  {\bf Required glide ratio}: Glide ratio over the ground required to reach the waypoint. \\
+  {\bf Required GR \& terrain glide}: Both required glide ratio and terrain avoidance glide arrival height.
+
+  For any option including terrain avoidance glide arrival height, the 'Reach
+  mode' setting (on the 'Glide Computer / Route' configuration page,
+  ~\ref{sec:glide-comp-route}) must be set to 'Turning'.
+
+  Glide ratio will be shown whenever the aircraft is higher than the waypoint
+  regardless of how shallow the glide is and
+  regardless of which configured waypoint file contains the waypoint. Negative
+  straight glide arrival heights, however, will only be shown for
+  waypoints in the 'Watched waypoints' file (selected on the
+  'Site Files / Site Files' configuration page, \ref{sec:site-files}). Negative
+  \emph{terrain avoidance} arrival heights will never be shown for any waypoints.
+
+  \warning
+  Also, if the 'Straight \& terrain glide' option is selected and only one
+  arrival height (a positive one) is shown for a waypoint (e.g.,
+  'Moontown:100m'), either no detour around terrain is needed or there's
+  interfering terrain and no possible detour will get you to the waypoint at
+  an acceptable height (the configured safety 'Arrival height'
+  (\ref{sec:safety-factors}) above the ground at the waypoint). These are two
+  \emph{very different situations} safety-wise!
+  Use other clues, like the reach line or the waypoint
+  appearance (e.g., color), to determine which is the case in this scenario.
+  Both arrival altitudes will be shown only if there's a detour that
+  will get you there at an acceptable height but a direct route is blocked
+  by terrain.
+  For example, 'Moontown:200/50m' means (1) you could reach Moontown 200m above the
+  minimum acceptable height if not for terrain that's in your way but (2) there's a detour
+  that will get you there 50m above the minimum acceptable height. So in this case,
+  you must detour, and the detour will cost you 150m (compared to if there were
+  no terrain in your way).
+
+\item[Label style*]  Labels for landables can be shown on a rounded rectangle with
+  white background, or with outlined letters.
+\item[Waypoint icon size] Size of waypoint symbols on the map as a percentage of
+  the built-in artwork. List dialogs keep a fixed row icon size.
+\item[Landable symbols]  \label{conf:waypointicons} Three styles are available:
+  Purple circles (WinPilot style), a high contrast style with icons,
+  and icons with a traffic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
+\item[Detailed landables*]  Enabling details on landables displays instead of fixed icons 
+  variable information like runway length and heading.
+\item[Landable size*]  A percentage to select the size landables are displayed on the map.
+\item[Scale runway length*]  Enabling this option will display for detailed landables 
+  additionally a scaled runway length based on real length.
 \end{description}
 
 
@@ -531,24 +518,6 @@ This page allows glide computer algorithms to be configured.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Glide Computer / Wind} \label{sec:wind}
-
-This page sets the base for wind computations.
-
-\begin{description}
-\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
-  automatic wind algorithm. \\
-  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate. \\
-  {\bf Circling}: Circling mode requires only a GPS source. \\
-  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
-  {\bf Both}:  Uses Circling and ZigZag.
-\item[Prefere external wind]  If enabled, the wind vector received from external
-  devices overrides XCSoar's internal wind calculation.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
 \section{Glide Computer / Route}\label{sec:glide-comp-route}
 
 This page allows control over glide reach calculations and route
@@ -580,6 +549,69 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 \end{description}
 
 
+%%%%%%%%%%
+\section{Glide Computer / Safety Factors}\label{sec:safety-factors}
+
+This page allows the safety heights and behaviour for the alternates mode to be defined.
+
+\begin{description}
+\item[Arrival height]  \label{conf:safetyarrival} The height above terrain that the glider
+  should arrive at for a safe landing.
+\item[Terrain height]  \label{conf:safetyterrain} The height above terrain that 
+  the glider must clear during final glide. \\
+See Section~\ref{sec:safety-heights} for more details on the meanings
+of the safety heights. \\
+\item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
+  in the alternates dialogue. \\
+  {\bf Simple}: The alternates will only be sorted by arrival height. 
+    The first waypoint in the list is therefore the most reachable waypoint. \\
+  {\bf Task}: The sorting will also take the current task direction into account, 
+    such that the sort order is according to minimum extra distance travelled to 
+    the respective field and onwards to the task. \\
+  {\bf Home}: The sorting will try to find landing options in the current direction 
+    to the configured home waypoint.  Similar to `task' but with 
+    the home field as the desired destination.
+\item[Polar degradation*]  A permanent polar degradation. 0\% means no degradation, 
+  50\% indicates the glider's sink rate is doubled.
+\item[Safety MC*]  When safety MC is enabled, this MacCready setting is used for reach 
+  calculations, task abort, alternates and for determining arrival altitude at airfields.\label{conf:safetyMC} 
+\item[STF risk factor*] 
+  The STF risk factor reduces the MacCready setting used to calculate
+  speed to fly as the glider gets low, in order to compensate for
+  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
+\sketch{figures/config-safety.png}
+  height (with reference to height of the maximum climb). If considered, 0.3 is recommended.  
+  See Section~\ref{sec:safety-factor} for more details.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Glide Computer / Wind} \label{sec:wind}
+
+This page sets the base for wind computations.
+
+\begin{description}
+\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
+  automatic wind algorithm. \\
+  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
+  setting the wind estimate. \\
+  {\bf Circling}: Circling mode requires only a GPS source. \\
+  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
+  {\bf Both}:  Uses Circling and ZigZag.
+\item[Prefere external wind]  If enabled, the wind vector received from external
+  devices overrides XCSoar's internal wind calculation.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Gauges / Thermal Assistant}
+
+\begin{description}
+\item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
+  Thermal Assistant and selects its position on the screen.
+\end{description}
+
+
 %%%%%%%%%%%%%%%%%%
 \section{Gauges / Traffic} \label{sec:flarmandother-gauge}
 
@@ -598,47 +630,36 @@ In all FLARM environments, the colour of the target indicates the threat level.
 
 
 %%%%%%%%%%
-\section{Gauges / Overlays}
+\section{Task / Scoring}
 
 \begin{description}
-\item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
-  ThermalAssistant gauge.
-\item[Thermal band] \label{conf:thermalband} Enables the display of the
-  thermal profile (climb band) overlay on the map.
-\item[Final glide bar MC0*]  If set to ON the final glide bar will show a second arrow 
-  indicating the required altitude to reach the final waypoint at MC zero.
-\end{description}
-
-
-%%%%%%%%%%
-\section{Gauges / Vario}\label{sec:vario-gauge}
-
-This page configures the analog vario gauge (shown with InfoBox layouts
-that include a vario).
-
-\begin{description}
-\item[Speed arrows]  \label{conf:variogauge} Whether to show speed command
-  arrows on the vario gauge.
-  When shown, in cruise mode, arrows point up to command slow down; arrows point down
-  to command speed up.
-\item[Show average]  Whether to show the average climb rate.  In cruise mode, this
-  switches to showing the average net airmass rate.
-\item[Show MacCready]  Whether to show the MacCready setting.
-\item[Show gross]  Whether to show the gross vario value.
-\item[Averager needle]  If true, the vario gauge will display a hollow averager
-  needle. During cruise, this needle displays the average net value. During circling,
-  this needle displays the average gross value.
-\item[Show bugs*]  Whether to show the bugs percentage.
-\item[Show ballast*]  Whether to show the ballast percentage.
-\item[Thermal Averager needle*]  If true, the vario gauge will display a thermal
-  averager needle instead of the current climb-rate needle. During cruise, this
-  needle displays the last thermal average net value. During circling, this
-  needle displays the average net value.
+\item[Contest]  Determines the rules used to optimise for the selected contest 
+  paths. \\
+  {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
+  finish.  For tasks longer than
+  500~km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\%
+  of total.  Finish height must not be lower than start height less 1000~m. \\
+  {\bf OLC Classic}: Up to seven points including start and finish, finish height
+  must not be lower than start height less 1000~m. \\
+  {\bf OLC League}: A contest on top of the classic task optimisation, cutting
+  a 2~hours segment over max.\ 3 of the turns. Finish height must not be below
+  start height. \\
+  {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
+  are added to the Classic score. \\
+  {\bf DMSt}: Deutsche Meisterschaft im Streckensegelflug. \\
+  {\bf XContest}: \todonum{tbd.} \\
+  {\bf DHV-XC}: \todonum{tbd.} \\
+  {\bf SIS-AT}: \todonum{tbd.} \\
+  {\bf FFVV NetCoupe}: The FFVV NetCoupe `{\it libre}' competition. \\
+  {\bf WeGlide FREE}: WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out I\& Return distance that can be fitted into the flight route. \\
+  {\bf WeGlide O\&R}: A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized. \\
+\item[Predict Contest]  If enabled, then the next task point is included in the 
+  score calculation, assuming that you will reach it.
 \end{description}
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Task Defaults / Task Rules}
+\section{Task / Task Rules}
 
 Task rules may be defined to limit valid starts according to competition
 rules. \label{conf:taskrules}
@@ -667,156 +688,15 @@ rules. \label{conf:taskrules}
  the start window remains open when \emph{Pilot Event} (see \ref
  {sec:pilotevent}) start procedure is used. If set to 0, the start window, once
  opened, remains open forever.
-\item[Contest]  Determines the rules used to optimise for the selected contest 
-  paths. \\
-  {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
-  finish.  For tasks longer than
-  500~km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\%
-  of total.  Finish height must not be lower than start height less 1000~m. \\
-  {\bf OLC Classic}: Up to seven points including start and finish, finish height
-  must not be lower than start height less 1000~m. \\
-  {\bf OLC League}: A contest on top of the classic task optimisation, cutting
-  a 2~hours segment over max.\ 3 of the turns. Finish height must not be below
-  start height. \\
-  {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
-  are added to the Classic score. \\
-  {\bf DMSt}: Deutsche Meisterschaft im Streckensegelflug. \\
-  {\bf XContest}: \todonum{tbd.} \\
-  {\bf DHV-XC}: \todonum{tbd.} \\
-  {\bf SIS-AT}: \todonum{tbd.} \\
-  {\bf FFVV NetCoupe}: The FFVV NetCoupe `{\it libre}' competition. \\
-  {\bf WeGlide FREE}: WeGlide combines multiple scoring systems in the WeGlide Free contest. The free score is a combination of the free distance score and the area bonus. For the area bonus, the scoring program determines the largest FAI triangle and the largest Out I\& Return distance that can be fitted into the flight route. \\
-  {\bf WeGlide O\&R}: A start point, one turn point and a finish point are chosen from the flight path such that the distance between the start point and the turn point is maximized. \\
-\item[Predict Contest]  If enabled, then the next task point is included in the 
-  score calculation, assuming that you will reach it.
 \end{description}
 
 %%%%%%%%%%%%%%%%%%
-\section{Task Defaults / Turnpoint Types}
+\section{Task / Turnpoint Types}
 
 This page allows to set default turnpoint types used by the task editor. All 
 options are well described for the task manager in Chapter~\ref{cha:tasks}.
 
 
-%%%%%%%%%%%%%%%%%%
-\section{Look / Screen}\label{sec:look-screen}
-\label{sec:interface-display}
-
-This page configures the physical screen: technology, resolution,
-orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
-
-\begin{description}
-\item[Display type*]  Select the display technology. E-ink modes disable
-  kinetic and smooth scrolling for slow refresh screens.
-\item[Display resolution*]  Used to adapt line widths, font size, landable
-  size and more.
-\item[Display orientation]  Rotate the display on devices that support it.
-\item[Screen brightness]  Adjust the screen brightness, where the platform
-  allows it.
-\item[Full screen]  Let XCSoar use the whole screen, including the areas
-  behind the system bars and the display cutout (the ``notch''). The map
-  always fills it completely; \emph{Stretch InfoBox area} decides which
-  edges
-  the InfoBoxes, gauges, map overlays and the menu may reach.
-  Only available on Android and iOS.
-\item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
-  that is available to the InfoBoxes, gauges, map overlays and the
-  menu. Selecting
-  this entry opens a picker in which you choose the screen edges on which
-  the InfoBox area is stretched out to the screen border, so that they
-  reach the very edge
-  there. Edges you leave unstretched stay clear of the display
-  cutout and of the space the system bars occupy, including the
-  home indicator while full screen hides it. Rounded corners stay
-  clear on unstretched edges. Dialogues always stay inside the
-  safe area. The Fly/Simulator start screen may fill the screen
-  with its background; Quit, Fly, Simulator and the version stay
-  in the safe area.
-  Only relevant while \emph{Full screen} is enabled.
-\item[System status bar]  Whether the system status bar with the clock and
-  the battery level stays visible. \\
-  {\bf Auto}: Show it unless the InfoBox area is stretched to the top
-  screen edge. \\
-  {\bf Visible}: Always show it, even in full screen mode. \\
-  {\bf Hidden}: Never show it. \\
-  While the status bar is visible, the InfoBoxes keep clear of the top screen
-  edge, because they cannot be drawn behind it.
-  Only available on iOS.
-\item[Cursor zoom]  Control the size of the cursor. Default is 1.
-  Only available if the cursor is drawn by XCSoar.
-\item[Invert cursor color]  Use a black cursor. Default is {\bf Off}
-  (white cursor). Only available if the cursor is drawn by XCSoar.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Look / Layout}\label{sec:interface-appearance}
-\label{conf:interface-appearance}
-
-This page once more details the appearance of the graphical user interface of XCSoar.
-
-\begin{description}
-\item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
-  best for your screen size. The preceding number refer to the total number of 
-  InfoBoxes of this geometry.
-\item[Tab dialogue style]  Determines whether tabbed dialogues use text or icons.
-\item[Message display*]  Defines the alignment of the status message box, either 
-  {\bf Center} or in the {\bf TopLeft} corner.
-\item[Dialogue size*]  Determines the display size of dialogues.
-\item[Inverse InfoBoxes*]  If {\bf On}, the InfoBoxes are white on black, otherwise 
-  black on white.
-\item[Colour InfoBoxes*]  If {\bf On}, certain InfoBoxes will have coloured text. For 
-  example, the active waypoint InfoBox will turn blue when the glider is above final 
-  glide.
-\item[InfoBox border*]  Two styles for InfoBox borders are available. \\
-  {\bf Box}: Draws boxes around each InfoBox. \\
-  {\bf Tab}: Draws a tab at the top of the InfoBox across the
-  title. \\
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Look / InfoBox Pages (or just Pages)}\label{conf:screenpages}
-
-This page allows the definition of the screen page ensemble. A typical setup 
-will contain three pages, the expert can pile up to eight possible pages.
-
-A page is more or less a composition of map and InfoBox set. There are five 
-predefined pages for circling, cruise, final glide, a map only page and a 
-page with automatic InfoBox set activation depending on your flight mode.
-
-Additionally you can choose from up to five more pages that are composed from map 
-and your custom InfoBox sets.  
-
-\begin{description}
-\item[Page 1..3]  Select what you feel is appropriate for you to appear on page 1,2,3 etc. 
-  Selecting ``- - -'' will make the page inactive.
-\item[Page 4..8*]  Experts can configure up to eight pages in the already 
-  described manner.
-\end{description}
-
-When editing a page, the following options are available for map pages:
-\begin{description}
-\item[Main area]  The primary content of the page, for example \emph{Map}
-  or \emph{Map (north-up)}.
-\item[InfoBoxes]  Which InfoBox set is shown alongside the main area.
-\item[Bottom area]  Optional panel below the main area.  Select
-  \emph{Weather controls} to show in-flight RASP, EDL, or XC Therm forecast
-  controls when the page uses a weather overlay.
-\item[Map overlay]  Optional weather overlay drawn on map pages: \emph{None},
-  \emph{RASP}, \emph{EDL}, or \emph{XC Therm}.  RASP requires a loaded RASP
-  file; EDL and XC Therm require network-capable builds with the respective
-  weather provider configured.
-\item[Layer / Level]  When \emph{Map overlay} is \emph{RASP}, selects
-  which RASP field is displayed on this page.  When the overlay is
-  \emph{EDL}, selects the pressure level (altitude band): \emph{Auto}
-  follows aircraft altitude when the page is opened; a fixed level is
-  restored each time the page is selected.  The label and choices
-  change with the selected overlay.
-\end{description}
-
-
-%%%%%%%%%%
 \section{Look / InfoBox Modes (or InfoBox Sets)}\label{sec:infobox_sets}
 \label{conf:infobox_sets}
 
@@ -889,28 +769,212 @@ landscape and portrait screen layout.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Setup / Logger} \label{conf:logger}
+\section{Look / Layout}\label{sec:interface-appearance}
+\label{conf:interface-appearance}
 
-The internal software logger has adjustable time steps, separate for
-cruise and circling modes.  
-Typically the circling time step is set to a smaller value
-than cruise in order to give good quality flight logs for replay
-purposes.
+This page once more details the appearance of the graphical user interface of XCSoar.
 
 \begin{description}
-\item[Pilot name]  This is the pilot name used in the internal software logger 
-  declaration.
-\item[Time step cruise*]  This is the time interval between logged points when 
-  not circling. 
-\item[Time step circling*]  This is the time interval between logged points when 
-  circling. 
-\item[Auto logger*]  Enables the automatic starting and stopping of the logger
-  on takeoff and landing respectively. Disable when flying paragliders to prevent 
-  the low ground speeds from triggering the automatic logger.
-\item[NMEA logger*]  Enable the NMEA logger on startup? If this option is disabled, 
-  the NMEA logger can still be started manually.
-\item[Log book*]  Logs each start and landing.
-\item[Logger ID]  This is the logger registration.
+\item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
+  best for your screen size. The preceding number refer to the total number of 
+  InfoBoxes of this geometry.
+\item[Tab dialogue style]  Determines whether tabbed dialogues use text or icons.
+\item[Message display*]  Defines the alignment of the status message box, either 
+  {\bf Center} or in the {\bf TopLeft} corner.
+\item[Dialogue size*]  Determines the display size of dialogues.
+\item[Inverse InfoBoxes*]  If {\bf On}, the InfoBoxes are white on black, otherwise 
+  black on white.
+\item[Colour InfoBoxes*]  If {\bf On}, certain InfoBoxes will have coloured text. For 
+  example, the active waypoint InfoBox will turn blue when the glider is above final 
+  glide.
+\item[InfoBox border*]  Two styles for InfoBox borders are available. \\
+  {\bf Box}: Draws boxes around each InfoBox. \\
+  {\bf Tab}: Draws a tab at the top of the InfoBox across the
+  title. \\
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Look / InfoBox Pages (or just Pages)}\label{conf:screenpages}
+
+This page allows the definition of the screen page ensemble. A typical setup 
+will contain three pages, the expert can pile up to eight possible pages.
+
+A page is more or less a composition of map and InfoBox set. There are five 
+predefined pages for circling, cruise, final glide, a map only page and a 
+page with automatic InfoBox set activation depending on your flight mode.
+
+Additionally you can choose from up to five more pages that are composed from map 
+and your custom InfoBox sets.  
+
+\begin{description}
+\item[Page 1..3]  Select what you feel is appropriate for you to appear on page 1,2,3 etc. 
+  Selecting ``- - -'' will make the page inactive.
+\item[Page 4..8*]  Experts can configure up to eight pages in the already 
+  described manner.
+\end{description}
+
+When editing a page, the following options are available for map pages:
+\begin{description}
+\item[Main area]  The primary content of the page, for example \emph{Map}
+  or \emph{Map (north-up)}.
+\item[InfoBoxes]  Which InfoBox set is shown alongside the main area.
+\item[Bottom area]  Optional panel below the main area.  Select
+  \emph{Weather controls} to show in-flight RASP, EDL, or XC Therm forecast
+  controls when the page uses a weather overlay.
+\item[Map overlay]  Optional weather overlay drawn on map pages: \emph{None},
+  \emph{RASP}, \emph{EDL}, or \emph{XC Therm}.  RASP requires a loaded RASP
+  file; EDL and XC Therm require network-capable builds with the respective
+  weather provider configured.
+\item[Layer / Level]  When \emph{Map overlay} is \emph{RASP}, selects
+  which RASP field is displayed on this page.  When the overlay is
+  \emph{EDL}, selects the pressure level (altitude band): \emph{Auto}
+  follows aircraft altitude when the page is opened; a fixed level is
+  restored each time the page is selected.  The label and choices
+  change with the selected overlay.
+\end{description}
+
+
+%%%%%%%%%%
+\section{Look / Screen}\label{sec:look-screen}
+\label{sec:interface-display}
+
+This page configures the physical screen: technology, resolution,
+orientation, brightness, and (where drawn by XCSoar) the mouse cursor.
+
+\begin{description}
+\item[Display type*]  Select the display technology. E-ink modes disable
+  kinetic and smooth scrolling for slow refresh screens.
+\item[Display resolution*]  Used to adapt line widths, font size, landable
+  size and more.
+\item[Display orientation]  Rotate the display on devices that support it.
+\item[Screen brightness]  Adjust the screen brightness, where the platform
+  allows it.
+\item[Full screen]  Let XCSoar use the whole screen, including the areas
+  behind the system bars and the display cutout (the ``notch''). The map
+  always fills it completely; \emph{Stretch InfoBox area} decides which
+  edges
+  the InfoBoxes, gauges, map overlays and the menu may reach.
+  Only available on Android and iOS.
+\item[Stretch InfoBox area*]  The InfoBox area is the part of the screen
+  that is available to the InfoBoxes, gauges, map overlays and the
+  menu. Selecting
+  this entry opens a picker in which you choose the screen edges on which
+  the InfoBox area is stretched out to the screen border, so that they
+  reach the very edge
+  there. Edges you leave unstretched stay clear of the display
+  cutout and of the space the system bars occupy, including the
+  home indicator while full screen hides it. Rounded corners stay
+  clear on unstretched edges. Dialogues always stay inside the
+  safe area. The Fly/Simulator start screen may fill the screen
+  with its background; Quit, Fly, Simulator and the version stay
+  in the safe area.
+  Only relevant while \emph{Full screen} is enabled.
+\item[System status bar]  Whether the system status bar with the clock and
+  the battery level stays visible. \\
+  {\bf Auto}: Show it unless the InfoBox area is stretched to the top
+  screen edge. \\
+  {\bf Visible}: Always show it, even in full screen mode. \\
+  {\bf Hidden}: Never show it. \\
+  While the status bar is visible, the InfoBoxes keep clear of the top screen
+  edge, because they cannot be drawn behind it.
+  Only available on iOS.
+\item[Cursor zoom]  Control the size of the cursor. Default is 1.
+  Only available if the cursor is drawn by XCSoar.
+\item[Invert cursor color]  Use a black cursor. Default is {\bf Off}
+  (white cursor). Only available if the cursor is drawn by XCSoar.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Look / Vario}\label{sec:vario-gauge}
+
+This page configures the analog vario. It is part of an InfoBox layout
+that includes a vario, not a separate gauge on the map.
+
+\begin{description}
+\item[Speed arrows]  \label{conf:variogauge} Whether to show speed command
+  arrows on the vario gauge.
+  When shown, in cruise mode, arrows point up to command slow down; arrows point down
+  to command speed up.
+\item[Show average]  Whether to show the average climb rate.  In cruise mode, this
+  switches to showing the average net airmass rate.
+\item[Show MacCready]  Whether to show the MacCready setting.
+\item[Show gross]  Whether to show the gross vario value.
+\item[Averager needle]  If true, the vario gauge will display a hollow averager
+  needle. During cruise, this needle displays the average net value. During circling,
+  this needle displays the average gross value.
+\item[Show bugs*]  Whether to show the bugs percentage.
+\item[Show ballast*]  Whether to show the ballast percentage.
+\item[Thermal Averager needle*]  If true, the vario gauge will display a thermal
+  averager needle instead of the current climb-rate needle. During cruise, this
+  needle displays the last thermal average net value. During circling, this
+  needle displays the average net value.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Services / LiveTrack24}
+
+The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
+\url{http://www.livetrack24.com}.
+Please consult the web pages of the service provider listed under `Server'
+for details on this setup.
+
+\begin{description}
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
+  your position to `{\em LiveTrack24}'.
+\item[Tracking Interval]  The time interval for which one position is sent to
+  the tracking service.
+\item[Vehicle Type]  Type of vehicle used.
+\item[Server]  The service's web address to stream your position to. There is currently 
+  a choice of some predefined.
+\item[Username]  If you created an account you can enter those credentials here. 
+  Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
+\item[Password]  The password to your tracking account.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Services / SkyLines}
+
+`{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
+network to send this position in real-time to a server, other people can see 
+your exact position and track presented in a map just in time.
+The tracking option needs the capability to connect to mobile networking as offered by 
+your glide computer.
+
+`{\em SkyLines}' is a spin-off project from XCSoar itself; for details on this
+service have a look at \url{https://skylines.aero}.
+
+\begin{description}
+\item[Enable]  Switch this {\bf On} to enable the live stream of 
+  your position to `{\em SkyLines}'.
+\item[Tracking Interval]  The time interval for which one position is sent to
+  the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
+  a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
+\item[Key]  Create a key on the page \url{https://skylines.aero/tracking/info} 
+  and enter it here, to identify your positions at the tracking service.
+\end{description}
+
+
+\section{Setup / Audio}\label{sec:audiovario-gauge}
+
+Master volume and the audio variometer. \label{conf:audiovariogauge}
+
+\begin{description}
+\item[Master Volume]  The overall audio output volume.
+\item[Audio Vario]  Enable/Disable the audio variometer. The other
+  audio vario settings on this page are hidden while it is off.
+\item[Vario Volume]  Set the volume of the variometer sounds.
+\item[Mode switching]  Stay in manual audio mode, or switch automatically
+  between Vario in circling and speed-to-fly in cruise.
+\item[Enable Deadband]  Enable/Disable the mute for audio output when the current lift is in a certain range around zero.
+\item[Min.\ Frequency*]  The tone frequency that is played at maximum sink rate.
+\item[Zero Frequency*]  The tone frequency that is played at zero climb rate.
+\item[Max.\ Frequency*]  The tone frequency that is played at maximum climb rate.
+\item[Deadband min.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is below this threshold.
+\item[Deadband max.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is above this threshold.
 \end{description}
 
 
@@ -958,22 +1022,28 @@ If customisation is disabled, default fonts will be used.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Setup / Audio}\label{sec:audiovario-gauge}
+\section{Setup / Logger} \label{conf:logger}
 
-Master volume and the audio variometer. \label{conf:audiovariogauge}
+The internal software logger has adjustable time steps, separate for
+cruise and circling modes.  
+Typically the circling time step is set to a smaller value
+than cruise in order to give good quality flight logs for replay
+purposes.
 
 \begin{description}
-\item[Master Volume]  The overall audio output volume.
-\item[Audio Vario]  Enable/Disable the audio variometer.
-\item[Vario Volume]  Set the volume of the variometer sounds.
-\item[Mode switching]  Stay in manual audio mode, or switch automatically
-  between Vario in circling and speed-to-fly in cruise.
-\item[Enable Deadband]  Enable/Disable the mute for audio output when the current lift is in a certain range around zero.
-\item[Min.\ Frequency*]  The tone frequency that is played at maximum sink rate.
-\item[Zero Frequency*]  The tone frequency that is played at zero climb rate.
-\item[Max.\ Frequency*]  The tone frequency that is played at maximum climb rate.
-\item[Deadband min.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is below this threshold.
-\item[Deadband max.\ lift*]  If the deadband feature is enabled the vario will play sounds when the climb rate is above this threshold.
+\item[Pilot name]  This is the pilot name used in the internal software logger 
+  declaration.
+\item[Time step cruise*]  This is the time interval between logged points when 
+  not circling. 
+\item[Time step circling*]  This is the time interval between logged points when 
+  circling. 
+\item[Auto logger*]  Enables the automatic starting and stopping of the logger
+  on takeoff and landing respectively. Disable when flying paragliders to prevent 
+  the low ground speeds from triggering the automatic logger.
+\item[NMEA logger*]  Enable the NMEA logger on startup? If this option is disabled, 
+  the NMEA logger can still be started manually.
+\item[Log book*]  Logs each start and landing.
+\item[Logger ID]  This is the logger registration.
 \end{description}
 
 
@@ -1041,50 +1111,6 @@ Set the local time offset with respect to UTC.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Services / SkyLines}
-
-`{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
-network to send this position in real-time to a server, other people can see 
-your exact position and track presented in a map just in time.
-The tracking option needs the capability to connect to mobile networking as offered by 
-your glide computer.
-
-`{\em SkyLines}' is a spin-off project from XCSoar itself; for details on this
-service have a look at \url{https://skylines.aero}.
-
-\begin{description}
-\item[Enable]  Switch this {\bf On} to enable the live stream of 
-  your position to `{\em SkyLines}'.
-\item[Tracking Interval]  The time interval for which one position is sent to
-  the tracking service. `{\em SkyLines}' implements a very lean protocol, so that even
-  a 30 sec.\ interval does not exhaust a plain GPRS connection (ca.\ 12~kbit/sec).
-\item[Key]  Create a key on the page \url{https://skylines.aero/tracking/info} 
-  and enter it here, to identify your positions at the tracking service.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\section{Services / LiveTrack24}
-
-The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
-\url{http://www.livetrack24.com}.
-Please consult the web pages of the service provider listed under `Server'
-for details on this setup.
-
-\begin{description}
-\item[Enable]  Switch this {\bf On} to enable the live stream of 
-  your position to `{\em LiveTrack24}'.
-\item[Tracking Interval]  The time interval for which one position is sent to
-  the tracking service.
-\item[Vehicle Type]  Type of vehicle used.
-\item[Server]  The service's web address to stream your position to. There is currently 
-  a choice of some predefined.
-\item[Username]  If you created an account you can enter those credentials here. 
-  Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
-\item[Password]  The password to your tracking account.
-\end{description}
-
-
 %%%%%%%%%%%%%%%%%%
 \section{Configure Plane}
 

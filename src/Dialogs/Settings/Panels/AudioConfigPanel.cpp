@@ -8,8 +8,10 @@
 
 #include "Audio/VarioGlue.hpp"
 #include "Audio/VarioSettings.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Float.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -46,15 +48,44 @@ static constexpr StaticEnumChoice switching_modes[] = {
   nullptr
 };
 
-class AudioConfigPanel final : public RowFormWidget {
+class AudioConfigPanel final
+  : public RowFormWidget, DataFieldListener {
 public:
   AudioConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-public:
+  void ShowAudioVarioControls(bool show) noexcept;
+
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+private:
+  void OnModified(DataField &df) noexcept override;
 };
+
+void
+AudioConfigPanel::ShowAudioVarioControls(bool show) noexcept
+{
+  SetRowAvailable(VOLUME, show);
+  SetRowAvailable(SWITCHING_MODE, show);
+  SetRowAvailable(DEAD_BAND_ENABLED, show);
+  SetRowAvailable(SPACER, show);
+  SetRowAvailable(MIN_FREQUENCY, show);
+  SetRowAvailable(ZERO_FREQUENCY, show);
+  SetRowAvailable(MAX_FREQUENCY, show);
+  SetRowAvailable(SPACER2, show);
+  SetRowAvailable(DEAD_BAND_MIN, show);
+  SetRowAvailable(DEAD_BAND_MAX, show);
+}
+
+void
+AudioConfigPanel::OnModified(DataField &df) noexcept
+{
+  if (IsDataField(ENABLED, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    ShowAudioVarioControls(dfb.GetValue());
+  }
+}
 
 void
 AudioConfigPanel::Prepare(ContainerWindow &parent,
@@ -82,7 +113,7 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
 
   AddBoolean(_("Audio Vario"),
              _("Emulate the sound of an electronic vario."),
-             settings.enabled);
+             settings.enabled, this);
 
   AddInteger(_("Vario Volume"),
              _("The audio vario sound volume."), "%u %%", "%u",
@@ -139,6 +170,8 @@ AudioConfigPanel::Prepare(ContainerWindow &parent,
   SetExpertRow(DEAD_BAND_MAX);
   DataFieldFloat &db_max = (DataFieldFloat &)GetDataField(DEAD_BAND_MAX);
   db_max.SetFormat(GetUserVerticalSpeedFormat(false, true));
+
+  ShowAudioVarioControls(settings.enabled);
 }
 
 bool
