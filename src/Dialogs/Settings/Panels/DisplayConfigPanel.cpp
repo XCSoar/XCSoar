@@ -6,7 +6,9 @@
 #include "ui/window/Features.hpp" // for HAVE_FULL_SCREEN_SETTING
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/Edit.hpp"
 #include "Hardware/DisplayBrightness.hpp"
@@ -226,7 +228,8 @@ FillDpiChoices(DataFieldEnum &df, unsigned value) noexcept
   df.SetValue(value);
 }
 
-class DisplayConfigPanel final : public RowFormWidget {
+class DisplayConfigPanel final
+  : public RowFormWidget, DataFieldListener {
   std::unique_ptr<DisplayBrightness> brightness;
 
 public:
@@ -236,7 +239,23 @@ public:
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+
+private:
+  void OnModified(DataField &df) noexcept override;
 };
+
+void
+DisplayConfigPanel::OnModified(DataField &df) noexcept
+{
+#ifdef HAVE_FULL_SCREEN_SETTING
+  if (IsDataField(FullScreen, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetRowAvailable(InfoBoxAreaStretch, dfb.GetValue());
+  }
+#else
+  (void)df;
+#endif
+}
 
 void
 DisplayConfigPanel::Prepare(ContainerWindow &parent,
@@ -291,7 +310,7 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
                "completely, while \"Stretch InfoBox area\" decides which "
                "edges the InfoBoxes, gauges, map overlays and the menu "
                "may reach."),
-             ui_settings.display.full_screen);
+             ui_settings.display.full_screen, this);
 
   const auto edges = FormatInfoBoxAreaStretch(ui_settings.display
                                           .infobox_area_stretch);
@@ -300,6 +319,7 @@ DisplayConfigPanel::Prepare(ContainerWindow &parent,
                         new DataFieldString(edges.c_str()));
   edges_row->SetEditCallback(EditInfoBoxAreaStretch);
   SetExpertRow(InfoBoxAreaStretch);
+  SetRowAvailable(InfoBoxAreaStretch, ui_settings.display.full_screen);
 #endif
 
 #ifdef HAVE_STATUS_BAR_SETTING
