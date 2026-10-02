@@ -26,8 +26,14 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Replay/Replay.hpp"
+#include "MapTimer.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
+#include "util/StaticString.hxx"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "PopupMessage.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Asset.hpp"
@@ -685,6 +691,89 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
               {scale_pos.left, scale_pos.bottom - height},
               mode, scale_pos, nullptr);
   }
+}
+
+PixelRect
+GlueMapWindow::GetMapTimerRect(const PixelRect &rc) const noexcept
+{
+  const Font &font = map_timer_font;
+  const auto elapsed = MapTimer::GetElapsed();
+  const unsigned total_s = unsigned(std::max<std::chrono::seconds::rep>(
+    elapsed.count(), 0));
+  const unsigned minutes = total_s / 60;
+  const unsigned seconds = total_s % 60;
+
+  StaticString<16> text;
+  text.Format("%u:%02u", minutes, seconds);
+
+  const PixelSize text_size = font.TextSize(text.c_str());
+  const unsigned pad_x = Layout::GetTextPadding() * 3;
+  const unsigned pad_y = Layout::GetTextPadding() * 2;
+  const unsigned width = text_size.width + pad_x * 2;
+  const unsigned height = text_size.height + pad_y * 2;
+  const int left = rc.GetCenter().x - int(width) / 2;
+
+  /* Top of the map by default; drop below a status popup when one is
+     covering the top area. */
+  int top = rc.top + int(Layout::Scale(8));
+  if (CommonInterface::main_window != nullptr) {
+    const PopupMessage *popup = CommonInterface::main_window->popup;
+    if (popup != nullptr && popup->IsVisible()) {
+      const PixelRect map_pos = GetPosition();
+      const PixelRect popup_pos = popup->GetPosition();
+      const int popup_top = popup_pos.top - map_pos.top;
+      const int popup_bottom = popup_pos.bottom - map_pos.top;
+      if (popup_top < top + int(height) + int(Layout::Scale(8)))
+        top = std::max(top, popup_bottom + int(Layout::Scale(8)));
+    }
+  }
+
+  return PixelRect{{left, top}, PixelSize{width, height}};
+}
+
+bool
+GlueMapWindow::MapTimerHitTest(PixelPoint p) const noexcept
+{
+  if (!MapTimer::IsVisible())
+    return false;
+
+  const PixelRect hud_rc = content_rect.GetWidth() > 0
+    ? content_rect
+    : GetClientRect();
+  const PixelRect pill = GetMapTimerRect(hud_rc);
+  return pill.GetWidth() > 0 && pill.Contains(p);
+}
+
+void
+GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
+{
+  if (!MapTimer::IsVisible())
+    return;
+
+  const Font &font = map_timer_font;
+  canvas.Select(font);
+
+  const auto elapsed = MapTimer::GetElapsed();
+  const unsigned total_s = unsigned(std::max<std::chrono::seconds::rep>(
+    elapsed.count(), 0));
+  const unsigned minutes = total_s / 60;
+  const unsigned seconds = total_s % 60;
+
+  StaticString<16> text;
+  text.Format("%u:%02u", minutes, seconds);
+
+  const PixelRect pill = GetMapTimerRect(rc);
+  if (pill.GetWidth() <= 0 || pill.GetHeight() <= 0)
+    return;
+
+  canvas.SelectWhiteBrush();
+  canvas.SelectNullPen();
+  canvas.DrawRoundRectangle(pill, PixelSize{pill.GetHeight()});
+
+  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetBackgroundTransparent();
+  const PixelSize text_size = font.TextSize(text.c_str());
+  canvas.DrawText(pill.GetCenter() - text_size / 2u, text.c_str());
 }
 
 void

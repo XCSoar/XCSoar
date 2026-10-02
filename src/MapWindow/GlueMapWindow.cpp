@@ -20,7 +20,8 @@ GlueMapWindow::GlueMapWindow(const Look &look) noexcept
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    vario_bar_renderer(look.vario_bar),
-   gesture_look(look.gesture)
+   gesture_look(look.gesture),
+   map_timer_font(look.info_box.value_font)
 {
 }
 

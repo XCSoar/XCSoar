@@ -84,7 +84,13 @@ class GlueMapWindow : public MapWindow {
     DRAG_PAN,
     DRAG_GESTURE,
     DRAG_SIMULATOR,
+
+    /** Press on the map stopwatch pill (tap / long-press). */
+    DRAG_MAP_TIMER,
   } drag_mode = DRAG_NONE;
+
+  bool map_timer_hold_armed = false;
+  UI::Timer map_timer_hold_timer{[this]{ OnMapTimerHoldTimer(); }};
 
   GeoPoint drag_start_geopoint;
   PixelPoint drag_start;
@@ -245,6 +251,9 @@ private:
   FinalGlideBarRenderer final_glide_bar_renderer;
   VarioBarRenderer vario_bar_renderer;
   const GestureLook &gesture_look;
+
+  /** Same face as InfoBox time main value line. */
+  const Font &map_timer_font;
 
   UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
@@ -456,6 +465,15 @@ private:
                  const MapHudLayout &layout) const noexcept;
   void DrawStallRatio(Canvas &canvas,
                       const MapHudLayout &layout) const noexcept;
+  void DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept;
+
+  [[gnu::pure]]
+  PixelRect GetMapTimerRect(const PixelRect &rc) const noexcept;
+
+  [[gnu::pure]]
+  bool MapTimerHitTest(PixelPoint p) const noexcept;
+
+  void OnMapTimerHoldTimer() noexcept;
 
   /**
    * Draw the position of the current page in the list of configured

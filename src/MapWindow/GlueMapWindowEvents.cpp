@@ -19,6 +19,8 @@
 #include "UserMapScale.hpp"
 #include "Form/Button.hpp"
 #include "util/StringAPI.hxx"
+#include "MapTimer.hpp"
+#include "Hardware/Vibrator.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -176,6 +178,16 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 
   case DRAG_SIMULATOR:
     return true;
+
+  case DRAG_MAP_TIMER:
+    if ((unsigned)ManhattanDistance(drag_start, p) >
+        (unsigned)Layout::Scale(HasTouchScreen() ? 20 : 10)) {
+      map_timer_hold_timer.Cancel();
+      map_timer_hold_armed = false;
+      ReleaseCapture();
+      drag_mode = DRAG_NONE;
+    }
+    return true;
   }
 
   return MapWindow::OnMouseMove(p, keys);
@@ -227,6 +239,14 @@ GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
   SetFocus();
 
   drag_start = p;
+
+  if (MapTimerHitTest(p)) {
+    drag_mode = DRAG_MAP_TIMER;
+    map_timer_hold_armed = false;
+    map_timer_hold_timer.Schedule(InfoBoxArrange::LONG_PRESS);
+    SetCapture();
+    return true;
+  }
 
   if (!visible_projection.IsValid()) {
     gestures.Start(p, Layout::Scale(20));
@@ -370,7 +390,21 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
 
     break;
 
-  case DRAG_GESTURE:
+  case DRAG_MAP_TIMER: {
+    map_timer_hold_timer.Cancel();
+    const bool on_target = MapTimerHitTest(p);
+    if (on_target) {
+      if (map_timer_hold_armed)
+        MapTimer::Reset();
+      else
+        MapTimer::ToggleRunning();
+      Invalidate();
+    }
+    map_timer_hold_armed = false;
+    return true;
+  }
+
+  case DRAG_GESTURE: {
     const char* gesture = gestures.Finish();
 
     /* repaint to erase the gesture trail; the map is not redrawn on
@@ -388,6 +422,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
     }
 
     break;
+  }
   }
 
   if (arm_mapitem_list) {
@@ -703,9 +738,22 @@ GlueMapWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 void
+GlueMapWindow::OnMapTimerHoldTimer() noexcept
+{
+  if (drag_mode != DRAG_MAP_TIMER)
+    return;
+
+  map_timer_hold_armed = true;
+  PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
+}
+
+void
 GlueMapWindow::OnCancelMode() noexcept
 {
   MapWindow::OnCancelMode();
+
+  map_timer_hold_timer.Cancel();
+  map_timer_hold_armed = false;
 
   if (drag_mode != DRAG_NONE) {
 #ifdef HAVE_MULTI_TOUCH
@@ -801,6 +849,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas) noexcept
   DrawMapScale(canvas, layout, render_projection);
   if (IsPanChromeVisible() || DEBUG_ALL_MAP_OVERLAYS)
     DrawPanInfo(canvas, layout);
+  DrawMapTimer(canvas, layout.content);
 
 #ifdef ENABLE_OPENGL
   LeaveDrawThread();
