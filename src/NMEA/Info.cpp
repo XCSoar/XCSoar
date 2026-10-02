@@ -224,6 +224,8 @@ NMEAInfo::Expire() noexcept
   noncomp_vario_available.Expire(clock, std::chrono::seconds(5));
   total_energy_vario_available.Expire(clock, std::chrono::seconds(5));
   netto_vario_available.Expire(clock, std::chrono::seconds(5));
+  acceleration.available.Expire(clock, std::chrono::seconds(5));
+  gyroscope.available.Expire(clock, std::chrono::seconds(5));
   settings.Expire(clock);
   external_wind_available.Expire(clock, std::chrono::minutes(10));
   heart_rate_available.Expire(clock, std::chrono::seconds(10));
