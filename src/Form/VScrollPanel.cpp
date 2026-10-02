@@ -174,6 +174,12 @@ VScrollPanel::OnResize(PixelSize new_size) noexcept
 }
 
 void
+VScrollPanel::OnChildContentHeightChanged() noexcept
+{
+  listener.OnVScrollPanelContentHeightChanged();
+}
+
+void
 VScrollPanel::OnDestroy() noexcept
 {
   kinetic_timer.Cancel();

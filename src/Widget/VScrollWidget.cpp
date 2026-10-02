@@ -307,6 +307,21 @@ VScrollWidget::OnVScrollPanelChange() noexcept
   widget->Move(GetWindow().GetVirtualRect());
 }
 
+void
+VScrollWidget::OnVScrollPanelContentHeightChanged() noexcept
+{
+  if (!visible)
+    return;
+
+  /* Remeasure after a row is shown or hidden.  The form was sized
+     to the previous content height. */
+  const PixelRect rc = GetWindow().GetClientRect();
+  UpdateVirtualHeight(rc);
+  widget->Move(PaintsScrollOrigin()
+               ? GetWindow().GetPhysicalRect()
+               : GetWindow().GetVirtualRect());
+}
+
 bool
 VScrollWidget::OnVScrollPanelGesture(const char *gesture) noexcept
 {

@@ -229,6 +229,12 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available) noexcept
 
   row.available = available;
   UpdateLayout();
+
+  /* The scroll panel sized this form while the row was hidden.
+     Ask it to measure again, or the new rows stay inside the old
+     short rectangle. */
+  if (ContainerWindow *parent = GetWindow().GetParent())
+    parent->OnChildContentHeightChanged();
 }
 
 void
