@@ -9,12 +9,14 @@
 #include "Look/DialogLook.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/window/SingleWindow.hpp"
+#include "ui/event/KeyCode.hpp"
 #include "UIGlobals.hpp"
 
 #include <boost/container/static_vector.hpp>
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 
 static WindowStyle
 GetMessageBoxStyle() noexcept
@@ -142,6 +144,58 @@ public:
   }
 
 protected:
+  bool OnAnyKeyDown(unsigned key_code) noexcept override {
+    if (key_code != KEY_LEFT && key_code != KEY_RIGHT &&
+        key_code != KEY_UP && key_code != KEY_DOWN)
+      return WndForm::OnAnyKeyDown(key_code);
+
+    auto *focused = GetClientAreaWindow().GetFocusedWindow();
+    const auto current = std::find_if(buttons.begin(), buttons.end(),
+                                     [focused](const Button &button) {
+                                       return &button == focused;
+                                     });
+    if (current == buttons.end())
+      return WndForm::OnAnyKeyDown(key_code);
+
+    const auto origin = current->GetPosition().GetCenter();
+    const bool horizontal = key_code == KEY_LEFT || key_code == KEY_RIGHT;
+    const bool reverse = key_code == KEY_LEFT || key_code == KEY_UP;
+    Button *next = nullptr;
+    int best_distance = 0, best_offset = 0;
+
+    for (auto &button : buttons) {
+      if (!button.IsVisible() || !button.IsEnabled())
+        continue;
+
+      const auto center = button.GetPosition().GetCenter();
+      const int dx = center.x - origin.x;
+      const int dy = center.y - origin.y;
+      if (horizontal && dy != 0)
+        continue;
+
+      int distance = horizontal ? dx : dy;
+      if (reverse)
+        distance = -distance;
+      if (distance <= 0)
+        continue;
+
+      // Stay in the row, or choose the closest column in the next row.
+      const int offset = horizontal ? 0 : std::abs(dx);
+      if (next == nullptr || distance < best_distance ||
+          (distance == best_distance && offset < best_offset)) {
+        next = &button;
+        best_distance = distance;
+        best_offset = offset;
+      }
+    }
+
+    if (next != nullptr)
+      next->SetFocus();
+
+    // At an edge, keep focus instead of falling back to tab order.
+    return true;
+  }
+
   void SetDefaultFocus() noexcept override {
     if (default_button != nullptr)
       default_button->SetFocus();
