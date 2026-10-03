@@ -55,7 +55,7 @@ GLint hillshade_projection, hillshade_translate,
   hillshade_texel_step, hillshade_sun, hillshade_contrast,
   hillshade_height_slope_factor, hillshade_height_div,
   hillshade_q, hillshade_do_shading, hillshade_contour_div,
-  hillshade_height_texel;
+  hillshade_contour_thickness, hillshade_height_texel;
 
 } // namespace OpenGL
 
@@ -349,6 +349,7 @@ static constexpr char hillshade_fragment_shader[] =
     uniform float q;
     uniform float do_shading;
     uniform float contour_div;
+    uniform float contour_thickness;
     uniform vec2 height_texel;
     varying vec2 texcoordvar;
 
@@ -381,6 +382,22 @@ static constexpr char hillshade_fragment_shader[] =
       if (h <= 0.0)
         return 0.0;
       return min(254.0, floor(h / contour_div));
+    }
+
+    /* True when this height texel starts a new contour interval,
+       matching the CPU neighbour test. */
+    bool contour_edge(vec2 uv) {
+      vec2 b = unpack_la(texture2D(height_tex, uv));
+      float h = is_special(b) ? 0.0 : height(b);
+      vec2 b_up = unpack_la(texture2D(height_tex,
+          uv - vec2(0.0, height_texel.y)));
+      vec2 b_lf = unpack_la(texture2D(height_tex,
+          uv - vec2(height_texel.x, 0.0)));
+      float h_up = is_special(b_up) ? 0.0 : height(b_up);
+      float h_lf = is_special(b_lf) ? 0.0 : height(b_lf);
+      float ci = contour_interval(h);
+      return ci != contour_interval(h_up) ||
+             ci != contour_interval(h_lf);
     }
 
     void main() {
@@ -427,15 +444,29 @@ static constexpr char hillshade_fragment_shader[] =
       }
 
       if (contour_div > 0.5) {
-        vec2 b_up = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(0.0, height_texel.y)));
-        vec2 b_lf = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(height_texel.x, 0.0)));
-        float h_up = is_special(b_up) ? 0.0 : height(b_up);
-        float h_lf = is_special(b_lf) ? 0.0 : height(b_lf);
-        float ci = contour_interval(h);
-        if (ci != contour_interval(h_up) ||
-            ci != contour_interval(h_lf))
+        /* ApplyContourExpansion() paints several matrix pixels.
+           The matrix is finer than the screen, so one texel is
+           thinner than a pixel and the line disappears. */
+        bool on_contour = contour_edge(texcoordvar);
+        if (!on_contour && contour_thickness > 1.5) {
+          float tl = floor(contour_thickness * 0.5);
+          float br = floor((contour_thickness - 1.0) * 0.5);
+          for (int j = -3; j <= 3; ++j) {
+            for (int i = -3; i <= 3; ++i) {
+              float fx = float(i);
+              float fy = float(j);
+              if (i == 0 && j == 0)
+                continue;
+              if (fx < -br || fx > tl || fy < -br || fy > tl)
+                continue;
+              if (contour_edge(texcoordvar +
+                               vec2(fx * height_texel.x,
+                                    fy * height_texel.y)))
+                on_contour = true;
+            }
+          }
+        }
+        if (on_contour)
           sindex = -64.0;
       }
 
@@ -622,6 +653,8 @@ OpenGL::InitShaders()
     hillshade_q = hillshade_shader->GetUniformLocation("q");
     hillshade_do_shading = hillshade_shader->GetUniformLocation("do_shading");
     hillshade_contour_div = hillshade_shader->GetUniformLocation("contour_div");
+    hillshade_contour_thickness =
+      hillshade_shader->GetUniformLocation("contour_thickness");
     hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
 
     hillshade_shader->Use();
