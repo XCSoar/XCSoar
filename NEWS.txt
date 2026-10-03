@@ -220,6 +220,7 @@ Version 7.46 - not yet released
     of the device that supplies the GPS fix when the logger starts
     #3180
 * dialogs
+  - navigate message-box buttons with arrow keys matching their positions
   - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
     Services configuration menu
   - rename Setup Services to System Services
