@@ -19,8 +19,12 @@
 #include "util/TextFile.hxx"
 #include "io/FileLineReader.hpp"
 #include "LogFile.hpp"
+#include "IGC/IGCExtensions.hpp"
+#include "IGC/IGCParser.hpp"
 
 #include <algorithm>
+#include <string>
+#include <string_view>
 #include <chrono>
 #include <stdlib.h>
 #include <fstream>
@@ -30,12 +34,72 @@
 
 using std::string_view_literals::operator""sv;
 
+namespace {
+
+/**
+ * The lengths the file's own "I" and "J" records give its B and K
+ * records.
+ *
+ * A row can arrive with a correct checksum and still be wrong: an
+ * LXNAV S100 has been seen to splice the head of one row onto the tail
+ * of another and checksum the result (#3229).  The row number matches
+ * and the checksum matches; only the length gives it away, since every
+ * B record of a file is as long as its I record says.
+ */
+struct RecordLengths {
+  /** 0 until the I / J record has been seen */
+  unsigned b = 0, k = 0;
+
+  void Learn(std::string_view row) noexcept {
+    if (row.empty() || (row.front() != 'I' && row.front() != 'J'))
+      return;
+
+    /* IGCParseExtensions() reads the "I" layout, which "J" shares */
+    std::string declaration{row};
+    const bool is_j = declaration.front() == 'J';
+    declaration.front() = 'I';
+
+    IGCExtensions extensions;
+    if (!IGCParseExtensions(declaration.c_str(), extensions))
+      return;
+
+    if (is_j)
+      k = IGCRecordLength(extensions, 7);
+    else
+      b = IGCRecordLength(extensions, 35);
+  }
+
+  [[gnu::pure]]
+  bool Fits(std::string_view row) const noexcept {
+    if (row.empty())
+      return true;
+
+    switch (row.front()) {
+    case 'B':
+      return b == 0 || row.size() == b;
+    case 'K':
+      return k == 0 || row.size() == k;
+    default:
+      return true;
+    }
+  }
+};
+
+} // anonymous namespace
+
+/**
+ * Count the rows already in a partial download, and learn the record
+ * lengths from its I and J records, which a resumed download will not
+ * receive again.
+ */
 static unsigned
-CountLinesInFile(Path path)
+CountLinesInFile(Path path, RecordLengths &lengths)
 {
   FileLineReaderA reader(path);
   unsigned line_count = 0;
-  while (reader.ReadLine() != nullptr) {
+  const char *line;
+  while ((line = reader.ReadLine()) != nullptr) {
+    lengths.Learn(line);
     line_count++;
   }
   // Return next line number to download (1-indexed)
@@ -278,7 +342,8 @@ RequestFlight(Port &port, const char *filename,
  */
 static unsigned
 HandleFlightLine(const char *_line, BufferedOutputStream &os,
-                 unsigned &i, unsigned &row_count_r)
+                 unsigned &i, unsigned &row_count_r,
+                 RecordLengths &lengths)
 {
   NMEAInputLine line(_line);
 
@@ -302,6 +367,15 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
     return 0;
 
   const std::string_view payload = line.Rest();
+  if (!lengths.Fits(payload)) {
+    LogFormat("NanoLogger: row %u is %u characters, its record type"
+              " declares %u; rejecting it",
+              row, unsigned(payload.size()),
+              payload.front() == 'B' ? lengths.b : lengths.k);
+    return 0;
+  }
+
+  lengths.Learn(payload);
   os.Write(AsBytes(payload));
   os.Write("\r\n");
   ++i;
@@ -310,7 +384,8 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
 
 static bool
 DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
-                    OperationEnvironment &env, unsigned *resume_row = nullptr)
+                    OperationEnvironment &env, RecordLengths &lengths,
+                    unsigned *resume_row = nullptr)
 {
   PortNMEAReader reader(port, env);
   unsigned row_count = 0, i = (resume_row && *resume_row > 0) ? *resume_row : 1;
@@ -358,7 +433,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
 
       const unsigned wrote = line == nullptr
         ? 0
-        : HandleFlightLine(line, os, i, row_count);
+        : HandleFlightLine(line, os, i, row_count, lengths);
       if (wrote == 0) {
         if (request_retry_count > MAX_REQUEST_RETRY_COUNT) {
           /* Update resume point before throwing - but note that buffered data
@@ -467,10 +542,11 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
 
   // Check if partial file exists and count lines to determine resume point
   unsigned calculated_resume_row = 1;
+  RecordLengths lengths;
   if (File::Exists(partial_path)) {
     try {
       // Count lines in existing partial file
-      calculated_resume_row = CountLinesInFile(partial_path);
+      calculated_resume_row = CountLinesInFile(partial_path, lengths);
       if (calculated_resume_row > 1) {
         LogFormat("NanoLogger: resuming download from line %u",
                   calculated_resume_row);
@@ -482,6 +558,7 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
       // If we can't count, delete partial and start fresh
       File::Delete(partial_path);
       calculated_resume_row = 1;
+      lengths = {};
     }
   }
 
@@ -493,7 +570,8 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
   BufferedOutputStream bos(fos);
   try {
     bool success = DownloadFlightInner(port, filename,
-                                      bos, env, &calculated_resume_row);
+                                      bos, env, lengths,
+                                      &calculated_resume_row);
 
     if (success) {
       bos.Flush();
