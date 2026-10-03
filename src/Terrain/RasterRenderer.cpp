@@ -24,9 +24,6 @@
 #include "ui/canvas/opengl/Texture.hpp"
 #include "ui/canvas/opengl/Shaders.hpp"
 #include "ui/canvas/opengl/Program.hpp"
-#include "ui/canvas/opengl/Attribute.hpp"
-#include "ui/canvas/opengl/VertexPointer.hpp"
-#include "ui/dim/BulkPoint.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -1327,9 +1324,9 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
 
   if (alpha < 1.0f) {
     const GLBlend blend(alpha);
-    DrawGeoMesh(bounds, projection, 0, 0, x1, y1);
+    DrawGeoQuad(bounds, projection, x1, y1);
   } else {
-    DrawGeoMesh(bounds, projection, 0, 0, x1, y1);
+    DrawGeoQuad(bounds, projection, x1, y1);
   }
 
   glActiveTexture(GL_TEXTURE1);

@@ -8,88 +8,103 @@
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Texture.hpp"
-#include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/VertexPointer.hpp"
 #include "ui/canvas/opengl/Attribute.hpp"
 #include "ui/dim/BulkPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <algorithm>
 #include <cmath>
 
-static unsigned
-GeoMeshDivisions(const GeoBounds &bounds) noexcept
+/** One strip per pixel of north/south edge mismatch, capped. */
+static constexpr unsigned MAX_GEO_QUAD_STRIPS = 160;
+
+/**
+ * Screen length of an edge, in pixels.
+ */
+static int
+ScreenSpan(PixelPoint a, PixelPoint b) noexcept
 {
-  const double span = std::max(std::fabs(bounds.GetWidth().Degrees()),
-                               std::fabs(bounds.GetHeight().Degrees()));
-  if (!(span > 1.0))
+  const double dx = double(a.x - b.x);
+  const double dy = double(a.y - b.y);
+  return int(std::hypot(dx, dy));
+}
+
+/**
+ * How many latitude strips keep the longitude error under a pixel.
+ * The error of one quad is about a quarter of the difference between
+ * the north and south edge lengths.
+ */
+static unsigned
+GeoQuadStrips(const Projection &projection,
+              const GeoBounds &bounds) noexcept
+{
+  const PixelPoint nw = projection.GeoToScreen(bounds.GetNorthWest());
+  const PixelPoint ne = projection.GeoToScreen(bounds.GetNorthEast());
+  const PixelPoint sw = projection.GeoToScreen(bounds.GetSouthWest());
+  const PixelPoint se = projection.GeoToScreen(bounds.GetSouthEast());
+  const int skew = std::abs(ScreenSpan(nw, ne) - ScreenSpan(sw, se));
+  if (skew <= 1)
     return 1;
-  const unsigned d = 1 + (unsigned)span;
-  return d > 16 ? 16 : d;
+
+  return std::min(unsigned(skew), MAX_GEO_QUAD_STRIPS);
 }
 
 void
-DrawGeoMesh(const GeoBounds &bounds, const Projection &projection,
-            float u0, float v0, float u1, float v1)
+DrawGeoQuad(const GeoBounds &bounds, const Projection &projection,
+            float u1, float v1) noexcept
 {
   assert(bounds.IsValid());
 
-  const unsigned div = GeoMeshDivisions(bounds);
+  const unsigned strips = GeoQuadStrips(projection, bounds);
+  const unsigned n = (strips + 1) * 2;
+
+  BulkPixelPoint vertices[(MAX_GEO_QUAD_STRIPS + 1) * 2];
+  GLfloat coord[(MAX_GEO_QUAD_STRIPS + 1) * 4];
+
   const Angle north = bounds.GetNorth();
   const Angle west = bounds.GetWest();
-  const Angle dlat = bounds.GetHeight() / double(div);
-  const Angle dlon = bounds.GetWidth() / double(div);
-  const GLfloat du = (u1 - u0) / GLfloat(div);
-  const GLfloat dv = (v1 - v0) / GLfloat(div);
+  const Angle east = bounds.GetEast();
+  const Angle step = bounds.GetHeight() / double(strips);
 
-  constexpr unsigned MAX_DIV = 16;
-  BulkPixelPoint vertices[2 * (MAX_DIV + 1)];
-  GLfloat coord[4 * (MAX_DIV + 1)];
+  for (unsigned i = 0; i <= strips; ++i) {
+    const Angle lat = north - step * double(i);
+    vertices[i * 2] = projection.GeoToScreen(GeoPoint(west, lat));
+    vertices[i * 2 + 1] = projection.GeoToScreen(GeoPoint(east, lat));
 
-  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-
-  for (unsigned j = 0; j < div; ++j) {
-    const Angle lat0 = north - dlat * double(j);
-    const Angle lat1 = north - dlat * double(j + 1);
-    const GLfloat vj0 = v0 + dv * GLfloat(j);
-    const GLfloat vj1 = v0 + dv * GLfloat(j + 1);
-
-    unsigned n = 0;
-    for (unsigned i = 0; i <= div; ++i) {
-      const Angle lon = west + dlon * double(i);
-      const GLfloat u = u0 + du * GLfloat(i);
-      vertices[n] = projection.GeoToScreen(GeoPoint(lon, lat0));
-      coord[n * 2] = u;
-      coord[n * 2 + 1] = vj0;
-      ++n;
-      vertices[n] = projection.GeoToScreen(GeoPoint(lon, lat1));
-      coord[n * 2] = u;
-      coord[n * 2 + 1] = vj1;
-      ++n;
-    }
-
-    const ScopeVertexPointer vp(vertices);
-    glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT,
-                          GL_FALSE, 0, coord);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, n);
+    const GLfloat v = v1 * GLfloat(i) / GLfloat(strips);
+    coord[i * 4] = 0;
+    coord[i * 4 + 1] = v;
+    coord[i * 4 + 2] = u1;
+    coord[i * 4 + 3] = v;
   }
 
+  const ScopeVertexPointer vp(vertices);
+  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
+  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+                        0, coord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, GLsizei(n));
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
 }
 
+/**
+ * Draw a geo-referenced bitmap texture.  The caller is responsible
+ * for setting up the OpenGL shader (e.g. via
+ * ScopeTextureConstantAlpha) before calling this function.
+ */
 void
 DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const GeoBounds &bounds,
               const Projection &projection)
 {
+  assert(bounds.IsValid());
+
   const GLTexture &texture = bitmap.BindAndGetTexture();
   const PixelSize allocated = texture.GetAllocatedSize();
 
-  const GLfloat x0 = 0;
-  const GLfloat y0 = 0;
   const GLfloat x1 = GLfloat(bitmap_size.width) / allocated.width;
   const GLfloat y1 = GLfloat(bitmap_size.height) / allocated.height;
-
-  DrawGeoMesh(bounds, projection, x0, y0, x1, y1);
+  DrawGeoQuad(bounds, projection, x1, y1);
 }
 
 #endif

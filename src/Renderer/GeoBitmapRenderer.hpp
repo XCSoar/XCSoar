@@ -24,11 +24,18 @@ DrawGeoBitmap(const RawBitmap &bitmap, PixelSize bitmap_size,
               const Projection &projection);
 
 /**
- * Draw a lat/lon rectangle as a projected mesh.  A 4-corner quad
- * warps against airspace at far zoom.
+ * Draw a latitude/longitude rectangle as a triangle strip.
+ *
+ * A single quad is wider toward the equator under the cosine
+ * projection.  Its diagonal then samples a longitude that drifts
+ * as the view changes size.  Strips follow constant latitude, which
+ * is linear on the screen.
+ *
+ * @param u1 texture coordinate of the east edge
+ * @param v1 texture coordinate of the south edge
  */
 void
-DrawGeoMesh(const GeoBounds &bounds, const Projection &projection,
-            float u0, float v0, float u1, float v1);
+DrawGeoQuad(const GeoBounds &bounds, const Projection &projection,
+            float u1, float v1) noexcept;
 
 #endif
