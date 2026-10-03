@@ -19,6 +19,7 @@
 #include "UserMapScale.hpp"
 #include "Form/Button.hpp"
 #include "util/StringAPI.hxx"
+#include "ui/event/Idle.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -827,6 +828,10 @@ GlueMapWindow::OnKineticTimer() noexcept
     kinetic_timer.Cancel();
     return;
   }
+
+  /* Coasting is still a pan.  Keep the height-matrix scan deferred
+     until the map has actually stopped. */
+  ResetUserIdle();
 
   auto location = drag_projection.ScreenToGeo({kinetic_x.GetPosition(), kinetic_y.GetPosition()});
   location = drag_projection.GetGeoLocation() +
