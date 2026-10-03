@@ -475,6 +475,8 @@ Version 7.46 - not yet released
   - describe the Speed VMG InfoBox in the English, German and Brazilian
     Portuguese manuals
 * development
+  - build system: add DEBUG_PROCESS_LOAD=y to draw a CPU / map-paint
+    sparkline and topography vertex counts on the map
   - build system: keep each CI target's download cache to itself; a
     bare downloads-$os- restore key handed one target another
     target's cache, without the files it needed

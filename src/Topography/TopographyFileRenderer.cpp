@@ -113,6 +113,8 @@ struct TopographyGpuStatsState {
 static TopographyGpuStatsState topo_stats;
 static uint64_t topo_frame_paint_us;
 static unsigned topo_frame_lines, topo_frame_fills;
+static unsigned topo_frame_vertices, topo_frame_polygons;
+static unsigned topo_last_vertices, topo_last_polygons;
 
 static uint64_t
 TopoSteadyUsSince(std::chrono::steady_clock::time_point t0) noexcept
@@ -128,6 +130,8 @@ TopographyGpuStatsBeginDraw() noexcept
   topo_frame_paint_us = 0;
   topo_frame_lines = 0;
   topo_frame_fills = 0;
+  topo_frame_vertices = 0;
+  topo_frame_polygons = 0;
 }
 
 static void
@@ -169,12 +173,27 @@ TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept
       LogFmt("OpenGL: Topo glGetError=0x{:x}", unsigned(err));
     topo_stats.Flush();
   }
+
+  topo_last_vertices = topo_frame_vertices;
+  topo_last_polygons = topo_frame_polygons;
 }
 
 void
 TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept
 {
   topo_stats.AddUs(cpu_us, topo_stats.label_us, topo_stats.label_max_us);
+}
+
+unsigned
+GetLastTopographyVertexCount() noexcept
+{
+  return topo_last_vertices;
+}
+
+unsigned
+GetLastTopographyPolygonCount() noexcept
+{
+  return topo_last_polygons;
 }
 
 #endif
@@ -362,6 +381,12 @@ DrawCachedWindow(ScopeVertexPointer &vp, const ShapePoint *buffer,
                  unsigned &line_draws, unsigned &fill_draws) noexcept
 {
   vp.Update(GL_FLOAT, buffer + w.window_base);
+
+  topo_frame_vertices += unsigned(w.lines.size() + w.fills.size());
+  if (!w.fill_counts.empty())
+    topo_frame_polygons += unsigned(w.fill_counts.size());
+  else if (!w.fills.empty())
+    topo_frame_polygons += unsigned(w.fills.size() / 3);
 
 #ifdef GL_EXT_multi_draw_arrays
   if (!w.line_counts.empty() && GLExt::HaveMultiDrawElements()) {
@@ -734,6 +759,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
           for (unsigned n : lines) {
             glDrawArrays(GL_LINE_STRIP, local, n);
             ++line_draws;
+            topo_frame_vertices += n;
             local += n;
           }
         } else {
@@ -742,6 +768,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
             glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
                            indices.indices);
             ++line_draws;
+            topo_frame_vertices += n;
             indices.indices += n;
           }
         }
@@ -804,6 +831,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_SHORT,
                        triangles.indices);
         ++fill_draws;
+        topo_frame_vertices += n;
+        ++topo_frame_polygons;
         index_cache_complete = false;
       }
 #else // !ENABLE_OPENGL

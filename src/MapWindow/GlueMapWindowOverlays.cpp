@@ -28,11 +28,26 @@
 #include "Replay/Replay.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
+#include "Asset.hpp"
+#include "Look/Colors.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Asset.hpp"
 #include "Hardware/CPU.hpp"
 #include "ui/canvas/opengl/Scope.hpp"
+#ifdef DEBUG_PROCESS_LOAD
+#include "Topography/TopographyFileRenderer.hpp"
+#endif
+#endif
+
+#ifdef DEBUG_PROCESS_LOAD
+#include <array>
+#include <chrono>
+#include <fmt/format.h>
+#ifdef _WIN32
+#include <processthreadsapi.h>
+#else
+#include <time.h>
+#endif
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -810,3 +825,178 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas,
   canvas.SelectBlackPen();
   canvas.DrawLine(p.At(-1, -m), p.At(-11, -m));
 }
+
+#ifdef DEBUG_PROCESS_LOAD
+
+static constexpr unsigned LOAD_HISTORY = 64;
+
+struct ProcessLoadHistory {
+  std::array<unsigned, LOAD_HISTORY> cpu_pct{};
+  std::array<unsigned, LOAD_HISTORY> gpu_ms{};
+  unsigned i = 0;
+  unsigned n = 0;
+};
+
+static ProcessLoadHistory load_history;
+
+[[nodiscard]]
+static unsigned
+SampleProcessCpuPercent() noexcept
+{
+  static bool have = false;
+#ifdef _WIN32
+  static uint64_t last_proc = 0;
+  static unsigned last_tick = 0;
+
+  uint64_t creation, exit_t, kernel, user;
+  if (!GetProcessTimes(GetCurrentProcess(),
+                       (FILETIME *)&creation, (FILETIME *)&exit_t,
+                       (FILETIME *)&kernel, (FILETIME *)&user))
+    return 0;
+
+  const uint64_t proc = (kernel + user) / 10000;
+  const unsigned tick = GetTickCount();
+  unsigned cpu = 0;
+  if (have && tick > last_tick)
+    cpu = unsigned((100 * (proc - last_proc)) / (tick - last_tick));
+  last_proc = proc;
+  last_tick = tick;
+  have = true;
+  return cpu;
+#else
+  static std::chrono::steady_clock::time_point last_wall;
+  static std::chrono::nanoseconds last_proc{0};
+
+  timespec ts{};
+  if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts) != 0)
+    return 0;
+
+  const auto now = std::chrono::steady_clock::now();
+  const auto proc = std::chrono::seconds(ts.tv_sec) +
+    std::chrono::nanoseconds(ts.tv_nsec);
+  unsigned cpu = 0;
+  if (have) {
+    const auto dw = now - last_wall;
+    const auto dp = proc - last_proc;
+    if (dw.count() > 0)
+      cpu = unsigned((100.0 * double(dp.count()) /
+                      double(dw.count())) + 0.5);
+  }
+  last_wall = now;
+  last_proc = proc;
+  have = true;
+  return cpu;
+#endif
+}
+
+static void
+DrawSparkline(Canvas &canvas, PixelRect rc,
+              const unsigned *hist, unsigned n, unsigned pos,
+              unsigned ymax, const Pen &pen) noexcept
+{
+  if (n < 2 || ymax == 0 || rc.GetWidth() < 2 || rc.GetHeight() < 2)
+    return;
+
+  BulkPixelPoint pts[LOAD_HISTORY];
+  const unsigned h = rc.GetHeight();
+  const unsigned w = rc.GetWidth();
+  for (unsigned s = 0; s < n; ++s) {
+    const unsigned idx = (pos + LOAD_HISTORY - n + s) % LOAD_HISTORY;
+    const unsigned v = std::min(hist[idx], ymax);
+    pts[s].x = rc.left + int(s * (w - 1) / (n - 1));
+    pts[s].y = rc.bottom - 1 - int(v * (h - 1) / ymax);
+  }
+
+  canvas.Select(pen);
+  canvas.DrawPolyline(pts, n);
+}
+
+void
+GlueMapWindow::DrawProcessLoad(Canvas &canvas, const MapHudLayout &layout,
+                               unsigned frame_ms) noexcept
+{
+  if (HasEPaper())
+    return;
+
+  /* One sample per paint is noisy: MergeThread and CalculationThread
+     bursts look like idle spikes.  Average over ~250 ms instead. */
+  static unsigned cpu = 0;
+  static unsigned gpu_max_ms = 0;
+  static std::chrono::steady_clock::time_point last_sample;
+  static bool have_sample = false;
+
+  gpu_max_ms = std::max(gpu_max_ms, std::min(frame_ms, 100u));
+
+  const auto now = std::chrono::steady_clock::now();
+  if (!have_sample ||
+      now - last_sample >= std::chrono::milliseconds(250)) {
+    cpu = SampleProcessCpuPercent();
+    load_history.cpu_pct[load_history.i] = cpu;
+    load_history.gpu_ms[load_history.i] = gpu_max_ms;
+    load_history.i = (load_history.i + 1) % LOAD_HISTORY;
+    if (load_history.n < LOAD_HISTORY)
+      ++load_history.n;
+    gpu_max_ms = 0;
+    last_sample = now;
+    have_sample = true;
+  }
+
+  const unsigned graph_w = Layout::Scale(110);
+  const unsigned graph_h = Layout::Scale(28);
+  const unsigned text_h = look.overlay.overlay_font->GetHeight();
+  const unsigned box_h = graph_h * 2 + text_h * 2 + Layout::Scale(8);
+
+  PixelRect box = layout.top_right;
+  if (int(box.GetWidth()) < int(graph_w) ||
+      int(box.GetHeight()) < int(box_h))
+    return;
+
+  box.left = box.right - int(graph_w);
+  box.bottom = box.top + int(box_h);
+
+#ifdef ENABLE_OPENGL
+  {
+    const ScopeAlphaBlend blend;
+    canvas.DrawFilledRectangle(box,
+                               ColorWithAlpha(COLOR_BLACK, 0xb0));
+  }
+#else
+  canvas.DrawFilledRectangle(box, COLOR_BLACK);
+#endif
+
+  PixelRect cpu_rc = box;
+  cpu_rc.Grow(-int(Layout::Scale(2)));
+  cpu_rc.bottom = cpu_rc.top + int(graph_h);
+  PixelRect gpu_rc = cpu_rc;
+  gpu_rc.top = cpu_rc.bottom;
+  gpu_rc.bottom = gpu_rc.top + int(graph_h);
+
+  const Pen cpu_pen(Layout::ScaleFinePenWidth(1), COLOR_CYAN);
+  const Pen gpu_pen(Layout::ScaleFinePenWidth(1), COLOR_AMBER);
+  DrawSparkline(canvas, cpu_rc, load_history.cpu_pct.data(),
+                load_history.n, load_history.i, 200, cpu_pen);
+  DrawSparkline(canvas, gpu_rc, load_history.gpu_ms.data(),
+                load_history.n, load_history.i, 33, gpu_pen);
+
+#ifdef ENABLE_OPENGL
+  const unsigned polys = GetLastTopographyPolygonCount();
+  const unsigned verts = GetLastTopographyVertexCount();
+#else
+  const unsigned polys = 0;
+  const unsigned verts = 0;
+#endif
+
+  canvas.Select(*look.overlay.overlay_font);
+  canvas.SetTextColor(COLOR_WHITE);
+  canvas.SetBackgroundTransparent();
+
+  const auto line1 = fmt::format("CPU {}%  GPU {}ms", cpu, frame_ms);
+  const auto line2 = fmt::format("poly {}  vtx {}", polys, verts);
+  canvas.DrawText({box.left + Layout::Scale(2), gpu_rc.bottom},
+                  line1);
+  canvas.DrawText({box.left + Layout::Scale(2),
+                   gpu_rc.bottom + int(text_h)},
+                  line2);
+}
+
+#endif
