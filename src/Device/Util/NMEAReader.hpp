@@ -5,14 +5,18 @@
 
 #include "util/StaticFifoBuffer.hxx"
 
+#include <cstddef>
+
 class Port;
 class OperationEnvironment;
 class TimeoutClock;
 
 class PortNMEAReader {
+  static constexpr std::size_t BUFFER_SIZE = 256;
+
   Port &port;
   OperationEnvironment &env;
-  StaticFifoBuffer<char, 256u> buffer;
+  StaticFifoBuffer<char, BUFFER_SIZE> buffer;
 
 public:
   PortNMEAReader(Port &_port, OperationEnvironment &_env)
