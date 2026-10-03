@@ -22,6 +22,18 @@ RelativePath(Path path) noexcept
   return path;
 }
 
+AllocatedPath
+ExpandLocalPath(Path src) noexcept
+{
+  return AllocatedPath(src);
+}
+
+AllocatedPath
+ContractLocalPath([[maybe_unused]] Path src) noexcept
+{
+  return nullptr;
+}
+
 Path
 GetCachePath() noexcept
 {

@@ -1217,11 +1217,15 @@ $(eval $(call link-program,TestDriver,TEST_DRIVER))
 TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
+	$(SRC)/Waypoint/WaypointDetailsReader.cpp \
 	$(SRC)/Radio/RadioFrequency.cpp \
+	$(IO_SRC_DIR)/MapFile.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
-TEST_WAY_POINT_FILE_DEPENDS = WAYPOINTFILE OPERATION GEO MATH IO ZZIP OS THREAD UTIL
+TEST_WAY_POINT_FILE_DEPENDS = WAYPOINTFILE PROFILE OPERATION GEO MATH IO ZZIP OS THREAD UTIL
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
