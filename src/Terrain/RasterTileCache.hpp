@@ -76,7 +76,7 @@ protected:
   };
 
   struct CacheHeader {
-    static constexpr unsigned VERSION = 0xb;
+    static constexpr unsigned VERSION = 0xd;
 
     unsigned version;
     UnsignedPoint2D size;
@@ -98,6 +98,11 @@ protected:
   Point2D<uint_least16_t> tile_size;
 
   RasterBuffer overview;
+  /**
+   * 4× subsample of the DEM, built with the overview and stored in
+   * the same cache file.  Scanned where a fine tile is not loaded.
+   */
+  RasterBuffer step;
   RasterLocation size;
   RasterLocation overview_size_fine;
 

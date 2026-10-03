@@ -205,20 +205,20 @@ RasterTileCache::GetFieldDirect(RasterLocation p) const noexcept
   if (tile.IsLoaded())
     return std::make_pair(tile.GetHeight(p), true);
 
-  // still not found, so go to overview
+  // still not found, so go to the step grid
 
-  // The overview might not cover the whole tile, if width or height are not
-  // a multiple of 2^OVERVIEW_BITS.
-  auto p_overview = p >> RasterTraits::OVERVIEW_BITS;
-  assert(p_overview.x <= overview.GetSize().x);
-  assert(p_overview.y <= overview.GetSize().y);
+  // The step grid might not cover the whole tile, if width or height
+  // are not a multiple of 2^STEP_BITS.
+  auto p_step = p >> RasterTraits::STEP_BITS;
+  assert(p_step.x <= step.GetSize().x);
+  assert(p_step.y <= step.GetSize().y);
 
-  if (p_overview.x == overview.GetSize().x)
-    --p_overview.x;
-  if (p_overview.y == overview.GetSize().y)
-    --p_overview.y;
+  if (p_step.x == step.GetSize().x)
+    --p_step.x;
+  if (p_step.y == step.GetSize().y)
+    --p_step.y;
 
-  return std::make_pair(overview.Get(p_overview), false);
+  return std::make_pair(step.Get(p_step), false);
 }
 
 SignedRasterLocation

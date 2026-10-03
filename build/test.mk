@@ -91,6 +91,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestWaypointReachability TestBackupPaths \
 	TestAllocatedGrid \
+	TestRasterTraits \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
@@ -663,6 +664,11 @@ TEST_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestMath.cpp
 QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
+
+TEST_RASTER_TRAITS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRasterTraits.cpp
+$(eval $(call link-program,TestRasterTraits,TEST_RASTER_TRAITS))
 
 TEST_GRAHAM_SCAN_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

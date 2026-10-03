@@ -127,6 +127,10 @@ Version 7.46 - not yet released
     rebuilding the slope image; contour lines stay unshaded (also on
     older OpenGL ES 2 devices); faster devices use full terrain
     resolution immediately instead of waiting until the map is idle
+  - cache a 4× terrain grid with the overview and use it when one
+    screen pixel is at least that coarse, so a wide view does not
+    decode every fine tile; the first start after this update
+    rebuilds the terrain cache
   - fix terrain shifting sideways against the map as you zoom
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
