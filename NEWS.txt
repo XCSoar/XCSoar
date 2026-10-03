@@ -109,6 +109,10 @@ Version 7.46 - not yet released
   - pc_met: draw the aircraft at its GPS position in the radar and
     satellite images, and in Sat Rad Blitz; nothing is drawn when
     there is no fix or the position lies outside the image #2966
+  - add the European rain radar (EUMETNET OPERA composite) as a map
+    overlay, free and without an account; fetched in tiles around the
+    aircraft, renewed every five minutes, and removed from the map
+    once it is twenty minutes old #2998
 * map
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
