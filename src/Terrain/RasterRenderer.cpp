@@ -25,6 +25,8 @@
 #endif
 
 #include <algorithm> // for std::clamp()
+#include <cmath>
+#include <cstdlib>
 #ifdef ENABLE_OPENGL
 #include <bit>
 #endif
@@ -204,8 +206,9 @@ static unsigned
 GetQuantisation() noexcept
 {
   if (!IsSlowCPU())
-    /* fast hosts: full resolution immediately (GPU hillshade and
-       ScanMap are cheap enough without the idle ladder) */
+    /* A full-resolution height field keeps slope shading during a
+       pan.  The pan stays smooth because only the strip entering
+       the view is scanned, rather than by drawing a coarser one. */
     return 1;
 
   if (IsUserIdle(1500))
@@ -240,9 +243,138 @@ RasterRenderer::BindAndGetTexture() const noexcept
 
 #endif
 
+#ifdef ENABLE_OPENGL
+
+void
+RasterRenderer::FillHeightRect(const RasterMap &map,
+                              unsigned x, unsigned y,
+                              unsigned w, unsigned h) noexcept
+{
+  if (w < 2 || h == 0)
+    return;
+
+  const unsigned width = height_matrix.GetSize().x;
+  const unsigned height = height_matrix.GetSize().y;
+  const Angle north = bounds.GetNorth();
+  const Angle west = bounds.GetWest();
+  /* Rows step by span/N and the last row stops short of the south
+     edge, matching HeightMatrix::Fill().  Columns are inclusive:
+     ScanLine puts sample i at i/(N-1) of the west-east span. */
+  const Angle dlat = bounds.GetHeight() / double(height);
+  const Angle width_angle = bounds.GetWidth();
+  const double x_denom = double(width - 1);
+
+  for (unsigned row = y; row < y + h; ++row) {
+    const Angle lat = north - dlat * double(row);
+    const Angle lon0 = west + width_angle * (double(x) / x_denom);
+    const Angle lon1 =
+      west + width_angle * (double(x + w - 1) / x_denom);
+    map.ScanLine(GeoPoint(lon0, lat), GeoPoint(lon1, lat),
+                 height_matrix.GetRow(row) + x,
+                 w, true);
+  }
+}
+
+bool
+RasterRenderer::ScrollMap(const RasterMap &map, const GeoBounds &desired,
+                         UnsignedPoint2D matrix_size) noexcept
+{
+  if (!bounds.IsValid() || height_matrix.GetSize() != matrix_size)
+    return false;
+
+  const unsigned width = matrix_size.x;
+  const unsigned height = matrix_size.y;
+  if (width < 2 || height < 2)
+    return false;
+
+  /* Same spacing as Fill(): columns inclusive, rows span/N. */
+  const double dlon = bounds.GetWidth().Degrees() / double(width - 1);
+  const double dlat = bounds.GetHeight().Degrees() / height;
+  if (!(dlon > 0) || !(dlat > 0))
+    return false;
+
+  if (std::fabs(desired.GetWidth().Degrees() - bounds.GetWidth().Degrees())
+      > dlon * 0.5 ||
+      std::fabs(desired.GetHeight().Degrees() - bounds.GetHeight().Degrees())
+      > dlat * 0.5)
+    return false;
+
+  const int east = (int)std::lround(
+    (desired.GetWest() - bounds.GetWest()).Degrees() / dlon);
+  const int north = (int)std::lround(
+    (desired.GetNorth() - bounds.GetNorth()).Degrees() / dlat);
+
+  if (east == 0 && north == 0) {
+    height_matrix_changed = false;
+    return true;
+  }
+
+  if (std::abs(east) >= (int)width / 2 ||
+      std::abs(north) >= (int)height / 2)
+    return false;
+
+  const Angle new_west = bounds.GetWest() +
+    Angle::Degrees(dlon * east);
+  const Angle new_north = bounds.GetNorth() +
+    Angle::Degrees(dlat * north);
+  bounds = GeoBounds(GeoPoint(new_west, new_north),
+                     GeoPoint(new_west + bounds.GetWidth(),
+                              new_north - bounds.GetHeight()));
+
+  height_matrix.Scroll(east, north);
+  last_quantisation_pixels = quantisation_pixels;
+
+  /* The GPU texture is not shifted by Scroll().  The whole picture
+     is uploaded later; uploading only the new edge would leave the
+     old interior on the new bounds, and the terrain would slide
+     against the map. */
+  unsigned row_y = 0, row_h = 0;
+  if (north > 0) {
+    row_y = 0;
+    row_h = unsigned(north);
+  } else if (north < 0) {
+    row_h = unsigned(-north);
+    row_y = height - row_h;
+  }
+  if (row_h > 0)
+    FillHeightRect(map, 0, row_y, width, row_h);
+
+  unsigned col_x = 0, col_w = 0;
+  if (east > 0) {
+    col_w = unsigned(east);
+    col_x = width - col_w;
+    if (col_w < 2 && col_x > 0) {
+      --col_x;
+      ++col_w;
+    }
+  } else if (east < 0) {
+    col_x = 0;
+    col_w = unsigned(-east);
+    if (col_w < 2 && col_w < width)
+      ++col_w;
+  }
+
+  unsigned col_y = 0;
+  unsigned col_h = height;
+  if (north > 0) {
+    col_y = unsigned(north);
+    col_h = height - col_y;
+  } else if (north < 0) {
+    col_h = height - unsigned(-north);
+  }
+  if (col_w >= 2 && col_h > 0)
+    FillHeightRect(map, col_x, col_y, col_w, col_h);
+
+  height_matrix_changed = true;
+  return true;
+}
+
+#endif
+
 void
 RasterRenderer::ScanMap(const RasterMap &map,
-                        const WindowProjection &projection) noexcept
+                        const WindowProjection &projection,
+                        bool force_full) noexcept
 {
   // GeoPoint corresponding to the MapWindow center
   GeoPoint center = projection.ScreenToGeo(projection.GetScreenCenter());
@@ -298,14 +430,20 @@ RasterRenderer::ScanMap(const RasterMap &map,
   }
 
 #ifdef ENABLE_OPENGL
-  bounds = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
-  bounds.IntersectWith(map.GetBounds());
+  GeoBounds desired =
+    projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
+  if (!desired.IntersectWith(map.GetBounds())) {
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
 
   UnsignedPoint2D matrix_size =
     (UnsignedPoint2D)projection.GetScreenSize()
     * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
     / quantisation_pixels / 128;
   if (matrix_size.x == 0 || matrix_size.y == 0) {
+    height_matrix_changed = false;
     quantisation_effective = 0;
     return;
   }
@@ -330,6 +468,11 @@ RasterRenderer::ScanMap(const RasterMap &map,
     matrix_size = {clamped_x, clamped_y};
   }
 
+  if (!force_full && ScrollMap(map, desired, matrix_size))
+    return;
+
+  bounds = desired;
+  height_matrix_changed = true;
   height_matrix.Fill(map, bounds, matrix_size, true);
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
@@ -337,6 +480,7 @@ RasterRenderer::ScanMap(const RasterMap &map,
 
   last_quantisation_pixels = quantisation_pixels;
 #else
+  (void)force_full;
   height_matrix.Fill(map, projection, quantisation_pixels, true);
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,

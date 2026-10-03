@@ -8,13 +8,31 @@
 #include "Interface.hpp"
 #include "time/PeriodClock.hpp"
 #include "ui/event/Idle.hpp"
-#include "Hardware/CPU.hpp"
 #include "Topography/Thread.hpp"
 #include "Terrain/Thread.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
+#include <chrono>
+
+namespace {
+
+template<typename F>
+static void
+TimedStop(const char *name, F &&stop) noexcept
+{
+  const auto start = std::chrono::steady_clock::now();
+  LogFmt("MapWindow: stop {} ...", name);
+  stop();
+  const auto ms =
+    std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - start).count();
+  LogFmt("MapWindow: stop {} took {} ms", name, ms);
+}
+
+}
 
 GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
@@ -34,7 +52,7 @@ void
 GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 {
   if (topography_thread != nullptr) {
-    topography_thread->LockStop();
+    TimedStop("topography", [&]{ topography_thread->LockStop(); });
     delete topography_thread;
     topography_thread = nullptr;
   }
@@ -50,7 +68,7 @@ void
 GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
-    terrain_thread->LockStop();
+    TimedStop("terrain", [&]{ terrain_thread->LockStop(); });
     delete terrain_thread;
     terrain_thread = nullptr;
   }
@@ -270,9 +288,6 @@ static constexpr auto TERRAIN_QUANTISATION_IDLE_STEP =
 void
 GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 {
-  if (!IsSlowCPU())
-    return;
-
   terrain_quantisation_idle_done = false;
   terrain_quantisation_timer.Schedule(TERRAIN_QUANTISATION_IDLE_STEP);
 }
@@ -280,9 +295,6 @@ GlueMapWindow::NoteTerrainQuantisationUserActivity() noexcept
 void
 GlueMapWindow::PollTerrainQuantisationIdle() noexcept
 {
-  if (!IsSlowCPU())
-    return;
-
   if (!IsUserIdle(750)) {
     terrain_quantisation_idle_done = false;
     return;

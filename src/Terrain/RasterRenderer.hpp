@@ -66,6 +66,8 @@ class RasterRenderer {
    */
   GeoBounds bounds = GeoBounds::Invalid();
 
+  bool height_matrix_changed = false;
+
   std::unique_ptr<GLTexture> height_texture;
   std::unique_ptr<GLTexture> ramp_texture;
   std::unique_ptr<uint8_t[]> ramp_rgba;
@@ -235,9 +237,25 @@ public:
 
   /**
    * Scan the map and fill the height matrix.
+   *
+   * @param force_full replace every sample.  Used when newly loaded
+   * fine tiles must show through the middle of the picture, not only
+   * on the edge that just entered the view.
    */
   void ScanMap(const RasterMap &map,
-               const WindowProjection &projection) noexcept;
+               const WindowProjection &projection,
+               bool force_full = false) noexcept;
+
+#ifdef ENABLE_OPENGL
+  /**
+   * True when the last ScanMap() changed samples that still need
+   * uploading.
+   */
+  [[gnu::pure]]
+  bool IsHeightMatrixChanged() const noexcept {
+    return height_matrix_changed;
+  }
+#endif
 
   /**
    * Make a gradient map from min_h to max_h, default left to right
@@ -296,6 +314,11 @@ private:
 #ifdef ENABLE_OPENGL
   void UploadHeightTexture() noexcept;
   void UploadRampTexture() noexcept;
+  void FillHeightRect(const RasterMap &map,
+                      unsigned x, unsigned y,
+                      unsigned w, unsigned h) noexcept;
+  bool ScrollMap(const RasterMap &map, const GeoBounds &desired,
+                 UnsignedPoint2D matrix_size) noexcept;
   void DrawHillshade(const WindowProjection &projection,
                      float alpha) const noexcept;
 #endif

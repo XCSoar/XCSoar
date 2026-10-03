@@ -7,10 +7,7 @@
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
-
-#ifdef ENABLE_OPENGL
 #include "ui/event/Idle.hpp"
-#endif
 
 #include <cassert>
 
@@ -383,10 +380,19 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
      Near the map edge, overscan is clipped so old_bounds.IsInside()
      can fail even when the projection is unchanged.  Use
      CompareExact (not tolerant Compare) so a tiny pan cannot skip
-     the IsInside coverage check. */
+     the IsInside coverage check.
+     While a finger is down, ignore a newer tile serial.  Each
+     arrival would otherwise rescan the whole height matrix on the
+     UI thread, and a pan hitch repeats until the finger lifts. */
+#ifdef ENABLE_OPENGL
+  const bool tiles_current = terrain_serial == terrain.GetSerial() ||
+    !IsUserIdle(750);
+#else
+  const bool tiles_current = terrain_serial == terrain.GetSerial();
+#endif
   if (!quantisation_improved &&
       compare_projection.CompareExact(map_projection) &&
-      terrain_serial == terrain.GetSerial() &&
+      tiles_current &&
       sun_ok) {
     if (settings.contours == Contours::OFF ||
 #ifdef ENABLE_OPENGL
@@ -410,10 +416,15 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       return false;
   }
 
-  if (!quantisation_improved &&
+  /* While the finger is down, ScanMap slides the picture and reads
+     only the strip that entered from the direction of the pan.
+     This reuse is for a still view whose samples are already
+     current. */
+  if (IsUserIdle(750) &&
+      !quantisation_improved &&
       old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
-      terrain_serial == terrain.GetSerial() &&
+      tiles_current &&
       sun_ok) {
     /* The existing terrain image is suitable for reuse.
        CPU contours need a rebuild when zoom changes the interval;
@@ -427,20 +438,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     }
   }
 
-  /* CPU slope shading is too expensive to run while the user is
-     dragging.  GPU hillshade only resamples the DEM; overscan reuse
-     already covers small pans, and GPS follow is idle so coverage
-     updates immediately. */
-  if (!raster_renderer.IsShaderHillshade() &&
-      !raster_renderer.IsQuantisationFixed() &&
-      old_bounds.IsValid() &&
-      old_bounds.IsInside(new_bounds) &&
-      !IsUserIdle(750))
-    return true;
-
 #endif
 
-  terrain_serial = terrain.GetSerial();
   compare_projection = CompareProjection(map_projection);
 
   last_sun_azimuth = sunazimuth;
@@ -460,8 +459,21 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
 
   {
     RasterTerrain::Lease map(terrain);
-    raster_renderer.ScanMap(map, map_projection);
+    raster_renderer.ScanMap(map, map_projection, !tiles_current);
   }
+
+  /* A pan only reads the strip that entered the view.  A tile that
+     finishes loading during that pan still has to be scanned through
+     the middle once the map is still, so keep the old serial until
+     then. */
+  if (terrain_serial == terrain.GetSerial() || IsUserIdle(750))
+    terrain_serial = terrain.GetSerial();
+
+#ifdef ENABLE_OPENGL
+  if (raster_renderer.IsShaderHillshade() &&
+      !raster_renderer.IsHeightMatrixChanged())
+    return true;
+#endif
 
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
