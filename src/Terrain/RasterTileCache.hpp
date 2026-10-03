@@ -76,7 +76,7 @@ protected:
   };
 
   struct CacheHeader {
-    static constexpr unsigned VERSION = 0xd;
+    static constexpr unsigned VERSION = 0xe;
 
     unsigned version;
     UnsignedPoint2D size;
@@ -108,7 +108,12 @@ protected:
 
   GeoBounds bounds;
 
-  StaticArray<MarkerSegmentInfo, 8192> segments;
+  /**
+   * One entry per JPEG2000 tile, plus the main-header markers.
+   * A 1-arc-second Alps map is about 14000 tiles; a shorter list
+   * cannot skip the tail of the file.
+   */
+  StaticArray<MarkerSegmentInfo, 16384> segments;
 
   /**
    * An array that is used to sort the requested tiles by distance.
