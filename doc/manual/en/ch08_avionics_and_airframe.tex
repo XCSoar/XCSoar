@@ -207,6 +207,10 @@ IGC file will be downloaded to the ``\texttt{logs}'' directory inside
 driver on separate lines above the progress bar.  Inside the bar it
 shows the percentage complete, the amount received against the total,
 the transfer speed, and an estimate of the time remaining.
+From an LXNAV logger that supports it, such as the Nano~3, XCSoar
+downloads the file in blocks with a checksum each and a checksum over
+the whole file, and requests a damaged block again; other LXNAV
+loggers are read line by line.
 A PowerFLARM Flex or Fusion does not give out its flight log on the
 data connection.  Join the device Wi-Fi (shown on the Hub screen) and
 use Flight download; XCSoar reads the flights from there.
