@@ -6,6 +6,10 @@ Version 7.47 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * map
+  - cache a 4× terrain grid with the overview and use it when one
+    screen pixel is at least that coarse, so a wide view does not
+    decode every fine tile; the first start after this update
+    rebuilds the terrain cache
   - fix terrain shifting sideways against the map as you zoom
 
 Version 7.46 - 2026-10-19
