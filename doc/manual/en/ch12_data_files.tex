@@ -114,6 +114,11 @@ to avoid any additional whitespaces around the equal sign or in front of the
 keyword. Which files are supported depends on your operating system and the
 applications that are installed.  Android supports JPEG files and other
 file types, others mostly BMP images. one or several images can be shown.
+The file name is relative to the XCSoar data directory, also for
+waypoints loaded from a \verb|.cupx| file. For those, a section in this
+file replaces the pictures the archive carries for that waypoint, even if
+it lists no image; only a file name that also exists in the archive is
+still taken from the archive.
 
 The text may also specify any document specific to airfields or waypoints using
 \verb|file=| followed by the file name. Such document won't be loaded directly in XCSoar 
