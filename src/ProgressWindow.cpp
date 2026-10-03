@@ -204,7 +204,7 @@ ProgressWindow::UpdateRate(unsigned done, unsigned total) noexcept
 void
 ProgressWindow::UpdateBarLabel(unsigned value) noexcept
 {
-  if (range_max <= range_min) {
+  if (!have_progress_position || range_max <= range_min) {
     progress_bar.SetText("");
     return;
   }
@@ -264,6 +264,8 @@ ProgressWindow::SetMessage(const char *text) noexcept
 void
 ProgressWindow::SetRange(unsigned min_value, unsigned max_value) noexcept
 {
+  if (range_min != min_value || range_max != max_value)
+    have_progress_position = false;
   range_min = min_value;
   range_max = max_value;
   ResetRate();
@@ -301,6 +303,7 @@ ProgressWindow::SetValue(unsigned value) noexcept
 {
   AssertThread();
 
+  have_progress_position = true;
   progress_bar.SetValue(value);
   UpdateBarLabel(value);
 }
@@ -308,6 +311,7 @@ ProgressWindow::SetValue(unsigned value) noexcept
 void
 ProgressWindow::Step() noexcept
 {
+  have_progress_position = true;
   progress_bar.Step();
   UpdateBarLabel(progress_bar.GetValue());
 }

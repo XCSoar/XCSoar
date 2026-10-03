@@ -36,6 +36,8 @@ class ProgressWindow : public ContainerWindow {
   unsigned message_lines = 2;
 
   unsigned range_min = 0, range_max = 0;
+  /** The default range alone does not mean the job reports progress. */
+  bool have_progress_position = false;
   std::chrono::steady_clock::time_point rate_start{};
   unsigned rate_done = 0;
   bool rate_started = false;
