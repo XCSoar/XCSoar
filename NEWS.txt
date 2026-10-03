@@ -300,6 +300,9 @@ Version 7.46 - not yet released
     and add waypoints selected with Goto to it #3207
   - fix crash when moving the keyboard focus on the waypoint picture
     page or in the flugwetter.de image view
+  - fix pictures named by image= in a waypoint details file not showing
+    for waypoints loaded from a .cupx file; they were looked for inside
+    the archive instead of the data directory #3250
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator
