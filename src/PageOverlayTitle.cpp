@@ -103,6 +103,16 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     }
     break;
 
+  case PageLayout::Overlay::RADAR:
+    builder.Append(", ");
+    builder.Append(_("Radar"));
+    break;
+
+  case PageLayout::Overlay::SATELLITE:
+    builder.Append(", ");
+    builder.Append(_("Satellite"));
+    break;
+
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }
