@@ -113,6 +113,10 @@ Version 7.46 - not yet released
     overlay, free and without an account; fetched in tiles around the
     aircraft, renewed every five minutes, and removed from the map
     once it is twenty minutes old #2998
+  - add Meteosat satellite imagery (EUMETSAT EUMETView) underneath the
+    map, free and without an account; one product per map page, fetched
+    nearest tile first and removed from the map when it grows too old
+    #3000
 * map
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
