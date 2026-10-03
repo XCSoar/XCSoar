@@ -126,6 +126,13 @@ struct WeatherSettings {
   EdlSettings edl;
   XCThermSettings xctherm;
 
+  /**
+   * Height of map-bottom weather control rows as a percentage of the
+   * default control height (30…100, steps of 10).  100 = current
+   * default (touch: maximum control height).
+   */
+  unsigned controls_height_percent;
+
   void SetDefaults() noexcept {
 #ifdef HAVE_PCMET
     pcmet.SetDefaults();
@@ -142,5 +149,6 @@ struct WeatherSettings {
     rasp.SetDefaults();
     edl.SetDefaults();
     xctherm.SetDefaults();
+    controls_height_percent = 100;
   }
 };
