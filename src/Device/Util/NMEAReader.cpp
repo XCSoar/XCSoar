@@ -30,41 +30,55 @@ PortNMEAReader::Fill(TimeoutClock timeout)
 inline char *
 PortNMEAReader::GetLine()
 {
-  const auto src = buffer.Read();
-  char *const end = src.data() + src.size();
+  while (true) {
+    const auto src = buffer.Read();
+    char *const end = src.data() + src.size();
 
-  /* a NMEA line starts with a dollar symbol ... */
-  char *dollar = std::find(src.data(), end, '$');
-  if (dollar == end) {
-    buffer.Clear();
-    return nullptr;
+    /* a NMEA line starts with a dollar symbol ... */
+    char *dollar = std::find(src.data(), end, '$');
+    if (dollar == end) {
+      buffer.Clear();
+      return nullptr;
+    }
+
+    /* drop what came before it: the rest of a line whose start was
+       lost, which would otherwise fill the buffer */
+    buffer.Consume(dollar - src.data());
+
+    char *start = dollar + 1;
+
+    /* ... and ends with an asterisk */
+    char *asterisk = std::find(start, end, '*');
+    if (asterisk + 3 > end) {
+      if (end - dollar < std::ptrdiff_t(BUFFER_SIZE))
+        /* need more data */
+        return nullptr;
+
+      /* a full buffer without an end: not a line we can read */
+      buffer.Consume(1);
+      continue;
+    }
+
+    /* verify the checksum following the asterisk (two hex digits) */
+
+    const uint8_t calculated_checksum = NMEAChecksum({start, asterisk});
+
+    const char checksum_buffer[3] = { asterisk[1], asterisk[2], 0 };
+    char *endptr;
+    const uint8_t parsed_checksum = strtoul(checksum_buffer, &endptr, 16);
+    if (endptr != checksum_buffer + 2 ||
+        parsed_checksum != calculated_checksum) {
+      /* skip only this dollar: when bytes were lost, the next line
+         may already be complete behind it */
+      buffer.Consume(1);
+      continue;
+    }
+
+    buffer.Consume(asterisk + 3 - dollar);
+
+    *asterisk = 0;
+    return start;
   }
-
-  char *start = dollar + 1;
-
-  /* ... and ends with an asterisk */
-  char *asterisk = std::find(start, end, '*');
-  if (asterisk + 3 > end)
-    /* need more data */
-    return nullptr;
-
-  /* verify the checksum following the asterisk (two hex digits) */
-
-  const uint8_t calculated_checksum = NMEAChecksum({start, asterisk});
-
-  const char checksum_buffer[3] = { asterisk[1], asterisk[2], 0 };
-  char *endptr;
-  const uint8_t parsed_checksum = strtoul(checksum_buffer, &endptr, 16);
-  if (endptr != checksum_buffer + 2 ||
-      parsed_checksum != calculated_checksum) {
-    buffer.Clear();
-    return nullptr;
-  }
-
-  buffer.Consume(asterisk + 3 - src.data());
-
-  *asterisk = 0;
-  return start;
 }
 
 void
