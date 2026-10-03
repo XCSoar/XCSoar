@@ -37,6 +37,16 @@ bool
 IGCParseExtensions(const char *buffer, IGCExtensions &extensions);
 
 /**
+ * The length of every record laid out by an "I" (B records) or "J"
+ * (K records) declaration: the fixed part, or the last byte an
+ * extension occupies, whichever is further.  The fixed part is 35 for
+ * a B record and 7 for a K record.
+ */
+[[gnu::pure]]
+unsigned
+IGCRecordLength(const IGCExtensions &extensions, unsigned fixed) noexcept;
+
+/**
  * Parse a location in IGC file format. (DDMMmmm[N/S]DDDMMmmm[E/W])
  *
  * @return true on success, false if the location was not recognized
