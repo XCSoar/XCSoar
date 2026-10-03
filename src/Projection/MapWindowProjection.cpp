@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "MapWindowProjection.hpp"
-#include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -64,8 +63,12 @@ double
 MapWindowProjection::CalculateMapScale(unsigned scale) const noexcept
 {
   assert(scale < ScaleListCount);
+  /* ScaleList is the scale-bar width in metres.  Divide by the map
+     pixel width, not Layout::Scale(width): that UI factor grows with
+     DPI and was capping wheel zoom at about 170 km on a 1400 px
+     window. */
   return double(ScaleList[scale]) *
-    GetMapResolutionFactor() / Layout::Scale(GetScreenSize().width);
+    GetMapResolutionFactor() / GetScreenSize().width;
 }
 
 /**
@@ -106,16 +109,17 @@ MapWindowProjection::FindMapScale(const double Value) const noexcept
 {
   const unsigned effective_count = EffectiveScaleListCount();
 
-  unsigned DesiredScale(Value * Layout::Scale(GetScreenSize().width)
-                        / GetMapResolutionFactor());
+  const unsigned desired_scale = (unsigned)
+    (Value * double(GetScreenSize().width)
+     / double(GetMapResolutionFactor()));
 
   unsigned i;
   for (i = 0; i < effective_count; i++) {
-    if (DesiredScale < ScaleList[i]) {
+    if (desired_scale < ScaleList[i]) {
       if (i == 0)
         return 0;
 
-      return i - (DesiredScale < (ScaleList[i] + ScaleList[i - 1]) / 2);
+      return i - (desired_scale < (ScaleList[i] + ScaleList[i - 1]) / 2);
     }
   }
 

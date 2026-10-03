@@ -132,6 +132,9 @@ Version 7.46 - not yet released
     decode every fine tile; the first start after this update
     rebuilds the terrain cache
   - fix terrain shifting sideways against the map as you zoom
+  - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
+    high-DPI screens; the discrete scale list is the scale-bar
+    width, up to 1000 km
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
