@@ -121,13 +121,11 @@ RasterTileCache::PollTiles(SignedRasterLocation p, unsigned radius) noexcept
      the screen will be loaded in advance */
   radius += 256;
 
-  /**
-   * Maximum number of tiles loaded at a time, to reduce system load
-   * peaks.
-   */
-  constexpr unsigned MAX_ACTIVATE = MAX_ACTIVE_TILES > 32
-    ? 16
-    : MAX_ACTIVE_TILES / 2;
+  /* One JPEG2000 pass walks the file from the start.  Request every
+     visible tile in that pass.  Repeating the walk for a handful of
+     tiles costs more than decoding them together.  MAX_ACTIVE_TILES
+     still bounds how many are held in memory. */
+  constexpr unsigned MAX_ACTIVATE = MAX_ACTIVE_TILES;
 
   /* query all tiles; all tiles which are either in range or already
      loaded are added to RequestTiles */

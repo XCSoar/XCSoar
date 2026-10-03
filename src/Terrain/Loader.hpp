@@ -28,6 +28,12 @@ class TerrainLoader {
    */
   mutable unsigned remaining_segments = 0;
 
+  /** Fine tiles copied by the current UpdateTiles() pass. */
+  unsigned tiles_stored = 0;
+
+  /** How many tiles this pass asked the decoder to store. */
+  unsigned tiles_wanted = 0;
+
 public:
   TerrainLoader(SharedMutex &_mutex, RasterTileCache &_rtc,
                 bool _scan_overview, bool _scan_all,
@@ -50,6 +56,15 @@ public:
                    SignedRasterLocation p, unsigned radius);
 
   /* callback methods for libjasper (via jas_rtc.cpp) */
+
+  /**
+   * True once every tile requested for this pass has been stored.
+   * The decoder uses this to stop instead of reading the rest of
+   * the file.
+   */
+  bool HasAllTiles() const noexcept {
+    return tiles_wanted > 0 && tiles_stored >= tiles_wanted;
+  }
 
   long SkipMarkerSegment(long file_offset) const;
   void MarkerSegment(long file_offset, unsigned id);
