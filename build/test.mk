@@ -119,6 +119,7 @@ TEST_NAMES = \
 	TestOGNAprsParser \
 	TestMETARParser \
 	TestIGCParser TestIGCFlightTimes \
+	TestNanoFileTransfer \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
 	TestInputConfig \
@@ -291,6 +292,13 @@ TEST_IGC_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCParser,TEST_IGC_PARSER))
+
+TEST_NANO_FILE_TRANSFER_SOURCES = \
+	$(SRC)/Device/Driver/LX/NanoFileTransfer.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestNanoFileTransfer.cpp
+TEST_NANO_FILE_TRANSFER_DEPENDS = UTIL
+$(eval $(call link-program,TestNanoFileTransfer,TEST_NANO_FILE_TRANSFER))
 
 TEST_IGC_FLIGHT_TIMES_SOURCES = \
 	$(SRC)/IGC/FlightTimes.cpp \
