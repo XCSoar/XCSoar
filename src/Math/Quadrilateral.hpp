@@ -5,6 +5,9 @@
 
 #include "Point2D.hpp"
 
+#include <algorithm>
+#include <cmath>
+
 constexpr double
 CalcQuadrilateralU(const DoublePoint2D h, DoublePoint2D f,
                    DoublePoint2D e, DoublePoint2D g,
@@ -54,18 +57,24 @@ MapInQuadrilateral(const DoublePoint2D a, const DoublePoint2D b,
   const double v2 = (-k1 + w) / (2 * k2);
   const double u2 = CalcQuadrilateralU(h, f, e, g, v2);
 
+  /* Accept roots slightly outside the unit square: points that lie
+     exactly on an edge of the quadrilateral (e.g. vertices produced by
+     clipping) can otherwise be rejected from floating point rounding
+     falling through to the {-1,-1} sentinel. */
+  constexpr double eps = 1e-6;
+
   double u = u1;
   double v = v1;
 
-  if (v < 0.0 || v > 1.0 || u < 0.0 || u > 1.0 ) {
+  if (!std::isfinite(u) || !std::isfinite(v) ||
+      v < -eps || v > 1.0 + eps || u < -eps || u > 1.0 + eps) {
     u = u2;
     v = v2;
   }
 
-  if (v < 0.0 || v > 1.0 || u < 0.0 || u > 1.0) {
-    u = -1.0;
-    v = -1.0;
-  }
+  if (!std::isfinite(u) || !std::isfinite(v) ||
+      v < -eps || v > 1.0 + eps || u < -eps || u > 1.0 + eps)
+    return {-1.0, -1.0};
 
-  return {u, v};
+  return {std::clamp(u, 0.0, 1.0), std::clamp(v, 0.0, 1.0)};
 }

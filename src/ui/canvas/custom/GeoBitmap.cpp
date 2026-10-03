@@ -6,6 +6,7 @@
 #include "UncompressedImage.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Quadrilateral.hpp"
+#include "Geo/ReferencedGrid.hpp"
 #include "Projection/MapWindowProjection.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
@@ -148,7 +149,7 @@ ParseTileBounds(std::string_view name)
   return GeoBitmap::GetGeoQuadrilateral({zoom, x, y});
 }
 
-GeoQuadrilateral
+GeoReferencedGrid
 Bitmap::LoadGeoFile(Path path)
 {
   if (!File::Exists(path))
@@ -161,7 +162,7 @@ Bitmap::LoadGeoFile(Path path)
   if (path.EndsWithIgnoreCase(".tif") ||
       path.EndsWithIgnoreCase(".tiff")) {
     if (File::GetSize(path) < kMinTiffGeoFileSize)
-      return {};
+      throw std::runtime_error("Geo image file is too small");
 
     auto result = LoadGeoTiff(path);
     if (!Load(std::move(result.first)))
@@ -186,7 +187,7 @@ Bitmap::LoadGeoFile(Path path)
     if (base == nullptr)
       throw std::runtime_error("Unsupported geo image file");
 
-    return ParseTileBounds(base.c_str());
+    return GeoReferencedGrid{ParseTileBounds(base.c_str())};
   }
 
   throw std::runtime_error("Unsupported geo image file");
