@@ -127,6 +127,27 @@ The same make flag works for ``TARGET=KOBO`` and ``OPENGL=n`` builds.
 Clean or rebuild affected objects when toggling the flag; mixed objects
 with and without ``-DDRAW_REDRAW_COUNTER`` are not reliable.
 
+Process-load overlay
+--------------------
+
+To draw XCSoar CPU percent, map-paint time, and topography polygon /
+vertex counts on the map, build with ``DEBUG_PROCESS_LOAD=y``::
+
+  make -j$(nproc) TARGET=UNIX USE_CCACHE=y DEBUG_PROCESS_LOAD=y
+
+The flag is defined in :file:`build/options.mk` (default ``n``). When
+enabled, a sparkline overlay in the top-right of the map shows process
+CPU (all threads, 100% is one core, averaged over ~250 ms), peak
+map-paint time in that window, and topography polygon / vertex counts
+from the last frame. E-paper builds skip the overlay.
+
+For Xcode builds on iOS and macOS, set ``DEBUG_PROCESS_LOAD=y`` in
+:file:`darwin/.env`; :file:`darwin/build.sh` passes it to make.
+
+Clean or rebuild affected map-window objects when toggling the flag;
+mixed objects with and without the define are not reliable. Do not
+ship production builds with this option enabled.
+
 Force all map overlays
 ----------------------
 

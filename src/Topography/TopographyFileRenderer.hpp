@@ -134,3 +134,13 @@ private:
 
   void PaintPoints(Canvas &canvas, const WindowProjection &projection) noexcept;
 };
+
+#ifdef ENABLE_OPENGL
+void TopographyGpuStatsBeginDraw() noexcept;
+void TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept;
+void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
+
+/** Indices submitted and fill primitives in the last Draw(). */
+unsigned GetLastTopographyVertexCount() noexcept;
+unsigned GetLastTopographyPolygonCount() noexcept;
+#endif

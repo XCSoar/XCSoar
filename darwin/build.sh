@@ -50,6 +50,18 @@ case "$(printf '%s' "${DEBUG_ALL_MAP_OVERLAYS:-n}" | tr '[:upper:]' '[:lower:]')
 esac
 export DEBUG_ALL_MAP_OVERLAYS
 
+# Normalise the DEBUG_PROCESS_LOAD flag (see doc/debugging.rst)
+case "$(printf '%s' "${DEBUG_PROCESS_LOAD:-n}" | tr '[:upper:]' '[:lower:]')" in
+    y|yes|true|1)
+        DEBUG_PROCESS_LOAD="y"
+        echo "build.sh: Process-load overlay (DEBUG_PROCESS_LOAD=y)"
+        ;;
+    *)
+        DEBUG_PROCESS_LOAD="n"
+        ;;
+esac
+export DEBUG_PROCESS_LOAD
+
 # Set debug flag based on configuration
 DEBUG="n"
 if [ "${CONFIGURATION}" = "Debug" ]; then
@@ -112,7 +124,7 @@ echo "Building with $NUM_CPUS parallel jobs..."
 # TESTING must be passed on the command line: build/options.mk assigns a
 # default with "=", which would override the value from the environment.
 # DEBUG_ALL_MAP_OVERLAYS is passed the same way for consistency.
-if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" DEBUG_ALL_MAP_OVERLAYS="$DEBUG_ALL_MAP_OVERLAYS" TARGET="$TARGET" $IPA_TARGET; then
+if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" DEBUG_ALL_MAP_OVERLAYS="$DEBUG_ALL_MAP_OVERLAYS" DEBUG_PROCESS_LOAD="$DEBUG_PROCESS_LOAD" TARGET="$TARGET" $IPA_TARGET; then
     echo "Error: Build failed" >&2
     exit 1
 fi

@@ -28,6 +28,8 @@ Version 7.47 - not yet released
     OpenGL shader, --seconds=N exits for profiling
   - add RunMapRendererStress to time terrain and topography map paint
     from an .xcm; --no-cache forces a full rasterize each draw
+  - build system: add DEBUG_PROCESS_LOAD=y to draw a CPU / map-paint
+    sparkline and topography vertex counts on the map
 
 Version 7.46 - 2026-10-19
 * highlights

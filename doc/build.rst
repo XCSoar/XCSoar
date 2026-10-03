@@ -404,7 +404,8 @@ That script reads optional settings from `darwin/.env` (see
 flavour with the red icon, which on iOS uses the separate bundle
 identifier ``XCSoar-testing`` and can therefore be installed next to the
 stable app. Likewise ``DEBUG_ALL_MAP_OVERLAYS=y`` forces all map overlays
-to be drawn (see :doc:`debugging`).
+to be drawn, and ``DEBUG_PROCESS_LOAD=y`` draws the CPU / map-paint
+overlay (see :doc:`debugging`).
 For iOS debugging with Visual Studio Code, the `iOS Debug`
 extension (https://github.com/nisargjhaveri/vscode-ios-debug) can be used.
 Note that this also requires an Xcode installation.
