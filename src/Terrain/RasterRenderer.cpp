@@ -22,9 +22,6 @@
 #include "ui/canvas/opengl/Texture.hpp"
 #include "ui/canvas/opengl/Shaders.hpp"
 #include "ui/canvas/opengl/Program.hpp"
-#include "ui/canvas/opengl/Attribute.hpp"
-#include "ui/canvas/opengl/VertexPointer.hpp"
-#include "ui/dim/BulkPoint.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -960,15 +957,6 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
   assert(height_texture != nullptr);
   assert(ramp_texture != nullptr);
 
-  const BulkPixelPoint vertices[] = {
-    projection.GeoToScreen(bounds.GetNorthWest()),
-    projection.GeoToScreen(bounds.GetNorthEast()),
-    projection.GeoToScreen(bounds.GetSouthWest()),
-    projection.GeoToScreen(bounds.GetSouthEast()),
-  };
-
-  const ScopeVertexPointer vp(vertices);
-
   glActiveTexture(GL_TEXTURE0);
   height_texture->Bind();
   glActiveTexture(GL_TEXTURE1);
@@ -981,16 +969,6 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
   const auto matrix_size = height_matrix.GetSize();
   const GLfloat x1 = GLfloat(matrix_size.x) / allocated.width;
   const GLfloat y1 = GLfloat(matrix_size.y) / allocated.height;
-  const GLfloat coord[] = {
-    0, 0,
-    x1, 0,
-    0, y1,
-    x1, y1,
-  };
-
-  glEnableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
-  glVertexAttribPointer(OpenGL::Attribute::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
-                        0, coord);
 
   const unsigned q = std::max(1u, quantisation_effective);
   glUniform2f(OpenGL::hillshade_texel_step,
@@ -1013,12 +991,10 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
 
   if (alpha < 1.0f) {
     const GLBlend blend(alpha);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    DrawGeoQuad(bounds, projection, x1, y1);
   } else {
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    DrawGeoQuad(bounds, projection, x1, y1);
   }
-
-  glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, 0);
