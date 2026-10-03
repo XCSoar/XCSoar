@@ -5,6 +5,7 @@
 #include "Waypoint/WaypointReaderBase.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Waypoint/CupWriter.hpp"
+#include "Waypoint/WaypointDetailsReader.hpp"
 #include "Waypoint/Factory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
@@ -20,6 +21,7 @@
 #include "Operation/Operation.hpp"
 #include "io/CupxArchive.hpp"
 
+#include <algorithm>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -431,6 +433,61 @@ TestCupxDataDescriptor()
   ok1(!img.empty());
 }
 
+static void
+ReadDetails(Waypoints &way_points, std::string_view details)
+{
+  MemoryReader mr(std::as_bytes(std::span{details}));
+  BufferedReader br(mr);
+  WaypointDetails::ReadFile(br, way_points);
+}
+
+/**
+ * A waypoint details file may name pictures for a waypoint loaded from
+ * a .cupx (#3250).  Its section replaces the archive's picture list,
+ * and a name the archive does not hold must come back empty from
+ * CupxArchive -- that is what sends the details dialog to the data
+ * directory instead.
+ */
+static void
+TestCupxDetailsFile()
+{
+  const Path cupx("test/data/test.cupx");
+
+  Waypoints way_points;
+  if (!TestWaypointFile(cupx, way_points, 2)) {
+    skip(5, 0, "opening CUPX file failed");
+    return;
+  }
+
+  ReadDetails(way_points,
+              "[Test Airfield]\n"
+              "image=AIP/chart.png\n"
+              "image=test_image.jpg\n");
+
+  const auto wp = way_points.LookupName("Test Airfield");
+  if (!ok1(wp != nullptr)) {
+    skip(4, 0, "waypoint not found");
+    return;
+  }
+
+  /* the details file's list, in file order, replaces the archive's */
+  const std::vector<std::string> expected{"AIP/chart.png", "test_image.jpg"};
+  ok1(std::equal(wp->files_embed.begin(), wp->files_embed.end(),
+                 expected.begin(), expected.end()));
+
+  /* not in the archive: the dialog must look in the data directory */
+  ok1(CupxArchive::ExtractImage(cupx, "AIP/chart.png").empty());
+
+  /* a name the archive does hold is still taken from the archive */
+  ok1(!CupxArchive::ExtractImage(cupx, "test_image.jpg").empty());
+
+  /* a section without any image= line empties the list as well */
+  ReadDetails(way_points,
+              "[Test Airfield]\n"
+              "Tower 123.500\n");
+  ok1(wp->files_embed.empty());
+}
+
 static wp_vector
 CreateOriginalWaypoints()
 {
@@ -533,12 +590,13 @@ int main()
 {
   wp_vector org_wp = CreateOriginalWaypoints();
 
-  plan_tests(507 + 4 + 8);
+  plan_tests(507 + 4 + 8 + 8);
 
   TestWinPilot(org_wp);
   TestSeeYou(org_wp);
   TestCupx();
   TestCupxDataDescriptor();
+  TestCupxDetailsFile();
   TestZander(org_wp);
   TestFS(org_wp);
   TestFS_UTM(org_wp);
