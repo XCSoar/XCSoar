@@ -477,14 +477,11 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
     try {
       if (is_cupx) {
         auto data = CupxArchive::ExtractImage(source_path, i);
-        if (data.empty())
-          continue;
-
+        if (!data.empty()) {
 #ifndef ANDROID
-        if (!images.append().Load(std::span<const std::byte>(data)))
-          images.shrink(images.size() - 1);
+          if (!images.append().Load(std::span<const std::byte>(data)))
+            images.shrink(images.size() - 1);
 #else
-        {
           const auto tmp_dir = MakeCacheDirectory("cupx");
           const auto tmp_file = AllocatedPath::Build(tmp_dir, i.c_str());
 
@@ -497,12 +494,18 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
             images.shrink(images.size() - 1);
 
           File::Delete(tmp_file);
-        }
 #endif
-      } else {
-        if (!images.append().LoadFile(LocalPath(i.c_str())))
-          images.shrink(images.size() - 1);
+          continue;
+        }
+
+        /* Not in the archive.  A waypoint details file may name its
+           own pictures ("image=AIP/ETSI_1.png") for a waypoint that
+           came from a .cupx, and those live in the data directory,
+           not in the archive's pics.zip. */
       }
+
+      if (!images.append().LoadFile(LocalPath(i.c_str())))
+        images.shrink(images.size() - 1);
     } catch (const std::exception &e) {
       LogFormat("Failed to load %s: %s",
                 (const char *)NarrowPathName(Path(i.c_str())),
