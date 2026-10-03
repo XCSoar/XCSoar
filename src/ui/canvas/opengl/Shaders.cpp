@@ -6,7 +6,9 @@
 #include "Attribute.hpp"
 #include "Globals.hpp"
 #include "ui/dim/Point.hpp"
+#include "LogFile.hpp"
 #include "lib/fmt/RuntimeError.hxx"
+#include "util/Exception.hxx"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -46,6 +48,14 @@ GLint filled_circle_projection, filled_circle_translate,
 GLProgram *round_line_shader;
 GLint round_line_projection, round_line_translate,
   round_line_softness, round_line_min_coverage, round_line_color;
+
+GLProgram *hillshade_shader;
+GLint hillshade_projection, hillshade_translate,
+  hillshade_height_tex, hillshade_ramp_tex,
+  hillshade_texel_step, hillshade_sun, hillshade_contrast,
+  hillshade_height_slope_factor, hillshade_height_div,
+  hillshade_q, hillshade_do_shading, hillshade_contour_div,
+  hillshade_contour_thickness, hillshade_height_texel;
 
 } // namespace OpenGL
 
@@ -321,6 +331,149 @@ static constexpr char round_line_fragment_shader[] =
     }
 )glsl";
 
+static const char *const hillshade_vertex_shader = texture_vertex_shader;
+
+static constexpr char hillshade_fragment_shader[] =
+  GLSL_VERSION
+  R"glsl(
+    /* Always mediump: Mali-400 has no fragment highp, and forming
+       int16 as 0..65535 is not representable (mediump is ±16384). */
+    precision mediump float;
+    uniform sampler2D height_tex;
+    uniform sampler2D ramp_tex;
+    uniform vec2 texel_step;
+    uniform vec3 sun;
+    uniform float contrast;
+    uniform float height_slope_factor;
+    uniform float height_div;
+    uniform float q;
+    uniform float do_shading;
+    uniform float contour_div;
+    uniform float contour_thickness;
+    uniform vec2 height_texel;
+    varying vec2 texcoordvar;
+
+    vec2 unpack_la(vec4 t) {
+      return vec2(floor(t.r * 255.0 + 0.5),
+                  floor(t.a * 255.0 + 0.5));
+    }
+
+    /* TerrainHeight::IsSpecial(): value <= -30000.
+       -32768 → hi=128; -30000 → hi=138 lo=208.  Do not reconstruct
+       those heights (they do not fit in mediump). */
+    bool is_special(vec2 b) {
+      return b.y >= 128.0 &&
+             (b.y < 138.0 || (b.y == 138.0 && b.x <= 208.0));
+    }
+
+    float height(vec2 b) {
+      float h = (b.y >= 128.0)
+        ? ((b.y - 256.0) * 256.0 + b.x)
+        : (b.y * 256.0 + b.x);
+      return clamp(h, -16383.0, 16383.0);
+    }
+
+    vec4 ramp_lookup(float h_idx, float sindex) {
+      return texture2D(ramp_tex, vec2((h_idx + 0.5) / 256.0,
+                                      (sindex + 64.5) / 128.0));
+    }
+
+    float contour_interval(float h) {
+      if (h <= 0.0)
+        return 0.0;
+      return min(254.0, floor(h / contour_div));
+    }
+
+    /* True when this height texel starts a new contour interval,
+       matching the CPU neighbour test. */
+    bool contour_edge(vec2 uv) {
+      vec2 b = unpack_la(texture2D(height_tex, uv));
+      float h = is_special(b) ? 0.0 : height(b);
+      vec2 b_up = unpack_la(texture2D(height_tex,
+          uv - vec2(0.0, height_texel.y)));
+      vec2 b_lf = unpack_la(texture2D(height_tex,
+          uv - vec2(height_texel.x, 0.0)));
+      float h_up = is_special(b_up) ? 0.0 : height(b_up);
+      float h_lf = is_special(b_lf) ? 0.0 : height(b_lf);
+      float ci = contour_interval(h);
+      return ci != contour_interval(h_up) ||
+             ci != contour_interval(h_lf);
+    }
+
+    void main() {
+      vec2 b = unpack_la(texture2D(height_tex, texcoordvar));
+      if (is_special(b)) {
+        gl_FragColor = ramp_lookup(255.0, 0.0);
+        return;
+      }
+
+      float h = height(b);
+      float h_idx = min(254.0, max(0.0, floor(h / height_div)));
+      float sindex = 0.0;
+
+      if (do_shading > 0.5) {
+        vec2 b_above = unpack_la(texture2D(height_tex,
+            texcoordvar - vec2(0.0, texel_step.y)));
+        vec2 b_below = unpack_la(texture2D(height_tex,
+            texcoordvar + vec2(0.0, texel_step.y)));
+        vec2 b_left = unpack_la(texture2D(height_tex,
+            texcoordvar - vec2(texel_step.x, 0.0)));
+        vec2 b_right = unpack_la(texture2D(height_tex,
+            texcoordvar + vec2(texel_step.x, 0.0)));
+
+        if (!is_special(b_above) && !is_special(b_below) &&
+            !is_special(b_left) && !is_special(b_right)) {
+          /* Same n as GenerateSlopeImage, divided by p20*p31 so
+             mediump cannot overflow (dd0 = p22*p31).  sval/sindex
+             use trunc-toward-zero, matching the CPU ints. */
+          float p32 = clamp(height(b_above) - height(b_below),
+                            -512.0, 512.0);
+          float p22 = clamp(height(b_right) - height(b_left),
+                            -512.0, 512.0);
+          float p20 = max(2.0 * q, 1.0);
+          float p31 = max(2.0 * q, 1.0);
+          float n0 = p22 / p20;
+          float n1 = p32 / p31;
+          float n2 = height_slope_factor;
+          float mag = sqrt(n0 * n0 + n1 * n1 + n2 * n2);
+          float num = n2 * sun.z + n0 * sun.x + n1 * sun.y;
+          float sval = mag > 0.0 ? float(int(num / mag)) : 0.0;
+          sindex = float(int((sval - sun.z) * contrast / 128.0));
+          sindex = clamp(sindex, -63.0, 63.0);
+        }
+      }
+
+      if (contour_div > 0.5) {
+        /* ApplyContourExpansion() paints several matrix pixels.
+           The matrix is finer than the screen, so one texel is
+           thinner than a pixel and the line disappears. */
+        bool on_contour = contour_edge(texcoordvar);
+        if (!on_contour && contour_thickness > 1.5) {
+          float tl = floor(contour_thickness * 0.5);
+          float br = floor((contour_thickness - 1.0) * 0.5);
+          for (int j = -3; j <= 3; ++j) {
+            for (int i = -3; i <= 3; ++i) {
+              float fx = float(i);
+              float fy = float(j);
+              if (i == 0 && j == 0)
+                continue;
+              if (fx < -br || fx > tl || fy < -br || fy > tl)
+                continue;
+              if (contour_edge(texcoordvar +
+                               vec2(fx * height_texel.x,
+                                    fy * height_texel.y)))
+                on_contour = true;
+            }
+          }
+        }
+        if (on_contour)
+          sindex = -64.0;
+      }
+
+      gl_FragColor = ramp_lookup(h_idx, sindex);
+    }
+)glsl";
+
 static void
 CompileAttachShader(GLProgram &program, GLenum type, const char *code)
 {
@@ -479,6 +632,40 @@ OpenGL::InitShaders()
   round_line_min_coverage =
     round_line_shader->GetUniformLocation("min_coverage");
   round_line_color = round_line_shader->GetUniformLocation("color");
+
+  try {
+    hillshade_shader = CompileProgram(hillshade_vertex_shader,
+                                      hillshade_fragment_shader);
+    hillshade_shader->BindAttribLocation(Attribute::POSITION, "position");
+    hillshade_shader->BindAttribLocation(Attribute::TEXCOORD, "texcoord");
+    LinkProgram(*hillshade_shader);
+
+    hillshade_projection = hillshade_shader->GetUniformLocation("projection");
+    hillshade_translate = hillshade_shader->GetUniformLocation("translate");
+    hillshade_height_tex = hillshade_shader->GetUniformLocation("height_tex");
+    hillshade_ramp_tex = hillshade_shader->GetUniformLocation("ramp_tex");
+    hillshade_texel_step = hillshade_shader->GetUniformLocation("texel_step");
+    hillshade_sun = hillshade_shader->GetUniformLocation("sun");
+    hillshade_contrast = hillshade_shader->GetUniformLocation("contrast");
+    hillshade_height_slope_factor =
+      hillshade_shader->GetUniformLocation("height_slope_factor");
+    hillshade_height_div = hillshade_shader->GetUniformLocation("height_div");
+    hillshade_q = hillshade_shader->GetUniformLocation("q");
+    hillshade_do_shading = hillshade_shader->GetUniformLocation("do_shading");
+    hillshade_contour_div = hillshade_shader->GetUniformLocation("contour_div");
+    hillshade_contour_thickness =
+      hillshade_shader->GetUniformLocation("contour_thickness");
+    hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
+
+    hillshade_shader->Use();
+    glUniform1i(hillshade_height_tex, 0);
+    glUniform1i(hillshade_ramp_tex, 1);
+  } catch (...) {
+    delete hillshade_shader;
+    hillshade_shader = nullptr;
+    LogFmt("OpenGL: hillshade shader failed ({}); using CPU",
+           GetFullMessage(std::current_exception()));
+  }
 }
 
 void
@@ -486,6 +673,8 @@ OpenGL::DeinitShaders() noexcept
 {
   delete round_line_shader;
   round_line_shader = nullptr;
+  delete hillshade_shader;
+  hillshade_shader = nullptr;
   delete filled_circle_shader;
   filled_circle_shader = nullptr;
   delete circle_outline_shader;
@@ -543,6 +732,12 @@ OpenGL::UpdateShaderProjectionMatrix() noexcept
   round_line_shader->Use();
   glUniformMatrix4fv(round_line_projection, 1, GL_FALSE,
                      glm::value_ptr(projection_matrix));
+
+  if (hillshade_shader != nullptr) {
+    hillshade_shader->Use();
+    glUniformMatrix4fv(hillshade_projection, 1, GL_FALSE,
+                       glm::value_ptr(projection_matrix));
+  }
 }
 
 void
@@ -576,4 +771,9 @@ OpenGL::UpdateShaderTranslate() noexcept
 
   round_line_shader->Use();
   glUniform2f(round_line_translate, t.x, t.y);
+
+  if (hillshade_shader != nullptr) {
+    hillshade_shader->Use();
+    glUniform2f(hillshade_translate, t.x, t.y);
+  }
 }

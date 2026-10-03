@@ -61,8 +61,9 @@ RasterBuffer::GetInterpolated(RasterLocation p) const noexcept
 }
 
 /**
- * This class implements an algorithm to traverse pixels quickly with
- * only integer addition, no multiplication and division.
+ * Walks a source span onto a fixed number of output samples.
+ * Zoomed out, one output sample covers many DEM pixels; the skip is
+ * one division so that cost stays with the output size.
  */
 class PixelIterator
 {
@@ -72,8 +73,8 @@ class PixelIterator
 
 public:
   constexpr PixelIterator(unsigned src_size, unsigned dest_size) noexcept
-    :src_increment(dest_size),
-     dest_increment(src_size) {}
+    :src_increment(int(dest_size)),
+     dest_increment(int(src_size)) {}
 
   /**
    * @return the number of source pixels to skip
@@ -85,18 +86,47 @@ public:
     }
 
     error += dest_increment;
+    if (error < src_increment || src_increment <= 0)
+      return 0;
 
-    unsigned n = 0;
-
-    /* this loop is inefficient with large dest_increment values */
-    while (error >= src_increment) {
-      error -= src_increment;
-      ++n;
-    }
-
+    const unsigned n = unsigned(error / src_increment);
+    error -= int(n) * src_increment;
     return n;
   }
 };
+
+/* The division form must match the old subtract loop. */
+static constexpr bool
+PixelIteratorMatchesLoop(unsigned src_size, unsigned dest_size,
+                         unsigned steps) noexcept
+{
+  PixelIterator fast(src_size, dest_size);
+  int error = 0;
+  const int src_increment = int(dest_size);
+  const int dest_increment = int(src_size);
+
+  for (unsigned i = 0; i < steps; ++i) {
+    unsigned slow = 0;
+    if (error < 0) {
+      error += dest_increment;
+    } else {
+      error += dest_increment;
+      while (src_increment > 0 && error >= src_increment) {
+        error -= src_increment;
+        ++slow;
+      }
+    }
+    if (fast.Next() != slow)
+      return false;
+  }
+  return true;
+}
+
+static_assert(PixelIteratorMatchesLoop(46, 1200, 80));
+static_assert(PixelIteratorMatchesLoop(187, 1200, 80));
+static_assert(PixelIteratorMatchesLoop(4000, 1200, 40));
+static_assert(PixelIteratorMatchesLoop(1, 1200, 20));
+static_assert(PixelIteratorMatchesLoop(1200, 1200, 20));
 
 [[gnu::hot]]
 void

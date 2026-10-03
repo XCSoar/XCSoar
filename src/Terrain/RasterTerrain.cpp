@@ -3,6 +3,8 @@
 
 #include "RasterTerrain.hpp"
 #include "Loader.hpp"
+#include "Math/Constants.hpp"
+#include "RasterTraits.hpp"
 #include "Profile/Profile.hpp"
 #include "io/ZipArchive.hpp"
 #include "io/FileCache.hpp"
@@ -91,11 +93,21 @@ try {
 }
 
 bool
-RasterTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
+RasterTerrain::UpdateTiles(const GeoPoint &location, double radius,
+                           double pixel_size_m) noexcept
 {
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())
     return false;
+
+  /* PixelDistance() is the diagonal of the span.  The step grid's
+     sample spacing is the axis length, so divide that out.  A wide
+     view then keeps only the tiles next to the aircraft (PollTiles
+     adds one tile of padding) and scans the cached step grid. */
+  const double step_m =
+    map.PixelDistance(location, 1u << RasterTraits::STEP_BITS) / M_SQRT2;
+  if (RasterTraits::StepCoversPixel(pixel_size_m, step_m))
+    radius = 0;
 
   try {
     UpdateTerrainTiles(archive.get(), tile_cache, mutex,

@@ -4,6 +4,9 @@
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
 
+#include <cstdlib>
+#include <cstring>
+
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
 #else
@@ -60,6 +63,50 @@ HeightMatrix::SetSize(UnsignedPoint2D _size,
   };
 
   SetSize((_size + round_up) / quantisation_pixels);
+}
+
+void
+HeightMatrix::Scroll(int east, int north) noexcept
+{
+  assert(size.x > 0 && size.y > 0);
+  assert(std::abs(east) < (int)size.x);
+  assert(std::abs(north) < (int)size.y);
+
+  const unsigned width = size.x;
+  const unsigned height = size.y;
+  auto *const base = data.data();
+  const auto sample_bytes = sizeof(TerrainHeight);
+
+  if (north > 0) {
+    const unsigned n = unsigned(north);
+    std::memmove(base + n * width, base,
+                 (height - n) * width * sample_bytes);
+  } else if (north < 0) {
+    const unsigned n = unsigned(-north);
+    std::memmove(base, base + n * width,
+                 (height - n) * width * sample_bytes);
+  }
+
+  if (east == 0)
+    return;
+
+  unsigned y0 = 0;
+  unsigned y1 = height;
+  if (north > 0)
+    y0 = unsigned(north);
+  else if (north < 0)
+    y1 = height - unsigned(-north);
+
+  for (unsigned y = y0; y < y1; ++y) {
+    auto *const row = base + y * width;
+    if (east > 0) {
+      const unsigned n = unsigned(east);
+      std::memmove(row, row + n, (width - n) * sample_bytes);
+    } else {
+      const unsigned n = unsigned(-east);
+      std::memmove(row + n, row, (width - n) * sample_bytes);
+    }
+  }
 }
 
 #ifdef ENABLE_OPENGL

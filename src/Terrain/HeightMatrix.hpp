@@ -65,6 +65,18 @@ public:
     return GetData() + y * size.x;
   }
 
+  TerrainHeight *GetRow(unsigned y) noexcept {
+    return data.data() + y * size.x;
+  }
+
+  /**
+   * Slide the samples by an integer number of columns and rows.
+   * Positive @p east discards the west edge.  Positive @p north
+   * discards the south edge.  The vacated samples are left stale
+   * for the caller to fill.
+   */
+  void Scroll(int east, int north) noexcept;
+
   const TerrainHeight *GetDataEnd() const noexcept {
     return GetRow(size.y);
   }

@@ -123,6 +123,18 @@ Version 7.46 - not yet released
     in track-up circling; leaving pan restores the orientation
   - defer the automatic zoom switch between circling and cruise until
     pan mode is left, when circling zoom is enabled
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded (also on
+    older OpenGL ES 2 devices); faster devices use full terrain
+    resolution immediately instead of waiting until the map is idle
+  - cache a 4× terrain grid with the overview and use it when one
+    screen pixel is at least that coarse, so a wide view does not
+    decode every fine tile; the first start after this update
+    rebuilds the terrain cache
+  - fix terrain shifting sideways against the map as you zoom
+  - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
+    high-DPI screens; the discrete scale list is the scale-bar
+    width, up to 1000 km
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
