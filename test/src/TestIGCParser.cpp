@@ -58,6 +58,21 @@ TestExtensions()
   ok1(extensions[3].start == 47);
   ok1(extensions[3].finish == 49);
   ok1(strcmp(extensions[3].code, "TRT") == 0);
+  ok1(IGCRecordLength(extensions, 35) == 49);
+
+  /* an LXNAV S100 declaration: every B record it writes is 79
+     characters, the finish byte of the last extension */
+  ok1(IGCParseExtensions("I113638FXA3941ENL4246TAS4751GSP5254TRT5559VAT"
+                         "6063OAT6468NET6972ACZ7376AOR7779AOP", extensions));
+  ok1(IGCRecordLength(extensions, 35) == 79);
+
+  /* a "J" record has the same layout; its K records are 15 here */
+  ok1(IGCParseExtensions("I020810WDI1115WVE", extensions));
+  ok1(IGCRecordLength(extensions, 7) == 15);
+
+  /* without extensions the fixed part is the length */
+  ok1(IGCParseExtensions("I00", extensions));
+  ok1(IGCRecordLength(extensions, 35) == 35);
 }
 
 static void
@@ -261,7 +276,7 @@ TestDeclarationTurnpoint()
 
 int main()
 {
-  plan_tests(148 + 8);
+  plan_tests(148 + 8 + 7);
 
   TestHeader();
   TestDate();

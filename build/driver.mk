@@ -38,6 +38,7 @@ IMI_SOURCES = \
 	$(DRIVER_SRC_DIR)/IMI/Register.cpp
 
 LX_SOURCES = \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(DRIVER_SRC_DIR)/LX/NanoLogger.cpp \
 	$(DRIVER_SRC_DIR)/LX/NanoDeclare.cpp \
 	$(DRIVER_SRC_DIR)/LX/Protocol.cpp \

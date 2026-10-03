@@ -13,6 +13,7 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 
+#include <algorithm>
 #include <stdlib.h>
 
 using std::string_view_literals::operator""sv;
@@ -157,6 +158,15 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
   }
 
   return true;
+}
+
+unsigned
+IGCRecordLength(const IGCExtensions &extensions, unsigned fixed) noexcept
+{
+  unsigned length = fixed;
+  for (const auto &x : extensions)
+    length = std::max(length, unsigned(x.finish));
+  return length;
 }
 
 /**
