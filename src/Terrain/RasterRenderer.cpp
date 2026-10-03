@@ -358,6 +358,30 @@ RasterRenderer::FillGradient(UnsignedPoint2D size,
   quantisation_effective = 1;
 }
 
+struct ContourSpan {
+  unsigned height_scale;
+  unsigned divisor;
+  unsigned thickness;
+};
+
+static ContourSpan
+MakeContourSpan(unsigned contour_spacing,
+                unsigned quantisation_pixels) noexcept
+{
+  if (contour_spacing == 0)
+    return {16, 0, 1};
+
+  unsigned s = 0;
+  while ((1u << s) < contour_spacing)
+    ++s;
+
+  const unsigned q = std::max(1u, quantisation_pixels);
+  const unsigned thickness = s >= 16
+    ? 1u
+    : std::max(1u, Layout::ScalePenWidth(768u) / (q * 1024u));
+  return {s, s >= 16 ? 0u : (1u << s), thickness};
+}
+
 void
 RasterRenderer::GenerateImage(bool do_shading,
                               unsigned height_scale,
@@ -374,23 +398,14 @@ RasterRenderer::GenerateImage(bool do_shading,
     contour_spacing = 0;
   }
 
-  // Convert spacing to scale, with scale=16: effectively no contours
-  unsigned contour_height_scale = 16;
-  if (contour_spacing > 0) {
-    unsigned s = 0;
-    while ((1u << s) < contour_spacing)
-      ++s;
-    contour_height_scale = s;
-  }
-
-  // Compute contour width, aiming for 0.75 units (=3/4 of one 80 dpi pixel)
-  contour_thickness = contour_height_scale < 16
-    ? std::max(1u,
-               Layout::ScalePenWidth(1u * 768u)
-               / (quantisation_pixels * 1024u))
-    : 1;
-
+  /* scale 16 and divisor 0: no contours. Thickness aims for
+     0.75 of one 80 dpi pixel. */
+  const ContourSpan contour =
+    MakeContourSpan(contour_spacing, quantisation_pixels);
+  const unsigned contour_height_scale = contour.height_scale;
+  contour_thickness = contour.thickness;
 #ifdef ENABLE_OPENGL
+  contour_div_for_draw = contour.divisor;
   height_scale_for_draw = height_scale;
   shading_for_draw = do_shading;
   {
@@ -404,7 +419,6 @@ RasterRenderer::GenerateImage(bool do_shading,
   if (!use_cpu_hillshade && OpenGL::hillshade_shader != nullptr &&
       !has_alpha &&
       height_matrix.GetSize().x > 0 && height_matrix.GetSize().y > 0) {
-    SetContourSpacing(contour_spacing);
     UploadHeightTexture();
     UploadRampTexture();
     shader_hillshade = true;
@@ -882,16 +896,10 @@ RasterRenderer::SetSunFromAzimuth(Angle sunazimuth, int brightness,
 void
 RasterRenderer::SetContourSpacing(unsigned contour_spacing) noexcept
 {
-  if (contour_spacing == 0) {
-    contour_div_for_draw = 0;
-    return;
-  }
-
-  unsigned s = 0;
-  while ((1u << s) < contour_spacing)
-    ++s;
-
-  contour_div_for_draw = s >= 16 ? 0 : (1u << s);
+  const ContourSpan contour =
+    MakeContourSpan(contour_spacing, quantisation_pixels);
+  contour_thickness = contour.thickness;
+  contour_div_for_draw = contour.divisor;
 }
 
 void
@@ -1014,6 +1022,8 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
               1.f / GLfloat(allocated.height));
   glUniform1f(OpenGL::hillshade_contour_div,
               GLfloat(contour_div_for_draw));
+  glUniform1f(OpenGL::hillshade_contour_thickness,
+              GLfloat(std::min(contour_thickness, 7u)));
 
   if (alpha < 1.0f) {
     const GLBlend blend(alpha);
