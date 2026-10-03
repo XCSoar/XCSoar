@@ -30,6 +30,12 @@ struct RecordedFlightInfo : FlightInfo {
        */
       char nano_filename[16];
 
+      /**
+       * File size in bytes from the Nano logbook, or 0 if the
+       * logger did not report it.
+       */
+      uint32_t nano_file_size;
+
       uint8_t start_address[3];
       uint8_t end_address[3];
     } lx;

@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "NanoLogger.hpp"
+#include "Device/Error.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Util/NMEAWriter.hpp"
@@ -21,6 +22,8 @@
 #include "LogFile.hpp"
 #include "IGC/IGCExtensions.hpp"
 #include "IGC/IGCParser.hpp"
+#include "NanoFileTransfer.hpp"
+#include "util/NumberParser.hxx"
 
 #include <algorithm>
 #include <string>
@@ -243,6 +246,9 @@ Nano::ParseLogbookContent(const char *_line, RecordedFlightInfo &info)
   if (info.end_time == BrokenTime::Midnight())
     info.end_time = BrokenTime::Invalid();
 
+  /* the file size; old firmware versions may not send it */
+  unsigned size;
+  info.internal.lx.nano_file_size = line.ReadChecked(size) ? size : 0;
   return true;
 }
 
@@ -515,6 +521,144 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
   }
 }
 
+static void
+WriteFileCommand(Port &port, std::string_view command,
+                 OperationEnvironment &env)
+{
+  const std::string line = fmt::format("PLXVC,{}", command);
+  PortWriteNMEA(port, line.c_str(), env);
+}
+
+/**
+ * Download a flight with the LXNAV file transfer protocol: base64
+ * blocks of #PAYLOAD bytes, acknowledged in windows of #WINDOW blocks,
+ * each with a CRC-32 chained over all blocks so far, and a CRC-32 of
+ * the whole file at the end.  Unlike the "FLIGHT" rows, a block which
+ * lost bytes on the way cannot pass these checks (#3229).
+ *
+ * @return false if the logger does not answer the request, i.e. does
+ * not know the protocol; throws once the transfer has started and
+ * then fails
+ */
+static bool
+DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
+                   BufferedOutputStream &os, OperationEnvironment &env)
+{
+  constexpr unsigned WINDOW = 20, PAYLOAD = 140;
+  constexpr unsigned MAX_TIMEOUTS = 5;
+
+  PortNMEAReader reader(port, env);
+  reader.Flush();
+
+  std::string request = fmt::format("FILE_INFO,R,/{},{},{}",
+                                    filename, WINDOW, PAYLOAD);
+  WriteFileCommand(port, request, env);
+
+  env.SetProgressRange(file_size);
+
+  Nano::FileTransferCrc chain, file_crc;
+  unsigned next_block = 0, in_window = 0, received = 0, timeouts = 0;
+  bool answered = false, lost_reported = false;
+  std::byte data[PAYLOAD];
+
+  while (true) {
+    const char *line;
+    try {
+      line = reader.ExpectLine("PLXVC,FILE_",
+                               TimeoutClock(std::chrono::seconds(2)));
+    } catch (const DeviceTimeout &) {
+      line = nullptr;
+    }
+
+    if (line == nullptr) {
+      if (!answered)
+        /* no answer at all: the logger does not know FILE_INFO */
+        return false;
+
+      if (++timeouts > MAX_TIMEOUTS) {
+        if (received == 0)
+          /* not one block passed the checks; let the row protocol
+             try instead */
+          return false;
+
+        throw std::runtime_error("Flight download failed:"
+                                 " no reply from the logger");
+      }
+
+      /* repeat the last request, as the logger may have missed it */
+      WriteFileCommand(port, request, env);
+      continue;
+    }
+
+    if (const char *crc_s = StringAfterPrefix(line, "CRC32,A,"sv)) {
+      int32_t crc;
+      if (received != file_size ||
+          !ParseIntegerTo(std::string_view{crc_s}, crc) ||
+          crc != file_crc.Get())
+        throw std::runtime_error("Flight download failed:"
+                                 " file checksum does not match");
+
+      WriteFileCommand(port, "FILE_CRC_OK,R", env);
+      os.Flush();
+      return true;
+    }
+
+    const char *data_s = StringAfterPrefix(line, "DATA,A,"sv);
+    if (data_s == nullptr)
+      continue;
+
+    const auto block = Nano::ParseFileDataBlock(data_s);
+    if (!block)
+      continue;
+
+    /* only a data block proves that the logger knows the protocol */
+    answered = true;
+
+    if (block->number < next_block)
+      /* left over from before a resend */
+      continue;
+
+    Nano::FileTransferCrc crc = chain;
+    crc.Update(block->base64);
+
+    const auto size = block->number == next_block &&
+      crc.Get() == block->crc
+      ? Nano::DecodeBase64(block->base64, data)
+      : std::nullopt;
+    const unsigned expected_size =
+      std::min(PAYLOAD, file_size - received);
+    if (!size || *size != expected_size) {
+      /* ask once for a resend from the missing block; the logger
+         repeats the rest of the window */
+      if (!lost_reported) {
+        LogFormat("NanoLogger: block %u is missing or damaged,"
+                  " requesting it again", next_block);
+        request = fmt::format("FILE_DATA_LOST,R,{}", next_block);
+        WriteFileCommand(port, request, env);
+        lost_reported = true;
+      }
+      continue;
+    }
+
+    chain = crc;
+    file_crc.Update(std::span{data, *size});
+    os.Write(std::span{data, *size});
+    received += *size;
+    ++next_block;
+    timeouts = 0;
+    lost_reported = false;
+
+    env.SetProgressBytes(received);
+    env.SetProgressPosition(received);
+
+    if (++in_window == WINDOW || received == file_size) {
+      in_window = 0;
+      request = fmt::format("FILE_OK,R,{}", next_block);
+      WriteFileCommand(port, request, env);
+    }
+  }
+}
+
 bool
 Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
                      Path path, OperationEnvironment &env)
@@ -539,6 +683,35 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
 
   
   const auto partial_path = AllocatedPath::Build(path.GetParent(), partial_filename);
+
+  /* prefer the verified file transfer; a partial file left by the
+     row protocol is resumed with that protocol instead */
+  const unsigned file_size = flight.internal.lx.nano_file_size;
+  if (file_size > 0 && !File::Exists(partial_path)) {
+    FileOutputStream fos(path);
+    BufferedOutputStream bos(fos);
+    try {
+      if (DownloadFlightFile(port, filename, file_size, bos, env)) {
+        fos.Commit();
+        LogFormat("NanoLogger: download complete (file transfer)");
+        return true;
+      }
+    } catch (...) {
+      /* stop the logger from sending the rest; the uncommitted file
+         is discarded */
+      try {
+        WriteFileCommand(port, "FILE_CANCEL,R", env);
+      } catch (...) {
+      }
+      throw;
+    }
+
+    LogFormat("NanoLogger: file transfer not available,"
+              " falling back to the row protocol");
+    WriteFileCommand(port, "FILE_CANCEL,R", env);
+    port.FullFlush(env, std::chrono::milliseconds(200),
+                   std::chrono::seconds(2));
+  }
 
   // Check if partial file exists and count lines to determine resume point
   unsigned calculated_resume_row = 1;
