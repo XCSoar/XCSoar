@@ -57,11 +57,13 @@ NMEAChecksum(std::string_view src) noexcept
 
 /**
  * Verify the NMEA checksum at the end of the specified string,
- * separated with an asterisk ('*').
+ * separated with an asterisk ('*').  As NMEA 0183 prescribes, the
+ * checksum must be exactly two hexadecimal digits (either case) and
+ * end the string.
  */
 [[nodiscard]] [[gnu::pure]]
 bool
-VerifyNMEAChecksum(const char *p) noexcept;
+VerifyNMEAChecksum(std::string_view sentence) noexcept;
 
 /**
  * Caclulates the checksum of the specified string, and appends it at

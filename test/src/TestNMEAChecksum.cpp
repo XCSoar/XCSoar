@@ -2,12 +2,9 @@
 // Copyright The XCSoar Project
 
 /*
- * These tests describe what the NMEA checksum functions do today,
- * including the places where they are more permissive than NMEA 0183.
- * That is deliberate: #2127 replaces strtoul() and sprintf() here, and
- * without a record of the current behaviour there is no way to tell a
- * deliberate tightening from an accidental regression.  Where a test
- * pins something the standard does not allow, it says so.
+ * These tests describe what the NMEA checksum functions do, and where
+ * the verifier deliberately follows NMEA 0183 more strictly than the
+ * strtoul() it used to be built on (#2127).
  */
 
 #include "NMEA/Checksum.hpp"
@@ -29,7 +26,7 @@ static_assert(NMEAChecksum(std::string_view{"$PX"}) == 0x08);
 
 int main()
 {
-  plan_tests(49);
+  plan_tests(50);
 
   /* --- NMEAChecksum(), const char * overload --------------------- */
 
@@ -90,6 +87,9 @@ int main()
   /* the last asterisk separates, so one inside the payload is data */
   ok1(VerifyNMEAChecksum("$A*B*29"));
 
+  /* a string_view ends where its length says, not at a NUL */
+  ok1(VerifyNMEAChecksum(std::string_view{"$PX*08\r\n", 6}));
+
   /* --- VerifyNMEAChecksum(), rejected ---------------------------- */
 
   ok1(!VerifyNMEAChecksum("$PX*09"));      // wrong value
@@ -108,21 +108,19 @@ int main()
   /* the caller has to strip the line ending first; NMEAReader does */
   ok1(!VerifyNMEAChecksum("$PX*08\r\n"));
 
-  /* --- VerifyNMEAChecksum(), wider than the standard ------------- */
+  /* --- VerifyNMEAChecksum(), not two hex digits ----------------- */
 
   /* NMEA 0183 says the checksum field is exactly two hex digits.
-     strtoul() is looser than that, and these sentences verify even
-     though a conforming talker would never send them.  Pinned so that
-     replacing strtoul() shows up as a decision rather than a
-     surprise; none of these has to keep working. */
+     strtoul() accepted all of these until #2127; a conforming talker
+     never sends them. */
 
-  ok1(VerifyNMEAChecksum("$PX* 08"));      // leading space
-  ok1(VerifyNMEAChecksum("$PX*\t08"));     // leading tab
-  ok1(VerifyNMEAChecksum("$PX*+08"));      // explicit sign
-  ok1(VerifyNMEAChecksum("$PX*0x08"));     // C hex prefix
-  ok1(VerifyNMEAChecksum("$PX*008"));      // extra leading zero
-  ok1(VerifyNMEAChecksum("$PX*8"));        // single digit
-  ok1(VerifyNMEAChecksum("$AA*-0"));       // negative zero
+  ok1(!VerifyNMEAChecksum("$PX* 08"));     // leading space
+  ok1(!VerifyNMEAChecksum("$PX*\t08"));    // leading tab
+  ok1(!VerifyNMEAChecksum("$PX*+08"));     // explicit sign
+  ok1(!VerifyNMEAChecksum("$PX*0x08"));    // C hex prefix
+  ok1(!VerifyNMEAChecksum("$PX*008"));     // extra leading zero
+  ok1(!VerifyNMEAChecksum("$PX*8"));       // single digit
+  ok1(!VerifyNMEAChecksum("$AA*-0"));      // negative zero
 
   /* --- AppendNMEAChecksum() -------------------------------------- */
 
