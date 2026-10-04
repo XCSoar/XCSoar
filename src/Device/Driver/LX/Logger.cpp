@@ -286,7 +286,12 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
       restore_nmea = true;
     }
 
-    return Nano::DownloadFlight(port, flight, path, env);
+    /* LXNAV's own app acknowledges an S series vario every 2 blocks
+       and a Nano every 20.  With 20, an S10 (firmware 9.41) wrote
+       its GPS sentences into the middle of the blocks within a few
+       hundred of them; with 2, not once in 12295. */
+    return Nano::DownloadFlight(port, flight, path,
+                                IsSVario() ? 2 : 20, env);
   }
 
   if (!EnableCommandMode(env))

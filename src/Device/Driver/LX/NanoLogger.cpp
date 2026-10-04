@@ -531,10 +531,10 @@ WriteFileCommand(Port &port, std::string_view command,
 
 /**
  * Download a flight with the LXNAV file transfer protocol: base64
- * blocks of #PAYLOAD bytes, acknowledged in windows of #WINDOW blocks,
- * each with a CRC-32 chained over all blocks so far, and a CRC-32 of
- * the whole file at the end.  Unlike the "FLIGHT" rows, a block which
- * lost bytes on the way cannot pass these checks (#3229).
+ * blocks of #PAYLOAD bytes, acknowledged in windows of @p window
+ * blocks, each with a CRC-32 chained over all blocks so far, and a
+ * CRC-32 of the whole file at the end.  Unlike the "FLIGHT" rows, a
+ * block which lost bytes on the way cannot pass these checks (#3229).
  *
  * @return false if the logger does not answer the request, i.e. does
  * not know the protocol; throws once the transfer has started and
@@ -542,16 +542,17 @@ WriteFileCommand(Port &port, std::string_view command,
  */
 static bool
 DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
+                   unsigned window,
                    BufferedOutputStream &os, OperationEnvironment &env)
 {
-  constexpr unsigned WINDOW = 20, PAYLOAD = 140;
+  constexpr unsigned PAYLOAD = 140;
   constexpr unsigned MAX_TIMEOUTS = 5;
 
   PortNMEAReader reader(port, env);
   reader.Flush();
 
   std::string request = fmt::format("FILE_INFO,R,/{},{},{}",
-                                    filename, WINDOW, PAYLOAD);
+                                    filename, window, PAYLOAD);
   WriteFileCommand(port, request, env);
 
   env.SetProgressRange(file_size);
@@ -628,13 +629,19 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
     const unsigned expected_size =
       std::min(PAYLOAD, file_size - received);
     if (!size || *size != expected_size) {
-      /* ask once for a resend from the missing block; the logger
-         repeats the rest of the window */
+      /* ask once for a resend from the missing block.  An S series
+         vario (firmware 9.41) ignores FILE_DATA_LOST: it finishes the
+         window and waits for the acknowledgement, so the request
+         repeated after a timeout acknowledges up to the missing
+         block instead, which starts the next window there. */
       if (!lost_reported) {
         LogFormat("NanoLogger: block %u is missing or damaged,"
                   " requesting it again", next_block);
-        request = fmt::format("FILE_DATA_LOST,R,{}", next_block);
-        WriteFileCommand(port, request, env);
+        WriteFileCommand(port,
+                         fmt::format("FILE_DATA_LOST,R,{}", next_block),
+                         env);
+        request = fmt::format("FILE_OK,R,{}", next_block);
+        in_window = 0;
         lost_reported = true;
       }
       continue;
@@ -651,7 +658,7 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
     env.SetProgressBytes(received);
     env.SetProgressPosition(received);
 
-    if (++in_window == WINDOW || received == file_size) {
+    if (++in_window == window || received == file_size) {
       in_window = 0;
       request = fmt::format("FILE_OK,R,{}", next_block);
       WriteFileCommand(port, request, env);
@@ -661,7 +668,8 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
 
 bool
 Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
-                     Path path, OperationEnvironment &env)
+                     Path path, unsigned file_window,
+                     OperationEnvironment &env)
 {
   port.StopRxThread();
   port.FullFlush(env, std::chrono::milliseconds(200), std::chrono::seconds(2));
@@ -691,23 +699,33 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
     FileOutputStream fos(path);
     BufferedOutputStream bos(fos);
     try {
-      if (DownloadFlightFile(port, filename, file_size, bos, env)) {
+      if (DownloadFlightFile(port, filename, file_size, file_window,
+                             bos, env)) {
         fos.Commit();
         LogFormat("NanoLogger: download complete (file transfer)");
         return true;
       }
-    } catch (...) {
+
+      LogFormat("NanoLogger: file transfer not available,"
+                " falling back to the row protocol");
+    } catch (const OperationCancelled &) {
       /* stop the logger from sending the rest; the uncommitted file
-         is discarded */
+         is discarded.  The cancelled environment refuses every
+         further write, so send this one without it. */
       try {
-        WriteFileCommand(port, "FILE_CANCEL,R", env);
+        NullOperationEnvironment cancel_env;
+        WriteFileCommand(port, "FILE_CANCEL,R", cancel_env);
       } catch (...) {
       }
       throw;
+    } catch (...) {
+      /* the rows carry the same flight and check each line's
+         length, so a transfer that broke off is not the end */
+      LogError(std::current_exception(),
+               "NanoLogger: file transfer failed,"
+               " falling back to the row protocol");
     }
 
-    LogFormat("NanoLogger: file transfer not available,"
-              " falling back to the row protocol");
     WriteFileCommand(port, "FILE_CANCEL,R", env);
     port.FullFlush(env, std::chrono::milliseconds(200),
                    std::chrono::seconds(2));
