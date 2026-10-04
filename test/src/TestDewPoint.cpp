@@ -14,6 +14,7 @@
 #include "Atmosphere/DewPoint.hpp"
 #include "TestUtil.hpp"
 
+#include <cmath>
 #include <math.h>
 
 struct Reference {
@@ -33,7 +34,7 @@ static constexpr Reference REFERENCE[] = {
 int
 main()
 {
-  plan_tests(14);
+  plan_tests(15);
 
   for (const auto &i : REFERENCE) {
     const auto dewpoint =
@@ -72,14 +73,12 @@ main()
   good.UpdateTemps(true, 60, t);
   ok1(!good.dewpoint_empty());
 
-  /* The other end of the domain cannot be asserted here.  At zero
-     humidity the formula takes log10(0) and the result is NaN, but
-     every build gets -ffast-math (build/debug.mk), and -ffinite-math-only
-     is only switched off again for clang -- so under GCC the compiler
-     may assume that NaN does not occur and isfinite() is not to be
-     trusted.  That is precisely why the value has to be rejected before
-     it reaches this function, in CuSonde::Level::UpdateTemps(), rather
-     than detected afterwards. */
+  /* The other end of the domain: at zero humidity the formula takes
+     log10(0), and the result is not a number.  That this can be seen
+     at all depends on -fno-finite-math-only (build/debug.mk); without
+     it GCC folds isfinite() to true.  The value is still rejected
+     before it gets here, in CuSonde::Level::UpdateTemps(). */
+  ok1(!std::isfinite(CalculateDewPoint(t, 0).ToKelvin()));
 
   return exit_status();
 }
