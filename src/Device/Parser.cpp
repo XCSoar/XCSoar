@@ -37,7 +37,7 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   if (string[0] != '$')
     return false;
 
-  if (!NMEAChecksum(string))
+  if (!VerifyNMEAChecksum(string))
     return false;
 
   NMEAInputLine line(string);
@@ -691,12 +691,6 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
   }
 
   return true;
-}
-
-bool
-NMEAParser::NMEAChecksum(const char *string)
-{
-  return VerifyNMEAChecksum(string);
 }
 
 bool

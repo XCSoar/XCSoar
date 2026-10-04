@@ -47,14 +47,6 @@ public:
 
 public:
   /**
-   * Calculates the checksum of the provided NMEA string and
-   * compares it to the provided checksum
-   * @param String NMEA string
-   * @return True if checksum correct
-   */
-  static bool NMEAChecksum(const char *string);
-
-  /**
    * Checks whether time has advanced since last call and
    * updates the last_time reference if necessary
    * @return True if time has advanced since last call
