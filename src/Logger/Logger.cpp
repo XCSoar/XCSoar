@@ -12,6 +12,12 @@
 #include "Computer/Settings.hpp"
 #include "Interface.hpp"
 #include "Simulator.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Device/Features.hpp"
+
+#include <array>
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -62,6 +68,27 @@ Logger::GetActivePath() const noexcept
   return AllocatedPath(logger.GetPath());
 }
 
+/**
+ * The device that supplies the GPS fix right now, for the HFGPS
+ * header (#3180).
+ */
+static unsigned
+GetGPSDeviceIndex() noexcept
+{
+  if (backend_components == nullptr ||
+      backend_components->device_blackboard == nullptr)
+    return 0;
+
+  auto &blackboard = *backend_components->device_blackboard;
+  const std::lock_guard lock{blackboard.mutex};
+
+  std::array<const NMEAInfo *, NUMDEV> devices;
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    devices[i] = &blackboard.RealState(i);
+
+  return FindGPSDevice(devices);
+}
+
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const ComputerSettings& settings,
@@ -96,10 +123,12 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
     }
   }
 
+  const auto &device_config =
+    CommonInterface::GetSystemSettings().devices[GetGPSDeviceIndex()];
+
   const std::lock_guard protect{lock};
   logger.StartLogger(gps_info, settings.logger, "", decl,
-                     GetGPSDeviceName(CommonInterface::GetSystemSettings().devices[0],
-                                      is_simulator()));
+                     GetGPSDeviceName(device_config, is_simulator()));
 }
 
 void

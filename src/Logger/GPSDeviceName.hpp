@@ -4,6 +4,9 @@
 #pragma once
 
 #include "Device/Config.hpp"
+#include "NMEA/Info.hpp"
+
+#include <span>
 
 /**
  * IGC HFGPS header text for the GPS that is recording the flight.
@@ -24,4 +27,20 @@ GetGPSDeviceName(const DeviceConfig &device, bool simulator) noexcept
     return "Internal GPS (Android)";
 
   return "Unknown";
+}
+
+/**
+ * The device whose GPS fix the merged data uses: the first live device
+ * with a location, in order A to H, as DeviceBlackboard::Merge() picks
+ * it.  Device A if none supplies one yet.
+ */
+[[gnu::pure]]
+inline unsigned
+FindGPSDevice(std::span<const NMEAInfo *const> devices) noexcept
+{
+  for (unsigned i = 0; i < devices.size(); ++i)
+    if (devices[i]->alive && devices[i]->location_available)
+      return i;
+
+  return 0;
 }
