@@ -248,6 +248,9 @@ Version 7.46 - not yet released
   - fix a TCP client device to "localhost" failing with "Connection
     refused" when the server listens on IPv4 only (e.g. CCAS); try
     every address the name resolves to #3164
+  - show only the start time in the flight download list when the
+    logger did not record when a flight ended, instead of 00:00 (LXNAV
+    S10)
 * dialogs
   - show each repository file as its name and its description, and
     download every ticked file together; Countries and Search narrow

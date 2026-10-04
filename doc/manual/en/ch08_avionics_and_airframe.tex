@@ -198,7 +198,10 @@ sometimes, it might be desirable to trigger that manually.
 
 The button ``Flight download'' is only available with supported IGC
 loggers (see Section~\ref{sec:supported-varios} for a list).  Upon clicking,
-XCSoar retrieves a list of flights, and asks you to select one.  The
+XCSoar retrieves a list of flights, and asks you to select one.  Each
+entry shows the date and the start and end time of the flight; the end
+time is left out when the logger did not record it, as an LXNAV S10
+does for most flights.  The
 IGC file will be downloaded to the ``\texttt{logs}'' directory inside
 \texttt{XCSoarData}.  A flight download shows the flight name, the connected device, and the
 driver on separate lines above the progress bar.  Inside the bar it

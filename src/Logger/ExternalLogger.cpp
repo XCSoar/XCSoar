@@ -399,13 +399,16 @@ ShowFlightList(const RecordedFlightList &flight_list)
 
     StaticString<64> buffer;
     if (flight.date.IsPlausible())
-      buffer.UnsafeFormat("%04u/%02u/%02u %02u:%02u-%02u:%02u",
+      buffer.UnsafeFormat("%04u/%02u/%02u %02u:%02u",
                           flight.date.year, flight.date.month, flight.date.day,
-                          flight.start_time.hour, flight.start_time.minute,
-                          flight.end_time.hour, flight.end_time.minute);
+                          flight.start_time.hour, flight.start_time.minute);
     else
-      buffer.UnsafeFormat("----/--/-- %02u:%02u-%02u:%02u",
-                          flight.start_time.hour, flight.start_time.minute,
+      buffer.UnsafeFormat("----/--/-- %02u:%02u",
+                          flight.start_time.hour, flight.start_time.minute);
+
+    /* some loggers do not record when a flight ended */
+    if (flight.end_time.IsPlausible())
+      buffer.AppendFormat("-%02u:%02u",
                           flight.end_time.hour, flight.end_time.minute);
 
     combo.Append(i, buffer);
