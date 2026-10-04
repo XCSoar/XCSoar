@@ -58,6 +58,12 @@ class TopographyFileRenderer final
    */
   double visible_scale = 0;
 
+  /**
+   * Fill thinning level used to skip sub-pixel cities/lakes in
+   * #visible_shapes.  Recache when it rises (zoom out) so they drop.
+   */
+  unsigned visible_fill_level = 0;
+
   std::vector<const XShape *> visible_shapes, visible_labels;
 
   std::vector<GeoPoint> visible_points;
@@ -118,3 +124,14 @@ private:
 
   void PaintPoints(Canvas &canvas, const WindowProjection &projection) noexcept;
 };
+
+#ifdef ENABLE_OPENGL
+struct TopographyLayerVtx {
+  const char *name;
+  unsigned vertices;
+};
+
+void TopographyGpuStatsBeginDraw() noexcept;
+void TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept;
+void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
+#endif

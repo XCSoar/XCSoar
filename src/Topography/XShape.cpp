@@ -337,24 +337,33 @@ SimplifyRingRDP(const ShapePoint *src, unsigned n, ShapeScalar eps2,
 }
 
 /**
- * Ear-clip a ring.  Rings larger than TARGET are simplified with
+ * Ear-clip a ring.  Rings larger than #target are simplified with
  * Douglas–Peucker first: PolygonToTriangles() is O(n²), and a
  * uniform stride used to drop bays so landcover triangles stretched
- * across the map.
+ * across the map.  #target is larger at close zoom so a fill that
+ * was thinned while zoomed out is rebuilt with more vertices.
  */
 static unsigned
 PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
                           GLushort *triangles,
-                          ShapeScalar min_distance) noexcept
+                          ShapeScalar min_distance,
+                          unsigned target) noexcept
 {
-  constexpr unsigned TARGET = 128;
+  assert(target >= 3);
   assert(n > 0 && n - 1 <= 0xffff);
 
   if (n >= 2 && src[0] == src[n - 1])
     n--;
 
-  if (n <= TARGET)
-    return PolygonToTriangles(src, n, triangles, min_distance);
+  if (n <= target) {
+    const unsigned count =
+      PolygonToTriangles(src, n, triangles, min_distance);
+    /* A rectangle thinned to one triangle is a speck or a stretched
+       sliver.  Keep a ring that was a triangle to begin with. */
+    if (n > 3 && count <= 3)
+      return 0;
+    return count;
+  }
 
   ShapeScalar min_x = src[0].x, max_x = src[0].x;
   ShapeScalar min_y = src[0].y, max_y = src[0].y;
@@ -369,7 +378,7 @@ PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
   if (span <= 0)
     return PolygonToTriangles(src, n, triangles, min_distance);
 
-  ShapeScalar eps = span / ShapeScalar(TARGET);
+  ShapeScalar eps = span / ShapeScalar(target);
   ShapeScalar eps2 = eps * eps;
 
   std::vector<char> keep;
@@ -379,12 +388,14 @@ PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
     n_keep = 0;
     for (char k : keep)
       n_keep += k != 0;
-    if (n_keep <= TARGET)
+    if (n_keep <= target)
       break;
     eps2 *= 4;
   }
 
   if (n_keep < 3)
+    return 0;
+  if (n_keep == 3 && n > 3)
     return 0;
 
   std::vector<ShapePoint> thin_pts;
@@ -404,6 +415,22 @@ PolygonToTrianglesThinned(const ShapePoint *src, unsigned n,
   for (unsigned j = 0; j < count; ++j)
     triangles[j] = orig[tmp[j]];
   return count;
+}
+
+[[gnu::const]]
+static unsigned
+FillRdpTarget(unsigned thinning_level) noexcept
+{
+  switch (thinning_level) {
+  case 0:
+    return 512;
+  case 1:
+    return 128;
+  case 2:
+    return 64;
+  default:
+    return 32;
+  }
 }
 
 inline bool
@@ -466,7 +493,8 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
     for (std::size_t i=0; i < num_lines; i++) {
       std::size_t count = PolygonToTrianglesThinned(pt, lines[i],
                                                     idx + *idx_count,
-                                                    min_distance);
+                                                    min_distance,
+                                                    FillRdpTarget(thinning_level));
       if (i > 0) {
         const GLushort offset = pt - points.get();
         const std::size_t max_idx_count = *idx_count + count;
@@ -487,11 +515,21 @@ XShape::BuildIndices(unsigned thinning_level, ShapeScalar min_distance) noexcept
 XShape::Indices
 XShape::GetIndices(int thinning_level, ShapeScalar min_distance) const noexcept
 {
-  if (indices[thinning_level] == nullptr) {
-    XShape &deconst = const_cast<XShape &>(*this);
-    if (!deconst.BuildIndices(thinning_level, min_distance))
-      return {};
+  XShape &deconst = const_cast<XShape &>(*this);
+  if (indices[thinning_level] != nullptr) {
+    const ShapeScalar built = index_min_distance[thinning_level];
+    if (built > 0 &&
+        min_distance <= built * ShapeScalar(1.25) &&
+        min_distance >= built / ShapeScalar(1.25))
+      return {indices[thinning_level], index_count[thinning_level].get()};
+
+    deconst.index_count[thinning_level].reset();
+    deconst.indices[thinning_level] = nullptr;
   }
+
+  deconst.index_min_distance[thinning_level] = min_distance;
+  if (!deconst.BuildIndices(thinning_level, min_distance))
+    return {};
 
   return {indices[thinning_level], index_count[thinning_level].get()};
 }
