@@ -284,6 +284,9 @@ converters at \url{https://xcsoar.readthedocs.io/en/latest/task_file.html}.
 The software flight logger generates IGC files (extension \verb|.igc|)
 according to the long naming convention described in the FAI 
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
+The GPS line of its header (\verb|HFGPS|) names the device that supplies
+the GPS fix when the logger starts: the first device in the Devices list
+that delivers a position, the one whose GPS flag is shown in bold.
 
 Log-files are stored in the `logs' subdirectory of the XCSoarData directory.
 These files can be imported into other programs for analysis after flight.
