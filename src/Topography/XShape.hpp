@@ -70,6 +70,12 @@ private:
   std::array<std::unique_ptr<uint16_t[]>, THINNING_LEVELS> index_count;
 
   /**
+   * #GetIndices min_distance last used to build each slot.  Rebuild
+   * when screen-space spacing changes with zoom.
+   */
+  std::array<ShapeScalar, THINNING_LEVELS> index_min_distance{};
+
+  /**
    * The start offset in the #GLArrayBuffer (vertex buffer object).
    * It is managed by #TopographyFileRenderer.
    */

@@ -135,8 +135,10 @@ Version 7.46 - not yet released
   - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
     high-DPI screens; the discrete scale list is the scale-bar
     width, up to 1000 km
-  - skip tiny topography fills, simplify large areas without tearing
-    them, clip long roads to the map view, and keep recently seen
+  - skip tiny topography fills, thin water and city polygons by
+    screen pixels (so a 186 km overview is not every OSM shoreline),
+    clip long roads to the map view, thin road and railway vertices
+    by screen pixels without dropping sticks, and keep recently seen
     shapes while panning
   - fix crash drawing dense topography fills at close zoom, including
     devices that cannot map large OpenGL vertex buffers, and PowerVR

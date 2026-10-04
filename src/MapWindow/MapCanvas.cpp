@@ -85,10 +85,59 @@ TriangulateGeoRing(const GeoPoint *src, unsigned &n,
                             reinterpret_cast<GLushort *>(indices.data()),
                             0.f);
 }
-#endif
 
 bool
-MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
+MapCanvas::BuildTriangleCache(const SearchPointVector &points,
+                              AllocatedArray<uint16_t> &indices,
+                              unsigned &index_count,
+                              unsigned &vertex_count) noexcept
+{
+  index_count = 0;
+  vertex_count = 0;
+  const unsigned n_src = points.size();
+  if (n_src < 3 || n_src > 65535)
+    return false;
+
+  AllocatedArray<GeoPoint> geo;
+  geo.GrowDiscard(n_src);
+  for (unsigned i = 0; i < n_src; ++i)
+    geo[i] = points[i].GetLocation();
+
+  unsigned n = n_src;
+  index_count = TriangulateGeoRing(geo.data(), n, indices);
+  vertex_count = n;
+  return index_count >= 3;
+}
+
+bool
+MapCanvas::PreparePolygon(const SearchPointVector &points,
+                          const uint16_t *indices, unsigned index_count,
+                          unsigned vertex_count) noexcept
+{
+  prepared_src = nullptr;
+  prepared_indices = nullptr;
+  num_triangle_indices = 0;
+  screen_ready = false;
+
+  if (indices == nullptr || index_count < 3 || vertex_count < 3)
+    return false;
+
+  GeoBounds bb(points[0].GetLocation());
+  for (unsigned i = 1; i < vertex_count; ++i)
+    bb.Extend(points[i].GetLocation());
+  if (bb.IsValid() && !clip.Overlaps(bb))
+    return false;
+
+  prepared_src = &points;
+  prepared_indices = indices;
+  num_triangle_indices = index_count;
+  num_raster_points = vertex_count;
+  return true;
+}
+
+bool
+MapCanvas::PreparePolygon(const SearchPointVector &points,
+                          bool skip_triangulate) noexcept
 {
   const unsigned n = points.size();
   if (n < 3)
@@ -97,7 +146,25 @@ MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
   geo_points.GrowDiscard(n * 4);
   for (unsigned i = 0; i < n; ++i)
     geo_points[i] = points[i].GetLocation();
+  return PrepareCopied(n, skip_triangulate);
+}
+#endif
+
+bool
+MapCanvas::PreparePolygon(const SearchPointVector &points) noexcept
+{
+#ifdef ENABLE_OPENGL
+  return PreparePolygon(points, false);
+#else
+  const unsigned n = points.size();
+  if (n < 3)
+    return false;
+
+  geo_points.GrowDiscard(n * 4);
+  for (unsigned i = 0; i < n; ++i)
+    geo_points[i] = points[i].GetLocation();
   return PrepareCopied(n);
+#endif
 }
 
 bool
@@ -113,7 +180,8 @@ MapCanvas::PreparePolygon(const GeoPoint *src, unsigned num_points) noexcept
 }
 
 bool
-MapCanvas::PrepareCopied(unsigned num_points) noexcept
+MapCanvas::PrepareCopied(unsigned num_points,
+                         bool skip_triangulate) noexcept
 {
   GeoBounds bb(geo_points[0]);
   for (unsigned i = 1; i < num_points; ++i)
@@ -122,15 +190,23 @@ MapCanvas::PrepareCopied(unsigned num_points) noexcept
     return false;
 
 #ifdef ENABLE_OPENGL
+  prepared_src = nullptr;
+  prepared_indices = nullptr;
   num_triangle_indices = 0;
-  unsigned n = num_points;
-  num_triangle_indices = TriangulateGeoRing(geo_points.data(), n,
-                                            triangle_indices);
-  if (num_triangle_indices >= 3) {
-    num_raster_points = n;
-    return true;
+  screen_ready = false;
+  if (!skip_triangulate) {
+    unsigned n = num_points;
+    num_triangle_indices = TriangulateGeoRing(geo_points.data(), n,
+                                              triangle_indices);
+    if (num_triangle_indices >= 3) {
+      num_raster_points = n;
+      prepared_indices = triangle_indices.data();
+      return true;
+    }
+    num_triangle_indices = 0;
   }
-  num_triangle_indices = 0;
+#else
+  (void)skip_triangulate;
 #endif
 
   num_raster_points = clip.ClipPolygon(geo_points.data(),
@@ -149,15 +225,26 @@ void
 MapCanvas::DrawPrepared() noexcept
 {
 #ifdef ENABLE_OPENGL
-  if (num_triangle_indices >= 3) {
-    screen_points.GrowDiscard(num_raster_points);
-    for (unsigned i = 0; i < num_raster_points; ++i) {
-      const auto sp = projection.GeoToScreen(geo_points[i]);
-      screen_points[i] = FloatPoint2D(float(sp.x), float(sp.y));
+  if (num_triangle_indices >= 3 && prepared_indices != nullptr) {
+    if (!screen_ready) {
+      screen_points.GrowDiscard(num_raster_points);
+      if (prepared_src != nullptr) {
+        for (unsigned i = 0; i < num_raster_points; ++i) {
+          const auto sp =
+            projection.GeoToScreen((*prepared_src)[i].GetLocation());
+          screen_points[i] = FloatPoint2D(float(sp.x), float(sp.y));
+        }
+      } else {
+        for (unsigned i = 0; i < num_raster_points; ++i) {
+          const auto sp = projection.GeoToScreen(geo_points[i]);
+          screen_points[i] = FloatPoint2D(float(sp.x), float(sp.y));
+        }
+      }
+      screen_ready = true;
     }
     canvas.DrawFilledTriangles(screen_points.data(),
                                reinterpret_cast<const GLushort *>(
-                                 triangle_indices.data()),
+                                 prepared_indices),
                                num_triangle_indices);
     return;
   }

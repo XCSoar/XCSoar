@@ -58,6 +58,12 @@ class TopographyFileRenderer final
    */
   double visible_scale = 0;
 
+  /**
+   * Fill thinning level used to skip sub-pixel cities/lakes in
+   * #visible_shapes.  Recache when it rises (zoom out) so they drop.
+   */
+  unsigned visible_fill_level = 0;
+
   std::vector<const XShape *> visible_shapes, visible_labels;
 
   std::vector<GeoPoint> visible_points;
@@ -136,6 +142,11 @@ private:
 };
 
 #ifdef ENABLE_OPENGL
+struct TopographyLayerVtx {
+  const char *name;
+  unsigned vertices;
+};
+
 void TopographyGpuStatsBeginDraw() noexcept;
 void TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept;
 void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
@@ -143,4 +154,8 @@ void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
 /** Indices submitted and fill primitives in the last Draw(). */
 unsigned GetLastTopographyVertexCount() noexcept;
 unsigned GetLastTopographyPolygonCount() noexcept;
+
+/** Layers of the last Draw(), most vertices first. */
+unsigned GetLastTopographyLayerVtxCount() noexcept;
+const TopographyLayerVtx *GetLastTopographyLayerVtx() noexcept;
 #endif

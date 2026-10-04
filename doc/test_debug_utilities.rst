@@ -320,9 +320,9 @@ Tests task calculation with flight data.
 RunMapRendererStress
 ~~~~~~~~~~~~~~~~~~~~
 
-Benchmarks map rendering (terrain DEM plus vector topography) from an
-``.xcm`` map container.  This is the map-paint counterpart to
-``RunTrailRendererStress``.
+Benchmarks map rendering (terrain DEM, vector topography, and
+optional OpenAir airspace) from an ``.xcm`` map container.  This is
+the map-paint counterpart to ``RunTrailRendererStress``.
 
 **Usage**:
 
@@ -331,18 +331,35 @@ Benchmarks map rendering (terrain DEM plus vector topography) from an
    ./output/UNIX/bin/RunMapRendererStress ~/.xcsoar/maps/ALPS_Test.xcm
    ./output/UNIX/bin/RunMapRendererStress --radius=3000 --lat=46.5 --lon=11.3 map.xcm
    ./output/UNIX/bin/RunMapRendererStress --no-cache --draws=40 --width=1600 --height=960 map.xcm
+   ./output/UNIX/bin/RunMapRendererStress \
+     --width=800 --height=600 --pan-m=80 --draws=60 \
+     --airspace=~/.xcsoar/repositorty/fr_openaip_asp_v2.txt \
+     /tmp/FRA_FULL.xcm
+   ./output/UNIX/bin/RunMapRendererStress --width=1024 --height=768 \
+     --airspace=~/.xcsoar/airspace/CH-ASP-National-SegelflugCH.txt \
+     --pan-m=80 --draws=60 --radius=25000 map.xcm
 
 **What it does**:
 
 - Loads ``topology.tpl`` and shapefiles from the map ZIP
 - Optionally loads ``terrain.jp2``
+- ``--airspace=FILE`` (repeatable) loads OpenAir into
+  ``AirspaceRenderer`` (same OpenGL fill/outline path as the map)
 - For each map half-width (``--radius``), times shape loading
   (``ScanVisibility``), terrain tiles, the first paint, and warm redraws
+- ``--pan-m=M`` with ``--draws=60`` shifts the centre east by *M* metres
+  on each warm frame (plus visibility scan and tile updates) so
+  ``frame_ms`` is a 60 Hz pan, not a static blit
 - Prints a TSV table on stdout (``scan_ms``, ``first_ms``, ``frame_ms``,
-  plus terrain / topography / label breakdowns)
+  plus terrain / topography / airspace / label breakdowns).  Each timed
+  draw calls ``glFinish`` so ``frame_ms`` and the layer columns include
+  GPU bandwidth, not only CPU submit (Mali-G400 / Cubie2 is
+  bandwidth-limited; typical canvas is 800×600, maximum 1024×768).
 - ``--no-cache`` flushes the software topography/terrain bitmap caches
-  before each timed draw so ``frame_ms`` / ``topo_ms`` measure rasterize
-  cost instead of a blit.  OpenGL already redraws vectors every frame.
+  and the airspace triangle/geo caches before each timed draw so
+  ``frame_ms`` / ``topo_ms`` / ``airspace_ms`` measure rasterize cost
+  instead of a blit.  OpenGL already redraws vectors every frame.
+  ``--no-airspace`` skips loading and painting airspace.
 
 Default radii are 750 m, 3 km, 19 km, 50 km and 150 km (circling through
 overview).  Samples run small-to-large so the shape cache expands; pass a
