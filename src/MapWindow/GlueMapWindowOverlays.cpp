@@ -735,7 +735,7 @@ GlueMapWindow::GetMapTimerRect(const PixelRect &rc) const noexcept
 bool
 GlueMapWindow::MapTimerHitTest(PixelPoint p) const noexcept
 {
-  if (!MapTimer::IsVisible())
+  if (!MapTimer::IsVisible() || IsPanning())
     return false;
 
   const PixelRect pill = GetMapTimerRect(GetHudLayout().content);
@@ -745,7 +745,7 @@ GlueMapWindow::MapTimerHitTest(PixelPoint p) const noexcept
 void
 GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
 {
-  if (!MapTimer::IsVisible())
+  if (!MapTimer::IsVisible() || IsPanning())
     return;
 
   const Font &font = info_box_look.value_font;
