@@ -29,6 +29,7 @@
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/LXNavDeclare.hpp"
+#include "Device/Driver/LX/NanoLogger.hpp"
 #include "Device/Driver/LX_Eos.hpp"
 #include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Leonardo.hpp"
@@ -3773,6 +3774,32 @@ TestTrafficExtensionsWire()
   ok1(sizeof(SkyLinesTracking::TrafficResponsePacket::Traffic) == 24);
 }
 
+/**
+ * PLXVC,LOGBOOK,A entries as an S10 (firmware 9.41) sends them, the
+ * part after that prefix: index, count, file, date, start, end, size.
+ */
+static void
+TestLXNanoLogbook()
+{
+  RecordedFlightInfo info;
+
+  ok1(Nano::ParseLogbookContent("5,81,243VNDX1.igc,03.04.2022,"
+                                "11:30:42,11:31:12,4234", info));
+  ok1(StringIsEqual(info.internal.lx.nano_filename, "243VNDX1.igc"));
+  ok1(info.date == BrokenDate(2022, 4, 3));
+  ok1(info.start_time == BrokenTime(11, 30, 42));
+  ok1(info.end_time == BrokenTime(11, 31, 12));
+
+  /* most flights: the logger did not record the end */
+  ok1(Nano::ParseLogbookContent("80,81,5ATVNDX1.igc,29.10.2025,"
+                                "07:35:25,00:00:00,1402159", info));
+  ok1(info.start_time == BrokenTime(7, 35, 25));
+  ok1(!info.end_time.IsPlausible());
+
+  ok1(!Nano::ParseLogbookContent("80,81,5ATVNDX1.igc,29.10.2025,"
+                                 "07:35:25", info));
+}
+
 int main()
 {
   const auto data_path = MakeTestDriverDataPath();
@@ -3794,7 +3821,8 @@ int main()
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
-             + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */);
+             + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
+             + 9 /* LXNanoLogbook */);
   TestGeneric();
   TestTasman();
   TestLK8EX1();
@@ -3869,6 +3897,7 @@ int main()
   TestMalformedInput();
   TestFlarmTrafficBuilder();
   TestTrafficExtensionsWire();
+  TestLXNanoLogbook();
 
   DeinitialiseDataPath();
   return exit_status();
