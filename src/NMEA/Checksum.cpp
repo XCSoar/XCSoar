@@ -2,32 +2,27 @@
 // Copyright The XCSoar Project
 
 #include "NMEA/Checksum.hpp"
+#include "util/CharUtil.hxx"
+#include "util/HexString.hpp"
 
 #include <cassert>
 #include <cstring>
-#include <cstdlib>
 #include <cstdio>
 #include <cstdint>
 
 bool
-VerifyNMEAChecksum(const char *p) noexcept
+VerifyNMEAChecksum(std::string_view sentence) noexcept
 {
-  assert(p != nullptr);
-
-  const char *asterisk = strrchr(p, '*');
-  if (asterisk == nullptr)
+  const auto asterisk = sentence.rfind('*');
+  if (asterisk == sentence.npos)
     return false;
 
-  const char *checksum_string = asterisk + 1;
-  char *endptr;
-  unsigned long ReadCheckSum2 = strtoul(checksum_string, &endptr, 16);
-  if (endptr == checksum_string || *endptr != 0 || ReadCheckSum2 >= 0x100)
+  const auto field = sentence.substr(asterisk + 1);
+  if (field.size() != 2 || !IsHexDigit(field[0]) || !IsHexDigit(field[1]))
     return false;
 
-  uint8_t ReadCheckSum = (unsigned char)ReadCheckSum2;
-  uint8_t CalcCheckSum = NMEAChecksum({p, asterisk});
-
-  return CalcCheckSum == ReadCheckSum;
+  const auto received = ParseHexString<1>(field)[0];
+  return std::byte{NMEAChecksum(sentence.substr(0, asterisk))} == received;
 }
 
 void

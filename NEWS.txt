@@ -205,6 +205,9 @@ Version 7.46 - not yet released
   - wait for the LXNAV product reply before choosing a flight-list
     protocol, so an S-series logger is not sent Colibri commands
     while it is still identifying
+  - accept an NMEA checksum only as exactly two hexadecimal digits, as
+    NMEA 0183 requires; a space, sign or "0x" before the digits, or a
+    single digit, used to pass #2127
 * dialogs
   - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
     Services configuration menu

@@ -180,6 +180,14 @@ TestGeneric()
   /* Magnetic Heading bad checksum */
   ok1(!parser.ParseLine("$HCHDM,182.7,M*26", nmea_info));
 
+  /* Magnetic Heading, checksum in lower case */
+  ok1(parser.ParseLine("$HCHDM,182.8,M*2a", nmea_info));
+  ok1(equals(nmea_info.attitude.heading, 182.8));
+
+  /* Magnetic Heading, right value but not two hex digits (#2127) */
+  ok1(!parser.ParseLine("$HCHDM,182.8,M* 2A", nmea_info));
+  ok1(!parser.ParseLine("$HCHDM,182.8,M*0x2A", nmea_info));
+
   ok1(parser.ParseLine("$WIMWV,12.1,T,10.1,M,A*24", nmea_info));
   ok1(nmea_info.external_wind_available);
   ok1(equals(nmea_info.external_wind.bearing, 12.1));
@@ -3636,7 +3644,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1091 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1095 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
