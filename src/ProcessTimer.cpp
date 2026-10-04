@@ -235,7 +235,7 @@ MapTimerProcessTimer() noexcept
     return;
 
   if (auto *map = CommonInterface::main_window->GetMap(); map != nullptr)
-    map->Invalidate();
+    map->InvalidateMapTimer();
 }
 
 static void
