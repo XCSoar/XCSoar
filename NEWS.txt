@@ -451,6 +451,9 @@ Version 7.46 - not yet released
   - describe the Speed VMG InfoBox in the English, German and Brazilian
     Portuguese manuals
 * development
+  - build system: keep isnan(), isinf() and isfinite() working on GCC
+    builds (Linux, Windows, Kobo); -ffast-math let GCC fold them away
+    #3072
   - build system: keep each CI target's download cache to itself; a
     bare downloads-$os- restore key handed one target another
     target's cache, without the files it needed
