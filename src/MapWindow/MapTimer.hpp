@@ -7,7 +7,8 @@
 
 /**
  * Simple map stopwatch shown as a centred pill overlay.  Controlled
- * from Status → Times; tap start/stop, long-press reset.
+ * from Status → Times; tap start/stop, hold 0.7 s to reset (resets
+ * while the finger is still down).
  */
 namespace MapTimer {
 

@@ -110,6 +110,9 @@ Version 7.46 - not yet released
     satellite images, and in Sat Rad Blitz; nothing is drawn when
     there is no fix or the position lies outside the image #2966
 * map
+  - Status → Times: Show timer draws a map stopwatch (tap start/stop,
+    hold 0.7 s to reset); follows the InfoBox light/dark colours and
+    shows a border while running
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
   - leave Trail drift off by default so the displayed track matches

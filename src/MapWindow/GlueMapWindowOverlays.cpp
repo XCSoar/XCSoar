@@ -27,6 +27,7 @@
 #include "BackendComponents.hpp"
 #include "Replay/Replay.hpp"
 #include "MapTimer.hpp"
+#include "Look/InfoBoxLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
@@ -696,7 +697,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
 PixelRect
 GlueMapWindow::GetMapTimerRect(const PixelRect &rc) const noexcept
 {
-  const Font &font = map_timer_font;
+  const Font &font = info_box_look.value_font;
   const auto elapsed = MapTimer::GetElapsed();
   const unsigned total_s = unsigned(std::max<std::chrono::seconds::rep>(
     elapsed.count(), 0));
@@ -750,7 +751,7 @@ GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
   if (!MapTimer::IsVisible())
     return;
 
-  const Font &font = map_timer_font;
+  const Font &font = info_box_look.value_font;
   canvas.Select(font);
 
   const auto elapsed = MapTimer::GetElapsed();
@@ -766,11 +767,24 @@ GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
   if (pill.GetWidth() <= 0 || pill.GetHeight() <= 0)
     return;
 
-  canvas.SelectWhiteBrush();
-  canvas.SelectNullPen();
+  /* Follow the InfoBox (navbox) theme: light = white fill / black text;
+     dark = black fill / white text.  A contrasting border while the
+     timer is running shows that it is active. */
+  const bool running = MapTimer::IsRunning();
+  const Color fill = info_box_look.background_color;
+  const Color text_color = info_box_look.value.fg_color;
+  const Color border_color = info_box_look.inverse
+    ? COLOR_WHITE
+    : COLOR_BLACK;
+
+  canvas.Select(Brush{fill});
+  if (running)
+    canvas.Select(Pen{Layout::ScalePenWidth(2), border_color});
+  else
+    canvas.SelectNullPen();
   canvas.DrawRoundRectangle(pill, PixelSize{pill.GetHeight()});
 
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(text_color);
   canvas.SetBackgroundTransparent();
   const PixelSize text_size = font.TextSize(text.c_str());
   canvas.DrawText(pill.GetCenter() - text_size / 2u, text.c_str());
