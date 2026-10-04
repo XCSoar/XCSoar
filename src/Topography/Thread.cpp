@@ -3,6 +3,8 @@
 
 #include "Thread.hpp"
 #include "TopographyStore.hpp"
+#include "TopographyFile.hpp"
+#include "Screen/Layout.hpp"
 
 TopographyThread::TopographyThread(TopographyStore &_store,
                                    std::function<void()> &&_callback)
@@ -32,7 +34,7 @@ TopographyThread::Trigger(const WindowProjection &_projection)
       return;
   }
 
-  last_bounds = new_bounds.Scale(1.1);
+  last_bounds = new_bounds.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   scale_threshold = store.GetNextScaleThreshold(_projection.GetMapScale());
 
   {
@@ -52,13 +54,18 @@ TopographyThread::Tick() noexcept
   while (next_projection.IsValid() && again && !IsStopped()) {
     const WindowProjection projection = next_projection;
 
-    const ScopeUnlock unlock(mutex);
-    again = store.ScanVisibility(projection, 1) > 0;
-  }
+    unsigned n_updated;
+    {
+      const ScopeUnlock unlock(mutex);
+      n_updated = store.ScanVisibility(projection, 1, Layout::Scale(1u));
+    }
+    again = n_updated > 0;
 
-  /* notify the client that we have updated the topography cache */
-  if (callback) {
-    const ScopeUnlock unlock(mutex);
-    callback();
+    /* Redraw after each layer so the screen pass is visible before
+       the 2× overscan finishes. */
+    if (callback) {
+      const ScopeUnlock unlock(mutex);
+      callback();
+    }
   }
 }

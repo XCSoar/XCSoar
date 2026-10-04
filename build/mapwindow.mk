@@ -50,11 +50,12 @@ endif
 
 $(eval $(call link-library,libmapwindow,LIBMAPWINDOW))
 
-# Rebuild the objects which evaluate DEBUG_ALL_MAP_OVERLAYS when the
-# option is toggled; make does not track preprocessor flag changes.
-MAP_OVERLAYS_FLAGS_STAMP = $(ABI_OUTPUT_DIR)/.debug_all_map_overlays.stamp
+# Rebuild the objects which evaluate DEBUG_ALL_MAP_OVERLAYS /
+# DEBUG_PROCESS_LOAD when those options are toggled; make does not
+# track preprocessor flag changes.
+MAP_OVERLAYS_FLAGS_STAMP = $(ABI_OUTPUT_DIR)/.debug_map_overlays.stamp
 $(MAP_OVERLAYS_FLAGS_STAMP): FORCE | $(ABI_OUTPUT_DIR)/dirstamp
-	@value=$(DEBUG_ALL_MAP_OVERLAYS); \
+	@value=$(DEBUG_ALL_MAP_OVERLAYS)-$(DEBUG_PROCESS_LOAD); \
 	if [ ! -f $@ ] || [ "$$(cat $@ 2>/dev/null)" != "$$value" ]; then \
 		echo "$$value" > $@.$(RANDOM_NUMBER).tmp && \
 			mv $@.$(RANDOM_NUMBER).tmp $@; \

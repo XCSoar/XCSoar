@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <vector>
+#include <cstdint>
 
 class TopographyFile;
 class Canvas;
@@ -48,7 +49,20 @@ class TopographyFileRenderer final
   MaskedIcon icon;
 
   Serial visible_serial;
-  GeoBounds visible_bounds;
+  GeoBounds visible_bounds = GeoBounds::Invalid();
+
+  /**
+   * #Projection::GetScale() (px/m) used to build #visible_shapes.
+   * Recache when the map is zoomed in (larger scale) so previously
+   * skipped sub-pixel fills can appear.
+   */
+  double visible_scale = 0;
+
+  /**
+   * Fill thinning level used to skip sub-pixel cities/lakes in
+   * #visible_shapes.  Recache when it rises (zoom out) so they drop.
+   */
+  unsigned visible_fill_level = 0;
 
   std::vector<const XShape *> visible_shapes, visible_labels;
 
@@ -57,6 +71,21 @@ class TopographyFileRenderer final
 #ifdef ENABLE_OPENGL
   std::unique_ptr<GLArrayBuffer> array_buffer;
   Serial array_buffer_serial;
+
+  /**
+   * Expanded (or MultiDraw) index lists for the current VBO and
+   * visible set.  Reused while panning inside the 2× cache.
+   */
+public:
+  struct CachedWindow {
+    unsigned window_base = 0;
+    std::vector<uint16_t> lines, fills;
+    std::vector<int> line_counts, fill_counts;
+  };
+private:
+  std::vector<CachedWindow> draw_windows;
+  unsigned draw_cache_thinning = ~0u;
+  bool draw_cache_valid = false;
 #endif
 
 public:
@@ -66,6 +95,22 @@ public:
   TopographyFileRenderer(const TopographyFileRenderer &) = delete;
 
   ~TopographyFileRenderer() noexcept;
+
+  const TopographyFile &GetFile() const noexcept {
+    return file;
+  }
+
+  std::size_t GetVisibleShapeCount() const noexcept {
+    return visible_shapes.size();
+  }
+
+  std::size_t GetVisiblePointCount() const noexcept {
+    return visible_points.size();
+  }
+
+  std::size_t GetVisibleLabelCount() const noexcept {
+    return visible_labels.size();
+  }
 
   /**
    * Paints the polygons, lines and points/icons in the TopographyFile
@@ -86,11 +131,31 @@ public:
                    LabelBlock &label_block) noexcept;
 
 private:
-  void UpdateVisibleShapes(const WindowProjection &projection) noexcept;
+  /** @return true if the visible-shape cache was rebuilt */
+  bool UpdateVisibleShapes(const WindowProjection &projection) noexcept;
 
 #ifdef ENABLE_OPENGL
-  void UpdateArrayBuffer() noexcept;
+  bool UpdateArrayBuffer() noexcept;
 #endif
 
   void PaintPoints(Canvas &canvas, const WindowProjection &projection) noexcept;
 };
+
+#ifdef ENABLE_OPENGL
+struct TopographyLayerVtx {
+  const char *name;
+  unsigned vertices;
+};
+
+void TopographyGpuStatsBeginDraw() noexcept;
+void TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept;
+void TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept;
+
+/** Indices submitted and fill primitives in the last Draw(). */
+unsigned GetLastTopographyVertexCount() noexcept;
+unsigned GetLastTopographyPolygonCount() noexcept;
+
+/** Layers of the last Draw(), most vertices first. */
+unsigned GetLastTopographyLayerVtxCount() noexcept;
+const TopographyLayerVtx *GetLastTopographyLayerVtx() noexcept;
+#endif

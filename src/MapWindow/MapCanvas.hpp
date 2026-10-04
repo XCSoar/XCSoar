@@ -5,7 +5,10 @@
 
 #include "ui/dim/BulkPoint.hpp"
 #include "Geo/GeoClip.hpp"
+#include "Math/Point2D.hpp"
 #include "util/AllocatedArray.hxx"
+
+#include <cstdint>
 
 class Canvas;
 class Projection;
@@ -34,6 +37,20 @@ public:
   AllocatedArray<BulkPixelPoint> raster_points;
   unsigned num_raster_points;
 
+#ifdef ENABLE_OPENGL
+  /**
+   * Geographic-space ear-clip indices so pan does not rebuild the
+   * fill from ClipPolygon vertices sliding along the view box.
+   */
+  AllocatedArray<FloatPoint2D> screen_points;
+  AllocatedArray<uint16_t> triangle_indices;
+  unsigned num_triangle_indices = 0;
+  /** Project from here when set (airspace triangle cache). */
+  const SearchPointVector *prepared_src = nullptr;
+  const uint16_t *prepared_indices = nullptr;
+  bool screen_ready = false;
+#endif
+
 public:
   MapCanvas(Canvas &_canvas, const Projection &_projection,
             const GeoClip &_clip) noexcept
@@ -60,14 +77,59 @@ public:
   }
 
   void DrawPolygon(const SearchPointVector &points) noexcept {
+    FillPolygon(points);
+  }
+
+  void DrawPolygon(const GeoPoint *src, unsigned n) noexcept {
+    if (PreparePolygon(src, n))
+      DrawPrepared();
+    DrawPolygonOutline(src, n);
+  }
+
+  void FillPolygon(const SearchPointVector &points) noexcept {
     if (PreparePolygon(points))
       DrawPrepared();
   }
+
+  void FillPolygon(const GeoPoint *src, unsigned n) noexcept {
+    if (PreparePolygon(src, n))
+      DrawPrepared();
+  }
+
+  /**
+   * Draw the border of a polygon.  Each edge is clipped as a line so
+   * the view-box edges that ClipPolygon inserts for fills are not
+   * drawn as a fake outline.
+   */
+  void DrawPolygonOutline(const SearchPointVector &points) noexcept;
+  void DrawPolygonOutline(const GeoPoint *src, unsigned n) noexcept;
 
   /**
    * @return false if it's completely outside the screen (don't call
    * DrawPrepared())
    */
   bool PreparePolygon(const SearchPointVector &points) noexcept;
+  bool PreparePolygon(const GeoPoint *src, unsigned n) noexcept;
+#ifdef ENABLE_OPENGL
+  /**
+   * Ear-clip #points in geographic space.  Indices refer to the
+   * ring after a closing duplicate is dropped.
+   */
+  static bool BuildTriangleCache(const SearchPointVector &points,
+                                 AllocatedArray<uint16_t> &indices,
+                                 unsigned &index_count,
+                                 unsigned &vertex_count) noexcept;
+
+  bool PreparePolygon(const SearchPointVector &points,
+                      const uint16_t *indices, unsigned index_count,
+                      unsigned vertex_count) noexcept;
+
+  bool PreparePolygon(const SearchPointVector &points,
+                      bool skip_triangulate) noexcept;
+#endif
   void DrawPrepared() noexcept;
+
+private:
+  bool PrepareCopied(unsigned n,
+                     bool skip_triangulate=false) noexcept;
 };

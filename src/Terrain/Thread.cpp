@@ -26,6 +26,8 @@ TerrainThread::Trigger(const WindowProjection &projection)
 
   next_center = center;
   next_radius = radius;
+  const double scale = projection.GetScale();
+  next_pixel_size = scale > 0 ? 1. / scale : 0;
   StandbyThread::Trigger();
 }
 
@@ -38,10 +40,11 @@ TerrainThread::Tick() noexcept
   while (next_center.IsValid() && again && !IsStopped()) {
     const GeoPoint center = next_center;
     const auto radius = next_radius;
+    const auto pixel_size = next_pixel_size;
 
     {
       const ScopeUnlock unlock(mutex);
-      again = terrain.UpdateTiles(center, radius);
+      again = terrain.UpdateTiles(center, radius, pixel_size);
     }
 
     last_center = center;

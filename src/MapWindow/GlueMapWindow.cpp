@@ -12,8 +12,27 @@
 #include "Terrain/Thread.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
+#include <chrono>
+
+namespace {
+
+template<typename F>
+static void
+TimedStop(const char *name, F &&stop) noexcept
+{
+  const auto start = std::chrono::steady_clock::now();
+  LogFmt("MapWindow: stop {} ...", name);
+  stop();
+  const auto ms =
+    std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - start).count();
+  LogFmt("MapWindow: stop {} took {} ms", name, ms);
+}
+
+}
 
 GlueMapWindow::GlueMapWindow(const Look &look) noexcept
   :MapWindow(look.map, look.traffic),
@@ -33,7 +52,7 @@ void
 GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 {
   if (topography_thread != nullptr) {
-    topography_thread->LockStop();
+    TimedStop("topography", [&]{ topography_thread->LockStop(); });
     delete topography_thread;
     topography_thread = nullptr;
   }
@@ -49,7 +68,7 @@ void
 GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
-    terrain_thread->LockStop();
+    TimedStop("terrain", [&]{ terrain_thread->LockStop(); });
     delete terrain_thread;
     terrain_thread = nullptr;
   }

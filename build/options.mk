@@ -48,6 +48,12 @@ ifeq ($(DEBUG_ALL_MAP_OVERLAYS),y)
   TARGET_CPPFLAGS += -DDEBUG_ALL_MAP_OVERLAYS=1
 endif
 
+# CPU / map-paint sparkline and topography vertex counts on the map?
+DEBUG_PROCESS_LOAD ?= n
+ifeq ($(DEBUG_PROCESS_LOAD),y)
+  TARGET_CPPFLAGS += -DDEBUG_PROCESS_LOAD
+endif
+
 # compile without UI?
 HEADLESS ?= n
 

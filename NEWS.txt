@@ -123,10 +123,36 @@ Version 7.46 - not yet released
     in track-up circling; leaving pan restores the orientation
   - defer the automatic zoom switch between circling and cruise until
     pan mode is left, when circling zoom is enabled
+  - add terrain shading that follows sun and wind lighting without
+    rebuilding the slope image; contour lines stay unshaded (also on
+    older OpenGL ES 2 devices); faster devices use full terrain
+    resolution immediately instead of waiting until the map is idle
+  - cache a 4× terrain grid with the overview and use it when one
+    screen pixel is at least that coarse, so a wide view does not
+    decode every fine tile; the first start after this update
+    rebuilds the terrain cache
+  - fix terrain shifting sideways against the map as you zoom
+  - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
+    high-DPI screens; the discrete scale list is the scale-bar
+    width, up to 1000 km
+  - skip tiny topography fills, thin water and city polygons by
+    screen pixels (so a 186 km overview is not every OSM shoreline),
+    clip long roads to the map view, thin road and railway vertices
+    by screen pixels without dropping sticks, and keep recently seen
+    shapes while panning
+  - fix crash drawing dense topography fills at close zoom, including
+    devices that cannot map large OpenGL vertex buffers, and PowerVR
+    GPUs whose driver crashes in MapBuffer or MultiDrawElements
+  - fix topography fills stretching across the map at some zoom levels
+  - fix map fills and outlines (airspace, XC Therm, reach, FAI
+    areas, weather overlays) vanishing when only partly on the map
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box
     instead of overlapping it
+  - fix topography labels flickering on and off while panning,
+    centre area names on the feature, sit place names under point
+    icons, and enlarge place names when zoomed in
   - fix the live snail trail losing circling detail and jumping as the
     map follows the aircraft, including at 10x replay #2948
   - keep the pan-mode map scale while panning, and restore the saved
@@ -451,6 +477,8 @@ Version 7.46 - not yet released
   - describe the Speed VMG InfoBox in the English, German and Brazilian
     Portuguese manuals
 * development
+  - build system: add DEBUG_PROCESS_LOAD=y to draw a CPU / map-paint
+    sparkline and topography vertex counts on the map
   - build system: keep each CI target's download cache to itself; a
     bare downloads-$os- restore key handed one target another
     target's cache, without the files it needed
@@ -467,6 +495,11 @@ Version 7.46 - not yet released
     TARGET=PC); use WIN64OPENGL or WIN32OPENGL #2132
   - build system: drop the GLX desktop OpenGL backend; UNIX X11
     OpenGL uses EGL and OpenGL ES #2140
+  - add RunTerrainRenderer to show TerrainRenderer hillshade with a
+    rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the
+    OpenGL shader, --seconds=N exits for profiling
+  - add RunMapRendererStress to time terrain and topography map paint
+    from an .xcm; --no-cache forces a full rasterize each draw
   - documentation: document the release and post-release version workflow
   - documentation: remove Windows CE and retired GDI target names from
     the developer manuals

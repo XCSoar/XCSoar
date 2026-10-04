@@ -91,6 +91,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestWaypointReachability TestBackupPaths \
 	TestAllocatedGrid \
+	TestRasterTraits \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
 	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
@@ -663,6 +664,11 @@ TEST_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/TestMath.cpp
 QUADRILATERAL_ARANGE_DEPENDS = MATH
 $(eval $(call link-program,TestMath,TEST_MATH))
+
+TEST_RASTER_TRAITS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestRasterTraits.cpp
+$(eval $(call link-program,TestRasterTraits,TEST_RASTER_TRAITS))
 
 TEST_GRAHAM_SCAN_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -1298,6 +1304,8 @@ ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
 DEBUG_PROGRAM_NAMES += \
 	RunTrailRendererStress \
+	RunMapRendererStress \
+	RunTerrainRenderer \
 	RunTrace \
 	RunContestAnalysis \
 	RunWaveComputer \
@@ -2144,6 +2152,64 @@ RUN_TRAIL_RENDERER_STRESS_DEPENDS = \
 	$(DEBUG_REPLAY_DEPENDS) SCREEN EVENT ASYNC OS IO THREAD GEO MATH UTIL TIME
 $(eval $(call link-program,RunTrailRendererStress,RUN_TRAIL_RENDERER_STRESS))
 
+RUN_MAP_RENDERER_STRESS_SOURCES = \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Look/TopographyLook.cpp \
+	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
+	$(SRC)/Renderer/TransparentRendererCache.cpp \
+	$(SRC)/Renderer/AirspaceRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRendererGL.cpp \
+	$(SRC)/Renderer/AirspaceRendererOther.cpp \
+	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(SRC)/MapWindow/MapCanvas.cpp \
+	$(SRC)/MapWindow/StencilMapCanvas.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Airspace/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Radio/RadioFrequency.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/Hardware/CPU.cpp \
+	$(TEST_SRC_DIR)/RunMapRendererStress.cpp
+RUN_MAP_RENDERER_STRESS_DEPENDS = \
+	TERRAIN TOPO SCREEN EVENT RESOURCE OPERATION \
+	AIRSPACE UNITS ASYNC OS IO THREAD GEO MATH UTIL TIME ZZIP JASPER
+$(eval $(call link-program,RunMapRendererStress,RUN_MAP_RENDERER_STRESS))
+
+RUN_TERRAIN_RENDERER_SOURCES = \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
+	$(SRC)/Renderer/GeoBitmapRenderer.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/Hardware/CPU.cpp \
+	$(TEST_SRC_DIR)/RunTerrainRenderer.cpp
+RUN_TERRAIN_RENDERER_DEPENDS = \
+	TERRAIN FORM SCREEN EVENT RESOURCE OPERATION \
+	ASYNC OS IO THREAD GEO MATH UTIL TIME ZZIP JASPER
+$(eval $(call link-program,RunTerrainRenderer,RUN_TERRAIN_RENDERER))
+
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
@@ -2413,6 +2479,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(SRC)/Hardware/CPU.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
 ifeq ($(HAVE_HTTP),y)
@@ -2839,6 +2906,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/Hardware/CPU.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_DEPENDS = \
 	TERRAIN \

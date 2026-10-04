@@ -19,6 +19,8 @@
 #include "UserMapScale.hpp"
 #include "Form/Button.hpp"
 #include "util/StringAPI.hxx"
+#include "ui/event/Idle.hpp"
+#include <chrono>
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -828,6 +830,10 @@ GlueMapWindow::OnKineticTimer() noexcept
     return;
   }
 
+  /* Coasting is still a pan.  Keep the height-matrix scan deferred
+     until the map has actually stopped. */
+  ResetUserIdle();
+
   auto location = drag_projection.ScreenToGeo({kinetic_x.GetPosition(), kinetic_y.GetPosition()});
   location = drag_projection.GetGeoLocation() +
     drag_start_geopoint - location;
@@ -841,12 +847,22 @@ GlueMapWindow::OnKineticTimer() noexcept
 void
 GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
+#ifdef DEBUG_PROCESS_LOAD
+  const auto t0 = std::chrono::steady_clock::now();
+#endif
   MapWindow::Render(canvas, rc);
+
+  const auto layout = GetHudLayout(GetHudRect(rc));
+#ifdef DEBUG_PROCESS_LOAD
+  const unsigned frame_ms = unsigned(
+    std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - t0)
+      .count());
+  DrawProcessLoad(canvas, layout, frame_ms);
+#endif
 
   if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {
     draw_sw.Mark("DrawGlueMisc");
-
-    const auto layout = GetHudLayout(GetHudRect(rc));
 
     if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
       DrawThermalBand(canvas, layout);

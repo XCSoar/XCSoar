@@ -143,7 +143,7 @@ private:
 
   /**
    * Re-render terrain at higher OpenGL quantisation after the user
-   * stops interacting (see RasterRenderer::GetQuantisation()).
+   * stops interacting on slow CPUs (see GetQuantisation()).
    */
   UI::Timer terrain_quantisation_timer{
     [this]{ OnTerrainQuantisationTimer(); }};
@@ -456,6 +456,10 @@ private:
                  const MapHudLayout &layout) const noexcept;
   void DrawStallRatio(Canvas &canvas,
                       const MapHudLayout &layout) const noexcept;
+#ifdef DEBUG_PROCESS_LOAD
+  void DrawProcessLoad(Canvas &canvas, const MapHudLayout &layout,
+                       unsigned frame_ms) noexcept;
+#endif
 
   /**
    * Draw the position of the current page in the list of configured

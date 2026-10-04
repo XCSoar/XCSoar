@@ -22,6 +22,12 @@ class TopographyRenderer : private NonCopyable {
 
   std::forward_list<TopographyFileRenderer> files;
 
+  /**
+   * Last #WindowProjection::GetMapScale() that was written to the
+   * log, so pinch/pan does not flood xcsoar.log.
+   */
+  double last_logged_map_scale = -1;
+
 public:
   TopographyRenderer(const TopographyStore &store,
                      const TopographyLook &look) noexcept;
