@@ -415,7 +415,7 @@ ShowFlightList(const RecordedFlightList &flight_list)
   }
 
   // Show list of the flights
-  int i = ComboPicker("Choose a flight",
+  int i = ComboPicker(_("Download flight"),
                       combo, nullptr, false);
 
   return i < 0 ? nullptr : &flight_list[i];
