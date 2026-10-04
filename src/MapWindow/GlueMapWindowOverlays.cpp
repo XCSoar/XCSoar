@@ -738,10 +738,7 @@ GlueMapWindow::MapTimerHitTest(PixelPoint p) const noexcept
   if (!MapTimer::IsVisible())
     return false;
 
-  const PixelRect hud_rc = content_rect.GetWidth() > 0
-    ? content_rect
-    : GetClientRect();
-  const PixelRect pill = GetMapTimerRect(hud_rc);
+  const PixelRect pill = GetMapTimerRect(GetHudLayout().content);
   return pill.GetWidth() > 0 && pill.Contains(p);
 }
 
