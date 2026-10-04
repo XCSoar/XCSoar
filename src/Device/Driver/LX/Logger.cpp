@@ -271,7 +271,10 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
         return;
 
       try {
-        LXNAVVario::SetupNMEA(port, env);
+        /* after a cancel, env refuses every write; the vario must
+           get its sentences back all the same */
+        NullOperationEnvironment restore_env;
+        LXNAVVario::SetupNMEA(port, restore_env);
       } catch (...) {
         LogError(std::current_exception(),
                  "LXNAV: failed to restore NMEA rates after flight download");
