@@ -1,10 +1,16 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "Airspace/AirspaceParser.hpp"
+#include "Engine/Airspace/Airspaces.hpp"
+#include "Geo/GeoVector.hpp"
+#include "Look/AirspaceLook.hpp"
 #include "Look/TopographyLook.hpp"
 #include "Operation/Operation.hpp"
 #include "ProductName.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Renderer/AirspaceRenderer.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -14,6 +20,8 @@
 #include "Topography/TopographyFile.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Version.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
 #include "io/ZipArchive.hpp"
 #include "io/ZipLineReader.hpp"
 #include "system/Args.hpp"
@@ -24,6 +32,8 @@
 #include "util/NumberParser.hpp"
 #include "util/PrintException.hxx"
 #include "util/StringCompare.hxx"
+
+#include "Fonts.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/opengl/System.hpp"
@@ -49,11 +59,12 @@ static constexpr double kDefaultRadiiM[] = {
 struct Options {
   unsigned draws_per_sample = 5;
   unsigned width = 800;
-  unsigned height = 480;
+  unsigned height = 600;
   unsigned dpi = 130;
   bool draw_terrain = true;
   bool draw_topo = true;
   bool draw_labels = true;
+  bool draw_airspace = true;
   bool no_cache = false;
   bool progress = true;
   bool layers = false;
@@ -61,6 +72,8 @@ struct Options {
   bool have_lon = false;
   double latitude_deg = 0;
   double longitude_deg = 0;
+  double pan_m = 0;
+  std::vector<AllocatedPath> airspace_files;
   std::vector<double> radii_m;
 };
 
@@ -72,20 +85,26 @@ PrintStandardHelp() noexcept
   std::printf(
     "Usage: %s [OPTION]... FILE.xcm\n"
     "\n"
-    "Load a map container and benchmark MapWindow-style terrain plus\n"
-    "topography draw cost.  Shape loading (ScanVisibility) is timed\n"
-    "separately from warm redraws so pan/zoom I/O is not mixed with\n"
-    "steady-state paint.\n"
+    "Load a map container and benchmark MapWindow-style terrain,\n"
+    "topography, and optional OpenAir airspace draw cost.\n"
+    "Shape loading (ScanVisibility) is timed separately from warm\n"
+    "redraws so pan/zoom I/O is not mixed with steady-state paint.\n"
     "\n"
     "Options:\n"
     "  --draws=N             warm redraws per radius (default: 5)\n"
-    "  --width=PIXELS        canvas width (default: 800)\n"
-    "  --height=PIXELS       canvas height (default: 480)\n"
+    "  --width=PIXELS        canvas width (default: 800; Cubie2-style)\n"
+    "  --height=PIXELS       canvas height (default: 600; try 768 for\n"
+    "                        1024x768)\n"
     "  --dpi=N               Layout DPI (default: 130)\n"
     "  --lat=DEG             map centre latitude (default: terrain centre)\n"
     "  --lon=DEG             map centre longitude (default: terrain centre)\n"
     "  --radius=M            half-width in metres (repeatable; default:\n"
     "                        750, 3000, 19000, 50000, 150000)\n"
+    "  --pan-m=M             shift the map east by M metres before each\n"
+    "                        warm redraw (0 = static; try 50 with\n"
+    "                        --draws=60 for a 60 Hz pan)\n"
+    "  --airspace=FILE       load OpenAir (repeatable)\n"
+    "  --no-airspace         do not load or paint airspace\n"
     "  --no-terrain          skip DEM load and terrain paint\n"
     "  --no-topo             skip topography load and paint\n"
     "  --no-labels           skip topography label paint\n"
@@ -98,7 +117,7 @@ PrintStandardHelp() noexcept
     "\n"
     "Example:\n"
     "  %s ~/.xcsoar/maps/ALPS_Test.xcm\n"
-    "  %s --radius=3000 --radius=19000 --lat=46.5 --lon=11.3 map.xcm\n"
+    "  %s --width=1024 --height=768 --airspace=fr.txt --pan-m=80 --draws=60 map.xcm\n"
     "\n"
     "Report bugs to: <%s>\n"
     "%s home page: <%s>\n",
@@ -158,6 +177,24 @@ ParseCommandLine(Args &args) noexcept
       args.Skip();
       PrintStandardVersion(canonical_name, XCSoar_Version);
       std::exit(EXIT_SUCCESS);
+    }
+
+    if (StringIsEqual(arg, "--no-airspace")) {
+      args.Skip();
+      options.draw_airspace = false;
+      continue;
+    }
+
+    if (StringStartsWith(arg, "--airspace=")) {
+      const char *p = arg + std::strlen("--airspace=");
+      if (*p == '\0') {
+        std::fprintf(stderr, "%s: --airspace= needs a path\n",
+                     canonical_name);
+        std::exit(EXIT_FAILURE);
+      }
+      args.Skip();
+      options.airspace_files.emplace_back(Path{p});
+      continue;
     }
 
     if (StringIsEqual(arg, "--no-terrain")) {
@@ -223,6 +260,13 @@ ParseCommandLine(Args &args) noexcept
       args.Skip();
       options.longitude_deg = coord;
       options.have_lon = true;
+      continue;
+    }
+
+    double pan = 0;
+    if (ParseDoubleOption(arg, "--pan-m=", pan, true)) {
+      args.Skip();
+      options.pan_m = pan;
       continue;
     }
 
@@ -320,7 +364,8 @@ ElapsedMs(std::chrono::steady_clock::time_point t0,
 
 static void
 MaybeFlushCaches(CachedTopographyRenderer *topo,
-                 TerrainRenderer *terrain_renderer) noexcept
+                 TerrainRenderer *terrain_renderer,
+                 AirspaceRenderer *airspace_renderer) noexcept
 {
   if (!options.no_cache)
     return;
@@ -329,6 +374,8 @@ MaybeFlushCaches(CachedTopographyRenderer *topo,
     topo->Flush();
   if (terrain_renderer != nullptr)
     terrain_renderer->Flush();
+  if (airspace_renderer != nullptr)
+    airspace_renderer->Flush();
 }
 
 static void
@@ -340,7 +387,7 @@ DrawTerrain(Canvas &canvas, TerrainRenderer *terrain_renderer,
   if (terrain_renderer == nullptr || terrain_settings == nullptr)
     return;
 
-  MaybeFlushCaches(nullptr, terrain_renderer);
+  MaybeFlushCaches(nullptr, terrain_renderer, nullptr);
   terrain_renderer->SetSettings(*terrain_settings);
   if (terrain_renderer->Generate(projection, sun_azimuth))
     terrain_renderer->Draw(canvas, projection);
@@ -353,7 +400,7 @@ DrawTopography(Canvas &canvas, CachedTopographyRenderer *topo,
   if (topo == nullptr)
     return;
 
-  MaybeFlushCaches(topo, nullptr);
+  MaybeFlushCaches(topo, nullptr, nullptr);
   topo->Draw(canvas, projection);
 }
 
@@ -369,9 +416,33 @@ DrawLabels(Canvas &canvas, CachedTopographyRenderer *topo,
 }
 
 static void
+DrawAirspace(Canvas &canvas, AirspaceRenderer *airspace_renderer,
+#ifndef ENABLE_OPENGL
+             Canvas *stencil_canvas,
+#endif
+             const AirspaceRendererSettings *airspace_settings,
+             const WindowProjection &projection) noexcept
+{
+  if (airspace_renderer == nullptr || airspace_settings == nullptr)
+    return;
+
+  MaybeFlushCaches(nullptr, nullptr, airspace_renderer);
+  airspace_renderer->Draw(canvas,
+#ifndef ENABLE_OPENGL
+                          *stencil_canvas,
+#endif
+                          projection, *airspace_settings);
+}
+
+static void
 DrawFrame(Canvas &canvas, TerrainRenderer *terrain_renderer,
           const TerrainRendererSettings *terrain_settings,
           CachedTopographyRenderer *topo, bool draw_labels,
+          AirspaceRenderer *airspace_renderer,
+#ifndef ENABLE_OPENGL
+          Canvas *stencil_canvas,
+#endif
+          const AirspaceRendererSettings *airspace_settings,
           const WindowProjection &projection,
           Angle sun_azimuth) noexcept
 {
@@ -379,6 +450,11 @@ DrawFrame(Canvas &canvas, TerrainRenderer *terrain_renderer,
   DrawTerrain(canvas, terrain_renderer, terrain_settings,
               projection, sun_azimuth);
   DrawTopography(canvas, topo, projection);
+  DrawAirspace(canvas, airspace_renderer,
+#ifndef ENABLE_OPENGL
+               stencil_canvas,
+#endif
+               airspace_settings, projection);
   if (draw_labels)
     DrawLabels(canvas, topo, projection);
 }
@@ -415,7 +491,7 @@ PrintSampleHeader() noexcept
 {
   std::puts("radius_m\tmap_scale\tfiles\tshapes\t"
             "scan_ms\ttiles_ms\tfirst_ms\tframe_ms\t"
-            "terrain_ms\ttopo_ms\tlabels_ms");
+            "terrain_ms\ttopo_ms\tairspace_ms\tlabels_ms");
 }
 
 int
@@ -433,7 +509,9 @@ try {
     return EXIT_FAILURE;
   }
 
-  if (!options.draw_topo && !options.draw_terrain) {
+  const bool want_airspace = options.draw_airspace &&
+    !options.airspace_files.empty();
+  if (!options.draw_topo && !options.draw_terrain && !want_airspace) {
     std::fprintf(stderr, "%s: nothing to benchmark\n", canonical_name);
     return EXIT_FAILURE;
   }
@@ -448,6 +526,7 @@ try {
   ScreenGlobalInit screen_init;
   Layout::Initialise(screen_init.GetDisplay(), screen_size,
                      100, options.dpi);
+  InitialiseFonts();
 
   BufferCanvas canvas;
   canvas.Create(screen_size);
@@ -512,6 +591,48 @@ try {
     }
   }
 
+  Airspaces airspace_database;
+  AirspaceLook airspace_look;
+  AirspaceRendererSettings airspace_settings;
+  std::unique_ptr<AirspaceRenderer> airspace_renderer;
+#ifndef ENABLE_OPENGL
+  BufferCanvas stencil_canvas;
+#endif
+
+  if (want_airspace) {
+    if (options.progress)
+      std::fprintf(stderr, "loading airspace...\n");
+
+    airspace_settings.SetDefaults();
+    airspace_look.Initialise(airspace_settings, bold_font);
+
+    const auto t0 = clock::now();
+    for (const auto &path : options.airspace_files) {
+    try {
+      FileReader file_reader{path};
+      BufferedReader buffered_reader{file_reader};
+      ParseAirspaceFile(airspace_database, buffered_reader);
+    } catch (...) {
+      PrintException(std::current_exception());
+      std::fprintf(stderr, "%s: failed to parse %s\n",
+                   canonical_name, path.c_str());
+      DeinitialiseFonts();
+      return EXIT_FAILURE;
+    }
+    }
+    airspace_database.Optimise();
+    airspace_renderer =
+      std::make_unique<AirspaceRenderer>(airspace_look);
+    airspace_renderer->SetAirspaces(&airspace_database);
+#ifndef ENABLE_OPENGL
+    stencil_canvas.Create(screen_size);
+#endif
+    if (options.progress)
+      std::fprintf(stderr, "loaded %u airspaces in %.1f ms\n",
+                   airspace_database.GetSize(),
+                   ElapsedMs(t0, clock::now()));
+  }
+
   GeoPoint location = GeoPoint::Invalid();
   if (options.have_lat)
     location = GeoPoint(Angle::Degrees(options.longitude_deg),
@@ -531,19 +652,32 @@ try {
     return EXIT_FAILURE;
   }
 
-  if (options.progress)
+  if (options.progress) {
+    const char *topo_bench = std::getenv("XCSOAR_BENCH_TOPO");
+    const char *as_bench = std::getenv("XCSOAR_BENCH_AS");
+    std::fprintf(stderr, "bench topo=%s airspace=%s\n",
+                 topo_bench != nullptr && *topo_bench != '\0'
+                   ? topo_bench : "full",
+                 as_bench != nullptr && *as_bench != '\0'
+                   ? as_bench : "geo");
     std::fprintf(stderr,
-                 "centre lat=%.5f lon=%.5f canvas=%ux%u dpi=%u%s\n",
+                 "centre lat=%.5f lon=%.5f canvas=%ux%u dpi=%u%s"
+                 " pan_m=%.0f\n",
                  location.latitude.Degrees(),
                  location.longitude.Degrees(),
                  options.width, options.height, options.dpi,
-                 options.no_cache ? " no-cache" : "");
+                 options.no_cache ? " no-cache" : "",
+                 options.pan_m);
+  }
 
   const Angle sun_azimuth = Angle::Degrees(-45);
   CachedTopographyRenderer *topo = topo_renderer.get();
   TerrainRenderer *tr = terrain_renderer.get();
   const TerrainRendererSettings *ts =
     terrain_renderer ? &terrain_settings : nullptr;
+  AirspaceRenderer *asr = airspace_renderer.get();
+  const AirspaceRendererSettings *as =
+    airspace_renderer ? &airspace_settings : nullptr;
 
   PrintSampleHeader();
 
@@ -580,38 +714,79 @@ try {
     FlushGL();
     const auto t_first0 = clock::now();
     DrawFrame(canvas, tr, ts, topo, options.draw_labels,
-              projection, sun_azimuth);
+              asr,
+#ifndef ENABLE_OPENGL
+              airspace_renderer ? &stencil_canvas : nullptr,
+#endif
+              as, projection, sun_azimuth);
     FlushGL();
     const double first_ms = ElapsedMs(t_first0, clock::now());
 
     const unsigned draws = options.draws_per_sample;
+    GeoPoint pan_loc = location;
     const double frame_ms = TimeDrawsMs(draws, [&]() {
+      WindowProjection frame_projection = projection;
+      if (options.pan_m > 0.) {
+        pan_loc = GeoVector(options.pan_m, Angle::Degrees(90))
+          .EndPoint(pan_loc);
+        frame_projection =
+          MakeProjection(pan_loc, radius_m, screen_size);
+        if (options.draw_topo)
+          ScanAll(topography, frame_projection);
+        if (terrain) {
+          const auto tile_radius =
+            frame_projection.GetScreenWidthMeters() / 2;
+          while (terrain->UpdateTiles(pan_loc, tile_radius)) {}
+        }
+      }
       DrawFrame(canvas, tr, ts, topo, options.draw_labels,
-                projection, sun_azimuth);
+                asr,
+#ifndef ENABLE_OPENGL
+                airspace_renderer ? &stencil_canvas : nullptr,
+#endif
+                as, frame_projection, sun_azimuth);
+      /* GPU bandwidth (Mali-G400) is in the finish, not the submit. */
+      FlushGL();
     }) / draws;
 
     const double terrain_ms = TimeDrawsMs(draws, [&]() {
       canvas.ClearWhite();
       DrawTerrain(canvas, tr, ts, projection, sun_azimuth);
+      FlushGL();
     }) / draws;
 
     const double topo_ms = TimeDrawsMs(draws, [&]() {
+      canvas.ClearWhite();
       DrawTopography(canvas, topo, projection);
+      FlushGL();
+    }) / draws;
+
+    const double airspace_ms = TimeDrawsMs(draws, [&]() {
+      canvas.ClearWhite();
+      DrawAirspace(canvas, asr,
+#ifndef ENABLE_OPENGL
+                   airspace_renderer ? &stencil_canvas : nullptr,
+#endif
+                   as, projection);
+      FlushGL();
     }) / draws;
 
     const double labels_ms = options.draw_labels
       ? TimeDrawsMs(draws, [&]() {
+          canvas.ClearWhite();
           DrawLabels(canvas, topo, projection);
+          FlushGL();
         }) / draws
       : 0.;
 
-    std::printf("%.0f\t%.0f\t%u\t%u\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+    std::printf("%.0f\t%.0f\t%u\t%u\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
                 radius_m, map_scale, visible.files, visible.shapes,
                 scan_ms, tiles_ms, first_ms, frame_ms,
-                terrain_ms, topo_ms, labels_ms);
+                terrain_ms, topo_ms, airspace_ms, labels_ms);
   }
 
   canvas.End();
+  DeinitialiseFonts();
   return EXIT_SUCCESS;
 } catch (...) {
   PrintException(std::current_exception());

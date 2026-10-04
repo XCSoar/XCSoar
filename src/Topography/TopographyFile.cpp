@@ -12,6 +12,7 @@
 #ifdef ENABLE_OPENGL
 #include "Topography/ShapeRenderer.hpp"
 #include "Geo/FAISphere.hpp"
+#include "util/MapBenchToggles.hpp"
 #endif
 
 #include <zzip/lib.h>
@@ -185,24 +186,23 @@ LoadShape(ShapeFile &file, GeoPoint &center, std::size_t i, int label_field,
 static void
 PrepareOpenGLShape(const XShape &shape, const TopographyFile &file,
                    const WindowProjection &map_projection,
-                   unsigned layout_scale) noexcept
+                   [[maybe_unused]] unsigned layout_scale) noexcept
 {
   if (shape.get_type() != MS_SHAPE_POLYGON)
     return;
 
+  const unsigned level =
+    file.GetFillThinningLevel(map_projection.GetMapScale());
   const Angle min_span =
-    map_projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+    map_projection.PixelsToAngle(FillMinBBoxPx(level, file.GetName()));
   const GeoBounds &b = shape.get_bounds();
   if (b.GetWidth() < min_span && b.GetHeight() < min_span)
     return;
 
-  const unsigned level =
-    file.GetThinningLevel(map_projection.GetMapScale());
-  if (layout_scale == 0)
-    layout_scale = 1;
   const ShapeScalar min_distance =
-    ShapeScalar(file.GetMinimumPointDistance(level))
-    / (layout_scale * FAISphere::REARTH);
+    ShapeScalar(map_projection.PixelsToAngle(int(FillSpacingPx(level,
+                                                               file.GetName())))
+                  .Native());
   [[maybe_unused]] const auto indices =
     shape.GetIndices(int(level), min_distance);
 }
@@ -408,6 +408,26 @@ TopographyFile::GetSkipSteps(double map_scale) const noexcept
   if (4 * map_scale > scale_threshold)
     return 2;
   return 1;
+}
+
+unsigned
+TopographyFile::GetFillThinningLevel(double map_scale) const noexcept
+{
+#ifdef ENABLE_OPENGL
+  if (MapBenchTopoHead())
+    return GetThinningLevel(map_scale);
+#endif
+  /* GetMapScale() is metres for min_edge/8.  The Bern city+lake peak
+     is a 30–50 km scale bar (~3–5.5 km here); that must already be
+     level 2, not 1. */
+  if (map_scale > 5000)
+    return 3;
+  if (map_scale > 2500)
+    return 2;
+  if (map_scale > 1200)
+    return 1;
+
+  return 0;
 }
 
 #ifdef ENABLE_OPENGL

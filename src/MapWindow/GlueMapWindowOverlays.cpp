@@ -42,6 +42,7 @@
 #ifdef DEBUG_PROCESS_LOAD
 #include <array>
 #include <chrono>
+#include <string_view>
 #include <fmt/format.h>
 #ifdef _WIN32
 #include <processthreadsapi.h>
@@ -941,10 +942,21 @@ GlueMapWindow::DrawProcessLoad(Canvas &canvas, const MapHudLayout &layout,
     have_sample = true;
   }
 
-  const unsigned graph_w = Layout::Scale(110);
+  const unsigned graph_w = Layout::Scale(140);
   const unsigned graph_h = Layout::Scale(28);
   const unsigned text_h = look.overlay.overlay_font->GetHeight();
-  const unsigned box_h = graph_h * 2 + text_h * 2 + Layout::Scale(8);
+#ifdef ENABLE_OPENGL
+  const unsigned n_layers = GetLastTopographyLayerVtxCount();
+  unsigned n_show = 0;
+  const auto *layers = GetLastTopographyLayerVtx();
+  for (unsigned i = 0; i < n_layers && n_show < 4; ++i)
+    if (layers[i].vertices > 0)
+      ++n_show;
+#else
+  const unsigned n_show = 0;
+#endif
+  const unsigned box_h = graph_h * 2 + text_h * (2 + n_show) +
+    Layout::Scale(8);
 
   PixelRect box = layout.top_right;
   if (int(box.GetWidth()) < int(graph_w) ||
@@ -997,6 +1009,21 @@ GlueMapWindow::DrawProcessLoad(Canvas &canvas, const MapHudLayout &layout,
   canvas.DrawText({box.left + Layout::Scale(2),
                    gpu_rc.bottom + int(text_h)},
                   line2);
+#ifdef ENABLE_OPENGL
+  unsigned shown = 0;
+  int y = gpu_rc.bottom + int(text_h) * 2;
+  const auto *brk = GetLastTopographyLayerVtx();
+  const unsigned n_brk = GetLastTopographyLayerVtxCount();
+  for (unsigned i = 0; i < n_brk && shown < 4; ++i) {
+    if (brk[i].vertices == 0)
+      continue;
+    const std::string_view full{brk[i].name};
+    const auto line = fmt::format("{:.14} {}", full, brk[i].vertices);
+    canvas.DrawText({box.left + Layout::Scale(2), y}, line);
+    y += int(text_h);
+    ++shown;
+  }
+#endif
 }
 
 #endif

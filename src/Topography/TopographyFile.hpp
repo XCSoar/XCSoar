@@ -295,6 +295,14 @@ public:
   [[gnu::pure]]
   unsigned GetSkipSteps(double map_scale) const noexcept;
 
+  /**
+   * Thinning for polygon fills (forest, water, cities).  Based on
+   * #GetMapScale, not the layer range, so a 30–50 km view of Bern
+   * (cities + lakes) is already thinned.
+   */
+  [[gnu::pure]]
+  unsigned GetFillThinningLevel(double map_scale) const noexcept;
+
 #ifdef ENABLE_OPENGL
   [[gnu::pure]]
   GeoPoint ToGeoPoint(const ShapePoint &p) const noexcept {
@@ -303,6 +311,8 @@ public:
   }
 
   /**
+   * Thinning for polylines (roads, rivers).
+   *
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
   [[gnu::pure]]

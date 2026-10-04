@@ -139,7 +139,10 @@ The flag is defined in :file:`build/options.mk` (default ``n``). When
 enabled, a sparkline overlay in the top-right of the map shows process
 CPU (all threads, 100% is one core, averaged over ~250 ms), peak
 map-paint time in that window, and topography polygon / vertex counts
-from the last frame. E-paper builds skip the overlay.
+from the last frame, plus the four layers with the most submitted
+vertices. E-paper builds skip the overlay. The same per-layer vertex
+counts are written to the log every two seconds
+(``OpenGL: Topo vtx name=count``).
 
 For Xcode builds on iOS and macOS, set ``DEBUG_PROCESS_LOAD=y`` in
 :file:`darwin/.env`; :file:`darwin/build.sh` passes it to make.

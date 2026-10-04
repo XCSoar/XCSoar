@@ -16,6 +16,7 @@
 #include "util/AllocatedArray.hxx"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
+#include "util/MapBenchToggles.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/VertexPointer.hpp"
@@ -36,6 +37,10 @@
 #include <numeric>
 #include <set>
 #include <vector>
+#include <cmath>
+#include <cstdint>
+#include <unordered_map>
+#include <unordered_set>
 #ifdef ENABLE_OPENGL
 #include <chrono>
 #include <cstdint>
@@ -111,6 +116,13 @@ struct TopographyGpuStatsState {
 };
 
 static TopographyGpuStatsState topo_stats;
+static constexpr unsigned TOPO_LAYER_VTX_MAX = 24;
+
+static TopographyLayerVtx topo_frame_layers[TOPO_LAYER_VTX_MAX];
+static unsigned topo_frame_n_layers;
+static TopographyLayerVtx topo_last_layers[TOPO_LAYER_VTX_MAX];
+static unsigned topo_last_n_layers;
+
 static uint64_t topo_frame_paint_us;
 static unsigned topo_frame_lines, topo_frame_fills;
 static unsigned topo_frame_vertices, topo_frame_polygons;
@@ -132,11 +144,13 @@ TopographyGpuStatsBeginDraw() noexcept
   topo_frame_fills = 0;
   topo_frame_vertices = 0;
   topo_frame_polygons = 0;
+  topo_frame_n_layers = 0;
 }
 
 static void
 TopoAddLayer(unsigned cpu_us, unsigned line_draws, unsigned fill_draws,
-             unsigned point_n, bool vis_rebuild, bool vbo_rebuild) noexcept
+             unsigned point_n, bool vis_rebuild, bool vbo_rebuild,
+             const char *name, unsigned vertices) noexcept
 {
   topo_stats.layers++;
   topo_frame_paint_us += cpu_us;
@@ -149,6 +163,11 @@ TopoAddLayer(unsigned cpu_us, unsigned line_draws, unsigned fill_draws,
     topo_stats.vis_rebuilds++;
   if (vbo_rebuild)
     topo_stats.vbo_rebuilds++;
+  if (topo_frame_n_layers < TOPO_LAYER_VTX_MAX) {
+    topo_frame_layers[topo_frame_n_layers].name = name;
+    topo_frame_layers[topo_frame_n_layers].vertices = vertices;
+    ++topo_frame_n_layers;
+  }
 }
 
 void
@@ -165,12 +184,28 @@ TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept
   topo_stats.last_sh = view.height;
   topo_stats.last_idle = IsUserIdle(750);
 
+  topo_last_n_layers = topo_frame_n_layers;
+  for (unsigned i = 0; i < topo_last_n_layers; ++i)
+    topo_last_layers[i] = topo_frame_layers[i];
+  std::sort(topo_last_layers, topo_last_layers + topo_last_n_layers,
+            [](const TopographyLayerVtx &a,
+               const TopographyLayerVtx &b) noexcept {
+              return a.vertices > b.vertices;
+            });
+
   if (!topo_stats.log_clock.IsDefined())
     topo_stats.log_clock.Update();
   else if (topo_stats.log_clock.Check(TOPO_STATS_PERIOD)) {
     const GLenum err = glGetError();
     if (err != GL_NO_ERROR)
       LogFmt("OpenGL: Topo glGetError=0x{:x}", unsigned(err));
+    for (unsigned i = 0; i < topo_last_n_layers; ++i) {
+      if (topo_last_layers[i].vertices == 0)
+        continue;
+      LogFmt("OpenGL: Topo vtx {}={}",
+             topo_last_layers[i].name,
+             topo_last_layers[i].vertices);
+    }
     topo_stats.Flush();
   }
 
@@ -194,6 +229,18 @@ unsigned
 GetLastTopographyPolygonCount() noexcept
 {
   return topo_last_polygons;
+}
+
+unsigned
+GetLastTopographyLayerVtxCount() noexcept
+{
+  return topo_last_n_layers;
+}
+
+const TopographyLayerVtx *
+GetLastTopographyLayerVtx() noexcept
+{
+  return topo_last_layers;
 }
 
 #endif
@@ -227,13 +274,142 @@ ShapeTooSmall(const GeoBounds &bounds, Angle min_span) noexcept
 
 [[gnu::pure]]
 static bool
-ShapeTooSmallToDraw(const XShape &shape, Angle min_span) noexcept
+ShapeTooSmallToDraw(const XShape &shape, Angle fill_span,
+                    Angle line_span) noexcept
 {
-  /* Lines: never skip.  At 120 km, 1 px is ~150 m; OSM road sticks
-     shorter than that would leave a gapped network.  Polygons: skip
-     sub-pixel fills that would still cost ear-clip. */
-  return shape.get_type() == MS_SHAPE_POLYGON &&
-    ShapeTooSmall(shape.get_bounds(), min_span);
+  if (shape.get_type() == MS_SHAPE_POLYGON)
+    return ShapeTooSmall(shape.get_bounds(), fill_span);
+  /* Two-point OSM road/rail sticks cannot be vertex-thinned.
+     Drop only those shorter than #line_span so the network does
+     not open visible gaps. */
+  if (shape.get_type() == MS_SHAPE_LINE && line_span.Native() > 0)
+    return ShapeTooSmall(shape.get_bounds(), line_span);
+  return false;
+}
+
+static Angle
+LineShapeSpan(const XShape &shape) noexcept
+{
+  const GeoBounds &b = shape.get_bounds();
+  const Angle w = b.GetWidth();
+  const Angle h = b.GetHeight();
+  return w > h ? w : h;
+}
+
+/**
+ * Unit direction of the first part (opposite dual carriageways
+ * still match via fabs(dot)).
+ */
+static bool
+LineUnitDirection(const XShape &shape, const TopographyFile &file,
+                  double &dx, double &dy) noexcept
+{
+  const auto lines = shape.GetLines();
+  if (lines.empty() || lines[0] < 2)
+    return false;
+
+  const auto *p = shape.GetPoints();
+#ifdef ENABLE_OPENGL
+  const GeoPoint a = file.ToGeoPoint(p[0]);
+  const GeoPoint b = file.ToGeoPoint(p[lines[0] - 1]);
+#else
+  const GeoPoint a = p[0];
+  const GeoPoint b = p[lines[0] - 1];
+  (void)file;
+#endif
+  dx = (b.longitude - a.longitude).Native();
+  dy = (b.latitude - a.latitude).Native();
+  const double len = std::hypot(dx, dy);
+  if (len <= 0)
+    return false;
+  dx /= len;
+  dy /= len;
+  return true;
+}
+
+struct DualLineKeep {
+  GeoPoint mid;
+  double dx, dy;
+};
+
+static uint64_t
+DualLineCell(int x, int y) noexcept
+{
+  return (uint64_t(uint32_t(x)) << 32) | uint32_t(y);
+}
+
+/**
+ * Drop the shorter of two parallel roads whose midpoints are within
+ * #collapse of each other.  O(n log n + n·k) with a cell hash; not
+ * n².  Longer sticks are considered first so a dual motorway is
+ * kept instead of a short ramp.
+ *
+ * @return shapes that were dropped (for label skip)
+ */
+static std::unordered_set<const XShape *>
+CollapseParallelLines(std::vector<const XShape *> &cands,
+                      const TopographyFile &file,
+                      Angle collapse) noexcept
+{
+  std::unordered_set<const XShape *> dropped;
+  if (cands.size() < 2 || collapse.Native() <= 0)
+    return dropped;
+
+  std::sort(cands.begin(), cands.end(),
+            [](const XShape *a, const XShape *b) noexcept {
+              return LineShapeSpan(*a) > LineShapeSpan(*b);
+            });
+
+  const double cell = collapse.Native();
+  std::vector<DualLineKeep> kept;
+  kept.reserve(cands.size());
+  std::unordered_map<uint64_t, std::vector<unsigned>> grid;
+  grid.reserve(cands.size() * 2);
+
+  constexpr double PARALLEL_DOT = 0.85; /* ~32° or 148° */
+
+  for (const XShape *shape : cands) {
+    DualLineKeep cur;
+    cur.mid = shape->get_bounds().GetCenter();
+    if (!LineUnitDirection(*shape, file, cur.dx, cur.dy))
+      continue;
+
+    const int cx = int(std::floor(cur.mid.longitude.Native() / cell));
+    const int cy = int(std::floor(cur.mid.latitude.Native() / cell));
+    bool hide = false;
+    for (int iy = cy - 1; iy <= cy + 1 && !hide; ++iy) {
+      for (int ix = cx - 1; ix <= cx + 1 && !hide; ++ix) {
+        const auto it = grid.find(DualLineCell(ix, iy));
+        if (it == grid.end())
+          continue;
+        for (unsigned idx : it->second) {
+          const DualLineKeep &o = kept[idx];
+          const Angle dlon =
+            (cur.mid.longitude - o.mid.longitude).Absolute();
+          const Angle dlat =
+            (cur.mid.latitude - o.mid.latitude).Absolute();
+          if (dlon >= collapse || dlat >= collapse)
+            continue;
+          const double dot = cur.dx * o.dx + cur.dy * o.dy;
+          if (std::fabs(dot) < PARALLEL_DOT)
+            continue;
+          hide = true;
+          break;
+        }
+      }
+    }
+
+    if (hide) {
+      dropped.insert(shape);
+      continue;
+    }
+
+    const unsigned idx = unsigned(kept.size());
+    kept.push_back(cur);
+    grid[DualLineCell(cx, cy)].push_back(idx);
+  }
+
+  return dropped;
 }
 
 #ifdef ENABLE_OPENGL
@@ -488,9 +664,12 @@ bool
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
 {
   const double scale = projection.GetScale();
+  const unsigned fill_level =
+    file.GetFillThinningLevel(projection.GetMapScale());
   const GeoBounds screen = projection.GetScreenBounds();
   if (file.GetSerial() == visible_serial &&
       scale <= visible_scale &&
+      fill_level <= visible_fill_level &&
       visible_bounds.IsValid() &&
       visible_bounds.IsInside(screen))
     /* still inside the last 2× viewport; pan only reprojects */
@@ -498,19 +677,28 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
 
   visible_serial = file.GetSerial();
   visible_scale = scale;
+  visible_fill_level = fill_level;
   visible_bounds = screen.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   visible_shapes.clear();
   visible_points.clear();
   visible_labels.clear();
 
-  const Angle min_span =
-    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
+  const int collapse_px = LineCollapsePx(fill_level, file.GetName());
+  const Angle collapse_span =
+    collapse_px > 0 ? projection.PixelsToAngle(collapse_px) : Angle::Zero();
+
+  std::vector<const XShape *> dual_cands;
 
   for (const XShape &shape : file) {
     if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
-    const bool too_small = ShapeTooSmallToDraw(shape, min_span);
+    const bool too_small = ShapeTooSmallToDraw(shape, fill_span,
+                                               line_span);
 
     if (shape.get_type() != MS_SHAPE_NULL && !too_small) {
       if (shape.get_type() == MS_SHAPE_POINT) {
@@ -527,12 +715,33 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
             }
           }
         }
+      } else if (collapse_px > 0 &&
+                 shape.get_type() == MS_SHAPE_LINE) {
+        dual_cands.push_back(&shape);
       } else
         visible_shapes.push_back(&shape);
     }
 
     if (shape.GetLabel() != nullptr && !too_small)
       visible_labels.push_back(&shape);
+  }
+
+  if (!dual_cands.empty()) {
+    const auto dropped =
+      CollapseParallelLines(dual_cands, file, collapse_span);
+    visible_shapes.reserve(visible_shapes.size() + dual_cands.size());
+    for (const XShape *shape : dual_cands) {
+      if (dropped.find(shape) == dropped.end())
+        visible_shapes.push_back(shape);
+    }
+    if (!dropped.empty() && !visible_labels.empty()) {
+      auto new_end = std::remove_if(
+        visible_labels.begin(), visible_labels.end(),
+        [&dropped](const XShape *s) {
+          return dropped.find(s) != dropped.end();
+        });
+      visible_labels.erase(new_end, visible_labels.end());
+    }
   }
 
   return true;
@@ -604,9 +813,12 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (!file.IsVisible(map_scale))
     return;
 
+  const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+
 #ifdef ENABLE_OPENGL
   const auto t0 = std::chrono::steady_clock::now();
   unsigned line_draws = 0, fill_draws = 0;
+  const unsigned vtx0 = topo_frame_vertices;
 #endif
   const bool vis_rebuild = UpdateVisibleShapes(projection);
   PaintPoints(canvas, projection);
@@ -615,7 +827,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
     draw_cache_valid = false;
     TopoAddLayer(TopoSteadyUsSince(t0), 0, 0,
-                 unsigned(visible_points.size()), vis_rebuild, false);
+                 unsigned(visible_points.size()), vis_rebuild, false,
+                 file.GetName(), topo_frame_vertices - vtx0);
 #endif
     return;
   }
@@ -627,7 +840,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     array_buffer == nullptr || file.GetSerial() != array_buffer_serial;
   if (!UpdateArrayBuffer()) {
     TopoAddLayer(TopoSteadyUsSince(t0), 0, 0,
-                 unsigned(visible_points.size()), vis_rebuild, vbo_rebuild);
+                 unsigned(visible_points.size()), vis_rebuild, vbo_rebuild,
+                 file.GetName(), topo_frame_vertices - vtx0);
     return;
   }
   array_buffer->Bind();
@@ -646,10 +860,26 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   // get drawing info
 
 #ifdef ENABLE_OPENGL
-  const unsigned level = file.GetThinningLevel(map_scale);
-  const ShapeScalar min_distance =
-    ShapeScalar(file.GetMinimumPointDistance(level))
-    / (Layout::Scale(1) * FAISphere::REARTH);
+  unsigned line_level = fill_level;
+  ShapeScalar line_min_distance;
+  ShapeScalar fill_min_distance;
+  if (MapBenchTopoHead()) {
+    line_level = file.GetThinningLevel(map_scale);
+    const ShapeScalar d =
+      ShapeScalar(file.GetMinimumPointDistance(line_level))
+      / (Layout::Scale(1) * FAISphere::REARTH);
+    line_min_distance = d;
+    fill_min_distance = d;
+  } else {
+    line_min_distance =
+      ShapeScalar(projection.PixelsToAngle(SHAPE_LINE_SPACING_PX[line_level])
+                    .Native());
+    fill_min_distance =
+      ShapeScalar(projection.PixelsToAngle(int(FillSpacingPx(fill_level,
+                                                           file.GetName())))
+                    .Native());
+  }
+  const unsigned cache_thinning = (fill_level << 8) | line_level;
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(ToGLM(projection, file.GetCenter())));
@@ -665,7 +895,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
   const bool cache_ok = draw_cache_valid &&
     !vis_rebuild && !vbo_rebuild &&
-    draw_cache_thinning == level;
+    draw_cache_thinning == cache_thinning;
 
   if (cache_ok) {
     for (const auto &w : draw_windows)
@@ -676,13 +906,15 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     bool index_cache_complete = true;
 #endif
 
-  const Angle min_span =
-    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
 
   for (const XShape *shape_p : visible_shapes) {
     const XShape &shape = *shape_p;
 
-    if (ShapeTooSmallToDraw(shape, min_span))
+    if (ShapeTooSmallToDraw(shape, fill_span, line_span))
       continue;
 
     const auto lines = shape.GetLines();
@@ -704,8 +936,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         const unsigned n_verts = CountLineVertices(lines);
         XShape::Indices indices{};
         const bool have_thin =
-          level != 0 &&
-          (indices = shape.GetIndices(level, min_distance)).indices != nullptr;
+          (indices = shape.GetIndices(line_level,
+                                      line_min_distance)).indices != nullptr;
 
         if (FitsGLushortWindow(offset, n_verts)) {
           /* postpone: one draw per 64k-vertex window */
@@ -793,7 +1025,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_POLYGON:
 #ifdef ENABLE_OPENGL
       {
-        const auto triangles = shape.GetIndices(level, min_distance);
+        const auto triangles = shape.GetIndices(fill_level,
+                                                fill_min_distance);
         if (triangles.indices == nullptr || triangles.count == nullptr ||
             *triangles.count == 0)
           break;
@@ -876,7 +1109,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     for (const auto &w : draw_windows)
       DrawCachedWindow(vp, buffer, w, line_draws, fill_draws);
     draw_cache_valid = index_cache_complete;
-    draw_cache_thinning = level;
+    draw_cache_thinning = cache_thinning;
   }
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
@@ -889,7 +1122,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   array_buffer->Unbind();
 
   TopoAddLayer(TopoSteadyUsSince(t0), line_draws, fill_draws,
-               unsigned(visible_points.size()), vis_rebuild, vbo_rebuild);
+               unsigned(visible_points.size()), vis_rebuild, vbo_rebuild,
+               file.GetName(), topo_frame_vertices - vtx0);
 #else
   shape_renderer.Commit();
 #endif
@@ -953,13 +1187,16 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 
   std::set<std::string> drawn_labels;
 
-  const Angle min_span =
-    projection.PixelsToAngle(SHAPE_MIN_BBOX_PX);
+  const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
 
   for (const XShape *shape_p : visible_labels) {
     const XShape &shape = *shape_p;
 
-    if (ShapeTooSmallToDraw(shape, min_span))
+    if (ShapeTooSmallToDraw(shape, fill_span, line_span))
       continue;
 
     const char *label = shape.GetLabel();
