@@ -4,6 +4,7 @@
 #include "Builder.hpp"
 #include "MapItem.hpp"
 #include "List.hpp"
+#include "MapWindow/ThermalDisplay.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "net/client/tim/Thermal.hpp"
@@ -28,26 +29,58 @@ MapItemListBuilder::AddWeatherStations(NOAAStore &store)
 }
 #endif
 
+template<typename Sources, typename GetLocation, typename MakeItem>
+static void
+AddDriftedThermals(MapItemList &list, GeoPoint location, double range,
+                   const Sources &sources, GetLocation get_location,
+                   MakeItem make_item)
+{
+  for (const auto &source : sources) {
+    if (list.full())
+      break;
+
+    const GeoPoint adjusted_location = get_location(source);
+    if (!adjusted_location.IsValid())
+      continue;
+
+    if (location.DistanceS(adjusted_location) < range)
+      list.append(make_item(source));
+  }
+}
+
 void
 MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
                                 const MoreData &basic,
                                 const DerivedInfo &calculated)
 {
-  for (const auto &t : thermals.sources) {
-    if (list.full())
-      break;
+  const SpeedVector wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+  AddDriftedThermals(
+    list, location, range, thermals.sources,
+    [&basic, &wind](const ThermalSource &source) {
+      return ThermalDisplay::GetLocation(source, basic.nav_altitude, wind);
+    },
+    [&basic](const ThermalSource &source) {
+      return new ThermalMapItem(source, basic.time);
+    });
+}
 
-    // find height difference
-    if (basic.nav_altitude < t.ground_height)
-      continue;
+void
+MapItemListBuilder::AddTrafficThermals(const TrafficThermalInfo &thermals,
+                                       const MoreData &basic,
+                                       const DerivedInfo &calculated)
+{
+  (void)calculated;
 
-    GeoPoint loc = calculated.wind_available
-      ? t.CalculateAdjustedLocation(basic.nav_altitude, calculated.wind)
-      : t.location;
-
-    if (location.DistanceS(loc) < range)
-      list.append(new ThermalMapItem(t));
-  }
+  AddDriftedThermals(
+    list, location, range, thermals.sources,
+    [&basic](const TrafficThermalSource &source) {
+      return ThermalDisplay::GetLocation(source, basic.nav_altitude);
+    },
+    [&basic](const TrafficThermalSource &source) {
+      return new ThermalMapItem(source, basic.time);
+    });
 }
 
 void
@@ -66,6 +99,7 @@ MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
     source.lift_rate = i.climb_rate;
     // TODO source.time = i.time;
 
-    list.append(new ThermalMapItem(source));
+    list.append(new ThermalMapItem(source, TimeStamp::Undefined(),
+                                   ThermalMapItem::Provenance::TIM));
   }
 }

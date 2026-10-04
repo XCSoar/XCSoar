@@ -79,6 +79,7 @@ TEST_NAMES = \
 	test_task \
 	TestInputTransformMode \
 	TestOverwritingRingBuffer \
+	TestBoundedArray \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPosixTimeZone \
 	TestPolylineDecoder \
@@ -93,10 +94,10 @@ TEST_NAMES = \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
-	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestFlarmThermalComputer TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
-	TestWaypointReader TestThermalBase \
+	TestWaypointReader TestThermalBase TestThermalProjection TestThermalDisplay \
 	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
@@ -255,6 +256,12 @@ TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOverwritingRingBuffer.cpp
 TEST_OVERWRITING_RING_BUFFER_DEPENDS = MATH
 $(eval $(call link-program,TestOverwritingRingBuffer,TEST_OVERWRITING_RING_BUFFER))
+
+TEST_BOUNDED_ARRAY_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBoundedArray.cpp
+TEST_BOUNDED_ARRAY_DEPENDS = MATH
+$(eval $(call link-program,TestBoundedArray,TEST_BOUNDED_ARRAY))
 
 TEST_IGC_PARSER_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
@@ -726,10 +733,32 @@ $(eval $(call link-program,TestGeoClip,TEST_GEO_CLIP))
 
 TEST_CLIMB_AV_CALC_SOURCES = \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/FLARM/Calculations.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
 $(eval $(call link-program,TestClimbAvCalc,TEST_CLIMB_AV_CALC))
+
+TEST_FLARM_THERMAL_COMPUTER_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/FlarmThermalCandidate.cpp \
+	$(SRC)/Computer/FlarmThermalCluster.cpp \
+	$(SRC)/Computer/FlarmThermalComputer.cpp \
+	$(SRC)/Computer/ThermalBase.cpp \
+	$(SRC)/MapWindow/ThermalDisplay.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/TrafficThermal.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmThermalComputer.cpp
+TEST_FLARM_THERMAL_COMPUTER_DEPENDS = FLARM LIBNMEA GEO TIME MATH UTIL THREAD FMT
+$(eval $(call link-program,TestFlarmThermalComputer,TEST_FLARM_THERMAL_COMPUTER))
 
 TEST_CIRCLING_WIND_SOURCES = \
 	$(SRC)/Computer/Wind/CirclingWind.cpp \
@@ -1060,6 +1089,24 @@ TEST_SPEED_VECTOR_SOURCES = \
 	$(TEST_SRC_DIR)/TestSpeedVector.cpp
 TEST_SPEED_VECTOR_DEPENDS = MATH
 $(eval $(call link-program,TestSpeedVector,TEST_SPEED_VECTOR))
+
+TEST_THERMAL_PROJECTION_SOURCES = \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestThermalProjection.cpp
+TEST_THERMAL_PROJECTION_DEPENDS = GEO MATH
+$(eval $(call link-program,TestThermalProjection,TEST_THERMAL_PROJECTION))
+
+TEST_THERMAL_DISPLAY_SOURCES = \
+	$(SRC)/MapWindow/ThermalDisplay.cpp \
+	$(SRC)/NMEA/ThermalProjection.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/TrafficThermal.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestThermalDisplay.cpp
+TEST_THERMAL_DISPLAY_DEPENDS = GEO MATH
+$(eval $(call link-program,TestThermalDisplay,TEST_THERMAL_DISPLAY))
 
 TEST_EARTH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
