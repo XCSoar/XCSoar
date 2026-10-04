@@ -41,7 +41,11 @@ LXWP1(NMEAInputLine &line, DeviceInfo &device);
 bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info);
 
+/**
+ * @param linear_offset true for an LXNAV S series vario, which derives
+ * the altitude offset from the QNH linearly (see the implementation)
+ */
 bool
-LXWP3(NMEAInputLine &line, NMEAInfo &info);
+LXWP3(NMEAInputLine &line, NMEAInfo &info, bool linear_offset = false);
 
 } // namespace LX

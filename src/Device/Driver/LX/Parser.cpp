@@ -15,6 +15,7 @@
 #include "util/StringCompare.hxx"
 #include "Math/Util.hpp"
 #include "util/NumberParser.hpp"
+#include "util/NumberParser.hxx"
 #include "LogFile.hpp"
 
 #include <optional>
@@ -226,7 +227,7 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 }
 
 bool
-LXWP3(NMEAInputLine &line, NMEAInfo &info)
+LXWP3(NMEAInputLine &line, NMEAInfo &info, bool linear_offset)
 {
   /*
    * $LXWP3,
@@ -249,8 +250,18 @@ LXWP3(NMEAInputLine &line, NMEAInfo &info)
 
   // Altitude offset -> QNH
   if (line.ReadChecked(value)) {
-    value = Units::ToSysUnit(-value, Unit::FEET);
-    auto qnh = AtmosphericPressure::PressureAltitudeToStaticPressure(value);
+    const double offset = Units::ToSysUnit(value, Unit::FEET);
+
+    /* An S series vario (S10, firmware 9.41) derives the offset from
+       its QNH at 8.5 m per hPa: 1020.00 hPa gives 57.4 m, reported as
+       188 ft, and 1010.00 hPa gives -27.6 m (-91 ft).  The standard
+       atmosphere turns those back into 1020.15 and 1009.92 hPa, and
+       XCSoar sent that error back to the vario on every connect, so
+       the QNH crept (#3261). */
+    const auto qnh = linear_offset
+      ? AtmosphericPressure::HectoPascal(
+          AtmosphericPressure::Standard().GetHectoPascal() + offset / 8.5)
+      : AtmosphericPressure::PressureAltitudeToStaticPressure(-offset);
     info.settings.ProvideQNH(qnh, info.clock);
   }
 
@@ -302,7 +313,15 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
     settings.Set(std::string{name}, value);
   }
 
-  if (name == "ELEVATION"sv) {
+  if (name == "QNH"sv) {
+    /* hPa times 100 as a whole number, sent on a change; more exact
+       than the $LXWP3 offset, which ProvideQNH() then leaves alone.
+       Read as an integer: a floating point parser would take "nan",
+       which -ffast-math lets past every range check. */
+    if (unsigned hundredths; ParseIntegerTo(value, hundredths))
+      info.settings.ProvideQNH(
+        AtmosphericPressure::HectoPascal(hundredths / 100.), info.clock);
+  } else if (name == "ELEVATION"sv) {
     if (auto d = ParseDoubleValue(value))
       info.settings.ProvideElevation(iround(*d), info.clock);
   } else if (name == "MC"sv) {
@@ -795,7 +814,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LX::LXWP2(line, info);
 
   if (type == "$LXWP3"sv)
-    return LX::LXWP3(line, info);
+    return LX::LXWP3(line, info, IsSVario());
 
   if (type == "$PLXV0"sv) {
     is_colibri = false;
