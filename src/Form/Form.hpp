@@ -56,6 +56,13 @@ protected:
 
   bool dragging = false;
 
+  /** Retain the requested geometry when a transient overlay reduces space. */
+  bool full_screen = false;
+  PixelSize preferred_size{};
+
+  /** Do not remember sizes imposed by the available dialog area. */
+  bool reinitialising_layout = false;
+
   /** The ClientWindow */
   SolidContainerWindow client_area;
   /** Coordinates of the ClientWindow */
@@ -127,9 +134,10 @@ public:
 
   /**
    * Does this dialog fill the whole area that is available to
-   * dialogs?  That is the safe area of the main window, which is
-   * smaller than its client area while the display cutout or the
-   * system bars are being drawn over.
+   * dialogs?  That is the safe area of the main window, shortened
+   * while a warning banner is visible.  It is smaller than the client
+   * area while the display cutout or the system bars are being drawn
+   * over.
    *
    * This deliberately hides Window::IsMaximised(), which compares
    * with the parent's client area and would therefore consider no
@@ -241,11 +249,12 @@ public:
   }
 
   /**
-   * Reposition window, if possible.  Will be called whenever the
-   * parent window changes.
+   * Fit the window inside the available dialog area.  Restore its
+   * preferred size when a transient overlay disappears.
    *
-   * @param rc the area available to dialogs, which is the safe area
-   * and does not necessarily start at the window's top left corner
+   * @param rc the area available to dialogs.  That is the safe area,
+   * shortened while a warning banner is visible, and it does not
+   * necessarily start at the window's top left corner
    */
   virtual void ReinitialiseLayout(const PixelRect &rc) noexcept;
 

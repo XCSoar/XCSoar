@@ -8,9 +8,14 @@
 #include "ui/window/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/event/KeyCode.hpp"
+#include "util/ScopeExit.hxx"
 #include "Look/DialogLook.hpp"
 #include "Renderer/BoxShadowRenderer.hpp"
 #include "ui/event/Globals.hpp"
+
+#include <algorithm>
+#include <utility>
+
 #include "ui/window/custom/Reference.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -47,7 +52,7 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
 WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const char *caption,
                  const WindowStyle style) noexcept
-  :WndForm(main_window, _look, main_window.GetSafeAreaRect(), caption, style)
+  :WndForm(main_window, _look, main_window.GetDialogRect(), caption, style)
 {
 }
 
@@ -55,6 +60,10 @@ void
 WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
                 const char *_caption, const WindowStyle style)
 {
+  preferred_size = rc.GetSize();
+  full_screen = preferred_size == main_window.GetClientRect().GetSize() ||
+    preferred_size == main_window.GetDialogRect().GetSize();
+
   if (_caption != nullptr)
     caption = _caption;
   else
@@ -67,7 +76,7 @@ void
 WndForm::Create(SingleWindow &main_window,
                 const char *_caption, const WindowStyle style)
 {
-  Create(main_window, main_window.GetSafeAreaRect(), _caption, style);
+  Create(main_window, main_window.GetDialogRect(), _caption, style);
 }
 
 SingleWindow &
@@ -82,7 +91,7 @@ WndForm::IsMaximised() const noexcept
   if (!IsDefined())
     return false;
 
-  const PixelSize available = GetMainWindow().GetSafeAreaRect().GetSize();
+  const PixelSize available = GetMainWindow().GetDialogRect().GetSize();
   const PixelSize size = GetSize();
 
   return size.width >= available.width && size.height >= available.height;
@@ -129,6 +138,16 @@ WndForm::OnCreate()
 void
 WndForm::OnResize(PixelSize new_size) noexcept
 {
+  if (!reinitialising_layout) {
+    /* Dialogs may replace their construction size after measuring content,
+       or when switching tabs.  Retain that size for overlay restoration.
+       On Win32, new_size is the client size, while Move() sizes the window. */
+    preferred_size = GetPosition().GetSize();
+    auto &main_window = GetMainWindow();
+    full_screen = preferred_size == main_window.GetClientRect().GetSize() ||
+      preferred_size == main_window.GetDialogRect().GetSize();
+  }
+
   ContainerWindow::OnResize(new_size);
   UpdateLayout();
   client_area.Move(client_rect);
@@ -159,35 +178,14 @@ WndForm::OnMouseMove(PixelPoint p, unsigned keys) noexcept
     last_drag.x = position.left + p.x;
     last_drag.y = position.top + p.y;
 
-    PixelRect parent = GetParentClientRect();
-    parent.Grow(-client_rect.top);
-
-    PixelRect new_position = position;
-    new_position.Offset(dx, dy);
-
-    if (new_position.right < parent.left)
-      new_position.Offset(parent.left - new_position.right, 0);
-
-    if (new_position.left > parent.right)
-      new_position.Offset(parent.right - new_position.left, 0);
-
-    if (new_position.top > parent.bottom)
-      new_position.Offset(0, parent.bottom - new_position.top);
-
-    if (new_position.top < 0)
-      new_position.Offset(0, -new_position.top);
-
-#ifdef USE_MEMORY_CANVAS
-    /* the RasterCanvas class doesn't clip negative window positions
-       properly, therefore we avoid this problem at this stage */
-    if (new_position.left < 0)
-      new_position.left = 0;
-
-    if (new_position.top < 0)
-      new_position.top = 0;
-#endif
-
-    Move(new_position.GetTopLeft());
+    const PixelRect parent = GetMainWindow().GetDialogRect();
+    const PixelPoint origin{
+      std::clamp(position.left + dx, parent.left,
+                 std::max(parent.left, parent.right - int(GetSize().width))),
+      std::clamp(position.top + dy, parent.top,
+                 std::max(parent.top, parent.bottom - int(GetSize().height))),
+    };
+    Move(origin);
 
     return true;
   }
@@ -287,7 +285,12 @@ WndForm::ShowModal()
   Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
-    if (!main_window.FilterEvent(event, this)) {
+    const bool dialog_event = main_window.FilterEvent(event, this);
+    Window *overlay = main_window.GetDialogOverlay();
+    const bool overlay_event =
+      !dialog_event && overlay != nullptr && event.IsMouse() &&
+      main_window.FilterEvent(event, overlay);
+    if (!dialog_event && !overlay_event) {
       if (modeless && event.IsMouseDown())
         break;
       else
@@ -302,6 +305,33 @@ WndForm::ShowModal()
         continue;
       else
         hastimed = true;
+    }
+
+    if (overlay_event) {
+      /* Allow only the registered warning strip outside the modal dialog.
+         Keep keyboard focus on the menu after tapping a warning button. */
+#ifdef USE_WINUSER
+      const HWND dialog_focus = ::GetFocus();
+#else
+      const auto dialog_focus = GetFocusedWindowReference();
+#endif
+      /* Bypass Win32's dialog keyboard manager for this sibling window. */
+      loop.EventLoop::Dispatch(event);
+#ifdef USE_WINUSER
+      if (::IsWindow(dialog_focus))
+        ::SetFocus(dialog_focus);
+      else
+        SetDefaultFocus();
+#else
+      Window *focus = dialog_focus.Defined()
+        ? dialog_focus.Get(*this)
+        : nullptr;
+      if (focus != nullptr)
+        focus->SetFocus();
+      else
+        SetDefaultFocus();
+#endif
+      continue;
     }
 
     if (event.IsKeyDown()) {
@@ -452,31 +482,33 @@ WndForm::SetCaption(const char *_caption)
 void
 WndForm::ReinitialiseLayout(const PixelRect &rc) noexcept
 {
-  const PixelSize size = GetSize();
-
-  if (rc.GetWidth() < size.width || rc.GetHeight() < size.height)
-    /* does not fit; leave it where it is */
+  /* edge-to-edge dialogs (Fly/Simulator) paint into the unsafe area
+     and are not shortened for a warning banner */
+  if (FillsClient())
     return;
 
-  /* reposition dialog to fit into the area available to dialogs; that
-     area does not necessarily start at the top left corner of the
-     window, because dialogs stay inside the safe area */
-  PixelRect dialog_rc = GetPosition();
+  const bool was_reinitialising = std::exchange(reinitialising_layout, true);
+  AtScopeExit(this, was_reinitialising) {
+    reinitialising_layout = was_reinitialising;
+  };
 
-  if (dialog_rc.right > rc.right)
-    dialog_rc.left = rc.right - int(size.width);
-  if (dialog_rc.bottom > rc.bottom)
-    dialog_rc.top = rc.bottom - int(size.height);
+  if (full_screen) {
+    Move(rc);
+    return;
+  }
 
-  /* a dialog above or left of the safe area would hide under the
-     display cutout or the status bar; the RasterCanvas class also
-     doesn't clip negative window positions properly */
-  if (dialog_rc.left < rc.left)
-    dialog_rc.left = rc.left;
-  if (dialog_rc.top < rc.top)
-    dialog_rc.top = rc.top;
-
-  Move(dialog_rc.GetTopLeft());
+  const PixelSize size{
+    std::min(preferred_size.width, rc.GetWidth()),
+    std::min(preferred_size.height, rc.GetHeight()),
+  };
+  const auto position = GetPosition();
+  const int max_left = rc.right - int(size.width);
+  const int max_top = rc.bottom - int(size.height);
+  const PixelPoint origin{
+    std::clamp(position.left, rc.left, std::max(rc.left, max_left)),
+    std::clamp(position.top, rc.top, std::max(rc.top, max_top)),
+  };
+  Move(origin, size);
 }
 
 void
