@@ -37,7 +37,7 @@ public:
    * Stops the GestureManager and returns the recognized gesture
    * @return NULL or recognized gesture string
    */
-  const char* Finish();
+  const char* Finish() noexcept;
 
   /**
    * Starts the GestureManager at the given coordinates

@@ -18,16 +18,21 @@
 #include "Look/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
-#include "UIUtil/GestureManager.hpp"
+#include "UIUtil/TrackingGestureManager.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Renderer/BestCruiseArrowRenderer.hpp"
+#include "Renderer/GestureRenderer.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
 
 #include <algorithm>
+
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scissor.hpp"
+#endif
 
 static void
 DrawTrafficInfoText(Canvas &canvas, PixelPoint p,
@@ -52,7 +57,7 @@ protected:
   unsigned last_zoom;
   static constexpr unsigned num_zoom_options = 5;
   Angle task_direction = Angle::Degrees(-1);
-  GestureManager gestures;
+  TrackingGestureManager gestures;
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
@@ -123,12 +128,14 @@ protected:
                Color text_color) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
-  void StopDragging() {
+  void StopDragging() noexcept {
     if (!dragging)
       return;
 
     dragging = false;
     ReleaseCapture();
+    gestures.Finish();
+    Invalidate();
   }
 
 protected:
@@ -599,6 +606,22 @@ FlarmTrafficControl::OnPaint(Canvas &canvas) noexcept
   PaintTaskDirection(canvas);
   FlarmTrafficWindow::Paint(canvas);
   PaintTrafficInfo(canvas);
+
+  if (gestures.HasPoints()) {
+#ifdef ENABLE_OPENGL
+    /* Captured pointers can leave the radar.  Keep the trail inside the
+       control so it cannot paint over InfoBoxes, dialogs or safe insets. */
+    const GLCanvasScissor scissor{canvas};
+#endif
+    const auto &gesture_look = UIGlobals::GetLook().gesture;
+    const char *gesture = gestures.GetGesture();
+    const bool valid = gesture == nullptr ||
+      StringIsEqual(gesture, "U") || StringIsEqual(gesture, "D") ||
+      StringIsEqual(gesture, "UD") || StringIsEqual(gesture, "DR") ||
+      StringIsEqual(gesture, "RL") || InputEvents::IsGesture(gesture);
+    GestureRenderer::Draw(canvas, gesture_look, gestures.GetPoints(),
+                          valid);
+  }
 }
 
 void
@@ -840,8 +863,10 @@ bool
 FlarmTrafficControl::OnMouseMove(PixelPoint p,
                                  [[maybe_unused]] unsigned keys) noexcept
 {
-  if (dragging)
+  if (dragging) {
     gestures.Update(p);
+    Invalidate();
+  }
 
   return true;
 }
@@ -853,6 +878,7 @@ FlarmTrafficControl::OnMouseDown(PixelPoint p) noexcept
     dragging = true;
     SetCapture();
     gestures.Start(p, Layout::Scale(20));
+    Invalidate();
   }
 
   return true;
@@ -862,9 +888,9 @@ bool
 FlarmTrafficControl::OnMouseUp(PixelPoint p) noexcept
 {
   if (dragging) {
+    const char *gesture = gestures.GetGesture();
     StopDragging();
 
-    const char *gesture = gestures.Finish();
     if (gesture && OnMouseGesture(gesture))
       return true;
   }
