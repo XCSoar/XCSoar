@@ -332,6 +332,15 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
 bool
 LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
+  {
+    /* the vario reported this QNH itself; sending it back could only
+       round it to what its $LXWP3 offset can carry (#3261) */
+    const std::lock_guard lock{mutex};
+    if (last_received_qnh &&
+        fabs(*last_received_qnh - pres.GetHectoPascal()) < 0.005)
+      return true;
+  }
+
   if (!EnableNMEA(env))
     return false;
 

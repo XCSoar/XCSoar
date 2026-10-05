@@ -127,6 +127,14 @@ class LXDevice: public AbstractDevice
   std::optional<double> last_sent_mc;
 
   /**
+   * The QNH [hPa] the vario reported last, as XCSoar read it from
+   * $LXWP3 or $PLXV0,QNH.  PutQNH() does not send it back: for an S
+   * series vario the $LXWP3 offset is in whole feet, so the echo could
+   * only round the value the pilot set (#3261).
+   */
+  std::optional<double> last_received_qnh;
+
+  /**
    * Has ballast been requested from the device?
    */
   bool ballast_requested = false;
@@ -522,6 +530,8 @@ private:
    */
   void IdDeviceByNameLocked(const StaticString<16> &product_name,
                             const DeviceInfo &device_info) noexcept;
+
+  void RememberReceivedQNH(const ExternalSettings &settings) noexcept;
 
   /**
    * Check if MC value from device is an echo of what we sent.

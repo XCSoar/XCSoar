@@ -315,12 +315,24 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings,
 
   if (name == "QNH"sv) {
     /* hPa times 100 as a whole number, sent on a change; more exact
-       than the $LXWP3 offset, which ProvideQNH() then leaves alone.
-       Read as an integer: a floating point parser would take "nan",
-       which -ffast-math lets past every range check. */
-    if (unsigned hundredths; ParseIntegerTo(value, hundredths))
-      info.settings.ProvideQNH(
-        AtmosphericPressure::HectoPascal(hundredths / 100.), info.clock);
+       than the $LXWP3 offset.  ProvideQNH() keeps a value within
+       0.5 hPa, so clear the one derived from the offset first; a
+       later $LXWP3 then leaves this one alone.  Read as an integer: a
+       floating point parser would take "nan", which -ffast-math lets
+       past every range check. */
+    if (unsigned hundredths; ParseIntegerTo(value, hundredths)) {
+      /* ProvideQNH() rejects an implausible value; keep the one
+         there was then */
+      const auto previous = info.settings.qnh;
+      const auto previous_available = info.settings.qnh_available;
+      info.settings.qnh_available.Clear();
+      if (!info.settings.ProvideQNH(
+            AtmosphericPressure::HectoPascal(hundredths / 100.),
+            info.clock)) {
+        info.settings.qnh = previous;
+        info.settings.qnh_available = previous_available;
+      }
+    }
   } else if (name == "ELEVATION"sv) {
     if (auto d = ParseDoubleValue(value))
       info.settings.ProvideElevation(iround(*d), info.clock);
@@ -788,6 +800,16 @@ LXDevice::UpdateDeviceFlags(const DeviceInfo &device_info,
   }
 }
 
+void
+LXDevice::RememberReceivedQNH(const ExternalSettings &settings) noexcept
+{
+  if (!settings.qnh_available)
+    return;
+
+  const std::lock_guard lock{mutex};
+  last_received_qnh = settings.qnh.GetHectoPascal();
+}
+
 bool
 LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
@@ -814,11 +836,17 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LX::LXWP2(line, info);
 
   if (type == "$LXWP3"sv)
-    return LX::LXWP3(line, info, IsSVario());
+  {
+    const bool result = LX::LXWP3(line, info, IsSVario());
+    RememberReceivedQNH(info.settings);
+    return result;
+  }
 
   if (type == "$PLXV0"sv) {
     is_colibri = false;
-    return PLXV0(line, lxnav_vario_settings, info, *this);
+    const bool result = PLXV0(line, lxnav_vario_settings, info, *this);
+    RememberReceivedQNH(info.settings);
+    return result;
   }
 
   if (type == "$PLXVC"sv) {
