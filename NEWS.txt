@@ -479,6 +479,7 @@ Version 7.46 - not yet released
     3.2 inches. Setup / Look / Layout / Viewing distance can force
     Handheld or Panel; Kobo starts on Handheld. Dialog text follows
     that size
+  - scale InfoBox value and title fonts with the Text size setting
   - size the Wayland UI from the output's physical size, and draw at
     the compositor's scale (including 125% / 150% / 200%) so fonts
     and the map are rasterised at the panel DPI #3123
