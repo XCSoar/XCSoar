@@ -37,6 +37,7 @@ LXDevice::LinkTimeout()
 
   mc_requested = false;
   last_sent_mc.reset();
+  last_received_qnh.reset();
   ballast_requested = false;
   last_sent_ballast_overload.reset();
   last_sent_crew_mass.reset();

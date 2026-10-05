@@ -4249,6 +4249,20 @@ TestLXNAVQNH()
   ok1(basic.settings.qnh_available);
   ok1(equals(basic.settings.qnh.GetHectoPascal(), 1020));
 
+  /* the order the S10 sends them in: the offset first, then the
+     exact value, which must replace the one derived from the offset
+     although they are less than 0.5 hPa apart */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA("$LXWP3,188,0,2.0,,0,20,5.0,0.5,0,100,-10.0,Kestrel 17m,,*15", basic));
+  ok1(device->ParseNMEA("$PLXV0,QNH,W,102000*0D", basic));
+  ok1(basic.settings.qnh.GetHectoPascal() == 1020);
+
+  /* an implausible value does not take the valid one away */
+  ok1(device->ParseNMEA("$PLXV0,QNH,W,0*3E", basic));
+  ok1(basic.settings.qnh_available);
+  ok1(basic.settings.qnh.GetHectoPascal() == 1020);
+
   /* not a number: never a QNH, whatever -ffast-math assumes */
   basic.Reset();
   basic.clock = TimeStamp{FloatDuration{1}};
@@ -4282,6 +4296,38 @@ TestLXNAVQNH()
   delete device;
 }
 
+/**
+ * PutQNH() does not send an S series vario the QNH it reported itself
+ * (#3261): that could only round it to what the $LXWP3 offset carries.
+ */
+static void
+TestLXNAVQNHEcho()
+{
+  DumpPort dump;
+  Device *device = lx_driver.CreateOnPort(dummy_config, dump);
+  LXDevice &lx_device = *(LXDevice *)device;
+  lx_device.ResetDeviceDetection();
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA("$LXWP1,NINC,30309,9.41,08*0B", basic));
+  ok1(device->ParseNMEA("$LXWP3,188,0,2.0,,0,20,5.0,0.5,0,100,-10.0,Kestrel 17m,,*15", basic));
+
+  NullOperationEnvironment env;
+
+  /* the value XCSoar adopted from that offset goes nowhere */
+  dump.Clear();
+  ok1(device->PutQNH(basic.settings.qnh, env));
+  ok1(dump.FindContaining("PLXV0,QNH,W") == nullptr);
+
+  /* a QNH the pilot set in XCSoar does */
+  ok1(device->PutQNH(AtmosphericPressure::HectoPascal(1013.25), env));
+  ok1(dump.FindContaining("PLXV0,QNH,W,101325") != nullptr);
+
+  delete device;
+}
+
 int main()
 {
   const auto data_path = MakeTestDriverDataPath();
@@ -4308,7 +4354,8 @@ int main()
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
              + 15 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
-             + 11 /* LXNAVQNH */);
+             + 17 /* LXNAVQNH */
+             + 6 /* LXNAVQNHEcho */);
   TestGeneric();
   TestTasman();
   TestLK8EX1();
@@ -4388,6 +4435,7 @@ int main()
   TestTrafficExtensionsWire();
   TestLXNanoLogbook();
   TestLXNAVQNH();
+  TestLXNAVQNHEcho();
 
   DeinitialiseDataPath();
   return exit_status();
