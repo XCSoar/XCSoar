@@ -20,6 +20,31 @@
 #endif
 
 #include <cassert>
+#include <cstdint>
+
+UnsignedPoint2D
+Display::AlignDpiToPixelAxes(PixelSize size, UnsignedPoint2D dpi) noexcept
+{
+  if (size.width == 0 || size.height == 0 ||
+      size.width == size.height ||
+      dpi.x == 0 || dpi.y == 0)
+    return dpi;
+
+  const bool pixel_portrait = size.height > size.width;
+  const bool inch_portrait =
+    (uint64_t)size.height * dpi.x > (uint64_t)size.width * dpi.y;
+  if (pixel_portrait == inch_portrait)
+    return dpi;
+
+  /* Physical width/height came from the unrotated panel.  Pair the
+     shorter physical edge with the shorter pixel edge. */
+  const unsigned x = (unsigned)((uint64_t)size.width * dpi.y / size.height);
+  const unsigned y = (unsigned)((uint64_t)size.height * dpi.x / size.width);
+  if (x == 0 || y == 0)
+    return dpi;
+
+  return {x, y};
+}
 
 #ifndef ANDROID
 static UnsignedPoint2D forced_dpi{};
@@ -118,8 +143,9 @@ Display::ProvideSizeMM(unsigned width_pixels, unsigned height_pixels,
   assert(width_mm > 0);
   assert(height_mm > 0);
 
-  detected_dpi = SizeMMToDPI({width_pixels, height_pixels},
-                             {width_mm, height_mm});
+  detected_dpi = AlignDpiToPixelAxes({width_pixels, height_pixels},
+                                     SizeMMToDPI({width_pixels, height_pixels},
+                                                 {width_mm, height_mm}));
 }
 
 #endif
