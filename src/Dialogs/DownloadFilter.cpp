@@ -198,8 +198,12 @@ DownloadFilter::MatchesSearch(const AvailableFile &file) noexcept
     return true;
 
   const char *needle_c = needle.c_str();
-  return ContainsNormalized(file.GetName(), needle_c) ||
-         ContainsNormalized(file.GetDescription(), needle_c);
+  if (ContainsNormalized(file.GetName(), needle_c))
+    return true;
+
+  const char *description = file.GetDescription();
+  return description != nullptr &&
+         ContainsNormalized(description, needle_c);
 }
 
 const char *

@@ -56,9 +56,10 @@ MultiFilePicker(const char *caption, MultiFileDataField &df,
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (FileTypeSupportsDownload(df.GetFileDataField().GetFileType())) {
     const auto download = [file_widget, &df]() {
-      const auto path = DownloadFilePicker(df.GetFileDataField().GetFileType());
-      if (path != nullptr) {
-        df.ForceModify(path);
+      const auto paths = DownloadFilePicker(df.GetFileDataField().GetFileType());
+      if (!paths.empty()) {
+        for (const auto &path : paths)
+          df.ForceModify(path);
         df.GetFileDataField().Sort();
 
         file_widget->Refresh();
