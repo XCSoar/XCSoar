@@ -226,6 +226,9 @@ Version 7.46 - not yet released
     of the device that supplies the GPS fix when the logger starts
     #3180
 * dialogs
+  - show each repository file as its name and its description, and
+    download every ticked file together; Countries and Search narrow
+    the list, and the country ticks are kept in the profile
   - navigate message-box buttons with arrow keys matching their positions
   - move SkyLines, LiveTrack24, XCSoar Cloud, and WeGlide to a new
     Services configuration menu
@@ -420,6 +423,8 @@ Version 7.46 - not yet released
     pixels, by refusing a size below 320x240 (240x320 when
     taller than wide) #2110
 * documentation
+  - describe the repository download list: name and description,
+    several files at once, and the country and search filters
   - clarify that Reach polar still applies to abort, alternates and
     landable arrival when Reach mode is Off
   - clarify that Trail drift also controls the circling projected
