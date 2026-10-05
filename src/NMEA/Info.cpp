@@ -295,13 +295,25 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
         add.gps_ellipsoid_altitude_available))
     gps_ellipsoid_altitude = add.gps_ellipsoid_altitude;
 
-  if (static_pressure_available.Complement(add.static_pressure_available))
+  /* Static pressure and pressure altitude are the same ambient
+     pressure.  Filling the missing form from a later device makes
+     ComputePressure() prefer that device (#3268). */
+  const bool have_ambient_pressure =
+    static_pressure_available || pressure_altitude_available;
+  const bool add_static_rejected =
+    have_ambient_pressure && add.static_pressure_available;
+
+  if (!add_static_rejected &&
+      static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
 
   if (dyn_pressure_available.Complement(add.dyn_pressure_available))
     dyn_pressure = add.dyn_pressure;
 
-  if (pitot_pressure_available.Complement(add.pitot_pressure_available))
+  /* Pitot pressure belongs with the static pressure of the same
+     device.  Leave it behind when that static pressure was rejected. */
+  if (!add_static_rejected &&
+      pitot_pressure_available.Complement(add.pitot_pressure_available))
     pitot_pressure = add.pitot_pressure;
 
   if (sensor_calibration_available.Complement(add.sensor_calibration_available)) {
@@ -312,7 +324,8 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
   if (baro_altitude_available.Complement(add.baro_altitude_available))
     baro_altitude = add.baro_altitude;
 
-  if (pressure_altitude_available.Complement(add.pressure_altitude_available))
+  if (!have_ambient_pressure &&
+      pressure_altitude_available.Complement(add.pressure_altitude_available))
     pressure_altitude = add.pressure_altitude;
 
   if (igc_pressure_altitude_available.Complement(add.igc_pressure_altitude_available))
