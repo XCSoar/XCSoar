@@ -293,8 +293,21 @@ PlaneGlue::CreateFromPolar(const char *registration,
   if (safe_name.empty())
     return nullptr;
 
-  const auto filename = fmt::format("{}.xcp", safe_name);
-  auto path = LocalPath(filename.c_str());
+  /* where the plane list dialog creates a new profile as well */
+  const auto dir = LocalPath(GetFileTypeDefaultDir(FileType::PLANE));
+  Directory::CreateRecursive(dir);
+
+  /* another registration may sanitize to the same name ("D 1234" and
+     "D1234"); add a number rather than replace its profile */
+  auto path = AllocatedPath::Build(dir,
+                                   fmt::format("{}.xcp", safe_name).c_str());
+  for (unsigned n = 2; File::Exists(path); ++n) {
+    if (n > 99)
+      return nullptr;
+
+    const auto numbered = fmt::format("{}-{}.xcp", safe_name, n);
+    path = AllocatedPath::Build(dir, numbered.c_str());
+  }
 
   WriteFile(plane, path);
   return path;
