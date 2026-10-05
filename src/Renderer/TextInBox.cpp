@@ -3,6 +3,7 @@
 
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
+#include "Asset.hpp"
 #include "BoxShadowRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
@@ -19,6 +20,13 @@
 #include "ui/canvas/opengl/Scope.hpp"
 #include "ui/canvas/opengl/Triangulate.hpp"
 #endif
+
+/** Alias raster (e-paper panels). */
+static bool
+LabelUsesAliasRaster() noexcept
+{
+  return HasEPaper() || IsDithered();
+}
 
 static PixelPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc) noexcept
@@ -92,12 +100,20 @@ RenderShadowedText(Canvas &canvas, const char *text,
   if (text == nullptr || text[0] == '\0')
     return;
 
+  /* OUTLINED_INVERTED uses a black halo for LCD contrast; alias panels
+     turn that fringe into extra ink. */
+  if (LabelUsesAliasRaster())
+    inverted = false;
+
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
 
   /* at least 1px, or tiny fonts get no halo at all */
-  DrawTextHalo(canvas, text, p, std::max(1u, canvas.GetFontHeight() / 12u));
+  const unsigned halo = LabelUsesAliasRaster()
+    ? std::max(1u, canvas.GetFontHeight() / 16u)
+    : std::max(1u, canvas.GetFontHeight() / 12u);
+  DrawTextHalo(canvas, text, p, halo);
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText(p, text);

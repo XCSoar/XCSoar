@@ -34,6 +34,9 @@
 #include "UIReceiveBlackboard.hpp"
 #include "UISettings.hpp"
 #include "Interface.hpp"
+#ifdef HAVE_TEXT_CACHE
+#include "ui/canvas/custom/Cache.hpp"
+#endif
 
 #include <algorithm>
 #include <utility>
@@ -711,6 +714,9 @@ MainWindow::Initialise()
 #endif
 
   Fonts::Initialize();
+#ifdef HAVE_TEXT_CACHE
+  TextCache::Flush();
+#endif
 
   if (look == nullptr)
     look = new Look();
@@ -721,11 +727,9 @@ MainWindow::Initialise()
 void
 MainWindow::InitialiseConfigured()
 {
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
-
-  if ((ui_settings.scale != 100) || (ui_settings.info_boxes.scale_title_font != 100) || (ui_settings.custom_dpi != 0))
-    /* call Initialise() again to reload fonts with the new scale */
-    Initialise();
+  /* Reload fonts after Display type, Text size, and DPI are known.
+     The first Initialise() ran before the profile. */
+  Initialise();
 
   PixelRect rc = GetClientRect();
   const PixelRect infobox_area_rc = GetInfoBoxAreaRect();

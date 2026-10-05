@@ -254,5 +254,9 @@ void
 SetDisplayType(DisplayType type) noexcept;
 
 [[gnu::pure]]
+DisplayType
+GetDisplayType() noexcept;
+
+[[gnu::pure]]
 bool
 HasEPaper() noexcept;

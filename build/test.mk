@@ -122,6 +122,7 @@ TEST_NAMES = \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
 	TestDisplayDPI \
+	TestDisplayType \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -907,6 +908,11 @@ TEST_DISPLAY_DPI_SOURCES = \
 	$(TEST_SRC_DIR)/TestDisplayDPI.cpp
 TEST_DISPLAY_DPI_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,TestDisplayDPI,TEST_DISPLAY_DPI))
+
+TEST_DISPLAY_TYPE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDisplayType.cpp
+$(eval $(call link-program,TestDisplayType,TEST_DISPLAY_TYPE))
 
 ifeq ($(HAVE_WIN32),y)
 TEST_UTF8WIN_SOURCES = \

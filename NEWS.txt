@@ -39,6 +39,7 @@ Version 7.46 - not yet released
   - fix BlueFly Vario BLE being offered only as a BLE sensor, which
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
+  - draw color e-ink text without anti-aliasing
 * iOS
   - add haptic feedback for button presses; the Haptic feedback
     setting controls it
@@ -489,6 +490,8 @@ Version 7.46 - not yet released
   - describe Look / Layout Text size: full-size type on 6 inch
     phones, and a closer-view size when the long edge is under
     5 inches
+  - describe Setup / Screen text drawn without anti-aliasing on
+    e-ink
 * development
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
