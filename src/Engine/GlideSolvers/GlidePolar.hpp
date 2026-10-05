@@ -582,6 +582,23 @@ public:
       Update();
   }
 
+  /**
+   * The polar the constructor starts with.  It stands in while no
+   * valid polar has been set up, e.g. when the plane profile is
+   * missing or broken, so it is not the pilot's glider.
+   */
+  static constexpr PolarCoefficients FALLBACK_POLAR{0.00157, -0.0734, 1.48};
+
+  /**
+   * Is this still the constructor's #FALLBACK_POLAR rather than a polar
+   * that was set up for a glider?
+   */
+  constexpr bool IsFallback() const noexcept {
+    return reference_polar.a == FALLBACK_POLAR.a &&
+      reference_polar.b == FALLBACK_POLAR.b &&
+      reference_polar.c == FALLBACK_POLAR.c;
+  }
+
   /** Returns the ideal polar coefficients */
   constexpr const PolarCoefficients &GetCoefficients() const noexcept {
     return reference_polar;

@@ -347,7 +347,10 @@ PolarSendProcessTimer(OperationEnvironment &env) noexcept
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const GlidePolar &gp = calculated.glide_polar_safety;
-  if (!gp.IsValid())
+
+  /* the fallback stands in for a missing or broken plane profile;
+     sending it would replace the pilot's polar in the vario (#3269) */
+  if (!gp.IsValid() || gp.IsFallback())
     return false;
 
   backend_components->devices->PutPolar(gp, env);
