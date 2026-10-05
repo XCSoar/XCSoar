@@ -7,8 +7,9 @@
 
 /**
  * User-selected display technology.  Affects refresh-sensitive UI
- * (scrolling, animations).  Visual greyscale / dither for e-ink is
- * separate and may follow later.
+ * (scrolling, animations) and font rasterisation (Kobo 1-bit glyphs
+ * on e-paper).  Full greyscale / dither chrome stays compile-time
+ * #DITHER so color e-ink keeps colour.
  */
 enum class DisplayType : uint8_t {
   /** Conventional LCD or OLED; full animations. */
@@ -29,4 +30,16 @@ IsEPaperDisplayType(DisplayType type) noexcept
 {
   return type == DisplayType::E_INK ||
     type == DisplayType::COLOR_E_INK;
+}
+
+/**
+ * 1-bit alias glyphs like Kobo (no anti-alias).  E-paper panels
+ * turn grey fringe into extra ink, which closes counters and reads as
+ * over-bold strokes; color e-ink uses the same raster path.
+ */
+[[gnu::const]]
+constexpr bool
+DisplayTypeUsesMonochromeFonts(DisplayType type) noexcept
+{
+  return IsEPaperDisplayType(type);
 }

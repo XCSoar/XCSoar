@@ -70,7 +70,8 @@ TextUtil::create(const FontDescription &d)
   paramTextSize = d.GetHeight();
 
   int paint_flags = 0;
-  if (!IsDithered())
+  if (!IsDithered() &&
+      !DisplayTypeUsesMonochromeFonts(GetDisplayType()))
     /* 1 = Paint.ANTI_ALIAS_FLAG */
     paint_flags |= 1;
 
