@@ -455,6 +455,9 @@ Startup(UI::Display &display)
      uses e-paper / OEM text compensation.  Look fonts reload again at
      InitialiseConfigured(). */
   SetDisplayType(ui_settings.display.display_type);
+  Layout::Initialise(main_window->GetDisplay(), main_window->GetSize(),
+                     ui_settings.GetPercentScale(), ui_settings.custom_dpi,
+                     ui_settings.viewing_distance);
 
   operation.SetText(_("Initialising"));
 

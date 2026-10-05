@@ -25,6 +25,9 @@ public:
   static void Initialise(JNIEnv *env) noexcept;
   static void Deinitialise(JNIEnv *env) noexcept;
 
+  static void SetCorrectedDpi(float text_scale_y, float letter_spacing,
+                              bool oem_dpi_corrected) noexcept;
+
   static TextUtil *create(const FontDescription &d);
 
   [[gnu::pure]]
