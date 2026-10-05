@@ -479,6 +479,9 @@ Version 7.46 - not yet released
   - describe the "Navigate to nearest point" task rule
   - describe the Speed VMG InfoBox in the English, German and Brazilian
     Portuguese manuals
+  - drop the obsolete Ignore checksum device setting from the manuals
+    and state that XCSoar uses an NMEA sentence only when its checksum
+    matches #3257
 * development
   - build system: keep isnan(), isinf() and isfinite() working on GCC
     builds (Linux, Windows, Kobo); -ffast-math let GCC fold them away

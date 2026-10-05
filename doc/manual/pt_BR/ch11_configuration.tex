@@ -642,6 +642,8 @@ Portas com de 0 a 10 poderão ser usadas, incluindo conexão TCP/IP.   Qual port
 \item[Driver] o tipo de driver específico pode ser selecionado na lista para ativar o suporte para os dispositivos com protocolos ou funções especiais.
 \item[Sincronização pelo dispositivo*]  esta opção deixa você configurar se o XCSoar usar ajustes como o valor de MacCready, bugs e lastro do dispositivo.
 \item[Sincronização para o dispositivo*]  esta opção deixa você configurar se o XCSoar enviar ao dispositivo, ajustes como MacCready, bugs e lastro.
-\item[Ignore checksum*] se o seu GPS envia somas NMEA inválidas ao dispositivo, este irá permitir que os dados do dispositivo sejam usados ao invés dos dados do GPS. 
 \end{description}
+
+O XCSoar só usa uma sentença NMEA quando a soma de verificação confere.
+Um dispositivo que envia somas inválidas não pode ser usado como está.
 
