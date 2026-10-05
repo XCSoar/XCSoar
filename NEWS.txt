@@ -393,6 +393,7 @@ Version 7.46 - not yet released
   - keep full-size type on 6 inch phones: shrink for close viewing
     only when the long edge is under 5 inches, and size dialog text
     from that scale rather than the short edge
+  - scale InfoBox value and title fonts with the Text size setting
   - size the Wayland UI from the output's physical size, and draw at
     the compositor's scale (including 125% / 150% / 200%) so fonts
     and the map are rasterised at the panel DPI #3123
