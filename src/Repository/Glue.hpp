@@ -44,6 +44,9 @@ void PurgeChangedUserRepositoryFiles(const char *old_list,
  */
 void LoadAllRepositories(FileRepository &repository);
 
+/** Load only the trusted main XCSoar repository. */
+bool LoadMainRepository(FileRepository &repository) noexcept;
+
 /**
  * Download the repository file.
  *

@@ -4,10 +4,12 @@
 #include "Repository/Parser.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Glue.hpp"
+#include "Repository/Freshness.hpp"
 #include "io/LineReader.hpp"
 #include "TestUtil.hpp"
 
 #include <cstring>
+#include <chrono>
 
 /**
  * A simple in-memory NLineReader for testing.
@@ -158,7 +160,17 @@ TestAllTypes()
     "\n"
     "name = i.xcl\n"
     "uri = http://x/i\n"
-    "type = checklist\n";
+    "type = checklist\n"
+    "\n"
+    "name = xcsoar-UNIX\n"
+    "uri = https://xcsoar.org/download\n"
+    "description = Stable release\n"
+    "type = software-update\n"
+    "target = UNIX\n"
+    "version = 2026.1\n"
+    "channel = stable\n"
+    "offer-id = 2026.1\n"
+    "source = XCSoar\n";
   StringLineReader reader(input);
   FileRepository repo;
 
@@ -173,6 +185,15 @@ TestAllTypes()
   ok1(repo.FindByName("g.xci")->type == FileType::XCI);
   ok1(repo.FindByName("h.tsk")->type == FileType::TASK);
   ok1(repo.FindByName("i.xcl")->type == FileType::CHECKLIST);
+  const auto *update = repo.FindByName("xcsoar-UNIX");
+  ok1(update != nullptr);
+  ok1(update->type == FileType::SOFTWARE_UPDATE);
+  ok1(update->software_update.has_value());
+  ok1(update->software_update->target == "UNIX");
+  ok1(update->software_update->version == "2026.1");
+  ok1(update->software_update->channel == "stable");
+  ok1(update->software_update->offer_id == "2026.1");
+  ok1(update->software_update->source == "XCSoar");
 }
 
 static void
@@ -434,6 +455,17 @@ TestAvailableFile()
   ok1(f.type == FileType::UNKNOWN);
 }
 
+static void
+TestRefreshFreshness()
+{
+  using namespace std::chrono;
+  const system_clock::time_point now{seconds{200000}};
+  ok1(Repository::IsRefreshDue({}, now));
+  ok1(!Repository::IsRefreshDue(now - hours{23}, now));
+  ok1(Repository::IsRefreshDue(now - hours{24}, now));
+  ok1(Repository::IsRefreshDue(now + seconds{1}, now));
+}
+
 int main()
 {
   plan_tests(
@@ -441,7 +473,7 @@ int main()
     2 +   // TestCommentsAndBlanks
     8 +   // TestSingleFile
     7 +   // TestMultipleFiles
-    10 +  // TestAllTypes
+    18 +  // TestAllTypes
     3 +   // TestUnknownType
     6 +   // TestUpdateDate
     3 +   // TestInvalidDate
@@ -455,7 +487,8 @@ int main()
     5 +   // TestFindByName
     3 +   // TestFieldsBeforeName
     7 +   // TestRaspForecastOutOfDate
-    10    // TestAvailableFile
+    10 +  // TestAvailableFile
+    4     // TestRefreshFreshness
   );
 
   TestEmpty();
@@ -477,6 +510,7 @@ int main()
   TestFieldsBeforeName();
   TestRaspForecastOutOfDate();
   TestAvailableFile();
+  TestRefreshFreshness();
 
   return exit_status();
 }

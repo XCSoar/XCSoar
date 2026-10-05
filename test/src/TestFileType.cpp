@@ -34,12 +34,18 @@ TestDefaultDirs()
 static void
 TestPatterns()
 {
-  // Every content type should have at least one non-empty pattern
+  // Downloadable content types have filename patterns; repository-only
+  // metadata does not represent a local file.
   for (uint8_t i = 1;
        i < static_cast<uint8_t>(FileType::COUNT); ++i) {
-    const char *p = GetFileTypePatterns(static_cast<FileType>(i));
-    ok(p != nullptr && p[0] != '\0',
-       "FileType %u has patterns", unsigned(i));
+    const auto type = static_cast<FileType>(i);
+    const char *p = GetFileTypePatterns(type);
+    if (type == FileType::SOFTWARE_UPDATE)
+      ok(p != nullptr && p[0] == '\0',
+         "FileType %u is repository metadata", unsigned(i));
+    else
+      ok(p != nullptr && p[0] != '\0',
+         "FileType %u has patterns", unsigned(i));
   }
 
   // Sentinel types return empty pattern

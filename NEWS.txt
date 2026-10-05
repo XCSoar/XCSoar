@@ -361,6 +361,8 @@ Version 7.46 - not yet released
     action it triggers
   - vibrate lightly while a gesture is drawn when it turns into another
     known gesture, for example from Analysis to Pan
+  - add an optional daily update check and Software Update dialog; repository
+    offers open the trusted download page and never install automatically
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
   - size the Wayland UI from the output's physical size, and draw at

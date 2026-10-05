@@ -3,7 +3,53 @@
 
 #pragma once
 
+#include "CharUtil.hxx"
+
 #include <string>
+#include <string_view>
+
+/**
+ * Check whether an HTTPS URL has an exact, allow-listed host.  The host list
+ * is comma-separated; an entry of "*" permits every host.
+ */
+[[gnu::pure]] static inline bool
+IsAllowedUrl(std::string_view url, std::string_view allowed_hosts) noexcept
+{
+  constexpr std::string_view scheme = "https://";
+  if (!url.starts_with(scheme))
+    return false;
+
+  const auto authority_end = url.find_first_of("/?#", scheme.size());
+  const auto authority = url.substr(scheme.size(), authority_end - scheme.size());
+  if (authority.empty() || authority.find_first_of("@:") != authority.npos)
+    return false;
+
+  while (!allowed_hosts.empty()) {
+    const auto separator = allowed_hosts.find(',');
+    const auto host = allowed_hosts.substr(0, separator);
+    allowed_hosts = separator == allowed_hosts.npos
+      ? std::string_view{}
+      : allowed_hosts.substr(separator + 1);
+
+    if (host == "*")
+      return true;
+
+    if (authority.size() != host.size())
+      continue;
+
+    bool equal = true;
+    for (size_t i = 0; i < host.size(); ++i)
+      if (ToLowerASCII(authority[i]) != ToLowerASCII(host[i])) {
+        equal = false;
+        break;
+      }
+
+    if (equal)
+      return true;
+  }
+
+  return false;
+}
 
 /**
  * Decode percent-encoded sequences (%XX) in a URI string in-place.

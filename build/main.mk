@@ -14,6 +14,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/LockScreen.cpp \
 	$(SRC)/Dialogs/Error.cpp \
+	$(SRC)/Dialogs/UpdateDialog.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/CoDialog.cpp \
@@ -129,6 +130,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/LoggerConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/NetworkConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/UpdateConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/RaspConfigPanel.cpp \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/SkySightConfigPanel.cpp) \
@@ -556,6 +558,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Storage/DirEntry.cpp \
 	$(SRC)/Storage/StorageDevice.cpp \
 	$(SRC)/Storage/StorageUtil.cpp \
+	$(SRC)/Update/Factory.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
@@ -588,6 +591,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Components.cpp \
 	$(SRC)/BackendComponents.cpp \
 	$(SRC)/DataComponents.cpp \
+	$(SRC)/Update/Service.cpp \
+	$(SRC)/Update/State.cpp \
+	$(SRC)/Update/StateFile.cpp \
 	$(SRC)/DataGlobals.cpp \
 	\
 	$(SRC)/Device/Factory.cpp \
@@ -636,6 +642,7 @@ ifeq ($(HAVE_WIN32),y)
 endif
 
 $(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
+include $(topdir)/build/update.mk
 
 ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
@@ -740,6 +747,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFileModal.cpp \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Repository/Glue.cpp \
+	$(SRC)/Repository/Service.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
 	$(SRC)/Weather/PCMet/Georeference.cpp \
@@ -783,6 +791,13 @@ XCSOAR_SOURCES += \
 	$(SRC)/Tracking/SkyLines/FlarmTrafficBuilder.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp \
 	$(SRC)/NetComponents.cpp
+
+ifneq ($(PLAY),y)
+TARGET_CPPFLAGS += -DHAVE_UPDATE -DHAVE_REPOSITORY_UPDATE
+XCSOAR_SOURCES += \
+	$(SRC)/Update/RepositoryBackend.cpp \
+	$(SRC)/Update/RepositoryOffer.cpp
+endif
 
 ifeq ($(OPENGL),y)
 XCSOAR_SOURCES += \

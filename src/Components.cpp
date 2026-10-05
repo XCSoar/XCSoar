@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Components.hpp"
+#include "Update/Service.hpp"
 #include "thread/Debug.hpp"
 #include "thread/Handle.hpp"
 
@@ -9,6 +10,7 @@
 
 FileCache *file_cache;
 AsyncTerrainOverviewLoader *terrain_loader;
+std::unique_ptr<UpdateService> update_service;
 
 #ifndef ENABLE_OPENGL
 DrawThread *draw_thread;
