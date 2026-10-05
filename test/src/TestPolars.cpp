@@ -54,6 +54,43 @@ TestBasic()
             polar_string) == 0, "GetString()");
 }
 
+/**
+ * A polar received as coefficients (e.g. from an LXNAV vario) and
+ * stored as points must give the same polar back (#3269).
+ */
+static void
+TestSetSinkRates()
+{
+  const PolarStore::Item *item = nullptr;
+  for (const auto &i : PolarStore::GetAll())
+    if (StringIsEqual(i.name, "401 Kestrel (17m)"))
+      item = &i;
+  if (!ok1(item != nullptr)) {
+    skip(7, 0, "Kestrel not in the polar store");
+    return;
+  }
+
+  const PolarInfo kestrel = item->ToPolarInfo();
+  const PolarCoefficients coefficients = kestrel.CalculateCoefficients();
+  ok1(coefficients.IsValid());
+
+  PolarShape shape = kestrel.shape;
+  for (auto &point : shape.points)
+    point.w = 0;
+  shape.SetSinkRates(coefficients);
+
+  /* sink is stored as a negative vertical speed */
+  ok1(shape[0].w < 0 && shape[1].w < 0 && shape[2].w < 0);
+  for (unsigned i = 0; i < 3; ++i)
+    ok1(fabs(shape[i].w - kestrel.shape[i].w) < 1e-9);
+
+  const PolarCoefficients back = shape.CalculateCoefficients();
+  ok1(back.IsValid());
+  ok1(fabs(back.a - coefficients.a) < 1e-9 &&
+      fabs(back.b - coefficients.b) < 1e-9 &&
+      fabs(back.c - coefficients.c) < 1e-9);
+}
+
 static void
 TestFileImport()
 {
@@ -193,7 +230,7 @@ TestBuiltInPolarsPlausibility()
 
 int main()
 try {
-  unsigned num_tests = 19 + 9 +
+  unsigned num_tests = 19 + 9 + 8 +
     PolarStore::GetAll().size() * 2 + 1 +
     /* LS-8 (15m), LS-8 (18m), default exact v_no */ 3;
 
@@ -204,6 +241,7 @@ try {
   plan_tests(num_tests);
 
   TestBasic();
+  TestSetSinkRates();
   TestFileImport();
   TestBuiltInPolars();
 
