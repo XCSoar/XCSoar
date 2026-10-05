@@ -704,7 +704,8 @@ MainWindow::Initialise()
 {
   Layout::Initialise(GetDisplay(), GetSize(),
                      CommonInterface::GetUISettings().GetPercentScale(),
-                     CommonInterface::GetUISettings().custom_dpi);
+                     CommonInterface::GetUISettings().custom_dpi,
+                     CommonInterface::GetUISettings().viewing_distance);
 #ifdef DRAW_MOUSE_CURSOR
   SetCursorSize(CommonInterface::GetDisplaySettings().cursor_size);
   SetCursorColorsInverted(CommonInterface::GetDisplaySettings().invert_cursor_colors);
@@ -1327,7 +1328,8 @@ MainWindow::OnResize(PixelSize new_size) noexcept
 {
   Layout::Initialise(GetDisplay(), new_size,
                      CommonInterface::GetUISettings().GetPercentScale(),
-                     CommonInterface::GetUISettings().custom_dpi);
+                     CommonInterface::GetUISettings().custom_dpi,
+                     CommonInterface::GetUISettings().viewing_distance);
 
   SingleWindow::OnResize(new_size);
 

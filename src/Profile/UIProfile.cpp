@@ -115,6 +115,12 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   if (settings.scale < 50 || settings.scale > 200)
     settings.scale = 100;
 
+  const auto viewing_distance = settings.viewing_distance;
+  if (!map.GetEnum(ProfileKeys::ViewingDistance, settings.viewing_distance) ||
+      unsigned(settings.viewing_distance) >
+      unsigned(Layout::ViewingDistance::PANEL))
+    settings.viewing_distance = viewing_distance;
+
   map.Get(ProfileKeys::CustomDPI, settings.custom_dpi);
   if (settings.custom_dpi < 120 || settings.custom_dpi > 520)
     settings.custom_dpi = 0;

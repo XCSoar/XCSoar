@@ -14,10 +14,12 @@
 #include "UtilsSettings.hpp"
 #include "Asset.hpp"
 #include "Menu/ShowButton.hpp"
+#include "util/Macros.hpp"
 
 enum ControlIndex {
   DarkMode,
   UIScale,
+  ViewingDistance,
   TabDialogStyle,
   SPACER_INFOBOX,
   AppInfoBoxGeom,
@@ -31,6 +33,20 @@ enum ControlIndex {
   ShowZoomButton,
   ShowQuickMenuButton,
 };
+
+static constexpr StaticEnumChoice viewing_distance_list[] = {
+  { unsigned(Layout::ViewingDistance::AUTO), NC_("Setting", "Auto"),
+    N_("Shrink type when the short edge is under 3.2 inches.") },
+  { unsigned(Layout::ViewingDistance::HANDHELD), N_("Handheld"),
+    N_("Always use the closer-view size.") },
+  { unsigned(Layout::ViewingDistance::PANEL), N_("Panel"),
+    N_("Keep full-size type, for a screen read at arm's length.") },
+  nullptr
+};
+
+static_assert(ARRAY_SIZE(viewing_distance_list) ==
+              unsigned(Layout::ViewingDistance::COUNT) + 1,
+              "viewing_distance_list must match ViewingDistance::COUNT");
 
 static constexpr StaticEnumChoice tabdialog_style_list[] = {
   { DialogSettings::TabStyle::Text, N_("Text"),
@@ -115,6 +131,13 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent,
              UISettings::SCALE_MIN, UISettings::SCALE_MAX,
              UISettings::SCALE_STEP,
              ui_settings.scale);
+
+  AddEnum(_("Viewing distance"),
+          _("Auto shrinks type when the short edge is under 3.2 inches. "
+            "Handheld always uses that closer size. Panel keeps "
+            "full-size type."),
+          viewing_distance_list,
+          unsigned(ui_settings.viewing_distance));
 
   AddEnum(_("Tab dialog style"), nullptr,
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
@@ -201,6 +224,16 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
   if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
                        ui_settings.scale))
     require_restart = changed = true;
+
+  if (SaveValueEnum(ViewingDistance, ProfileKeys::ViewingDistance,
+                    ui_settings.viewing_distance)) {
+    changed = true;
+    if (CommonInterface::main_window != nullptr) {
+      CommonInterface::main_window->Initialise();
+      CommonInterface::main_window->ReinitialiseLook();
+      CommonInterface::main_window->ReinitialiseLayout();
+    }
+  }
 
   bool info_box_geometry_changed = false;
 

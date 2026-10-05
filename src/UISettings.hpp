@@ -12,6 +12,7 @@
 #include "Dialogs/DialogSettings.hpp"
 #include "DisplaySettings.hpp"
 #include "Audio/Settings.hpp"
+#include "Screen/Layout.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -32,6 +33,9 @@ struct UISettings {
   static constexpr unsigned SCALE_STEP = 5;
 
   unsigned scale;
+
+  /** Close-view shrink.  Kobo defaults to handheld. */
+  Layout::ViewingDistance viewing_distance;
 
   /** Override OS dpi settings */
   unsigned custom_dpi;

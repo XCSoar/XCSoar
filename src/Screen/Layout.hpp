@@ -13,8 +13,18 @@ namespace Layout
 extern bool landscape;
 
 /**
- * True when the short edge is smaller than about 5 inches (used to
- * shrink fonts for closer viewing distance).
+ * How far away the screen is read.  Auto uses the short edge:
+ * under 3.2 inches is handheld and uses closer-view type.
+ */
+enum class ViewingDistance : unsigned {
+  AUTO,
+  HANDHELD,
+  PANEL,
+  COUNT,
+};
+
+/**
+ * True when type is shrunk for closer viewing.
  */
 extern bool small_screen;
 
@@ -76,11 +86,13 @@ extern unsigned hit_radius;
  * @param screen_size the size of the screen in pixels
  * @param ui_scale the UI scale setting in percent
  * @param custom_dpi user defined DPI setting or 0 for system settings
+ * @param viewing_distance overrides the short-edge test when not Auto
  */
 void
 Initialise(const UI::Display &display,
            PixelSize screen_size, unsigned ui_scale=100,
-           unsigned custom_dpi=0) noexcept;
+           unsigned custom_dpi=0,
+           ViewingDistance viewing_distance=ViewingDistance::AUTO) noexcept;
 
 /**
  * Initialise layout from an explicit pixel size and DPI.  Does not
@@ -90,10 +102,12 @@ Initialise(const UI::Display &display,
  * @param dpi pixels per inch along x (pens) and y (points/fonts)
  * @param ui_scale the UI scale setting in percent
  * @param has_touch true to size controls and hit targets for touch
+ * @param viewing_distance overrides the short-edge test when not Auto
  */
 void
 Initialise(PixelSize screen_size, UnsignedPoint2D dpi,
-           unsigned ui_scale=100, bool has_touch=false) noexcept;
+           unsigned ui_scale=100, bool has_touch=false,
+           ViewingDistance viewing_distance=ViewingDistance::AUTO) noexcept;
 
 /**
  * Is scaling supported by this platform?
