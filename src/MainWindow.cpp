@@ -280,11 +280,16 @@ GetOuterBorder(const PixelRect &infobox_area_rc, const PixelRect &rc) noexcept
   return border;
 }
 
+struct MapAreaLayout {
+  PixelRect top, map, bottom_banner, bottom;
+};
+
 [[gnu::pure]]
-static PixelRect
-ComputeMapAreaRect(const PixelRect &main_rect,
-                   const Widget *top_widget,
-                   const Widget *bottom_widget) noexcept
+static MapAreaLayout
+CalculateMapAreaLayout(const PixelRect &main_rect,
+                       const Widget *top_widget,
+                       const Widget *bottom_banner_widget,
+                       const Widget *bottom_widget) noexcept
 {
   PixelRect rc = main_rect;
 
@@ -292,7 +297,13 @@ ComputeMapAreaRect(const PixelRect &main_rect,
   rc = GetMapRectBelow(rc, top_rect);
 
   const PixelRect bottom_rect = GetBottomWidgetRect(rc, bottom_widget);
-  return GetMapRectAbove(rc, bottom_rect);
+  rc = GetMapRectAbove(rc, bottom_rect);
+
+  const PixelRect bottom_banner_rect =
+    GetBottomWidgetRect(rc, bottom_banner_widget);
+  const PixelRect map_rect = GetMapRectAbove(rc, bottom_banner_rect);
+
+  return {top_rect, map_rect, bottom_banner_rect, bottom_rect};
 }
 
 PixelRect
@@ -368,7 +379,8 @@ MainWindow::GetMapAreaRect() const noexcept
   if (map != nullptr)
     return map->GetPosition();
 
-  return ComputeMapAreaRect(GetMainRect(), top_widget, bottom_widget);
+  return CalculateMapAreaLayout(GetMainRect(), top_widget,
+                                bottom_banner_widget, bottom_widget).map;
 }
 
 void
@@ -449,6 +461,23 @@ MainWindow::LayoutMapArea() noexcept
 
     if (main_rect.bottom <= bottom_rect.bottom)
       main_rect = GetMapRectAbove(main_rect, bottom_rect);
+  }
+
+  /* transient warnings sit above the configured bottom area */
+  PixelRect above_bottom = area_stack_rc;
+  if (HaveTopWidget())
+    above_bottom = GetMapRectBelow(above_bottom, top_rect);
+  if (HaveBottomWidget())
+    above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
+
+  const PixelRect banner_rect =
+    GetBottomWidgetRect(above_bottom, bottom_banner_widget);
+  if (HaveBottomBannerWidget()) {
+    bottom_banner_widget->Move(banner_rect);
+    hud_rect = GetMapRectAbove(hud_rect, banner_rect);
+
+    if (main_rect.bottom <= banner_rect.bottom)
+      main_rect = GetMapRectAbove(main_rect, banner_rect);
   }
 
   map->Move(main_rect);
@@ -1346,6 +1375,8 @@ MainWindow::OnKeyDown(unsigned key_code) noexcept
 {
   return (widget != nullptr && widget->KeyPress(key_code)) ||
     (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
+    (HaveBottomBannerWidget() &&
+     bottom_banner_widget->KeyPress(key_code)) ||
     (HaveBottomWidget() && bottom_widget->KeyPress(key_code)) ||
     InputEvents::processKey(key_code) ||
     SingleWindow::OnKeyDown(key_code);
@@ -1517,6 +1548,9 @@ MainWindow::OnDestroy() noexcept
 {
   timer.Cancel();
 
+  /* The bottom banner is hidden while a custom main widget is active.  Tear
+     it down before KillWidget() clears that state. */
+  KillBottomBannerWidget();
   KillWidget();
   KillTopWidget();
   KillBottomWidget();
@@ -1549,12 +1583,35 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  if (HaveBottomWidget() && map != nullptr) {
-    /* draw a separator between main area and bottom area */
+  if ((HaveBottomBannerWidget() || HaveBottomWidget()) && map != nullptr) {
+    /* draw a separator between the map and the strip below it */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
     rc.bottom += separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
+  }
+
+  if (HaveBottomBannerWidget() && HaveBottomWidget()) {
+    /* separator between the warning banner and the configured bottom
+       area; the map may extend underneath both */
+    const PixelRect area_stack_rc = GetAreaStackRect();
+    PixelRect above_bottom = area_stack_rc;
+    if (HaveTopWidget())
+      above_bottom = GetMapRectBelow(above_bottom,
+                                     GetTopWidgetRect(area_stack_rc,
+                                                      top_widget));
+
+    const PixelRect bottom_rect =
+      GetBottomWidgetRect(area_stack_rc, bottom_widget);
+    above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
+    const PixelRect banner_rect =
+      GetBottomWidgetRect(above_bottom, bottom_banner_widget);
+
+    PixelRect rc = banner_rect;
+    rc.top = banner_rect.bottom;
+    rc.bottom = bottom_rect.top;
+    if (rc.top < rc.bottom)
+      canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
   SingleWindow::OnPaint(canvas);
@@ -1701,12 +1758,15 @@ MainWindow::ActivateMap() noexcept
   if (widget != nullptr) {
     KillWidget();
 
-    if (bottom_widget != nullptr) {
-      PixelRect main_rect = GetMainRect();
-      const PixelRect top_rect = GetTopWidgetRect(main_rect, top_widget);
-      main_rect = GetMapRectBelow(main_rect, top_rect);
-      bottom_widget->Show(GetBottomWidgetRect(main_rect, bottom_widget));
-    }
+    const MapAreaLayout layout =
+      CalculateMapAreaLayout(GetMainRect(), top_widget,
+                             bottom_banner_widget, bottom_widget);
+
+    if (bottom_banner_widget != nullptr)
+      bottom_banner_widget->Show(layout.bottom_banner);
+
+    if (bottom_widget != nullptr)
+      bottom_widget->Show(layout.bottom);
 
     LayoutMapArea();
     map->Show();
@@ -1812,6 +1872,22 @@ MainWindow::KillBottomWidget() noexcept
 }
 
 void
+MainWindow::KillBottomBannerWidget() noexcept
+{
+  if (bottom_banner_widget == nullptr)
+    return;
+
+  Widget *const old = bottom_banner_widget;
+  bottom_banner_widget = nullptr;
+
+  if (widget == nullptr)
+    old->Hide();
+
+  old->Unprepare();
+  delete old;
+}
+
+void
 MainWindow::SetBottomWidget(Widget *_widget) noexcept
 {
   if (bottom_widget == nullptr && _widget == nullptr)
@@ -1863,12 +1939,56 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
 }
 
 void
+MainWindow::SetBottomBannerWidget(Widget *_widget) noexcept
+{
+  if (bottom_banner_widget == nullptr && _widget == nullptr)
+    return;
+
+  if (map == nullptr) {
+    /* this doesn't work without a map */
+    delete _widget;
+    return;
+  }
+
+  KillBottomBannerWidget();
+
+  bottom_banner_widget = _widget;
+
+  if (bottom_banner_widget != nullptr) {
+    PixelRect available = GetMainRect();
+    available = GetMapRectBelow(available,
+                                GetTopWidgetRect(available, top_widget));
+    available = GetMapRectAbove(available,
+                                GetBottomWidgetRect(available,
+                                                    bottom_widget));
+
+    /* Prepare with all space above the configured bottom widget so the
+       banner can determine its final minimum size. */
+    bottom_banner_widget->Initialise(*this, available);
+    bottom_banner_widget->Prepare(*this, available);
+  }
+
+  const MapAreaLayout layout =
+    CalculateMapAreaLayout(GetMainRect(), top_widget,
+                           bottom_banner_widget, bottom_widget);
+
+  if (HaveBottomBannerWidget())
+    bottom_banner_widget->Show(layout.bottom_banner);
+
+  LayoutMapArea();
+  map->FullRedraw();
+
+  UpdateMapOverlayButtonLayout();
+}
+
+void
 MainWindow::SetWidget(Widget *_widget) noexcept
 {
   assert(_widget != nullptr);
 
   restore_page_pending = false;
 
+  const bool have_bottom_banner_widget = HaveBottomBannerWidget();
   const bool have_bottom_widget = HaveBottomWidget();
 
   /* delete the old widget */
@@ -1885,6 +2005,9 @@ MainWindow::SetWidget(Widget *_widget) noexcept
     }
 #endif
   }
+
+  if (have_bottom_banner_widget)
+    bottom_banner_widget->Hide();
 
   if (have_bottom_widget)
     bottom_widget->Hide();
