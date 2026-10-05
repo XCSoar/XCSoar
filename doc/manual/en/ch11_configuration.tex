@@ -1242,6 +1242,7 @@ lists.
   like the MacCready value, bugs and ballast from the device.
 \item[Sync.\ to device*]  This option lets you configure if XCSoar should send settings
   like the MacCready value, bugs and ballast to the device.
-\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
-  will allow it's data to be used anyway.
 \end{description}
+
+XCSoar uses an NMEA sentence only when its checksum matches.  A device
+that sends invalid checksums cannot be used as it is.
