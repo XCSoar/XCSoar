@@ -16,6 +16,7 @@
 #include "Task/TaskStore.hpp"
 #include "Task/ValidationErrorStrings.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "system/FileUtil.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
@@ -278,7 +279,8 @@ TaskListPanel::RenameTask()
 
   newname.append(".tsk");
 
-  const auto tasks_path = MakeLocalPath("tasks");
+  const auto tasks_path =
+    MakeLocalPath(GetFileTypeDefaultDir(FileType::TASK).c_str());
 
   File::Rename(task_store.GetPath(cursor_index),
                AllocatedPath::Build(tasks_path, newname));

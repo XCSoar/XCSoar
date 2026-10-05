@@ -7,6 +7,7 @@
 #include "File.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "Repository/FileType.hpp"
 #include "Map.hpp"
 #include "lib/fmt/PathFormatter.hpp"
 #include "system/FileUtil.hpp"
@@ -30,7 +31,8 @@ static bool loaded = false;
 static AllocatedPath
 BuildProfilePath(Path base_name) noexcept
 {
-  return LocalPath(AllocatedPath::Build(Path("profiles"), base_name));
+  return LocalPath(AllocatedPath::Build(
+    GetFileTypeDefaultDir(FileType::PROFILE), base_name));
 }
 
 Path

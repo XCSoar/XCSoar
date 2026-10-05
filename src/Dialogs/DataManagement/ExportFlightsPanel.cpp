@@ -121,7 +121,8 @@ static std::unique_ptr<MultiFileDataField>
 ScanLogs(bool igc_only)
 {
   auto df = std::make_unique<MultiFileDataField>();
-  auto logs_path = MakeLocalPath("logs");
+  auto logs_path =
+    MakeLocalPath(GetFileTypeDefaultDir(FileType::IGC).c_str());
   if (logs_path == nullptr || !Directory::Exists(logs_path))
     return df;
 
