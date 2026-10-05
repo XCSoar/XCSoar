@@ -34,6 +34,12 @@ struct PolarShape {
   [[gnu::pure]]
   PolarCoefficients CalculateCoefficients() const noexcept;
 
+  /**
+   * The reverse of CalculateCoefficients(): set the sink rate of each
+   * point, at the speed it already has, from these coefficients.
+   */
+  void SetSinkRates(const PolarCoefficients &coefficients) noexcept;
+
   [[gnu::pure]]
   bool IsValid() const noexcept;
 };
