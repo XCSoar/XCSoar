@@ -315,12 +315,37 @@ GlidePolarTest::Run()
   TestNextLegEqThermal();
 }
 
+/**
+ * The constructor's stand-in polar must be recognisable as such, so
+ * that it is never sent to a device as the pilot's polar (#3269).
+ */
+static void
+TestFallback()
+{
+  GlidePolar polar(0);
+  ok1(polar.IsValid());
+  ok1(polar.IsFallback());
+
+  /* the masses, MC, bugs and ballast do not make it a glider's polar */
+  polar.SetMC(1.5);
+  polar.SetBugs(0.9);
+  polar.SetReferenceMass(383);
+  ok1(polar.IsFallback());
+
+  /* a polar set up for a glider is not the fallback */
+  polar.SetCoefficients(PolarCoefficients(0.0011, -0.07, 1.6));
+  ok1(!polar.IsFallback());
+
+  ok1(!GlidePolar::Invalid().IsFallback());
+}
+
 int main()
 {
-  plan_tests(69 + 3 + 21);
+  plan_tests(69 + 3 + 21 + 5);
 
   GlidePolarTest test;
   test.Run();
+  TestFallback();
 
   return exit_status();
 }
