@@ -20,6 +20,7 @@
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Form/Form.hpp"
 #include "Widget/Widget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Look/GlobalFonts.hpp"
 #include "Look/DefaultFonts.hpp"
 #include "InfoBoxes/Border.hpp"
@@ -287,11 +288,14 @@ struct MapAreaLayout {
 [[gnu::pure]]
 static MapAreaLayout
 CalculateMapAreaLayout(const PixelRect &main_rect,
+                       const MenuBar *menu_bar,
                        const Widget *top_widget,
                        const Widget *bottom_banner_widget,
                        const Widget *bottom_widget) noexcept
 {
   PixelRect rc = main_rect;
+  if (bottom_banner_widget != nullptr && menu_bar != nullptr)
+    rc = menu_bar->GetRemainingRectAboveBottomButtons(rc);
 
   const PixelRect top_rect = GetTopWidgetRect(rc, top_widget);
   rc = GetMapRectBelow(rc, top_rect);
@@ -379,8 +383,41 @@ MainWindow::GetMapAreaRect() const noexcept
   if (map != nullptr)
     return map->GetPosition();
 
-  return CalculateMapAreaLayout(GetMainRect(), top_widget,
+  return CalculateMapAreaLayout(GetMainRect(), menu_bar, top_widget,
                                 bottom_banner_widget, bottom_widget).map;
+}
+
+PixelRect
+MainWindow::GetBottomBannerRect() const noexcept
+{
+  assert(bottom_banner_widget != nullptr);
+
+  PixelRect available = widget != nullptr
+    ? GetClientRect()
+    : GetAreaStackRect();
+  if (menu_bar != nullptr)
+    available = menu_bar->GetRemainingRectAboveBottomButtons(available);
+
+  if (widget != nullptr)
+    return GetBottomWidgetRect(available, bottom_banner_widget);
+
+  if (HaveTopWidget())
+    available = GetMapRectBelow(available,
+                                GetTopWidgetRect(available, top_widget));
+  if (HaveBottomWidget())
+    available = GetMapRectAbove(available,
+                                GetBottomWidgetRect(available,
+                                                    bottom_widget));
+
+  return GetBottomWidgetRect(available, bottom_banner_widget);
+}
+
+void
+MainWindow::LayoutBottomBannerWidget() noexcept
+{
+  if (HaveBottomBannerWidget() &&
+      bottom_banner_widget->GetWindow().IsVisible())
+    bottom_banner_widget->Move(GetBottomBannerRect());
 }
 
 void
@@ -435,8 +472,11 @@ MainWindow::LayoutMapArea() noexcept
 
   /* the top and bottom areas (cross section, airspace and NOTAM
      warnings) carry text and buttons, so they are laid out like the
-     InfoBoxes: inside the safe area and clear of the InfoBoxes */
-  const PixelRect area_stack_rc = GetAreaStackRect();
+     InfoBoxes: inside the safe area and clear of the InfoBoxes.
+     A warning banner also stays above the menu buttons. */
+  PixelRect area_stack_rc = GetAreaStackRect();
+  if (bottom_banner_widget != nullptr && menu_bar != nullptr)
+    area_stack_rc = menu_bar->GetRemainingRectAboveBottomButtons(area_stack_rc);
 
   /* what the widgets leave over is where the HUD elements go */
   hud_rect = area_stack_rc;
@@ -463,17 +503,19 @@ MainWindow::LayoutMapArea() noexcept
       main_rect = GetMapRectAbove(main_rect, bottom_rect);
   }
 
-  /* transient warnings sit above the configured bottom area */
-  PixelRect above_bottom = area_stack_rc;
-  if (HaveTopWidget())
-    above_bottom = GetMapRectBelow(above_bottom, top_rect);
-  if (HaveBottomWidget())
-    above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
+  /* transient warnings sit above the configured bottom area, on the
+     map page.  A custom page positions the banner itself. */
+  if (bottom_banner_widget != nullptr && widget == nullptr) {
+    PixelRect above_bottom = area_stack_rc;
+    if (HaveTopWidget())
+      above_bottom = GetMapRectBelow(above_bottom, top_rect);
+    if (HaveBottomWidget())
+      above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
 
-  const PixelRect banner_rect =
-    GetBottomWidgetRect(above_bottom, bottom_banner_widget);
-  if (HaveBottomBannerWidget()) {
-    bottom_banner_widget->Move(banner_rect);
+    const PixelRect banner_rect =
+      GetBottomWidgetRect(above_bottom, bottom_banner_widget);
+    if (bottom_banner_widget->GetWindow().IsVisible())
+      bottom_banner_widget->Move(banner_rect);
     hud_rect = GetMapRectAbove(hud_rect, banner_rect);
 
     if (main_rect.bottom <= banner_rect.bottom)
@@ -481,6 +523,7 @@ MainWindow::LayoutMapArea() noexcept
   }
 
   map->Move(main_rect);
+  RaiseBottomBannerWidget();
 
   /* keep the HUD elements (compass, map scale, final glide bar, ...)
      inside it, even if the map extends beyond */
@@ -968,6 +1011,8 @@ MainWindow::ReinitialiseLayout() noexcept
 
   if (map != nullptr)
     map->BringToBottom();
+
+  RaiseBottomBannerWidget();
 }
 
 void
@@ -1275,6 +1320,14 @@ MainWindow::OnResize(PixelSize new_size) noexcept
   if (menu_bar != nullptr)
     menu_bar->OnResize(GetInfoBoxAreaRect());
 
+  if (widget == nullptr && map != nullptr && HaveBottomBannerWidget()) {
+    LayoutMapArea();
+    UpdateMapOverlayButtonLayout();
+  } else {
+    LayoutBottomBannerWidget();
+    RaiseBottomBannerWidget();
+  }
+
   ProgressGlue::Move(GetSafeAreaRect());
 }
 
@@ -1373,10 +1426,11 @@ MainWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 bool
 MainWindow::OnKeyDown(unsigned key_code) noexcept
 {
-  return (widget != nullptr && widget->KeyPress(key_code)) ||
+  return (HaveBottomBannerWidget() &&
+          bottom_banner_widget->GetWindow().IsVisible() &&
+          bottom_banner_widget->KeyPress(key_code)) ||
+    (widget != nullptr && widget->KeyPress(key_code)) ||
     (HaveTopWidget() && top_widget->KeyPress(key_code)) ||
-    (HaveBottomBannerWidget() &&
-     bottom_banner_widget->KeyPress(key_code)) ||
     (HaveBottomWidget() && bottom_widget->KeyPress(key_code)) ||
     InputEvents::processKey(key_code) ||
     SingleWindow::OnKeyDown(key_code);
@@ -1447,6 +1501,8 @@ MainWindow::RunTimer() noexcept
       widget->Raise();
     }
   }
+
+  RaiseBottomBannerWidget();
 
   battery_timer.Process();
 }
@@ -1548,8 +1604,6 @@ MainWindow::OnDestroy() noexcept
 {
   timer.Cancel();
 
-  /* The bottom banner is hidden while a custom main widget is active.  Tear
-     it down before KillWidget() clears that state. */
   KillBottomBannerWidget();
   KillWidget();
   KillTopWidget();
@@ -1583,7 +1637,8 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  if ((HaveBottomBannerWidget() || HaveBottomWidget()) && map != nullptr) {
+  if ((HaveBottomBannerWidget() || HaveBottomWidget()) &&
+      map != nullptr && widget == nullptr) {
     /* draw a separator between the map and the strip below it */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
@@ -1662,6 +1717,7 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
   }
 
   LayoutHudElements();
+  RaiseBottomBannerWidget();
 
   UpdateVarioGaugeVisibility();
 }
@@ -1756,13 +1812,17 @@ MainWindow::ActivateMap() noexcept
     return nullptr;
 
   if (widget != nullptr) {
+    const bool have_bottom_banner_widget = HaveBottomBannerWidget();
+    if (have_bottom_banner_widget)
+      bottom_banner_widget->Hide();
+
     KillWidget();
 
     const MapAreaLayout layout =
-      CalculateMapAreaLayout(GetMainRect(), top_widget,
+      CalculateMapAreaLayout(GetMainRect(), menu_bar, top_widget,
                              bottom_banner_widget, bottom_widget);
 
-    if (bottom_banner_widget != nullptr)
+    if (have_bottom_banner_widget)
       bottom_banner_widget->Show(layout.bottom_banner);
 
     if (bottom_widget != nullptr)
@@ -1770,6 +1830,7 @@ MainWindow::ActivateMap() noexcept
 
     LayoutMapArea();
     map->Show();
+    RaiseBottomBannerWidget();
     map->SetFocus();
     UpdateMapOverlayButtonLayout();
 
@@ -1877,14 +1938,22 @@ MainWindow::KillBottomBannerWidget() noexcept
   if (bottom_banner_widget == nullptr)
     return;
 
-  Widget *const old = bottom_banner_widget;
+  WindowWidget *const old = bottom_banner_widget;
   bottom_banner_widget = nullptr;
 
-  if (widget == nullptr)
+  if (old->GetWindow().IsVisible())
     old->Hide();
 
   old->Unprepare();
   delete old;
+}
+
+void
+MainWindow::RaiseBottomBannerWidget() noexcept
+{
+  if (HaveBottomBannerWidget() &&
+      bottom_banner_widget->GetWindow().IsVisible())
+    bottom_banner_widget->GetWindow().BringToTop();
 }
 
 void
@@ -1939,7 +2008,7 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
 }
 
 void
-MainWindow::SetBottomBannerWidget(Widget *_widget) noexcept
+MainWindow::SetBottomBannerWidget(WindowWidget *_widget) noexcept
 {
   if (bottom_banner_widget == nullptr && _widget == nullptr)
     return;
@@ -1955,25 +2024,33 @@ MainWindow::SetBottomBannerWidget(Widget *_widget) noexcept
   bottom_banner_widget = _widget;
 
   if (bottom_banner_widget != nullptr) {
-    PixelRect available = GetMainRect();
-    available = GetMapRectBelow(available,
-                                GetTopWidgetRect(available, top_widget));
-    available = GetMapRectAbove(available,
-                                GetBottomWidgetRect(available,
-                                                    bottom_widget));
+    PixelRect available;
+    if (widget != nullptr) {
+      available = GetClientRect();
+      if (menu_bar != nullptr)
+        available = menu_bar->GetRemainingRectAboveBottomButtons(available);
+    } else {
+      available = GetMainRect();
+      if (menu_bar != nullptr)
+        available = menu_bar->GetRemainingRectAboveBottomButtons(available);
 
-    /* Prepare with all space above the configured bottom widget so the
-       banner can determine its final minimum size. */
+      available = GetMapRectBelow(available,
+                                  GetTopWidgetRect(available, top_widget));
+      available = GetMapRectAbove(available,
+                                  GetBottomWidgetRect(available,
+                                                      bottom_widget));
+    }
+
+    /* Prepare with the available active-content area so the banner can
+       determine its final minimum size. */
     bottom_banner_widget->Initialise(*this, available);
     bottom_banner_widget->Prepare(*this, available);
   }
 
-  const MapAreaLayout layout =
-    CalculateMapAreaLayout(GetMainRect(), top_widget,
-                           bottom_banner_widget, bottom_widget);
-
-  if (HaveBottomBannerWidget())
-    bottom_banner_widget->Show(layout.bottom_banner);
+  if (HaveBottomBannerWidget()) {
+    bottom_banner_widget->Show(GetBottomBannerRect());
+    RaiseBottomBannerWidget();
+  }
 
   LayoutMapArea();
   map->FullRedraw();
@@ -2019,6 +2096,11 @@ MainWindow::SetWidget(Widget *_widget) noexcept
   widget->Prepare(*this, hud_rc);
   widget->Show(hud_rc);
 
+  if (have_bottom_banner_widget)
+    bottom_banner_widget->Show(GetBottomBannerRect());
+
+  RaiseBottomBannerWidget();
+
   UpdateMapOverlayButtonLayout();
 
   if (!widget->SetFocus())
@@ -2042,6 +2124,13 @@ MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
      area may have changed since the MenuBar was created */
   menu_bar->OnResize(GetInfoBoxAreaRect());
   MenuGlue::Set(*menu_bar, menu, overlay, full);
+  if (widget == nullptr && map != nullptr && HaveBottomBannerWidget()) {
+    LayoutMapArea();
+    UpdateMapOverlayButtonLayout();
+  } else {
+    LayoutBottomBannerWidget();
+    RaiseBottomBannerWidget();
+  }
 }
 
 bool
