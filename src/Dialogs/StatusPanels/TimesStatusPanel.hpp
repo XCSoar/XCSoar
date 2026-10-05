@@ -6,6 +6,7 @@
 #include "StatusPanel.hpp"
 
 #include <functional>
+#include <utility>
 
 class Button;
 

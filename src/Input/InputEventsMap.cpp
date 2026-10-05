@@ -11,6 +11,7 @@
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "MapWindow/UserMapScale.hpp"
+#include "MapWindow/MapTimer.hpp"
 #include "Units/Units.hpp"
 #include "Pan.hpp"
 #include "PageActions.hpp"
@@ -133,6 +134,36 @@ InputEvents::eventPan(const char *misc)
     sub_PanCursor(-1, 0);
 
   XCSoarInterface::SendMapSettings(true);
+}
+
+/**
+ * MapTimer - show, hide, start/stop, or reset the map stopwatch.
+ *
+ * misc:
+ *   show            Show the stopwatch
+ *   hide            Hide the stopwatch
+ *   toggle visible  Toggle visibility
+ *   toggle          Start if stopped, stop if running (visible only)
+ *   reset           Stop and clear elapsed time
+ */
+void
+InputEvents::eventMapTimer(const char *misc)
+{
+  if (StringIsEqual(misc, "show"))
+    MapTimer::SetVisible(true);
+  else if (StringIsEqual(misc, "hide"))
+    MapTimer::SetVisible(false);
+  else if (StringIsEqual(misc, "toggle visible"))
+    MapTimer::ToggleVisible();
+  else if (StringIsEqual(misc, "toggle"))
+    MapTimer::ToggleRunning();
+  else if (StringIsEqual(misc, "reset"))
+    MapTimer::Reset();
+  else
+    return;
+
+  if (auto *map = UIGlobals::GetMap())
+    map->InvalidateMapTimer();
 }
 
 void

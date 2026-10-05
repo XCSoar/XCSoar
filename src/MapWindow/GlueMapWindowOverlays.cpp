@@ -819,15 +819,21 @@ GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
   canvas.DrawRoundRectangle(pill, PixelSize{pill.GetHeight()});
 
   if (map_timer_hold_pending || map_timer_hold_armed) {
-    const bool fade = !HasEPaper() && !IsSlowCPU() &&
-      !map_timer_hold_armed;
-    const unsigned t = fade
-      ? InfoBoxArrange::LongPressFade(map_timer_press_start)
-      : 256;
-    FillRoundedCard(canvas, pill, radius,
-                    int(pill.GetHeight() * t / 256),
-                    info_box_look.GetPreviewGlowColor(),
-                    fill);
+    /* E-paper / slow CPU skip the fade animation; do not draw a full
+       hold fill until the hold actually arms, or a short tap looks
+       like a completed reset.  Pressed (yellow) background still
+       acknowledges the press. */
+    unsigned t = 0;
+    if (map_timer_hold_armed)
+      t = 256;
+    else if (!HasEPaper() && !IsSlowCPU())
+      t = InfoBoxArrange::LongPressFade(map_timer_press_start);
+
+    if (t > 0)
+      FillRoundedCard(canvas, pill, radius,
+                      int(pill.GetHeight() * t / 256),
+                      info_box_look.GetPreviewGlowColor(),
+                      fill);
   }
 
   if (running) {

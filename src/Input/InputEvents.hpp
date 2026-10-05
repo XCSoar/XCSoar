@@ -166,6 +166,7 @@ void eventClearStatusMessages(const char *misc);
 void eventLogger(const char *misc);
 void eventMacCready(const char *misc);
 void eventMainMenu(const char *misc);
+void eventMapTimer(const char *misc);
 void eventMarkLocation(const char *misc);
 void eventPilotEvent(const char *misc);
 void eventMode(const char *misc);

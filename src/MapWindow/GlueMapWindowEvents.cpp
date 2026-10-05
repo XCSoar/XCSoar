@@ -519,6 +519,10 @@ GlueMapWindow::DiscardPendingFingerGesture() noexcept
 void
 GlueMapWindow::BeginMultiTouchOwnership() noexcept
 {
+  /* Second finger cancels a stopwatch press before drag_mode is
+     replaced; otherwise the pill stays pressed and the tap timer
+     keeps invalidating after the pinch ends. */
+  StopMapTimerLongPress();
   DiscardPendingFingerGesture();
   multi_touch_was_panning = IsPanning();
   multi_touch_pan_ui = false;
