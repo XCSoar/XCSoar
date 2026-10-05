@@ -36,19 +36,19 @@ IsSmallScreen(unsigned size, unsigned dpi) noexcept
 }
 
 /**
- * Is the small edge smaller than 5 inch?
+ * Is the long edge smaller than 5 inch?
  */
 static constexpr bool
 IsSmallScreen(unsigned width, unsigned height,
               unsigned x_dpi, unsigned y_dpi) noexcept
 {
-  return width < height
+  return width > height
     ? IsSmallScreen(width, x_dpi)
     : IsSmallScreen(height, y_dpi);
 }
 
 /**
- * Is the small edge smaller than 5 inch?
+ * Is the long edge smaller than 5 inch?
  */
 static constexpr bool
 IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept

@@ -13,7 +13,7 @@ namespace Layout
 extern bool landscape;
 
 /**
- * True when the short edge is smaller than about 5 inches (used to
+ * True when the long edge is smaller than about 5 inches (used to
  * shrink fonts for closer viewing distance).
  */
 extern bool small_screen;

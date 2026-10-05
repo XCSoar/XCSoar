@@ -390,6 +390,9 @@ Version 7.46 - not yet released
     known gesture, for example from Analysis to Pan
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - keep full-size type on 6 inch phones: shrink for close viewing
+    only when the long edge is under 5 inches, and size dialog text
+    from that scale rather than the short edge
   - size the Wayland UI from the output's physical size, and draw at
     the compositor's scale (including 125% / 150% / 200%) so fonts
     and the map are rasterised at the panel DPI #3123
@@ -482,6 +485,9 @@ Version 7.46 - not yet released
   - drop the obsolete Ignore checksum device setting from the manuals
     and state that XCSoar uses an NMEA sentence only when its checksum
     matches #3257
+  - describe Look / Layout Text size: full-size type on 6 inch
+    phones, and a closer-view size when the long edge is under
+    5 inches
 * development
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
