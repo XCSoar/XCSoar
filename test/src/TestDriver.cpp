@@ -3501,6 +3501,96 @@ TestMWVRelativeTrue()
 }
 
 /**
+ * Static pressure and pressure altitude are one ambient-pressure
+ * source.  A later device must not fill the other form (#3268).
+ */
+static void
+TestAmbientPressureComplement()
+{
+  const auto clock = TimeStamp{FloatDuration{1}};
+
+  NMEAInfo higher, lower;
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+
+  /* Pressure altitude on the earlier device blocks static pressure. */
+  higher.ProvidePressureAltitude(262.1);
+  lower.ProvideStaticPressure(AtmosphericPressure::HectoPascal(980));
+  higher.Complement(lower);
+  ok1(higher.pressure_altitude_available);
+  ok1(equals(higher.pressure_altitude, 262.1));
+  ok1(!higher.static_pressure_available);
+
+  /* Static pressure on the earlier device blocks pressure altitude. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  higher.ProvideStaticPressure(AtmosphericPressure::HectoPascal(980));
+  lower.ProvidePressureAltitude(100);
+  higher.Complement(lower);
+  ok1(higher.static_pressure_available);
+  ok1(equals(higher.static_pressure.GetHectoPascal(), 980));
+  ok1(!higher.pressure_altitude_available);
+
+  /* The first device to supply pressure keeps both of its forms. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  lower.ProvideStaticPressure(AtmosphericPressure::HectoPascal(990));
+  lower.ProvidePressureAltitude(150);
+  higher.Complement(lower);
+  ok1(higher.static_pressure_available);
+  ok1(equals(higher.static_pressure.GetHectoPascal(), 990));
+  ok1(higher.pressure_altitude_available);
+  ok1(equals(higher.pressure_altitude, 150));
+
+  /* Pitot that belongs to the rejected static pressure stays behind. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  higher.ProvidePressureAltitude(200);
+  lower.ProvideStaticPressure(AtmosphericPressure::HectoPascal(970));
+  lower.ProvidePitotPressure(AtmosphericPressure::HectoPascal(972));
+  higher.Complement(lower);
+  ok1(higher.pressure_altitude_available);
+  ok1(!higher.static_pressure_available);
+  ok1(!higher.pitot_pressure_available);
+
+  /* Pitot without a static pressure still fills in. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  higher.ProvidePressureAltitude(200);
+  lower.ProvidePitotPressure(AtmosphericPressure::HectoPascal(972));
+  higher.Complement(lower);
+  ok1(higher.pitot_pressure_available);
+  ok1(equals(higher.pitot_pressure.GetHectoPascal(), 972));
+
+  /* No earlier pressure: the later static pressure is used. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  lower.ProvideStaticPressure(AtmosphericPressure::HectoPascal(985));
+  higher.Complement(lower);
+  ok1(higher.static_pressure_available);
+  ok1(equals(higher.static_pressure.GetHectoPascal(), 985));
+  ok1(!higher.pressure_altitude_available);
+}
+
+/**
  * Test that NMEAInfo::Complement() correctly copies stall_ratio AND
  * updates stall_ratio_available.
  */
@@ -4058,6 +4148,7 @@ int main()
              + 109 /* LXNav protocol 1.05 */
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
+             + 18 /* AmbientPressureComplement */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GGAEllipsoid */ + 9 /* EllipsoidComplement */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
@@ -4135,6 +4226,7 @@ int main()
   TestMWVStatus();
   TestMWVRelativeTrue();
   TestStallRatioComplement();
+  TestAmbientPressureComplement();
   TestTemperatureHumidityValidity();
   TestGGAEllipsoidAltitude();
   TestEllipsoidAltitudeValidity();

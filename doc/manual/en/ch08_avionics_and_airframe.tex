@@ -177,6 +177,9 @@ The same is true for values such as barometric altitude (QNH),
 pressure altitude (QNE), logger altitude (IGC), vario and
 airspeed: XCSoar prefers the first device, and uses the second
 device only for values that are not received from the first one.
+Static pressure and pressure altitude are one ambient pressure:
+XCSoar uses the form sent by the first device and ignores the other
+form from a later device.
 Traffic (FLARM) from every device that reports it is used.
 
 Example: Device A is a CAI 302, and Device B is a FLARM.

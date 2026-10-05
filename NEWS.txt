@@ -261,6 +261,9 @@ Version 7.46 - not yet released
   - show only the start time in the flight download list when the
     logger did not record when a flight ended, instead of 00:00 (LXNAV
     S10)
+  - fix barometric altitude using a later sensor when an earlier
+    device already supplies it as pressure altitude or static pressure
+    #3268
 * dialogs
   - show each repository file as its name and its description, and
     download every ticked file together; Countries and Search narrow
@@ -303,8 +306,9 @@ Version 7.46 - not yet released
   - draw Devices list sensor flags in bold when XCSoar uses that
     device's value: first source for GPS, Baro, QNE, Alt IGC, vario
     and the like (A before B); flags that are not bold mean an
-    earlier device already supplies the same data. FLARM is shown
-    only while the device is sending updates
+    earlier device already supplies the same data. QNE and Pressure
+    are one ambient pressure, so only the earlier of those two is
+    bold. FLARM is shown only while the device is sending updates
   - show Baro for QNH height, QNE for pressure altitude, and Alt
     IGC for the logger altitude as separate Devices list flags
   - show Bad GPS on the Devices list in red on a colour display, or
@@ -313,8 +317,9 @@ Version 7.46 - not yet released
   - show Battery=N% on the Devices list in red on a colour display,
     or in bold on e-paper, when remaining charge is below 10%
   - add Help on the Devices list explaining first-device priority,
-    bold flags, Baro versus QNE and Alt IGC, and Bad GPS or low
-    battery (red, or bold on e-paper)
+    bold flags, Baro versus QNE and Alt IGC, that QNE and Pressure
+    are one ambient pressure, and Bad GPS or low battery (red, or
+    bold on e-paper)
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
   - toggle a Markdown checkbox from a tap on its line. A link on

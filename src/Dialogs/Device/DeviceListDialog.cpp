@@ -67,6 +67,8 @@ GetDeviceListHelp() noexcept
            "supplies the same data. "
            "Baro is height with the current QNH; QNE is pressure "
            "altitude; Alt IGC is the altitude the logger writes. "
+           "QNE and Pressure are the same ambient pressure, so only "
+           "the earlier of those two is bold. "
            "Bad GPS and a battery below 10% are shown in red on a colour "
            "display, and in bold on e-paper.");
 }
@@ -479,11 +481,14 @@ DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
                       return f.baro;
                     }), need_sep);
 
+  /* QNE and Pressure are one ambient-pressure source (#3268). */
+  const auto earlier_ambient = [](const Flags &f) {
+    return f.pressure_altitude || f.pressure;
+  };
+
   if (flags.pressure_altitude)
     DrawStatusToken(canvas, p, regular, bold, _("QNE"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.pressure_altitude;
-                    }), need_sep);
+                    !EarlierHas(idx, earlier_ambient), need_sep);
 
   if (flags.igc_altitude)
     DrawStatusToken(canvas, p, regular, bold,
@@ -494,9 +499,7 @@ DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
 
   if (flags.pressure)
     DrawStatusToken(canvas, p, regular, bold, _("Pressure"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.pressure;
-                    }), need_sep);
+                    !EarlierHas(idx, earlier_ambient), need_sep);
 
   if (flags.pitot)
     DrawStatusToken(canvas, p, regular, bold, _("Pitot"),
