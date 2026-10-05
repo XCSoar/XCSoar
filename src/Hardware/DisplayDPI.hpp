@@ -19,6 +19,18 @@ namespace Display {
    */
   void SetForcedDPI(unsigned x_dpi, unsigned y_dpi);
 
+/**
+ * Pair each DPI axis with the matching pixel axis.
+ *
+ * Some panels report portrait pixels with landscape physical size
+ * (or the reverse), so fonts scale from the long-edge DPI.
+ * Unchanged when the pixel and inch orientations already agree, or
+ * when the buffer is square.
+ */
+[[gnu::const]]
+UnsignedPoint2D
+AlignDpiToPixelAxes(PixelSize size, UnsignedPoint2D dpi) noexcept;
+
 #ifdef HAVE_DPI_DETECTION
 /**
  * This function gets called by our UI toolkit (the "Screen" library)
