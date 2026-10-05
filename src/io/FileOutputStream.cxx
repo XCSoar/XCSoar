@@ -5,6 +5,8 @@
 #include "lib/fmt/PathFormatter.hpp"
 #include "lib/fmt/SystemError.hxx"
 
+#include <utility>
+
 #ifdef _WIN32
 #include "system/UTF8Win32.hpp"
 #endif
@@ -64,17 +66,25 @@ FileOutputStream::OpenCreate(bool visible)
 {
 	if (!visible) {
 		/* attempt to create a temporary file */
-		tmp_path = path.WithSuffix(".tmp");
-		Delete(tmp_path);
+		auto candidate = path.WithSuffix(".tmp");
+		Delete(candidate);
 
-		handle = CreateFileW(UTF8ToWide(tmp_path.c_str()).c_str(),
+		handle = CreateFileW(UTF8ToWide(candidate.c_str()).c_str(),
 				     GENERIC_WRITE, 0, nullptr,
 				     CREATE_NEW,
 				     FILE_ATTRIBUTE_NORMAL|FILE_FLAG_WRITE_THROUGH,
 				     nullptr);
-		if (handle != INVALID_HANDLE_VALUE)
-			return;
+		if (!IsDefined()) {
+			/* Opening the target instead would truncate it
+			   before Commit(), so a failed save would
+			   destroy the existing file. */
+			throw FmtLastError(
+				"Failed to create temporary file {}",
+				candidate);
+		}
 
+		tmp_path = std::move(candidate);
+		return;
 	}
 
 	handle = CreateFileW(UTF8ToWide(path.c_str()).c_str(), GENERIC_WRITE,
@@ -202,21 +212,29 @@ FileOutputStream::OpenCreate(bool visible)
 
 	if (!visible) {
 		/* attempt to create a temporary file */
-		tmp_path = path + ".tmp";
-		Delete(tmp_path);
+		auto candidate = path + ".tmp";
+		Delete(candidate);
 
-		if (fd.Open(
+		if (!fd.Open(
 #ifdef __linux__
-			    directory_fd,
+			     directory_fd,
 #endif
-			    tmp_path.c_str(),
-			    O_WRONLY|O_CREAT|O_EXCL,
-			    0666))
-			return;
+			     candidate.c_str(),
+			     O_WRONLY|O_CREAT|O_EXCL,
+			     0666)) {
+			/* Opening the target instead would truncate it
+			   before Commit(), so a failed save would
+			   destroy the existing file. */
+			throw FmtErrno(
+				"Failed to create temporary file {}",
+				candidate);
+		}
 
+		tmp_path = std::move(candidate);
+		return;
 	}
 
-	/* fall back to plain POSIX */
+	/* CREATE_VISIBLE may show the new contents before Commit() */
 	if (!fd.Open(
 #ifdef __linux__
 		    directory_fd,

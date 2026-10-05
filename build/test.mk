@@ -161,7 +161,8 @@ endif
 ifeq ($(HAVE_WIN32),n)
 TEST_NAMES += \
 	TestDataLayoutMigration \
-	TestLocalPathResolve
+	TestLocalPathResolve \
+	TestFileOutputStream
 endif
 
 ifeq ($(HAVE_WIN32),y)
@@ -958,6 +959,14 @@ TEST_FILE_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/TestFileUtil.cpp
 TEST_FILE_UTIL_DEPENDS = OS UTIL
 $(eval $(call link-program,TestFileUtil,TEST_FILE_UTIL))
+
+ifeq ($(HAVE_WIN32),n)
+TEST_FILE_OUTPUT_STREAM_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFileOutputStream.cpp
+TEST_FILE_OUTPUT_STREAM_DEPENDS = IO OS UTIL
+$(eval $(call link-program,TestFileOutputStream,TEST_FILE_OUTPUT_STREAM))
+endif
 
 TEST_PATH_SOURCES = \
 	$(SRC)/system/Path.cpp \
