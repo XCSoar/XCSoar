@@ -41,6 +41,7 @@ Version 7.46 - not yet released
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
   - show the XCSoar logo on the F-Droid store page
+  - draw color e-ink text without anti-aliasing
 * iOS
   - add haptic feedback for button presses; the Haptic feedback
     setting controls it
@@ -592,6 +593,8 @@ Version 7.46 - not yet released
   - describe Look / Layout Viewing distance: Auto uses a 3.2 inch
     short edge, Handheld always shrinks, and Panel keeps full-size
     type
+  - describe Setup / Screen text drawn without anti-aliasing on
+    e-ink
 * development
   - document the testfast and testslow flight-harness targets in
     doc/build.rst

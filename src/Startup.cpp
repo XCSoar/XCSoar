@@ -449,6 +449,13 @@ Startup(UI::Display &display)
   InitializeAppleBackgroundSave();
 #endif
 
+  /* Display type and Text size come from the profile.  The first
+     MainWindow::Initialise() ran with defaults; apply profile layout
+     now so post-profile startup UI (progress, orientation reload)
+     uses e-paper / OEM text compensation.  Look fonts reload again at
+     InitialiseConfigured(). */
+  SetDisplayType(ui_settings.display.display_type);
+
   operation.SetText(_("Initialising"));
 
   /* create XCSoarData on the first start */
@@ -468,8 +475,6 @@ Startup(UI::Display &display)
 
   Display::LoadOrientation(operation);
   main_window->CheckResize();
-
-  SetDisplayType(CommonInterface::GetUISettings().display.display_type);
 
   {
     const PixelSize size = main_window->GetSize();
