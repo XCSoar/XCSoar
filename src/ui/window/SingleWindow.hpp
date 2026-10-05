@@ -27,6 +27,10 @@ class SingleWindow : public TopWindow {
    */
   PixelRect dialog_rect{0, 0, 0, 0};
 
+  /** A non-owning pointer to an interactive strip outside modal dialogs. */
+  Window *dialog_overlay = nullptr;
+  unsigned dialog_bottom_margin = 0;
+
 public:
   using TopWindow::TopWindow;
 
@@ -43,6 +47,17 @@ public:
 
   /** Raise a child above page content while preserving the dialog stack. */
   void BringToTopBelowDialogs(Window &window) noexcept;
+
+  /** Available dialog area, excluding the optional bottom overlay. */
+  [[gnu::pure]]
+  PixelRect GetDialogRect() const noexcept;
+
+  /** The caller must unregister an overlay before destroying its window. */
+  void SetDialogOverlay(Window *window, unsigned bottom_margin=0) noexcept;
+
+  Window *GetDialogOverlay() const noexcept {
+    return dialog_overlay;
+  }
 
   /**
    * Forcefully cancel the top-most dialog.
@@ -83,6 +98,16 @@ public:
 
     return *dialogs.front();
   }
+
+protected:
+  virtual void OnDialogChanged() noexcept {}
+
+  /** Reflow open dialogs after changing the available area. */
+  void ReinitialiseDialogs() noexcept;
+
+private:
+  [[gnu::pure]]
+  PixelRect GetDialogRect(PixelRect rc) const noexcept;
 
 protected:
   [[gnu::pure]]

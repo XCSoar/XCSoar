@@ -4,6 +4,8 @@
 #include "SingleWindow.hpp"
 #include "Form/Form.hpp"
 
+#include <algorithm>
+
 namespace UI {
 
 void
@@ -12,8 +14,11 @@ SingleWindow::AddDialog(WndForm *dialog) noexcept
   dialogs.push_front(dialog);
 
   /* remember what a maximised dialog looks like right now, so
-     OnResize() can tell one apart later */
-  dialog_rect = GetSafeAreaRect();
+     OnResize() can tell one apart later.  The warning banner, if
+     any, is already excluded. */
+  dialog_rect = GetDialogRect();
+  OnDialogChanged();
+  dialog->ReinitialiseLayout(dialog_rect);
 }
 
 void
@@ -22,6 +27,44 @@ SingleWindow::RemoveDialog([[maybe_unused]] WndForm *dialog) noexcept
   assert(dialog == dialogs.front());
 
   dialogs.pop_front();
+  OnDialogChanged();
+}
+
+PixelRect
+SingleWindow::GetDialogRect(PixelRect rc) const noexcept
+{
+  rc.bottom -= std::min(dialog_bottom_margin, rc.GetHeight() / 2);
+  return rc;
+}
+
+PixelRect
+SingleWindow::GetDialogRect() const noexcept
+{
+  return GetDialogRect(GetSafeAreaRect());
+}
+
+void
+SingleWindow::SetDialogOverlay(Window *window, unsigned bottom_margin) noexcept
+{
+  dialog_overlay = window;
+  if (window == nullptr)
+    bottom_margin = 0;
+
+  if (dialog_bottom_margin == bottom_margin)
+    return;
+
+  dialog_bottom_margin = bottom_margin;
+  ReinitialiseDialogs();
+  Invalidate();
+}
+
+void
+SingleWindow::ReinitialiseDialogs() noexcept
+{
+  const auto rc = GetDialogRect();
+  for (auto *dialog : dialogs)
+    dialog->ReinitialiseLayout(rc);
+  dialog_rect = rc;
 }
 
 void
@@ -113,11 +156,12 @@ SingleWindow::OnResize(PixelSize new_size) noexcept
      size when Expose() runs.  GetClientRect() still returns the old
      size here, so build the rects from new_size.
 
-     Dialogs stay in the safe area.  The Fly/Simulator start screen is
-     the exception: it fills the client so its gradient can paint
-     edge to edge, and only its controls follow the insets. */
+     Dialogs stay in the safe area, above a warning banner.  The
+     Fly/Simulator start screen is the exception: it fills the client
+     so its gradient can paint edge to edge, and only its controls
+     follow the insets. */
   const PixelRect full_rc{new_size};
-  const PixelRect rc = GetSafeAreaRect(new_size);
+  const PixelRect rc = GetDialogRect(GetSafeAreaRect(new_size));
   for (WndForm *dialog : dialogs) {
     if (dialog->FillsClient()) {
       dialog->Move(full_rc);

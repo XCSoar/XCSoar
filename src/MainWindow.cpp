@@ -389,6 +389,9 @@ MainWindow::GetBottomBannerRect() const noexcept
 {
   assert(bottom_banner_widget != nullptr);
 
+  if (HasDialog())
+    return GetBottomWidgetRect(GetSafeAreaRect(), bottom_banner_widget);
+
   PixelRect available = GetAreaStackRect();
   if (HaveTopWidget())
     available = GetMapRectBelow(available,
@@ -455,6 +458,13 @@ MainWindow::LayoutMapArea() noexcept
      InfoBoxes: inside the safe area and clear of the InfoBoxes */
   const PixelRect area_stack_rc = GetAreaStackRect();
 
+  /* measure the banner at the width it will use, so its height is
+     final before the rest of the stack is placed */
+  const bool banner_visible = HaveBottomBannerWidget() &&
+    bottom_banner_widget->GetWindow().IsVisible();
+  if (banner_visible)
+    bottom_banner_widget->Move(GetBottomBannerRect());
+
   /* what the widgets leave over is where the HUD elements go */
   hud_rect = area_stack_rc;
 
@@ -481,16 +491,17 @@ MainWindow::LayoutMapArea() noexcept
   }
 
   /* transient warnings sit above the configured bottom area, on the
-     map and on a custom page */
-  if (bottom_banner_widget != nullptr) {
+     map and on a custom page.  While a dialog is open the banner is
+     the dialog overlay and must not shorten the map. */
+  PixelRect banner_rect{};
+  if (bottom_banner_widget != nullptr && !HasDialog()) {
     PixelRect above_bottom = area_stack_rc;
     if (HaveTopWidget())
       above_bottom = GetMapRectBelow(above_bottom, top_rect);
     if (HaveBottomWidget())
       above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
 
-    const PixelRect banner_rect =
-      GetBottomWidgetRect(above_bottom, bottom_banner_widget);
+    banner_rect = GetBottomWidgetRect(above_bottom, bottom_banner_widget);
     if (bottom_banner_widget->GetWindow().IsVisible())
       bottom_banner_widget->Move(banner_rect);
     hud_rect = GetMapRectAbove(hud_rect, banner_rect);
@@ -502,6 +513,19 @@ MainWindow::LayoutMapArea() noexcept
   map->Move(main_rect);
   if (widget != nullptr)
     widget->Move(hud_rect);
+
+  if (banner_visible) {
+    if (HasDialog()) {
+      banner_rect = GetBottomWidgetRect(GetSafeAreaRect(),
+                                        bottom_banner_widget);
+      bottom_banner_widget->Move(banner_rect);
+    }
+
+    SetDialogOverlay(&bottom_banner_widget->GetWindow(),
+                     banner_rect.GetHeight());
+  } else
+    SetDialogOverlay(nullptr);
+
   RaiseBottomBannerWidget();
 
   /* keep the HUD elements (compass, map scale, final glide bar, ...)
@@ -531,6 +555,16 @@ MainWindow::LayoutHudElements() noexcept
 
   if (popup != nullptr)
     popup->UpdateLayout(hud_rc);
+}
+
+void
+MainWindow::OnDialogChanged() noexcept
+{
+  if (!HaveBottomBannerWidget())
+    return;
+
+  LayoutMapArea();
+  UpdateMapOverlayButtonLayout();
 }
 
 void
@@ -1299,6 +1333,9 @@ MainWindow::OnResize(PixelSize new_size) noexcept
   if (menu_bar != nullptr)
     menu_bar->OnResize(GetInfoBoxAreaRect());
 
+  /* the banner's height may have changed with the new width */
+  ReinitialiseDialogs();
+
   ProgressGlue::Move(GetSafeAreaRect());
 }
 
@@ -1606,7 +1643,8 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  if ((HaveBottomBannerWidget() || HaveBottomWidget()) && map != nullptr) {
+  const bool map_banner = HaveBottomBannerWidget() && !HasDialog();
+  if ((map_banner || HaveBottomWidget()) && map != nullptr) {
     /* draw a separator between the map and the strip below it */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
@@ -1614,7 +1652,7 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  if (HaveBottomBannerWidget() && HaveBottomWidget()) {
+  if (map_banner && HaveBottomWidget()) {
     /* separator between the warning banner and the configured bottom
        area; the map may extend underneath both */
     const PixelRect area_stack_rc = GetAreaStackRect();
@@ -1891,6 +1929,7 @@ MainWindow::KillBottomBannerWidget() noexcept
 
   WindowWidget *const old = bottom_banner_widget;
   bottom_banner_widget = nullptr;
+  SetDialogOverlay(nullptr);
 
   if (old->GetWindow().IsVisible())
     old->Hide();
@@ -1905,7 +1944,7 @@ MainWindow::RaiseBottomBannerWidget() noexcept
   if (HaveBottomBannerWidget() &&
       bottom_banner_widget->GetWindow().IsVisible()) {
     BringToTopBelowDialogs(bottom_banner_widget->GetWindow());
-    if (menu_bar != nullptr)
+    if (menu_bar != nullptr && !HasDialog())
       menu_bar->BringToTop(*this);
   }
 }
