@@ -7610,9 +7610,6 @@ msgstr ""
 msgid "Turn on"
 msgstr ""
 
-msgid "Restart"
-msgstr ""
-
 msgid "Turn off"
 msgstr ""
 
