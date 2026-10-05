@@ -331,13 +331,23 @@ NMEAInfo::Complement(const NMEAInfo &add) noexcept
   if (igc_pressure_altitude_available.Complement(add.igc_pressure_altitude_available))
     igc_pressure_altitude = add.igc_pressure_altitude;
 
-  if (noncomp_vario_available.Complement(add.noncomp_vario_available))
+  /* Uncompensated, total-energy and netto vario are one climb-rate
+     source.  A later device's uncompensated value becomes gps_vario
+     and is subtracted from the earlier total-energy vario when the
+     pitch angle is estimated. */
+  const bool have_vario = noncomp_vario_available ||
+    total_energy_vario_available || netto_vario_available;
+
+  if (!have_vario &&
+      noncomp_vario_available.Complement(add.noncomp_vario_available))
     noncomp_vario = add.noncomp_vario;
 
-  if (total_energy_vario_available.Complement(add.total_energy_vario_available))
+  if (!have_vario &&
+      total_energy_vario_available.Complement(add.total_energy_vario_available))
     total_energy_vario = add.total_energy_vario;
 
-  if (netto_vario_available.Complement(add.netto_vario_available))
+  if (!have_vario &&
+      netto_vario_available.Complement(add.netto_vario_available))
     netto_vario = add.netto_vario;
 
   settings.Complement(add.settings);

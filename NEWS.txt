@@ -264,6 +264,8 @@ Version 7.46 - not yet released
   - fix barometric altitude using a later sensor when an earlier
     device already supplies it as pressure altitude or static pressure
     #3268
+  - fix the estimated pitch angle using a later sensor's climb rate
+    together with an earlier device's total-energy vario
 * dialogs
   - show each repository file as its name and its description, and
     download every ticked file together; Countries and Search narrow
