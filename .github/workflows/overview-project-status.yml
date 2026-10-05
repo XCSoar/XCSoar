@@ -1,0 +1,172 @@
+# Sync issue status to the XCSoar Overview project board (org project #13).
+#
+# Triggers:
+#   Milestone added   → Todo        (unless already In Progress or Done)
+#   PR links issue    → In Progress (unless already Done)
+#   Issue closed      → Done        (only if already on the board)
+#
+# Requires PROJECT_TOKEN secret (PAT with project scope).
+# GITHUB_TOKEN cannot write to organization projects.
+---
+name: Sync Overview project status
+
+permissions: {}
+
+on:
+  issues:
+    types: [milestoned, closed]
+  pull_request:
+    types: [opened, edited]
+
+env:
+  PROJECT_ID: PVT_kwDOAA0kkM4BjCO8
+  STATUS_FIELD_ID: PVTSSF_lADOAA0kkM4BjCO8zhh4F4A
+  STATUS_TODO: f75ad846
+  STATUS_IN_PROGRESS: 47fc9ee4
+  STATUS_DONE: 98236657
+
+jobs:
+  sync-status:
+    runs-on: ubuntu-latest
+    if: github.repository == 'XCSoar/XCSoar'
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+    steps:
+      - name: Define helper functions
+        id: helpers
+        run: |
+          cat > "$RUNNER_TEMP/project-helpers.sh" << 'EOF'
+          # Get project item ID and current status for an issue node ID.
+          # Sets ITEM_ID and CURRENT_STATUS.
+          get_project_item() {
+            local issue_id="$1"
+            local data=$(gh api graphql -f query='
+              query($id: ID!) {
+                node(id: $id) {
+                  ... on Issue {
+                    projectItems(first: 10) {
+                      nodes {
+                        id
+                        project { id }
+                        fieldValueByName(name: "Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { optionId }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ' -f id="$issue_id")
+            ITEM_ID=$(echo "$data" | jq -r ".data.node.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .id")
+            CURRENT_STATUS=$(echo "$data" | jq -r ".data.node.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .fieldValueByName.optionId // empty")
+          }
+
+          # Add issue to project if not already present. Sets ITEM_ID.
+          add_to_project() {
+            local issue_id="$1"
+            ITEM_ID=$(gh api graphql -f query='
+              mutation($project: ID!, $content: ID!) {
+                addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
+                  item { id }
+                }
+              }
+            ' -f project="$PROJECT_ID" -f content="$issue_id" --jq '.data.addProjectV2ItemById.item.id')
+          }
+
+          # Set the Status field on a project item.
+          set_status() {
+            local item_id="$1" status_id="$2"
+            gh api graphql -f query='
+              mutation($project: ID!, $item: ID!, $field: ID!, $value: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $project, itemId: $item, fieldId: $field,
+                  value: {singleSelectOptionId: $value}
+                }) { projectV2Item { id } }
+              }
+            ' -f project="$PROJECT_ID" -f item="$item_id" \
+              -f field="$STATUS_FIELD_ID" -f value="$status_id" >/dev/null
+          }
+          EOF
+
+      - name: Milestone added → Todo
+        if: github.event_name == 'issues' && github.event.action == 'milestoned'
+        run: |
+          source "$RUNNER_TEMP/project-helpers.sh"
+          ISSUE_ID="${{ github.event.issue.node_id }}"
+
+          get_project_item "$ISSUE_ID"
+
+          if [ -z "$ITEM_ID" ]; then
+            add_to_project "$ISSUE_ID"
+            echo "Added issue to project"
+          fi
+
+          if [ "$CURRENT_STATUS" = "$STATUS_IN_PROGRESS" ] || [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
+            echo "Already In Progress or Done; skipping"
+          else
+            set_status "$ITEM_ID" "$STATUS_TODO"
+            echo "Set status to Todo"
+          fi
+
+      - name: Issue closed → Done
+        if: github.event_name == 'issues' && github.event.action == 'closed'
+        run: |
+          source "$RUNNER_TEMP/project-helpers.sh"
+          ISSUE_ID="${{ github.event.issue.node_id }}"
+
+          get_project_item "$ISSUE_ID"
+
+          if [ -z "$ITEM_ID" ]; then
+            echo "Issue not on Overview project; skipping"
+          else
+            set_status "$ITEM_ID" "$STATUS_DONE"
+            echo "Set status to Done"
+          fi
+
+      - name: PR linked → In Progress
+        if: github.event_name == 'pull_request'
+        run: |
+          source "$RUNNER_TEMP/project-helpers.sh"
+
+          # Extract issue numbers from Fixes/Closes/Resolves #N patterns
+          ISSUE_NUMS=$(echo "${{ github.event.pull_request.body }}" \
+            | grep -oiE '(fix(es)?|close(s)?|resolve(s)?)\s*#[0-9]+' \
+            | grep -oE '[0-9]+' || true)
+
+          if [ -z "$ISSUE_NUMS" ]; then
+            echo "No linked issues found"
+            exit 0
+          fi
+
+          for NUM in $ISSUE_NUMS; do
+            echo "Processing issue #$NUM"
+
+            # Look up issue node ID
+            ISSUE_ID=$(gh api graphql -f query='
+              query($owner: String!, $repo: String!, $num: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $num) { id }
+                }
+              }
+            ' -f owner="XCSoar" -f repo="XCSoar" -F num="$NUM" \
+              --jq '.data.repository.issue.id // empty' 2>/dev/null || true)
+
+            if [ -z "$ISSUE_ID" ]; then
+              echo "  Not found; skipping"
+              continue
+            fi
+
+            get_project_item "$ISSUE_ID"
+
+            if [ -z "$ITEM_ID" ]; then
+              add_to_project "$ISSUE_ID"
+              echo "  Added to project"
+            fi
+
+            if [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
+              echo "  Already Done; skipping"
+            else
+              set_status "$ITEM_ID" "$STATUS_IN_PROGRESS"
+              echo "  Set to In Progress"
+            fi
+          done
