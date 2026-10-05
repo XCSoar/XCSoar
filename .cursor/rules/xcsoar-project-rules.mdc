@@ -677,7 +677,7 @@ When writing or modifying renderer code (`src/Renderer/`, `src/Look/`, `MapWindo
 - Use `Layout::ScalePenWidth()` or `Layout::ScaleFinePenWidth()` for line widths
 - Never use hardcoded pixel values; always use scaling functions from `Layout` namespace
 - Base resolution: 240 pixels (320 for square displays) on the shortest dimension
-- Small screens (< 5 inch) automatically get adjusted scaling for viewing distance
+- Small screens (short edge under 3.2 inches) automatically get adjusted scaling for viewing distance. The Viewing distance setting can force Handheld or Panel scaling
 - Touch screens get larger hit areas and control heights
 - Test UI changes on both low-DPI and high-DPI devices when possible
 

@@ -475,6 +475,10 @@ Version 7.46 - not yet released
     known gesture, for example from Analysis to Pan
   - keep pan-mode menu buttons about 20 mm tall on tall phones,
     large enough for a gloved tap
+  - shrink type for close viewing when the short edge is under
+    3.2 inches. Setup / Look / Layout / Viewing distance can force
+    Handheld or Panel; Kobo starts on Handheld. Dialog text follows
+    that size
   - size the Wayland UI from the output's physical size, and draw at
     the compositor's scale (including 125% / 150% / 200%) so fonts
     and the map are rasterised at the panel DPI #3123
@@ -584,6 +588,9 @@ Version 7.46 - not yet released
     airspace exchanges
   - add Lua examples for altitude reminders: landing checklist and
     landing gear on the way down, oxygen on the way up #884
+  - describe Look / Layout Viewing distance: Auto uses a 3.2 inch
+    short edge, Handheld always shrinks, and Panel keeps full-size
+    type
 * development
   - document the testfast and testslow flight-harness targets in
     doc/build.rst

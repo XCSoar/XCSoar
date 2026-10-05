@@ -27,16 +27,17 @@ unsigned minimum_control_height = 20, maximum_control_height = 44;
 unsigned hit_radius = 10;
 
 /**
- * Is the given pixel size smaller than 5 inch?
+ * Short edge under 3.2 inches (16/5).  size * 5 < dpi * 16.
  */
 static constexpr bool
 IsSmallScreen(unsigned size, unsigned dpi) noexcept
 {
-  return size < dpi * 5;
+  return size * 5 < dpi * 16;
 }
 
 /**
- * Is the small edge smaller than 5 inch?
+ * Is the short edge under 3.2 inches?
+ * A square uses the height and the y DPI.
  */
 static constexpr bool
 IsSmallScreen(unsigned width, unsigned height,
@@ -47,13 +48,29 @@ IsSmallScreen(unsigned width, unsigned height,
     : IsSmallScreen(height, y_dpi);
 }
 
-/**
- * Is the small edge smaller than 5 inch?
- */
 static constexpr bool
 IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
 {
   return IsSmallScreen(size.width, size.height, dpi.x, dpi.y);
+}
+
+static constexpr bool
+UseCloseView(PixelSize size, UnsignedPoint2D dpi,
+             ViewingDistance viewing_distance) noexcept
+{
+  switch (viewing_distance) {
+  case ViewingDistance::HANDHELD:
+    return true;
+
+  case ViewingDistance::PANEL:
+    return false;
+
+  case ViewingDistance::AUTO:
+  case ViewingDistance::COUNT:
+    break;
+  }
+
+  return IsSmallScreen(size, dpi);
 }
 
 [[gnu::pure]]
@@ -104,9 +121,7 @@ Apply(PixelSize new_size, UnsignedPoint2D dpi,
   fine_pen_width_scale = std::max(1024u, dpi.x * 1024u / 160u);
 
   pt_scale = 1024 * dpi.y / 72;
-
   vpt_scale = SmallScreenAdjust(pt_scale);
-
   font_scale = SmallScreenAdjust(1024 * dpi.y * ui_scale / 72 / 100);
 
   text_padding = VptScale(2);
@@ -128,19 +143,22 @@ Apply(PixelSize new_size, UnsignedPoint2D dpi,
 
 void
 Initialise(PixelSize new_size, UnsignedPoint2D dpi,
-           unsigned ui_scale, bool has_touch) noexcept
+           unsigned ui_scale, bool has_touch,
+           ViewingDistance viewing_distance) noexcept
 {
   Apply(new_size, dpi, ui_scale, has_touch,
-        IsSmallScreen(new_size, dpi));
+        UseCloseView(new_size, dpi, viewing_distance));
 }
 
 void
 Initialise(const UI::Display &display, PixelSize new_size,
-           unsigned ui_scale, unsigned custom_dpi) noexcept
+           unsigned ui_scale, unsigned custom_dpi,
+           ViewingDistance viewing_distance) noexcept
 {
   const auto dpi = Display::GetDPI(display, custom_dpi);
+  const auto size = GetDisplaySize(display, new_size);
   Apply(new_size, dpi, ui_scale, HasTouchScreen(),
-        IsSmallScreen(GetDisplaySize(display, new_size), dpi));
+        UseCloseView(size, dpi, viewing_distance));
 }
 
 } // namespace Layout

@@ -44,9 +44,10 @@ struct Expected {
   static bool
   IsSmallScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
   {
+    /* Short edge under 3.2 inches.  A square uses height and y DPI. */
     return size.width < size.height
-      ? size.width < dpi.x * 5
-      : size.height < dpi.y * 5;
+      ? size.width * 5 < dpi.x * 16
+      : size.height * 5 < dpi.y * 16;
   }
 
   static Expected
@@ -138,8 +139,8 @@ TestCase(PixelSize size, UnsignedPoint2D dpi,
 /**
  * Literal goldens for square vs landscape.  Square is never
  * landscape, uses divisor 320, and small-screen on a square uses
- * y DPI.  Landscape is width>height and uses the short-edge (y)
- * DPI; flipping 480x640 to 640x480 keeps the same scale_1024.
+ * y DPI.  Landscape uses the short edge (height) and y DPI;
+ * flipping 480x640 to 640x480 keeps the same scale_1024.
  */
 static constexpr unsigned SQUARE_LANDSCAPE_CHECKS = 25;
 
@@ -192,7 +193,7 @@ TestSquareAndLandscape() noexcept
   ok1(!Layout::landscape);
   ok1(!Layout::small_screen);
 
-  /* landscape small-screen uses y_dpi (the short edge) */
+  /* landscape small-screen uses the short edge and y_dpi */
   Layout::Initialise({800, 480}, {96, 200}, 100, false);
   ok1(Layout::landscape);
   ok1(Layout::small_screen);
@@ -245,16 +246,16 @@ main()
     unsigned ui_scale;
     bool has_touch;
   } cases[] = {
-    /* 240x320 @ 96 DPI: historical base, 2.5" short edge, small */
+    /* 240x320 @ 96 DPI: short edge 2.5", small */
     {{240, 320}, dpi96, 100, false},
     {{320, 240}, dpi96, 100, false},
     {{320, 320}, dpi96, 100, false},
     {{480, 480}, dpi96, 100, false},
     {{480, 640}, dpi96, 100, false},
 
-    /* 5 inch is size < dpi*5, not <= */
-    {{479, 800}, dpi96, 100, false},
-    {{480, 800}, dpi96, 100, false},
+    /* 3.2 inch is size*5 < dpi*16, not <= (short edge) */
+    {{307, 800}, dpi96, 100, false},
+    {{308, 800}, dpi96, 100, false},
 
     {{1920, 1080}, dpi96, 100, false},
     {{1920, 1080}, dpi96, 200, false},
@@ -264,10 +265,13 @@ main()
 
     {{1080, 1920}, dpi400, 100, true},
     {{1080, 1920}, {96, 400}, 100, false},
+
+    /* HiBreak Pro: short edge 2.75" at 300 dpi, small */
+    {{824, 1648}, {300, 300}, 100, true},
   };
 
   plan_tests(1 + ARRAY_SIZE(cases) * LAYOUT_CHECKS +
-             SQUARE_LANDSCAPE_CHECKS + MINIMUM_SIZE_CHECKS);
+             SQUARE_LANDSCAPE_CHECKS + MINIMUM_SIZE_CHECKS + 3 + 6);
 
   ok1(Layout::ScaleSupported());
 
@@ -276,6 +280,30 @@ main()
 
   TestSquareAndLandscape();
   TestMinimumWindowSize();
+
+  /* HiBreak Pro is small (short edge 2.75").  12 pt at 300 dpi is
+     50 px before the closer-view shrink. */
+  Layout::Initialise({824, 1648}, {300, 300}, 100, true);
+  ok1(Layout::small_screen);
+  ok1(Layout::PtScale(12) == 49);
+  ok1(Layout::FontScale(12) == 33);
+
+  /* 7" panel, short edge 3.6".  Phone, short edge 2.7". */
+  Layout::Initialise({1024, 720}, {200, 200}, 100, true);
+  ok1(!Layout::small_screen);
+
+  Layout::Initialise({1080, 2400}, {400, 400}, 100, true);
+  ok1(Layout::small_screen);
+
+  Layout::Initialise({1024, 720}, {200, 200}, 100, true,
+                     Layout::ViewingDistance::HANDHELD);
+  ok1(Layout::small_screen);
+  ok1(Layout::FontScale(12) < Layout::PtScale(12));
+
+  Layout::Initialise({1080, 2400}, {400, 400}, 100, true,
+                     Layout::ViewingDistance::PANEL);
+  ok1(!Layout::small_screen);
+  ok1(Layout::FontScale(12) == Layout::PtScale(12));
 
   return exit_status();
 }

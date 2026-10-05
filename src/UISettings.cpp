@@ -13,6 +13,12 @@ UISettings::SetDefaults() noexcept
 
   scale = 100;
 
+#ifdef KOBO
+  viewing_distance = Layout::ViewingDistance::HANDHELD;
+#else
+  viewing_distance = Layout::ViewingDistance::AUTO;
+#endif
+
   custom_dpi = 0;  // automatic
 
   thermal_assistant_position = ThermalAssistantPosition::BOTTOM_LEFT_AVOID_IB;
