@@ -211,3 +211,11 @@ Window::BringToBottom() noexcept
 
   parent->BringChildToBottom(*this);
 }
+
+void
+Window::PlaceBelow(Window &sibling) noexcept
+{
+  AssertThread();
+  assert(parent == sibling.parent);
+  parent->PlaceChildBelow(*this, sibling);
+}

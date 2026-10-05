@@ -227,6 +227,8 @@ public:
 
   void BringToTop() noexcept;
   void BringToBottom() noexcept;
+  /** Place this window immediately below a sibling without taking focus. */
+  void PlaceBelow(Window &sibling) noexcept;
 
   void ShowOnTop() noexcept {
     AssertThread();
