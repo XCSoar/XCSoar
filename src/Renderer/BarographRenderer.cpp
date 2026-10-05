@@ -17,9 +17,12 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "TaskLegRenderer.hpp"
 #include "GradientRenderer.hpp"
+#include "Math/Point2D.hpp"
+#include "Math/XYDataStore.hpp"
 #include "time/FloatDuration.hxx"
 #include "time/RoughTime.hpp"
 #include "time/Stamp.hpp"
+#include "util/StaticArray.hxx"
 #include "util/UTF8.hpp"
 
 #include <cmath>
@@ -77,6 +80,51 @@ ClockHoursToTimeStamp(double hours) noexcept
 }
 
 /**
+ * Altitude samples are one minute apart while flying. A longer gap is
+ * time on the ground; do not draw terrain or altitude across it.
+ */
+static constexpr double FLIGHT_BREAK_HOURS = 5. / 60.;
+
+template<typename Draw>
+static void
+ForEachFlightSegment(const XYDataStore &data, Draw &&draw) noexcept
+{
+  if (!data.HasResult())
+    return;
+
+  const auto slots = data.GetSlots();
+  StaticArray<DoublePoint2D, 1000> segment;
+  segment.append(DoublePoint2D{slots[0].x, slots[0].y});
+  for (std::size_t i = 1; i < slots.size(); ++i) {
+    if (slots[i].x - slots[i - 1].x > FLIGHT_BREAK_HOURS) {
+      if (segment.size() >= 2)
+        draw(std::span<const DoublePoint2D>{segment});
+      segment.clear();
+    }
+    segment.append(DoublePoint2D{slots[i].x, slots[i].y});
+  }
+  if (segment.size() >= 2)
+    draw(std::span<const DoublePoint2D>{segment});
+}
+
+static void
+DrawFlightFilled(ChartRenderer &chart, const XYDataStore &data) noexcept
+{
+  ForEachFlightSegment(data, [&](std::span<const DoublePoint2D> segment) {
+    chart.DrawFilledLineGraph(segment);
+  });
+}
+
+static void
+DrawFlightLine(ChartRenderer &chart, const XYDataStore &data,
+               ChartLook::Style style) noexcept
+{
+  ForEachFlightSegment(data, [&](std::span<const DoublePoint2D> segment) {
+    chart.DrawLineGraph(segment, style);
+  });
+}
+
+/**
  * Hour ticks (short marks only, no full vertical grid) plus end labels.
  */
 static void
@@ -110,8 +158,13 @@ DrawBarographClockAxis(ChartRenderer &chart,
   canvas.DrawText({rc_chart.right - int(end_width), label_y},
                   end_text.c_str());
 
-  const double first_hour = std::ceil(x_min + 1e-9);
-  for (double hour = first_hour; hour < x_max - 1e-9; hour += 1.) {
+  /* X is UTC hours. Align ticks to whole local hours. */
+  const double offset_hours = utc_offset.AsMinutes() / 60.;
+  const double first_local = std::ceil(x_min + offset_hours + 1e-9);
+  for (double local = first_local;; local += 1.) {
+    const double hour = local - offset_hours;
+    if (!(hour < x_max - 1e-9))
+      break;
     const int x = chart.ScreenX(hour);
     if (x <= rc_chart.left || x >= rc_chart.right)
       continue;
@@ -141,7 +194,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromData(fs.altitude);
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(0);
-  if (nmea_info.time_available)
+  if (derived_info.flight.flying && nmea_info.time_available)
     chart.ScaleXFromValue(ToClockHours(nmea_info.time));
 
   if (_task != nullptr) {
@@ -153,9 +206,10 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
-  chart.DrawFilledLineGraph(fs.altitude_terrain);
+  DrawFlightFilled(chart, fs.altitude_terrain);
 
-  chart.DrawLineGraph(fs.altitude, inverse? ChartLook::STYLE_WHITE: ChartLook::STYLE_BLACK);
+  DrawFlightLine(chart, fs.altitude,
+                 inverse ? ChartLook::STYLE_WHITE : ChartLook::STYLE_BLACK);
 
   // draw dot
   if (fs.altitude.GetCount()) {
@@ -202,7 +256,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(0);
   chart.ScaleXFromValue(fs.altitude.GetMinX());
-  if (nmea_info.time_available)
+  if (derived_info.flight.flying && nmea_info.time_available)
     chart.ScaleXFromValue(ToClockHours(nmea_info.time));
 
   if (!fs.altitude_ceiling.IsEmpty()) {
@@ -217,7 +271,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
-  chart.DrawFilledLineGraph(fs.altitude_terrain);
+  DrawFlightFilled(chart, fs.altitude_terrain);
 
   Pen bg_pen(1, chart_look.background_color);
   Brush bg_brush(chart_look.background_color);
@@ -238,7 +292,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
     chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHINDASH);
   }
 
-  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_BLACK);
+  DrawFlightLine(chart, fs.altitude, ChartLook::STYLE_BLACK);
   chart.Finish();
 }
 
