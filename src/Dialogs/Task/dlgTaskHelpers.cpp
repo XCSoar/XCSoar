@@ -7,6 +7,7 @@
 #include "Task/SaveFile.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "LocalPath.hpp"
+#include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 
 #include <cstring>
@@ -18,7 +19,8 @@ OrderedTaskSave(OrderedTask &task)
   if (!TextEntryDialog(fname, 64, _("Enter a task name")))
     return false;
 
-  const auto tasks_path = MakeLocalPath("tasks");
+  const auto tasks_path =
+    MakeLocalPath(GetFileTypeDefaultDir(FileType::TASK).c_str());
 
   strcat(fname, ".tsk");
   task.SetName(fname);

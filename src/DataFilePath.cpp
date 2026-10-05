@@ -201,9 +201,8 @@ ResolveCacheDataPath(const char *filename) noexcept
 AllocatedPath
 LogsDataSavePath(const char *filename) noexcept
 {
-  const auto logs_dir = LocalPath(Path("logs"));
-  Directory::CreateRecursive(logs_dir);
-  return AllocatedPath::Build(logs_dir, filename);
+  /* IGC and NMEA share logs/ */
+  return TypedDataSavePath(FileType::IGC, filename);
 }
 
 AllocatedPath
