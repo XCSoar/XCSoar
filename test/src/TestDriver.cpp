@@ -3591,6 +3591,83 @@ TestAmbientPressureComplement()
 }
 
 /**
+ * Uncompensated, total-energy and netto vario are one climb rate.
+ * A later device must not fill another form.
+ */
+static void
+TestVarioComplement()
+{
+  const auto clock = TimeStamp{FloatDuration{1}};
+
+  NMEAInfo higher, lower;
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+
+  /* Total-energy vario blocks a later uncompensated vario. */
+  higher.ProvideTotalEnergyVario(1.5);
+  lower.ProvideNoncompVario(0.2);
+  higher.Complement(lower);
+  ok1(higher.total_energy_vario_available);
+  ok1(equals(higher.total_energy_vario, 1.5));
+  ok1(!higher.noncomp_vario_available);
+
+  /* Uncompensated vario blocks a later total-energy vario. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  higher.ProvideNoncompVario(0.4);
+  lower.ProvideTotalEnergyVario(2.0);
+  higher.Complement(lower);
+  ok1(higher.noncomp_vario_available);
+  ok1(equals(higher.noncomp_vario, 0.4));
+  ok1(!higher.total_energy_vario_available);
+
+  /* The first device to supply a vario keeps both of its forms. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  lower.ProvideTotalEnergyVario(1.2);
+  lower.ProvideNoncompVario(0.8);
+  higher.Complement(lower);
+  ok1(higher.total_energy_vario_available);
+  ok1(equals(higher.total_energy_vario, 1.2));
+  ok1(higher.noncomp_vario_available);
+  ok1(equals(higher.noncomp_vario, 0.8));
+
+  /* Total-energy vario blocks a later netto vario. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  higher.ProvideTotalEnergyVario(1.1);
+  lower.ProvideNettoVario(0.3);
+  higher.Complement(lower);
+  ok1(higher.total_energy_vario_available);
+  ok1(equals(higher.total_energy_vario, 1.1));
+  ok1(!higher.netto_vario_available);
+
+  /* No earlier vario: the later uncompensated value is used. */
+  higher.Reset();
+  lower.Reset();
+  higher.clock = clock;
+  lower.clock = clock;
+  lower.alive.Update(clock);
+  lower.ProvideNoncompVario(-0.5);
+  higher.Complement(lower);
+  ok1(higher.noncomp_vario_available);
+  ok1(equals(higher.noncomp_vario, -0.5));
+  ok1(!higher.total_energy_vario_available);
+}
+
+/**
  * Test that NMEAInfo::Complement() correctly copies stall_ratio AND
  * updates stall_ratio_available.
  */
@@ -4149,6 +4226,7 @@ int main()
              + 8 /* SubSecond */ + 4 /* MWVStatus */
              + 5 /* MWVRelativeTrue */ + 4 /* StallRatio */
              + 18 /* AmbientPressureComplement */
+             + 16 /* VarioComplement */
              + 12 /* TempHumidityValidity */ + 2 /* ReadGeoAngleNoDot */
              + 13 /* GGAEllipsoid */ + 9 /* EllipsoidComplement */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
@@ -4227,6 +4305,7 @@ int main()
   TestMWVRelativeTrue();
   TestStallRatioComplement();
   TestAmbientPressureComplement();
+  TestVarioComplement();
   TestTemperatureHumidityValidity();
   TestGGAEllipsoidAltitude();
   TestEllipsoidAltitudeValidity();
