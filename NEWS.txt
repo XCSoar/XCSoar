@@ -429,6 +429,10 @@ Version 7.46 - not yet released
   - fix a crash when the desktop window is resized to a few
     pixels, by refusing a size below 320x240 (240x320 when
     taller than wide) #2110
+* data files
+  - fix a failed save destroying the existing profile, waypoints,
+    task, polar or flight log when a temporary file cannot be
+    created #3256
 * documentation
   - describe the repository download list: name and description,
     several files at once, and the country and search filters
