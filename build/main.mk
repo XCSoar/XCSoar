@@ -748,6 +748,7 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/DownloadFileModal.cpp \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
+	$(SRC)/Dialogs/DownloadFilter.cpp \
 	$(SRC)/Repository/Glue.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/PCMet/Images.cpp \
