@@ -483,6 +483,8 @@ Version 7.46 - not yet released
     and state that XCSoar uses an NMEA sentence only when its checksum
     matches #3257
 * development
+  - build system: stop auto-committing translation catalog updates
+    onto the translationupdates branch
   - build system: keep isnan(), isinf() and isfinite() working on GCC
     builds (Linux, Windows, Kobo); -ffast-math let GCC fold them away
     #3072

@@ -2,12 +2,6 @@
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
-    paths:
-      - 'src/**'
-      - 'po/**'
-      - 'data/**'
     tags:
       - 'v*'
   release:
@@ -53,54 +47,3 @@ jobs:
           else
             echo "✓ po/xcsoar.pot is up-to-date"
           fi
-
-  autocommit-pot-files:
-    runs-on: ubuntu-24.04
-    container: debian:trixie-slim
-    permissions:
-      contents: write
-    if: github.event_name != 'pull_request'
-    steps:
-      - name: Install checkout dependencies
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends git \
-          ca-certificates rsync openssh-client
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Install dependencies
-        run: |
-          ./ide/provisioning/install-debian-packages.sh UPDATE
-          ./ide/provisioning/install-debian-packages.sh BASE
-      - name: make working directory a safe commit dir
-        run: git config --global --add safe.directory /__w/XCSoar/XCSoar
-      - name: Copy xcsoar.pot
-        run: cp po/xcsoar.pot po/xcsoar.old
-      - name: Update pot and po files
-        run: make update-po
-      - name: Normalize and remove timestamps
-        run: |
-          cp po/xcsoar.pot po/xcsoar.ref # keep xcsoar.pot to push
-          # Normalize line wrapping using msgcat
-          msgcat po/xcsoar.ref -o po/xcsoar.ref.normalized
-          msgcat po/xcsoar.old -o po/xcsoar.old.normalized
-          # Remove timestamps
-          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.ref.normalized
-          sed -i '/^"POT-Creation-Date:/d' po/xcsoar.old.normalized
-      - name: Check for differences
-        id: check_test
-        run: |
-          if ! diff --normal po/xcsoar.ref.normalized po/xcsoar.old.normalized; then
-            echo "do_update=true" >> $GITHUB_OUTPUT
-          else
-            echo "do_update=false" >> $GITHUB_OUTPUT
-          fi
-      - name: Push Local Changes
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "Autocommit translation sources"
-          file_pattern: "*.pot *.po"
-          create_branch: true
-          branch: translationupdates
-          push_options: '--force'
-        if: steps.check_test.outputs.do_update == 'true'
