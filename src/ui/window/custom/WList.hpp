@@ -56,6 +56,7 @@ public:
 
   void BringToTop(Window &w) noexcept;
   void BringToBottom(Window &w) noexcept;
+  void PlaceBelow(Window &w, Window &sibling) noexcept;
 
   /**
    * Locate a window by its relative coordinates.

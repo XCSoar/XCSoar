@@ -1502,8 +1502,6 @@ MainWindow::RunTimer() noexcept
     }
   }
 
-  RaiseBottomBannerWidget();
-
   battery_timer.Process();
 }
 
@@ -1952,8 +1950,11 @@ void
 MainWindow::RaiseBottomBannerWidget() noexcept
 {
   if (HaveBottomBannerWidget() &&
-      bottom_banner_widget->GetWindow().IsVisible())
-    bottom_banner_widget->GetWindow().BringToTop();
+      bottom_banner_widget->GetWindow().IsVisible()) {
+    BringToTopBelowDialogs(bottom_banner_widget->GetWindow());
+    if (menu_bar != nullptr)
+      menu_bar->BringToTop(*this);
+  }
 }
 
 void
