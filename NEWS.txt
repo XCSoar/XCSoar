@@ -15,8 +15,9 @@ Version 7.46 - not yet released
   - show the radio range of a FLARM as a plot #231 #3299
   - download flights from a PowerFLARM Flex or Fusion over Wi-Fi #1882
   - download LXNAV flights more reliably over Bluetooth. Polar sync
-    no longer sends XCSoar's built-in polar to an S10, and an
-    S-series QNH no longer creeps on reconnect
+    no longer sends XCSoar's built-in polar to an S10, a received
+    polar keeps downward sink, and an S-series QNH no longer creeps
+    on reconnect
     #3229 #3201 #3269 #3261
   - fix IOIO connections, including older boards such as the Androport
     that 7.44 refused #3348
