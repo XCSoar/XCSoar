@@ -270,7 +270,7 @@ main()
   };
 
   plan_tests(1 + ARRAY_SIZE(cases) * LAYOUT_CHECKS +
-             SQUARE_LANDSCAPE_CHECKS + MINIMUM_SIZE_CHECKS);
+             SQUARE_LANDSCAPE_CHECKS + MINIMUM_SIZE_CHECKS + 5);
 
   ok1(Layout::ScaleSupported());
 
@@ -279,6 +279,24 @@ main()
 
   TestSquareAndLandscape();
   TestMinimumWindowSize();
+
+  /* Android uses scale_1024 for pt/vpt/font; UNIX uses dpi.y for pt/vpt.
+     HiBreak Pro: OEM DPI is sanitized to 300 but framebuffer scaling is
+     the 240px reference (FontScale(12)=41 on Android, 49 on UNIX). */
+  {
+    constexpr PixelSize size{824, 1648};
+    constexpr unsigned ui_scale = 100;
+    const unsigned scale_1024 = std::max(1024U, size.width * 1024 / 240);
+    const unsigned android_pt_scale = scale_1024 * ui_scale / 100;
+
+    ok1(scale_1024 == 824u * 1024 / 240);
+    ok1((12u * android_pt_scale >> 10) == 41);
+
+    Layout::Initialise(size, {300, 300}, 100, true);
+    ok1(Layout::PtScale(12) == 49);
+    ok1(Layout::PtScale(12) == Layout::FontScale(12));
+    ok1((12u * android_pt_scale >> 10) < Layout::PtScale(12));
+  }
 
   return exit_status();
 }

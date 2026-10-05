@@ -40,6 +40,11 @@ Version 7.46 - not yet released
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
   - draw color e-ink text without anti-aliasing
+  - use thin body type and stronger emphasis on Android color e-ink
+    so counters stay open and QuickGuide bold stays visible at the
+    same layout size as LCD
+  - fix huge fonts and buttons when the device reports unusable
+    physical DPI; use Android's density instead
 * iOS
   - add haptic feedback for button presses; the Haptic feedback
     setting controls it
