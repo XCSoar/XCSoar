@@ -56,6 +56,7 @@
 #include "util/Exception.hxx"
 #include "util/ScopeExit.hxx"
 #include "GlobalSettings.hpp"
+#include "Hardware/DisplayDPI.hpp"
 
 #include "IOIOHelper.hpp"
 #include "BMP085Device.hpp"
@@ -234,7 +235,7 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jobject _context,
                                      jobject _permission_manager,
                                      jint width, jint height,
-                                     jint xdpi, jint ydpi,
+                                     jint xdpi, jint ydpi, jint density_dpi,
                                      jstring product)
 try {
   const std::scoped_lock shutdown_lock{shutdown_mutex};
@@ -277,7 +278,7 @@ try {
 
   assert(native_view == nullptr);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
-                               product);
+                               density_dpi, product);
   AtScopeExit() {
     delete native_view;
     native_view = nullptr;
