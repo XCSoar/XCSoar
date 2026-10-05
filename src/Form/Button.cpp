@@ -187,8 +187,6 @@ Button::OnKeyCheck(unsigned key_code) const noexcept
 {
   switch (key_code) {
   case KEY_RETURN:
-  case KEY_UP:
-  case KEY_DOWN:
     return true;
 
   default:
@@ -206,9 +204,11 @@ Button::OnKeyDown(unsigned key_code) noexcept
     return true;
 
   case KEY_UP:
-    /* WndForm remaps unhandled Up/Down to tab order, but a Button
-       outside a modal form (map overlay, and Up from the first
-       chrome button) never got that path back to the widget */
+    /* OnKeyCheck leaves Up/Down unclaimed so a modal form walks
+       the whole dialog: Up from Select Waypoint's Details returns
+       to the filter instead of wrapping inside Details/Close.
+       This path is for a button outside a form, such as the map
+       arrange overlay. */
     if (auto *parent = GetParent())
       return parent->FocusPreviousControl();
     break;
