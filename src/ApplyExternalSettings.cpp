@@ -306,8 +306,7 @@ PolarProcessTimer() noexcept
       ps.points[1].v = 130.0 / 3.6;
       ps.points[2].v = 180.0 / 3.6;
     }
-    for (auto &pt : ps.points)
-      pt.w = pc.a * pt.v * pt.v + pc.b * pt.v + pc.c;
+    ps.SetSinkRates(pc);
 
     if (settings.polar_reference_mass_available)
       ps.reference_mass = settings.polar_reference_mass;

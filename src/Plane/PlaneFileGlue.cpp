@@ -281,12 +281,9 @@ PlaneGlue::CreateFromPolar(const char *registration,
   const auto &coeffs = gp.GetCoefficients();
   if (coeffs.IsValid()) {
     constexpr double speeds[] = {90.0 / 3.6, 130.0 / 3.6, 180.0 / 3.6};
-    for (unsigned i = 0; i < 3; ++i) {
-      const double v = speeds[i];
-      plane.polar_shape.points[i].v = v;
-      plane.polar_shape.points[i].w =
-        coeffs.a * v * v + coeffs.b * v + coeffs.c;
-    }
+    for (unsigned i = 0; i < 3; ++i)
+      plane.polar_shape.points[i].v = speeds[i];
+    plane.polar_shape.SetSinkRates(coeffs);
   }
 
   const auto safe_name = SanitizeFilename(registration);

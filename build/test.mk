@@ -577,6 +577,7 @@ $(eval $(call link-program,TestTaskFileSeeYouParsing,TEST_TASKFILE_SEEYOU_PARSIN
 
 TEST_PLANES_SOURCES = \
 	$(SRC)/Polar/Parser.cpp \
+	$(SRC)/Polar/Shape.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/Repository/FileType.cpp \
 	$(TEST_SRC_DIR)/FakeLocalPath.cpp \

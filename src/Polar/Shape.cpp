@@ -11,6 +11,16 @@ PolarShape::CalculateCoefficients() const noexcept
                                     points[0].w, points[1].w, points[2].w);
 }
 
+void
+PolarShape::SetSinkRates(const PolarCoefficients &coefficients) noexcept
+{
+  /* the coefficients give the sink as a positive number, the points
+     hold it as a negative vertical speed */
+  for (auto &point : points)
+    point.w = -(coefficients.a * point.v * point.v +
+                coefficients.b * point.v + coefficients.c);
+}
+
 bool
 PolarShape::IsValid() const noexcept
 {
