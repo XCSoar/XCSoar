@@ -400,6 +400,10 @@ Event list
      ``auto off``, ``auto show``, ``show`` (display current value).
  * - ``MainMenu``
    - Opens the main menu.
+ * - ``MapTimer``
+   - Controls the map stopwatch (Status → Times). Possible
+     arguments: ``show``, ``hide``, ``toggle visible``, ``toggle``
+     (start/stop when visible), ``reset``.
  * - ``MarkLocation``
    - Marks the current location and creates a user waypoint marker.
      Use ``reset`` to erase all user markers.

@@ -13,12 +13,15 @@
 #include "Pan.hpp"
 #include "Topography/Thread.hpp"
 #include "Asset.hpp"
+#include "Hardware/CPU.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "ActionInterface.hpp"
 #include "UserMapScale.hpp"
 #include "Form/Button.hpp"
 #include "util/StringAPI.hxx"
+#include "MapTimer.hpp"
+#include "Hardware/Vibrator.hpp"
 #ifdef HAVE_EDL
 #include "UIState.hpp"
 #endif
@@ -176,6 +179,18 @@ GlueMapWindow::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 
   case DRAG_SIMULATOR:
     return true;
+
+  case DRAG_MAP_TIMER:
+    /* Leave the pill, or move past slop before the hold is armed:
+       cancel (same rules as InfoBoxes). */
+    if (!MapTimerHitTest(p) ||
+        (!map_timer_hold_armed &&
+         InfoBoxArrange::PastTouchSlop(p, drag_start))) {
+      StopMapTimerLongPress();
+      ReleaseCapture();
+      drag_mode = DRAG_NONE;
+    }
+    return true;
   }
 
   return MapWindow::OnMouseMove(p, keys);
@@ -227,6 +242,18 @@ GlueMapWindow::OnMouseDown(PixelPoint p) noexcept
   SetFocus();
 
   drag_start = p;
+
+  if (MapTimerHitTest(p)) {
+    drag_mode = DRAG_MAP_TIMER;
+    map_timer_hold_pending = true;
+    map_timer_hold_armed = false;
+    map_timer_press_start = std::chrono::steady_clock::now();
+    map_timer_hold_timer.Schedule(InfoBoxArrange::LONG_PRESS);
+    map_timer_tap_timer.Schedule(InfoBoxArrange::TAP);
+    InvalidateMapTimer();
+    SetCapture();
+    return true;
+  }
 
   if (!visible_projection.IsValid()) {
     gestures.Start(p, Layout::Scale(20));
@@ -370,7 +397,23 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
 
     break;
 
-  case DRAG_GESTURE:
+  case DRAG_MAP_TIMER: {
+    const bool armed = map_timer_hold_armed;
+    const bool pending = map_timer_hold_pending;
+    StopMapTimerLongPress();
+    /* Hold arms at LONG_PRESS (fill complete); lift on the pill
+       commits reset.  Slide off discards.  A short tap toggles. */
+    if (MapTimerHitTest(p)) {
+      if (armed)
+        MapTimer::Reset();
+      else if (pending)
+        MapTimer::ToggleRunning();
+    }
+    InvalidateMapTimer();
+    return true;
+  }
+
+  case DRAG_GESTURE: {
     const char* gesture = gestures.Finish();
 
     /* repaint to erase the gesture trail; the map is not redrawn on
@@ -388,6 +431,7 @@ GlueMapWindow::OnMouseUp(PixelPoint p) noexcept
     }
 
     break;
+  }
   }
 
   if (arm_mapitem_list) {
@@ -475,6 +519,10 @@ GlueMapWindow::DiscardPendingFingerGesture() noexcept
 void
 GlueMapWindow::BeginMultiTouchOwnership() noexcept
 {
+  /* Second finger cancels a stopwatch press before drag_mode is
+     replaced; otherwise the pill stays pressed and the tap timer
+     keeps invalidating after the pinch ends. */
+  StopMapTimerLongPress();
   DiscardPendingFingerGesture();
   multi_touch_was_panning = IsPanning();
   multi_touch_pan_ui = false;
@@ -703,9 +751,50 @@ GlueMapWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 void
+GlueMapWindow::StopMapTimerLongPress() noexcept
+{
+  if (!map_timer_hold_pending && !map_timer_hold_armed &&
+      !map_timer_fade_timer.IsActive())
+    return;
+
+  map_timer_hold_pending = false;
+  map_timer_hold_armed = false;
+  map_timer_hold_timer.Cancel();
+  map_timer_tap_timer.Cancel();
+  map_timer_fade_timer.Cancel();
+  InvalidateMapTimer();
+}
+
+void
+GlueMapWindow::OnMapTimerTapTimer() noexcept
+{
+  if (!map_timer_hold_pending)
+    return;
+
+  if (!HasEPaper() && !IsSlowCPU())
+    map_timer_fade_timer.Schedule(InfoBoxArrange::LONG_PRESS_FADE);
+  InvalidateMapTimer();
+}
+
+void
+GlueMapWindow::OnMapTimerHoldTimer() noexcept
+{
+  if (drag_mode != DRAG_MAP_TIMER || !map_timer_hold_pending)
+    return;
+
+  /* Arm only; reset commits on lift while still on the stopwatch. */
+  map_timer_fade_timer.Cancel();
+  map_timer_hold_armed = true;
+  PlayHapticFeedback(HapticFeedbackType::LONG_PRESS);
+  InvalidateMapTimer();
+}
+
+void
 GlueMapWindow::OnCancelMode() noexcept
 {
   MapWindow::OnCancelMode();
+
+  StopMapTimerLongPress();
 
   if (drag_mode != DRAG_NONE) {
 #ifdef HAVE_MULTI_TOUCH
@@ -761,6 +850,11 @@ GlueMapWindow::OnPaint(Canvas &canvas) noexcept
   /* over the buffered map, so fading it out does not render the whole
      map again */
   DrawPageIndicator(canvas);
+
+  /* Stopwatch tick/reset uses PaintWindow::Invalidate(); keep it out of
+     OnPaintBuffer so non-OpenGL builds refresh without a full Repaint,
+     and so popup geometry is read on the UI thread only. */
+  DrawMapTimer(canvas, GetHudLayout().content);
 
   /* the trail may leave this window (the pointer is captured); under
      OpenGL it is painted over the InfoBoxes, and MainWindow::OnPaint()

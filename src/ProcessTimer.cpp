@@ -25,6 +25,8 @@
 #include "NetComponents.hpp"
 #include "BackendComponents.hpp"
 #include "LogFile.hpp"
+#include "MapWindow/MapTimer.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -223,6 +225,20 @@ DarkModeProcessTimer() noexcept
 #endif
 
 static void
+MapTimerProcessTimer() noexcept
+{
+  if (!MapTimer::IsVisible() || !MapTimer::IsRunning())
+    return;
+
+  static PeriodClock clock;
+  if (!clock.CheckUpdate(std::chrono::seconds{1}))
+    return;
+
+  if (auto *map = CommonInterface::main_window->GetMap(); map != nullptr)
+    map->InvalidateMapTimer();
+}
+
+static void
 CommonProcessTimer() noexcept
 {
   BlackboardProcessTimer();
@@ -238,6 +254,7 @@ CommonProcessTimer() noexcept
 
   MessageProcessTimer();
   SystemProcessTimer();
+  MapTimerProcessTimer();
 }
 
 static void

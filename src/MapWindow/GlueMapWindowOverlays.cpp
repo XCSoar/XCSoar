@@ -26,13 +26,22 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 #include "Replay/Replay.hpp"
+#include "MapTimer.hpp"
+#include "InfoBoxes/InfoBoxArrange.hpp"
+#include "Look/InfoBoxLook.hpp"
+#include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
-
-#ifdef ENABLE_OPENGL
+#include "util/StaticString.hxx"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "PopupMessage.hpp"
 #include "Asset.hpp"
 #include "Hardware/CPU.hpp"
+
+#ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Scope.hpp"
+#include "ui/canvas/opengl/Scissor.hpp"
 #endif
 
 #include <algorithm> // for std::clamp()
@@ -685,6 +694,158 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
               {scale_pos.left, scale_pos.bottom - height},
               mode, scale_pos, nullptr);
   }
+}
+
+namespace {
+
+/**
+ * Vertical hold fill clipped to a rounded rectangle.
+ * Duplicated from InfoBoxArrangeWindow for now; share later.
+ */
+void
+FillRoundedCard(Canvas &canvas, const PixelRect &inner, int radius,
+                int height, Color glow,
+                [[maybe_unused]] Color rest) noexcept
+{
+  if (height <= 0)
+    return;
+
+  const PixelSize ellipse{radius * 2, radius * 2};
+
+#ifdef ENABLE_OPENGL
+  PixelRect band = inner;
+  band.top = inner.bottom - height;
+  const GLCanvasScissor clip(band);
+  canvas.Select(Brush{glow});
+  canvas.DrawRoundRectangle(inner, ellipse);
+#else
+  canvas.Select(Brush{glow});
+  canvas.DrawRoundRectangle(inner, ellipse);
+  if (height < (int)inner.GetHeight()) {
+    PixelRect top = inner;
+    top.bottom = inner.bottom - height;
+    canvas.DrawFilledRectangle(top, rest);
+  }
+#endif
+}
+
+} // namespace
+
+PixelRect
+GlueMapWindow::GetMapTimerRect(const PixelRect &rc) const noexcept
+{
+  const Font &font = info_box_look.value_font;
+  const auto elapsed = MapTimer::GetElapsed();
+  const unsigned total_s = unsigned(std::max<std::chrono::seconds::rep>(
+    elapsed.count(), 0));
+  const unsigned minutes = total_s / 60;
+  const unsigned seconds = total_s % 60;
+
+  StaticString<16> text;
+  text.Format("%u:%02u", minutes, seconds);
+
+  const PixelSize text_size = font.TextSize(text.c_str());
+  const unsigned pad_x = Layout::GetTextPadding() * 3;
+  const unsigned pad_y = Layout::GetTextPadding() * 2;
+  const unsigned width = text_size.width + pad_x * 2;
+  const unsigned height = text_size.height + pad_y * 2;
+  const int left = rc.GetCenter().x - int(width) / 2;
+
+  /* Top of the map by default; drop below a status popup when one is
+     covering the top area. */
+  int top = rc.top + int(Layout::Scale(8));
+  if (CommonInterface::main_window != nullptr) {
+    const PopupMessage *popup = CommonInterface::main_window->popup;
+    if (popup != nullptr && popup->IsVisible()) {
+      const PixelRect map_pos = GetPosition();
+      const PixelRect popup_pos = popup->GetPosition();
+      const int popup_top = popup_pos.top - map_pos.top;
+      const int popup_bottom = popup_pos.bottom - map_pos.top;
+      if (popup_top < top + int(height) + int(Layout::Scale(8)))
+        top = std::max(top, popup_bottom + int(Layout::Scale(8)));
+    }
+  }
+
+  return PixelRect{{left, top}, PixelSize{width, height}};
+}
+
+bool
+GlueMapWindow::MapTimerHitTest(PixelPoint p) const noexcept
+{
+  if (!MapTimer::IsVisible() || IsPanning())
+    return false;
+
+  const PixelRect pill = GetMapTimerRect(GetHudLayout().content);
+  return pill.GetWidth() > 0 && pill.Contains(p);
+}
+
+void
+GlueMapWindow::DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept
+{
+  if (!MapTimer::IsVisible() || IsPanning())
+    return;
+
+  const Font &font = info_box_look.value_font;
+  canvas.Select(font);
+
+  const auto elapsed = MapTimer::GetElapsed();
+  const unsigned total_s = unsigned(std::max<std::chrono::seconds::rep>(
+    elapsed.count(), 0));
+  const unsigned minutes = total_s / 60;
+  const unsigned seconds = total_s % 60;
+
+  StaticString<16> text;
+  text.Format("%u:%02u", minutes, seconds);
+
+  const PixelRect pill = GetMapTimerRect(rc);
+  if (pill.GetWidth() <= 0 || pill.GetHeight() <= 0)
+    return;
+
+  /* InfoBox theme: yellow while pressed, blue hold fill (same idea as
+     arrange cards; FillRoundedCard duplicated locally for now). */
+  const bool running = MapTimer::IsRunning();
+  const bool pressed = map_timer_hold_pending;
+  const Color fill = pressed
+    ? info_box_look.pressed_background_color
+    : info_box_look.background_color;
+  const Color text_color = info_box_look.value.fg_color;
+  const Color border_color = info_box_look.inverse
+    ? COLOR_WHITE
+    : COLOR_BLACK;
+  const int radius = int(pill.GetHeight() / 2);
+
+  canvas.SelectNullPen();
+  canvas.Select(Brush{fill});
+  canvas.DrawRoundRectangle(pill, PixelSize{pill.GetHeight()});
+
+  if (map_timer_hold_pending || map_timer_hold_armed) {
+    /* E-paper / slow CPU skip the fade animation; do not draw a full
+       hold fill until the hold actually arms, or a short tap looks
+       like a completed reset.  Pressed (yellow) background still
+       acknowledges the press. */
+    unsigned t = 0;
+    if (map_timer_hold_armed)
+      t = 256;
+    else if (!HasEPaper() && !IsSlowCPU())
+      t = InfoBoxArrange::LongPressFade(map_timer_press_start);
+
+    if (t > 0)
+      FillRoundedCard(canvas, pill, radius,
+                      int(pill.GetHeight() * t / 256),
+                      info_box_look.GetPreviewGlowColor(),
+                      fill);
+  }
+
+  if (running) {
+    canvas.SelectHollowBrush();
+    canvas.Select(Pen{Layout::ScalePenWidth(2), border_color});
+    canvas.DrawRoundRectangle(pill, PixelSize{pill.GetHeight()});
+  }
+
+  canvas.SetTextColor(text_color);
+  canvas.SetBackgroundTransparent();
+  const PixelSize text_size = font.TextSize(text.c_str());
+  canvas.DrawText(pill.GetCenter() - text_size / 2u, text.c_str());
 }
 
 void

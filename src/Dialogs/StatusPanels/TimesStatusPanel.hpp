@@ -5,10 +5,19 @@
 
 #include "StatusPanel.hpp"
 
+#include <functional>
+#include <utility>
+
+class Button;
+
 class TimesStatusPanel : public StatusPanel {
+  Button *timer_button = nullptr;
+  std::function<void()> close_dialog;
+
 public:
-  explicit TimesStatusPanel(const DialogLook &look) noexcept
-    :StatusPanel(look) {}
+  TimesStatusPanel(const DialogLook &look,
+                   std::function<void()> _close_dialog) noexcept
+    :StatusPanel(look), close_dialog(std::move(_close_dialog)) {}
 
   /* virtual methods from class StatusPanel */
   void Refresh() noexcept override;

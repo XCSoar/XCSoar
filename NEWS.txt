@@ -118,6 +118,10 @@ Version 7.46 - not yet released
     nearest tile first and removed from the map when it grows too old
     #3000
 * map
+  - Status → Times: Show timer draws a map stopwatch (tap start/stop;
+    yellow press and InfoBox hold fill, lift to reset, slide off to
+    cancel); follows the InfoBox light/dark colours and shows a
+    border while running
   - use Vario #2 snail trail colours by default so climb and sink
     stand out on typical terrain #2988
   - leave Trail drift off by default so the displayed track matches
@@ -407,6 +411,8 @@ Version 7.46 - not yet released
     pixels, by refusing a size below 320x240 (240x320 when
     taller than wide) #2110
 * documentation
+  - document the Status → Times map stopwatch (show/hide, tap,
+    hold to reset) in the English manual
   - clarify that Reach polar still applies to abort, alternates and
     landable arrival when Reach mode is Off
   - clarify that Trail drift also controls the circling projected

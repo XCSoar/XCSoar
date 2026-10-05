@@ -9,6 +9,9 @@
 #include "Language/Language.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "time/RoughTime.hpp"
+#include "MapWindow/MapTimer.hpp"
+#include "Form/Button.hpp"
+#include "ActionInterface.hpp"
 
 enum Controls {
   LocalTime,
@@ -18,6 +21,7 @@ enum Controls {
   TakeoffTime,
   LandingTime,
   Daylight,
+  TimerButton,
 };
 
 void
@@ -110,10 +114,16 @@ TimesStatusPanel::Refresh() noexcept
   } else {
     ClearText(FlightTime);
   }
+
+  if (timer_button != nullptr)
+    timer_button->SetCaption(MapTimer::IsVisible()
+                             ? _("Hide timer")
+                             : _("Show timer"));
 }
 
 void
-TimesStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
+TimesStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
+                          [[maybe_unused]] const PixelRect &rc) noexcept
 {
   AddReadOnly(_("Local time"));
   AddReadOnly(_("UTC time"));
@@ -122,4 +132,11 @@ TimesStatusPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unus
   AddReadOnly(_("Takeoff time"));
   AddReadOnly(_("Landing time"));
   AddReadOnly(_("Daylight time"));
+
+  timer_button = AddButton(_("Show timer"), [this]() {
+    MapTimer::ToggleVisible();
+    ActionInterface::SendUIState(true);
+    if (close_dialog)
+      close_dialog();
+  });
 }

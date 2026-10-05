@@ -12,17 +12,16 @@
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Renderer/VarioBarRenderer.hpp"
 #include "ui/event/Timer.hpp"
+#include "ui/event/PeriodicTimer.hpp"
 #include "ui/event/Notify.hpp"
 #include "ui/window/Features.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "ui/event/PeriodicTimer.hpp"
-#endif
-
 #include <array>
+#include <chrono>
 
 struct Look;
 struct GestureLook;
+struct InfoBoxLook;
 class TopographyThread;
 class TerrainThread;
 
@@ -84,7 +83,24 @@ class GlueMapWindow : public MapWindow {
     DRAG_PAN,
     DRAG_GESTURE,
     DRAG_SIMULATOR,
+
+    /** Press on the map stopwatch pill (tap / long-press). */
+    DRAG_MAP_TIMER,
   } drag_mode = DRAG_NONE;
+
+  /** Press still down; lift before arm is a tap, after arm resets. */
+  bool map_timer_hold_pending = false;
+  bool map_timer_hold_armed = false;
+  std::chrono::steady_clock::time_point map_timer_press_start{};
+
+  /** Arms the reset hold at InfoBoxArrange::LONG_PRESS. */
+  UI::Timer map_timer_hold_timer{[this]{ OnMapTimerHoldTimer(); }};
+
+  /** Starts the fill once past InfoBoxArrange::TAP. */
+  UI::Timer map_timer_tap_timer{[this]{ OnMapTimerTapTimer(); }};
+
+  /** Redraws the long-press fill while it grows. */
+  UI::PeriodicTimer map_timer_fade_timer{[this]{ InvalidateMapTimer(); }};
 
   GeoPoint drag_start_geopoint;
   PixelPoint drag_start;
@@ -246,6 +262,9 @@ private:
   VarioBarRenderer vario_bar_renderer;
   const GestureLook &gesture_look;
 
+  /** Same face and colours as the InfoBox (navbox) style. */
+  const InfoBoxLook &info_box_look;
+
   UI::Timer map_item_timer{[this]{ OnMapItemTimer(); }};
 
   /**
@@ -355,6 +374,14 @@ public:
 
   void QuickRedraw() noexcept;
 
+  /**
+   * Repaint the stopwatch drawn over the buffered map without
+   * rebuilding the map buffer.
+   */
+  void InvalidateMapTimer() noexcept {
+    PaintWindow::Invalidate();
+  }
+
   void SetHudMargins(unsigned left, unsigned top,
                      unsigned right, unsigned bottom) noexcept override;
 
@@ -456,6 +483,17 @@ private:
                  const MapHudLayout &layout) const noexcept;
   void DrawStallRatio(Canvas &canvas,
                       const MapHudLayout &layout) const noexcept;
+  void DrawMapTimer(Canvas &canvas, const PixelRect &rc) const noexcept;
+
+  [[gnu::pure]]
+  PixelRect GetMapTimerRect(const PixelRect &rc) const noexcept;
+
+  [[gnu::pure]]
+  bool MapTimerHitTest(PixelPoint p) const noexcept;
+
+  void StopMapTimerLongPress() noexcept;
+  void OnMapTimerTapTimer() noexcept;
+  void OnMapTimerHoldTimer() noexcept;
 
   /**
    * Draw the position of the current page in the list of configured

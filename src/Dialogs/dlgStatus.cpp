@@ -79,7 +79,8 @@ dlgStatusShowModal(int start_page)
   widget.AddTab(std::make_unique<RulesStatusPanel>(look),
                 _("Rules"), RulesIcon);
 
-  widget.AddTab(std::make_unique<TimesStatusPanel>(look),
+  widget.AddTab(std::make_unique<TimesStatusPanel>(
+                  look, dialog.MakeModalResultCallback(mrOK)),
                 _("Times"), TimesIcon);
 
   /* restore previous page */
