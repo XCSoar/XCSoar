@@ -11,9 +11,9 @@
 #include <vector>
 
 /**
- * Port that records every Write() for driver unit tests.
- * PortWriteNMEA() writes '$', body, then "*CS\\r\\n" in separate
- * calls; this class reassembles complete lines.
+ * Port that records every Write() for driver unit tests.  Reassembles
+ * complete lines regardless of how many Write() calls a sentence is
+ * split across.
  */
 class DumpPort : public Port {
   NullDataHandler null_handler;

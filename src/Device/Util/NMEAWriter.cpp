@@ -6,6 +6,7 @@
 #include "NMEA/Checksum.hpp"
 
 #include <cassert>
+#include <string>
 
 #include <stdio.h>
 #include <string.h>
@@ -19,10 +20,16 @@ PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
      parameter? */
   static constexpr auto timeout = std::chrono::seconds(1);
 
-  port.Write('$');
-  port.FullWrite(line, env, timeout);
-
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  port.FullWrite(checksum, env, timeout);
+
+  /** 
+   * assemble the whole sentence and send it with one Write()
+   * instead of three, to save round-trips on slow links .
+   */
+  std::string buffer("$");
+  buffer += line;
+  buffer += checksum;
+
+  port.FullWrite(buffer, env, timeout);
 }
