@@ -22,7 +22,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
-#include <limits>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -600,14 +600,13 @@ ThrowNetCdfError(int status, const char *action)
                           action, nc_strerror(status));
 }
 
-double
-GetOptionalDoubleAttribute(int file_id, int variable_id,
-                           const char *name, double fallback)
+std::optional<double>
+GetOptionalDoubleAttribute(int file_id, int variable_id, const char *name)
 {
-  double value = fallback;
+  double value;
   const auto status = nc_get_att_double(file_id, variable_id, name, &value);
   if (status == NC_ENOTATT)
-    return fallback;
+    return std::nullopt;
 
   ThrowNetCdfError(status, name);
   return value;
@@ -697,13 +696,13 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
                    "read data values");
   ThrowIfCancelled(is_cancelled);
 
-  const double fill_value = GetOptionalDoubleAttribute(file_id, data_var_id,
-                                                       "_FillValue",
-                                                       std::numeric_limits<double>::quiet_NaN());
+  const auto fill_value = GetOptionalDoubleAttribute(file_id, data_var_id,
+                                                     "_FillValue");
   const double offset = GetOptionalDoubleAttribute(file_id, data_var_id,
-                                                   "add_offset", 0.0);
-  const double scale = GetOptionalDoubleAttribute(file_id, data_var_id,
-                                                  "scale_factor", 1.0);
+                                                   "add_offset").value_or(0.0);
+  const double scale =
+    GetOptionalDoubleAttribute(file_id, data_var_id, "scale_factor")
+    .value_or(1.0);
   if (!std::isfinite(offset) || !std::isfinite(scale))
     throw std::runtime_error("SkySight NetCDF scaling is not finite");
 
@@ -762,8 +761,7 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
         const auto source_x = lon_ascending ? x : (lon_size - 1 - x);
         const auto index = source_y * lon_size + source_x;
         const auto raw = values[index];
-        if (!std::isfinite(raw) ||
-            (!std::isnan(fill_value) && raw == fill_value))
+        if (!std::isfinite(raw) || (fill_value && raw == *fill_value))
           continue;
 
         const auto point = raw * scale + offset;
