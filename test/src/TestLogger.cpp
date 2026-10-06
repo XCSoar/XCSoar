@@ -62,6 +62,7 @@ static const char *const expect[] = {
   "E112243my_event",
   "B1122435103117N00742367EA004900048700000",
   "LPLTmy_note",
+  "LXCS112248GPS:B FLARM",
   "F112253121701",
   "B1122535103117S00742367WA004900048700000",
   "B1122585103117S00742367WA004900000000000",
@@ -105,12 +106,18 @@ Run(IGCWriter &writer)
 
   writer.LogEmptyFRecord(i.date_time_utc);
 
+  /* no time: no B record, so no L record for a new GPS source */
+  NMEAInfo no_time = i;
+  no_time.time_available.Clear();
+  ok1(!writer.LogPoint(no_time));
+
   i.date_time_utc.second += 5;
-  writer.LogPoint(i);
+  ok1(writer.LogPoint(i));
   i.date_time_utc.second += 5;
   writer.LogEvent(i, "my_event");
   i.date_time_utc.second += 5;
   writer.LoggerNote("my_note");
+  writer.LogGPSSource(i.date_time_utc, 'B', "FLARM");
 
   int satellites[GPSState::MAXSATELLITES];
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i)
@@ -187,7 +194,7 @@ TestIGCFixApplyEllipsoid()
 
 int main()
 try {
-  plan_tests(51 + 4 + 7);
+  plan_tests(53 + 2 + 4 + 7);
 
   const Path path("output/test/test.igc");
   File::Delete(path);

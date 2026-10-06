@@ -4,8 +4,12 @@
 #pragma once
 
 #include "LoggerImpl.hpp"
+#include "Device/Features.hpp"
 #include "system/Path.hpp"
 #include "thread/Mutex.hxx"
+#include "util/StaticString.hxx"
+
+#include <array>
 
 struct NMEAInfo;
 struct ComputerSettings;
@@ -15,6 +19,15 @@ class ProtectedTaskManager;
 class Logger {
   LoggerImpl logger;
   mutable Mutex lock;
+
+  /**
+   * The HFGPS text of each device, taken when the logger starts, for
+   * the L record that names a new GPS source (#3180).
+   */
+  std::array<StaticString<32>, NUMDEV> gps_device_names;
+
+  /** The device the IGC file named last as the GPS source */
+  unsigned gps_device = 0;
 
   void LogEvent(const NMEAInfo &gps_info, const char*);
 

@@ -6,6 +6,7 @@
 #include "Device/Config.hpp"
 #include "NMEA/Info.hpp"
 
+#include <optional>
 #include <span>
 
 /**
@@ -32,15 +33,15 @@ GetGPSDeviceName(const DeviceConfig &device, bool simulator) noexcept
 /**
  * The device whose GPS fix the merged data uses: the first live device
  * with a location, in order A to H, as DeviceBlackboard::Merge() picks
- * it.  Device A if none supplies one yet.
+ * it.  Nothing if none supplies one.
  */
 [[gnu::pure]]
-inline unsigned
+inline std::optional<unsigned>
 FindGPSDevice(std::span<const NMEAInfo *const> devices) noexcept
 {
   for (unsigned i = 0; i < devices.size(); ++i)
     if (devices[i]->alive && devices[i]->location_available)
       return i;
 
-  return 0;
+  return std::nullopt;
 }

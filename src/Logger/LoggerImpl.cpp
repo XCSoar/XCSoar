@@ -102,15 +102,15 @@ LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
     writer->LogEvent(gps_info, event);
 }
 
-void
+bool
 LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 {
   if (!gps_info.alive || !gps_info.time_available)
-    return;
+    return false;
 
   if (writer == nullptr) {
     LogPointToBuffer(gps_info);
-    return;
+    return false;
   }
 
   while (!pre_takeoff_buffer.empty()) {
@@ -172,10 +172,10 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     WritePoint(tmp_info);
   }
 
-  WritePoint(gps_info);
+  return WritePoint(gps_info);
 }
 
-void
+bool
 LoggerImpl::WritePoint(const NMEAInfo &gps_info)
 {
   assert(gps_info.alive);
@@ -192,7 +192,7 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
       writer->LogEmptyFRecord(gps_info.date_time_utc);
   }
 
-  writer->LogPoint(gps_info);
+  return writer->LogPoint(gps_info);
 }
 
 bool
@@ -242,6 +242,14 @@ LoggerImpl::LoggerNote(const char *text)
 {
   if (writer != nullptr)
     writer->LoggerNote(text);
+}
+
+void
+LoggerImpl::LogGPSSource(const NMEAInfo &gps_info, char device,
+                         const char *name)
+{
+  if (writer != nullptr)
+    writer->LogGPSSource(gps_info.date_time_utc, device, name);
 }
 
 void

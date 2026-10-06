@@ -153,6 +153,16 @@ IGCWriter::LoggerNote(const char *text)
   WriteLine("LPLT", text);
 }
 
+void
+IGCWriter::LogGPSSource(const BrokenTime &time, char device,
+                        const char *name)
+{
+  char prefix[32];
+  sprintf(prefix, "LXCS%02u%02u%02uGPS:%c ", time.hour, time.minute,
+          time.second, device);
+  WriteLine(prefix, name);
+}
+
 /**
  * Applies range checks to the specified altitude value and converts
  * it to an integer suitable for printing in the IGC file.
@@ -207,13 +217,16 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
   Flush();
 }
 
-void
+bool
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  if (fix.Apply(gps_info))
-    LogPoint(fix,
-             gps_info.location_available ? (int)GetEPE(gps_info.gps) : 0,
-             GetSIU(gps_info.gps));
+  if (!fix.Apply(gps_info))
+    return false;
+
+  LogPoint(fix,
+           gps_info.location_available ? (int)GetEPE(gps_info.gps) : 0,
+           GetSIU(gps_info.gps));
+  return true;
 }
 
 void
