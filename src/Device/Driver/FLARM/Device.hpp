@@ -18,6 +18,7 @@ class OperationEnvironment;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class NMEAInputLine;
+struct FlarmRange;
 
 class FlarmDevice: public AbstractDevice
 {
@@ -167,6 +168,27 @@ public:
    * @param scenario 1-6, see FTD-012 for descriptions
    */
   void RunSimulation(unsigned scenario, OperationEnvironment &env);
+
+  /**
+   * Read the radio range statistics (PFLAN,R,RANGE).  PowerFLARM
+   * only; a Classic FLARM does not answer.
+   *
+   * Throws on error.
+   *
+   * @return false if the answer did not arrive completely in time,
+   * e.g. from a Classic FLARM
+   */
+  bool ReadRangeStatistics(FlarmRange &range, OperationEnvironment &env);
+
+  /**
+   * Reset the radio range statistics (PFLAN,S,RESET), e.g. after an
+   * antenna change.  PowerFLARM only.
+   *
+   * Throws on error.
+   *
+   * @return false if the device did not confirm in time
+   */
+  bool ResetRangeStatistics(OperationEnvironment &env);
 
 private:
   /**
