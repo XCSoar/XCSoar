@@ -17,6 +17,9 @@
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/Eye.hpp"
 #include "Device/Driver/FLARM.hpp"
+#include "Device/Driver/FLARM/Device.hpp"
+#include "Device/Driver/FLARM/RangeParser.hpp"
+#include "Device/Error.hpp"
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/Flytec.hpp"
@@ -47,6 +50,7 @@
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "FLARM/Error.hpp"
 #include "FLARM/Progress.hpp"
+#include "FLARM/Range.hpp"
 #include "FLARM/State.hpp"
 #include "FLARM/Global.hpp"
 #include "FLARM/TrafficDatabases.hpp"
@@ -68,6 +72,7 @@
 #include "NMEA/GPSState.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
 #include "Protection.hpp"
@@ -631,6 +636,136 @@ TestFLARM()
   // Clean up to avoid side effects across tests
   delete traffic_databases;
   traffic_databases = nullptr;
+}
+
+/**
+ * $PFLAN,A,RANGE sentences (radio range statistics, FTD-012 ICD 7.22
+ * chapter 8.18): empty fields are "not computed", not zero, and the
+ * number of sectors is not fixed.
+ */
+static void
+TestFLARMRangeParser()
+{
+  FlarmRange range;
+
+  ParsePFLANRange("RFTOP,A,5600,4800,,3600,", range);
+  const auto &mean_a = range.channels[0].mean;
+  ok1(mean_a.size() == 5);
+  ok1(mean_a[0] == 5600u);
+  ok1(mean_a[1] == 4800u);
+  ok1(!mean_a[2].has_value());
+  ok1(mean_a[3] == 3600u);
+  ok1(!mean_a[4].has_value());
+  ok1(range.channels[1].mean.empty());
+
+  ParsePFLANRange("RFCNT,B,54,x,121", range);
+  const auto &count_b = range.channels[1].count;
+  ok1(count_b.size() == 3);
+  ok1(count_b[0] == 54u);
+  ok1(!count_b[1].has_value());
+  ok1(count_b[2] == 121u);
+
+  std::string deviation = "RFDEV,A";
+  for (unsigned i = 0; i < 24; ++i)
+    deviation += fmt::format(",{}", 100 + i);
+  ParsePFLANRange(deviation, range);
+  ok1(range.channels[0].deviation.size() == 24);
+  ok1(range.channels[0].deviation[23] == 123u);
+
+  ParsePFLANRange("STATS,5000", range);
+  ok1(range.points == 5000u);
+
+  ParsePFLANRange("TIMESPAN,1562000000,1563000000", range);
+  ok1(range.first &&
+      range.first->time_since_epoch() == std::chrono::seconds{1562000000});
+  ok1(range.last &&
+      range.last->time_since_epoch() == std::chrono::seconds{1563000000});
+
+  /* the ICD may add statistic types; unknown ones change nothing */
+  ParsePFLANRange("RFNEW,A,1,2,3", range);
+  ParsePFLANRange("RFTOP,C,1,2,3", range);
+  ok1(range.channels[0].mean.size() == 5);
+}
+
+/**
+ * A #DumpPort that also answers: Read() hands out a prepared reply,
+ * and a read past its end times out like a silent device.
+ */
+class ReplyPort final : public DumpPort {
+  std::string reply;
+
+public:
+  explicit ReplyPort(std::string_view _reply) noexcept
+    :reply(_reply) {}
+
+  std::size_t Read(std::span<std::byte> dest) override {
+    const std::size_t n = std::min(dest.size(), reply.size());
+    std::memcpy(dest.data(), reply.data(), n);
+    reply.erase(0, n);
+    return n;
+  }
+
+  void WaitRead(std::chrono::steady_clock::duration) override {
+    if (reply.empty())
+      throw DeviceTimeout{"no more data"};
+  }
+};
+
+static std::string
+MakeSentence(std::string_view body)
+{
+  return fmt::format("${}*{:02X}\r\n", body, NMEAChecksum(body));
+}
+
+static void
+TestFLARMRangeRequest()
+{
+  NullOperationEnvironment env;
+  FlarmRange range;
+
+  /* a complete answer, with a traffic sentence in between */
+  {
+    ReplyPort port{MakeSentence("PFLAU,0,1,1,1,0,,0,,") +
+                   MakeSentence("PFLAN,A,RANGE,RFTOP,A,5600,,4800") +
+                   MakeSentence("PFLAN,A,RANGE,STATS,5000") +
+                   MakeSentence("PFLAN,A,RANGE")};
+    std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                             port)};
+    auto &flarm = static_cast<FlarmDevice &>(*device);
+    ok1(flarm.ReadRangeStatistics(range, env));
+    ok1(port.FindContaining("PFLAN,R,RANGE") != nullptr);
+    ok1(range.channels[0].mean.size() == 3 &&
+        !range.channels[0].mean[1].has_value() &&
+        range.channels[0].mean[2] == 4800u);
+    ok1(range.points == 5000u);
+  }
+
+  /* no terminating "$PFLAN,A,RANGE": incomplete */
+  {
+    ReplyPort port{MakeSentence("PFLAN,A,RANGE,STATS,5000")};
+    std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                             port)};
+    auto &flarm = static_cast<FlarmDevice &>(*device);
+    ok1(!flarm.ReadRangeStatistics(range, env));
+  }
+
+  /* a Classic FLARM does not answer */
+  {
+    ReplyPort port{""};
+    std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                             port)};
+    auto &flarm = static_cast<FlarmDevice &>(*device);
+    ok1(!flarm.ReadRangeStatistics(range, env));
+  }
+
+  {
+    ReplyPort port{MakeSentence("PFLAN,A,RESET")};
+    std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                             port)};
+    auto &flarm = static_cast<FlarmDevice &>(*device);
+    ok1(flarm.ResetRangeStatistics(env));
+    ok1(port.FindContaining("PFLAN,S,RESET") != nullptr);
+  }
 }
 
 static void
@@ -3658,11 +3793,14 @@ int main()
              + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
-             + 30 /* LXV7PolarWrite */);
+             + 30 /* LXV7PolarWrite */
+             + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */);
   TestGeneric();
   TestTasman();
   TestLK8EX1();
   TestFLARM();
+  TestFLARMRangeParser();
+  TestFLARMRangeRequest();
   TestAltairRU();
   TestBlueFly();
   TestBorgeltB50();

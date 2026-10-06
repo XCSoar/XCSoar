@@ -2,6 +2,10 @@
 // Copyright The XCSoar Project
 
 #include "Device.hpp"
+#include "RangeParser.hpp"
+#include "Device/Util/NMEAReader.hpp"
+#include "Device/Error.hpp"
+#include "FLARM/Range.hpp"
 #include "Device/Port/Port.hpp"
 #include "LogFile.hpp"
 #include "util/StaticString.hxx"
@@ -10,6 +14,7 @@
 #include "util/NumberParser.hpp"
 #include "util/StringCompare.hxx"
 #include "NMEA/Checksum.hpp"
+#include "time/TimeoutClock.hpp"
 
 #include <fmt/format.h>
 
@@ -252,4 +257,57 @@ FlarmDevice::RunSimulation(unsigned scenario, OperationEnvironment &env)
   StaticString<32> buffer;
   buffer.Format("PFLAF,S,%u", scenario);
   Send(buffer, env);
+}
+
+bool
+FlarmDevice::ReadRangeStatistics(FlarmRange &range,
+                                 OperationEnvironment &env)
+{
+  if (!TextMode(env))
+    return false;
+
+  PortNMEAReader reader(port, env);
+  reader.Flush();
+
+  Send("PFLAN,R,RANGE", env);
+
+  /* the answer is one sentence per statistic, ended by a bare
+     "$PFLAN,A,RANGE"; a Classic FLARM does not answer at all */
+  range = {};
+  const TimeoutClock timeout(std::chrono::seconds(5));
+  try {
+    while (true) {
+      const char *line = reader.ExpectLine("PFLAN,A,RANGE", timeout);
+      if (line == nullptr)
+        return false;
+
+      if (*line == '\0')
+        return true;
+
+      if (*line == ',')
+        ParsePFLANRange(line + 1, range);
+    }
+  } catch (const DeviceTimeout &) {
+    return false;
+  }
+}
+
+bool
+FlarmDevice::ResetRangeStatistics(OperationEnvironment &env)
+{
+  if (!TextMode(env))
+    return false;
+
+  PortNMEAReader reader(port, env);
+  reader.Flush();
+
+  Send("PFLAN,S,RESET", env);
+
+  const TimeoutClock timeout(std::chrono::seconds(2));
+  try {
+    const char *line = reader.ExpectLine("PFLAN,A,RESET", timeout);
+    return line != nullptr && *line == '\0';
+  } catch (const DeviceTimeout &) {
+    return false;
+  }
 }
