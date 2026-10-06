@@ -26,11 +26,25 @@ TCPClientPort::~TCPClientPort() noexcept
 }
 
 void
-TCPClientPort::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept
+TCPClientPort::ConnectNext() noexcept
+{
+  assert(!addresses.empty());
+
+  const AllocatedSocketAddress address = std::move(addresses.front());
+  addresses.pop_front();
+
+  ConnectSocketHandler &handler = *this;
+  connect.emplace(GetEventLoop(), handler);
+  connect->Connect(address, std::chrono::seconds(30));
+}
+
+void
+TCPClientPort::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> _addresses) noexcept
 {
   assert(resolver);
   resolver.reset();
 
+  addresses = std::move(_addresses);
   if (addresses.empty()) {
     state = PortState::FAILED;
     StateChanged();
@@ -38,9 +52,7 @@ TCPClientPort::OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addre
     return;
   }
 
-  ConnectSocketHandler &handler = *this;
-  connect.emplace(GetEventLoop(), handler);
-  connect->Connect(addresses.front(), std::chrono::seconds(30));
+  ConnectNext();
 }
 
 void
@@ -80,6 +92,12 @@ TCPClientPort::OnSocketConnectError(std::exception_ptr ep) noexcept
 {
   assert(connect);
   connect.reset();
+
+  /* the server may listen on another of the addresses (#3164) */
+  if (!addresses.empty()) {
+    ConnectNext();
+    return;
+  }
 
   state = PortState::FAILED;
   StateChanged();
