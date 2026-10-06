@@ -313,6 +313,12 @@ ifeq ($(TARGET),UNIX)
 
   ifeq ($(ARMV7),y)
     TARGET_ARCH += -march=armv7-a
+
+    # Use Thumb-2 instructions: smaller code, and NEON works in Thumb
+    # mode as well.  Debian's arm-linux-gnueabihf GCC defaults to Thumb,
+    # but other toolchains and Clang may not, so do not leave it to the
+    # compiler.
+    TARGET_ARCH += -mthumb
   endif
 
   ifeq ($(TARGET_IS_ARMHF),y)
@@ -479,11 +485,6 @@ endif
 
 ifeq ($(TARGET_IS_KOBO),y)
   TARGET_CPPFLAGS += -DKOBO
-
-  # Use Thumb instructions (which is the default in Debian's arm-linux-gnueabihf
-  # toolchain, but this might be different when using another toolchain, or
-  # Clang instead of GCC).
-  TARGET_ARCH += -mthumb
 
   # At least in Debian's arm-linux-gnueabihf GCC, PIE is enabled by default.
   # PIE brings no benefit for us, and we can get smaller binaries when disabling
