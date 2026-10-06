@@ -1229,6 +1229,11 @@ MainWindow::BeginShutdown() noexcept
   refresh_info_boxes_notify.ClearNotification();
   page_actions_update_notify.ClearNotification();
 
+  /* the widgets in these slots may belong to the monitors (airspace
+     warning, task advance), which Shutdown() deletes right after this;
+     a widget left alive until OnDestroy() would unregister itself from
+     a monitor that no longer exists */
+  KillBottomBannerWidget();
   KillTopWidget();
   KillBottomWidget();
 }
