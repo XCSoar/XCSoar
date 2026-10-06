@@ -232,6 +232,8 @@ Version 7.46 - not yet released
   - fix the GPS line (HFGPS) of an IGC file naming device A instead
     of the device that supplies the GPS fix when the logger starts
     #3180
+  - note in an IGC file when another device takes over the GPS fix
+    during the flight, as an L record after its first fix #3180
 * dialogs
   - show each repository file as its name and its description, and
     download every ticked file together; Countries and Search narrow

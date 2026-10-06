@@ -292,6 +292,10 @@ document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.
 The GPS line of its header (\verb|HFGPS|) names the device that supplies
 the GPS fix when the logger starts: the first device in the Devices list
 that delivers a position, the one whose GPS flag is shown in bold.
+If another device takes over the GPS fix during the flight, the file
+notes it in a comment line after the first fix from that device, for
+example \verb|LXCS132015GPS:B FLARM| (UTC time 13:20:15, new source
+device~B with the FLARM driver); the header line itself cannot change.
 
 Log-files are stored in the `logs' subdirectory of the XCSoarData directory.
 These files can be imported into other programs for analysis after flight.

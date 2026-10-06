@@ -59,9 +59,9 @@ TestFindGPSDevice() noexcept
   std::array<const NMEAInfo *, 3> stale{&stale_fix, &none, &fix};
   ok1(FindGPSDevice(stale) == 2);
 
-  /* nothing yet: device A, as before */
+  /* nothing yet: no device; the header falls back to device A */
   std::array<const NMEAInfo *, 3> nothing{&none, &no_fix, &none};
-  ok1(FindGPSDevice(nothing) == 0);
+  ok1(!FindGPSDevice(nothing).has_value());
 }
 
 int main()

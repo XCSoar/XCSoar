@@ -93,7 +93,10 @@ public:
   ~LoggerImpl() noexcept;
 
 public:
-  void LogPoint(const NMEAInfo &gps_info);
+  /**
+   * @return true if @p gps_info went into the IGC file as a B record
+   */
+  bool LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const NMEAInfo &gps_info, const char* event);
 
   bool IsActive() const noexcept {
@@ -120,6 +123,8 @@ public:
    */
   void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const char *text);
+  void LogGPSSource(const NMEAInfo &gps_info, char device,
+                    const char *name);
   void ClearBuffer() noexcept;
 
 private:
@@ -132,5 +137,5 @@ private:
 
 private:
   void LogPointToBuffer(const NMEAInfo &gps_info) noexcept;
-  void WritePoint(const NMEAInfo &gps_info);
+  bool WritePoint(const NMEAInfo &gps_info);
 };
