@@ -7,6 +7,7 @@
 #include "event/net/ConnectSocket.hxx"
 #include "event/net/cares/SimpleResolver.hxx"
 
+#include <forward_list>
 #include <optional>
 
 namespace Cares { class Channel; }
@@ -19,6 +20,13 @@ class TCPClientPort final
 {
   std::optional<Cares::SimpleResolver> resolver;
   std::optional<ConnectSocket> connect;
+
+  /**
+   * The resolved addresses not tried yet.  A name like "localhost"
+   * resolves to both "::1" and "127.0.0.1", and a server may listen
+   * on only one of them.
+   */
+  std::forward_list<AllocatedSocketAddress> addresses;
 
   PortState state = PortState::LIMBO;
 
@@ -34,8 +42,14 @@ public:
   }
 
 private:
+  /**
+   * Connect to the first address in #addresses and remove it from
+   * the list.
+   */
+  void ConnectNext() noexcept;
+
   /* virtual methods from Cares::SimpleHandler */
-  void OnResolverSuccess(std::forward_list<AllocatedSocketAddress> addresses) noexcept override;
+  void OnResolverSuccess(std::forward_list<AllocatedSocketAddress> _addresses) noexcept override;
   void OnResolverError(std::exception_ptr error) noexcept override;
 
   /* virtual methods from ConnectSocketHandler */
