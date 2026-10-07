@@ -138,6 +138,19 @@ ActionInterface::SetBallastFraction(double fraction, bool to_devices) noexcept
   }
 }
 
+bool
+ActionInterface::SetBallastDump(bool active) noexcept
+{
+  ComputerSettings &settings = SetComputerSettings();
+
+  if (active && (!settings.polar.glide_polar_task.HasBallast() ||
+                 settings.plane.dump_time == 0))
+    active = false;
+
+  settings.polar.ballast_timer_active = active;
+  return active;
+}
+
 void
 ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
 {

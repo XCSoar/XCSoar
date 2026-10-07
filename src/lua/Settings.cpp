@@ -41,6 +41,12 @@ l_settings_index(lua_State *L)
         CommonInterface::GetComputerSettings();
     
       Lua::Push(L, settings_computer.polar.glide_polar_task.GetBallastFraction());
+  } else if (StringIsEqual(name, "ballast_dumping")) {
+      /* Is water ballast being dumped right now? */
+      const ComputerSettings &settings_computer =
+        CommonInterface::GetComputerSettings();
+
+      Lua::Push(L, settings_computer.polar.ballast_timer_active);
   } else if (StringIsEqual(name, "qnh")) {
       /* Area pressure for barometric altimeter calibration */
       const ComputerSettings &settings_computer =
@@ -148,6 +154,17 @@ l_settings_setballast(lua_State *L)
 }
 
 static int
+l_settings_setballastdump(lua_State *L)
+{
+  if (lua_gettop(L) != 1)
+    return luaL_error(L, "Invalid parameters");
+
+  luaL_checktype(L, 1, LUA_TBOOLEAN);
+  Lua::Push(L, ActionInterface::SetBallastDump(lua_toboolean(L, 1)));
+  return 1;
+}
+
+static int
 l_settings_setmaxtemp(lua_State *L)
 {
   if (lua_gettop(L) != 1)
@@ -163,6 +180,7 @@ static constexpr struct luaL_Reg settings_funcs[] = {
   {"setbugs", l_settings_setbugs},
   {"setqnh", l_settings_setqnh},
   {"setballast", l_settings_setballast},
+  {"setballastdump", l_settings_setballastdump},
   {"setmaxtemp", l_settings_setmaxtemp},
   {nullptr, nullptr}
 };

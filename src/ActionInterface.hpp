@@ -35,6 +35,16 @@ void
 SetBallastFraction(double fraction, bool to_devices=true) noexcept;
 
 /**
+ * Start or stop dumping water ballast over the dump time of the
+ * plane profile.  Dumping starts only if the glider carries ballast
+ * and the plane profile has a dump time.
+ *
+ * @return true if ballast is being dumped now
+ */
+bool
+SetBallastDump(bool active) noexcept;
+
+/**
  * Configure a new Bugs setting in #ComputerSettings, and
  * forward it to all XCSoar modules that want it.
  *
