@@ -294,21 +294,12 @@ InputEvents::eventBallast(const char *misc)
 
   if (StringIsEqual(misc, "toggle")) {
     if (settings.ballast_timer_active) {
-      settings.ballast_timer_active = false;
+      ActionInterface::SetBallastDump(false);
       Message::AddMessage(_("Ballast dump stopped"));
-      return;
-    }
-
-    if (!polar.HasBallast())
-      return;
-
-    if (computer_settings.plane.dump_time == 0) {
+    } else if (ActionInterface::SetBallastDump(true))
+      Message::AddMessage(_("Ballast dump started"));
+    else if (polar.HasBallast())
       Message::AddMessage(_("Ballast dump time is 0 in plane profile"));
-      return;
-    }
-
-    settings.ballast_timer_active = true;
-    Message::AddMessage(_("Ballast dump started"));
     return;
   }
   

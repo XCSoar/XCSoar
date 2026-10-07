@@ -562,6 +562,9 @@ Version 7.46 - not yet released
     replay at normal speed does
   - lua: fix replay.fast_forward() returning a bogus value instead of
     reporting whether it succeeded
+  - lua: start and stop dumping water ballast with
+    xcsoar.settings.setballastdump(), and read whether it runs from
+    xcsoar.settings.ballast_dumping #764
   - build system: fix the fat-binary Android build failing at random when
     its four per-ABI submakes rebuilt the shared arch-independent outputs
     at the same time #3186
