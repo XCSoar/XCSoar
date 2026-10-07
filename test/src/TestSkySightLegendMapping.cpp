@@ -4,6 +4,49 @@
 #include "Weather/SkySight/LegendMapping.hpp"
 #include "TestUtil.hpp"
 
+#include <limits>
+
+/**
+ * DecodeGridValue(): a missing "_FillValue" is not a fill value of
+ * its own, NaN or 0 included, and samples without a value stay
+ * empty.  The NaN and infinity cases also fail if -ffinite-math-only
+ * comes back and folds the isfinite() checks away.
+ */
+static void
+TestDecodeGridValue()
+{
+  using SkySight::DecodeGridValue;
+
+  constexpr double nan = std::numeric_limits<double>::quiet_NaN();
+  constexpr double inf = std::numeric_limits<double>::infinity();
+
+  /* no fill value: every finite sample has a value, 0 included */
+  ok1(DecodeGridValue(3, std::nullopt, 2, 1) == 7.f);
+  ok1(DecodeGridValue(0, std::nullopt, 2, 1) == 1.f);
+  ok1(DecodeGridValue(-9999, std::nullopt, 1, 0) == -9999.f);
+
+  /* a numeric fill value marks exactly that raw value as empty */
+  ok1(!DecodeGridValue(-9999, -9999., 2, 1).has_value());
+  ok1(DecodeGridValue(3, -9999., 2, 1) == 7.f);
+  ok1(!DecodeGridValue(0, 0., 2, 1).has_value());
+  ok1(DecodeGridValue(1, 0., 2, 1) == 3.f);
+
+  /* a file that declares NaN as its fill value */
+  ok1(DecodeGridValue(3, nan, 2, 1) == 7.f);
+  ok1(!DecodeGridValue(nan, nan, 2, 1).has_value());
+
+  /* samples that are not finite, or not after scaling */
+  ok1(!DecodeGridValue(nan, std::nullopt, 1, 0).has_value());
+  ok1(!DecodeGridValue(inf, std::nullopt, 1, 0).has_value());
+  ok1(!DecodeGridValue(-inf, -9999., 1, 0).has_value());
+  ok1(!DecodeGridValue(1e300, std::nullopt, 1e300, 0).has_value());
+  ok1(!DecodeGridValue(1e300, std::nullopt, 1, 0).has_value());
+  ok1(!DecodeGridValue(-1e300, std::nullopt, 1, 0).has_value());
+
+  /* just inside the float range */
+  ok1(DecodeGridValue(3e38, std::nullopt, 1, 0) == 3e38f);
+}
+
 static void
 TestBipolarDeadZone()
 {
@@ -76,7 +119,8 @@ TestAllPositiveLegend()
 int
 main()
 {
-  plan_tests(11 + 3 + 5);
+  plan_tests(16 + 11 + 3 + 5);
+  TestDecodeGridValue();
   TestBipolarDeadZone();
   TestNegativeStopsStillPaint();
   TestAllPositiveLegend();

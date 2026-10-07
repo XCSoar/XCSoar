@@ -7,9 +7,37 @@
 
 #include <cmath>
 #include <iterator>
+#include <limits>
 #include <map>
+#include <optional>
 
 namespace SkySight {
+
+/**
+ * Turn one raw value of a SkySight NetCDF grid into the value the
+ * legend is looked up with, applying "scale_factor" and "add_offset".
+ *
+ * @param fill_value the variable's "_FillValue", or nothing if it
+ * has none
+ * @return nothing for a sample without a value: not finite, equal to
+ * the fill value, or outside the float range after scaling
+ */
+[[nodiscard]] [[gnu::const]] inline std::optional<float>
+DecodeGridValue(double raw, std::optional<double> fill_value,
+                double scale, double offset) noexcept
+{
+  if (!std::isfinite(raw) || (fill_value && raw == *fill_value))
+    return std::nullopt;
+
+  /* a double outside the float range must not be converted: that is
+     undefined behaviour, not infinity */
+  const double value = raw * scale + offset;
+  if (!std::isfinite(value) ||
+      std::fabs(value) > std::numeric_limits<float>::max())
+    return std::nullopt;
+
+  return static_cast<float>(value);
+}
 
 /**
  * Map a sample onto the SkySight legend.

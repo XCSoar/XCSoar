@@ -760,16 +760,13 @@ DecodeNetCdf(const SkySightPreparedData &prepared,
       for (size_t x = 0; x < lon_size; ++x) {
         const auto source_x = lon_ascending ? x : (lon_size - 1 - x);
         const auto index = source_y * lon_size + source_x;
-        const auto raw = values[index];
-        if (!std::isfinite(raw) || (fill_value && raw == *fill_value))
+        const auto value = SkySight::DecodeGridValue(values[index],
+                                                     fill_value,
+                                                     scale, offset);
+        if (!value)
           continue;
 
-        const auto point = raw * scale + offset;
-        const auto float_point = (float)point;
-        if (!std::isfinite(point) || !std::isfinite(float_point))
-          continue;
-
-        auto color = SkySight::FindLegendColor(legend, float_point);
+        auto color = SkySight::FindLegendColor(legend, *value);
         if (color == nullptr)
           continue;
 
