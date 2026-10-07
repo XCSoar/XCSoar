@@ -334,6 +334,8 @@ Version 7.46 - 2026-10-19
   - fix the temperature trace when the forecast temperature is
     changed after a climb above 9,900 m #3218
 * devices
+  - support OpenVario protocol 1.5 unaligned acceleration and
+    gyroscope data, and uncompensated vario data #3141
   - send an LXNAV vario the wing loading of the active plane, the
     reference mass divided by the wing area, instead of the kg/m²
     left from the polar the vario had before
