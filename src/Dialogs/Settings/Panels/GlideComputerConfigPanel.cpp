@@ -106,9 +106,11 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
   AddSpacer();
   SetExpertRow(SPACER_MODE);
 
-  AddBoolean(_("Flap forces cruise"),
-             _("When Vega variometer is connected and this option is true, the positive flap "
-                 "setting switches the flight mode between circling and cruise."),
+  AddBoolean(_("Vario switch sets flight mode"),
+             _("If enabled, a variometer that reports its cruise/circling "
+               "switch (e.g. Vega flap, Borgelt B50, LXNAV, XCVario) "
+               "switches XCSoar between cruise and circling mode.  This "
+               "only works while flying."),
              settings_computer.circling.external_trigger_cruise_enabled);
   SetExpertRow(EnableExternalTriggerCruise);
 
