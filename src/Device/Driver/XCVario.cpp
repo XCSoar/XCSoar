@@ -113,7 +113,8 @@ XVCDevice::PXCV(NMEAInputLine &line, NMEAInfo &info)
     line.Read(-1);    // starting protocol version 2 we ignore this field
   }
 
-  // inclimb/incruise 1=cruise,0=climb
+  /* cruise/climb switch: 0 in cruise, 1 in climb, as for the Borgelt
+     B50 (#812); the XCVario firmware sends "!cruise" */
   switch (line.Read(-1)) {
   case 0:
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;
