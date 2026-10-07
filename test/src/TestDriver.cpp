@@ -73,11 +73,8 @@
 #include "NMEA/GPSState.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
-<<<<<<< HEAD
 #include "NMEA/Checksum.hpp"
-=======
 #include "Geo/Gravity.hpp"
->>>>>>> fdc8c72d54 (OpenVario driver: Add tests for acceleration and gyro)
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
 #include "Protection.hpp"
@@ -3902,7 +3899,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
-             + 9 /* LXNanoLogbook */);
+             + 9 /* LXNanoLogbook */
              + 39 /* POV */);
   TestGeneric();
   TestTasman();
