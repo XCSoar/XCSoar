@@ -165,6 +165,12 @@ ComputeActiveWaypointGlide(const MoreData &basic,
                            const DerivedInfo &calculated,
                            const Waypoint &waypoint) noexcept
 {
+  if (!waypoint.has_elevation) {
+    GlideResult result;
+    result.Reset();
+    return result;
+  }
+
   const GlideState glide_state(
     basic.location.DistanceBearing(waypoint.location),
     waypoint.elevation + settings.task.safety_height_arrival,
@@ -188,7 +194,10 @@ SetInfoBoxWaypointGlideData(InfoBoxData &data, const MoreData &basic,
 
   const GlideResult result =
     ComputeActiveWaypointGlide(basic, settings, calculated, waypoint);
-  data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
+  if (result.IsDefined())
+    data.SetValueFromArrival(result.SelectAltitudeDifference(settings.task.glide));
+  else
+    data.SetInvalid();
   data.SetCommentFromDistance(basic.location.DistanceS(waypoint.location));
 }
 

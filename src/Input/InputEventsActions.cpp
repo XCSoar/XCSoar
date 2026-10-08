@@ -716,7 +716,10 @@ InputEvents::eventAddWaypoint(const char *misc)
     way_points.AddTempPoint(location, elevation, "(goto)");
   } else {
     Waypoint edit_waypoint = way_points.Create(basic.location);
-    edit_waypoint.elevation = calculated.terrain_altitude;
+    if (calculated.terrain_valid) {
+      edit_waypoint.elevation = calculated.terrain_altitude;
+      edit_waypoint.has_elevation = true;
+    }
     if (dlgWaypointEditShowModal(edit_waypoint) == WaypointEditResult::CANCEL ||
         edit_waypoint.name.empty()) {
       trigger_redraw();
