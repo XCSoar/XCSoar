@@ -99,9 +99,10 @@ jobs:
           if [ -z "$ITEM_ID" ]; then
             add_to_project "$ISSUE_ID"
             echo "Added issue to project"
-          fi
-
-          if [ "$CURRENT_STATUS" = "$STATUS_IN_PROGRESS" ] || [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
+            # Newly added items have no status yet, so set to Todo
+            set_status "$ITEM_ID" "$STATUS_TODO"
+            echo "Set status to Todo"
+          elif [ "$CURRENT_STATUS" = "$STATUS_IN_PROGRESS" ] || [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
             echo "Already In Progress or Done; skipping"
           else
             set_status "$ITEM_ID" "$STATUS_TODO"
@@ -131,9 +132,10 @@ jobs:
           source "$RUNNER_TEMP/project-helpers.sh"
 
           # Extract issue numbers from Fixes/Closes/Resolves #N patterns
+          # Use sort -u to deduplicate in case an issue is referenced multiple times
           ISSUE_NUMS=$(echo "$PR_BODY" \
             | grep -oiE '(fix(es)?|close(s)?|resolve(s)?)\s*#[0-9]+' \
-            | grep -oE '[0-9]+' || true)
+            | grep -oE '[0-9]+' | sort -u || true)
 
           if [ -z "$ISSUE_NUMS" ]; then
             echo "No linked issues found"
@@ -163,9 +165,10 @@ jobs:
             if [ -z "$ITEM_ID" ]; then
               add_to_project "$ISSUE_ID"
               echo "  Added to project"
-            fi
-
-            if [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
+              # Newly added items have no status yet, so set to In Progress
+              set_status "$ITEM_ID" "$STATUS_IN_PROGRESS"
+              echo "  Set to In Progress"
+            elif [ "$CURRENT_STATUS" = "$STATUS_DONE" ]; then
               echo "  Already Done; skipping"
             else
               set_status "$ITEM_ID" "$STATUS_IN_PROGRESS"
