@@ -125,11 +125,13 @@ jobs:
 
       - name: PR linked → In Progress
         if: github.event_name == 'pull_request'
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
           source "$RUNNER_TEMP/project-helpers.sh"
 
           # Extract issue numbers from Fixes/Closes/Resolves #N patterns
-          ISSUE_NUMS=$(echo "${{ github.event.pull_request.body }}" \
+          ISSUE_NUMS=$(echo "$PR_BODY" \
             | grep -oiE '(fix(es)?|close(s)?|resolve(s)?)\s*#[0-9]+' \
             | grep -oE '[0-9]+' || true)
 
