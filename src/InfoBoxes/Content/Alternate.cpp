@@ -114,6 +114,9 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
   GlideResult solution;
   solution.Reset();
 
+  if (!waypoint.has_elevation)
+    return solution;
+
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return solution;
 
@@ -122,8 +125,7 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
 
   return TaskSolution::GlideSolutionRemaining(
     basic.location, waypoint.location,
-    (waypoint.has_elevation ? waypoint.elevation : 0.) +
-      settings.task.safety_height_arrival,
+    waypoint.elevation + settings.task.safety_height_arrival,
     basic.nav_altitude, calculated.GetWindOrZero(),
     settings.task.glide, calculated.glide_polar_safety);
 }
