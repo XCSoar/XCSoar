@@ -89,7 +89,7 @@ TEST_NAMES = \
 	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
-	TestWaypointReachability TestBackupPaths \
+	TestWaypointReachability TestWaypointElevation TestBackupPaths \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
@@ -1171,6 +1171,13 @@ TEST_WAYPOINT_REACHABILITY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReachability.cpp
 $(eval $(call link-program,TestWaypointReachability,TEST_WAYPOINT_REACHABILITY))
+
+TEST_WAYPOINT_ELEVATION_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWaypointElevation.cpp \
+	$(SRC)/Engine/Waypoint/Waypoint.cpp
+TEST_WAYPOINT_ELEVATION_DEPENDS = GLIDE GEO MATH
+$(eval $(call link-program,TestWaypointElevation,TEST_WAYPOINT_ELEVATION))
 
 TEST_VARIO_SYNTHESISER_SOURCES = \
 	$(SRC)/Audio/ToneSynthesiser.cpp \
