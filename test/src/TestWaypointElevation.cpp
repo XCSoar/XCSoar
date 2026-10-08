@@ -1,6 +1,23 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+/**
+ * @file TestWaypointElevation.cpp
+ * @brief Unit tests for Waypoint elevation handling (GitHub issue #3286).
+ *
+ * These tests verify the expected behavior when accessing Waypoint::elevation:
+ * - Waypoint::has_elevation must be checked before using elevation
+ * - Glide calculations should return NO_SOLUTION for unknown elevation
+ * - Sea level (elevation=0, has_elevation=true) differs from unknown
+ *
+ * The glide helper functions here mirror the pattern used in production code
+ * (InfoBoxes/Content/Places.cpp and InfoBoxes/Content/Alternate.cpp) to
+ * document the expected behavior. The production code has UI dependencies
+ * that prevent direct unit testing, but these tests verify the underlying
+ * Waypoint class and the glide calculation pattern that all callers must
+ * follow.
+ */
+
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/GlideSolvers/GlideSettings.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
@@ -35,8 +52,10 @@ TestGetElevationOrZero()
 }
 
 /**
- * Simulate the ComputeActiveWaypointGlide function behavior.
- * Returns invalid result when elevation is unknown.
+ * Helper that mirrors the has_elevation check pattern used in production
+ * code (ComputeActiveWaypointGlide in Places.cpp). Returns invalid result
+ * when elevation is unknown - this is the behavior all glide callers must
+ * implement.
  */
 static GlideResult
 ComputeGlideToWaypoint(const GeoPoint &aircraft_location,
@@ -108,9 +127,10 @@ TestGlideWithElevation()
 }
 
 /**
- * Simulate the SolveManualAlternate function behavior.
- * Previously used (has_elevation ? elevation : 0), which incorrectly
- * treated unknown elevation as sea level.
+ * Helper that mirrors the has_elevation check pattern used in production
+ * code (SolveManualAlternate in Alternate.cpp). The previous bug used
+ * (has_elevation ? elevation : 0) which incorrectly treated unknown
+ * elevation as sea level.
  */
 static GlideResult
 SolveAlternateGlide(const GeoPoint &aircraft_location,
