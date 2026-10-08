@@ -26,7 +26,8 @@ namespace Nano {
  * The CRC-32 the LXNAV file transfer uses.  It is the reflected
  * CRC-32 (polynomial 0xedb88320), except that every right shift
  * copies the sign bit in, as a signed 32 bit shift does; the logger
- * computes it that way.  Values are printed as signed decimals.
+ * computes it that way.  Values are usually printed as signed
+ * decimals; see ParseFileTransferCrc().
  */
 class FileTransferCrc {
   uint32_t value = 0xffffffff;
@@ -43,6 +44,16 @@ public:
     return static_cast<int32_t>(~value);
   }
 };
+
+/**
+ * Parse a checksum as the logger prints it.  That is a signed
+ * decimal, except that a Nano 3 (firmware 3.02) prints it unsigned
+ * for a block it sends again after FILE_DATA_LOST; both are
+ * accepted.
+ */
+[[gnu::pure]]
+std::optional<int32_t>
+ParseFileTransferCrc(std::string_view s) noexcept;
 
 /**
  * One parsed "FILE_DATA,A" sentence, the part after that prefix.

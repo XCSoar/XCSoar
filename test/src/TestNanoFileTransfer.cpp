@@ -6,6 +6,7 @@
 
 #include <array>
 #include <cstring>
+#include <limits>
 
 using namespace Nano;
 
@@ -83,6 +84,23 @@ TestBase64()
 }
 
 static void
+TestParseFileTransferCrc()
+{
+  ok1(ParseFileTransferCrc("0") == 0);
+  ok1(ParseFileTransferCrc("460463230") == 460463230);
+  ok1(ParseFileTransferCrc("-2147483648") ==
+      std::numeric_limits<int32_t>::min());
+  ok1(ParseFileTransferCrc("2147483648") ==
+      std::numeric_limits<int32_t>::min());
+  ok1(ParseFileTransferCrc("4294967295") == -1);
+
+  ok1(!ParseFileTransferCrc(""));
+  ok1(!ParseFileTransferCrc("4294967296"));
+  ok1(!ParseFileTransferCrc("-2147483649"));
+  ok1(!ParseFileTransferCrc("12x"));
+}
+
+static void
 TestParseFileDataBlock()
 {
   auto block = ParseFileDataBlock("0,7507,323897820,M0Q2");
@@ -92,7 +110,15 @@ TestParseFileDataBlock()
   block = ParseFileDataBlock("0,0,-350561111,QUxY");
   ok1(block && block->number == 0 && block->crc == -350561111);
 
-  ok1(!ParseFileDataBlock("1,0,-350561111,QUxY"));
+  /* block 245 of a Nano 3 (firmware 3.02) download: status 0 and a
+     signed checksum when first sent, status 1 and the same checksum
+     unsigned when sent again after FILE_DATA_LOST */
+  block = ParseFileDataBlock("0,245,-250173837,QUxY");
+  ok1(block && block->number == 245 && block->crc == -250173837);
+  block = ParseFileDataBlock("1,245,4044793459,QUxY");
+  ok1(block && block->number == 245 && block->crc == -250173837);
+
+  ok1(!ParseFileDataBlock("2,0,-350561111,QUxY"));
   ok1(!ParseFileDataBlock("0,x,-350561111,QUxY"));
   ok1(!ParseFileDataBlock("0,0,99999999999,QUxY"));
   ok1(!ParseFileDataBlock("0,0,-350561111,"));
@@ -102,10 +128,11 @@ TestParseFileDataBlock()
 int
 main()
 {
-  plan_tests(8 + 12 + 7);
+  plan_tests(8 + 12 + 9 + 9);
 
   TestCrc();
   TestBase64();
+  TestParseFileTransferCrc();
   TestParseFileDataBlock();
 
   return exit_status();
