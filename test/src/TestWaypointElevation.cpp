@@ -1,0 +1,235 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/GlideSolvers/GlideSettings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/GlideSolvers/GlideState.hpp"
+#include "Engine/GlideSolvers/GlideResult.hpp"
+#include "Engine/GlideSolvers/MacCready.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
+
+#include "TestUtil.hpp"
+
+static GlideSettings glide_settings;
+static GlidePolar glide_polar(1.0);
+
+/**
+ * Test that Waypoint::GetElevationOrZero() returns correct values
+ * based on has_elevation flag.
+ */
+static void
+TestGetElevationOrZero()
+{
+  Waypoint wp_with_elevation{GeoPoint(Angle::Degrees(7.0), Angle::Degrees(47.0))};
+  wp_with_elevation.elevation = 500.0;
+  wp_with_elevation.has_elevation = true;
+
+  Waypoint wp_without_elevation{GeoPoint(Angle::Degrees(7.1), Angle::Degrees(47.1))};
+  wp_without_elevation.elevation = 999.0;  // Should be ignored
+  wp_without_elevation.has_elevation = false;
+
+  ok1(equals(wp_with_elevation.GetElevationOrZero(), 500.0));
+  ok1(equals(wp_without_elevation.GetElevationOrZero(), 0.0));
+}
+
+/**
+ * Simulate the ComputeActiveWaypointGlide function behavior.
+ * Returns invalid result when elevation is unknown.
+ */
+static GlideResult
+ComputeGlideToWaypoint(const GeoPoint &aircraft_location,
+                       double aircraft_altitude,
+                       const Waypoint &waypoint,
+                       double safety_height)
+{
+  if (!waypoint.has_elevation) {
+    GlideResult result;
+    result.Reset();
+    return result;
+  }
+
+  const GlideState glide_state(
+    aircraft_location.DistanceBearing(waypoint.location),
+    waypoint.elevation + safety_height,
+    aircraft_altitude,
+    SpeedVector::Zero());
+
+  return MacCready::Solve(glide_settings, glide_polar, glide_state);
+}
+
+/**
+ * Test that glide calculation returns invalid result for waypoint
+ * without elevation.
+ */
+static void
+TestGlideWithoutElevation()
+{
+  const GeoPoint aircraft_location(Angle::Degrees(7.0), Angle::Degrees(47.0));
+  const double aircraft_altitude = 1500.0;
+  const double safety_height = 100.0;
+
+  // Waypoint without elevation should return invalid result
+  Waypoint wp_no_elev{GeoPoint(Angle::Degrees(7.1), Angle::Degrees(47.1))};
+  wp_no_elev.has_elevation = false;
+
+  GlideResult result_no_elev = ComputeGlideToWaypoint(
+    aircraft_location, aircraft_altitude, wp_no_elev, safety_height);
+
+  ok1(!result_no_elev.IsDefined());
+  ok1(result_no_elev.validity == GlideResult::Validity::NO_SOLUTION);
+}
+
+/**
+ * Test that glide calculation returns valid result for waypoint
+ * with elevation.
+ */
+static void
+TestGlideWithElevation()
+{
+  const GeoPoint aircraft_location(Angle::Degrees(7.0), Angle::Degrees(47.0));
+  const double aircraft_altitude = 1500.0;
+  const double safety_height = 100.0;
+
+  // Waypoint with elevation should return valid result
+  Waypoint wp_with_elev{GeoPoint(Angle::Degrees(7.05), Angle::Degrees(47.05))};
+  wp_with_elev.elevation = 500.0;
+  wp_with_elev.has_elevation = true;
+
+  GlideResult result_with_elev = ComputeGlideToWaypoint(
+    aircraft_location, aircraft_altitude, wp_with_elev, safety_height);
+
+  ok1(result_with_elev.IsDefined());
+  ok1(result_with_elev.validity == GlideResult::Validity::OK);
+  // With 1500m altitude, 500m elevation + 100m safety = 600m target
+  // Altitude difference should be positive (above glide)
+  ok1(result_with_elev.altitude_difference > 0);
+}
+
+/**
+ * Simulate the SolveManualAlternate function behavior.
+ * Previously used (has_elevation ? elevation : 0), which incorrectly
+ * treated unknown elevation as sea level.
+ */
+static GlideResult
+SolveAlternateGlide(const GeoPoint &aircraft_location,
+                    double aircraft_altitude,
+                    const Waypoint &waypoint,
+                    double safety_height)
+{
+  GlideResult solution;
+  solution.Reset();
+
+  if (!waypoint.has_elevation)
+    return solution;
+
+  const GlideState glide_state(
+    aircraft_location.DistanceBearing(waypoint.location),
+    waypoint.elevation + safety_height,
+    aircraft_altitude,
+    SpeedVector::Zero());
+
+  return MacCready::Solve(glide_settings, glide_polar, glide_state);
+}
+
+/**
+ * Test that alternate glide calculation behaves correctly for
+ * waypoints with and without elevation.
+ */
+static void
+TestAlternateGlide()
+{
+  const GeoPoint aircraft_location(Angle::Degrees(7.0), Angle::Degrees(47.0));
+  const double aircraft_altitude = 1500.0;
+  const double safety_height = 100.0;
+
+  // Waypoint at 1000m elevation - should be reachable from 1500m
+  Waypoint wp_high{GeoPoint(Angle::Degrees(7.02), Angle::Degrees(47.02))};
+  wp_high.elevation = 1000.0;
+  wp_high.has_elevation = true;
+
+  GlideResult result_high = SolveAlternateGlide(
+    aircraft_location, aircraft_altitude, wp_high, safety_height);
+
+  ok1(result_high.IsDefined());
+
+  // Waypoint without elevation - should return invalid, not assume sea level
+  Waypoint wp_unknown{GeoPoint(Angle::Degrees(7.02), Angle::Degrees(47.02))};
+  wp_unknown.has_elevation = false;
+
+  GlideResult result_unknown = SolveAlternateGlide(
+    aircraft_location, aircraft_altitude, wp_unknown, safety_height);
+
+  ok1(!result_unknown.IsDefined());
+}
+
+/**
+ * Test edge case: Waypoint at sea level (elevation = 0) with has_elevation = true
+ * should be treated differently from unknown elevation.
+ */
+static void
+TestSeaLevelVsUnknown()
+{
+  const GeoPoint aircraft_location(Angle::Degrees(7.0), Angle::Degrees(47.0));
+  const double aircraft_altitude = 1000.0;
+  const double safety_height = 50.0;
+
+  // Coastal waypoint at actual sea level
+  Waypoint wp_sea_level{GeoPoint(Angle::Degrees(7.1), Angle::Degrees(47.1))};
+  wp_sea_level.elevation = 0.0;
+  wp_sea_level.has_elevation = true;
+
+  // Waypoint with unknown elevation
+  Waypoint wp_unknown{GeoPoint(Angle::Degrees(7.1), Angle::Degrees(47.1))};
+  wp_unknown.has_elevation = false;
+
+  GlideResult result_sea_level = SolveAlternateGlide(
+    aircraft_location, aircraft_altitude, wp_sea_level, safety_height);
+
+  GlideResult result_unknown = SolveAlternateGlide(
+    aircraft_location, aircraft_altitude, wp_unknown, safety_height);
+
+  // Sea level waypoint should be reachable and have a valid solution
+  ok1(result_sea_level.IsDefined());
+  ok1(result_sea_level.IsOk());
+
+  // Unknown elevation should return invalid solution
+  ok1(!result_unknown.IsDefined());
+
+  // Verify the sea level calculation shows positive altitude margin
+  // From 1000m aircraft altitude to 50m target (0+safety), we can reach
+  ok1(result_sea_level.altitude_difference > 0);
+}
+
+/**
+ * Test Waypoint initialization defaults.
+ */
+static void
+TestWaypointDefaults()
+{
+  Waypoint wp{GeoPoint(Angle::Degrees(7.0), Angle::Degrees(47.0))};
+
+  // By default, has_elevation should be false
+  ok1(!wp.has_elevation);
+
+  // GetElevationOrZero should return 0 when has_elevation is false
+  ok1(equals(wp.GetElevationOrZero(), 0.0));
+}
+
+int main()
+{
+  plan_tests(15);
+
+  glide_settings.SetDefaults();
+  glide_polar.SetMC(1.0);
+
+  TestWaypointDefaults();
+  TestGetElevationOrZero();
+  TestGlideWithoutElevation();
+  TestGlideWithElevation();
+  TestAlternateGlide();
+  TestSeaLevelVsUnknown();
+
+  return exit_status();
+}
