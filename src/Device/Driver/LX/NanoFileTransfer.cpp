@@ -5,6 +5,8 @@
 #include "util/NumberParser.hxx"
 #include "util/StringSplit.hxx"
 
+#include <limits>
+
 namespace Nano {
 
 /**
@@ -31,21 +33,36 @@ FileTransferCrc::Update(std::span<const std::byte> data) noexcept
   }
 }
 
+std::optional<int32_t>
+ParseFileTransferCrc(std::string_view s) noexcept
+{
+  int64_t value;
+  if (!ParseIntegerTo(s, value) ||
+      value < std::numeric_limits<int32_t>::min() ||
+      value > std::numeric_limits<uint32_t>::max())
+    return std::nullopt;
+
+  return static_cast<int32_t>(static_cast<uint32_t>(value));
+}
+
 std::optional<FileDataBlock>
 ParseFileDataBlock(std::string_view line) noexcept
 {
-  /* "0,<block>,<crc>,<base64>"; the leading column is always 0 */
+  /* "<status>,<block>,<crc>,<base64>"; the status is 0, or 1 for a
+     block a Nano 3 (firmware 3.02) sends again after FILE_DATA_LOST */
   const auto [status, rest1] = Split(line, ',');
   const auto [number, rest2] = Split(rest1, ',');
   const auto [crc, base64] = Split(rest2, ',');
 
   FileDataBlock block;
-  if (status != "0" ||
+  const auto crc_value = ParseFileTransferCrc(crc);
+  if ((status != "0" && status != "1") ||
       !ParseIntegerTo(number, block.number) ||
-      !ParseIntegerTo(crc, block.crc) ||
+      !crc_value ||
       base64.empty())
     return std::nullopt;
 
+  block.crc = *crc_value;
   block.base64 = base64;
   return block;
 }

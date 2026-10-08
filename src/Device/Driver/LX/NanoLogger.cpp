@@ -592,10 +592,8 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
     }
 
     if (const char *crc_s = StringAfterPrefix(line, "CRC32,A,"sv)) {
-      int32_t crc;
-      if (received != file_size ||
-          !ParseIntegerTo(std::string_view{crc_s}, crc) ||
-          crc != file_crc.Get())
+      const auto crc = Nano::ParseFileTransferCrc(crc_s);
+      if (received != file_size || crc != file_crc.Get())
         throw std::runtime_error("Flight download failed:"
                                  " file checksum does not match");
 
