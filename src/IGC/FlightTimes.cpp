@@ -130,7 +130,8 @@ Scan(Path path, OperationEnvironment *operation)
     ApplyIGCFixToNMEA(fix, time, derived_ground_speed, basic);
 
     const bool was_flying = flying.flying;
-    flying_computer.Compute(IMPORT_TAKEOFF_SPEED, basic, calculated, flying);
+    flying_computer.Compute(IMPORT_TAKEOFF_SPEED, true,
+                            basic, calculated, flying);
 
     if (!was_flying && flying.flying) {
       if (!result.takeoff)
