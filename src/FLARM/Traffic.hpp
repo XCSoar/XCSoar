@@ -182,6 +182,13 @@ struct FlarmTraffic {
   /** Was the RSSI value received from the device? */
   bool rssi_available;
 
+  /**
+   * Did the device say where the target came from (PFLAA Source,
+   * protocol version 9)?  If not, #source is FLARM by default, also
+   * for an ADS-B target.
+   */
+  bool source_received;
+
   bool IsDefined() const noexcept {
     return valid;
   }
@@ -205,6 +212,7 @@ struct FlarmTraffic {
     id_type = IdType::UNKNOWN;
     rssi = 0;
     rssi_available = false;
+    source_received = false;
     no_track = false;
     absolute_location = false;
     absolute_altitude = false;

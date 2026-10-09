@@ -502,13 +502,14 @@ TestFLARM()
   if (ok1(traffic != NULL)) {
     ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::ADSB);
+    ok1(traffic->source_received);
     ok1(traffic->rssi_available);
     ok1(traffic->rssi == -85);
     ok1(!traffic->no_track);
     ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(equals(traffic->track, 180));
   } else {
-    skip(7, 0, "traffic == NULL");
+    skip(8, 0, "traffic == NULL");
   }
 
   // PFLAA v9+ with Source=Mode-S (6), NoTrack=0, no RSSI
@@ -534,11 +535,12 @@ TestFLARM()
   traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
+    ok1(!traffic->source_received);
     ok1(traffic->stealth);
     ok1(traffic->no_track);
     ok1(!traffic->rssi_available);
   } else {
-    skip(4, 0, "traffic == NULL");
+    skip(5, 0, "traffic == NULL");
   }
 
   // PFLAA v8+ with NoTrack=0, out-of-range source (9 -> defaults to FLARM)
@@ -4234,7 +4236,7 @@ int main()
   CreateDataPath();
 
   plan_tests(1095 /* drivers */ + 29 /* PFLAU extended */
-             + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
+             + 39 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
