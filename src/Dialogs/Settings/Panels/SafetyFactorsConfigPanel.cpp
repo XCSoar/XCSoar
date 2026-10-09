@@ -158,11 +158,12 @@ SafetyFactorsConfigPanel::BuildSafetyMCHelp() noexcept
 {
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
-  safety_mc_help = _("The MacCready used for terrain reach, landable colours, "
-                     "abort and the Alternates list when Reach polar is Safety "
-                     "MC. Alternate InfoBoxes and waypoint Alt. diff. MC safety "
-                     "always use this value. Speed-to-fly is not affected. "
-                     "Higher values treat fewer fields as reachable.");
+  safety_mc_help = _("The MacCready used for terrain reach, landable "
+                     "colours, abort and the Alternates list when Reach "
+                     "polar is Safety MC. Alternate InfoBoxes and "
+                     "waypoint Alt. diff. MC safety always use this "
+                     "value. Speed-to-fly is not affected. Higher values "
+                     "treat fewer fields as reachable.");
   safety_mc_help += "\n\n";
 
   if (!settings.polar.glide_polar_task.IsValid()) {
