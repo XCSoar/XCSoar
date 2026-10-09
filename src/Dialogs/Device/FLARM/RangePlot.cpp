@@ -101,6 +101,30 @@ FlarmRangePlot::PaintSectors(Canvas &canvas,
 }
 
 void
+FlarmRangePlot::PaintMaxima(Canvas &canvas,
+                            double full_range) const noexcept
+{
+  const unsigned n = sectors.size();
+  const unsigned radius = radar.GetRadius();
+  constexpr unsigned STEPS = 6;
+
+  canvas.Select(look.plane_pen);
+
+  for (unsigned i = 0; i < n; ++i) {
+    const auto &maximum = sectors[i].maximum;
+    if (!maximum)
+      continue;
+
+    const unsigned r = unsigned(std::min(*maximum / full_range, 1.) * radius);
+    BulkPixelPoint arc[STEPS + 1];
+    for (unsigned j = 0; j <= STEPS; ++j)
+      arc[j] = radar.At(Angle::FullCircle() * ((i + double(j) / STEPS) / n),
+                        r);
+    canvas.DrawPolyline(arc, STEPS + 1);
+  }
+}
+
+void
 FlarmRangePlot::PaintMinimum(Canvas &canvas,
                              double full_range) const noexcept
 {
@@ -182,9 +206,12 @@ FlarmRangePlot::OnPaint(Canvas &canvas) noexcept
   canvas.Clear(dialog_look.background_color);
 
   unsigned max_range = 0;
-  for (const auto &sector : sectors)
+  for (const auto &sector : sectors) {
     if (sector.range)
       max_range = std::max(max_range, *sector.range);
+    if (sector.maximum)
+      max_range = std::max(max_range, *sector.maximum);
+  }
 
   if (max_range == 0) {
     /* no sector has a value, so there is nothing to scale to */
@@ -209,6 +236,7 @@ FlarmRangePlot::OnPaint(Canvas &canvas) noexcept
 
   const double full_range = Units::ToSysDistance(step * rings);
   PaintSectors(canvas, full_range);
+  PaintMaxima(canvas, full_range);
   PaintMinimum(canvas, full_range);
   PaintRings(canvas, step, rings);
   PaintLimit(canvas, full_range);
