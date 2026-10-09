@@ -135,6 +135,29 @@ class LXDevice: public AbstractDevice
   std::optional<double> last_received_qnh;
 
   /**
+   * How this port's vario turns a QNH into the $LXWP3 altitude
+   * offset.  LinkTimeout() clears is_sVario, but $LXWP3 keeps
+   * arriving for up to a minute before the next $LXWP1, so this is
+   * not cleared with the detection flags (#3261).
+   */
+  enum class QnhModel {
+    UNKNOWN,
+    STANDARD,
+    LINEAR,
+  };
+
+  QnhModel qnh_model = QnhModel::UNKNOWN;
+
+  /** The current QNH was derived from $LXWP3, not from $PLXV0,QNH. */
+  bool qnh_from_lxwp3 = false;
+
+  /**
+   * qnh_model changed.  The next $LXWP3 replaces a QNH derived with
+   * the previous model, even when the two are within 0.5 hPa.
+   */
+  bool replace_lxwp3_qnh = false;
+
+  /**
    * Has ballast been requested from the device?
    */
   bool ballast_requested = false;
@@ -532,6 +555,12 @@ private:
                             const DeviceInfo &device_info) noexcept;
 
   void RememberReceivedQNH(const ExternalSettings &settings) noexcept;
+
+  /**
+   * Remember the $LXWP3 offset model for this port.  Caller holds
+   * #mutex.  Does nothing when the model is unchanged.
+   */
+  void NoteQnhModelLocked(bool linear) noexcept;
 
   /**
    * Check if MC value from device is an echo of what we sent.

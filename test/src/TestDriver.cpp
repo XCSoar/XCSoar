@@ -4297,6 +4297,80 @@ TestLXNAVQNH()
 }
 
 /**
+ * $LXWP3 before the vario is identified must not plant the
+ * standard-atmosphere QNH, and a link timeout must not forget that
+ * an S series offset is linear (#3261).
+ */
+static void
+TestLXNAVQNHModel()
+{
+  NullPort null;
+  Device *device = lx_driver.CreateOnPort(dummy_config, null);
+  LXDevice &lx_device = *(LXDevice *)device;
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+
+  static constexpr const char *lxwp3_188 =
+    "$LXWP3,188,0,2.0,,0,20,5.0,0.5,0,100,-10.0,Kestrel 17m,,*15";
+  static constexpr const char *lxwp1_ninc =
+    "$LXWP1,NINC,30309,9.41,08*0B";
+  static constexpr const char *lxwp1_1606 =
+    "$LXWP1,1606,4294967295,1.90,1.00,4294967295*06";
+
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  ok1(!basic.settings.qnh_available);
+  ok1(basic.settings.vario_filter_period_available);
+  ok1(equals(basic.settings.vario_filter_period, 2.0));
+
+  ok1(device->ParseNMEA(lxwp1_ninc, basic));
+  ok1(lx_device.IsSVario());
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  ok1(fabs(basic.settings.qnh.GetHectoPascal() - 1020) < 0.02);
+
+  /* detection flags are cleared; the offset model is not */
+  lx_device.LinkTimeout();
+  ok1(!lx_device.IsSVario());
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  const double linear = basic.settings.qnh.GetHectoPascal();
+  ok1(fabs(linear - 1020) < 0.02);
+  ok1(fabs(linear - 1020.15) > 0.05);
+
+  delete device;
+
+  /* 188 ft through the standard atmosphere is about 1020.15.  The
+     linear reading is within 0.5 hPa of that, and must still replace
+     it once the port is known to be an S series. */
+  device = lx_driver.CreateOnPort(dummy_config, null);
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA(lxwp1_1606, basic));
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  const double isa = basic.settings.qnh.GetHectoPascal();
+  ok1(fabs(isa - 1020.15) < 0.02);
+
+  ok1(device->ParseNMEA(lxwp1_ninc, basic));
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  ok1(fabs(basic.settings.qnh.GetHectoPascal() - 1020) < 0.02);
+  ok1(fabs(basic.settings.qnh.GetHectoPascal() - isa) > 0.05);
+
+  /* an exact $PLXV0,QNH is not replaced by the coarse offset */
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA(lxwp1_1606, basic));
+  ok1(device->ParseNMEA("$PLXV0,QNH,W,102000*0D", basic));
+  ok1(basic.settings.qnh.GetHectoPascal() == 1020);
+  ok1(device->ParseNMEA(lxwp1_ninc, basic));
+  ok1(device->ParseNMEA(lxwp3_188, basic));
+  ok1(basic.settings.qnh.GetHectoPascal() == 1020);
+
+  delete device;
+}
+
+/**
  * PutQNH() does not send an S series vario the QNH it reported itself
  * (#3261): that could only round it to what the $LXWP3 offset carries.
  */
@@ -4355,6 +4429,7 @@ int main()
              + 15 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
              + 17 /* LXNAVQNH */
+             + 25 /* LXNAVQNHModel */
              + 6 /* LXNAVQNHEcho */);
   TestGeneric();
   TestTasman();
@@ -4435,6 +4510,7 @@ int main()
   TestTrafficExtensionsWire();
   TestLXNanoLogbook();
   TestLXNAVQNH();
+  TestLXNAVQNHModel();
   TestLXNAVQNHEcho();
 
   DeinitialiseDataPath();
