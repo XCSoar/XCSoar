@@ -25,4 +25,4 @@ WHY XCSOAR
 - Supports a wide range of hardware
 
 Documentation:
-- User manual: https://xcsoar.org/discover/manual.html
+- User manual: https://xcsoar.org/docs/#manual

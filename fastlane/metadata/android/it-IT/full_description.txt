@@ -28,4 +28,4 @@ PERCHÉ XCSOAR
 - Compatibile con un'ampia gamma di hardware
 
 Documentazione:
-- Manuale utente: https://xcsoar.org/discover/manual.html
+- Manuale utente: https://xcsoar.org/docs/#manual

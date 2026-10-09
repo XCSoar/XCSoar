@@ -23,4 +23,4 @@ XCSoar 是面向滑翔伞与滑翔机飞行员的战术飞行计算机。免费�
 - 支持广泛的硬件设备
 
 文档：
-- 用户手册：https://xcsoar.org/discover/manual.html
+- 用户手册：https://xcsoar.org/docs/#manual

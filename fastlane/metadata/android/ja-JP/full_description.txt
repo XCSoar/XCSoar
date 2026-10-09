@@ -24,4 +24,4 @@ XCSoar を選ぶ理由
 - 幅広いハードウェアに対応
 
 ドキュメント:
-- ユーザーマニュアル: https://xcsoar.org/discover/manual.html
+- ユーザーマニュアル: https://xcsoar.org/docs/#manual

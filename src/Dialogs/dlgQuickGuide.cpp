@@ -69,7 +69,7 @@ GetWelcomeText(bool dark_mode)
     "%s\n\n"
     "%s\n\n"
     "- [https://xcsoar.org](https://xcsoar.org)\n"
-    "- [%s](https://xcsoar.org/discover/manual.html)\n"
+    "- [%s](https://xcsoar.org/docs/#manual)\n"
     "- [%s](https://github.com/XCSoar/XCSoar)\n"
     "- [%s](https://github.com/XCSoar/XCSoar/discussions)",
     dark_mode ? "IDB_TITLE_HD_WHITE" : "IDB_TITLE_HD",

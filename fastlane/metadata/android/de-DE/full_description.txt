@@ -26,4 +26,4 @@ WARUM XCSOAR
 - Unterstützt eine breite Auswahl an Hardware
 
 Dokumentation:
-- Benutzerhandbuch: https://xcsoar.org/discover/manual.html
+- Benutzerhandbuch: https://xcsoar.org/docs/#manual

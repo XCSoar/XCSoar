@@ -374,6 +374,8 @@ Version 7.46 - not yet released
     language
   - disable the previous button on the first page of the Quick Guide,
     checklist, Credits, and Configuration
+  - fix the Quick Guide link to the user manual, which opened a page
+    that no longer exists
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator
@@ -533,6 +535,9 @@ Version 7.46 - not yet released
   - drop the obsolete Ignore checksum device setting from the manuals
     and state that XCSoar uses an NMEA sentence only when its checksum
     matches #3257
+  - point the manuals and store descriptions at the current manual,
+    GitHub Discussions, the issue tracker, and the turnpoint and
+    airspace exchanges
 * development
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch

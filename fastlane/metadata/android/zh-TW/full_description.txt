@@ -24,4 +24,4 @@ XCSoar 是為滑翔傘與滑翔機飛行員打造的強大戰術飛行電腦。
 - 相容廣泛硬體設備
 
 文件：
-- 使用手冊：https://xcsoar.org/discover/manual.html
+- 使用手冊：https://xcsoar.org/docs/#manual
