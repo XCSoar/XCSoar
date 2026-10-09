@@ -11315,3 +11315,59 @@ msgstr ""
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+
+#, no-c-format
+msgid "Range statistics"
+msgstr ""
+
+#, no-c-format
+msgid "Antenna"
+msgstr ""
+
+#, no-c-format
+msgid "The FLARM keeps the statistics for each of its two radio channels."
+msgstr ""
+
+#, no-c-format
+msgid "Data points"
+msgstr ""
+
+#, no-c-format
+msgid "Period"
+msgstr ""
+
+#, no-c-format
+msgid "FLARM range"
+msgstr ""
+
+#, no-c-format
+msgid "The FLARM did not send its range statistics."
+msgstr ""
+
+#, no-c-format
+msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
+msgstr ""
+
+#, no-c-format
+msgid "The FLARM did not confirm the reset."
+msgstr ""
+
+#, no-c-format
+msgid "Below minimum range"
+msgstr ""
+
+#, no-c-format
+msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
+msgstr ""
+
+#, no-c-format
+msgid "Range setting"
+msgstr ""
+
+#, no-c-format
+msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
+msgstr ""
+
+#, no-c-format
+msgid "Unlimited"
+msgstr ""

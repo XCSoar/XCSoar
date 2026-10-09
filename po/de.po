@@ -11363,3 +11363,59 @@ msgstr "Füllt Max. Temp. in den Flug Einstellungen aus der DWD-Vorhersage von h
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr "Die Höchsttemperatur am Boden für heute. Eine Trockenadiabate von ihr gegen die im Steigen gemessene Außentemperatur ergibt die geschätzte Arbeitshöhe; für die Wolkenbasis braucht es zusätzlich einen Feuchtefühler. Beide stehen auf der Temperaturkurve im Analyse-Dialog, sobald der Segler die Schicht durchstiegen hat."
+
+#, no-c-format
+msgid "Range statistics"
+msgstr "Reichweitenstatistik"
+
+#, no-c-format
+msgid "Antenna"
+msgstr "Antenne"
+
+#, no-c-format
+msgid "The FLARM keeps the statistics for each of its two radio channels."
+msgstr "Das FLARM führt die Statistik für jeden seiner beiden Funkkanäle getrennt."
+
+#, no-c-format
+msgid "Data points"
+msgstr "Messpunkte"
+
+#, no-c-format
+msgid "Period"
+msgstr "Zeitraum"
+
+#, no-c-format
+msgid "FLARM range"
+msgstr "FLARM-Reichweite"
+
+#, no-c-format
+msgid "The FLARM did not send its range statistics."
+msgstr "Das FLARM hat seine Reichweitenstatistik nicht gesendet."
+
+#, no-c-format
+msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
+msgstr "Reichweitenstatistik zurücksetzen? Das ist nach einer Änderung an den Antennen sinnvoll; das FLARM sammelt sie dann neu."
+
+#, no-c-format
+msgid "The FLARM did not confirm the reset."
+msgstr "Das FLARM hat das Zurücksetzen nicht bestätigt."
+
+#, no-c-format
+msgid "Below minimum range"
+msgstr "Unter Mindestreichweite"
+
+#, no-c-format
+msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
+msgstr "Gemessene Sektoren dieses Kanals, deren mittlere Reichweite unter dem Minimum von FLARM liegt: 2 NM nach vorn, 1 NM zur Seite und nach hinten.  Dann den Antenneneinbau prüfen."
+
+#, no-c-format
+msgid "Range setting"
+msgstr "Reichweiteneinstellung"
+
+#, no-c-format
+msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
+msgstr "Das FLARM meldet keine Luftfahrzeuge jenseits dieser Entfernung.  Liegt sie im dargestellten Bereich, zeigt der Plot sie als gestrichelten Kreis."
+
+#, no-c-format
+msgid "Unlimited"
+msgstr "Unbegrenzt"
