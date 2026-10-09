@@ -558,7 +558,10 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
   env.SetProgressRange(file_size);
 
   Nano::FileTransferCrc chain, file_crc;
-  unsigned next_block = 0, in_window = 0, received = 0, timeouts = 0;
+  /* the logger sends blocks up to window_end - 1, then waits for
+     FILE_OK; a resend does not move that boundary */
+  unsigned next_block = 0, window_end = window, received = 0,
+    timeouts = 0;
   bool answered = false, lost_reported = false;
   std::byte data[PAYLOAD];
 
@@ -586,7 +589,14 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
                                  " no reply from the logger");
       }
 
-      /* repeat the last request, as the logger may have missed it */
+      /* repeat the request, as the logger may have missed it; once
+         blocks have arrived, acknowledge up to the first one still
+         missing, which starts a new window there */
+      if (answered) {
+        request = fmt::format("FILE_OK,R,{}", next_block);
+        window_end = next_block + window;
+      }
+
       WriteFileCommand(port, request, env);
       continue;
     }
@@ -638,8 +648,6 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
         WriteFileCommand(port,
                          fmt::format("FILE_DATA_LOST,R,{}", next_block),
                          env);
-        request = fmt::format("FILE_OK,R,{}", next_block);
-        in_window = 0;
         lost_reported = true;
       }
       continue;
@@ -656,8 +664,8 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
     env.SetProgressBytes(received);
     env.SetProgressPosition(received);
 
-    if (++in_window == window || received == file_size) {
-      in_window = 0;
+    if (next_block == window_end || received == file_size) {
+      window_end = next_block + window;
       request = fmt::format("FILE_OK,R,{}", next_block);
       WriteFileCommand(port, request, env);
     }
