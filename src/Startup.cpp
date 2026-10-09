@@ -600,6 +600,8 @@ Startup(UI::Display &display)
   backend_components->glide_computer->SetTerrain(data_components->terrain.get());
   backend_components->glide_computer->SetLogger(backend_components->igc_logger.get());
   backend_components->glide_computer->Initialise();
+  backend_components->glide_computer->GetFlarmRange()
+    .Load(LocalPath("flarm-range.txt"));
 
   backend_components->replay =
     std::make_unique<Replay>(*backend_components->device_blackboard,
@@ -962,6 +964,9 @@ Shutdown()
       backend_components->calculation_thread->Join();
       backend_components->calculation_thread.reset();
     }
+
+    if (backend_components->glide_computer)
+      backend_components->glide_computer->GetFlarmRange().Close();
   }
 
   //  Wait for the drawing thread to finish
