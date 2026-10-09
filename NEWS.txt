@@ -175,6 +175,9 @@ Version 7.46 - not yet released
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
+  - a Goto with no known elevation keeps bearing and distance, and
+    leaves arrival height, required glide ratio, time estimates and
+    the final-glide bar blank instead of assuming sea level #3286
 * analysis
   - plot the Analysis barograph against clock time (end labels and
     hourly tick marks) so successive flights without relaunch no

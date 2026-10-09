@@ -42,12 +42,23 @@ public:
     return waypoint;
   }
 
+  /**
+   * Whether #GetBaseElevation() is a stored terrain height.
+   * Goto and abort must not solve a glide when this is false.
+   */
+  [[gnu::pure]]
+  bool HasElevation() const noexcept {
+    return waypoint->has_elevation;
+  }
+
 protected:
   /**
-   * Altitude (AMSL, m) of task point terrain.
+   * Terrain altitude (m MSL). Unknown elevation is reported as 0.
+   *
+   * Goto and abort check HasElevation() and skip the glide.
+   * Ordered tasks still use this 0 m fallback.
    */
   double GetBaseElevation() const noexcept {
-    // TODO can we avoid the zero fallback somehow?
     return waypoint->GetElevationOrZero();
   }
 };
