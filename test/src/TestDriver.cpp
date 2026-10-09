@@ -29,6 +29,7 @@
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/LXNavDeclare.hpp"
+#include "Device/Driver/LX/NanoFileTransfer.hpp"
 #include "Device/Driver/LX/NanoLogger.hpp"
 #include "Device/Driver/LX_Eos.hpp"
 #include "Device/Driver/Larus.hpp"
@@ -74,6 +75,7 @@
 #include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Checksum.hpp"
+#include "NMEA/InputLine.hpp"
 #include "Operation/Operation.hpp"
 #include "Plane/Plane.hpp"
 #include "Protection.hpp"
@@ -81,7 +83,10 @@
 #include "Units/System.hpp"
 #include "io/FileOutputStream.hxx"
 #include "io/NullDataHandler.hpp"
+#include "system/FileUtil.hpp"
 #include "system/Path.hpp"
+#include "util/NumberParser.hpp"
+#include "util/StringSplit.hxx"
 #include "util/SpanCast.hxx"
 #include "util/StaticString.hxx"
 #include "util/ByteOrder.hxx"
@@ -767,6 +772,246 @@ TestFLARMRangeRequest()
     ok1(flarm.ResetRangeStatistics(env));
     ok1(port.FindContaining("PFLAN,S,RESET") != nullptr);
   }
+}
+
+static std::string
+EncodeBase64(std::string_view src)
+{
+  static constexpr char digits[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+  std::string out;
+  for (std::size_t i = 0; i < src.size(); i += 3) {
+    const std::size_t n = std::min<std::size_t>(3, src.size() - i);
+    uint32_t v = 0;
+    for (std::size_t j = 0; j < 3; ++j)
+      v = (v << 8) | (j < n ? uint8_t(src[i + j]) : 0);
+
+    for (std::size_t j = 0; j < 4; ++j)
+      out += j <= n ? digits[(v >> (18 - 6 * j)) & 0x3f] : '=';
+  }
+  return out;
+}
+
+/**
+ * A LXNAV logger behind a #DumpPort: it answers the file transfer
+ * (FILE_INFO, FILE_OK, FILE_DATA_LOST) and the row download (FLIGHT)
+ * from a flight in memory, with the faults seen on real loggers.
+ */
+class NanoLoggerPort final : public DumpPort {
+public:
+  enum class Mode {
+    /** no faults */
+    CLEAN,
+
+    /** a damaged, a dropped and a spliced block; FILE_DATA_LOST
+        sends the rest of the window again */
+    DAMAGE,
+
+    /** ignores FILE_INFO, so only the rows work */
+    NO_FILE,
+
+    /** as #DAMAGE, but ignores FILE_DATA_LOST, as an S10 (firmware
+        9.41) does */
+    S_VARIO,
+
+    /** as #DAMAGE, but answers FILE_DATA_LOST as a Nano 3 (firmware
+        3.02) does: the lost block with Lost=1 and an unsigned
+        checksum, then the rest of the window with the right
+        checksums and a wrong payload; ignores a FILE_OK that does
+        not end the current window */
+    NANO_302,
+  };
+
+private:
+  const std::string flight;
+  const Mode mode;
+
+  std::string reply;
+  std::size_t handled_lines = 0;
+
+  unsigned window = 0, window_start = 0;
+  std::vector<std::string> blocks;
+  std::vector<int32_t> chain;
+  bool corrupted = false, dropped = false, spliced = false;
+
+public:
+  NanoLoggerPort(std::string_view _flight, Mode _mode) noexcept
+    :flight(_flight), mode(_mode) {}
+
+  std::size_t Write(std::span<const std::byte> src) override {
+    const std::size_t result = DumpPort::Write(src);
+    while (handled_lines < GetLines().size())
+      Handle(GetLines()[handled_lines++]);
+    return result;
+  }
+
+  std::size_t Read(std::span<std::byte> dest) override {
+    const std::size_t n = std::min(dest.size(), reply.size());
+    std::memcpy(dest.data(), reply.data(), n);
+    reply.erase(0, n);
+    return n;
+  }
+
+  void WaitRead(std::chrono::steady_clock::duration) override {
+    if (reply.empty())
+      throw DeviceTimeout{"no more data"};
+  }
+
+private:
+  bool Damages() const noexcept {
+    return mode != Mode::CLEAN && mode != Mode::NO_FILE;
+  }
+
+  std::string Block(unsigned n, char lost = '0',
+                    bool unsigned_crc = false) const {
+    const auto crc = unsigned_crc
+      ? fmt::format("{}", uint32_t(chain[n]))
+      : fmt::format("{}", chain[n]);
+    return MakeSentence(fmt::format("PLXVC,FILE_DATA,A,{},{},{},{}",
+                                    lost, n, crc, EncodeBase64(blocks[n])));
+  }
+
+  void SendWindow(unsigned start) {
+    window_start = start;
+    const unsigned end = std::min<unsigned>(start + window, blocks.size());
+    for (unsigned n = start; n < end; ++n) {
+      std::string s = Block(n);
+      if (Damages() && n == 5 && !corrupted) {
+        /* other data, valid NMEA checksum */
+        corrupted = true;
+        std::string body = s.substr(1, s.rfind('*') - 1);
+        char &c = body[body.rfind(',') + 5];
+        c = c == 'A' ? 'B' : 'A';
+        s = MakeSentence(body);
+      } else if (Damages() && n == 25 && !dropped) {
+        dropped = true;
+        continue;
+      } else if (Damages() && n == 45 && !spliced) {
+        /* lose the tail of 45 and the head of 46, as a Bluetooth
+           buffer overrun does */
+        spliced = true;
+        const std::string next = Block(n + 1);
+        s = s.substr(0, s.size() / 2) + next.substr(next.size() / 2);
+        ++n;
+      }
+
+      reply += s;
+    }
+  }
+
+  void Handle(const std::string &line) {
+    if (line.starts_with("$PLXVC,FILE_INFO,R,")) {
+      if (mode == Mode::NO_FILE)
+        return;
+
+      /* "$PLXVC,FILE_INFO,R,/<file>,<window>,<payload>*CS" */
+      NMEAInputLine in(line.c_str() + 19);
+      in.Skip();
+      unsigned payload;
+      if (!in.ReadChecked(window) || !in.ReadChecked(payload))
+        return;
+
+      blocks.clear();
+      chain.clear();
+      Nano::FileTransferCrc crc;
+      for (std::size_t i = 0; i < flight.size(); i += payload) {
+        blocks.emplace_back(flight.substr(i, payload));
+        crc.Update(EncodeBase64(blocks.back()));
+        chain.push_back(crc.Get());
+      }
+
+      SendWindow(0);
+    } else if (line.starts_with("$PLXVC,FILE_OK,R,")) {
+      const unsigned n = ParseUnsigned(line.c_str() + 17);
+      if (n >= blocks.size()) {
+        Nano::FileTransferCrc crc;
+        crc.Update(std::string_view{flight});
+        reply += MakeSentence(fmt::format("PLXVC,FILE_CRC32,A,{}",
+                                          crc.Get()));
+      } else if (mode != Mode::NANO_302 || n == window_start + window)
+        SendWindow(n);
+    } else if (line.starts_with("$PLXVC,FILE_DATA_LOST,R,")) {
+      if (mode == Mode::S_VARIO)
+        return;
+
+      const unsigned n = ParseUnsigned(line.c_str() + 24);
+      const unsigned end = std::min<unsigned>(window_start + window,
+                                              blocks.size());
+      if (mode == Mode::NANO_302) {
+        reply += Block(n, '1', true);
+        for (unsigned i = n + 1; i < end; ++i) {
+          const std::string junk(blocks[i].size(), '\xe0');
+          reply += MakeSentence(fmt::format("PLXVC,FILE_DATA,A,0,{},{},{}",
+                                            i, uint32_t(chain[i]),
+                                            EncodeBase64(junk)));
+        }
+      } else
+        for (unsigned i = n; i < end; ++i)
+          reply += Block(i);
+    } else if (line.starts_with("$PLXVC,FLIGHT,R,")) {
+      /* "$PLXVC,FLIGHT,R,<file>,<start>,<end>,*CS" */
+      NMEAInputLine in(line.c_str() + 16);
+      in.Skip();
+      unsigned start, end;
+      if (!in.ReadChecked(start) || !in.ReadChecked(end))
+        return;
+
+      std::vector<std::string_view> rows;
+      for (std::string_view rest = flight; !rest.empty();) {
+        auto [row, tail] = Split(rest, '\n');
+        if (row.ends_with('\r'))
+          row.remove_suffix(1);
+        rows.push_back(row);
+        rest = tail;
+      }
+
+      for (unsigned r = start; r < end && r <= rows.size(); ++r)
+        reply += MakeSentence(fmt::format("PLXVC,FLIGHT,A,,{},{},{}",
+                                          r, rows.size(), rows[r - 1]));
+    }
+  }
+};
+
+static void
+TestNanoDownloadFlight()
+{
+  /* about 80 blocks of 140 bytes, so the faults fall into different
+     windows */
+  std::string flight;
+  for (unsigned i = 1; i <= 250; ++i)
+    flight += fmt::format("LXXXROW{:04}abcdefghijklmnopqrstuvwxyz\r\n", i);
+
+  RecordedFlightInfo info{};
+  strcpy(info.internal.lx.nano_filename, "TEST0001.igc");
+  info.internal.lx.nano_file_size = flight.size();
+
+  const auto path = AllocatedPath::Build(GetPrimaryDataPath(),
+                                         "nano-download.igc");
+
+  using Mode = NanoLoggerPort::Mode;
+  for (const Mode mode : {Mode::CLEAN, Mode::DAMAGE, Mode::NO_FILE,
+                          Mode::S_VARIO, Mode::NANO_302}) {
+    NanoLoggerPort port{flight, mode};
+    NullOperationEnvironment env;
+    File::Delete(path);
+
+    const unsigned window = mode == Mode::S_VARIO ? 2 : 20;
+    ok1(Nano::DownloadFlight(port, info, path, window, env));
+
+    std::vector<char> result(flight.size() + 2);
+    ok1(File::ReadString(path, result.data(), result.size()) &&
+        flight == result.data());
+
+    /* only a logger without the file transfer needs the rows */
+    if (mode == Mode::NO_FILE)
+      ok1(port.FindContaining("PLXVC,FLIGHT,R,") != nullptr);
+    else
+      ok1(port.FindContaining("PLXVC,FILE_CRC_OK,R") != nullptr &&
+          port.FindContaining("PLXVC,FLIGHT,R,") == nullptr);
+  }
+
+  File::Delete(path);
 }
 
 static void
@@ -3822,6 +4067,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
+             + 15 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */);
   TestGeneric();
   TestTasman();
@@ -3829,6 +4075,7 @@ int main()
   TestFLARM();
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
+  TestNanoDownloadFlight();
   TestAltairRU();
   TestBlueFly();
   TestBorgeltB50();
