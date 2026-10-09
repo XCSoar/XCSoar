@@ -50,6 +50,10 @@ DebugReplayNMEA::Next()
     if (!device || !device->ParseNMEA(line, raw_basic))
       parser.ParseLine(line, raw_basic);
 
+    /* like MergeThread: drop the FLARM targets that stopped
+       reporting, or the list fills up and new ones are lost */
+    raw_basic.flarm.traffic.Expire(raw_basic.clock);
+
     if (raw_basic.location_available != last_basic.location_available) {
       Compute();
       return true;
