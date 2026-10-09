@@ -29,6 +29,8 @@ LIBCOMPUTER_SOURCES = \
 	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Computer/LiftDatabaseComputer.cpp \
 	$(SRC)/Computer/LogComputer.cpp \
+	$(SRC)/Computer/FlarmRangeComputer.cpp \
+	$(SRC)/FLARM/RangeEstimate.cpp \
 	$(SRC)/Computer/AverageVarioComputer.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/GlideRatioComputer.cpp \
