@@ -760,6 +760,7 @@ GDL90Device::ParseTrafficReport(std::span<const uint8_t> payload,
   slot->stealth = false;
   slot->no_track = false;
   slot->rssi_available = false;
+  slot->source_received = false;
   slot->turn_rate_received = false;
 }
 

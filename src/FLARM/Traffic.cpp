@@ -99,6 +99,7 @@ FlarmTraffic::Update(const FlarmTraffic &other) noexcept
   id_type = other.id_type;
   rssi = other.rssi;
   rssi_available = other.rssi_available;
+  source_received = other.source_received;
   no_track = other.no_track;
   absolute_location = other.absolute_location;
   absolute_altitude = other.absolute_altitude;
