@@ -3,6 +3,7 @@
 
 #include "ManageFlarmDialog.hpp"
 #include "FLARM/ConfigWidget.hpp"
+#include "FLARM/RangeStatisticsDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Error.hpp"
@@ -135,6 +136,11 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         "FLARM", widget);
   });
+
+  if (hardware.isPowerFlarm())
+    AddButton(_("Range statistics"), [this](){
+      FlarmRangeStatisticsDialog(device);
+    });
 
   AddButton(_("Reboot"), [this](){
     try {

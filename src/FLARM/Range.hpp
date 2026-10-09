@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "Math/Angle.hpp"
+
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <optional>
@@ -49,3 +52,22 @@ struct FlarmRange {
   /** the first and last RF packet used (TIMESPAN) */
   std::optional<std::chrono::system_clock::time_point> first, last;
 };
+
+/**
+ * The range FLARM asks for at least (FTD-041, the antenna
+ * installation application note, FAQ): 2 nm ahead and 1 nm to the
+ * sides and behind, which gives a warning 15 s before the closest
+ * approach of two aircraft at 250 kt each.  FLARM gives no shape in
+ * between; this blends the two with the cosine of the bearing, which
+ * is how FLARM's own range analyser draws it.
+ *
+ * @param bearing relative to the direction of flight
+ * @return the range [m]
+ */
+[[gnu::const]]
+inline double
+FlarmMinimumRange(Angle bearing) noexcept
+{
+  constexpr double NAUTICAL_MILE = 1852;
+  return NAUTICAL_MILE * (1 + std::max(0., bearing.cos()));
+}
