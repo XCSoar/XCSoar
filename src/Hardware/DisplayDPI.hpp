@@ -19,6 +19,62 @@ namespace Display {
    */
   void SetForcedDPI(unsigned x_dpi, unsigned y_dpi);
 
+/**
+ * Pair each DPI axis with the matching pixel axis.
+ *
+ * Some Android panels report portrait pixels with landscape physical
+ * size (or the reverse), so fonts scale from the long-edge DPI.
+ * Unchanged when the pixel and inch orientations already agree, or
+ * when the buffer is square.
+ */
+[[gnu::const]]
+UnsignedPoint2D
+AlignDpiToPixelAxes(PixelSize size, UnsignedPoint2D dpi) noexcept;
+
+/**
+ * Align physical DPI to the pixel axes, then fall back to
+ * #density_dpi when either axis is more than 20% away from it.
+ * Android's density is what the OEM tuned; xdpi/ydpi are often
+ * garbage.  density_dpi 0 skips the fallback.
+ */
+[[gnu::const]]
+UnsignedPoint2D
+SanitizeDisplayDpi(PixelSize size, UnsignedPoint2D physical,
+                   unsigned density_dpi) noexcept;
+
+/**
+ * When #SanitizeDisplayDpi() falls back to density_dpi, Android Skia
+ * may still advance glyphs using the aligned OEM x/y DPI.  Map
+ * horizontal extent to layout DPI with
+ * sqrt(corrected.x/aligned.x * corrected.y/aligned.y).
+ */
+[[gnu::const]]
+float
+AndroidTextScaleX(PixelSize size, UnsignedPoint2D physical,
+                  unsigned density_dpi,
+                  UnsignedPoint2D corrected) noexcept;
+
+/**
+ * Vertical em scale for Android Skia when #SanitizeDisplayDpi() had to
+ * fall back: corrected.y / aligned.y (font axis vs OEM y DPI).
+ */
+[[gnu::const]]
+float
+AndroidTextScaleY(PixelSize size, UnsignedPoint2D physical,
+                  unsigned density_dpi,
+                  UnsignedPoint2D corrected) noexcept;
+
+/**
+ * Letter-spacing (in em) to widen OEM horizontal advances without
+ * squashing glyph outlines the way Paint.setTextScaleX() does.
+ * Zero when #AndroidTextScaleX() is 1.
+ */
+[[gnu::const]]
+float
+AndroidTextLetterSpacing(PixelSize size, UnsignedPoint2D physical,
+                         unsigned density_dpi,
+                         UnsignedPoint2D corrected) noexcept;
+
 #ifdef HAVE_DPI_DETECTION
 /**
  * This function gets called by our UI toolkit (the "Screen" library)
