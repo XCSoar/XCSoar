@@ -39,6 +39,7 @@ Version 7.46 - not yet released
   - fix BlueFly Vario BLE being offered only as a BLE sensor, which
     cannot open the serial UART; choose BLE port and the BlueFly
     driver #3146
+  - show the XCSoar logo on the F-Droid store page
 * iOS
   - add haptic feedback for button presses; the Haptic feedback
     setting controls it

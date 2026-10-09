@@ -35,6 +35,21 @@ These workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
 Ruby dependencies are pinned in the repo-root `Gemfile` / `Gemfile.lock`
 and installed via Bundler in CI (`bundle exec fastlane supply`).
 
+## F-Droid
+
+F-Droid reads graphics from this tree after the build:
+
+- `metadata/android/en-US/images/icon.png` (512×512 store icon)
+- `metadata/android/en-US/images/phoneScreenshots/`
+
+The store icon is not in git. The Android build renders it from
+`Data/graphics/logo.svg` (`FASTLANE_ICON` in `build/android.mk`).
+Listing text stays in fdroiddata.
+
+The APK also ships `mipmap-<density>/ic_launcher.png` and
+`ic_launcher_round.png` so the indexer can extract a PNG. The
+on-device icon remains the adaptive XML in `mipmap-anydpi-v26`.
+
 ## Other stores
 
-Apple and F-Droid metadata are not managed here yet.
+Apple metadata is not managed here yet.
