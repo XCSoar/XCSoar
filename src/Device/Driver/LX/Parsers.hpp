@@ -42,10 +42,23 @@ bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info);
 
 /**
- * @param linear_offset true for an LXNAV S series vario, which derives
- * the altitude offset from the QNH linearly (see the implementation)
+ * How to turn the $LXWP3 altitude offset into a QNH.
+ */
+enum class LXWP3QNH {
+  /** Standard atmosphere. Devices other than an S series vario. */
+  STANDARD,
+  /** S series vario: 8.5 m per hPa (see the implementation). */
+  LINEAR,
+  /** Product not yet known. Do not adopt a QNH from the offset. */
+  SKIP,
+};
+
+/**
+ * @param qnh_updated set when a QNH from the offset was stored
  */
 bool
-LXWP3(NMEAInputLine &line, NMEAInfo &info, bool linear_offset = false);
+LXWP3(NMEAInputLine &line, NMEAInfo &info,
+      LXWP3QNH qnh_mode = LXWP3QNH::STANDARD,
+      bool *qnh_updated = nullptr);
 
 } // namespace LX
