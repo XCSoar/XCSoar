@@ -372,6 +372,8 @@ Version 7.46 - not yet released
     the archive instead of the data directory #3250
   - show the title of the flight download list in the selected
     language
+  - disable the previous button on the first page of the Quick Guide,
+    checklist, Credits, and Configuration
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator

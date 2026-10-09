@@ -423,6 +423,16 @@ void
 ArrowPagerWidget::UpdateButtons() noexcept
 {
   const bool enable = GetSize() >= 2;
-  previous_button.SetEnabled(enable);
+  const bool previous = enable && GetCurrentIndex() > 0;
+  previous_button.SetEnabled(previous);
   next_button.SetEnabled(enable && HasNextPage() && CanAdvance());
+
+  /* Arriving on the first page by the previous button leaves focus
+     on a control that is now disabled. */
+  if (!previous && previous_button.HasFocus()) {
+    if (next_button.IsEnabled())
+      next_button.SetFocus();
+    else
+      close_button.SetFocus();
+  }
 }
