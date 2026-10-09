@@ -650,6 +650,21 @@ TestFLARM()
  * number of sectors is not fixed.
  */
 static void
+TestFlarmMinimumRange()
+{
+  /* FTD-041: 2 nm ahead, 1 nm to the sides and behind */
+  ok1(equals(FlarmMinimumRange(Angle::Zero()), 3704));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(90)), 1852));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(180)), 1852));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(270)), 1852));
+
+  /* in between, more than to the side, less than ahead */
+  const double half = FlarmMinimumRange(Angle::Degrees(45));
+  ok1(half > 1852 && half < 3704);
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(-45)), half));
+}
+
+static void
 TestFLARMRangeParser()
 {
   FlarmRange range;
@@ -4236,12 +4251,14 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
+             + 6 /* FlarmMinimumRange */
              + 15 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */);
   TestGeneric();
   TestTasman();
   TestLK8EX1();
   TestFLARM();
+  TestFlarmMinimumRange();
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
   TestNanoDownloadFlight();
