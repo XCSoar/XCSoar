@@ -1,0 +1,49 @@
+# Promote the latest internal release to open testing.
+# See fastlane/Fastfile. Requires secret GOOGLE_PLAY_JSON_KEY.
+---
+name: Promote Play open testing
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Monday 06:00 UTC. Cron runs only from the default branch.
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promote-play-open-testing
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    # The Play key is only for master. A workflow_dispatch from another
+    # branch must not run this job or check out that branch's Fastfile.
+    if: github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: master
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.7'
+          bundler-cache: true
+
+      - name: Create Play Store key
+        run: |
+          printf '%s' "$GOOGLE_PLAY_JSON_KEY" > play-key.json
+          chmod 600 play-key.json
+        env:
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
+
+      - name: Promote latest internal release to open testing
+        run: bundle exec fastlane promote_open_testing
+
+      - name: Remove key
+        if: always()
+        run: rm -f play-key.json

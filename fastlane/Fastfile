@@ -1,0 +1,64 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Copyright The XCSoar Project
+
+# Promote the newest internal release of org.xcsoar.play to open
+# testing. Play's API name for that track is "beta". The binary is
+# the one already uploaded from master; this lane does not build.
+
+lane :promote_open_testing do
+  package_name = "org.xcsoar.play"
+  json_key = "play-key.json"
+
+  internal = latest_completed_version_code(
+    package_name: package_name,
+    track: "internal",
+    json_key: json_key
+  )
+  if internal.nil?
+    UI.user_error!("Internal track has no completed release to promote")
+  end
+
+  open_testing = latest_completed_version_code(
+    package_name: package_name,
+    track: "beta",
+    json_key: json_key
+  )
+  if open_testing && open_testing >= internal
+    UI.success("Open testing already has version code #{open_testing}")
+    next
+  end
+
+  UI.message("Promoting #{internal} from internal to open testing")
+  upload_to_play_store(
+    package_name: package_name,
+    json_key: json_key,
+    track: "internal",
+    track_promote_to: "beta",
+    version_code: internal,
+    skip_upload_apk: true,
+    skip_upload_aab: true,
+    skip_upload_metadata: true,
+    skip_upload_images: true,
+    skip_upload_screenshots: true,
+    skip_upload_changelogs: true
+  )
+end
+
+# Play lists draft and halted releases beside the live one. The master
+# upload is published as completed, so that is the release to promote.
+private_lane :latest_completed_version_code do |options|
+  require "supply"
+  require "supply/reader"
+
+  Supply.config = FastlaneCore::Configuration.create(
+    Supply::Options.available_options,
+    options
+  )
+
+  releases = Supply::Reader.new.track_meta&.releases || []
+  completed = releases.select do |release|
+    release.status == Supply::ReleaseStatus::COMPLETED
+  end
+  codes = completed.flat_map { |release| release.version_codes || [] }
+  codes.map(&:to_i).max
+end

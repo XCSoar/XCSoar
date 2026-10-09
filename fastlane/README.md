@@ -27,8 +27,10 @@ CI uploads this metadata with:
 
 - `.github/workflows/update-play-store-metadata.yml` (metadata-only updates)
 - `.github/workflows/build-native.yml` (AAB + metadata upload to internal track)
+- `.github/workflows/promote-play-open-testing.yml` (weekly promotion of the
+  latest internal release to open testing; lane `promote_open_testing`)
 
-Both workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
+These workflows require the `GOOGLE_PLAY_JSON_KEY` GitHub secret.
 
 Ruby dependencies are pinned in the repo-root `Gemfile` / `Gemfile.lock`
 and installed via Bundler in CI (`bundle exec fastlane supply`).
