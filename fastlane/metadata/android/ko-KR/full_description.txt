@@ -25,4 +25,4 @@ Android, iOS, Linux, macOS, Windows에서 실행됩니다.
 - 다양한 하드웨어와 호환
 
 문서:
-- 사용자 매뉴얼: https://xcsoar.org/discover/manual.html
+- 사용자 매뉴얼: https://xcsoar.org/docs/#manual

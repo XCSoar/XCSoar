@@ -26,4 +26,4 @@ NEDEN XCSOAR
 - Geniş bir donanım yelpazesiyle uyumludur
 
 Dokümantasyon:
-- Kullanım kılavuzu: https://xcsoar.org/discover/manual.html
+- Kullanım kılavuzu: https://xcsoar.org/docs/#manual

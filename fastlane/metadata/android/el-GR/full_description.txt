@@ -26,4 +26,4 @@
 - Υποστηρίζει μεγάλο εύρος συσκευών
 
 Τεκμηρίωση:
-- Εγχειρίδιο χρήστη: https://xcsoar.org/discover/manual.html
+- Εγχειρίδιο χρήστη: https://xcsoar.org/docs/#manual

@@ -28,4 +28,4 @@ DLACZEGO XCSOAR
 - Zgodny z szeroką gamą sprzętu
 
 Dokumentacja:
-- Podręcznik użytkownika: https://xcsoar.org/discover/manual.html
+- Podręcznik użytkownika: https://xcsoar.org/docs/#manual

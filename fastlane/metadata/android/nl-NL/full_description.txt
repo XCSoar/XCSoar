@@ -28,4 +28,4 @@ WAAROM XCSOAR
 - Compatibel met een breed scala aan hardware
 
 Documentatie:
-- Gebruikershandleiding: https://xcsoar.org/discover/manual.html
+- Gebruikershandleiding: https://xcsoar.org/docs/#manual

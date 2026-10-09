@@ -252,7 +252,7 @@ Here is a complete example checklist file for glider operations::
     - [Location](geo:47.5,8.5)
 
     [References]
-    - [XCSoar Manual](https://xcsoar.org/discover/manual.html)
+    - [XCSoar Manual](https://xcsoar.org/docs/#manual)
     - [Weather](https://www.windy.com)
 
 Supported URI Schemes
