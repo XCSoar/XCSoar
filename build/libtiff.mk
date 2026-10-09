@@ -22,7 +22,9 @@ $(eval $(call pkg-config-library,LIBTIFF,libtiff-4))
 LIBTIFF_CPPFLAGS += -DUSE_LIBTIFF
 
 ifeq ($(GEOTIFF),y)
-LIBTIFF_CPPFLAGS += -DUSE_GEOTIFF
+# USE_GEOTIFF must be consistent across all translation units, or
+# conditional declarations become inconsistent (crashes at runtime).
+TARGET_CPPFLAGS += -DUSE_GEOTIFF
 LIBGEOTIFF_USE_PKG_CONFIG := y
 LIBGEOTIFF_LDLIBS = -lgeotiff
 
@@ -48,9 +50,9 @@ endif
 endif
 
 LIBTIFF_LDLIBS += $(LIBGEOTIFF_LDLIBS)
-endif
 
-ifeq ($(GEOTIFF)$(USE_THIRDPARTY_LIBS),yy)
+# LibTiff.cpp uses PROJ directly to apply the datum shift to WGS84, so
+# PROJ is required whenever GeoTIFF support is enabled.
 $(eval $(call pkg-config-library,PROJ,proj))
 LIBTIFF_CPPFLAGS += $(PROJ_CPPFLAGS)
 LIBTIFF_LDLIBS += $(PROJ_LDLIBS)
