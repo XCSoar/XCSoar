@@ -7,6 +7,7 @@
 #include "GlideSolvers/GlideState.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Task/Points/TaskPoint.hpp"
+#include "Task/Points/TaskWaypoint.hpp"
 #include "Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 #include <algorithm>
@@ -36,6 +37,15 @@ TaskSolution::GlideSolutionRemaining(const TaskPoint &taskpoint,
                                      const GlidePolar &polar,
                                      const double min_h)
 {
+  /* A goto or abort point with no stored height must not be solved
+     as 0 m MSL. */
+  if (taskpoint.GetType() == TaskPointType::UNORDERED &&
+      !static_cast<const TaskWaypoint &>(taskpoint).HasElevation()) {
+    GlideResult res;
+    res.Reset();
+    return res;
+  }
+
   const GlideState gs = GlideState::Remaining(taskpoint, ac, min_h);
   return MacCready::Solve(settings, polar, gs);
 }

@@ -608,9 +608,10 @@ $(eval $(call link-program,TestTaskPoint,TEST_TASKPOINT))
 
 TEST_TASKWAYPOINT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
-TEST_TASKWAYPOINT_DEPENDS = IO OS TASK GEO MATH UTIL
+TEST_TASKWAYPOINT_DEPENDS = IO OS TASK ROUTE GLIDE GEO TIME MATH UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TEAM_CODE_SOURCES = \

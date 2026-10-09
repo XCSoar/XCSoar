@@ -315,6 +315,10 @@ AbstractTask::CalcLegGradient(const AircraftState &aircraft) const noexcept
   if (!tp)
     return 0;
 
+  /* Geometric gradient to 0 m would look like a real glide ratio. */
+  if (tp->GetType() == TaskPointType::UNORDERED && !tp->HasElevation())
+    return 0;
+
   // Get the distance to the next turnpoint
   const auto d = tp->GetVectorRemaining(aircraft.location).distance;
   if (d <= 0)

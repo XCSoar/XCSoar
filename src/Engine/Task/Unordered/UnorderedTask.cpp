@@ -19,8 +19,8 @@ UnorderedTask::CalcBestMC(const AircraftState &aircraft,
                           const GlidePolar &glide_polar,
                           double& best) const noexcept
 {
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (tp == nullptr || !aircraft.location.IsValid()) {
+  TaskWaypoint *tp = GetActiveTaskPoint();
+  if (tp == nullptr || !tp->HasElevation() || !aircraft.location.IsValid()) {
     best = glide_polar.GetMC();
     return false;
   }
@@ -59,8 +59,8 @@ double
 UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
                                  const GlidePolar &glide_polar) const noexcept
 {
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (tp == nullptr || !aircraft.location.IsValid())
+  TaskWaypoint *tp = GetActiveTaskPoint();
+  if (tp == nullptr || !tp->HasElevation() || !aircraft.location.IsValid())
     return 0;
 
   TaskGlideRequired bgr(*tp, aircraft, task_behaviour.glide, glide_polar);
