@@ -11,6 +11,8 @@
 #include "Form/DataField/Listener.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "FLARM/Range.hpp"
+#include "FLARM/RangeEstimate.hpp"
+#include "Computer/FlarmRangeComputer.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Look/DialogLook.hpp"
@@ -21,6 +23,7 @@
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "time/BrokenDateTime.hpp"
+#include "util/NumberParser.hpp"
 #include "util/StaticString.hxx"
 #include "UIGlobals.hpp"
 
@@ -228,6 +231,178 @@ FlarmRangeStatisticsDialog(FlarmDevice &device)
                                          UIGlobals::GetMainWindow(),
                                          look, _("FLARM range"));
   dialog.SetWidget(look, UIGlobals::GetLook().flarm_dialog, device);
+  dialog.AddButton(_("Reset"), [&dialog](){
+    dialog.GetWidget().Reset();
+  });
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
+}
+
+/**
+ * The share of the reports in a sector that the plot shows as its
+ * range.  The mean of all reports mostly says how far away the
+ * traffic was; most reports lie closer than the range.
+ */
+static constexpr double ESTIMATE_PERCENTILE = 0.9;
+
+static std::vector<FlarmRangeSector>
+ToSectors(const FlarmRangeEstimate &estimate) noexcept
+{
+  std::vector<FlarmRangeSector> sectors(FlarmRangeEstimate::SECTORS);
+  for (unsigned i = 0; i < sectors.size(); ++i) {
+    const auto &sector = estimate.sectors[i];
+    sectors[i].range = sector.Percentile(ESTIMATE_PERCENTILE);
+    sectors[i].significant = sector.count >= MIN_POINTS;
+    if (sector.count > 0)
+      sectors[i].maximum = sector.maximum;
+  }
+
+  return sectors;
+}
+
+class FlarmRangeEstimateWidget final : public RowFormWidget {
+  enum Controls {
+    POINTS,
+    PERIOD,
+    BELOW_MINIMUM,
+    RANGE_SETTING,
+  };
+
+  FlarmDevice &device;
+  FlarmRangeComputer &computer;
+  const FlarmTrafficLook &look;
+
+  FlarmRangePlot *plot;
+
+public:
+  FlarmRangeEstimateWidget(const DialogLook &_dialog_look,
+                           const FlarmTrafficLook &_look,
+                           FlarmDevice &_device,
+                           FlarmRangeComputer &_computer) noexcept
+    :RowFormWidget(_dialog_look), device(_device), computer(_computer),
+     look(_look) {}
+
+  void Reset() noexcept;
+
+private:
+  void Update() noexcept;
+
+  /* virtual methods from Widget */
+  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+};
+
+void
+FlarmRangeEstimateWidget::Prepare(ContainerWindow &,
+                                  const PixelRect &) noexcept
+{
+  AddReadOnly(_("Data points"),
+              _("Position reports of other FLARM aircraft received in "
+                "flight.  XCSoar estimates the range from them: the "
+                "sector shows the distance 90 % of the reports stay "
+                "within, the line across it the largest one."));
+  AddReadOnly(_("Period"));
+  AddReadOnly(_("Below minimum range"),
+              _("Measured sectors whose estimated range is shorter than "
+                "FLARM's minimum: 2 nm ahead, 1 nm to the sides and "
+                "behind.  Check the antenna installation."));
+  AddReadOnly(_("Range setting"),
+              _("The FLARM reports no aircraft beyond this distance.  "
+                "The plot shows it as a dashed circle when it is within "
+                "the plotted range."));
+
+  auto window = std::make_unique<FlarmRangePlot>(GetLook(), look);
+  window->Create((ContainerWindow &)GetWindow(), {0, 0, 100, 100},
+                 WindowStyle{});
+  plot = window.get();
+  AddRemaining(std::move(window));
+
+  /* the setting caps what the FLARM reports, so an estimate that
+     reaches it says more about the setting than about the antenna;
+     read it the way the FLARM dialog reads its settings, which works
+     while the port's receive thread runs */
+  try {
+    static const char *const names[] = { "RANGE", nullptr };
+    PopupOperationEnvironment env;
+    if (device.RequestAllSettings(names, env))
+      if (const auto value = device.GetSetting("RANGE")) {
+        char *end;
+        const unsigned range = ParseUnsigned(value->c_str(), &end);
+        if (end != value->c_str()) {
+          plot->SetLimit(range);
+          if (range >= 65535)
+            SetText(RANGE_SETTING, _("Unlimited"));
+          else
+            SetText(RANGE_SETTING, FormatUserDistanceSmart(range));
+        }
+      }
+  } catch (...) {
+  }
+
+  Update();
+}
+
+void
+FlarmRangeEstimateWidget::Update() noexcept
+{
+  const auto estimate = computer.GetEstimate();
+  StaticString<64> buffer;
+
+  if (const auto count = estimate.GetCount(); count > 0) {
+    buffer.Format("%u", unsigned(count));
+    SetText(POINTS, buffer);
+  } else
+    ClearText(POINTS);
+
+  if (estimate.first && estimate.last) {
+    /* the dates only; the reports are UTC */
+    char first[16], last[16];
+    FormatISO8601(first, BrokenDate{BrokenDateTime{*estimate.first}});
+    FormatISO8601(last, BrokenDate{BrokenDateTime{*estimate.last}});
+    buffer.Format("%s – %s", first, last);
+    SetText(PERIOD, buffer);
+  } else
+    ClearText(PERIOD);
+
+  auto sectors = ToSectors(estimate);
+  unsigned measured = 0, below = 0;
+  for (unsigned i = 0; i < sectors.size(); ++i) {
+    if (sectors[i].significant)
+      ++measured;
+    if (IsBelowMinimum(sectors[i], i, sectors.size()))
+      ++below;
+  }
+
+  if (measured > 0) {
+    buffer.Format("%u / %u", below, measured);
+    SetText(BELOW_MINIMUM, buffer);
+  } else
+    ClearText(BELOW_MINIMUM);
+
+  plot->SetSectors(std::move(sectors));
+}
+
+void
+FlarmRangeEstimateWidget::Reset() noexcept
+{
+  if (ShowMessageBox(_("Reset the range estimate? Do this after a "
+                       "change to the antenna; XCSoar then collects it "
+                       "anew."),
+                     _("FLARM range estimate"),
+                     MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return;
+
+  computer.Reset();
+  Update();
+}
+
+void
+FlarmRangeEstimateDialog(FlarmDevice &device, FlarmRangeComputer &computer)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  TWidgetDialog<FlarmRangeEstimateWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           look, _("FLARM range estimate"));
+  dialog.SetWidget(look, UIGlobals::GetLook().flarm_dialog, device, computer);
   dialog.AddButton(_("Reset"), [&dialog](){
     dialog.GetWidget().Reset();
   });

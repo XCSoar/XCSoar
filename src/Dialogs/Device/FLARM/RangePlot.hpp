@@ -27,6 +27,12 @@ struct FlarmRangeSector {
    * is drawn as an outline only.
    */
   bool significant = false;
+
+  /**
+   * The largest distance received [m], drawn as an arc across the
+   * sector; none draws nothing.
+   */
+  std::optional<unsigned> maximum;
 };
 
 /**
@@ -71,6 +77,7 @@ public:
 
 private:
   void PaintSectors(Canvas &canvas, double full_range) const noexcept;
+  void PaintMaxima(Canvas &canvas, double full_range) const noexcept;
   void PaintMinimum(Canvas &canvas, double full_range) const noexcept;
   void PaintLimit(Canvas &canvas, double full_range) const noexcept;
   void PaintRings(Canvas &canvas, double step, unsigned rings) const noexcept;
