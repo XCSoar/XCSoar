@@ -11419,3 +11419,19 @@ msgstr "Das FLARM meldet keine Luftfahrzeuge jenseits dieser Entfernung.  Liegt 
 #, no-c-format
 msgid "Unlimited"
 msgstr "Unbegrenzt"
+
+#, no-c-format
+msgid "Position reports of other FLARM aircraft received in flight.  XCSoar estimates the range from them: the sector shows the distance 90 % of the reports stay within, the line across it the largest one."
+msgstr "Positionsmeldungen anderer FLARM-Luftfahrzeuge, empfangen im Flug.  XCSoar schätzt daraus die Reichweite: der Sektor zeigt die Entfernung, innerhalb der 90 % der Meldungen liegen, die Linie darüber die größte."
+
+#, no-c-format
+msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
+msgstr "Gemessene Sektoren, deren geschätzte Reichweite unter dem Minimum von FLARM liegt: 2 NM nach vorn, 1 NM zur Seite und nach hinten.  Dann den Antenneneinbau prüfen."
+
+#, no-c-format
+msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
+msgstr "Reichweitenschätzung zurücksetzen? Das ist nach einer Änderung an der Antenne sinnvoll; XCSoar sammelt sie dann neu."
+
+#, no-c-format
+msgid "FLARM range estimate"
+msgstr "FLARM-Reichweitenschätzung"

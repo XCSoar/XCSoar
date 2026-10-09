@@ -10048,3 +10048,19 @@ msgstr ""
 #, no-c-format
 msgid "Unlimited"
 msgstr ""
+
+#, no-c-format
+msgid "Position reports of other FLARM aircraft received in flight.  XCSoar estimates the range from them: the sector shows the distance 90 % of the reports stay within, the line across it the largest one."
+msgstr ""
+
+#, no-c-format
+msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
+msgstr ""
+
+#, no-c-format
+msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
+msgstr ""
+
+#, no-c-format
+msgid "FLARM range estimate"
+msgstr ""
