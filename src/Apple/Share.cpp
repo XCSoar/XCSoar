@@ -96,13 +96,18 @@ ShareTextIOS(const char *text) noexcept
   if (shareString == nil)
     return;
 
+  /* URL items reach apps that accept links but not plain text. */
+  id shareItem = shareString;
+  if (NSURL *const shareURL = [NSURL URLWithString:shareString])
+    shareItem = shareURL;
+
   dispatch_async(dispatch_get_main_queue(), ^{
     UIViewController *controller = FindActiveController();
     if (controller == nil)
       return;
 
     UIActivityViewController *activityVC =
-      [[UIActivityViewController alloc] initWithActivityItems:@[shareString]
+      [[UIActivityViewController alloc] initWithActivityItems:@[shareItem]
                                         applicationActivities:nil];
 
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
