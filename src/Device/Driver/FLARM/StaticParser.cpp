@@ -220,7 +220,8 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
     traffic.no_track = no_track_val != 0;
 
     int source_val;
-    if (line.ReadChecked(source_val)) {
+    traffic.source_received = line.ReadChecked(source_val);
+    if (traffic.source_received) {
       switch (source_val) {
       case 0: case 1: case 3: case 4: case 6:
         traffic.source = (FlarmTraffic::SourceType)source_val;
@@ -246,6 +247,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, TimeStamp clock, RangeFilter
   } else {
     traffic.no_track = false;
     traffic.source = FlarmTraffic::SourceType::FLARM;
+    traffic.source_received = false;
     traffic.rssi = 0;
     traffic.rssi_available = false;
   }

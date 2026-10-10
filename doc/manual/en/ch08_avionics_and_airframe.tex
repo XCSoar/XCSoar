@@ -222,3 +222,36 @@ The button ``Manage'' is enabled when a Vega or a CAI 302 is
 connected.  It provides access to special features of these devices,
 such as clearing the CAI 302 flight memory, which is needed sometimes
 to work around a Cambridge firmware bug.
+
+For a FLARM, ``Manage'' shows the device type, ID and versions, and
+offers Setup, Reboot and Simulation.  On a PowerFLARM, ``Range
+statistics'' shows the mean distance at which the FLARM has received
+other aircraft, as a plot seen from above with the direction of flight
+up: one sector per direction, separately for each of its two radio
+channels (``Antenna'' A and B).  A sector drawn as an outline only has
+fewer than 50 data points behind it and is not yet meaningful, as
+FLARM recommends; a missing sector has no data at all.  The dashed
+line is the minimum range FLARM asks for: 2\,nm ahead and 1\,nm to
+the sides and behind, which gives a warning 15 seconds before two
+aircraft at 250\,kt each would meet.  A measured sector that does not
+reach it is drawn in orange, and ``Below minimum range'' counts these
+sectors out of all measured ones; check the antenna installation if
+there are any.  ``Range setting'' is the distance beyond which the
+FLARM reports no aircraft at all; when it is within the plot, it is
+drawn as a dashed black circle, since the FLARM cannot measure beyond
+it.  The statistics build up over many flights.  ``Reset''
+clears them, for example after a change to the antennas.
+
+Any other FLARM, such as a Classic FLARM, keeps no such statistics.
+For these, ``Range statistics'' shows an estimate that XCSoar collects
+itself, across flights, from the traffic the FLARM reports while
+flying: each position report of another FLARM aircraft counts with its
+distance and its direction relative to the own ground track.  A sector
+shows the distance that 90\,\% of the reports stay within, and the
+line across it the largest distance received.  ADS-B targets and
+aircraft in stealth or no-tracking mode do not count.  The estimate is
+saved every 10 minutes in flight, on landing and when XCSoar exits.
+It is not FLARM's own measurement: it depends on how much traffic
+there was and how far away, and the FLARM reports nothing beyond its
+``Range setting''.  ``Reset'' clears the estimate, for example after a
+change to the antenna.

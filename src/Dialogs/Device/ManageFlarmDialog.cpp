@@ -3,6 +3,10 @@
 
 #include "ManageFlarmDialog.hpp"
 #include "FLARM/ConfigWidget.hpp"
+#include "FLARM/RangeStatisticsDialog.hpp"
+#include "Components.hpp"
+#include "BackendComponents.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Error.hpp"
@@ -134,6 +138,15 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     FLARMConfigWidget widget(GetLook(), device, hardware);
     DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
                         "FLARM", widget);
+  });
+
+  /* a PowerFLARM keeps statistics of its own; for any other FLARM,
+     XCSoar estimates the range from the traffic it reports */
+  AddButton(_("Range statistics"), [this](){
+    if (hardware.isPowerFlarm())
+      FlarmRangeStatisticsDialog(device);
+    else if (const auto &glide_computer = backend_components->glide_computer)
+      FlarmRangeEstimateDialog(device, glide_computer->GetFlarmRange());
   });
 
   AddButton(_("Reboot"), [this](){

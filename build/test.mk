@@ -342,6 +342,16 @@ TEST_SKYSIGHT_FORECAST_UTILS_SOURCES = \
 TEST_SKYSIGHT_FORECAST_UTILS_DEPENDS = TIME UTIL
 $(eval $(call link-program,TestSkySightForecastUtils,TEST_SKYSIGHT_FORECAST_UTILS))
 
+TEST_NAMES += TestFlarmRangeEstimate
+
+TEST_FLARM_RANGE_ESTIMATE_SOURCES = \
+	$(SRC)/FLARM/RangeEstimate.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmRangeEstimate.cpp
+TEST_FLARM_RANGE_ESTIMATE_DEPENDS = LIBNMEA GEO MATH IO OS TIME UTIL FMT
+$(eval $(call link-program,TestFlarmRangeEstimate,TEST_FLARM_RANGE_ESTIMATE))
+
 TEST_NAMES += TestSkySightLegendMapping
 
 TEST_SKYSIGHT_LEGEND_MAPPING_SOURCES = \
@@ -1391,7 +1401,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunEnableNMEA \
 	CAI302Tool \
 	RunIGCWriter \
-	RunFlightLogger RunFlyingComputer \
+	RunFlightLogger RunFlyingComputer RunFlarmRangeEstimate \
 	RunCirclingWind RunWindEKF RunWindComputer \
 	RunExternalWind \
 	RunTask \
@@ -2138,6 +2148,16 @@ RUN_FLYING_COMPUTER_SOURCES = \
 	$(TEST_SRC_DIR)/RunFlyingComputer.cpp
 RUN_FLYING_COMPUTER_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL UNITS
 $(eval $(call link-program,RunFlyingComputer,RUN_FLYING_COMPUTER))
+
+RUN_FLARM_RANGE_ESTIMATE_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/FLARM/RangeEstimate.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(TEST_SRC_DIR)/RunFlarmRangeEstimate.cpp
+RUN_FLARM_RANGE_ESTIMATE_DEPENDS = $(DEBUG_REPLAY_DEPENDS) GEO MATH UTIL FMT
+$(eval $(call link-program,RunFlarmRangeEstimate,RUN_FLARM_RANGE_ESTIMATE))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \

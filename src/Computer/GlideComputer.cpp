@@ -109,6 +109,8 @@ GlideComputer::ProcessGPS(bool force)
 
   TakeoffLanding(last_flying);
 
+  flarm_range_computer.Process(basic, calculated.flight.flying);
+
   // const_cast is safe here: waypoints object is actually non-const
   // (from data_components->waypoints), and AddTempPoint is a safe operation
   task_computer.ProcessAutoTask(basic, calculated,

@@ -502,13 +502,14 @@ TestFLARM()
   if (ok1(traffic != NULL)) {
     ok1(traffic->id_type == FlarmTraffic::IdType::FLARM);
     ok1(traffic->source == FlarmTraffic::SourceType::ADSB);
+    ok1(traffic->source_received);
     ok1(traffic->rssi_available);
     ok1(traffic->rssi == -85);
     ok1(!traffic->no_track);
     ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
     ok1(equals(traffic->track, 180));
   } else {
-    skip(7, 0, "traffic == NULL");
+    skip(8, 0, "traffic == NULL");
   }
 
   // PFLAA v9+ with Source=Mode-S (6), NoTrack=0, no RSSI
@@ -534,11 +535,12 @@ TestFLARM()
   traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->source == FlarmTraffic::SourceType::FLARM);
+    ok1(!traffic->source_received);
     ok1(traffic->stealth);
     ok1(traffic->no_track);
     ok1(!traffic->rssi_available);
   } else {
-    skip(4, 0, "traffic == NULL");
+    skip(5, 0, "traffic == NULL");
   }
 
   // PFLAA v8+ with NoTrack=0, out-of-range source (9 -> defaults to FLARM)
@@ -649,6 +651,21 @@ TestFLARM()
  * chapter 8.18): empty fields are "not computed", not zero, and the
  * number of sectors is not fixed.
  */
+static void
+TestFlarmMinimumRange()
+{
+  /* FTD-041: 2 nm ahead, 1 nm to the sides and behind */
+  ok1(equals(FlarmMinimumRange(Angle::Zero()), 3704));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(90)), 1852));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(180)), 1852));
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(270)), 1852));
+
+  /* in between, more than to the side, less than ahead */
+  const double half = FlarmMinimumRange(Angle::Degrees(45));
+  ok1(half > 1852 && half < 3704);
+  ok1(equals(FlarmMinimumRange(Angle::Degrees(-45)), half));
+}
+
 static void
 TestFLARMRangeParser()
 {
@@ -4409,7 +4426,7 @@ int main()
   CreateDataPath();
 
   plan_tests(1095 /* drivers */ + 29 /* PFLAU extended */
-             + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
+             + 39 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
              + 109 /* LXNav protocol 1.05 */
@@ -4426,6 +4443,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
+             + 6 /* FlarmMinimumRange */
              + 15 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
              + 17 /* LXNAVQNH */
@@ -4435,6 +4453,7 @@ int main()
   TestTasman();
   TestLK8EX1();
   TestFLARM();
+  TestFlarmMinimumRange();
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
   TestNanoDownloadFlight();

@@ -10,6 +10,7 @@
 #include "StatsComputer.hpp"
 #include "TaskComputer.hpp"
 #include "LogComputer.hpp"
+#include "FlarmRangeComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
 #include "Engine/Contest/Solvers/Retrospective.hpp"
@@ -32,6 +33,7 @@ class GlideComputer : public GlideComputerBlackboard
   TaskComputer task_computer;
   StatsComputer stats_computer;
   LogComputer log_computer;
+  FlarmRangeComputer flarm_range_computer;
   CuComputer cu_computer;
 
   ConditionMonitors condition_monitors;
@@ -127,6 +129,10 @@ public:
 
   const ProtectedTaskManager &GetProtectedTaskManager() const {
     return task_computer.GetProtectedTaskManager();
+  }
+
+  FlarmRangeComputer &GetFlarmRange() noexcept {
+    return flarm_range_computer;
   }
 
   const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
