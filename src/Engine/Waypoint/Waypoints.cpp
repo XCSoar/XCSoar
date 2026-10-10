@@ -478,7 +478,9 @@ Waypoints::GenerateTempPoint(const GeoPoint& location,
   // fallback: create a temporary point
   Waypoint to_point(location);
   to_point.elevation = terrain_alt.value_or(0);
-  to_point.has_elevation = terrain_alt.has_value();
+  to_point.elevation_source = terrain_alt
+    ? Waypoint::ElevationSource::TERRAIN
+    : Waypoint::ElevationSource::NONE;
   to_point.name = name;
   to_point.shortname = name;
   const bool is_takeoff = StringIsEqual(name, "(takeoff)");

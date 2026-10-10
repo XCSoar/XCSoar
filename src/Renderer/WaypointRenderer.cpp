@@ -190,7 +190,7 @@ protected:
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR ||
         settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR_AND_TERRAIN) {
       if (!basic.location_available || !basic.NavAltitudeAvailable() ||
-          !way_point.has_elevation)
+          !way_point.HasElevation())
         return;
 
       const auto safety_height = task_behaviour.safety_height_arrival;

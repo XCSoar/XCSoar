@@ -173,10 +173,10 @@ WaypointManagerWidget::OnWaypointNewClicked()
 
   if (CommonInterface::Calculated().terrain_valid) {
     edit_waypoint.elevation = CommonInterface::Calculated().terrain_altitude;
-    edit_waypoint.has_elevation = true;
+    edit_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   } else if (CommonInterface::Basic().NavAltitudeAvailable()) {
     edit_waypoint.elevation = CommonInterface::Basic().nav_altitude;
-    edit_waypoint.has_elevation = true;
+    edit_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   }
 
   if (dlgWaypointEditShowModal(edit_waypoint) == WaypointEditResult::MODIFIED &&

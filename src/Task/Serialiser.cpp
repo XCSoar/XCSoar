@@ -66,7 +66,7 @@ Serialise(WritableDataNode &node, const Waypoint &data)
   node.SetAttribute("name", data.name.c_str());
   node.SetAttribute("id", data.id);
   node.SetAttribute("comment", data.comment.c_str());
-  if (data.has_elevation)
+  if (data.HasElevation())
     node.SetAttribute("altitude", data.elevation);
 
   Serialise(*node.AppendChild("Location"), data.location);

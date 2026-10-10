@@ -75,7 +75,7 @@ DeserialiseWaypoint(const ConstDataNode &node, const Waypoints *waypoints)
     wp->comment = comment;
 
   if (node.GetAttribute("altitude", wp->elevation))
-    wp->has_elevation = true;
+    wp->elevation_source = Waypoint::ElevationSource::FILE;
 
   return WaypointPtr(wp);
 }
