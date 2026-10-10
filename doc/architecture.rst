@@ -700,12 +700,13 @@ child of the main window on the map.
   below it.  Use it only for content the pilot drags in that band.
 
   The InfoBox arrange overlay fills the client rectangle, so the
-  backdrop still covers the band, and its cards, text and buttons use
-  the one-argument helper (the whole band).  The Sets editor is a
-  dialogue already placed in the safe area; pass the two-argument
-  helper the dialogue's Y in the view, so only the part of the band
-  that still covers the dialogue moves the cards.  A band that ends
-  at the status bar does not move them.
+  backdrop still covers the band.  Its cards, text and buttons use
+  the safe area, then the one-argument helper: a stretched outer
+  column must not sit in the edge-gesture strip, and only the part
+  of the shade band that still covers the safe area moves the cards.
+  The Sets editor is a dialogue already placed in the safe area;
+  pass the two-argument helper the dialogue's Y in the view, so a
+  band that ends at the status bar does not move the cards.
 
 Touch interaction
 ~~~~~~~~~~~~~~~~~
