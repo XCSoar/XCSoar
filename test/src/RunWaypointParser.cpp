@@ -31,7 +31,7 @@ try {
               wp.location.latitude.Degrees(),
               wp.location.longitude.Degrees());
 
-    if (wp.has_elevation)
+    if (wp.HasElevation())
       fprintf(stdout, "%.0fm\n", wp.elevation);
     else
       fprintf(stdout, "?\n");

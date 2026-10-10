@@ -25,7 +25,7 @@ static Waypoint
 MakeWaypoint(Waypoint wp, double altitude) noexcept
 {
   wp.elevation = altitude;
-  wp.has_elevation = true;
+  wp.elevation_source = Waypoint::ElevationSource::FILE;
   return wp;
 }
 

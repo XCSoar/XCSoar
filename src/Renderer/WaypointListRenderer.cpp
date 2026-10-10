@@ -19,7 +19,7 @@ typedef StaticString<256u> Buffer;
 static void
 FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
 {
-  if (waypoint.has_elevation)
+  if (waypoint.HasElevation())
     buffer.Format("%s: %s", _("Elevation"),
                   FormatUserAltitude(waypoint.elevation).c_str());
   else

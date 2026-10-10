@@ -98,7 +98,7 @@ WaypointEditWidget::Save(bool &_changed) noexcept
   if (double elevation = value.GetElevationOrZero();
       SaveValue(ELEVATION, UnitGroup::ALTITUDE, elevation)) {
     value.elevation = elevation;
-    value.has_elevation = true;
+    value.elevation_source = Waypoint::ElevationSource::FILE;
   }
 
   if (SaveValueEnum(TYPE, value.type)) {

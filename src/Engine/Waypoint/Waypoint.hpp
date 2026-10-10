@@ -49,6 +49,20 @@ struct Waypoint {
   };
 
   /**
+   * Where the #elevation of a waypoint comes from.
+   */
+  enum class ElevationSource : uint8_t {
+    /** unknown; #elevation is not usable */
+    NONE,
+
+    /** given explicitly, by a file or by the user */
+    FILE,
+
+    /** looked up in the terrain, because nothing else gave one */
+    TERRAIN,
+  };
+
+  /**
    * Bitfield structure for Waypoint capabilities
    * Several of these capabilities are not used by XCSoar, but are
    * present for compatibility
@@ -75,7 +89,7 @@ struct Waypoint {
   /**
    * Height AMSL (m) of waypoint terrain.
    *
-   * This field is only usable if #has_elevation is true.
+   * This field is only usable if HasElevation() is true.
    */
   double elevation;
 
@@ -123,10 +137,8 @@ struct Waypoint {
    */
   uint8_t file_num = 0;
 
-  /**
-   * Does the #elevation field contain a value?
-   */
-  bool has_elevation = false;
+  /** Where #elevation comes from */
+  ElevationSource elevation_source = ElevationSource::NONE;
 
 #ifndef NDEBUG
   bool flat_location_initialised = false;
@@ -182,8 +194,15 @@ struct Waypoint {
     return flags.finish_point;
   }
 
+  /**
+   * Does the #elevation field contain a value?
+   */
+  constexpr bool HasElevation() const noexcept {
+    return elevation_source != ElevationSource::NONE;
+  }
+
   constexpr double GetElevationOrZero() const noexcept {
-    return has_elevation ? elevation : 0.;
+    return HasElevation() ? elevation : 0.;
   }
 
   /**

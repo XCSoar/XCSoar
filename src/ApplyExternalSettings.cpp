@@ -485,7 +485,7 @@ TargetProcessTimer(OperationEnvironment &env) noexcept
           wp->location != last_sent_location) {
         backend_components->devices->PutTarget(
           wp->location, wp->name.c_str(),
-          wp->has_elevation
+          wp->HasElevation()
             ? std::optional<double>(wp->elevation)
             : std::nullopt,
           env);

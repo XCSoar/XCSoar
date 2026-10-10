@@ -60,7 +60,7 @@ AddSpiralWaypoints(Waypoints &waypoints,
     Waypoint waypoint{vector.EndPoint(center)};
     waypoint.original_id = i;
     waypoint.elevation = i * 10 - 500;
-    waypoint.has_elevation = true;
+    waypoint.elevation_source = Waypoint::ElevationSource::FILE;
 
     StaticString<256> buffer;
 
@@ -425,24 +425,24 @@ TestTempPoint()
   waypoints.AddTempPoint(location, std::nullopt, "(goto)");
   auto wp = waypoints.LookupName("(goto)");
   ok1(wp != nullptr);
-  ok1(wp != nullptr && !wp->has_elevation);
+  ok1(wp != nullptr && !wp->HasElevation());
 
   /* known elevation, also at sea level; replaces the previous one */
   waypoints.AddTempPoint(location, 0., "(goto)");
   wp = waypoints.LookupName("(goto)");
-  ok1(wp != nullptr && wp->has_elevation && wp->elevation == 0);
+  ok1(wp != nullptr && wp->HasElevation() && wp->elevation == 0);
   ok1(waypoints.size() == 1);
 
   const Waypoint takeoff =
     waypoints.GenerateTempPoint(location, 312., "(takeoff)");
-  ok1(takeoff.has_elevation && takeoff.elevation == 312);
+  ok1(takeoff.HasElevation() && takeoff.elevation == 312);
 
   /* an altitude that is not a number is not an elevation */
   const Waypoint nan_point =
     waypoints.GenerateTempPoint(location,
                                 std::numeric_limits<double>::quiet_NaN(),
                                 "(takeoff)");
-  ok1(!nan_point.has_elevation);
+  ok1(!nan_point.HasElevation());
 }
 
 static void
