@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskRulesConfigPanel.hpp"
+#include "Dialogs/DataField.hpp"
 #include "Profile/Keys.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
@@ -61,8 +62,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task. "
                "Set to 0 for no limit."),
-           "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
-           task_behaviour.ordered_defaults.start_constraints.max_height);
+           "%.0f %s", "%.0f", 0, 30000, 50, false, UnitGroup::ALTITUDE,
+           task_behaviour.ordered_defaults.start_constraints.max_height)
+    ->SetEditCallback(EditUnsignedFloatDialog);
 
   AddFloat(_("Start max. height margin"),
            _("Maximum height above maximum start height to tolerate. Set to 0 for no tolerance."),
@@ -93,8 +95,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent,
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. "
                "Set to 0 for no limit."),
-           "%.0f %s", "%.0f", 0, 10000, 50, false, UnitGroup::ALTITUDE,
-           task_behaviour.ordered_defaults.finish_constraints.min_height);
+           "%.0f %s", "%.0f", 0, 30000, 50, false, UnitGroup::ALTITUDE,
+           task_behaviour.ordered_defaults.finish_constraints.min_height)
+    ->SetEditCallback(EditUnsignedFloatDialog);
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),

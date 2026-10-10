@@ -48,6 +48,14 @@ public:
     mMax = v;
   }
 
+  double GetMin() const noexcept {
+    return mMin;
+  }
+
+  double GetMax() const noexcept {
+    return mMax;
+  }
+
   void SetStep(double v) noexcept {
     mStep = v;
   }

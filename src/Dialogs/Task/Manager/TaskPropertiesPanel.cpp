@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskPropertiesPanel.hpp"
+#include "Dialogs/DataField.hpp"
 #include "Internal.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -241,7 +242,8 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task. Set to 0 for no limit."),
            "%.0f %s", "%.0f",
-           0, 10000, 25, false, 0);
+           0, 30000, 25, false, 0)
+    ->SetEditCallback(EditUnsignedFloatDialog);
 
   static constexpr StaticEnumChoice altitude_reference_list[] = {
     { AltitudeReference::AGL, N_("AGL"),
@@ -258,7 +260,8 @@ TaskPropertiesPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task. Set to 0 for no limit."),
            "%.0f %s", "%.0f",
-           0, 10000, 25, false, 0);
+           0, 30000, 25, false, 0)
+    ->SetEditCallback(EditUnsignedFloatDialog);
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),

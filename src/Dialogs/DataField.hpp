@@ -13,3 +13,13 @@ class DataField;
 bool
 EditDataFieldDialog(const char *caption, DataField &df,
                     const char *help_text);
+
+/**
+ * Edit a non-negative #DataFieldFloat as a whole number on the digit
+ * pad.  The value stays in the field's own unit (feet or metres).
+ *
+ * @return true if the user confirmed the dialog
+ */
+bool
+EditUnsignedFloatDialog(const char *caption, DataField &df,
+                        const char *help_text);
