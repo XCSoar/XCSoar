@@ -7,6 +7,7 @@
 #include "util/Macros.hpp"
 
 #include <functional>
+#include <limits>
 
 #include <stdio.h>
 extern "C" {
@@ -415,6 +416,36 @@ TestSuggestNameSubstring()
 }
 
 static void
+TestTempPoint()
+{
+  Waypoints waypoints;
+  const GeoPoint location(Angle::Degrees(7.85), Angle::Degrees(51.4));
+
+  /* unknown elevation: no value, not a number standing in for one */
+  waypoints.AddTempPoint(location, std::nullopt, "(goto)");
+  auto wp = waypoints.LookupName("(goto)");
+  ok1(wp != nullptr);
+  ok1(wp != nullptr && !wp->has_elevation);
+
+  /* known elevation, also at sea level; replaces the previous one */
+  waypoints.AddTempPoint(location, 0., "(goto)");
+  wp = waypoints.LookupName("(goto)");
+  ok1(wp != nullptr && wp->has_elevation && wp->elevation == 0);
+  ok1(waypoints.size() == 1);
+
+  const Waypoint takeoff =
+    waypoints.GenerateTempPoint(location, 312., "(takeoff)");
+  ok1(takeoff.has_elevation && takeoff.elevation == 312);
+
+  /* an altitude that is not a number is not an elevation */
+  const Waypoint nan_point =
+    waypoints.GenerateTempPoint(location,
+                                std::numeric_limits<double>::quiet_NaN(),
+                                "(takeoff)");
+  ok1(!nan_point.has_elevation);
+}
+
+static void
 TestNameSubstringShortname()
 {
   /* Reproduce the SeeYou .cup case where the long name is the
@@ -491,7 +522,7 @@ main(int argc, char** argv)
   if (!ParseArgs(argc, argv))
     return 0;
 
-  plan_tests(52 + 9 + 6 + 17);
+  plan_tests(52 + 9 + 6 + 17 + 6);
 
   Waypoints waypoints;
   GeoPoint center(Angle::Degrees(51.4), Angle::Degrees(7.85));
@@ -507,6 +538,7 @@ main(int argc, char** argv)
   TestNamePrefixVisitor(waypoints);
   TestNameSubstringVisitor(waypoints);
   TestNameSubstringShortname();
+  TestTempPoint();
   TestSuggestNameSubstring();
   TestRangeVisitor(waypoints, center);
   TestGetNearest(waypoints, center);

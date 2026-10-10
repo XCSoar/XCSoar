@@ -40,7 +40,7 @@
 #include "Simulator.hpp"
 #include <Message.hpp>
 
-#include <limits>
+#include <optional>
 #include <exception>
 
 #ifdef HAVE_NOAA
@@ -442,7 +442,7 @@ MapItemListWidget::OnGotoClicked()
     const GeoPoint &location = loc_item.location;
 
     // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
-    double elevation = std::numeric_limits<double>::quiet_NaN();
+    std::optional<double> elevation;
     if (loc_item.HasElevation()) {
       elevation = loc_item.elevation;
     } else if (data_components->terrain != nullptr) {
@@ -452,7 +452,7 @@ MapItemListWidget::OnGotoClicked()
       }
     }
 
-    // Create temporary goto waypoint (elevation may be NaN if unavailable)
+    // Create temporary goto waypoint (without elevation if unavailable)
     auto &way_points = *data_components->waypoints;
     const char *goto_name = "(goto)";
     {
@@ -606,7 +606,7 @@ ShowMapItemDialog(const MapItem &item,
     const GeoPoint &location = loc_item.location;
 
     // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
-    double elevation = std::numeric_limits<double>::quiet_NaN();
+    std::optional<double> elevation;
     if (loc_item.HasElevation()) {
       elevation = loc_item.elevation;
     } else if (data_components != nullptr &&
@@ -617,7 +617,8 @@ ShowMapItemDialog(const MapItem &item,
       }
     }
 
-    // Create temporary goto waypoint for display (elevation may be NaN if unavailable)
+    // Create temporary goto waypoint for display (without elevation if
+    // unavailable)
     const char *goto_name = "(goto)";
     {
       ScopeSuspendAllThreads suspend;
