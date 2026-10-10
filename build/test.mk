@@ -122,6 +122,7 @@ TEST_NAMES = \
 	TestNanoFileTransfer \
 	TestTraceBounds \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
+	TestContainerWindow \
 	TestInputConfig \
 	TestCRC16 TestCRC8 \
 	TestUnitsFormatter \
@@ -935,6 +936,14 @@ TEST_LAYOUT_SOURCES = \
 	$(TEST_SRC_DIR)/TestLayout.cpp
 TEST_LAYOUT_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,TestLayout,TEST_LAYOUT))
+
+TEST_CONTAINER_WINDOW_SOURCES = \
+	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestContainerWindow.cpp
+TEST_CONTAINER_WINDOW_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
+$(eval $(call link-program,TestContainerWindow,TEST_CONTAINER_WINDOW))
 
 ifeq ($(HAVE_WIN32),y)
 TEST_UTF8WIN_SOURCES = \

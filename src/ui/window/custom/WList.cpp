@@ -101,7 +101,7 @@ Window *
 WindowList::FindAt(PixelPoint p) noexcept
 {
   for (Window &w : list)
-    if (w.IsEnabled() && IsAt(w, p))
+    if (IsAt(w, p))
       return &w;
 
   return nullptr;

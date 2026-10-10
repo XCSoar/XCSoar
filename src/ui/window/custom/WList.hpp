@@ -60,6 +60,9 @@ public:
 
   /**
    * Locate a window by its relative coordinates.
+   *
+   * @return the topmost visible window at that position, which may be
+   * disabled, or nullptr if there is none
    */
   [[gnu::pure]]
   Window *FindAt(PixelPoint p) noexcept;
