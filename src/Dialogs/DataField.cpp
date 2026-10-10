@@ -7,7 +7,9 @@
 #include "Form/DataField/RoughTime.hpp"
 #include "Form/DataField/Prefix.hpp"
 #include "Form/DataField/Date.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Form/DataField/Integer.hpp"
+#include "Math/Util.hpp"
 #include "ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/TimeEntry.hpp"
@@ -125,4 +127,36 @@ EditDataFieldDialog(const char *caption, DataField &df,
   } else
     // don't know how to edit this
     return false;
+}
+
+/** Digit columns needed to show @p value.  At least one, at most eight. */
+static unsigned
+WholeDigitLength(double value) noexcept
+{
+  unsigned length = 1;
+  double limit = 10;
+  while (value >= limit && length < 8) {
+    limit *= 10;
+    ++length;
+  }
+  return length;
+}
+
+bool
+EditUnsignedFloatDialog(const char *caption, DataField &df,
+                        [[maybe_unused]] const char *help_text)
+{
+  auto &field = static_cast<DataFieldFloat &>(df);
+  assert(field.GetType() == DataField::Type::REAL);
+  assert(field.GetMin() >= 0);
+
+  const double raw = field.GetValue();
+  unsigned value = raw > 0 ? uround(raw) : 0u;
+
+  const double ceiling = std::max(field.GetMax(), raw > 0 ? raw : 0);
+  if (!NumberEntryDialog(caption, value, WholeDigitLength(ceiling)))
+    return false;
+
+  field.ModifyValue(value);
+  return true;
 }

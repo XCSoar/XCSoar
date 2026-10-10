@@ -183,6 +183,9 @@ Version 7.46 - not yet released
   - a Goto with no known elevation keeps bearing and distance, and
     leaves arrival height, required glide ratio, time estimates and
     the final-glide bar blank instead of assuming sea level #3286
+  - let Start max. height and Finish min. height be typed on the
+    digit pad, up to 30,000 feet or metres, instead of a list that
+    stopped at 10,000 #3202
 * analysis
   - plot the Analysis barograph against clock time (end labels and
     hourly tick marks) so successive flights without relaunch no
