@@ -1,8 +1,9 @@
 Version 7.46 - not yet released
 * android
   - lay the cards, the text and the buttons on the InfoBox arrange
-    page and the InfoBox Sets editor below the area that opens the
-    notification shade
+    page and the InfoBox Sets editor clear of the screen edge and
+    below the area that opens the notification shade, so a column on
+    the glass can be dragged inward #3223
   - target Android 16 so Google Play still accepts updates #2874
   - add the "Stretch InfoBox area" setting (Config → Setup → Screen,
     expert): pick the screen edges on which the InfoBoxes, gauges,

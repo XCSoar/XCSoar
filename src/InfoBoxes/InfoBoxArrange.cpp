@@ -118,16 +118,19 @@ public:
 
   /**
    * Where the cards, the description and the buttons are laid out.
-   * On Android this starts below the system swipe-down band.  The
-   * overlay itself stays full screen, so the backdrop still covers
-   * that band.
+   * The overlay stays full screen.  The cards use the safe area, so
+   * a stretched column is not on the glass: on Android a drag inward
+   * from that edge is cancelled as a system gesture.  The top also
+   * drops only the part of the swipe-down band that still covers
+   * the safe area.
    */
   [[nodiscard]]
-  static PixelRect GetContentRect(PixelRect full) noexcept {
+  static PixelRect GetContentRect() noexcept {
+    const PixelRect page = UIGlobals::GetMainWindow().GetSafeAreaRect();
 #ifdef ANDROID
-    return Android::ContentRectBelowTopGesture(full);
+    return Android::ContentRectBelowTopGesture(page);
 #else
-    return full;
+    return page;
 #endif
   }
 
@@ -155,9 +158,7 @@ public:
 
     const unsigned title_scale =
       CommonInterface::GetUISettings().info_boxes.scale_title_font;
-    /* the cards lie exactly over the InfoBoxes on the screen, which
-       follow the InfoBox area and not the client rect */
-    const PixelRect page = GetContentRect(InfoBoxManager::layout.rc);
+    const PixelRect page = GetContentRect();
     page_layout =
       InfoBoxLayout::Calculate(page, InfoBoxManager::layout.geometry,
                                title_scale, full.GetSize());
