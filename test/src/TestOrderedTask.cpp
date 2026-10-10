@@ -1003,6 +1003,47 @@ TestWaitingInsideStart(std::unique_ptr<ObservationZonePoint> zone,
   }
 }
 
+/**
+ * A task which begins inside its start cylinder never sees the start
+ * entered, only left.  A finish right after the start must still
+ * count (#3314).
+ */
+static void
+TestFinishAfterStartOnlyLeft()
+{
+  const OrderedTaskSettings &settings = task_behaviour.ordered_defaults;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+  task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 5000),
+                         WaypointPtr(wp1), task_behaviour,
+                         settings.start_constraints));
+  task.Append(FinishPoint(std::make_unique<CylinderZone>(wp3->location, 1000),
+                          WaypointPtr(wp3), task_behaviour,
+                          settings.finish_constraints, false));
+  task.UpdateGeometry();
+  ok1(!IsError(task.CheckTask()));
+
+  /* inside the start cylinder from the first fix, out of it, and into
+     the finish cylinder */
+  static constexpr double route[] = {
+    45.0, 45.03, 45.06, 45.5, 45.95, 45.995,
+  };
+
+  auto state_last = MakeTimedAircraft(0, route[0], 1000, FloatDuration{3600});
+  task.Update(state_last, state_last, glide_polar);
+  for (unsigned i = 1; i < std::size(route); ++i) {
+    const auto state = MakeTimedAircraft(0, route[i], 1000,
+                                         FloatDuration{3600 + 60 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+  }
+
+  ok1(task.GetStats().start.HasStarted());
+  ok1(!task.GetTaskPoint(0).HasEntered());
+  ok1(task.GetStats().task_finished);
+}
+
 static void
 TestAll()
 {
@@ -1017,7 +1058,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62);
+  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62 + 4);
 
   task_behaviour.SetDefaults();
 
@@ -1046,6 +1087,7 @@ int main()
   TestStartNearestPoint();
   TestFinishNearestPoint();
   TestStartNearestPointContinuity();
+  TestFinishAfterStartOnlyLeft();
 
   return exit_status();
 }

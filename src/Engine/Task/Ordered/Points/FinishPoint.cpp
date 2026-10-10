@@ -34,7 +34,14 @@ FinishPoint::Reset() noexcept
 bool
 FinishPoint::EntryPrecondition() const noexcept
 {
-  return GetPrevious() != NULL && GetPrevious()->HasEntered();
+  const OrderedTaskPoint *previous = GetPrevious();
+  if (previous == nullptr)
+    return false;
+
+  /* a start may have been left without ever being seen entered, e.g.
+     when the task began inside the start zone */
+  return previous->HasEntered() ||
+    (previous->GetType() == TaskPointType::START && previous->HasExited());
 }
 
 double
