@@ -51,6 +51,8 @@ FormatGlideRatioAtMC(char *buffer, size_t size,
                      const GlidePolar &polar, double user_mc) noexcept
 {
   GlidePolar mc_polar = polar;
+  /* Same point the safety reach polar flies: past maximum cruise. */
+  mc_polar.SetMCLimitedByCruise(false);
   mc_polar.SetMC(Units::ToSysVSpeed(user_mc));
   FormatGlideRatio(buffer, size, mc_polar.GetBestLD());
 }

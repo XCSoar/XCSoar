@@ -436,6 +436,9 @@ public:
   void UpdateCommonStatsPolar(const AircraftState &state) noexcept;
 
 private:
+  /** Apply Safety MC without the maximum-cruise speed cap. */
+  void ApplySafetyMC() noexcept;
+
   TaskType SetMode(const TaskType mode) noexcept;
 
   void UpdateCommonStats(const AircraftState &state) noexcept;

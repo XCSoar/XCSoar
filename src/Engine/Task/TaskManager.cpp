@@ -48,7 +48,7 @@ TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour) noexcept
 {
   task_behaviour = behaviour;
 
-  safety_polar.SetMC(task_behaviour.safety_mc);
+  ApplySafetyMC();
 
   ordered_task->SetTaskBehaviour(behaviour);
   goto_task->SetTaskBehaviour(behaviour);
@@ -402,6 +402,15 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar) noexcept
   glide_polar = _glide_polar;
 
   safety_polar = glide_polar;
+  ApplySafetyMC();
+}
+
+void
+TaskManager::ApplySafetyMC() noexcept
+{
+  /* The task polar keeps the cruise cap for speed-to-fly. Reach,
+     abort and alternates fly the Safety MC point past that cap. */
+  safety_polar.SetMCLimitedByCruise(false);
   safety_polar.SetMC(task_behaviour.safety_mc);
 }
 

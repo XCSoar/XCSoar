@@ -60,6 +60,14 @@ class GlidePolar
 
   /** Maximum cruise speed (m/s) */
   double Vmax;
+
+  /**
+   * When true, the MacCready speed stops at #Vmax. The safety polar
+   * clears this so reach can fly faster than maximum cruise.
+   * Speed-to-fly leaves it set.
+   */
+  bool limit_mc_to_cruise = true;
+
   /** Sink rate at maximum cruise speed (m/s, positive down) */
   double Smax;
 
@@ -327,6 +335,14 @@ public:
    * @param _mc The new MacCready ring setting (m/s)
    */
   void SetMC(const double _mc) noexcept;
+
+  /**
+   * Stop the MacCready speed at maximum cruise speed when @p limited
+   * is true. Reach on the safety polar passes false so a higher
+   * Safety MC keeps selecting a steeper point. Speed-to-fly stays
+   * limited.
+   */
+  void SetMCLimitedByCruise(bool limited) noexcept;
 
   /**
    * Accessor for MC setting

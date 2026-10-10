@@ -599,7 +599,9 @@ of the safety heights. \\
 \item[Safety MC*]  The MacCready used for terrain reach, landable colours,
   abort and the Alternates list when Reach polar is Safety MC.  Alternate
   InfoBoxes and waypoint Alt.\ diff.\ MC safety always use this value.
-  Speed-to-fly is not affected.  Higher values treat fewer fields as reachable.
+  The Safety MC speed is not limited by maximum cruise speed.
+  Speed-to-fly still stops at maximum cruise speed.  Higher values treat
+  fewer fields as reachable.
   Default is 3.2~m/s, about 25:1 on the default LS-8 polar.\label{conf:safetyMC} 
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
