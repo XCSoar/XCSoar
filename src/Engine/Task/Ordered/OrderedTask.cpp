@@ -63,6 +63,21 @@ GetCylinderRadiusOrMinusOne(const ObservationZoneClient &p) noexcept
   return GetCylinderRadiusOrMinusOne(p.GetObservationZone());
 }
 
+/**
+ * Is this a reached turn point which counts at its own location,
+ * however deep the aircraft flew into its observation zone, like
+ * GetLocationScored()?  An AAT area counts the point reached instead,
+ * and the start keeps the point where it was left, which takes a
+ * start cylinder's radius off the task.
+ */
+[[gnu::pure]]
+static bool
+CountsAtLocation(const OrderedTaskPoint &tp) noexcept
+{
+  return tp.HasSampled() && !tp.IsBoundaryScored() &&
+    tp.GetType() != TaskPointType::START;
+}
+
 OrderedTask::OrderedTask(const TaskBehaviour &tb) noexcept
   :AbstractTask(TaskType::ORDERED, tb),
    factory_mode(tb.task_type_default),
@@ -267,11 +282,18 @@ OrderedTask::RunDijsktraMax(TaskDijkstraMax &dijkstra,
 
   const unsigned active_index = GetActiveIndex();
   for (unsigned i = 0; i != task_size; ++i) {
-    const SearchPointVector &boundary = (i == active_index || ignoreSampledPoints)
+    const OrderedTaskPoint &tp = *task_points[i];
+    const SearchPointVector &boundary = ignoreSampledPoints
+      ? tp.GetBoundaryPoints()
+      : i <= active_index && CountsAtLocation(tp)
+      /* search from the turn point itself, so the points chosen next
+         to it suit the location it counts at */
+      ? tp.GetNominalPoints()
+      : i == active_index
       /* since one can still travel further in the current sector, use
          the full boundary here */
-      ? task_points[i]->GetBoundaryPoints()
-      : task_points[i]->GetSearchPoints();
+      ? tp.GetBoundaryPoints()
+      : tp.GetSearchPoints();
 
     dijkstra.SetBoundary(i, boundary);
   }
