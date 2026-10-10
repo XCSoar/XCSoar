@@ -10980,3 +10980,9 @@ msgstr ""
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+
+msgid "Vario switch sets flight mode"
+msgstr ""
+
+msgid "If enabled, a variometer that reports its cruise/circling switch (e.g. Vega flap, Borgelt B50, LXNAV, XCVario) switches XCSoar between cruise and circling mode.  This only works while flying."
+msgstr ""

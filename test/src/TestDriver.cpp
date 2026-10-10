@@ -1161,6 +1161,11 @@ TestBorgeltB50()
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature.ToKelvin(), 245.15));
 
+  /* 0 is cruise: the Borgelt documentation has the switch the other
+     way round, the devices send it like this (#812) */
+  ok1(device->ParseNMEA("$PBB50,042,-01.1,1.0,12345,10,1.3,0,-28*74", nmea_info));
+  ok1(nmea_info.switch_state.flight_mode == SwitchState::FlightMode::CRUISE);
+
   delete device;
 }
 
@@ -4408,7 +4413,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1095 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1097 /* drivers */ + 29 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */

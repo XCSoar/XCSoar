@@ -41,7 +41,8 @@ C.C = MacCready 0 to 8.0 knots
 DDDDD = IAS squared 0 to 22500
 EE = bugs degradation, 0 = clean to 30 %
 F.FF = Ballast 1.00 to 1.60
-G = 0 in climb, 1 in cruise
+G = 0 in cruise, 1 in climb (the Borgelt documentation says the opposite;
+    Mike Borgelt confirmed the devices send it this way, see #812)
 HH = Outside airtemp in degrees celcius ( may have leading negative sign )
 CHK = standard NMEA checksum
 */
@@ -84,7 +85,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   if (line.ReadChecked(ballast_overload))
     info.settings.ProvideBallastOverload(ballast_overload, info.clock);
 
-  // inclimb/incruise 1=cruise,0=climb, OAT
+  // cruise/climb switch, 0 in cruise, 1 in climb (see above)
   switch (line.Read(-1)) {
   case 0:
     info.switch_state.flight_mode = SwitchState::FlightMode::CRUISE;

@@ -214,6 +214,9 @@ Version 7.46 - not yet released
   - fix a read past the end of the temperature trace levels when the
     forecast temperature is changed after a measurement above
     9900 m #3218
+  - rename the setting "Flap forces cruise" to "Vario switch sets flight
+    mode" and say in its help that it applies to every vario that
+    reports its cruise/circling switch, and only while flying #1752
 * devices
   - fix corrupted IGC files downloaded from LXNAV S100 and other
     LXNAV loggers over Bluetooth: reject B and K records whose length
