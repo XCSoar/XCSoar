@@ -829,6 +829,41 @@ output tree when switching ``SANITIZE=``)::
 To force warnings-as-errors on an optimised build (``DEBUG=n`` disables
 ``WERROR`` by default), pass ``WERROR=y`` explicitly.
 
+.. _complexity-report:
+
+Complexity report
+^^^^^^^^^^^^^^^^^
+
+`lizard <https://github.com/terryyin/lizard>`__ points out functions
+which branch a lot (cyclomatic complexity, CCN), run long or take many
+parameters.  The check is advisory: it does not run in CI, does not
+block a commit, and existing code does not have to be changed to pass
+it.  It helps to keep new and changed functions small, and shows
+reviewers the ones that are not.
+
+Run it on demand through :program:`pre-commit` (see
+:file:`.pre-commit-config.yaml`), on the staged files or on all of
+:file:`src/`::
+
+  pre-commit run lizard --hook-stage manual
+  pre-commit run lizard --hook-stage manual --all-files
+
+It warns about a function with a CCN above 25, more than 120 lines or
+more than 7 parameters, and leaves out the bundled third-party code in
+:file:`src/Topography/shapelib/`, :file:`src/zzip/` and
+:file:`src/Terrain/jasper/`.  Without :program:`pre-commit`, run
+:program:`lizard` directly (it skips :file:`*.hxx` when scanning a
+directory)::
+
+  pip install lizard
+  lizard -C 25 -L 120 -a 7 -w \
+    -x "src/Topography/shapelib/*" -x "src/zzip/*" \
+    -x "src/Terrain/jasper/*" src
+
+For a closer look, e.g. before refactoring, lower the thresholds to
+``-C 15 -L 100 -a 6``, or leave out ``-w`` and the thresholds for a
+table of every function and a summary.
+
 .. _docker-build:
 
 Using Docker
