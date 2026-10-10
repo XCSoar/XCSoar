@@ -72,3 +72,22 @@ repos:
   hooks:
   - id: pretty-format-yaml
     args: [--autofix, --indent, '2']
+
+  # Cyclomatic complexity, advisory and on demand only:
+  #   pre-commit run lizard --hook-stage manual [--all-files]
+  # See doc/build.rst, "Complexity report".
+- repo: local
+  hooks:
+  - id: lizard
+    name: lizard (complexity)
+    language: python
+    additional_dependencies: [lizard==1.24.1]
+    entry: lizard -C 25 -L 120 -a 7 -w
+    files: ^src/.*\.(c|cpp|cxx|h|hpp|hxx)$
+    exclude: |
+      (?x)^(
+        src/Topography/shapelib/.*|
+        src/zzip/.*|
+        src/Terrain/jasper/.*
+      )$
+    stages: [manual]
