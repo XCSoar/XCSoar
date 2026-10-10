@@ -386,8 +386,8 @@ FlightSetupPanel::ShowForecastTemperature() noexcept
      tap and answers it with WndProperty::ShowFullContent() -- a
      full-screen dialog holding one short number, which is not what
      pressing a field that says "not yours to set" should do.  A
-     disabled row is skipped by WindowList::FindAt(), so the tap lands
-     nowhere, and it cannot be reached with the cursor keys either. */
+     disabled row swallows the tap without answering it, and it cannot
+     be reached with the cursor keys either. */
   SetRowEnabled(Temperature, false);
   GetControl(Temperature).RefreshDisplay();
 }

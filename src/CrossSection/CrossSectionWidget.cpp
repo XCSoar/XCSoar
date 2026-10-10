@@ -41,7 +41,6 @@ CrossSectionWidget::Prepare(ContainerWindow &parent,
 
   WindowStyle style;
   style.Hide();
-  style.Disable();
 
   auto w =
     std::make_unique<CrossSectionWindow>(look.cross_section,

@@ -10,7 +10,6 @@ GlueGaugeVario::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   WindowStyle style;
   style.Hide();
-  style.Disable();
 
   SetWindow(std::make_unique<GaugeVario>(blackboard, parent, look,
                                          rc, style));

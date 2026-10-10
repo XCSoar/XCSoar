@@ -499,6 +499,9 @@ Version 7.46 - not yet released
   - fix a crash when the desktop window is resized to a few
     pixels, by refusing a size below 320x240 (240x320 when
     taller than wide) #2110
+  - fix a tap on a disabled button reaching what lies beneath it:
+    tapping the greyed-out zoom button of the FLARM radar twice
+    opened the menu #512
 * data files
   - fix a failed save destroying the existing profile, waypoints,
     task, polar or flight log when a temporary file cannot be
