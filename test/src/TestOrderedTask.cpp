@@ -14,6 +14,7 @@
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 #include "Engine/Task/ObservationZones/SectorZone.hpp"
+#include "Engine/Task/ObservationZones/SymmetricSectorZone.hpp"
 #include "Geo/Math.hpp"
 #include "Math/Constants.hpp"
 
@@ -940,6 +941,68 @@ TestStartNavigationLocation()
              fresh.GetStats().total.planned.GetDistance()));
 }
 
+/**
+ * Drift inside a start line or start sector without crossing it.
+ * The leg origin stays on a boundary node, clear of the glider, and
+ * the bearing uses that same node.
+ *
+ * @param latitude track, south of wp1, chosen so every step is inside
+ */
+static void
+TestWaitingInsideStart(std::unique_ptr<ObservationZonePoint> zone,
+                       double latitude)
+{
+  ordered_task_settings.SetDefaults();
+
+  OrderedTask task(task_behaviour);
+  task.Append(StartPoint(std::move(zone), WaypointPtr(wp1),
+                         task_behaviour,
+                         ordered_task_settings.start_constraints));
+  task.Append(ASTPoint(std::make_unique<CylinderZone>(wp3->location, 500),
+                       WaypointPtr(wp3), task_behaviour));
+  task.Append(FinishPoint(std::make_unique<CylinderZone>(wp4->location, 500),
+                          WaypointPtr(wp4), task_behaviour,
+                          ordered_task_settings.finish_constraints));
+  task.UpdateGeometry();
+
+  ok1(!IsError(task.CheckTask()));
+
+  /* about 50 m east per step; six steps stay inside a 1000 m line
+     and inside the 90° FAI start sector */
+  constexpr double LON_STEP = 0.00064;
+  constexpr unsigned STEPS = 6;
+
+  auto state_last = MakeTimedAircraft(0, latitude, 2000, FloatDuration{3600});
+  double previous_distance_min = -1;
+
+  for (unsigned i = 0; i < STEPS; ++i) {
+    const auto state = MakeTimedAircraft(LON_STEP * i, latitude, 2000,
+                                         FloatDuration{3600 + 5 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+
+    const GeoPoint &origin = task.GetPoint(0).GetLocationRemaining();
+
+    ok1(task.GetActiveTaskPointIndex() == 0);
+
+    bool on_boundary = false;
+    for (const GeoPoint &node : task.GetPoint(0).GetBoundary())
+      on_boundary |= node.Distance(origin) < 1;
+    ok1(on_boundary);
+
+    /* an interior sample would sit on the glider */
+    ok1(origin.Distance(state.location) > 100);
+
+    ok1(task.GetStats().current_leg.location_remaining
+        .Distance(origin) < 1);
+
+    const double distance_min = task.GetStats().distance_min;
+    ok1(previous_distance_min < 0 ||
+        equals(distance_min, previous_distance_min));
+    previous_distance_min = distance_min;
+  }
+}
+
 static void
 TestAll()
 {
@@ -954,13 +1017,21 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8 + 31 + 5 + 49 + 123);
+  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62);
 
   task_behaviour.SetDefaults();
 
   TestTravelledDistance();
   TestStartLegOrigin();
   TestStartNavigationLocation();
+  /* 200 m south of a 1000 m start line */
+  TestWaitingInsideStart(std::make_unique<LineSectorZone>(wp1->location,
+                                                          1000),
+                         44.9982);
+  /* 400 m south, inside the 1000 m 90° FAI start sector */
+  TestWaitingInsideStart(SymmetricSectorZone::CreateFAISectorZone(
+                           wp1->location, false),
+                         44.9964);
   TestAll();
 
   glide_polar.SetMC(1);
