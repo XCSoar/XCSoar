@@ -7,9 +7,9 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
-#include "Math/Classify.hpp"
 
 #include <cassert>
+#include <cmath>
 
 inline WaypointPtr
 Waypoints::WaypointNameTree::Get(std::string_view name) const noexcept
@@ -464,15 +464,21 @@ Waypoints::CheckExistsOrAppend(WaypointPtr waypoint) noexcept
 }
 
 Waypoint
-Waypoints::GenerateTempPoint(const GeoPoint& location, const double terrain_alt,
+Waypoints::GenerateTempPoint(const GeoPoint& location,
+                             std::optional<double> terrain_alt,
                              const char *name) const noexcept
 {
   assert(name != nullptr);
 
+  /* TakeoffAutotask() passes an altitude from a device, which is not
+     known to be a number */
+  if (terrain_alt && !std::isfinite(*terrain_alt))
+    terrain_alt.reset();
+
   // fallback: create a temporary point
   Waypoint to_point(location);
-  to_point.elevation = terrain_alt;
-  to_point.has_elevation = IsFinite(terrain_alt);
+  to_point.elevation = terrain_alt.value_or(0);
+  to_point.has_elevation = terrain_alt.has_value();
   to_point.name = name;
   to_point.shortname = name;
   const bool is_takeoff = StringIsEqual(name, "(takeoff)");
@@ -482,7 +488,8 @@ Waypoints::GenerateTempPoint(const GeoPoint& location, const double terrain_alt,
 }
 
 void
-Waypoints::AddTempPoint(const GeoPoint& location, const double terrain_alt,
+Waypoints::AddTempPoint(const GeoPoint& location,
+                        std::optional<double> terrain_alt,
                         const char *name) noexcept
 {
   if (name == nullptr)
