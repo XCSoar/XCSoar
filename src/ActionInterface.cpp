@@ -253,6 +253,62 @@ ActionInterface::OffsetManualMacCready(double offset, bool to_devices) noexcept
     SetManualMacCready(mc, to_devices);
 }
 
+static void
+PutMacCreadyToDevices(double mc) noexcept
+{
+  if (!backend_components || !backend_components->devices)
+    return;
+
+  MessageOperationEnvironment env;
+  backend_components->devices->PutMacCready(mc, env);
+}
+
+void
+ActionInterface::OffsetSafetyMacCready(double offset) noexcept
+{
+  auto &settings = SetComputerSettings();
+  const double task_mc = settings.polar.glide_polar_task.GetMC();
+  const double old_safety = settings.task.safety_mc;
+
+  auto mc = old_safety + offset;
+  if (mc < 0)
+    mc = 0;
+  else if (mc > TaskBehaviour::SAFETY_MC_MAX)
+    mc = TaskBehaviour::SAFETY_MC_MAX;
+
+  if (mc == old_safety)
+    return;
+
+  settings.task.safety_mc = mc;
+
+  if (backend_components && backend_components->calculation_thread)
+    backend_components->calculation_thread->ForceTrigger();
+
+  InfoBoxManager::SetDirty();
+
+  /* Task MC above Safety MC is the faster command. Send the lower
+     Safety MC. Once Safety MC is no longer below Task MC, put Task
+     MC back. */
+  const bool limits = task_mc > mc;
+  const bool was_limiting = task_mc > old_safety;
+  if (limits)
+    PutMacCreadyToDevices(mc);
+  else if (was_limiting)
+    PutMacCreadyToDevices(task_mc);
+}
+
+void
+ActionInterface::PublishAbortDeviceMacCready(bool in_abort) noexcept
+{
+  const auto &settings = GetComputerSettings();
+  const double task_mc = settings.polar.glide_polar_task.GetMC();
+  const double safety_mc = settings.task.safety_mc;
+  if (!(task_mc > safety_mc))
+    return;
+
+  PutMacCreadyToDevices(in_abort ? safety_mc : task_mc);
+}
+
 void
 ActionInterface::SendMapSettings(const bool trigger_draw) noexcept
 {

@@ -200,6 +200,13 @@ best glide.  With MacCready above 0, wind is not used.
 (Touch-screen/PC only) Also used
 to adjust the MacCready setting if the InfoBox is active, by using the up/down
 cursor keys. Pressing the enter cursor key toggles `Auto MacCready' mode.
+In task abort the title and the value are Safety MC, and the
+comment is the still-air glide ratio at that MacCready, written as a
+ratio such as 25:1, instead of speed-to-fly. Up and down adjust Safety
+MC for this flight and leave the saved setting unchanged. If Task MC is
+higher than that Safety MC, the lower value is sent
+to connected devices. A lower Task MC is left unchanged. Leaving abort
+sends Task MC back when it had been replaced.
 An InfoBox dialogue is available}
 \ibi{Speed MacCready}{V MC}{MacCready speed-to-fly for optimal flight to the
 next waypoint. In cruise flight mode, this speed-to-fly is calculated for

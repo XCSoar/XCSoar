@@ -364,9 +364,12 @@ Version 7.46 - not yet released
     the Alternate InfoBoxes when the reach polar cannot reach it but
     a straight best glide still can. In the traffic-lights style it
     is light red, because orange is already the straight reach #2552
-  - show the GR for each safety MC value in the Safety Factors
-    setup, both next to the setting and while picking a value, based on
-    the active polar #2552
+  - show Safety MC and its glide ratio on the MacCready InfoBox during
+    task abort, adjust it with up and down for this flight, and send
+    it to devices when Task MC is higher
+  - show the GR, written as 25:1, for each safety MC value in
+    the Safety Factors setup, both next to the setting and while picking
+    a value, based on the active polar #2552
   - translate tracking interval units (sec/min) in SkyLines and
     LiveTrack24
   - collapse unused dependent settings rows so they do not leave a

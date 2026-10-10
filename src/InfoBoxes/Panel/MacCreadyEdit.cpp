@@ -4,9 +4,11 @@
 #include "MacCreadyEdit.hpp"
 #include "Look/DialogLook.hpp"
 #include "Widget/OffsetButtonsWidget.hpp"
+#include "Engine/Task/TaskType.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
 #include "ActionInterface.hpp"
+#include "Interface.hpp"
 #include "UIGlobals.hpp"
 
 class MacCreadyOffsetButtons final : public OffsetButtonsWidget {
@@ -21,7 +23,12 @@ protected:
 void
 MacCreadyOffsetButtons::OnOffset(double offset) noexcept
 {
-  ActionInterface::OffsetManualMacCready(Units::ToSysVSpeed(offset));
+  const auto step = Units::ToSysVSpeed(offset);
+  if (CommonInterface::Calculated().common_stats.task_type ==
+      TaskType::ABORT)
+    ActionInterface::OffsetSafetyMacCready(step);
+  else
+    ActionInterface::OffsetManualMacCready(step);
 }
 
 std::unique_ptr<Widget>

@@ -721,9 +721,14 @@ flight modes refer to Section~\ref{sec:flightmodes}. In this flight mode
 the configuration option Reach polar determines whether
 waypoint arrival heights in abort mode use the live Task MC or Safety MC.
 \config{reachpolar}
-Default is Safety MC.  Abort does not change the MacCready ring;
-speed-to-fly stays on Task MC.  Safety MC reach is not limited by
-maximum cruise speed.
+Default is Safety MC.  Abort does not change XCSoar's MacCready
+ring; speed-to-fly stays on Task MC.  The MacCready InfoBox shows
+Safety MC, with the glide ratio at that setting in place of
+speed-to-fly, and up and down adjust Safety MC for this flight.
+The saved Safety MC setting is left unchanged.  If Task MC is higher
+than Safety MC, that lower value is sent to connected devices, and
+Task MC is sent back when abort ends.  Safety MC reach is not limited
+by maximum cruise speed.
 
 With invoking abort mode the cross-country task is disabled. On the map radials
 are drawn pointing to the nearest landables to instantly
