@@ -1,0 +1,67 @@
+# Advisory complexity report with lizard (#3043): warns about functions
+# above CCN 25, 120 lines or 7 parameters in the C/C++ files a pull
+# request changes.  It never fails the build.  See doc/build.rst,
+# "Complexity report".
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+    - src/**
+    - .github/workflows/complexity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  lizard:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        # the merge commit and its first parent, the base branch
+        fetch-depth: 2
+
+    - uses: actions/setup-python@v7
+      with:
+        python-version: '3.14'
+
+    - name: Install lizard
+      run: pip install lizard==1.24.1
+
+    - name: Report complex functions
+      run: |
+        # a pull request checks the files it changes, a manual run
+        # all of src/
+        if [ "$GITHUB_EVENT_NAME" = pull_request ]; then
+          git diff --name-only --diff-filter=d HEAD^1 HEAD
+        else
+          git ls-files src
+        fi \
+          | grep -E '^src/.*\.(c|cpp|cxx|h|hpp|hxx)$' \
+          | grep -Ev '^src/(Topography/shapelib|zzip|Terrain/jasper)/' \
+          > files.txt || true
+
+        if [ ! -s files.txt ]; then
+          echo "No C/C++ files to check."
+          exit 0
+        fi
+
+        # lizard exits non-zero when it warns; the report is advisory
+        lizard -C 25 -L 120 -a 7 -w -f files.txt > report.txt || true
+
+        sed -E 's/^([^:]+):([0-9]+): warning: (.*)$/::warning file=\1,line=\2::\3/' \
+          report.txt
+
+        count=$(grep -c ': warning: ' report.txt || true)
+        {
+          echo "### Complexity report"
+          echo
+          echo "$(wc -l < files.txt) file(s) checked, $count function(s)" \
+               "above CCN 25, 120 lines or 7 parameters."
+          if [ "$count" -gt 0 ]; then
+            echo
+            echo '```'
+            cat report.txt
+            echo '```'
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"

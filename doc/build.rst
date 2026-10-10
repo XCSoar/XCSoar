@@ -836,12 +836,18 @@ Complexity report
 
 `lizard <https://github.com/terryyin/lizard>`__ points out functions
 which branch a lot (cyclomatic complexity, CCN), run long or take many
-parameters.  The check is advisory: it does not run in CI, does not
-block a commit, and existing code does not have to be changed to pass
-it.  It helps to keep new and changed functions small, and shows
-reviewers the ones that are not.
+parameters.  The check is advisory: it never fails a build or blocks a
+commit, and existing code does not have to be changed to pass it.  It
+helps to keep new and changed functions small, and shows reviewers
+the ones that are not.
 
-Run it on demand through :program:`pre-commit` (see
+The workflow :file:`.github/workflows/complexity.yml` runs it on every
+pull request that changes :file:`src/`, over the C/C++ files the pull
+request changes.  It shows each warning as an annotation on the pull
+request and lists them all in the job summary.  Started by hand
+(``workflow_dispatch``), it checks all of :file:`src/`.
+
+Locally, run it through :program:`pre-commit` (see
 :file:`.pre-commit-config.yaml`), on the staged files or on all of
 :file:`src/`::
 
