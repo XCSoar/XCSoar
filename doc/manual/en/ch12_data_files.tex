@@ -77,11 +77,12 @@ inaccessible.}: \url{http://soaringweb.org/TP}
 Several commercial and freely distributable programs exist for
 converting between different waypoint formats.
 
-Elevation field of a waypoint shouldn't be empty. If so, import of such
-a waypoint is skipped.
-But if the elevation of any waypoints is set to zero in the waypoint file,
-then XCSoar estimates the waypoint elevation from the terrain database
-if available.
+If the elevation field of a waypoint is empty, XCSoar takes the
+waypoint elevation from the terrain, as soon as the terrain file has
+been loaded, and again whenever another terrain file is loaded.  A
+waypoint outside of the terrain has no elevation, and no arrival
+altitude is calculated for it.  An elevation of zero in the waypoint
+file means sea level.
 
 \section{Airspace}
 

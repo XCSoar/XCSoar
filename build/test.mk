@@ -1176,10 +1176,12 @@ TEST_WAYPOINT_REACHABILITY_SOURCES = \
 $(eval $(call link-program,TestWaypointReachability,TEST_WAYPOINT_REACHABILITY))
 
 TEST_WAYPOINT_ELEVATION_SOURCES = \
+	$(SRC)/Waypoint/Factory.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestWaypointElevation.cpp \
-	$(SRC)/Engine/Waypoint/Waypoint.cpp
-TEST_WAYPOINT_ELEVATION_DEPENDS = GLIDE GEO MATH
+	$(TEST_SRC_DIR)/TestWaypointElevation.cpp
+TEST_WAYPOINT_ELEVATION_DEPENDS = TERRAIN WAYPOINT GLIDE PROFILE OPERATION IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,TestWaypointElevation,TEST_WAYPOINT_ELEVATION))
 
 TEST_VARIO_SYNTHESISER_SOURCES = \

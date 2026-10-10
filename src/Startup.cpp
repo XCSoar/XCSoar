@@ -84,6 +84,7 @@
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Waypoint/Factory.hpp"
 #include "Storage/StorageManager.hpp"
 #include "DataLayoutMigration.hpp"
 
@@ -311,6 +312,11 @@ try {
 
   DataGlobals::UnsetTerrain();
   DataGlobals::SetTerrain(std::move(new_terrain));
+
+  /* the waypoints were usually read before the terrain was there */
+  if (data_components->terrain && data_components->waypoints)
+    UpdateTerrainElevations(*data_components->waypoints,
+                            *data_components->terrain);
   DataGlobals::UpdateHome(false);
 
   SetAirspaceGroundLevels(*data_components->airspaces,

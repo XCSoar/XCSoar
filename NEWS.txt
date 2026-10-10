@@ -503,6 +503,10 @@ Version 7.46 - not yet released
   - fix a failed save destroying the existing profile, waypoints,
     task, polar or flight log when a temporary file cannot be
     created #3256
+  - take the elevation of a waypoint which has none in its file from
+    the terrain also when the terrain finishes loading after the
+    waypoints, as it does at startup, and again from each terrain
+    file loaded later #900
 * documentation
   - describe the Startup Task MC setting on the Safety Factors page
   - clarify Reach polar versus always-Safety-MC (InfoBoxes, waypoint
