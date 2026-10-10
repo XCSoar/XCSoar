@@ -583,6 +583,8 @@ Version 7.46 - not yet released
 * development
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
+  - add an advisory complexity report with lizard: an on-demand
+    pre-commit hook and a section in doc/build.rst #3043
   - build system: keep isnan(), isinf() and isfinite() working on GCC
     builds (Linux, Windows, Kobo); -ffast-math let GCC fold them away
     #3072
