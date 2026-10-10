@@ -197,6 +197,10 @@ Version 7.46 - not yet released
     stopped at 10,000 #3202
   - fix a task going straight from the start to the finish never
     finishing when it began inside the start zone #3314
+  - fix the task distance and the average speed of an FAI badge,
+    record or racing task growing with how deep the turn point
+    sector was flown into: they now run through the turn point
+    itself, as the task is scored #1412
 * analysis
   - plot the Analysis barograph against clock time (end labels and
     hourly tick marks) so successive flights without relaunch no
