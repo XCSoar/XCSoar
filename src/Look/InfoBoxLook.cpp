@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "InfoBoxLook.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "FontDescription.hpp"
 #include "Colors.hpp"
 #include "ui/canvas/Features.hpp" // for HAVE_TEXT_CACHE
@@ -55,9 +56,15 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors,
     colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_LIGHT_GREEN;
     colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_AMBER;
     colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
+    colors[InfoBoxData::COLOR_ORANGE] = COLOR_ORANGE;
   } else
-    std::fill(colors + 1, colors + 6, inverse ? COLOR_WHITE : COLOR_BLACK);
+    std::fill(colors + 1, colors + ARRAY_SIZE(colors),
+              inverse ? COLOR_WHITE : COLOR_BLACK);
 }
+
+static_assert(sizeof(InfoBoxLook::colors) / sizeof(Color) ==
+              InfoBoxData::COLOR_COUNT,
+              "InfoBox colour table must match InfoBoxData::COLOR_COUNT");
 
 void
 InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
