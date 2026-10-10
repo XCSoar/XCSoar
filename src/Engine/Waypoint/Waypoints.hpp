@@ -10,6 +10,7 @@
 #include "util/QuadTree.hxx"
 #include "util/Serial.hpp"
 
+#include <optional>
 #include <string_view>
 #include <functional>
 
@@ -188,16 +189,19 @@ public:
   /**
    * Generate a temporary waypoint with a given name.
    *
+   * @param terrain_alt the elevation, if known
    * @return waypoint copy
    */
-  Waypoint GenerateTempPoint(const GeoPoint &location, double terrain_alt,
+  Waypoint GenerateTempPoint(const GeoPoint &location,
+                             std::optional<double> terrain_alt,
                              const char *name) const noexcept;
 
   /**
    * Create a temporary point with a given name and replaces the previous one.
    * This modifies the waypoint database.
    */
-  void AddTempPoint(const GeoPoint& location, double terrain_alt,
+  void AddTempPoint(const GeoPoint& location,
+                    std::optional<double> terrain_alt,
                     const char *name) noexcept;
 
   /**
