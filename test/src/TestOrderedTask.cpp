@@ -1003,6 +1003,206 @@ TestWaitingInsideStart(std::unique_ptr<ObservationZonePoint> zone,
   }
 }
 
+/**
+ * Fly an out-and-return from the start line at 45 degrees north to the
+ * turn point at 46 degrees north and back, going on to 46.07 degrees
+ * (7.8 km beyond the turn point) before turning back.
+ *
+ * @param deep_planned receives the planned task distance while the
+ * glider is at its deepest point
+ * @return the statistics after the finish
+ */
+static TaskStats
+FlyOutAndReturn(const OrderedTaskPoint &turn, double &deep_planned)
+{
+  const OrderedTaskSettings &settings = task_behaviour.ordered_defaults;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+  task.Append(StartPoint(std::make_unique<LineSectorZone>(wp1->location),
+                         WaypointPtr(wp1), task_behaviour,
+                         settings.start_constraints));
+  task.Append(turn);
+  task.Append(FinishPoint(std::make_unique<LineSectorZone>(wp1->location),
+                          WaypointPtr(wp1), task_behaviour,
+                          settings.finish_constraints, false));
+  task.UpdateGeometry();
+  ok1(!IsError(task.CheckTask()));
+
+  /* across the start line and the finish line 111 m either side of
+     it, and out of the 10 km sector at 45.85 degrees */
+  static constexpr double route[] = {
+    44.999, 45.001, 45.5, 45.95, 46.03, 46.07, 45.85, 45.5, 45.001, 44.999,
+  };
+
+  auto state_last = MakeTimedAircraft(0, route[0], 2000, FloatDuration{3600});
+  task.Update(state_last, state_last, glide_polar);
+  for (unsigned i = 1; i < std::size(route); ++i) {
+    const auto state = MakeTimedAircraft(0, route[i], 2000,
+                                         FloatDuration{3600 + 600 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+
+    if (route[i] == 46.07) {
+      deep_planned = task.GetStats().total.planned.GetDistance();
+
+      /* turn back: an AAT area waits for the pilot to arm the
+         advance */
+      task.SetTaskAdvance().SetArmed(true);
+    }
+  }
+
+  return task.GetStats();
+}
+
+/**
+ * The distance of a task through a turn point whose sector is not
+ * scored by the boundary (the "FAI badges/records" task, a racing
+ * task) runs through the turn point itself, however deep the glider
+ * flies into the sector (#1412).  Only an AAT area counts the point
+ * reached.
+ */
+static void
+TestTurnPointDepth()
+{
+  ordered_task_settings.SetDefaults();
+
+  const double nominal = 2 * wp1->location.Distance(wp3->location);
+  const double deep = 2 * wp1->location.Distance(MakeGeoPoint(0, 46.07));
+
+  {
+    double deep_planned = 0;
+    const TaskStats stats =
+      FlyOutAndReturn(ASTPoint(SymmetricSectorZone::CreateFAISectorZone(
+                                 wp3->location),
+                               WaypointPtr(wp3), task_behaviour),
+                      deep_planned);
+
+    ok1(stats.task_finished);
+    ok1(equals(stats.distance_nominal, nominal, 1000));
+    ok1(equals(deep_planned, nominal, 1000));
+    ok1(equals(stats.total.planned.GetDistance(), nominal, 1000));
+    ok1(equals(stats.total.travelled.GetDistance(), nominal, 1000));
+
+    /* the "Speed average" of the Status dialog */
+    ok1(equals(stats.total.travelled.GetSpeed(),
+               nominal / stats.total.time_elapsed.count(), 1000));
+  }
+
+  {
+    double deep_planned = 0;
+    const TaskStats stats =
+      FlyOutAndReturn(AATPoint(std::make_unique<CylinderZone>(wp3->location,
+                                                              10000),
+                               WaypointPtr(wp3), task_behaviour),
+                      deep_planned);
+
+    ok1(stats.task_finished);
+    ok1(equals(deep_planned, deep, 1000));
+    ok1(equals(stats.total.planned.GetDistance(), deep, 1000));
+    ok1(equals(stats.total.travelled.GetDistance(), deep, 1000));
+  }
+}
+
+/**
+ * Unlike a turn point, a start cylinder is not counted at its center:
+ * the task distance is reduced by its radius (Annex A 6.3.1c, "less
+ * the radius of the Start Ring"), wherever the aircraft left it.
+ */
+static void
+TestStartCylinderExit()
+{
+  const OrderedTaskSettings &settings = task_behaviour.ordered_defaults;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+  task.Append(StartPoint(std::make_unique<CylinderZone>(wp1->location, 10000),
+                         WaypointPtr(wp1), task_behaviour,
+                         settings.start_constraints));
+  task.Append(ASTPoint(SymmetricSectorZone::CreateFAISectorZone(wp3->location),
+                       WaypointPtr(wp3), task_behaviour));
+  task.Append(FinishPoint(std::make_unique<LineSectorZone>(wp1->location),
+                          WaypointPtr(wp1), task_behaviour,
+                          settings.finish_constraints, false));
+  task.UpdateGeometry();
+  ok1(!IsError(task.CheckTask()));
+
+  /* leave the cylinder 5.6 km north of its center */
+  const auto inside = MakeTimedAircraft(0, 45.05, 2000, FloatDuration{3600});
+  const auto outside = MakeTimedAircraft(0, 45.1, 2000, FloatDuration{3660});
+  const auto on_leg = MakeTimedAircraft(0, 45.5, 2000, FloatDuration{4200});
+  task.Update(inside, inside, glide_polar);
+  task.Update(outside, inside, glide_polar);
+  ok1(task.GetStats().start.HasStarted());
+  task.Update(on_leg, outside, glide_polar);
+
+  const double expected = 2 * wp1->location.Distance(wp3->location) - 10000;
+  ok1(equals(task.GetStats().total.planned.GetDistance(), expected, 1000));
+}
+
+/**
+ * The point the search picks in an AAT area must suit the next turn
+ * point itself, not the point the aircraft reached deep in that turn
+ * point's sector.  Of the two points flown in the area, the western
+ * one gives the longer task through that deep point, but the eastern
+ * one through the turn point.
+ */
+static void
+TestAreaBeforeTurnPoint()
+{
+  const OrderedTaskSettings &settings = task_behaviour.ordered_defaults;
+
+  OrderedTask task(task_behaviour);
+  task.SetOrderedTaskSettings(settings);
+  task.Append(StartPoint(std::make_unique<LineSectorZone>(wp1->location),
+                         WaypointPtr(wp1), task_behaviour,
+                         settings.start_constraints));
+  task.Append(AATPoint(std::make_unique<CylinderZone>(wp2->location, 20000),
+                       WaypointPtr(wp2), task_behaviour));
+  task.Append(ASTPoint(SymmetricSectorZone::CreateFAISectorZone(wp3->location),
+                       WaypointPtr(wp3), task_behaviour));
+  task.Append(FinishPoint(std::make_unique<LineSectorZone>(wp1->location),
+                          WaypointPtr(wp1), task_behaviour,
+                          settings.finish_constraints, false));
+  task.UpdateGeometry();
+  ok1(!IsError(task.CheckTask()));
+
+  /* across the start line, west and east in the area, and 7 km deep
+     into the turn point sector, east of the turn point */
+  static constexpr GeoPoint west = MakeGeoPoint(-0.21, 45.35);
+  static constexpr GeoPoint east = MakeGeoPoint(0.23, 45.35);
+  static constexpr GeoPoint route[] = {
+    MakeGeoPoint(0, 44.999), MakeGeoPoint(0, 45.001), west, east,
+    MakeGeoPoint(0.23, 45.6), MakeGeoPoint(0.06, 46.06),
+    MakeGeoPoint(0, 45.5),
+  };
+
+  auto state_last = MakeTimedAircraft(route[0].longitude.Degrees(),
+                                      route[0].latitude.Degrees(), 2000,
+                                      FloatDuration{3600});
+  task.Update(state_last, state_last, glide_polar);
+  for (unsigned i = 1; i < std::size(route); ++i) {
+    const auto state = MakeTimedAircraft(route[i].longitude.Degrees(),
+                                         route[i].latitude.Degrees(), 2000,
+                                         FloatDuration{3600 + 600 * i});
+    task.Update(state, state_last, glide_polar);
+    state_last = state;
+
+    /* leave the area: it waits for the pilot to arm the advance */
+    task.SetTaskAdvance().SetArmed(true);
+  }
+
+  ok1(task.GetActiveIndex() == 3);
+
+  const double through_west = wp1->location.Distance(west) +
+    west.Distance(wp3->location) + wp3->location.Distance(wp1->location);
+  const double through_east = wp1->location.Distance(east) +
+    east.Distance(wp3->location) + wp3->location.Distance(wp1->location);
+  ok1(through_east > through_west);
+  ok1(equals(task.GetStats().total.planned.GetDistance(), through_east,
+             1000));
+}
+
 static void
 TestAll()
 {
@@ -1017,7 +1217,7 @@ TestAll()
 
 int main()
 {
-  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62);
+  plan_tests(746 + 8 + 31 + 5 + 49 + 123 + 62 + 12 + 3 + 4);
 
   task_behaviour.SetDefaults();
 
@@ -1046,6 +1246,9 @@ int main()
   TestStartNearestPoint();
   TestFinishNearestPoint();
   TestStartNearestPointContinuity();
+  TestTurnPointDepth();
+  TestStartCylinderExit();
+  TestAreaBeforeTurnPoint();
 
   return exit_status();
 }

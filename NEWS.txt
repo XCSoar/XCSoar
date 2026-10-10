@@ -182,6 +182,10 @@ Version 7.46 - not yet released
   - a Goto with no known elevation keeps bearing and distance, and
     leaves arrival height, required glide ratio, time estimates and
     the final-glide bar blank instead of assuming sea level #3286
+  - fix the task distance and the average speed of an FAI badge,
+    record or racing task growing with how deep the turn point
+    sector was flown into: they now run through the turn point
+    itself, as the task is scored #1412
 * analysis
   - plot the Analysis barograph against clock time (end labels and
     hourly tick marks) so successive flights without relaunch no
