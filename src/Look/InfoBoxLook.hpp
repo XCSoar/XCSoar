@@ -54,7 +54,7 @@ struct InfoBoxLook {
   /** the small font for the slot number in the arrange preview */
   Font preview_number_font;
 
-  Color colors[6];
+  Color colors[7];
 
   void Initialise(bool inverse, bool use_colors,
                   unsigned width, unsigned scale_title_font);
