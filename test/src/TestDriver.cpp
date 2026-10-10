@@ -821,6 +821,10 @@ public:
         checksums and a wrong payload; ignores a FILE_OK that does
         not end the current window */
     NANO_302,
+
+    /** as #NANO_302, but its first answer to FILE_DATA_LOST does not
+        arrive, as on a Bluetooth link that drops bytes */
+    NANO_302_LOSSY,
   };
 
 private:
@@ -834,6 +838,7 @@ private:
   std::vector<std::string> blocks;
   std::vector<int32_t> chain;
   bool corrupted = false, dropped = false, spliced = false;
+  bool resend_dropped = false;
 
 public:
   NanoLoggerPort(std::string_view _flight, Mode _mode) noexcept
@@ -859,6 +864,10 @@ public:
   }
 
 private:
+  bool IsNano302() const noexcept {
+    return mode == Mode::NANO_302 || mode == Mode::NANO_302_LOSSY;
+  }
+
   bool Damages() const noexcept {
     return mode != Mode::CLEAN && mode != Mode::NO_FILE;
   }
@@ -929,16 +938,21 @@ private:
         crc.Update(std::string_view{flight});
         reply += MakeSentence(fmt::format("PLXVC,FILE_CRC32,A,{}",
                                           crc.Get()));
-      } else if (mode != Mode::NANO_302 || n == window_start + window)
+      } else if (!IsNano302() || n == window_start + window)
         SendWindow(n);
     } else if (line.starts_with("$PLXVC,FILE_DATA_LOST,R,")) {
       if (mode == Mode::S_VARIO)
         return;
 
+      if (mode == Mode::NANO_302_LOSSY && !resend_dropped) {
+        resend_dropped = true;
+        return;
+      }
+
       const unsigned n = ParseUnsigned(line.c_str() + 24);
       const unsigned end = std::min<unsigned>(window_start + window,
                                               blocks.size());
-      if (mode == Mode::NANO_302) {
+      if (IsNano302()) {
         reply += Block(n, '1', true);
         for (unsigned i = n + 1; i < end; ++i) {
           const std::string junk(blocks[i].size(), '\xe0');
@@ -991,7 +1005,8 @@ TestNanoDownloadFlight()
 
   using Mode = NanoLoggerPort::Mode;
   for (const Mode mode : {Mode::CLEAN, Mode::DAMAGE, Mode::NO_FILE,
-                          Mode::S_VARIO, Mode::NANO_302}) {
+                          Mode::S_VARIO, Mode::NANO_302,
+                          Mode::NANO_302_LOSSY}) {
     NanoLoggerPort port{flight, mode};
     NullOperationEnvironment env;
     File::Delete(path);
@@ -4426,7 +4441,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
-             + 15 /* NanoDownloadFlight */
+             + 18 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
              + 17 /* LXNAVQNH */
              + 25 /* LXNAVQNHModel */
