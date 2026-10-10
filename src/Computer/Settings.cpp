@@ -30,7 +30,7 @@ PlacesOfInterestSettings::SetHome(const Waypoint &wp)
   home_waypoint = wp.id;
   home_location = wp.location;
   home_location_available = true;
-  if (wp.has_elevation) {
+  if (wp.HasElevation()) {
     home_elevation = wp.elevation;
     home_elevation_available = true;
   } else

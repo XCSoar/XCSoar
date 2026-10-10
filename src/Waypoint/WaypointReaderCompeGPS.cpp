@@ -197,7 +197,7 @@ WaypointReaderCompeGPS::ParseLine(const char *line, Waypoints &waypoints)
 
   // Parse altitude
   if (ParseAltitude(line, waypoint.elevation))
-    waypoint.has_elevation = true;
+    waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   else
     factory.FallbackElevation(waypoint);
 

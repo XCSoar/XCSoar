@@ -137,7 +137,7 @@ SolveManualAlternate(const Waypoint &waypoint) noexcept
   GlideResult solution;
   solution.Reset();
 
-  if (!waypoint.has_elevation)
+  if (!waypoint.HasElevation())
     return solution;
 
   if (!basic.location_available || !basic.NavAltitudeAvailable())

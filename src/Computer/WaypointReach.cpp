@@ -22,7 +22,7 @@ CalculateWaypointReachRoute(const Waypoint &waypoint,
 {
   WaypointReach reach;
 
-  if (!waypoint.has_elevation)
+  if (!waypoint.HasElevation())
     return reach;
 
   const double elevation = waypoint.elevation +
@@ -58,7 +58,7 @@ CalculateWaypointReachDirect(const Waypoint &waypoint, const MoreData &basic,
 
   WaypointReach reach;
 
-  if (!waypoint.has_elevation)
+  if (!waypoint.HasElevation())
     return reach;
 
   const auto elevation = waypoint.elevation +
@@ -90,7 +90,7 @@ PromoteBestGlide(const WaypointReachability reachability,
   if (!glide_polar.IsValid() || glide_polar.GetMC() <= 0)
     return reachability;
   if (!basic.location_available || !basic.NavAltitudeAvailable() ||
-      !waypoint.IsLandable() || !waypoint.has_elevation)
+      !waypoint.IsLandable() || !waypoint.HasElevation())
     return reachability;
 
   const double elevation = waypoint.elevation + safety_height_arrival;

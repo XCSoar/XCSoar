@@ -2663,19 +2663,19 @@ TestLXNavDeclare()
                                 Angle::Degrees(48.778)));
     wp_start.name = "START";
     wp_start.elevation = 585;
-    wp_start.has_elevation = true;
+    wp_start.elevation_source = Waypoint::ElevationSource::FILE;
 
     Waypoint wp_tp1(GeoPoint(Angle::Degrees(9.702),
                               Angle::Degrees(47.192)));
     wp_tp1.name = "TP1";
     wp_tp1.elevation = 572;
-    wp_tp1.has_elevation = true;
+    wp_tp1.elevation_source = Waypoint::ElevationSource::FILE;
 
     Waypoint wp_finish(GeoPoint(Angle::Degrees(11.552),
                                  Angle::Degrees(47.735)));
     wp_finish.name = "FINISH";
     wp_finish.elevation = 420;
-    wp_finish.has_elevation = true;
+    wp_finish.elevation_source = Waypoint::ElevationSource::FILE;
 
     decl.Append(wp_start);
     decl.Append(wp_tp1);
@@ -2817,7 +2817,7 @@ TestLXNavDeclare()
                           Angle::Degrees(47.811)));
     wp.name = "EBENSEE";
     wp.elevation = 420;
-    wp.has_elevation = true;
+    wp.elevation_source = Waypoint::ElevationSource::FILE;
 
     Declaration::TurnPoint tp(wp);
     const auto c_record = LXNavDeclare::FormatTurnPointCRecord(tp);
@@ -3336,7 +3336,7 @@ TestDeclare(const struct DeviceRegister &driver)
   Waypoint wp(gp);
   wp.name = "Foo";
   wp.elevation = 123;
-  wp.has_elevation = true;
+  wp.elevation_source = Waypoint::ElevationSource::FILE;
   declaration.Append(wp);
   declaration.Append(wp);
   declaration.Append(wp);

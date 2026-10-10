@@ -78,7 +78,7 @@ MakeWaypoint(const char *name, int altitude,
                        Angle::Degrees(latitude)));
   wp.name = name;
   wp.elevation = altitude;
-  wp.has_elevation = true;
+  wp.elevation_source = Waypoint::ElevationSource::FILE;
   return wp;
 }
 

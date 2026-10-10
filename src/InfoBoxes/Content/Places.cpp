@@ -165,7 +165,7 @@ ComputeActiveWaypointGlide(const MoreData &basic,
                            const DerivedInfo &calculated,
                            const Waypoint &waypoint) noexcept
 {
-  if (!waypoint.has_elevation) {
+  if (!waypoint.HasElevation()) {
     GlideResult result;
     result.Reset();
     return result;

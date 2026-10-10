@@ -12,7 +12,7 @@ WaypointFactory::FallbackElevation(Waypoint &waypoint) const noexcept
     const auto h = terrain->GetTerrainHeight(waypoint.location);
     if (!h.IsSpecial()) {
       waypoint.elevation = h.GetValue();
-      waypoint.has_elevation = true;
+      waypoint.elevation_source = Waypoint::ElevationSource::TERRAIN;
       return true;
     }
   }

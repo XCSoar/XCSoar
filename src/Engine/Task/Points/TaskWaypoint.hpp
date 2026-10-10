@@ -48,7 +48,7 @@ public:
    */
   [[gnu::pure]]
   bool HasElevation() const noexcept {
-    return waypoint->has_elevation;
+    return waypoint->HasElevation();
   }
 
 protected:
