@@ -128,7 +128,7 @@ struct TaskBehaviour {
   /**
    * Safety MacCready (m/s) for terrain reach, landable colours, abort
    * and the Alternates list when Reach polar is Safety MC.  Alternate
-   * InfoBoxes and waypoint Alt. diff. MC safety always use this value.
+   * InfoBoxes and waypoint Alt. diff. Safety MC always use this value.
    */
   double safety_mc;
 

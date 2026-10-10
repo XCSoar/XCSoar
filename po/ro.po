@@ -2613,10 +2613,10 @@ msgstr "Direcție și distanță"
 msgid "Alt. diff. MC 0"
 msgstr "Diferență de înălțime MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Diferență de înălțime MC siguranță"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Diferența de înălțime MC curentă"
 
 #, no-c-format

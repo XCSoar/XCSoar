@@ -2597,10 +2597,10 @@ msgstr "각도와 거리"
 msgid "Alt. diff. MC 0"
 msgstr "고도차(MC0)"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "고도차안전MC"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "고도차현재MC"
 
 #, no-c-format

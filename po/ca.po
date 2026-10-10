@@ -2610,10 +2610,10 @@ msgstr "Rumb i distància"
 msgid "Alt. diff. MC 0"
 msgstr "Diferència d'altitud MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Diferència d'altitud MC de seguretat"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Diferència d'altitud MC actual"
 
 #, no-c-format

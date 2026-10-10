@@ -2602,10 +2602,10 @@ msgstr "Začetni smerni kot in razdalja"
 msgid "Alt. diff. MC 0"
 msgstr "Višinski razlika MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Višinski razlika MC varnost"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Višinski razlika MC trenutno"
 
 #, no-c-format

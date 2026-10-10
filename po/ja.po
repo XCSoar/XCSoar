@@ -2630,10 +2630,10 @@ msgstr "進路および距離"
 msgid "Alt. diff. MC 0"
 msgstr "高度差マクレディー０"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "高度差　マクレディー　安全"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "高度差　マクレディー現在値"
 
 #, no-c-format

@@ -2597,10 +2597,10 @@ msgstr "Bäring och Distans"
 msgid "Alt. diff. MC 0"
 msgstr "Alt. diff. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Alt. diff. MC säker"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Alt. diff. MC aktuell"
 
 #, no-c-format

@@ -2606,10 +2606,10 @@ msgstr "Orientação e Distância"
 msgid "Alt. diff. MC 0"
 msgstr "Alt. dif. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Alt. dif. MC seguro"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Alt. dif. MC atual"
 
 #, no-c-format

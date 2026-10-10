@@ -2569,10 +2569,10 @@ msgstr "దశాబందం మరియు విలీనత"
 msgid "Alt. diff. MC 0"
 msgstr "అధిక ఉత్తాపం MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "అధిక ఉత్తాపం MC భద్రత"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "అధిక ఉత్తాపం MC కొనసాగిన"
 
 #, no-c-format

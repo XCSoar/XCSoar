@@ -2591,10 +2591,10 @@ msgstr "Smer i udaljenost"
 msgid "Alt. diff. MC 0"
 msgstr "Razlika u visini MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Razlika u visini MC za sigurnosnu vrednost"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Trenutna razlika u visini MC"
 
 #, no-c-format

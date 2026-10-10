@@ -2610,10 +2610,10 @@ msgstr "Smer a vzdialenosť"
 msgid "Alt. diff. MC 0"
 msgstr "Výšk. rozdiel MC0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Výšk. rozdiel na bezpečnom MC"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Výškový rozdiel na akt. MC"
 
 #, no-c-format

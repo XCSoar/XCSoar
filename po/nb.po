@@ -2615,10 +2615,10 @@ msgstr "Retning og Distanse"
 msgid "Alt. diff. MC 0"
 msgstr "Alt. diff. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Høydediff MC sikkerhet"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Høyde diff. MC nå"
 
 #, no-c-format

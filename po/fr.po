@@ -2620,10 +2620,10 @@ msgstr "Cap et distance"
 msgid "Alt. diff. MC 0"
 msgstr "Diff. Alt. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Diff. Alt. MC sécurité"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Diff. Alt. MC act."
 
 #, no-c-format
