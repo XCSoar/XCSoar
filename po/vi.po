@@ -2589,10 +2589,10 @@ msgstr "Phương hướng và Khoảng cách"
 msgid "Alt. diff. MC 0"
 msgstr "Độ ca khác biệt MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Độ ca khác biệt MC an toàn"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Độ ca khác biệt MC hiện tại"
 
 #, no-c-format

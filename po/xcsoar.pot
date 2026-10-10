@@ -3725,10 +3725,10 @@ msgstr ""
 msgid "Alt. diff. MC 0"
 msgstr ""
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr ""
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr ""
 
 #, no-c-format

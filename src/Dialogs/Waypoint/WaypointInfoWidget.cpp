@@ -221,12 +221,12 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent,
                    MacCready::Solve(settings.task.glide,
                                     gp0, glide_state));
 
-    AddGlideResult(_("Alt. diff. MC safety"),
+    AddGlideResult(_("Alt. diff. Safety MC"),
                    MacCready::Solve(settings.task.glide,
                                     calculated.glide_polar_safety,
                                     glide_state));
 
-    AddGlideResult(_("Alt. diff. MC current"),
+    AddGlideResult(_("Alt. diff. Task MC"),
                    MacCready::Solve(settings.task.glide,
                                     settings.polar.glide_polar_task,
                                     glide_state));

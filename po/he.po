@@ -2683,10 +2683,10 @@ msgstr "כיוון ומרחק"
 msgid "Alt. diff. MC 0"
 msgstr "הפרש גובה MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "הפרש גובה MC בטיחות"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "הפרש גובה MC נוכחי"
 
 #, no-c-format

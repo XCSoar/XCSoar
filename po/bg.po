@@ -2613,10 +2613,10 @@ msgstr "Азимут и разстояние"
 msgid "Alt. diff. MC 0"
 msgstr "ΔH при MC=0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "ΔH при MC-безопасно"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "ΔH при MC-текущо"
 
 #, no-c-format

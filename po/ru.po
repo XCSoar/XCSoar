@@ -2606,10 +2606,10 @@ msgstr "Азимут и расстояние"
 msgid "Alt. diff. MC 0"
 msgstr "Разница высоты MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Разница высоты MC безопасность"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Разница высоты MC текущая"
 
 #, no-c-format

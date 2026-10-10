@@ -2598,10 +2598,10 @@ msgstr "Suunta ja etäisyys"
 msgid "Alt. diff. MC 0"
 msgstr "Korkeustila MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Korkeustila turvallisuus"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Korkeustila nykyinen"
 
 #, no-c-format

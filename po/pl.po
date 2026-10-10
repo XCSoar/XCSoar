@@ -2618,10 +2618,10 @@ msgstr "Kurs i Odległość"
 msgid "Alt. diff. MC 0"
 msgstr "Różn.H dla MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Różn.H dla MC bezp"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Różn.H dla MC bież"
 
 #, no-c-format

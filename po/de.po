@@ -2619,10 +2619,10 @@ msgstr "Peilung und Distanz"
 msgid "Alt. diff. MC 0"
 msgstr "H Diff MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "H Diff MC sicher"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "H Diff MC aktuell"
 
 #, no-c-format

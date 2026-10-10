@@ -2599,10 +2599,10 @@ msgstr "Irány és távolság"
 msgid "Alt. diff. MC 0"
 msgstr "Mgsg. tblt. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Mgsg. tblt. MC biz"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Mgsg. tblt. MC akt"
 
 #, no-c-format

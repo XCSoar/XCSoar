@@ -2598,10 +2598,10 @@ msgstr "Nuoroda ir atstumas"
 msgid "Alt. diff. MC 0"
 msgstr "Altinis skirtumas MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Altinis skirtumas MC saugumas"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Altinis skirtumas MC dabartė"
 
 #, no-c-format

@@ -2590,10 +2590,10 @@ msgstr "Yön ve Mesafe"
 msgid "Alt. diff. MC 0"
 msgstr "Yükseklik farkı MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Yükseklik farkı güvenli MC"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Yükseklik farkı mevcut MC"
 
 #, no-c-format

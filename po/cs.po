@@ -2599,10 +2599,10 @@ msgstr "Směr a vzdálenost"
 msgid "Alt. diff. MC 0"
 msgstr "ΔH při MC0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "ΔH při MC bezp"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "ΔH při MC akt"
 
 #, no-c-format

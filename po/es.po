@@ -2616,10 +2616,10 @@ msgstr "Rumbo y distancia"
 msgid "Alt. diff. MC 0"
 msgstr "Dif. Alt. MC 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Diff. alt. MC de seguridad"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Dif. alt. MC actual"
 
 #, no-c-format

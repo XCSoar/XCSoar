@@ -2559,10 +2559,10 @@ msgstr "方位和距離"
 msgid "Alt. diff. MC 0"
 msgstr "MC設置為0的高差"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "MC設置為安全高度的高車"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "當前MC的高差"
 
 #, no-c-format

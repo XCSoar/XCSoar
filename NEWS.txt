@@ -431,6 +431,8 @@ Version 7.46 - not yet released
     the distance to the next waypoint
 * ui
   - rename Reach polar Task to Task MC, matching Safety MC
+  - rename the waypoint arrival rows to Alt. diff. Safety MC and
+    Alt. diff. Task MC
   - add pinch-to-zoom on waypoint pictures and downloaded weather
     images: the image scales smoothly and follows the two fingers,
     which also pan it #2868

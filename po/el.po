@@ -2617,10 +2617,10 @@ msgstr "Στοίχημα και απόσταση"
 msgid "Alt. diff. MC 0"
 msgstr "Διαφορά αλτιτυπίας MacCready 0"
 
-msgid "Alt. diff. MC safety"
+msgid "Alt. diff. Safety MC"
 msgstr "Διαφορά αλτιτυπίας MacCready ασφάλεια"
 
-msgid "Alt. diff. MC current"
+msgid "Alt. diff. Task MC"
 msgstr "Διαφορά αναταράχησης MacCready"
 
 #, no-c-format

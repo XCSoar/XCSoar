@@ -140,7 +140,7 @@ RouteConfigPanel::Prepare(ContainerWindow &parent,
           _("Which MacCready is used for terrain reach, landable "
             "colours, abort and the Alternates list. This still applies "
             "when Reach mode is Off. The working line always uses Task MC. "
-            "Alternate InfoBoxes and waypoint Alt. diff. MC safety always "
+            "Alternate InfoBoxes and waypoint Alt. diff. Safety MC always "
             "use Safety MC."),
           reach_polar_list, (unsigned)route_planner.reach_polar_mode);
   SetExpertRow(ReachPolarMode);
