@@ -575,6 +575,8 @@ Version 7.46 - not yet released
   - point the manuals and store descriptions at the current manual,
     GitHub Discussions, the issue tracker, and the turnpoint and
     airspace exchanges
+  - add Lua examples for altitude reminders: landing checklist and
+    landing gear on the way down, oxygen on the way up #884
 * development
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
