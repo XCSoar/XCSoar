@@ -718,7 +718,7 @@ InputEvents::eventAddWaypoint(const char *misc)
     Waypoint edit_waypoint = way_points.Create(basic.location);
     if (calculated.terrain_valid) {
       edit_waypoint.elevation = calculated.terrain_altitude;
-      edit_waypoint.has_elevation = true;
+      edit_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
     }
     if (dlgWaypointEditShowModal(edit_waypoint) == WaypointEditResult::CANCEL ||
         edit_waypoint.name.empty()) {

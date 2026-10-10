@@ -271,7 +271,7 @@ bool ParseSeeYou(WaypointFactory factory, Waypoints &waypoints, BufferedReader &
     if ( params_num > iElevation &&
          !params[iElevation].empty() &&
          ParseAltitude(params[iElevation], new_waypoint.elevation) )
-      new_waypoint.has_elevation = true;
+      new_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
     else
       factory.FallbackElevation(new_waypoint);
 

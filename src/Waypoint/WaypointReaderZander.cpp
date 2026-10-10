@@ -164,7 +164,7 @@ WaypointReaderZander::ParseLine(const char *line, Waypoints &way_points)
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   if (ParseAltitude(line + 30, new_waypoint.elevation))
-    new_waypoint.has_elevation = true;
+    new_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   else
     factory.FallbackElevation(new_waypoint);
 

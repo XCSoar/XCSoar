@@ -89,7 +89,7 @@ WaypointReaderOzi::ParseLine(const char *line, Waypoints &way_points)
 
   if (elevation_feet) {
     new_waypoint.elevation = Units::ToSysUnit(*elevation_feet, Unit::FEET);
-    new_waypoint.has_elevation = true;
+    new_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   } else
     factory.FallbackElevation(new_waypoint);
 

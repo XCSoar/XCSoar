@@ -40,14 +40,14 @@ TaskWaypointTest::Run()
   Waypoint wp(gp);
   wp.name = "Test";
   wp.elevation = 42;
-  wp.has_elevation = true;
+  wp.elevation_source = Waypoint::ElevationSource::FILE;
 
   DummyTaskWaypoint tw(TaskPointType::AST, WaypointPtr(new Waypoint(wp)));
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == "Test");
   ok1(equals(tw.GetBaseElevation(), 42));
-  ok1(wp2.has_elevation);
+  ok1(wp2.HasElevation());
   ok1(equals(tw.GetBaseElevation(), wp2.elevation));
   ok1(equals(wp2.location, gp));
   ok1(equals(tw.GetLocation(), gp));
@@ -58,7 +58,9 @@ MakeGotoWaypoint(double elevation, bool has_elevation) noexcept
 {
   Waypoint wp(GeoPoint(Angle::Degrees(7.05), Angle::Degrees(47.05)));
   wp.elevation = elevation;
-  wp.has_elevation = has_elevation;
+  wp.elevation_source = has_elevation
+    ? Waypoint::ElevationSource::FILE
+    : Waypoint::ElevationSource::NONE;
   return WaypointPtr(new Waypoint(wp));
 }
 

@@ -236,7 +236,7 @@ WaypointReaderWinPilot::ParseLine(const char *line, Waypoints &waypoints)
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
   if (ParseAltitude(NextColumn(rest), new_waypoint.elevation))
-    new_waypoint.has_elevation = true;
+    new_waypoint.elevation_source = Waypoint::ElevationSource::FILE;
   else
     factory.FallbackElevation(new_waypoint);
 

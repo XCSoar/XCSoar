@@ -29,7 +29,7 @@ MakeWaypoint(Waypoint wp, double altitude, std::string name, unsigned id) noexce
   wp.name = name;
   wp.id = id;
   wp.elevation = altitude;
-  wp.has_elevation = true;
+  wp.elevation_source = Waypoint::ElevationSource::FILE;
   return wp;
 }
 

@@ -28,7 +28,7 @@ FindHomeId(Waypoints &waypoints,
   settings.home_location = wp->location;
   settings.home_location_available = true;
 
-  if (wp->has_elevation) {
+  if (wp->HasElevation()) {
     settings.home_elevation = wp->elevation;
     settings.home_elevation_available = true;
   } else
@@ -54,7 +54,7 @@ FindHomeLocation(Waypoints &waypoints,
     return nullptr;
   }
 
-  if (wp->has_elevation) {
+  if (wp->HasElevation()) {
     settings.home_elevation = wp->elevation;
     settings.home_elevation_available = true;
   } else

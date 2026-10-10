@@ -6,6 +6,7 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 
 class RasterTerrain;
+class Waypoints;
 
 /**
  * This class can create new Waypoint instances and can help fill out
@@ -43,3 +44,14 @@ public:
    */
   bool FallbackElevation(Waypoint &waypoint) const noexcept;
 };
+
+/**
+ * Look up the elevation of each waypoint which has none, or one from
+ * an earlier terrain, in the given terrain.  Call this after a terrain
+ * was loaded: the waypoints are usually read before that.  A waypoint
+ * outside of the terrain loses an elevation it had from the terrain;
+ * one given by its file is kept.
+ */
+void
+UpdateTerrainElevations(Waypoints &waypoints,
+                        const RasterTerrain &terrain) noexcept;
