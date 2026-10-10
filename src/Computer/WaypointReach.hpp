@@ -14,6 +14,21 @@ struct SpeedVector;
 class MacCready;
 class ProtectedRoutePlanner;
 
+class GlidePolar;
+struct GlideSettings;
+
+/**
+ * Keep UNREACHABLE when best glide also misses. A straight glide at
+ * the best-L/D speed that still arrives becomes BEST_GLIDE.
+ */
+[[nodiscard]]
+WaypointReachability
+PromoteBestGlide(WaypointReachability reachability,
+                 const Waypoint &waypoint, const MoreData &basic,
+                 const SpeedVector &wind, const GlidePolar &glide_polar,
+                 const GlideSettings &glide,
+                 double safety_height_arrival) noexcept;
+
 /**
  * Calculate the reachability of the given waypoint using the route
  * planner, i.e. taking terrain into account.
