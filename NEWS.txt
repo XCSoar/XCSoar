@@ -199,6 +199,8 @@ Version 7.46 - not yet released
   - add a Startup Task MC setting (0 to 5 m/s) for the MacCready used at
     startup, instead of copying Safety MC into speed-to-fly #2552
   - default Safety MC to 3.2 m/s, about 25:1 on the default LS-8 polar
+  - let Safety MC reach fly faster than maximum cruise speed, so a
+    higher Safety MC keeps making the glide steeper #2552
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft
@@ -358,6 +360,9 @@ Version 7.46 - not yet released
     computed list #2912
   - show the same terrain reach on the Alternates list as the map,
     including turning around obstacles
+  - show the GR for each safety MC value in the Safety Factors
+    setup, both next to the setting and while picking a value, based on
+    the active polar #2552
   - translate tracking interval units (sec/min) in SkyLines and
     LiveTrack24
   - collapse unused dependent settings rows so they do not leave a

@@ -722,7 +722,8 @@ the configuration option Reach polar determines whether
 waypoint arrival heights in abort mode use the live Task MC or Safety MC.
 \config{reachpolar}
 Default is Safety MC.  Abort does not change the MacCready ring;
-speed-to-fly stays on Task MC.
+speed-to-fly stays on Task MC.  Safety MC reach is not limited by
+maximum cruise speed.
 
 With invoking abort mode the cross-country task is disabled. On the map radials
 are drawn pointing to the nearest landables to instantly
@@ -748,7 +749,6 @@ heading, you were taking whilst still task oriented.
 Landable colours and arrival altitude use the same terrain reach as the
 map, including turns around obstacles when Reach mode is Turning.
 \config{turningreach}
-
 As is with every waypoint list, additional information might be called by tapping \bmenuw{Details} before deciding which final to go. Select a waypoint from the list and push \bmenuw{Goto}.
 \sketch{figures/alternates_list.png}
 

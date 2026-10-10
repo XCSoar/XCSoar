@@ -22,6 +22,7 @@ private:
   void TestBallastOverload();
   void TestBugs();
   void TestMC();
+  void TestSafetyMCPastCruise();
   void TestDensityRatio();
   void TestDensityRatioMC();
   void TestNextLegEqThermal();
@@ -185,6 +186,35 @@ GlidePolarTest::TestMC()
 }
 
 void
+GlidePolarTest::TestSafetyMCPastCruise()
+{
+  const double cruise = Units::ToSysUnit(120, Unit::KILOMETER_PER_HOUR);
+  polar.SetDensityRatio(1.0);
+  polar.SetMC(0);
+  polar.SetVMax(cruise);
+
+  polar.SetMC(4);
+  const double expected = sqrt((polar.polar.c + 4) / polar.polar.a);
+  ok1(expected > cruise);
+  ok1(equals(polar.GetVBestLD(), cruise));
+  ok1(equals(polar.GetVMax(), cruise));
+  const double ld_at_cap = polar.GetBestLD();
+
+  polar.SetMCLimitedByCruise(false);
+  ok1(equals(polar.GetVBestLD(), expected));
+  ok1(equals(polar.GetVBestLD(), polar.GetBestGlideRatioSpeed(0)));
+  ok1(equals(polar.GetVMax(), cruise));
+  ok1(polar.GetBestLD() < ld_at_cap);
+  ok1(equals(polar.SpeedToFly(0, 0), cruise));
+
+  polar.SetMCLimitedByCruise(true);
+  ok1(equals(polar.GetVBestLD(), cruise));
+
+  polar.SetMC(0);
+  polar.SetVMax(Units::ToSysUnit(200, Unit::KILOMETER_PER_HOUR));
+}
+
+void
 GlidePolarTest::TestDensityRatio()
 {
   // Baseline values at sea level (density_ratio == 1.0 by default)
@@ -310,6 +340,7 @@ GlidePolarTest::Run()
   TestBallastOverload();
   TestBugs();
   TestMC();
+  TestSafetyMCPastCruise();
   TestDensityRatio();
   TestDensityRatioMC();
   TestNextLegEqThermal();
@@ -341,7 +372,7 @@ TestFallback()
 
 int main()
 {
-  plan_tests(69 + 3 + 21 + 5);
+  plan_tests(69 + 3 + 21 + 5 + 9);
 
   GlidePolarTest test;
   test.Run();

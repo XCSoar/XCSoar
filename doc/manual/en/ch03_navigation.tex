@@ -553,7 +553,8 @@ calculations is configurable\config{reachpolar}:
 \item[Task MC] The live task MacCready (the same value as speed-to-fly).
 \item[Safety MC] A separate MacCready for conservative reach.  Default is
   3.2~m/s, about 25:1 on the default LS-8 polar.  Higher values treat fewer
-  fields as reachable.  Speed-to-fly is not affected.
+  fields as reachable.  The Safety MC speed is not limited by maximum
+  cruise speed.  Speed-to-fly still stops at maximum cruise speed.
 \end{description}
 The working line always uses Task MC.  Alternate InfoBoxes and the
 waypoint Alt.\ diff.\ MC safety figure always use Safety MC, even if

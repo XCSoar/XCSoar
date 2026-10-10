@@ -141,6 +141,18 @@ GlidePolar::SetMC(const double _mc) noexcept
 }
 
 void
+GlidePolar::SetMCLimitedByCruise(const bool limited) noexcept
+{
+  if (limit_mc_to_cruise == limited)
+    return;
+
+  limit_mc_to_cruise = limited;
+
+  if (IsValid())
+    UpdateBestLD();
+}
+
+void
 GlidePolar::SetDensityRatio(const double dr) noexcept
 {
   const double safe_dr = (dr > 0.0 && std::isfinite(dr)) ? dr : 1.0;
@@ -230,7 +242,12 @@ GlidePolar::UpdateBestLD() noexcept
      with GlidePolarSpeedToFly and GetBestGlideRatioSpeed() */
   const double vbld = sqrt((polar.c * density_ratio + mc) *
                            density_ratio / polar.a);
-  VbestLD = std::clamp(vbld, Vmin, Vmax);
+  /* Speed-to-fly stops at maximum cruise. Reach on the safety polar
+     does not, so a Safety MC whose speed lies past that cap still
+     steepens the glide. */
+  VbestLD = std::max(vbld, Vmin);
+  if (limit_mc_to_cruise)
+    VbestLD = std::min(VbestLD, Vmax);
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif
