@@ -828,10 +828,8 @@ TestStartLegOrigin()
        be crossed, i.e. on the boundary of the start cylinder */
     ok1(equals(wp1->location.Distance(origin), START_RADIUS));
 
-    /* the origin stays on the boundary and moves by at most one
-       node.  The two writers minimise different objectives over the
-       same nodes, so they can settle one node apart; this bounds
-       that step. */
+    /* the origin stays on the boundary and steps by at most one
+       sampled node as the aircraft drifts */
     ok1(!previous.IsValid() ||
         previous.Distance(origin) < 1.5 * BOUNDARY_STEP);
 
@@ -884,13 +882,9 @@ FindBestStartNode(const OrderedTask &task, const GeoPoint &location)
 }
 
 /**
- * While the start is the active task point, the task navigates to the
- * start boundary node giving the shortest flight to the next task
- * point, and the bearing line points at the same node.  The minimum
- * distance search, which also writes a start node, must not move it.
- *
- * A large AAT area next makes the two searches disagree often.  A
- * reset task forgets the node chosen during the previous flight.
+ * While the start is active, the leg and the bearing use the
+ * boundary node find_best_start() chose.  The minimum-distance
+ * search must not move it.  Reset forgets that node.
  */
 static void
 TestStartNavigationLocation()
@@ -920,7 +914,7 @@ TestStartNavigationLocation()
     task.Update(state, state_last, glide_polar);
     state_last = state;
 
-    const GeoPoint origin = task.GetPoint(0).GetLocationRemaining();
+    const GeoPoint &origin = task.GetPoint(0).GetLocationRemaining();
 
     ok1(task.GetActiveTaskPointIndex() == 0);
     ok1(FindBestStartNode(task, state.location).Distance(origin) < 1);

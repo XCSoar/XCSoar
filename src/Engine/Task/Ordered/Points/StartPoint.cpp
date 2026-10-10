@@ -25,9 +25,6 @@ const GeoPoint &
 StartPoint::GetLocationRemaining() const noexcept
 {
   if (IsCurrent() && start_location.IsValid())
-    /* the start has not been crossed yet: navigate to the boundary
-       point find_best_start() chose, not to whatever node the
-       distance searches last wrote */
     return start_location;
 
   return OrderedTaskPoint::GetLocationRemaining();

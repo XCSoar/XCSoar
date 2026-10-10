@@ -29,16 +29,9 @@ class StartPoint final : public OrderedTaskPoint {
   StartConstraints constraints;
 
   /**
-   * The point on the observation zone boundary the aircraft is
-   * expected to cross, as chosen by find_best_start().  This is what
-   * the task navigates to while the start is the active task point.
-   *
-   * It is kept apart from the search point written by the minimum
-   * distance search, which answers a different question and is
-   * updated on a different schedule.
-   *
-   * Invalid until find_best_start() has run, which does not happen
-   * before the aircraft is flying, and again after Reset().
+   * Boundary node from find_best_start().  While this start is the
+   * active point, the leg, the bearing and the glide use it.
+   * Invalid before the aircraft is flying, and after Reset().
    */
   GeoPoint start_location;
 
@@ -68,19 +61,16 @@ public:
   }
 
   /**
-   * Search the observation zone boundary for the node which minimises
-   * the distance from the aircraft via that node to the next task
-   * point, and make it this task point's "remaining" location.
+   * Search the boundary for the node which minimises the distance
+   * from the aircraft via that node to the next task point.
    *
-   * This runs on every cycle while the start is the active task
-   * point, wherever the aircraft is; it does not require the aircraft
-   * to be inside the sector.  It does not run before takeoff, though:
-   * OrderedTask::CheckTransitions() returns early while the aircraft
-   * is not flying.
+   * Called on every cycle while the start is active, wherever the
+   * aircraft is.  Not called before takeoff: CheckTransitions()
+   * returns early while the aircraft is not flying.
    *
    * @param state Current aircraft state
    * @param next Next task point following the start
-   * @param projection the projection used by the task
+   * @param projection Projection used by the task
    */
   void find_best_start(const AircraftState &state,
                        const OrderedTaskPoint &next,
