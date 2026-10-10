@@ -398,6 +398,23 @@ public:
       CalculateRoute(*route_planner);
     else
       CalculateDirect(polar_settings, task_behaviour, calculated);
+
+    if (!basic.location_available || !basic.NavAltitudeAvailable())
+      return;
+
+    const bool task_polar =
+      task_behaviour.route_planner.reach_polar_mode ==
+      RoutePlannerConfig::Polar::TASK;
+    const GlidePolar &glide_polar = task_polar
+      ? polar_settings.glide_polar_task
+      : calculated.glide_polar_safety;
+    const SpeedVector wind = calculated.GetWindOrZero();
+
+    for (VisibleWaypoint &vwp : waypoints)
+      vwp.reachable =
+        PromoteBestGlide(vwp.reachable, *vwp.waypoint, basic, wind,
+                         glide_polar, task_behaviour.glide,
+                         task_behaviour.safety_height_arrival);
   }
 
   void Draw() noexcept {

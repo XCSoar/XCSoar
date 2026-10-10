@@ -10,6 +10,11 @@
 enum class WaypointReachability : uint8_t {
   INVALID,
   UNREACHABLE,
+  /**
+   * The reach polar does not arrive, but a straight glide at best
+   * L/D (MacCready 0, same polar and wind) still does.
+   */
+  BEST_GLIDE,
   STRAIGHT,
   TERRAIN,
 };
@@ -21,6 +26,7 @@ IsReachable(WaypointReachability r) noexcept
   switch (r) {
   case WaypointReachability::INVALID:
   case WaypointReachability::UNREACHABLE:
+  case WaypointReachability::BEST_GLIDE:
     break;
 
   case WaypointReachability::STRAIGHT:

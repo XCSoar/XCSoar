@@ -374,6 +374,24 @@ MacCready::OptimiseGlide(const GlideState &task, const bool allow_partial) const
   return mc_vopt.Result(glide_polar.GetVMin());
 }
 
+bool
+MacCready::ArrivesAtBestGlide(const GlidePolar &polar,
+                              const GlideSettings &settings,
+                              const GlideState &state) noexcept
+{
+  if (!polar.IsValid())
+    return false;
+
+  GlidePolar best = polar;
+  best.SetMC(0);
+  /* SolveStraight(MC 0) searches for a wind-optimal speed. The map
+     calls this for every unreachable landable on screen, so evaluate
+     the best-L/D speed once instead. */
+  const GlideResult result =
+    MacCready(settings, best).SolveGlide(state, best.GetVBestLD());
+  return result.IsOk() && result.pure_glide_altitude_difference > 0;
+}
+
 /*
   // distance relation
 

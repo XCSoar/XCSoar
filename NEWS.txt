@@ -360,6 +360,9 @@ Version 7.46 - not yet released
     computed list #2912
   - show the same terrain reach on the Alternates list as the map,
     including turning around obstacles
+  - draw a landable orange on the map and in the Alternates list when
+    the reach polar cannot reach it but a straight best glide still
+    can #2552
   - show the GR for each safety MC value in the Safety Factors
     setup, both next to the setting and while picking a value, based on
     the active polar #2552

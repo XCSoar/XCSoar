@@ -78,6 +78,30 @@ CalculateWaypointReachDirect(const Waypoint &waypoint, const MoreData &basic,
   return reach;
 }
 
+WaypointReachability
+PromoteBestGlide(const WaypointReachability reachability,
+                 const Waypoint &waypoint, const MoreData &basic,
+                 const SpeedVector &wind, const GlidePolar &glide_polar,
+                 const GlideSettings &glide,
+                 const double safety_height_arrival) noexcept
+{
+  if (reachability != WaypointReachability::UNREACHABLE)
+    return reachability;
+  if (!glide_polar.IsValid() || glide_polar.GetMC() <= 0)
+    return reachability;
+  if (!basic.location_available || !basic.NavAltitudeAvailable() ||
+      !waypoint.IsLandable() || !waypoint.has_elevation)
+    return reachability;
+
+  const double elevation = waypoint.elevation + safety_height_arrival;
+  const GlideState state(GeoVector(basic.location, waypoint.location),
+                         elevation, basic.nav_altitude, wind);
+  if (!MacCready::ArrivesAtBestGlide(glide_polar, glide, state))
+    return reachability;
+
+  return WaypointReachability::BEST_GLIDE;
+}
+
 WaypointReach
 CalculateWaypointReach(const Waypoint &waypoint,
                        const ProtectedRoutePlanner *route_planner,
@@ -85,21 +109,30 @@ CalculateWaypointReach(const Waypoint &waypoint,
                        const PolarSettings &polar_settings,
                        const TaskBehaviour &task_behaviour) noexcept
 {
-  if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
-    return CalculateWaypointReachRoute(waypoint, *route_planner,
-                                       task_behaviour);
-
-  if (!basic.location_available || !basic.NavAltitudeAvailable())
-    return {};
-
-  const GlidePolar &glide_polar =
-    task_behaviour.route_planner.reach_polar_mode == RoutePlannerConfig::Polar::TASK
+  const bool task_polar =
+    task_behaviour.route_planner.reach_polar_mode ==
+    RoutePlannerConfig::Polar::TASK;
+  const GlidePolar &glide_polar = task_polar
     ? polar_settings.glide_polar_task
     : calculated.glide_polar_safety;
 
-  return CalculateWaypointReachDirect(waypoint, basic,
-                                      calculated.GetWindOrZero(),
-                                      MacCready(task_behaviour.glide,
-                                                glide_polar),
-                                      task_behaviour);
+  WaypointReach reach;
+  if (route_planner != nullptr && !route_planner->IsTerrainReachEmpty())
+    reach = CalculateWaypointReachRoute(waypoint, *route_planner,
+                                        task_behaviour);
+  else if (!basic.location_available || !basic.NavAltitudeAvailable())
+    return {};
+  else
+    reach = CalculateWaypointReachDirect(waypoint, basic,
+                                         calculated.GetWindOrZero(),
+                                         MacCready(task_behaviour.glide,
+                                                   glide_polar),
+                                         task_behaviour);
+
+  reach.reachability =
+    PromoteBestGlide(reach.reachability, waypoint, basic,
+                     calculated.GetWindOrZero(), glide_polar,
+                     task_behaviour.glide,
+                     task_behaviour.safety_height_arrival);
+  return reach;
 }
