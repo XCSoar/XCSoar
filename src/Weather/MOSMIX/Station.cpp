@@ -41,10 +41,10 @@ DegreesMinutesToDegrees(double value) noexcept
 
        The refusal is carried beside the number rather than in it:
        XCSoar compiles with -ffast-math, which lets the compiler
-       assume no value is ever NaN and quietly folds std::isnan() to
-       false (build/debug.mk restores that only for clang).  A NaN
-       returned here would have sailed through every check on GCC
-       builds. */
+       assume no value is ever NaN and fold std::isnan() to false.
+       build/debug.mk switches that part off again for all compilers,
+       but a NaN standing in for "no value" would still pass any
+       caller that does not check for it. */
     return std::nullopt;
 
   /* exactly sixty is allowed: the catalogue carries one station
