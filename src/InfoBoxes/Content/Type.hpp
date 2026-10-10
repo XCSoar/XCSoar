@@ -18,7 +18,7 @@ namespace InfoBoxFactory
     e_TL_Gain, /* Total altitude gain/loss in the last thermal */
     e_TL_Time, /* Time spent circling in the last thermal */
     /* 10..19 */
-    e_MacCready, /* The current MacCready setting and whether it is manual or auto. The comment is the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint. (Touchscreen/PC only) Also used to adjust the MacCready setting if the infobox is active, by using the up/down cursor keys */
+    e_MacCready, /* The current MacCready setting and whether it is manual or auto. The comment is the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint. In task abort the title and the value are Safety MC, and the comment is the glide ratio at that setting. (Touchscreen/PC only) Also used to adjust the MacCready setting if the infobox is active, by using the up/down cursor keys */
     e_WP_Distance, /* The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector */
     e_WP_AltDiff, /* Next Altitude Difference - Arrival altitude at the next waypoint relative to the safety arrival height */
     e_WP_AltReq, /* Additional altitude required to reach the next turn point */

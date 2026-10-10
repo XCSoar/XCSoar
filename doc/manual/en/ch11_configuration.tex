@@ -600,9 +600,13 @@ of the safety heights. \\
   abort and the Alternates list when Reach polar is Safety MC.  Alternate
   InfoBoxes and waypoint Alt.\ diff.\ MC safety always use this value.
   The Safety MC speed is not limited by maximum cruise speed.
-  Speed-to-fly still stops at maximum cruise speed.  Higher values treat
-  fewer fields as reachable.
-  Default is 3.2~m/s, about 25:1 on the default LS-8 polar.\label{conf:safetyMC} 
+  Speed-to-fly still stops at maximum cruise speed.  The GR at
+  that setting is shown beside the value, written as 25:1.  Higher values
+  treat fewer fields as reachable.
+  The setting runs from 0 to 10~m/s.
+  Default is 3.2~m/s, about 25:1 on the default LS-8 polar.
+  Adjusting Safety MC from the MacCready InfoBox during abort changes
+  it for that flight and leaves this saved value unchanged.\label{conf:safetyMC} 
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
   speed to fly as the glider gets low, in order to compensate for

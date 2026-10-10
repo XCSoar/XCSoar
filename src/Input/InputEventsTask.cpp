@@ -163,12 +163,16 @@ InputEvents::eventMacCready(const char *misc)
 
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
-  if (StringIsEqual(misc, "up")) {
+  const bool abort =
+    CommonInterface::Calculated().common_stats.task_type == TaskType::ABORT;
+
+  if (StringIsEqual(misc, "up") || StringIsEqual(misc, "down")) {
     const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-    ActionInterface::OffsetManualMacCready(step);
-  } else if (StringIsEqual(misc, "down")) {
-    const auto step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-    ActionInterface::OffsetManualMacCready(-step);
+    const auto offset = StringIsEqual(misc, "up") ? step : -step;
+    if (abort)
+      ActionInterface::OffsetSafetyMacCready(offset);
+    else
+      ActionInterface::OffsetManualMacCready(offset);
   } else if (StringIsEqual(misc, "auto toggle")) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
     Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
@@ -185,6 +189,8 @@ InputEvents::eventMacCready(const char *misc)
       Message::AddMessage(_("Auto. MacCready off"));
     }
   } else if (StringIsEqual(misc, "show")) {
+    if (abort)
+      mc = task_behaviour.safety_mc;
     Message::AddMessage(_("MacCready"),
                         FormatUserVerticalSpeed(mc, false));
   }
@@ -239,70 +245,85 @@ InputEvents::eventAbortTask(const char *misc)
   if (!backend_components->protected_task_manager)
     return;
 
-  ProtectedTaskManager::ExclusiveLease task_manager{*backend_components->protected_task_manager};
-  const auto report_resume = [&task_manager](bool resumed) {
-    if (resumed) {
-      if (task_manager->GetMode() == TaskType::GOTO)
-        Message::AddMessage(_("Go to target"));
+  bool crossed_abort = false;
+  bool in_abort      = false;
+
+  {
+    ProtectedTaskManager::ExclusiveLease task_manager{
+      *backend_components->protected_task_manager};
+    const auto mode_before   = task_manager->GetMode();
+    const auto report_resume = [&task_manager](bool resumed) {
+      if (resumed) {
+        if (task_manager->GetMode() == TaskType::GOTO)
+          Message::AddMessage(_("Go to target"));
+        else
+          Message::AddMessage(_("Task resumed"));
+        return;
+      }
+
+      const auto &ordered_task = task_manager->GetOrderedTask();
+      if (ordered_task.TaskSize() == 0)
+        Message::AddMessage(_("No task to resume"));
+      else if (!task_manager->CheckOrderedTask())
+        Message::AddMessage(_("Ordered task invalid"));
       else
-        Message::AddMessage(_("Task resumed"));
-      return;
-    }
+        Message::AddMessage(_("Task resume failed"));
+    };
 
-    const auto &ordered_task = task_manager->GetOrderedTask();
-    if (ordered_task.TaskSize() == 0)
-      Message::AddMessage(_("No task to resume"));
-    else if (!task_manager->CheckOrderedTask())
-      Message::AddMessage(_("Ordered task invalid"));
-    else
-      Message::AddMessage(_("Task resume failed"));
-  };
-
-  if (StringIsEqual(misc, "abort")) {
-    task_manager->Abort();
-    Message::AddMessage(_("Task aborted"));
-  } else if (StringIsEqual(misc, "resume")) {
-    report_resume(task_manager->Resume());
-  } else if (StringIsEqual(misc, "show")) {
-    switch (task_manager->GetMode()) {
-    case TaskType::ABORT:
-      Message::AddMessage(_("Task aborted"));
-      break;
-    case TaskType::GOTO:
-      Message::AddMessage(_("Go to target"));
-      break;
-    case TaskType::ORDERED:
-      Message::AddMessage(_("Ordered task"));
-      break;
-    default:
-      Message::AddMessage(_("No task"));
-    }
-  } else {
-    // toggle
-    switch (task_manager->GetMode()) {
-    case TaskType::NONE:
-    case TaskType::ORDERED:
+    if (StringIsEqual(misc, "abort")) {
       task_manager->Abort();
       Message::AddMessage(_("Task aborted"));
-      break;
-    case TaskType::GOTO:
-      if (task_manager->CheckOrderedTask()) {
-        report_resume(task_manager->Resume());
-      } else {
+    } else if (StringIsEqual(misc, "resume")) {
+      report_resume(task_manager->Resume());
+    } else if (StringIsEqual(misc, "show")) {
+      switch (task_manager->GetMode()) {
+      case TaskType::ABORT:
+        Message::AddMessage(_("Task aborted"));
+        break;
+      case TaskType::GOTO:
+        Message::AddMessage(_("Go to target"));
+        break;
+      case TaskType::ORDERED:
+        Message::AddMessage(_("Ordered task"));
+        break;
+      default:
+        Message::AddMessage(_("No task"));
+      }
+    } else {
+      // toggle
+      switch (task_manager->GetMode()) {
+      case TaskType::NONE:
+      case TaskType::ORDERED:
         task_manager->Abort();
         Message::AddMessage(_("Task aborted"));
+        break;
+      case TaskType::GOTO:
+        if (task_manager->CheckOrderedTask()) {
+          report_resume(task_manager->Resume());
+        } else {
+          task_manager->Abort();
+          Message::AddMessage(_("Task aborted"));
+        }
+        break;
+      case TaskType::ABORT:
+        report_resume(task_manager->Resume());
+        break;
       }
-      break;
-    case TaskType::ABORT:
-      report_resume(task_manager->Resume());
-      break;
     }
+
+    /* quickly propagate the updated values from the TaskManager to the
+       InterfaceBlackboard, so they are available immediately */
+    task_manager->UpdateCommonStatsTask();
+    CommonInterface::ReadCommonStats(task_manager->GetCommonStats());
+
+    const auto mode_after = task_manager->GetMode();
+    crossed_abort =
+      (mode_before == TaskType::ABORT) != (mode_after == TaskType::ABORT);
+    in_abort = mode_after == TaskType::ABORT;
   }
 
-  /* quickly propagate the updated values from the TaskManager to the
-     InterfaceBlackboard, so they are available immediately */
-  task_manager->UpdateCommonStatsTask();
-  CommonInterface::ReadCommonStats(task_manager->GetCommonStats());
+  if (crossed_abort)
+    ActionInterface::PublishAbortDeviceMacCready(in_abort);
 
   trigger_redraw();
 }
