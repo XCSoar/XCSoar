@@ -589,12 +589,21 @@ DownloadFlightFile(Port &port, const char *filename, unsigned file_size,
                                  " no reply from the logger");
       }
 
-      /* repeat the request, as the logger may have missed it; once
-         blocks have arrived, acknowledge up to the first one still
-         missing, which starts a new window there */
+      /* repeat the request, as the logger may have missed it.  At
+         the end of a window, that is the acknowledgement.  For a
+         block missing inside the window, the loggers understand
+         different requests: a Nano sends it again after
+         FILE_DATA_LOST, but ignores an acknowledgement that does not
+         end its window; an S series vario ignores FILE_DATA_LOST and
+         starts a new window at the block an acknowledgement names.
+         So alternate between the two. */
       if (answered) {
-        request = fmt::format("FILE_OK,R,{}", next_block);
-        window_end = next_block + window;
+        if (next_block != window_end && timeouts % 2 == 1)
+          request = fmt::format("FILE_DATA_LOST,R,{}", next_block);
+        else {
+          request = fmt::format("FILE_OK,R,{}", next_block);
+          window_end = next_block + window;
+        }
       }
 
       WriteFileCommand(port, request, env);
