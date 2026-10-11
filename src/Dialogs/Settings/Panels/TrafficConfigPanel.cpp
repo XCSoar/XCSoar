@@ -11,12 +11,14 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "MainWindow.hpp"
+#include "Monitor/TrafficMonitor.hpp"
 
 enum ControlIndex {
   TrafficRadar,
   AutoCloseFlarmDialog,
   NoPositionTargetDistanceRing,
   SpokenAlerts,
+  TestSpokenAlert,
 };
 
 /** Not a GaugeLocation; used only in this panel's Off/position enum. */
@@ -121,6 +123,10 @@ TrafficConfigPanel::Prepare(ContainerWindow &parent,
                "\"Traffic urgent! Three o'clock. Above.\" Obstacle and "
                "alert zone alarms are not spoken."),
              ui_settings.traffic.spoken_alerts);
+
+  AddButton(_("Test spoken alert"), [](){
+    PlaySpokenAlertExample();
+  });
 
   SetRadarEnabled(ui_settings.traffic.enable_gauge);
 }

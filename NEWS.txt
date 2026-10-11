@@ -206,7 +206,8 @@ Version 7.46 - not yet released
     clock position and whether the traffic is above, below or level
     ("Traffic urgent! Three o'clock. Above."), and without a clock
     position for a non-directional (PCAS) intruder; English only,
-    off by default (Config → Gauges → Traffic, "Spoken alerts") #2782
+    off by default (Config → Gauges → Traffic, "Spoken alerts", with
+    a button to test it) #2782
   - download flights from a PowerFLARM Flex or Fusion over the
     device Wi-Fi, after asking the device for its type #1882
   - fail flight download immediately when the device answers that

@@ -34,3 +34,14 @@ public:
 private:
   void Speak(bool escalated) noexcept;
 };
+
+/**
+ * Play SpokenTrafficAlert::Example(), so the pilot can try the voice
+ * and its volume.  Nothing is played while FLARM reports an aircraft
+ * alarm: the example would replace what is left of the real alert
+ * with a made-up position.
+ *
+ * @return true if the example plays
+ */
+bool
+PlaySpokenAlertExample() noexcept;

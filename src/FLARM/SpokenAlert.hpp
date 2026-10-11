@@ -36,6 +36,16 @@ struct SpokenTrafficAlert {
   operator==(const SpokenTrafficAlert &) const noexcept = default;
 
   /**
+   * An alert to try the voice and its volume on the ground: "Traffic
+   * urgent! Twelve o'clock. Above."
+   */
+  static constexpr SpokenTrafficAlert
+  Example() noexcept
+  {
+    return {FlarmTraffic::AlarmType::URGENT, 12, Vertical::ABOVE};
+  }
+
+  /**
    * The alert for the collision alarm in a PFLAU sentence, or
    * std::nullopt if there is no aircraft alarm.  Obstacle and alert
    * zone alarms are not spoken.

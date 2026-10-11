@@ -92,6 +92,10 @@ TestVertical()
 static void
 TestClips()
 {
+  /* the example of the "Test spoken alert" button */
+  ok1(ClipsAre(SpokenTrafficAlert::Example(), "IDR_WAV_TRAFFIC_URGENT",
+               "IDR_WAV_OCLOCK_12", "IDR_WAV_ABOVE"));
+
   auto alert = SpokenTrafficAlert::FromStatus(
     MakeAlarm(FlarmTraffic::AlarmType::URGENT, 90, 300, 600));
   ok1(alert && ClipsAre(*alert, "IDR_WAV_TRAFFIC_URGENT", "IDR_WAV_OCLOCK_3",
@@ -148,7 +152,7 @@ TestNoAlert()
 int
 main()
 {
-  plan_tests(14 + 4 + 7 + 5);
+  plan_tests(14 + 4 + 8 + 5);
 
   TestClock();
   TestVertical();

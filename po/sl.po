@@ -11214,3 +11214,6 @@ msgstr ""
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+
+msgid "Test spoken alert"
+msgstr ""
