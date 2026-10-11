@@ -9,6 +9,7 @@
 
 struct NMEAInfo;
 struct MoreData;
+struct FlarmHardware;
 struct GeoPoint;
 class Angle;
 
@@ -51,6 +52,16 @@ ToFix(uint64_t key, const NMEAInfo &basic);
  * known
  * @param opt_in may the fix be forwarded to OGN?
  */
+/**
+ * The OGN APRS "id" (see #FixOGNExtension::id) of the connected
+ * FLARM: its radio address, address type and aircraft type.
+ *
+ * @return 0 if the FLARM has not told its radio id and its type
+ */
+[[gnu::pure]]
+uint32_t
+MakeOGNId(const FlarmHardware &hardware) noexcept;
+
 [[gnu::pure]]
 OGNFixPacket
 ToOGNFix(uint64_t key, const MoreData &basic, uint32_t id, bool opt_in);

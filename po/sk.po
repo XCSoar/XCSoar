@@ -11272,3 +11272,9 @@ msgstr "Nie je dostupné počas letu."
 
 msgid "User"
 msgstr "Používateľ"
+
+msgid "Send to OGN"
+msgstr ""
+
+msgid "Let the XCSoar Cloud pass your position on to the Open Glider Network, where it joins the track that OGN receivers pick up from your FLARM. This needs a FLARM connected to XCSoar: its radio id and aircraft type are used, and nothing is sent if it is set to privacy or no tracking."
+msgstr ""
