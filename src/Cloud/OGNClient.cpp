@@ -8,6 +8,7 @@
 #include "net/SocketAddress.hxx"
 #include "util/BindMethod.hxx"
 #include "util/SpanCast.hxx"
+#include "util/StringCompare.hxx"
 #include "util/PrintException.hxx"
 #include "util/Exception.hxx"
 #include "util/EnvParser.hpp"
@@ -84,6 +85,7 @@ OGNClient::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
 {
   std::cerr << "OGN\tconnected\t" << host << ':' << port << std::endl;
 
+  login_verified = false;
   read_event.Open(fd.Release());
   read_event.ScheduleRead();
   rx_buffer.clear();
@@ -103,6 +105,39 @@ OGNClient::OnSocketConnectError(std::exception_ptr error) noexcept
   std::cerr << "OGN\tconnect-error\t" << host << ':' << port << '\t'
             << GetFullMessage(error) << std::endl;
   ScheduleReconnect();
+}
+
+bool
+OGNClient::CanSend() const noexcept
+{
+  return user != "N0CALL" && login_verified && read_event.IsDefined();
+}
+
+bool
+OGNClient::SendLine(std::string_view line) noexcept
+{
+  if (!CanSend())
+    return false;
+
+  std::string buffer;
+  buffer.reserve(line.size() + 2);
+  buffer.append(line);
+  buffer.append("\r\n");
+
+  const auto nbytes =
+    read_event.GetSocket().WriteNoWait(AsBytes(std::string_view{buffer}));
+  if (nbytes == ssize_t(buffer.size()))
+    return true;
+
+  if (nbytes > 0) {
+    /* a part of the line went out; the next one would be appended to
+       it, so start over with a new connection */
+    std::cerr << "OGN\tshort-write\t" << host << ':' << port << std::endl;
+    CloseConnection();
+    ScheduleReconnect();
+  }
+
+  return false;
 }
 
 void
@@ -180,6 +215,22 @@ OGNClient::OnReadReady(unsigned events) noexcept
 }
 
 void
+OGNClient::CheckLoginResponse(std::string_view line) noexcept
+{
+  /* "# logresp XCSOAR verified, server GLIDERN1" */
+  using namespace std::string_view_literals;
+  if (!SkipPrefix(line, "# logresp "sv) ||
+      !SkipPrefix(line, std::string_view{user}) ||
+      !SkipPrefix(line, " "sv))
+    return;
+
+  login_verified = line.starts_with("verified,"sv);
+  if (!login_verified)
+    std::cerr << "OGN\tlogin-unverified\t" << host << ':' << port
+              << std::endl;
+}
+
+void
 OGNClient::ConsumeInput(std::string_view chunk)
 {
   rx_buffer.append(chunk.data(), chunk.size());
@@ -194,6 +245,7 @@ OGNClient::ConsumeInput(std::string_view chunk)
     while (!line.empty() && line.back() == '\r')
       line.remove_suffix(1);
 
+    CheckLoginResponse(line);
     handler.OnAprsLine(line);
     cut = nl + 1;
   }

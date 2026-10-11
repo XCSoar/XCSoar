@@ -496,9 +496,10 @@ $(eval $(call link-program,TestSkyLinesFix,TEST_SKYLINES_FIX))
 TEST_OGN_APRS_PARSER_SOURCES = \
 	$(SRC)/Cloud/OGNAprs.cpp \
 	$(SRC)/Cloud/OGNTraffic.cpp \
+	$(SRC)/Cloud/OGNDeviceDatabase.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
-TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
+TEST_OGN_APRS_PARSER_DEPENDS = IO OS GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
 
 TEST_AIRSPACE_INTERVAL_MATH_SOURCES = \
