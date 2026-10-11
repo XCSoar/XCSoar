@@ -55,6 +55,10 @@ TestFlightResult test_flight(int test_num, int n_wind,
                              const double speed_factor = 1.0,
                              const bool auto_mc = false);
 
+// Reseeds so successive calls aim at the same sector points.
+TestFlightResult test_flight_same_points(int test_num, int n_wind,
+                                         double speed_factor = 1.0);
+
 bool test_flight_times(int test_num, int n_wind);
 
 std::chrono::duration<unsigned>

@@ -18,12 +18,12 @@ test_effective_mc(int test_num, int n_wind)
 
   autopilot_parms.SetIdeal();
 
-  TestFlightResult result = test_flight(test_num, n_wind);
+  TestFlightResult result = test_flight_same_points(test_num, n_wind);
   ce0 = result.calc_effective_mc;
 
   // wandering
   autopilot_parms.SetRealistic();
-  result = test_flight(test_num, n_wind);
+  result = test_flight_same_points(test_num, n_wind);
   ce1 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
   if (ce0 <= ce1 || verbose)
@@ -33,7 +33,7 @@ test_effective_mc(int test_num, int n_wind)
 
   // flying too slow
   autopilot_parms.SetIdeal();
-  result = test_flight(test_num, n_wind, 0.8);
+  result = test_flight_same_points(test_num, n_wind, 0.8);
   ce2 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
   if (ce0 <= ce2 || verbose)
@@ -43,7 +43,7 @@ test_effective_mc(int test_num, int n_wind)
 
   // flying too fast
   autopilot_parms.SetIdeal();
-  result = test_flight(test_num, n_wind, 1.2);
+  result = test_flight_same_points(test_num, n_wind, 1.2);
   ce3 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
   if (ce0 <= ce3 || verbose)
@@ -53,7 +53,7 @@ test_effective_mc(int test_num, int n_wind)
 
   // higher than expected cruise sink
   autopilot_parms.sink_factor = 1.2;
-  result = test_flight(test_num, n_wind);
+  result = test_flight_same_points(test_num, n_wind);
   ce4 = result.calc_effective_mc;
   if (ce0 <= ce4 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
@@ -64,7 +64,7 @@ test_effective_mc(int test_num, int n_wind)
 
   // slower than expected climb
   autopilot_parms.climb_factor = 0.8;
-  result = test_flight(test_num, n_wind);
+  result = test_flight_same_points(test_num, n_wind);
   ce5 = result.calc_effective_mc;
   if (ce0 <= ce5 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
@@ -75,7 +75,7 @@ test_effective_mc(int test_num, int n_wind)
 
   // lower than expected cruise sink;
   autopilot_parms.sink_factor = 0.8;
-  result = test_flight(test_num, n_wind);
+  result = test_flight_same_points(test_num, n_wind);
   ce6 = result.calc_effective_mc;
   if (ce0 >= ce6 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);

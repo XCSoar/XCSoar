@@ -25,7 +25,8 @@ AutopilotParameters::SetRealistic()
 }
 
 TaskAutoPilot::TaskAutoPilot(const AutopilotParameters &_parms)
-  :parms(_parms), heading_filter(8), climb_rate(2.0), speed_factor(1.0) {}
+  :parms(_parms), heading_filter(8), heading_noise_state(1),
+   climb_rate(2.0), speed_factor(1.0) {}
 
 void
 TaskAutoPilot::Start(const TaskAccessor& task)
@@ -66,6 +67,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
   // reset the heading
   heading = Angle::Zero();
   heading_filter.Reset(0);
+  heading_noise_state = 1;
 
   acstate = Cruise;
 }
@@ -110,7 +112,12 @@ TaskAutoPilot::GetHeadingDeviation()
   auto noise_mag = acstate == Climb
     ? parms.bearing_noise / 2.
     : parms.bearing_noise;
-  const double r = 2. * rand() / RAND_MAX - 1;
+
+  // Sector aim points use rand(). A shared sequence made a noisy
+  // flight aim at different points than the ideal one.
+  heading_noise_state = heading_noise_state * 1103515245u + 12345u;
+  const double unit = ((heading_noise_state >> 16) & 0x7fffu) / 32768.;
+  const double r = unit * 2. - 1.;
   auto deviation = heading_filter.Update(noise_mag * r);
   return Angle::Degrees(deviation).AsDelta();
 }

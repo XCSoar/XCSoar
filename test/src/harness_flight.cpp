@@ -15,6 +15,7 @@
 #include "system/FileUtil.hpp"
 #include "test_debug.hpp"
 
+#include <cstdlib>
 #include <fstream>
 
 using namespace std::chrono;
@@ -282,6 +283,15 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 
   return run_flight(components, task_manager, autopilot_parms, n_wind,
                     speed_factor);
+}
+
+TestFlightResult
+test_flight_same_points(int test_num, int n_wind, double speed_factor)
+{
+  // Sector points come from rand(). Repeat the seed so each scenario
+  // aims at the same points.
+  srand(1);
+  return test_flight(test_num, n_wind, speed_factor);
 }
 
 bool
