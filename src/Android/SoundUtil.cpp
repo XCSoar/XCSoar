@@ -7,10 +7,13 @@
 #include "LocalPath.hpp"
 #include "system/Path.hpp"
 
+#include <string>
+
 namespace SoundUtil {
 static Java::TrivialClass cls;
 static jmethodID play_method;
 static jmethodID playExternal_method;
+static jmethodID playSequence_method;
 } // namespace SoundUtil
 
 void
@@ -24,6 +27,9 @@ SoundUtil::Initialise(JNIEnv *env)
                                        "(Landroid/content/Context;"
                                        "Ljava/lang/String;)Z");
   playExternal_method = env->GetStaticMethodID(cls, "playExternal",
+                                               "(Landroid/content/Context;"
+                                               "Ljava/lang/String;)Z");
+  playSequence_method = env->GetStaticMethodID(cls, "playSequence",
                                                "(Landroid/content/Context;"
                                                "Ljava/lang/String;)Z");
 }
@@ -49,4 +55,21 @@ SoundUtil::PlayExternal(JNIEnv *env, jobject context, const char *path)
   Java::String paramName(env, absolutePath.c_str());
   return env->CallStaticBooleanMethod(cls, playExternal_method, context,
                                       paramName.Get());
+}
+
+bool
+SoundUtil::PlaySequence(JNIEnv *env, jobject context,
+                        std::span<const char *const> names)
+{
+  /* the names are passed as one string, separated by spaces */
+  std::string joined;
+  for (const char *name : names) {
+    if (!joined.empty())
+      joined.push_back(' ');
+    joined.append(name);
+  }
+
+  Java::String paramNames(env, joined.c_str());
+  return env->CallStaticBooleanMethod(cls, playSequence_method, context,
+                                      paramNames.Get());
 }

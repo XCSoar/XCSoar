@@ -9,6 +9,7 @@
 #include "thread/Mutex.hxx"
 
 #include <memory>
+#include <span>
 
 /**
  * Can play sounds, stored as raw PCM in an embedded resource, using #PCMPlayer
@@ -28,4 +29,10 @@ public:
   PCMResourcePlayer &operator=(PCMResourcePlayer &) = delete;
 
   bool PlayResource(const char *resource_name);
+
+  /**
+   * Play the resources one after another, instead of what is still
+   * queued or playing.
+   */
+  bool PlayResources(std::span<const char *const> resource_names);
 };
