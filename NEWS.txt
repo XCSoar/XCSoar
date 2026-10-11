@@ -29,6 +29,12 @@ Version 7.47 - not yet released
     an API key #3347
   - show the WeGlide task manager page only while WeGlide is enabled,
     and use one Upload Flight action for WeGlide and SoaringScoring
+* FLARM
+  - send your position to the Open Glider Network through the XCSoar
+    Cloud, so it joins the OGN track of your FLARM where no receiver
+    hears you; off by default (Config → Services → XCSoar Cloud,
+    "Send to OGN"), only with a connected FLARM that is not set to
+    privacy or no tracking #1282
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
