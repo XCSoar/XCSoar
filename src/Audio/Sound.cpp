@@ -59,3 +59,28 @@ PlayResource(const char *resource_name)
   return false;
 #endif
 }
+
+bool
+PlayResources(std::span<const char *const> resource_names)
+{
+#ifdef ANDROID
+
+  return SoundUtil::PlaySequence(Java::GetEnv(), context->Get(),
+                                 resource_names);
+
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+
+  return SoundUtil::PlaySequence(resource_names);
+
+#elif defined(HAVE_PCM_PLAYER)
+
+  if (nullptr == pcm_resource_player)
+    return false;
+
+  return pcm_resource_player->PlayResources(resource_names);
+
+#else
+  (void)resource_names;
+  return false;
+#endif
+}

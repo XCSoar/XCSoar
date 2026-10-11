@@ -5,7 +5,9 @@ package org.xcsoar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,6 +49,15 @@ public final class SoundUtil {
 
   public static boolean playExternal(Context context, String path) {
     return UiSounds.playExternalFile(context.getApplicationContext(), path);
+  }
+
+  /**
+   * @param names native tokens separated by spaces, played one after
+   *     another; replaces a sequence which is still playing
+   */
+  public static boolean playSequence(Context context, String names) {
+    return SpokenSequence.play(context.getApplicationContext(),
+        names.split(" "));
   }
 
   // --- volume (explicit scaling; sonification routing is OEM-dependent) ---
@@ -310,6 +321,111 @@ public final class SoundUtil {
         return false;
       }
       return true;
+    }
+  }
+
+  // --- spoken alerts: several clips back to back ---
+
+  /**
+   * Plays clips one after another without a gap, chained with
+   * {@link MediaPlayer#setNextMediaPlayer}.  A new sequence stops the
+   * one still playing, so a stale alert is never finished.
+   */
+  private static final class SpokenSequence {
+    private static List<MediaPlayer> players;
+    private static Runnable releaseFocus;
+
+    private SpokenSequence() {
+    }
+
+    static synchronized boolean play(Context app, String[] tokens) {
+      stop();
+
+      AudioManager am =
+          (AudioManager)app.getSystemService(Context.AUDIO_SERVICE);
+      float gain = VolumePolicy.userAudibleMix(am);
+      if (gain <= 0f)
+        return false;
+
+      List<MediaPlayer> prepared = new ArrayList<>();
+      try {
+        for (String token : tokens) {
+          Integer rawId = BundledSoundBank.rawResourceId(token);
+          if (rawId == null) {
+            Log.w(TAG, "Unknown sound token=\"" + token + "\"");
+            continue;
+          }
+
+          final int resId = rawId.intValue();
+          MediaPlayer player = OneShotMediaPlayer.createPrepared(p -> {
+            try (AssetFileDescriptor afd =
+                     app.getResources().openRawResourceFd(resId)) {
+              p.setDataSource(afd.getFileDescriptor(),
+                  afd.getStartOffset(), afd.getLength());
+            }
+          });
+          player.setVolume(gain, gain);
+          prepared.add(player);
+        }
+      } catch (IOException | RuntimeException e) {
+        Log.e(TAG, "Failed to prepare spoken sequence", e);
+        for (MediaPlayer p : prepared)
+          p.release();
+        return false;
+      }
+
+      if (prepared.isEmpty())
+        return false;
+
+      for (int i = 0; i + 1 < prepared.size(); ++i)
+        prepared.get(i).setNextMediaPlayer(prepared.get(i + 1));
+
+      for (MediaPlayer p : prepared) {
+        p.setOnErrorListener((mp, what, extra) -> {
+          Log.e(TAG, "MediaPlayer error what=" + what + " extra=" + extra);
+          finish(prepared);
+          return true;
+        });
+      }
+
+      prepared.get(prepared.size() - 1)
+          .setOnCompletionListener(mp -> finish(prepared));
+
+      BundledSoundBank.flushPendingFocusRelease();
+      releaseFocus = SonificationRouting.acquireTransientFocus(am);
+      players = prepared;
+
+      try {
+        prepared.get(0).start();
+      } catch (IllegalStateException e) {
+        Log.e(TAG, "MediaPlayer.start failed", e);
+        stop();
+        return false;
+      }
+
+      return true;
+    }
+
+    /**
+     * Called when the sequence has ended; ignored if a newer sequence
+     * has replaced it already.
+     */
+    private static synchronized void finish(List<MediaPlayer> sequence) {
+      if (sequence == players)
+        stop();
+    }
+
+    private static synchronized void stop() {
+      if (players != null) {
+        for (MediaPlayer p : players)
+          p.release();
+        players = null;
+      }
+
+      if (releaseFocus != null) {
+        releaseFocus.run();
+        releaseFocus = null;
+      }
     }
   }
 
