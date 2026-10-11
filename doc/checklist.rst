@@ -120,6 +120,11 @@ Open XCSoar dialogs and settings directly from your checklist.
     [Status](xcsoar://dialog/status)
     [Checklist](xcsoar://dialog/checklist)
 
+**Sound test**: play the example of the spoken FLARM alerts, "Traffic
+urgent! Twelve o'clock. Above.", to check the voice and the volume::
+
+    - [ ] FLARM voice audible [Test](xcsoar://sound/test)
+
 Communication Links
 ~~~~~~~~~~~~~~~~~~~
 

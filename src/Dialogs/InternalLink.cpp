@@ -44,6 +44,7 @@
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 #include "Language/Language.hpp"
+#include "Monitor/TrafficMonitor.hpp"
 
 void
 ShowConfigPanel(const char *title,
@@ -189,6 +190,11 @@ HandleInternalLink(const char *url)
 
   if (StringIsEqual(path, "dialog/credits")) {
     dlgCreditsShowModal(*CommonInterface::main_window);
+    return true;
+  }
+
+  if (StringIsEqual(path, "sound/test")) {
+    PlaySpokenAlertExample();
     return true;
   }
 
