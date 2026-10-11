@@ -151,6 +151,33 @@ public final class SoundUtil {
       RAW_RES_ID_BY_TOKEN.put("IDR_WAV_DRIP", R.raw.beep_drip);
     }
 
+    /** Spoken clips, played by {@link SpokenSequence}, not preloaded. */
+    private static final Map<String, Integer> SPOKEN_RAW_RES_ID_BY_TOKEN =
+        new HashMap<>();
+
+    static {
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_TRAFFIC_LOW", R.raw.traffic_low);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_TRAFFIC_IMPORTANT",
+          R.raw.traffic_important);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_TRAFFIC_URGENT",
+          R.raw.traffic_urgent);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_1", R.raw.oclock_1);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_2", R.raw.oclock_2);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_3", R.raw.oclock_3);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_4", R.raw.oclock_4);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_5", R.raw.oclock_5);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_6", R.raw.oclock_6);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_7", R.raw.oclock_7);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_8", R.raw.oclock_8);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_9", R.raw.oclock_9);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_10", R.raw.oclock_10);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_11", R.raw.oclock_11);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_OCLOCK_12", R.raw.oclock_12);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_ABOVE", R.raw.above);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_BELOW", R.raw.below);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_LEVEL", R.raw.level);
+    }
+
     private static final Map<String, Integer> POOL_SAMPLE_ID_BY_TOKEN =
         new HashMap<>();
 
@@ -204,7 +231,8 @@ public final class SoundUtil {
     }
 
     static Integer rawResourceId(String token) {
-      return RAW_RES_ID_BY_TOKEN.get(token);
+      Integer id = RAW_RES_ID_BY_TOKEN.get(token);
+      return id != null ? id : SPOKEN_RAW_RES_ID_BY_TOKEN.get(token);
     }
 
     static boolean isPoolReady() {

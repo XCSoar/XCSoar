@@ -102,6 +102,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	TestSpeedVector \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
+	TestFlarmSpokenAlert \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
@@ -202,6 +203,12 @@ TEST_FLARM_BINARY_PROTOCOL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmBinaryProtocol.cpp
 $(eval $(call link-program,TestFlarmBinaryProtocol,TEST_FLARM_BINARY_PROTOCOL))
+
+TEST_FLARM_SPOKEN_ALERT_SOURCES = \
+	$(SRC)/FLARM/SpokenAlert.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmSpokenAlert.cpp
+$(eval $(call link-program,TestFlarmSpokenAlert,TEST_FLARM_SPOKEN_ALERT))
 
 TEST_MOSMIX_STATION_SOURCES = \
 	$(SRC)/Weather/MOSMIX/Station.cpp \

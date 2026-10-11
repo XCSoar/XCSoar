@@ -4,6 +4,43 @@
 #include "TrafficMonitor.hpp"
 #include "Interface.hpp"
 #include "Form/Button.hpp"
+#include "Audio/Sound.hpp"
+
+#include <chrono>
+
+using namespace std::chrono;
+
+/**
+ * While the alarm persists, speak a changed clock position or
+ * vertical position not more often than this.
+ */
+static constexpr auto REPEAT_INTERVAL = seconds(5);
+
+void
+TrafficMonitor::Speak(bool escalated) noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  const auto alert = SpokenTrafficAlert::FromStatus(basic.flarm.status);
+  if (!alert) {
+    spoken.reset();
+    return;
+  }
+
+  /* speak a new or higher alarm at once, and a change while it
+     persists only after a while, so the clock position does not
+     chatter at a boundary */
+  if (!escalated &&
+      (*alert == spoken ||
+       (spoken_time.IsDefined() &&
+        basic.clock - spoken_time < REPEAT_INTERVAL)))
+    return;
+
+  spoken = alert;
+  spoken_time = basic.clock;
+
+  const auto clips = alert->GetClips();
+  PlayResources(clips);
+}
 
 void
 TrafficMonitor::Check() noexcept
@@ -27,6 +64,14 @@ TrafficMonitor::Check() noexcept
     (!was_warning || alarm_level > last);
 
   last = alarm_level;
+
+  if (CommonInterface::GetUISettings().traffic.spoken_alerts) {
+    Speak(escalated);
+  } else {
+    /* once turned on again, speak the current alarm as a new one */
+    spoken.reset();
+    spoken_time = TimeStamp::Undefined();
+  }
 
   if (!escalated)
     return;

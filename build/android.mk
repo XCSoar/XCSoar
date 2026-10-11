@@ -363,6 +363,8 @@ PNG_FILES = $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) $(P
 # link) and in the App Bundle (BUNDLE_CONFIG / build-bundle --config):
 # SoundPool uses openRawResourceFd, which does not work on deflated res/raw ogg.
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
+SOUNDS += traffic_low traffic_important traffic_urgent above below level
+SOUNDS += $(addprefix oclock_,1 2 3 4 5 6 7 8 9 10 11 12)
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 
 # Vorbis -q 5: nominal quality (~160 kb/s class); was 1 for smallest APK
