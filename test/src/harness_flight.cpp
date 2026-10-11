@@ -26,6 +26,11 @@ aat_min_time(int test_num) noexcept
   OrderedTaskSettings beh;
   beh.SetDefaults();
   switch (test_num) {
+  case 0:
+    // Shortest path of the mixed task already exceeds the 3 hour
+    // default, so the areas cannot be pulled in enough to finish
+    // then. Use a minimum they can stretch to.
+    return duration<unsigned>{unsigned(3600 * 4)};
   case 2:
     return duration<unsigned>{unsigned(3600 * 3.8)};
   default:
