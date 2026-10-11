@@ -22,6 +22,12 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
     Send("PFLAV,R", env);
     Send("PFLAC,R,RADIOID", env);
     Send("PFLAC,R,DEVTYPE", env);
+
+    /* aircraft type and privacy, for forwarding to the Open Glider
+       Network */
+    Send("PFLAC,R,ACFT", env);
+    Send("PFLAC,R,PRIV", env);
+    Send("PFLAC,R,NOTRACK", env);
     return true;
 
   case Mode::NMEA:

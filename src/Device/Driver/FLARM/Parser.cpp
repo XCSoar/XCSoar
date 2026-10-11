@@ -6,6 +6,7 @@
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "util/NumberParser.hxx"
 
 #include <cstring>
 #include <string>
@@ -49,6 +50,10 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line, NMEAInfo &info)
     /* Always update radio_id so a missing/invalid RADIOID does not
        leave a stale self-id in the blackboard. */
     info.flarm.hardware.radio_id = id;
+
+    const auto type = ParseInteger<uint8_t>(id_type);
+    info.flarm.hardware.radio_id_type =
+      id.IsDefined() && type && (*type == 1 || *type == 2) ? *type : 0;
     if (id.IsDefined())
       info.flarm.hardware.available.Update(info.clock);
 
@@ -69,6 +74,21 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line, NMEAInfo &info)
   }
 
   const auto value = line.Rest();
+
+  /* what the XCSoar Cloud needs to forward fixes to the Open Glider
+     Network */
+  if (const auto number = ParseInteger<unsigned>(value)) {
+    auto &hardware = info.flarm.hardware;
+    if (name == "ACFT"sv)
+      hardware.aircraft_type = *number < 16 ? *number : 0;
+    else if (name == "PRIV"sv) {
+      hardware.privacy = *number != 0;
+      hardware.privacy_known = true;
+    } else if (name == "NOTRACK"sv) {
+      hardware.no_tracking = *number != 0;
+      hardware.no_tracking_known = true;
+    }
+  }
 
   const std::lock_guard<Mutex> lock(settings);
   settings.Set(std::string{name}, std::string{value});
