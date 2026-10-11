@@ -583,6 +583,8 @@ Version 7.46 - not yet released
   - add Lua examples for altitude reminders: landing checklist and
     landing gear on the way down, oxygen on the way up #884
 * development
+  - document the testfast and testslow flight-harness targets in
+    doc/build.rst
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
   - add an advisory complexity report with lizard: a CI job on pull
