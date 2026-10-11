@@ -329,6 +329,7 @@ TestFLARM()
   ok1(nmea_info.flarm.status.rx == 5);
   ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
   ok1(nmea_info.flarm.status.has_extended);
+  ok1(nmea_info.flarm.status.has_bearing);
   ok1(nmea_info.flarm.status.relative_bearing == 45);
   ok1(nmea_info.flarm.status.alarm_type == 3);
   ok1(nmea_info.flarm.status.relative_vertical == -200);
@@ -359,11 +360,33 @@ TestFLARM()
   ok1(nmea_info.flarm.status.relative_distance == 0);
   ok1(nmea_info.flarm.status.target_id == FlarmId::Parse("A25703", NULL));
 
+  // PFLAU non-directional alarm (PCAS): no bearing, but the vertical
+  // and the distance
+  ok1(parser.ParseLine("$PFLAU,4,1,2,1,3,,2,-120,500,*62",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::URGENT);
+  ok1(nmea_info.flarm.status.has_extended);
+  ok1(!nmea_info.flarm.status.has_bearing);
+  ok1(nmea_info.flarm.status.alarm_type == 2);
+  ok1(nmea_info.flarm.status.has_vertical);
+  ok1(nmea_info.flarm.status.relative_vertical == -120);
+  ok1(nmea_info.flarm.status.relative_distance == 500);
+
+  // PFLAU non-directional alarm with neither bearing nor vertical
+  ok1(parser.ParseLine("$PFLAU,4,1,2,1,3,,2,,,*49",
+                       nmea_info));
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::URGENT);
+  ok1(nmea_info.flarm.status.alarm_type == 2);
+  ok1(!nmea_info.flarm.status.has_bearing);
+  ok1(!nmea_info.flarm.status.has_vertical);
+  ok1(!nmea_info.flarm.status.has_extended);
+
   // PFLAU with empty bearing fields (no alarm target)
   ok1(parser.ParseLine("$PFLAU,3,1,2,1,0,,0,,*63",
                        nmea_info));
   ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
   ok1(!nmea_info.flarm.status.has_extended);
+  ok1(!nmea_info.flarm.status.has_bearing);
 
   ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
@@ -4408,7 +4431,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1095 /* drivers */ + 29 /* PFLAU extended */
+  plan_tests(1095 /* drivers */ + 45 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */

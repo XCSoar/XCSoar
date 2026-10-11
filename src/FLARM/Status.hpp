@@ -34,15 +34,27 @@ struct FlarmStatus {
 
   /**
    * Relative bearing to the most threatening intruder (field 6).
-   * Only valid when alarm_level > NONE.
+   * Only valid if #has_bearing is set.
    */
   int16_t relative_bearing;
+
+  /**
+   * Was the bearing (field 6) present?  It is empty for a
+   * non-directional intruder (PCAS, Mode-S) and when there is none.
+   */
+  bool has_bearing;
 
   /** Alarm type of the most threatening intruder (field 7) */
   uint8_t alarm_type;
 
-  /** Relative vertical distance to threat in metres (field 8) */
+  /**
+   * Relative vertical distance to threat in metres (field 8).
+   * Only valid if #has_vertical is set.
+   */
   int32_t relative_vertical;
+
+  /** Was the vertical distance (field 8) present? */
+  bool has_vertical;
 
   /** Horizontal distance to threat in metres (field 9) */
   uint32_t relative_distance;
@@ -50,7 +62,10 @@ struct FlarmStatus {
   /** FLARM ID of the most threatening intruder (field 10) */
   FlarmId target_id;
 
-  /** Were the extended fields (6-10) present in the sentence? */
+  /**
+   * Were the extended fields (6-10) present in the sentence, with a
+   * bearing or a vertical distance?
+   */
   bool has_extended;
 
   /** Is FLARM information available? */
@@ -59,6 +74,8 @@ struct FlarmStatus {
   constexpr void Clear() noexcept {
     available.Clear();
     has_extended = false;
+    has_bearing = false;
+    has_vertical = false;
     relative_bearing = 0;
     alarm_type = 0;
     relative_vertical = 0;
