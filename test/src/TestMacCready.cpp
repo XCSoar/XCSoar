@@ -10,6 +10,8 @@
 
 #include "TestUtil.hpp"
 
+#include <cmath>
+
 static GlideSettings glide_settings;
 static GlidePolar glide_polar(0);
 
@@ -143,6 +145,34 @@ TestArrivesAtBestGlide()
   ok1(!MacCready::ArrivesAtBestGlide(polar, glide_settings, low));
 }
 
+/**
+ * Wind not aligned with the target. A pure crosswind has no headwind
+ * component, and the cruise track is not the target bearing.
+ */
+static void
+TestCrosswind()
+{
+  GlidePolar polar(1);
+  const GeoVector north(20000, Angle::Zero());
+  const double wind_speed = 10;
+
+  const GlideState cross(north, 0, 2000,
+                         SpeedVector(Angle::Degrees(90), wind_speed));
+  ok1(equals(cross.head_wind, 0));
+
+  GlideResult result = MacCready::Solve(glide_settings, polar, cross);
+  ok1(result.IsOk());
+  result.CalcDeferred();
+  const auto track_error =
+    (result.cruise_track_bearing - north.bearing).AsDelta().Degrees();
+  ok1(std::fabs(track_error) > 1);
+
+  const GlideState quarter(north, 0, 2000,
+                           SpeedVector(Angle::Degrees(45), wind_speed));
+  ok1(equals(quarter.head_wind,
+             wind_speed * Angle::Degrees(45).cos()));
+}
+
 static void
 TestAll()
 {
@@ -156,10 +186,11 @@ TestAll()
 
 int main()
 {
-  plan_tests(2108);
+  plan_tests(2108 + 4);
 
   glide_settings.SetDefaults();
 
+  TestCrosswind();
   TestAll();
 
   glide_polar.SetMC(0.1);
