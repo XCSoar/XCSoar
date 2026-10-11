@@ -21,6 +21,12 @@
 namespace {
 constexpr auto CONNECT_TIMEOUT = std::chrono::seconds(15);
 constexpr auto RECONNECT_DELAY = std::chrono::seconds(25);
+
+/**
+ * APRS-IS sends a "# aprsc" line every 20 seconds.  A connection that
+ * stays silent longer was lost without notice (e.g. a NAT timeout).
+ */
+constexpr auto IDLE_TIMEOUT = std::chrono::seconds(60);
 constexpr std::size_t RX_BUFFER_CAPACITY = 16384;
 } // namespace
 
@@ -39,7 +45,8 @@ OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
     resolver_handler(*this),
     connector(loop, *this),
     read_event(loop, BIND_THIS_METHOD(OnReadReady)),
-    reconnect_timer(loop, BIND_THIS_METHOD(OnReconnectTimer)) {}
+    reconnect_timer(loop, BIND_THIS_METHOD(OnReconnectTimer)),
+    idle_timer(loop, BIND_THIS_METHOD(OnIdleTimer)) {}
 
 void
 OGNClient::Start() noexcept
@@ -88,6 +95,7 @@ OGNClient::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
   login_verified = false;
   read_event.Open(fd.Release());
   read_event.ScheduleRead();
+  idle_timer.Schedule(IDLE_TIMEOUT);
   rx_buffer.clear();
   try {
     rx_buffer.reserve(RX_BUFFER_CAPACITY);
@@ -159,6 +167,7 @@ void
 OGNClient::CloseConnection() noexcept
 {
   read_event.Close();
+  idle_timer.Cancel();
 
   if (connector.IsPending())
     connector.Cancel();
@@ -177,6 +186,13 @@ void
 OGNClient::OnReconnectTimer() noexcept
 {
   BeginLookup();
+}
+
+void
+OGNClient::OnIdleTimer() noexcept
+{
+  std::cerr << "OGN\tidle\t" << host << ':' << port << std::endl;
+  ScheduleReconnect();
 }
 
 void
@@ -202,6 +218,8 @@ OGNClient::OnReadReady(unsigned events) noexcept
     ScheduleReconnect();
     return;
   }
+
+  idle_timer.Schedule(IDLE_TIMEOUT);
 
   if (GetEnvBool("XCS_CLOUD_DEBUG"))
     std::cerr << "OGN\trx\t" << nbytes << " bytes" << std::endl;
