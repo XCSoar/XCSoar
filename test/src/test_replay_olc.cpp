@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
 #include "harness_aircraft.hpp"
 #include "Replay/IgcReplay.hpp"
 #include "Computer/TraceComputer.hpp"
@@ -23,7 +26,8 @@ using namespace std::chrono;
 ContestResult official_score_classic,
   official_score_sprint,
   official_score_fai,
-  official_score_plus;
+  official_score_plus,
+  official_score_league;
 double official_index;
 
 inline void output_score(const char* header,
@@ -84,6 +88,7 @@ inline void load_scores(unsigned &contest_handicap) {
   load_score_file(fscore, official_score_sprint);
   load_score_file(fscore, official_score_fai);
   load_score_file(fscore, official_score_plus);
+  load_score_file(fscore, official_score_league);
   fscore.close();
 
   contest_handicap = (unsigned)official_index;
@@ -199,8 +204,11 @@ test_replay(const Contest olc_type,
   if (verbose) {
     PrintDistanceCounts();
   }
-  return compare_scores(official_score, 
-                        contest_manager.GetStats().GetResult(0));
+
+  // OLC Plus stores the plus score in result 2. Result 0 is classic.
+  const unsigned which = olc_type == Contest::OLC_PLUS ? 2 : 0;
+  return compare_scores(official_score,
+                        contest_manager.GetStats().GetResult(which));
 }
 
 
@@ -212,7 +220,7 @@ try {
 
   plan_tests(5);
 
-  ok(test_replay(Contest::OLC_LEAGUE, official_score_sprint),
+  ok(test_replay(Contest::OLC_LEAGUE, official_score_league),
      "replay league", 0);
   ok(test_replay(Contest::OLC_FAI, official_score_fai),
      "replay fai", 0);
