@@ -332,10 +332,21 @@ TopWindow::Refresh() noexcept
     return;
 #endif
 
+#ifdef USE_WAYLAND
+  /* Leave invalidated set.  The frame callback pushes EXPOSE when
+     the compositor is ready for another buffer. */
+  if (IsFramePending())
+    return;
+#endif
+
   if (!invalidated)
     return;
 
   invalidated = false;
+
+#ifdef USE_WAYLAND
+  ArmFrameCallback();
+#endif
 
   Expose();
 }
