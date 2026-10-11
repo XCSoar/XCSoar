@@ -5,6 +5,7 @@
 
 #include "Geo/Boost/GeoPoint.hpp"
 #include "net/AllocatedSocketAddress.hxx"
+#include "Tracking/SkyLines/Import.hpp"
 
 #include <boost/intrusive/list.hpp>
 #include <boost/intrusive/set.hpp>
@@ -13,6 +14,7 @@
 #include <boost/range/iterator_range_core.hpp>
 #include <memory>
 #include <chrono>
+#include <optional>
 
 class Serialiser;
 class Deserialiser;
@@ -81,6 +83,23 @@ struct CloudClient
   bool track_valid = false;
 
   /**
+   * Millisecond of day (UTC) of the most recent fix.
+   */
+  std::chrono::milliseconds fix_time{};
+
+  /**
+   * Ground speed in m/s from the most recent fix.
+   */
+  std::optional<double> ground_speed;
+
+  /**
+   * From the #SkyLinesTracking::FixOGNExtension of the most recent
+   * fix, which the client sends to be forwarded to the Open Glider
+   * Network.
+   */
+  std::optional<SkyLinesTracking::ReceivedFix::OGN> ogn;
+
+  /**
    * FLARM aircraft type (glider for XCSoar cloud clients).
    */
   unsigned aircraft_type = CLOUD_DEFAULT_AIRCRAFT_TYPE;
@@ -131,6 +150,15 @@ struct CloudClient
   void Refresh(SocketAddress _address) noexcept {
     address = _address;
     stamp = std::chrono::steady_clock::now();
+  }
+
+  /**
+   * Keep what the server does not index from a fix.
+   */
+  void UpdateFix(const SkyLinesTracking::ReceivedFix &fix) noexcept {
+    fix_time = fix.time_of_day;
+    ground_speed = fix.ground_speed;
+    ogn = fix.ogn;
   }
 
   void Save(Serialiser &s) const;
