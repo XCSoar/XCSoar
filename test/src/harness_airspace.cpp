@@ -31,12 +31,13 @@ airspace_random_properties(AbstractAirspace& as)
 
 
 bool test_airspace_extra(Airspaces &airspaces) {
-  // try adding a null polygon
-
+  // Clear() without another Optimise() after an add. A polygon needs
+  // at least three points; the constructor asserts on fewer.
   std::vector<GeoPoint> pts;
+  pts.emplace_back(Angle::Degrees(0.1), Angle::Degrees(0.1));
+  pts.emplace_back(Angle::Degrees(0.2), Angle::Degrees(0.1));
+  pts.emplace_back(Angle::Degrees(0.15), Angle::Degrees(0.2));
   airspaces.Add(std::make_shared<AirspacePolygon>(pts));
-
-  // try clearing now (we haven't called optimise())
 
   airspaces.Clear();
   return true;
