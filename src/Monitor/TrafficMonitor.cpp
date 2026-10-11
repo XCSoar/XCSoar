@@ -16,6 +16,16 @@ using namespace std::chrono;
  */
 static constexpr auto REPEAT_INTERVAL = seconds(5);
 
+bool
+PlaySpokenAlertExample() noexcept
+{
+  if (SpokenTrafficAlert::FromStatus(CommonInterface::Basic().flarm.status))
+    return false;
+
+  const auto clips = SpokenTrafficAlert::Example().GetClips();
+  return PlayResources(clips);
+}
+
 void
 TrafficMonitor::Speak(bool escalated) noexcept
 {
