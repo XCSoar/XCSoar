@@ -657,6 +657,17 @@ This page sets the base for wind computations.
 \\
 \item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM 
   traffic has gone.
+\item[Spoken alerts] \label{conf:flarmspokenalerts} Speaks the collision
+  alarms of FLARM in English: the urgency ({\em Traffic}, {\em Traffic
+  important}, {\em Traffic urgent}), the clock position of the
+  intruder and whether it is {\em above}, {\em below} or {\em level}.
+  A level intruder is less than about 8 degrees above or below you.
+  A non-directional intruder (PCAS, Mode-S) gets no clock position.
+  An alarm is spoken when it starts and whenever it becomes more
+  urgent; while it persists, a new clock or vertical position is
+  spoken at most every five seconds.  Obstacle and alert zone alarms
+  are not spoken: the FLARM device still beeps for them, as it does
+  for every alarm.  Off by default.
 \end{description}
 In all FLARM environments, the colour of the target indicates the threat level.
 

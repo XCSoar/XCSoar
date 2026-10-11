@@ -10,6 +10,7 @@ FLARM_SOURCES = \
 	$(SRC)/FLARM/MessagingRecord.cpp \
 	$(SRC)/FLARM/MessagingDatabase.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/SpokenAlert.cpp \
 	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/Computer.cpp \

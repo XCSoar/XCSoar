@@ -21,6 +21,9 @@ struct TrafficSettings {
   /** Show distance ring for FLARM targets without position data? */
   bool no_position_target_distance_ring;
 
+  /** Speak the collision alarms of FLARM: "Traffic urgent! Three o'clock." */
+  bool spoken_alerts;
+
   /** Location of Flarm radar */
   enum class GaugeLocation : uint8_t {
     AUTO,
