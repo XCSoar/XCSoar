@@ -3,15 +3,158 @@
 
 #include "Cloud/OGNAprs.hpp"
 #include "Cloud/OGNTraffic.hpp"
+#include "Cloud/OGNDeviceDatabase.hpp"
 
 #include "TestUtil.hpp"
 
 #include <cmath>
 
+static OGNXCSFix
+MakeFix(uint32_t id, std::chrono::seconds time, double lat_min,
+        double lon_min, unsigned track, unsigned knots, int feet,
+        int fpm) noexcept
+{
+  return {
+    id,
+    time,
+    GeoPoint(Angle::Degrees(lon_min / 60), Angle::Degrees(lat_min / 60)),
+    track,
+    knots / 1.943844,
+    int(std::lround(feet * 0.3048)),
+    fpm / 196.850394,
+  };
+}
+
+/**
+ * The OGNXCS messages the XCSoar Cloud sends, against the examples of
+ * XCSoar_APRS_format.md in glidernet/ogn-aprs-protocol.
+ */
+static void
+TestFormatOGNXCS()
+{
+  using namespace std::chrono;
+
+  ok1(FormatOGNXCSBeacon(MakeFix(0x06dd5a01, hours{12} + minutes{30},
+                                 47 * 60 + 44.298, 12 * 60 + 26.100,
+                                 60, 52, 3609, 98)) ==
+      "FLRDD5A01>OGNXCS,qOR:/123000h4744.29N/01226.10E'060/052"
+      "/A=003609 !W80! id06DD5A01 +098fpm");
+
+  ok1(FormatOGNXCSBeacon(MakeFix(0x06dd5a01,
+                                 hours{12} + minutes{55} + seconds{22},
+                                 47 * 60 + 56.767, 12 * 60 + 36.793,
+                                 95, 93, 5600, -276)) ==
+      "FLRDD5A01>OGNXCS,qOR:/125522h4756.76N/01236.79E'095/093"
+      "/A=005600 !W73! id06DD5A01 -276fpm");
+
+  ok1(FormatOGNXCSBeacon(MakeFix(0x053e5a01,
+                                 hours{13} + minutes{10} + seconds{4},
+                                 47 * 60 + 51.727, 12 * 60 + 46.993,
+                                 210, 85, 6398, -177)) ==
+      "ICA3E5A01>OGNXCS,qOR:/131004h4751.72N/01246.99E'210/085"
+      "/A=006398 !W73! id053E5A01 -177fpm");
+
+  /* north is 360, an unknown track and speed 000/000; southern and
+     western hemispheres; no climb rate */
+  OGNXCSFix fix = MakeFix(0x06dd5a01, hours{1}, -(33 * 60 + 1.5),
+                          -(70 * 60 + 30.25), 0, 40, 1000, 0);
+  ok1(FormatOGNXCSBeacon(fix).find("S/07030.25W'360/040/") !=
+      std::string::npos);
+  fix.track_deg.reset();
+  fix.ground_speed.reset();
+  fix.vertical_speed.reset();
+  const std::string unknown = FormatOGNXCSBeacon(fix);
+  ok1(unknown.find("'000/000/") != std::string::npos);
+  ok1(unknown.find("fpm") == std::string::npos);
+
+  /* not forwarded: address type unknown or OGN, stealth, no tracking */
+  fix.id = 0x00dd5a01;
+  ok1(FormatOGNXCSBeacon(fix).empty());
+  fix.id = 0x07dd5a01;
+  ok1(FormatOGNXCSBeacon(fix).empty());
+  fix.id = 0x86dd5a01;
+  ok1(FormatOGNXCSBeacon(fix).empty());
+  fix.id = 0x46dd5a01;
+  ok1(FormatOGNXCSBeacon(fix).empty());
+
+  /* below sea level: OGN parsers cannot read a negative altitude */
+  fix.id = 0x06dd5a01;
+  fix.gps_altitude = -30;
+  ok1(FormatOGNXCSBeacon(fix).empty());
+  fix.gps_altitude = 0;
+  ok1(FormatOGNXCSBeacon(fix).find("/A=000000 ") != std::string::npos);
+
+  /* OGN reads it back as it was sent */
+  const std::string line =
+    FormatOGNXCSBeacon(MakeFix(0x06dd5a01, hours{12} + minutes{30},
+                               47 * 60 + 44.298, 12 * 60 + 26.100,
+                               60, 52, 3609, 98));
+  const OGNAprsParseResult r = ParseOGNAprsLine(line);
+  ok1(r.valid);
+  ok1(r.station_id == "FLRDD5A01");
+  ok1(r.flarm_valid && r.flarm_id == 0xdd5a01u);
+  ok1(r.address_type == 2u);
+  ok1(r.altitude_valid && r.altitude == int(std::lround(3609 * 0.3048)));
+  ok1(r.track_valid && r.track_deg == 60u);
+}
+
+/**
+ * The CSV download of ddb.glidernet.org decides which aircraft must
+ * not be forwarded.
+ */
+static void
+TestDeviceDatabase()
+{
+  OGNDeviceDatabase ddb;
+
+  /* nothing is forwarded without a database */
+  ok1(!ddb.IsLoaded());
+  ok1(!ddb.IsAllowed(0x06dd5a01));
+
+  ok1(!ddb.Parse("not the database\n'F','DD5A01','LS 4','D-1234','XY',"
+                 "'N','Y'\n"));
+  ok1(!ddb.IsLoaded());
+
+  ok1(ddb.Parse(
+    "#DEVICE_TYPE,DEVICE_ID,AIRCRAFT_MODEL,REGISTRATION,CN,TRACKED,"
+    "IDENTIFIED\r\n"
+    "'F','000000','AS 33Me','OY-XEL','EL','Y','Y'\r\n"
+    "'F','DD5A01','LS 4','D-1234','XY','N','Y'\r\n"
+    "'I','3E5A01','Duo Discus, XLT','D-KABC','AB','Y','N'\r\n"
+    "'O','123456','Paraglider','','','N','N'\r\n"));
+  ok1(ddb.IsLoaded());
+  ok1(ddb.GetBlockedCount() == 3);
+
+  /* tracked and identified, and an address the database does not
+     know */
+  ok1(ddb.IsAllowed(0x06000000));
+  ok1(ddb.IsAllowed(0x06dd5a02));
+
+  /* not tracked, whatever the aircraft type */
+  ok1(!ddb.IsAllowed(0x06dd5a01));
+  ok1(!ddb.IsAllowed(0x0add5a01));
+
+  /* not identified, with a comma in the model */
+  ok1(!ddb.IsAllowed(0x053e5a01));
+
+  /* the same address as an ICAO address is another aircraft */
+  ok1(ddb.IsAllowed(0x05dd5a01));
+
+  /* a download cut off in the middle of a line is rejected, and the
+     old database stays */
+  ok1(!ddb.Parse(
+    "#DEVICE_TYPE,DEVICE_ID,AIRCRAFT_MODEL,REGISTRATION,CN,TRACKED,"
+    "IDENTIFIED\n"
+    "'F','000000','AS 33Me','OY-XEL','EL','Y','Y'\n"
+    "'F','DD5A"));
+  ok1(!ddb.IsAllowed(0x06dd5a01));
+  ok1(ddb.GetBlockedCount() == 3);
+}
+
 int
 main()
 {
-  plan_tests(42);
+  plan_tests(42 + 18 + 16);
 
   const OGNAprsParseResult bad = ParseOGNAprsLine("# comment");
   ok1(!bad.valid);
@@ -94,6 +237,9 @@ main()
   const OGNAprsParseResult no_alt_r = ParseOGNAprsLine(no_altitude);
   ok1(no_alt_r.valid);
   ok1(!no_alt_r.altitude_valid);
+
+  TestFormatOGNXCS();
+  TestDeviceDatabase();
 
   return exit_status();
 }
