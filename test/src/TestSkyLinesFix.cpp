@@ -10,6 +10,7 @@
 #include "Tracking/SkyLines/Import.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
 #include "NMEA/MoreData.hpp"
+#include "FLARM/Hardware.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC16CCITT.hpp"
 #include "util/SpanCast.hxx"
@@ -108,6 +109,30 @@ TestOGNFix()
 }
 
 /**
+ * The OGN id from what the FLARM told about itself.
+ */
+static void
+TestOGNId()
+{
+  FlarmHardware hardware;
+  hardware.Clear();
+  ok1(MakeOGNId(hardware) == 0);
+
+  hardware.radio_id = FlarmId::FromValue(0xdd1234);
+  ok1(MakeOGNId(hardware) == 0);
+
+  hardware.radio_id_type = 2;
+  hardware.aircraft_type = 1;
+  ok1(MakeOGNId(hardware) == ((1u << 26) | (2u << 24) | 0xdd1234));
+
+  /* an ICAO address of a tow plane */
+  hardware.radio_id = FlarmId::FromValue(0x3e4f21);
+  hardware.radio_id_type = 1;
+  hardware.aircraft_type = 2;
+  ok1(MakeOGNId(hardware) == ((2u << 26) | (1u << 24) | 0x3e4f21));
+}
+
+/**
  * A server reads only what is there: a fix that claims the extension
  * but is too short to hold it, and a datagram shorter than a fix.
  */
@@ -127,10 +152,11 @@ TestShortDatagrams()
 int
 main()
 {
-  plan_tests(9 + 13 + 3);
+  plan_tests(9 + 13 + 4 + 3);
 
   TestSkyLinesFix();
   TestOGNFix();
+  TestOGNId();
   TestShortDatagrams();
 
   return exit_status();

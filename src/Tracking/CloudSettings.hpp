@@ -49,6 +49,13 @@ struct CloudSettings {
   bool show_thermals;
 
   /**
+   * May the XCSoar Cloud forward our fixes to the Open Glider
+   * Network?  Only with a FLARM that tells its radio id and allows
+   * tracking.
+   */
+  bool forward_to_ogn;
+
+  /**
    * Enable cloud communication while on a "roamed" connection?
    */
   bool roaming;
@@ -73,6 +80,7 @@ struct CloudSettings {
     enabled = TriState::UNKNOWN;
     show_traffic = true;
     show_thermals = true;
+    forward_to_ogn = false;
     roaming = true;
     key = 0;
     host = DEFAULT_HOST;
