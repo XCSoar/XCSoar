@@ -89,39 +89,32 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, TimeStamp clock) noexcept
   flarm.alarm_level = (FlarmTraffic::AlarmType)
     line.Read((int)FlarmTraffic::AlarmType::NONE);
 
-  // Extended fields (6-10): parse if bearing field is present (field 6).
-  // Per FTD-012 ICD these are only emitted when alarm_level > 0, but we
-  // check field presence to be robust against empty fields either way.
+  // Extended fields (6-10).  Per FTD-012 ICD they are only emitted when
+  // alarm_level > 0, and the bearing is empty for a non-directional
+  // intruder (PCAS, Mode-S), so check each field's presence.
   int bearing;
-  if (line.ReadChecked(bearing)) {
-    flarm.relative_bearing = (int16_t)bearing;
-    flarm.alarm_type = (uint8_t)line.ReadHex(0);
+  flarm.has_bearing = line.ReadChecked(bearing);
+  flarm.relative_bearing = flarm.has_bearing ? (int16_t)bearing : 0;
+  flarm.alarm_type = (uint8_t)line.ReadHex(0);
 
-    int vert;
-    if (line.ReadChecked(vert))
-      flarm.relative_vertical = vert;
-    else
-      flarm.relative_vertical = 0;
+  int vert;
+  flarm.has_vertical = line.ReadChecked(vert);
+  flarm.relative_vertical = flarm.has_vertical ? vert : 0;
 
-    int dist;
-    if (line.ReadChecked(dist) && dist >= 0)
-      flarm.relative_distance = (uint32_t)dist;
-    else
-      flarm.relative_distance = 0;
-
-    char id_string[16];
-    line.Read(id_string, 16);
-    flarm.target_id = FlarmId::Parse(id_string, nullptr);
-
-    flarm.has_extended = true;
-  } else {
-    flarm.has_extended = false;
-    flarm.relative_bearing = 0;
-    flarm.alarm_type = 0;
-    flarm.relative_vertical = 0;
+  int dist;
+  if (line.ReadChecked(dist) && dist >= 0)
+    flarm.relative_distance = (uint32_t)dist;
+  else
     flarm.relative_distance = 0;
+
+  flarm.has_extended = flarm.has_bearing || flarm.has_vertical;
+
+  char id_string[16];
+  line.Read(id_string, 16);
+  if (flarm.has_extended)
+    flarm.target_id = FlarmId::Parse(id_string, nullptr);
+  else
     flarm.target_id.Clear();
-  }
 }
 
 void
