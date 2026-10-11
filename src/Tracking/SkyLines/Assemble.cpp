@@ -5,6 +5,7 @@
 #include "Export.hpp"
 #include "Protocol.hpp"
 #include "NMEA/MoreData.hpp"
+#include "FLARM/Hardware.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC16CCITT.hpp"
 #include "util/SpanCast.hxx"
@@ -244,6 +245,17 @@ SkyLinesTracking::MakeUserNameRequest(uint64_t key, uint32_t user_id)
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
+}
+
+uint32_t
+SkyLinesTracking::MakeOGNId(const FlarmHardware &hardware) noexcept
+{
+  if (!hardware.radio_id.IsDefined() || hardware.radio_id_type == 0)
+    return 0;
+
+  return (uint32_t(hardware.aircraft_type & 0xf) << 26) |
+    (uint32_t(hardware.radio_id_type & 0x3) << 24) |
+    (hardware.radio_id.Value() & 0xffffff);
 }
 
 SkyLinesTracking::OGNFixPacket

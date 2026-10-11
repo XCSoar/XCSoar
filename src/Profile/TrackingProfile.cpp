@@ -18,6 +18,7 @@ static void Load(const ProfileMap &map, CloudSettings &settings) {
 
   map.Get(ProfileKeys::CloudShowTraffic, settings.show_traffic);
   map.Get(ProfileKeys::CloudShowThermals, settings.show_thermals);
+  map.Get(ProfileKeys::CloudForwardToOGN, settings.forward_to_ogn);
   map.Get(ProfileKeys::CloudRoaming, settings.roaming);
 
   if (!map.Get(ProfileKeys::CloudHost, settings.host) ||

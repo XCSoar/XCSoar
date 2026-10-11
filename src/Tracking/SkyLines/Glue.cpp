@@ -6,7 +6,7 @@
 #include "Tracking/CloudSettings.hpp"
 #include "Queue.hpp"
 #include "Assemble.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "net/State.hpp"
 #include "io/async/GlobalAsioThread.hpp"
@@ -21,6 +21,12 @@
 using namespace std::chrono;
 
 static constexpr auto CLOUD_INTERVAL = minutes(1);
+
+/**
+ * A fix the XCSoar Cloud forwards to OGN goes every 10 s, the rate
+ * documented for OGNXCS in glidernet/ogn-aprs-protocol.
+ */
+static constexpr auto CLOUD_OGN_INTERVAL = seconds(10);
 static constexpr auto RECONNECT_INTERVAL = seconds(30);
 
 SkyLinesTracking::Glue::Glue(EventLoop &event_loop,
@@ -109,7 +115,7 @@ SkyLinesTracking::Glue::SendFixes(const NMEAInfo &basic)
 }
 
 void
-SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
+SkyLinesTracking::Glue::SendCloudFix(const MoreData &basic,
                                      const DerivedInfo &calculated)
 {
   assert(cloud_client.IsConnected());
@@ -131,8 +137,21 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
     return;
   }
 
-  if (cloud_clock.CheckAdvance(basic.time, CLOUD_INTERVAL)) {
-    cloud_client.SendFix(basic);
+  /* the radio address only goes with the pilot's consent, and only if
+     the FLARM allows tracking */
+  const auto &hardware = basic.flarm.hardware;
+  const uint32_t ogn_id = cloud_forward_to_ogn &&
+    hardware.privacy_known && !hardware.privacy &&
+    hardware.no_tracking_known && !hardware.no_tracking
+    ? MakeOGNId(hardware)
+    : 0;
+
+  const FloatDuration interval = ogn_id != 0
+    ? FloatDuration{CLOUD_OGN_INTERVAL}
+    : FloatDuration{CLOUD_INTERVAL};
+  if (cloud_clock.CheckAdvance(basic.time, interval)) {
+    cloud_client.SendPacket(ToOGNFix(cloud_client.GetKey(), basic,
+                                     ogn_id, ogn_id != 0));
     if (GetEnvBool("XCS_CLOUD_DEBUG"))
       LogFmt("Cloud: sent FIX flying={}", calculated.flight.flying);
   }
@@ -168,7 +187,7 @@ SkyLinesTracking::Glue::SendCloudFix(const NMEAInfo &basic,
 }
 
 void
-SkyLinesTracking::Glue::Tick(const NMEAInfo &basic,
+SkyLinesTracking::Glue::Tick(const MoreData &basic,
                              const DerivedInfo &calculated)
 {
   const bool simulator =
@@ -232,6 +251,7 @@ SkyLinesTracking::Glue::SetSettings(const Settings &skylines_settings,
   thermal_enabled = cloud_settings.show_thermals;
   cloud_show_traffic = cloud_settings.show_traffic;
   cloud_roaming = cloud_settings.roaming;
+  cloud_forward_to_ogn = cloud_settings.forward_to_ogn;
 
   if (cloud_settings.enabled == TriState::TRUE && cloud_settings.key != 0) {
     cloud_client.SetKey(cloud_settings.key);
