@@ -74,6 +74,11 @@ class OGNClient final : ConnectSocketHandler {
   bool login_verified = false;
   CoarseTimerEvent reconnect_timer;
 
+  /**
+   * Reconnects when the server stays silent too long.
+   */
+  CoarseTimerEvent idle_timer;
+
   std::string rx_buffer;
 
 public:
@@ -106,6 +111,7 @@ private:
   void OnSocketConnectError(std::exception_ptr error) noexcept override;
 
   void OnReconnectTimer() noexcept;
+  void OnIdleTimer() noexcept;
   void OnReadReady(unsigned events) noexcept;
 
   void BeginLookup() noexcept;
