@@ -9,6 +9,7 @@
 #include "Serialiser.hpp"
 #include "Tracking/SkyLines/Server.hpp"
 #include "Tracking/SkyLines/Protocol.hpp"
+#include "Tracking/SkyLines/Import.hpp"
 #include "util/ByteOrder.hxx"
 #include "event/Loop.hxx"
 #include "event/CoarseTimerEvent.hxx"
@@ -248,9 +249,7 @@ private:
 protected:
   /* virtual methods from class SkyLinesTracking::Server */
   void OnFix(const Client &client,
-             std::chrono::milliseconds time_of_day,
-             const ::GeoPoint &location, int altitude,
-             unsigned track_deg, bool track_valid) override;
+             const SkyLinesTracking::ReceivedFix &fix) override;
 
   void OnTrafficRequest(const Client &client,
                         bool near) override;
@@ -468,11 +467,12 @@ CloudServer::SendNearTrafficSnapshot(CloudClient &client,
 
 void
 CloudServer::OnFix(const Client &c,
-                   std::chrono::milliseconds time_of_day,
-                   const ::GeoPoint &location, int altitude,
-                   unsigned track_deg, bool track_valid)
+                   const SkyLinesTracking::ReceivedFix &fix)
 {
-  (void)time_of_day; // TODO: use this parameter
+  const ::GeoPoint &location = fix.location;
+  const int altitude = fix.altitude;
+  const unsigned track_deg = fix.track_deg;
+  const bool track_valid = fix.track_valid;
 
   CloudClient *client;
   if (location.IsValid()) {
@@ -489,6 +489,8 @@ CloudServer::OnFix(const Client &c,
          << client->altitude << 'm';
     if (track_valid)
       cout << "\ttrack=" << track_deg;
+    if (fix.ogn && fix.ogn->gps_altitude)
+      cout << "\tgps=" << *fix.ogn->gps_altitude << 'm';
     cout << endl;
 
     if (was_empty)
@@ -498,6 +500,9 @@ CloudServer::OnFix(const Client &c,
     if (client != nullptr)
       clients.Refresh(*client, c.address);
   }
+
+  if (client != nullptr)
+    client->UpdateFix(fix);
 
   if (client == nullptr || !location.IsValid())
     return;
