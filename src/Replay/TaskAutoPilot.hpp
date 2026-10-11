@@ -9,6 +9,7 @@
 #include "time/FloatDuration.hxx"
 
 #include <chrono>
+#include <cstdint>
 
 struct AircraftState;
 
@@ -66,6 +67,7 @@ protected:
 private:
   const AutopilotParameters &parms;
   Filter heading_filter;
+  std::uint32_t heading_noise_state;
   double climb_rate;
   double speed_factor;
   GeoPoint w[2];
