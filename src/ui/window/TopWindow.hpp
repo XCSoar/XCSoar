@@ -58,6 +58,7 @@ class TopCanvas;
 #ifdef USE_WAYLAND
 struct wl_egl_window;
 struct wl_surface;
+struct wl_callback;
 struct wl_output;
 struct xdg_surface;
 struct xdg_toplevel;
@@ -160,6 +161,15 @@ class TopWindow : public ContainerWindow {
   struct wp_viewport *viewport = nullptr;
   struct wp_fractional_scale_v1 *fractional_scale = nullptr;
   struct zwp_confined_pointer_v1 *confined_pointer = nullptr;
+
+  /**
+   * Outstanding wl_surface.frame.  While this is set, Refresh()
+   * must not call eglSwapBuffers: Mesa waits inside that call for
+   * a buffer release, and a surface that is not on screen never
+   * gets one, which stalls the UI thread.
+   */
+  struct wl_callback *frame_callback = nullptr;
+
   PixelSize initial_requested_size{0, 0};
   PixelSize compositor_size{0, 0};
   std::chrono::steady_clock::time_point last_resize_flush_time;
@@ -178,6 +188,17 @@ public:
   void CommitNativeSurface() noexcept;
   void OnFractionalPreferredScale(unsigned scale_120) noexcept;
   void OnSurfaceOutput(struct wl_output *output, bool entered) noexcept;
+
+  [[nodiscard]]
+  bool IsFramePending() const noexcept {
+    return frame_callback != nullptr;
+  }
+
+  /** Register a frame callback.  The next surface commit sends it. */
+  void ArmFrameCallback() noexcept;
+
+  void OnFrameDone(struct wl_callback *callback) noexcept;
+  void ClearFrameCallback() noexcept;
 #elif defined(ENABLE_SDL)
   SDL_Window *window;
 #endif
