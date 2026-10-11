@@ -812,13 +812,96 @@ or as part of ``everything`` (below). To build one program::
   make -j$(nproc) output/UNIX/bin/RunTask
 
 The ``everything`` target adds optional outputs, those ``debug`` utilities,
-unit-test binaries, and test harness programs; ``check`` runs the tests (build
-them first with ``everything`` or ``build-check``).
+unit-test binaries, and the flight harness (``build-harness``). ``check``
+runs the TAP unit tests listed as ``TEST_NAMES`` in :file:`build/test.mk`.
+Build those first with ``everything`` or ``build-check``. ``check`` does
+not run ``testfast`` or ``testslow``.
 
-``debug`` lists all ``Run*`` tools in :file:`build/test.mk`; ``build-harness``
-builds the ``test_*`` harness programs (also included in ``everything``).
-Utilities are built for the host platform (``UNIX``, Windows OpenGL, macOS),
-not for embedded targets such as Android or Kobo.
+``debug`` lists all ``Run*`` tools in :file:`build/test.mk`. Utilities are
+built for the host platform (``UNIX``, Windows OpenGL, macOS), not for
+embedded targets such as Android or Kobo.
+
+.. _flight-harness:
+
+Flight harness
+^^^^^^^^^^^^^^
+
+``testfast`` and ``testslow`` build and run the flight-engine harness.
+The program lists are ``TESTFAST`` and ``TESTSLOW`` in
+:file:`build/test.mk`. ``build-harness`` only compiles them, and
+``everything`` includes that compile. Continuous integration runs
+``make check``, not these two targets.
+
+.. code-block:: bash
+
+   make -j$(nproc) TARGET=UNIX testfast
+   make -j$(nproc) TARGET=UNIX testslow
+
+``testfast`` finishes in a few seconds. ``testslow`` flies simulated
+tasks and takes a few minutes. ``test_replay_olc`` replays
+:file:`test/data/0asljd01.igc`. Android builds omit that replay because
+it needs Java.
+
+Both targets print TAP through :file:`test/src/testall.pl`. To build and
+run one program::
+
+   make -j$(nproc) TARGET=UNIX output/UNIX/bin/test_flight
+   ./output/UNIX/bin/test_flight --verbose=1
+
+``-v`` needs an argument, so use ``-v 1``. An unknown option aborts the
+program.
+
+Four ``testfast`` programs are already part of ``make check``:
+``test_fixed``, ``TestWaypoints``, ``test_pressure`` and ``test_task``.
+The other harness programs are not.
+
+The flight programs share :file:`test/src/harness_flight.cpp`. An
+autopilot flies a constructed task through the task engine. Wind is one
+of nine cases in :file:`test/src/harness_wind.hpp`: still air, then
+5 m/s and 10 m/s from north, east, south and west. Where a program
+checks the clock, elapsed time must stay within 2% of the planned
+time. The random seed is fixed at startup, so a run repeats.
+
+``testfast``:
+
+* ``test_fixed``, ``TestWaypoints``, ``test_pressure``, ``test_task``
+  — fixed-point maths, waypoints, pressure, and task construction.
+  These four also run under ``make check``.
+* ``test_mc`` — writes MacCready polar samples under
+  ``output/results/``. It does not compare them with an expected value.
+* ``test_modes`` — abort, goto, and an empty task.
+* ``test_automc`` — auto MacCready is not slower than a fixed setting,
+  once for each wind.
+* ``test_acfilter`` — one flight with heading noise through the
+  aircraft-state filter.
+* ``test_vopt`` — flying slower or faster than the optimum speed takes
+  longer.
+
+``testslow``:
+
+* ``test_flight`` — elapsed time matches the plan for each task type
+  and one wind.
+* ``test_randomtask`` — the same clock check on random tasks.
+* ``test_aat`` — assigned-area tasks finish within 1.5% of the minimum
+  time. The mixed task uses a four-hour minimum.
+* ``test_bestcruisetrack`` — crabbing is not slower than drifting.
+* ``test_effectivemc``, ``test_cruiseefficiency`` — a clean flight
+  scores higher than wandering, the wrong speed, extra sink, or a weak
+  climb.
+* ``test_airspace`` — flights through generated airspace, including
+  clearing a polygon.
+* ``test_highterrain`` — the clock check while spare waypoint
+  elevations are raised. The flown task still uses the flat fields.
+* ``test_replay_olc`` — replays :file:`test/data/0asljd01.igc` and
+  checks OLC, DMSt, the XContest triangle, Charron and SIS-AT. Classic,
+  FAI and Plus scores come from :file:`test/data/0asljd01.txt`. The
+  sprint trace is solved while the flight is read, because it only
+  keeps the latest two hours.
+
+Glide and reach checks live in the ``make check`` programs
+``TestMacCready`` and ``TestTerrainReach``. ``TestMacCready`` includes
+a crosswind. ``TestTerrainReach`` builds a small terrain tile and
+checks ridge clearance and the reach fan.
 
 CI uses a headless software renderer and optional sanitizers (clean the
 output tree when switching ``SANITIZE=``)::

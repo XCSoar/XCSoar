@@ -73,6 +73,14 @@ To build a specific utility:
 The utilities are built for the host platform (your development machine), not
 for embedded targets like Android or Kobo.
 
+Flight harness
+--------------
+
+``testfast`` and ``testslow`` fly the task engine. They are separate
+from these ``Run*`` tools and from ``make check``. The programs, and how
+to run the two targets, are documented in :ref:`flight-harness` in
+:doc:`build`.
+
 Common Patterns
 ---------------
 
