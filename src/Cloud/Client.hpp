@@ -100,6 +100,11 @@ struct CloudClient
   std::optional<SkyLinesTracking::ReceivedFix::OGN> ogn;
 
   /**
+   * Time of day of the fix most recently forwarded to OGN.
+   */
+  std::optional<std::chrono::milliseconds> ogn_forwarded;
+
+  /**
    * FLARM aircraft type (glider for XCSoar cloud clients).
    */
   unsigned aircraft_type = CLOUD_DEFAULT_AIRCRAFT_TYPE;
