@@ -88,4 +88,10 @@ protected:
    * period.
    */
   Duration GetPeriodMin() const noexcept override;
+
+  /**
+   * E-paper keeps the Kobo idle floor.  An LCD keeps the constructor
+   * idle.
+   */
+  Duration GetIdleMin() const noexcept override;
 };

@@ -21,27 +21,31 @@
 MergeThread::Duration
 MergeThread::GetPeriodMin() const noexcept
 {
-  /* Same cap as the Kobo merge thread.  HasEPaper() follows the
-     display type, so an Android e-ink panel gets it too. */
+  /* E-paper cannot usefully refresh faster than this.  Kobo defaults
+     to that display type, so it takes this path too. */
   if (HasEPaper())
     return std::chrono::milliseconds{450};
 
   return WorkerThread::GetPeriodMin();
 }
 
+MergeThread::Duration
+MergeThread::GetIdleMin() const noexcept
+{
+  /* A merge that already filled the period still waits before the
+     next one.  An LCD keeps the shorter constructor idle. */
+  if (HasEPaper())
+    return std::chrono::milliseconds{100};
+
+  return WorkerThread::GetIdleMin();
+}
+
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
                          MultipleDevices *_devices,
                          TraceComputer *_trail_vario_sink) noexcept
   :WorkerThread("MergeThread",
-#ifdef KOBO
-                /* throttle more on the Kobo, because the EPaper
-                   screen cannot be updated that often */
-                std::chrono::milliseconds{450},
-                std::chrono::milliseconds{100},
-#else
                 std::chrono::milliseconds{50},
                 std::chrono::milliseconds{20},
-#endif
                 std::chrono::milliseconds{10}),
    device_blackboard(_device_blackboard),
    devices(_devices),
