@@ -122,9 +122,10 @@ protected:
 
   /**
    * Draw a checkbox at the left of the row and clipped text to the right.
+   * The text keeps the colour ListControl set for this row.
    */
   void DrawCheckboxText(Canvas &canvas, const PixelRect &rc,
-                        const char *text, bool selected) noexcept;
+                        const char *text, bool checked) noexcept;
 
   /** Optional hook for derived classes to react to selection changes. */
   virtual void OnSelectionChanged() noexcept {}
