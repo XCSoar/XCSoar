@@ -120,6 +120,7 @@ NativeView::Deinitialise(JNIEnv *env)
 
 NativeView::NativeView(JNIEnv *env, jobject _obj,
                        unsigned _width, unsigned _height,
+                       unsigned _display_width, unsigned _display_height,
                        unsigned _xdpi, unsigned _ydpi, unsigned _density_dpi,
                        jstring _product) noexcept
   :obj(env, _obj),
@@ -127,7 +128,10 @@ NativeView::NativeView(JNIEnv *env, jobject _obj,
 {
   Java::String::CopyTo(env, _product, product, sizeof(product));
 
-  const auto dpi = Display::SanitizeDisplayDpi({_width, _height},
+  /* xdpi/ydpi belong to the real display, not the surface.  A rotated
+     or multi-window surface can disagree with that pixel grid. */
+  const PixelSize display_size{_display_width, _display_height};
+  const auto dpi = Display::SanitizeDisplayDpi(display_size,
                                                {_xdpi, _ydpi},
                                                _density_dpi);
   if (dpi.x != _xdpi || dpi.y != _ydpi)
@@ -136,12 +140,11 @@ NativeView::NativeView(JNIEnv *env, jobject _obj,
 
   Display::ProvideDPI(dpi.x, dpi.y);
 
-  const PixelSize pixel_size{_width, _height};
   const UnsignedPoint2D physical{_xdpi, _ydpi};
   const float text_scale_y = Display::AndroidTextScaleY(
-    pixel_size, physical, _density_dpi, dpi);
+    display_size, physical, _density_dpi, dpi);
   const float letter_spacing = Display::AndroidTextLetterSpacing(
-    pixel_size, physical, _density_dpi, dpi);
+    display_size, physical, _density_dpi, dpi);
   const bool oem_dpi_corrected = text_scale_y != 1.f ||
     letter_spacing > 0.001f;
 

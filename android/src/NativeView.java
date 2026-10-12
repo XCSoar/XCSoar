@@ -459,6 +459,7 @@ class NativeView extends SurfaceView
       try {
         runNative(context, permissionManager,
                   r.width(), r.height(),
+                  metrics.widthPixels, metrics.heightPixels,
                   (int)metrics.xdpi, (int)metrics.ydpi,
                   metrics.densityDpi,
                   Build.PRODUCT);
@@ -538,6 +539,7 @@ class NativeView extends SurfaceView
   protected native void runNative(Context context,
                                   PermissionManager permissionManager,
                                   int width, int height,
+                                  int displayWidth, int displayHeight,
                                   int xdpi, int ydpi, int densityDpi,
                                   String product);
 
