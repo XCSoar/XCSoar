@@ -711,10 +711,11 @@ Nano::DownloadFlight(Port &port, const RecordedFlightInfo &flight,
   
   const auto partial_path = AllocatedPath::Build(path.GetParent(), partial_filename);
 
-  /* prefer the verified file transfer; a partial file left by the
-     row protocol is resumed with that protocol instead */
+  /* BLE uses the block transfer.  Classic serial and classic
+     Bluetooth stay on the rows.  A partial file left by the rows is
+     resumed with that protocol on every link. */
   const unsigned file_size = flight.internal.lx.nano_file_size;
-  if (file_size > 0 && !File::Exists(partial_path)) {
+  if (port.IsBleSerial() && file_size > 0 && !File::Exists(partial_path)) {
     FileOutputStream fos(path);
     BufferedOutputStream bos(fos);
     try {
