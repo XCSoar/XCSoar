@@ -263,7 +263,7 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   /* Short interval for the transfer.  Restored on every exit,
      including failure.  Ports that are not BLE ignore this. */
   port.SetConnectionPriority(Port::ConnectionPriority::HIGH);
-  AtScopeExit(&port) {
+  AtScopeExit(this) {
     port.SetConnectionPriority(Port::ConnectionPriority::BALANCED);
   };
 
