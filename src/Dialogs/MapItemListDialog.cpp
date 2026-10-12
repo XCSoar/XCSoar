@@ -640,8 +640,12 @@ MapItemListWidget::OnEnableClicked()
 inline void
 MapItemListWidget::OnClearanceClicked(bool set)
 {
-  const AirspaceMapItem &as_item = *(const AirspaceMapItem *)
-    list[GetCursorIndex()];
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || item->type != MapItem::Type::AIRSPACE ||
+      backend_components == nullptr)
+    return;
+
+  const auto &as_item = static_cast<const AirspaceMapItem &>(*item);
   auto *warnings = backend_components->GetAirspaceWarnings();
   if (warnings == nullptr) {
     LogFmt("Failed to update airspace clearance: missing warning manager");
