@@ -379,32 +379,40 @@ public:
       if (!iv.IsValid() && warning == nullptr)
         return;
 
-      if (warning == nullptr)
-        warning =
-          warning_manager.GetNewWarningPtr(
-            std::move(airspace_ptr));
+      /* Cleared airspaces keep their interval even when this
+         prediction is not a warning.  Other airspaces wait until
+         the intercept is accepted, so a rejected solution does not
+         leave a WARNING_CLEAR entry for WarningLive() to delete. */
+      if (warning == nullptr && iv.IsValid() &&
+          warning_manager.GetCleared(airspace))
+        warning = warning_manager.GetNewWarningPtr(airspace_ptr);
 
-      if (iv.IsValid())
+      if (warning != nullptr && iv.IsValid())
         warning->SetInterval(warning_state, iv);
 
-      /* Upgrade state and solution only when the new state
-         is at least as severe as the current one */
-      if (warning->IsStateAccepted(warning_state)) {
-        AirspaceInterceptSolution solution;
-        if (mode_inside)
-          solution = airspace.Intercept(
-            state, perf, state.location, state.location);
-        else
-          solution = Intercept(airspace, state, perf);
+      if (warning != nullptr &&
+          !warning->IsStateAccepted(warning_state))
+        return;
 
-        if (!solution.IsValid())
-          return;
-        if (solution.elapsed_time > max_time)
-          return;
+      AirspaceInterceptSolution solution;
+      if (mode_inside)
+        solution = airspace.Intercept(
+          state, perf, state.location, state.location);
+      else
+        solution = Intercept(airspace, state, perf);
 
-        warning->UpdateSolution(warning_state, solution);
-        found = true;
+      if (!solution.IsValid() || solution.elapsed_time > max_time)
+        return;
+
+      if (warning == nullptr) {
+        warning =
+          warning_manager.GetNewWarningPtr(std::move(airspace_ptr));
+        if (iv.IsValid())
+          warning->SetInterval(warning_state, iv);
       }
+
+      warning->UpdateSolution(warning_state, solution);
+      found = true;
     } catch (const std::exception &e) {
       LogFormat("Airspace intersection failed: %s", e.what());
 #ifndef NDEBUG
