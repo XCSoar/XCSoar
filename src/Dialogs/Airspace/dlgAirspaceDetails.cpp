@@ -101,33 +101,6 @@ GetScrollableTextRowMaximumHeight(const PixelRect &rc) noexcept
 
 } // namespace
 
-bool
-IsAirspaceClearanceAllowed(AirspaceClass type) noexcept
-{
-  return CommonInterface::GetComputerSettings().airspace.warnings
-    .IsClassClearanceAllowed(type);
-}
-
-bool
-TrySetAirspaceClearance(ProtectedAirspaceWarningManager &manager,
-                        ConstAirspacePtr airspace,
-                        bool set) noexcept
-{
-  try {
-    manager.SetCleared(std::move(airspace), set);
-    return true;
-  } catch (const std::exception &e) {
-    LogFmt("Failed to update airspace clearance: {}", e.what());
-    Message::AddMessage(_("Failed to update airspace clearance"));
-    return false;
-  } catch (...) {
-    LogError(std::current_exception(),
-             "Failed to update airspace clearance");
-    Message::AddMessage(_("Failed to update airspace clearance"));
-    return false;
-  }
-}
-
 class AirspaceDetailsWidget
   : public RowFormWidget {
 protected:
