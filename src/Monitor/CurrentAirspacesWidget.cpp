@@ -48,6 +48,8 @@ class AirspaceRowsWindow final : public ContainerWindow {
 
   unsigned row_height = 0;
   unsigned status_column_width = 0;
+  /** Row touched on press.  Lift-off opens details only if still here. */
+  int pressed_row = -1;
 
 public:
   AirspaceRowsWindow(CurrentAirspacesWidget &_widget,
@@ -106,23 +108,56 @@ protected:
     if (ContainerWindow::OnMouseDown(p))
       return true;
 
-    if (row_height == 0)
+    pressed_row = RowAt(p);
+    if (pressed_row < 0)
       return false;
+
+    SetCapture();
+    return true;
+  }
+
+  bool OnMouseUp(PixelPoint p) noexcept override {
+    const int row = pressed_row;
+    pressed_row = -1;
+    if (row < 0)
+      return ContainerWindow::OnMouseUp(p);
+
+    ReleaseCapture();
+    if (RowAt(p) == row)
+      dlgAirspaceDetails(entries[row].airspace, &manager);
+    return true;
+  }
+
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override {
+    if (pressed_row >= 0 && RowAt(p) != pressed_row)
+      pressed_row = -1;
+    return ContainerWindow::OnMouseMove(p, keys);
+  }
+
+  void OnCancelMode() noexcept override {
+    if (pressed_row >= 0)
+      ReleaseCapture();
+    pressed_row = -1;
+    ContainerWindow::OnCancelMode();
+  }
+
+private:
+  [[nodiscard]]
+  int RowAt(PixelPoint p) const noexcept {
+    if (row_height == 0)
+      return -1;
 
     const PixelRect client_rc = GetClientRect();
     const int rel_y = p.y - client_rc.top;
     if (rel_y < 0)
-      return false;
+      return -1;
 
     const unsigned i = unsigned(rel_y) / row_height;
     if (i >= n_entries)
-      return false;
-
-    dlgAirspaceDetails(entries[i].airspace, &manager);
-    return true;
+      return -1;
+    return int(i);
   }
 
-private:
   bool HasRevoke(unsigned i) const noexcept {
     return entries[i].role == CurrentAirspacesWidget::Role::Cleared;
   }
