@@ -77,6 +77,14 @@ abstract class AbstractAndroidPort implements AndroidPort {
       : STATE_FAILED;
   }
 
+  @Override public boolean setConnectionPriority(int priority) {
+    return false;
+  }
+
+  @Override public boolean requestMtu(int mtu) {
+    return false;
+  }
+
   @Override public final boolean drain() {
     OutputThread o = output;
     return o != null && o.drain();

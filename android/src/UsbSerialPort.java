@@ -133,6 +133,14 @@ public final class UsbSerialPort
     return true;
   }
 
+  @Override public boolean setConnectionPriority(int priority) {
+    return false;
+  }
+
+  @Override public boolean requestMtu(int mtu) {
+    return false;
+  }
+
   @Override
   public synchronized int write(byte[] data, int length) {
     UsbSerialDevice serialDevice = this.serialDevice;

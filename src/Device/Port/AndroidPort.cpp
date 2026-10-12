@@ -57,6 +57,27 @@ AndroidPort::SetBaudrate(unsigned baud_rate)
     throw std::runtime_error{"Failed to set baud rate"};
 }
 
+bool
+AndroidPort::SetConnectionPriority(ConnectionPriority priority) noexcept
+{
+  assert(bridge != nullptr);
+
+  return bridge->setConnectionPriority(Java::GetEnv(),
+                                       static_cast<int>(priority));
+}
+
+bool
+AndroidPort::RequestMtu(unsigned mtu) noexcept
+{
+  assert(bridge != nullptr);
+
+  /* Android's largest ATT MTU is 517. */
+  if (mtu > 517)
+    mtu = 517;
+
+  return bridge->requestMtu(Java::GetEnv(), static_cast<int>(mtu));
+}
+
 std::size_t
 AndroidPort::Write(std::span<const std::byte> src)
 {

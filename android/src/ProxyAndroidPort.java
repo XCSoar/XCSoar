@@ -88,6 +88,16 @@ abstract class ProxyAndroidPort implements AndroidPort {
     return port != null && port.setBaudRate(baud);
   }
 
+  @Override public boolean setConnectionPriority(int priority) {
+    AndroidPort port = this.port;
+    return port != null && port.setConnectionPriority(priority);
+  }
+
+  @Override public boolean requestMtu(int mtu) {
+    AndroidPort port = this.port;
+    return port != null && port.requestMtu(mtu);
+  }
+
   @Override public int write(byte[] data, int length) {
     AndroidPort port = this.port;
     return port != null

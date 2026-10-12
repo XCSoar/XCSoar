@@ -114,6 +114,41 @@ public:
   virtual void SetBaudrate(unsigned BaudRate) = 0;
 
   /**
+   * BLE connection interval.  Values match BluetoothGatt's public
+   * CONNECTION_PRIORITY_* constants.
+   *
+   * BALANCED is Android's default, 30–50 ms.  HIGH is 11.25–15 ms,
+   * for a burst such as a flight download.  LOW_POWER is 100–125 ms.
+   * Other ports ignore this.
+   */
+  enum class ConnectionPriority : uint8_t {
+    BALANCED = 0,
+    HIGH = 1,
+    LOW_POWER = 2,
+  };
+
+  /**
+   * Ask a BLE port for a connection interval.  Returns false when
+   * this port has no GATT link or the stack rejects the request.
+   */
+  virtual bool SetConnectionPriority(
+      [[maybe_unused]] ConnectionPriority priority) noexcept {
+    return false;
+  }
+
+  /**
+   * Ask a BLE port for an ATT MTU.  The stack may grant less.
+   * Android 14 and later asks for 517 on the first request and
+   * ignores the value.  Other ports ignore this.
+   *
+   * @return false when this port has no GATT link or the request
+   * was not started
+   */
+  virtual bool RequestMtu([[maybe_unused]] unsigned mtu) noexcept {
+    return false;
+  }
+
+  /**
    * Gets the current baud rate of the serial port
    *
    * @return the current baud rate, or 0 on error or if a baud rate is

@@ -17,6 +17,7 @@ class PortBridge : protected Java::GlobalCloseable {
   static jmethodID getState_method;
   static jmethodID drain_method;
   static jmethodID getBaudRate_method, setBaudRate_method;
+  static jmethodID setConnectionPriority_method, requestMtu_method;
   static jmethodID write_method;
 
   static constexpr size_t write_buffer_size = 4096;
@@ -48,6 +49,15 @@ public:
 
   bool setBaudRate(JNIEnv *env, int baud_rate) {
     return env->CallBooleanMethod(Get(), setBaudRate_method, baud_rate);
+  }
+
+  bool setConnectionPriority(JNIEnv *env, int priority) noexcept {
+    return env->CallBooleanMethod(Get(), setConnectionPriority_method,
+                                  priority);
+  }
+
+  bool requestMtu(JNIEnv *env, int mtu) noexcept {
+    return env->CallBooleanMethod(Get(), requestMtu_method, mtu);
   }
 
   std::size_t write(JNIEnv *env, std::span<const std::byte> src);
