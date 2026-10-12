@@ -137,10 +137,11 @@ private:
   KalmanFilter1d kalman_filter;
 
   /**
-   * Set after a high BLE interval was requested on a ready port.
-   * Cleared on link timeout so the next sample asks again.  A port
-   * that is not BLE is ready and ignores the request; settling
-   * avoids asking on every 50 Hz sample.
+   * Set after a ready port has been asked for the high interval.
+   * Cleared on link timeout.  A port that is not BLE, and a BLE
+   * stack that rejects the request, are not asked again until then.
+   * The 50 Hz stream would otherwise repeat a request that cannot
+   * succeed.
    */
   std::atomic<bool> high_priority_settled{false};
 
