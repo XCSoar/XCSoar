@@ -643,6 +643,7 @@ private:
   /* virtual methods from class PortListener */
   void PortStateChanged() noexcept override;
   void PortError(const char *msg) noexcept override;
+  void PortLog(const char *msg) noexcept override;
 
   /* virtual methods from DataHandler  */
   bool DataReceived(std::span<const std::byte> s) noexcept override;

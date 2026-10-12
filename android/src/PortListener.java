@@ -21,4 +21,11 @@ interface PortListener {
    * localised)
    */
   void portError(String msg);
+
+  /**
+   * A recoverable notice.  The port stays open.
+   *
+   * @param msg a human-readable message (probably not localised)
+   */
+  void portLog(String msg);
 }
