@@ -7,7 +7,10 @@
 
 lane :promote_open_testing do
   package_name = "org.xcsoar.play"
-  json_key = "play-key.json"
+  # A lane runs inside fastlane/. The workflow writes the key at the
+  # repository root, next to the other Play jobs, so a relative name
+  # would be opened as fastlane/play-key.json.
+  json_key = File.expand_path("../play-key.json")
 
   internal = latest_completed_version_code(
     package_name: package_name,
