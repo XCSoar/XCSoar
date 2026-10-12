@@ -3,11 +3,34 @@
 
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Internal.hpp"
+#include "Device/Port/Port.hpp"
+
+void
+BlueFlyDevice::RequestHighConnectionPriority() noexcept
+{
+  if (high_priority_settled.load())
+    return;
+
+  /* Still connecting.  The next sample, or EnableNMEA(), asks again. */
+  if (port.GetState() != PortState::READY)
+    return;
+
+  port.SetConnectionPriority(Port::ConnectionPriority::HIGH);
+  high_priority_settled.store(true);
+}
 
 void
 BlueFlyDevice::LinkTimeout()
 {
   kalman_filter.Reset();
+  high_priority_settled.store(false);
+}
+
+bool
+BlueFlyDevice::EnableNMEA([[maybe_unused]] OperationEnvironment &env)
+{
+  RequestHighConnectionPriority();
+  return true;
 }
 
 BlueFlyDevice::BlueFlyDevice(Port &_port)

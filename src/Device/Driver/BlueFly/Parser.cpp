@@ -225,6 +225,8 @@ ParseBFVTelemetry(NMEAInputLine &line, NMEAInfo &info, bool extended)
 bool
 BlueFlyDevice::ParseNMEA(const char *line, NMEAInfo &info)
 {
+  RequestHighConnectionPriority();
+
   if (line[0] == '$') {
     if (!VerifyNMEAChecksum(line))
       return false;
