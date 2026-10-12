@@ -368,7 +368,7 @@ public class BleSerialPort
    * status 0 is a clean drop, 8 a supervision timeout, 19 the peer,
    * 133 the Android stack.
    */
-  private void noteDisconnect(BluetoothGatt gatt, int status) {
+  private void noteDisconnect(BluetoothGatt gatt, int status) throws Error {
     final String msg = "GATT disconnected status=" + status;
     if (gatt.connect()) {
       log(msg + ", reconnecting");
