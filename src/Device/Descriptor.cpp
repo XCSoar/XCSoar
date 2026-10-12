@@ -1795,6 +1795,16 @@ DeviceDescriptor::PortStateChanged() noexcept
 }
 
 void
+DeviceDescriptor::PortLog(const char *msg) noexcept
+{
+  if (msg == nullptr || *msg == '\0')
+    return;
+
+  char buffer[64];
+  LogFormat("%s: %s", config.GetPortName(buffer, 64), msg);
+}
+
+void
 DeviceDescriptor::PortError(const char *msg) noexcept
 {
   {

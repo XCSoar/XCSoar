@@ -164,9 +164,8 @@ public class BleSerialPort
         notifyCharacteristic = null;
         deviceNameCharacteristic = null;
 
-        if ((BluetoothProfile.STATE_DISCONNECTED == newState) && !shutdown &&
-            !gatt.connect())
-          throw new Error("Received GATT disconnected event, and reconnect attempt failed");
+        if ((BluetoothProfile.STATE_DISCONNECTED == newState) && !shutdown)
+          noteDisconnect(gatt, status);
       }
 
       portState = STATE_LIMBO;
@@ -326,6 +325,36 @@ public class BleSerialPort
     return writeBuffer.write(gatt, writeCharacteristic,
                              deviceNameCharacteristic,
                              data, length);
+  }
+
+  /**
+   * Log a GATT drop without failing the port.  portError() marks the
+   * port FAILED, and the ticker then closes it, which drops the
+   * gatt.connect() this method just queued.
+   *
+   * status 0 is a clean drop, 8 a supervision timeout, 19 the peer,
+   * 133 the Android stack.
+   */
+  private void noteDisconnect(BluetoothGatt gatt, int status) {
+    final String msg = "GATT disconnected status=" + status;
+    if (gatt.connect()) {
+      log(msg + ", reconnecting");
+      return;
+    }
+
+    throw new Error(msg + ", reconnect failed");
+  }
+
+  private void log(String msg) {
+    PortListener portListener = this.portListener;
+    if (portListener != null && safeDestruct.increment()) {
+      try {
+        portListener.portLog(msg);
+      } finally {
+        safeDestruct.decrement();
+      }
+    } else
+      Log.w(TAG, msg);
   }
 
   protected final void stateChanged() {

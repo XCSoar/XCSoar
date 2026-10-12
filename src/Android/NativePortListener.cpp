@@ -40,6 +40,18 @@ Java_org_xcsoar_NativePortListener_portError(JNIEnv *env, jobject obj,
   listener.PortError(Java::String::GetUTFChars(env, msg).c_str());
 }
 
+JNIEXPORT void JNICALL
+Java_org_xcsoar_NativePortListener_portLog(JNIEnv *env, jobject obj,
+                                           jstring msg)
+{
+  jlong ptr = env->GetLongField(obj, NativePortListener::ptr_field);
+  if (ptr == 0 || msg == nullptr)
+    return;
+
+  PortListener &listener = *(PortListener *)(void *)ptr;
+  listener.PortLog(Java::String::GetUTFChars(env, msg).c_str());
+}
+
 void
 NativePortListener::Initialise(JNIEnv *env)
 {

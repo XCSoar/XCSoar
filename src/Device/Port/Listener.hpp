@@ -22,4 +22,11 @@ public:
    * localised)
    */
   virtual void PortError([[maybe_unused]] const char *msg) noexcept {}
+
+  /**
+   * A recoverable notice.  The port stays open.
+   *
+   * @param msg a human-readable message (probably not localised)
+   */
+  virtual void PortLog([[maybe_unused]] const char *msg) noexcept {}
 };
