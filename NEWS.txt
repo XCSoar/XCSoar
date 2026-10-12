@@ -147,6 +147,8 @@ Version 7.46 - not yet released
     mode, or to cycle the active display mode's map orientation; the
     compass is now shown with north-up as well (it stays hidden only on
     a dedicated "Map (north-up)" page) #2839
+  - on e-ink, draw terrain at full detail immediately, instead of
+    showing the coarse height facets first
   - freeze map rotation when entering pan instead of following the
     configured orientation, so the map does not spin while panning
     in track-up circling; leaving pan restores the orientation
@@ -597,6 +599,8 @@ Version 7.46 - not yet released
     type
   - describe Setup / Screen text drawn without anti-aliasing on
     e-ink
+  - describe e-ink terrain drawn at full detail, without a coarse
+    preview
 * development
   - document the testfast and testslow flight-harness targets in
     doc/build.rst
