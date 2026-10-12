@@ -260,6 +260,13 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
                          Path path,
                          OperationEnvironment &env)
 {
+  /* Short interval for the transfer.  Restored on every exit,
+     including failure.  Ports that are not BLE ignore this. */
+  port.SetConnectionPriority(Port::ConnectionPriority::HIGH);
+  AtScopeExit(&port) {
+    port.SetConnectionPriority(Port::ConnectionPriority::BALANCED);
+  };
+
   if (flight.internal.lx.nano_filename[0] != 0) {
     assert(!busy);
     busy = true;
