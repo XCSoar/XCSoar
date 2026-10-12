@@ -169,5 +169,11 @@ CalculationThread::GetPeriodMin() const noexcept
      slow CPUs keep the limit; 1x replay already matches it. */
   if (replay_active && !HasEPaper() && !IsSlowCPU())
     return Duration{};
+
+  /* The Kobo uses this cap because the panel cannot usefully refresh
+     faster.  The same cap applies to any e-paper display type. */
+  if (HasEPaper())
+    return std::chrono::milliseconds{900};
+
   return WorkerThread::GetPeriodMin();
 }
