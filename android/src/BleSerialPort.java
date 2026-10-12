@@ -26,6 +26,10 @@ public class BleSerialPort
     implements AndroidPort  {
   private static final String TAG = "XCSoar";
 
+  /* ATT MTU asked at connect and available to a flight download.
+     Android 14 and later ignores this and negotiates 517. */
+  static final int REQUESTED_MTU = 512;
+
   /* Maximum number of milliseconds to wait for disconnected state after
      calling BluetoothGatt.disconnect() in close() */
   private static final int DISCONNECT_TIMEOUT = 500;
@@ -188,11 +192,15 @@ public class BleSerialPort
       if (BluetoothGatt.GATT_SUCCESS != status)
         throw new Error("Discovering GATT services failed");
 
-      /* request a high MTU (usually, HM-10 chips support 23 bytes);
-         postpone the setupCharacteristics() call until onMtuChanged()
-         is called - we can't do both at the same time */
+      /* Postpone setupCharacteristics() until onMtuChanged().
+         A peripheral that rejects the request (HM-10 is often 23
+         bytes) still calls onMtuChanged(); if the stack will not
+         start the request, continue at the default MTU. */
       setupCharacteristicsPending = true;
-      gatt.requestMtu(256);
+      if (!requestMtu(REQUESTED_MTU)) {
+        setupCharacteristicsPending = false;
+        setupCharacteristics();
+      }
     } catch (Error e) {
       error(e.getMessage());
       stateChanged();
@@ -310,6 +318,31 @@ public class BleSerialPort
   @Override
   public boolean setBaudRate(int baud) {
     return true;
+  }
+
+  @Override
+  public boolean setConnectionPriority(int priority) {
+    final BluetoothGatt gatt = this.gatt;
+    if (gatt == null || shutdown)
+      return false;
+
+    /* Reject anything outside the three public constants.
+       requestConnectionPriority() throws on an unknown value. */
+    if (priority < BluetoothGatt.CONNECTION_PRIORITY_BALANCED ||
+        priority > BluetoothGatt.CONNECTION_PRIORITY_LOW_POWER)
+      return false;
+
+    return gatt.requestConnectionPriority(priority);
+  }
+
+  @Override
+  public boolean requestMtu(int mtu) {
+    final BluetoothGatt gatt = this.gatt;
+    /* 23 is the default ATT MTU.  517 is Android's maximum. */
+    if (gatt == null || shutdown || mtu < 23 || mtu > 517)
+      return false;
+
+    return gatt.requestMtu(mtu);
   }
 
   @Override

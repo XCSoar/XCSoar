@@ -16,6 +16,8 @@ jmethodID PortBridge::getState_method;
 jmethodID PortBridge::drain_method;
 jmethodID PortBridge::getBaudRate_method;
 jmethodID PortBridge::setBaudRate_method;
+jmethodID PortBridge::setConnectionPriority_method;
+jmethodID PortBridge::requestMtu_method;
 jmethodID PortBridge::write_method;
 
 void
@@ -31,6 +33,9 @@ PortBridge::Initialise(JNIEnv *env)
   drain_method = env->GetMethodID(cls, "drain", "()Z");
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");
+  setConnectionPriority_method =
+    env->GetMethodID(cls, "setConnectionPriority", "(I)Z");
+  requestMtu_method = env->GetMethodID(cls, "requestMtu", "(I)Z");
   write_method = env->GetMethodID(cls, "write", "([BI)I");
 }
 

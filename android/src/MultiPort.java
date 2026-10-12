@@ -110,6 +110,20 @@ class MultiPort implements AndroidPort, InputListener {
     return true;
   }
 
+  @Override public synchronized boolean setConnectionPriority(int priority) {
+    boolean any = false;
+    for (AndroidPort port : ports)
+      any |= port.setConnectionPriority(priority);
+    return any;
+  }
+
+  @Override public synchronized boolean requestMtu(int mtu) {
+    boolean any = false;
+    for (AndroidPort port : ports)
+      any |= port.requestMtu(mtu);
+    return any;
+  }
+
   @Override public synchronized int write(byte[] data, int length) {
     int result = -1;
 

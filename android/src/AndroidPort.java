@@ -22,6 +22,19 @@ interface AndroidPort extends AndroidSensor {
   boolean setBaudRate(int baud);
 
   /**
+   * Ask for a BLE connection interval.  @param priority is
+   * BluetoothGatt.CONNECTION_PRIORITY_BALANCED, _HIGH, or
+   * _LOW_POWER.  Ports that are not BLE return false.
+   */
+  boolean setConnectionPriority(int priority);
+
+  /**
+   * Ask for an ATT MTU.  The stack may grant less.  Ports that are
+   * not BLE return false.
+   */
+  boolean requestMtu(int mtu);
+
+  /**
    * Write data to the port.  Execution blocks until at least one
    * bytes is written or an error occurs or until the timeout expires.
    *

@@ -25,5 +25,7 @@ public:
   bool Drain() override;
   unsigned GetBaudrate() const noexcept override;
   void SetBaudrate(unsigned baud_rate) override;
+  bool SetConnectionPriority(ConnectionPriority priority) noexcept override;
+  bool RequestMtu(unsigned mtu) noexcept override;
   std::size_t Write(std::span<const std::byte> src) override;
 };
