@@ -86,6 +86,7 @@ public:
   void SetBaudrate(unsigned baud_rate) override;
   bool SetConnectionPriority(ConnectionPriority priority) noexcept override;
   bool RequestMtu(unsigned mtu) noexcept override;
+  bool IsBleSerial() const noexcept override;
   bool StopRxThread() override;
   bool StartRxThread() override;
   std::size_t Read(std::span<std::byte> dest) override;

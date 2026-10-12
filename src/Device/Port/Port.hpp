@@ -149,6 +149,15 @@ public:
   }
 
   /**
+   * True for an Android BLE serial link.  Classic Bluetooth, USB
+   * serial, and every other port return false.
+   */
+  [[gnu::pure]]
+  virtual bool IsBleSerial() const noexcept {
+    return false;
+  }
+
+  /**
    * Gets the current baud rate of the serial port
    *
    * @return the current baud rate, or 0 on error or if a baud rate is
