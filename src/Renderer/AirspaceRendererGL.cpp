@@ -370,6 +370,8 @@ class AirspaceVisitorRenderer final
   const AirspaceRendererSettings &settings;
   const bool use_even_odd;
   const bool use_outline_stencil;
+  /** CLEARED_RING_STENCIL is bit 4, so it needs five stencil bits. */
+  const bool use_cleared_ring;
   unsigned num_padding_vertices = 0;
 
 public:
@@ -377,11 +379,13 @@ public:
                           const AirspaceLook &_look,
                           const AirspaceWarningCopy &_warnings,
                           const AirspaceRendererSettings &_settings,
-                          bool _use_even_odd, bool _use_outline_stencil)
+                          bool _use_even_odd, bool _use_outline_stencil,
+                          bool _use_cleared_ring)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(1.1)),
      look(_look), warning_manager(_warnings), settings(_settings),
-     use_even_odd(_use_even_odd), use_outline_stencil(_use_outline_stencil)
+     use_even_odd(_use_even_odd), use_outline_stencil(_use_outline_stencil),
+     use_cleared_ring(_use_cleared_ring)
   {
     if (use_outline_stencil || use_even_odd) {
       glStencilMask(0xff);
@@ -400,7 +404,7 @@ private:
   [[nodiscard]]
   bool WantsClearedBoundaryPadding(const AbstractAirspace &airspace,
                                    bool fill_airspace) const noexcept {
-    return !fill_airspace &&
+    return use_cleared_ring && !fill_airspace &&
            warning_manager.IsWarningCapable(airspace) &&
            !warning_manager.IsClearedAtCurrentAltitude(airspace);
   }
@@ -564,8 +568,10 @@ public:
       SetClearanceStencil();
       canvas.DrawCircle(screen_center, screen_radius);
 
-      SetClearedRingStencil();
-      canvas.DrawCircle(screen_center, screen_radius);
+      if (use_cleared_ring) {
+        SetClearedRingStencil();
+        canvas.DrawCircle(screen_center, screen_radius);
+      }
       break;
     }
 
@@ -582,8 +588,10 @@ public:
         DrawPrepared();
       }
 
-      SetClearedRingStencil();
-      DrawPrepared();
+      if (use_cleared_ring) {
+        SetClearedRingStencil();
+        DrawPrepared();
+      }
       break;
     }
     }
@@ -948,8 +956,12 @@ AirspaceRenderer::DrawInternal(Canvas &canvas,
         renderer.Visit(airspace);
     }
   } else {
+    /* CLEARANCE_STENCIL is bit 3 (four bits).  The cleared-boundary
+       ring is bit 4 and needs a fifth. */
+    const bool use_cleared_ring = stencil_bits >= 5;
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc, settings,
-                                     use_even_odd, use_outline_stencil);
+                                     use_even_odd, use_outline_stencil,
+                                     use_cleared_ring);
 
     /* Stamp visible cleared airspaces so the warning fill leaves
        those areas empty.  Needs a fourth stencil bit; bit 2 is
