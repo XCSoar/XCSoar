@@ -118,7 +118,7 @@ ScaleSupported() noexcept
   return true;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline int
 Scale(int x) noexcept
 {
@@ -128,7 +128,7 @@ Scale(int x) noexcept
   return (x * int(scale_1024)) >> 10;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 Scale(unsigned x) noexcept
 {
@@ -138,7 +138,7 @@ Scale(unsigned x) noexcept
   return (x * scale_1024) >> 10;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline long
 Scale(long x) noexcept
 {
@@ -148,7 +148,7 @@ Scale(long x) noexcept
   return (x * long(scale_1024)) >> 10;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline double
 Scale(double x) noexcept
 {
@@ -158,7 +158,7 @@ Scale(double x) noexcept
   return x * (Layout::scale_1024 / 1024.);
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline PixelSize
 Scale(PixelSize size) noexcept
 {
@@ -168,7 +168,7 @@ Scale(PixelSize size) noexcept
   return {Scale(size.width), Scale(size.height)};
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline int
 FastScale(int x) noexcept
 {
@@ -178,7 +178,7 @@ FastScale(int x) noexcept
   return x * int(scale);
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 FastScale(unsigned x) noexcept
 {
@@ -188,7 +188,7 @@ FastScale(unsigned x) noexcept
   return x * scale;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline long
 FastScale(long x) noexcept
 {
@@ -198,7 +198,7 @@ FastScale(long x) noexcept
   return x * (long)scale;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 ScalePenWidth(unsigned width) noexcept
 {
@@ -208,7 +208,7 @@ ScalePenWidth(unsigned width) noexcept
   return (width * pen_width_scale) >> 10;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 ScaleFinePenWidth(unsigned width) noexcept
 {
@@ -223,7 +223,7 @@ ScaleFinePenWidth(unsigned width) noexcept
  *
  * Use this if you need exact physical dimensions.
  */
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 PtScale(unsigned pt) noexcept
 {
@@ -237,7 +237,7 @@ PtScale(unsigned pt) noexcept
  *
  * Use this for best readability of on-screen objects.
  */
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 VptScale(unsigned pt) noexcept
 {
@@ -249,7 +249,7 @@ VptScale(unsigned pt) noexcept
  * scaling factors may be applied to consider small screens
  * (i.e. viewing distance) and user preference.
  */
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 FontScale(unsigned spt) noexcept
 {
@@ -269,7 +269,7 @@ ScaleY(int y) noexcept
   return y;
 }
 
-[[gnu::const]]
+[[gnu::pure]]
 static inline unsigned
 GetTextPadding() noexcept
 {
