@@ -10,12 +10,24 @@
 #include "NMEA/Derived.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Device/MultipleDevices.hpp"
+#include "Asset.hpp"
 
 #ifdef HAVE_TRACKING
 #include "Components.hpp"
 #include "NetComponents.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #endif
+
+MergeThread::Duration
+MergeThread::GetPeriodMin() const noexcept
+{
+  /* Same cap as the Kobo merge thread.  HasEPaper() follows the
+     display type, so an Android e-ink panel gets it too. */
+  if (HasEPaper())
+    return std::chrono::milliseconds{450};
+
+  return WorkerThread::GetPeriodMin();
+}
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard,
                          MultipleDevices *_devices,

@@ -149,6 +149,8 @@ Version 7.46 - not yet released
     a dedicated "Map (north-up)" page) #2839
   - on e-ink, draw terrain at full detail immediately, instead of
     showing the coarse height facets first
+  - on e-ink, cap map updates at the Kobo rate: calculations at
+    900 ms and sensor merge at 450 ms
   - freeze map rotation when entering pan instead of following the
     configured orientation, so the map does not spin while panning
     in track-up circling; leaving pan restores the orientation
@@ -601,6 +603,7 @@ Version 7.46 - not yet released
     e-ink
   - describe e-ink terrain drawn at full detail, without a coarse
     preview
+  - describe the Kobo update caps on every e-ink display
 * development
   - document the testfast and testslow flight-harness targets in
     doc/build.rst

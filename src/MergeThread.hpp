@@ -82,4 +82,10 @@ private:
 
 protected:
   void Tick() noexcept override;
+
+  /**
+   * E-paper uses the Kobo merge cap.  An LCD keeps the constructor
+   * period.
+   */
+  Duration GetPeriodMin() const noexcept override;
 };
