@@ -241,10 +241,11 @@ Version 7.46 - not yet released
   - fix corrupted IGC files downloaded from LXNAV S100 and other
     LXNAV loggers over Bluetooth: reject B and K records whose length
     does not match the file's I and J records #3229
-  - download flights from LXNAV loggers that support it (such as the
-    Nano 3 and the S10) in CRC-checked blocks, the way LXNAV's own app
-    does, and fall back to the row download on loggers that do not or
-    when a transfer breaks off #3229
+  - download flights from LXNAV loggers over BLE in CRC-checked
+    blocks, the way LXNAV's own app does, and fall back to the row
+    download when the logger does not support it or a transfer breaks
+    off; a serial port or classic Bluetooth keeps the row download
+    #3229
   - fix Condor 3 Spectate showing altitude about 40 m (136 ft) too low #3055
   - ignore Condor 3 UDP electronic vario, altimeter, airspeed,
     heading, and ground speed so they cannot override NMEA GPS and
@@ -527,6 +528,9 @@ Version 7.46 - not yet released
     task, polar or flight log when a temporary file cannot be
     created #3256
 * documentation
+  - document that an LXNAV flight download uses checked blocks on
+    BLE and reads the flight line by line on a serial port or classic
+    Bluetooth
   - describe the Startup Task MC setting on the Safety Factors page
   - clarify Reach polar versus always-Safety-MC (InfoBoxes, waypoint
     details), and that abort does not copy Safety MC into the ring

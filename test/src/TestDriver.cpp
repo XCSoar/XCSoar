@@ -1042,10 +1042,12 @@ TestNanoDownloadFlight()
                                          "nano-download.igc");
 
   using Mode = NanoLoggerPort::Mode;
+  /* BLE uses the block transfer.  A logger that ignores FILE_INFO
+     falls back to 7-line row requests. */
   for (const Mode mode : {Mode::CLEAN, Mode::DAMAGE, Mode::NO_FILE,
                           Mode::S_VARIO, Mode::NANO_302,
                           Mode::NANO_302_LOSSY}) {
-    NanoLoggerPort port{flight, mode};
+    NanoLoggerPort port{flight, mode, true};
     NullOperationEnvironment env;
     File::Delete(path);
 
@@ -1056,18 +1058,18 @@ TestNanoDownloadFlight()
     ok1(File::ReadString(path, result.data(), result.size()) &&
         flight == result.data());
 
-    /* only a logger without the file transfer needs the rows */
     if (mode == Mode::NO_FILE) {
       ok1(port.FindContaining("PLXVC,FLIGHT,R,") != nullptr);
-      ok1(FlightRowChunk(port, 50));
+      ok1(FlightRowChunk(port, 7));
     } else
       ok1(port.FindContaining("PLXVC,FILE_CRC_OK,R") != nullptr &&
           port.FindContaining("PLXVC,FLIGHT,R,") == nullptr);
   }
 
-  /* BLE asks for 7 lines.  Classic Bluetooth and serial stay at 50. */
+  /* Classic serial and classic Bluetooth stay on the rows, 50 lines
+     after the first, even when the logger can do the block transfer. */
   {
-    NanoLoggerPort port{flight, Mode::NO_FILE, true};
+    NanoLoggerPort port{flight, Mode::CLEAN};
     NullOperationEnvironment env;
     File::Delete(path);
 
@@ -1076,7 +1078,8 @@ TestNanoDownloadFlight()
     std::vector<char> result(flight.size() + 2);
     ok1(File::ReadString(path, result.data(), result.size()) &&
         flight == result.data());
-    ok1(FlightRowChunk(port, 7));
+    ok1(FlightRowChunk(port, 50));
+    ok1(port.FindContaining("PLXVC,FILE_INFO,R,") == nullptr);
   }
 
   File::Delete(path);
@@ -4494,7 +4497,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
-             + 22 /* NanoDownloadFlight */
+             + 23 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
              + 17 /* LXNAVQNH */
              + 25 /* LXNAVQNHModel */
