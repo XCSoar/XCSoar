@@ -75,6 +75,7 @@ public:
   static void Deinitialise(JNIEnv *env);
 
   NativeView(JNIEnv *_env, jobject _obj, unsigned _width, unsigned _height,
+             unsigned _display_width, unsigned _display_height,
              unsigned _xdpi, unsigned _ydpi, unsigned _density_dpi,
              jstring _product) noexcept;
 

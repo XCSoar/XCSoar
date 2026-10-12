@@ -235,6 +235,7 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj,
                                      jobject _context,
                                      jobject _permission_manager,
                                      jint width, jint height,
+                                     jint display_width, jint display_height,
                                      jint xdpi, jint ydpi, jint density_dpi,
                                      jstring product)
 try {
@@ -277,8 +278,9 @@ try {
   AtScopeExit(env) { TextUtil::Deinitialise(env); };
 
   assert(native_view == nullptr);
-  native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
-                               density_dpi, product);
+  native_view = new NativeView(env, obj, width, height,
+                               display_width, display_height,
+                               xdpi, ydpi, density_dpi, product);
   AtScopeExit() {
     delete native_view;
     native_view = nullptr;
