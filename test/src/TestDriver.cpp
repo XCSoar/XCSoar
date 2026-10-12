@@ -830,6 +830,7 @@ public:
 private:
   const std::string flight;
   const Mode mode;
+  const bool ble;
 
   std::string reply;
   std::size_t handled_lines = 0;
@@ -841,8 +842,13 @@ private:
   bool resend_dropped = false;
 
 public:
-  NanoLoggerPort(std::string_view _flight, Mode _mode) noexcept
-    :flight(_flight), mode(_mode) {}
+  NanoLoggerPort(std::string_view _flight, Mode _mode,
+                 bool _ble = false) noexcept
+    :flight(_flight), mode(_mode), ble(_ble) {}
+
+  bool IsBleSerial() const noexcept override {
+    return ble;
+  }
 
   std::size_t Write(std::span<const std::byte> src) override {
     const std::size_t result = DumpPort::Write(src);
@@ -987,6 +993,38 @@ private:
   }
 };
 
+/**
+ * The first row request is one line.  Every later request is at most
+ * @p chunk lines, and at least one request uses the full chunk.
+ */
+static bool
+FlightRowChunk(const NanoLoggerPort &port, unsigned chunk) noexcept
+{
+  bool first = true, saw_chunk = false;
+  for (const auto &line : port.GetLines()) {
+    if (!line.starts_with("$PLXVC,FLIGHT,R,"))
+      continue;
+
+    NMEAInputLine in(line.c_str() + 16);
+    in.Skip();
+    unsigned start, end;
+    if (!in.ReadChecked(start) || !in.ReadChecked(end) || end <= start)
+      return false;
+
+    const unsigned n = end - start;
+    if (first) {
+      if (n != 1)
+        return false;
+      first = false;
+    } else if (n > chunk)
+      return false;
+    else if (n == chunk)
+      saw_chunk = true;
+  }
+
+  return saw_chunk;
+}
+
 static void
 TestNanoDownloadFlight()
 {
@@ -1019,11 +1057,26 @@ TestNanoDownloadFlight()
         flight == result.data());
 
     /* only a logger without the file transfer needs the rows */
-    if (mode == Mode::NO_FILE)
+    if (mode == Mode::NO_FILE) {
       ok1(port.FindContaining("PLXVC,FLIGHT,R,") != nullptr);
-    else
+      ok1(FlightRowChunk(port, 50));
+    } else
       ok1(port.FindContaining("PLXVC,FILE_CRC_OK,R") != nullptr &&
           port.FindContaining("PLXVC,FLIGHT,R,") == nullptr);
+  }
+
+  /* BLE asks for 7 lines.  Classic Bluetooth and serial stay at 50. */
+  {
+    NanoLoggerPort port{flight, Mode::NO_FILE, true};
+    NullOperationEnvironment env;
+    File::Delete(path);
+
+    ok1(Nano::DownloadFlight(port, info, path, 20, env));
+
+    std::vector<char> result(flight.size() + 2);
+    ok1(File::ReadString(path, result.data(), result.size()) &&
+        flight == result.data());
+    ok1(FlightRowChunk(port, 7));
   }
 
   File::Delete(path);
@@ -4441,7 +4494,7 @@ int main()
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
-             + 18 /* NanoDownloadFlight */
+             + 22 /* NanoDownloadFlight */
              + 9 /* LXNanoLogbook */
              + 17 /* LXNAVQNH */
              + 25 /* LXNAVQNHModel */

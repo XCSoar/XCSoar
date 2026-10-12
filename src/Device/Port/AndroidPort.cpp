@@ -8,8 +8,9 @@
 #include <stdexcept>
 
 AndroidPort::AndroidPort(PortListener *_listener, DataHandler &_handler,
-                         PortBridge *_bridge)
-  :BufferedPort(_listener, _handler), bridge(_bridge)
+                         PortBridge *_bridge, bool _ble_serial)
+  :BufferedPort(_listener, _handler), bridge(_bridge),
+   ble_serial(_ble_serial)
 {
   assert(bridge != nullptr);
 
@@ -76,6 +77,12 @@ AndroidPort::RequestMtu(unsigned mtu) noexcept
     mtu = 517;
 
   return bridge->requestMtu(Java::GetEnv(), static_cast<int>(mtu));
+}
+
+bool
+AndroidPort::IsBleSerial() const noexcept
+{
+  return ble_serial;
 }
 
 std::size_t

@@ -15,9 +15,13 @@ class AndroidPort : public BufferedPort
 {
   PortBridge *bridge;
 
+  /** Set for BLE serial.  Classic Bluetooth and USB serial leave it
+      false. */
+  const bool ble_serial;
+
 public:
   AndroidPort(PortListener *_listener, DataHandler &_handler,
-              PortBridge *bridge);
+              PortBridge *bridge, bool ble_serial = false);
   ~AndroidPort() noexcept override;
 
   /* virtual methods from class Port */
@@ -27,5 +31,6 @@ public:
   void SetBaudrate(unsigned baud_rate) override;
   bool SetConnectionPriority(ConnectionPriority priority) noexcept override;
   bool RequestMtu(unsigned mtu) noexcept override;
+  bool IsBleSerial() const noexcept override;
   std::size_t Write(std::span<const std::byte> src) override;
 };

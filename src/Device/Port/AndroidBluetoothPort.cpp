@@ -38,5 +38,5 @@ OpenAndroidBleSerialPort(BluetoothHelper &bluetooth_helper,
 
   PortBridge *bridge = bluetooth_helper.connectBleSerial(Java::GetEnv(), address);
   assert(bridge != nullptr);
-  return std::make_unique<AndroidPort>(listener, handler, bridge);
+  return std::make_unique<AndroidPort>(listener, handler, bridge, true);
 }

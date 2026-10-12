@@ -401,8 +401,12 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
   bool range_set = false;
 
   while (true) {
-    /* read up to 50 lines at a time */
-    unsigned nrequest = row_count == 0 ? 1 : 50;
+    /* The first request is one line, so the record length is known.
+       Later requests are 50 lines.  On BLE that burst overruns the
+       short buffer, so ask for 7 (#3296).  Classic Bluetooth and
+       serial stay at 50. */
+    const unsigned chunk = port.IsBleSerial() ? 7u : 50u;
+    unsigned nrequest = row_count == 0 ? 1 : chunk;
     if (row_count > 0) {
       assert(i <= row_count);
       const unsigned remaining = row_count - i + 1;

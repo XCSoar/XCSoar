@@ -118,6 +118,12 @@ DumpPort::RequestMtu(unsigned mtu) noexcept
 }
 
 bool
+DumpPort::IsBleSerial() const noexcept
+{
+  return port->IsBleSerial();
+}
+
+bool
 DumpPort::StopRxThread()
 {
   if (CheckEnabled())
