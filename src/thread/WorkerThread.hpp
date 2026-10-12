@@ -87,6 +87,15 @@ protected:
     return period_min;
   }
 
+  /**
+   * Minimum sleep after Tick().  Subclasses may raise this when the
+   * panel cannot usefully refresh at the constructor rate.
+   */
+  [[gnu::pure]]
+  virtual Duration GetIdleMin() const noexcept {
+    return idle_min;
+  }
+
   virtual void Run() noexcept;
 
   /**

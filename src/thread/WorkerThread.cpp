@@ -53,7 +53,7 @@ WorkerThread::Run() noexcept
       Tick();
     }
 
-    auto idle = idle_min;
+    auto idle = GetIdleMin();
     const auto pmin = GetPeriodMin();
     if (pmin.count() > 0) {
       const auto elapsed = clock.Elapsed();
