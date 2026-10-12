@@ -19,7 +19,6 @@ jmethodID TextUtil::midGetTextBounds;
 jmethodID TextUtil::midGetTextTextureGL;
 static jmethodID midSetCorrectedDpi;
 static bool oem_dpi_corrected{};
-static float text_letter_spacing{};
 
 void
 TextUtil::Initialise(JNIEnv *_env) noexcept
@@ -28,7 +27,7 @@ TextUtil::Initialise(JNIEnv *_env) noexcept
 
   cls.Find(_env, "org/xcsoar/TextUtil");
 
-  midTextUtil = _env->GetMethodID(cls, "<init>", "(IZZZZZZF)V");
+  midTextUtil = _env->GetMethodID(cls, "<init>", "(IZZZZZF)V");
   midGetFontMetrics = _env->GetMethodID(cls, "getFontMetrics", "([I)V");
   midGetTextBounds = _env->GetMethodID(cls, "getTextBounds",
                                        "(Ljava/lang/String;)[I");
@@ -43,7 +42,6 @@ TextUtil::SetCorrectedDpi(float text_scale_y, float letter_spacing,
                           bool corrected) noexcept
 {
   oem_dpi_corrected = corrected;
-  text_letter_spacing = letter_spacing;
   env->CallStaticVoidMethod(cls, midSetCorrectedDpi,
                             (jfloat)text_scale_y,
                             (jfloat)letter_spacing);
@@ -88,12 +86,8 @@ TextUtil::create(const FontDescription &d)
      sizes (fitEmHeight, OEM textScaleY) and e-paper. */
   const bool linear_metrics = alias_edging || oem_dpi_corrected;
 
-  /* Per-glyph layout was for skewed OEM advances; letter-spacing
-     widens runs without squashing counters like setTextScaleX(). */
-  const bool per_glyph = oem_dpi_corrected &&
-    text_letter_spacing < 0.001f;
-
-  // construct org.xcsoar.TextUtil object
+  /* Letter spacing adjusts the whole shaped run.  Drawing one code
+     point at a time would drop joining, marks, and kerning. */
   auto &e = *env;
   Java::LocalObject localObject{&e,
     e.NewObject(cls, midTextUtil,
@@ -103,7 +97,6 @@ TextUtil::create(const FontDescription &d)
                 (jboolean)d.IsMonospace(),
                 (jboolean)alias_edging,
                 (jboolean)linear_metrics,
-                (jboolean)per_glyph,
                 (jfloat)d.GetLetterSpacing())};
   Java::RethrowException(&e);
 

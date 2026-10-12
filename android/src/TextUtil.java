@@ -22,7 +22,6 @@ public final class TextUtil {
 
   private final Paint paint;
   private final Paint.FontMetricsInt metrics;
-  private final boolean perGlyphLayout;
   private final int[] extent = new int[2];
   private final int[] id = new int[5];
 
@@ -77,31 +76,9 @@ public final class TextUtil {
       paint.setTextSize(targetEmPx * targetEmPx / em);
   }
 
-  private float measureTextRun(String text) {
-    float width = 0;
-    for (int i = 0; i < text.length();) {
-      final int cp = text.codePointAt(i);
-      final int len = Character.charCount(cp);
-      width += paint.measureText(text, i, i + len);
-      i += len;
-    }
-    return width;
-  }
-
-  private void drawTextRun(Canvas canvas, String text, float x, float y) {
-    float cx = x;
-    for (int i = 0; i < text.length();) {
-      final int cp = text.codePointAt(i);
-      final int len = Character.charCount(cp);
-      canvas.drawText(text, i, i + len, cx, y, paint);
-      cx += paint.measureText(text, i, i + len);
-      i += len;
-    }
-  }
-
   public TextUtil(int textSize, boolean bold, boolean italic,
                   boolean monospace, boolean aliasEdging,
-                  boolean linearMetrics, boolean perGlyphLayout,
+                  boolean linearMetrics,
                   float fontLetterSpacingEm) {
     paint = new Paint(0);
 
@@ -127,7 +104,6 @@ public final class TextUtil {
     else
       paint.setTextSkewX(0f);
 
-    this.perGlyphLayout = perGlyphLayout;
     metrics = paint.getFontMetricsInt();
   }
 
@@ -147,10 +123,7 @@ public final class TextUtil {
     /* we cannot simply use getTextBounds() here, because xcsoar will not
      * know where the baseline of the text is inside the texture
      */
-    if (perGlyphLayout)
-      extent[0] = Math.round(measureTextRun(text));
-    else
-      extent[0] = Math.round(paint.measureText(text));
+    extent[0] = Math.round(paint.measureText(text));
     extent[1] = metrics.descent - metrics.ascent;
     return extent;
   }
@@ -165,10 +138,7 @@ public final class TextUtil {
     paint.setColor(Color.WHITE);
     Canvas canvas = new Canvas(bmp);
     canvas.setDensity(Bitmap.DENSITY_NONE);
-    if (perGlyphLayout)
-      drawTextRun(canvas, text, 0, -metrics.ascent);
-    else
-      canvas.drawText(text, 0, -metrics.ascent, paint);
+    canvas.drawText(text, 0, -metrics.ascent, paint);
 
     if (!BitmapUtil.bitmapToOpenGL(bmp, true, false, id))
       return null;
