@@ -5,6 +5,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
+#include "Asset.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "ui/canvas/Color.hpp"
 #include "ui/canvas/RawBitmap.hpp"
@@ -197,6 +198,12 @@ RasterRenderer::~RasterRenderer() noexcept
 static unsigned
 GetQuantisation() noexcept
 {
+  /* An e-paper panel keeps every swapped frame.  Draw the final
+     sample size immediately so the coarse height facets are never
+     shown. */
+  if (HasEPaper())
+    return 1;
+
   if (IsUserIdle(1500))
     /* full terrain resolution when the user stops interacting */
     return 1;
