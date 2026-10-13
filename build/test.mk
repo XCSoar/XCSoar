@@ -147,6 +147,7 @@ TEST_NAMES = \
 	TestLXNToIGC \
 	TestLeastSquares \
 	TestHexString \
+	TestInfoBoxLayout \
 	TestUriUtil \
 	TestThermalBand \
 	TestPackedFloat \
@@ -187,6 +188,12 @@ TEST_HEX_STRING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestHexString.cpp
 $(eval $(call link-program,TestHexString,TEST_HEX_STRING))
+
+TEST_INFO_BOX_LAYOUT_SOURCES = \
+	$(SRC)/InfoBoxes/InfoBoxLayout.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestInfoBoxLayout.cpp
+$(eval $(call link-program,TestInfoBoxLayout,TEST_INFO_BOX_LAYOUT))
 
 TEST_URI_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

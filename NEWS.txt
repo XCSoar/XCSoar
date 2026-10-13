@@ -458,6 +458,9 @@ Version 7.46 - not yet released
     because wind is not available
   - add "Speed VMG" InfoBox: the part of the ground speed that closes
     the distance to the next waypoint
+  - fix the title and the value overlapping in the 5 Right
+    InfoBoxes on a landscape screen; that column is narrowed so
+    the text fits, as on the other side layouts #3327
 * ui
   - rename Reach polar Task to Task MC, matching Safety MC
   - rename the waypoint arrival rows to Alt. diff. Safety MC and

@@ -661,9 +661,12 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout, PixelSize screen_size,
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_5:
-    // calculate control dimensions
-    layout.control_size.width = screen_size.width / 5;
+    /* Landscape caps the width like the other columns so the font fits. */
     layout.control_size.height = screen_size.height / 5;
+    layout.control_size.width = landscape
+      ? CalculateInfoBoxColumnWidth(screen_size.width,
+                                    layout.control_size.height)
+      : screen_size.width / 5;
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_16:
