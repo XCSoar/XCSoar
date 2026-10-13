@@ -81,6 +81,8 @@ Version 7.46 - not yet released
   - add a desktop menu entry and icon for the Unix package #1496
   - add restart and power-off controls to the Quit dialog
   - use OpenGL ES instead of desktop OpenGL #2140
+  - in landscape, show Turn on and Restart for System Services in
+    the button column so the service list keeps that row
   - termination: fix SIGTERM and Ctrl-C killing the program instead of
     shutting it down, which lost the settings and the flight log that
     are written on exit
