@@ -431,7 +431,10 @@ Version 7.46 - not yet released
     that no longer exists
   - fix Look → Pages cutting off the bottom fields in landscape;
     the page editor scrolls when it does not fit, and Add, Delete
-    and the move buttons move into the button column #3326
+    and the move buttons move into the button column. Up and Down
+    stay on the page list until Enter, then walk the editor, those
+    buttons and Expert. Escape returns to the list; a second
+    Escape closes the dialog #3326
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator

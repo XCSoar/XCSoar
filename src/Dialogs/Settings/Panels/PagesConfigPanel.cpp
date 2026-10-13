@@ -7,6 +7,7 @@
 #include "Renderer/TextRowRenderer.hpp"
 #include "Form/Button.hpp"
 #include "Form/ButtonPanel.hpp"
+#include "Form/CheckBox.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "PageActions.hpp"
@@ -34,6 +35,8 @@
 #include "UIGlobals.hpp"
 #include "ConfigPanel.hpp"
 #include "Screen/Layout.hpp"
+#include "ui/event/KeyCode.hpp"
+#include "ui/window/ContainerWindow.hpp"
 #include "util/StaticString.hxx"
 
 #ifdef HAVE_HTTP
@@ -103,6 +106,11 @@ class PageListWidget
 
   void SyncChromeButtons() noexcept;
   void ReleaseChromeButtons() noexcept;
+
+  /** 0 Add, 1 Delete, 2 move up, 3 move down. Expert is 4. */
+  Button *ActionButton(unsigned i) const noexcept;
+  int ActionIndex() const noexcept;
+  bool FocusAction(int from, bool down) noexcept;
 
 public:
   ~PageListWidget() {
@@ -188,6 +196,7 @@ public:
   void Hide() noexcept override;
   void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
   void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -705,6 +714,104 @@ PageListWidget::ReleaseChromeButtons() noexcept
     ConfigPanel::ReturnExtraButton(i);
   chrome_add = chrome_delete = nullptr;
   chrome_up = chrome_down = nullptr;
+}
+
+Button *
+PageListWidget::ActionButton(unsigned i) const noexcept
+{
+  switch (i) {
+  case 0:
+    return chrome_add != nullptr ? chrome_add : add_button;
+  case 1:
+    return chrome_delete != nullptr ? chrome_delete : delete_button;
+  case 2:
+    return chrome_up != nullptr ? chrome_up : move_up_button;
+  case 3:
+    return chrome_down != nullptr ? chrome_down : move_down_button;
+  default:
+    return nullptr;
+  }
+}
+
+int
+PageListWidget::ActionIndex() const noexcept
+{
+  for (unsigned i = 0; i < 4; ++i) {
+    const Button *b = ActionButton(i);
+    if (b != nullptr && b->HasFocus())
+      return i;
+  }
+
+  if (ConfigPanel::GetExpertCheckbox().HasFocus())
+    return 4;
+
+  return -1;
+}
+
+bool
+PageListWidget::FocusAction(int from, bool down) noexcept
+{
+  const int step = down ? 1 : -1;
+  for (int i = from + step; i >= 0 && i <= 4; i += step) {
+    if (i == 4) {
+      ConfigPanel::GetExpertCheckbox().SetFocus();
+      return true;
+    }
+
+    Button *b = ActionButton(i);
+    if (b != nullptr && b->IsVisible() && b->IsEnabled()) {
+      b->SetFocus();
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool
+PageListWidget::KeyPress(unsigned key_code) noexcept
+{
+  /* First level: Up/Down stay on the page list. Left/Right are the
+     pager's. Enter activates the row and focuses the editor. */
+  if (IsDefined() && GetList().HasFocus()) {
+    if (key_code == KEY_UP || key_code == KEY_DOWN) {
+      ListWidget::KeyPress(key_code);
+      return true;
+    }
+    return false;
+  }
+
+  const bool in_editor = editor->HasFocus();
+  const int action = ActionIndex();
+  if (key_code == KEY_ESCAPE) {
+    if (in_editor || action >= 0) {
+      GetList().SetFocus();
+      return true;
+    }
+    return false;
+  }
+
+  if (key_code != KEY_UP && key_code != KEY_DOWN)
+    return false;
+
+  if (in_editor) {
+    const bool down = key_code == KEY_DOWN;
+    if (editor->FocusAdjacent(down))
+      return true;
+
+    /* Past the last field: Add, Delete, move up, move down, Expert. */
+    if (down)
+      FocusAction(-1, true);
+    return true;
+  }
+
+  if (action < 0)
+    return false;
+
+  const bool down = key_code == KEY_DOWN;
+  if (!FocusAction(action, down) && !down)
+    ((ContainerWindow &)editor->GetWindow()).FocusLastControl();
+  return true;
 }
 
 void

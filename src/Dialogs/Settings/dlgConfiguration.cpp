@@ -235,6 +235,10 @@ public:
     return buttons[number - 1];
   }
 
+  CheckBoxControl &GetExpert() noexcept {
+    return expert;
+  }
+
   void Borrow(unsigned number, const char *caption,
               std::function<void()> callback) noexcept {
     assert(number >= 1 && number <= MAX_EXTRA_BUTTONS);
@@ -285,8 +289,10 @@ protected:
     style.Hide();
     style.TabStop();
 
-    for (auto &button : buttons)
-      button.Create(parent, look.button, "", rc, style);
+    /* High index first so child order matches the stack, top to
+       bottom.  Up then walks v → ^ → Delete → Add. */
+    for (unsigned n = MAX_EXTRA_BUTTONS; n > 0; --n)
+      buttons[n - 1].Create(parent, look.button, "", rc, style);
 
     Apply(rc);
   }
@@ -402,6 +408,13 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 {
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   extra.Return(i);
+}
+
+CheckBoxControl &
+ConfigPanel::GetExpertCheckbox() noexcept
+{
+  auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
+  return extra.GetExpert();
 }
 
 static void
