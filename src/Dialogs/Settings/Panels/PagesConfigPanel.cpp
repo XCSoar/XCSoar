@@ -30,7 +30,10 @@
 #include "Widget/ListWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
+#include "Widget/VScrollWidget.hpp"
 #include "UIGlobals.hpp"
+#include "ConfigPanel.hpp"
+#include "Screen/Layout.hpp"
 #include "util/StaticString.hxx"
 
 #ifdef HAVE_HTTP
@@ -93,6 +96,13 @@ class PageListWidget
   ButtonPanelWidget *buttons;
   Button *add_button, *delete_button;
   Button *move_up_button, *move_down_button;
+
+  /* Landscape copies. Index 1 is the bottom of the stack. */
+  Button *chrome_add = nullptr, *chrome_delete = nullptr;
+  Button *chrome_up = nullptr, *chrome_down = nullptr;
+
+  void SyncChromeButtons() noexcept;
+  void ReleaseChromeButtons() noexcept;
 
 public:
   ~PageListWidget() {
@@ -161,12 +171,22 @@ public:
     delete_button->SetEnabled(length >= 2);
     move_up_button->SetEnabled(cursor > 0);
     move_down_button->SetEnabled(cursor + 1 < length);
+
+    if (chrome_add == nullptr)
+      return;
+
+    chrome_add->SetEnabled(add_button->IsEnabled());
+    chrome_delete->SetEnabled(delete_button->IsEnabled());
+    chrome_up->SetEnabled(move_up_button->IsEnabled());
+    chrome_down->SetEnabled(move_down_button->IsEnabled());
   }
 
   /* virtual methods from class Widget */
   void Initialise(ContainerWindow &parent,
                   const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
+  void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 
   /* virtual methods from class ListItemRenderer */
@@ -647,6 +667,47 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 }
 
 void
+PageListWidget::SyncChromeButtons() noexcept
+{
+  if (!Layout::landscape) {
+    ReleaseChromeButtons();
+    return;
+  }
+
+  if (chrome_add != nullptr)
+    return;
+
+  /* Index 1 is the bottom of the stack: down, up, Delete, Add. */
+  chrome_down = &ConfigPanel::BorrowExtraButton(1, "v", [this](){
+    move_down_button->Click();
+  });
+  chrome_up = &ConfigPanel::BorrowExtraButton(2, "^", [this](){
+    move_up_button->Click();
+  });
+  chrome_delete = &ConfigPanel::BorrowExtraButton(3, C_("Button", "Delete"),
+                                                  [this](){
+    delete_button->Click();
+  });
+  chrome_add = &ConfigPanel::BorrowExtraButton(4, C_("Button", "Add"),
+                                               [this](){
+    add_button->Click();
+  });
+  UpdateButtons();
+}
+
+void
+PageListWidget::ReleaseChromeButtons() noexcept
+{
+  if (chrome_add == nullptr)
+    return;
+
+  for (unsigned i = 1; i <= 4; ++i)
+    ConfigPanel::ReturnExtraButton(i);
+  chrome_add = chrome_delete = nullptr;
+  chrome_up = chrome_down = nullptr;
+}
+
+void
 PageListWidget::Initialise(ContainerWindow &parent,
                            const PixelRect &rc) noexcept
 {
@@ -665,9 +726,24 @@ PageListWidget::Initialise(ContainerWindow &parent,
 void
 PageListWidget::Show(const PixelRect &rc) noexcept
 {
+  SyncChromeButtons();
   editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
 
   ListWidget::Show(rc);
+}
+
+void
+PageListWidget::Hide() noexcept
+{
+  ReleaseChromeButtons();
+  ListWidget::Hide();
+}
+
+void
+PageListWidget::Move(const PixelRect &rc) noexcept
+{
+  SyncChromeButtons();
+  ListWidget::Move(rc);
 }
 
 bool
@@ -752,19 +828,22 @@ PageListWidget::OnModified(const PageLayout &new_value) noexcept
 std::unique_ptr<Widget>
 CreatePagesConfigPanel()
 {
-  auto _list = std::make_unique<PageListWidget>();
-  auto _editor = std::make_unique<PageLayoutEditWidget>(UIGlobals::GetDialogLook(),
-                                                        *_list);
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  auto two = std::make_unique<TwoWidgets>(std::move(_list),
-                                          std::move(_editor));
-  auto &list = (PageListWidget &)two->GetFirst();
-  auto &editor = (PageLayoutEditWidget &)two->GetSecond();
-  list.SetEditor(editor);
+  auto list = std::make_unique<PageListWidget>();
+  auto editor = std::make_unique<PageLayoutEditWidget>(look, *list);
+  list->SetEditor(*editor);
+
+  /* Scroll the editor when the landscape pane is shorter than its rows. */
+  auto two = std::make_unique<TwoWidgets>(
+    std::move(list),
+    std::make_unique<VScrollWidget>(std::move(editor), look));
+  auto &list_widget = (PageListWidget &)two->GetFirst();
 
   auto buttons = std::make_unique<ButtonPanelWidget>(std::move(two),
                                                      ButtonPanelWidget::Alignment::BOTTOM);
-  list.SetButtonPanel(*buttons);
+  buttons->HideInLandscape();
+  list_widget.SetButtonPanel(*buttons);
 
   return buttons;
 }

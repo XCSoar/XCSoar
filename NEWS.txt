@@ -427,6 +427,9 @@ Version 7.46 - not yet released
     checklist, Credits, and Configuration
   - fix the Quick Guide link to the user manual, which opened a page
     that no longer exists
+  - fix Look → Pages cutting off the bottom fields in landscape;
+    the page editor scrolls when it does not fit, and Add, Delete
+    and the move buttons move into the button column #3326
 * infoboxen
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator
