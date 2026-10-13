@@ -219,8 +219,9 @@ class ConfigurationExtraButtons final
 
   PixelRect position{};
 
+  /** Taller than the single portrait row: the landscape column. */
   bool IsStack(const PixelRect &rc) const noexcept {
-    return rc.GetHeight() >= 3 * ::Layout::GetMaximumControlHeight();
+    return rc.GetHeight() > ::Layout::GetMaximumControlHeight();
   }
 
   void Apply(const PixelRect &rc) noexcept;
