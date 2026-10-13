@@ -4,8 +4,16 @@
 #pragma once
 
 #include <functional>
+
+class Button;
+
 namespace ConfigPanel {
-void BorrowExtraButton(unsigned i, const char *caption,
-                       std::function<void()> callback) noexcept;
+/**
+ * @param i 1-based. Landscape stacks above Previous; portrait shows
+ * only 1 and 2 beside Expert.
+ */
+Button &
+BorrowExtraButton(unsigned i, const char *caption,
+                  std::function<void()> callback) noexcept;
 void ReturnExtraButton(unsigned i);
 };
