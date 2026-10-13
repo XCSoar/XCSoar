@@ -6031,8 +6031,6 @@
 		5CBFEB1F2D742FA600F05795 /* Triangulate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangulate.cpp; sourceTree = "<group>"; };
 		5CBFEB202D742FA600F05795 /* UncompressedImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UncompressedImage.hpp; sourceTree = "<group>"; };
 		5CBFEB212D742FA600F05795 /* UncompressedImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UncompressedImage.cpp; sourceTree = "<group>"; };
-		5CBFEB222D742FA600F05795 /* VertexArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexArray.hpp; sourceTree = "<group>"; };
-		5CBFEB232D742FA600F05795 /* VertexArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VertexArray.cpp; sourceTree = "<group>"; };
 		5CBFEB242D742FA600F05795 /* VertexPointer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VertexPointer.hpp; sourceTree = "<group>"; };
 		5CBFEB262D742FA600F05795 /* TopCanvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopCanvas.cpp; sourceTree = "<group>"; };
 		5CBFEB282D742FA600F05795 /* AnyCanvas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AnyCanvas.hpp; sourceTree = "<group>"; };
@@ -18721,8 +18719,6 @@
 				5CBFEB1F2D742FA600F05795 /* Triangulate.cpp */,
 				5CBFEB202D742FA600F05795 /* UncompressedImage.hpp */,
 				5CBFEB212D742FA600F05795 /* UncompressedImage.cpp */,
-				5CBFEB222D742FA600F05795 /* VertexArray.hpp */,
-				5CBFEB232D742FA600F05795 /* VertexArray.cpp */,
 				5CBFEB242D742FA600F05795 /* VertexPointer.hpp */,
 			);
 			path = opengl;
