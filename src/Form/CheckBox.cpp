@@ -237,7 +237,11 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
     : cb_look.disabled;
 
   const unsigned padding = Layout::GetTextPadding();
-  unsigned size = canvas.GetHeight() - 2 * padding;
+  const unsigned height = canvas.GetHeight();
+  const unsigned width = canvas.GetWidth();
+  const unsigned limit = width < height ? width : height;
+  /* Unsigned wrap here scales the check mark to the whole screen. */
+  const unsigned size = limit > 2 * padding ? limit - 2 * padding : 0;
 
   PixelRect box_rc;
   box_rc.left = (int)padding;
@@ -250,7 +254,7 @@ CheckBoxControl::OnPaint(Canvas &canvas) noexcept
   canvas.SetTextColor(state_look.text_color);
   canvas.SetBackgroundTransparent();
 
-  const PixelPoint caption_position(canvas.GetHeight() + 2 * padding,
-                                    ((int)canvas.GetHeight() - (int)cb_look.font->GetHeight()) / 2);
+  const PixelPoint caption_position((int)height + 2 * (int)padding,
+                                    ((int)height - (int)cb_look.font->GetHeight()) / 2);
   canvas.DrawText(caption_position, caption.c_str());
 }
