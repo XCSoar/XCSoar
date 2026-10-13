@@ -12,6 +12,8 @@
 #include "Look/DialogLook.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "UIGlobals.hpp"
+#include "ConfigPanel.hpp"
+#include "Screen/Layout.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Widget/ListWidget.hpp"
 #include "lib/dbus/Connection.hxx"
@@ -86,6 +88,8 @@ class SystemdListWidget final : public ListWidget {
   TwoTextRowsRenderer row_renderer;
   Button *toggle_button = nullptr;
   Button *restart_button = nullptr;
+  Button *chrome_toggle = nullptr;
+  Button *chrome_restart = nullptr;
   ButtonPanelWidget *button_panel = nullptr;
   bool actions_armed = false;
   UI::PeriodicTimer refresh_timer{[this]{ Refresh(); }};
@@ -106,6 +110,7 @@ public:
   }
 
   void Show(const PixelRect &rc) noexcept override {
+    SyncChromeButtons();
     ListWidget::Show(rc);
     Refresh();
     refresh_timer.Schedule(refresh_interval);
@@ -114,7 +119,13 @@ public:
   void Hide() noexcept override {
     refresh_timer.Cancel();
     DisarmActions();
+    ReleaseChromeButtons();
     ListWidget::Hide();
+  }
+
+  void Move(const PixelRect &rc) noexcept override {
+    SyncChromeButtons();
+    ListWidget::Move(rc);
   }
 
   void Unprepare() noexcept override {
@@ -125,11 +136,24 @@ public:
 
   bool KeyPress(unsigned key_code) noexcept override {
     if (key_code == KEY_UP && !actions_armed && !services.empty() &&
-        button_panel != nullptr && GetList().HasFocus()) {
-      button_panel->GetButtonPanel().EnableCursorSelection();
-      actions_armed = true;
-      UpdateButtons();
-      return true;
+        GetList().HasFocus()) {
+      if (Layout::landscape) {
+        Button *target = nullptr;
+        if (chrome_toggle != nullptr && chrome_toggle->IsEnabled())
+          target = chrome_toggle;
+        else if (chrome_restart != nullptr && chrome_restart->IsEnabled())
+          target = chrome_restart;
+        if (target != nullptr)
+          target->SetFocus();
+        return true;
+      }
+
+      if (button_panel != nullptr) {
+        button_panel->GetButtonPanel().EnableCursorSelection();
+        actions_armed = true;
+        UpdateButtons();
+        return true;
+      }
     }
 
     return ListWidget::KeyPress(key_code);
@@ -241,16 +265,52 @@ private:
     const bool is_active = index < statuses.size() && statuses[index].valid &&
       statuses[index].state == Systemd::ActiveState::ACTIVE;
 
+    const char *toggle_caption = is_active ? _("Turn off") : _("Turn on");
     if (toggle_button != nullptr) {
-      toggle_button->SetCaption(is_active ? _("Turn off") : _("Turn on"));
+      toggle_button->SetCaption(toggle_caption);
       toggle_button->SetEnabled(can_toggle);
+    }
+    if (chrome_toggle != nullptr) {
+      chrome_toggle->SetCaption(toggle_caption);
+      chrome_toggle->SetEnabled(can_toggle);
     }
 
     if (restart_button != nullptr)
       restart_button->SetEnabled(is_active);
+    if (chrome_restart != nullptr)
+      chrome_restart->SetEnabled(is_active);
 
-    if (actions_armed && button_panel != nullptr)
+    if (actions_armed && button_panel != nullptr && !Layout::landscape)
       button_panel->GetButtonPanel().ReselectToFirstEnabled();
+  }
+
+  /* Index 1 is the bottom of the stack, so Turn on/off sits above Restart. */
+  void SyncChromeButtons() noexcept {
+    if (!Layout::landscape) {
+      ReleaseChromeButtons();
+      return;
+    }
+
+    if (chrome_toggle != nullptr)
+      return;
+
+    chrome_restart = &ConfigPanel::BorrowExtraButton(1, _("Restart"), [this]{
+      restart_button->Click();
+    });
+    chrome_toggle = &ConfigPanel::BorrowExtraButton(2, _("Turn on"), [this]{
+      toggle_button->Click();
+    });
+    UpdateButtons();
+  }
+
+  void ReleaseChromeButtons() noexcept {
+    if (chrome_toggle == nullptr)
+      return;
+
+    ConfigPanel::ReturnExtraButton(1);
+    ConfigPanel::ReturnExtraButton(2);
+    chrome_toggle = nullptr;
+    chrome_restart = nullptr;
   }
 
   void DisarmActions() noexcept {
@@ -336,6 +396,7 @@ CreateSystemdConfigPanel()
   auto list = std::make_unique<SystemdListWidget>();
   auto panel = std::make_unique<ButtonPanelWidget>(
     std::move(list), ButtonPanelWidget::Alignment::BOTTOM);
+  panel->HideInLandscape();
   static_cast<SystemdListWidget &>(panel->GetWidget()).SetButtonPanel(*panel);
   return panel;
 }
