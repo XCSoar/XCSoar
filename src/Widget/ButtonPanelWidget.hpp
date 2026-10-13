@@ -24,10 +24,17 @@ private:
   std::unique_ptr<ButtonPanel> buttons;
   Alignment alignment;
 
+  /** Landscape gives this row to the child. */
+  bool hide_in_landscape = false;
+
 public:
   ButtonPanelWidget(std::unique_ptr<Widget> &&_widget,
                     Alignment _alignment=Alignment::AUTO) noexcept
     :widget(std::move(_widget)), alignment(_alignment) {}
+
+  void HideInLandscape() noexcept {
+    hide_in_landscape = true;
+  }
 
   ~ButtonPanelWidget() noexcept override;
 

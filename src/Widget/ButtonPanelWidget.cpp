@@ -17,6 +17,14 @@ ButtonPanelWidget::UpdateLayout(const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
+  if (hide_in_landscape && Layout::landscape) {
+    buttons->HideAll();
+    return rc;
+  }
+
+  if (hide_in_landscape)
+    buttons->ShowAll();
+
   switch (alignment) {
   case Alignment::AUTO:
     return buttons->UpdateLayout(rc);
@@ -107,7 +115,8 @@ ButtonPanelWidget::Show(const PixelRect &rc) noexcept
 {
   assert(buttons != nullptr);
 
-  buttons->ShowAll();
+  if (!hide_in_landscape)
+    buttons->ShowAll();
   widget->Show(UpdateLayout(rc));
 }
 
