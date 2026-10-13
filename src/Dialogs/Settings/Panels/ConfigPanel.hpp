@@ -6,6 +6,7 @@
 #include <functional>
 
 class Button;
+class CheckBoxControl;
 
 namespace ConfigPanel {
 /**
@@ -16,4 +17,6 @@ Button &
 BorrowExtraButton(unsigned i, const char *caption,
                   std::function<void()> callback) noexcept;
 void ReturnExtraButton(unsigned i);
+
+CheckBoxControl &GetExpertCheckbox() noexcept;
 };

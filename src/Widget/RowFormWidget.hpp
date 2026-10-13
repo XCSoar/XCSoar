@@ -825,4 +825,12 @@ public:
   void Move(const PixelRect &rc) noexcept override;
   bool SetFocus() noexcept override;
   bool HasFocus() const noexcept override;
+
+  /**
+   * Move focus to the next or previous visible row.
+   *
+   * @return false when no row has focus, or this row is already
+   * at that end
+   */
+  bool FocusAdjacent(bool next) noexcept;
 };
