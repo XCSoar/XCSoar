@@ -151,9 +151,12 @@ WaylandPointerAxis(void *data,
     auto &q = *(WaylandEventQueue *)data;
     PixelPoint p = q.MaybeTransformPoint(q.GetPointerPosition());
     Event e(Event::MOUSE_WHEEL, p);
-    /* Vertical scroll: positive = down, negative = up
-       Horizontal scroll: positive = right, negative = left */
-    e.param = wl_fixed_to_int(value);
+    /* Wayland's positive vertical axis is down. XCSoar matches X11:
+       a positive wheel is up. */
+    int delta = wl_fixed_to_int(value);
+    if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
+      delta = -delta;
+    e.param = unsigned(delta);
     q.Push(e);
   }
 }
