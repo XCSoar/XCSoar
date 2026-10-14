@@ -107,10 +107,12 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   circling_info.turning =
     circling_info.turn_rate_smoothed.Absolute() >= MIN_TURN_RATE;
 
-  // Force cruise or climb mode if external device says so
+  /* The variometer cruise/climb report forces the flight mode. */
   bool force_cruise = false;
   bool force_circling = false;
-  if (settings.external_trigger_cruise_enabled && !basic.gps.replay) {
+  if (settings.speed_command_switch ==
+      CirclingSettings::SpeedCommandSwitch::FLIGHT_MODE &&
+      !basic.gps.replay) {
     switch (basic.switch_state.flight_mode) {
     case SwitchState::FlightMode::UNKNOWN:
       break;

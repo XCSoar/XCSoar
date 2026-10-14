@@ -232,6 +232,12 @@ Version 7.46 - not yet released
   - default Safety MC to 3.2 m/s, about 25:1 on the default LS-8 polar
   - let Safety MC reach fly faster than maximum cruise speed, so a
     higher Safety MC keeps making the glide steeper #2552
+  - replace the expert "Flap forces cruise" checkbox with
+    "Speed command switch" (Off, Flight mode, Display mode).
+    Flight mode is the old checkbox: the variometer cruise/climb
+    report forces circling or cruise and restarts the climb average.
+    Display mode changes only the page.  An enabled checkbox loads
+    as Flight mode #1752
   - fix best-glide speed and speed-to-fly at altitude when MacCready
     is set, so density scaling no longer inflates MacCready #2881
   - fix circling wind staying blank on paragliders and other aircraft

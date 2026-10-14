@@ -3,6 +3,7 @@
 
 #include "UIReceiveBlackboard.hpp"
 #include "Interface.hpp"
+#include "UIState.hpp"
 #include "ActionInterface.hpp"
 #include "ApplyVegaSwitches.hpp"
 #include "ApplyExternalSettings.hpp"
@@ -25,12 +26,72 @@
 
 static TaskEventObserver task_event_observer;
 
+/** Display force last written by the speed-command switch. */
+static DisplayMode owned_speed_command_page = DisplayMode::NONE;
+
+/**
+ * While Display mode is selected, the page follows the current
+ * cruise/climb report.  Releasing the setting clears only that force.
+ *
+ * @return true when force_display_mode changed
+ */
+static bool
+ApplySpeedCommandDisplay() noexcept
+{
+  const auto &basic = CommonInterface::Basic();
+  const auto setting = CommonInterface::GetComputerSettings()
+    .circling.speed_command_switch;
+  UIState &ui = CommonInterface::SetUIState();
+
+  DisplayMode want = DisplayMode::NONE;
+  if (setting == CirclingSettings::SpeedCommandSwitch::DISPLAY_MODE &&
+      !basic.gps.replay) {
+    switch (basic.switch_state.SpeedCommandPage()) {
+    case SwitchState::FlightMode::CRUISE:
+      want = DisplayMode::CRUISE;
+      break;
+
+    case SwitchState::FlightMode::CIRCLING:
+      want = DisplayMode::CIRCLING;
+      break;
+
+    case SwitchState::FlightMode::UNKNOWN:
+      break;
+    }
+  }
+
+  if (want == DisplayMode::NONE) {
+    if (owned_speed_command_page == DisplayMode::NONE ||
+        ui.force_display_mode != owned_speed_command_page) {
+      owned_speed_command_page = DisplayMode::NONE;
+      return false;
+    }
+
+    ui.force_display_mode = DisplayMode::NONE;
+    owned_speed_command_page = DisplayMode::NONE;
+    return true;
+  }
+
+  if (ui.force_display_mode == want &&
+      owned_speed_command_page == want)
+    return false;
+
+  ui.force_display_mode = want;
+  owned_speed_command_page = want;
+  return true;
+}
+
 void
 UIReceiveSensorData(OperationEnvironment &env)
 {
   XCSoarInterface::ReceiveGPS();
 
   ApplyVegaSwitches();
+
+  if (ApplySpeedCommandDisplay()) {
+    ActionInterface::UpdateDisplayMode();
+    ActionInterface::SendUIState();
+  }
 
 #if defined(__linux__) && defined(USE_POLL_EVENT) && !defined(KOBO)
   static bool clock_set = false;
@@ -108,8 +169,12 @@ UIReceiveCalculatedData()
 {
   XCSoarInterface::ReceiveCalculated();
 
+  const bool speed_command_page_changed = ApplySpeedCommandDisplay();
   ActionInterface::UpdateDisplayMode();
-  ActionInterface::ScheduleSendUIState();
+  if (speed_command_page_changed)
+    ActionInterface::SendUIState();
+  else
+    ActionInterface::ScheduleSendUIState();
 
   if (backend_components->devices)
     backend_components->devices->NotifyCalculatedUpdate(CommonInterface::Basic(),

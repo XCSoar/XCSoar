@@ -197,14 +197,43 @@ struct FeaturesSettings {
 };
 
 struct CirclingSettings {
-  bool external_trigger_cruise_enabled;
+  enum class SpeedCommandSwitch : uint8_t {
+    OFF,
+    FLIGHT_MODE,
+    DISPLAY_MODE,
+    COUNT,
+  };
+
+  /** How the variometer cruise/climb report is used. */
+  SpeedCommandSwitch speed_command_switch;
+
   FloatDuration cruise_to_circling_mode_switch_threshold;
   FloatDuration circling_to_cruise_mode_switch_threshold;
 
   void SetDefaults() {
-    external_trigger_cruise_enabled = false;
+    speed_command_switch = SpeedCommandSwitch::OFF;
     cruise_to_circling_mode_switch_threshold = std::chrono::seconds{15};
     circling_to_cruise_mode_switch_threshold = std::chrono::seconds{10};
+  }
+
+  /**
+   * @param has_new  SpeedCommandSwitch is present in the profile
+   * @param raw      stored enum value
+   * @param old_enabled  EnableExternalTriggerCruise from older profiles
+   */
+  [[nodiscard]]
+  static constexpr SpeedCommandSwitch
+  SpeedCommandSwitchFromProfile(bool has_new, int raw,
+                                bool old_enabled) noexcept {
+    if (has_new) {
+      if (raw < 0 || raw >= static_cast<int>(SpeedCommandSwitch::COUNT))
+        return SpeedCommandSwitch::OFF;
+      return static_cast<SpeedCommandSwitch>(raw);
+    }
+
+    return old_enabled
+      ? SpeedCommandSwitch::FLIGHT_MODE
+      : SpeedCommandSwitch::OFF;
   }
 };
 

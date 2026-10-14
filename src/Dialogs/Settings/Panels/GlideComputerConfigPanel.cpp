@@ -106,10 +106,32 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent,
   AddSpacer();
   SetExpertRow(SPACER_MODE);
 
-  AddBoolean(_("Flap forces cruise"),
-             _("When Vega variometer is connected and this option is true, the positive flap "
-                 "setting switches the flight mode between circling and cruise."),
-             settings_computer.circling.external_trigger_cruise_enabled);
+  static constexpr StaticEnumChoice speed_command_list[] = {
+    { CirclingSettings::SpeedCommandSwitch::OFF, N_("Off"),
+      N_("XCSoar decides circling from the turn. "
+         "The variometer report is not used.") },
+    { CirclingSettings::SpeedCommandSwitch::FLIGHT_MODE,
+      N_("Flight mode"),
+      N_("While flying, the variometer's cruise/climb report is the "
+         "flight mode. "
+         "Cruise ends the climb and restarts the average. "
+         "Climb starts a new thermal. "
+         "Final glide can still appear in cruise. "
+         "On a Vega this is the circling output.") },
+    { CirclingSettings::SpeedCommandSwitch::DISPLAY_MODE,
+      N_("Display mode"),
+      N_("The page changes and the flight mode does not. "
+         "Cruise shows the cruise page, including while turning, "
+         "and hides final glide. "
+         "Climb shows the vario page. "
+         "On a Vega this is the speed-command switch.") },
+    nullptr
+  };
+
+  AddEnum(_("Speed command switch"),
+          _("How XCSoar uses the variometer's cruise/climb report."),
+          speed_command_list,
+          unsigned(settings_computer.circling.speed_command_switch));
   SetExpertRow(EnableExternalTriggerCruise);
 
   AddDuration(_("Cruise/Circling period"),
@@ -151,8 +173,9 @@ GlideComputerConfigPanel::Save(bool &_changed) noexcept
                     settings_computer.average_eff_time))
     require_restart = changed = true;
 
-  changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
-                       settings_computer.circling.external_trigger_cruise_enabled);
+  changed |= SaveValueEnum(EnableExternalTriggerCruise,
+                           ProfileKeys::SpeedCommandSwitch,
+                           settings_computer.circling.speed_command_switch);
 
   changed |= SaveValue(CruiseToCirclingModeSwitchThreshold, ProfileKeys::CruiseToCirclingModeSwitchThreshold,
                        settings_computer.circling.cruise_to_circling_mode_switch_threshold);

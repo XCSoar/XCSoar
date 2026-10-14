@@ -88,7 +88,7 @@ TEST_NAMES = \
 	TestAngle TestARange \
 	TestGrahamScan \
 	TestUnits TestEarth TestSunEphemeris \
-	TestValidity TestUTM \
+	TestValidity TestUTM TestSwitchState \
 	TestWaypointReachability TestWaypointElevation TestBackupPaths \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
@@ -502,6 +502,12 @@ TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/TestDateTime.cpp
 TEST_DATE_TIME_DEPENDS = MATH TIME
 $(eval $(call link-program,TestDateTime,TEST_DATE_TIME))
+
+TEST_SWITCH_STATE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSwitchState.cpp
+TEST_SWITCH_STATE_DEPENDS = 
+$(eval $(call link-program,TestSwitchState,TEST_SWITCH_STATE))
 
 TEST_ISO8601_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
