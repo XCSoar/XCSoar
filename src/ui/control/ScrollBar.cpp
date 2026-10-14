@@ -7,13 +7,13 @@
 #include "ui/window/PaintWindow.hpp"
 #include "Asset.hpp"
 #include "Look/ButtonLook.hpp"
-#include "util/Compiler.h"
 #include "util/Macros.hpp"
 
 #include <cassert>
 
 ScrollBar::ScrollBar(const ButtonLook &_button_look) noexcept
-  :button_renderer(_button_look), dragging(false)
+  :button_renderer(_button_look), dragging(false),
+   arrow(Arrow::NONE), arrow_pressed(false)
 {
   // Reset the ScrollBar on creation
   Reset();
@@ -101,13 +101,13 @@ ScrollBar::ToOrigin(unsigned size, unsigned view_size, int y) const noexcept
 void
 ScrollBar::Paint(Canvas &canvas) const noexcept
 {
-  Paint(canvas, ButtonState::ENABLED, ButtonState::ENABLED);
-}
+  const bool up_pressed = arrow_pressed && arrow == Arrow::UP;
+  const bool down_pressed = arrow_pressed && arrow == Arrow::DOWN;
+  const ButtonState up_state = up_pressed
+    ? ButtonState::PRESSED : ButtonState::ENABLED;
+  const ButtonState down_state = down_pressed
+    ? ButtonState::PRESSED : ButtonState::ENABLED;
 
-void
-ScrollBar::Paint(Canvas &canvas, ButtonState up_state,
-                 ButtonState down_state) const noexcept
-{
   // draw rectangle around entire scrollbar area
   canvas.SelectBlackPen();
   canvas.SelectHollowBrush();
@@ -135,52 +135,27 @@ ScrollBar::Paint(Canvas &canvas, ButtonState up_state,
   const ButtonLook &look = button_renderer.GetLook();
   canvas.SelectNullPen();
 
-  const auto select_foreground = [&canvas, &look](ButtonState state) {
-    switch (state) {
-    case ButtonState::DISABLED:
-      canvas.Select(look.disabled.brush);
-      break;
-    case ButtonState::FOCUSED:
-    case ButtonState::PRESSED:
-      /* match button rendering: focused and pressed share the same palette */
-      canvas.Select(look.focused.foreground_brush);
-      break;
-    case ButtonState::SELECTED:
-      canvas.Select(look.selected.foreground_brush);
-      break;
-    case ButtonState::ENABLED:
-      canvas.Select(look.standard.foreground_brush);
-      break;
-    default:
-      gcc_unreachable();
-    }
+  const auto draw_arrow = [&](const PixelRect &arrow_rc, bool up,
+                              bool pressed) {
+    const int tip_y = up
+      ? arrow_rc.top + arrow_padding
+      : arrow_rc.bottom - arrow_padding;
+    const int base_y = up
+      ? arrow_rc.bottom - arrow_padding
+      : arrow_rc.top + arrow_padding;
+    const BulkPixelPoint tri[3] = {
+      { (arrow_rc.left + rc.right) / 2, tip_y },
+      { arrow_rc.left + arrow_padding, base_y },
+      { rc.right - arrow_padding, base_y },
+    };
+    canvas.Select(pressed
+                  ? look.focused.foreground_brush
+                  : look.standard.foreground_brush);
+    canvas.DrawTriangleFan(tri, ARRAY_SIZE(tri));
   };
 
-  const BulkPixelPoint up_arrow[3] = {
-    { (up_arrow_rect.left + rc.right) / 2,
-      up_arrow_rect.top + arrow_padding },
-    { up_arrow_rect.left + arrow_padding,
-      up_arrow_rect.bottom - arrow_padding },
-    { rc.right - arrow_padding,
-      up_arrow_rect.bottom - arrow_padding },
-  };
-  select_foreground(up_state);
-  canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
-
-  const BulkPixelPoint down_arrow[3] = {
-    { (down_arrow_rect.left + rc.right) / 2,
-      down_arrow_rect.bottom - arrow_padding },
-    { down_arrow_rect.left + arrow_padding,
-      down_arrow_rect.top + arrow_padding },
-    { rc.right - arrow_padding,
-      down_arrow_rect.top + arrow_padding },
-  };
-  select_foreground(down_state);
-  canvas.DrawTriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
-
-  // ###################
-  // ####  Slider   ####
-  // ###################
+  draw_arrow(up_arrow_rect, true, up_pressed);
+  draw_arrow(down_arrow_rect, false, down_pressed);
 
   if (rc_slider.top + 4 < rc_slider.bottom) {
     canvas.SelectBlackPen();
@@ -207,42 +182,99 @@ ScrollBar::Paint(Canvas &canvas, ButtonState up_state,
                                background_color);
 }
 
-void
-ScrollBar::DragBegin(PaintWindow *w, unsigned y) noexcept
+bool
+ScrollBar::PointerOnArrow(PixelPoint p) const noexcept
 {
-  // Make sure that we are not dragging already
+  if (arrow == Arrow::NONE || !IsInside(p))
+    return false;
+
+  return arrow == Arrow::UP
+    ? IsInsideUpArrow(p.y)
+    : IsInsideDownArrow(p.y);
+}
+
+void
+ScrollBar::StartDrag(PaintWindow *w, int offset) noexcept
+{
   assert(!dragging);
 
-  // Save the offset of the drag
-  drag_offset = y - rc_slider.top;
-  // ... and remember that we are dragging now
+  drag_offset = offset;
   dragging = true;
   w->SetCapture();
   w->Invalidate(rc_slider);
+}
+
+void
+ScrollBar::DragBegin(PaintWindow *w, unsigned y) noexcept
+{
+  StartDrag(w, y - rc_slider.top);
 }
 
 void
 ScrollBar::DragBeginCentred(PaintWindow *w) noexcept
 {
-  // Make sure that we are not dragging already
-  assert(!dragging);
+  StartDrag(w, GetSliderHeight() / 2);
+}
 
-  // Pick the slider up by its middle
-  drag_offset = GetSliderHeight() / 2;
-  // ... and remember that we are dragging now
-  dragging = true;
+bool
+ScrollBar::ArrowDown(PaintWindow *w, PixelPoint p) noexcept
+{
+  if (!IsInside(p))
+    return false;
+
+  const bool up = IsInsideUpArrow(p.y);
+  if (!up && !IsInsideDownArrow(p.y))
+    return false;
+
+  assert(!dragging);
+  assert(arrow == Arrow::NONE);
+
+  arrow = up ? Arrow::UP : Arrow::DOWN;
+  arrow_pressed = true;
   w->SetCapture();
-  w->Invalidate(rc_slider);
+  w->Invalidate(rc);
+  return true;
+}
+
+bool
+ScrollBar::ArrowMove(PaintWindow *w, PixelPoint p) noexcept
+{
+  if (arrow == Arrow::NONE)
+    return false;
+
+  const bool inside = PointerOnArrow(p);
+  if (inside != arrow_pressed) {
+    arrow_pressed = inside;
+    w->Invalidate(rc);
+  }
+  return true;
+}
+
+bool
+ScrollBar::ArrowUp(PaintWindow *w, PixelPoint p) noexcept
+{
+  if (arrow == Arrow::NONE)
+    return false;
+
+  const bool fire = PointerOnArrow(p);
+  DragEnd(w);
+  return fire;
 }
 
 void
 ScrollBar::DragEnd(PaintWindow *w) noexcept
 {
-  // If we are not dragging right now -> nothing to end
+  if (arrow != Arrow::NONE) {
+    arrow = Arrow::NONE;
+    arrow_pressed = false;
+    w->ReleaseCapture();
+    w->Invalidate(rc);
+    return;
+  }
+
   if (!dragging)
     return;
 
-  // Realize that we are not dragging anymore
   dragging = false;
   w->ReleaseCapture();
   w->Invalidate(rc_slider);

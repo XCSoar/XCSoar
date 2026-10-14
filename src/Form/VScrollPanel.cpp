@@ -245,6 +245,13 @@ VScrollPanel::OnKeyDown(unsigned key_code) noexcept
 bool
 VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 {
+  if (scroll_bar.IsArrowHeld()) {
+    const bool up = scroll_bar.IsArrowUp();
+    if (scroll_bar.ArrowUp(this, p))
+      ScrollBy(up ? -GetScrollStep() : GetScrollStep());
+    return true;
+  }
+
   /* Finish gesture tracking and check for horizontal swipe */
   const bool had_gesture_trail = gesture_tracking;
 
@@ -313,6 +320,9 @@ VScrollPanel::OnMouseUp(PixelPoint p) noexcept
 bool
 VScrollPanel::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (scroll_bar.ArrowMove(this, p))
+    return true;
+
   if (gesture_tracking) {
     gestures.Update(p);
     Invalidate();
@@ -371,18 +381,16 @@ VScrollPanel::OnMouseDown(PixelPoint p) noexcept
     PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
-    if (scroll_bar.IsInsideUpArrow(p.y)) {
-      ScrollBy(-GetScrollStep());
-    } else if (scroll_bar.IsInsideDownArrow(p.y)) {
-      ScrollBy(GetScrollStep());
-    } else if (scroll_bar.IsAboveSlider(p.y)) {
-      /* page up */
-      ScrollBy(-std::max(1,
-        static_cast<int>(GetSize().height) - GetScrollStep()));
-    } else if (scroll_bar.IsBelowSlider(p.y)) {
-      /* page down */
-      ScrollBy(std::max(1,
-        static_cast<int>(GetSize().height) - GetScrollStep()));
+    if (!scroll_bar.ArrowDown(this, p)) {
+      if (scroll_bar.IsAboveSlider(p.y)) {
+        /* page up */
+        ScrollBy(-std::max(1,
+          static_cast<int>(GetSize().height) - GetScrollStep()));
+      } else if (scroll_bar.IsBelowSlider(p.y)) {
+        /* page down */
+        ScrollBy(std::max(1,
+          static_cast<int>(GetSize().height) - GetScrollStep()));
+      }
     }
     return true;
   } else {
@@ -524,7 +532,7 @@ VScrollPanel::OnPaint(Canvas &canvas) noexcept
 
   if (scroll_bar.IsDefined()) {
     scroll_bar.SetSlider(virtual_height, canvas.GetHeight(), origin);
-    scroll_bar.Paint(canvas, ButtonState::ENABLED, ButtonState::ENABLED);
+    scroll_bar.Paint(canvas);
   }
 }
 
