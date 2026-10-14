@@ -50,24 +50,25 @@ InputEvents::DoQueuedEvents()
   assert(InMainThread());
 
   int GCE_Queue_copy[MAX_GCE_QUEUE];
-  unsigned i;
+  int NMEA_Queue_copy[MAX_NMEA_QUEUE];
 
-  // copy the queue first, blocking
+  // copy the queues first, blocking
   {
     const std::lock_guard lock{mutexEventQueue};
     std::copy_n(GCE_Queue, MAX_GCE_QUEUE, GCE_Queue_copy);
     std::fill_n(GCE_Queue, MAX_GCE_QUEUE, -1);
+    std::copy_n(NMEA_Queue, MAX_NMEA_QUEUE, NMEA_Queue_copy);
+    std::fill_n(NMEA_Queue, MAX_NMEA_QUEUE, -1);
   }
 
   // process each item in the queue
-  for (i = 0; i < MAX_GCE_QUEUE; i++) {
-    if (GCE_Queue_copy[i] != -1) {
+  for (unsigned i = 0; i < MAX_GCE_QUEUE; i++) {
+    if (GCE_Queue_copy[i] != -1)
       processGlideComputer_real(GCE_Queue_copy[i]);
-    }
   }
-  for (i = 0; i < MAX_NMEA_QUEUE; i++) {
-    if (NMEA_Queue[i] != -1)
-      processNmea_real(NMEA_Queue[i]);
+  for (unsigned i = 0; i < MAX_NMEA_QUEUE; i++) {
+    if (NMEA_Queue_copy[i] != -1)
+      processNmea_real(NMEA_Queue_copy[i]);
   }
 }
 

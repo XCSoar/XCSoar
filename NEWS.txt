@@ -107,6 +107,8 @@ Version 7.46 - not yet released
     can be changed in flight; default key N
   - add TextSize input events (up/down/show) so UI text size can be
     changed in flight; default keys T and S step by 5%
+  - fix NMEA switch events repeating every tick until the ten-slot
+    queue is full and later events are dropped
 * weather
   - fill Max. temp. in the flight setup dialog from the DWD forecast
     for the day, fetched once daily in the background from the
