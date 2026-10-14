@@ -1107,15 +1107,21 @@ WaylandEventQueue::EnsureCursorThemeScale() noexcept
   if (size < 1)
     size = 1;
 
+  struct wl_cursor_theme *new_theme =
+    wl_cursor_theme_load(nullptr, size, shm);
+  if (new_theme == nullptr) {
+    /* Keep the current theme.  Remember the scale so pointer motion
+       does not try the load again on every move. */
+    loaded_cursor_scale = scale;
+    return;
+  }
+
   if (cursor_theme != nullptr)
     wl_cursor_theme_destroy(cursor_theme);
-  cursor_theme = wl_cursor_theme_load(nullptr, size, shm);
-  cursor_pointer = nullptr;
-  if (cursor_theme != nullptr) {
-    cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
-    if (cursor_pointer == nullptr)
-      cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "default");
-  }
+  cursor_theme = new_theme;
+  cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
+  if (cursor_pointer == nullptr)
+    cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "default");
   loaded_cursor_scale = scale;
   shown_resize_edge = ~uint32_t{0};
 }
