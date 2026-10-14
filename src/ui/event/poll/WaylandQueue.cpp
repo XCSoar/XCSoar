@@ -343,6 +343,10 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
      -> ~750px). Cursor themes typically have sizes up to 256px, but we allow
      larger requests; the theme will use the closest available size. */
   int cursor_size = GetEnvInt("XCURSOR_SIZE", 0, /* min */ 0, /* max */ 2048);
+  /* XCURSOR_SIZE is a logical size.  ApplyCursor() sets the buffer
+     scale and divides the hotspot, so the image must be that many
+     times larger.  The DPI fallback below is already in device pixels. */
+  xcursor_size = cursor_size;
   if (cursor_size == 0) {
     /* If XCURSOR_SIZE not set, scale default cursor size based on DPI
        Default is 24px at 96 DPI (1/4 inch). Scale proportionally for
@@ -359,6 +363,10 @@ WaylandEventQueue::WaylandEventQueue(UI::Display &_display, EventQueue &_queue)
     } else {
       cursor_size = 24; /* Fallback to default if DPI unavailable */
     }
+  } else {
+    loaded_cursor_scale = Wayland::ToIntegerScale(scale_120);
+    const int scaled = cursor_size * (int)loaded_cursor_scale;
+    cursor_size = scaled > 2048 ? 2048 : scaled;
   }
   cursor_theme = wl_cursor_theme_load(nullptr, cursor_size, shm);
   if (cursor_theme != nullptr) {
@@ -925,6 +933,8 @@ WaylandEventQueue::CornerCursor(uint32_t edge) const noexcept
 void
 WaylandEventQueue::UpdateCornerCursor() noexcept
 {
+  EnsureCursorThemeScale();
+
   const uint32_t edge = CurrentCornerEdge();
   if (edge == shown_resize_edge)
     return;
@@ -1080,6 +1090,35 @@ WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
 }
 
 #endif
+
+void
+WaylandEventQueue::EnsureCursorThemeScale() noexcept
+{
+  if (xcursor_size <= 0 || shm == nullptr)
+    return;
+
+  const unsigned scale = Wayland::ToIntegerScale(scale_120);
+  if (scale == loaded_cursor_scale)
+    return;
+
+  int size = xcursor_size * (int)scale;
+  if (size > 2048)
+    size = 2048;
+  if (size < 1)
+    size = 1;
+
+  if (cursor_theme != nullptr)
+    wl_cursor_theme_destroy(cursor_theme);
+  cursor_theme = wl_cursor_theme_load(nullptr, size, shm);
+  cursor_pointer = nullptr;
+  if (cursor_theme != nullptr) {
+    cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "left_ptr");
+    if (cursor_pointer == nullptr)
+      cursor_pointer = wl_cursor_theme_get_cursor(cursor_theme, "default");
+  }
+  loaded_cursor_scale = scale;
+  shown_resize_edge = ~uint32_t{0};
+}
 
 bool
 WaylandEventQueue::ApplyCursor(struct wl_cursor *cursor) noexcept

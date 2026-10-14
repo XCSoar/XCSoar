@@ -70,6 +70,9 @@ class WaylandEventQueue final {
   struct wl_cursor_theme *cursor_theme = nullptr;
   struct wl_cursor *cursor_pointer = nullptr;
   struct wl_surface *cursor_surface = nullptr;
+  /* XCURSOR_SIZE, a logical size.  0 means the theme was sized from DPI. */
+  int xcursor_size = 0;
+  unsigned loaded_cursor_scale = 1;
 
   IntPoint2D pointer_position = {0, 0};
 
@@ -227,6 +230,7 @@ private:
   void UpdateCornerCursor() noexcept;
   [[nodiscard]] bool BeginCornerResize(uint32_t serial) noexcept;
   [[nodiscard]] bool ApplyCursor(struct wl_cursor *cursor) noexcept;
+  void EnsureCursorThemeScale() noexcept;
   [[nodiscard]] struct wl_cursor *
   CornerCursor(uint32_t edge) const noexcept;
   [[gnu::pure]]
