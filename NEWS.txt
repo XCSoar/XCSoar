@@ -158,6 +158,8 @@ Version 7.46 - not yet released
     in track-up circling; leaving pan restores the orientation
   - defer the automatic zoom switch between circling and cruise until
     pan mode is left, when circling zoom is enabled
+  - show the current InfoBox panel beside the map scale: Circling,
+    Cruise or FinalGlide, or the panel's own name
   - fix the ragged white halo behind map labels on high-DPI screens
     #2879
   - fix the map scale arrows: draw them at the height of the scale box

@@ -656,7 +656,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
     buffer += "| ";
     buffer += ui_state.map_scale_page_title;
     buffer += " ";
-  } else if (ui_state.auxiliary_enabled) {
+  } else if (!ui_state.panel_name.empty()) {
     buffer += ui_state.panel_name;
     buffer += " ";
   }
