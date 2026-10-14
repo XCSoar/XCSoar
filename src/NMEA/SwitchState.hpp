@@ -46,6 +46,19 @@ struct SwitchState
 
   VegaSwitchState vega;
 
+  /**
+   * Cruise/climb report for the page.  A Vega page follows the
+   * speed-command input.  Every other device uses flight_mode.
+   */
+  [[nodiscard]]
+  constexpr FlightMode SpeedCommandPage() const noexcept {
+    if (vega.IsDefined())
+      return vega.GetSpeedCommand()
+        ? FlightMode::CRUISE
+        : FlightMode::CIRCLING;
+    return flight_mode;
+  }
+
   void Reset() noexcept;
 
   void Complement(const SwitchState &add) noexcept;

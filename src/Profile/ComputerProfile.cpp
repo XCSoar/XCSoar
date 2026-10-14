@@ -107,8 +107,13 @@ Profile::Load(const ProfileMap &map, FeaturesSettings &settings)
 void
 Profile::Load(const ProfileMap &map, CirclingSettings &settings)
 {
-  map.Get(ProfileKeys::EnableExternalTriggerCruise,
-          settings.external_trigger_cruise_enabled);
+  int raw = 0;
+  const bool has_new = map.Get(ProfileKeys::SpeedCommandSwitch, raw);
+  bool old_enabled = false;
+  map.Get(ProfileKeys::EnableExternalTriggerCruise, old_enabled);
+  settings.speed_command_switch =
+    CirclingSettings::SpeedCommandSwitchFromProfile(has_new, raw,
+                                                    old_enabled);
   map.Get(ProfileKeys::CruiseToCirclingModeSwitchThreshold,
           settings.cruise_to_circling_mode_switch_threshold);
   map.Get(ProfileKeys::CirclingToCruiseModeSwitchThreshold,

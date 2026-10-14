@@ -198,6 +198,7 @@ constexpr std::string_view AbortTaskMode = "AbortTaskMode";
 constexpr std::string_view AutoMcMode = "AutoMcMode";
 constexpr std::string_view AutoMc = "AutoMc";
 constexpr std::string_view EnableExternalTriggerCruise = "EnableExternalTriggerCruise";
+constexpr std::string_view SpeedCommandSwitch = "SpeedCommandSwitch";
 constexpr std::string_view CruiseToCirclingModeSwitchThreshold = "CruiseToCirclingModeSwitchThreshold";
 constexpr std::string_view CirclingToCruiseModeSwitchThreshold = "CirclingToCruiseModeSwitchThreshold";
 constexpr std::string_view OLCRules = "OLCRules"; // legacy name, key contains contest rules

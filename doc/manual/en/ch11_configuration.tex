@@ -497,13 +497,21 @@ This page allows glide computer algorithms to be configured.
 \item[Nav.\ by baro altitude*]  When enabled and if connected to a barometric
   altimeter, barometric altitude is used for all navigation functions. Otherwise
   GPS altitude is used.
-\item[Flap forces cruise*]
-  When this option is enabled, causes the flap switches in Vega to
-  force cruise mode when the flap is not positive. This means that
-  when departing a thermal, switching to neutral or negative flap will
-  immediately switch XCSoar's mode to cruise mode.
-  Similarly, for Borgelt B50 systems, the speed command switch forces
-  XCSoar's climb or cruise mode.
+\item[Speed command switch*]
+  How XCSoar uses the variometer's cruise/climb report.  Off by default.
+  \begin{description}
+  \item[Off] XCSoar decides circling from the turn.  The variometer
+    report is not used.
+  \item[Flight mode] While flying, the variometer's cruise/climb report
+    is the flight mode.  Cruise ends the climb and restarts the average.
+    Climb starts a new thermal.  Final glide can still appear in cruise.
+    On a Vega this is the circling output.  A profile that had
+    \emph{Flap forces cruise} enabled loads as this choice.
+  \item[Display mode] The page changes and the flight mode does not.
+    Cruise shows the cruise page, including while turning, and hides
+    final glide.  Climb shows the vario page.  On a Vega this is the
+    speed-command switch.  This choice does not run during a replay.
+  \end{description}
 \item[GR Average period*]  Average efficiency is always calculated in real-time. 
   Here you can decide on how many seconds of flight this calculation must be done. 
   The real distance covered second by second in this period is divided by the final 
