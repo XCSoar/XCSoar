@@ -11179,3 +11179,24 @@ msgstr ""
 
 msgid "Test spoken alert"
 msgstr ""
+
+msgid "Speed command switch"
+msgstr ""
+
+msgid "How XCSoar uses the variometer's cruise/climb report."
+msgstr ""
+
+msgid "Flight mode"
+msgstr ""
+
+msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
+msgstr ""
+
+msgid "Display mode"
+msgstr ""
+
+msgid "XCSoar decides circling from the turn. The variometer report is not used."
+msgstr ""
+
+msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
+msgstr ""
