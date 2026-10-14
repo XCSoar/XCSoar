@@ -14,10 +14,20 @@ class Canvas;
 class ScrollBar {
   ButtonFrameRenderer button_renderer;
 
-protected:
+  enum class Arrow { NONE, UP, DOWN };
+
   /** Whether the slider is currently being dragged */
   bool dragging;
   int drag_offset;
+
+  /** Arrow button the finger went down on, or NONE. */
+  Arrow arrow;
+  /** Pointer is still on that arrow, so it draws pressed. */
+  bool arrow_pressed;
+
+  bool PointerOnArrow(PixelPoint p) const noexcept;
+  void StartDrag(PaintWindow *w, int offset) noexcept;
+
   /** Coordinates of the ScrollBar */
   PixelRect rc;
   /** Coordinates of the Slider */
@@ -150,17 +160,8 @@ public:
   /** Calculates the new origin out of the given y-Coordinate of the drag */
   unsigned ToOrigin(unsigned size, unsigned view_size, int y) const noexcept;
 
-  /** Paints the ScollBar */
+  /** Paints the ScrollBar */
   void Paint(Canvas &canvas) const noexcept;
-
-  /**
-   * Paints the ScrollBar with explicit button states.
-   *
-   * @param up_state State of the up arrow button.
-   * @param down_state State of the down arrow button.
-   */
-  void Paint(Canvas &canvas, ButtonState up_state,
-             ButtonState down_state) const noexcept;
 
   /**
    * Returns whether the slider is currently being dragged
@@ -194,6 +195,30 @@ public:
    * @param w The Window object the ScrollBar is belonging to
    */
   void DragEnd(PaintWindow *w) noexcept;
+
+  bool IsArrowHeld() const noexcept {
+    return arrow != Arrow::NONE;
+  }
+
+  bool IsArrowUp() const noexcept {
+    return arrow == Arrow::UP;
+  }
+
+  /**
+   * Press the arrow under @p if there is one.  It draws pressed
+   * until ::ArrowUp().  ::DragEnd() cancels it.  @return true if an
+   * arrow was pressed.  The caller scrolls on release, same as #Button.
+   */
+  bool ArrowDown(PaintWindow *w, PixelPoint p) noexcept;
+
+  /** @return true while an arrow gesture is in progress. */
+  bool ArrowMove(PaintWindow *w, PixelPoint p) noexcept;
+
+  /**
+   * Release the arrow.  @return true if the pointer is still on it,
+   * so the caller should run the button action.
+   */
+  bool ArrowUp(PaintWindow *w, PixelPoint p) noexcept;
 
   /**
    * Should be called while dragging

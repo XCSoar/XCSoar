@@ -482,6 +482,13 @@ ListControl::OnKeyDown(unsigned key_code) noexcept
 bool
 ListControl::OnMouseUp(PixelPoint p) noexcept
 {
+  if (scroll_bar.IsArrowHeld()) {
+    const bool up = scroll_bar.IsArrowUp();
+    if (scroll_bar.ArrowUp(this, p))
+      MoveOrigin(up ? -1 : 1);
+    return true;
+  }
+
   if (scroll_bar.IsDragging()) {
 #ifdef HAVE_VIBRATOR
     /* releasing the slider is the end of a deliberate drag; give it
@@ -559,6 +566,9 @@ ListControl::drag_end() noexcept
 bool
 ListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (scroll_bar.ArrowMove(this, p))
+    return true;
+
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
@@ -624,15 +634,14 @@ ListControl::OnMouseDown(PixelPoint Pos) noexcept
     PlayHapticFeedback(HapticFeedbackType::PRESS);
 #endif
 
-    /* Pressed beside the slider: move the slider there on the press
-       itself, and let it follow the pointer from there.  Stepping a
-       row or a page instead only works on a bar that is long enough
-       to aim at, and this one rarely is: the slider of a short list
-       is thinner than a fingertip, and the two arrow buttons take a
-       control height each.  Rows can still be stepped with the wheel
-       and the cursor keys. */
-    scroll_bar.DragBeginCentred(this);
-    ScrollBarDragMove(Pos.y);
+    if (!scroll_bar.ArrowDown(this, Pos)) {
+      /* Pressed on the track beside the slider: move the slider there
+         on the press itself, and let it follow the pointer from
+         there.  The slider of a short list is thinner than a
+         fingertip. */
+      scroll_bar.DragBeginCentred(this);
+      ScrollBarDragMove(Pos.y);
+    }
   } else {
     // if click in ListBox area
     // -> select appropriate item

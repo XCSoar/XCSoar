@@ -531,9 +531,10 @@ Version 7.46 - not yet released
   - fix blurry icons on high-DPI screens, most visible on the large
     waypoint list icons, by rendering the icon set at a higher
     resolution
-  - pressing the scroll bar of a list beside the slider now moves the
-    slider to that spot instead of stepping a row or a page, which
-    makes the short scroll bars in settings panels usable at all
+  - pressing the track of a list scroll bar, beside the slider, moves
+    the slider to that spot, which makes the short scroll bars in
+    settings panels usable. The arrow buttons step one row (one
+    scroll step in a text panel) and draw pressed while held #3323
   - on touch screens, swiping a list scrolls it without dragging the
     selection to the row the finger came down on
   - fix dragging inside a settings panel, e.g. scrolling the list in
