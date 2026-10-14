@@ -96,23 +96,26 @@ static constexpr struct wl_seat_listener seat_listener = {
 static void
 WaylandPointerEnter(void *data,
                     [[maybe_unused]] struct wl_pointer *wl_pointer,
-                    [[maybe_unused]] uint32_t serial,
+                    uint32_t serial,
                     [[maybe_unused]] struct wl_surface *surface,
                     wl_fixed_t surface_x,
                     wl_fixed_t surface_y)
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerMotion(IntPoint2D(wl_fixed_to_int(surface_x),
-                                 wl_fixed_to_int(surface_y)));
+  queue.PointerEnter(serial,
+                     IntPoint2D(wl_fixed_to_int(surface_x),
+                                wl_fixed_to_int(surface_y)));
 }
 
 static void
-WaylandPointerLeave([[maybe_unused]] void *data,
+WaylandPointerLeave(void *data,
                     [[maybe_unused]] struct wl_pointer *wl_pointer,
                     [[maybe_unused]] uint32_t serial,
                     [[maybe_unused]] struct wl_surface *surface)
 {
+  auto &queue = *(WaylandEventQueue *)data;
+  queue.PointerLeave();
 }
 
 static void
@@ -130,14 +133,14 @@ WaylandPointerMotion(void *data,
 static void
 WaylandPointerButton(void *data,
                      [[maybe_unused]] struct wl_pointer *wl_pointer,
-                     [[maybe_unused]] uint32_t serial,
+                     uint32_t serial,
                      [[maybe_unused]] uint32_t time,
-                     [[maybe_unused]] uint32_t button,
+                     uint32_t button,
                      uint32_t state)
 {
   auto &queue = *(WaylandEventQueue *)data;
 
-  queue.PointerButton(state);
+  queue.PointerButton(serial, button, state);
 }
 
 static void
@@ -758,6 +761,66 @@ WaylandEventQueue::TouchCancel() noexcept
   touch_multi = false;
 }
 
+namespace {
+
+/* Logical pixels.  The compositor corner is 1px; this square is the
+   target that starts a diagonal resize. */
+constexpr unsigned CORNER_RESIZE_LOGICAL_PX = 16;
+
+[[nodiscard]] [[gnu::const]]
+constexpr uint32_t
+CornerResizeEdge(int x, int y, int width, int height,
+                 int margin) noexcept
+{
+  if (margin < 1 || width <= margin * 2 || height <= margin * 2)
+    return XDG_TOPLEVEL_RESIZE_EDGE_NONE;
+
+  uint32_t edge;
+  if (x < margin)
+    edge = XDG_TOPLEVEL_RESIZE_EDGE_LEFT;
+  else if (x >= width - margin)
+    edge = XDG_TOPLEVEL_RESIZE_EDGE_RIGHT;
+  else
+    return XDG_TOPLEVEL_RESIZE_EDGE_NONE;
+
+  if (y < margin)
+    return edge | XDG_TOPLEVEL_RESIZE_EDGE_TOP;
+  if (y >= height - margin)
+    return edge | XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM;
+  return XDG_TOPLEVEL_RESIZE_EDGE_NONE;
+}
+
+static_assert(CornerResizeEdge(0, 0, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_TOP_LEFT);
+static_assert(CornerResizeEdge(90, 0, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_TOP_RIGHT);
+static_assert(CornerResizeEdge(0, 90, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_LEFT);
+static_assert(CornerResizeEdge(90, 90, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT);
+static_assert(CornerResizeEdge(50, 0, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_NONE);
+static_assert(CornerResizeEdge(0, 50, 100, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_NONE);
+static_assert(CornerResizeEdge(0, 0, 20, 100, 16) ==
+              XDG_TOPLEVEL_RESIZE_EDGE_NONE);
+
+} // namespace
+
+inline void
+WaylandEventQueue::PointerEnter(uint32_t serial, IntPoint2D p) noexcept
+{
+  pointer_enter_serial = serial;
+  shown_resize_edge = ~uint32_t{0};
+  PointerMotion(p);
+}
+
+inline void
+WaylandEventQueue::PointerLeave() noexcept
+{
+  shown_resize_edge = ~uint32_t{0};
+}
+
 inline void
 WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 {
@@ -767,10 +830,12 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
   new_pointer_position =
     Wayland::ToPhysicalPoint(PixelPoint(new_pointer_position), scale_120);
 
-  if (new_pointer_position == pointer_position)
+  const bool moved = new_pointer_position != pointer_position;
+  pointer_position = new_pointer_position;
+  UpdateCornerCursor();
+  if (!moved)
     return;
 
-  pointer_position = new_pointer_position;
   const PixelPoint transformed =
     MaybeTransformPoint(PixelPoint(pointer_position.x,
                                    pointer_position.y));
@@ -779,16 +844,115 @@ WaylandEventQueue::PointerMotion(IntPoint2D new_pointer_position) noexcept
 }
 
 inline void
-WaylandEventQueue::PointerButton(bool pressed) noexcept
+WaylandEventQueue::PointerButton(uint32_t serial, uint32_t button,
+                                 uint32_t state) noexcept
 {
   if (last_touch_count > 0)
     return;
 
+  if (button == BTN_LEFT &&
+      state == WL_POINTER_BUTTON_STATE_RELEASED &&
+      swallow_corner_release) {
+    swallow_corner_release = false;
+    return;
+  }
+
+  /* A new left press retires a release the compositor never delivered. */
+  if (state == WL_POINTER_BUTTON_STATE_PRESSED && button == BTN_LEFT) {
+    swallow_corner_release = false;
+    if (BeginCornerResize(serial)) {
+      swallow_corner_release = true;
+      return;
+    }
+  }
+
   const PixelPoint transformed =
     MaybeTransformPoint(PixelPoint(pointer_position.x,
                                    pointer_position.y));
-  Push(Event(pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
+  Push(Event(state == WL_POINTER_BUTTON_STATE_PRESSED
+               ? Event::MOUSE_DOWN : Event::MOUSE_UP,
              transformed));
+}
+
+uint32_t
+WaylandEventQueue::CurrentCornerEdge() const noexcept
+{
+  if (!resize_enabled || resize_size.width == 0 || resize_size.height == 0)
+    return XDG_TOPLEVEL_RESIZE_EDGE_NONE;
+
+  const int margin =
+    (int)Wayland::ToPhysicalPixels(CORNER_RESIZE_LOGICAL_PX, scale_120);
+  return CornerResizeEdge(pointer_position.x, pointer_position.y,
+                          (int)resize_size.width, (int)resize_size.height,
+                          margin);
+}
+
+struct wl_cursor *
+WaylandEventQueue::CornerCursor(uint32_t edge) const noexcept
+{
+  if (cursor_theme == nullptr)
+    return nullptr;
+
+  const char *name;
+  const char *fallback;
+  switch (edge) {
+  case XDG_TOPLEVEL_RESIZE_EDGE_TOP_LEFT:
+    name = "top_left_corner";
+    fallback = "nw-resize";
+    break;
+  case XDG_TOPLEVEL_RESIZE_EDGE_TOP_RIGHT:
+    name = "top_right_corner";
+    fallback = "ne-resize";
+    break;
+  case XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_LEFT:
+    name = "bottom_left_corner";
+    fallback = "sw-resize";
+    break;
+  case XDG_TOPLEVEL_RESIZE_EDGE_BOTTOM_RIGHT:
+    name = "bottom_right_corner";
+    fallback = "se-resize";
+    break;
+  default:
+    return nullptr;
+  }
+
+  struct wl_cursor *cursor = wl_cursor_theme_get_cursor(cursor_theme, name);
+  if (cursor == nullptr)
+    cursor = wl_cursor_theme_get_cursor(cursor_theme, fallback);
+  return cursor;
+}
+
+void
+WaylandEventQueue::UpdateCornerCursor() noexcept
+{
+  const uint32_t edge = CurrentCornerEdge();
+  if (edge == shown_resize_edge)
+    return;
+
+  /* The frame keeps its last resize glyph until the client sets one.
+     Inside the window, that glyph is the arrow, except on a corner. */
+  if (edge != XDG_TOPLEVEL_RESIZE_EDGE_NONE &&
+      ApplyCursor(CornerCursor(edge))) {
+    shown_resize_edge = edge;
+    return;
+  }
+
+  if (ApplyCursor(cursor_pointer))
+    shown_resize_edge = XDG_TOPLEVEL_RESIZE_EDGE_NONE;
+}
+
+bool
+WaylandEventQueue::BeginCornerResize(uint32_t serial) noexcept
+{
+  if (resize_toplevel == nullptr || seat == nullptr)
+    return false;
+
+  const uint32_t edge = CurrentCornerEdge();
+  if (edge == XDG_TOPLEVEL_RESIZE_EDGE_NONE)
+    return false;
+
+  xdg_toplevel_resize(resize_toplevel, seat, serial, edge);
+  return true;
 }
 
 void
@@ -917,29 +1081,37 @@ WaylandEventQueue::SetScreenSize(PixelSize screen_size) noexcept
 
 #endif
 
-void
-WaylandEventQueue::SetCursor(struct wl_pointer *wl_pointer, uint32_t serial) noexcept
+bool
+WaylandEventQueue::ApplyCursor(struct wl_cursor *cursor) noexcept
 {
-  if (cursor_surface == nullptr || cursor_pointer == nullptr)
-    return;
+  if (cursor == nullptr || cursor_surface == nullptr || pointer == nullptr)
+    return false;
 
-  /* wl_cursor contains an images array of wl_cursor_image structs */
-  if (cursor_pointer->image_count == 0)
-    return;
+  if (cursor->image_count == 0)
+    return false;
 
-  struct wl_cursor_image *image = cursor_pointer->images[0];
+  struct wl_cursor_image *image = cursor->images[0];
   if (image == nullptr)
-    return;
+    return false;
 
-  wl_pointer_set_cursor(wl_pointer, serial, cursor_surface,
-                        image->hotspot_x, image->hotspot_y);
+  /* Theme pixels are already device pixels.  Without buffer scale the
+     compositor enlarges them again on a scaled output. */
+  const unsigned scale = Wayland::ToIntegerScale(scale_120);
+  if (wl_proxy_get_version((struct wl_proxy *)cursor_surface) >= 3)
+    wl_surface_set_buffer_scale(cursor_surface, (int32_t)scale);
+
+  wl_pointer_set_cursor(pointer, pointer_enter_serial, cursor_surface,
+                        (int32_t)(image->hotspot_x / scale),
+                        (int32_t)(image->hotspot_y / scale));
 
   struct wl_buffer *buffer = wl_cursor_image_get_buffer(image);
-  if (buffer != nullptr) {
-    wl_surface_attach(cursor_surface, buffer, 0, 0);
-    wl_surface_damage(cursor_surface, 0, 0, image->width, image->height);
-    wl_surface_commit(cursor_surface);
-  }
+  if (buffer == nullptr)
+    return false;
+
+  wl_surface_attach(cursor_surface, buffer, 0, 0);
+  wl_surface_damage(cursor_surface, 0, 0, image->width, image->height);
+  wl_surface_commit(cursor_surface);
+  return true;
 }
 
 } // namespace UI

@@ -101,6 +101,7 @@ handle_toplevel_configure(void *data,
   auto *window = static_cast<TopWindow *>(data);
 
   bool suspended = false;
+  bool resizable = true;
   const auto *state = static_cast<const uint32_t *>(states->data);
   const auto *const states_end =
     state + states->size / sizeof(uint32_t);
@@ -111,13 +112,19 @@ handle_toplevel_configure(void *data,
       suspended = true;
       break;
 #endif
+    case XDG_TOPLEVEL_STATE_FULLSCREEN:
+    case XDG_TOPLEVEL_STATE_MAXIMIZED:
+      resizable = false;
+      break;
     default:
       break;
     }
   }
 
-  if (event_queue != nullptr)
+  if (event_queue != nullptr) {
     event_queue->SetToplevelState(suspended);
+    event_queue->SetResizeEnabled(resizable);
+  }
 
   window->OnToplevelConfigureSize(width, height);
 }
@@ -296,6 +303,8 @@ TopWindow::CreateNative(const char *text, PixelSize size,
 
     xdg_toplevel = xdg_surface_get_toplevel(xdg_surface);
     xdg_toplevel_add_listener(xdg_toplevel, &toplevel_listener, this);
+    if (event_queue != nullptr)
+      event_queue->SetResizeToplevel(xdg_toplevel);
     xdg_toplevel_set_title(xdg_toplevel, text);
     xdg_toplevel_set_app_id(xdg_toplevel, "xcsoar");
 
@@ -435,6 +444,8 @@ TopWindow::DestroyNative() noexcept
     zxdg_toplevel_decoration_v1_destroy(xdg_decoration);
     xdg_decoration = nullptr;
   }
+  if (event_queue != nullptr)
+    event_queue->SetResizeToplevel(nullptr);
   if (xdg_toplevel != nullptr) {
     xdg_toplevel_destroy(xdg_toplevel);
     xdg_toplevel = nullptr;

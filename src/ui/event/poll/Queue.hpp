@@ -142,6 +142,14 @@ public:
   void SetSurfaceScale120(unsigned scale_120) noexcept {
     input_queue.SetSurfaceScale120(scale_120);
   }
+
+  void SetResizeToplevel(struct xdg_toplevel *toplevel) noexcept {
+    input_queue.SetResizeToplevel(toplevel);
+  }
+
+  void SetResizeEnabled(bool enabled) noexcept {
+    input_queue.SetResizeEnabled(enabled);
+  }
 #endif
 
   void SetScreenSize([[maybe_unused]] const PixelSize &screen_size) noexcept {
@@ -149,6 +157,9 @@ public:
     input_queue.SetScreenSize(screen_size);
 #elif defined(ENABLE_OPENGL) && defined(SOFTWARE_ROTATE_DISPLAY) && defined(USE_WAYLAND)
     input_queue.SetScreenSize(screen_size);
+#endif
+#ifdef USE_WAYLAND
+    input_queue.SetResizeSize(screen_size);
 #endif
   }
 
