@@ -1576,6 +1576,8 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
 	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(TEST_SRC_DIR)/FakeFlarmGlue.cpp \
+	$(TEST_SRC_DIR)/FakeLocalPath.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -2878,8 +2880,10 @@ RUN_JOB_DIALOG_SOURCES = \
 RUN_JOB_DIALOG_DEPENDS = OPERATION FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
+# Real LocalPath.cpp below; the replay stub in DEBUG_REPLAY_SOURCES
+# would duplicate those symbols.
 RUN_ANALYSIS_SOURCES = \
-	$(DEBUG_REPLAY_SOURCES) \
+	$(filter-out $(TEST_SRC_DIR)/FakeLocalPath.cpp,$(DEBUG_REPLAY_SOURCES)) \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Engine/Trace/Point.cpp \
 	$(SRC)/Engine/Trace/Trace.cpp \
