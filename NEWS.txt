@@ -647,6 +647,8 @@ Version 7.46 - not yet released
 * development
   - document the testfast and testslow flight-harness targets in
     doc/build.rst
+  - build the replay debug tools on macOS and the ATR833 emulator with
+    fmt 12
   - build system: stop auto-committing translation catalog updates
     onto the translationupdates branch
   - add an advisory complexity report with lizard: a CI job on pull

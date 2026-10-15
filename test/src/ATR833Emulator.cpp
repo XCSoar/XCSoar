@@ -67,7 +67,8 @@ ATR833Emulator::Handle(std::span<const std::byte> src) noexcept
       });
 
     default:
-      fmt::print("unknown command: {:#x}\n", src[2]);
+      fmt::print("unknown command: {:#x}\n",
+                 std::to_integer<unsigned>(src[2]));
       return 3;
     }
   } else
