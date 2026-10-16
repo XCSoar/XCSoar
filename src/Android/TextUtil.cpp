@@ -17,8 +17,6 @@ jmethodID TextUtil::midTextUtil;
 jmethodID TextUtil::midGetFontMetrics;
 jmethodID TextUtil::midGetTextBounds;
 jmethodID TextUtil::midGetTextTextureGL;
-static jmethodID midSetCorrectedDpi;
-static bool oem_dpi_corrected{};
 
 void
 TextUtil::Initialise(JNIEnv *_env) noexcept
@@ -33,18 +31,6 @@ TextUtil::Initialise(JNIEnv *_env) noexcept
                                        "(Ljava/lang/String;)[I");
   midGetTextTextureGL = _env->GetMethodID(cls, "getTextTextureGL",
                                           "(Ljava/lang/String;)[I");
-  midSetCorrectedDpi = _env->GetStaticMethodID(cls, "setCorrectedDpi",
-                                               "(FF)V");
-}
-
-void
-TextUtil::SetCorrectedDpi(float text_scale_y, float letter_spacing,
-                          bool corrected) noexcept
-{
-  oem_dpi_corrected = corrected;
-  env->CallStaticVoidMethod(cls, midSetCorrectedDpi,
-                            (jfloat)text_scale_y,
-                            (jfloat)letter_spacing);
 }
 
 void
@@ -78,16 +64,11 @@ TextUtil::create(const FontDescription &d)
 
   const auto display_type = GetDisplayType();
 
-  /* 1-bit glyphs on e-paper and dithered displays. */
+  /* 1-bit glyphs on e-paper and dithered displays.  The same flag
+     turns hinting off so those stems are not snapped to a grid. */
   const bool alias_edging = DisplayTypeUsesMonochromeFonts(display_type) ||
     IsDithered();
 
-  /* SkFont hinting / linear metrics — off grid snap for fractional em
-     sizes (fitEmHeight, OEM textScaleY) and e-paper. */
-  const bool linear_metrics = alias_edging || oem_dpi_corrected;
-
-  /* Letter spacing adjusts the whole shaped run.  Drawing one code
-     point at a time would drop joining, marks, and kerning. */
   auto &e = *env;
   Java::LocalObject localObject{&e,
     e.NewObject(cls, midTextUtil,
@@ -96,7 +77,7 @@ TextUtil::create(const FontDescription &d)
                 (jboolean)d.IsItalic(),
                 (jboolean)d.IsMonospace(),
                 (jboolean)alias_edging,
-                (jboolean)linear_metrics,
+                (jboolean)alias_edging,
                 (jfloat)d.GetLetterSpacing())};
   Java::RethrowException(&e);
 

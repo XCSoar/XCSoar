@@ -20,7 +20,6 @@
 #endif
 
 #include <cassert>
-#include <cmath>
 #include <cstdint>
 
 UnsignedPoint2D
@@ -66,54 +65,6 @@ Display::SanitizeDisplayDpi(PixelSize size, UnsignedPoint2D physical,
     return {density_dpi, density_dpi};
 
   return dpi;
-}
-
-float
-Display::AndroidTextScaleX(PixelSize size, UnsignedPoint2D physical,
-                           unsigned density_dpi,
-                           UnsignedPoint2D corrected) noexcept
-{
-  const auto aligned = AlignDpiToPixelAxes(size, physical);
-  if (!DpiFarFrom(aligned.x, density_dpi) &&
-      !DpiFarFrom(aligned.y, density_dpi))
-    return 1.f;
-
-  if (aligned.x == 0 || aligned.y == 0 ||
-      corrected.x == 0 || corrected.y == 0)
-    return 1.f;
-
-  const double sx = double(corrected.x) / aligned.x;
-  const double sy = double(corrected.y) / aligned.y;
-  return float(std::sqrt(sx * sy));
-}
-
-float
-Display::AndroidTextScaleY(PixelSize size, UnsignedPoint2D physical,
-                           unsigned density_dpi,
-                           UnsignedPoint2D corrected) noexcept
-{
-  const auto aligned = AlignDpiToPixelAxes(size, physical);
-  if (!DpiFarFrom(aligned.x, density_dpi) &&
-      !DpiFarFrom(aligned.y, density_dpi))
-    return 1.f;
-
-  if (aligned.y == 0 || corrected.y == 0)
-    return 1.f;
-
-  return float(double(corrected.y) / aligned.y);
-}
-
-float
-Display::AndroidTextLetterSpacing(PixelSize size, UnsignedPoint2D physical,
-                                  unsigned density_dpi,
-                                  UnsignedPoint2D corrected) noexcept
-{
-  const float scale_x = AndroidTextScaleX(size, physical,
-                                          density_dpi, corrected);
-  if (scale_x <= 0.f || scale_x >= 1.f)
-    return 0.f;
-
-  return 1.f / scale_x - 1.f;
 }
 
 #ifndef ANDROID
