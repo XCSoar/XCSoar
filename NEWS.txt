@@ -369,6 +369,9 @@ Version 7.46 - not yet released
     checklist, Credits and Configuration
   - fix the Quick Guide link to the user manual, which opened a page
     that no longer exists
+  - fix Flight Setup leaving bugs, ballast, wing loading, QNH and
+    crew at the values from when the dialog opened while a device
+    changes them
   - fix Look → Pages cutting off the bottom fields in landscape; the
     page editor scrolls, and Add, Delete and the move buttons move
     into the button column #3326

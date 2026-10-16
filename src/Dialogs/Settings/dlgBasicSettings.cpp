@@ -141,7 +141,7 @@ FlightSetupPanel::SetBallast()
 {
   const bool ballastable = polar_settings.glide_polar_task.IsBallastable();
   SetRowVisible(Ballast, ballastable);
-  if (ballastable) {
+  if (ballastable && !GetControl(Ballast).HasFocus()) {
     WndProperty &control = GetControl(Ballast);
     auto *df = dynamic_cast<DataFieldFloat *>(control.GetDataField());
     if (df != nullptr) {
@@ -152,14 +152,22 @@ FlightSetupPanel::SetBallast()
       if (ui_max < db)
         ui_max = 400.0;
       df->SetMax(db * ceil(ui_max / db));
+
+      const double litres =
+        polar_settings.glide_polar_task.GetBallastLitres();
+      if (fabs(df->GetValue() - litres) >= 0.5)
+        LoadValue(Ballast, litres);
     }
-    LoadValue(Ballast, polar_settings.glide_polar_task.GetBallastLitres());
   }
 
   const auto wl = polar_settings.glide_polar_task.GetWingLoading();
   SetRowVisible(WingLoading, wl > 0);
-  if (wl > 0)
-    LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
+  if (wl > 0) {
+    const auto &df = (const DataFieldFloat &)GetDataField(WingLoading);
+    const Unit unit = Units::GetUserUnitByGroup(UnitGroup::WING_LOADING);
+    if (fabs(df.GetValue() - Units::ToUserUnit(wl, unit)) >= 0.05)
+      LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
+  }
 }
 
 void
@@ -238,10 +246,37 @@ FlightSetupPanel::OnTimer()
 
   if (settings.ballast_timer_active) {
     /* dump updates the polar on the process timer; push that to
-       devices and refresh the dialog */
+       devices.  The fields below pick up the new litres. */
     ActionInterface::SetBallastLitres(
         polar_settings.glide_polar_task.GetBallastLitres());
-    SetBallast();
+  }
+
+  /* A device can change these while the dialog is open.  Leave a
+     field alone while it has the cursor. */
+  const auto &polar = polar_settings.glide_polar_task;
+
+  if (!GetControl(Crew).HasFocus()) {
+    const double crew = polar.GetCrewMass();
+    const auto &df = (const DataFieldFloat &)GetDataField(Crew);
+    if (fabs(df.GetValue() - Units::ToUserMass(crew)) >= 0.5)
+      LoadValue(Crew, crew, UnitGroup::MASS);
+  }
+
+  SetBallast();
+
+  if (!GetControl(Bugs).HasFocus()) {
+    const double bugs_percent = (1 - settings.bugs) * 100;
+    const auto &df = (const DataFieldFloat &)GetDataField(Bugs);
+    if (fabs(df.GetValue() - bugs_percent) >= 0.5)
+      LoadValue(Bugs, bugs_percent);
+  }
+
+  if (!GetControl(QNH).HasFocus()) {
+    const double user_qnh = Units::ToUserPressure(
+      CommonInterface::GetComputerSettings().pressure);
+    const auto &df = (const DataFieldFloat &)GetDataField(QNH);
+    if (fabs(df.GetValue() - user_qnh) >= GetUserPressureStep() / 2)
+      LoadValue(QNH, user_qnh);
   }
 
   RefreshAltitudeControl();
