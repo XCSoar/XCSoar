@@ -47,6 +47,7 @@ Version 7.46 - not yet released
   - fix IOIO boards with older firmware, such as the Androport, being
     refused since 7.44 #3348
   - fix hang on exit while waiting for the IOIO
+  - reconnect the IOIO when it is plugged in again
 * iOS
   - add haptic feedback for button presses; the Haptic feedback
     setting controls it

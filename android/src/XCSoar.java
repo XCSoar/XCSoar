@@ -38,6 +38,7 @@ import android.content.BroadcastReceiver;
 import android.content.ServiceConnection;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
+import android.hardware.usb.UsbManager;
 import android.content.res.Configuration;
 import android.util.Log;
 import android.provider.Settings;
@@ -367,6 +368,18 @@ public class XCSoar extends Activity implements PermissionManager {
 
     if (nativeView != null)
       nativeView.setHapticFeedback(hapticFeedbackEnabled);
+  }
+
+  @Override protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    /* an IOIO plugged in while XCSoar runs (launchMode singleInstance
+       delivers USB_*_ATTACHED here); wake the connect attempt that is
+       waiting for it */
+    final String action = intent.getAction();
+    if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(action) ||
+        UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action))
+      IOIOHelper.onUsbAttached();
   }
 
   @Override protected void onResume() {
