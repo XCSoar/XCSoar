@@ -188,6 +188,12 @@ Replay::Update()
     data.ProvidePressureAltitude(r.baro_altitude);
     data.ProvideBaroAltitudeTrue(r.baro_altitude);
 
+    /* The fix time is ahead of this sample. Expire() treats a
+       validity stamp in the future as a time warp and drops the
+       logged airspeed. */
+    if (data.airspeed_available)
+      data.airspeed_available.Update(data.clock);
+
     {
       const std::lock_guard lock{device_blackboard.mutex};
       device_blackboard.SetReplayState() = data;

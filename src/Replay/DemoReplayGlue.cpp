@@ -53,6 +53,8 @@ DemoReplayGlue::Update(NMEAInfo &data)
   data.gps_altitude_available.Update(data.clock);
   data.ProvidePressureAltitude(s.altitude);
   data.ProvideBaroAltitudeTrue(s.altitude);
+  if (s.true_airspeed > 0)
+    data.ProvideTrueAirspeed(s.true_airspeed);
   data.gps.real = false;
   data.gps.replay = true;
   data.gps.simulator = false;
