@@ -105,8 +105,8 @@ API (:file:`Repository/FileType.hpp`).
    ├── logs/                  IGC and NMEA flight logs
    ├── lua/                   Lua scripts (*.lua); lua/lib/ for libraries
    ├── maps/                  Terrain files (*.xcm, *.lkm)
+   ├── planes/                Plane polar files (*.xcp)
    ├── profiles/              Profile files (*.prf)
-   │   └── planes/            Plane polar files (*.xcp)
    ├── tasks/                 Saved task files
    ├── waypoints/             Waypoint files (*.cup, *.dat, …)
    │   └── details/           Waypoint detail text files
@@ -162,7 +162,7 @@ recognised by :cpp:func:`GetFileTypePatterns`.
    * - :file:`profiles/`
      - ``PROFILE``
      - ``*.prf`` (including ``default.prf``)
-   * - :file:`profiles/planes/`
+   * - :file:`planes/`
      - ``PLANE``
      - ``*.xcp``
    * - :file:`input/`

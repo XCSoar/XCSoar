@@ -127,7 +127,7 @@ TestLayoutClassification()
   ok1(GetLayoutSubdirForFilename("track.igc") == Path("logs"));
   ok1(GetLayoutSubdirForFilename("readme.md") == nullptr);
   ok1(GetLayoutSubdirForFilename("profile.prf") == Path("profiles"));
-  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("profiles/planes"));
+  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("planes"));
   ok1(GetLayoutSubdirForFilename("repository") == Path("cache"));
   ok1(GetLayoutSubdirForFilename("xcsoar.log") == nullptr);
 }

@@ -100,7 +100,7 @@ GetFileTypeDefaultDir(const FileType file_type)
     return AllocatedPath("logs");
 
   case FileType::PLANE:
-    return AllocatedPath::Build("profiles", "planes");
+    return AllocatedPath("planes");
 
   case FileType::XCI:
     return AllocatedPath("input");

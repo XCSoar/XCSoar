@@ -40,7 +40,7 @@ TestLayoutSubdirForFilename()
   ok1(GetLayoutSubdirForFilename("zone.openair") == Path("airspace"));
   ok1(GetLayoutSubdirForFilename("user.cup") == Path("waypoints"));
   ok1(GetLayoutSubdirForFilename("profile.prf") == Path("profiles"));
-  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("profiles/planes"));
+  ok1(GetLayoutSubdirForFilename("plane.xcp") == Path("planes"));
   ok1(GetLayoutSubdirForFilename("repository") == Path("cache"));
   ok1(GetLayoutSubdirForFilename("user_repository_3") == Path("cache"));
   ok1(GetLayoutSubdirForFilename("notams.json") == Path("cache"));
