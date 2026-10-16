@@ -261,10 +261,66 @@ UpdateAllProfilesFromMoves(const MovedEntries &moved_entries)
       }
 }
 
+/**
+ * 7.46 briefly stored plane files in profiles/planes. Move those into
+ * planes/ even when the layout marker is already present.
+ */
+static void
+MovePlanesFromProfiles() noexcept
+{
+  const auto source_dir =
+    LocalPath(AllocatedPath::Build(Path("profiles"), Path("planes")));
+  if (!Directory::Exists(source_dir))
+    return;
+
+  const auto dest_dir = LocalPath(GetFileTypeDefaultDir(FileType::PLANE));
+  Directory::CreateRecursive(dest_dir);
+
+  struct Visitor final : Directory::DirEntryVisitor {
+    std::vector<AllocatedPath> files;
+
+    void Visit(Path full, Path filename, bool is_dir) noexcept override {
+      if (is_dir || !filename.IsValidFilename())
+        return;
+      if (!FilenameMatchesFileType(filename.c_str(), FileType::PLANE))
+        return;
+
+      files.emplace_back(full);
+    }
+  };
+
+  Visitor visitor;
+  Directory::VisitDirectoriesAndFiles(source_dir, visitor, false);
+
+  std::vector<MigrationEntry> entries;
+  for (auto &source : visitor.files) {
+    auto destination = AllocatedPath::Build(dest_dir, source.GetBase());
+    if (File::ExistsAny(destination))
+      continue;
+    if (!File::Rename(source, destination))
+      continue;
+
+    entries.emplace_back(std::move(source), std::move(destination),
+                         FileType::PLANE);
+  }
+
+  if (entries.empty())
+    return;
+
+  MovedEntries moved;
+  moved.reserve(entries.size());
+  for (const auto &entry : entries)
+    moved.push_back(&entry);
+
+  UpdateAllProfilesFromMoves(moved);
+}
+
 void
 MigrateDataLayoutToSubdirs() noexcept
 {
   try {
+    MovePlanesFromProfiles();
+
     const auto root = GetPrimaryDataPath();
     const auto marker = LocalPath(MIGRATION_MARKER);
     if (File::Exists(marker))
