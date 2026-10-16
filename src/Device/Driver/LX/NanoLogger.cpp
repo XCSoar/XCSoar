@@ -345,11 +345,14 @@ RequestFlight(Port &port, const char *filename,
 /**
  * Write one flight row.  Returns the number of bytes written, or 0
  * when the row is rejected.
+ *
+ * @param rejected the last row rejected for its length; a row that
+ * comes back the same when asked again is kept
  */
 static unsigned
 HandleFlightLine(const char *_line, BufferedOutputStream &os,
                  unsigned &i, unsigned &row_count_r,
-                 RecordLengths &lengths)
+                 RecordLengths &lengths, std::string &rejected)
 {
   NMEAInputLine line(_line);
 
@@ -374,13 +377,23 @@ HandleFlightLine(const char *_line, BufferedOutputStream &os,
 
   const std::string_view payload = line.Rest();
   if (!lengths.Fits(payload)) {
-    LogFormat("NanoLogger: row %u is %u characters, its record type"
-              " declares %u; rejecting it",
-              row, unsigned(payload.size()),
-              payload.front() == 'B' ? lengths.b : lengths.k);
-    return 0;
+    if (payload != rejected) {
+      LogFormat("NanoLogger: row %u is %u characters, its record type"
+                " declares %u; rejecting it",
+                row, unsigned(payload.size()),
+                payload.front() == 'B' ? lengths.b : lengths.k);
+      rejected.assign(payload);
+      return 0;
+    }
+
+    /* A splice does not happen twice the same way.  The logger
+       stored this row like that: an LXNAV S10 has been seen to write
+       a 4-digit wind direction into a 3-digit K record field. */
+    LogFormat("NanoLogger: row %u came back unchanged; keeping it as"
+              " the logger stored it", row);
   }
 
+  rejected.clear();
   lengths.Learn(payload);
   os.Write(AsBytes(payload));
   os.Write("\r\n");
@@ -399,6 +412,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
   unsigned lines_since_last_flush = 0;
   unsigned bytes_written = 0;
   bool range_set = false;
+  std::string rejected;
 
   while (true) {
     /* The first request is one line, so the record length is known.
@@ -443,7 +457,7 @@ DownloadFlightInner(Port &port, const char *filename, BufferedOutputStream &os,
 
       const unsigned wrote = line == nullptr
         ? 0
-        : HandleFlightLine(line, os, i, row_count, lengths);
+        : HandleFlightLine(line, os, i, row_count, lengths, rejected);
       if (wrote == 0) {
         if (request_retry_count > MAX_REQUEST_RETRY_COUNT) {
           /* Update resume point before throwing - but note that buffered data

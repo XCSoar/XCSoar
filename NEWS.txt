@@ -270,8 +270,10 @@ Version 7.46 - not yet released
     9900 m #3218
 * devices
   - fix corrupted IGC files downloaded from LXNAV S100 and other
-    LXNAV loggers over Bluetooth: reject B and K records whose length
-    does not match the file's I and J records #3229
+    LXNAV loggers over Bluetooth: ask again for B and K records whose
+    length does not match the file's I and J records, and keep one
+    that comes back unchanged, as an LXNAV S10 stores some K records
+    #3229
   - download flights from LXNAV loggers over BLE in CRC-checked
     blocks, the way LXNAV's own app does, and fall back to the row
     download when the logger does not support it or a transfer breaks

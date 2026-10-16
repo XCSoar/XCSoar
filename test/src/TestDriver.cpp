@@ -862,7 +862,7 @@ private:
   std::vector<std::string> blocks;
   std::vector<int32_t> chain;
   bool corrupted = false, dropped = false, spliced = false;
-  bool resend_dropped = false;
+  bool resend_dropped = false, row_spliced = false;
 
 public:
   NanoLoggerPort(std::string_view _flight, Mode _mode,
@@ -1009,9 +1009,18 @@ private:
         rest = tail;
       }
 
-      for (unsigned r = start; r < end && r <= rows.size(); ++r)
+      for (unsigned r = start; r < end && r <= rows.size(); ++r) {
+        std::string_view row = rows[r - 1];
+        if (Damages() && r == 10 && !row_spliced) {
+          /* lose a character, with a valid NMEA checksum, as a splice
+             does */
+          row_spliced = true;
+          row.remove_suffix(1);
+        }
+
         reply += MakeSentence(fmt::format("PLXVC,FLIGHT,A,,{},{},{}",
-                                          r, rows.size(), rows[r - 1]));
+                                          r, rows.size(), row));
+      }
     }
   }
 };
@@ -1104,6 +1113,48 @@ TestNanoDownloadFlight()
     ok1(FlightRowChunk(port, 50));
     ok1(port.FindContaining("PLXVC,FILE_INFO,R,") == nullptr);
   }
+
+  File::Delete(path);
+}
+
+/**
+ * The rows of a real IGC file must fit their I and J records.  A row
+ * that does not is asked for again; one that comes back the same is
+ * kept, since the logger stored it like that.
+ */
+static void
+TestNanoDownloadFlightRecordLength()
+{
+  std::string flight = "AXXXTEST\r\nHFDTE170825\r\n"
+    "I013638FXA\r\nJ010810WDI\r\n";
+  for (unsigned i = 1; i <= 60; ++i) {
+    flight += fmt::format("B{:06}4902419N01124877EA0095601102{:03}\r\n",
+                          124400 + i, i);
+    if (i % 20 == 0)
+      flight += fmt::format("K{:06}214\r\n", 124400 + i);
+  }
+
+  /* an LXNAV S10 wrote this K record with a 4-digit wind direction */
+  flight += "K124419-214\r\n";
+  flight += "GABCDEF\r\n";
+
+  RecordedFlightInfo info{};
+  strcpy(info.internal.lx.nano_filename, "TEST0002.igc");
+  info.internal.lx.nano_file_size = flight.size();
+
+  const auto path = AllocatedPath::Build(GetPrimaryDataPath(),
+                                         "nano-download.igc");
+
+  /* row 10 arrives spliced once */
+  NanoLoggerPort port{flight, NanoLoggerPort::Mode::DAMAGE};
+  NullOperationEnvironment env;
+  File::Delete(path);
+
+  ok1(Nano::DownloadFlight(port, info, path, 20, env));
+
+  std::vector<char> result(flight.size() + 2);
+  ok1(File::ReadString(path, result.data(), result.size()) &&
+      flight == result.data());
 
   File::Delete(path);
 }
@@ -4507,7 +4558,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1097 /* drivers */ + 45 /* PFLAU extended */
+  plan_tests(1099 /* drivers */ + 45 /* PFLAU extended */
              + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
@@ -4537,6 +4588,7 @@ int main()
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
   TestNanoDownloadFlight();
+  TestNanoDownloadFlightRecordLength();
   TestAltairRU();
   TestBlueFly();
   TestBorgeltB50();
