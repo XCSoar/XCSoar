@@ -189,6 +189,41 @@ TestMovesPlanesOutOfProfiles()
 }
 
 static void
+TestRewritesPlanePathWhenAlreadyMoved()
+{
+  char template_path[] = "/tmp/xcsoar-migrate-plane-retry-XXXXXX";
+  ok1(mkdtemp(template_path) != nullptr);
+
+  const Path data_path(template_path);
+  SetSingleDataPath(data_path);
+
+  ok1(WriteTextFile(LocalPath(".xcsoar-subdir-layout-v1"), ""));
+
+  const auto planes = AllocatedPath::Build(data_path, Path("planes"));
+  Directory::CreateRecursive(planes);
+  ok1(WriteTextFile(AllocatedPath::Build(planes, Path("plane.xcp")),
+                    "plane"));
+
+  const auto default_prf =
+    AllocatedPath::Build(AllocatedPath::Build(data_path, Path("profiles")),
+                         Path("default.prf"));
+  Directory::CreateRecursive(default_prf.GetParent());
+  ok1(WriteTextFile(default_prf,
+                    "PlanePath=%LOCAL_PATH%\\profiles\\planes\\plane.xcp\n"));
+
+  Profile::SetFiles(default_prf);
+
+  MigrateDataLayoutToSubdirs();
+
+  Profile::Load();
+
+  const auto active_plane = Profile::GetPath("PlanePath");
+  ok1(active_plane != nullptr);
+  ok1(StringFind(active_plane.c_str(), "planes") != nullptr);
+  ok1(StringFind(active_plane.c_str(), "profiles") == nullptr);
+}
+
+static void
 TestDoesNotWriteMarkerWhenAllMovesFail()
 {
   char template_path[] = "/tmp/xcsoar-migrate-fail-XXXXXX";
@@ -225,9 +260,10 @@ main()
 {
   SetFakeLogFileQuiet(true);
 
-  plan_tests(55);
+  plan_tests(62);
   TestMigratesFilesAndAllProfiles();
   TestMovesPlanesOutOfProfiles();
+  TestRewritesPlanePathWhenAlreadyMoved();
   TestDoesNotWriteMarkerWhenAllMovesFail();
   return exit_status();
 }
