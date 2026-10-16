@@ -17,6 +17,8 @@
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Widget/QuestionWidget.hpp"
+#include "Widget/ButtonPanelWidget.hpp"
+#include "Form/ButtonPanel.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -57,6 +59,15 @@ class AirspaceWarningWidget final
 
   /** width available for the message text, known from Prepare() */
   unsigned message_width = 0;
+
+  /** full banner width; the button rows use this, not #message_width */
+  unsigned banner_width = 0;
+
+  /**
+   * Button rows #ButtonPanel::BottomLayout will use at #banner_width.
+   * One until Prepare().  Two is the 2x2 layout.
+   */
+  unsigned button_rows = 1;
 
   /**
    * True when the name plus the current distance/time do not fit on
@@ -104,7 +115,18 @@ class AirspaceWarningWidget final
    * by the padding on both sides.
    */
   void SetMessageWidth(const PixelRect &rc) noexcept {
-    message_width = rc.GetWidth() - 2 * Layout::GetTextPadding();
+    banner_width = rc.GetWidth();
+    message_width = banner_width - 2 * Layout::GetTextPadding();
+  }
+
+  /** Recount button rows after the banner width or the buttons change. */
+  void UpdateButtonRows() noexcept {
+    if (banner_width == 0)
+      return;
+
+    auto &panel = static_cast<ButtonPanelWidget &>(GetWidget())
+      .GetButtonPanel();
+    button_rows = panel.BottomRowCount(banner_width);
   }
 
   /**
@@ -229,6 +251,7 @@ public:
 
     QuestionWidget::Prepare(parent, rc);
     SetMessage(buffer);
+    UpdateButtonRows();
   }
 
   void Move(const PixelRect &rc) noexcept override {
@@ -238,14 +261,25 @@ public:
 
     QuestionWidget::Move(rc);
     SetMessage(buffer);
+    UpdateButtonRows();
   }
 
   PixelSize GetMinimumSize() const noexcept override {
-    /* QuestionWidget already reserves one text line plus the button
-       row */
+    /* QuestionWidget reserves one text line plus one button row.
+       Each further row can grow to the maximum control height, and
+       that height has to be in the banner or the row covers the
+       text. */
     PixelSize size = QuestionWidget::GetMinimumSize();
     if (two_lines)
       size.height += UIGlobals::GetDialogLook().text_font.GetHeight();
+
+    if (button_rows > 1) {
+      const unsigned rows_height =
+        button_rows * Layout::GetMaximumControlHeight();
+      const unsigned reserved = Layout::GetMinimumControlHeight();
+      if (rows_height > reserved)
+        size.height += rows_height - reserved;
+    }
     return size;
   }
 

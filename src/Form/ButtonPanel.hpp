@@ -121,6 +121,13 @@ public:
   PixelRect BottomLayout(PixelRect rc) noexcept;
   PixelRect BottomLayout() noexcept;
 
+  /**
+   * How many rows #BottomLayout uses at this width.
+   * Zero when there are no buttons.
+   */
+  [[gnu::pure]]
+  unsigned BottomRowCount(unsigned total_width) const noexcept;
+
   void ShowAll() noexcept;
   void HideAll() noexcept;
 
@@ -138,6 +145,17 @@ public:
   bool KeyPress(unsigned key_code) noexcept;
 
 private:
+  struct BottomRow {
+    unsigned start, end;
+
+    constexpr unsigned size() const noexcept {
+      return end - start;
+    }
+  };
+
+  void CollectBottomRows(StaticArray<BottomRow, MAX_BUTTONS> &rows,
+                         unsigned total_width) const noexcept;
+
   [[gnu::pure]]
   unsigned Width(unsigned i) const noexcept;
 
