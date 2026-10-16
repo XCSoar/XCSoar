@@ -355,7 +355,7 @@ Version 7.46 - not yet released
     bugs, and the thermal averager needle, and leave the averager
     needle off
   - draw the analog vario scale and its climb and sink band as
-    smooth arcs
+    smooth arcs #1396
   - colour the analog vario MacCready figure like the MacCready
     InfoBox: green when manual, blue when automatic, orange for
     Safety MC, and mark that value on the outside of the scale with
