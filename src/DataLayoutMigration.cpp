@@ -270,11 +270,7 @@ MovePlanesFromProfiles() noexcept
 {
   const auto source_dir =
     LocalPath(AllocatedPath::Build(Path("profiles"), Path("planes")));
-  if (!Directory::Exists(source_dir))
-    return;
-
   const auto dest_dir = LocalPath(GetFileTypeDefaultDir(FileType::PLANE));
-  Directory::CreateRecursive(dest_dir);
 
   struct Visitor final : Directory::DirEntryVisitor {
     std::vector<AllocatedPath> files;
@@ -289,19 +285,48 @@ MovePlanesFromProfiles() noexcept
     }
   };
 
-  Visitor visitor;
-  Directory::VisitDirectoriesAndFiles(source_dir, visitor, false);
-
   std::vector<MigrationEntry> entries;
-  for (auto &source : visitor.files) {
-    auto destination = AllocatedPath::Build(dest_dir, source.GetBase());
-    if (File::ExistsAny(destination))
-      continue;
-    if (!File::Rename(source, destination))
-      continue;
 
-    entries.emplace_back(std::move(source), std::move(destination),
-                         FileType::PLANE);
+  if (Directory::Exists(source_dir)) {
+    Directory::CreateRecursive(dest_dir);
+
+    Visitor visitor;
+    Directory::VisitDirectoriesAndFiles(source_dir, visitor, false);
+
+    for (auto &source : visitor.files) {
+      auto destination = AllocatedPath::Build(dest_dir, source.GetBase());
+      if (File::ExistsAny(destination))
+        continue;
+      if (!File::Rename(source, destination))
+        continue;
+
+      entries.emplace_back(std::move(source), std::move(destination),
+                           FileType::PLANE);
+    }
+  }
+
+  /* A previous startup can rename the plane and then fail to save
+     the profile.  The old path is gone, so the move above records
+     nothing.  Rewrite a profile that still names that old path. */
+  if (Directory::Exists(dest_dir)) {
+    Visitor already_there;
+    Directory::VisitDirectoriesAndFiles(dest_dir, already_there, false);
+
+    for (auto &destination : already_there.files) {
+      bool queued = false;
+      for (const auto &entry : entries)
+        if (entry.destination_path.GetBase() == destination.GetBase())
+          queued = true;
+      if (queued)
+        continue;
+
+      auto old_path = AllocatedPath::Build(source_dir, destination.GetBase());
+      if (File::ExistsAny(old_path))
+        continue;
+
+      entries.emplace_back(std::move(old_path), std::move(destination),
+                           FileType::PLANE);
+    }
   }
 
   if (entries.empty())
