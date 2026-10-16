@@ -496,6 +496,10 @@ Version 7.46 - not yet released
     changes them
   - adopt the vario's pilot weight into Flight Setup crew when only
     that weight changes and the polar coefficients stay the same
+  - keep the vario's ballast in step with Flight Setup when crew
+    weight changes.  The vario stores ballast as a fraction of the
+    reference mass, so a crew change was moving the water by the
+    same amount
   - fix Look → Pages cutting off the bottom fields in landscape;
     the page editor scrolls when it does not fit, and Add, Delete
     and the move buttons move into the button column. Up and Down
