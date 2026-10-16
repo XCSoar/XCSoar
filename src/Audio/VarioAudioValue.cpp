@@ -24,16 +24,26 @@ STFSpeedErrorToPseudoVario(double speed_error) noexcept
                     -VARIO_FULL_SCALE, VARIO_FULL_SCALE);
 }
 
+bool
+UsesSTF(const bool circling, const bool stf_available,
+        const VarioSoundSwitchingMode switching_mode,
+        const VarioSoundManualMode manual_mode) noexcept
+{
+  const bool want_stf = switching_mode == VarioSoundSwitchingMode::AUTO
+    ? !circling
+    : manual_mode == VarioSoundManualMode::STF;
+
+  return want_stf &&
+    (stf_available || switching_mode != VarioSoundSwitchingMode::AUTO);
+}
+
 std::optional<double>
 ComputeAudioValue(const VarioAudioInput &input,
                   const VarioSoundSwitchingMode switching_mode,
                   const VarioSoundManualMode manual_mode) noexcept
 {
-  const bool use_stf = switching_mode == VarioSoundSwitchingMode::AUTO
-    ? !input.circling
-    : manual_mode == VarioSoundManualMode::STF;
-
-  if (!use_stf)
+  if (!UsesSTF(input.circling, input.stf_speed_error.has_value(),
+               switching_mode, manual_mode))
     return input.vario;
 
   if (input.stf_speed_error) {
@@ -43,11 +53,7 @@ ComputeAudioValue(const VarioAudioInput &input,
     return STFSpeedErrorToPseudoVario(*input.stf_speed_error);
   }
 
-  /* Automatic switching keeps the vario useful until STF inputs become
-     available.  Explicit manual STF instead stays silent. */
-  return switching_mode == VarioSoundSwitchingMode::AUTO
-    ? input.vario
-    : std::nullopt;
+  return std::nullopt;
 }
 
 } // namespace AudioVarioGlue
