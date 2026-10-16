@@ -131,12 +131,17 @@ Display::MakeCurrent(EGLSurface surface)
      presents the frame.  A window that is not on screen may never
      be presented, which stalls the UI thread and everything queued
      behind it.  Interval 0 returns without that wait.
-     eglSwapInterval applies to the current draw surface, so this
-     must run after MakeCurrent.  On Wayland, Refresh() also waits
-     for wl_surface.frame before swapping again, and skips Flip()
-     while the toplevel is SUSPENDED. */
-  if (!eglSwapInterval(display, 0))
-    LogFormat("eglSwapInterval(0) failed: %#x", eglGetError());
+     eglSwapInterval applies only to a window surface, so this must
+     run after MakeCurrent and not on the dummy pbuffer or after
+     unbinding.  A driver with no swap control returns
+     EGL_BAD_SURFACE; the Wayland frame callback still paces
+     presentation. */
+  if (surface != EGL_NO_SURFACE && surface != dummy_surface &&
+      !eglSwapInterval(display, 0)) {
+    const EGLint error = eglGetError();
+    if (error != EGL_BAD_SURFACE)
+      LogFormat("eglSwapInterval(0) failed: %#x", error);
+  }
 #endif
 }
 
