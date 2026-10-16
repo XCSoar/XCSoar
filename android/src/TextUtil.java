@@ -12,23 +12,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.Build;
 
 public final class TextUtil {
-  /** Vertical em scale from Display::AndroidTextScaleY(). */
-  private static float textScaleY = 1f;
-
-  /** Horizontal advance compensation from Display::AndroidTextLetterSpacing(). */
-  private static float textLetterSpacing = 0f;
-
   private final Paint paint;
   private final Paint.FontMetricsInt metrics;
   private final int[] extent = new int[2];
   private final int[] id = new int[5];
-
-  public static void setCorrectedDpi(float scaleY, float letterSpacing) {
-    textScaleY = scaleY;
-    textLetterSpacing = letterSpacing;
-  }
 
   /** Framebuffer pixels, not dp/sp (see bitmap canvas DENSITY_NONE). */
   private static void setRawPixelDensity(Paint paint) {
@@ -44,8 +34,7 @@ public final class TextUtil {
                                              boolean aliasEdging,
                                              boolean linearMetrics) {
     paint.setAntiAlias(!aliasEdging);
-    /* A fractional em from a corrected DPI must not snap back onto
-       the pixel grid.  E-paper uses the same unhinted 1-bit path. */
+    /* E-paper draws unhinted 1-bit glyphs. */
     if (linearMetrics) {
       paint.setLinearText(true);
       paint.setHinting(Paint.HINTING_OFF);
@@ -59,21 +48,18 @@ public final class TextUtil {
       ? Typeface.MONOSPACE
       : Typeface.SANS_SERIF;
 
+    /* The style bit does not set the wght axis on Android 14 variable
+       fonts, so bold is sometimes the regular face and sometimes a
+       heavy fallback.  400 and 700 are the designed cuts. */
+    if (Build.VERSION.SDK_INT >= 28)
+      return Typeface.create(family, bold ? 700 : 400, italic);
+
     int style = Typeface.NORMAL;
     if (bold)
       style |= Typeface.BOLD;
     if (italic)
       style |= Typeface.ITALIC;
     return Typeface.create(family, style);
-  }
-
-  /** Derive the text size that yields em == targetEmPx (framebuffer px). */
-  private static void fitEmHeight(Paint paint, float targetEmPx) {
-    paint.setTextSize(targetEmPx);
-    final Paint.FontMetricsInt fm = paint.getFontMetricsInt();
-    final float em = fm.descent - fm.ascent;
-    if (em > 0f && Math.abs(em - targetEmPx) > 0.5f)
-      paint.setTextSize(targetEmPx * targetEmPx / em);
   }
 
   public TextUtil(int textSize, boolean bold, boolean italic,
@@ -87,17 +73,11 @@ public final class TextUtil {
 
     applySkiaPaintSettings(paint, aliasEdging, linearMetrics);
 
-    /* Scale, letter spacing and the em fit correct Skia only when the
-       OEM DPI was replaced.  A matching DPI uses the requested pixel
-       size as setTextSize(), as the other font engines do. */
-    final boolean dpiCorrected = textScaleY != 1f
-      || textLetterSpacing > 0.001f;
-    if (dpiCorrected)
-      fitEmHeight(paint, textSize * textScaleY);
-    else
-      paint.setTextSize(textSize);
-
-    paint.setLetterSpacing(textLetterSpacing + fontLetterSpacingEm);
+    /* Same pixel size the other font engines get from FontScale.
+       Do not refit the em: bold and regular have different boxes, so
+       the refit changes their weight. */
+    paint.setTextSize(textSize);
+    paint.setLetterSpacing(fontLetterSpacingEm);
 
     if (italic && !tf.isItalic())
       paint.setTextSkewX((float) -0.2);

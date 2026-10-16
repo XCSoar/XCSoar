@@ -6,7 +6,6 @@
 #include "ui/canvas/custom/LibTiff.hpp"
 #include "ui/canvas/custom/UncompressedImage.hpp"
 #include "NativeView.hpp"
-#include "TextUtil.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "LogFile.hpp"
 
@@ -138,17 +137,11 @@ NativeView::NativeView(JNIEnv *env, jobject _obj,
     LogFmt("Corrected display DPI {}x{} (density {}) -> {}x{}",
            _xdpi, _ydpi, _density_dpi, dpi.x, dpi.y);
 
+  /* setTextSize() is already framebuffer pixels from this DPI.
+     Scaling the em or adding letter-spacing from the OEM axes
+     stretches the run and changes bold and regular by different
+     ratios. */
   Display::ProvideDPI(dpi.x, dpi.y);
-
-  const UnsignedPoint2D physical{_xdpi, _ydpi};
-  const float text_scale_y = Display::AndroidTextScaleY(
-    display_size, physical, _density_dpi, dpi);
-  const float letter_spacing = Display::AndroidTextLetterSpacing(
-    display_size, physical, _density_dpi, dpi);
-  const bool oem_dpi_corrected = text_scale_y != 1.f ||
-    letter_spacing > 0.001f;
-
-  TextUtil::SetCorrectedDpi(text_scale_y, letter_spacing, oem_dpi_corrected);
 }
 
 static void
