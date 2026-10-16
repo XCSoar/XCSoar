@@ -5825,12 +5825,8 @@ msgid "TL Avg"
 msgstr "TL Mitjana"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"La gane d'altitud total en l'última termica dividida per el temps passat a "
-"volar en círculo."
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr "La gane d'altitud total en l'última termica dividida per el temps passat a volar en círculo. Els segons en menor tipus de lletra reflecteixen el temps girant."
 
 #, no-c-format
 msgid "Last thermal gain"
@@ -5857,8 +5853,8 @@ msgid "TL duration"
 msgstr "TL Durada"
 
 #, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Temps passat a volar en círculo en l'última termica."
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr "Temps passat a volar en círculo en l'última termica. El número en menor tipus de lletra reflecteix la taxa general de pujada de l'última tèrmica."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -8455,10 +8451,11 @@ msgstr ""
 "No s'ha pogut connectar. Comproveu la contrasenya i torneu-ho a provar."
 
 #, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
 msgstr ""
 "Defineixzione pressione QNH actual usata per il calcolo dell'altitudine "
-"barometrica. Toca l'infobox per obrere il pannello e regolare il QNH "
+"barometrica. La línia de sota mostra aquesta altitud quan hi ha un sensor "
+"de pressió. Toca l'infobox per obrere il pannello e regolare il QNH "
 "manualmente."
 
 #, no-c-format

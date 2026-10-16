@@ -6498,7 +6498,7 @@ msgstr "真対気速度"
 
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
-msgstr "真大気速度\\n高機能バリオからの信号。対地速度と風から推定した値は青色です。"
+msgstr "真対気速度\n対応する外部の高機能バリオが報告する値。対地速度と風から推定した値は青色です。"
 
 #, no-c-format
 msgid "Team code"
