@@ -17,15 +17,18 @@
 
 #include <algorithm>
 
-/** Scale InfoBox auto-size width by the Text size setting (%). */
+/** Scale InfoBox auto-size width by the Text size setting (%).
+    Cap at the box so a larger Text size cannot overlap the next one. */
 static unsigned
 AutoSizeTargetWidth(unsigned width) noexcept
 {
   if (Layout::vdpi == 0)
     return width;
 
-  return unsigned((uint64_t)width * Layout::FontScale(100) * 72u
-                  / (100u * Layout::vdpi));
+  const unsigned scaled =
+    unsigned((uint64_t)width * Layout::FontScale(100) * 72u
+             / (100u * Layout::vdpi));
+  return std::min(scaled, width);
 }
 
 void
