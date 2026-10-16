@@ -11411,3 +11411,9 @@ msgstr "Während des Fluges nicht verfügbar."
 
 msgid "User"
 msgstr "Benutzer"
+
+msgid "Send to OGN"
+msgstr "An OGN senden"
+
+msgid "Let the XCSoar Cloud pass your position on to the Open Glider Network, where it joins the track that OGN receivers pick up from your FLARM. This needs a FLARM connected to XCSoar: its radio id and aircraft type are used, and nothing is sent if it is set to privacy or no tracking."
+msgstr "Die XCSoar Cloud gibt die eigene Position an das Open Glider Network weiter, wo sie sich mit der Spur verbindet, die OGN-Empfänger vom eigenen FLARM aufzeichnen. Dafür muss ein FLARM mit XCSoar verbunden sein: Seine Funk-ID und sein Luftfahrzeugtyp werden verwendet, und es wird nichts gesendet, wenn es auf Privatsphäre oder kein Tracking eingestellt ist."

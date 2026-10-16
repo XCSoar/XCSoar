@@ -981,6 +981,36 @@ service have a look at \url{https://skylines.aero}.
 \end{description}
 
 
+%%%%%%%%%%%%%%%%%%
+\section{Services / XCSoar Cloud}\label{sec:xcsoar-cloud}
+
+The XCSoar Cloud is XCSoar's own tracking service.  While flying, XCSoar
+sends your position to it and receives the other participants and the
+traffic of the Open Glider Network (OGN) in return.
+
+\begin{description}
+\item[XCSoar Cloud]  Take part in the XCSoar Cloud.
+\item[Show traffic]  Show the traffic of the XCSoar Cloud and of OGN.
+\item[Roaming]  Use the XCSoar Cloud also on a roaming mobile data
+  connection.
+\item[Show thermals]  Show the thermals that others reported.
+\item[Send to OGN] \label{conf:cloud-send-to-ogn} Let the XCSoar Cloud
+  pass your position on to OGN, so that it joins the track the OGN
+  receivers pick up from your FLARM, also where no receiver hears you.
+  Off by default.  It needs a FLARM connected to XCSoar: XCSoar reads
+  its radio address, address type and aircraft type, and sends nothing
+  if the FLARM is set to privacy (\texttt{PRIV}) or no tracking
+  (\texttt{NOTRACK}).  The XCSoar Cloud also respects what you set in
+  the OGN device database (\url{https://ddb.glidernet.org}).  While
+  your position is forwarded, XCSoar sends it every 10 seconds instead
+  of every minute.
+\item[Server*, Port*]  The address of the XCSoar Cloud server.
+\item[Own FLARM IDs*]  Radio addresses to hide from the traffic, for
+  example your own when the FLARM sits behind a vario that does not
+  pass its radio address on.
+\end{description}
+
+
 \section{Setup / Audio}\label{sec:audiovario-gauge}
 
 Master volume and the audio variometer. \label{conf:audiovariogauge}

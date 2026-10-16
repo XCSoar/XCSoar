@@ -5,7 +5,9 @@
 
 #include "Geo/GeoPoint.hpp"
 
+#include <chrono>
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -67,3 +69,42 @@ IsForwardableOgnTraffic(const OGNAprsParseResult &r,
 [[gnu::pure]]
 OGNAprsParseResult
 ParseOGNAprsLine(std::string_view line) noexcept;
+
+/**
+ * One fix the XCSoar Cloud forwards to OGN.
+ */
+struct OGNXCSFix {
+  /**
+   * The OGN "id" field: address type (1 ICAO, 2 FLARM), aircraft
+   * type and radio address; see #SkyLinesTracking::FixOGNExtension.
+   */
+  uint32_t id;
+
+  /** UTC time of the fix */
+  std::chrono::milliseconds time_of_day;
+
+  GeoPoint location;
+
+  std::optional<unsigned> track_deg;
+
+  /** Ground speed in m/s */
+  std::optional<double> ground_speed;
+
+  /** GPS altitude in m above MSL */
+  int gps_altitude;
+
+  /** Vertical speed in m/s, not total energy compensated */
+  std::optional<double> vertical_speed;
+};
+
+/**
+ * Format an APRS position message with the TOCALL OGNXCS, as
+ * documented in XCSoar_APRS_format.md of glidernet/ogn-aprs-protocol.
+ *
+ * @return an empty string if the fix must not be forwarded: no ICAO
+ * or FLARM address, the stealth or no-tracking bit set, or below sea
+ * level
+ */
+[[gnu::pure]]
+std::string
+FormatOGNXCSBeacon(const OGNXCSFix &fix) noexcept;

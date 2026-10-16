@@ -797,6 +797,58 @@ TestFLARMRangeRequest()
   }
 }
 
+/**
+ * What the FLARM tells about itself on connect, which the XCSoar
+ * Cloud needs to forward fixes to OGN (#1282).
+ */
+static void
+TestFLARMOGNConfig()
+{
+  NullPort null;
+  std::unique_ptr<Device> device{flarm_driver.CreateOnPort(dummy_config,
+                                                           null)};
+
+  NMEAInfo info;
+  info.Reset();
+  info.clock = TimeStamp{FloatDuration{1}};
+
+  /* one sentence as the port thread passes it, without CR LF */
+  const auto Line = [](std::string_view sentence) {
+    return fmt::format("${}*{:02X}", sentence, NMEAChecksum(sentence));
+  };
+
+  const auto &hardware = info.flarm.hardware;
+  ok1(hardware.radio_id_type == 0);
+  ok1(!hardware.privacy_known);
+  ok1(!hardware.no_tracking_known);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,2,DD1234").c_str(),
+                        info));
+  ok1(hardware.radio_id == FlarmId::Parse("DD1234", nullptr));
+  ok1(hardware.radio_id_type == 2);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,1,3E4F21").c_str(),
+                        info));
+  ok1(hardware.radio_id_type == 1);
+
+  /* an unknown type is not passed on */
+  ok1(device->ParseNMEA(Line("PFLAC,A,RADIOID,7,3E4F21").c_str(),
+                        info));
+  ok1(hardware.radio_id_type == 0);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,ACFT,1").c_str(), info));
+  ok1(hardware.aircraft_type == 1);
+
+  ok1(device->ParseNMEA(Line("PFLAC,A,PRIV,0").c_str(), info));
+  ok1(hardware.privacy_known && !hardware.privacy);
+  ok1(device->ParseNMEA(Line("PFLAC,A,NOTRACK,1").c_str(), info));
+  ok1(hardware.no_tracking_known && hardware.no_tracking);
+
+  /* an error answer changes nothing */
+  ok1(device->ParseNMEA(Line("PFLAC,A,ERROR").c_str(), info));
+  ok1(hardware.no_tracking_known && hardware.no_tracking);
+}
+
 static std::string
 EncodeBase64(std::string_view src)
 {
@@ -4508,6 +4560,7 @@ int main()
   CreateDataPath();
 
   plan_tests(1097 /* drivers */ + 45 /* PFLAU extended */
+             + 18 /* PFLAC for OGN */
              + 37 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
@@ -4536,6 +4589,7 @@ int main()
   TestFLARM();
   TestFLARMRangeParser();
   TestFLARMRangeRequest();
+  TestFLARMOGNConfig();
   TestNanoDownloadFlight();
   TestAltairRU();
   TestBlueFly();

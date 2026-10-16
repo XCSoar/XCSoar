@@ -221,6 +221,11 @@ Version 7.46 - not yet released
     off by default (Config → Gauges → Traffic, "Spoken alerts", with
     a button to test it; a checklist plays the test with the link
     xcsoar://sound/test) #2782
+  - send your position to the Open Glider Network through the XCSoar
+    Cloud, so it joins the OGN track of your FLARM where no receiver
+    hears you; off by default (Config → Services → XCSoar Cloud,
+    "Send to OGN"), only with a connected FLARM that is not set to
+    privacy or no tracking #1282
   - download flights from a PowerFLARM Flex or Fusion over the
     device Wi-Fi, after asking the device for its type #1882
   - fail flight download immediately when the device answers that
