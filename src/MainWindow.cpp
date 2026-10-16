@@ -75,6 +75,14 @@ GetActiveInfoBoxGeometry() noexcept
   return settings.ResolveGeometry(settings.panels[panel_index]);
 }
 
+/** Size the dial and its labels to the gauge window. */
+static void
+FitVarioLook(Look &look, const InfoBoxLayout::Layout &layout) noexcept
+{
+  look.vario.ReinitialiseLayout(layout.vario.GetWidth(),
+                               layout.control_size.width);
+}
+
 [[gnu::pure]]
 static PixelRect
 GetMapOverlayButtonRect(const PixelRect rc, int top) noexcept
@@ -880,9 +888,13 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout) noexce
     return;
   }
 
+  FitVarioLook(*look, layout);
+
   if (!vario.IsDefined())
     vario.Set(new GlueGaugeVario(CommonInterface::GetLiveBlackboard(),
                                  look->vario));
+  else
+    static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
 
   vario.Move(layout.vario);
   vario.Show();
@@ -1177,6 +1189,18 @@ MainWindow::ReinitialiseLook() noexcept
   look->InitialiseConfigured(CommonInterface::GetUISettings(),
                              Fonts::map, Fonts::map_bold,
                              ib_layout.control_size.width);
+
+  /* InitialiseConfigured fits the dial to an InfoBox. Size it to the
+     gauge that is actually on screen. */
+  const PixelRect rc = GetClientRect();
+  const InfoBoxLayout::Layout placed =
+    InfoBoxLayout::Calculate(GetInfoBoxAreaRect(), GetActiveInfoBoxGeometry(),
+                             ib_settings.scale_title_font, rc.GetSize());
+  if (placed.HasVario()) {
+    FitVarioLook(*look, placed);
+    if (vario.IsDefined())
+      static_cast<GlueGaugeVario *>(vario.Get())->ReinitialiseLook();
+  }
 
   InfoBoxManager::ScheduleRedraw();
 }

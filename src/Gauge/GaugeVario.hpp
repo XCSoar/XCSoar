@@ -4,18 +4,14 @@
 #pragma once
 
 #include "ui/window/AntiFlickerWindow.hpp"
-#include "ui/dim/BulkPoint.hpp"
+#include "ui/canvas/Color.hpp"
 #include "Blackboard/FullBlackboard.hpp"
-#include "Math/Point2D.hpp"
 
 struct VarioLook;
 class ContainerWindow;
 
 class GaugeVario : public AntiFlickerWindow
 {
-  static constexpr unsigned NARROWS = 3;
-  static constexpr int YOFFSET = 36;
-
   /** 5 m/s */
   static constexpr int GAUGEVARIORANGE = 5;
 
@@ -25,20 +21,14 @@ class GaugeVario : public AntiFlickerWindow
   static constexpr int gmax = GAUGEVARIOSWEEP + 2;
   static constexpr int gmin = -gmax;
 
-  struct BallastGeometry {
+  /** Ballast (top) and bugs (bottom) share this layout. */
+  struct PercentGeometry {
     PixelRect label_rect, value_rect;
     PixelPoint label_pos, value_pos;
 
-    BallastGeometry() = default;
-    BallastGeometry(const VarioLook &look, const PixelRect &rc) noexcept;
-  };
-
-  struct BugsGeometry {
-    PixelRect label_rect, value_rect;
-    PixelPoint label_pos, value_pos;
-
-    BugsGeometry() = default;
-    BugsGeometry(const VarioLook &look, const PixelRect &rc) noexcept;
+    PercentGeometry() = default;
+    PercentGeometry(const VarioLook &look, const PixelRect &rc,
+                    bool top, const char *caption) noexcept;
   };
 
   struct LabelValueGeometry {
@@ -52,28 +42,25 @@ class GaugeVario : public AntiFlickerWindow
   };
 
   struct Geometry {
-    int nlength0, nlength1, nwidth, nline;
+    int nlength0, nlength1, nwidth;
     int dial_radius;
 
     PixelPoint offset;
 
     LabelValueGeometry average, gross, mc;
 
-    BallastGeometry ballast;
-    BugsGeometry bugs;
+    PercentGeometry ballast, bugs;
 
     Geometry() = default;
     Geometry(const VarioLook &look, const PixelRect &rc) noexcept;
   } geometry;
 
   struct DrawInfo {
-    unsigned last_width;
     double last_value;
     char last_text[32];
     Unit last_unit;
 
     void Reset() noexcept {
-      last_width = 0;
       last_value = -9999;
       last_text[0] = '\0';
       last_unit = Unit::UNDEFINED;
@@ -97,10 +84,15 @@ class GaugeVario : public AntiFlickerWindow
   bool dirty = true;
 
   bool background_dirty = true;
-  bool needle_initialised = false;
   bool vario_line_drawn = false;
 
   LabelValueDrawInfo average_di, mc_di, gross_di;
+
+  /** InfoBox value-colour index last used for the MacCready figure. */
+  int mc_color_index = -1;
+
+  /** 0 normal, 1 red. Tracks the TC 30s InfoBox rule for Avg. */
+  int average_color_index = -1;
 
   int ival_av_last = 0;
   int vval_last = 0;
@@ -113,8 +105,14 @@ class GaugeVario : public AntiFlickerWindow
 
   int last_bugs = -1;
 
-  BulkPixelPoint polys[(gmax * 2 + 1) * 3];
-  BulkPixelPoint lines[gmax * 2 + 1];
+  /** 1 STF, 0 Var, -1 not painted. */
+  int mode_stf = -1;
+
+  /** Needle angle of the MacCready mark, or below the dial when hidden. */
+  int mc_mark_pos = gmin - 1;
+
+  /** InfoBox colour index last painted for that mark. */
+  int mc_mark_color = -1;
 
 public:
   GaugeVario(const FullBlackboard &blackboard,
@@ -152,20 +150,20 @@ protected:
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
 
 private:
-  void RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept;
-  void RenderZero(Canvas &canvas) noexcept;
+  void RenderBackground(Canvas &canvas) noexcept;
   void RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                    LabelValueDrawInfo &di,
-                   double Value, const char *Label) noexcept;
-  void RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept;
+                   double Value, const char *Label,
+                   Color value_color) noexcept;
+  void RenderSpeedToFly(Canvas &canvas) noexcept;
+  void RenderPercent(Canvas &canvas, const PercentGeometry &corner,
+                     const char *caption, int percent, int &last) noexcept;
   void RenderBallast(Canvas &canvas) noexcept;
   void RenderBugs(Canvas &canvas) noexcept;
   int  ValueToNeedlePos(double Value) noexcept;
   void RenderNeedle(Canvas &canvas, int i, bool average, bool clear) noexcept;
+  void RenderMcMark(Canvas &canvas, int i, Color color) noexcept;
   void RenderVarioLine(Canvas &canvas, int i, int sink, bool clear) noexcept;
   void RenderClimb(Canvas &canvas) noexcept;
-
-  void MakePolygon(const int i) noexcept;
-  void MakeAllPolygons() noexcept;
-  BulkPixelPoint *getPolygon(const int i) noexcept;
+  void RenderMode(Canvas &canvas) noexcept;
 };
