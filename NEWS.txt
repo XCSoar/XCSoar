@@ -451,6 +451,8 @@ Version 7.46 - not yet released
     buttons and Expert. Escape returns to the list; a second
     Escape closes the dialog #3326
 * infoboxen
+  - show the barometric altitude under the QNH pressure on the QNH
+    InfoBox
   - add a Fixed text InfoBox whose title, value and comment are set
     by tapping it on the map, for labelling a page or as a separator
     between groups of InfoBoxes #613
@@ -573,6 +575,8 @@ Version 7.46 - not yet released
     waypoints, as it does at startup, and again from each terrain
     file loaded later #900
 * documentation
+  - describe the QNH InfoBox, including the barometric altitude under
+    the pressure
   - document that an LXNAV flight download uses checked blocks on
     BLE and reads the flight line by line on a serial port or classic
     Bluetooth
