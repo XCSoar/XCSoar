@@ -451,6 +451,8 @@ Version 7.46 - not yet released
     buttons and Expert. Escape returns to the list; a second
     Escape closes the dialog #3326
 * infoboxen
+  - show how long the last thermal lasted under TL Avg, and the
+    average climb rate under TL duration
   - show the barometric altitude under the QNH pressure on the QNH
     InfoBox
   - add a Fixed text InfoBox whose title, value and comment are set
@@ -575,6 +577,8 @@ Version 7.46 - not yet released
     waypoints, as it does at startup, and again from each terrain
     file loaded later #900
 * documentation
+  - describe the time under TL Avg and the average climb rate under
+    TL duration
   - explain that a blue V TAS value is estimated from ground speed
     and wind
   - describe the QNH InfoBox, including the barometric altitude under

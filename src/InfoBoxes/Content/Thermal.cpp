@@ -58,6 +58,12 @@ UpdateInfoBoxThermalLastAvg(InfoBoxData &data) noexcept
   }
 
   SetVSpeed(data, thermal.lift_rate);
+
+  const auto seconds =
+    std::chrono::duration_cast<std::chrono::seconds>(thermal.duration);
+  StaticString<16> duration_buffer;
+  duration_buffer.Format("%u s", static_cast<unsigned>(seconds.count()));
+  data.SetComment(duration_buffer);
 }
 
 void
@@ -83,6 +89,7 @@ UpdateInfoBoxThermalLastTime(InfoBoxData &data) noexcept
   }
 
   data.SetValueFromTimeTwoLines(thermal.duration);
+  data.SetCommentFromVerticalSpeed(thermal.lift_rate);
 }
 
 void
