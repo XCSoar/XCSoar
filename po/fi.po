@@ -6451,7 +6451,7 @@ msgstr "V-Liike Nopeus"
 
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
-msgstr "Tosilentonopeus tuetusta ulkoisesta älyvariometristä. Arvo on sininen, kun se on arvioitu maanopeudesta ja tuulesta."
+msgstr "Tosi-ilmanopeus, jonka ilmoittaa tuettu ulkoinen älyvariometri. Arvo on sininen, kun se arvioidaan maanopeudesta ja tuulesta."
 
 #, no-c-format
 msgid "Team code"

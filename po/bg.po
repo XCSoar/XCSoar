@@ -5808,11 +5808,8 @@ msgid "TL Avg"
 msgstr "Средно качване"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Пълен набор/загуба на височина разделен на времето прекарано във въртене."
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr "Пълен набор/загуба на височина разделен на времето прекарано във въртене. Секундите с по-малък шрифт показват времето във въртене."
 
 #, no-c-format
 msgid "Last thermal gain"
@@ -5839,8 +5836,8 @@ msgid "TL duration"
 msgstr "Време в термика"
 
 #, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Време прекарано във въртене на последната термика."
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr "Време прекарано във въртене на последната термика. Числото с по-малък шрифт показва средното качване за последната термика."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -8464,10 +8461,11 @@ msgid "Could not connect. Check the passphrase and try again."
 msgstr "Неуспешно свързване. Проверете паролата и опитайте отново."
 
 #, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
 msgstr ""
 "Текущата настройка на налягането QNH за изчисление на барометричната "
-"височина. Натиснете InfoBox, за да отворите панела и да зададете QNH ръчно."
+"височина. Редът отдолу показва тази височина, когато има сензор за "
+"налягане. Натиснете InfoBox, за да отворите панела и да зададете QNH ръчно."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
