@@ -191,7 +191,7 @@ static constexpr MetaData meta_data[] = {
     Group::VARIO,
     N_("Last thermal average"),
     N_("TL Avg"),
-    N_("Total altitude gain/loss in the last thermal divided by the time spent circling."),
+    N_("Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."),
     UpdateInfoBoxThermalLastAvg,
   },
 
@@ -209,7 +209,7 @@ static constexpr MetaData meta_data[] = {
     Group::VARIO,
     N_("Last thermal duration"),
     N_("TL duration"),
-    N_("Time spent circling in the last thermal."),
+    N_("Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."),
     UpdateInfoBoxThermalLastTime,
   },
 
