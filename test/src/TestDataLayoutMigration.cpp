@@ -86,12 +86,12 @@ TestMigratesFilesAndAllProfiles()
 
   const auto active_plane = Profile::GetPath("PlanePath");
   ok1(active_plane != nullptr);
-  ok1(StringFind(active_plane.c_str(), "profiles") != nullptr);
+  ok1(StringFind(active_plane.c_str(), "profiles") == nullptr);
   ok1(StringFind(active_plane.c_str(), "planes") != nullptr);
 
   std::string raw_active_plane;
   ok1(Profile::Get("PlanePath", raw_active_plane));
-  ok1(StringFind(raw_active_plane.c_str(), "profiles") != nullptr);
+  ok1(StringFind(raw_active_plane.c_str(), "profiles") == nullptr);
   ok1(StringFind(raw_active_plane.c_str(), "planes") != nullptr);
 
   ok1(Profile::GetPath() != nullptr);
@@ -140,11 +140,52 @@ TestMigratesFilesAndAllProfiles()
   ok1(File::Exists(AllocatedPath::Build(AllocatedPath::Build(data_path,
                                                              Path("profiles")),
                                         Path("default.prf"))));
-  ok1(File::Exists(AllocatedPath::Build(AllocatedPath::Build(AllocatedPath::Build(data_path,
-                                                                                  Path("profiles")),
+  ok1(File::Exists(AllocatedPath::Build(AllocatedPath::Build(data_path,
                                                              Path("planes")),
                                         Path("plane.xcp"))));
   ok1(!File::Exists(AllocatedPath::Build(data_path, Path("plane.xcp"))));
+}
+
+static void
+TestMovesPlanesOutOfProfiles()
+{
+  char template_path[] = "/tmp/xcsoar-migrate-planes-XXXXXX";
+  ok1(mkdtemp(template_path) != nullptr);
+
+  const Path data_path(template_path);
+  SetSingleDataPath(data_path);
+
+  ok1(WriteTextFile(LocalPath(".xcsoar-subdir-layout-v1"), ""));
+
+  const auto old_dir =
+    AllocatedPath::Build(AllocatedPath::Build(data_path, Path("profiles")),
+                         Path("planes"));
+  Directory::CreateRecursive(old_dir);
+  ok1(WriteTextFile(AllocatedPath::Build(old_dir, Path("plane.xcp")),
+                    "plane"));
+
+  const auto default_prf =
+    AllocatedPath::Build(AllocatedPath::Build(data_path, Path("profiles")),
+                         Path("default.prf"));
+  ok1(WriteTextFile(default_prf,
+                    "PlanePath=%LOCAL_PATH%\\profiles\\planes\\plane.xcp\n"));
+
+  Profile::SetFiles(default_prf);
+
+  MigrateDataLayoutToSubdirs();
+
+  Profile::Load();
+
+  const auto new_plane =
+    AllocatedPath::Build(AllocatedPath::Build(data_path, Path("planes")),
+                         Path("plane.xcp"));
+  ok1(File::Exists(new_plane));
+  ok1(!File::Exists(AllocatedPath::Build(old_dir, Path("plane.xcp"))));
+
+  const auto active_plane = Profile::GetPath("PlanePath");
+  ok1(active_plane != nullptr);
+  ok1(StringFind(active_plane.c_str(), "planes") != nullptr);
+  ok1(StringFind(active_plane.c_str(), "profiles") == nullptr);
 }
 
 static void
@@ -184,8 +225,9 @@ main()
 {
   SetFakeLogFileQuiet(true);
 
-  plan_tests(46);
+  plan_tests(55);
   TestMigratesFilesAndAllProfiles();
+  TestMovesPlanesOutOfProfiles();
   TestDoesNotWriteMarkerWhenAllMovesFail();
   return exit_status();
 }
