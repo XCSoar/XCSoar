@@ -6490,10 +6490,8 @@ msgid "V TAS"
 msgstr "V ŠAVS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Skleidžiamasis skleidimo greitis, atskleidžiamas palaikomame išorinėje "
-"intelektualioje variometro."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Tikrasis oro greitis iš palaikomo išorinio išmaniojo variometro. Reikšmė yra mėlyna, kai įvertinta pagal greitį žemės atžvilgiu ir vėją."
 
 #, no-c-format
 msgid "Team code"

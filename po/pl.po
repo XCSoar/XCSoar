@@ -6515,11 +6515,8 @@ msgid "V TAS"
 msgstr "Vr TAS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Vr TAS: Rzeczywista prędkość powietrzna. Uwzględnia poprawkę na zmianę "
-"temperatury i gęstości powietrza w stosunku do wzorcowych w procesie "
-"skalowania prędkościomierza."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Vr TAS: Rzeczywista prędkość powietrzna. Uwzględnia poprawkę na zmianę temperatury i gęstości powietrza w stosunku do wzorcowych w procesie skalowania prędkościomierza. Wartość jest niebieska, gdy jest oszacowana z prędkości względem ziemi i wiatru."
 
 #, no-c-format
 msgid "Team code"

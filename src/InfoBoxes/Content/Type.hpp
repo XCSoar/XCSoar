@@ -66,7 +66,7 @@ namespace InfoBoxFactory
     e_Fin_AA_Distance, /* Assigned Area Task distance around target points for remainder of task */
     e_AA_SpeedAvg, /* Assigned Area Task average speed achievable around target points remaining in minimum AAT time */
     e_LD, /* Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---' */
-    e_Speed, /* True Airspeed reported by a supported external intelligent vario */
+    e_Speed, /* True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind */
     e_Team_Code, /* The current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath */
     e_Team_Bearing, /* The bearing to the team aircraft location at the last team code report */
     e_Team_BearingDiff, /* The relative bearing to the team aircraft location at the last reported team code */

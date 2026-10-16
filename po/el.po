@@ -6552,10 +6552,8 @@ msgid "V TAS"
 msgstr "Β ΤΑΣ"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Θετική ταχύτητα υψηλότερου περιθώριου διαμέρισης (TAS) αναφέρομαι από ένα "
-"υποστηρίζοντα εξωτερικό βαριομέτρο."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Αληθής ταχύτητα αέρα από υποστηριζόμενο εξωτερικό ευφυές βαριόμετρο. Η τιμή είναι μπλε όταν εκτιμάται από την ταχύτητα εδάφους και τον άνεμο."
 
 #, no-c-format
 msgid "Team code"

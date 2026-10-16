@@ -6221,8 +6221,8 @@ msgid "V TAS"
 msgstr "真實空速"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "由支持的外部智慧高度表報告的真實空速。"
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "由支持的外部智慧高度表報告的真實空速。數值為藍色時表示由地速和風估算。"
 
 #, no-c-format
 msgid "Team code"

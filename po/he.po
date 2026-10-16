@@ -6448,8 +6448,8 @@ msgid "V TAS"
 msgstr "המרחק המטאורולוגי"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "מהירות האווירית המדויקת שמדד ווריומטר מטחני נתמך."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "מהירות האווירית המדויקת שמדד ווריומטר מטחני נתמך. הערך כחול כאשר הוא מוערך ממהירות הקרקע והרוח."
 
 #, no-c-format
 msgid "Team code"

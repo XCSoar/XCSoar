@@ -8252,7 +8252,7 @@ msgid "V TAS"
 msgstr ""
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
 msgstr ""
 
 #, no-c-format

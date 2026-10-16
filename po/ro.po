@@ -6489,8 +6489,8 @@ msgid "V TAS"
 msgstr "V VITEA"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Viteza aeriensă de adevărat raportată de un vario inteligent susținut."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Viteza adevărată a aerului raportată de un variometru inteligent extern acceptat. Valoarea este albastră când este estimată din viteza față de sol și vânt."
 
 #, no-c-format
 msgid "Team code"

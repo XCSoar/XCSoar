@@ -6504,8 +6504,8 @@ msgid "V TAS"
 msgstr "V TAS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Wahre Geschwindigkeit gegenüber Luft laut dem angeschlossenen Sensor."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Wahre Geschwindigkeit gegenüber Luft laut dem angeschlossenen Sensor. Der Wert ist blau, wenn er aus Geschwindigkeit über Grund und Wind geschätzt wird."
 
 #, no-c-format
 msgid "Team code"
