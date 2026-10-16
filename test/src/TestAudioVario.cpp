@@ -38,20 +38,32 @@ TestModesAndDeadBand() noexcept
   auto value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
                                  VarioSoundManualMode::VARIO);
   ok1(value && equals(*value, 1.5));
+  ok1(!UsesSTF(input.circling, input.stf_speed_error.has_value(),
+               VarioSoundSwitchingMode::MANUAL,
+               VarioSoundManualMode::VARIO));
 
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
                             VarioSoundManualMode::STF);
   ok1(!value);
+  ok1(UsesSTF(input.circling, input.stf_speed_error.has_value(),
+              VarioSoundSwitchingMode::MANUAL,
+              VarioSoundManualMode::STF));
 
   input.circling = true;
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::AUTO,
                             VarioSoundManualMode::STF);
   ok1(value && equals(*value, 1.5));
+  ok1(!UsesSTF(input.circling, input.stf_speed_error.has_value(),
+               VarioSoundSwitchingMode::AUTO,
+               VarioSoundManualMode::STF));
 
   input.circling = false;
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::AUTO,
                             VarioSoundManualMode::VARIO);
   ok1(value && equals(*value, 1.5));
+  ok1(!UsesSTF(input.circling, input.stf_speed_error.has_value(),
+               VarioSoundSwitchingMode::AUTO,
+               VarioSoundManualMode::VARIO));
 
   input.stf_speed_error = 2.;
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
@@ -69,6 +81,9 @@ TestModesAndDeadBand() noexcept
                             VarioSoundManualMode::STF);
   ok1(value && *value < 0);
   ok1(HasSound(value));
+  ok1(UsesSTF(input.circling, input.stf_speed_error.has_value(),
+              VarioSoundSwitchingMode::AUTO,
+              VarioSoundManualMode::VARIO));
 
   input.stf_speed_error = 9.;
   value = ComputeAudioValue(input, VarioSoundSwitchingMode::MANUAL,
@@ -133,7 +148,7 @@ TestMergedSensorSTF() noexcept
 int
 main()
 {
-  plan_tests(19);
+  plan_tests(24);
 
   TestModesAndDeadBand();
   TestMergedSensorSTF();

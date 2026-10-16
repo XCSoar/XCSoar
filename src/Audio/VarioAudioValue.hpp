@@ -21,6 +21,18 @@ struct VarioAudioInput {
 };
 
 /**
+ * Whether the synthesiser is using speed-to-fly.
+ * A quiet deadband is still speed-to-fly. Automatic cruise without a
+ * speed error stays on the variometer. Manual speed-to-fly stays
+ * selected, and is silent until that error exists.
+ */
+[[gnu::pure]]
+bool
+UsesSTF(bool circling, bool stf_available,
+        VarioSoundSwitchingMode switching_mode,
+        VarioSoundManualMode manual_mode) noexcept;
+
+/**
  * Convert the current Vario/STF inputs to the value consumed by the vario
  * synthesiser.  An empty result requests silence.
  */
