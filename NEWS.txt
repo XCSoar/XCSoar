@@ -351,9 +351,9 @@ Version 7.46 - not yet released
     Thermal Assistant
   - show analog vario speed arrows, average, MacCready, gross, and
     averager needle without Expert mode
-  - turn on the analog vario readouts by default, including ballast,
-    bugs, and the thermal averager needle, and leave the averager
-    needle off
+  - turn on the analog vario readouts, ballast, bugs, and the
+    thermal averager needle by default; the averager needle stays
+    off
   - draw the analog vario scale and its climb and sink band as
     smooth arcs #1396
   - colour the analog vario MacCready figure like the MacCready
