@@ -98,8 +98,12 @@ InfoBoxLook::ReinitialiseLayout(unsigned width, unsigned scale_title_font)
   unit_fraction_pen.Create(Layout::ScaleFinePenWidth(1), value.fg_color);
 
   FontDescription title_font_d(8);
+  /* scale_title_font can exceed 100%. Cap before AutoSizeTargetWidth(),
+     which only limits the result to the width it is given. */
+  const unsigned title_width =
+    std::min(width, (width * scale_title_font) / 100U);
   AutoSizeFont(title_font_d,
-               AutoSizeTargetWidth((width * scale_title_font) / 100U),
+               AutoSizeTargetWidth(title_width),
                "1234567890A");
 
   title_font.Load(title_font_d);
