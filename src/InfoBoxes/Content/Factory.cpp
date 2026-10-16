@@ -615,7 +615,7 @@ static constexpr MetaData meta_data[] = {
     Group::SPEED,
     N_("Airspeed TAS"),
     N_("V TAS"),
-    N_("True Airspeed reported by a supported external intelligent vario."),
+    N_("True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."),
     UpdateInfoBoxSpeed,
   },
 

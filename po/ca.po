@@ -6536,10 +6536,8 @@ msgid "V TAS"
 msgstr "V Ràpid"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Velocitat de màgica reportada per un variometre intel·ligent suportat "
-"externament."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Velocitat vertadera indicada per un variòmetre intel·ligent extern compatible. El valor és blau quan s'estima a partir de la velocitat respecte al terra i del vent."
 
 #, no-c-format
 msgid "Team code"

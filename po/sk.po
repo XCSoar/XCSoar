@@ -6458,8 +6458,8 @@ msgid "V TAS"
 msgstr "R TAS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Skutočná rýchlosť z výstupu kompatibilného inteligentného vária."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Skutočná rýchlosť z výstupu kompatibilného inteligentného vária. Hodnota je modrá, keď je odhadnutá z rýchlosti voči zemi a vetra."
 
 #, no-c-format
 msgid "Team code"

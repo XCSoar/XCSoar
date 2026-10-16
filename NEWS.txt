@@ -575,6 +575,8 @@ Version 7.46 - not yet released
     waypoints, as it does at startup, and again from each terrain
     file loaded later #900
 * documentation
+  - explain that a blue V TAS value is estimated from ground speed
+    and wind
   - describe the QNH InfoBox, including the barometric altitude under
     the pressure
   - document that an LXNAV flight download uses checked blocks on

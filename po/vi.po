@@ -6446,10 +6446,8 @@ msgid "V TAS"
 msgstr "Vận tốc>true"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Tốc độ không khí thực tế báo cáo bởi đồng hồ tốc độ lên xuống thông minh "
-"được hỗ trợ."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Tốc độ không khí thực tế báo cáo bởi đồng hồ tốc độ lên xuống thông minh được hỗ trợ. Giá trị màu xanh dương khi được ước tính từ tốc độ mặt đất và gió."
 
 #, no-c-format
 msgid "Team code"

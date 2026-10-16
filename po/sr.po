@@ -6468,10 +6468,8 @@ msgid "V TAS"
 msgstr "U KT"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Istinita brzina vazduha (TAS) izvrsena od strane podržanog vanjskog "
-"intelektualnog variometra."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Istinska brzina vazduha koju javlja podržani spoljni inteligentni variometar. Vrednost je plava kada je procenjena iz brzine u odnosu na zemlju i vetra."
 
 #, no-c-format
 msgid "Team code"

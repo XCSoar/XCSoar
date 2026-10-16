@@ -6430,8 +6430,8 @@ msgid "V TAS"
 msgstr "V TAS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr "Flyhastighet målt av ekstern vario."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Flyhastighet målt av ekstern vario. Verdien er blå når den er estimert fra bakkefart og vind."
 
 #, no-c-format
 msgid "Team code"

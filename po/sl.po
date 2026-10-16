@@ -6464,10 +6464,8 @@ msgid "V TAS"
 msgstr "V POMS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Pravilna hitrost letalne površine, izpisana podprtenim zunanjim "
-"inteligentnim variometrom."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Prava hitrost zraka, ki jo sporoči podprt zunanji inteligentni variometer. Vrednost je modra, ko je ocenjena iz hitrosti glede na tla in vetra."
 
 #, no-c-format
 msgid "Team code"

@@ -6471,10 +6471,8 @@ msgid "V TAS"
 msgstr "V ETK"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"Desteklenen bir externel intelligent varyometre tarafından raporlanan "
-"gerçikçi havesefer hızı."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "Desteklenen harici bir akıllı variometrenin bildirdiği gerçek hava hızı. Değer, yer hızı ve rüzgardan tahmin edildiğinde mavidir."
 
 #, no-c-format
 msgid "Team code"

@@ -6347,9 +6347,8 @@ msgid "V TAS"
 msgstr "V TAS"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"V TAS: 외부 피토관의 V IAS 값과 현재 고도를 비교해서 계산한 실제 대기속도."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "V TAS: 외부 피토관의 V IAS 값과 현재 고도를 비교해서 계산한 실제 대기속도. 값이 파란색이면 대지 속도와 바람으로 추정한 값입니다."
 
 #, no-c-format
 msgid "Team code"

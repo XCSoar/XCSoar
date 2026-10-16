@@ -6468,9 +6468,8 @@ msgid "V TAS"
 msgstr "Seb vls"
 
 #, no-c-format
-msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
-"A tényleges sebesség, ha külső intelligens variométer lett csatlakoztatva."
+msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
+msgstr "A tényleges sebesség, ha külső intelligens variométer lett csatlakoztatva. Az érték kék, ha a föld feletti sebességből és a szélből becsült."
 
 #, no-c-format
 msgid "Team code"
