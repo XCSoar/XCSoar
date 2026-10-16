@@ -1,0 +1,72 @@
+# Sync the `ready2merge` label with the PR template checkbox
+# "- [x] I'm ready to merge".
+#
+# Uses pull_request_target so fork PRs work. Reads the current PR
+# body through the API (no checkout, no execution of PR code).
+---
+name: Sync ready2merge label
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+# One run per PR. Each run reads the PR body when it starts, so a
+# queued run applies the checkbox state from that moment.
+concurrency:
+  group: ready2merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  sync-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add or remove ready2merge label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.payload.pull_request.number;
+            const label = 'ready2merge';
+
+            const { data: pull } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: issue_number,
+            });
+            const body = pull.body || '';
+
+            // Match "- [x] I'm ready to merge" (case-insensitive x,
+            // straight apostrophe or U+2019).
+            const pattern = /^- \[x\] I['\u2019]m ready to merge/im;
+            const checked = pattern.test(body);
+
+            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+              owner,
+              repo,
+              issue_number,
+            });
+            const hasLabel = labels.some(l => l.name === label);
+
+            if (checked && !hasLabel) {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number,
+                labels: [label],
+              });
+              core.info(`Added label '${label}'`);
+            } else if (!checked && hasLabel) {
+              await github.rest.issues.removeLabel({
+                owner,
+                repo,
+                issue_number,
+                name: label,
+              });
+              core.info(`Removed label '${label}'`);
+            } else {
+              core.info(`No change needed (checked=${checked}, hasLabel=${hasLabel})`);
+            }
