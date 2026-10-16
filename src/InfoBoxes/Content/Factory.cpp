@@ -1333,7 +1333,7 @@ static constexpr MetaData meta_data[] = {
     Group::ALTITUDE,
     N_("QNH"),
     N_("QNH"),
-    N_("Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."),
+    N_("Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."),
     UpdateInfoBoxAltitudeQNH,
     altitude_infobox_panels,
   },

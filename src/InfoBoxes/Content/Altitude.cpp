@@ -8,6 +8,7 @@
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "NMEA/Info.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
@@ -225,7 +226,11 @@ UpdateInfoBoxAltitudeQNH(InfoBoxData &data) noexcept
   const Unit unit = Units::current.pressure_unit;
   const double value = Units::ToUserPressure(qnh);
 
-  data.SetCommentInvalid();
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if (basic.baro_altitude_available)
+    FormatUserAltitude(basic.baro_altitude, data.comment.buffer());
+  else
+    data.SetCommentInvalid();
 
   if (unit == Unit::INCH_MERCURY) {
     data.FmtValue("{:.2f}", value);
