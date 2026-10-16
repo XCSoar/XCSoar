@@ -73,6 +73,23 @@ final class IOIOHelper implements IOIOConnectionHolder,
         ((ContextWrapperDependent) bootstrap).onCreate(context);
   }
 
+  /**
+   * Android announced a USB accessory or device that matches the
+   * manifest filters.  The accessory connection does not watch for
+   * that itself: a connect attempt that found no IOIO waits until it
+   * is told to try again.
+   */
+  static void onUsbAttached() {
+    for (IOIOConnectionBootstrap bootstrap : bootstraps) {
+      try {
+        if (bootstrap instanceof ContextWrapperDependent)
+          ((ContextWrapperDependent) bootstrap).reopen();
+      } catch (Exception e) {
+        Log.e(TAG, "ContextWrapperDependent.reopen() failed", e);
+      }
+    }
+  }
+
   static void onDestroyContext() {
     for (IOIOConnectionBootstrap bootstrap : bootstraps)
       if (bootstrap instanceof ContextWrapperDependent)
