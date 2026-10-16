@@ -269,6 +269,8 @@ Version 7.46 - not yet released
   - keep the QNH of an LXNAV S-series vario from creeping by about
     0.15 hPa on every reconnect
 * dialogs
+  - adopt the vario's pilot weight into Flight Setup crew when only
+    that weight changes and the polar coefficients stay the same
   - show each repository file as its name and its description, and
     download every ticked file together. Countries and Search narrow
     map, waypoint and airspace files, and the country ticks are kept
