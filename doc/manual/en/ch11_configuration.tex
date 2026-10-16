@@ -913,16 +913,34 @@ When editing a page, the following options are available for map pages:
 \section{Look / Vario}\label{sec:vario-gauge}
 
 This page configures the analog vario. It is part of an InfoBox layout
-that includes a vario, not a separate gauge on the map.
+that includes a vario, not a separate gauge on the map. The readouts
+are on by default. The averager needle is off. The thermal averager
+needle is on and replaces the live vario needle. Under the average,
+gross, and MacCready figures, STF or Var shows the audio vario cue.
+STF is speed-to-fly. Var is the variometer. Automatic mode uses STF
+in cruise and Var while circling, and stays on Var in cruise when
+speed-to-fly input is not available. Manual mode keeps the selected
+cue.
 
 \begin{description}
-\item[Speed arrows]  \label{conf:variogauge} Whether to show speed command
-  arrows on the vario gauge.
-  When shown, in cruise mode, arrows point up to command slow down; arrows point down
-  to command speed up.
+\item[Speed arrows]  \label{conf:variogauge} Whether to show the speed
+  command on the vario gauge. It is a vertical bar in the same colours
+  as the climb and sink band: up to command slow down, down to command
+  speed up.
+  Shown in speed-to-fly mode, not while circling, when true airspeed
+  is available. Within about 8 kt of the speed-to-fly target, no bar
+  is drawn. At full deflection the bar reaches the top or bottom of
+  the scale.
 \item[Show average]  Whether to show the average climb rate.  In cruise mode, this
   switches to showing the average net airmass rate.
+  While circling, the figure is red when it is less than half the risk
+  MacCready, the same as the Thermal climb, last 30~s InfoBox.
+  Cruise keeps the plain text colour.
 \item[Show MacCready]  Whether to show the MacCready setting.
+  The figure is green when manual, blue when automatic, and orange
+  for Safety MC in task abort, the same colours as the MacCready
+  InfoBox. In task abort the figure is Safety MC. An arrow in that
+  colour marks the same value on the outside of the scale.
 \item[Show gross]  Whether to show the gross vario value.
 \item[Averager needle]  If true, the vario gauge will display a hollow averager
   needle. During cruise, this needle displays the average net value. During circling,

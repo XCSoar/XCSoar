@@ -6,12 +6,12 @@
 void
 VarioSettings::SetDefaults() noexcept
 {
-  show_average = false;
-  show_mc = false;
-  show_speed_to_fly = false;
-  show_ballast = false;
-  show_bugs = false;
+  show_average = true;
+  show_mc = true;
+  show_speed_to_fly = true;
+  show_ballast = true;
+  show_bugs = true;
   show_gross = true;
   show_average_needle = false;
-  show_thermal_average_needle = false;
+  show_thermal_average_needle = true;
 }

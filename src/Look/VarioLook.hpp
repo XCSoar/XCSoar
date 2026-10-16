@@ -25,8 +25,6 @@ struct VarioLook {
 
   Brush sink_brush, lift_brush;
 
-  Pen thick_background_pen, thick_sink_pen, thick_lift_pen;
-
   MaskedIcon climb_icon;
 
   const Font *text_font;

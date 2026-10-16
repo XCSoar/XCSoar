@@ -2,10 +2,17 @@
 // Copyright The XCSoar Project
 
 #include "Gauge/GaugeVario.hpp"
-#include "Gauge/VarioGeometry.hpp"
+#include "Audio/VarioAudioValue.hpp"
 #include "Computer/STF.hpp"
 #include "Look/VarioLook.hpp"
+#include "Look/Look.hpp"
+#include "UIGlobals.hpp"
+#include "InfoBoxes/Data.hpp"
+#include "Engine/Task/TaskType.hpp"
+#include "Language/Language.hpp"
+#include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/dim/BulkPoint.hpp"
 #include "Screen/Layout.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Math/FastRotation.hpp"
@@ -17,105 +24,92 @@
 
 static constexpr double DELTA_V_STEP = 4.0;
 static constexpr double DELTA_V_LIMIT = 16.0;
-#define TEXT_BUG "Bug"
-#define TEXT_BALLAST "Bal"
 
+/** Climb/sink band and the speed bar, in pixels. */
 static int
-GetDialRadius(const VarioLook &look, unsigned window_width) noexcept
+BandWidth() noexcept
+{
+  return std::max(1, (int)Layout::Scale(5));
+}
+static constexpr const char *TEXT_BUG = "Bug";
+static constexpr const char *TEXT_BALLAST = "Bal";
+
+struct DialFit {
+  int radius;
+  /** Pivot moves left by this when the height cap shortens the radius. */
+  int left_shift;
+};
+
+static DialFit
+FitDial(const VarioLook &look, PixelSize window) noexcept
 {
   const int arc_padding = look.arc_label_font.GetHeight();
   const int tick_length = look.Scale(Layout::GetTextPadding() * 4);
   const int label_width = look.arc_label_font.TextSize("-5").width;
-  const int right = int(std::min(window_width, look.geometry_width))
+  const int right = int(std::min(window.width, look.geometry_width))
     - int(look.Scale(Layout::GetTextPadding()));
 
-  return std::max(1, right - tick_length - arc_padding / 2 - label_width / 2);
+  int radius = right - tick_length - arc_padding / 2 - label_width / 2;
+  int left_shift = 0;
+
+  /* Keep the circle inside the gauge. A two-row portrait gauge is
+     shorter than the column is wide, and the spare width shifts
+     the arc left. */
+  const int limit = int(window.height / 2);
+  if (limit > 0 && radius > limit) {
+    left_shift = radius - limit;
+    radius = limit;
+  }
+
+  /* A tall gauge has no spare width, so the figures sit on the right
+     edge and cover the speed bar. Leave one bar's width. The two-row
+     gauge already has at least that. */
+  const int bar = BandWidth();
+  const int pad = int(look.Scale(Layout::GetTextPadding()));
+  const int gap = left_shift + pad;
+  if (gap < bar && radius > 1) {
+    const int extra = std::min(bar - gap, radius - 1);
+    left_shift += extra;
+    radius -= extra;
+  }
+
+  return {std::max(1, radius), left_shift};
 }
 
 inline
-GaugeVario::BallastGeometry::BallastGeometry(const VarioLook &look,
-                                             const PixelRect &rc) noexcept
+GaugeVario::PercentGeometry::PercentGeometry(const VarioLook &look,
+                                             const PixelRect &rc,
+                                             const bool top,
+                                             const char *caption) noexcept
 {
-  PixelSize tSize;
-
-  // position of ballast label
-  label_pos.x = 1;
-  label_pos.y = rc.top + 2
-    + look.label_font.GetCapitalHeight() * 2
-    - look.label_font.GetAscentHeight();
-
-  // position of ballast value
-  value_pos.x = 1;
-  value_pos.y = rc.top + 1
-    + look.label_font.GetCapitalHeight()
-    - look.label_font.GetAscentHeight();
-
-  // set upper left corner
-  label_rect.left = label_pos.x;
-  label_rect.top = label_pos.y
-    + look.label_font.GetAscentHeight()
-    - look.label_font.GetCapitalHeight();
-
-  // set upper left corner
-  value_rect.left = value_pos.x;
-  value_rect.top = value_pos.y
-    + look.label_font.GetAscentHeight()
-    - look.label_font.GetCapitalHeight();
-
-  // get max label size
-  tSize = look.label_font.TextSize(TEXT_BALLAST);
-
-  // update back rect with max label size
-  label_rect.right = label_rect.left + tSize.width;
-  label_rect.bottom = label_rect.top +
-    look.label_font.GetCapitalHeight();
-
-  // get max value size
-  tSize = look.label_font.TextSize("100%");
-
-  value_rect.right = value_rect.left + tSize.width;
-  // update back rect with max label size
-  value_rect.bottom = value_rect.top +
-    look.label_font.GetCapitalHeight();
-}
-
-inline
-GaugeVario::BugsGeometry::BugsGeometry(const VarioLook &look,
-                                       const PixelRect &rc) noexcept
-{
-  PixelSize tSize;
+  const int capital = look.label_font.GetCapitalHeight();
+  const int ascent = look.label_font.GetAscentHeight();
 
   label_pos.x = 1;
-  label_pos.y = rc.bottom - 2
-    - look.label_font.GetCapitalHeight()
-    - look.label_font.GetAscentHeight();
-
   value_pos.x = 1;
-  value_pos.y = rc.bottom - 1
-    - look.label_font.GetAscentHeight();
+  if (top) {
+    label_pos.y = rc.top + 2 + capital * 2 - ascent;
+    value_pos.y = rc.top + 1 + capital - ascent;
+  } else {
+    label_pos.y = rc.bottom - 2 - capital - ascent;
+    value_pos.y = rc.bottom - 1 - ascent;
+  }
 
   label_rect.left = label_pos.x;
-  label_rect.top = label_pos.y
-    + look.label_font.GetAscentHeight()
-    - look.label_font.GetCapitalHeight();
   value_rect.left = value_pos.x;
-  value_rect.top = value_pos.y
-    + look.label_font.GetAscentHeight()
-    - look.label_font.GetCapitalHeight();
+  label_rect.top = label_pos.y + ascent - capital;
+  value_rect.top = value_pos.y + ascent - capital;
 
-  tSize = look.label_font.TextSize(TEXT_BUG);
+  label_rect.right = label_rect.left
+    + look.label_font.TextSize(caption).width;
+  label_rect.bottom = label_rect.top + capital;
+  /* The bottom caption's erase rect covers the line below. */
+  if (!top)
+    label_rect.bottom += look.label_font.GetHeight() - ascent;
 
-  label_rect.right = label_rect.left + tSize.width;
-  label_rect.bottom = label_rect.top
-    + look.label_font.GetCapitalHeight()
-    + look.label_font.GetHeight()
-    - look.label_font.GetAscentHeight();
-
-  tSize = look.label_font.TextSize("100%");
-
-  value_rect.right = value_rect.left + tSize.width;
-  value_rect.bottom = value_rect.top +
-    look.label_font.GetCapitalHeight();
+  value_rect.right = value_rect.left
+    + look.label_font.TextSize("100%").width;
+  value_rect.bottom = value_rect.top + capital;
 }
 
 inline
@@ -145,16 +139,17 @@ GaugeVario::LabelValueGeometry::GetHeight(const VarioLook &look) noexcept
 
 inline
 GaugeVario::Geometry::Geometry(const VarioLook &look, const PixelRect &rc) noexcept
-  :ballast(look, rc), bugs(look, rc)
+  :ballast(look, rc, true, TEXT_BALLAST),
+   bugs(look, rc, false, TEXT_BUG)
 {
   nlength0 = look.Scale(Layout::Scale(10));
   nlength1 = look.Scale(Layout::Scale(2));
   nwidth = look.Scale(Layout::Scale(4));
-  nline = look.Scale(Layout::Scale(8));
 
+  const DialFit dial = FitDial(look, rc.GetSize());
   offset = rc.GetMiddleRight();
-  offset.x -= look.Scale(Layout::GetTextPadding());
-  dial_radius = GetDialRadius(look, rc.GetWidth());
+  offset.x -= look.Scale(Layout::GetTextPadding()) + dial.left_shift;
+  dial_radius = dial.radius;
 
   const PixelSize value_offset{0u, LabelValueGeometry::GetHeight(look)};
 
@@ -172,42 +167,25 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
   Create(parent, rc, style);
 }
 
-static constexpr int
-WidthToHeight(int width) noexcept
-{
-  return width * int(VarioGeometry::VERTICAL_SCALE_PERCENT) / 100;
-}
-
 static constexpr PixelPoint
 TransformRotatedPoint(IntPoint2D pt, IntPoint2D offset) noexcept
 {
-  return { pt.x + offset.x, WidthToHeight(pt.y) + offset.y + 1 };
+  return { pt.x + offset.x, pt.y + offset.y };
 }
 
 inline void
-GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
+GaugeVario::RenderBackground(Canvas &canvas) noexcept
 {
   canvas.Clear(look.background_color);
 
   canvas.Select(look.arc_pen);
 
-  std::array<BulkPixelPoint, 21> arc;
-
   const int arc_padding = look.arc_label_font.GetHeight();
+  const int x_radius = geometry.dial_radius;
 
-  const int x_radius = GetDialRadius(look, rc.GetWidth());
-  const int y_radius = WidthToHeight(x_radius);
-
-  for (std::size_t i = 0; i < arc.size(); ++i) {
-    const unsigned angle = INT_ANGLE_RANGE / 2
-      + i * INT_ANGLE_RANGE / 2 / (arc.size() - 1);
-    const PixelPoint delta(ISINETABLE[NormalizeIntAngle(angle)] * x_radius / 1024,
-                           -ISINETABLE[NormalizeIntAngle(angle + INT_QUARTER_CIRCLE)] * y_radius / 1024);
-
-    arc[i] = geometry.offset + delta;
-  }
-
-  canvas.DrawPolyline(arc.data(), arc.size());
+  /* Left semicircle: bottom, through the left, to the top. */
+  canvas.DrawArc(geometry.offset, std::max(1, x_radius),
+                 Angle::HalfCircle(), Angle::FullCircle());
 
   canvas.Select(look.tick_pen);
   canvas.Select(look.arc_label_font);
@@ -265,29 +243,71 @@ GaugeVario::RenderBackground(Canvas &canvas, const PixelRect &rc) noexcept
 void
 GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
 {
-  const PixelRect rc = GetClientRect();
-
   if (!IsPersistent() || background_dirty) {
-    RenderBackground(canvas, rc);
+    RenderBackground(canvas);
     background_dirty = false;
   }
 
   if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
+    const bool circling = Calculated().circling;
+    const double avg = circling ? Calculated().average
+                                : Calculated().netto_average;
+    /* Same red as TC 30s: the 30 s climb is below half the risk MC.
+       NetAvg is a different figure, so it stays the plain text colour. */
+    const int color_index =
+      circling && 2 * avg < Calculated().common_stats.current_risk_mc
+        ? 1 : 0;
+    if (color_index != average_color_index) {
+      average_color_index = color_index;
+      average_di.value.last_value = -9999;
+      dirty = true;
+    }
+
     RenderValue(canvas, geometry.average, average_di,
-                Units::ToUserVSpeed(Calculated().circling ? Calculated().average : Calculated().netto_average),
-                Calculated().circling ? "Avg" : "NetAvg");
+                Units::ToUserVSpeed(avg),
+                circling ? "Avg" : "NetAvg",
+                color_index == 0
+                  ? look.text_color
+                  : UIGlobals::GetLook().info_box.GetValueColor(color_index));
   }
 
+  bool show_mc_mark = false;
+  int mc_pos = 0;
+  Color mc_color = COLOR_BLACK;
   if (Settings().show_mc) {
-    auto mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
+    const bool abort = Calculated().common_stats.task_type == TaskType::ABORT;
+    const bool auto_mc = GetComputerSettings().task.auto_mc;
+    const int color_index = abort ? (int)InfoBoxData::COLOR_ORANGE
+                                  : auto_mc ? 2 : 3;
+    if (color_index != mc_color_index) {
+      mc_color_index = color_index;
+      mc_di.value.last_value = -9999;
+      dirty = true;
+    }
+
+    double mc = GetGlidePolar().GetMC();
+    const char *label = auto_mc ? "Auto MC" : "MC";
+    if (abort) {
+      const GlidePolar &safety = Calculated().glide_polar_safety;
+      mc = safety.IsValid()
+        ? safety.GetMC()
+        : GetComputerSettings().task.safety_mc;
+      label = _("Safety MC");
+    }
+
+    mc_color = UIGlobals::GetLook().info_box.GetValueColor(color_index);
+    mc_pos = ValueToNeedlePos(mc);
+    show_mc_mark = true;
+
     RenderValue(canvas, geometry.mc, mc_di,
-                mc,
-                GetComputerSettings().task.auto_mc ? "Auto MC" : "MC");
+                Units::ToUserVSpeed(mc),
+                label,
+                mc_color);
   }
 
   if (Settings().show_speed_to_fly)
-    RenderSpeedToFly(canvas, rc.right - 11, (rc.top + rc.bottom) / 2);
+    RenderSpeedToFly(canvas);
   else
     RenderClimb(canvas);
 
@@ -358,48 +378,62 @@ GaugeVario::OnPaintBuffer(Canvas &canvas) noexcept
                Settings().show_thermal_average_needle ? ival_av_thermal : ival,
                false, false);
 
+  if (show_mc_mark) {
+    if (!IsPersistent() || mc_mark_pos != mc_pos
+        || mc_mark_color != mc_color_index) {
+      if (IsPersistent() && mc_mark_pos >= gmin)
+        RenderMcMark(canvas, mc_mark_pos, look.background_color);
+      RenderMcMark(canvas, mc_pos, mc_color);
+      mc_mark_pos = mc_pos;
+      mc_mark_color = mc_color_index;
+    }
+  } else if (IsPersistent() && mc_mark_pos >= gmin) {
+    RenderMcMark(canvas, mc_mark_pos, look.background_color);
+    mc_mark_pos = gmin - 1;
+    mc_mark_color = -1;
+  }
+
   if (Settings().show_gross) {
     auto vvaldisplay = std::clamp(Units::ToUserVSpeed(vval),
                                   -99.9, 99.9);
 
     RenderValue(canvas, geometry.gross, gross_di,
                 vvaldisplay,
-                "Gross");
+                "Gross",
+                look.text_color);
   }
 
-  RenderZero(canvas);
+  RenderMode(canvas);
 }
 
 void
-GaugeVario::MakePolygon(const int i) noexcept
+GaugeVario::RenderMode(Canvas &canvas) noexcept
 {
-  auto *bit = getPolygon(i);
-  auto *bline = &lines[i + gmax];
+  const auto &sound = blackboard.GetUISettings().sound.vario;
+  const bool stf = AudioVarioGlue::UsesSTF(
+    Calculated().circling, Basic().V_stf_available,
+    sound.switching_mode, sound.manual_mode);
+  const int mode = stf ? 1 : 0;
+  if (IsPersistent() && mode_stf == mode)
+    return;
 
-  const FastIntegerRotation r(Angle::Degrees(i));
+  const char *label = stf ? "STF" : "Var";
+  canvas.Select(look.label_font);
+  canvas.SetTextColor(look.dimmed_text_color);
+  canvas.SetBackgroundColor(look.background_color);
 
-  bit[0] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength0, geometry.nwidth}),
-                                 geometry.offset);
-  bit[1] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength1, 0}),
-                                 geometry.offset);
-  bit[2] = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nlength0, -geometry.nwidth}),
-                                 geometry.offset);
-
-  *bline = TransformRotatedPoint(r.Rotate({-geometry.dial_radius + geometry.nline, 0}),
-                                 geometry.offset);
-}
-
-inline BulkPixelPoint *
-GaugeVario::getPolygon(int i) noexcept
-{
-  return polys + (i + gmax) * 3;
-}
-
-inline void
-GaugeVario::MakeAllPolygons() noexcept
-{
-  for (int i = gmin; i <= gmax; i++)
-    MakePolygon(i);
+  const int width = (int)std::max(canvas.CalcTextWidth("STF"),
+                                  canvas.CalcTextWidth("Var"));
+  const int height = look.label_font.GetCapitalHeight();
+  const int right = geometry.mc.label_right;
+  const int top = geometry.mc.value_bottom
+    + look.Scale(Layout::Scale(1));
+  canvas.DrawOpaqueText({right - (int)canvas.CalcTextWidth(label),
+                         top + height
+                           - (int)look.label_font.GetAscentHeight()},
+                        {right - width, top, right, top + height},
+                        label);
+  mode_stf = mode;
 }
 
 void
@@ -425,37 +459,14 @@ GaugeVario::RenderClimb(Canvas &canvas) noexcept
                                look.background_color);
 }
 
-inline void
-GaugeVario::RenderZero(Canvas &canvas) noexcept
-{
-  if (look.inverse)
-    canvas.SelectWhitePen();
-  else
-    canvas.SelectBlackPen();
-
-  canvas.DrawLine({0, geometry.offset.y},
-                  {Layout::Scale(17), geometry.offset.y});
-  canvas.DrawLine({0, geometry.offset.y + 1},
-                  {Layout::Scale(17), geometry.offset.y + 1});
-}
-
 int
 GaugeVario::ValueToNeedlePos(double Value) noexcept
 {
   constexpr double degrees_per_unit =
     double(GAUGEVARIOSWEEP) / GAUGEVARIORANGE;
 
-  int i;
-
-  if (!needle_initialised){
-    MakeAllPolygons();
-    needle_initialised = true;
-  }
-
-
-  i = iround(Value * degrees_per_unit);
-  i = std::clamp(i, int(gmin), int(gmax));
-  return i;
+  return std::clamp(iround(Value * degrees_per_unit),
+                    int(gmin), int(gmax));
 }
 
 void
@@ -466,27 +477,26 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink,
   if (i == sink)
     return;
 
-  canvas.Select(clear
-                ? look.thick_background_pen
-                : (i > sink ? look.thick_lift_pen : look.thick_sink_pen));
+  const int lo = std::min(i, sink);
+  const int hi = std::max(i, sink);
+  const unsigned outer = std::max(1, geometry.dial_radius);
+  const unsigned thick = BandWidth();
+  const unsigned inner = outer > thick ? outer - thick : 1u;
 
-  if (i > sink)
-    canvas.DrawPolyline(lines + gmax + sink, i - sink);
-  else
-    canvas.DrawPolyline(lines + gmax + i, sink - i);
-
-  if (!clear) {
-    canvas.SelectNullPen();
-
-    // clear up naked (sink) edge of polygon, this gives it a nice
-    // taper look
-    if (look.inverse) {
+  canvas.SelectNullPen();
+  if (clear) {
+    if (look.inverse)
       canvas.SelectBlackBrush();
-    } else {
+    else
       canvas.SelectWhiteBrush();
-    }
-    canvas.DrawTriangleFan(getPolygon(sink), 3);
-  }
+  } else
+    canvas.Select(i > sink ? look.lift_brush : look.sink_brush);
+
+  /* 0° on this dial is the left of the circle, climb is towards
+     the top. */
+  canvas.DrawAnnulus(geometry.offset, inner, outer,
+                     Angle::Degrees(270 + lo),
+                     Angle::Degrees(270 + hi));
 }
 
 void
@@ -506,17 +516,56 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average,
     canvas.SelectBlackPen();
   }
 
+  const FastIntegerRotation r(Angle::Degrees(i));
+  const int radius = geometry.dial_radius;
+  const BulkPixelPoint needle[3] = {
+    TransformRotatedPoint(r.Rotate({-radius + geometry.nlength0,
+                                    geometry.nwidth}),
+                          geometry.offset),
+    TransformRotatedPoint(r.Rotate({-radius + geometry.nlength1, 0}),
+                          geometry.offset),
+    TransformRotatedPoint(r.Rotate({-radius + geometry.nlength0,
+                                    -geometry.nwidth}),
+                          geometry.offset),
+  };
+
   if (average)
-    canvas.DrawPolyline(getPolygon(i), 3);
+    canvas.DrawPolyline(needle, 3);
   else
-    canvas.DrawTriangleFan(getPolygon(i), 3);
+    canvas.DrawTriangleFan(needle, 3);
+}
+
+void
+GaugeVario::RenderMcMark(Canvas &canvas, int i, Color color) noexcept
+{
+  /* Outside the scale, pointing in at the MacCready value. */
+  const int radius = geometry.dial_radius;
+  const int thick = BandWidth();
+  const int outer = radius + (int)look.arc_pen.GetWidth() / 2;
+  const int length = std::max(3, thick);
+  const int half = std::max(2, length / 2);
+  const FastIntegerRotation r(Angle::Degrees(i));
+  const BulkPixelPoint arrow[3] = {
+    TransformRotatedPoint(r.Rotate({-outer, 0}), geometry.offset),
+    TransformRotatedPoint(r.Rotate({-outer - length, half}),
+                          geometry.offset),
+    TransformRotatedPoint(r.Rotate({-outer - length, -half}),
+                          geometry.offset),
+  };
+
+  Brush brush;
+  brush.Create(color);
+  canvas.SelectNullPen();
+  canvas.Select(brush);
+  canvas.DrawTriangleFan(arrow, 3);
 }
 
 // TODO code: Optimise vario rendering, this is slow
 void
 GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
                         LabelValueDrawInfo &di,
-                        double value, const char *label) noexcept
+                        double value, const char *label,
+                        Color value_color) noexcept
 {
   value = (double)iround(value * 10) / 10; // prevent the -0.0 case
 
@@ -538,7 +587,6 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 
       canvas.SetBackgroundColor(look.background_color);
       canvas.DrawOpaqueText(text_position, rc, label);
-      di.label.last_width = width;
       strcpy(di.label.last_text, label);
     } else {
       canvas.DrawText(text_position, label);
@@ -548,7 +596,7 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
   if (!IsPersistent() || (dirty && di.value.last_value != value)) {
     const auto buffer = FmtBuffer<18>("{:.1f}", value);
     canvas.SetBackgroundColor(look.background_color);
-    canvas.SetTextColor(look.text_color);
+    canvas.SetTextColor(value_color);
     canvas.Select(look.value_font);
     const unsigned width = canvas.CalcTextSize(buffer.c_str()).width;
 
@@ -563,7 +611,6 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 
       canvas.DrawOpaqueText(text_position, rc, buffer.c_str());
 
-      di.value.last_width = width;
       di.value.last_value = value;
     } else {
       canvas.DrawText(text_position, buffer.c_str());
@@ -588,213 +635,113 @@ GaugeVario::RenderValue(Canvas &canvas, const LabelValueGeometry &g,
 }
 
 inline void
-GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y) noexcept
+GaugeVario::RenderSpeedToFly(Canvas &canvas) noexcept
 {
-  const auto stf = GetSTFSpeed(Basic(), Calculated());
-  if (!stf || !Basic().airspeed_available ||
-      !Basic().total_energy_vario_available)
-    return;
+  /* Cruise, or no switch and the computer is not circling. A climb
+     switch or a detected circle clears the bar. */
+  const bool stf =
+    Basic().switch_state.SpeedCommandPage()
+      != SwitchState::FlightMode::CIRCLING
+    && !Calculated().circling;
 
-  double v_diff;
-
-  const unsigned arrow_y_size = look.Scale(Layout::Scale(3));
-  const unsigned arrow_x_size = look.Scale(Layout::Scale(7));
+  const auto stf_speed = stf && Basic().airspeed_available
+    ? GetSTFSpeed(Basic(), Calculated())
+    : std::optional<double>{};
 
   const PixelRect rc = GetClientRect();
 
-  int nary = NARROWS * arrow_y_size;
-  const int y_offset = look.Scale(YOFFSET);
-  int ytop = rc.top + y_offset + nary; // JMW
-  int ybottom = rc.bottom - y_offset - nary
-    - int(look.Scale(Layout::FastScale(1)));
+  /* V_stf is the target TAS. Positive means too slow. */
+  double v_diff = 0;
+  if (stf_speed) {
+    v_diff = *stf_speed - Basic().true_airspeed;
+    v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT);
+    v_diff = iround(v_diff / DELTA_V_STEP) * DELTA_V_STEP;
+  }
 
-  ytop += look.Scale(Layout::Scale(14));
-  ybottom -= look.Scale(Layout::Scale(14));
-
-  x = rc.right - 2 * arrow_x_size;
-
-  // only draw speed command if flying and vario is not circling
-  if ((Calculated().flight.flying)
-      && (!Basic().gps.simulator || !Calculated().circling)) {
-    /* V_stf is TAS (density-compensated); compare to actual TAS */
-    v_diff = *stf - Basic().true_airspeed;
-    v_diff = std::clamp(v_diff, -DELTA_V_LIMIT, DELTA_V_LIMIT); // limit it
-    v_diff = iround(v_diff/DELTA_V_STEP) * DELTA_V_STEP;
-  } else
-    v_diff = 0;
+  /* Same thickness and colours as the climb/sink band, drawn
+     vertically. Up commands slow down. Full deflection meets the
+     top or bottom of the scale. */
+  const int thick = BandWidth();
+  const int x = rc.right - thick;
+  const int mid = geometry.offset.y;
+  const int reach = std::max(1, geometry.dial_radius);
+  const double speed_error = v_diff < 0 ? -v_diff : v_diff;
+  const int span = std::min(reach,
+                            int(speed_error / DELTA_V_LIMIT * reach));
 
   if (!IsPersistent() || last_v_diff != v_diff || dirty) {
     last_v_diff = v_diff;
 
-    if (IsPersistent()) {
-      const unsigned height = nary + arrow_y_size
-        + look.Scale(Layout::FastScale(2));
-
-      const PixelSize size{arrow_x_size * 2 + 1, height};
-
-      // bottom (too slow)
-      canvas.DrawFilledRectangle({{x, ybottom + y_offset}, size},
+    if (IsPersistent())
+      canvas.DrawFilledRectangle({x, mid - reach, rc.right, mid + reach},
                                  look.background_color);
-
-      // top (too fast)
-      canvas.DrawFilledRectangle({{x, ytop - y_offset + 1 - int(height)}, size},
-                                 look.background_color);
-    }
 
     RenderClimb(canvas);
 
-    canvas.SelectNullPen();
-
-    if (look.colors) {
-      if (v_diff > 0) {
-        // too slow
-        canvas.Select(look.sink_brush);
-      } else {
-        canvas.Select(look.lift_brush);
-      }
-    } else {
-      if (look.inverse)
-        canvas.SelectWhiteBrush();
-      else
-        canvas.SelectBlackBrush();
-    }
-
-    if (v_diff > 0) {
-      // too slow
-      y = ybottom;
-      y += y_offset;
-
-      const PixelSize size{arrow_x_size * 2 + 1, arrow_y_size - 1};
-      while (v_diff > 0) {
-        if (v_diff > DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y}, size});
-        } else {
-          BulkPixelPoint arrow[3];
-          arrow[0].x = x;
-          arrow[0].y = y;
-          arrow[1].x = x + arrow_x_size;
-          arrow[1].y = y + arrow_y_size - 1;
-          arrow[2].x = x + 2 * arrow_x_size;
-          arrow[2].y = y;
-          canvas.DrawTriangleFan(arrow, 3);
-        }
-        v_diff -= DELTA_V_STEP;
-        y += arrow_y_size;
-      }
-    } else if (v_diff < 0) {
-      // too fast
-      y = ytop;
-      y -= y_offset;
-
-      const PixelSize size{arrow_x_size * 2 + 1, y - arrow_y_size + 1};
-      while (v_diff < 0) {
-        if (v_diff < -DELTA_V_STEP) {
-          canvas.DrawRectangle({{x, y + 1}, size});
-        } else {
-          BulkPixelPoint arrow[3];
-          arrow[0].x = x;
-          arrow[0].y = y;
-          arrow[1].x = x + arrow_x_size;
-          arrow[1].y = y - arrow_y_size + 1;
-          arrow[2].x = x + 2 * arrow_x_size;
-          arrow[2].y = y;
-          canvas.DrawTriangleFan(arrow, 3);
-        }
-        v_diff += DELTA_V_STEP;
-        y -= arrow_y_size;
-      }
+    if (span > 0) {
+      const bool down = v_diff > 0;
+      const int y1 = down ? mid + span : mid - span;
+      const Color color = down ? look.sink_color : look.lift_color;
+      canvas.DrawFilledRectangle({x, std::min(mid, y1),
+                                  x + thick, std::max(mid, y1)},
+                                 color);
     }
   }
+}
+
+void
+GaugeVario::RenderPercent(Canvas &canvas, const PercentGeometry &corner,
+                          const char *caption,
+                          int percent, int &last) noexcept
+{
+  const bool persistent = IsPersistent();
+  if (persistent && percent == last)
+    return;
+
+  canvas.Select(look.label_font);
+  if (persistent)
+    canvas.SetBackgroundColor(look.background_color);
+  else
+    canvas.SetBackgroundTransparent();
+
+  if (persistent || last < 1 || percent < 1) {
+    if (percent > 0) {
+      canvas.SetTextColor(look.dimmed_text_color);
+      if (persistent)
+        canvas.DrawOpaqueText(corner.label_pos, corner.label_rect, caption);
+      else
+        canvas.DrawText(corner.label_pos, caption);
+    } else if (persistent)
+      canvas.DrawFilledRectangle(corner.label_rect, look.background_color);
+  }
+
+  if (percent > 0) {
+    const auto buffer = FmtBuffer<18>("{}%", percent);
+    canvas.SetTextColor(look.text_color);
+    if (persistent)
+      canvas.DrawOpaqueText(corner.value_pos, corner.value_rect,
+                            buffer.c_str());
+    else
+      canvas.DrawText(corner.value_pos, buffer.c_str());
+  } else if (persistent)
+    canvas.DrawFilledRectangle(corner.value_rect, look.background_color);
+
+  if (persistent)
+    last = percent;
 }
 
 inline void
 GaugeVario::RenderBallast(Canvas &canvas) noexcept
 {
-  const GlidePolar &polar = GetGlidePolar();
-  const double ballast_fraction = polar.GetBallastFraction();
-  int ballast = iround(ballast_fraction * 100);
-
-  if (!IsPersistent() || ballast != last_ballast) {
-    // ballast hase been changed
-
-    canvas.Select(look.label_font);
-
-    if (IsPersistent())
-      canvas.SetBackgroundColor(look.background_color);
-    else
-      canvas.SetBackgroundTransparent();
-
-    const auto &g = geometry.ballast;
-
-    if (IsPersistent() || last_ballast < 1 || ballast < 1) {
-      // new ballast is 0, hide label
-      if (ballast > 0) {
-        canvas.SetTextColor(look.dimmed_text_color);
-        // ols ballast was 0, show label
-        if (IsPersistent())
-          canvas.DrawOpaqueText(g.label_pos, g.label_rect, TEXT_BALLAST);
-        else
-          canvas.DrawText(g.label_pos, TEXT_BALLAST);
-      } else if (IsPersistent())
-        canvas.DrawFilledRectangle(g.label_rect, look.background_color);
-    }
-
-    // new ballast 0, hide value
-    if (ballast > 0) {
-      const auto buffer = FmtBuffer<18>("{}%", ballast);
-      canvas.SetTextColor(look.text_color);
-
-      if (IsPersistent())
-        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer.c_str());
-      else
-        canvas.DrawText(g.value_pos, buffer.c_str());
-    } else if (IsPersistent())
-      canvas.DrawFilledRectangle(g.value_rect, look.background_color);
-
-    if (IsPersistent())
-      last_ballast = ballast;
-  }
+  const int ballast = iround(GetGlidePolar().GetBallastFraction() * 100);
+  RenderPercent(canvas, geometry.ballast, TEXT_BALLAST, ballast, last_ballast);
 }
 
 inline void
 GaugeVario::RenderBugs(Canvas &canvas) noexcept
 {
-  int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
-  if (!IsPersistent() || bugs != last_bugs) {
-
-    canvas.Select(look.label_font);
-
-    if (IsPersistent())
-      canvas.SetBackgroundColor(look.background_color);
-    else
-      canvas.SetBackgroundTransparent();
-
-    const auto &g = geometry.bugs;
-
-    if (IsPersistent() || last_bugs < 1 || bugs < 1) {
-      if (bugs > 0) {
-        canvas.SetTextColor(look.dimmed_text_color);
-        if (IsPersistent())
-          canvas.DrawOpaqueText(g.label_pos, g.label_rect, TEXT_BUG);
-        else
-          canvas.DrawText(g.label_pos, TEXT_BUG);
-      } else if (IsPersistent())
-        canvas.DrawFilledRectangle(g.label_rect, look.background_color);
-    }
-
-    if (bugs > 0) {
-      const auto buffer = FmtBuffer<18>("{}%", bugs);
-      canvas.SetTextColor(look.text_color);
-      if (IsPersistent())
-        canvas.DrawOpaqueText(g.value_pos, g.value_rect, buffer.c_str());
-      else
-        canvas.DrawText(g.value_pos, buffer.c_str());
-    } else if (IsPersistent())
-      canvas.DrawFilledRectangle(g.value_rect, look.background_color);
-
-    if (IsPersistent())
-      last_bugs = bugs;
-  }
+  const int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
+  RenderPercent(canvas, geometry.bugs, TEXT_BUG, bugs, last_bugs);
 }
 
 void
@@ -814,8 +761,9 @@ GaugeVario::ReinitialiseLook() noexcept
   /* trigger reinitialisation */
   dirty = true;
   background_dirty = true;
-  needle_initialised = false;
   vario_line_drawn = false;
+  mc_mark_pos = gmin - 1;
+  mc_mark_color = -1;
 
   average_di.Reset();
   mc_di.Reset();
@@ -823,6 +771,7 @@ GaugeVario::ReinitialiseLook() noexcept
 
   last_ballast = -1;
   last_bugs = -1;
+  mode_stf = -1;
 
   Invalidate();
 }

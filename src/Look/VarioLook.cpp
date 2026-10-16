@@ -43,10 +43,6 @@ VarioLook::Initialise(bool _inverse, bool _colors,
   arc_pen.Create(Layout::ScalePenWidth(2), text_color);
   tick_pen.Create(Layout::ScalePenWidth(1), text_color);
 
-  thick_background_pen.Create(Layout::Scale(5), background_color);
-  thick_sink_pen.Create(Layout::Scale(5), sink_color);
-  thick_lift_pen.Create(Layout::Scale(5), lift_color);
-
   climb_icon.LoadResource(IDB_CLIMB_ALL);
 
   text_font = &_text_font;
@@ -64,9 +60,6 @@ VarioLook::ReinitialiseLayout(unsigned width, unsigned reference_width)
 
   arc_pen.Create(Layout::ScalePenWidth(2), text_color);
   tick_pen.Create(Layout::ScalePenWidth(1), text_color);
-  thick_background_pen.Create(Layout::Scale(5), background_color);
-  thick_sink_pen.Create(Layout::Scale(5), sink_color);
-  thick_lift_pen.Create(Layout::Scale(5), lift_color);
 
   /* Keep the value column legible when the dial has to shrink to fit a
      compact portrait Vario window. */
