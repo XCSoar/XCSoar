@@ -38,10 +38,11 @@ IsZeroHeader(const TarHeader &header) noexcept
 
 [[nodiscard]]
 uint64_t
-ReadSizeFromHeader(const TarHeader &header) noexcept
+ReadOctal(const char *source, size_t size) noexcept
 {
-  char buf[13] = {};
-  std::memcpy(buf, header.data() + 124, 12);
+  char buf[13]{};
+  size = std::min(size, sizeof(buf) - 1);
+  std::memcpy(buf, source, size);
   return buf[0] != '\0' ? std::strtoull(buf, nullptr, 8) : 0;
 }
 
@@ -136,11 +137,12 @@ WriteChecksumField(TarHeader &header) noexcept
 }
 
 void
-WriteHeaderBlock(OutputStream &out, std::string_view name, uint64_t size)
+WriteHeaderBlock(OutputStream &out, std::string_view name, uint64_t size,
+                 unsigned mode)
 {
   TarHeader header{};
   WriteString(header.data() + 0, name, TAR_NAME_SIZE);
-  WriteOctal(header.data() + 100, 8, 0644);
+  WriteOctal(header.data() + 100, 8, mode & 0777);
   WriteOctal(header.data() + 108, 8, 0);
   WriteOctal(header.data() + 116, 8, 0);
   WriteOctal(header.data() + 124, 12, size);
@@ -177,7 +179,7 @@ WriteEndMarker(OutputStream &out)
 } // namespace
 
 bool
-TarReader::Next(std::string &name, uint64_t &size)
+TarReader::Next(std::string &name, uint64_t &size, unsigned &mode)
 {
   for (;;) {
     TarHeader header{};
@@ -197,7 +199,8 @@ TarReader::Next(std::string &name, uint64_t &size)
     if (first > 0)
       name.erase(0, first);
 
-    size = ReadSizeFromHeader(header);
+    mode = static_cast<unsigned>(ReadOctal(header.data() + 100, 8));
+    size = ReadOctal(header.data() + 124, 12);
     remaining = size;
 
     /* skip entries with path-traversal sequences or empty names */
@@ -233,10 +236,18 @@ void
 TarWriter::Add(std::string_view name, Reader &in, uint64_t size,
                const std::function<void(uint64_t)> &on_bytes)
 {
+  Add(name, in, size, 0644, on_bytes);
+}
+
+void
+TarWriter::Add(std::string_view name, Reader &in, uint64_t size,
+               unsigned mode,
+               const std::function<void(uint64_t)> &on_bytes)
+{
   if (name.size() > TAR_NAME_SIZE)
     throw std::invalid_argument("tar entry name too long");
 
-  WriteHeaderBlock(output, name, size);
+  WriteHeaderBlock(output, name, size, mode);
   CopyBytes(in, output, size, on_bytes);
   WritePaddingBytes(output, size);
 }

@@ -80,6 +80,8 @@ Version 7.46 - not yet released
 * Linux
   - add a desktop menu entry and icon for the Unix package #1496
   - add restart and power-off controls to the Quit dialog
+  - add an optional System Tools page for installed maintenance tools
+    and personal scripts, with live output and bounded cancellation
   - use OpenGL ES instead of desktop OpenGL #2140
   - in landscape, show Turn on and Restart for System Services in
     the button column so the service list keeps that row
@@ -654,6 +656,7 @@ Version 7.46 - not yet released
     flights with a detected launch and landing, under the flight
     export, WeGlide Upload and Replay lists
   - document Linux restart and power-off controls
+  - document optional Linux system tools
   - document 15-minute UTC offset selection
   - describe the T Next Leg InfoBox, how to use it at a turn, and that
     the comment shows no wind when the box is blank because wind is

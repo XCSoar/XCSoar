@@ -90,6 +90,7 @@ TEST_NAMES = \
 	TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestSwitchState \
 	TestWaypointReachability TestWaypointElevation TestBackupPaths \
+	TestTarArchive \
 	TestAllocatedGrid \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestPCMetGeoreference \
@@ -156,6 +157,7 @@ TEST_NAMES = \
 	TestWaylandScale \
 	TestVersionNumber \
 	TestSlowCPU \
+	TestSystemTools \
 	TestWeglideScoring \
 	TestNetCoupeScoring \
 	TestDMStScoring
@@ -201,6 +203,14 @@ TEST_URI_UTIL_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUriUtil.cpp
 $(eval $(call link-program,TestUriUtil,TEST_URI_UTIL))
+
+TEST_SYSTEM_TOOLS_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSystemTools.cpp \
+	$(SRC)/SystemTools.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp
+TEST_SYSTEM_TOOLS_DEPENDS = IO OS UTIL
+$(eval $(call link-program,TestSystemTools,TEST_SYSTEM_TOOLS))
 
 TEST_CRC16_SOURCES = \
 	$(SRC)/util/CRC16CCITT.cpp \
@@ -1150,11 +1160,23 @@ TEST_LOCAL_PATH_RESOLVE_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestLocalPathResolve,TEST_LOCAL_PATH_RESOLVE))
 
 TEST_TAR_ARCHIVE_SOURCES = \
+	$(SRC)/DataFileLayout.cpp \
+	$(SRC)/DataFilePath.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/Repository/FileType.cpp \
+	$(SRC)/SystemTools.cpp \
+	$(SRC)/Formatter/ByteSizeFormatter.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/io/BackupPaths.cpp \
+	$(SRC)/io/TarBackup.cpp \
 	$(SRC)/io/MemoryReader.cxx \
 	$(SRC)/io/TarArchive.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTarArchive.cpp
-TEST_TAR_ARCHIVE_DEPENDS = IO UTIL
+TEST_TAR_ARCHIVE_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestTarArchive,TEST_TAR_ARCHIVE))
 TEST_GEO_POINT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

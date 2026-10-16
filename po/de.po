@@ -11314,7 +11314,7 @@ msgid "Starting..."
 msgstr ""
 
 msgid "Stopping..."
-msgstr ""
+msgstr "Wird gestoppt…"
 
 msgid "Reloading..."
 msgstr ""
@@ -11401,3 +11401,13 @@ msgstr ""
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+
+#, no-c-format
+msgid "System Tools"
+msgstr "Systemwerkzeuge"
+
+msgid "Not available while flying."
+msgstr "Während des Fluges nicht verfügbar."
+
+msgid "User"
+msgstr "Benutzer"

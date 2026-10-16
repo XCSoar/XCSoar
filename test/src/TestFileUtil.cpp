@@ -4,6 +4,52 @@
 #include "system/FileUtil.hpp"
 #include "TestUtil.hpp"
 
+#ifdef __linux__
+#include <dirent.h>
+#include <stdexcept>
+
+static unsigned
+CountFileDescriptors()
+{
+  DIR *dir = opendir("/proc/self/fd");
+  if (dir == nullptr)
+    return 0;
+
+  unsigned count = 0;
+  while (readdir(dir) != nullptr)
+    ++count;
+  closedir(dir);
+  return count;
+}
+
+static void
+TestVisitorException()
+{
+  const auto before = CountFileDescriptors();
+  if (before == 0) {
+    skip(2, 0, "/proc/self/fd unavailable");
+    return;
+  }
+
+  struct ThrowingVisitor final : File::Visitor {
+    void Visit(Path, Path) override {
+      throw std::runtime_error{"test visitor failure"};
+    }
+  } visitor;
+
+  unsigned caught = 0;
+  for (unsigned i = 0; i < 5; ++i) {
+    try {
+      Directory::VisitFiles(Path{"test/data/file_visitor_test"}, visitor);
+    } catch (const std::runtime_error &) {
+      ++caught;
+    }
+  }
+  ok1(caught == 5);
+  ok1(CountFileDescriptors() == before);
+}
+#endif
+
 class TestingFileVisitor: public File::Visitor
 {
 private:
@@ -33,7 +79,11 @@ public:
 
 int main()
 {
-  plan_tests(17);
+  plan_tests(17
+#ifdef __linux__
+             + 2
+#endif
+             );
 
   ok1(Directory::Exists(Path("test/data/file_visitor_test")));
   ok1(File::Exists(Path("test/data/file_visitor_test/a.txt")));
@@ -54,6 +104,10 @@ int main()
   TestingFileVisitor fv4(true, true);
   Directory::VisitSpecificFiles(Path("test/data/file_visitor_test"),
                                 "*.txt", fv4, true);
+
+#ifdef __linux__
+  TestVisitorException();
+#endif
 
   return exit_status();
 }

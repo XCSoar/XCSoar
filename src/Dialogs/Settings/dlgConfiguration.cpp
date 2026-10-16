@@ -87,6 +87,9 @@
 
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
 #include "Panels/SystemdConfigPanel.hpp"
+#ifdef USE_POLL_EVENT
+#include "Panels/SystemToolsPanel.hpp"
+#endif
 #endif
 
 #include <algorithm>
@@ -186,6 +189,9 @@ static constexpr TabMenuPage setup_pages[] = {
   { N_("Screen"), CreateDisplayConfigPanel },
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
   { N_("System Services"), CreateSystemdConfigPanel },
+#ifdef USE_POLL_EVENT
+  { N_("System Tools"), CreateSystemToolsPanel, HasSystemTools },
+#endif
 #endif
   { NC_("Setting", "Time"), CreateTimeConfigPanel },
   { nullptr, nullptr }
