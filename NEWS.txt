@@ -188,6 +188,8 @@ Version 7.46 - not yet released
     Airspace transparency setting are gone
   - improve stable OpenGL airspace fills and padding while preserving
     overlapping borders #2479
+  - fix the bottom airspace warning banner covering its text when
+    the buttons wrap onto two rows
 * task
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the

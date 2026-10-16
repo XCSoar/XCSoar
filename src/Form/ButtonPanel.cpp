@@ -200,28 +200,19 @@ ButtonPanel::FitButtonRow(unsigned start, unsigned total_width) const noexcept
   return i;
 }
 
-PixelRect
-ButtonPanel::BottomLayout(PixelRect rc) noexcept
+void
+ButtonPanel::CollectBottomRows(StaticArray<BottomRow, MAX_BUTTONS> &rows,
+                               unsigned total_width) const noexcept
 {
-  if (buttons.empty())
-    return rc;
+  rows.clear();
 
   const unsigned n_buttons = buttons.size();
-  const unsigned total_width = rc.GetWidth();
+  if (n_buttons == 0)
+    return;
 
   /* naive button distribution algorithm: distribute as many buttons
      as possible into each row; weakness: the last row may have only
      one button */
-
-  struct Row {
-    unsigned start, end;
-
-    constexpr unsigned size() const {
-      return end - start;
-    }
-  };
-
-  StaticArray<Row, ButtonPanel::MAX_BUTTONS> rows;
 
   for (unsigned i = 0; i < n_buttons;) {
     unsigned end = FitButtonRow(i, total_width);
@@ -231,8 +222,6 @@ ButtonPanel::BottomLayout(PixelRect rc) noexcept
     row.start = i;
     row.end = i = end;
   }
-
-  assert(!rows.empty());
 
   /* optimise the naive result: try to move buttons down until we see
      no further chance for improvement */
@@ -247,7 +236,8 @@ ButtonPanel::BottomLayout(PixelRect rc) noexcept
 
       /* the upper row has many more buttons than the lower row */
       if (dest_row.size() + 2 <= src_row.size()) {
-        unsigned max_width = RangeMaxWidth(dest_row.start - 1, dest_row.end);
+        unsigned max_width = RangeMaxWidth(dest_row.start - 1,
+                                           dest_row.end);
         unsigned row_width = (dest_row.size() + 1) * max_width;
 
         /* yes, we can move one button down */
@@ -259,8 +249,25 @@ ButtonPanel::BottomLayout(PixelRect rc) noexcept
       }
     }
   } while (modified);
+}
 
-  /* now do the actual layout based on row metadata */
+unsigned
+ButtonPanel::BottomRowCount(unsigned total_width) const noexcept
+{
+  StaticArray<BottomRow, MAX_BUTTONS> rows;
+  CollectBottomRows(rows, total_width);
+  return rows.size();
+}
+
+PixelRect
+ButtonPanel::BottomLayout(PixelRect rc) noexcept
+{
+  if (buttons.empty())
+    return rc;
+
+  StaticArray<BottomRow, MAX_BUTTONS> rows;
+  CollectBottomRows(rows, rc.GetWidth());
+  assert(!rows.empty());
 
   for (int i = rows.size() - 1; i >= 0; --i) {
     const auto &row = rows[i];
