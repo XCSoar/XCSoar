@@ -529,6 +529,10 @@ bool
 ApplyExternalSettings(OperationEnvironment &env) noexcept
 {
   bool modified = false;
+  /* Pilot weight is the crew mass.  Ballast litres are derived from
+     the overload and that crew, so adopt the weight first when both
+     arrive in the same pass. */
+  modified |= PolarProcessTimer();
   modified |= BallastLitresProcessTimer();
   modified |= BallastProcessTimer();
   modified |= BugsProcessTimer();
@@ -536,7 +540,6 @@ ApplyExternalSettings(OperationEnvironment &env) noexcept
   modified |= MacCreadyProcessTimer();
   modified |= RadioProcess();
   modified |= TransponderProcess();
-  modified |= PolarProcessTimer();
   PolarSendProcessTimer(env);
   PlaneProfileProcessTimer();
   TargetProcessTimer(env);
