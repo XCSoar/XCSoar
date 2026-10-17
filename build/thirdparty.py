@@ -79,6 +79,7 @@ thirdparty_projects = {
     'simple-usbmodeswitch': simple_usbmodeswitch,
     'sdl2': sdl2,
     'angle': angle,
+    'zxing-cpp': zxing_cpp,
 }
 
 if toolchain.is_windows:
@@ -135,7 +136,8 @@ elif toolchain.is_darwin:
             angle,
         ]
     thirdparty_libs += [
-        sdl2
+        sdl2,
+        zxing_cpp,
     ]
     if geotiff_enabled:
         thirdparty_libs += [

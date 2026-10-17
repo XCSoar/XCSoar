@@ -17,9 +17,9 @@ else ifeq ($(TARGET_IS_OSX),y)
   USE_THIRDPARTY_LIBS = y
   USE_ANGLE ?= y
   ifeq ($(USE_ANGLE),y)
-    THIRDPARTY_PACKAGES ?= angle,sdl2
+    THIRDPARTY_PACKAGES ?= angle,sdl2,zxing-cpp
   else
-    THIRDPARTY_PACKAGES ?= sdl2
+    THIRDPARTY_PACKAGES ?= sdl2,zxing-cpp
   endif
 else
   USE_THIRDPARTY_LIBS = n

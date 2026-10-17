@@ -1,11 +1,11 @@
-# zxing-cpp reads and writes QR codes.  The scanner is Android-only;
-# the codec itself is portable, so every Linux target except the Kobo
-# cross toolchain builds it.  Kobo's musl CMake setup is not wired for
-# this library.
+# zxing-cpp reads and writes QR codes.  The scanner is Android-only.
+# Linux (except the Kobo cross toolchain) and Apple build the codec,
+# so those targets can draw a task QR code.  Kobo's musl CMake setup
+# is not wired for this library.
 
 ifeq ($(TARGET_IS_KOBO),y)
 ZXING ?= n
-else ifeq ($(TARGET_IS_LINUX),y)
+else ifeq ($(call bool_or,$(TARGET_IS_LINUX),$(TARGET_IS_DARWIN)),y)
 ZXING ?= y
 else
 ZXING ?= n
