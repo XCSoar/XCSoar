@@ -261,10 +261,91 @@ UpdateAllProfilesFromMoves(const MovedEntries &moved_entries)
       }
 }
 
+/**
+ * 7.46 briefly stored plane files in profiles/planes. Move those into
+ * planes/ even when the layout marker is already present.
+ */
+static void
+MovePlanesFromProfiles() noexcept
+{
+  const auto source_dir =
+    LocalPath(AllocatedPath::Build(Path("profiles"), Path("planes")));
+  const auto dest_dir = LocalPath(GetFileTypeDefaultDir(FileType::PLANE));
+
+  struct Visitor final : Directory::DirEntryVisitor {
+    std::vector<AllocatedPath> files;
+
+    void Visit(Path full, Path filename, bool is_dir) noexcept override {
+      if (is_dir || !filename.IsValidFilename())
+        return;
+      if (!FilenameMatchesFileType(filename.c_str(), FileType::PLANE))
+        return;
+
+      files.emplace_back(full);
+    }
+  };
+
+  std::vector<MigrationEntry> entries;
+
+  if (Directory::Exists(source_dir)) {
+    Directory::CreateRecursive(dest_dir);
+
+    Visitor visitor;
+    Directory::VisitDirectoriesAndFiles(source_dir, visitor, false);
+
+    for (auto &source : visitor.files) {
+      auto destination = AllocatedPath::Build(dest_dir, source.GetBase());
+      if (File::ExistsAny(destination))
+        continue;
+      if (!File::Rename(source, destination))
+        continue;
+
+      entries.emplace_back(std::move(source), std::move(destination),
+                           FileType::PLANE);
+    }
+  }
+
+  /* A previous startup can rename the plane and then fail to save
+     the profile.  The old path is gone, so the move above records
+     nothing.  Rewrite a profile that still names that old path. */
+  if (Directory::Exists(dest_dir)) {
+    Visitor already_there;
+    Directory::VisitDirectoriesAndFiles(dest_dir, already_there, false);
+
+    for (auto &destination : already_there.files) {
+      bool queued = false;
+      for (const auto &entry : entries)
+        if (entry.destination_path.GetBase() == destination.GetBase())
+          queued = true;
+      if (queued)
+        continue;
+
+      auto old_path = AllocatedPath::Build(source_dir, destination.GetBase());
+      if (File::ExistsAny(old_path))
+        continue;
+
+      entries.emplace_back(std::move(old_path), std::move(destination),
+                           FileType::PLANE);
+    }
+  }
+
+  if (entries.empty())
+    return;
+
+  MovedEntries moved;
+  moved.reserve(entries.size());
+  for (const auto &entry : entries)
+    moved.push_back(&entry);
+
+  UpdateAllProfilesFromMoves(moved);
+}
+
 void
 MigrateDataLayoutToSubdirs() noexcept
 {
   try {
+    MovePlanesFromProfiles();
+
     const auto root = GetPrimaryDataPath();
     const auto marker = LocalPath(MIGRATION_MARKER);
     if (File::Exists(marker))

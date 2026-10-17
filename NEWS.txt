@@ -322,11 +322,14 @@ Version 7.46 - not yet released
     protocol, so an S-series logger is not sent Colibri commands
     while it is still identifying
   - create the plane profile for a glider registration received from
-    a device in profiles/planes instead of at the data-folder root, and
-    never replace an existing profile with it #3269
+    a device in the planes folder instead of at the data-folder root,
+    and never replace an existing profile with it #3269
   - never send XCSoar's built-in stand-in polar to a device with polar
     sync "send"; it replaced the pilot's polar in an LXNAV S10 when the
     plane profile was broken #3269
+  - fix a polar received from an LXNAV vario being saved to the plane
+    profile with positive sink rates, which made the profile invalid
+    #3269
   - accept an NMEA checksum only as exactly two hexadecimal digits, as
     NMEA 0183 requires; a space, sign or "0x" before the digits, or a
     single digit, used to pass #2127
@@ -488,6 +491,15 @@ Version 7.46 - not yet released
     checklist, Credits, and Configuration
   - fix the Quick Guide link to the user manual, which opened a page
     that no longer exists
+  - fix Flight Setup leaving bugs, ballast, wing loading, QNH and
+    crew at the values from when the dialog opened while a device
+    changes them
+  - adopt the vario's pilot weight into Flight Setup crew when only
+    that weight changes and the polar coefficients stay the same
+  - keep the vario's ballast in step with Flight Setup when crew
+    weight changes.  The vario stores ballast as a fraction of the
+    reference mass, so a crew change was moving the water by the
+    same amount
   - fix Look → Pages cutting off the bottom fields in landscape;
     the page editor scrolls when it does not fit, and Add, Delete
     and the move buttons move into the button column. Up and Down

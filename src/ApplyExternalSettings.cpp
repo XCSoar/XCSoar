@@ -245,22 +245,49 @@ AnyDeviceReceivingPolar() noexcept
 }
 
 static bool
+AdoptPilotWeight(const ExternalSettings &settings) noexcept
+{
+  if (!(settings.polar_pilot_weight > 0))
+    return false;
+
+  using namespace CommonInterface;
+  GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
+  if (std::abs(polar.GetCrewMass() - settings.polar_pilot_weight) <= 0.1)
+    return false;
+
+  /* The vario's pilot weight is XCSoar's crew.  A change of that
+     weight alone does not touch the coefficients, so the polar
+     rewrite below never runs. */
+  polar.SetCrewMass(settings.polar_pilot_weight);
+  if (backend_components)
+    backend_components->SetTaskPolar(GetComputerSettings().polar);
+  return true;
+}
+
+static bool
 PolarProcessTimer() noexcept
 {
   static Validity last_coefficients;
+  static Validity last_pilot_weight;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
 
-  if (!settings.polar_coefficients_available.Modified(last_coefficients)) {
-    last_coefficients = settings.polar_coefficients_available;
-    return false;
-  }
-
+  const bool coefficients_changed =
+    settings.polar_coefficients_available.Modified(last_coefficients);
+  const bool pilot_changed =
+    settings.polar_pilot_weight_available.Modified(last_pilot_weight);
   last_coefficients = settings.polar_coefficients_available;
+  last_pilot_weight = settings.polar_pilot_weight_available;
+
+  if (!coefficients_changed && !pilot_changed)
+    return false;
 
   /* Metadata POLAR reads (SEND/OFF) still fill ExternalSettings for
      the driver cache path; only RECEIVE may adopt into XCSoar (#2397). */
   if (!AnyDeviceReceivingPolar())
     return false;
+
+  if (!coefficients_changed)
+    return AdoptPilotWeight(settings);
 
   PolarCoefficients pc(settings.polar_a, settings.polar_b, settings.polar_c);
   if (!pc.IsValid())
@@ -306,8 +333,7 @@ PolarProcessTimer() noexcept
       ps.points[1].v = 130.0 / 3.6;
       ps.points[2].v = 180.0 / 3.6;
     }
-    for (auto &pt : ps.points)
-      pt.w = pc.a * pt.v * pt.v + pc.b * pt.v + pc.c;
+    ps.SetSinkRates(pc);
 
     if (settings.polar_reference_mass_available)
       ps.reference_mass = settings.polar_reference_mass;
@@ -503,6 +529,10 @@ bool
 ApplyExternalSettings(OperationEnvironment &env) noexcept
 {
   bool modified = false;
+  /* Pilot weight is the crew mass.  Ballast litres are derived from
+     the overload and that crew, so adopt the weight first when both
+     arrive in the same pass. */
+  modified |= PolarProcessTimer();
   modified |= BallastLitresProcessTimer();
   modified |= BallastProcessTimer();
   modified |= BugsProcessTimer();
@@ -510,7 +540,6 @@ ApplyExternalSettings(OperationEnvironment &env) noexcept
   modified |= MacCreadyProcessTimer();
   modified |= RadioProcess();
   modified |= TransponderProcess();
-  modified |= PolarProcessTimer();
   PolarSendProcessTimer(env);
   PlaneProfileProcessTimer();
   TargetProcessTimer(env);
