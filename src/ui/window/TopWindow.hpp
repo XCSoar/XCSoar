@@ -782,8 +782,6 @@ protected:
    */
   void OnSurface() noexcept;
 
-  virtual void OnTaskReceived() noexcept {}
-
   /**
    * @see Event::PAUSE
    */

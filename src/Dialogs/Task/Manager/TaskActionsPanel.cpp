@@ -15,6 +15,10 @@
 #include "Interface.hpp"
 #include "Device/Declaration.hpp"
 #include "Task/ValidationErrorStrings.hpp"
+#include "Task/QRScanner.hpp"
+#ifdef HAVE_ZXING
+#include "Dialogs/Task/TaskQRCodeDialog.hpp"
+#endif
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
@@ -132,6 +136,29 @@ TaskActionsPanel::OnDownloadClicked() noexcept
 }
 #endif
 
+#ifdef HAVE_ZXING
+inline void
+TaskActionsPanel::OnShowQRCodeClicked() noexcept
+{
+  ShowTaskQRCode(*active_task);
+}
+#endif
+
+#ifdef ANDROID
+/**
+ * Open the camera, leaving this dialog open behind it.  The scan runs
+ * in a separate Activity and reports back asynchronously, so closing
+ * here would throw away the pilot's task if they then cancelled the
+ * scan.  A task that does arrive is handed to this still-open dialog
+ * by MainWindow::OnTaskReceived() via TaskManagerReceiveTask().
+ */
+inline void
+TaskActionsPanel::OnScanQRCodeClicked() noexcept
+{
+  ScanTaskQRCode();
+}
+#endif
+
 void
 TaskActionsPanel::ReClick() noexcept
 {
@@ -150,6 +177,15 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("Declare"), [this](){ OnDeclareClicked(); });
   AddButton(_("Browse"), [this](){ OnBrowseClicked(); });
   AddButton(_("Save"), [this](){ SaveTask(); });
+
+#ifdef HAVE_ZXING
+  AddButton(_("Show QR Code"), [this](){ OnShowQRCodeClicked(); });
+#endif
+
+#ifdef ANDROID
+  AddButton(_("Scan QR Code"), [this](){ OnScanQRCodeClicked(); });
+  SetRowEnabled(SCAN_QR_CODE, HaveQRScanner());
+#endif
 
 #ifdef HAVE_HTTP
   AddSpacer();

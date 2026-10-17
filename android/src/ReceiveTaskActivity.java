@@ -36,18 +36,24 @@ public class ReceiveTaskActivity extends Activity {
 
     Log.d(TAG, "Received intent data='" + data + "'");
 
-    if (data.startsWith("xctsk:")) {
-      final String msg = NativeView.onReceiveXCTrackTask(data.substring(6));
-      if (msg == null) {
-        /* the data was handled successfully, and the main "XCSoar"
-           activity shows the details - switch to it */
-        Intent myIntent = new Intent(this, XCSoar.class);
-        startActivity(myIntent);
-        return null;
-      }
-
-      return msg;
-    } else
+    /* Android lower-cases the scheme of an intent URI.  The task
+       text after the colon keeps its case. */
+    final String msg;
+    if (data.regionMatches(true, 0, "xctsk:", 0, 6))
+      msg = NativeView.onReceiveXCTrackTask(data.substring(6));
+    else if (data.regionMatches(true, 0, "xcs:", 0, 4) ||
+             data.regionMatches(true, 0, "cup:", 0, 4))
+      msg = NativeView.onReceiveTaskQRCode(data);
+    else
       return "Unknown action";
+
+    if (msg == null) {
+      /* the data was handled successfully, and the main "XCSoar"
+         activity shows the details - switch to it */
+      startActivity(new Intent(this, XCSoar.class));
+      return null;
+    }
+
+    return msg;
   }
 }

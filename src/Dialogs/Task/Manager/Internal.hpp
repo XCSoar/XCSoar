@@ -78,6 +78,12 @@ public:
   void SwitchToPropertiesPanel();
 
   /**
+   * Replace the task being edited with one that arrived from outside,
+   * e.g. a scanned QR code, and show it.
+   */
+  void ReceiveTask(std::unique_ptr<OrderedTask> task) noexcept;
+
+  /**
    * Validates task and prompts if change or error
    * Commits task if no error
    * @return True if task manager should close
