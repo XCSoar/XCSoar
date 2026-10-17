@@ -5119,6 +5119,9 @@ msgstr "Deklarér"
 msgid "Browse"
 msgstr "Bliv venlig at søge"
 
+msgid "Scan QR Code"
+msgstr "Scan QR-kode"
+
 msgid "Download Declaration"
 msgstr "Download deklaration"
 
@@ -11284,3 +11287,15 @@ msgstr "Ikke tilgængelig under flyvning."
 
 msgid "User"
 msgstr "Bruger"
+
+msgid "Show QR Code"
+msgstr "Vis QR-kode"
+
+msgid "QR Code"
+msgstr "QR-kode"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Denne opgave kan ikke vises som QR-kode"
+
+msgid "XCSoar task"
+msgstr "XCSoar-opgave"

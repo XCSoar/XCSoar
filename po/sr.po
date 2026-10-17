@@ -5107,6 +5107,9 @@ msgstr "Objaviti"
 msgid "Browse"
 msgstr "Pretraživanje"
 
+msgid "Scan QR Code"
+msgstr "Skeniraj QR kod"
+
 msgid "Download Declaration"
 msgstr "Slanje deklaracije"
 
@@ -11253,3 +11256,15 @@ msgstr "Није доступно током лета."
 
 msgid "User"
 msgstr "Корисник"
+
+msgid "Show QR Code"
+msgstr "Prikaži QR kod"
+
+msgid "QR Code"
+msgstr "QR kod"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Ovaj zadatak nije moguće prikazati kao QR kod"
+
+msgid "XCSoar task"
+msgstr "Zadatak XCSoar"

@@ -5154,6 +5154,9 @@ msgstr "Declara"
 msgid "Browse"
 msgstr "Navigare"
 
+msgid "Scan QR Code"
+msgstr "Scanează codul QR"
+
 msgid "Download Declaration"
 msgstr "Descarcă declarația"
 
@@ -11310,3 +11313,15 @@ msgstr "Indisponibil în timpul zborului."
 
 msgid "User"
 msgstr "Utilizator"
+
+msgid "Show QR Code"
+msgstr "Afișează codul QR"
+
+msgid "QR Code"
+msgstr "Cod QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Această probă nu poate fi afișată ca un cod QR"
+
+msgid "XCSoar task"
+msgstr "Proba XCSoar"

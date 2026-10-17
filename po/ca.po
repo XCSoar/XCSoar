@@ -5161,6 +5161,9 @@ msgstr "Declara"
 msgid "Browse"
 msgstr "Explora"
 
+msgid "Scan QR Code"
+msgstr "Escaneja el codi QR"
+
 msgid "Download Declaration"
 msgstr "Descarrega la declaració"
 
@@ -11351,3 +11354,15 @@ msgstr "No disponible durant el vol."
 
 msgid "User"
 msgstr "Usuari"
+
+msgid "Show QR Code"
+msgstr "Mostra el codi QR"
+
+msgid "QR Code"
+msgstr "Codi QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Aquesta tasca no es pot mostrar com a codi QR"
+
+msgid "XCSoar task"
+msgstr "Tasca XCSoar"

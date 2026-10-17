@@ -4952,6 +4952,9 @@ msgstr "申報"
 msgid "Browse"
 msgstr "流覽"
 
+msgid "Scan QR Code"
+msgstr "掃描 QR 碼"
+
 msgid "Download Declaration"
 msgstr "下載申報"
 
@@ -10858,3 +10861,15 @@ msgstr "飛行期間無法使用。"
 
 msgid "User"
 msgstr "使用者"
+
+msgid "Show QR Code"
+msgstr "顯示 QR 碼"
+
+msgid "QR Code"
+msgstr "QR 碼"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "此任務無法顯示為 QR 碼"
+
+msgid "XCSoar task"
+msgstr "XCSoar任務"

@@ -5143,6 +5143,9 @@ msgstr "Заявити"
 msgid "Browse"
 msgstr "Огляд"
 
+msgid "Scan QR Code"
+msgstr "Сканувати QR-код"
+
 msgid "Download Declaration"
 msgstr "Завантажити декларацію"
 
@@ -11344,3 +11347,15 @@ msgstr "Недоступно під час польоту."
 
 msgid "User"
 msgstr "Користувач"
+
+msgid "Show QR Code"
+msgstr "Показати QR-код"
+
+msgid "QR Code"
+msgstr "QR-код"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Це завдання не можна показати як QR-код"
+
+msgid "XCSoar task"
+msgstr "Завдання XCSoar"

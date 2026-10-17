@@ -4994,6 +4994,9 @@ msgstr "పేవెన్న"
 msgid "Browse"
 msgstr "అర్చ్‌బుక్"
 
+msgid "Scan QR Code"
+msgstr "QR కోడ్ స్కాన్ చేయండి"
+
 msgid "Download Declaration"
 msgstr "ప్రకటనను డౌన్‌లోడ్ చేయండి"
 
@@ -11093,3 +11096,15 @@ msgstr "విమానంలో ఉన్నప్పుడు అందుబ�
 
 msgid "User"
 msgstr "వినియోగదారు"
+
+msgid "Show QR Code"
+msgstr "QR కోడ్‌ను చూపించండి"
+
+msgid "QR Code"
+msgstr "QR కోడ్"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "ఈ టాస్క్‌ను QR కోడ్‌గా చూపించలేము"
+
+msgid "XCSoar task"
+msgstr "XCSoar టాస్క్"

@@ -5093,6 +5093,9 @@ msgstr "Khai báo"
 msgid "Browse"
 msgstr "duyệt"
 
+msgid "Scan QR Code"
+msgstr "Quét mã QR"
+
 msgid "Download Declaration"
 msgstr "Tải xuống tờ khai"
 
@@ -11218,3 +11221,15 @@ msgstr "Không khả dụng khi đang bay."
 
 msgid "User"
 msgstr "Người dùng"
+
+msgid "Show QR Code"
+msgstr "Hiện mã QR"
+
+msgid "QR Code"
+msgstr "Mã QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Không thể hiện nhiệm vụ này dưới dạng mã QR"
+
+msgid "XCSoar task"
+msgstr "Nhiệm vụ XCSoar"

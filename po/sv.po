@@ -5068,6 +5068,9 @@ msgstr "Deklarera"
 msgid "Browse"
 msgstr "Bläddra"
 
+msgid "Scan QR Code"
+msgstr "Skanna QR-kod"
+
 msgid "Download Declaration"
 msgstr "Ladda ner deklaration"
 
@@ -11210,3 +11213,15 @@ msgstr "Inte tillgängligt under flygning."
 
 msgid "User"
 msgstr "Användare"
+
+msgid "Show QR Code"
+msgstr "Visa QR-kod"
+
+msgid "QR Code"
+msgstr "QR-kod"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Den här uppgiften kan inte visas som en QR-kod"
+
+msgid "XCSoar task"
+msgstr "XCSoar-uppgift"

@@ -5184,6 +5184,9 @@ msgstr "Δήλωση"
 msgid "Browse"
 msgstr "Αναζήτηση"
 
+msgid "Scan QR Code"
+msgstr "Σάρωση κωδικού QR"
+
 msgid "Download Declaration"
 msgstr "Λήψη δήλωσης"
 
@@ -11390,3 +11393,15 @@ msgstr "Δεν είναι διαθέσιμο κατά την πτήση."
 
 msgid "User"
 msgstr "Χρήστης"
+
+msgid "Show QR Code"
+msgstr "Εμφάνιση κωδικού QR"
+
+msgid "QR Code"
+msgstr "Κωδικός QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Αυτή η δοκιμασία δεν μπορεί να εμφανιστεί ως κωδικός QR"
+
+msgid "XCSoar task"
+msgstr "Δοκιμασία XCSoar"

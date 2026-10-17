@@ -10040,3 +10040,18 @@ msgstr ""
 
 msgid "User"
 msgstr ""
+
+msgid "Scan QR Code"
+msgstr ""
+
+msgid "Show QR Code"
+msgstr ""
+
+msgid "QR Code"
+msgstr ""
+
+msgid "This task cannot be shown as a QR code"
+msgstr ""
+
+msgid "XCSoar task"
+msgstr ""
