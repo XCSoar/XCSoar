@@ -94,7 +94,8 @@ install_debian() {
     libio-captureoutput-perl \
     build-essential \
     xvfb \
-    xauth
+    xauth \
+    curl
   echo
 }
 
