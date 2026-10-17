@@ -15,6 +15,9 @@ class TaskManagerDialog final : public TabWidget {
   enum Tabs {
     TurnpointTab,
     PropertiesTab,
+#ifdef HAVE_HTTP
+    WeGlideTab,
+#endif
     RulesTab,
     CloseTab,
   };

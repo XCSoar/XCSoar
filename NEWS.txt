@@ -210,6 +210,9 @@ Version 7.46 - not yet released
     code and start XCSoar; a task that does not fit is shown as a
     SeeYou CUP code when the zones can be described that way, or as
     an XCTrack code when every zone is a cylinder
+  - move Download Declaration, My Tasks, Declared Tasks,
+    Competitions Today and Recent Scores onto a WeGlide tab in the
+    task manager
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
@@ -615,6 +618,7 @@ Version 7.46 - not yet released
     waypoints, as it does at startup, and again from each terrain
     file loaded later #900
 * documentation
+  - describe the WeGlide tab in the task manager
   - describe the red 30 s climb on the vario gauge and on TC 30s
     when it is less than half the risk MacCready
   - describe the time under TL Avg and the average climb rate under

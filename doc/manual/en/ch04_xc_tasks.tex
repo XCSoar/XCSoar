@@ -271,7 +271,8 @@ country tasks.
 The primary page is a calculator. It shows various calculations
 related to the active task, as described in detail below.  In addition, there
 are buttons for invoking dialogues \bmenuw{Turn Points}, \bmenuw{Manage},
-and \bmenuw{Rules}, as well as a button to \bmenuw{Close} the task manager.
+\bmenuw{WeGlide} and \bmenuw{Rules}, as well as a button to \bmenuw{Close}
+the task manager.
 
 \subsection*{Task calculator dialog}\label{sec:task-calc-dial}
 The task calculator dialogue allows the pilot to see the effect of
@@ -365,6 +366,22 @@ This page allows for invoking all operations needed to create new or manage
   The phone camera can open any of these codes and start XCSoar when
   it is not already running.
 \end{itemize}
+
+\subsection*{WeGlide}
+This page loads tasks from WeGlide.  The buttons stay disabled until
+\menulabelr{\bmenuw{WeGlide}} WeGlide is enabled in configuration.  Download
+Declaration and My Tasks also need the WeGlide pilot id.
+
+\begin{itemize}
+\item [\bmenuw{Download Declaration}] Downloads the task declared on
+  WeGlide and loads it into the task manager.
+\item [\bmenuw{My Tasks}] Lists the tasks of the configured pilot.
+\item [\bmenuw{Declared Tasks}] Lists tasks declared on WeGlide.
+\item [\bmenuw{Competitions Today}] Lists today's competition tasks.
+\item [\bmenuw{Recent Scores}] Lists tasks from recent scores.
+\end{itemize}
+
+Choosing a task from one of those lists loads it into the task manager.
 
 \subsection*{Rules}
 The values in the menu depend on the task type selected. Clicking any existing
