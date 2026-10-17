@@ -6,6 +6,7 @@
 #include "Math/Point2D.hpp"
 
 #include <stdexcept>
+#include <string>
 
 using PointE5 = Point2D<int_fast32_t>;
 
@@ -14,6 +15,22 @@ static Angle
 AngleFromE5(int_fast32_t i) noexcept
 {
   return Angle::Degrees(i * 1e-5);
+}
+
+void
+AppendPolylineInt(std::string &dest, int_fast32_t value)
+{
+  /* Zigzag the sign into the low bit, then emit 5-bit chunks. */
+  auto encoded = static_cast<uint_fast32_t>(value) << 1;
+  if (value < 0)
+    encoded = ~encoded;
+
+  while (encoded >= 0x20) {
+    dest.push_back(static_cast<char>((encoded & 0x1f) | 0x20) + 63);
+    encoded >>= 5;
+  }
+
+  dest.push_back(static_cast<char>(encoded) + 63);
 }
 
 int_fast32_t

@@ -24,7 +24,19 @@ try {
     GP(43.252, -126.453),
   };
 
-  plan_tests(1 + decoded.size());
+  plan_tests(1 + decoded.size() + 5);
+
+  std::string encoded_ints;
+  AppendPolylineInt(encoded_ints, 0);
+  AppendPolylineInt(encoded_ints, -1);
+  AppendPolylineInt(encoded_ints, 123456);
+  AppendPolylineInt(encoded_ints, -12020000);
+  std::string_view ints = encoded_ints;
+  ok1(ReadPolylineInt(ints) == 0);
+  ok1(ReadPolylineInt(ints) == -1);
+  ok1(ReadPolylineInt(ints) == 123456);
+  ok1(ReadPolylineInt(ints) == -12020000);
+  ok1(ints.empty());
 
   const auto v = DecodePolyline(encoded);
   ok1(v.size() == decoded.size());

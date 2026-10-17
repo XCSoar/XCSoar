@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -11,6 +12,13 @@ struct GeoPoint;
 
 int_fast32_t
 ReadPolylineInt(std::string_view &src);
+
+/**
+ * Inverse of ReadPolylineInt().  Appends one zigzag-encoded integer
+ * to @p dest.
+ */
+void
+AppendPolylineInt(std::string &dest, int_fast32_t value);
 
 GeoPoint
 ReadPolylineGeoPoint(std::string_view &src);
