@@ -6,6 +6,7 @@
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
 #include "TaskMiscPanel.hpp"
+#include "WeGlidePanel.hpp"
 #include "TaskClosePanel.hpp"
 #include "../TaskDialogs.hpp"
 #include "UIGlobals.hpp"
@@ -147,6 +148,10 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
          _("Turn Points"), TurnPointIcon);
   AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),
          _("Manage"), BrowseIcon);
+#ifdef HAVE_HTTP
+  AddTab(std::make_unique<WeGlidePanel>(*this, task, &modified),
+         _("WeGlide"));
+#endif
   AddTab(std::make_unique<VScrollWidget>(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
                                          GetLook()),
          _("Rules"), PropertiesIcon);

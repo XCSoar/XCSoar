@@ -21,15 +21,6 @@ class TaskActionsPanel : public RowFormWidget {
 #ifdef ANDROID
     SCAN_QR_CODE,
 #endif
-#ifdef HAVE_HTTP
-    WEGLIDE_SPACER,
-    WEGLIDE_STATUS,
-    DOWNLOAD_DECLARATION,
-    MY_TASKS,
-    DECLARED_TASKS,
-    COMPETITIONS_TODAY,
-    RECENT_SCORES,
-#endif
   };
 
   TaskManagerDialog &dialog;
@@ -49,7 +40,6 @@ private:
   void OnBrowseClicked();
   void OnNewTaskClicked();
   void OnDeclareClicked();
-  void OnDownloadClicked() noexcept;
 #ifdef HAVE_ZXING
   void OnShowQRCodeClicked() noexcept;
 #endif
