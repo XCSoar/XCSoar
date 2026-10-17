@@ -1,6 +1,6 @@
 [submodule "android/ioio"]
 	path = android/ioio
-	url = https://github.com/XCSoar/ioio.git
+	url = https://github.com/ytai/ioio.git
 [submodule "lib/glm"]
 	path = lib/glm
 	url = https://github.com/g-truc/glm.git

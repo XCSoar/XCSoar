@@ -155,8 +155,7 @@ the Android package.
 Location in the tree: `android/ioio/` (git submodule); the subset of files that
 is actually compiled is listed in `build/android.mk`.
 
-**Upstream:** [github.com/ytai/ioio](https://github.com/ytai/ioio), by way of the
-fork at [github.com/XCSoar/ioio](https://github.com/XCSoar/ioio)
+**Upstream:** [github.com/ytai/ioio](https://github.com/ytai/ioio)
 
 **License:** BSD 2-Clause, as stated in the file headers.  Note that
 `android/ioio/LICENSE` puts the repository as a whole under the Apache License
