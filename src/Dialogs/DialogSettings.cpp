@@ -7,6 +7,6 @@ void
 DialogSettings::SetDefaults() noexcept
 {
   text_input_style = TextInputStyle::Default;
-  tab_style = TabStyle::Text;
+  tab_style = TabStyle::Icon;
   expert = false;
 }

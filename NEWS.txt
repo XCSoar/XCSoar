@@ -527,6 +527,8 @@ Version 7.46 - not yet released
     InfoBoxes on a landscape screen; that column is narrowed so
     the text fits, as on the other side layouts #3327
 * ui
+  - show icons on tabbed dialogs by default. Tab dialog style under
+    Look / Layout still switches them back to text
   - rename Reach polar Task to Task MC, matching Safety MC
   - rename the waypoint arrival rows to Alt. diff. Safety MC and
     Alt. diff. Task MC
@@ -618,6 +620,7 @@ Version 7.46 - not yet released
     waypoints, as it does at startup, and again from each terrain
     file loaded later #900
 * documentation
+  - document that tabbed dialogues start with icons
   - describe the WeGlide tab in the task manager
   - describe the red 30 s climb on the vario gauge and on TC 30s
     when it is less than half the risk MacCready
