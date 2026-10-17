@@ -14,7 +14,7 @@ def __write_cmake_compiler(f: TextIO, language: str, compiler: str) -> None:
         compiler = s[1]
     print(f'set(CMAKE_{language}_COMPILER {compiler})', file=f)
 
-def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bool, cmake_system_name: str) -> None:
+def __write_cmake_toolchain_file(f: TextIO, toolchain: Toolchain, no_isystem: bool, cmake_system_name: str, extra_cxxflags: str = "") -> None:
     cppflags = toolchain.cppflags
     if no_isystem:
         cppflags = re.sub(r'\s*-isystem\s+\S+\s*', ' ', cppflags)
@@ -31,7 +31,7 @@ set(CMAKE_CXX_COMPILER_TARGET {toolchain.host_triplet})
 set(CMAKE_OBJC_COMPILER_TARGET {toolchain.host_triplet})
 
 set(CMAKE_C_FLAGS_INIT "{toolchain.cflags} {cppflags}")
-set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags}")
+set(CMAKE_CXX_FLAGS_INIT "{toolchain.cxxflags} {cppflags} {extra_cxxflags}")
 set(CMAKE_OBJC_FLAGS_INIT "{toolchain.cflags} {cppflags}")
 """)
     __write_cmake_compiler(f, 'C', toolchain.cc)
@@ -83,7 +83,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 """)
 
-def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[], env: Optional[Mapping[str, str]]=None) -> None:
+def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[], env: Optional[Mapping[str, str]]=None, extra_cxxflags: str = "") -> None:
     cross_args: list[str] = []
 
     if toolchain.is_windows:
@@ -127,7 +127,7 @@ def configure(toolchain: AnyToolchain, src: str, build: str, args: list[str]=[],
 
         cmake_toolchain_file = os.path.join(build, 'cmake_toolchain_file')
         with open(cmake_toolchain_file, 'w') as f:
-            __write_cmake_toolchain_file(f, toolchain, no_isystem, cmake_system_name)
+            __write_cmake_toolchain_file(f, toolchain, no_isystem, cmake_system_name, extra_cxxflags)
 
         configure.append('-DCMAKE_TOOLCHAIN_FILE=' + cmake_toolchain_file)
 
@@ -146,6 +146,7 @@ class CmakeProject(Project):
                  android_configure_args: Optional[list[str]]=None,
                  darwin_configure_args: Optional[list[str]]=None,
                  env: Optional[Mapping[str, str]]=None,
+                 extra_cxxflags: str = "",
                  **kwargs):
         Project.__init__(self, url, md5, installed, **kwargs)
         self.configure_args = configure_args or []
@@ -153,6 +154,7 @@ class CmakeProject(Project):
         self.android_configure_args = android_configure_args or []
         self.darwin_configure_args = darwin_configure_args or []
         self.env = env
+        self.extra_cxxflags = extra_cxxflags
 
     def configure(self, toolchain: AnyToolchain) -> str:
         src = self.unpack(toolchain)
@@ -164,7 +166,8 @@ class CmakeProject(Project):
             configure_args = configure_args + self.android_configure_args
         if toolchain.is_darwin:
             configure_args = configure_args + self.darwin_configure_args
-        configure(toolchain, src, build, configure_args, self.env)
+        configure(toolchain, src, build, configure_args, self.env,
+                  self.extra_cxxflags)
         return build
 
     def _build(self, toolchain: AnyToolchain, target_toolchain: Optional[AnyToolchain]=None) -> None:

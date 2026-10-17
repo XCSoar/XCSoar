@@ -8,6 +8,21 @@ require their copyright and permission notices to be reproduced.
 Components are listed with the directory they occupy, so that the notice can be
 checked against the tree.
 
+## zxing-cpp
+
+XCSoar uses **zxing-cpp** to read and write QR codes.  It is built
+with the QR reader and zxing's own QR writer; the other barcode
+formats, and the Zint encoder, are disabled.
+Not part of the source tree: it is fetched at build time and shipped with the
+binaries that use it.
+
+**Upstream:** [github.com/zxing-cpp/zxing-cpp](https://github.com/zxing-cpp/zxing-cpp), version 3.1.1
+
+**License:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+The licence text is in Appendix C.
+
+Copyright (c) zxing-cpp contributors.
+
 
 ## ANGLE (Almost Native Graphics Layer Engine)
 
