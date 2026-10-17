@@ -5171,6 +5171,9 @@ msgstr "Déclarer"
 msgid "Browse"
 msgstr "Circuits enregistrés"
 
+msgid "Scan QR Code"
+msgstr "Scanner le code QR"
+
 msgid "Download Declaration"
 msgstr "Télécharger la déclaration"
 
@@ -11422,3 +11425,15 @@ msgstr "Indisponible en vol."
 
 msgid "User"
 msgstr "Utilisateur"
+
+msgid "Show QR Code"
+msgstr "Afficher le code QR"
+
+msgid "QR Code"
+msgstr "Code QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Ce circuit ne peut pas être affiché comme un code QR"
+
+msgid "XCSoar task"
+msgstr "Circuit XCSoar"

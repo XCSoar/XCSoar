@@ -5043,6 +5043,9 @@ msgstr "타스크 선언"
 msgid "Browse"
 msgstr "타스크 찾아보기"
 
+msgid "Scan QR Code"
+msgstr "QR 코드 스캔"
+
 msgid "Download Declaration"
 msgstr "선언서 다운로드"
 
@@ -11027,3 +11030,15 @@ msgstr "비행 중에는 사용할 수 없습니다."
 
 msgid "User"
 msgstr "사용자"
+
+msgid "Show QR Code"
+msgstr "QR 코드 표시"
+
+msgid "QR Code"
+msgstr "QR 코드"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "이 타스크는 QR 코드로 표시할 수 없습니다"
+
+msgid "XCSoar task"
+msgstr "XCSoar 타스크"

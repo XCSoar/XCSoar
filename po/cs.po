@@ -5112,6 +5112,9 @@ msgstr "Deklaruj"
 msgid "Browse"
 msgstr "Procházej"
 
+msgid "Scan QR Code"
+msgstr "Skenovat QR kód"
+
 msgid "Download Declaration"
 msgstr "Stáhnout deklaraci"
 
@@ -11226,3 +11229,15 @@ msgstr "Není dostupné za letu."
 
 msgid "User"
 msgstr "Uživatel"
+
+msgid "Show QR Code"
+msgstr "Zobrazit QR kód"
+
+msgid "QR Code"
+msgstr "QR kód"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Tuto úlohu nelze zobrazit jako QR kód"
+
+msgid "XCSoar task"
+msgstr "Úloha XCSoar"

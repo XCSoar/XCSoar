@@ -5111,6 +5111,9 @@ msgstr "Tanımla"
 msgid "Browse"
 msgstr "Gez"
 
+msgid "Scan QR Code"
+msgstr "QR kodu tara"
+
 msgid "Download Declaration"
 msgstr "Deklarasyonu indir"
 
@@ -11272,3 +11275,15 @@ msgstr "Uçuş sırasında kullanılamaz."
 
 msgid "User"
 msgstr "Kullanıcı"
+
+msgid "Show QR Code"
+msgstr "QR kodunu göster"
+
+msgid "QR Code"
+msgstr "QR kodu"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Bu görev QR kodu olarak gösterilemez"
+
+msgid "XCSoar task"
+msgstr "XCSoar görev"

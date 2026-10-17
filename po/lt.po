@@ -5132,6 +5132,9 @@ msgstr "Apibrėžti"
 msgid "Browse"
 msgstr "Paieška"
 
+msgid "Scan QR Code"
+msgstr "Skenuoti QR kodą"
+
 msgid "Download Declaration"
 msgstr "Atsisiųsti deklaraciją"
 
@@ -11296,3 +11299,15 @@ msgstr "Skrydžio metu nepasiekiama."
 
 msgid "User"
 msgstr "Naudotojas"
+
+msgid "Show QR Code"
+msgstr "Rodyti QR kodą"
+
+msgid "QR Code"
+msgstr "QR kodas"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Šios užduoties negalima parodyti kaip QR kodo"
+
+msgid "XCSoar task"
+msgstr "XCSoar užduotis"

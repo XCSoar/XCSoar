@@ -5150,6 +5150,9 @@ msgstr "הצהר"
 msgid "Browse"
 msgstr "עיין"
 
+msgid "Scan QR Code"
+msgstr "סרוק קוד QR"
+
 msgid "Download Declaration"
 msgstr "הורד הצהרה"
 
@@ -11169,3 +11172,15 @@ msgstr "לא זמין בזמן טיסה."
 
 msgid "User"
 msgstr "משתמש"
+
+msgid "Show QR Code"
+msgstr "הצג קוד QR"
+
+msgid "QR Code"
+msgstr "קוד QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "לא ניתן להציג משימה זו כקוד QR"
+
+msgid "XCSoar task"
+msgstr "משימת XCSoar"

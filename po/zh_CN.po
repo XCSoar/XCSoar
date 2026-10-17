@@ -4956,6 +4956,9 @@ msgstr "申报"
 msgid "Browse"
 msgstr "浏览"
 
+msgid "Scan QR Code"
+msgstr "扫描二维码"
+
 msgid "Download Declaration"
 msgstr "下载申报"
 
@@ -10850,3 +10853,15 @@ msgstr "飞行期间不可用。"
 
 msgid "User"
 msgstr "用户"
+
+msgid "Show QR Code"
+msgstr "显示二维码"
+
+msgid "QR Code"
+msgstr "二维码"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "此任务无法显示为二维码"
+
+msgid "XCSoar task"
+msgstr "XCSoar任务"

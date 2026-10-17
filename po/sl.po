@@ -5115,6 +5115,9 @@ msgstr "Obvesti"
 msgid "Browse"
 msgstr "Pretražuj"
 
+msgid "Scan QR Code"
+msgstr "Skeniraj kodo QR"
+
 msgid "Download Declaration"
 msgstr "Prenesi deklaracijo"
 
@@ -11246,3 +11249,15 @@ msgstr "Ni na voljo med letom."
 
 msgid "User"
 msgstr "Uporabnik"
+
+msgid "Show QR Code"
+msgstr "Prikaži kodo QR"
+
+msgid "QR Code"
+msgstr "Koda QR"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Te naloge ni mogoče prikazati kot kodo QR"
+
+msgid "XCSoar task"
+msgstr "Naloga XCSoar"

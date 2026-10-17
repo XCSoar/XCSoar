@@ -5117,6 +5117,9 @@ msgstr "Deklarál"
 msgid "Browse"
 msgstr "Tallóz"
 
+msgid "Scan QR Code"
+msgstr "QR-kód beolvasása"
+
 msgid "Download Declaration"
 msgstr "Deklaráció letöltése"
 
@@ -11304,3 +11307,15 @@ msgstr "Repülés közben nem érhető el."
 
 msgid "User"
 msgstr "Felhasználó"
+
+msgid "Show QR Code"
+msgstr "QR-kód megjelenítése"
+
+msgid "QR Code"
+msgstr "QR-kód"
+
+msgid "This task cannot be shown as a QR code"
+msgstr "Ez a feladat nem jeleníthető meg QR-kódként"
+
+msgid "XCSoar task"
+msgstr "XCSoar feladat"
