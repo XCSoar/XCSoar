@@ -9,7 +9,9 @@
 #include "Internal.hpp"
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/InternalLink.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Init.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
@@ -20,16 +22,17 @@
 #include "Components.hpp"
 #include "DataComponents.hpp"
 
-class WeGlideActionsPanel final : public RowFormWidget {
-  enum Controls {
-    WEGLIDE_STATUS,
-    DOWNLOAD_DECLARATION,
-    MY_TASKS,
-    DECLARED_TASKS,
-    COMPETITIONS_TODAY,
-    RECENT_SCORES,
-  };
+static bool
+WeGlideReady()
+{
+  if (CommonInterface::GetComputerSettings().weglide.IsConfigured())
+    return true;
 
+  ShowConfigPanel(_("WeGlide"), CreateWeGlideConfigPanel);
+  return CommonInterface::GetComputerSettings().weglide.IsConfigured();
+}
+
+class WeGlideActionsPanel final : public RowFormWidget {
   TaskManagerDialog &dialog;
   WeGlidePanel &parent;
 
@@ -86,40 +89,30 @@ void
 WeGlideActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
-  const auto &settings = CommonInterface::GetComputerSettings();
-
-  AddReadOnly(_("WeGlide"),
-              nullptr,
-              settings.weglide.enabled
-              ? _("On") : _("Off"));
-
-  const bool weglide_enabled = settings.weglide.enabled;
-  const bool pilot_configured = weglide_enabled &&
-    settings.weglide.pilot_id != 0;
-
-  AddButton(_("Download Declaration"),
-            [this](){ OnDownloadClicked(); });
-  SetRowEnabled(DOWNLOAD_DECLARATION, pilot_configured);
+  AddButton(_("Download Declaration"), [this](){
+    if (WeGlideReady())
+      OnDownloadClicked();
+  });
 
   AddButton(_("My Tasks"), [this](){
-    parent.SetCurrent(parent.PAGE_USER);
+    if (WeGlideReady())
+      parent.SetCurrent(parent.PAGE_USER);
   });
-  SetRowEnabled(MY_TASKS, pilot_configured);
 
   AddButton(_("Declared Tasks"), [this](){
-    parent.SetCurrent(parent.PAGE_PUBLIC_DECLARED);
+    if (WeGlideReady())
+      parent.SetCurrent(parent.PAGE_PUBLIC_DECLARED);
   });
-  SetRowEnabled(DECLARED_TASKS, weglide_enabled);
 
   AddButton(_("Competitions Today"), [this](){
-    parent.SetCurrent(parent.PAGE_DAILY_COMPETITIONS);
+    if (WeGlideReady())
+      parent.SetCurrent(parent.PAGE_DAILY_COMPETITIONS);
   });
-  SetRowEnabled(COMPETITIONS_TODAY, weglide_enabled);
 
   AddButton(_("Recent Scores"), [this](){
-    parent.SetCurrent(parent.PAGE_RECENT_SCORES);
+    if (WeGlideReady())
+      parent.SetCurrent(parent.PAGE_RECENT_SCORES);
   });
-  SetRowEnabled(RECENT_SCORES, weglide_enabled);
 }
 
 WeGlidePanel::WeGlidePanel(TaskManagerDialog &dialog,
