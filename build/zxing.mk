@@ -26,7 +26,8 @@ else
 # not pull in Zint.
 
 ZXING_VERSION = 3.1.1
-ZXING_TARBALL = $(DOWNLOAD_DIR)/zxing-cpp-$(ZXING_VERSION).tar.gz
+ZXING_URL = https://github.com/zxing-cpp/zxing-cpp/archive/v$(ZXING_VERSION).tar.gz
+ZXING_TARBALL = $(DOWNLOAD_DIR)/$(notdir $(ZXING_URL))
 ZXING_SRC = $(OUT)/src/zxing-cpp-$(ZXING_VERSION)
 ZXING_BUILD = $(ARCH_OUTPUT_DIR)/build/zxing
 ZXING_PREFIX = $(ARCH_OUTPUT_DIR)/lib/zxing
@@ -34,10 +35,8 @@ ZXING_LIB = $(ZXING_PREFIX)/lib/libZXing.a
 ZXING_SHA256 = 7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542
 
 $(ZXING_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
-	$(Q)curl -fsSL -o $@.part \
-		https://github.com/zxing-cpp/zxing-cpp/archive/v$(ZXING_VERSION).tar.gz
-	echo "$(ZXING_SHA256)  $@.part" | sha256sum -c -
-	$(Q)mv $@.part $@
+	@$(NQ)echo "  GET     $@"
+	$(Q)./build/download.py $(ZXING_URL) $(ZXING_URL) $(ZXING_SHA256) $(DOWNLOAD_DIR)
 
 # CreateBarcode.cpp calls MultiFormatWriter, which this release
 # marks deprecated.  The warning is inside the library.
