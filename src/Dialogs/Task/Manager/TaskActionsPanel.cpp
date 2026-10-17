@@ -95,20 +95,18 @@ TaskActionsPanel::OnShowQRCodeClicked() noexcept
 }
 #endif
 
-#ifdef ANDROID
 /**
- * Open the camera, leaving this dialog open behind it.  The scan runs
- * in a separate Activity and reports back asynchronously, so closing
- * here would throw away the pilot's task if they then cancelled the
- * scan.  A task that does arrive is handed to this still-open dialog
- * by MainWindow::OnTaskReceived() via TaskManagerReceiveTask().
+ * Open the camera, leaving this dialog open behind it.  The scan
+ * reports back asynchronously, so closing here would throw away the
+ * pilot's task if they then cancelled the scan.  A task that does
+ * arrive is handed to this still-open dialog by
+ * MainWindow::OnTaskReceived() via TaskManagerReceiveTask().
  */
 inline void
 TaskActionsPanel::OnScanQRCodeClicked() noexcept
 {
   ScanTaskQRCode();
 }
-#endif
 
 void
 TaskActionsPanel::ReClick() noexcept
@@ -129,10 +127,8 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
   AddButton(_("Show QR Code"), [this](){ OnShowQRCodeClicked(); });
 #endif
 
-#ifdef ANDROID
-  AddButton(_("Scan QR Code"), [this](){ OnScanQRCodeClicked(); });
-  SetRowEnabled(SCAN_QR_CODE, HaveQRScanner());
-#endif
+  if (HaveQRScanner())
+    AddButton(_("Scan QR Code"), [this](){ OnScanQRCodeClicked(); });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */

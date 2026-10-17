@@ -21,6 +21,7 @@
 #include "Language/Language.hpp"
 #include "Components.hpp"
 #include "DataComponents.hpp"
+#include "Task/QRScanner.hpp"
 
 static bool
 WeGlideReady()
@@ -89,6 +90,14 @@ void
 WeGlideActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
                              [[maybe_unused]] const PixelRect &rc) noexcept
 {
+  enum Controls {
+    DOWNLOAD_DECLARATION,
+    MY_TASKS,
+    DECLARED_TASKS,
+    COMPETITIONS_TODAY,
+    RECENT_SCORES,
+  };
+
   AddButton(_("Download Declaration"), [this](){
     if (WeGlideReady())
       OnDownloadClicked();
@@ -113,6 +122,11 @@ WeGlideActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
     if (WeGlideReady())
       parent.SetCurrent(parent.PAGE_RECENT_SCORES);
   });
+
+  /* WeGlide draws its task QR as an XCTrack task ("XCTSK:"), which
+     the scanner already loads.  Hidden where there is no camera. */
+  if (HaveQRScanner())
+    AddButton(_("Scan QR Code"), [](){ ScanTaskQRCode(); });
 }
 
 WeGlidePanel::WeGlidePanel(TaskManagerDialog &dialog,

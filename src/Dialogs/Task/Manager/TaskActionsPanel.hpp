@@ -18,9 +18,6 @@ class TaskActionsPanel : public RowFormWidget {
 #ifdef HAVE_ZXING
     SHOW_QR_CODE,
 #endif
-#ifdef ANDROID
-    SCAN_QR_CODE,
-#endif
   };
 
   TaskManagerDialog &dialog;
@@ -43,9 +40,7 @@ private:
 #ifdef HAVE_ZXING
   void OnShowQRCodeClicked() noexcept;
 #endif
-#ifdef ANDROID
   void OnScanQRCodeClicked() noexcept;
-#endif
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;

@@ -214,6 +214,8 @@ Version 7.46 - not yet released
     Competitions Today and Recent Scores onto a WeGlide tab in the
     task manager, marked with the WeGlide logo. Each list button
     opens the WeGlide settings when the pilot is not configured
+  - scan the QR code WeGlide shows for a task from the WeGlide tab.
+    That code is an XCTrack task
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388
