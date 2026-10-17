@@ -31,6 +31,7 @@ jmethodID NativeView::getTopGestureClearance_method;
 jmethodID NativeView::startMyService_method;
 jmethodID NativeView::launchSAFTreePicker_method;
 jmethodID NativeView::reportSize_method;
+jmethodID NativeView::scanQRCode_method;
 
 Java::TrivialClass NativeView::clsBitmap;
 jmethodID NativeView::createBitmap_method;
@@ -98,6 +99,8 @@ NativeView::Initialise(JNIEnv *env)
                      "(Ljava/lang/String;)V");
 
   reportSize_method = env->GetMethodID(cls, "reportSize", "(II)V");
+
+  scanQRCode_method = env->GetMethodID(cls, "scanQRCode", "()V");
 
   clsBitmap.Find(env, "android/graphics/Bitmap");
   createBitmap_method = env->GetStaticMethodID(

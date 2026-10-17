@@ -1,5 +1,7 @@
 Version 7.46 - not yet released
 * android
+  - add "Scan QR Code" to the task manager to import an XCTrack task
+    with the camera, instead of opening the code in another app #1270
   - lay the cards, the text and the buttons on the InfoBox arrange
     page and the InfoBox Sets editor clear of the screen edge and
     below the area that opens the notification shade, so a column on
@@ -201,6 +203,13 @@ Version 7.46 - not yet released
   - fix the bottom airspace warning banner covering its text when
     the buttons wrap onto two rows
 * task
+  - show the current task as a QR code from the task manager, with
+    the swift in the centre and the saved task name under the code,
+    so another XCSoar can scan the same zones and rules; an unsaved
+    task is labelled "XCSoar task"; the phone camera can open that
+    code and start XCSoar; a task that does not fit is shown as a
+    SeeYou CUP code when the zones can be described that way, or as
+    an XCTrack code when every zone is a cylinder
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388

@@ -621,6 +621,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Hardware/PowerGlobal.cpp \
 	$(SRC)/Hardware/Battery.cpp \
 	$(SRC)/Hardware/DisplayBrightness.cpp \
+	\
+	$(SRC)/Task/ReceiveTask.cpp \
 
 ifneq ($(TARGET),ANDROID)
 ifeq ($(TARGET_IS_LINUX),y)
@@ -679,6 +681,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Apple/KeyboardDetection.cpp \
 	$(SRC)/Apple/Vibrator.cpp \
 	$(SRC)/Apple/Share.cpp \
+	$(SRC)/Apple/QRScanner.cpp \
 	$(SRC)/Device/SmartDeviceSensors.cpp
 endif
 
@@ -732,7 +735,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/UsbSerialHelper.cpp \
 	$(SRC)/Android/TextEntryDialog.cpp \
 	$(SRC)/Android/FileProvider.cpp \
-	$(SRC)/Android/ReceiveTask.cpp \
+	$(SRC)/Android/QRScanner.cpp \
 	$(SRC)/Android/SAFHelper.cpp \
 	$(SRC)/Storage/android/SAFReader.cpp \
 	$(SRC)/Storage/android/SAFOutputStream.cpp \
@@ -746,6 +749,12 @@ else
 XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/XCSoar.cpp
+
+# No camera here.  Apple links Apple/QRScanner.cpp instead; a new
+# port does the same with its own file (see Task/QRScanner.hpp).
+ifneq ($(TARGET_IS_DARWIN),y)
+XCSOAR_SOURCES += $(SRC)/Task/QRScanner.cpp
+endif
 endif
 
 ifeq ($(HAVE_HTTP),y)
@@ -888,6 +897,16 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_LDLIBS += $(NETCDF_LDLIBS)
+endif
+
+ifeq ($(ZXING),y)
+XCSOAR_SOURCES += \
+	$(SRC)/QR/QRCode.cpp \
+	$(SRC)/Renderer/QRCodeRenderer.cpp \
+	$(SRC)/Dialogs/Task/TaskQRCodeDialog.cpp
+
+$(call SRC_TO_OBJ,$(SRC)/QR/QRCode.cpp): CPPFLAGS += $(ZXING_CPPFLAGS)
+XCSOAR_LDLIBS += $(ZXING_LDLIBS)
 endif
 
 XCSOAR_STRIP = y

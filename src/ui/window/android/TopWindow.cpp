@@ -318,10 +318,6 @@ TopWindow::OnEvent(const Event &event)
     OnSurface();
     return true;
 
-  case Event::TASK_RECEIVED:
-    OnTaskReceived();
-    return true;
-
   case Event::PAUSE:
     OnPause();
     return true;
