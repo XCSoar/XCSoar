@@ -212,7 +212,7 @@ Version 7.46 - not yet released
     an XCTrack code when every zone is a cylinder
   - move Download Declaration, My Tasks, Declared Tasks,
     Competitions Today and Recent Scores onto a WeGlide tab in the
-    task manager
+    task manager, marked with the WeGlide logo
   - add a "Navigate to nearest point" task rule: aim at the start and
     finish zone where the glider is going to cross it, not where the
     task is shortest; off by default #2388

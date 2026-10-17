@@ -149,8 +149,9 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
   AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),
          _("Manage"), BrowseIcon);
 #ifdef HAVE_HTTP
+  const auto *WeGlideIcon = enable_icons ? &icons.hBmpTabWeGlide : nullptr;
   AddTab(std::make_unique<WeGlidePanel>(*this, task, &modified),
-         _("WeGlide"));
+         _("WeGlide"), WeGlideIcon);
 #endif
   AddTab(std::make_unique<VScrollWidget>(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
                                          GetLook()),

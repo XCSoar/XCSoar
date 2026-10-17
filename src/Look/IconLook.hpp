@@ -13,6 +13,7 @@ struct IconLook {
   MaskedIcon hBmpTabTask;
   MaskedIcon hBmpTabWrench;
   MaskedIcon hBmpTabSettings;
+  MaskedIcon hBmpTabWeGlide;
   MaskedIcon hBmpTabCalculator;
 
   // status dialog

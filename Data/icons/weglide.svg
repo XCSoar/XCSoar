@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+ <!-- WeGlide mark. The three fills are their published brand blues. -->
+ <path fill="#55b3d9" d="M11.00 7.67C15.27 7.67 18.85 10.26 19.69 13.71L21.00 14.35C20.76 12.34 19.74 10.48 18.08 9.04C16.19 7.40 13.67 6.50 11.00 6.50C8.34 6.50 5.82 7.40 3.93 9.04C2.26 10.48 1.24 12.34 1.00 14.35L2.31 13.71C3.16 10.26 6.73 7.67 11.00 7.67z"/>
+ <path fill="#367fbf" d="M19.69 13.71L11.00 9.43L1.00 14.35L3.62 14.35L10.99 10.72L18.37 14.35L21.00 14.35z"/>
+ <rect x="1" y="14.35" width="20" height="1.15" fill="#2d55a6"/>
+</svg>
