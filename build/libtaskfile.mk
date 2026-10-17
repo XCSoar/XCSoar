@@ -1,6 +1,9 @@
 TASKFILE_SOURCES = \
 	$(SRC)/Task/PolylineDecoder.cpp \
 	$(SRC)/Task/XCTrackTaskDecoder.cpp \
+	$(SRC)/Task/XCTrackTaskEncoder.cpp \
+	$(SRC)/Task/XCSoarTaskQR.cpp \
+	$(SRC)/Task/CupTaskQR.cpp \
 	$(SRC)/Task/XCTrackTaskFile.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \

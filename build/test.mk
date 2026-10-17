@@ -533,6 +533,18 @@ TEST_POLYLINE_DECODER_SOURCES = \
 TEST_POLYLINE_DECODER_DEPENDS = GEO UTIL
 $(eval $(call link-program,TestPolylineDecoder,TEST_POLYLINE_DECODER))
 
+ifeq ($(ZXING),y)
+TEST_NAMES += TestQRCode
+TEST_QR_CODE_SOURCES = \
+	$(SRC)/QR/QRCode.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestQRCode.cpp
+TEST_QR_CODE_CPPFLAGS = $(ZXING_CPPFLAGS)
+TEST_QR_CODE_LDLIBS = $(ZXING_LDLIBS)
+TEST_QR_CODE_DEPENDS = UTIL
+$(eval $(call link-program,TestQRCode,TEST_QR_CODE))
+endif
+
 TEST_TRANSPONDER_CODE_SOURCES = \
 	$(SRC)/Radio/TransponderCode.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -619,12 +631,15 @@ TEST_TASK_SAVE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/XML/Node.cpp \
+	$(SRC)/Waypoint/Factory.cpp \
+	$(SRC)/Radio/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(SRC)/Task/SaveFile.cpp \
 	$(TEST_SRC_DIR)/TestTaskSave.cpp
 TEST_TASK_SAVE_OBJS = $(call SRC_TO_OBJ,$(TEST_TASK_SAVE_SOURCES))
-TEST_TASK_SAVE_DEPENDS = TASK TASKFILE ROUTE GLIDE WAYPOINT GEO TIME MATH UTIL XML
+TEST_TASK_SAVE_DEPENDS = TASK TASKFILE ROUTE GLIDE WAYPOINT WAYPOINTFILE GEO TIME MATH UTIL XML FMT UNITS
 $(eval $(call link-program,TestTaskSave,TEST_TASK_SAVE))
 
 TEST_TASKFILE_SEEYOU_PARSING_SOURCES = \

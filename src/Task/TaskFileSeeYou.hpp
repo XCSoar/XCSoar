@@ -5,12 +5,14 @@
 
 #include "TaskFile.hpp"
 
+#include <string_view>
+
 /**
  * A class that reads and parses a SeeYou task file to an XCSoar internal
  * task representation.
  */
 
-class TaskFileSeeYou: public TaskFile
+class TaskFileSeeYou : public TaskFile
 {
 public:
   using TaskFile::TaskFile;
@@ -20,3 +22,12 @@ public:
                                        const Waypoints *waypoints,
                                        unsigned index) const override;
 };
+
+/**
+ * Read the first task from SeeYou CUP text.
+ *
+ * The text is a waypoint list, the "Related Tasks" marker, then one
+ * task.  @return the task, or nullptr if the text has no task.
+ */
+std::unique_ptr<OrderedTask>
+LoadSeeYouTaskText(std::string_view text, const TaskBehaviour &task_behaviour);

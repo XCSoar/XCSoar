@@ -2,38 +2,41 @@
 // Copyright The XCSoar Project
 
 #include "Task/TaskFileSeeYou.hpp"
-#include "io/BufferedReader.hxx"
-#include "io/BufferedCsvReader.hpp"
-#include "io/FileReader.hxx"
-#include "io/StringConverter.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
-#include "Waypoint/CupParser.hpp"
-#include "Waypoint/WaypointReaderSeeYou.hpp"
-#include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/ObservationZones/KeyholeZone.hpp"
+
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Ordered/Points/StartPoint.hpp"
-#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
-#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
+#include "Engine/Task/Ordered/Points/StartPoint.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/ObservationZones/KeyholeZone.hpp"
+#include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Units/System.hpp"
+#include "Waypoint/CupParser.hpp"
+#include "Waypoint/WaypointReaderSeeYou.hpp"
+#include "io/BufferedCsvReader.hpp"
+#include "io/BufferedReader.hxx"
+#include "io/FileReader.hxx"
+#include "io/MemoryReader.hxx"
+#include "io/StringConverter.hpp"
 #include "time/BrokenTime.hpp"
 #include "util/DecimalParser.hxx"
 #include "util/IterableSplitString.hxx"
 #include "util/NumberParser.hxx"
+#include "util/SpanCast.hxx"
 #include "util/StringCompare.hxx"
 
 #include <stdlib.h>
-
 #include <string>
 
 using std::string_view_literals::operator""sv;
 
 static constexpr std::size_t CUP_MAX_TPS = 30;
 
-struct SeeYouTaskInformation {
+struct SeeYouTaskInformation
+{
   /** True = RT, False = AAT */
   bool wp_dis = true;
   /** AAT task time in seconds */
@@ -42,7 +45,8 @@ struct SeeYouTaskInformation {
   double max_start_altitude = 0;
 };
 
-struct SeeYouTurnpointInformation {
+struct SeeYouTurnpointInformation
+{
   /** CUP file contained info for this OZ */
   bool has_oz = false;
 
@@ -55,14 +59,14 @@ struct SeeYouTurnpointInformation {
   } style = SYMMETRICAL;
 
   bool is_line = false;
-  bool reduce = false;
+  bool reduce  = false;
 
   bool radius1_set = false;
   bool radius2_set = false;
   double radius1 = 500, radius2 = 200, max_altitude = 0;
 
-  bool angle1_set = false;
-  bool angle2_set = false;
+  bool angle1_set  = false;
+  bool angle2_set  = false;
   bool angle12_set = false;
   Angle angle1{}, angle2{}, angle12{};
 };
@@ -73,25 +77,19 @@ ParseTaskTime(std::string_view src) noexcept
 {
   unsigned hh, mm = 0, ss = 0;
 
-  if (src.size() < 2)
-    return {};
+  if (src.size() < 2) return {};
 
-  if (!ParseIntegerTo(src.substr(0, 2), hh))
-    return {};
+  if (!ParseIntegerTo(src.substr(0, 2), hh)) return {};
 
   if (src.size() > 2) {
-    if (src[2] != ':' || src.size() < 5)
-      return {};
+    if (src[2] != ':' || src.size() < 5) return {};
 
-    if (!ParseIntegerTo(src.substr(3, 2), mm))
-      return {};
+    if (!ParseIntegerTo(src.substr(3, 2), mm)) return {};
 
     if (src.size() > 5) {
-      if (src[5] != ':' || src.size() != 8)
-        return {};
+      if (src[5] != ':' || src.size() != 8) return {};
 
-      if (!ParseIntegerTo(src.substr(6, 2), ss))
-        return {};
+      if (!ParseIntegerTo(src.substr(6, 2), ss)) return {};
     }
   }
 
@@ -112,8 +110,7 @@ ParseStyle(std::string_view src) noexcept
 static Angle
 ParseAngle(std::string_view src) noexcept
 {
-  if (auto value = ParseDecimal(src))
-    return Angle::Degrees(*value);
+  if (auto value = ParseDecimal(src)) return Angle::Degrees(*value);
 
   return Angle::Zero();
 }
@@ -132,8 +129,7 @@ ParseRadius(std::string_view src) noexcept
   // If no unit suffix found, default to meters (unit already set to METER)
 
   const auto value = ParseDecimal(src);
-  if (!value)
-    return 0;
+  if (!value) return 0;
 
   return Units::ToSysUnit(*value, unit);
 }
@@ -149,8 +145,7 @@ ParseMaxAlt(std::string_view src) noexcept
   else
     RemoveSuffix(src, "m"sv);
 
-  if (auto value = ParseDecimal(src))
-    return Units::ToSysUnit(*value, unit);
+  if (auto value = ParseDecimal(src)) return Units::ToSysUnit(*value, unit);
 
   return 0;
 }
@@ -166,8 +161,7 @@ ParseOptions(SeeYouTaskInformation &task_info, std::string_view src) noexcept
 {
   for (std::string_view i : IterableSplitString(src, ',')) {
     if (SkipPrefix(i, "WpDis="sv)) {
-      if (i == "False"sv)
-        task_info.wp_dis = false;
+      if (i == "False"sv) task_info.wp_dis = false;
     } else if (SkipPrefix(i, "TaskTime="sv)) {
       task_info.task_time = ParseTaskTime(i);
     }
@@ -189,26 +183,24 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
     else if (SkipPrefix(i, "R1="sv)) {
       const double radius = ParseRadius(i);
       if (radius > 0) {
-        tp_info.radius1 = radius;
+        tp_info.radius1     = radius;
         tp_info.radius1_set = true;
       }
     } else if (SkipPrefix(i, "A1="sv)) {
       tp_info.angle1_set = true;
-      tp_info.angle1 = ParseAngle(i);
+      tp_info.angle1     = ParseAngle(i);
     } else if (SkipPrefix(i, "R2="sv)) {
       const double radius = ParseRadius(i);
       if (radius > 0) {
-        tp_info.radius2 = radius;
+        tp_info.radius2     = radius;
         tp_info.radius2_set = true;
       }
-    }
-    else if (SkipPrefix(i, "A2="sv)) {
+    } else if (SkipPrefix(i, "A2="sv)) {
       tp_info.angle2_set = true;
-      tp_info.angle2 = ParseAngle(i);
-    }
-    else if (SkipPrefix(i, "A12="sv)) {
+      tp_info.angle2     = ParseAngle(i);
+    } else if (SkipPrefix(i, "A12="sv)) {
       tp_info.angle12_set = true;
-      tp_info.angle12 = ParseAngle(i);
+      tp_info.angle12     = ParseAngle(i);
     } else if (SkipPrefix(i, "MaxAlt="sv))
       tp_info.max_altitude = ParseMaxAlt(i);
     else if (SkipPrefix(i, "Line="sv))
@@ -225,13 +217,14 @@ ParseOZs(SeeYouTurnpointInformation &tp_info, std::string_view src) noexcept
  * @param turnpoint_infos Loads this with CU task tp info
  */
 static void
-ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
+ParseCUTaskDetails(BufferedReader &reader,
+                   SeeYouTaskInformation &task_info,
                    SeeYouTurnpointInformation turnpoint_infos[])
 {
   // Read options/observation zones
   char *line;
-  while ((line = reader.ReadLine()) != nullptr &&
-         line[0] != '\"' && line[0] != ',') {
+  while ((line = reader.ReadLine()) != nullptr && line[0] != '\"' &&
+         line[0] != ',') {
     std::string_view src{line};
 
     if (SkipPrefix(src, "Options,"sv)) {
@@ -241,11 +234,9 @@ ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
       auto [index_string, rest] = Split(src, ',');
 
       std::size_t index;
-      if (!ParseIntegerTo(index_string, index))
-        continue;
+      if (!ParseIntegerTo(index_string, index)) continue;
 
-      if (index >= CUP_MAX_TPS)
-        continue;
+      if (index >= CUP_MAX_TPS) continue;
 
       ParseOZs(turnpoint_infos[index], rest);
       if (index == 0)
@@ -254,7 +245,8 @@ ParseCUTaskDetails(BufferedReader &reader, SeeYouTaskInformation &task_info,
   } // end while
 }
 
-static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
+static bool
+isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 {
   return (fabs(turnpoint_infos.angle1.Degrees() - 45) < 2 &&
           fabs(turnpoint_infos.radius1 - 10000) < 2 &&
@@ -262,7 +254,8 @@ static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
           fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
-static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
+static bool
+isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
   return (fabs(turnpoint_infos.angle1.Degrees() - 45) < 2 &&
           fabs(turnpoint_infos.radius1 - 20000) < 2 &&
@@ -270,8 +263,8 @@ static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_inf
           fabs(turnpoint_infos.radius2 - 500) < 2);
 }
 
-static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
-                                    &turnpoint_infos)
+static bool
+isBGAEnhancedOptionZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
   return (fabs(turnpoint_infos.angle1.Degrees() - 90) < 2 &&
           fabs(turnpoint_infos.radius1 - 10000) < 2 &&
@@ -287,28 +280,28 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
                       const GeoPoint &previous,
                       const GeoPoint &next)
 {
-    switch (turnpoint_infos.style) {
-    case SeeYouTurnpointInformation::FIXED:
-      return turnpoint_infos.angle12.Reciprocal();
+  switch (turnpoint_infos.style) {
+  case SeeYouTurnpointInformation::FIXED:
+    return turnpoint_infos.angle12.Reciprocal();
 
-    case SeeYouTurnpointInformation::SYMMETRICAL:
-      break;
+  case SeeYouTurnpointInformation::SYMMETRICAL:
+    break;
 
-    case SeeYouTurnpointInformation::TO_NEXT_POINT:
-      return next.Bearing(location);
+  case SeeYouTurnpointInformation::TO_NEXT_POINT:
+    return next.Bearing(location);
 
-    case SeeYouTurnpointInformation::TO_PREVIOUS_POINT:
-      return previous.Bearing(location);
+  case SeeYouTurnpointInformation::TO_PREVIOUS_POINT:
+    return previous.Bearing(location);
 
-    case SeeYouTurnpointInformation::TO_START_POINT:
-      return start.Bearing(location);
-    }
+  case SeeYouTurnpointInformation::TO_START_POINT:
+    return start.Bearing(location);
+  }
 
-    /* SYMMETRICAL is the fallback when the file contained an
-       invalid/unknown style */
-    const Angle ap = previous.Bearing(location);
-    const Angle an = next.Bearing(location);
-    return ap.HalfAngle(an).Reciprocal();
+  /* SYMMETRICAL is the fallback when the file contained an
+     invalid/unknown style */
+  const Angle ap = previous.Bearing(location);
+  const Angle an = next.Bearing(location);
+  return ap.HalfAngle(an).Reciprocal();
 }
 
 /**
@@ -325,78 +318,90 @@ CalcIntermediateAngle(const SeeYouTurnpointInformation &turnpoint_infos,
  */
 static std::unique_ptr<ObservationZonePoint>
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
-         unsigned pos, unsigned size, const WaypointPtr wps[],
+         unsigned pos,
+         unsigned size,
+         const WaypointPtr wps[],
          TaskFactoryType factType)
 {
   const bool is_intermediate = (pos > 0) && (pos < (size - 1));
-  const Waypoint *wp = &*wps[pos];
+  const Waypoint *wp         = &*wps[pos];
 
-  // For turnpoints that don't have an explicit ObsZone line, default to an FAI Quadrant
+  // For turnpoints that don't have an explicit ObsZone line, default to an FAI
+  // Quadrant
   if (!turnpoint_infos.has_oz)
-    return SymmetricSectorZone::CreateFAISectorZone(wp->location, is_intermediate);
+    return SymmetricSectorZone::CreateFAISectorZone(wp->location,
+                                                    is_intermediate);
 
-  if (factType == TaskFactoryType::RACING &&
-      is_intermediate && isKeyhole(turnpoint_infos)) {
-    auto oz = KeyholeZone::CreateCustomKeyholeZone(wp->location,
-                                                   turnpoint_infos.radius1,
-                                                   turnpoint_infos.angle1);
+  if (factType == TaskFactoryType::RACING && is_intermediate &&
+      isKeyhole(turnpoint_infos)) {
+    auto oz = KeyholeZone::CreateCustomKeyholeZone(
+      wp->location, turnpoint_infos.radius1, turnpoint_infos.angle1);
     oz->SetInnerRadius(turnpoint_infos.radius2);
     return oz;
   }
 
-  else if (factType == TaskFactoryType::RACING &&
-      is_intermediate && isBGAEnhancedOptionZone(turnpoint_infos))
+  else if (factType == TaskFactoryType::RACING && is_intermediate &&
+           isBGAEnhancedOptionZone(turnpoint_infos))
     return KeyholeZone::CreateBGAEnhancedOptionZone(wp->location);
 
-  else if (factType == TaskFactoryType::RACING &&
-      is_intermediate && isBGAFixedCourseZone(turnpoint_infos))
+  else if (factType == TaskFactoryType::RACING && is_intermediate &&
+           isBGAFixedCourseZone(turnpoint_infos))
     return KeyholeZone::CreateBGAFixedCourseZone(wp->location);
 
-  else if (!is_intermediate && turnpoint_infos.is_line) // special case "is_line"
+  else if (!is_intermediate &&
+           turnpoint_infos.is_line) // special case "is_line"
     // R1 in CUP file is radius (half gate width), but LineSectorZone
     // constructor expects full length, so multiply by 2
     return std::make_unique<LineSectorZone>(wp->location,
                                             turnpoint_infos.radius1 * 2);
 
   // special case "Cylinder"
-  else if (fabs(turnpoint_infos.angle1.Degrees() - 180) < 1 )
+  else if (fabs(turnpoint_infos.angle1.Degrees() - 180) < 1)
     return std::make_unique<CylinderZone>(wp->location,
                                           turnpoint_infos.radius1);
 
   else if (factType == TaskFactoryType::RACING) {
 
-    // XCSoar does not support FIXED sectors for RT, fall back to a basic cylinder
+    // XCSoar does not support FIXED sectors for RT, fall back to a basic
+    // cylinder
     if (turnpoint_infos.style == SeeYouTurnpointInformation::FIXED) {
       return std::make_unique<CylinderZone>(wp->location,
                                             turnpoint_infos.radius1);
 
-    // Handle SYMMETRICAL OZs for Racing tasks
-    } else if (turnpoint_infos.style == SeeYouTurnpointInformation::Style::SYMMETRICAL) {
+      // Handle SYMMETRICAL OZs for Racing tasks
+    } else if (turnpoint_infos.style ==
+               SeeYouTurnpointInformation::Style::SYMMETRICAL) {
 
       /*
-      Compute "effective" radius and angle used for OZ type selection, depending on
-      whether the .cup file explicitly sets these explicitly or not.
+      Compute "effective" radius and angle used for OZ type selection,
+      depending on whether the .cup file explicitly sets these explicitly or
+      not.
       */
-      const double eff_radius = turnpoint_infos.radius1_set ? turnpoint_infos.radius1 : 3000.0;
-      const Angle eff_angle  = turnpoint_infos.angle1_set ? turnpoint_infos.angle1 * 2: Angle::QuarterCircle();
+      const double eff_radius =
+        turnpoint_infos.radius1_set ? turnpoint_infos.radius1 : 3000.0;
+      const Angle eff_angle = turnpoint_infos.angle1_set
+                                ? turnpoint_infos.angle1 * 2
+                                : Angle::QuarterCircle();
 
       /*
-      For FAI observation zones, SeeYou creates .cup files with a radius of 3000m
-      and an angle of 45 degrees. Detect these (with some margin of error, allowing for
-      any radius larger than 3000m as long as the angle is 45 degrees) and create
-      FAI quadrant OZs for them.
+      For FAI observation zones, SeeYou creates .cup files with a radius of
+      3000m and an angle of 45 degrees. Detect these (with some margin of
+      error, allowing for any radius larger than 3000m as long as the angle is
+      45 degrees) and create FAI quadrant OZs for them.
       */
       if (eff_radius >= 3000.0 &&
-          eff_angle.CompareRoughly(Angle::QuarterCircle(), Angle::Degrees(1))) {
+          eff_angle.CompareRoughly(Angle::QuarterCircle(),
+                                   Angle::Degrees(1))) {
 
         return SymmetricSectorZone::CreateFAISectorZone(wp->location,
-                                                         is_intermediate);
+                                                        is_intermediate);
       } else {
         /*
-        In case of a OZ definition with a non-FAI radius or other angle than a quadrant,
-        then specify a generic circular sector zone here instead of an FAI quadrant.
-        Even if the above heuristic for detecting FAI quadrants is not perfect, this remains
-        functionally correct and in line with what is specified in the .cup file.
+        In case of a OZ definition with a non-FAI radius or other angle than a
+        quadrant, then specify a generic circular sector zone here instead of
+        an FAI quadrant. Even if the above heuristic for detecting FAI
+        quadrants is not perfect, this remains functionally correct and in line
+        with what is specified in the .cup file.
         */
         return SymmetricSectorZone::CreateSymmetricCircularSectorZone(
           wp->location, eff_radius, eff_angle);
@@ -407,11 +412,10 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
       This will often not be what the task designer intended.
       */
       return SymmetricSectorZone::CreateFAISectorZone(wp->location,
-                                                         is_intermediate);
-
+                                                      is_intermediate);
     }
 
-  } else if (is_intermediate) { //AAT intermediate point
+  } else if (is_intermediate) { // AAT intermediate point
     assert(wps[pos + 1]);
     assert(wps[pos - 1]);
 
@@ -422,21 +426,23 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
                                                wps[0]->location);
 
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
-    const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
+    const Angle RadialEnd   = (A12adj + turnpoint_infos.angle1).AsBearing();
 
     if (turnpoint_infos.radius2 > 0 &&
         (turnpoint_infos.angle2.AsBearing().Degrees()) < 1) {
       return std::make_unique<AnnularSectorZone>(wp->location,
                                                  turnpoint_infos.radius1,
-                                                 RadialStart, RadialEnd,
+                                                 RadialStart,
+                                                 RadialEnd,
                                                  turnpoint_infos.radius2);
     } else {
-      return std::make_unique<SectorZone>(wp->location, turnpoint_infos.radius1,
-                                          RadialStart, RadialEnd);
+      return std::make_unique<SectorZone>(
+        wp->location, turnpoint_infos.radius1, RadialStart, RadialEnd);
     }
 
   } else { // catch-all
-    return std::make_unique<CylinderZone>(wp->location,turnpoint_infos.radius1);
+    return std::make_unique<CylinderZone>(wp->location,
+                                          turnpoint_infos.radius1);
   }
 }
 
@@ -451,32 +457,30 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
  * @return The point
  */
 static std::unique_ptr<OrderedTaskPoint>
-CreatePoint(unsigned pos, unsigned n_waypoints, WaypointPtr &&wp,
-            AbstractTaskFactory& fact,
+CreatePoint(unsigned pos,
+            unsigned n_waypoints,
+            WaypointPtr &&wp,
+            AbstractTaskFactory &fact,
             std::unique_ptr<ObservationZonePoint> oz,
             const TaskFactoryType factType) noexcept
 {
   std::unique_ptr<OrderedTaskPoint> pt;
 
   if (pos == 0)
-    pt = oz
-      ? fact.CreateStart(std::move(oz), std::move(wp))
-      : fact.CreateStart(std::move(wp));
+    pt = oz ? fact.CreateStart(std::move(oz), std::move(wp))
+            : fact.CreateStart(std::move(wp));
 
   else if (pos == n_waypoints - 1)
-    pt = oz
-      ? fact.CreateFinish(std::move(oz), std::move(wp))
-      : fact.CreateFinish(std::move(wp));
+    pt = oz ? fact.CreateFinish(std::move(oz), std::move(wp))
+            : fact.CreateFinish(std::move(wp));
 
   else if (factType == TaskFactoryType::RACING)
-    pt = oz
-      ? fact.CreateASTPoint(std::move(oz), std::move(wp))
-      : fact.CreateIntermediate(std::move(wp));
+    pt = oz ? fact.CreateASTPoint(std::move(oz), std::move(wp))
+            : fact.CreateIntermediate(std::move(wp));
 
   else
-    pt = oz
-      ? fact.CreateAATPoint(std::move(oz), std::move(wp))
-      : fact.CreateIntermediate(std::move(wp));
+    pt = oz ? fact.CreateAATPoint(std::move(oz), std::move(wp))
+            : fact.CreateIntermediate(std::move(wp));
 
   return pt;
 }
@@ -501,8 +505,7 @@ AdvanceReaderToTask(BufferedReader &reader, const unsigned index)
   char *line;
   while ((line = reader.ReadLine()) != nullptr) {
     if (line[0] == '\"' || line[0] == ',') {
-      if (count == index)
-        break;
+      if (count == index) break;
 
       count++;
     }
@@ -510,44 +513,41 @@ AdvanceReaderToTask(BufferedReader &reader, const unsigned index)
   return line;
 }
 
-std::unique_ptr<OrderedTask>
-TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
-                        const Waypoints *waypoints, unsigned index) const
+static std::unique_ptr<OrderedTask>
+LoadSeeYouTask(BufferedReader &reader,
+               const TaskBehaviour &task_behaviour,
+               const Waypoints *waypoints,
+               unsigned index)
 try {
-  // Create FileReader for reading the task
-  FileReader file_reader{path};
-  BufferedReader reader{file_reader};
   StringConverter string_converter;
 
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
-  if (!ParseSeeYouWaypoints(reader, file_waypoints))
-    return nullptr;
+  if (!ParseSeeYouWaypoints(reader, file_waypoints)) return nullptr;
 
   file_waypoints.Optimise();
 
   char *line = AdvanceReaderToTask(reader, index);
-  if (line == nullptr)
-    return nullptr;
+  if (line == nullptr) return nullptr;
 
   /* CupSplitColumns stores string_views into its input; further
      BufferedReader::ReadLine calls can reuse that memory (#2496). */
   const std::string task_line_storage(line);
 
   // Read waypoint list
-  // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
-  //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
+  // e.g. "Club day 4 Racing
+  // task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
+  //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH
+  //       ,  LANDING
   std::array<std::string_view, CUP_MAX_TPS> wps;
   CupSplitColumns(std::string_view(task_line_storage), wps);
 
   std::size_t n_waypoints = 0;
   for (std::size_t i = 0; i < wps.size(); ++i)
-    if (!wps[i].empty())
-      n_waypoints = i + 1;
+    if (!wps[i].empty()) n_waypoints = i + 1;
 
   // At least taskname and takeoff, start, finish and landing points are needed
-  if (n_waypoints < 5)
-    return nullptr;
+  if (n_waypoints < 5) return nullptr;
 
   // Remove taskname, takeoff and landing from count
   n_waypoints -= 3;
@@ -559,9 +559,9 @@ try {
   ParseCUTaskDetails(reader, task_info, turnpoint_infos);
 
   auto task = std::make_unique<OrderedTask>(task_behaviour);
-  task->SetFactory(task_info.wp_dis ?
-                    TaskFactoryType::RACING : TaskFactoryType::AAT);
-  AbstractTaskFactory& fact = task->GetFactory();
+  task->SetFactory(task_info.wp_dis ? TaskFactoryType::RACING
+                                    : TaskFactoryType::AAT);
+  AbstractTaskFactory &fact      = task->GetFactory();
   const TaskFactoryType factType = task->GetFactoryType();
 
   OrderedTaskSettings beh = task->GetOrderedTaskSettings();
@@ -577,17 +577,16 @@ try {
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
-    auto file_wp = file_waypoints.LookupName(string_converter.Convert(wps[i + 2]));
-    if (file_wp == nullptr)
-      return nullptr;
+    auto file_wp =
+      file_waypoints.LookupName(string_converter.Convert(wps[i + 2]));
+    if (file_wp == nullptr) return nullptr;
 
     if (waypoints != nullptr) {
       // Try to find waypoint by name
       auto wp = waypoints->LookupName(file_wp->name);
 
       // If waypoint by name found and closer than 10m to the original
-      if (wp != nullptr &&
-          wp->location.DistanceS(file_wp->location) <= 10) {
+      if (wp != nullptr && wp->location.DistanceS(file_wp->location) <= 10) {
         // Use this waypoint for the task
         waypoints_in_task[i] = wp;
         continue;
@@ -597,8 +596,7 @@ try {
       wp = waypoints->GetNearest(file_wp->location, 10);
 
       // If closest waypoint found and closer than 10m to the original
-      if (wp != nullptr &&
-          wp->location.DistanceS(file_wp->location) <= 10) {
+      if (wp != nullptr && wp->location.DistanceS(file_wp->location) <= 10) {
         // Use this waypoint for the task
         waypoints_in_task[i] = wp;
         continue;
@@ -609,20 +607,44 @@ try {
     waypoints_in_task[i] = file_wp;
   }
 
-  //now create TPs and OZs
+  // now create TPs and OZs
   for (unsigned i = 0; i < n_waypoints; i++) {
 
-    auto oz = CreateOZ(turnpoint_infos[i], i, n_waypoints,
-                       waypoints_in_task, factType);
+    auto oz = CreateOZ(
+      turnpoint_infos[i], i, n_waypoints, waypoints_in_task, factType);
     assert(waypoints_in_task[i]);
-    auto pt = CreatePoint(i, n_waypoints,
+    auto pt = CreatePoint(i,
+                          n_waypoints,
                           WaypointPtr(waypoints_in_task[i]),
-                          fact, std::move(oz), factType);
+                          fact,
+                          std::move(oz),
+                          factType);
 
-    if (pt != nullptr)
-      fact.Append(*pt, false);
+    if (pt != nullptr) fact.Append(*pt, false);
   }
   return task;
+} catch (...) {
+  return nullptr;
+}
+
+std::unique_ptr<OrderedTask>
+TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
+                        const Waypoints *waypoints,
+                        unsigned index) const
+try {
+  FileReader file_reader{path};
+  BufferedReader reader{file_reader};
+  return LoadSeeYouTask(reader, task_behaviour, waypoints, index);
+} catch (...) {
+  return nullptr;
+}
+
+std::unique_ptr<OrderedTask>
+LoadSeeYouTaskText(std::string_view text, const TaskBehaviour &task_behaviour)
+try {
+  MemoryReader memory{AsBytes(text)};
+  BufferedReader reader{memory};
+  return LoadSeeYouTask(reader, task_behaviour, nullptr, 0);
 } catch (...) {
   return nullptr;
 }
