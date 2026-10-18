@@ -19,4 +19,5 @@ void
 RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  const ChartLook &chart_look,
                  const ClimbHistory &climb_history,
-                 const GlidePolar &glide_polar);
+                 const GlidePolar &glide_polar,
+                 bool over_mtow = false);

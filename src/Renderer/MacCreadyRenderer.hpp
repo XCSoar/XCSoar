@@ -16,5 +16,6 @@ MacCreadyCaption(char *sTmp, size_t buffer_size,
 
 void
 RenderMacCready(Canvas &canvas, const PixelRect rc,
-                 const ChartLook &chart_look,
-                 const GlidePolar &glide_polar);
+                const ChartLook &chart_look,
+                const GlidePolar &glide_polar,
+                bool over_mtow = false);
