@@ -11040,7 +11040,7 @@ msgstr "Tämä määrittelee liitolukua käytettäväksi ulkolasku, saavutettavu
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr "Vaihtoehtoja-kuvaketta: Auto"
+msgstr "Vaihtoehtotila: Auto"
 
 msgid "Paste"
 msgstr "Liitä"
