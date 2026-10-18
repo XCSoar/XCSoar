@@ -1964,9 +1964,6 @@ msgstr "Ballast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Ballasts du planeur. Appuyez sur \"Larguez/Arrêtez\" pour lancer le décompte du volume des ballasts selon le taux de vidage spécifié dans les paramètres de configuration."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Charge alaire actuelle, calculée à partir de la masse à vide du planeur, de la masse équipage et du ballast."
-
 msgid "Bugs"
 msgstr "Moucherons"
 
@@ -12751,10 +12748,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Vario and thermal"
 msgstr ""
 
@@ -12794,5 +12787,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Charge alaire actuelle, calculée à partir de la masse à vide du planeur, de"
+" la masse équipage et du ballast. Affichée en rouge lorsque le planeur est "
+"plus lourd que sa masse maximale au décollage."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

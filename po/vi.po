@@ -1934,9 +1934,6 @@ msgstr "Túi dằn"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Ballast của tàu lượn. Nhấn \"Rời bỏ/STOP\" để chuyển đổi trạng thái đếm ngược thể tích ballast theo tốc độ đã cài đặt trong cài đặt cấu hình."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Tải trọng hiện tại của cánh, được tính từ trọng lượng rỗng của tàu lượn, trọng lượng của tổ lái và vật dằn."
-
 msgid "Bugs"
 msgstr "Lỗi"
 
@@ -12538,10 +12535,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12593,5 +12586,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Tải trọng hiện tại của cánh, được tính từ trọng lượng rỗng của tàu lượn, tr"
+"ọng lượng của tổ lái và vật dằn. Hiện màu đỏ khi tàu lượn nặng hơn trọng lư"
+"ợng cất cánh tối đa."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

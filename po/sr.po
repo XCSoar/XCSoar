@@ -1935,9 +1935,6 @@ msgstr "Balast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Vodeni balast jedrilice. Pritisnite \"Prazničen vodeni balast/Pauza\" za prekid četvrtnog broja praženja u skladu sa postavkom brzine praženja iz konfiguracijskih podešavaња."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Тренутно оптерећење крила, израчунато на основу тежине празног једрилице, тежине посаде и баласта."
-
 msgid "Bugs"
 msgstr "Greške"
 
@@ -12578,10 +12575,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12633,5 +12626,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Тренутно оптерећење крила, израчунато на основу тежине празног једрилице, т"
+"ежине посаде и баласта. Приказује се црвено када је једрилица тежа од своје"
+" највеће полетне масе."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

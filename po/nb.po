@@ -1961,9 +1961,6 @@ msgstr "Ballast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Ballastmengde. Øk denne verdien dersom nyttelasten inklusiv pilot er høyere enn referansevekten hvor polaren gjelder (normalt 75 kg.) Trykk ENTER på dette feltet for å slå av/på nedtelling under ballasttømming. Raten som brukes hentes fra innstillinger for ballast."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Den nåværende vingebelastningen, beregnet fra seilflyets tomvekt, mannskapsvekt og ballast."
-
 msgid "Bugs"
 msgstr "Urenheter"
 
@@ -12533,10 +12530,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12588,5 +12581,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Den nåværende vingebelastningen, beregnet fra seilflyets tomvekt, mannskaps"
+"vekt og ballast. Vises i rødt når seilflyet er tyngre enn sin maksimale sta"
+"rtmasse."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

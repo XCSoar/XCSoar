@@ -1955,9 +1955,6 @@ msgstr "Ballast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Ballast van het zweefvliegtuig. Verhoog deze waarde indien het gewicht van piloot en cockpit lading groter is dan het referentiegewicht voor de polaire van het zweefvliegtuig (meestal 75kg). Druk op ENTER in dit veld om de loostijd van de (water) ballast, zoals opgegeven in de configuratie instellingen, aan te passen."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "De huidige vleugelbelasting, berekend op basis van het leeggewicht van het zweefvliegtuig, het gewicht van de bemanning en de ballast."
-
 msgid "Bugs"
 msgstr "Insecten"
 
@@ -12687,10 +12684,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12742,5 +12735,22 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"De huidige vleugelbelasting, berekend op basis van het leeggewicht van het "
+"zweefvliegtuig, het gewicht van de bemanning en de ballast. Wordt rood weer"
+"gegeven wanneer het zweefvliegtuig zwaarder is dan zijn maximale startmassa"
+"."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

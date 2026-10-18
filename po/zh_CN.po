@@ -1913,9 +1913,6 @@ msgstr "配重"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "滑翔机的配重。如果飞行员/驾驶舱负荷大于滑翔机极曲线参考重量，则增加这个值。（通常为75公斤）。滑翔机的镇流器。如果飞行员/驾驶舱负荷增加，则增加这个值。"
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "当前机翼载荷，根据滑翔机的空重、机组人员重量和压载物计算得出。"
-
 msgid "Bugs"
 msgstr "虫子"
 
@@ -12174,10 +12171,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12229,5 +12222,18 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr "当前机翼载荷，根据滑翔机的空重、机组人员重量和压载物计算得出。当滑翔机超过最大起飞重量时以红色显示。"
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

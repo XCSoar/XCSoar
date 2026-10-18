@@ -1943,9 +1943,6 @@ msgstr "밸러스트"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "기체의 밸러스트값을 입력: 카운트 다운 설정으로, 시간당 투기량을 조정할 수 있다."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "글라이더의 자체 중량, 승무원 중량, 밸러스트로부터 계산된 현재 날개 하중입니다."
-
 msgid "Bugs"
 msgstr "노후도"
 
@@ -12351,10 +12348,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12406,5 +12399,19 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"글라이더의 자체 중량, 승무원 중량, 밸러스트로부터 계산된 현재 날개 하중입니다. 최대 이륙 중량보다 무거우면 빨간색으로 표시됩니다."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

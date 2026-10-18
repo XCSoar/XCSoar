@@ -1916,9 +1916,6 @@ msgstr ""
 "ప్రకారం బ్యాలస్ట్ వాల్యూమ్ యొక్క కౌంట్-డౌన్ను టోగుల్ చేయడానికి "
 "\"Dump/Stop\"ని నొక్కండి."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "ప్రస్తుత వింగ్ లోడింగ్, గ్లైడర్ యొక్క ఖాళీ బరువు, సిబ్బంది బరువు మరియు బ్యాలస్ట్ నుండి లెక్కించబడుతుంది."
-
 msgid "Bugs"
 msgstr "బుగ్ల్స్"
 
@@ -12419,10 +12416,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12474,5 +12467,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"ప్రస్తుత వింగ్ లోడింగ్, గ్లైడర్ యొక్క ఖాళీ బరువు, సిబ్బంది బరువు మరియు బ్యా"
+"లస్ట్ నుండి లెక్కించబడుతుంది. గ్లైడర్ గరిష్ఠ టేకాఫ్ బరువు కంటే ఎక్కువగా ఉన్"
+"నప్పుడు ఎరుపు రంగులో చూపబడుతుంది."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

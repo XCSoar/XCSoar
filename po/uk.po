@@ -1962,9 +1962,6 @@ msgstr "Баласт"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Баласт планера. Збільшіть це значення, якщо навантаження пілот/кокпіт більше за номінальне значення ваги пілота для поляри крила (зазвичай 75 кг). Натисніть ENTER на цьому полі, щоб в режимі зворотнього відліку зменшити об'єм баласту, відповідно до швидкості скидання баласту, зазначеної в конфігурації налаштувань ."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Поточне навантаження на крило, розраховане на основі ваги порожнього планера, ваги екіпажу та баласту."
-
 msgid "Bugs"
 msgstr "Комахи"
 
@@ -12667,10 +12664,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12722,5 +12715,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Поточне навантаження на крило, розраховане на основі ваги порожнього планер"
+"а, ваги екіпажу та баласту. Показується червоним, коли планер важчий за сво"
+"ю максимальну злітну масу."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

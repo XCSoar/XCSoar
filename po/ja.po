@@ -1973,9 +1973,6 @@ msgstr ""
 "搭載バラスト投棄量のカウントダウンはこのボタンを押す\n"
 "時間当たりの投棄量は予めCONFIGで設定しておく"
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "グライダーの空重量、乗員重量、バラストから計算される現在の翼荷重。"
-
 msgid "Bugs"
 msgstr "バグ"
 
@@ -12556,10 +12553,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12611,5 +12604,18 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr "グライダーの空重量、乗員重量、バラストから計算される現在の翼荷重。最大離陸重量を超えると赤で表示されます。"
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 
