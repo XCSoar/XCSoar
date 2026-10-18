@@ -11,4 +11,5 @@ class GlidePolar;
 void
 RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
                      const ChartLook &chart_look,
-                     const GlidePolar &glide_polar);
+                     const GlidePolar &glide_polar,
+                     bool over_mtow = false);

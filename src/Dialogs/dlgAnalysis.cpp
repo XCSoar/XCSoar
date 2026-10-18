@@ -392,11 +392,17 @@ ChartControl::OnPaint(Canvas &canvas) noexcept
   case AnalysisPage::POLAR:
     RenderGlidePolar(canvas, rcgfx, chart_look,
                      calculated.climb_history,
-                     settings_computer.polar.glide_polar_task);
+                     settings_computer.polar.glide_polar_task,
+                     settings_computer.plane.IsOverMaxTakeoffMass(
+                       settings_computer.polar.glide_polar_task
+                         .GetTotalMass()));
     break;
     case AnalysisPage::MACCREADY:
       RenderMacCready(canvas, rcgfx, chart_look,
-                      settings_computer.polar.glide_polar_task);
+                      settings_computer.polar.glide_polar_task,
+                      settings_computer.plane.IsOverMaxTakeoffMass(
+                        settings_computer.polar.glide_polar_task
+                          .GetTotalMass()));
     break;
   case AnalysisPage::TEMPTRACE:
     RenderTemperatureChart(canvas, rcgfx, chart_look,

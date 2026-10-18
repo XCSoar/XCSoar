@@ -42,8 +42,9 @@ MacCreadyCaption(char *sTmp, size_t buffer_size,
 
 void
 RenderMacCready(Canvas &canvas, const PixelRect rc,
-                 const ChartLook &chart_look,
-                 const GlidePolar &glide_polar)
+                const ChartLook &chart_look,
+                const GlidePolar &glide_polar,
+                bool over_mtow)
 {
   ChartRenderer chart(chart_look, canvas, rc);
   chart.SetYLabel("V", Units::GetSpeedName());
@@ -95,5 +96,5 @@ RenderMacCready(Canvas &canvas, const PixelRect rc,
 
   chart.Finish();
 
-  RenderGlidePolarInfo(canvas, rc, chart_look, glide_polar);
+  RenderGlidePolarInfo(canvas, rc, chart_look, glide_polar, over_mtow);
 }
