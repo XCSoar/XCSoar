@@ -1951,9 +1951,6 @@ msgstr "Zavorra"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Zavorra del velivolo. Premi \"Scarica/Stop\" per avviare il conto alla rovescia del volume della zavorra secondo il rateo di scaricamento specificato nella configurazione."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Il carico alare attuale, calcolato dal peso a vuoto dell'aliante, dal peso dell'equipaggio e dalla zavorra."
-
 msgid "Bugs"
 msgstr "Sporco"
 
@@ -12739,10 +12736,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12794,5 +12787,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Il carico alare attuale, calcolato dal peso a vuoto dell'aliante, dal peso "
+"dell'equipaggio e dalla zavorra. È mostrato in rosso quando l'aliante è più"
+" pesante della sua massa massima al decollo."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

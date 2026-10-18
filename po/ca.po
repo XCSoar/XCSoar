@@ -1954,9 +1954,6 @@ msgstr "Llast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Llast del planador. Presiona \"Descarregar/Stop\" per canviar entre el compte-atrás de la volumetria de descarrega segons la taxa de descarrega especificada en les configuracions."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "La càrrega alar actual, calculada a partir del pes en buit del planador, el pes de la tripulació i el llast."
-
 msgid "Bugs"
 msgstr "Comàs"
 
@@ -12679,10 +12676,6 @@ msgid "Arrival altitude at the second-best alternate landing location using Safe
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12734,5 +12727,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"La càrrega alar actual, calculada a partir del pes en buit del planador, el"
+" pes de la tripulació i el llast. Es mostra en vermell quan el planador és "
+"més pesat que la seva massa màxima d'enlairament."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

@@ -1954,9 +1954,6 @@ msgstr "Vodná záťaž"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Záťaž vetroňa, zvýšte toto číslo ak je záťaž v kabíne/pilot ťažší ako referenčná váha pre poláru (typicky 75kg). Stlačte ENTER na tomto políčku pre spustenie odpočtu vypúšťania vodnej záťaže podľa rýchlosti nastavenej v menu konfigurácie."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Aktuálne zaťaženie krídla vypočítané z prázdnej hmotnosti vetroňa, hmotnosti posádky a záťaže."
-
 msgid "Bugs"
 msgstr "Muchy"
 
@@ -12596,10 +12593,6 @@ msgid "Current QNH pressure setting used for barometric altitude calculation. Th
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12651,5 +12644,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Aktuálne zaťaženie krídla vypočítané z prázdnej hmotnosti vetroňa, hmotnost"
+"i posádky a záťaže. Zobrazuje sa načerveno, keď je vetroň ťažší ako jeho ma"
+"ximálna vzletová hmotnosť."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 

@@ -1957,9 +1957,6 @@ msgstr "Баласт"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Баласт на планера. Натиснете клавиша „Намаляване/Спиране“ за да превключите обратния брояч за размер на баласта според стойността в настройките."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Текущото натоварване на крилото, изчислено от празното тегло на планера, теглото на екипажа и баласта."
-
 msgid "Bugs"
 msgstr "Замърсеност"
 
@@ -12696,10 +12693,6 @@ msgid "Arrival altitude at the second-best alternate landing location using Safe
 msgstr ""
 
 #, no-c-format
-msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
-
-#, no-c-format
 msgid "Speed VMG"
 msgstr ""
 
@@ -12751,5 +12744,21 @@ msgstr ""
 msgid ""
 "Arrange\n"
 "InfoBoxes"
+msgstr ""
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Текущото натоварване на крилото, изчислено от празното тегло на планера, те"
+"глото на екипажа и баласта. Показва се в червено, когато планерът е по-тежъ"
+"к от максималната си излетна маса."
+
+msgid "MTOW"
+msgstr ""
+
+msgid "Maximum takeoff weight of the glider."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
 
