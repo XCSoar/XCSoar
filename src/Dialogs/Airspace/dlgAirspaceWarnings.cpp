@@ -349,14 +349,9 @@ AirspaceWarningListWidget::Enable()
     return;
 
   try {
-    ProtectedAirspaceWarningManager::ExclusiveLease lease(airspace_warnings);
-    AirspaceWarning *warning = lease->GetWarningPtr(*airspace);
-
-    lease->AcknowledgeDay(airspace, false);
-    if (warning != NULL) {
-      warning->AcknowledgeInside(false);
-      warning->AcknowledgeWarning(false);
-    }
+    airspace_warnings.AcknowledgeDay(airspace, false);
+    airspace_warnings.AcknowledgeInside(airspace, false);
+    airspace_warnings.AcknowledgeWarning(airspace, false);
   } catch (const std::exception &e) {
     LogFmt("Failed to re-enable airspace warning: {}", e.what());
     Message::AddMessage(_("Failed to re-enable airspace warning"));

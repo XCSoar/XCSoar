@@ -3,10 +3,14 @@
 
 #include "Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceCircle.hpp"
+#include "Engine/Airspace/AirspaceInterceptSolution.hpp"
+#include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
+#include "time/FloatDuration.hxx"
 
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -128,14 +132,79 @@ TestNotamAckDayClearSiblings()
   ok1(second_warning != nullptr && !second_warning->GetAckDay());
 }
 
+static AirspaceInterceptSolution
+MakeSolution(double distance, double seconds) noexcept
+{
+  AirspaceInterceptSolution sol = AirspaceInterceptSolution::Invalid();
+  sol.location = GeoPoint{Angle::Degrees(8), Angle::Degrees(50)};
+  sol.distance = distance;
+  sol.altitude = 500;
+  sol.elapsed_time = FloatDuration{seconds};
+  return sol;
+}
+
+static void
+TestAckClearsActiveImmediately()
+{
+  Airspaces airspaces;
+  const auto inside_as = MakeAirspace(AirspaceClass::CLASSC, "Inside");
+  const auto near_as = MakeAirspace(AirspaceClass::CLASSD, "Near");
+  airspaces.Add(inside_as);
+  airspaces.Add(near_as);
+  airspaces.Optimise();
+
+  AirspaceWarningConfig config;
+  config.SetDefaults();
+  AirspaceWarningManager manager(config, airspaces);
+
+  const auto inside_sol = MakeSolution(0, 5);
+  const auto near_sol = MakeSolution(2000, 20);
+  auto &inside = manager.GetWarning(inside_as);
+  inside.UpdateSolution(AirspaceWarning::WARNING_INSIDE, inside_sol);
+  auto &near = manager.GetWarning(near_as);
+  near.UpdateSolution(AirspaceWarning::WARNING_GLIDE, near_sol);
+
+  const auto ack = std::chrono::seconds{30};
+  const auto step = std::chrono::seconds{1};
+  ok1(inside.WarningLive(ack, step));
+  ok1(near.WarningLive(ack, step));
+  ok1(inside.IsActive());
+  ok1(near.IsActive());
+
+  manager.AcknowledgeInside(inside_as);
+  ok1(!inside.IsActive());
+  ok1(near.IsActive());
+  ok1(&manager.begin()->GetAirspace() == near_as.get());
+
+  /* The next warning cycle must not report the ack again. */
+  inside.SaveState();
+  inside.UpdateSolution(AirspaceWarning::WARNING_INSIDE, inside_sol);
+  ok1(inside.WarningLive(ack, step));
+  ok1(!inside.ChangedState());
+  ok1(!inside.IsActive());
+
+  manager.SetCleared(near_as, true);
+  ok1(!near.IsActive());
+  ok1(&manager.begin()->GetAirspace() == inside_as.get());
+
+  manager.SetCleared(near_as, false);
+  ok1(near.IsActive());
+  ok1(&manager.begin()->GetAirspace() == near_as.get());
+
+  manager.Acknowledge(near_as);
+  ok1(!near.IsActive());
+  ok1(!inside.IsActive());
+}
+
 int
 main()
 {
-  plan_tests(31);
+  plan_tests(31 + 20);
 
   TestNonNotamAckDayClear();
   TestNotamAckDayClearAfterRefresh();
   TestNotamAckDayClearSiblings();
+  TestAckClearsActiveImmediately();
 
   return exit_status();
 }

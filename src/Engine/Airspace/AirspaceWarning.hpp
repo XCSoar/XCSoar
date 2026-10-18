@@ -153,11 +153,16 @@ public:
   }
 
   /**
-   * Is this warning currently active, i.e. it has no valid "ACK"?
-   * This implies that IsWarning() is true.
+   * Is this warning currently alerting?
+   *
+   * True when the aircraft is near or inside and no acknowledgement
+   * or clearance is in force. Evaluated from the current
+   * acknowledgement, so ACK and clearance take effect immediately
+   * rather than on the next warning cycle.
    */
+  [[gnu::pure]]
   bool IsActive() const noexcept {
-    return expired;
+    return IsWarning() && IsAckExpired();
   }
 
   /**
@@ -248,6 +253,7 @@ public:
    */
   void AcknowledgeDay(const bool set=true) noexcept {
     ack_day = set;
+    expired = IsAckExpired();
   }
 
   /**
@@ -264,6 +270,7 @@ public:
    */
   void SetCleared(const bool set=true) noexcept {
     cleared_day = set;
+    expired = IsAckExpired();
   }
 
   /**
@@ -284,6 +291,7 @@ public:
    */
   void SetCoveredByClearance(const bool set) noexcept {
     covered_by_clearance = set;
+    expired = IsAckExpired();
   }
 
   /**

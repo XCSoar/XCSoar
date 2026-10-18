@@ -617,11 +617,21 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 }
 
 void
+AirspaceWarningManager::Resort() noexcept
+{
+  warnings.sort();
+}
+
+void
 AirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 {
   auto *w = GetWarningPtr(*airspace);
-  if (w != nullptr)
-    w->Acknowledge();
+  if (w == nullptr || !w->IsActive())
+    return;
+
+  w->Acknowledge();
+  Resort();
+  ++serial;
 }
 
 void
@@ -640,8 +650,11 @@ AirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
 
   const bool was_acknowledged = warning->IsWarningAcknowledged();
   warning->AcknowledgeWarning(set);
-  if (warning->IsWarningAcknowledged() != was_acknowledged)
-    ++serial;
+  if (warning->IsWarningAcknowledged() == was_acknowledged)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 void
@@ -660,8 +673,11 @@ AirspaceWarningManager::AcknowledgeInside(ConstAirspacePtr airspace,
 
   const bool was_acknowledged = warning->IsInsideAcknowledged();
   warning->AcknowledgeInside(set);
-  if (warning->IsInsideAcknowledged() != was_acknowledged)
-    ++serial;
+  if (warning->IsInsideAcknowledged() == was_acknowledged)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 void
@@ -713,8 +729,11 @@ AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
     ack_changed = warning->GetAckDay() != was_acknowledged;
   }
 
-  if (membership_changed || ack_changed)
-    ++serial;
+  if (!membership_changed && !ack_changed)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 bool
@@ -766,8 +785,11 @@ AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
   // The renderer fill cache keys on the manager serial; without this
   // bump, toggling clearance on an existing warning would not refresh
   // the cached fill on the non-GL renderer.
-  if (membership_changed || flag_changed)
-    ++serial;
+  if (!membership_changed && !flag_changed)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 bool
@@ -791,10 +813,21 @@ AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcep
 void
 AirspaceWarningManager::AcknowledgeAll()
 {
+  bool changed = false;
   for (auto &w : warnings) {
+    if (!w.IsActive())
+      continue;
+
     w.AcknowledgeWarning(true);
     w.AcknowledgeInside(true);
+    changed = true;
   }
+
+  if (!changed)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 namespace {

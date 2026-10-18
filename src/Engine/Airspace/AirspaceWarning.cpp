@@ -127,6 +127,10 @@ AirspaceWarning::Acknowledge() noexcept
     acktime_inside = null_acktime;
   else if (state != WARNING_CLEAR)
     acktime_warning = null_acktime;
+  else
+    return;
+
+  expired = IsAckExpired();
 }
 
 void
@@ -136,6 +140,8 @@ AirspaceWarning::AcknowledgeInside(const bool set) noexcept
     acktime_inside = null_acktime;
   else
     acktime_inside = {};
+
+  expired = IsAckExpired();
 }
 
 void
@@ -145,6 +151,8 @@ AirspaceWarning::AcknowledgeWarning(const bool set) noexcept
     acktime_warning = null_acktime;
   else
     acktime_warning = {};
+
+  expired = IsAckExpired();
 }
 
 void
