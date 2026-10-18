@@ -2083,9 +2083,11 @@ msgstr "ІнфоБокс вставити"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"«Скопіювати» запам'ятовує всі інфобокси цього набору, «Вставити» замінює ни"
+"ми інфобокси іншого набору."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Успадкувати загальні налаштування"
 
 msgid "Invalid"
 msgstr "Хибне"
@@ -2770,17 +2772,18 @@ msgstr "Коментар"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Фіксований текст"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Заголовок, значення і коментар, введені пілотом. Торкніться, щоб змінити."
 
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 msgid "Value"
-msgstr ""
+msgstr "Значення"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4418,10 +4421,10 @@ msgid "Reference used for start max height rule."
 msgstr "Прив'язка, що використовується в правилах макс. висоти старту."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Перейти до найближчої точки"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Перехід до найближчої точки зон старту і фінішу."
 
 msgid "Finish min. height"
 msgstr "Мін. висота на фініші"
@@ -11053,21 +11056,21 @@ msgstr "Вручну"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Кисень у крові"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Насичення крові киснем у відсотках, з пульсоксиметра Bluetooth."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Нещодавно використані маршрутні точки"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Підключіться до Wi-Fi приладу, щоб завантажити польоти з цього FLARM."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Визначає, чи зноситься слід вітром під час відображення в режимі кола на близьких масштабах карти. Вимкнено — слід лишається без компенсації вітрового зносу. У колі це також стосується проекції траєкторії: Увімк. тримає її відносно повітряної маси; Вимк. враховує вітер."
 
@@ -11103,20 +11106,21 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Умикає радар трафіку й обирає його положення на головному екрані. Азимут на ціль відносно курсу ПС має вигляд стрілки. Трикутники, направлені вгору чи вниз, вказують на висоту відносно цілі, а їх колір - рівень небезпеки."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Роздільність екрана"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Яскравість екрана"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Налаштувати яскравість екрана."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"Яскравість екрана лише для читання, бо запис потребує додаткових дозволів."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Авто"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11131,10 +11135,10 @@ msgstr "Визначає розрахунки характеристик глі�
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Режим запасних: Авто"
 
 msgid "Paste"
-msgstr ""
+msgstr "Вставити"
 
 #, c-format
 msgid ""
@@ -11238,105 +11242,124 @@ msgid "%u min"
 msgstr "%u хв"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Підтримувані служби не знайдено"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Вибрані модулі systemd не встановлено."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Недоступно"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Запуск..."
 
 msgid "Stopping..."
 msgstr "Зупинення…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Перезавантаження..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Збій"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Увімкнути"
 
 msgid "Restart"
-msgstr ""
+msgstr "Перезавантажити"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Вимкнути"
 
 msgid "System service"
-msgstr ""
+msgstr "Системна служба"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Сервер SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Віддалений термінал"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Датчики"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Служба датчиків OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Аудіо варіо"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Служба аудіо варіо OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Макс. температура з прогнозу"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Підставляє макс. температуру в налаштування польоту з прогнозу DWD на цей д"
+"ень для найближчої станції MOSMIX. Потрібна позиція, завантаження раз на де"
+"нь, без облікового запису."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Найвища приземна температура дня. Суха адіабата від неї до температури зовн"
+"ішнього повітря, виміряної в наборі висоти, дає оцінку стелі терміка; для к"
+"ромки хмар потрібен ще датчик вологості. Обидві лінії малюються на сторінці"
+" температурного сліду в діалозі «Аналіз», коли планер пройшов шар."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC завдання на старті"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Якість планування безпечної МС"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Голосові застереження"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Промовляє застереження про зіткнення FLARM, із терміновістю, положенням за "
+"годинником і тим, вище чи нижче рух: \"Traffic urgent! Three o'clock. Above"
+".\" Застереження про перешкоди і зону тривоги не промовляються."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Перевірити голосове застереження"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Перемикач командної швидкості"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Як XCSoar використовує доповідь варіометра про перехід і набір висоти."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Режим польоту"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"У польоті доповідь варіометра про перехід і набір висоти є режимом польоту."
+" Перехід закінчує набір і починає середнє заново. Набір висоти починає нови"
+"й термік. Доліт може й далі з'являтися в переході. На Vega це вихід спіралі"
+"."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Режим екрана"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar визначає режим спіралі за розворотом. Доповідь варіометра не викорис"
+"товується."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Сторінка змінюється, а режим польоту ні. Перехід показує сторінку переходу,"
+" зокрема в розвороті, і ховає доліт. Набір висоти показує сторінку варіо. Н"
+"а Vega це перемикач командної швидкості."
 
 #, no-c-format
 msgid "System Tools"
@@ -11362,71 +11385,85 @@ msgstr "Завдання XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Статистика дальності"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Антена"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM зберігає статистику для кожного з двох радіоканалів."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Точки даних"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Період"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Дальність FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM не надіслав статистику дальності."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Скинути статистику дальності? Зробіть це після заміни антен; FLARM збере її"
+" заново."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM не підтвердив скидання."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Нижче мінімальної дальності"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Виміряні сектори цього каналу, чия середня дальність коротша за мінімум FLA"
+"RM: 2 nm попереду, 1 nm у боки і назад. Перевірте встановлення антени."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Налаштування дальності"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM не повідомляє про повітряні судна далі за цю відстань. Графік показує"
+" її пунктирним колом, коли вона в зображеній дальності."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Необмежено"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Контакти з іншими повітряними суднами FLARM у польоті, пораховані по разу в"
+" кожному секторі, який вони пройшли, з найбільшою відстанню, на якій їх там"
+" прийнято. Сектор показує середнє більшої половини цих відстаней, лінія впо"
+"перек — найбільшу."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Виміряні сектори, чия оцінена дальність коротша за мінімум FLARM: 2 nm попе"
+"реду, 1 nm у боки і назад. Перевірте встановлення антени."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Скинути оцінку дальності? Зробіть це після заміни антени; XCSoar збере її з"
+"аново."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "Оцінка дальності FLARM"
