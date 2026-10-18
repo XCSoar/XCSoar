@@ -431,6 +431,7 @@ Version 7.46 - not yet released
     polar analysis
   - open the flight setup when the vario gauge is tapped, as the
     Ballast InfoBox does. Sliding off before lifting does not open it
+  - update translations for 8 languages #3300
   - show icons on tabbed dialogs by default. Tab dialog style under
     Look → Layout still switches them back to text
   - rename Reach polar "Task" to "Task MC", matching Safety MC
