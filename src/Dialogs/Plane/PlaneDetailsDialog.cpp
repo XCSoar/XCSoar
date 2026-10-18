@@ -25,6 +25,7 @@ class PlaneEditWidget final
     HANDICAP,
     WING_AREA,
     EMPTY_MASS,
+    MTOW,
     MAX_BALLAST,
     DUMP_TIME,
     MAX_SPEED,
@@ -151,6 +152,10 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
            "%.0f %s", "%.0f",
            0, 1000, 5, false,
            UnitGroup::MASS, plane.empty_mass);
+  AddFloat(_("MTOW"), _("Maximum takeoff weight of the glider."),
+           "%.0f %s", "%.0f",
+           0, 1000, 5, false,
+           UnitGroup::MASS, plane.max_takeoff_mass);
   AddFloat(_("Max. Ballast"), nullptr,
            "%.0f l", "%.0f",
            0, 500, 5,
@@ -188,6 +193,7 @@ PlaneEditWidget::Save(bool &_changed) noexcept
   changed |= SaveValueInteger(HANDICAP, plane.handicap);
   changed |= SaveValue(WING_AREA, plane.wing_area);
   changed |= SaveValue(EMPTY_MASS, UnitGroup::MASS, plane.empty_mass);
+  changed |= SaveValue(MTOW, UnitGroup::MASS, plane.max_takeoff_mass);
   changed |= SaveValue(MAX_BALLAST, plane.max_ballast);
   changed |= SaveValueInteger(DUMP_TIME, plane.dump_time);
   changed |= SaveValue(MAX_SPEED, UnitGroup::HORIZONTAL_SPEED,
@@ -214,6 +220,7 @@ PlaneEditWidget::PolarButtonClicked() noexcept
   LoadValue(HANDICAP, plane.handicap);
   LoadValue(WING_AREA, plane.wing_area);
   LoadValue(EMPTY_MASS, plane.empty_mass, UnitGroup::MASS);
+  LoadValue(MTOW, plane.max_takeoff_mass, UnitGroup::MASS);
   LoadValue(MAX_BALLAST, plane.max_ballast);
   LoadValue(MAX_SPEED, plane.max_speed, UnitGroup::HORIZONTAL_SPEED);
 }

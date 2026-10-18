@@ -63,6 +63,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   bool has_empty_mass = false;
   bool has_handicap = false;
   bool has_max_ballast = false;
+  bool has_max_takeoff_mass = false;
   bool has_dump_time = false;
   bool has_max_speed = false;
   bool has_wing_area = false;
@@ -96,6 +97,9 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
       has_empty_mass = ReadDouble(pair.value, plane.empty_mass);
     } else if (!has_max_ballast && StringIsEqual(pair.key, "MaxBallast")) {
       has_max_ballast = ReadDouble(pair.value, plane.max_ballast);
+    } else if (!has_max_takeoff_mass &&
+               StringIsEqual(pair.key, "MaxTakeoffMass")) {
+      has_max_takeoff_mass = ReadDouble(pair.value, plane.max_takeoff_mass);
     } else if (!has_dump_time && StringIsEqual(pair.key, "DumpTime")) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
     } else if (!has_max_speed && StringIsEqual(pair.key, "MaxSpeed")) {
@@ -128,6 +132,8 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
     plane.handicap = 100;
   if (!has_max_ballast)
     plane.max_ballast = 0;
+  if (!has_max_takeoff_mass)
+    plane.max_takeoff_mass = 0;
   if (!has_dump_time)
     plane.dump_time = 0;
   if (!has_max_speed)
@@ -181,6 +187,8 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   writer.Write("PlaneEmptyMass", tmp);
   tmp.Format("%f", (double)plane.max_ballast);
   writer.Write("MaxBallast", tmp);
+  tmp.Format("%f", (double)plane.max_takeoff_mass);
+  writer.Write("MaxTakeoffMass", tmp);
   tmp.Format("%f", (double)plane.dump_time);
   writer.Write("DumpTime", tmp);
   tmp.Format("%f", (double)plane.max_speed);
