@@ -11227,10 +11227,10 @@ msgid "OpenVario sensor daemon"
 msgstr "OpenVario-sensortjeneste"
 
 msgid "Audio vario"
-msgstr "Audiolokator"
+msgstr "Lydvariometer"
 
 msgid "OpenVario audio vario daemon"
-msgstr "OpenVario Audiolokator-tjeneste"
+msgstr "OpenVario lydvariometertjeneste"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
