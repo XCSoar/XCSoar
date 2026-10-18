@@ -19,6 +19,8 @@
 
 #include <fmt/format.h>
 
+#include <cmath>
+
 static bool
 ReadPolar(const char *string, Plane &plane) noexcept
 {
@@ -99,7 +101,12 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
       has_max_ballast = ReadDouble(pair.value, plane.max_ballast);
     } else if (!has_max_takeoff_mass &&
                StringIsEqual(pair.key, "MaxTakeoffMass")) {
-      has_max_takeoff_mass = ReadDouble(pair.value, plane.max_takeoff_mass);
+      has_max_takeoff_mass =
+        ReadDouble(pair.value, plane.max_takeoff_mass) &&
+        std::isfinite(plane.max_takeoff_mass) &&
+        plane.max_takeoff_mass >= 0;
+      if (!has_max_takeoff_mass)
+        plane.max_takeoff_mass = 0;
     } else if (!has_dump_time && StringIsEqual(pair.key, "DumpTime")) {
       has_dump_time = ReadUnsigned(pair.value, plane.dump_time);
     } else if (!has_max_speed && StringIsEqual(pair.key, "MaxSpeed")) {

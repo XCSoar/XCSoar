@@ -25,7 +25,7 @@ struct Plane
   double max_ballast;
 
   /** Maximum takeoff weight (kg).  Zero when the plane file has none. */
-  double max_takeoff_mass;
+  double max_takeoff_mass = 0;
   double max_speed;
   double wing_area;
 

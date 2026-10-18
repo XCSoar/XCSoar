@@ -12,6 +12,7 @@
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "Units/Units.hpp"
 #include "Computer/Settings.hpp"
 #include "UIGlobals.hpp"
 
@@ -152,9 +153,12 @@ PlaneEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
            "%.0f %s", "%.0f",
            0, 1000, 5, false,
            UnitGroup::MASS, plane.empty_mass);
+  /* AddFloat keeps min and max in the user unit.  1000 kg is about
+     2205 lb, so a pound display can still hold this glider's MTOW. */
+  const Unit mass_unit = Units::GetUserUnitByGroup(UnitGroup::MASS);
   AddFloat(_("MTOW"), _("Maximum takeoff weight of the glider."),
            "%.0f %s", "%.0f",
-           0, 1000, 5, false,
+           0, Units::ToUserUnit(1000, mass_unit), 5, false,
            UnitGroup::MASS, plane.max_takeoff_mass);
   AddFloat(_("Max. Ballast"), nullptr,
            "%.0f l", "%.0f",

@@ -347,21 +347,27 @@ LXDevice::PutPolar(const GlidePolar &polar,
 
       const bool load_matches = polar_load <= 0 ||
         fabs(device_polar.polar_load - polar_load) < 0.05;
-      if (load_matches &&
+      const double pending_mtow =
+        (pending_max_takeoff_mass && *pending_max_takeoff_mass > 0)
+        ? *pending_max_takeoff_mass : 0;
+      const bool mtow_matches = pending_mtow <= 0 ||
+        fabs(device_polar.max_weight - pending_mtow) < 0.5;
+      if (mtow_matches && load_matches &&
           fabs(device_polar.a - coeffs.a) < 0.0001 &&
           fabs(device_polar.b - coeffs.b) < 0.0001 &&
           fabs(device_polar.c - coeffs.c) < 0.0001 &&
           fabs(device_polar.polar_weight - ref_mass) < 0.1 &&
           fabs(device_polar.empty_weight - empty_mass) < 0.1 &&
-          fabs(device_polar.pilot_weight - crew_mass) < 0.1)
+          fabs(device_polar.pilot_weight - crew_mass) < 0.1) {
+        /* Already on the vario.  Drop the pending value so the
+           calculated update does not send it again. */
+        if (pending_mtow > 0)
+          pending_max_takeoff_mass.reset();
         return true;
-
-      max_weight = device_polar.max_weight;
-      if (pending_max_takeoff_mass && *pending_max_takeoff_mass > 0) {
-        max_weight = *pending_max_takeoff_mass;
-        device_polar.max_weight = max_weight;
-        pending_max_takeoff_mass.reset();
       }
+
+      max_weight = pending_mtow > 0 ? pending_mtow
+                                     : device_polar.max_weight;
       glider_name = device_polar.name;
       stall = device_polar.stall;
     }
@@ -399,6 +405,9 @@ LXDevice::PutPolar(const GlidePolar &polar,
     device_polar.polar_weight = ref_mass;
     device_polar.empty_weight = empty_mass;
     device_polar.pilot_weight = crew_mass;
+    if (max_weight > 0)
+      device_polar.max_weight = max_weight;
+    pending_max_takeoff_mass.reset();
     device_polar.valid = true;
   }
 

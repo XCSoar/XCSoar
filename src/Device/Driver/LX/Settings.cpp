@@ -305,7 +305,9 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
       pending_empty_mass = empty_mass;
       need_polar = true;
     } else {
-      pending_empty_mass.reset();
+      /* Keep the pending mass until the sentence is written, so a
+         failed port open can be retried from OnCalculatedUpdate. */
+      pending_empty_mass = empty_mass;
       cmd = fmt::format(
         "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
         "{:.1f},{:.1f},{},{:.0f}",
@@ -319,8 +321,6 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
         device_polar.pilot_weight,
         device_polar.name,
         device_polar.stall);
-      device_polar.empty_weight = empty_mass;
-      last_sent_empty_mass = empty_mass;
     }
   }
 
@@ -339,6 +339,12 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
     return false;
 
   PortWriteNMEA(port, cmd.c_str(), env);
+  {
+    const std::lock_guard lock{mutex};
+    device_polar.empty_weight = empty_mass;
+    last_sent_empty_mass = empty_mass;
+    pending_empty_mass.reset();
+  }
   return true;
 }
 
@@ -361,7 +367,7 @@ LXDevice::PutMaxTakeoffMass(double max_takeoff_mass,
       pending_max_takeoff_mass = max_takeoff_mass;
       need_polar = true;
     } else {
-      pending_max_takeoff_mass.reset();
+      pending_max_takeoff_mass = max_takeoff_mass;
       cmd = fmt::format(
         "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
         "{:.1f},{:.1f},{},{:.0f}",
@@ -375,7 +381,6 @@ LXDevice::PutMaxTakeoffMass(double max_takeoff_mass,
         device_polar.pilot_weight,
         device_polar.name,
         device_polar.stall);
-      device_polar.max_weight = max_takeoff_mass;
     }
   }
 
@@ -392,6 +397,11 @@ LXDevice::PutMaxTakeoffMass(double max_takeoff_mass,
     return false;
 
   PortWriteNMEA(port, cmd.c_str(), env);
+  {
+    const std::lock_guard lock{mutex};
+    device_polar.max_weight = max_takeoff_mass;
+    pending_max_takeoff_mass.reset();
+  }
   return true;
 }
 
