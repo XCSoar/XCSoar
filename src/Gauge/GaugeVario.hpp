@@ -83,6 +83,9 @@ class GaugeVario : public AntiFlickerWindow
 
   bool dirty = true;
 
+  /** Finger is down on the gauge.  Lift inside opens Flight Setup. */
+  bool dragging = false;
+
   bool background_dirty = true;
   bool vario_line_drawn = false;
 
@@ -144,7 +147,11 @@ protected:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnResize(PixelSize new_size) noexcept override;
+  void OnResize(PixelSize new_size) noexcept override;
+  void OnCancelMode() noexcept override;
+  bool OnMouseDown(PixelPoint p) noexcept override;
+  bool OnMouseUp(PixelPoint p) noexcept override;
+  bool OnMouseMove(PixelPoint p, unsigned keys) noexcept override;
 
   /* virtual methods from class AntiFlickerWindow */
   virtual void OnPaintBuffer(Canvas &canvas) noexcept override;
