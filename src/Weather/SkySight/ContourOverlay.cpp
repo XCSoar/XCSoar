@@ -17,7 +17,7 @@
 #include <cmath>
 #include <memory>
 
-#ifdef USE_GEOTIFF
+#if defined(USE_GEOTIFF) && defined(ENABLE_OPENGL)
 
 namespace {
 
