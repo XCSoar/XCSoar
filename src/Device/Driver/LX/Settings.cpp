@@ -293,15 +293,19 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
   if (!IsLXNAVVario())
     return true;
 
-  if (!EnableNMEA(env))
-    return false;
-
-  /* Send full POLAR command with only empty_weight changed to
-     avoid zeroing other fields on the device. */
+  /* A full sentence needs the cached coefficients and name.  Remember
+     the mass and refuse success so DeviceDescriptor does not treat
+     it as sent.  The next POLAR reply publishes this mass, and
+     OnCalculatedUpdate writes it (#3353). */
+  bool need_polar = false;
   std::string cmd;
   {
     const std::lock_guard lock{mutex};
-    if (device_polar.valid) {
+    if (!device_polar.valid) {
+      pending_empty_mass = empty_mass;
+      need_polar = true;
+    } else {
+      pending_empty_mass.reset();
       cmd = fmt::format(
         "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
         "{:.1f},{:.1f},{},{:.0f}",
@@ -320,12 +324,21 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
     }
   }
 
-  if (!cmd.empty()) {
-    PortWriteNMEA(port, cmd.c_str(), env);
-    return true;
+  if (need_polar) {
+    if (EnableNMEA(env))
+      RequestLXNAVVarioSetting("POLAR", env);
+    return false;
   }
 
-  /* Same as PutCrewMass: never send empty-coefficient POLAR (#2397). */
+  if (!EnableNMEA(env))
+    return false;
+
+  /* Do not fall back to a partial POLAR write: empty a,b,c fields
+     zero the polar on LXNAV S-series varios (#2397). */
+  if (cmd.empty())
+    return false;
+
+  PortWriteNMEA(port, cmd.c_str(), env);
   return true;
 }
 

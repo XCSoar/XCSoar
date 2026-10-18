@@ -178,6 +178,13 @@ class LXDevice: public AbstractDevice
   std::optional<double> last_sent_empty_mass;
 
   /**
+   * Empty mass waiting for a cached POLAR.  A full PLXV0,POLAR,W
+   * cannot be built before that, and the send must not be reported
+   * as done (#3353).
+   */
+  std::optional<double> pending_empty_mass;
+
+  /**
    * Tracked polar values to detect when plane profile changes.
    */
   struct TrackedPolar {
@@ -357,6 +364,7 @@ public:
     switch_host_baud_for_direct = true;
     polar_sync_notified = false;
     device_polar.valid = false;
+    pending_empty_mass.reset();
     last_sent_target_name.clear();
     last_sent_target_location = GeoPoint::Invalid();
     last_task_type = TaskType::NONE;

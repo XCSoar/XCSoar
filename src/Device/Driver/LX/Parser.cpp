@@ -398,6 +398,17 @@ LXDevice::StoreReceivedPolar(std::string_view value,
     device_polar.name = name;
     device_polar.stall = stall;
     device_polar.valid = true;
+
+    /* A send that waited for this cache must win over the mass in
+       the reply, or PolarProcessTimer writes the vario's old mass
+       into the plane file (#3353). */
+    if (pending_empty_mass &&
+        (*pending_empty_mass > empty_weight + 0.1 ||
+         *pending_empty_mass < empty_weight - 0.1)) {
+      empty_weight = *pending_empty_mass;
+      device_polar.empty_weight = empty_weight;
+    } else
+      pending_empty_mass.reset();
   }
 
   info.settings.ProvidePolarCoefficients(pc.a, pc.b, pc.c, info.clock);
