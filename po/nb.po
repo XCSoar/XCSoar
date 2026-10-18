@@ -11082,1114 +11082,1124 @@ msgstr "FLARM-rekkeviddeanslag"
 
 #, no-c-format
 msgid "Zoom in"
-msgstr ""
+msgstr "Zoom inn"
 
 #, no-c-format
 msgid "Zoom out"
-msgstr ""
+msgstr "Zoom ut"
 
 #, no-c-format
 msgid "Auto zoom"
-msgstr ""
+msgstr "Autozoom"
 
 #, no-c-format
 msgid "Next page"
-msgstr ""
+msgstr "Neste side"
 
 #, no-c-format
 msgid "Previous page"
-msgstr ""
+msgstr "Forrige side"
 
 #, no-c-format
 msgid "Waypoint list"
-msgstr ""
+msgstr "Vendepunktliste"
 
 #, no-c-format
 msgid "Menu"
-msgstr ""
+msgstr "Meny"
 
 #, no-c-format
 msgid "Task manager"
-msgstr ""
+msgstr "Oppgavebehandling"
 
 #, no-c-format
 msgid "Pan mode"
-msgstr ""
+msgstr "Panoreringsmodus"
 
 #, no-c-format
 msgid "Quick menu"
-msgstr ""
+msgstr "Hurtigmeny"
 
 #. OPERA is published under CC BY 4.0, so the attribution has to
 #. travel with the picture; the overlay label carries it, which is
 #. what the map shows when the pilot taps it
 #, no-c-format
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #, no-c-format
 msgid "Satellite"
-msgstr ""
+msgstr "Satellitt"
 
 msgid "(Inside)"
-msgstr ""
+msgstr "(Inne)"
 
 msgid "(Near)"
-msgstr ""
+msgstr "(Nær)"
 
 msgid "Cleared"
-msgstr ""
+msgstr "Klarert"
 
 msgid "Covered"
-msgstr ""
+msgstr "Dekket"
 
 msgid "Power off"
-msgstr ""
+msgstr "Slå av"
 
 #, no-c-format
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #, no-c-format
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "De forente arabiske emirater"
 
 #, no-c-format
 msgid "Afghanistan"
-msgstr ""
+msgstr "Afghanistan"
 
 #, no-c-format
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua og Barbuda"
 
 #, no-c-format
 msgid "Anguilla"
-msgstr ""
+msgstr "Anguilla"
 
 #, no-c-format
 msgid "Albania"
-msgstr ""
+msgstr "Albania"
 
 #, no-c-format
 msgid "Armenia"
-msgstr ""
+msgstr "Armenia"
 
 #, no-c-format
 msgid "Angola"
-msgstr ""
+msgstr "Angola"
 
 #, no-c-format
 msgid "Antarctica"
-msgstr ""
+msgstr "Antarktis"
 
 #, no-c-format
 msgid "Argentina"
-msgstr ""
+msgstr "Argentina"
 
 #, no-c-format
 msgid "American Samoa"
-msgstr ""
+msgstr "Amerikansk Samoa"
 
 #, no-c-format
 msgid "Austria"
-msgstr ""
+msgstr "Østerrike"
 
 #, no-c-format
 msgid "Australia"
-msgstr ""
+msgstr "Australia"
 
 #, no-c-format
 msgid "Aruba"
-msgstr ""
+msgstr "Aruba"
 
 #, no-c-format
 msgid "Åland Islands"
-msgstr ""
+msgstr "Åland"
 
 #, no-c-format
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Aserbajdsjan"
 
 #, no-c-format
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bosnia-Hercegovina"
 
 #, no-c-format
 msgid "Barbados"
-msgstr ""
+msgstr "Barbados"
 
 #, no-c-format
 msgid "Bangladesh"
-msgstr ""
+msgstr "Bangladesh"
 
 #, no-c-format
 msgid "Belgium"
-msgstr ""
+msgstr "Belgia"
 
 #, no-c-format
 msgid "Burkina Faso"
-msgstr ""
+msgstr "Burkina Faso"
 
 #, no-c-format
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bulgaria"
 
 #, no-c-format
 msgid "Bahrain"
-msgstr ""
+msgstr "Bahrain"
 
 #, no-c-format
 msgid "Burundi"
-msgstr ""
+msgstr "Burundi"
 
 #, no-c-format
 msgid "Benin"
-msgstr ""
+msgstr "Benin"
 
 #, no-c-format
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Saint-Barthélemy"
 
 #, no-c-format
 msgid "Bermuda"
-msgstr ""
+msgstr "Bermuda"
 
 #, no-c-format
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 #, no-c-format
 msgid "Bolivia"
-msgstr ""
+msgstr "Bolivia"
 
 #, no-c-format
 msgid "Caribbean Netherlands"
-msgstr ""
+msgstr "Karibisk Nederland"
 
 #, no-c-format
 msgid "Brazil"
-msgstr ""
+msgstr "Brasil"
 
 #, no-c-format
 msgid "Bahamas"
-msgstr ""
+msgstr "Bahamas"
 
 #, no-c-format
 msgid "Bhutan"
-msgstr ""
+msgstr "Bhutan"
 
 #, no-c-format
 msgid "Bouvet Island"
-msgstr ""
+msgstr "Bouvetøya"
 
 #, no-c-format
 msgid "Botswana"
-msgstr ""
+msgstr "Botswana"
 
 #, no-c-format
 msgid "Belarus"
-msgstr ""
+msgstr "Belarus"
 
 #, no-c-format
 msgid "Belize"
-msgstr ""
+msgstr "Belize"
 
 #, no-c-format
 msgid "Canada"
-msgstr ""
+msgstr "Canada"
 
 #, no-c-format
 msgid "Cocos Islands"
-msgstr ""
+msgstr "Kokosøyene"
 
 #, no-c-format
 msgid "Congo-Kinshasa"
-msgstr ""
+msgstr "Kongo"
 
 #, no-c-format
 msgid "Central African Republic"
-msgstr ""
+msgstr "Den sentralafrikanske republikk"
 
 #, no-c-format
 msgid "Congo-Brazzaville"
-msgstr ""
+msgstr "Kongo-Brazzaville"
 
 #, no-c-format
 msgid "Switzerland"
-msgstr ""
+msgstr "Sveits"
 
 #, no-c-format
 msgid "Côte d'Ivoire"
-msgstr ""
+msgstr "Elfenbenskysten"
 
 #, no-c-format
 msgid "Cook Islands"
-msgstr ""
+msgstr "Cookøyene"
 
 #, no-c-format
 msgid "Chile"
-msgstr ""
+msgstr "Chile"
 
 #, no-c-format
 msgid "Cameroon"
-msgstr ""
+msgstr "Kamerun"
 
 #, no-c-format
 msgid "China"
-msgstr ""
+msgstr "Kina"
 
 #, no-c-format
 msgid "Colombia"
-msgstr ""
+msgstr "Colombia"
 
 #, no-c-format
 msgid "Costa Rica"
-msgstr ""
+msgstr "Costa Rica"
 
 #, no-c-format
 msgid "Cuba"
-msgstr ""
+msgstr "Cuba"
 
 #, no-c-format
 msgid "Cape Verde"
-msgstr ""
+msgstr "Kapp Verde"
 
 #, no-c-format
 msgid "Curaçao"
-msgstr ""
+msgstr "Curaçao"
 
 #, no-c-format
 msgid "Christmas Island"
-msgstr ""
+msgstr "Christmasøya"
 
 #, no-c-format
 msgid "Cyprus"
-msgstr ""
+msgstr "Kypros"
 
 #, no-c-format
 msgid "Czechia"
-msgstr ""
+msgstr "Tsjekkia"
 
 #, no-c-format
 msgid "Germany"
-msgstr ""
+msgstr "Tyskland"
 
 #, no-c-format
 msgid "Djibouti"
-msgstr ""
+msgstr "Djibouti"
 
 #, no-c-format
 msgid "Denmark"
-msgstr ""
+msgstr "Danmark"
 
 #, no-c-format
 msgid "Dominica"
-msgstr ""
+msgstr "Dominica"
 
 #, no-c-format
 msgid "Dominican Republic"
-msgstr ""
+msgstr "Den dominikanske republikk"
 
 #, no-c-format
 msgid "Algeria"
-msgstr ""
+msgstr "Algerie"
 
 #, no-c-format
 msgid "Ecuador"
-msgstr ""
+msgstr "Ecuador"
 
 #, no-c-format
 msgid "Estonia"
-msgstr ""
+msgstr "Estland"
 
 #, no-c-format
 msgid "Egypt"
-msgstr ""
+msgstr "Egypt"
 
 #, no-c-format
 msgid "Western Sahara"
-msgstr ""
+msgstr "Vest-Sahara"
 
 #, no-c-format
 msgid "Eritrea"
-msgstr ""
+msgstr "Eritrea"
 
 #, no-c-format
 msgid "Spain"
-msgstr ""
+msgstr "Spania"
 
 #, no-c-format
 msgid "Ethiopia"
-msgstr ""
+msgstr "Etiopia"
 
 #, no-c-format
 msgid "Finland"
-msgstr ""
+msgstr "Finland"
 
 #, no-c-format
 msgid "Fiji"
-msgstr ""
+msgstr "Fiji"
 
 #, no-c-format
 msgid "Falkland Islands"
-msgstr ""
+msgstr "Falklandsøyene"
 
 #, no-c-format
 msgid "Micronesia"
-msgstr ""
+msgstr "Mikronesiaføderasjonen"
 
 #, no-c-format
 msgid "Faroe Islands"
-msgstr ""
+msgstr "Færøyene"
 
 #, no-c-format
 msgid "France"
-msgstr ""
+msgstr "Frankrike"
 
 #, no-c-format
 msgid "Gabon"
-msgstr ""
+msgstr "Gabon"
 
 #, no-c-format
 msgid "United Kingdom"
-msgstr ""
+msgstr "Storbritannia"
 
 #, no-c-format
 msgid "Grenada"
-msgstr ""
+msgstr "Grenada"
 
 #, no-c-format
 msgid "Georgia"
-msgstr ""
+msgstr "Georgia"
 
 #, no-c-format
 msgid "French Guiana"
-msgstr ""
+msgstr "Fransk Guyana"
 
 #, no-c-format
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #, no-c-format
 msgid "Ghana"
-msgstr ""
+msgstr "Ghana"
 
 #, no-c-format
 msgid "Gibraltar"
-msgstr ""
+msgstr "Gibraltar"
 
 #, no-c-format
 msgid "Greenland"
-msgstr ""
+msgstr "Grønland"
 
 #, no-c-format
 msgid "Gambia"
-msgstr ""
+msgstr "Gambia"
 
 #, no-c-format
 msgid "Guinea"
-msgstr ""
+msgstr "Guinea"
 
 #, no-c-format
 msgid "Guadeloupe"
-msgstr ""
+msgstr "Guadeloupe"
 
 #, no-c-format
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "Ekvatorial-Guinea"
 
 #, no-c-format
 msgid "Greece"
-msgstr ""
+msgstr "Hellas"
 
 #, no-c-format
 msgid "South Georgia"
-msgstr ""
+msgstr "Sør-Georgia og Sør-Sandwichøyene"
 
 #, no-c-format
 msgid "Guatemala"
-msgstr ""
+msgstr "Guatemala"
 
 #, no-c-format
 msgid "Guam"
-msgstr ""
+msgstr "Guam"
 
 #, no-c-format
 msgid "Guinea-Bissau"
-msgstr ""
+msgstr "Guinea-Bissau"
 
 #, no-c-format
 msgid "Guyana"
-msgstr ""
+msgstr "Guyana"
 
 #, no-c-format
 msgid "Hong Kong"
-msgstr ""
+msgstr "Hongkong SAR Kina"
 
 #, no-c-format
 msgid "Heard Island"
-msgstr ""
+msgstr "Heard- og McDonaldøyene"
 
 #, no-c-format
 msgid "Honduras"
-msgstr ""
+msgstr "Honduras"
 
 #, no-c-format
 msgid "Croatia"
-msgstr ""
+msgstr "Kroatia"
 
 #, no-c-format
 msgid "Haiti"
-msgstr ""
+msgstr "Haiti"
 
 #, no-c-format
 msgid "Hungary"
-msgstr ""
+msgstr "Ungarn"
 
 #, no-c-format
 msgid "Indonesia"
-msgstr ""
+msgstr "Indonesia"
 
 #, no-c-format
 msgid "Ireland"
-msgstr ""
+msgstr "Irland"
 
 #, no-c-format
 msgid "Israel"
-msgstr ""
+msgstr "Israel"
 
 #, no-c-format
 msgid "Isle of Man"
-msgstr ""
+msgstr "Man"
 
 #, no-c-format
 msgid "India"
-msgstr ""
+msgstr "India"
 
 #, no-c-format
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "Det britiske territoriet i Indiahavet"
 
 #, no-c-format
 msgid "Iraq"
-msgstr ""
+msgstr "Irak"
 
 #, no-c-format
 msgid "Iran"
-msgstr ""
+msgstr "Iran"
 
 #, no-c-format
 msgid "Iceland"
-msgstr ""
+msgstr "Island"
 
 #, no-c-format
 msgid "Italy"
-msgstr ""
+msgstr "Italia"
 
 #, no-c-format
 msgid "Jersey"
-msgstr ""
+msgstr "Jersey"
 
 #, no-c-format
 msgid "Jamaica"
-msgstr ""
+msgstr "Jamaica"
 
 #, no-c-format
 msgid "Jordan"
-msgstr ""
+msgstr "Jordan"
 
 #, no-c-format
 msgid "Japan"
-msgstr ""
+msgstr "Japan"
 
 #, no-c-format
 msgid "Kenya"
-msgstr ""
+msgstr "Kenya"
 
 #, no-c-format
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "Kirgisistan"
 
 #, no-c-format
 msgid "Cambodia"
-msgstr ""
+msgstr "Kambodsja"
 
 #, no-c-format
 msgid "Kiribati"
-msgstr ""
+msgstr "Kiribati"
 
 #, no-c-format
 msgid "Comoros"
-msgstr ""
+msgstr "Komorene"
 
 #, no-c-format
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "Saint Kitts og Nevis"
 
 #, no-c-format
 msgid "North Korea"
-msgstr ""
+msgstr "Nord-Korea"
 
 #, no-c-format
 msgid "South Korea"
-msgstr ""
+msgstr "Sør-Korea"
 
 #, no-c-format
 msgid "Kuwait"
-msgstr ""
+msgstr "Kuwait"
 
 #, no-c-format
 msgid "Cayman Islands"
-msgstr ""
+msgstr "Caymanøyene"
 
 #, no-c-format
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kasakhstan"
 
 #, no-c-format
 msgid "Laos"
-msgstr ""
+msgstr "Laos"
 
 #, no-c-format
 msgid "Lebanon"
-msgstr ""
+msgstr "Libanon"
 
 #, no-c-format
 msgid "Saint Lucia"
-msgstr ""
+msgstr "St. Lucia"
 
 #, no-c-format
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #, no-c-format
 msgid "Sri Lanka"
-msgstr ""
+msgstr "Sri Lanka"
 
 #, no-c-format
 msgid "Liberia"
-msgstr ""
+msgstr "Liberia"
 
 #, no-c-format
 msgid "Lesotho"
-msgstr ""
+msgstr "Lesotho"
 
 #, no-c-format
 msgid "Lithuania"
-msgstr ""
+msgstr "Litauen"
 
 #, no-c-format
 msgid "Luxembourg"
-msgstr ""
+msgstr "Luxemburg"
 
 #, no-c-format
 msgid "Latvia"
-msgstr ""
+msgstr "Latvia"
 
 #, no-c-format
 msgid "Libya"
-msgstr ""
+msgstr "Libya"
 
 #, no-c-format
 msgid "Morocco"
-msgstr ""
+msgstr "Marokko"
 
 #, no-c-format
 msgid "Monaco"
-msgstr ""
+msgstr "Monaco"
 
 #, no-c-format
 msgid "Moldova"
-msgstr ""
+msgstr "Moldova"
 
 #, no-c-format
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegro"
 
 #, no-c-format
 msgid "Saint Martin"
-msgstr ""
+msgstr "Saint-Martin"
 
 #, no-c-format
 msgid "Madagascar"
-msgstr ""
+msgstr "Madagaskar"
 
 #, no-c-format
 msgid "Marshall Islands"
-msgstr ""
+msgstr "Marshalløyene"
 
 #, no-c-format
 msgid "North Macedonia"
-msgstr ""
+msgstr "Nord-Makedonia"
 
 #, no-c-format
 msgid "Mali"
-msgstr ""
+msgstr "Mali"
 
 #, no-c-format
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmar (Burma)"
 
 #, no-c-format
 msgid "Mongolia"
-msgstr ""
+msgstr "Mongolia"
 
 #, no-c-format
 msgid "Macao"
-msgstr ""
+msgstr "Macao SAR Kina"
 
 #, no-c-format
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "Nord-Marianene"
 
 #, no-c-format
 msgid "Martinique"
-msgstr ""
+msgstr "Martinique"
 
 #, no-c-format
 msgid "Mauritania"
-msgstr ""
+msgstr "Mauritania"
 
 #, no-c-format
 msgid "Montserrat"
-msgstr ""
+msgstr "Montserrat"
 
 #, no-c-format
 msgid "Malta"
-msgstr ""
+msgstr "Malta"
 
 #, no-c-format
 msgid "Mauritius"
-msgstr ""
+msgstr "Mauritius"
 
 #, no-c-format
 msgid "Maldives"
-msgstr ""
+msgstr "Maldivene"
 
 #, no-c-format
 msgid "Malawi"
-msgstr ""
+msgstr "Malawi"
 
 #, no-c-format
 msgid "Mexico"
-msgstr ""
+msgstr "Mexico"
 
 #, no-c-format
 msgid "Malaysia"
-msgstr ""
+msgstr "Malaysia"
 
 #, no-c-format
 msgid "Mozambique"
-msgstr ""
+msgstr "Mosambik"
 
 #, no-c-format
 msgid "Namibia"
-msgstr ""
+msgstr "Namibia"
 
 #, no-c-format
 msgid "New Caledonia"
-msgstr ""
+msgstr "Ny-Caledonia"
 
 #, no-c-format
 msgid "Niger"
-msgstr ""
+msgstr "Niger"
 
 #, no-c-format
 msgid "Norfolk Island"
-msgstr ""
+msgstr "Norfolkøya"
 
 #, no-c-format
 msgid "Nigeria"
-msgstr ""
+msgstr "Nigeria"
 
 #, no-c-format
 msgid "Nicaragua"
-msgstr ""
+msgstr "Nicaragua"
 
 #, no-c-format
 msgid "Netherlands"
-msgstr ""
+msgstr "Nederland"
 
 #, no-c-format
 msgid "Norway"
-msgstr ""
+msgstr "Norge"
 
 #, no-c-format
 msgid "Nepal"
-msgstr ""
+msgstr "Nepal"
 
 #, no-c-format
 msgid "Nauru"
-msgstr ""
+msgstr "Nauru"
 
 #, no-c-format
 msgid "Niue"
-msgstr ""
+msgstr "Niue"
 
 #, no-c-format
 msgid "New Zealand"
-msgstr ""
+msgstr "New Zealand"
 
 #, no-c-format
 msgid "Oman"
-msgstr ""
+msgstr "Oman"
 
 #, no-c-format
 msgid "Panama"
-msgstr ""
+msgstr "Panama"
 
 #, no-c-format
 msgid "Peru"
-msgstr ""
+msgstr "Peru"
 
 #, no-c-format
 msgid "French Polynesia"
-msgstr ""
+msgstr "Fransk Polynesia"
 
 #, no-c-format
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "Papua Ny-Guinea"
 
 #, no-c-format
 msgid "Philippines"
-msgstr ""
+msgstr "Filippinene"
 
 #, no-c-format
 msgid "Pakistan"
-msgstr ""
+msgstr "Pakistan"
 
 #, no-c-format
 msgid "Poland"
-msgstr ""
+msgstr "Polen"
 
 #, no-c-format
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Saint-Pierre-et-Miquelon"
 
 #, no-c-format
 msgid "Pitcairn"
-msgstr ""
+msgstr "Pitcairnøyene"
 
 #, no-c-format
 msgid "Puerto Rico"
-msgstr ""
+msgstr "Puerto Rico"
 
 #, no-c-format
 msgid "Palestine"
-msgstr ""
+msgstr "Det palestinske området"
 
 #, no-c-format
 msgid "Portugal"
-msgstr ""
+msgstr "Portugal"
 
 #, no-c-format
 msgid "Palau"
-msgstr ""
+msgstr "Palau"
 
 #, no-c-format
 msgid "Paraguay"
-msgstr ""
+msgstr "Paraguay"
 
 #, no-c-format
 msgid "Qatar"
-msgstr ""
+msgstr "Qatar"
 
 #, no-c-format
 msgid "Réunion"
-msgstr ""
+msgstr "Réunion"
 
 #, no-c-format
 msgid "Romania"
-msgstr ""
+msgstr "Romania"
 
 #, no-c-format
 msgid "Serbia"
-msgstr ""
+msgstr "Serbia"
 
 #, no-c-format
 msgid "Russia"
-msgstr ""
+msgstr "Russland"
 
 #, no-c-format
 msgid "Rwanda"
-msgstr ""
+msgstr "Rwanda"
 
 #, no-c-format
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Saudi-Arabia"
 
 #, no-c-format
 msgid "Solomon Islands"
-msgstr ""
+msgstr "Salomonøyene"
 
 #, no-c-format
 msgid "Seychelles"
-msgstr ""
+msgstr "Seychellene"
 
 #, no-c-format
 msgid "Sudan"
-msgstr ""
+msgstr "Sudan"
 
 #, no-c-format
 msgid "Sweden"
-msgstr ""
+msgstr "Sverige"
 
 #, no-c-format
 msgid "Singapore"
-msgstr ""
+msgstr "Singapore"
 
 #, no-c-format
 msgid "Saint Helena"
-msgstr ""
+msgstr "St. Helena"
 
 #, no-c-format
 msgid "Slovenia"
-msgstr ""
+msgstr "Slovenia"
 
 #, no-c-format
 msgid "Svalbard and Jan Mayen"
-msgstr ""
+msgstr "Svalbard og Jan Mayen"
 
 #, no-c-format
 msgid "Slovakia"
-msgstr ""
+msgstr "Slovakia"
 
 #, no-c-format
 msgid "Sierra Leone"
-msgstr ""
+msgstr "Sierra Leone"
 
 #, no-c-format
 msgid "San Marino"
-msgstr ""
+msgstr "San Marino"
 
 #, no-c-format
 msgid "Senegal"
-msgstr ""
+msgstr "Senegal"
 
 #, no-c-format
 msgid "Somalia"
-msgstr ""
+msgstr "Somalia"
 
 #, no-c-format
 msgid "Suriname"
-msgstr ""
+msgstr "Surinam"
 
 #, no-c-format
 msgid "South Sudan"
-msgstr ""
+msgstr "Sør-Sudan"
 
 #, no-c-format
 msgid "São Tomé and Príncipe"
-msgstr ""
+msgstr "São Tomé og Príncipe"
 
 #, no-c-format
 msgid "El Salvador"
-msgstr ""
+msgstr "El Salvador"
 
 #, no-c-format
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 #, no-c-format
 msgid "Syria"
-msgstr ""
+msgstr "Syria"
 
 #, no-c-format
 msgid "Eswatini"
-msgstr ""
+msgstr "Eswatini"
 
 #, no-c-format
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Turks- og Caicosøyene"
 
 #, no-c-format
 msgid "Chad"
-msgstr ""
+msgstr "Tsjad"
 
 #, no-c-format
 msgid "French Southern Territories"
-msgstr ""
+msgstr "De franske sørterritorier"
 
 #, no-c-format
 msgid "Togo"
-msgstr ""
+msgstr "Togo"
 
 #, no-c-format
 msgid "Thailand"
-msgstr ""
+msgstr "Thailand"
 
 #, no-c-format
 msgid "Tajikistan"
-msgstr ""
+msgstr "Tadsjikistan"
 
 #, no-c-format
 msgid "Tokelau"
-msgstr ""
+msgstr "Tokelau"
 
 #, no-c-format
 msgid "Timor-Leste"
-msgstr ""
+msgstr "Øst-Timor"
 
 #, no-c-format
 msgid "Turkmenistan"
-msgstr ""
+msgstr "Turkmenistan"
 
 #, no-c-format
 msgid "Tunisia"
-msgstr ""
+msgstr "Tunisia"
 
 #, no-c-format
 msgid "Tonga"
-msgstr ""
+msgstr "Tonga"
 
 #, no-c-format
 msgid "Turkey"
-msgstr ""
+msgstr "Tyrkia"
 
 #, no-c-format
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trinidad og Tobago"
 
 #, no-c-format
 msgid "Tuvalu"
-msgstr ""
+msgstr "Tuvalu"
 
 #, no-c-format
 msgid "Taiwan"
-msgstr ""
+msgstr "Taiwan"
 
 #, no-c-format
 msgid "Tanzania"
-msgstr ""
+msgstr "Tanzania"
 
 #, no-c-format
 msgid "Ukraine"
-msgstr ""
+msgstr "Ukraina"
 
 #, no-c-format
 msgid "Uganda"
-msgstr ""
+msgstr "Uganda"
 
 #, no-c-format
 msgid "U.S. Outlying Islands"
-msgstr ""
+msgstr "USAs ytre øyer"
 
 #, no-c-format
 msgid "United States"
-msgstr ""
+msgstr "USA"
 
 #, no-c-format
 msgid "Uruguay"
-msgstr ""
+msgstr "Uruguay"
 
 #, no-c-format
 msgid "Uzbekistan"
-msgstr ""
+msgstr "Usbekistan"
 
 #, no-c-format
 msgid "Vatican City"
-msgstr ""
+msgstr "Vatikanstaten"
 
 #, no-c-format
 msgid "Saint Vincent and the Grenadines"
-msgstr ""
+msgstr "St. Vincent og Grenadinene"
 
 #, no-c-format
 msgid "Venezuela"
-msgstr ""
+msgstr "Venezuela"
 
 #, no-c-format
 msgid "British Virgin Islands"
-msgstr ""
+msgstr "De britiske jomfruøyene"
 
 #, no-c-format
 msgid "U.S. Virgin Islands"
-msgstr ""
+msgstr "De amerikanske jomfruøyene"
 
 #, no-c-format
 msgid "Vietnam"
-msgstr ""
+msgstr "Vietnam"
 
 #, no-c-format
 msgid "Vanuatu"
-msgstr ""
+msgstr "Vanuatu"
 
 #, no-c-format
 msgid "Wallis and Futuna"
-msgstr ""
+msgstr "Wallis og Futuna"
 
 #, no-c-format
 msgid "Samoa"
-msgstr ""
+msgstr "Samoa"
 
 #, no-c-format
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #, no-c-format
 msgid "Yemen"
-msgstr ""
+msgstr "Jemen"
 
 #, no-c-format
 msgid "Mayotte"
-msgstr ""
+msgstr "Mayotte"
 
 #, no-c-format
 msgid "South Africa"
-msgstr ""
+msgstr "Sør-Afrika"
 
 #, no-c-format
 msgid "Zambia"
-msgstr ""
+msgstr "Zambia"
 
 #, no-c-format
 msgid "Zimbabwe"
-msgstr ""
+msgstr "Zimbabwe"
 
 #. the backup is there, but on purpose without the files the
 #. loggers are writing right now: say so, and which ones
 msgid "Backup complete."
-msgstr ""
+msgstr "Sikkerhetskopi fullført."
 
 msgid "Left out, being written right now:"
-msgstr ""
+msgstr "Utelatt, skrives akkurat nå:"
 
 msgid "Don't use"
-msgstr ""
+msgstr "Ikke bruk"
 
 msgid "Not aligned"
-msgstr ""
+msgstr "Ikke innrettet"
 
 msgid "Fixed & aligned"
-msgstr ""
+msgstr "Fast og innrettet"
 
 msgid "Built-in IMU"
-msgstr ""
+msgstr "Innebygd IMU"
 
 msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Om instrumentet med IMU sitter fast, og aksene er innrettet med flyets akse"
+"r. Sett «Fast og innrettet» bare når det er stivt montert. Er du i tvil, br"
+"uk «Ikke innrettet»."
 
-#, c-format
+#, no-c-format
 msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
 msgstr ""
+"XCSoar bruker den første enheten som leverer hver verdi (enhet A før B, og "
+"så videre). Fete flagg er verdiene XCSoar bruker fra denne enheten. Flagg s"
+"om ikke er fete, betyr at en tidligere enhet allerede leverer de samme data"
+"ene. Baro er høyden med gjeldende QNH; QNE er trykkhøyde; Alt IGC er høyden"
+" loggeren skriver. QNE og Pressure er det samme omgivelsestrykket, så bare "
+"den tidligere av de to er fet. Dårlig GPS og et batteri under 10 prosent vi"
+"ses i rødt på en fargeskjerm og i fet skrift på e-papir."
 
 msgid "QNE"
-msgstr ""
+msgstr "QNE"
 
 msgid "Engine"
-msgstr ""
+msgstr "Motor"
 
 msgid "Set Clearance"
-msgstr ""
+msgstr "Sett klarering"
 
 msgid "Revoke Clearance"
-msgstr ""
+msgstr "Trekk klarering"
 
 msgid "Failed to update airspace clearance"
-msgstr ""
+msgstr "Kunne ikke oppdatere luftromsklareringen"
 
 msgid "Clrnc"
-msgstr ""
+msgstr "Klrg"
 
 msgid ""
 "Per-class filter settings. For airspaces where both\n"
@@ -12201,244 +12211,305 @@ msgid ""
 "  Clrnc - allow granting a clearance to suppress\n"
 "           warnings from other overlapping airspaces"
 msgstr ""
+"Filterinnstillinger per klasse. Der både type (CTR, FIR, ...) og klasse er "
+"gitt, har typen forrang for klassen i XCSoar.\nKolonner:\n  Vis   — tegn lu"
+"ftrom av denne klassen på kartet\n  Advar — slå på advarsler ved innflyging"
+" og inne i\n  Klrg  — tillat en klarering som demper\n          advarsler f"
+"ra andre overlappende luftrom"
 
 msgid "Clearance"
-msgstr ""
+msgstr "Klarering"
 
 msgid "Groups"
-msgstr ""
+msgstr "Grupper"
 
 msgid "Show only the InfoBoxes of these groups in the list."
-msgstr ""
+msgstr "Vis bare infoboksene i disse gruppene i listen."
 
 msgid "Share location"
-msgstr ""
+msgstr "Del posisjon"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Top"
-msgstr ""
+msgstr "Øverst"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Right"
-msgstr ""
+msgstr "Høyre"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Bottom"
-msgstr ""
+msgstr "Nederst"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Left"
-msgstr ""
+msgstr "Venstre"
 
 #, no-c-format
 msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
 msgstr ""
+"Trykk på en kant for å strekke infoboksområdet ut til skjermkanten der."
 
 #, no-c-format
 msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
 msgstr ""
+"Infoboksområdet er den delen av skjermen som er til infobokser, instrumente"
+"r, kartoverlegg og menyen. Velg kantene der det strekkes ut til skjermkante"
+"n. Kanter som ikke strekkes, holder seg unna systemlinjene og de avrundede "
+"hjørnene. Kartet bruker alltid hele skjermen, og dialoger blir innenfor det"
+" trygge området. Bare relevant i fullskjerm."
 
 msgid "Stretch InfoBox area"
-msgstr ""
+msgstr "Strekk infoboksområdet"
 
 #, no-c-format
 msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
 msgstr ""
+"Vis statuslinjen med mindre infoboksområdet er strukket til skjermens øvre "
+"kant, der det ville dekke infoboksene."
 
 #, no-c-format
 msgid "Visible"
-msgstr ""
+msgstr "Synlig"
 
 #, no-c-format
 msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
 msgstr ""
+"Vis alltid statuslinjen, også i fullskjerm. Infoboksene kan ikke tegnes bak"
+" den, så de holder seg unna skjermens øvre kant."
 
 #, no-c-format
 msgid "Hidden"
-msgstr ""
+msgstr "Skjult"
 
 #, no-c-format
 msgid "Never show the status bar."
-msgstr ""
+msgstr "Vis aldri statuslinjen."
 
 msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
 msgstr ""
+"La XCSoar bruke hele skjermen, også områdene bak systemlinjene og utskjærin"
+"gen. Kartet fyller den, mens «Strekk infoboksområdet» avgjør hvilke kanter "
+"infobokser, instrumenter, overlegg og menyen kan nå."
 
 msgid "System status bar"
-msgstr ""
+msgstr "Systemstatuslinje"
 
 msgid "Whether the system status bar with the clock and the battery level stays visible."
-msgstr ""
+msgstr "Om systemstatuslinjen med klokke og batterinivå forblir synlig."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Warn when radar expires"
-msgstr ""
+msgstr "Advar når radaren utløper"
 
 msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
 msgstr ""
+"Hvis på, vises en advarsel når nedbørsradaroverlegget ikke kunne oppdateres"
+" og ble fjernet fra kartet."
 
 #, no-c-format
 msgid "Shrink type when the short edge is under 3.2 inches."
-msgstr ""
+msgstr "Forminsk skriftstørrelsen når den korte kanten er under 3.2 tommer."
 
 #, no-c-format
 msgid "Handheld"
-msgstr ""
+msgstr "I hånden"
 
 #, no-c-format
 msgid "Always use the closer-view size."
-msgstr ""
+msgstr "Bruk alltid størrelsen for nærsyn."
 
 #, no-c-format
 msgid "Panel"
-msgstr ""
+msgstr "Panel"
 
 #, no-c-format
 msgid "Keep full-size type, for a screen read at arm's length."
 msgstr ""
+"Behold full skriftstørrelse, for en skjerm lest på en armlengdes avstand."
 
 msgid "Viewing distance"
-msgstr ""
+msgstr "Leseavstand"
 
 msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
 msgstr ""
+"Auto forminsker skriften når den korte kanten er under 3.2 tommer. „I hånde"
+"n“ bruker alltid den nærmere størrelsen. „Panel“ beholder full størrelse."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Satellite layer"
-msgstr ""
+msgstr "Satellittlag"
 
 msgid "Which EUMETView satellite product this page draws under the map."
-msgstr ""
+msgstr "Hvilket EUMETView-satellittprodukt denne siden tegner under kartet."
 
 #, no-c-format
 msgid "Rain radar"
-msgstr ""
+msgstr "Nedbørsradar"
 
 #, no-c-format
 msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Rekkevidden er rette linjer fra seilflyet. Fargene på landbare steder og li"
+"sten over alternativer bruker denne rekkevidden."
 
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Rekkevidden beregnes med svinger rundt terrenghindre. Fargene på landbare s"
+"teder og listen over alternativer bruker denne rekkevidden."
 
 #, no-c-format
 msgid "Task MC"
-msgstr ""
+msgstr "Oppgave-MC"
 
 #, no-c-format
 msgid "Uses task MacCready value."
-msgstr ""
+msgstr "Bruker oppgavens MacCready-verdi."
 
 msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
 msgstr ""
+"Hvilken MacCready som brukes til terrengrekkevidde, farger på landbare sted"
+"er, avbrudd og listen over alternativer. Det gjelder også når rekkeviddemod"
+"us er av. Arbeidslinjen bruker alltid oppgave-MC. Alternative infobokser og"
+" høydeforskjell med sikkerhets-MC bruker alltid sikkerhets-MC."
 
 #, no-c-format
 msgid "No reach overlay on the map."
-msgstr ""
+msgstr "Ingen rekkeviddeoverlegg på kartet."
 
 #, no-c-format
 msgid "How far you can glide to the ground. Uses the Reach polar."
-msgstr ""
+msgstr "Hvor langt du kan gli til bakken. Bruker rekkeviddepolaren."
 
 #, no-c-format
 msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
-msgstr ""
+msgstr "Skygger kartet utenfor glid til bakken. Bruker rekkeviddepolaren."
 
 #, no-c-format
 msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
 msgstr ""
+"Hvor langt du kan gli og likevel ankomme i typisk termikkbasehøyde fra denn"
+"e flygingen. Bruker alltid oppgave-MC."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
 msgstr ""
+"Arbeidslinje til typisk termikkbasehøyde med oppgave-MC, pluss en terrengli"
+"nje til bakken med rekkeviddepolaren."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
 msgstr ""
+"Arbeidslinje til typisk termikkbasehøyde med oppgave-MC, pluss skygge utenf"
+"or bakken med rekkeviddepolaren."
 
 msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
 msgstr ""
+"MacCready som brukes til terrengrekkevidde, farger på landbare steder, avbr"
+"udd og listen over alternativer når rekkeviddepolaren er sikkerhets-MC. Alt"
+"ernative infobokser og høydeforskjell med sikkerhets-MC bruker alltid denne"
+" verdien. Fartkommandoen påvirkes ikke. Høyere verdier regner færre jorder "
+"som nåelige."
 
 msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
 msgstr ""
+"Ingen glidepolar er satt opp, så glideforholdet kan ikke vises. Velg et fly"
+" først."
 
 msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
 msgstr ""
+"Glideforholdet ved hver verdi er det beste glideforholdet i stille luft ved"
+" den MacCready-innstillingen, inkludert insekter, ballast og forringelse av"
+" polaren."
 
 #, c-format
 msgid "Active polar: %s"
-msgstr ""
+msgstr "Aktiv polar: %s"
 
 msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
 msgstr ""
+"MacCready ved oppstart for fartkommando og oppgaveberegninger. Endring her "
+"setter også den gjeldende MacCready. Terrengrekkevidde, farger på landbare "
+"steder, avbrudd og listen over alternativer følger rekkeviddepolaren, ikke "
+"denne verdien, med mindre rekkeviddepolaren er oppgave-MC."
 
 #, no-c-format
 msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
 msgstr ""
+"Bruk tidssonen som er satt i operativsystemet, og følg den ved sommertidssk"
+"ifter og ved reise til en annen tidssone."
 
 #, no-c-format
 msgid "Time zone"
-msgstr ""
+msgstr "Tidssone"
 
 #, no-c-format
 msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
 msgstr ""
+"Bruk tidssonen som er valgt nedenfor. XCSoar kjenner reglene for sommertid "
+"og utfører overgangene selv, så innstillingen ikke trenger å rettes to gang"
+"er i året."
 
 #, no-c-format
 msgid "Manual UTC offset"
-msgstr ""
+msgstr "Manuelt UTC-avvik"
 
 #, no-c-format
 msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
 msgstr ""
+"Bruk det faste UTC-avviket som er skrevet inn nedenfor. Det må rettes for h"
+"ånd når sommertid begynner eller slutter."
 
 msgid "Local time source"
-msgstr ""
+msgstr "Kilde for lokaltid"
 
 msgid "Selects where XCSoar gets the offset between UTC and local time from."
-msgstr ""
+msgstr "Velger hvor XCSoar henter avviket mellom UTC og lokaltid."
 
 msgid "The time zone of the airfield you are flying at."
-msgstr ""
+msgstr "Tidssonen til flyplassen du flyr fra."
 
 msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
 msgstr ""
+"Feltet for UTC-avvik gjør det mulig å angi avviket mellom UTC og lokaltid. "
+"Det beholder verdien du skrev inn selv om en annen kilde for lokaltid er va"
+"lgt. Nedenfor vises lokaltiden og UTC-avviket som gjelder nå."
 
 #, no-c-format
 msgid "UKV Model"
-msgstr ""
+msgstr "UKV-modell"
 
 #, no-c-format
 msgid "United Kingdom. UKV model."
-msgstr ""
+msgstr "Storbritannia. UKV-modell."
 
 #. the other tabs are named after their service, which is why they
 #. are not translated; this one is a common noun
 msgid "Overlay"
-msgstr ""
+msgstr "Overlegg"
 
 msgid "Revoke"
-msgstr ""
+msgstr "Trekk tilbake"
 
 #, no-c-format
 msgid "Radar (EUMETNET OPERA)"
-msgstr ""
+msgstr "Radar (EUMETNET OPERA)"
 
 #. the server answered but the product had nothing to draw here:
 #. say so, rather than leaving an empty map to be read as a slow
 #. download
 msgid "no data"
-msgstr ""
+msgstr "ingen data"
 
 msgid "Downloading radar..."
-msgstr ""
+msgstr "Laster ned radar..."
 
 #. the opt-out follows the Quick Guide dialog: answering "no" writes
 #. the choice to the profile, and the Look configuration page can
@@ -12448,140 +12519,167 @@ msgid ""
 "\n"
 "Warn again when this happens?"
 msgstr ""
+"Radarbildet kunne ikke oppdateres og er fjernet, slik at ikke et utdatert e"
+"kko vises.\n\nAdvar igjen når dette skjer?"
 
 #. first, and the default: the closest counterpart to the pc_met
 #. vis_hrv images, and the one product here that covers Europe at
 #. the HRV sampling German pilots are used to reading
 #, no-c-format
 msgid "European HRV RGB"
-msgstr ""
+msgstr "Europeisk HRV RGB"
 
 #. MTG, which resolves about twice as finely as SEVIRI HRV
 #, no-c-format
 msgid "Visible 0.6 µm (MTG)"
-msgstr ""
+msgstr "Synlig 0.6 µm (MTG)"
 
 #, no-c-format
 msgid "Infrared 10.5 µm (MTG)"
-msgstr ""
+msgstr "Infrarød 10.5 µm (MTG)"
 
 #. the RGB composites are assembled from several channels and reach
 #. the server a few minutes behind the single channel products, which
 #. the frame search follows on its own
 #, no-c-format
 msgid "True colour (MTG)"
-msgstr ""
+msgstr "Ekte farge (MTG)"
 
 #, no-c-format
 msgid "Geo colour (MTG)"
-msgstr ""
+msgstr "Geofarge (MTG)"
 
 #. five minute cadence, and the promptest of them by a wide margin
 #, no-c-format
 msgid "Rapid scan natural colour"
-msgstr ""
+msgstr "Hurtigskann, naturlig farge"
 
 msgid "No satellite imagery here right now"
-msgstr ""
+msgstr "Ingen satellittbilde her akkurat nå"
 
 msgid "Countries"
-msgstr ""
+msgstr "Land"
 
 msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
 msgstr ""
+"Vis bare filer for disse landene — samme valg for kart, vendepunkter og luf"
+"trom, lagret i profilen. Filer som gjelder alle land, blir stående."
 
 msgid "Search"
-msgstr ""
+msgstr "Søk"
 
 msgid "Show only the files whose name or description contains this text."
-msgstr ""
+msgstr "Vis bare filer der navn eller beskrivelse inneholder denne teksten."
 
 msgid "No file matches the filter."
-msgstr ""
+msgstr "Ingen fil samsvarer med filteret."
 
 msgid "Complete"
-msgstr ""
+msgstr "Fullført"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Avbrutt"
 
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
 msgstr ""
+"Samlet høydegevinst eller -tap i siste termikk delt på tiden i sirkling. Se"
+"kundene i mindre skrift viser tiden i sirkling."
 
 #, no-c-format
 msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
 msgstr ""
+"Tid brukt på å sirkle i siste termikk. Tallet i mindre skrift viser samlet "
+"stigerate for siste termikk."
 
 #, no-c-format
 msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
 msgstr ""
+"Hovedverdi: termikkstigning på neste legg som svarer til en stigning lik Ma"
+"cCready på nåværende legg. Sekundærverdi: termikkstigning på nåværende legg"
+" som svarer til en stigning lik MacCready på neste legg."
 
 #, no-c-format
 msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Ankomsthøyde ved beste alternative landingssted med sikkerhets-MC, i forhol"
+"d til sikkerhetsankomsthøyden."
 
 #, no-c-format
 msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Ankomsthøyde ved nest beste alternative landingssted med sikkerhets-MC, i f"
+"orhold til sikkerhetsankomsthøyden."
 
 #, no-c-format
 msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
 msgstr ""
+"Gjeldende QNH-trykkinnstilling for beregning av barometrisk høyde. Linjen u"
+"nder viser den høyden når en trykksensor er tilgjengelig. Trykk på infoboks"
+"en for å åpne panelet og justere QNH manuelt."
 
 #, no-c-format
 msgid "Speed VMG"
-msgstr ""
+msgstr "Fart VMG"
 
 #, no-c-format
 msgid "V VMG"
-msgstr ""
+msgstr "V VMG"
 
 #, no-c-format
 msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
 msgstr ""
+"Den delen av farten over bakken som peker mot neste vendepunkt. Den er lik "
+"farten over bakken på direkte kurs mot det, faller til null på tvers og bli"
+"r negativ når man flyr bort. Den setter et tall på hva en omvei fra den dir"
+"ekte kursen koster."
 
 #, no-c-format
 msgid "Vario and thermal"
-msgstr ""
+msgstr "Vario og termikk"
 
 #, no-c-format
 msgid "Glide"
-msgstr ""
+msgstr "Gliding"
 
 #, no-c-format
 msgid "Speed and attitude"
-msgstr ""
+msgstr "Fart og stilling"
 
 #, no-c-format
 msgid "Wind and weather"
-msgstr ""
+msgstr "Vind og vær"
 
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #, no-c-format
 msgid "Airspace and team"
-msgstr ""
+msgstr "Luftrom og lag"
 
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Annet"
 
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr ""
+"Dra en infoboks oppå en annen for å bytte dem. Hold en infoboks og løft for"
+" å velge en annen til den plassen."
 
 msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
 msgstr ""
+"Enter tar valgt infoboks, flytt den med piltastene og trykk Enter igjen for"
+" å sette den ned. To trykk på Enter uten å flytte velger en annen infoboks "
+"til plassen."
 
 msgid "Arrange InfoBoxes"
-msgstr ""
+msgstr "Ordne infobokser"
 
 msgid ""
 "Arrange\n"
 "InfoBoxes"
-msgstr ""
+msgstr "Ordne\ninfobokser"
 
 msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
 msgstr ""
@@ -12590,12 +12688,15 @@ msgstr ""
 "rtmasse."
 
 msgid "MTOW"
-msgstr ""
+msgstr "MTOW"
 
 msgid "Maximum takeoff weight of the glider."
-msgstr ""
+msgstr "Seilflyets maksimale startmasse."
 
 #, no-c-format
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
+"Vannballast om bord, i liter. Kommentaren viser vingebelastningen, i rødt n"
+"år seilflyet er tyngre enn sin maksimale startmasse. Verdien er blå mens ba"
+"llast tømmes. Trykk for å endre ballasten."
 
