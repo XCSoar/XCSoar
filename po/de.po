@@ -2084,9 +2084,11 @@ msgstr "InfoBox einfügen"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopieren merkt sich alle InfoBoxen dieses Satzes, Einfügen ersetzt damit "
+"die InfoBoxen eines anderen Satzes."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Von den globalen Einstellungen übernehmen"
 
 msgid "Invalid"
 msgstr "Ungültig"
@@ -2772,17 +2774,18 @@ msgstr "Anmerkung"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Fester Text"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Titel, Wert und Anmerkung, vom Piloten eingegeben. Zum Bearbeiten tippen."
 
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 msgid "Value"
-msgstr ""
+msgstr "Wert"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -11098,21 +11101,23 @@ msgstr "Manuell"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Blutsauerstoff"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Blutsauerstoffsättigung in Prozent, von einem Bluetooth-Pulsoximeter."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Zuletzt benutzte Wegpunkte"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Mit dem Wi-Fi des Geräts verbinden, um die Flüge dieses FLARM "
+"herunterzuladen."
 
 msgctxt "Screen edge"
 msgid "Top"
@@ -11170,20 +11175,22 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Aktiviert das Verkehrsradar und wählt seine Position auf dem Hauptbildschirm. Die Flugrichtung des Ziels relativ zum eigenen Steuerkurs wird als Pfeilkopf dargestellt. Ein Dreieck, das nach oben oder nach unten zeigt die Höhe des Ziels relativ zur Eigenen. In allen Modi deutet die Farbe des Ziels die Größe der Bedrohung an."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Bildschirmauflösung"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Bildschirmhelligkeit"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Bildschirmhelligkeit anpassen."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"Die Bildschirmhelligkeit ist schreibgeschützt, weil das Schreiben "
+"zusätzliche Berechtigungen erfordert."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11198,10 +11205,10 @@ msgstr "Hiermit wird festgelegt welche Flugleistung für die Berechnung der Reic
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Alternativenmodus: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Einfügen"
 
 #, c-format
 msgid ""
@@ -11305,55 +11312,55 @@ msgid "%u min"
 msgstr "%u Min."
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Keine unterstützten Dienste gefunden"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Keine der ausgewählten systemd-Units ist installiert."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nicht verfügbar"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Wird gestartet..."
 
 msgid "Stopping..."
 msgstr "Wird gestoppt…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Wird neu geladen..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Fehlgeschlagen"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Einschalten"
 
 msgid "Restart"
-msgstr ""
+msgstr "Neustart"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Ausschalten"
 
 msgid "System service"
-msgstr ""
+msgstr "Systemdienst"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH-Server"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Fernzugriff auf das Terminal"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Sensoren"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario-Sensordienst"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Audio-Vario"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario-Audio-Vario-Dienst"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
@@ -11369,11 +11376,11 @@ msgstr "Die Höchsttemperatur am Boden für heute. Eine Trockenadiabate von ihr 
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Aufgaben-MC beim Start"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Gleitzahl des Sicherheits-MC"
 
 msgid "Spoken alerts"
 msgstr "Gesprochene Warnungen"
@@ -11385,25 +11392,34 @@ msgid "Test spoken alert"
 msgstr "Ansage testen"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Sollfahrt-Schalter"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Wie XCSoar die Vorflug/Steigen-Meldung des Variometers nutzt."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Flugmodus"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Im Flug ist die Vorflug/Steigen-Meldung des Variometers der Flugmodus. "
+"Vorflug beendet das Steigen und startet den Mittelwert neu. Steigen beginnt "
+"eine neue Thermik. Der Endanflug kann im Vorflug weiter erscheinen. Bei "
+"einem Vega ist das der Kreisflug-Ausgang."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Anzeigemodus"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar erkennt das Kreisen aus der Kurve. Die Meldung des Variometers wird "
+"nicht verwendet."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Die Seite wechselt, der Flugmodus nicht. Vorflug zeigt die Vorflugseite, "
+"auch in der Kurve, und blendet den Endanflug aus. Steigen zeigt die "
+"Varioseite. Bei einem Vega ist das der Sollfahrt-Schalter."
 
 #, no-c-format
 msgid "System Tools"
