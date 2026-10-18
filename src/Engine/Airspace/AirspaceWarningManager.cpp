@@ -197,6 +197,9 @@ AirspaceWarningManager::Update(const AircraftState& state,
                                const std::chrono::duration<unsigned> dt)
 {
   last_location = state.location;
+  last_altitude = state.altitude;
+  last_altitude_agl = state.altitude_agl;
+  last_vario = state.vario;
 
   bool changed = false;
 
@@ -673,6 +676,19 @@ AirspaceWarningManager::CoverOutsideAirspaces() noexcept
     if (!cleared.IsCleared())
       continue;
     if (!cleared.GetAirspace().Inside(last_location))
+      continue;
+
+    /* The top is a boundary even though the horizontal distance is
+       zero. Warn once the climb reaches it within the warning time. */
+    AltitudeState alt_state{};
+    alt_state.altitude = last_altitude;
+    alt_state.altitude_agl = last_altitude_agl;
+    const double top = cleared.GetAirspace().GetTopAltitude(alt_state);
+    if (last_altitude >= top)
+      continue;
+    if (last_vario > 0 &&
+        (top - last_altitude) / last_vario <=
+        double(config.warning_time.count()))
       continue;
 
     for (auto &other : warnings) {

@@ -125,7 +125,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(45);
+  plan_tests(47);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -1013,6 +1013,40 @@ main()
 
     mgr.SetCleared(inner, true);
     ok1(ow.IsCoveredByClearance() && !ow.IsAckExpired());
+  }
+
+  /* Climbing out through the top within the warning time is a
+     boundary ahead. The airspace above keeps warning. */
+  {
+    Airspaces airspaces;
+    auto inner = MakeCircle(origin, 2000.0, 0.0, 2500.0);
+    auto outer = MakeCircle(origin, 8000.0, 1600.0, 4000.0);
+    airspaces.Add(inner);
+    airspaces.Add(outer);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 2480.0,
+                              Angle::Degrees(90.0), 30.0);
+    state.vario = 5;
+    mgr.Reset(state);
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto &ow = mgr.GetWarning(outer);
+    AirspaceInterceptSolution sol{};
+    sol.distance = 0;
+    sol.altitude = 2500;
+    sol.elapsed_time = FloatDuration{4};
+    sol.location = origin;
+    ow.UpdateSolution(AirspaceWarning::WARNING_GLIDE, sol);
+    ok1(ow.IsWarning() && !ow.IsCoveredByClearance());
+
+    mgr.SetCleared(inner, true);
+    ok1(!ow.IsCoveredByClearance() && ow.IsAckExpired());
   }
 
   /* The cleared polygon can stick out of the airspace above the
