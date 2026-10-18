@@ -65,6 +65,10 @@ class AirspaceWarningManager {
 
   /** Aircraft position from the last Update(). */
   GeoPoint last_location = GeoPoint::Invalid();
+  double last_altitude = 0;
+  double last_altitude_agl = 0;
+  /** Climb rate (m/s) from the last Update(). Positive is up. */
+  double last_vario = 0;
 
   /**
    * NOTAM areas are removed and re-created when the NOTAM list is refreshed,
@@ -314,8 +318,9 @@ private:
    * While the aircraft is inside a cleared airspace, silence a
    * surrounding airspace whose warning has no horizontal distance.
    * A boundary still ahead is the exit from the clearance and keeps
-   * alerting. Leaving the cleared airspace lets the outside warning
-   * return.
+   * alerting, including a climb that reaches the top within the
+   * warning time. Leaving the cleared airspace lets the outside
+   * warning return.
    *
    * @return true if a warning was newly covered
    */

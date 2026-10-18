@@ -171,7 +171,8 @@ Version 7.46 - not yet released
   - grant clearance on an inner airspace, such as a glider sector
     inside a restricted area. Unlike acknowledge, the warning from
     the airspace around it is suppressed while the glider stays
-    inside the sector, and sounds again on leaving it
+    inside the sector, and sounds again on leaving it, including a
+    climb that reaches the top within the warning time
   - keep airspace altitude labels readable when they would overlap #771
   - improve airspace fills and the margin around them, and keep
     overlapping borders #2479
