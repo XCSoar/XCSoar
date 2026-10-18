@@ -11317,7 +11317,7 @@ msgstr "MC задачи при старте"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr "Качество безопасного MC"
+msgstr "Качество планирования при безопасном MC"
 
 msgid "Spoken alerts"
 msgstr "Голосовые предупреждения"
