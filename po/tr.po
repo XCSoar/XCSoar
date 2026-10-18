@@ -1087,7 +1087,6 @@ msgstr "BLE Portu"
 msgid "Bluetooth server"
 msgstr "Bluetooth sunucu"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "İçerikli GPS & Sensörler"
 
@@ -1731,7 +1730,6 @@ msgstr "ADSB dikey aralığı"
 msgid "Ack Day"
 msgstr "Ack Günü"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -1928,7 +1926,6 @@ msgstr "Personel"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Boş ağırlıkten itibaren giderde yüklenen tüm ağırlıklar, pilot ve kopyolar dahil ancak su balastı hariç."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Balast"
 
@@ -2130,7 +2127,6 @@ msgstr "Takım Kodu"
 msgid "Task Calc"
 msgstr "Görev Hesaplama"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analiz"
 
@@ -2167,7 +2163,6 @@ msgstr "Görev Hızı"
 msgid "Warnings"
 msgstr "Uyarılar"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Kontrol Listesi"
 
@@ -2374,14 +2369,12 @@ msgstr "Yanlış parola."
 msgid "Enter a new password"
 msgstr "Yeni bir parola girin"
 
-#, no-c-format
 msgid "Status"
 msgstr "Durum"
 
 msgid "Flight"
 msgstr "Uçuş"
 
-#, no-c-format
 msgid "System"
 msgstr "Sistem"
 
@@ -2632,7 +2625,6 @@ msgstr "Gidin"
 msgid "Pan To"
 msgstr "Yol Noktasına kaydır"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Yol Noktası"
 
@@ -3316,7 +3308,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Görüntü çözünürlüğü, çizgi kalınlıklarını, yazı tipi boyutlarını ve atlanabilir alanları ayarlama gibi kullanılır."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Otomatik"
 
@@ -5151,7 +5142,6 @@ msgstr "Optimizasyon"
 msgid "No alternates available"
 msgstr "Alternatiler mevcut değil"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternatifler"
 

@@ -1117,7 +1117,6 @@ msgstr "Port BLE"
 msgid "Bluetooth server"
 msgstr "Serveur Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS intégré et senseurs"
 
@@ -1759,7 +1758,6 @@ msgstr "Portée verticale ADSB"
 msgid "Ack Day"
 msgstr "OK Auj."
 
-#, no-c-format
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -1957,7 +1955,6 @@ msgstr "Équipage"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Toutes les masses chargées dans le planeur au-delà du poids à vide, y compris le pilote et le copilote, mais pas les ballasts."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Ballast"
 
@@ -2159,7 +2156,6 @@ msgstr "Code équipe"
 msgid "Task Calc"
 msgstr "Calc. circuit"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analyses"
 
@@ -2196,7 +2192,6 @@ msgstr "Vitesse Circuit"
 msgid "Warnings"
 msgstr "Avertissements"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Checklist"
 
@@ -2403,14 +2398,12 @@ msgstr "Mot de passe incorrect."
 msgid "Enter a new password"
 msgstr "Entrez un nouveau mot de passe"
 
-#, no-c-format
 msgid "Status"
 msgstr "État"
 
 msgid "Flight"
 msgstr "Vol"
 
-#, no-c-format
 msgid "System"
 msgstr "Système"
 
@@ -2662,7 +2655,6 @@ msgstr "Aller à"
 msgid "Pan To"
 msgstr "Mode Panorama"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Balise"
 
@@ -3349,7 +3341,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "La résolution de l'affichage est utilisée pour adapter les largeurs de ligne, la taille de la police, la taille des terrains posables, etc."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatique"
 
@@ -5216,7 +5207,6 @@ msgstr "Optimisé"
 msgid "No alternates available"
 msgstr "Aucun point d'atterrissage alternatif disponible"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Dégagmts"
 
@@ -11159,12 +11149,15 @@ msgstr "Vario sonore"
 msgid "OpenVario audio vario daemon"
 msgstr "Service du vario sonore OpenVario"
 
+#, no-c-format
 msgid "Max. temp. from forecast"
 msgstr "Temp. max. de la prévision"
 
+#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr "Renseigne la temp. max. dans Configuration vol d'après la prévision DWD du jour pour la station MOSMIX la plus proche.  Nécessite une position GPS ; un seul chargement par jour, sans compte."
 
+#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr "La température maximale au sol de la journée. Une adiabatique sèche partant de cette valeur, comparée à la température extérieure mesurée en montée, donne la hauteur des thermiques estimée ; la base des nuages demande en plus une sonde d'humidité. Les deux sont tracés sur la page Courbe de température du dialogue Analyses, une fois que le planeur a traversé la couche."
 

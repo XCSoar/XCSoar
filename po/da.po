@@ -1102,7 +1102,6 @@ msgstr "BLE-port"
 msgid "Bluetooth server"
 msgstr "Bluetooth-server"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integreerede GPS & sensorer"
 
@@ -1747,7 +1746,6 @@ msgstr "ADSB vertikalt område"
 msgid "Ack Day"
 msgstr "Ack Dag"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Indstillinger"
 
@@ -1940,7 +1938,6 @@ msgstr "Besætning"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Alle masser ladet til svæveflyet over legevægt, inklusive pilot og copilot, men ikke vandballast."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Vandballast"
 
@@ -2142,7 +2139,6 @@ msgstr "Tjekkoder"
 msgid "Task Calc"
 msgstr "Opgaveberækningsværktøj"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analyse"
 
@@ -2179,7 +2175,6 @@ msgstr "Opgavespeed"
 msgid "Warnings"
 msgstr "Advarsel"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Kontroller"
 
@@ -2386,14 +2381,12 @@ msgstr "Forkert adgangskode."
 msgid "Enter a new password"
 msgstr "Indtast en ny adgangskode"
 
-#, no-c-format
 msgid "Status"
 msgstr "Status"
 
 msgid "Flight"
 msgstr "Flugt"
 
-#, no-c-format
 msgid "System"
 msgstr "System"
 
@@ -2642,7 +2635,6 @@ msgstr "GåTil"
 msgid "Pan To"
 msgstr "Panér til"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Vejpunkt"
 
@@ -3314,7 +3306,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Visningsopnåelsen bruges til at anpassede linjesæder, tegnesæder, landbar størrelser og mere."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatisk"
 
@@ -5161,7 +5152,6 @@ msgstr "Optimeret"
 msgid "No alternates available"
 msgstr "Ingen alternater tilgængelige"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternater"
 

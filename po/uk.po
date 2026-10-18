@@ -1116,7 +1116,6 @@ msgstr "Порт BLE"
 msgid "Bluetooth server"
 msgstr "Сервер Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Вбудований GPS і датники"
 
@@ -1760,7 +1759,6 @@ msgstr "ADSB вертикальна діапазон"
 msgid "Ack Day"
 msgstr "Підтвердити день"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -1955,7 +1953,6 @@ msgstr "Співробітники"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Всі маси, завантажені на планер за рахунок ваги порожнього планера, включаючи пилота та супроводника (якщо є), але не водний баласт."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Баласт"
 
@@ -2157,7 +2154,6 @@ msgstr "Код команди"
 msgid "Task Calc"
 msgstr "Розрахунок завдання"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Аналіз"
 
@@ -2194,7 +2190,6 @@ msgstr "Швидкість завдання"
 msgid "Warnings"
 msgstr "Застереження"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Чек-лист"
 
@@ -2401,14 +2396,12 @@ msgstr "Невірний пароль."
 msgid "Enter a new password"
 msgstr "Уведіть новий пароль"
 
-#, no-c-format
 msgid "Status"
 msgstr "Статус"
 
 msgid "Flight"
 msgstr "Політ"
 
-#, no-c-format
 msgid "System"
 msgstr "Система"
 
@@ -2659,7 +2652,6 @@ msgstr "Летіти до"
 msgid "Pan To"
 msgstr "Панель до"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Точка маршруту"
 
@@ -3329,7 +3321,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Роздільна здатність дисплея використовується для адаптації ширини лінії, розміру шрифту, розміру приземлення тощо."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Автоматично"
 
@@ -5185,7 +5176,6 @@ msgstr "Оптимізовано"
 msgid "No alternates available"
 msgstr "Немає альтернативних пунктів"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Запасні"
 

@@ -1106,7 +1106,6 @@ msgstr "Porta TCP"
 msgid "Bluetooth server"
 msgstr "Servidor Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS embutido & sensores"
 
@@ -1748,7 +1747,6 @@ msgstr "Faixa vertical ADSB"
 msgid "Ack Day"
 msgstr "REC Dia"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Opções"
 
@@ -1943,7 +1941,6 @@ msgstr "Tripulante"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Todas as massas carregadas na planador além do peso vazio, incluindo piloto e copiloto, mas não água de lastro."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Lastro"
 
@@ -2145,7 +2142,6 @@ msgstr "Código Team"
 msgid "Task Calc"
 msgstr "Calc. Task"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Análise"
 
@@ -2182,7 +2178,6 @@ msgstr "Velocidade Task"
 msgid "Warnings"
 msgstr "Avisos"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Checklist"
 
@@ -2389,14 +2384,12 @@ msgstr "Palavra-passe incorreta."
 msgid "Enter a new password"
 msgstr "Digite uma nova palavra-passe"
 
-#, no-c-format
 msgid "Status"
 msgstr "Estado"
 
 msgid "Flight"
 msgstr "Voo"
 
-#, no-c-format
 msgid "System"
 msgstr "SISTEMA"
 
@@ -2648,7 +2641,6 @@ msgstr "Ir para"
 msgid "Pan To"
 msgstr "Centralizar em"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Waypoint"
 
@@ -3326,7 +3318,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "A resolução da exibição é usada para adaptar as larguras das linhas, o tamanho da fonte, o tamanho dos aterros e mais."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automático"
 
@@ -5177,7 +5168,6 @@ msgstr "Otimizado"
 msgid "No alternates available"
 msgstr "Não há alternativas disponíveis"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternativos"
 

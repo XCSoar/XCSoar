@@ -1114,7 +1114,6 @@ msgstr "Port TE"
 msgid "Bluetooth server"
 msgstr "Serwer Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Wbudowany GPS i czujniki"
 
@@ -1757,7 +1756,6 @@ msgstr "Zasięg poziomy ADSB"
 msgid "Ack Day"
 msgstr "Dziś OK"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Ustawienia"
 
@@ -1952,7 +1950,6 @@ msgstr "Zespół"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Wszystkie masy załadowane do szybowca po jego wadze pustej, w tym pilota i pasażera (jeśli jest), ale nie balastu wodnego."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Balast"
 
@@ -2154,7 +2151,6 @@ msgstr "ZesKodSz"
 msgid "Task Calc"
 msgstr "Kalk. Zad."
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analiza"
 
@@ -2191,7 +2187,6 @@ msgstr "Prędkość Zadania"
 msgid "Warnings"
 msgstr "Ostrzeżenia"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Lista kontrolna"
 
@@ -2398,7 +2393,6 @@ msgstr "Nieprawidłowe hasło."
 msgid "Enter a new password"
 msgstr "Wpisz nowe hasło"
 
-#, no-c-format
 msgid "Status"
 msgstr "Status"
 
@@ -2407,7 +2401,6 @@ msgstr ""
 "Ustaw.\n"
 "Lotu"
 
-#, no-c-format
 msgid "System"
 msgstr "System"
 
@@ -2660,7 +2653,6 @@ msgstr "Leć do"
 msgid "Pan To"
 msgstr "Włącz tryb ręcznego przesuwania"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Punkt trasy"
 
@@ -3335,7 +3327,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Rozdzielczość wyświetlacza pomaga dostosować szerokość linii, rozmiar czcionki, lądowisk i innych."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatycznie"
 
@@ -5179,7 +5170,6 @@ msgstr "Zoptymalizowano"
 msgid "No alternates available"
 msgstr "Brak alternatyw"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Lądow."
 

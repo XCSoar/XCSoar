@@ -1098,7 +1098,6 @@ msgstr "BLE portas"
 msgid "Bluetooth server"
 msgstr "Bluetooth serveris"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integruotas GPS ir sensoriai"
 
@@ -1742,7 +1741,6 @@ msgstr "ADSB vertikalus intervalas"
 msgid "Ack Day"
 msgstr "Patvirtinimo diena"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Nustatymai"
 
@@ -1935,7 +1933,6 @@ msgstr "Komandos"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Glideryje įkilti visi masės, išskyrus tuščią greičio būseną, įskaitant piloto ir paskutinio keliavimo operatorio, bet ne vandens balastą."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Balastas"
 
@@ -2137,7 +2134,6 @@ msgstr "Kompanijos kodas"
 msgid "Task Calc"
 msgstr "Užduoties skaičiavimas"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analizė"
 
@@ -2174,7 +2170,6 @@ msgstr "Užduoties greitis"
 msgid "Warnings"
 msgstr "Ataskaitos"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Sklandymo patikrinimas"
 
@@ -2381,14 +2376,12 @@ msgstr "Neteisingas slaptažodis."
 msgid "Enter a new password"
 msgstr "Įvesti naują slaptažodį"
 
-#, no-c-format
 msgid "Status"
 msgstr "Statusas"
 
 msgid "Flight"
 msgstr "Lėktuvinis laikas"
 
-#, no-c-format
 msgid "System"
 msgstr "Sistemos informacija"
 
@@ -2640,7 +2633,6 @@ msgstr "Eiti į"
 msgid "Pan To"
 msgstr "Perkelė per"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Maršruto taškas"
 
@@ -3319,7 +3311,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Naudotojo įrašo resoliucija naudojama, kad aptiktų linijų plotus, šriftinės dydžio ir ledo dydžio."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatinis"
 
@@ -5166,7 +5157,6 @@ msgstr "Optimizuotas"
 msgid "No alternates available"
 msgstr "Alternatyvų startas neprieinamas"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternatyvūs startai"
 

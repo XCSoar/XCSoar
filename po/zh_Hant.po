@@ -1077,7 +1077,6 @@ msgstr "TE埠"
 msgid "Bluetooth server"
 msgstr "藍牙伺服器"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "內置GPS和感測器"
 
@@ -1719,7 +1718,6 @@ msgstr "ADSB垂直範圍"
 msgid "Ack Day"
 msgstr "確認日"
 
-#, no-c-format
 msgid "Settings"
 msgstr "設定"
 
@@ -1906,7 +1904,6 @@ msgstr "船員"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "包括飞行员和副驾驶在内的所有装载到滑翔机上的总重量，但不包括压舱水。"
 
-#, no-c-format
 msgid "Ballast"
 msgstr "配重"
 
@@ -2106,7 +2103,6 @@ msgstr "團隊代碼"
 msgid "Task Calc"
 msgstr "任務計算"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "分析"
 
@@ -2143,7 +2139,6 @@ msgstr "任務速度"
 msgid "Warnings"
 msgstr "告警"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "檢查表"
 
@@ -2346,14 +2341,12 @@ msgstr "密碼錯誤。"
 msgid "Enter a new password"
 msgstr "輸入新密碼"
 
-#, no-c-format
 msgid "Status"
 msgstr "狀態"
 
 msgid "Flight"
 msgstr "飛行"
 
-#, no-c-format
 msgid "System"
 msgstr "系統"
 
@@ -2599,7 +2592,6 @@ msgstr "GoTo轉到"
 msgid "Pan To"
 msgstr "移動至"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "航點"
 
@@ -3229,7 +3221,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "顯示解析度用於適應線寬、字體大小、可著陸區大小等。"
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "自動"
 
@@ -4990,7 +4981,6 @@ msgstr "優化"
 msgid "No alternates available"
 msgstr "沒有替代場地可用"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "交替"
 

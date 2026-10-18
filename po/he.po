@@ -1101,7 +1101,6 @@ msgstr "יצוא"
 msgid "Bluetooth server"
 msgstr "שרת בלוטות"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "גי פי אס מובנה"
 
@@ -1745,7 +1744,6 @@ msgstr "טווח אנכי ADSB"
 msgid "Ack Day"
 msgstr "יום אישור"
 
-#, no-c-format
 msgid "Settings"
 msgstr "הגדרות"
 
@@ -1985,7 +1983,6 @@ msgstr "צוות"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "כל משקלים שהוספו לדאון מחוץ למשקל ריק כולל טייס ועוזר טייס, אבל לא משקלו של מים"
 
-#, no-c-format
 msgid "Ballast"
 msgstr "מים"
 
@@ -2187,7 +2184,6 @@ msgstr "קוד צוות"
 msgid "Task Calc"
 msgstr "חישוב משימה"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "נתוח"
 
@@ -2224,7 +2220,6 @@ msgstr "מהירות המשימה"
 msgid "Warnings"
 msgstr "אזהרות"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "בד''ח"
 
@@ -2429,14 +2424,12 @@ msgstr "סיסמה לא נכונה."
 msgid "Enter a new password"
 msgstr "הכנס סיסמה חדשה"
 
-#, no-c-format
 msgid "Status"
 msgstr "סטאטוס"
 
 msgid "Flight"
 msgstr "טיסה"
 
-#, no-c-format
 msgid "System"
 msgstr "מערכת"
 
@@ -2725,7 +2718,6 @@ msgstr "טוס אל"
 msgid "Pan To"
 msgstr "panscreen ל."
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "נקודת פנייה"
 
@@ -3372,7 +3364,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "התולעת נמצאת בשימוש כדי להתאים את רוחב הנקודות, הגודל של הטקסט, גודל היעד ועוד."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "אוטומטי"
 
@@ -5193,7 +5184,6 @@ msgstr "אופtimizציה"
 msgid "No alternates available"
 msgstr "אין אפשרויות חליפה זמינות"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "אפשרויות חליפה"
 

@@ -1077,7 +1077,6 @@ msgstr "BLE పార్టు"
 msgid "Bluetooth server"
 msgstr "బ్లైథ్యూట్ సర్వర్"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "ఇంబ్-బైన్రి GPS & సెన్సర్‌లు"
 
@@ -1719,7 +1718,6 @@ msgstr "ADSB ఊరుగుల రణనిష్ఠత"
 msgid "Ack Day"
 msgstr "అక్కడ నాయక దినం"
 
-#, no-c-format
 msgid "Settings"
 msgstr "సెటింగ్స్"
 
@@ -1906,7 +1904,6 @@ msgstr "కార్యకరించిన శాద్వాళ్లు"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "గ్లైడర్‌కు తెలిమీటర్‌ల పేర్కొని వంటి సాధారణ దృష్టి లబ్దాలు, పాలీట్‌ను కావాలానికి వంటి సమయం, కావాలానికి వంటి పరిమాణం, కావాలానికి వంటి స్థానం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి దృష్టి పరిమాణం, కావాలానికి వంటి సమయం, కావాలానికి వంటి"
 
-#, no-c-format
 msgid "Ballast"
 msgstr "బాలస్ట్"
 
@@ -2111,7 +2108,6 @@ msgstr "తిరుగుబాటు కోడ్"
 msgid "Task Calc"
 msgstr "టాస్క్‌ క"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "విశ్లేషణ"
 
@@ -2148,7 +2144,6 @@ msgstr "టాస్క్ శ్రద్ధలు"
 msgid "Warnings"
 msgstr "అన్వయ క్రమం"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "చెక్‌లిష్ట"
 
@@ -2355,14 +2350,12 @@ msgstr "ఎట్టీ పదం."
 msgid "Enter a new password"
 msgstr "ఏకా పదం ఇచ్చండి"
 
-#, no-c-format
 msgid "Status"
 msgstr "స్థాయి"
 
 msgid "Flight"
 msgstr "ఫైల్"
 
-#, no-c-format
 msgid "System"
 msgstr "సిస్టమ్"
 
@@ -2611,7 +2604,6 @@ msgstr "గొంతుకి వచ్చడం"
 msgid "Pan To"
 msgstr "మెనువేర్కు చేర్యాలని తానుకోడం"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "వేపాయింట్"
 
@@ -3247,7 +3239,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "ప్రాక్తన విడుదల దృష్టి నియంత్రణ అవసరమైన రేఖ వెడల్పనలు, ఫోం చదువు, లాండబుల్ వెడల్పనలు మరియు కొత్త రేఖలకు సరైన చదువులను నియంత్రించడానికి ఉపయోగించబడుతుంది."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "స్వాభావిక"
 
@@ -5043,7 +5034,6 @@ msgstr "అధికారంగా నిర్వహణలో"
 msgid "No alternates available"
 msgstr "కానైవాల్ లాబ్ల్స్ ఉంది కాదు"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "కానైవాల్ లాబ్ల్స్"
 

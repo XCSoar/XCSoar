@@ -1101,7 +1101,6 @@ msgstr "Vienti"
 msgid "Bluetooth server"
 msgstr "Bluetooth-palvelin"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Sisäänrakennettu GPS ja anturit"
 
@@ -1745,7 +1744,6 @@ msgstr "ADSB pystyalue"
 msgid "Ack Day"
 msgstr "Vahvista Päivämäärä"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Asetukset"
 
@@ -1938,7 +1936,6 @@ msgstr "Jousto"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Kaikki massat, jotka on laadittu purjelentokoneeseen sen tyhjellä painotukella yli, mukaan lukien johtaja ja toistojohtaja, mutta ei vettiballasti."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Ballasti"
 
@@ -2140,7 +2137,6 @@ msgstr "Tiimikoodi"
 msgid "Task Calc"
 msgstr "Tehtävä laskenta"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analysointi"
 
@@ -2177,7 +2173,6 @@ msgstr "Tehtävän nopeus"
 msgid "Warnings"
 msgstr "Varoitukset"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Tarkastuslista"
 
@@ -2384,14 +2379,12 @@ msgstr "Salasana"
 msgid "Enter a new password"
 msgstr "Syötä uusi salasana"
 
-#, no-c-format
 msgid "Status"
 msgstr "Tila"
 
 msgid "Flight"
 msgstr "Lento"
 
-#, no-c-format
 msgid "System"
 msgstr "Järjestelmä"
 
@@ -2640,7 +2633,6 @@ msgstr "Mene"
 msgid "Pan To"
 msgstr "Siirry kohteeseen"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Reittipiste"
 
@@ -3313,7 +3305,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Näyttöresoluutio käytetään suorittamaan linjien leveydet, fonttikokoja, maahanmuuttajien koon ja muita asioita."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automaattinen"
 
@@ -5148,7 +5139,6 @@ msgstr "Optimoitu"
 msgid "No alternates available"
 msgstr "Ei vaihtoehtoja saatavana"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Vaihtoehdot"
 

@@ -1110,7 +1110,6 @@ msgstr "BLE порт"
 msgid "Bluetooth server"
 msgstr "Bluetooth сървър"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Вграден ГПС и други датчици"
 
@@ -1755,7 +1754,6 @@ msgstr "Вертикален обхват ADSB"
 msgid "Ack Day"
 msgstr "Приемане за деня"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Настройки"
 
@@ -1950,7 +1948,6 @@ msgstr "Екипаж"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Допълнително натоварено тегло над теглото на празен планер, включително командира и втория пилот, но без воден баласт"
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Баласт"
 
@@ -2152,7 +2149,6 @@ msgstr "Отборен код"
 msgid "Task Calc"
 msgstr "Изчисляване на задача"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Анализ"
 
@@ -2189,7 +2185,6 @@ msgstr "Скорост по задачата"
 msgid "Warnings"
 msgstr "Предупреждения"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Контролен списък"
 
@@ -2396,14 +2391,12 @@ msgstr "Грешна парола."
 msgid "Enter a new password"
 msgstr "Въведете нова парола"
 
-#, no-c-format
 msgid "Status"
 msgstr "Състояние"
 
 msgid "Flight"
 msgstr "Полет"
 
-#, no-c-format
 msgid "System"
 msgstr "Система"
 
@@ -2655,7 +2648,6 @@ msgstr "Отиди към"
 msgid "Pan To"
 msgstr "Премести към"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Пътна точка"
 
@@ -3342,7 +3334,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Разделителната способност на екрана се използва за да адаптира дебелината на линиите, размера на шрифта, възможните места за кацане и др."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Автоматично"
 
@@ -5195,7 +5186,6 @@ msgstr "Оптимизирана"
 msgid "No alternates available"
 msgstr "Няма налични алтернативи"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Резервни места за кацане"
 

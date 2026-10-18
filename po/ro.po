@@ -1111,7 +1111,6 @@ msgstr "Portul BLE"
 msgid "Bluetooth server"
 msgstr "Serviciu Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS integrat și senzori"
 
@@ -1755,7 +1754,6 @@ msgstr "ADSB distanță verticală"
 msgid "Ack Day"
 msgstr "Confirma ziua"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Setări"
 
@@ -1950,7 +1948,6 @@ msgstr "Echipaj"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Toate greutățile încărcate pe planor, inclusiv pilot și copilot, dar nu balastul de apă."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Balast"
 
@@ -2152,7 +2149,6 @@ msgstr "Cod al echipei"
 msgid "Task Calc"
 msgstr "Calcul probă"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analiză"
 
@@ -2189,7 +2185,6 @@ msgstr "Viteza probelor"
 msgid "Warnings"
 msgstr "Avertismente"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Verificare"
 
@@ -2396,14 +2391,12 @@ msgstr "Parola gresită."
 msgid "Enter a new password"
 msgstr "Introduceți o nouă parolă"
 
-#, no-c-format
 msgid "Status"
 msgstr "Statut"
 
 msgid "Flight"
 msgstr "Zbor"
 
-#, no-c-format
 msgid "System"
 msgstr "Sistem"
 
@@ -2655,7 +2648,6 @@ msgstr "Către"
 msgid "Pan To"
 msgstr "Panare către"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Punct de ruta"
 
@@ -3337,7 +3329,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Résoluția afișajului este utilizată pentru a adapta lățimile liniei, dimensiunea fontului, dimensiunea terenurilor landabile și mai multe."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatice"
 
@@ -5198,7 +5189,6 @@ msgstr "Optimit"
 msgid "No alternates available"
 msgstr "Fără alternativi disponibile"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternative"
 

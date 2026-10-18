@@ -1094,7 +1094,6 @@ msgstr "port BLE"
 msgid "Bluetooth server"
 msgstr "server Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integrirani GPS i senzori"
 
@@ -1738,7 +1737,6 @@ msgstr "ADSB vertikalni opseg"
 msgid "Ack Day"
 msgstr "POTV dan"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Postavke"
 
@@ -1931,7 +1929,6 @@ msgstr "Sastav"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Sve težeće materije u jedrilici izvan praznovaga težina, uključujući pilota i sporednog vozaoca, ali ne vodni balast."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Balast"
 
@@ -2133,7 +2130,6 @@ msgstr "kod tima"
 msgid "Task Calc"
 msgstr "Računar"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analiza"
 
@@ -2170,7 +2166,6 @@ msgstr "Brzina zadatka"
 msgid "Warnings"
 msgstr "Upozorenja"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Popis za provjeru"
 
@@ -2377,14 +2372,12 @@ msgstr "Neispravna lozinka."
 msgid "Enter a new password"
 msgstr "Unesite novu lozinku"
 
-#, no-c-format
 msgid "Status"
 msgstr "Status"
 
 msgid "Flight"
 msgstr "Letenje"
 
-#, no-c-format
 msgid "System"
 msgstr "Sustav"
 
@@ -2635,7 +2628,6 @@ msgstr "Idi na"
 msgid "Pan To"
 msgstr "Pomicanje na točku"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Točka"
 
@@ -3313,7 +3305,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Resolucija prikaza se koristi za prilagođavanje širine linija, veličine fonta, veličine letljivih objekata i mnogo drugog."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatski"
 
@@ -5156,7 +5147,6 @@ msgstr "Optimizirano"
 msgid "No alternates available"
 msgstr "Nema alternativa dostupne"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternativni putovi"
 
