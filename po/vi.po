@@ -2055,9 +2055,11 @@ msgstr "Bộ.InfoBox dán"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Sao chép nhớ mọi hộp thông tin của bộ này, Dán thay hộp thông tin của bộ kh"
+"ác bằng chúng."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Kế thừa từ cài đặt chung"
 
 msgid "Invalid"
 msgstr "Không hợp lệ"
@@ -2742,17 +2744,17 @@ msgstr "Ghi chú"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Văn bản cố định"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Tiêu đề, giá trị và ghi chú do phi công nhập. Chạm để sửa."
 
 msgid "Title"
-msgstr ""
+msgstr "Tiêu đề"
 
 msgid "Value"
-msgstr ""
+msgstr "Giá trị"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4379,10 +4381,10 @@ msgid "Reference used for start max height rule."
 msgstr "Tham chiếu được sử dụng cho quy tắc chiều cao tối đa khởi động."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Dẫn tới điểm gần nhất"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Dẫn tới điểm gần nhất của vùng xuất phát và về đích."
 
 msgid "Finish min. height"
 msgstr "Chiều cao tối thiểu hoàn thành"
@@ -10927,21 +10929,21 @@ msgstr "Hướng dẫn thủ công"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Oxy trong máu"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Độ bão hòa oxy trong máu theo phần trăm, từ máy đo oxy mạch Bluetooth."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Điểm đường bay dùng gần đây"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Kết nối Wi-Fi của thiết bị để tải chuyến bay từ FLARM này."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Xác định liệu dấu ốc sên có bị gió đẩy khi hiển thị ở chế độ vòng tại tỷ lệ bản đồ gần. Tắt — dấu vẫn không bù trôi gió. Khi vòng nhiệt cũng áp dụng cho đường bay chiếu: Bật giữ theo khối khí; Tắt gồm gió."
 
@@ -10977,20 +10979,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Bật radar giao thông và chọn vị trí trên màn hình chính. Hướng của mục tiêu so với hướng đường bay của máy bay được hiển thị dưới dạng mũi tên, và tam giác chỉ lên hoặc xuống thể hiện độ cao tương đối của mục tiêu so với bạn. Trong tất cả các chế độ, màu sắc của mục tiêu chỉ mức độ nguy hiểm."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Độ phân giải màn hình"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Độ sáng màn hình"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Chỉnh độ sáng màn hình."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "Độ sáng màn hình chỉ đọc vì ghi cần thêm quyền."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Tự động"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11005,10 +11007,10 @@ msgstr "Điều này xác định hiệu suất lượn được sử dụng tro
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Mode dự phòng: Tự động"
 
 msgid "Paste"
-msgstr ""
+msgstr "Dán"
 
 #, c-format
 msgid ""
@@ -11112,105 +11114,123 @@ msgid "%u min"
 msgstr "%u phút"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Không thấy dịch vụ được hỗ trợ"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Các đơn vị systemd đã chọn chưa được cài."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Không khả dụng"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Đang khởi động..."
 
 msgid "Stopping..."
 msgstr "Đang dừng…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Đang tải lại..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Thất bại"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Bật"
 
 msgid "Restart"
-msgstr ""
+msgstr "Khởi động lại"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Tắt"
 
 msgid "System service"
-msgstr ""
+msgstr "Dịch vụ hệ thống"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Máy chủ SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Thiết bị đầu cuối từ xa"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Cảm biến"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Dịch vụ cảm biến OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Âm vario"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Dịch vụ âm vario OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Nhiệt độ cực đại từ dự báo"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Điền nhiệt độ cực đại vào cài đặt bay từ dự báo DWD trong ngày cho trạm MOS"
+"MIX gần nhất. Cần vị trí và tải một lần mỗi ngày; không cần tài khoản."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Nhiệt độ mặt đất cao nhất trong ngày. Đường đoạn nhiệt khô từ đó tới nhiệt "
+"độ không khí ngoài đo khi leo cho trần dòng nhiệt ước tính; chân mây còn cầ"
+"n cảm biến độ ẩm. Cả hai được vẽ trên trang vết nhiệt độ của hộp thoại Phân"
+" tích sau khi tàu lượn đi qua lớp."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC bài thi lúc khởi động"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Tỷ lệ lượn của Mc an toàn"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Cảnh báo đọc thành tiếng"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Đọc cảnh báo va chạm FLARM, kèm mức khẩn, vị trí đồng hồ và lưu lượng ở trê"
+"n hay dưới: \"Traffic urgent! Three o'clock. Above.\" Cảnh báo chướng ngại "
+"và vùng báo động không được đọc."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Thử cảnh báo đọc thành tiếng"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Công tắc lệnh tốc độ"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "XCSoar dùng báo cáo đi thẳng/leo của vario như thế nào."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Chế độ bay"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Trong chuyến bay, báo cáo đi thẳng/leo của vario là chế độ bay. Đi thẳng kế"
+"t thúc leo và bắt đầu tính trung bình lại từ đầu. Leo bắt đầu một dòng nhiệ"
+"t mới. Lướt tới đích vẫn có thể hiện khi đi thẳng. Trên Vega đây là ngõ ra "
+"lượn vòng."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Chế độ hiển thị"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar quyết định chế độ lượn vòng từ vòng quay. Báo cáo vario không được d"
+"ùng."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Trang đổi còn chế độ bay thì không. Đi thẳng hiện trang đi thẳng, kể cả khi"
+" quay, và ẩn lướt tới đích. Leo hiện trang vario. Trên Vega đây là công tắc"
+" lệnh tốc độ."
 
 #, no-c-format
 msgid "System Tools"
@@ -11236,71 +11256,82 @@ msgstr "Nhiệm vụ XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Thống kê tầm"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Ăng-ten"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM giữ thống kê cho từng kênh trong hai kênh vô tuyến."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Điểm dữ liệu"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Khoảng thời gian"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Tầm FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM không gửi thống kê tầm."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Đặt lại thống kê tầm? Làm việc này sau khi đổi ăng-ten; FLARM sẽ thu lại."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM không xác nhận việc đặt lại."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Dưới tầm nhỏ nhất"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Các sector đã đo của kênh này có tầm trung bình ngắn hơn mức nhỏ nhất của F"
+"LARM: 2 nm phía trước, 1 nm hai bên và phía sau. Kiểm tra cách lắp ăng-ten."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Cài đặt tầm"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM không báo máy bay xa hơn khoảng cách này. Biểu đồ vẽ nó thành vòng tr"
+"òn nét đứt khi nó nằm trong tầm đang vẽ."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Không giới hạn"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Tiếp xúc với máy bay FLARM khác khi bay, đếm một lần ở mỗi sector chúng đi "
+"qua, với khoảng cách lớn nhất mà chúng được nhận ở đó. Sector hiện trung bì"
+"nh của nửa lớn hơn các khoảng cách đó, đường ngang là khoảng cách lớn nhất."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Các sector đã đo có tầm ước tính ngắn hơn mức nhỏ nhất của FLARM: 2 nm phía"
+" trước, 1 nm hai bên và phía sau. Kiểm tra cách lắp ăng-ten."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Đặt lại ước tính tầm? Làm việc này sau khi đổi ăng-ten; XCSoar sẽ thu lại."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "Ước tính tầm FLARM"
