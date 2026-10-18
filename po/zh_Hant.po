@@ -10731,1114 +10731,1117 @@ msgstr "FLARM 接收距離估計"
 
 #, no-c-format
 msgid "Zoom in"
-msgstr ""
+msgstr "放大"
 
 #, no-c-format
 msgid "Zoom out"
-msgstr ""
+msgstr "縮小"
 
 #, no-c-format
 msgid "Auto zoom"
-msgstr ""
+msgstr "自動縮放"
 
 #, no-c-format
 msgid "Next page"
-msgstr ""
+msgstr "下一頁"
 
 #, no-c-format
 msgid "Previous page"
-msgstr ""
+msgstr "上一頁"
 
 #, no-c-format
 msgid "Waypoint list"
-msgstr ""
+msgstr "航點列表"
 
 #, no-c-format
 msgid "Menu"
-msgstr ""
+msgstr "選單"
 
 #, no-c-format
 msgid "Task manager"
-msgstr ""
+msgstr "任務管理"
 
 #, no-c-format
 msgid "Pan mode"
-msgstr ""
+msgstr "平移模式"
 
 #, no-c-format
 msgid "Quick menu"
-msgstr ""
+msgstr "快捷選單"
 
 #. OPERA is published under CC BY 4.0, so the attribution has to
 #. travel with the picture; the overlay label carries it, which is
 #. what the map shows when the pilot taps it
 #, no-c-format
 msgid "Radar"
-msgstr ""
+msgstr "雷達"
 
 #, no-c-format
 msgid "Satellite"
-msgstr ""
+msgstr "衛星"
 
 msgid "(Inside)"
-msgstr ""
+msgstr "(內部)"
 
 msgid "(Near)"
-msgstr ""
+msgstr "(附近)"
 
 msgid "Cleared"
-msgstr ""
+msgstr "已許可"
 
 msgid "Covered"
-msgstr ""
+msgstr "已覆蓋"
 
 msgid "Power off"
-msgstr ""
+msgstr "關機"
 
 #, no-c-format
 msgid "Andorra"
-msgstr ""
+msgstr "安道爾"
 
 #, no-c-format
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "阿拉伯聯合大公國"
 
 #, no-c-format
 msgid "Afghanistan"
-msgstr ""
+msgstr "阿富汗"
 
 #, no-c-format
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "安地卡及巴布達"
 
 #, no-c-format
 msgid "Anguilla"
-msgstr ""
+msgstr "安奎拉"
 
 #, no-c-format
 msgid "Albania"
-msgstr ""
+msgstr "阿爾巴尼亞"
 
 #, no-c-format
 msgid "Armenia"
-msgstr ""
+msgstr "亞美尼亞"
 
 #, no-c-format
 msgid "Angola"
-msgstr ""
+msgstr "安哥拉"
 
 #, no-c-format
 msgid "Antarctica"
-msgstr ""
+msgstr "南極洲"
 
 #, no-c-format
 msgid "Argentina"
-msgstr ""
+msgstr "阿根廷"
 
 #, no-c-format
 msgid "American Samoa"
-msgstr ""
+msgstr "美屬薩摩亞"
 
 #, no-c-format
 msgid "Austria"
-msgstr ""
+msgstr "奧地利"
 
 #, no-c-format
 msgid "Australia"
-msgstr ""
+msgstr "澳洲"
 
 #, no-c-format
 msgid "Aruba"
-msgstr ""
+msgstr "荷屬阿魯巴"
 
 #, no-c-format
 msgid "Åland Islands"
-msgstr ""
+msgstr "奧蘭群島"
 
 #, no-c-format
 msgid "Azerbaijan"
-msgstr ""
+msgstr "亞塞拜然"
 
 #, no-c-format
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "波士尼亞與赫塞哥維納"
 
 #, no-c-format
 msgid "Barbados"
-msgstr ""
+msgstr "巴貝多"
 
 #, no-c-format
 msgid "Bangladesh"
-msgstr ""
+msgstr "孟加拉"
 
 #, no-c-format
 msgid "Belgium"
-msgstr ""
+msgstr "比利時"
 
 #, no-c-format
 msgid "Burkina Faso"
-msgstr ""
+msgstr "布吉納法索"
 
 #, no-c-format
 msgid "Bulgaria"
-msgstr ""
+msgstr "保加利亞"
 
 #, no-c-format
 msgid "Bahrain"
-msgstr ""
+msgstr "巴林"
 
 #, no-c-format
 msgid "Burundi"
-msgstr ""
+msgstr "蒲隆地"
 
 #, no-c-format
 msgid "Benin"
-msgstr ""
+msgstr "貝南"
 
 #, no-c-format
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "聖巴瑟米"
 
 #, no-c-format
 msgid "Bermuda"
-msgstr ""
+msgstr "百慕達"
 
 #, no-c-format
 msgid "Brunei"
-msgstr ""
+msgstr "汶萊"
 
 #, no-c-format
 msgid "Bolivia"
-msgstr ""
+msgstr "玻利維亞"
 
 #, no-c-format
 msgid "Caribbean Netherlands"
-msgstr ""
+msgstr "荷蘭加勒比區"
 
 #, no-c-format
 msgid "Brazil"
-msgstr ""
+msgstr "巴西"
 
 #, no-c-format
 msgid "Bahamas"
-msgstr ""
+msgstr "巴哈馬"
 
 #, no-c-format
 msgid "Bhutan"
-msgstr ""
+msgstr "不丹"
 
 #, no-c-format
 msgid "Bouvet Island"
-msgstr ""
+msgstr "布威島"
 
 #, no-c-format
 msgid "Botswana"
-msgstr ""
+msgstr "波札那"
 
 #, no-c-format
 msgid "Belarus"
-msgstr ""
+msgstr "白俄羅斯"
 
 #, no-c-format
 msgid "Belize"
-msgstr ""
+msgstr "貝里斯"
 
 #, no-c-format
 msgid "Canada"
-msgstr ""
+msgstr "加拿大"
 
 #, no-c-format
 msgid "Cocos Islands"
-msgstr ""
+msgstr "科克斯（基靈）群島"
 
 #, no-c-format
 msgid "Congo-Kinshasa"
-msgstr ""
+msgstr "剛果（金夏沙）"
 
 #, no-c-format
 msgid "Central African Republic"
-msgstr ""
+msgstr "中非共和國"
 
 #, no-c-format
 msgid "Congo-Brazzaville"
-msgstr ""
+msgstr "剛果（布拉薩）"
 
 #, no-c-format
 msgid "Switzerland"
-msgstr ""
+msgstr "瑞士"
 
 #, no-c-format
 msgid "Côte d'Ivoire"
-msgstr ""
+msgstr "象牙海岸"
 
 #, no-c-format
 msgid "Cook Islands"
-msgstr ""
+msgstr "庫克群島"
 
 #, no-c-format
 msgid "Chile"
-msgstr ""
+msgstr "智利"
 
 #, no-c-format
 msgid "Cameroon"
-msgstr ""
+msgstr "喀麥隆"
 
 #, no-c-format
 msgid "China"
-msgstr ""
+msgstr "中國"
 
 #, no-c-format
 msgid "Colombia"
-msgstr ""
+msgstr "哥倫比亞"
 
 #, no-c-format
 msgid "Costa Rica"
-msgstr ""
+msgstr "哥斯大黎加"
 
 #, no-c-format
 msgid "Cuba"
-msgstr ""
+msgstr "古巴"
 
 #, no-c-format
 msgid "Cape Verde"
-msgstr ""
+msgstr "維德角"
 
 #, no-c-format
 msgid "Curaçao"
-msgstr ""
+msgstr "庫拉索"
 
 #, no-c-format
 msgid "Christmas Island"
-msgstr ""
+msgstr "聖誕島"
 
 #, no-c-format
 msgid "Cyprus"
-msgstr ""
+msgstr "賽普勒斯"
 
 #, no-c-format
 msgid "Czechia"
-msgstr ""
+msgstr "捷克"
 
 #, no-c-format
 msgid "Germany"
-msgstr ""
+msgstr "德國"
 
 #, no-c-format
 msgid "Djibouti"
-msgstr ""
+msgstr "吉布地"
 
 #, no-c-format
 msgid "Denmark"
-msgstr ""
+msgstr "丹麥"
 
 #, no-c-format
 msgid "Dominica"
-msgstr ""
+msgstr "多米尼克"
 
 #, no-c-format
 msgid "Dominican Republic"
-msgstr ""
+msgstr "多明尼加共和國"
 
 #, no-c-format
 msgid "Algeria"
-msgstr ""
+msgstr "阿爾及利亞"
 
 #, no-c-format
 msgid "Ecuador"
-msgstr ""
+msgstr "厄瓜多"
 
 #, no-c-format
 msgid "Estonia"
-msgstr ""
+msgstr "愛沙尼亞"
 
 #, no-c-format
 msgid "Egypt"
-msgstr ""
+msgstr "埃及"
 
 #, no-c-format
 msgid "Western Sahara"
-msgstr ""
+msgstr "西撒哈拉"
 
 #, no-c-format
 msgid "Eritrea"
-msgstr ""
+msgstr "厄利垂亞"
 
 #, no-c-format
 msgid "Spain"
-msgstr ""
+msgstr "西班牙"
 
 #, no-c-format
 msgid "Ethiopia"
-msgstr ""
+msgstr "衣索比亞"
 
 #, no-c-format
 msgid "Finland"
-msgstr ""
+msgstr "芬蘭"
 
 #, no-c-format
 msgid "Fiji"
-msgstr ""
+msgstr "斐濟"
 
 #, no-c-format
 msgid "Falkland Islands"
-msgstr ""
+msgstr "福克蘭群島"
 
 #, no-c-format
 msgid "Micronesia"
-msgstr ""
+msgstr "密克羅尼西亞"
 
 #, no-c-format
 msgid "Faroe Islands"
-msgstr ""
+msgstr "法羅群島"
 
 #, no-c-format
 msgid "France"
-msgstr ""
+msgstr "法國"
 
 #, no-c-format
 msgid "Gabon"
-msgstr ""
+msgstr "加彭"
 
 #, no-c-format
 msgid "United Kingdom"
-msgstr ""
+msgstr "英國"
 
 #, no-c-format
 msgid "Grenada"
-msgstr ""
+msgstr "格瑞那達"
 
 #, no-c-format
 msgid "Georgia"
-msgstr ""
+msgstr "喬治亞"
 
 #, no-c-format
 msgid "French Guiana"
-msgstr ""
+msgstr "法屬圭亞那"
 
 #, no-c-format
 msgid "Guernsey"
-msgstr ""
+msgstr "根息"
 
 #, no-c-format
 msgid "Ghana"
-msgstr ""
+msgstr "迦納"
 
 #, no-c-format
 msgid "Gibraltar"
-msgstr ""
+msgstr "直布羅陀"
 
 #, no-c-format
 msgid "Greenland"
-msgstr ""
+msgstr "格陵蘭"
 
 #, no-c-format
 msgid "Gambia"
-msgstr ""
+msgstr "甘比亞"
 
 #, no-c-format
 msgid "Guinea"
-msgstr ""
+msgstr "幾內亞"
 
 #, no-c-format
 msgid "Guadeloupe"
-msgstr ""
+msgstr "瓜地洛普"
 
 #, no-c-format
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "赤道幾內亞"
 
 #, no-c-format
 msgid "Greece"
-msgstr ""
+msgstr "希臘"
 
 #, no-c-format
 msgid "South Georgia"
-msgstr ""
+msgstr "南喬治亞與南三明治群島"
 
 #, no-c-format
 msgid "Guatemala"
-msgstr ""
+msgstr "瓜地馬拉"
 
 #, no-c-format
 msgid "Guam"
-msgstr ""
+msgstr "關島"
 
 #, no-c-format
 msgid "Guinea-Bissau"
-msgstr ""
+msgstr "幾內亞比索"
 
 #, no-c-format
 msgid "Guyana"
-msgstr ""
+msgstr "蓋亞那"
 
 #, no-c-format
 msgid "Hong Kong"
-msgstr ""
+msgstr "中國香港特別行政區"
 
 #, no-c-format
 msgid "Heard Island"
-msgstr ""
+msgstr "赫德島及麥唐納群島"
 
 #, no-c-format
 msgid "Honduras"
-msgstr ""
+msgstr "宏都拉斯"
 
 #, no-c-format
 msgid "Croatia"
-msgstr ""
+msgstr "克羅埃西亞"
 
 #, no-c-format
 msgid "Haiti"
-msgstr ""
+msgstr "海地"
 
 #, no-c-format
 msgid "Hungary"
-msgstr ""
+msgstr "匈牙利"
 
 #, no-c-format
 msgid "Indonesia"
-msgstr ""
+msgstr "印尼"
 
 #, no-c-format
 msgid "Ireland"
-msgstr ""
+msgstr "愛爾蘭"
 
 #, no-c-format
 msgid "Israel"
-msgstr ""
+msgstr "以色列"
 
 #, no-c-format
 msgid "Isle of Man"
-msgstr ""
+msgstr "曼島"
 
 #, no-c-format
 msgid "India"
-msgstr ""
+msgstr "印度"
 
 #, no-c-format
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "英屬印度洋領地"
 
 #, no-c-format
 msgid "Iraq"
-msgstr ""
+msgstr "伊拉克"
 
 #, no-c-format
 msgid "Iran"
-msgstr ""
+msgstr "伊朗"
 
 #, no-c-format
 msgid "Iceland"
-msgstr ""
+msgstr "冰島"
 
 #, no-c-format
 msgid "Italy"
-msgstr ""
+msgstr "義大利"
 
 #, no-c-format
 msgid "Jersey"
-msgstr ""
+msgstr "澤西島"
 
 #, no-c-format
 msgid "Jamaica"
-msgstr ""
+msgstr "牙買加"
 
 #, no-c-format
 msgid "Jordan"
-msgstr ""
+msgstr "約旦"
 
 #, no-c-format
 msgid "Japan"
-msgstr ""
+msgstr "日本"
 
 #, no-c-format
 msgid "Kenya"
-msgstr ""
+msgstr "肯亞"
 
 #, no-c-format
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "吉爾吉斯"
 
 #, no-c-format
 msgid "Cambodia"
-msgstr ""
+msgstr "柬埔寨"
 
 #, no-c-format
 msgid "Kiribati"
-msgstr ""
+msgstr "吉里巴斯"
 
 #, no-c-format
 msgid "Comoros"
-msgstr ""
+msgstr "葛摩"
 
 #, no-c-format
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "聖克里斯多福及尼維斯"
 
 #, no-c-format
 msgid "North Korea"
-msgstr ""
+msgstr "北韓"
 
 #, no-c-format
 msgid "South Korea"
-msgstr ""
+msgstr "南韓"
 
 #, no-c-format
 msgid "Kuwait"
-msgstr ""
+msgstr "科威特"
 
 #, no-c-format
 msgid "Cayman Islands"
-msgstr ""
+msgstr "開曼群島"
 
 #, no-c-format
 msgid "Kazakhstan"
-msgstr ""
+msgstr "哈薩克"
 
 #, no-c-format
 msgid "Laos"
-msgstr ""
+msgstr "寮國"
 
 #, no-c-format
 msgid "Lebanon"
-msgstr ""
+msgstr "黎巴嫩"
 
 #, no-c-format
 msgid "Saint Lucia"
-msgstr ""
+msgstr "聖露西亞"
 
 #, no-c-format
 msgid "Liechtenstein"
-msgstr ""
+msgstr "列支敦斯登"
 
 #, no-c-format
 msgid "Sri Lanka"
-msgstr ""
+msgstr "斯里蘭卡"
 
 #, no-c-format
 msgid "Liberia"
-msgstr ""
+msgstr "賴比瑞亞"
 
 #, no-c-format
 msgid "Lesotho"
-msgstr ""
+msgstr "賴索托"
 
 #, no-c-format
 msgid "Lithuania"
-msgstr ""
+msgstr "立陶宛"
 
 #, no-c-format
 msgid "Luxembourg"
-msgstr ""
+msgstr "盧森堡"
 
 #, no-c-format
 msgid "Latvia"
-msgstr ""
+msgstr "拉脫維亞"
 
 #, no-c-format
 msgid "Libya"
-msgstr ""
+msgstr "利比亞"
 
 #, no-c-format
 msgid "Morocco"
-msgstr ""
+msgstr "摩洛哥"
 
 #, no-c-format
 msgid "Monaco"
-msgstr ""
+msgstr "摩納哥"
 
 #, no-c-format
 msgid "Moldova"
-msgstr ""
+msgstr "摩爾多瓦"
 
 #, no-c-format
 msgid "Montenegro"
-msgstr ""
+msgstr "蒙特內哥羅"
 
 #, no-c-format
 msgid "Saint Martin"
-msgstr ""
+msgstr "法屬聖馬丁"
 
 #, no-c-format
 msgid "Madagascar"
-msgstr ""
+msgstr "馬達加斯加"
 
 #, no-c-format
 msgid "Marshall Islands"
-msgstr ""
+msgstr "馬紹爾群島"
 
 #, no-c-format
 msgid "North Macedonia"
-msgstr ""
+msgstr "北馬其頓"
 
 #, no-c-format
 msgid "Mali"
-msgstr ""
+msgstr "馬利"
 
 #, no-c-format
 msgid "Myanmar"
-msgstr ""
+msgstr "緬甸"
 
 #, no-c-format
 msgid "Mongolia"
-msgstr ""
+msgstr "蒙古"
 
 #, no-c-format
 msgid "Macao"
-msgstr ""
+msgstr "中國澳門特別行政區"
 
 #, no-c-format
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "北馬利安納群島"
 
 #, no-c-format
 msgid "Martinique"
-msgstr ""
+msgstr "馬丁尼克"
 
 #, no-c-format
 msgid "Mauritania"
-msgstr ""
+msgstr "茅利塔尼亞"
 
 #, no-c-format
 msgid "Montserrat"
-msgstr ""
+msgstr "蒙哲臘"
 
 #, no-c-format
 msgid "Malta"
-msgstr ""
+msgstr "馬爾他"
 
 #, no-c-format
 msgid "Mauritius"
-msgstr ""
+msgstr "模里西斯"
 
 #, no-c-format
 msgid "Maldives"
-msgstr ""
+msgstr "馬爾地夫"
 
 #, no-c-format
 msgid "Malawi"
-msgstr ""
+msgstr "馬拉威"
 
 #, no-c-format
 msgid "Mexico"
-msgstr ""
+msgstr "墨西哥"
 
 #, no-c-format
 msgid "Malaysia"
-msgstr ""
+msgstr "馬來西亞"
 
 #, no-c-format
 msgid "Mozambique"
-msgstr ""
+msgstr "莫三比克"
 
 #, no-c-format
 msgid "Namibia"
-msgstr ""
+msgstr "納米比亞"
 
 #, no-c-format
 msgid "New Caledonia"
-msgstr ""
+msgstr "新喀里多尼亞"
 
 #, no-c-format
 msgid "Niger"
-msgstr ""
+msgstr "尼日"
 
 #, no-c-format
 msgid "Norfolk Island"
-msgstr ""
+msgstr "諾福克島"
 
 #, no-c-format
 msgid "Nigeria"
-msgstr ""
+msgstr "奈及利亞"
 
 #, no-c-format
 msgid "Nicaragua"
-msgstr ""
+msgstr "尼加拉瓜"
 
 #, no-c-format
 msgid "Netherlands"
-msgstr ""
+msgstr "荷蘭"
 
 #, no-c-format
 msgid "Norway"
-msgstr ""
+msgstr "挪威"
 
 #, no-c-format
 msgid "Nepal"
-msgstr ""
+msgstr "尼泊爾"
 
 #, no-c-format
 msgid "Nauru"
-msgstr ""
+msgstr "諾魯"
 
 #, no-c-format
 msgid "Niue"
-msgstr ""
+msgstr "紐埃島"
 
 #, no-c-format
 msgid "New Zealand"
-msgstr ""
+msgstr "紐西蘭"
 
 #, no-c-format
 msgid "Oman"
-msgstr ""
+msgstr "阿曼"
 
 #, no-c-format
 msgid "Panama"
-msgstr ""
+msgstr "巴拿馬"
 
 #, no-c-format
 msgid "Peru"
-msgstr ""
+msgstr "秘魯"
 
 #, no-c-format
 msgid "French Polynesia"
-msgstr ""
+msgstr "法屬玻里尼西亞"
 
 #, no-c-format
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "巴布亞紐幾內亞"
 
 #, no-c-format
 msgid "Philippines"
-msgstr ""
+msgstr "菲律賓"
 
 #, no-c-format
 msgid "Pakistan"
-msgstr ""
+msgstr "巴基斯坦"
 
 #, no-c-format
 msgid "Poland"
-msgstr ""
+msgstr "波蘭"
 
 #, no-c-format
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "聖皮埃與密克隆群島"
 
 #, no-c-format
 msgid "Pitcairn"
-msgstr ""
+msgstr "皮特肯群島"
 
 #, no-c-format
 msgid "Puerto Rico"
-msgstr ""
+msgstr "波多黎各"
 
 #, no-c-format
 msgid "Palestine"
-msgstr ""
+msgstr "巴勒斯坦自治區"
 
 #, no-c-format
 msgid "Portugal"
-msgstr ""
+msgstr "葡萄牙"
 
 #, no-c-format
 msgid "Palau"
-msgstr ""
+msgstr "帛琉"
 
 #, no-c-format
 msgid "Paraguay"
-msgstr ""
+msgstr "巴拉圭"
 
 #, no-c-format
 msgid "Qatar"
-msgstr ""
+msgstr "卡達"
 
 #, no-c-format
 msgid "Réunion"
-msgstr ""
+msgstr "留尼旺"
 
 #, no-c-format
 msgid "Romania"
-msgstr ""
+msgstr "羅馬尼亞"
 
 #, no-c-format
 msgid "Serbia"
-msgstr ""
+msgstr "塞爾維亞"
 
 #, no-c-format
 msgid "Russia"
-msgstr ""
+msgstr "俄羅斯"
 
 #, no-c-format
 msgid "Rwanda"
-msgstr ""
+msgstr "盧安達"
 
 #, no-c-format
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "沙烏地阿拉伯"
 
 #, no-c-format
 msgid "Solomon Islands"
-msgstr ""
+msgstr "索羅門群島"
 
 #, no-c-format
 msgid "Seychelles"
-msgstr ""
+msgstr "塞席爾"
 
 #, no-c-format
 msgid "Sudan"
-msgstr ""
+msgstr "蘇丹"
 
 #, no-c-format
 msgid "Sweden"
-msgstr ""
+msgstr "瑞典"
 
 #, no-c-format
 msgid "Singapore"
-msgstr ""
+msgstr "新加坡"
 
 #, no-c-format
 msgid "Saint Helena"
-msgstr ""
+msgstr "聖赫勒拿島"
 
 #, no-c-format
 msgid "Slovenia"
-msgstr ""
+msgstr "斯洛維尼亞"
 
 #, no-c-format
 msgid "Svalbard and Jan Mayen"
-msgstr ""
+msgstr "挪威屬斯瓦巴及尖棉"
 
 #, no-c-format
 msgid "Slovakia"
-msgstr ""
+msgstr "斯洛伐克"
 
 #, no-c-format
 msgid "Sierra Leone"
-msgstr ""
+msgstr "獅子山"
 
 #, no-c-format
 msgid "San Marino"
-msgstr ""
+msgstr "聖馬利諾"
 
 #, no-c-format
 msgid "Senegal"
-msgstr ""
+msgstr "塞內加爾"
 
 #, no-c-format
 msgid "Somalia"
-msgstr ""
+msgstr "索馬利亞"
 
 #, no-c-format
 msgid "Suriname"
-msgstr ""
+msgstr "蘇利南"
 
 #, no-c-format
 msgid "South Sudan"
-msgstr ""
+msgstr "南蘇丹"
 
 #, no-c-format
 msgid "São Tomé and Príncipe"
-msgstr ""
+msgstr "聖多美普林西比"
 
 #, no-c-format
 msgid "El Salvador"
-msgstr ""
+msgstr "薩爾瓦多"
 
 #, no-c-format
 msgid "Sint Maarten"
-msgstr ""
+msgstr "荷屬聖馬丁"
 
 #, no-c-format
 msgid "Syria"
-msgstr ""
+msgstr "敘利亞"
 
 #, no-c-format
 msgid "Eswatini"
-msgstr ""
+msgstr "史瓦帝尼"
 
 #, no-c-format
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "土克斯及開科斯群島"
 
 #, no-c-format
 msgid "Chad"
-msgstr ""
+msgstr "查德"
 
 #, no-c-format
 msgid "French Southern Territories"
-msgstr ""
+msgstr "法屬南部屬地"
 
 #, no-c-format
 msgid "Togo"
-msgstr ""
+msgstr "多哥"
 
 #, no-c-format
 msgid "Thailand"
-msgstr ""
+msgstr "泰國"
 
 #, no-c-format
 msgid "Tajikistan"
-msgstr ""
+msgstr "塔吉克"
 
 #, no-c-format
 msgid "Tokelau"
-msgstr ""
+msgstr "托克勞群島"
 
 #, no-c-format
 msgid "Timor-Leste"
-msgstr ""
+msgstr "東帝汶"
 
 #, no-c-format
 msgid "Turkmenistan"
-msgstr ""
+msgstr "土庫曼"
 
 #, no-c-format
 msgid "Tunisia"
-msgstr ""
+msgstr "突尼西亞"
 
 #, no-c-format
 msgid "Tonga"
-msgstr ""
+msgstr "東加"
 
 #, no-c-format
 msgid "Turkey"
-msgstr ""
+msgstr "土耳其"
 
 #, no-c-format
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "千里達及托巴哥"
 
 #, no-c-format
 msgid "Tuvalu"
-msgstr ""
+msgstr "吐瓦魯"
 
 #, no-c-format
 msgid "Taiwan"
-msgstr ""
+msgstr "台灣"
 
 #, no-c-format
 msgid "Tanzania"
-msgstr ""
+msgstr "坦尚尼亞"
 
 #, no-c-format
 msgid "Ukraine"
-msgstr ""
+msgstr "烏克蘭"
 
 #, no-c-format
 msgid "Uganda"
-msgstr ""
+msgstr "烏干達"
 
 #, no-c-format
 msgid "U.S. Outlying Islands"
-msgstr ""
+msgstr "美國本土外小島嶼"
 
 #, no-c-format
 msgid "United States"
-msgstr ""
+msgstr "美國"
 
 #, no-c-format
 msgid "Uruguay"
-msgstr ""
+msgstr "烏拉圭"
 
 #, no-c-format
 msgid "Uzbekistan"
-msgstr ""
+msgstr "烏茲別克"
 
 #, no-c-format
 msgid "Vatican City"
-msgstr ""
+msgstr "梵蒂岡"
 
 #, no-c-format
 msgid "Saint Vincent and the Grenadines"
-msgstr ""
+msgstr "聖文森及格瑞那丁"
 
 #, no-c-format
 msgid "Venezuela"
-msgstr ""
+msgstr "委內瑞拉"
 
 #, no-c-format
 msgid "British Virgin Islands"
-msgstr ""
+msgstr "英屬維京群島"
 
 #, no-c-format
 msgid "U.S. Virgin Islands"
-msgstr ""
+msgstr "美屬維京群島"
 
 #, no-c-format
 msgid "Vietnam"
-msgstr ""
+msgstr "越南"
 
 #, no-c-format
 msgid "Vanuatu"
-msgstr ""
+msgstr "萬那杜"
 
 #, no-c-format
 msgid "Wallis and Futuna"
-msgstr ""
+msgstr "瓦利斯群島和富圖那群島"
 
 #, no-c-format
 msgid "Samoa"
-msgstr ""
+msgstr "薩摩亞"
 
 #, no-c-format
 msgid "Kosovo"
-msgstr ""
+msgstr "科索沃"
 
 #, no-c-format
 msgid "Yemen"
-msgstr ""
+msgstr "葉門"
 
 #, no-c-format
 msgid "Mayotte"
-msgstr ""
+msgstr "馬約特島"
 
 #, no-c-format
 msgid "South Africa"
-msgstr ""
+msgstr "南非"
 
 #, no-c-format
 msgid "Zambia"
-msgstr ""
+msgstr "尚比亞"
 
 #, no-c-format
 msgid "Zimbabwe"
-msgstr ""
+msgstr "辛巴威"
 
 #. the backup is there, but on purpose without the files the
 #. loggers are writing right now: say so, and which ones
 msgid "Backup complete."
-msgstr ""
+msgstr "備份完成。"
 
 msgid "Left out, being written right now:"
-msgstr ""
+msgstr "已略過，正在寫入："
 
 msgid "Don't use"
-msgstr ""
+msgstr "不使用"
 
 msgid "Not aligned"
-msgstr ""
+msgstr "未對準"
 
 msgid "Fixed & aligned"
-msgstr ""
+msgstr "固定並對準"
 
 msgid "Built-in IMU"
-msgstr ""
+msgstr "內建 IMU"
 
 msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
-msgstr ""
+msgstr "裝有 IMU 的儀表是否永久固定，且其軸與飛機軸對齊。僅在剛性安裝時設為「固定並對準」。有疑問時用「未對準」。"
 
-#, c-format
+#, no-c-format
 msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
 msgstr ""
+"XCSoar 使用最先提供每個數值的裝置（裝置 A 先於 B，依此類推）。粗體標誌是 XCSoar 正在使用的、來自該裝置的數值。非粗體標誌表示更早的"
+"裝置已經提供相同資料。Baro 是目前 QNH 下的高度；QNE 是氣壓高度；Alt IGC 是紀錄器寫入的高度。QNE 與 Pressure 是同一"
+"環境氣壓，因此二者中只有更早的那個為粗體。GPS 不良和電量低於 百分之十 在彩色螢幕上顯示為紅色，在電子紙上顯示為粗體。"
 
 msgid "QNE"
-msgstr ""
+msgstr "QNE"
 
 msgid "Engine"
-msgstr ""
+msgstr "發動機"
 
 msgid "Set Clearance"
-msgstr ""
+msgstr "設定許可"
 
 msgid "Revoke Clearance"
-msgstr ""
+msgstr "撤銷許可"
 
 msgid "Failed to update airspace clearance"
-msgstr ""
+msgstr "無法更新空域許可"
 
 msgid "Clrnc"
-msgstr ""
+msgstr "許可"
 
 msgid ""
 "Per-class filter settings. For airspaces where both\n"
@@ -11850,244 +11853,256 @@ msgid ""
 "  Clrnc - allow granting a clearance to suppress\n"
 "           warnings from other overlapping airspaces"
 msgstr ""
+"按類別的過濾設定。若空域同時給出類型（CTR、FIR……）和類別，XCSoar 中類型優先於類別。\n欄：\n  顯示 — 在地圖上繪製該類別的空域"
+"\n  警告 — 接近和進入時發出警告\n  許可 — 允許授予許可，以抑制\n         其他重疊空域的警告"
 
 msgid "Clearance"
-msgstr ""
+msgstr "許可"
 
 msgid "Groups"
-msgstr ""
+msgstr "分組"
 
 msgid "Show only the InfoBoxes of these groups in the list."
-msgstr ""
+msgstr "清單中只顯示這些分組的資訊框。"
 
 msgid "Share location"
-msgstr ""
+msgstr "分享位置"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Top"
-msgstr ""
+msgstr "上"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Bottom"
-msgstr ""
+msgstr "下"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #, no-c-format
 msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
-msgstr ""
+msgstr "點按一條邊，將資訊框區域拉伸到該處的螢幕邊緣。"
 
 #, no-c-format
 msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
 msgstr ""
+"資訊框區域是螢幕上可供資訊框、儀表、地圖疊加和選單使用的部分。選擇將其拉伸到螢幕邊緣的邊。未拉伸的邊會避開系統列和圓角。地圖始終使用整個螢幕，對話方塊"
+"始終留在安全區內。僅在全螢幕模式有意義。"
 
 msgid "Stretch InfoBox area"
-msgstr ""
+msgstr "拉伸資訊框區域"
 
 #, no-c-format
 msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
-msgstr ""
+msgstr "顯示狀態列，除非資訊框區域被拉伸到螢幕上沿從而擋住資訊框。"
 
 #, no-c-format
 msgid "Visible"
-msgstr ""
+msgstr "可見"
 
 #, no-c-format
 msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
-msgstr ""
+msgstr "即使在全螢幕模式也始終顯示狀態列。資訊框不能畫在它後面，因此會避開螢幕上沿。"
 
 #, no-c-format
 msgid "Hidden"
-msgstr ""
+msgstr "隱藏"
 
 #, no-c-format
 msgid "Never show the status bar."
-msgstr ""
+msgstr "永不顯示狀態列。"
 
 msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
 msgstr ""
+"讓 XCSoar 使用整個螢幕，包括系統列和螢幕挖孔後面的區域。地圖會鋪滿，而「拉伸資訊框區域」決定資訊框、儀表、地圖疊加和選單可以到達哪些邊。"
 
 msgid "System status bar"
-msgstr ""
+msgstr "系統狀態列"
 
 msgid "Whether the system status bar with the clock and the battery level stays visible."
-msgstr ""
+msgstr "帶時鐘和電量的系統狀態列是否保持可見。"
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Warn when radar expires"
-msgstr ""
+msgstr "雷達過期時警告"
 
 msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
-msgstr ""
+msgstr "啟用後，當降水雷達疊加無法重新整理並從地圖上移除時顯示警告。"
 
 #, no-c-format
 msgid "Shrink type when the short edge is under 3.2 inches."
-msgstr ""
+msgstr "短邊小於 3.2 英寸時縮小字級。"
 
 #, no-c-format
 msgid "Handheld"
-msgstr ""
+msgstr "手持"
 
 #, no-c-format
 msgid "Always use the closer-view size."
-msgstr ""
+msgstr "始終使用近距離觀看的字級。"
 
 #, no-c-format
 msgid "Panel"
-msgstr ""
+msgstr "面板"
 
 #, no-c-format
 msgid "Keep full-size type, for a screen read at arm's length."
-msgstr ""
+msgstr "保持完整字級，供在一臂距離閱讀的螢幕使用。"
 
 msgid "Viewing distance"
-msgstr ""
+msgstr "觀看距離"
 
 msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
-msgstr ""
+msgstr "短邊小於 3.2 英寸時自動縮小字級。「手持」始終使用該近距離字級。「面板」保持完整字級。"
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Satellite layer"
-msgstr ""
+msgstr "衛星圖層"
 
 msgid "Which EUMETView satellite product this page draws under the map."
-msgstr ""
+msgstr "此頁面在地圖下繪製的 EUMETView 衛星產品。"
 
 #, no-c-format
 msgid "Rain radar"
-msgstr ""
+msgstr "降水雷達"
 
 #, no-c-format
 msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
-msgstr ""
+msgstr "可達範圍來自滑翔機的直線路徑。可著陸點的顏色和備降列表使用該範圍。"
 
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
-msgstr ""
+msgstr "可達範圍在允許繞開地形障礙轉彎時計算。可著陸點的顏色和備降列表使用該範圍。"
 
 #, no-c-format
 msgid "Task MC"
-msgstr ""
+msgstr "任務 MC"
 
 #, no-c-format
 msgid "Uses task MacCready value."
-msgstr ""
+msgstr "使用任務的 MacCready 值。"
 
 msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
 msgstr ""
+"地形可達、可著陸點顏色、中止和備降列表使用哪個 MacCready。可達模式關閉時仍然適用。工作線始終使用任務 MC。備降資訊框和安全 MC 的高度差"
+"始終使用安全 MC。"
 
 #, no-c-format
 msgid "No reach overlay on the map."
-msgstr ""
+msgstr "地圖上沒有可達範圍疊加。"
 
 #, no-c-format
 msgid "How far you can glide to the ground. Uses the Reach polar."
-msgstr ""
+msgstr "能滑翔到地面的距離。使用可達極曲線。"
 
 #, no-c-format
 msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
-msgstr ""
+msgstr "將滑翔到地面以外的地圖塗暗。使用可達極曲線。"
 
 #, no-c-format
 msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
-msgstr ""
+msgstr "從這個飛行的典型熱氣流底部高度仍能到達時，能滑翔多遠。始終使用任務 MC。"
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
-msgstr ""
+msgstr "用任務 MC 畫到典型熱氣流底部高度的工作線，並用可達極曲線畫到地面的地形線。"
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
-msgstr ""
+msgstr "用任務 MC 畫到典型熱氣流底部高度的工作線，並用可達極曲線在地面以外塗暗。"
 
 msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
 msgstr ""
+"當可達極曲線為安全 MC 時，用於地形可達、可著陸點顏色、中止和備降列表的 MacCready。備降資訊框和安全 MC 的高度差始終使用該值。最佳滑翔"
+"速度不受影響。數值越高，被視為可到達的田地越少。"
 
 msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
-msgstr ""
+msgstr "未設定滑翔極曲線，因此無法顯示滑翔比。請先選擇飛機。"
 
 msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
-msgstr ""
+msgstr "每個數值旁的滑翔比是該 MacCready 設定下靜風中的最佳滑翔比，包括蟲污、壓載和極曲線衰減。"
 
 #, c-format
 msgid "Active polar: %s"
-msgstr ""
+msgstr "目前極曲線：%s"
 
 msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
 msgstr ""
+"啟動時用於最佳滑翔速度和任務計算的 MacCready。在此更改也會設定目前的 MacCready。地形可達、可著陸點顏色、中止和備降列表跟隨可達極曲"
+"線，而不是該值，除非可達極曲線是任務 MC。"
 
 #, no-c-format
 msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
-msgstr ""
+msgstr "使用作業系統中設定的時區，並在夏令時間切換和前往其他時區時繼續跟隨它。"
 
 #, no-c-format
 msgid "Time zone"
-msgstr ""
+msgstr "時區"
 
 #, no-c-format
 msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
-msgstr ""
+msgstr "使用下面選擇的時區。XCSoar 知道其夏令時間規則並自行切換，因此不必每年改正兩次。"
 
 #, no-c-format
 msgid "Manual UTC offset"
-msgstr ""
+msgstr "手動 UTC 偏移"
 
 #, no-c-format
 msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
-msgstr ""
+msgstr "使用下面輸入的固定 UTC 偏移。夏令時間開始或結束時必須手動改正。"
 
 msgid "Local time source"
-msgstr ""
+msgstr "本地時間來源"
 
 msgid "Selects where XCSoar gets the offset between UTC and local time from."
-msgstr ""
+msgstr "選擇 XCSoar 從何處取得 UTC 與本地時間的偏移。"
 
 msgid "The time zone of the airfield you are flying at."
-msgstr ""
+msgstr "您所在機場的時區。"
 
 msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
 msgstr ""
+"UTC 偏移欄用於指定 UTC 與本地時間的偏移。即使選擇了其他本地時間來源，它仍保留您輸入的值。下方顯示本地時間以及目前生效的 UTC 偏移。"
 
 #, no-c-format
 msgid "UKV Model"
-msgstr ""
+msgstr "UKV 模式"
 
 #, no-c-format
 msgid "United Kingdom. UKV model."
-msgstr ""
+msgstr "英國。UKV 模式。"
 
 #. the other tabs are named after their service, which is why they
 #. are not translated; this one is a common noun
 msgid "Overlay"
-msgstr ""
+msgstr "疊加"
 
 msgid "Revoke"
-msgstr ""
+msgstr "撤銷"
 
 #, no-c-format
 msgid "Radar (EUMETNET OPERA)"
-msgstr ""
+msgstr "Radar (EUMETNET OPERA)"
 
 #. the server answered but the product had nothing to draw here:
 #. say so, rather than leaving an empty map to be read as a slow
 #. download
 msgid "no data"
-msgstr ""
+msgstr "無數據"
 
 msgid "Downloading radar..."
-msgstr ""
+msgstr "正在下載雷達..."
 
 #. the opt-out follows the Quick Guide dialog: answering "no" writes
 #. the choice to the profile, and the Look configuration page can
@@ -12096,152 +12111,154 @@ msgid ""
 "The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
 "\n"
 "Warn again when this happens?"
-msgstr ""
+msgstr "雷達影像無法重新整理，已被移除，以免顯示過時回波。\n\n再發生時再次警告？"
 
 #. first, and the default: the closest counterpart to the pc_met
 #. vis_hrv images, and the one product here that covers Europe at
 #. the HRV sampling German pilots are used to reading
 #, no-c-format
 msgid "European HRV RGB"
-msgstr ""
+msgstr "歐洲 HRV RGB"
 
 #. MTG, which resolves about twice as finely as SEVIRI HRV
 #, no-c-format
 msgid "Visible 0.6 µm (MTG)"
-msgstr ""
+msgstr "可見光 0.6 µm (MTG)"
 
 #, no-c-format
 msgid "Infrared 10.5 µm (MTG)"
-msgstr ""
+msgstr "紅外 10.5 µm (MTG)"
 
 #. the RGB composites are assembled from several channels and reach
 #. the server a few minutes behind the single channel products, which
 #. the frame search follows on its own
 #, no-c-format
 msgid "True colour (MTG)"
-msgstr ""
+msgstr "真彩色 (MTG)"
 
 #, no-c-format
 msgid "Geo colour (MTG)"
-msgstr ""
+msgstr "地理彩色 (MTG)"
 
 #. five minute cadence, and the promptest of them by a wide margin
 #, no-c-format
 msgid "Rapid scan natural colour"
-msgstr ""
+msgstr "快速掃描自然色"
 
 msgid "No satellite imagery here right now"
-msgstr ""
+msgstr "此處目前沒有衛星影像"
 
 msgid "Countries"
-msgstr ""
+msgstr "國家"
 
 msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
-msgstr ""
+msgstr "只顯示這些國家的檔案——地圖、航點和空域使用同一選擇，並保存在設定檔中。涉及所有國家的檔案仍會列出。"
 
 msgid "Search"
-msgstr ""
+msgstr "搜尋"
 
 msgid "Show only the files whose name or description contains this text."
-msgstr ""
+msgstr "只顯示名稱或說明包含此文字的檔案。"
 
 msgid "No file matches the filter."
-msgstr ""
+msgstr "沒有檔案符合篩選條件。"
 
 msgid "Complete"
-msgstr ""
+msgstr "已完成"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "已取消"
 
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
-msgstr ""
+msgstr "上一個熱氣流中的總高度增減除以盤旋時間。較小的秒數是盤旋時間。"
 
 #, no-c-format
 msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
-msgstr ""
+msgstr "在上一個熱氣流中盤旋的時間。較小的數字是該熱氣流的平均爬升率。"
 
 #, no-c-format
 msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
 msgstr ""
+"主值：下一航段上的熱氣流爬升率，相當於目前航段 MacCready 設定的爬升率。次值：目前航段上的熱氣流爬升率，相當於下一航段 MacCready "
+"設定的爬升率。"
 
 #, no-c-format
 msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
-msgstr ""
+msgstr "使用安全 MC 時，在最佳備降點的到達高度，相對於安全到達高度。"
 
 #, no-c-format
 msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
-msgstr ""
+msgstr "使用安全 MC 時，在次佳備降點的到達高度，相對於安全到達高度。"
 
 #, no-c-format
 msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
+msgstr "用於計算氣壓高度的目前 QNH 氣壓設定。有氣壓感測器時，下面一行顯示該高度。點按資訊框可開啟面板並手動調整 QNH。"
 
 #, no-c-format
 msgid "Speed VMG"
-msgstr ""
+msgstr "速度 VMG"
 
 #, no-c-format
 msgid "V VMG"
-msgstr ""
+msgstr "V VMG"
 
 #, no-c-format
 msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
-msgstr ""
+msgstr "地速在下一航點方向上的分量。直飛對準它時等於地速，成直角時降為零，飛離時變為負值。它用數字表示偏離直線航路的代價。"
 
 #, no-c-format
 msgid "Vario and thermal"
-msgstr ""
+msgstr "升降儀和熱氣流"
 
 #, no-c-format
 msgid "Glide"
-msgstr ""
+msgstr "滑翔"
 
 #, no-c-format
 msgid "Speed and attitude"
-msgstr ""
+msgstr "速度和姿態"
 
 #, no-c-format
 msgid "Wind and weather"
-msgstr ""
+msgstr "風和天氣"
 
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "時間"
 
 #, no-c-format
 msgid "Airspace and team"
-msgstr ""
+msgstr "空域和團隊"
 
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
-msgstr ""
+msgstr "將一個資訊框拖到另一個上即可互換。按住一個資訊框並抬起，可為該位置另選資訊框。"
 
 msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
+msgstr "按 Enter 拿起所選資訊框，用方向鍵移動，再按 Enter 放下。不移動而連按兩次 Enter 會為該位置另選資訊框。"
 
 msgid "Arrange InfoBoxes"
-msgstr ""
+msgstr "排列資訊框"
 
 msgid ""
 "Arrange\n"
 "InfoBoxes"
-msgstr ""
+msgstr "排列\n資訊框"
 
 msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
 msgstr "目前機翼載荷，根據滑翔機的空重、機組人員重量和壓載物計算。當滑翔機超過最大起飛重量時以紅色顯示。"
 
 msgid "MTOW"
-msgstr ""
+msgstr "MTOW"
 
 msgid "Maximum takeoff weight of the glider."
-msgstr ""
+msgstr "滑翔機的最大起飛重量。"
 
 #, no-c-format
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
-msgstr ""
+msgstr "機上水壓載，單位為公升。註解顯示機翼載荷，滑翔機超過最大起飛重量時為紅色。拋放時數值為藍色。點按可更改壓載。"
 
