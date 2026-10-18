@@ -9,6 +9,7 @@
 #include "UIGlobals.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Engine/Task/TaskType.hpp"
+#include "Input/InputEvents.hpp"
 #include "Language/Language.hpp"
 #include "ui/canvas/Brush.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -742,6 +743,51 @@ GaugeVario::RenderBugs(Canvas &canvas) noexcept
 {
   const int bugs = iround((1 - GetComputerSettings().polar.bugs) * 100);
   RenderPercent(canvas, geometry.bugs, TEXT_BUG, bugs, last_bugs);
+}
+
+void
+GaugeVario::OnCancelMode() noexcept
+{
+  if (dragging) {
+    dragging = false;
+    ReleaseCapture();
+  }
+
+  AntiFlickerWindow::OnCancelMode();
+}
+
+bool
+GaugeVario::OnMouseDown([[maybe_unused]] PixelPoint p) noexcept
+{
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+  }
+
+  return true;
+}
+
+bool
+GaugeVario::OnMouseUp(PixelPoint p) noexcept
+{
+  if (!dragging)
+    return false;
+
+  dragging = false;
+  ReleaseCapture();
+
+  /* Same dialog as the Ballast InfoBox.  A slide off cancels. */
+  if (IsInside(p))
+    InputEvents::eventSetup("Basic");
+
+  return true;
+}
+
+bool
+GaugeVario::OnMouseMove([[maybe_unused]] PixelPoint p,
+                        [[maybe_unused]] unsigned keys) noexcept
+{
+  return dragging;
 }
 
 void
