@@ -851,6 +851,46 @@ vario on a free serial/USB port (XCSoar must not hold the port).
 
 **Exit status**: ``0`` on success, non-zero on timeout or mismatch.
 
+RunLXNAVPlaneSwitch
+~~~~~~~~~~~~~~~~~~~~
+
+Hardware check for the two plane-switch sequences.  It talks to an
+LXNAV vario, prints what the vario stored, and writes the original
+polar and ballast back before it exits.  Quit XCSoar first so the
+port is free.  Do not interrupt the program while it is running.
+
+**Build**::
+
+   make -j$(nproc) TARGET=UNIX USE_CCACHE=y output/UNIX/bin/RunLXNAVPlaneSwitch
+
+**Usage**::
+
+   ./output/UNIX/bin/RunLXNAVPlaneSwitch /dev/ttyUSB0 115200 --read-only
+   ./output/UNIX/bin/RunLXNAVPlaneSwitch /dev/ttyUSB0 115200
+
+``--read-only`` prints the polar and the ballast overload and does not
+write.  The default run does two sequences:
+
+- Request ``PLXV0,POLAR,R``, then write a full polar whose only change
+  is a pending empty mass, then write another full polar with a
+  different empty mass.  This is the wire shape of an empty mass that
+  was waiting for the first polar and is still sent after a plane
+  switch.
+- Set a modest water ballast, write a full polar that raises the empty
+  mass by 20 kg, and do not send ``PLXV0,BAL``.  Then send the
+  ``PLXV0,BAL`` that keeps the same litres.  This is the wire shape of
+  activating another plane.
+- Write a maximum weight 10 kg above the stored value, then restore it.
+- Write a ballast factor whose all-up weight exceeds the maximum
+  weight, then a maximum weight below the loaded mass, then an empty
+  mass that already exceeds the maximum weight.  The program prints
+  whether the vario stored, clamped, or ignored each one.
+
+**Exit status**: ``0`` when the plane-switch writes were stored and the
+original polar and ballast were restored.  An over-MTOW value the vario
+refuses is still success.  Non-zero on timeout, a plane-switch write the
+vario did not store, or a restore that did not read back.
+
 LXNAV polar sync — manual XCSoar checklist (#2397)
 --------------------------------------------------
 
