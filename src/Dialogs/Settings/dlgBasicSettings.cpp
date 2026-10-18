@@ -141,7 +141,7 @@ FlightSetupPanel::SetBallast()
 {
   const bool ballastable = polar_settings.glide_polar_task.IsBallastable();
   SetRowVisible(Ballast, ballastable);
-  if (ballastable && !GetControl(Ballast).HasFocus()) {
+  if (ballastable) {
     WndProperty &control = GetControl(Ballast);
     auto *df = dynamic_cast<DataFieldFloat *>(control.GetDataField());
     if (df != nullptr) {
@@ -155,7 +155,10 @@ FlightSetupPanel::SetBallast()
 
       const double litres =
         polar_settings.glide_polar_task.GetBallastLitres();
-      if (fabs(df->GetValue() - litres) >= 0.5)
+      /* Leave a value the pilot is editing.  The maximum still
+         follows a plane change. */
+      if (!control.HasFocus() &&
+          fabs(df->GetValue() - litres) >= 0.5)
         LoadValue(Ballast, litres);
     }
   }
