@@ -20,6 +20,7 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Interface.hpp"
+#include "ActionInterface.hpp"
 #include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
@@ -177,6 +178,11 @@ LoadFile(Path path) noexcept
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
   backend_components->SetTaskPolar(settings.polar);
+  /* Synchronize stores the mass locally.  Flight Setup sends crew
+     mass through ActionInterface; empty mass has to go the same
+     way or the next POLAR read restores the vario's old value
+     (#3353). */
+  ActionInterface::SetEmptyMass(settings.plane.empty_mass);
   Profile::Save();
 
   return true;

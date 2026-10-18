@@ -283,6 +283,17 @@ LXDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
       RequestLXNAVVarioSetting("POLAR", env);
   }
 
+  /* Flush an empty mass that PutEmptyMass could not send before
+     device_polar was valid (#3353). */
+  std::optional<double> pending_empty;
+  {
+    const std::lock_guard lock{mutex};
+    if (pending_empty_mass && device_polar.valid)
+      pending_empty = pending_empty_mass;
+  }
+  if (pending_empty)
+    PutEmptyMass(*pending_empty, env);
+
   TrackPolarChanges(calculated);
 }
 

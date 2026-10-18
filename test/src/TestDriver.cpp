@@ -2696,6 +2696,65 @@ TestLXV7PolarWrite()
   delete device;
 }
 
+/**
+ * An empty-mass send before PLXV0 POLAR is cached must not be reported
+ * as done, and the reply must not replace that mass (#3353).
+ */
+static void
+TestLXEmptyMassBeforePolar()
+{
+  DumpPort dump;
+  Device *device = lx_driver.CreateOnPort(dummy_config, dump);
+  ok1(device != nullptr);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = TimeStamp{FloatDuration{1}};
+  ok1(device->ParseNMEA("$LXWP1,S8x,12345,1.0,1.0,12345*1D", basic));
+
+  MoreData more;
+  more.Reset();
+  more.clock = basic.clock;
+  DerivedInfo calculated{};
+  /* Consume vario_just_detected so the flush below is not skipped. */
+  device->OnCalculatedUpdate(more, calculated);
+
+  NullOperationEnvironment env;
+  dump.Clear();
+  ok1(!device->PutEmptyMass(270, env));
+
+  bool any_partial = false;
+  bool any_full = false;
+  for (const auto &line : dump.GetLines()) {
+    if (LXNAVPolar::IsPartialPolarWrite(line))
+      any_partial = true;
+    if (line.find("POLAR,W,") != std::string::npos)
+      any_full = true;
+  }
+  ok1(!any_partial);
+  ok1(!any_full);
+  ok1(dump.FindContaining("PLXV0,POLAR,R") != nullptr);
+
+  basic.clock = TimeStamp{FloatDuration{2}};
+  ok1(device->ParseNMEA(
+        "$PLXV0,POLAR,W,1.780,-3.030,1.930,30.0,292,600,260,90,LS 7,0*24",
+        basic));
+  ok1(equals(basic.settings.polar_empty_weight, 270.));
+
+  dump.Clear();
+  more.clock = basic.clock;
+  device->OnCalculatedUpdate(more, calculated);
+
+  const char *written = dump.FindContaining("PLXV0,POLAR,W,");
+  ok1(written != nullptr &&
+      !LXNAVPolar::IsPartialPolarWrite(written));
+  ok1(written != nullptr && strstr(written, ",270.0,") != nullptr);
+  ok1(written != nullptr && strstr(written, "1.780000") != nullptr);
+  ok1(written != nullptr && strstr(written, "LS 7") != nullptr);
+
+  delete device;
+}
+
 
 static void
 TestLXRadioTransponder()
@@ -4593,6 +4652,7 @@ int main()
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */
              + 30 /* LXV7PolarWrite */
+             + 12 /* LXEmptyMassBeforePolar */
              + 17 /* FLARMRangeParser */ + 8 /* FLARMRangeRequest */
              + 6 /* FlarmMinimumRange */
              + 23 /* NanoDownloadFlight */
@@ -4629,6 +4689,7 @@ int main()
   TestLXV7();
   TestLXV7POLAR();
   TestLXV7PolarWrite();
+  TestLXEmptyMassBeforePolar();
   TestLXRadioTransponder();
   TestLXNavDeclare();
   TestILEC();
