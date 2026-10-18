@@ -2033,10 +2033,10 @@ msgid "InfoBox paste set"
 msgstr "信息框粘貼"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
-msgstr ""
+msgstr "複製記住此套信息框的全部內容，粘貼用它們替換另一套信息框。"
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "從全域設定繼承"
 
 msgid "Invalid"
 msgstr "無效"
@@ -2712,17 +2712,17 @@ msgstr "注釋"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "固定文字"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "飛行員輸入的標題、數值和註解。點按即可編輯。"
 
 msgid "Title"
-msgstr ""
+msgstr "標題"
 
 msgid "Value"
-msgstr ""
+msgstr "數值"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4255,10 +4255,10 @@ msgid "Reference used for start max height rule."
 msgstr "參考用於開始的最大高度規則。"
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "導航到最近點"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "導航到起點區和終點區的最近點。"
 
 msgid "Finish min. height"
 msgstr "最終滑翔最小高度"
@@ -10567,21 +10567,21 @@ msgstr "手冊"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "血氧"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "來自藍牙脈搏血氧儀的血氧飽和度，以百分比表示。"
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "最近使用的航點"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "連接到裝置 Wi-Fi，以便從此 FLARM 下載飛行紀錄。"
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "決定在近距離地圖比例的盤旋模式下顯示時，蝸牛跡是否隨風漂移。關閉時，軌跡不做風漂補償。 盤旋時同樣適用於投影航跡：開為相對氣團；關則計入風。"
 
@@ -10617,20 +10617,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "啟用交通雷達並選擇其在主螢幕上的位置。飛行器航跡方向相對於目標方向顯示為箭頭，三角形向上或向下顯示目標相對於目標的相對高度。在所有模式中，目標的顏色指示威脅級別。"
 
 msgid "Display resolution"
-msgstr ""
+msgstr "螢幕解析度"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "螢幕亮度"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "調節螢幕亮度。"
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "螢幕亮度唯讀，因為寫入需要額外權限。"
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "自動"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -10645,10 +10645,10 @@ msgstr "這決定了滑翔性能在到達、著陸、中止和備用計算中的
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "備用模式: 自動"
 
 msgid "Paste"
-msgstr ""
+msgstr "粘貼"
 
 #, c-format
 msgid ""
@@ -10752,105 +10752,111 @@ msgid "%u min"
 msgstr "%u 分"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "未找到支援的服務"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "所選 systemd 單元未安裝。"
 
 msgid "Unavailable"
-msgstr ""
+msgstr "不可用"
 
 msgid "Starting..."
-msgstr ""
+msgstr "正在啟動..."
 
 msgid "Stopping..."
 msgstr "正在停止…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "正在重新載入..."
 
 msgid "Failed"
-msgstr ""
+msgstr "失敗"
 
 msgid "Turn on"
-msgstr ""
+msgstr "開啟"
 
 msgid "Restart"
-msgstr ""
+msgstr "重啟"
 
 msgid "Turn off"
-msgstr ""
+msgstr "關閉"
 
 msgid "System service"
-msgstr ""
+msgstr "系統服務"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH 伺服器"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "遠端終端"
 
 msgid "Sensors"
-msgstr ""
+msgstr "感測器"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario 感測器服務"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "高度表音訊"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario 高度表音訊服務"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "預報最高溫度"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
+msgstr "把當天 DWD 預報中最近 MOSMIX 站的最高溫度填入飛行設定。需要位置，每天下載一次，無需帳戶。"
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"當天的地面最高溫度。從它到爬升中測得的外界氣溫所作的乾絕熱線給出估計熱氣流頂；雲底還需要濕度感測器。滑翔機穿過該層後，兩條線畫在分析對話框的溫度軌跡頁"
+"上。"
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "啟動時的任務 MC"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "MC安全值的滑翔比"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "語音警告"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"朗讀 FLARM 碰撞警報，包括緊急程度、時鐘方位以及對方在上方還是下方: \"Traffic urgent! Three o'clock. Abov"
+"e.\" 障礙物和警戒區警報不朗讀。"
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "試聽語音警告"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "速度指令開關"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "XCSoar 如何使用升降儀的巡航/爬升報告。"
 
 msgid "Flight mode"
-msgstr ""
+msgstr "飛行模式"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"飛行中，升降儀的巡航/爬升報告就是飛行模式。巡航結束爬升並重新開始計算平均。爬升開始一條新熱氣流。最終滑翔在巡航中仍可能出現。在 Vega 上這是盤轉"
+"輸出。"
 
 msgid "Display mode"
-msgstr ""
+msgstr "顯示模式"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar 根據轉彎判斷盤轉模式。不使用升降儀報告。"
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "頁面會變，飛行模式不變。巡航顯示巡航頁，轉彎時也顯示，並隱藏最終滑翔。爬升顯示升降頁。在 Vega 上這是速度指令開關。"
 
 #, no-c-format
 msgid "System Tools"
@@ -10876,71 +10882,72 @@ msgstr "XCSoar任務"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "接收距離統計"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "天線"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM 為其兩個無線電通道分別保存統計。"
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "資料點"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "時段"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM 接收距離"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM 沒有發來接收距離統計。"
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "重設接收距離統計？請在更換天線後進行；FLARM 會重新收集。"
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM 沒有確認重設。"
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "低於最小接收距離"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "本通道中平均接收距離短於 FLARM 最小值的已測扇區：前方 2 nm，側方和後方 1 nm。請檢查天線安裝。"
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "接收距離設定"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "FLARM 不報告超過此距離的航空器。它落在所繪範圍內時，圖上以虛線圓表示。"
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "無限制"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"與空中其他 FLARM 航空器的接觸，在它們經過的每個扇區各計一次，取在該處收到的最大距離。扇區顯示這些距離中較大一半的平均，橫線為最大距離。"
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "估計接收距離短於 FLARM 最小值的已測扇區：前方 2 nm，側方和後方 1 nm。請檢查天線安裝。"
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "重設接收距離估計？請在更換天線後進行；XCSoar 會重新收集。"
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM 接收距離估計"
