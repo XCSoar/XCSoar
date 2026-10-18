@@ -327,8 +327,13 @@ LXDevice::PutPolar(const GlidePolar &polar,
   const double ref_mass = polar.GetReferenceMass();
   const double empty_mass = polar.GetEmptyMass();
   const double crew_mass = polar.GetCrewMass();
+  const double wing_area = polar.GetWingArea();
+  /* Wing loading belongs to this plane.  The cached device value is
+     the previous polar's kg/m². */
+  const double plane_load =
+    (wing_area > 0 && ref_mass > 0) ? ref_mass / wing_area : 0;
 
-  double polar_load = 0;
+  double polar_load = plane_load;
   double max_weight = 0;
   std::string glider_name;
   double stall = 0;
@@ -337,7 +342,13 @@ LXDevice::PutPolar(const GlidePolar &polar,
     const std::lock_guard lock{mutex};
     if (device_polar.valid) {
       have_device_polar = true;
-      if (fabs(device_polar.a - coeffs.a) < 0.0001 &&
+      if (polar_load <= 0)
+        polar_load = device_polar.polar_load;
+
+      const bool load_matches = polar_load <= 0 ||
+        fabs(device_polar.polar_load - polar_load) < 0.05;
+      if (load_matches &&
+          fabs(device_polar.a - coeffs.a) < 0.0001 &&
           fabs(device_polar.b - coeffs.b) < 0.0001 &&
           fabs(device_polar.c - coeffs.c) < 0.0001 &&
           fabs(device_polar.polar_weight - ref_mass) < 0.1 &&
@@ -345,7 +356,6 @@ LXDevice::PutPolar(const GlidePolar &polar,
           fabs(device_polar.pilot_weight - crew_mass) < 0.1)
         return true;
 
-      polar_load = device_polar.polar_load;
       max_weight = device_polar.max_weight;
       if (pending_max_takeoff_mass && *pending_max_takeoff_mass > 0) {
         max_weight = *pending_max_takeoff_mass;
@@ -364,12 +374,6 @@ LXDevice::PutPolar(const GlidePolar &polar,
       return false;
     RequestLXNAVVarioSetting("POLAR", env);
     return true;
-  }
-
-  if (polar_load <= 0) {
-    const double wing_area = polar.GetWingArea();
-    polar_load =
-      (wing_area > 0 && ref_mass > 0) ? ref_mass / wing_area : 0;
   }
 
   if (!EnableNMEA(env))
