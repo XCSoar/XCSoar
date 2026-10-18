@@ -2063,9 +2063,11 @@ msgstr "Informacijos blokių kopija rinkinyje"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopijuoti įsimena visus šio rinkinio InfoBox'us, Įklijuoti jais pakeičia ki"
+"to rinkinio InfoBox'us."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Paveldėti iš bendrųjų nustatymų"
 
 msgid "Invalid"
 msgstr "Neteisingas"
@@ -2751,17 +2753,17 @@ msgstr "Komentaras"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Fiksuotas tekstas"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Piloto įvesti antraštė, reikšmė ir komentaras. Bakstelėkite redaguoti."
 
 msgid "Title"
-msgstr ""
+msgstr "Antraštė"
 
 msgid "Value"
-msgstr ""
+msgstr "Reikšmė"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4416,10 +4418,10 @@ msgid "Reference used for start max height rule."
 msgstr "Naudoti pradžios maksimalaus lygio taisyklėse"
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Naviguoti į artimiausią tašką"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Naviguoja į artimiausią starto ir finišo zonų tašką."
 
 msgid "Finish min. height"
 msgstr "Baigimo minimalus lygis"
@@ -11005,21 +11007,23 @@ msgstr "Rankinis"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Deguonis kraujyje"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Kraujo įsotinimas deguonimi procentais, iš Bluetooth pulso oksimetro."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Neseniai naudoti maršruto taškai"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Prisijunkite prie prietaiso Wi-Fi, kad atsisiųstumėte skrydžius iš šio FLAR"
+"M."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Nustato, ar pėdsakas dreifuojamas su vėju, kai rodomas sukimosi režimu artimuose žemėlapio masteliuose. Išjungta — pėdsakas lieka be vėjo dreifo kompensavimo. Sukantis tai taikoma ir projektuojamai trajektorijai: Įjungta laiko santykinai oro masei; Išjungta įtraukia vėją."
 
@@ -11055,20 +11059,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Įjungia eismo radarą ir parenka jo vietą pagrindiniame ekrane. Tikslas nurodo skaičiavimo linijos viršutinį kampelį, o trikampis iškreiptas į aukštyn ar žemyn rodo tikslo aukštumą nuo jūsų. Visais režimais, pagalva tikslas nurodo dėmesio lygį."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Ekrano skiriamoji geba"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Ekrano ryškumas"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Reguliuokite ekrano ryškumą."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "Ekrano ryškumas tik skaitomas, nes rašymui reikia papildomų leidimų."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11083,10 +11087,10 @@ msgstr "Šis apibrėžia sklandymo veiklą, naudojama kalkuliuojant atsiradimą,
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Alternatyvų režimas: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Įklijuoti"
 
 #, c-format
 msgid ""
@@ -11190,105 +11194,124 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Palaikomų tarnybų nerasta"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Pasirinkti systemd vienetai neįdiegti."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nepasiekiama"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Paleidžiama..."
 
 msgid "Stopping..."
 msgstr "Stabdoma…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Įkeliama iš naujo..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Nepavyko"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Įjungti"
 
 msgid "Restart"
-msgstr ""
+msgstr "Perstartuoti"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Išjungti"
 
 msgid "System service"
-msgstr ""
+msgstr "Sistemos tarnyba"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH serveris"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Nuotolinis terminalas"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Jutikliai"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario jutiklių tarnyba"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Acustinis variometras"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario akustinio variometro tarnyba"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Didžiausia temperatūra iš prognozės"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Įrašo didžiausią temperatūrą į skrydžio nustatymą iš tos dienos DWD prognoz"
+"ės artimiausiai MOSMIX stočiai. Reikia padėties, atsisiunčiama kartą per di"
+"eną; be paskyros."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Dienos aukščiausia pažemio temperatūra. Sausa adiabatė nuo jos iki kilimo m"
+"etu išmatuotos lauko temperatūros duoda įvertintas termikos lubas; debesų b"
+"azei reikia ir drėgmės jutiklio. Abi brėžiamos Analizės dialogo temperatūro"
+"s pėdsako puslapyje, kai sklandytuvas pereina sluoksnį."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Užduoties MC paleidžiant"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Saugumas MC sklendimo santykis"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Įgarsinti įspėjimai"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Ištaria FLARM susidūrimo pavojaus signalus, su skubumu, laikrodžio padėtimi"
+" ir ar eismas yra viršuje ar apačioje: \"Traffic urgent! Three o'clock. Abo"
+"ve.\" Kliūčių ir pavojaus zonos signalai neištariami."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Išbandyti įgarsintą įspėjimą"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Greičio komandos jungiklis"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Kaip XCSoar naudoja variometro kruizo ir kilimo pranešimą."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Skrydžio režimas"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Skrydyje variometro kruizo ir kilimo pranešimas yra skrydžio režimas. Kruiz"
+"as baigia kilimą ir pradeda vidurkį iš naujo. Kilimas pradeda naują termiką"
+". Galutinis sklendimas vis dar gali pasirodyti kruize. Vega tai yra kringli"
+"o išėjimas."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Rodymo režimas"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar kringlio režimą nustato pagal posūkį. Variometro pranešimas nenaudoj"
+"amas."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Puslapis keičiasi, o skrydžio režimas ne. Kruizas rodo kruizo puslapį ir po"
+"sūkyje, ir slepia galutinį sklendimą. Kilimas rodo vario puslapį. Vega tai "
+"yra greičio komandos jungiklis."
 
 #, no-c-format
 msgid "System Tools"
@@ -11314,71 +11337,86 @@ msgstr "XCSoar užduotis"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Nuotolio statistika"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antena"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM saugo statistiką kiekvienam iš dviejų radijo kanalų."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Duomenų taškai"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Laikotarpis"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM nuotolis"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM neišsiuntė nuotolio statistikos."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Atstatyti nuotolio statistiką? Padarykite tai pakeitę antenas; FLARM ją vėl"
+" rinks."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM nepatvirtino atstatymo."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Žemiau mažiausio nuotolio"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Išmatuoti šio kanalo sektoriai, kurių vidutinis nuotolis trumpesnis už FLAR"
+"M minimumą: 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos mont"
+"avimą."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Nuotolio nustatymas"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM nepraneša orlaivių už šio atstumo. Grafikas rodo jį brūkšnine apskrit"
+"imu, kai jis yra nubraižytame nuotolyje."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Neribota"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Kontaktai su kitais FLARM orlaiviais skrydyje, skaičiuojami kartą kiekviena"
+"me sektoriuje, kurį kirto, didžiausiu atstumu, kuriuo ten buvo priimti. Sek"
+"torius rodo didesnės pusės tų atstumų vidurkį, skersinė linija — didžiausią"
+"."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Išmatuoti sektoriai, kurių įvertintas nuotolis trumpesnis už FLARM minimumą"
+": 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos montavimą."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Atstatyti nuotolio įvertį? Padarykite tai pakeitę anteną; XCSoar jį vėl rin"
+"ks."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM nuotolio įvertis"
