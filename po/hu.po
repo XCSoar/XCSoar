@@ -11182,1114 +11182,1125 @@ msgstr "FLARM hatótávbecslés"
 
 #, no-c-format
 msgid "Zoom in"
-msgstr ""
+msgstr "Nagyítás"
 
 #, no-c-format
 msgid "Zoom out"
-msgstr ""
+msgstr "Kicsinyítés"
 
 #, no-c-format
 msgid "Auto zoom"
-msgstr ""
+msgstr "Automatikus nagyítás"
 
 #, no-c-format
 msgid "Next page"
-msgstr ""
+msgstr "Következő oldal"
 
 #, no-c-format
 msgid "Previous page"
-msgstr ""
+msgstr "Előző oldal"
 
 #, no-c-format
 msgid "Waypoint list"
-msgstr ""
+msgstr "Fordulópontlista"
 
 #, no-c-format
 msgid "Menu"
-msgstr ""
+msgstr "Menü"
 
 #, no-c-format
 msgid "Task manager"
-msgstr ""
+msgstr "Feladatkezelő"
 
 #, no-c-format
 msgid "Pan mode"
-msgstr ""
+msgstr "Mozgatás mód"
 
 #, no-c-format
 msgid "Quick menu"
-msgstr ""
+msgstr "Gyorsmenü"
 
 #. OPERA is published under CC BY 4.0, so the attribution has to
 #. travel with the picture; the overlay label carries it, which is
 #. what the map shows when the pilot taps it
 #, no-c-format
 msgid "Radar"
-msgstr ""
+msgstr "Radar"
 
 #, no-c-format
 msgid "Satellite"
-msgstr ""
+msgstr "Műhold"
 
 msgid "(Inside)"
-msgstr ""
+msgstr "(Belül)"
 
 msgid "(Near)"
-msgstr ""
+msgstr "(Közel)"
 
 msgid "Cleared"
-msgstr ""
+msgstr "Engedélyezve"
 
 msgid "Covered"
-msgstr ""
+msgstr "Lefedve"
 
 msgid "Power off"
-msgstr ""
+msgstr "Kikapcsolás"
 
 #, no-c-format
 msgid "Andorra"
-msgstr ""
+msgstr "Andorra"
 
 #, no-c-format
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Egyesült Arab Emírségek"
 
 #, no-c-format
 msgid "Afghanistan"
-msgstr ""
+msgstr "Afganisztán"
 
 #, no-c-format
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua és Barbuda"
 
 #, no-c-format
 msgid "Anguilla"
-msgstr ""
+msgstr "Anguilla"
 
 #, no-c-format
 msgid "Albania"
-msgstr ""
+msgstr "Albánia"
 
 #, no-c-format
 msgid "Armenia"
-msgstr ""
+msgstr "Örményország"
 
 #, no-c-format
 msgid "Angola"
-msgstr ""
+msgstr "Angola"
 
 #, no-c-format
 msgid "Antarctica"
-msgstr ""
+msgstr "Antarktisz"
 
 #, no-c-format
 msgid "Argentina"
-msgstr ""
+msgstr "Argentína"
 
 #, no-c-format
 msgid "American Samoa"
-msgstr ""
+msgstr "Amerikai Szamoa"
 
 #, no-c-format
 msgid "Austria"
-msgstr ""
+msgstr "Ausztria"
 
 #, no-c-format
 msgid "Australia"
-msgstr ""
+msgstr "Ausztrália"
 
 #, no-c-format
 msgid "Aruba"
-msgstr ""
+msgstr "Aruba"
 
 #, no-c-format
 msgid "Åland Islands"
-msgstr ""
+msgstr "Åland-szigetek"
 
 #, no-c-format
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Azerbajdzsán"
 
 #, no-c-format
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bosznia-Hercegovina"
 
 #, no-c-format
 msgid "Barbados"
-msgstr ""
+msgstr "Barbados"
 
 #, no-c-format
 msgid "Bangladesh"
-msgstr ""
+msgstr "Banglades"
 
 #, no-c-format
 msgid "Belgium"
-msgstr ""
+msgstr "Belgium"
 
 #, no-c-format
 msgid "Burkina Faso"
-msgstr ""
+msgstr "Burkina Faso"
 
 #, no-c-format
 msgid "Bulgaria"
-msgstr ""
+msgstr "Bulgária"
 
 #, no-c-format
 msgid "Bahrain"
-msgstr ""
+msgstr "Bahrein"
 
 #, no-c-format
 msgid "Burundi"
-msgstr ""
+msgstr "Burundi"
 
 #, no-c-format
 msgid "Benin"
-msgstr ""
+msgstr "Benin"
 
 #, no-c-format
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Saint-Barthélemy"
 
 #, no-c-format
 msgid "Bermuda"
-msgstr ""
+msgstr "Bermuda"
 
 #, no-c-format
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 #, no-c-format
 msgid "Bolivia"
-msgstr ""
+msgstr "Bolívia"
 
 #, no-c-format
 msgid "Caribbean Netherlands"
-msgstr ""
+msgstr "Holland Karib-térség"
 
 #, no-c-format
 msgid "Brazil"
-msgstr ""
+msgstr "Brazília"
 
 #, no-c-format
 msgid "Bahamas"
-msgstr ""
+msgstr "Bahama-szigetek"
 
 #, no-c-format
 msgid "Bhutan"
-msgstr ""
+msgstr "Bhután"
 
 #, no-c-format
 msgid "Bouvet Island"
-msgstr ""
+msgstr "Bouvet-sziget"
 
 #, no-c-format
 msgid "Botswana"
-msgstr ""
+msgstr "Botswana"
 
 #, no-c-format
 msgid "Belarus"
-msgstr ""
+msgstr "Belarusz"
 
 #, no-c-format
 msgid "Belize"
-msgstr ""
+msgstr "Belize"
 
 #, no-c-format
 msgid "Canada"
-msgstr ""
+msgstr "Kanada"
 
 #, no-c-format
 msgid "Cocos Islands"
-msgstr ""
+msgstr "Kókusz (Keeling)-szigetek"
 
 #, no-c-format
 msgid "Congo-Kinshasa"
-msgstr ""
+msgstr "Kongó – Kinshasa"
 
 #, no-c-format
 msgid "Central African Republic"
-msgstr ""
+msgstr "Közép-afrikai Köztársaság"
 
 #, no-c-format
 msgid "Congo-Brazzaville"
-msgstr ""
+msgstr "Kongó – Brazzaville"
 
 #, no-c-format
 msgid "Switzerland"
-msgstr ""
+msgstr "Svájc"
 
 #, no-c-format
 msgid "Côte d'Ivoire"
-msgstr ""
+msgstr "Elefántcsontpart"
 
 #, no-c-format
 msgid "Cook Islands"
-msgstr ""
+msgstr "Cook-szigetek"
 
 #, no-c-format
 msgid "Chile"
-msgstr ""
+msgstr "Chile"
 
 #, no-c-format
 msgid "Cameroon"
-msgstr ""
+msgstr "Kamerun"
 
 #, no-c-format
 msgid "China"
-msgstr ""
+msgstr "Kína"
 
 #, no-c-format
 msgid "Colombia"
-msgstr ""
+msgstr "Kolumbia"
 
 #, no-c-format
 msgid "Costa Rica"
-msgstr ""
+msgstr "Costa Rica"
 
 #, no-c-format
 msgid "Cuba"
-msgstr ""
+msgstr "Kuba"
 
 #, no-c-format
 msgid "Cape Verde"
-msgstr ""
+msgstr "Zöld-foki Köztársaság"
 
 #, no-c-format
 msgid "Curaçao"
-msgstr ""
+msgstr "Curaçao"
 
 #, no-c-format
 msgid "Christmas Island"
-msgstr ""
+msgstr "Karácsony-sziget"
 
 #, no-c-format
 msgid "Cyprus"
-msgstr ""
+msgstr "Ciprus"
 
 #, no-c-format
 msgid "Czechia"
-msgstr ""
+msgstr "Csehország"
 
 #, no-c-format
 msgid "Germany"
-msgstr ""
+msgstr "Németország"
 
 #, no-c-format
 msgid "Djibouti"
-msgstr ""
+msgstr "Dzsibuti"
 
 #, no-c-format
 msgid "Denmark"
-msgstr ""
+msgstr "Dánia"
 
 #, no-c-format
 msgid "Dominica"
-msgstr ""
+msgstr "Dominika"
 
 #, no-c-format
 msgid "Dominican Republic"
-msgstr ""
+msgstr "Dominikai Köztársaság"
 
 #, no-c-format
 msgid "Algeria"
-msgstr ""
+msgstr "Algéria"
 
 #, no-c-format
 msgid "Ecuador"
-msgstr ""
+msgstr "Ecuador"
 
 #, no-c-format
 msgid "Estonia"
-msgstr ""
+msgstr "Észtország"
 
 #, no-c-format
 msgid "Egypt"
-msgstr ""
+msgstr "Egyiptom"
 
 #, no-c-format
 msgid "Western Sahara"
-msgstr ""
+msgstr "Nyugat-Szahara"
 
 #, no-c-format
 msgid "Eritrea"
-msgstr ""
+msgstr "Eritrea"
 
 #, no-c-format
 msgid "Spain"
-msgstr ""
+msgstr "Spanyolország"
 
 #, no-c-format
 msgid "Ethiopia"
-msgstr ""
+msgstr "Etiópia"
 
 #, no-c-format
 msgid "Finland"
-msgstr ""
+msgstr "Finnország"
 
 #, no-c-format
 msgid "Fiji"
-msgstr ""
+msgstr "Fidzsi"
 
 #, no-c-format
 msgid "Falkland Islands"
-msgstr ""
+msgstr "Falkland-szigetek"
 
 #, no-c-format
 msgid "Micronesia"
-msgstr ""
+msgstr "Mikronézia"
 
 #, no-c-format
 msgid "Faroe Islands"
-msgstr ""
+msgstr "Feröer szigetek"
 
 #, no-c-format
 msgid "France"
-msgstr ""
+msgstr "Franciaország"
 
 #, no-c-format
 msgid "Gabon"
-msgstr ""
+msgstr "Gabon"
 
 #, no-c-format
 msgid "United Kingdom"
-msgstr ""
+msgstr "Egyesült Királyság"
 
 #, no-c-format
 msgid "Grenada"
-msgstr ""
+msgstr "Grenada"
 
 #, no-c-format
 msgid "Georgia"
-msgstr ""
+msgstr "Grúzia"
 
 #, no-c-format
 msgid "French Guiana"
-msgstr ""
+msgstr "Francia Guyana"
 
 #, no-c-format
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernsey"
 
 #, no-c-format
 msgid "Ghana"
-msgstr ""
+msgstr "Ghána"
 
 #, no-c-format
 msgid "Gibraltar"
-msgstr ""
+msgstr "Gibraltár"
 
 #, no-c-format
 msgid "Greenland"
-msgstr ""
+msgstr "Grönland"
 
 #, no-c-format
 msgid "Gambia"
-msgstr ""
+msgstr "Gambia"
 
 #, no-c-format
 msgid "Guinea"
-msgstr ""
+msgstr "Guinea"
 
 #, no-c-format
 msgid "Guadeloupe"
-msgstr ""
+msgstr "Guadeloupe"
 
 #, no-c-format
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "Egyenlítői-Guinea"
 
 #, no-c-format
 msgid "Greece"
-msgstr ""
+msgstr "Görögország"
 
 #, no-c-format
 msgid "South Georgia"
-msgstr ""
+msgstr "Déli-Georgia és Déli-Sandwich-szigetek"
 
 #, no-c-format
 msgid "Guatemala"
-msgstr ""
+msgstr "Guatemala"
 
 #, no-c-format
 msgid "Guam"
-msgstr ""
+msgstr "Guam"
 
 #, no-c-format
 msgid "Guinea-Bissau"
-msgstr ""
+msgstr "Bissau-Guinea"
 
 #, no-c-format
 msgid "Guyana"
-msgstr ""
+msgstr "Guyana"
 
 #, no-c-format
 msgid "Hong Kong"
-msgstr ""
+msgstr "Hongkong KKT"
 
 #, no-c-format
 msgid "Heard Island"
-msgstr ""
+msgstr "Heard-sziget és McDonald-szigetek"
 
 #, no-c-format
 msgid "Honduras"
-msgstr ""
+msgstr "Honduras"
 
 #, no-c-format
 msgid "Croatia"
-msgstr ""
+msgstr "Horvátország"
 
 #, no-c-format
 msgid "Haiti"
-msgstr ""
+msgstr "Haiti"
 
 #, no-c-format
 msgid "Hungary"
-msgstr ""
+msgstr "Magyarország"
 
 #, no-c-format
 msgid "Indonesia"
-msgstr ""
+msgstr "Indonézia"
 
 #, no-c-format
 msgid "Ireland"
-msgstr ""
+msgstr "Írország"
 
 #, no-c-format
 msgid "Israel"
-msgstr ""
+msgstr "Izrael"
 
 #, no-c-format
 msgid "Isle of Man"
-msgstr ""
+msgstr "Man-sziget"
 
 #, no-c-format
 msgid "India"
-msgstr ""
+msgstr "India"
 
 #, no-c-format
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "Brit Indiai-óceáni Terület"
 
 #, no-c-format
 msgid "Iraq"
-msgstr ""
+msgstr "Irak"
 
 #, no-c-format
 msgid "Iran"
-msgstr ""
+msgstr "Irán"
 
 #, no-c-format
 msgid "Iceland"
-msgstr ""
+msgstr "Izland"
 
 #, no-c-format
 msgid "Italy"
-msgstr ""
+msgstr "Olaszország"
 
 #, no-c-format
 msgid "Jersey"
-msgstr ""
+msgstr "Jersey"
 
 #, no-c-format
 msgid "Jamaica"
-msgstr ""
+msgstr "Jamaica"
 
 #, no-c-format
 msgid "Jordan"
-msgstr ""
+msgstr "Jordánia"
 
 #, no-c-format
 msgid "Japan"
-msgstr ""
+msgstr "Japán"
 
 #, no-c-format
 msgid "Kenya"
-msgstr ""
+msgstr "Kenya"
 
 #, no-c-format
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "Kirgizisztán"
 
 #, no-c-format
 msgid "Cambodia"
-msgstr ""
+msgstr "Kambodzsa"
 
 #, no-c-format
 msgid "Kiribati"
-msgstr ""
+msgstr "Kiribati"
 
 #, no-c-format
 msgid "Comoros"
-msgstr ""
+msgstr "Comore-szigetek"
 
 #, no-c-format
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "Saint Kitts és Nevis"
 
 #, no-c-format
 msgid "North Korea"
-msgstr ""
+msgstr "Észak-Korea"
 
 #, no-c-format
 msgid "South Korea"
-msgstr ""
+msgstr "Dél-Korea"
 
 #, no-c-format
 msgid "Kuwait"
-msgstr ""
+msgstr "Kuvait"
 
 #, no-c-format
 msgid "Cayman Islands"
-msgstr ""
+msgstr "Kajmán-szigetek"
 
 #, no-c-format
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Kazahsztán"
 
 #, no-c-format
 msgid "Laos"
-msgstr ""
+msgstr "Laosz"
 
 #, no-c-format
 msgid "Lebanon"
-msgstr ""
+msgstr "Libanon"
 
 #, no-c-format
 msgid "Saint Lucia"
-msgstr ""
+msgstr "Saint Lucia"
 
 #, no-c-format
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Liechtenstein"
 
 #, no-c-format
 msgid "Sri Lanka"
-msgstr ""
+msgstr "Srí Lanka"
 
 #, no-c-format
 msgid "Liberia"
-msgstr ""
+msgstr "Libéria"
 
 #, no-c-format
 msgid "Lesotho"
-msgstr ""
+msgstr "Lesotho"
 
 #, no-c-format
 msgid "Lithuania"
-msgstr ""
+msgstr "Litvánia"
 
 #, no-c-format
 msgid "Luxembourg"
-msgstr ""
+msgstr "Luxemburg"
 
 #, no-c-format
 msgid "Latvia"
-msgstr ""
+msgstr "Lettország"
 
 #, no-c-format
 msgid "Libya"
-msgstr ""
+msgstr "Líbia"
 
 #, no-c-format
 msgid "Morocco"
-msgstr ""
+msgstr "Marokkó"
 
 #, no-c-format
 msgid "Monaco"
-msgstr ""
+msgstr "Monaco"
 
 #, no-c-format
 msgid "Moldova"
-msgstr ""
+msgstr "Moldova"
 
 #, no-c-format
 msgid "Montenegro"
-msgstr ""
+msgstr "Montenegró"
 
 #, no-c-format
 msgid "Saint Martin"
-msgstr ""
+msgstr "Saint Martin"
 
 #, no-c-format
 msgid "Madagascar"
-msgstr ""
+msgstr "Madagaszkár"
 
 #, no-c-format
 msgid "Marshall Islands"
-msgstr ""
+msgstr "Marshall-szigetek"
 
 #, no-c-format
 msgid "North Macedonia"
-msgstr ""
+msgstr "Észak-Macedónia"
 
 #, no-c-format
 msgid "Mali"
-msgstr ""
+msgstr "Mali"
 
 #, no-c-format
 msgid "Myanmar"
-msgstr ""
+msgstr "Mianmar"
 
 #, no-c-format
 msgid "Mongolia"
-msgstr ""
+msgstr "Mongólia"
 
 #, no-c-format
 msgid "Macao"
-msgstr ""
+msgstr "Makaó KKT"
 
 #, no-c-format
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "Északi Mariana-szigetek"
 
 #, no-c-format
 msgid "Martinique"
-msgstr ""
+msgstr "Martinique"
 
 #, no-c-format
 msgid "Mauritania"
-msgstr ""
+msgstr "Mauritánia"
 
 #, no-c-format
 msgid "Montserrat"
-msgstr ""
+msgstr "Montserrat"
 
 #, no-c-format
 msgid "Malta"
-msgstr ""
+msgstr "Málta"
 
 #, no-c-format
 msgid "Mauritius"
-msgstr ""
+msgstr "Mauritius"
 
 #, no-c-format
 msgid "Maldives"
-msgstr ""
+msgstr "Maldív-szigetek"
 
 #, no-c-format
 msgid "Malawi"
-msgstr ""
+msgstr "Malawi"
 
 #, no-c-format
 msgid "Mexico"
-msgstr ""
+msgstr "Mexikó"
 
 #, no-c-format
 msgid "Malaysia"
-msgstr ""
+msgstr "Malajzia"
 
 #, no-c-format
 msgid "Mozambique"
-msgstr ""
+msgstr "Mozambik"
 
 #, no-c-format
 msgid "Namibia"
-msgstr ""
+msgstr "Namíbia"
 
 #, no-c-format
 msgid "New Caledonia"
-msgstr ""
+msgstr "Új-Kaledónia"
 
 #, no-c-format
 msgid "Niger"
-msgstr ""
+msgstr "Niger"
 
 #, no-c-format
 msgid "Norfolk Island"
-msgstr ""
+msgstr "Norfolk-sziget"
 
 #, no-c-format
 msgid "Nigeria"
-msgstr ""
+msgstr "Nigéria"
 
 #, no-c-format
 msgid "Nicaragua"
-msgstr ""
+msgstr "Nicaragua"
 
 #, no-c-format
 msgid "Netherlands"
-msgstr ""
+msgstr "Hollandia"
 
 #, no-c-format
 msgid "Norway"
-msgstr ""
+msgstr "Norvégia"
 
 #, no-c-format
 msgid "Nepal"
-msgstr ""
+msgstr "Nepál"
 
 #, no-c-format
 msgid "Nauru"
-msgstr ""
+msgstr "Nauru"
 
 #, no-c-format
 msgid "Niue"
-msgstr ""
+msgstr "Niue"
 
 #, no-c-format
 msgid "New Zealand"
-msgstr ""
+msgstr "Új-Zéland"
 
 #, no-c-format
 msgid "Oman"
-msgstr ""
+msgstr "Omán"
 
 #, no-c-format
 msgid "Panama"
-msgstr ""
+msgstr "Panama"
 
 #, no-c-format
 msgid "Peru"
-msgstr ""
+msgstr "Peru"
 
 #, no-c-format
 msgid "French Polynesia"
-msgstr ""
+msgstr "Francia Polinézia"
 
 #, no-c-format
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "Pápua Új-Guinea"
 
 #, no-c-format
 msgid "Philippines"
-msgstr ""
+msgstr "Fülöp-szigetek"
 
 #, no-c-format
 msgid "Pakistan"
-msgstr ""
+msgstr "Pakisztán"
 
 #, no-c-format
 msgid "Poland"
-msgstr ""
+msgstr "Lengyelország"
 
 #, no-c-format
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Saint-Pierre és Miquelon"
 
 #, no-c-format
 msgid "Pitcairn"
-msgstr ""
+msgstr "Pitcairn-szigetek"
 
 #, no-c-format
 msgid "Puerto Rico"
-msgstr ""
+msgstr "Puerto Rico"
 
 #, no-c-format
 msgid "Palestine"
-msgstr ""
+msgstr "Palesztin Autonómia"
 
 #, no-c-format
 msgid "Portugal"
-msgstr ""
+msgstr "Portugália"
 
 #, no-c-format
 msgid "Palau"
-msgstr ""
+msgstr "Palau"
 
 #, no-c-format
 msgid "Paraguay"
-msgstr ""
+msgstr "Paraguay"
 
 #, no-c-format
 msgid "Qatar"
-msgstr ""
+msgstr "Katar"
 
 #, no-c-format
 msgid "Réunion"
-msgstr ""
+msgstr "Réunion"
 
 #, no-c-format
 msgid "Romania"
-msgstr ""
+msgstr "Románia"
 
 #, no-c-format
 msgid "Serbia"
-msgstr ""
+msgstr "Szerbia"
 
 #, no-c-format
 msgid "Russia"
-msgstr ""
+msgstr "Oroszország"
 
 #, no-c-format
 msgid "Rwanda"
-msgstr ""
+msgstr "Ruanda"
 
 #, no-c-format
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Szaúd-Arábia"
 
 #, no-c-format
 msgid "Solomon Islands"
-msgstr ""
+msgstr "Salamon-szigetek"
 
 #, no-c-format
 msgid "Seychelles"
-msgstr ""
+msgstr "Seychelle-szigetek"
 
 #, no-c-format
 msgid "Sudan"
-msgstr ""
+msgstr "Szudán"
 
 #, no-c-format
 msgid "Sweden"
-msgstr ""
+msgstr "Svédország"
 
 #, no-c-format
 msgid "Singapore"
-msgstr ""
+msgstr "Szingapúr"
 
 #, no-c-format
 msgid "Saint Helena"
-msgstr ""
+msgstr "Szent Ilona"
 
 #, no-c-format
 msgid "Slovenia"
-msgstr ""
+msgstr "Szlovénia"
 
 #, no-c-format
 msgid "Svalbard and Jan Mayen"
-msgstr ""
+msgstr "Svalbard és Jan Mayen"
 
 #, no-c-format
 msgid "Slovakia"
-msgstr ""
+msgstr "Szlovákia"
 
 #, no-c-format
 msgid "Sierra Leone"
-msgstr ""
+msgstr "Sierra Leone"
 
 #, no-c-format
 msgid "San Marino"
-msgstr ""
+msgstr "San Marino"
 
 #, no-c-format
 msgid "Senegal"
-msgstr ""
+msgstr "Szenegál"
 
 #, no-c-format
 msgid "Somalia"
-msgstr ""
+msgstr "Szomália"
 
 #, no-c-format
 msgid "Suriname"
-msgstr ""
+msgstr "Suriname"
 
 #, no-c-format
 msgid "South Sudan"
-msgstr ""
+msgstr "Dél-Szudán"
 
 #, no-c-format
 msgid "São Tomé and Príncipe"
-msgstr ""
+msgstr "São Tomé és Príncipe"
 
 #, no-c-format
 msgid "El Salvador"
-msgstr ""
+msgstr "Salvador"
 
 #, no-c-format
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 #, no-c-format
 msgid "Syria"
-msgstr ""
+msgstr "Szíria"
 
 #, no-c-format
 msgid "Eswatini"
-msgstr ""
+msgstr "Szváziföld"
 
 #, no-c-format
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Turks- és Caicos-szigetek"
 
 #, no-c-format
 msgid "Chad"
-msgstr ""
+msgstr "Csád"
 
 #, no-c-format
 msgid "French Southern Territories"
-msgstr ""
+msgstr "Francia Déli Területek"
 
 #, no-c-format
 msgid "Togo"
-msgstr ""
+msgstr "Togo"
 
 #, no-c-format
 msgid "Thailand"
-msgstr ""
+msgstr "Thaiföld"
 
 #, no-c-format
 msgid "Tajikistan"
-msgstr ""
+msgstr "Tádzsikisztán"
 
 #, no-c-format
 msgid "Tokelau"
-msgstr ""
+msgstr "Tokelau"
 
 #, no-c-format
 msgid "Timor-Leste"
-msgstr ""
+msgstr "Kelet-Timor"
 
 #, no-c-format
 msgid "Turkmenistan"
-msgstr ""
+msgstr "Türkmenisztán"
 
 #, no-c-format
 msgid "Tunisia"
-msgstr ""
+msgstr "Tunézia"
 
 #, no-c-format
 msgid "Tonga"
-msgstr ""
+msgstr "Tonga"
 
 #, no-c-format
 msgid "Turkey"
-msgstr ""
+msgstr "Törökország"
 
 #, no-c-format
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trinidad és Tobago"
 
 #, no-c-format
 msgid "Tuvalu"
-msgstr ""
+msgstr "Tuvalu"
 
 #, no-c-format
 msgid "Taiwan"
-msgstr ""
+msgstr "Tajvan"
 
 #, no-c-format
 msgid "Tanzania"
-msgstr ""
+msgstr "Tanzánia"
 
 #, no-c-format
 msgid "Ukraine"
-msgstr ""
+msgstr "Ukrajna"
 
 #, no-c-format
 msgid "Uganda"
-msgstr ""
+msgstr "Uganda"
 
 #, no-c-format
 msgid "U.S. Outlying Islands"
-msgstr ""
+msgstr "Az USA lakatlan külbirtokai"
 
 #, no-c-format
 msgid "United States"
-msgstr ""
+msgstr "Egyesült Államok"
 
 #, no-c-format
 msgid "Uruguay"
-msgstr ""
+msgstr "Uruguay"
 
 #, no-c-format
 msgid "Uzbekistan"
-msgstr ""
+msgstr "Üzbegisztán"
 
 #, no-c-format
 msgid "Vatican City"
-msgstr ""
+msgstr "Vatikán"
 
 #, no-c-format
 msgid "Saint Vincent and the Grenadines"
-msgstr ""
+msgstr "Saint Vincent és a Grenadine-szigetek"
 
 #, no-c-format
 msgid "Venezuela"
-msgstr ""
+msgstr "Venezuela"
 
 #, no-c-format
 msgid "British Virgin Islands"
-msgstr ""
+msgstr "Brit Virgin-szigetek"
 
 #, no-c-format
 msgid "U.S. Virgin Islands"
-msgstr ""
+msgstr "Amerikai Virgin-szigetek"
 
 #, no-c-format
 msgid "Vietnam"
-msgstr ""
+msgstr "Vietnám"
 
 #, no-c-format
 msgid "Vanuatu"
-msgstr ""
+msgstr "Vanuatu"
 
 #, no-c-format
 msgid "Wallis and Futuna"
-msgstr ""
+msgstr "Wallis és Futuna"
 
 #, no-c-format
 msgid "Samoa"
-msgstr ""
+msgstr "Szamoa"
 
 #, no-c-format
 msgid "Kosovo"
-msgstr ""
+msgstr "Koszovó"
 
 #, no-c-format
 msgid "Yemen"
-msgstr ""
+msgstr "Jemen"
 
 #, no-c-format
 msgid "Mayotte"
-msgstr ""
+msgstr "Mayotte"
 
 #, no-c-format
 msgid "South Africa"
-msgstr ""
+msgstr "Dél-afrikai Köztársaság"
 
 #, no-c-format
 msgid "Zambia"
-msgstr ""
+msgstr "Zambia"
 
 #, no-c-format
 msgid "Zimbabwe"
-msgstr ""
+msgstr "Zimbabwe"
 
 #. the backup is there, but on purpose without the files the
 #. loggers are writing right now: say so, and which ones
 msgid "Backup complete."
-msgstr ""
+msgstr "A mentés kész."
 
 msgid "Left out, being written right now:"
-msgstr ""
+msgstr "Kihagyva, éppen most íródik:"
 
 msgid "Don't use"
-msgstr ""
+msgstr "Ne használd"
 
 msgid "Not aligned"
-msgstr ""
+msgstr "Nincs igazítva"
 
 msgid "Fixed & aligned"
-msgstr ""
+msgstr "Rögzítve és igazítva"
 
 msgid "Built-in IMU"
-msgstr ""
+msgstr "Beépített IMU"
 
 msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Az IMU-t tartalmazó műszer tartósan rögzítve van-e, és a tengelyei egybeesn"
+"ek-e a légi jármű tengelyeivel. «Rögzítve és igazítva» csak merev beépítésn"
+"él. Kétség esetén «Nincs igazítva»."
 
-#, c-format
+#, no-c-format
 msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
 msgstr ""
+"Az XCSoar az első eszközt használja, amely az adott értéket adja (az A eszk"
+"özt a B előtt, és így tovább). A félkövér jelzők azok az értékek, amelyeket"
+" az XCSoar ettől az eszköztől vesz. A nem félkövérek azt jelentik, hogy egy"
+" korábbi eszköz már adja ugyanazokat az adatokat. A Baro a magasság az aktu"
+"ális QNH-val; a QNE a nyomásmagasság; az Alt IGC a magasság, amelyet a napl"
+"ózó ír. A QNE és a Pressure ugyanaz a környezeti nyomás, ezért csak a koráb"
+"bi vastag. A rossz GPS és a 10 százalék alatti akkumulátor színes kijelzőn "
+"piros, e-papíron félkövér."
 
 msgid "QNE"
-msgstr ""
+msgstr "QNE"
 
 msgid "Engine"
-msgstr ""
+msgstr "Motor"
 
 msgid "Set Clearance"
-msgstr ""
+msgstr "Engedély megadása"
 
 msgid "Revoke Clearance"
-msgstr ""
+msgstr "Engedély visszavonása"
 
 msgid "Failed to update airspace clearance"
-msgstr ""
+msgstr "A légtérengedély frissítése nem sikerült"
 
 msgid "Clrnc"
-msgstr ""
+msgstr "Eng."
 
 msgid ""
 "Per-class filter settings. For airspaces where both\n"
@@ -12301,244 +12312,315 @@ msgid ""
 "  Clrnc - allow granting a clearance to suppress\n"
 "           warnings from other overlapping airspaces"
 msgstr ""
+"Osztályonkénti szűrőbeállítások. Ha egy légtérnek típusa (CTR, FIR, ...) és"
+" osztálya is van, az XCSoarban a típus előbbre való az osztálynál.\nOszlopo"
+"k:\n  Mutat — ennek az osztálynak a légtereit rajzolja a térképre\n  Riaszt"
+" — figyelmeztetés közeledéskor és belül\n  Eng.  — engedélyt ad, amely elny"
+"omja\n          más átfedő légterek figyelmeztetéseit"
 
 msgid "Clearance"
-msgstr ""
+msgstr "Engedély"
 
 msgid "Groups"
-msgstr ""
+msgstr "Csoportok"
 
 msgid "Show only the InfoBoxes of these groups in the list."
-msgstr ""
+msgstr "A listában csak ezeknek a csoportoknak az infódobozai jelenjenek meg."
 
 msgid "Share location"
-msgstr ""
+msgstr "Hely megosztása"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Top"
-msgstr ""
+msgstr "Fent"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Right"
-msgstr ""
+msgstr "Jobb"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Bottom"
-msgstr ""
+msgstr "Lent"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Left"
-msgstr ""
+msgstr "Bal"
 
 #, no-c-format
 msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
 msgstr ""
+"Koppintson egy élre, hogy az infódoboz-területet a képernyő széléig nyújtsa"
+"."
 
 #, no-c-format
 msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
 msgstr ""
+"Az infódoboz-terület a képernyőnek az infódobozok, a műszerek, a térképréte"
+"gek és a menü számára elérhető része. Válassza ki azokat az éleket, amelyek"
+"en a képernyő széléig nyúlik. A nem nyújtott élek távol maradnak a rendszer"
+"sávoktól és a lekerekített sarkoktól. A térkép mindig az egész képernyőt ha"
+"sználja, a párbeszédablakok pedig a biztonságos területen maradnak. Csak te"
+"ljes képernyőn számít."
 
 msgid "Stretch InfoBox area"
-msgstr ""
+msgstr "Az infódoboz-terület nyújtása"
 
 #, no-c-format
 msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
 msgstr ""
+"Mutassa az állapotsort, kivéve ha az infódoboz-terület a képernyő felső szé"
+"léig van nyújtva, ahol eltakarná az infódobozokat."
 
 #, no-c-format
 msgid "Visible"
-msgstr ""
+msgstr "Látható"
 
 #, no-c-format
 msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
 msgstr ""
+"Az állapotsor mindig látszódjon, teljes képernyőn is. Az infódobozok nem ra"
+"jzolhatók mögé, ezért távol maradnak a felső széltől."
 
 #, no-c-format
 msgid "Hidden"
-msgstr ""
+msgstr "Rejtett"
 
 #, no-c-format
 msgid "Never show the status bar."
-msgstr ""
+msgstr "Az állapotsor soha ne jelenjen meg."
 
 msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
 msgstr ""
+"Az XCSoar használja az egész képernyőt, a rendszersávok és a kivágás mögött"
+"i területeket is. A térkép teljesen kitölti, az «infódoboz-terület nyújtása"
+"» pedig eldönti, mely élekig érhetnek az infódobozok, a műszerek, a térképr"
+"étegek és a menü."
 
 msgid "System status bar"
-msgstr ""
+msgstr "Rendszer állapotsora"
 
 msgid "Whether the system status bar with the clock and the battery level stays visible."
 msgstr ""
+"A rendszer állapotsora, az órával és az akkumulátor szintjével, látható mar"
+"ad-e."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Warn when radar expires"
-msgstr ""
+msgstr "Figyelmeztetés, ha a radar lejár"
 
 msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
 msgstr ""
+"Ha be van kapcsolva, figyelmeztetés jelenik meg, ha a csapadékradar átfedés"
+"ét nem lehetett frissíteni, és lekerült a térképről."
 
 #, no-c-format
 msgid "Shrink type when the short edge is under 3.2 inches."
-msgstr ""
+msgstr "Csökkentse a betűméretet, ha a rövidebb oldal 3.2 hüvelyk alatt van."
 
 #, no-c-format
 msgid "Handheld"
-msgstr ""
+msgstr "Kézben"
 
 #, no-c-format
 msgid "Always use the closer-view size."
-msgstr ""
+msgstr "Mindig a közeli olvasás méretét használja."
 
 #, no-c-format
 msgid "Panel"
-msgstr ""
+msgstr "Műszerfal"
 
 #, no-c-format
 msgid "Keep full-size type, for a screen read at arm's length."
-msgstr ""
+msgstr "Tartsa meg a teljes betűméretet, karnyújtásnyira olvasott képernyőhöz."
 
 msgid "Viewing distance"
-msgstr ""
+msgstr "Olvasási távolság"
 
 msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
 msgstr ""
+"Az Auto csökkenti a betűméretet, ha a rövidebb oldal 3.2 hüvelyk alatt van."
+" A „Kézben“ mindig ezt a közeli méretet használja. A „Műszerfal“ megtartja "
+"a teljes méretet."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Satellite layer"
-msgstr ""
+msgstr "Műholdréteg"
 
 msgid "Which EUMETView satellite product this page draws under the map."
-msgstr ""
+msgstr "Melyik EUMETView műholdterméket rajzolja ez az oldal a térkép alá."
 
 #, no-c-format
 msgid "Rain radar"
-msgstr ""
+msgstr "Csapadékradar"
 
 #, no-c-format
 msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Az elérhetőség egyenes pályák a vitorlázótól. A leszállásra alkalmas helyek"
+" színei és a kitérők listája ezt használja."
 
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Az elérhetőséget a terepakadályok körüli fordulókkal számolja. A leszállásr"
+"a alkalmas helyek színei és a kitérők listája ezt használja."
 
 #, no-c-format
 msgid "Task MC"
-msgstr ""
+msgstr "Feladat MC"
 
 #, no-c-format
 msgid "Uses task MacCready value."
-msgstr ""
+msgstr "A feladat MacCready értékét használja."
 
 msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
 msgstr ""
+"Melyik MacCready szolgál a terepi elérhetőséghez, a leszállásra alkalmas he"
+"lyek színeihez, a megszakításhoz és a kitérők listájához. Akkor is érvényes"
+", ha az elérhetőségi mód ki van kapcsolva. A munkavonal mindig a feladat MC"
+"-jét használja. A kitérő infódobozok és a biztonságos MC-s magasságkülönbsé"
+"g mindig a biztonságos MC-t használják."
 
 #, no-c-format
 msgid "No reach overlay on the map."
-msgstr ""
+msgstr "Nincs elérhetőségi átfedés a térképen."
 
 #, no-c-format
 msgid "How far you can glide to the ground. Uses the Reach polar."
-msgstr ""
+msgstr "Meddig siklik a talajig. Az elérhetőségi polárist használja."
 
 #, no-c-format
 msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
 msgstr ""
+"Árnyékolja a térképet a talajig tartó sikláson túl. Az elérhetőségi poláris"
+"t használja."
 
 #, no-c-format
 msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
 msgstr ""
+"Meddig siklik úgy, hogy ennek a repülésnek a tipikus termikbázis-magasságán"
+" még megérkezik. Mindig a feladat MC-jét használja."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
 msgstr ""
+"Munkavonal a tipikus termikbázis-magasságig a feladat MC-jével, plusz terep"
+"vonal a talajig az elérhetőségi polárissal."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
 msgstr ""
+"Munkavonal a tipikus termikbázis-magasságig a feladat MC-jével, plusz árnyé"
+"k a talajon túl az elérhetőségi polárissal."
 
 msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
 msgstr ""
+"A terepi elérhetőséghez, a leszállásra alkalmas helyek színeihez, a megszak"
+"ításhoz és a kitérők listájához használt MacCready, ha az elérhetőségi polá"
+"ris a biztonságos MC. A kitérő infódobozok és a biztonságos MC-s magasságkü"
+"lönbség mindig ezt az értéket használják. Az optimális siklósebesség nem vá"
+"ltozik. Nagyobb értékek kevesebb mezőt tekintenek elérhetőnek."
 
 msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
 msgstr ""
+"Nincs beállítva siklópoláris, ezért siklószám nem jeleníthető meg. Először "
+"válasszon repülőgépet."
 
 msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
 msgstr ""
+"Az egyes értékek melletti siklószám a legjobb siklószám szélcsendben ennél "
+"a MacCready-beállításnál, bogarakkal, ballaszttal és a poláris romlásával e"
+"gyütt."
 
 #, c-format
 msgid "Active polar: %s"
-msgstr ""
+msgstr "Aktív poláris: %s"
 
 msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
 msgstr ""
+"Az induláskor az optimális siklósebességhez és a feladatszámításhoz használ"
+"t MacCready. Az itteni módosítás a pillanatnyi MacCreadyt is beállítja. A t"
+"erepi elérhetőség, a leszállásra alkalmas helyek színei, a megszakítás és a"
+" kitérők listája az elérhetőségi polárist követi, nem ezt az értéket, hacsa"
+"k az elérhetőségi poláris nem a feladat MC-je."
 
 #, no-c-format
 msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
 msgstr ""
+"Az operációs rendszerben beállított időzónát használja, és kövesse a nyári "
+"időszámítás váltásakor és másik zónába utazáskor is."
 
 #, no-c-format
 msgid "Time zone"
-msgstr ""
+msgstr "Időzóna"
 
 #, no-c-format
 msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
 msgstr ""
+"A lenti kiválasztott időzónát használja. Az XCSoar ismeri a nyári időszámít"
+"ás szabályait, és maga alkalmazza az átállásokat, ezért a beállítást nem ke"
+"ll évente kétszer javítani."
 
 #, no-c-format
 msgid "Manual UTC offset"
-msgstr ""
+msgstr "Kézi UTC-eltolás"
 
 #, no-c-format
 msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
 msgstr ""
+"A lenti rögzített UTC-eltolást használja. Kézzel kell javítani, amikor a ny"
+"ári időszámítás kezdődik vagy végződik."
 
 msgid "Local time source"
-msgstr ""
+msgstr "Helyi idő forrása"
 
 msgid "Selects where XCSoar gets the offset between UTC and local time from."
 msgstr ""
+"Megadja, honnan veszi az XCSoar az UTC és a helyi idő közötti eltolást."
 
 msgid "The time zone of the airfield you are flying at."
-msgstr ""
+msgstr "Annak a repülőtérnek az időzónája, ahonnan repül."
 
 msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
 msgstr ""
+"Az UTC-eltolás mezővel megadható az UTC és a helyi idő közötti eltolás. Meg"
+"őrzi a beírt értéket akkor is, ha másik helyi idő forrás van kiválasztva. A"
+"lul a helyi idő és a most érvényes UTC-eltolás látható."
 
 #, no-c-format
 msgid "UKV Model"
-msgstr ""
+msgstr "UKV modell"
 
 #, no-c-format
 msgid "United Kingdom. UKV model."
-msgstr ""
+msgstr "Egyesült Királyság. UKV modell."
 
 #. the other tabs are named after their service, which is why they
 #. are not translated; this one is a common noun
 msgid "Overlay"
-msgstr ""
+msgstr "Átfedés"
 
 msgid "Revoke"
-msgstr ""
+msgstr "Visszavonás"
 
 #, no-c-format
 msgid "Radar (EUMETNET OPERA)"
-msgstr ""
+msgstr "Radar (EUMETNET OPERA)"
 
 #. the server answered but the product had nothing to draw here:
 #. say so, rather than leaving an empty map to be read as a slow
 #. download
 msgid "no data"
-msgstr ""
+msgstr "nincs adat"
 
 msgid "Downloading radar..."
-msgstr ""
+msgstr "Radar letöltése..."
 
 #. the opt-out follows the Quick Guide dialog: answering "no" writes
 #. the choice to the profile, and the Look configuration page can
@@ -12548,140 +12630,171 @@ msgid ""
 "\n"
 "Warn again when this happens?"
 msgstr ""
+"A radarképet nem lehetett frissíteni, és el lett távolítva, hogy ne jelenje"
+"n meg elavult visszhang.\n\nFigyelmeztessen újra, ha ez megtörténik?"
 
 #. first, and the default: the closest counterpart to the pc_met
 #. vis_hrv images, and the one product here that covers Europe at
 #. the HRV sampling German pilots are used to reading
 #, no-c-format
 msgid "European HRV RGB"
-msgstr ""
+msgstr "Európai HRV RGB"
 
 #. MTG, which resolves about twice as finely as SEVIRI HRV
 #, no-c-format
 msgid "Visible 0.6 µm (MTG)"
-msgstr ""
+msgstr "Látható 0.6 µm (MTG)"
 
 #, no-c-format
 msgid "Infrared 10.5 µm (MTG)"
-msgstr ""
+msgstr "Infravörös 10.5 µm (MTG)"
 
 #. the RGB composites are assembled from several channels and reach
 #. the server a few minutes behind the single channel products, which
 #. the frame search follows on its own
 #, no-c-format
 msgid "True colour (MTG)"
-msgstr ""
+msgstr "Valódi szín (MTG)"
 
 #, no-c-format
 msgid "Geo colour (MTG)"
-msgstr ""
+msgstr "Geoszín (MTG)"
 
 #. five minute cadence, and the promptest of them by a wide margin
 #, no-c-format
 msgid "Rapid scan natural colour"
-msgstr ""
+msgstr "Gyorspásztázás, természetes szín"
 
 msgid "No satellite imagery here right now"
-msgstr ""
+msgstr "Itt most nincs műholdkép"
 
 msgid "Countries"
-msgstr ""
+msgstr "Országok"
 
 msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
 msgstr ""
+"Csak ezeknek az országoknak a fájljait mutassa — ugyanaz a választás térkép"
+"ekre, fordulópontokra és légterekre, a profilban tárolva. A minden országra"
+" vonatkozó fájlok a listán maradnak."
 
 msgid "Search"
-msgstr ""
+msgstr "Keresés"
 
 msgid "Show only the files whose name or description contains this text."
 msgstr ""
+"Csak azokat a fájlokat mutassa, amelyek neve vagy leírása tartalmazza ezt a"
+" szöveget."
 
 msgid "No file matches the filter."
-msgstr ""
+msgstr "Egy fájl sem felel meg a szűrőnek."
 
 msgid "Complete"
-msgstr ""
+msgstr "Kész"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Megszakítva"
 
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
 msgstr ""
+"Az utolsó termik teljes magasságnyeresége vagy -vesztesége osztva a körözés"
+"i idővel. A kisebb másodpercek a körözési időt mutatják."
 
 #, no-c-format
 msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
 msgstr ""
+"Az utolsó termikben körözéssel töltött idő. A kisebb szám az utolsó termik "
+"átlagos emelkedését mutatja."
 
 #, no-c-format
 msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
 msgstr ""
+"Fő érték: a következő szárny termikemelkedése, amely a jelenlegi szárny Mac"
+"Cready-beállításával egyenlő emelkedésnek felel meg. Mellékérték: a jelenle"
+"gi szárny termikemelkedése, amely a következő szárny MacCready-beállításáva"
+"l egyenlő emelkedésnek felel meg."
 
 #, no-c-format
 msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Érkezési magasság a legjobb kitérő leszállóhelynél a biztonságos MC-vel, a "
+"biztonsági érkezési magassághoz képest."
 
 #, no-c-format
 msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Érkezési magasság a második legjobb kitérő leszállóhelynél a biztonságos MC"
+"-vel, a biztonsági érkezési magassághoz képest."
 
 #, no-c-format
 msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
 msgstr ""
+"A barometrikus magasság számításához használt aktuális QNH-nyomás. Az alatt"
+"a lévő sor ezt a magasságot mutatja, ha van nyomásérzékelő. Koppintson az i"
+"nfódobozra a panel megnyitásához és a QNH kézi beállításához."
 
 #, no-c-format
 msgid "Speed VMG"
-msgstr ""
+msgstr "Sebesség VMG"
 
 #, no-c-format
 msgid "V VMG"
-msgstr ""
+msgstr "V VMG"
 
 #, no-c-format
 msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
 msgstr ""
+"A földsebességnek a következő fordulópont irányába eső összetevője. Egyenes"
+" útirányon egyenlő a földsebességgel, keresztirányban nullára esik, távolod"
+"áskor pedig negatív. Számmal mutatja, mennyibe kerül a közvetlen útirányról"
+" való kitérő."
 
 #, no-c-format
 msgid "Vario and thermal"
-msgstr ""
+msgstr "Varió és termik"
 
 #, no-c-format
 msgid "Glide"
-msgstr ""
+msgstr "Siklás"
 
 #, no-c-format
 msgid "Speed and attitude"
-msgstr ""
+msgstr "Sebesség és helyzet"
 
 #, no-c-format
 msgid "Wind and weather"
-msgstr ""
+msgstr "Szél és időjárás"
 
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Idő"
 
 #, no-c-format
 msgid "Airspace and team"
-msgstr ""
+msgstr "Légtér és csapat"
 
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr ""
+"Húzzon egy infódobozt egy másikra a cseréhez. Tartson egy infódobozt, és em"
+"elje fel, hogy másikat válasszon arra a helyre."
 
 msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
 msgstr ""
+"Az Enter felveszi a kijelölt infódobozt, a kurzorbillentyűkkel mozgassa, és"
+" az Enter újra leteszi. Kétszeri Enter mozgatás nélkül más infódobozt válas"
+"zt arra a helyre."
 
 msgid "Arrange InfoBoxes"
-msgstr ""
+msgstr "Infódobozok elrendezése"
 
 msgid ""
 "Arrange\n"
 "InfoBoxes"
-msgstr ""
+msgstr "Infódobozok\nelrendezése"
 
 msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
 msgstr ""
@@ -12690,12 +12803,15 @@ msgstr ""
 " a maximális felszálló tömegénél."
 
 msgid "MTOW"
-msgstr ""
+msgstr "MTOW"
 
 msgid "Maximum takeoff weight of the glider."
-msgstr ""
+msgstr "A vitorlázó maximális felszálló tömege."
 
 #, no-c-format
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
+"Fedélzeti vízballaszt, literben. A megjegyzés a szárnyterhelést mutatja, pi"
+"rosan, ha a vitorlázó nehezebb a maximális felszálló tömegénél. Az érték ké"
+"k, amíg a ballaszt ürül. Koppintson a ballaszt módosításához."
 
