@@ -158,6 +158,8 @@ Version 7.46 - not yet released
   - inset the map overlays by the same margin as the menu, Quick Menu
     and zoom buttons
 * airspace
+  - keep Ack Day for the rest of the day, including a surrounding
+    airspace already overhead, and across a replay time jump
   - fill airspace with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
   - set Show, Warn and Clearance for each class on the airspace
