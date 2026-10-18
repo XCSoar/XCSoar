@@ -45,6 +45,9 @@ public:
   bool read_only = false;
   Alignment alignment = Alignment::LEFT;
 
+  /** Draw the value in red (a warning, such as wing loading over MTOW). */
+  bool value_warning = false;
+
   bool dragging = false, pressed = false;
 
 public:
@@ -84,6 +87,12 @@ public:
   void SetReadOnly(bool _read_only=true) noexcept {
     read_only = _read_only;
   }
+
+  /**
+   * Draw the value in red.  Ignored on a display without colour.
+   * Does not repaint when the flag is unchanged.
+   */
+  void SetValueWarning(bool warning) noexcept;
 
   [[gnu::pure]]
   bool IsReadOnly() const noexcept {

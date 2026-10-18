@@ -168,6 +168,11 @@ FlightSetupPanel::SetBallast()
     if (fabs(df.GetValue() - Units::ToUserUnit(wl, unit)) >= 0.05)
       LoadValue(WingLoading, wl, UnitGroup::WING_LOADING);
   }
+
+  const auto &plane = CommonInterface::GetComputerSettings().plane;
+  GetControl(WingLoading).SetValueWarning(
+    plane.IsOverMaxTakeoffMass(
+      polar_settings.glide_polar_task.GetTotalMass()));
 }
 
 void
@@ -324,7 +329,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent,
            this);
 
   WndProperty *wing_loading = AddFloat(_("Wing loading"),
-                                       _("The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."),
+                                       _("The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."),
                                        "%.1f %s", "%.0f", 0,
                                        300, 5,
                                        false, UnitGroup::WING_LOADING,

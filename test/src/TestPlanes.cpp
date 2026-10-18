@@ -136,11 +136,25 @@ TestWriter()
   ok1(found15);
 }
 
+static void
+TestOverMaxTakeoffMass()
+{
+  Plane plane;
+  plane.max_takeoff_mass = 0;
+  ok1(!plane.IsOverMaxTakeoffMass(600));
+
+  plane.max_takeoff_mass = 550;
+  ok1(!plane.IsOverMaxTakeoffMass(550));
+  ok1(!plane.IsOverMaxTakeoffMass(549));
+  ok1(plane.IsOverMaxTakeoffMass(550.1));
+}
+
 int main()
 try {
-  plan_tests(37);
+  plan_tests(41);
 
   TestReader();
+  TestOverMaxTakeoffMass();
   TestWriter();
 
   return exit_status();

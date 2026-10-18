@@ -48,4 +48,10 @@ struct Plane
    * This is set when a plane profile file is loaded from Profile::GetPath("PlanePath").
    */
   bool plane_profile_active;
+
+  /** True when MTOW is known and the all-up mass is above it. */
+  [[nodiscard]]
+  constexpr bool IsOverMaxTakeoffMass(double total_mass) const noexcept {
+    return max_takeoff_mass > 0 && total_mass > max_takeoff_mass;
+  }
 };

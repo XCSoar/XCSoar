@@ -1370,7 +1370,7 @@ static constexpr MetaData meta_data[] = {
     Group::TASK,
     N_("Ballast"),
     N_("Ballast"),
-    N_("Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."),
+    N_("Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."),
     IBFHelper<InfoBoxContentBallast>::Create,
   },
 

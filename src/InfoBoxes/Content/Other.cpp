@@ -324,13 +324,22 @@ InfoBoxContentBallast::Update(InfoBoxData &data) noexcept
   /* blue while ballast is being dumped */
   data.SetValueColor(polar_settings.ballast_timer_active ? 2 : 0);
 
+  const auto &plane = CommonInterface::GetComputerSettings().plane;
+  /* UpdateContent() keeps the previous colour, so set it every time. */
+  const bool over_mtow =
+    plane.IsOverMaxTakeoffMass(polar.GetTotalMass());
+
   const double wing_loading = polar.GetWingLoading();
   if (wing_loading > 0) {
     char buffer[32];
     FormatUserWingLoading(wing_loading, buffer, sizeof(buffer), true);
     data.SetComment(buffer);
-  } else
+    /* 1 is red: the comment is the wing loading */
+    data.SetCommentColor(over_mtow ? 1 : 0);
+  } else {
     data.SetCommentInvalid();
+    data.SetCommentColor(0);
+  }
 }
 
 bool
