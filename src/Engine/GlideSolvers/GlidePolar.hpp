@@ -275,8 +275,10 @@ public:
   }
 
   /**
-   * Set ballast value in litres
-   * @param litres The new ballast setting (l or kg)
+   * Set ballast in litres.
+   * When #max_ballast is greater than zero, a larger value is clamped
+   * to that maximum so the polar cannot exceed the plane profile.
+   * @param litres The new ballast setting (l or kg), >= 0
    */
   void SetBallastLitres(double litres) noexcept;
 
@@ -287,7 +289,8 @@ public:
   void SetBallastFraction(double fraction) noexcept;
 
   /**
-   * Set ballast value as overload (mass ratio)
+   * Set ballast from an overload (all-up mass divided by reference mass).
+   * Litres implied by the overload are clamped like SetBallastLitres().
    * @param overload The overload ratio (1.0 = reference mass, >1.0 = heavier)
    */
   void SetBallastOverload(double overload) noexcept;

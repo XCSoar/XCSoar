@@ -147,6 +147,24 @@ GlidePolarTest::TestBallastOverload()
     overload * ref - crew - empty;
   ok1(equals(decoded_water, water));
 
+  /* Variometer overload above the tanks stays at maximum ballast. */
+  polar.SetMaxBallast(90);
+  polar.SetBallastLitres(165);
+  ok1(equals(polar.GetBallastLitres(), 90));
+  ok1(equals(polar.GetBallastFraction(), 1));
+
+  const double over_max = (empty + crew + 165) / ref;
+  polar.SetBallastOverload(over_max);
+  ok1(equals(polar.GetBallastLitres(), 90));
+
+  polar.SetBallastLitres(40);
+  ok1(equals(polar.GetBallastLitres(), 40));
+
+  /* No configured maximum: a weight margin is still accepted. */
+  polar.SetMaxBallast(0, false);
+  polar.SetBallastLitres(15);
+  ok1(equals(polar.GetBallastLitres(), 15));
+
   /* Restore baseline for subsequent tests */
   Init();
   polar.Update();
@@ -372,7 +390,7 @@ TestFallback()
 
 int main()
 {
-  plan_tests(69 + 3 + 21 + 5 + 9);
+  plan_tests(69 + 3 + 21 + 5 + 9 + 5);
 
   GlidePolarTest test;
   test.Run();

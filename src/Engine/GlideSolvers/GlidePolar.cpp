@@ -86,6 +86,9 @@ void
 GlidePolar::SetBallastLitres(double litres) noexcept
 {
   assert(litres >= 0);
+  /* max_ballast <= 0 means the plane profile has no tank limit. */
+  if (max_ballast > 0)
+    litres = std::min(litres, max_ballast);
   ballast_litres = litres;
   Update();
 }
@@ -103,10 +106,10 @@ GlidePolar::SetBallastOverload(double overload) noexcept
 {
   assert(overload > 0);
   const double total_mass = overload * GetReferenceMass();
-  ballast_litres = total_mass - GetDryMass();
-  if (ballast_litres < 0)
-    ballast_litres = 0;
-  Update();
+  double litres = total_mass - GetDryMass();
+  if (litres < 0)
+    litres = 0;
+  SetBallastLitres(litres);
 }
 
 double
