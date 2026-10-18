@@ -241,6 +241,13 @@ Version 7.46 - not yet released
   - create the plane profile for a registration received from a
     device in the planes folder, instead of the data folder, and
     never replace an existing profile with it
+  - fix changing the empty mass of the active plane not reaching
+    the vario; a send before the polar is known is sent when the
+    polar arrives, and that reply does not put the old mass back.
+    Activating another plane sends that plane's whole polar when
+    polar sync is Send, and does not copy its empty mass onto the
+    vario's curve. A save that leaves the empty mass alone does not
+    resend ballast #3353
   - show only the start time in the flight download list when the
     logger did not record when a flight ended, instead of 00:00
     (LXNAV S10)

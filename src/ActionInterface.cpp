@@ -194,6 +194,9 @@ void
 ActionInterface::SetEmptyMass(double empty_mass, bool to_devices) noexcept
 {
   GlidePolar &polar = SetComputerSettings().polar.glide_polar_task;
+  const double previous_empty = polar.GetEmptyMass();
+  const bool empty_changed = previous_empty > empty_mass + 0.1 ||
+                             previous_empty < empty_mass - 0.1;
   polar.SetEmptyMass(empty_mass);
 
   if (backend_components)
@@ -202,7 +205,10 @@ ActionInterface::SetEmptyMass(double empty_mass, bool to_devices) noexcept
   if (to_devices && backend_components && backend_components->devices) {
     MessageOperationEnvironment env;
     backend_components->devices->PutEmptyMass(empty_mass, env);
-    if (polar.GetReferenceMass() > 0)
+    /* Overload is total mass over the reference mass.  Resend ballast
+       only when the empty mass changed.  A save that leaves it alone
+       must not push ballast. */
+    if (empty_changed && polar.GetReferenceMass() > 0)
       backend_components->devices->PutBallast(polar.GetBallastFraction(),
                                               polar.GetBallastOverload(),
                                               env);
