@@ -2063,10 +2063,10 @@ msgid "InfoBox paste set"
 msgstr "정보창 붙이기"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
-msgstr ""
+msgstr "복사는 이 세트의 정보창을 모두 기억하고, 붙여넣기는 다른 세트의 정보창을 그것으로 바꿉니다."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "전역 설정에서 상속"
 
 msgid "Invalid"
 msgstr "유효하지 않음"
@@ -2752,17 +2752,17 @@ msgstr "주석"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "고정 텍스트"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "조종사가 입력한 제목, 값, 설명. 눌러 편집합니다."
 
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4338,10 +4338,10 @@ msgstr ""
 "한다."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "가장 가까운 점으로 이동"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "출발과 도착 구역의 가장 가까운 점으로 이동합니다."
 
 msgid "Finish min. height"
 msgstr "최종골 최저고도"
@@ -10736,21 +10736,21 @@ msgstr "수동"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "혈중 산소"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Bluetooth 맥박산소측정기의 혈중 산소 포화도, 퍼센트."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "최근 사용한 웨이포인트"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "이 FLARM에서 비행을 내려받으려면 기기의 Wi-Fi에 연결하십시오."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "가까운 지도 축척에서 선회 모드로 표시할 때 스네일 트레일을 바람에 표류시킬지 결정합니다. 끄면 트레일은 바람 표류 보정 없이 유지됩니다. 선회 중에는 예측 항적에도 적용됩니다. 켜면 기단 기준, 끄면 바람을 포함합니다."
 
@@ -10786,20 +10786,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "트래픽 레이더를 켜고 주 화면에서의 위치를 고릅니다. 대상의 색상은 근접위협 수준을 보여준다."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "화면 해상도"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "화면 밝기"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "화면 밝기를 조정합니다."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "쓰기에 추가 권한이 필요하므로 화면 밝기는 읽기 전용입니다."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "자동"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -10814,10 +10814,10 @@ msgstr "도달범위를 계산하는데 필요한 활공비를 설정한다. 착
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "대체착륙장 모드: 자동"
 
 msgid "Paste"
-msgstr ""
+msgstr "붙여넣기"
 
 #, c-format
 msgid ""
@@ -10921,105 +10921,115 @@ msgid "%u min"
 msgstr "%u분"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "지원되는 서비스가 없습니다"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "선택한 systemd 유닛이 설치되어 있지 않습니다."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "사용 불가"
 
 msgid "Starting..."
-msgstr ""
+msgstr "시작하는 중..."
 
 msgid "Stopping..."
 msgstr "중지 중…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "다시 읽는 중..."
 
 msgid "Failed"
-msgstr ""
+msgstr "실패"
 
 msgid "Turn on"
-msgstr ""
+msgstr "켜기"
 
 msgid "Restart"
-msgstr ""
+msgstr "재부팅"
 
 msgid "Turn off"
-msgstr ""
+msgstr "끄기"
 
 msgid "System service"
-msgstr ""
+msgstr "시스템 서비스"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH 서버"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "원격 터미널"
 
 msgid "Sensors"
-msgstr ""
+msgstr "센서"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario 센서 서비스"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "바리오 소리"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario 바리오 소리 서비스"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "예보의 최고 온도"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"그날의 DWD 예보에서 가장 가까운 MOSMIX 지점의 최고 온도를 비행 설정에 넣습니다. 위치가 필요하고 하루에 한 번 받습니다. 계"
+"정은 필요 없습니다."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"그날의 지면 최고 온도. 상승 중 측정한 외기 온도에 대한 건조 단열선이 추정 써멀 상한을 줍니다. 운저에는 습도 센서도 필요합니다. "
+"둘 다 글라이더가 층을 지난 뒤 비행분석 대화의 온도 궤적 페이지에 그려집니다."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "시작 시 타스크 MC"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "안전 맥크레디의 활공비"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "음성 경고"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"FLARM 충돌 경보를 긴급도, 시계 방향, 상대가 위인지 아래인지와 함께 읽습니다: \"Traffic urgent! Three o'c"
+"lock. Above.\" 장애물과 경보 구역 경보는 읽지 않습니다."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "음성 경고 시험"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "속도 제어 스위치"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "XCSoar가 바리오미터의 순항/상승 보고를 어떻게 쓰는지."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "비행 모드"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"비행 중 바리오미터의 순항/상승 보고가 비행 모드입니다. 순항은 상승을 끝내고 평균을 처음부터 계산합니다. 상승은 새 써멀을 시작합니다"
+". 골 러시는 순항 중에도 나타날 수 있습니다. Vega에서는 이것이 써클링 출력입니다."
 
 msgid "Display mode"
-msgstr ""
+msgstr "표시 모드"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar는 선회로부터 써클링 모드를 판단합니다. 바리오미터 보고는 쓰지 않습니다."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"페이지는 바뀌고 비행 모드는 바뀌지 않습니다. 순항은 선회 중에도 순항 페이지를 보이고 골 러시를 숨깁니다. 상승은 바리오 페이지를 보"
+"입니다. Vega에서는 이것이 속도 제어 스위치입니다."
 
 #, no-c-format
 msgid "System Tools"
@@ -11045,71 +11055,75 @@ msgstr "XCSoar 타스크"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "도달 거리 통계"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "안테나"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM은 두 무선 채널 각각의 통계를 유지합니다."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "데이터 점"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "기간"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM 도달 거리"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM이 도달 거리 통계를 보내지 않았습니다."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "도달 거리 통계를 다시 설정합니까? 안테나를 바꾼 뒤에 하십시오. FLARM이 다시 모읍니다."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM이 다시 설정을 확인하지 않았습니다."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "최소 도달 거리 미만"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"이 채널에서 평균 도달 거리가 FLARM 최소값보다 짧은 측정 섹터: 전방 2 nm, 측방과 후방 1 nm. 안테나 설치를 확인하십시오"
+"."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "도달 거리 설정"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "FLARM은 이 거리 너머의 항공기를 보고하지 않습니다. 그린 범위 안에 있으면 그래프는 파선 원으로 보입니다."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "무제한"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"비행 중 다른 FLARM 항공기와의 접촉. 지나간 섹터마다 한 번, 그곳에서 수신된 가장 먼 거리로 셉니다. 섹터는 그 거리의 큰 절반"
+"의 평균을, 가로선은 가장 먼 거리를 보입니다."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "추정 도달 거리가 FLARM 최소값보다 짧은 측정 섹터: 전방 2 nm, 측방과 후방 1 nm. 안테나 설치를 확인하십시오."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "도달 거리 추정을 다시 설정합니까? 안테나를 바꾼 뒤에 하십시오. XCSoar가 다시 모읍니다."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM 도달 거리 추정"
