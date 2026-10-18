@@ -1115,7 +1115,6 @@ msgstr "BLE Anschluss"
 msgid "Bluetooth server"
 msgstr "Bluetoothserver"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Eingebautes GPS & Sensoren"
 
@@ -1759,7 +1758,6 @@ msgstr "ADSB vertikale Reichweite"
 msgid "Ack Day"
 msgstr "Best. Tag"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1953,7 +1951,6 @@ msgstr "Besatzung"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Alle Massen, die über das Leergewicht hinaus in den Segelflieger geladen werden, einschließlich Pilot und Copilot, aber ohne Wasserballast."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Ballast"
 
@@ -2155,7 +2152,6 @@ msgstr "Team-Code"
 msgid "Task Calc"
 msgstr "Aufgaben Berechnung"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analyse"
 
@@ -2192,7 +2188,6 @@ msgstr "Überland-Geschwindigkeit"
 msgid "Warnings"
 msgstr "Warnungen"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Kontrollliste"
 
@@ -2399,14 +2394,12 @@ msgstr "Falsches Passwort."
 msgid "Enter a new password"
 msgstr "Geben Sie ein neues Passwort ein"
 
-#, no-c-format
 msgid "Status"
 msgstr "Status"
 
 msgid "Flight"
 msgstr "Flug"
 
-#, no-c-format
 msgid "System"
 msgstr "System"
 
@@ -2658,7 +2651,6 @@ msgstr "Fliege zu"
 msgid "Pan To"
 msgstr "Pan Modus"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Wegpunkt"
 
@@ -3339,7 +3331,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Die Bildschirmauflösung passt die Stärke der Linien, Schriftgrößen, Größe der Landemarkierung und anderer Symbole an."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -5193,7 +5184,6 @@ msgstr "Optimiert"
 msgid "No alternates available"
 msgstr "Keine Alternativen verfügbar"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternativen"
 
@@ -10900,22 +10890,18 @@ msgstr ""
 "Mit dem Wi-Fi des Geräts verbinden, um die Flüge dieses FLARM "
 "herunterzuladen."
 
-#, no-c-format
 msgctxt "Screen edge"
 msgid "Top"
 msgstr "Oben"
 
-#, no-c-format
 msgctxt "Screen edge"
 msgid "Right"
 msgstr "Rechts"
 
-#, no-c-format
 msgctxt "Screen edge"
 msgid "Bottom"
 msgstr "Unten"
 
-#, no-c-format
 msgctxt "Screen edge"
 msgid "Left"
 msgstr "Links"
@@ -11144,12 +11130,15 @@ msgstr "Audio-Vario"
 msgid "OpenVario audio vario daemon"
 msgstr "OpenVario-Audio-Vario-Dienst"
 
+#, no-c-format
 msgid "Max. temp. from forecast"
 msgstr "Max. Temp. aus Vorhersage"
 
+#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr "Füllt Max. Temp. in den Flug Einstellungen aus der DWD-Vorhersage von heute für die nächste MOSMIX-Station.  Braucht eine Position und lädt einmal am Tag; kein Konto nötig."
 
+#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr "Die Höchsttemperatur am Boden für heute. Eine Trockenadiabate von ihr gegen die im Steigen gemessene Außentemperatur ergibt die geschätzte Arbeitshöhe; für die Wolkenbasis braucht es zusätzlich einen Feuchtefühler. Beide stehen auf der Temperaturkurve im Analyse-Dialog, sobald der Segler die Schicht durchstiegen hat."
 
@@ -11221,57 +11210,74 @@ msgstr "XCSoar-Aufgabe"
 
 #. a PowerFLARM keeps statistics of its own; for any other FLARM,
 #. XCSoar estimates the range from the traffic it reports
+#, no-c-format
 msgid "Range statistics"
 msgstr "Reichweitenstatistik"
 
+#, no-c-format
 msgid "Antenna"
 msgstr "Antenne"
 
+#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
 msgstr "Das FLARM führt die Statistik für jeden seiner beiden Funkkanäle getrennt."
 
+#, no-c-format
 msgid "Data points"
 msgstr "Messpunkte"
 
+#, no-c-format
 msgid "Period"
 msgstr "Zeitraum"
 
+#, no-c-format
 msgid "FLARM range"
 msgstr "FLARM-Reichweite"
 
+#, no-c-format
 msgid "The FLARM did not send its range statistics."
 msgstr "Das FLARM hat seine Reichweitenstatistik nicht gesendet."
 
+#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr "Reichweitenstatistik zurücksetzen? Das ist nach einer Änderung an den Antennen sinnvoll; das FLARM sammelt sie dann neu."
 
+#, no-c-format
 msgid "The FLARM did not confirm the reset."
 msgstr "Das FLARM hat das Zurücksetzen nicht bestätigt."
 
+#, no-c-format
 msgid "Below minimum range"
 msgstr "Unter Mindestreichweite"
 
+#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr "Gemessene Sektoren dieses Kanals, deren mittlere Reichweite unter dem Minimum von FLARM liegt: 2 NM nach vorn, 1 NM zur Seite und nach hinten.  Dann den Antenneneinbau prüfen."
 
+#, no-c-format
 msgid "Range setting"
 msgstr "Reichweiteneinstellung"
 
+#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr "Das FLARM meldet keine Luftfahrzeuge jenseits dieser Entfernung.  Liegt sie im dargestellten Bereich, zeigt der Plot sie als gestrichelten Kreis."
 
+#, no-c-format
 msgid "Unlimited"
 msgstr "Unbegrenzt"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr "Kontakte mit anderen FLARM-Luftfahrzeugen im Flug, einmal gezählt in jedem Sektor, den sie durchquert haben, mit der größten Entfernung, in der sie dort empfangen wurden.  Der Sektor zeigt den Mittelwert der größeren Hälfte dieser Entfernungen, die Linie darüber die größte."
 
+#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr "Gemessene Sektoren, deren geschätzte Reichweite unter dem Minimum von FLARM liegt: 2 NM nach vorn, 1 NM zur Seite und nach hinten.  Dann den Antenneneinbau prüfen."
 
+#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr "Reichweitenschätzung zurücksetzen? Das ist nach einer Änderung an der Antenne sinnvoll; XCSoar sammelt sie dann neu."
 
+#, no-c-format
 msgid "FLARM range estimate"
 msgstr "FLARM-Reichweitenschätzung"
 

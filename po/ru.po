@@ -1106,7 +1106,6 @@ msgstr "TCP порт"
 msgid "Bluetooth server"
 msgstr "Сервер блютуз"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Встроенный GPS и другие сенсоры"
 
@@ -1750,7 +1749,6 @@ msgstr "ВертICALная область ADSB"
 msgid "Ack Day"
 msgstr "ACK День"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Настройки"
 
@@ -1944,7 +1942,6 @@ msgstr "Команда"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Общий вес, загруженный на планер сверх его пустого веса, включая пилота и копилота, но не водяной балласт."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Балласт"
 
@@ -2146,7 +2143,6 @@ msgstr "Код команды"
 msgid "Task Calc"
 msgstr "Расч зад"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Анализ"
 
@@ -2183,7 +2179,6 @@ msgstr "Достигн скорость в задаче"
 msgid "Warnings"
 msgstr "Предупреждения"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Перечень"
 
@@ -2390,14 +2385,12 @@ msgstr "Пароль"
 msgid "Enter a new password"
 msgstr "Введите новый пароль"
 
-#, no-c-format
 msgid "Status"
 msgstr "Статус"
 
 msgid "Flight"
 msgstr "Полёт"
 
-#, no-c-format
 msgid "System"
 msgstr "СИСТЕМА"
 
@@ -2648,7 +2641,6 @@ msgstr "Лететь к"
 msgid "Pan To"
 msgstr "Панирование к"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Точка маршрута"
 
@@ -3332,7 +3324,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Разрешение экрана используется для адаптации ширины линий, размера шрифта, размера посадочной площадки и т.д."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Автоматически"
 
@@ -5187,7 +5178,6 @@ msgstr "Оптимизировано"
 msgid "No alternates available"
 msgstr "Нет альтернативных точек"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Альтернативы"
 

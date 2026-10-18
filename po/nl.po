@@ -1109,7 +1109,6 @@ msgstr "BLE poort"
 msgid "Bluetooth server"
 msgstr "Bluetooth-server"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Ingebouwde GPS & sensoren"
 
@@ -1753,7 +1752,6 @@ msgstr "ADSB verticale bereik"
 msgid "Ack Day"
 msgstr "Acc Dag"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -1948,7 +1946,6 @@ msgstr "Overschrijven van alle InfoBoxes in deze set?"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Kies een bestand om toe te voegen of te downloaden."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Ballast"
 
@@ -2150,7 +2147,6 @@ msgstr "Teamcode"
 msgid "Task Calc"
 msgstr "Opdr Berekening"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analyse"
 
@@ -2187,7 +2183,6 @@ msgstr "Opdrachtsnelheid"
 msgid "Warnings"
 msgstr "Waarschuwingen"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Checklist"
 
@@ -2394,14 +2389,12 @@ msgstr "Fout wachtwoord."
 msgid "Enter a new password"
 msgstr "Geef een nieuw wachtwoord op"
 
-#, no-c-format
 msgid "Status"
 msgstr "Status"
 
 msgid "Flight"
 msgstr "Vlucht"
 
-#, no-c-format
 msgid "System"
 msgstr "Systeem"
 
@@ -2654,7 +2647,6 @@ msgstr "Ga naar"
 msgid "Pan To"
 msgstr "Pan Naar"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Keerpunt"
 
@@ -3342,7 +3334,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "De schermresolutie wordt gebruikt om de regelbreedte, tekst- en veldgrootte aan te passen."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -5198,7 +5189,6 @@ msgstr "Geoptimaliseerd"
 msgid "No alternates available"
 msgstr "Geen alternatieven beschikbaar"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternatieven"
 

@@ -1090,7 +1090,6 @@ msgstr "Cổng BLE"
 msgid "Bluetooth server"
 msgstr "Server Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS tích hợp & cảm biến"
 
@@ -1733,7 +1732,6 @@ msgstr "ADSB vertical range | phạm vi dọc ADSB"
 msgid "Ack Day"
 msgstr "Xác nhận Ngày"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Cài đặt"
 
@@ -1927,7 +1925,6 @@ msgstr "Phi hành đoàn"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Tổng khối lượng đã tải lên tàu lượn bao gồm trọng lượng rỗng, phi công và đồng hành viên, nhưng không bao gồm nước ballast."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Túi dằn"
 
@@ -2129,7 +2126,6 @@ msgstr "Mã đội"
 msgid "Task Calc"
 msgstr "Tính toán nhiệm vụ"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Phân tích"
 
@@ -2166,7 +2162,6 @@ msgstr "Tốc độ thi"
 msgid "Warnings"
 msgstr "Các cảnh báo"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Danh sách kiểm tra"
 
@@ -2372,14 +2367,12 @@ msgstr "Mật khẩu sai."
 msgid "Enter a new password"
 msgstr "Nhập mật khẩu mới"
 
-#, no-c-format
 msgid "Status"
 msgstr "Tình trạng"
 
 msgid "Flight"
 msgstr "Chuyến bay"
 
-#, no-c-format
 msgid "System"
 msgstr "Hệ thống"
 
@@ -2631,7 +2624,6 @@ msgstr "Đi đến"
 msgid "Pan To"
 msgstr "Quay về"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Điểm đường bay"
 
@@ -3297,7 +3289,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Độ phân giải màn hình được sử dụng để điều chỉnh độ rộng của các đường, kích cỡ chữ, và kích thước hạ cánh."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Tự động"
 
@@ -5134,7 +5125,6 @@ msgstr "Đã tối ưu hóa"
 msgid "No alternates available"
 msgstr "Không có điểm dự phòng sẵn có"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Điểm dự phòng"
 

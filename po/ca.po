@@ -1108,7 +1108,6 @@ msgstr "Port BLE"
 msgid "Bluetooth server"
 msgstr "Servidor Bluetooth"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "GPS & sensors integrats"
 
@@ -1751,7 +1750,6 @@ msgstr "Raona vertical ADSB"
 msgid "Ack Day"
 msgstr "Dia d'acceptació"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Configuracions"
 
@@ -1947,7 +1945,6 @@ msgstr "Equips"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Tota la massa carregada al planador més allà del pes buit, inclòs el pilot i copilots, però no l'last d'aigua."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Llast"
 
@@ -2149,7 +2146,6 @@ msgstr "Codi d'equip"
 msgid "Task Calc"
 msgstr "Calcul de tasca"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Anàlisi"
 
@@ -2186,7 +2182,6 @@ msgstr "Velocitat de tasca"
 msgid "Warnings"
 msgstr "Avísos"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Llistat de controls"
 
@@ -2393,14 +2388,12 @@ msgstr "Contrasenya incorrecta."
 msgid "Enter a new password"
 msgstr "Introdueix una nova contrasenya"
 
-#, no-c-format
 msgid "Status"
 msgstr "Estat"
 
 msgid "Flight"
 msgstr "Viatge"
 
-#, no-c-format
 msgid "System"
 msgstr "Sistemes"
 
@@ -2652,7 +2645,6 @@ msgstr "Anar a"
 msgid "Pan To"
 msgstr "Amplia l'angle fins a"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Punt de ruta"
 
@@ -3336,7 +3328,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "La resolució de visualització s'usa per adaptar la mida de les línies, el tamany de la lletra, el tamany dels aterrages i més."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Automàtic"
 
@@ -5200,7 +5191,6 @@ msgstr "Optimitzat"
 msgid "No alternates available"
 msgstr "Sense alternatives disponibles"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternatives"
 

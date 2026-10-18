@@ -1104,7 +1104,6 @@ msgstr "BLE port"
 msgid "Bluetooth server"
 msgstr "Bluetooth szerver"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Beépített GPS és érzékelők"
 
@@ -1746,7 +1745,6 @@ msgstr "ADSB vertikális tartománya"
 msgid "Ack Day"
 msgstr "Napi nyugta"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Rep. tényezők"
 
@@ -1938,7 +1936,6 @@ msgstr "Személyzet"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Összes töltött tömeg a vitorlázógép üres tömegén kívül, beleértve a pilátót és a második pilátot, de nem a vízballaszt."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Ballaszt"
 
@@ -2140,7 +2137,6 @@ msgstr "Csapatkód"
 msgid "Task Calc"
 msgstr "Feladatkezelő"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Elemzés"
 
@@ -2177,7 +2173,6 @@ msgstr "Feladat sebessége"
 msgid "Warnings"
 msgstr "Riasztás"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Ellenőrző lista"
 
@@ -2384,14 +2379,12 @@ msgstr "Jelszó"
 msgid "Enter a new password"
 msgstr "Adjon meg új jelszót"
 
-#, no-c-format
 msgid "Status"
 msgstr "Státusz"
 
 msgid "Flight"
 msgstr "Repülés"
 
-#, no-c-format
 msgid "System"
 msgstr "Rendszer"
 
@@ -2641,7 +2634,6 @@ msgstr "Menj"
 msgid "Pan To"
 msgstr "Mozgatás mód"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Fordulópont"
 
@@ -3323,7 +3315,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Képernyő felbontása a vonalvastagságok, betűméretek és egyebek megfelelő megjelenítéséhez."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "automata"
 
@@ -5164,7 +5155,6 @@ msgstr "Optimalizált"
 msgid "No alternates available"
 msgstr "Nincs alternatív verzió"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Kitérők"
 

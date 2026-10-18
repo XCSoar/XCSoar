@@ -1100,7 +1100,6 @@ msgstr "BLE port"
 msgid "Bluetooth server"
 msgstr "Bluetooth server"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Vestavěné GPS @ sensory"
 
@@ -1743,7 +1742,6 @@ msgstr "Výšková oblast ADSB"
 msgid "Ack Day"
 msgstr "Deaktivuj"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Nastavení"
 
@@ -1935,7 +1933,6 @@ msgstr "Posádka"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Všechna zátěž, přidaná k prázdné hmotnosti kluzáku, včetně pilota a kopilota, avšak bez vodní zátěže."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Zátěž"
 
@@ -2139,7 +2136,6 @@ msgstr ""
 "Stav\n"
 "Úloha"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Analýza"
 
@@ -2176,7 +2172,6 @@ msgstr "Rychlost úlohy"
 msgid "Warnings"
 msgstr "Varování"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Kontrolní seznam"
 
@@ -2383,14 +2378,12 @@ msgstr "Nesprávné heslo"
 msgid "Enter a new password"
 msgstr "Zadejte nové heslo"
 
-#, no-c-format
 msgid "Status"
 msgstr "Stav"
 
 msgid "Flight"
 msgstr "Let"
 
-#, no-c-format
 msgid "System"
 msgstr "Systém"
 
@@ -2641,7 +2634,6 @@ msgstr "GoTo"
 msgid "Pan To"
 msgstr "Posun mapy"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Bod trati"
 
@@ -3313,7 +3305,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Nastavení rozlišení displeje je používáno k adaptaci šíře linek, velikosti fontů, velikosti nouzových ploch a dalším úpravám."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Auto"
 
@@ -5151,7 +5142,6 @@ msgstr "Optimalizuj"
 msgid "No alternates available"
 msgstr "Nedostupné alternativy"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Alternativy"
 

@@ -1113,7 +1113,6 @@ msgstr "BLE υπολογιστικό"
 msgid "Bluetooth server"
 msgstr "Bluetooth διαδραστής"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Περιεχόμενο για το GPS & συνοπτικά"
 
@@ -1757,7 +1756,6 @@ msgstr "Μέγιστη κύματο-πλάτων ADSB"
 msgid "Ack Day"
 msgstr "ACK μέρα"
 
-#, no-c-format
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
@@ -1953,7 +1951,6 @@ msgstr "Μέρος της ομάδας"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Πλήθος που εισάγεται στο ανεμοπέτρινο πέρσοναλ μεταυξημένων χρηστών, προστίθενται οι βάρησης του πιλότου και του σύμβουλου, αλλά δεν περιλαμβάνεται η υδατινή βάρηση."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "Έρμα"
 
@@ -2155,7 +2152,6 @@ msgstr "Κωδικός Ομάδας"
 msgid "Task Calc"
 msgstr "Υπολ. Διαδρομής"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "Ανάλυση"
 
@@ -2192,7 +2188,6 @@ msgstr "Ταχύτητα Διαδρομής"
 msgid "Warnings"
 msgstr "Προειδοποιήσεις"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "Φόρμαλισμος"
 
@@ -2400,14 +2395,12 @@ msgstr "Κωδικός"
 msgid "Enter a new password"
 msgstr "Εισάγετε ένα νέο μύθμα"
 
-#, no-c-format
 msgid "Status"
 msgstr "Κατάσταση"
 
 msgid "Flight"
 msgstr "Πτήση"
 
-#, no-c-format
 msgid "System"
 msgstr "Σύστημα"
 
@@ -2659,7 +2652,6 @@ msgstr "Πήγα"
 msgid "Pan To"
 msgstr "Μετάβαση στο"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "Σημεία"
 
@@ -3346,7 +3338,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "Η διαστάση της οθόνης χρησιμοποιείται για την αρμοδιότητα στην εκτίμηση πλυμάτων, μέγεθος κειμένου και άλλες διαδικασίες."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "Αυτόματο"
 
@@ -5226,7 +5217,6 @@ msgstr "Επιτρεπτές"
 msgid "No alternates available"
 msgstr "Δεν υπάρχουν αντικαταστάσεις διαθέσιμες"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "Αντικαταστάσεις"
 

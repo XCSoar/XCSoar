@@ -1103,7 +1103,6 @@ msgstr "BLE 포트"
 msgid "Bluetooth server"
 msgstr "블루투스서버"
 
-#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "내장GPS&센서"
 
@@ -1745,7 +1744,6 @@ msgstr "ADSB 수직 범위"
 msgid "Ack Day"
 msgstr "날짜"
 
-#, no-c-format
 msgid "Settings"
 msgstr "설정"
 
@@ -1936,7 +1934,6 @@ msgstr "크루"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "조종사와 부조종사를 포함하여 Empty 중량 이상으로 글라이더에 실린 무게(물 밸러스트 제외)."
 
-#, no-c-format
 msgid "Ballast"
 msgstr "밸러스트"
 
@@ -2140,7 +2137,6 @@ msgstr "팀코드"
 msgid "Task Calc"
 msgstr "타스크계산"
 
-#, no-c-format
 msgid "Analysis"
 msgstr "비행분석"
 
@@ -2177,7 +2173,6 @@ msgstr "타스크속도"
 msgid "Warnings"
 msgstr "경고"
 
-#, no-c-format
 msgid "Checklist"
 msgstr "체크리스트"
 
@@ -2382,7 +2377,6 @@ msgstr "잘못된 암호."
 msgid "Enter a new password"
 msgstr "새 비밀번호 입력"
 
-#, no-c-format
 msgid "Status"
 msgstr "상태"
 
@@ -2391,7 +2385,6 @@ msgstr ""
 "기체\n"
 "(Flight)"
 
-#, no-c-format
 msgid "System"
 msgstr "시스템"
 
@@ -2637,7 +2630,6 @@ msgstr "목표로 설정"
 msgid "Pan To"
 msgstr "넓게 보기"
 
-#, no-c-format
 msgid "Waypoint"
 msgstr "웨이포인트"
 
@@ -3289,7 +3281,6 @@ msgid "The display resolution is used to adapt line widths, font size, landable 
 msgstr "해상도조정: 표시되는 선의 굵기와 글자크기가 달라진다."
 
 #. the Kobo has no time zone configuration which we could follow
-#, no-c-format
 msgid "Automatic"
 msgstr "자동"
 
@@ -5090,7 +5081,6 @@ msgstr "최적화"
 msgid "No alternates available"
 msgstr "대체 항목이 없습니다"
 
-#, no-c-format
 msgid "Alternates"
 msgstr "대체지"
 
