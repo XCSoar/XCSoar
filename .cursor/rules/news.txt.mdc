@@ -33,6 +33,10 @@ notes only list bugs that were present in 7.44.
 - If a **new feature** in this version had bugs during development, fold
   the final behaviour into the feature bullet (or omit); do not add a
   separate `fix` line
+- What's New shows only the first version block. Do not repeat a fix
+  already shipped in a patch release of the previous minor (7.46 must
+  not restate 7.45.1–7.45.3). Keep those patch blocks in the cumulative
+  file, below the unreleased version
 
 ```text
 # BAD in Version 7.45 (only happened on 7.45 development builds)
