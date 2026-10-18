@@ -36,6 +36,7 @@ TestReader()
   ok1(equals(plane.dry_mass_obsolete, 302));
   ok1(equals(plane.empty_mass, 212));
   ok1(equals(plane.max_ballast, 100));
+  ok1(equals(plane.max_takeoff_mass, 0));
   ok1(plane.dump_time == 90);
   ok1(equals(plane.max_speed, 41.666));
   ok1(equals(plane.wing_area, 9.8));
@@ -65,6 +66,7 @@ TestWriter()
   plane.dry_mass_obsolete = 302;
   plane.empty_mass = 212;
   plane.max_ballast = 100;
+  plane.max_takeoff_mass = 550;
   plane.dump_time = 90;
   plane.max_speed = 41.666;
   plane.wing_area = 9.8;
@@ -78,7 +80,7 @@ TestWriter()
   bool found1 = false, found2 = false, found3 = false, found4 = false;
   bool found5 = false, found6 = false, found7 = false, found8 = false;
   bool found9 = false, found10 = false, found11 = false, found12 = false;
-  bool found13 = false, found14 = false;
+  bool found13 = false, found14 = false, found15 = false;
 
   char *line;
   while ((line = reader.ReadLine()) != NULL) {
@@ -100,6 +102,8 @@ TestWriter()
       found8 = true;
     if (StringIsEqual(line, "MaxBallast=\"100.000000\""))
       found9 = true;
+    if (StringIsEqual(line, "MaxTakeoffMass=\"550.000000\""))
+      found15 = true;
     if (StringIsEqual(line, "DumpTime=\"90.000000\""))
       found10 = true;
     if (StringIsEqual(line, "MaxSpeed=\"41.666000\""))
@@ -114,7 +118,7 @@ TestWriter()
     count++;
   }
 
-  ok1(count == 14);
+  ok1(count == 15);
   ok1(found1);
   ok1(found2);
   ok1(found3);
@@ -129,11 +133,12 @@ TestWriter()
   ok1(found12);
   ok1(found13);
   ok1(found14);
+  ok1(found15);
 }
 
 int main()
 try {
-  plan_tests(35);
+  plan_tests(37);
 
   TestReader();
   TestWriter();

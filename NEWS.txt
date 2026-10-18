@@ -276,6 +276,9 @@ Version 7.46 - not yet released
   - keep the QNH of an LXNAV S-series vario from creeping by about
     0.15 hPa on every reconnect
 * dialogs
+  - add an MTOW field to the plane profile, in the same mass units
+    as Empty Mass. Leave it at zero when the maximum takeoff weight
+    is not known
   - adopt the vario's pilot weight into Flight Setup crew when only
     that weight changes and the polar coefficients stay the same
   - show each repository file as its name and its description, and

@@ -23,6 +23,9 @@ struct Plane
   double empty_mass;
   double dry_mass_obsolete; // unused entry for plane file compatibility. to be removed 2023..
   double max_ballast;
+
+  /** Maximum takeoff weight (kg).  Zero when the plane file has none. */
+  double max_takeoff_mass;
   double max_speed;
   double wing_area;
 
