@@ -158,6 +158,10 @@ Version 7.46 - not yet released
   - inset the map overlays by the same margin as the menu, Quick Menu
     and zoom buttons
 * airspace
+  - speak airspace warnings ("Airspace near.", "Airspace above."
+    or "Airspace inside.") instead of the warning beep, with a
+    pause between "Airspace" and "near" or "above", and repeat
+    that phrase while the warning persists; English only
   - keep Ack Day for the rest of the day, including a surrounding
     airspace already overhead, and across a replay time jump
   - fill airspace with a transparent colour; hatch patterns and the

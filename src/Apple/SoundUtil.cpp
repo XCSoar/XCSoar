@@ -87,6 +87,9 @@ GetFileName(const char *resource_name)
     { "IDR_WAV_ABOVE", "above" },
     { "IDR_WAV_BELOW", "below" },
     { "IDR_WAV_LEVEL", "level" },
+    { "IDR_WAV_AIRSPACE_NEAR", "airspace_near" },
+    { "IDR_WAV_AIRSPACE_ABOVE", "airspace_above" },
+    { "IDR_WAV_AIRSPACE_INSIDE", "airspace_inside" },
   };
 
   for (const auto &i : files)

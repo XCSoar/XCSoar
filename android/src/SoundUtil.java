@@ -176,6 +176,12 @@ public final class SoundUtil {
       SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_ABOVE", R.raw.above);
       SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_BELOW", R.raw.below);
       SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_LEVEL", R.raw.level);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRSPACE_NEAR",
+          R.raw.airspace_near);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRSPACE_ABOVE",
+          R.raw.airspace_above);
+      SPOKEN_RAW_RES_ID_BY_TOKEN.put("IDR_WAV_AIRSPACE_INSIDE",
+          R.raw.airspace_inside);
     }
 
     private static final Map<String, Integer> POOL_SAMPLE_ID_BY_TOKEN =
