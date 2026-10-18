@@ -185,6 +185,12 @@ class LXDevice: public AbstractDevice
   std::optional<double> pending_empty_mass;
 
   /**
+   * Maximum takeoff weight waiting for a cached POLAR.  Zero is never
+   * stored here: that would clear the vario's maximum weight.
+   */
+  std::optional<double> pending_max_takeoff_mass;
+
+  /**
    * Tracked polar values to detect when plane profile changes.
    */
   struct TrackedPolar {
@@ -365,6 +371,7 @@ public:
     polar_sync_notified = false;
     device_polar.valid = false;
     pending_empty_mass.reset();
+    pending_max_takeoff_mass.reset();
     last_sent_target_name.clear();
     last_sent_target_location = GeoPoint::Invalid();
     last_task_type = TaskType::NONE;
@@ -513,6 +520,8 @@ public:
   bool PutMacCready(double mc, OperationEnvironment &env) override;
   bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
   bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
+  bool PutMaxTakeoffMass(double max_takeoff_mass,
+                         OperationEnvironment &env) override;
   bool PutQNH(const AtmosphericPressure &pres,
               OperationEnvironment &env) override;
 

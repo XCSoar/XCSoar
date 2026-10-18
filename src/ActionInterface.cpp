@@ -216,6 +216,20 @@ ActionInterface::SetEmptyMass(double empty_mass, bool to_devices) noexcept
 }
 
 void
+ActionInterface::SetMaxTakeoffMass(double max_takeoff_mass,
+                                  bool to_devices) noexcept
+{
+  SetComputerSettings().plane.max_takeoff_mass = max_takeoff_mass;
+
+  if (!(to_devices && max_takeoff_mass > 0 &&
+        backend_components && backend_components->devices))
+    return;
+
+  MessageOperationEnvironment env;
+  backend_components->devices->PutMaxTakeoffMass(max_takeoff_mass, env);
+}
+
+void
 ActionInterface::SetMacCready(double mc, bool to_devices) noexcept
 {
   // Repeated adjustment of MC with the +/- UI elements could result in

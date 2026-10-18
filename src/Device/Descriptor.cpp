@@ -1032,6 +1032,41 @@ DeviceDescriptor::PutEmptyMass(double empty_mass, OperationEnvironment &env) noe
 }
 
 bool
+DeviceDescriptor::PutMaxTakeoffMass(double max_takeoff_mass,
+                                   OperationEnvironment &env) noexcept
+{
+  assert(InMainThread());
+
+  /* Zero means the plane file has no maximum takeoff weight.  Do not
+     write that: an empty field is stored as zero on an LXNAV vario. */
+  if (max_takeoff_mass <= 0)
+    return true;
+
+  if (device == nullptr || !config.sync_to_device ||
+      settings_sent.ComparePolarMaximumMass(max_takeoff_mass))
+    return true;
+
+  if (!Borrow())
+    return false;
+
+  try {
+    const ScopeReturnDevice restore(*this, env);
+    if (!device->PutMaxTakeoffMass(max_takeoff_mass, env))
+      return false;
+  } catch (OperationCancelled) {
+    return false;
+  } catch (...) {
+    LogError(std::current_exception(), "PutMaxTakeoffMass() failed");
+    return false;
+  }
+
+  settings_sent.polar_maximum_mass = max_takeoff_mass;
+  settings_sent.polar_maximum_mass_available.Update(GetClock());
+
+  return true;
+}
+
+bool
 DeviceDescriptor::PutPolar(const GlidePolar &polar,
                            OperationEnvironment &env) noexcept
 {

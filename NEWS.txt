@@ -234,6 +234,9 @@ Version 7.46 - not yet released
   - fix the temperature trace when the forecast temperature is
     changed after a climb above 9,900 m #3218
 * devices
+  - send the active plane's maximum takeoff weight to an LXNAV
+    vario when it changes, and when another plane that has one is
+    selected. Zero is not sent
   - download flights from an LXNAV logger over Bluetooth Low Energy
     in checked blocks, and fall back to line by line when the logger
     does not support that; a cable or ordinary Bluetooth stays line

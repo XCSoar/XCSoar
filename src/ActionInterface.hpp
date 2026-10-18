@@ -82,6 +82,16 @@ void
 SetEmptyMass(double empty_mass, bool to_devices=true) noexcept;
 
 /**
+ * Set the maximum takeoff weight of the active plane.
+ *
+ * @param max_takeoff_mass the new maximum takeoff weight [kg].  Zero
+ * is stored and is not sent: the device would keep it as zero.
+ * @param to_devices send the new setting to all devices?
+ */
+void
+SetMaxTakeoffMass(double max_takeoff_mass, bool to_devices=true) noexcept;
+
+/**
  * Configure a new MacCready setting in #ComputerSettings, and
  * forward it to all XCSoar modules that want it. Also switch
  * to manual MC mode.

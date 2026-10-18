@@ -294,6 +294,15 @@ LXDevice::OnCalculatedUpdate([[maybe_unused]] const MoreData &basic,
   if (pending_empty)
     PutEmptyMass(*pending_empty, env);
 
+  std::optional<double> pending_mtow;
+  {
+    const std::lock_guard lock{mutex};
+    if (pending_max_takeoff_mass && device_polar.valid)
+      pending_mtow = pending_max_takeoff_mass;
+  }
+  if (pending_mtow)
+    PutMaxTakeoffMass(*pending_mtow, env);
+
   TrackPolarChanges(calculated);
 }
 
@@ -338,6 +347,11 @@ LXDevice::PutPolar(const GlidePolar &polar,
 
       polar_load = device_polar.polar_load;
       max_weight = device_polar.max_weight;
+      if (pending_max_takeoff_mass && *pending_max_takeoff_mass > 0) {
+        max_weight = *pending_max_takeoff_mass;
+        device_polar.max_weight = max_weight;
+        pending_max_takeoff_mass.reset();
+      }
       glider_name = device_polar.name;
       stall = device_polar.stall;
     }

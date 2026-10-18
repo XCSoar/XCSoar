@@ -196,6 +196,7 @@ LoadFile(Path path, bool edited_active) noexcept
   const bool same_plane = Profile::GetPathIsEqual("PlanePath", path);
   const double previous_empty =
     settings.polar.glide_polar_task.GetEmptyMass();
+  const double previous_mtow = settings.plane.max_takeoff_mass;
 
   if (!PlaneGlue::ReadFile(settings.plane, path))
     return false;
@@ -203,6 +204,9 @@ LoadFile(Path path, bool edited_active) noexcept
   const double new_empty = settings.plane.empty_mass;
   const bool empty_changed = previous_empty > new_empty + 0.1 ||
                              previous_empty < new_empty - 0.1;
+  const double new_mtow = settings.plane.max_takeoff_mass;
+  const bool mtow_changed = previous_mtow > new_mtow + 0.1 ||
+                            previous_mtow < new_mtow - 0.1;
 
   Profile::SetPath("PlanePath", path);
 
@@ -212,6 +216,13 @@ LoadFile(Path path, bool edited_active) noexcept
      for an edit of this plane and wrong for a different glider. */
   if (edited_active && empty_changed)
     ActionInterface::SetEmptyMass(new_empty);
+
+  /* After the empty mass, so this polar sentence keeps that change.
+     Zero is not a weight the device should store. */
+  if (new_mtow > 0 &&
+      ((edited_active && mtow_changed) ||
+       (!edited_active && !same_plane)))
+    ActionInterface::SetMaxTakeoffMass(new_mtow);
 
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
