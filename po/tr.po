@@ -2056,9 +2056,11 @@ msgstr "Bilgi kutusu yapıştırma kümesi"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopyala bu kümenin tüm bilgi kutularını hatırlar, Yapıştır başka bir kümeni"
+"n bilgi kutularını onlarla değiştirir."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Genel ayarlardan devral"
 
 msgid "Invalid"
 msgstr "Geçersiz"
@@ -2743,17 +2745,17 @@ msgstr "Yorum"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Sabit metin"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Pilotun girdiği başlık, değer ve yorum. Düzenlemek için dokunun."
 
 msgid "Title"
-msgstr ""
+msgstr "Başlık"
 
 msgid "Value"
-msgstr ""
+msgstr "Değer"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4397,10 +4399,10 @@ msgid "Reference used for start max height rule."
 msgstr "Başlangıç maksimum yükseklik kuralı için kullanılan referans."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "En yakın noktaya git"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Kalkış ve varış bölgelerinin en yakın noktasına gider."
 
 msgid "Finish min. height"
 msgstr "Bitiş minimum yükseklik"
@@ -10981,21 +10983,21 @@ msgstr "El ile"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Kandaki oksijen"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Bluetooth nabız oksimetresinden, yüzde olarak kan oksijen doygunluğu."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Son kullanılan yol noktaları"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Bu FLARM'dan uçuşları indirmek için aygıtın Wi-Fi ağına bağlanın."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Yakın harita ölçeklerinde daire modunda gösterilirken salyangoz izinin rüzgârla sürüklenip sürüklenmeyeceğini belirler. Kapalıyken iz rüzgâr sürüklenmesi telafisi olmadan kalır. Dolaşmada bu, izdüşürülen iz eğrisi için de geçerlidir: Açık onu hava kütlesine göre tutar; Kapalı rüzgârı dahil eder."
 
@@ -11031,20 +11033,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Trafik radarını açar ve ana ekrandaki konumunu seçer. Hedefin hedef traktingenine göre traktingenin yönünü bir ok ile ve hedefin sizinle olan yüksekliğinin yukarı veya aşağı bir üçgeni ile gösterir. Tüm modlarda, hedefin renkleri tehlike seviyesini gösterir."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Ekran çözünürlüğü"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Ekran parlaklığı"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Ekran parlaklığını ayarlayın."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "Yazmak ek izin istediği için ekran parlaklığı salt okunurdur."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Otomatik"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11059,10 +11061,10 @@ msgstr "Bu, ulaşım, atık varış, iptal ve alternatif hesaplamalarında kulla
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Alternatif modu: Otomatik"
 
 msgid "Paste"
-msgstr ""
+msgstr "Yapıştır"
 
 #, c-format
 msgid ""
@@ -11166,105 +11168,122 @@ msgid "%u min"
 msgstr "%u dk"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Desteklenen hizmet bulunamadı"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Seçilen systemd birimleri kurulu değil."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Kullanılamıyor"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Başlatılıyor..."
 
 msgid "Stopping..."
 msgstr "Durduruluyor…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Yeniden yükleniyor..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Başarısız"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Aç"
 
 msgid "Restart"
-msgstr ""
+msgstr "Yeniden başlat"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Kapat"
 
 msgid "System service"
-msgstr ""
+msgstr "Sistem hizmeti"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH sunucusu"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Uzak terminal"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Algılayıcılar"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario algılayıcı hizmeti"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Ses Vario"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario ses vario hizmeti"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Öngörüden en yüksek sıcaklık"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"O günün DWD öngörüsünden en yakın MOSMIX istasyonunun en yüksek sıcaklığını"
+" uçuş ayarına yazar. Konum gerekir ve günde bir kez indirilir; hesap yok."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Günün en yüksek yer sıcaklığı. Ondan, tırmanışta ölçülen dış hava sıcaklığı"
+"na çizilen kuru adyabat tahmini termik tavanını verir; bulut tabanı için ne"
+"m algılayıcısı da gerekir. İkisi de, planör katmanı geçtikten sonra Analiz "
+"iletişim kutusunun sıcaklık izi sayfasında çizilir."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Başlangıçta görev MC"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Güvenlik MC L/D oranı"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Sesli uyarılar"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"FLARM çarpışma alarmlarını, aciliyet, saat yönü ve trafiğin üstte mi altta "
+"mı olduğu ile okur: \"Traffic urgent! Three o'clock. Above.\" Engel ve alar"
+"m bölgesi alarmları okunmaz."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Sesli uyarıyı dene"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Hız komutu anahtarı"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "XCSoar, varyometrenin düz uçuş/tırmanış bildirimini nasıl kullanır."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Uçuş kipi"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Uçuşta varyometrenin düz uçuş/tırmanış bildirimi uçuş kipidir. Düz uçuş tır"
+"manışı bitirir ve ortalamayı baştan başlatır. Tırmanış yeni bir termik başl"
+"atır. Son süzülüş düz uçuşta da görünebilir. Vega'da bu, dönüş çıkışıdır."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Görüntü kipi"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar daire uçuş kipini virajdan belirler. Varyometre bildirimi kullanılma"
+"z."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Sayfa değişir, uçuş kipi değişmez. Düz uçuş, dönüşte de düz uçuş sayfasını "
+"gösterir ve son süzülüşü gizler. Tırmanış vario sayfasını gösterir. Vega'da"
+" bu, hız komutu anahtarıdır."
 
 #, no-c-format
 msgid "System Tools"
@@ -11290,71 +11309,84 @@ msgstr "XCSoar görev"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Menzil istatistiği"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Anten"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM iki radyo kanalının her biri için istatistik tutar."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Veri noktaları"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Dönem"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM menzili"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM menzil istatistiğini göndermedi."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Menzil istatistiği sıfırlansın mı? Anten değişiminden sonra yapın; FLARM on"
+"u yeniden toplar."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM sıfırlamayı onaylamadı."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "En küçük menzilin altında"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Bu kanalda ortalama menzili FLARM en küçüğünden kısa ölçülmüş dilimler: önd"
+"e 2 nm, yanlarda ve arkada 1 nm. Anten montajını kontrol edin."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Menzil ayarı"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM bu mesafenin ötesindeki hava araçlarını bildirmez. Çizilen menzil içi"
+"ndeyse grafik onu kesik çizgili daire olarak gösterir."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Sınırsız"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Uçuştaki diğer FLARM hava araçlarıyla temaslar, geçtikleri her dilimde bir "
+"kez, orada alındıkları en büyük mesafeyle sayılır. Dilim bu mesafelerin büy"
+"ük yarısının ortalamasını, çapraz çizgi en büyüğünü gösterir."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Tahmini menzili FLARM en küçüğünden kısa ölçülmüş dilimler: önde 2 nm, yanl"
+"arda ve arkada 1 nm. Anten montajını kontrol edin."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Menzil tahmini sıfırlansın mı? Anten değişiminden sonra yapın; XCSoar onu y"
+"eniden toplar."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM menzil tahmini"
