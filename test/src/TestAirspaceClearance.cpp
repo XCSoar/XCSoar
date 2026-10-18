@@ -125,7 +125,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(35);
+  plan_tests(45);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -979,6 +979,134 @@ main()
     ok1(wa.IsCleared() && wb.IsCleared());
     mgr.SetCleared(b, false);
     ok1(!wa.IsCleared() && !wb.IsCleared());
+  }
+
+  /* Aircraft inside a cleared inner circle, already under the
+     surrounding circle (no horizontal distance). That outside
+     warning goes quiet as soon as clearance is set. */
+  {
+    Airspaces airspaces;
+    auto inner = MakeCircle(origin, 2000.0, 0.0, 2500.0);
+    auto outer = MakeCircle(origin, 8000.0, 1600.0, 4000.0);
+    airspaces.Add(inner);
+    airspaces.Add(outer);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto &ow = mgr.GetWarning(outer);
+    AirspaceInterceptSolution sol{};
+    sol.distance = 0;
+    sol.altitude = 1600;
+    sol.elapsed_time = FloatDuration{10};
+    sol.location = origin;
+    ow.UpdateSolution(AirspaceWarning::WARNING_GLIDE, sol);
+    ok1(ow.IsWarning() && !ow.IsCoveredByClearance());
+
+    mgr.SetCleared(inner, true);
+    ok1(ow.IsCoveredByClearance() && !ow.IsAckExpired());
+  }
+
+  /* The cleared polygon can stick out of the airspace above the
+     aircraft, so that airspace does not contain the cleared centre.
+     Clearance still covers it when the aircraft is inside both and
+     there is no horizontal distance. */
+  {
+    Airspaces airspaces;
+    const GeoPoint aircraft =
+      GeoVector(3000, Angle::Degrees(90)).EndPoint(origin);
+    const GeoPoint outer_center =
+      GeoVector(8000, Angle::Degrees(90)).EndPoint(origin);
+    auto inner = MakeCircle(origin, 5000.0, 0.0, 2500.0);
+    auto outer = MakeCircle(outer_center, 5500.0, 1600.0, 4000.0);
+    airspaces.Add(inner);
+    airspaces.Add(outer);
+    airspaces.Optimise();
+    ok1(inner->Inside(aircraft) && outer->Inside(aircraft) &&
+        !outer->Inside(origin));
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(aircraft, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto &ow = mgr.GetWarning(outer);
+    AirspaceInterceptSolution sol{};
+    sol.distance = 0;
+    sol.altitude = 1600;
+    sol.elapsed_time = FloatDuration{10};
+    sol.location = aircraft;
+    ow.UpdateSolution(AirspaceWarning::WARNING_GLIDE, sol);
+    ok1(ow.IsWarning() && !ow.IsCoveredByClearance());
+
+    mgr.SetCleared(inner, true);
+    ok1(ow.IsCoveredByClearance() && !ow.IsAckExpired());
+  }
+
+  /* Ack Day sticks for the airspace and for the one around it,
+     including across a warning reset. */
+  {
+    Airspaces airspaces;
+    auto inner = MakeCircle(origin, 2000.0, 0.0, 2500.0);
+    auto outer = MakeCircle(origin, 8000.0, 1600.0, 4000.0);
+    airspaces.Add(inner);
+    airspaces.Add(outer);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 1500.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto *iw = mgr.GetWarningPtr(*inner);
+    ok1(iw != nullptr && iw->IsActive());
+
+    auto &outside = mgr.GetWarning(outer);
+    AirspaceInterceptSolution sol{};
+    sol.distance = 0;
+    sol.altitude = 1600;
+    sol.elapsed_time = FloatDuration{10};
+    sol.location = origin;
+    outside.UpdateSolution(AirspaceWarning::WARNING_GLIDE, sol);
+
+    mgr.AcknowledgeDay(inner, true);
+    ok1(mgr.GetAckDay(*inner) && iw != nullptr && !iw->IsActive());
+    ok1(mgr.GetAckDay(*outer) && !outside.IsAckExpired());
+
+    for (int i = 0; i < 3; ++i) {
+      state.time += std::chrono::seconds{1};
+      mgr.Update(state, polar, task_stats, false,
+                 std::chrono::seconds{1});
+    }
+    iw = mgr.GetWarningPtr(*inner);
+    ok1(mgr.GetAckDay(*inner) && mgr.GetAckDay(*outer) &&
+        (iw == nullptr || !iw->IsActive()));
+
+    mgr.Reset(state);
+    state.time += std::chrono::seconds{1};
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+    iw = mgr.GetWarningPtr(*inner);
+    ok1(mgr.GetAckDay(*inner) &&
+        (iw == nullptr || !iw->IsActive()));
   }
 
   return exit_status();

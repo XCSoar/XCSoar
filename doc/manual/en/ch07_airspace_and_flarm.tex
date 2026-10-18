@@ -273,7 +273,10 @@ Once the pilot grants clearance on the outer (larger) airspace,
 XCSoar computes the volume that remains \emph{outside} the cleared
 area and treats only that volume as restricted for warning purposes.
 Warnings that would arise solely because the aircraft is inside the
-cleared sector---and nowhere else---are suppressed.
+cleared sector---and nowhere else---are suppressed.  While you are
+inside the cleared airspace, another you are already under goes quiet
+too when it has no boundary ahead.  A boundary still ahead keeps
+warning.
 
 \begin{center}
 \includegraphics[width=0.75\linewidth,keepaspectratio='true']{figures/airspace-clearance-restricted.pdf}
@@ -417,7 +420,9 @@ search based on name, distance, direction, and type (class).
 \sketch{figures/airspacelookup.png}
 
 Once an airspace item has been located, you have the chance to acknowledge it
-for the day.  From the
+for the day.  That acknowledgement also covers a surrounding airspace
+you are already under, and it remains until you re-enable the item.
+From the
 airspace management dialogue it is possible to re-enable it again.
 
 
