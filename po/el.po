@@ -11263,1114 +11263,1126 @@ msgstr "Εκτίμηση εμβέλειας FLARM"
 
 #, no-c-format
 msgid "Zoom in"
-msgstr ""
+msgstr "Μεγέθυνση"
 
 #, no-c-format
 msgid "Zoom out"
-msgstr ""
+msgstr "Σμίκρυνση"
 
 #, no-c-format
 msgid "Auto zoom"
-msgstr ""
+msgstr "Αυτόματο ζουμ"
 
 #, no-c-format
 msgid "Next page"
-msgstr ""
+msgstr "Επόμενη σελίδα"
 
 #, no-c-format
 msgid "Previous page"
-msgstr ""
+msgstr "Προηγούμενη σελίδα"
 
 #, no-c-format
 msgid "Waypoint list"
-msgstr ""
+msgstr "Λίστα σημείων"
 
 #, no-c-format
 msgid "Menu"
-msgstr ""
+msgstr "Μενού"
 
 #, no-c-format
 msgid "Task manager"
-msgstr ""
+msgstr "Διαχειριστής διαδρομής"
 
 #, no-c-format
 msgid "Pan mode"
-msgstr ""
+msgstr "Λειτουργία μετατόπισης"
 
 #, no-c-format
 msgid "Quick menu"
-msgstr ""
+msgstr "Γρήγορο μενού"
 
 #. OPERA is published under CC BY 4.0, so the attribution has to
 #. travel with the picture; the overlay label carries it, which is
 #. what the map shows when the pilot taps it
 #, no-c-format
 msgid "Radar"
-msgstr ""
+msgstr "Ραντάρ"
 
 #, no-c-format
 msgid "Satellite"
-msgstr ""
+msgstr "Δορυφόρος"
 
 msgid "(Inside)"
-msgstr ""
+msgstr "(Εντός)"
 
 msgid "(Near)"
-msgstr ""
+msgstr "(Κοντά)"
 
 msgid "Cleared"
-msgstr ""
+msgstr "Εγκεκριμένο"
 
 msgid "Covered"
-msgstr ""
+msgstr "Καλύπτεται"
 
 msgid "Power off"
-msgstr ""
+msgstr "Απενεργοποίηση"
 
 #, no-c-format
 msgid "Andorra"
-msgstr ""
+msgstr "Ανδόρα"
 
 #, no-c-format
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "Ηνωμένα Αραβικά Εμιράτα"
 
 #, no-c-format
 msgid "Afghanistan"
-msgstr ""
+msgstr "Αφγανιστάν"
 
 #, no-c-format
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Αντίγκουα και Μπαρμπούντα"
 
 #, no-c-format
 msgid "Anguilla"
-msgstr ""
+msgstr "Ανγκουίλα"
 
 #, no-c-format
 msgid "Albania"
-msgstr ""
+msgstr "Αλβανία"
 
 #, no-c-format
 msgid "Armenia"
-msgstr ""
+msgstr "Αρμενία"
 
 #, no-c-format
 msgid "Angola"
-msgstr ""
+msgstr "Αγκόλα"
 
 #, no-c-format
 msgid "Antarctica"
-msgstr ""
+msgstr "Ανταρκτική"
 
 #, no-c-format
 msgid "Argentina"
-msgstr ""
+msgstr "Αργεντινή"
 
 #, no-c-format
 msgid "American Samoa"
-msgstr ""
+msgstr "Αμερικανική Σαμόα"
 
 #, no-c-format
 msgid "Austria"
-msgstr ""
+msgstr "Αυστρία"
 
 #, no-c-format
 msgid "Australia"
-msgstr ""
+msgstr "Αυστραλία"
 
 #, no-c-format
 msgid "Aruba"
-msgstr ""
+msgstr "Αρούμπα"
 
 #, no-c-format
 msgid "Åland Islands"
-msgstr ""
+msgstr "Νήσοι Όλαντ"
 
 #, no-c-format
 msgid "Azerbaijan"
-msgstr ""
+msgstr "Αζερμπαϊτζάν"
 
 #, no-c-format
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Βοσνία - Ερζεγοβίνη"
 
 #, no-c-format
 msgid "Barbados"
-msgstr ""
+msgstr "Μπαρμπέιντος"
 
 #, no-c-format
 msgid "Bangladesh"
-msgstr ""
+msgstr "Μπανγκλαντές"
 
 #, no-c-format
 msgid "Belgium"
-msgstr ""
+msgstr "Βέλγιο"
 
 #, no-c-format
 msgid "Burkina Faso"
-msgstr ""
+msgstr "Μπουρκίνα Φάσο"
 
 #, no-c-format
 msgid "Bulgaria"
-msgstr ""
+msgstr "Βουλγαρία"
 
 #, no-c-format
 msgid "Bahrain"
-msgstr ""
+msgstr "Μπαχρέιν"
 
 #, no-c-format
 msgid "Burundi"
-msgstr ""
+msgstr "Μπουρούντι"
 
 #, no-c-format
 msgid "Benin"
-msgstr ""
+msgstr "Μπενίν"
 
 #, no-c-format
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Άγιος Βαρθολομαίος"
 
 #, no-c-format
 msgid "Bermuda"
-msgstr ""
+msgstr "Βερμούδες"
 
 #, no-c-format
 msgid "Brunei"
-msgstr ""
+msgstr "Μπρουνέι"
 
 #, no-c-format
 msgid "Bolivia"
-msgstr ""
+msgstr "Βολιβία"
 
 #, no-c-format
 msgid "Caribbean Netherlands"
-msgstr ""
+msgstr "Ολλανδία Καραϊβικής"
 
 #, no-c-format
 msgid "Brazil"
-msgstr ""
+msgstr "Βραζιλία"
 
 #, no-c-format
 msgid "Bahamas"
-msgstr ""
+msgstr "Μπαχάμες"
 
 #, no-c-format
 msgid "Bhutan"
-msgstr ""
+msgstr "Μπουτάν"
 
 #, no-c-format
 msgid "Bouvet Island"
-msgstr ""
+msgstr "Νήσος Μπουβέ"
 
 #, no-c-format
 msgid "Botswana"
-msgstr ""
+msgstr "Μποτσουάνα"
 
 #, no-c-format
 msgid "Belarus"
-msgstr ""
+msgstr "Λευκορωσία"
 
 #, no-c-format
 msgid "Belize"
-msgstr ""
+msgstr "Μπελίζ"
 
 #, no-c-format
 msgid "Canada"
-msgstr ""
+msgstr "Καναδάς"
 
 #, no-c-format
 msgid "Cocos Islands"
-msgstr ""
+msgstr "Νήσοι Κόκος (Κίλινγκ)"
 
 #, no-c-format
 msgid "Congo-Kinshasa"
-msgstr ""
+msgstr "Κονγκό - Κινσάσα"
 
 #, no-c-format
 msgid "Central African Republic"
-msgstr ""
+msgstr "Κεντροαφρικανική Δημοκρατία"
 
 #, no-c-format
 msgid "Congo-Brazzaville"
-msgstr ""
+msgstr "Κονγκό - Μπραζαβίλ"
 
 #, no-c-format
 msgid "Switzerland"
-msgstr ""
+msgstr "Ελβετία"
 
 #, no-c-format
 msgid "Côte d'Ivoire"
-msgstr ""
+msgstr "Ακτή Ελεφαντοστού"
 
 #, no-c-format
 msgid "Cook Islands"
-msgstr ""
+msgstr "Νήσοι Κουκ"
 
 #, no-c-format
 msgid "Chile"
-msgstr ""
+msgstr "Χιλή"
 
 #, no-c-format
 msgid "Cameroon"
-msgstr ""
+msgstr "Καμερούν"
 
 #, no-c-format
 msgid "China"
-msgstr ""
+msgstr "Κίνα"
 
 #, no-c-format
 msgid "Colombia"
-msgstr ""
+msgstr "Κολομβία"
 
 #, no-c-format
 msgid "Costa Rica"
-msgstr ""
+msgstr "Κόστα Ρίκα"
 
 #, no-c-format
 msgid "Cuba"
-msgstr ""
+msgstr "Κούβα"
 
 #, no-c-format
 msgid "Cape Verde"
-msgstr ""
+msgstr "Πράσινο Ακρωτήριο"
 
 #, no-c-format
 msgid "Curaçao"
-msgstr ""
+msgstr "Κουρασάο"
 
 #, no-c-format
 msgid "Christmas Island"
-msgstr ""
+msgstr "Νήσος των Χριστουγέννων"
 
 #, no-c-format
 msgid "Cyprus"
-msgstr ""
+msgstr "Κύπρος"
 
 #, no-c-format
 msgid "Czechia"
-msgstr ""
+msgstr "Τσεχία"
 
 #, no-c-format
 msgid "Germany"
-msgstr ""
+msgstr "Γερμανία"
 
 #, no-c-format
 msgid "Djibouti"
-msgstr ""
+msgstr "Τζιμπουτί"
 
 #, no-c-format
 msgid "Denmark"
-msgstr ""
+msgstr "Δανία"
 
 #, no-c-format
 msgid "Dominica"
-msgstr ""
+msgstr "Ντομίνικα"
 
 #, no-c-format
 msgid "Dominican Republic"
-msgstr ""
+msgstr "Δομινικανή Δημοκρατία"
 
 #, no-c-format
 msgid "Algeria"
-msgstr ""
+msgstr "Αλγερία"
 
 #, no-c-format
 msgid "Ecuador"
-msgstr ""
+msgstr "Ισημερινός"
 
 #, no-c-format
 msgid "Estonia"
-msgstr ""
+msgstr "Εσθονία"
 
 #, no-c-format
 msgid "Egypt"
-msgstr ""
+msgstr "Αίγυπτος"
 
 #, no-c-format
 msgid "Western Sahara"
-msgstr ""
+msgstr "Δυτική Σαχάρα"
 
 #, no-c-format
 msgid "Eritrea"
-msgstr ""
+msgstr "Ερυθραία"
 
 #, no-c-format
 msgid "Spain"
-msgstr ""
+msgstr "Ισπανία"
 
 #, no-c-format
 msgid "Ethiopia"
-msgstr ""
+msgstr "Αιθιοπία"
 
 #, no-c-format
 msgid "Finland"
-msgstr ""
+msgstr "Φινλανδία"
 
 #, no-c-format
 msgid "Fiji"
-msgstr ""
+msgstr "Φίτζι"
 
 #, no-c-format
 msgid "Falkland Islands"
-msgstr ""
+msgstr "Νήσοι Φόκλαντ"
 
 #, no-c-format
 msgid "Micronesia"
-msgstr ""
+msgstr "Μικρονησία"
 
 #, no-c-format
 msgid "Faroe Islands"
-msgstr ""
+msgstr "Νήσοι Φερόες"
 
 #, no-c-format
 msgid "France"
-msgstr ""
+msgstr "Γαλλία"
 
 #, no-c-format
 msgid "Gabon"
-msgstr ""
+msgstr "Γκαμπόν"
 
 #, no-c-format
 msgid "United Kingdom"
-msgstr ""
+msgstr "Ηνωμένο Βασίλειο"
 
 #, no-c-format
 msgid "Grenada"
-msgstr ""
+msgstr "Γρενάδα"
 
 #, no-c-format
 msgid "Georgia"
-msgstr ""
+msgstr "Γεωργία"
 
 #, no-c-format
 msgid "French Guiana"
-msgstr ""
+msgstr "Γαλλική Γουιάνα"
 
 #, no-c-format
 msgid "Guernsey"
-msgstr ""
+msgstr "Γκέρνζι"
 
 #, no-c-format
 msgid "Ghana"
-msgstr ""
+msgstr "Γκάνα"
 
 #, no-c-format
 msgid "Gibraltar"
-msgstr ""
+msgstr "Γιβραλτάρ"
 
 #, no-c-format
 msgid "Greenland"
-msgstr ""
+msgstr "Γροιλανδία"
 
 #, no-c-format
 msgid "Gambia"
-msgstr ""
+msgstr "Γκάμπια"
 
 #, no-c-format
 msgid "Guinea"
-msgstr ""
+msgstr "Γουινέα"
 
 #, no-c-format
 msgid "Guadeloupe"
-msgstr ""
+msgstr "Γουαδελούπη"
 
 #, no-c-format
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "Ισημερινή Γουινέα"
 
 #, no-c-format
 msgid "Greece"
-msgstr ""
+msgstr "Ελλάδα"
 
 #, no-c-format
 msgid "South Georgia"
-msgstr ""
+msgstr "Νήσοι Νότια Γεωργία και Νότιες Σάντουιτς"
 
 #, no-c-format
 msgid "Guatemala"
-msgstr ""
+msgstr "Γουατεμάλα"
 
 #, no-c-format
 msgid "Guam"
-msgstr ""
+msgstr "Γκουάμ"
 
 #, no-c-format
 msgid "Guinea-Bissau"
-msgstr ""
+msgstr "Γουινέα Μπισάου"
 
 #, no-c-format
 msgid "Guyana"
-msgstr ""
+msgstr "Γουιάνα"
 
 #, no-c-format
 msgid "Hong Kong"
-msgstr ""
+msgstr "Χονγκ Κονγκ ΕΔΠ Κίνας"
 
 #, no-c-format
 msgid "Heard Island"
-msgstr ""
+msgstr "Νήσοι Χερντ και Μακντόναλντ"
 
 #, no-c-format
 msgid "Honduras"
-msgstr ""
+msgstr "Ονδούρα"
 
 #, no-c-format
 msgid "Croatia"
-msgstr ""
+msgstr "Κροατία"
 
 #, no-c-format
 msgid "Haiti"
-msgstr ""
+msgstr "Αϊτή"
 
 #, no-c-format
 msgid "Hungary"
-msgstr ""
+msgstr "Ουγγαρία"
 
 #, no-c-format
 msgid "Indonesia"
-msgstr ""
+msgstr "Ινδονησία"
 
 #, no-c-format
 msgid "Ireland"
-msgstr ""
+msgstr "Ιρλανδία"
 
 #, no-c-format
 msgid "Israel"
-msgstr ""
+msgstr "Ισραήλ"
 
 #, no-c-format
 msgid "Isle of Man"
-msgstr ""
+msgstr "Νήσος του Μαν"
 
 #, no-c-format
 msgid "India"
-msgstr ""
+msgstr "Ινδία"
 
 #, no-c-format
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "Βρετανικά Εδάφη Ινδικού Ωκεανού"
 
 #, no-c-format
 msgid "Iraq"
-msgstr ""
+msgstr "Ιράκ"
 
 #, no-c-format
 msgid "Iran"
-msgstr ""
+msgstr "Ιράν"
 
 #, no-c-format
 msgid "Iceland"
-msgstr ""
+msgstr "Ισλανδία"
 
 #, no-c-format
 msgid "Italy"
-msgstr ""
+msgstr "Ιταλία"
 
 #, no-c-format
 msgid "Jersey"
-msgstr ""
+msgstr "Τζέρζι"
 
 #, no-c-format
 msgid "Jamaica"
-msgstr ""
+msgstr "Τζαμάικα"
 
 #, no-c-format
 msgid "Jordan"
-msgstr ""
+msgstr "Ιορδανία"
 
 #, no-c-format
 msgid "Japan"
-msgstr ""
+msgstr "Ιαπωνία"
 
 #, no-c-format
 msgid "Kenya"
-msgstr ""
+msgstr "Κένυα"
 
 #, no-c-format
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "Κιργιστάν"
 
 #, no-c-format
 msgid "Cambodia"
-msgstr ""
+msgstr "Καμπότζη"
 
 #, no-c-format
 msgid "Kiribati"
-msgstr ""
+msgstr "Κιριμπάτι"
 
 #, no-c-format
 msgid "Comoros"
-msgstr ""
+msgstr "Κομόρες"
 
 #, no-c-format
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "Σεν Κιτς και Νέβις"
 
 #, no-c-format
 msgid "North Korea"
-msgstr ""
+msgstr "Βόρεια Κορέα"
 
 #, no-c-format
 msgid "South Korea"
-msgstr ""
+msgstr "Νότια Κορέα"
 
 #, no-c-format
 msgid "Kuwait"
-msgstr ""
+msgstr "Κουβέιτ"
 
 #, no-c-format
 msgid "Cayman Islands"
-msgstr ""
+msgstr "Νήσοι Κέιμαν"
 
 #, no-c-format
 msgid "Kazakhstan"
-msgstr ""
+msgstr "Καζακστάν"
 
 #, no-c-format
 msgid "Laos"
-msgstr ""
+msgstr "Λάος"
 
 #, no-c-format
 msgid "Lebanon"
-msgstr ""
+msgstr "Λίβανος"
 
 #, no-c-format
 msgid "Saint Lucia"
-msgstr ""
+msgstr "Αγία Λουκία"
 
 #, no-c-format
 msgid "Liechtenstein"
-msgstr ""
+msgstr "Λιχτενστάιν"
 
 #, no-c-format
 msgid "Sri Lanka"
-msgstr ""
+msgstr "Σρι Λάνκα"
 
 #, no-c-format
 msgid "Liberia"
-msgstr ""
+msgstr "Λιβερία"
 
 #, no-c-format
 msgid "Lesotho"
-msgstr ""
+msgstr "Λεσότο"
 
 #, no-c-format
 msgid "Lithuania"
-msgstr ""
+msgstr "Λιθουανία"
 
 #, no-c-format
 msgid "Luxembourg"
-msgstr ""
+msgstr "Λουξεμβούργο"
 
 #, no-c-format
 msgid "Latvia"
-msgstr ""
+msgstr "Λετονία"
 
 #, no-c-format
 msgid "Libya"
-msgstr ""
+msgstr "Λιβύη"
 
 #, no-c-format
 msgid "Morocco"
-msgstr ""
+msgstr "Μαρόκο"
 
 #, no-c-format
 msgid "Monaco"
-msgstr ""
+msgstr "Μονακό"
 
 #, no-c-format
 msgid "Moldova"
-msgstr ""
+msgstr "Μολδαβία"
 
 #, no-c-format
 msgid "Montenegro"
-msgstr ""
+msgstr "Μαυροβούνιο"
 
 #, no-c-format
 msgid "Saint Martin"
-msgstr ""
+msgstr "Άγιος Μαρτίνος (Γαλλικό τμήμα)"
 
 #, no-c-format
 msgid "Madagascar"
-msgstr ""
+msgstr "Μαδαγασκάρη"
 
 #, no-c-format
 msgid "Marshall Islands"
-msgstr ""
+msgstr "Νήσοι Μάρσαλ"
 
 #, no-c-format
 msgid "North Macedonia"
-msgstr ""
+msgstr "Βόρεια Μακεδονία"
 
 #, no-c-format
 msgid "Mali"
-msgstr ""
+msgstr "Μάλι"
 
 #, no-c-format
 msgid "Myanmar"
-msgstr ""
+msgstr "Μιανμάρ (Βιρμανία)"
 
 #, no-c-format
 msgid "Mongolia"
-msgstr ""
+msgstr "Μογγολία"
 
 #, no-c-format
 msgid "Macao"
-msgstr ""
+msgstr "Μακάο ΕΔΠ Κίνας"
 
 #, no-c-format
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "Νήσοι Βόρειες Μαριάνες"
 
 #, no-c-format
 msgid "Martinique"
-msgstr ""
+msgstr "Μαρτινίκα"
 
 #, no-c-format
 msgid "Mauritania"
-msgstr ""
+msgstr "Μαυριτανία"
 
 #, no-c-format
 msgid "Montserrat"
-msgstr ""
+msgstr "Μονσεράτ"
 
 #, no-c-format
 msgid "Malta"
-msgstr ""
+msgstr "Μάλτα"
 
 #, no-c-format
 msgid "Mauritius"
-msgstr ""
+msgstr "Μαυρίκιος"
 
 #, no-c-format
 msgid "Maldives"
-msgstr ""
+msgstr "Μαλδίβες"
 
 #, no-c-format
 msgid "Malawi"
-msgstr ""
+msgstr "Μαλάουι"
 
 #, no-c-format
 msgid "Mexico"
-msgstr ""
+msgstr "Μεξικό"
 
 #, no-c-format
 msgid "Malaysia"
-msgstr ""
+msgstr "Μαλαισία"
 
 #, no-c-format
 msgid "Mozambique"
-msgstr ""
+msgstr "Μοζαμβίκη"
 
 #, no-c-format
 msgid "Namibia"
-msgstr ""
+msgstr "Ναμίμπια"
 
 #, no-c-format
 msgid "New Caledonia"
-msgstr ""
+msgstr "Νέα Καληδονία"
 
 #, no-c-format
 msgid "Niger"
-msgstr ""
+msgstr "Νίγηρας"
 
 #, no-c-format
 msgid "Norfolk Island"
-msgstr ""
+msgstr "Νήσος Νόρφολκ"
 
 #, no-c-format
 msgid "Nigeria"
-msgstr ""
+msgstr "Νιγηρία"
 
 #, no-c-format
 msgid "Nicaragua"
-msgstr ""
+msgstr "Νικαράγουα"
 
 #, no-c-format
 msgid "Netherlands"
-msgstr ""
+msgstr "Κάτω Χώρες"
 
 #, no-c-format
 msgid "Norway"
-msgstr ""
+msgstr "Νορβηγία"
 
 #, no-c-format
 msgid "Nepal"
-msgstr ""
+msgstr "Νεπάλ"
 
 #, no-c-format
 msgid "Nauru"
-msgstr ""
+msgstr "Ναουρού"
 
 #, no-c-format
 msgid "Niue"
-msgstr ""
+msgstr "Νιούε"
 
 #, no-c-format
 msgid "New Zealand"
-msgstr ""
+msgstr "Νέα Ζηλανδία"
 
 #, no-c-format
 msgid "Oman"
-msgstr ""
+msgstr "Ομάν"
 
 #, no-c-format
 msgid "Panama"
-msgstr ""
+msgstr "Παναμάς"
 
 #, no-c-format
 msgid "Peru"
-msgstr ""
+msgstr "Περού"
 
 #, no-c-format
 msgid "French Polynesia"
-msgstr ""
+msgstr "Γαλλική Πολυνησία"
 
 #, no-c-format
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "Παπούα Νέα Γουινέα"
 
 #, no-c-format
 msgid "Philippines"
-msgstr ""
+msgstr "Φιλιππίνες"
 
 #, no-c-format
 msgid "Pakistan"
-msgstr ""
+msgstr "Πακιστάν"
 
 #, no-c-format
 msgid "Poland"
-msgstr ""
+msgstr "Πολωνία"
 
 #, no-c-format
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Σεν Πιερ και Μικελόν"
 
 #, no-c-format
 msgid "Pitcairn"
-msgstr ""
+msgstr "Νήσοι Πίτκερν"
 
 #, no-c-format
 msgid "Puerto Rico"
-msgstr ""
+msgstr "Πουέρτο Ρίκο"
 
 #, no-c-format
 msgid "Palestine"
-msgstr ""
+msgstr "Παλαιστινιακά Εδάφη"
 
 #, no-c-format
 msgid "Portugal"
-msgstr ""
+msgstr "Πορτογαλία"
 
 #, no-c-format
 msgid "Palau"
-msgstr ""
+msgstr "Παλάου"
 
 #, no-c-format
 msgid "Paraguay"
-msgstr ""
+msgstr "Παραγουάη"
 
 #, no-c-format
 msgid "Qatar"
-msgstr ""
+msgstr "Κατάρ"
 
 #, no-c-format
 msgid "Réunion"
-msgstr ""
+msgstr "Ρεϊνιόν"
 
 #, no-c-format
 msgid "Romania"
-msgstr ""
+msgstr "Ρουμανία"
 
 #, no-c-format
 msgid "Serbia"
-msgstr ""
+msgstr "Σερβία"
 
 #, no-c-format
 msgid "Russia"
-msgstr ""
+msgstr "Ρωσία"
 
 #, no-c-format
 msgid "Rwanda"
-msgstr ""
+msgstr "Ρουάντα"
 
 #, no-c-format
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "Σαουδική Αραβία"
 
 #, no-c-format
 msgid "Solomon Islands"
-msgstr ""
+msgstr "Νήσοι Σολομώντος"
 
 #, no-c-format
 msgid "Seychelles"
-msgstr ""
+msgstr "Σεϋχέλλες"
 
 #, no-c-format
 msgid "Sudan"
-msgstr ""
+msgstr "Σουδάν"
 
 #, no-c-format
 msgid "Sweden"
-msgstr ""
+msgstr "Σουηδία"
 
 #, no-c-format
 msgid "Singapore"
-msgstr ""
+msgstr "Σιγκαπούρη"
 
 #, no-c-format
 msgid "Saint Helena"
-msgstr ""
+msgstr "Αγία Ελένη"
 
 #, no-c-format
 msgid "Slovenia"
-msgstr ""
+msgstr "Σλοβενία"
 
 #, no-c-format
 msgid "Svalbard and Jan Mayen"
-msgstr ""
+msgstr "Σβάλμπαρντ και Γιαν Μαγιέν"
 
 #, no-c-format
 msgid "Slovakia"
-msgstr ""
+msgstr "Σλοβακία"
 
 #, no-c-format
 msgid "Sierra Leone"
-msgstr ""
+msgstr "Σιέρα Λεόνε"
 
 #, no-c-format
 msgid "San Marino"
-msgstr ""
+msgstr "Άγιος Μαρίνος"
 
 #, no-c-format
 msgid "Senegal"
-msgstr ""
+msgstr "Σενεγάλη"
 
 #, no-c-format
 msgid "Somalia"
-msgstr ""
+msgstr "Σομαλία"
 
 #, no-c-format
 msgid "Suriname"
-msgstr ""
+msgstr "Σουρινάμ"
 
 #, no-c-format
 msgid "South Sudan"
-msgstr ""
+msgstr "Νότιο Σουδάν"
 
 #, no-c-format
 msgid "São Tomé and Príncipe"
-msgstr ""
+msgstr "Σάο Τομέ και Πρίνσιπε"
 
 #, no-c-format
 msgid "El Salvador"
-msgstr ""
+msgstr "Ελ Σαλβαδόρ"
 
 #, no-c-format
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Άγιος Μαρτίνος (Ολλανδικό τμήμα)"
 
 #, no-c-format
 msgid "Syria"
-msgstr ""
+msgstr "Συρία"
 
 #, no-c-format
 msgid "Eswatini"
-msgstr ""
+msgstr "Εσουατίνι"
 
 #, no-c-format
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Νήσοι Τερκς και Κάικος"
 
 #, no-c-format
 msgid "Chad"
-msgstr ""
+msgstr "Τσαντ"
 
 #, no-c-format
 msgid "French Southern Territories"
-msgstr ""
+msgstr "Γαλλικά Νότια Εδάφη"
 
 #, no-c-format
 msgid "Togo"
-msgstr ""
+msgstr "Τόγκο"
 
 #, no-c-format
 msgid "Thailand"
-msgstr ""
+msgstr "Ταϊλάνδη"
 
 #, no-c-format
 msgid "Tajikistan"
-msgstr ""
+msgstr "Τατζικιστάν"
 
 #, no-c-format
 msgid "Tokelau"
-msgstr ""
+msgstr "Τοκελάου"
 
 #, no-c-format
 msgid "Timor-Leste"
-msgstr ""
+msgstr "Τιμόρ-Λέστε"
 
 #, no-c-format
 msgid "Turkmenistan"
-msgstr ""
+msgstr "Τουρκμενιστάν"
 
 #, no-c-format
 msgid "Tunisia"
-msgstr ""
+msgstr "Τυνησία"
 
 #, no-c-format
 msgid "Tonga"
-msgstr ""
+msgstr "Τόνγκα"
 
 #, no-c-format
 msgid "Turkey"
-msgstr ""
+msgstr "Τουρκία"
 
 #, no-c-format
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Τρινιντάντ και Τομπάγκο"
 
 #, no-c-format
 msgid "Tuvalu"
-msgstr ""
+msgstr "Τουβαλού"
 
 #, no-c-format
 msgid "Taiwan"
-msgstr ""
+msgstr "Ταϊβάν"
 
 #, no-c-format
 msgid "Tanzania"
-msgstr ""
+msgstr "Τανζανία"
 
 #, no-c-format
 msgid "Ukraine"
-msgstr ""
+msgstr "Ουκρανία"
 
 #, no-c-format
 msgid "Uganda"
-msgstr ""
+msgstr "Ουγκάντα"
 
 #, no-c-format
 msgid "U.S. Outlying Islands"
-msgstr ""
+msgstr "Απομακρυσμένες Νησίδες ΗΠΑ"
 
 #, no-c-format
 msgid "United States"
-msgstr ""
+msgstr "Ηνωμένες Πολιτείες"
 
 #, no-c-format
 msgid "Uruguay"
-msgstr ""
+msgstr "Ουρουγουάη"
 
 #, no-c-format
 msgid "Uzbekistan"
-msgstr ""
+msgstr "Ουζμπεκιστάν"
 
 #, no-c-format
 msgid "Vatican City"
-msgstr ""
+msgstr "Βατικανό"
 
 #, no-c-format
 msgid "Saint Vincent and the Grenadines"
-msgstr ""
+msgstr "Άγιος Βικέντιος και Γρεναδίνες"
 
 #, no-c-format
 msgid "Venezuela"
-msgstr ""
+msgstr "Βενεζουέλα"
 
 #, no-c-format
 msgid "British Virgin Islands"
-msgstr ""
+msgstr "Βρετανικές Παρθένες Νήσοι"
 
 #, no-c-format
 msgid "U.S. Virgin Islands"
-msgstr ""
+msgstr "Αμερικανικές Παρθένες Νήσοι"
 
 #, no-c-format
 msgid "Vietnam"
-msgstr ""
+msgstr "Βιετνάμ"
 
 #, no-c-format
 msgid "Vanuatu"
-msgstr ""
+msgstr "Βανουάτου"
 
 #, no-c-format
 msgid "Wallis and Futuna"
-msgstr ""
+msgstr "Γουάλις και Φουτούνα"
 
 #, no-c-format
 msgid "Samoa"
-msgstr ""
+msgstr "Σαμόα"
 
 #, no-c-format
 msgid "Kosovo"
-msgstr ""
+msgstr "Κοσσυφοπέδιο"
 
 #, no-c-format
 msgid "Yemen"
-msgstr ""
+msgstr "Υεμένη"
 
 #, no-c-format
 msgid "Mayotte"
-msgstr ""
+msgstr "Μαγιότ"
 
 #, no-c-format
 msgid "South Africa"
-msgstr ""
+msgstr "Νότια Αφρική"
 
 #, no-c-format
 msgid "Zambia"
-msgstr ""
+msgstr "Ζάμπια"
 
 #, no-c-format
 msgid "Zimbabwe"
-msgstr ""
+msgstr "Ζιμπάμπουε"
 
 #. the backup is there, but on purpose without the files the
 #. loggers are writing right now: say so, and which ones
 msgid "Backup complete."
-msgstr ""
+msgstr "Η δημιουργία αντιγράφου ολοκληρώθηκε."
 
 msgid "Left out, being written right now:"
-msgstr ""
+msgstr "Παραλείφθηκαν, γράφονται τώρα:"
 
 msgid "Don't use"
-msgstr ""
+msgstr "Να μη χρησιμοποιείται"
 
 msgid "Not aligned"
-msgstr ""
+msgstr "Χωρίς ευθυγράμμιση"
 
 msgid "Fixed & aligned"
-msgstr ""
+msgstr "Σταθερό και ευθυγραμμισμένο"
 
 msgid "Built-in IMU"
-msgstr ""
+msgstr "Ενσωματωμένο IMU"
 
 msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Αν το όργανο με το IMU είναι μόνιμα στερεωμένο και οι άξονές του ευθυγραμμί"
+"ζονται με του αεροσκάφους. «Σταθερό και ευθυγραμμισμένο» μόνο όταν είναι άκ"
+"αμπτα τοποθετημένο. Σε αμφιβολία, «Χωρίς ευθυγράμμιση»."
 
-#, c-format
+#, no-c-format
 msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
 msgstr ""
+"Το XCSoar χρησιμοποιεί την πρώτη συσκευή που δίνει κάθε τιμή (συσκευή A πρι"
+"ν από τη B, και ούτω καθεξής). Οι έντονοι δείκτες είναι οι τιμές που παίρνε"
+"ι το XCSoar από αυτή τη συσκευή. Όσοι δεν είναι έντονοι σημαίνουν ότι μια π"
+"ροηγούμενη συσκευή δίνει ήδη τα ίδια δεδομένα. Το Baro είναι ύψος με το τρέ"
+"χον QNH· το QNE είναι υψόμετρο πίεσης· το Alt IGC είναι το υψόμετρο που γρά"
+"φει ο καταγραφέας. Τα QNE και Pressure είναι η ίδια πίεση περιβάλλοντος, οπ"
+"ότε μόνο το προγενέστερο από τα δύο είναι έντονο. Κακό GPS και μπαταρία κάτ"
+"ω από 10 τοις εκατό εμφανίζονται κόκκινα σε έγχρωμη οθόνη και έντονα σε ηλε"
+"κτρονικό χαρτί."
 
 msgid "QNE"
-msgstr ""
+msgstr "QNE"
 
 msgid "Engine"
-msgstr ""
+msgstr "Κινητήρας"
 
 msgid "Set Clearance"
-msgstr ""
+msgstr "Ορισμός άδειας"
 
 msgid "Revoke Clearance"
-msgstr ""
+msgstr "Ανάκληση άδειας"
 
 msgid "Failed to update airspace clearance"
-msgstr ""
+msgstr "Αποτυχία ενημέρωσης της άδειας εναέριου χώρου"
 
 msgid "Clrnc"
-msgstr ""
+msgstr "Αδ."
 
 msgid ""
 "Per-class filter settings. For airspaces where both\n"
@@ -12382,244 +12394,322 @@ msgid ""
 "  Clrnc - allow granting a clearance to suppress\n"
 "           warnings from other overlapping airspaces"
 msgstr ""
+"Ρυθμίσεις φίλτρου ανά κλάση. Όπου δίνονται και τύπος (CTR, FIR, ...) και κλ"
+"άση, ο τύπος προηγείται της κλάσης στο XCSoar.\nΣτήλες:\n  Εμφάνιση — σχεδί"
+"αση εναέριων χώρων αυτής της κλάσης στον χάρτη\n  Προειδ.  — ειδοποιήσεις κ"
+"ατά την προσέγγιση και στο εσωτερικό\n  Αδ.      — επιτρέπει άδεια που κατα"
+"στέλλει\n             ειδοποιήσεις από άλλους επικαλυπτόμενους χώρους"
 
 msgid "Clearance"
-msgstr ""
+msgstr "Άδεια"
 
 msgid "Groups"
-msgstr ""
+msgstr "Ομάδες"
 
 msgid "Show only the InfoBoxes of these groups in the list."
-msgstr ""
+msgstr "Στη λίστα να εμφανίζονται μόνο τα InfoBox αυτών των ομάδων."
 
 msgid "Share location"
-msgstr ""
+msgstr "Κοινοποίηση θέσης"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Top"
-msgstr ""
+msgstr "Πάνω"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Right"
-msgstr ""
+msgstr "Δεξιά"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Bottom"
-msgstr ""
+msgstr "Κάτω"
 
 #, no-c-format
 msgctxt "Screen edge"
 msgid "Left"
-msgstr ""
+msgstr "Αριστερά"
 
 #, no-c-format
 msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
 msgstr ""
+"Αγγίξτε μια άκρη για να τεντώσετε την περιοχή InfoBox ως το όριο της οθόνης"
+"."
 
 #, no-c-format
 msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
 msgstr ""
+"Η περιοχή InfoBox είναι το μέρος της οθόνης για τα InfoBox, τα όργανα, τις "
+"επικαλύψεις χάρτη και το μενού. Διαλέξτε τις άκρες στις οποίες τεντώνεται ω"
+"ς το όριο της οθόνης. Οι άκρες που δεν τεντώνονται μένουν μακριά από τις γρ"
+"αμμές συστήματος και τις στρογγυλεμένες γωνίες. Ο χάρτης χρησιμοποιεί πάντα"
+" όλη την οθόνη, και οι διάλογοι μένουν στην ασφαλή περιοχή. Ισχύει μόνο σε "
+"πλήρη οθόνη."
 
 msgid "Stretch InfoBox area"
-msgstr ""
+msgstr "Τέντωμα περιοχής InfoBox"
 
 #, no-c-format
 msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
 msgstr ""
+"Εμφάνισε τη γραμμή κατάστασης, εκτός αν η περιοχή InfoBox τεντώνεται ως την"
+" πάνω άκρη της οθόνης, όπου θα τα κάλυπτε."
 
 #, no-c-format
 msgid "Visible"
-msgstr ""
+msgstr "Ορατή"
 
 #, no-c-format
 msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
 msgstr ""
+"Να εμφανίζεται πάντα η γραμμή κατάστασης, ακόμη και σε πλήρη οθόνη. Τα Info"
+"Box δεν μπορούν να σχεδιαστούν πίσω της, οπότε μένουν μακριά από την πάνω ά"
+"κρη."
 
 #, no-c-format
 msgid "Hidden"
-msgstr ""
+msgstr "Κρυφή"
 
 #, no-c-format
 msgid "Never show the status bar."
-msgstr ""
+msgstr "Να μην εμφανίζεται ποτέ η γραμμή κατάστασης."
 
 msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
 msgstr ""
+"Άφησε το XCSoar να χρησιμοποιήσει όλη την οθόνη, και τις περιοχές πίσω από "
+"τις γραμμές συστήματος και την εγκοπή. Ο χάρτης τη γεμίζει, και το «Τέντωμα"
+" περιοχής InfoBox» ορίζει ως ποιες άκρες φτάνουν τα InfoBox, τα όργανα, οι "
+"επικαλύψεις και το μενού."
 
 msgid "System status bar"
-msgstr ""
+msgstr "Γραμμή κατάστασης συστήματος"
 
 msgid "Whether the system status bar with the clock and the battery level stays visible."
 msgstr ""
+"Αν η γραμμή κατάστασης του συστήματος με το ρολόι και τη στάθμη της μπαταρί"
+"ας μένει ορατή."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Warn when radar expires"
-msgstr ""
+msgstr "Προειδοποίηση όταν το ραντάρ λήξει"
 
 msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
 msgstr ""
+"Αν είναι ενεργό, εμφανίζεται προειδοποίηση όταν η επικάλυψη του ραντάρ βροχ"
+"ής δεν μπόρεσε να ανανεωθεί και αφαιρέθηκε από τον χάρτη."
 
 #, no-c-format
 msgid "Shrink type when the short edge is under 3.2 inches."
 msgstr ""
+"Σμίκρυνε τη γραμματοσειρά όταν η μικρή πλευρά είναι κάτω από 3.2 ίντσες."
 
 #, no-c-format
 msgid "Handheld"
-msgstr ""
+msgstr "Στο χέρι"
 
 #, no-c-format
 msgid "Always use the closer-view size."
-msgstr ""
+msgstr "Να χρησιμοποιείται πάντα το μέγεθος κοντινής ανάγνωσης."
 
 #, no-c-format
 msgid "Panel"
-msgstr ""
+msgstr "Πίνακας"
 
 #, no-c-format
 msgid "Keep full-size type, for a screen read at arm's length."
-msgstr ""
+msgstr "Κράτα πλήρες μέγεθος γραμματοσειράς, για οθόνη σε απόσταση χεριού."
 
 msgid "Viewing distance"
-msgstr ""
+msgstr "Απόσταση ανάγνωσης"
 
 msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
 msgstr ""
+"Το Auto σμικραίνει τη γραμματοσειρά όταν η μικρή πλευρά είναι κάτω από 3.2 "
+"ίντσες. Το «Στο χέρι» χρησιμοποιεί πάντα αυτό το κοντινό μέγεθος. Ο «Πίνακα"
+"ς» κρατά το πλήρες."
 
 #, no-c-format
 msgctxt "Setting"
 msgid "Satellite layer"
-msgstr ""
+msgstr "Δορυφορικό επίπεδο"
 
 msgid "Which EUMETView satellite product this page draws under the map."
 msgstr ""
+"Ποιο δορυφορικό προϊόν EUMETView σχεδιάζει αυτή η σελίδα κάτω από τον χάρτη"
+"."
 
 #, no-c-format
 msgid "Rain radar"
-msgstr ""
+msgstr "Ραντάρ βροχής"
 
 #, no-c-format
 msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Η εμβέλεια προκύπτει από ευθείες τροχιές από το ανεμόπτερο. Τα χρώματα των "
+"προσγειώσιμων και η λίστα εναλλακτικών χρησιμοποιούν αυτή την εμβέλεια."
 
 #, no-c-format
 msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
 msgstr ""
+"Η εμβέλεια υπολογίζεται με στροφές γύρω από εμπόδια εδάφους. Τα χρώματα των"
+" προσγειώσιμων και η λίστα εναλλακτικών χρησιμοποιούν αυτή την εμβέλεια."
 
 #, no-c-format
 msgid "Task MC"
-msgstr ""
+msgstr "MC διαδρομής"
 
 #, no-c-format
 msgid "Uses task MacCready value."
-msgstr ""
+msgstr "Χρησιμοποιεί την τιμή MacCready της διαδρομής."
 
 msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
 msgstr ""
+"Ποιο MacCready χρησιμοποιείται για την εμβέλεια εδάφους, τα χρώματα των προ"
+"σγειώσιμων, τη ματαίωση και τη λίστα εναλλακτικών. Ισχύει και όταν η λειτου"
+"ργία εμβέλειας είναι ανενεργή. Η γραμμή εργασίας χρησιμοποιεί πάντα το MC δ"
+"ιαδρομής. Τα InfoBox εναλλακτικών και η διαφορά ύψους με ασφαλές MC χρησιμο"
+"ποιούν πάντα το ασφαλές MC."
 
 #, no-c-format
 msgid "No reach overlay on the map."
-msgstr ""
+msgstr "Χωρίς επικάλυψη εμβέλειας στον χάρτη."
 
 #, no-c-format
 msgid "How far you can glide to the ground. Uses the Reach polar."
 msgstr ""
+"Πόσο μακριά μπορείτε να ανεμοπορήσετε ως το έδαφος. Χρησιμοποιεί την πολική"
+" εμβέλειας."
 
 #, no-c-format
 msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
 msgstr ""
+"Σκιάζει τον χάρτη πέρα από την ανεμοπορία ως το έδαφος. Χρησιμοποιεί την πο"
+"λική εμβέλειας."
 
 #, no-c-format
 msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
 msgstr ""
+"Πόσο μακριά μπορείτε να ανεμοπορήσετε και να φτάσετε ακόμη στο τυπικό ύψος "
+"βάσης θερμικού αυτής της πτήσης. Χρησιμοποιεί πάντα το MC διαδρομής."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
 msgstr ""
+"Γραμμή εργασίας ως το τυπικό ύψος βάσης θερμικού με το MC διαδρομής, συν γρ"
+"αμμή εδάφους ως το έδαφος με την πολική εμβέλειας."
 
 #, no-c-format
 msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
 msgstr ""
+"Γραμμή εργασίας ως το τυπικό ύψος βάσης θερμικού με το MC διαδρομής, συν σκ"
+"ιά πέρα από το έδαφος με την πολική εμβέλειας."
 
 msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
 msgstr ""
+"Το MacCready για την εμβέλεια εδάφους, τα χρώματα των προσγειώσιμων, τη ματ"
+"αίωση και τη λίστα εναλλακτικών, όταν η πολική εμβέλειας είναι το ασφαλές M"
+"C. Τα InfoBox εναλλακτικών και η διαφορά ύψους με ασφαλές MC χρησιμοποιούν "
+"πάντα αυτή την τιμή. Η ταχύτητα βέλτιστης ανεμοπορίας δεν επηρεάζεται. Υψηλ"
+"ότερες τιμές θεωρούν λιγότερα χωράφια εφικτά."
 
 msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
 msgstr ""
+"Δεν έχει ρυθμιστεί πολική ανεμοπορίας, οπότε δεν μπορεί να εμφανιστεί λόγος"
+" κατολίσθησης. Επιλέξτε πρώτα αεροσκάφος."
 
 msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
 msgstr ""
+"Ο λόγος κατολίσθησης δίπλα σε κάθε τιμή είναι ο καλύτερος σε ήρεμο αέρα σε "
+"αυτή τη ρύθμιση MacCready, μαζί με έντομα, έρμα και υποβάθμιση της πολικής."
 
 #, c-format
 msgid "Active polar: %s"
-msgstr ""
+msgstr "Ενεργή πολική: %s"
 
 msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
 msgstr ""
+"Το MacCready στην εκκίνηση για την ταχύτητα βέλτιστης ανεμοπορίας και τους "
+"υπολογισμούς διαδρομής. Η αλλαγή εδώ ορίζει και το ζωντανό MacCready. Η εμβ"
+"έλεια εδάφους, τα χρώματα των προσγειώσιμων, η ματαίωση και η λίστα εναλλακ"
+"τικών ακολουθούν την πολική εμβέλειας, όχι αυτή την τιμή, εκτός αν η πολική"
+" εμβέλειας είναι το MC διαδρομής."
 
 #, no-c-format
 msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
 msgstr ""
+"Χρησιμοποίησε τη ζώνη ώρας του λειτουργικού συστήματος και ακολούθησέ την σ"
+"τις αλλαγές θερινής ώρας και όταν ταξιδεύεις σε άλλη ζώνη."
 
 #, no-c-format
 msgid "Time zone"
-msgstr ""
+msgstr "Ζώνη ώρας"
 
 #, no-c-format
 msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
 msgstr ""
+"Χρησιμοποίησε τη ζώνη ώρας που έχει επιλεγεί παρακάτω. Το XCSoar γνωρίζει τ"
+"ους κανόνες θερινής ώρας και εφαρμόζει τις αλλαγές μόνο του, οπότε η ρύθμισ"
+"η δεν χρειάζεται διόρθωση δύο φορές τον χρόνο."
 
 #, no-c-format
 msgid "Manual UTC offset"
-msgstr ""
+msgstr "Χειροκίνητη μετατόπιση UTC"
 
 #, no-c-format
 msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
 msgstr ""
+"Χρησιμοποίησε τη σταθερή μετατόπιση UTC που έχει εισαχθεί παρακάτω. Πρέπει "
+"να διορθώνεται χειροκίνητα όταν αρχίζει ή τελειώνει η θερινή ώρα."
 
 msgid "Local time source"
-msgstr ""
+msgstr "Πηγή τοπικής ώρας"
 
 msgid "Selects where XCSoar gets the offset between UTC and local time from."
 msgstr ""
+"Επιλέγει από πού παίρνει το XCSoar τη μετατόπιση μεταξύ UTC και τοπικής ώρα"
+"ς."
 
 msgid "The time zone of the airfield you are flying at."
-msgstr ""
+msgstr "Η ζώνη ώρας του αεροδρομίου από το οποίο πετάτε."
 
 msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
 msgstr ""
+"Το πεδίο μετατόπισης UTC επιτρέπει να οριστεί η διαφορά μεταξύ UTC και τοπι"
+"κής ώρας. Κρατά την τιμή που εισαγάγατε ακόμη και όταν έχει επιλεγεί άλλη π"
+"ηγή τοπικής ώρας. Από κάτω εμφανίζονται η τοπική ώρα και η μετατόπιση UTC π"
+"ου ισχύει τώρα."
 
 #, no-c-format
 msgid "UKV Model"
-msgstr ""
+msgstr "Μοντέλο UKV"
 
 #, no-c-format
 msgid "United Kingdom. UKV model."
-msgstr ""
+msgstr "Ηνωμένο Βασίλειο. Μοντέλο UKV."
 
 #. the other tabs are named after their service, which is why they
 #. are not translated; this one is a common noun
 msgid "Overlay"
-msgstr ""
+msgstr "Επικάλυψη"
 
 msgid "Revoke"
-msgstr ""
+msgstr "Ανάκληση"
 
 #, no-c-format
 msgid "Radar (EUMETNET OPERA)"
-msgstr ""
+msgstr "Radar (EUMETNET OPERA)"
 
 #. the server answered but the product had nothing to draw here:
 #. say so, rather than leaving an empty map to be read as a slow
 #. download
 msgid "no data"
-msgstr ""
+msgstr "χωρίς δεδομένα"
 
 msgid "Downloading radar..."
-msgstr ""
+msgstr "Λήψη ραντάρ..."
 
 #. the opt-out follows the Quick Guide dialog: answering "no" writes
 #. the choice to the profile, and the Look configuration page can
@@ -12629,140 +12719,172 @@ msgid ""
 "\n"
 "Warn again when this happens?"
 msgstr ""
+"Η εικόνα του ραντάρ δεν μπόρεσε να ανανεωθεί και αφαιρέθηκε, ώστε να μην εμ"
+"φανίζεται παλιά ηχώ.\n\nΝα προειδοποιήσω ξανά όταν συμβεί;"
 
 #. first, and the default: the closest counterpart to the pc_met
 #. vis_hrv images, and the one product here that covers Europe at
 #. the HRV sampling German pilots are used to reading
 #, no-c-format
 msgid "European HRV RGB"
-msgstr ""
+msgstr "Ευρωπαϊκό HRV RGB"
 
 #. MTG, which resolves about twice as finely as SEVIRI HRV
 #, no-c-format
 msgid "Visible 0.6 µm (MTG)"
-msgstr ""
+msgstr "Ορατό 0.6 µm (MTG)"
 
 #, no-c-format
 msgid "Infrared 10.5 µm (MTG)"
-msgstr ""
+msgstr "Υπέρυθρο 10.5 µm (MTG)"
 
 #. the RGB composites are assembled from several channels and reach
 #. the server a few minutes behind the single channel products, which
 #. the frame search follows on its own
 #, no-c-format
 msgid "True colour (MTG)"
-msgstr ""
+msgstr "Πραγματικό χρώμα (MTG)"
 
 #, no-c-format
 msgid "Geo colour (MTG)"
-msgstr ""
+msgstr "Γεωχρώμα (MTG)"
 
 #. five minute cadence, and the promptest of them by a wide margin
 #, no-c-format
 msgid "Rapid scan natural colour"
-msgstr ""
+msgstr "Ταχεία σάρωση, φυσικό χρώμα"
 
 msgid "No satellite imagery here right now"
-msgstr ""
+msgstr "Δεν υπάρχει δορυφορική εικόνα εδώ τώρα"
 
 msgid "Countries"
-msgstr ""
+msgstr "Χώρες"
 
 msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
 msgstr ""
+"Εμφάνισε μόνο αρχεία αυτών των χωρών — η ίδια επιλογή για χάρτες, σημεία κα"
+"ι εναέριους χώρους, αποθηκευμένη στο προφίλ. Αρχεία για όλες τις χώρες μένο"
+"υν στη λίστα."
 
 msgid "Search"
-msgstr ""
+msgstr "Αναζήτηση"
 
 msgid "Show only the files whose name or description contains this text."
 msgstr ""
+"Εμφάνισε μόνο αρχεία των οποίων το όνομα ή η περιγραφή περιέχει αυτό το κεί"
+"μενο."
 
 msgid "No file matches the filter."
-msgstr ""
+msgstr "Κανένα αρχείο δεν ταιριάζει στο φίλτρο."
 
 msgid "Complete"
-msgstr ""
+msgstr "Ολοκληρώθηκε"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Ακυρώθηκε"
 
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
 msgstr ""
+"Συνολικό κέρδος ή απώλεια ύψους στο τελευταίο θερμικό διαιρεμένο με τον χρό"
+"νο κυκλικής πτήσης. Τα δευτερόλεπτα με μικρότερη γραμματοσειρά δείχνουν τον"
+" χρόνο κυκλικής πτήσης."
 
 #, no-c-format
 msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
 msgstr ""
+"Χρόνος κυκλικής πτήσης στο τελευταίο θερμικό. Ο αριθμός με μικρότερη γραμμα"
+"τοσειρά δείχνει τον μέσο ρυθμό ανόδου του τελευταίου θερμικού."
 
 #, no-c-format
 msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
 msgstr ""
+"Κύρια τιμή: ρυθμός ανόδου σε θερμικό στο επόμενο σκέλος ισοδύναμος με ρυθμό"
+" ίσο με το MacCready του τρέχοντος σκέλους. Δευτερεύουσα τιμή: ρυθμός ανόδο"
+"υ σε θερμικό στο τρέχον σκέλος ισοδύναμος με ρυθμό ίσο με το MacCready του "
+"επόμενου σκέλους."
 
 #, no-c-format
 msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Ύψος άφιξης στην καλύτερη εναλλακτική προσγείωση με το ασφαλές MC, ως προς "
+"το ασφαλές ύψος άφιξης."
 
 #, no-c-format
 msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
 msgstr ""
+"Ύψος άφιξης στη δεύτερη καλύτερη εναλλακτική προσγείωση με το ασφαλές MC, ω"
+"ς προς το ασφαλές ύψος άφιξης."
 
 #, no-c-format
 msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
 msgstr ""
+"Τρέχουσα ρύθμιση πίεσης QNH για τον υπολογισμό του βαρομετρικού ύψους. Η γρ"
+"αμμή από κάτω δείχνει αυτό το ύψος όταν υπάρχει αισθητήρας πίεσης. Αγγίξτε "
+"το InfoBox για να ανοίξετε τον πίνακα και να ρυθμίσετε το QNH χειροκίνητα."
 
 #, no-c-format
 msgid "Speed VMG"
-msgstr ""
+msgstr "Ταχύτητα VMG"
 
 #, no-c-format
 msgid "V VMG"
-msgstr ""
+msgstr "V VMG"
 
 #, no-c-format
 msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
 msgstr ""
+"Η συνιστώσα της ταχύτητας εδάφους προς το επόμενο σημείο. Ισούται με την τα"
+"χύτητα εδάφους σε ευθεία πορεία προς αυτό, μηδενίζεται σε ορθή γωνία και γί"
+"νεται αρνητική όταν απομακρύνεστε. Βάζει αριθμό στο κόστος μιας παράκαμψης "
+"από την ευθεία πορεία."
 
 #, no-c-format
 msgid "Vario and thermal"
-msgstr ""
+msgstr "Βάριο και θερμικό"
 
 #, no-c-format
 msgid "Glide"
-msgstr ""
+msgstr "Ανεμοπορία"
 
 #, no-c-format
 msgid "Speed and attitude"
-msgstr ""
+msgstr "Ταχύτητα και στάση"
 
 #, no-c-format
 msgid "Wind and weather"
-msgstr ""
+msgstr "Άνεμος και καιρός"
 
 #, no-c-format
 msgid "Time"
-msgstr ""
+msgstr "Ώρα"
 
 #, no-c-format
 msgid "Airspace and team"
-msgstr ""
+msgstr "Εναέριος χώρος και ομάδα"
 
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Άλλα"
 
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr ""
+"Σύρετε ένα InfoBox πάνω σε άλλο για να τα ανταλλάξετε. Κρατήστε ένα InfoBox"
+" και σηκώστε το για να διαλέξετε άλλο για τη θέση."
 
 msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
 msgstr ""
+"Το Enter παίρνει το επιλεγμένο InfoBox, μετακινήστε το με τα βελάκια και ξα"
+"νά Enter για να το αφήσετε. Δύο Enter χωρίς μετακίνηση διαλέγουν άλλο InfoB"
+"ox για τη θέση."
 
 msgid "Arrange InfoBoxes"
-msgstr ""
+msgstr "Διάταξη InfoBox"
 
 msgid ""
 "Arrange\n"
 "InfoBoxes"
-msgstr ""
+msgstr "Διάταξη\nInfoBox"
 
 msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
 msgstr ""
@@ -12771,12 +12893,16 @@ msgstr ""
 "νεμόπτερο είναι βαρύτερο από τη μέγιστη μάζα απογείωσης."
 
 msgid "MTOW"
-msgstr ""
+msgstr "MTOW"
 
 msgid "Maximum takeoff weight of the glider."
-msgstr ""
+msgstr "Μέγιστη μάζα απογείωσης του ανεμόπτερου."
 
 #, no-c-format
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr ""
+"Υδάτινο έρμα επί του σκάφους, σε λίτρα. Το σχόλιο δείχνει τη φόρτιση πτέρυγ"
+"ας, με κόκκινο όταν το ανεμόπτερο είναι βαρύτερο από τη μέγιστη μάζα απογεί"
+"ωσης. Η τιμή είναι μπλε ενώ αδειάζει το έρμα. Αγγίξτε για να αλλάξετε το έρ"
+"μα."
 
