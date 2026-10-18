@@ -2078,9 +2078,11 @@ msgstr "Set InfoBox paste"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Copie reține toate casetele de informații ale acestui set, Lipește le înloc"
+"uiește pe cele ale altui set."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Moștenește din setările globale"
 
 msgid "Invalid"
 msgstr "Invalidat"
@@ -2766,17 +2768,18 @@ msgstr "Comentariu"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Text fix"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Titlu, valoare și comentariu introduse de pilot. Atingeți pentru a edita."
 
 msgid "Title"
-msgstr ""
+msgstr "Titlu"
 
 msgid "Value"
-msgstr ""
+msgstr "Valoare"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4437,10 +4440,11 @@ msgid "Reference used for start max height rule."
 msgstr "Referința folosită pentru regulă maximă de înălțime la început."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navighează la punctul cel mai apropiat"
 
 msgid "Navigate to the nearest point of the start and finish zones."
 msgstr ""
+"Navighează la punctul cel mai apropiat al zonelor de start și de sosire."
 
 msgid "Finish min. height"
 msgstr "Înalțime minima la finalizare"
@@ -11019,21 +11023,25 @@ msgstr "Manual"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Oxigen în sânge"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
+"Saturația oxigenului în sânge, în procente, de la un pulsoximetru Bluetooth"
+"."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Puncte de ruta folosite recent"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Conectați-vă la Wi-Fi-ul aparatului ca să descărcați zborurile de pe acest "
+"FLARM."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Determină dacă urma este derivată cu vântul când este afișată în modul de spirală la scări apropiate ale hărții. Dezactivat, urma rămâne fără compensare pentru deriva vântului. În termică se aplică și curbei de traiectorie proiectate: Pornit o păstrează față de masa de aer; Oprit include vântul."
 
@@ -11069,20 +11077,22 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Activează radarul de trafic și alege poziția pe ecranul principal. Direcția fațării traseu relativă a obiectului visulat față de direcția traseu al avionului este afișată ca cap de freză, iar un triunghi orientat în sus sau jos indică înălțimea relativă a obiectului visulat față de vârful. În toate modurile, culoarea obiectului visulat indică nivelul de amenințare."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Rezoluția ecranului"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Luminozitatea ecranului"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Reglați luminozitatea ecranului."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"Luminozitatea ecranului este doar pentru citire, deoarece scrierea cere per"
+"misiuni suplimentare."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Automat"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11097,10 +11107,10 @@ msgstr "Acest lucru determine performanța planară utilizată în calculul cât
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Mod alternativi: Automat"
 
 msgid "Paste"
-msgstr ""
+msgstr "Lipește"
 
 #, c-format
 msgid ""
@@ -11204,105 +11214,124 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Nu s-au găsit servicii acceptate"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Unitățile systemd selectate nu sunt instalate."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Indisponibil"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Se pornește..."
 
 msgid "Stopping..."
 msgstr "Se oprește…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Se reîncarcă..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Eșuat"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Activează"
 
 msgid "Restart"
-msgstr ""
+msgstr "Repornire"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Dezactivează"
 
 msgid "System service"
-msgstr ""
+msgstr "Serviciu de sistem"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Server SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Terminal la distanță"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Senzori"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Serviciul de senzori OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Variometru audio"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Serviciul de variometru audio OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Temperatura maximă din prognoză"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Completează temperatura max. în setarea de zbor din prognoza DWD a zilei pe"
+"ntru stația MOSMIX cea mai apropiată. Are nevoie de o poziție și se descarc"
+"ă o dată pe zi; fără cont."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Temperatura maximă la sol a zilei. O adiabată uscată de la ea la temperatur"
+"a exterioară măsurată în urcare dă plafonul termic estimat; baza norilor ar"
+"e nevoie și de o sondă de umiditate. Ambele se desenează pe pagina urmei de"
+" temperatură din dialogul Analiză, după ce planorul a traversat stratul."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC al probei la pornire"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Raportul L/D al Siguranță MC"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Avertismente rostite"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Rostește alarmele de coliziune FLARM, cu urgența, poziția de ceas și dacă t"
+"raficul este deasupra sau dedesubt: \"Traffic urgent! Three o'clock. Above."
+"\" Alarmele de obstacol și de zonă de alertă nu sunt rostite."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Încearcă avertismentul rostit"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Comutator comandă viteză"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Cum folosește XCSoar raportul de cruce/urcare al variometrului."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Mod de zbor"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"În zbor, raportul de cruce/urcare al variometrului este modul de zbor. Cruc"
+"ea încheie urcarea și începe media de la capăt. Urcarea începe un termic no"
+"u. Planarea finală poate apărea în continuare în cruce. Pe un Vega aceasta "
+"este ieșirea de circuit."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Mod de afișare"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar stabilește modul de circuit din viraj. Raportul variometrului nu est"
+"e folosit."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Pagina se schimbă, iar modul de zbor nu. Crucea arată pagina de cruce, și î"
+"n viraj, și ascunde planarea finală. Urcarea arată pagina de vario. Pe un V"
+"ega acesta este comutatorul de comandă viteză."
 
 #, no-c-format
 msgid "System Tools"
@@ -11328,71 +11357,86 @@ msgstr "Proba XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Statistica razei"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenă"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM ține statistica pentru fiecare dintre cele două canale radio."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Puncte de date"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Perioadă"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Rază FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM nu a trimis statistica razei."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Resetați statistica razei? Faceți-o după schimbarea antenelor; FLARM o adun"
+"ă din nou."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM nu a confirmat resetarea."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Sub raza minimă"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Sectoare măsurate ale acestui canal a căror rază medie este mai scurtă decâ"
+"t minimul FLARM: 2 nm înainte, 1 nm lateral și înapoi. Verificați montarea "
+"antenei."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Setarea razei"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM nu raportează aeronave dincolo de această distanță. Graficul o arată "
+"ca un cerc întrerupt când este în raza desenată."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Nelimitat"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Contacte cu alte aeronave FLARM în zbor, numărate o dată în fiecare sector "
+"pe care l-au traversat, la cea mai mare distanță la care au fost recepționa"
+"te acolo. Sectorul arată media jumătății mai mari a acestor distanțe, iar l"
+"inia de-a latul pe cea mai mare."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Sectoare măsurate a căror rază estimată este mai scurtă decât minimul FLARM"
+": 2 nm înainte, 1 nm lateral și înapoi. Verificați montarea antenei."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Resetați estimarea razei? Faceți-o după schimbarea antenei; XCSoar o adună "
+"din nou."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "Estimarea razei FLARM"
