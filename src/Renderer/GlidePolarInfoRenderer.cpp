@@ -9,6 +9,9 @@
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Interface.hpp"
+#include "Plane/Plane.hpp"
+#include "Asset.hpp"
 #include "util/StaticString.hxx"
 
 
@@ -37,7 +40,15 @@ RenderGlidePolarInfo(Canvas &canvas, const PixelRect rc,
 
     text.Format("%s: %s", _("Wing loading"), value.c_str());
 
+    const auto &plane = CommonInterface::GetComputerSettings().plane;
+    if (HasColors() &&
+        plane.IsOverMaxTakeoffMass(glide_polar.GetTotalMass()))
+      canvas.SetTextColor(chart_look.text_color == COLOR_WHITE
+                           ? COLOR_INVERSE_RED
+                           : COLOR_RED);
+
     canvas.DrawText({left, rc.bottom - (int)Layout::Scale(35u)},
                     text);
+    canvas.SetTextColor(chart_look.text_color);
   }
 }

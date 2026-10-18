@@ -297,6 +297,19 @@ WndProperty::DecValue() noexcept
 }
 
 void
+WndProperty::SetValueWarning(bool warning) noexcept
+{
+  if (!HasColors())
+    warning = false;
+
+  if (value_warning == warning)
+    return;
+
+  value_warning = warning;
+  Invalidate();
+}
+
+void
 WndProperty::OnPaint(Canvas &canvas) noexcept
 {
   PixelRect visible_edit_rc = edit_rc;
@@ -369,6 +382,9 @@ WndProperty::OnPaint(Canvas &canvas) noexcept
       : COLOR_LIGHT_GRAY;
     text_color = look.dark_mode ? COLOR_GRAY : COLOR_DARK_GRAY;
   }
+
+  if (value_warning)
+    text_color = look.dark_mode ? COLOR_INVERSE_RED : COLOR_RED;
 
   if (!visible_edit_rc.IsEmpty()) {
     canvas.DrawFilledRectangle(visible_edit_rc, background_color);
