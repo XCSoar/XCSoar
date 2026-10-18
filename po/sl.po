@@ -11165,13 +11165,13 @@ msgid "Failed"
 msgstr "Ni uspelo"
 
 msgid "Turn on"
-msgstr "Omogoči"
+msgstr "Vklopi"
 
 msgid "Restart"
 msgstr "Ponovni zagon"
 
 msgid "Turn off"
-msgstr "Onemogoči"
+msgstr "Izklopi"
 
 msgid "System service"
 msgstr "Sistemska storitev"
