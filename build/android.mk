@@ -365,6 +365,7 @@ PNG_FILES = $(PNG2) $(PNG3) $(PNG4) $(PNG5) $(PNG6) $(PNG7) $(PNG8a) $(PNG8) $(P
 # SoundPool uses openRawResourceFd, which does not work on deflated res/raw ogg.
 SOUNDS = fail insert remove beep_bweep beep_clear beep_drip
 SOUNDS += traffic_low traffic_important traffic_urgent above below level
+SOUNDS += airspace_near airspace_above airspace_inside
 SOUNDS += $(addprefix oclock_,1 2 3 4 5 6 7 8 9 10 11 12)
 SOUND_FILES = $(patsubst %,$(RAW_DIR)/%.ogg,$(SOUNDS))
 

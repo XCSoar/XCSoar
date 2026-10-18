@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Copyright The XCSoar Project
 
-"""Generate the spoken traffic alert clips in Data/sound/.
+"""Generate the spoken alert clips in Data/sound/.
 
 The clips are spoken by the Piper voice "cori" (en_GB-cori-high,
 trained on public-domain LibriVox recordings by Bryce Beattie).
@@ -14,7 +14,9 @@ Usage:
   tools/GenerateVoiceClips.py en_GB-cori-high.onnx Data/sound
 
 XCSoar plays a traffic alert as up to three clips in a row (urgency,
-clock position, above/below), so each clip ends with a short pause.
+clock position, above/below). An airspace warning is one clip. Near
+and above have a pause between the two words. Each clip ends with a
+short pause.
 """
 
 import io
@@ -33,6 +35,15 @@ CLIPS = {
     "above": ("Above.", 0.75),
     "below": ("Below.", 0.75),
     "level": ("Level.", 0.75),
+    "airspace_near": ("Airspace near.", 0.75),
+    "airspace_above": ("Airspace above.", 0.75),
+    "airspace_inside": ("Airspace inside.", 0.7),
+}
+
+# Silence after the first word of these clips.
+WORD_GAP_MS = {
+    "airspace_near": 300,
+    "airspace_above": 300,
 }
 
 CLOCK = [
@@ -70,15 +81,28 @@ def synthesize(voice, text, length_scale):
     return samples.astype(np.float32)
 
 
-def trim_and_normalize(samples, rate):
+def trim_and_normalize(samples, rate, tail_ms=TAIL_MS - LEAD_MS):
     """Cut the silence around the speech and normalize the peak."""
     loud = np.where(np.abs(samples) / 32768 > THRESHOLD)[0]
     start = max(0, loud[0] - rate * LEAD_MS // 1000)
     end = min(len(samples), loud[-1] + rate * LEAD_MS // 1000)
     samples = samples[start:end]
     samples *= 32767 * 10 ** (PEAK_DBFS / 20) / np.max(np.abs(samples))
-    pause = np.zeros(rate * (TAIL_MS - LEAD_MS) // 1000, np.float32)
+    pause = np.zeros(rate * tail_ms // 1000, np.float32)
     return np.concatenate([samples, pause]).astype(np.int16)
+
+
+def synthesize_phrase(voice, text, length_scale, rate, gap_ms):
+    """One utterance, or two words with gap_ms of silence between them."""
+    if gap_ms <= 0 or " " not in text:
+        return trim_and_normalize(synthesize(voice, text, length_scale), rate)
+
+    first, rest = text.split(" ", 1)
+    head = trim_and_normalize(
+        synthesize(voice, first, length_scale), rate, tail_ms=gap_ms
+    )
+    tail = trim_and_normalize(synthesize(voice, rest, length_scale), rate)
+    return np.concatenate([head, tail])
 
 
 def main():
@@ -89,7 +113,9 @@ def main():
     rate = voice.config.sample_rate
 
     for name, (text, length_scale) in CLIPS.items():
-        samples = trim_and_normalize(synthesize(voice, text, length_scale), rate)
+        samples = synthesize_phrase(
+            voice, text, length_scale, rate, WORD_GAP_MS.get(name, 0)
+        )
         with wave.open(os.path.join(sys.argv[2], name + ".wav"), "wb") as w:
             w.setnchannels(1)
             w.setsampwidth(2)

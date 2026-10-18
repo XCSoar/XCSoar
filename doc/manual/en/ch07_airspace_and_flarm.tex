@@ -142,7 +142,11 @@ The sequence of events when entering an airspace results typically
 in two warnings: when near (level 1), and when inside (level 2).
 
 Whenever the warning level increases (above level 0) for any airspace,
-the airspace warning dialogue appears, accompanied by a system beep.
+the airspace warning dialogue appears, and XCSoar says ``Airspace
+near.'', ``Airspace above.'' or ``Airspace inside.'' ``Airspace
+above.'' is used when the airspace is overhead and there is no
+horizontal distance. ``Airspace near.'' and ``Airspace above.'' have
+a short pause between the two words.
 When there are no more airspace regions at warning levels above
 0, the dialogue disappears automatically.
 
@@ -212,7 +216,8 @@ fact stating that you are currently inside the airspace.
 The general guidelines for using the dialogue are:
 \begin{itemize}
 \item  Don't acknowledge a warning if you intend to or must avoid the airspace
-\item  The warning system beep only occurs when the warning level increases.
+\item  The spoken alert occurs when the warning level increases, and is
+  repeated while the warning remains if Repetitive sound is enabled.
 \item  The warning system is designed to allow circling near an airspace without
   over-stressing the pilot with extraneous warnings.
 \end{itemize}

@@ -25,6 +25,7 @@
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Engine/Airspace/AirspaceWarningConfig.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Airspace/SpokenAlert.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "util/StaticString.hxx"
@@ -316,6 +317,15 @@ AirspaceWarningMonitor::Reset() noexcept
   last = calculated.airspace_warnings.latest;
 }
 
+static void
+SpeakAirspaceWarning(AirspaceWarning::State state,
+                     const AirspaceInterceptSolution &solution) noexcept
+{
+  const auto clips = SpokenAirspaceAlert::From(
+      state, solution, CommonInterface::Basic().nav_altitude).GetClips();
+  PlayResources(clips);
+}
+
 void
 AirspaceWarningMonitor::PlayRepetitiveSound() noexcept
 {
@@ -327,19 +337,28 @@ AirspaceWarningMonitor::PlayRepetitiveSound() noexcept
     return;
   ProtectedAirspaceWarningManager::Lease lease(*manager);
   FloatDuration closest{1000};
-  bool active = false;
+  const AirspaceWarning *top = nullptr;
   for (const auto &warning : *lease.operator->()) {
-    if (!warning.IsActive()) continue;
-    active = true;
-    if (warning.IsInside()) closest = {};
-    else closest = std::min(closest, warning.GetSolution().elapsed_time);
+    if (!warning.IsActive())
+      continue;
+    if (top == nullptr)
+      top = &warning;
+    if (warning.IsInside())
+      closest = {};
+    else
+      closest = std::min(closest, warning.GetSolution().elapsed_time);
   }
-  if (!active) { sound_interval_counter = 0; sound_timer.Cancel(); return; }
+  if (top == nullptr) {
+    sound_interval_counter = 0;
+    sound_timer.Cancel();
+    return;
+  }
   const unsigned interval = ((closest * 3 / config.warning_time) + 1) * 2;
   if (sound_interval_counter >= interval) {
-    PlayResource("IDR_WAV_BEEPBWEEP");
+    SpeakAirspaceWarning(top->GetWarningState(), top->GetSolution());
     sound_interval_counter = 1;
-  } else ++sound_interval_counter;
+  } else
+    ++sound_interval_counter;
 }
 
 void
@@ -377,12 +396,16 @@ AirspaceWarningMonitor::Check() noexcept
       /* already visible */
       return;
 
-    // un-blank the display, play a sound
+    // un-blank the display, speak the warning
     ResetUserIdle();
-    PlayResource("IDR_WAV_BEEPBWEEP");
+    if (const auto spoken = airspace_warnings->GetTopWarning();
+        spoken && spoken->IsActive()) {
+      SpeakAirspaceWarning(spoken->GetWarningState(),
+                           spoken->GetSolution());
 #ifdef HAVE_VIBRATOR
-    PlayHapticFeedback(HapticFeedbackType::ALARM);
+      PlayHapticFeedback(HapticFeedbackType::ALARM);
 #endif
+    }
 
     if (CommonInterface::GetUISettings().enable_airspace_warning_dialog) {
       sound_interval_counter = 0;
@@ -421,9 +444,9 @@ AirspaceWarningMonitor::Check() noexcept
       CommonInterface::main_window->SetBottomBannerWidget(warning_widget);
     }
 
-    // un-blank the display, play a sound
+    // un-blank the display, speak the warning
     ResetUserIdle();
-    PlayResource("IDR_WAV_BEEPBWEEP");
+    SpeakAirspaceWarning(w->GetWarningState(), w->GetSolution());
 #ifdef HAVE_VIBRATOR
     PlayHapticFeedback(HapticFeedbackType::ALARM);
 #endif
