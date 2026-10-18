@@ -59,6 +59,13 @@ AbstractDevice::PutEmptyMass([[maybe_unused]] double empty_mass, [[maybe_unused]
 }
 
 bool
+AbstractDevice::PutMaxTakeoffMass([[maybe_unused]] double max_takeoff_mass,
+                                  [[maybe_unused]] OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
 AbstractDevice::PutPolar([[maybe_unused]] const GlidePolar &polar,
                          [[maybe_unused]] OperationEnvironment &env)
 {

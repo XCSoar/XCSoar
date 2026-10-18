@@ -409,6 +409,14 @@ LXDevice::StoreReceivedPolar(std::string_view value,
       device_polar.empty_weight = empty_weight;
     } else
       pending_empty_mass.reset();
+
+    if (pending_max_takeoff_mass &&
+        (*pending_max_takeoff_mass > max_weight + 0.1 ||
+         *pending_max_takeoff_mass < max_weight - 0.1)) {
+      max_weight = *pending_max_takeoff_mass;
+      device_polar.max_weight = max_weight;
+    } else
+      pending_max_takeoff_mass.reset();
   }
 
   info.settings.ProvidePolarCoefficients(pc.a, pc.b, pc.c, info.clock);

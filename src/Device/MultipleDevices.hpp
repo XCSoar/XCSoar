@@ -83,6 +83,8 @@ public:
                   OperationEnvironment &env) noexcept;
   void PutCrewMass(double crew_mass, OperationEnvironment &env) noexcept;
   void PutEmptyMass(double empty_mass, OperationEnvironment &env) noexcept;
+  void PutMaxTakeoffMass(double max_takeoff_mass,
+                         OperationEnvironment &env) noexcept;
   void PutPolar(const GlidePolar &polar, OperationEnvironment &env) noexcept;
   void PutTarget(const GeoPoint &location, const char *name,
                  std::optional<double> elevation,

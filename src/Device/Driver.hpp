@@ -100,6 +100,15 @@ public:
   virtual bool PutEmptyMass(double empty_mass, OperationEnvironment &env) = 0;
 
   /**
+   * Send the maximum takeoff weight to the device.
+   *
+   * @param max_takeoff_mass the new maximum takeoff weight [kg]
+   * @return true on success
+   */
+  virtual bool PutMaxTakeoffMass(double max_takeoff_mass,
+                                 OperationEnvironment &env) = 0;
+
+  /**
    * Send the glide polar to the device.
    *
    * The driver receives XCSoar's canonical GlidePolar and extracts
@@ -317,6 +326,8 @@ public:
                   OperationEnvironment &env) override;
   bool PutCrewMass(double crew_mass, OperationEnvironment &env) override;
   bool PutEmptyMass(double empty_mass, OperationEnvironment &env) override;
+  bool PutMaxTakeoffMass(double max_takeoff_mass,
+                         OperationEnvironment &env) override;
   bool PutPolar(const GlidePolar &polar, OperationEnvironment &env) override;
   bool PutTarget(const GeoPoint &location, const char *name,
                  std::optional<double> elevation,

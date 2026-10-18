@@ -116,6 +116,14 @@ MultipleDevices::PutEmptyMass(double empty_mass, OperationEnvironment &env) noex
 }
 
 void
+MultipleDevices::PutMaxTakeoffMass(double max_takeoff_mass,
+                                  OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices)
+    i->PutMaxTakeoffMass(max_takeoff_mass, env);
+}
+
+void
 MultipleDevices::PutPolar(const GlidePolar &polar,
                           OperationEnvironment &env) noexcept
 {

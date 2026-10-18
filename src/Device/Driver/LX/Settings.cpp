@@ -343,6 +343,59 @@ LXDevice::PutEmptyMass(double empty_mass, OperationEnvironment &env)
 }
 
 bool
+LXDevice::PutMaxTakeoffMass(double max_takeoff_mass,
+                            OperationEnvironment &env)
+{
+  if (!IsLXNAVVario())
+    return true;
+
+  /* Zero is "not set" on the plane.  Writing it would store zero. */
+  if (max_takeoff_mass <= 0)
+    return true;
+
+  bool need_polar = false;
+  std::string cmd;
+  {
+    const std::lock_guard lock{mutex};
+    if (!device_polar.valid) {
+      pending_max_takeoff_mass = max_takeoff_mass;
+      need_polar = true;
+    } else {
+      pending_max_takeoff_mass.reset();
+      cmd = fmt::format(
+        "PLXV0,POLAR,W,{:.6f},{:.6f},{:.6f},{:.2f},{:.1f},{:.0f},"
+        "{:.1f},{:.1f},{},{:.0f}",
+        device_polar.a * (LX_POLAR_V * LX_POLAR_V),
+        device_polar.b * LX_POLAR_V,
+        device_polar.c,
+        device_polar.polar_load,
+        device_polar.polar_weight,
+        max_takeoff_mass,
+        device_polar.empty_weight,
+        device_polar.pilot_weight,
+        device_polar.name,
+        device_polar.stall);
+      device_polar.max_weight = max_takeoff_mass;
+    }
+  }
+
+  if (need_polar) {
+    if (EnableNMEA(env))
+      RequestLXNAVVarioSetting("POLAR", env);
+    return false;
+  }
+
+  if (!EnableNMEA(env))
+    return false;
+
+  if (cmd.empty())
+    return false;
+
+  PortWriteNMEA(port, cmd.c_str(), env);
+  return true;
+}
+
+bool
 LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
   {
