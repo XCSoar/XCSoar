@@ -1,4 +1,4 @@
-Version 7.46 - not yet released
+Version 7.46 - 2026-10-19
 * highlights
   - show the current task as a QR code in the task manager, and
     import one from WeGlide or similar with the phone camera #1270
