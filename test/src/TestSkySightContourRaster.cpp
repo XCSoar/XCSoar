@@ -199,6 +199,16 @@ TestRasterBudget()
   const auto zero = SkySight::FitContourRaster({0, 0, 10, 10}, 0, MAX_AXIS,
                                                MAX_CELLS);
   ok1(zero.raster_width == 10 && zero.raster_height == 10);
+
+  /* A sliver patch keeps one pixel on its short axis without breaking
+     the cell budget: 3002 x 1 would otherwise come out at 548 x 1. */
+  const auto row = SkySight::FitContourRaster({0, 0, 3002, 1}, 1, MAX_AXIS,
+                                              100);
+  ok1(row.raster_width == 100 && row.raster_height == 1);
+
+  const auto column = SkySight::FitContourRaster({0, 0, 1, 3002}, 1,
+                                                 MAX_AXIS, 100);
+  ok1(column.raster_width == 1 && column.raster_height == 100);
 }
 
 static void
@@ -426,7 +436,7 @@ TestGeoFieldGrid()
 int
 main()
 {
-  plan_tests(16 + 11 + 3 + 5 + 5 + 14 + 8 + 3 + 4 + 5 + 2 + 6 + 3 + 11 + 12);
+  plan_tests(16 + 11 + 3 + 5 + 5 + 16 + 8 + 3 + 4 + 5 + 2 + 6 + 3 + 11 + 12);
   TestDecodeGridValue();
   TestBipolarDeadZone();
   TestNegativeStopsStillPaint();

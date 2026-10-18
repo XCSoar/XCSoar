@@ -186,6 +186,17 @@ FitContourRaster(ContourWindow window, unsigned upsample, unsigned max_axis,
      a patch narrower than one pixel still gets one. */
   window.raster_width = std::max(1u, unsigned(width));
   window.raster_height = std::max(1u, unsigned(height));
+
+  /* That one pixel can break the cell budget of a sliver patch: the
+     short axis then stays at one pixel and the long one is cut to the
+     budget. */
+  if (std::size_t(window.raster_width) * window.raster_height > max_cells) {
+    if (window.raster_height == 1)
+      window.raster_width = unsigned(max_cells);
+    else
+      window.raster_height = unsigned(max_cells);
+  }
+
   return window;
 }
 
