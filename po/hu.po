@@ -2066,9 +2066,11 @@ msgstr "InfóDoboz beillesztése"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"A Másol megjegyzi ennek a készletnek az összes infódobozát, a Beillesztés e"
+"zekkel cseréli le egy másik készlet infódobozait."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Öröklés a globális beállításokból"
 
 msgid "Invalid"
 msgstr "Érvénytelen"
@@ -2752,17 +2754,19 @@ msgstr "Infó"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Rögzített szöveg"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"A pilóta által megadott cím, érték és megjegyzés. Koppintson a szerkesztésh"
+"ez."
 
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 msgid "Value"
-msgstr ""
+msgstr "Érték"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4396,10 +4400,10 @@ msgid "Reference used for start max height rule."
 msgstr "A maximális startmagassághoz használt referencia."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigálás a legközelebbi ponthoz"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "A start- és célzóna legközelebbi pontjához navigál."
 
 msgid "Finish min. height"
 msgstr "Cél min magasság"
@@ -11013,21 +11017,23 @@ msgstr "Kézi"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Véroxigén"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "A vér oxigéntelítettsége százalékban, Bluetooth pulzoximéterről."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Nemrég használt fordulópontok"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Csatlakozzon az eszköz Wi-Fi hálózatához, hogy letöltse a repüléseket erről"
+" a FLARM-ról."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Meghatározza, hogy a nyomvonal a széllel sodródjon-e köröző módban, közeli térkép-léptékeken. Kikapcsolva a nyomvonal szél-sodródás kompenzáció nélkül marad. Körözéskor ez a vetített nyomvonalgörbére is vonatkozik: Be a légtömeghez képest tartja; Ki beleszámítja a szelet."
 
@@ -11063,20 +11069,22 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Bekapcsolja a forgalmi radart, és kiválasztja a helyét a főképernyőn. Nyílhegy formában kerül kijelzésre a forgalom haladási iránya a sajátunkhoz képest és egy fel vagy lefele mutató háromszög utal a cél relatív magasságára a sajátunkhoz képest. A nyíl színe minden üzemmódban a fenyegetés szintjére utal."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Képernyőfelbontás"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Képernyő fényereje"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "A képernyő fényerejének beállítása."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"A képernyő fényereje csak olvasható, mert az íráshoz további jogosultság ke"
+"ll."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Automata"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11091,10 +11099,10 @@ msgstr "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezé
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Kitérő üzemmód: Automata"
 
 msgid "Paste"
-msgstr ""
+msgstr "Beillesztés"
 
 #, c-format
 msgid ""
@@ -11198,105 +11206,124 @@ msgid "%u min"
 msgstr "%u perc"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Nem található támogatott szolgáltatás"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "A kijelölt systemd egységek nincsenek telepítve."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nem elérhető"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Indítás..."
 
 msgid "Stopping..."
 msgstr "Leállítás…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Újratöltés..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Sikertelen"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Bekapcsolás"
 
 msgid "Restart"
-msgstr ""
+msgstr "Újraindítás"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Kikapcsolás"
 
 msgid "System service"
-msgstr ""
+msgstr "Rendszerszolgáltatás"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH-kiszolgáló"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Távoli terminál"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Érzékelők"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario érzékelőszolgáltatás"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Audió varió"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario audió varió szolgáltatás"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Maximális hőmérséklet az előrejelzésből"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Beírja a max. hőmérsékletet a repülési beállításba az aznapi DWD-előrejelzé"
+"sből a legközelebbi MOSMIX-állomásra. Kell egy helyzet, és naponta egyszer "
+"töltődik; fiók nélkül."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"A nap legmagasabb talajközeli hőmérséklete. A belőle húzott száraz adiabata"
+" az emelkedésben mért külső hőmérséklethez adja a becsült termikplafont; a "
+"felhőalaphoz nedvességérzékelő is kell. Mindkettő az Elemzés párbeszéd hőmé"
+"rsékleti nyomvonal oldalán jelenik meg, miután a vitorlázó átrepülte a réte"
+"get."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Feladat MC indításkor"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "A biztonságos MC L/D értéke"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Felolvasott figyelmeztetések"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Felolvassa a FLARM ütközési riasztásait, a sürgősséggel, az óraállással és "
+"azzal, hogy a forgalom fölötte vagy alatta van: \"Traffic urgent! Three o'c"
+"lock. Above.\" Az akadály- és riasztózóna-riasztásokat nem olvassa fel."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Felolvasott figyelmeztetés próbája"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Sebességparancs-kapcsoló"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Hogyan használja az XCSoar a varió siklás/emelkedés jelentését."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Repülési mód"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Repülés közben a varió siklás/emelkedés jelentése a repülési mód. A siklás "
+"befejezi az emelkedést, és elölről kezdi az átlagot. Az emelkedés új termik"
+"et kezd. A végsiklás siklásban is megjelenhet. Vegán ez a körözés kimenete."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Megjelenítési mód"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"Az XCSoar a körözés módját a fordulóból dönti el. A varió jelentése nem has"
+"znált."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Az oldal változik, a repülési mód nem. A siklás a siklás oldalát mutatja, f"
+"ordulóban is, és elrejti a végsiklást. Az emelkedés a varió oldalát mutatja"
+". Vegán ez a sebességparancs-kapcsoló."
 
 #, no-c-format
 msgid "System Tools"
@@ -11322,71 +11349,85 @@ msgstr "XCSoar feladat"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Hatótáv-statisztika"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenna"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "A FLARM mindkét rádiócsatornájáról statisztikát vezet."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Adatpontok"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Időszak"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM hatótáv"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "A FLARM nem küldte el a hatótáv-statisztikát."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Alapállapotba állítja a hatótáv-statisztikát? Tegye antenna csere után; a F"
+"LARM ezután újra gyűjti."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "A FLARM nem igazolta az alapállapotot."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "A legkisebb hatótáv alatt"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Ennek a csatornának a mért szektorai, amelyek átlagos hatótáva rövidebb a F"
+"LARM minimumánál: 2 nm előre, 1 nm oldalra és hátra. Ellenőrizze az antenna"
+" felszerelését."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Hatótáv beállítása"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"A FLARM nem jelent légi járművet ezen a távolságon túl. A grafikon szaggato"
+"tt körként mutatja, ha a kirajzolt hatótávon belül van."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Korlátlan"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Kapcsolatok más FLARM légi járművekkel repülés közben, szektoronként egysze"
+"r számolva, azon a legnagyobb távolságon, ahol ott vette őket. A szektor e "
+"távolságok nagyobb felének átlagát mutatja, a keresztvonal a legnagyobbat."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Mért szektorok, amelyek becsült hatótáva rövidebb a FLARM minimumánál: 2 nm"
+" előre, 1 nm oldalra és hátra. Ellenőrizze az antenna felszerelését."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Alapállapotba állítja a hatótávbecslést? Tegye antenna csere után; az XCSoa"
+"r ezután újra gyűjti."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM hatótávbecslés"
