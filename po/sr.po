@@ -2056,9 +2056,11 @@ msgstr "InfoBox nalepiti"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopiraj pamti sve InfoBox-ove ovog skupa, Nalepi njima zamenjuje InfoBox-ov"
+"e drugog skupa."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Nasledi iz opštih podešavanja"
 
 msgid "Invalid"
 msgstr "Neispravno"
@@ -2744,17 +2746,17 @@ msgstr "Komentar"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Fiksni tekst"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Naslov, vrednost i komentar koje je uneo pilot. Dodirnite da izmenite."
 
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 msgid "Value"
-msgstr ""
+msgstr "Vrednost"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4396,10 +4398,10 @@ msgid "Reference used for start max height rule."
 msgstr "Referenca koristena za pravilo maksimalne dozvoljene visine početka"
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigiraj do najbliže tačke"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Navigira do najbliže tačke zona starta i cilja."
 
 msgid "Finish min. height"
 msgstr "Minimalna dozvoljena visina završetka"
@@ -10962,21 +10964,21 @@ msgstr "Uputstvo"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Kiseonik u krvi"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Zasićenje krvi kiseonikom u procentima, sa Bluetooth pulsoksimetra."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Nedavno korišćene putne tačke"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Povežite se na Wi-Fi uređaja da preuzmete letove sa ovog FLARM-a."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Одређује да ли се траг помера ветром при приказу у режиму кружења на блиским размерама карте. Искључено — траг остаје без компензације ветреног дрифта. Pri kruženju važi i za projiciranu stazu: Uključeno je drži relativno prema vazdušnoj masi; Isključeno uključuje vetar."
 
@@ -11012,20 +11014,21 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Uključuje radar saobraćaja i bira položaj na glavnom ekranu. Uzork začinje sa šiljkom koja pokazuje smjer traga cilja u odnosu na smjer traga letelca, a trokut koji tačno toči gore ili dolje pokazuje relativnu visinu cilja u odnosu na vas. U svim režimovima boja cilja označava nivo opasnosti."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Rezolucija ekrana"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Osvetljenje ekrana"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Podesite osvetljenje ekrana."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"Osvetljenje ekrana je samo za čitanje jer upis zahteva dodatne dozvole."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11040,10 +11043,10 @@ msgstr "Ovo određuje performans klizanja koje se koristi u računavanju dosega,
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Način alternativnih putova: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Nalepi"
 
 #, c-format
 msgid ""
@@ -11147,105 +11150,124 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Nema pronađenih podržanih usluga"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Izabrane jedinice systemd nisu instalirane."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nedostupno"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Pokretanje..."
 
 msgid "Stopping..."
 msgstr "Заустављање…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Ponovno učitavanje..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Neuspeh"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Uključi"
 
 msgid "Restart"
-msgstr ""
+msgstr "Ponovno pokretanje"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Isključi"
 
 msgid "System service"
-msgstr ""
+msgstr "Usluga sistema"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH server"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Udaljeni terminal"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Senzori"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Usluga senzora OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Zvuk variometar"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Usluga zvuka variometra OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Maksimalna temperatura iz prognoze"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Upisuje maks. temperaturu u podešavanje leta iz današnje prognoze DWD za na"
+"jbližu stanicu MOSMIX. Treba položaj i preuzima se jednom dnevno; bez nalog"
+"a."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Najviša prizemna temperatura dana. Suva adijabata od nje prema spoljašnjoj "
+"temperaturi izmerenoj u penjanju daje procenjeni vrh termala; baza oblaka t"
+"reba i sondu vlage. Obe se crtaju na stranici temperaturnog traga u dijalog"
+"u Analize, kad jedrilica prođe sloj."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC zadatka pri pokretanju"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Odnos klizanja sigurnog Mc"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Govorne uzbune"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Izgovara uzbune sudara FLARM-a, sa hitnošću, položajem na satu i time da li"
+" je saobraćaj iznad ili ispod: \"Traffic urgent! Three o'clock. Above.\" Uz"
+"bune prepreka i zone uzbune se ne izgovaraju."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Isprobaj govornu uzbunu"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Prekidač komande brzine"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Kako XCSoar koristi izveštaj variometra o krstarenju i penjanju."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Način leta"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"U letu je izveštaj variometra o krstarenju i penjanju način leta. Krstarenj"
+"e završava penjanje i počinje prosek iznova. Penjanje započinje novi termal"
+". Finalno klizanje se i dalje može pojaviti u krstarenju. Na Vegi ovo je iz"
+"laz kruženja."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Način prikaza"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar određuje način kruženja prema zaokretu. Izveštaj variometra se ne ko"
+"risti."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Stranica se menja, a način leta ne. Krstarenje prikazuje stranicu krstarenj"
+"a, i u zaokretu, i skriva finalno klizanje. Penjanje prikazuje stranicu var"
+"ia. Na Vegi ovo je prekidač komande brzine."
 
 #, no-c-format
 msgid "System Tools"
@@ -11271,71 +11293,84 @@ msgstr "Zadatak XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Statistika dometa"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antena"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM vodi statistiku za svaki od svoja dva radio kanala."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Podatkovne tačke"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Period"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Domet FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM nije poslao statistiku dometa."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Vratiti statistiku dometa? Učinite to posle zamene antena; FLARM je tada sk"
+"uplja iznova."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM nije potvrdio vraćanje."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Ispod najmanjeg dometa"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Izmereni sektori ovog kanala čiji je srednji domet kraći od minimuma FLARM-"
+"a: 2 nm napred, 1 nm sa strane i nazad. Proverite ugradnju antene."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Podešavanje dometa"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM ne javlja letelice dalje od ove udaljenosti. Grafikon je pokazuje kao"
+" isprekidanu kružnicu kad je unutar nacrtanog dometa."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Neograničeno"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Kontakti sa drugim letelicama FLARM u letu, brojani jednom u svakom sektoru"
+" koji su prošli, sa najvećom udaljenošću na kojoj su tamo primljeni. Sektor"
+" pokazuje prosek veće polovine tih udaljenosti, a crta preko njega najveću."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Izmereni sektori čiji je procenjeni domet kraći od minimuma FLARM-a: 2 nm n"
+"apred, 1 nm sa strane i nazad. Proverite ugradnju antene."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Vratiti procenu dometa? Učinite to posle zamene antene; XCSoar je tada skup"
+"lja iznova."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "Procena dometa FLARM"
