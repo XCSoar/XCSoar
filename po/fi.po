@@ -2066,9 +2066,11 @@ msgstr "Inforuutu-sivut"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopioi muistaa kaikki tämän sarjan infoboxit, Liitä korvaa niillä toisen sa"
+"rjan infoboxit."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Peri yleisistä asetuksista"
 
 msgid "Invalid"
 msgstr "Virheellinen"
@@ -2751,17 +2753,17 @@ msgstr "Kommentti"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Kiinteä teksti"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Ohjaajan antama otsikko, arvo ja kommentti. Napauta muokataksesi."
 
 msgid "Title"
-msgstr ""
+msgstr "Otsikko"
 
 msgid "Value"
-msgstr ""
+msgstr "Arvo"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4394,10 +4396,10 @@ msgid "Reference used for start max height rule."
 msgstr "Korkeustasainen sääntö aloitusmaxiimikorkeudelle."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigoi lähimpään pisteeseen"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Navigoi lähtö- ja maalialueen lähimpään pisteeseen."
 
 msgid "Finish min. height"
 msgstr "Loppuminimi korkeus"
@@ -10960,21 +10962,21 @@ msgstr "Manuaalinen"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Veren happi"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Veren happikyllästeisyys prosentteina Bluetooth-pulssioksimetristä."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Viimeksi käytetyt reittipisteet"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Yhdistä laitteen Wi-Fi-verkkoon ladataksesi lennot tästä FLARMista."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Määrittää, ajetaanko jälki tuulen mukana näytettäessä kaarros-tilassa lähellä olevilla karttamittakaavoilla. Pois päältä jälki jää ilman tuulivirtauksen kompensointia. Kaarrettaessa tämä koskee myös projisoitua jälkeä: Päällä se pysyy ilmamassaan nähden; Pois sisältää tuulen."
 
@@ -11010,20 +11012,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Ottaa liikennetutkan käyttöön ja valitsee sen paikan päänäytöllä. Koneiden suunta suhteessa tavoitteen suunta on näkyvissä nousevaan puolihuikuun muodossa, ja ylöspäin tai alaspäin oleva kolmio kertoo koneen suhteen tavoitteen korkeudelle. Kaikilla tiloissa kohteiden väri kuvaa uhkaustaso."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Näytön tarkkuus"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Näytön kirkkaus"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Säädä näytön kirkkautta."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "Näytön kirkkaus on vain luku, koska kirjoitus vaatii lisäoikeuksia."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11038,10 +11040,10 @@ msgstr "Tämä määrittelee liitolukua käytettäväksi ulkolasku, saavutettavu
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Vaihtoehtoja-kuvaketta: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Liitä"
 
 #, c-format
 msgid ""
@@ -11145,105 +11147,123 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Tuettuja palveluja ei löytynyt"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Valittuja systemd-yksiköitä ei ole asennettu."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Ei saatavilla"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Käynnistetään..."
 
 msgid "Stopping..."
 msgstr "Pysäytetään…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Ladataan uudelleen..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Epäonnistui"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Kytke päälle"
 
 msgid "Restart"
-msgstr ""
+msgstr "Käynnistä uudelleen"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Kytke pois"
 
 msgid "System service"
-msgstr ""
+msgstr "Järjestelmäpalvelu"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH-palvelin"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Etäpääte"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Anturit"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVarion anturipalvelu"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Variom. äänet"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVarion äänivariopalvelu"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Ennusteen enimmäislämpötila"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Täyttää lennon asetuksen enimmäislämpötilan päivän DWD-ennusteesta lähimmäl"
+"le MOSMIX-asemalle. Tarvitsee sijainnin ja latautuu kerran päivässä; ei til"
+"iä."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Päivän korkein maanpintalämpötila. Kuiva adiabaatti siitä nousussa mitattuu"
+"n ulkoilman lämpötilaan antaa arvioidun termiikkikaton; pilvipohja tarvitse"
+"e myös kosteusanturin. Molemmat piirretään Analysointi-valintaikkunan lämpö"
+"jälkisivulle, kun purjekone on noussut kerroksen läpi."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Tehtävän MC käynnistyksessä"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Turvallisuuden MC:n liitoluku"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Puhutut varoitukset"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Lukee FLARMin törmäyshälytykset, tärkeyden, kellosuunnan ja sen, onko liike"
+"nne ylä- vai alapuolella: \"Traffic urgent! Three o'clock. Above.\" Este- j"
+"a hälytysaluehälytyksiä ei lueta."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Kokeile puhuttua varoitusta"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Nopeuskomentokytkin"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Miten XCSoar käyttää variometrin liuku- ja nousuilmoitusta."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Lentotila"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Lennossa variometrin liuku- ja nousuilmoitus on lentotila. Liuku lopettaa n"
+"ousun ja aloittaa keskiarvon alusta. Nousu aloittaa uuden termiikin. Loppul"
+"iuku voi yhä näkyä liu'ussa. Vegassa tämä on kierron lähtö."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Näyttötila"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar päättelee kiertotilan käännöksestä. Variometrin ilmoitusta ei käytet"
+"ä."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Sivu vaihtuu, lentotila ei. Liuku näyttää liukusivun myös käännöksessä ja p"
+"iilottaa loppuliu'un. Nousu näyttää variosivun. Vegassa tämä on nopeuskomen"
+"tokytkin."
 
 #, no-c-format
 msgid "System Tools"
@@ -11269,71 +11289,85 @@ msgstr "XCSoar-tehtävä"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Kantamatilasto"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenni"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM pitää tilastoa kummastakin radiokanavastaan."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Datapisteet"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Jakso"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM-kantama"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM ei lähettänyt kantamatilastoaan."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Palautetaanko kantamatilasto? Tee se antennien vaihdon jälkeen; FLARM kerää"
+" sen sitten uudelleen."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM ei vahvistanut palautusta."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Alle vähimmäiskantaman"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Tämän kanavan mitatut sektorit, joiden keskikantama on lyhyempi kuin FLARMi"
+"n minimi: 2 nm eteen, 1 nm sivuille ja taakse. Tarkista antennin asennus."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Kantama-asetus"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM ei ilmoita ilma-aluksia tätä etäisyyttä kauempaa. Kaavio näyttää sen "
+"katkoviivaympyränä, kun se on piirretyn kantaman sisällä."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Rajoittamaton"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Yhteydet muihin FLARM-ilma-aluksiin lennossa, laskettuina kerran jokaisessa"
+" sektorissa jonka ne ylittivät, suurimmalla etäisyydellä jolla ne siellä va"
+"staanotettiin. Sektori näyttää näiden etäisyyksien suuremman puolikkaan kes"
+"kiarvon, poikkiviiva suurimman."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Mitatut sektorit, joiden arvioitu kantama on lyhyempi kuin FLARMin minimi: "
+"2 nm eteen, 1 nm sivuille ja taakse. Tarkista antennin asennus."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Palautetaanko kantama-arvio? Tee se antennin vaihdon jälkeen; XCSoar kerää "
+"sen sitten uudelleen."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARMin kantama-arvio"
