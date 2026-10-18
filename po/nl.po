@@ -2076,9 +2076,11 @@ msgstr "InfoBox plakken"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopieer onthoudt alle informatievakken van deze set, Plakken vervangt "
+"daarmee de informatievakken van een andere set."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Overnemen van de globale instellingen"
 
 msgid "Invalid"
 msgstr "Ongeldig"
@@ -2765,17 +2767,18 @@ msgstr "Opmerking"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Vaste tekst"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Titel, waarde en opmerking ingevoerd door de vlieger. Tik om te bewerken."
 
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 msgid "Value"
-msgstr ""
+msgstr "Waarde"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4434,10 +4437,10 @@ msgid "Reference used for start max height rule."
 msgstr "Referentie die gebruikt wordt voor de start max hoogte regel."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigeer naar het dichtstbijzijnde punt"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Navigeert naar het dichtstbijzijnde punt van de start- en finishzone."
 
 msgid "Finish min. height"
 msgstr "Finish min hoogte"
@@ -11070,21 +11073,25 @@ msgstr "Handmatig"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Bloedzuurstof"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
+"Zuurstofsaturatie van het bloed in procenten, van een "
+"Bluetooth-pulsoximeter."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Recent gebruikte keerpunten"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Verbind met de Wi-Fi van het apparaat om de vluchten van deze FLARM te "
+"downloaden."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Bepaalt of het slakkenspoor met de wind meedrijft wanneer het in cirkelmodus bij nabije kaartschalen wordt getoond. Uit — het spoor blijft ongecompenseerd voor winddrift. In circuleren geldt dit ook voor de geprojecteerde koerscurve: Aan houdt hem relatief tot de luchtmassa; Uit neemt de wind mee."
 
@@ -11120,20 +11127,21 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Schakelt de verkeersradar in en kiest de positie op het hoofdscherm. De koers van het object ten opzichte van de koers van het vliegtuig wordt weergegeven als een pijlpunt. Een driehoek naar boven of naar beneden toont de relatieve hoogte van het object ten opzichte van het vliegtuig. In alle modi, geeft de kleur van het object de dreiging aan."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Schermresolutie"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Schermhelderheid"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Schermhelderheid aanpassen."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"De schermhelderheid is alleen-lezen omdat schrijven extra rechten vereist."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11148,10 +11156,10 @@ msgstr "Dit bepaalt de glij prestaties in bereik modus, landbare aankomst, af te
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Alternatievenmodus: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Plakken"
 
 #, c-format
 msgid ""
@@ -11255,105 +11263,125 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Geen ondersteunde diensten gevonden"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Er zijn geen geselecteerde systemd-units geïnstalleerd."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Niet beschikbaar"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Starten..."
 
 msgid "Stopping..."
 msgstr "Bezig met stoppen…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Opnieuw laden..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Aanzetten"
 
 msgid "Restart"
-msgstr ""
+msgstr "Herstart"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Uitzetten"
 
 msgid "System service"
-msgstr ""
+msgstr "Systeemdienst"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH-server"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Externe terminaltoegang"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Sensoren"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario-sensordienst"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Vario-geluid"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario-audio-variodienst"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Max. temperatuur uit de verwachting"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Vult de max. temperatuur in de vluchtinstellingen vanuit de DWD-verwachting "
+"van de dag voor het dichtstbijzijnde MOSMIX-station. Heeft een positie "
+"nodig en haalt die eenmaal per dag op; geen account."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"De maximale bodemtemperatuur van de dag. Een droge adiabaat daarvan tegen "
+"de buitenluchttemperatuur, gemeten tijdens het stijgen, geeft het geschatte "
+"thermiekplafond; de wolkenbasis heeft ook een vochtigheidssonde nodig. "
+"Beide worden getekend op de temperatuurcurve van het dialoogvenster "
+"Analyse, zodra het zweefvliegtuig door de laag is gestegen."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC van de opdracht bij opstarten"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Glijgetal van de veiligheids-MC"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Gesproken waarschuwingen"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Spreekt de botsingsalarmen van de FLARM uit, met de urgentie, de "
+"klokpositie en of het verkeer hoger of lager is: \"Traffic urgent! Three "
+"o'clock. Above.\" Obstakel- en alarmzonealarmen worden niet uitgesproken."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Gesproken waarschuwing testen"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Schakelaar snelheidscommando"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Hoe XCSoar de steek/stijgen-melding van de vario gebruikt."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Vluchtmodus"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Tijdens het vliegen is de steek/stijgen-melding van de vario de "
+"vluchtmodus. Steken beëindigt het stijgen en herstart het gemiddelde. "
+"Stijgen begint een nieuwe thermiek. De eindvlucht kan nog verschijnen "
+"tijdens steken. Op een Vega is dit de cirkeluitgang."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Weergavemodus"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar bepaalt het cirkelen uit de bocht. De variomelding wordt niet "
+"gebruikt."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"De pagina verandert en de vluchtmodus niet. Steken toont de steekpagina, "
+"ook tijdens het draaien, en verbergt de eindvlucht. Stijgen toont de "
+"variopagina. Op een Vega is dit de schakelaar van het snelheidscommando."
 
 #, no-c-format
 msgid "System Tools"
@@ -11379,71 +11407,87 @@ msgstr "XCSoar-taak"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Bereikstatistiek"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenne"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "De FLARM houdt de statistiek bij voor elk van zijn twee radiokanalen."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Meetpunten"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Periode"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM-bereik"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "De FLARM heeft zijn bereikstatistiek niet gestuurd."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Bereikstatistiek herstellen? Doe dit na een wijziging aan de antennes; de "
+"FLARM verzamelt ze dan opnieuw."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "De FLARM heeft het herstellen niet bevestigd."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Onder het minimumbereik"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Gemeten sectoren van dit kanaal waarvan het gemiddelde bereik korter is dan "
+"het minimum van FLARM: 2 nm vooruit, 1 nm opzij en achteruit. Controleer de "
+"antenne-installatie."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Bereikinstelling"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"De FLARM meldt geen vliegtuigen voorbij deze afstand. De grafiek toont die "
+"als een streepjescirkel wanneer ze binnen het getekende bereik ligt."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Onbeperkt"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Contacten met andere FLARM-vliegtuigen in de vlucht, eenmaal geteld in elke "
+"sector die ze passeerden, met de grootste afstand waarop ze daar werden "
+"ontvangen. De sector toont het gemiddelde van de grootste helft van deze "
+"afstanden, de lijn erover de grootste."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Gemeten sectoren waarvan het geschatte bereik korter is dan het minimum van "
+"FLARM: 2 nm vooruit, 1 nm opzij en achteruit. Controleer de "
+"antenne-installatie."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Bereikschatting herstellen? Doe dit na een wijziging aan de antenne; XCSoar "
+"verzamelt die dan opnieuw."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM-bereikschatting"
