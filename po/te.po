@@ -2037,9 +2037,11 @@ msgstr "సమాచార బ్యాక్స్‌ కొనైపెట్�
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"కాపీ ఈ సెట్‌లోని ఇన్ఫోబాక్సులన్నింటినీ గుర్తుంచుకుంటుంది, పేస్ట్ వాటితో మరో"
+" సెట్ ఇన్ఫోబాక్సులను మారుస్తుంది."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "సాధారణ సెట్టింగ్‌ల నుండి వారసత్వం"
 
 msgid "Invalid"
 msgstr "అసలూకూరు"
@@ -2722,17 +2724,17 @@ msgstr "కామెంట్"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "స్థిర పాఠ్యం"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "పైలట్ నమోదు చేసిన శీర్షిక, విలువ, వ్యాఖ్య. మార్చడానికి నొక్కండి."
 
 msgid "Title"
-msgstr ""
+msgstr "శీర్షిక"
 
 msgid "Value"
-msgstr ""
+msgstr "విలువ"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4296,10 +4298,10 @@ msgid "Reference used for start max height rule."
 msgstr "ప్రారంభ మేగిన ఉత్తమ ఊరు నిలిచడానికి ఉపయోగించాలనున్న ఉత్తరం"
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "దగ్గరి బిందువుకు నావిగేట్"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "ప్రారంభ మరియు ముగింపు మండలాల దగ్గరి బిందువుకు నావిగేట్ చేస్తుంది."
 
 msgid "Finish min. height"
 msgstr "అవధి మార్గ నిలిచడం"
@@ -6307,6 +6309,8 @@ msgstr "V TAS"
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
 msgstr ""
+"మద్దతు ఉన్న బాహ్య తెలివైన వేరియో నివేదించిన నిజమైన గాలి వేగం. నేల వేగం మరియ"
+"ు గాలి నుండి అంచనా వేసినప్పుడు విలువ నీలం."
 
 #, no-c-format
 msgid "Team code"
@@ -7182,7 +7186,7 @@ msgid "no QNH"
 msgstr "నిష్పత్తి కోడ్ (QNH)"
 
 msgid "no wind"
-msgstr ""
+msgstr "గాలి లేదు"
 
 msgid "Not flying"
 msgstr "ప్రాచీనమైన గతి"
@@ -10802,21 +10806,21 @@ msgstr "మానిలోయిక్"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "రక్తంలో ఆక్సిజన్"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Bluetooth పల్స్ ఆక్సిమీటర్ నుండి రక్తంలో ఆక్సిజన్ సంతృప్తి, శాతంలో."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "ఇటీవల వాడిన వే పాయింట్లు"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "ఈ FLARM నుండి విమానాలను దించుకోవడానికి పరికర Wi-Fiకి కనెక్ట్ అవ్వండి."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "సమీప మ్యాప్ స్కేల్స్‌లో సర్క్లింగ్ మోడ్‌లో చూపినప్పుడు స్నెయిల్ ట్రయిల్ గాలితో డ్రిఫ్ట్ అవుతుందో లేదో నిర్ణయిస్తుంది. ఆఫ్ అయితే ట్రయిల్ గాలి డ్రిఫ్ట్ కాంపెన్సేషన్ లేకుండా ఉంటుంది. సర్క్లింగ్‌లో ప్రొజెక్టెడ్ ట్రాక్ వక్రానికి కూడా వర్తిస్తుంది: ఆన్ గాలి ద్రవ్యరాశికి సాపేక్షంగా ఉంచుతుంది; ఆఫ్ గాలిని చేర్చుతుంది."
 
@@ -10852,20 +10856,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "ట్రాఫిక్ రాడార్‌ను ప్రారంభించి ప్రధాన స్క్రీన్‌పై స్థానాన్ని ఎంచుకుంటుంది. తాజేశ కోణం ని వహాయ్ కోణం నిర్వహణ కోణంలో ఉన్న తాజేశ కోణం అనే సీక్‌లు దాదాపు చేయబడతాయి, మరియు తాజేశ నివారణ సంఖ్యను ఉన్నట్లు కోణం చెప్తుంది. అనేక రూపాలలో, తాజేశ వర్గమూలం తాజేశ స్థాయిని చెప్తుంది."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "తెర విభాజకత"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "తెర ప్రకాశం"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "తెర ప్రకాశాన్ని సరిచేయండి."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "రాయడానికి అదనపు అనుమతులు కావాలి కాబట్టి తెర ప్రకాశం చదవడానికి మాత్రమే."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "ఆటో"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -10880,10 +10884,10 @@ msgstr "ఈ దృష్టిని రాయ్, క్లియరెన్�
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "ప్రత్యామ్నాయ మోడ్: ఆటో"
 
 msgid "Paste"
-msgstr ""
+msgstr "అతికించు"
 
 #, c-format
 msgid ""
@@ -10987,105 +10991,121 @@ msgid "%u min"
 msgstr "%u ని"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "మద్దతు ఉన్న సేవలు కనబడలేదు"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "ఎంచుకున్న systemd యూనిట్లు ఇన్‌స్టాల్ కాలేదు."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "అందుబాటులో లేదు"
 
 msgid "Starting..."
-msgstr ""
+msgstr "ప్రారంభమవుతోంది..."
 
 msgid "Stopping..."
 msgstr "ఆపుతోంది…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "మళ్లీ లోడ్ అవుతోంది..."
 
 msgid "Failed"
-msgstr ""
+msgstr "విఫలమైంది"
 
 msgid "Turn on"
-msgstr ""
+msgstr "ఆన్ చేయి"
 
 msgid "Restart"
-msgstr ""
+msgstr "పునఃప్రారంభించు"
 
 msgid "Turn off"
-msgstr ""
+msgstr "ఆఫ్ చేయి"
 
 msgid "System service"
-msgstr ""
+msgstr "సిస్టమ్ సేవ"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH సర్వర్"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "రిమోట్ టెర్మినల్"
 
 msgid "Sensors"
-msgstr ""
+msgstr "సెన్సార్లు"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario సెన్సార్ సేవ"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "ఆడియో వేరియో"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario ఆడియో వేరియో సేవ"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "అంచనా నుండి గరిష్ఠ ఉష్ణోగ్రత"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"ఆ రోజు DWD అంచనా నుండి సమీప MOSMIX స్టేషన్ గరిష్ఠ ఉష్ణోగ్రతను విమాన సెట్టిం"
+"గ్‌లో పెడుతుంది. స్థానం కావాలి, రోజుకు ఒకసారి దిగుమతి; ఖాతా అవసరం లేదు."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"ఆ రోజు నేల గరిష్ఠ ఉష్ణోగ్రత. దాని నుండి ఎగబాకులో కొలిచిన బయటి గాలి ఉష్ణోగ్ర"
+"తకు పొడి అడియాబాట్ అంచనా థర్మల్ పైకప్పును ఇస్తుంది; మేఘపు అడుగుకు తేమ సెన్స"
+"ార్ కూడా కావాలి. గ్లైడర్ పొరను దాటిన తర్వాత రెండూ విశ్లేషణ డైలాగ్ ఉష్ణోగ్రత"
+" జాడ పేజీలో గీయబడతాయి."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "ప్రారంభంలో టాస్క్ MC"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "భద్రతా MC గ్లైడ్ నిష్పత్తి"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "మాట్లాడే హెచ్చరికలు"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"FLARM ఢీకొనే అలారాలను అత్యవసరం, గడియార స్థానం, ట్రాఫిక్ పైనా కిందా అనే వివర"
+"ాలతో చదువుతుంది: \"Traffic urgent! Three o'clock. Above.\" అడ్డంకి మరియు అల"
+"ర్ట్ జోన్ అలారాలు చదవబడవు."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "మాట్లాడే హెచ్చరికను పరీక్షించు"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "వేగ ఆదేశ స్విచ్"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "వేరియోమీటర్ క్రూజ్/ఆరోహణ నివేదికను XCSoar ఎలా వాడుతుంది."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "విమాన మోడ్"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"విమానంలో వేరియోమీటర్ క్రూజ్/ఆరోహణ నివేదికే విమాన మోడ్. క్రూజ్ ఆరోహణను ముగిం"
+"చి సగటును మొదటి నుండి మొదలుపెడుతుంది. ఆరోహణ కొత్త థర్మల్‌ను మొదలుపెడుతుంది."
+" తుది గ్లైడ్ క్రూజ్‌లో కూడా కనిపించవచ్చు. Vegaలో ఇది వలయ అవుట్‌పుట్."
 
 msgid "Display mode"
-msgstr ""
+msgstr "ప్రదర్శన మోడ్"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"XCSoar వలయ మోడ్‌ను మలుపు నుండి నిర్ణయిస్తుంది. వేరియోమీటర్ నివేదిక వాడబడదు."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"పేజీ మారుతుంది, విమాన మోడ్ మారదు. క్రూజ్ మలుపులో కూడా క్రూజ్ పేజీని చూపి తు"
+"ది గ్లైడ్‌ను దాచుతుంది. ఆరోహణ వేరియో పేజీని చూపుతుంది. Vegaలో ఇది వేగ ఆదేశ "
+"స్విచ్."
 
 #, no-c-format
 msgid "System Tools"
@@ -11111,71 +11131,84 @@ msgstr "XCSoar టాస్క్"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "పరిధి గణాంకాలు"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "యాంటెన్నా"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM తన రెండు రేడియో ఛానెళ్లకు గణాంకాలు ఉంచుతుంది."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "డేటా బిందువులు"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "కాలం"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM పరిధి"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM పరిధి గణాంకాలను పంపలేదు."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"పరిధి గణాంకాలను రీసెట్ చేయాలా? యాంటెన్నాలు మార్చిన తర్వాత చేయండి; FLARM వాట"
+"ిని మళ్లీ సేకరిస్తుంది."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM రీసెట్‌ను నిర్ధారించలేదు."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "కనిష్ఠ పరిధి కంటే తక్కువ"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"ఈ ఛానెల్‌లో సగటు పరిధి FLARM కనిష్ఠం కంటే తక్కువగా ఉన్న కొలిచిన సెక్టార్లు:"
+" ముందు 2 nm, పక్కలకు మరియు వెనుక 1 nm. యాంటెన్నా అమరికను తనిఖీ చేయండి."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "పరిధి సెట్టింగ్"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM ఈ దూరం దాటి విమానాలను నివేదించదు. గీసిన పరిధిలో ఉంటే గ్రాఫ్ దాన్ని వి"
+"రిగిన వృత్తంగా చూపుతుంది."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "అపరిమితం"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"విమానంలో ఇతర FLARM విమానాలతో సంపర్కాలు, అవి దాటిన ప్రతి సెక్టార్‌లో ఒకసారి,"
+" అక్కడ స్వీకరించిన అతి పెద్ద దూరంతో లెక్క. సెక్టార్ ఆ దూరాల పెద్ద సగం సగటున"
+"ు, అడ్డగీత అతి పెద్దదాన్ని చూపుతుంది."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"అంచనా పరిధి FLARM కనిష్ఠం కంటే తక్కువగా ఉన్న కొలిచిన సెక్టార్లు: ముందు 2 nm"
+", పక్కలకు మరియు వెనుక 1 nm. యాంటెన్నా అమరికను తనిఖీ చేయండి."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"పరిధి అంచనాను రీసెట్ చేయాలా? యాంటెన్నా మార్చిన తర్వాత చేయండి; XCSoar దాన్ని"
+" మళ్లీ సేకరిస్తుంది."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "FLARM పరిధి అంచనా"
