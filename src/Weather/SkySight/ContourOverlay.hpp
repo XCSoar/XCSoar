@@ -15,7 +15,9 @@
 
 class Path;
 
-#ifdef USE_GEOTIFF
+/* MapOverlayBitmap, which draws the contoured patch, exists only with
+   OpenGL */
+#if defined(USE_GEOTIFF) && defined(ENABLE_OPENGL)
 
 /**
  * Draws a SkySight forecast field as filled contour bands.
