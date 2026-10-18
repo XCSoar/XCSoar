@@ -247,18 +247,14 @@ Version 7.46 - not yet released
   - create the plane profile for a registration received from a
     device in the planes folder, instead of the data folder, and
     never replace an existing profile with it
-  - fix changing the empty mass of the active plane not reaching
-    the vario; a send before the polar is known is sent when the
-    polar arrives, and that reply does not put the old mass back.
-    Activating another plane sends that plane's whole polar when
-    polar sync is Send, and does not copy its empty mass onto the
-    vario's curve. A save that leaves the empty mass alone does not
-    resend ballast #3353
   - show only the start time in the flight download list when the
     logger did not record when a flight ended, instead of 00:00
     (LXNAV S10)
   - note in the IGC file when another device takes over the GPS fix
     during the flight #3180
+  - send a change of the empty mass to an LXNAV vario. Selecting
+    another plane sends that plane's whole polar when polar sync
+    is Send #3353
   - fix corrupted IGC files downloaded from an LXNAV S100 and other
     LXNAV loggers over Bluetooth
   - fix an LXNAV S-series flight download stopping after good lines,
@@ -287,6 +283,10 @@ Version 7.46 - not yet released
     is not known
   - adopt the vario's pilot weight into Flight Setup crew when only
     that weight changes and the polar coefficients stay the same
+  - keep the vario's ballast in step with Flight Setup when crew
+    weight changes. The vario stores ballast as a fraction of the
+    reference mass, so a crew change was moving the water by the
+    same amount
   - show each repository file as its name and its description, and
     download every ticked file together. Countries and Search narrow
     map, waypoint and airspace files, and the country ticks are kept
