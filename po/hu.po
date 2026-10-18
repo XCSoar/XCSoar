@@ -1090,9 +1090,6 @@ msgstr "Deklarálás küldése"
 msgid "Reading flight list"
 msgstr "Repülési lista betöltése"
 
-msgid "Downloading flight log"
-msgstr "Napló letöltése"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Tiltva"
@@ -1788,9 +1785,6 @@ msgstr "Riaszt"
 msgid "Airspace"
 msgstr "Légtér"
 
-msgid "Select Pattern"
-msgstr "Válassz mintát"
-
 msgid "Squawk code"
 msgstr "Kód beállítás"
 
@@ -1845,9 +1839,6 @@ msgstr "Keretszín"
 
 msgid "Change Fill Color"
 msgstr "Kitöltési szín"
-
-msgid "Change Fill Brush"
-msgstr "Kitöltési mintázat"
 
 msgid "Border Width"
 msgstr "Keret vastagsága"
@@ -1951,9 +1942,6 @@ msgstr "Ballaszt"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "A gép vízballasztja. Növelje ezt az értéket, ha a pilóta/csomag terhelés nagyobb mint a referenciapilóta súlya a polárgörbén (tipikusan 75kg). Az Enter megnyomására elindul a ballaszt kiengedése, a konfigurációban megadott ütemben."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Az aktuális szárnyterhelés, a vitorlázó üres tömegéből, a személyzet tömegéből és a ballasztból számítva."
-
 msgid "Bugs"
 msgstr "Bogárpiszok"
 
@@ -1970,9 +1958,6 @@ msgstr "Területi nyomás barometrikus magasságmérő kalibrálásához. Ez aut
 
 msgid "Max. temp."
 msgstr "Max. hőm."
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "Állítsa be a várható talajmenti hőmérsékletet. A konvekció-becslő használja (Elemzés ablak hőmérsékletváltozás oldala)"
 
 #, no-c-format
 msgid "Orientation"
@@ -2030,10 +2015,6 @@ msgid "Gauges"
 msgstr "Műszerek"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "Feladat alapértelmezések"
-
-#, no-c-format
 msgid "Look"
 msgstr "Megjelenés"
 
@@ -2043,14 +2024,8 @@ msgstr "Szakértő"
 msgid "Configuration"
 msgstr "Beállítások"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Az InfoBox panel konfigurációjának neve."
-
 msgid "InfoBox"
 msgstr "InfóDoboz"
-
-msgid "Content"
-msgstr "Tartalom"
 
 msgid "Copy Set"
 msgstr "Másol"
@@ -2066,9 +2041,11 @@ msgstr "InfóDoboz beillesztése"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"A Másol megjegyzi ennek a készletnek az összes infódobozát, a Beillesztés e"
+"zekkel cseréli le egy másik készlet infódobozait."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Öröklés a globális beállításokból"
 
 msgid "Invalid"
 msgstr "Érvénytelen"
@@ -2426,9 +2403,6 @@ msgstr "Max.mag.nyrsg"
 msgid "Near"
 msgstr "Közeli FP"
 
-msgid "Share"
-msgstr "Megosztás"
-
 #, no-c-format
 msgid "Disconnected"
 msgstr "Nincs kapcsolat"
@@ -2752,17 +2726,19 @@ msgstr "Infó"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Rögzített szöveg"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"A pilóta által megadott cím, érték és megjegyzés. Koppintson a szerkesztésh"
+"ez."
 
 msgid "Title"
-msgstr ""
+msgstr "Cím"
 
 msgid "Value"
-msgstr ""
+msgstr "Érték"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -2943,12 +2919,6 @@ msgstr "Légtér kiszínezésének módja"
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Légtér kiszínezésének módja."
-
-msgid "Airspace transparency"
-msgstr "Légtér átlátszóság"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Ha bekapcsoljuk, a légtereket átlátszóan színezi ki."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3270,16 +3240,6 @@ msgstr ""
 "barometrikus magasság lesz felhasználva minden navigációs számításhoz. "
 "Ellenkező esetben a GPS magasságot használja."
 
-msgid "Flap forces cruise"
-msgstr "Ivelőlap siklást jelent"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr ""
-"Ha bekapcsoljuk és Vega variométer csatlakozik, a pozitív ívelőlap állások "
-"átkapcsolnak a körözés és a siklás üzemmódok között."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "Ajánlott időtartam siklóernyősöknek."
@@ -3354,6 +3314,7 @@ msgstr "Szöveg méret"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Képernyő felbontása a vonalvastagságok, betűméretek és egyebek megfelelő megjelenítéséhez."
 
+#. the Kobo has no time zone configuration which we could follow
 msgid "Automatic"
 msgstr "automata"
 
@@ -3414,90 +3375,6 @@ msgstr "Fordított álló"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Fordított fekvő"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 Osztás"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 Osztás"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 Osztás 3 sorban"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 Osztás 3 sorban"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 Osztás 3 sorban"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "Jobb alsó"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 lent + varió (álló)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "Bal felső"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 Felső + Variometer (Portrét)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 jobbra + varió (Fekvő)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Bal + Jobb + Varió (Fekvő)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "9 Bal + Jobb + Varió (Fekvő)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 jobbra (Négyzetes)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "Jobb alsó"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "Jobb alsó"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "Bal felső"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "Bal felső"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "12 jobbra (Fekvő)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "Jobb alsó"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "Bal felső"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "Jobb alsó"
 
 #, no-c-format
 msgid "Text"
@@ -3591,9 +3468,6 @@ msgstr "Mindig használjon világos szöveget sötét InfoBox háttéren."
 
 msgid "Full screen"
 msgstr "Teljes képernyő"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "XCSoar futtatása teljes képernyős módban"
 
 msgid "Display orientation"
 msgstr "Képernyő tájolás"
@@ -3948,16 +3822,8 @@ msgid "Straight"
 msgstr "Egyenesen"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "Az egyenes vonalú repülésben elérhető terület."
-
-#, no-c-format
 msgid "Turning"
 msgstr "Kerülőkkel"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr "A terepakadályok megkerülésével elérhető terület."
 
 #. Spacer
 msgid "Reach mode"
@@ -3967,10 +3833,6 @@ msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr "Az elérhető terület kiszámításának módja."
-
-#, no-c-format
-msgid "Uses task glide polar."
-msgstr "A feladat polárgörbéjével."
 
 #, no-c-format
 msgid "Safety MC"
@@ -3984,48 +3846,24 @@ msgid "Reach polar"
 msgstr "Elérhető polárisa"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "Letiltja az elérhetó terület megjelenítését."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "Domborzat be"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr "A terület peremét szaggatott vonal jelzi."
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "Terep feletti bizt. mag."
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr "A területen kívüli terep árnyékolva lesz."
-
-#, no-c-format
 msgid "Working line"
 msgstr "Munkasáv"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr "A terület peremét szaggatott vonal jelzi."
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "Elérhető táv vonala"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "A terület peremét szaggatott vonal jelzi."
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "Munka sor, terület sárgítása"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "A terület peremét szaggatott vonal jelzi."
 
 msgid "Reach display"
 msgstr "Elérhető kijelzése"
@@ -4081,14 +3919,6 @@ msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
 "Bekapcsolva 1%-kal növeli a bogárpiszok szintet minden repült óra után."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Ezzel a MacCready értékkel kerülnek meghatározásra feladat megszakítása "
-"esetén az elérhető leszállóhelyek és érkezési magasságok."
 
 msgid "STF risk factor"
 msgstr "Magasságvesztés kockázata"
@@ -4396,10 +4226,10 @@ msgid "Reference used for start max height rule."
 msgstr "A maximális startmagassághoz használt referencia."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigálás a legközelebbi ponthoz"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "A start- és célzóna legközelebbi pontjához navigál."
 
 msgid "Finish min. height"
 msgstr "Cél min magasság"
@@ -4756,14 +4586,6 @@ msgstr "A földrajzi szélességhez, hosszúsághoz használt mértékegység."
 #, no-c-format
 msgid "UTC offset"
 msgstr "Helyi idő eltérése UTC-től"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"A helyi időzóna, az UTC-hez képesti eltolás beállítása. Alul látszik a "
-"számított helyi idő, ami segít a megfelelő eltolást beállítani."
 
 msgid "Use GPS time"
 msgstr "GPS idő használata"
@@ -5775,14 +5597,6 @@ msgid "TL Avg"
 msgstr "Tk átlg"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Az utolsó termikben nyert/veszített magasság és a körözéssel töltött idő "
-"hányadosa."
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "Termik nyereség"
 
@@ -5805,10 +5619,6 @@ msgstr "A legutolsó termik hossza"
 #, no-c-format
 msgid "TL duration"
 msgstr "Idő repült"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Az utolsó termikben körözéssel töltött idő."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -6967,10 +6777,6 @@ msgid "T Next Leg"
 msgstr "T köv szksz"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "A termikemelés a következő szakszon, ami megfelel egy, a jelenlegi szakasz MacCready beállításával megegyező termiknek."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Szembeszél összetevő (egyszerűsített)"
 
@@ -7323,20 +7129,12 @@ msgid "Altn 1 AltD"
 msgstr "Ktr1"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "A feladat utolsó fordulópontjába érkezés magassága a biztonsági magassághoz képest."
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "FP magasság többlet"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "Ktr2"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "A feladat utolsó fordulópontjába érkezés magassága a biztonsági magassághoz képest."
 
 #, no-c-format
 msgid "Simulator"
@@ -8404,13 +8202,6 @@ msgstr ""
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "Nem sikerült csatlakozni. Ellenőrizze a jelszót, és próbálja újra."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Az aktuális QNH nyomásbeállítás a barometrikus magasság számításhoz. "
-"Koppintson az InfoBoxra a beállítópanel megnyitásához és a QNH kézi "
-"módosításához."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9885,14 +9676,6 @@ msgstr ""
 "Lefedi a teljes alpesi ívet Bécstől Perpignanig, hullámot előrejelezve az "
 "egész Alpok régiójában. ICON-CH modell."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Egyesült Királyság. ICON-UK modell."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11013,21 +10796,24 @@ msgstr "Kézi"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Véroxigén"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "A vér oxigéntelítettsége százalékban, Bluetooth pulzoximéterről."
 
+#, no-c-format
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Nemrég használt fordulópontok"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Csatlakozzon az eszköz Wi-Fi hálózatához, hogy letöltse a repüléseket erről"
+" a FLARM-ról."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Meghatározza, hogy a nyomvonal a széllel sodródjon-e köröző módban, közeli térkép-léptékeken. Kikapcsolva a nyomvonal szél-sodródás kompenzáció nélkül marad. Körözéskor ez a vetített nyomvonalgörbére is vonatkozik: Be a légtömeghez képest tartja; Ki beleszámítja a szelet."
 
@@ -11063,27 +10849,26 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Bekapcsolja a forgalmi radart, és kiválasztja a helyét a főképernyőn. Nyílhegy formában kerül kijelzésre a forgalom haladási iránya a sajátunkhoz képest és egy fel vagy lefele mutató háromszög utal a cél relatív magasságára a sajátunkhoz képest. A nyíl színe minden üzemmódban a fenyegetés szintjére utal."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Képernyőfelbontás"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Képernyő fényereje"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "A képernyő fényerejének beállítása."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"A képernyő fényereje csak olvasható, mert az íráshoz további jogosultság ke"
+"ll."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Automata"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "Kikapcsolja a térképes berepülhetőséget (terepvonal és árnyékolás). A megszakítás, kitérők és leszállható mezők érkezése továbbra is a berepülhetőségi polárt használja."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezés, feladatmegszakítás és kitérő számításánál a gép milyen teljesítményével számoljon. Akkor is érvényes, ha a berepülhetőségi mód Ki."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -11091,10 +10876,10 @@ msgstr "Ez szabályozza, hogy a berepülhető terület, leszállóhelyi érkezé
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Kitérő üzemmód: Automata"
 
 msgid "Paste"
-msgstr ""
+msgstr "Beillesztés"
 
 #, c-format
 msgid ""
@@ -11198,105 +10983,111 @@ msgid "%u min"
 msgstr "%u perc"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Nem található támogatott szolgáltatás"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "A kijelölt systemd egységek nincsenek telepítve."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nem elérhető"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Indítás..."
 
 msgid "Stopping..."
 msgstr "Leállítás…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Újratöltés..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Sikertelen"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Bekapcsolás"
 
 msgid "Restart"
-msgstr ""
+msgstr "Újraindítás"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Kikapcsolás"
 
 msgid "System service"
-msgstr ""
+msgstr "Rendszerszolgáltatás"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH-kiszolgáló"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Távoli terminál"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Érzékelők"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario érzékelőszolgáltatás"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Audió varió"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario audió varió szolgáltatás"
 
-#, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Maximális hőmérséklet az előrejelzésből"
 
-#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
+msgstr "Beírja a max. hőmérsékletet a repülési beállításba az aznapi DWD-előrejelzésből a legközelebbi MOSMIX-állomásra. Kell egy helyzet, és naponta egyszer töltődik; fiók nélkül."
 
-#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
-msgstr ""
+msgstr "A nap legmagasabb talajközeli hőmérséklete. A belőle húzott száraz adiabata az emelkedésben mért külső hőmérséklethez adja a becsült termikplafont; a felhőalaphoz nedvességérzékelő is kell. Mindkettő az Elemzés párbeszéd hőmérsékleti nyomvonal oldalán jelenik meg, miután a vitorlázó átrepülte a réteget."
 
-#, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "Feladat MC indításkor"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
-msgstr ""
+msgstr "A biztonságos MC L/D értéke"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Felolvasott figyelmeztetések"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Felolvassa a FLARM ütközési riasztásait, a sürgősséggel, az óraállással és "
+"azzal, hogy a forgalom fölötte vagy alatta van: \"Traffic urgent! Three o'c"
+"lock. Above.\" Az akadály- és riasztózóna-riasztásokat nem olvassa fel."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Felolvasott figyelmeztetés próbája"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Sebességparancs-kapcsoló"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Hogyan használja az XCSoar a varió siklás/emelkedés jelentését."
 
+#, no-c-format
 msgid "Flight mode"
-msgstr ""
+msgstr "Repülési mód"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
+msgstr "Repülés közben a varió siklás/emelkedés jelentése a repülési mód. A siklás befejezi az emelkedést, és elölről kezdi az átlagot. Az emelkedés új termiket kezd. A végsiklás siklásban is megjelenhet. Vegán ez a körözés kimenete."
 
+#, no-c-format
 msgid "Display mode"
-msgstr ""
+msgstr "Megjelenítési mód"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "Az XCSoar a körözés módját a fordulóból dönti el. A varió jelentése nem használt."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "Az oldal változik, a repülési mód nem. A siklás a siklás oldalát mutatja, fordulóban is, és elrejti a végsiklást. Az emelkedés a varió oldalát mutatja. Vegán ez a sebességparancs-kapcsoló."
 
 #, no-c-format
 msgid "System Tools"
@@ -11320,73 +11111,1697 @@ msgstr "Ez a feladat nem jeleníthető meg QR-kódként"
 msgid "XCSoar task"
 msgstr "XCSoar feladat"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
-msgstr ""
+msgstr "Hatótáv-statisztika"
 
-#, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenna"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "A FLARM mindkét rádiócsatornájáról statisztikát vezet."
 
-#, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Adatpontok"
 
-#, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Időszak"
 
-#, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM hatótáv"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "A FLARM nem küldte el a hatótáv-statisztikát."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "Alapállapotba állítja a hatótáv-statisztikát? Tegye antenna csere után; a FLARM ezután újra gyűjti."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "A FLARM nem igazolta az alapállapotot."
 
-#, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "A legkisebb hatótáv alatt"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Ennek a csatornának a mért szektorai, amelyek átlagos hatótáva rövidebb a FLARM minimumánál: 2 nm előre, 1 nm oldalra és hátra. Ellenőrizze az antenna felszerelését."
 
-#, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Hatótáv beállítása"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "A FLARM nem jelent légi járművet ezen a távolságon túl. A grafikon szaggatott körként mutatja, ha a kirajzolt hatótávon belül van."
 
-#, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Korlátlan"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Kapcsolatok más FLARM légi járművekkel repülés közben, szektoronként egysze"
+"r számolva, azon a legnagyobb távolságon, ahol ott vette őket. A szektor e "
+"távolságok nagyobb felének átlagát mutatja, a keresztvonal a legnagyobbat."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Mért szektorok, amelyek becsült hatótáva rövidebb a FLARM minimumánál: 2 nm előre, 1 nm oldalra és hátra. Ellenőrizze az antenna felszerelését."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "Alapállapotba állítja a hatótávbecslést? Tegye antenna csere után; az XCSoar ezután újra gyűjti."
+
+msgid "FLARM range estimate"
+msgstr "FLARM hatótávbecslés"
 
 #, no-c-format
-msgid "FLARM range estimate"
+msgid "Zoom in"
+msgstr "Nagyítás"
+
+#, no-c-format
+msgid "Zoom out"
+msgstr "Kicsinyítés"
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr "Automatikus nagyítás"
+
+#, no-c-format
+msgid "Next page"
+msgstr "Következő oldal"
+
+#, no-c-format
+msgid "Previous page"
+msgstr "Előző oldal"
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr "Fordulópontlista"
+
+#, no-c-format
+msgid "Menu"
+msgstr "Menü"
+
+#, no-c-format
+msgid "Task manager"
+msgstr "Feladatkezelő"
+
+#, no-c-format
+msgid "Pan mode"
+msgstr "Mozgatás mód"
+
+#, no-c-format
+msgid "Quick menu"
+msgstr "Gyorsmenü"
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr "Radar"
+
+#, no-c-format
+msgid "Satellite"
+msgstr "Műhold"
+
+msgid "(Inside)"
+msgstr "(Belül)"
+
+msgid "(Near)"
+msgstr "(Közel)"
+
+msgid "Cleared"
+msgstr "Engedélyezve"
+
+msgid "Covered"
+msgstr "Lefedve"
+
+msgid "Power off"
+msgstr "Kikapcsolás"
+
+#, no-c-format
+msgid "Andorra"
+msgstr "Andorra"
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr "Egyesült Arab Emírségek"
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr "Afganisztán"
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr "Antigua és Barbuda"
+
+#, no-c-format
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#, no-c-format
+msgid "Albania"
+msgstr "Albánia"
+
+#, no-c-format
+msgid "Armenia"
+msgstr "Örményország"
+
+#, no-c-format
+msgid "Angola"
+msgstr "Angola"
+
+#, no-c-format
+msgid "Antarctica"
+msgstr "Antarktisz"
+
+#, no-c-format
+msgid "Argentina"
+msgstr "Argentína"
+
+#, no-c-format
+msgid "American Samoa"
+msgstr "Amerikai Szamoa"
+
+#, no-c-format
+msgid "Austria"
+msgstr "Ausztria"
+
+#, no-c-format
+msgid "Australia"
+msgstr "Ausztrália"
+
+#, no-c-format
+msgid "Aruba"
+msgstr "Aruba"
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr "Åland-szigetek"
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr "Azerbajdzsán"
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr "Bosznia-Hercegovina"
+
+#, no-c-format
+msgid "Barbados"
+msgstr "Barbados"
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr "Banglades"
+
+#, no-c-format
+msgid "Belgium"
+msgstr "Belgium"
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr "Bulgária"
+
+#, no-c-format
+msgid "Bahrain"
+msgstr "Bahrein"
+
+#, no-c-format
+msgid "Burundi"
+msgstr "Burundi"
+
+#, no-c-format
+msgid "Benin"
+msgstr "Benin"
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr "Saint-Barthélemy"
+
+#, no-c-format
+msgid "Bermuda"
+msgstr "Bermuda"
+
+#, no-c-format
+msgid "Brunei"
+msgstr "Brunei"
+
+#, no-c-format
+msgid "Bolivia"
+msgstr "Bolívia"
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr "Holland Karib-térség"
+
+#, no-c-format
+msgid "Brazil"
+msgstr "Brazília"
+
+#, no-c-format
+msgid "Bahamas"
+msgstr "Bahama-szigetek"
+
+#, no-c-format
+msgid "Bhutan"
+msgstr "Bhután"
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr "Bouvet-sziget"
+
+#, no-c-format
+msgid "Botswana"
+msgstr "Botswana"
+
+#, no-c-format
+msgid "Belarus"
+msgstr "Belarusz"
+
+#, no-c-format
+msgid "Belize"
+msgstr "Belize"
+
+#, no-c-format
+msgid "Canada"
+msgstr "Kanada"
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr "Kókusz (Keeling)-szigetek"
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr "Kongó – Kinshasa"
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr "Közép-afrikai Köztársaság"
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr "Kongó – Brazzaville"
+
+#, no-c-format
+msgid "Switzerland"
+msgstr "Svájc"
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr "Elefántcsontpart"
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr "Cook-szigetek"
+
+#, no-c-format
+msgid "Chile"
+msgstr "Chile"
+
+#, no-c-format
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#, no-c-format
+msgid "China"
+msgstr "Kína"
+
+#, no-c-format
+msgid "Colombia"
+msgstr "Kolumbia"
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#, no-c-format
+msgid "Cuba"
+msgstr "Kuba"
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr "Zöld-foki Köztársaság"
+
+#, no-c-format
+msgid "Curaçao"
+msgstr "Curaçao"
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr "Karácsony-sziget"
+
+#, no-c-format
+msgid "Cyprus"
+msgstr "Ciprus"
+
+#, no-c-format
+msgid "Czechia"
+msgstr "Csehország"
+
+#, no-c-format
+msgid "Germany"
+msgstr "Németország"
+
+#, no-c-format
+msgid "Djibouti"
+msgstr "Dzsibuti"
+
+#, no-c-format
+msgid "Denmark"
+msgstr "Dánia"
+
+#, no-c-format
+msgid "Dominica"
+msgstr "Dominika"
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr "Dominikai Köztársaság"
+
+#, no-c-format
+msgid "Algeria"
+msgstr "Algéria"
+
+#, no-c-format
+msgid "Ecuador"
+msgstr "Ecuador"
+
+#, no-c-format
+msgid "Estonia"
+msgstr "Észtország"
+
+#, no-c-format
+msgid "Egypt"
+msgstr "Egyiptom"
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr "Nyugat-Szahara"
+
+#, no-c-format
+msgid "Eritrea"
+msgstr "Eritrea"
+
+#, no-c-format
+msgid "Spain"
+msgstr "Spanyolország"
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr "Etiópia"
+
+#, no-c-format
+msgid "Finland"
+msgstr "Finnország"
+
+#, no-c-format
+msgid "Fiji"
+msgstr "Fidzsi"
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr "Falkland-szigetek"
+
+#, no-c-format
+msgid "Micronesia"
+msgstr "Mikronézia"
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr "Feröer szigetek"
+
+#, no-c-format
+msgid "France"
+msgstr "Franciaország"
+
+#, no-c-format
+msgid "Gabon"
+msgstr "Gabon"
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr "Egyesült Királyság"
+
+#, no-c-format
+msgid "Grenada"
+msgstr "Grenada"
+
+#, no-c-format
+msgid "Georgia"
+msgstr "Grúzia"
+
+#, no-c-format
+msgid "French Guiana"
+msgstr "Francia Guyana"
+
+#, no-c-format
+msgid "Guernsey"
+msgstr "Guernsey"
+
+#, no-c-format
+msgid "Ghana"
+msgstr "Ghána"
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr "Gibraltár"
+
+#, no-c-format
+msgid "Greenland"
+msgstr "Grönland"
+
+#, no-c-format
+msgid "Gambia"
+msgstr "Gambia"
+
+#, no-c-format
+msgid "Guinea"
+msgstr "Guinea"
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr "Egyenlítői-Guinea"
+
+#, no-c-format
+msgid "Greece"
+msgstr "Görögország"
+
+#, no-c-format
+msgid "South Georgia"
+msgstr "Déli-Georgia és Déli-Sandwich-szigetek"
+
+#, no-c-format
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#, no-c-format
+msgid "Guam"
+msgstr "Guam"
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr "Bissau-Guinea"
+
+#, no-c-format
+msgid "Guyana"
+msgstr "Guyana"
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr "Hongkong KKT"
+
+#, no-c-format
+msgid "Heard Island"
+msgstr "Heard-sziget és McDonald-szigetek"
+
+#, no-c-format
+msgid "Honduras"
+msgstr "Honduras"
+
+#, no-c-format
+msgid "Croatia"
+msgstr "Horvátország"
+
+#, no-c-format
+msgid "Haiti"
+msgstr "Haiti"
+
+#, no-c-format
+msgid "Hungary"
+msgstr "Magyarország"
+
+#, no-c-format
+msgid "Indonesia"
+msgstr "Indonézia"
+
+#, no-c-format
+msgid "Ireland"
+msgstr "Írország"
+
+#, no-c-format
+msgid "Israel"
+msgstr "Izrael"
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr "Man-sziget"
+
+#, no-c-format
+msgid "India"
+msgstr "India"
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr "Brit Indiai-óceáni Terület"
+
+#, no-c-format
+msgid "Iraq"
+msgstr "Irak"
+
+#, no-c-format
+msgid "Iran"
+msgstr "Irán"
+
+#, no-c-format
+msgid "Iceland"
+msgstr "Izland"
+
+#, no-c-format
+msgid "Italy"
+msgstr "Olaszország"
+
+#, no-c-format
+msgid "Jersey"
+msgstr "Jersey"
+
+#, no-c-format
+msgid "Jamaica"
+msgstr "Jamaica"
+
+#, no-c-format
+msgid "Jordan"
+msgstr "Jordánia"
+
+#, no-c-format
+msgid "Japan"
+msgstr "Japán"
+
+#, no-c-format
+msgid "Kenya"
+msgstr "Kenya"
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr "Kirgizisztán"
+
+#, no-c-format
+msgid "Cambodia"
+msgstr "Kambodzsa"
+
+#, no-c-format
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#, no-c-format
+msgid "Comoros"
+msgstr "Comore-szigetek"
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr "Saint Kitts és Nevis"
+
+#, no-c-format
+msgid "North Korea"
+msgstr "Észak-Korea"
+
+#, no-c-format
+msgid "South Korea"
+msgstr "Dél-Korea"
+
+#, no-c-format
+msgid "Kuwait"
+msgstr "Kuvait"
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr "Kajmán-szigetek"
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr "Kazahsztán"
+
+#, no-c-format
+msgid "Laos"
+msgstr "Laosz"
+
+#, no-c-format
+msgid "Lebanon"
+msgstr "Libanon"
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr "Saint Lucia"
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr "Srí Lanka"
+
+#, no-c-format
+msgid "Liberia"
+msgstr "Libéria"
+
+#, no-c-format
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#, no-c-format
+msgid "Lithuania"
+msgstr "Litvánia"
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr "Luxemburg"
+
+#, no-c-format
+msgid "Latvia"
+msgstr "Lettország"
+
+#, no-c-format
+msgid "Libya"
+msgstr "Líbia"
+
+#, no-c-format
+msgid "Morocco"
+msgstr "Marokkó"
+
+#, no-c-format
+msgid "Monaco"
+msgstr "Monaco"
+
+#, no-c-format
+msgid "Moldova"
+msgstr "Moldova"
+
+#, no-c-format
+msgid "Montenegro"
+msgstr "Montenegró"
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr "Saint Martin"
+
+#, no-c-format
+msgid "Madagascar"
+msgstr "Madagaszkár"
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr "Marshall-szigetek"
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr "Észak-Macedónia"
+
+#, no-c-format
+msgid "Mali"
+msgstr "Mali"
+
+#, no-c-format
+msgid "Myanmar"
+msgstr "Mianmar"
+
+#, no-c-format
+msgid "Mongolia"
+msgstr "Mongólia"
+
+#, no-c-format
+msgid "Macao"
+msgstr "Makaó KKT"
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr "Északi Mariana-szigetek"
+
+#, no-c-format
+msgid "Martinique"
+msgstr "Martinique"
+
+#, no-c-format
+msgid "Mauritania"
+msgstr "Mauritánia"
+
+#, no-c-format
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#, no-c-format
+msgid "Malta"
+msgstr "Málta"
+
+#, no-c-format
+msgid "Mauritius"
+msgstr "Mauritius"
+
+#, no-c-format
+msgid "Maldives"
+msgstr "Maldív-szigetek"
+
+#, no-c-format
+msgid "Malawi"
+msgstr "Malawi"
+
+#, no-c-format
+msgid "Mexico"
+msgstr "Mexikó"
+
+#, no-c-format
+msgid "Malaysia"
+msgstr "Malajzia"
+
+#, no-c-format
+msgid "Mozambique"
+msgstr "Mozambik"
+
+#, no-c-format
+msgid "Namibia"
+msgstr "Namíbia"
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr "Új-Kaledónia"
+
+#, no-c-format
+msgid "Niger"
+msgstr "Niger"
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr "Norfolk-sziget"
+
+#, no-c-format
+msgid "Nigeria"
+msgstr "Nigéria"
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#, no-c-format
+msgid "Netherlands"
+msgstr "Hollandia"
+
+#, no-c-format
+msgid "Norway"
+msgstr "Norvégia"
+
+#, no-c-format
+msgid "Nepal"
+msgstr "Nepál"
+
+#, no-c-format
+msgid "Nauru"
+msgstr "Nauru"
+
+#, no-c-format
+msgid "Niue"
+msgstr "Niue"
+
+#, no-c-format
+msgid "New Zealand"
+msgstr "Új-Zéland"
+
+#, no-c-format
+msgid "Oman"
+msgstr "Omán"
+
+#, no-c-format
+msgid "Panama"
+msgstr "Panama"
+
+#, no-c-format
+msgid "Peru"
+msgstr "Peru"
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr "Francia Polinézia"
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr "Pápua Új-Guinea"
+
+#, no-c-format
+msgid "Philippines"
+msgstr "Fülöp-szigetek"
+
+#, no-c-format
+msgid "Pakistan"
+msgstr "Pakisztán"
+
+#, no-c-format
+msgid "Poland"
+msgstr "Lengyelország"
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint-Pierre és Miquelon"
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr "Pitcairn-szigetek"
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr "Puerto Rico"
+
+#, no-c-format
+msgid "Palestine"
+msgstr "Palesztin Autonómia"
+
+#, no-c-format
+msgid "Portugal"
+msgstr "Portugália"
+
+#, no-c-format
+msgid "Palau"
+msgstr "Palau"
+
+#, no-c-format
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#, no-c-format
+msgid "Qatar"
+msgstr "Katar"
+
+#, no-c-format
+msgid "Réunion"
+msgstr "Réunion"
+
+#, no-c-format
+msgid "Romania"
+msgstr "Románia"
+
+#, no-c-format
+msgid "Serbia"
+msgstr "Szerbia"
+
+#, no-c-format
+msgid "Russia"
+msgstr "Oroszország"
+
+#, no-c-format
+msgid "Rwanda"
+msgstr "Ruanda"
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr "Szaúd-Arábia"
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr "Salamon-szigetek"
+
+#, no-c-format
+msgid "Seychelles"
+msgstr "Seychelle-szigetek"
+
+#, no-c-format
+msgid "Sudan"
+msgstr "Szudán"
+
+#, no-c-format
+msgid "Sweden"
+msgstr "Svédország"
+
+#, no-c-format
+msgid "Singapore"
+msgstr "Szingapúr"
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr "Szent Ilona"
+
+#, no-c-format
+msgid "Slovenia"
+msgstr "Szlovénia"
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbard és Jan Mayen"
+
+#, no-c-format
+msgid "Slovakia"
+msgstr "Szlovákia"
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#, no-c-format
+msgid "San Marino"
+msgstr "San Marino"
+
+#, no-c-format
+msgid "Senegal"
+msgstr "Szenegál"
+
+#, no-c-format
+msgid "Somalia"
+msgstr "Szomália"
+
+#, no-c-format
+msgid "Suriname"
+msgstr "Suriname"
+
+#, no-c-format
+msgid "South Sudan"
+msgstr "Dél-Szudán"
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr "São Tomé és Príncipe"
+
+#, no-c-format
+msgid "El Salvador"
+msgstr "Salvador"
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr "Sint Maarten"
+
+#, no-c-format
+msgid "Syria"
+msgstr "Szíria"
+
+#, no-c-format
+msgid "Eswatini"
+msgstr "Szváziföld"
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr "Turks- és Caicos-szigetek"
+
+#, no-c-format
+msgid "Chad"
+msgstr "Csád"
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr "Francia Déli Területek"
+
+#, no-c-format
+msgid "Togo"
+msgstr "Togo"
+
+#, no-c-format
+msgid "Thailand"
+msgstr "Thaiföld"
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr "Tádzsikisztán"
+
+#, no-c-format
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr "Kelet-Timor"
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr "Türkmenisztán"
+
+#, no-c-format
+msgid "Tunisia"
+msgstr "Tunézia"
+
+#, no-c-format
+msgid "Tonga"
+msgstr "Tonga"
+
+#, no-c-format
+msgid "Turkey"
+msgstr "Törökország"
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr "Trinidad és Tobago"
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#, no-c-format
+msgid "Taiwan"
+msgstr "Tajvan"
+
+#, no-c-format
+msgid "Tanzania"
+msgstr "Tanzánia"
+
+#, no-c-format
+msgid "Ukraine"
+msgstr "Ukrajna"
+
+#, no-c-format
+msgid "Uganda"
+msgstr "Uganda"
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr "Az USA lakatlan külbirtokai"
+
+#, no-c-format
+msgid "United States"
+msgstr "Egyesült Államok"
+
+#, no-c-format
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr "Üzbegisztán"
+
+#, no-c-format
+msgid "Vatican City"
+msgstr "Vatikán"
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint Vincent és a Grenadine-szigetek"
+
+#, no-c-format
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr "Brit Virgin-szigetek"
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr "Amerikai Virgin-szigetek"
+
+#, no-c-format
+msgid "Vietnam"
+msgstr "Vietnám"
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr "Wallis és Futuna"
+
+#, no-c-format
+msgid "Samoa"
+msgstr "Szamoa"
+
+#, no-c-format
+msgid "Kosovo"
+msgstr "Koszovó"
+
+#, no-c-format
+msgid "Yemen"
+msgstr "Jemen"
+
+#, no-c-format
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#, no-c-format
+msgid "South Africa"
+msgstr "Dél-afrikai Köztársaság"
+
+#, no-c-format
+msgid "Zambia"
+msgstr "Zambia"
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr "A mentés kész."
+
+msgid "Left out, being written right now:"
+msgstr "Kihagyva, éppen most íródik:"
+
+msgid "Don't use"
+msgstr "Ne használd"
+
+msgid "Not aligned"
+msgstr "Nincs igazítva"
+
+msgid "Fixed & aligned"
+msgstr "Rögzítve és igazítva"
+
+msgid "Built-in IMU"
+msgstr "Beépített IMU"
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Az IMU-t tartalmazó műszer tartósan rögzítve van-e, és a tengelyei egybeesn"
+"ek-e a légi jármű tengelyeivel. «Rögzítve és igazítva» csak merev beépítésn"
+"él. Kétség esetén «Nincs igazítva»."
+
+#, no-c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+"Az XCSoar az első eszközt használja, amely az adott értéket adja (az A eszk"
+"özt a B előtt, és így tovább). A félkövér jelzők azok az értékek, amelyeket"
+" az XCSoar ettől az eszköztől vesz. A nem félkövérek azt jelentik, hogy egy"
+" korábbi eszköz már adja ugyanazokat az adatokat. A Baro a magasság az aktu"
+"ális QNH-val; a QNE a nyomásmagasság; az Alt IGC a magasság, amelyet a napl"
+"ózó ír. A QNE és a Pressure ugyanaz a környezeti nyomás, ezért csak a koráb"
+"bi vastag. A rossz GPS és a 10 százalék alatti akkumulátor színes kijelzőn "
+"piros, e-papíron félkövér."
+
+msgid "QNE"
+msgstr "QNE"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "Set Clearance"
+msgstr "Engedély megadása"
+
+msgid "Revoke Clearance"
+msgstr "Engedély visszavonása"
+
+msgid "Failed to update airspace clearance"
+msgstr "A légtérengedély frissítése nem sikerült"
+
+msgid "Clrnc"
+msgstr "Eng."
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+"Osztályonkénti szűrőbeállítások. Ha egy légtérnek típusa (CTR, FIR, ...) és"
+" osztálya is van, az XCSoarban a típus előbbre való az osztálynál.\nOszlopo"
+"k:\n  Mutat — ennek az osztálynak a légtereit rajzolja a térképre\n  Riaszt"
+" — figyelmeztetés közeledéskor és belül\n  Eng.  — engedélyt ad, amely elny"
+"omja\n          más átfedő légterek figyelmeztetéseit"
+
+msgid "Clearance"
+msgstr "Engedély"
+
+msgid "Groups"
+msgstr "Csoportok"
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr "A listában csak ezeknek a csoportoknak az infódobozai jelenjenek meg."
+
+msgid "Share location"
+msgstr "Hely megosztása"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "Fent"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "Jobb"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "Lent"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "Bal"
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr ""
+"Koppintson egy élre, hogy az infódoboz-területet a képernyő széléig nyújtsa"
+"."
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+"Az infódoboz-terület a képernyőnek az infódobozok, a műszerek, a térképréte"
+"gek és a menü számára elérhető része. Válassza ki azokat az éleket, amelyek"
+"en a képernyő széléig nyúlik. A nem nyújtott élek távol maradnak a rendszer"
+"sávoktól és a lekerekített sarkoktól. A térkép mindig az egész képernyőt ha"
+"sználja, a párbeszédablakok pedig a biztonságos területen maradnak. Csak te"
+"ljes képernyőn számít."
+
+msgid "Stretch InfoBox area"
+msgstr "Az infódoboz-terület nyújtása"
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+"Mutassa az állapotsort, kivéve ha az infódoboz-terület a képernyő felső szé"
+"léig van nyújtva, ahol eltakarná az infódobozokat."
+
+#, no-c-format
+msgid "Visible"
+msgstr "Látható"
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+"Az állapotsor mindig látszódjon, teljes képernyőn is. Az infódobozok nem ra"
+"jzolhatók mögé, ezért távol maradnak a felső széltől."
+
+#, no-c-format
+msgid "Hidden"
+msgstr "Rejtett"
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr "Az állapotsor soha ne jelenjen meg."
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+"Az XCSoar használja az egész képernyőt, a rendszersávok és a kivágás mögött"
+"i területeket is. A térkép teljesen kitölti, az «infódoboz-terület nyújtása"
+"» pedig eldönti, mely élekig érhetnek az infódobozok, a műszerek, a térképr"
+"étegek és a menü."
+
+msgid "System status bar"
+msgstr "Rendszer állapotsora"
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+"A rendszer állapotsora, az órával és az akkumulátor szintjével, látható mar"
+"ad-e."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr "Figyelmeztetés, ha a radar lejár"
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr ""
+"Ha be van kapcsolva, figyelmeztetés jelenik meg, ha a csapadékradar átfedés"
+"ét nem lehetett frissíteni, és lekerült a térképről."
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr "Csökkentse a betűméretet, ha a rövidebb oldal 3.2 hüvelyk alatt van."
+
+#, no-c-format
+msgid "Handheld"
+msgstr "Kézben"
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr "Mindig a közeli olvasás méretét használja."
+
+#, no-c-format
+msgid "Panel"
+msgstr "Műszerfal"
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr "Tartsa meg a teljes betűméretet, karnyújtásnyira olvasott képernyőhöz."
+
+msgid "Viewing distance"
+msgstr "Olvasási távolság"
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+"Az Auto csökkenti a betűméretet, ha a rövidebb oldal 3.2 hüvelyk alatt van."
+" A „Kézben“ mindig ezt a közeli méretet használja. A „Műszerfal“ megtartja "
+"a teljes méretet."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr "Műholdréteg"
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr "Melyik EUMETView műholdterméket rajzolja ez az oldal a térkép alá."
+
+#, no-c-format
+msgid "Rain radar"
+msgstr "Csapadékradar"
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr ""
+"Az elérhetőség egyenes pályák a vitorlázótól. A leszállásra alkalmas helyek"
+" színei és a kitérők listája ezt használja."
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr ""
+"Az elérhetőséget a terepakadályok körüli fordulókkal számolja. A leszállásr"
+"a alkalmas helyek színei és a kitérők listája ezt használja."
+
+#, no-c-format
+msgid "Task MC"
+msgstr "Feladat MC"
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr "A feladat MacCready értékét használja."
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+"Melyik MacCready szolgál a terepi elérhetőséghez, a leszállásra alkalmas he"
+"lyek színeihez, a megszakításhoz és a kitérők listájához. Akkor is érvényes"
+", ha az elérhetőségi mód ki van kapcsolva. A munkavonal mindig a feladat MC"
+"-jét használja. A kitérő infódobozok és a biztonságos MC-s magasságkülönbsé"
+"g mindig a biztonságos MC-t használják."
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr "Nincs elérhetőségi átfedés a térképen."
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr "Meddig siklik a talajig. Az elérhetőségi polárist használja."
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr ""
+"Árnyékolja a térképet a talajig tartó sikláson túl. Az elérhetőségi poláris"
+"t használja."
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr ""
+"Meddig siklik úgy, hogy ennek a repülésnek a tipikus termikbázis-magasságán"
+" még megérkezik. Mindig a feladat MC-jét használja."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr ""
+"Munkavonal a tipikus termikbázis-magasságig a feladat MC-jével, plusz terep"
+"vonal a talajig az elérhetőségi polárissal."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr ""
+"Munkavonal a tipikus termikbázis-magasságig a feladat MC-jével, plusz árnyé"
+"k a talajon túl az elérhetőségi polárissal."
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+"A terepi elérhetőséghez, a leszállásra alkalmas helyek színeihez, a megszak"
+"ításhoz és a kitérők listájához használt MacCready, ha az elérhetőségi polá"
+"ris a biztonságos MC. A kitérő infódobozok és a biztonságos MC-s magasságkü"
+"lönbség mindig ezt az értéket használják. Az optimális siklósebesség nem vá"
+"ltozik. Nagyobb értékek kevesebb mezőt tekintenek elérhetőnek."
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr ""
+"Nincs beállítva siklópoláris, ezért siklószám nem jeleníthető meg. Először "
+"válasszon repülőgépet."
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr ""
+"Az egyes értékek melletti siklószám a legjobb siklószám szélcsendben ennél "
+"a MacCready-beállításnál, bogarakkal, ballaszttal és a poláris romlásával e"
+"gyütt."
+
+#, c-format
+msgid "Active polar: %s"
+msgstr "Aktív poláris: %s"
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+"Az induláskor az optimális siklósebességhez és a feladatszámításhoz használ"
+"t MacCready. Az itteni módosítás a pillanatnyi MacCreadyt is beállítja. A t"
+"erepi elérhetőség, a leszállásra alkalmas helyek színei, a megszakítás és a"
+" kitérők listája az elérhetőségi polárist követi, nem ezt az értéket, hacsa"
+"k az elérhetőségi poláris nem a feladat MC-je."
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+"Az operációs rendszerben beállított időzónát használja, és kövesse a nyári "
+"időszámítás váltásakor és másik zónába utazáskor is."
+
+#, no-c-format
+msgid "Time zone"
+msgstr "Időzóna"
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+"A lenti kiválasztott időzónát használja. Az XCSoar ismeri a nyári időszámít"
+"ás szabályait, és maga alkalmazza az átállásokat, ezért a beállítást nem ke"
+"ll évente kétszer javítani."
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr "Kézi UTC-eltolás"
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+"A lenti rögzített UTC-eltolást használja. Kézzel kell javítani, amikor a ny"
+"ári időszámítás kezdődik vagy végződik."
+
+msgid "Local time source"
+msgstr "Helyi idő forrása"
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+"Megadja, honnan veszi az XCSoar az UTC és a helyi idő közötti eltolást."
+
+msgid "The time zone of the airfield you are flying at."
+msgstr "Annak a repülőtérnek az időzónája, ahonnan repül."
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+"Az UTC-eltolás mezővel megadható az UTC és a helyi idő közötti eltolás. Meg"
+"őrzi a beírt értéket akkor is, ha másik helyi idő forrás van kiválasztva. A"
+"lul a helyi idő és a most érvényes UTC-eltolás látható."
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV modell"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Egyesült Királyság. UKV modell."
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr "Átfedés"
+
+msgid "Revoke"
+msgstr "Visszavonás"
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr "Radar (EUMETNET OPERA)"
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr "nincs adat"
+
+msgid "Downloading radar..."
+msgstr "Radar letöltése..."
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr ""
+"A radarképet nem lehetett frissíteni, és el lett távolítva, hogy ne jelenje"
+"n meg elavult visszhang.\n\nFigyelmeztessen újra, ha ez megtörténik?"
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr "Európai HRV RGB"
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr "Látható 0.6 µm (MTG)"
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr "Infravörös 10.5 µm (MTG)"
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr "Valódi szín (MTG)"
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr "Geoszín (MTG)"
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr "Gyorspásztázás, természetes szín"
+
+msgid "No satellite imagery here right now"
+msgstr "Itt most nincs műholdkép"
+
+msgid "Countries"
+msgstr "Országok"
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+"Csak ezeknek az országoknak a fájljait mutassa — ugyanaz a választás térkép"
+"ekre, fordulópontokra és légterekre, a profilban tárolva. A minden országra"
+" vonatkozó fájlok a listán maradnak."
+
+msgid "Search"
+msgstr "Keresés"
+
+msgid "Show only the files whose name or description contains this text."
+msgstr ""
+"Csak azokat a fájlokat mutassa, amelyek neve vagy leírása tartalmazza ezt a"
+" szöveget."
+
+msgid "No file matches the filter."
+msgstr "Egy fájl sem felel meg a szűrőnek."
+
+msgid "Complete"
+msgstr "Kész"
+
+msgid "Cancelled"
+msgstr "Megszakítva"
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr ""
+"Az utolsó termik teljes magasságnyeresége vagy -vesztesége osztva a körözés"
+"i idővel. A kisebb másodpercek a körözési időt mutatják."
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr ""
+"Az utolsó termikben körözéssel töltött idő. A kisebb szám az utolsó termik "
+"átlagos emelkedését mutatja."
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+"Fő érték: a következő szárny termikemelkedése, amely a jelenlegi szárny Mac"
+"Cready-beállításával egyenlő emelkedésnek felel meg. Mellékérték: a jelenle"
+"gi szárny termikemelkedése, amely a következő szárny MacCready-beállításáva"
+"l egyenlő emelkedésnek felel meg."
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Érkezési magasság a legjobb kitérő leszállóhelynél a biztonságos MC-vel, a "
+"biztonsági érkezési magassághoz képest."
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Érkezési magasság a második legjobb kitérő leszállóhelynél a biztonságos MC"
+"-vel, a biztonsági érkezési magassághoz képest."
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+"A barometrikus magasság számításához használt aktuális QNH-nyomás. Az alatt"
+"a lévő sor ezt a magasságot mutatja, ha van nyomásérzékelő. Koppintson az i"
+"nfódobozra a panel megnyitásához és a QNH kézi beállításához."
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr "Sebesség VMG"
+
+#, no-c-format
+msgid "V VMG"
+msgstr "V VMG"
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+"A földsebességnek a következő fordulópont irányába eső összetevője. Egyenes"
+" útirányon egyenlő a földsebességgel, keresztirányban nullára esik, távolod"
+"áskor pedig negatív. Számmal mutatja, mennyibe kerül a közvetlen útirányról"
+" való kitérő."
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr "Varió és termik"
+
+#, no-c-format
+msgid "Glide"
+msgstr "Siklás"
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr "Sebesség és helyzet"
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr "Szél és időjárás"
+
+#, no-c-format
+msgid "Time"
+msgstr "Idő"
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr "Légtér és csapat"
+
+#, no-c-format
+msgid "Other"
+msgstr "Egyéb"
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+"Húzzon egy infódobozt egy másikra a cseréhez. Tartson egy infódobozt, és em"
+"elje fel, hogy másikat válasszon arra a helyre."
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+"Az Enter felveszi a kijelölt infódobozt, a kurzorbillentyűkkel mozgassa, és"
+" az Enter újra leteszi. Kétszeri Enter mozgatás nélkül más infódobozt válas"
+"zt arra a helyre."
+
+msgid "Arrange InfoBoxes"
+msgstr "Infódobozok elrendezése"
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr "Infódobozok\nelrendezése"
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Az aktuális szárnyterhelés, a vitorlázó üres tömegéből, a személyzet tömegé"
+"ből és a ballasztból számítva. Pirosan jelenik meg, ha a vitorlázó nehezebb"
+" a maximális felszálló tömegénél."
+
+msgid "MTOW"
+msgstr "MTOW"
+
+msgid "Maximum takeoff weight of the glider."
+msgstr "A vitorlázó maximális felszálló tömege."
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+"Fedélzeti vízballaszt, literben. A megjegyzés a szárnyterhelést mutatja, pi"
+"rosan, ha a vitorlázó nehezebb a maximális felszálló tömegénél. Az érték ké"
+"k, amíg a ballaszt ürül. Koppintson a ballaszt módosításához."
+

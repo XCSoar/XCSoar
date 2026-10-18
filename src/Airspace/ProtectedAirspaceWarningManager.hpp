@@ -40,8 +40,8 @@ public:
   bool IsEmpty() const noexcept;
 
   /**
-   * Returns a copy of the highest priority warning, or an empty
-   * instance if there is no warning.
+   * Returns a copy of the highest-priority warning that is currently
+   * alerting, or an empty instance if none is.
    */
   [[gnu::pure]]
   std::optional<AirspaceWarning> GetTopWarning() const noexcept;

@@ -54,14 +54,13 @@ def entry_key(entry: polib.POEntry) -> POKey:
 
 
 def entry_signature(entry: polib.POEntry) -> tuple:
-  """Translation signature — layout/metadata-only diffs must not rewrite."""
+  """Translation signature. Flag-only diffs must not rewrite the entry."""
   plural_items = tuple(
       sorted((int(k), v) for k, v in entry.msgstr_plural.items())
   )
   return (
       entry.msgstr,
       plural_items,
-      tuple(sorted(entry.flags)),
       bool(entry.obsolete),
   )
 

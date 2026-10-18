@@ -1086,9 +1086,6 @@ msgstr "Zasílám deklaraci"
 msgid "Reading flight list"
 msgstr "Načítám seznamu letů"
 
-msgid "Downloading flight log"
-msgstr "Stahuji záznam letu"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Vypnuto"
@@ -1787,9 +1784,6 @@ msgstr "Varuj"
 msgid "Airspace"
 msgstr "Prostory"
 
-msgid "Select Pattern"
-msgstr "Vyber vzor"
-
 msgid "Squawk code"
 msgstr "Zadej kód"
 
@@ -1844,9 +1838,6 @@ msgstr "Změň barvu ohraničení"
 
 msgid "Change Fill Color"
 msgstr "Změň barvu výplně"
-
-msgid "Change Fill Brush"
-msgstr "Změnit vzorek výplně"
 
 msgid "Border Width"
 msgstr "Šířka okraje"
@@ -1948,9 +1939,6 @@ msgstr "Zátěž"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Zátěž kluzáku. Stiskněte tlačítko Vypusť/Zastav pro spuštění/zastavení odpočtu vypouštění vodní zátěže, rychlostí zadanou v nastavení letadla."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Aktuální plošné zatížení, vypočtené z prázdné hmotnosti kluzáku, hmotnosti posádky a balastu."
-
 msgid "Bugs"
 msgstr "Zamoušení"
 
@@ -1967,9 +1955,6 @@ msgstr "Tlak pro barometrickou kalibraci výškoměru. Je nastaven automaticky, 
 
 msgid "Max. temp."
 msgstr "Max. teplota"
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "Zadejte předpovídanou přízemní teplotu. Hodnota je použita v odhadu výskytu konvekce (strana Teplotní křivka v menu Analýza)"
 
 #, no-c-format
 msgid "Orientation"
@@ -2027,10 +2012,6 @@ msgid "Gauges"
 msgstr "Přístroje"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "Úloha"
-
-#, no-c-format
 msgid "Look"
 msgstr "Vzhled"
 
@@ -2040,14 +2021,8 @@ msgstr "Expert"
 msgid "Configuration"
 msgstr "Nastavení"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Název této konfigurace panelu InfoBox."
-
 msgid "InfoBox"
 msgstr "InfoBox"
-
-msgid "Content"
-msgstr "Obsah"
 
 msgid "Copy Set"
 msgstr "Kopírovat sadu"
@@ -2063,9 +2038,11 @@ msgstr "InfoBox vložit"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Kopíruj si pamatuje všechny InfoBoxy této sady, Vlož jimi nahradí InfoBoxy "
+"jiné sady."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Převzít z globálního nastavení"
 
 msgid "Invalid"
 msgstr "Neplatný"
@@ -2425,9 +2402,6 @@ msgstr "Max. zisk výšky"
 msgid "Near"
 msgstr "Co je poblíž"
 
-msgid "Share"
-msgstr "Sdílej"
-
 #, no-c-format
 msgid "Disconnected"
 msgstr "Odpojeno"
@@ -2752,17 +2726,17 @@ msgstr "Komentář"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Pevný text"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "Nadpis, hodnota a komentář zadané pilotem. Klepnutím upravíte."
 
 msgid "Title"
-msgstr ""
+msgstr "Nadpis"
 
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -2939,12 +2913,6 @@ msgstr "Styl vyplnění"
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Určuje, jak mají být plochy prostorů vyplněny."
-
-msgid "Airspace transparency"
-msgstr "Prostory transparentní"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Prostory budou vyplněny transparentně."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3262,16 +3230,6 @@ msgstr ""
 "Pokud je zapnuto a je připojen barometrický výškoměr, je barometrická výška "
 "použita pro všechny navigační funkce. V opačném případě je použita výška GPS."
 
-msgid "Flap forces cruise"
-msgstr "Klapka vynutí přeskok"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr ""
-"Pokud je připojen variometr Vega a tato volba je zapnuta, nastavení klapky "
-"na pozitivní hodnotu přepíná letový režim mezi kroužením a přeskokem."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "Preferovaná doba pro padákové kluzáky."
@@ -3346,6 +3304,7 @@ msgstr "Velikost textu"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Nastavení rozlišení displeje je používáno k adaptaci šíře linek, velikosti fontů, velikosti nouzových ploch a dalším úpravám."
 
+#. the Kobo has no time zone configuration which we could follow
 msgid "Automatic"
 msgstr "Auto"
 
@@ -3406,90 +3365,6 @@ msgstr "Obráceně na výšku"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Obráceně na šířku"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 rozděleno"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 rozděleno"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 rozděleno / 3 řady"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 rozděleno / 3 řady"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 rozděleno / 3 řady"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 dole nebo vpravo"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 dole + vário (na výšku)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 nahoře nebo vlevo"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 nahoře + vário (na výšku)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 vpravo + vário (na šířku)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 vlevo + vpravo + vário (na šířku)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 vlevo + 3 vpravo + vário (na šířku)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 vpravo (čtverec)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 dole nebo vpravo"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 dole nebo vpravo"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 nahoře nebo vlevo"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 nahoře nebo vlevo"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 vpravo (na šířku)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 dole nebo vpravo"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 nahoře nebo vlevo"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 dole nebo vpravo"
 
 #, no-c-format
 msgid "Text"
@@ -3581,9 +3456,6 @@ msgstr "Vždy používat světlý text na tmavém pozadí InfoBoxu."
 
 msgid "Full screen"
 msgstr "Celá obrazovka"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "Spustí XCSoar v celoobrazovkovém režimu"
 
 msgid "Display orientation"
 msgstr "Orientace displeje"
@@ -3940,17 +3812,8 @@ msgid "Straight"
 msgstr "Přímo"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "Akční rádius v přímé linii letu kluzáku."
-
-#, no-c-format
 msgid "Turning"
 msgstr "Odbočky"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"Akční rádius je vypočten s přihlédnutím k vyhnutí se terénním překážkám."
 
 #. Spacer
 msgid "Reach mode"
@@ -3964,10 +3827,6 @@ msgstr ""
 "terén."
 
 #, no-c-format
-msgid "Uses task glide polar."
-msgstr "Použije poláru úlohy."
-
-#, no-c-format
 msgid "Safety MC"
 msgstr "Bezpečné MC"
 
@@ -3979,52 +3838,24 @@ msgid "Reach polar"
 msgstr "Polára pro akční rádius"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "Akční rádius není zobrazen."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "Linie terénu"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Zobrazí přerušovanou čáru na hranici akčního rádiusu kluzáku."
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "Stínování terénu"
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr "Stínování terénu mimo akční rádius kluzáku."
-
-#, no-c-format
 msgid "Working line"
 msgstr "Linie pracovního pásma"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr "Zobrazí přerušovanou čáru na hranici pracovního pásma."
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "Linie pracovního pásma, linie terénu"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr ""
-"Zobrazí přerušovanou čáru na hranici pracovního pásma a akčního rádiusu "
-"kluzáku."
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "Linie pracovního pásma, stínování terénu"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr ""
-"Zobrazí přerušovanou čáru na hranici pracovního pásma a stínuje akční rádius "
-"kluzáku."
 
 msgid "Reach display"
 msgstr "Akční rádius"
@@ -4079,15 +3910,6 @@ msgstr "Auto zamoušení"
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr "Pokud je zapnuto, zvyšuje zamoušení o 1% každou hodinu letu."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Použité nastavení MacCready, pokud je zapnuto bezpečností nastavení MC pro "
-"výpočet akčního rádiusu, v režimu přerušení úlohy a pro určení výšky příletu "
-"na letiště."
 
 msgid "STF risk factor"
 msgstr "STF rizikový faktor"
@@ -4395,10 +4217,10 @@ msgid "Reference used for start max height rule."
 msgstr "Reference použitá pro pravidlo maximální výšky."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Navigovat k nejbližšímu bodu"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Naviguje k nejbližšímu bodu startovní a cílové zóny."
 
 msgid "Finish min. height"
 msgstr "Min. výška v cíli"
@@ -4755,14 +4577,6 @@ msgstr "Jednotky použité pro otáčky."
 #, no-c-format
 msgid "UTC offset"
 msgstr "Posun vůči UTC času"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"UTC posun umožňuje nastavit odchylku lokálního času od UTC. Lokální čas je "
-"zobrazen dole pro usnadnění a ověření správného nastavení."
 
 msgid "Use GPS time"
 msgstr "GPS čas"
@@ -5764,13 +5578,6 @@ msgid "TL Avg"
 msgstr "STM prům"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Celkový zisk/ztráta výšky v minulém stoupavém proudu, dělená časem kroužení."
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "Zisk výšky v minulém st. proudu"
 
@@ -5792,10 +5599,6 @@ msgstr "Doba trvání minulého st. proudu"
 #, no-c-format
 msgid "TL duration"
 msgstr "STM čas"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Doba strávená kroužením v minulém stoupavém proudu."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -6945,10 +6748,6 @@ msgid "T Next Leg"
 msgstr "ST př rameno"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Rychlost stoupání na příštím rameni, která odpovídá nastavení MacCready na současném rameni."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Složka protivětru (zjednodušeně)"
 
@@ -7301,20 +7100,12 @@ msgid "Altn 1 AltD"
 msgstr "Altn 1"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "Rozdílová výška nad dalším bodem"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "Altn 2"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "Výška příletu nad cílový bod trati relativně k bezpečné výšce příletu."
 
 #, no-c-format
 msgid "Simulator"
@@ -8357,12 +8148,6 @@ msgstr "Přístup odepřen. Možná nemáte oprávnění připojit se k této s�
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "Připojení selhalo. Zkontrolujte heslo a zkuste znovu."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Aktuální nastavení tlaku QNH pro výpočet barometrické výšky. Klepnutím na "
-"InfoBox otevřete panel a QNH upravíte ručně."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9824,14 +9609,6 @@ msgstr ""
 "Pokryje celý alpský oblouk od Vídně po Perpignan a předpovídá vlnu v celé "
 "alpské oblasti. Model ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Spojené království. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "E-mail XC Therm"
 
@@ -10935,21 +10712,22 @@ msgstr "Ručně"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Kyslík v krvi"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Saturace kyslíku v krvi v procentech, z pulzního oxymetru Bluetooth."
 
+#, no-c-format
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Naposledy použité otočné body"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "Připojte se k Wi-Fi přístroje a stáhněte lety z tohoto FLARM."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Určuje, zda je stopa unášena větrem při zobrazení v režimu kroužení na blízkých měřítkách mapy. Vypnuto — stopa zůstává bez kompenzace driftu větru. V kroužení to platí i pro promítnutou stopu: Zapnuto ji drží vůči vzdušné hmotě; Vypnuto zahrnuje vítr."
 
@@ -10985,27 +10763,24 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Zapne radar provozu a zvolí jeho pozici na hlavní obrazovce. Směr letu cíle, relativní k vlastnímu letadlu je zobrazen šipkou, trojúhelník směřující nahoru nebo dolů ukazuje relativní výšku. Ve všech režimech barva cíle indikuje míru hrozby."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Rozlišení obrazovky"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Jas obrazovky"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Nastavit jas obrazovky."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "Jas obrazovky je jen ke čtení, protože zápis vyžaduje další oprávnění."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "Vypne dosah na mapě (čára terénu a stínování). Přerušení, alternativy a přílet na přistávací plochy stále používají polaru dosahu."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "Klouzavost, užívaná ve výpočtech akčního rádiusu, přerušení úlohy a alternativ. Platí i když je režim dosahu Vypnuto."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -11013,10 +10788,10 @@ msgstr "Klouzavost, užívaná ve výpočtech akčního rádiusu, přerušení �
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Režim alternativ: Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Vlož"
 
 #, c-format
 msgid ""
@@ -11120,105 +10895,111 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Nenalezeny žádné podporované služby"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Nejsou nainstalovány žádné vybrané jednotky systemd."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Nedostupné"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Spouštění..."
 
 msgid "Stopping..."
 msgstr "Zastavování…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Znovunačítání..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Selhalo"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Zapnout"
 
 msgid "Restart"
-msgstr ""
+msgstr "Restartuj"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Vypnout"
 
 msgid "System service"
-msgstr ""
+msgstr "Systémová služba"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Server SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Vzdálený přístup k terminálu"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Senzory"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Služba senzorů OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Audio vário"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Služba audio vária OpenVario"
 
-#, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Max. teplota z předpovědi"
 
-#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
+msgstr "Doplní max. teplotu v nastavení letu z dnešní předpovědi DWD pro nejbližší stanici MOSMIX. Potřebuje polohu a stáhne ji jednou denně; bez účtu."
 
-#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
-msgstr ""
+msgstr "Nejvyšší přízemní teplota dne. Suchá adiabata od ní proti venkovní teplotě měřené při stoupání dává odhadovaný dostup termiky; základna mraků potřebuje i sondu vlhkosti. Obě se kreslí na stránce teplotní stopy v dialogu Analýza, jakmile kluzák proletí vrstvou."
 
-#, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC úlohy při startu"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Klouzavost bezpečné MC"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Hlasová varování"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Čte kolizní poplachy FLARM, s naléhavostí, hodinovou polohou a tím, zda je "
+"provoz nad nebo pod: \"Traffic urgent! Three o'clock. Above.\" Poplachy pře"
+"kážek a výstražných zón se nečtou."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Vyzkoušet hlasové varování"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Přepínač Speed Command"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Jak XCSoar používá hlášení vária o přeskoku a stoupání."
 
+#, no-c-format
 msgid "Flight mode"
-msgstr ""
+msgstr "Režim letu"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
+msgstr "Za letu je hlášení vária o přeskoku a stoupání režimem letu. Přeskok ukončí stoupání a začne průměr znovu. Stoupání zahájí novou termiku. Dolét se může dál objevit při přeskoku. Na Vega je to výstup kroužení."
 
+#, no-c-format
 msgid "Display mode"
-msgstr ""
+msgstr "Režim zobrazení"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar určí kroužení podle zatáčky. Hlášení vária se nepoužije."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "Stránka se mění a režim letu ne. Přeskok ukazuje stránku přeskoku i v zatáčce a skryje dolét. Stoupání ukazuje stránku vária. Na Vega je to přepínač Speed Command."
 
 #, no-c-format
 msgid "System Tools"
@@ -11242,73 +11023,1678 @@ msgstr "Tuto úlohu nelze zobrazit jako QR kód"
 msgid "XCSoar task"
 msgstr "Úloha XCSoar"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
-msgstr ""
+msgstr "Statistika dosahu"
 
-#, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Anténa"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM vede statistiku pro každý ze svých dvou rádiových kanálů."
 
-#, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Datové body"
 
-#, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Období"
 
-#, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Dosah FLARM"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM neposlal statistiku dosahu."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "Resetovat statistiku dosahu? Udělejte to po výměně antén; FLARM ji pak sbírá znovu."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM nepotvrdil vynulování."
 
-#, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Pod minimálním dosahem"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Změřené sektory tohoto kanálu, jejichž střední dosah je kratší než minimum FLARM: 2 nm vpředu, 1 nm do stran a vzad. Zkontrolujte montáž antény."
 
-#, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Nastavení dosahu"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "FLARM nehlásí letadla za touto vzdáleností. Graf ji ukáže jako čárkovanou kružnici, je-li ve vykresleném dosahu."
 
-#, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Neomezeně"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Kontakty s jinými letadly FLARM za letu, počítané jednou v každém sektoru, "
+"kterým prolétly, s největší vzdáleností, na které tam byly přijaty. Sektor "
+"ukazuje průměr větší poloviny těchto vzdáleností, čára napříč tu největší."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Změřené sektory, jejichž odhadovaný dosah je kratší než minimum FLARM: 2 nm vpředu, 1 nm do stran a vzad. Zkontrolujte montáž antény."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "Resetovat odhad dosahu? Udělejte to po výměně antény; XCSoar ho pak sbírá znovu."
+
+msgid "FLARM range estimate"
+msgstr "Odhad dosahu FLARM"
 
 #, no-c-format
-msgid "FLARM range estimate"
+msgid "Zoom in"
+msgstr "Přiblížit"
+
+#, no-c-format
+msgid "Zoom out"
+msgstr "Oddálit"
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr "Auto zvětšení"
+
+#, no-c-format
+msgid "Next page"
+msgstr "Další stránka"
+
+#, no-c-format
+msgid "Previous page"
+msgstr "Předchozí stránka"
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr "Seznam bodů"
+
+#, no-c-format
+msgid "Menu"
+msgstr "Menu"
+
+#, no-c-format
+msgid "Task manager"
+msgstr "Správce úloh"
+
+#, no-c-format
+msgid "Pan mode"
+msgstr "Posun mapy"
+
+#, no-c-format
+msgid "Quick menu"
+msgstr "Rychlé menu"
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr "Radar"
+
+#, no-c-format
+msgid "Satellite"
+msgstr "Družice"
+
+msgid "(Inside)"
+msgstr "(Uvnitř)"
+
+msgid "(Near)"
+msgstr "(Poblíž)"
+
+msgid "Cleared"
+msgstr "Povoleno"
+
+msgid "Covered"
+msgstr "Pokryto"
+
+msgid "Power off"
+msgstr "Vypnout"
+
+#, no-c-format
+msgid "Andorra"
+msgstr "Andorra"
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr "Spojené arabské emiráty"
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr "Afghánistán"
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr "Antigua a Barbuda"
+
+#, no-c-format
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#, no-c-format
+msgid "Albania"
+msgstr "Albánie"
+
+#, no-c-format
+msgid "Armenia"
+msgstr "Arménie"
+
+#, no-c-format
+msgid "Angola"
+msgstr "Angola"
+
+#, no-c-format
+msgid "Antarctica"
+msgstr "Antarktida"
+
+#, no-c-format
+msgid "Argentina"
+msgstr "Argentina"
+
+#, no-c-format
+msgid "American Samoa"
+msgstr "Americká Samoa"
+
+#, no-c-format
+msgid "Austria"
+msgstr "Rakousko"
+
+#, no-c-format
+msgid "Australia"
+msgstr "Austrálie"
+
+#, no-c-format
+msgid "Aruba"
+msgstr "Aruba"
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr "Ålandy"
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr "Ázerbájdžán"
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr "Bosna a Hercegovina"
+
+#, no-c-format
+msgid "Barbados"
+msgstr "Barbados"
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr "Bangladéš"
+
+#, no-c-format
+msgid "Belgium"
+msgstr "Belgie"
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr "Bulharsko"
+
+#, no-c-format
+msgid "Bahrain"
+msgstr "Bahrajn"
+
+#, no-c-format
+msgid "Burundi"
+msgstr "Burundi"
+
+#, no-c-format
+msgid "Benin"
+msgstr "Benin"
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr "Svatý Bartoloměj"
+
+#, no-c-format
+msgid "Bermuda"
+msgstr "Bermudy"
+
+#, no-c-format
+msgid "Brunei"
+msgstr "Brunej"
+
+#, no-c-format
+msgid "Bolivia"
+msgstr "Bolívie"
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr "Karibské Nizozemsko"
+
+#, no-c-format
+msgid "Brazil"
+msgstr "Brazílie"
+
+#, no-c-format
+msgid "Bahamas"
+msgstr "Bahamy"
+
+#, no-c-format
+msgid "Bhutan"
+msgstr "Bhútán"
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr "Bouvetův ostrov"
+
+#, no-c-format
+msgid "Botswana"
+msgstr "Botswana"
+
+#, no-c-format
+msgid "Belarus"
+msgstr "Bělorusko"
+
+#, no-c-format
+msgid "Belize"
+msgstr "Belize"
+
+#, no-c-format
+msgid "Canada"
+msgstr "Kanada"
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr "Kokosové ostrovy"
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr "Kongo – Kinshasa"
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr "Středoafrická republika"
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr "Kongo – Brazzaville"
+
+#, no-c-format
+msgid "Switzerland"
+msgstr "Švýcarsko"
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr "Pobřeží slonoviny"
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr "Cookovy ostrovy"
+
+#, no-c-format
+msgid "Chile"
+msgstr "Chile"
+
+#, no-c-format
+msgid "Cameroon"
+msgstr "Kamerun"
+
+#, no-c-format
+msgid "China"
+msgstr "Čína"
+
+#, no-c-format
+msgid "Colombia"
+msgstr "Kolumbie"
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr "Kostarika"
+
+#, no-c-format
+msgid "Cuba"
+msgstr "Kuba"
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr "Kapverdy"
+
+#, no-c-format
+msgid "Curaçao"
+msgstr "Curaçao"
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr "Vánoční ostrov"
+
+#, no-c-format
+msgid "Cyprus"
+msgstr "Kypr"
+
+#, no-c-format
+msgid "Czechia"
+msgstr "Česko"
+
+#, no-c-format
+msgid "Germany"
+msgstr "Německo"
+
+#, no-c-format
+msgid "Djibouti"
+msgstr "Džibutsko"
+
+#, no-c-format
+msgid "Denmark"
+msgstr "Dánsko"
+
+#, no-c-format
+msgid "Dominica"
+msgstr "Dominika"
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr "Dominikánská republika"
+
+#, no-c-format
+msgid "Algeria"
+msgstr "Alžírsko"
+
+#, no-c-format
+msgid "Ecuador"
+msgstr "Ekvádor"
+
+#, no-c-format
+msgid "Estonia"
+msgstr "Estonsko"
+
+#, no-c-format
+msgid "Egypt"
+msgstr "Egypt"
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr "Západní Sahara"
+
+#, no-c-format
+msgid "Eritrea"
+msgstr "Eritrea"
+
+#, no-c-format
+msgid "Spain"
+msgstr "Španělsko"
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr "Etiopie"
+
+#, no-c-format
+msgid "Finland"
+msgstr "Finsko"
+
+#, no-c-format
+msgid "Fiji"
+msgstr "Fidži"
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr "Falklandské ostrovy"
+
+#, no-c-format
+msgid "Micronesia"
+msgstr "Mikronésie"
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr "Faerské ostrovy"
+
+#, no-c-format
+msgid "France"
+msgstr "Francie"
+
+#, no-c-format
+msgid "Gabon"
+msgstr "Gabon"
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr "Spojené království"
+
+#, no-c-format
+msgid "Grenada"
+msgstr "Grenada"
+
+#, no-c-format
+msgid "Georgia"
+msgstr "Gruzie"
+
+#, no-c-format
+msgid "French Guiana"
+msgstr "Francouzská Guyana"
+
+#, no-c-format
+msgid "Guernsey"
+msgstr "Guernsey"
+
+#, no-c-format
+msgid "Ghana"
+msgstr "Ghana"
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#, no-c-format
+msgid "Greenland"
+msgstr "Grónsko"
+
+#, no-c-format
+msgid "Gambia"
+msgstr "Gambie"
+
+#, no-c-format
+msgid "Guinea"
+msgstr "Guinea"
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr "Rovníková Guinea"
+
+#, no-c-format
+msgid "Greece"
+msgstr "Řecko"
+
+#, no-c-format
+msgid "South Georgia"
+msgstr "Jižní Georgie a Jižní Sandwichovy ostrovy"
+
+#, no-c-format
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#, no-c-format
+msgid "Guam"
+msgstr "Guam"
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr "Guinea-Bissau"
+
+#, no-c-format
+msgid "Guyana"
+msgstr "Guyana"
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr "Hongkong – ZAO Číny"
+
+#, no-c-format
+msgid "Heard Island"
+msgstr "Heardův ostrov a McDonaldovy ostrovy"
+
+#, no-c-format
+msgid "Honduras"
+msgstr "Honduras"
+
+#, no-c-format
+msgid "Croatia"
+msgstr "Chorvatsko"
+
+#, no-c-format
+msgid "Haiti"
+msgstr "Haiti"
+
+#, no-c-format
+msgid "Hungary"
+msgstr "Maďarsko"
+
+#, no-c-format
+msgid "Indonesia"
+msgstr "Indonésie"
+
+#, no-c-format
+msgid "Ireland"
+msgstr "Irsko"
+
+#, no-c-format
+msgid "Israel"
+msgstr "Izrael"
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr "Ostrov Man"
+
+#, no-c-format
+msgid "India"
+msgstr "Indie"
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr "Britské indickooceánské území"
+
+#, no-c-format
+msgid "Iraq"
+msgstr "Irák"
+
+#, no-c-format
+msgid "Iran"
+msgstr "Írán"
+
+#, no-c-format
+msgid "Iceland"
+msgstr "Island"
+
+#, no-c-format
+msgid "Italy"
+msgstr "Itálie"
+
+#, no-c-format
+msgid "Jersey"
+msgstr "Jersey"
+
+#, no-c-format
+msgid "Jamaica"
+msgstr "Jamajka"
+
+#, no-c-format
+msgid "Jordan"
+msgstr "Jordánsko"
+
+#, no-c-format
+msgid "Japan"
+msgstr "Japonsko"
+
+#, no-c-format
+msgid "Kenya"
+msgstr "Keňa"
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr "Kyrgyzstán"
+
+#, no-c-format
+msgid "Cambodia"
+msgstr "Kambodža"
+
+#, no-c-format
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#, no-c-format
+msgid "Comoros"
+msgstr "Komory"
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr "Svatý Kryštof a Nevis"
+
+#, no-c-format
+msgid "North Korea"
+msgstr "Severní Korea"
+
+#, no-c-format
+msgid "South Korea"
+msgstr "Jižní Korea"
+
+#, no-c-format
+msgid "Kuwait"
+msgstr "Kuvajt"
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr "Kajmanské ostrovy"
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr "Kazachstán"
+
+#, no-c-format
+msgid "Laos"
+msgstr "Laos"
+
+#, no-c-format
+msgid "Lebanon"
+msgstr "Libanon"
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr "Svatá Lucie"
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr "Lichtenštejnsko"
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr "Srí Lanka"
+
+#, no-c-format
+msgid "Liberia"
+msgstr "Libérie"
+
+#, no-c-format
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#, no-c-format
+msgid "Lithuania"
+msgstr "Litva"
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr "Lucembursko"
+
+#, no-c-format
+msgid "Latvia"
+msgstr "Lotyšsko"
+
+#, no-c-format
+msgid "Libya"
+msgstr "Libye"
+
+#, no-c-format
+msgid "Morocco"
+msgstr "Maroko"
+
+#, no-c-format
+msgid "Monaco"
+msgstr "Monako"
+
+#, no-c-format
+msgid "Moldova"
+msgstr "Moldavsko"
+
+#, no-c-format
+msgid "Montenegro"
+msgstr "Černá Hora"
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr "Svatý Martin (Francie)"
+
+#, no-c-format
+msgid "Madagascar"
+msgstr "Madagaskar"
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr "Marshallovy ostrovy"
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr "Severní Makedonie"
+
+#, no-c-format
+msgid "Mali"
+msgstr "Mali"
+
+#, no-c-format
+msgid "Myanmar"
+msgstr "Myanmar (Barma)"
+
+#, no-c-format
+msgid "Mongolia"
+msgstr "Mongolsko"
+
+#, no-c-format
+msgid "Macao"
+msgstr "Macao – ZAO Číny"
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr "Severní Mariany"
+
+#, no-c-format
+msgid "Martinique"
+msgstr "Martinik"
+
+#, no-c-format
+msgid "Mauritania"
+msgstr "Mauritánie"
+
+#, no-c-format
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#, no-c-format
+msgid "Malta"
+msgstr "Malta"
+
+#, no-c-format
+msgid "Mauritius"
+msgstr "Mauricius"
+
+#, no-c-format
+msgid "Maldives"
+msgstr "Maledivy"
+
+#, no-c-format
+msgid "Malawi"
+msgstr "Malawi"
+
+#, no-c-format
+msgid "Mexico"
+msgstr "Mexiko"
+
+#, no-c-format
+msgid "Malaysia"
+msgstr "Malajsie"
+
+#, no-c-format
+msgid "Mozambique"
+msgstr "Mosambik"
+
+#, no-c-format
+msgid "Namibia"
+msgstr "Namibie"
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr "Nová Kaledonie"
+
+#, no-c-format
+msgid "Niger"
+msgstr "Niger"
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr "Norfolk"
+
+#, no-c-format
+msgid "Nigeria"
+msgstr "Nigérie"
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr "Nikaragua"
+
+#, no-c-format
+msgid "Netherlands"
+msgstr "Nizozemsko"
+
+#, no-c-format
+msgid "Norway"
+msgstr "Norsko"
+
+#, no-c-format
+msgid "Nepal"
+msgstr "Nepál"
+
+#, no-c-format
+msgid "Nauru"
+msgstr "Nauru"
+
+#, no-c-format
+msgid "Niue"
+msgstr "Niue"
+
+#, no-c-format
+msgid "New Zealand"
+msgstr "Nový Zéland"
+
+#, no-c-format
+msgid "Oman"
+msgstr "Omán"
+
+#, no-c-format
+msgid "Panama"
+msgstr "Panama"
+
+#, no-c-format
+msgid "Peru"
+msgstr "Peru"
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr "Francouzská Polynésie"
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr "Papua-Nová Guinea"
+
+#, no-c-format
+msgid "Philippines"
+msgstr "Filipíny"
+
+#, no-c-format
+msgid "Pakistan"
+msgstr "Pákistán"
+
+#, no-c-format
+msgid "Poland"
+msgstr "Polsko"
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint-Pierre a Miquelon"
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr "Pitcairnovy ostrovy"
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr "Portoriko"
+
+#, no-c-format
+msgid "Palestine"
+msgstr "Palestinská území"
+
+#, no-c-format
+msgid "Portugal"
+msgstr "Portugalsko"
+
+#, no-c-format
+msgid "Palau"
+msgstr "Palau"
+
+#, no-c-format
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#, no-c-format
+msgid "Qatar"
+msgstr "Katar"
+
+#, no-c-format
+msgid "Réunion"
+msgstr "Réunion"
+
+#, no-c-format
+msgid "Romania"
+msgstr "Rumunsko"
+
+#, no-c-format
+msgid "Serbia"
+msgstr "Srbsko"
+
+#, no-c-format
+msgid "Russia"
+msgstr "Rusko"
+
+#, no-c-format
+msgid "Rwanda"
+msgstr "Rwanda"
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr "Saúdská Arábie"
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr "Šalamounovy ostrovy"
+
+#, no-c-format
+msgid "Seychelles"
+msgstr "Seychely"
+
+#, no-c-format
+msgid "Sudan"
+msgstr "Súdán"
+
+#, no-c-format
+msgid "Sweden"
+msgstr "Švédsko"
+
+#, no-c-format
+msgid "Singapore"
+msgstr "Singapur"
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr "Svatá Helena"
+
+#, no-c-format
+msgid "Slovenia"
+msgstr "Slovinsko"
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr "Špicberky a Jan Mayen"
+
+#, no-c-format
+msgid "Slovakia"
+msgstr "Slovensko"
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#, no-c-format
+msgid "San Marino"
+msgstr "San Marino"
+
+#, no-c-format
+msgid "Senegal"
+msgstr "Senegal"
+
+#, no-c-format
+msgid "Somalia"
+msgstr "Somálsko"
+
+#, no-c-format
+msgid "Suriname"
+msgstr "Surinam"
+
+#, no-c-format
+msgid "South Sudan"
+msgstr "Jižní Súdán"
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr "Svatý Tomáš a Princův ostrov"
+
+#, no-c-format
+msgid "El Salvador"
+msgstr "Salvador"
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr "Svatý Martin (Nizozemsko)"
+
+#, no-c-format
+msgid "Syria"
+msgstr "Sýrie"
+
+#, no-c-format
+msgid "Eswatini"
+msgstr "Eswatini"
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr "Turks a Caicos"
+
+#, no-c-format
+msgid "Chad"
+msgstr "Čad"
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr "Francouzská jižní území"
+
+#, no-c-format
+msgid "Togo"
+msgstr "Togo"
+
+#, no-c-format
+msgid "Thailand"
+msgstr "Thajsko"
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr "Tádžikistán"
+
+#, no-c-format
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr "Východní Timor"
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr "Turkmenistán"
+
+#, no-c-format
+msgid "Tunisia"
+msgstr "Tunisko"
+
+#, no-c-format
+msgid "Tonga"
+msgstr "Tonga"
+
+#, no-c-format
+msgid "Turkey"
+msgstr "Turecko"
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr "Trinidad a Tobago"
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#, no-c-format
+msgid "Taiwan"
+msgstr "Tchaj-wan"
+
+#, no-c-format
+msgid "Tanzania"
+msgstr "Tanzanie"
+
+#, no-c-format
+msgid "Ukraine"
+msgstr "Ukrajina"
+
+#, no-c-format
+msgid "Uganda"
+msgstr "Uganda"
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr "Menší odlehlé ostrovy USA"
+
+#, no-c-format
+msgid "United States"
+msgstr "Spojené státy"
+
+#, no-c-format
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr "Uzbekistán"
+
+#, no-c-format
+msgid "Vatican City"
+msgstr "Vatikán"
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr "Svatý Vincenc a Grenadiny"
+
+#, no-c-format
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr "Britské Panenské ostrovy"
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr "Americké Panenské ostrovy"
+
+#, no-c-format
+msgid "Vietnam"
+msgstr "Vietnam"
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr "Wallis a Futuna"
+
+#, no-c-format
+msgid "Samoa"
+msgstr "Samoa"
+
+#, no-c-format
+msgid "Kosovo"
+msgstr "Kosovo"
+
+#, no-c-format
+msgid "Yemen"
+msgstr "Jemen"
+
+#, no-c-format
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#, no-c-format
+msgid "South Africa"
+msgstr "Jihoafrická republika"
+
+#, no-c-format
+msgid "Zambia"
+msgstr "Zambie"
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr "Záloha je hotová."
+
+msgid "Left out, being written right now:"
+msgstr "Vynecháno, právě se zapisuje:"
+
+msgid "Don't use"
+msgstr "Nepoužívat"
+
+msgid "Not aligned"
+msgstr "Nesrovnáno"
+
+msgid "Fixed & aligned"
+msgstr "Pevně a srovnáno"
+
+msgid "Built-in IMU"
+msgstr "Vestavěné IMU"
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Zda je přístroj s IMU trvale upevněn a jeho osy jsou srovnány s osami letad"
+"la. «Pevně a srovnáno» nastavte jen při tuhém uchycení. V pochybnostech pou"
+"žijte «Nesrovnáno»."
+
+#, no-c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+"XCSoar použije první zařízení, které dodává každou hodnotu (zařízení A před"
+" B a tak dále). Tučné příznaky jsou hodnoty, které XCSoar z tohoto zařízení"
+" bere. Netučné znamenají, že dřívější zařízení už stejná data dodává. Baro "
+"je výška s aktuálním QNH; QNE je tlaková výška; Alt IGC je výška, kterou za"
+"pisuje záznamník. QNE a Pressure jsou tentýž okolní tlak, takže tučné je je"
+"n dřívější z nich. Špatné GPS a baterie pod 10 procent se na barevném displ"
+"eji ukazují červeně a na elektronickém papíře tučně."
+
+msgid "QNE"
+msgstr "QNE"
+
+msgid "Engine"
+msgstr "Motor"
+
+msgid "Set Clearance"
+msgstr "Nastavit povolení"
+
+msgid "Revoke Clearance"
+msgstr "Odvolat povolení"
+
+msgid "Failed to update airspace clearance"
+msgstr "Nepodařilo se aktualizovat povolení vzdušného prostoru"
+
+msgid "Clrnc"
+msgstr "Pov."
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+"Nastavení filtru podle třídy. Kde je u prostoru zadán typ (CTR, FIR, ...) i"
+" třída, má v XCSoar typ přednost před třídou.\nSloupce:\n  Zobraz — kreslí "
+"prostory této třídy na mapu\n  Varuj  — zapne varování při přiblížení a uvn"
+"itř\n  Pov.   — dovolí udělit povolení, které potlačí\n           varování "
+"z jiných překrývajících se prostorů"
+
+msgid "Clearance"
+msgstr "Povolení"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr "V seznamu ukazuj jen InfoBoxy těchto skupin."
+
+msgid "Share location"
+msgstr "Sdílet polohu"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "Nahoře"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "Vpravo"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "Dole"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "Vlevo"
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr "Klepněte na hranu a oblast InfoBoxů se roztáhne k okraji obrazovky."
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+"Oblast InfoBoxů je část obrazovky pro InfoBoxy, přístroje, překryvy mapy a "
+"menu. Vyberte hrany, na kterých se roztáhne k okraji obrazovky. Neroztažené"
+" hrany zůstanou mimo systémové lišty a zaoblené rohy. Mapa vždy používá cel"
+"ou obrazovku a dialogy zůstávají v bezpečné oblasti. Platí jen v celoobrazo"
+"vkovém režimu."
+
+msgid "Stretch InfoBox area"
+msgstr "Roztáhnout oblast InfoBoxů"
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+"Zobrazuj stavový řádek, pokud oblast InfoBoxů není roztažena k hornímu okra"
+"ji obrazovky, kde by je zakryla."
+
+#, no-c-format
+msgid "Visible"
+msgstr "Viditelná"
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+"Stavový řádek zobrazuj vždy, i v celoobrazovkovém režimu. InfoBoxy se za ně"
+"j kreslit nedají, a proto zůstávají mimo horní okraj."
+
+#, no-c-format
+msgid "Hidden"
+msgstr "Skrytá"
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr "Stavový řádek nikdy nezobrazovat."
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+"Nechť XCSoar použije celou obrazovku, včetně míst za systémovými lištami a "
+"výřezem displeje. Mapa ji vyplní celou a «Roztáhnout oblast InfoBoxů» určí,"
+" ke kterým hranám sahají InfoBoxy, přístroje, překryvy a menu."
+
+msgid "System status bar"
+msgstr "Systémový stavový řádek"
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+"Zda systémový stavový řádek s hodinami a stavem baterie zůstane viditelný."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr "Varovat, když radar vyprší"
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr ""
+"Pokud je zapnuto, zobrazí se varování, když překryv dešťového radaru nešlo "
+"obnovit a byl z mapy odstraněn."
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr "Zmenši písmo, když je kratší strana pod 3.2 palce."
+
+#, no-c-format
+msgid "Handheld"
+msgstr "V ruce"
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr "Vždy použít velikost pro bližší čtení."
+
+#, no-c-format
+msgid "Panel"
+msgstr "Panel"
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr "Ponech plnou velikost písma pro čtení na délku paže."
+
+msgid "Viewing distance"
+msgstr "Vzdálenost čtení"
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+"Auto zmenší písmo, když je kratší strana pod 3.2 palce. „V ruce“ vždy použi"
+"je tuto bližší velikost. „Panel“ ponechá plnou velikost."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr "Družicová vrstva"
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr "Který družicový produkt EUMETView tato stránka kreslí pod mapu."
+
+#, no-c-format
+msgid "Rain radar"
+msgstr "Dešťový radar"
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr ""
+"Dolet je z přímých drah od kluzáku. Barvy přistávacích míst a seznam altern"
+"ativ používají tento dolet."
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr ""
+"Dolet se počítá se zatáčkami kolem terénních překážek. Barvy přistávacích m"
+"íst a seznam alternativ používají tento dolet."
+
+#, no-c-format
+msgid "Task MC"
+msgstr "MC úlohy"
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr "Použije MacCready hodnotu úlohy."
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+"Který MacCready se používá pro dolet nad terénem, barvy přistávacích míst, "
+"přerušení a seznam alternativ. Platí i když je režim doletu vypnutý. Pracov"
+"ní čára vždy použije MC úlohy. InfoBoxy alternativ a výškový rozdíl s bezpe"
+"čnostním MC vždy použijí bezpečnostní MC."
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr "Bez překryvu doletu na mapě."
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr "Jak daleko dokluzáte k zemi. Použije poláru doletu."
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr "Stínuje mapu za dokluzem k zemi. Použije poláru doletu."
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr ""
+"Jak daleko dokluzáte a přesto dorazíte v typické výšce základny stoupání z "
+"tohoto letu. Vždy použije MC úlohy."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr ""
+"Pracovní čára k typické výšce základny stoupání s MC úlohy a terénní čára k"
+" zemi s polárou doletu."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr ""
+"Pracovní čára k typické výšce základny stoupání s MC úlohy a stín za zemí s"
+" polárou doletu."
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+"MacCready pro dolet nad terénem, barvy přistávacích míst, přerušení a sezna"
+"m alternativ, když je polára doletu bezpečnostní MC. InfoBoxy alternativ a "
+"výškový rozdíl s bezpečnostním MC vždy použijí tuto hodnotu. Rychlost pro n"
+"ejlepší klouzání se nemění. Vyšší hodnoty berou méně ploch jako dosažitelné"
+"."
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr ""
+"Není nastavena klouzavá polára, takže nelze ukázat klouzavost. Nejprve vybe"
+"rte letadlo."
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr ""
+"Klouzavost vedle každé hodnoty je nejlepší klouzavost v klidném vzduchu při"
+" tomto MacCready, včetně zamoušení, zátěže a zhoršení poláry."
+
+#, c-format
+msgid "Active polar: %s"
+msgstr "Aktivní polára: %s"
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+"MacCready při startu pro rychlost nejlepšího klouzání a výpočty úlohy. Změn"
+"a zde nastaví i živý MacCready. Dolet nad terénem, barvy přistávacích míst,"
+" přerušení a seznam alternativ se řídí polárou doletu, ne touto hodnotou, p"
+"okud polára doletu není MC úlohy."
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+"Použij časové pásmo nastavené v operačním systému a sleduj ho při změnách l"
+"etního času i při cestě do jiného pásma."
+
+#, no-c-format
+msgid "Time zone"
+msgstr "Časové pásmo"
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+"Použij časové pásmo vybrané níže. XCSoar zná pravidla letního času a přecho"
+"dy provede sám, takže nastavení není třeba dvakrát ročně opravovat."
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr "Ruční posun UTC"
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+"Použij pevný posun UTC zadaný níže. Při začátku a konci letního času se mus"
+"í opravit ručně."
+
+msgid "Local time source"
+msgstr "Zdroj místního času"
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr "Volí, odkud XCSoar bere posun mezi UTC a místním časem."
+
+msgid "The time zone of the airfield you are flying at."
+msgstr "Časové pásmo letiště, ze kterého letíte."
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+"Pole posunu UTC umožňuje zadat posun mezi UTC a místním časem. Ponechá zada"
+"nou hodnotu, i když je vybrán jiný zdroj místního času. Dole se zobrazují m"
+"ístní čas a posun UTC, který právě platí."
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Model UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Spojené království. Model UKV."
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr "Překryv"
+
+msgid "Revoke"
+msgstr "Odvolat"
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr "Radar (EUMETNET OPERA)"
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr "žádná data"
+
+msgid "Downloading radar..."
+msgstr "Stahování radaru..."
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr ""
+"Radarový snímek nešlo obnovit a byl odstraněn, aby se neukazovala zastaralá"
+" ozvěna.\n\nVarovat znovu, až se to stane?"
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr "Evropské HRV RGB"
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr "Viditelné 0.6 µm (MTG)"
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr "Infračervené 10.5 µm (MTG)"
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr "Pravé barvy (MTG)"
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr "Geobarvy (MTG)"
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr "Rychlý sken, přirozené barvy"
+
+msgid "No satellite imagery here right now"
+msgstr "Zde teď není žádný družicový snímek"
+
+msgid "Countries"
+msgstr "Země"
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+"Ukazuj jen soubory těchto zemí — stejný výběr pro mapy, body a prostory, ul"
+"ožený v profilu. Soubory pro všechny země zůstanou v seznamu."
+
+msgid "Search"
+msgstr "Hledat"
+
+msgid "Show only the files whose name or description contains this text."
+msgstr "Ukazuj jen soubory, jejichž název nebo popis obsahuje tento text."
+
+msgid "No file matches the filter."
+msgstr "Žádný soubor neodpovídá filtru."
+
+msgid "Complete"
+msgstr "Dokončeno"
+
+msgid "Cancelled"
+msgstr "Zrušeno"
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr ""
+"Celkový zisk nebo ztráta výšky v posledním stoupání dělený časem kroužení. "
+"Sekundy menším písmem ukazují čas kroužení."
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr ""
+"Čas strávený kroužením v posledním stoupání. Menší číslo ukazuje průměrné s"
+"toupání posledního stoupání."
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+"Hlavní hodnota: stoupání v termice na dalším rameni odpovídající stoupání r"
+"ovnému MacCready na současném rameni. Vedlejší hodnota: stoupání v termice "
+"na současném rameni odpovídající stoupání rovnému MacCready na dalším ramen"
+"i."
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Výška příletu na nejlepší náhradní přistání s bezpečnostním MC, vůči bezpeč"
+"nostní výšce příletu."
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Výška příletu na druhé nejlepší náhradní přistání s bezpečnostním MC, vůči "
+"bezpečnostní výšce příletu."
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+"Aktuální nastavení tlaku QNH pro výpočet barometrické výšky. Řádek pod tím "
+"ukazuje tuto výšku, když je k dispozici tlakové čidlo. Klepnutím na InfoBox"
+" otevřete panel a QNH nastavíte ručně."
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr "Rychlost VMG"
+
+#, no-c-format
+msgid "V VMG"
+msgstr "V VMG"
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+"Složka rychlosti nad zemí ve směru dalšího bodu. Rovná se rychlosti nad zem"
+"í při přímém kurzu k němu, na kolmici klesá k nule a při vzdalování je zápo"
+"rná. Číselně ukazuje, co stojí odbočka z přímého kurzu."
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr "Vario a stoupání"
+
+#, no-c-format
+msgid "Glide"
+msgstr "Kluz"
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr "Rychlost a poloha"
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr "Vítr a počasí"
+
+#, no-c-format
+msgid "Time"
+msgstr "Čas"
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr "Vzdušný prostor a tým"
+
+#, no-c-format
+msgid "Other"
+msgstr "Ostatní"
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+"Přetáhněte InfoBox na jiný a oba se vymění. Podržte InfoBox a zvedněte ho, "
+"abyste pro tu pozici vybrali jiný."
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+"Enter vezme vybraný InfoBox, šipkami ho přesuňte a dalším Enter ho položíte"
+". Dvojí Enter bez pohybu vybere pro tu pozici jiný InfoBox."
+
+msgid "Arrange InfoBoxes"
+msgstr "Uspořádat InfoBoxy"
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr "Uspořádat\nInfoBoxy"
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Aktuální plošné zatížení, vypočtené z prázdné hmotnosti kluzáku, hmotnosti "
+"posádky a balastu. Zobrazuje se červeně, když je kluzák těžší než jeho maxi"
+"mální vzletová hmotnost."
+
+msgid "MTOW"
+msgstr "MTOW"
+
+msgid "Maximum takeoff weight of the glider."
+msgstr "Maximální vzletová hmotnost kluzáku."
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+"Vodní zátěž na palubě v litrech. Komentář ukazuje plošné zatížení, červeně,"
+" když je kluzák těžší než jeho maximální vzletová hmotnost. Hodnota je modr"
+"á při vypouštění. Klepnutím změníte zátěž."
+

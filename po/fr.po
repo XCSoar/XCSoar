@@ -1103,9 +1103,6 @@ msgstr "Envoi de la déclaration"
 msgid "Reading flight list"
 msgstr "Lecture de la liste de vol"
 
-msgid "Downloading flight log"
-msgstr "téléchargement du log du vol"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Désactivée"
@@ -1803,9 +1800,6 @@ msgstr "Alert."
 msgid "Airspace"
 msgstr "Espace aérien"
 
-msgid "Select Pattern"
-msgstr "Select. Modèle"
-
 msgid "Squawk code"
 msgstr "Code squawk"
 
@@ -1860,9 +1854,6 @@ msgstr "Modifier la couleur de la bordure"
 
 msgid "Change Fill Color"
 msgstr "Modifier la couleur de remplissage"
-
-msgid "Change Fill Brush"
-msgstr "Changer la brosse de remplissage"
 
 msgid "Border Width"
 msgstr "Epaisseur de bordure"
@@ -1970,9 +1961,6 @@ msgstr "Ballast"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "Ballasts du planeur. Appuyez sur \"Larguez/Arrêtez\" pour lancer le décompte du volume des ballasts selon le taux de vidage spécifié dans les paramètres de configuration."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "Charge alaire actuelle, calculée à partir de la masse à vide du planeur, de la masse équipage et du ballast."
-
 msgid "Bugs"
 msgstr "Moucherons"
 
@@ -1989,9 +1977,6 @@ msgstr "Pression locale pour calage barométrique de l'altimètre. Ce champ est 
 
 msgid "Max. temp."
 msgstr "Temp. max."
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "À remplir pour prédire la température au sol. Utilisé par l'estimateur de convection (page Courbe de température du menu Analyses)"
 
 #, no-c-format
 msgid "Orientation"
@@ -2049,10 +2034,6 @@ msgid "Gauges"
 msgstr "Instruments"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "Circuit par défaut"
-
-#, no-c-format
 msgid "Look"
 msgstr "Apparence"
 
@@ -2062,14 +2043,8 @@ msgstr "Expert"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Nom de cette configuration de panneau InfoBox."
-
 msgid "InfoBox"
 msgstr "InfoBoxe"
-
-msgid "Content"
-msgstr "Contenu"
 
 msgid "Copy Set"
 msgstr "Copier le jeu"
@@ -2085,9 +2060,11 @@ msgstr "Coller l'InfoBox"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Copier retient toutes les InfoBoxes de ce jeu, Coller remplace par elles "
+"les InfoBoxes d'un autre jeu."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Hériter des paramètres globaux"
 
 msgid "Invalid"
 msgstr "Invalide"
@@ -2445,9 +2422,6 @@ msgstr "Gain d'alt. max."
 msgid "Near"
 msgstr "A proximité de"
 
-msgid "Share"
-msgstr "Partager"
-
 #, no-c-format
 msgid "Disconnected"
 msgstr "Déconnecté"
@@ -2773,17 +2747,18 @@ msgstr "Commentaire"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Texte fixe"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Titre, valeur et commentaire saisis par le pilote. Touchez pour modifier."
 
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgid "Value"
-msgstr ""
+msgstr "Valeur"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -2974,12 +2949,6 @@ msgstr "Mode remplissage"
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Spécifie le mode de remplissage de l'espace aérien."
-
-msgid "Airspace transparency"
-msgstr "Transparence"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Si activé, alors les espaces sont colorés de façon transparente."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3297,17 +3266,6 @@ msgstr ""
 "l'altitude barométrique utilisée pour toutes les fonctions de navigation. "
 "Sinon l'altitude GPS est utilisée."
 
-msgid "Flap forces cruise"
-msgstr "Transition par volets"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr ""
-"Lorsqu'un vario Vega est connecté et cette option sélectionnée, alors le "
-"détecteur de position de volets en positif passe la phase de vol de "
-"transition à spirale (et inversement)."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "Période adaptée pour parapentes."
@@ -3382,6 +3340,7 @@ msgstr "Taille du texte"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "La résolution de l'affichage est utilisée pour adapter les largeurs de ligne, la taille de la police, la taille des terrains posables, etc."
 
+#. the Kobo has no time zone configuration which we could follow
 msgid "Automatic"
 msgstr "Automatique"
 
@@ -3442,90 +3401,6 @@ msgstr "Portrait inversé"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Paysage inversé"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 séparées"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 séparées"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 sur 3 lignes"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 sur 3 lignes"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 sur 3 lignes"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 en bas ou à droite"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 Bas + Vario (Portrait)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 en haut ou à gauche"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 Haut + Vario (Portrait)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 Droite + Vario (Paysage)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Gauche + Droite + Vario (Paysage)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 Gauche + 3 Droite Vario (Paysage)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 Droite (Carré)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 en bas ou à droite"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 en bas ou à droite"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 en haut ou à gauche"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 en haut ou à gauche"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 à droite (Paysage)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 en bas ou à droite"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 en haut ou à gauche"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 en bas ou à droite"
 
 #, no-c-format
 msgid "Text"
@@ -3617,9 +3492,6 @@ msgstr "Toujours utiliser un texte clair sur un fond sombre d'InfoBox."
 
 msgid "Full screen"
 msgstr "Carte en plein écran"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "Exécuter XCSoar en mode plein écran"
 
 msgid "Display orientation"
 msgstr "Orientation de l'affichage"
@@ -3986,16 +3858,8 @@ msgid "Straight"
 msgstr "En ligne droite"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "Calcul du local en ligne droite."
-
-#, no-c-format
 msgid "Turning"
 msgstr "Contourne"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr "Le local est calculé en contournant les obstacles du relief."
 
 #. Spacer
 msgid "Reach mode"
@@ -4005,10 +3869,6 @@ msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr "Méthodes de calcul du local en tenant compte du relief."
-
-#, no-c-format
-msgid "Uses task glide polar."
-msgstr "Utilise la polaire du circuit."
 
 #, no-c-format
 msgid "Safety MC"
@@ -4022,48 +3882,24 @@ msgid "Reach polar"
 msgstr "Polaire pour zone d'atteinte"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "Désactive l'affichage de la zone atteignable."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "Courbe de niveau"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr "Dessine en pointillés la limite de la zone atteignable en vol plané."
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "Ombrage du relief"
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr "Grise la carte hors de la zone atteignable en finesse."
-
-#, no-c-format
 msgid "Working line"
 msgstr "Ligne de travail"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr "Dessine en pointillés la limite de la zone atteignable en vol plané."
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "Ligne actuelle, ligne au terrain"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur."
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "Ligne de travail, ombrage du relief"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "Dessine en pointillés la limite de la zone d'atteinte du planeur."
 
 msgid "Reach display"
 msgstr "Aff. Zone atteignable"
@@ -4119,15 +3955,6 @@ msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr ""
 "Si activé, alors ajoute 1% au réglage moucherons à chaque heure de vol."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Le réglage MacCready utilisé, quand le MC de sécurité est activé pour le "
-"calcul de locaux, en mode abandon de circuit et pour déterminer l'altitude "
-"d'arrivée sur les aérodromes."
 
 msgid "STF risk factor"
 msgstr "Coef. risque sur calage"
@@ -4807,15 +4634,6 @@ msgstr "Unité utilisée pour la rotation."
 #, no-c-format
 msgid "UTC offset"
 msgstr "Décalage UTC"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"Ce champ \"Fuseau Horaire\" permet de régler le décalage UTC pour déterminer "
-"l'heure locale. L'heure locale est affichée sous le champ \"Fuseau Horaire\" "
-"pour vérification."
 
 msgid "Use GPS time"
 msgstr "Heure du GPS"
@@ -5832,14 +5650,6 @@ msgid "TL Avg"
 msgstr "Dern Vz"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Gain ou perte d'altitude totale dans le dernier thermique, divisé par la "
-"durée passée en spirale."
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "Gain du dernier thermique"
 
@@ -5862,10 +5672,6 @@ msgstr "Durée du dernier thermique"
 #, no-c-format
 msgid "TL duration"
 msgstr "Durée DerTh"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Durée passée à spiraler dans le dernier thermique."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -7041,10 +6847,6 @@ msgid "T Next Leg"
 msgstr "Vz Moy. après WP"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Vz moyenne prévue sur la prochaine branche. Équivalent au calage MacCready de la branche courante."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Composante de vent de face (simplifiée)"
 
@@ -7401,20 +7203,12 @@ msgid "Altn 1 AltD"
 msgstr "Dgmt 1"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "Altitude d'arrivée au point de virage final du circuit en tenant compte de la hauteur de sécurité en arrivée."
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "Différence d'altitude prochain waypoint"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "Dgmt 2"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "Altitude d'arrivée au point de virage final du circuit en tenant compte de la hauteur de sécurité en arrivée."
 
 #, no-c-format
 msgid "Simulator"
@@ -8497,13 +8291,6 @@ msgstr ""
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "Impossible de se connecter. Vérifiez la phrase de passe et réessayez."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Réglage de pression QNH actuel utilisé pour le calcul de l'altitude "
-"barométrique. Touchez l'infobox pour ouvrir le panneau de configuration et "
-"régler le QNH manuellement."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9994,14 +9781,6 @@ msgstr ""
 "Couvre l'arc alpin entier de Vienne à Perpignan, avec prévision d'onde sur "
 "toute la région alpine. Modèle ICON-CH."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Royaume-Uni. Modèle ICON-UK."
-
 msgid "XC Therm email"
 msgstr "E-mail XC Therm"
 
@@ -11131,21 +10910,26 @@ msgstr "Manuel"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Oxygène sanguin"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr ""
+"Saturation de l'oxygène sanguin en pourcentage, mesurée par un oxymètre de "
+"pouls Bluetooth."
 
+#, no-c-format
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Waypoints récemment utilisés"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Connectez-vous au Wi-Fi de l'appareil pour télécharger les vols de ce "
+"FLARM."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Détermine si la trace est dérivée avec le vent lorsqu'elle est affichée en mode spirale aux échelles de carte proches. Désactivé, la trace reste sans compensation de dérive du vent. En spirale, cela s'applique aussi à la courbe de route projetée : Activé la conserve par rapport à la masse d'air ; Désactivé inclut le vent."
 
@@ -11181,27 +10965,26 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Active le radar de trafic et choisit sa position sur l'écran principal. Le cap de la route vers l'objectif par rapport au cap de la route du planeur est représenté par une flèche. Un triangle pointant vers le haut ou vers le bas indique l'altitude relative de la cible par rapport à vous. Dans tous les modes, la couleur de l'objectif indique le niveau de danger de collision."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Résolution de l'écran"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Luminosité de l'écran"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Régler la luminosité de l'écran."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"La luminosité de l'écran est en lecture seule, car l'écriture demande des "
+"autorisations supplémentaires."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "Désactive la zone d'atteinte sur la carte (ligne et ombrage du terrain). L'abort, les dégagements et l'arrivée sur terrains atterrissables utilisent toujours la polaire d'atteinte."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "Définit la performance du planeur utilisée pour la calcul de la zone d'atteinte au sol, des terrains posables, de l'abandon du circuit et des dégagements. Cela s'applique encore lorsque le mode d'atteinte est Désactivé."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -11209,10 +10992,10 @@ msgstr "Définit la performance du planeur utilisée pour la calcul de la zone d
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Mode des dégagements : Auto"
 
 msgid "Paste"
-msgstr ""
+msgstr "Coller"
 
 #, c-format
 msgid ""
@@ -11316,55 +11099,55 @@ msgid "%u min"
 msgstr "%u min"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Aucun service pris en charge"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Aucune unité systemd sélectionnée n'est installée."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Indisponible"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Démarrage..."
 
 msgid "Stopping..."
 msgstr "Arrêt en cours…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Rechargement..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Échec"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Allumer"
 
 msgid "Restart"
-msgstr ""
+msgstr "Redémarrer"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Éteindre"
 
 msgid "System service"
-msgstr ""
+msgstr "Service système"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Serveur SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Accès distant au terminal"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Capteurs"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Service des capteurs OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Vario sonore"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Service du vario sonore OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
@@ -11378,43 +11161,53 @@ msgstr "Renseigne la temp. max. dans Configuration vol d'après la prévision DW
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr "La température maximale au sol de la journée. Une adiabatique sèche partant de cette valeur, comparée à la température extérieure mesurée en montée, donne la hauteur des thermiques estimée ; la base des nuages demande en plus une sonde d'humidité. Les deux sont tracés sur la page Courbe de température du dialogue Analyses, une fois que le planeur a traversé la couche."
 
-#, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC du circuit au démarrage"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Finesse du MC de sécurité"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Alertes parlées"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Énonce les alarmes de collision du FLARM, avec l'urgence, la position "
+"horaire et si le trafic est au-dessus ou en dessous : \"Traffic urgent! "
+"Three o'clock. Above.\" Les alarmes d'obstacle et de zone d'alerte ne sont "
+"pas énoncées."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Essayer l'alerte parlée"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Interrupteur de commande de vitesse"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Comment XCSoar utilise le rapport transition/montée du variomètre."
 
+#, no-c-format
 msgid "Flight mode"
-msgstr ""
+msgstr "Mode de vol"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
+msgstr "En vol, le rapport transition/montée du variomètre est le mode de vol. Transition termine la montée et relance la moyenne. Montée commence une nouvelle thermique. La finale peut encore apparaître en transition. Sur un Vega, c'est la sortie spirale."
 
+#, no-c-format
 msgid "Display mode"
-msgstr ""
+msgstr "Mode d'affichage"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar décide la spirale d'après le virage. Le rapport du variomètre n'est pas utilisé."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "La page change et le mode de vol non. Transition affiche la page de transition, y compris en virage, et masque la finale. Montée affiche la page vario. Sur un Vega, c'est l'interrupteur de commande de vitesse."
 
 #, no-c-format
 msgid "System Tools"
@@ -11438,73 +11231,1691 @@ msgstr "Ce circuit ne peut pas être affiché comme un code QR"
 msgid "XCSoar task"
 msgstr "Circuit XCSoar"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
-msgstr ""
+msgstr "Statistiques de portée"
 
-#, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Antenne"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "Le FLARM conserve les statistiques de chacun de ses deux canaux radio."
 
-#, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Points de mesure"
 
-#, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Période"
 
-#, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Portée FLARM"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "Le FLARM n'a pas envoyé ses statistiques de portée."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "Réinitialiser les statistiques de portée ? À faire après un changement d'antennes ; le FLARM les recueille alors à nouveau."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "Le FLARM n'a pas confirmé la réinitialisation."
 
-#, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Sous la portée minimale"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Secteurs mesurés de ce canal dont la portée moyenne est inférieure au minimum du FLARM : 2 nm devant, 1 nm sur les côtés et derrière. Vérifiez l'installation de l'antenne."
 
-#, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Réglage de portée"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "Le FLARM ne signale aucun aéronef au-delà de cette distance. Le tracé la montre comme un cercle en pointillés lorsqu'elle est dans la portée affichée."
 
-#, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Illimité"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Contacts avec d'autres aéronefs FLARM en vol, comptés une fois dans chaque "
+"secteur traversé, avec la plus grande distance à laquelle ils y ont été "
+"reçus. Le secteur montre la moyenne de la plus grande moitié de ces "
+"distances, et la ligne qui le traverse la plus grande."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "Secteurs mesurés dont la portée estimée est inférieure au minimum du FLARM : 2 nm devant, 1 nm sur les côtés et derrière. Vérifiez l'installation de l'antenne."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "Réinitialiser l'estimation de portée ? À faire après un changement d'antenne ; XCSoar la recueille alors à nouveau."
+
+msgid "FLARM range estimate"
+msgstr "Estimation de portée FLARM"
 
 #, no-c-format
-msgid "FLARM range estimate"
+msgid "Zoom in"
+msgstr "Zoom avant"
+
+#, no-c-format
+msgid "Zoom out"
+msgstr "Zoom arrière"
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr "Zoom auto"
+
+#, no-c-format
+msgid "Next page"
+msgstr "Page suivante"
+
+#, no-c-format
+msgid "Previous page"
+msgstr "Page précédente"
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr "Liste des balises"
+
+#, no-c-format
+msgid "Menu"
+msgstr "Menu"
+
+#, no-c-format
+msgid "Task manager"
+msgstr "Gestion des circuits"
+
+#, no-c-format
+msgid "Pan mode"
+msgstr "Mode panorama"
+
+#, no-c-format
+msgid "Quick menu"
+msgstr "Menu rapide"
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr "Radar"
+
+#, no-c-format
+msgid "Satellite"
+msgstr "Satellite"
+
+msgid "(Inside)"
+msgstr "(À l'intérieur)"
+
+msgid "(Near)"
+msgstr "(À proximité)"
+
+msgid "Cleared"
+msgstr "Autorisé"
+
+msgid "Covered"
+msgstr "Couvert"
+
+msgid "Power off"
+msgstr "Éteindre"
+
+#, no-c-format
+msgid "Andorra"
+msgstr "Andorre"
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr "Émirats arabes unis"
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr "Afghanistan"
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr "Antigua-et-Barbuda"
+
+#, no-c-format
+msgid "Anguilla"
+msgstr "Anguilla"
+
+#, no-c-format
+msgid "Albania"
+msgstr "Albanie"
+
+#, no-c-format
+msgid "Armenia"
+msgstr "Arménie"
+
+#, no-c-format
+msgid "Angola"
+msgstr "Angola"
+
+#, no-c-format
+msgid "Antarctica"
+msgstr "Antarctique"
+
+#, no-c-format
+msgid "Argentina"
+msgstr "Argentine"
+
+#, no-c-format
+msgid "American Samoa"
+msgstr "Samoa américaines"
+
+#, no-c-format
+msgid "Austria"
+msgstr "Autriche"
+
+#, no-c-format
+msgid "Australia"
+msgstr "Australie"
+
+#, no-c-format
+msgid "Aruba"
+msgstr "Aruba"
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr "Îles Åland"
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr "Azerbaïdjan"
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr "Bosnie-Herzégovine"
+
+#, no-c-format
+msgid "Barbados"
+msgstr "Barbade"
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr "Bangladesh"
+
+#, no-c-format
+msgid "Belgium"
+msgstr "Belgique"
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr "Burkina Faso"
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr "Bulgarie"
+
+#, no-c-format
+msgid "Bahrain"
+msgstr "Bahreïn"
+
+#, no-c-format
+msgid "Burundi"
+msgstr "Burundi"
+
+#, no-c-format
+msgid "Benin"
+msgstr "Bénin"
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr "Saint-Barthélemy"
+
+#, no-c-format
+msgid "Bermuda"
+msgstr "Bermudes"
+
+#, no-c-format
+msgid "Brunei"
+msgstr "Brunei"
+
+#, no-c-format
+msgid "Bolivia"
+msgstr "Bolivie"
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr "Pays-Bas caribéens"
+
+#, no-c-format
+msgid "Brazil"
+msgstr "Brésil"
+
+#, no-c-format
+msgid "Bahamas"
+msgstr "Bahamas"
+
+#, no-c-format
+msgid "Bhutan"
+msgstr "Bhoutan"
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr "Île Bouvet"
+
+#, no-c-format
+msgid "Botswana"
+msgstr "Botswana"
+
+#, no-c-format
+msgid "Belarus"
+msgstr "Biélorussie"
+
+#, no-c-format
+msgid "Belize"
+msgstr "Belize"
+
+#, no-c-format
+msgid "Canada"
+msgstr "Canada"
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr "Îles Cocos"
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr "Congo-Kinshasa"
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr "République centrafricaine"
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr "Congo-Brazzaville"
+
+#, no-c-format
+msgid "Switzerland"
+msgstr "Suisse"
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr "Côte d’Ivoire"
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr "Îles Cook"
+
+#, no-c-format
+msgid "Chile"
+msgstr "Chili"
+
+#, no-c-format
+msgid "Cameroon"
+msgstr "Cameroun"
+
+#, no-c-format
+msgid "China"
+msgstr "Chine"
+
+#, no-c-format
+msgid "Colombia"
+msgstr "Colombie"
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr "Costa Rica"
+
+#, no-c-format
+msgid "Cuba"
+msgstr "Cuba"
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr "Cap-Vert"
+
+#, no-c-format
+msgid "Curaçao"
+msgstr "Curaçao"
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr "Île Christmas"
+
+#, no-c-format
+msgid "Cyprus"
+msgstr "Chypre"
+
+#, no-c-format
+msgid "Czechia"
+msgstr "Tchéquie"
+
+#, no-c-format
+msgid "Germany"
+msgstr "Allemagne"
+
+#, no-c-format
+msgid "Djibouti"
+msgstr "Djibouti"
+
+#, no-c-format
+msgid "Denmark"
+msgstr "Danemark"
+
+#, no-c-format
+msgid "Dominica"
+msgstr "Dominique"
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr "République dominicaine"
+
+#, no-c-format
+msgid "Algeria"
+msgstr "Algérie"
+
+#, no-c-format
+msgid "Ecuador"
+msgstr "Équateur"
+
+#, no-c-format
+msgid "Estonia"
+msgstr "Estonie"
+
+#, no-c-format
+msgid "Egypt"
+msgstr "Égypte"
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr "Sahara occidental"
+
+#, no-c-format
+msgid "Eritrea"
+msgstr "Érythrée"
+
+#, no-c-format
+msgid "Spain"
+msgstr "Espagne"
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr "Éthiopie"
+
+#, no-c-format
+msgid "Finland"
+msgstr "Finlande"
+
+#, no-c-format
+msgid "Fiji"
+msgstr "Fidji"
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr "Îles Malouines"
+
+#, no-c-format
+msgid "Micronesia"
+msgstr "Micronésie"
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr "Îles Féroé"
+
+#, no-c-format
+msgid "France"
+msgstr "France"
+
+#, no-c-format
+msgid "Gabon"
+msgstr "Gabon"
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr "Royaume-Uni"
+
+#, no-c-format
+msgid "Grenada"
+msgstr "Grenade"
+
+#, no-c-format
+msgid "Georgia"
+msgstr "Géorgie"
+
+#, no-c-format
+msgid "French Guiana"
+msgstr "Guyane française"
+
+#, no-c-format
+msgid "Guernsey"
+msgstr "Guernesey"
+
+#, no-c-format
+msgid "Ghana"
+msgstr "Ghana"
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr "Gibraltar"
+
+#, no-c-format
+msgid "Greenland"
+msgstr "Groenland"
+
+#, no-c-format
+msgid "Gambia"
+msgstr "Gambie"
+
+#, no-c-format
+msgid "Guinea"
+msgstr "Guinée"
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr "Guadeloupe"
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr "Guinée équatoriale"
+
+#, no-c-format
+msgid "Greece"
+msgstr "Grèce"
+
+#, no-c-format
+msgid "South Georgia"
+msgstr "Géorgie du Sud-et-les Îles Sandwich du Sud"
+
+#, no-c-format
+msgid "Guatemala"
+msgstr "Guatemala"
+
+#, no-c-format
+msgid "Guam"
+msgstr "Guam"
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr "Guinée-Bissau"
+
+#, no-c-format
+msgid "Guyana"
+msgstr "Guyana"
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr "R.A.S. chinoise de Hong Kong"
+
+#, no-c-format
+msgid "Heard Island"
+msgstr "Îles Heard-et-MacDonald"
+
+#, no-c-format
+msgid "Honduras"
+msgstr "Honduras"
+
+#, no-c-format
+msgid "Croatia"
+msgstr "Croatie"
+
+#, no-c-format
+msgid "Haiti"
+msgstr "Haïti"
+
+#, no-c-format
+msgid "Hungary"
+msgstr "Hongrie"
+
+#, no-c-format
+msgid "Indonesia"
+msgstr "Indonésie"
+
+#, no-c-format
+msgid "Ireland"
+msgstr "Irlande"
+
+#, no-c-format
+msgid "Israel"
+msgstr "Israël"
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr "Île de Man"
+
+#, no-c-format
+msgid "India"
+msgstr "Inde"
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr "Territoire britannique de l’océan Indien"
+
+#, no-c-format
+msgid "Iraq"
+msgstr "Irak"
+
+#, no-c-format
+msgid "Iran"
+msgstr "Iran"
+
+#, no-c-format
+msgid "Iceland"
+msgstr "Islande"
+
+#, no-c-format
+msgid "Italy"
+msgstr "Italie"
+
+#, no-c-format
+msgid "Jersey"
+msgstr "Jersey"
+
+#, no-c-format
+msgid "Jamaica"
+msgstr "Jamaïque"
+
+#, no-c-format
+msgid "Jordan"
+msgstr "Jordanie"
+
+#, no-c-format
+msgid "Japan"
+msgstr "Japon"
+
+#, no-c-format
+msgid "Kenya"
+msgstr "Kenya"
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr "Kirghizstan"
+
+#, no-c-format
+msgid "Cambodia"
+msgstr "Cambodge"
+
+#, no-c-format
+msgid "Kiribati"
+msgstr "Kiribati"
+
+#, no-c-format
+msgid "Comoros"
+msgstr "Comores"
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr "Saint-Christophe-et-Niévès"
+
+#, no-c-format
+msgid "North Korea"
+msgstr "Corée du Nord"
+
+#, no-c-format
+msgid "South Korea"
+msgstr "Corée du Sud"
+
+#, no-c-format
+msgid "Kuwait"
+msgstr "Koweït"
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr "Îles Caïmans"
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr "Kazakhstan"
+
+#, no-c-format
+msgid "Laos"
+msgstr "Laos"
+
+#, no-c-format
+msgid "Lebanon"
+msgstr "Liban"
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr "Sainte-Lucie"
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr "Liechtenstein"
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr "Sri Lanka"
+
+#, no-c-format
+msgid "Liberia"
+msgstr "Liberia"
+
+#, no-c-format
+msgid "Lesotho"
+msgstr "Lesotho"
+
+#, no-c-format
+msgid "Lithuania"
+msgstr "Lituanie"
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr "Luxembourg"
+
+#, no-c-format
+msgid "Latvia"
+msgstr "Lettonie"
+
+#, no-c-format
+msgid "Libya"
+msgstr "Libye"
+
+#, no-c-format
+msgid "Morocco"
+msgstr "Maroc"
+
+#, no-c-format
+msgid "Monaco"
+msgstr "Monaco"
+
+#, no-c-format
+msgid "Moldova"
+msgstr "Moldavie"
+
+#, no-c-format
+msgid "Montenegro"
+msgstr "Monténégro"
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr "Saint-Martin"
+
+#, no-c-format
+msgid "Madagascar"
+msgstr "Madagascar"
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr "Îles Marshall"
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr "Macédoine du Nord"
+
+#, no-c-format
+msgid "Mali"
+msgstr "Mali"
+
+#, no-c-format
+msgid "Myanmar"
+msgstr "Myanmar (Birmanie)"
+
+#, no-c-format
+msgid "Mongolia"
+msgstr "Mongolie"
+
+#, no-c-format
+msgid "Macao"
+msgstr "R.A.S. chinoise de Macao"
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr "Îles Mariannes du Nord"
+
+#, no-c-format
+msgid "Martinique"
+msgstr "Martinique"
+
+#, no-c-format
+msgid "Mauritania"
+msgstr "Mauritanie"
+
+#, no-c-format
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#, no-c-format
+msgid "Malta"
+msgstr "Malte"
+
+#, no-c-format
+msgid "Mauritius"
+msgstr "Maurice"
+
+#, no-c-format
+msgid "Maldives"
+msgstr "Maldives"
+
+#, no-c-format
+msgid "Malawi"
+msgstr "Malawi"
+
+#, no-c-format
+msgid "Mexico"
+msgstr "Mexique"
+
+#, no-c-format
+msgid "Malaysia"
+msgstr "Malaisie"
+
+#, no-c-format
+msgid "Mozambique"
+msgstr "Mozambique"
+
+#, no-c-format
+msgid "Namibia"
+msgstr "Namibie"
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr "Nouvelle-Calédonie"
+
+#, no-c-format
+msgid "Niger"
+msgstr "Niger"
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr "Île Norfolk"
+
+#, no-c-format
+msgid "Nigeria"
+msgstr "Nigeria"
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr "Nicaragua"
+
+#, no-c-format
+msgid "Netherlands"
+msgstr "Pays-Bas"
+
+#, no-c-format
+msgid "Norway"
+msgstr "Norvège"
+
+#, no-c-format
+msgid "Nepal"
+msgstr "Népal"
+
+#, no-c-format
+msgid "Nauru"
+msgstr "Nauru"
+
+#, no-c-format
+msgid "Niue"
+msgstr "Niue"
+
+#, no-c-format
+msgid "New Zealand"
+msgstr "Nouvelle-Zélande"
+
+#, no-c-format
+msgid "Oman"
+msgstr "Oman"
+
+#, no-c-format
+msgid "Panama"
+msgstr "Panama"
+
+#, no-c-format
+msgid "Peru"
+msgstr "Pérou"
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr "Polynésie française"
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr "Papouasie-Nouvelle-Guinée"
+
+#, no-c-format
+msgid "Philippines"
+msgstr "Philippines"
+
+#, no-c-format
+msgid "Pakistan"
+msgstr "Pakistan"
+
+#, no-c-format
+msgid "Poland"
+msgstr "Pologne"
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr "Saint-Pierre-et-Miquelon"
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr "Îles Pitcairn"
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr "Porto Rico"
+
+#, no-c-format
+msgid "Palestine"
+msgstr "Territoires palestiniens"
+
+#, no-c-format
+msgid "Portugal"
+msgstr "Portugal"
+
+#, no-c-format
+msgid "Palau"
+msgstr "Palaos"
+
+#, no-c-format
+msgid "Paraguay"
+msgstr "Paraguay"
+
+#, no-c-format
+msgid "Qatar"
+msgstr "Qatar"
+
+#, no-c-format
+msgid "Réunion"
+msgstr "La Réunion"
+
+#, no-c-format
+msgid "Romania"
+msgstr "Roumanie"
+
+#, no-c-format
+msgid "Serbia"
+msgstr "Serbie"
+
+#, no-c-format
+msgid "Russia"
+msgstr "Russie"
+
+#, no-c-format
+msgid "Rwanda"
+msgstr "Rwanda"
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr "Arabie saoudite"
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr "Îles Salomon"
+
+#, no-c-format
+msgid "Seychelles"
+msgstr "Seychelles"
+
+#, no-c-format
+msgid "Sudan"
+msgstr "Soudan"
+
+#, no-c-format
+msgid "Sweden"
+msgstr "Suède"
+
+#, no-c-format
+msgid "Singapore"
+msgstr "Singapour"
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr "Sainte-Hélène"
+
+#, no-c-format
+msgid "Slovenia"
+msgstr "Slovénie"
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr "Svalbard et Jan Mayen"
+
+#, no-c-format
+msgid "Slovakia"
+msgstr "Slovaquie"
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr "Sierra Leone"
+
+#, no-c-format
+msgid "San Marino"
+msgstr "Saint-Marin"
+
+#, no-c-format
+msgid "Senegal"
+msgstr "Sénégal"
+
+#, no-c-format
+msgid "Somalia"
+msgstr "Somalie"
+
+#, no-c-format
+msgid "Suriname"
+msgstr "Suriname"
+
+#, no-c-format
+msgid "South Sudan"
+msgstr "Soudan du Sud"
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr "Sao Tomé-et-Principe"
+
+#, no-c-format
+msgid "El Salvador"
+msgstr "Salvador"
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr "Saint-Martin (partie néerlandaise)"
+
+#, no-c-format
+msgid "Syria"
+msgstr "Syrie"
+
+#, no-c-format
+msgid "Eswatini"
+msgstr "Eswatini"
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr "Îles Turques-et-Caïques"
+
+#, no-c-format
+msgid "Chad"
+msgstr "Tchad"
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr "Terres australes françaises"
+
+#, no-c-format
+msgid "Togo"
+msgstr "Togo"
+
+#, no-c-format
+msgid "Thailand"
+msgstr "Thaïlande"
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr "Tadjikistan"
+
+#, no-c-format
+msgid "Tokelau"
+msgstr "Tokelau"
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr "Timor oriental"
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr "Turkménistan"
+
+#, no-c-format
+msgid "Tunisia"
+msgstr "Tunisie"
+
+#, no-c-format
+msgid "Tonga"
+msgstr "Tonga"
+
+#, no-c-format
+msgid "Turkey"
+msgstr "Turquie"
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr "Trinité-et-Tobago"
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr "Tuvalu"
+
+#, no-c-format
+msgid "Taiwan"
+msgstr "Taïwan"
+
+#, no-c-format
+msgid "Tanzania"
+msgstr "Tanzanie"
+
+#, no-c-format
+msgid "Ukraine"
+msgstr "Ukraine"
+
+#, no-c-format
+msgid "Uganda"
+msgstr "Ouganda"
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr "Îles mineures éloignées des États-Unis"
+
+#, no-c-format
+msgid "United States"
+msgstr "États-Unis"
+
+#, no-c-format
+msgid "Uruguay"
+msgstr "Uruguay"
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr "Ouzbékistan"
+
+#, no-c-format
+msgid "Vatican City"
+msgstr "État de la Cité du Vatican"
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr "Saint-Vincent-et-les Grenadines"
+
+#, no-c-format
+msgid "Venezuela"
+msgstr "Venezuela"
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr "Îles Vierges britanniques"
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr "Îles Vierges des États-Unis"
+
+#, no-c-format
+msgid "Vietnam"
+msgstr "Viêt Nam"
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr "Vanuatu"
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr "Wallis-et-Futuna"
+
+#, no-c-format
+msgid "Samoa"
+msgstr "Samoa"
+
+#, no-c-format
+msgid "Kosovo"
+msgstr "Kosovo"
+
+#, no-c-format
+msgid "Yemen"
+msgstr "Yémen"
+
+#, no-c-format
+msgid "Mayotte"
+msgstr "Mayotte"
+
+#, no-c-format
+msgid "South Africa"
+msgstr "Afrique du Sud"
+
+#, no-c-format
+msgid "Zambia"
+msgstr "Zambie"
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr "Zimbabwe"
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr "Sauvegarde terminée."
+
+msgid "Left out, being written right now:"
+msgstr "Laissés de côté, en cours d'écriture :"
+
+msgid "Don't use"
+msgstr "Ne pas utiliser"
+
+msgid "Not aligned"
+msgstr "Non aligné"
+
+msgid "Fixed & aligned"
+msgstr "Fixe et aligné"
+
+msgid "Built-in IMU"
+msgstr "IMU intégrée"
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"Si l'instrument qui contient l'IMU est fixé en permanence et ses axes sont "
+"alignés sur ceux de l'aéronef. « Fixe et aligné » seulement s'il est monté "
+"rigidement. Dans le doute, « Non aligné »."
+
+#, no-c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+"XCSoar utilise le premier appareil qui fournit chaque valeur (l'appareil A "
+"avant B, et ainsi de suite). Les indicateurs en gras sont les valeurs que X"
+"CSoar prend sur cet appareil. Ceux qui ne sont pas en gras signifient qu'un"
+" appareil précédent fournit déjà les mêmes données. Baro est la hauteur ave"
+"c le QNH actuel ; QNE est l'altitude pression ; Alt IGC est l'altitude que "
+"le logger écrit. QNE et Pressure sont la même pression ambiante, donc seul "
+"le plus ancien des deux est en gras. Un mauvais GPS et une batterie sous 10"
+" pour cent s'affichent en rouge sur un écran couleur, et en gras sur du pap"
+"ier électronique."
+
+msgid "QNE"
+msgstr "QNE"
+
+msgid "Engine"
+msgstr "Moteur"
+
+msgid "Set Clearance"
+msgstr "Accorder l'autorisation"
+
+msgid "Revoke Clearance"
+msgstr "Révoquer l'autorisation"
+
+msgid "Failed to update airspace clearance"
+msgstr "Échec de la mise à jour de l'autorisation d'espace aérien"
+
+msgid "Clrnc"
+msgstr "Aut."
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+"Réglages du filtre par classe. Quand un espace aérien a un type (CTR, FIR, "
+"...) et une classe, le type l'emporte sur la classe dans XCSoar.\nColonnes "
+":\n  Afficher — dessiner sur la carte les espaces de cette classe\n  Alerte"
+"   — activer les alertes à l'approche et à l'intérieur\n  Aut.     — permet"
+"tre une autorisation qui supprime\n             les alertes des autres espa"
+"ces qui se recouvrent"
+
+msgid "Clearance"
+msgstr "Autorisation"
+
+msgid "Groups"
+msgstr "Groupes"
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr "N'afficher dans la liste que les InfoBoxes de ces groupes."
+
+msgid "Share location"
+msgstr "Partager la position"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "Haut"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "Droite"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "Bas"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "Gauche"
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr ""
+"Touchez un bord pour étirer la zone des InfoBoxes jusqu'au bord de l'écran."
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+"La zone des InfoBoxes est la partie de l'écran disponible pour les InfoBoxe"
+"s, les instruments, les superpositions de carte et le menu. Choisissez les "
+"bords sur lesquels elle est étirée jusqu'au bord de l'écran. Les bords non "
+"étirés restent à l'écart des barres système et des coins arrondis. La carte"
+" utilise toujours tout l'écran, et les boîtes de dialogue restent dans la z"
+"one sûre. Utile seulement en plein écran."
+
+msgid "Stretch InfoBox area"
+msgstr "Étirer la zone des InfoBoxes"
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+"Afficher la barre d'état, sauf si la zone des InfoBoxes est étirée jusqu'au"
+" bord supérieur de l'écran, où elle les couvrirait."
+
+#, no-c-format
+msgid "Visible"
+msgstr "Visible"
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+"Toujours afficher la barre d'état, même en plein écran. Les InfoBoxes ne pe"
+"uvent pas être dessinées derrière, elles restent donc à l'écart du bord sup"
+"érieur."
+
+#, no-c-format
+msgid "Hidden"
+msgstr "Masquée"
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr "Ne jamais afficher la barre d'état."
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+"Laisser XCSoar utiliser tout l'écran, y compris derrière les barres système"
+" et la découpe. La carte le remplit entièrement, et « Étirer la zone des In"
+"foBoxes » décide quels bords les InfoBoxes, les instruments, les superposit"
+"ions et le menu peuvent atteindre."
+
+msgid "System status bar"
+msgstr "Barre d'état du système"
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+"Si la barre d'état du système, avec l'horloge et le niveau de batterie, res"
+"te visible."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr "Avertir quand le radar expire"
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr ""
+"Si l'option est activée, un avertissement s'affiche quand la superposition "
+"du radar de pluie n'a pas pu être actualisée et a été retirée de la carte."
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr ""
+"Réduire le corps du texte quand le petit côté fait moins de 3.2 pouces."
+
+#, no-c-format
+msgid "Handheld"
+msgstr "À la main"
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr "Toujours utiliser la taille pour une lecture de près."
+
+#, no-c-format
+msgid "Panel"
+msgstr "Tableau"
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr "Garder le corps de texte plein, pour un écran lu à bout de bras."
+
+msgid "Viewing distance"
+msgstr "Distance de lecture"
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+"Auto réduit le corps du texte quand le petit côté fait moins de 3.2 pouces."
+" « À la main » utilise toujours cette taille proche. « Tableau » garde le c"
+"orps plein."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr "Couche satellite"
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr "Quel produit satellite EUMETView cette page dessine sous la carte."
+
+#, no-c-format
+msgid "Rain radar"
+msgstr "Radar de pluie"
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr ""
+"La portée vient de trajectoires en ligne droite depuis le planeur. Les coul"
+"eurs des atterrissables et la liste des dégagements utilisent cette portée."
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr ""
+"La portée est calculée en autorisant des virages autour des obstacles du re"
+"lief. Les couleurs des atterrissables et la liste des dégagements utilisent"
+" cette portée."
+
+#, no-c-format
+msgid "Task MC"
+msgstr "MC du circuit"
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr "Utilise le calage MacCready du circuit."
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+"Quel MacCready est utilisé pour la portée sur le relief, les couleurs des a"
+"tterrissables, l'abandon et la liste des dégagements. Cela s'applique encor"
+"e quand le mode de portée est désactivé. La ligne de travail utilise toujou"
+"rs le MC du circuit. Les InfoBoxes de dégagement et l'écart d'altitude au M"
+"C de sécurité utilisent toujours le MC de sécurité."
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr "Pas de superposition de portée sur la carte."
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr ""
+"Jusqu'où vous pouvez planer jusqu'au sol. Utilise la polaire de portée."
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr ""
+"Ombre la carte au-delà du plané jusqu'au sol. Utilise la polaire de portée."
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr ""
+"Jusqu'où vous pouvez planer et arriver encore à la hauteur typique de la ba"
+"se des thermiques de ce vol. Utilise toujours le MC du circuit."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr ""
+"Ligne de travail jusqu'à la hauteur typique de la base des thermiques avec "
+"le MC du circuit, plus une ligne de relief jusqu'au sol avec la polaire de "
+"portée."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr ""
+"Ligne de travail jusqu'à la hauteur typique de la base des thermiques avec "
+"le MC du circuit, plus une ombre au-delà du sol avec la polaire de portée."
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+"Le MacCready utilisé pour la portée sur le relief, les couleurs des atterri"
+"ssables, l'abandon et la liste des dégagements quand la polaire de portée e"
+"st le MC de sécurité. Les InfoBoxes de dégagement et l'écart d'altitude au "
+"MC de sécurité utilisent toujours cette valeur. La vitesse de finesse maxim"
+"ale n'est pas touchée. Des valeurs plus hautes traitent moins de champs com"
+"me atteignables."
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr ""
+"Aucune polaire de plané n'est configurée, donc aucune finesse ne peut être "
+"affichée. Choisissez d'abord un planeur."
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr ""
+"La finesse à côté de chaque valeur est la meilleure finesse en air calme à "
+"ce calage MacCready, insectes, ballast et dégradation de la polaire compris"
+"."
+
+#, c-format
+msgid "Active polar: %s"
+msgstr "Polaire active : %s"
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+"Le MacCready au démarrage pour la vitesse de finesse maximale et les calcul"
+"s de circuit. Le changer ici règle aussi le MacCready en cours. La portée s"
+"ur le relief, les couleurs des atterrissables, l'abandon et la liste des dé"
+"gagements suivent la polaire de portée, pas cette valeur, sauf si la polair"
+"e de portée est le MC du circuit."
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+"Utiliser le fuseau horaire configuré dans le système d'exploitation et cont"
+"inuer à le suivre lors des changements d'heure d'été et en voyageant vers u"
+"n autre fuseau."
+
+#, no-c-format
+msgid "Time zone"
+msgstr "Fuseau horaire"
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+"Utiliser le fuseau horaire choisi ci-dessous. XCSoar connaît ses règles d'h"
+"eure d'été et applique les transitions tout seul, si bien que le réglage n'"
+"a pas à être corrigé deux fois par an."
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr "Décalage UTC manuel"
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+"Utiliser le décalage UTC fixe saisi ci-dessous. Il faut le corriger à la ma"
+"in au début et à la fin de l'heure d'été."
+
+msgid "Local time source"
+msgstr "Source de l'heure locale"
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr "Choisit d'où XCSoar prend le décalage entre l'UTC et l'heure locale."
+
+msgid "The time zone of the airfield you are flying at."
+msgstr "Le fuseau horaire de l'aérodrome d'où vous volez."
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+"Le champ de décalage UTC permet d'indiquer le décalage entre l'UTC et l'heu"
+"re locale. Il conserve la valeur saisie même si une autre source d'heure lo"
+"cale est choisie. L'heure locale et le décalage UTC en vigueur s'affichent "
+"en dessous."
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "Modèle UKV"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "Royaume-Uni. Modèle UKV."
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr "Superposition"
+
+msgid "Revoke"
+msgstr "Révoquer"
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr "Radar (EUMETNET OPERA)"
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr "pas de données"
+
+msgid "Downloading radar..."
+msgstr "Téléchargement du radar..."
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr ""
+"L'image radar n'a pas pu être actualisée et a été retirée, afin qu'aucun éc"
+"ho périmé ne soit affiché.\n\nAvertir à nouveau lorsque cela se produit ?"
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr "HRV RGB européen"
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr "Visible 0.6 µm (MTG)"
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr "Infrarouge 10.5 µm (MTG)"
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr "Couleur réelle (MTG)"
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr "Géocouleur (MTG)"
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr "Balayage rapide en couleur naturelle"
+
+msgid "No satellite imagery here right now"
+msgstr "Pas d'image satellite ici pour le moment"
+
+msgid "Countries"
+msgstr "Pays"
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+"N'afficher que les fichiers de ces pays — la même sélection pour les cartes"
+", les balises et les espaces aériens, conservée dans le profil. Les fichier"
+"s qui concernent tous les pays restent listés."
+
+msgid "Search"
+msgstr "Recherche"
+
+msgid "Show only the files whose name or description contains this text."
+msgstr ""
+"N'afficher que les fichiers dont le nom ou la description contient ce texte"
+"."
+
+msgid "No file matches the filter."
+msgstr "Aucun fichier ne correspond au filtre."
+
+msgid "Complete"
+msgstr "Terminé"
+
+msgid "Cancelled"
+msgstr "Annulé"
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr ""
+"Gain ou perte d'altitude totale dans le dernier thermique divisé par le tem"
+"ps passé à spiraler. Les secondes en plus petits caractères indiquent ce te"
+"mps."
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr ""
+"Temps passé à spiraler dans le dernier thermique. Le chiffre en plus petits"
+" caractères indique le taux de montée moyen du dernier thermique."
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+"Valeur principale : taux de montée en thermique sur la branche suivante équ"
+"ivalent à un taux égal au MacCready de la branche en cours. Valeur secondai"
+"re : taux de montée en thermique sur la branche en cours équivalent à un ta"
+"ux égal au MacCready de la branche suivante."
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Hauteur d'arrivée au meilleur atterrissage de dégagement avec le MC de sécu"
+"rité, par rapport à la hauteur d'arrivée de sécurité."
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"Hauteur d'arrivée au deuxième meilleur atterrissage de dégagement avec le M"
+"C de sécurité, par rapport à la hauteur d'arrivée de sécurité."
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+"Réglage actuel de la pression QNH pour le calcul de l'altitude barométrique"
+". La ligne en dessous montre cette altitude lorsqu'un capteur de pression e"
+"st disponible. Touchez l'InfoBox pour ouvrir le panneau et régler le QNH à "
+"la main."
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr "Vario et thermique"
+
+#, no-c-format
+msgid "Glide"
+msgstr "Plané"
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr "Vitesse et assiette"
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr "Vent et météo"
+
+#, no-c-format
+msgid "Time"
+msgstr "Heure"
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr "Espace aérien et équipe"
+
+#, no-c-format
+msgid "Other"
+msgstr "Autres"
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+"Faites glisser une InfoBox sur une autre pour les échanger. Maintenez une I"
+"nfoBox et soulevez-la pour en choisir une autre pour cette place."
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+"Entrée prend l'InfoBox choisie, déplacez-la avec les flèches et Entrée la p"
+"ose. Deux fois Entrée sans la déplacer en choisit une autre pour cette plac"
+"e."
+
+msgid "Arrange InfoBoxes"
+msgstr "Arranger les InfoBoxes"
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr "Arranger\nInfoBoxes"
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"Charge alaire actuelle, calculée à partir de la masse à vide du planeur, de"
+" la masse équipage et du ballast. Affichée en rouge lorsque le planeur est "
+"plus lourd que sa masse maximale au décollage."
+
+msgid "MTOW"
+msgstr "MTOW"
+
+msgid "Maximum takeoff weight of the glider."
+msgstr "Masse maximale au décollage du planeur."
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+"Ballast d'eau à bord, en litres. Le commentaire montre la charge alaire, en"
+" rouge lorsque le planeur est plus lourd que sa masse maximale au décollage"
+". La valeur est bleue pendant la vidange. Touchez pour changer le ballast."
+

@@ -1063,9 +1063,6 @@ msgstr "అనూహెతి పాఠం పంపడం"
 msgid "Reading flight list"
 msgstr "ఫైట్ లిస్ట్‌ను చదివడం"
 
-msgid "Downloading flight log"
-msgstr "ఫైట్ లోగ్‌ను డొల్యాడ్‌కం"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "బాధ్యతా లేదు"
@@ -1759,9 +1756,6 @@ msgstr "అద్వితీయమైన జాబితా"
 msgid "Airspace"
 msgstr "వాయు అవకాశం"
 
-msgid "Select Pattern"
-msgstr "నియంత్రణ రేఖ ఎంపిక నియంత్రణ"
-
 msgid "Squawk code"
 msgstr "స్కౌక్ కోడ్"
 
@@ -1816,9 +1810,6 @@ msgstr "బ౉ర్డర్ రంగం మార్చు"
 
 msgid "Change Fill Color"
 msgstr "ఫైల్ రంగం మార్చు"
-
-msgid "Change Fill Brush"
-msgstr "ఫైల్ బ్రష్ మార్చు"
 
 msgid "Border Width"
 msgstr "బ౉ర్డర్ వెయిడ్"
@@ -1922,9 +1913,6 @@ msgstr ""
 "ప్రకారం బ్యాలస్ట్ వాల్యూమ్ యొక్క కౌంట్-డౌన్ను టోగుల్ చేయడానికి "
 "\"Dump/Stop\"ని నొక్కండి."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "ప్రస్తుత వింగ్ లోడింగ్, గ్లైడర్ యొక్క ఖాళీ బరువు, సిబ్బంది బరువు మరియు బ్యాలస్ట్ నుండి లెక్కించబడుతుంది."
-
 msgid "Bugs"
 msgstr "బుగ్ల్స్"
 
@@ -1941,9 +1929,6 @@ msgstr "బారోమెటర్ అల్టిమేటర్ కోవస�
 
 msgid "Max. temp."
 msgstr "మాక్స్ టెమ్పరేచ"
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "వాటిని నీలాల తలపరి గ్రొండ్ టెమ్పరేచకు సెట్‌చేయండి. వివరాల డాలిగ్ దీని అనుభావం (పరిమితి తరచు) లో కాన్వెక్షన్ ఎస్టిమేటర్లో ఉపయోగించబడుతుంది."
 
 #, no-c-format
 msgid "Orientation"
@@ -2001,10 +1986,6 @@ msgid "Gauges"
 msgstr "గ్లైడ్ నిర్వహణలు"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "టాస్క్ డెఫోల్ట్‌లు"
-
-#, no-c-format
 msgid "Look"
 msgstr "పనిదారం"
 
@@ -2014,14 +1995,8 @@ msgstr "శాస్త్రవాదుడు"
 msgid "Configuration"
 msgstr "నియమాలు"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "ఈ InfoBox ప్యానెల్ కాన్ఫిగరేషన్ పేరు."
-
 msgid "InfoBox"
 msgstr "సమాచార బ్యాక్స్"
-
-msgid "Content"
-msgstr "శాఖలు"
 
 msgid "Copy Set"
 msgstr "కొనైపెట్‌ని తిరిగి చేరుతో"
@@ -2037,9 +2012,11 @@ msgstr "సమాచార బ్యాక్స్‌ కొనైపెట్�
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"కాపీ ఈ సెట్‌లోని ఇన్ఫోబాక్సులన్నింటినీ గుర్తుంచుకుంటుంది, పేస్ట్ వాటితో మరో"
+" సెట్ ఇన్ఫోబాక్సులను మారుస్తుంది."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "సాధారణ సెట్టింగ్‌ల నుండి వారసత్వం"
 
 msgid "Invalid"
 msgstr "అసలూకూరు"
@@ -2397,9 +2374,6 @@ msgstr "మaks. ఉత్పత్తి ఎత్రం"
 msgid "Near"
 msgstr "కలవనట్లో"
 
-msgid "Share"
-msgstr "శారీరిక సహకారం"
-
 #, no-c-format
 msgid "Disconnected"
 msgstr "దానికి జోడించినది"
@@ -2722,17 +2696,17 @@ msgstr "కామెంట్"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "స్థిర పాఠ్యం"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "పైలట్ నమోదు చేసిన శీర్షిక, విలువ, వ్యాఖ్య. మార్చడానికి నొక్కండి."
 
 msgid "Title"
-msgstr ""
+msgstr "శీర్షిక"
 
 msgid "Value"
-msgstr ""
+msgstr "విలువ"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -2904,12 +2878,6 @@ msgstr "వాయు అవకాశం ప్రత్యేక స్థిర
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "వాయు అవకాశం క్లరీఫైన్ మోడ్‌ని పేర్కొనే రూపం."
-
-msgid "Airspace transparency"
-msgstr "వాయు అవకాశం స్థితి"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "ఈ చెందినా ఉంటే, వాయు అవకాశంలో రంగం స్పష్టంగా చెందడం."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3204,16 +3172,6 @@ msgstr ""
 " అన్ని నావిగేషన్ ఫంక్షన్ల కోసం బారోమెట్రిక్ ఎత్తు ఉపయోగించబడుతుంది. లేకపోతే "
 "GPS ఎత్తు ఉపయోగించబడుతుంది."
 
-msgid "Flap forces cruise"
-msgstr "ఫల్ప్ బహుమతి క్రూజ్"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr ""
-"వేగా వారియోమీటర్‌కు స్వీకరణ ఉంటే, ప్లస్టివ్ ఫల్ప్ నిర్ధారించబడుతున్నాయి. ఈ వారియోమీటర్‌లో, క్యామెర్‌డీ వేగం "
-"నిర్వహించబడతాయి."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "పారాగ్లిడర్కు ఉచిత ఆవర్తన సమయం"
@@ -3280,6 +3238,7 @@ msgstr "టెక్స్‌ వేలు"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "ప్రాక్తన విడుదల దృష్టి నియంత్రణ అవసరమైన రేఖ వెడల్పనలు, ఫోం చదువు, లాండబుల్ వెడల్పనలు మరియు కొత్త రేఖలకు సరైన చదువులను నియంత్రించడానికి ఉపయోగించబడుతుంది."
 
+#. the Kobo has no time zone configuration which we could follow
 msgid "Automatic"
 msgstr "స్వాభావిక"
 
@@ -3343,90 +3302,6 @@ msgstr "రెవర్్స్ పోర్ట్రేట"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "రెవర్్స్ లాండ్సైప్"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 స్పిట్"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 స్పిట్"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 స్పిట్ 3 రోల్‌లలో"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 స్పిట్ 3 రోల్‌లలో"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 స్పిట్ 3 రోల్‌లలో"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 నీణదం లేదా మైదానం"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 నీణదం + వేరియోమీటర్ (పోర్ట్రోట)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 శీతారం లేదా మైదానం"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "9 మైదానం + వేరియోమీటర్ (లాండ్స్క్యాప్)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 ఎవర్‌కొంతం + వేరియోమీటర్ (లాండ్స్క్యాప్)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "12 ఎవర్‌కొంతం + 3 మైదానం వేరియోమీటర్ (లాండ్స్క్యాప్)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "5 ఎవర్‌కొంతం (క్వారెంస్)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "10 నీణదం లేదా మైదానం"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "12 నీణదం లేదా మైదానం"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "10 శీతారం లేదా మైదానం"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "12 శీతారం లేదా మైదానం"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "16 మైదానం (లాండ్స్క్యాప్)"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "24 నీణదం లేదా మైదానం"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "4 శీతారం లేదా మైదానం"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 మూసారి లేదా ముఖ్యకోణం"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 నుండి కొనసాగిన డాక్లీ లేదా ఎవర్‌కోట"
 
 #, no-c-format
 msgid "Text"
@@ -3518,9 +3393,6 @@ msgstr "ముదురు InfoBox నేపథ్యంలో ఎల్లప�
 
 msgid "Full screen"
 msgstr "ఫల్‌స్క్రీన్"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "కొడ్ల వెయ్యిలో పూర్తి స్క్రీన్‌ మేడు లేదా వినియోగంలో కొడ్ల వెయ్యిలో XCSoar ప్రారంభించాలనుకుందాం."
 
 msgid "Display orientation"
 msgstr "దిస్ప్లైమెంట్ అయితే నిర్వహణ"
@@ -3867,16 +3739,8 @@ msgid "Straight"
 msgstr "సరళ"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "రాయ్ ఎందుకు ఉంటే, గ్లైడర్ ను ప్రదర్శని లో ఉన్న సరళ రేఖల మధ్య."
-
-#, no-c-format
 msgid "Turning"
 msgstr "తార్ఫ్"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr "రాయ్ ఎందుకు ఉంటే, గ్లైడర్ ను ప్రదర్శని లో ఉన్న తార్ఫ్‌ల వెయ్యి కూడా అన్ని కావాలని పరిశీలించబడతాయి."
 
 #. Spacer
 msgid "Reach mode"
@@ -3886,10 +3750,6 @@ msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr "గ్లైడర్ ను తార్ఫ్‌ల సంపదన ద్వారా పరిశీలించబడతాయి."
-
-#, no-c-format
-msgid "Uses task glide polar."
-msgstr "టాస్క్ గ్లైడ్ పోలి"
 
 #, no-c-format
 msgid "Safety MC"
@@ -3903,48 +3763,24 @@ msgid "Reach polar"
 msgstr "రాయ్ పోలి"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "రాయ్ ప్రదర్శని అధికారికగా బట్టి నష్టం."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "తార్ఫ్ రేఖ"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr "భూతలానికి గ్లైడ్ పరివేశన్‌ల జ్ఞాపకం దగ్గర చట్టమైన రేఖ"
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "భూతల సమర్ధించిన వేయాలు"
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr "గ్లైడ్ పరివేశన్‌ల జ్ఞాపకం దగ్గర భూతలానికి సమర్ధించిన వేయాలు"
-
-#, no-c-format
 msgid "Working line"
 msgstr "కొనసాగిన రేఖ"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr "కొనసాగిన గ్లైడ్ పరివేశన్‌ల జ్ఞాపకం దగ్గర చట్టమైన రేఖ"
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "కొనసాగిన రేఖ, భూతల రేఖ"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "కొనసాగిన రేఖ, భూతల పరివేశన్‌ల జ్ఞాపకం దగ్గర చట్టమైన రేఖ"
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "కొనసాగిన రేఖ, భూతల సమర్ధించిన వేయాలు"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "కొనసాగిన రేఖ, భూతల పరివేశన్‌ల జ్ఞాపకం దగ్గర చట్టమైన వేయాలు"
 
 msgid "Reach display"
 msgstr "పరివేశన్ ప్రదర్శనం"
@@ -3995,14 +3831,6 @@ msgstr "అయోబ్‌ల్ బ్యాగ్‌లు"
 msgid ""
 "If enabled, adds 1% to the bugs setting after each full hour while flying."
 msgstr "ప్రారంభించబడితే, ఎగురుతున్నప్పుడు ప్రతి పూర్తి గంట తర్వాత బగ్‌ల సెట్టింగ్‌కు 1% జోడిస్తుంది."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"భద్రత మాక్‌క్రెడీ సెటింగ్‌, ప్రావిన్సైన్‌ల వాయు అవకాశాల నిర్ణయాలో, కేంద్రమైన ప్రావిన్సైన్‌ల వాయు అవకాశాల నిర్ణయాలో, "
-"కేంద్రమైన ప్రావిన్సైన్‌ల వాయు అవకాశాల నిర్ణయాలో."
 
 msgid "STF risk factor"
 msgstr "STF రిక్ష్‌ఫైక్టర్"
@@ -4296,10 +4124,10 @@ msgid "Reference used for start max height rule."
 msgstr "ప్రారంభ మేగిన ఉత్తమ ఊరు నిలిచడానికి ఉపయోగించాలనున్న ఉత్తరం"
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "దగ్గరి బిందువుకు నావిగేట్"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "ప్రారంభ మరియు ముగింపు మండలాల దగ్గరి బిందువుకు నావిగేట్ చేస్తుంది."
 
 msgid "Finish min. height"
 msgstr "అవధి మార్గ నిలిచడం"
@@ -4647,14 +4475,6 @@ msgstr "తామియణ అనేది రాత్రి కోసం ఉ�
 #, no-c-format
 msgid "UTC offset"
 msgstr "UTC వివరణ"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"UTC వివరణ లేకుండా, స్థానంలో ఉన్న సమయం ప్రదర్శించబడుతుంది. UTC వివరణ నిర్ధారించడానికి సరైన వివరణ "
-"పరికరించబడుతుంది."
 
 msgid "Use GPS time"
 msgstr "GPS సమయం ఉపయోగించడం"
@@ -5645,14 +5465,6 @@ msgid "TL Avg"
 msgstr "TL Avg టోల్ ఔహ్యానం కావలసిన వారు"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling. ఆస్త్‌కు చివరి థర్మల్లో పొందానికి విభజించి క్రూజ్ దీనికి వహించిన సమయం గుణాంకం"
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "Last thermal gain ఆస్త్‌కు చివరి థర్మల్ విజేన్"
 
@@ -5675,10 +5487,6 @@ msgstr "జాతీయ థర్మల్ సమయం"
 #, no-c-format
 msgid "TL duration"
 msgstr "TL సమయం"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "జాతీయ థర్మల్లో వెలుపలి ల్యాండింగ్ కాలం."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -6307,6 +6115,8 @@ msgstr "V TAS"
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario. The value is blue when estimated from ground speed and wind."
 msgstr ""
+"మద్దతు ఉన్న బాహ్య తెలివైన వేరియో నివేదించిన నిజమైన గాలి వేగం. నేల వేగం మరియ"
+"ు గాలి నుండి అంచనా వేసినప్పుడు విలువ నీలం."
 
 #, no-c-format
 msgid "Team code"
@@ -6799,10 +6609,6 @@ msgid "T Next Leg"
 msgstr "T తదుపరి లెగ్"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "క్రమం అక్షాన్ని నిర్ణయించిన తరణ ఉద్భవం, ప్రస్తావిత మాక్‌క్‌రెడీ నిర్ధారించబడుతుంది."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "విన్దులో పారమితి (క్షమంగా)"
 
@@ -7159,20 +6965,12 @@ msgid "Altn 1 AltD"
 msgstr "అల్టేట్ 1 అల్టD"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "సరాసరి క్రమంద సమయంలో ప్రకటన వేగం, ఉత్తాపం కారణంగా సమావేశించలేదు"
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "అల్టేట్ 2 ఉత్తాపం విరమణ"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "అల్టేట్ 2 అల్టD"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "దొనగా క్రమంద సమయంలో ప్రకటన వేగం, ఉత్తాపం కారణంగా సమావేశించలేదు"
 
 #, no-c-format
 msgid "Simulator"
@@ -7182,7 +6980,7 @@ msgid "no QNH"
 msgstr "నిష్పత్తి కోడ్ (QNH)"
 
 msgid "no wind"
-msgstr ""
+msgstr "గాలి లేదు"
 
 msgid "Not flying"
 msgstr "ప్రాచీనమైన గతి"
@@ -8193,12 +7991,6 @@ msgstr ""
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "కనెక్ట్ అవుతోంది విఫలమైంది. Provjerite lozinku i pokušajte ponovo."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Trenutna QNH postavka tlaka za izračun barometrijske visine. నొక్కండి "
-"InfoBox za otvaranje panela i ručno podešavanje QNH."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9677,14 +9469,6 @@ msgstr ""
 "వియన్నా నుండి పెర్పిగ్నాన్ వరకు మొత్తం ఆల్పైన్ ఆర్క్‌ను కవర్ చేస్తుంది, "
 "మొత్తం ఆల్ప్స్ ప్రాంతం అంతటా తరంగాన్ని అంచనా వేస్తుంది. ICON-CH మోడల్."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -10802,21 +10586,22 @@ msgstr "మానిలోయిక్"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "రక్తంలో ఆక్సిజన్"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Bluetooth పల్స్ ఆక్సిమీటర్ నుండి రక్తంలో ఆక్సిజన్ సంతృప్తి, శాతంలో."
 
+#, no-c-format
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "ఇటీవల వాడిన వే పాయింట్లు"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "ఈ FLARM నుండి విమానాలను దించుకోవడానికి పరికర Wi-Fiకి కనెక్ట్ అవ్వండి."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "సమీప మ్యాప్ స్కేల్స్‌లో సర్క్లింగ్ మోడ్‌లో చూపినప్పుడు స్నెయిల్ ట్రయిల్ గాలితో డ్రిఫ్ట్ అవుతుందో లేదో నిర్ణయిస్తుంది. ఆఫ్ అయితే ట్రయిల్ గాలి డ్రిఫ్ట్ కాంపెన్సేషన్ లేకుండా ఉంటుంది. సర్క్లింగ్‌లో ప్రొజెక్టెడ్ ట్రాక్ వక్రానికి కూడా వర్తిస్తుంది: ఆన్ గాలి ద్రవ్యరాశికి సాపేక్షంగా ఉంచుతుంది; ఆఫ్ గాలిని చేర్చుతుంది."
 
@@ -10852,27 +10637,24 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "ట్రాఫిక్ రాడార్‌ను ప్రారంభించి ప్రధాన స్క్రీన్‌పై స్థానాన్ని ఎంచుకుంటుంది. తాజేశ కోణం ని వహాయ్ కోణం నిర్వహణ కోణంలో ఉన్న తాజేశ కోణం అనే సీక్‌లు దాదాపు చేయబడతాయి, మరియు తాజేశ నివారణ సంఖ్యను ఉన్నట్లు కోణం చెప్తుంది. అనేక రూపాలలో, తాజేశ వర్గమూలం తాజేశ స్థాయిని చెప్తుంది."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "తెర విభాజకత"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "తెర ప్రకాశం"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "తెర ప్రకాశాన్ని సరిచేయండి."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "రాయడానికి అదనపు అనుమతులు కావాలి కాబట్టి తెర ప్రకాశం చదవడానికి మాత్రమే."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "ఆటో"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "మ్యాప్ రీచ్‌ను నిలిపివేస్తుంది (భూభాగ రేఖ మరియు షేడ్). అబార్ట్, ప్రత్యామ్నాయాలు మరియు ల్యాండబుల్ రాక ఇంకా రీచ్ పోలార్‌ను ఉపయోగిస్తాయి."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "ఈ దృష్టిని రాయ్, క్లియరెన్స్, అబ్టో మరియు వాహన ప్రదర్శని లో ఉన్న గ్లైడ్ ప్రదర్శని ద్వారా నిర్ణయం చేసుకోబడతాయి. రీచ్ మోడ్ ఆఫ్ అయినా ఇది వర్తిస్తుంది."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -10880,10 +10662,10 @@ msgstr "ఈ దృష్టిని రాయ్, క్లియరెన్�
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "ప్రత్యామ్నాయ మోడ్: ఆటో"
 
 msgid "Paste"
-msgstr ""
+msgstr "అతికించు"
 
 #, c-format
 msgid ""
@@ -10987,105 +10769,111 @@ msgid "%u min"
 msgstr "%u ని"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "మద్దతు ఉన్న సేవలు కనబడలేదు"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "ఎంచుకున్న systemd యూనిట్లు ఇన్‌స్టాల్ కాలేదు."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "అందుబాటులో లేదు"
 
 msgid "Starting..."
-msgstr ""
+msgstr "ప్రారంభమవుతోంది..."
 
 msgid "Stopping..."
 msgstr "ఆపుతోంది…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "మళ్లీ లోడ్ అవుతోంది..."
 
 msgid "Failed"
-msgstr ""
+msgstr "విఫలమైంది"
 
 msgid "Turn on"
-msgstr ""
+msgstr "ఆన్ చేయి"
 
 msgid "Restart"
-msgstr ""
+msgstr "పునఃప్రారంభించు"
 
 msgid "Turn off"
-msgstr ""
+msgstr "ఆఫ్ చేయి"
 
 msgid "System service"
-msgstr ""
+msgstr "సిస్టమ్ సేవ"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH సర్వర్"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "రిమోట్ టెర్మినల్"
 
 msgid "Sensors"
-msgstr ""
+msgstr "సెన్సార్లు"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario సెన్సార్ సేవ"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "ఆడియో వేరియో"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario ఆడియో వేరియో సేవ"
 
-#, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "అంచనా నుండి గరిష్ఠ ఉష్ణోగ్రత"
 
-#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
+msgstr "ఆ రోజు DWD అంచనా నుండి సమీప MOSMIX స్టేషన్ గరిష్ఠ ఉష్ణోగ్రతను విమాన సెట్టింగ్‌లో పెడుతుంది. స్థానం కావాలి, రోజుకు ఒకసారి దిగుమతి; ఖాతా అవసరం లేదు."
 
-#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
-msgstr ""
+msgstr "ఆ రోజు నేల గరిష్ఠ ఉష్ణోగ్రత. దాని నుండి ఎగబాకులో కొలిచిన బయటి గాలి ఉష్ణోగ్రతకు పొడి అడియాబాట్ అంచనా థర్మల్ పైకప్పును ఇస్తుంది; మేఘపు అడుగుకు తేమ సెన్సార్ కూడా కావాలి. గ్లైడర్ పొరను దాటిన తర్వాత రెండూ విశ్లేషణ డైలాగ్ ఉష్ణోగ్రత జాడ పేజీలో గీయబడతాయి."
 
-#, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "ప్రారంభంలో టాస్క్ MC"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
-msgstr ""
+msgstr "భద్రతా MC గ్లైడ్ నిష్పత్తి"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "మాట్లాడే హెచ్చరికలు"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"FLARM ఢీకొనే అలారాలను అత్యవసరం, గడియార స్థానం, ట్రాఫిక్ పైనా కిందా అనే వివర"
+"ాలతో చదువుతుంది: \"Traffic urgent! Three o'clock. Above.\" అడ్డంకి మరియు అల"
+"ర్ట్ జోన్ అలారాలు చదవబడవు."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "మాట్లాడే హెచ్చరికను పరీక్షించు"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "వేగ ఆదేశ స్విచ్"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "వేరియోమీటర్ క్రూజ్/ఆరోహణ నివేదికను XCSoar ఎలా వాడుతుంది."
 
+#, no-c-format
 msgid "Flight mode"
-msgstr ""
+msgstr "విమాన మోడ్"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
+msgstr "విమానంలో వేరియోమీటర్ క్రూజ్/ఆరోహణ నివేదికే విమాన మోడ్. క్రూజ్ ఆరోహణను ముగించి సగటును మొదటి నుండి మొదలుపెడుతుంది. ఆరోహణ కొత్త థర్మల్‌ను మొదలుపెడుతుంది. తుది గ్లైడ్ క్రూజ్‌లో కూడా కనిపించవచ్చు. Vegaలో ఇది వలయ అవుట్‌పుట్."
 
+#, no-c-format
 msgid "Display mode"
-msgstr ""
+msgstr "ప్రదర్శన మోడ్"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar వలయ మోడ్‌ను మలుపు నుండి నిర్ణయిస్తుంది. వేరియోమీటర్ నివేదిక వాడబడదు."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "పేజీ మారుతుంది, విమాన మోడ్ మారదు. క్రూజ్ మలుపులో కూడా క్రూజ్ పేజీని చూపి తుది గ్లైడ్‌ను దాచుతుంది. ఆరోహణ వేరియో పేజీని చూపుతుంది. Vegaలో ఇది వేగ ఆదేశ స్విచ్."
 
 #, no-c-format
 msgid "System Tools"
@@ -11109,73 +10897,1684 @@ msgstr "ఈ టాస్క్‌ను QR కోడ్‌గా చూపిం
 msgid "XCSoar task"
 msgstr "XCSoar టాస్క్"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
-msgstr ""
+msgstr "పరిధి గణాంకాలు"
 
-#, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "యాంటెన్నా"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM తన రెండు రేడియో ఛానెళ్లకు గణాంకాలు ఉంచుతుంది."
 
-#, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "డేటా బిందువులు"
 
-#, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "కాలం"
 
-#, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM పరిధి"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM పరిధి గణాంకాలను పంపలేదు."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "పరిధి గణాంకాలను రీసెట్ చేయాలా? యాంటెన్నాలు మార్చిన తర్వాత చేయండి; FLARM వాటిని మళ్లీ సేకరిస్తుంది."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM రీసెట్‌ను నిర్ధారించలేదు."
 
-#, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "కనిష్ఠ పరిధి కంటే తక్కువ"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "ఈ ఛానెల్‌లో సగటు పరిధి FLARM కనిష్ఠం కంటే తక్కువగా ఉన్న కొలిచిన సెక్టార్లు: ముందు 2 nm, పక్కలకు మరియు వెనుక 1 nm. యాంటెన్నా అమరికను తనిఖీ చేయండి."
 
-#, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "పరిధి సెట్టింగ్"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "FLARM ఈ దూరం దాటి విమానాలను నివేదించదు. గీసిన పరిధిలో ఉంటే గ్రాఫ్ దాన్ని విరిగిన వృత్తంగా చూపుతుంది."
 
-#, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "అపరిమితం"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"విమానంలో ఇతర FLARM విమానాలతో సంపర్కాలు, అవి దాటిన ప్రతి సెక్టార్‌లో ఒకసారి,"
+" అక్కడ స్వీకరించిన అతి పెద్ద దూరంతో లెక్క. సెక్టార్ ఆ దూరాల పెద్ద సగం సగటున"
+"ు, అడ్డగీత అతి పెద్దదాన్ని చూపుతుంది."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "అంచనా పరిధి FLARM కనిష్ఠం కంటే తక్కువగా ఉన్న కొలిచిన సెక్టార్లు: ముందు 2 nm, పక్కలకు మరియు వెనుక 1 nm. యాంటెన్నా అమరికను తనిఖీ చేయండి."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "పరిధి అంచనాను రీసెట్ చేయాలా? యాంటెన్నా మార్చిన తర్వాత చేయండి; XCSoar దాన్ని మళ్లీ సేకరిస్తుంది."
+
+msgid "FLARM range estimate"
+msgstr "FLARM పరిధి అంచనా"
 
 #, no-c-format
-msgid "FLARM range estimate"
+msgid "Zoom in"
+msgstr "దగ్గరగా"
+
+#, no-c-format
+msgid "Zoom out"
+msgstr "దూరంగా"
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr "ఆటో జూమ్"
+
+#, no-c-format
+msgid "Next page"
+msgstr "తర్వాతి పేజీ"
+
+#, no-c-format
+msgid "Previous page"
+msgstr "మునుపటి పేజీ"
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr "వే పాయింట్ జాబితా"
+
+#, no-c-format
+msgid "Menu"
+msgstr "మెనూ"
+
+#, no-c-format
+msgid "Task manager"
+msgstr "టాస్క్ నిర్వాహకం"
+
+#, no-c-format
+msgid "Pan mode"
+msgstr "పాన్ మోడ్"
+
+#, no-c-format
+msgid "Quick menu"
+msgstr "త్వరిత మెనూ"
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr "రాడార్"
+
+#, no-c-format
+msgid "Satellite"
+msgstr "ఉపగ్రహం"
+
+msgid "(Inside)"
+msgstr "(లోపల)"
+
+msgid "(Near)"
+msgstr "(దగ్గర)"
+
+msgid "Cleared"
+msgstr "అనుమతించబడింది"
+
+msgid "Covered"
+msgstr "కవర్ చేయబడింది"
+
+msgid "Power off"
+msgstr "ఆపివేయి"
+
+#, no-c-format
+msgid "Andorra"
+msgstr "ఆండోరా"
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr "యునైటెడ్ అరబ్ ఎమిరేట్స్"
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr "ఆఫ్ఘనిస్తాన్"
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr "ఆంటిగ్వా మరియు బార్బుడా"
+
+#, no-c-format
+msgid "Anguilla"
+msgstr "ఆంగ్విల్లా"
+
+#, no-c-format
+msgid "Albania"
+msgstr "అల్బేనియా"
+
+#, no-c-format
+msgid "Armenia"
+msgstr "ఆర్మేనియా"
+
+#, no-c-format
+msgid "Angola"
+msgstr "అంగోలా"
+
+#, no-c-format
+msgid "Antarctica"
+msgstr "అంటార్కిటికా"
+
+#, no-c-format
+msgid "Argentina"
+msgstr "అర్జెంటీనా"
+
+#, no-c-format
+msgid "American Samoa"
+msgstr "అమెరికన్ సమోవా"
+
+#, no-c-format
+msgid "Austria"
+msgstr "ఆస్ట్రియా"
+
+#, no-c-format
+msgid "Australia"
+msgstr "ఆస్ట్రేలియా"
+
+#, no-c-format
+msgid "Aruba"
+msgstr "అరుబా"
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr "ఆలాండ్ దీవులు"
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr "అజర్బైజాన్"
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr "బోస్నియా మరియు హెర్జిగోవినా"
+
+#, no-c-format
+msgid "Barbados"
+msgstr "బార్బడోస్"
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr "బంగ్లాదేశ్"
+
+#, no-c-format
+msgid "Belgium"
+msgstr "బెల్జియం"
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr "బుర్కినా ఫాసో"
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr "బల్గేరియా"
+
+#, no-c-format
+msgid "Bahrain"
+msgstr "బహ్రెయిన్"
+
+#, no-c-format
+msgid "Burundi"
+msgstr "బురుండి"
+
+#, no-c-format
+msgid "Benin"
+msgstr "బెనిన్"
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr "సెయింట్ బర్థెలిమి"
+
+#, no-c-format
+msgid "Bermuda"
+msgstr "బెర్ముడా"
+
+#, no-c-format
+msgid "Brunei"
+msgstr "బ్రూనే"
+
+#, no-c-format
+msgid "Bolivia"
+msgstr "బొలీవియా"
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr "కరీబియన్ నెదర్లాండ్స్"
+
+#, no-c-format
+msgid "Brazil"
+msgstr "బ్రెజిల్"
+
+#, no-c-format
+msgid "Bahamas"
+msgstr "బహామాస్"
+
+#, no-c-format
+msgid "Bhutan"
+msgstr "భూటాన్"
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr "బువై దీవి"
+
+#, no-c-format
+msgid "Botswana"
+msgstr "బోట్స్వానా"
+
+#, no-c-format
+msgid "Belarus"
+msgstr "బెలారస్"
+
+#, no-c-format
+msgid "Belize"
+msgstr "బెలిజ్"
+
+#, no-c-format
+msgid "Canada"
+msgstr "కెనడా"
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr "కోకోస్ (కీలింగ్) దీవులు"
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr "కాంగో- కిన్షాసా"
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr "సెంట్రల్ ఆఫ్రికన్ రిపబ్లిక్"
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr "కాంగో- బ్రాజావిల్లి"
+
+#, no-c-format
+msgid "Switzerland"
+msgstr "స్విట్జర్లాండ్"
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr "కోట్ డి ఐవోర్"
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr "కుక్ దీవులు"
+
+#, no-c-format
+msgid "Chile"
+msgstr "చిలీ"
+
+#, no-c-format
+msgid "Cameroon"
+msgstr "కామెరూన్"
+
+#, no-c-format
+msgid "China"
+msgstr "చైనా"
+
+#, no-c-format
+msgid "Colombia"
+msgstr "కొలంబియా"
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr "కోస్టా రికా"
+
+#, no-c-format
+msgid "Cuba"
+msgstr "క్యూబా"
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr "కేప్ వెర్డె"
+
+#, no-c-format
+msgid "Curaçao"
+msgstr "క్యూరసో"
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr "క్రిస్మస్ దీవి"
+
+#, no-c-format
+msgid "Cyprus"
+msgstr "సైప్రస్"
+
+#, no-c-format
+msgid "Czechia"
+msgstr "చెకియా"
+
+#, no-c-format
+msgid "Germany"
+msgstr "జర్మనీ"
+
+#, no-c-format
+msgid "Djibouti"
+msgstr "జిబౌటి"
+
+#, no-c-format
+msgid "Denmark"
+msgstr "డెన్మార్క్"
+
+#, no-c-format
+msgid "Dominica"
+msgstr "డొమినికా"
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr "డొమినికన్ రిపబ్లిక్"
+
+#, no-c-format
+msgid "Algeria"
+msgstr "అల్జీరియా"
+
+#, no-c-format
+msgid "Ecuador"
+msgstr "ఈక్వడార్"
+
+#, no-c-format
+msgid "Estonia"
+msgstr "ఎస్టోనియా"
+
+#, no-c-format
+msgid "Egypt"
+msgstr "ఈజిప్ట్"
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr "పడమటి సహారా"
+
+#, no-c-format
+msgid "Eritrea"
+msgstr "ఎరిట్రియా"
+
+#, no-c-format
+msgid "Spain"
+msgstr "స్పెయిన్"
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr "ఇథియోపియా"
+
+#, no-c-format
+msgid "Finland"
+msgstr "ఫిన్లాండ్"
+
+#, no-c-format
+msgid "Fiji"
+msgstr "ఫిజీ"
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr "ఫాక్‌ల్యాండ్ దీవులు"
+
+#, no-c-format
+msgid "Micronesia"
+msgstr "మైక్రోనేషియా"
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr "ఫారో దీవులు"
+
+#, no-c-format
+msgid "France"
+msgstr "ఫ్రాన్స్‌"
+
+#, no-c-format
+msgid "Gabon"
+msgstr "గేబన్"
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr "యునైటెడ్ కింగ్‌డమ్"
+
+#, no-c-format
+msgid "Grenada"
+msgstr "గ్రెనడా"
+
+#, no-c-format
+msgid "Georgia"
+msgstr "జార్జియా"
+
+#, no-c-format
+msgid "French Guiana"
+msgstr "ఫ్రెంచ్ గియానా"
+
+#, no-c-format
+msgid "Guernsey"
+msgstr "గర్న్‌సీ"
+
+#, no-c-format
+msgid "Ghana"
+msgstr "ఘనా"
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr "జిబ్రాల్టర్"
+
+#, no-c-format
+msgid "Greenland"
+msgstr "గ్రీన్‌ల్యాండ్"
+
+#, no-c-format
+msgid "Gambia"
+msgstr "గాంబియా"
+
+#, no-c-format
+msgid "Guinea"
+msgstr "గినియా"
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr "గ్వాడెలోప్"
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr "ఈక్వటోరియల్ గినియా"
+
+#, no-c-format
+msgid "Greece"
+msgstr "గ్రీస్"
+
+#, no-c-format
+msgid "South Georgia"
+msgstr "దక్షిణ జార్జియా మరియు దక్షిణ శాండ్విచ్ దీవులు"
+
+#, no-c-format
+msgid "Guatemala"
+msgstr "గ్వాటిమాలా"
+
+#, no-c-format
+msgid "Guam"
+msgstr "గ్వామ్"
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr "గినియా-బిస్సావ్"
+
+#, no-c-format
+msgid "Guyana"
+msgstr "గయానా"
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr "హాంకాంగ్ ఎస్ఏఆర్ చైనా"
+
+#, no-c-format
+msgid "Heard Island"
+msgstr "హెర్డ్ దీవి మరియు మెక్‌డొనాల్డ్ దీవులు"
+
+#, no-c-format
+msgid "Honduras"
+msgstr "హోండురాస్"
+
+#, no-c-format
+msgid "Croatia"
+msgstr "క్రొయేషియా"
+
+#, no-c-format
+msgid "Haiti"
+msgstr "హైతీ"
+
+#, no-c-format
+msgid "Hungary"
+msgstr "హంగేరీ"
+
+#, no-c-format
+msgid "Indonesia"
+msgstr "ఇండోనేషియా"
+
+#, no-c-format
+msgid "Ireland"
+msgstr "ఐర్లాండ్"
+
+#, no-c-format
+msgid "Israel"
+msgstr "ఇజ్రాయెల్"
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr "ఐల్ ఆఫ్ మాన్"
+
+#, no-c-format
+msgid "India"
+msgstr "భారతదేశం"
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr "బ్రిటిష్ హిందూ మహాసముద్ర ప్రాంతం"
+
+#, no-c-format
+msgid "Iraq"
+msgstr "ఇరాక్"
+
+#, no-c-format
+msgid "Iran"
+msgstr "ఇరాన్"
+
+#, no-c-format
+msgid "Iceland"
+msgstr "ఐస్లాండ్"
+
+#, no-c-format
+msgid "Italy"
+msgstr "ఇటలీ"
+
+#, no-c-format
+msgid "Jersey"
+msgstr "జెర్సీ"
+
+#, no-c-format
+msgid "Jamaica"
+msgstr "జమైకా"
+
+#, no-c-format
+msgid "Jordan"
+msgstr "జోర్డాన్"
+
+#, no-c-format
+msgid "Japan"
+msgstr "జపాన్"
+
+#, no-c-format
+msgid "Kenya"
+msgstr "కెన్యా"
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr "కిర్గిజిస్తాన్"
+
+#, no-c-format
+msgid "Cambodia"
+msgstr "కంబోడియా"
+
+#, no-c-format
+msgid "Kiribati"
+msgstr "కిరిబాటి"
+
+#, no-c-format
+msgid "Comoros"
+msgstr "కొమొరోస్"
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr "సెయింట్ కిట్స్ మరియు నెవిస్"
+
+#, no-c-format
+msgid "North Korea"
+msgstr "ఉత్తర కొరియా"
+
+#, no-c-format
+msgid "South Korea"
+msgstr "దక్షిణ కొరియా"
+
+#, no-c-format
+msgid "Kuwait"
+msgstr "కువైట్"
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr "కేమాన్ దీవులు"
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr "కజకిస్తాన్"
+
+#, no-c-format
+msgid "Laos"
+msgstr "లావోస్"
+
+#, no-c-format
+msgid "Lebanon"
+msgstr "లెబనాన్"
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr "సెయింట్ లూసియా"
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr "లిక్టెన్‌స్టెయిన్"
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr "శ్రీలంక"
+
+#, no-c-format
+msgid "Liberia"
+msgstr "లైబీరియా"
+
+#, no-c-format
+msgid "Lesotho"
+msgstr "లెసోతో"
+
+#, no-c-format
+msgid "Lithuania"
+msgstr "లిథువేనియా"
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr "లక్సెంబర్గ్"
+
+#, no-c-format
+msgid "Latvia"
+msgstr "లాత్వియా"
+
+#, no-c-format
+msgid "Libya"
+msgstr "లిబియా"
+
+#, no-c-format
+msgid "Morocco"
+msgstr "మొరాకో"
+
+#, no-c-format
+msgid "Monaco"
+msgstr "మొనాకో"
+
+#, no-c-format
+msgid "Moldova"
+msgstr "మోల్డోవా"
+
+#, no-c-format
+msgid "Montenegro"
+msgstr "మాంటెనెగ్రో"
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr "సెయింట్ మార్టిన్"
+
+#, no-c-format
+msgid "Madagascar"
+msgstr "మడగాస్కర్"
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr "మార్షల్ దీవులు"
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr "ఉత్తర మాసిడోనియా"
+
+#, no-c-format
+msgid "Mali"
+msgstr "మాలి"
+
+#, no-c-format
+msgid "Myanmar"
+msgstr "మయన్మార్"
+
+#, no-c-format
+msgid "Mongolia"
+msgstr "మంగోలియా"
+
+#, no-c-format
+msgid "Macao"
+msgstr "మకావ్ ఎస్ఏఆర్ చైనా"
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr "ఉత్తర మరియానా దీవులు"
+
+#, no-c-format
+msgid "Martinique"
+msgstr "మార్టినీక్"
+
+#, no-c-format
+msgid "Mauritania"
+msgstr "మారిటేనియా"
+
+#, no-c-format
+msgid "Montserrat"
+msgstr "మాంట్సెరాట్"
+
+#, no-c-format
+msgid "Malta"
+msgstr "మాల్టా"
+
+#, no-c-format
+msgid "Mauritius"
+msgstr "మారిషస్"
+
+#, no-c-format
+msgid "Maldives"
+msgstr "మాల్దీవులు"
+
+#, no-c-format
+msgid "Malawi"
+msgstr "మలావీ"
+
+#, no-c-format
+msgid "Mexico"
+msgstr "మెక్సికో"
+
+#, no-c-format
+msgid "Malaysia"
+msgstr "మలేషియా"
+
+#, no-c-format
+msgid "Mozambique"
+msgstr "మొజాంబిక్"
+
+#, no-c-format
+msgid "Namibia"
+msgstr "నమీబియా"
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr "క్రొత్త కాలెడోనియా"
+
+#, no-c-format
+msgid "Niger"
+msgstr "నైజర్"
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr "నార్ఫోక్ దీవి"
+
+#, no-c-format
+msgid "Nigeria"
+msgstr "నైజీరియా"
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr "నికరాగువా"
+
+#, no-c-format
+msgid "Netherlands"
+msgstr "నెదర్లాండ్స్"
+
+#, no-c-format
+msgid "Norway"
+msgstr "నార్వే"
+
+#, no-c-format
+msgid "Nepal"
+msgstr "నేపాల్"
+
+#, no-c-format
+msgid "Nauru"
+msgstr "నౌరు"
+
+#, no-c-format
+msgid "Niue"
+msgstr "నియూ"
+
+#, no-c-format
+msgid "New Zealand"
+msgstr "న్యూజిలాండ్"
+
+#, no-c-format
+msgid "Oman"
+msgstr "ఓమన్"
+
+#, no-c-format
+msgid "Panama"
+msgstr "పనామా"
+
+#, no-c-format
+msgid "Peru"
+msgstr "పెరూ"
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr "ఫ్రెంచ్ పోలినీషియా"
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr "పాపువా న్యూ గినియా"
+
+#, no-c-format
+msgid "Philippines"
+msgstr "ఫిలిప్పైన్స్"
+
+#, no-c-format
+msgid "Pakistan"
+msgstr "పాకిస్తాన్"
+
+#, no-c-format
+msgid "Poland"
+msgstr "పోలాండ్"
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr "సెయింట్ పియెర్ మరియు మికెలాన్"
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr "పిట్‌కెయిర్న్ దీవులు"
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr "ప్యూర్టో రికో"
+
+#, no-c-format
+msgid "Palestine"
+msgstr "పాలస్తీనియన్ ప్రాంతాలు"
+
+#, no-c-format
+msgid "Portugal"
+msgstr "పోర్చుగల్"
+
+#, no-c-format
+msgid "Palau"
+msgstr "పాలావ్"
+
+#, no-c-format
+msgid "Paraguay"
+msgstr "పరాగ్వే"
+
+#, no-c-format
+msgid "Qatar"
+msgstr "ఖతార్"
+
+#, no-c-format
+msgid "Réunion"
+msgstr "రీయూనియన్"
+
+#, no-c-format
+msgid "Romania"
+msgstr "రోమేనియా"
+
+#, no-c-format
+msgid "Serbia"
+msgstr "సెర్బియా"
+
+#, no-c-format
+msgid "Russia"
+msgstr "రష్యా"
+
+#, no-c-format
+msgid "Rwanda"
+msgstr "రువాండా"
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr "సౌదీ అరేబియా"
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr "సోలమన్ దీవులు"
+
+#, no-c-format
+msgid "Seychelles"
+msgstr "సీషెల్స్"
+
+#, no-c-format
+msgid "Sudan"
+msgstr "సూడాన్"
+
+#, no-c-format
+msgid "Sweden"
+msgstr "స్వీడన్"
+
+#, no-c-format
+msgid "Singapore"
+msgstr "సింగపూర్"
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr "సెయింట్ హెలెనా"
+
+#, no-c-format
+msgid "Slovenia"
+msgstr "స్లోవేనియా"
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr "స్వాల్‌బార్డ్ మరియు జాన్ మాయెన్"
+
+#, no-c-format
+msgid "Slovakia"
+msgstr "స్లొవేకియా"
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr "సియెర్రా లియాన్"
+
+#, no-c-format
+msgid "San Marino"
+msgstr "శాన్ మారినో"
+
+#, no-c-format
+msgid "Senegal"
+msgstr "సెనెగల్"
+
+#, no-c-format
+msgid "Somalia"
+msgstr "సోమాలియా"
+
+#, no-c-format
+msgid "Suriname"
+msgstr "సూరినామ్"
+
+#, no-c-format
+msgid "South Sudan"
+msgstr "దక్షిణ సూడాన్"
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr "సావో టోమ్ మరియు ప్రిన్సిపి"
+
+#, no-c-format
+msgid "El Salvador"
+msgstr "ఎల్ సాల్వడోర్"
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr "సింట్ మార్టెన్"
+
+#, no-c-format
+msgid "Syria"
+msgstr "సిరియా"
+
+#, no-c-format
+msgid "Eswatini"
+msgstr "ఈస్వాటిని"
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr "టర్క్స్ మరియు కైకోస్ దీవులు"
+
+#, no-c-format
+msgid "Chad"
+msgstr "చాద్"
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr "ఫ్రెంచ్ దక్షిణ ప్రాంతాలు"
+
+#, no-c-format
+msgid "Togo"
+msgstr "టోగో"
+
+#, no-c-format
+msgid "Thailand"
+msgstr "థాయిలాండ్"
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr "తజికిస్తాన్"
+
+#, no-c-format
+msgid "Tokelau"
+msgstr "టోకెలావ్"
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr "టిమోర్-లెస్టె"
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr "టర్క్‌మెనిస్తాన్"
+
+#, no-c-format
+msgid "Tunisia"
+msgstr "ట్యునీషియా"
+
+#, no-c-format
+msgid "Tonga"
+msgstr "టోంగా"
+
+#, no-c-format
+msgid "Turkey"
+msgstr "తుర్కియె"
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr "ట్రినిడాడ్ మరియు టొబాగో"
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr "టువాలు"
+
+#, no-c-format
+msgid "Taiwan"
+msgstr "తైవాన్"
+
+#, no-c-format
+msgid "Tanzania"
+msgstr "టాంజానియా"
+
+#, no-c-format
+msgid "Ukraine"
+msgstr "ఉక్రెయిన్"
+
+#, no-c-format
+msgid "Uganda"
+msgstr "ఉగాండా"
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr "సంయుక్త రాజ్య అమెరికా బయట ఉన్న దీవులు"
+
+#, no-c-format
+msgid "United States"
+msgstr "యునైటెడ్ స్టేట్స్"
+
+#, no-c-format
+msgid "Uruguay"
+msgstr "ఉరుగ్వే"
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr "ఉజ్బెకిస్తాన్"
+
+#, no-c-format
+msgid "Vatican City"
+msgstr "వాటికన్ నగరం"
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr "సెయింట్ విన్సెంట్ మరియు గ్రెనడీన్స్"
+
+#, no-c-format
+msgid "Venezuela"
+msgstr "వెనిజులా"
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr "బ్రిటిష్ వర్జిన్ దీవులు"
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr "యు.ఎస్. వర్జిన్ దీవులు"
+
+#, no-c-format
+msgid "Vietnam"
+msgstr "వియత్నాం"
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr "వనాటు"
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr "వాల్లిస్ మరియు ఫుటునా"
+
+#, no-c-format
+msgid "Samoa"
+msgstr "సమోవా"
+
+#, no-c-format
+msgid "Kosovo"
+msgstr "కొసోవో"
+
+#, no-c-format
+msgid "Yemen"
+msgstr "యెమెన్"
+
+#, no-c-format
+msgid "Mayotte"
+msgstr "మాయొట్"
+
+#, no-c-format
+msgid "South Africa"
+msgstr "దక్షిణ ఆఫ్రికా"
+
+#, no-c-format
+msgid "Zambia"
+msgstr "జాంబియా"
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr "జింబాబ్వే"
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr "బ్యాకప్ పూర్తయింది."
+
+msgid "Left out, being written right now:"
+msgstr "వదిలివేయబడింది, ఇప్పుడు వ్రాయబడుతోంది:"
+
+msgid "Don't use"
+msgstr "ఉపయోగించవద్దు"
+
+msgid "Not aligned"
+msgstr "సమలేఖనం కాలేదు"
+
+msgid "Fixed & aligned"
+msgstr "స్థిరంగా మరియు సమలేఖనం"
+
+msgid "Built-in IMU"
+msgstr "అంతర్నిర్మిత IMU"
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"IMU ఉన్న పరికరం శాశ్వతంగా బిగించబడి, దాని అక్షాలు విమాన అక్షాలతో సమలేఖనమయ్య"
+"ాయా. గట్టిగా అమర్చినప్పుడు మాత్రమే «స్థిరంగా మరియు సమలేఖనం». సందేహమైతే «సమల"
+"ేఖనం కాలేదు»."
+
+#, no-c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+"ప్రతి విలువను ఇచ్చే మొదటి పరికరాన్ని XCSoar ఉపయోగిస్తుంది (పరికరం A, B కంటే"
+" ముందు, అలాగే). బొద్దు గుర్తులు ఈ పరికరం నుండి XCSoar తీసుకునే విలువలు. బొద"
+"్దు కానివి ముందరి పరికరం అదే డేటా ఇస్తోందని అర్థం. Baro ప్రస్తుత QNHతో ఎత్త"
+"ు; QNE పీడన ఎత్తు; Alt IGC లాగర్ రాసే ఎత్తు. QNE మరియు Pressure ఒకే పరిసర ప"
+"ీడనం, కాబట్టి రెండింటిలో ముందరిది మాత్రమే బొద్దు. చెడు GPS మరియు 10 శాతం కం"
+"టే తక్కువ బ్యాటరీ రంగు తెరపై ఎరుపు, ఇ-పేపర్‌పై బొద్దు."
+
+msgid "QNE"
+msgstr "QNE"
+
+msgid "Engine"
+msgstr "ఇంజిన్"
+
+msgid "Set Clearance"
+msgstr "అనుమతిని సెట్ చేయి"
+
+msgid "Revoke Clearance"
+msgstr "అనుమతిని ఉపసంహరించు"
+
+msgid "Failed to update airspace clearance"
+msgstr "వాయు ప్రదేశ అనుమతిని నవీకరించడం విఫలమైంది"
+
+msgid "Clrnc"
+msgstr "అను."
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+"తరగతి వారీ ఫిల్టర్ సెట్టింగులు. వాయు ప్రదేశానికి రకం (CTR, FIR, ...) మరియు "
+"తరగతి రెండూ ఇస్తే, XCSoarలో రకానికి తరగతి కంటే ప్రాధాన్యం.\nనిలువు వరుసలు:"
+"\n  చూపు — ఈ తరగతి వాయు ప్రదేశాలను మ్యాప్‌పై గీయి\n  హెచ్చరిక — దగ్గర పడినప"
+"్పుడు మరియు లోపల హెచ్చరికలు\n  అను. — ఇతర అతివ్యాప్తి ప్రదేశాల హెచ్చరికలను"
+"\n         అణిచే అనుమతిని ఇవ్వడానికి అనుమతించు"
+
+msgid "Clearance"
+msgstr "అనుమతి"
+
+msgid "Groups"
+msgstr "సమూహాలు"
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr "జాబితాలో ఈ సమూహాల ఇన్‌ఫోబాక్స్‌లను మాత్రమే చూపు."
+
+msgid "Share location"
+msgstr "స్థానాన్ని పంచుకోండి"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "పైన"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "కుడి"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "కింద"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "ఎడమ"
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr ""
+"అక్కడి తెర అంచు వరకు ఇన్‌ఫోబాక్స్ ప్రాంతాన్ని సాగదీయడానికి అంచును నొక్కండి."
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+"ఇన్‌ఫోబాక్స్ ప్రాంతం ఇన్‌ఫోబాక్స్‌లు, గేజ్‌లు, మ్యాప్ అతివ్యాప్తులు మరియు మ"
+"ెనూకు అందుబాటులో ఉన్న తెర భాగం. తెర అంచు వరకు సాగదీసే అంచులను ఎంచుకోండి. సా"
+"గదీయని అంచులు సిస్టమ్ పట్టీలు మరియు గుండ్రని మూలల నుండి దూరంగా ఉంటాయి. మ్యా"
+"ప్ ఎప్పుడూ మొత్తం తెరను ఉపయోగిస్తుంది, డైలాగ్‌లు సురక్షిత ప్రాంతంలో ఉంటాయి."
+" పూర్తి తెరలో మాత్రమే అవసరం."
+
+msgid "Stretch InfoBox area"
+msgstr "ఇన్‌ఫోబాక్స్ ప్రాంతాన్ని సాగదీయండి"
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+"ఇన్‌ఫోబాక్స్‌లను కప్పే తెర పై అంచు వరకు ప్రాంతం సాగదీయబడితే తప్ప స్థితి పట్"
+"టీని చూపు."
+
+#, no-c-format
+msgid "Visible"
+msgstr "కనిపిస్తుంది"
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+"పూర్తి తెరలో కూడా స్థితి పట్టీని ఎప్పుడూ చూపు. ఇన్‌ఫోబాక్స్‌లను దాని వెనుక "
+"గీయలేం, కాబట్టి అవి పై అంచు నుండి దూరంగా ఉంటాయి."
+
+#, no-c-format
+msgid "Hidden"
+msgstr "దాచబడింది"
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr "స్థితి పట్టీని ఎప్పుడూ చూపవద్దు."
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+"సిస్టమ్ పట్టీలు మరియు కటౌట్ వెనుక సహా మొత్తం తెరను XCSoar ఉపయోగించనివ్వండి."
+" మ్యాప్ దాన్ని నింపుతుంది, «ఇన్‌ఫోబాక్స్ ప్రాంతాన్ని సాగదీయండి» ఇన్‌ఫోబాక్స"
+"్‌లు, గేజ్‌లు, మ్యాప్ అతివ్యాప్తులు మరియు మెనూ ఏ అంచుల వరకు చేరతాయో నిర్ణయి"
+"స్తుంది."
+
+msgid "System status bar"
+msgstr "సిస్టమ్ స్థితి పట్టీ"
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+"గడియారం మరియు బ్యాటరీ స్థాయి ఉన్న సిస్టమ్ స్థితి పట్టీ కనిపిస్తూనే ఉంటుందా."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr "రాడార్ గడువు ముగిసినప్పుడు హెచ్చరించు"
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr ""
+"ప్రారంభిస్తే, వర్షపు రాడార్ అతివ్యాప్తిని రిఫ్రెష్ చేయలేక మ్యాప్ నుండి తీసి"
+"వేసినప్పుడు హెచ్చరిక చూపబడుతుంది."
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr "చిన్న అంచు 3.2 అంగుళాల కంటే తక్కువగా ఉంటే అక్షర పరిమాణం తగ్గించు."
+
+#, no-c-format
+msgid "Handheld"
+msgstr "చేతిలో"
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr "ఎప్పుడూ దగ్గరి వీక్షణ పరిమాణాన్ని ఉపయోగించండి."
+
+#, no-c-format
+msgid "Panel"
+msgstr "ప్యానెల్"
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr "చేయి దూరంలో చదివే తెరకు పూర్తి అక్షర పరిమాణం ఉంచు."
+
+msgid "Viewing distance"
+msgstr "చూసే దూరం"
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+"చిన్న అంచు 3.2 అంగుళాల కంటే తక్కువైతే ఆటో అక్షర పరిమాణం తగ్గిస్తుంది. «చేతి"
+"లో» ఎప్పుడూ ఆ దగ్గరి పరిమాణం. «ప్యానెల్» పూర్తి పరిమాణం ఉంచుతుంది."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr "ఉపగ్రహ పొర"
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr "ఈ పేజీ మ్యాప్ కింద గీసే EUMETView ఉపగ్రహ ఉత్పత్తి."
+
+#, no-c-format
+msgid "Rain radar"
+msgstr "వర్షపు రాడార్"
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr ""
+"రీచ్ గ్లైడర్ నుండి సరళ రేఖలు. ల్యాండబుల్ రంగులు మరియు ప్రత్యామ్నాయాల జాబితా"
+" ఈ రీచ్‌ను ఉపయోగిస్తాయి."
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr ""
+"భూభాగ అడ్డంకుల చుట్టూ మలుపులను అనుమతించి రీచ్ లెక్కించబడుతుంది. ల్యాండబుల్ "
+"రంగులు మరియు ప్రత్యామ్నాయాల జాబితా ఈ రీచ్‌ను ఉపయోగిస్తాయి."
+
+#, no-c-format
+msgid "Task MC"
+msgstr "టాస్క్ MC"
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr "టాస్క్ MacCready విలువను ఉపయోగిస్తుంది."
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+"భూభాగ రీచ్, ల్యాండబుల్ రంగులు, రద్దు మరియు ప్రత్యామ్నాయాల జాబితాకు ఏ MacCre"
+"ady ఉపయోగించబడుతుంది. రీచ్ మోడ్ ఆఫ్ అయినా ఇది వర్తిస్తుంది. పని రేఖ ఎప్పుడూ"
+" టాస్క్ MC. ప్రత్యామ్నాయ ఇన్‌ఫోబాక్స్‌లు మరియు భద్రత MC ఎత్తు తేడా ఎప్పుడూ "
+"భద్రత MC."
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr "మ్యాప్‌పై రీచ్ అతివ్యాప్తి లేదు."
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr "నేల వరకు ఎంత దూరం గ్లైడ్ చేయవచ్చు. రీచ్ పోలార్‌ను ఉపయోగిస్తుంది."
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr ""
+"నేల వరకు గ్లైడ్‌కు ఆవల మ్యాప్‌ను నీడగా చూపు. రీచ్ పోలార్‌ను ఉపయోగిస్తుంది."
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr ""
+"ఈ విమానం యొక్క సాధారణ థర్మల్ బేస్ ఎత్తుకు ఇంకా చేరుకుంటూ ఎంత దూరం గ్లైడ్ చే"
+"యవచ్చు. ఎప్పుడూ టాస్క్ MCను ఉపయోగిస్తుంది."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr ""
+"టాస్క్ MCతో సాధారణ థర్మల్ బేస్ ఎత్తు వరకు పని రేఖ, అలాగే రీచ్ పోలార్‌తో నేల"
+" వరకు భూభాగ రేఖ."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr ""
+"టాస్క్ MCతో సాధారణ థర్మల్ బేస్ ఎత్తు వరకు పని రేఖ, అలాగే రీచ్ పోలార్‌తో నేల"
+"కు ఆవల నీడ."
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+"రీచ్ పోలార్ భద్రత MC అయినప్పుడు భూభాగ రీచ్, ల్యాండబుల్ రంగులు, రద్దు మరియు "
+"ప్రత్యామ్నాయాల జాబితాకు MacCready. ప్రత్యామ్నాయ ఇన్‌ఫోబాక్స్‌లు మరియు భద్రత"
+" MC ఎత్తు తేడా ఎప్పుడూ ఈ విలువ. ఉత్తమ గ్లైడ్ వేగం మారదు. ఎక్కువ విలువలు తక్"
+"కువ పొలాలను చేరుకోగలిగినవిగా భావిస్తాయి."
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr ""
+"గ్లైడ్ పోలార్ సెట్ చేయబడలేదు, కాబట్టి గ్లైడ్ నిష్పత్తి చూపలేం. ముందు విమానా"
+"న్ని ఎంచుకోండి."
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr ""
+"ప్రతి విలువ పక్కన ఉన్న గ్లైడ్ నిష్పత్తి ఆ MacCready సెట్టింగ్‌లో నిశ్చల గాల"
+"ిలో అత్యుత్తమం, పురుగులు, బ్యాలస్ట్ మరియు పోలార్ క్షీణతతో సహా."
+
+#, c-format
+msgid "Active polar: %s"
+msgstr "క్రియాశీల పోలార్: %s"
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+"వేగం మరియు టాస్క్ లెక్కల కోసం ప్రారంభంలో MacCready. ఇక్కడ మారిస్తే ప్రస్తుత"
+" MacCready కూడా సెట్ అవుతుంది. భూభాగ రీచ్, ల్యాండబుల్ రంగులు, రద్దు మరియు ప"
+"్రత్యామ్నాయాల జాబితా రీచ్ పోలార్ టాస్క్ MC కాకపోతే ఈ విలువను కాదు, రీచ్ పోల"
+"ార్‌ను అనుసరిస్తాయి."
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+"ఆపరేటింగ్ సిస్టమ్‌లో సెట్ చేసిన సమయ మండలిని ఉపయోగించి, పగటి పొదుపు మార్పుల్"
+"లో మరియు మరో మండలికి ప్రయాణించినప్పుడు దాన్నే అనుసరించు."
+
+#, no-c-format
+msgid "Time zone"
+msgstr "సమయ మండలి"
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+"కింద ఎంచుకున్న సమయ మండలిని ఉపయోగించు. XCSoar దాని పగటి పొదుపు నియమాలు తెలుస"
+"ు, మార్పులను తానే వర్తింపజేస్తుంది, కాబట్టి సెట్టింగ్‌ను సంవత్సరానికి రెండు"
+"సార్లు సరిచేయనవసరం లేదు."
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr "మాన్యువల్ UTC ఆఫ్‌సెట్"
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+"కింద నమోదు చేసిన స్థిర UTC ఆఫ్‌సెట్‌ను ఉపయోగించు. పగటి పొదుపు సమయం మొదలైనప్"
+"పుడు లేదా ముగిసినప్పుడు చేతితో సరిచేయాలి."
+
+msgid "Local time source"
+msgstr "స్థానిక సమయ మూలం"
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+"UTC మరియు స్థానిక సమయం మధ్య ఆఫ్‌సెట్‌ను XCSoar ఎక్కడి నుండి తీసుకుంటుందో ఎం"
+"చుకుంటుంది."
+
+msgid "The time zone of the airfield you are flying at."
+msgstr "మీరు ఎగురుతున్న విమానాశ్రయం యొక్క సమయ మండలి."
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+"UTC ఆఫ్‌సెట్ ఫీల్డ్ UTC మరియు స్థానిక సమయం మధ్య ఆఫ్‌సెట్‌ను పేర్కొనడానికి అ"
+"నుమతిస్తుంది. మరో స్థానిక సమయ మూలం ఎంచుకున్నా మీరు నమోదు చేసిన విలువను ఉంచు"
+"తుంది. కింద స్థానిక సమయం మరియు ఇప్పుడు అమలులో ఉన్న UTC ఆఫ్‌సెట్ కనిపిస్తాయి"
+"."
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV మోడల్"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "యునైటెడ్ కింగ్‌డమ్. UKV మోడల్."
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr "అతివ్యాప్తి"
+
+msgid "Revoke"
+msgstr "ఉపసంహరించు"
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr "Radar (EUMETNET OPERA)"
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr "డేటా లేదు"
+
+msgid "Downloading radar..."
+msgstr "రాడార్ దించబడుతోంది..."
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr ""
+"రాడార్ చిత్రాన్ని రిఫ్రెష్ చేయలేక తీసివేశాం, పాత ఎకో కనిపించకుండా.\n\nఇలా జ"
+"రిగినప్పుడు మళ్లీ హెచ్చరించాలా?"
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr "యూరోపియన్ HRV RGB"
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr "కనిపించే 0.6 µm (MTG)"
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr "ఇన్‌ఫ్రారెడ్ 10.5 µm (MTG)"
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr "నిజమైన రంగు (MTG)"
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr "జియో రంగు (MTG)"
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr "వేగవంతమైన స్కాన్, సహజ రంగు"
+
+msgid "No satellite imagery here right now"
+msgstr "ఇప్పుడు ఇక్కడ ఉపగ్రహ చిత్రం లేదు"
+
+msgid "Countries"
+msgstr "దేశాలు"
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+"ఈ దేశాల ఫైళ్లను మాత్రమే చూపు — మ్యాప్‌లు, వే పాయింట్లు మరియు వాయు ప్రదేశాలక"
+"ు అదే ఎంపిక, ప్రొఫైల్‌లో ఉంచబడుతుంది. ప్రతి దేశానికి సంబంధించిన ఫైళ్లు జాబి"
+"తాలో ఉంటాయి."
+
+msgid "Search"
+msgstr "వెతకండి"
+
+msgid "Show only the files whose name or description contains this text."
+msgstr "పేరు లేదా వివరణలో ఈ పాఠ్యం ఉన్న ఫైళ్లను మాత్రమే చూపు."
+
+msgid "No file matches the filter."
+msgstr "ఫిల్టర్‌కు సరిపోయే ఫైల్ లేదు."
+
+msgid "Complete"
+msgstr "పూర్తయింది"
+
+msgid "Cancelled"
+msgstr "రద్దు చేయబడింది"
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr ""
+"చివరి థర్మల్‌లో మొత్తం ఎత్తు లాభం లేదా నష్టం, వలయ సమయంతో భాగించబడుతుంది. చి"
+"న్న అక్షరంలోని సెకన్లు వలయ సమయం."
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr ""
+"చివరి థర్మల్‌లో వలయంలో గడిపిన సమయం. చిన్న అక్షరంలోని సంఖ్య ఆ థర్మల్ సగటు ఎగ"
+"బాకే రేటు."
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+"ప్రధాన విలువ: తదుపరి లెగ్‌పై థర్మల్ ఎగబాకే రేటు, ప్రస్తుత లెగ్ MacCreadyకు "
+"సమానమైన రేటుకు సమానం. ద్వితీయ విలువ: ప్రస్తుత లెగ్‌పై థర్మల్ ఎగబాకే రేటు, త"
+"దుపరి లెగ్ MacCreadyకు సమానమైన రేటుకు సమానం."
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"భద్రత MCతో ఉత్తమ ప్రత్యామ్నాయ ల్యాండింగ్ వద్ద రాక ఎత్తు, భద్రతా రాక ఎత్తుకు"
+" సాపేక్షంగా."
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+"భద్రత MCతో రెండవ ఉత్తమ ప్రత్యామ్నాయ ల్యాండింగ్ వద్ద రాక ఎత్తు, భద్రతా రాక ఎ"
+"త్తుకు సాపేక్షంగా."
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+"బారోమెట్రిక్ ఎత్తు లెక్కకు ప్రస్తుత QNH పీడన సెట్టింగ్. పీడన సెన్సార్ ఉన్నప"
+"్పుడు కింది పంక్తి ఆ ఎత్తును చూపుతుంది. ప్యానెల్ తెరిచి QNHను చేతితో మార్చడ"
+"ానికి ఇన్‌ఫోబాక్స్‌ను నొక్కండి."
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr "వేగం VMG"
+
+#, no-c-format
+msgid "V VMG"
+msgstr "V VMG"
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+"తదుపరి వే పాయింట్ దిశలో భూమి వేగం యొక్క అంశం. నేరుగా వెళ్తే భూమి వేగానికి స"
+"మానం, లంబ కోణంలో సున్నా, దూరంగా వెళ్తే రుణం. నేరుగా కోర్సు నుండి పక్కదారి ధ"
+"రను సంఖ్యగా చూపుతుంది."
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr "వేరియో మరియు థర్మల్"
+
+#, no-c-format
+msgid "Glide"
+msgstr "గ్లైడ్"
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr "వేగం మరియు భంగిమ"
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr "గాలి మరియు వాతావరణం"
+
+#, no-c-format
+msgid "Time"
+msgstr "సమయం"
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr "వాయు ప్రదేశం మరియు జట్టు"
+
+#, no-c-format
+msgid "Other"
+msgstr "ఇతర"
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+"రెండింటిని మార్చడానికి ఒక ఇన్‌ఫోబాక్స్‌ను మరోదానిపై లాగండి. ఆ స్థానానికి మర"
+"ోదాన్ని ఎంచుకోవడానికి పట్టి ఎత్తండి."
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+"ఎంచుకున్న ఇన్‌ఫోబాక్స్‌ను తీసుకోవడానికి Enter, బాణపు కీలతో జరపండి, మళ్లీ En"
+"terతో ఉంచండి. కదపకుండా రెండుసార్లు Enter ఆ స్థానానికి మరో ఇన్‌ఫోబాక్స్‌ను ఎ"
+"ంచుకుంటుంది."
+
+msgid "Arrange InfoBoxes"
+msgstr "ఇన్‌ఫోబాక్స్‌లను అమర్చండి"
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr "అమర్చు\nఇన్‌ఫోబాక్స్"
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"ప్రస్తుత వింగ్ లోడింగ్, గ్లైడర్ యొక్క ఖాళీ బరువు, సిబ్బంది బరువు మరియు బ్యా"
+"లస్ట్ నుండి లెక్కించబడుతుంది. గ్లైడర్ గరిష్ఠ టేకాఫ్ బరువు కంటే ఎక్కువగా ఉన్"
+"నప్పుడు ఎరుపు రంగులో చూపబడుతుంది."
+
+msgid "MTOW"
+msgstr "MTOW"
+
+msgid "Maximum takeoff weight of the glider."
+msgstr "గ్లైడర్ యొక్క గరిష్ఠ టేకాఫ్ బరువు."
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+"బోర్డులో నీటి బ్యాలస్ట్, లీటర్లలో. వ్యాఖ్య వింగ్ లోడింగ్‌ను చూపుతుంది, గ్లై"
+"డర్ గరిష్ఠ టేకాఫ్ బరువు కంటే ఎక్కువైతే ఎరుపు. బ్యాలస్ట్ పోస్తున్నప్పుడు విల"
+"ువ నీలం. మార్చడానికి నొక్కండి."
+

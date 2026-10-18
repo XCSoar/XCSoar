@@ -90,8 +90,10 @@ std::optional<AirspaceWarning>
 ProtectedAirspaceWarningManager::GetTopWarning() const noexcept
 {
   const Lease lease(*this);
-  if (auto i = lease->begin(); i != lease->end())
-    return *i;
+  const AirspaceWarningManager &manager = lease;
+  for (const auto &warning : manager)
+    if (warning.IsActive())
+      return warning;
 
   return std::nullopt;
 }

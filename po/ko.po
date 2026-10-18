@@ -1089,9 +1089,6 @@ msgstr "선언을 보냄"
 msgid "Reading flight list"
 msgstr "비행리스트 읽기"
 
-msgid "Downloading flight log"
-msgstr "비행 로그 다운로드"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "사용 안함"
@@ -1789,9 +1786,6 @@ msgstr "경고"
 msgid "Airspace"
 msgstr "공역"
 
-msgid "Select Pattern"
-msgstr "패턴선택"
-
 msgid "Squawk code"
 msgstr "코드 설정"
 
@@ -1846,9 +1840,6 @@ msgstr "테두리색상변경"
 
 msgid "Change Fill Color"
 msgstr "채우기색변경"
-
-msgid "Change Fill Brush"
-msgstr "채움브러시변경"
 
 msgid "Border Width"
 msgstr "테두리폭"
@@ -1949,9 +1940,6 @@ msgstr "밸러스트"
 msgid "Ballast of the glider. Press \"Dump/Stop\" to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."
 msgstr "기체의 밸러스트값을 입력: 카운트 다운 설정으로, 시간당 투기량을 조정할 수 있다."
 
-msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast."
-msgstr "글라이더의 자체 중량, 승무원 중량, 밸러스트로부터 계산된 현재 날개 하중입니다."
-
 msgid "Bugs"
 msgstr "노후도"
 
@@ -1968,9 +1956,6 @@ msgstr "기압보정(고도계), Vega가 연결되어 있으면 자동으로 설
 
 msgid "Max. temp."
 msgstr "최고온도"
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "지상예보기온: 입력하면, 고도에 따른 온도변화를 계산해서 보여준다. (정보창-예상온도)"
 
 #, no-c-format
 msgid "Orientation"
@@ -2028,10 +2013,6 @@ msgid "Gauges"
 msgstr "계기"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "기본타스크"
-
-#, no-c-format
 msgid "Look"
 msgstr "일반"
 
@@ -2041,14 +2022,8 @@ msgstr "고급설정"
 msgid "Configuration"
 msgstr "설정"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "이 InfoBox 패널 구성의 이름입니다."
-
 msgid "InfoBox"
 msgstr "정보창"
-
-msgid "Content"
-msgstr "목차"
 
 msgid "Copy Set"
 msgstr "복사"
@@ -2063,10 +2038,10 @@ msgid "InfoBox paste set"
 msgstr "정보창 붙이기"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
-msgstr ""
+msgstr "복사는 이 세트의 정보창을 모두 기억하고, 붙여넣기는 다른 세트의 정보창을 그것으로 바꿉니다."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "전역 설정에서 상속"
 
 msgid "Invalid"
 msgstr "유효하지 않음"
@@ -2428,9 +2403,6 @@ msgstr "최고고도획득"
 msgid "Near"
 msgstr "가까운웨이포인트"
 
-msgid "Share"
-msgstr "공유"
-
 #, no-c-format
 msgid "Disconnected"
 msgstr "연결 해제"
@@ -2752,17 +2724,17 @@ msgstr "주석"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "고정 텍스트"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "조종사가 입력한 제목, 값, 설명. 눌러 편집합니다."
 
 msgid "Title"
-msgstr ""
+msgstr "제목"
 
 msgid "Value"
-msgstr ""
+msgstr "값"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -2934,12 +2906,6 @@ msgstr "공역 채우기 모드"
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "공역 채우기 유형을 선택하시오."
-
-msgid "Airspace transparency"
-msgstr "공역투명도"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "선택하면 공역을 투명하게 채움."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3246,14 +3212,6 @@ msgstr ""
 "기압고도계의 데이터가 있으면, 계산할때 기압고도를 사용한다. 없으면, GPS 고도"
 "를 사용한다."
 
-msgid "Flap forces cruise"
-msgstr "플랩사용지시"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr "Vega 바리오미터가 연결된 경우, 써클링, 순항중에 플랩 설정을 표시한다."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "패러글라이더(Paraglider)를 위한 시간설정."
@@ -3322,6 +3280,7 @@ msgstr "글자 크기"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "해상도조정: 표시되는 선의 굵기와 글자크기가 달라진다."
 
+#. the Kobo has no time zone configuration which we could follow
 msgid "Automatic"
 msgstr "자동"
 
@@ -3382,90 +3341,6 @@ msgstr "세로(역방향)"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "가로(역방향)"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "정보창 8개 (위아래 4개 혹은 좌우 4개)"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "정보창 10개 (5개씩 분할)"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "정보창 12개 (좌우 나눠 3줄)"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "정보창 8개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "정보창 8개 + 바리오 (세로)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "정보창 8개 (위 혹은 왼쪽)"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "정보창 8개 + 바리오 (세로)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "정보창 9개 + 바리오 (가로)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "정보창 9개(좌우나뉨) + 바리오 (가로)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12개 왼쪽 + 바리오 3개 오른쪽 (가로)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "정보창 5개"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "정보창 10개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "정보창 12개 (아래 혹은 오른쪽)"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "정보창 10개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "정보창 12개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "정보창 16개 (가로)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "정보창 4개 (아래쪽 혹은 오른쪽)"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "정보창 4개 (위쪽 혹은 왼쪽)"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "정보창 4개 (아래쪽 혹은 오른쪽)"
 
 #, no-c-format
 msgid "Text"
@@ -3557,9 +3432,6 @@ msgstr "항상 어두운 InfoBox 배경에 밝은 텍스트를 사용하십시�
 
 msgid "Full screen"
 msgstr "지도 (풀 스크린)"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "전체화면으로 XCSoar 실행"
 
 msgid "Display orientation"
 msgstr "화면방향"
@@ -3897,16 +3769,8 @@ msgid "Straight"
 msgstr "직진"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "직진 했을때 글라이더 도달범위를 표시한다."
-
-#, no-c-format
 msgid "Turning"
 msgstr "선회(지형지물 계산)"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr "글라이더 도달범위를 지형 장애물과 고도를 고려하여 계산한다."
 
 #. Spacer
 msgid "Reach mode"
@@ -3916,10 +3780,6 @@ msgid ""
 "How calculations are performed of the reach of the glider with respect to "
 "terrain."
 msgstr "글라이더의 도달범위를 계산하는 방식을 설정한다."
-
-#, no-c-format
-msgid "Uses task glide polar."
-msgstr "글라이더의 폴라커브를 사용하여 계산한다."
 
 #, no-c-format
 msgid "Safety MC"
@@ -3933,48 +3793,24 @@ msgid "Reach polar"
 msgstr "도달범위 계산"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "도달범위 표시를 하지않음."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "대지 라인"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr "도달범위를 점선으로 표시한다."
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "흐린 대지"
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr "도달범위 바깥을 흐릿하게 표시한다."
-
-#, no-c-format
 msgid "Working line"
 msgstr "도달 선"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr "기체가 도달할 수 있는 거리를 직선으로 표시한다."
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "작업선, 지형선"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr "기체가 도달할수 있는 거리를 선으로 표시한다."
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "작업선, 어두운 지형"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr "글라이더가 도달 할 수 있는 거리를 지면에 점선으로 표시한다."
 
 msgid "Reach display"
 msgstr "도달범위 표시"
@@ -4027,14 +3863,6 @@ msgid ""
 msgstr ""
 "매 시간마다 1%씩 기체 침하율을 상승하게 설정 할 수 있다(50%는 0%의 침하율 두"
 "배)(행/패러는 필요없는 설정)."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"맥크레디가 설정되어 있는경우 안전맥크레디를 사용해서 기체 도달범위를 계산한"
-"다. 타스크 중단시, 착륙장에 도달 가능한 도착고도 또한 계산한다."
 
 msgid "STF risk factor"
 msgstr "STF 위험 요소"
@@ -4338,10 +4166,10 @@ msgstr ""
 "한다."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "가장 가까운 점으로 이동"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "출발과 도착 구역의 가장 가까운 점으로 이동합니다."
 
 msgid "Finish min. height"
 msgstr "최종골 최저고도"
@@ -4692,12 +4520,6 @@ msgstr "익면하중의 단위."
 #, no-c-format
 msgid "UTC offset"
 msgstr "UTC 오프셋"
-
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr "UTC에 대한 현지시간 보정값을 입력한다. 한국은 UTC + 9h이다."
 
 msgid "Use GPS time"
 msgstr "GPS 시간보정"
@@ -5691,14 +5513,6 @@ msgid "TL Avg"
 msgstr "평균(직전열)"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"직전 써멀에서의 고도상승/손실량: 앞 써멀의 고도변화를 소요시간으로 나눈 값이"
-"다."
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "써멀(직전써멀 고도획득)"
 
@@ -5721,10 +5535,6 @@ msgstr "써멀(직전써멀 선회시간)"
 #, no-c-format
 msgid "TL duration"
 msgstr "시간(직전열)"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "직전 써멀에서 선회한 시간을 표시한다."
 
 #, no-c-format
 msgid "MacCready setting"
@@ -6839,10 +6649,6 @@ msgid "T Next Leg"
 msgstr "필요상승(다음)"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "필요상승(다음): 다음포인트(leg)까지 필요한 상승률, 현재의 맥크레디 설정으로 예측한다."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "바람(정풍 수치 - 심플)"
 
@@ -7195,20 +7001,12 @@ msgid "Altn 1 AltD"
 msgstr "예비1"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 계산한 고도차이."
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "타스크(고도 - 다음포인트 도착고도)"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "예비2"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "최종고도차: 최종골 포인트 도착고도를 현재고도에서 계산한 고도차이."
 
 #, no-c-format
 msgid "Simulator"
@@ -8237,12 +8035,6 @@ msgstr "권한이 거부되었습니다. 이 네트워크에 연결할 수 없�
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "연결 중 실패. Provjerite lozinku i pokušajte ponovo."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Trenutna QNH postavka tlaka za izračun barometrijske visine. 탭 InfoBox za "
-"otvaranje panela i ručno podešavanje QNH."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9674,14 +9466,6 @@ msgid ""
 "throughout the whole Alps region. ICON-CH model."
 msgstr "비엔나에서 페르피냥까지 알프스 전 구간을 다루며 알프스 전역의 웨이브를 예보합니다. ICON-CH 모델."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Ujedinjeno Kraljevstvo. Model ICON-UK."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -10736,21 +10520,22 @@ msgstr "수동"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "혈중 산소"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Bluetooth 맥박산소측정기의 혈중 산소 포화도, 퍼센트."
 
+#, no-c-format
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "최근 사용한 웨이포인트"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "이 FLARM에서 비행을 내려받으려면 기기의 Wi-Fi에 연결하십시오."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "가까운 지도 축척에서 선회 모드로 표시할 때 스네일 트레일을 바람에 표류시킬지 결정합니다. 끄면 트레일은 바람 표류 보정 없이 유지됩니다. 선회 중에는 예측 항적에도 적용됩니다. 켜면 기단 기준, 끄면 바람을 포함합니다."
 
@@ -10786,27 +10571,24 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "트래픽 레이더를 켜고 주 화면에서의 위치를 고릅니다. 대상의 색상은 근접위협 수준을 보여준다."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "화면 해상도"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "화면 밝기"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "화면 밝기를 조정합니다."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "쓰기에 추가 권한이 필요하므로 화면 밝기는 읽기 전용입니다."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "자동"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "지도 도달 범위(지형선 및 음영)를 끕니다. 중단, 대체 활공항, 착륙 가능지 도착은 계속 도달 폴라를 사용합니다."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "도달범위를 계산하는데 필요한 활공비를 설정한다. 착륙가능한 착륙장이나, 비행중지시에 비상착륙장 계산에도 사용된다. 도달 모드가 꺼져 있어도 적용됩니다."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -10814,10 +10596,10 @@ msgstr "도달범위를 계산하는데 필요한 활공비를 설정한다. 착
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "대체착륙장 모드: 자동"
 
 msgid "Paste"
-msgstr ""
+msgstr "붙여넣기"
 
 #, c-format
 msgid ""
@@ -10921,105 +10703,110 @@ msgid "%u min"
 msgstr "%u분"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "지원되는 서비스가 없습니다"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "선택한 systemd 유닛이 설치되어 있지 않습니다."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "사용 불가"
 
 msgid "Starting..."
-msgstr ""
+msgstr "시작하는 중..."
 
 msgid "Stopping..."
 msgstr "중지 중…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "다시 읽는 중..."
 
 msgid "Failed"
-msgstr ""
+msgstr "실패"
 
 msgid "Turn on"
-msgstr ""
+msgstr "켜기"
 
 msgid "Restart"
-msgstr ""
+msgstr "재부팅"
 
 msgid "Turn off"
-msgstr ""
+msgstr "끄기"
 
 msgid "System service"
-msgstr ""
+msgstr "시스템 서비스"
 
 msgid "SSH server"
-msgstr ""
+msgstr "SSH 서버"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "원격 터미널"
 
 msgid "Sensors"
-msgstr ""
+msgstr "센서"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "OpenVario 센서 서비스"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "바리오 소리"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "OpenVario 바리오 소리 서비스"
 
-#, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "예보의 최고 온도"
 
-#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
+msgstr "그날의 DWD 예보에서 가장 가까운 MOSMIX 지점의 최고 온도를 비행 설정에 넣습니다. 위치가 필요하고 하루에 한 번 받습니다. 계정은 필요 없습니다."
 
-#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
-msgstr ""
+msgstr "그날의 지면 최고 온도. 상승 중 측정한 외기 온도에 대한 건조 단열선이 추정 써멀 상한을 줍니다. 운저에는 습도 센서도 필요합니다. 둘 다 글라이더가 층을 지난 뒤 비행분석 대화의 온도 궤적 페이지에 그려집니다."
 
-#, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "시작 시 타스크 MC"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
-msgstr ""
+msgstr "안전 맥크레디의 활공비"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "음성 경고"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"FLARM 충돌 경보를 긴급도, 시계 방향, 상대가 위인지 아래인지와 함께 읽습니다: \"Traffic urgent! Three o'c"
+"lock. Above.\" 장애물과 경보 구역 경보는 읽지 않습니다."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "음성 경고 시험"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "속도 제어 스위치"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "XCSoar가 바리오미터의 순항/상승 보고를 어떻게 쓰는지."
 
+#, no-c-format
 msgid "Flight mode"
-msgstr ""
+msgstr "비행 모드"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
+msgstr "비행 중 바리오미터의 순항/상승 보고가 비행 모드입니다. 순항은 상승을 끝내고 평균을 처음부터 계산합니다. 상승은 새 써멀을 시작합니다. 골 러시는 순항 중에도 나타날 수 있습니다. Vega에서는 이것이 써클링 출력입니다."
 
+#, no-c-format
 msgid "Display mode"
-msgstr ""
+msgstr "표시 모드"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar는 선회로부터 써클링 모드를 판단합니다. 바리오미터 보고는 쓰지 않습니다."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
+msgstr "페이지는 바뀌고 비행 모드는 바뀌지 않습니다. 순항은 선회 중에도 순항 페이지를 보이고 골 러시를 숨깁니다. 상승은 바리오 페이지를 보입니다. Vega에서는 이것이 속도 제어 스위치입니다."
 
 #, no-c-format
 msgid "System Tools"
@@ -11043,73 +10830,1616 @@ msgstr "이 타스크는 QR 코드로 표시할 수 없습니다"
 msgid "XCSoar task"
 msgstr "XCSoar 타스크"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
-msgstr ""
+msgstr "도달 거리 통계"
 
-#, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "안테나"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM은 두 무선 채널 각각의 통계를 유지합니다."
 
-#, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "데이터 점"
 
-#, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "기간"
 
-#, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "FLARM 도달 거리"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM이 도달 거리 통계를 보내지 않았습니다."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
+msgstr "도달 거리 통계를 다시 설정합니까? 안테나를 바꾼 뒤에 하십시오. FLARM이 다시 모읍니다."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM이 다시 설정을 확인하지 않았습니다."
 
-#, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "최소 도달 거리 미만"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "이 채널에서 평균 도달 거리가 FLARM 최소값보다 짧은 측정 섹터: 전방 2 nm, 측방과 후방 1 nm. 안테나 설치를 확인하십시오."
 
-#, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "도달 거리 설정"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
+msgstr "FLARM은 이 거리 너머의 항공기를 보고하지 않습니다. 그린 범위 안에 있으면 그래프는 파선 원으로 보입니다."
 
-#, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "무제한"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"비행 중 다른 FLARM 항공기와의 접촉. 지나간 섹터마다 한 번, 그곳에서 수신된 가장 먼 거리로 셉니다. 섹터는 그 거리의 큰 절반"
+"의 평균을, 가로선은 가장 먼 거리를 보입니다."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
+msgstr "추정 도달 거리가 FLARM 최소값보다 짧은 측정 섹터: 전방 2 nm, 측방과 후방 1 nm. 안테나 설치를 확인하십시오."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
+msgstr "도달 거리 추정을 다시 설정합니까? 안테나를 바꾼 뒤에 하십시오. XCSoar가 다시 모읍니다."
+
+msgid "FLARM range estimate"
+msgstr "FLARM 도달 거리 추정"
 
 #, no-c-format
-msgid "FLARM range estimate"
+msgid "Zoom in"
+msgstr "확대"
+
+#, no-c-format
+msgid "Zoom out"
+msgstr "축소"
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr "자동 줌"
+
+#, no-c-format
+msgid "Next page"
+msgstr "다음 페이지"
+
+#, no-c-format
+msgid "Previous page"
+msgstr "이전 페이지"
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr "웨이포인트 목록"
+
+#, no-c-format
+msgid "Menu"
+msgstr "메뉴"
+
+#, no-c-format
+msgid "Task manager"
+msgstr "태스크 관리"
+
+#, no-c-format
+msgid "Pan mode"
+msgstr "이동 모드"
+
+#, no-c-format
+msgid "Quick menu"
+msgstr "빠른 메뉴"
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr "레이더"
+
+#, no-c-format
+msgid "Satellite"
+msgstr "위성"
+
+msgid "(Inside)"
+msgstr "(내부)"
+
+msgid "(Near)"
+msgstr "(근처)"
+
+msgid "Cleared"
+msgstr "허가됨"
+
+msgid "Covered"
+msgstr "포함됨"
+
+msgid "Power off"
+msgstr "전원 끄기"
+
+#, no-c-format
+msgid "Andorra"
+msgstr "안도라"
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr "아랍에미리트"
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr "아프가니스탄"
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr "앤티가 바부다"
+
+#, no-c-format
+msgid "Anguilla"
+msgstr "앵귈라"
+
+#, no-c-format
+msgid "Albania"
+msgstr "알바니아"
+
+#, no-c-format
+msgid "Armenia"
+msgstr "아르메니아"
+
+#, no-c-format
+msgid "Angola"
+msgstr "앙골라"
+
+#, no-c-format
+msgid "Antarctica"
+msgstr "남극 대륙"
+
+#, no-c-format
+msgid "Argentina"
+msgstr "아르헨티나"
+
+#, no-c-format
+msgid "American Samoa"
+msgstr "아메리칸 사모아"
+
+#, no-c-format
+msgid "Austria"
+msgstr "오스트리아"
+
+#, no-c-format
+msgid "Australia"
+msgstr "오스트레일리아"
+
+#, no-c-format
+msgid "Aruba"
+msgstr "아루바"
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr "올란드 제도"
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr "아제르바이잔"
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr "보스니아 헤르체고비나"
+
+#, no-c-format
+msgid "Barbados"
+msgstr "바베이도스"
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr "방글라데시"
+
+#, no-c-format
+msgid "Belgium"
+msgstr "벨기에"
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr "부르키나파소"
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr "불가리아"
+
+#, no-c-format
+msgid "Bahrain"
+msgstr "바레인"
+
+#, no-c-format
+msgid "Burundi"
+msgstr "부룬디"
+
+#, no-c-format
+msgid "Benin"
+msgstr "베냉"
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr "생바르텔레미"
+
+#, no-c-format
+msgid "Bermuda"
+msgstr "버뮤다"
+
+#, no-c-format
+msgid "Brunei"
+msgstr "브루나이"
+
+#, no-c-format
+msgid "Bolivia"
+msgstr "볼리비아"
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr "네덜란드령 카리브"
+
+#, no-c-format
+msgid "Brazil"
+msgstr "브라질"
+
+#, no-c-format
+msgid "Bahamas"
+msgstr "바하마"
+
+#, no-c-format
+msgid "Bhutan"
+msgstr "부탄"
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr "부베섬"
+
+#, no-c-format
+msgid "Botswana"
+msgstr "보츠와나"
+
+#, no-c-format
+msgid "Belarus"
+msgstr "벨라루스"
+
+#, no-c-format
+msgid "Belize"
+msgstr "벨리즈"
+
+#, no-c-format
+msgid "Canada"
+msgstr "캐나다"
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr "코코스 제도"
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr "콩고-킨샤사"
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr "중앙 아프리카 공화국"
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr "콩고-브라자빌"
+
+#, no-c-format
+msgid "Switzerland"
+msgstr "스위스"
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr "코트디부아르"
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr "쿡 제도"
+
+#, no-c-format
+msgid "Chile"
+msgstr "칠레"
+
+#, no-c-format
+msgid "Cameroon"
+msgstr "카메룬"
+
+#, no-c-format
+msgid "China"
+msgstr "중국"
+
+#, no-c-format
+msgid "Colombia"
+msgstr "콜롬비아"
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr "코스타리카"
+
+#, no-c-format
+msgid "Cuba"
+msgstr "쿠바"
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr "카보베르데"
+
+#, no-c-format
+msgid "Curaçao"
+msgstr "퀴라소"
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr "크리스마스섬"
+
+#, no-c-format
+msgid "Cyprus"
+msgstr "키프로스"
+
+#, no-c-format
+msgid "Czechia"
+msgstr "체코"
+
+#, no-c-format
+msgid "Germany"
+msgstr "독일"
+
+#, no-c-format
+msgid "Djibouti"
+msgstr "지부티"
+
+#, no-c-format
+msgid "Denmark"
+msgstr "덴마크"
+
+#, no-c-format
+msgid "Dominica"
+msgstr "도미니카"
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr "도미니카 공화국"
+
+#, no-c-format
+msgid "Algeria"
+msgstr "알제리"
+
+#, no-c-format
+msgid "Ecuador"
+msgstr "에콰도르"
+
+#, no-c-format
+msgid "Estonia"
+msgstr "에스토니아"
+
+#, no-c-format
+msgid "Egypt"
+msgstr "이집트"
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr "서사하라"
+
+#, no-c-format
+msgid "Eritrea"
+msgstr "에리트리아"
+
+#, no-c-format
+msgid "Spain"
+msgstr "스페인"
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr "에티오피아"
+
+#, no-c-format
+msgid "Finland"
+msgstr "핀란드"
+
+#, no-c-format
+msgid "Fiji"
+msgstr "피지"
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr "포클랜드 제도"
+
+#, no-c-format
+msgid "Micronesia"
+msgstr "미크로네시아"
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr "페로 제도"
+
+#, no-c-format
+msgid "France"
+msgstr "프랑스"
+
+#, no-c-format
+msgid "Gabon"
+msgstr "가봉"
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr "영국"
+
+#, no-c-format
+msgid "Grenada"
+msgstr "그레나다"
+
+#, no-c-format
+msgid "Georgia"
+msgstr "조지아"
+
+#, no-c-format
+msgid "French Guiana"
+msgstr "프랑스령 기아나"
+
+#, no-c-format
+msgid "Guernsey"
+msgstr "건지"
+
+#, no-c-format
+msgid "Ghana"
+msgstr "가나"
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr "지브롤터"
+
+#, no-c-format
+msgid "Greenland"
+msgstr "그린란드"
+
+#, no-c-format
+msgid "Gambia"
+msgstr "감비아"
+
+#, no-c-format
+msgid "Guinea"
+msgstr "기니"
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr "과들루프"
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr "적도 기니"
+
+#, no-c-format
+msgid "Greece"
+msgstr "그리스"
+
+#, no-c-format
+msgid "South Georgia"
+msgstr "사우스조지아 사우스샌드위치 제도"
+
+#, no-c-format
+msgid "Guatemala"
+msgstr "과테말라"
+
+#, no-c-format
+msgid "Guam"
+msgstr "괌"
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr "기니비사우"
+
+#, no-c-format
+msgid "Guyana"
+msgstr "가이아나"
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr "홍콩(중국 특별행정구)"
+
+#, no-c-format
+msgid "Heard Island"
+msgstr "허드 맥도널드 제도"
+
+#, no-c-format
+msgid "Honduras"
+msgstr "온두라스"
+
+#, no-c-format
+msgid "Croatia"
+msgstr "크로아티아"
+
+#, no-c-format
+msgid "Haiti"
+msgstr "아이티"
+
+#, no-c-format
+msgid "Hungary"
+msgstr "헝가리"
+
+#, no-c-format
+msgid "Indonesia"
+msgstr "인도네시아"
+
+#, no-c-format
+msgid "Ireland"
+msgstr "아일랜드"
+
+#, no-c-format
+msgid "Israel"
+msgstr "이스라엘"
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr "맨섬"
+
+#, no-c-format
+msgid "India"
+msgstr "인도"
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr "영국령 인도양 지역"
+
+#, no-c-format
+msgid "Iraq"
+msgstr "이라크"
+
+#, no-c-format
+msgid "Iran"
+msgstr "이란"
+
+#, no-c-format
+msgid "Iceland"
+msgstr "아이슬란드"
+
+#, no-c-format
+msgid "Italy"
+msgstr "이탈리아"
+
+#, no-c-format
+msgid "Jersey"
+msgstr "저지"
+
+#, no-c-format
+msgid "Jamaica"
+msgstr "자메이카"
+
+#, no-c-format
+msgid "Jordan"
+msgstr "요르단"
+
+#, no-c-format
+msgid "Japan"
+msgstr "일본"
+
+#, no-c-format
+msgid "Kenya"
+msgstr "케냐"
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr "키르기스스탄"
+
+#, no-c-format
+msgid "Cambodia"
+msgstr "캄보디아"
+
+#, no-c-format
+msgid "Kiribati"
+msgstr "키리바시"
+
+#, no-c-format
+msgid "Comoros"
+msgstr "코모로"
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr "세인트키츠 네비스"
+
+#, no-c-format
+msgid "North Korea"
+msgstr "북한"
+
+#, no-c-format
+msgid "South Korea"
+msgstr "대한민국"
+
+#, no-c-format
+msgid "Kuwait"
+msgstr "쿠웨이트"
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr "케이맨 제도"
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr "카자흐스탄"
+
+#, no-c-format
+msgid "Laos"
+msgstr "라오스"
+
+#, no-c-format
+msgid "Lebanon"
+msgstr "레바논"
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr "세인트루시아"
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr "리히텐슈타인"
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr "스리랑카"
+
+#, no-c-format
+msgid "Liberia"
+msgstr "라이베리아"
+
+#, no-c-format
+msgid "Lesotho"
+msgstr "레소토"
+
+#, no-c-format
+msgid "Lithuania"
+msgstr "리투아니아"
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr "룩셈부르크"
+
+#, no-c-format
+msgid "Latvia"
+msgstr "라트비아"
+
+#, no-c-format
+msgid "Libya"
+msgstr "리비아"
+
+#, no-c-format
+msgid "Morocco"
+msgstr "모로코"
+
+#, no-c-format
+msgid "Monaco"
+msgstr "모나코"
+
+#, no-c-format
+msgid "Moldova"
+msgstr "몰도바"
+
+#, no-c-format
+msgid "Montenegro"
+msgstr "몬테네그로"
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr "생마르탱"
+
+#, no-c-format
+msgid "Madagascar"
+msgstr "마다가스카르"
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr "마셜 제도"
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr "북마케도니아"
+
+#, no-c-format
+msgid "Mali"
+msgstr "말리"
+
+#, no-c-format
+msgid "Myanmar"
+msgstr "미얀마"
+
+#, no-c-format
+msgid "Mongolia"
+msgstr "몽골"
+
+#, no-c-format
+msgid "Macao"
+msgstr "마카오(중국 특별행정구)"
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr "북마리아나제도"
+
+#, no-c-format
+msgid "Martinique"
+msgstr "마르티니크"
+
+#, no-c-format
+msgid "Mauritania"
+msgstr "모리타니"
+
+#, no-c-format
+msgid "Montserrat"
+msgstr "몬트세라트"
+
+#, no-c-format
+msgid "Malta"
+msgstr "몰타"
+
+#, no-c-format
+msgid "Mauritius"
+msgstr "모리셔스"
+
+#, no-c-format
+msgid "Maldives"
+msgstr "몰디브"
+
+#, no-c-format
+msgid "Malawi"
+msgstr "말라위"
+
+#, no-c-format
+msgid "Mexico"
+msgstr "멕시코"
+
+#, no-c-format
+msgid "Malaysia"
+msgstr "말레이시아"
+
+#, no-c-format
+msgid "Mozambique"
+msgstr "모잠비크"
+
+#, no-c-format
+msgid "Namibia"
+msgstr "나미비아"
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr "뉴칼레도니아"
+
+#, no-c-format
+msgid "Niger"
+msgstr "니제르"
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr "노퍽섬"
+
+#, no-c-format
+msgid "Nigeria"
+msgstr "나이지리아"
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr "니카라과"
+
+#, no-c-format
+msgid "Netherlands"
+msgstr "네덜란드"
+
+#, no-c-format
+msgid "Norway"
+msgstr "노르웨이"
+
+#, no-c-format
+msgid "Nepal"
+msgstr "네팔"
+
+#, no-c-format
+msgid "Nauru"
+msgstr "나우루"
+
+#, no-c-format
+msgid "Niue"
+msgstr "니우에"
+
+#, no-c-format
+msgid "New Zealand"
+msgstr "뉴질랜드"
+
+#, no-c-format
+msgid "Oman"
+msgstr "오만"
+
+#, no-c-format
+msgid "Panama"
+msgstr "파나마"
+
+#, no-c-format
+msgid "Peru"
+msgstr "페루"
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr "프랑스령 폴리네시아"
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr "파푸아뉴기니"
+
+#, no-c-format
+msgid "Philippines"
+msgstr "필리핀"
+
+#, no-c-format
+msgid "Pakistan"
+msgstr "파키스탄"
+
+#, no-c-format
+msgid "Poland"
+msgstr "폴란드"
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr "생피에르 미클롱"
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr "핏케언 제도"
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr "푸에르토리코"
+
+#, no-c-format
+msgid "Palestine"
+msgstr "팔레스타인 지구"
+
+#, no-c-format
+msgid "Portugal"
+msgstr "포르투갈"
+
+#, no-c-format
+msgid "Palau"
+msgstr "팔라우"
+
+#, no-c-format
+msgid "Paraguay"
+msgstr "파라과이"
+
+#, no-c-format
+msgid "Qatar"
+msgstr "카타르"
+
+#, no-c-format
+msgid "Réunion"
+msgstr "레위니옹"
+
+#, no-c-format
+msgid "Romania"
+msgstr "루마니아"
+
+#, no-c-format
+msgid "Serbia"
+msgstr "세르비아"
+
+#, no-c-format
+msgid "Russia"
+msgstr "러시아"
+
+#, no-c-format
+msgid "Rwanda"
+msgstr "르완다"
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr "사우디아라비아"
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr "솔로몬 제도"
+
+#, no-c-format
+msgid "Seychelles"
+msgstr "세이셸"
+
+#, no-c-format
+msgid "Sudan"
+msgstr "수단"
+
+#, no-c-format
+msgid "Sweden"
+msgstr "스웨덴"
+
+#, no-c-format
+msgid "Singapore"
+msgstr "싱가포르"
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr "세인트헬레나"
+
+#, no-c-format
+msgid "Slovenia"
+msgstr "슬로베니아"
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr "스발바르제도-얀마웬섬"
+
+#, no-c-format
+msgid "Slovakia"
+msgstr "슬로바키아"
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr "시에라리온"
+
+#, no-c-format
+msgid "San Marino"
+msgstr "산마리노"
+
+#, no-c-format
+msgid "Senegal"
+msgstr "세네갈"
+
+#, no-c-format
+msgid "Somalia"
+msgstr "소말리아"
+
+#, no-c-format
+msgid "Suriname"
+msgstr "수리남"
+
+#, no-c-format
+msgid "South Sudan"
+msgstr "남수단"
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr "상투메 프린시페"
+
+#, no-c-format
+msgid "El Salvador"
+msgstr "엘살바도르"
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr "신트마르턴"
+
+#, no-c-format
+msgid "Syria"
+msgstr "시리아"
+
+#, no-c-format
+msgid "Eswatini"
+msgstr "에스와티니"
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr "터크스 케이커스 제도"
+
+#, no-c-format
+msgid "Chad"
+msgstr "차드"
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr "프랑스령 남방 지역"
+
+#, no-c-format
+msgid "Togo"
+msgstr "토고"
+
+#, no-c-format
+msgid "Thailand"
+msgstr "태국"
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr "타지키스탄"
+
+#, no-c-format
+msgid "Tokelau"
+msgstr "토켈라우"
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr "동티모르"
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr "투르크메니스탄"
+
+#, no-c-format
+msgid "Tunisia"
+msgstr "튀니지"
+
+#, no-c-format
+msgid "Tonga"
+msgstr "통가"
+
+#, no-c-format
+msgid "Turkey"
+msgstr "튀르키예"
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr "트리니다드 토바고"
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr "투발루"
+
+#, no-c-format
+msgid "Taiwan"
+msgstr "대만"
+
+#, no-c-format
+msgid "Tanzania"
+msgstr "탄자니아"
+
+#, no-c-format
+msgid "Ukraine"
+msgstr "우크라이나"
+
+#, no-c-format
+msgid "Uganda"
+msgstr "우간다"
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr "미국령 해외 제도"
+
+#, no-c-format
+msgid "United States"
+msgstr "미국"
+
+#, no-c-format
+msgid "Uruguay"
+msgstr "우루과이"
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr "우즈베키스탄"
+
+#, no-c-format
+msgid "Vatican City"
+msgstr "바티칸 시국"
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr "세인트빈센트그레나딘"
+
+#, no-c-format
+msgid "Venezuela"
+msgstr "베네수엘라"
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr "영국령 버진아일랜드"
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr "미국령 버진아일랜드"
+
+#, no-c-format
+msgid "Vietnam"
+msgstr "베트남"
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr "바누아투"
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr "왈리스-푸투나 제도"
+
+#, no-c-format
+msgid "Samoa"
+msgstr "사모아"
+
+#, no-c-format
+msgid "Kosovo"
+msgstr "코소보"
+
+#, no-c-format
+msgid "Yemen"
+msgstr "예멘"
+
+#, no-c-format
+msgid "Mayotte"
+msgstr "마요트"
+
+#, no-c-format
+msgid "South Africa"
+msgstr "남아프리카"
+
+#, no-c-format
+msgid "Zambia"
+msgstr "잠비아"
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr "짐바브웨"
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr "백업이 완료되었습니다."
+
+msgid "Left out, being written right now:"
+msgstr "제외됨, 지금 기록 중:"
+
+msgid "Don't use"
+msgstr "사용 안 함"
+
+msgid "Not aligned"
+msgstr "정렬 안 됨"
+
+msgid "Fixed & aligned"
+msgstr "고정 및 정렬"
+
+msgid "Built-in IMU"
+msgstr "내장 IMU"
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
 msgstr ""
+"IMU가 들어 있는 계기가 영구히 고정되어 있고 그 축이 기체 축과 정렬되어 있는지입니다. 단단히 장착된 경우에만 「고정 및 정렬」로 "
+"두세요. 의심되면 「정렬 안 됨」。"
+
+#, no-c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+"XCSoar는 각 값을 공급하는 첫 기기를 사용합니다(기기 A가 B보다 앞, 이하 같음). 굵은 표시는 XCSoar가 이 기기에서 쓰는"
+" 값입니다. 굵지 않은 표시는 앞선 기기가 이미 같은 자료를 공급한다는 뜻입니다. Baro는 현재 QNH의 고도, QNE는 기압 고도,"
+" Alt IGC는 기록기가 쓰는 고도입니다. QNE와 Pressure는 같은 주변 기압이므로 더 앞선 쪽만 굵습니다. 나쁜 GPS와 1"
+"0퍼센트 미만 배터리는 컬러 화면에서 빨강, 전자 종이에서 굵게 표시됩니다."
+
+msgid "QNE"
+msgstr "QNE"
+
+msgid "Engine"
+msgstr "엔진"
+
+msgid "Set Clearance"
+msgstr "허가 설정"
+
+msgid "Revoke Clearance"
+msgstr "허가 취소"
+
+msgid "Failed to update airspace clearance"
+msgstr "공역 허가를 업데이트하지 못했습니다"
+
+msgid "Clrnc"
+msgstr "허가"
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+"등급별 필터 설정입니다. 공역에 종류(CTR, FIR, ...)와 등급이 모두 있으면 XCSoar에서는 종류가 등급보다 우선합니다.\n"
+"열:\n  보기 — 이 등급의 공역을 지도에 그립니다\n  경고 — 접근할 때와 안에서 경고를 켭니다\n  허가 — 겹치는 다른 공역의"
+" 경고를\n         누르는 허가를 허용합니다"
+
+msgid "Clearance"
+msgstr "허가"
+
+msgid "Groups"
+msgstr "그룹"
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr "목록에는 이 그룹의 정보창만 표시합니다."
+
+msgid "Share location"
+msgstr "위치 공유"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr "위"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr "오른쪽"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr "아래"
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr "왼쪽"
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr "가장자리를 누르면 정보창 영역이 그곳의 화면 경계까지 늘어납니다."
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+"정보창 영역은 정보창, 계기, 지도 오버레이, 메뉴가 쓸 수 있는 화면 부분입니다. 화면 경계까지 늘릴 가장자리를 고릅니다. 늘리지 않"
+"은 가장자리는 시스템 막대와 둥근 모서리에서 떨어집니다. 지도는 항상 화면 전체를 쓰고, 대화 상자는 안전 영역 안에 있습니다. 전체 "
+"화면일 때만 의미가 있습니다."
+
+msgid "Stretch InfoBox area"
+msgstr "정보창 영역 늘리기"
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr "정보창 영역이 화면 위쪽 끝까지 늘어나 정보창을 가리는 경우가 아니면 상태 표시줄을 표시합니다."
+
+#, no-c-format
+msgid "Visible"
+msgstr "표시"
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr "전체 화면에서도 상태 표시줄을 항상 표시합니다. 정보창은 그 뒤에 그릴 수 없어 화면 위쪽 끝에서 떨어집니다."
+
+#, no-c-format
+msgid "Hidden"
+msgstr "숨김"
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr "상태 표시줄을 표시하지 않습니다."
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+"XCSoar가 시스템 막대와 디스플레이 컷아웃 뒤까지 포함한 화면 전체를 쓰게 합니다. 지도는 그 전체를 채우고, 「정보창 영역 늘리기"
+"」가 정보창, 계기, 지도 오버레이, 메뉴가 닿을 가장자리를 정합니다."
+
+msgid "System status bar"
+msgstr "시스템 상태 표시줄"
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr "시계와 배터리 잔량이 있는 시스템 상태 표시줄을 계속 보일지 여부입니다."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr "레이더가 만료되면 경고"
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr "켜면 강수 레이더 오버레이를 새로 고치지 못해 지도에서 없앴을 때 경고를 표시합니다."
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr "짧은 변이 3.2인치 미만이면 글자 크기를 줄입니다."
+
+#, no-c-format
+msgid "Handheld"
+msgstr "손에 들고"
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr "항상 가까운 보기 크기를 사용합니다."
+
+#, no-c-format
+msgid "Panel"
+msgstr "계기판"
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr "팔 길이에서 읽는 화면을 위해 글자 크기를 그대로 둡니다."
+
+msgid "Viewing distance"
+msgstr "보는 거리"
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+"짧은 변이 3.2인치 미만이면 자동으로 글자를 줄입니다. 「손에 들고」는 항상 그 가까운 크기입니다. 「계기판」은 원래 크기를 유지합니"
+"다."
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr "위성 레이어"
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr "이 페이지가 지도 아래에 그리는 EUMETView 위성 산출물입니다."
+
+#, no-c-format
+msgid "Rain radar"
+msgstr "강수 레이더"
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr "도달 범위는 글라이더에서 직선 경로입니다. 착륙 가능지 색과 대체지 목록이 이 범위를 사용합니다."
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr "도달 범위는 지형 장애물을 돌아가는 선회를 허용해 계산합니다. 착륙 가능지 색과 대체지 목록이 이 범위를 사용합니다."
+
+#, no-c-format
+msgid "Task MC"
+msgstr "태스크 MC"
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr "태스크 맥크레디 값을 사용합니다."
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+"지형 도달 범위, 착륙 가능지 색, 중단, 대체지 목록에 쓰는 맥크레디입니다. 도달 범위 모드가 꺼져 있어도 적용됩니다. 작업선은 항상"
+" 태스크 MC를 사용합니다. 대체지 정보창과 안전 MC 고도 차는 항상 안전 MC를 사용합니다."
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr "지도에 도달 범위 오버레이가 없습니다."
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr "지면까지 활공할 수 있는 거리입니다. 도달 범위 폴라를 사용합니다."
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr "지면까지 활공하는 범위 밖을 지도에서 어둡게 합니다. 도달 범위 폴라를 사용합니다."
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr "이 비행의 일반적인 열기류 기저 고도에 아직 도착할 수 있는 활공 거리입니다. 항상 태스크 MC를 사용합니다."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr "태스크 MC로 일반적인 열기류 기저 고도까지의 작업선과, 도달 범위 폴라로 지면까지의 지형선입니다."
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr "태스크 MC로 일반적인 열기류 기저 고도까지의 작업선과, 도달 범위 폴라로 지면 너머의 음영입니다."
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+"도달 범위 폴라가 안전 MC일 때 지형 도달 범위, 착륙 가능지 색, 중단, 대체지 목록에 쓰는 맥크레디입니다. 대체지 정보창과 안전 "
+"MC 고도 차는 항상 이 값을 사용합니다. 최적 활공 속도는 영향받지 않습니다. 값이 클수록 도달 가능한 밭이 줄어듭니다."
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr "활공 폴라가 설정되지 않아 활공비를 표시할 수 없습니다. 먼저 기체를 선택하세요."
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr "각 값 옆의 활공비는 그 맥크레디 설정에서 잔잔한 공기의 최선 활공비이며, 벌레, 밸러스트, 폴라 저하를 포함합니다."
+
+#, c-format
+msgid "Active polar: %s"
+msgstr "사용 중인 폴라: %s"
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+"최적 활공 속도와 태스크 계산을 위해 시작할 때 쓰는 맥크레디입니다. 여기서 바꾸면 현재 맥크레디도 설정됩니다. 지형 도달 범위, 착륙"
+" 가능지 색, 중단, 대체지 목록은 도달 범위 폴라가 태스크 MC가 아닌 한 이 값이 아니라 도달 범위 폴라를 따릅니다."
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr "운영 체제에 설정된 시간대를 사용하고, 일광 절약 시간 전환과 다른 시간대로 이동할 때도 그것을 계속 따릅니다."
+
+#, no-c-format
+msgid "Time zone"
+msgstr "시간대"
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+"아래에서 고른 시간대를 사용합니다. XCSoar가 일광 절약 시간 규칙을 알고 전환을 스스로 적용하므로, 설정을 일 년에 두 번 고칠 "
+"필요가 없습니다."
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr "수동 UTC 오프셋"
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr "아래에 입력한 고정 UTC 오프셋을 사용합니다. 일광 절약 시간이 시작되거나 끝날 때마다 손으로 고쳐야 합니다."
+
+msgid "Local time source"
+msgstr "현지 시각 소스"
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr "XCSoar가 UTC와 현지 시각의 차이를 어디서 가져올지 선택합니다."
+
+msgid "The time zone of the airfield you are flying at."
+msgstr "비행 중인 비행장의 시간대입니다."
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+"UTC 오프셋 칸에서 UTC와 현지 시각의 차이를 지정할 수 있습니다. 다른 현지 시각 소스를 선택해도 입력한 값은 유지됩니다. 아래에"
+"는 현지 시각과 지금 적용 중인 UTC 오프셋이 표시됩니다."
+
+#, no-c-format
+msgid "UKV Model"
+msgstr "UKV 모델"
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr "영국. UKV 모델."
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr "오버레이"
+
+msgid "Revoke"
+msgstr "취소"
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr "Radar (EUMETNET OPERA)"
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr "데이터 없음"
+
+msgid "Downloading radar..."
+msgstr "레이더 다운로드 중..."
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr "레이더 영상을 새로 고치지 못해 제거했습니다. 오래된 에코를 보이지 않으려고입니다.\n\n다시 이럴 때 경고할까요?"
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr "유럽 HRV RGB"
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr "가시 0.6 µm (MTG)"
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr "적외선 10.5 µm (MTG)"
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr "트루 컬러 (MTG)"
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr "지오 컬러 (MTG)"
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr "고속 스캔 자연색"
+
+msgid "No satellite imagery here right now"
+msgstr "지금은 여기에 위성 영상이 없습니다"
+
+msgid "Countries"
+msgstr "국가"
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+"이 국가들의 파일만 표시합니다. 지도, 웨이포인트, 공역에 같은 선택이 프로필에 저장됩니다. 모든 나라에 해당하는 파일은 목록에 남습니"
+"다."
+
+msgid "Search"
+msgstr "검색"
+
+msgid "Show only the files whose name or description contains this text."
+msgstr "이름이나 설명에 이 글이 들어 있는 파일만 표시합니다."
+
+msgid "No file matches the filter."
+msgstr "필터와 일치하는 파일이 없습니다."
+
+msgid "Complete"
+msgstr "완료"
+
+msgid "Cancelled"
+msgstr "취소됨"
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr "마지막 열기류의 고도 증감을 선회 시간으로 나눈 값입니다. 작은 초는 선회 시간입니다."
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr "마지막 열기류에서 선회한 시간입니다. 작은 글자는 마지막 열기류의 평균 상승률입니다."
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+"주 값: 다음 구간의 열기류 상승률로, 현재 구간의 맥크레디와 같은 상승률에 해당합니다. 보조 값: 현재 구간의 열기류 상승률로, 다음"
+" 구간의 맥크레디와 같은 상승률에 해당합니다."
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr "안전 MC를 쓴 최선의 대체 착륙지 도착 고도입니다. 안전 도착 고도에 대한 값입니다."
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr "안전 MC를 쓴 두 번째 대체 착륙지 도착 고도입니다. 안전 도착 고도에 대한 값입니다."
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+"기압 고도 계산에 쓰는 현재 QNH입니다. 기압 센서가 있으면 아래 줄에 그 고도가 나옵니다. 정보창을 눌러 패널을 열고 QNH를 손으"
+"로 맞춥니다."
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr "속도 VMG"
+
+#, no-c-format
+msgid "V VMG"
+msgstr "V VMG"
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+"다음 웨이포인트 방향의 대지 속도 성분입니다. 곧장 향할 때는 대지 속도와 같고, 직각에서는 0이 되며, 멀어지면 음수가 됩니다. 직선"
+" 코스에서 벗어난 우회의 비용을 숫자로 보여 줍니다."
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr "바리오와 열기류"
+
+#, no-c-format
+msgid "Glide"
+msgstr "활공"
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr "속도와 자세"
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr "바람과 날씨"
+
+#, no-c-format
+msgid "Time"
+msgstr "시간"
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr "공역과 팀"
+
+#, no-c-format
+msgid "Other"
+msgstr "기타"
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr "정보창을 다른 정보창 위로 끌면 둘이 바뀝니다. 정보창을 길게 눌러 들면 그 자리의 다른 정보창을 고릅니다."
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+"Enter로 선택한 정보창을 집어 커서 키로 옮기고, Enter를 다시 눌러 놓습니다. 움직이지 않고 Enter를 두 번 누르면 그 자"
+"리의 다른 정보창을 고릅니다."
+
+msgid "Arrange InfoBoxes"
+msgstr "정보창 배치"
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr "배치\n정보창"
+
+msgid "The current wing loading, calculated from the glider's empty weight, crew weight, and ballast. Shown in red when the glider is heavier than its MTOW."
+msgstr ""
+"글라이더의 자체 중량, 승무원 중량, 밸러스트로부터 계산된 현재 날개 하중입니다. 최대 이륙 중량보다 무거우면 빨간색으로 표시됩니다."
+
+msgid "MTOW"
+msgstr "MTOW"
+
+msgid "Maximum takeoff weight of the glider."
+msgstr "글라이더의 최대 이륙 중량."
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+"탑재된 물 밸러스트, 리터. 설명에는 날개 하중이 보이며, 최대 이륙 중량보다 무거우면 빨간색입니다. 투기 중에는 값이 파란색입니다. "
+"눌러 밸러스트를 바꿉니다."
+

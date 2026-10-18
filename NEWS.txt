@@ -1,4 +1,6 @@
-Version 7.46 - not yet released
+Version 7.47 - not yet released
+
+Version 7.46 - 2026-10-19
 * highlights
   - show the current task as a QR code in the task manager, and
     import one from WeGlide or similar with the phone camera #1270
@@ -162,6 +164,12 @@ Version 7.46 - not yet released
   - inset the map overlays by the same margin as the menu, Quick Menu
     and zoom buttons
 * airspace
+  - speak airspace warnings ("Airspace near.", "Airspace above."
+    or "Airspace inside.") instead of the warning beep, with a
+    pause between "Airspace" and "near" or "above", and repeat
+    that phrase while the warning persists; English only
+  - keep Ack Day for the rest of the day, including a surrounding
+    airspace already overhead, and across a replay time jump
   - fill airspace with a transparent colour; hatch patterns and the
     Airspace transparency setting are gone
   - set Show, Warn and Clearance for each class on the airspace
@@ -169,7 +177,8 @@ Version 7.46 - not yet released
   - grant clearance on an inner airspace, such as a glider sector
     inside a restricted area. Unlike acknowledge, the warning from
     the airspace around it is suppressed while the glider stays
-    inside the sector, and sounds again on leaving it
+    inside the sector, and sounds again on leaving it, including a
+    climb that reaches the top within the warning time
   - keep airspace altitude labels readable when they would overlap #771
   - improve airspace fills and the margin around them, and keep
     overlapping borders #2479
@@ -428,6 +437,7 @@ Version 7.46 - not yet released
     polar analysis
   - open the flight setup when the vario gauge is tapped, as the
     Ballast InfoBox does. Sliding off before lifting does not open it
+  - update translations for 33 languages #3300
   - show icons on tabbed dialogs by default. Tab dialog style under
     Look → Layout still switches them back to text
   - rename Reach polar "Task" to "Task MC", matching Safety MC

@@ -9,7 +9,7 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "Task/Stats/TaskStats.hpp"
 #include "util/PrintException.hxx"
-#include "LogFileDecl.hpp"
+#include "LogFile.hpp"
 
 #include <algorithm>
 #include <array>
@@ -17,6 +17,33 @@
 #include <cstddef>
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
+
+/**
+ * One line when a warning starts or becomes more urgent. The
+ * aircraft position is where the alert was raised; the intercept is
+ * the predicted entry or exit point.
+ */
+static void
+LogAirspaceWarning(const AirspaceWarning &warning,
+                   const AircraftState &state) noexcept
+{
+  const char *kind = warning.IsInside() ? "inside" : "near";
+  const GeoPoint &here = state.location;
+  const AirspaceInterceptSolution &solution = warning.GetSolution();
+  const char *name = warning.GetAirspace().GetName();
+
+  if (solution.IsValid() && solution.location.IsValid())
+    LogFmt("Airspace warning: {} \"{}\" at {:.5f},{:.5f}"
+           " intercept {:.5f},{:.5f}",
+           kind, name,
+           here.latitude.Degrees(), here.longitude.Degrees(),
+           solution.location.latitude.Degrees(),
+           solution.location.longitude.Degrees());
+  else
+    LogFmt("Airspace warning: {} \"{}\" at {:.5f},{:.5f}",
+           kind, name,
+           here.latitude.Degrees(), here.longitude.Degrees());
+}
 
 /**
  * Stable id for NOTAM day-ack: short identifier in #GetStationName().
@@ -40,6 +67,14 @@ AirspaceWarningManager::ApplyNotamDayState(AirspaceWarning &warning) noexcept
     if (notam_day_cleared_by_station.contains(key))
       warning.SetCleared(true);
   }
+}
+
+void
+AirspaceWarningManager::ApplyRememberedDayState(AirspaceWarning &warning) noexcept
+{
+  ApplyNotamDayState(warning);
+  if (ack_day_airspaces.contains(&warning.GetAirspace()))
+    warning.AcknowledgeDay(true);
 }
 
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
@@ -77,7 +112,7 @@ AirspaceWarningManager::Reset(const AircraftState &state)
 {
   ++serial;
   warnings.clear();
-  notam_day_ack_by_station.clear();
+  /* Ack Day outlives a time jump. clear() drops it with the database. */
   notam_day_cleared_by_station.clear();
   cruise_filter.Reset(state);
   circling_filter.Reset(state);
@@ -109,7 +144,7 @@ AirspaceWarningManager::GetWarning(ConstAirspacePtr airspace)
   // not found, create new entry
   ++serial;
   warnings.emplace_back(std::move(airspace));
-  ApplyNotamDayState(warnings.back());
+  ApplyRememberedDayState(warnings.back());
   return warnings.back();
 }
 
@@ -150,7 +185,7 @@ AirspaceWarningManager::GetNewWarningPtr(ConstAirspacePtr airspace)
 {
   ++serial;
   warnings.emplace_back(airspace);
-  ApplyNotamDayState(warnings.back());
+  ApplyRememberedDayState(warnings.back());
   return &warnings.back();
 }
 
@@ -161,6 +196,11 @@ AirspaceWarningManager::Update(const AircraftState& state,
                                const bool circling,
                                const std::chrono::duration<unsigned> dt)
 {
+  last_location = state.location;
+  last_altitude = state.altitude;
+  last_altitude_agl = state.altitude_agl;
+  last_vario = state.vario;
+
   bool changed = false;
 
   // update warning states
@@ -192,8 +232,11 @@ AirspaceWarningManager::Update(const AircraftState& state,
   // action changes
   for (auto it = warnings.begin(), end = warnings.end(); it != end;) {
     if (it->WarningLive(config.acknowledgement_time, dt)) {
-      if (it->ChangedState())
+      if (it->ChangedState()) {
         changed = true;
+        if (it->IsActive())
+          LogAirspaceWarning(*it, state);
+      }
 
       it++;
     } else {
@@ -617,11 +660,94 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 }
 
 void
+AirspaceWarningManager::Resort() noexcept
+{
+  warnings.sort();
+}
+
+bool
+AirspaceWarningManager::CoverOutsideAirspaces() noexcept
+{
+  if (!last_location.IsValid())
+    return false;
+
+  bool covered = false;
+  for (const auto &cleared : warnings) {
+    if (!cleared.IsCleared())
+      continue;
+    if (!cleared.GetAirspace().Inside(last_location))
+      continue;
+
+    /* The top is a boundary even though the horizontal distance is
+       zero. Warn once the climb reaches it within the warning time. */
+    AltitudeState alt_state{};
+    alt_state.altitude = last_altitude;
+    alt_state.altitude_agl = last_altitude_agl;
+    const double top = cleared.GetAirspace().GetTopAltitude(alt_state);
+    if (last_altitude >= top)
+      continue;
+    if (last_vario > 0 &&
+        (top - last_altitude) / last_vario <=
+        double(config.warning_time.count()))
+      continue;
+
+    for (auto &other : warnings) {
+      if (&other == &cleared || other.IsCleared() ||
+          other.IsCoveredByClearance() || !other.IsWarning())
+        continue;
+      /* A boundary ahead is the exit from the clearance. Silence
+         only an airspace that already contains the aircraft and has
+         no horizontal distance. The cleared area's centre is the
+         wrong test: a large polygon can stick out of the airspace
+         above the aircraft. */
+      const auto &sol = other.GetSolution();
+      if (!sol.IsValid() || sol.distance > 0)
+        continue;
+      if (!other.GetAirspace().Inside(last_location))
+        continue;
+      other.SetCoveredByClearance(true);
+      covered = true;
+    }
+  }
+  return covered;
+}
+
+bool
+AirspaceWarningManager::AckOutsideAirspaces(const AbstractAirspace &acked) noexcept
+{
+  if (!last_location.IsValid())
+    return false;
+
+  if (!acked.Inside(last_location))
+    return false;
+
+  bool changed = false;
+  for (auto &other : warnings) {
+    if (&other.GetAirspace() == &acked || other.GetAckDay() ||
+        !other.IsWarning())
+      continue;
+    const auto &sol = other.GetSolution();
+    if (!sol.IsValid() || sol.distance > 0)
+      continue;
+    if (!other.GetAirspace().Inside(last_location))
+      continue;
+    other.AcknowledgeDay(true);
+    ack_day_airspaces.insert(&other.GetAirspace());
+    changed = true;
+  }
+  return changed;
+}
+
+void
 AirspaceWarningManager::Acknowledge(ConstAirspacePtr airspace) noexcept
 {
   auto *w = GetWarningPtr(*airspace);
-  if (w != nullptr)
-    w->Acknowledge();
+  if (w == nullptr || !w->IsActive())
+    return;
+
+  w->Acknowledge();
+  Resort();
+  ++serial;
 }
 
 void
@@ -640,8 +766,11 @@ AirspaceWarningManager::AcknowledgeWarning(ConstAirspacePtr airspace,
 
   const bool was_acknowledged = warning->IsWarningAcknowledged();
   warning->AcknowledgeWarning(set);
-  if (warning->IsWarningAcknowledged() != was_acknowledged)
-    ++serial;
+  if (warning->IsWarningAcknowledged() == was_acknowledged)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 void
@@ -660,14 +789,18 @@ AirspaceWarningManager::AcknowledgeInside(ConstAirspacePtr airspace,
 
   const bool was_acknowledged = warning->IsInsideAcknowledged();
   warning->AcknowledgeInside(set);
-  if (warning->IsInsideAcknowledged() != was_acknowledged)
-    ++serial;
+  if (warning->IsInsideAcknowledged() == was_acknowledged)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 void
 AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
                                        const bool set)
 {
+  const AbstractAirspace *const raw = airspace.get();
   const char *const key = NotamDayAckKey(*airspace);
   const std::string_view key_view =
     key != nullptr ? std::string_view{key} : std::string_view{};
@@ -713,8 +846,33 @@ AirspaceWarningManager::AcknowledgeDay(ConstAirspacePtr airspace,
     ack_changed = warning->GetAckDay() != was_acknowledged;
   }
 
-  if (membership_changed || ack_changed)
-    ++serial;
+  if (raw != nullptr) {
+    if (set)
+      ack_day_airspaces.insert(raw);
+    else
+      ack_day_airspaces.erase(raw);
+  }
+  if (key != nullptr) {
+    for (const auto &candidate : warnings) {
+      const char *const candidate_key =
+        NotamDayAckKey(candidate.GetAirspace());
+      if (candidate_key == nullptr || key_view != candidate_key)
+        continue;
+      if (set)
+        ack_day_airspaces.insert(&candidate.GetAirspace());
+      else
+        ack_day_airspaces.erase(&candidate.GetAirspace());
+    }
+  }
+
+  const bool outside = set && raw != nullptr &&
+    AckOutsideAirspaces(*raw);
+
+  if (!membership_changed && !ack_changed && !outside)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 bool
@@ -723,6 +881,9 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const noexce
   if (const char *key = NotamDayAckKey(airspace);
       key != nullptr &&
       notam_day_ack_by_station.contains(key))
+    return true;
+
+  if (ack_day_airspaces.contains(&airspace))
     return true;
 
   const AirspaceWarning *warning = GetWarningPtr(airspace);
@@ -763,11 +924,16 @@ AirspaceWarningManager::SetCleared(ConstAirspacePtr airspace,
     flag_changed = true;
   }
 
+  const bool covered = set && CoverOutsideAirspaces();
+
   // The renderer fill cache keys on the manager serial; without this
   // bump, toggling clearance on an existing warning would not refresh
   // the cached fill on the non-GL renderer.
-  if (membership_changed || flag_changed)
-    ++serial;
+  if (!membership_changed && !flag_changed && !covered)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 bool
@@ -791,10 +957,21 @@ AirspaceWarningManager::IsActive(const AbstractAirspace &airspace) const noexcep
 void
 AirspaceWarningManager::AcknowledgeAll()
 {
+  bool changed = false;
   for (auto &w : warnings) {
+    if (!w.IsActive())
+      continue;
+
     w.AcknowledgeWarning(true);
     w.AcknowledgeInside(true);
+    changed = true;
   }
+
+  if (!changed)
+    return;
+
+  Resort();
+  ++serial;
 }
 
 namespace {
@@ -1231,4 +1408,6 @@ AirspaceWarningManager::ProcessClearanceIntervals(
     if (!apply_nearest(w, residuals.data(), n_res, false))
       w.SetCoveredByClearance(true);
   }
+
+  CoverOutsideAirspaces();
 }
