@@ -2081,9 +2081,11 @@ msgstr "Σύνολο InfoBox πάστες"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"Η αντιγραφή θυμάται όλα τα InfoBox αυτού του συνόλου, η επικόλληση αντικαθι"
+"στά με αυτά τα InfoBox άλλου συνόλου."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "Κληρονόμηση από τις γενικές ρυθμίσεις"
 
 msgid "Invalid"
 msgstr "Αριθμητικά λάθη"
@@ -2770,17 +2772,18 @@ msgstr "Σχόλια"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "Σταθερό κείμενο"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
 msgstr ""
+"Τίτλος, τιμή και σχόλιο που εισήγαγε ο χειριστής. Αγγίξτε για επεξεργασία."
 
 msgid "Title"
-msgstr ""
+msgstr "Τίτλος"
 
 msgid "Value"
-msgstr ""
+msgstr "Τιμή"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4463,10 +4466,10 @@ msgid "Reference used for start max height rule."
 msgstr "Αναφέρεται για την αρχική περιοχή ωρολόγιας μέγιστης."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "Πλοήγηση στο πλησιέστερο σημείο"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "Πλοηγεί στο πλησιέστερο σημείο των ζωνών εκκίνησης και τερματισμού."
 
 msgid "Finish min. height"
 msgstr "Μέγιστη ωρολόγια βάθους"
@@ -11099,21 +11102,23 @@ msgstr "Χειροκίνητα"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "Οξυγόνο αίματος"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "Κορεσμός οξυγόνου αίματος σε ποσοστό, από παλμικό οξύμετρο Bluetooth."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "Πρόσφατα χρησιμοποιημένα σημεία διαδρομής"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
 msgstr ""
+"Συνδεθείτε στο Wi-Fi της συσκευής για να κατεβάσετε τις πτήσεις από αυτό το"
+" FLARM."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "Καθορίζει αν το ίχνος μετατοπίζεται με τον άνεμο όταν εμφανίζεται σε λειτουργία κύκλων σε κοντινές κλίμακες χάρτη. Απενεργοποιημένο, το ίχνος μένει χωρίς αντιστάθμιση ολίσθησης ανέμου. Στην περιδίνηση ισχύει και για την προβαλλόμενη καμπύλη πορείας: Ενεργό τη διατηρεί ως προς την αέρια μάζα· Ανενεργό περιλαμβάνει τον άνεμο."
 
@@ -11149,20 +11154,22 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "Ενεργοποιεί το ραντάρ κυκλοφορίας και επιλέγει τη θέση του στην κύρια οθόνη. Η κατεύθυνση της διέξοδου του στόχου από σημείο προορισμού εμφανίζεται ως βολβό, και ένα τρίγωνο πάνω ή κάτω δείχνει τη σχετική ανύψωση του στόχου σε σχέση με τον χρήστη. Σε όλα τα προγράμματα, η χρώμα του στόχου δείχνει το επίπεδο της απεικόνισης."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "Ανάλυση οθόνης"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "Φωτεινότητα οθόνης"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "Ρύθμιση της φωτεινότητας οθόνης."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
 msgstr ""
+"Η φωτεινότητα οθόνης είναι μόνο για ανάγνωση, γιατί η εγγραφή απαιτεί πρόσθ"
+"ετα δικαιώματα."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "Αυτόματα"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -11177,10 +11184,10 @@ msgstr "Αυτό καθορίζει την περιποίηση που χρησ�
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "Προορισμοί αναπληρωμής: Αυτόματα"
 
 msgid "Paste"
-msgstr ""
+msgstr "Επικόλληση"
 
 #, c-format
 msgid ""
@@ -11284,105 +11291,126 @@ msgid "%u min"
 msgstr "%u λεπ."
 
 msgid "No supported services found"
-msgstr ""
+msgstr "Δεν βρέθηκαν υποστηριζόμενες υπηρεσίες"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "Δεν είναι εγκατεστημένες οι επιλεγμένες μονάδες systemd."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "Μη διαθέσιμο"
 
 msgid "Starting..."
-msgstr ""
+msgstr "Εκκίνηση..."
 
 msgid "Stopping..."
 msgstr "Διακοπή…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "Επαναφόρτωση..."
 
 msgid "Failed"
-msgstr ""
+msgstr "Απέτυχε"
 
 msgid "Turn on"
-msgstr ""
+msgstr "Ενεργοποίηση"
 
 msgid "Restart"
-msgstr ""
+msgstr "Επανεκκίνηση"
 
 msgid "Turn off"
-msgstr ""
+msgstr "Απενεργοποίηση"
 
 msgid "System service"
-msgstr ""
+msgstr "Υπηρεσία συστήματος"
 
 msgid "SSH server"
-msgstr ""
+msgstr "Διακομιστής SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "Απομακρυσμένη πρόσβαση τερματικού"
 
 msgid "Sensors"
-msgstr ""
+msgstr "Αισθητήρες"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "Υπηρεσία αισθητήρων OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "Ακουστικό βαριόμετρο"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "Υπηρεσία ακουστικού βαριομέτρου OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "Μέγιστη θερμοκρασία από την πρόγνωση"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"Συμπληρώνει τη μέγ. θερμοκρασία στη ρύθμιση πτήσης από την πρόγνωση DWD της"
+" ημέρας για τον πλησιέστερο σταθμό MOSMIX. Χρειάζεται θέση και λαμβάνεται μ"
+"ία φορά την ημέρα· χωρίς λογαριασμό."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"Η μέγιστη θερμοκρασία εδάφους της ημέρας. Μια ξηρή αδιαβατική από αυτήν ως "
+"προς την εξωτερική θερμοκρασία που μετρήθηκε στην άνοδο δίνει το εκτιμώμενο"
+" ταβάνι θερμικού· η βάση νεφών χρειάζεται και αισθητήρα υγρασίας. Και τα δύ"
+"ο σχεδιάζονται στη σελίδα ίχνους θερμοκρασίας του διαλόγου Ανάλυση, μόλις τ"
+"ο ανεμόπτερο διασχίσει το στρώμα."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC διαδρομής κατά την εκκίνηση"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "Λόγος ολίσθησης του ασφαλούς Mc"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "Προφορικές προειδοποιήσεις"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"Εκφωνεί τους συναγερμούς σύγκρουσης του FLARM, με τον επείγοντα χαρακτήρα, "
+"τη θέση ρολογιού και αν η κίνηση είναι πάνω ή κάτω: \"Traffic urgent! Three"
+" o'clock. Above.\" Οι συναγερμοί εμποδίων και ζώνης συναγερμού δεν εκφωνούν"
+"ται."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "Δοκιμή προφορικής προειδοποίησης"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "Διακόπτης διατάξεων ταχύτητας"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "Πώς το XCSoar χρησιμοποιεί την αναφορά πορείας/ανόδου του βαριομέτρου."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "Λειτουργία πτήσης"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"Κατά την πτήση, η αναφορά πορείας/ανόδου του βαριομέτρου είναι η λειτουργία"
+" πτήσης. Η πορεία τερματίζει την άνοδο και ξεκινά τον μέσο όρο από την αρχή"
+". Η άνοδος ξεκινά νέο θερμικό. Η τελική πορεία μπορεί ακόμη να εμφανίζεται "
+"στην πορεία. Σε Vega αυτή είναι η έξοδος κυκλώματος."
 
 msgid "Display mode"
-msgstr ""
+msgstr "Λειτουργία οθόνης"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
 msgstr ""
+"Το XCSoar κρίνει το κύκλωμα από τη στροφή. Η αναφορά του βαριομέτρου δεν χρ"
+"ησιμοποιείται."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"Η σελίδα αλλάζει και η λειτουργία πτήσης όχι. Η πορεία δείχνει τη σελίδα πο"
+"ρείας, και κατά τη στροφή, και κρύβει την τελική πορεία. Η άνοδος δείχνει τ"
+"η σελίδα βαριο. Σε Vega αυτός είναι ο διακόπτης διατάξεων ταχύτητας."
 
 #, no-c-format
 msgid "System Tools"
@@ -11408,71 +11436,87 @@ msgstr "Δοκιμασία XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "Στατιστικά εμβέλειας"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "Κεραία"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "Το FLARM κρατά στατιστικά για καθένα από τα δύο ραδιοκανάλια του."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "Σημεία δεδομένων"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "Περίοδος"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "Εμβέλεια FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "Το FLARM δεν έστειλε τα στατιστικά εμβέλειας."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"Επαναφορά των στατιστικών εμβέλειας; Κάντε το μετά από αλλαγή κεραιών· το F"
+"LARM τα συλλέγει ξανά."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "Το FLARM δεν επιβεβαίωσε τον μηδενισμό."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "Κάτω από την ελάχιστη εμβέλεια"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Μετρημένοι τομείς αυτού του καναλιού των οποίων η μέση εμβέλεια είναι μικρό"
+"τερη από το ελάχιστο του FLARM: 2 nm μπροστά, 1 nm στα πλάγια και πίσω. Ελέ"
+"γξτε την εγκατάσταση της κεραίας."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "Ρύθμιση εμβέλειας"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"Το FLARM δεν αναφέρει αεροσκάφη πέρα από αυτή την απόσταση. Το γράφημα τη δ"
+"είχνει ως διακεκομμένο κύκλο όταν είναι μέσα στην απεικονιζόμενη εμβέλεια."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "Απεριόριστη"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"Επαφές με άλλα αεροσκάφη FLARM εν πτήσει, μετρημένες μία φορά σε κάθε τομέα"
+" που πέρασαν, με τη μεγαλύτερη απόσταση λήψης εκεί. Ο τομέας δείχνει τον μέ"
+"σο όρο του μεγαλύτερου μισού αυτών των αποστάσεων, η γραμμή κατά πλάτος τη "
+"μεγαλύτερη."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"Μετρημένοι τομείς των οποίων η εκτιμώμενη εμβέλεια είναι μικρότερη από το ε"
+"λάχιστο του FLARM: 2 nm μπροστά, 1 nm στα πλάγια και πίσω. Ελέγξτε την εγκα"
+"τάσταση της κεραίας."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"Επαναφορά της εκτίμησης εμβέλειας; Κάντε το μετά από αλλαγή κεραίας· το XCS"
+"oar τη συλλέγει ξανά."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "Εκτίμηση εμβέλειας FLARM"
