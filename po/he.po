@@ -2113,9 +2113,11 @@ msgstr "כותרות תיבות מידע"
 
 msgid "Copy remembers all InfoBoxes of this set, Paste replaces the InfoBoxes of another set with them."
 msgstr ""
+"העתק זוכר את כל תיבות המידע של ערכה זו, הדבק מחליף בהן את תיבות המידע של ער"
+"כה אחרת."
 
 msgid "Inherit from global settings"
-msgstr ""
+msgstr "ירושה מההגדרות הכלליות"
 
 msgid "Invalid"
 msgstr "חסר תוקף"
@@ -2836,17 +2838,17 @@ msgstr "הערה"
 
 #, no-c-format
 msgid "Fixed text"
-msgstr ""
+msgstr "טקסט קבוע"
 
 #, no-c-format
 msgid "Title, value and comment entered by the pilot. Tap to edit."
-msgstr ""
+msgstr "כותרת, ערך והערה שהזין הטייס. גע כדי לערוך."
 
 msgid "Title"
-msgstr ""
+msgstr "כותרת"
 
 msgid "Value"
-msgstr ""
+msgstr "ערך"
 
 msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
@@ -4430,10 +4432,10 @@ msgid "Reference used for start max height rule."
 msgstr "הבסיס משמש עבור חוק maksימלי של הגובה של התחלה."
 
 msgid "Navigate to nearest point"
-msgstr ""
+msgstr "נווט אל הנקודה הקרובה"
 
 msgid "Navigate to the nearest point of the start and finish zones."
-msgstr ""
+msgstr "נווט אל הנקודה הקרובה באזורי הזינוק והסיום."
 
 msgid "Finish min. height"
 msgstr "הגובה המינימלי הסופי"
@@ -10878,21 +10880,21 @@ msgstr "ידנית"
 
 #, no-c-format
 msgid "Blood Oxygen"
-msgstr ""
+msgstr "חמצן בדם"
 
 #, no-c-format
 msgid "SpO2"
-msgstr ""
+msgstr "SpO2"
 
 #, no-c-format
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
-msgstr ""
+msgstr "ריווי חמצן בדם באחוזים, ממד חמצן דופק Bluetooth."
 
 msgid "Recently used waypoints"
-msgstr ""
+msgstr "נ\"צ ששימשו לאחרונה"
 
 msgid "Connect to the device Wi-Fi to download flights from this FLARM."
-msgstr ""
+msgstr "התחבר ל-Wi-Fi של המכשיר כדי להוריד טיסות מ-FLARM זה."
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr "קובע האם עקבת החילזון נסחפת עם הרוח כשהיא מוצגת במצב הקפה בקני מידה קרובים של המפה. כבוי — העקבה נשארת ללא פיצוי על סחיפת רוח. בהקפה זה חל גם על עקומת המסלול המוקרנת: פועל שומר אותה ביחס למסת האוויר; כבוי כולל את הרוח."
 
@@ -10928,20 +10930,20 @@ msgid "Enable the traffic radar and choose its position on the main screen. The 
 msgstr "מפעיל את מכ״ם התנועה ובוחר את מיקומו במסך הראשי. כיוון המסלול של המטרה יחסית לכיוון המסלול של המטוס מוצג כראש חץ, ומשולש הפונה למעלה או למטה מציג את הגובה היחסי של המטרה ביחס אליך. בכל המצבים, צבע המטרה מציין את רמת האיום."
 
 msgid "Display resolution"
-msgstr ""
+msgstr "רזולוציית מסך"
 
 msgid "Screen brightness"
-msgstr ""
+msgstr "בהירות מסך"
 
 msgid "Adjust the screen brightness."
-msgstr ""
+msgstr "כוונון בהירות המסך."
 
 msgid "Screen brightness is read-only because writing requires additional permissions."
-msgstr ""
+msgstr "בהירות המסך לקריאה בלבד, כי כתיבה דורשת הרשאות נוספות."
 
 #, no-c-format
 msgid "Auto"
-msgstr ""
+msgstr "אוטו"
 
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
@@ -10956,10 +10958,10 @@ msgstr "זה קובע את הביצועים של הגלאישה שנמשכים �
 #, no-c-format
 msgctxt "Button"
 msgid "Alternate Mode: Auto"
-msgstr ""
+msgstr "מצב אלטרנטיבי: אוטו"
 
 msgid "Paste"
-msgstr ""
+msgstr "הדבק"
 
 #, c-format
 msgid ""
@@ -11063,105 +11065,118 @@ msgid "%u min"
 msgstr "%u דק׳"
 
 msgid "No supported services found"
-msgstr ""
+msgstr "לא נמצאו שירותים נתמכים"
 
 msgid "No selected systemd units are installed."
-msgstr ""
+msgstr "יחידות systemd שנבחרו אינן מותקנות."
 
 msgid "Unavailable"
-msgstr ""
+msgstr "לא זמין"
 
 msgid "Starting..."
-msgstr ""
+msgstr "מפעיל..."
 
 msgid "Stopping..."
 msgstr "עוצר…"
 
 msgid "Reloading..."
-msgstr ""
+msgstr "טוען מחדש..."
 
 msgid "Failed"
-msgstr ""
+msgstr "נכשל"
 
 msgid "Turn on"
-msgstr ""
+msgstr "הפעל"
 
 msgid "Restart"
-msgstr ""
+msgstr "אתחל מחדש"
 
 msgid "Turn off"
-msgstr ""
+msgstr "כבה"
 
 msgid "System service"
-msgstr ""
+msgstr "שירות מערכת"
 
 msgid "SSH server"
-msgstr ""
+msgstr "שרת SSH"
 
 msgid "Remote terminal access"
-msgstr ""
+msgstr "גישת מסוף מרחוק"
 
 msgid "Sensors"
-msgstr ""
+msgstr "חיישנים"
 
 msgid "OpenVario sensor daemon"
-msgstr ""
+msgstr "שירות חיישנים של OpenVario"
 
 msgid "Audio vario"
-msgstr ""
+msgstr "ואריו חשמלי"
 
 msgid "OpenVario audio vario daemon"
-msgstr ""
+msgstr "שירות ואריו חשמלי של OpenVario"
 
 #, no-c-format
 msgid "Max. temp. from forecast"
-msgstr ""
+msgstr "טמפרטורה מרבית מהתחזית"
 
 #, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
 msgstr ""
+"ממלא את הטמפרטורה המרבית בהגדרת הטיסה מתחזית DWD של היום לתחנת MOSMIX הקרוב"
+"ה. נדרש מיקום, וההורדה פעם ביום; בלי חשבון."
 
 #, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
 msgstr ""
+"הטמפרטורה המרבית של הקרקע באותו יום. אדיאבטה יבשה ממנה אל טמפרטורת החוץ שנמ"
+"דדה בטיפוס נותנת את תקרת התרמיקה המשוערת; לבסיס הענן נדרש גם חיישן לחות. שנ"
+"יהם מצוירים בדף עקבות הטמפרטורה בדו-שיח ניתוח, אחרי שהדאון חצה את השכבה."
 
 #, no-c-format
 msgid "Startup Task MC"
-msgstr ""
+msgstr "MC של המשימה בהפעלה"
 
 #, no-c-format
 msgid "Safety MC GR"
-msgstr ""
+msgstr "ערך גלישה של בטיחות MC"
 
 msgid "Spoken alerts"
-msgstr ""
+msgstr "אזהרות מושמעות"
 
 msgid "Speak the collision alarms of FLARM, with the urgency, the clock position and whether the traffic is above or below: \"Traffic urgent! Three o'clock. Above.\" Obstacle and alert zone alarms are not spoken."
 msgstr ""
+"מקריא את אזעקות ההתנגשות של FLARM, עם הדחיפות, מיקום השעון והאם התנועה מעל "
+"או מתחת: \"Traffic urgent! Three o'clock. Above.\" אזעקות מכשול ואזור התרעה"
+" אינן מוקראות."
 
 msgid "Test spoken alert"
-msgstr ""
+msgstr "בדוק אזהרה מושמעת"
 
 msgid "Speed command switch"
-msgstr ""
+msgstr "מתג פקודת מהירות"
 
 msgid "How XCSoar uses the variometer's cruise/climb report."
-msgstr ""
+msgstr "כיצד XCSoar משתמש בדיווח הדאייה/טיפוס של הואריומטר."
 
 msgid "Flight mode"
-msgstr ""
+msgstr "מצב טיסה"
 
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
 msgstr ""
+"בטיסה, דיווח הדאייה/טיפוס של הואריומטר הוא מצב הטיסה. דאייה מסיימת את הטיפו"
+"ס ומתחילה את הממוצע מחדש. טיפוס מתחיל תרמיקה חדשה. גלישה סופית עדיין יכולה "
+"להופיע בדאייה. ב-Vega זהו פלט המעגל."
 
 msgid "Display mode"
-msgstr ""
+msgstr "מצב תצוגה"
 
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
+msgstr "XCSoar קובע את מצב המעגל לפי הפנייה. דיווח הואריומטר אינו בשימוש."
 
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
 msgstr ""
+"הדף משתנה ומצב הטיסה לא. דאייה מציגה את דף הדאייה, גם בפנייה, ומסתירה את הג"
+"לישה הסופית. טיפוס מציג את דף הואריו. ב-Vega זהו מתג פקודת המהירות."
 
 #, no-c-format
 msgid "System Tools"
@@ -11187,71 +11202,82 @@ msgstr "משימת XCSoar"
 
 #, no-c-format
 msgid "Range statistics"
-msgstr ""
+msgstr "סטטיסטיקת טווח"
 
 #, no-c-format
 msgid "Antenna"
-msgstr ""
+msgstr "אנטנה"
 
 #, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
-msgstr ""
+msgstr "FLARM שומר סטטיסטיקה לכל אחד משני ערוצי הרדיו שלו."
 
 #, no-c-format
 msgid "Data points"
-msgstr ""
+msgstr "נקודות נתונים"
 
 #, no-c-format
 msgid "Period"
-msgstr ""
+msgstr "תקופה"
 
 #, no-c-format
 msgid "FLARM range"
-msgstr ""
+msgstr "טווח FLARM"
 
 #, no-c-format
 msgid "The FLARM did not send its range statistics."
-msgstr ""
+msgstr "FLARM לא שלח את סטטיסטיקת הטווח."
 
 #, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
 msgstr ""
+"לאתחל את סטטיסטיקת הטווח? עשה זאת אחרי החלפת אנטנות; FLARM יאסוף אותה מחדש."
 
 #, no-c-format
 msgid "The FLARM did not confirm the reset."
-msgstr ""
+msgstr "FLARM לא אישר את האתחול."
 
 #, no-c-format
 msgid "Below minimum range"
-msgstr ""
+msgstr "מתחת לטווח המזערי"
 
 #, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"סקטורים שנמדדו בערוץ זה, שהטווח הממוצע שלהם קצר ממינימום FLARM: 2 nm קדימה,"
+" 1 nm לצדדים ולאחור. בדוק את התקנת האנטנה."
 
 #, no-c-format
 msgid "Range setting"
-msgstr ""
+msgstr "הגדרת טווח"
 
 #, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
 msgstr ""
+"FLARM אינו מדווח על כלי טיס מעבר למרחק זה. התרשים מציג אותו כמעגל מקווקו כש"
+"הוא בתוך הטווח המצויר."
 
 #, no-c-format
 msgid "Unlimited"
-msgstr ""
+msgstr "בלתי מוגבל"
 
 msgid "Contacts with other FLARM aircraft in flight, counted once in every sector they passed, with the largest distance they were received at there.  The sector shows the mean of the larger half of these distances, the line across it the largest one."
 msgstr ""
+"מגעים עם כלי טיס FLARM אחרים בטיסה, נספרים פעם אחת בכל סקטור שעברו, במרחק ה"
+"גדול ביותר שבו התקבלו שם. הסקטור מציג את ממוצע החצי הגדול של המרחקים, והקו "
+"לרוחבו את הגדול ביותר."
 
 #, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
 msgstr ""
+"סקטורים שנמדדו, שהטווח המוערך שלהם קצר ממינימום FLARM: 2 nm קדימה, 1 nm לצד"
+"דים ולאחור. בדוק את התקנת האנטנה."
 
 #, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
 msgstr ""
+"לאתחל את הערכת הטווח? עשה זאת אחרי החלפת האנטנה; XCSoar יאסוף אותה מחדש."
 
 #, no-c-format
 msgid "FLARM range estimate"
-msgstr ""
+msgstr "הערכת טווח FLARM"
