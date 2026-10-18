@@ -1084,9 +1084,6 @@ msgstr "Siųsti deklaraciją"
 msgid "Reading flight list"
 msgstr "Peržiūrėti lango sąrašą"
 
-msgid "Downloading flight log"
-msgstr "Atsisiųsti lango žurnalą"
-
 #, no-c-format
 msgid "Disabled"
 msgstr "Išjungta"
@@ -1101,6 +1098,7 @@ msgstr "BLE portas"
 msgid "Bluetooth server"
 msgstr "Bluetooth serveris"
 
+#, no-c-format
 msgid "Built-in GPS & sensors"
 msgstr "Integruotas GPS ir sensoriai"
 
@@ -1744,6 +1742,7 @@ msgstr "ADSB vertikalus intervalas"
 msgid "Ack Day"
 msgstr "Patvirtinimo diena"
 
+#, no-c-format
 msgid "Settings"
 msgstr "Nustatymai"
 
@@ -1785,9 +1784,6 @@ msgstr "Užkurti atminties pranešimą"
 #, no-c-format
 msgid "Airspace"
 msgstr "Oro erdve"
-
-msgid "Select Pattern"
-msgstr "Pasirinkite šabloną"
 
 msgid "Squawk code"
 msgstr "Skuokimo kodas"
@@ -1843,9 +1839,6 @@ msgstr "Keisti ploto spalvą"
 
 msgid "Change Fill Color"
 msgstr "Keisti užpildos spalvą"
-
-msgid "Change Fill Brush"
-msgstr "Pakeisti užpildymo žvilgsnį"
 
 msgid "Border Width"
 msgstr "Krepšinio plotis"
@@ -1942,6 +1935,7 @@ msgstr "Komandos"
 msgid "All masses loaded to the glider beyond the empty weight including pilot and copilot, but not water ballast."
 msgstr "Glideryje įkilti visi masės, išskyrus tuščią greičio būseną, įskaitant piloto ir paskutinio keliavimo operatorio, bet ne vandens balastą."
 
+#, no-c-format
 msgid "Ballast"
 msgstr "Balastas"
 
@@ -1967,9 +1961,6 @@ msgstr "Teritorinės sritis apmokymo duomenys barometriniam augstumu kalibavimui
 
 msgid "Max. temp."
 msgstr "Maksimalus temperatūras"
-
-msgid "Set to forecast ground temperature. Used by convection estimator (temperature trace page of Analysis dialog)."
-msgstr "Nustatyti prognozuotą šiaurės žemyno temperatūrą. Naudojamas konvekcijos skaičiavime (Analizės dialogo temperatūros grafikas)."
 
 #, no-c-format
 msgid "Orientation"
@@ -2027,10 +2018,6 @@ msgid "Gauges"
 msgstr "Indikatoriai"
 
 #, no-c-format
-msgid "Task Defaults"
-msgstr "Užduoties numatyti reikšmės"
-
-#, no-c-format
 msgid "Look"
 msgstr "Konfigūracijos pakeitimai išsaugoti. Pradėkite XCSoar iš naujo, kad įveikti pakeitimų."
 
@@ -2040,14 +2027,8 @@ msgstr "Ekspertas"
 msgid "Configuration"
 msgstr "Nustatymai"
 
-msgid "The name of this InfoBox panel configuration."
-msgstr "Šios InfoBox skydelio konfigūracijos pavadinimas."
-
 msgid "InfoBox"
 msgstr "Informacijos blokas"
-
-msgid "Content"
-msgstr "Turinys"
 
 msgid "Copy Set"
 msgstr "Kopijuoti nustatymus"
@@ -2159,6 +2140,7 @@ msgstr "Kompanijos kodas"
 msgid "Task Calc"
 msgstr "Užduoties skaičiavimas"
 
+#, no-c-format
 msgid "Analysis"
 msgstr "Analizė"
 
@@ -2195,6 +2177,7 @@ msgstr "Užduoties greitis"
 msgid "Warnings"
 msgstr "Ataskaitos"
 
+#, no-c-format
 msgid "Checklist"
 msgstr "Sklandymo patikrinimas"
 
@@ -2401,12 +2384,14 @@ msgstr "Neteisingas slaptažodis."
 msgid "Enter a new password"
 msgstr "Įvesti naują slaptažodį"
 
+#, no-c-format
 msgid "Status"
 msgstr "Statusas"
 
 msgid "Flight"
 msgstr "Lėktuvinis laikas"
 
+#, no-c-format
 msgid "System"
 msgstr "Sistemos informacija"
 
@@ -2424,9 +2409,6 @@ msgstr "Šaltinio mažuma"
 
 msgid "Near"
 msgstr "Kiekvienas"
-
-msgid "Share"
-msgstr "Sužinoti"
 
 #, no-c-format
 msgid "Disconnected"
@@ -2661,6 +2643,7 @@ msgstr "Eiti į"
 msgid "Pan To"
 msgstr "Perkelė per"
 
+#, no-c-format
 msgid "Waypoint"
 msgstr "Maršruto taškas"
 
@@ -2945,12 +2928,6 @@ msgstr "Oro erdvinis režimas"
 
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Nurodo, kaip narys užpildytas oro erdvė."
-
-msgid "Airspace transparency"
-msgstr "Oro erdvės transparencija"
-
-msgid "If enabled, then airspaces are filled transparently."
-msgstr "Jei įjungta, tada oro erdvės narys užpildys transparantu."
 
 #, no-c-format
 msgid "Disable final glide bar."
@@ -3269,16 +3246,6 @@ msgstr ""
 "aukštiniai naudojami visose navigacines funkcijose. Kitu atveju naudojamas "
 "GPS aukštis."
 
-msgid "Flap forces cruise"
-msgstr "Flapiai sklandymui"
-
-msgid ""
-"When Vega variometer is connected and this option is true, the positive flap "
-"setting switches the flight mode between circling and cruise."
-msgstr ""
-"Jei yra prisijungtas Vega variometras ir ši parinktis įjungta, teigiama "
-"flapio nustatymas pakeičia laikotarpį tarp kringlių ir sklandymo."
-
 #, no-c-format
 msgid "Preferred period for paragliders."
 msgstr "Prenumeruotas laikotarpis parašklydžiamams."
@@ -3354,6 +3321,8 @@ msgstr "Teksto dydis"
 msgid "The display resolution is used to adapt line widths, font size, landable size and more."
 msgstr "Naudotojo įrašo resoliucija naudojama, kad aptiktų linijų plotus, šriftinės dydžio ir ledo dydžio."
 
+#. the Kobo has no time zone configuration which we could follow
+#, no-c-format
 msgid "Automatic"
 msgstr "Automatinis"
 
@@ -3414,90 +3383,6 @@ msgstr "Atvirkštinis portretas"
 #, no-c-format
 msgid "Reverse Landscape"
 msgstr "Atvirkštinis požiūris"
-
-#, no-c-format
-msgid "8 Split"
-msgstr "8 dalijimas"
-
-#, no-c-format
-msgid "10 Split"
-msgstr "10 dalijimas"
-
-#, no-c-format
-msgid "12 Split in 3 rows"
-msgstr "12 dalijimas 3 eilutėmis"
-
-#, no-c-format
-msgid "15 Split in 3 rows"
-msgstr "15 dalijimas 3 eilutėmis"
-
-#, no-c-format
-msgid "18 Split in 3 rows"
-msgstr "18 dalijimas 3 eilutėmis"
-
-#, no-c-format
-msgid "8 Bottom or Right"
-msgstr "8 apatini arba dešinės pusės"
-
-#, no-c-format
-msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 apatinė arba dešinės pusės + variometras (portretas)"
-
-#, no-c-format
-msgid "8 Top or Left"
-msgstr "8 aukštyn arba kairės pusės"
-
-#, no-c-format
-msgid "8 Top + Vario (Portrait)"
-msgstr "8 aukštyn arba kairės pusės + variometras (portretas)"
-
-#, no-c-format
-msgid "9 Right + Vario (Landscape)"
-msgstr "9 dešinės pusės + variometras (požiūris)"
-
-#, no-c-format
-msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 kairės pusės + dešinės pusės + variometras (požiūris)"
-
-#, no-c-format
-msgid "12 Left + 3 Right Vario (Landscape)"
-msgstr "12 kairės pusės + 3 dešinės pusės + variometras (požiūris)"
-
-#, no-c-format
-msgid "5 Right (Square)"
-msgstr "5 dešinės pusės (kvadratinis)"
-
-#, no-c-format
-msgid "10 Bottom or Right"
-msgstr "10 apatini arba dešinės pusės"
-
-#, no-c-format
-msgid "12 Bottom or Right"
-msgstr "12 Apatini arba Puslango dešinė"
-
-#, no-c-format
-msgid "10 Top or Left"
-msgstr "10 Aukštyn arba Puslango kairė"
-
-#, no-c-format
-msgid "12 Top or Left"
-msgstr "12 Aukštyn arba Puslango kairė"
-
-#, no-c-format
-msgid "16 Right (Landscape)"
-msgstr "16 Puslango dešinė (Pasaulio atvaizdas)"
-
-#, no-c-format
-msgid "24 Bottom or Right"
-msgstr "24 Apatini arba Puslango dešinė"
-
-#, no-c-format
-msgid "4 Top or Left"
-msgstr "4 Aukštyn arba Puslango kairė"
-
-#, no-c-format
-msgid "4 Bottom or Right"
-msgstr "4 Apatini arba Puslango dešinė"
 
 #, no-c-format
 msgid "Text"
@@ -3590,9 +3475,6 @@ msgstr "Visada naudokite šviesų tekstą tamsiame InfoBox fone."
 
 msgid "Full screen"
 msgstr "Pilnas ekranas"
-
-msgid "Run XCSoar in full screen mode"
-msgstr "Paleiskite XCSoar pilnuoju ekranu"
 
 msgid "Display orientation"
 msgstr "Ekranų orientavimas"
@@ -3951,17 +3833,8 @@ msgid "Straight"
 msgstr "Geriausias"
 
 #, no-c-format
-msgid "The reach is from straight line paths from the glider."
-msgstr "Reikšmės yra skaičiuojamos pagal tiesiogines kelio linijas nuo laivo."
-
-#, no-c-format
 msgid "Turning"
 msgstr "Skirtumas"
-
-#, no-c-format
-msgid "The reach is calculated allowing turns around terrain obstacles."
-msgstr ""
-"Reikšmės yra skaičiuojamos leidžiant skambutis iki topografinių kliūčių."
 
 #. Spacer
 msgid "Reach mode"
@@ -3975,10 +3848,6 @@ msgstr ""
 "atžvilgiu į topografinę informaciją."
 
 #, no-c-format
-msgid "Uses task glide polar."
-msgstr "Naudoja užduoties sklandumo poliar."
-
-#, no-c-format
 msgid "Safety MC"
 msgstr "Saugumas MC"
 
@@ -3990,57 +3859,24 @@ msgid "Reach polar"
 msgstr "Attinkamas polar"
 
 #, no-c-format
-msgid "Disables the reach display."
-msgstr "Išminkina atinkamo atsiradimo rodytę."
-
-#, no-c-format
 msgid "Terrain line"
 msgstr "Įjungti Paviršių"
-
-#, no-c-format
-msgid "Draws a dashed line at the terrain glide reach."
-msgstr ""
-"Parašia tarpinį liniją sklandumo atinkamo atsiradimo pagal topografinę "
-"vietoj."
 
 #, no-c-format
 msgid "Terrain shade"
 msgstr "Įjungti Paviršių"
 
 #, no-c-format
-msgid "Shades terrain outside glide reach."
-msgstr ""
-"Įvairių topografinių vietas užskleidžia iki sklandumo atinkamo atsiradimo."
-
-#, no-c-format
 msgid "Working line"
 msgstr "Finišo linija"
-
-#, no-c-format
-msgid "Draws a dashed line at the working glide reach."
-msgstr ""
-"Parašia tarpinį liniją darbo sklandumo atinkamo atsiradimo pagal topografinę "
-"vietoj."
 
 #, no-c-format
 msgid "Working line, terrain line"
 msgstr "Darbo linija, topografinė linija"
 
 #, no-c-format
-msgid "Draws a dashed line at the working and terrain glide reaches."
-msgstr ""
-"Parašia tarpinį liniją darbo ir topografinio sklandumo atinkamo atsiradimo "
-"pagal topografinę vietoj."
-
-#, no-c-format
 msgid "Working line, terrain shade"
 msgstr "Darbo linija, topografinių vietų užskleidimas"
-
-#, no-c-format
-msgid "Draws a dashed line at working, and shade terrain, glide reaches."
-msgstr ""
-"Parašia tarpinį liniją darbo, ir užskleidžiamas topografinės vietas, "
-"sklandumo atinkamo atsiradimo pagal topografinę vietoj."
 
 msgid "Reach display"
 msgstr "Atinkamo atsiradimo rodytė"
@@ -4095,14 +3931,6 @@ msgid ""
 msgstr ""
 "Jei įjungta, prideda 1% klaidų nustatymo po kiekvienos valandos skrydžio "
 "metu."
-
-msgid ""
-"The MacCready setting used, when safety MC is enabled for reach "
-"calculations, in task abort mode and for determining arrival altitude at "
-"airfields."
-msgstr ""
-"Naudoti MacCready nustatymas, kai saugumas MacCready yra įjungtas užduoties "
-"atsakyme ir skirtas apibrėžti laikrodis atvykimo aukštumą lūkesčiuose."
 
 msgid "STF risk factor"
 msgstr "STF risko koeficientas"
@@ -4783,15 +4611,6 @@ msgstr "Rotacijos vienetas."
 msgid "UTC offset"
 msgstr "UTC nuolatinis laiko juosta."
 
-msgid ""
-"The UTC offset field allows the UTC local time offset to be specified. The "
-"local time is displayed below in order to make it easier to verify the "
-"correct offset has been entered."
-msgstr ""
-"UTC nuolatinis laiko juostos nurodymas leidžia nurodyti vietinius laiką ir "
-"UTC laiką. Vietinis laikas rodomas, kad būtų lengviau patvirtinti teisingą "
-"nuolaidą."
-
 msgid "Use GPS time"
 msgstr "Naudojami GPS laikai"
 
@@ -5350,6 +5169,7 @@ msgstr "Optimizuotas"
 msgid "No alternates available"
 msgstr "Alternatyvų startas neprieinamas"
 
+#, no-c-format
 msgid "Alternates"
 msgstr "Alternatyvūs startai"
 
@@ -5794,14 +5614,6 @@ msgid "TL Avg"
 msgstr "TL Vidurkis"
 
 #, no-c-format
-msgid ""
-"Total altitude gain/loss in the last thermal divided by the time spent "
-"circling."
-msgstr ""
-"Paskutinė termiko pabaigos aukštųjų užimimas/nužimimas dalyje nuo tarpinio "
-"kringelio laiko."
-
-#, no-c-format
 msgid "Last thermal gain"
 msgstr "Paskutinė termiko užimimas"
 
@@ -5824,10 +5636,6 @@ msgstr "Laikas paskutiniame termike"
 #, no-c-format
 msgid "TL duration"
 msgstr "Paskutiniothermalio laikas"
-
-#, no-c-format
-msgid "Time spent circling in the last thermal."
-msgstr "Laikas praleistas sukantis termike paskutiniame termike"
 
 #, no-c-format
 msgid "MacCready setting"
@@ -6998,10 +6806,6 @@ msgid "T Next Leg"
 msgstr "T Nėkimo lygva"
 
 #, no-c-format
-msgid "Thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg."
-msgstr "Nėkimties greitis nėkimo lygva, lygu dabartiniam nėkimties greimui MacCready nustatymui."
-
-#, no-c-format
 msgid "Wind, head component (simplified)"
 msgstr "Vėjas, viršutinis komponentas (simplifikuotas)"
 
@@ -7354,20 +7158,12 @@ msgid "Altn 1 AltD"
 msgstr "Aukštis 1 AltD"
 
 #, no-c-format
-msgid "Arrival altitude at the best alternate landing location relative to the safety arrival height."
-msgstr "Atvykimo aukštis į pirmąja alternatyvuoju nusileidimų vietoje nuo saugos atvykimo aukštojo lygio."
-
-#, no-c-format
 msgid "Alternate 2 altitude difference"
 msgstr "Sekantis altitudės skirtumas"
 
 #, no-c-format
 msgid "Altn 2 AltD"
 msgstr "Aukštis 2 AltD"
-
-#, no-c-format
-msgid "Arrival altitude at the second-best alternate landing location relative to the safety arrival height."
-msgstr "Atvykimo aukštis į antra alternatyvuoju nusileidimų vietoje nuo saugos atvykimo aukštojo lygio."
 
 #, no-c-format
 msgid "Simulator"
@@ -8404,13 +8200,6 @@ msgstr "Prieiga uždrausta. Galbūt neturite leidimo jungtis prie šio tinklo."
 
 msgid "Could not connect. Check the passphrase and try again."
 msgstr "Jungiamasi nepavyko. Provjerite lozinku i pokušajte ponovo."
-
-#, no-c-format
-msgid "Current QNH pressure setting used for barometric altitude calculation. Tap the infobox to open the setup panel and adjust QNH manually."
-msgstr ""
-"Dabartinė QNH slėgio nuostata, naudojama barometriniam aukščiui "
-"apskaičiuoti. Palieskite InfoBox, kad atvertumėte sąrankos skydelį ir "
-"rankiniu būdu pakeistumėte QNH."
 
 #, no-c-format
 msgid "Active waypoint: shows the next task waypoint when an ordered task is loaded, otherwise the Goto waypoint. Displays the waypoint name, arrival altitude difference relative to the safety arrival height, and distance. Click to choose a different waypoint (a task waypoint to skip to that leg, or any waypoint to set as Goto when no task is loaded)."
@@ -9881,14 +9670,6 @@ msgstr ""
 "Apima visą Alpių lanką nuo Vienos iki Perpinjano ir prognozuoja bangą visame"
 " Alpių regione. ICON-CH modelis."
 
-#, no-c-format
-msgid "UK"
-msgstr "UK"
-
-#, no-c-format
-msgid "United Kingdom. ICON-UK model."
-msgstr "Jungtinė Karalystė. ICON-UK modelis."
-
 msgid "XC Therm email"
 msgstr "XC Therm e-mail"
 
@@ -11017,6 +10798,7 @@ msgstr "SpO2"
 msgid "Blood oxygen saturation in percent, from a Bluetooth pulse oximeter."
 msgstr "Kraujo įsotinimas deguonimi procentais, iš Bluetooth pulso oksimetro."
 
+#, no-c-format
 msgid "Recently used waypoints"
 msgstr "Neseniai naudoti maršruto taškai"
 
@@ -11077,9 +10859,6 @@ msgstr "Auto"
 #, no-c-format
 msgid "Disables map reach (terrain line and shade). Abort, alternates and landable arrival still use the Reach polar."
 msgstr "Išjungia žemėlapio pasiekiamumą (reljefo linija ir šešėliavimas). Nutraukimas, atsarginiai ir atvykimas į nutupiama vis dar naudoja pasiekiamumo polarę."
-
-msgid "Glide performance for map reach, landable arrival, abort and alternates. This still applies when Reach mode is Off."
-msgstr "Šis apibrėžia sklandymo veiklą, naudojama kalkuliuojant atsiradimą, nusileidimą už aerodromo ribų, atšaukti ir alternatyvius atsiradimus. Tai galioja ir kai pasiekiamumo veiksena yra Išjungta."
 
 #. Alternate Mode: Auto returns a MANUAL slot to the computed
 #. list. Pinning is Select as Alternate, which is always
@@ -11244,30 +11023,21 @@ msgstr "Acustinis variometras"
 msgid "OpenVario audio vario daemon"
 msgstr "OpenVario akustinio variometro tarnyba"
 
-#, no-c-format
 msgid "Max. temp. from forecast"
 msgstr "Didžiausia temperatūra iš prognozės"
 
-#, no-c-format
 msgid "Fill Max. temp. in the flight setup from the day's DWD forecast for the nearest MOSMIX station.  Needs a position fix, and fetches once a day; no account."
-msgstr ""
-"Įrašo didžiausią temperatūrą į skrydžio nustatymą iš tos dienos DWD prognoz"
-"ės artimiausiai MOSMIX stočiai. Reikia padėties, atsisiunčiama kartą per di"
-"eną; be paskyros."
+msgstr "Įrašo didžiausią temperatūrą į skrydžio nustatymą iš tos dienos DWD prognozės artimiausiai MOSMIX stočiai. Reikia padėties, atsisiunčiama kartą per dieną; be paskyros."
 
-#, no-c-format
 msgid "The day's maximum ground temperature. A dry adiabat from it against the outside air temperature measured while climbing gives the estimated thermal ceiling; the cloud base needs a humidity probe as well. Both are drawn on the temperature trace page of the Analysis dialog, once the glider has climbed through the layer."
-msgstr ""
-"Dienos aukščiausia pažemio temperatūra. Sausa adiabatė nuo jos iki kilimo m"
-"etu išmatuotos lauko temperatūros duoda įvertintas termikos lubas; debesų b"
-"azei reikia ir drėgmės jutiklio. Abi brėžiamos Analizės dialogo temperatūro"
-"s pėdsako puslapyje, kai sklandytuvas pereina sluoksnį."
+msgstr "Dienos aukščiausia pažemio temperatūra. Sausa adiabatė nuo jos iki kilimo metu išmatuotos lauko temperatūros duoda įvertintas termikos lubas; debesų bazei reikia ir drėgmės jutiklio. Abi brėžiamos Analizės dialogo temperatūros pėdsako puslapyje, kai sklandytuvas pereina sluoksnį."
 
-#, no-c-format
 msgid "Startup Task MC"
 msgstr "Užduoties MC paleidžiant"
 
-#, no-c-format
+#. no help text: this row always carries a value, and
+#. WndProperty::BeginEditing() then shows the value instead of the
+#. help; the explanation is on the safety MC row above
 msgid "Safety MC GR"
 msgstr "Saugumas MC sklendimo santykis"
 
@@ -11289,29 +11059,25 @@ msgstr "Greičio komandos jungiklis"
 msgid "How XCSoar uses the variometer's cruise/climb report."
 msgstr "Kaip XCSoar naudoja variometro kruizo ir kilimo pranešimą."
 
+#, no-c-format
 msgid "Flight mode"
 msgstr "Skrydžio režimas"
 
+#, no-c-format
 msgid "While flying, the variometer's cruise/climb report is the flight mode. Cruise ends the climb and restarts the average. Climb starts a new thermal. Final glide can still appear in cruise. On a Vega this is the circling output."
-msgstr ""
-"Skrydyje variometro kruizo ir kilimo pranešimas yra skrydžio režimas. Kruiz"
-"as baigia kilimą ir pradeda vidurkį iš naujo. Kilimas pradeda naują termiką"
-". Galutinis sklendimas vis dar gali pasirodyti kruize. Vega tai yra kringli"
-"o išėjimas."
+msgstr "Skrydyje variometro kruizo ir kilimo pranešimas yra skrydžio režimas. Kruizas baigia kilimą ir pradeda vidurkį iš naujo. Kilimas pradeda naują termiką. Galutinis sklendimas vis dar gali pasirodyti kruize. Vega tai yra kringlio išėjimas."
 
+#, no-c-format
 msgid "Display mode"
 msgstr "Rodymo režimas"
 
+#, no-c-format
 msgid "XCSoar decides circling from the turn. The variometer report is not used."
-msgstr ""
-"XCSoar kringlio režimą nustato pagal posūkį. Variometro pranešimas nenaudoj"
-"amas."
+msgstr "XCSoar kringlio režimą nustato pagal posūkį. Variometro pranešimas nenaudojamas."
 
+#, no-c-format
 msgid "The page changes and the flight mode does not. Cruise shows the cruise page, including while turning, and hides final glide. Climb shows the vario page. On a Vega this is the speed-command switch."
-msgstr ""
-"Puslapis keičiasi, o skrydžio režimas ne. Kruizas rodo kruizo puslapį ir po"
-"sūkyje, ir slepia galutinį sklendimą. Kilimas rodo vario puslapį. Vega tai "
-"yra greičio komandos jungiklis."
+msgstr "Puslapis keičiasi, o skrydžio režimas ne. Kruizas rodo kruizo puslapį ir posūkyje, ir slepia galutinį sklendimą. Kilimas rodo vario puslapį. Vega tai yra greičio komandos jungiklis."
 
 #, no-c-format
 msgid "System Tools"
@@ -11335,66 +11101,47 @@ msgstr "Šios užduoties negalima parodyti kaip QR kodo"
 msgid "XCSoar task"
 msgstr "XCSoar užduotis"
 
-#, no-c-format
+#. a PowerFLARM keeps statistics of its own; for any other FLARM,
+#. XCSoar estimates the range from the traffic it reports
 msgid "Range statistics"
 msgstr "Nuotolio statistika"
 
-#, no-c-format
 msgid "Antenna"
 msgstr "Antena"
 
-#, no-c-format
 msgid "The FLARM keeps the statistics for each of its two radio channels."
 msgstr "FLARM saugo statistiką kiekvienam iš dviejų radijo kanalų."
 
-#, no-c-format
 msgid "Data points"
 msgstr "Duomenų taškai"
 
-#, no-c-format
 msgid "Period"
 msgstr "Laikotarpis"
 
-#, no-c-format
 msgid "FLARM range"
 msgstr "FLARM nuotolis"
 
-#, no-c-format
 msgid "The FLARM did not send its range statistics."
 msgstr "FLARM neišsiuntė nuotolio statistikos."
 
-#, no-c-format
 msgid "Reset the range statistics? Do this after a change to the antennas; the FLARM then collects them anew."
-msgstr ""
-"Atstatyti nuotolio statistiką? Padarykite tai pakeitę antenas; FLARM ją vėl"
-" rinks."
+msgstr "Atstatyti nuotolio statistiką? Padarykite tai pakeitę antenas; FLARM ją vėl rinks."
 
-#, no-c-format
 msgid "The FLARM did not confirm the reset."
 msgstr "FLARM nepatvirtino atstatymo."
 
-#, no-c-format
 msgid "Below minimum range"
 msgstr "Žemiau mažiausio nuotolio"
 
-#, no-c-format
 msgid "Measured sectors of this channel whose mean range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
-"Išmatuoti šio kanalo sektoriai, kurių vidutinis nuotolis trumpesnis už FLAR"
-"M minimumą: 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos mont"
-"avimą."
+msgstr "Išmatuoti šio kanalo sektoriai, kurių vidutinis nuotolis trumpesnis už FLARM minimumą: 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos montavimą."
 
-#, no-c-format
 msgid "Range setting"
 msgstr "Nuotolio nustatymas"
 
-#, no-c-format
 msgid "The FLARM reports no aircraft beyond this distance.  The plot shows it as a dashed circle when it is within the plotted range."
-msgstr ""
-"FLARM nepraneša orlaivių už šio atstumo. Grafikas rodo jį brūkšnine apskrit"
-"imu, kai jis yra nubraižytame nuotolyje."
+msgstr "FLARM nepraneša orlaivių už šio atstumo. Grafikas rodo jį brūkšnine apskritimu, kai jis yra nubraižytame nuotolyje."
 
-#, no-c-format
 msgid "Unlimited"
 msgstr "Neribota"
 
@@ -11405,18 +11152,1519 @@ msgstr ""
 "torius rodo didesnės pusės tų atstumų vidurkį, skersinė linija — didžiausią"
 "."
 
-#, no-c-format
 msgid "Measured sectors whose estimated range is shorter than FLARM's minimum: 2 nm ahead, 1 nm to the sides and behind.  Check the antenna installation."
-msgstr ""
-"Išmatuoti sektoriai, kurių įvertintas nuotolis trumpesnis už FLARM minimumą"
-": 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos montavimą."
+msgstr "Išmatuoti sektoriai, kurių įvertintas nuotolis trumpesnis už FLARM minimumą: 2 nm priekyje, 1 nm į šonus ir atgal. Patikrinkite antenos montavimą."
 
-#, no-c-format
 msgid "Reset the range estimate? Do this after a change to the antenna; XCSoar then collects it anew."
-msgstr ""
-"Atstatyti nuotolio įvertį? Padarykite tai pakeitę anteną; XCSoar jį vėl rin"
-"ks."
+msgstr "Atstatyti nuotolio įvertį? Padarykite tai pakeitę anteną; XCSoar jį vėl rinks."
 
-#, no-c-format
 msgid "FLARM range estimate"
 msgstr "FLARM nuotolio įvertis"
+
+#, no-c-format
+msgid "Zoom in"
+msgstr ""
+
+#, no-c-format
+msgid "Zoom out"
+msgstr ""
+
+#, no-c-format
+msgid "Auto zoom"
+msgstr ""
+
+#, no-c-format
+msgid "Next page"
+msgstr ""
+
+#, no-c-format
+msgid "Previous page"
+msgstr ""
+
+#, no-c-format
+msgid "Waypoint list"
+msgstr ""
+
+#, no-c-format
+msgid "Menu"
+msgstr ""
+
+#, no-c-format
+msgid "Task manager"
+msgstr ""
+
+#, no-c-format
+msgid "Pan mode"
+msgstr ""
+
+#, no-c-format
+msgid "Quick menu"
+msgstr ""
+
+#. OPERA is published under CC BY 4.0, so the attribution has to
+#. travel with the picture; the overlay label carries it, which is
+#. what the map shows when the pilot taps it
+#, no-c-format
+msgid "Radar"
+msgstr ""
+
+#, no-c-format
+msgid "Satellite"
+msgstr ""
+
+msgid "(Inside)"
+msgstr ""
+
+msgid "(Near)"
+msgstr ""
+
+msgid "Cleared"
+msgstr ""
+
+msgid "Covered"
+msgstr ""
+
+msgid "Power off"
+msgstr ""
+
+#, no-c-format
+msgid "Andorra"
+msgstr ""
+
+#, no-c-format
+msgid "United Arab Emirates"
+msgstr ""
+
+#, no-c-format
+msgid "Afghanistan"
+msgstr ""
+
+#, no-c-format
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#, no-c-format
+msgid "Anguilla"
+msgstr ""
+
+#, no-c-format
+msgid "Albania"
+msgstr ""
+
+#, no-c-format
+msgid "Armenia"
+msgstr ""
+
+#, no-c-format
+msgid "Angola"
+msgstr ""
+
+#, no-c-format
+msgid "Antarctica"
+msgstr ""
+
+#, no-c-format
+msgid "Argentina"
+msgstr ""
+
+#, no-c-format
+msgid "American Samoa"
+msgstr ""
+
+#, no-c-format
+msgid "Austria"
+msgstr ""
+
+#, no-c-format
+msgid "Australia"
+msgstr ""
+
+#, no-c-format
+msgid "Aruba"
+msgstr ""
+
+#, no-c-format
+msgid "Åland Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Azerbaijan"
+msgstr ""
+
+#, no-c-format
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#, no-c-format
+msgid "Barbados"
+msgstr ""
+
+#, no-c-format
+msgid "Bangladesh"
+msgstr ""
+
+#, no-c-format
+msgid "Belgium"
+msgstr ""
+
+#, no-c-format
+msgid "Burkina Faso"
+msgstr ""
+
+#, no-c-format
+msgid "Bulgaria"
+msgstr ""
+
+#, no-c-format
+msgid "Bahrain"
+msgstr ""
+
+#, no-c-format
+msgid "Burundi"
+msgstr ""
+
+#, no-c-format
+msgid "Benin"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Barthélemy"
+msgstr ""
+
+#, no-c-format
+msgid "Bermuda"
+msgstr ""
+
+#, no-c-format
+msgid "Brunei"
+msgstr ""
+
+#, no-c-format
+msgid "Bolivia"
+msgstr ""
+
+#, no-c-format
+msgid "Caribbean Netherlands"
+msgstr ""
+
+#, no-c-format
+msgid "Brazil"
+msgstr ""
+
+#, no-c-format
+msgid "Bahamas"
+msgstr ""
+
+#, no-c-format
+msgid "Bhutan"
+msgstr ""
+
+#, no-c-format
+msgid "Bouvet Island"
+msgstr ""
+
+#, no-c-format
+msgid "Botswana"
+msgstr ""
+
+#, no-c-format
+msgid "Belarus"
+msgstr ""
+
+#, no-c-format
+msgid "Belize"
+msgstr ""
+
+#, no-c-format
+msgid "Canada"
+msgstr ""
+
+#, no-c-format
+msgid "Cocos Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Congo-Kinshasa"
+msgstr ""
+
+#, no-c-format
+msgid "Central African Republic"
+msgstr ""
+
+#, no-c-format
+msgid "Congo-Brazzaville"
+msgstr ""
+
+#, no-c-format
+msgid "Switzerland"
+msgstr ""
+
+#, no-c-format
+msgid "Côte d'Ivoire"
+msgstr ""
+
+#, no-c-format
+msgid "Cook Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Chile"
+msgstr ""
+
+#, no-c-format
+msgid "Cameroon"
+msgstr ""
+
+#, no-c-format
+msgid "China"
+msgstr ""
+
+#, no-c-format
+msgid "Colombia"
+msgstr ""
+
+#, no-c-format
+msgid "Costa Rica"
+msgstr ""
+
+#, no-c-format
+msgid "Cuba"
+msgstr ""
+
+#, no-c-format
+msgid "Cape Verde"
+msgstr ""
+
+#, no-c-format
+msgid "Curaçao"
+msgstr ""
+
+#, no-c-format
+msgid "Christmas Island"
+msgstr ""
+
+#, no-c-format
+msgid "Cyprus"
+msgstr ""
+
+#, no-c-format
+msgid "Czechia"
+msgstr ""
+
+#, no-c-format
+msgid "Germany"
+msgstr ""
+
+#, no-c-format
+msgid "Djibouti"
+msgstr ""
+
+#, no-c-format
+msgid "Denmark"
+msgstr ""
+
+#, no-c-format
+msgid "Dominica"
+msgstr ""
+
+#, no-c-format
+msgid "Dominican Republic"
+msgstr ""
+
+#, no-c-format
+msgid "Algeria"
+msgstr ""
+
+#, no-c-format
+msgid "Ecuador"
+msgstr ""
+
+#, no-c-format
+msgid "Estonia"
+msgstr ""
+
+#, no-c-format
+msgid "Egypt"
+msgstr ""
+
+#, no-c-format
+msgid "Western Sahara"
+msgstr ""
+
+#, no-c-format
+msgid "Eritrea"
+msgstr ""
+
+#, no-c-format
+msgid "Spain"
+msgstr ""
+
+#, no-c-format
+msgid "Ethiopia"
+msgstr ""
+
+#, no-c-format
+msgid "Finland"
+msgstr ""
+
+#, no-c-format
+msgid "Fiji"
+msgstr ""
+
+#, no-c-format
+msgid "Falkland Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Micronesia"
+msgstr ""
+
+#, no-c-format
+msgid "Faroe Islands"
+msgstr ""
+
+#, no-c-format
+msgid "France"
+msgstr ""
+
+#, no-c-format
+msgid "Gabon"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom"
+msgstr ""
+
+#, no-c-format
+msgid "Grenada"
+msgstr ""
+
+#, no-c-format
+msgid "Georgia"
+msgstr ""
+
+#, no-c-format
+msgid "French Guiana"
+msgstr ""
+
+#, no-c-format
+msgid "Guernsey"
+msgstr ""
+
+#, no-c-format
+msgid "Ghana"
+msgstr ""
+
+#, no-c-format
+msgid "Gibraltar"
+msgstr ""
+
+#, no-c-format
+msgid "Greenland"
+msgstr ""
+
+#, no-c-format
+msgid "Gambia"
+msgstr ""
+
+#, no-c-format
+msgid "Guinea"
+msgstr ""
+
+#, no-c-format
+msgid "Guadeloupe"
+msgstr ""
+
+#, no-c-format
+msgid "Equatorial Guinea"
+msgstr ""
+
+#, no-c-format
+msgid "Greece"
+msgstr ""
+
+#, no-c-format
+msgid "South Georgia"
+msgstr ""
+
+#, no-c-format
+msgid "Guatemala"
+msgstr ""
+
+#, no-c-format
+msgid "Guam"
+msgstr ""
+
+#, no-c-format
+msgid "Guinea-Bissau"
+msgstr ""
+
+#, no-c-format
+msgid "Guyana"
+msgstr ""
+
+#, no-c-format
+msgid "Hong Kong"
+msgstr ""
+
+#, no-c-format
+msgid "Heard Island"
+msgstr ""
+
+#, no-c-format
+msgid "Honduras"
+msgstr ""
+
+#, no-c-format
+msgid "Croatia"
+msgstr ""
+
+#, no-c-format
+msgid "Haiti"
+msgstr ""
+
+#, no-c-format
+msgid "Hungary"
+msgstr ""
+
+#, no-c-format
+msgid "Indonesia"
+msgstr ""
+
+#, no-c-format
+msgid "Ireland"
+msgstr ""
+
+#, no-c-format
+msgid "Israel"
+msgstr ""
+
+#, no-c-format
+msgid "Isle of Man"
+msgstr ""
+
+#, no-c-format
+msgid "India"
+msgstr ""
+
+#, no-c-format
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#, no-c-format
+msgid "Iraq"
+msgstr ""
+
+#, no-c-format
+msgid "Iran"
+msgstr ""
+
+#, no-c-format
+msgid "Iceland"
+msgstr ""
+
+#, no-c-format
+msgid "Italy"
+msgstr ""
+
+#, no-c-format
+msgid "Jersey"
+msgstr ""
+
+#, no-c-format
+msgid "Jamaica"
+msgstr ""
+
+#, no-c-format
+msgid "Jordan"
+msgstr ""
+
+#, no-c-format
+msgid "Japan"
+msgstr ""
+
+#, no-c-format
+msgid "Kenya"
+msgstr ""
+
+#, no-c-format
+msgid "Kyrgyzstan"
+msgstr ""
+
+#, no-c-format
+msgid "Cambodia"
+msgstr ""
+
+#, no-c-format
+msgid "Kiribati"
+msgstr ""
+
+#, no-c-format
+msgid "Comoros"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#, no-c-format
+msgid "North Korea"
+msgstr ""
+
+#, no-c-format
+msgid "South Korea"
+msgstr ""
+
+#, no-c-format
+msgid "Kuwait"
+msgstr ""
+
+#, no-c-format
+msgid "Cayman Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Kazakhstan"
+msgstr ""
+
+#, no-c-format
+msgid "Laos"
+msgstr ""
+
+#, no-c-format
+msgid "Lebanon"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Lucia"
+msgstr ""
+
+#, no-c-format
+msgid "Liechtenstein"
+msgstr ""
+
+#, no-c-format
+msgid "Sri Lanka"
+msgstr ""
+
+#, no-c-format
+msgid "Liberia"
+msgstr ""
+
+#, no-c-format
+msgid "Lesotho"
+msgstr ""
+
+#, no-c-format
+msgid "Lithuania"
+msgstr ""
+
+#, no-c-format
+msgid "Luxembourg"
+msgstr ""
+
+#, no-c-format
+msgid "Latvia"
+msgstr ""
+
+#, no-c-format
+msgid "Libya"
+msgstr ""
+
+#, no-c-format
+msgid "Morocco"
+msgstr ""
+
+#, no-c-format
+msgid "Monaco"
+msgstr ""
+
+#, no-c-format
+msgid "Moldova"
+msgstr ""
+
+#, no-c-format
+msgid "Montenegro"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Martin"
+msgstr ""
+
+#, no-c-format
+msgid "Madagascar"
+msgstr ""
+
+#, no-c-format
+msgid "Marshall Islands"
+msgstr ""
+
+#, no-c-format
+msgid "North Macedonia"
+msgstr ""
+
+#, no-c-format
+msgid "Mali"
+msgstr ""
+
+#, no-c-format
+msgid "Myanmar"
+msgstr ""
+
+#, no-c-format
+msgid "Mongolia"
+msgstr ""
+
+#, no-c-format
+msgid "Macao"
+msgstr ""
+
+#, no-c-format
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Martinique"
+msgstr ""
+
+#, no-c-format
+msgid "Mauritania"
+msgstr ""
+
+#, no-c-format
+msgid "Montserrat"
+msgstr ""
+
+#, no-c-format
+msgid "Malta"
+msgstr ""
+
+#, no-c-format
+msgid "Mauritius"
+msgstr ""
+
+#, no-c-format
+msgid "Maldives"
+msgstr ""
+
+#, no-c-format
+msgid "Malawi"
+msgstr ""
+
+#, no-c-format
+msgid "Mexico"
+msgstr ""
+
+#, no-c-format
+msgid "Malaysia"
+msgstr ""
+
+#, no-c-format
+msgid "Mozambique"
+msgstr ""
+
+#, no-c-format
+msgid "Namibia"
+msgstr ""
+
+#, no-c-format
+msgid "New Caledonia"
+msgstr ""
+
+#, no-c-format
+msgid "Niger"
+msgstr ""
+
+#, no-c-format
+msgid "Norfolk Island"
+msgstr ""
+
+#, no-c-format
+msgid "Nigeria"
+msgstr ""
+
+#, no-c-format
+msgid "Nicaragua"
+msgstr ""
+
+#, no-c-format
+msgid "Netherlands"
+msgstr ""
+
+#, no-c-format
+msgid "Norway"
+msgstr ""
+
+#, no-c-format
+msgid "Nepal"
+msgstr ""
+
+#, no-c-format
+msgid "Nauru"
+msgstr ""
+
+#, no-c-format
+msgid "Niue"
+msgstr ""
+
+#, no-c-format
+msgid "New Zealand"
+msgstr ""
+
+#, no-c-format
+msgid "Oman"
+msgstr ""
+
+#, no-c-format
+msgid "Panama"
+msgstr ""
+
+#, no-c-format
+msgid "Peru"
+msgstr ""
+
+#, no-c-format
+msgid "French Polynesia"
+msgstr ""
+
+#, no-c-format
+msgid "Papua New Guinea"
+msgstr ""
+
+#, no-c-format
+msgid "Philippines"
+msgstr ""
+
+#, no-c-format
+msgid "Pakistan"
+msgstr ""
+
+#, no-c-format
+msgid "Poland"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#, no-c-format
+msgid "Pitcairn"
+msgstr ""
+
+#, no-c-format
+msgid "Puerto Rico"
+msgstr ""
+
+#, no-c-format
+msgid "Palestine"
+msgstr ""
+
+#, no-c-format
+msgid "Portugal"
+msgstr ""
+
+#, no-c-format
+msgid "Palau"
+msgstr ""
+
+#, no-c-format
+msgid "Paraguay"
+msgstr ""
+
+#, no-c-format
+msgid "Qatar"
+msgstr ""
+
+#, no-c-format
+msgid "Réunion"
+msgstr ""
+
+#, no-c-format
+msgid "Romania"
+msgstr ""
+
+#, no-c-format
+msgid "Serbia"
+msgstr ""
+
+#, no-c-format
+msgid "Russia"
+msgstr ""
+
+#, no-c-format
+msgid "Rwanda"
+msgstr ""
+
+#, no-c-format
+msgid "Saudi Arabia"
+msgstr ""
+
+#, no-c-format
+msgid "Solomon Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Seychelles"
+msgstr ""
+
+#, no-c-format
+msgid "Sudan"
+msgstr ""
+
+#, no-c-format
+msgid "Sweden"
+msgstr ""
+
+#, no-c-format
+msgid "Singapore"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Helena"
+msgstr ""
+
+#, no-c-format
+msgid "Slovenia"
+msgstr ""
+
+#, no-c-format
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#, no-c-format
+msgid "Slovakia"
+msgstr ""
+
+#, no-c-format
+msgid "Sierra Leone"
+msgstr ""
+
+#, no-c-format
+msgid "San Marino"
+msgstr ""
+
+#, no-c-format
+msgid "Senegal"
+msgstr ""
+
+#, no-c-format
+msgid "Somalia"
+msgstr ""
+
+#, no-c-format
+msgid "Suriname"
+msgstr ""
+
+#, no-c-format
+msgid "South Sudan"
+msgstr ""
+
+#, no-c-format
+msgid "São Tomé and Príncipe"
+msgstr ""
+
+#, no-c-format
+msgid "El Salvador"
+msgstr ""
+
+#, no-c-format
+msgid "Sint Maarten"
+msgstr ""
+
+#, no-c-format
+msgid "Syria"
+msgstr ""
+
+#, no-c-format
+msgid "Eswatini"
+msgstr ""
+
+#, no-c-format
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Chad"
+msgstr ""
+
+#, no-c-format
+msgid "French Southern Territories"
+msgstr ""
+
+#, no-c-format
+msgid "Togo"
+msgstr ""
+
+#, no-c-format
+msgid "Thailand"
+msgstr ""
+
+#, no-c-format
+msgid "Tajikistan"
+msgstr ""
+
+#, no-c-format
+msgid "Tokelau"
+msgstr ""
+
+#, no-c-format
+msgid "Timor-Leste"
+msgstr ""
+
+#, no-c-format
+msgid "Turkmenistan"
+msgstr ""
+
+#, no-c-format
+msgid "Tunisia"
+msgstr ""
+
+#, no-c-format
+msgid "Tonga"
+msgstr ""
+
+#, no-c-format
+msgid "Turkey"
+msgstr ""
+
+#, no-c-format
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#, no-c-format
+msgid "Tuvalu"
+msgstr ""
+
+#, no-c-format
+msgid "Taiwan"
+msgstr ""
+
+#, no-c-format
+msgid "Tanzania"
+msgstr ""
+
+#, no-c-format
+msgid "Ukraine"
+msgstr ""
+
+#, no-c-format
+msgid "Uganda"
+msgstr ""
+
+#, no-c-format
+msgid "U.S. Outlying Islands"
+msgstr ""
+
+#, no-c-format
+msgid "United States"
+msgstr ""
+
+#, no-c-format
+msgid "Uruguay"
+msgstr ""
+
+#, no-c-format
+msgid "Uzbekistan"
+msgstr ""
+
+#, no-c-format
+msgid "Vatican City"
+msgstr ""
+
+#, no-c-format
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#, no-c-format
+msgid "Venezuela"
+msgstr ""
+
+#, no-c-format
+msgid "British Virgin Islands"
+msgstr ""
+
+#, no-c-format
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#, no-c-format
+msgid "Vietnam"
+msgstr ""
+
+#, no-c-format
+msgid "Vanuatu"
+msgstr ""
+
+#, no-c-format
+msgid "Wallis and Futuna"
+msgstr ""
+
+#, no-c-format
+msgid "Samoa"
+msgstr ""
+
+#, no-c-format
+msgid "Kosovo"
+msgstr ""
+
+#, no-c-format
+msgid "Yemen"
+msgstr ""
+
+#, no-c-format
+msgid "Mayotte"
+msgstr ""
+
+#, no-c-format
+msgid "South Africa"
+msgstr ""
+
+#, no-c-format
+msgid "Zambia"
+msgstr ""
+
+#, no-c-format
+msgid "Zimbabwe"
+msgstr ""
+
+#. the backup is there, but on purpose without the files the
+#. loggers are writing right now: say so, and which ones
+msgid "Backup complete."
+msgstr ""
+
+msgid "Left out, being written right now:"
+msgstr ""
+
+msgid "Don't use"
+msgstr ""
+
+msgid "Not aligned"
+msgstr ""
+
+msgid "Fixed & aligned"
+msgstr ""
+
+msgid "Built-in IMU"
+msgstr ""
+
+msgid "Whether the instrument housing the IMU is permanently fixed and its axes are aligned to the aircraft axes. Set to 'Fixed & aligned' only when the device is rigidly mounted. If in doubt, use 'Not aligned'."
+msgstr ""
+
+#, c-format
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgstr ""
+
+msgid "QNE"
+msgstr ""
+
+msgid "Engine"
+msgstr ""
+
+msgid "Set Clearance"
+msgstr ""
+
+msgid "Revoke Clearance"
+msgstr ""
+
+msgid "Failed to update airspace clearance"
+msgstr ""
+
+msgid "Clrnc"
+msgstr ""
+
+msgid ""
+"Per-class filter settings. For airspaces where both\n"
+"type (CTR, FIR, ...) and class are given, the type\n"
+"takes precedence over class in XCSoar.\n"
+"Columns:\n"
+"  Show  - draw airspaces of this class on the map\n"
+"  Warn  - enable warnings when approaching / inside\n"
+"  Clrnc - allow granting a clearance to suppress\n"
+"           warnings from other overlapping airspaces"
+msgstr ""
+
+msgid "Clearance"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "Show only the InfoBoxes of these groups in the list."
+msgstr ""
+
+msgid "Share location"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Top"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Right"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Bottom"
+msgstr ""
+
+#, no-c-format
+msgctxt "Screen edge"
+msgid "Left"
+msgstr ""
+
+#, no-c-format
+msgid "Tap an edge to stretch the InfoBox area out to the screen border there."
+msgstr ""
+
+#, no-c-format
+msgid "The InfoBox area is the part of the screen available to the InfoBoxes, gauges, map overlays and the menu. Pick the edges on which it is stretched out to the screen border. Unstretched edges stay clear of the system bars and rounded corners. The map always uses the whole screen, and dialogs always stay inside the safe area. Only relevant while full screen mode is enabled."
+msgstr ""
+
+msgid "Stretch InfoBox area"
+msgstr ""
+
+#, no-c-format
+msgid "Show the status bar unless the InfoBox area is stretched to the top screen edge, where it would cover the InfoBoxes."
+msgstr ""
+
+#, no-c-format
+msgid "Visible"
+msgstr ""
+
+#, no-c-format
+msgid "Always show the status bar, even in full screen mode. The InfoBoxes cannot be drawn behind it, so they keep clear of the top screen edge."
+msgstr ""
+
+#, no-c-format
+msgid "Hidden"
+msgstr ""
+
+#, no-c-format
+msgid "Never show the status bar."
+msgstr ""
+
+msgid "Let XCSoar use the whole screen, including the areas behind the system bars and the display cutout. The map fills it completely, while \"Stretch InfoBox area\" decides which edges the InfoBoxes, gauges, map overlays and the menu may reach."
+msgstr ""
+
+msgid "System status bar"
+msgstr ""
+
+msgid "Whether the system status bar with the clock and the battery level stays visible."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Warn when radar expires"
+msgstr ""
+
+msgid "If enabled, a warning is shown when the rain radar overlay could not be refreshed and was removed from the map."
+msgstr ""
+
+#, no-c-format
+msgid "Shrink type when the short edge is under 3.2 inches."
+msgstr ""
+
+#, no-c-format
+msgid "Handheld"
+msgstr ""
+
+#, no-c-format
+msgid "Always use the closer-view size."
+msgstr ""
+
+#, no-c-format
+msgid "Panel"
+msgstr ""
+
+#, no-c-format
+msgid "Keep full-size type, for a screen read at arm's length."
+msgstr ""
+
+msgid "Viewing distance"
+msgstr ""
+
+msgid "Auto shrinks type when the short edge is under 3.2 inches. Handheld always uses that closer size. Panel keeps full-size type."
+msgstr ""
+
+#, no-c-format
+msgctxt "Setting"
+msgid "Satellite layer"
+msgstr ""
+
+msgid "Which EUMETView satellite product this page draws under the map."
+msgstr ""
+
+#, no-c-format
+msgid "Rain radar"
+msgstr ""
+
+#, no-c-format
+msgid "The reach is from straight line paths from the glider. Landable colours and the Alternates list use this reach."
+msgstr ""
+
+#, no-c-format
+msgid "The reach is calculated allowing turns around terrain obstacles. Landable colours and the Alternates list use this reach."
+msgstr ""
+
+#, no-c-format
+msgid "Task MC"
+msgstr ""
+
+#, no-c-format
+msgid "Uses task MacCready value."
+msgstr ""
+
+msgid "Which MacCready is used for terrain reach, landable colours, abort and the Alternates list. This still applies when Reach mode is Off. The working line always uses Task MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use Safety MC."
+msgstr ""
+
+#, no-c-format
+msgid "No reach overlay on the map."
+msgstr ""
+
+#, no-c-format
+msgid "How far you can glide to the ground. Uses the Reach polar."
+msgstr ""
+
+#, no-c-format
+msgid "Shades the map beyond glide to the ground. Uses the Reach polar."
+msgstr ""
+
+#, no-c-format
+msgid "How far you can glide and still arrive at typical thermal-base height from this flight. Always uses Task MC."
+msgstr ""
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus terrain line to the ground using the Reach polar."
+msgstr ""
+
+#, no-c-format
+msgid "Working line to typical thermal-base height using Task MC, plus shade beyond the ground using the Reach polar."
+msgstr ""
+
+msgid "The MacCready used for terrain reach, landable colours, abort and the Alternates list when Reach polar is Safety MC. Alternate InfoBoxes and waypoint Alt. diff. Safety MC always use this value. Speed-to-fly is not affected. Higher values treat fewer fields as reachable."
+msgstr ""
+
+msgid "No glide polar is configured, so no glide ratio can be shown. Select a plane first."
+msgstr ""
+
+msgid "The glide ratio next to each value is the best glide ratio in still air at that MacCready setting, including bugs, ballast and polar degradation."
+msgstr ""
+
+#, c-format
+msgid "Active polar: %s"
+msgstr ""
+
+msgid "The MacCready used at startup for speed-to-fly and task calculations. Changing it here also sets the live MacCready. Terrain reach, landable colours, abort and the Alternates list follow Reach polar, not this value unless Reach polar is Task MC."
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone which is configured in the operating system, and keep following it across daylight saving time changes and when travelling to another time zone."
+msgstr ""
+
+#, no-c-format
+msgid "Time zone"
+msgstr ""
+
+#, no-c-format
+msgid "Use the time zone selected below.  XCSoar knows its daylight saving time rules and applies the transitions on its own, which means the setting does not need to be corrected twice a year."
+msgstr ""
+
+#, no-c-format
+msgid "Manual UTC offset"
+msgstr ""
+
+#, no-c-format
+msgid "Use the fixed UTC offset entered below.  It has to be corrected manually whenever daylight saving time begins or ends."
+msgstr ""
+
+msgid "Local time source"
+msgstr ""
+
+msgid "Selects where XCSoar gets the offset between UTC and local time from."
+msgstr ""
+
+msgid "The time zone of the airfield you are flying at."
+msgstr ""
+
+msgid "The UTC offset field allows the UTC local time offset to be specified. It keeps the value you entered even while another local time source is selected. The local time is displayed below, along with the UTC offset which is currently in effect."
+msgstr ""
+
+#, no-c-format
+msgid "UKV Model"
+msgstr ""
+
+#, no-c-format
+msgid "United Kingdom. UKV model."
+msgstr ""
+
+#. the other tabs are named after their service, which is why they
+#. are not translated; this one is a common noun
+msgid "Overlay"
+msgstr ""
+
+msgid "Revoke"
+msgstr ""
+
+#, no-c-format
+msgid "Radar (EUMETNET OPERA)"
+msgstr ""
+
+#. the server answered but the product had nothing to draw here:
+#. say so, rather than leaving an empty map to be read as a slow
+#. download
+msgid "no data"
+msgstr ""
+
+msgid "Downloading radar..."
+msgstr ""
+
+#. the opt-out follows the Quick Guide dialog: answering "no" writes
+#. the choice to the profile, and the Look configuration page can
+#. switch it back on
+msgid ""
+"The radar image could not be refreshed and has been removed, so that no outdated echo is shown.\n"
+"\n"
+"Warn again when this happens?"
+msgstr ""
+
+#. first, and the default: the closest counterpart to the pc_met
+#. vis_hrv images, and the one product here that covers Europe at
+#. the HRV sampling German pilots are used to reading
+#, no-c-format
+msgid "European HRV RGB"
+msgstr ""
+
+#. MTG, which resolves about twice as finely as SEVIRI HRV
+#, no-c-format
+msgid "Visible 0.6 µm (MTG)"
+msgstr ""
+
+#, no-c-format
+msgid "Infrared 10.5 µm (MTG)"
+msgstr ""
+
+#. the RGB composites are assembled from several channels and reach
+#. the server a few minutes behind the single channel products, which
+#. the frame search follows on its own
+#, no-c-format
+msgid "True colour (MTG)"
+msgstr ""
+
+#, no-c-format
+msgid "Geo colour (MTG)"
+msgstr ""
+
+#. five minute cadence, and the promptest of them by a wide margin
+#, no-c-format
+msgid "Rapid scan natural colour"
+msgstr ""
+
+msgid "No satellite imagery here right now"
+msgstr ""
+
+msgid "Countries"
+msgstr ""
+
+msgid "Show only the files of these countries - the same selection for maps, waypoints and airspaces, kept in the profile.  Files that concern every country stay listed."
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Show only the files whose name or description contains this text."
+msgstr ""
+
+msgid "No file matches the filter."
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+#, no-c-format
+msgid "Total altitude gain/loss in the last thermal divided by the time spent circling. The seconds in smaller font reflect the time spent circling."
+msgstr ""
+
+#, no-c-format
+msgid "Time spent circling in the last thermal. The number in smaller font reflects the overall climb rate for the last thermal."
+msgstr ""
+
+#, no-c-format
+msgid "Main value: thermal climb rate on the next leg that is equivalent to a thermal climb rate equal to the MacCready setting on the current leg. Secondary value: thermal climb rate on the current leg that is equivalent to a thermal climb rate equal to the MacCready setting on the next leg."
+msgstr ""
+
+#, no-c-format
+msgid "Arrival altitude at the best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+
+#, no-c-format
+msgid "Arrival altitude at the second-best alternate landing location using Safety MC, relative to the safety arrival height."
+msgstr ""
+
+#, no-c-format
+msgid "Current QNH pressure setting used for barometric altitude calculation. The line below shows that altitude when a pressure sensor is available. Tap the infobox to open the setup panel and adjust QNH manually."
+msgstr ""
+
+#, no-c-format
+msgid "Water ballast on board, in litres. The comment shows the wing loading. The value is blue while ballast is being dumped. Tap to change the ballast."
+msgstr ""
+
+#, no-c-format
+msgid "Speed VMG"
+msgstr ""
+
+#, no-c-format
+msgid "V VMG"
+msgstr ""
+
+#, no-c-format
+msgid "The component of the ground speed in the direction of the next waypoint. It equals the ground speed when tracking straight at it, falls to zero at right angles and goes negative when flying away. It puts a number on what a detour off the direct course costs."
+msgstr ""
+
+#, no-c-format
+msgid "Vario and thermal"
+msgstr ""
+
+#, no-c-format
+msgid "Glide"
+msgstr ""
+
+#, no-c-format
+msgid "Speed and attitude"
+msgstr ""
+
+#, no-c-format
+msgid "Wind and weather"
+msgstr ""
+
+#, no-c-format
+msgid "Time"
+msgstr ""
+
+#, no-c-format
+msgid "Airspace and team"
+msgstr ""
+
+#, no-c-format
+msgid "Other"
+msgstr ""
+
+msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgstr ""
+
+msgid "Arrange InfoBoxes"
+msgstr ""
+
+msgid ""
+"Arrange\n"
+"InfoBoxes"
+msgstr ""
+
