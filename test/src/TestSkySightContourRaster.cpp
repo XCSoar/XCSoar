@@ -212,6 +212,40 @@ TestRasterBudget()
 }
 
 static void
+TestRasterReuse()
+{
+  using SkySight::CanReuseContourRaster;
+
+  /* 10 x 10 samples rendered at 4 pixels per sample */
+  constexpr SkySight::ContourWindow cached{10, 10, 10, 10, 40, 40};
+
+  ok1(CanReuseContourRaster(cached, cached));
+
+  /* a patch inside it, at the same detail */
+  ok1(CanReuseContourRaster(cached, {12, 12, 5, 5, 20, 20}));
+
+  /* a patch reaching past it on any side */
+  ok1(!CanReuseContourRaster(cached, {9, 12, 5, 5, 20, 20}));
+  ok1(!CanReuseContourRaster(cached, {12, 16, 5, 5, 20, 20}));
+
+  /* zooming in by less than the ratio keeps the raster, zooming in
+     further contours again */
+  ok1(CanReuseContourRaster(cached, {12, 12, 5, 5, 40, 40}));
+  ok1(!CanReuseContourRaster(cached, {12, 12, 5, 5, 41, 41}));
+
+  /* a raster with far more detail than wanted is not kept either */
+  ok1(!CanReuseContourRaster(cached, {10, 10, 10, 10, 19, 19}));
+
+  /* the vertical detail counts as much as the horizontal one */
+  ok1(!CanReuseContourRaster(cached, {12, 12, 5, 5, 20, 80}));
+  ok1(!CanReuseContourRaster(cached, {12, 12, 5, 5, 20, 5}));
+
+  /* nothing rendered, or nothing to render */
+  ok1(!CanReuseContourRaster({}, {12, 12, 5, 5, 20, 20}));
+  ok1(!CanReuseContourRaster(cached, {}));
+}
+
+static void
 TestRasterizerDecimates()
 {
   /* Eight samples into a four-pixel raster: each output pixel covers two
@@ -436,13 +470,15 @@ TestGeoFieldGrid()
 int
 main()
 {
-  plan_tests(16 + 11 + 3 + 5 + 5 + 16 + 8 + 3 + 4 + 5 + 2 + 6 + 3 + 11 + 12);
+  plan_tests(16 + 11 + 3 + 5 + 5 + 16 + 11 + 8 + 3 + 4 + 5 + 2 + 6 + 3 +
+             11 + 12);
   TestDecodeGridValue();
   TestBipolarDeadZone();
   TestNegativeStopsStillPaint();
   TestAllPositiveLegend();
   TestPaletteRejectsMissingSamples();
   TestRasterBudget();
+  TestRasterReuse();
   TestSampleFieldInterpolates();
   TestSampleFieldDoesNotOvershoot();
   TestSampleFieldSkipsMissingData();

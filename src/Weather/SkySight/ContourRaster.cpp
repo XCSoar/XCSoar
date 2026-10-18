@@ -200,6 +200,38 @@ FitContourRaster(ContourWindow window, unsigned upsample, unsigned max_axis,
   return window;
 }
 
+/**
+ * Is the detail of @p pixels_a over @p samples_a within
+ * #MAX_CONTOUR_DETAIL_RATIO of @p pixels_b over @p samples_b?
+ */
+[[gnu::const]] static bool
+IsSimilarDetail(unsigned samples_a, unsigned pixels_a,
+                unsigned samples_b, unsigned pixels_b) noexcept
+{
+  /* compare pixels_a / samples_a with pixels_b / samples_b without
+     dividing */
+  const auto a = uint64_t(pixels_a) * samples_b;
+  const auto b = uint64_t(pixels_b) * samples_a;
+  return a * MAX_CONTOUR_DETAIL_RATIO >= b &&
+    a <= b * MAX_CONTOUR_DETAIL_RATIO;
+}
+
+bool
+CanReuseContourRaster(const ContourWindow &cached,
+                      const ContourWindow &wanted) noexcept
+{
+  if (cached.empty() || wanted.empty())
+    return false;
+
+  return cached.x <= wanted.x && cached.y <= wanted.y &&
+    cached.x + cached.width >= wanted.x + wanted.width &&
+    cached.y + cached.height >= wanted.y + wanted.height &&
+    IsSimilarDetail(cached.width, cached.raster_width,
+                    wanted.width, wanted.raster_width) &&
+    IsSimilarDetail(cached.height, cached.raster_height,
+                    wanted.height, wanted.raster_height);
+}
+
 ContourRasterizer::ContourRasterizer(const ScalarField &_field,
                                      const ContourPalette &_palette,
                                      ContourWindow _window) noexcept
