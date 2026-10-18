@@ -203,6 +203,12 @@ Points to keep in mind when touching this:
   covers more than one sample at low zoom; :cpp:`ContourWindow` carries
   the raster size for exactly that reason, rather than an integer
   magnification.
+- The overlay keeps its last raster while :cpp:`CanReuseContourRaster()`
+  accepts it: the raster must cover the patch, and its pixels per sample
+  must be within ``MAX_CONTOUR_DETAIL_RATIO`` (two) of what the view asks
+  for, on both axes.  Contouring a phone-sized raster takes about 200 ms
+  on a mid-range phone, so requiring the exact detail would re-contour on
+  every zoom step.
 - ``FIELD_IMAGE_MAGIC`` identifies the layout.  Change what the decoder
   writes and the magic must change with it, so overlays from an earlier
   decoder are re-fetched rather than drawn as pictures.

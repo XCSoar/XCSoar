@@ -129,6 +129,26 @@ FitContourRaster(ContourWindow window, unsigned upsample, unsigned max_axis,
                  std::size_t max_cells) noexcept;
 
 /**
+ * How far the detail of a rendered raster (pixels per sample) may differ
+ * from the detail a view asks for before it is contoured again.
+ */
+inline constexpr unsigned MAX_CONTOUR_DETAIL_RATIO = 2;
+
+/**
+ * May the raster rendered for @p cached be drawn for a view that asks for
+ * @p wanted?  It must cover the whole patch, and its detail must be within
+ * #MAX_CONTOUR_DETAIL_RATIO of the wanted detail on both axes.
+ *
+ * Contouring runs on the drawing path and costs a few hundred
+ * milliseconds for a phone-sized raster, so re-contouring at every zoom
+ * step would stall the map; a factor of two either way is not visible
+ * once the map magnifies the raster with bilinear filtering.
+ */
+[[nodiscard]] [[gnu::pure]] bool
+CanReuseContourRaster(const ContourWindow &cached,
+                      const ContourWindow &wanted) noexcept;
+
+/**
  * Renders part of a forecast grid as filled contour bands.
  *
  * The grid is resampled onto a finer raster and each output pixel is

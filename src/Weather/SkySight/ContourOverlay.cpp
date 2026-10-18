@@ -52,19 +52,6 @@ GetMaxRasterAxis() noexcept
   return SkySight::MAX_CONTOUR_RASTER_AXIS;
 }
 
-[[gnu::pure]] bool
-Contains(const SkySight::ContourWindow &outer,
-         const SkySight::ContourWindow &inner) noexcept
-{
-  /* Reuse only at the same detail: a raster rendered for a wider patch
-     carries fewer pixels per sample than a zoomed-in view needs. */
-  return outer.width * inner.raster_width ==
-      inner.width * outer.raster_width &&
-    outer.x <= inner.x && outer.y <= inner.y &&
-    outer.x + outer.width >= inner.x + inner.width &&
-    outer.y + outer.height >= inner.y + inner.height;
-}
-
 } // namespace
 
 SkySightContourOverlay::SkySightContourOverlay(
@@ -173,7 +160,8 @@ SkySightContourOverlay::Draw(Canvas &canvas,
   if (window.empty())
     return;
 
-  if ((!cached || !Contains(cached_window, window)) && !Render(window))
+  if ((!cached || !SkySight::CanReuseContourRaster(cached_window, window)) &&
+      !Render(window))
     return;
 
   cached->Draw(canvas, projection);
