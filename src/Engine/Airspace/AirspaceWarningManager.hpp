@@ -296,6 +296,9 @@ public:
 private:
   void ApplyNotamDayState(AirspaceWarning &warning) noexcept;
 
+  /** Keep the most severe active warning at the front. */
+  void Resort() noexcept;
+
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
   const AirspaceWarning *
   FindWarningByNotamDayAckKey(std::string_view key) const noexcept;
