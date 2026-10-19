@@ -57,6 +57,8 @@ Version 7.47 - not yet released
     above its ceiling
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
+* task
+  - scan task QR codes with the camera on iOS, like on Android
 * development
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
