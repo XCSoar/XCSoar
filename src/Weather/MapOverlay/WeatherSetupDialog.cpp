@@ -31,6 +31,7 @@ ShowWeatherSetupDialog() noexcept
        rather than wherever the dialog was left last */
     page = "overlay";
     break;
+  case PageLayout::Overlay::WEGLIDE:
   case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:

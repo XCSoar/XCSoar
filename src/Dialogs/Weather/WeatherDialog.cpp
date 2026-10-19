@@ -20,6 +20,7 @@
 #endif
 #ifdef HAVE_WEATHER_OVERLAY
 #include "MapOverlayWidget.hpp"
+#include "WeGlideDialog.hpp"
 #endif
 #include "Widget/TextWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -177,6 +178,11 @@ ShowWeatherDialog(const char *page)
 #endif
 
 #ifdef HAVE_WEATHER_OVERLAY
+  if (page != nullptr && StringIsEqual(page, "weglide"))
+    start_page = widget.GetSize();
+
+  widget.AddTab(CreateWeGlideWeatherTab(), _("WeGlide"));
+
   /* this was disabled while the only source was the DWD, whose
      georeferenced images we lost access to; the radar composite needs
      no account, so there is something to show again */

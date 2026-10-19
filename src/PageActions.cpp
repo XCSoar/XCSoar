@@ -38,6 +38,7 @@
 #ifdef HAVE_WEATHER_OVERLAY
 #include "Weather/OPERA/RadarPageOverlay.hpp"
 #include "Weather/EUMETView/SatellitePageOverlay.hpp"
+#include "Weather/WeGlide/PageOverlay.hpp"
 #endif
 #endif
 
@@ -76,6 +77,7 @@ namespace PageActions {
   static void LeaveSkySightOverlay() noexcept;
   static void LeaveRadarOverlay() noexcept;
   static void LeaveSatelliteOverlay() noexcept;
+  static void LeaveWeGlideOverlay() noexcept;
 
   static void LeaveWeatherOverlayPage(const PageLayout &layout) noexcept;
 
@@ -85,6 +87,7 @@ namespace PageActions {
   static void ApplySkySightOverlay(const PageLayout &layout) noexcept;
   static void ApplyRadarOverlay() noexcept;
   static void ApplySatelliteOverlay(const PageLayout &layout) noexcept;
+  static void ApplyWeGlideOverlay(const PageLayout &layout) noexcept;
 
   static void ApplyPageOverlay(const PageLayout &layout) noexcept;
 
@@ -192,6 +195,7 @@ PageActions::OnMapProjectionModified() noexcept
 #ifdef HAVE_WEATHER_OVERLAY
   OPERA::OnProjectionModified();
   EUMETView::OnProjectionModified();
+  WeGlide::OnProjectionModified();
 #endif
 }
 
@@ -221,6 +225,32 @@ PageActions::ApplySatelliteOverlay([[maybe_unused]] const PageLayout &layout)
 }
 
 void
+PageActions::LeaveWeGlideOverlay() noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  auto &session = CommonInterface::SetUIState().weather.weglide;
+  if (session.IsSuspendedForPan())
+    return;
+
+  session.LeavePage();
+  WeGlide::DeactivatePageOverlay();
+#endif
+}
+
+void
+PageActions::ApplyWeGlideOverlay(const PageLayout &layout) noexcept
+{
+#ifdef HAVE_WEATHER_OVERLAY
+  auto &session = CommonInterface::SetUIState().weather.weglide;
+  const bool first_enter = session.EnterPage();
+  WeGlide::ActivatePageOverlay(layout.weglide_layer.c_str(), first_enter,
+                               layout.weglide_time);
+#else
+  (void)layout;
+#endif
+}
+
+void
 PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
 {
   if (layout.UsesEdlOverlay())
@@ -235,6 +265,8 @@ PageActions::LeaveWeatherOverlayPage(const PageLayout &layout) noexcept
     LeaveRadarOverlay();
   else if (layout.UsesSatelliteOverlay())
     LeaveSatelliteOverlay();
+  else if (layout.UsesWeGlideOverlay())
+    LeaveWeGlideOverlay();
 }
 
 void
@@ -345,6 +377,10 @@ PageActions::SuspendWeatherOverlaysForPan() noexcept
     OPERA::SuspendForPan();
   if (layout.UsesSatelliteOverlay())
     EUMETView::SuspendForPan();
+  if (layout.UsesWeGlideOverlay()) {
+    CommonInterface::SetUIState().weather.weglide.SuspendForPan();
+    WeGlide::SuspendForPan();
+  }
 #endif
 }
 
@@ -356,9 +392,11 @@ PageActions::ResumeWeatherOverlaysAfterPan() noexcept
   weather.rasp.ResumeAfterPan();
   weather.xctherm.ResumeAfterPan();
   weather.skysight.ResumeAfterPan();
+  weather.weglide.ResumeAfterPan();
 #ifdef HAVE_WEATHER_OVERLAY
   OPERA::ResumeAfterPan();
   EUMETView::ResumeAfterPan();
+  WeGlide::ResumeAfterPan();
 #endif
 }
 
@@ -382,6 +420,8 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
     LeaveRadarOverlay();
   if (!layout.UsesSatelliteOverlay())
     LeaveSatelliteOverlay();
+  if (!layout.UsesWeGlideOverlay())
+    LeaveWeGlideOverlay();
 
   ClearPageOverlays();
 
@@ -411,6 +451,10 @@ PageActions::ApplyPageOverlay(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::SATELLITE:
     ApplySatelliteOverlay(layout);
+    break;
+
+  case PageLayout::Overlay::WEGLIDE:
+    ApplyWeGlideOverlay(layout);
     break;
 
   case PageLayout::Overlay::MAX:

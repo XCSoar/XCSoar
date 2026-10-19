@@ -196,6 +196,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Settings/WeGlideDeviceSignIn.cpp \
 	$(SRC)/Dialogs/Weather/XCThermDialog.cpp \
 	$(SRC)/Dialogs/Weather/WeatherCredentialGateWidget.cpp \
 	$(SRC)/Dialogs/Weather/MosmixTemperature.cpp \
@@ -651,6 +652,7 @@ ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
+	$(SRC)/Dialogs/Weather/WeGlideDialog.cpp \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp \
 	$(SRC)/Weather/OPERA/Radar.cpp \
 	$(SRC)/Weather/OPERA/RadarData.cpp \
@@ -658,7 +660,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EUMETView/Satellite.cpp \
 	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
 	$(SRC)/Weather/EUMETView/Enhance.cpp \
-	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp
+	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp \
+	$(SRC)/Weather/WeGlide/PageOverlay.cpp \
+	$(SRC)/Weather/MapOverlay/WeGlideControlsModel.cpp
 endif
 endif
 
@@ -762,6 +766,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
+	$(SRC)/net/client/WeGlide/Account.cpp \
 	$(SRC)/Dialogs/DownloadFileModal.cpp \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Dialogs/DownloadFilter.cpp \

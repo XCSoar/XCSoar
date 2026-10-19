@@ -24,6 +24,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "ui/event/CoInjectFunction.hpp"
+#include "net/client/WeGlide/Account.hpp"
 #include "net/client/WeGlide/ListTasks.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
 #include "net/http/Init.hpp"
@@ -56,6 +57,9 @@ class WeGlideTasksPanel final
 
   NullOperationEnvironment null_progress_listener;
   UI::CoInjectFunction<List> inject_reload{Net::curl->GetEventLoop()};
+  WeGlide::AccountToken account;
+  WeGlide::RefreshOutcome account_outcome =
+    WeGlide::RefreshOutcome::UNCHANGED;
 
   const WeGlideTaskSelection selection;
 
@@ -169,6 +173,45 @@ WeGlideTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                   FormatUserDistanceSmart(info.distance));
 }
 
+static void
+SaveRefreshedAccount(const WeGlide::AccountToken &account,
+                     WeGlide::RefreshOutcome outcome) noexcept
+{
+  if (outcome != WeGlide::RefreshOutcome::UNCHANGED)
+    WeGlide::SaveAccountToken(account);
+}
+
+static Co::Task<std::vector<WeGlide::TaskInfo>>
+LoadUserTasks(const WeGlideSettings &settings,
+              WeGlide::AccountToken &account,
+              WeGlide::RefreshOutcome &outcome,
+              ProgressListener &progress)
+{
+  auto refresh = WeGlide::RefreshAccount(*Net::curl, account);
+  outcome = co_await refresh;
+  auto tasks = WeGlide::ListTasksByUser(*Net::curl, settings,
+                                        settings.pilot_id, progress,
+                                        account.access_token);
+  co_return co_await tasks;
+}
+
+static Co::Task<std::unique_ptr<OrderedTask>>
+DownloadAuthorised(const WeGlideSettings &settings,
+                   uint_least64_t task_id,
+                   const TaskBehaviour &task_behaviour,
+                   const Waypoints *waypoints,
+                   ProgressListener &progress,
+                   WeGlide::AccountToken &account,
+                   WeGlide::RefreshOutcome &outcome)
+{
+  auto refresh = WeGlide::RefreshAccount(*Net::curl, account);
+  outcome = co_await refresh;
+  auto task = WeGlide::DownloadTask(*Net::curl, settings, task_id,
+                                    task_behaviour, waypoints, progress,
+                                    account.access_token);
+  co_return co_await task;
+}
+
 static auto
 LoadTaskList(WeGlideTaskSelection selection,
              const WeGlideSettings &settings,
@@ -210,18 +253,30 @@ WeGlideTasksPanel::ReloadList() noexcept
   }
 
   inject_reload.Cancel();
-  inject_reload.Start(LoadTaskList(selection, settings.weglide,
-                                   null_progress_listener),
-                      [this](List &&_list){
-                        list = std::move(_list);
-                        GetList().SetLength(list.empty() ? 1 : list.size());
-                        UpdateButtons();
-                        RefreshView();
-                      },
-                      [this](std::exception_ptr error){
-                        ShowError(error, "Error");
-                        RefreshView();
-                      });
+  account_outcome = WeGlide::RefreshOutcome::UNCHANGED;
+  auto on_success = [this](List &&_list){
+    SaveRefreshedAccount(account, account_outcome);
+    list = std::move(_list);
+    GetList().SetLength(list.empty() ? 1 : list.size());
+    UpdateButtons();
+    RefreshView();
+  };
+  auto on_error = [this](std::exception_ptr error){
+    SaveRefreshedAccount(account, account_outcome);
+    ShowError(error, "Error");
+    RefreshView();
+  };
+  if (selection == WeGlideTaskSelection::USER) {
+    account = WeGlide::LoadAccountToken();
+    inject_reload.Start(LoadUserTasks(settings.weglide, account,
+                                      account_outcome,
+                                      null_progress_listener),
+                        std::move(on_success), std::move(on_error));
+  } else {
+    inject_reload.Start(LoadTaskList(selection, settings.weglide,
+                                     null_progress_listener),
+                        std::move(on_success), std::move(on_error));
+  }
 }
 
 void
@@ -270,16 +325,19 @@ try {
   const auto &info = list[GetList().GetCursorIndex()];
 
   PluggableOperationEnvironment env;
+  account = WeGlide::LoadAccountToken();
+  account_outcome = WeGlide::RefreshOutcome::UNCHANGED;
 
   auto task = ShowCoFunctionDialog(dialog.GetMainWindow(), look,
                                    _("Download"),
-                                   WeGlide::DownloadTask(*Net::curl,
-                                                         settings.weglide,
-                                                         info.id,
-                                                         settings.task,
-                                                         data_components->waypoints.get(),
-                                                         env),
+                                   DownloadAuthorised(settings.weglide,
+                                                      info.id,
+                                                      settings.task,
+                                                      data_components->waypoints.get(),
+                                                      env, account,
+                                                      account_outcome),
                                    &env);
+  SaveRefreshedAccount(account, account_outcome);
   if (!task)
     return;
 

@@ -348,6 +348,7 @@ PageLayoutEditWidget::FillOverlayDetailControl() noexcept
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::XCTHERM:
   case PageLayout::Overlay::RADAR:
+  case PageLayout::Overlay::WEGLIDE:
 #ifndef HAVE_WEATHER_OVERLAY
   case PageLayout::Overlay::SATELLITE:
 #endif
@@ -398,6 +399,7 @@ PageLayoutEditWidget::UpdateOverlayControls() noexcept
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::XCTHERM:
     case PageLayout::Overlay::RADAR:
+    case PageLayout::Overlay::WEGLIDE:
 #ifndef HAVE_EDL
     case PageLayout::Overlay::EDL:
 #endif
@@ -500,6 +502,7 @@ PageLayoutEditWidget::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_
 #ifdef HAVE_WEATHER_OVERLAY
     { PageLayout::Overlay::RADAR, N_("Rain radar") },
     { PageLayout::Overlay::SATELLITE, N_("Satellite") },
+    { PageLayout::Overlay::WEGLIDE, N_("WeGlide") },
 #endif
     nullptr
   };

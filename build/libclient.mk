@@ -3,6 +3,7 @@ ifeq ($(HAVE_HTTP),y)
 # network services.
 
 LIBCLIENT_SOURCES = \
+	$(SRC)/net/client/auth/DeviceFlow.cpp \
 	$(SRC)/net/client/auth/JwtBearerSession.cpp \
 	$(SRC)/net/client/FlarmHub/Client.cpp \
 	$(SRC)/net/client/SyncHttp.cpp \
@@ -13,6 +14,7 @@ LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/ListTasks.cpp \
+	$(SRC)/net/client/WeGlide/Tiles.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
 # ASYNC must follow this library: the progress poll calls

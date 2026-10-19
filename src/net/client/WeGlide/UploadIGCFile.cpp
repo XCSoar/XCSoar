@@ -6,6 +6,7 @@
 
 #ifdef HAVE_HTTP
 
+#include "Account.hpp"
 #include "UploadFlight.hpp"
 #include "AircraftList.hpp"
 #include "Settings.hpp"
@@ -109,6 +110,18 @@ UploadSuccessDialog(const FlightData &flight_data) noexcept
   ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
 }
 
+static Co::Task<boost::json::value>
+UploadAuthorised(CurlGlobal &curl, const WeGlideSettings &settings,
+                 AccountToken &account, uint32_t glider_id, Path igc_path,
+                 ProgressListener &progress)
+{
+  auto refresh = RefreshAccount(curl, account);
+  co_await refresh;
+  auto upload = UploadFlight(curl, settings, glider_id, igc_path, progress,
+                             account.access_token);
+  co_return co_await upload;
+}
+
 static FlightData
 UploadFile(Path igc_path)
 {
@@ -124,11 +137,17 @@ UploadFile(Path igc_path)
   }
 
   PluggableOperationEnvironment env;
+  AccountToken account = LoadAccountToken();
+  struct SaveAccount {
+    AccountToken &account;
+    ~SaveAccount() noexcept { SaveAccountToken(account); }
+  } save_account{account};
 
   auto value = ShowCoFunctionDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                                     _("Upload Flight"),
-                                    UploadFlight(*Net::curl, settings, glider_id,
-                                                 igc_path, env),
+                                    UploadAuthorised(*Net::curl, settings,
+                                                     account, glider_id,
+                                                     igc_path, env),
                                     &env);
   if (!value)
     return {};

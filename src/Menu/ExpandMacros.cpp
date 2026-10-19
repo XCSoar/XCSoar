@@ -278,6 +278,7 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::RADAR:
     case PageLayout::Overlay::SATELLITE:
+    case PageLayout::Overlay::WEGLIDE:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
       return plus
@@ -300,6 +301,7 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::RADAR:
     case PageLayout::Overlay::SATELLITE:
+    case PageLayout::Overlay::WEGLIDE:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
       return C_("Weather control", "Layer\nList\n(F2/+)");
@@ -320,6 +322,7 @@ LookupMacro(std::string_view name, bool &invalid) noexcept
     case PageLayout::Overlay::RASP:
     case PageLayout::Overlay::RADAR:
     case PageLayout::Overlay::SATELLITE:
+    case PageLayout::Overlay::WEGLIDE:
     case PageLayout::Overlay::NONE:
     case PageLayout::Overlay::MAX:
       return C_("Weather control", "Time\nAuto\n(F3/-)");

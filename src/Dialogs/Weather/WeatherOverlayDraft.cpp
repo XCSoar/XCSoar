@@ -84,6 +84,10 @@ State::IsDirty() const noexcept
     return draft.skysight_overlay != baseline.skysight_overlay ||
       draft.skysight_time != baseline.skysight_time;
 
+  case PageLayout::Overlay::WEGLIDE:
+    return draft.weglide_layer != baseline.weglide_layer ||
+      draft.weglide_time != baseline.weglide_time;
+
   case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::SATELLITE:
   case PageLayout::Overlay::NONE:

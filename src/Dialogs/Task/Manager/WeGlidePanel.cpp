@@ -14,6 +14,7 @@
 #include "Dialogs/Settings/Panels/WeGlideConfigPanel.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Init.hpp"
+#include "net/client/WeGlide/Account.hpp"
 #include "net/client/WeGlide/DownloadTask.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
@@ -26,11 +27,17 @@
 static bool
 WeGlideReady()
 {
-  if (CommonInterface::GetComputerSettings().weglide.IsConfigured())
+  const auto &settings = CommonInterface::GetComputerSettings().weglide;
+  if (settings.enabled &&
+      (settings.IsConfigured() ||
+       !WeGlide::LoadAccountToken().access_token.empty()))
     return true;
 
   ShowConfigPanel(_("WeGlide"), CreateWeGlideConfigPanel);
-  return CommonInterface::GetComputerSettings().weglide.IsConfigured();
+  const auto &again = CommonInterface::GetComputerSettings().weglide;
+  return again.enabled &&
+    (again.IsConfigured() ||
+     !WeGlide::LoadAccountToken().access_token.empty());
 }
 
 class WeGlideActionsPanel final : public RowFormWidget {
@@ -58,6 +65,10 @@ void
 WeGlideActionsPanel::OnDownloadClicked() noexcept
 try {
   const auto &settings = CommonInterface::GetComputerSettings();
+  if (settings.weglide.pilot_id == 0) {
+    ShowConfigPanel(_("WeGlide"), CreateWeGlideConfigPanel);
+    return;
+  }
 
   PluggableOperationEnvironment env;
 

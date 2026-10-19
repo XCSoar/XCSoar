@@ -6,10 +6,15 @@
 #include "Profile/Keys.hpp"
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/Button.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+
+#ifdef HAVE_HTTP
+#include "Dialogs/Settings/WeGlideDeviceSignIn.hpp"
+#endif
 
 #include <stdio.h>
 
@@ -20,6 +25,9 @@ enum ControlIndex {
   WeGlideAutomaticUpload,
   WeGlidePilotID,
   WeGlidePilotBirthDate,
+#ifdef HAVE_HTTP
+  WeGlideConnect,
+#endif
 };
 
 
@@ -31,8 +39,15 @@ public:
 
   void SetEnabled(bool enabled) noexcept;
 
+#ifdef HAVE_HTTP
+  Button *account_button = nullptr;
+
+  void UpdateAccountButton() noexcept;
+#endif
+
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 
 private:
@@ -46,7 +61,26 @@ WeGlideConfigPanel::SetEnabled(bool enabled) noexcept
   SetRowEnabled(WeGlideAutomaticUpload, enabled);
   SetRowEnabled(WeGlidePilotBirthDate, enabled);
   SetRowEnabled(WeGlidePilotID, enabled);
+#ifdef HAVE_HTTP
+  UpdateAccountButton();
+#endif
 }
+
+#ifdef HAVE_HTTP
+void
+WeGlideConfigPanel::UpdateAccountButton() noexcept
+{
+  if (account_button == nullptr)
+    return;
+
+  const bool connected = WeGlideAccountConnected();
+  account_button->SetCaption(connected
+                              ? C_("Button", "Disconnect")
+                              : C_("Button", "Connect"));
+  SetRowEnabled(WeGlideConnect,
+                connected || GetValueBoolean(WeGlideEnabled));
+}
+#endif
 
 void
 WeGlideConfigPanel::OnModified(DataField &df) noexcept
@@ -82,7 +116,26 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
   AddDate(_("Pilot date of birth"), nullptr,
           weglide.pilot_birthdate);
 
+#ifdef HAVE_HTTP
+  account_button = AddButton(C_("Button", "Connect"), [this]() {
+    if (WeGlideAccountConnected())
+      ForgetWeGlideAccount();
+    else if (GetValueBoolean(WeGlideEnabled))
+      RunWeGlideDeviceSignIn();
+    UpdateAccountButton();
+  });
+#endif
+
   SetEnabled(weglide.enabled);
+}
+
+void
+WeGlideConfigPanel::Show(const PixelRect &rc) noexcept
+{
+  RowFormWidget::Show(rc);
+#ifdef HAVE_HTTP
+  UpdateAccountButton();
+#endif
 }
 
 bool
