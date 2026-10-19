@@ -161,19 +161,19 @@ TestAckClearsActiveImmediately()
   const auto near_sol = MakeSolution(2000, 20);
   auto &inside = manager.GetWarning(inside_as);
   inside.UpdateSolution(AirspaceWarning::WARNING_INSIDE, inside_sol);
-  auto &near = manager.GetWarning(near_as);
-  near.UpdateSolution(AirspaceWarning::WARNING_GLIDE, near_sol);
+  auto &nearby = manager.GetWarning(near_as);
+  nearby.UpdateSolution(AirspaceWarning::WARNING_GLIDE, near_sol);
 
   const auto ack = std::chrono::seconds{30};
   const auto step = std::chrono::seconds{1};
   ok1(inside.WarningLive(ack, step));
-  ok1(near.WarningLive(ack, step));
+  ok1(nearby.WarningLive(ack, step));
   ok1(inside.IsActive());
-  ok1(near.IsActive());
+  ok1(nearby.IsActive());
 
   manager.AcknowledgeInside(inside_as);
   ok1(!inside.IsActive());
-  ok1(near.IsActive());
+  ok1(nearby.IsActive());
   ok1(&manager.begin()->GetAirspace() == near_as.get());
 
   /* The next warning cycle must not report the ack again. */
@@ -184,15 +184,15 @@ TestAckClearsActiveImmediately()
   ok1(!inside.IsActive());
 
   manager.SetCleared(near_as, true);
-  ok1(!near.IsActive());
+  ok1(!nearby.IsActive());
   ok1(&manager.begin()->GetAirspace() == inside_as.get());
 
   manager.SetCleared(near_as, false);
-  ok1(near.IsActive());
+  ok1(nearby.IsActive());
   ok1(&manager.begin()->GetAirspace() == near_as.get());
 
   manager.Acknowledge(near_as);
-  ok1(!near.IsActive());
+  ok1(!nearby.IsActive());
   ok1(!inside.IsActive());
 }
 
