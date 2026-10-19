@@ -4,6 +4,8 @@ Version 7.46.1 - not yet released
     topography enabled #1235
   - keep menu, dialogue and status text from overflowing on a
     high-resolution phone #3375
+  - fix the IOIO not connecting after XCSoar was restarted while the
+    board stayed plugged in
 * dialogs
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
