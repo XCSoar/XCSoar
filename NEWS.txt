@@ -14,6 +14,9 @@ Version 7.47 - not yet released
   - label the MacCready InfoBox speed-to-fly comment TAS, because
     that speed is true airspeed. Setup can show it as indicated
     airspeed
+  - show WeGlide Copilot thermals or vario on the map after signing
+    in, with the colour legend.  The cursor bar steps back from the
+    live frame by 15 minutes and switches the layer #1403
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,

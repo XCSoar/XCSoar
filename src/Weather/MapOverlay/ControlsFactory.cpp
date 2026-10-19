@@ -13,6 +13,9 @@
 #include "SkySightControlsModel.hpp"
 #endif
 #include "XcthermControlsModel.hpp"
+#ifdef HAVE_WEATHER_OVERLAY
+#include "WeGlideControlsModel.hpp"
+#endif
 
 #include <memory>
 
@@ -46,6 +49,15 @@ CreateControlsModel(const PageLayout &layout) noexcept
 
   case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::SATELLITE:
+    break;
+
+  case PageLayout::Overlay::WEGLIDE:
+#ifdef HAVE_WEATHER_OVERLAY
+    return std::make_unique<WeGlideControlsModel>();
+#else
+    break;
+#endif
+
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:
     break;
