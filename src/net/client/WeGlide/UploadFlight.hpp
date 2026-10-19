@@ -8,6 +8,7 @@
 #include <boost/json/fwd.hpp>
 
 #include <cstdint>
+#include <string_view>
 
 struct WeGlideSettings;
 class Path;
@@ -20,6 +21,7 @@ Co::Task<boost::json::value>
 UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
              uint_least32_t glider_type,
              Path igc_path,
-             ProgressListener &progress);
+             ProgressListener &progress,
+             std::string_view access_token = {});
 
 } // namespace WeGlide

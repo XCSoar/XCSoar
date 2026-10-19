@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class CurlGlobal;
@@ -124,7 +125,8 @@ struct TaskInfo {
 Co::Task<std::vector<TaskInfo>>
 ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
                 uint_least64_t user_id,
-                ProgressListener &progress);
+                ProgressListener &progress,
+                std::string_view access_token = {});
 
 /**
  * Download a list of all tasks declared in WeGlide.

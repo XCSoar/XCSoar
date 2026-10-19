@@ -13,6 +13,7 @@
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
+#include "lib/curl/Slist.hxx"
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/fmt/ToBuffer.hxx"
 #include "io/StringOutputStream.hxx"
@@ -20,6 +21,7 @@
 #include <boost/json.hpp>
 
 #include <cassert>
+#include <string>
 
 using std::string_view_literals::operator""sv;
 
@@ -27,11 +29,17 @@ namespace WeGlide {
 
 static Co::Task<std::unique_ptr<OrderedTask>>
 DownloadTask(CurlGlobal &curl, CurlEasy easy,
+             std::string authorization,
              const TaskBehaviour &task_behaviour,
              const Waypoints *waypoints,
              ProgressListener &progress)
 {
   Curl::Setup(easy);
+  CurlSlist headers;
+  if (!authorization.empty()) {
+    headers.Append(authorization.c_str());
+    easy.SetRequestHeaders(headers.Get());
+  }
   const Net::ProgressAdapter progress_adapter{easy, progress};
 
   StringOutputStream sos;
@@ -72,11 +80,17 @@ DownloadTask(CurlGlobal &curl, const WeGlideSettings &settings,
              uint_least64_t task_id,
              const TaskBehaviour &task_behaviour,
              const Waypoints *waypoints,
-             ProgressListener &progress)
+             ProgressListener &progress,
+             std::string_view access_token)
 {
   const auto url = FmtBuffer<256>("{}/task/{}?cup=false&tsk=true",
                                   settings.default_url, task_id);
-  return DownloadTask(curl, CurlEasy{url},
+  std::string authorization;
+  if (!access_token.empty()) {
+    authorization = "Authorization: Bearer ";
+    authorization.append(access_token);
+  }
+  return DownloadTask(curl, CurlEasy{url}, std::move(authorization),
                       task_behaviour, waypoints,
                       progress);
 }
@@ -91,7 +105,7 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
 
   const auto url = FmtBuffer<256>("{}/task/declaration/{}?cup=false&tsk=true",
                                   settings.default_url, settings.pilot_id);
-  return DownloadTask(curl, CurlEasy{url},
+  return DownloadTask(curl, CurlEasy{url}, {},
                       task_behaviour, waypoints,
                       progress);
 }
