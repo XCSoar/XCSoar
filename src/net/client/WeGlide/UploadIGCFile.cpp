@@ -6,6 +6,7 @@
 
 #ifdef HAVE_HTTP
 
+#include "Account.hpp"
 #include "UploadFlight.hpp"
 #include "AircraftList.hpp"
 #include "Settings.hpp"
@@ -109,6 +110,25 @@ UploadSuccessDialog(const FlightData &flight_data) noexcept
   ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
 }
 
+static Co::Task<boost::json::value>
+UploadAuthorised(CurlGlobal &curl, const WeGlideSettings &settings,
+                 AccountToken &account, RefreshOutcome &outcome,
+                 uint32_t glider_id, Path igc_path,
+                 ProgressListener &progress)
+{
+  try {
+    outcome = co_await RefreshAccount(curl, account);
+  } catch (...) {
+    /* A timed-out refresh must not abort an upload whose access
+       token is still inside its lifetime. */
+    if (!AccessTokenUsable(account))
+      throw;
+  }
+  auto upload = UploadFlight(curl, settings, glider_id, igc_path, progress,
+                             account.access_token);
+  co_return co_await upload;
+}
+
 static FlightData
 UploadFile(Path igc_path)
 {
@@ -124,11 +144,26 @@ UploadFile(Path igc_path)
   }
 
   PluggableOperationEnvironment env;
+  AccountToken account = LoadAccountToken();
+  const std::string refresh_at_start = account.refresh_token;
+  RefreshOutcome outcome = RefreshOutcome::UNCHANGED;
+  struct SaveAccount {
+    AccountToken &account;
+    const std::string &refresh_at_start;
+    RefreshOutcome &outcome;
+    ~SaveAccount() noexcept {
+      const auto profile = LoadAccountToken().refresh_token;
+      if (!ShouldSaveRefreshedAccount(outcome, profile, refresh_at_start))
+        return;
+      SaveAccountToken(account);
+    }
+  } save_account{account, refresh_at_start, outcome};
 
   auto value = ShowCoFunctionDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
                                     _("Upload Flight"),
-                                    UploadFlight(*Net::curl, settings, glider_id,
-                                                 igc_path, env),
+                                    UploadAuthorised(*Net::curl, settings,
+                                                     account, outcome,
+                                                     glider_id, igc_path, env),
                                     &env);
   if (!value)
     return {};
