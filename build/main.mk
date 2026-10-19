@@ -200,6 +200,7 @@ ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Settings/SoaringScoringDeviceSignIn.cpp \
 	$(SRC)/net/client/SoaringScoring/Account.cpp \
+	$(SRC)/Dialogs/Settings/WeGlideDeviceSignIn.cpp \
 	$(SRC)/Dialogs/Weather/XCThermDialog.cpp \
 	$(SRC)/Dialogs/Weather/WeatherCredentialGateWidget.cpp \
 	$(SRC)/Dialogs/Weather/MosmixTemperature.cpp \
@@ -770,6 +771,7 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
+	$(SRC)/net/client/WeGlide/Account.cpp \
 	$(SRC)/Dialogs/DownloadFileModal.cpp \
 	$(SRC)/Dialogs/DownloadFilePicker.cpp \
 	$(SRC)/Dialogs/DownloadFilter.cpp \
