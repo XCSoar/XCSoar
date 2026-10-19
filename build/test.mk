@@ -382,6 +382,15 @@ TEST_SOARING_SCORING_SOURCES = \
 TEST_SOARING_SCORING_DEPENDS = JSON UTIL
 $(eval $(call link-program,TestSoaringScoring,TEST_SOARING_SCORING))
 
+TEST_NAMES += TestWeGlideTiles
+
+TEST_WEGLIDE_TILES_SOURCES = \
+	$(SRC)/net/client/WeGlide/Tiles.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWeGlideTiles.cpp
+TEST_WEGLIDE_TILES_DEPENDS = JSON FMT UTIL
+$(eval $(call link-program,TestWeGlideTiles,TEST_WEGLIDE_TILES))
+
 TEST_NAMES += TestWeatherUIState
 
 TEST_WEATHER_UI_STATE_SOURCES = \
