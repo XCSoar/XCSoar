@@ -53,6 +53,11 @@ CopyWeatherOverlayCursors(PageLayout &dest,
     dest.satellite_layer = src.satellite_layer;
     break;
 
+  case PageLayout::Overlay::WEGLIDE:
+    dest.weglide_layer = src.weglide_layer;
+    dest.weglide_time = src.weglide_time;
+    break;
+
   case PageLayout::Overlay::RADAR:
   case PageLayout::Overlay::NONE:
   case PageLayout::Overlay::MAX:

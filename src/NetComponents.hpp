@@ -23,6 +23,7 @@ class XCThermDownloadGlue;
 #ifdef HAVE_WEATHER_OVERLAY
 class RadarDownloadGlue;
 class SatelliteDownloadGlue;
+class WeGlideDownloadGlue;
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
@@ -50,6 +51,7 @@ struct NetComponents {
 # ifdef HAVE_WEATHER_OVERLAY
   const std::unique_ptr<RadarDownloadGlue> opera_radar;
   const std::unique_ptr<SatelliteDownloadGlue> eumetview_satellite;
+  const std::unique_ptr<WeGlideDownloadGlue> weglide_copilot;
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER

@@ -13,6 +13,7 @@ Applies to:
 - EDL
 - XCTherm
 - SkySight
+- WeGlide Copilot (thermal and vario tiles, after the device-flow sign-in)
 
 Code entry points:
 
@@ -107,6 +108,13 @@ time/altitude.
   - entering a SkySight page applies both values. A fixed timestamp is kept
     even when refreshed metadata no longer contains that step, so the cursor
     can show it as unavailable instead of silently changing the page.
+
+- WeGlide:
+
+  - :cpp:`PageLayout::weglide_layer` stores the layer id.
+  - :cpp:`PageLayout::weglide_time` stores Auto or a fixed Unix frame.
+    Auto follows the live frame. The cursor steps 15 minutes, snapped
+    to the layer interval, and does not pass the live frame.
 
 SkySight forecast loading
 -------------------------

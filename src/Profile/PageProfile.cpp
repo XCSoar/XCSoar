@@ -96,6 +96,17 @@ Load(const ProfileMap &map, PageLayout &_pl, const unsigned page)
   if (!map.Get(profileKey, pl.satellite_layer) || pl.satellite_layer < 0)
     pl.satellite_layer = PageLayout::SATELLITE_LAYER_DEFAULT;
 
+  strcpy(profileKey + prefixLen, "WeGlideLayer");
+  if (const char *value = map.Get(profileKey); value != nullptr)
+    pl.weglide_layer = value;
+
+  strcpy(profileKey + prefixLen, "WeGlideTime");
+  if (const char *value = map.Get(profileKey); value != nullptr) {
+    if (!ParseIntegerTo(std::string_view{value}, pl.weglide_time) ||
+        pl.weglide_time < PageLayout::WEGLIDE_TIME_AUTO)
+      pl.weglide_time = PageLayout::WEGLIDE_TIME_AUTO;
+  }
+
   strcpy(profileKey + prefixLen, "SkysightOverlay");
   const char *skysight_overlay_value = map.Get(profileKey);
   strcpy(profileKey + prefixLen, "SkysightOverlay");
@@ -186,6 +197,14 @@ Profile::Save(ProfileMap &map, const PageLayout &page, const unsigned i)
 
   strcpy(profileKey + prefixLen, "SatelliteLayer");
   map.Set(profileKey, page.satellite_layer);
+
+  strcpy(profileKey + prefixLen, "WeGlideLayer");
+  map.Set(profileKey, page.weglide_layer.c_str());
+
+  strcpy(profileKey + prefixLen, "WeGlideTime");
+  StaticString<32> weglide_time;
+  weglide_time.Format("%lld", (long long)page.weglide_time);
+  map.Set(profileKey, weglide_time.c_str());
 
   strcpy(profileKey + prefixLen, "SkysightOverlay");
   map.Set(profileKey, page.skysight_overlay.c_str());
