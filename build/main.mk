@@ -652,6 +652,7 @@ ifeq ($(OPENGL),y)
 ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Weather/MapOverlayWidget.cpp \
+	$(SRC)/Dialogs/Weather/WeGlideDialog.cpp \
 	$(SRC)/Dialogs/Weather/EdlSettingsWidget.cpp \
 	$(SRC)/Weather/OPERA/Radar.cpp \
 	$(SRC)/Weather/OPERA/RadarData.cpp \

@@ -1,8 +1,10 @@
 Version 7.47 - not yet released
 * ui
   - show WeGlide Copilot thermals or vario on the map after signing
-    in, with the colour legend.  The cursor bar steps back from the
-    live frame by 15 minutes and switches the layer #1403
+    in, with the colour legend.  Info → Weather has a WeGlide page
+    to sign in, disconnect, and apply the overlay.  The cursor bar
+    steps back from the live frame by 15 minutes and switches the
+    layer #1403
 
 Version 7.46 - 2026-10-19
 * highlights
