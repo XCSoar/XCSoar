@@ -756,8 +756,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/XCSoar.cpp
 
-# No camera here.  Apple links Apple/QRScanner.cpp instead; a new
-# port does the same with its own file (see Task/QRScanner.hpp).
+# No camera here.  Apple links Apple/QRScanner.cpp instead (the iOS
+# scanner, or a stub on macOS); a new port does the same with its own
+# file (see Task/QRScanner.hpp).
 ifneq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += $(SRC)/Task/QRScanner.cpp
 endif
