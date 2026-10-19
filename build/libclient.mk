@@ -14,6 +14,7 @@ LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/WeGlide/Error.cpp \
 	$(SRC)/net/client/WeGlide/DownloadTask.cpp \
 	$(SRC)/net/client/WeGlide/ListTasks.cpp \
+	$(SRC)/net/client/WeGlide/Tiles.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp
 
 # ASYNC must follow this library: the progress poll calls
