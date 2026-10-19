@@ -21,6 +21,8 @@ Version 7.46.1 - not yet released
   - fix a downloaded IGC file losing carriage returns
 * linux
   - fix SkyLines user-name replies on ARM
+* task
+  - fix a crash drawing the task QR code
 * development
   - compile the QR library as ARMv6 for a Raspberry Pi 1
   - link libatomic into 32-bit ARM builds, except Kobo
