@@ -73,6 +73,7 @@ Version 7.47 - not yet released
     airspace list was empty
 * task
   - scan task QR codes with the camera on iOS, like on Android
+  - fix a crash drawing the task QR code
 * development
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
