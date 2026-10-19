@@ -15,7 +15,8 @@
  */
 struct SpokenAirspaceAlert {
   enum class Kind : uint8_t {
-    NEAR,
+    /* NEAR is an empty macro in windef.h, so MinGW cannot use it. */
+    NEARBY,
     INSIDE,
     ABOVE,
   };
@@ -37,7 +38,7 @@ struct SpokenAirspaceAlert {
         solution.altitude > nav_altitude)
       return {Kind::ABOVE};
 
-    return {Kind::NEAR};
+    return {Kind::NEARBY};
   }
 
   /**
