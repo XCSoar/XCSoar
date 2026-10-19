@@ -12269,3 +12269,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "将相机对准任务二维码"
+
+msgid "No camera permission"
+msgstr "没有相机权限"
+
+msgid "No camera found"
+msgstr "未找到相机"
+
+msgid "Cannot open the camera"
+msgstr "无法打开相机"
+
+msgid "Cannot start the camera preview"
+msgstr "无法启动相机预览"
+
+msgid "Camera not usable"
+msgstr "相机不可用"

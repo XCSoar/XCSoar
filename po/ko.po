@@ -12468,3 +12468,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "카메라를 과제 QR 코드에 맞추세요"
+
+msgid "No camera permission"
+msgstr "카메라 권한 없음"
+
+msgid "No camera found"
+msgstr "카메라를 찾을 수 없음"
+
+msgid "Cannot open the camera"
+msgstr "카메라를 열 수 없음"
+
+msgid "Cannot start the camera preview"
+msgstr "카메라 미리보기를 시작할 수 없음"
+
+msgid "Camera not usable"
+msgstr "카메라를 사용할 수 없음"

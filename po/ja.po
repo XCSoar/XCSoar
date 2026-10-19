@@ -12662,3 +12662,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "タスクのQRコードにカメラを向けてください"
+
+msgid "No camera permission"
+msgstr "カメラの権限がありません"
+
+msgid "No camera found"
+msgstr "カメラが見つかりません"
+
+msgid "Cannot open the camera"
+msgstr "カメラを開けません"
+
+msgid "Cannot start the camera preview"
+msgstr "カメラのプレビューを開始できません"
+
+msgid "Camera not usable"
+msgstr "カメラを使用できません"

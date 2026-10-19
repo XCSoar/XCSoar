@@ -12921,3 +12921,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Στρέψτε την κάμερα σε έναν κωδικό QR εργασίας"
+
+msgid "No camera permission"
+msgstr "Δεν υπάρχει άδεια κάμερας"
+
+msgid "No camera found"
+msgstr "Δεν βρέθηκε κάμερα"
+
+msgid "Cannot open the camera"
+msgstr "Δεν είναι δυνατό το άνοιγμα της κάμερας"
+
+msgid "Cannot start the camera preview"
+msgstr "Δεν είναι δυνατή η έναρξη της προεπισκόπησης κάμερας"
+
+msgid "Camera not usable"
+msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"

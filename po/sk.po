@@ -12774,3 +12774,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Namierte fotoaparát na QR kód úlohy"
+
+msgid "No camera permission"
+msgstr "Chýba povolenie pre fotoaparát"
+
+msgid "No camera found"
+msgstr "Fotoaparát sa nenašiel"
+
+msgid "Cannot open the camera"
+msgstr "Fotoaparát sa nedá otvoriť"
+
+msgid "Cannot start the camera preview"
+msgstr "Náhľad fotoaparátu sa nedá spustiť"
+
+msgid "Camera not usable"
+msgstr "Fotoaparát sa nedá použiť"
