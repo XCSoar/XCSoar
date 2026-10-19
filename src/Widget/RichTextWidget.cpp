@@ -19,27 +19,36 @@ RichTextWidget::GetMinimumSize() const noexcept
 PixelSize
 RichTextWidget::GetMaximumSize() const noexcept
 {
+  PixelSize size{Layout::FastScale(600), Layout::FastScale(200)};
+  bool from_content = false;
+
   if (IsDefined()) {
     const auto &w = static_cast<const RichTextWindow &>(GetWindow());
-    unsigned content_height = w.GetContentHeight();
-    if (content_height > 0)
-      return PixelSize{Layout::FastScale(600),
-                       static_cast<int>(content_height)};
+    const unsigned content_height = w.GetContentHeight();
+    if (content_height > 0) {
+      size.height = content_height;
+      from_content = true;
+    }
   }
 
-  if (!text.empty()) {
+  if (!from_content && !text.empty()) {
     const Font &font = GetLook().text_font;
     const unsigned line_height = font.GetLineSpacing();
     const unsigned estimate_width = Layout::FastScale(600);
     const unsigned line_count =
       std::max(1u, EstimateWrappedLineCount(font, estimate_width, text));
     const unsigned padding = Layout::GetTextPadding();
-    return PixelSize{
-      Layout::FastScale(600),
-      static_cast<int>(line_count * line_height + padding * 2)};
+    size.height = line_count * line_height + padding * 2;
   }
 
-  return PixelSize{Layout::FastScale(600), Layout::FastScale(200)};
+  /* TwoWidgets requires maximum >= minimum. A short code and URL
+     would otherwise be shorter than GetMinimumSize(). */
+  const PixelSize minimum = GetMinimumSize();
+  if (size.width < minimum.width)
+    size.width = minimum.width;
+  if (size.height < minimum.height)
+    size.height = minimum.height;
+  return size;
 }
 
 void
