@@ -3,7 +3,8 @@ Version 7.47 - not yet released
   - show WeGlide Copilot thermals or vario on the map after signing
     in, with the colour legend.  Info → Weather has a WeGlide page
     to sign in, disconnect, and apply the overlay.  The cursor bar
-    steps the forecast time by 15 minutes and the layer #1403
+    steps the forecast time by 15 minutes and the layer.  The same
+    sign-in uploads an IGC file and loads the pilot's tasks #1403
 
 Version 7.46 - 2026-10-19
 * highlights
