@@ -370,6 +370,15 @@ TEST_DEVICE_FLOW_SOURCES = \
 TEST_DEVICE_FLOW_DEPENDS = JSON UTIL
 $(eval $(call link-program,TestDeviceFlow,TEST_DEVICE_FLOW))
 
+TEST_NAMES += TestWeGlideTiles
+
+TEST_WEGLIDE_TILES_SOURCES = \
+	$(SRC)/net/client/WeGlide/Tiles.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWeGlideTiles.cpp
+TEST_WEGLIDE_TILES_DEPENDS = JSON FMT UTIL
+$(eval $(call link-program,TestWeGlideTiles,TEST_WEGLIDE_TILES))
+
 TEST_NAMES += TestWeatherUIState
 
 TEST_WEATHER_UI_STATE_SOURCES = \
