@@ -1,4 +1,7 @@
 Version 7.47 - not yet released
+* android
+  - fix a map crash on PowerVR Rogue tablets while panning with
+    topography enabled #1235
 
 Version 7.46 - 2026-10-19
 * highlights
