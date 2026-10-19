@@ -12945,3 +12945,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Apunte la cámara a un código QR de tarea"
+
+msgid "No camera permission"
+msgstr "Sin permiso para la cámara"
+
+msgid "No camera found"
+msgstr "No se encontró ninguna cámara"
+
+msgid "Cannot open the camera"
+msgstr "No se puede abrir la cámara"
+
+msgid "Cannot start the camera preview"
+msgstr "No se puede iniciar la vista previa de la cámara"
+
+msgid "Camera not usable"
+msgstr "La cámara no se puede usar"

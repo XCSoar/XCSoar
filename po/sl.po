@@ -12746,3 +12746,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Usmerite kamero v kodo QR naloge"
+
+msgid "No camera permission"
+msgstr "Ni dovoljenja za kamero"
+
+msgid "No camera found"
+msgstr "Kamere ni mogoče najti"
+
+msgid "Cannot open the camera"
+msgstr "Kamere ni mogoče odpreti"
+
+msgid "Cannot start the camera preview"
+msgstr "Predogleda kamere ni mogoče zagnati"
+
+msgid "Camera not usable"
+msgstr "Kamere ni mogoče uporabiti"

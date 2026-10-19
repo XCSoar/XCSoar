@@ -12861,3 +12861,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Skieruj aparat na kod QR zadania"
+
+msgid "No camera permission"
+msgstr "Brak uprawnień do aparatu"
+
+msgid "No camera found"
+msgstr "Nie znaleziono aparatu"
+
+msgid "Cannot open the camera"
+msgstr "Nie można otworzyć aparatu"
+
+msgid "Cannot start the camera preview"
+msgstr "Nie można uruchomić podglądu aparatu"
+
+msgid "Camera not usable"
+msgstr "Aparat nie nadaje się do użycia"

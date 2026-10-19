@@ -12854,3 +12854,21 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Наведіть камеру на QR-код завдання"
+
+msgid "No camera permission"
+msgstr "Немає дозволу на камеру"
+
+msgid "No camera found"
+msgstr "Камеру не знайдено"
+
+msgid "Cannot open the camera"
+msgstr "Не вдається відкрити камеру"
+
+msgid "Cannot start the camera preview"
+msgstr "Не вдається запустити попередній перегляд камери"
+
+msgid "Camera not usable"
+msgstr "Камера непридатна для використання"
