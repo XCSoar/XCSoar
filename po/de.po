@@ -12878,3 +12878,6 @@ msgstr ""
 "ist blau, während Ballast abgelassen wird. Antippen, um den Ballast zu ände"
 "rn."
 
+
+msgid "Denied"
+msgstr "Abgelehnt"

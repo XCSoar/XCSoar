@@ -11423,3 +11423,6 @@ msgid ""
 "Arrange\n"
 "InfoBoxes"
 msgstr ""
+
+msgid "Denied"
+msgstr ""

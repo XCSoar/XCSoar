@@ -12805,3 +12805,6 @@ msgstr ""
 "rosan, ha a vitorlázó nehezebb a maximális felszálló tömegénél. Az érték ké"
 "k, amíg a ballaszt ürül. Koppintson a ballaszt módosításához."
 
+
+msgid "Denied"
+msgstr "Elutasítva"

@@ -12919,3 +12919,6 @@ msgstr ""
 " rouge lorsque le planeur est plus lourd que sa masse maximale au décollage"
 ". La valeur est bleue pendant la vidange. Touchez pour changer le ballast."
 
+
+msgid "Denied"
+msgstr "Refusé"

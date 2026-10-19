@@ -12757,3 +12757,6 @@ msgstr ""
 " når svæveflyet er tungere end dets maksimale startmasse. Værdien er blå, m"
 "ens ballast tømmes. Tryk for at ændre ballasten."
 
+
+msgid "Denied"
+msgstr "Afvist"

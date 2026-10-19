@@ -12769,3 +12769,6 @@ msgstr ""
 "ai sklandytuvas sunkesnis už didžiausią kilimo masę. Vertė mėlyna išleidžia"
 "nt balastą. Bakstelėkite balastui keisti."
 
+
+msgid "Denied"
+msgstr "Atmesta"

@@ -12690,3 +12690,6 @@ msgstr ""
 "år seilflyet er tyngre enn sin maksimale startmasse. Verdien er blå mens ba"
 "llast tømmes. Trykk for å endre ballasten."
 
+
+msgid "Denied"
+msgstr "Avslått"

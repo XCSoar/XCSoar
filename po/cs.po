@@ -12698,3 +12698,6 @@ msgstr ""
 " když je kluzák těžší než jeho maximální vzletová hmotnost. Hodnota je modr"
 "á při vypouštění. Klepnutím změníte zátěž."
 
+
+msgid "Denied"
+msgstr "Odmítnuto"

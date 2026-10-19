@@ -12920,3 +12920,6 @@ msgstr ""
 "rojo cuando el planeador pesa más que su masa máxima al despegue. El valor "
 "es azul mientras se vacía el lastre. Toque para cambiar el lastre."
 
+
+msgid "Denied"
+msgstr "Denegado"

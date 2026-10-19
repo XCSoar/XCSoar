@@ -12863,3 +12863,6 @@ msgstr ""
 " De waarde is blauw terwijl ballast wordt geloosd. Tik om de ballast te wij"
 "zigen."
 
+
+msgid "Denied"
+msgstr "Geweigerd"

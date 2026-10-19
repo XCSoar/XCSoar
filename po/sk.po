@@ -12749,3 +12749,6 @@ msgstr ""
 "o, keď je vetroň ťažší ako jeho maximálna vzletová hmotnosť. Hodnota je mod"
 "rá pri vypúšťaní. Klepnutím zmeníte záťaž."
 
+
+msgid "Denied"
+msgstr "Zamietnuté"

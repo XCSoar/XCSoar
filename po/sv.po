@@ -12697,3 +12697,6 @@ msgstr ""
 "är segelflygplanet är tyngre än sin maximala startvikt. Värdet är blått med"
 "an ballast töms. Tryck för att ändra ballasten."
 
+
+msgid "Denied"
+msgstr "Nekad"

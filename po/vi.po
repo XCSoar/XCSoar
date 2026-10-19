@@ -12687,3 +12687,6 @@ msgstr ""
 "khi tàu lượn nặng hơn trọng lượng cất cánh tối đa. Giá trị màu xanh trong l"
 "úc xả. Chạm để đổi vật dằn."
 
+
+msgid "Denied"
+msgstr "Bị từ chối"

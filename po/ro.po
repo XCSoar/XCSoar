@@ -12807,3 +12807,6 @@ msgstr ""
 "când planorul este mai greu decât masa maximă la decolare. Valoarea este al"
 "bastră în timp ce se golește balastul. Atingeți pentru a schimba balastul."
 
+
+msgid "Denied"
+msgstr "Refuzat"

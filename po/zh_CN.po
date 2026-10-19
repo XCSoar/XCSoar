@@ -12244,3 +12244,6 @@ msgstr "滑翔机的最大起飞重量。"
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr "机上水压载，单位为升。注释显示机翼载荷，滑翔机超过最大起飞重量时为红色。抛放时数值为蓝色。点按可更改压载。"
 
+
+msgid "Denied"
+msgstr "已拒绝"

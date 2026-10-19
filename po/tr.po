@@ -12748,3 +12748,6 @@ msgstr ""
 "ş ağırlığından ağırsa kırmızı. Balast boşaltılırken değer mavidir. Değiştir"
 "mek için dokunun."
 
+
+msgid "Denied"
+msgstr "Reddedildi"

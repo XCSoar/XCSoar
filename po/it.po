@@ -12917,3 +12917,6 @@ msgstr ""
 "valore è blu mentre la zavorra viene scaricata. Toccare per cambiare la zav"
 "orra."
 
+
+msgid "Denied"
+msgstr "Negato"

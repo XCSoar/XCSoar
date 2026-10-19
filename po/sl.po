@@ -12721,3 +12721,6 @@ msgstr ""
 "o je jadralno letalo težje od svoje največje vzletne mase. Vrednost je modr"
 "a med praznjenjem. Tapnite za spremembo balasta."
 
+
+msgid "Denied"
+msgstr "Zavrnjeno"

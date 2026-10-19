@@ -12731,3 +12731,6 @@ msgstr ""
 "eno kada je jedrilica teža od svoje najveće poletne mase. Vrednost je plava"
 " dok se balast ispušta. Dodirnite da promenite balast."
 
+
+msgid "Denied"
+msgstr "Odbijeno"

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "net/client/WeGlide/Account.hpp"
 #include "net/client/WeGlide/Auth.hpp"
 #include "net/client/auth/DeviceFlow.hpp"
 #include "TestUtil.hpp"
@@ -148,13 +149,37 @@ TestForms()
   ok1(refresh == refresh_expected);
 }
 
+static void
+TestAccountSavePolicy()
+{
+  using WeGlide::AccessTokenUsableAt;
+  using WeGlide::AccountToken;
+  using WeGlide::RefreshOutcome;
+  using WeGlide::ShouldSaveRefreshedAccount;
+
+  ok1(!ShouldSaveRefreshedAccount(RefreshOutcome::UNCHANGED, "r1", "r1"));
+  ok1(ShouldSaveRefreshedAccount(RefreshOutcome::UPDATED, "r1", "r1"));
+  ok1(!ShouldSaveRefreshedAccount(RefreshOutcome::UPDATED, "r2", "r1"));
+  ok1(ShouldSaveRefreshedAccount(RefreshOutcome::FAILED, "r1", "r1"));
+  ok1(!ShouldSaveRefreshedAccount(RefreshOutcome::FAILED, "r2", "r1"));
+
+  AccountToken account;
+  ok1(!AccessTokenUsableAt(account, 100));
+  account.access_token = "access";
+  ok1(AccessTokenUsableAt(account, 100));
+  account.access_expires_at = 100;
+  ok1(!AccessTokenUsableAt(account, 100));
+  ok1(AccessTokenUsableAt(account, 99));
+}
+
 int
 main()
 {
-  plan_tests(25 + 9 + 19 + 3);
+  plan_tests(25 + 9 + 19 + 3 + 9);
   TestAuthorizeAndPoll();
   TestDeniedAndExpired();
   TestRefresh();
   TestForms();
+  TestAccountSavePolicy();
   return exit_status();
 }
