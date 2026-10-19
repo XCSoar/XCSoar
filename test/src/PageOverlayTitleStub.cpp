@@ -60,6 +60,11 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     builder.Append(_("Satellite"));
     break;
 
+  case PageLayout::Overlay::WEGLIDE:
+    builder.Append(", ");
+    builder.Append(_("WeGlide"));
+    break;
+
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }

@@ -1,4 +1,8 @@
 Version 7.47 - not yet released
+* ui
+  - show WeGlide Copilot thermals or vario on the map after signing
+    in, with the colour legend.  The cursor bar steps the forecast
+    time by 15 minutes and the layer #1403
 
 Version 7.46 - 2026-10-19
 * highlights

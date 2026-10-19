@@ -659,7 +659,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/EUMETView/Satellite.cpp \
 	$(SRC)/Weather/EUMETView/SatelliteData.cpp \
 	$(SRC)/Weather/EUMETView/Enhance.cpp \
-	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp
+	$(SRC)/Weather/EUMETView/SatellitePageOverlay.cpp \
+	$(SRC)/Weather/WeGlide/PageOverlay.cpp \
+	$(SRC)/Weather/MapOverlay/WeGlideControlsModel.cpp
 endif
 endif
 

@@ -114,6 +114,7 @@ struct PageLayout
     SKYSIGHT,
     RADAR,
     SATELLITE,
+    WEGLIDE,
 
     MAX
   } overlay;
@@ -169,6 +170,17 @@ struct PageLayout
 
   int satellite_layer;
 
+  /**
+   * Copilot layer id when #overlay is Overlay::WEGLIDE.
+   * Empty means thermal.
+   */
+  StaticString<32> weglide_layer;
+
+  /** Copilot frame. Zero follows the live frame. */
+  static constexpr int64_t WEGLIDE_TIME_AUTO = 0;
+
+  int64_t weglide_time;
+
   PageLayout() = default;
 
   constexpr PageLayout(bool _valid, InfoBoxConfig _infobox_config)
@@ -184,7 +196,9 @@ struct PageLayout
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
      xctherm_time(XCTHERM_TIME_AUTO),
-     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
+     satellite_layer(SATELLITE_LAYER_DEFAULT),
+     weglide_layer{},
+     weglide_time(WEGLIDE_TIME_AUTO) {}
 
   constexpr PageLayout(InfoBoxConfig _infobox_config)
     :valid(true), main(Main::MAP),
@@ -199,7 +213,9 @@ struct PageLayout
      edl_isobar(0),
      xctherm_layer(XCTHERM_LAYER_AUTO),
      xctherm_time(XCTHERM_TIME_AUTO),
-     satellite_layer(SATELLITE_LAYER_DEFAULT) {}
+     satellite_layer(SATELLITE_LAYER_DEFAULT),
+     weglide_layer{},
+     weglide_time(WEGLIDE_TIME_AUTO) {}
 
   /**
    * Return an "undefined" page.  Its IsDefined() method will return
@@ -293,11 +309,19 @@ struct PageLayout
 
   [[gnu::const]]
   constexpr bool
+  UsesWeGlideOverlay() const noexcept
+  {
+    return IsMapMain() && overlay == Overlay::WEGLIDE;
+  }
+
+  [[gnu::const]]
+  constexpr bool
   UsesWeatherOverlay() const noexcept
   {
     return IsMapMain() &&
       (overlay == Overlay::EDL || overlay == Overlay::RASP ||
-       overlay == Overlay::XCTHERM || overlay == Overlay::SKYSIGHT);
+       overlay == Overlay::XCTHERM || overlay == Overlay::SKYSIGHT ||
+       overlay == Overlay::WEGLIDE);
   }
 
   /**
@@ -390,6 +414,9 @@ struct PageLayout
       if (xctherm_time < XCTHERM_TIME_AUTO || xctherm_time >= 24)
         xctherm_time = XCTHERM_TIME_AUTO;
     }
+
+    if (overlay != Overlay::WEGLIDE || weglide_time < WEGLIDE_TIME_AUTO)
+      weglide_time = WEGLIDE_TIME_AUTO;
   }
 
   [[nodiscard]]
