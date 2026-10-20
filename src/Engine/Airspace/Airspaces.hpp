@@ -77,6 +77,12 @@ public:
   void Clear() noexcept;
 
   /**
+   * Remove airspaces selected by the predicate.
+   * Bumps the serial when at least one airspace is removed.
+   */
+  void EraseIf(const AirspacePredicate &predicate) noexcept;
+
+  /**
    * Size of airspace (in tree, not in temporary store) ---
    * must call optimise() before this for it to be accurate.
    *

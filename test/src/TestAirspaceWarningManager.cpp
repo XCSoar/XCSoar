@@ -196,15 +196,54 @@ TestAckClearsActiveImmediately()
   ok1(!inside.IsActive());
 }
 
+static void
+TestEraseIfLeavesNotam()
+{
+  Airspaces airspaces;
+  const auto class_c = MakeAirspace(AirspaceClass::CLASSC, "Class C Test");
+  const auto notam = MakeAirspace(AirspaceClass::NOTAM, "NOTAM Test",
+                                  "A1234/26");
+  airspaces.Add(class_c);
+  airspaces.Add(notam);
+  airspaces.Optimise();
+
+  ok1(airspaces.GetSize() == 2);
+
+  AirspaceWarningConfig config;
+  config.SetDefaults();
+  AirspaceWarningManager manager(config, airspaces);
+  manager.AcknowledgeDay(notam, true);
+  ok1(manager.GetAckDay(*notam));
+
+  const Serial serial_before = airspaces.GetSerial();
+  airspaces.EraseIf([](const AbstractAirspace &airspace) {
+    return airspace.GetType() != AirspaceClass::NOTAM;
+  });
+
+  ok1(airspaces.GetSerial() != serial_before);
+  airspaces.Optimise();
+  ok1(airspaces.GetSize() == 1);
+
+  const AbstractAirspace *found = nullptr;
+  unsigned remaining = 0;
+  for (const auto &i : airspaces.QueryAll()) {
+    ++remaining;
+    found = &i.GetAirspace();
+  }
+  ok1(remaining == 1 && found == notam.get());
+  ok1(manager.GetAckDay(*notam));
+}
+
 int
 main()
 {
-  plan_tests(31 + 20);
+  plan_tests(31 + 20 + 10);
 
   TestNonNotamAckDayClear();
   TestNotamAckDayClearAfterRefresh();
   TestNotamAckDayClearSiblings();
   TestAckClearsActiveImmediately();
+  TestEraseIfLeavesNotam();
 
   return exit_status();
 }
