@@ -44,6 +44,13 @@ $(ZXING_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 # type, so this library has to see the same flags as the callers.
 ZXING_CXX_FLAGS = -Wno-deprecated-declarations $(LIBSTDCXX_CPPFLAGS)
 
+# Add the CLANG target if appplicable to the C and C++ flags
+ifeq ($(CLANG),y)
+  ifneq ($(LLVM_TARGET),)
+    ZXING_CXX_FLAGS += -target $(LLVM_TARGET)
+  endif
+endif
+
 # The flags file is rewritten only when the text changes, so a later
 # DEBUG_GLIBCXX=y build does not keep the library from the plain one.
 .PHONY: zxing-cxxflags-force
@@ -53,13 +60,46 @@ $(ZXING_PREFIX)/cxxflags.txt: zxing-cxxflags-force
 	$(Q)mkdir -p $(dir $@)
 	$(Q)echo '$(ZXING_CXX_FLAGS)' | cmp -s - $@ || echo '$(ZXING_CXX_FLAGS)' > $@
 
-$(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags.txt
+# When cross-compiling generate a tool chain file for CMake for cross compilation
+ifeq ($(DO_CROSS_COMPILE),y)
+
+CROSS_TOOLCHAIN_FILE=$(ZXING_PREFIX)/cross_toolchain.txt
+
+# Write the cross-compilation parameters temporarily always,
+# but replace an existing file only when the temporary one
+# is different from the existing one.
+$(CROSS_TOOLCHAIN_FILE): zxing-cxxflags-force
+	$(Q)mkdir -p $(dir $@)
+	$(Q)echo 'set(CMAKE_SYSTEM_NAME Linux)' > $@.tmp
+	$(Q)echo ' ' >> $@.tmp
+	$(Q)echo 'set(CMAKE_C_COMPILER   $(CC))' >> $@.tmp
+	$(Q)echo 'set(CMAKE_CXX_COMPILER $(CXX))' >> $@.tmp
+	$(Q)echo ' ' >> $@.tmp
+	$(Q)if test ! -z '$(SYSROOT)' ; then echo 'set(CMAKE_SYSROOT $(SYSROOT))' >> $@.tmp; fi
+	$(Q)if test ! -z '$(SYSROOT)' ; then echo 'set(CMAKE_FIND_ROOT_PATH $(SYSROOT))' >> $@.tmp; fi
+	$(Q)echo ' ' >> $@.tmp
+	$(Q)echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)' >> $@.tmp
+	$(Q)echo ' ' >> $@.tmp
+	$(Q)echo 'set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)' >> $@.tmp
+	$(Q)echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)' >> $@.tmp
+	$(Q)if cmp -s $@.tmp $@; then rm $@.tmp; else mv $@.tmp $@; fi
+
+# Define the option to use the tool chain file for CMake here.
+# If not cross-compiling this option is not applied to CMake because the 
+# option is empty.
+ZXING_CROSS_TOOLCHAIN_FILE_OPTION := -DCMAKE_TOOLCHAIN_FILE=$(abspath $(CROSS_TOOLCHAIN_FILE))
+
+endif # if CROSS_COMPILE
+
+$(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags.txt \
+  $(CROSS_TOOLCHAIN_FILE)
 	$(Q)rm -rf $(ZXING_SRC) $(ZXING_BUILD)
 	$(Q)mkdir -p $(OUT)/src $(ZXING_BUILD)
 	$(Q)tar -xzf $(ZXING_TARBALL) -C $(OUT)/src
 	$(Q)cmake -S $(ZXING_SRC) -B $(ZXING_BUILD) \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_CXX_FLAGS="$(ZXING_CXX_FLAGS)" \
+		-DCMAKE_C_FLAGS="$(ZXING_CXX_FLAGS)" \
 		-DCMAKE_INSTALL_PREFIX=$(abspath $(ZXING_PREFIX)) \
 		-DCMAKE_INSTALL_LIBDIR=lib \
 		-DBUILD_SHARED_LIBS=OFF \
@@ -76,8 +116,8 @@ $(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags
 		-DZXING_UNIT_TESTS=OFF \
 		-DZXING_BLACKBOX_TESTS=OFF \
 		-DZXING_DEPENDENCIES=LOCAL \
-		-DZXING_DISABLE_PCH=ON
-	$(Q)cmake --build $(ZXING_BUILD) -j2 
+		-DZXING_DISABLE_PCH=ON $(ZXING_CROSS_TOOLCHAIN_FILE_OPTION)
+	$(Q)cmake --build $(ZXING_BUILD) -j2
 	$(Q)cmake --install $(ZXING_BUILD)
 
 ZXING_CPPFLAGS += -isystem $(ZXING_PREFIX)/include
