@@ -9,6 +9,9 @@ Version 7.47 - not yet released
     landscape screen #3373
 * documentation
   - describe the size limit for menu, dialogue and status text
+* airspace
+  - fix Ack Day on a lower sector also silencing the airspace
+    above its ceiling
 
 Version 7.46 - 2026-10-19
 * highlights
