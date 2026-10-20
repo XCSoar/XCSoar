@@ -205,14 +205,14 @@ AirspaceWarningManager::Update(const AircraftState& state,
 
   // update warning states
   if (airspaces.IsEmpty()) {
-    // The airspace database can be rebuilt asynchronously (e.g. NOTAM
-    // disable/refresh), temporarily dropping all airspaces while stale warning
-    // entries from the previous set still exist.
-    if (warnings.empty())
+    /* Drop stale warnings and Ack Day pointers. A new airspace can
+       reuse an old address. Station-keyed NOTAM Ack Day stays. */
+    if (warnings.empty() && ack_day_airspaces.empty())
       return false;
 
     ++serial;
     warnings.clear();
+    ack_day_airspaces.clear();
     return true;
   }
 
