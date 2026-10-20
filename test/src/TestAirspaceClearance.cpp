@@ -125,7 +125,7 @@ GetWarning(AirspaceWarningManager &mgr, const AbstractAirspace &as)
 int
 main()
 {
-  plan_tests(47);
+  plan_tests(47 + 3);
 
   /* Place airspaces near 50N where 0.01 deg lon ~ 716m.
      We choose simple longitudinal layouts (heading east) so that
@@ -1141,6 +1141,37 @@ main()
     iw = mgr.GetWarningPtr(*inner);
     ok1(mgr.GetAckDay(*inner) &&
         (iw == nullptr || !iw->IsActive()));
+  }
+
+  /* A floor above the sector ceiling stays alerting. */
+  {
+    Airspaces airspaces;
+    auto lower = MakeCircle(origin, 5000.0, 0.0, 2500.0);
+    auto upper = MakeCircle(origin, 5000.0, 2530.0, 4000.0);
+    airspaces.Add(lower);
+    airspaces.Add(upper);
+    airspaces.Optimise();
+
+    AirspaceWarningConfig cfg;
+    cfg.SetDefaults();
+    AirspaceWarningManager mgr(cfg, airspaces);
+
+    auto state = MakeAircraft(origin, 2000.0,
+                              Angle::Degrees(90.0), 30.0);
+    mgr.Reset(state);
+    mgr.Update(state, polar, task_stats, false,
+               std::chrono::seconds{1});
+
+    auto &above = mgr.GetWarning(upper);
+    AirspaceInterceptSolution sol{};
+    sol.distance = 0;
+    sol.elapsed_time = FloatDuration{10};
+    above.UpdateSolution(AirspaceWarning::WARNING_GLIDE, sol);
+    ok1(above.IsWarning() && above.IsAckExpired());
+
+    mgr.AcknowledgeDay(lower, true);
+    ok1(mgr.GetAckDay(*lower));
+    ok1(!mgr.GetAckDay(*upper) && above.IsAckExpired());
   }
 
   return exit_status();
