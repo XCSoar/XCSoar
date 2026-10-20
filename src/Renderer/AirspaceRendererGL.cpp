@@ -230,7 +230,7 @@ PrepareEvenOddCoverage(const BulkPixelPoint *points,
                        unsigned num_points) noexcept
 {
   if (points == nullptr || num_points == 0)
-    return;
+    return {nullptr, 0, {}};
 
   auto min_x = points[0].x;
   auto max_x = points[0].x;
@@ -277,6 +277,8 @@ DrawEvenOddPolygon(Canvas &canvas, const BulkPixelPoint *points,
                    GLuint stencil_mask) noexcept
 {
   const auto coverage = PrepareEvenOddCoverage(points, num_points);
+  if (coverage.num_vertices == 0)
+    return;
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
   glStencilFunc(GL_ALWAYS, polygon_stencil, polygon_stencil);
@@ -302,6 +304,8 @@ StampEvenOddClearance(Canvas &canvas, const BulkPixelPoint *points,
                       unsigned num_points) noexcept
 {
   const auto coverage = PrepareEvenOddCoverage(points, num_points);
+  if (coverage.num_vertices == 0)
+    return;
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
   glStencilFunc(GL_ALWAYS, POLYGON_STENCIL, POLYGON_STENCIL);
