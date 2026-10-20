@@ -17,10 +17,10 @@ void
 DialogLook::LoadFonts()
 {
   /* FontScale applies DPI, Text size, and the close-view shrink.
-     Cap at the short edge / 20 so menus, forms and status text stay
-     on the screen.  Map labels are not capped. */
-  const unsigned height =
-    std::min(Layout::FontScale(12), Layout::min_screen_pixels / 20);
+     Cap at the short edge / 20 so menus, forms, headings and status
+     text stay on the screen.  Map labels are not capped. */
+  const unsigned cap    = Layout::min_screen_pixels / 20;
+  const unsigned height = std::min(Layout::FontScale(12), cap);
   const FontDescription text_font_d(height);
 
   const FontDescription small_font_d =
@@ -34,11 +34,11 @@ DialogLook::LoadFonts()
      text_font on e-paper (see Initialise). */
   bold_font.Load(text_font_d.WithBold());
 
-  /* H1 = 150% of text size, H2 = 125%. */
+  /* H1 = 150% of text size, H2 = 125%, both inside the same cap. */
   const FontDescription heading1_d =
-    text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 2u);
+    text_font_d.WithHeight(std::min(height * 3u / 2u, cap));
   const FontDescription heading2_d =
-    text_font_d.WithHeight(text_font_d.GetHeight() * 5u / 4u);
+    text_font_d.WithHeight(std::min(height * 5u / 4u, cap));
   heading1_font.Load(heading1_d.WithBold());
   heading2_font.Load(heading2_d.WithBold());
 }
