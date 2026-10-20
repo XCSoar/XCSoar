@@ -339,6 +339,8 @@ InputEvents::eventProfileLoad(const char *misc)
 
     MapFileChanged = true;
     WaypointFileChanged = true;
+    PrimaryWaypointFileChanged = true;
+    WatchedWaypointFileChanged = true;
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
 

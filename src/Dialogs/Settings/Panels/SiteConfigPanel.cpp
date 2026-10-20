@@ -130,10 +130,13 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
   // WaypointFileChanged has already a meaningful value
-  WaypointFileChanged |= SaveValueMultiFileReader(
+  const bool primary_changed = SaveValueMultiFileReader(
       WaypointFileList, ProfileKeys::WaypointFileList);
-  WaypointFileChanged |= SaveValueMultiFileReader(
+  const bool watched_changed = SaveValueMultiFileReader(
       WatchedWaypointFileList, ProfileKeys::WatchedWaypointFileList);
+  PrimaryWaypointFileChanged |= primary_changed;
+  WatchedWaypointFileChanged |= watched_changed;
+  WaypointFileChanged |= primary_changed || watched_changed;
 
   AirspaceFileChanged |= SaveValueMultiFileReader(
       AirspaceFileList, ProfileKeys::AirspaceFileList);

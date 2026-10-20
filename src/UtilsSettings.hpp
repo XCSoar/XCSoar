@@ -8,6 +8,8 @@
 extern bool DevicePortChanged;
 extern bool AirspaceFileChanged;
 extern bool WaypointFileChanged;
+extern bool PrimaryWaypointFileChanged;
+extern bool WatchedWaypointFileChanged;
 extern bool AirfieldFileChanged;
 extern bool InputFileChanged;
 extern bool MapFileChanged;

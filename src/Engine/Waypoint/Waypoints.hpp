@@ -129,6 +129,12 @@ public:
   void EraseFile(WaypointOrigin origin, uint8_t file_num) noexcept;
 
   /**
+   * Erase every waypoint from one list.
+   * Home is cleared only when that waypoint is the one removed.
+   */
+  void EraseOrigin(WaypointOrigin origin) noexcept;
+
+  /**
    * Replace waypoint from the internal store.  Requires Optimise() to
    * be called afterwards.
    *
