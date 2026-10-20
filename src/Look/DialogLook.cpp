@@ -7,6 +7,8 @@
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
+#include <algorithm>
+
 #ifdef EYE_CANDY
 #include "Resources.hpp"
 #endif
@@ -14,10 +16,12 @@
 void
 DialogLook::LoadFonts()
 {
-  /* FontScale already applies DPI, Text size, and the close-view
-     shrink.  Display type only changes rasterisation (alias/weights),
-     not layout em. */
-  FontDescription text_font_d(Layout::FontScale(12));
+  /* FontScale applies DPI, Text size, and the close-view shrink.
+     Cap at the short edge / 20 so menus, forms and status text stay
+     on the screen.  Map labels are not capped. */
+  const unsigned height =
+    std::min(Layout::FontScale(12), Layout::min_screen_pixels / 20);
+  const FontDescription text_font_d(height);
 
   const FontDescription small_font_d =
     text_font_d.WithHeight(text_font_d.GetHeight() * 3u / 4u);
