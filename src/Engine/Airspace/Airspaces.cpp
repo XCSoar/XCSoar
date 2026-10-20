@@ -172,6 +172,14 @@ Airspaces::EraseIf(const AirspacePredicate &predicate) noexcept
   ++serial;
 }
 
+void
+Airspaces::EraseOrigin(AirspaceOrigin origin) noexcept
+{
+  EraseIf([origin](const AbstractAirspace &airspace) {
+    return airspace.GetOrigin() == origin;
+  });
+}
+
 unsigned
 Airspaces::GetSize() const noexcept
 {
