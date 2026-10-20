@@ -109,7 +109,7 @@ TEST_NAMES = \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestMacCready TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
+	TestMacCready TestFinalGlide TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
 	TestPlanes \
 	TestTaskPoint \
@@ -616,6 +616,14 @@ TEST_MAC_CREADY_SOURCES = \
 TEST_MAC_CREADY_OBJS = $(call SRC_TO_OBJ,$(TEST_MAC_CREADY_SOURCES))
 TEST_MAC_CREADY_DEPENDS = GLIDE GEO MATH UTIL
 $(eval $(call link-program,TestMacCready,TEST_MAC_CREADY))
+
+TEST_FINAL_GLIDE_SOURCES = \
+	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFinalGlide.cpp
+TEST_FINAL_GLIDE_DEPENDS = GLIDE GEO MATH UTIL
+$(eval $(call link-program,TestFinalGlide,TEST_FINAL_GLIDE))
 
 TEST_TERRAIN_REACH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
