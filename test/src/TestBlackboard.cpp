@@ -24,7 +24,7 @@ TriggerMergeThread() noexcept
 }
 
 static GeoPoint
-Point(double longitude, double latitude) noexcept
+Location(double longitude, double latitude) noexcept
 {
   return GeoPoint{Angle::Degrees(longitude), Angle::Degrees(latitude)};
 }
@@ -82,26 +82,26 @@ static void
 TestCopy() noexcept
 {
   DeviceBlackboard device;
-  const auto here      = Point(7, 48);
-  const auto other     = Point(1, 2);
-  const auto replay_at = Point(8, 49);
-  const auto sim_at    = Point(9, 50);
+  const auto here      = Location(7, 48);
+  const auto other     = Location(1, 2);
+  const auto replay_at = Location(8, 49);
+  const auto sim_at    = Location(9, 50);
 
   auto location = At(here, 0);
   location.gps_altitude_available.Clear();
-  auto altitude = At(Point(0, 0), 1500);
+  auto altitude = At(Location(0, 0), 1500);
   altitude.location_available.Clear();
 
-  device.LockSetDeviceDataScheduleMerge(0, location);
-  device.LockSetDeviceDataScheduleMerge(1, altitude);
+  device.LockSetDeviceDataScheduleMerge(1, location);
+  device.LockSetDeviceDataScheduleMerge(2, altitude);
 
   ok1(merge_triggers == 2);
-  ok1(device.RealState(0).location_available);
-  ok1(equals(device.RealState(0).location, here));
-  ok1(!device.RealState(0).gps_altitude_available);
-  ok1(device.RealState(1).gps_altitude_available);
-  ok1(equals(device.RealState(1).gps_altitude, 1500));
-  ok1(!device.RealState(1).location_available);
+  ok1(device.RealState(1).location_available);
+  ok1(equals(device.RealState(1).location, here));
+  ok1(!device.RealState(1).gps_altitude_available);
+  ok1(device.RealState(2).gps_altitude_available);
+  ok1(equals(device.RealState(2).gps_altitude, 1500));
+  ok1(!device.RealState(2).location_available);
   ok1(!device.Basic().location_available);
   ok1(!device.Basic().gps_altitude_available);
 
@@ -109,7 +109,7 @@ TestCopy() noexcept
     const std::lock_guard lock{device.mutex};
     auto dead = At(other, 50);
     dead.alive.Clear();
-    device.SetRealState(2) = dead;
+    device.SetRealState(0) = dead;
     device.Merge();
   }
 
@@ -118,8 +118,8 @@ TestCopy() noexcept
   ok1(device.Basic().gps_altitude_available);
   ok1(equals(device.Basic().gps_altitude, 1500));
   ok1(equals(device.RealState().location, here));
-  ok1(equals(device.RealState(0).location, here));
-  ok1(equals(device.RealState(2).location, other));
+  ok1(equals(device.RealState(1).location, here));
+  ok1(equals(device.RealState(0).location, other));
 
   GlideComputerBlackboard calc;
   calc.ReadBlackboard(device.Basic());
