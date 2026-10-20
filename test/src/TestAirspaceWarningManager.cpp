@@ -204,6 +204,7 @@ TestEraseIfLeavesNotam()
   const auto notam = MakeAirspace(AirspaceClass::NOTAM, "NOTAM Test",
                                   "A1234/26");
   airspaces.Add(class_c);
+  notam->SetOrigin(AirspaceOrigin::NOTAM);
   airspaces.Add(notam);
   airspaces.Optimise();
 
@@ -216,9 +217,7 @@ TestEraseIfLeavesNotam()
   ok1(manager.GetAckDay(*notam));
 
   const Serial serial_before = airspaces.GetSerial();
-  airspaces.EraseIf([](const AbstractAirspace &airspace) {
-    return airspace.GetType() != AirspaceClass::NOTAM;
-  });
+  airspaces.EraseOrigin(AirspaceOrigin::FILE);
 
   ok1(airspaces.GetSerial() != serial_before);
   airspaces.Optimise();

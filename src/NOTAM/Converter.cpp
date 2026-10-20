@@ -179,7 +179,8 @@ BuildNOTAMAirspace(const struct NOTAM &notam,
       base, // base altitude
       top // top altitude
     );
-    
+    airspace->SetOrigin(AirspaceOrigin::NOTAM);
+
     // Set radio frequency if available (extract from text/source)
     // TODO: Parse radio frequency from NOTAM text if available?
     

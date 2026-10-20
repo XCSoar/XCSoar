@@ -167,6 +167,7 @@ struct TempAirspace
   TransponderCode transponder_code;
   AirspaceClass asclass;
   AirspaceClass astype;
+  AirspaceOrigin origin = AirspaceOrigin::FILE;
   std::optional<AirspaceAltitude> base;
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
@@ -260,6 +261,7 @@ struct TempAirspace
     as->SetRadioFrequency(radio_frequency);
     as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
+    as->SetOrigin(origin);
     airspace_database.Add(std::move(as));
   }
 
@@ -297,6 +299,7 @@ struct TempAirspace
     as->SetRadioFrequency(radio_frequency);
     as->SetTransponderCode(transponder_code);
     as->SetDays(days_of_operation);
+    as->SetOrigin(origin);
     airspace_database.Add(std::move(as));
   }
 
@@ -935,13 +938,15 @@ DetectFileType(const char *line) noexcept
 
 void
 ParseAirspaceFile(Airspaces &airspaces,
-                  BufferedReader &reader)
+                  BufferedReader &reader,
+                  AirspaceOrigin origin)
 {
   StringConverter string_converter;
 
   bool ignore = false;
 
   TempAirspace temp_area;
+  temp_area.origin = origin;
   AirspaceFileType filetype = AirspaceFileType::UNKNOWN;
 
   char *line;

@@ -14,7 +14,6 @@
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Protection.hpp"
 #include "Operation/Operation.hpp"
 #include "Operation/ProgressListener.hpp"
@@ -33,7 +32,6 @@
 #include <stdexcept>
 #include <string_view>
 #include <unordered_map>
-#include <unordered_set>
 
 #include <boost/json.hpp>
 
@@ -49,7 +47,6 @@ static constexpr std::time_t MIN_NOTAM_REFRESH_ATTEMPT_INTERVAL_SECONDS =
 struct NOTAMImpl {
   std::vector<NOTAMStruct> current_notams;
   NOTAMClient::KnownMap known;
-  std::unordered_set<const AbstractAirspace *> injected_airspaces;
   GeoPoint known_location = GeoPoint::Invalid();
   unsigned known_radius_km = 0;
   boost::json::value cached_api;
@@ -1071,22 +1068,15 @@ NOTAMGlue::UpdateAirspaces(Airspaces &airspaces)
 {
   const auto now = GetCurrentTimeUTCSnapshot();
   std::vector<NOTAMStruct> notams;
-  std::unordered_set<const AbstractAirspace *> previous_injected;
   NOTAMSettings settings_snapshot;
   {
     const std::lock_guard<Mutex> lock(mutex);
     auto *impl = current_notams_impl.get();
     notams = impl->current_notams;
-    previous_injected = impl->injected_airspaces;
     settings_snapshot = settings;
   }
 
-  auto result = NOTAMAirspaceSync::Rebuild(airspaces, notams,
-                                            settings_snapshot, now,
-                                            previous_injected);
-
-  const std::lock_guard<Mutex> lock(mutex);
-  current_notams_impl->injected_airspaces.swap(result.injected);
+  NOTAMAirspaceSync::Rebuild(airspaces, notams, settings_snapshot, now);
 }
 
 AllocatedPath

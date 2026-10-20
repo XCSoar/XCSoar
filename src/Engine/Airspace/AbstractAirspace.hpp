@@ -4,6 +4,7 @@
 #pragma once
 
 #include "util/TriState.hpp"
+#include "Origin.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
@@ -55,6 +56,9 @@ protected:
 
   /** Airspace type */
   AirspaceClass astype;
+
+  /** Where this airspace was loaded from. */
+  AirspaceOrigin origin = AirspaceOrigin::FILE;
 
   /** Airspace Station name */
   std::string station_name;
@@ -278,6 +282,14 @@ public:
    */
   AirspaceClass GetType() const noexcept {
     return astype;
+  }
+
+  void SetOrigin(AirspaceOrigin _origin) noexcept {
+    origin = _origin;
+  }
+
+  AirspaceOrigin GetOrigin() const noexcept {
+    return origin;
   }
 
   /**

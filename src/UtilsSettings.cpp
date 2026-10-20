@@ -179,7 +179,8 @@ SettingsLeave(const UISettings &old_ui_settings)
     }
 
     auto &airspace_database = *data_components->airspaces;
-    airspace_database.Clear();
+    airspace_database.EraseOrigin(AirspaceOrigin::FILE);
+    airspace_database.EraseOrigin(AirspaceOrigin::MAP);
     ReadAirspace(airspace_database,
                  CommonInterface::GetComputerSettings().pressure,
                  operation);
