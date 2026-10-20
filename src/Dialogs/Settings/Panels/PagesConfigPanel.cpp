@@ -678,7 +678,9 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 void
 PageListWidget::SyncChromeButtons() noexcept
 {
-  if (!Layout::landscape) {
+  /* Weather → Pages setup and xcsoar://config/pages have no
+     Configuration button column. Keep Add and Delete on this panel. */
+  if (!Layout::landscape || !ConfigPanel::HasExtraButtons()) {
     ReleaseChromeButtons();
     return;
   }
@@ -742,7 +744,8 @@ PageListWidget::ActionIndex() const noexcept
       return i;
   }
 
-  if (ConfigPanel::GetExpertCheckbox().HasFocus())
+  if (ConfigPanel::HasExtraButtons() &&
+      ConfigPanel::GetExpertCheckbox().HasFocus())
     return 4;
 
   return -1;
@@ -751,8 +754,9 @@ PageListWidget::ActionIndex() const noexcept
 bool
 PageListWidget::FocusAction(int from, bool down) noexcept
 {
+  const int last = ConfigPanel::HasExtraButtons() ? 4 : 3;
   const int step = down ? 1 : -1;
-  for (int i = from + step; i >= 0 && i <= 4; i += step) {
+  for (int i = from + step; i >= 0 && i <= last; i += step) {
     if (i == 4) {
       ConfigPanel::GetExpertCheckbox().SetFocus();
       return true;
@@ -949,7 +953,10 @@ CreatePagesConfigPanel()
 
   auto buttons = std::make_unique<ButtonPanelWidget>(std::move(two),
                                                      ButtonPanelWidget::Alignment::BOTTOM);
-  buttons->HideInLandscape();
+  /* Inside Configuration these actions move into the button column.
+     A standalone dialog has no column, so the row stays. */
+  if (ConfigPanel::HasExtraButtons())
+    buttons->HideInLandscape();
   list_widget.SetButtonPanel(*buttons);
 
   return buttons;

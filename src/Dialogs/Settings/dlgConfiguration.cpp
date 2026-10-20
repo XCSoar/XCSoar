@@ -17,6 +17,7 @@
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "util/Macros.hpp"
+#include "util/ScopeExit.hxx"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"
@@ -400,10 +401,18 @@ ConfigurationExtraButtons::Apply(const PixelRect &rc) noexcept
   }
 }
 
+bool
+ConfigPanel::HasExtraButtons() noexcept
+{
+  return pager != nullptr;
+}
+
 Button &
 ConfigPanel::BorrowExtraButton(unsigned i, const char *caption,
                                std::function<void()> callback) noexcept
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   extra.Borrow(i, caption, std::move(callback));
   return extra.GetButton(i);
@@ -412,6 +421,8 @@ ConfigPanel::BorrowExtraButton(unsigned i, const char *caption,
 void
 ConfigPanel::ReturnExtraButton(unsigned i)
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   extra.Return(i);
 }
@@ -419,6 +430,8 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 CheckBoxControl &
 ConfigPanel::GetExpertCheckbox() noexcept
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   return extra.GetExpert();
 }
@@ -467,6 +480,13 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
 void dlgConfigurationShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
+
+  /* Destroyed after the dialog, so Hide() can still return borrowed
+     buttons. Left set, the pointer dangles and a later standalone
+     panel crashes in BorrowExtraButton(). */
+  AtScopeExit() {
+    pager = nullptr;
+  };
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Configuration"));
