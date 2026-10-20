@@ -123,6 +123,12 @@ public:
   void EraseUserMarkers() noexcept;
 
   /**
+   * Erase every waypoint loaded from one file.
+   * Home is cleared only when that waypoint is the one removed.
+   */
+  void EraseFile(WaypointOrigin origin, uint8_t file_num) noexcept;
+
+  /**
    * Replace waypoint from the internal store.  Requires Optimise() to
    * be called afterwards.
    *
