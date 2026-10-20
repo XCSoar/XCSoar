@@ -2,9 +2,13 @@ Version 7.46.1 - not yet released
 * android
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
+  - keep menu, dialogue and status text from overflowing on a
+    high-resolution phone #3375
 * dialogs
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
+* documentation
+  - describe the size limit for menu, dialogue and status text
 
 Version 7.46 - 2026-10-19
 * highlights
