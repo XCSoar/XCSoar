@@ -10,6 +10,14 @@ class CheckBoxControl;
 
 namespace ConfigPanel {
 /**
+ * True while Configuration is open. Landscape panels borrow actions
+ * into its button column. A panel opened on its own has no column.
+ */
+[[gnu::pure]]
+bool
+HasExtraButtons() noexcept;
+
+/**
  * @param i 1-based. Landscape stacks above Previous; portrait shows
  * only 1 and 2 beside Expert.
  */
