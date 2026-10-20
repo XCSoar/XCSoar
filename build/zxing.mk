@@ -77,7 +77,7 @@ $(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags
 		-DZXING_BLACKBOX_TESTS=OFF \
 		-DZXING_DEPENDENCIES=LOCAL \
 		-DZXING_DISABLE_PCH=ON
-	$(Q)cmake --build $(ZXING_BUILD) --parallel
+	$(Q)cmake --build $(ZXING_BUILD) -j2 
 	$(Q)cmake --install $(ZXING_BUILD)
 
 ZXING_CPPFLAGS += -isystem $(ZXING_PREFIX)/include
