@@ -426,6 +426,22 @@ Waypoints::EraseFile(WaypointOrigin origin, uint8_t file_num) noexcept
 }
 
 void
+Waypoints::EraseOrigin(WaypointOrigin origin) noexcept
+{
+  waypoint_tree.EraseIf([this, origin](const WaypointPtr &wp){
+      if (wp->origin != origin)
+        return false;
+
+      if (home == wp)
+        home = nullptr;
+
+      name_tree.Remove(wp);
+      ++serial;
+      return true;
+    });
+}
+
+void
 Waypoints::Replace(const WaypointPtr &orig, Waypoint &&replacement) noexcept
 {
   assert(!waypoint_tree.IsEmpty());

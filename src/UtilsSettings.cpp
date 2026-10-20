@@ -58,6 +58,8 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
+bool PrimaryWaypointFileChanged = false;
+bool WatchedWaypointFileChanged = false;
 bool FlarmFileChanged = false;
 bool RaspFileChanged = false;
 bool ChecklistFileChanged = false;
@@ -78,6 +80,8 @@ SettingsEnter() noexcept
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
+  PrimaryWaypointFileChanged = false;
+  WatchedWaypointFileChanged = false;
   FlarmFileChanged = false;
   RaspFileChanged = false;
   ChecklistFileChanged = false;
@@ -131,11 +135,19 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   auto &way_points = *data_components->waypoints;
 
-  if (WaypointFileChanged || AirfieldFileChanged) {
-    // re-load waypoints
-    WaypointGlue::LoadWaypoints(way_points, data_components->terrain.get(),
-                                operation);
+  const bool waypoint_files_changed =
+    PrimaryWaypointFileChanged || WatchedWaypointFileChanged ||
+    MapFileChanged;
 
+  if (waypoint_files_changed)
+    WaypointGlue::ReloadWaypointFiles(way_points,
+                                      data_components->terrain.get(),
+                                      operation,
+                                      PrimaryWaypointFileChanged,
+                                      WatchedWaypointFileChanged,
+                                      MapFileChanged);
+
+  if (waypoint_files_changed || AirfieldFileChanged) {
     try {
       WaypointDetails::ReadFileFromProfile(way_points, operation);
     } catch (...) {
@@ -143,7 +155,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     }
   }
 
-  if (WaypointFileChanged &&
+  if ((waypoint_files_changed || WaypointFileChanged) &&
       backend_components->protected_task_manager) {
     ProtectedTaskManager::ExclusiveLease lease{*backend_components->protected_task_manager};
     auto task = lease->Clone(CommonInterface::GetComputerSettings().task);
@@ -158,9 +170,9 @@ SettingsLeave(const UISettings &old_ui_settings)
     }
   }
 
-  if (WaypointFileChanged) {
+  if (waypoint_files_changed || WaypointFileChanged) {
     // re-set home
-    DataGlobals::UpdateHome(WaypointFileChanged);
+    DataGlobals::UpdateHome(true);
   }
 
   if (TopographyFileChanged) {

@@ -89,6 +89,18 @@ LoadWaypoints(Waypoints &way_points,
               ProgressListener &progress);
 
 /**
+ * Replace primary and/or watched waypoint files.
+ * Leaves user.cup waypoints and temporary points in place.
+ * Map waypoints are loaded only when no primary or watched
+ * waypoint remains.
+ */
+void
+ReloadWaypointFiles(Waypoints &way_points,
+                    const RasterTerrain *terrain,
+                    ProgressListener &progress,
+                    bool primary, bool watched, bool map_file);
+
+/**
  * Create the file user.cup (replacing it if it already exists) and write to
  * this new file every waypoint from way_points that has an origin of USER
  * (i.e., every waypoint in memory designated for inclusion in user.cup).
