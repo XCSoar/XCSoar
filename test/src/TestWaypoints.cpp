@@ -516,13 +516,92 @@ TestNameSubstringShortname()
   ok1(dual_matched && dual_matched->name == "ALPHA FIELD");
 }
 
+static WaypointPtr
+AppendOrigin(Waypoints &waypoints, const char *name,
+             WaypointOrigin origin, uint8_t file_num,
+             Waypoint::Type type, double longitude)
+{
+  Waypoint waypoint{GeoPoint(Angle::Degrees(longitude),
+                             Angle::Degrees(48))};
+  waypoint.name = name;
+  waypoint.origin = origin;
+  waypoint.file_num = file_num;
+  waypoint.type = type;
+  return waypoints.Append(std::move(waypoint));
+}
+
+static void
+TestEraseFile()
+{
+  Waypoints waypoints;
+
+  const unsigned id0 = AppendOrigin(waypoints, "Primary 0",
+                                    WaypointOrigin::PRIMARY, 0,
+                                    Waypoint::Type::NORMAL, 7.0)->id;
+  const unsigned id1 = AppendOrigin(waypoints, "Primary 1",
+                                    WaypointOrigin::PRIMARY, 1,
+                                    Waypoint::Type::NORMAL, 7.1)->id;
+  AppendOrigin(waypoints, "Watched 0",
+               WaypointOrigin::WATCHED, 0,
+               Waypoint::Type::NORMAL, 7.2);
+  const auto user = AppendOrigin(waypoints, "User",
+                                 WaypointOrigin::USER, 0,
+                                 Waypoint::Type::NORMAL, 7.3);
+  AppendOrigin(waypoints, "Marker",
+               WaypointOrigin::USER, 0,
+               Waypoint::Type::MARKER, 7.4);
+  const unsigned id_map = AppendOrigin(waypoints, "Map",
+                                       WaypointOrigin::MAP, 0,
+                                       Waypoint::Type::NORMAL, 7.5)->id;
+  const unsigned id_goto = AppendOrigin(waypoints, "(goto)",
+                                        WaypointOrigin::NONE, 0,
+                                        Waypoint::Type::NORMAL, 7.6)->id;
+
+  waypoints.Optimise();
+
+  const unsigned id_user = user->id;
+  ok1(waypoints.SetHome(id_user));
+  const Serial serial_before = waypoints.GetSerial();
+
+  waypoints.EraseFile(WaypointOrigin::PRIMARY, 0);
+  waypoints.Optimise();
+
+  ok1(waypoints.GetSerial() != serial_before);
+  ok1(waypoints.LookupId(id0) == nullptr);
+  ok1(waypoints.LookupId(id1) != nullptr &&
+      waypoints.LookupId(id1)->id == id1);
+  ok1(waypoints.LookupName("Watched 0") != nullptr);
+  ok1(waypoints.LookupName("User") != nullptr &&
+      waypoints.LookupName("User")->id == id_user);
+  ok1(waypoints.LookupName("Marker") != nullptr);
+  ok1(waypoints.LookupName("Map") != nullptr &&
+      waypoints.LookupName("Map")->id == id_map);
+  ok1(waypoints.LookupName("(goto)") != nullptr &&
+      waypoints.LookupName("(goto)")->id == id_goto);
+  ok1(waypoints.GetHome() == user);
+  ok1(waypoints.size() == 6);
+
+  waypoints.EraseUserMarkers();
+  ok1(waypoints.LookupName("Marker") == nullptr);
+  ok1(waypoints.LookupName("User") != nullptr);
+  ok1(waypoints.GetHome() == user);
+
+  ok1(waypoints.SetHome(id1));
+  waypoints.EraseFile(WaypointOrigin::PRIMARY, 1);
+  ok1(waypoints.GetHome() == nullptr);
+  ok1(waypoints.LookupId(id1) == nullptr);
+  ok1(waypoints.LookupName("User") != nullptr);
+  ok1(waypoints.LookupName("Watched 0") != nullptr);
+  ok1(waypoints.LookupName("Map") != nullptr);
+}
+
 int
 main(int argc, char** argv)
 {
   if (!ParseArgs(argc, argv))
     return 0;
 
-  plan_tests(52 + 9 + 6 + 17 + 6);
+  plan_tests(52 + 9 + 6 + 17 + 6 + 20);
 
   Waypoints waypoints;
   GeoPoint center(Angle::Degrees(51.4), Angle::Degrees(7.85));
@@ -534,6 +613,7 @@ main(int argc, char** argv)
   ok1(!waypoints.IsEmpty());
   ok1(waypoints.size() == 151);
 
+  TestEraseFile();
   TestLookups(waypoints, center);
   TestNamePrefixVisitor(waypoints);
   TestNameSubstringVisitor(waypoints);
