@@ -480,7 +480,6 @@ endif
 ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
   TARGET_CPPFLAGS += --sysroot=$(CUBIE) -isystem $(CUBIE)/usr/include/arm-linux-gnueabihf
-  TARGET_CPPFLAGS += -isystem $(CUBIE)/usr/local/stow/sunxi-mali/include
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
@@ -568,7 +567,6 @@ ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   TARGET_LDFLAGS += -L/usr/arm-linux-gnueabihf/lib --sysroot=$(CUBIE)
   TARGET_LDFLAGS += -L$(CUBIE)/lib/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(CUBIE)/usr/lib/arm-linux-gnueabihf
-  TARGET_LDFLAGS += -L$(CUBIE)/usr/local/stow/sunxi-mali/lib
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
