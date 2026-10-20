@@ -63,6 +63,11 @@
 #
 #   USE_CCACHE  "y" to build with ccache
 #
+#   SYSROOT     Set to the root directory of the target file system when
+#               cross-compiling for targets CUBIE, PI or PI2.
+#				When no set target dependend defaults are applied. See
+#               build/targets.mk for default values.
+#
 #   TARGET_DIR  "<path>" to build into output/<path> instead of output/<target>
 #
 #   TARGET_OUTPUT_DIR "<path>" to build into arbitrary directory
