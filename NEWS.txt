@@ -12,6 +12,8 @@ Version 7.47 - not yet released
 * airspace
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling
+  - fix Ack Day silencing a new airspace after the
+    airspace list was empty
 
 Version 7.46 - 2026-10-19
 * highlights
