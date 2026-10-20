@@ -35,6 +35,8 @@
 #include "Language/Language.hpp"
 #include "Protection.hpp"
 #include "LogFile.hpp"
+
+#include <chrono>
 #include "UtilsSystem.hpp"
 #include "FLARM/Glue.hpp"
 #include "Logger/Logger.hpp"
@@ -308,19 +310,28 @@ try {
   SetTopWidget(nullptr);
   terrain_loader_env.reset();
 
-  const ScopeSuspendAllThreads suspend;
+  {
+    const ScopeSuspendAllThreads suspend;
 
-  DataGlobals::UnsetTerrain();
-  DataGlobals::SetTerrain(std::move(new_terrain));
+    DataGlobals::UnsetTerrain();
+    DataGlobals::SetTerrain(std::move(new_terrain));
 
-  /* the waypoints were usually read before the terrain was there */
-  if (data_components->terrain && data_components->waypoints)
-    UpdateTerrainElevations(*data_components->waypoints,
+    /* the waypoints were usually read before the terrain was there */
+    if (data_components->terrain && data_components->waypoints)
+      UpdateTerrainElevations(*data_components->waypoints,
+                              *data_components->terrain);
+    DataGlobals::UpdateHome(false);
+
+    SetAirspaceGroundLevels(*data_components->airspaces,
                             *data_components->terrain);
-  DataGlobals::UpdateHome(false);
+  }
 
-  SetAirspaceGroundLevels(*data_components->airspaces,
-                          *data_components->terrain);
+  /* SetTopWidget() already painted the map, before this terrain
+     existed.  A cache miss finishes after startup, and a still map
+     does not paint again, so the generated terrain stayed invisible
+     until the next launch read the cache. */
+  if (map != nullptr)
+    map->FullRedraw();
 } catch (...) {
   SetTopWidget(nullptr);
   terrain_loader_env.reset();
@@ -862,9 +873,33 @@ SaveUserState() noexcept
   Profile::Save();
 }
 
+namespace {
+
+class ShutdownStep {
+  const char *const name;
+  const std::chrono::steady_clock::time_point start;
+
+public:
+  explicit ShutdownStep(const char *_name) noexcept
+    :name(_name), start(std::chrono::steady_clock::now()) {
+    LogFmt("Shutdown: {} ...", name);
+  }
+
+  ~ShutdownStep() noexcept {
+    const auto ms =
+      std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - start).count();
+    LogFmt("Shutdown: {} took {} ms", name, ms);
+  }
+};
+
+}
+
 void
 Shutdown()
 {
+  const ShutdownStep total{"total"};
+
   VerboseOperationEnvironment operation;
 
   MainWindow *const main_window = CommonInterface::main_window;
@@ -895,13 +930,19 @@ Shutdown()
   Lua::StopAllBackground();
 
   // Stop logger and save igc file
-  if (backend_components != nullptr && backend_components->igc_logger != nullptr) {
-    operation.SetText(_("Shutdown, saving logs..."));
+  {
+    const ShutdownStep step{"logger"};
 
-    try {
-      backend_components->igc_logger->GUIStopLogger(CommonInterface::Basic(), true);
-    } catch (...) {
-      LogError(std::current_exception());
+    if (backend_components != nullptr &&
+        backend_components->igc_logger != nullptr) {
+      operation.SetText(_("Shutdown, saving logs..."));
+
+      try {
+        backend_components->igc_logger->GUIStopLogger(
+            CommonInterface::Basic(), true);
+      } catch (...) {
+        LogError(std::current_exception());
+      }
     }
   }
 
@@ -924,15 +965,22 @@ Shutdown()
 #endif
 
   // Save settings to profile
-  operation.SetText(_("Shutdown, saving profile..."));
-  SaveUserState();
+  {
+    const ShutdownStep step{"profile"};
+    operation.SetText(_("Shutdown, saving profile..."));
+    SaveUserState();
+  }
 
   operation.SetText(_("Shutdown, please wait..."));
 
   // Close any device connections
-  if (backend_components != nullptr && backend_components->devices != nullptr) {
-    LogString("Stop devices");
-    backend_components->devices->Close();
+  {
+    const ShutdownStep step{"devices"};
+    if (backend_components != nullptr &&
+        backend_components->devices != nullptr) {
+      LogString("Stop devices");
+      backend_components->devices->Close();
+    }
   }
 
   // Stop threads
@@ -955,12 +1003,16 @@ Shutdown()
     // Wait for the calculations thread to finish
     LogString("Waiting for calculation thread");
 
-    if (backend_components->merge_thread && backend_components->merge_thread->IsDefined()) {
+    if (backend_components->merge_thread &&
+        backend_components->merge_thread->IsDefined()) {
+      const ShutdownStep step{"merge thread"};
       backend_components->merge_thread->Join();
       backend_components->merge_thread.reset();
     }
 
-    if (backend_components->calculation_thread && backend_components->calculation_thread->IsDefined()) {
+    if (backend_components->calculation_thread &&
+        backend_components->calculation_thread->IsDefined()) {
+      const ShutdownStep step{"calculation thread"};
       backend_components->calculation_thread->Join();
       backend_components->calculation_thread.reset();
     }
@@ -981,7 +1033,10 @@ Shutdown()
 #endif
 
   LogString("delete MapWindow");
-  main_window->Deinitialise();
+  {
+    const ShutdownStep step{"map window"};
+    main_window->Deinitialise();
+  }
 
 #ifdef HAVE_HTTP
   /* Release SkySight before HTTP/curl teardown so active tile requests cancel
@@ -993,10 +1048,12 @@ Shutdown()
   AudioVarioGlue::Deinitialise();
 
   // Save the task for the next time
-  if (backend_components != nullptr && backend_components->protected_task_manager) {
+  if (backend_components != nullptr &&
+      backend_components->protected_task_manager) {
     operation.SetText(_("Shutdown, saving task..."));
     LogString("Save default task");
 
+    const ShutdownStep step{"task"};
     try {
       backend_components->protected_task_manager->TaskSaveDefault();
     } catch (...) {
@@ -1007,9 +1064,11 @@ Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Clear terrain database
-
-  delete terrain_loader;
-  terrain_loader = nullptr;
+  {
+    const ShutdownStep step{"terrain loader"};
+    delete terrain_loader;
+    terrain_loader = nullptr;
+  }
 
   if (backend_components != nullptr)
     backend_components->devices.reset();
@@ -1057,8 +1116,11 @@ Shutdown()
   delete backend_components;
   backend_components = nullptr;
 
-  delete data_components;
-  data_components = nullptr;
+  {
+    const ShutdownStep step{"data"};
+    delete data_components;
+    data_components = nullptr;
+  }
 
   delete file_cache;
   file_cache = nullptr;

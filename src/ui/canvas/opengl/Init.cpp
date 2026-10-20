@@ -110,6 +110,7 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_VERSION))
     LogFormat("GL version: %s", s);
 
+  bool disable_mapbuffer = false;
   /* PowerVR Rogue (libGLESv2_POWERVR_ROGUE) crashes in memcpy inside
      glMultiDrawElementsEXT while drawing topography polygons. Callers
      fall back to glDrawElements when the pointers stay null. #1235 */
@@ -131,6 +132,10 @@ OpenGL::SetupContext()
            zoomed out.  Keep the map inside the scale that is safe
            on that GPU. #1235 */
         max_map_scale = 300000;
+        /* glMapBufferOES after glBufferData(..., nullptr) SIGSEGVs
+           in libGLESv2_mtk. Upload VBOs from client memory. */
+        disable_mapbuffer = true;
+        LogFormat("GL: MapBuffer disabled on PowerVR Rogue GE8300");
       }
     }
   }
@@ -167,6 +172,9 @@ OpenGL::SetupContext()
   }
 #endif
 
+  if (disable_mapbuffer)
+    mapbuffer = false;
+
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
   if (!disable_multi_draw &&
       IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
@@ -175,6 +183,11 @@ OpenGL::SetupContext()
     GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)
       GetProcAddress("glMultiDrawElementsEXT");
   } else {
+    GLExt::multi_draw_arrays = nullptr;
+    GLExt::multi_draw_elements = nullptr;
+  }
+
+  if (disable_multi_draw) {
     GLExt::multi_draw_arrays = nullptr;
     GLExt::multi_draw_elements = nullptr;
   }

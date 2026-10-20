@@ -41,6 +41,13 @@ namespace CommandLine {
 
   extern unsigned width, height;
 
+  /**
+   * True if the user passed @c -WIDTHxHEIGHT, @c -portrait,
+   * @c -square or @c -small.  Used by DRM/KMS to pick a connector
+   * mode instead of the preferred native resolution.
+   */
+  extern bool size_specified;
+
 #ifdef KOBO
   static constexpr bool full_screen = false;
 #elif defined(ENABLE_SDL) || defined(USE_X11)

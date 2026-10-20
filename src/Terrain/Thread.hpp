@@ -24,6 +24,7 @@ class TerrainThread final : private StandbyThread {
 
   GeoPoint next_center;
   double next_radius;
+  double next_pixel_size = 0;
 
 public:
   TerrainThread(RasterTerrain &_terrain, std::function<void()> &&_callback);

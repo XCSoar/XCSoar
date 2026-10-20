@@ -76,7 +76,7 @@ protected:
   };
 
   struct CacheHeader {
-    static constexpr unsigned VERSION = 0xb;
+    static constexpr unsigned VERSION = 0xe;
 
     unsigned version;
     UnsignedPoint2D size;
@@ -98,12 +98,22 @@ protected:
   Point2D<uint_least16_t> tile_size;
 
   RasterBuffer overview;
+  /**
+   * 4× subsample of the DEM, built with the overview and stored in
+   * the same cache file.  Scanned where a fine tile is not loaded.
+   */
+  RasterBuffer step;
   RasterLocation size;
   RasterLocation overview_size_fine;
 
   GeoBounds bounds;
 
-  StaticArray<MarkerSegmentInfo, 8192> segments;
+  /**
+   * One entry per JPEG2000 tile, plus the main-header markers.
+   * A 1-arc-second Alps map is about 14000 tiles; a shorter list
+   * cannot skip the tail of the file.
+   */
+  StaticArray<MarkerSegmentInfo, 16384> segments;
 
   /**
    * An array that is used to sort the requested tiles by distance.

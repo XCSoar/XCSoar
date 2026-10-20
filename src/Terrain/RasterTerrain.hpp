@@ -64,9 +64,17 @@ public:
   }
 
   /**
+   * Load fine tiles around #location.
+   *
+   * @param pixel_size_m metres covered by one screen pixel.  When
+   * this is at least one step-grid sample, only the tiles next to
+   * #location are loaded; the rest of the view uses the step grid.
+   * Zero keeps the full #radius.
+   *
    * @return true if the method shall be called again
    */
-  bool UpdateTiles(const GeoPoint &location, double radius) noexcept;
+  bool UpdateTiles(const GeoPoint &location, double radius,
+                   double pixel_size_m = 0) noexcept;
 
 private:
   /**

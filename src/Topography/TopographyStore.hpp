@@ -53,10 +53,13 @@ public:
   /**
    * @param max_update the maximum number of files updated in this
    * call
+   * @param layout_scale UI pixel scale (Layout::Scale(1)); forwarded
+   * to TopographyFile::Update() for OpenGL triangulation
    * @return the number of files which were updated
    */
   unsigned ScanVisibility(const WindowProjection &m_projection,
-                          unsigned max_update=1024) noexcept;
+                          unsigned max_update=1024,
+                          unsigned layout_scale=1) noexcept;
 
   /**
    * Load all shapes of all files into memory.  For debugging

@@ -4,25 +4,30 @@
 #include "Topography/TopographyFileRenderer.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
+#include "Topography/ShapeRenderer.hpp"
 #include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "LogFile.hpp"
 #include "shapelib/mapserver.h"
 #include "util/AllocatedArray.hxx"
 #include "Geo/GeoClip.hpp"
 #include "Geo/FAISphere.hpp"
+#include "util/MapBenchToggles.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/VertexPointer.hpp"
 #include "ui/canvas/opengl/Buffer.hpp"
 #include "ui/canvas/opengl/Dynamic.hpp"
 #include "ui/canvas/opengl/Geo.hpp"
-
 #include "ui/canvas/opengl/Program.hpp"
 #include "ui/canvas/opengl/Shaders.hpp"
+#include "ui/opengl/System.hpp"
+#include "ui/event/Idle.hpp"
+#include "time/PeriodClock.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #endif
@@ -31,6 +36,214 @@
 #include <algorithm>
 #include <numeric>
 #include <set>
+#include <vector>
+#include <cmath>
+#include <cstdint>
+#include <unordered_map>
+#include <unordered_set>
+#ifdef ENABLE_OPENGL
+#include <chrono>
+#include <cstdint>
+#include <span>
+#endif
+
+#ifdef ENABLE_OPENGL
+
+static constexpr auto TOPO_STATS_PERIOD = std::chrono::seconds(2);
+
+struct TopographyGpuStatsState {
+  PeriodClock log_clock;
+  unsigned frames = 0;
+  unsigned layers = 0;
+  unsigned vis_rebuilds = 0, vbo_rebuilds = 0;
+  unsigned line_draws = 0, fill_draws = 0, points = 0;
+  uint64_t paint_us = 0, paint_max_us = 0;
+  uint64_t label_us = 0, label_max_us = 0;
+  unsigned last_sw = 0, last_sh = 0;
+  unsigned last_lines = 0, last_fills = 0;
+  double last_scale = 0;
+  bool last_idle = false;
+
+  void Reset() noexcept {
+    frames = layers = 0;
+    vis_rebuilds = vbo_rebuilds = 0;
+    line_draws = fill_draws = points = 0;
+    paint_us = paint_max_us = 0;
+    label_us = label_max_us = 0;
+  }
+
+  void AddUs(uint64_t us, uint64_t &sum, uint64_t &mx) noexcept {
+    sum += us;
+    if (us > mx)
+      mx = us;
+  }
+
+  void Flush() noexcept {
+    if (frames == 0)
+      return;
+
+    const auto elapsed = log_clock.Elapsed();
+    const double sec =
+      elapsed.count() > 0
+      ? std::chrono::duration<double>(elapsed).count()
+      : 2.0;
+    const double fps = frames / sec;
+    const double paint_avg = (paint_us / 1000.0) / frames;
+    const double label_avg =
+      (label_us / 1000.0) / std::max(1u, frames);
+
+    LogFmt("OpenGL: Topo {:.1f}s frames={} ({:.0f}/s) idle={} "
+           "scale={:.0f}m view={}x{}",
+           sec, frames, fps, last_idle ? 1 : 0,
+           last_scale, last_sw, last_sh);
+    LogFmt("OpenGL: Topo cpu paint avg/max {:.2f}/{:.2f} ms  "
+           "labels avg/max {:.2f}/{:.2f} ms",
+           paint_avg, paint_max_us / 1000.0,
+           label_avg, label_max_us / 1000.0);
+    LogFmt("OpenGL: Topo layers/frame={:.1f} line_draws={} "
+           "(avg {:.0f}) fill_draws={} (avg {:.1f}) points={}  "
+           "vis_rebuild={} vbo_rebuild={}",
+           layers / double(frames),
+           line_draws, line_draws / double(frames),
+           fill_draws, fill_draws / double(frames),
+           points, vis_rebuilds, vbo_rebuilds);
+    LogFmt("OpenGL: Topo last frame lines={} fills={}",
+           last_lines, last_fills);
+
+    Reset();
+    log_clock.Update();
+  }
+};
+
+static TopographyGpuStatsState topo_stats;
+static constexpr unsigned TOPO_LAYER_VTX_MAX = 24;
+
+static TopographyLayerVtx topo_frame_layers[TOPO_LAYER_VTX_MAX];
+static unsigned topo_frame_n_layers;
+static TopographyLayerVtx topo_last_layers[TOPO_LAYER_VTX_MAX];
+static unsigned topo_last_n_layers;
+
+static uint64_t topo_frame_paint_us;
+static unsigned topo_frame_lines, topo_frame_fills;
+static unsigned topo_frame_vertices, topo_frame_polygons;
+static unsigned topo_last_vertices, topo_last_polygons;
+
+static uint64_t
+TopoSteadyUsSince(std::chrono::steady_clock::time_point t0) noexcept
+{
+  return uint64_t(std::chrono::duration_cast<std::chrono::microseconds>(
+                    std::chrono::steady_clock::now() - t0)
+                    .count());
+}
+
+void
+TopographyGpuStatsBeginDraw() noexcept
+{
+  topo_frame_paint_us = 0;
+  topo_frame_lines = 0;
+  topo_frame_fills = 0;
+  topo_frame_vertices = 0;
+  topo_frame_polygons = 0;
+  topo_frame_n_layers = 0;
+}
+
+static void
+TopoAddLayer(unsigned cpu_us, unsigned line_draws, unsigned fill_draws,
+             unsigned point_n, bool vis_rebuild, bool vbo_rebuild,
+             const char *name, unsigned vertices) noexcept
+{
+  topo_stats.layers++;
+  topo_frame_paint_us += cpu_us;
+  topo_stats.line_draws += line_draws;
+  topo_stats.fill_draws += fill_draws;
+  topo_frame_lines += line_draws;
+  topo_frame_fills += fill_draws;
+  topo_stats.points += point_n;
+  if (vis_rebuild)
+    topo_stats.vis_rebuilds++;
+  if (vbo_rebuild)
+    topo_stats.vbo_rebuilds++;
+  if (topo_frame_n_layers < TOPO_LAYER_VTX_MAX) {
+    topo_frame_layers[topo_frame_n_layers].name = name;
+    topo_frame_layers[topo_frame_n_layers].vertices = vertices;
+    ++topo_frame_n_layers;
+  }
+}
+
+void
+TopographyGpuStatsEndDraw(const WindowProjection &projection) noexcept
+{
+  topo_stats.frames++;
+  topo_stats.AddUs(topo_frame_paint_us, topo_stats.paint_us,
+                   topo_stats.paint_max_us);
+  topo_stats.last_lines = topo_frame_lines;
+  topo_stats.last_fills = topo_frame_fills;
+  topo_stats.last_scale = projection.GetMapScale();
+  const auto view = projection.GetScreenSize();
+  topo_stats.last_sw = view.width;
+  topo_stats.last_sh = view.height;
+  topo_stats.last_idle = IsUserIdle(750);
+
+  topo_last_n_layers = topo_frame_n_layers;
+  for (unsigned i = 0; i < topo_last_n_layers; ++i)
+    topo_last_layers[i] = topo_frame_layers[i];
+  std::sort(topo_last_layers, topo_last_layers + topo_last_n_layers,
+            [](const TopographyLayerVtx &a,
+               const TopographyLayerVtx &b) noexcept {
+              return a.vertices > b.vertices;
+            });
+
+  if (!topo_stats.log_clock.IsDefined())
+    topo_stats.log_clock.Update();
+  else if (topo_stats.log_clock.Check(TOPO_STATS_PERIOD)) {
+    const GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+      LogFmt("OpenGL: Topo glGetError=0x{:x}", unsigned(err));
+    for (unsigned i = 0; i < topo_last_n_layers; ++i) {
+      if (topo_last_layers[i].vertices == 0)
+        continue;
+      LogFmt("OpenGL: Topo vtx {}={}",
+             topo_last_layers[i].name,
+             topo_last_layers[i].vertices);
+    }
+    topo_stats.Flush();
+  }
+
+  topo_last_vertices = topo_frame_vertices;
+  topo_last_polygons = topo_frame_polygons;
+}
+
+void
+TopographyGpuStatsAddLabels(unsigned cpu_us) noexcept
+{
+  topo_stats.AddUs(cpu_us, topo_stats.label_us, topo_stats.label_max_us);
+}
+
+unsigned
+GetLastTopographyVertexCount() noexcept
+{
+  return topo_last_vertices;
+}
+
+unsigned
+GetLastTopographyPolygonCount() noexcept
+{
+  return topo_last_polygons;
+}
+
+unsigned
+GetLastTopographyLayerVtxCount() noexcept
+{
+  return topo_last_n_layers;
+}
+
+const TopographyLayerVtx *
+GetLastTopographyLayerVtx() noexcept
+{
+  return topo_last_layers;
+}
+
+#endif
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
                                                const TopographyLook &_look) noexcept
@@ -48,26 +261,446 @@ TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file,
 
 TopographyFileRenderer::~TopographyFileRenderer() noexcept = default;
 
-void
-TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
+/**
+ * True if a feature's geographic box is smaller than
+ * #SHAPE_MIN_BBOX_PX on screen.  Cheap (angle spans only).
+ */
+[[gnu::pure]]
+static bool
+ShapeTooSmall(const GeoBounds &bounds, Angle min_span) noexcept
 {
-  if (file.GetSerial() == visible_serial &&
-      visible_bounds.IsInside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().Scale(2).IsInside(visible_bounds))
-    /* cache is clean */
+  return bounds.GetWidth() < min_span && bounds.GetHeight() < min_span;
+}
+
+[[gnu::pure]]
+static bool
+ShapeTooSmallToDraw(const XShape &shape, Angle fill_span,
+                    Angle line_span) noexcept
+{
+  if (shape.get_type() == MS_SHAPE_POLYGON)
+    return ShapeTooSmall(shape.get_bounds(), fill_span);
+  /* Two-point OSM road/rail sticks cannot be vertex-thinned.
+     Drop only those shorter than #line_span so the network does
+     not open visible gaps. */
+  if (shape.get_type() == MS_SHAPE_LINE && line_span.Native() > 0)
+    return ShapeTooSmall(shape.get_bounds(), line_span);
+  return false;
+}
+
+static Angle
+LineShapeSpan(const XShape &shape) noexcept
+{
+  const GeoBounds &b = shape.get_bounds();
+  const Angle w = b.GetWidth();
+  const Angle h = b.GetHeight();
+  return w > h ? w : h;
+}
+
+/**
+ * Unit direction of the first part (opposite dual carriageways
+ * still match via fabs(dot)).
+ */
+static bool
+LineUnitDirection(const XShape &shape, const TopographyFile &file,
+                  double &dx, double &dy) noexcept
+{
+  const auto lines = shape.GetLines();
+  if (lines.empty() || lines[0] < 2)
+    return false;
+
+  const auto *p = shape.GetPoints();
+#ifdef ENABLE_OPENGL
+  const GeoPoint a = file.ToGeoPoint(p[0]);
+  const GeoPoint b = file.ToGeoPoint(p[lines[0] - 1]);
+#else
+  const GeoPoint a = p[0];
+  const GeoPoint b = p[lines[0] - 1];
+  (void)file;
+#endif
+  dx = (b.longitude - a.longitude).Native();
+  dy = (b.latitude - a.latitude).Native();
+  const double len = std::hypot(dx, dy);
+  if (len <= 0)
+    return false;
+  dx /= len;
+  dy /= len;
+  return true;
+}
+
+struct DualLineKeep {
+  GeoPoint mid;
+  double dx, dy;
+};
+
+static uint64_t
+DualLineCell(int x, int y) noexcept
+{
+  return (uint64_t(uint32_t(x)) << 32) | uint32_t(y);
+}
+
+/**
+ * Drop the shorter of two parallel roads whose midpoints are within
+ * #collapse of each other.  O(n log n + n·k) with a cell hash; not
+ * n².  Longer sticks are considered first so a dual motorway is
+ * kept instead of a short ramp.
+ *
+ * @return shapes that were dropped (for label skip)
+ */
+static std::unordered_set<const XShape *>
+CollapseParallelLines(std::vector<const XShape *> &cands,
+                      const TopographyFile &file,
+                      Angle collapse) noexcept
+{
+  std::unordered_set<const XShape *> dropped;
+  if (cands.size() < 2 || collapse.Native() <= 0)
+    return dropped;
+
+  std::sort(cands.begin(), cands.end(),
+            [](const XShape *a, const XShape *b) noexcept {
+              return LineShapeSpan(*a) > LineShapeSpan(*b);
+            });
+
+  const double cell = collapse.Native();
+  std::vector<DualLineKeep> kept;
+  kept.reserve(cands.size());
+  std::unordered_map<uint64_t, std::vector<unsigned>> grid;
+  grid.reserve(cands.size() * 2);
+
+  constexpr double PARALLEL_DOT = 0.85; /* ~32° or 148° */
+
+  for (const XShape *shape : cands) {
+    DualLineKeep cur;
+    cur.mid = shape->get_bounds().GetCenter();
+    if (!LineUnitDirection(*shape, file, cur.dx, cur.dy))
+      continue;
+
+    const int cx = int(std::floor(cur.mid.longitude.Native() / cell));
+    const int cy = int(std::floor(cur.mid.latitude.Native() / cell));
+    bool hide = false;
+    for (int iy = cy - 1; iy <= cy + 1 && !hide; ++iy) {
+      for (int ix = cx - 1; ix <= cx + 1 && !hide; ++ix) {
+        const auto it = grid.find(DualLineCell(ix, iy));
+        if (it == grid.end())
+          continue;
+        for (unsigned idx : it->second) {
+          const DualLineKeep &o = kept[idx];
+          const Angle dlon =
+            (cur.mid.longitude - o.mid.longitude).Absolute();
+          const Angle dlat =
+            (cur.mid.latitude - o.mid.latitude).Absolute();
+          if (dlon >= collapse || dlat >= collapse)
+            continue;
+          const double dot = cur.dx * o.dx + cur.dy * o.dy;
+          if (std::fabs(dot) < PARALLEL_DOT)
+            continue;
+          hide = true;
+          break;
+        }
+      }
+    }
+
+    if (hide) {
+      dropped.insert(shape);
+      continue;
+    }
+
+    const unsigned idx = unsigned(kept.size());
+    kept.push_back(cur);
+    grid[DualLineCell(cx, cy)].push_back(idx);
+  }
+
+  return dropped;
+}
+
+#ifdef ENABLE_OPENGL
+
+/** GLES2 indices are 16-bit; batch shapes that share a 64k vertex window. */
+static constexpr unsigned GLUSHORT_WINDOW = 0x10000;
+
+[[gnu::pure]]
+static unsigned
+CountLineVertices(std::span<const uint16_t> lines) noexcept
+{
+  unsigned n = 0;
+  for (const unsigned nv : lines)
+    n += nv;
+  return n;
+}
+
+[[gnu::pure]]
+static constexpr bool
+FitsGLushortWindow(unsigned offset, unsigned n_verts) noexcept
+{
+  const unsigned local = offset % GLUSHORT_WINDOW;
+  return n_verts <= GLUSHORT_WINDOW - local;
+}
+
+static constexpr unsigned
+GLushortWindowBase(unsigned offset) noexcept
+{
+  return offset - offset % GLUSHORT_WINDOW;
+}
+
+static void
+AppendOffsetStrip(std::vector<GLsizei> &counts,
+                  std::vector<GLushort> &indices,
+                  unsigned base, unsigned n) noexcept
+{
+  if (n < 2)
     return;
 
+  counts.push_back(GLsizei(n));
+  const size_t size = indices.size();
+  indices.resize(size + n);
+  for (unsigned i = 0; i < n; ++i)
+    indices[size + i] = GLushort(base + i);
+}
+
+static void
+AppendIndexedStrip(std::vector<GLsizei> &counts,
+                   std::vector<GLushort> &indices,
+                   unsigned offset,
+                   const GLushort *src, unsigned n) noexcept
+{
+  if (n < 2)
+    return;
+
+  counts.push_back(GLsizei(n));
+  const size_t size = indices.size();
+  indices.resize(size + n, GLushort(offset));
+  for (unsigned i = 0; i < n; ++i)
+    indices[size + i] += src[i];
+}
+
+/**
+ * Expand a triangle strip to independent triangles, skipping
+ * degenerates used as strip restarts.  One glDrawElements then
+ * covers many polygons when MultiDrawElements is unavailable.
+ */
+static void
+AppendStripAsTriangles(std::vector<uint16_t> &triangles,
+                       const GLushort *strip, unsigned n) noexcept
+{
+  if (n < 3)
+    return;
+
+  for (unsigned i = 0; i + 2 < n; ++i) {
+    const GLushort a = strip[i];
+    const GLushort b = strip[i + 1];
+    const GLushort c = strip[i + 2];
+    if (a == b || b == c || a == c)
+      continue;
+
+    if (i & 1) {
+      triangles.push_back(b);
+      triangles.push_back(a);
+      triangles.push_back(c);
+    } else {
+      triangles.push_back(a);
+      triangles.push_back(b);
+      triangles.push_back(c);
+    }
+  }
+}
+
+/**
+ * Expand a line strip to independent segments.  Used when the
+ * driver cannot MultiDraw (PowerVR GE8300 SIGSEGV in
+ * glMultiDrawElementsEXT).  Core glDrawElements(GL_LINES) is the
+ * same path as the fill triangle list that already runs there.
+ */
+static void
+AppendStripAsLines(std::vector<uint16_t> &segments,
+                   const GLushort *strip, unsigned n) noexcept
+{
+  if (n < 2)
+    return;
+
+  for (unsigned i = 0; i + 1 < n; ++i) {
+    const GLushort a = strip[i];
+    const GLushort b = strip[i + 1];
+    if (a == b)
+      continue;
+
+    segments.push_back(a);
+    segments.push_back(b);
+  }
+}
+
+static void
+ExpandLines(std::vector<uint16_t> &segments,
+            const std::vector<GLsizei> &counts,
+            const std::vector<GLushort> &indices) noexcept
+{
+  unsigned i = 0;
+  for (auto count : counts) {
+    AppendStripAsLines(segments, indices.data() + i, count);
+    i += count;
+  }
+}
+
+static void
+ExpandFills(std::vector<uint16_t> &triangles,
+            const std::vector<GLsizei> &counts,
+            const std::vector<GLushort> &indices) noexcept
+{
+  unsigned i = 0;
+  for (auto count : counts) {
+    AppendStripAsTriangles(triangles, indices.data() + i, count);
+    i += count;
+  }
+}
+
+static void
+DrawCachedWindow(ScopeVertexPointer &vp, const ShapePoint *buffer,
+                 const TopographyFileRenderer::CachedWindow &w,
+                 unsigned &line_draws, unsigned &fill_draws) noexcept
+{
+  vp.Update(GL_FLOAT, buffer + w.window_base);
+
+  topo_frame_vertices += unsigned(w.lines.size() + w.fills.size());
+  if (!w.fill_counts.empty())
+    topo_frame_polygons += unsigned(w.fill_counts.size());
+  else if (!w.fills.empty())
+    topo_frame_polygons += unsigned(w.fills.size() / 3);
+
+#ifdef GL_EXT_multi_draw_arrays
+  if (!w.line_counts.empty() && GLExt::HaveMultiDrawElements()) {
+    std::vector<const GLushort *> pointers;
+    unsigned i = 0;
+    for (auto count : w.line_counts) {
+      pointers.push_back(w.lines.data() + i);
+      i += unsigned(count);
+    }
+    GLExt::MultiDrawElements(GL_LINE_STRIP, w.line_counts.data(),
+                             GL_UNSIGNED_SHORT,
+                             (const GLvoid **)pointers.data(),
+                             w.line_counts.size());
+    ++line_draws;
+  } else
+#endif
+  if (!w.lines.empty()) {
+    glDrawElements(GL_LINES, GLsizei(w.lines.size()),
+                   GL_UNSIGNED_SHORT, w.lines.data());
+    ++line_draws;
+  }
+
+#ifdef GL_EXT_multi_draw_arrays
+  if (!w.fill_counts.empty() && GLExt::HaveMultiDrawElements()) {
+    std::vector<const GLushort *> pointers;
+    unsigned i = 0;
+    for (auto count : w.fill_counts) {
+      pointers.push_back(w.fills.data() + i);
+      i += unsigned(count);
+    }
+    GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, w.fill_counts.data(),
+                             GL_UNSIGNED_SHORT,
+                             (const GLvoid **)pointers.data(),
+                             w.fill_counts.size());
+    ++fill_draws;
+  } else
+#endif
+  if (!w.fills.empty()) {
+    glDrawElements(GL_TRIANGLES, GLsizei(w.fills.size()),
+                   GL_UNSIGNED_SHORT, w.fills.data());
+    ++fill_draws;
+  }
+}
+
+struct TopoShapeBatch {
+  std::vector<GLsizei> line_counts;
+  std::vector<GLushort> line_indices;
+  std::vector<GLsizei> polygon_counts;
+  std::vector<GLushort> polygon_indices;
+  unsigned window_base = 0;
+  bool active = false;
+
+  void FlushTo(std::vector<TopographyFileRenderer::CachedWindow> &out) noexcept {
+    if (!active)
+      return;
+
+    TopographyFileRenderer::CachedWindow w;
+    w.window_base = window_base;
+
+#ifdef GL_EXT_multi_draw_arrays
+    if (GLExt::HaveMultiDrawElements()) {
+      w.line_counts.assign(line_counts.begin(), line_counts.end());
+      w.lines.assign(line_indices.begin(), line_indices.end());
+      w.fill_counts.assign(polygon_counts.begin(), polygon_counts.end());
+      w.fills.assign(polygon_indices.begin(), polygon_indices.end());
+    } else
+#endif
+    {
+      w.lines.reserve(line_indices.size() * 2);
+      w.fills.reserve(polygon_indices.size() * 3);
+      ExpandLines(w.lines, line_counts, line_indices);
+      ExpandFills(w.fills, polygon_counts, polygon_indices);
+    }
+
+    if (!w.lines.empty() || !w.fills.empty() ||
+        !w.line_counts.empty() || !w.fill_counts.empty())
+      out.push_back(std::move(w));
+
+    line_counts.clear();
+    line_indices.clear();
+    polygon_counts.clear();
+    polygon_indices.clear();
+    active = false;
+  }
+
+  void EnsureWindow(unsigned window,
+                    std::vector<TopographyFileRenderer::CachedWindow> &out) noexcept {
+    if (active && window != window_base)
+      FlushTo(out);
+
+    window_base = window;
+    active = true;
+  }
+};
+
+#endif
+
+bool
+TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
+{
+  const double scale = projection.GetScale();
+  const unsigned fill_level =
+    file.GetFillThinningLevel(projection.GetMapScale());
+  const GeoBounds screen = projection.GetScreenBounds();
+  if (file.GetSerial() == visible_serial &&
+      scale <= visible_scale &&
+      fill_level <= visible_fill_level &&
+      visible_bounds.IsValid() &&
+      visible_bounds.IsInside(screen))
+    /* still inside the last 2× viewport; pan only reprojects */
+    return false;
+
   visible_serial = file.GetSerial();
-  visible_bounds = projection.GetScreenBounds().Scale(1.2);
+  visible_scale = scale;
+  visible_fill_level = fill_level;
+  visible_bounds = screen.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   visible_shapes.clear();
   visible_points.clear();
   visible_labels.clear();
+
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
+  const int collapse_px = LineCollapsePx(fill_level, file.GetName());
+  const Angle collapse_span =
+    collapse_px > 0 ? projection.PixelsToAngle(collapse_px) : Angle::Zero();
+
+  std::vector<const XShape *> dual_cands;
 
   for (const XShape &shape : file) {
     if (!visible_bounds.Overlaps(shape.get_bounds()))
       continue;
 
-    if (shape.get_type() != MS_SHAPE_NULL) {
+    const bool too_small = ShapeTooSmallToDraw(shape, fill_span,
+                                               line_span);
+
+    if (shape.get_type() != MS_SHAPE_NULL && !too_small) {
       if (shape.get_type() == MS_SHAPE_POINT) {
         if (icon.IsDefined()) {
           const auto *points = shape.GetPoints();
@@ -82,26 +715,47 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) 
             }
           }
         }
+      } else if (collapse_px > 0 &&
+                 shape.get_type() == MS_SHAPE_LINE) {
+        dual_cands.push_back(&shape);
       } else
         visible_shapes.push_back(&shape);
     }
 
-    if (shape.GetLabel() != nullptr)
+    if (shape.GetLabel() != nullptr && !too_small)
       visible_labels.push_back(&shape);
   }
+
+  if (!dual_cands.empty()) {
+    const auto dropped =
+      CollapseParallelLines(dual_cands, file, collapse_span);
+    visible_shapes.reserve(visible_shapes.size() + dual_cands.size());
+    for (const XShape *shape : dual_cands) {
+      if (dropped.find(shape) == dropped.end())
+        visible_shapes.push_back(shape);
+    }
+    if (!dropped.empty() && !visible_labels.empty()) {
+      auto new_end = std::remove_if(
+        visible_labels.begin(), visible_labels.end(),
+        [&dropped](const XShape *s) {
+          return dropped.find(s) != dropped.end();
+        });
+      visible_labels.erase(new_end, visible_labels.end());
+    }
+  }
+
+  return true;
 }
 
 #ifdef ENABLE_OPENGL
 
-inline void
+inline bool
 TopographyFileRenderer::UpdateArrayBuffer() noexcept
 {
   if (array_buffer == nullptr)
     array_buffer = std::make_unique<GLArrayBuffer>();
   else if (file.GetSerial() == array_buffer_serial)
-    return;
-
-  array_buffer_serial = file.GetSerial();
+    return true;
 
   unsigned n = 0;
   for (auto &shape : file) {
@@ -111,9 +765,17 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
     n = std::accumulate(lines.begin(), lines.end(), n);
   }
 
+  if (n == 0)
+    return false;
+
   ShapePoint *p = (ShapePoint *)
     array_buffer->BeginWrite(n * sizeof(*p));
-  assert (p != nullptr);
+  if (p == nullptr) {
+    LogFmt("Topography: {} failed to allocate {} vertices",
+           file.GetName(), n);
+    GLArrayBuffer::Unbind();
+    return false;
+  }
 
   for (const auto &shape : file) {
     const auto lines = shape.GetLines();
@@ -125,6 +787,8 @@ TopographyFileRenderer::UpdateArrayBuffer() noexcept
   }
 
   array_buffer->CommitWrite(n * sizeof(*p), p - n);
+  array_buffer_serial = file.GetSerial();
+  return true;
 }
 
 #endif
@@ -149,16 +813,37 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   if (!file.IsVisible(map_scale))
     return;
 
-  UpdateVisibleShapes(projection);
+  const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+
+#ifdef ENABLE_OPENGL
+  const auto t0 = std::chrono::steady_clock::now();
+  unsigned line_draws = 0, fill_draws = 0;
+  const unsigned vtx0 = topo_frame_vertices;
+#endif
+  const bool vis_rebuild = UpdateVisibleShapes(projection);
   PaintPoints(canvas, projection);
 
-  if (visible_shapes.empty())
+  if (visible_shapes.empty()) {
+#ifdef ENABLE_OPENGL
+    draw_cache_valid = false;
+    TopoAddLayer(TopoSteadyUsSince(t0), 0, 0,
+                 unsigned(visible_points.size()), vis_rebuild, false,
+                 file.GetName(), topo_frame_vertices - vtx0);
+#endif
     return;
+  }
 
 #ifdef ENABLE_OPENGL
   OpenGL::solid_shader->Use();
 
-  UpdateArrayBuffer();
+  const bool vbo_rebuild =
+    array_buffer == nullptr || file.GetSerial() != array_buffer_serial;
+  if (!UpdateArrayBuffer()) {
+    TopoAddLayer(TopoSteadyUsSince(t0), 0, 0,
+                 unsigned(visible_points.size()), vis_rebuild, vbo_rebuild,
+                 file.GetName(), topo_frame_vertices - vtx0);
+    return;
+  }
   array_buffer->Bind();
   const ShapePoint *const buffer = nullptr;
 
@@ -175,10 +860,26 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   // get drawing info
 
 #ifdef ENABLE_OPENGL
-  const unsigned level = file.GetThinningLevel(map_scale);
-  const ShapeScalar min_distance =
-    ShapeScalar(file.GetMinimumPointDistance(level))
-    / (Layout::Scale(1) * FAISphere::REARTH);
+  unsigned line_level = fill_level;
+  ShapeScalar line_min_distance;
+  ShapeScalar fill_min_distance;
+  if (MapBenchTopoHead()) {
+    line_level = file.GetThinningLevel(map_scale);
+    const ShapeScalar d =
+      ShapeScalar(file.GetMinimumPointDistance(line_level))
+      / (Layout::Scale(1) * FAISphere::REARTH);
+    line_min_distance = d;
+    fill_min_distance = d;
+  } else {
+    line_min_distance =
+      ShapeScalar(projection.PixelsToAngle(SHAPE_LINE_SPACING_PX[line_level])
+                    .Native());
+    fill_min_distance =
+      ShapeScalar(projection.PixelsToAngle(int(FillSpacingPx(fill_level,
+                                                           file.GetName())))
+                    .Native());
+  }
+  const unsigned cache_thinning = (fill_level << 8) | line_level;
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(ToGLM(projection, file.GetCenter())));
@@ -192,14 +893,29 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
   ScopeVertexPointer vp;
 
-#ifdef GL_EXT_multi_draw_arrays
-  std::vector<GLsizei> polygon_counts;
-  std::vector<GLushort> polygon_indices;
+  const bool cache_ok = draw_cache_valid &&
+    !vis_rebuild && !vbo_rebuild &&
+    draw_cache_thinning == cache_thinning;
+
+  if (cache_ok) {
+    for (const auto &w : draw_windows)
+      DrawCachedWindow(vp, buffer, w, line_draws, fill_draws);
+  } else {
+    draw_windows.clear();
+    TopoShapeBatch batch;
+    bool index_cache_complete = true;
 #endif
-#endif
+
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
 
   for (const XShape *shape_p : visible_shapes) {
     const XShape &shape = *shape_p;
+
+    if (ShapeTooSmallToDraw(shape, fill_span, line_span))
+      continue;
 
     const auto lines = shape.GetLines();
 #ifdef ENABLE_OPENGL
@@ -216,23 +932,79 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_LINE:
       {
 #ifdef ENABLE_OPENGL
+        const unsigned offset = shape.GetOffset();
+        const unsigned n_verts = CountLineVertices(lines);
+        XShape::Indices indices{};
+        const bool have_thin =
+          (indices = shape.GetIndices(line_level,
+                                      line_min_distance)).indices != nullptr;
+
+        if (FitsGLushortWindow(offset, n_verts)) {
+          /* postpone: one draw per 64k-vertex window */
+          const unsigned window = GLushortWindowBase(offset);
+          batch.EnsureWindow(window, draw_windows);
+          const unsigned local_base = offset - window;
+          if (!have_thin) {
+            unsigned local = 0;
+            for (unsigned n : lines) {
+              AppendOffsetStrip(batch.line_counts, batch.line_indices,
+                                local_base + local, n);
+              local += n;
+            }
+          } else {
+            for (unsigned n : std::span<const GLushort>{
+                   indices.count, lines.size()}) {
+              AppendIndexedStrip(batch.line_counts, batch.line_indices,
+                                 local_base, indices.indices, n);
+              indices.indices += n;
+            }
+          }
+          break;
+        }
+
+        if (n_verts <= GLUSHORT_WINDOW) {
+          /* Shape spans a 64k VBO window; address it from its own
+             base so indices stay 16-bit. */
+          batch.EnsureWindow(offset, draw_windows);
+          if (!have_thin) {
+            unsigned local = 0;
+            for (unsigned n : lines) {
+              AppendOffsetStrip(batch.line_counts, batch.line_indices,
+                                local, n);
+              local += n;
+            }
+          } else {
+            for (unsigned n : std::span<const GLushort>{
+                   indices.count, lines.size()}) {
+              AppendIndexedStrip(batch.line_counts, batch.line_indices,
+                                 0, indices.indices, n);
+              indices.indices += n;
+            }
+          }
+          break;
+        }
+
         vp.Update(GL_FLOAT, points);
 
-        XShape::Indices indices;
-        if (level == 0 ||
-            (indices = shape.GetIndices(level, min_distance)).indices == nullptr) {
-          unsigned offset = 0;
+        if (!have_thin) {
+          unsigned local = 0;
           for (unsigned n : lines) {
-            glDrawArrays(GL_LINE_STRIP, offset, n);
-            offset += n;
+            glDrawArrays(GL_LINE_STRIP, local, n);
+            ++line_draws;
+            topo_frame_vertices += n;
+            local += n;
           }
         } else {
-          for (unsigned n : std::span<const GLushort>{indices.count, lines.size()}) {
+          for (unsigned n : std::span<const GLushort>{
+                 indices.count, lines.size()}) {
             glDrawElements(GL_LINE_STRIP, n, GL_UNSIGNED_SHORT,
                            indices.indices);
+            ++line_draws;
+            topo_frame_vertices += n;
             indices.indices += n;
           }
         }
+        index_cache_complete = false;
 #else // !ENABLE_OPENGL
         for (unsigned msize : lines) {
         shape_renderer.Begin(msize);
@@ -253,26 +1025,48 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_POLYGON:
 #ifdef ENABLE_OPENGL
       {
-        const auto triangles = shape.GetIndices(level, min_distance);
+        const auto triangles = shape.GetIndices(fill_level,
+                                                fill_min_distance);
+        if (triangles.indices == nullptr || triangles.count == nullptr ||
+            *triangles.count == 0)
+          break;
+
         const unsigned n = *triangles.count;
 
-#ifdef GL_EXT_multi_draw_arrays
         const unsigned offset = shape.GetOffset();
-        if (GLExt::HaveMultiDrawElements() && offset + n < 0x10000) {
-          /* postpone, draw many polygons with a single
-             glMultiDrawElements() call */
-          polygon_counts.push_back(n);
-          const size_t size = polygon_indices.size();
-          polygon_indices.resize(size + n, offset);
+        const unsigned n_verts = CountLineVertices(lines);
+        /* GLushort indices relative to the 64k window that
+           contains this shape.  A strip that crosses a window
+           is drawn unbatched so indices cannot wrap. */
+        if (FitsGLushortWindow(offset, n_verts)) {
+          const unsigned window = GLushortWindowBase(offset);
+          batch.EnsureWindow(window, draw_windows);
+          const unsigned local_base = offset - window;
+          batch.polygon_counts.push_back(n);
+          const size_t size = batch.polygon_indices.size();
+          batch.polygon_indices.resize(size + n, local_base);
           for (unsigned i = 0; i < n; ++i)
-            polygon_indices[size + i] += triangles.indices[i];
+            batch.polygon_indices[size + i] += triangles.indices[i];
           break;
         }
-#endif
+
+        if (n_verts <= GLUSHORT_WINDOW) {
+          batch.EnsureWindow(offset, draw_windows);
+          batch.polygon_counts.push_back(n);
+          const size_t size = batch.polygon_indices.size();
+          batch.polygon_indices.resize(size + n);
+          for (unsigned i = 0; i < n; ++i)
+            batch.polygon_indices[size + i] = triangles.indices[i];
+          break;
+        }
 
         vp.Update(GL_FLOAT, points);
         glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_SHORT,
                        triangles.indices);
+        ++fill_draws;
+        topo_frame_vertices += n;
+        ++topo_frame_polygons;
+        index_cache_complete = false;
       }
 #else // !ENABLE_OPENGL
       {
@@ -284,7 +1078,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
              clip them, to avoid integer overflows (as PixelPoint may
              store only 16 bit integers on some platforms) */
 
-          geo_points.GrowDiscard(msize * 3);
+          geo_points.GrowDiscard(msize * 4);
           for (unsigned i = 0; i < msize; ++i)
             geo_points[i] = src[i * iskip];
 
@@ -311,25 +1105,12 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   }
 #ifdef ENABLE_OPENGL
 
-#ifdef GL_EXT_multi_draw_arrays
-  if (!polygon_indices.empty()) {
-    assert(GLExt::HaveMultiDrawElements());
-
-    std::vector<const GLushort *> polygon_pointers;
-    unsigned i = 0;
-    for (auto count : polygon_counts) {
-      polygon_pointers.push_back(polygon_indices.data() + i);
-      i += count;
-    }
-
-    vp.Update(GL_FLOAT, buffer);
-
-    GLExt::MultiDrawElements(GL_TRIANGLE_STRIP, polygon_counts.data(),
-                             GL_UNSIGNED_SHORT,
-                             (const GLvoid **)polygon_pointers.data(),
-                             polygon_counts.size());
+    batch.FlushTo(draw_windows);
+    for (const auto &w : draw_windows)
+      DrawCachedWindow(vp, buffer, w, line_draws, fill_draws);
+    draw_cache_valid = index_cache_complete;
+    draw_cache_thinning = cache_thinning;
   }
-#endif
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(glm::mat4(1)));
@@ -339,9 +1120,45 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   pen.Unbind();
 
   array_buffer->Unbind();
+
+  TopoAddLayer(TopoSteadyUsSince(t0), line_draws, fill_draws,
+               unsigned(visible_points.size()), vis_rebuild, vbo_rebuild,
+               file.GetName(), topo_frame_vertices - vtx0);
 #else
   shape_renderer.Commit();
 #endif
+}
+
+/**
+ * Map scale (metres) at which labels use the largest font (circuit).
+ */
+static constexpr double LABEL_LARGE_SCALE = 2000;
+
+/**
+ * Fraction of the layer's label range at which labels step up to the
+ * medium font (well inside the range, not just as they appear).
+ */
+static constexpr double LABEL_MEDIUM_RANGE_FRACTION = 0.25;
+
+[[gnu::pure]]
+static TopographyLook::LabelSize
+LabelSizeForScale(double map_scale, double label_threshold,
+                  MS_SHAPE_TYPE type) noexcept
+{
+  /* Lines (roads, rivers) stay SMALL.  Each font size is a separate
+     TextCache key; 256 GPU textures.  Upsizing every street name at
+     circuit scale misses the cache and uploads glyphs on Mali-400. */
+  if (type != MS_SHAPE_POINT)
+    return TopographyLook::LabelSize::SMALL;
+
+  if (map_scale <= LABEL_LARGE_SCALE)
+    return TopographyLook::LabelSize::LARGE;
+
+  if (label_threshold > 0 &&
+      map_scale <= label_threshold * LABEL_MEDIUM_RANGE_FRACTION)
+    return TopographyLook::LabelSize::MEDIUM;
+
+  return TopographyLook::LabelSize::SMALL;
 }
 
 void
@@ -360,67 +1177,65 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   if (visible_labels.empty())
     return;
 
-  canvas.Select(file.IsLabelImportant(map_scale)
-                ? look.important_label_font
-                : look.regular_label_font);
-  canvas.SetTextColor(file.IsLabelImportant(map_scale) ?
-                COLOR_BLACK : COLOR_VERY_DARK_GRAY);
+  const bool important = file.IsLabelImportant(map_scale);
+  const auto size = LabelSizeForScale(map_scale,
+                                      file.GetLabelThreshold(),
+                                      visible_labels.front()->get_type());
+  canvas.Select(look.GetLabelFont(important, size));
+  canvas.SetTextColor(important ? COLOR_BLACK : COLOR_VERY_DARK_GRAY);
   canvas.SetBackgroundTransparent();
-
-  // get drawing info
-
-  int iskip = file.GetSkipSteps(map_scale);
 
   std::set<std::string> drawn_labels;
 
-  // Iterate over all shapes in the file
+  const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+  const Angle fill_span =
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
+  const Angle line_span =
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
+
   for (const XShape *shape_p : visible_labels) {
     const XShape &shape = *shape_p;
 
-    // Skip shapes without a label
+    if (ShapeTooSmallToDraw(shape, fill_span, line_span))
+      continue;
+
     const char *label = shape.GetLabel();
     assert(label != nullptr);
+    if (label[0] == '\0')
+      continue;
 
-    const auto lines = shape.GetLines();
-    const auto *points = shape.GetPoints();
+    /* Geographic centre, not the leftmost vertex: on compact shapes
+       that vertex flips while panning/rotating, so the text jumps
+       and loses the LabelBlock contest. */
+    const GeoPoint center = shape.get_bounds().GetCenter();
+    if (!center.IsValid())
+      continue;
 
-    for (const unsigned n : lines) {
-      int minx = canvas.GetWidth();
-      int miny = canvas.GetHeight();
+    const auto pt = projection.GeoToScreenIfVisible(center);
+    if (!pt)
+      continue;
 
-      const auto *end = points + n;
-      for (; points < end; points += iskip) {
-#ifdef ENABLE_OPENGL
-        auto pt = projection.GeoToScreen(file.ToGeoPoint(*points));
-#else
-        auto pt = projection.GeoToScreen(*points);
-#endif
+    if (drawn_labels.contains(label))
+      continue;
 
-        if (pt.x <= minx) {
-          minx = pt.x;
-          miny = pt.y;
-        }
-      }
-
-      points = end;
-
-      minx += 2;
-      miny += 2;
-
-      PixelSize tsize = canvas.CalcTextSize(label);
-      PixelRect brect;
-      brect.left = minx;
-      brect.right = brect.left + tsize.width;
-      brect.top = miny;
-      brect.bottom = brect.top + tsize.height;
-
-      if (!label_block.check(brect))
-        continue;
-
-      if (!drawn_labels.insert(label).second)
-        continue;
-
-      canvas.DrawText({minx, miny}, label);
+    const PixelSize tsize = canvas.CalcTextSize(label);
+    PixelRect brect;
+    if (shape.get_type() == MS_SHAPE_POINT && icon.IsDefined()) {
+      /* Sit the name under the icon so it does not cover the symbol.
+         Fills and roads stay centred on the hook. */
+      const int pad = Layout::GetTextPadding();
+      const PixelPoint origin{
+        pt->x - int(tsize.width) / 2,
+        pt->y + int(icon.GetSize().height + 1) / 2 + pad,
+      };
+      brect = PixelRect{origin, tsize};
+    } else {
+      brect = PixelRect::Centered(*pt, tsize);
     }
+    if (!label_block.check(brect))
+      continue;
+
+    drawn_labels.emplace(label);
+    canvas.DrawText(brect.GetTopLeft(), label);
   }
 }

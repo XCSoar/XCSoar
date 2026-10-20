@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Geo/GeoClip.hpp"
+#include "util/AllocatedArray.hxx"
 
 #include <cassert>
 
@@ -388,17 +389,23 @@ GeoClip::ClipPolygon(GeoPoint *dest,
   if (src_length < 3)
     return 0;
 
-  GeoPoint *imported = dest + src_length * 2;
+  /* Do not overlay dest with the longitude-clip output: that pass
+     inserts vertices, so dest+src_length overlaps dest+2*src_length
+     and corrupts polygons that straddle the clip box. */
+  AllocatedArray<GeoPoint> imported;
+  imported.GrowDiscard(src_length);
   for (unsigned i = 0; i < src_length; ++i)
     imported[i] = ImportPoint(src[i]);
 
-  GeoPoint *first_stage = dest + src_length;
+  AllocatedArray<GeoPoint> stage;
+  stage.GrowDiscard(src_length * 3);
   unsigned n = ClipPolygonLongitude(Angle::Zero(), width,
-                                    first_stage, imported, src_length);
+                                    stage.data(), imported.data(),
+                                    src_length);
   if (n < 3)
     return 0;
 
-  n = ClipPolygonLatitude(GetSouth(), GetNorth(), dest, first_stage, n);
+  n = ClipPolygonLatitude(GetSouth(), GetNorth(), dest, stage.data(), n);
   if (n < 3)
     return 0;
 

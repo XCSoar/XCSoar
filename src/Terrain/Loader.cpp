@@ -29,6 +29,10 @@ TerrainLoader::SkipMarkerSegment(long file_offset) const
     /* use all segments when loading the overview */
     return 0;
 
+  if (HasAllTiles())
+    /* the visible tiles are in memory; do not decode the rest */
+    return -1;
+
   if (remaining_segments > 0) {
     /* enable the follow-up segment */
     --remaining_segments;
@@ -177,8 +181,10 @@ TerrainLoader::PutTileData(unsigned index,
          copy tile data directly, with no IsRequested() check
          which would discard the tile immediately */
       raster_tile_cache.tiles.GetLinear(index).CopyFrom(m);
-    else
+    else if (raster_tile_cache.tiles.GetLinear(index).IsRequested()) {
+      ++tiles_stored;
       raster_tile_cache.PutTileData(index, m);
+    }
   }
 }
 
@@ -239,7 +245,8 @@ LoadJPG2000(jas_stream_t *in, void *loader)
 
   dec->loader = loader;
 
-  if (jpc_dec_decode(dec) != 0)
+  if (jpc_dec_decode(dec) != 0 &&
+      !static_cast<const TerrainLoader *>(loader)->HasAllTiles())
     throw std::runtime_error("jpc_dec_decode() failed");
 }
 
@@ -311,6 +318,7 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
 {
   assert(!scan_overview);
 
+  unsigned requested = 0;
   {
     /* this write lock is necessary because
        RasterTileCache::PollTiles() calls RasterTile::Unload() */
@@ -319,8 +327,14 @@ TerrainLoader::UpdateTiles(struct zzip_dir *dir, const char *path,
     if (!raster_tile_cache.PollTiles(p, radius))
       /* nothing to do */
       return;
+
+    for (const auto i : raster_tile_cache.request_tiles)
+      if (raster_tile_cache.tiles.GetLinear(i).IsRequested())
+        ++requested;
   }
 
+  tiles_stored = 0;
+  tiles_wanted = requested;
   AtScopeExit(this) { raster_tile_cache.FinishTileUpdate(); };
   LoadJPG2000(dir, path);
 }
