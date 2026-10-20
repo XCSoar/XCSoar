@@ -19,10 +19,11 @@
 #
 #   ENABLE_SDL  If set to "y", the UI is drawn with libSDL.
 #
-#   ENABLE_MESA_KMS If set to "y", the program uses KMS to switch to graphics mode.
+#   ENABLE_MESA_KMS If set to "y", the program uses DRM/KMS to switch to
+#               graphics mode.
 #               Use this option when the program runs on a text-mode system
 #               without graphics and window system like X11 or Wayland.
-#               Default for Raspberry Pi 4, optional for Cubieboard.
+#               Default for Raspberry PIs and Cubieboards.
 #
 #   OPENGL      "y" means render with OpenGL.
 #
