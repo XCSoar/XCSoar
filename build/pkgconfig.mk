@@ -19,13 +19,13 @@ ifeq ($(TARGET_IS_DARWIN),y)
   endif
 endif
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  PI_PKG_CONFIG_LIBDIR := $(PI)/usr/lib/arm-linux-gnueabihf/pkgconfig:$(PI)/usr/share/pkgconfig
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(PI_PKG_CONFIG_LIBDIR) $(PKG_CONFIG) --define-variable=prefix=$(PI)/usr
-endif
-
-ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
-  PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CUBIE)/usr/lib/arm-linux-gnueabihf/pkgconfig $(PKG_CONFIG) --define-variable=prefix=$(CUBIE)/usr
+ifeq ($(DO_CROSS_COMPILE),y)
+  ifneq ($(SYSROOT),)
+    ifneq ($(HOST_TRIPLET),)
+      CROSS_PKG_CONFIG_LIBDIR := $(SYSROOT)/usr/lib/$(HOST_TRIPLET)/pkgconfig:$(SYSROOT)/usr/share/pkgconfig
+      PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CROSS_PKG_CONFIG_LIBDIR) $(PKG_CONFIG) --define-variable=prefix=$(SYSROOT)/usr
+    endif
+  endif
 endif
 
 call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)

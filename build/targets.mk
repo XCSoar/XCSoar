@@ -56,6 +56,7 @@ HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
 HAVE_HTTP := y
+DO_CROSS_COMPILE := n
 
 TARGET_ARCH :=
 
@@ -195,9 +196,6 @@ endif
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
   TCPREFIX := arm-linux-gnueabihf-
-  ifeq ($(HOST_IS_PI),n)
-    PI ?= /opt/pi/root
-  endif
   TARGET_IS_LINUX = y
   TARGET_IS_PI = y
   TARGET_IS_PI32 = y
@@ -208,9 +206,6 @@ endif
 
 ifeq ($(TARGET),PI2)
   override TARGET = NEON
-  ifeq ($(HOST_IS_PI),n)
-    PI ?= /opt/pi/root
-  endif
   TARGET_IS_PI = y
   TARGET_IS_PI32 = y
 endif
@@ -218,7 +213,6 @@ endif
 ifeq ($(TARGET),CUBIE)
   # cross-crompiling for Cubieboard
   override TARGET = NEON
-  CUBIE ?= /opt/cubie/root
   TARGET_IS_CUBIE=y
 endif
 
@@ -315,7 +309,7 @@ ifeq ($(TARGET),UNIX)
     TARGET_ARCH += -march=armv7-a
 
     # Use Thumb-2 instructions: smaller code, and NEON works in Thumb
-    # mode as well.  Debian's arm-linux-gnueabihf GCC defaults to Thumb,
+    # mode as well. Debian's and Ubuntu's arm-linux-gnueabihf GCC defaults to Thumb,
     # but other toolchains and Clang may not, so do not leave it to the
     # compiler.
     TARGET_ARCH += -mthumb
@@ -472,14 +466,34 @@ endif
 ifeq ($(TARGET_IS_PI),y)
   TARGET_CPPFLAGS += -DRASPBERRY_PI
 
-  ifneq ($(PI),)
-    TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf -isystem $(PI)/usr/include
+  ifeq ($(HOST_IS_PI),n)
+    # Cross-compiling for a PI
+    DO_CROSS_COMPILE := y
+    ifneq ($(PI),)
+      $(warning Use of variable PI is deprecated. Please use SYSROOT instead.)
+      SYSROOT := $(PI)
+    else
+      SYSROOT ?= /opt/pi/root
+    endif
+
   endif
+
 endif
 
 ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   # cross-crompiling for Cubieboard
-  TARGET_CPPFLAGS += --sysroot=$(CUBIE) -isystem $(CUBIE)/usr/include/arm-linux-gnueabihf
+  DO_CROSS_COMPILE := y
+  ifneq ($(CUBIE),)
+    $(warning Use of variable CUBIE is deprecated. Please use SYSROOT instead.)
+    SYSROOT := $(CUBIE)
+  else
+    SYSROOT ?= /opt/cubie/root
+  endif
+  
+endif
+
+ifneq ($(SYSROOT),)
+  TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
@@ -558,15 +572,10 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
-endif
-
-ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
-  # cross-crompiling for Cubieboard
-  TARGET_LDFLAGS += -L/usr/arm-linux-gnueabihf/lib --sysroot=$(CUBIE)
-  TARGET_LDFLAGS += -L$(CUBIE)/lib/arm-linux-gnueabihf
-  TARGET_LDFLAGS += -L$(CUBIE)/usr/lib/arm-linux-gnueabihf
+ifeq ($(DO_CROSS_COMPILE),y)
+  ifneq ($(SYSROOT),)
+    TARGET_LDFLAGS += --sysroot=$(SYSROOT)
+  endif
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
