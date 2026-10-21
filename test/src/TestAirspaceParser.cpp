@@ -13,6 +13,7 @@
 #include "io/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
+#include "time/BrokenDateTime.hpp"
 
 struct AirspaceClassTestCouple
 {
@@ -289,13 +290,118 @@ TestOpenAirExtended()
   }
 }
 
+static void
+TestActivationTime()
+{
+  Airspaces airspaces;
+  if (!ParseFile(Path("test/data/airspace/openair_activation_time.txt"), airspaces)) {
+    skip(12, 0, "Failed to parse activation-time input file");
+    return;
+  }
+
+  // 11 airspace definitions, including two AA NONE records
+  ok1(airspaces.GetSize() == 11);
+
+  for (const auto &as_ : airspaces.QueryAll()) {
+    const AbstractAirspace &airspace = as_.GetAirspace();
+
+    /* Inactive at load, not after the next day-mask update. */
+    ok1(airspace.IsActive() ==
+        (!airspace.HasActivationTime() || airspace.IsActiveToday()));
+
+    if (StringIsEqual("AA-No-Tag-Test", airspace.GetName())) {
+      // Legacy airspace: no AA line → no activation-time metadata, always considered active
+      ok1(!airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+
+    } else if (StringIsEqual("AA-Active-Test", airspace.GetName())) {
+      // Single AA covering [2000-01-01 … 2099-12-31]: always IS_ACTIVE_NOW at test time
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      // Activation-times must be non-empty
+      ok1(airspace.GetActivationStartTime().IsPlausible());
+      ok1(airspace.GetActivationEndTime().IsPlausible());
+
+    } else if (StringIsEqual("AA-Active-Test-short-time", airspace.GetName())) {
+      // Single AA covering [2000-01-01 … 2099-12-31]: always IS_ACTIVE_NOW at test time
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      // Activation-times must be non-empty
+      ok1(airspace.GetActivationStartTime().IsPlausible());
+      ok1(airspace.GetActivationEndTime().IsPlausible());
+
+    } else if (StringIsEqual("AA-Active-Test-undef-Start", airspace.GetName())) {
+      // Single AA covering [undef... 2099-12-31]: always IS_ACTIVE_NOW at test time
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      // Activation-times end must be non-empty
+      ok1(!airspace.GetActivationStartTime().IsPlausible());
+      ok1(airspace.GetActivationEndTime().IsPlausible());
+
+    } else if (StringIsEqual("AA-Active-Test-undef-End", airspace.GetName())) {
+      // Single AA covering [2000-01-01 ... undef]: always IS_ACTIVE_NOW at test time
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      // Activation-times start must be non-empty
+      ok1(airspace.GetActivationStartTime().IsPlausible());
+      ok1(!airspace.GetActivationEndTime().IsPlausible());
+
+    } else if (StringIsEqual("AA-End-Of-Day-Test", airspace.GetName())) {
+      /* T24:00Z is the next midnight, so this window is still open. */
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      ok1(airspace.GetActivationStartTime() ==
+          BrokenDateTime(2000, 1, 1, 0, 0, 0));
+      ok1(airspace.GetActivationEndTime() ==
+          BrokenDateTime(2100, 1, 1, 0, 0, 0));
+
+    } else if (StringIsEqual("AA-Past-Test", airspace.GetName())) {
+      // Interval entirely in the past → NOT_APPLICABLE → not active today
+      ok1(airspace.HasActivationTime());
+      ok1(!airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+
+    } else if (StringIsEqual("AA-Malformed-Test", airspace.GetName())) {
+      /* Unreadable AA stays active, so a typo still warns. */
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+
+    } else if (StringIsEqual("AA-MultiLine-Active-Test", airspace.GetName())) {
+      // Past interval followed by active interval → airspace is active
+      ok1(airspace.HasActivationTime());
+      ok1(airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+
+    } else if (StringIsEqual("AA-Never-NONE-Test", airspace.GetName()) ||
+               StringIsEqual("AA-MultiLine-NeverActive-Test",
+                             airspace.GetName())) {
+      /* AA NONE overrides any window. The airspace stays, inactive. */
+      ok1(airspace.HasActivationTime());
+      ok1(!airspace.IsActiveToday());
+      ok1(airspace.IsNeverActive());
+      ok1(!airspace.GetActivationStartTime().IsPlausible());
+      ok1(!airspace.GetActivationEndTime().IsPlausible());
+
+    } else {
+      ok1(false); // Unexpected airspace in database
+    }
+  }
+}
+
 int main()
 try {
-  plan_tests(115);
+  plan_tests(174);
 
   TestOpenAir();
   TestTNP();
   TestOpenAirExtended();
+  TestActivationTime();
 
   return exit_status();
 } catch (const std::runtime_error &e) {

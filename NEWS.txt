@@ -30,6 +30,8 @@ Version 7.47 - not yet released
     without restarting. This covers the map, waypoints, airspace,
     RASP, FLARMNet, the checklist, and the input file #1115 #3092
 * airspace
+  - show when an OpenAir airspace is active from its activation
+    times #2520
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling
   - fix Ack Day silencing a new airspace after the

@@ -18,6 +18,7 @@ FUZZ_WAYPOINT_READER_DEPENDS = WAYPOINTFILE GEO MATH IO OS UTIL ZZIP THREAD UNIT
 $(eval $(call link-program,FuzzWaypointReader,FUZZ_WAYPOINT_READER))
 
 FUZZ_AIRSPACE_PARSER_SOURCES = \
+	$(SRC)/time/BrokenDate.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
