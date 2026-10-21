@@ -112,7 +112,7 @@ echo "Building with $NUM_CPUS parallel jobs..."
 # TESTING must be passed on the command line: build/options.mk assigns a
 # default with "=", which would override the value from the environment.
 # DEBUG_ALL_MAP_OVERLAYS is passed the same way for consistency.
-if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 OPTIMIZE="-O0" DEBUG="$DEBUG" TESTING="$TESTING" DEBUG_ALL_MAP_OVERLAYS="$DEBUG_ALL_MAP_OVERLAYS" TARGET="$TARGET" $IPA_TARGET; then
+if ! gmake -j"${NUM_CPUS}" USE_CCACHE=y V=2 DEBUG="$DEBUG" TESTING="$TESTING" DEBUG_ALL_MAP_OVERLAYS="$DEBUG_ALL_MAP_OVERLAYS" TARGET="$TARGET" $IPA_TARGET; then
     echo "Error: Build failed" >&2
     exit 1
 fi
