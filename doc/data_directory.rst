@@ -295,6 +295,8 @@ the data root.
 The file manager and data-management tools understand the typed layout:
 downloads are stored in the correct subdirectory, and files can be
 transferred between storage volumes with paths rewritten automatically.
+A download reloads the running session only when that path is selected
+in Site files; see :ref:`loading-configured-files`.
 
 Related documentation
 ---------------------
@@ -302,4 +304,5 @@ Related documentation
 - :doc:`lua` — Lua script location under :file:`lua/`
 - :doc:`checklist` — checklist file format and search order
 - :doc:`rebranding` — platform-specific data directory names
-- :doc:`architecture` — :file:`Repository/` and background downloads
+- :doc:`architecture` — :ref:`loading-configured-files`,
+  :file:`Repository/`, and background downloads
