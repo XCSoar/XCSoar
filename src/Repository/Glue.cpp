@@ -20,6 +20,7 @@
 #include "UtilsSettings.hpp"
 #include "LogFile.hpp"
 #include "Message.hpp"
+#include "Interface.hpp"
 #include "io/FileLineReader.hpp"
 #include "time/BrokenDateTime.hpp"
 
@@ -439,7 +440,10 @@ class RepositoryAutoUpdate final : public Net::DownloadListener {
     if (index)
       EnqueueOutOfDate();
 
-    if (!finished.empty()) {
+    /* A map or airspace reload suspends threads and drops warnings.
+       While flying, leave the new file on disk until the next start. */
+    if (!finished.empty() &&
+        !CommonInterface::Calculated().flight.flying) {
       try {
         ApplyConfiguredDataFiles(finished);
       } catch (...) {
