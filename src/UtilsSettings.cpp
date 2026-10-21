@@ -109,24 +109,25 @@ SettingsLeave(const UISettings &old_ui_settings)
     InfoBoxManager::InvalidateAfterLanguageChange();
   }
 
-  bool TerrainFileChanged = false, TopographyFileChanged = false;
   if (MapFileChanged) {
     /* set these flags, because they may be loaded from the map
        file */
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
     WaypointFileChanged = true;
-    TerrainFileChanged = true;
-    TopographyFileChanged = true;
   }
 
-  if (TerrainFileChanged)
+  /* The map path is shared. Terrain and topography are separate
+     reloads. OnTerrainLoaded() installs terrain only. The retry
+     below loads terrain when the file appears, and leaves
+     topography alone. */
+  if (MapFileChanged)
     main_window.LoadTerrain();
 
   /* If the terrain wasn't changed via the settings UI but no terrain is
      currently loaded (e.g. a previous automated load failed), attempt
      to load the configured map file when it now exists. */
-  if (!TerrainFileChanged && data_components->terrain == nullptr) {
+  if (!MapFileChanged && data_components->terrain == nullptr) {
     if (const auto path = Profile::GetPath(ProfileKeys::MapFile); path != nullptr) {
       if (File::Exists(path))
         main_window.LoadTerrain();
@@ -175,7 +176,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     DataGlobals::UpdateHome(true);
   }
 
-  if (TopographyFileChanged) {
+  if (MapFileChanged) {
     main_window.SetTopography(nullptr);
 
     auto &topography = *data_components->topography;
