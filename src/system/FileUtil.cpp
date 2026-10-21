@@ -529,6 +529,10 @@ File::ReadString(Path path, char *buffer, size_t size) noexcept
 #ifdef O_CLOEXEC
   flags |= O_CLOEXEC;
 #endif
+#ifdef O_BINARY
+  /* Text mode strips CR and breaks an IGC download. */
+  flags |= O_BINARY;
+#endif
 
   int fd = open(path.c_str(), flags);
   if (fd < 0)
