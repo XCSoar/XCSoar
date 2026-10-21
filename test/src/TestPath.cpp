@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "system/Path.hpp"
+#include "Compatibility/path.h"
 
 #include <cstring>
 
@@ -36,8 +37,8 @@ int main()
   ok1(!Path("/absolute").IsBase());
 
   /* IsAbsolute() */
-  ok1(Path("/").IsAbsolute());
-  ok1(Path("/home/user").IsAbsolute());
+  ok1(Path(DIR_SEPARATOR_S).IsAbsolute());
+  ok1(Path(DIR_SEPARATOR_S "home" DIR_SEPARATOR_S "user").IsAbsolute());
   ok1(!Path("relative").IsAbsolute());
   ok1(!Path("a/b").IsAbsolute());
 
@@ -54,10 +55,14 @@ int main()
   ok1(Path("a/b/c").GetParent() == Path("a/b"));
 
   /* RelativeTo() */
-  ok1(Path("/home/user/file.txt").RelativeTo(Path("/home/user"))
+  ok1(Path(DIR_SEPARATOR_S "home" DIR_SEPARATOR_S "user"
+           DIR_SEPARATOR_S "file.txt")
+      .RelativeTo(Path(DIR_SEPARATOR_S "home" DIR_SEPARATOR_S "user"))
       == Path("file.txt"));
-  ok1(Path("/home/user/sub/file.txt").RelativeTo(Path("/home/user"))
-      == Path("sub/file.txt"));
+  ok1(Path(DIR_SEPARATOR_S "home" DIR_SEPARATOR_S "user"
+           DIR_SEPARATOR_S "sub" DIR_SEPARATOR_S "file.txt")
+      .RelativeTo(Path(DIR_SEPARATOR_S "home" DIR_SEPARATOR_S "user"))
+      == Path("sub" DIR_SEPARATOR_S "file.txt"));
   ok1(Path("/other/file.txt").RelativeTo(Path("/home")) == nullptr);
   ok1(Path("/home").RelativeTo(Path("/home")) == nullptr);
 
@@ -104,9 +109,9 @@ int main()
 
   /* AllocatedPath::Build() */
   ok1(AllocatedPath::Build(Path("/home"), Path("file"))
-      == Path("/home/file"));
+      == Path("/home" DIR_SEPARATOR_S "file"));
   ok1(AllocatedPath::Build(Path("a"), Path("b"))
-      == Path("a/b"));
+      == Path("a" DIR_SEPARATOR_S "b"));
 
   return exit_status();
 }
