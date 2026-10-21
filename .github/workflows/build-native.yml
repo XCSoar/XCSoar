@@ -673,6 +673,7 @@ jobs:
 
       - name: Stage Win64 OpenGL unit tests
         if: ${{ success() && matrix.target == 'WIN64OPENGL' }}
+        shell: bash
         run: |
           set -euo pipefail
           stage=output/win64opengl-unit-tests
