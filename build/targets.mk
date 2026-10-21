@@ -195,7 +195,8 @@ endif
 
 ifeq ($(TARGET),PI)
   override TARGET = UNIX
-  TCPREFIX := arm-linux-gnueabihf-
+  HOST_TRIPLET := arm-linux-gnueabihf
+  TCPREFIX := $(HOST_TRIPLET)-
   TARGET_IS_LINUX = y
   TARGET_IS_PI = y
   TARGET_IS_PI32 = y
