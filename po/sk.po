@@ -12749,3 +12749,22 @@ msgstr ""
 "o, keď je vetroň ťažší ako jeho maximálna vzletová hmotnosť. Hodnota je mod"
 "rá pri vypúšťaní. Klepnutím zmeníte záťaž."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

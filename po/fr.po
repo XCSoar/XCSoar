@@ -12919,3 +12919,22 @@ msgstr ""
 " rouge lorsque le planeur est plus lourd que sa masse maximale au décollage"
 ". La valeur est bleue pendant la vidange. Touchez pour changer le ballast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

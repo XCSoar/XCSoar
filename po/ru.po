@@ -12834,3 +12834,22 @@ msgstr ""
 "о красным, когда планер тяжелее своей максимальной взлётной массы. Значение"
 " синее, пока балласт сливается. Коснитесь, чтобы изменить балласт."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

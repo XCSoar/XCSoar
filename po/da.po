@@ -12757,3 +12757,22 @@ msgstr ""
 " når svæveflyet er tungere end dets maksimale startmasse. Værdien er blå, m"
 "ens ballast tømmes. Tryk for at ændre ballasten."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

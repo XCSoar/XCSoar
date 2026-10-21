@@ -12748,3 +12748,22 @@ msgstr ""
 "ş ağırlığından ağırsa kırmızı. Balast boşaltılırken değer mavidir. Değiştir"
 "mek için dokunun."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

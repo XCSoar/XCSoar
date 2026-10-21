@@ -12687,3 +12687,22 @@ msgstr ""
 "khi tàu lượn nặng hơn trọng lượng cất cánh tối đa. Giá trị màu xanh trong l"
 "úc xả. Chạm để đổi vật dằn."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

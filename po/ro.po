@@ -12807,3 +12807,22 @@ msgstr ""
 "când planorul este mai greu decât masa maximă la decolare. Valoarea este al"
 "bastră în timp ce se golește balastul. Atingeți pentru a schimba balastul."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

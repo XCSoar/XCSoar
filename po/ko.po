@@ -12443,3 +12443,22 @@ msgstr ""
 "탑재된 물 밸러스트, 리터. 설명에는 날개 하중이 보이며, 최대 이륙 중량보다 무거우면 빨간색입니다. 투기 중에는 값이 파란색입니다. "
 "눌러 밸러스트를 바꿉니다."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

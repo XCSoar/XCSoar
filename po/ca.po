@@ -12847,3 +12847,22 @@ msgstr ""
 "rmell quan el planador és més pesat que la seva massa màxima d'enlairament."
 " El valor és blau mentre es buida el llast. Toqueu per canviar el llast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
