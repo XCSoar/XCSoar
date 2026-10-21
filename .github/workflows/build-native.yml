@@ -671,6 +671,36 @@ jobs:
             DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
           fi
 
+      - name: Stage Win64 OpenGL unit tests
+        if: ${{ success() && matrix.target == 'WIN64OPENGL' }}
+        run: |
+          set -euo pipefail
+          stage=output/win64opengl-unit-tests
+          dry=$(mktemp)
+          rm -rf "$stage"
+          mkdir -p "$stage"
+          make -n TARGET=WIN64OPENGL DEBUG="${DEBUG}" check-no-build >"$dry"
+          mapfile -t exes < <(grep -o 'output/WIN64OPENGL/bin/[^[:space:]]*\.exe' "$dry" | sort -u)
+          if [ "${#exes[@]}" -eq 0 ]; then
+            echo "check-no-build listed no test executables"
+            exit 1
+          fi
+          cp -a "${exes[@]}" "$stage/"
+          # shortcut: libwinpthread only; copy the DLL from the error if a test does not start
+          dll=$(x86_64-w64-mingw32-g++ -print-file-name=libwinpthread-1.dll)
+          if [ -f "$dll" ]; then
+            cp -a "$dll" "$stage/"
+          fi
+          echo "Staged ${#exes[@]} unit tests"
+
+      - name: Upload Win64 OpenGL unit tests
+        if: ${{ success() && matrix.target == 'WIN64OPENGL' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: win64opengl-unit-tests
+          path: output/win64opengl-unit-tests
+          if-no-files-found: error
+
       - name: Run tests before signing
         id: tests
         if: ${{ (matrix.target == 'IOS64' || matrix.target == 'MACOS') && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/apple-testing' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'pull_request') }}
@@ -874,6 +904,29 @@ jobs:
 
       - name: Show ccache stats
         run: ccache --show-stats || true
+
+  # shortcut: WIN64OPENGL only; add WIN32OPENGL the same way when 32-bit tests matter
+  windows-tests:
+    name: Windows unit tests
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
+
+      - name: Download Win64 OpenGL unit tests
+        uses: actions/download-artifact@v8
+        with:
+          name: win64opengl-unit-tests
+          path: win64opengl-unit-tests
+
+      - name: Run unit tests
+        shell: bash
+        run: |
+          shopt -s failglob
+          perl test/src/testall.pl win64opengl-unit-tests/*.exe
 
   upload-to-play:
     name: Upload to Google Play
