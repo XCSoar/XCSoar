@@ -69,7 +69,6 @@ bool ChecklistFileChanged = false;
 bool InputFileChanged = false;
 bool LanguageChanged = false;
 bool UserRepositoriesListChanged = false;
-bool require_restart;
 
 void
 SettingsEnter() noexcept
@@ -92,7 +91,6 @@ SettingsEnter() noexcept
   DevicePortChanged = false;
   LanguageChanged = false;
   UserRepositoriesListChanged = false;
-  require_restart = false;
 }
 
 void

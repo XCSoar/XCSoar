@@ -12,6 +12,9 @@ Version 7.47 - not yet released
   - keep menu, dialogue and status text from overflowing on a
     high-resolution phone #3375
 * dialogs
+  - apply Configuration changes without restarting XCSoar. This
+    covers Warning time, Acknowledge time, Text size, Display
+    resolution, GR average period, Events, and Log book #3392
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
@@ -27,8 +30,6 @@ Version 7.47 - not yet released
     without restarting. This covers the map, waypoints, airspace,
     RASP, FLARMNet, the checklist, and the input file #1115 #3092
 * airspace
-  - apply Warning time and Acknowledge time without restarting
-    XCSoar #3392
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling
   - fix Ack Day silencing a new airspace after the
