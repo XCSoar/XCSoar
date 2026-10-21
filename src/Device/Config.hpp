@@ -530,4 +530,20 @@ struct DeviceConfig {
    */
   [[gnu::pure]]
   const char *GetPortName(char *buffer, size_t max_size) const noexcept;
+
+  /**
+   * G-load contribution of one phone acceleration sample.
+   *
+   * The sign is which edge of the phone is up: positive when the top
+   * edge is above the bottom edge. Not aligned folds that sign away.
+   * Any other alignment keeps it. The published G load is the mean of
+   * these samples.
+   */
+  [[nodiscard]]
+  static constexpr double
+  GLoadSample(InstrumentAlignment alignment, double acceleration) noexcept {
+    return alignment == InstrumentAlignment::NOT_ALIGNED && acceleration < 0.
+      ? -acceleration
+      : acceleration;
+  }
 };

@@ -43,8 +43,10 @@ DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
     is_first_time = false;
   }
 
-  accumulator += acceleration;
+  accumulator +=
+    DeviceConfig::GLoadSample(config.instrument_alignment, acceleration);
   accu_cnt += 1;
+
   // about 124 readings per sec, to 1 value per sec
   if (current_time >= next_sample_time && accu_cnt > 0) {
     // we might have skipped several samples?
