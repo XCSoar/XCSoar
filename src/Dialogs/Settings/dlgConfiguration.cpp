@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Message.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -47,7 +46,6 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
-#include "UtilsSettings.hpp"
 #include "net/http/Features.hpp"
 
 #ifdef HAVE_HTTP
@@ -550,10 +548,6 @@ void dlgConfigurationShowModal()
     }
   }
 
-  if (dialog.GetChanged() || expert_changed) {
+  if (dialog.GetChanged() || expert_changed)
     Profile::Save();
-    if (require_restart)
-      ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),
-                  "", MB_OK);
-  }
 }
