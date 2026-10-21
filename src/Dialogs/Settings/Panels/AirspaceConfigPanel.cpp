@@ -258,10 +258,8 @@ AirspaceConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(WarningDialog, ProfileKeys::AirspaceWarningDialog,
                        ui_settings.enable_airspace_warning_dialog);
 
-  if (SaveValue(WarningTime, ProfileKeys::WarningTime, computer.warnings.warning_time)) {
-    changed = true;
-    require_restart = true;
-  }
+  changed |= SaveValue(WarningTime, ProfileKeys::WarningTime,
+                       computer.warnings.warning_time);
 
   changed |= SaveValue(RepetitiveSound, ProfileKeys::RepetitiveSound,
                        computer.warnings.repetitive_sound);
