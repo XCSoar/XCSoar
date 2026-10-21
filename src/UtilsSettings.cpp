@@ -47,6 +47,9 @@
 #include "DataComponents.hpp"
 #include "DataGlobals.hpp"
 #include "Repository/Glue.hpp"
+#include "Repository/FileType.hpp"
+#include "Input/InputEvents.hpp"
+#include "LocalPath.hpp"
 #include "net/http/Features.hpp"
 
 #ifdef __APPLE__
@@ -216,6 +219,14 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (ChecklistFileChanged)
     dlgChecklistNotifySiteFileChanged();
 
+  if (InputFileChanged) {
+    try {
+      InputEvents::readFile();
+    } catch (...) {
+      LogError(std::current_exception(), "Failed to load input file");
+    }
+  }
+
 #ifdef HAVE_HTTP
   if (UserRepositoriesListChanged) {
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -267,6 +278,79 @@ SettingsLeave(const UISettings &old_ui_settings)
   main_window.FlushRendererCaches();
   main_window.FullRedraw();
   main_window.SetDefaultFocus();
+}
+
+static bool
+ConfiguredPathMatches(std::string_view key, Path updated) noexcept
+{
+  const auto configured = Profile::GetPath(key);
+  return configured != nullptr && configured == updated;
+}
+
+static bool
+ConfiguredListMatches(std::string_view key, const char *patterns,
+                      Path updated) noexcept
+{
+  for (const auto &configured : Profile::GetMultiplePaths(key, patterns))
+    if (configured != nullptr && configured == updated)
+      return true;
+  return false;
+}
+
+void
+ApplyConfiguredDataFiles(std::span<const std::string> relative_paths)
+{
+  if (!global_running)
+    return;
+
+  const char *const waypoint_patterns =
+    GetFileTypePatterns(FileType::WAYPOINT);
+  const char *const airspace_patterns =
+    GetFileTypePatterns(FileType::AIRSPACE);
+
+  bool map = false;
+  bool primary = false;
+  bool watched = false;
+  bool airspace = false;
+  bool flarm = false;
+  bool rasp = false;
+  bool checklist = false;
+  bool input = false;
+
+  for (const auto &relative : relative_paths) {
+    const auto updated = LocalPath(relative.c_str());
+    if (updated == nullptr)
+      continue;
+
+    map |= ConfiguredPathMatches(ProfileKeys::MapFile, updated);
+    primary |= ConfiguredListMatches(ProfileKeys::WaypointFileList,
+                                    waypoint_patterns, updated);
+    watched |= ConfiguredListMatches(ProfileKeys::WatchedWaypointFileList,
+                                    waypoint_patterns, updated);
+    airspace |= ConfiguredListMatches(ProfileKeys::AirspaceFileList,
+                                     airspace_patterns, updated);
+    flarm |= ConfiguredPathMatches(ProfileKeys::FlarmFile, updated);
+    rasp |= ConfiguredPathMatches(ProfileKeys::RaspFile, updated);
+    checklist |= ConfiguredPathMatches(ProfileKeys::ChecklistFile, updated);
+    input |= ConfiguredPathMatches(ProfileKeys::InputFile, updated);
+  }
+
+  if (!map && !primary && !watched && !airspace &&
+      !flarm && !rasp && !checklist && !input)
+    return;
+
+  /* Same flags Setup sets. A map file still reloads the waypoint
+     and airspace rows that live inside the zip. */
+  SettingsEnter();
+  MapFileChanged = map;
+  PrimaryWaypointFileChanged = primary;
+  WatchedWaypointFileChanged = watched;
+  AirspaceFileChanged = airspace;
+  FlarmFileChanged = flarm;
+  RaspFileChanged = rasp;
+  ChecklistFileChanged = checklist;
+  InputFileChanged = input;
+  SettingsLeave(CommonInterface::GetUISettings());
 }
 
 void
