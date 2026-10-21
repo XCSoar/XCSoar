@@ -10,7 +10,8 @@
 FlarmId
 FlarmId::Parse(const char *input, char **endptr_r) noexcept
 {
-  return FlarmId(strtol(input, endptr_r, 16));
+  /* long is 32-bit on Windows; ids above 0x7fffffff do not fit in strtol. */
+  return FlarmId(static_cast<uint32_t>(strtoul(input, endptr_r, 16)));
 }
 
 const char *
