@@ -926,8 +926,14 @@ jobs:
       - name: Run unit tests
         shell: bash
         run: |
+          # Git Bash perl has no TAP::Harness, so run the executables directly.
           shopt -s failglob
-          perl test/src/testall.pl win64opengl-unit-tests/*.exe
+          failed=0
+          for exe in win64opengl-unit-tests/*.exe; do
+            echo "== $exe"
+            "$exe" || failed=1
+          done
+          exit "$failed"
 
   upload-to-play:
     name: Upload to Google Play
