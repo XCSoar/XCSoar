@@ -42,10 +42,14 @@ public:
                          [[maybe_unused]] unsigned aircraft_type) {}
   virtual void OnUserName([[maybe_unused]] uint32_t user_id, [[maybe_unused]] const char *name) {}
   virtual void OnWave([[maybe_unused]] unsigned time_of_day_ms,
-                      [[maybe_unused]] const ::GeoPoint &a, [[maybe_unused]] const ::GeoPoint &b) {}
+                      [[maybe_unused]] const ::GeoPoint &a,
+                      [[maybe_unused]] const ::GeoPoint &b,
+                      [[maybe_unused]] TrafficSource source) {}
   virtual void OnThermal([[maybe_unused]] unsigned time_of_day_ms,
-                         [[maybe_unused]] const AGeoPoint &bottom, [[maybe_unused]] const AGeoPoint &top,
-                         [[maybe_unused]] double lift) {}
+                         [[maybe_unused]] const AGeoPoint &bottom,
+                         [[maybe_unused]] const AGeoPoint &top,
+                         [[maybe_unused]] double lift,
+                         [[maybe_unused]] TrafficSource source) {}
 
   /**
    * An error has occurred, and the SkyLines tracking client is

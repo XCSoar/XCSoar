@@ -215,10 +215,18 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return backend_components != nullptr &&
-           backend_components->protected_task_manager &&
-           (item.type == MapItem::Type::WAYPOINT ||
-            item.type == MapItem::Type::LOCATION);
+    if (backend_components == nullptr ||
+        backend_components->protected_task_manager == nullptr)
+      return false;
+
+    if (item.type == MapItem::Type::THERMAL) {
+      const auto &thermal =
+        static_cast<const ThermalMapItem &>(item).thermal;
+      return thermal.location.IsValid();
+    }
+
+    return item.type == MapItem::Type::WAYPOINT ||
+           item.type == MapItem::Type::LOCATION;
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -490,28 +498,34 @@ MapItemListWidget::OnGotoClicked()
   auto const &item = *list[index];
 
   assert(item.type == MapItem::Type::WAYPOINT ||
-         item.type == MapItem::Type::LOCATION);
+         item.type == MapItem::Type::LOCATION ||
+         item.type == MapItem::Type::THERMAL);
 
   WaypointPtr waypoint;
 
-  if (item.type == MapItem::Type::LOCATION) {
-    const auto &loc_item = static_cast<const LocationMapItem &>(item);
-
-    // Use the stored location directly
-    const GeoPoint &location = loc_item.location;
-
-    // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
+  if (item.type == MapItem::Type::LOCATION ||
+      item.type == MapItem::Type::THERMAL) {
+    GeoPoint location;
     std::optional<double> elevation;
-    if (loc_item.HasElevation()) {
-      elevation = loc_item.elevation;
-    } else if (data_components->terrain != nullptr) {
-      const auto h = data_components->terrain->GetTerrainHeight(location);
-      if (!h.IsSpecial()) {
-        elevation = h.GetValue();
-      }
+
+    if (item.type == MapItem::Type::LOCATION) {
+      const auto &loc_item = static_cast<const LocationMapItem &>(item);
+      location = loc_item.location;
+      if (loc_item.HasElevation())
+        elevation = loc_item.elevation;
+    } else {
+      location = static_cast<const ThermalMapItem &>(item).thermal.location;
     }
 
-    // Create temporary goto waypoint (without elevation if unavailable)
+    if (!location.IsValid())
+      return;
+
+    if (!elevation && data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial())
+        elevation = h.GetValue();
+    }
+
     auto &way_points = *data_components->waypoints;
     const char *goto_name = "(goto)";
     {

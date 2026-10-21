@@ -736,6 +736,7 @@ Startup(UI::Display &display)
   GlueMapWindow *map_window = main_window->GetMap();
   if (map_window != nullptr) {
     map_window->SetWaypoints(data_components->waypoints.get());
+    map_window->SetObservations(data_components->observations.get());
     map_window->SetTask(backend_components->protected_task_manager.get());
     map_window->SetRoutePlanner(&backend_components->glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(backend_components->glide_computer.get());
@@ -802,12 +803,13 @@ Startup(UI::Display &display)
   if (edl_glue != nullptr && net_components->edl != nullptr)
     edl_glue->AttachDownloadGlue(*net_components->edl);
 # endif
-# ifdef HAVE_SKYLINES_TRACKING
-  if (map_window != nullptr)
-    map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
+# ifdef HAVE_TRACKING
+  if (net_components->tracking != nullptr && data_components != nullptr)
+    net_components->tracking->SetObservations(
+      data_components->observations.get());
 # endif
-  if (map_window != nullptr)
-    map_window->SetThermalInfoMap(net_components->tim.get());
+  if (net_components->tim != nullptr && data_components != nullptr)
+    net_components->tim->SetObservations(data_components->observations.get());
 #endif
 
   assert(!global_running);
@@ -830,20 +832,13 @@ Startup(UI::Display &display)
 
 #ifdef HAVE_HTTP
 static void
-BeginShutdownNetComponents(MainWindow &main_window) noexcept
+BeginShutdownNetComponents() noexcept
 {
   if (net_components == nullptr)
     return;
 
   net_components->BeginShutdown();
   DeinitNOTAMMessageListener();
-
-  if (GlueMapWindow *map = main_window.GetMap()) {
-#ifdef HAVE_SKYLINES_TRACKING
-    map->SetSkyLinesData(nullptr);
-#endif
-    map->SetThermalInfoMap(nullptr);
-  }
 }
 
 static void
@@ -880,8 +875,7 @@ Shutdown()
 #endif
 
 #ifdef HAVE_HTTP
-  if (main_window != nullptr)
-    BeginShutdownNetComponents(*main_window);
+  BeginShutdownNetComponents();
 #endif
 
   // Show progress dialog
@@ -1056,6 +1050,10 @@ Shutdown()
 
   delete backend_components;
   backend_components = nullptr;
+
+  if (main_window != nullptr)
+    if (GlueMapWindow *map = main_window->GetMap())
+      map->SetObservations(nullptr);
 
   delete data_components;
   data_components = nullptr;

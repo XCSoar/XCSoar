@@ -188,7 +188,8 @@ SkyLinesTracking::Client::OnWaveReceived(const WaveResponsePacket &packet,
 
   for (const auto &wave : waves)
     handler->OnWave(FromBE32(wave.time),
-                    ImportGeoPoint(wave.a), ImportGeoPoint(wave.b));
+                    ImportGeoPoint(wave.a), ImportGeoPoint(wave.b),
+                    traffic_source);
 }
 
 inline void
@@ -209,7 +210,8 @@ SkyLinesTracking::Client::OnThermalReceived(const ThermalResponsePacket &packet,
                                  FromBE16(thermal.bottom_altitude)),
                        AGeoPoint(ImportGeoPoint(thermal.top_location),
                                  FromBE16(thermal.top_altitude)),
-                       FromBE16(thermal.lift) / 256.);
+                       FromBE16(thermal.lift) / 256.,
+                       traffic_source);
 }
 
 inline void

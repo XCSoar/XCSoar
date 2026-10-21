@@ -15,7 +15,9 @@
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/WaveRenderer.hpp"
 #include "Operation/Operation.hpp"
-#include "Tracking/SkyLines/Data.hpp"
+#include "Observation/Database.hpp"
+#include "Engine/Observation/Store.hpp"
+#include "Geo/GeoClip.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -172,16 +174,19 @@ MapWindow::RenderNOAAStations(Canvas &canvas) noexcept
 inline void
 MapWindow::DrawWaves(Canvas &canvas) noexcept
 {
+  if (observations == nullptr)
+    return;
+
+  WaveRows waves;
+  observations->CopyWaves(waves);
+
   const WaveRenderer renderer(look.wave);
-
-#ifdef HAVE_SKYLINES_TRACKING
-  if (skylines_data != nullptr) {
-    const std::lock_guard lock{skylines_data->mutex};
-    renderer.Draw(canvas, render_projection, *skylines_data);
+  const GeoClip clip(render_projection.GetScreenBounds().Scale(1.1));
+  for (const auto &wave : waves) {
+    if (!wave.a.IsValid() || !wave.b.IsValid())
+      continue;
+    renderer.Draw(canvas, render_projection, clip, wave.a, wave.b);
   }
-#endif
-
-  renderer.Draw(canvas, render_projection, Calculated().wave);
 }
 
 inline void

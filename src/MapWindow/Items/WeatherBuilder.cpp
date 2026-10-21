@@ -6,7 +6,12 @@
 #include "List.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "net/client/tim/Thermal.hpp"
+#include "Computer/Settings.hpp"
+#include "Observation/Database.hpp"
+#include "Observation/Publish.hpp"
+#include "Engine/Observation/Store.hpp"
+#include "Tracking/Features.hpp"
+#include "net/http/Features.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -29,43 +34,35 @@ MapItemListBuilder::AddWeatherStations(NOAAStore &store)
 #endif
 
 void
-MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
+MapItemListBuilder::AddThermals(const ObservationDatabase &observations,
                                 const MoreData &basic,
-                                const DerivedInfo &calculated)
+                                const DerivedInfo &calculated,
+                                const ComputerSettings &settings)
 {
-  for (const auto &t : thermals.sources) {
+  bool show_cloud = false;
+#ifdef HAVE_TRACKING
+  show_cloud = settings.tracking.cloud.show_thermals;
+#endif
+
+  bool show_tim = false;
+#ifdef HAVE_HTTP
+  show_tim = settings.weather.enable_tim;
+#endif
+
+  const SpeedVector wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+
+  ThermalRows raw, visible, shown;
+  observations.CopyThermals(raw);
+  CollectVisibleThermals(raw, visible, basic.nav_altitude, wind,
+                         show_cloud, show_tim);
+  SelectThermals(visible, shown, THERMAL_DUPLICATE_RANGE_M);
+
+  for (const auto &row : shown) {
     if (list.full())
       break;
-
-    // find height difference
-    if (basic.nav_altitude < t.ground_height)
-      continue;
-
-    GeoPoint loc = calculated.wind_available
-      ? t.CalculateAdjustedLocation(basic.nav_altitude, calculated.wind)
-      : t.location;
-
-    if (location.DistanceS(loc) < range)
-      list.append(new ThermalMapItem(t));
-  }
-}
-
-void
-MapItemListBuilder::AddThermals(std::span<const TIM::Thermal> thermals) noexcept
-{
-  for (const auto &i : thermals) {
-    if (list.full())
-      break;
-
-    if (location.DistanceS(i.location) > range)
-      continue;
-
-    ThermalSource source;
-    source.location = i.location;
-    source.ground_height = 0; // TODO
-    source.lift_rate = i.climb_rate;
-    // TODO source.time = i.time;
-
-    list.append(new ThermalMapItem(source));
+    if (location.DistanceS(row.location) < range)
+      list.append(new ThermalMapItem(row));
   }
 }

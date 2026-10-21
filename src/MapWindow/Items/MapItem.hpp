@@ -8,7 +8,7 @@
 #include "Rough/RoughAngle.hpp"
 #include "FLARM/Id.hpp"
 #include "FLARM/Color.hpp"
-#include "NMEA/ThermalLocator.hpp"
+#include "Engine/Observation/Store.hpp"
 #include "Weather/Features.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Airspace/Ptr.hpp"
@@ -199,8 +199,8 @@ struct TrafficMapItem: public MapItem
 
 struct ThermalMapItem: public MapItem
 {
-  ThermalSource thermal;
+  ObservedThermal thermal;
 
-  ThermalMapItem(const ThermalSource &_thermal)
+  ThermalMapItem(const ObservedThermal &_thermal)
     :MapItem(Type::THERMAL), thermal(_thermal) {}
 };
