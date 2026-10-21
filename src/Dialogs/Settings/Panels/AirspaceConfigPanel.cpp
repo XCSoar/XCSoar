@@ -14,7 +14,6 @@
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
-#include "UtilsSettings.hpp"
 
 using namespace std::chrono;
 
@@ -264,11 +263,8 @@ AirspaceConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(RepetitiveSound, ProfileKeys::RepetitiveSound,
                        computer.warnings.repetitive_sound);
 
-  if (SaveValue(AcknowledgeTime, ProfileKeys::AcknowledgementTime,
-                computer.warnings.acknowledgement_time)) {
-    changed = true;
-    require_restart = true;
-  }
+  changed |= SaveValue(AcknowledgeTime, ProfileKeys::AcknowledgementTime,
+                       computer.warnings.acknowledgement_time);
 
   changed |= SaveValue(UseBlackOutline, ProfileKeys::AirspaceBlackOutline, renderer.black_outline);
 
