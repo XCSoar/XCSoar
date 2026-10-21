@@ -12863,3 +12863,22 @@ msgstr ""
 " De waarde is blauw terwijl ballast wordt geloosd. Tik om de ballast te wij"
 "zigen."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

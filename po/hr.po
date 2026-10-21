@@ -12741,3 +12741,22 @@ msgstr ""
 "eno kada je jedrilica teža od svoje najveće uzletne mase. Vrijednost je pla"
 "va dok se balast ispušta. Dodirnite da promijenite balast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

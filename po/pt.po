@@ -12829,3 +12829,22 @@ msgstr ""
 ". O valor fica azul enquanto o lastro é despejado. Toque para alterar o las"
 "tro."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

@@ -12698,3 +12698,22 @@ msgstr ""
 " když je kluzák těžší než jeho maximální vzletová hmotnost. Hodnota je modr"
 "á při vypouštění. Klepnutím změníte zátěž."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

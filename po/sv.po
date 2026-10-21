@@ -12697,3 +12697,22 @@ msgstr ""
 "är segelflygplanet är tyngre än sin maximala startvikt. Värdet är blått med"
 "an ballast töms. Tryck för att ändra ballasten."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

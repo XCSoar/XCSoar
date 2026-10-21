@@ -12690,3 +12690,22 @@ msgstr ""
 "år seilflyet er tyngre enn sin maksimale startmasse. Verdien er blå mens ba"
 "llast tømmes. Trykk for å endre ballasten."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""

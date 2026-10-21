@@ -12578,3 +12578,22 @@ msgstr ""
 "డర్ గరిష్ఠ టేకాఫ్ బరువు కంటే ఎక్కువైతే ఎరుపు. బ్యాలస్ట్ పోస్తున్నప్పుడు విల"
 "ువ నీలం. మార్చడానికి నొక్కండి."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
