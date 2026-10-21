@@ -213,7 +213,7 @@ InterfaceConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   if (SaveValueFileReader(InputFile, ProfileKeys::InputFile))
-    require_restart = changed = true;
+    InputFileChanged = changed = true;
 
 #ifdef HAVE_NLS
   WndProperty *wp = (WndProperty *)&GetControl(LanguageFile);
