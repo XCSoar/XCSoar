@@ -687,6 +687,9 @@ jobs:
             exit 1
           fi
           cp -a "${exes[@]}" "$stage/"
+          # TestContainerWindow and TestWrapText import these.
+          cp -a output/WIN64OPENGL/bin/libEGL.dll \
+                output/WIN64OPENGL/bin/libGLESv2.dll "$stage/"
           # shortcut: libwinpthread only; copy the DLL from the error if a test does not start
           dll=$(x86_64-w64-mingw32-g++ -print-file-name=libwinpthread-1.dll)
           if [ -f "$dll" ]; then
