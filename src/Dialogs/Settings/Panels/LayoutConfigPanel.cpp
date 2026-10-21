@@ -11,7 +11,6 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "UtilsSettings.hpp"
 #include "Asset.hpp"
 #include "Menu/ShowButton.hpp"
 #include "util/Macros.hpp"
@@ -222,8 +221,14 @@ LayoutConfigPanel::Save(bool &_changed) noexcept
                            ui_settings.dark_mode);
 
   if (SaveValueInteger(UIScale, ProfileKeys::UIScale,
-                       ui_settings.scale))
-    require_restart = changed = true;
+                       ui_settings.scale)) {
+    changed = true;
+    if (CommonInterface::main_window != nullptr) {
+      CommonInterface::main_window->Initialise();
+      CommonInterface::main_window->ReinitialiseLook();
+      CommonInterface::main_window->ReinitialiseLayout();
+    }
+  }
 
   if (SaveValueEnum(ViewingDistance, ProfileKeys::ViewingDistance,
                     ui_settings.viewing_distance)) {
