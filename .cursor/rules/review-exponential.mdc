@@ -1,7 +1,8 @@
 ---
 description: >-
   When writing or reviewing code, reject exponential, combinatorial, or
-  unbounded-cost work on hot paths and growing flight data.
+  unbounded-cost work on hot paths and growing flight data. The floor
+  for map, cache, and GLES work is a Cubieboard 2 or Raspberry Pi 3.
 globs:
   - "**/*.cpp"
   - "**/*.hpp"
@@ -12,9 +13,13 @@ alwaysApply: false
 
 # Review: exponential and unbounded cost
 
-XCSoar runs on slow devices. Cost that grows with waypoints, airspaces,
-traffic, NOTAM, or tiles will stall flight. Flag algorithmic blow-ups,
-not micro-optimisations of cold setup code.
+The floor for new map, cache, and GLES work is a Cubieboard 2 or a
+Raspberry Pi 3: about 1 GB of RAM shared with the system, a GLES2 GPU
+(Mali-400, VideoCore IV), and `IsSlowCPU()` (at most 1.4 GHz). Kobo is
+a separate floor: software canvas and e-paper refresh, no GPU pipeline.
+Cost that grows with waypoints, airspaces, traffic, NOTAM, or tiles
+will stall flight. Flag algorithmic blow-ups, not micro-optimisations
+of cold setup code.
 
 ## Hot paths (must stay cheap)
 
@@ -27,7 +32,12 @@ not micro-optimisations of cold setup code.
 - Nested loops over two growing collections (waypoints × airspaces,
   traffic × airspace, tiles × time steps) on a hot path
 - Recursion without a hard depth or size bound
-- Unbounded caches, maps, or overlay lists with no eviction
+- Unbounded caches, maps, or overlay lists, and any cache whose
+  resident size you cannot state in megabytes. Cap it, evict, and put
+  the byte count in the comment (as `MAX_CACHED_TILES` does)
+- On the map paint path, a draw call, texture bind, or texture upload
+  inside a loop over a growing set (waypoints, trail points, tiles,
+  airspaces). Batch as `TrailRenderer` does
 - Retries, downloads, or timers that can pile up without a cap
 - Combinatorial search (task points × waypoints × routes) without the
   existing Engine path/route solvers
@@ -40,6 +50,12 @@ for (const auto &wp : waypoints)
     if (as.Inside(wp.location)) ...
 
 // GOOD: spatial query, or run only when the set changed
+
+// BAD: one draw per waypoint, every frame
+for (const auto &wp : waypoints)
+  canvas.DrawLine(wp.a, wp.b);
+
+// GOOD: one batched draw for the set, or skip until the set changes
 ```
 
 Prefer the existing Engine indexes and solvers. If the input can grow
