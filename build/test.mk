@@ -97,7 +97,7 @@ TEST_NAMES = \
 	TestOperaRadar \
 	TestEumetviewSatellite \
 	TestEumetviewEnhance \
-	TestLogger TestGPSDeviceName TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestGLoadSample TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
@@ -1408,6 +1408,12 @@ TEST_GPS_DEVICE_NAME_SOURCES = \
 	$(TEST_SRC_DIR)/TestGPSDeviceName.cpp
 TEST_GPS_DEVICE_NAME_DEPENDS = LIBNMEA GEO TIME UNITS MATH UTIL
 $(eval $(call link-program,TestGPSDeviceName,TEST_GPS_DEVICE_NAME))
+
+TEST_GLOAD_SAMPLE_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGLoadSample.cpp
+TEST_GLOAD_SAMPLE_DEPENDS = MATH
+$(eval $(call link-program,TestGLoadSample,TEST_GLOAD_SAMPLE))
 
 TEST_BLACKBOARD_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
