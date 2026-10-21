@@ -929,6 +929,8 @@ jobs:
         run: |
           # Git Bash perl has no TAP::Harness, so run the executables directly.
           shopt -s failglob
+          # make check creates this. A checkout does not.
+          mkdir -p output/test
           failed=0
           for exe in win64opengl-unit-tests/*.exe; do
             echo "== $exe"
