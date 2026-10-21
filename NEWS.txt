@@ -17,6 +17,10 @@ Version 7.47 - not yet released
 * documentation
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
+* data
+  - load a File Manager update of a file selected in Site files
+    without restarting. This covers the map, waypoints, airspace,
+    RASP, FLARMNet, the checklist, and the input file #1115 #3092
 * airspace
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling
