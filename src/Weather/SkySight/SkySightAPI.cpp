@@ -774,7 +774,6 @@ SkySightAPI::QueueDecodeJob(SkySightPreparedData prepared, const SkySight::Layer
     pending_decode_jobs.push_back(PendingDecodeJob{
       std::move(prepared),
       std::string{layer.id},
-      layer.legend,
       std::string{layer.id},
       forecast_time,
     });
@@ -826,7 +825,6 @@ SkySightAPI::StartNextDecodeJob() noexcept
     decode_job->Start(
       std::move(job.prepared),
       std::move(job.variable_name),
-      std::move(job.legend),
       [this, layer_id, forecast_time](AllocatedPath output_path) {
         OnDatafileDownloaded(layer_id, forecast_time, SkySightPreparedData{
           SkySightPreparedDataKind::DisplayReady,

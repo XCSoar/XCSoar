@@ -389,13 +389,17 @@ TEST_FLARM_RANGE_ESTIMATE_SOURCES = \
 TEST_FLARM_RANGE_ESTIMATE_DEPENDS = LIBNMEA GEO MATH IO OS TIME UTIL FMT
 $(eval $(call link-program,TestFlarmRangeEstimate,TEST_FLARM_RANGE_ESTIMATE))
 
-TEST_NAMES += TestSkySightLegendMapping
+TEST_NAMES += TestSkySightContourRaster
 
-TEST_SKYSIGHT_LEGEND_MAPPING_SOURCES = \
+TEST_SKYSIGHT_CONTOUR_RASTER_SOURCES = \
+	$(SRC)/Weather/SkySight/ContourRaster.cpp \
+	$(SRC)/Weather/SkySight/FieldImage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestSkySightLegendMapping.cpp
-TEST_SKYSIGHT_LEGEND_MAPPING_DEPENDS = TIME UTIL
-$(eval $(call link-program,TestSkySightLegendMapping,TEST_SKYSIGHT_LEGEND_MAPPING))
+	$(TEST_SRC_DIR)/TestSkySightContourRaster.cpp
+TEST_SKYSIGHT_CONTOUR_RASTER_DEPENDS = GEO MATH TIME UTIL FMT
+TEST_SKYSIGHT_CONTOUR_RASTER_LDLIBS = $(LIBTIFF_LDLIBS)
+$(eval $(call link-program,TestSkySightContourRaster,TEST_SKYSIGHT_CONTOUR_RASTER))
 
 TEST_NAMES += TestSkySightRegionTime
 
