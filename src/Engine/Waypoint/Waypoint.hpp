@@ -45,7 +45,13 @@ struct Waypoint {
     INTERSECTION,
     REPORTING_POINT,
     PGTAKEOFF,
-    PGLANDING
+    PGLANDING,
+
+    /**
+     * Number of #Type values (for display-filter arrays).  Not a
+     * real waypoint type.
+     */
+    COUNT
   };
 
   /**
