@@ -3,74 +3,44 @@
 
 #include "MapWindow.hpp"
 #include "Look/MapLook.hpp"
+#include "Observation/Database.hpp"
+#include "Observation/Publish.hpp"
+#include "Engine/Observation/Store.hpp"
 #include "ui/canvas/Icon.hpp"
-#ifdef HAVE_SKYLINES_TRACKING
-#include "Tracking/SkyLines/Data.hpp"
-#endif
-#ifdef HAVE_HTTP
-#include "net/client/tim/Glue.hpp"
-#include "net/client/tim/Thermal.hpp"
-#endif
-
-template<typename T>
-static void
-DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
-                   const WindowProjection &projection,
-                   const T &sources,
-                   const double aircraft_altitude,
-                   const SpeedVector &wind) noexcept
-{
-  for (const auto &source : sources) {
-    // find height difference
-    if (aircraft_altitude < source.ground_height)
-      continue;
-
-    // draw thermal at location it would be at the glider's height
-    GeoPoint location = wind.IsNonZero()
-      ? source.CalculateAdjustedLocation(aircraft_altitude, wind)
-      : source.location;
-
-    // draw if it is in the field of view
-    if (auto p = projection.GeoToScreenIfVisible(location))
-      icon.Draw(canvas, *p);
-  }
-}
+#include "Tracking/Features.hpp"
+#include "net/http/Features.hpp"
 
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const noexcept
 {
-  const MoreData &basic = Basic();
-  const DerivedInfo &calculated = Calculated();
-  const ThermalLocatorInfo &thermal_locator = calculated.thermal_locator;
-
-  if (render_projection.GetMapScale() > 4000)
+  if (observations == nullptr || render_projection.GetMapScale() > 4000)
     return;
 
-  // draw only at close map scales in non-circling mode
+  const MoreData &basic = Basic();
+  const DerivedInfo &calculated = Calculated();
+  const ComputerSettings &settings = GetComputerSettings();
 
-  DrawThermalSources(canvas, look.thermal_source_icon, render_projection,
-                     thermal_locator.sources, basic.nav_altitude,
-                     calculated.wind_available
-                     ? calculated.wind : SpeedVector::Zero());
-
-#ifdef HAVE_SKYLINES_TRACKING
-  const auto &cloud_settings = GetComputerSettings().tracking.cloud;
-  if (cloud_settings.show_thermals && skylines_data != nullptr) {
-    const std::lock_guard lock{skylines_data->mutex};
-    for (auto &i : skylines_data->thermals) {
-      // TODO: apply wind drift
-      if (auto p = render_projection.GeoToScreenIfVisible(i.bottom_location))
-        look.thermal_source_icon.Draw(canvas, *p);
-    }
-  }
+  bool show_cloud = false;
+#ifdef HAVE_TRACKING
+  show_cloud = settings.tracking.cloud.show_thermals;
 #endif
 
+  bool show_tim = false;
 #ifdef HAVE_HTTP
-  if (tim_glue != nullptr && GetComputerSettings().weather.enable_tim) {
-    const auto lock = tim_glue->Lock();
-    for (const auto &i : tim_glue->Get())
-      if (auto p = render_projection.GeoToScreenIfVisible(i.location))
-        look.thermal_source_icon.Draw(canvas, *p);
-  }
+  show_tim = settings.weather.enable_tim;
 #endif
+
+  const SpeedVector wind = calculated.wind_available
+    ? calculated.wind
+    : SpeedVector::Zero();
+
+  ThermalRows raw, visible, shown;
+  observations->CopyThermals(raw);
+  CollectVisibleThermals(raw, visible, basic.nav_altitude, wind,
+                         show_cloud, show_tim);
+  SelectThermals(visible, shown, THERMAL_DUPLICATE_RANGE_M);
+
+  for (const auto &row : shown)
+    if (auto p = render_projection.GeoToScreenIfVisible(row.location))
+      look.thermal_source_icon.Draw(canvas, *p);
 }

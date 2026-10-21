@@ -240,6 +240,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterBand.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterCollection.cpp \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(SRC)/Observation/Publish.cpp \
 	$(SRC)/DataFileLayout.cpp \
 	$(SRC)/DataLayoutMigration.cpp \
 	$(SRC)/HorizonWidget.cpp \

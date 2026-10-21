@@ -121,6 +121,7 @@ TEST_NAMES = \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
 	TestAirspaceIntervalMath \
+	TestObservationStore \
 	TestAirspaceClearance \
 	TestAirspaceBoundary \
 	TestMETARParser \
@@ -507,6 +508,13 @@ TEST_OGN_APRS_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
 TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
+
+TEST_OBSERVATION_STORE_SOURCES = \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestObservationStore.cpp
+TEST_OBSERVATION_STORE_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestObservationStore,TEST_OBSERVATION_STORE))
 
 TEST_AIRSPACE_INTERVAL_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -2625,6 +2633,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Renderer/WaveRenderer.cpp \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(SRC)/Observation/Publish.cpp \
 	$(SRC)/Renderer/DistanceRingsRenderer.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \

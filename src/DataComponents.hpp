@@ -9,16 +9,18 @@ class TopographyStore;
 class RasterTerrain;
 class Waypoints;
 class Airspaces;
+class ObservationDatabase;
 
 /**
  * This singleton manages all data loaded from data files (waypoints,
  * airspaces, etc.) and associated objects (caches, loaders) but not
  * user- or interface-specific runtime state (e.g. no airspace
- * warnings).
+ * warnings). The observation store is the live thermal and wave list.
  */
 struct DataComponents {
   const std::unique_ptr<Airspaces> airspaces;
   const std::unique_ptr<Waypoints> waypoints;
+  const std::unique_ptr<ObservationDatabase> observations;
 
   std::unique_ptr<TopographyStore> topography;
 

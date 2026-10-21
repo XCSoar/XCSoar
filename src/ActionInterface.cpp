@@ -24,6 +24,7 @@
 #include "PageSettings.hpp"
 #include "Weather/Features.hpp"
 #include "DataComponents.hpp"
+#include "Observation/Publish.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 
@@ -68,6 +69,9 @@ XCSoarInterface::ReceiveCalculated() noexcept
     ReadBlackboardCalculated(device_blackboard.Calculated());
     device_blackboard.ReadComputerSettings(GetComputerSettings());
   }
+
+  if (data_components != nullptr && data_components->observations != nullptr)
+    PublishOwnObservations(*data_components->observations, Calculated());
 
   BroadcastCalculatedUpdate();
 }

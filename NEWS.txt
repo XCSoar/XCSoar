@@ -1,4 +1,10 @@
 Version 7.47 - not yet released
+* map
+  - show own-ship, Cloud, SkyLines, and Thermal Information Map
+    thermals as one marker. A tap names the source and can start
+    a Go To. Markers within a kilometre keep the newer one #3093
+  - draw own-ship, Cloud, and SkyLines wave lines from one list
+    #3094
 * android
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
@@ -9,6 +15,7 @@ Version 7.47 - not yet released
     landscape screen #3373
 * documentation
   - describe the size limit for menu, dialogue and status text
+  - describe shared thermal markers and Go To
 * airspace
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling

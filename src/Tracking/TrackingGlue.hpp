@@ -28,6 +28,7 @@ struct MoreData;
 struct DerivedInfo;
 struct NMEAInfo;
 class CurlGlobal;
+class ObservationDatabase;
 
 class TrackingGlue final
   : private SkyLinesTracking::Handler
@@ -49,6 +50,9 @@ class TrackingGlue final
   std::map<FlarmId, std::chrono::steady_clock::time_point> online_last_received;
 
   bool shutting_down = false;
+
+  mutable Mutex observation_mutex;
+  ObservationDatabase *observations = nullptr;
 
   TriState cloud_enabled = TriState::UNKNOWN;
   bool cloud_show_traffic = true;
@@ -75,6 +79,8 @@ public:
   void SetSettings(const TrackingSettings &_settings);
 
   void BeginShutdown() noexcept;
+
+  void SetObservations(ObservationDatabase *db) noexcept;
 
   void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
@@ -119,10 +125,12 @@ private:
                  FlarmId flarm_id, unsigned aircraft_type) override;
   void OnUserName(uint32_t user_id, const char *name) override;
   void OnWave(unsigned time_of_day_ms,
-              const GeoPoint &a, const GeoPoint &b) override;
+              const GeoPoint &a, const GeoPoint &b,
+              SkyLinesTracking::TrafficSource source) override;
   void OnThermal(unsigned time_of_day_ms,
                  const AGeoPoint &bottom, const AGeoPoint &top,
-                 double lift) override;
+                 double lift,
+                 SkyLinesTracking::TrafficSource source) override;
   void OnSkyLinesError(std::exception_ptr e) override;
 };
 

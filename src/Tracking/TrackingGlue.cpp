@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TrackingGlue.hpp"
+#include "Observation/Database.hpp"
 #include "Tracking/SkyLines/FlarmTrafficBuilder.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "NMEA/MoreData.hpp"
@@ -116,8 +117,19 @@ TrackingGlue::BeginShutdown() noexcept
     return;
 
   shutting_down = true;
+  {
+    const std::lock_guard lock{observation_mutex};
+    observations = nullptr;
+  }
   skylines.BeginShutdown();
   livetrack24.BeginShutdown();
+}
+
+void
+TrackingGlue::SetObservations(ObservationDatabase *db) noexcept
+{
+  const std::lock_guard lock{observation_mutex};
+  observations = db;
 }
 
 void
@@ -298,36 +310,67 @@ TrackingGlue::OnUserName(uint32_t user_id, const char *name)
   skylines_data.user_names[user_id] = name;
 }
 
-void
-TrackingGlue::OnWave(unsigned time_of_day_ms,
-                     const GeoPoint &a, const GeoPoint &b)
+static ObservationOrigin
+FeedOrigin(SkyLinesTracking::TrafficSource source) noexcept
 {
-  const std::lock_guard lock{skylines_data.mutex};
+  return source == SkyLinesTracking::TrafficSource::CLOUD
+    ? ObservationOrigin::CLOUD
+    : ObservationOrigin::SKYLINES;
+}
 
-  /* garbage collection - hard-coded upper limit */
-  auto n = skylines_data.waves.size();
-  while (n-- >= 64)
-    skylines_data.waves.pop_front();
+void
+TrackingGlue::OnWave([[maybe_unused]] unsigned time_of_day_ms,
+                     const GeoPoint &a, const GeoPoint &b,
+                     SkyLinesTracking::TrafficSource source)
+{
+  if (!a.IsValid() || !b.IsValid())
+    return;
 
-  // TODO: replace existing item?
-  skylines_data.waves.emplace_back(SkyLinesTracking::Data::Time{time_of_day_ms},
-                                   a, b);
+  ObservationDatabase *db;
+  {
+    const std::lock_guard lock{observation_mutex};
+    if (shutting_down)
+      return;
+    db = observations;
+  }
+  if (db == nullptr)
+    return;
+
+  ObservedWave row;
+  row.origin = FeedOrigin(source);
+  row.a = a;
+  row.b = b;
+  row.received = steady_clock::now();
+  db->AppendWave(row);
 }
 
 void
 TrackingGlue::OnThermal([[maybe_unused]] unsigned time_of_day_ms,
-                        const AGeoPoint &bottom, const AGeoPoint &top,
-                        double lift)
+                        const AGeoPoint &bottom,
+                        [[maybe_unused]] const AGeoPoint &top,
+                        double lift,
+                        SkyLinesTracking::TrafficSource source)
 {
-  const std::lock_guard lock{skylines_data.mutex};
+  if (!bottom.IsValid())
+    return;
 
-  /* garbage collection - hard-coded upper limit */
-  auto n = skylines_data.thermals.size();
-  while (n-- >= 64)
-    skylines_data.thermals.pop_front();
+  ObservationDatabase *db;
+  {
+    const std::lock_guard lock{observation_mutex};
+    if (shutting_down)
+      return;
+    db = observations;
+  }
+  if (db == nullptr)
+    return;
 
-  // TODO: replace existing item?
-  skylines_data.thermals.emplace_back(bottom, top, lift);
+  ObservedThermal row;
+  row.origin = FeedOrigin(source);
+  row.location = bottom;
+  row.ground_height = 0;
+  row.lift_rate = lift;
+  row.received = steady_clock::now();
+  db->AppendThermal(row);
 }
 
 void

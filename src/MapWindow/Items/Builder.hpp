@@ -18,13 +18,12 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 struct TrafficList;
-struct ThermalLocatorInfo;
 struct NMEAInfo;
 class RasterTerrain;
 class ProtectedRoutePlanner;
 struct ComputerSettings;
 class NOAAStore;
-namespace TIM { struct Thermal; }
+class ObservationDatabase;
 
 class MapItemListBuilder
 {
@@ -51,10 +50,9 @@ public:
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddTraffic(const TrafficList &flarm);
-  void AddThermals(const ThermalLocatorInfo &thermals,
-                   const MoreData &basic, const DerivedInfo &calculated);
-
-  void AddThermals(std::span<const TIM::Thermal> thermals) noexcept;
+  void AddThermals(const ObservationDatabase &observations,
+                   const MoreData &basic, const DerivedInfo &calculated,
+                   const ComputerSettings &settings);
 
   void AddWeatherStations(NOAAStore &store);
 };
