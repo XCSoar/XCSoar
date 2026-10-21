@@ -31,6 +31,9 @@ Version 7.47 - not yet released
     above its ceiling
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
+* development
+  - document which reload runs when a map zip finishes loading and
+    when File Manager updates a configured file #3095
 
 Version 7.46 - 2026-10-19
 * highlights
