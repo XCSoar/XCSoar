@@ -313,7 +313,8 @@ try {
   DataGlobals::UnsetTerrain();
   DataGlobals::SetTerrain(std::move(new_terrain));
 
-  /* the waypoints were usually read before the terrain was there */
+  /* Dependents of the new terrain. Topography stays as loaded.
+     Waypoints were usually read before the terrain was there. */
   if (data_components->terrain && data_components->waypoints)
     UpdateTerrainElevations(*data_components->waypoints,
                             *data_components->terrain);
