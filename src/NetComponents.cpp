@@ -15,6 +15,7 @@
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Weather/Rasp/DownloadGlue.hpp"
+#include "Repository/Glue.hpp"
 #endif
 #ifdef HAVE_HTTP
 #include "Weather/xctherm/XCThermDownloadGlue.hpp"
@@ -77,6 +78,7 @@ void
 NetComponents::BeginShutdown() noexcept
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
+  RepositoryAutoUpdateShutdown();
   Net::DownloadManager::BeginDeinitialise();
 #endif
 
