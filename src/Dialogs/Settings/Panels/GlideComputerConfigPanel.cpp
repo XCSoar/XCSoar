@@ -9,7 +9,6 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "UtilsSettings.hpp"
 
 using namespace std::chrono;
 
@@ -169,9 +168,8 @@ GlideComputerConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(EnableNavBaroAltitude, ProfileKeys::EnableNavBaroAltitude,
                        settings_computer.features.nav_baro_altitude_enabled);
 
-  if (SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime,
-                    settings_computer.average_eff_time))
-    require_restart = changed = true;
+  changed |= SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime,
+                           settings_computer.average_eff_time);
 
   changed |= SaveValueEnum(EnableExternalTriggerCruise,
                            ProfileKeys::SpeedCommandSwitch,
