@@ -135,6 +135,32 @@ AirspaceDetailsWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
 
   AddMultiLine(airspace->GetName());
 
+  if (airspace->HasActivationTime()) {
+    if (airspace->IsActiveToday()) {
+      char time_buffer[32];
+      const BrokenDate today = BrokenDateTime::NowUTC().GetDate();
+      BrokenDateTime dt = airspace->GetActivationStartTime();
+      if (dt.IsPlausible()) {
+        FormatUTCTime(time_buffer, dt, today);
+        AddReadOnly(_("Starts"), nullptr, time_buffer);
+      } else AddReadOnly(_("Starts"), nullptr, _("undefined"));
+
+      dt = airspace->GetActivationEndTime();
+      if (dt.IsPlausible()) {
+        FormatUTCTime(time_buffer, dt, today);
+        AddReadOnly(_("Ends"), nullptr, time_buffer);
+      } else AddReadOnly(_("Ends"), nullptr, _("undefined"));
+    }
+  }
+
+  if (airspace->IsActive()) buffer = _("active");
+  else buffer = _("inactive");
+  if (warnings != nullptr) {
+    if (warnings->GetAckDay(*airspace)) buffer += _(", dismissed");
+    else buffer += _(", enabled");
+  }
+  AddReadOnly(_("Status"), nullptr, buffer.c_str());
+
   const TransponderCode transponderCode = airspace->GetTransponderCode();
   char buffer2[5];
 
