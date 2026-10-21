@@ -115,6 +115,7 @@
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
 #include "Repository/FileType.hpp"
+#include "Repository/Glue.hpp"
 
 #include "util/ScopeExit.hxx"
 
@@ -322,10 +323,16 @@ try {
 
   SetAirspaceGroundLevels(*data_components->airspaces,
                           *data_components->terrain);
+#ifdef HAVE_DOWNLOAD_MANAGER
+  RepositoryAutoUpdateTerrainIdle();
+#endif
 } catch (...) {
   SetTopWidget(nullptr);
   terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
+#ifdef HAVE_DOWNLOAD_MANAGER
+  RepositoryAutoUpdateTerrainIdle();
+#endif
 }
 
 /**
@@ -827,6 +834,12 @@ Startup(UI::Display &display)
 
   main_window->FinishStartup();
   main_window->SchedulePageActionsUpdate();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  StartRepositoryAutoUpdate();
+  if (terrain_loader == nullptr)
+    RepositoryAutoUpdateTerrainIdle();
+#endif
 
   return true;
 }

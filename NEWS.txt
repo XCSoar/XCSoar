@@ -18,6 +18,10 @@ Version 7.47 - not yet released
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
 * data
+  - add an option on Site files to download newer copies of files
+    already on the device when XCSoar starts. The progress bar
+    shows the download, and a message reports when files were
+    updated #417
   - load a File Manager update of a file selected in Site files
     without restarting. This covers the map, waypoints, airspace,
     RASP, FLARMNet, the checklist, and the input file #1115 #3092

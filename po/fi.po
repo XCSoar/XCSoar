@@ -12752,3 +12752,9 @@ msgstr ""
 #, c-format
 msgid "%s ago"
 msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""

@@ -88,8 +88,11 @@ IsRemoteFileOutOfDate(const AvailableFile &file) noexcept;
 
 /**
  * Queue a repository file for download.
+ *
+ * @return false when the file has no path or its directory cannot
+ * be created
  */
-void
+bool
 EnqueueRemoteFileDownload(const AvailableFile &file) noexcept;
 
 /**
@@ -134,4 +137,15 @@ DownloadRepositoriesModal(bool main_repo=true, bool user_repo=true);
  */
 [[gnu::pure]] bool
 FileTypeSupportsDownload(FileType type) noexcept;
+
+/** Site files "Auto update": newer copies of files already on disk. */
+void
+StartRepositoryAutoUpdate() noexcept;
+
+/** Terrain loading has cleared the top widget. */
+void
+RepositoryAutoUpdateTerrainIdle() noexcept;
+
+void
+RepositoryAutoUpdateShutdown() noexcept;
 #endif /* HAVE_DOWNLOAD_MANAGER */
