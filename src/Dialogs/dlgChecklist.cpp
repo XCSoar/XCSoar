@@ -21,8 +21,10 @@
 #include "Repository/FileType.hpp"
 #include "system/Path.hpp"
 #include "Language/Language.hpp"
+#include "Session/SessionState.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -146,6 +148,59 @@ GetPageWindow(Widget &page) noexcept
   return static_cast<RichTextWindow &>(widget.GetWindow());
 }
 
+static std::string
+TicksToString(const std::vector<uint8_t> &checked) noexcept
+{
+  std::string ticks;
+  ticks.reserve(checked.size());
+  for (const uint8_t bit : checked)
+    ticks.push_back(bit ? '1' : '0');
+  return ticks;
+}
+
+static std::vector<uint8_t>
+TicksFromString(const std::string &ticks) noexcept
+{
+  std::vector<uint8_t> checked;
+  checked.reserve(ticks.size());
+  for (const char c : ticks)
+    checked.push_back(c == '1');
+  return checked;
+}
+
+/**
+ * Fill the in-memory session from the session file when this process
+ * has not opened the checklist yet.
+ */
+static void
+LoadFileIntoSession(Path path, const Checklist &checklist) noexcept
+{
+  if (path == nullptr)
+    return;
+
+  const SessionState &state = Session::State();
+  if (!state.flying || state.checklist_file != path.c_str())
+    return;
+
+  session.path = path;
+  session.page = state.checklist_page;
+  session.texts.clear();
+  session.checks.clear();
+  session.texts.reserve(checklist.size());
+  session.checks.reserve(checklist.size());
+
+  for (std::size_t i = 0; i < checklist.size(); ++i) {
+    session.texts.push_back(checklist[i].text);
+
+    std::string ticks;
+    if (state.ChecklistTicks(unsigned(i),
+                             SessionHash(checklist[i].text), ticks))
+      session.checks.push_back(TicksFromString(ticks));
+    else
+      session.checks.emplace_back();
+  }
+}
+
 static void
 RestoreSessionChecks(ArrowPagerWidget &pager, Path path,
                      const Checklist &checklist) noexcept
@@ -179,11 +234,40 @@ SaveSession(ArrowPagerWidget &pager, Path path,
                               (unsigned)checklist.size());
   session.texts.reserve(n);
   session.checks.reserve(n);
+  std::array<SessionChecklistNote, SESSION_MAX_CHECKLIST_PAGES> notes{};
+  std::array<std::string, SESSION_MAX_CHECKLIST_PAGES> stored{};
+
   for (unsigned i = 0; i < n; ++i) {
     session.texts.push_back(checklist[i].text);
     session.checks.push_back(
       GetPageWindow(pager.GetWidget(i)).GetCheckboxCheckedStates());
+
+    if (i >= SESSION_MAX_CHECKLIST_PAGES)
+      continue;
+
+    stored[i] = TicksToString(session.checks.back());
+    notes[i].sum = SessionHash(checklist[i].text);
+    notes[i].ticks = stored[i];
   }
+
+  if (path != nullptr && !path.empty())
+    Session::NoteChecklist(path.c_str(), unsigned(session.page),
+                           std::span<const SessionChecklistNote>(
+                             notes.data(),
+                             std::min(n, SESSION_MAX_CHECKLIST_PAGES)));
+}
+
+struct ChecklistPersist {
+  ArrowPagerWidget *pager;
+  const Checklist *checklist;
+  Path path;
+};
+
+static void
+OnChecklistToggled(void *ctx) noexcept
+{
+  const auto *persist = static_cast<const ChecklistPersist *>(ctx);
+  SaveSession(*persist->pager, persist->path, *persist->checklist);
 }
 
 void
@@ -192,6 +276,7 @@ dlgChecklistNotifySiteFileChanged() noexcept
   /* Profile::GetPath(ChecklistFile) is already updated; drop page and
      ticks so a different file does not keep stale state. */
   session = {};
+  Session::ClearChecklist();
 }
 
 void
@@ -242,6 +327,9 @@ dlgChecklistShowModal()
         });
     }
 
+  if (session.path == nullptr || path == nullptr || session.path != path)
+    LoadFileIntoSession(path, checklist);
+
   if (session.page >= checklist.size())
     session.page = 0;
 
@@ -279,6 +367,11 @@ dlgChecklistShowModal()
 
   auto &pager_widget = static_cast<ArrowPagerWidget &>(dialog.GetWidget());
   RestoreSessionChecks(pager_widget, path, checklist);
+
+  ChecklistPersist persist{&pager_widget, &checklist, path};
+  for (unsigned i = 0; i < pager_widget.GetSize(); ++i)
+    GetPageWindow(pager_widget.GetWidget(i))
+      .SetCheckboxToggledCallback(OnChecklistToggled, &persist);
 
   dialog.ShowModal();
 

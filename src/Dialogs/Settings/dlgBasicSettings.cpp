@@ -24,6 +24,7 @@
 #include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "Session/SessionState.hpp"
 
 #include <math.h>
 
@@ -305,7 +306,11 @@ FlightSetupPanel::OnModified(DataField &df) noexcept
   } else if (IsDataField(QNH, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     SetQNH(Units::FromUserPressure(dff.GetValue()));
+    return;
   }
+
+  /* Dump ticks also call SetBallastLitres and must not flush here. */
+  Session::Flush();
 }
 
 void
