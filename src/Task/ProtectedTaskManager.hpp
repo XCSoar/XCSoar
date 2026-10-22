@@ -7,8 +7,10 @@
 #include "time/RoughTime.hpp"
 #include "Engine/Task/Unordered/AbortIntersectionTest.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <memory>
+#include <string_view>
 
 struct AGeoPoint;
 struct TaskBehaviour;
@@ -62,6 +64,18 @@ public:
   void IncrementActiveTaskPointArm(int offset) noexcept;
 
   bool DoGoto(WaypointPtr &&wp) noexcept;
+
+  /**
+   * Called after a user Goto succeeds.  Not used for the takeoff
+   * autotask.  The name view is valid only for the call.
+   */
+  using GotoPersistedHandler = void (*)(unsigned id,
+                                        const GeoPoint &location,
+                                        bool has_elevation,
+                                        double elevation,
+                                        std::string_view name) noexcept;
+
+  void SetGotoPersistedHandler(GotoPersistedHandler handler) noexcept;
 
   bool DoGoto(const WaypointPtr &wp) noexcept {
     return DoGoto(WaypointPtr(wp));
