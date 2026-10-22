@@ -171,6 +171,7 @@ ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
 TEST_NAMES += \
 	TestProfile \
+	TestSession \
 	TestDriver
 endif
 
@@ -636,6 +637,15 @@ TEST_PROFILE_SOURCES = \
 	$(TEST_SRC_DIR)/TestProfile.cpp
 TEST_PROFILE_DEPENDS = PROFILE MATH IO OS UTIL
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
+
+TEST_SESSION_SOURCES = \
+	$(SRC)/Session/SessionFile.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestSession.cpp
+TEST_SESSION_DEPENDS = PROFILE GEO MATH IO OS UTIL
+$(eval $(call link-program,TestSession,TEST_SESSION))
 
 TEST_MAC_CREADY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
