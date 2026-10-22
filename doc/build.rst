@@ -440,11 +440,11 @@ The same steps work on a native Debian/Ubuntu host or inside the
 
 Cross-compile (Pi 1 / ARMv6; binaries in ``output/PI/bin/``)::
 
-  make TARGET=PI PI=/opt/pi/root
+  make TARGET=PI SYSROOT=/opt/pi/root
 
 For Raspberry Pi 2/3 (ARMv7 with NEON; ``output/PI2/bin/``)::
 
-  make TARGET=PI2 PI=/opt/pi/root
+  make TARGET=PI2 SYSROOT=/opt/pi/root
 
 Although ``TARGET=PI`` and ``TARGET=PI2`` compile as ``UNIX`` internally,
 binaries are written to ``output/PI/`` and ``output/PI2/`` respectively
@@ -462,15 +462,24 @@ toolchain; install the ``ARM`` provisioning section::
 
 Cross-compile (binaries in ``output/CUBIE/bin/``)::
 
-  make TARGET=CUBIE CUBIE=/opt/cubie/root
+  make TARGET=CUBIE SYSROOT=/opt/cubie/root
 
 The default sysroot path is ``/opt/cubie/root``. Unlike the Raspberry Pi
 path, XCSoar does not ship an automated sysroot script for Cubie; the
-sysroot must provide ARMhf development libraries and the Mali/EGL headers
-under ``usr/local/stow/sunxi-mali/`` (see ``build/targets.mk``).
+sysroot must provide ARMhf development libraries.
+
+On the sysroot, as well for native compilation on the Cubieboard,
+install the same embedded-Linux graphics packages as a desktop
+``UNIX`` build, plus ``LIBINPUT_GBM`` (DRM/GBM/GLES)::
 
 If you compile on the Cubieboard itself, the default ``UNIX`` target
 auto-detects the board.
+
+To create a working Cubieboard sysroot file system use the
+`meta-openvario <https://github.com/Openvario/meta-openvario>`__
+toolchain used by the `OpenVario <https://openvario.org>`__ project.
+Alternatively a working Ubuntu SD card image and root file system can be created
+from the `horOV <https://github.com/hor63/horOpenVario>`__ project.
 
 OpenVario flight computer images
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
