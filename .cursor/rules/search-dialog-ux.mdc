@@ -31,9 +31,9 @@ The **outer** dialog should close only when:
 
 Closing the **child** with “no commit” (e.g. **Close** / browse done) must return to the **outer** list **without** dismissing the outer dialog.
 
-## Communicating commit: WaypointDetailsNesting (waypoint details)
+## Communicating commit: DetailsNesting (browse parent)
 
-`dlgWaypointDetailsShowModal` takes an optional const **`WaypointDetailsNesting *`** (default `nullptr` = no parent; same as all-null). See `Dialogs/Waypoint/WaypointDialogs.hpp`.
+`DetailsNesting` in `Dialogs/SearchNesting.hpp` (alias `WaypointDetailsNesting`) is the browse vs pick-only close contract. Search UIs assemble filter + list with `SearchFilterList.hpp`. `dlgWaypointDetailsShowModal` takes an optional const **`WaypointDetailsNesting *`** (default `nullptr` = no parent; same as all-null). See `Dialogs/Waypoint/WaypointDialogs.hpp`.
 
 - **`state_change_committed`** — Dismiss the parent list when a commit completes (GoTo, task, home, edit, pan with default include-pan, …). **Close** on the details dialog must not leave it **`true`**.
 

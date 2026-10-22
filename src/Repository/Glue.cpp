@@ -156,6 +156,19 @@ EnqueueRepositoryDownload(bool force, bool main_repo, bool user_repo)
   }
 }
 
+AllocatedPath
+LocalPathForTypedName(const char *name, FileType type) noexcept
+{
+  if (name == nullptr)
+    return nullptr;
+
+  const AllocatedPath subdir = GetFileTypeDefaultDir(type);
+  const AllocatedPath path = (subdir == nullptr)
+    ? AllocatedPath(name)
+    : AllocatedPath::Build(subdir, Path(name));
+  return LocalPath(path);
+}
+
 #ifdef HAVE_DOWNLOAD_MANAGER
 
 AllocatedPath
@@ -170,6 +183,30 @@ GetFileDownloadRelativePath(const AvailableFile &file) noexcept
     return AllocatedPath(base);
 
   return AllocatedPath::Build(subdir, Path(base));
+}
+
+AllocatedPath
+LocalPathForRepositoryFile(const AvailableFile &file) noexcept
+{
+  return LocalPathForTypedName(file.GetName(), file.type);
+}
+
+bool
+RepositoryFileCanDownload(const FileRepository &repository,
+                          const char *name) noexcept
+{
+  return repository.FindByName(name) != nullptr;
+}
+
+bool
+RepositoryFileUpdateAvailable(const FileRepository &repository,
+                              const char *name) noexcept
+{
+  const AvailableFile *remote_file = repository.FindByName(name);
+  if (remote_file == nullptr)
+    return false;
+
+  return IsRemoteFileOutOfDate(*remote_file);
 }
 
 bool

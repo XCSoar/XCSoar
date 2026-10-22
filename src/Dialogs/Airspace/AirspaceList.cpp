@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "Airspace.hpp"
+#include "Dialogs/SearchFilterList.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Widget/ListWidget.hpp"
@@ -48,6 +49,7 @@ class AirspaceFilterWidget;
 class AirspaceListWidget final
   : public ListWidget, public DataFieldListener,
     NullBlackboardListener {
+  WidgetDialog &dialog;
   AirspaceFilterWidget &filter_widget;
 
   AirspaceSelectInfoVector items;
@@ -55,8 +57,9 @@ class AirspaceListWidget final
   TwoTextRowsRenderer row_renderer;
 
 public:
-  AirspaceListWidget(AirspaceFilterWidget &_filter_widget)
-    :filter_widget(_filter_widget) {}
+  AirspaceListWidget(WidgetDialog &_dialog,
+                     AirspaceFilterWidget &_filter_widget)
+    :dialog(_dialog), filter_widget(_filter_widget) {}
 
   void UpdateList();
   void FilterMode(bool direction);
@@ -219,7 +222,10 @@ AirspaceListWidget::OnAirspaceListEnter(unsigned i)
 
   assert(i < items.size());
 
-  dlgAirspaceDetails(items[i].GetAirspacePtr(), airspace_warnings);
+  if (ParentSearchClosesAfterDetails(
+        dlgAirspaceDetailsForBrowseParent(items[i].GetAirspacePtr(),
+                                          airspace_warnings)))
+    dialog.SetModalResult(mrOK);
 }
 
 void
@@ -483,7 +489,8 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
 
   auto filter_widget = std::make_unique<AirspaceFilterWidget>(look);
 
-  auto list_widget = std::make_unique<AirspaceListWidget>(*filter_widget);
+  auto list_widget = std::make_unique<AirspaceListWidget>(dialog,
+                                                         *filter_widget);
   AirspaceListWidget *const list = list_widget.get();
 
   filter_widget->SetListener(list);
@@ -492,7 +499,8 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
      the list (after the last item) go to the actions, like other list
      dialogs, instead of wrapping to the name filter. */
   dialog.FinishPreliminary(
-    new TwoWidgets(std::move(filter_widget), std::move(list_widget), false));
+    MakeFilterAndList(std::move(filter_widget),
+                      std::move(list_widget)).release());
   dialog.AddButton(_("Details"), [list](){
     list->ShowDetails();
   });

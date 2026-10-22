@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Dialogs/SearchNesting.hpp"
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Waypoint/WaypointFilter.hpp"
 
@@ -70,27 +71,6 @@ enum class WaypointEditResult {
  */
 WaypointEditResult
 dlgWaypointEditShowModal(Waypoint &way_point);
-
-/**
- * Optional coordination between nested \ref dlgWaypointDetailsShowModal and a
- * parent list dialog. All pointers, when non-null, refer to the caller; on
- * open, the modal assigns @c false to the locations pointed to by
- * @c state_change_committed and @c map_pan_from_details when they are
- * non-null.
- */
-struct WaypointDetailsNesting {
-  bool *state_change_committed = nullptr;
-
-  /** If false, pan (header or commands) does not set #state_change_committed. */
-  bool include_pan_in_parent_dismissal = true;
-
-  /**
-   * If non-null, set to true when the user panned the map to the waypoint
-   * (Pan To / Pan to Waypoint) before leaving details, regardless of
-   * #include_pan_in_parent_dismissal.
-   */
-  bool *map_pan_from_details = nullptr;
-};
 
 void
 dlgWaypointDetailsShowModal(

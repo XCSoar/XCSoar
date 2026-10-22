@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "TaskDialogs.hpp"
+#include "Dialogs/SearchFilterList.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/Waypoint/GetWaypointReachability.hpp"
@@ -252,8 +253,9 @@ AlternatesListWidget::CreateButtons(WidgetDialog &dialog,
         /* allow_navigation + allow_edit: like the persistent list;
          * alternates are task-adjacent; editing user waypoints
          * (e.g. user.cup) stays available from this entry point. */
-        if (dlgWaypointDetailsShowModalForBrowseParent(
-              wpts, std::move(w), true, true))
+        if (ParentSearchClosesAfterDetails(
+              dlgWaypointDetailsShowModalForBrowseParent(
+                wpts, std::move(w), true, true)))
           dialog.SetModalResult(mrOK);
       });
   }

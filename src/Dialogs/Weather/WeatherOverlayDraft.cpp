@@ -11,6 +11,7 @@
 #include "Form/Edit.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/PageProfile.hpp"
 #include "UIState.hpp"
@@ -167,6 +168,41 @@ State::AddPage(Button *apply_button, Button *add_button) noexcept
 
   Profile::Save(Profile::map, settings);
   SyncButtons(apply_button, add_button);
+}
+
+void
+AddApplyAddButtons(RowFormWidget &form,
+                   Button *&apply_button, Button *&add_button,
+                   std::function<void()> apply_clicked,
+                   std::function<void()> add_clicked) noexcept
+{
+  apply_button = form.AddButton(C_("Button", "Apply to page"),
+                                std::move(apply_clicked));
+  add_button = form.AddButton(C_("Button", "Add page"),
+                              std::move(add_clicked));
+}
+
+void
+AddPagesSetupButton(RowFormWidget &form,
+                    std::function<void()> after_open) noexcept
+{
+  form.AddButton(C_("Button", "Pages setup"),
+                 [after_open = std::move(after_open)]() {
+                   OpenPagesConfig();
+                   if (after_open)
+                     after_open();
+                 });
+}
+
+bool
+ApplySkySightLayerToPage(const char *layer_id) noexcept
+{
+  State overlay;
+  overlay.Load(PageLayout::Overlay::SKYSIGHT, layer_id);
+  overlay.draft.overlay = PageLayout::Overlay::SKYSIGHT;
+  overlay.draft.skysight_overlay = layer_id != nullptr ? layer_id : "";
+  overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
+  return !overlay.IsDirty() || overlay.ApplyIfDirty();
 }
 
 void

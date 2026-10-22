@@ -19,7 +19,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/CoDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
-	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/DataManagement/FileManager.cpp \
 	$(SRC)/Dialogs/DataManagement/DataManagement.cpp \
 	$(SRC)/Dialogs/DataManagement/ExportFlightsPanel.cpp \
 	$(SRC)/Dialogs/DataManagement/BackupRestorePanel.cpp \
@@ -34,6 +34,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Device/PortPicker.cpp \
 	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
 	$(SRC)/Dialogs/Device/DeviceListDialog.cpp \
+	$(SRC)/Dialogs/Device/DeviceListActions.cpp \
 	$(SRC)/Dialogs/Device/PortMonitor.cpp \
 	$(SRC)/Dialogs/Device/ManageCAI302Dialog.cpp \
 	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
@@ -77,6 +78,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Traffic/FlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/Traffic/TeamCodeDialog.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
+	$(SRC)/Dialogs/Analysis/AnalysisPages.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
 	$(SRC)/Dialogs/ProfileListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneListDialog.cpp \
@@ -312,6 +314,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/SaveGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
+	$(SRC)/Waypoint/LoadWaypointImages.cpp \
+	$(SRC)/Waypoint/SourcePath.cpp \
+	$(SRC)/Waypoint/OpenAssociatedFile.cpp \
 	$(SRC)/Waypoint/CupWriter.cpp \
 	$(SRC)/Waypoint/Factory.cpp \
 	\
@@ -668,6 +673,7 @@ ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/SkySight/SkySightFileDecoder.cpp \
 	$(SRC)/Weather/SkySight/SkySightClient.cpp \
+	$(SRC)/Weather/SkySight/LayerStatus.cpp \
 	$(SRC)/Weather/SkySight/SkySightCache.cpp \
 	$(SRC)/Weather/SkySight/SkySightAPI.cpp \
 	$(SRC)/Weather/SkySight/SkySightRequest.cpp
@@ -785,6 +791,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/xctherm/XCThermAPI.cpp \
 	$(SRC)/Weather/xctherm/XCThermDownload.cpp \
 	$(SRC)/Weather/xctherm/XCThermDownloadGlue.cpp \
+	$(SRC)/Weather/xctherm/LayerDownloadStatus.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSON.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoQuery.cpp \
 	$(SRC)/Weather/xctherm/XCThermGeoJSONOverlay.cpp \

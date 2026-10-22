@@ -10,8 +10,6 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Weather/WeatherOverlayDraft.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
-#include "Formatter/LocalTimeFormatter.hpp"
-#include "Formatter/TimeFormatter.hpp"
 #include "Form/Button.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -33,7 +31,7 @@
 #include "Widget/TextWidget.hpp"
 #include "Widget/TwoWidgets.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
-#include "Weather/SkySight/ForecastFormatter.hpp"
+#include "Weather/SkySight/LayerStatus.hpp"
 #include "ui/event/PeriodicTimer.hpp"
 
 #include "util/StaticString.hxx"
@@ -86,68 +84,7 @@ public:
     if (skysight->GetActiveLayerId() == layer->id)
       first_row.AppendFormat(" [%s]", C_("Status", "Current page"));
 
-    StaticString<256> second_row;
-    if (layer->ShouldShowUpdating()) {
-      if (skysight->IsThrottled())
-        second_row.Format(_("Download limit reached; retrying in %u seconds..."),
-                          unsigned(skysight->GetThrottleRemainingSeconds()));
-      else if (const auto retry = skysight->GetDatafilesRetryRemainingSeconds();
-               retry > 0 && layer->HasPendingForecastMetadata())
-        second_row.Format(_("Connection failed; retrying in %u seconds..."),
-                          unsigned(retry));
-      else if (!layer->SupportsLiveTiles() &&
-               layer->HasPendingForecastMetadata())
-        second_row = _("Loading forecast steps...");
-      else if (!layer->SupportsLiveTiles() && layer->decoding)
-        second_row = _("Decoding forecast data...");
-      else if (!layer->SupportsLiveTiles() && layer->pending_downloads > 1)
-        second_row.Format(_("Preloading %u forecast steps..."),
-                          layer->pending_downloads);
-      else if (!layer->SupportsLiveTiles())
-        second_row = _("Downloading forecast data...");
-      else
-        second_row = _("Updating...");
-    } else if (layer->SupportsLiveTiles()) {
-      if (layer->last_update != 0) {
-        second_row.Format(_("Live layer. Last update %s"),
-                          FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->last_update)),
-                                              skysight->GetForecastDisplayOffset(layer->last_update)).c_str());
-      } else {
-        second_row = _("Live tile layer.");
-      }
-    } else if (layer->forecast_datafiles.empty()) {
-      second_row = _("No forecast steps available yet.");
-    } else if (layer->mtime == 0) {
-      if (!skysight->IsForecastDecodeAvailable())
-        second_row = _("Forecast steps available, but this build has no NetCDF decode support.");
-      else
-        second_row = _("Forecast steps available. Activate or choose Time to download one.");
-    } else {
-      const auto now = std::time(nullptr);
-      const auto age = std::chrono::seconds(now > layer->mtime
-                                            ? now - layer->mtime
-                                            : 0);
-      if (layer->forecast_time != 0) {
-        const auto step_offset =
-          skysight->GetForecastDisplayOffset(layer->forecast_time);
-        second_row.Format(_("Step %s. Data from %s to %s. Updated %s ago"),
-                          SkySight::FormatForecastTimeLabel(
-                            *layer, layer->forecast_time,
-                            step_offset).c_str(),
-                          FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->from)),
-                                              skysight->GetForecastDisplayOffset(layer->from)).c_str(),
-                          FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->to)),
-                                              skysight->GetForecastDisplayOffset(layer->to)).c_str(),
-                          FormatTimespanSmart(age).c_str());
-      } else {
-        second_row.Format(_("Data from %s to %s. Updated %s ago"),
-                          FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->from)),
-                                              skysight->GetForecastDisplayOffset(layer->from)).c_str(),
-                          FormatLocalTimeHHMM(TimeStamp(std::chrono::duration<double>(layer->to)),
-                                              skysight->GetForecastDisplayOffset(layer->to)).c_str(),
-                          FormatTimespanSmart(age).c_str());
-      }
-    }
+    const auto second_row = FormatSelectedLayerStatus(*skysight, *layer);
 
     row_renderer.DrawFirstRow(canvas, rc, first_row.c_str());
     row_renderer.DrawSecondRow(canvas, rc, second_row.c_str());
@@ -473,12 +410,7 @@ private:
     if (layer == nullptr)
       return;
 
-    WeatherOverlayDraft::State overlay;
-    overlay.Load(PageLayout::Overlay::SKYSIGHT, layer->id.c_str());
-    overlay.draft.overlay = PageLayout::Overlay::SKYSIGHT;
-    overlay.draft.skysight_overlay = layer->id;
-    overlay.draft.skysight_time = PageLayout::SKYSIGHT_TIME_AUTO;
-    if (overlay.IsDirty() && !overlay.ApplyIfDirty()) {
+    if (!WeatherOverlayDraft::ApplySkySightLayerToPage(layer->id.c_str())) {
       ShowMessageBox(_("Couldn't apply the selected SkySight layer "
                        "to the current page."),
                      "SkySight", MB_OK);
@@ -597,9 +529,7 @@ public:
                 _("Total disk space used by the SkySight cache folder."));
     UpdateCacheSize();
     AddButton(C_("Button", "Clear downloaded data"), [this] { ClearCache(); });
-    AddButton(C_("Button", "Pages setup"), [] {
-      WeatherOverlayDraft::OpenPagesConfig();
-    });
+    WeatherOverlayDraft::AddPagesSetupButton(*this, nullptr);
   }
 
   void Show(const PixelRect &rc) noexcept override {

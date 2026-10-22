@@ -18,7 +18,6 @@
 #include "Widget/ImageZoomView.hpp"
 #include "Widget/ImageZoomFrame.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "LocalPath.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -31,15 +30,10 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Language/Language.hpp"
 #include "Waypoint/LastUsed.hpp"
-#include "Profile/Current.hpp"
-#include "Profile/Map.hpp"
-#include "Profile/Profile.hpp"
-#include "Profile/Keys.hpp"
-#include "system/RunFile.hpp"
+#include "Waypoint/OpenAssociatedFile.hpp"
+#include "Waypoint/SourcePath.hpp"
 #include "system/Path.hpp"
-#include "system/ConvertPathName.hpp"
-#include "io/CupxArchive.hpp"
-#include "io/FileOutputStream.hxx"
+#include "Waypoint/LoadWaypointImages.hpp"
 #include "system/FileUtil.hpp"
 #include "LogFile.hpp"
 #include "util/StringPointer.hxx"
@@ -52,13 +46,7 @@
 #include "Input/InputEvents.hpp"
 #include "util/StringAPI.hxx"
 
-#include <functional>
 #include <optional>
-
-#ifdef ANDROID
-#include "Android/NativeView.hpp"
-#include "Android/Main.hpp"
-#endif
 
 static bool
 ActivatePan(const Waypoint &waypoint)
@@ -96,16 +84,7 @@ public:
 void
 WaypointExternalFileListHandler::OnActivateItem(unsigned i) noexcept
 {
-  auto file = waypoint->files_external.begin();
-  std::advance(file, i);
-
-#ifdef ANDROID
-  /* on Android, the ContentProvider API needs to be used to give
-     other apps access to this file */
-  native_view->OpenWaypointFile(Java::GetEnv(), waypoint->id, file->c_str());
-#else
-  RunFile(LocalPath(file->c_str()).c_str());
-#endif
+  OpenWaypointAssociatedFile(*waypoint, i);
 }
 
 void
@@ -467,52 +446,7 @@ void
 WaypointDetailsWidget::Prepare(ContainerWindow &parent,
                                const PixelRect &rc) noexcept
 {
-  const bool is_cupx = source_path != nullptr &&
-    source_path.EndsWithIgnoreCase(".cupx");
-
-  for (const auto &i : waypoint->files_embed) {
-    if (images.full())
-      break;
-
-    try {
-      if (is_cupx) {
-        auto data = CupxArchive::ExtractImage(source_path, i);
-        if (!data.empty()) {
-#ifndef ANDROID
-          if (!images.append().Load(std::span<const std::byte>(data)))
-            images.shrink(images.size() - 1);
-#else
-          const auto tmp_dir = MakeCacheDirectory("cupx");
-          const auto tmp_file = AllocatedPath::Build(tmp_dir, i.c_str());
-
-          FileOutputStream fos(tmp_file,
-                               FileOutputStream::Mode::CREATE_VISIBLE);
-          fos.Write(std::as_bytes(std::span{data}));
-          fos.Commit();
-
-          if (!images.append().LoadFile(tmp_file))
-            images.shrink(images.size() - 1);
-
-          File::Delete(tmp_file);
-#endif
-          continue;
-        }
-
-        /* Not in the archive.  A waypoint details file may name its
-           own pictures ("image=AIP/ETSI_1.png") for a waypoint that
-           came from a .cupx, and those live in the data directory,
-           not in the archive's pics.zip. */
-      }
-
-      if (!images.append().LoadFile(LocalPath(i.c_str())))
-        images.shrink(images.size() - 1);
-    } catch (const std::exception &e) {
-      LogFormat("Failed to load %s: %s",
-                (const char *)NarrowPathName(Path(i.c_str())),
-                e.what());
-      images.shrink(images.size() - 1);
-    }
-  }
+  LoadWaypointEmbeddedImages(images, *waypoint, source_path);
 
   const Layout layout(rc,
                       sim_jump_active,
@@ -905,37 +839,10 @@ WaypointDetailsWidget::OnSimJumpClicked()
   }
 }
 
-/**
- * Map a WaypointOrigin to the profile key that stores its source
- * file list, or return an empty view for origins without a key.
- */
-static std::string_view
-OriginToProfileKey(WaypointOrigin origin) noexcept
-{
-  switch (origin) {
-  case WaypointOrigin::PRIMARY:
-    return ProfileKeys::WaypointFileList;
-  case WaypointOrigin::WATCHED:
-    return ProfileKeys::WatchedWaypointFileList;
-  case WaypointOrigin::MAP:
-    return ProfileKeys::MapFile;
-  default:
-    return {};
-  }
-}
-
 AllocatedPath
 WaypointDetailsWidget::GetSourcePath() const noexcept
 {
-  const auto key = OriginToProfileKey(waypoint->origin);
-  if (key.empty())
-    return {};
-
-  auto paths = Profile::GetMultiplePaths(key, nullptr);
-  if (waypoint->file_num < paths.size())
-    return std::move(paths[waypoint->file_num]);
-
-  return {};
+  return GetWaypointSourcePath(*waypoint);
 }
 
 void

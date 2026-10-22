@@ -173,21 +173,18 @@ EdlSettingsWidget::UpdateLevelControl() noexcept
 void
 EdlSettingsWidget::RefreshPageSection() noexcept
 {
-  overlay.Load(PageLayout::Overlay::EDL);
+  overlay.Reload(PageLayout::Overlay::EDL,
+                 apply_to_page_button, add_page_button);
   UpdateTimeControl();
   UpdateLevelControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
 EdlSettingsWidget::ApplyToPageClicked() noexcept
 {
-  if (!overlay.ApplyIfDirty())
-    return;
-
+  overlay.ApplyClicked(apply_to_page_button, add_page_button);
   UpdateTimeControl();
   UpdateLevelControl();
-  overlay.SyncButtons(apply_to_page_button, add_page_button);
 }
 
 void
@@ -346,18 +343,15 @@ EdlSettingsWidget::Prepare(ContainerWindow &parent,
                           "controls."));
   level->SetEditCallback(EditLevelCallback);
 
-  apply_to_page_button = AddButton(C_("Button", "Apply to page"), [this]{
-    ApplyToPageClicked();
-  });
-  add_page_button = AddButton(C_("Button", "Add page"), [this]{
-    AddPageClicked();
-  });
+  WeatherOverlayDraft::AddApplyAddButtons(*this, apply_to_page_button,
+                                          add_page_button,
+                                          [this]{ ApplyToPageClicked(); },
+                                          [this]{ AddPageClicked(); });
 #endif
 
   AddSpacer();
 
-  AddButton(C_("Button", "Pages setup"), [this]{
-    WeatherOverlayDraft::OpenPagesConfig();
+  WeatherOverlayDraft::AddPagesSetupButton(*this, [this]{
 #ifdef HAVE_EDL
     RefreshPageSection();
 #endif

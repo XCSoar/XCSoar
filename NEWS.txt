@@ -12,6 +12,8 @@ Version 7.47 - not yet released
   - keep menu, dialogue and status text from overflowing on a
     high-resolution phone #3375
 * dialogs
+  - close the airspace search after Ack Day or Enable from details,
+    matching the waypoint search
   - apply Configuration changes without restarting XCSoar. This
     covers Warning time, Acknowledge time, Text size, Display
     resolution, GR average period, Events, and Log book #3392
@@ -37,6 +39,8 @@ Version 7.47 - not yet released
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
 * development
+  - documentation: Dialogs stay clicks, layout, and Save; Settings stay
+    on RowForm panels until GroupedListWidget is in master
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
 
