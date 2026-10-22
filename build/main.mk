@@ -463,6 +463,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DisplayMode.cpp \
 	\
 	$(SRC)/Markers/Markers.cpp \
+	$(SRC)/Session/SessionFile.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightInfo.cpp \
