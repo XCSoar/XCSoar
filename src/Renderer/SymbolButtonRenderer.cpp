@@ -17,7 +17,7 @@ SymbolButtonRenderer::IsSymbolCaption(const char *caption) noexcept
     return false;
 
   return ch == '+' || ch == '-' || ch == '<' || ch == '>' ||
-    ch == '^' || ch == 'v' || ch == 'h' || ch == 'q';
+    ch == '^' || ch == 'v' || ch == 'h' || ch == 'q' || ch == 's';
 }
 
 [[gnu::pure]]
@@ -93,6 +93,10 @@ SymbolButtonRenderer::DrawSymbol(Canvas &canvas, PixelRect rc,
   // Draw bolt icon (map overlay QuickMenu button)
   else if (ch == 'q')
     SymbolRenderer::DrawBolt(canvas, rc);
+
+  // Android share glyph
+  else if (ch == 's')
+    SymbolRenderer::DrawShare(canvas, rc);
 }
 
 void
