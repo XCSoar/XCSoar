@@ -109,6 +109,9 @@ class RichTextWindow : public LinkableWindow {
   /** Checkbox toggle states (non-zero = toggled from original) */
   mutable std::vector<uint8_t> checkbox_toggled;
 
+  void (*checkbox_toggled_cb)(void *) noexcept = nullptr;
+  void *checkbox_toggled_ctx = nullptr;
+
   /** Checkbox hit rectangles for click detection (window space). */
   struct CheckboxRect {
     PixelRect rect;
@@ -421,6 +424,15 @@ public:
    * Toggle a checkbox state.
    */
   void ToggleCheckbox(std::size_t style_index) noexcept;
+
+  /**
+   * Called after a checkbox toggle.  @p ctx is the pointer passed here.
+   */
+  void SetCheckboxToggledCallback(void (*callback)(void *) noexcept,
+                                  void *ctx) noexcept {
+    checkbox_toggled_cb = callback;
+    checkbox_toggled_ctx = ctx;
+  }
 
   /** Checked state of each checkbox in document order (1 = checked). */
   [[gnu::pure]]
