@@ -12,6 +12,8 @@ Version 7.47 - not yet released
   - keep menu, dialogue and status text from overflowing on a
     high-resolution phone #3375
 * dialogs
+  - close the airspace search after Ack Day or Enable from details,
+    matching the waypoint search
   - apply Configuration changes without restarting XCSoar. This
     covers Warning time, Acknowledge time, Text size, Display
     resolution, GR average period, Events, and Log book #3392
@@ -37,6 +39,8 @@ Version 7.47 - not yet released
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
 * development
+  - documentation: Dialogs stay clicks, layout, and Save; Settings stay
+    on RowForm panels until GroupedListWidget is in master
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
 
@@ -700,8 +704,6 @@ Version 7.45.3 - 2026-09-22
     list sensor flags when a device reports them
   - remember checklist checkbox ticks until XCSoar exits or a
     different checklist file is selected
-  - close the airspace search after Ack Day or Enable from details,
-    matching the waypoint search
 * ui
   - fix Quit on the Fly / Simulator screen emptying a profile that
     was given on the command line #3190
@@ -808,8 +810,6 @@ Version 7.45.2 - 2026-09-12
     the comment shows no wind when the box is blank because wind is
     missing
 * development
-  - documentation: Dialogs stay clicks, layout, and Save; Settings stay
-    on RowForm panels until GroupedListWidget is in master
   - build system: use Android SDK 36 and Build-Tools 36.0.0
   - build system: use XTIFFOpenExt only with libgeotiff 1.7.2, so
     SkySight builds on Ubuntu 24.04
