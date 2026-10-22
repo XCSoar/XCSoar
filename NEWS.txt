@@ -1,4 +1,15 @@
 Version 7.47 - not yet released
+* glide computer
+  - remember water ballast, crew weight, and bugs when XCSoar is
+    restarted during a flight. Startup asks before restoring and
+    restores after 5 seconds; No keeps the logger crew template and
+    empty ballast #1019
+  - remember QNH and the maximum forecast temperature with that
+    same question
+* ui
+  - remember the ATC radial and the current Goto when an unfinished
+    flight is restored; loading or resuming an ordered task clears
+    the Goto, and the automatic takeoff Goto is not kept #2795
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,
@@ -12,12 +23,18 @@ Version 7.47 - not yet released
   - keep menu, dialogue and status text from overflowing on a
     high-resolution phone #3375
 * dialogs
+  - remember checklist checkbox ticks when an unfinished flight is
+    restored; choosing a different checklist file, or editing a page's
+    text, clears the ticks for that file or page #2536
   - apply Configuration changes without restarting XCSoar. This
     covers Warning time, Acknowledge time, Text size, Display
     resolution, GR average period, Events, and Log book #3392
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
+  - document the unfinished-flight question for ballast, crew weight,
+    bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
+    and checklist ticks
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
 * data
