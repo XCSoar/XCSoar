@@ -65,3 +65,12 @@ int
 ShowMessageBox(const char *text, const char *caption,
                std::span<const MessageBoxButton> buttons,
                int default_result = 0) noexcept;
+
+/**
+ * Same dialog.  After @p timeout_ms with no answer, returns
+ * @p timeout_id.  Zero waits forever.  A Yes button counts down.
+ */
+int
+ShowMessageBox(const char *text, const char *caption,
+               unsigned flags, unsigned timeout_ms,
+               int timeout_id) noexcept;
