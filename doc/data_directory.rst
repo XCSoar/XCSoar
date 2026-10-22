@@ -250,6 +250,13 @@ Some paths intentionally remain at the top level of the data root:
   :file:`xcsoar-startup.log`, :file:`xcsoar-persist.log`
   (:file:`LogFile.cpp`)
 - **Markers** — :file:`xcsoar-marks.txt` (:file:`Markers/Markers.cpp`)
+- **Session** — :file:`xcsoar-session.txt` (:file:`Session/SessionFile.cpp`).
+  In-flight ballast, crew weight, bugs, QNH, the maximum forecast
+  temperature, the ATC radial, the current Goto, and checklist ticks.
+  When that file says the aircraft was still flying, startup asks
+  whether to restore them and does so after 5 seconds.  No leaves
+  them unused.  This is not a profile: copying
+  a :file:`*.prf` does not copy it.
 - **Migration marker** — :file:`.xcsoar-subdir-layout-v1` — empty file
   written after the 7.45 layout migration; see :ref:`typed-layout-7-45`
 

@@ -41,7 +41,10 @@ Goto tasks may be established by selecting a waypoint from the map,
 the waypoint list, or any other mechanism e.g.\ the alternates dialogue,
 and select \bmenuw{GoTo}. In goto task mode, selecting
 \bmenug{Nav 2}\blink\bmenug{Task Resume} resumes the ordered task (if
-any).
+any). The current Goto comes back when an unfinished flight is
+restored. It is cleared when
+an ordered task is loaded or resumed, or when the Goto is cleared.
+The automatic takeoff Goto is not kept.
 
 If the Goto destination has no known elevation, bearing and distance
 are still shown. Arrival height, the required glide ratio, time
