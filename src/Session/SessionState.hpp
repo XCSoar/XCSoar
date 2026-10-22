@@ -47,6 +47,13 @@ struct SessionState {
   /** Set after this process has seen @c flying true.  Not stored. */
   bool seen_flying = false;
 
+  /**
+   * Set when the pilot declines restore.  Not stored.
+   * Cleared once this process sees the aircraft on the ground, so
+   * the next takeoff can be recorded.
+   */
+  bool restore_declined = false;
+
   bool flying = false;
 
   bool have_ballast = false;

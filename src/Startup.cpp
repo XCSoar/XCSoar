@@ -408,8 +408,13 @@ RestoreSessionGoto() noexcept
 
   auto &waypoints = *data_components->waypoints;
   WaypointPtr wp;
-  if (state.goto_id != 0)
+  if (state.goto_id != 0) {
     wp = waypoints.LookupId(state.goto_id);
+    /* Ids follow file order.  A moved point is a different waypoint. */
+    if (wp != nullptr && state.have_goto_location &&
+        wp->location.Distance(state.goto_location) > 100)
+      wp = nullptr;
+  }
   if (wp == nullptr && state.have_goto_location)
     wp = waypoints.LookupLocation(state.goto_location, 100);
   if (wp == nullptr && state.goto_name == "(goto)" &&

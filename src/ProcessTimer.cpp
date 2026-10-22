@@ -227,7 +227,10 @@ SessionProcessTimer() noexcept
   if (backend_components->protected_task_manager != nullptr) {
     const ProtectedTaskManager::Lease
       lease{*backend_components->protected_task_manager};
-    if (lease->GetMode() != TaskType::GOTO && Session::State().have_goto)
+    /* Abort keeps the Goto task.  Resume() puts that mode back. */
+    const auto mode = lease->GetMode();
+    if (mode != TaskType::GOTO && mode != TaskType::ABORT &&
+        Session::State().have_goto)
       Session::ClearGoto();
   }
 

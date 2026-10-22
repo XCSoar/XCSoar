@@ -168,10 +168,47 @@ TestFlyingLatch()
   ok1(!state.NoteFlying(false, 0, 90, 1));
 }
 
+static void
+TestDeclinedRestore()
+{
+  SessionState state;
+  state.restore_declined = true;
+
+  ok1(!state.NoteFlying(true, 10, 80, 0.9));
+  ok1(!state.flying);
+  ok1(!state.seen_flying);
+
+  ok1(!state.NoteFlying(false, 10, 80, 0.9));
+  ok1(!state.restore_declined);
+
+  ok1(state.NoteFlying(true, 10, 80, 0.9));
+  ok1(state.flying);
+}
+
+static void
+TestNonFinite()
+{
+  ok1(WriteRaw(Path("output/TestSessionNonFinite.txt"),
+               "BallastLitres=\"inf\"\n"
+               "CrewMass=\"nan\"\n"
+               "AtcDeclination=\"nan\"\n"
+               "GotoElevation=\"inf\"\n"
+               "GotoId=\"7\"\n"));
+
+  SessionState loaded;
+  LoadSession(loaded, Path("output/TestSessionNonFinite.txt"));
+  ok1(!loaded.have_ballast);
+  ok1(!loaded.have_crew);
+  ok1(!loaded.have_atc_declination);
+  ok1(!loaded.have_goto_elevation);
+  ok1(loaded.have_goto);
+  ok1(loaded.goto_id == 7);
+}
+
 int
 main()
 {
-  plan_tests(22 + 4 + 3 + 5 + 2 + 12);
+  plan_tests(22 + 4 + 3 + 5 + 2 + 12 + 7 + 7);
 
   TestRoundTrip();
   TestFlyingClearIgnoresPolar();
@@ -179,6 +216,8 @@ main()
   TestChecklistMismatch();
   TestTakeoffGoto();
   TestFlyingLatch();
+  TestDeclinedRestore();
+  TestNonFinite();
 
   return exit_status();
 }

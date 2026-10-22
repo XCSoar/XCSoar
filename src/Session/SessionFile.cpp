@@ -5,6 +5,7 @@
 
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
+#include "Math/Classify.hpp"
 #include "Profile/File.hpp"
 #include "Profile/Map.hpp"
 #include "system/FileUtil.hpp"
@@ -151,6 +152,10 @@ SessionState::NoteFlying(bool now_flying, double ballast, double crew,
                          double _bugs) noexcept
 {
   if (now_flying) {
+    /* No wrote Flying=0 while still airborne.  Do not put it back. */
+    if (restore_declined)
+      return false;
+
     const bool edge = !seen_flying || !flying;
     seen_flying = true;
     flying = true;
@@ -159,6 +164,8 @@ SessionState::NoteFlying(bool now_flying, double ballast, double crew,
       modified = true;
     return edge || polar;
   }
+
+  restore_declined = false;
 
   if (!seen_flying || !flying)
     return false;
@@ -182,12 +189,14 @@ LoadSession(SessionState &state, Path path)
   if (map.Get("Flying", flying) && flying <= 1)
     loaded.flying = flying == 1;
 
-  if (double litres; map.Get("BallastLitres", litres) && litres >= 0) {
+  if (double litres; map.Get("BallastLitres", litres) &&
+      IsFinite(litres) && litres >= 0) {
     loaded.ballast_litres = litres;
     loaded.have_ballast = true;
   }
 
-  if (double mass; map.Get("CrewMass", mass) && mass >= 0) {
+  if (double mass; map.Get("CrewMass", mass) &&
+      IsFinite(mass) && mass >= 0) {
     loaded.crew_mass = mass;
     loaded.have_crew = true;
   }
@@ -215,7 +224,8 @@ LoadSession(SessionState &state, Path path)
     loaded.have_atc_reference = true;
   }
 
-  if (double degrees; map.Get("AtcDeclination", degrees)) {
+  if (double degrees; map.Get("AtcDeclination", degrees) &&
+      IsFinite(degrees)) {
     loaded.atc_declination_deg = degrees;
     loaded.have_atc_declination = true;
   }
@@ -232,7 +242,8 @@ LoadSession(SessionState &state, Path path)
     loaded.have_goto = true;
   }
 
-  if (double elevation; map.Get("GotoElevation", elevation)) {
+  if (double elevation; map.Get("GotoElevation", elevation) &&
+      IsFinite(elevation)) {
     loaded.goto_elevation = elevation;
     loaded.have_goto_elevation = true;
     loaded.have_goto = true;
@@ -344,6 +355,7 @@ DeclineRestore() noexcept
     return;
 
   session_state.flying = false;
+  session_state.restore_declined = true;
   session_state.modified = true;
   Flush();
 }
