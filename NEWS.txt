@@ -64,6 +64,13 @@ Version 7.47 - not yet released
 * development
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
+  - consolidate and simplify cross-compilation flags and options for
+    PIs and Cubieboards.
+    Path to the target file system is variable SYSROOT.
+    Variables CUBIE and PI for the sysroot directory for CUBIE or PI
+    targets still work but are deprecated. #3386
+  - enable CMake cross-compilation for library ZXing for CUBIE and PI
+    targets. #3386
 
 Version 7.46 - 2026-10-19
 * highlights
