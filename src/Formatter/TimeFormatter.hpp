@@ -22,6 +22,16 @@ void
 FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept;
 
 /**
+ * UTC time for display. The same calendar day as @today is HH:MMZ.
+ * Any other day is YYYY-MM-DD HH:MMZ.
+ *
+ * @param buffer at least 18 bytes
+ */
+void
+FormatUTCTime(char *buffer, const BrokenDateTime &stamp,
+              const BrokenDate &today) noexcept;
+
+/**
  * Parse a UTC ISO 8601 timestamp (YYYY-MM-DDTHH:MM:SS[.sss]Z).
  *
  * @throws std::runtime_error on invalid input (including non-UTC offsets).

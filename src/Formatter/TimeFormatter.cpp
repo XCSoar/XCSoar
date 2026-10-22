@@ -31,6 +31,22 @@ FormatISO8601(char *buffer, const BrokenDateTime &stamp) noexcept
                stamp.hour, stamp.minute, stamp.second);
 }
 
+void
+FormatUTCTime(char *buffer, const BrokenDateTime &stamp,
+              const BrokenDate &today) noexcept
+{
+  if (stamp.GetDate() == today) {
+    FormatTimeHHMM(buffer, TimeStamp{stamp.DurationSinceMidnight()});
+    buffer[5] = 'Z';
+    buffer[6] = '\0';
+    return;
+  }
+
+  StringFormat(buffer, 18, "%04u-%02u-%02u %02u:%02uZ",
+               stamp.year, stamp.month, stamp.day,
+               stamp.hour, stamp.minute);
+}
+
 std::chrono::system_clock::time_point
 ParseISO8601Utc(const std::string_view iso_string)
 {
