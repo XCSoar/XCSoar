@@ -5,6 +5,7 @@
 #include "ui/canvas/Canvas.hpp"
 
 #include <algorithm>
+#include <cmath>
 
 namespace {
 
@@ -45,6 +46,27 @@ void
 DrawBarAt(Canvas &canvas, PixelPoint center, PixelSize margin) noexcept
 {
   canvas.DrawRectangle(PixelRect{center}.WithMargin(margin));
+}
+
+/** Filled arm between two nodes.  The brush is already selected. */
+void
+DrawArm(Canvas &canvas, PixelPoint a, PixelPoint b, int half) noexcept
+{
+  const int dx = b.x - a.x;
+  const int dy = b.y - a.y;
+  const int len = std::max(1, (int)std::lround(std::hypot(dx, dy)));
+  const int px = -dy * half / len;
+  const int py = dx * half / len;
+  if (px == 0 && py == 0)
+    return;
+
+  const BulkPixelPoint arm[] = {
+    {a.x + px, a.y + py},
+    {a.x - px, a.y - py},
+    {b.x - px, b.y - py},
+    {b.x + px, b.y + py},
+  };
+  canvas.DrawPolygon(arm, 4);
 }
 
 } // namespace
@@ -136,4 +158,29 @@ SymbolRenderer::DrawBolt(Canvas &canvas, PixelRect rc) noexcept
   };
 
   canvas.DrawPolygon(bolt, 6);
+}
+
+void
+SymbolRenderer::DrawShare(Canvas &canvas, PixelRect rc) noexcept
+{
+  const unsigned min_dim = MinDimension(rc);
+  if (min_dim == 0)
+    return;
+
+  /* Material share icon on a 24-grid.  The glyph is 20 units
+     tall, so dividing by 40 leaves about half the button as
+     margin around it. */
+  const int u = std::max(1, int(min_dim) / 40);
+  const auto c = rc.GetCenter();
+  const PixelPoint left{c.x - 6 * u, c.y};
+  const PixelPoint upper{c.x + 6 * u, c.y - 7 * u};
+  const PixelPoint lower{c.x + 6 * u, c.y + 7 * u};
+  const unsigned radius = std::max(2u, unsigned(3 * u));
+  const int half = std::max(1, u);
+
+  DrawArm(canvas, left, upper, half);
+  DrawArm(canvas, left, lower, half);
+  canvas.DrawCircle(left, radius);
+  canvas.DrawCircle(upper, radius);
+  canvas.DrawCircle(lower, radius);
 }

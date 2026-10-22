@@ -21,6 +21,7 @@ Version 7.47 - not yet released
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
+  - show the Export flights Share button as the Android share mark
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
   - keep menu, dialogue and status text from overflowing on a

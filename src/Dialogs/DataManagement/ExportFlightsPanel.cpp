@@ -284,8 +284,7 @@ PerformShare(FileMultiSelectWidget *file_widget)
 {
   const auto selected = file_widget->GetSelectedPaths();
   if (selected.empty()) {
-    ShowMessageBox(_("Select at least one flight."), "",
-                   MB_OK | MB_ICONINFORMATION);
+    ShowNeedFlightSelection();
     return;
   }
 
@@ -614,7 +613,7 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
       PerformWeGlideUpload(&file_list);
     });
 #ifdef ANDROID
-    dialog.AddButton(C_("Button", "Share"), [&file_list]() {
+    dialog.AddSymbolButton("s", [&file_list]() {
       PerformShare(&file_list);
     });
 #endif

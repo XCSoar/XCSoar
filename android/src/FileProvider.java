@@ -72,7 +72,11 @@ public final class FileProvider extends ContentProvider {
       String name = file.getName();
       int dot = name.lastIndexOf('.');
       if (dot >= 0) {
-        String extension = name.substring(dot + 1);
+        String extension = name.substring(dot + 1).toLowerCase();
+        if (extension.equals("igc"))
+          return "application/vnd.fai.igc";
+        if (extension.equals("nmea"))
+          return "text/plain";
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         if (mime != null)
           return mime;

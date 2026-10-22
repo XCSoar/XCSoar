@@ -689,7 +689,8 @@ class NativeView extends SurfaceView
       if (uris.size() == 1) {
         send.setAction(Intent.ACTION_SEND);
         send.putExtra(Intent.EXTRA_STREAM, uris.get(0));
-        send.setType(guessShareMime(relativePaths[0]));
+        String mime = getContext().getContentResolver().getType(uris.get(0));
+        send.setType(mime != null ? mime : "application/octet-stream");
       } else {
         send.setAction(Intent.ACTION_SEND_MULTIPLE);
         send.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
@@ -709,21 +710,6 @@ class NativeView extends SurfaceView
     } catch (Exception e) {
       Log.e(TAG, "shareFiles() error", e);
     }
-  }
-
-  private static String guessShareMime(String path) {
-    if (path == null)
-      return "application/octet-stream";
-    int dot = path.lastIndexOf('.');
-    if (dot < 0)
-      return "application/octet-stream";
-    String ext = path.substring(dot + 1).toLowerCase();
-    if (ext.equals("igc"))
-      return "application/vnd.fai.igc";
-    if (ext.equals("nmea") || ext.equals("txt"))
-      return "text/plain";
-    String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-    return mime != null ? mime : "application/octet-stream";
   }
 
   /**
