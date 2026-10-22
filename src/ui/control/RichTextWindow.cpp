@@ -1638,6 +1638,9 @@ RichTextWindow::ToggleCheckbox(std::size_t style_index) noexcept
   checkbox_toggled[style_index] = !checkbox_toggled[style_index];
   InvalidateContentCache();
   Invalidate();
+
+  if (checkbox_toggled_cb != nullptr)
+    checkbox_toggled_cb(checkbox_toggled_ctx);
 }
 
 std::vector<uint8_t>
