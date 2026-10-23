@@ -67,6 +67,7 @@ Version 7.47 - not yet released
     targets still work but are deprecated. #3386
   - enable CMake cross-compilation for library ZXing for CUBIE and PI
     targets. #3386
+  - accept TARGET=PI3 as an alias of TARGET=PI2
 
 Version 7.46 - 2026-10-19
 * highlights

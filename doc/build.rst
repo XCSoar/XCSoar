@@ -446,6 +446,8 @@ For Raspberry Pi 2/3 (ARMv7 with NEON; ``output/PI2/bin/``)::
 
   make TARGET=PI2 SYSROOT=/opt/pi/root
 
+``TARGET=PI3`` is an alias of ``PI2`` and writes to ``output/PI3/``.
+
 Although ``TARGET=PI`` and ``TARGET=PI2`` compile as ``UNIX`` internally,
 binaries are written to ``output/PI/`` and ``output/PI2/`` respectively
 (the flavour name is preserved for the output directory).
@@ -678,6 +680,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - OpenGL (EGL/KMS)
    - ARMv7 + NEON cross-compile target (Pi 2 and 3).
+ * - ``PI3``
+   - Raspberry Pi 3
+   - no
+   - OpenGL (EGL/KMS)
+   - Alias of ``PI2``. Binaries go to ``output/PI3/``.
  * - ``CUBIE``
    - Cubieboard
    - no
