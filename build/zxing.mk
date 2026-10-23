@@ -91,6 +91,17 @@ ZXING_CROSS_TOOLCHAIN_FILE_OPTION := -DCMAKE_TOOLCHAIN_FILE=$(abspath $(CROSS_TO
 
 endif # if CROSS_COMPILE
 
+# Parent make -jN.  Otherwise one job, or one per core when -j has no
+# limit.  A 1 GB board can pass ZXING_BUILD_JOBS=2.
+ZXING_BUILD_JOBS ?= $(patsubst -j%,%,$(filter -j%,$(MAKEFLAGS)))
+ifeq ($(ZXING_BUILD_JOBS),)
+  ifneq ($(filter -j,$(MAKEFLAGS)),)
+    ZXING_BUILD_JOBS := $(shell nproc 2>/dev/null || echo 1)
+  else
+    ZXING_BUILD_JOBS := 1
+  endif
+endif
+
 $(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags.txt \
   $(CROSS_TOOLCHAIN_FILE)
 	$(Q)rm -rf $(ZXING_SRC) $(ZXING_BUILD)
@@ -117,7 +128,7 @@ $(ZXING_LIB): $(ZXING_TARBALL) $(topdir)/build/zxing.mk $(ZXING_PREFIX)/cxxflags
 		-DZXING_BLACKBOX_TESTS=OFF \
 		-DZXING_DEPENDENCIES=LOCAL \
 		-DZXING_DISABLE_PCH=ON $(ZXING_CROSS_TOOLCHAIN_FILE_OPTION)
-	$(Q)cmake --build $(ZXING_BUILD) -j2
+	$(Q)cmake --build $(ZXING_BUILD) -j$(ZXING_BUILD_JOBS)
 	$(Q)cmake --install $(ZXING_BUILD)
 
 ZXING_CPPFLAGS += -isystem $(ZXING_PREFIX)/include
