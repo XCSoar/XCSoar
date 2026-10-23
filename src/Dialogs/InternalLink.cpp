@@ -27,6 +27,9 @@
 #ifdef HAVE_LIVETRACK24
 #include "Dialogs/Settings/Panels/LiveTrack24ConfigPanel.hpp"
 #endif
+#ifdef HAVE_PURETRACK
+#include "Dialogs/Settings/Panels/PureTrackConfigPanel.hpp"
+#endif
 #ifdef HAVE_TRACKING
 #include "Dialogs/Settings/Panels/CloudConfigPanel.hpp"
 #endif
@@ -103,6 +106,9 @@ static constexpr ConfigPanelLink config_panel_links[] = {
 #ifndef HAVE_SKYLINES_TRACKING
   {"config/tracking",   "LiveTrack24",  CreateLiveTrack24ConfigPanel},
 #endif
+#endif
+#ifdef HAVE_PURETRACK
+  {"config/puretrack",  "PureTrack",    CreatePureTrackConfigPanel},
 #endif
 #ifdef HAVE_TRACKING
   {"config/cloud",      N_("XCSoar Cloud"), CreateCloudConfigPanel},

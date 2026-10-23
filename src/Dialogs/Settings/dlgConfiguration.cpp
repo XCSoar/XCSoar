@@ -63,6 +63,9 @@
 #ifdef HAVE_LIVETRACK24
 #include "Panels/LiveTrack24ConfigPanel.hpp"
 #endif
+#ifdef HAVE_PURETRACK
+#include "Panels/PureTrackConfigPanel.hpp"
+#endif
 #ifdef HAVE_TRACKING
 #include "Panels/CloudConfigPanel.hpp"
 #endif
@@ -162,6 +165,9 @@ static constexpr TabMenuPage weather_pages[] = {
 static constexpr TabMenuPage online_pages[] = {
 #ifdef HAVE_LIVETRACK24
   { "LiveTrack24", CreateLiveTrack24ConfigPanel },
+#endif
+#ifdef HAVE_PURETRACK
+  { "PureTrack", CreatePureTrackConfigPanel },
 #endif
 #ifdef HAVE_SKYLINES_TRACKING
   { "SkyLines", CreateSkyLinesConfigPanel },

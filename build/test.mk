@@ -143,6 +143,7 @@ TEST_NAMES = \
 	TestIGCFilenameFormatter \
 	TestNMEAFormatter \
 	TestNMEAChecksum \
+	TestPureTrack \
 	TestDewPoint \
 	TestCuSonde \
 	TestMosmixStation \
@@ -824,6 +825,13 @@ TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAngle.cpp
 TEST_ANGLE_DEPENDS = MATH
 $(eval $(call link-program,TestAngle,TEST_ANGLE))
+
+TEST_PURETRACK_SOURCES = \
+	$(SRC)/Tracking/PureTrack/Protocol.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPureTrack.cpp
+TEST_PURETRACK_DEPENDS = JSON FMT IO GEO MATH UTIL
+$(eval $(call link-program,TestPureTrack,TEST_PURETRACK))
 
 TEST_OPERA_RADAR_SOURCES = \
 	$(SRC)/Weather/OPERA/RadarData.cpp \

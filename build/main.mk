@@ -799,13 +799,17 @@ XCSOAR_SOURCES += \
 XCSOAR_SOURCES += \
 	$(SRC)/Dialogs/Settings/Panels/SkyLinesConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/LiveTrack24ConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/PureTrackConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/TrackingIntervalChoices.cpp \
 	$(SRC)/Dialogs/Settings/Panels/CloudConfigPanel.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/LiveTrack24/SessionID.cpp \
 	$(SRC)/Tracking/LiveTrack24/Glue.cpp \
-	$(SRC)/Tracking/LiveTrack24/Client.cpp
+	$(SRC)/Tracking/LiveTrack24/Client.cpp \
+	$(SRC)/Tracking/PureTrack/Protocol.cpp \
+	$(SRC)/Tracking/PureTrack/Glue.cpp \
+	$(SRC)/Tracking/PureTrack/Client.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Glue.cpp \

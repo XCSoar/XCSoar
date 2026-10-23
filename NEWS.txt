@@ -18,6 +18,9 @@ Version 7.47 - not yet released
     kilometre keep the newer one #3093
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
+* tracking
+  - send a position to PureTrack from Configuration, Services, when
+    an application key and a device ID are set #1626
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
@@ -41,6 +44,7 @@ Version 7.47 - not yet released
     and checklist ticks
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
+  - document PureTrack live tracking under Services
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar

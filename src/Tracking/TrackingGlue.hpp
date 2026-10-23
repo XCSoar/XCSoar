@@ -15,6 +15,7 @@
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Tracking/SkyLines/Data.hpp"
 #include "Tracking/LiveTrack24/Glue.hpp"
+#include "Tracking/PureTrack/Glue.hpp"
 #include "util/StaticString.hxx"
 #include "util/StaticArray.hxx"
 #include "util/TriState.hpp"
@@ -38,6 +39,7 @@ class TrackingGlue final
   SkyLinesTracking::Data skylines_data;
 
   LiveTrack24::Glue livetrack24;
+  PureTrack::Glue puretrack;
 
   mutable Mutex online_mutex;
 

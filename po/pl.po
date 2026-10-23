@@ -12861,3 +12861,18 @@ msgstr ""
 
 msgid "Data files have been updated"
 msgstr ""
+
+msgid "Name shown by PureTrack."
+msgstr ""
+
+msgid "PureTrack Insert API endpoint URL."
+msgstr ""
+
+msgid "PureTrack Insert API application key."
+msgstr ""
+
+msgid "Device ID"
+msgstr ""
+
+msgid "Unique device identifier sent to PureTrack."
+msgstr ""

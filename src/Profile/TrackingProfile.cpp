@@ -70,6 +70,23 @@ static void Load(const ProfileMap &map,
   map.GetEnum(ProfileKeys::LiveTrack24TrackingVehicleType, settings.vehicleType);
   map.Get(ProfileKeys::LiveTrack24TrackingVehicleName, settings.vehicle_name);
 }
+
+static void Load(const ProfileMap &map,
+                 PureTrack::Settings &settings) {
+  map.Get(ProfileKeys::PureTrackEnabled, settings.enabled);
+  map.Get(ProfileKeys::PureTrackInsertEndpoint, settings.endpoint);
+  map.Get(ProfileKeys::PureTrackInsertInterval, settings.interval);
+  if (settings.interval == 0)
+    settings.interval = PureTrack::Settings::DEFAULT_INTERVAL;
+
+  map.Get(ProfileKeys::PureTrackInsertAppKey, settings.app_key);
+  map.Get(ProfileKeys::PureTrackInsertDeviceID, settings.device_id);
+  map.Get(ProfileKeys::PureTrackInsertLabel, settings.label);
+  map.Get(ProfileKeys::PureTrackInsertRego, settings.rego);
+  map.GetEnum(ProfileKeys::PureTrackInsertVehicleType, settings.vehicle_type);
+  if (settings.vehicle_type >= PureTrack::Settings::VehicleType::COUNT)
+    settings.vehicle_type = PureTrack::Settings::VehicleType::GLIDER;
+}
 }
 
 void
@@ -78,6 +95,7 @@ Profile::Load(const ProfileMap &map, TrackingSettings &settings)
   Load(map, settings.skylines);
   Load(map, settings.cloud);
   Load(map, settings.livetrack24);
+  Load(map, settings.puretrack);
 }
 
 #endif /* HAVE_TRACKING */
