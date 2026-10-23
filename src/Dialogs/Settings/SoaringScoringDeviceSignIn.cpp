@@ -12,6 +12,14 @@
 #include "UIGlobals.hpp"
 #include "Widget/RichTextWidget.hpp"
 #include "co/Task.hxx"
+#ifdef HAVE_ZXING
+#include "QR/QRCode.hpp"
+#include "Renderer/QRCodeRenderer.hpp"
+#include "Screen/Layout.hpp"
+#include "Widget/DrawWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "ui/canvas/Canvas.hpp"
+#endif
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Global.hxx"
 #include "lib/curl/Handler.hxx"
@@ -36,6 +44,32 @@
 #include <string>
 #include <utility>
 
+#ifdef HAVE_ZXING
+
+/** QR pane. A non-zero minimum lets TwoWidgets give it the spare space. */
+class SignInCodeWidget final : public DrawWidget {
+public:
+  using DrawWidget::DrawWidget;
+
+  PixelSize GetMinimumSize() const noexcept override {
+    const unsigned side = Layout::GetMinimumControlHeight() * 4;
+    return {side, side};
+  }
+};
+
+static std::unique_ptr<Widget>
+MakeCodeWidget(const QRSymbol &symbol)
+{
+  return std::make_unique<SignInCodeWidget>(
+    [&symbol](Canvas &canvas, const PixelRect &rc) {
+      canvas.Clear(COLOR_WHITE);
+      if (symbol.IsValid())
+        DrawQRSymbol(canvas, rc, symbol);
+    });
+}
+
+#endif
+
 static uint32_t
 Now() noexcept
 {
@@ -59,9 +93,6 @@ StoreToken(const Net::Client::Auth::DeviceFlow &flow) noexcept
  * dialog stops it before the form or the body string are destroyed.
  * status, body, and error are written on the network thread and read
  * on the UI thread from OnUi(), after the notify.
- *
- * shortcut: the code is text until the QR renderer from #3369 is on
- * this branch.
  */
 struct SignInPoll final : CurlResponseHandler
 {
@@ -270,7 +301,21 @@ RunSoaringScoringDeviceSignIn() noexcept
   text += url;
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  auto body = std::make_unique<RichTextWidget>(look, text.c_str());
+  std::unique_ptr<Widget> body =
+    std::make_unique<RichTextWidget>(look, text.c_str());
+
+#ifdef HAVE_ZXING
+  QRSymbol symbol;
+  try {
+    symbol = EncodeQRCode(url);
+  } catch (...) {
+    symbol = {};
+  }
+  if (symbol.IsValid())
+    body = std::make_unique<TwoWidgets>(MakeCodeWidget(symbol),
+                                        std::move(body));
+#endif
+
   WidgetDialog dialog(WidgetDialog::Full{},
                       UIGlobals::GetMainWindow(),
                       look,
