@@ -364,6 +364,15 @@ TEST_METAR_PARSER_SOURCES = \
 TEST_METAR_PARSER_DEPENDS = MATH UTIL UNITS
 $(eval $(call link-program,TestMETARParser,TEST_METAR_PARSER))
 
+TEST_NAMES += TestDeviceFlow
+
+TEST_DEVICE_FLOW_SOURCES = \
+	$(SRC)/net/client/auth/DeviceFlow.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDeviceFlow.cpp
+TEST_DEVICE_FLOW_DEPENDS = JSON UTIL
+$(eval $(call link-program,TestDeviceFlow,TEST_DEVICE_FLOW))
+
 TEST_NAMES += TestWeatherUIState
 
 TEST_WEATHER_UI_STATE_SOURCES = \
