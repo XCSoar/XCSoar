@@ -12890,3 +12890,22 @@ msgstr "No es pot iniciar la previsualització de la càmera"
 
 msgid "Camera not usable"
 msgstr "La càmera no es pot utilitzar"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""

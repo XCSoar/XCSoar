@@ -373,6 +373,15 @@ TEST_DEVICE_FLOW_SOURCES = \
 TEST_DEVICE_FLOW_DEPENDS = JSON UTIL
 $(eval $(call link-program,TestDeviceFlow,TEST_DEVICE_FLOW))
 
+TEST_NAMES += TestSoaringScoring
+
+TEST_SOARING_SCORING_SOURCES = \
+	$(SRC)/net/client/SoaringScoring/Parse.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSoaringScoring.cpp
+TEST_SOARING_SCORING_DEPENDS = JSON UTIL
+$(eval $(call link-program,TestSoaringScoring,TEST_SOARING_SCORING))
+
 TEST_NAMES += TestWeatherUIState
 
 TEST_WEATHER_UI_STATE_SOURCES = \

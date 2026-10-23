@@ -12677,3 +12677,22 @@ msgstr "לא ניתן להפעיל את תצוגת המצלמה"
 
 msgid "Camera not usable"
 msgstr "לא ניתן להשתמש במצלמה"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""

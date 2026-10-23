@@ -151,6 +151,7 @@ DIALOG_SOURCES = \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/PCMetConfigPanel.cpp) \
 	$(if $(filter y,$(HAVE_HTTP)),$(SRC)/Dialogs/Settings/Panels/XCThermConfigPanel.cpp) \
 	$(SRC)/Dialogs/Settings/Panels/WeGlideConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SoaringScoringConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
@@ -167,6 +168,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Manager/TaskListPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/WeGlideTasksPanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/WeGlidePanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/SoaringScoringTasksPanel.cpp \
 	$(SRC)/Dialogs/Task/OptionalStartsDialog.cpp \
 	$(SRC)/Dialogs/Task/TaskPointDialog.cpp \
 	$(SRC)/Dialogs/Task/MutateTaskPointDialog.cpp \
@@ -196,6 +198,8 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
+	$(SRC)/Dialogs/Settings/SoaringScoringDeviceSignIn.cpp \
+	$(SRC)/net/client/SoaringScoring/Account.cpp \
 	$(SRC)/Dialogs/Weather/XCThermDialog.cpp \
 	$(SRC)/Dialogs/Weather/WeatherCredentialGateWidget.cpp \
 	$(SRC)/Dialogs/Weather/MosmixTemperature.cpp \

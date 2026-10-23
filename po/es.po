@@ -12963,3 +12963,22 @@ msgstr "No se puede iniciar la vista previa de la cámara"
 
 msgid "Camera not usable"
 msgstr "La cámara no se puede usar"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""

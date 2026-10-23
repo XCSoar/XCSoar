@@ -28,6 +28,20 @@
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
+#include "net/http/Features.hpp"
+#ifdef HAVE_HTTP
+#include "Dialogs/CoFunctionDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Dialogs/ListPicker.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "Renderer/TextRowRenderer.hpp"
+#include "io/FileMapping.hpp"
+#include "net/client/SoaringScoring/Account.hpp"
+#include "net/client/SoaringScoring/Client.hpp"
+#include "net/http/Init.hpp"
+#include "ui/canvas/Canvas.hpp"
+#include <span>
+#endif
 #include "ui/event/Notify.hpp"
 #include "ui/event/DelayedNotify.hpp"
 #include "LogFile.hpp"
@@ -205,6 +219,129 @@ PerformExport(FileMultiSelectWidget *file_widget)
   ShowMessageBox(msg, C_("Menu", "Export flights"),
                  MB_OK | (failed ? MB_ICONERROR : MB_ICONINFORMATION));
 }
+
+#ifdef HAVE_HTTP
+
+static int
+PickSoaringScoringEntry(const std::vector<SoaringScoring::Entry> &entries)
+{
+  if (entries.size() == 1)
+    return 0;
+
+  TextRowRenderer row_renderer;
+  row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font);
+
+  class EntryRenderer final : public ListItemRenderer {
+    const std::vector<SoaringScoring::Entry> &entries;
+    TextRowRenderer &row_renderer;
+
+  public:
+    EntryRenderer(const std::vector<SoaringScoring::Entry> &_entries,
+                  TextRowRenderer &_row_renderer) noexcept
+      :entries(_entries), row_renderer(_row_renderer) {}
+
+    void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                     unsigned idx) noexcept override {
+      const char *name = entries[idx].contest_name.c_str();
+      if (name[0] == '\0')
+        name = entries[idx].class_name.c_str();
+      row_renderer.DrawTextRow(canvas, rc, name);
+    }
+  } renderer{entries, row_renderer};
+
+  return ListPicker(_("SoaringScoring"), entries.size(), 0,
+                    Layout::GetMinimumControlHeight(), renderer);
+}
+
+static void
+PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
+{
+  if (!SoaringScoring::AccountConnected() || Net::curl == nullptr) {
+    ShowMessageBox(_("Sign in from Services, SoaringScoring."),
+                   _("SoaringScoring"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  const auto selected = file_widget->GetSelectedPaths();
+  if (selected.empty()) {
+    ShowMessageBox(_("Select at least one flight."), "",
+                   MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  for (const auto &path : selected) {
+    if (!path.EndsWithIgnoreCase(".igc")) {
+      ShowMessageBox(_("Only .igc files can be uploaded."),
+                     _("SoaringScoring"), MB_OK | MB_ICONERROR);
+      return;
+    }
+  }
+
+  const auto token = SoaringScoring::LoadAccountToken().access_token;
+  PluggableOperationEnvironment env;
+  std::optional<std::vector<SoaringScoring::Entry>> entries;
+  try {
+    entries = ShowCoFunctionDialog(
+      UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+      _("Download"),
+      SoaringScoring::LoadEntries(*Net::curl, token, env), &env);
+  } catch (...) {
+    ShowError(std::current_exception(), _("SoaringScoring"));
+    return;
+  }
+  if (!entries)
+    return;
+  if (entries->empty()) {
+    ShowMessageBox(_("No current contest entry."), _("SoaringScoring"),
+                   MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  const int which = PickSoaringScoringEntry(*entries);
+  if (which < 0)
+    return;
+  const auto &entry = (*entries)[which];
+
+  std::string problems;
+  for (const auto &path : selected) {
+    try {
+      FileMapping mapping{path};
+      const std::span<const std::byte> bytes = mapping;
+      std::string igc{reinterpret_cast<const char *>(bytes.data()),
+                      bytes.size()};
+      const auto base = path.GetBase();
+      auto report = ShowCoFunctionDialog(
+        UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+        _("SoaringScoring"),
+        SoaringScoring::UploadIgc(*Net::curl, token, entry.upload_url,
+                                  base.c_str(), std::move(igc), env),
+        &env);
+      if (!report)
+        return;
+      if (!report->validation_ok) {
+        if (!problems.empty())
+          problems.push_back('\n');
+        problems += base.c_str();
+        for (const auto &issue : report->issues) {
+          problems.push_back('\n');
+          problems += issue;
+        }
+      }
+    } catch (...) {
+      ShowError(std::current_exception(), _("SoaringScoring"));
+      return;
+    }
+  }
+
+  if (problems.empty())
+    ShowMessageBox(_("OK"), _("SoaringScoring"),
+                   MB_OK | MB_ICONINFORMATION);
+  else
+    ShowMessageBox(problems.c_str(), _("SoaringScoring"),
+                   MB_OK | MB_ICONEXCLAMATION);
+}
+
+#endif
 
 static bool
 EnsureWeGlideConfigured() noexcept
@@ -612,6 +749,11 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
     dialog.AddButton(_("WeGlide Upload"), [&file_list]() {
       PerformWeGlideUpload(&file_list);
     });
+#ifdef HAVE_HTTP
+    dialog.AddButton(_("SoaringScoring"), [&file_list]() {
+      PerformSoaringScoringUpload(&file_list);
+    });
+#endif
 #ifdef ANDROID
     dialog.AddSymbolButton("s", [&file_list]() {
       PerformShare(&file_list);

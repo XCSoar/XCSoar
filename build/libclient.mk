@@ -4,6 +4,8 @@ ifeq ($(HAVE_HTTP),y)
 
 LIBCLIENT_SOURCES = \
 	$(SRC)/net/client/auth/DeviceFlow.cpp \
+	$(SRC)/net/client/SoaringScoring/Parse.cpp \
+	$(SRC)/net/client/SoaringScoring/Client.cpp \
 	$(SRC)/net/client/auth/JwtBearerSession.cpp \
 	$(SRC)/net/client/FlarmHub/Client.cpp \
 	$(SRC)/net/client/SyncHttp.cpp \

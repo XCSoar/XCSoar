@@ -12850,3 +12850,22 @@ msgstr "Previzualizarea camerei nu poate fi pornită"
 
 msgid "Camera not usable"
 msgstr "Camera nu poate fi folosită"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""

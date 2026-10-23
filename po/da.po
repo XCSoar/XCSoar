@@ -12800,3 +12800,22 @@ msgstr "Kan ikke starte kameravisningen"
 
 msgid "Camera not usable"
 msgstr "Kameraet kan ikke bruges"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""

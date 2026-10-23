@@ -12939,3 +12939,22 @@ msgstr "Δεν είναι δυνατή η έναρξη της προεπισκό
 
 msgid "Camera not usable"
 msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
+
+msgid "SoaringScoring"
+msgstr ""
+
+
+msgid "Sign in from Services, SoaringScoring."
+msgstr ""
+
+
+msgid "Only .igc files can be uploaded."
+msgstr ""
+
+
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
