@@ -94,6 +94,8 @@ For Raspberry Pi 2/3 (ARMv7 with NEON)::
 
    make TARGET=PI2 SYSROOT=/opt/pi/root
 
+``TARGET=PI3`` is an alias of ``PI2`` and writes to ``output/PI3/``.
+
 Binaries are written to ``output/PI/`` and ``output/PI2/`` (not
 ``output/UNIX/``). See :doc:`build` for details.
 
