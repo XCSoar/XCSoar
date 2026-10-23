@@ -3,7 +3,7 @@ TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	FUZZER \
-	PI PI2 CUBIE KOBO NEON \
+	PI PI2 PI3 CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
@@ -203,6 +203,11 @@ ifeq ($(TARGET),PI)
   TARGET_IS_ARM = y
   TARGET_IS_ARMHF = y
   ARMV6 = y
+endif
+
+ifeq ($(TARGET),PI3)
+  # Same ARMv7 + NEON build as PI2.  The output directory stays output/PI3.
+  override TARGET = PI2
 endif
 
 ifeq ($(TARGET),PI2)
