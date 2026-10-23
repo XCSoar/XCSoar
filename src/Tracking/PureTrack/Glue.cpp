@@ -8,31 +8,48 @@
 #include "LogFile.hpp"
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
+#include "net/State.hpp"
 #include "util/Macros.hpp"
 
 namespace PureTrack {
 
 Glue::Glue(CurlGlobal &curl) noexcept
   :client(curl),
-   inject_task(curl.GetEventLoop())
+   task(curl.GetEventLoop())
 {
   settings.SetDefaults();
 }
 
 void
-Glue::OnTimer(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calculated)
+Glue::BeginShutdown() noexcept
 {
+  task.BeginShutdown();
+}
+
+void
+Glue::OnTimer(const MoreData &basic,
+              [[maybe_unused]] const DerivedInfo &calculated)
+{
+  if (task.IsShuttingDown())
+    return;
+
   if (!settings.enabled || settings.app_key.empty() ||
       settings.device_id.empty())
     return;
 
-  if (!basic.time_available || !basic.gps.real || !basic.location_available)
+  if (GetNetState() == NetState::DISCONNECTED)
     return;
 
-  if (!clock.CheckUpdate(std::chrono::seconds(settings.interval)))
+  if (!basic.time_available || !basic.gps.real ||
+      !basic.location_available)
     return;
 
-  if (inject_task)
+  /* A running insert must not consume the next interval. */
+  if (task.IsRunning())
+    return;
+
+  if (settings.interval == 0 ||
+      !clock.CheckUpdate(std::chrono::seconds(settings.interval)))
     return;
 
   Sample sample;
@@ -40,7 +57,7 @@ Glue::OnTimer(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calcula
     ? basic.date_time_utc.ToTimePoint()
     : std::chrono::system_clock::now();
   sample.location = basic.location;
-  sample.altitude = basic.NavAltitudeAvailable() && basic.nav_altitude > 0
+  sample.altitude = basic.NavAltitudeAvailable()
     ? basic.nav_altitude
     : 0;
   sample.speed = basic.ground_speed_available
@@ -53,7 +70,7 @@ Glue::OnTimer(const MoreData &basic, [[maybe_unused]] const DerivedInfo &calcula
     ? basic.brutto_vario
     : 0;
 
-  inject_task.Start(Tick(settings, sample), BIND_THIS_METHOD(OnCompletion));
+  task.Start(Tick(settings, sample), BIND_THIS_METHOD(OnCompletion));
 }
 
 Co::InvokeTask

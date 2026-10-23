@@ -103,6 +103,7 @@ ParseInsertResponse(unsigned status, const boost::json::value &body)
 
   response.http_code = GetUnsigned(o, "http_code"sv);
   response.trackers_received = GetUnsigned(o, "trackers_received"sv);
+  /* PureTrack spells this response field "recieved". */
   response.total_points_received = GetUnsigned(o, "total_points_recieved"sv);
   response.total_points_inserted = GetUnsigned(o, "total_points_inserted"sv);
   return response;

@@ -39,10 +39,12 @@ struct Settings {
 
   VehicleType vehicle_type;
 
+  static constexpr unsigned DEFAULT_INTERVAL = 60;
+
   void SetDefaults() {
     enabled = false;
     endpoint = "https://puretrack.io/api/insert";
-    interval = 60;
+    interval = DEFAULT_INTERVAL;
     app_key.clear();
     device_id.clear();
     label.clear();

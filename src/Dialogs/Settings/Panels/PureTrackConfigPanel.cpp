@@ -6,6 +6,7 @@
 #include "Profile/Keys.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/Features.hpp"
@@ -94,7 +95,8 @@ PureTrackConfigPanel::Prepare(ContainerWindow &parent,
           settings.puretrack.label);
   AddText(_("Server"), _("PureTrack Insert API endpoint URL."),
           settings.puretrack.endpoint);
-  AddPassword(_("Key"), _("PureTrack Insert API application key."),
+  AddPassword(C_("Setting", "Key"),
+              _("PureTrack Insert API application key."),
               settings.puretrack.app_key);
   AddText(_("Device ID"), _("Unique device identifier sent to PureTrack."),
           settings.puretrack.device_id);

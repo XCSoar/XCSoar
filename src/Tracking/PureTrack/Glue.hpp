@@ -6,7 +6,7 @@
 #include "Settings.hpp"
 #include "Client.hpp"
 #include "time/PeriodClock.hpp"
-#include "co/InjectTask.hxx"
+#include "net/AsyncTask.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -18,10 +18,12 @@ class Glue final {
   PeriodClock clock;
   Settings settings;
   Client client;
-  Co::InjectTask inject_task;
+  Net::AsyncTask task;
 
 public:
   explicit Glue(CurlGlobal &curl) noexcept;
+
+  void BeginShutdown() noexcept;
 
   void SetSettings(const Settings &_settings) noexcept {
     settings = _settings;

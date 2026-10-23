@@ -125,6 +125,7 @@ TrackingGlue::BeginShutdown() noexcept
   }
   skylines.BeginShutdown();
   livetrack24.BeginShutdown();
+  puretrack.BeginShutdown();
 }
 
 void

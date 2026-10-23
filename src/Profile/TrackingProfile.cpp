@@ -76,11 +76,16 @@ static void Load(const ProfileMap &map,
   map.Get(ProfileKeys::PureTrackEnabled, settings.enabled);
   map.Get(ProfileKeys::PureTrackInsertEndpoint, settings.endpoint);
   map.Get(ProfileKeys::PureTrackInsertInterval, settings.interval);
+  if (settings.interval == 0)
+    settings.interval = PureTrack::Settings::DEFAULT_INTERVAL;
+
   map.Get(ProfileKeys::PureTrackInsertAppKey, settings.app_key);
   map.Get(ProfileKeys::PureTrackInsertDeviceID, settings.device_id);
   map.Get(ProfileKeys::PureTrackInsertLabel, settings.label);
   map.Get(ProfileKeys::PureTrackInsertRego, settings.rego);
   map.GetEnum(ProfileKeys::PureTrackInsertVehicleType, settings.vehicle_type);
+  if (settings.vehicle_type >= PureTrack::Settings::VehicleType::COUNT)
+    settings.vehicle_type = PureTrack::Settings::VehicleType::GLIDER;
 }
 }
 

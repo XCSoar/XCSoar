@@ -984,6 +984,31 @@ for details on this setup.
 
 
 %%%%%%%%%%%%%%%%%%
+\section{Services / PureTrack}
+
+`{\em PureTrack}' receives a live position stream at
+\url{https://puretrack.io/api/insert}.
+PureTrack issues the application key. The device ID is how PureTrack
+attaches this stream to a map marker. Keep it short, and keep it
+where the pilot can read it.
+
+\begin{description}
+\item[Enable]  Switch this {\bf On} to enable the live stream of
+  your position to `{\em PureTrack}'.
+\item[Tracking Interval]  The time interval for which one position is sent to
+  the tracking service.
+\item[Vehicle Type]  Type of vehicle used.
+\item[Vehicle Name]  Name shown on PureTrack when no aircraft
+  registration is linked to this device.
+\item[Server]  Insert API address. The default is
+  \url{https://puretrack.io/api/insert}.
+\item[Key]  Application key issued by PureTrack.
+\item[Device ID]  Short identifier for this device. The pilot needs
+  this value to link the stream to a PureTrack map marker.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
 \section{Services / SkyLines}
 
 `{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
