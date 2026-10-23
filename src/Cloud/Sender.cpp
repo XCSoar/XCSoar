@@ -77,10 +77,16 @@ SendUserNameResponse(SkyLinesTracking::Server &server,
   if (name.empty() || name.size() > 255 || !ValidateUTF8(name))
     return;
 
-  std::array<std::byte, sizeof(SkyLinesTracking::UserNameResponsePacket) + 255>
-    buffer{};
+  /* The name follows the packet on the wire.  The packet is 40
+     bytes and 8-byte aligned, so the name starts immediately after
+     it.  A std::byte buffer is only 1-byte aligned, and ARM rejects
+     the cast. */
+  struct {
+    SkyLinesTracking::UserNameResponsePacket packet;
+    std::array<std::byte, 255> name;
+  } storage{};
 
-  auto &packet = *(SkyLinesTracking::UserNameResponsePacket *)buffer.data();
+  auto &packet = storage.packet;
   packet.header.magic = ToBE32(SkyLinesTracking::MAGIC);
   packet.header.crc = 0;
   packet.header.type = ToBE16(SkyLinesTracking::Type::USER_NAME_RESPONSE);
@@ -95,11 +101,11 @@ SendUserNameResponse(SkyLinesTracking::Server &server,
   packet.reserved4 = 0;
   packet.reserved5 = 0;
 
-  std::memcpy(&packet + 1, name.data(), name.size());
+  std::memcpy(storage.name.data(), name.data(), name.size());
 
   const size_t size = sizeof(packet) + name.size();
-  packet.header.crc = ToBE16(UpdateCRC16CCITT(buffer.data(), size, 0));
-  server.SendBuffer(address, {buffer.data(), size});
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&storage, size, 0));
+  server.SendBuffer(address, {(const std::byte *)&storage, size});
 }
 
 void
