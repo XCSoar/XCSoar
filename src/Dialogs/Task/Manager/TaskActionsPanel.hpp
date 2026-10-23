@@ -18,6 +18,9 @@ class TaskActionsPanel : public RowFormWidget {
 #ifdef HAVE_ZXING
     SHOW_QR_CODE,
 #endif
+#ifdef HAVE_HTTP
+    SOARING_SCORING,
+#endif
   };
 
   TaskManagerDialog &dialog;

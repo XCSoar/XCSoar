@@ -126,6 +126,11 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &_parent,
 #ifdef HAVE_ZXING
   AddButton(_("Show QR Code"), [this](){ OnShowQRCodeClicked(); });
 #endif
+#ifdef HAVE_HTTP
+  AddButton(_("SoaringScoring"), [this](){
+    parent.SetCurrent(parent.PAGE_SOARING_SCORING);
+  });
+#endif
 
   if (HaveQRScanner())
     AddButton(_("Scan QR Code"), [this](){ OnScanQRCodeClicked(); });

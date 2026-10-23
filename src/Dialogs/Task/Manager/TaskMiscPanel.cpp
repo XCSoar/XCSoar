@@ -4,6 +4,8 @@
 #include "TaskMiscPanel.hpp"
 #include "TaskActionsPanel.hpp"
 #include "TaskListPanel.hpp"
+#include "SoaringScoringTasksPanel.hpp"
+#include "net/http/Features.hpp"
 
 TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
                              std::unique_ptr<OrderedTask> &_active_task,
@@ -12,6 +14,9 @@ TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
   Add(std::make_unique<TaskActionsPanel>(dialog, *this, _active_task, _task_modified));
 
   Add(CreateTaskListPanel(dialog, _active_task, _task_modified));
+#ifdef HAVE_HTTP
+  Add(CreateSoaringScoringTasksPanel(dialog, _active_task, _task_modified));
+#endif
 }
 
 void

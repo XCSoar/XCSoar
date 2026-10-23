@@ -18,6 +18,11 @@ Version 7.47 - not yet released
     kilometre keep the newer one #3093
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
+* task
+  - sign in to SoaringScoring from Services and load the contest task
+    in the task manager. After landing, upload the IGC from the
+    flight export page. The pilot approves a code on their phone;
+    XCSoar does not store an API key #3347
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
@@ -36,6 +41,7 @@ Version 7.47 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
+  - describe SoaringScoring sign-in, task download, and IGC upload
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
     and checklist ticks
