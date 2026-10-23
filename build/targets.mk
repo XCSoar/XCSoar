@@ -583,6 +583,11 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
+ifeq ($(TARGET_IS_ARM),y)
+  # 64-bit std::atomic needs libatomic on 32-bit ARM.
+  TARGET_LDLIBS += -latomic
+endif
+
 ifeq ($(DO_CROSS_COMPILE),y)
   ifneq ($(SYSROOT),)
     TARGET_LDFLAGS += --sysroot=$(SYSROOT)
