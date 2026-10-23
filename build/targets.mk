@@ -499,6 +499,9 @@ ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
 endif
 
 ifeq ($(DO_CROSS_COMPILE),y)
+  # armhf GCC notes the std::pair return ABI change in every file.
+  TARGET_CXXFLAGS += -Wno-psabi
+
   ifneq ($(SYSROOT),)
     TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
   endif
