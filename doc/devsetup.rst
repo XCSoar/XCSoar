@@ -88,11 +88,11 @@ installs ``PI_HOST`` host tools by default)::
 
 Cross-compile (Pi 1 / ARMv6)::
 
-   make TARGET=PI PI=/opt/pi/root
+   make TARGET=PI SYSROOT=/opt/pi/root
 
 For Raspberry Pi 2/3 (ARMv7 with NEON)::
 
-   make TARGET=PI2 PI=/opt/pi/root
+   make TARGET=PI2 SYSROOT=/opt/pi/root
 
 Binaries are written to ``output/PI/`` and ``output/PI2/`` (not
 ``output/UNIX/``). See :doc:`build` for details.
