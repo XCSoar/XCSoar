@@ -11,7 +11,7 @@
 #   sudo PI_ROOT=$HOME/pi-sysroot ./ide/provisioning/setup-pi-sysroot.sh
 #
 # Then on the host:
-#   make TARGET=PI2 PI=/opt/pi/root USE_CCACHE=y DEBUG=y
+#   make TARGET=PI2 SYSROOT=/opt/pi/root USE_CCACHE=y DEBUG=y
 #
 # Host packages: ide/provisioning/install-debian-packages.sh PI_HOST
 #
@@ -229,7 +229,7 @@ Pi sysroot ready: ${PI_ROOT}
 
 Cross-compile XCSoar for Raspberry Pi 2/3:
 
-  make -j\$(nproc) TARGET=PI2 PI=${PI_ROOT} USE_CCACHE=y DEBUG=y
+  make -j\$(nproc) TARGET=PI2 SYSROOT=${PI_ROOT} USE_CCACHE=y DEBUG=y
 
 For Pi 1 (ARMv6) use TARGET=PI instead of PI2.
 EOF

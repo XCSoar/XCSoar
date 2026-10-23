@@ -1017,7 +1017,7 @@ build::
       -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 
   sudo ./ide/provisioning/setup-pi-sysroot.sh
-  make -j$(nproc) TARGET=PI2 PI=/opt/pi/root USE_CCACHE=y
+  make -j$(nproc) TARGET=PI2 SYSROOT=/opt/pi/root USE_CCACHE=y
 
 **Android and iOS:** The image ships with the Android SDK and NDK. On
 **Linux x86_64**, ``xcsoar-compile ANDROID`` is the usual Docker workflow
