@@ -493,8 +493,10 @@ ifeq ($(HOST_IS_ARM)$(TARGET_IS_CUBIE),ny)
   
 endif
 
-ifneq ($(SYSROOT),)
-  TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
+ifeq ($(DO_CROSS_COMPILE),y)
+  ifneq ($(SYSROOT),)
+    TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
+  endif
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
