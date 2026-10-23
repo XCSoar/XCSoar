@@ -1536,6 +1536,7 @@ ifeq ($(DO_CROSS_COMPILE),y)
 endif
 ifneq ($(QEMU_LD_PREFIX),)
 check check-no-build: export QEMU_LD_PREFIX := $(QEMU_LD_PREFIX)
+testfast testslow: export QEMU_LD_PREFIX := $(QEMU_LD_PREFIX)
 endif
 
 check: $(TESTS) | $(OUT)/test/dirstamp
