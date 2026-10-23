@@ -286,6 +286,14 @@ DeviceFlow::OnRefresh(unsigned http_status, std::string_view json,
 }
 
 std::string
+FormField(std::string_view name, std::string_view value)
+{
+  std::string body;
+  AppendField(body, name, value);
+  return body;
+}
+
+std::string
 DeviceAuthorizeForm(std::string_view client_id, std::string_view scope)
 {
   std::string body;

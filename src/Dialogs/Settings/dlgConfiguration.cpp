@@ -82,6 +82,9 @@
 #endif
 
 #include "Panels/WeGlideConfigPanel.hpp"
+#ifdef HAVE_HTTP
+#include "Panels/SoaringScoringConfigPanel.hpp"
+#endif
 #include "Panels/NetworkConfigPanel.hpp"
 
 #if defined(__linux__) && !defined(__ANDROID__) && !defined(KOBO)
@@ -167,6 +170,9 @@ static constexpr TabMenuPage online_pages[] = {
   { "SkyLines", CreateSkyLinesConfigPanel },
 #endif
   { "WeGlide", CreateWeGlideConfigPanel },
+#ifdef HAVE_HTTP
+  { "SoaringScoring", CreateSoaringScoringConfigPanel },
+#endif
 #ifdef HAVE_TRACKING
   { "XCSoar Cloud", CreateCloudConfigPanel },
 #endif

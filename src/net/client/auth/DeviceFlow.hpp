@@ -95,6 +95,10 @@ struct DeviceFlow {
   void Clear() noexcept;
 };
 
+/** One form field, `name=value`, with the value percent-encoded. */
+[[nodiscard]] std::string
+FormField(std::string_view name, std::string_view value);
+
 /** `client_id` and `scope`, form-urlencoded. */
 [[nodiscard]] std::string
 DeviceAuthorizeForm(std::string_view client_id,
