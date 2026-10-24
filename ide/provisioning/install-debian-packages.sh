@@ -123,7 +123,8 @@ install_arm() {
 install_pi_host() {
   echo Installing host tools for Raspberry Pi cross-compilation and sysroot...
   apt-get install "${APTOPTS[@]}" debootstrap qemu-user-static binfmt-support \
-    g++-arm-linux-gnueabihf libmpc-dev ca-certificates pkg-config
+    g++-arm-linux-gnueabihf g++-aarch64-linux-gnu \
+    libmpc-dev ca-certificates pkg-config
   echo
 }
 
