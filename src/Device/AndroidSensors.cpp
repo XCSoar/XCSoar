@@ -43,8 +43,13 @@ DeviceDescriptor::OnAccelerationSensor(double acceleration) noexcept
     is_first_time = false;
   }
 
-  accumulator += acceleration;
+  // Smartphone's acceleration sensor encodes attitude in the sign of G load value
+  if (config.instrument_alignment == DeviceConfig::InstrumentAlignment::NOT_ALIGNED)
+    accumulator += std::abs(acceleration);
+  else
+    accumulator += acceleration;
   accu_cnt += 1;
+
   // about 124 readings per sec, to 1 value per sec
   if (current_time >= next_sample_time && accu_cnt > 0) {
     // we might have skipped several samples?
