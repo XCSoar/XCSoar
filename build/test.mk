@@ -1526,6 +1526,19 @@ $(eval $(call link-program,FlightTable,FLIGHT_TABLE))
 
 build-check: $(TESTS)
 
+# qemu-user opens the ELF interpreter on the host.  The armhf loader
+# lives in the sysroot, so point QEMU_LD_PREFIX at it for these runs.
+# An already-set prefix is left alone.  Needs qemu-user binfmt.
+ifeq ($(DO_CROSS_COMPILE),y)
+  ifneq ($(SYSROOT),)
+    QEMU_LD_PREFIX ?= $(SYSROOT)
+  endif
+endif
+ifneq ($(QEMU_LD_PREFIX),)
+check check-no-build: export QEMU_LD_PREFIX := $(QEMU_LD_PREFIX)
+testfast testslow: export QEMU_LD_PREFIX := $(QEMU_LD_PREFIX)
+endif
+
 check: $(TESTS) | $(OUT)/test/dirstamp
 	@$(NQ)echo "  TEST    $(notdir $(patsubst %$(TARGET_EXEEXT),%,$^))"
 	$(Q)$(PERL) $(TEST_SRC_DIR)/testall.pl $(TESTS)
@@ -3260,6 +3273,7 @@ $(eval $(call link-program,RunProfileListDialog,RUN_PROFILE_LIST_DIALOG))
 
 PLAY_TONE_SOURCES = \
 	$(MORE_SCREEN_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/PlayTone.cpp
 PLAY_TONE_DEPENDS = AUDIO MATH SCREEN EVENT ASYNC THREAD OS IO UTIL
 $(eval $(call link-program,PlayTone,PLAY_TONE))
@@ -3269,6 +3283,7 @@ PLAY_VARIO_SOURCES = \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(SRC)/Radio/TransponderCode.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/PlayVario.cpp
 PLAY_VARIO_LDADD = $(AUDIO_LDADD) $(SCREEN_LDADD) $(EVENT_LDADD)
 PLAY_VARIO_DEPENDS = $(DEBUG_REPLAY_DEPENDS) AUDIO GEO MATH SCREEN EVENT ASYNC THREAD OS TIME UTIL

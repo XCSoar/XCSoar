@@ -440,15 +440,36 @@ The same steps work on a native Debian/Ubuntu host or inside the
 
 Cross-compile (Pi 1 / ARMv6; binaries in ``output/PI/bin/``)::
 
-  make TARGET=PI PI=/opt/pi/root
+  make TARGET=PI SYSROOT=/opt/pi/root
 
 For Raspberry Pi 2/3 (ARMv7 with NEON; ``output/PI2/bin/``)::
 
-  make TARGET=PI2 PI=/opt/pi/root
+  make TARGET=PI2 SYSROOT=/opt/pi/root
 
-Although ``TARGET=PI`` and ``TARGET=PI2`` compile as ``UNIX`` internally,
-binaries are written to ``output/PI/`` and ``output/PI2/`` respectively
-(the flavour name is preserved for the output directory).
+``TARGET=PI3`` is an alias of ``PI2`` and writes to ``output/PI3/``.
+
+Cross-compiling for Raspberry Pi 4 and 5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pi 4 and Pi 5 are aarch64. ``TARGET=PI4`` cross-compiles for both
+(``-march=armv8-a``). ``TARGET=PI5`` is an alias and writes to
+``output/PI5/``. This needs an arm64 sysroot, separate from the armhf
+tree used for Pi 1–3::
+
+  cd ide/provisioning
+  sudo ./setup-pi-sysroot.sh --arch arm64
+
+Cross-compile (binaries in ``output/PI4/bin/``)::
+
+  make TARGET=PI4 SYSROOT=/opt/pi64/root
+
+The default sysroot path is ``/opt/pi64/root``. Building on the Pi itself
+is still ``TARGET=UNIX`` with no sysroot; see above.
+
+Although ``TARGET=PI``, ``TARGET=PI2`` and ``TARGET=PI4`` compile as
+``UNIX`` internally, binaries are written to ``output/PI/``,
+``output/PI2/`` and ``output/PI4/`` respectively (the flavour name is
+preserved for the output directory).
 
 Compiling for the Cubieboard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -462,15 +483,24 @@ toolchain; install the ``ARM`` provisioning section::
 
 Cross-compile (binaries in ``output/CUBIE/bin/``)::
 
-  make TARGET=CUBIE CUBIE=/opt/cubie/root
+  make TARGET=CUBIE SYSROOT=/opt/cubie/root
 
 The default sysroot path is ``/opt/cubie/root``. Unlike the Raspberry Pi
 path, XCSoar does not ship an automated sysroot script for Cubie; the
-sysroot must provide ARMhf development libraries and the Mali/EGL headers
-under ``usr/local/stow/sunxi-mali/`` (see ``build/targets.mk``).
+sysroot must provide ARMhf development libraries.
+
+On the sysroot, as well for native compilation on the Cubieboard,
+install the same embedded-Linux graphics packages as a desktop
+``UNIX`` build, plus ``LIBINPUT_GBM`` (DRM/GBM/GLES)::
 
 If you compile on the Cubieboard itself, the default ``UNIX`` target
 auto-detects the board.
+
+To create a working Cubieboard sysroot file system use the
+`meta-openvario <https://github.com/Openvario/meta-openvario>`__
+toolchain used by the `OpenVario <https://openvario.org>`__ project.
+Alternatively a working Ubuntu SD card image and root file system can be created
+from the `horOV <https://github.com/hor63/horOpenVario>`__ project.
 
 OpenVario flight computer images
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -669,6 +699,11 @@ Defaults shown are from the build system (they can be overridden with
    - no
    - OpenGL (EGL/KMS)
    - ARMv7 + NEON cross-compile target (Pi 2 and 3).
+ * - ``PI3``
+   - Raspberry Pi 3
+   - no
+   - OpenGL (EGL/KMS)
+   - Alias of ``PI2``. Binaries go to ``output/PI3/``.
  * - ``CUBIE``
    - Cubieboard
    - no
@@ -1008,7 +1043,13 @@ build::
       -it ghcr.io/xcsoar/xcsoar/xcsoar-build:latest /bin/bash
 
   sudo ./ide/provisioning/setup-pi-sysroot.sh
-  make -j$(nproc) TARGET=PI2 PI=/opt/pi/root USE_CCACHE=y
+  make -j$(nproc) TARGET=PI2 SYSROOT=/opt/pi/root USE_CCACHE=y
+
+For Pi 4/5, create the arm64 sysroot and cross-compile with
+``TARGET=PI4`` (``TARGET=PI5`` is an alias, output in ``output/PI5/``)::
+
+  sudo ./ide/provisioning/setup-pi-sysroot.sh --arch arm64
+  make -j$(nproc) TARGET=PI4 SYSROOT=/opt/pi64/root USE_CCACHE=y
 
 **Android and iOS:** The image ships with the Android SDK and NDK. On
 **Linux x86_64**, ``xcsoar-compile ANDROID`` is the usual Docker workflow

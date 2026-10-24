@@ -2,16 +2,19 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Copyright The XCSoar Project
 #
-# Create an armhf Debian sysroot for cross-compiling XCSoar (TARGET=PI / PI2).
-# Legacy use only: Pi 1–3 cross-build from a desktop host. Pi 4/5 should
-# compile natively (see doc/build.rst).
+# Create a Debian sysroot for cross-compiling XCSoar.
+# armhf (default): TARGET=PI / PI2 / PI3, root /opt/pi/root.
+# arm64: TARGET=PI4 / PI5, root /opt/pi64/root.
+# Pi 4/5 can also be built natively on the board (see doc/build.rst).
 #
 # Usage (requires root, e.g. sudo):
 #   sudo ./ide/provisioning/setup-pi-sysroot.sh
+#   sudo ./ide/provisioning/setup-pi-sysroot.sh --arch arm64
 #   sudo PI_ROOT=$HOME/pi-sysroot ./ide/provisioning/setup-pi-sysroot.sh
 #
 # Then on the host:
-#   make TARGET=PI2 PI=/opt/pi/root USE_CCACHE=y DEBUG=y
+#   make TARGET=PI2 SYSROOT=/opt/pi/root USE_CCACHE=y DEBUG=y
+#   make TARGET=PI4 SYSROOT=/opt/pi64/root USE_CCACHE=y DEBUG=y
 #
 # Host packages: ide/provisioning/install-debian-packages.sh PI_HOST
 #
@@ -50,7 +53,8 @@ PI_SYSROOT_PACKAGES=(
   mesa-common-dev
 )
 
-PI_ROOT="${PI_ROOT:-/opt/pi/root}"
+PI_ARCH="${PI_ARCH:-armhf}"
+PI_ROOT="${PI_ROOT:-}"
 DEBIAN_SUITE="${DEBIAN_SUITE:-trixie}"
 DEBIAN_MIRROR="${DEBIAN_MIRROR:-http://deb.debian.org/debian}"
 INSTALL_HOST_DEPS="${INSTALL_HOST_DEPS:-1}"
@@ -58,17 +62,19 @@ FORCE=0
 PACKAGES_ONLY=0
 
 usage() {
-  sed -n '2,14p' "$0" | sed 's/^# \{0,1\}//'
+  sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'
   cat <<EOF
 
 Options:
+  --arch armhf|arm64   Debian architecture (default: armhf, or PI_ARCH)
   --force              Remove an existing sysroot and recreate it
   --packages-only      Install dev packages into an existing sysroot (no debootstrap)
   --no-host-deps       Do not apt-get install tools on the host
   -h, --help           Show this help
 
 Environment:
-  PI_ROOT              Sysroot path (default: /opt/pi/root)
+  PI_ARCH              armhf (default) or arm64
+  PI_ROOT              Sysroot path (armhf: /opt/pi/root, arm64: /opt/pi64/root)
   DEBIAN_SUITE         Debian release (default: trixie)
   DEBIAN_MIRROR        Debian mirror URL
   INSTALL_HOST_DEPS    1 = install host packages (default), 0 = skip
@@ -77,6 +83,14 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+  --arch)
+    if [[ $# -lt 2 ]]; then
+      echo "--arch needs armhf or arm64" >&2
+      exit 1
+    fi
+    PI_ARCH="$2"
+    shift 2
+    ;;
   --force)
     FORCE=1
     shift
@@ -101,6 +115,27 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+case "${PI_ARCH}" in
+armhf)
+  DEBIAN_ARCH=armhf
+  QEMU_STATIC=qemu-arm-static
+  MULTIARCH=arm-linux-gnueabihf
+  PI_ROOT="${PI_ROOT:-/opt/pi/root}"
+  XCSOAR_TARGET=PI2
+  ;;
+arm64)
+  DEBIAN_ARCH=arm64
+  QEMU_STATIC=qemu-aarch64-static
+  MULTIARCH=aarch64-linux-gnu
+  PI_ROOT="${PI_ROOT:-/opt/pi64/root}"
+  XCSOAR_TARGET=PI4
+  ;;
+*)
+  echo "Unknown architecture: ${PI_ARCH} (use armhf or arm64)" >&2
+  exit 1
+  ;;
+esac
+
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Run as root (e.g. sudo $0)" >&2
   exit 1
@@ -124,7 +159,7 @@ is_unsafe_removal_path() {
 is_xcsoar_pi_sysroot() {
   [[ -f "${PI_ROOT}/.xcsoar-pi-sysroot" ]] || \
     [[ -f "${PI_ROOT}/debootstrap/debootstrap" ]] || \
-    { [[ -d "${PI_ROOT}/usr/lib/arm-linux-gnueabihf" ]] && \
+    { [[ -d "${PI_ROOT}/usr/lib/${MULTIARCH}" ]] && \
       [[ -f "${PI_ROOT}/etc/debian_version" ]]; }
 }
 
@@ -136,7 +171,7 @@ if [[ -d "${PI_ROOT}/usr" ]]; then
     fi
     if ! is_xcsoar_pi_sysroot; then
       echo "Refusing --force: ${PI_ROOT} does not look like a Pi sysroot." >&2
-      echo "Use a dedicated directory (default: /opt/pi/root)." >&2
+      echo "Use a dedicated directory (armhf: /opt/pi/root, arm64: /opt/pi64/root)." >&2
       exit 1
     fi
     echo "Removing existing sysroot at ${PI_ROOT}"
@@ -161,7 +196,7 @@ install_sysroot_packages() {
 }
 
 verify_sysroot() {
-  PKG_CONFIG_LIBDIR="${PI_ROOT}/usr/lib/arm-linux-gnueabihf/pkgconfig:${PI_ROOT}/usr/share/pkgconfig"
+  PKG_CONFIG_LIBDIR="${PI_ROOT}/usr/lib/${MULTIARCH}/pkgconfig:${PI_ROOT}/usr/share/pkgconfig"
   echo "Verifying pkg-config entries in sysroot..."
   missing=0
   for pc in egl gbm libdrm libinput libudev bzip2 freetype2; do
@@ -183,8 +218,8 @@ if [[ "${INSTALL_HOST_DEPS}" == 1 ]]; then
   "${SCRIPT_DIR}/install-debian-packages.sh" UPDATE PI_HOST
 fi
 
-if ! command -v qemu-arm-static >/dev/null; then
-  echo "qemu-arm-static not found (needed for chroot apt)." >&2
+if ! command -v "${QEMU_STATIC}" >/dev/null; then
+  echo "${QEMU_STATIC} not found (needed for chroot apt)." >&2
   exit 1
 fi
 
@@ -204,11 +239,11 @@ fi
 
 mkdir -p "${PI_ROOT}"
 
-echo "Bootstrapping ${DEBIAN_SUITE} armhf into ${PI_ROOT}..."
-debootstrap --arch=armhf --foreign "${DEBIAN_SUITE}" "${PI_ROOT}" "${DEBIAN_MIRROR}"
+echo "Bootstrapping ${DEBIAN_SUITE} ${DEBIAN_ARCH} into ${PI_ROOT}..."
+debootstrap --arch="${DEBIAN_ARCH}" --foreign "${DEBIAN_SUITE}" "${PI_ROOT}" "${DEBIAN_MIRROR}"
 
-QEMU_BIN="$(command -v qemu-arm-static)"
-install -D -m 0755 "${QEMU_BIN}" "${PI_ROOT}/usr/bin/qemu-arm-static"
+QEMU_BIN="$(command -v "${QEMU_STATIC}")"
+install -D -m 0755 "${QEMU_BIN}" "${PI_ROOT}/usr/bin/${QEMU_STATIC}"
 
 echo "Running debootstrap second stage..."
 DEBIAN_FRONTEND=noninteractive \
@@ -227,9 +262,13 @@ cat <<EOF
 
 Pi sysroot ready: ${PI_ROOT}
 
-Cross-compile XCSoar for Raspberry Pi 2/3:
+Cross-compile XCSoar:
 
-  make -j\$(nproc) TARGET=PI2 PI=${PI_ROOT} USE_CCACHE=y DEBUG=y
-
-For Pi 1 (ARMv6) use TARGET=PI instead of PI2.
+  make -j\$(nproc) TARGET=${XCSOAR_TARGET} SYSROOT=${PI_ROOT} USE_CCACHE=y DEBUG=y
 EOF
+
+if [[ "${PI_ARCH}" == armhf ]]; then
+  echo "For Pi 1 (ARMv6) use TARGET=PI.  TARGET=PI3 is an alias of PI2."
+else
+  echo "TARGET=PI5 is an alias of PI4 and writes to output/PI5/."
+fi
