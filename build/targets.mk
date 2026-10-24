@@ -3,7 +3,7 @@ TARGETS = PC WIN64 \
 	UNIX UNIX32 UNIX64 OPT \
 	WAYLAND \
 	FUZZER \
-	PI PI2 PI3 CUBIE KOBO NEON \
+	PI PI2 PI3 PI4 PI5 CUBIE KOBO NEON \
 	ANDROID ANDROID7 ANDROID86 \
 	ANDROIDAARCH64 ANDROIDX64 \
 	ANDROIDFAT \
@@ -216,6 +216,23 @@ ifeq ($(TARGET),PI2)
   TARGET_IS_PI32 = y
 endif
 
+ifeq ($(TARGET),PI5)
+  # Same ARMv8-A build as PI4.  The output directory stays output/PI5.
+  override TARGET = PI4
+endif
+
+ifeq ($(TARGET),PI4)
+  override TARGET = UNIX
+  HOST_TRIPLET := aarch64-linux-gnu
+  TCPREFIX := $(HOST_TRIPLET)-
+  TARGET_IS_LINUX = y
+  TARGET_IS_PI = y
+  TARGET_IS_PI64 = y
+  TARGET_IS_ARM = y
+  # Pi 4 is Cortex-A72, Pi 5 is Cortex-A76.  armv8-a runs on both.
+  TARGET_ARCH += -march=armv8-a
+endif
+
 ifeq ($(TARGET),CUBIE)
   # cross-crompiling for Cubieboard
   override TARGET = NEON
@@ -334,7 +351,9 @@ ifeq ($(TARGET),UNIX)
   endif
 
   ifeq ($(TARGET_IS_ARM)$(TARGET_IS_LINUX),yy)
-    ifeq ($(TARGET_IS_ARMHF),y)
+    ifeq ($(TARGET_IS_PI64),y)
+      LLVM_TARGET ?= aarch64-linux-gnu
+    else ifeq ($(TARGET_IS_ARMHF),y)
       LLVM_TARGET ?= arm-linux-gnueabihf
     else
       LLVM_TARGET ?= arm-linux-gnueabi
@@ -478,6 +497,8 @@ ifeq ($(TARGET_IS_PI),y)
     ifneq ($(PI),)
       $(warning Use of variable PI is deprecated. Please use SYSROOT instead.)
       SYSROOT := $(PI)
+    else ifeq ($(TARGET_IS_PI64),y)
+      SYSROOT ?= /opt/pi64/root
     else
       SYSROOT ?= /opt/pi/root
     endif
