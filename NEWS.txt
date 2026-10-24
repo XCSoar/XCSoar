@@ -68,6 +68,9 @@ Version 7.47 - not yet released
   - enable CMake cross-compilation for library ZXing for CUBIE and PI
     targets. #3386
   - accept TARGET=PI3 as an alias of TARGET=PI2
+  - cross-compile for Raspberry Pi 4 and 5 with TARGET=PI4
+    (TARGET=PI5 is an alias). The arm64 sysroot defaults to
+    /opt/pi64/root
 
 Version 7.46 - 2026-10-19
 * highlights

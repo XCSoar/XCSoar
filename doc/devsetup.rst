@@ -96,12 +96,22 @@ For Raspberry Pi 2/3 (ARMv7 with NEON)::
 
 ``TARGET=PI3`` is an alias of ``PI2`` and writes to ``output/PI3/``.
 
-Binaries are written to ``output/PI/`` and ``output/PI2/`` (not
-``output/UNIX/``). See :doc:`build` for details.
+Binaries for the 32-bit targets are written to ``output/PI/`` and
+``output/PI2/`` (not ``output/UNIX/``). See :doc:`build` for details.
+
+Cross-compiling for Raspberry Pi 4 and 5
+-----------------------------------------
+
+Pi 4 and 5 are aarch64. From a desktop host, create a separate sysroot
+and cross-compile (``TARGET=PI5`` is an alias and writes to
+``output/PI5/``)::
+
+   sudo ./setup-pi-sysroot.sh --arch arm64
+   make TARGET=PI4 SYSROOT=/opt/pi64/root
 
 The same sysroot steps work inside a privileged Docker container; see
-:doc:`build` (“Using Docker” and “Cross-compiling for legacy Raspberry Pi
-1–3”).
+:doc:`build` (“Using Docker”, “Cross-compiling for legacy Raspberry Pi
+1–3”, and “Cross-compiling for Raspberry Pi 4 and 5”).
 
 Optional: modern LaTeX editor for editing the Manual
 ====================================================
