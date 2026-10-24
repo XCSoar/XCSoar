@@ -448,9 +448,28 @@ For Raspberry Pi 2/3 (ARMv7 with NEON; ``output/PI2/bin/``)::
 
 ``TARGET=PI3`` is an alias of ``PI2`` and writes to ``output/PI3/``.
 
-Although ``TARGET=PI`` and ``TARGET=PI2`` compile as ``UNIX`` internally,
-binaries are written to ``output/PI/`` and ``output/PI2/`` respectively
-(the flavour name is preserved for the output directory).
+Cross-compiling for Raspberry Pi 4 and 5
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pi 4 and Pi 5 are aarch64. ``TARGET=PI4`` cross-compiles for both
+(``-march=armv8-a``). ``TARGET=PI5`` is an alias and writes to
+``output/PI5/``. This needs an arm64 sysroot, separate from the armhf
+tree used for Pi 1–3::
+
+  cd ide/provisioning
+  sudo ./setup-pi-sysroot.sh --arch arm64
+
+Cross-compile (binaries in ``output/PI4/bin/``)::
+
+  make TARGET=PI4 SYSROOT=/opt/pi64/root
+
+The default sysroot path is ``/opt/pi64/root``. Building on the Pi itself
+is still ``TARGET=UNIX`` with no sysroot; see above.
+
+Although ``TARGET=PI``, ``TARGET=PI2`` and ``TARGET=PI4`` compile as
+``UNIX`` internally, binaries are written to ``output/PI/``,
+``output/PI2/`` and ``output/PI4/`` respectively (the flavour name is
+preserved for the output directory).
 
 Compiling for the Cubieboard
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1025,6 +1044,12 @@ build::
 
   sudo ./ide/provisioning/setup-pi-sysroot.sh
   make -j$(nproc) TARGET=PI2 SYSROOT=/opt/pi/root USE_CCACHE=y
+
+For Pi 4/5, create the arm64 sysroot and cross-compile with
+``TARGET=PI4`` (``TARGET=PI5`` is an alias, output in ``output/PI5/``)::
+
+  sudo ./ide/provisioning/setup-pi-sysroot.sh --arch arm64
+  make -j$(nproc) TARGET=PI4 SYSROOT=/opt/pi64/root USE_CCACHE=y
 
 **Android and iOS:** The image ships with the Android SDK and NDK. On
 **Linux x86_64**, ``xcsoar-compile ANDROID`` is the usual Docker workflow
