@@ -443,8 +443,18 @@ private:
                     const MapWindowProjection &projection) const noexcept;
   void DrawFlightMode(Canvas &canvas,
                       const MapHudLayout &layout) const noexcept;
-  void DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
-                     const NMEAInfo &info) const noexcept;
+  /**
+   * @return the top of the status row, or the bottom of the free
+   * area if there is nothing to report
+   */
+  int DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
+                    const NMEAInfo &info) const noexcept;
+
+  /**
+   * Say so above the GPS status while there is no glide polar.
+   */
+  void DrawPolarStatus(Canvas &canvas, const MapHudLayout &layout,
+                       int bottom) const noexcept;
   void DrawCrossHairs(Canvas &canvas) const noexcept;
   void DrawPanInfo(Canvas &canvas,
                    const MapHudLayout &layout) const noexcept;
