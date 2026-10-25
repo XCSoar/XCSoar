@@ -12875,3 +12875,9 @@ msgstr "Câmara não utilizável"
 
 msgid "The polar of this plane is invalid. Check it in the plane setup."
 msgstr ""
+
+msgid "No polar"
+msgstr ""
+
+msgid "No polar is set up, so final glide and speed to fly are off. Set up a plane."
+msgstr ""

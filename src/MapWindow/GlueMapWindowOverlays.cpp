@@ -388,10 +388,13 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas,
   }
 }
 
-void
+int
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
                              const NMEAInfo &info) const noexcept
 {
+  const PixelRect &area = layout.bottom;
+  const int clear_bottom = area.bottom - int(layout.scale_title_clearance);
+
   const char *txt;
   const MaskedIcon *icon;
 
@@ -406,13 +409,10 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
     txt = "GPS status";
   } else
     // early exit
-    return;
+    return clear_bottom;
 
   const Font &font = *look.overlay.overlay_font;
   canvas.Select(font);
-
-  const PixelRect &area = layout.bottom;
-  const int clear_bottom = area.bottom - int(layout.scale_title_clearance);
 
   const int row_height = std::max((int)icon->GetSize().height,
                                   (int)font.GetHeight());
@@ -427,6 +427,33 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
   mode.shape = LabelShape::ROUNDED_BLACK;
 
   TextInBox(canvas, txt, p, mode, area, nullptr);
+
+  return clear_bottom - row_height;
+}
+
+void
+GlueMapWindow::DrawPolarStatus(Canvas &canvas, const MapHudLayout &layout,
+                               int bottom) const noexcept
+{
+  /* final glide, speed to fly and reach are all off without one */
+  if (GetComputerSettings().polar.glide_polar_task.IsValid() &&
+      !DEBUG_ALL_MAP_OVERLAYS)
+    return;
+
+  const Font &font = *look.overlay.overlay_font;
+  canvas.Select(font);
+
+  /* in line with the text of the GPS status, right of its icon */
+  const PixelRect &area = layout.bottom;
+  const PixelPoint p(area.left + int(look.no_gps_icon.GetSize().width) +
+                     Layout::FastScale(4),
+                     bottom - int(Layout::GetTextPadding()) -
+                     int(font.GetHeight()));
+
+  TextInBoxMode mode;
+  mode.shape = LabelShape::ROUNDED_BLACK;
+
+  TextInBox(canvas, _("No polar"), p, mode, area, nullptr);
 }
 
 void

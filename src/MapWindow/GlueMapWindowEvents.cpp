@@ -860,6 +860,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
     DrawFlightMode(canvas, layout);
     DrawFinalGlide(canvas, layout);
     DrawVario(canvas, layout);
-    DrawGPSStatus(canvas, layout, Basic());
+    const int status_top = DrawGPSStatus(canvas, layout, Basic());
+    DrawPolarStatus(canvas, layout, status_top);
   }
 }
