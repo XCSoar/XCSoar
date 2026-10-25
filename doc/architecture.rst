@@ -521,108 +521,188 @@ radian angles to degrees and more. You can now do fancy stuff like::
 User interface guidelines
 -------------------------
 
-General
-~~~~~~~
+Rules for map, dialog, InfoBox, and overlay UI.  XCSoar is flown in a
+cockpit, not used like a desktop app.  Prefer the project’s own words:
+screen page, map / main area, InfoBoxes, button menu, Quick Menu
+(``RemoteStick``), pan mode, display mode (cruise / circling / final
+glide), HUD, status message, dialog, weather overlay
+(``mode=weather``).  Escape’s home is ``mode=default`` (the map).
 
--  Minimise the number of colours, and re-use colour groups already
-   defined.
+Useful background (do not invent a second style guide from these):
 
--  Too much use of colour where it is not required serves only to reduce
-   the effectiveness of bright colours for important items.
+- ICAO Annex 4 (aeronautical charts)
+- `NASA Colour Usage <http://colorusage.arc.nasa.gov/>`__
+- `DOT/FAA/AR-03/67` (EFB human factors)
+- `FAA Human Factors Design Standards <http://hf.tc.faa.gov/hfds/>`__
+- DOT/FAA/AM-01/17 Multifunction Displays
+- Ship display practice (IMO MSC.191 / IHO S-52): ops vs dialogue;
+  day vs night contrast
+- Compact soaring / EFIS HMIs (e.g. XCVario Pur) as inspiration only
 
--  High colour saturation elements should be reserved for high
-   importance items
+Check colour blindness (e.g. http://www.etre.com/tools/colourcheck/).
+Avoid UI that forces continuous staring, and controls that are
+dangerous if set wrong in flight.
 
--  High contrast against background should be reserved for high
-   importance items
+Cockpit principles
+~~~~~~~~~~~~~~~~~~
 
--  Attempt to adopt colours that are intuitive based the function of the
-   item
+A normal flight, once configured, should need no tapping: map,
+InfoBoxes, warnings, and audio do the work.  Visual and audio are
+one HMI — vario tone and traffic / airspace audio are not optional
+extras.  Interaction is for exceptions (task, MacCready, pan,
+weather), not for keeping the system alive.  Do not invent in-flight
+chores or timed dismissals.  Traffic and airspace warnings must stay
+visible (and audible) while Setup or another dialog is open.
 
--  Minimise the clutter where possible — readibility is essential for
-   use in flight
+In-flight functions stay within three steps of the map
+(``mode=default``); frequent ones fewer.  Prefer overlays, InfoBoxes,
+gestures, buttons, ``ActionInterface``, and InputEvents over deep
+Setup-only paths.  Ground / config UI may go deeper.  After a common
+in-flight edit (e.g. MacCready), return to the map — do not force a
+walk back through menus.  Settings rows need short help when the
+label is ambiguous.  Consider an airborne timeout that returns to
+the map.
 
--  Use colours defined in ``Graphics`` according to functional name, not
-   their actual colour.
+Every action answers: pressed look within ~100 ms (and haptic if
+enabled — Touch interaction); outcome on the control, map, InfoBox,
+and/or ``StatusMessage`` / ``PopupMessage`` /
+``OperationEnvironment``; a busy cue if work can take longer than
+about half a second.  No silent toggles or fire-and-forget network
+actions in flight.  Hold progress must be honest (Touch
+interaction).
 
--  Try to maintain consistent use of colours in all uses of that
-   function, such as dialogue graphics as well as map overlays and
-   infoboxes.
+What the pilot sees must match software state.  No silent mode
+changes, downloads, or setting flips.  Gestures and long-press need
+a label, hold progress, or status — not secret chords.  Auto modes
+(Auto MacCready, auto weather time, …) show that they are on.
 
--  Text should always be monochrome.
+Touch-reachable functions must also work with Up, Down, Left, Right,
+Enter, Escape, F1, F2 (:doc:`input_events`).  Dialogs: clear focus,
+arrows move it, Enter activates, Escape cancels / closes toward the
+map on in-flight stacks.  No touch-only in-flight actions.
 
-Use aviation conventions or adopt best aviation human factors standards
-where possible, in particular:
+Escape is home to the map (``mode=default``), not merely “previous
+widget” — same idea as BACK to the primary flight view on a PFD.
+Nested menus and dialogs: Esc peels one level; at the top of an
+in-flight stack it dismisses to the map, not an empty menu shell.
+Ground Setup may use Esc as previous page / Close; in-flight paths
+must exit to ``default``.
 
--  ICAO Internation Standards and Recommended Practices, Annex 4 to the
-   Convention on International Civil Aviation (Aeronautical Charts).
+In-flight chrome and InfoBoxes should be readable in about a second:
+large type via ``Layout::``, high contrast, little decoration.
+Viewing distance is Config → Layout → Viewing distance /
+``Layout::ViewingDistance`` (:file:`src/Screen/Layout.hpp`): Auto
+(short edge under 3.2 inches → closer type), Handheld (always
+closer), Panel (arm’s-length type).  Scale with ``Layout::Scale``,
+``FontScale``, ``VptScale``, and the pen helpers — no hard-coded
+pixels that only work in one mode.  **Panel: small UI does not
+work.**  At arm’s length, fine type, thin pens, tiny hit targets,
+and dense chrome fail.  Design and review for Panel; do not ship
+controls that only work when held close.
 
-- `NASA Colour Usage recommendations and design guidelines <http://colorusage.arc.nasa.gov/>`__
+Day: high luminance contrast for washed-out sunlight; avoid pastel
+on pastel.  Night / inverse: light foreground on a dark, non-glary
+background — not a dimmed day palette.  Do not rely on hue alone;
+pair critical cues with position, shape, or text.  Respect inverse
+InfoBoxes, dark dialogs, and e-paper (``IsDithered()``,
+``HasColors()``).
 
-- `DOT/FAA/AR-03/67 Human Factors Considerations in the Design and Evaluation of Electronic Flight Bags (EFBs) <http://www.volpe.dot.gov/hf/aviation/efb/docs/efb_version2.pdf>`__
+Same control, same meaning; stable layout where possible.  Easy
+cancel (Escape / Close); confirm destructive actions; lift-off
+cancel on touch (Touch interaction).  One job per screen or dialog —
+the pilot should not manage the UI in a thermal.
 
--  `FAA Human Factors Design Standards <http://hf.tc.faa.gov/hfds/>`__
+UI input (touch, keys, dialogs) stays responsive on the UI thread.
+Map paint and heavy overlays must not starve input: acknowledge a
+press within ~100 ms even when the map is busy.  Do not run
+unbounded render or download work from a tap.  Under load, drop or
+simplify map work before dropping input.
 
--  DOT/FAA/AM-01/17 Human Factors Design Guidelines for Multifunction
-   Displays
+Keep the operational display (map, HUD, InfoBoxes, map alerts)
+separate from dialogue (button menu, Quick Menu, Setup, modals) —
+same split as shipborne nav screens (MSC.191).  Do not put
+Setup-style scrolling chrome into the map hole.  When a dialog
+closes, return to an uncluttered map (Screen rectangles).
 
-Check for performance with respect to colour blindness.  This site has
-a useful tool that can be used to convert screenshots to how they
-would look to a person with common color blindness:
-http://www.etre.com/tools/colourcheck/
+Reuse Look, button, dialog, and list patterns.  Copy an existing
+in-flight or Setup flow end-to-end (search, Close vs OK/Cancel,
+overlay controls, InfoBox tap); do not invent a third way.  Share
+one implementation when two call sites need the same steps.
 
-**For safety purposes, avoid use of elements that may encourage or
-require the user to stare at the screen continuously.**
+Modes must be obvious: pan, Simulator, replay, weather overlay,
+Auto MacCready, and so on — map title / chrome, InfoBox colour, or
+status, never a silent mode.
 
-**For safety purposes, avoid user controls that have significant risk
-of producing unsafe results if misconfigured by the pilot.**
+Alarms state what is wrong and how urgent, in plain language;
+colour supports the message, it does not replace it.  Align map,
+badge, and status.  Traffic needs a clear overlay (or dedicated
+presentation) and tone where available — not a buried Setup page.
+Do not cry wolf.  Invalid data: omit or dashes, never a fake zero.
+Use user units; significant digits match accuracy or pilot use,
+whichever is lower.  Where rate of change matters, show trend
+(spark InfoBoxes, deltas, trend fields, colour) instead of a naked
+number.  Guidance such as speed-to-fly: directional cues (arrows /
+bands) sized by error; reuse existing patterns.
 
-General colour conventions
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+``CalculationThread`` runs at most about 2 Hz; UI house-keeping
+about twice per second; ``MergeThread`` merges sensors on a short
+interval (~50 ms).  InfoBoxes follow calculated / GPS updates —
+not certified-PFD attitude rates.  Do not block input for map or
+calc work, and do not demand 15 Hz for every InfoBox.  Coalesce
+redraws; avoid jitter that looks “live” but lies.  On e-paper, use
+a truthful slower refresh and avoid ``Invalidate`` storms
+(:doc:`debugging`).
 
-Colour conventions generally in use throughout the program:
+Rare options live in Setup; the in-flight path stays short.  Touch,
+keys / joystick, and documented gestures reach the same outcomes —
+no gesture-only or touch-only flight features.  The map already
+owns the eyes: prefer audio and short status for alerts over more
+chrome.
 
--  Red for indicator of warning
+Colour
+~~~~~~
 
--  Orange for indicator of caution
+Colour means something.  If a hue does not encode condition,
+provenance, or a map-layer convention, use the default (normal)
+colour.
 
--  Green for positive indicator of safety
+Two axes — do not mix them:
 
--  Blue for neutral indicator of safety
+- Condition: bad → red; caution → orange / amber; normal → theme
+  black / white / grey.  Green where “OK / safe / cleared” is
+  needed.
+- Provenance (InfoBoxes): blue = derived / estimated, not measured
+  (e.g. TAS blue when computed from ground speed and wind).  Measured
+  values stay normal.  Blue is not “neutral safety” and not brand
+  chrome.
 
-Displayed data
-^^^^^^^^^^^^^^
+InfoBox colour indices (``InfoBoxLook``): 0 normal, 1 red, 2 blue
+(derived), 3 green, 4 amber, 5 magenta, 6 orange.
 
--  Where data is invalid, indicate this by not presenting the data or
-   showing dashes.
+Primitives live in :file:`src/ui/canvas/Color.hpp`, named project
+colours in :file:`src/Look/Colors.hpp`, feature pens / brushes in
+the matching ``*Look`` under :file:`src/Look/`.  New UI reuses a
+name or adds a functionally named constant.  Avoid raw
+``Color(0x..)`` in dialogs / renderers; Look init may keep
+feature-private locals.
 
--  Present data in user-defined units.
-
--  Display numerical data with significant digits appropriate to the
-   accuracy of the calculations, or its functional use by the pilot,
-   whichever is lower.
+Brand / chrome uses ``COLOR_XCSOAR*`` (focus, titles, selection) —
+not condition and not “derived”.  Dark / light dialog names are in
+``Colors.hpp``.  Map colours follow existing ``TaskLook`` /
+``TrafficLook`` / ``VarioLook``: task OZ / legs use the Look purple
+(not bit-identical to paper ICAO magenta); bearing / best cruise use
+magenta; aircraft mostly black / white; lift / sink via
+``VarioLook``; airspace warning badges are named in ``Colors.hpp``
+(Inside, Near, cleared).  Dialogs: grey / light-grey buttons, yellow
+pressed, brand-blue focus and title; enabled text black (or white
+on dark), disabled greyed but readable.  Keep the palette small;
+high saturation is for importance.  Dialog body text stays
+monochrome; InfoBox value colours are the exception for condition /
+provenance.  On ``HasColors()`` false / ``IsDithered()``, meaning
+must survive without hue.
 
 Dialogs and menu buttons
 ~~~~~~~~~~~~~~~~~~~~~~~~
-
-Colors
-^^^^^^
-
-Colour conventions in use are:
-
--  Grey for buttons
-
--  Buttons and other widgets rendered with an evenly shaded border
-
--  Yellow for clicked items
-
--  Light blue for the key focused item
-
--  Medium blue for dialogue title bar
-
--  Text is black if the item is enabled
-
--  Text is greyed out (but still visible) if the item is disabled
 
 dialogue types and navigation buttons
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -694,11 +774,31 @@ Usability
 
 -  Minimum size of buttons should be X by Y mm
 
--  Ensure all dialogs are navigable using cursor keys only
+-  Ensure all dialogs are navigable using the keyboard / joystick set
+   above (arrows, Enter, Escape)
 
 -  Ensure the focussed item is clearly identified. The rectangle of the
    widget on the canvas may be drawn using the ``fill_focus`` method of
    ``Canvas``.
+
+Scrolling
+~~~~~~~~~
+
+Menus and dialogs used in flight (Quick Menu, in-flight task /
+airspace / traffic flows, …) do not scroll.  Prefer one screen,
+paging / tabs, or a short list.  If there are many items, split,
+filter, or use an overlay / InfoBox — do not depend on a long
+scrollable list mid-flight.
+
+Configuration / Setup may scroll when that panel is not on an
+in-flight menu path.  Test: would a pilot open this while flying?
+If yes → no scroll; if config-only → scroll is fine.
+
+When scroll is used, reuse list / ``ScrollBar`` / kinetic behaviour
+and keep arrow-key navigation; do not invent a new scroll widget.
+Always show that more content exists (visible scrollbar or
+equivalent) — no silent overflow.  On e-paper / slow CPU, avoid
+pointless full-frame ``Invalidate()`` (:doc:`debugging`).
 
 Screen rectangles
 ~~~~~~~~~~~~~~~~~
@@ -829,8 +929,8 @@ Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
    is armed is a drag or a cancel, not a tap.
 
 -  Cursor keys and a remote stick must reach the same actions as
-   touch.  E-paper skips hold animation (``HasEPaper()`` /
-   ``IsSlowCPU()``).
+   touch (see Cockpit principles).  E-paper skips hold animation
+   (``HasEPaper()`` / ``IsSlowCPU()``).
 
 Main graphics
 ~~~~~~~~~~~~~
@@ -838,28 +938,24 @@ Main graphics
 Colors
 ^^^^^^
 
-Colour conventions in use, in order of priority, are:
+Match existing Look code; see Colour above for condition / provenance.
 
--  Aircraft black and white, for neutrality but clear identification
+-  Aircraft black and white, for clear identification
 
--  Traffic (FLARM) use alarm green, orange, and red.
+-  Traffic (FLARM): safe / caution / alarm (green / orange / red tones
+   in ``TrafficLook``)
 
--  Lift is vibrant green, sink is copper orange.
+-  Lift vibrant green, sink copper orange (``VarioLook``)
 
--  Aircraft navigation (route, best cruise track) is (ICAO) dark
-   purple-blue
+-  Bearing / best cruise: magenta; task observation zones / legs: Look
+   purple (see ``TaskLook``)
 
--  Task navigation lines and areas are (ICAO) magenta.
+-  Updraft-derived data: sky blue where used
 
--  Updraft sources and other updraft derived data is sky blue.
+-  Airspace warning badges: named colours in ``Colors.hpp``
 
-(Todo) airspace alert colours
-
-Map culture (topography) and terrain rendering should conform to ICAO
-Annex 4 where appropriate. Note that some modifications are reasonable
-for electronic use given that Annex 4 deals with paper charts.
-Nevertheless, the colour conventions are useful to adopt as they are
-likely to be intuitive and are designed for aviation use.
+Map culture (topography) and terrain should follow ICAO Annex 4 themes
+where appropriate (electronic charts may differ from paper).
 
 Pen styles
 ^^^^^^^^^^
@@ -883,7 +979,8 @@ from the map:
    shade) than the background map layer elements.
 
 -  For elements covering an area (non line), draw the entire element or
-   a border with a luminosity contrasting pen, of width ``IBLSCALE(1)``.
+   a border with a luminosity contrasting pen, of width
+   ``Layout::Scale(1)`` (or ``Layout::ScalePenWidth(1)``).
 
 -  Consider whether the widget is required in all flying states and
    display modes. if it does not serve a direct functional purpose in

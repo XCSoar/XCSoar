@@ -11,16 +11,15 @@ Index: `doc/index.rst`. Do not invent a parallel layout; follow these files.
 blackboards, device drivers, network/HTTP, or where a type belongs.
 
 For UI colour, map overlays, dialogs, touch/hold, screen rectangles,
-and in-flight safety, read **User interface guidelines** in
-`doc/architecture.rst`. Which rectangle an element belongs in is
-**Screen rectangles** in that file. That section adopts:
+scrolling, and in-flight / cockpit safety, read **User interface
+guidelines** in `doc/architecture.rst` (including **Cockpit
+principles**). Which rectangle an element belongs in is **Screen
+rectangles** in that file. External HF anchors (NASA colour, FAA EFB
+DOT/FAA/AR-03/67, ICAO Annex 4) are listed there.
 
-- NASA Colour Usage recommendations
-- DOT/FAA/AR-03/67 (Electronic Flight Bags / EFB human factors)
-- ICAO Annex 4 (aeronautical charts) and FAA HF design standards
-
-Do not invent a parallel colour language. Reuse named colours in Look
-code; keep high saturation and contrast for warnings and cautions.
+Do not invent a parallel colour or gesture language. Reuse named
+colours in Look code; keep high saturation and contrast for warnings
+and cautions.
 
 User-facing behaviour also needs the **English user manual**
 (`doc/manual/en/`), not only `NEWS.txt`. See `.cursor/rules/user-manual.mdc`.
