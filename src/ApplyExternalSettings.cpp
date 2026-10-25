@@ -427,8 +427,10 @@ PlaneProfileProcessTimer() noexcept
 
         SetComputerSettings().plane = plane_copy;
         Profile::SetPath("PlanePath", found_path);
-        PlaneGlue::Synchronize(plane_copy, SetComputerSettings(),
-                               SetComputerSettings().polar.glide_polar_task);
+        auto &polar = SetComputerSettings().polar.glide_polar_task;
+        if (!PlaneGlue::Synchronize(plane_copy, SetComputerSettings(), polar))
+          Message::AddMessage(_("The polar of this plane is invalid. "
+                                "Check it in the plane setup."));
         if (backend_components)
           backend_components->SetTaskPolar(GetComputerSettings().polar);
         Profile::Save();
@@ -457,8 +459,10 @@ PlaneProfileProcessTimer() noexcept
         if (PlaneGlue::ReadFile(plane, path)) {
           plane.plane_profile_active = true;
           SetComputerSettings().plane = plane;
-          PlaneGlue::Synchronize(plane, SetComputerSettings(),
-                                 SetComputerSettings().polar.glide_polar_task);
+          auto &polar = SetComputerSettings().polar.glide_polar_task;
+          if (!PlaneGlue::Synchronize(plane, SetComputerSettings(), polar))
+            Message::AddMessage(_("The polar of this plane is invalid. "
+                                  "Check it in the plane setup."));
           if (backend_components)
             backend_components->SetTaskPolar(GetComputerSettings().polar);
           Profile::SetPath("PlanePath", path);
