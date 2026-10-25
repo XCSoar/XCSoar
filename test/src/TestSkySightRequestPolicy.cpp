@@ -58,15 +58,25 @@ TestAuthenticationFailurePolicy()
   SkySight::AuthenticationFailurePolicy authentication;
 
   ok1(authentication.CanAttempt(NOW));
+  ok1(authentication.GetRejectedStatus() == 0);
   auto decision = authentication.OnHttpFailure(401, NOW);
   ok1(decision.action == SkySight::AuthenticationFailureAction::Rejected);
   ok1(!authentication.CanAttempt(NOW + 24 * 60 * 60));
+  ok1(authentication.GetRejectedStatus() == 401);
   authentication.Reset();
   ok1(authentication.CanAttempt(NOW));
+  ok1(authentication.GetRejectedStatus() == 0);
+
+  /* the status is kept, so the user can be told why */
+  decision = authentication.OnHttpFailure(402, NOW);
+  ok1(decision.action == SkySight::AuthenticationFailureAction::Rejected);
+  ok1(authentication.GetRejectedStatus() == 402);
+  authentication.Reset();
 
   decision = authentication.OnHttpFailure(429, NOW, NOW + 123);
   ok1(decision.action == SkySight::AuthenticationFailureAction::Throttle);
   ok1(decision.ready_at == NOW + 123);
+  ok1(authentication.GetRejectedStatus() == 0);
   ok1(!authentication.CanAttempt(NOW + 122));
   ok1(authentication.CanAttempt(NOW + 123));
 
@@ -79,6 +89,7 @@ TestAuthenticationFailurePolicy()
   decision = authentication.OnHttpFailure(503, NOW);
   ok1(decision.action == SkySight::AuthenticationFailureAction::Retry);
   ok1(decision.ready_at == NOW + 30);
+  ok1(authentication.GetRejectedStatus() == 0);
   decision = authentication.OnTransportFailure(NOW + 30);
   ok1(decision.ready_at == NOW + 90);
 }
@@ -147,7 +158,7 @@ TestResourcePolicies()
 int
 main()
 {
-  plan_tests(61);
+  plan_tests(68);
   TestRequestFailurePolicy();
   TestAuthenticationFailurePolicy();
   TestRequestPacing();

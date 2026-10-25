@@ -437,6 +437,40 @@ SkySightClient::IsThrottled() const noexcept
   return api->IsThrottled();
 }
 
+StaticString<128>
+SkySightClient::GetLoginRejectedMessage() const noexcept
+{
+  StaticString<128> message;
+  message.clear();
+
+  /* the status codes SkySight documents for its login, see #2860 */
+  const unsigned status = api->GetLoginRejectedStatus();
+  const char *reason;
+  switch (status) {
+  case 0:
+    return message;
+
+  case 401:
+    reason = _("wrong e-mail or password");
+    break;
+
+  case 402:
+    reason = _("the subscription is not active");
+    break;
+
+  case 403:
+    reason = _("too many devices use this account");
+    break;
+
+  default:
+    message.Format("%s HTTP %u", _("SkySight login rejected:"), status);
+    return message;
+  }
+
+  message.Format("%s %s", _("SkySight login rejected:"), reason);
+  return message;
+}
+
 bool
 SkySightClient::IsLiveViewUpdating(std::string_view layer_id) const noexcept
 {
@@ -917,6 +951,15 @@ SkySightClient::OnForecastThrottled() noexcept
   message.Format(_("SkySight rate limit reached; continuing in %u seconds."),
                  unsigned(GetThrottleRemainingSeconds()));
   Message::AddMessage(message.c_str());
+}
+
+void
+SkySightClient::OnLoginRejected() noexcept
+{
+  /* login is not attempted again until the credentials are entered
+     again, so this is said only once */
+  if (const auto message = GetLoginRejectedMessage(); !message.empty())
+    Message::AddMessage(message.c_str());
 }
 
 void

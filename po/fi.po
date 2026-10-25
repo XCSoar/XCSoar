@@ -12814,3 +12814,15 @@ msgstr "Kameraa ei voi käyttää"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "SkySight login rejected:"
+msgstr ""
+
+msgid "wrong e-mail or password"
+msgstr ""
+
+msgid "the subscription is not active"
+msgstr ""
+
+msgid "too many devices use this account"
+msgstr ""
