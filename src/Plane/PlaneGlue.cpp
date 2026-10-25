@@ -103,7 +103,7 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.Update();
 
-  if (plane.max_speed > 0)
+  if (plane.max_speed > 0 && gp.IsValid())
     gp.SetVMax(std::clamp(plane.max_speed,
                           gp.GetVMin() + 10, DEFAULT_MAX_SPEED));
 }
