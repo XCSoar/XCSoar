@@ -8,6 +8,8 @@ Version 7.47 - not yet released
     same question
   - leave the glide polar unset until a plane or a device provides
     one, instead of flying with a built-in glider nobody chose #3270
+  - say so when a plane with an invalid polar is loaded, and do not
+    keep using the previous plane's polar #3270
 * ui
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
