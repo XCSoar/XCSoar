@@ -12698,3 +12698,46 @@ msgstr ""
 " když je kluzák těžší než jeho maximální vzletová hmotnost. Hodnota je modr"
 "á při vypouštění. Klepnutím změníte zátěž."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Namiřte fotoaparát na QR kód úlohy"
+
+msgid "No camera permission"
+msgstr "Chybí oprávnění k fotoaparátu"
+
+msgid "No camera found"
+msgstr "Fotoaparát nenalezen"
+
+msgid "Cannot open the camera"
+msgstr "Nelze otevřít fotoaparát"
+
+msgid "Cannot start the camera preview"
+msgstr "Nelze spustit náhled fotoaparátu"
+
+msgid "Camera not usable"
+msgstr "Fotoaparát nelze použít"

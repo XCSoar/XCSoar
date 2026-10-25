@@ -12748,3 +12748,46 @@ msgstr ""
 "ş ağırlığından ağırsa kırmızı. Balast boşaltılırken değer mavidir. Değiştir"
 "mek için dokunun."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Kamerayı bir görev QR koduna doğrultun"
+
+msgid "No camera permission"
+msgstr "Kamera izni yok"
+
+msgid "No camera found"
+msgstr "Kamera bulunamadı"
+
+msgid "Cannot open the camera"
+msgstr "Kamera açılamıyor"
+
+msgid "Cannot start the camera preview"
+msgstr "Kamera önizlemesi başlatılamıyor"
+
+msgid "Camera not usable"
+msgstr "Kamera kullanılamıyor"

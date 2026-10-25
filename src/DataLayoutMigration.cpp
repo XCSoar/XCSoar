@@ -138,9 +138,14 @@ UpdateProfileReferences(ProfileMap &profile, Path old_path, Path new_path)
 
   key_changed = UpdateMultipleProfilePaths(profile, ProfileKeys::WaypointFileList,
                                            old_path, new_path);
-  key_changed |= UpdateMultipleProfilePaths(profile, ProfileKeys::WatchedWaypointFileList,
-                                            old_path, new_path);
   changed |= key_changed;
+  PrimaryWaypointFileChanged |= key_changed;
+  WaypointFileChanged |= key_changed;
+
+  key_changed = UpdateMultipleProfilePaths(
+      profile, ProfileKeys::WatchedWaypointFileList, old_path, new_path);
+  changed |= key_changed;
+  WatchedWaypointFileChanged |= key_changed;
   WaypointFileChanged |= key_changed;
 
   key_changed = UpdateMultipleProfilePaths(profile, ProfileKeys::AirfieldFileList,

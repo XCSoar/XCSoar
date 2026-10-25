@@ -12769,3 +12769,46 @@ msgstr ""
 "ai sklandytuvas sunkesnis už didžiausią kilimo masę. Vertė mėlyna išleidžia"
 "nt balastą. Bakstelėkite balastui keisti."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Nukreipkite kamerą į užduoties QR kodą"
+
+msgid "No camera permission"
+msgstr "Nėra leidimo naudoti kamerą"
+
+msgid "No camera found"
+msgstr "Kamera nerasta"
+
+msgid "Cannot open the camera"
+msgstr "Nepavyksta atidaryti kameros"
+
+msgid "Cannot start the camera preview"
+msgstr "Nepavyksta paleisti kameros peržiūros"
+
+msgid "Camera not usable"
+msgstr "Kamera netinkama naudoti"

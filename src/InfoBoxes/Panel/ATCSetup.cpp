@@ -8,6 +8,7 @@
 #include "Language/Language.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Session/SessionState.hpp"
 
 class ATCSetupPanel : public RowFormWidget,
                       private DataFieldListener {
@@ -48,6 +49,7 @@ ATCSetupPanel::OnModified(DataField &_df) noexcept
     CommonInterface::SetComputerSettings();
 
   settings.poi.magnetic_declination = Angle::Degrees(df.GetValue());
+  Session::NoteAtcDeclination(df.GetValue());
 }
 
 std::unique_ptr<Widget>

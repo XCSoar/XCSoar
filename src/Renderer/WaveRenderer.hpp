@@ -11,10 +11,6 @@ class Canvas;
 class WindowProjection;
 class GeoClip;
 
-namespace SkyLinesTracking {
-  struct Data;
-}
-
 class WaveRenderer {
   const WaveLook &look;
 
@@ -33,7 +29,4 @@ public:
 
   void Draw(Canvas &canvas, const WindowProjection &projection,
             const WaveResult &result) const;
-
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const SkyLinesTracking::Data &data) const;
 };

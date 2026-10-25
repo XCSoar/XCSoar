@@ -12863,3 +12863,46 @@ msgstr ""
 " De waarde is blauw terwijl ballast wordt geloosd. Tik om de ballast te wij"
 "zigen."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Richt de camera op een taak-QR-code"
+
+msgid "No camera permission"
+msgstr "Geen cameratoestemming"
+
+msgid "No camera found"
+msgstr "Geen camera gevonden"
+
+msgid "Cannot open the camera"
+msgstr "Kan de camera niet openen"
+
+msgid "Cannot start the camera preview"
+msgstr "Kan het cameravoorbeeld niet starten"
+
+msgid "Camera not usable"
+msgstr "Camera niet bruikbaar"

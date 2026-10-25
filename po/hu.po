@@ -12805,3 +12805,46 @@ msgstr ""
 "rosan, ha a vitorlázó nehezebb a maximális felszálló tömegénél. Az érték ké"
 "k, amíg a ballaszt ürül. Koppintson a ballaszt módosításához."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Irányítsa a kamerát egy feladat QR-kódjára"
+
+msgid "No camera permission"
+msgstr "Nincs kameraengedély"
+
+msgid "No camera found"
+msgstr "Nem található kamera"
+
+msgid "Cannot open the camera"
+msgstr "A kamera nem nyitható meg"
+
+msgid "Cannot start the camera preview"
+msgstr "A kamera előnézete nem indítható el"
+
+msgid "Camera not usable"
+msgstr "A kamera nem használható"

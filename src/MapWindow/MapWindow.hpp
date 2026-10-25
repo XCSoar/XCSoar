@@ -19,7 +19,6 @@
 #include "Renderer/TurnBackMarkerRenderer.hpp"
 #include "OverlayLimits.hpp"
 #include "Weather/Features.hpp"
-#include "Tracking/SkyLines/Features.hpp"
 
 #include <memory>
 
@@ -39,11 +38,7 @@ class ContainerWindow;
 class NOAAStore;
 class MapOverlay;
 
-namespace SkyLinesTracking {
-  struct Data;
-}
-
-namespace TIM { class Glue; }
+class ObservationDatabase;
 
 class MapWindow :
   public DoubleBufferWindow,
@@ -154,13 +149,7 @@ protected:
   NOAAStore *noaa_store = nullptr;
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING
-  const SkyLinesTracking::Data *skylines_data = nullptr;
-#endif
-
-#ifdef HAVE_HTTP
-  const TIM::Glue *tim_glue = nullptr;
-#endif
+  const ObservationDatabase *observations = nullptr;
 
   bool compass_visible = true;
 
@@ -308,17 +297,9 @@ public:
   }
 #endif
 
-#ifdef HAVE_SKYLINES_TRACKING
-  void SetSkyLinesData(const SkyLinesTracking::Data *_data) noexcept {
-    skylines_data = _data;
+  void SetObservations(const ObservationDatabase *db) noexcept {
+    observations = db;
   }
-#endif
-
-#ifdef HAVE_HTTP
-  void SetThermalInfoMap(const TIM::Glue *_tim) noexcept {
-    tim_glue = _tim;
-  }
-#endif
 
   void FlushCaches() noexcept;
 

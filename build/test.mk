@@ -97,7 +97,7 @@ TEST_NAMES = \
 	TestOperaRadar \
 	TestEumetviewSatellite \
 	TestEumetviewEnhance \
-	TestLogger TestGPSDeviceName TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
@@ -109,7 +109,7 @@ TEST_NAMES = \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestMacCready TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
+	TestMacCready TestFinalGlide TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
 	TestPlanes \
 	TestTaskPoint \
@@ -121,7 +121,9 @@ TEST_NAMES = \
 	TestAirspaceLabelPlacement \
 	TestOGNAprsParser \
 	TestAirspaceIntervalMath \
+	TestObservationStore \
 	TestAirspaceClearance \
+	TestAirspaceBoundary \
 	TestMETARParser \
 	TestIGCParser TestIGCFlightTimes \
 	TestNanoFileTransfer \
@@ -169,6 +171,7 @@ ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
 TEST_NAMES += \
 	TestProfile \
+	TestSession \
 	TestDriver
 endif
 
@@ -471,10 +474,18 @@ $(eval $(call link-program,TestNOTAM,TEST_NOTAM))
 endif
 
 TEST_AIRSPACE_PARSER_SOURCES = \
+	$(SRC)/time/Convert.cxx \
+	$(SRC)/time/LocalTime.cpp \
+	$(SRC)/time/BrokenDate.cpp \
+	$(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenTime.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/time/Zone.cxx \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Radio/RadioFrequency.cpp \
 	$(SRC)/Radio/TransponderCode.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -511,6 +522,13 @@ TEST_OGN_APRS_PARSER_SOURCES = \
 TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
 
+TEST_OBSERVATION_STORE_SOURCES = \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestObservationStore.cpp
+TEST_OBSERVATION_STORE_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestObservationStore,TEST_OBSERVATION_STORE))
+
 TEST_AIRSPACE_INTERVAL_MATH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestAirspaceIntervalMath.cpp
@@ -526,6 +544,16 @@ TEST_AIRSPACE_CLEARANCE_SOURCES = \
 	$(TEST_SRC_DIR)/TestAirspaceClearance.cpp
 TEST_AIRSPACE_CLEARANCE_DEPENDS = AIRSPACE GLIDE TASK GEO MATH UTIL UNITS TIME FMT
 $(eval $(call link-program,TestAirspaceClearance,TEST_AIRSPACE_CLEARANCE))
+
+TEST_AIRSPACE_BOUNDARY_SOURCES = \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceBoundary.cpp
+TEST_AIRSPACE_BOUNDARY_DEPENDS = AIRSPACE GLIDE TASK GEO MATH UTIL UNITS TIME FMT
+$(eval $(call link-program,TestAirspaceBoundary,TEST_AIRSPACE_BOUNDARY))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -614,12 +642,29 @@ TEST_PROFILE_SOURCES = \
 TEST_PROFILE_DEPENDS = PROFILE MATH IO OS UTIL
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
 
+TEST_SESSION_SOURCES = \
+	$(SRC)/Session/SessionFile.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/TestSession.cpp
+TEST_SESSION_DEPENDS = PROFILE GEO MATH IO OS UTIL
+$(eval $(call link-program,TestSession,TEST_SESSION))
+
 TEST_MAC_CREADY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMacCready.cpp
 TEST_MAC_CREADY_OBJS = $(call SRC_TO_OBJ,$(TEST_MAC_CREADY_SOURCES))
 TEST_MAC_CREADY_DEPENDS = GLIDE GEO MATH UTIL
 $(eval $(call link-program,TestMacCready,TEST_MAC_CREADY))
+
+TEST_FINAL_GLIDE_SOURCES = \
+	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFinalGlide.cpp
+TEST_FINAL_GLIDE_DEPENDS = GLIDE GEO MATH UTIL
+$(eval $(call link-program,TestFinalGlide,TEST_FINAL_GLIDE))
 
 TEST_TERRAIN_REACH_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
@@ -745,6 +790,7 @@ TEST_ROUTE_SOURCES = \
 	$(TEST_SRC_DIR)/AirspacePrinting.cpp \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
 	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_DEPENDS = TERRAIN OPERATION IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_route,TEST_ROUTE))
@@ -1367,6 +1413,25 @@ TEST_GPS_DEVICE_NAME_SOURCES = \
 TEST_GPS_DEVICE_NAME_DEPENDS = LIBNMEA GEO TIME UNITS MATH UTIL
 $(eval $(call link-program,TestGPSDeviceName,TEST_GPS_DEVICE_NAME))
 
+TEST_BLACKBOARD_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Blackboard/DeviceBlackboard.cpp \
+	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
+	$(SRC)/Blackboard/LiveBlackboard.cpp \
+	$(SRC)/Computer/GlideComputerBlackboard.cpp \
+	$(SRC)/Device/Simulator.cpp \
+	$(SRC)/Engine/GlideSolvers/GlidePolar.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
+	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalBand.cpp \
+	$(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBlackboard.cpp
+TEST_BLACKBOARD_DEPENDS = LIBNMEA GEO TIME MATH UTIL UNITS THREAD
+$(eval $(call link-program,TestBlackboard,TEST_BLACKBOARD))
+
 TEST_GRECORD_SOURCES = \
 	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/util/MD5.cpp \
@@ -1947,10 +2012,18 @@ RUN_FLIGHT_PARSER_DEPENDS = IO OS TIME UTIL
 $(eval $(call link-program,RunFlightParser,RUN_FLIGHT_PARSER))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
+	$(SRC)/time/Convert.cxx \
+	$(SRC)/time/LocalTime.cpp \
+	$(SRC)/time/BrokenDate.cpp \
+	$(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenTime.cpp \
+	$(SRC)/time/Zone.cxx \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Radio/RadioFrequency.cpp \
 	$(SRC)/Radio/TransponderCode.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
@@ -2436,7 +2509,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalBand.cpp \
-    $(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
+	$(ENGINE_SRC_DIR)/ThermalBand/ThermalSlice.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterBand.cpp \
 	$(ENGINE_SRC_DIR)/ThermalBand/ThermalEncounterCollection.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -2591,6 +2664,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Renderer/WaveRenderer.cpp \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(SRC)/Observation/Publish.cpp \
 	$(SRC)/Renderer/DistanceRingsRenderer.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \

@@ -12697,3 +12697,46 @@ msgstr ""
 "är segelflygplanet är tyngre än sin maximala startvikt. Värdet är blått med"
 "an ballast töms. Tryck för att ändra ballasten."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Rikta kameran mot en uppgifts-QR-kod"
+
+msgid "No camera permission"
+msgstr "Ingen kamerabehörighet"
+
+msgid "No camera found"
+msgstr "Ingen kamera hittades"
+
+msgid "Cannot open the camera"
+msgstr "Kan inte öppna kameran"
+
+msgid "Cannot start the camera preview"
+msgstr "Kan inte starta kameravyn"
+
+msgid "Camera not usable"
+msgstr "Kameran går inte att använda"

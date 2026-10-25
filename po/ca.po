@@ -12847,3 +12847,46 @@ msgstr ""
 "rmell quan el planador és més pesat que la seva massa màxima d'enlairament."
 " El valor és blau mentre es buida el llast. Toqueu per canviar el llast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Apunteu la càmera a un codi QR de tasca"
+
+msgid "No camera permission"
+msgstr "Sense permís per a la càmera"
+
+msgid "No camera found"
+msgstr "No s'ha trobat cap càmera"
+
+msgid "Cannot open the camera"
+msgstr "No es pot obrir la càmera"
+
+msgid "Cannot start the camera preview"
+msgstr "No es pot iniciar la previsualització de la càmera"
+
+msgid "Camera not usable"
+msgstr "La càmera no es pot utilitzar"

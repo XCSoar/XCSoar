@@ -72,6 +72,8 @@ section tries to give a rough overview where you can find what.
 
 -  :file:`Engine/Waypoint/`: waypoint data structures
 
+-  :file:`Engine/Observation/`: thermal and wave marks, tagged by feed
+
 -  :file:`Engine/GlideSolvers/`: a MacCready implementation
 
 -  :file:`Engine/Task/`: task data structures and calculations
@@ -217,13 +219,15 @@ torn down. The global pointer is cleared later in :file:`Startup.cpp`
 **Shutdown order** (see :file:`Startup.cpp`; simplified):
 
 1. ``NetComponents::BeginShutdown()`` — cancel coroutines and queued
-   downloads; clear map pointers to TIM / SkyLines data
+   downloads; clear the network clients' pointer to the observation
+   store
 2. ``MainWindow::BeginShutdown()``; stop merge and calculation threads;
    join them; deinitialise map and devices
 3. ``MainWindow::DeinitialiseStorage()`` — unregister storage UI listeners
 4. ``StorageManager::StopMonitoring()`` — stop hotplug; destructor joins
    the enumeration worker when ``delete backend_components`` runs
-5. ``delete backend_components`` and ``delete data_components``
+5. ``delete backend_components``; clear the map's observation pointer
+   and ``delete data_components``
 6. ``DestroyNetComponents()``; destroy :file:`MainWindow`
 7. On process exit, :file:`Net::Deinitialise` destroys :file:`CurlGlobal` on
    the **asio** thread (:file:`DrainCurl` in :file:`net/http/Init.cpp`)
@@ -243,6 +247,89 @@ layout while InfoBoxes are being created. Use
 example :file:`Weather/EDL/DownloadGlue.cpp`). New providers (such as
 XCTherm) should follow the same split: listener on the UI thread,
 network I/O on the asio thread, UI updates via :file:`UI::Notify`.
+
+Origin stores
+~~~~~~~~~~~~~
+
+Waypoints, airspaces, thermals, and waves each live in one list.  Every
+row is tagged with the feed that produced it: a waypoint file, the
+Thermal Information Map, Cloud, SkyLines, or XCSoar's own calculation.
+Replacing a feed deletes only that feed's rows.  A live packet appends
+or updates one row and leaves the other feeds in place.
+
+The engine types (:file:`Engine/Waypoint/Waypoints`,
+:file:`Engine/Airspace/Airspaces`, :file:`Engine/Observation/Store`)
+have no lock and no thread.  Waypoint and airspace reloads run on the
+UI thread while the other threads are suspended
+(:file:`ScopeSuspendAllThreads`).  Thermals and waves are published
+while the map is drawing, so :file:`Observation/Database` holds the
+mutex.  :file:`DataComponents` owns that database.  The network thread
+may call ``ReplaceThermals``, ``AppendThermal``, and the wave
+equivalents directly.  :file:`ReceiveCalculated` publishes own-ship rows
+from the UI thread through the same mutex.  The draw thread and the
+map click list copy a snapshot with ``CopyThermals`` / ``CopyWaves``
+and then work on the copy.
+
+:file:`UI::Notify` is for windows, status text, and
+:file:`ActionInterface`.  A new thermal or wave appears on the next map
+draw.
+
+Traffic (:file:`FLARM/List`) is a different store.  One slot per
+aircraft id is updated and expired in place.  Replacing a whole feed
+does not fit a single traffic sentence.
+
+Shutdown clears each network client's store pointer in its
+``BeginShutdown()`` before that client's work is cancelled, and clears
+the map pointer before ``delete data_components``.
+
+.. _loading-configured-files:
+
+Loading configured files
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A file on disk is not the in-memory object.  Three kinds of source
+feed the lists in `Origin stores`_.
+
+**Map zip.**  The configured ``.xcm`` supplies ``terrain.jp2`` and
+``topology.tpl``.  It may also contain ``waypoints.cup`` or
+``waypoints.xcw``, ``airspace.txt``, and ``airfields.txt``.  Those
+members are still read: map waypoints only when no primary or watched
+waypoint file produced a row; ``airspace.txt`` is merged with the
+configured OpenAir files; ``airfields.txt`` is applied as waypoint
+details.  :file:`SettingsLeave` therefore treats ``MapFileChanged`` as
+a waypoint, airspace, airfield, terrain, and topography change.
+
+**Profile path.**  A Site files entry is one source: the map file, a
+waypoint or airspace list, FLARMNet, RASP, the checklist, or the input
+file.  Reloading one origin deletes only that origin's rows.
+
+**Live feed.**  NOTAM, traffic, Cloud, and SkyLines are not files.
+NOTAM replaces ``AirspaceOrigin::NOTAM`` and leaves file airspace in
+place.  Traffic (:file:`FLARM/List`) keeps one slot per aircraft id,
+updated and expired in place.
+
+The reload runs on the UI thread.  A download callback queues the
+path and :file:`UI::Notify` delivers it.  Waypoint and airspace edits
+suspend the other threads (:file:`ScopeSuspendAllThreads`, or
+:file:`SuspendAllThreads` inside :file:`SettingsLeave`) and bump
+``Serial`` on the list.
+
+**Map zip finished loading.**  :file:`MainWindow::LoadTerrain` reads
+the zip on a worker.  :file:`OnTerrainLoaded` then installs the
+terrain, fills waypoint elevations that were missing, updates home,
+and sets airspace ground levels.  Topography and the waypoint and
+airspace files stay as they were.
+
+**File Manager, or startup auto-update.**
+:file:`ApplyConfiguredDataFiles` compares each downloaded path with
+the Site files profile keys.  A path that is not selected is left on
+disk.  A match sets the same flags Setup uses and calls
+:file:`SettingsEnter` / :file:`SettingsLeave`.  An updated ``.xcm``
+still reloads the zip's waypoint, airspace, and airfield members.  An
+OpenAir update drops file and map airspace rows, rereads them, and
+clears airspace warnings; NOTAM rows stay.  Startup auto-update skips
+that reload while flying: the new file stays on disk until the next
+start.
 
 Background file jobs
 ~~~~~~~~~~~~~~~~~~~~

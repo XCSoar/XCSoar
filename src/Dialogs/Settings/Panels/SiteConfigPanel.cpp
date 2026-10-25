@@ -24,7 +24,10 @@ enum ControlIndex {
   FlarmFile,
   RaspFile,
   ChecklistFile,
-  UserRepositoriesList
+  UserRepositoriesList,
+#ifdef HAVE_DOWNLOAD_MANAGER
+  AutoUpdate,
+#endif
 };
 
 class SiteConfigPanel final : public RowFormWidget {
@@ -120,6 +123,15 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
           _("List of additional user repository URIs, separated by '|' character."),
           user_repositories_list_value);
   SetExpertRow(UserRepositoriesList);
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  bool auto_update = false;
+  Profile::Get(ProfileKeys::RepositoryAutoUpdate, auto_update);
+  AddBoolean(C_("Setting", "Auto update"),
+             _("At startup, download a newer copy of each file already "
+               "on this device. The progress bar shows the download."),
+             auto_update);
+#endif
 }
 
 bool
@@ -130,10 +142,13 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
   // WaypointFileChanged has already a meaningful value
-  WaypointFileChanged |= SaveValueMultiFileReader(
+  const bool primary_changed = SaveValueMultiFileReader(
       WaypointFileList, ProfileKeys::WaypointFileList);
-  WaypointFileChanged |= SaveValueMultiFileReader(
+  const bool watched_changed = SaveValueMultiFileReader(
       WatchedWaypointFileList, ProfileKeys::WatchedWaypointFileList);
+  PrimaryWaypointFileChanged |= primary_changed;
+  WatchedWaypointFileChanged |= watched_changed;
+  WaypointFileChanged |= primary_changed || watched_changed;
 
   AirspaceFileChanged |= SaveValueMultiFileReader(
       AirspaceFileList, ProfileKeys::AirspaceFileList);
@@ -158,6 +173,13 @@ SiteConfigPanel::Save(bool &_changed) noexcept
             AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
             RaspFileChanged || ChecklistFileChanged ||
             UserRepositoriesListChanged;
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  bool auto_update = false;
+  Profile::Get(ProfileKeys::RepositoryAutoUpdate, auto_update);
+  changed |= SaveValue(AutoUpdate, ProfileKeys::RepositoryAutoUpdate,
+                       auto_update);
+#endif
 
   _changed |= changed;
 

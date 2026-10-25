@@ -11,6 +11,7 @@
 #include <boost/geometry/strategies/strategies.hpp>
 #include <boost/geometry/geometries/segment.hpp>
 
+#include <algorithm>
 #include <utility>
 
 namespace bgi = boost::geometry::index;
@@ -141,6 +142,42 @@ Airspaces::Clear() noexcept
 
   // then delete the tree
   airspace_tree.clear();
+}
+
+void
+Airspaces::EraseIf(const AirspacePredicate &predicate) noexcept
+{
+  if (!predicate)
+    return;
+
+  const std::size_t tmp_before = tmp_as.size();
+  std::erase_if(tmp_as, [&](const AirspacePtr &airspace) {
+    return airspace && predicate(*airspace);
+  });
+
+  AirspaceVector keep;
+  keep.reserve(airspace_tree.size());
+  for (const auto &i : QueryAll())
+    if (!predicate(i.GetAirspace()))
+      keep.push_back(i);
+
+  if (tmp_as.size() == tmp_before &&
+      keep.size() == airspace_tree.size())
+    return;
+
+  airspace_tree.clear();
+  for (const auto &i : keep)
+    airspace_tree.insert(i);
+
+  ++serial;
+}
+
+void
+Airspaces::EraseOrigin(AirspaceOrigin origin) noexcept
+{
+  EraseIf([origin](const AbstractAirspace &airspace) {
+    return airspace.GetOrigin() == origin;
+  });
 }
 
 unsigned

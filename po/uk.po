@@ -12829,3 +12829,46 @@ msgstr ""
 "рвоним, коли планер важчий за свою максимальну злітну масу. Значення синє, "
 "поки баласт зливається. Торкніться, щоб змінити баласт."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Наведіть камеру на QR-код завдання"
+
+msgid "No camera permission"
+msgstr "Немає дозволу на камеру"
+
+msgid "No camera found"
+msgstr "Камеру не знайдено"
+
+msgid "Cannot open the camera"
+msgstr "Не вдається відкрити камеру"
+
+msgid "Cannot start the camera preview"
+msgstr "Не вдається запустити попередній перегляд камери"
+
+msgid "Camera not usable"
+msgstr "Камера непридатна для використання"

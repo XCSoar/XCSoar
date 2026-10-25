@@ -240,6 +240,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/ThermalBand/ThermalSlice.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterBand.cpp \
 	$(SRC)/Engine/ThermalBand/ThermalEncounterCollection.cpp \
+	$(SRC)/Engine/Observation/Store.cpp \
+	$(SRC)/Observation/Publish.cpp \
 	$(SRC)/DataFileLayout.cpp \
 	$(SRC)/DataLayoutMigration.cpp \
 	$(SRC)/HorizonWidget.cpp \
@@ -461,6 +463,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DisplayMode.cpp \
 	\
 	$(SRC)/Markers/Markers.cpp \
+	$(SRC)/Session/SessionFile.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightInfo.cpp \
@@ -756,8 +759,9 @@ XCSOAR_SOURCES += \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/XCSoar.cpp
 
-# No camera here.  Apple links Apple/QRScanner.cpp instead; a new
-# port does the same with its own file (see Task/QRScanner.hpp).
+# No camera here.  Apple links Apple/QRScanner.cpp instead (the iOS
+# scanner, or a stub on macOS); a new port does the same with its own
+# file (see Task/QRScanner.hpp).
 ifneq ($(TARGET_IS_DARWIN),y)
 XCSOAR_SOURCES += $(SRC)/Task/QRScanner.cpp
 endif

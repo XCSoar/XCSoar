@@ -38,5 +38,6 @@ build/local-config.mk
 
 .idea
 .ccache
+compile_commands.json
 messages.mo
 po/*.mo

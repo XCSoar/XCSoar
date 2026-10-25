@@ -6,6 +6,9 @@
 #include "Engine/Airspace/AirspaceInterceptSolution.hpp"
 #include "Engine/Airspace/AirspaceWarning.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
+#include "Engine/Task/Stats/TaskStats.hpp"
 #include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
 #include "time/FloatDuration.hxx"
@@ -35,7 +38,13 @@ MakeAirspace(AirspaceClass cls,
   top.reference = AltitudeReference::MSL;
   top.altitude = 1000;
 
-  airspace->SetProperties(std::string{name}, std::string{station_name},
+  airspace->SetProperties(std::string{name},
+                          false,                      // has_activation_time
+                          BrokenDateTime::Invalid(),  // activation start time
+                          BrokenDateTime::Invalid(),  // activation end time
+                          true,                       // active_today, with activation time
+                          false,                      // never_active, with activation time
+                          std::string{station_name},
                           TransponderCode::Null(),
                           cls, cls, base, top);
   return airspace;
@@ -196,15 +205,91 @@ TestAckClearsActiveImmediately()
   ok1(!inside.IsActive());
 }
 
+static void
+TestEraseIfLeavesNotam()
+{
+  Airspaces airspaces;
+  const auto class_c = MakeAirspace(AirspaceClass::CLASSC, "Class C Test");
+  const auto notam = MakeAirspace(AirspaceClass::NOTAM, "NOTAM Test",
+                                  "A1234/26");
+  airspaces.Add(class_c);
+  notam->SetOrigin(AirspaceOrigin::NOTAM);
+  airspaces.Add(notam);
+  airspaces.Optimise();
+
+  ok1(airspaces.GetSize() == 2);
+
+  AirspaceWarningConfig config;
+  config.SetDefaults();
+  AirspaceWarningManager manager(config, airspaces);
+  manager.AcknowledgeDay(notam, true);
+  ok1(manager.GetAckDay(*notam));
+
+  const Serial serial_before = airspaces.GetSerial();
+  airspaces.EraseOrigin(AirspaceOrigin::FILE);
+
+  ok1(airspaces.GetSerial() != serial_before);
+  airspaces.Optimise();
+  ok1(airspaces.GetSize() == 1);
+
+  const AbstractAirspace *found = nullptr;
+  unsigned remaining = 0;
+  for (const auto &i : airspaces.QueryAll()) {
+    ++remaining;
+    found = &i.GetAirspace();
+  }
+  ok1(remaining == 1 && found == notam.get());
+  ok1(manager.GetAckDay(*notam));
+}
+
+static void
+TestAckDayClearedWithEmptyDatabase()
+{
+  Airspaces airspaces;
+  const auto airspace = MakeAirspace(AirspaceClass::CLASSC, "Class C");
+  const auto notam = MakeAirspace(AirspaceClass::NOTAM, "NOTAM", "B1234/26");
+  airspaces.Add(airspace);
+  airspaces.Add(notam);
+  airspaces.Optimise();
+
+  AirspaceWarningConfig config;
+  config.SetDefaults();
+  AirspaceWarningManager manager(config, airspaces);
+
+  AircraftState state{};
+  state.location = GeoPoint{Angle::Degrees(8), Angle::Degrees(50)};
+
+  manager.AcknowledgeDay(airspace, true);
+  manager.AcknowledgeDay(notam, true);
+  ok1(manager.GetAckDay(*airspace));
+
+  /* A time jump keeps Ack Day. An empty database does not. */
+  manager.Reset(state);
+  ok1(manager.GetAckDay(*airspace));
+
+  airspaces.Clear();
+  ok1(manager.Update(state, GlidePolar(), TaskStats{}, false,
+                     std::chrono::seconds{1}));
+  ok1(!manager.GetAckDay(*airspace));
+
+  const auto reloaded = MakeAirspace(AirspaceClass::NOTAM, "NOTAM",
+                                     "B1234/26");
+  ok1(manager.GetAckDay(*reloaded));
+  ok1(!manager.Update(state, GlidePolar(), TaskStats{}, false,
+                      std::chrono::seconds{1}));
+}
+
 int
 main()
 {
-  plan_tests(31 + 20);
+  plan_tests(31 + 20 + 10 + 12);
 
   TestNonNotamAckDayClear();
   TestNotamAckDayClearAfterRefresh();
   TestNotamAckDayClearSiblings();
   TestAckClearsActiveImmediately();
+  TestEraseIfLeavesNotam();
+  TestAckDayClearedWithEmptyDatabase();
 
   return exit_status();
 }

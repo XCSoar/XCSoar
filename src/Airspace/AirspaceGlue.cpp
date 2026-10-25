@@ -55,7 +55,7 @@ try {
   BufferedReader buffered_reader{progress_reader};
 
   try {
-    ParseAirspaceFile(airspaces, buffered_reader);
+    ParseAirspaceFile(airspaces, buffered_reader, AirspaceOrigin::MAP);
   } catch (...) {
     // TODO translate this?
     std::throw_with_nested(FmtRuntimeError("Error in file {}", path));
@@ -98,9 +98,11 @@ ReadAirspace(Airspaces &airspaces,
   if (airspace_ok) {
     airspaces.Optimise();
     airspaces.SetFlightLevels(press);
-  } else
-    // there was a problem
-    airspaces.Clear();
+  } else {
+    /* Drop a partial read. Other origins stay. */
+    airspaces.EraseOrigin(AirspaceOrigin::FILE);
+    airspaces.EraseOrigin(AirspaceOrigin::MAP);
+  }
 }
 
 void

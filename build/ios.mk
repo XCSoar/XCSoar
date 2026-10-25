@@ -2,6 +2,11 @@ ifeq ($(TARGET_IS_IOS),y)
 
 TARGET_LDLIBS += -framework UIKit
 
+# the task QR code scanner in Apple/QRScanner.cpp reads camera frames:
+# CMSampleBuffer* lives in CoreMedia, CVPixelBuffer* in CoreVideo
+TARGET_LDLIBS += -framework CoreMedia
+TARGET_LDLIBS += -framework CoreVideo
+
 IPA_TMPDIR = $(TARGET_OUTPUT_DIR)/ipa
 
 IPA_NAME = xcsoar.ipa

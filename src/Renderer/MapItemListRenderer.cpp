@@ -38,6 +38,9 @@
 #include "Weather/Features.hpp"
 #include "FLARM/List.hpp"
 #include "time/RoughTime.hpp"
+#include "Engine/Observation/Store.hpp"
+
+#include <chrono>
 #include "time/BrokenDateTime.hpp"
 
 #ifdef HAVE_NOAA
@@ -258,17 +261,35 @@ Draw(Canvas &canvas, const PixelRect rc,
 }
 #endif
 
+static const char *
+OriginLabel(ObservationOrigin origin) noexcept
+{
+  switch (origin) {
+  case ObservationOrigin::OWN:
+    return C_("Observation", "XCSoar");
+  case ObservationOrigin::CLOUD:
+    return C_("Observation", "Cloud");
+  case ObservationOrigin::SKYLINES:
+    return C_("Observation", "SkyLines");
+  case ObservationOrigin::TIM:
+    return _("Thermal Information Map");
+  case ObservationOrigin::COUNT:
+    break;
+  }
+  return _("Thermal");
+}
+
 static void
 Draw(Canvas &canvas, PixelRect rc,
      const ThermalMapItem &item,
-     RoughTimeDelta utc_offset,
+     [[maybe_unused]] RoughTimeDelta utc_offset,
      const TwoTextRowsRenderer &row_renderer,
      const MapLook &look)
 {
   const unsigned line_height = rc.GetHeight();
   const unsigned text_padding = Layout::GetTextPadding();
 
-  const ThermalSource &thermal = item.thermal;
+  const ObservedThermal &thermal = item.thermal;
 
   const PixelPoint pt(rc.left + line_height / 2,
                       rc.top + line_height / 2);
@@ -279,17 +300,21 @@ Draw(Canvas &canvas, PixelRect rc,
 
   row_renderer.DrawFirstRow(canvas, rc, _("Thermal"));
 
+  auto age = std::chrono::steady_clock::now() - thermal.received;
+  if (age.count() < 0)
+    age = {};
+
+  const auto age_s =
+    std::chrono::duration_cast<std::chrono::seconds>(age);
+  StaticString<64> ago;
+  ago.Format(_("%s ago"), FormatTimespanSmart(age_s).c_str());
+
   StaticString<256> buffer;
-
-  auto timespan = TimeStamp{BrokenDateTime::NowUTC().DurationSinceMidnight()} - thermal.time;
-  if (timespan.count() < 0)
-    timespan += hours{24};
-
-  buffer.Format("%s: %s - left %s ago (%s)",
+  buffer.Format("%s, %s: %s - %s",
+                OriginLabel(thermal.origin),
                 _("Avg. lift"),
                 FormatUserVerticalSpeed(thermal.lift_rate).c_str(),
-                FormatTimespanSmart(timespan).c_str(),
-                FormatLocalTimeHHMM(thermal.time, utc_offset).c_str());
+                ago.c_str());
   row_renderer.DrawSecondRow(canvas, rc, buffer);
 }
 

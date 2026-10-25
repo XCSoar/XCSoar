@@ -205,14 +205,14 @@ AirspaceWarningManager::Update(const AircraftState& state,
 
   // update warning states
   if (airspaces.IsEmpty()) {
-    // The airspace database can be rebuilt asynchronously (e.g. NOTAM
-    // disable/refresh), temporarily dropping all airspaces while stale warning
-    // entries from the previous set still exist.
-    if (warnings.empty())
+    /* Drop stale warnings and Ack Day pointers. A new airspace can
+       reuse an old address. Station-keyed NOTAM Ack Day stays. */
+    if (warnings.empty() && ack_day_airspaces.empty())
       return false;
 
     ++serial;
     warnings.clear();
+    ack_day_airspaces.clear();
     return true;
   }
 
@@ -721,6 +721,12 @@ AirspaceWarningManager::AckOutsideAirspaces(const AbstractAirspace &acked) noexc
   if (!acked.Inside(last_location))
     return false;
 
+  AltitudeState alt_state{};
+  alt_state.altitude = last_altitude;
+  alt_state.altitude_agl = last_altitude_agl;
+  const double band_base = acked.GetBaseAltitude(alt_state);
+  const double band_top = acked.GetTopAltitude(alt_state);
+
   bool changed = false;
   for (auto &other : warnings) {
     if (&other.GetAirspace() == &acked || other.GetAckDay() ||
@@ -731,6 +737,16 @@ AirspaceWarningManager::AckOutsideAirspaces(const AbstractAirspace &acked) noexc
       continue;
     if (!other.GetAirspace().Inside(last_location))
       continue;
+
+    /* Share a height band. A floor at or above this ceiling
+       is still ahead. */
+    const double other_base =
+      other.GetAirspace().GetBaseAltitude(alt_state);
+    const double other_top =
+      other.GetAirspace().GetTopAltitude(alt_state);
+    if (other_base >= band_top || other_top <= band_base)
+      continue;
+
     other.AcknowledgeDay(true);
     ack_day_airspaces.insert(&other.GetAirspace());
     changed = true;

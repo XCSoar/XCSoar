@@ -2,7 +2,6 @@
 // Copyright The XCSoar Project
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Message.hpp"
 #include "Widget/ArrowPagerWidget.hpp"
 #include "Widget/CreateWindowWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
@@ -17,6 +16,7 @@
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
 #include "util/Macros.hpp"
+#include "util/ScopeExit.hxx"
 #include "Panels/ConfigPanel.hpp"
 #include "Panels/PagesConfigPanel.hpp"
 #include "Panels/UnitsConfigPanel.hpp"
@@ -46,7 +46,6 @@
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Audio/Features.hpp"
-#include "UtilsSettings.hpp"
 #include "net/http/Features.hpp"
 
 #ifdef HAVE_HTTP
@@ -400,10 +399,18 @@ ConfigurationExtraButtons::Apply(const PixelRect &rc) noexcept
   }
 }
 
+bool
+ConfigPanel::HasExtraButtons() noexcept
+{
+  return pager != nullptr;
+}
+
 Button &
 ConfigPanel::BorrowExtraButton(unsigned i, const char *caption,
                                std::function<void()> callback) noexcept
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   extra.Borrow(i, caption, std::move(callback));
   return extra.GetButton(i);
@@ -412,6 +419,8 @@ ConfigPanel::BorrowExtraButton(unsigned i, const char *caption,
 void
 ConfigPanel::ReturnExtraButton(unsigned i)
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   extra.Return(i);
 }
@@ -419,6 +428,8 @@ ConfigPanel::ReturnExtraButton(unsigned i)
 CheckBoxControl &
 ConfigPanel::GetExpertCheckbox() noexcept
 {
+  assert(pager != nullptr);
+
   auto &extra = (ConfigurationExtraButtons &)pager->GetExtra();
   return extra.GetExpert();
 }
@@ -467,6 +478,13 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
 void dlgConfigurationShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
+
+  /* Destroyed after the dialog, so Hide() can still return borrowed
+     buttons. Left set, the pointer dangles and a later standalone
+     panel crashes in BorrowExtraButton(). */
+  AtScopeExit() {
+    pager = nullptr;
+  };
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
                       look, _("Configuration"));
@@ -530,10 +548,6 @@ void dlgConfigurationShowModal()
     }
   }
 
-  if (dialog.GetChanged() || expert_changed) {
+  if (dialog.GetChanged() || expert_changed)
     Profile::Save();
-    if (require_restart)
-      ShowMessageBox(_("Changes to configuration saved. Restart XCSoar to apply changes."),
-                  "", MB_OK);
-  }
 }

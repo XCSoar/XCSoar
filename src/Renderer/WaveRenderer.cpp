@@ -3,8 +3,6 @@
 
 #include "WaveRenderer.hpp"
 #include "Computer/WaveResult.hpp"
-#include "Tracking/Features.hpp"
-#include "Tracking/SkyLines/Data.hpp"
 #include "Look/WaveLook.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -57,19 +55,3 @@ WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
   for (const auto &wave : result.waves)
     Draw(canvas, projection, clip, wave);
 }
-
-#ifdef HAVE_SKYLINES_TRACKING
-
-void
-WaveRenderer::Draw(Canvas &canvas, const WindowProjection &projection,
-                   const SkyLinesTracking::Data &data) const
-{
-  if (data.waves.empty())
-    return;
-
-  const GeoClip clip(projection.GetScreenBounds().Scale(1.1));
-  for (const auto &i : data.waves)
-    Draw(canvas, projection, clip, i.a, i.b);
-}
-
-#endif

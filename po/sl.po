@@ -12721,3 +12721,46 @@ msgstr ""
 "o je jadralno letalo težje od svoje največje vzletne mase. Vrednost je modr"
 "a med praznjenjem. Tapnite za spremembo balasta."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Usmerite kamero v kodo QR naloge"
+
+msgid "No camera permission"
+msgstr "Ni dovoljenja za kamero"
+
+msgid "No camera found"
+msgstr "Kamere ni mogoče najti"
+
+msgid "Cannot open the camera"
+msgstr "Kamere ni mogoče odpreti"
+
+msgid "Cannot start the camera preview"
+msgstr "Predogleda kamere ni mogoče zagnati"
+
+msgid "Camera not usable"
+msgstr "Kamere ni mogoče uporabiti"

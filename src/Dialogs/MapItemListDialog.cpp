@@ -39,12 +39,18 @@
 #include "LogFile.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Color.hpp"
+#include "Widget/RowFormWidget.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "util/StaticString.hxx"
 #include "Pan.hpp"
 #include "Simulator.hpp"
 #include <Message.hpp>
 
 #include <optional>
 #include <exception>
+#include <chrono>
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather/NOAADetails.hpp"
@@ -86,9 +92,9 @@ HasDetails(const MapItem &item)
 {
   switch (item.type) {
   case MapItem::Type::ARRIVAL_ALTITUDE:
-  case MapItem::Type::THERMAL:
     return false;
 
+  case MapItem::Type::THERMAL:
   case MapItem::Type::SELF:
   case MapItem::Type::LOCATION:
   case MapItem::Type::AIRSPACE:
@@ -215,10 +221,18 @@ public:
   }
 
   static bool CanGotoItem(const MapItem &item) noexcept {
-    return backend_components != nullptr &&
-           backend_components->protected_task_manager &&
-           (item.type == MapItem::Type::WAYPOINT ||
-            item.type == MapItem::Type::LOCATION);
+    if (backend_components == nullptr ||
+        backend_components->protected_task_manager == nullptr)
+      return false;
+
+    if (item.type == MapItem::Type::THERMAL) {
+      const auto &thermal =
+        static_cast<const ThermalMapItem &>(item).thermal;
+      return thermal.location.IsValid();
+    }
+
+    return item.type == MapItem::Type::WAYPOINT ||
+           item.type == MapItem::Type::LOCATION;
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -490,28 +504,34 @@ MapItemListWidget::OnGotoClicked()
   auto const &item = *list[index];
 
   assert(item.type == MapItem::Type::WAYPOINT ||
-         item.type == MapItem::Type::LOCATION);
+         item.type == MapItem::Type::LOCATION ||
+         item.type == MapItem::Type::THERMAL);
 
   WaypointPtr waypoint;
 
-  if (item.type == MapItem::Type::LOCATION) {
-    const auto &loc_item = static_cast<const LocationMapItem &>(item);
-
-    // Use the stored location directly
-    const GeoPoint &location = loc_item.location;
-
-    // Get terrain elevation (prefer stored elevation, fall back to terrain lookup)
+  if (item.type == MapItem::Type::LOCATION ||
+      item.type == MapItem::Type::THERMAL) {
+    GeoPoint location;
     std::optional<double> elevation;
-    if (loc_item.HasElevation()) {
-      elevation = loc_item.elevation;
-    } else if (data_components->terrain != nullptr) {
-      const auto h = data_components->terrain->GetTerrainHeight(location);
-      if (!h.IsSpecial()) {
-        elevation = h.GetValue();
-      }
+
+    if (item.type == MapItem::Type::LOCATION) {
+      const auto &loc_item = static_cast<const LocationMapItem &>(item);
+      location = loc_item.location;
+      if (loc_item.HasElevation())
+        elevation = loc_item.elevation;
+    } else {
+      location = static_cast<const ThermalMapItem &>(item).thermal.location;
     }
 
-    // Create temporary goto waypoint (without elevation if unavailable)
+    if (!location.IsValid())
+      return;
+
+    if (!elevation && data_components->terrain != nullptr) {
+      const auto h = data_components->terrain->GetTerrainHeight(location);
+      if (!h.IsSpecial())
+        elevation = h.GetValue();
+    }
+
     auto &way_points = *data_components->waypoints;
     const char *goto_name = "(goto)";
     {
@@ -656,6 +676,76 @@ MapItemListWidget::OnClearanceClicked(bool set)
     UpdateButtons();
 }
 
+static const char *
+ThermalOriginLabel(ObservationOrigin origin) noexcept
+{
+  switch (origin) {
+  case ObservationOrigin::OWN:
+    return C_("Observation", "XCSoar");
+  case ObservationOrigin::CLOUD:
+    return C_("Observation", "Cloud");
+  case ObservationOrigin::SKYLINES:
+    return C_("Observation", "SkyLines");
+  case ObservationOrigin::TIM:
+    return _("Thermal Information Map");
+  case ObservationOrigin::COUNT:
+    break;
+  }
+  return _("Thermal");
+}
+
+class ThermalDetailsWidget final : public RowFormWidget {
+  const ObservedThermal thermal;
+
+public:
+  ThermalDetailsWidget(const DialogLook &look, const ObservedThermal &_thermal)
+    :RowFormWidget(look), thermal(_thermal) {}
+
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
+};
+
+void
+ThermalDetailsWidget::Prepare(ContainerWindow &parent,
+                              const PixelRect &rc) noexcept
+{
+  RowFormWidget::Prepare(parent, rc);
+
+  AddReadOnly(_("Source"), nullptr, ThermalOriginLabel(thermal.origin));
+
+  if (const auto location = FormatGeoPoint(thermal.location);
+      !location.empty())
+    AddReadOnly(_("Location"), nullptr, location.c_str());
+
+  if (thermal.origin == ObservationOrigin::OWN)
+    AddReadOnly(_("Elevation"), nullptr,
+                FormatUserAltitude(thermal.ground_height).c_str());
+
+  AddReadOnly(_("Avg. lift"), nullptr,
+              FormatUserVerticalSpeed(thermal.lift_rate).c_str());
+
+  auto age = std::chrono::steady_clock::now() - thermal.received;
+  if (age.count() < 0)
+    age = {};
+  const auto age_s =
+    std::chrono::duration_cast<std::chrono::seconds>(age);
+  StaticString<64> ago;
+  ago.Format(_("%s ago"), FormatTimespanSmart(age_s).c_str());
+  AddReadOnly(_("Time"), nullptr, ago);
+}
+
+static void
+ShowThermalDetails(const ObservedThermal &thermal) noexcept
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  TWidgetDialog<ThermalDetailsWidget>
+    dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
+           look, _("Thermal"));
+  dialog.SetWidget(look, thermal);
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
+}
+
 static bool
 ShowMapItemDialog(const MapItem &item,
                   Waypoints *waypoints,
@@ -663,7 +753,10 @@ ShowMapItemDialog(const MapItem &item,
 {
   switch (item.type) {
   case MapItem::Type::ARRIVAL_ALTITUDE:
+    return false;
+
   case MapItem::Type::THERMAL:
+    ShowThermalDetails(static_cast<const ThermalMapItem &>(item).thermal);
     return false;
 
   case MapItem::Type::SELF:

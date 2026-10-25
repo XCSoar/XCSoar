@@ -281,6 +281,19 @@ TestFlightTimeFromRoundedBrokenDateTime()
 }
 
 static void
+TestFormatUTCTime()
+{
+  char buffer[32];
+  const BrokenDate today{2026, 10, 22};
+
+  FormatUTCTime(buffer, BrokenDateTime{2026, 10, 22, 14, 5, 9}, today);
+  ok1(StringIsEqual(buffer, "14:05Z"));
+
+  FormatUTCTime(buffer, BrokenDateTime{2000, 1, 1, 0, 1, 30}, today);
+  ok1(StringIsEqual(buffer, "2000-01-01 00:01Z"));
+}
+
+static void
 TestFormatLocalDateTimeYYYYMMDDHHMM()
 {
   std::array<char, 21> buffer;
@@ -296,7 +309,7 @@ TestFormatLocalDateTimeYYYYMMDDHHMM()
 
 int main()
 {
-  plan_tests(117);
+  plan_tests(119);
 
   TestFormat();
   TestFormatLong();
@@ -305,6 +318,7 @@ int main()
   TestSmart();
   TestFlightTimeFromRoundedTakeoffLanding();
   TestFlightTimeFromRoundedBrokenDateTime();
+  TestFormatUTCTime();
   TestFormatLocalDateTimeYYYYMMDDHHMM();
 
   return exit_status();

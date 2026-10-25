@@ -59,8 +59,8 @@ CompareMapItems(const MapItem *a, const MapItem *b)
            ((const TrafficMapItem *)b)->id;
 
   case MapItem::Type::THERMAL:
-    return ((const ThermalMapItem *)a)->thermal.time >
-           ((const ThermalMapItem *)b)->thermal.time;
+    return ((const ThermalMapItem *)a)->thermal.received >
+           ((const ThermalMapItem *)b)->thermal.received;
 
   case MapItem::Type::AIRSPACE:
     return AirspaceAltitude::SortHighest(

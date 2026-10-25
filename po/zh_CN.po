@@ -12244,3 +12244,46 @@ msgstr "滑翔机的最大起飞重量。"
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr "机上水压载，单位为升。注释显示机翼载荷，滑翔机超过最大起飞重量时为红色。抛放时数值为蓝色。点按可更改压载。"
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "将相机对准任务二维码"
+
+msgid "No camera permission"
+msgstr "没有相机权限"
+
+msgid "No camera found"
+msgstr "未找到相机"
+
+msgid "Cannot open the camera"
+msgstr "无法打开相机"
+
+msgid "Cannot start the camera preview"
+msgstr "无法启动相机预览"
+
+msgid "Camera not usable"
+msgstr "相机不可用"

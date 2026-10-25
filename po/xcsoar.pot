@@ -11423,3 +11423,46 @@ msgid ""
 "Arrange\n"
 "InfoBoxes"
 msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr ""
+
+msgid "No camera permission"
+msgstr ""
+
+msgid "No camera found"
+msgstr ""
+
+msgid "Cannot open the camera"
+msgstr ""
+
+msgid "Cannot start the camera preview"
+msgstr ""
+
+msgid "Camera not usable"
+msgstr ""

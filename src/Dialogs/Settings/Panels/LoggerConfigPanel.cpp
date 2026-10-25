@@ -9,9 +9,11 @@
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Logger/NMEALogger.hpp"
-#include "UtilsSettings.hpp"
+#include "Logger/GlueFlightLogger.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+#include "DataFilePath.hpp"
+#include "Simulator.hpp"
 #include "Units/Group.hpp"
 #include "Units/Units.hpp"
 
@@ -140,10 +142,19 @@ LoggerConfigPanel::Save(bool &changed) noexcept
                 logger.enable_flight_logger)) {
     changed = true;
 
-    /* currently, the GlueFlightLogger instance is created on startup
-       only, which means XCSoar needs to be restarted to apply the new
-       setting */
-    require_restart = true;
+    /* Same as startup: the simulator has no log book. */
+    if (!is_simulator() && backend_components != nullptr) {
+      if (logger.enable_flight_logger) {
+        if (backend_components->flight_logger == nullptr) {
+          auto &blackboard = CommonInterface::GetLiveBlackboard();
+          backend_components->flight_logger =
+            std::make_unique<GlueFlightLogger>(blackboard);
+          backend_components->flight_logger->SetPath(
+            LogsDataSavePath("flights.log"));
+        }
+      } else
+        backend_components->flight_logger.reset();
+    }
   }
 
   changed |= SaveValue(LoggerID, ProfileKeys::LoggerID, logger.logger_id);

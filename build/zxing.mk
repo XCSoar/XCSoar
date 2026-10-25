@@ -1,4 +1,4 @@
-# zxing-cpp reads and writes QR codes.  The scanner is Android-only.
+# zxing-cpp reads and writes QR codes.  Android and iOS scan them.
 # Linux (except the Kobo cross toolchain) and Apple build the codec,
 # so those targets can draw a task QR code.  Kobo's musl CMake setup
 # is not wired for this library.

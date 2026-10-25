@@ -12920,3 +12920,46 @@ msgstr ""
 "rojo cuando el planeador pesa más que su masa máxima al despegue. El valor "
 "es azul mientras se vacía el lastre. Toque para cambiar el lastre."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Apunte la cámara a un código QR de tarea"
+
+msgid "No camera permission"
+msgstr "Sin permiso para la cámara"
+
+msgid "No camera found"
+msgstr "No se encontró ninguna cámara"
+
+msgid "Cannot open the camera"
+msgstr "No se puede abrir la cámara"
+
+msgid "Cannot start the camera preview"
+msgstr "No se puede iniciar la vista previa de la cámara"
+
+msgid "Camera not usable"
+msgstr "La cámara no se puede usar"

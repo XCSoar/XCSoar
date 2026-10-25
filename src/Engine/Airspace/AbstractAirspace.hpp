@@ -4,6 +4,8 @@
 #pragma once
 
 #include "util/TriState.hpp"
+#include "Origin.hpp"
+#include "time/BrokenDateTime.hpp"
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
@@ -53,8 +55,21 @@ protected:
   /** Airspace name (identifier) */
   std::string name;
 
+  /** Activation times related variables are meaningless
+   ** unless has_activation_time == true
+   */
+  bool has_activation_time = false;
+  BrokenDateTime activation_start_time = BrokenDateTime::Invalid();
+  BrokenDateTime activation_end_time = BrokenDateTime::Invalid();
+  bool active_today = true;
+  bool never_active = false;
+  /** end of Activation times related variables */
+
   /** Airspace type */
   AirspaceClass astype;
+
+  /** Where this airspace was loaded from. */
+  AirspaceOrigin origin = AirspaceOrigin::FILE;
 
   /** Airspace Station name */
   std::string station_name;
@@ -213,18 +228,42 @@ public:
    * Set fundamental properties of airspace
    *
    * @param _Name Name of airspace
+   * @param _has_activation_time
+   * @param _activation_start_time
+   * @param _activation_end_time
+   * @param _active_today, _never_active
    * @param _classs Class
    * @param _type Type
    * @param _base Lower limit
    * @param _top Upper limit
    */
 
-  void SetProperties(std::string &&_name, std::string &&_station_name,
+  void SetProperties(std::string &&_name,
+                     bool _has_activation_time,
+                     BrokenDateTime _activation_start_time,
+                     BrokenDateTime _activation_end_time,
+                     bool _active_today, bool _never_active,
+                     std::string &&_station_name,
                      TransponderCode &&_transponder_code,
                      const AirspaceClass _class, const AirspaceClass _type,
                      const AirspaceAltitude &_base,
                      const AirspaceAltitude &_top) noexcept
   {
+    has_activation_time = _has_activation_time;
+    if (has_activation_time) {
+      activation_start_time = std::move(_activation_start_time);
+      activation_end_time   = std::move(_activation_end_time);
+      never_active          = _never_active;
+      active_today          = _active_today;
+      /* Add() applies the day mask on the next update. Until then
+         the constructor would leave this airspace active. */
+      active                = _active_today;
+    } else {
+      activation_start_time = BrokenDateTime::Invalid();
+      activation_end_time   = BrokenDateTime::Invalid();
+      never_active          = false;
+      active_today          = true;
+    }
     name = std::move(_name);
     station_name = std::move(_station_name);
     transponder_code = std::move(_transponder_code);
@@ -278,6 +317,14 @@ public:
    */
   AirspaceClass GetType() const noexcept {
     return astype;
+  }
+
+  void SetOrigin(AirspaceOrigin _origin) noexcept {
+    origin = _origin;
+  }
+
+  AirspaceOrigin GetOrigin() const noexcept {
+    return origin;
   }
 
   /**
@@ -377,6 +424,31 @@ public:
   [[gnu::pure]]
   const char *GetName() const noexcept {
     return name.c_str();
+  }
+
+  [[gnu::pure]]
+  bool HasActivationTime() const noexcept {
+    return has_activation_time;
+  }
+
+  [[nodiscard]]
+  BrokenDateTime GetActivationStartTime() const noexcept {
+    return activation_start_time;
+  }
+
+  [[nodiscard]]
+  BrokenDateTime GetActivationEndTime() const noexcept {
+    return activation_end_time;
+  }
+
+  [[gnu::pure]]
+  bool IsNeverActive() const noexcept {
+    return never_active;
+  }
+
+  [[gnu::pure]]
+  bool IsActiveToday() const noexcept {
+    return active_today;
   }
 
   [[gnu::pure]]

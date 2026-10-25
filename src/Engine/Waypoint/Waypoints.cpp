@@ -410,6 +410,38 @@ Waypoints::EraseUserMarkers() noexcept
 }
 
 void
+Waypoints::EraseFile(WaypointOrigin origin, uint8_t file_num) noexcept
+{
+  waypoint_tree.EraseIf([this, origin, file_num](const WaypointPtr &wp){
+      if (wp->origin != origin || wp->file_num != file_num)
+        return false;
+
+      if (home == wp)
+        home = nullptr;
+
+      name_tree.Remove(wp);
+      ++serial;
+      return true;
+    });
+}
+
+void
+Waypoints::EraseOrigin(WaypointOrigin origin) noexcept
+{
+  waypoint_tree.EraseIf([this, origin](const WaypointPtr &wp){
+      if (wp->origin != origin)
+        return false;
+
+      if (home == wp)
+        home = nullptr;
+
+      name_tree.Remove(wp);
+      ++serial;
+      return true;
+    });
+}
+
+void
 Waypoints::Replace(const WaypointPtr &orig, Waypoint &&replacement) noexcept
 {
   assert(!waypoint_tree.IsEmpty());

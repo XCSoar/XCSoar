@@ -12634,3 +12634,46 @@ msgstr ""
 "יותר ממסת ההמראה המרבית. הערך כחול בזמן ריקון הנטל. הקישו כדי לשנות את הנטל"
 "."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "כוון את המצלמה לקוד QR של משימה"
+
+msgid "No camera permission"
+msgstr "אין הרשאה למצלמה"
+
+msgid "No camera found"
+msgstr "לא נמצאה מצלמה"
+
+msgid "Cannot open the camera"
+msgstr "לא ניתן לפתוח את המצלמה"
+
+msgid "Cannot start the camera preview"
+msgstr "לא ניתן להפעיל את תצוגת המצלמה"
+
+msgid "Camera not usable"
+msgstr "לא ניתן להשתמש במצלמה"

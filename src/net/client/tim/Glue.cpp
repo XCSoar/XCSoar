@@ -4,10 +4,14 @@
 #include "Glue.hpp"
 #include "Client.hpp"
 #include "Thermal.hpp"
+#include "Observation/Database.hpp"
+#include "Engine/Observation/Store.hpp"
 #include "NMEA/Info.hpp"
 #include "lib/curl/Global.hxx"
 #include "LogFile.hpp"
 #include "net/State.hpp"
+
+#include <chrono>
 
 namespace TIM {
 
@@ -25,7 +29,18 @@ Glue::~Glue() noexcept
 void
 Glue::BeginShutdown() noexcept
 {
+  {
+    const std::lock_guard lock{mutex};
+    observations = nullptr;
+  }
   task.BeginShutdown();
+}
+
+void
+Glue::SetObservations(ObservationDatabase *db) noexcept
+{
+  const std::lock_guard lock{mutex};
+  observations = db;
 }
 
 void
@@ -57,13 +72,36 @@ Glue::OnTimer(const NMEAInfo &basic) noexcept
 Co::InvokeTask
 Glue::Start(const GeoPoint &location)
 {
-  auto new_thermals = co_await GetThermals(curl, std::chrono::hours(1),
-                                           location, 20);
+  auto downloaded = co_await GetThermals(curl, std::chrono::hours(1),
+                                        location, 20);
   LogDebug("Downloaded {} thermals from ThermalInfoMap",
-           new_thermals.size());
+           downloaded.size());
 
-  const auto lock = Lock();
-  thermals = std::move(new_thermals);
+  ThermalRows rows;
+  rows.clear();
+  const auto now = std::chrono::steady_clock::now();
+  for (const auto &thermal : downloaded) {
+    if (rows.full())
+      break;
+    if (!thermal.location.IsValid())
+      continue;
+
+    ObservedThermal row;
+    row.origin = ObservationOrigin::TIM;
+    row.location = thermal.location;
+    row.ground_height = 0;
+    row.lift_rate = thermal.climb_rate;
+    row.received = now;
+    rows.append(row);
+  }
+
+  ObservationDatabase *db;
+  {
+    const std::lock_guard lock{mutex};
+    db = observations;
+  }
+  if (db != nullptr)
+    db->ReplaceThermals(ObservationOrigin::TIM, rows);
 }
 
 void

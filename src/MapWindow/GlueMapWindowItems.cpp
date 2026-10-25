@@ -14,10 +14,7 @@
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 #include "Weather/Rasp/RaspRenderer.hpp"
-#ifdef HAVE_HTTP
-#include "net/client/tim/Glue.hpp"
-#include "net/client/tim/Thermal.hpp"
-#endif
+#include "Observation/Database.hpp"
 #include "Interface.hpp"
 #include "Overlay.hpp"
 #include "OverlayLimits.hpp"
@@ -66,16 +63,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                settings.airspace, basic,
                                calculated);
 
-  if (visible_projection.GetMapScale() <= 4000) {
-    builder.AddThermals(calculated.thermal_locator, basic, calculated);
-
-#ifdef HAVE_HTTP
-    if (tim_glue != nullptr && computer_settings.weather.enable_tim) {
-      const auto lock = tim_glue->Lock();
-      builder.AddThermals(tim_glue->Get());
-    }
-#endif
-  }
+  if (visible_projection.GetMapScale() <= 4000 && observations != nullptr)
+    builder.AddThermals(*observations, basic, calculated,
+                        computer_settings);
 
   if (waypoints)
     builder.AddWaypoints(*waypoints, route_planner, basic, calculated,

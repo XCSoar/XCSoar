@@ -12690,3 +12690,46 @@ msgstr ""
 "år seilflyet er tyngre enn sin maksimale startmasse. Verdien er blå mens ba"
 "llast tømmes. Trykk for å endre ballasten."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Rett kameraet mot en oppgave-QR-kode"
+
+msgid "No camera permission"
+msgstr "Ingen kameratillatelse"
+
+msgid "No camera found"
+msgstr "Fant ikke noe kamera"
+
+msgid "Cannot open the camera"
+msgstr "Kan ikke åpne kameraet"
+
+msgid "Cannot start the camera preview"
+msgstr "Kan ikke starte kameravisningen"
+
+msgid "Camera not usable"
+msgstr "Kameraet kan ikke brukes"

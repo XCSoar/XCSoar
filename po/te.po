@@ -12578,3 +12578,46 @@ msgstr ""
 "డర్ గరిష్ఠ టేకాఫ్ బరువు కంటే ఎక్కువైతే ఎరుపు. బ్యాలస్ట్ పోస్తున్నప్పుడు విల"
 "ువ నీలం. మార్చడానికి నొక్కండి."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "కెమెరాను టాస్క్ QR కోడ్ వైపు చూపండి"
+
+msgid "No camera permission"
+msgstr "కెమెరా అనుమతి లేదు"
+
+msgid "No camera found"
+msgstr "కెమెరా కనుగొనబడలేదు"
+
+msgid "Cannot open the camera"
+msgstr "కెమెరాను తెరవలేము"
+
+msgid "Cannot start the camera preview"
+msgstr "కెమెరా ప్రివ్యూను ప్రారంభించలేము"
+
+msgid "Camera not usable"
+msgstr "కెమెరా ఉపయోగించలేనిది"

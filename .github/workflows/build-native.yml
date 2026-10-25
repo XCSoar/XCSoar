@@ -582,9 +582,9 @@ jobs:
           elif [ ${{ matrix.target }} = "KOBO" ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ matrix.target }} = "MACOS" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" dmg pkg
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y dmg pkg
           elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y OPTIMIZE="-O0" ipa ios-dsym
+            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 TESTING=y ipa ios-dsym
           elif [ ${{ matrix.target }} = "UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
@@ -670,6 +670,40 @@ jobs:
             cd output/UNIX/DPKG
             DEB_BUILD_OPTIONS=ccache dpkg-buildpackage --jobs-force=$(nproc) --no-sign
           fi
+
+      - name: Stage Win64 OpenGL unit tests
+        if: ${{ success() && matrix.target == 'WIN64OPENGL' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          stage=output/win64opengl-unit-tests
+          dry=$(mktemp)
+          rm -rf "$stage"
+          mkdir -p "$stage"
+          make -n TARGET=WIN64OPENGL DEBUG="${DEBUG}" check-no-build >"$dry"
+          mapfile -t exes < <(grep -o 'output/WIN64OPENGL/bin/[^[:space:]]*\.exe' "$dry" | sort -u)
+          if [ "${#exes[@]}" -eq 0 ]; then
+            echo "check-no-build listed no test executables"
+            exit 1
+          fi
+          cp -a "${exes[@]}" "$stage/"
+          # TestContainerWindow and TestWrapText import these.
+          cp -a output/WIN64OPENGL/bin/libEGL.dll \
+                output/WIN64OPENGL/bin/libGLESv2.dll "$stage/"
+          # shortcut: libwinpthread only; copy the DLL from the error if a test does not start
+          dll=$(x86_64-w64-mingw32-g++ -print-file-name=libwinpthread-1.dll)
+          if [ -f "$dll" ]; then
+            cp -a "$dll" "$stage/"
+          fi
+          echo "Staged ${#exes[@]} unit tests"
+
+      - name: Upload Win64 OpenGL unit tests
+        if: ${{ success() && matrix.target == 'WIN64OPENGL' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: win64opengl-unit-tests
+          path: output/win64opengl-unit-tests
+          if-no-files-found: error
 
       - name: Run tests before signing
         id: tests
@@ -874,6 +908,38 @@ jobs:
 
       - name: Show ccache stats
         run: ccache --show-stats || true
+
+  # shortcut: WIN64OPENGL only; add WIN32OPENGL the same way when 32-bit tests matter
+  windows-tests:
+    name: Windows unit tests
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
+          persist-credentials: false
+
+      - name: Download Win64 OpenGL unit tests
+        uses: actions/download-artifact@v8
+        with:
+          name: win64opengl-unit-tests
+          path: win64opengl-unit-tests
+
+      - name: Run unit tests
+        shell: bash
+        run: |
+          # Git Bash perl has no TAP::Harness, so run the executables directly.
+          shopt -s failglob
+          # make check creates this. A checkout does not.
+          mkdir -p output/test
+          failed=0
+          for exe in win64opengl-unit-tests/*.exe; do
+            echo "== $exe"
+            "$exe" || failed=1
+          done
+          exit "$failed"
 
   upload-to-play:
     name: Upload to Google Play

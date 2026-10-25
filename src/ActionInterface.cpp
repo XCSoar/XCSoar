@@ -24,8 +24,10 @@
 #include "PageSettings.hpp"
 #include "Weather/Features.hpp"
 #include "DataComponents.hpp"
+#include "Observation/Publish.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Session/SessionState.hpp"
 
 using namespace CommonInterface;
 
@@ -36,6 +38,15 @@ SendGetComputerSettings() noexcept;
 
 static void
 UpdateMapScalePageInfo(UIState &state) noexcept;
+
+static void
+NoteSessionPolar() noexcept
+{
+  const auto &polar = GetComputerSettings().polar;
+  Session::NotePolar(polar.glide_polar_task.GetBallastLitres(),
+                     polar.glide_polar_task.GetCrewMass(),
+                     polar.bugs);
+}
 
 void
 XCSoarInterface::ReceiveGPS() noexcept
@@ -68,6 +79,9 @@ XCSoarInterface::ReceiveCalculated() noexcept
     ReadBlackboardCalculated(device_blackboard.Calculated());
     device_blackboard.ReadComputerSettings(GetComputerSettings());
   }
+
+  if (data_components != nullptr && data_components->observations != nullptr)
+    PublishOwnObservations(*data_components->observations, Calculated());
 
   BroadcastCalculatedUpdate();
 }
@@ -117,6 +131,8 @@ ActionInterface::SetBallastLitres(double ballast_litres, bool to_devices) noexce
                                               env);
     }
   }
+
+  NoteSessionPolar();
 }
 
 void
@@ -137,6 +153,8 @@ ActionInterface::SetBallastFraction(double fraction, bool to_devices) noexcept
                                               env);
     }
   }
+
+  NoteSessionPolar();
 }
 
 bool
@@ -164,6 +182,8 @@ ActionInterface::SetBugs(double bugs, bool to_devices) noexcept
     MessageOperationEnvironment env;
     backend_components->devices->PutBugs(bugs, env);
   }
+
+  NoteSessionPolar();
 }
 
 void
@@ -188,6 +208,8 @@ ActionInterface::SetCrewMass(double crew_mass, bool to_devices) noexcept
                                               polar.GetBallastOverload(),
                                               env);
   }
+
+  NoteSessionPolar();
 }
 
 void

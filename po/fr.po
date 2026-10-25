@@ -12919,3 +12919,46 @@ msgstr ""
 " rouge lorsque le planeur est plus lourd que sa masse maximale au décollage"
 ". La valeur est bleue pendant la vidange. Touchez pour changer le ballast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Pointez la caméra vers un code QR de tâche"
+
+msgid "No camera permission"
+msgstr "Pas d'autorisation pour la caméra"
+
+msgid "No camera found"
+msgstr "Aucune caméra trouvée"
+
+msgid "Cannot open the camera"
+msgstr "Impossible d'ouvrir la caméra"
+
+msgid "Cannot start the camera preview"
+msgstr "Impossible de démarrer l'aperçu de la caméra"
+
+msgid "Camera not usable"
+msgstr "Caméra inutilisable"

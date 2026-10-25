@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Predicate/AirspacePredicate.hpp"
+#include "Origin.hpp"
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
 #include "Ptr.hpp"
@@ -75,6 +76,18 @@ public:
    * Clear the airspace store, deleting airspace objects if m_owner is true
    */
   void Clear() noexcept;
+
+  /**
+   * Remove airspaces selected by the predicate.
+   * Bumps the serial when at least one airspace is removed.
+   */
+  void EraseIf(const AirspacePredicate &predicate) noexcept;
+
+  /**
+   * Remove every airspace loaded from one origin.
+   * Bumps the serial when at least one airspace is removed.
+   */
+  void EraseOrigin(AirspaceOrigin origin) noexcept;
 
   /**
    * Size of airspace (in tree, not in temporary store) ---

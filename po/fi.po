@@ -12733,3 +12733,46 @@ msgstr ""
 "isena, kun kone on painavampi kuin sen suurin lentoonlähtöpaino. Arvo on si"
 "ninen painolastia tyhjennettäessä. Napauta muuttaaksesi painolastia."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Osoita kameralla tehtävän QR-koodia"
+
+msgid "No camera permission"
+msgstr "Ei kameran käyttöoikeutta"
+
+msgid "No camera found"
+msgstr "Kameraa ei löytynyt"
+
+msgid "Cannot open the camera"
+msgstr "Kameraa ei voi avata"
+
+msgid "Cannot start the camera preview"
+msgstr "Kameran esikatselua ei voi käynnistää"
+
+msgid "Camera not usable"
+msgstr "Kameraa ei voi käyttää"

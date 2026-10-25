@@ -5,6 +5,7 @@
 #include "EmptyDownloadList.hpp"
 #include "WidgetDialog.hpp"
 #include "Message.hpp"
+#include "LogFile.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Renderer/TextRowRenderer.hpp"
@@ -20,6 +21,7 @@
 #include "net/http/Features.hpp"
 #include "util/Macros.hpp"
 #include "Repository/FileRepository.hpp"
+#include "UtilsSettings.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "Repository/Glue.hpp"
@@ -151,8 +153,8 @@ class ManagedFileListWidget
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   /**
-   * This mutex protects the attributes "downloads" and
-   * "repository_modified".
+   * This mutex protects the attributes "downloads",
+   * "completed", and "repository_modified".
    */
   mutable Mutex mutex;
 
@@ -161,6 +163,9 @@ class ManagedFileListWidget
    * downloaded.
    */
   std::map<std::string, DownloadStatus, std::less<>> downloads;
+
+  /** Relative paths whose download finished since the last UI hop. */
+  std::vector<std::string> completed;
 
   /**
    * Each item in this set is a failed download.
@@ -752,7 +757,8 @@ ManagedFileListWidget::OnDownloadComplete(Path path_relative) noexcept
       repository_modified = true;
     } else if (IsUserRepositoryFile(name.c_str())) {
       repository_modified = true;
-    }
+    } else
+      completed.emplace_back(path_relative.c_str());
   }
 
   download_notify.SendNotification();
@@ -785,11 +791,22 @@ void
 ManagedFileListWidget::OnDownloadNotification() noexcept
 {
   bool repository_modified2, repository_failed2;
+  std::vector<std::string> completed2;
 
   {
     const std::lock_guard lock{mutex};
     repository_modified2 = std::exchange(repository_modified, false);
     repository_failed2 = std::exchange(repository_failed, false);
+    completed2.swap(completed);
+  }
+
+  if (!completed2.empty()) {
+    try {
+      ApplyConfiguredDataFiles(completed2);
+    } catch (...) {
+      LogError(std::current_exception(),
+               "Failed to load downloaded file");
+    }
   }
 
   if (repository_modified2)

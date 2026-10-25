@@ -12836,3 +12836,46 @@ msgstr ""
 "a, na czerwono, gdy szybowiec jest cięższy niż jego maksymalna masa startow"
 "a. Wartość jest niebieska podczas zrzutu. Stuknij, aby zmienić balast."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Skieruj aparat na kod QR zadania"
+
+msgid "No camera permission"
+msgstr "Brak uprawnień do aparatu"
+
+msgid "No camera found"
+msgstr "Nie znaleziono aparatu"
+
+msgid "Cannot open the camera"
+msgstr "Nie można otworzyć aparatu"
+
+msgid "Cannot start the camera preview"
+msgstr "Nie można uruchomić podglądu aparatu"
+
+msgid "Camera not usable"
+msgstr "Aparat nie nadaje się do użycia"

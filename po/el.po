@@ -12896,3 +12896,46 @@ msgstr ""
 "ωσης. Η τιμή είναι μπλε ενώ αδειάζει το έρμα. Αγγίξτε για να αλλάξετε το έρ"
 "μα."
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "Στρέψτε την κάμερα σε έναν κωδικό QR εργασίας"
+
+msgid "No camera permission"
+msgstr "Δεν υπάρχει άδεια κάμερας"
+
+msgid "No camera found"
+msgstr "Δεν βρέθηκε κάμερα"
+
+msgid "Cannot open the camera"
+msgstr "Δεν είναι δυνατό το άνοιγμα της κάμερας"
+
+msgid "Cannot start the camera preview"
+msgstr "Δεν είναι δυνατή η έναρξη της προεπισκόπησης κάμερας"
+
+msgid "Camera not usable"
+msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"

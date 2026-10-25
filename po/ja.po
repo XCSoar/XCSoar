@@ -12637,3 +12637,46 @@ msgstr "グライダーの最大離陸重量。"
 msgid "Water ballast on board, in litres. The comment shows the wing loading, in red when the glider is heavier than its MTOW. The value is blue while ballast is being dumped. Tap to change the ballast."
 msgstr "搭載中の水バラスト、リットル。コメントは翼面荷重を示し、最大離陸重量を超えると赤です。投棄中は値が青です。タップしてバラストを変更します。"
 
+
+#, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+msgid "Data files have been updated"
+msgstr ""
+
+msgid "Point the camera at a task QR code"
+msgstr "タスクのQRコードにカメラを向けてください"
+
+msgid "No camera permission"
+msgstr "カメラの権限がありません"
+
+msgid "No camera found"
+msgstr "カメラが見つかりません"
+
+msgid "Cannot open the camera"
+msgstr "カメラを開けません"
+
+msgid "Cannot start the camera preview"
+msgstr "カメラのプレビューを開始できません"
+
+msgid "Camera not usable"
+msgstr "カメラを使用できません"

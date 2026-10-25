@@ -103,6 +103,11 @@ configured when flying at a new site.
   The content listed in that manifest is then included in the file download 
   selectors. The manifest needs to use the same format as that of the XCSoar repository
   (See \url{https://github.com/XCSoar/xcsoar-data-content}).
+\item[Auto update] At startup, download a newer copy of each file already
+  stored on the device. A progress bar shows the download, and a message
+  reports when files were updated. Files selected on this page are loaded
+  without restarting. A download that finishes while flying is stored and
+  loaded the next time XCSoar starts. Off by default.
   
 \end{description}
 
@@ -838,7 +843,8 @@ This page once more details the appearance of the graphical user interface of XC
 \begin{description}
 \item[Text size]  Scales all UI text. At 100\%, type follows the
   display density. InfoBox fonts follow it, and do not grow past
-  the box.
+  the box. Menus, dialogues and status messages stop growing once
+  the type would no longer fit the screen.
 \item[Viewing distance]  {\bf Auto} shrinks type when the short edge
   is under 3.2 inches (a phone held close). {\bf Handheld} always
   uses that closer size. {\bf Panel} keeps full-size type for a

@@ -14,6 +14,13 @@
 #include "net/http/DownloadManager.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
+#include "ui/event/Notify.hpp"
+#include "thread/Mutex.hxx"
+#include "Weather/BackgroundDownloadProgress.hpp"
+#include "UtilsSettings.hpp"
+#include "LogFile.hpp"
+#include "Message.hpp"
+#include "Interface.hpp"
 #include "io/FileLineReader.hpp"
 #include "time/BrokenDateTime.hpp"
 
@@ -27,6 +34,8 @@
 #include "Language/Language.hpp"
 #endif
 
+#include <set>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -178,25 +187,26 @@ IsRemoteFileOutOfDate(const AvailableFile &file) noexcept
   return local_changed < file.update_date;
 }
 
-void
+bool
 EnqueueRemoteFileDownload(const AvailableFile &file) noexcept
 {
   if (!Net::DownloadManager::IsAvailable())
-    return;
+    return false;
 
   const auto relative_path = GetFileDownloadRelativePath(file);
   if (relative_path == nullptr)
-    return;
+    return false;
 
   const AllocatedPath subdir = GetFileTypeDefaultDir(file.type);
   if (subdir != nullptr) {
     const auto dest_path = LocalPath(subdir);
     Directory::CreateRecursive(dest_path);
     if (!Directory::Exists(dest_path))
-      return;
+      return false;
   }
 
   Net::DownloadManager::Enqueue(file.GetURI(), Path(relative_path.c_str()));
+  return true;
 }
 
 AllocatedPath
@@ -317,6 +327,216 @@ FileTypeSupportsDownload(FileType type) noexcept
 {
   return type != FileType::IGC && type != FileType::UNKNOWN &&
          Net::DownloadManager::IsAvailable();
+}
+
+/**
+ * After a repository index arrives, queue newer copies of files
+ * already on disk. Missing files stay missing.
+ * shortcut: listener stays up all session, so a later index refresh
+ * updates too. Split it from File Manager if that double-reloads.
+ */
+class RepositoryAutoUpdate final : public Net::DownloadListener {
+  struct Event {
+    bool error;
+    std::string path;
+  };
+
+  UI::Notify notify{[this]{ OnNotify(); }};
+  Mutex mutex;
+  std::vector<Event> events;
+  std::set<std::string> queued;
+
+  bool registered = false;
+  bool progress = false;
+  bool terrain_idle = false;
+  bool stop = false;
+  bool updated = false;
+
+  void Push(bool error, Path path) noexcept {
+    if (path == nullptr || path.empty())
+      return;
+
+    {
+      const std::lock_guard lock{mutex};
+      events.push_back({error, path.c_str()});
+    }
+    notify.SendNotification();
+  }
+
+  static bool IsIndex(Path path) noexcept {
+    const Path name = path.GetBase();
+    if (name == nullptr || name.empty())
+      return false;
+
+    return StringIsEqual(name.c_str(), "repository") ||
+           IsUserRepositoryFile(name.c_str());
+  }
+
+  void EnqueueOutOfDate() noexcept {
+    FileRepository repository;
+    LoadAllRepositories(repository);
+
+    for (const AvailableFile &file : repository) {
+      const AllocatedPath relative = GetFileDownloadRelativePath(file);
+      if (relative == nullptr)
+        continue;
+
+      const AllocatedPath local = LocalPath(relative);
+      if (local == nullptr || !File::Exists(local) ||
+          !IsRemoteFileOutOfDate(file))
+        continue;
+
+      const std::string key{relative.c_str()};
+      if (queued.contains(key) || !EnqueueRemoteFileDownload(file))
+        continue;
+
+      queued.insert(key);
+    }
+  }
+
+  void Show() noexcept {
+    if (stop || !terrain_idle || queued.empty() || progress)
+      return;
+
+    BackgroundDownloadProgress::Get().Begin(_("Updating"));
+    progress = true;
+  }
+
+  void Hide() noexcept {
+    if (!progress)
+      return;
+
+    BackgroundDownloadProgress::Get().End();
+    progress = false;
+  }
+
+  void OnNotify() noexcept {
+    if (stop)
+      return;
+
+    std::vector<Event> batch;
+    {
+      const std::lock_guard lock{mutex};
+      batch.swap(events);
+    }
+
+    bool index = false;
+    std::vector<std::string> finished;
+    for (const Event &event : batch) {
+      const Path path{event.path.c_str()};
+      if (IsIndex(path)) {
+        index |= !event.error;
+        continue;
+      }
+
+      if (queued.erase(event.path) == 0)
+        continue;
+      if (!event.error) {
+        finished.push_back(event.path);
+        updated = true;
+      }
+    }
+
+    if (index)
+      EnqueueOutOfDate();
+
+    /* A map or airspace reload suspends threads and drops warnings.
+       While flying, leave the new file on disk until the next start. */
+    if (!finished.empty() &&
+        !CommonInterface::Calculated().flight.flying) {
+      try {
+        ApplyConfiguredDataFiles(finished);
+      } catch (...) {
+        LogError(std::current_exception(),
+                 "Failed to load downloaded file");
+      }
+    }
+
+    if (!queued.empty()) {
+      Show();
+      return;
+    }
+
+    Hide();
+    if (!updated)
+      return;
+
+    updated = false;
+    Message::AddMessage(_("Data files have been updated"));
+  }
+
+public:
+  void Start() noexcept {
+    if (registered || stop || !Net::DownloadManager::IsAvailable())
+      return;
+
+    bool enabled = false;
+    Profile::Get(ProfileKeys::RepositoryAutoUpdate, enabled);
+    if (!enabled)
+      return;
+
+    Net::DownloadManager::AddListener(*this);
+    registered = true;
+    EnqueueRepositoryDownload(true);
+  }
+
+  void TerrainIdle() noexcept {
+    terrain_idle = true;
+    Show();
+  }
+
+  void Shutdown() noexcept {
+    stop = true;
+    queued.clear();
+    {
+      const std::lock_guard lock{mutex};
+      events.clear();
+    }
+
+    if (registered) {
+      Net::DownloadManager::RemoveListener(*this);
+      registered = false;
+    }
+
+    notify.ClearNotification();
+    Hide();
+  }
+
+  void OnDownloadAdded(Path, int64_t, int64_t) noexcept override {}
+
+  void OnDownloadComplete(Path path_relative) noexcept override {
+    Push(false, path_relative);
+  }
+
+  void OnDownloadError(Path path_relative,
+                       std::exception_ptr) noexcept override {
+    Push(true, path_relative);
+  }
+};
+
+static RepositoryAutoUpdate &
+GetRepositoryAutoUpdate() noexcept
+{
+  static RepositoryAutoUpdate instance;
+  return instance;
+}
+
+void
+StartRepositoryAutoUpdate() noexcept
+{
+  GetRepositoryAutoUpdate().Start();
+}
+
+void
+RepositoryAutoUpdateTerrainIdle() noexcept
+{
+  GetRepositoryAutoUpdate().TerrainIdle();
+}
+
+void
+RepositoryAutoUpdateShutdown() noexcept
+{
+  GetRepositoryAutoUpdate().Shutdown();
 }
 
 #endif

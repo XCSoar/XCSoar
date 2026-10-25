@@ -110,6 +110,11 @@ OpenGL::SetupContext()
   if (auto s = (const char *)glGetString(GL_VERSION))
     LogFormat("GL version: %s", s);
 
+  /* PowerVR Rogue (libGLESv2_POWERVR_ROGUE) crashes in memcpy inside
+     glMultiDrawElementsEXT while drawing topography polygons. Callers
+     fall back to glDrawElements when the pointers stay null. #1235 */
+  [[maybe_unused]] bool disable_multi_draw = false;
+
   if (auto s = (const char *)glGetString(GL_RENDERER)) {
     LogFormat("GL renderer: %s", s);
 
@@ -117,12 +122,16 @@ OpenGL::SetupContext()
       /* Allwinner A20 SoC has a Mali-400 GPU. Limit the map scale to
          250 km. */
       max_map_scale = 251*1000*2;
-    } else if (strstr(s, "PowerVR Rogue GE8300") != nullptr) {
-      /* PowerVR Rogue GE8300 (MediaTek MT8166) crashes in the driver
-         when rendering large topography polygons at extreme zoom-out.
-         Limit the maximum map scale to avoid triggering the bug.
-         See https://github.com/XCSoar/XCSoar/issues/1235 */
-      max_map_scale = 300000;
+    } else if (strstr(s, "PowerVR Rogue") != nullptr) {
+      disable_multi_draw = true;
+      LogFormat("GL: multi-draw disabled on PowerVR Rogue");
+
+      if (strstr(s, "GE8300") != nullptr) {
+        /* MediaTek MT8166 still crashes on large topography when
+           zoomed out.  Keep the map inside the scale that is safe
+           on that GPU. #1235 */
+        max_map_scale = 300000;
+      }
     }
   }
 
@@ -159,7 +168,8 @@ OpenGL::SetupContext()
 #endif
 
 #ifdef HAVE_DYNAMIC_MULTI_DRAW_ARRAYS
-  if (IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
+  if (!disable_multi_draw &&
+      IsExtensionSupported("GL_EXT_multi_draw_arrays")) {
     GLExt::multi_draw_arrays = (PFNGLMULTIDRAWARRAYSEXTPROC)
       GetProcAddress("glMultiDrawArraysEXT");
     GLExt::multi_draw_elements = (PFNGLMULTIDRAWELEMENTSEXTPROC)

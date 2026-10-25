@@ -28,6 +28,7 @@
 #endif
 #include "Input/InputEvents.hpp"
 #include "Input/InputQueue.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/StartupDialog.hpp"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "Dialogs/dlgQuickGuide.hpp"
@@ -106,6 +107,10 @@
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Plane/PlaneGlue.hpp"
+#include "Session/SessionState.hpp"
+#include "Atmosphere/Pressure.hpp"
+#include "Atmosphere/Temperature.hpp"
+#include "time/Stamp.hpp"
 #include "UIState.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
@@ -115,8 +120,11 @@
 #include "lua/StartFile.hpp"
 #include "lua/Background.hpp"
 #include "Repository/FileType.hpp"
+#include "Repository/Glue.hpp"
 
 #include "util/ScopeExit.hxx"
+
+#include <limits>
 
 #ifdef ENABLE_OPENGL
 #include "ui/canvas/opengl/Globals.hpp"
@@ -313,7 +321,8 @@ try {
   DataGlobals::UnsetTerrain();
   DataGlobals::SetTerrain(std::move(new_terrain));
 
-  /* the waypoints were usually read before the terrain was there */
+  /* Dependents of the new terrain. Topography stays as loaded.
+     Waypoints were usually read before the terrain was there. */
   if (data_components->terrain && data_components->waypoints)
     UpdateTerrainElevations(*data_components->waypoints,
                             *data_components->terrain);
@@ -321,10 +330,104 @@ try {
 
   SetAirspaceGroundLevels(*data_components->airspaces,
                           *data_components->terrain);
+#ifdef HAVE_DOWNLOAD_MANAGER
+  RepositoryAutoUpdateTerrainIdle();
+#endif
 } catch (...) {
   SetTopWidget(nullptr);
   terrain_loader_env.reset();
   LogError(std::current_exception(), "LoadTerrain failed");
+#ifdef HAVE_DOWNLOAD_MANAGER
+  RepositoryAutoUpdateTerrainIdle();
+#endif
+}
+
+/** Ask once when the file still says the aircraft was flying. */
+static void
+ConfirmSessionRestore() noexcept
+{
+  if (!Session::State().flying)
+    return;
+
+  /* No answer restores.  A crash restart should not wait on a tap. */
+  const int answer = ShowMessageBox(
+    _("Unfinished flight detected. Restore flight settings?"),
+    _("Flight"), MB_YESNO, 5000, IDYES);
+  if (answer == IDYES)
+    return;
+
+  Session::DeclineRestore();
+}
+
+static void
+RestoreSessionComputer(GlidePolar &gp) noexcept
+{
+  const SessionState &state = Session::State();
+  if (!state.flying)
+    return;
+
+  auto &settings = CommonInterface::SetComputerSettings();
+  if (state.have_bugs)
+    settings.polar.SetBugs(state.bugs);
+  if (state.have_ballast)
+    gp.SetBallastLitres(state.ballast_litres);
+  if (state.have_crew)
+    gp.SetCrewMass(state.crew_mass);
+
+  if (state.have_qnh) {
+    settings.pressure = AtmosphericPressure::HectoPascal(state.qnh_hpa);
+    auto now = CommonInterface::Basic().clock;
+    if (!now.IsDefined() || now.ToDuration().count() <= 0)
+      now = TimeStamp{FloatDuration{1}};
+    settings.pressure_available.Update(now);
+  }
+
+  if (state.have_max_temp)
+    settings.forecast_temperature =
+      Temperature::FromKelvin(state.max_temp_k);
+
+  if (state.have_atc_reference)
+    settings.poi.atc_reference = state.atc_reference;
+  if (state.have_atc_declination)
+    settings.poi.magnetic_declination =
+      Angle::Degrees(state.atc_declination_deg);
+}
+
+static void
+RestoreSessionGoto() noexcept
+{
+  const SessionState &state = Session::State();
+  if (!state.flying || !state.have_goto)
+    return;
+
+  if (!state.ShouldRestoreGoto() ||
+      task_manager->GetMode() != TaskType::NONE) {
+    Session::ClearGoto();
+    return;
+  }
+
+  auto &waypoints = *data_components->waypoints;
+  WaypointPtr wp;
+  if (state.goto_id != 0) {
+    wp = waypoints.LookupId(state.goto_id);
+    /* Ids follow file order.  A moved point is a different waypoint. */
+    if (wp != nullptr && state.have_goto_location &&
+        wp->location.Distance(state.goto_location) > 100)
+      wp = nullptr;
+  }
+  if (wp == nullptr && state.have_goto_location)
+    wp = waypoints.LookupLocation(state.goto_location, 100);
+  if (wp == nullptr && state.goto_name == "(goto)" &&
+      state.have_goto_location) {
+    const double elevation = state.have_goto_elevation
+      ? state.goto_elevation
+      : std::numeric_limits<double>::quiet_NaN();
+    waypoints.AddTempPoint(state.goto_location, elevation, "(goto)");
+    wp = waypoints.LookupName("(goto)");
+  }
+
+  if (wp == nullptr || !task_manager->DoGoto(std::move(wp)))
+    Session::ClearGoto();
 }
 
 /**
@@ -587,6 +690,8 @@ Startup(UI::Display &display)
 
   backend_components->protected_task_manager =
     std::make_unique<ProtectedTaskManager>(*task_manager, computer_settings.task);
+  backend_components->protected_task_manager->SetGotoPersistedHandler(
+    Session::NoteGoto);
 
   // Read the terrain file
   main_window->LoadTerrain();
@@ -625,7 +730,10 @@ Startup(UI::Display &display)
     return false;
   }
 
-  GlidePolar &gp = CommonInterface::SetComputerSettings().polar.glide_polar_task;
+  Session::Load();
+
+  GlidePolar &gp =
+    CommonInterface::SetComputerSettings().polar.glide_polar_task;
   gp = GlidePolar(0);
   gp.SetMC(computer_settings.task.task_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
@@ -634,6 +742,8 @@ Startup(UI::Display &display)
                          Profile::map);
   PlaneGlue::Synchronize(computer_settings.plane,
                          CommonInterface::SetComputerSettings(), gp);
+  ConfirmSessionRestore();
+  RestoreSessionComputer(gp);
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
@@ -669,6 +779,8 @@ Startup(UI::Display &display)
   WaypointGlue::SetHome(*data_components->waypoints,
                         settings.poi, settings.team_code,
                         false);
+  RestoreSessionGoto();
+  Session::SetReady();
   ActionInterface::SetStartupLocation();
 
   // ReSynchronise the blackboards here since SetStartupLocation
@@ -736,6 +848,7 @@ Startup(UI::Display &display)
   GlueMapWindow *map_window = main_window->GetMap();
   if (map_window != nullptr) {
     map_window->SetWaypoints(data_components->waypoints.get());
+    map_window->SetObservations(data_components->observations.get());
     map_window->SetTask(backend_components->protected_task_manager.get());
     map_window->SetRoutePlanner(&backend_components->glide_computer->GetProtectedRoutePlanner());
     map_window->SetGlideComputer(backend_components->glide_computer.get());
@@ -802,12 +915,13 @@ Startup(UI::Display &display)
   if (edl_glue != nullptr && net_components->edl != nullptr)
     edl_glue->AttachDownloadGlue(*net_components->edl);
 # endif
-# ifdef HAVE_SKYLINES_TRACKING
-  if (map_window != nullptr)
-    map_window->SetSkyLinesData(&net_components->tracking->GetSkyLinesData());
+# ifdef HAVE_TRACKING
+  if (net_components->tracking != nullptr && data_components != nullptr)
+    net_components->tracking->SetObservations(
+      data_components->observations.get());
 # endif
-  if (map_window != nullptr)
-    map_window->SetThermalInfoMap(net_components->tim.get());
+  if (net_components->tim != nullptr && data_components != nullptr)
+    net_components->tim->SetObservations(data_components->observations.get());
 #endif
 
   assert(!global_running);
@@ -825,25 +939,24 @@ Startup(UI::Display &display)
   main_window->FinishStartup();
   main_window->SchedulePageActionsUpdate();
 
+#ifdef HAVE_DOWNLOAD_MANAGER
+  StartRepositoryAutoUpdate();
+  if (terrain_loader == nullptr)
+    RepositoryAutoUpdateTerrainIdle();
+#endif
+
   return true;
 }
 
 #ifdef HAVE_HTTP
 static void
-BeginShutdownNetComponents(MainWindow &main_window) noexcept
+BeginShutdownNetComponents() noexcept
 {
   if (net_components == nullptr)
     return;
 
   net_components->BeginShutdown();
   DeinitNOTAMMessageListener();
-
-  if (GlueMapWindow *map = main_window.GetMap()) {
-#ifdef HAVE_SKYLINES_TRACKING
-    map->SetSkyLinesData(nullptr);
-#endif
-    map->SetThermalInfoMap(nullptr);
-  }
 }
 
 static void
@@ -860,6 +973,7 @@ SaveUserState() noexcept
   SaveFlarmColors();
   SaveFlarmMessaging();
   Profile::Save();
+  Session::Flush();
 }
 
 void
@@ -880,8 +994,7 @@ Shutdown()
 #endif
 
 #ifdef HAVE_HTTP
-  if (main_window != nullptr)
-    BeginShutdownNetComponents(*main_window);
+  BeginShutdownNetComponents();
 #endif
 
   // Show progress dialog
@@ -1056,6 +1169,10 @@ Shutdown()
 
   delete backend_components;
   backend_components = nullptr;
+
+  if (main_window != nullptr)
+    if (GlueMapWindow *map = main_window->GetMap())
+      map->SetObservations(nullptr);
 
   delete data_components;
   data_components = nullptr;

@@ -5,21 +5,17 @@
 
 #include "net/AsyncTask.hpp"
 #include "thread/Mutex.hxx"
-#include "event/DeferEvent.hxx"
 #include "time/PeriodClock.hpp"
-
-#include <vector>
 
 struct NMEAInfo;
 struct GeoPoint;
 class CurlGlobal;
+class ObservationDatabase;
 
 /**
  * Client for ThermalInfoMap (https://thermalmap.info/api-doc.php)
  */
 namespace TIM {
-
-struct Thermal;
 
 class Glue {
   CurlGlobal &curl;
@@ -28,7 +24,7 @@ class Glue {
 
   mutable Mutex mutex;
 
-  std::vector<Thermal> thermals;
+  ObservationDatabase *observations = nullptr;
 
   Net::AsyncTask task;
 
@@ -38,16 +34,7 @@ public:
 
   void BeginShutdown() noexcept;
 
-  auto Lock() const noexcept {
-    return std::lock_guard{mutex};
-  }
-
-  /**
-   * Must lock the #mutex while accessing the returned reference.
-   */
-  const auto &Get() const noexcept {
-    return thermals;
-  }
+  void SetObservations(ObservationDatabase *db) noexcept;
 
   void OnTimer(const NMEAInfo &basic) noexcept;
 
