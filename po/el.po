@@ -12977,3 +12977,6 @@ msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

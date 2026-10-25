@@ -742,10 +742,17 @@ Startup(UI::Display &display)
   gp.SetCrewMass(computer_settings.logger.crew_mass_template);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
                          Profile::map);
-  PlaneGlue::Synchronize(computer_settings.plane,
-                         CommonInterface::SetComputerSettings(), gp);
+  const bool plane_polar_valid =
+    PlaneGlue::Synchronize(computer_settings.plane,
+                           CommonInterface::SetComputerSettings(), gp);
   ConfirmSessionRestore();
   RestoreSessionComputer(gp);
+  if (!plane_polar_valid)
+    /* a status message would be gone before the map is up; asked
+       after the session question, which has a timeout */
+    ShowMessageBox(_("The polar of this plane is invalid. "
+                     "Check it in the plane setup."),
+                   _("Polar"), MB_OK | MB_ICONWARNING);
   task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
