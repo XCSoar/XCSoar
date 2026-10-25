@@ -11,7 +11,10 @@
 #include "time/PeriodClock.hpp"
 #include "time/RoughTime.hpp"
 #include "MainWindow.hpp"
+#include "Message.hpp"
 #include "PopupMessage.hpp"
+#include "Dialogs/Message.hpp"
+#include "Language/Language.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -276,6 +279,46 @@ DarkModeProcessTimer() noexcept
 
 #endif
 
+/**
+ * Warn once, 30 seconds after the start, when there is still no glide
+ * polar and no plane provides one: final glide and speed to fly are
+ * off then.  A vario that sends its polar on connecting has had time
+ * by then; a plane with a broken polar was reported at startup.
+ */
+static void
+NoPolarProcessTimer() noexcept
+{
+  static PeriodClock since_start;
+  static bool done = false;
+
+  if (done)
+    return;
+
+  if (!since_start.IsDefined()) {
+    since_start.Update();
+    return;
+  }
+
+  if (since_start.Elapsed() < std::chrono::seconds(30))
+    return;
+
+  /* before the message box, whose modal loop runs this timer again */
+  done = true;
+
+  const auto &settings = CommonInterface::GetComputerSettings();
+  if (settings.polar.glide_polar_task.IsValid() ||
+      settings.plane.polar_shape.reference_mass > 0)
+    return;
+
+  const char *message = _("No polar is set up, so final glide and speed "
+                          "to fly are off. Set up a plane.");
+  if (CommonInterface::Calculated().flight.flying)
+    /* do not block the map in flight, e.g. after a restart */
+    Message::AddMessage(message);
+  else
+    ShowMessageBox(message, _("Polar"), MB_OK | MB_ICONWARNING);
+}
+
 static void
 CommonProcessTimer() noexcept
 {
@@ -292,6 +335,7 @@ CommonProcessTimer() noexcept
 
   MessageProcessTimer();
   SystemProcessTimer();
+  NoPolarProcessTimer();
 }
 
 static void
