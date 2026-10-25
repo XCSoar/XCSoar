@@ -42,8 +42,9 @@ double
 ClampUserMapScale(double scale) noexcept
 {
   const DisplayMode mode = CommonInterface::GetUIState().display_mode;
-  const auto vmin =
-    CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
+  const auto &polar =
+    CommonInterface::GetComputerSettings().polar.glide_polar_task;
+  const auto vmin = polar.IsValid() ? polar.GetVMin() : 0.;
   return ClampUserMapScale(scale, mode, vmin);
 }
 
