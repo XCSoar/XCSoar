@@ -202,7 +202,11 @@ void
 TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
                            const FloatDuration timestep) noexcept
 {
-  const GlidePolar &glide_polar = task.GetGlidePolar();
+  /* the demo flies a glider even when none is set up */
+  static const GlidePolar demo_polar(0);
+  const GlidePolar &glide_polar = task.GetGlidePolar().IsValid()
+    ? task.GetGlidePolar()
+    : demo_polar;
 
   switch (acstate) {
   case Cruise:
