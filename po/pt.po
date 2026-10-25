@@ -12872,3 +12872,6 @@ msgstr "Não é possível iniciar a pré-visualização da câmara"
 
 msgid "Camera not usable"
 msgstr "Câmara não utilizável"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

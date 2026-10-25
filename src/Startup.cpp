@@ -742,8 +742,12 @@ Startup(UI::Display &display)
   gp.SetCrewMass(computer_settings.logger.crew_mass_template);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
                          Profile::map);
-  PlaneGlue::Synchronize(computer_settings.plane,
-                         CommonInterface::SetComputerSettings(), gp);
+  if (!PlaneGlue::Synchronize(computer_settings.plane,
+                              CommonInterface::SetComputerSettings(), gp))
+    /* a status message would be gone before the map is up */
+    ShowMessageBox(_("The polar of this plane is invalid. "
+                     "Check it in the plane setup."),
+                   _("Polar"), MB_OK | MB_ICONWARNING);
   ConfirmSessionRestore();
   RestoreSessionComputer(gp);
   task_manager->SetGlidePolar(gp);

@@ -12848,3 +12848,6 @@ msgstr "A kamera előnézete nem indítható el"
 
 msgid "Camera not usable"
 msgstr "A kamera nem használható"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

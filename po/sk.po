@@ -12792,3 +12792,6 @@ msgstr "Náhľad fotoaparátu sa nedá spustiť"
 
 msgid "Camera not usable"
 msgstr "Fotoaparát sa nedá použiť"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

@@ -70,7 +70,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
     plane.weglide_glider_type = 0;
 }
 
-void
+bool
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp) noexcept
 {
@@ -83,11 +83,13 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   /* Don't apply polar if no plane profile is loaded (reference_mass == 0)
    * - wait for device POLAR data instead */
   if (plane.polar_shape.reference_mass <= 0)
-    return;
+    return true;
 
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
-  if (!pc.IsValid())
-    return;
+  if (!pc.IsValid()) {
+    gp.SetInvalid();
+    return false;
+  }
 
   gp.SetCoefficients(pc, false);
 
@@ -106,4 +108,6 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   if (plane.max_speed > 0 && gp.IsValid())
     gp.SetVMax(std::clamp(plane.max_speed,
                           gp.GetVMin() + 10, DEFAULT_MAX_SPEED));
+
+  return true;
 }

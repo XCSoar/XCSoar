@@ -12939,3 +12939,6 @@ msgstr "Δεν είναι δυνατή η έναρξη της προεπισκό
 
 msgid "Camera not usable"
 msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

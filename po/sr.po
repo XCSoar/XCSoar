@@ -12774,3 +12774,6 @@ msgstr "Није могуће покренути преглед камере"
 
 msgid "Camera not usable"
 msgstr "Камера се не може користити"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""

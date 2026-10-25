@@ -3,6 +3,10 @@
 
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneFileGlue.hpp"
+#include "Plane/PlaneGlue.hpp"
+#include "Computer/Settings.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Polar/PolarGlue.hpp"
 #include "io/FileLineReader.hpp"
 #include "io/KeyValueFileReader.hpp"
 #include "io/KeyValueFileWriter.hpp"
@@ -12,6 +16,13 @@
 #include "util/PrintException.hxx"
 
 #include <stdlib.h>
+
+/* PlaneGlue::FromProfile() reads a pre-6.7 polar; there is none here */
+bool
+PolarGlue::LoadFromProfile([[maybe_unused]] PolarInfo &polar) noexcept
+{
+  return false;
+}
 static void
 TestReader()
 {
@@ -149,11 +160,36 @@ TestOverMaxTakeoffMass()
   ok1(plane.IsOverMaxTakeoffMass(550.1));
 }
 
+static void
+TestSynchronize()
+{
+  ComputerSettings settings{};
+  GlidePolar gp = GlidePolar::Invalid();
+
+  Plane plane;
+  PlaneGlue::ReadFile(plane, Path("test/data/D-4449.xcp"));
+  ok1(PlaneGlue::Synchronize(plane, settings, gp));
+  ok1(gp.IsValid());
+
+  /* positive sink rates, as some development builds wrote them, do
+     not give a polar; the previous plane's must not stay in place */
+  for (unsigned i = 0; i < 3; ++i)
+    plane.polar_shape[i].w = -plane.polar_shape[i].w;
+  ok1(!PlaneGlue::Synchronize(plane, settings, gp));
+  ok1(!gp.IsValid());
+
+  /* no plane polar at all: wait for one from a device */
+  plane.polar_shape.reference_mass = 0;
+  ok1(PlaneGlue::Synchronize(plane, settings, gp));
+  ok1(!gp.IsValid());
+}
+
 int main()
 try {
-  plan_tests(41);
+  plan_tests(47);
 
   TestReader();
+  TestSynchronize();
   TestOverMaxTakeoffMass();
   TestWriter();
 

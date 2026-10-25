@@ -12960,3 +12960,6 @@ msgstr "Impossibile avviare l'anteprima della fotocamera"
 
 msgid "Camera not usable"
 msgstr "Fotocamera non utilizzabile"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""
