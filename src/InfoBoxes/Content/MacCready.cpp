@@ -85,7 +85,14 @@ InfoBoxContentMacCready::Update(InfoBoxData &data) noexcept
   data.SetTitle(auto_mc ? _("MC AUTO") : _("MC MANUAL"));
   data.SetValueColor(auto_mc ? 2 : 3);
 
-  SetVSpeed(data, settings_computer.polar.glide_polar_task.GetMC());
+  const auto &polar = settings_computer.polar.glide_polar_task;
+  SetVSpeed(data, polar.GetMC());
+
+  /* without a polar there is no speed to fly */
+  if (!polar.IsValid()) {
+    data.SetCommentInvalid();
+    return;
+  }
 
   /* V_block is true airspeed. The Setup switch shows it as indicated. */
   double speed_ms = calculated.common_stats.V_block;

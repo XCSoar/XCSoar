@@ -149,7 +149,10 @@ InputEvents::eventNearestAirspaceDetails([[maybe_unused]] const char *misc)
                                           aircraft_state);
   GlidePolar polar = settings_computer.polar.glide_polar_task;
   polar.SetMC(std::max(polar.GetMC(), 1.));
-  const AirspaceAircraftPerformance perf(polar);
+  /* without a polar, assume a typical glider rather than give up */
+  const auto perf = polar.IsValid()
+    ? AirspaceAircraftPerformance(polar)
+    : AirspaceAircraftPerformance(AirspaceAircraftPerformance::Simple{});
 
   const auto as = FindSoonestAirspace(*data_components->airspaces, aircraft_state, perf,
                                       std::move(visible),
