@@ -607,6 +607,11 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
         const char *message;
         if (skysight == nullptr)
           message = _("SkySight is unavailable.");
+        else if (const char *rejected = skysight->GetLoginRejectedMessage();
+                 rejected != nullptr)
+          /* the catalog will not load until the credentials are
+             entered again */
+          message = rejected;
         else if (skysight->IsThrottled())
           message = _("SkySight API rate-limited. Retrying shortly.");
         else if (!skysight->HasForecastLayers())

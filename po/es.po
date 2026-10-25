@@ -12963,3 +12963,15 @@ msgstr "No se puede iniciar la vista previa de la cámara"
 
 msgid "Camera not usable"
 msgstr "La cámara no se puede usar"
+
+msgid "SkySight login rejected: wrong e-mail or password."
+msgstr ""
+
+msgid "SkySight login rejected: the subscription is not active."
+msgstr ""
+
+msgid "SkySight login rejected: too many devices use this account."
+msgstr ""
+
+msgid "SkySight login rejected."
+msgstr ""

@@ -680,6 +680,7 @@ SkySightRequest::OnLoginError(std::exception_ptr error) noexcept
                SkySight::AuthenticationFailureAction::Rejected) {
       LogFmt("SkySight login rejected with HTTP {}; automatic login disabled "
              "until credentials are configured again", http_error.status);
+      api.OnLoginRejected();
     }
   } catch (...) {
     if (host_resolution_failure)
