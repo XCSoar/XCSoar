@@ -1,4 +1,4 @@
-PKG_CONFIG = pkg-config
+PKG_CONFIG := pkg-config
 
 ifeq ($(USE_THIRDPARTY_LIBS),y)
   ifeq ($(TARGET_IS_ANDROID)$(TARGET_IS_KOBO)$(TARGET_IS_IOS),nnn)
@@ -19,13 +19,13 @@ ifeq ($(TARGET_IS_DARWIN),y)
   endif
 endif
 
-ifeq ($(DO_CROSS_COMPILE),y)
-  ifneq ($(SYSROOT),)
-    ifneq ($(HOST_TRIPLET),)
-      CROSS_PKG_CONFIG_LIBDIR := $(SYSROOT)/usr/lib/$(HOST_TRIPLET)/pkgconfig:$(SYSROOT)/usr/share/pkgconfig
-      PKG_CONFIG := PKG_CONFIG_LIBDIR=$(CROSS_PKG_CONFIG_LIBDIR) $(PKG_CONFIG) --define-variable=prefix=$(SYSROOT)/usr
-    endif
+ifneq ($(SYSROOT),)
+  # when no toolchain is explicitly defined, obtain it from your compiler.
+  ifeq ($(HOST_TRIPLET),)
+    HOST_TRIPLET = $(shell $(CXX) -dumpmachine)
   endif
+  CROSS_PKG_CONFIG_LIBDIR := $(SYSROOT)/usr/lib/$(HOST_TRIPLET)/pkgconfig:$(SYSROOT)/usr/share/pkgconfig
+  PKG_CONFIG := PKG_CONFIG_SYSROOT_DIR=$(SYSROOT) PKG_CONFIG_LIBDIR=$(CROSS_PKG_CONFIG_LIBDIR) $(PKG_CONFIG)
 endif
 
 call-pkg-config = $(shell $(PKG_CONFIG) --$(2) $(1) || echo ERROR)
