@@ -522,10 +522,11 @@ endif
 ifeq ($(DO_CROSS_COMPILE),y)
   # armhf GCC notes the std::pair return ABI change in every file.
   TARGET_CXXFLAGS += -Wno-psabi
+endif
 
-  ifneq ($(SYSROOT),)
-    TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
-  endif
+# Same-arch sysroot is valid (other distro, or Mac arm64 vs Pi OS).
+ifneq ($(SYSROOT),)
+  TARGET_CPPFLAGS += --sysroot=$(SYSROOT)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
@@ -609,10 +610,8 @@ ifeq ($(TARGET_IS_ARM),y)
   TARGET_LDLIBS += -latomic
 endif
 
-ifeq ($(DO_CROSS_COMPILE),y)
-  ifneq ($(SYSROOT),)
-    TARGET_LDFLAGS += --sysroot=$(SYSROOT)
-  endif
+ifneq ($(SYSROOT),)
+  TARGET_LDFLAGS += --sysroot=$(SYSROOT)
 endif
 
 ifeq ($(TARGET_IS_KOBO),y)
