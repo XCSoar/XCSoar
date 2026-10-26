@@ -261,6 +261,17 @@ RowMatchesClass(const TaskRow &row, std::string_view class_name) noexcept
 }
 
 unsigned
+HandicapIndex(double value) noexcept
+{
+  if (!(value > 0))
+    return 0;
+  /* Live contests publish a factor. 0.91 is handicap 91. */
+  if (value < 5)
+    return static_cast<unsigned>(std::lround(value * 100));
+  return static_cast<unsigned>(std::lround(value));
+}
+
+unsigned
 SuggestTask(std::span<const TaskRow> rows, unsigned handicap) noexcept
 {
   unsigned official = 0;
@@ -268,7 +279,7 @@ SuggestTask(std::span<const TaskRow> rows, unsigned handicap) noexcept
   for (unsigned i = 0; i < rows.size(); ++i) {
     const auto &row = rows[i];
     if (handicap != 0 && row.has_handicap &&
-        static_cast<unsigned>(std::lround(row.handicap)) == handicap)
+        HandicapIndex(row.handicap) == handicap)
       return i;
     if (!saw_official && row.official) {
       official = i;

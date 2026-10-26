@@ -134,9 +134,13 @@ SoaringScoringTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     second.append(distance);
   }
   if (task.row.has_handicap) {
-    if (!second.empty())
-      second.append("  ");
-    second.AppendFormat("%s %.0f", _("Handicap"), task.row.handicap);
+    const unsigned handicap =
+      SoaringScoring::HandicapIndex(task.row.handicap);
+    if (handicap != 0) {
+      if (!second.empty())
+        second.append("  ");
+      second.AppendFormat("%s %u", _("Handicap"), handicap);
+    }
   }
   if (!second.empty())
     row_renderer.DrawSecondRow(canvas, rc, second.c_str());

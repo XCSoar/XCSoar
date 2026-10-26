@@ -78,6 +78,22 @@ TestTasks()
 }
 
 static void
+TestHandicap()
+{
+  ok1(SoaringScoring::HandicapIndex(0.91) == 91);
+  ok1(SoaringScoring::HandicapIndex(1.02) == 102);
+  ok1(SoaringScoring::HandicapIndex(108) == 108);
+  ok1(SoaringScoring::HandicapIndex(0) == 0);
+
+  const auto list = SoaringScoring::ParseTaskList(
+    R"({"tasks":[{"displayLabel":"Day 1","className":"All Comers",)"
+    R"("dhtHandicap":0.91,"files":{"xcsoarTsk":"/tsk"}}]})");
+  ok1(list.tasks.size() == 1);
+  ok1(SoaringScoring::SuggestTask(list.tasks, 91) == 0);
+  ok1(SoaringScoring::SuggestTask(list.tasks, 100) == 0);
+}
+
+static void
 TestUploadAndError()
 {
   const auto report = SoaringScoring::ParseUploadReport(
@@ -95,10 +111,11 @@ TestUploadAndError()
 int
 main()
 {
-  plan_tests(2 + 8 + 15 + 5);
+  plan_tests(2 + 8 + 15 + 7 + 5);
   TestUrls();
   TestPilot();
   TestTasks();
+  TestHandicap();
   TestUploadAndError();
   return exit_status();
 }

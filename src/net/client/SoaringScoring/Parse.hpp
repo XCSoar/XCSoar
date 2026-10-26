@@ -84,6 +84,14 @@ RowMatchesClass(const TaskRow &row,
                 std::string_view class_name) noexcept;
 
 /**
+ * Contest handicap index, where 100 is standard.
+ * A value below 5 is a factor (0.91 is 91). Larger values are
+ * already an index.
+ */
+[[nodiscard]] unsigned
+HandicapIndex(double value) noexcept;
+
+/**
  * Handicap row for @p handicap, otherwise the first official row.
  * @p handicap 0 does not match a distance-handicap row.
  */
