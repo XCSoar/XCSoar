@@ -55,14 +55,16 @@ $(ZXING_PREFIX)/cxxflags.txt: zxing-cxxflags-force
 	$(Q)mkdir -p $(dir $@)
 	$(Q)echo '$(ZXING_CXX_FLAGS)' | cmp -s - $@ || echo '$(ZXING_CXX_FLAGS)' > $@
 
-# When cross-compiling generate a tool chain file for CMake for cross compilation
-ifeq ($(DO_CROSS_COMPILE),y)
+# When cross-compiling and/or SYSROOT is defined,
+# generate a tool chain file for CMake for cross compilation
+ifeq ($(if $(SYSROOT),y,$(DO_CROSS_COMPILE)),y)
 
 CROSS_TOOLCHAIN_FILE=$(ZXING_PREFIX)/cross_toolchain.txt
 
-# Write the cross-compilation parameters temporarily always,
-# but replace an existing file only when the temporary one
-# is different from the existing one.
+# Write the cross-compilation parameters always temporarily,
+# but replace the target file only when the temporary one
+# is different from the target file (or the target file does
+# not exist).
 $(CROSS_TOOLCHAIN_FILE): zxing-cxxflags-force
 	$(Q)mkdir -p $(dir $@)
 	$(Q)echo 'set(CMAKE_SYSTEM_NAME Linux)' > $@.tmp
