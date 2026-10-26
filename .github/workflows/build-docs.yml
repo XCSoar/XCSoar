@@ -37,7 +37,7 @@ env:
   TARGET_EXT: pdf
 jobs:
   manual-pdf:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container: debian:trixie-slim
     steps:
      - name: Install checkout dependencies
@@ -94,7 +94,7 @@ jobs:
          SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ inputs.release_version }}
 
   readthedocs-sphinx:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
      - uses: actions/checkout@v7
        with:
