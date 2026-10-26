@@ -303,8 +303,10 @@ LarusDevice::PLARW(NMEAInputLine &line, NMEAInfo &info)
   case 'A':
     info.ProvideExternalWind(wind);
     break;
+  case 'I':
+    info.ProvideExternalInstantaneousWind(wind);
+    break;
   default:
-    // xcsoar does not support instantaneous wind
     return false;
   }
 
