@@ -605,8 +605,9 @@ ifneq ($(TARGET),ANDROID)
 endif
 endif
 
-ifeq ($(TARGET_IS_ARM),y)
-  # 64-bit std::atomic needs libatomic on 32-bit ARM.
+ifeq ($(TARGET_IS_ARMHF)$(TARGET_IS_KOBO),yn)
+  # GCC 32-bit ARM needs libatomic for 64-bit std::atomic.
+  # Kobo's musl toolchain does not ship it.
   TARGET_LDLIBS += -latomic
 endif
 
