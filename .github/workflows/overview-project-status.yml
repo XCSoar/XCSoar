@@ -5,6 +5,9 @@
 #   PR links issue    → In Progress (unless already Done)
 #   Issue closed      → Done        (only if already on the board)
 #
+# issues: milestoned and issues: closed also fire for pull requests.
+# Those are ignored: issue.node_id is a PullRequest, which has no projectItems.
+#
 # Requires PROJECT_TOKEN secret (PAT with project scope).
 # GITHUB_TOKEN cannot write to organization projects.
 ---
@@ -40,7 +43,8 @@ jobs:
           # Sets ITEM_ID and CURRENT_STATUS.
           get_project_item() {
             local issue_id="$1"
-            local data=$(gh api graphql -f query='
+            local data
+            data=$(gh api graphql -f query='
               query($id: ID!) {
                 node(id: $id) {
                   ... on Issue {
@@ -56,9 +60,12 @@ jobs:
                   }
                 }
               }
-            ' -f id="$issue_id")
-            ITEM_ID=$(echo "$data" | jq -r ".data.node.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .id")
-            CURRENT_STATUS=$(echo "$data" | jq -r ".data.node.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .fieldValueByName.optionId // empty")
+            ' -f id="$issue_id") || return 1
+            # A non-issue node omits projectItems; nodes[] would abort jq.
+            ITEM_ID=$(echo "$data" | jq -r \
+              "(.data.node.projectItems.nodes // [])[] | select(.project.id == \"$PROJECT_ID\") | .id")
+            CURRENT_STATUS=$(echo "$data" | jq -r \
+              "(.data.node.projectItems.nodes // [])[] | select(.project.id == \"$PROJECT_ID\") | .fieldValueByName.optionId // empty")
           }
 
           # Add issue to project if not already present. Sets ITEM_ID.
@@ -89,7 +96,10 @@ jobs:
           EOF
 
       - name: Milestone added → Todo
-        if: github.event_name == 'issues' && github.event.action == 'milestoned'
+        if: >-
+          github.event_name == 'issues' &&
+          github.event.action == 'milestoned' &&
+          github.event.issue.pull_request == null
         run: |
           source "$RUNNER_TEMP/project-helpers.sh"
           ISSUE_ID="${{ github.event.issue.node_id }}"
@@ -110,7 +120,10 @@ jobs:
           fi
 
       - name: Issue closed → Done
-        if: github.event_name == 'issues' && github.event.action == 'closed'
+        if: >-
+          github.event_name == 'issues' &&
+          github.event.action == 'closed' &&
+          github.event.issue.pull_request == null
         run: |
           source "$RUNNER_TEMP/project-helpers.sh"
           ISSUE_ID="${{ github.event.issue.node_id }}"
@@ -145,7 +158,8 @@ jobs:
           for NUM in $ISSUE_NUMS; do
             echo "Processing issue #$NUM"
 
-            # Look up issue node ID
+            # Look up issue node ID. A failed request fails the step;
+            # a number that is not an issue is skipped below.
             ISSUE_ID=$(gh api graphql -f query='
               query($owner: String!, $repo: String!, $num: Int!) {
                 repository(owner: $owner, name: $repo) {
@@ -153,7 +167,7 @@ jobs:
                 }
               }
             ' -f owner="XCSoar" -f repo="XCSoar" -F num="$NUM" \
-              --jq '.data.repository.issue.id // empty' 2>/dev/null || true)
+              --jq '.data.repository.issue.id // empty')
 
             if [ -z "$ISSUE_ID" ]; then
               echo "  Not found; skipping"
