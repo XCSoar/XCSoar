@@ -37,6 +37,9 @@ Version 7.47 - not yet released
     resolution, GR average period, Events, and Log book #3392
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
+  - say why SkySight does not load when the server rejects the
+    login (wrong e-mail or password, subscription not active, too
+    many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,

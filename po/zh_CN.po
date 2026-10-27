@@ -12287,3 +12287,15 @@ msgstr "无法启动相机预览"
 
 msgid "Camera not usable"
 msgstr "相机不可用"
+
+msgid "SkySight login rejected: wrong e-mail or password."
+msgstr ""
+
+msgid "SkySight login rejected: the subscription is not active."
+msgstr ""
+
+msgid "SkySight login rejected: too many devices use this account."
+msgstr ""
+
+msgid "SkySight login rejected."
+msgstr ""

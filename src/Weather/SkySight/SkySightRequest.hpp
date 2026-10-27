@@ -132,6 +132,13 @@ public:
 
   bool IsLoggedIn() const noexcept;
 
+  /**
+   * @return the HTTP status that rejected the login, or 0
+   */
+  unsigned GetLoginRejectedStatus() const noexcept {
+    return authentication_failures.GetRejectedStatus();
+  }
+
   bool IsThrottled() const noexcept {
     return std::time(nullptr) < throttle_until;
   }

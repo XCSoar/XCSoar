@@ -58,7 +58,11 @@ class AuthenticationFailurePolicy {
   static constexpr time_t MAX_RETRY_SECONDS = 10 * 60;
   time_t ready_at = 0;
   unsigned attempts = 0;
-  bool rejected = false;
+
+  /**
+   * The HTTP status that rejected the credentials, or 0.
+   */
+  unsigned rejected_status = 0;
 
   static constexpr time_t
   GetBackoff(unsigned value) noexcept
@@ -74,7 +78,17 @@ public:
   [[nodiscard]] bool
   CanAttempt(time_t now) const noexcept
   {
-    return !rejected && now >= ready_at;
+    return rejected_status == 0 && now >= ready_at;
+  }
+
+  /**
+   * @return the HTTP status (e.g. 401, 402, 403) that rejected the
+   * credentials, or 0 if they were not rejected
+   */
+  [[nodiscard]] unsigned
+  GetRejectedStatus() const noexcept
+  {
+    return rejected_status;
   }
 
   AuthenticationFailureDecision
@@ -83,7 +97,7 @@ public:
     ++attempts;
 
     if (status == 429) {
-      rejected = false;
+      rejected_status = 0;
       ready_at = retry_after > now
         ? retry_after
         : now + THROTTLE_FALLBACK_SECONDS;
@@ -91,12 +105,12 @@ public:
     }
 
     if (status == 408 || status >= 500) {
-      rejected = false;
+      rejected_status = 0;
       ready_at = now + GetBackoff(attempts);
       return {AuthenticationFailureAction::Retry, ready_at, attempts};
     }
 
-    rejected = true;
+    rejected_status = status;
     ready_at = 0;
     return {AuthenticationFailureAction::Rejected, 0, attempts};
   }
@@ -105,7 +119,7 @@ public:
   OnTransportFailure(time_t now) noexcept
   {
     ++attempts;
-    rejected = false;
+    rejected_status = 0;
     ready_at = now + GetBackoff(attempts);
     return {AuthenticationFailureAction::Retry, ready_at, attempts};
   }
@@ -114,7 +128,7 @@ public:
   {
     ready_at = 0;
     attempts = 0;
-    rejected = false;
+    rejected_status = 0;
   }
 };
 
