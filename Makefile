@@ -94,9 +94,10 @@ include $(topdir)/build/util.mk
 include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/thirdparty.mk
-include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/languages.mk
 include $(topdir)/build/options.mk
+include $(topdir)/build/set_compiler.mk
+include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/abi.mk
 include $(topdir)/build/coverage.mk
