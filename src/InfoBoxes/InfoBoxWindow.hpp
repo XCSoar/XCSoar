@@ -44,6 +44,9 @@ class InfoBoxWindow : public LazyPaintWindow
    */
   bool pressed = false;
 
+  /** Enter is down.  Release before the hold is armed runs the action. */
+  bool enter_down = false;
+
   /**
    * draw the selector event if the InfoBox window is not the system focus
    */
@@ -156,6 +159,9 @@ protected:
   /** Short press and Enter: the content action, if this box has one. */
   void Activate() noexcept;
 
+  /** Lift or Enter release: arrange if the hold is armed, else the action. */
+  void FinishPress() noexcept;
+
   /** Move focus to the nearest box in this screen direction. */
   void FocusNeighbour(int dx, int dy) noexcept;
 
@@ -184,6 +190,7 @@ protected:
   void OnCancelMode() noexcept override;
 
   bool OnKeyDown(unsigned key_code) noexcept override;
+  bool OnKeyUp(unsigned key_code) noexcept override;
 
   bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp(PixelPoint p) noexcept override;
