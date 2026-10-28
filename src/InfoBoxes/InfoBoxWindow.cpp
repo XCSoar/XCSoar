@@ -299,6 +299,30 @@ InfoBoxWindow::Activate() noexcept
 }
 
 void
+InfoBoxWindow::FinishPress() noexcept
+{
+  long_press_timer.Cancel();
+
+  const bool was_pressed = pressed;
+  pressed = false;
+  Invalidate();
+
+  hold_timer.Cancel();
+  fade_timer.Cancel();
+
+  if (was_pressed && hold_armed) {
+    hold_armed = false;
+    long_press_pending = false;
+    InfoBoxArrange::Begin(id);
+  } else if (was_pressed && long_press_pending) {
+    long_press_pending = false;
+    InfoBoxManager::ClearFocusExcept(id);
+    SetFocus();
+    Activate();
+  }
+}
+
+void
 InfoBoxWindow::FocusNeighbour(int dx, int dy) noexcept
 {
   const auto &layout = InfoBoxManager::layout;
@@ -388,7 +412,21 @@ InfoBoxWindow::OnKeyDown(unsigned key_code) noexcept
   }
 
   case KEY_RETURN:
-    Activate();
+    /* repeats while Enter is held must not restart the hold */
+    if (enter_down || dragging)
+      return true;
+
+    enter_down = true;
+    pressed = true;
+    Invalidate();
+    press_start = std::chrono::steady_clock::now();
+    long_press_pending = true;
+    long_press_timer.Schedule(REORDER_DELAY);
+    hold_timer.Schedule(InfoBoxArrange::TAP);
+    PlayHapticFeedback();
+    focus_timer.Schedule(HasCursorKeys()
+                         ? FOCUS_TIMEOUT_MAX
+                         : std::chrono::milliseconds(1100));
     return true;
 
   case KEY_ESCAPE:
@@ -408,8 +446,25 @@ InfoBoxWindow::OnKeyDown(unsigned key_code) noexcept
 }
 
 bool
+InfoBoxWindow::OnKeyUp(unsigned key_code) noexcept
+{
+  if (key_code != KEY_RETURN || !enter_down)
+    return PaintWindow::OnKeyUp(key_code);
+
+  enter_down = false;
+  FinishPress();
+  return true;
+}
+
+bool
 InfoBoxWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  if (enter_down) {
+    enter_down = false;
+    pressed = false;
+    StopLongPress();
+  }
+
   long_press_timer.Cancel();
 
   if (!dragging) {
@@ -434,36 +489,13 @@ InfoBoxWindow::OnMouseDown(PixelPoint p) noexcept
 bool
 InfoBoxWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
 {
-  long_press_timer.Cancel();
+  if (!dragging)
+    return false;
 
-  if (dragging) {
-    const bool was_pressed = pressed;
-
-    dragging = false;
-    pressed = false;
-    Invalidate();
-
-    ReleaseCapture();
-
-    hold_timer.Cancel();
-    fade_timer.Cancel();
-
-    if (was_pressed && hold_armed) {
-      hold_armed = false;
-      long_press_pending = false;
-      InfoBoxArrange::Begin(id);
-    } else if (was_pressed && long_press_pending) {
-      long_press_pending = false;
-
-      InfoBoxManager::ClearFocusExcept(id);
-      SetFocus();
-      Activate();
-    }
-
-    return true;
-  }
-
-  return false;
+  dragging = false;
+  ReleaseCapture();
+  FinishPress();
+  return true;
 }
 
 bool
@@ -512,6 +544,11 @@ InfoBoxWindow::OnCancelMode() noexcept
     ReleaseCapture();
   }
 
+  if (enter_down) {
+    enter_down = false;
+    pressed = false;
+  }
+
   long_press_timer.Cancel();
   StopLongPress();
 
@@ -536,6 +573,13 @@ InfoBoxWindow::OnKillFocus() noexcept
   PaintWindow::OnKillFocus();
 
   focus_timer.Cancel();
+
+  if (enter_down) {
+    enter_down = false;
+    pressed = false;
+    long_press_timer.Cancel();
+    StopLongPress();
+  }
 
   Invalidate();
 }

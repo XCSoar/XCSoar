@@ -7,9 +7,13 @@ Version 7.47 - not yet released
   - remember QNH and the maximum forecast temperature with that
     same question
 * ui
-  - let a tap or Enter run an InfoBox action at once. The cursor keys
-    move to the InfoBox in that direction on the screen. A double tap
-    on an InfoBox no longer opens the menu #2095
+  - let a tap or a short Enter run an InfoBox action at once. Hold
+    Enter to arrange, the same as a long press. In arrange mode a
+    short Enter takes or puts down a card, and holding Enter opens
+    the list. The cursor keys move to the InfoBox in that direction
+    on the screen. Escape selects the first InfoBox when the map is
+    showing, and returns to the map from an InfoBox. A double tap on
+    an InfoBox no longer opens the menu #2095
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
@@ -41,8 +45,8 @@ Version 7.47 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
-  - describe InfoBox tap, Enter, and moving between InfoBoxes with
-    the cursor keys
+  - describe InfoBox tap, Enter, holding Enter to arrange, and holding
+    Enter in arrange mode to open the InfoBox list
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
     and checklist ticks
