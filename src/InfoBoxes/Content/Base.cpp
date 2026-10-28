@@ -6,12 +6,6 @@
 InfoBoxContent::~InfoBoxContent() noexcept = default;
 
 bool
-InfoBoxContent::HandleKey([[maybe_unused]] const InfoBoxKeyCodes keycode) noexcept
-{
-  return false;
-}
-
-bool
 InfoBoxContent::HandleClick() noexcept
 {
   return false;

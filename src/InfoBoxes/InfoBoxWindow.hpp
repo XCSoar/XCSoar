@@ -58,7 +58,7 @@ class InfoBoxWindow : public LazyPaintWindow
   /** the hold finished; the action waits for lift-off */
   bool hold_armed = false;
 
-  /** the position of the press which #dialog_timer is watching */
+  /** where this press started, for the slop check */
   PixelPoint press_point{0, 0};
 
   /** when the long-press glow started */
@@ -74,11 +74,10 @@ class InfoBoxWindow : public LazyPaintWindow
   UI::Timer focus_timer{[this]{ FocusParent(); }};
 
   /**
-   * This timer opens the dialog.  It is used to check for "long
-   * click" and to delay the dialog a bit (for double click
-   * detection).
+   * Arms the hold while the press is still down.  Lift after that
+   * opens arrange mode.
    */
-  UI::Timer dialog_timer{[this]{ OnDialogTimer(); }};
+  UI::Timer long_press_timer{[this]{ OnLongPress(); }};
 
   PixelRect title_rect;
   PixelRect value_rect;
@@ -154,7 +153,11 @@ private:
 protected:
   void ShowDialog();
 
-  bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
+  /** Short press and Enter: the content action, if this box has one. */
+  void Activate() noexcept;
+
+  /** Move focus to the nearest box in this screen direction. */
+  void FocusNeighbour(int dx, int dy) noexcept;
 
 public:
   [[gnu::pure]]
@@ -168,7 +171,7 @@ public:
   }
 
 private:
-  void OnDialogTimer() noexcept;
+  void OnLongPress() noexcept;
   void OnHoldArmed() noexcept;
   void StopLongPress() noexcept;
   void PaintLongPressGlow(Canvas &canvas) noexcept;

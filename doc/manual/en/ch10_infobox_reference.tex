@@ -2,15 +2,14 @@
 InfoBox data types are grouped into logical categories.
 
 All InfoBoxes display their data in user-specified units.  Whenever the content 
-is invalid, the displayed value will be `$---$' and the content is
-greyed out.  This happens, for example, when no terrain elevation is found for 
+is invalid, the displayed value will be `$---$'.  This happens, for example, when no terrain elevation is found for 
 the `Terrain Elevation' InfoBox, or in the same way for a derived InfoBox like 
 `Height AGL'.
 
 Some of the InfoBox contents are modifiable complex values like `MC setting', or `Wind'. Most of 
 those values are now accessible through an InfoBox dialogue. It is a short cut to quickly 
-change the most often accessed items. An InfoBox dialogue is opened by long press to the InfoBox 
-(Touchscreen devices), or `Select' and `Enter' (PC).
+change the most often accessed items. An InfoBox dialogue is opened by tapping the InfoBox
+(or pressing Enter when it is selected). A long press opens the arrange mode.
 
 In the following description of the InfoBox types, the first
 title is as it appears in the InfoBox configuration dialogue box, the
@@ -37,8 +36,8 @@ second title is the label used in the InfoBox title.
 \section{Altitude}
 
 \ibig{Altitude GPS}{Alt GPS}{Altitude above mean sea level reported by the
-GPS. (Touch-screen/PC only) In simulation mode this value is adjustable with the
-up/down arrow keys. The right/left arrow keys also cause the glider to turn.\footnotemark[1]}
+GPS. Tap or Enter opens the altitude panel. In simulation mode that
+panel can change this altitude.\footnotemark[1]}
 {figures/simulator-keys.png}
 \ibi{Barometric altitude}{Alt Baro}{Barometric altitude obtained from a
 device equipped with pressure sensor.\footnotemark[1]}
@@ -66,12 +65,10 @@ of the InfoBox.}
 %%%%%%%%%%%
 \section{Aircraft state}
 
-\ibi{Speed ground}{V GND}{Ground speed measured by the GPS. If this InfoBox is
-active in simulation mode, pressing the up and down arrows adjusts the speed, 
-left and right turns the glider.}
-\ibi{Track}{Track}{Magnetic track reported by the GPS. (Touch-screen/PC only) If
-this InfoBox is active in simulation mode, pressing the up and down arrows
-adjusts the track.}
+\ibi{Speed ground}{V GND}{Ground speed measured by the GPS. In simulation
+mode, tap or Enter opens a panel that changes the speed and the track.}
+\ibi{Track}{Track}{Magnetic track reported by the GPS. In simulation
+mode, tap or Enter opens the same panel as Speed ground.}
 \ibi{Airspeed IAS}{V IAS}{Indicated Airspeed reported by a supported external
 intelligent vario.}
 \ibi{G load}{G}{Magnitude of G loading reported by a supported external
@@ -174,14 +171,13 @@ lift distribution over each part of the circle.}
 %%%%%%%%%%%
 \section{Atmosphere}
 
-\ibig{Wind arrow}{Wind}{Wind vector estimated by XCSoar. Manual adjustment is possible 
-with the connected InfoBox dialogue. Pressing the up/down cursor keys to cycle through 
-settings, adjust the values with left/right cursor keys.}
+\ibig{Wind arrow}{Wind}{Wind vector estimated by XCSoar. Tap or Enter
+opens the wind settings.}
 {figures/infobox-dialog-wind1.png}
-\ibi{Wind bearing}{Wind}{Wind bearing incl. wind speed, estimated by XCSoar. Adjustable in the same 
-manner as Wind arrow.}
-\ibi{Wind speed}{Wind}{Wind speed incl. wind direction, estimated by XCSoar. Adjustable in the same 
-manner as Wind arrow.}
+\ibi{Wind bearing}{Wind}{Wind bearing incl. wind speed, estimated by XCSoar.
+Tap or Enter opens the wind settings.}
+\ibi{Wind speed}{Wind}{Wind speed incl. wind direction, estimated by XCSoar.
+Tap or Enter opens the wind settings.}
 \ibi{Wind, head component}{Head Wind}{Current head wind component. Head wind 
 is calculated from TAS and GPS ground speed if airspeed is available from 
 external device. Otherwise the estimated wind is used for the calculation.}
@@ -194,9 +190,8 @@ if supported by a connected intelligent variometer.}
 measured by a probe if supported by a connected intelligent variometer.}
 \ibi{Forecast temperature}{Max Temp}{Forecast temperature of the ground at the
 home airfield, used in estimating convection height and cloud base in
-conjunction with outside air temperature and relative humidity probe. 
-(Touch-screen/PC only) Pressing the up/down cursor keys adjusts this forecast
-temperature.}
+conjunction with outside air temperature and relative humidity probe.
+Tap or Enter opens the flight setup page, where this temperature is set.}
 
 %%%%%%%%%%%
 \section{MacCready}
@@ -206,17 +201,15 @@ MacCready mode (manual or auto), and recommended speed-to-fly.
 At MacCready 0, with a task or Goto active, that speed is adjusted
 for wind toward the waypoint and need not match the polar's still-air
 best glide.  With MacCready above 0, wind is not used.
-(Touch-screen/PC only) Also used
-to adjust the MacCready setting if the InfoBox is active, by using the up/down
-cursor keys. Pressing the enter cursor key toggles `Auto MacCready' mode.
+Tap or Enter opens a dialogue to change the value and to switch Auto
+MacCready.
 In task abort the title and the value are Safety MC, and the
 comment is the still-air glide ratio at that MacCready, written as a
-ratio such as 25:1, instead of speed-to-fly. Up and down adjust Safety
-MC for this flight and leave the saved setting unchanged. If Task MC is
+ratio such as 25:1, instead of speed-to-fly. The dialogue adjusts
+Safety MC for this flight and leaves the saved setting unchanged. If Task MC is
 higher than that Safety MC, the lower value is sent
 to connected devices. A lower Task MC is left unchanged. Leaving abort
-sends Task MC back when it had been replaced.
-An InfoBox dialogue is available}
+sends Task MC back when it had been replaced.}
 \ibi{Speed MacCready}{V MC}{MacCready speed-to-fly for optimal flight to the
 next waypoint. In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude. In final glide mode, this speed-to-fly is calculated for
@@ -353,10 +346,8 @@ open/close time} (\ref{sec:task-type-racing}) are used. }
 %%%%%%%%%%%
 \section{Waypoint}
 
-\ibi{Next waypoint}{Next WP}{Name of the currently selected turn point. When
-this InfoBox is active, using the up/down cursor keys selects the next/previous
-waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings
-up the airfields or waypoint details.}
+\ibi{Next waypoint}{Next WP}{Name of the currently selected turn point.
+Tap or Enter opens the waypoint details.}
 \ibi{Flight Duration}{Flt Duration}{Time elapsed since take-off was detected.}
 \ibi{Time local}{Time loc}{GPS time expressed in local time zone.}
 \ibi{Time UTC}{Time UTC}{GPS time expressed in UTC.}

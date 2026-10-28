@@ -9,7 +9,6 @@ class InfoBoxContentTeamCode : public InfoBoxContent
 {
 public:
   void Update(InfoBoxData &data) noexcept override;
-  bool HandleKey(const InfoBoxKeyCodes keycode) noexcept override;
   bool HandleClick() noexcept override;
 };
 

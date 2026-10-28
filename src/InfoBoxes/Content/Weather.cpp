@@ -17,6 +17,7 @@
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Input/InputEvents.hpp"
 
 void
 UpdateInfoBoxHumidity(InfoBoxData &data) noexcept
@@ -80,22 +81,10 @@ InfoBoxContentTemperatureForecast::Update(InfoBoxData &data) noexcept
 }
 
 bool
-InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode) noexcept
+InfoBoxContentTemperatureForecast::HandleClick() noexcept
 {
-  switch(keycode) {
-  case ibkUp:
-    CommonInterface::SetComputerSettings().forecast_temperature += Temperature::FromKelvin(0.5);
-    return true;
-
-  case ibkDown:
-    CommonInterface::SetComputerSettings().forecast_temperature -= Temperature::FromKelvin(0.5);
-    return true;
-
-  default:
-    break;
-  }
-
-  return false;
+  InputEvents::eventSetup("Basic");
+  return true;
 }
 
 bool

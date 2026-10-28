@@ -127,7 +127,7 @@ static constexpr MetaData meta_data[] = {
     Group::ALTITUDE,
     N_("Altitude GPS"),
     N_("Alt GPS"),
-    N_("Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In simulation mode, this value is adjustable with the up/down arrow keys; the right/left arrow keys cause the glider to turn."),
+    N_("Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
   },
 

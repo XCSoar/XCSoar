@@ -773,27 +773,8 @@ int
 InfoBoxArrangeWindow::FindNeighbour(PixelPoint origin,
                                     int dx, int dy) const noexcept
 {
-  int best = -1, best_distance = 0;
-
-  for (unsigned i = 0; i < layout->count; ++i) {
-    const PixelPoint p = layout->positions[i].GetCenter();
-    const int along = (p.x - origin.x) * dx + (p.y - origin.y) * dy;
-    if (along <= 0)
-      continue;
-
-    /* the closest slot in that direction wins, and among those the
-       one which is least off to the side */
-    const int across = std::abs((p.x - origin.x) * dy
-                                - (p.y - origin.y) * dx);
-    const int distance = along + 4 * across;
-
-    if (best < 0 || distance < best_distance) {
-      best = i;
-      best_distance = distance;
-    }
-  }
-
-  return best;
+  return InfoBoxArrange::FindNeighbour(layout->positions, layout->count,
+                                       origin, dx, dy);
 }
 
 bool
