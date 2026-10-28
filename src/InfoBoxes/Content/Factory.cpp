@@ -127,7 +127,7 @@ static constexpr MetaData meta_data[] = {
     Group::ALTITUDE,
     N_("Altitude GPS"),
     N_("Alt GPS"),
-    N_("Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In simulation mode, this value is adjustable with the up/down arrow keys; the right/left arrow keys cause the glider to turn."),
+    N_("Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."),
     IBFHelper<InfoBoxContentAltitudeGPS>::Create,
   },
 
@@ -182,7 +182,7 @@ static constexpr MetaData meta_data[] = {
     Group::SPEED,
     N_("Speed ground"),
     N_("V GND"),
-    N_("Ground speed measured by the GPS. The small value shows the head or tail wind difference to TAS for the current vector. If this InfoBox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider."),
+    N_("Ground speed measured by the GPS. The small value shows the head or tail wind difference to TAS for the current vector. In simulation mode, tap or Enter opens a panel that changes the speed and the track."),
     IBFHelper<InfoBoxContentSpeedGround>::Create,
   },
 
@@ -218,7 +218,7 @@ static constexpr MetaData meta_data[] = {
     Group::TASK,
     N_("MacCready setting"),
     N_("MC"),
-    N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
+    N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. Tap or Enter opens a dialogue to change the value and to switch Auto MacCready."),
     IBFHelper<InfoBoxContentMacCready>::Create,
   },
 
@@ -254,7 +254,7 @@ static constexpr MetaData meta_data[] = {
     Group::WAYPOINT,
     N_("Next waypoint"),
     N_("Next WP"),
-    N_("Name of the currently selected turn point. When this InfoBox is active, using the up/down cursor keys selects the next/previous waypoint in the task. (Touch-screen/PC only) Pressing the enter cursor key brings up the Airfields/waypoint details."),
+    N_("Name of the currently selected turn point. Tap or Enter opens the waypoint details."),
     IBFHelper<InfoBoxContentNextWaypoint>::Create,
   },
 
@@ -335,7 +335,7 @@ static constexpr MetaData meta_data[] = {
     Group::SPEED,
     N_("Track"),
     N_("Track"),
-    N_("Magnetic track reported by the GPS. (Touch-screen/PC only) If this InfoBox is active in simulation mode, pressing the up/down arrows adjusts the track."),
+    N_("Magnetic track reported by the GPS. In simulation mode, tap or Enter opens the same panel as Speed ground."),
     IBFHelper<InfoBoxContentTrack>::Create,
   },
 
@@ -579,7 +579,7 @@ static constexpr MetaData meta_data[] = {
     Group::WIND,
     N_("Forecast temperature"),
     N_("Max Temp"),
-    N_("Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. (Touch-screen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature."),
+    N_("Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. Tap or Enter opens the flight setup page, where this temperature is set."),
     IBFHelper<InfoBoxContentTemperatureForecast>::Create,
   },
 

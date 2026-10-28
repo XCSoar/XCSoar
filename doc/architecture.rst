@@ -742,8 +742,12 @@ Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
    is armed is a drag or a cancel, not a tap.
 
 -  Cursor keys and a remote stick must reach the same actions as
-   touch.  E-paper skips hold animation (``HasEPaper()`` /
-   ``IsSlowCPU()``).
+   touch.  On a selected InfoBox, the arrow keys move to the InfoBox
+   in that screen direction (``InfoBoxArrange::FindNeighbour``): left
+   is left, right is right, and they do not follow the slot number.
+   Enter does what a short press does.  A long press, and the arrange
+   screen, are the same action.  E-paper skips hold animation
+   (``HasEPaper()`` / ``IsSlowCPU()``).
 
 Main graphics
 ~~~~~~~~~~~~~

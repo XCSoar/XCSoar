@@ -75,8 +75,8 @@ certain events occur.
 \item[Dialogue windows] Larger dialogue windows, usually containing graphics and
 buttons, are used to present detailed data to the pilot regarding waypoint
 details, statistics and analysis etc.
-\item[Main menu] The main menu is accessible by double tapping the map area or
-InfoBoxes as well as through gesture. If the menu buttons are not pressed after
+\item[Main menu] The main menu is accessible by double tapping the map area
+as well as through gesture. If the menu buttons are not pressed after
 \gesturespec{du} a specified time, they disappear again so as to not obscure 
 the map area.
 \end{description}
@@ -524,26 +524,21 @@ page is configured.
 
 \subsection*{Modifying InfoBox content}
 
-(This section applies only when a touch-screen or mouse is present.)
+A short press on an InfoBox (a tap or a click, lifting before the box
+fills) runs that InfoBox's action.  Some open a small dialogue, some
+open another screen, and some do nothing.  Enter does the same thing
+when the InfoBox is selected.
 
-Some InfoBox values can be changed by the user by tapping the
-InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue:
+Press and hold until the box fills, then lift, to arrange the
+InfoBoxes.  That is described in section~\ref{sec:arrange_infoboxes}.
 
-\begin{description}
-\item[\bmenuw{Edit}]  
-  Allows the pilot to adjust the InfoBox setting (e.g.\ raise or lower the
-  MacCready setting)
+With a keyboard, Tab selects an InfoBox.  The cursor keys then move
+to the InfoBox in that direction on the screen: left to the one on
+the left, and likewise for right, up, and down.  Escape returns to
+the map.
 
-\item[\bmenuw{Setup}]
-  Allows you to change the behaviour of the setting related to the InfoBox 
-  (for example, changing from auto to manual MacCready mode); or 
-  to change the InfoBox itself by pressing `\emph{Switch InfoBox}', then 
-  choosing from a list of all available InfoBoxes.
-
-\end{description}
-
-Examples of InfoBoxes that can
-be adjusted include MacCready setting, wind speed, and altitude (QNH).
+Examples of InfoBoxes that open a dialogue include the MacCready
+setting, wind, and QNH.
 
 
 \subsection*{Rearranging InfoBoxes}\label{sec:arrange_infoboxes}

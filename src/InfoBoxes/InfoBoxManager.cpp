@@ -209,6 +209,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
 
   WindowStyle style;
   style.Hide();
+  style.TabStop();
 
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {

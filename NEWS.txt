@@ -1,4 +1,8 @@
 Version 7.46.1 - not yet released
+* ui
+  - let a tap or Enter run an InfoBox action at once. The cursor keys
+    move to the InfoBox in that direction on the screen. A double tap
+    on an InfoBox no longer opens the menu #2095
 * android
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
@@ -12,6 +16,8 @@ Version 7.46.1 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
+  - describe InfoBox tap, Enter, and moving between InfoBoxes with
+    the cursor keys
   - describe the size limit for menu, dialogue and status text
   - describe that Not aligned ignores the sign of Android G load
 * airspace

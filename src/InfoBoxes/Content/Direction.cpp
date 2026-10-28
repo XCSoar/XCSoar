@@ -3,10 +3,16 @@
 
 #include "InfoBoxes/Content/Direction.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
+#include "InfoBoxes/Panel/SpeedSimulator.hpp"
+#include "Simulator.hpp"
 #include "Interface.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
-#include "BackendComponents.hpp"
+#include "Language/Language.hpp"
+
+static constexpr InfoBoxPanel track_panels[] = {
+  { N_("Simulator"), LoadSpeedSimulatorPanel },
+  { nullptr, nullptr }
+};
 
 void
 InfoBoxContentTrack::Update(InfoBoxData &data) noexcept
@@ -18,30 +24,11 @@ InfoBoxContentTrack::Update(InfoBoxData &data) noexcept
   data.SetValue(CommonInterface::Basic().track);
 }
 
-bool
-InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode) noexcept
+const InfoBoxPanel *
+InfoBoxContentTrack::GetDialogContent() noexcept
 {
-  if (!CommonInterface::Basic().gps.simulator)
-    return false;
+  if (!is_simulator())
+    return nullptr;
 
-  if (!backend_components || !backend_components->device_blackboard)
-    return false;
-
-  auto &device_blackboard = *backend_components->device_blackboard;
-  const Angle a5 = Angle::Degrees(5);
-  switch (keycode) {
-  case ibkUp:
-  case ibkRight:
-    device_blackboard.SetTrack(
-        CommonInterface::Basic().track + a5);
-    return true;
-
-  case ibkDown:
-  case ibkLeft:
-    device_blackboard.SetTrack(
-        CommonInterface::Basic().track - a5);
-    return true;
-  }
-
-  return false;
+  return track_panels;
 }
