@@ -361,8 +361,10 @@ InfoBoxArrangeWindow::DrawCard(Canvas &canvas, const PixelRect &rc,
 {
   const int radius = look.preview_radius;
   const bool active = state == CardState::ACTIVE;
-  const bool picker_wait = active &&
-    (picker_timer.IsPending() || picker_armed);
+  /* keyboard focus is not ACTIVE, but a held Enter fills that card too */
+  const bool held = picker_timer.IsPending() || picker_armed;
+  const bool picker_wait = held && selection != Selection::MOVING &&
+    (active || state == CardState::FOCUSED);
   const bool fade = picker_wait && !HasEPaper() && !IsSlowCPU();
 
   int halo = 0;
@@ -708,7 +710,11 @@ InfoBoxArrangeWindow::OnHoldArmed() noexcept
 void
 InfoBoxArrangeWindow::OnPickerTimer() noexcept
 {
-  if (!drag || drag->following)
+  if (drag && drag->following)
+    return;
+
+  /* a finger hold has a drag; Enter hold does not */
+  if (!drag && !enter_down)
     return;
 
   /* the hold is armed; lifting now opens the content list */
@@ -749,7 +755,7 @@ InfoBoxArrangeWindow::ShowHelp() noexcept
 
     text.append(_("Press Enter to take the selected InfoBox, move it with "
                   "the cursor keys and press Enter again to put it down.  "
-                  "Pressing Enter twice without moving an InfoBox chooses "
+                  "Hold Enter, or press it twice without moving, to choose "
                   "a different InfoBox for that position."));
   }
 
@@ -869,7 +875,7 @@ InfoBoxArrangeWindow::MoveSelection(int dx, int dy) noexcept
 }
 
 bool
-InfoBoxArrangeWindow::Activate() noexcept
+InfoBoxArrangeWindow::Activate(bool open_picker_if_unmoved) noexcept
 {
   OnArrangeActivity();
 
@@ -892,7 +898,7 @@ InfoBoxArrangeWindow::Activate() noexcept
 
   Invalidate();
 
-  if (unmoved) {
+  if (unmoved && open_picker_if_unmoved) {
     /* taking and putting down without moving means the user wants to
        change the InfoBox instead */
     PlayHapticFeedback();
@@ -1029,6 +1035,11 @@ InfoBoxArrangeWindow::CancelDrag() noexcept
 bool
 InfoBoxArrangeWindow::OnMouseDown(PixelPoint p) noexcept
 {
+  if (enter_down) {
+    enter_down = false;
+    CancelPicker();
+  }
+
   OnArrangeActivity();
 
   const PixelPoint layout_p = ToLayoutPoint(p);
@@ -1104,6 +1115,12 @@ void
 InfoBoxArrangeWindow::OnKillFocus() noexcept
 {
   PaintWindow::OnKillFocus();
+
+  if (enter_down) {
+    enter_down = false;
+    CancelPicker();
+  }
+
   Invalidate();
 }
 
@@ -1135,6 +1152,12 @@ InfoBoxArrangeWindow::OnKeyCheck(unsigned key_code) const noexcept
 bool
 InfoBoxArrangeWindow::OnKeyDown(unsigned key_code) noexcept
 {
+  /* an arrow, Escape, or anything else lets go of a held Enter */
+  if (enter_down && key_code != KEY_RETURN) {
+    enter_down = false;
+    CancelPicker();
+  }
+
   switch (key_code) {
   case KEY_LEFT:
     return MoveSelection(-1, 0);
@@ -1158,7 +1181,17 @@ InfoBoxArrangeWindow::OnKeyDown(unsigned key_code) noexcept
 #endif
 
   case KEY_RETURN:
-    return Activate();
+    /* repeats while Enter is held must not take and open the list */
+    if (enter_down)
+      return true;
+
+    enter_down = true;
+    OnArrangeActivity();
+    if (described_slot >= 0) {
+      SchedulePicker();
+      Invalidate();
+    }
+    return true;
 
   case KEY_ESCAPE:
     return OnArrangeCancel();
@@ -1167,9 +1200,31 @@ InfoBoxArrangeWindow::OnKeyDown(unsigned key_code) noexcept
   return PaintWindow::OnKeyDown(key_code);
 }
 
+bool
+InfoBoxArrangeWindow::OnKeyUp(unsigned key_code) noexcept
+{
+  if (key_code != KEY_RETURN || !enter_down)
+    return PaintWindow::OnKeyUp(key_code);
+
+  const bool armed = picker_armed;
+  const bool moving = selection == Selection::MOVING;
+  enter_down = false;
+  CancelPicker();
+
+  /* a hold is the long press: the list.  It does not also take the card.
+     Once the card is already taken, the hold only puts it down. */
+  if (armed && !moving && described_slot >= 0) {
+    ShowPicker(described_slot);
+    return true;
+  }
+
+  return Activate(!armed);
+}
+
 void
 InfoBoxArrangeWindow::OnCancelMode() noexcept
 {
+  enter_down = false;
   CancelDrag();
   PaintWindow::OnCancelMode();
 }

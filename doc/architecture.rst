@@ -745,8 +745,16 @@ Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
    touch.  On a selected InfoBox, the arrow keys move to the InfoBox
    in that screen direction (``InfoBoxArrange::FindNeighbour``): left
    is left, right is right, and they do not follow the slot number.
-   Enter does what a short press does.  A long press, and the arrange
-   screen, are the same action.  E-paper skips hold animation
+   Enter does what a short press does.  Holding Enter until the hold
+   is armed, then releasing, opens arrange, the same as a long press.
+   In arrange mode that hold opens the InfoBox list.  A short Enter
+   there takes or puts down the selected card, and does not also
+   open the list.
+   Escape on the map, with no
+   dialogue, menu, or special page open, selects the first InfoBox.
+   Escape on a selected InfoBox returns to the map.  A long press,
+   and the arrange screen, are the same action.  E-paper skips hold
+   animation
    (``HasEPaper()`` / ``IsSlowCPU()``).
 
 Main graphics
