@@ -5,16 +5,12 @@
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/SpeedSimulator.hpp"
 #include "Simulator.hpp"
-#include "BackendComponents.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "Computer/STF.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
-#include <stdlib.h>
 
 static constexpr InfoBoxPanel speed_ground_panels[] = {
   { N_("Simulator"), LoadSpeedSimulatorPanel },
@@ -50,42 +46,6 @@ InfoBoxContentSpeedGround::Update(InfoBoxData &data) noexcept
   char buffer[16];
   FormatUserWindSpeed(-info.head_wind, buffer, true, false);
   data.SetComment(buffer);
-}
-
-bool
-InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode) noexcept
-{
-  if (!is_simulator())
-    return false;
-
-  if (!backend_components || !backend_components->device_blackboard)
-    return false;
-
-  auto &device_blackboard = *backend_components->device_blackboard;
-  const double step = Units::ToSysSpeed(10);
-  const auto a5 = Angle::Degrees(5);
-
-  switch (keycode) {
-  case ibkUp:
-    device_blackboard.SetSpeed(
-        CommonInterface::Basic().ground_speed + step);
-    return true;
-
-  case ibkDown:
-    device_blackboard.SetSpeed(fdim(CommonInterface::Basic().ground_speed,
-                                     step));
-    return true;
-
-  case ibkLeft:
-    device_blackboard.SetTrack(CommonInterface::Basic().track - a5);
-    return true;
-
-  case ibkRight:
-    device_blackboard.SetTrack(CommonInterface::Basic().track + a5);
-    return true;
-  }
-
-  return false;
 }
 
 void
