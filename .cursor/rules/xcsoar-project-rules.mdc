@@ -710,13 +710,13 @@ Key rules:
 - `ActionInterface` provides a clean API for UI actions that can be triggered by various input methods (touch, keyboard shortcuts, gestures, InputEvents)
 - This allows the same functionality to be accessible regardless of input method
 - Consider exposing commonly used actions through `ActionInterface` for consistency and accessibility
-- **Navigation depth**: All actions used in-flight should be maximum 3 steps away from the main operation mode
-- This ensures critical functions remain quickly accessible during flight operations
-- Prioritize frequently used in-flight actions to be accessible with fewer steps
-- **State change notifications**: Announce internal state changes to the user
-- Use appropriate notification mechanisms (e.g., `StatusMessage`, `PopupMessage`, `OperationEnvironment::SetText()`) to inform users of important state changes
-- Examples: GPS connection status, device connection/disconnection, task state changes, airspace warnings, system errors
-- Ensure users are aware of changes that affect system behavior or require their attention
+- **Navigation depth / feedback / cockpit UX**: see **User interface
+  guidelines** in `doc/architecture.rst` (direct access ≤3 steps,
+  Escape to map, action feedback, no hidden behaviours). Do not
+  invent a parallel rulebook here.
+- Announce important state changes (`StatusMessage`, `PopupMessage`,
+  `OperationEnvironment::SetText()`, …) as required by those
+  guidelines.
 
 ### Letter Cases
 - Captions: Capitalization (e.g., "Pan On", "The Display Of...")
@@ -725,14 +725,10 @@ Key rules:
 - Labels: Generally like prose, with exceptions where meaningful
 
 ### Colors
-- Red: warning
-- Orange: caution
-- Green: positive safety indicator
-- Blue: neutral safety indicator
-- Grey: buttons
-- Yellow: clicked items
-- Light blue: key focused item
-- Medium blue: dialogue title bar
+- Condition / provenance and chrome: see **User interface guidelines**
+  in `doc/architecture.rst` (bad/caution/normal; InfoBox blue =
+  derived; brand `COLOR_XCSOAR*` for chrome — not “neutral safety”).
+- Grey buttons; yellow pressed; brand-blue focus/title (Look code).
 
 ### Safety
 - Avoid elements that encourage continuous screen staring
