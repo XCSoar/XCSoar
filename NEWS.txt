@@ -7,6 +7,8 @@ Version 7.47 - not yet released
   - remember QNH and the maximum forecast temperature with that
     same question
 * ui
+  - estimate pitch and bank for the artificial horizon in simulator
+    mode and during replay, from the climb angle and the rate of turn
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears

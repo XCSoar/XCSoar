@@ -11,6 +11,8 @@
 #include "Math/Util.hpp"
 #include "time/Cast.hxx"
 
+#include <algorithm>
+
 static constexpr double INVERSE_G = 1. / GRAVITY;
 static constexpr double INVERSE_2G = INVERSE_G / 2.;
 
@@ -358,11 +360,64 @@ ComputeNettoVario(MoreData &basic, double sink_rate) noexcept
 }
 
 /**
+ * Simulator and replay have no AHRS unless the log already carries
+ * one.  Pitch is the climb angle.  Bank is the coordinated-turn angle
+ * from yaw rate (change of track).
+ *
+ * @param yaw_rate last yaw rate; kept when this merge has no new fix
+ */
+static void
+EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
+                         const DerivedInfo &calculated,
+                         Angle &yaw_rate) noexcept
+{
+  if (!basic.gps.simulator && !basic.gps.replay)
+    return;
+
+  const double speed = basic.airspeed_available
+    ? basic.true_airspeed
+    : basic.ground_speed;
+  if (!(speed > 0))
+    return;
+
+  /* Once flying with an airspeed, ComputeDynamics() estimates bank
+     from the smoothed turn rate.  Until then, use the track change. */
+  if (!basic.attitude.bank_angle_available &&
+      !(calculated.flight.flying && basic.airspeed_available)) {
+    if (calculated.flight.flying) {
+      yaw_rate = calculated.turn_rate_heading;
+    } else if (basic.track_available && last.track_available &&
+               basic.time_available && last.time_available) {
+      const auto dt = basic.time - last.time;
+      if (dt.count() > 0)
+        yaw_rate = std::clamp((basic.track - last.track).AsDelta() /
+                              ToFloatSeconds(dt),
+                              Angle::Degrees(-50), Angle::Degrees(50));
+    }
+
+    basic.attitude.bank_angle =
+      Angle::Radians(atan((yaw_rate * speed * INVERSE_G).Radians()));
+    basic.attitude.bank_angle_available = basic.track_available;
+  }
+
+  if (!basic.attitude.pitch_angle_available &&
+      !basic.total_energy_vario_available &&
+      basic.gps_vario_available) {
+    basic.attitude.pitch_angle = Angle::FromXY(speed, basic.gps_vario);
+    basic.attitude.pitch_angle_available = basic.gps_vario_available;
+  }
+}
+
+/**
  * Calculates the estimated bank and pitch angles
  */
 static void
-ComputeDynamics(MoreData &basic, const DerivedInfo &calculated) noexcept
+ComputeDynamics(MoreData &basic, const MoreData &last,
+                const DerivedInfo &calculated,
+                Angle &playback_yaw_rate) noexcept
 {
+  EstimatePlaybackAttitude(basic, last, calculated, playback_yaw_rate);
+
   if (!calculated.flight.flying)
     return;
 
@@ -437,5 +492,5 @@ BasicComputer::Compute(MoreData &data,
   const double sink_rate = GetGliderSinkRate(data, calculated, settings);
   ComputeNettoVario(data, sink_rate);
   filtered_vario.Compute(data, sink_rate);
-  ComputeDynamics(data, calculated);
+  ComputeDynamics(data, last, calculated, playback_yaw_rate);
 }
