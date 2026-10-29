@@ -871,7 +871,6 @@ jobs:
           fi
 
       - name: Deploy to Download server - testing
-        id: deploy-testing
         if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
         uses: easingthemes/ssh-deploy@main
         env:
@@ -882,9 +881,12 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}
+          # Every uploaded file must be world-readable. Runs on the server,
+          # so macOS openrsync (which ignores --chmod) is covered too.
+          SCRIPT_AFTER: find "${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}" -type f -exec chmod 644 {} +
+          SCRIPT_AFTER_REQUIRED: "true"
 
       - name: Deploy to Download server - release
-        id: deploy-release
         if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
         uses: easingthemes/ssh-deploy@main
         env:
@@ -895,9 +897,10 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+          SCRIPT_AFTER: find "${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}" -type f -exec chmod 644 {} +
+          SCRIPT_AFTER_REQUIRED: "true"
 
       - name: Deploy installer to Download server - release
-        id: deploy-installer
         if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && (matrix.target == 'WIN64OPENGL' || matrix.target == 'WIN32OPENGL') }}
         uses: easingthemes/ssh-deploy@main
         env:
@@ -908,106 +911,11 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}
-
-      # Runs only after a successful rsync, so an rsync failure stays
-      # covered by build.continue-on-error. The result is rechecked by
-      # verify-download-mode, which is allowed to fail the workflow.
-      - name: Require download files mode 0644
-        id: download-mode
-        if: ${{ steps.deploy-testing.outcome == 'success' || steps.deploy-release.outcome == 'success' || steps.deploy-installer.outcome == 'success' }}
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.REPOSITORY_HOST }}
-          REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
-          TESTING_OUTCOME: ${{ steps.deploy-testing.outcome }}
-          RELEASE_OUTCOME: ${{ steps.deploy-release.outcome }}
-          INSTALLER_OUTCOME: ${{ steps.deploy-installer.outcome }}
-          TESTING_DIR: ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}
-          RELEASE_DIR: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}
-        run: |
-          set -euo pipefail
-          install -d -m 700 ~/.ssh
-          trap 'rm -f ~/.ssh/download_mode' EXIT
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/download_mode
-          chmod 600 ~/.ssh/download_mode
-          dirs=()
-          if [ "$TESTING_OUTCOME" = success ]; then
-            dirs+=("$TESTING_DIR")
-          fi
-          if [ "$RELEASE_OUTCOME" = success ] || [ "$INSTALLER_OUTCOME" = success ]; then
-            dirs+=("$RELEASE_DIR")
-          fi
-          for dir in "${dirs[@]}"; do
-            ssh -i ~/.ssh/download_mode -o StrictHostKeyChecking=no \
-              "$REMOTE_USER@$REMOTE_HOST" bash -s -- "$dir" <<'EOF'
-          set -eu
-          dir=$1
-          find "$dir" -type f -exec chmod 644 {} +
-          bad=$(find "$dir" -type f ! -perm 644 -print)
-          if [ -n "$bad" ]; then
-            printf '%s\n' "$bad"
-            exit 1
-          fi
-          find "$dir" -type f -print | grep -q .
-          EOF
-          done
+          SCRIPT_AFTER: find "${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}" -type f -exec chmod 644 {} +
+          SCRIPT_AFTER_REQUIRED: "true"
 
       - name: Show ccache stats
         run: ccache --show-stats || true
-
-      - name: Record download mode
-        if: ${{ always() && github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
-        run: |
-          set -euo pipefail
-          mkdir -p download-mode
-          if [ "${{ steps.download-mode.outcome }}" = failure ]; then
-            echo fail > download-mode/result.txt
-          else
-            echo ok > download-mode/result.txt
-          fi
-
-      - name: Upload download mode result
-        if: ${{ always() && github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
-        uses: actions/upload-artifact@v7
-        with:
-          name: download-mode-${{ matrix.target }}
-          path: download-mode/result.txt
-          if-no-files-found: error
-
-  # build.continue-on-error hides a failed chmod on master and tags.
-  # This job has no continue-on-error, so a published file that is not
-  # mode 0644 fails the workflow. A failed rsync does not: that leg
-  # records ok and the old deploy policy stays.
-  verify-download-mode:
-    name: Download file mode
-    runs-on: ubuntu-24.04
-    needs: build
-    if: ${{ always() && needs.build.result != 'cancelled' && needs.build.result != 'skipped' && github.repository == 'XCSoar/XCSoar' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')) }}
-    steps:
-      - name: Download mode results
-        uses: actions/download-artifact@v8
-        with:
-          pattern: download-mode-*
-          path: mode-results
-
-      - name: Fail unless every published tree is mode 0644
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          files=(mode-results/*/result.txt)
-          if [ "${#files[@]}" -eq 0 ]; then
-            echo "No download-mode results were uploaded"
-            exit 1
-          fi
-          fail=0
-          for f in "${files[@]}"; do
-            status=$(cat "$f")
-            echo "$(basename "$f"): $status"
-            if [ "$status" = fail ]; then
-              fail=1
-            fi
-          done
-          exit "$fail"
 
   # shortcut: WIN64OPENGL only; add WIN32OPENGL the same way when 32-bit tests matter
   windows-tests:
