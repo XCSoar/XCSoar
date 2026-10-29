@@ -12939,3 +12939,6 @@ msgstr "Δεν είναι δυνατή η έναρξη της προεπισκό
 
 msgid "Camera not usable"
 msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
+
+msgid "NO AHRS"
+msgstr "NO AHRS"

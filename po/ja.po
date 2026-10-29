@@ -12680,3 +12680,6 @@ msgstr "カメラのプレビューを開始できません"
 
 msgid "Camera not usable"
 msgstr "カメラを使用できません"
+
+msgid "NO AHRS"
+msgstr "NO AHRS"

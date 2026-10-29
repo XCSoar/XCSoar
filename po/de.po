@@ -12921,3 +12921,6 @@ msgstr "Kameravorschau kann nicht gestartet werden"
 
 msgid "Camera not usable"
 msgstr "Kamera nicht verwendbar"
+
+msgid "NO AHRS"
+msgstr "Kein AHRS"

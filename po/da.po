@@ -12800,3 +12800,6 @@ msgstr "Kan ikke starte kameravisningen"
 
 msgid "Camera not usable"
 msgstr "Kameraet kan ikke bruges"
+
+msgid "NO AHRS"
+msgstr "Ingen AHRS"

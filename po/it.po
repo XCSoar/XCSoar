@@ -12960,3 +12960,6 @@ msgstr "Impossibile avviare l'anteprima della fotocamera"
 
 msgid "Camera not usable"
 msgstr "Fotocamera non utilizzabile"
+
+msgid "NO AHRS"
+msgstr "NO AHRS"

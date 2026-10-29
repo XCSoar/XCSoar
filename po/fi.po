@@ -12776,3 +12776,6 @@ msgstr "Kameran esikatselua ei voi käynnistää"
 
 msgid "Camera not usable"
 msgstr "Kameraa ei voi käyttää"
+
+msgid "NO AHRS"
+msgstr "Ei AHRS"

@@ -12741,3 +12741,6 @@ msgstr "Nelze spustit náhled fotoaparátu"
 
 msgid "Camera not usable"
 msgstr "Fotoaparát nelze použít"
+
+msgid "NO AHRS"
+msgstr "Není AHRS"
