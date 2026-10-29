@@ -302,6 +302,14 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw horizon line
   if (i != NONE && j != NONE)
   {
+    /* Ground side, so the line still reads when the horizon is banked. */
+    const Angle bank = Angle::Degrees(bank_degrees);
+    const int gap = std::max(1, static_cast<int>(look.horizon_pen.GetWidth()));
+    const PixelPoint off{iround(bank.sin() * gap),
+                         iround(bank.cos() * gap)};
+    canvas.SelectBlackPen(gap);
+    canvas.DrawLine(intersect_left + off, intersect_right + off);
+
     canvas.Select(look.horizon_pen);
     canvas.DrawLine(intersect_left, intersect_right);
   }
