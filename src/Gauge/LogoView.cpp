@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "LogoView.hpp"
+#include "Renderer/WarningRibbonRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/FontDescription.hpp"
@@ -241,52 +242,28 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc,
   canvas.DrawText(origin + PixelPoint{2, 2}, XCSoar_ProductToken);
 
 #ifndef NDEBUG
-  /* Draw debug build warning banner below logo (like "Remove before flight") */
-  if (bold_font.IsDefined())
-    canvas.Select(bold_font);
-  
+  /* Same streamer as the horizon "NO AHRS" label. */
+  const Font &warning_font = bold_font.IsDefined() ? bold_font : font;
   const char *warning_text = "DEBUG BUILD - DO NOT FLY!";
-  const auto text_size = canvas.CalcTextSize(warning_text);
-  
-  /* Half character padding (max) */
-  const int padding = text_size.height / 2;
-  const int banner_height = text_size.height + padding * 2;
-  const int banner_width = text_size.width + padding * 2;
-  
-  /* Position banner below the logo/title with some spacing.
+  const PixelSize banner =
+    WarningRibbonRenderer::Size(warning_font, warning_text);
+
+  /* Position the ribbon below the logo/title with some spacing.
      logo_position and title_position already include origin. */
   int banner_y;
-  if (orientation == LogoViewOrientation::PORTRAIT) {
-    // Below title in portrait mode
+  if (orientation == LogoViewOrientation::PORTRAIT)
     banner_y = title_position.y + title_size.height + spacing / 2;
-  } else if (orientation == LogoViewOrientation::SQUARE) {
-    // Below logo in square mode
+  else if (orientation == LogoViewOrientation::SQUARE)
     banner_y = logo_position.y + logo_size.height + spacing / 2;
-  } else {
-    // Below whichever is lower in landscape mode
+  else
     banner_y = std::max(logo_position.y + logo_size.height,
                        title_position.y + title_size.height) + spacing / 2;
-  }
-  
-  /* Only draw if banner fits within the visible area */
-  if (banner_y + banner_height <= rc.bottom) {
-    const PixelRect warning_rect{
-      origin.x + Center(width, banner_width),
-      banner_y,
-      origin.x + Center(width, banner_width) + banner_width,
-      banner_y + banner_height
-    };
-    
-    canvas.DrawFilledRectangle(warning_rect, COLOR_RED);
-    canvas.SetTextColor(COLOR_WHITE);
-    canvas.SetBackgroundTransparent();
-    
-    const PixelPoint text_pos{
-      warning_rect.left + padding,
-      warning_rect.top + padding
-    };
-    
-    canvas.DrawText(text_pos, warning_text);
-  }
+
+  if (banner.height > 0 &&
+      banner_y + int(banner.height) <= rc.bottom)
+    WarningRibbonRenderer::Draw(canvas,
+                                {origin.x + Center(width, banner.width),
+                                 banner_y},
+                                warning_font, warning_text);
 #endif
 }
