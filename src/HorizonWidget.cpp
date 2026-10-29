@@ -56,10 +56,6 @@ protected:
     else
       canvas.ClearWhite();
 
-    if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-      // TODO: paint "no data" hint
-      return;
-
     HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }
 
