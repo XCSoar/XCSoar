@@ -605,6 +605,12 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -llog -landroid -ljnigraphics
 endif
 
+ifeq ($(TARGET_IS_ARMHF)$(TARGET_IS_KOBO),yn)
+  # GCC 32-bit ARM needs libatomic for 64-bit std::atomic.
+  # Kobo's musl toolchain does not ship it.
+  TARGET_LDLIBS += -latomic
+endif
+
 ######## output files
 
 TARGET_EXEEXT = .exe
