@@ -19,7 +19,8 @@ Version 7.47 - not yet released
   - open the full-screen horizon when the attitude indicator InfoBox
     is tapped
   - estimate pitch and bank for the artificial horizon in simulator
-    mode and during replay, from the climb angle and the rate of turn
+    mode and during replay, from the climb angle and the rate of turn,
+    eased toward each fix so the horizon does not step once a second
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
