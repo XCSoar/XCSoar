@@ -20,6 +20,7 @@ OV_MENU_SOURCES = \
 	$(SRC)/Renderer/FlightListRenderer.cpp \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
