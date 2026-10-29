@@ -16,6 +16,16 @@ Version 7.46.1 - not yet released
     above its ceiling
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
+* Windows
+  - fix FLARM ids with the high bit set collapsing into one aircraft
+  - fix a downloaded IGC file losing carriage returns
+* linux
+  - fix SkyLines user-name replies on ARM
+* development
+  - compile the QR library as ARMv6 for a Raspberry Pi 1
+  - link libatomic into 32-bit ARM builds, except Kobo
+  - include cstdlib where version numbers call std::strtoul, so a
+    Raspberry Pi cross build compiles
 
 Version 7.46 - 2026-10-19
 * highlights
