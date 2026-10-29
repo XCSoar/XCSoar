@@ -27,7 +27,7 @@ Version 7.47 - not yet released
     eased toward each fix so the horizon does not step once a second
   - show a level horizon with a red cross and a red "NO AHRS" label
     in white when no attitude data is available.  The attitude
-    indicator InfoBox shows "---" and "NO AHRS" in its comment
+    indicator InfoBox shows "---" and "NO AHRS" in its comment #2047
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
