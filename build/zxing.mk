@@ -42,7 +42,9 @@ $(ZXING_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 # marks deprecated.  The warning is inside the library.
 # BarcodeFormats holds a std::vector.  _GLIBCXX_DEBUG changes that
 # type, so this library has to see the same flags as the callers.
-ZXING_CXX_FLAGS = -Wno-deprecated-declarations $(LIBSTDCXX_CPPFLAGS)
+# TARGET_ARCH keeps Pi 1 at ARMv6; the armhf compiler defaults to ARMv7.
+ZXING_CXX_FLAGS = -Wno-deprecated-declarations $(LIBSTDCXX_CPPFLAGS) \
+	$(TARGET_ARCH)
 
 # The flags file is rewritten only when the text changes, so a later
 # DEBUG_GLIBCXX=y build does not keep the library from the plain one.
