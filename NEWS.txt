@@ -6,11 +6,14 @@ Version 7.46.1 - not yet released
     high-resolution phone #3375
   - fix the IOIO not connecting after XCSoar was restarted while the
     board stayed plugged in
+  - fix negative G load when the Android Built-in IMU is Not
+    aligned and the top of the phone points down
 * dialogs
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
   - describe the size limit for menu, dialogue and status text
+  - describe that Not aligned ignores the sign of Android G load
 * airspace
   - fix Ack Day on a lower sector also silencing the airspace
     above its ceiling

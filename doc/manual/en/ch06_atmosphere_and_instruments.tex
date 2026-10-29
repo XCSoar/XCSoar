@@ -84,7 +84,9 @@ in a separate InfoBox.  Key sensor measurements that XCSoar uses include:
 \item[Aircraft acceleration] (load factor)  Used for netto variometer
   calculations where an external netto variometer is not provided.
   On Android, XCSoar uses the phone's accelerometer when no external
-  G-sensor is connected.
+  G-sensor is connected.  With {\it Built-in IMU} set to
+  {\it Not aligned}, the sign is ignored, because a negative
+  value means the top of the phone points down.
 \item[Barometric altitude] Used for display
 \item[Indicated airspeed] Used for display, in compensating final glide
   calculations for aircraft kinetic energy, and in netto variometer
