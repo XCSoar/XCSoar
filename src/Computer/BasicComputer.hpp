@@ -36,6 +36,8 @@ class BasicComputer {
     Angle pitch = Angle::Zero();
     std::chrono::steady_clock::time_point shown_at{};
     bool shown = false;
+    /** Negative: measure the step from the wall clock. */
+    double frame = -1;
   } playback;
 
   [[nodiscard]] double PlaybackFrame() noexcept;
@@ -69,6 +71,14 @@ public:
   void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
                const DerivedInfo &calculated,
                const ComputerSettings &settings) noexcept;
+
+  /**
+   * Pin the simulator and replay ease step, in seconds.  A negative
+   * value uses the wall clock.  Tests set this.
+   */
+  void SetPlaybackFrame(double seconds) noexcept {
+    playback.frame = seconds;
+  }
 
   [[gnu::pure]]
   bool FilteredVarioSampleUpdated() const noexcept {

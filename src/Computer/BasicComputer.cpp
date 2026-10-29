@@ -537,6 +537,9 @@ BasicComputer::Compute(MoreData &data,
 double
 BasicComputer::PlaybackFrame() noexcept
 {
+  if (playback.frame >= 0)
+    return playback.frame;
+
   using clock = std::chrono::steady_clock;
   const auto now = clock::now();
   double dt = 0.05;

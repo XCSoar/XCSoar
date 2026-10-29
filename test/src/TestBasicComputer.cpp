@@ -59,6 +59,8 @@ main()
   plan_tests(18);
 
   BasicComputer computer;
+  /* One merge of the 15° roll must be the 50 ms ease step. */
+  computer.SetPlaybackFrame(0.05);
   DerivedInfo calculated;
   calculated.flight.flying = false;
   calculated.wind_available.Clear();
@@ -109,6 +111,7 @@ main()
 
   /* IGC replay: same track change, no simulator flag. */
   BasicComputer replay_computer;
+  replay_computer.SetPlaybackFrame(0.05);
   auto replay_before = Sample(20, 0, 1000, false);
   replay_before.gps.replay = true;
   replay_before.gps.real = false;
