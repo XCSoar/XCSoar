@@ -615,9 +615,11 @@ InfoBoxWindow::PaintLongPressGlow(Canvas &canvas) noexcept
     return;
 
   const bool fade = !HasEPaper() && !IsSlowCPU() && !hold_armed;
+  /* e-paper skips the fade, so a full box before the hold is armed
+     would still be a short press */
   const unsigned t = fade
     ? InfoBoxArrange::LongPressFade(press_start)
-    : 256;
+    : hold_armed ? 256 : 0;
   /* inside the borders: they are drawn on top of the window edge, so
      the glow must not reach into the space they reserve */
   PixelRect rc = title_rect;
