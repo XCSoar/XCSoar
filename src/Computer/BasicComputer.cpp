@@ -8,10 +8,12 @@
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/AirDensity.hpp"
 #include "Geo/Gravity.hpp"
+#include "Math/LowPassFilter.hpp"
 #include "Math/Util.hpp"
 #include "time/Cast.hxx"
 
 #include <algorithm>
+#include <cmath>
 
 static constexpr double INVERSE_G = 1. / GRAVITY;
 static constexpr double INVERSE_2G = INVERSE_G / 2.;
@@ -359,20 +361,38 @@ ComputeNettoVario(MoreData &basic, double sink_rate) noexcept
   basic.netto_vario = basic.brutto_vario - sink_rate;
 }
 
+/** Ease toward a once-a-second fix.  Tau is wall time, in seconds. */
+static Angle
+EaseAngle(Angle shown, Angle target, double dt) noexcept
+{
+  constexpr double tau = 1.0;
+  if (!(dt > 0))
+    return shown;
+
+  const double a = 1. - std::exp(-dt / tau);
+  return Angle::Radians(LowPassFilter(shown.Radians(),
+                                      target.Radians(), a));
+}
+
 /**
  * Simulator and replay have no AHRS unless the log already carries
  * one.  Pitch is the climb angle.  Bank is the coordinated-turn angle
- * from yaw rate (change of track).
+ * from yaw rate (change of track).  Both are eased: the fix arrives
+ * about once a second, and a step there makes the horizon jump.
  *
- * @param yaw_rate last yaw rate; kept when this merge has no new fix
+ * @param frame seconds of easing for this merge
  */
-static void
-EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
-                         const DerivedInfo &calculated,
-                         Angle &yaw_rate) noexcept
+void
+BasicComputer::EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
+                                        const DerivedInfo &calculated,
+                                        double frame) noexcept
 {
-  if (!basic.gps.simulator && !basic.gps.replay)
+  if (!basic.gps.simulator && !basic.gps.replay) {
+    playback.bank = Angle::Zero();
+    playback.pitch = Angle::Zero();
+    playback.shown = false;
     return;
+  }
 
   const double speed = basic.airspeed_available
     ? basic.true_airspeed
@@ -385,25 +405,30 @@ EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
   if (!basic.attitude.bank_angle_available &&
       !(calculated.flight.flying && basic.airspeed_available)) {
     if (calculated.flight.flying) {
-      yaw_rate = calculated.turn_rate_heading;
+      playback.yaw_rate = calculated.turn_rate_heading;
     } else if (basic.track_available && last.track_available &&
                basic.time_available && last.time_available) {
       const auto dt = basic.time - last.time;
       if (dt.count() > 0)
-        yaw_rate = std::clamp((basic.track - last.track).AsDelta() /
-                              ToFloatSeconds(dt),
-                              Angle::Degrees(-50), Angle::Degrees(50));
+        playback.yaw_rate = std::clamp((basic.track - last.track).AsDelta() /
+                                       ToFloatSeconds(dt),
+                                       Angle::Degrees(-50),
+                                       Angle::Degrees(50));
     }
 
-    basic.attitude.bank_angle =
-      Angle::Radians(atan((yaw_rate * speed * INVERSE_G).Radians()));
+    const auto target =
+      Angle::Radians(atan((playback.yaw_rate * speed * INVERSE_G).Radians()));
+    playback.bank = EaseAngle(playback.bank, target, frame);
+    basic.attitude.bank_angle = playback.bank;
     basic.attitude.bank_angle_available = basic.track_available;
   }
 
   if (!basic.attitude.pitch_angle_available &&
       !basic.total_energy_vario_available &&
       basic.gps_vario_available) {
-    basic.attitude.pitch_angle = Angle::FromXY(speed, basic.gps_vario);
+    const auto target = Angle::FromXY(speed, basic.gps_vario);
+    playback.pitch = EaseAngle(playback.pitch, target, frame);
+    basic.attitude.pitch_angle = playback.pitch;
     basic.attitude.pitch_angle_available = basic.gps_vario_available;
   }
 }
@@ -411,12 +436,12 @@ EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
 /**
  * Calculates the estimated bank and pitch angles
  */
-static void
-ComputeDynamics(MoreData &basic, const MoreData &last,
-                const DerivedInfo &calculated,
-                Angle &playback_yaw_rate) noexcept
+void
+BasicComputer::ComputeDynamics(MoreData &basic, const MoreData &last,
+                               const DerivedInfo &calculated,
+                               double frame) noexcept
 {
-  EstimatePlaybackAttitude(basic, last, calculated, playback_yaw_rate);
+  EstimatePlaybackAttitude(basic, last, calculated, frame);
 
   if (!calculated.flight.flying)
     return;
@@ -431,17 +456,28 @@ ComputeDynamics(MoreData &basic, const MoreData &last,
   // estimate bank angle (assuming balanced turn)
   const auto angle = atan((calculated.turn_rate_heading
       * basic.true_airspeed * INVERSE_G).Radians());
+  const bool playback_fix = basic.gps.simulator || basic.gps.replay;
 
   if (!basic.attitude.bank_angle_available) {
-    basic.attitude.bank_angle = Angle::Radians(angle);
+    auto target = Angle::Radians(angle);
+    if (playback_fix) {
+      playback.bank = EaseAngle(playback.bank, target, frame);
+      target = playback.bank;
+    }
+    basic.attitude.bank_angle = target;
     basic.attitude.bank_angle_available = std::max(basic.attitude.heading_available,
                                                    basic.airspeed_available);
   }
 
   if (!basic.attitude.pitch_angle_available && basic.total_energy_vario_available) {
     // estimate pitch angle (assuming balanced turn)
-    basic.attitude.pitch_angle = Angle::FromXY(basic.true_airspeed,
-                                               basic.gps_vario - basic.total_energy_vario);
+    auto target = Angle::FromXY(basic.true_airspeed,
+                                basic.gps_vario - basic.total_energy_vario);
+    if (playback_fix) {
+      playback.pitch = EaseAngle(playback.pitch, target, frame);
+      target = playback.pitch;
+    }
+    basic.attitude.pitch_angle = target;
     basic.attitude.pitch_angle_available = std::max({
         basic.airspeed_available,
         basic.gps_vario_available,
@@ -492,5 +528,29 @@ BasicComputer::Compute(MoreData &data,
   const double sink_rate = GetGliderSinkRate(data, calculated, settings);
   ComputeNettoVario(data, sink_rate);
   filtered_vario.Compute(data, sink_rate);
-  ComputeDynamics(data, last, calculated, playback_yaw_rate);
+  const double frame = (data.gps.simulator || data.gps.replay)
+    ? PlaybackFrame()
+    : 0.;
+  ComputeDynamics(data, last, calculated, frame);
+}
+
+double
+BasicComputer::PlaybackFrame() noexcept
+{
+  using clock = std::chrono::steady_clock;
+  const auto now = clock::now();
+  double dt = 0.05;
+  if (playback.shown) {
+    dt = std::chrono::duration<double>(now - playback.shown_at).count();
+    /* A burst of calls (a unit test, or a replay catching up) still
+       has to move.  A stall must not snap the horizon across. */
+    if (dt < 0.02)
+      dt = 0.05;
+    else if (dt > 0.5)
+      dt = 0.5;
+  }
+
+  playback.shown = true;
+  playback.shown_at = now;
+  return dt;
 }
