@@ -841,6 +841,22 @@ PageActions::ShowThermalAssistant()
 }
 
 void
+PageActions::ShowHorizon()
+{
+  PageLayout layout = GetCurrentLayout();
+  if (layout.main == PageLayout::Main::HORIZON)
+    return;
+
+  if (GetConfiguredLayout().main == PageLayout::Main::HORIZON)
+    Restore();
+  else {
+    layout.main = PageLayout::Main::HORIZON;
+    layout.bottom = PageLayout::Bottom::NOTHING;
+    OpenLayout(layout);
+  }
+}
+
+void
 PageActions::ShowWeatherPage()
 {
 #ifdef HAVE_EDL

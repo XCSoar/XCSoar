@@ -18,6 +18,8 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "PageActions.hpp"
+#include "UIState.hpp"
 
 #ifdef HAVE_BATTERY
 #include "Hardware/PowerInfo.hpp"
@@ -262,6 +264,19 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
 
   data.SetCustom(basic.attitude.bank_angle_available.ToInteger() +
                  basic.attitude.pitch_angle_available.ToInteger());
+}
+
+bool
+InfoBoxContentHorizon::HandleClick() noexcept
+{
+  const auto &pages = CommonInterface::GetUIState().pages;
+  if (pages.special_page.IsDefined() &&
+      pages.special_page.main == PageLayout::Main::HORIZON)
+    PageActions::Restore();
+  else
+    PageActions::ShowHorizon();
+
+  return true;
 }
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp

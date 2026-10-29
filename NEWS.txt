@@ -16,6 +16,8 @@ Version 7.47 - not yet released
     an InfoBox no longer opens the menu #2095
   - add a ground-side shadow to the artificial horizon line so it
     stays visible on both sky and ground
+  - open the full-screen horizon when the attitude indicator InfoBox
+    is tapped
   - estimate pitch and bank for the artificial horizon in simulator
     mode and during replay, from the climb angle and the rate of turn
   - show whether the aircraft is in flight on the Status Times page
