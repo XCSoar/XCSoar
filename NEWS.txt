@@ -38,6 +38,7 @@ Version 7.47 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
+  - describe a circular airspace that is stored as a ring of points
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
     and checklist ticks
@@ -53,6 +54,8 @@ Version 7.47 - not yet released
     without restarting. This covers the map, waypoints, airspace,
     RASP, FLARMNet, the checklist, and the input file #1115 #3092
 * airspace
+  - draw a circular airspace as a circle when the file stores it as
+    a ring of points, such as an OpenAIP gliding site
   - show when an OpenAir airspace is active from its activation
     times #2520
   - fix Ack Day on a lower sector also silencing the airspace

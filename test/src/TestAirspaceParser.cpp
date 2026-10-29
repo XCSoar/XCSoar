@@ -6,14 +6,22 @@
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
+#include "Geo/Math.hpp"
 #include "Units/System.hpp"
 #include "util/Macros.hpp"
 #include "util/StringAPI.hxx"
 #include "util/PrintException.hxx"
+#include "util/SpanCast.hxx"
+#include "io/BufferedReader.hxx"
 #include "io/FileLineReader.hpp"
+#include "io/MemoryReader.hxx"
 #include "Operation/Operation.hpp"
 #include "TestUtil.hpp"
 #include "time/BrokenDateTime.hpp"
+
+#include <cmath>
+#include <fmt/format.h>
+#include <string>
 
 struct AirspaceClassTestCouple
 {
@@ -394,14 +402,151 @@ TestActivationTime()
   }
 }
 
-int main()
+static void
+AppendCoord(std::string &text, Angle angle, char positive, char negative)
+{
+  double degrees        = angle.Degrees();
+  const char hemisphere = degrees < 0 ? negative : positive;
+  if (degrees < 0) degrees = -degrees;
+
+  const int whole      = int(degrees);
+  const double minutes = (degrees - whole) * 60;
+  text += fmt::format("{}:{:09.6f} {}", whole, minutes, hemisphere);
+}
+
+static void
+AppendPoint(std::string &text, const GeoPoint &point)
+{
+  text += "DP ";
+  AppendCoord(text, point.latitude, 'N', 'S');
+  text += ' ';
+  AppendCoord(text, point.longitude, 'E', 'W');
+  text += '\n';
+}
+
+static void
+AppendHeader(std::string &text, const char *name)
+{
+  text += "AC C\nAN ";
+  text += name;
+  text += "\nAL GND\nAH 1000 ft\n";
+}
+
+static bool
+ParseText(std::string_view text, Airspaces &airspaces)
+{
+  MemoryReader reader{AsBytes(text)};
+  BufferedReader buffered_reader{reader};
+
+  try {
+    ParseAirspaceFile(airspaces, buffered_reader);
+    ok1(true);
+  } catch (...) {
+    ok1(false);
+    return false;
+  }
+
+  airspaces.Optimise();
+  return true;
+}
+
+static const AbstractAirspace *
+FindAirspace(const Airspaces &airspaces, const char *name)
+{
+  for (const auto &as : airspaces.QueryAll()) {
+    const AbstractAirspace &airspace = as.GetAirspace();
+    if (StringIsEqual(airspace.GetName(), name)) return &airspace;
+  }
+
+  return nullptr;
+}
+
+/**
+ * A ring of points on a circle becomes an AirspaceCircle.  A sampled
+ * square, and a circle with one vertex pulled inward, stay polygons.
+ */
+static void
+TestSampledCircle()
+{
+  const GeoPoint center{Angle::Degrees(-2.2833), Angle::Degrees(51.714)};
+  constexpr double radius     = 1852;
+  constexpr unsigned n_circle = 36;
+
+  std::string text;
+  AppendHeader(text, "Sampled-Circle");
+  for (unsigned i = 0; i <= n_circle; ++i)
+    AppendPoint(text,
+                FindLatitudeLongitude(
+                  center, Angle::Degrees(360.0 * i / n_circle), radius));
+
+  AppendHeader(text, "Sampled-Box");
+  const GeoPoint corners[4] = {
+    FindLatitudeLongitude(center, Angle::Degrees(45), 2000),
+    FindLatitudeLongitude(center, Angle::Degrees(135), 2000),
+    FindLatitudeLongitude(center, Angle::Degrees(225), 2000),
+    FindLatitudeLongitude(center, Angle::Degrees(315), 2000),
+  };
+  constexpr unsigned per_side = 6;
+  for (unsigned side = 0; side < 4; ++side) {
+    const GeoPoint &a = corners[side];
+    const GeoPoint &b = corners[(side + 1) % 4];
+    for (unsigned i = 0; i < per_side; ++i) {
+      const double t = double(i) / per_side;
+      AppendPoint(text,
+                  GeoPoint{
+                    a.longitude + (b.longitude - a.longitude) * t,
+                    a.latitude + (b.latitude - a.latitude) * t,
+                  });
+    }
+  }
+
+  AppendHeader(text, "Dented-Circle");
+  for (unsigned i = 0; i <= n_circle; ++i) {
+    const Angle bearing   = Angle::Degrees(360.0 * i / n_circle);
+    const double distance = i == 4 ? radius * 0.5 : radius;
+    AppendPoint(text, FindLatitudeLongitude(center, bearing, distance));
+  }
+
+  Airspaces airspaces;
+  if (!ParseText(text, airspaces)) {
+    skip(6, 0, "failed to parse sampled circle");
+    return;
+  }
+
+  ok1(airspaces.GetSize() == 3);
+
+  const AbstractAirspace *sampled = FindAirspace(airspaces, "Sampled-Circle");
+  const bool is_circle =
+    sampled != nullptr &&
+    sampled->GetShape() == AbstractAirspace::Shape::CIRCLE;
+  ok1(is_circle);
+  if (is_circle) {
+    const auto &circle = (const AirspaceCircle &)*sampled;
+    ok1(std::fabs(circle.GetRadius() - radius) < 5);
+    ok1(circle.GetReferenceLocation().Distance(center) < 20);
+  } else {
+    ok1(false);
+    ok1(false);
+  }
+
+  const AbstractAirspace *box = FindAirspace(airspaces, "Sampled-Box");
+  ok1(box != nullptr && box->GetShape() == AbstractAirspace::Shape::POLYGON);
+
+  const AbstractAirspace *dented = FindAirspace(airspaces, "Dented-Circle");
+  ok1(dented != nullptr &&
+      dented->GetShape() == AbstractAirspace::Shape::POLYGON);
+}
+
+int
+main()
 try {
-  plan_tests(174);
+  plan_tests(174 + 7);
 
   TestOpenAir();
   TestTNP();
   TestOpenAirExtended();
   TestActivationTime();
+  TestSampledCircle();
 
   return exit_status();
 } catch (const std::runtime_error &e) {
