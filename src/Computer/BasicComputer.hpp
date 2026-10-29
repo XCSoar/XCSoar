@@ -7,6 +7,8 @@
 #include "FilteredVarioComputer.hpp"
 #include "Math/Angle.hpp"
 
+#include <chrono>
+
 struct MoreData;
 struct DerivedInfo;
 class AtmosphericPressure;
@@ -23,10 +25,28 @@ class BasicComputer {
   FilteredVarioComputer filtered_vario;
 
   /**
-   * Yaw rate from the last simulator or replay sample.  Merge runs
-   * faster than those ticks, and each merge copies attitude away.
+   * Simulator and replay publish a fix about once a second, then
+   * merge copies the attitude away.  The yaw rate is the latest
+   * sample; bank and pitch ease toward it so the horizon does not
+   * step.
    */
-  Angle playback_yaw_rate = Angle::Zero();
+  struct PlaybackAttitude {
+    Angle yaw_rate = Angle::Zero();
+    Angle bank = Angle::Zero();
+    Angle pitch = Angle::Zero();
+    std::chrono::steady_clock::time_point shown_at{};
+    bool shown = false;
+  } playback;
+
+  [[nodiscard]] double PlaybackFrame() noexcept;
+
+  void EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
+                                const DerivedInfo &calculated,
+                                double frame) noexcept;
+
+  void ComputeDynamics(MoreData &basic, const MoreData &last,
+                       const DerivedInfo &calculated,
+                       double frame) noexcept;
 
 public:
   /**

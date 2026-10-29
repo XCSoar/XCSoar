@@ -39,10 +39,24 @@ Run(BasicComputer &computer, MoreData &data, const MoreData &last,
   computer.Compute(data, last, last, calculated, settings);
 }
 
+/** Merge repeats the same fix; each pass eases the horizon. */
+static MoreData
+Settle(BasicComputer &computer, const MoreData &sample,
+       const MoreData &last, const DerivedInfo &calculated,
+       const ComputerSettings &settings) noexcept
+{
+  MoreData data = sample;
+  for (int i = 0; i < 250; ++i) {
+    data = sample;
+    Run(computer, data, last, calculated, settings);
+  }
+  return data;
+}
+
 int
 main()
 {
-  plan_tests(17);
+  plan_tests(18);
 
   BasicComputer computer;
   DerivedInfo calculated;
@@ -64,20 +78,26 @@ main()
   ok1(equals(level.attitude.bank_angle, 0));
   ok1(equals(level.attitude.pitch_angle, 0));
 
-  /* 5° of track in one second at 30 m/s: about 15° of bank. */
-  auto turning = Sample(12, 5, 1000, true);
-  Run(computer, turning, level, calculated, settings);
+  /* 5° of track in one second at 30 m/s: about 15° of bank.
+     One merge only starts the roll; the horizon eases onto it. */
+  auto turning_once = Sample(12, 5, 1000, true);
+  Run(computer, turning_once, level, calculated, settings);
+  ok1(between(turning_once.attitude.bank_angle.Degrees(), 0.3, 3.0));
+  ok1(equals(turning_once.attitude.pitch_angle, 0));
+
+  const auto turning_sample = Sample(12, 5, 1000, true);
+  const auto turning = Settle(computer, turning_sample, level,
+                              calculated, settings);
   ok1(between(turning.attitude.bank_angle.Degrees(), 14.8, 15.1));
-  ok1(equals(turning.attitude.pitch_angle, 0));
 
   /* Same fix again: merge is faster than the simulator tick. */
   auto held = Sample(12, 5, 1000, true);
-  Run(computer, held, turning, calculated, settings);
-  ok1(equals(held.attitude.bank_angle, turning.attitude.bank_angle));
+  Run(computer, held, level, calculated, settings);
+  ok1(between(held.attitude.bank_angle.Degrees(), 14.8, 15.1));
 
   /* +3 m in one second, track steady: pitch up, bank back to level. */
-  auto climbing = Sample(13, 5, 1003, true);
-  Run(computer, climbing, turning, calculated, settings);
+  const auto climbing = Settle(computer, Sample(13, 5, 1003, true),
+                               turning_sample, calculated, settings);
   ok1(between(climbing.attitude.pitch_angle.Degrees(), 5.6, 5.9));
   ok1(equals(climbing.attitude.bank_angle, 0));
 
@@ -95,9 +115,10 @@ main()
   auto replay_turn = Sample(21, 5, 1000, false);
   replay_turn.gps.replay = true;
   replay_turn.gps.real = false;
-  Run(replay_computer, replay_turn, replay_before, calculated, settings);
-  ok1(between(replay_turn.attitude.bank_angle.Degrees(), 14.8, 15.1));
-  ok1(equals(replay_turn.attitude.pitch_angle, 0));
+  const auto replay_settled = Settle(replay_computer, replay_turn,
+                                     replay_before, calculated, settings);
+  ok1(between(replay_settled.attitude.bank_angle.Degrees(), 14.8, 15.1));
+  ok1(equals(replay_settled.attitude.pitch_angle, 0));
 
   /* A log that already has attitude keeps it. */
   auto sensed = Sample(30, 0, 1000, false);
