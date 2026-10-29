@@ -12,26 +12,6 @@
 
 #include <algorithm>
 
-static const Bitmap &
-SwiftLogo(unsigned pixels) noexcept
-{
-  static Bitmap huge, big, small;
-  static bool ready = false;
-  if (!ready) {
-    ready = true;
-    try {
-      huge.Load(IDB_LOGO_UHD);
-      big.Load(IDB_LOGO_HD);
-      small.Load(IDB_LOGO);
-    } catch (...) {
-    }
-  }
-
-  if (pixels >= 180 && huge.IsDefined()) return huge;
-  if (pixels >= 64 && big.IsDefined()) return big;
-  return small;
-}
-
 void
 DrawQRSymbol(Canvas &canvas,
              const PixelRect &rc,
@@ -102,7 +82,15 @@ DrawQRSymbol(Canvas &canvas,
     return;
   }
 
-  const Bitmap &bitmap = SwiftLogo(logo);
+  /* shortcut: reloads the logo each paint, cache on the dialog if
+     the QR page is redrawn often */
+  Bitmap bitmap;
+  try {
+    if (logo >= 180) bitmap.Load(IDB_LOGO_UHD);
+    if (!bitmap.IsDefined() && logo >= 64) bitmap.Load(IDB_LOGO_HD);
+    if (!bitmap.IsDefined()) bitmap.Load(IDB_LOGO);
+  } catch (...) {
+  }
   if (!bitmap.IsDefined())
     return;
 
