@@ -402,9 +402,11 @@ InfoBoxArrangeWindow::DrawCard(Canvas &canvas, const PixelRect &rc,
     canvas.DrawRoundRectangle(inner, {inner_radius * 2, inner_radius * 2});
 
     if (picker_wait) {
+      /* e-paper skips the fade, so a full card before the hold is
+         armed would still be a short press */
       const unsigned t = fade
         ? InfoBoxArrange::LongPressFade(picker_start)
-        : 256;
+        : picker_armed ? 256 : 0;
       FillRoundedCard(canvas, inner, inner_radius,
                       int(inner.GetHeight() * t / 256),
                       look.GetPreviewGlowColor(),
@@ -1224,7 +1226,11 @@ InfoBoxArrangeWindow::OnKeyUp(unsigned key_code) noexcept
 void
 InfoBoxArrangeWindow::OnCancelMode() noexcept
 {
-  enter_down = false;
+  if (enter_down) {
+    enter_down = false;
+    CancelPicker();
+  }
+
   CancelDrag();
   PaintWindow::OnCancelMode();
 }
