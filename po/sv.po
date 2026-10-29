@@ -12778,3 +12778,6 @@ msgstr "Kameran går inte att använda"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "NO AHRS"
+msgstr "NO AHRS"
