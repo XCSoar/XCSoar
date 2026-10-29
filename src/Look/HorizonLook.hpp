@@ -18,7 +18,6 @@ struct HorizonLook {
   Pen terrain_pen;
 
   static constexpr Color aircraft_color{0xf2, 0xf2, 0x19};
-  Pen aircraft_pen;
   Brush aircraft_brush;
 
   Pen mark_pen;
