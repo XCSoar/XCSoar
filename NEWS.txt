@@ -14,6 +14,8 @@ Version 7.47 - not yet released
     on the screen. Escape selects the first InfoBox when the map is
     showing, and returns to the map from an InfoBox. A double tap on
     an InfoBox no longer opens the menu #2095
+  - estimate pitch and bank for the artificial horizon in simulator
+    mode and during replay, from the climb angle and the rate of turn
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
