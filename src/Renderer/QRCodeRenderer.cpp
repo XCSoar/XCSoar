@@ -76,9 +76,19 @@ DrawQRSymbol(Canvas &canvas,
     return;
 
   if (centre != nullptr && centre->IsDefined()) {
+    const PixelSize native = centre->GetSize();
+    unsigned target = logo;
+    /* Draw() keeps the aspect ratio. A wider icon would leave
+       the white centre and cover modules. */
+    if (native.width > native.height && native.width > 0) {
+      target = logo * native.height / native.width;
+      if (target == 0)
+        return;
+    }
+
     const PixelPoint at{plate_x + int(plate / 2),
                         plate_y + int(plate / 2)};
-    centre->Draw(canvas, at, logo);
+    centre->Draw(canvas, at, target);
     return;
   }
 
