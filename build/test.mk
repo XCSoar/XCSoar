@@ -2984,6 +2984,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Renderer/RadarRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
 RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
