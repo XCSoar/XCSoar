@@ -99,6 +99,7 @@ TEST_NAMES = \
 	TestEumetviewEnhance \
 	TestLogger TestGPSDeviceName TestGLoadSample TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
+	TestBasicComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
 	TestSpeedVector \
@@ -938,6 +939,20 @@ TEST_CIRCLING_WIND_SOURCES = \
 	$(TEST_SRC_DIR)/TestCirclingWind.cpp
 TEST_CIRCLING_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
 $(eval $(call link-program,TestCirclingWind,TEST_CIRCLING_WIND))
+
+TEST_BASIC_COMPUTER_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/FilteredVarioComputer.cpp \
+	$(SRC)/Computer/GroundSpeedComputer.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/Util/VarioOutputFilter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBasicComputer.cpp
+TEST_BASIC_COMPUTER_DEPENDS = LIBNMEA GEO MATH UTIL UNITS TIME
+$(eval $(call link-program,TestBasicComputer,TEST_BASIC_COMPUTER))
 
 TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \

@@ -5,6 +5,7 @@
 
 #include "GroundSpeedComputer.hpp"
 #include "FilteredVarioComputer.hpp"
+#include "Math/Angle.hpp"
 
 struct MoreData;
 struct DerivedInfo;
@@ -20,6 +21,12 @@ struct ComputerSettings;
 class BasicComputer {
   GroundSpeedComputer ground_speed;
   FilteredVarioComputer filtered_vario;
+
+  /**
+   * Yaw rate from the last simulator or replay sample.  Merge runs
+   * faster than those ticks, and each merge copies attitude away.
+   */
+  Angle playback_yaw_rate = Angle::Zero();
 
 public:
   /**
