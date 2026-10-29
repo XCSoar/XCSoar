@@ -11466,3 +11466,6 @@ msgstr ""
 
 msgid "Camera not usable"
 msgstr ""
+
+msgid "NO AHRS"
+msgstr ""

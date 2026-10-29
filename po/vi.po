@@ -12730,3 +12730,6 @@ msgstr "Không thể bắt đầu xem trước máy ảnh"
 
 msgid "Camera not usable"
 msgstr "Không thể dùng máy ảnh"
+
+msgid "NO AHRS"
+msgstr "Không có AHRS"

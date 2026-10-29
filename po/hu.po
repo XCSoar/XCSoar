@@ -12848,3 +12848,6 @@ msgstr "A kamera előnézete nem indítható el"
 
 msgid "Camera not usable"
 msgstr "A kamera nem használható"
+
+msgid "NO AHRS"
+msgstr "Nincs AHRS"

@@ -12879,3 +12879,6 @@ msgstr "Nie można uruchomić podglądu aparatu"
 
 msgid "Camera not usable"
 msgstr "Aparat nie nadaje się do użycia"
+
+msgid "NO AHRS"
+msgstr "Brak AHRS"

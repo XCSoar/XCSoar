@@ -12872,3 +12872,6 @@ msgstr "Не вдається запустити попередній перег
 
 msgid "Camera not usable"
 msgstr "Камера непридатна для використання"
+
+msgid "NO AHRS"
+msgstr "Нема AHRS"
