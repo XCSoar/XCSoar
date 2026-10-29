@@ -243,12 +243,9 @@ void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {
-  const auto &attitude = CommonInterface::Basic().attitude;
-  if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-    return;
-
   const Look &look = UIGlobals::GetLook();
-  HorizonRenderer::Draw(canvas, rc, look.horizon, attitude);
+  HorizonRenderer::Draw(canvas, rc, look.horizon,
+                        CommonInterface::Basic().attitude);
 }
 
 void
@@ -259,9 +256,11 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
   if (!basic.attitude.bank_angle_available &&
       !basic.attitude.pitch_angle_available) {
     data.SetInvalid();
+    data.SetComment(_("NO AHRS"));
     return;
   }
 
+  data.SetCommentInvalid();
   data.SetCustom(basic.attitude.bank_angle_available.ToInteger() +
                  basic.attitude.pitch_angle_available.ToInteger());
 }
