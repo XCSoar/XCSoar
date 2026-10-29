@@ -35,6 +35,7 @@
 #include "LogFile.hpp"
 
 #include <cassert>
+#include <optional>
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
@@ -153,6 +154,72 @@ static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
 static constexpr AirspaceClass airspace_ICAO_and_Unclassified[] = {
   AirspaceClass::CLASSA, AirspaceClass::CLASSB, AirspaceClass::CLASSC, AirspaceClass::CLASSD,
   AirspaceClass::CLASSE, AirspaceClass::CLASSF, AirspaceClass::CLASSG, AirspaceClass::UNCLASSIFIED};
+
+/**
+ * OpenAIP publishes a circular airspace as a closed ring of vertices.
+ * Accept the ring when those vertices lie on one radius and the steps
+ * around the ring are short.  The corners of a rectangle also lie on a
+ * circle; points sampled along a side sit well inside that circle, so
+ * the radius spread rejects them.
+ *
+ * A 1 NM ring rounded to one second of arc spreads by a few percent.
+ * A square's side is about 30 percent inside its circumradius.
+ */
+struct SampledCircle
+{
+  GeoPoint center;
+  double radius;
+};
+
+static std::optional<SampledCircle>
+FitSampledCircle(const std::vector<GeoPoint> &points) noexcept
+{
+  std::size_t n = points.size();
+  if (n >= 2 && points.front() == points.back()) --n;
+
+  constexpr std::size_t MIN_POINTS = 20;
+  constexpr double MAX_STEP_DEG    = 22;
+  constexpr double MAX_SPREAD      = 0.08;
+  if (n < MIN_POINTS) return std::nullopt;
+
+  const double lon0 = points[0].longitude.Degrees();
+  double lat_sum = 0, lon_sum = 0;
+  for (std::size_t i = 0; i < n; ++i) {
+    const double lon = points[i].longitude.Degrees();
+    /* Mean of longitudes is the centre only when the ring does not
+       cross the anti-meridian. */
+    if (lon - lon0 > 90 || lon0 - lon > 90) return std::nullopt;
+
+    lat_sum += points[i].latitude.Degrees();
+    lon_sum += lon;
+  }
+
+  const GeoPoint center{Angle::Degrees(lon_sum / n),
+                        Angle::Degrees(lat_sum / n)};
+
+  double radius_sum = 0;
+  double radius_min = points[0].Distance(center);
+  double radius_max = radius_min;
+  for (std::size_t i = 0; i < n; ++i) {
+    const double distance = points[i].Distance(center);
+    radius_sum += distance;
+    if (distance < radius_min) radius_min = distance;
+    if (distance > radius_max) radius_max = distance;
+  }
+
+  const double radius = radius_sum / n;
+  if (!(radius > 0) || radius_max - radius_min > radius * MAX_SPREAD)
+    return std::nullopt;
+
+  for (std::size_t i = 0; i < n; ++i) {
+    const Angle a = center.Bearing(points[i]);
+    const Angle b = center.Bearing(points[(i + 1) % n]);
+    if ((b - a).AsDelta().Absolute().Degrees() > MAX_STEP_DEG)
+      return std::nullopt;
+  }
+
+  return SampledCircle{center, radius};
+}
 
 // this can now be called multiple times to load several airspaces.
 
@@ -280,7 +347,11 @@ struct TempAirspace
     if (!top)
       throw CommitError{"No top altitude"};
 
-    auto as = std::make_shared<AirspacePolygon>(points);
+    AirspacePtr as;
+    if (const auto circle = FitSampledCircle(points))
+      as = std::make_shared<AirspaceCircle>(circle->center, circle->radius);
+    else
+      as = std::make_shared<AirspacePolygon>(points);
     as->SetProperties(std::move(name),
                       std::move(has_activation_time),
                       std::move(activation_start_time),
