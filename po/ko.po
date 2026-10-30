@@ -12486,3 +12486,12 @@ msgstr "카메라 미리보기를 시작할 수 없음"
 
 msgid "Camera not usable"
 msgstr "카메라를 사용할 수 없음"
+
+msgid "The polar of this plane is invalid. Check it in the plane setup."
+msgstr ""
+
+msgid "No polar"
+msgstr ""
+
+msgid "No polar is set up, so final glide and speed to fly are off. Set up a plane."
+msgstr ""

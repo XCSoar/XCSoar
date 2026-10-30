@@ -734,14 +734,20 @@ Startup(UI::Display &display)
 
   GlidePolar &gp =
     CommonInterface::SetComputerSettings().polar.glide_polar_task;
-  gp = GlidePolar(0);
+  /* no polar until a plane profile or a device supplies one; a
+     stand-in glider would be flown with silently */
+  gp = GlidePolar::Invalid();
   gp.SetMC(computer_settings.task.task_mc);
   gp.SetBugs(computer_settings.polar.degradation_factor);
   gp.SetCrewMass(computer_settings.logger.crew_mass_template);
   PlaneGlue::FromProfile(CommonInterface::SetComputerSettings().plane,
                          Profile::map);
-  PlaneGlue::Synchronize(computer_settings.plane,
-                         CommonInterface::SetComputerSettings(), gp);
+  if (!PlaneGlue::Synchronize(computer_settings.plane,
+                              CommonInterface::SetComputerSettings(), gp))
+    /* a status message would be gone before the map is up */
+    ShowMessageBox(_("The polar of this plane is invalid. "
+                     "Check it in the plane setup."),
+                   _("Polar"), MB_OK | MB_ICONWARNING);
   ConfirmSessionRestore();
   RestoreSessionComputer(gp);
   task_manager->SetGlidePolar(gp);

@@ -84,7 +84,12 @@ InfoBoxContentMacCready::Update(InfoBoxData &data) noexcept
   data.SetTitle(auto_mc ? _("MC AUTO") : _("MC MANUAL"));
   data.SetValueColor(auto_mc ? 2 : 3);
 
-  SetVSpeed(data, settings_computer.polar.glide_polar_task.GetMC());
+  const auto &polar = settings_computer.polar.glide_polar_task;
+  SetVSpeed(data, polar.GetMC());
 
-  data.SetCommentFromSpeed(calculated.common_stats.V_block, false);
+  /* without a polar there is no speed to fly */
+  if (!polar.IsValid())
+    data.SetCommentInvalid();
+  else
+    data.SetCommentFromSpeed(calculated.common_stats.V_block, false);
 }

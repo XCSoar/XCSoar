@@ -6,6 +6,12 @@ Version 7.47 - not yet released
     empty ballast #1019
   - remember QNH and the maximum forecast temperature with that
     same question
+  - leave the glide polar unset until a plane or a device provides
+    one, instead of flying with a built-in glider nobody chose #3270
+  - say so when a plane with an invalid polar is loaded, and do not
+    keep using the previous plane's polar #3270
+  - show "No polar" on the map while there is none, and warn once
+    when there is still none 30 seconds after the start #3270
 * ui
   - let a tap or a short Enter run an InfoBox action at once. Hold
     Enter to arrange, the same as a long press. In arrange mode a
