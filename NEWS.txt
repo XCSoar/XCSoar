@@ -28,6 +28,10 @@ Version 7.47 - not yet released
   - show a level horizon with a red cross and a red "NO AHRS" label
     in white when no attitude data is available.  The attitude
     indicator InfoBox shows "---" and "NO AHRS" in its comment #2047
+  - show a speed tape and an altitude tape as a shaded overlay on
+    the full-screen horizon.  Speed is indicated airspeed, or ground
+    speed when airspeed is missing.  Altitude is the navigation
+    altitude.  A missing value is shown as "---" #2047
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears

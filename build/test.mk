@@ -87,7 +87,7 @@ TEST_NAMES = \
 	TestMathTables \
 	TestAngle TestARange \
 	TestGrahamScan \
-	TestUnits TestEarth TestSunEphemeris \
+	TestUnits TestHorizonReadout TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestSwitchState \
 	TestWaypointReachability TestWaypointElevation TestBackupPaths \
 	TestTarArchive \
@@ -979,6 +979,14 @@ TEST_UNITS_SOURCES = \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_DEPENDS = MATH UNITS
 $(eval $(call link-program,TestUnits,TEST_UNITS))
+
+TEST_HORIZON_READOUT_SOURCES = \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHorizonReadout.cpp
+TEST_HORIZON_READOUT_DEPENDS = MATH UNITS
+$(eval $(call link-program,TestHorizonReadout,TEST_HORIZON_READOUT))
 
 TEST_UNITS_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/Units.cpp \

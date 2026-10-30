@@ -23,6 +23,8 @@ struct HorizonLook {
   Pen mark_pen;
   Brush mark_brush;
   Font mark_font;
+  /** Fixed speed and altitude digits on the full horizon. */
+  Font value_font;
 
   Pen horizon_pen;
 

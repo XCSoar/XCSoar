@@ -13,6 +13,7 @@ HorizonLook::Initialise()
   mark_pen.Create(Layout::Scale(2), COLOR_WHITE);
   mark_brush.Create(COLOR_WHITE);
   mark_font.Load(FontDescription(Layout::FontScale(12)));
+  value_font.Load(FontDescription(Layout::FontScale(18), true));
 
   horizon_pen.Create(Layout::Scale(2), COLOR_WHITE);
 
