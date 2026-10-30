@@ -678,8 +678,8 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
 void
 PageListWidget::SyncChromeButtons() noexcept
 {
-  /* Weather → Pages setup and xcsoar://config/pages have no
-     Configuration button column. Keep Add and Delete on this panel. */
+  /* Portrait, and a host that is not Configuration, keep the
+     buttons on this panel. */
   if (!Layout::landscape || !ConfigPanel::HasExtraButtons()) {
     ReleaseChromeButtons();
     return;

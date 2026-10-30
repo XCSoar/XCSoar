@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include <memory>
+
+class Widget;
 namespace UI { class SingleWindow; }
 
 void dlgBasicSettingsShowModal();
@@ -15,6 +18,9 @@ void dlgChecklistShowModal();
  */
 void dlgChecklistNotifySiteFileChanged() noexcept;
 void dlgConfigurationShowModal();
+
+/** Open Configuration on an existing menu page. */
+void dlgConfigurationShowPage(std::unique_ptr<Widget> (*page)());
 void dlgConfigFontsShowModal();
 
 void ShowWindSettingsDialog();
