@@ -137,7 +137,9 @@ are appropriate. Prefix bullets with a topic (``build system:``,
   ``* user interface``); match the current unreleased release block.
 
 See also ``.cursor/rules/news.txt.mdc`` for wording examples and a fuller
-checklist.
+checklist.  When that block is released, copy it into
+``debian/changelog`` and write the Play What's New text.  Limits and
+file names are in :doc:`release`.
 
 User-facing behaviour must also update the English user manual under
 ``doc/manual/en/`` (LaTeX chapters, not ``doc/*.rst``). See
