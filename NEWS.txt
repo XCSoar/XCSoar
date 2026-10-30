@@ -74,7 +74,7 @@ Version 7.47 - not yet released
     and checklist ticks
   - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
-  - describe positive G load when Android Built-in IMU is Not aligned
+  - describe that Not aligned ignores the sign of Android G load
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
