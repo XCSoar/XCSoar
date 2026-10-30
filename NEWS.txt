@@ -89,6 +89,8 @@ Version 7.47 - not yet released
     above its ceiling
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
+  - fix Ack Day silencing a different airspace after a NOTAM
+    refresh replaced the acknowledged one
 * task
   - scan task QR codes with the camera on iOS, like on Android
   - fix a crash drawing the task QR code

@@ -279,10 +279,54 @@ TestAckDayClearedWithEmptyDatabase()
                       std::chrono::seconds{1}));
 }
 
+static void
+TestAckDayDropsRemovedAirspace()
+{
+  Airspaces airspaces;
+  const auto kept = MakeAirspace(AirspaceClass::CLASSC, "Kept");
+  const auto removed = MakeAirspace(AirspaceClass::CLASSC, "Removed");
+  const auto notam = MakeAirspace(AirspaceClass::NOTAM, "NOTAM", "C1234/26");
+  airspaces.Add(kept);
+  airspaces.Add(removed);
+  airspaces.Add(notam);
+  airspaces.Optimise();
+
+  AirspaceWarningConfig config;
+  config.SetDefaults();
+  AirspaceWarningManager manager(config, airspaces);
+
+  manager.AcknowledgeDay(kept, true);
+  manager.AcknowledgeDay(removed, true);
+  manager.AcknowledgeDay(notam, true);
+
+  /* A NOTAM refresh keeps the file airspace and replaces the NOTAM. */
+  Airspaces rebuilt;
+  rebuilt.Add(kept);
+  const auto arrived = MakeAirspace(AirspaceClass::CLASSC, "Arrived");
+  const auto refreshed = MakeAirspace(AirspaceClass::NOTAM, "NOTAM",
+                                      "C1234/26");
+  rebuilt.Add(arrived);
+  rebuilt.Add(refreshed);
+  rebuilt.Optimise();
+  airspaces.Swap(rebuilt);
+
+  ok1(manager.GetAckDay(*kept));
+  ok1(!manager.GetAckDay(*arrived));
+  ok1(manager.GetAckDay(*refreshed));
+
+  AircraftState state{};
+  state.location = GeoPoint{Angle::Degrees(8), Angle::Degrees(50)};
+  manager.Reset(state);
+
+  ok1(manager.GetAckDay(*kept));
+  ok1(!manager.GetAckDay(*removed));
+  ok1(manager.GetAckDay(*refreshed));
+}
+
 int
 main()
 {
-  plan_tests(31 + 20 + 10 + 12);
+  plan_tests(31 + 20 + 10 + 12 + 16);
 
   TestNonNotamAckDayClear();
   TestNotamAckDayClearAfterRefresh();
@@ -290,6 +334,7 @@ main()
   TestAckClearsActiveImmediately();
   TestEraseIfLeavesNotam();
   TestAckDayClearedWithEmptyDatabase();
+  TestAckDayDropsRemovedAirspace();
 
   return exit_status();
 }

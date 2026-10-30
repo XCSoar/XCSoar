@@ -80,10 +80,16 @@ class AirspaceWarningManager {
                      TransparentStringEqual> notam_day_ack_by_station;
 
   /**
-   * Airspaces acknowledged for the day. Survives warning deletion
-   * and a replay time jump. Cleared when the airspace database is.
+   * Airspaces acknowledged for the day, by object address. Survives
+   * warning deletion and a replay time jump. An address leaves this
+   * set when that object leaves the database, so a reused address
+   * does not inherit the acknowledgement. NOTAM Ack Day is also
+   * keyed by NOTAM number.
    */
   std::unordered_set<const AbstractAirspace *> ack_day_airspaces;
+
+  /** Database generation last reconciled with #ack_day_airspaces. */
+  Serial ack_day_airspace_serial;
   std::unordered_set<std::string, TransparentStringHash,
                      TransparentStringEqual> notam_day_cleared_by_station;
 
@@ -335,6 +341,9 @@ private:
   bool AckOutsideAirspaces(const AbstractAirspace &acked) noexcept;
 
   void ApplyRememberedDayState(AirspaceWarning &warning) noexcept;
+
+  /** Drop Ack Day addresses that are no longer in the database. */
+  void DropAckDayForAbsentAirspaces() noexcept;
 
   AirspaceWarning *FindWarningByNotamDayAckKey(std::string_view key) noexcept;
   const AirspaceWarning *

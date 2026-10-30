@@ -77,6 +77,24 @@ AirspaceWarningManager::ApplyRememberedDayState(AirspaceWarning &warning) noexce
     warning.AcknowledgeDay(true);
 }
 
+void
+AirspaceWarningManager::DropAckDayForAbsentAirspaces() noexcept
+{
+  if (ack_day_airspaces.empty())
+    return;
+
+  std::unordered_set<const AbstractAirspace *> present;
+  for (const auto &airspace : airspaces.QueryAll())
+    present.insert(&airspace.GetAirspace());
+
+  for (auto it = ack_day_airspaces.begin(); it != ack_day_airspaces.end();) {
+    if (present.contains(*it))
+      ++it;
+    else
+      it = ack_day_airspaces.erase(it);
+  }
+}
+
 AirspaceWarningManager::AirspaceWarningManager(const AirspaceWarningConfig &_config,
                                                const Airspaces &_airspaces)
   :airspaces(_airspaces)
@@ -111,6 +129,11 @@ void
 AirspaceWarningManager::Reset(const AircraftState &state)
 {
   ++serial;
+  /* File airspaces are still in the database. NOTAM objects that the
+     refresh already removed are not, and their addresses must not
+     outlive them. */
+  DropAckDayForAbsentAirspaces();
+  ack_day_airspace_serial = airspaces.GetSerial();
   warnings.clear();
   /* Ack Day outlives a time jump. clear() drops it with the database. */
   notam_day_cleared_by_station.clear();
@@ -213,7 +236,13 @@ AirspaceWarningManager::Update(const AircraftState& state,
     ++serial;
     warnings.clear();
     ack_day_airspaces.clear();
+    ack_day_airspace_serial = airspaces.GetSerial();
     return true;
+  }
+
+  if (airspaces.GetSerial() != ack_day_airspace_serial) {
+    DropAckDayForAbsentAirspaces();
+    ack_day_airspace_serial = airspaces.GetSerial();
   }
 
   // save old state
