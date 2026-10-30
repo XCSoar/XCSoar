@@ -19,6 +19,8 @@ Version 7.46.1 - not yet released
 * dialogs
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
+  - open Pages setup on the Configuration Pages page so landscape
+    uses that page's sidebar for Add, Delete, and the move buttons
 * documentation
   - describe InfoBox tap, Enter, holding Enter to arrange, and holding
     Enter in arrange mode to open the InfoBox list
