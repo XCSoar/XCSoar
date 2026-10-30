@@ -7,6 +7,9 @@ Version 7.46.1 - not yet released
     on the screen. Escape selects the first InfoBox when the map is
     showing, and returns to the map from an InfoBox. A double tap on
     an InfoBox no longer opens the menu #2095
+* map
+  - fix the RASP map staying on the previous forecast time until
+    the layer is changed or the map is pinched #3415
 * android
   - fix a map crash on PowerVR Rogue tablets while panning with
     topography enabled #1235
