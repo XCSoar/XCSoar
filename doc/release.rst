@@ -34,8 +34,9 @@ The Android version code is calculated as::
   major * 10000000 + minor * 100000 + patch * 10000 + build
 
 ``patch`` and ``build`` are zero for a normal minor release.  For example,
-version 7.46 uses version code ``74600000``.  CI uses its run number for the
-``build`` field on master and zero for a release tag.
+version 7.46 uses version code ``74600000``, and 7.46.1 uses ``74610000``.
+CI uses its run number for the ``build`` field on master and zero for a
+release tag.
 
 Preparing a minor release
 =========================
@@ -49,7 +50,11 @@ Preparing a minor release
 #. Replace ``not yet released`` in the ``NEWS.txt`` version heading with the
    release date in ``YYYY-MM-DD`` format.
 #. Refresh the maintainer timestamp in the existing ``debian/changelog``
-   stanza.  Do not add another stanza for the same version.
+   stanza.  Do not add another stanza for the same version.  Replace the
+   placeholder ``* new release`` bullet with the changes from that
+   ``NEWS.txt`` block.  See `Debian changelog`_ below.
+#. Write the Play Store What's New text for this version code.  See
+   `Play Store`_ below.
 #. Check that the release-note extractor finds the intended block::
 
      ./tools/changelog.sh v7.46
@@ -85,8 +90,10 @@ one commit:
 #. Increment ``VERSION.txt``.
 #. Add ``Version <next> - not yet released`` and a blank line at the top of
    ``NEWS.txt``.
-#. Add a new top stanza to ``debian/changelog`` for the next version.  Refresh
-   its timestamp when that version is eventually released.
+#. Add a new top stanza to ``debian/changelog`` for the next version,
+   with a ``* new release`` placeholder.  When that version is marked
+   released, refresh the timestamp and replace the placeholder.  See
+   `Debian changelog`_.
 #. Update ``versionName`` and the baseline ``versionCode`` in
    ``android/AndroidManifest.xml.template``.
 #. Verify the changes with ``git diff --check`` and an appropriate build.
@@ -102,6 +109,46 @@ Patch releases
 ==============
 
 Patch releases use all three version components, for example ``7.46.1``.
-Apply the same consistency checks and include the patch component in the
-Android version code.  Make patch-release changes on the current minor branch
-as described in :doc:`policy`.
+Make the changes on the current minor branch as described in
+:doc:`policy`.  A patch is not already the version in ``VERSION.txt``:
+the development cycle left that file on the minor release.
+
+#. Set ``VERSION.txt`` to ``X.Y.Z``.
+#. Date the ``NEWS.txt`` heading.  The block is already at the top.
+#. Add a new top ``debian/changelog`` stanza for ``X.Y.Z``.  Leave the
+   previous version's stanza in place.  List the ``NEWS.txt`` changes
+   in the new stanza.
+#. Set the Android ``versionName`` to ``X.Y.Z`` and the baseline
+   ``versionCode`` to the formula above with ``build`` 0.  For 7.46.1
+   that is ``74610000``.
+#. Add the Play What's New file for that version code.
+#. Run ``./tools/changelog.sh vX.Y.Z`` and ``dpkg-parsechangelog``.
+
+Debian changelog
+================
+
+The top stanza lists the same changes as the ``NEWS.txt`` block for
+that version.  One Debian bullet per ``NEWS.txt`` bullet, including
+``* development`` items.  Older stanzas stay as they were written.
+
+There is no character cap.  Wrap each line at 80 columns.  Continuation
+lines are indented four spaces.  ``dpkg-parsechangelog`` must accept
+the file.
+
+Play Store
+==========
+
+Google Play allows 500 characters of What's New text per language.
+Write the English text at::
+
+  fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
+
+``<versionCode>`` is the tag's Android version code (``build`` 0), so
+7.46.1 is ``74610000.txt``.  Count the text without a final newline;
+499 or fewer characters leaves room for that newline.  This is a short
+summary, not a copy of ``NEWS.txt``.
+
+The Android bundle upload sends this file
+(``.github/workflows/build-native.yml``).  A metadata-only update and
+the open-testing promotion do not.  Other listing languages have no
+changelog file; Play shows the English text for them.

@@ -33,6 +33,7 @@ User-facing behaviour also needs the **English user manual**
 | Screen rectangles (client, safe area, HUD, shade) | `doc/architecture.rst` (Screen rectangles) |
 | Touch, lift-off, tap vs hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
 | Patches, code style | `doc/policy.rst` |
+| Release (version files, Debian, Play) | `doc/release.rst`, `.cursor/rules/release.mdc` |
 | Build | `doc/build.rst` |
 | Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc`, `.cursor/rules/standardized-terminology.mdc` |
 | Weather overlays | `doc/weather_overlays.rst` |

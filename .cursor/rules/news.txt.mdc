@@ -13,6 +13,10 @@ bottom retain legacy formats (prose lists, “Changes from …”, contributor
 attributions). **New entries** always go at the top under the current
 unreleased version.
 
+When a version is marked released, copy that block into
+`debian/changelog` and write the Play What's New text. Limits and
+paths: `doc/release.rst` and `.cursor/rules/release.mdc`.
+
 ## When to add an entry
 
 - Under **`Version X.Y - not yet released`** at the top of the file

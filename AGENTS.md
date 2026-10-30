@@ -75,6 +75,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | Waypoint types / CUP round-trip | `.cursor/rules/waypoint-types.mdc` |
 | SVG icons (`Data/icons/`) | `.cursor/rules/svg-icons.mdc` |
 | `NEWS.txt` | `.cursor/rules/news.txt.mdc` |
+| Release version bump, Debian changelog, Play What's New | `doc/release.rst`, `.cursor/rules/release.mdc` |
 | AUTHORS / third-party notices | `.cursor/rules/credits-attribution.mdc` |
 | Test harness CLI (`--help`) | `.cursor/rules/cli-test-utilities.mdc` |
 | TAP tests | `.cursor/rules/xcsoar-testing.mdc` |
