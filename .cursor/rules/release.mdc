@@ -1,0 +1,41 @@
+---
+description: Version bump, Debian changelog, and Play Store What's New
+globs:
+  - "VERSION.txt"
+  - "NEWS.txt"
+  - "debian/changelog"
+  - "android/AndroidManifest.xml.template"
+  - "fastlane/metadata/android/**/changelogs/**"
+  - "doc/release.rst"
+alwaysApply: false
+---
+
+# Release metadata
+
+Process and file list: `doc/release.rst`. Do not invent a second checklist.
+
+When marking a version released:
+
+- `VERSION.txt`, the `NEWS.txt` heading, the top `debian/changelog`
+  stanza, and the Android `versionName` name the same version.
+- Android `versionCode` is
+  `major*10000000 + minor*100000 + patch*10000 + build`.
+  A release tag uses `build` 0. 7.46 is `74600000`. 7.46.1 is
+  `74610000`.
+- A patch release sets `VERSION.txt` and the manifest. A minor release
+  already has those from the development bump. A patch adds a new
+  Debian stanza and leaves the previous version's stanza in place.
+
+**Debian changelog.** The top stanza lists one bullet per `NEWS.txt`
+bullet, including `* development`. There is no character cap. Wrap at
+80 columns; continuation lines are indented four spaces.
+`dpkg-parsechangelog` must accept the file. Do not rewrite older
+stanzas.
+
+**Play Store.** What's New is at most 500 characters per language.
+English text goes in
+`fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`,
+named with the tag's version code. Count the text without a final
+newline and stay at 499 or fewer. It is a short summary, not a copy
+of `NEWS.txt`. The Android bundle upload sends it. A metadata-only
+update does not.
