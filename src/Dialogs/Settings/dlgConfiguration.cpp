@@ -45,6 +45,7 @@
 #include "Panels/InfoBoxesConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "UtilsSettings.hpp"
 #include "Audio/Features.hpp"
 #include "net/http/Features.hpp"
 
@@ -98,6 +99,9 @@
 #include <cassert>
 
 static unsigned current_page;
+
+/** Menu page to show when Configuration opens. */
+static std::unique_ptr<Widget> (*initial_page)() = nullptr;
 
 // TODO: eliminate global variables
 static ArrowPagerWidget *pager;
@@ -213,6 +217,24 @@ static constexpr TabMenuGroup main_menu_captions[] = {
   { NC_("Menu", "Services"), online_pages },
   { NC_("Menu", "Setup"), setup_pages },
 };
+
+static unsigned
+FindConfigPage(std::unique_ptr<Widget> (*load)()) noexcept
+{
+  unsigned index = 0;
+  for (const auto &group : main_menu_captions) {
+    for (auto page = group.pages; page->Load != nullptr; ++page) {
+      if (page->IsAvailable != nullptr && !page->IsAvailable())
+        continue;
+      if (page->Load == load)
+        return index;
+      ++index;
+    }
+  }
+
+  assert(false);
+  return 0;
+}
 
 static void
 OnUserLevel(bool expert) noexcept;
@@ -481,6 +503,25 @@ OnPageFlipped(WidgetDialog &dialog, TabMenuDisplay &menu)
                                : _("Back"));
 }
 
+void
+dlgConfigurationShowPage(std::unique_ptr<Widget> (*page)())
+{
+  assert(page != nullptr);
+
+  /* Already inside Configuration: this is one of its pages. */
+  if (pager != nullptr) {
+    pager->SetCurrent(TabMenuDisplay::PagerIndex(FindConfigPage(page)),
+                      false);
+    return;
+  }
+
+  initial_page = page;
+  AtScopeExit() {
+    initial_page = nullptr;
+  };
+  SystemConfiguration();
+}
+
 void dlgConfigurationShowModal()
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
@@ -514,11 +555,20 @@ void dlgConfigurationShowModal()
   /* restore last selected menu item */
   menu.SetCursor(current_page);
 
+  if (initial_page != nullptr) {
+    const unsigned index = FindConfigPage(initial_page);
+    pager->SetCurrent(TabMenuDisplay::PagerIndex(index), false);
+  }
+
   pager->SetPageFlippedCallback([&dialog, &menu](){
     OnPageFlipped(dialog, menu);
   });
 
   dialog.FinishPreliminary(pager);
+
+  if (initial_page != nullptr) {
+    OnPageFlipped(dialog, menu);
+  }
 
   /* Esc on a settings panel returns to the menu (same as Back);
      on the menu itself, leave Esc to cancel the dialog. */

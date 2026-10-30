@@ -156,6 +156,11 @@ public:
 
   void SetCursor(unsigned i) noexcept;
 
+  /** Pager index of a menu page. The menu itself is page 0. */
+  static constexpr unsigned PagerIndex(unsigned menu_index) noexcept {
+    return PAGE_OFFSET + menu_index;
+  }
+
 private:
   void UpdateLayout() noexcept;
 

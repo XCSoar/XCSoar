@@ -3,7 +3,7 @@
 
 #include "WeatherOverlayDraft.hpp"
 
-#include "Dialogs/InternalLink.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Settings/Panels/PagesConfigPanel.hpp"
 #include "PageActions.hpp"
 #include "Form/Button.hpp"
@@ -23,7 +23,7 @@ namespace WeatherOverlayDraft {
 void
 OpenPagesConfig() noexcept
 {
-  ShowConfigPanel(_("Pages"), CreatePagesConfigPanel);
+  dlgConfigurationShowPage(CreatePagesConfigPanel);
 }
 
 static bool

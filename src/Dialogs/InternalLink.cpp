@@ -89,7 +89,6 @@ static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/logger",     N_("Logger"),     CreateLoggerConfigPanel},
   {"config/time",       NC_("Setting", "Time"), CreateTimeConfigPanel},
   {"config/infoboxes",  N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
-  {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
   {"config/weglide",    "WeGlide",        CreateWeGlideConfigPanel},
   {"config/network",    N_("Network"),    CreateNetworkConfigPanel},
   {"config/weather",    N_("Weather"),    CreateWeatherConfigPanel},
@@ -137,6 +136,12 @@ HandleInternalLink(const char *url)
   const char *path = url + 9;  // Skip "xcsoar://"
 
   /* ---- Config panel table ---- */
+
+  /* Pages is a Configuration menu page. Open that dialog on it. */
+  if (StringIsEqual(path, "config/pages")) {
+    dlgConfigurationShowPage(CreatePagesConfigPanel);
+    return true;
+  }
 
   for (const auto &entry : config_panel_links) {
     if (StringIsEqual(path, entry.path)) {

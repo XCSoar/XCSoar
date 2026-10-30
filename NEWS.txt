@@ -59,6 +59,8 @@ Version 7.47 - not yet released
     resolution, GR average period, Events, and Log book #3392
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
+  - open Pages setup on the Configuration Pages page so landscape
+    uses that page's sidebar for Add, Delete, and the move buttons
 * documentation
   - describe the MacCready InfoBox speed-to-fly comment as true
     airspeed, labelled TAS, and the Setup switch for indicated
