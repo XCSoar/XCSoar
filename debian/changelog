@@ -4,6 +4,47 @@ xcsoar (7.47) unstable; urgency=low
 
  -- Philipp Wollschlegel <folken@kabelsalat.ch>  Mon, 19 Oct 2026 00:40:00 +0200
 
+xcsoar (7.46.1) unstable; urgency=low
+
+  * Let a tap or a short Enter run an InfoBox action at once. Hold Enter
+    to arrange, the same as a long press. In arrange mode a short Enter
+    takes or puts down a card, and holding Enter opens the list. The
+    cursor keys move to the InfoBox in that direction. Escape selects
+    the first InfoBox when the map is showing, and returns to the map
+    from an InfoBox. A double tap on an InfoBox no longer opens the menu.
+  * Fix the RASP map staying on the previous forecast time until the
+    layer is changed or the map is pinched.
+  * Fix a map crash on PowerVR Rogue tablets while panning with
+    topography enabled.
+  * Keep menu, dialogue and status text from overflowing on a
+    high-resolution phone.
+  * Fix the IOIO not connecting after XCSoar was restarted while the
+    board stayed plugged in.
+  * Fix negative G load when the Android built-in IMU is not aligned
+    and the top of the phone points down.
+  * Fix a crash opening Pages setup from a weather overlay on a
+    landscape screen.
+  * Open Pages setup on the Configuration Pages page so landscape uses
+    that page's sidebar for Add, Delete, and the move buttons.
+  * Describe InfoBox tap and Enter, the size limit for menu and dialogue
+    text, and that Not aligned ignores the sign of Android G load.
+  * Fix Ack Day on a lower sector also silencing the airspace above its
+    ceiling.
+  * Fix Ack Day silencing a new airspace after the airspace list was
+    empty.
+  * Fix Ack Day silencing a different airspace after a NOTAM refresh
+    replaced the acknowledged one.
+  * Fix FLARM ids with the high bit set collapsing into one aircraft.
+  * Fix a downloaded IGC file losing carriage returns.
+  * Fix SkyLines user-name replies on ARM.
+  * Fix a crash drawing the task QR code.
+  * Compile the QR library as ARMv6 for a Raspberry Pi 1.
+  * Link libatomic into 32-bit ARM builds, except Kobo.
+  * Include cstdlib where version numbers call std::strtoul, so a
+    Raspberry Pi cross build compiles.
+
+ -- Philipp Wollschlegel <folken@kabelsalat.ch>  Fri, 30 Oct 2026 23:45:00 +0100
+
 xcsoar (7.46) unstable; urgency=low
 
   * new release

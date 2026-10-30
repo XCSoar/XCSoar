@@ -1017,6 +1017,7 @@ jobs:
           else
             echo "::warning::Native debug symbols not found at $SYMBOLS_ZIP (expected CI artifact layout); Play native stacks may stay obfuscated"
           fi
+          # What's New: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
           bundle exec fastlane supply \
             --package_name org.xcsoar.play \
             --aab "$AAB_PATH" \
@@ -1024,7 +1025,7 @@ jobs:
             --metadata_path fastlane/metadata/android \
             --json_key play-key.json \
             --track "$PLAY_TRACK" \
-            --skip_upload_changelogs true
+            --skip_upload_changelogs false
 
       - name: Remove key
         if: always()

@@ -7,13 +7,6 @@ Version 7.47 - not yet released
   - remember QNH and the maximum forecast temperature with that
     same question
 * ui
-  - let a tap or a short Enter run an InfoBox action at once. Hold
-    Enter to arrange, the same as a long press. In arrange mode a
-    short Enter takes or puts down a card, and holding Enter opens
-    the list. The cursor keys move to the InfoBox in that direction
-    on the screen. Escape selects the first InfoBox when the map is
-    showing, and returns to the map from an InfoBox. A double tap on
-    an InfoBox no longer opens the menu #2095
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
@@ -28,8 +21,6 @@ Version 7.47 - not yet released
     kilometre keep the newer one #3093
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
-  - fix the RASP map staying on the previous forecast time until
-    the layer is changed or the map is pinched #3415
 * task
   - sign in to SoaringScoring from Services and load the contest task
     from its task manager page, shown while signed in. Upload Flight
@@ -42,14 +33,6 @@ Version 7.47 - not yet released
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
   - show the Export flights Share button as the Android share mark
-  - fix a map crash on PowerVR Rogue tablets while panning with
-    topography enabled #1235
-  - keep menu, dialogue and status text from overflowing on a
-    high-resolution phone #3375
-  - fix the IOIO not connecting after XCSoar was restarted while the
-    board stayed plugged in
-  - fix negative G load when the Android Built-in IMU is Not
-    aligned and the top of the phone points down
 * dialogs
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
@@ -57,24 +40,16 @@ Version 7.47 - not yet released
   - apply Configuration changes without restarting XCSoar. This
     covers Warning time, Acknowledge time, Text size, Display
     resolution, GR average period, Events, and Log book #3392
-  - fix a crash opening Pages setup from a weather overlay on a
-    landscape screen #3373
-  - open Pages setup on the Configuration Pages page so landscape
-    uses that page's sidebar for Add, Delete, and the move buttons
 * documentation
   - describe the MacCready InfoBox speed-to-fly comment as true
     airspeed, labelled TAS, and the Setup switch for indicated
     airspeed
-  - describe InfoBox tap, Enter, holding Enter to arrange, and holding
-    Enter in arrange mode to open the InfoBox list
   - describe SoaringScoring sign-in, the task page, Automatic Upload,
     and Upload Flight
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
     and checklist ticks
-  - describe the size limit for menu, dialogue and status text
   - describe shared thermal markers, their details, and Go To
-  - describe that Not aligned ignores the sign of Android G load
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
@@ -87,15 +62,8 @@ Version 7.47 - not yet released
 * airspace
   - show when an OpenAir airspace is active from its activation
     times #2520
-  - fix Ack Day on a lower sector also silencing the airspace
-    above its ceiling
-  - fix Ack Day silencing a new airspace after the
-    airspace list was empty
-  - fix Ack Day silencing a different airspace after a NOTAM
-    refresh replaced the acknowledged one
 * task
   - scan task QR codes with the camera on iOS, like on Android
-  - fix a crash drawing the task QR code
 * development
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
@@ -110,6 +78,57 @@ Version 7.47 - not yet released
   - cross-compile for Raspberry Pi 4 and 5 with TARGET=PI4
     (TARGET=PI5 is an alias). The arm64 sysroot defaults to
     /opt/pi64/root
+
+Version 7.46.1 - 2026-10-30
+* ui
+  - let a tap or a short Enter run an InfoBox action at once. Hold
+    Enter to arrange, the same as a long press. In arrange mode a
+    short Enter takes or puts down a card, and holding Enter opens
+    the list. The cursor keys move to the InfoBox in that direction
+    on the screen. Escape selects the first InfoBox when the map is
+    showing, and returns to the map from an InfoBox. A double tap on
+    an InfoBox no longer opens the menu #2095
+* map
+  - fix the RASP map staying on the previous forecast time until
+    the layer is changed or the map is pinched #3415
+* android
+  - fix a map crash on PowerVR Rogue tablets while panning with
+    topography enabled #1235
+  - keep menu, dialogue and status text from overflowing on a
+    high-resolution phone #3375
+  - fix the IOIO not connecting after XCSoar was restarted while the
+    board stayed plugged in
+  - fix negative G load when the Android Built-in IMU is Not
+    aligned and the top of the phone points down
+* dialogs
+  - fix a crash opening Pages setup from a weather overlay on a
+    landscape screen #3373
+  - open Pages setup on the Configuration Pages page so landscape
+    uses that page's sidebar for Add, Delete, and the move buttons
+* documentation
+  - describe InfoBox tap, Enter, holding Enter to arrange, and holding
+    Enter in arrange mode to open the InfoBox list
+  - describe the size limit for menu, dialogue and status text
+  - describe that Not aligned ignores the sign of Android G load
+* airspace
+  - fix Ack Day on a lower sector also silencing the airspace
+    above its ceiling
+  - fix Ack Day silencing a new airspace after the
+    airspace list was empty
+  - fix Ack Day silencing a different airspace after a NOTAM
+    refresh replaced the acknowledged one
+* Windows
+  - fix FLARM ids with the high bit set collapsing into one aircraft
+  - fix a downloaded IGC file losing carriage returns
+* linux
+  - fix SkyLines user-name replies on ARM
+* task
+  - fix a crash drawing the task QR code
+* development
+  - compile the QR library as ARMv6 for a Raspberry Pi 1
+  - link libatomic into 32-bit ARM builds, except Kobo
+  - include cstdlib where version numbers call std::strtoul, so a
+    Raspberry Pi cross build compiles
 
 Version 7.46 - 2026-10-19
 * highlights

@@ -1,0 +1,9 @@
+Tap or Enter runs an InfoBox action. Hold Enter to arrange. Cursor keys move between InfoBoxes.
+
+The RASP map follows the forecast time you select.
+
+Fixes an Android crash while panning with topography, text overflow on a high-resolution phone, IOIO reconnect, and a negative G load when the phone is not aligned.
+
+Pages setup from a weather overlay no longer crashes in landscape. Ack Day no longer silences the wrong airspace.
+
+Also fixes FLARM ids and IGC files on Windows, and the task QR code.
