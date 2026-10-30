@@ -31,6 +31,8 @@ Version 7.46.1 - not yet released
     above its ceiling
   - fix Ack Day silencing a new airspace after the
     airspace list was empty
+  - fix Ack Day silencing a different airspace after a NOTAM
+    refresh replaced the acknowledged one
 * Windows
   - fix FLARM ids with the high bit set collapsing into one aircraft
   - fix a downloaded IGC file losing carriage returns
