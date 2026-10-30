@@ -244,8 +244,9 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {
   const Look &look = UIGlobals::GetLook();
-  HorizonRenderer::Draw(canvas, rc, look.horizon,
-                        CommonInterface::Basic().attitude);
+  const auto &basic = CommonInterface::Basic();
+  HorizonRenderer::Draw(canvas, rc, look.horizon, basic.attitude,
+                        HorizonRenderer::Readout(basic));
 }
 
 void

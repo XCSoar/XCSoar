@@ -709,10 +709,191 @@ DrawScales(Canvas &canvas, const HorizonLook &look, bool compact,
   canvas.DrawPolygon(triangle, 3);
 }
 
+/** One labelled mark is this many pixels apart. */
+static int
+TapePitch() noexcept
+{
+  const unsigned pitch = Layout::Scale(28);
+  return int(pitch > 0 ? pitch : 28);
+}
+
+static int
+TapeWidth(Canvas &canvas, const Font &font) noexcept
+{
+  if (!font.IsDefined())
+    return 0;
+
+  canvas.Select(font);
+  const int text = int(canvas.CalcTextSize("00000").width);
+  const int gap = int(Layout::Scale(8));
+  return text + gap * 2;
+}
+
+/**
+ * One even translucent plate.  The memory canvas cannot blend, so
+ * the marks sit on the horizon with no plate.
+ */
+static void
+ShadeStrip(Canvas &canvas, const PixelRect &strip) noexcept
+{
+#ifdef ENABLE_OPENGL
+  if (!HasColors())
+    return;
+
+  const ScopeAlphaBlend blend;
+  canvas.DrawFilledRectangle(strip, COLOR_BLACK.WithAlpha(140));
+#else
+  (void)canvas;
+  (void)strip;
+#endif
+}
+
+/**
+ * Vertical tape beside the horizon.  @p value is already in the user
+ * unit.  Ticks sit on the inner edge, toward the free space.
+ */
+static void
+DrawTape(Canvas &canvas, const PixelRect &strip, const Font &font,
+         const Font &value_font, const Color ink,
+         std::optional<double> value, double step,
+         bool ticks_on_right) noexcept
+{
+  if (strip.GetWidth() < 4 || strip.GetHeight() < 4)
+    return;
+
+  ShadeStrip(canvas, strip);
+
+  canvas.Select(font);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(ink);
+  canvas.Select(Pen(PenPx(), ink));
+
+  const int mid = (strip.top + strip.bottom) / 2;
+  const int tick_len = std::max(2, int(Layout::Scale(8)));
+  const int inner = ticks_on_right ? strip.right - 1 : strip.left;
+
+  if (value && std::isfinite(*value) && step > 0 &&
+      std::abs(*value) < 1000000) {
+    const double px = double(TapePitch()) / step;
+    const double span = (strip.GetHeight() / 2.0 + TapePitch()) / px;
+    const int i0 = int(std::floor((*value - span) / step));
+    const int i1 = int(std::ceil((*value + span) / step));
+    if (i1 >= i0 && i1 - i0 <= 64) {
+      for (int i = i0; i <= i1; ++i) {
+        const double tick = i * step;
+        const int y = mid - int(std::lround((tick - *value) * px));
+        if (y <= strip.top || y >= strip.bottom)
+          continue;
+
+        canvas.DrawLine({inner - (ticks_on_right ? tick_len : 0), y},
+                        {inner + (ticks_on_right ? 0 : tick_len), y});
+
+        char label[16];
+        StringFormatUnsafe(label, "%d", iround(tick));
+        const PixelSize ls = canvas.CalcTextSize(label);
+        if (y - int(ls.height) / 2 <= strip.top ||
+            y + int(ls.height) / 2 >= strip.bottom)
+          continue;
+
+        const int x = ticks_on_right
+          ? inner - tick_len - int(ls.width) - 2
+          : inner + tick_len + 2;
+        canvas.DrawText({x, y - int(ls.height) / 2}, label);
+      }
+    }
+  }
+
+  char bug[16] = "---";
+  if (value && std::isfinite(*value))
+    StringFormatUnsafe(bug, "%d", iround(*value));
+
+  canvas.Select(value_font);
+  canvas.SetTextColor(ink);
+  const PixelSize ts = canvas.CalcTextSize(bug);
+  const unsigned frame = std::max(1u, Layout::Scale(3u) / 4);
+  const int bug_h = int(ts.height) + int(frame) * 2
+    + int(Layout::Scale(2));
+  const int tip = std::max(int(Layout::Scale(8)), bug_h / 3);
+  const int gap = int(Layout::Scale(4));
+  const int point_x = ticks_on_right
+    ? strip.right - 1 - gap
+    : strip.left + gap;
+  const int shoulder = ticks_on_right ? point_x - tip : point_x + tip;
+  const PixelRect body{ticks_on_right ? strip.left : shoulder,
+                       mid - bug_h / 2,
+                       ticks_on_right ? shoulder : strip.right,
+                       mid + bug_h / 2};
+  const Color plate = HasColors() ? COLOR_BLACK : COLOR_WHITE;
+  const BulkPixelPoint chevron[3] = {
+    {shoulder, body.top},
+    {point_x, mid},
+    {shoulder, body.bottom},
+  };
+
+  const int drop = std::max(1, int(Layout::Scale(1)));
+  DrawShadow(canvas, [&]{
+    const BulkPixelPoint shade_body[4] = {
+      {body.left, body.top + drop},
+      {body.right, body.top + drop},
+      {body.right, body.bottom + drop},
+      {body.left, body.bottom + drop},
+    };
+    const BulkPixelPoint shade_tip[3] = {
+      {chevron[0].x, chevron[0].y + drop},
+      {chevron[1].x, chevron[1].y + drop},
+      {chevron[2].x, chevron[2].y + drop},
+    };
+    canvas.DrawPolygon(shade_body, 4);
+    canvas.DrawPolygon(shade_tip, 3);
+  });
+
+  if (HasColors())
+    canvas.SelectBlackBrush();
+  else
+    canvas.SelectWhiteBrush();
+  canvas.SelectNullPen();
+  canvas.DrawFilledRectangle(body, plate);
+  canvas.DrawPolygon(chevron, 3);
+
+  canvas.Select(Pen(frame, ink));
+  if (ticks_on_right) {
+    canvas.DrawLine({body.left, body.top}, {body.left, body.bottom});
+    canvas.DrawLine({body.left, body.top}, {shoulder, body.top});
+    canvas.DrawLine({body.left, body.bottom}, {shoulder, body.bottom});
+  } else {
+    canvas.DrawLine({body.right, body.top}, {body.right, body.bottom});
+    canvas.DrawLine({shoulder, body.top}, {body.right, body.top});
+    canvas.DrawLine({shoulder, body.bottom}, {body.right, body.bottom});
+  }
+  canvas.DrawLine({shoulder, body.top}, {point_x, mid});
+  canvas.DrawLine({point_x, mid}, {shoulder, body.bottom});
+
+  const int x = body.left
+    + int((int(body.GetWidth()) - int(ts.width)) / 2);
+  canvas.DrawText({x, mid - int(ts.height) / 2}, bug);
+}
+
+static void
+DrawTapes(Canvas &canvas, const PixelRect &rc, int tape_w,
+          const HorizonLook &look,
+          const HorizonRenderer::HorizonReadout &readout) noexcept
+{
+  const Color ink = HasColors() ? COLOR_WHITE : COLOR_BLACK;
+  const PixelRect speed{rc.left, rc.top, rc.left + tape_w, rc.bottom};
+  const PixelRect altitude{rc.right - tape_w, rc.top,
+                           rc.right, rc.bottom};
+
+  DrawTape(canvas, speed, look.mark_font, look.value_font, ink,
+           readout.speed, readout.speed_step, true);
+  DrawTape(canvas, altitude, look.mark_font, look.value_font, ink,
+           readout.altitude, readout.altitude_step, false);
+}
+
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const HorizonLook &look,
-                      const AttitudeState &attitude)
+                      const AttitudeState &attitude,
+                      const HorizonReadout &readout)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -726,12 +907,30 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   is the case or not.
   */
 
+  RadarRenderer probe{Layout::Scale(1U)};
+  probe.UpdateLayout(rc);
+  const bool compact = IsCompact(probe.GetRadius());
+
+  /* Sky and ground fill the whole window, under the tapes.  Marks
+     stay in the gap so the plates do not cover them. */
+  PixelRect ball = rc;
+  int tape_w = 0;
+  if (!compact) {
+    tape_w = TapeWidth(canvas, look.value_font);
+    if (tape_w > 0 && rc.GetWidth() > unsigned(tape_w) * 3 &&
+        rc.GetHeight() > unsigned(Layout::Scale(48))) {
+      ball.left += tape_w;
+      ball.right -= tape_w;
+    } else {
+      tape_w = 0;
+    }
+  }
+
   RadarRenderer radar_renderer{Layout::Scale(1U)};
-  radar_renderer.UpdateLayout(rc);
+  radar_renderer.UpdateLayout(ball);
 
   const auto center = radar_renderer.GetCenter();
   const int radius = radar_renderer.GetRadius();
-  const bool compact = IsCompact(radius);
   const double bank = attitude.bank_angle_available
     ? attitude.bank_angle.Degrees()
     : 0.;
@@ -741,8 +940,11 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   DrawSkyGround(canvas, rc, look, compact, center, bank, pitch);
   DrawScales(canvas, look, compact, center, radius,
-             int(rc.GetHeight()), bank, pitch);
+             int(ball.GetHeight()), bank, pitch);
+
+  if (tape_w > 0)
+    DrawTapes(canvas, rc, tape_w, look, readout);
 
   if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-    DrawNoAhrs(canvas, rc, compact);
+    DrawNoAhrs(canvas, ball, compact);
 }

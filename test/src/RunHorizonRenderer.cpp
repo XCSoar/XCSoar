@@ -18,20 +18,24 @@ class HorizonWindow : public PaintWindow
 {
   const HorizonLook &look;
   AttitudeState attitude;
+  HorizonRenderer::HorizonReadout readout;
 
 public:
   HorizonWindow(const HorizonLook &_look)
     :look(_look) {}
 
-  void SetAttitude(const AttitudeState &_attitude) {
+  void SetState(const AttitudeState &_attitude,
+                const HorizonRenderer::HorizonReadout &_readout) {
     attitude = _attitude;
+    readout = _readout;
     Invalidate();
   }
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override {
     canvas.ClearWhite();
-    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
+    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude,
+                          readout);
   }
 };
 
@@ -65,7 +69,12 @@ Main(TestMainWindow &main_window)
     attitude.bank_angle = Angle::Degrees(bank);
     attitude.pitch_angle = Angle::Degrees(pitch);
 
-    horizon.SetAttitude(attitude);
+    /* Already in display units: the demo has no unit settings. */
+    HorizonRenderer::HorizonReadout readout;
+    readout.speed = 110 + 20 * std::sin(t * 0.23);
+    readout.altitude = 1500 + 200 * std::sin(t * 0.11);
+
+    horizon.SetState(attitude, readout);
   });
   timer.Schedule(std::chrono::milliseconds(50));
   main_window.RunEventLoop();

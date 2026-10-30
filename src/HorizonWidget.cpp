@@ -20,6 +20,7 @@ class HorizonWindow : public AntiFlickerWindow {
   const bool& inverse;
 
   AttitudeState attitude;
+  HorizonRenderer::HorizonReadout readout;
 
   GestureManager gestures;
   bool dragging = false;
@@ -34,8 +35,9 @@ public:
     attitude.Reset();
   }
 
-  void ReadBlackboard(const AttitudeState _attitude) noexcept {
-    attitude = _attitude;
+  void ReadBlackboard(const MoreData &basic) noexcept {
+    attitude = basic.attitude;
+    readout = HorizonRenderer::Readout(basic);
     Invalidate();
   }
 
@@ -56,7 +58,8 @@ protected:
     else
       canvas.ClearWhite();
 
-    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
+    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude,
+                          readout);
   }
 
   /* virtual methods from Window */
@@ -129,7 +132,7 @@ void
 HorizonWidget::Update(const MoreData &basic) noexcept
 {
   HorizonWindow &w = (HorizonWindow &)GetWindow();
-  w.ReadBlackboard(basic.attitude);
+  w.ReadBlackboard(basic);
   w.Invalidate();
 }
 
