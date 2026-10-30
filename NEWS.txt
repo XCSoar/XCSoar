@@ -1,4 +1,4 @@
-Version 7.46.1 - not yet released
+Version 7.46.1 - 2026-10-30
 * ui
   - let a tap or a short Enter run an InfoBox action at once. Hold
     Enter to arrange, the same as a long press. In arrange mode a
