@@ -18,6 +18,9 @@ Version 7.47 - not yet released
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
     the Goto, and the automatic takeoff Goto is not kept #2795
+  - label the MacCready InfoBox speed-to-fly comment TAS, because
+    that speed is true airspeed. Setup can show it as indicated
+    airspeed
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,
@@ -49,6 +52,9 @@ Version 7.47 - not yet released
   - fix a crash opening Pages setup from a weather overlay on a
     landscape screen #3373
 * documentation
+  - describe the MacCready InfoBox speed-to-fly comment as true
+    airspeed, labelled TAS, and the Setup switch for indicated
+    airspeed
   - describe InfoBox tap, Enter, holding Enter to arrange, and holding
     Enter in arrange mode to open the InfoBox list
   - document the unfinished-flight question for ballast, crew weight,

@@ -5440,7 +5440,9 @@ msgstr "MacCready"
 #, no-c-format
 msgid ""
 "Current MacCready setting and mode (manual or auto). The comment shows the "
-"MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that "
+"MacCready speed-to-fly, labelled TAS (true airspeed). Setup can "
+"show it as indicated airspeed, labelled IAS. At MacCready 0, "
+"with a task or Goto active, that "
 "speed is adjusted for wind toward the waypoint and need not match the "
 "polar's still-air best glide. With MacCready above 0, wind is not used. "
 "(Touch-screen/PC only) When this InfoBox is active, use the up/down cursor "
@@ -12287,3 +12289,7 @@ msgstr "无法启动相机预览"
 
 msgid "Camera not usable"
 msgstr "相机不可用"
+
+#, no-c-format
+msgid "Show the speed-to-fly as indicated airspeed."
+msgstr ""

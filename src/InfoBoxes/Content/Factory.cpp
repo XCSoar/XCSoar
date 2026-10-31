@@ -218,7 +218,7 @@ static constexpr MetaData meta_data[] = {
     Group::TASK,
     N_("MacCready setting"),
     N_("MC"),
-    N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
+    N_("Current MacCready setting and mode (manual or auto). The comment shows the MacCready speed-to-fly, labelled TAS (true airspeed). Setup can show it as indicated airspeed, labelled IAS. At MacCready 0, with a task or Goto active, that speed is adjusted for wind toward the waypoint and need not match the polar's still-air best glide. With MacCready above 0, wind is not used. (Touch-screen/PC only) When this InfoBox is active, use the up/down cursor keys to adjust the MacCready setting."),
     IBFHelper<InfoBoxContentMacCready>::Create,
   },
 
