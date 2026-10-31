@@ -183,6 +183,8 @@ class XCThermWidget final : public RowFormWidget {
   UI::PeriodicTimer poll_timer{[this]{ PollDownload(); }};
 
   static XCThermWidget *active;
+  /** Panel this one replaced, restored when this one is destroyed. */
+  XCThermWidget *replaced_active = nullptr;
 
 public:
   XCThermWidget() noexcept
@@ -192,7 +194,7 @@ public:
     if (auto *glue = GetXCThermDownloadGlue())
       glue->Abandon();
     if (active == this)
-      active = nullptr;
+      active = replaced_active;
   }
 
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -724,6 +726,9 @@ XCThermWidget::Prepare(ContainerWindow &parent,
                        const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
+  /* Configuration prepares its own XC Therm page while a weather
+     dialog panel is still current. */
+  replaced_active = active == this ? nullptr : active;
   active = this;
 
   const auto &settings =
@@ -805,7 +810,8 @@ void
 XCThermWidget::Unprepare() noexcept
 {
   if (active == this)
-    active = nullptr;
+    active = replaced_active;
+  replaced_active = nullptr;
   update_button = nullptr;
   delete_button = nullptr;
   RowFormWidget::Unprepare();
