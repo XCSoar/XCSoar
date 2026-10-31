@@ -87,4 +87,4 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | Touch / lift-off / hold | `.cursor/rules/ui-touch.mdc` |
 | Other developer docs | `.cursor/rules/developer-docs.mdc` |
 | User manual (pilots) | `.cursor/rules/user-manual.mdc` |
-| gettext / `po/` | `.cursor/rules/translations.mdc` |
+| gettext / `po/` | `.cursor/rules/translations.mdc`, `.cursor/rules/standardized-terminology.mdc` |

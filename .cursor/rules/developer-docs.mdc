@@ -34,7 +34,7 @@ User-facing behaviour also needs the **English user manual**
 | Touch, lift-off, tap vs hold | `.cursor/rules/ui-touch.mdc`, `doc/architecture.rst` (Touch interaction) |
 | Patches, code style | `doc/policy.rst` |
 | Build | `doc/build.rst` |
-| Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc` |
+| Translations | `doc/i18n.rst`, `.cursor/rules/translations.mdc`, `.cursor/rules/standardized-terminology.mdc` |
 | Weather overlays | `doc/weather_overlays.rst` |
 | On-disk data layout | `doc/data_directory.rst` |
 | Input events | `doc/input_events.rst` |

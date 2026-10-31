@@ -6,6 +6,7 @@
 #include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/MacCreadyEdit.hpp"
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
+#include "Atmosphere/AirDensity.hpp"
 #include "Engine/Task/TaskType.hpp"
 #include "Formatter/GlideRatioFormatter.hpp"
 #include "Interface.hpp"
@@ -86,5 +87,17 @@ InfoBoxContentMacCready::Update(InfoBoxData &data) noexcept
 
   SetVSpeed(data, settings_computer.polar.glide_polar_task.GetMC());
 
-  data.SetCommentFromSpeed(calculated.common_stats.V_block, false);
+  /* V_block is true airspeed. The Setup switch shows it as indicated. */
+  double speed_ms = calculated.common_stats.V_block;
+  const bool as_ias = CommonInterface::GetUISettings().maccready_stf_ias;
+  if (as_ias) {
+    /* shortcut: no altitude leaves IAS equal to TAS */
+    if (const auto altitude = CommonInterface::Basic().GetAnyAltitude())
+      speed_ms /= AirDensityRatio(*altitude);
+  }
+
+  char speed[32];
+  FormatUserSpeed(speed_ms, speed, true, false);
+  /* IAS and TAS are ICAO abbreviations and stay untranslated. */
+  data.FmtComment("{} {}", speed, as_ias ? "IAS" : "TAS");
 }

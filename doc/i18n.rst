@@ -21,6 +21,27 @@ Marking strings in source
 (``LogFormat()``, ``LogDebug()``, ``LogInfo()``, ``LogError()``,
 and similar). Keep logs in English for consistency and debugging.
 
+**Do not** mark ICAO abbreviations and codes for translation. They stay
+as published in Doc 8400 (``IAS``, ``TAS``, ``CAS``, ``EAS``, ``QNH``,
+``QFE``, ``QNE``, ``IFR``, ``VFR``, ``VMC``, ``IMC``, and the rest of
+that list). Write the abbreviation as a string literal. A sentence
+around it is ordinary language and still uses ``_()`` / ``N_()``.
+Inside that sentence, leave the abbreviation unchanged. Do not add a
+msgid that is only the abbreviation. Leave abbreviations that are
+already in the catalogues alone.
+
+::
+
+  data.FmtComment("{} {}", speed, "TAS");
+  AddBoolean("IAS",
+             _("Show the speed-to-fly as indicated airspeed."),
+             on, listener);
+
+**Do not** translate brand names. Write them as published: ``WeGlide``,
+``SoaringScoring``, ``SkySight``, ``XC Therm``, ``NetCDF``. A label that is only the
+name is a string literal. A sentence around it still uses ``_()`` /
+``N_()``, and the name stays unchanged inside that sentence.
+
 Reuse existing English strings whenever the same wording fits.
 Search :file:`po/xcsoar.pot` and existing ``_()`` / ``N_()`` call sites
 before adding a new string. Slightly different spellings or punctuation
@@ -107,8 +128,9 @@ Filling translations
    ``msgid`` has the same placeholders (e.g. Hungarian ``50%-nál`` can
    be misread as ``%-n``; prefer a spelled-out “percent” form).
 
-Keep brand names such as ``SkySight`` and ``NetCDF`` unchanged unless a
-language already has an established local form.
+Keep brand names (``WeGlide``, ``SoaringScoring``, ``SkySight``,
+``XC Therm``, ``NetCDF``, …) and ICAO abbreviations (``IAS``, ``TAS``,
+``QNH``, …) unchanged in every language.
 
 Commit organisation
 -------------------

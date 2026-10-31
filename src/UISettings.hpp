@@ -63,6 +63,9 @@ struct UISettings {
   bool show_zoom_button;
   bool show_quickmenu_button;
 
+  /** MacCready InfoBox speed-to-fly comment as indicated airspeed. */
+  bool maccready_stf_ias;
+
   enum class PopupMessagePosition : uint8_t {
     CENTER,
     TOP_LEFT,

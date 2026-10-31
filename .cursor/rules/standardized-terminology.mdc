@@ -1,0 +1,42 @@
+---
+description: ICAO abbreviations and brand names stay untranslated
+globs:
+  - "po/**"
+  - "src/**/*.cpp"
+  - "src/**/*.hpp"
+alwaysApply: false
+---
+
+# Standardized terminology
+
+Details: `doc/i18n.rst`.
+
+ICAO abbreviations and codes stay as published in Doc 8400. Do not pass
+the abbreviation itself through gettext.
+
+Examples: `IAS`, `TAS`, `CAS`, `EAS`, `QNH`, `QFE`, `QNE`, `IFR`, `VFR`,
+`VMC`, `IMC`.
+
+- The abbreviation is a string literal: `"TAS"`, `"IAS"`.
+- Do not add a msgid that is only that abbreviation (`_("TAS")`,
+  `N_("IAS")`, `C_("Abbreviation", "TAS")`).
+- A sentence around it is ordinary language and stays in `_()` / `N_()`.
+  Translators keep the abbreviation unchanged inside the sentence.
+- Leave abbreviations that are already in the catalogs alone. Do not
+  start a cleanup unless asked.
+
+Brand names stay as published. Examples: `WeGlide`, `SoaringScoring`,
+`SkySight`, `XC Therm`, `NetCDF`. A label that is only the name is a literal. A
+sentence around it still translates, and the name stays unchanged
+inside that sentence.
+
+```cpp
+// BAD: the abbreviation becomes a translatable string
+data.FmtComment("{} {}", speed, C_("Abbreviation", "TAS"));
+
+// GOOD: the label is fixed; the help sentence still translates
+AddBoolean("IAS",
+           _("Show the speed-to-fly as indicated airspeed."),
+           on, listener);
+data.FmtComment("{} {}", speed, "TAS");
+```

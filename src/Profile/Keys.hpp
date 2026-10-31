@@ -198,6 +198,7 @@ constexpr std::string_view SafetyMacCready = "SafetyMacCready";
 constexpr std::string_view AbortTaskMode = "AbortTaskMode";
 constexpr std::string_view AutoMcMode = "AutoMcMode";
 constexpr std::string_view AutoMc = "AutoMc";
+constexpr std::string_view MacCreadySTFIAS = "MacCreadySTFIAS";
 constexpr std::string_view EnableExternalTriggerCruise = "EnableExternalTriggerCruise";
 constexpr std::string_view SpeedCommandSwitch = "SpeedCommandSwitch";
 constexpr std::string_view CruiseToCirclingModeSwitchThreshold = "CruiseToCirclingModeSwitchThreshold";
