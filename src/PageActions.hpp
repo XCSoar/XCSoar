@@ -123,6 +123,11 @@ namespace PageActions
   void ShowThermalAssistant();
 
   /**
+   * Show a page with the artificial horizon.
+   */
+  void ShowHorizon();
+
+  /**
    * Show the dedicated weather map page.
    */
   void ShowWeatherPage();

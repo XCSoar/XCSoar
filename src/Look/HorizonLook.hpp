@@ -18,12 +18,13 @@ struct HorizonLook {
   Pen terrain_pen;
 
   static constexpr Color aircraft_color{0xf2, 0xf2, 0x19};
-  Pen aircraft_pen;
   Brush aircraft_brush;
 
   Pen mark_pen;
   Brush mark_brush;
   Font mark_font;
+  /** Fixed speed and altitude digits on the full horizon. */
+  Font value_font;
 
   Pen horizon_pen;
 

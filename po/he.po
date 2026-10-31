@@ -12677,3 +12677,6 @@ msgstr "לא ניתן להפעיל את תצוגת המצלמה"
 
 msgid "Camera not usable"
 msgstr "לא ניתן להשתמש במצלמה"
+
+msgid "NO AHRS"
+msgstr "אין AHRS"

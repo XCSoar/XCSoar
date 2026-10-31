@@ -5,6 +5,9 @@
 
 #include "GroundSpeedComputer.hpp"
 #include "FilteredVarioComputer.hpp"
+#include "Math/Angle.hpp"
+
+#include <chrono>
 
 struct MoreData;
 struct DerivedInfo;
@@ -20,6 +23,32 @@ struct ComputerSettings;
 class BasicComputer {
   GroundSpeedComputer ground_speed;
   FilteredVarioComputer filtered_vario;
+
+  /**
+   * Simulator and replay publish a fix about once a second, then
+   * merge copies the attitude away.  The yaw rate is the latest
+   * sample; bank and pitch ease toward it so the horizon does not
+   * step.
+   */
+  struct PlaybackAttitude {
+    Angle yaw_rate = Angle::Zero();
+    Angle bank = Angle::Zero();
+    Angle pitch = Angle::Zero();
+    std::chrono::steady_clock::time_point shown_at{};
+    bool shown = false;
+    /** Negative: measure the step from the wall clock. */
+    double frame = -1;
+  } playback;
+
+  [[nodiscard]] double PlaybackFrame() noexcept;
+
+  void EstimatePlaybackAttitude(MoreData &basic, const MoreData &last,
+                                const DerivedInfo &calculated,
+                                double frame) noexcept;
+
+  void ComputeDynamics(MoreData &basic, const MoreData &last,
+                       const DerivedInfo &calculated,
+                       double frame) noexcept;
 
 public:
   /**
@@ -42,6 +71,14 @@ public:
   void Compute(MoreData &data, const MoreData &last, const MoreData &last_gps,
                const DerivedInfo &calculated,
                const ComputerSettings &settings) noexcept;
+
+  /**
+   * Pin the simulator and replay ease step, in seconds.  A negative
+   * value uses the wall clock.  Tests set this.
+   */
+  void SetPlaybackFrame(double seconds) noexcept {
+    playback.frame = seconds;
+  }
 
   [[gnu::pure]]
   bool FilteredVarioSampleUpdated() const noexcept {

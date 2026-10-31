@@ -12287,3 +12287,6 @@ msgstr "无法启动相机预览"
 
 msgid "Camera not usable"
 msgstr "相机不可用"
+
+msgid "NO AHRS"
+msgstr ""

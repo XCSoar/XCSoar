@@ -14,6 +14,24 @@ Version 7.47 - not yet released
     on the screen. Escape selects the first InfoBox when the map is
     showing, and returns to the map from an InfoBox. A double tap on
     an InfoBox no longer opens the menu #2095
+  - add a ground-side shadow to the artificial horizon line so it
+    stays visible on both sky and ground
+  - draw the artificial-horizon aircraft reference as a yellow bar
+    and nose, with one pair of yellow dashes fixed beside it
+    and a yellow bank pointer.  On the full horizon each has
+    a soft shadow under its lower edge
+  - open the full-screen horizon when the attitude indicator InfoBox
+    is tapped
+  - estimate pitch and bank for the artificial horizon in simulator
+    mode and during replay, from the climb angle and the rate of turn,
+    eased toward each fix so the horizon does not step once a second
+  - show a level horizon with a red cross and a red "NO AHRS" label
+    in white when no attitude data is available.  The attitude
+    indicator InfoBox shows "---" and "NO AHRS" in its comment #2047
+  - show a speed tape and an altitude tape as a shaded overlay on
+    the full-screen horizon.  Speed is indicated airspeed, or ground
+    speed when airspeed is missing.  Altitude is the navigation
+    altitude.  A missing value is shown as "---" #2047
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears

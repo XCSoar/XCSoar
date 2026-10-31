@@ -12791,3 +12791,6 @@ msgstr "Kamera önizlemesi başlatılamıyor"
 
 msgid "Camera not usable"
 msgstr "Kamera kullanılamıyor"
+
+msgid "NO AHRS"
+msgstr "AHRS yok"

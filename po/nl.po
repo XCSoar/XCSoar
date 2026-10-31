@@ -12906,3 +12906,6 @@ msgstr "Kan het cameravoorbeeld niet starten"
 
 msgid "Camera not usable"
 msgstr "Camera niet bruikbaar"
+
+msgid "NO AHRS"
+msgstr "Geen AHRS"

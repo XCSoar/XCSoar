@@ -12890,3 +12890,6 @@ msgstr "No es pot iniciar la previsualització de la càmera"
 
 msgid "Camera not usable"
 msgstr "La càmera no es pot utilitzar"
+
+msgid "NO AHRS"
+msgstr "sense AHRS"
