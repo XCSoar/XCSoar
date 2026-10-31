@@ -15,6 +15,7 @@
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <new>
 
 static constexpr double CRUISE_FILTER_FACT = 0.5;
 
@@ -80,22 +81,20 @@ AirspaceWarningManager::ApplyRememberedDayState(AirspaceWarning &warning) noexce
 void
 AirspaceWarningManager::DropAckDayForAbsentAirspaces() noexcept
 {
-  /* Allocation can throw. Compare pointers directly; Ack Day is a
-     small set and this runs only when the database serial changes. */
-  for (auto it = ack_day_airspaces.begin(); it != ack_day_airspaces.end();) {
-    const AbstractAirspace *ack = *it;
-    bool found = false;
-    for (const auto &airspace : airspaces.QueryAll()) {
-      if (&airspace.GetAirspace() == ack) {
-        found = true;
-        break;
-      }
-    }
+  if (ack_day_airspaces.empty())
+    return;
 
-    if (found)
-      ++it;
-    else
-      it = ack_day_airspaces.erase(it);
+  /* One pass over the database. The set can throw; this is noexcept,
+     so a failed allocation leaves the acknowledgements in place. */
+  try {
+    std::unordered_set<const AbstractAirspace *> keep;
+    for (const auto &airspace : airspaces.QueryAll()) {
+      const AbstractAirspace *raw = &airspace.GetAirspace();
+      if (ack_day_airspaces.contains(raw))
+        keep.insert(raw);
+    }
+    ack_day_airspaces.swap(keep);
+  } catch (const std::bad_alloc &) {
   }
 }
 
