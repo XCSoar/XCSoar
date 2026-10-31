@@ -2994,8 +2994,37 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
-RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
+RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL TERRAIN GEO ZZIP IO
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
+
+RUN_TERRAIN_VIEW_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/time/Convert.cxx \
+	$(SRC)/time/LocalTime.cpp \
+	$(SRC)/time/BrokenDate.cpp \
+	$(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenTime.cpp \
+	$(SRC)/time/Zone.cxx \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Radio/RadioFrequency.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/RunTerrainView.cpp
+RUN_TERRAIN_VIEW_DEPENDS = FORM OS THREAD MATH UTIL TERRAIN OPERATION TOPO GEO SCREEN EVENT ASYNC RESOURCE AIRSPACE IO UNITS ZZIP
+$(eval $(call link-program,RunTerrainView,RUN_TERRAIN_VIEW))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \

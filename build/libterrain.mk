@@ -14,6 +14,7 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/Thread.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
+	$(SRC)/Terrain/TerrainColor.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp
 

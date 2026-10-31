@@ -110,12 +110,14 @@ slow e-ink screens), build with ``DRAW_REDRAW_COUNTER=y``::
 
 The flag is defined in :file:`build/options.mk` (default ``n``). When
 enabled, each ``TopWindow::Expose()`` / framebuffer flip draws a
-high-contrast overlay in the top-left corner::
+high-contrast overlay.  The top-left corner is::
 
   R:<total>  <hz>/s
 
 ``R`` is the lifetime present count; the rate is frames over the last
 one-second window (it stays ``0.0/s`` until the first full second).
+OpenGL builds also draw ``D:<n>`` in the top-right corner: the number
+of ``glDraw*`` calls in that frame, not counting the overlay itself.
 The overlay is paint-only (it does not capture mouse or touch).
 
 On Kobo, or any build where ``HasEPaper()`` is true, use the overlay

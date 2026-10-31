@@ -9,12 +9,16 @@
 #include "Look/HorizonLook.hpp"
 #include "Math/Util.hpp"
 #include "NMEA/Attitude.hpp"
+#include "Geo/GeoVector.hpp"
+#include "Terrain/RasterTerrain.hpp"
 #include "RadarRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "WarningRibbonRenderer.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "ui/canvas/Font.hpp"
+#include "ui/canvas/Ramp.hpp"
+#include "util/Macros.hpp"
 #include "util/StringFormat.hpp"
 
 #include <algorithm>
@@ -220,11 +224,221 @@ PaintHalf(Canvas &canvas, const HorizonLook &look, bool compact,
   canvas.DrawPolygon(poly.v, poly.n);
 }
 
+/* shortcut: default map ramp only, not the terrain-colour setting.
+   Upgrade when the horizon should follow that setting. */
+static constexpr ColorRampEntry kTerrainRamp[] = {
+  {0, {0x70, 0xc0, 0xa7}},
+  {250, {0xca, 0xe7, 0xb9}},
+  {500, {0xf4, 0xea, 0xaf}},
+  {750, {0xdc, 0xb2, 0x82}},
+  {1000, {0xca, 0x8e, 0x72}},
+  {1250, {0xde, 0xc8, 0xbd}},
+  {1500, {0xe3, 0xe4, 0xe9}},
+  {1750, {0xdb, 0xd9, 0xef}},
+  {2000, {0xce, 0xcd, 0xf5}},
+  {2250, {0xc2, 0xc1, 0xfa}},
+  {2500, {0xb7, 0xb9, 0xff}},
+  {5000, {0xb7, 0xb9, 0xff}},
+  {6000, {0xb7, 0xb9, 0xff}},
+};
+
+static constexpr ColorRamp kTerrainColors{
+  false, short(ARRAY_SIZE(kTerrainRamp)), kTerrainRamp, nullptr,
+};
+
+/** Lighten a rising slope and darken a falling one, so faces separate. */
+static Color
+SlopeShade(Color color, int rise) noexcept
+{
+  int t = rise / 2;
+  if (t > 48)
+    t = 48;
+  else if (t < -48)
+    t = -48;
+
+  auto ch = [t](uint8_t v) noexcept {
+    int x = int(v) + t;
+    if (x < 0)
+      x = 0;
+    else if (x > 255)
+      x = 255;
+    return uint8_t(x);
+  };
+  return Color(ch(color.Red()), ch(color.Green()), ch(color.Blue()));
+}
+
+/**
+ * Local voxel space taken from the DEM.  40 km forward and 64 km
+ * wide, in 40 m cells.  shortcut: one height per column, not a dense
+ * 3D grid.  A DEM has a single surface, so every voxel at or below
+ * that height is solid.  The march steps one cell and can skip a
+ * ridge thinner than that.  Upgrade for overhangs or a finer step.
+ */
+static constexpr unsigned VOXEL_NX = 1600;
+static constexpr unsigned VOXEL_NZ = 1000;
+static constexpr double VOXEL_M = 40;
+static constexpr int VOXEL_H = 10;
+static constexpr int VOXEL_EMPTY = -32768;
+
+static int
+QuantiseHeight(int height) noexcept
+{
+  if (height >= 0)
+    return (height / VOXEL_H) * VOXEL_H;
+  return ((height - VOXEL_H + 1) / VOXEL_H) * VOXEL_H;
+}
+
+static int
+FillVoxelColumns(int16_t column[VOXEL_NZ][VOXEL_NX],
+                 const HorizonRenderer::HorizonTerrain &view) noexcept
+{
+  int max_h = VOXEL_EMPTY;
+  static TerrainHeight line[VOXEL_NX];
+  const double half = VOXEL_NX * VOXEL_M * 0.5;
+  const double left_r = -half + 0.5 * VOXEL_M;
+  const double right_r = half - 0.5 * VOXEL_M;
+
+  const RasterTerrain::Lease map(*view.terrain);
+  for (unsigned iz = 0; iz < VOXEL_NZ; ++iz) {
+    const double fwd = (iz + 0.5) * VOXEL_M;
+    const auto end = [&](double right) noexcept {
+      return GeoVector(std::hypot(fwd, right),
+                       view.heading +
+                         Angle::Radians(std::atan2(right, fwd)))
+        .EndPoint(view.location);
+    };
+    map->ScanLine(end(left_r), end(right_r), line, VOXEL_NX, false);
+    for (unsigned ix = 0; ix < VOXEL_NX; ++ix) {
+      const int h = line[ix].IsInvalid()
+        ? VOXEL_EMPTY
+        : QuantiseHeight(line[ix].GetValueOr0());
+      column[iz][ix] = int16_t(h);
+      if (h != VOXEL_EMPTY && h > max_h)
+        max_h = h;
+    }
+  }
+  return max_h;
+}
+
+/** First solid voxel a ray enters, or VOXEL_EMPTY. */
+static int
+MarchVoxel(const int16_t column[VOXEL_NZ][VOXEL_NX],
+           double altitude, int max_h,
+           double dx, double dy, double dz,
+           unsigned &hit_x, unsigned &hit_z) noexcept
+{
+  if (dz <= 0.05 || max_h == VOXEL_EMPTY)
+    return VOXEL_EMPTY;
+
+  const double far = VOXEL_NZ * VOXEL_M;
+  double t = VOXEL_M;
+  /* Stay above every column: nothing to hit until the ray descends. */
+  if (altitude > max_h) {
+    if (dy >= -1e-4)
+      return VOXEL_EMPTY;
+    t = (altitude - max_h) / -dy;
+    if (t >= far)
+      return VOXEL_EMPTY;
+    if (t < VOXEL_M)
+      t = VOXEL_M;
+  }
+
+  for (; t < far; t += VOXEL_M) {
+    const double fwd = dz * t;
+    const double right = dx * t;
+    const int iz = int(fwd / VOXEL_M);
+    const int ix = int(std::floor(right / VOXEL_M + VOXEL_NX / 2.0));
+    if (iz < 0 || unsigned(iz) >= VOXEL_NZ)
+      break;
+    if (ix < 0) {
+      if (dx <= 0)
+        break;
+      continue;
+    }
+    if (unsigned(ix) >= VOXEL_NX) {
+      if (dx >= 0)
+        break;
+      continue;
+    }
+
+    const int h = column[iz][ix];
+    if (h == VOXEL_EMPTY)
+      continue;
+    if (altitude + dy * t <= h) {
+      hit_x = unsigned(ix);
+      hit_z = unsigned(iz);
+      return h;
+    }
+  }
+  return VOXEL_EMPTY;
+}
+
+/**
+ * Walk the voxel space from the cockpit.  Samples use the same 40°
+ * scale as the horizon line.  Blocks stay inside the rect.
+ */
+static void
+DrawRelief(Canvas &canvas, const PixelRect &rc, PixelPoint center,
+           double bank_deg, int pitch_px,
+           const HorizonRenderer::HorizonTerrain &view) noexcept
+{
+  if (!view.valid || view.terrain == nullptr)
+    return;
+
+  const int height = int(rc.GetHeight());
+  if (height < 2)
+    return;
+
+  static int16_t column[VOXEL_NZ][VOXEL_NX];
+  const int max_h = FillVoxelColumns(column, view);
+  if (max_h == VOXEL_EMPTY)
+    return;
+
+  const double px_per_deg = (height / 2.0) / MAX_PITCH_DEG;
+  const Angle roll = Angle::Degrees(-bank_deg);
+  const double cs = roll.cos();
+  const double sn = roll.sin();
+  const int stride = std::max(2, height / 140);
+
+  for (int sy = rc.top; sy < rc.bottom; sy += stride) {
+    for (int sx = rc.left; sx < rc.right; sx += stride) {
+      const double rx = sx + stride / 2 - center.x;
+      const double ry = sy + stride / 2 - center.y;
+      const double rel_x = rx * cs + ry * sn;
+      const double rel_y = -rx * sn + ry * cs;
+      const Angle az = Angle::Degrees(rel_x / px_per_deg);
+      const Angle elev =
+        Angle::Degrees((pitch_px - rel_y) / px_per_deg);
+      const double dx = az.sin() * elev.cos();
+      const double dy = elev.sin();
+      const double dz = az.cos() * elev.cos();
+
+      unsigned hit_x = 0, hit_z = 0;
+      const int h = MarchVoxel(column, view.altitude, max_h,
+                               dx, dy, dz, hit_x, hit_z);
+      if (h == VOXEL_EMPTY)
+        continue;
+
+      int rise = 0;
+      if (hit_z + 1 < VOXEL_NZ &&
+          column[hit_z + 1][hit_x] != VOXEL_EMPTY)
+        rise = column[hit_z + 1][hit_x] - h;
+
+      const PixelRect block{sx, sy,
+                            std::min(sx + stride, rc.right),
+                            std::min(sy + stride, rc.bottom)};
+      canvas.DrawFilledRectangle(block, SlopeShade(
+        Color(ColorRampLookup(h, &kTerrainColors)), rise));
+    }
+  }
+}
+
 static void
 DrawSkyGround(Canvas &canvas, const PixelRect &rc,
               const HorizonLook &look, bool compact,
               PixelPoint center, double bank_deg,
-              double pitch_deg) noexcept
+              double pitch_deg,
+              const HorizonRenderer::HorizonTerrain &view) noexcept
 {
   const int pitch_px =
     int(rc.GetHeight() / 2.f * pitch_deg / MAX_PITCH_DEG);
@@ -239,13 +453,18 @@ DrawSkyGround(Canvas &canvas, const PixelRect &rc,
   PixelPoint cut_a, cut_b;
   if (!ClipHorizon(rc, h0, h1, sky, ground, cut_a, cut_b)) {
     /* Horizon misses the rect: the whole dial is one colour. */
-    PaintHalf(canvas, look, compact, sky.n >= ground.n, sky.n >= 3
+    const bool sky_side = sky.n >= ground.n;
+    PaintHalf(canvas, look, compact, sky_side, sky.n >= 3
               ? sky : ground);
+    if (!compact)
+      DrawRelief(canvas, rc, center, bank_deg, pitch_px, view);
     return;
   }
 
   PaintHalf(canvas, look, compact, true, sky);
   PaintHalf(canvas, look, compact, false, ground);
+  if (!compact)
+    DrawRelief(canvas, rc, center, bank_deg, pitch_px, view);
 
   const Angle bank = Angle::Degrees(bank_deg);
   const unsigned width = compact
@@ -903,7 +1122,8 @@ void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const HorizonLook &look,
                       const AttitudeState &attitude,
-                      const HorizonReadout &readout)
+                      const HorizonReadout &readout,
+                      const HorizonTerrain &terrain)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -948,7 +1168,7 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     ? attitude.pitch_angle.Degrees()
     : 0.;
 
-  DrawSkyGround(canvas, rc, look, compact, center, bank, pitch);
+  DrawSkyGround(canvas, rc, look, compact, center, bank, pitch, terrain);
   DrawScales(canvas, look, compact, center, radius,
              int(ball.GetHeight()), bank, pitch);
 

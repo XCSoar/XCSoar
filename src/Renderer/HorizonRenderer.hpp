@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Geo/GeoPoint.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Units/Units.hpp"
 
@@ -12,6 +13,7 @@ struct PixelRect;
 struct HorizonLook;
 struct AttitudeState;
 class Canvas;
+class RasterTerrain;
 
 namespace HorizonRenderer {
 
@@ -23,10 +25,20 @@ struct HorizonReadout {
   double altitude_step = 50;
 };
 
+/** Position and loaded terrain for the ground ahead of the aircraft. */
+struct HorizonTerrain {
+  RasterTerrain *terrain = nullptr;
+  GeoPoint location = GeoPoint::Invalid();
+  Angle heading = Angle::Zero();
+  double altitude = 0;
+  bool valid = false;
+};
+
 void Draw(Canvas &canvas, const PixelRect &rc,
           const HorizonLook &look,
           const AttitudeState &attitude,
-          const HorizonReadout &readout = {});
+          const HorizonReadout &readout = {},
+          const HorizonTerrain &terrain = {});
 
 /**
  * Indicated airspeed when it is available, otherwise ground speed.

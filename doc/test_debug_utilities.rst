@@ -1099,6 +1099,28 @@ Tests artificial horizon rendering with animated attitude display.
 - Demonstrates horizon rendering with attitude indicators
 - Useful for testing attitude visualization
 
+RunTerrainView
+~~~~~~~~~~~~~~
+
+Shows a terrain file as a lit height mesh.
+
+**Usage**:
+
+.. code-block:: bash
+
+   ./output/UNIX/bin/RunTerrainView terrain.zip
+   ./output/UNIX/bin/RunTerrainView --range 8000 --pitch 45 terrain.zip
+
+**What it does**:
+
+- Loads ``terrain.jp2`` from a terrain zip
+- Draws ``topology.tpl`` on the mesh when present: filled areas and lines. WASD moves across the surface and reloads terrain
+- Builds a height mesh out to ``--range`` metres (default 20000)
+- Colours each face with a map terrain ramp (``--ramp``, default 0)
+- Lights the mesh from the north-west
+- Draws it with a depth buffer, so nearer ground covers what is behind it
+- Drag to orbit; mouse wheel or Page Up/Down changes distance
+
 RunFinalGlideBarRenderer
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
