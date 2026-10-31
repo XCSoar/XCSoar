@@ -96,6 +96,9 @@ class PageListWidget
 
   PageSettings settings;
 
+  /** Live page count last copied into #settings. */
+  unsigned synced_live_pages = 0;
+
   ButtonPanelWidget *buttons;
   Button *add_button, *delete_button;
   Button *move_up_button, *move_down_button;
@@ -106,6 +109,7 @@ class PageListWidget
 
   void SyncChromeButtons() noexcept;
   void ReleaseChromeButtons() noexcept;
+  void AdoptExternalPages() noexcept;
 
   /** 0 Add, 1 Delete, 2 move up, 3 move down. Expert is 4. */
   Button *ActionButton(unsigned i) const noexcept;
@@ -825,6 +829,7 @@ PageListWidget::Initialise(ContainerWindow &parent,
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   settings = CommonInterface::GetUISettings().pages;
+  synced_live_pages = settings.n_pages;
 
   CreateList(parent, UIGlobals::GetDialogLook(), rc,
              row_renderer.CalculateLayout(*look.list.font))
@@ -835,8 +840,33 @@ PageListWidget::Initialise(ContainerWindow &parent,
 }
 
 void
+PageListWidget::AdoptExternalPages() noexcept
+{
+  const PageSettings &live = CommonInterface::GetUISettings().pages;
+  if (live.n_pages <= synced_live_pages)
+    return;
+
+  unsigned extra = live.n_pages - synced_live_pages;
+  const unsigned n = GetList().GetLength();
+  if (n >= PageSettings::MAX_PAGES)
+    extra = 0;
+  else if (n + extra > PageSettings::MAX_PAGES)
+    extra = PageSettings::MAX_PAGES - n;
+
+  for (unsigned i = 0; i < extra; ++i)
+    settings.pages[n + i] = live.pages[synced_live_pages + i];
+
+  if (extra > 0)
+    GetList().SetLength(n + extra);
+
+  synced_live_pages = live.n_pages;
+  UpdateButtons();
+}
+
+void
 PageListWidget::Show(const PixelRect &rc) noexcept
 {
+  AdoptExternalPages();
   SyncChromeButtons();
   editor->SetValue(settings.pages[GetList().GetCursorIndex()]);
 
@@ -860,6 +890,8 @@ PageListWidget::Move(const PixelRect &rc) noexcept
 bool
 PageListWidget::Save(bool &_changed) noexcept
 {
+  AdoptExternalPages();
+
   bool changed = false;
 
   settings.n_pages = GetList().GetLength();
