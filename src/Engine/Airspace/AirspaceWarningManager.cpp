@@ -80,15 +80,19 @@ AirspaceWarningManager::ApplyRememberedDayState(AirspaceWarning &warning) noexce
 void
 AirspaceWarningManager::DropAckDayForAbsentAirspaces() noexcept
 {
-  if (ack_day_airspaces.empty())
-    return;
-
-  std::unordered_set<const AbstractAirspace *> present;
-  for (const auto &airspace : airspaces.QueryAll())
-    present.insert(&airspace.GetAirspace());
-
+  /* Allocation can throw. Compare pointers directly; Ack Day is a
+     small set and this runs only when the database serial changes. */
   for (auto it = ack_day_airspaces.begin(); it != ack_day_airspaces.end();) {
-    if (present.contains(*it))
+    const AbstractAirspace *ack = *it;
+    bool found = false;
+    for (const auto &airspace : airspaces.QueryAll()) {
+      if (&airspace.GetAirspace() == ack) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found)
       ++it;
     else
       it = ack_day_airspaces.erase(it);
