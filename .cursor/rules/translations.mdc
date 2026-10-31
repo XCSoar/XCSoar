@@ -25,6 +25,9 @@ translation by role. Prefer existing contexts (`Button`, `Menu`,
 
 Do not mark log messages for translation.
 
+ICAO abbreviations and brand names stay untranslated. See
+`.cursor/rules/standardized-terminology.mdc`.
+
 ## Low-churn catalog updates
 
 After source changes, run `make update-po` (`tools/update_po_low_churn.py`).

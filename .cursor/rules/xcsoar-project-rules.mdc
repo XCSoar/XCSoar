@@ -109,6 +109,7 @@ alwaysApply: true
 - Use `C_()` / `NC_()` (gettext `msgctxt`) only when the same English text needs different translations by role — e.g. `C_("Button", "Setup")`, `NC_("Setting", "Auto")`, `C_("Status", "Live")`, `C_("Weather control", "Time")`
 - Prefer existing context names (`Button`, `Menu`, `Setting`, `Status`, `Weather control`, `Weather layer`, `Abbreviation`, `InfoBox`, …) over inventing new ones
 - **Logging is exempt**: Do not use translation macros (`_()` or `N_()`) in logging functions (e.g., `LogFormat()`, `LogDebug()`, `LogInfo()`, `LogError()`)
+- **ICAO abbreviations and brand names are exempt**: Doc 8400 codes (`IAS`, `TAS`, `QNH`) and names such as `WeGlide`, `SoaringScoring`, `SkySight`, and `XC Therm` are string literals, not `_()` / `N_()` / `C_()`. See `.cursor/rules/standardized-terminology.mdc`
 - Log messages should remain in English for consistency and debugging
 - After source string changes, run `make update-po`. The `.po` diff must
   **only add new msgid/msgstr entries** (and `xcsoar.pot`). Do not rewrap,
