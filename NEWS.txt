@@ -31,6 +31,7 @@ Version 7.47 - not yet released
     resolution, GR average period, Events, and Log book #3392
   - keep a page added from a weather overlay when Pages setup or
     Configuration is closed
+  - keep the RASP and XC Therm time control after Pages setup
 * documentation
   - document the unfinished-flight question for ballast, crew weight,
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
