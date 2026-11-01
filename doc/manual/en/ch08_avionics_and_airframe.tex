@@ -197,7 +197,11 @@ and it lists what information they provide.
 \config{comdevices}
 The button ``Reconnect'' attempts to reconnect to the selected
 device.  XCSoar reconnects to a failed device periodically, but
-sometimes, it might be desirable to trigger that manually.
+sometimes, it might be desirable to trigger that manually.  On
+Android, a USB serial device that sends no valid data for 10 seconds
+also counts as failed, so it is reconnected even when the link stopped
+without the adapter being unplugged.  Drivers for devices that may
+stay silent, such as some radios, are left out.
 
 The button ``Flight download'' is only available with supported IGC
 loggers (see Section~\ref{sec:supported-varios} for a list).  Upon clicking,
