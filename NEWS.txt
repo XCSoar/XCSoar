@@ -33,6 +33,8 @@ Version 7.47 - not yet released
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
   - show the Export flights Share button as the Android share mark
+  - keep XCSoar from hanging when it stops an IOIO connection, and
+    ignore unexpected messages from the board instead of failing
 * dialogs
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
