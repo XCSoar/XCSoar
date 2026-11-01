@@ -428,10 +428,6 @@ msgstr "Το αρχείο καταγραφής είναι άδειο"
 msgid "Failed to download flight."
 msgstr "Απέτυχε το \"Κατέβασμα\" της πτήσης"
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Θέλετε να απβαθμίσετε αυτό το πτήση στο WeGlide;"
-
 msgid "Do you want to download another flight?"
 msgstr "Θέλετε να καταγράψετε άλλη πτήση;"
 
@@ -1137,10 +1133,6 @@ msgstr "Λίστα InfoBox"
 #, no-c-format
 msgid "Pages"
 msgstr "Σελίδες"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Ανεμόπτερο"
 
 #, no-c-format
 msgid "Weather"
@@ -4847,13 +4839,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "Αυτόματη μεταφόρτωση"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Αsks αν πρέπει να μεταδίδεται η εξέγερση στο WeGlide, μετά την κατέβαση από "
-"δεξιό log."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Αυτό παίρνεται από το profile WeGlide σας. ή ρίθμιστε 0 αν δεν "
@@ -5534,16 +5519,6 @@ msgstr "Υψόμετρο GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Αλτ GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Το υπόλοιπο ρυμούλκησης από το GPS. (Μόνο για προσωπικά σκέρες/PC) Στο "
-"μοδόλο συμπύκνωσης, αυτή η τιμή είναι διαjustable με τους κουμπίσια πάνω-"
-"κάτω; τα κουμπίσια δεξιό-αριστερό αλλάζουν τη φορά του ανεμοπέτρου."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8611,9 +8586,6 @@ msgid ""
 msgstr ""
 "Το WeGlide δεν έχει ρυθμιστεί. Ορίστε το ID πιλότου και την ημερομηνία "
 "γέννησης στις ρυθμίσεις."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Μόνο αρχεία .igc μπορούν να μεταφορτωθούν στο WeGlide."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12862,12 +12834,6 @@ msgstr ""
 "Σύρετε ένα InfoBox πάνω σε άλλο για να τα ανταλλάξετε. Κρατήστε ένα InfoBox"
 " και σηκώστε το για να διαλέξετε άλλο για τη θέση."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Το Enter παίρνει το επιλεγμένο InfoBox, μετακινήστε το με τα βελάκια και ξα"
-"νά Enter για να το αφήσετε. Δύο Enter χωρίς μετακίνηση διαλέγουν άλλο InfoB"
-"ox για τη θέση."
-
 msgid "Arrange InfoBoxes"
 msgstr "Διάταξη InfoBox"
 
@@ -12922,6 +12888,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Θέλετε να απβαθμίσετε αυτό το πτήση στο %s;"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Μόνο αρχεία .igc μπορούν να μεταφορτωθούν στο %s."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Αsks αν πρέπει να μεταδίδεται η εξέγερση στο %s, μετά την κατέβαση από δεξιό log."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Στρέψτε την κάμερα σε έναν κωδικό QR εργασίας"
 
@@ -12939,22 +12971,3 @@ msgstr "Δεν είναι δυνατή η έναρξη της προεπισκό
 
 msgid "Camera not usable"
 msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

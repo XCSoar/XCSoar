@@ -410,10 +410,6 @@ msgstr "로거파일이 없음."
 msgid "Failed to download flight."
 msgstr "비행 파일 다운로드 실패."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "이 비행기록을 WeGlide에 올리겠습니까?"
-
 msgid "Do you want to download another flight?"
 msgstr "다른 비행을 다운로드합니까?"
 
@@ -1127,10 +1123,6 @@ msgstr "정보창 설정"
 #, no-c-format
 msgid "Pages"
 msgstr "페이지"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "글라이더"
 
 #, no-c-format
 msgid "Weather"
@@ -4714,11 +4706,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "자동 업로드"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr "외부 로거로부터 비행을 다운로드한 후 Weglide에 업로드 여부를 묻습니다."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "WeGlide 프로필에서 가져온다. 사용하지 않을 경우 0으로 설정한다."
 
@@ -5395,15 +5382,6 @@ msgstr "고도(GPS)"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS고도"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"해수면부터 기체위치의 GPS 고도를 표시한다. \n"
-"시뮬레이션 모드에서는 위 아래로 고도 설정, 좌우로 기체회전을 설정 할 수 있다."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8370,9 +8348,6 @@ msgid ""
 "WeGlide is not configured. Please set your pilot ID and birthdate in the "
 "settings."
 msgstr "WeGlide nije konfiguriran. 설정te ID pilota i datum rođenja u 설정."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide se mogu prenijeti samo .igc 파일."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12414,11 +12389,6 @@ msgstr "기타"
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr "정보창을 다른 정보창 위로 끌면 둘이 바뀝니다. 정보창을 길게 눌러 들면 그 자리의 다른 정보창을 고릅니다."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter로 선택한 정보창을 집어 커서 키로 옮기고, Enter를 다시 눌러 놓습니다. 움직이지 않고 Enter를 두 번 누르면 그 자"
-"리의 다른 정보창을 고릅니다."
-
 msgid "Arrange InfoBoxes"
 msgstr "정보창 배치"
 
@@ -12469,6 +12439,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "이 비행기록을 %s에 올리겠습니까?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Na %s se mogu prenijeti samo .igc 파일."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "외부 로거로부터 비행을 다운로드한 후 %s에 업로드 여부를 묻습니다."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "카메라를 과제 QR 코드에 맞추세요"
 
@@ -12486,22 +12522,3 @@ msgstr "카메라 미리보기를 시작할 수 없음"
 
 msgid "Camera not usable"
 msgstr "카메라를 사용할 수 없음"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

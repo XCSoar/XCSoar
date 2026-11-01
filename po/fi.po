@@ -428,10 +428,6 @@ msgstr "Loggeri on tyhjä."
 msgid "Failed to download flight."
 msgstr "Lennon lataaminen epäonnistui."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Haluatko ladata toisen lennon?"
-
 msgid "Do you want to download another flight?"
 msgstr "Haluatko ladata toisen lennon?"
 
@@ -1125,10 +1121,6 @@ msgstr "Inforuudut"
 #, no-c-format
 msgid "Pages"
 msgstr "Sivut"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "WeGlide"
 
 #, no-c-format
 msgid "Weather"
@@ -4773,13 +4765,6 @@ msgstr "Salli Weglide:n tehtävänhallinnasta laadittujen tehtävien lataaminen.
 msgid "Automatic Upload"
 msgstr "Automaattinen lähetys"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Kysyy, onko lentotapahtuma lähetettävä WeGlide:lle, kun se on ladattu "
-"ulkopuolelta."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "Tämä tulee WeGlide-profiilistasi. Jos ei käytetä, aseta arvoksi 0."
 
@@ -5455,16 +5440,6 @@ msgstr "Korkeus GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Kork. GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"GPS:n ilmoittama korkeus keskimääräisestä merenpinnasta. (Vain "
-"kosketusnäyttö/PC) Simulaattoritilassa arvoa voi säätää ylös/alas-"
-"nuolinäppäimillä; oikea/vasen-nuolinäppäimet kääntävät purjekonetta."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8495,9 +8470,6 @@ msgid ""
 msgstr ""
 "WeGlidea ei ole määritetty. Aseta lentäjätunnuksesi ja syntymäaikasi "
 "asetuksissa."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "WeGlideen voi lähettää vain .igc-tiedostoja."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12700,12 +12672,6 @@ msgstr ""
 "Vedä infobox toisen päälle vaihtaaksesi ne. Pidä infoboxia ja nosta valitak"
 "sesi toisen siihen paikkaan."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter ottaa valitun infoboxin, siirrä sitä nuolilla ja paina Enter uudellee"
-"n laskeaksesi sen. Kaksi Enteriä ilman siirtoa valitsee toisen infoboxin si"
-"ihen paikkaan."
-
 msgid "Arrange InfoBoxes"
 msgstr "Järjestä infoboxit"
 
@@ -12759,6 +12725,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Haluatko lähettää tämän lennon %siin?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "%sen voi lähettää vain .igc-tiedostoja."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Kysyy, onko lentotapahtuma lähetettävä %s:lle, kun se on ladattu ulkopuolelta."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Osoita kameralla tehtävän QR-koodia"
 
@@ -12776,22 +12808,3 @@ msgstr "Kameran esikatselua ei voi käynnistää"
 
 msgid "Camera not usable"
 msgstr "Kameraa ei voi käyttää"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

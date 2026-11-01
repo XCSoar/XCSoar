@@ -426,10 +426,6 @@ msgstr "Înregistratorul este gol."
 msgid "Failed to download flight."
 msgstr "Descărcarea zborului nereușită."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Dorești să descarci un alt zbor?"
-
 msgid "Do you want to download another flight?"
 msgstr "Dorești să descarci un alt zbor?"
 
@@ -1135,10 +1131,6 @@ msgstr "Seturi InfoBox"
 #, no-c-format
 msgid "Pages"
 msgstr "Pagini"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Încărcare WeGlide"
 
 #, no-c-format
 msgid "Weather"
@@ -4821,13 +4813,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "Încărcare automată"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"întreba dacă se va încărca traseu la WeGlide după ce acesta este descărcat "
-"de la un logger extern."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Înregistrează acest lucru din profilul WeGlide. Sau setează la 0 dacă nu "
@@ -5508,16 +5493,6 @@ msgstr "Altitudine GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Alt GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Altitudinea deasupra nivelului mării dată de GPS. Touchscreen/PC only: în "
-"mod simulare valoarea poate fi schimbată cu tastele sus/jos iar tastele "
-"stânga/dreapta fac planorul să vireze."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8543,9 +8518,6 @@ msgid ""
 msgstr ""
 "WeGlide non è configurato. Setați ID pilota e data di nascita nelle "
 "setațizioni."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Solo i fișier .igc possono essere caricati su WeGlide."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12774,12 +12746,6 @@ msgstr ""
 "Trageți un InfoBox peste altul ca să le schimbați. Țineți un InfoBox și rid"
 "icați-l ca să alegeți altul pentru acea poziție."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter ia InfoBoxul selectat, mutați-l cu săgețile și apăsați Enter din nou "
-"ca să-l așezați. De două ori Enter fără mutare alege alt InfoBox pentru ace"
-"a poziție."
-
 msgid "Arrange InfoBoxes"
 msgstr "Aranjează InfoBoxurile"
 
@@ -12833,6 +12799,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Încărcați acest zbor pe %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Solo i fișier .igc possono essere caricati su %s."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "întreba dacă se va încărca traseu la %s după ce acesta este descărcat de la un logger extern."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Îndreptați camera spre un cod QR de sarcină"
 
@@ -12850,22 +12882,3 @@ msgstr "Previzualizarea camerei nu poate fi pornită"
 
 msgid "Camera not usable"
 msgstr "Camera nu poate fi folosită"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

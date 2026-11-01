@@ -420,10 +420,6 @@ msgstr "Geen logger-bestanden."
 msgid "Failed to download flight."
 msgstr "Vlucht download mislukt."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Wilt u een andere vlucht te downloaden?"
-
 msgid "Do you want to download another flight?"
 msgstr "Wilt u een andere vlucht te downloaden?"
 
@@ -1133,10 +1129,6 @@ msgstr "InfoBox Groepen"
 #, no-c-format
 msgid "Pages"
 msgstr "Pagina's"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Zweefvliegtuig"
 
 #, no-c-format
 msgid "Weather"
@@ -4820,13 +4812,6 @@ msgstr "Laat opdrachten downloaden van Weglide in het Opdrachtbeheer."
 msgid "Automatic Upload"
 msgstr "Upload Automatisch"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Vraagt of je een vliegprofiel wilt uploaden naar Weglide, nadat het "
-"vliegprofiel is gedownload uit een externe logger."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Neem dit van uw WeGlide profiel. Of zet gelijk aan 0 indien niet gebruikt."
@@ -5508,16 +5493,6 @@ msgstr "GPS hoogte"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS hoogte"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Dit is de MSL hoogte aangegeven door de GPS. Touch-screen/PC: In "
-"simulatiemodus kun je de waarde aanpassen met de omhoog/omlaag pijlen. De "
-"links/rechts pijlen veroorzaken het maken van een bocht."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8586,9 +8561,6 @@ msgid ""
 msgstr ""
 "WeGlide is niet geconfigureerd. Stel je piloot-ID en geboortedatum in de "
 "instellingen in."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Alleen .igc-bestanden kunnen naar WeGlide worden geüpload."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12828,12 +12800,6 @@ msgstr ""
 "Sleep een informatievak op een ander om ze te wisselen. Houd een vak vast e"
 "n til het op om een ander vak voor die plaats te kiezen."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter pakt het gekozen informatievak, verplaats het met de pijltjestoetsen "
-"en druk nogmaals op Enter om het neer te zetten. Twee keer Enter zonder te "
-"verplaatsen kiest een ander vak voor die plaats."
-
 msgid "Arrange InfoBoxes"
 msgstr "Informatievakken ordenen"
 
@@ -12889,6 +12855,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Wilt u deze vlucht naar %s uploaden?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Alleen .igc-bestanden kunnen naar %s worden geüpload."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Vraagt of je een vliegprofiel wilt uploaden naar %s, nadat het vliegprofiel is gedownload uit een externe logger."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Richt de camera op een taak-QR-code"
 
@@ -12906,22 +12938,3 @@ msgstr "Kan het cameravoorbeeld niet starten"
 
 msgid "Camera not usable"
 msgstr "Camera niet bruikbaar"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

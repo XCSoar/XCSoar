@@ -423,10 +423,6 @@ msgstr "Logeris tuščias"
 msgid "Failed to download flight."
 msgstr "Nepavyko atsisiųsti skrydį."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Ar norite atsisiųsti kitą skrydį?"
-
 msgid "Do you want to download another flight?"
 msgstr "Ar norite atsisiųsti kitą skrydį?"
 
@@ -1122,10 +1118,6 @@ msgstr "Informacijos blokai"
 #, no-c-format
 msgid "Pages"
 msgstr "Paprastos puslapiai"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Parsisiųsti skrydį"
 
 #, no-c-format
 msgid "Weather"
@@ -4793,13 +4785,6 @@ msgstr "Leisti atsisiųsti Weglide užduotis užduotų tvarkyklėje."
 msgid "Automatic Upload"
 msgstr "Automatinis įkėlimas"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Atrodo, ar norite išsiųsti lankstumą Weglide po jį atsiuntimo iš išorinio "
-"žurnalio."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "Nusistatyti iš WeGlide profilio. Arba nustatyti 0 jei ne naudojamas."
 
@@ -5475,15 +5460,6 @@ msgstr "GPS Altitudė"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Alternatyvus GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Ši altitudė virš jūros lygio gaunama iš GPS. Simuliacijos režime altitudės "
-"reikšmę galime keisti reguliuojant klavišus aukštyn / žemyn"
 
 #, no-c-format
 msgid "Height AGL"
@@ -8526,9 +8502,6 @@ msgid ""
 msgstr ""
 "WeGlide nesukonfigūruotas. Nustatymuose nustatykite piloto ID ir gimimo "
 "datą."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide se mogu prenijeti samo .igc failai."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12737,11 +12710,6 @@ msgstr ""
 "Vilkkite InfoBox ant kito, kad sukeistumėte. Laikykite InfoBox ir pakelkite"
 ", kad tai vietai pasirinktumėte kitą."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter paima pasirinktą InfoBox, rodyklėmis jį perkelkite ir dar kartą Enter"
-" padėkite. Du Enter be perkėlimo pasirenka kitą InfoBox tai vietai."
-
 msgid "Arrange InfoBoxes"
 msgstr "Išdėstyti InfoBox"
 
@@ -12795,6 +12763,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Ar norite įkelti šį skrydį į %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Na %s se mogu prenijeti samo .igc failai."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Atrodo, ar norite išsiųsti lankstumą %s po jį atsiuntimo iš išorinio žurnalio."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Nukreipkite kamerą į užduoties QR kodą"
 
@@ -12812,22 +12846,3 @@ msgstr "Nepavyksta paleisti kameros peržiūros"
 
 msgid "Camera not usable"
 msgstr "Kamera netinkama naudoti"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

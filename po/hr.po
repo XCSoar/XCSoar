@@ -419,10 +419,6 @@ msgstr "Zapisnik je prazan."
 msgid "Failed to download flight."
 msgstr "Neuspješno je preuzeto letovanje."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Da li zaista želite obrisati sve letove s ovog uređaja?"
-
 msgid "Do you want to download another flight?"
 msgstr "Želite li preuzeti još jedno letovanje?"
 
@@ -1118,10 +1114,6 @@ msgstr "Skupovi InfoBox-a"
 #, no-c-format
 msgid "Pages"
 msgstr "Stranice"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Jedrilica"
 
 #, no-c-format
 msgid "Weather"
@@ -4780,13 +4772,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "Automatski prijenos"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Pita treba li prenijeti let na WeGlide nakon što je let preuzet s vanjskog "
-"logera."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Pitanje o slanju leta na WeGlide nakon preuzimanja leta s vanjskog logger-a."
@@ -5462,16 +5447,6 @@ msgstr "Visina prema MSL prema GPS-u."
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Visina GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Visina prema MSL prema GPS-u. (Tastaturi/PC samo) U simulacijskom režimu je "
-"vrijednost reguliriva s pomoću gornjih/i doljnih strelica; lijeve/i desne "
-"strelice uzrokuju okretanje jedrilice."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8514,9 +8489,6 @@ msgid ""
 "settings."
 msgstr ""
 "WeGlide nije konfiguriran. Postavite ID pilota i datum rođenja u postavkama."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide se mogu prenijeti samo .igc datoteke."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12709,11 +12681,6 @@ msgstr ""
 "Povucite InfoBox na drugi da ih zamijenite. Držite InfoBox i podignite ga d"
 "a odaberete drugi za to mjesto."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter uzima odabrani InfoBox, pomaknite ga strelicama i ponovno Enter da ga"
-" spustite. Dva puta Enter bez pomicanja bira drugi InfoBox za to mjesto."
-
 msgid "Arrange InfoBoxes"
 msgstr "Rasporedi InfoBoxe"
 
@@ -12767,6 +12734,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Želite li prenijeti ovaj let na %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Na %s se mogu prenijeti samo .igc datoteke."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Pita treba li prenijeti let na %s nakon što je let preuzet s vanjskog logera."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Usmjerite kameru prema QR kodu zadatka"
 
@@ -12784,22 +12817,3 @@ msgstr "Nije moguće pokrenuti pregled kamere"
 
 msgid "Camera not usable"
 msgstr "Kamera se ne može koristiti"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

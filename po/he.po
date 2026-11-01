@@ -409,10 +409,6 @@ msgstr "מקליט טיסות ריק"
 msgid "Failed to download flight."
 msgstr "הורדת טיסה נכשלה"
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "האם ברצונך להוריד טיסה אחרת?"
-
 msgid "Do you want to download another flight?"
 msgstr "האם ברצונך להוריד טיסה אחרת?"
 
@@ -1125,10 +1121,6 @@ msgstr "קבוצות InfoBox"
 #, no-c-format
 msgid "Pages"
 msgstr "עמודים"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "מחשב טיסה"
 
 #, no-c-format
 msgid "Weather"
@@ -4824,11 +4816,6 @@ msgstr "אפשר הורדת משימות מוצהרות מ-WeGlide במנהל ה
 msgid "Automatic Upload"
 msgstr "העלאה אוטומטית"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr "שואל האם להעלות את הטיסה ל-WeGlide לאחר שהטיסה הורדה מלוגר חיצוני."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "קח זאת מפרופיל ה-WeGlide שלך. או הגדר 0 אם לא בשימוש."
 
@@ -5494,13 +5481,6 @@ msgstr "גובה גי פי אס"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "אופטימיזציה GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr "זהו הגובה מעל פני הים"
 
 #, no-c-format
 msgid "Height AGL"
@@ -8465,9 +8445,6 @@ msgid ""
 "WeGlide is not configured. Please set your pilot ID and birthdate in the "
 "settings."
 msgstr "WeGlide אינו מוגדר. יש להגדיר את מזהה הטייס ואת תאריך הלידה בהגדרות."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "ניתן להעלות ל־WeGlide קבצי .igc בלבד."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12603,11 +12580,6 @@ msgstr ""
 "גררו תיבת מידע על אחרת כדי להחליף ביניהן. החזיקו תיבה והרימו כדי לבחור אחרת"
 " לאותו מקום."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter לוקח את תיבת המידע הנבחרת, הזיזו אותה בחצים ולחצו Enter שוב כדי להניח"
-". Enter פעמיים בלי הזזה בוחר תיבה אחרת לאותו מקום."
-
 msgid "Arrange InfoBoxes"
 msgstr "סידור תיבות המידע"
 
@@ -12660,6 +12632,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "האם להעלות טיסה זו ל-%s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "ניתן להעלות ל־%s קבצי .igc בלבד."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "שואל האם להעלות את הטיסה ל-%s לאחר שהטיסה הורדה מלוגר חיצוני."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "כוון את המצלמה לקוד QR של משימה"
 
@@ -12677,22 +12715,3 @@ msgstr "לא ניתן להפעיל את תצוגת המצלמה"
 
 msgid "Camera not usable"
 msgstr "לא ניתן להשתמש במצלמה"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

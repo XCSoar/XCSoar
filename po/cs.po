@@ -413,10 +413,6 @@ msgstr "Logger je prázdný."
 msgid "Failed to download flight."
 msgstr "Nepodařilo se stáhnout let."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Chcete nahrát tento let na WeGlide?"
-
 msgid "Do you want to download another flight?"
 msgstr "Chcete stáhnout jiný let?"
 
@@ -1124,10 +1120,6 @@ msgstr "InfoBoxy"
 #, no-c-format
 msgid "Pages"
 msgstr "Stránky"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Kluzák"
 
 #, no-c-format
 msgid "Weather"
@@ -4776,12 +4768,6 @@ msgstr "Ve Správci úloh umožňuje stažení deklarovaných úloh z WeGlide."
 msgid "Automatic Upload"
 msgstr "Automatický upload"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Po stažení letu z externího loggeru se zeptá, zda nahrát let na WeGlide."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "Použijte údaje ze svého účtu WeGlide. Pokud nepoužíváte, zadejte 0."
 
@@ -5455,16 +5441,6 @@ msgstr "Výška GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Alt GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Výška nad střední hladinou moře dle GPS. V režimu simulace je tato hodnota "
-"nastavitelná pomocí kláves nahoru/dolů; klávesy doprava/doleva mění směr "
-"letu kluzáku (Pouze doteková obrazovka/PC)."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8486,9 +8462,6 @@ msgid ""
 msgstr ""
 "WeGlide není nakonfigurován. Nastavte ID pilota a datum narození v "
 "nastavení."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide lze nahrát pouze soubory .igc."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12666,11 +12639,6 @@ msgstr ""
 "Přetáhněte InfoBox na jiný a oba se vymění. Podržte InfoBox a zvedněte ho, "
 "abyste pro tu pozici vybrali jiný."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter vezme vybraný InfoBox, šipkami ho přesuňte a dalším Enter ho položíte"
-". Dvojí Enter bez pohybu vybere pro tu pozici jiný InfoBox."
-
 msgid "Arrange InfoBoxes"
 msgstr "Uspořádat InfoBoxy"
 
@@ -12724,6 +12692,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Chcete nahrát tento let na %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Na %s lze nahrát pouze soubory .igc."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Po stažení letu z externího loggeru se zeptá, zda nahrát let na %s."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Namiřte fotoaparát na QR kód úlohy"
 
@@ -12741,22 +12775,3 @@ msgstr "Nelze spustit náhled fotoaparátu"
 
 msgid "Camera not usable"
 msgstr "Fotoaparát nelze použít"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

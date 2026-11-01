@@ -419,10 +419,6 @@ msgstr "Данные отсутствуют"
 msgid "Failed to download flight."
 msgstr "Ошибка загрузки полета"
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Хотите загрузить другой полет?"
-
 msgid "Do you want to download another flight?"
 msgstr "Хотите загрузить другой полет?"
 
@@ -1130,10 +1126,6 @@ msgstr "Настройки ИнфоБоксов"
 #, no-c-format
 msgid "Pages"
 msgstr "Страницы"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Планер"
 
 #, no-c-format
 msgid "Weather"
@@ -4808,13 +4800,6 @@ msgstr "Разрешить загрузку объявленных задани�
 msgid "Automatic Upload"
 msgstr "Автозагрузка"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Запросить разрешение на загрузку полета на WeGlide после его загрузки с "
-"внешнего логгера."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Извлеките это из своего профиля WeGlide. Или установите в 0, если не "
@@ -5503,17 +5488,6 @@ msgstr "Высота GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Высота GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Это высота над уровнем моря, получаемая от GPS. Только сенсорные экраны/PC : "
-"В режиме симуляции, это значение можно регулировать с помощью клавиш со "
-"стрелками вверх / вниз и клавиш со стрелками влево / вправо также можно "
-"повернуть планер."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8586,9 +8560,6 @@ msgid ""
 "WeGlide is not configured. Please set your pilot ID and birthdate in the "
 "settings."
 msgstr "WeGlide не настроен. Укажите ID пилота и дату рождения в настройках."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "На WeGlide можно загружать только файлы .igc."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12801,12 +12772,6 @@ msgstr ""
 "Перетащите инфобокс на другой, чтобы поменять их местами. Удерживайте инфоб"
 "окс и поднимите, чтобы выбрать другой на это место."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter берёт выбранный инфобокс, стрелками его перемещают, и Enter снова кла"
-"дёт его. Дважды Enter без перемещения выбирает другой инфобокс на это место"
-"."
-
 msgid "Arrange InfoBoxes"
 msgstr "Расположить инфобоксы"
 
@@ -12860,6 +12825,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Загрузить этот полёт на %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "На %s можно загружать только файлы .igc."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Запросить разрешение на загрузку полета на %s после его загрузки с внешнего логгера."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Наведите камеру на QR-код задания"
 
@@ -12877,22 +12908,3 @@ msgstr "Не удаётся запустить предпросмотр каме
 
 msgid "Camera not usable"
 msgstr "Камера непригодна для использования"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

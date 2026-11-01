@@ -416,10 +416,6 @@ msgstr "Loggern är tom."
 msgid "Failed to download flight."
 msgstr "Nedladdning av flygning misslyckades."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Ladda upp flyget till WeGlide?"
-
 msgid "Do you want to download another flight?"
 msgstr "Vill du ladda ner ytterligare flygningar?"
 
@@ -1127,10 +1123,6 @@ msgstr "Info-rutor uppsättning"
 #, no-c-format
 msgid "Pages"
 msgstr "Sidor"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Segelflygplan"
 
 #, no-c-format
 msgid "Weather"
@@ -4738,13 +4730,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "Automatisk uppladdning"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Frågar om flödet ska laddas upp till WeGlide efter att det har laddats ner "
-"från en extern loggare."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "Använd värde från din WeGlide profil. Eller sätt 0 om ej använd."
 
@@ -5414,16 +5399,6 @@ msgstr "Höjd GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Alt GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"Detta höjden över medelhavsnivån(MSL) enligt GPS. (Endast Pekskärm/PC: Under "
-"simulering kan detta värdet justeras med up/ner piltangenter, höger/vänster "
-"svänger segelplanet)."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8468,9 +8443,6 @@ msgid ""
 msgstr ""
 "WeGlide är inte konfigurerat. Ange pilot-ID och födelsedatum i "
 "inställningarna."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Endast .igc-filer kan laddas upp till WeGlide."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12664,12 +12636,6 @@ msgstr ""
 "Dra en info-ruta till en annan för att byta dem. Håll en info-ruta och lyft"
 " för att välja en annan för den platsen."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter tar vald info-ruta, flytta den med piltangenterna och tryck Enter ige"
-"n för att lägga ner den. Två gånger Enter utan att flytta väljer en annan i"
-"nfo-ruta för platsen."
-
 msgid "Arrange InfoBoxes"
 msgstr "Ordna info-rutor"
 
@@ -12723,6 +12689,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Ladda upp flyget till %s?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Endast .igc-filer kan laddas upp till %s."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Frågar om flödet ska laddas upp till %s efter att det har laddats ner från en extern loggare."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Rikta kameran mot en uppgifts-QR-kod"
 
@@ -12740,22 +12772,3 @@ msgstr "Kan inte starta kameravyn"
 
 msgid "Camera not usable"
 msgstr "Kameran går inte att använda"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

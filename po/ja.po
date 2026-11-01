@@ -415,10 +415,6 @@ msgstr "航跡がありません"
 msgid "Failed to download flight."
 msgstr "航跡ダウンロード失敗"
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "他のフライトログをダウンロードしますか？"
-
 msgid "Do you want to download another flight?"
 msgstr "他のフライトログをダウンロードしますか？"
 
@@ -1142,10 +1138,6 @@ msgstr "インフォボックス　設定"
 #, no-c-format
 msgid "Pages"
 msgstr "ページ"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "グライダー"
 
 #, no-c-format
 msgid "Weather"
@@ -4817,13 +4809,6 @@ msgstr "Task ManagerでWeGlideから宣言されたタスクのダウンロー�
 msgid "Automatic Upload"
 msgstr "自動アップロード"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"フライトをWeGlideにアップロードするかどうかを確認します。外部レコーダーからフ"
-"ライトがダウンロードされた後に行います。"
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "この項目はあなたのWeGlideプロフィールから取得します。使用しない場合は0に設定"
@@ -5489,16 +5474,6 @@ msgstr "GPS 高度"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS　高度"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"標準海面からのGPSが計測した標高。\n"
-"シュミレーターモードの場合UP/down矢印で高度を。right/leftキーで方向を操作する"
-"ことができます"
 
 #, no-c-format
 msgid "Height AGL"
@@ -8590,9 +8565,6 @@ msgid ""
 "WeGlide is not configured. Please set your pilot ID and birthdate in the "
 "settings."
 msgstr "WeGlide が設定されていません。設定でパイロット ID と生年月日を設定してください。"
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "WeGlide には .igc ファイルのみアップロードできます。"
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12611,11 +12583,6 @@ msgstr "その他"
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr "情報表示を別の上へドラッグすると入れ替わります。長押しして持ち上げると、その位置の別の情報表示を選べます。"
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Enter で選んだ情報表示を取り、カーソルキーで動かし、もう一度 Enter で置きます。動かさずに Enter を二度押すと、その位置の別の情報表"
-"示を選びます。"
-
 msgid "Arrange InfoBoxes"
 msgstr "情報表示の配置"
 
@@ -12663,6 +12630,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "このフライトを%sにアップロードしますか？"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "%s には .igc ファイルのみアップロードできます。"
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "フライトを%sにアップロードするかどうかを確認します。外部レコーダーからフライトがダウンロードされた後に行います。"
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "タスクのQRコードにカメラを向けてください"
 
@@ -12680,22 +12713,3 @@ msgstr "カメラのプレビューを開始できません"
 
 msgid "Camera not usable"
 msgstr "カメラを使用できません"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

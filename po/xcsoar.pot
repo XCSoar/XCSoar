@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-18 20:54+0200\n"
+"POT-Creation-Date: 2026-10-31 13:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -444,8 +444,8 @@ msgstr ""
 msgid "Failed to download flight."
 msgstr ""
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
+#, c-format
+msgid "Do you want to upload this flight to %s?"
 msgstr ""
 
 msgid "Do you want to download another flight?"
@@ -1141,7 +1141,30 @@ msgid "Your Position"
 msgstr ""
 
 #, no-c-format
+msgctxt "Observation"
+msgid "XCSoar"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "Cloud"
+msgstr ""
+
+#, no-c-format
+msgctxt "Observation"
+msgid "SkyLines"
+msgstr ""
+
+#, no-c-format
+msgid "Thermal Information Map"
+msgstr ""
+
+#, no-c-format
 msgid "Thermal"
+msgstr ""
+
+#, c-format
+msgid "%s ago"
 msgstr ""
 
 msgid "Avg. lift"
@@ -2476,6 +2499,12 @@ msgstr ""
 msgid "Loading Terrain File..."
 msgstr ""
 
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Flight"
+msgstr ""
+
 msgid "Initialising"
 msgstr ""
 
@@ -2577,10 +2606,6 @@ msgstr ""
 
 #, no-c-format
 msgid "Pages"
-msgstr ""
-
-#, no-c-format
-msgid "WeGlide"
 msgstr ""
 
 #. Important: all pages after Units in this list must not have data fields that are
@@ -2769,14 +2794,33 @@ msgid ""
 "Failed %u."
 msgstr ""
 
-msgid "WeGlide is not configured. Please set your pilot ID and birthdate in the settings."
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
 msgstr ""
 
-msgid "Only .igc files can be uploaded to WeGlide."
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "No current contest entry."
+msgstr ""
+
+msgid "WeGlide is not configured. Please set your pilot ID and birthdate in the settings."
 msgstr ""
 
 #, c-format
 msgid "Uploaded %u file(s)"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
 msgstr ""
 
 #, no-c-format
@@ -3270,7 +3314,7 @@ msgstr ""
 msgid "Whether you use a K6Bt to connect the device."
 msgstr ""
 
-#, c-format
+#, no-c-format
 msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
 msgstr ""
 
@@ -3887,6 +3931,13 @@ msgstr ""
 msgid "Failed to update airspace clearance"
 msgstr ""
 
+msgid "Source"
+msgstr ""
+
+#, no-c-format
+msgid "Time"
+msgstr ""
+
 msgid "Map elements at this location"
 msgstr ""
 
@@ -3930,6 +3981,27 @@ msgid ""
 msgstr ""
 
 msgid "[Invalid text]"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
 msgstr ""
 
 msgid "Squawk code"
@@ -4325,10 +4397,6 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#, no-c-format
-msgid "Thermal Information Map"
-msgstr ""
-
 #. Before Units: audio vario deadband uses vertical-speed units.
 #, no-c-format
 msgid "Audio"
@@ -4670,9 +4738,6 @@ msgstr ""
 msgid "WeGlide Aircraft"
 msgstr ""
 
-msgid "Download"
-msgstr ""
-
 msgid "Select WeGlide Type"
 msgstr ""
 
@@ -4755,9 +4820,6 @@ msgid "WiFi"
 msgstr ""
 
 msgid "Switch InfoBox"
-msgstr ""
-
-msgid "Flight"
 msgstr ""
 
 msgid "Name of file to replay. May be an IGC file (.igc) or a raw NMEA log file (.nmea). Leave blank to run the demo."
@@ -6724,6 +6786,14 @@ msgid "List of additional user repository URIs, separated by '|' character."
 msgstr ""
 
 #, no-c-format
+msgctxt "Setting"
+msgid "Auto update"
+msgstr ""
+
+msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
+msgstr ""
+
+#, no-c-format
 msgid "Disable display of ground track line."
 msgstr ""
 
@@ -7645,10 +7715,11 @@ msgstr ""
 msgid "Allow download of declared tasks from Weglide in the Task Manager."
 msgstr ""
 
-msgid "Automatic Upload"
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
 msgstr ""
 
-msgid "Asks whether to upload flight to Weglide, after flight is downloaded from external logger."
+msgid "Automatic Upload"
 msgstr ""
 
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
@@ -7957,11 +8028,6 @@ msgid "Modified"
 msgstr ""
 
 msgid "Local date and time of the selected RASP file."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "Auto update"
 msgstr ""
 
 msgid "Automatically download a newer RASP file when the configured forecast is missing or out of date."
@@ -8346,6 +8412,12 @@ msgid "Deadband max. lift"
 msgstr ""
 
 msgid "Above this lift threshold the vario will start to play sounds if the 'Deadband' feature is enabled."
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Sign-in was denied."
 msgstr ""
 
 #, no-c-format
@@ -8800,6 +8872,9 @@ msgstr ""
 msgid "No file matches the filter."
 msgstr ""
 
+msgid "Data files have been updated"
+msgstr ""
+
 msgid "No METAR available"
 msgstr ""
 
@@ -9064,7 +9139,7 @@ msgid "Alt GPS"
 msgstr ""
 
 #, no-c-format
-msgid "Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In simulation mode, this value is adjustable with the up/down arrow keys; the right/left arrow keys cause the glider to turn."
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
 msgstr ""
 
 #, no-c-format
@@ -10574,10 +10649,6 @@ msgid "Wind and weather"
 msgstr ""
 
 #, no-c-format
-msgid "Time"
-msgstr ""
-
-#, no-c-format
 msgid "Airspace and team"
 msgstr ""
 
@@ -10653,9 +10724,6 @@ msgstr ""
 msgid "Waiting"
 msgstr ""
 
-msgid "Open"
-msgstr ""
-
 msgid "Closed"
 msgstr ""
 
@@ -10706,7 +10774,7 @@ msgstr ""
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr ""
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
 msgstr ""
 
 msgid "Arrange InfoBoxes"
@@ -11424,31 +11492,6 @@ msgid ""
 "InfoBoxes"
 msgstr ""
 
-#, no-c-format
-msgctxt "Observation"
-msgid "XCSoar"
-msgstr ""
-
-#, no-c-format
-msgctxt "Observation"
-msgid "Cloud"
-msgstr ""
-
-#, no-c-format
-msgctxt "Observation"
-msgid "SkyLines"
-msgstr ""
-
-#, c-format
-msgid "%s ago"
-msgstr ""
-
-msgid "At startup, download a newer copy of each file already on this device. The progress bar shows the download."
-msgstr ""
-
-msgid "Data files have been updated"
-msgstr ""
-
 msgid "Point the camera at a task QR code"
 msgstr ""
 
@@ -11465,23 +11508,4 @@ msgid "Cannot start the camera preview"
 msgstr ""
 
 msgid "Camera not usable"
-msgstr ""
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
 msgstr ""

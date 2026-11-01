@@ -417,10 +417,6 @@ msgstr "A logger üres."
 msgid "Failed to download flight."
 msgstr "Hiba a repülés letöltésekor."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "Ennek a repülésnek a feltöltése WeGlide-ra?"
-
 msgid "Do you want to download another flight?"
 msgstr "Szeretne egy másik repülést letölteni?"
 
@@ -1128,10 +1124,6 @@ msgstr "InfóDoboz készletek"
 #, no-c-format
 msgid "Pages"
 msgstr "Oldalak"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "Vitorlázó repülő"
 
 #, no-c-format
 msgid "Weather"
@@ -4787,13 +4779,6 @@ msgstr ""
 msgid "Automatic Upload"
 msgstr "Automatikus feltöltés"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr ""
-"Kérdezi, hogy töltheti-e le a repülést a WeGlide-be, miután a külső "
-"loggerból letöltött."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr ""
 "Ezt használja a WeGlide Profiljából. Vagy állítsa 0-ra, ha nem használja."
@@ -5471,16 +5456,6 @@ msgstr "Magasság GPS"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "Mgsg GPS"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"A GPS által mért tengerszint feletti magasság. Szimulációs üzemmódban ez az "
-"érték a fel/le nyilakkal állítható, a jobb/bal nyilakkal pedig fordítani is "
-"lehet a gépet."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8542,9 +8517,6 @@ msgid ""
 msgstr ""
 "A WeGlide nincs beállítva. Állítsa be a pilótaazonosítót és a születési "
 "dátumot a beállításokban."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "A WeGlide-ra csak .igc fájlok tölthetők fel."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12772,12 +12744,6 @@ msgstr ""
 "Húzzon egy infódobozt egy másikra a cseréhez. Tartson egy infódobozt, és em"
 "elje fel, hogy másikat válasszon arra a helyre."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"Az Enter felveszi a kijelölt infódobozt, a kurzorbillentyűkkel mozgassa, és"
-" az Enter újra leteszi. Kétszeri Enter mozgatás nélkül más infódobozt válas"
-"zt arra a helyre."
-
 msgid "Arrange InfoBoxes"
 msgstr "Infódobozok elrendezése"
 
@@ -12831,6 +12797,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "Ennek a repülésnek a feltöltése %s-ra?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "A %s-ra csak .igc fájlok tölthetők fel."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "Kérdezi, hogy töltheti-e le a repülést a %s-be, miután a külső loggerból letöltött."
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "Irányítsa a kamerát egy feladat QR-kódjára"
 
@@ -12848,22 +12880,3 @@ msgstr "A kamera előnézete nem indítható el"
 
 msgid "Camera not usable"
 msgstr "A kamera nem használható"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

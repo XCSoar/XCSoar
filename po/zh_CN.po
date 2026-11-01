@@ -390,10 +390,6 @@ msgstr "记录器空。"
 msgid "Failed to download flight."
 msgstr "下载飞行失败。"
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "您想上传本次飞行到WeGlide？"
-
 msgid "Do you want to download another flight?"
 msgstr "您想下载另一个飞行？"
 
@@ -1101,10 +1097,6 @@ msgstr "信息框设置"
 #, no-c-format
 msgid "Pages"
 msgstr "页"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "滑翔机"
 
 #, no-c-format
 msgid "Weather"
@@ -4628,11 +4620,6 @@ msgstr "允许从WeGlide下载声明的任务到任务管理器中。"
 msgid "Automatic Upload"
 msgstr "自动上传"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr "下载飞行数据后询问是否上传至WeGlide。"
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "从您的WeGlide设置中获取或默认设置为0。"
 
@@ -5293,15 +5280,6 @@ msgstr "GPS高度"
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS高度"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"这是GPS报告的平均海平面以上的高度。触摸屏/只有PC：在模拟模式下，这个值可以用"
-"上下箭头进行调整。左/右箭头键也会导致滑翔机转向。"
 
 #, no-c-format
 msgid "Height AGL"
@@ -8221,9 +8199,6 @@ msgid ""
 "WeGlide is not configured. Please set your pilot ID and birthdate in the "
 "settings."
 msgstr "未配置 WeGlide。请在设置中填写飞行员 ID 和出生日期。"
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "只能向 WeGlide 上传 .igc 文件。"
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12220,9 +12195,6 @@ msgstr "其他"
 msgid "Drag an InfoBox onto another one to exchange the two.  Hold an InfoBox and lift to choose a different InfoBox for that position."
 msgstr "将一个信息框拖到另一个上即可互换。按住一个信息框并抬起，可为该位置另选信息框。"
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr "按 Enter 拿起所选信息框，用方向键移动，再按 Enter 放下。不移动而连按两次 Enter 会为该位置另选信息框。"
-
 msgid "Arrange InfoBoxes"
 msgstr "排列信息框"
 
@@ -12270,6 +12242,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "您想上传本次飞行到%s？"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "只能向 %s 上传 .igc 文件。"
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr "下载飞行数据后询问是否上传至%s。"
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "将相机对准任务二维码"
 
@@ -12287,22 +12325,3 @@ msgstr "无法启动相机预览"
 
 msgid "Camera not usable"
 msgstr "相机不可用"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""

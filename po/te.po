@@ -404,10 +404,6 @@ msgstr "లోగర్‌ కట్టుబడి తీవ్రమైనద�
 msgid "Failed to download flight."
 msgstr "ఫ్లాయ్థ్ డొన్‌లోడ్ చేయబడినది."
 
-#. ask whether this IGC should be uploaded to WeGlide
-msgid "Do you want to upload this flight to WeGlide?"
-msgstr "ఈ ఫ్లాయ్థ్‌ని WeGlide‌‌కు అప్లోడ్ చేయవటం లేదో?"
-
 msgid "Do you want to download another flight?"
 msgstr "మరొకస్టాను డొన్‌లోడ్ చేయవటం లేదో?"
 
@@ -1101,10 +1097,6 @@ msgstr "ఇనోఫ్స్‌బ౉క్‌ ఎట్స్"
 #, no-c-format
 msgid "Pages"
 msgstr "పాజెయర్‌లు"
-
-#, no-c-format
-msgid "WeGlide"
-msgstr "WeGlide"
 
 #, no-c-format
 msgid "Weather"
@@ -4670,11 +4662,6 @@ msgstr "వెబ్గ్లైడ్ టాస్క్‌లను తరగ�
 msgid "Automatic Upload"
 msgstr "స్వయంచాలక అప్‌లోడ్"
 
-msgid ""
-"Asks whether to upload flight to Weglide, after flight is downloaded from "
-"external logger."
-msgstr "వాహన దత్తాంశాన్ని వెబ్గ్లైడ్‌కు అందిస్తే కొన్ని ప్రశ్నలను చేయాలి."
-
 msgid "Take this from your WeGlide Profile. Or set to 0 if not used."
 msgstr "మీ WeGlide ప్రొఫైల్ నుండి ఇది తీసుకోండి. ఇటు ఉపయోగించనియు అయితే 0 కి నియమించండి."
 
@@ -5342,16 +5329,6 @@ msgstr "GPS అతిమధ్య సమాప్తి ఉపరితల ఉ�
 #, no-c-format
 msgid "Alt GPS"
 msgstr "GPS అతిమధ్య సమాప్తి"
-
-#, no-c-format
-msgid ""
-"Altitude above mean sea level reported by the GPS. (Touch-screen/PC only) In "
-"simulation mode, this value is adjustable with the up/down arrow keys; the "
-"right/left arrow keys cause the glider to turn."
-msgstr ""
-"GPS ద్వారా నివేదించబడిన సగటు సముద్ర మట్టానికి ఎత్తు. (టచ్-స్క్రీన్/PC "
-"మాత్రమే) సిమ్యులేషన్ మోడ్లో, ఈ విలువ అప్/డౌన్ బాణం కీలతో సర్దుబాటు "
-"చేయబడుతుంది; కుడి/ఎడమ బాణం కీలు గ్లైడర్ను తిప్పడానికి కారణమవుతాయి."
 
 #, no-c-format
 msgid "Height AGL"
@@ -8331,9 +8308,6 @@ msgid ""
 "settings."
 msgstr ""
 "WeGlide nije konfiguriran. సెట్te ID pilota i datum rođenja u సెట్టింగ్‌లు."
-
-msgid "Only .igc files can be uploaded to WeGlide."
-msgstr "Na WeGlide se mogu prenijeti samo .igc ఫైళ్లు."
 
 #, c-format
 msgid "Uploaded %u file(s)"
@@ -12545,12 +12519,6 @@ msgstr ""
 "రెండింటిని మార్చడానికి ఒక ఇన్‌ఫోబాక్స్‌ను మరోదానిపై లాగండి. ఆ స్థానానికి మర"
 "ోదాన్ని ఎంచుకోవడానికి పట్టి ఎత్తండి."
 
-msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Pressing Enter twice without moving an InfoBox chooses a different InfoBox for that position."
-msgstr ""
-"ఎంచుకున్న ఇన్‌ఫోబాక్స్‌ను తీసుకోవడానికి Enter, బాణపు కీలతో జరపండి, మళ్లీ En"
-"terతో ఉంచండి. కదపకుండా రెండుసార్లు Enter ఆ స్థానానికి మరో ఇన్‌ఫోబాక్స్‌ను ఎ"
-"ంచుకుంటుంది."
-
 msgid "Arrange InfoBoxes"
 msgstr "ఇన్‌ఫోబాక్స్‌లను అమర్చండి"
 
@@ -12604,6 +12572,72 @@ msgstr ""
 msgid "Data files have been updated"
 msgstr ""
 
+msgid "No current contest entry."
+msgstr ""
+
+
+msgid "Sign-in was denied."
+msgstr ""
+
+msgid "Unfinished flight detected. Restore flight settings?"
+msgstr ""
+
+msgid "Sharing is not available."
+msgstr ""
+
+#, no-c-format
+msgctxt "Button"
+msgid "Share"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "Starts"
+msgstr ""
+
+msgid "undefined"
+msgstr ""
+
+msgid "Ends"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "inactive"
+msgstr ""
+
+msgid ", dismissed"
+msgstr ""
+
+msgid ", enabled"
+msgstr ""
+
+#, c-format
+msgid "Do you want to upload this flight to %s?"
+msgstr "ఈ ఫ్లాయ్థ్‌ని %s‌‌కు అప్లోడ్ చేయవటం లేదో?"
+
+#, c-format
+msgid "Only .igc files can be uploaded to %s."
+msgstr "Na %s se mogu prenijeti samo .igc ఫైళ్లు."
+
+#, c-format
+msgid "Sign in from Services, %s."
+msgstr ""
+
+#, c-format
+msgid "Asks whether to upload flight to %s, after flight is downloaded from external logger."
+msgstr ""
+
+#, no-c-format
+msgid "Altitude above mean sea level reported by the GPS. Tap to open the altitude panel. In simulation mode that panel can change this altitude."
+msgstr ""
+
+msgid "Press Enter to take the selected InfoBox, move it with the cursor keys and press Enter again to put it down.  Hold Enter, or press it twice without moving, to choose a different InfoBox for that position."
+msgstr ""
+
+
 msgid "Point the camera at a task QR code"
 msgstr "కెమెరాను టాస్క్ QR కోడ్ వైపు చూపండి"
 
@@ -12621,22 +12655,3 @@ msgstr "కెమెరా ప్రివ్యూను ప్రారంభ�
 
 msgid "Camera not usable"
 msgstr "కెమెరా ఉపయోగించలేనిది"
-
-msgid "SoaringScoring"
-msgstr ""
-
-
-msgid "Sign in from Services, SoaringScoring."
-msgstr ""
-
-
-msgid "Only .igc files can be uploaded."
-msgstr ""
-
-
-msgid "No current contest entry."
-msgstr ""
-
-
-msgid "Sign-in was denied."
-msgstr ""
