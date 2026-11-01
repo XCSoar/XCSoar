@@ -184,7 +184,7 @@ SoaringScoringTasksPanel::ReloadList() noexcept
         GetList().SetCursorIndex(tasks.suggested);
       UpdateButtons();
     },
-    [this](std::exception_ptr error) {
+    [](std::exception_ptr error) {
       ShowError(error, "SoaringScoring");
     });
 }
