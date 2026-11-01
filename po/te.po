@@ -12621,3 +12621,6 @@ msgstr "కెమెరా ప్రివ్యూను ప్రారంభ�
 
 msgid "Camera not usable"
 msgstr "కెమెరా ఉపయోగించలేనిది"
+
+msgid "NO AHRS"
+msgstr "AHRS లేదు"

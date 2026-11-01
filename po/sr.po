@@ -12774,3 +12774,6 @@ msgstr "Није могуће покренути преглед камере"
 
 msgid "Camera not usable"
 msgstr "Камера се не може користити"
+
+msgid "NO AHRS"
+msgstr "NO AHRS"

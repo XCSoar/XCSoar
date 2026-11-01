@@ -12812,3 +12812,6 @@ msgstr "Nepavyksta paleisti kameros peržiūros"
 
 msgid "Camera not usable"
 msgstr "Kamera netinkama naudoti"
+
+msgid "NO AHRS"
+msgstr "Nėra AHRS"

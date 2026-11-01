@@ -16,6 +16,7 @@ KOBO_MENU_SOURCES = \
 	$(SRC)/Renderer/TwoTextRowsRenderer.cpp \
 	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \

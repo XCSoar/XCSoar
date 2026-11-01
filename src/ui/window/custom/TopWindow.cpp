@@ -200,6 +200,11 @@ TopWindow::DrawRedrawCounter(Canvas &canvas) noexcept
 {
   using namespace std::chrono;
 
+#ifdef ENABLE_OPENGL
+  /* Snapshot before this overlay's own rectangles and text. */
+  const unsigned draws_this_frame = OpenGL::frame_draw_calls;
+#endif
+
   ++redraw_count;
   ++hz_window_frames;
 
@@ -217,18 +222,23 @@ TopWindow::DrawRedrawCounter(Canvas &canvas) noexcept
     hz_window_frames = 0;
   }
 
-  static Font font;
-  if (!font.IsDefined()) {
+  /* Leaked on purpose.  A function-local Font is destroyed after the
+     screen has gone, and Font::Destroy() then asserts. */
+  static Font *font;
+  if (font == nullptr) {
+    font = new Font();
     try {
-      font.Load(FontDescription(Layout::FontScale(12)));
+      font->Load(FontDescription(Layout::FontScale(12)));
     } catch (...) {
+      delete font;
+      font = nullptr;
       return;
     }
   }
 
   const auto text = fmt::format("R:{}  {:.1f}/s",
                                 redraw_count, redraw_hz);
-  const PixelSize text_size = font.TextSize(text);
+  const PixelSize text_size = font->TextSize(text);
   const int pad = Layout::Scale(2);
   const PixelRect box{
     pad,
@@ -237,11 +247,27 @@ TopWindow::DrawRedrawCounter(Canvas &canvas) noexcept
     pad + int(text_size.height) + pad * 2,
   };
 
-  canvas.DrawFilledRectangle(box, COLOR_WHITE);
-  canvas.Select(font);
+  canvas.Select(*font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(COLOR_WHITE);
+
+  canvas.DrawFilledRectangle(box, COLOR_WHITE);
   canvas.DrawText({box.left + pad, box.top + pad}, text);
+
+#ifdef ENABLE_OPENGL
+  const auto draws = fmt::format("D:{}", draws_this_frame);
+  const PixelSize draw_size = font->TextSize(draws);
+  const int draw_w = int(draw_size.width) + pad * 2;
+  const int draw_left = int(canvas.GetWidth()) - pad - draw_w;
+  const PixelRect draw_box{
+    draw_left,
+    pad,
+    draw_left + draw_w,
+    pad + int(draw_size.height) + pad * 2,
+  };
+  canvas.DrawFilledRectangle(draw_box, COLOR_WHITE);
+  canvas.DrawText({draw_box.left + pad, draw_box.top + pad}, draws);
+#endif
 }
 
 #endif
@@ -261,6 +287,9 @@ TopWindow::Expose() noexcept
 #endif
 
   if (auto canvas = screen->Lock(); canvas.IsDefined()) {
+#if defined(ENABLE_OPENGL) && defined(DRAW_REDRAW_COUNTER)
+    OpenGL::frame_draw_calls = 0;
+#endif
 #if defined(ANDROID) || (defined(__APPLE__) && TARGET_OS_IPHONE)
     /* On a device with a display cutout or system bars, XCSoar does
        not necessarily paint every pixel: the user interface may be

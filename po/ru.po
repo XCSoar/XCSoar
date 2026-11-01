@@ -12877,3 +12877,6 @@ msgstr "Не удаётся запустить предпросмотр каме
 
 msgid "Camera not usable"
 msgstr "Камера непригодна для использования"
+
+msgid "NO AHRS"
+msgstr "Нет AHRS"

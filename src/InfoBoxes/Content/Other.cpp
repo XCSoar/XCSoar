@@ -18,6 +18,8 @@
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
+#include "PageActions.hpp"
+#include "UIState.hpp"
 
 #ifdef HAVE_BATTERY
 #include "Hardware/PowerInfo.hpp"
@@ -241,12 +243,10 @@ void
 InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
                                      const PixelRect &rc) noexcept
 {
-  const auto &attitude = CommonInterface::Basic().attitude;
-  if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-    return;
-
   const Look &look = UIGlobals::GetLook();
-  HorizonRenderer::Draw(canvas, rc, look.horizon, attitude);
+  const auto &basic = CommonInterface::Basic();
+  HorizonRenderer::Draw(canvas, rc, look.horizon, basic.attitude,
+                        HorizonRenderer::Readout(basic));
 }
 
 void
@@ -257,11 +257,26 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
   if (!basic.attitude.bank_angle_available &&
       !basic.attitude.pitch_angle_available) {
     data.SetInvalid();
+    data.SetComment(_("NO AHRS"));
     return;
   }
 
+  data.SetCommentInvalid();
   data.SetCustom(basic.attitude.bank_angle_available.ToInteger() +
                  basic.attitude.pitch_angle_available.ToInteger());
+}
+
+bool
+InfoBoxContentHorizon::HandleClick() noexcept
+{
+  const auto &pages = CommonInterface::GetUIState().pages;
+  if (pages.special_page.IsDefined() &&
+      pages.special_page.main == PageLayout::Main::HORIZON)
+    PageActions::Restore();
+  else
+    PageActions::ShowHorizon();
+
+  return true;
 }
 
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp

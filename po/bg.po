@@ -12900,3 +12900,6 @@ msgstr "Прегледът от камерата не може да се ста�
 
 msgid "Camera not usable"
 msgstr "Камерата не може да се използва"
+
+msgid "NO AHRS"
+msgstr "NO AHRS"

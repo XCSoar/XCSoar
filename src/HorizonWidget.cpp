@@ -11,6 +11,9 @@
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
+#include "Components.hpp"
+#include "DataComponents.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -20,6 +23,8 @@ class HorizonWindow : public AntiFlickerWindow {
   const bool& inverse;
 
   AttitudeState attitude;
+  HorizonRenderer::HorizonReadout readout;
+  HorizonRenderer::HorizonTerrain ground;
 
   GestureManager gestures;
   bool dragging = false;
@@ -34,8 +39,25 @@ public:
     attitude.Reset();
   }
 
-  void ReadBlackboard(const AttitudeState _attitude) noexcept {
-    attitude = _attitude;
+  void ReadBlackboard(const MoreData &basic) noexcept {
+    attitude = basic.attitude;
+    readout = HorizonRenderer::Readout(basic);
+    ground = {};
+    const bool heading = basic.attitude.heading_available ||
+                         basic.track_available;
+    if (basic.location_available && basic.NavAltitudeAvailable() &&
+        heading && data_components != nullptr &&
+        data_components->terrain != nullptr) {
+      ground.terrain = data_components->terrain.get();
+      ground.location = basic.location;
+      ground.heading = basic.attitude.heading_available
+        ? basic.attitude.heading
+        : basic.track;
+      ground.altitude = basic.nav_altitude;
+      ground.valid = true;
+      /* Load the tiles the view will sample.  Paint must not do this. */
+      ground.terrain->UpdateTiles(ground.location, 60000);
+    }
     Invalidate();
   }
 
@@ -56,11 +78,8 @@ protected:
     else
       canvas.ClearWhite();
 
-    if (!attitude.bank_angle_available && !attitude.pitch_angle_available)
-      // TODO: paint "no data" hint
-      return;
-
-    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
+    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude,
+                          readout, ground);
   }
 
   /* virtual methods from Window */
@@ -133,7 +152,7 @@ void
 HorizonWidget::Update(const MoreData &basic) noexcept
 {
   HorizonWindow &w = (HorizonWindow &)GetWindow();
-  w.ReadBlackboard(basic.attitude);
+  w.ReadBlackboard(basic);
   w.Invalidate();
 }
 

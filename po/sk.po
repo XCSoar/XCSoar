@@ -12792,3 +12792,6 @@ msgstr "Náhľad fotoaparátu sa nedá spustiť"
 
 msgid "Camera not usable"
 msgstr "Fotoaparát sa nedá použiť"
+
+msgid "NO AHRS"
+msgstr "Bez AHRS"

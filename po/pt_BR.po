@@ -12866,3 +12866,6 @@ msgstr "Não é possível iniciar a visualização da câmera"
 
 msgid "Camera not usable"
 msgstr "Câmera não utilizável"
+
+msgid "NO AHRS"
+msgstr "Sem AHRS"

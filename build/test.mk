@@ -87,7 +87,7 @@ TEST_NAMES = \
 	TestMathTables \
 	TestAngle TestARange \
 	TestGrahamScan \
-	TestUnits TestEarth TestSunEphemeris \
+	TestUnits TestHorizonReadout TestEarth TestSunEphemeris \
 	TestValidity TestUTM TestSwitchState \
 	TestWaypointReachability TestWaypointElevation TestBackupPaths \
 	TestTarArchive \
@@ -99,6 +99,7 @@ TEST_NAMES = \
 	TestEumetviewEnhance \
 	TestLogger TestGPSDeviceName TestGLoadSample TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
+	TestBasicComputer \
 	TestVarioSynthesiser TestAudioVario \
 	TestWaypointReader TestThermalBase \
 	TestSpeedVector \
@@ -939,6 +940,20 @@ TEST_CIRCLING_WIND_SOURCES = \
 TEST_CIRCLING_WIND_DEPENDS = LIBNMEA GEO MATH UTIL TIME FMT UNITS
 $(eval $(call link-program,TestCirclingWind,TEST_CIRCLING_WIND))
 
+TEST_BASIC_COMPUTER_SOURCES = \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/FilteredVarioComputer.cpp \
+	$(SRC)/Computer/GroundSpeedComputer.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/Util/VarioOutputFilter.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestBasicComputer.cpp
+TEST_BASIC_COMPUTER_DEPENDS = LIBNMEA GEO MATH UTIL UNITS TIME
+$(eval $(call link-program,TestBasicComputer,TEST_BASIC_COMPUTER))
+
 TEST_FILTERED_VARIO_COMPUTER_SOURCES = \
 	$(SRC)/Atmosphere/AirDensity.cpp \
 	$(SRC)/Computer/FilteredVarioComputer.cpp \
@@ -964,6 +979,14 @@ TEST_UNITS_SOURCES = \
 	$(TEST_SRC_DIR)/TestUnits.cpp
 TEST_UNITS_DEPENDS = MATH UNITS
 $(eval $(call link-program,TestUnits,TEST_UNITS))
+
+TEST_HORIZON_READOUT_SOURCES = \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHorizonReadout.cpp
+TEST_HORIZON_READOUT_DEPENDS = MATH UNITS
+$(eval $(call link-program,TestHorizonReadout,TEST_HORIZON_READOUT))
 
 TEST_UNITS_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/Units.cpp \
@@ -2962,14 +2985,46 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Look/HorizonLook.cpp \
+	$(SRC)/Look/AutoFont.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
+	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
 	$(SRC)/Renderer/RadarRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
-RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
+RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS THREAD MATH UTIL TERRAIN GEO ZZIP IO
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
+
+RUN_TERRAIN_VIEW_SOURCES = \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(MORE_SCREEN_SOURCES) \
+	$(SRC)/Version.cpp \
+	$(SRC)/system/StandardVersion.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(SRC)/time/Convert.cxx \
+	$(SRC)/time/LocalTime.cpp \
+	$(SRC)/time/BrokenDate.cpp \
+	$(SRC)/time/BrokenDateTime.cpp \
+	$(SRC)/time/BrokenTime.cpp \
+	$(SRC)/time/Zone.cxx \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Radio/RadioFrequency.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/RunTerrainView.cpp
+RUN_TERRAIN_VIEW_DEPENDS = FORM OS THREAD MATH UTIL TERRAIN OPERATION TOPO GEO SCREEN EVENT ASYNC RESOURCE AIRSPACE IO UNITS ZZIP
+$(eval $(call link-program,RunTerrainView,RUN_TERRAIN_VIEW))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
@@ -3028,6 +3083,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
@@ -3044,6 +3100,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Look/CheckBoxLook.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Renderer/WarningRibbonRenderer.cpp \
 	$(SRC)/Dialogs/ProgressDialog.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \

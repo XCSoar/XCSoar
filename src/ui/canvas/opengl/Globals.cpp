@@ -29,6 +29,10 @@ glm::mat4 projection_matrix;
 
 unsigned max_map_scale;
 
+#ifdef DRAW_REDRAW_COUNTER
+unsigned frame_draw_calls;
+#endif
+
 #ifndef NDEBUG
 #ifdef _WIN32
 DWORD thread;
