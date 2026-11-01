@@ -10,6 +10,10 @@
 #
 # Requires PROJECT_TOKEN secret (PAT with project scope).
 # GITHUB_TOKEN cannot write to organization projects.
+#
+# Uses pull_request_target, because a pull_request run from a fork gets
+# no secrets.  Safe: nothing from the pull request is checked out, and
+# its body reaches the shell only through PR_BODY.
 ---
 name: Sync Overview project status
 
@@ -18,7 +22,7 @@ permissions: {}
 on:
   issues:
     types: [milestoned, closed]
-  pull_request:
+  pull_request_target:
     types: [opened, edited]
 
 env:
@@ -138,7 +142,7 @@ jobs:
           fi
 
       - name: PR linked → In Progress
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request_target'
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
