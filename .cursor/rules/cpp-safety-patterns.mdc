@@ -119,7 +119,7 @@ When the same value is expressed differently in different files (e.g., `36.1` vs
 
 ## Screen resources outlive the screen
 
-A `Font`, `Bitmap`, `Pen`, or `Brush` must not be a function-local `static`. Its destructor runs after the screen is gone, and `Destroy()` asserts `IsScreenInitialized()`, so quit aborts. The text cache may still key a `Font` by address: keep that object in something destroyed while the screen is up, or leak it on purpose.
+A `Font` or `Bitmap` must not be a function-local `static`. `~Font` calls `Destroy()` (AppKit and UIKit have no `Font` destructor) and `~Bitmap` calls `Reset()`, and both assert `IsScreenInitialized()`, so quit aborts. `Pen` and `Brush` do not. The text cache may still key a `Font` by address: keep that object in something destroyed while the screen is up, or leak it on purpose.
 
 ```cpp
 // BAD: ~Font runs after FreeType and the screen are gone
