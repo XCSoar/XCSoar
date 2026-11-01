@@ -11,6 +11,7 @@ IconLook::Initialise()
   hBmpTabWrench.LoadResource(IDB_WRENCH_ALL);
   hBmpTabSettings.LoadResource(IDB_SETTINGS_ALL);
   hBmpTabWeGlide.LoadResource(IDB_WEGLIDE_ALL);
+  hBmpTabSoaringScoring.LoadResource(IDB_SOARINGSCORING_ALL);
   hBmpTabCalculator.LoadResource(IDB_CALCULATOR_ALL);
 
   hBmpTabFlight.LoadResource(IDB_GLOBE_ALL);
