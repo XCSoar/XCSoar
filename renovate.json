@@ -21,6 +21,9 @@
   ],
   "minimumReleaseAge": "3 days",
   "separateMajorMinor": true,
+  "git-submodules": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "description": "Bundled libraries in libs.py (monthly, one PR per library)",
@@ -68,6 +71,22 @@
       "description": "Patch updates bypass minimum release age",
       "matchUpdateTypes": ["patch"],
       "minimumReleaseAge": null
+    },
+    {
+      "description": "Git submodules: only android/ioio is tracked",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["!android/ioio"],
+      "enabled": false
+    },
+    {
+      "description": "android/ioio follows ytai/ioio master, which has no releases. Each update needs a test with an IOIO board, so it is only listed in the Dependency Dashboard and opened from there",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["android/ioio"],
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "android/ioio:",
+      "commitMessageTopic": "to ytai/ioio",
+      "commitMessageExtra": "{{{newDigestShort}}}"
     }
   ],
   "customManagers": [
