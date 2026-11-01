@@ -34,13 +34,16 @@
 #include "LogFile.hpp"
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "util/Exception.hxx"
+#include "util/StaticString.hxx"
 
 #ifdef HAVE_HTTP
 #include "Dialogs/CoFunctionDialog.hpp"
+#include "Dialogs/DataManagement/ExportFlightsPanel.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "Operation/ProgressListener.hpp"
 #include "co/InvokeTask.hxx"
 #include "net/client/FlarmHub/Client.hpp"
+#include "net/client/SoaringScoring/Account.hpp"
 #include "net/http/Init.hpp"
 #endif
 
@@ -581,14 +584,27 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
     WeGlideSettings weglide_settings =
       CommonInterface::GetComputerSettings().weglide;
+    // %s is the service name and is not translated.
+    StaticString<256> question;
     if (weglide_settings.enabled && weglide_settings.automatic_upload &&
       weglide_settings.pilot_id > 0) {
-      // ask whether this IGC should be uploaded to WeGlide
-      if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-        _("Upload Flight"), MB_YESNO | MB_ICONQUESTION) == IDYES) {
+      question.Format(_("Do you want to upload this flight to %s?"),
+                      "WeGlide");
+      if (ShowMessageBox(question.c_str(), _("Upload Flight"),
+                         MB_YESNO | MB_ICONQUESTION) == IDYES)
         WeGlide::UploadIGCFile(igc_path);
-      }
     }
+
+#ifdef HAVE_HTTP
+    if (SoaringScoring::AccountConnected() &&
+        SoaringScoring::AutomaticUpload()) {
+      question.Format(_("Do you want to upload this flight to %s?"),
+                      "SoaringScoring");
+      if (ShowMessageBox(question.c_str(), _("Upload Flight"),
+                         MB_YESNO | MB_ICONQUESTION) == IDYES)
+        UploadSoaringScoringIgc(igc_path);
+    }
+#endif
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
                     _("Download flight"), MB_YESNO | MB_ICONQUESTION) != IDYES)

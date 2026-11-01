@@ -13,9 +13,6 @@ public:
   enum Pages {
     PAGE_ACTIONS,
     PAGE_LIST,
-#ifdef HAVE_HTTP
-    PAGE_SOARING_SCORING,
-#endif
   };
 
   TaskMiscPanel(TaskManagerDialog &dialog,

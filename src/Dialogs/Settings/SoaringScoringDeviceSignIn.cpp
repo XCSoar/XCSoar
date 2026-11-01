@@ -258,7 +258,7 @@ bool
 RunSoaringScoringDeviceSignIn() noexcept
 {
   if (Net::curl == nullptr) {
-    ShowMessageBox(_("Error"), _("SoaringScoring"), MB_OK);
+    ShowMessageBox(_("Error"), "SoaringScoring", MB_OK);
     return false;
   }
 
@@ -274,7 +274,7 @@ RunSoaringScoringDeviceSignIn() noexcept
         SoaringScoring::AuthorizeForm()),
       &env);
   } catch (...) {
-    ShowError(std::current_exception(), _("SoaringScoring"));
+    ShowError(std::current_exception(), "SoaringScoring");
     return false;
   }
 
@@ -286,7 +286,7 @@ RunSoaringScoringDeviceSignIn() noexcept
       !poll.flow.OnAuthorize(started->second, Now())) {
     const auto message = SoaringScoring::ErrorMessage(started->second);
     ShowMessageBox(message.empty() ? _("Error") : message.c_str(),
-                   _("SoaringScoring"), MB_OK);
+                   "SoaringScoring", MB_OK);
     return false;
   }
 
@@ -319,7 +319,7 @@ RunSoaringScoringDeviceSignIn() noexcept
   WidgetDialog dialog(WidgetDialog::Full{},
                       UIGlobals::GetMainWindow(),
                       look,
-                      _("SoaringScoring"),
+                      "SoaringScoring",
                       body.release());
   dialog.AddButton(_("Open"), [&url]() { OpenLink(url.c_str()); });
   dialog.AddButton(_("Close"), mrCancel);
@@ -343,18 +343,18 @@ RunSoaringScoringDeviceSignIn() noexcept
   poll.Stop();
 
   if (poll.signed_in) {
-    ShowMessageBox(_("Connected"), _("SoaringScoring"), MB_OK);
+    ShowMessageBox(_("Connected"), "SoaringScoring", MB_OK);
     return true;
   }
 
   if (poll.error)
-    ShowError(poll.error, _("SoaringScoring"));
+    ShowError(poll.error, "SoaringScoring");
   else if (poll.denied)
-    ShowMessageBox(_("Sign-in was denied."), _("SoaringScoring"), MB_OK);
+    ShowMessageBox(_("Sign-in was denied."), "SoaringScoring", MB_OK);
   else if (poll.expired)
-    ShowMessageBox(C_("Status", "Expired"), _("SoaringScoring"), MB_OK);
+    ShowMessageBox(C_("Status", "Expired"), "SoaringScoring", MB_OK);
   else if (poll.failed)
-    ShowMessageBox(_("Error"), _("SoaringScoring"), MB_OK);
+    ShowMessageBox(_("Error"), "SoaringScoring", MB_OK);
 
   return false;
 }

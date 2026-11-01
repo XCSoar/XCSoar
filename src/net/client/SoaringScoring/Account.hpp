@@ -26,4 +26,8 @@ ClearAccountToken() noexcept;
 [[nodiscard]] bool
 AccountConnected() noexcept;
 
+/** True when the key is absent. The Services page can turn it off. */
+[[nodiscard]] bool
+AutomaticUpload() noexcept;
+
 } // namespace SoaringScoring

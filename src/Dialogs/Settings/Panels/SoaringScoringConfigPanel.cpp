@@ -9,6 +9,8 @@
 #include "UIGlobals.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
+#include "Profile/Profile.hpp"
+#include "util/StaticString.hxx"
 
 #ifdef HAVE_HTTP
 #include "Dialogs/Settings/SoaringScoringDeviceSignIn.hpp"
@@ -22,7 +24,14 @@
 
 class SoaringScoringConfigPanel final : public RowFormWidget {
 #ifdef HAVE_HTTP
+  enum Controls {
+    AutomaticUpload = 1,
+  };
+
   Button *account_button = nullptr;
+  bool automatic_upload = true;
+  /** Help text; %s is the untranslated service name. */
+  StaticString<512> automatic_upload_help;
 
   void UpdateButton() noexcept;
   void OnAccountClicked() noexcept;
@@ -35,6 +44,7 @@ public:
   void Prepare(ContainerWindow &parent,
                const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
+  bool Save(bool &changed) noexcept override;
 };
 
 #ifdef HAVE_HTTP
@@ -48,6 +58,7 @@ SoaringScoringConfigPanel::UpdateButton() noexcept
   account_button->SetCaption(SoaringScoring::AccountConnected()
                               ? C_("Button", "Disconnect")
                               : C_("Button", "Connect"));
+  SetRowEnabled(AutomaticUpload, SoaringScoring::AccountConnected());
 }
 
 void
@@ -65,7 +76,7 @@ SoaringScoringConfigPanel::OnAccountClicked() noexcept
           SoaringScoring::RevokeToken(*Net::curl, token),
           &env);
       } catch (...) {
-        ShowError(std::current_exception(), _("SoaringScoring"));
+        ShowError(std::current_exception(), "SoaringScoring");
       }
     }
     SoaringScoring::ClearAccountToken();
@@ -85,13 +96,34 @@ SoaringScoringConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
 #ifdef HAVE_HTTP
+  Profile::Get(ProfileKeys::SoaringScoringAutomaticUpload,
+               automatic_upload);
+  automatic_upload_help.Format(
+      _("Asks whether to upload flight to %s, after flight is "
+        "downloaded from external logger."),
+      "SoaringScoring");
   account_button = AddButton(C_("Button", "Connect"), [this]() {
     OnAccountClicked();
   });
+  AddBoolean(_("Automatic Upload"), automatic_upload_help.c_str(),
+             automatic_upload);
   UpdateButton();
 #else
   AddReadOnly(_("Not connected"));
 #endif
+}
+
+bool
+SoaringScoringConfigPanel::Save(bool &changed) noexcept
+{
+#ifdef HAVE_HTTP
+  changed |= SaveValue(AutomaticUpload,
+                       ProfileKeys::SoaringScoringAutomaticUpload,
+                       automatic_upload);
+#else
+  (void)changed;
+#endif
+  return true;
 }
 
 void

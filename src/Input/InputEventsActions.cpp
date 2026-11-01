@@ -818,10 +818,5 @@ InputEvents::eventExchangeFrequencies([[maybe_unused]] const char *misc)
 void
 InputEvents::eventUploadIGCFile([[maybe_unused]] const char *misc)
 {
-  if (!CommonInterface::GetComputerSettings().weglide.IsConfigured()) {
-    HandleInternalLink("xcsoar://config/weglide");
-    return;
-  }
-
-  ShowExportFlightsDialog(ExportFlightsMode::WEGLIDE);
+  ShowUploadFlightList();
 }

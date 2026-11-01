@@ -28,11 +28,13 @@
 #include "net/client/WeGlide/UploadIGCFile.hpp"
 #include "net/client/WeGlide/Settings.hpp"
 #include "Interface.hpp"
+#include "Dialogs/InternalLink.hpp"
 #include "net/http/Features.hpp"
 #ifdef HAVE_HTTP
 #include "Dialogs/CoFunctionDialog.hpp"
 #include "Dialogs/Error.hpp"
 #include "Dialogs/ListPicker.hpp"
+#include "ui/control/List.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "Renderer/TextRowRenderer.hpp"
 #include "io/FileMapping.hpp"
@@ -44,6 +46,8 @@
 #endif
 #include "ui/event/Notify.hpp"
 #include "ui/event/DelayedNotify.hpp"
+
+#include <optional>
 #include "LogFile.hpp"
 
 #ifdef ANDROID
@@ -220,6 +224,69 @@ PerformExport(FileMultiSelectWidget *file_widget)
                  MB_OK | (failed ? MB_ICONERROR : MB_ICONINFORMATION));
 }
 
+enum class FlightUploadService {
+  WEGLIDE,
+  SOARING_SCORING,
+};
+
+static std::optional<FlightUploadService>
+PickFlightUploadService() noexcept
+{
+  const bool weglide =
+    CommonInterface::GetComputerSettings().weglide.enabled;
+#ifdef HAVE_HTTP
+  const bool scoring = SoaringScoring::AccountConnected();
+  if (weglide && scoring) {
+    static constexpr const char *const names[] = {
+      "WeGlide",
+      "SoaringScoring",
+    };
+
+    TextRowRenderer row_renderer;
+    row_renderer.CalculateLayout(*UIGlobals::GetDialogLook().list.font);
+    auto renderer = MakeListItemRenderer([&](Canvas &canvas,
+                                             const PixelRect rc,
+                                             unsigned idx) noexcept {
+      row_renderer.DrawTextRow(canvas, rc, names[idx]);
+    });
+
+    const int which = ListPicker(_("Upload Flight"), 2, 0,
+                                 Layout::GetMinimumControlHeight(),
+                                 renderer);
+    if (which < 0)
+      return std::nullopt;
+    return which == 0
+      ? FlightUploadService::WEGLIDE
+      : FlightUploadService::SOARING_SCORING;
+  }
+  if (scoring)
+    return FlightUploadService::SOARING_SCORING;
+#endif
+  if (weglide)
+    return FlightUploadService::WEGLIDE;
+  return std::nullopt;
+}
+
+static bool
+FlightUploadReady(FlightUploadService service) noexcept
+{
+  if (service != FlightUploadService::WEGLIDE ||
+      CommonInterface::GetComputerSettings().weglide.IsConfigured())
+    return true;
+
+  HandleInternalLink("xcsoar://config/weglide");
+  return false;
+}
+
+/** %s is the service name and is not translated. */
+static void
+ShowOnlyIgc(const char *service, const char *title) noexcept
+{
+  StaticString<256> message;
+  message.Format(_("Only .igc files can be uploaded to %s."), service);
+  ShowMessageBox(message.c_str(), title, MB_OK | MB_ICONERROR);
+}
+
 #ifdef HAVE_HTTP
 
 static int
@@ -249,32 +316,19 @@ PickSoaringScoringEntry(const std::vector<SoaringScoring::Entry> &entries)
     }
   } renderer{entries, row_renderer};
 
-  return ListPicker(_("SoaringScoring"), entries.size(), 0,
+  return ListPicker("SoaringScoring", entries.size(), 0,
                     Layout::GetMinimumControlHeight(), renderer);
 }
 
-static void
-PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
+static std::optional<SoaringScoring::Entry>
+ChooseSoaringScoringEntry() noexcept
 {
   if (!SoaringScoring::AccountConnected() || Net::curl == nullptr) {
-    ShowMessageBox(_("Sign in from Services, SoaringScoring."),
-                   _("SoaringScoring"), MB_OK | MB_ICONINFORMATION);
-    return;
-  }
-
-  const auto selected = file_widget->GetSelectedPaths();
-  if (selected.empty()) {
-    ShowMessageBox(_("Select at least one flight."), "",
+    StaticString<160> sign_in;
+    sign_in.Format(_("Sign in from Services, %s."), "SoaringScoring");
+    ShowMessageBox(sign_in.c_str(), "SoaringScoring",
                    MB_OK | MB_ICONINFORMATION);
-    return;
-  }
-
-  for (const auto &path : selected) {
-    if (!path.EndsWithIgnoreCase(".igc")) {
-      ShowMessageBox(_("Only .igc files can be uploaded."),
-                     _("SoaringScoring"), MB_OK | MB_ICONERROR);
-      return;
-    }
+    return std::nullopt;
   }
 
   const auto token = SoaringScoring::LoadAccountToken().access_token;
@@ -286,24 +340,31 @@ PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
       _("Download"),
       SoaringScoring::LoadEntries(*Net::curl, token, env), &env);
   } catch (...) {
-    ShowError(std::current_exception(), _("SoaringScoring"));
-    return;
+    ShowError(std::current_exception(), "SoaringScoring");
+    return std::nullopt;
   }
   if (!entries)
-    return;
+    return std::nullopt;
   if (entries->empty()) {
-    ShowMessageBox(_("No current contest entry."), _("SoaringScoring"),
+    ShowMessageBox(_("No current contest entry."), "SoaringScoring",
                    MB_OK | MB_ICONINFORMATION);
-    return;
+    return std::nullopt;
   }
 
   const int which = PickSoaringScoringEntry(*entries);
   if (which < 0)
-    return;
-  const auto &entry = (*entries)[which];
+    return std::nullopt;
+  return (*entries)[which];
+}
 
+static void
+UploadSoaringScoringPaths(const SoaringScoring::Entry &entry,
+                          std::span<const Path> paths) noexcept
+{
+  const auto token = SoaringScoring::LoadAccountToken().access_token;
+  PluggableOperationEnvironment env;
   std::string problems;
-  for (const auto &path : selected) {
+  for (const Path path : paths) {
     try {
       FileMapping mapping{path};
       const std::span<const std::byte> bytes = mapping;
@@ -312,7 +373,7 @@ PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
       const auto base = path.GetBase();
       auto report = ShowCoFunctionDialog(
         UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-        _("SoaringScoring"),
+        "SoaringScoring",
         SoaringScoring::UploadIgc(*Net::curl, token, entry.upload_url,
                                   base.c_str(), std::move(igc), env),
         &env);
@@ -328,17 +389,56 @@ PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
         }
       }
     } catch (...) {
-      ShowError(std::current_exception(), _("SoaringScoring"));
+      ShowError(std::current_exception(), "SoaringScoring");
       return;
     }
   }
 
   if (problems.empty())
-    ShowMessageBox(_("OK"), _("SoaringScoring"),
+    ShowMessageBox(_("OK"), "SoaringScoring",
                    MB_OK | MB_ICONINFORMATION);
   else
-    ShowMessageBox(problems.c_str(), _("SoaringScoring"),
+    ShowMessageBox(problems.c_str(), "SoaringScoring",
                    MB_OK | MB_ICONEXCLAMATION);
+}
+
+void
+UploadSoaringScoringIgc(Path path) noexcept
+{
+  if (path == nullptr || path.empty())
+    return;
+  if (!path.EndsWithIgnoreCase(".igc")) {
+    ShowOnlyIgc("SoaringScoring", "SoaringScoring");
+    return;
+  }
+
+  const auto entry = ChooseSoaringScoringEntry();
+  if (!entry)
+    return;
+  UploadSoaringScoringPaths(*entry, {&path, 1});
+}
+
+static void
+PerformSoaringScoringUpload(FileMultiSelectWidget *file_widget)
+{
+  const auto selected = file_widget->GetSelectedPaths();
+  if (selected.empty()) {
+    ShowMessageBox(_("Select at least one flight."), "",
+                   MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  for (const auto &path : selected) {
+    if (!path.EndsWithIgnoreCase(".igc")) {
+      ShowOnlyIgc("SoaringScoring", "SoaringScoring");
+      return;
+    }
+  }
+
+  const auto entry = ChooseSoaringScoringEntry();
+  if (!entry)
+    return;
+  UploadSoaringScoringPaths(*entry, selected);
 }
 
 #endif
@@ -364,13 +464,25 @@ UploadOneIGCFile(Path path) noexcept
     return;
 
   if (!path.EndsWithIgnoreCase(".igc")) {
-    ShowMessageBox(_("Only .igc files can be uploaded to WeGlide."),
-                   _("WeGlide Upload"), MB_OK | MB_ICONERROR);
+    ShowOnlyIgc("WeGlide", _("WeGlide Upload"));
     return;
   }
 
   /* UploadIGCFile() shows its own progress dialog and result. */
   WeGlide::UploadIGCFile(path);
+}
+
+static void
+UploadChosenFlight(FlightUploadService service, Path path) noexcept
+{
+  if (service == FlightUploadService::SOARING_SCORING) {
+#ifdef HAVE_HTTP
+    UploadSoaringScoringIgc(path);
+#endif
+    return;
+  }
+
+  UploadOneIGCFile(path);
 }
 
 static void
@@ -388,8 +500,7 @@ PerformWeGlideUpload(FileMultiSelectWidget *file_widget)
   // Validate that only .igc files are selected
   for (const auto &path : selected) {
     if (!path.EndsWithIgnoreCase(".igc")) {
-      ShowMessageBox(_("Only .igc files can be uploaded to WeGlide."),
-                     _("WeGlide Upload"), MB_OK | MB_ICONERROR);
+      ShowOnlyIgc("WeGlide", _("WeGlide Upload"));
       return;
     }
   }
@@ -708,32 +819,33 @@ struct FlightContainer : public PropertyWidgetContainer {
   }
 };
 
-void
-ShowExportFlightsDialog(ExportFlightsMode mode)
+static void
+OpenExportFlightsDialog(ExportFlightsMode mode,
+                        FlightUploadService service)
 {
-  const bool weglide = mode == ExportFlightsMode::WEGLIDE;
+  const bool upload = mode == ExportFlightsMode::UPLOAD;
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-                      look, weglide
-                      ? _("WeGlide Upload")
+                      look, upload
+                      ? _("Upload Flight")
                       : C_("Menu", "Export flights"));
 
-  auto df = ScanLogs(weglide);
-  auto container = std::make_unique<FlightContainer>(*df, weglide);
+  auto df = ScanLogs(upload);
+  auto container = std::make_unique<FlightContainer>(*df, upload);
   FlightContainer &flight_container = *container;
   FileMultiSelectWidget &file_list = *flight_container.file_list;
 
-  if (!weglide) {
+  if (!upload) {
     const AllocatedPath &last = GetLastStorageTarget();
     if (last != nullptr)
       flight_container.SetTargetDevice(Path(last));
   }
 
-  if (weglide) {
+  if (upload) {
     file_list.SetShowCheckmarks(false);
-    file_list.SetFileActivateCallback([](Path picked) {
-      UploadOneIGCFile(picked);
+    file_list.SetFileActivateCallback([service](Path picked) {
+      UploadChosenFlight(service, picked);
     });
     dialog.AddButton(_("Upload Flight"), [&file_list]() {
       UseHighlightedFlight(file_list);
@@ -746,14 +858,23 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
       });
     });
 
-    dialog.AddButton(_("WeGlide Upload"), [&file_list]() {
-      PerformWeGlideUpload(&file_list);
-    });
+    if (CommonInterface::GetComputerSettings().weglide.enabled
 #ifdef HAVE_HTTP
-    dialog.AddButton(_("SoaringScoring"), [&file_list]() {
-      PerformSoaringScoringUpload(&file_list);
-    });
+        || SoaringScoring::AccountConnected()
 #endif
+        ) {
+      dialog.AddButton(_("Upload Flight"), [&file_list]() {
+        const auto chosen = PickFlightUploadService();
+        if (!chosen || !FlightUploadReady(*chosen))
+          return;
+        if (*chosen == FlightUploadService::WEGLIDE)
+          PerformWeGlideUpload(&file_list);
+#ifdef HAVE_HTTP
+        else
+          PerformSoaringScoringUpload(&file_list);
+#endif
+      });
+    }
 #ifdef ANDROID
     dialog.AddSymbolButton("s", [&file_list]() {
       PerformShare(&file_list);
@@ -773,6 +894,22 @@ ShowExportFlightsDialog(ExportFlightsMode mode)
 
   dialog.FinishPreliminary(std::move(container));
   dialog.ShowModal();
+}
+
+void
+ShowExportFlightsDialog(ExportFlightsMode mode)
+{
+  OpenExportFlightsDialog(mode, FlightUploadService::WEGLIDE);
+}
+
+void
+ShowUploadFlightList() noexcept
+{
+  const auto service = PickFlightUploadService();
+  if (!service || !FlightUploadReady(*service))
+    return;
+
+  OpenExportFlightsDialog(ExportFlightsMode::UPLOAD, *service);
 }
 
 ReplayFlightChoice

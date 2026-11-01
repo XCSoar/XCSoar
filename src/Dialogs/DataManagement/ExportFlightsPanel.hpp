@@ -5,10 +5,10 @@
 
 #include "system/Path.hpp"
 
-/** Export lists IGC and NMEA logs. WeGlide lists IGC files for upload. */
+/** Export lists IGC and NMEA logs. Upload lists IGC files. */
 enum class ExportFlightsMode {
   EXPORT,
-  WEGLIDE,
+  UPLOAD,
 };
 
 /** Result of the Replay file list. FILE copies the chosen path. */
@@ -20,10 +20,16 @@ enum class ReplayFlightChoice {
 
 /**
  * Declaration for the Export Flights dialog (moved into DataManagement).
- * WeGlide mode is the upload list: IGC files, Upload, and Cancel.
  */
 void ShowExportFlightsDialog(ExportFlightsMode mode =
                             ExportFlightsMode::EXPORT);
+
+/** Pick the service when both are on, then open the IGC list. */
+void
+ShowUploadFlightList() noexcept;
+
+void
+UploadSoaringScoringIgc(Path path) noexcept;
 
 /**
  * Replay file selector. Lists IGC and NMEA logs. IGC rows gain

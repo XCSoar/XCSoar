@@ -12,15 +12,7 @@ class OrderedTask;
 class ButtonWidget;
 
 class TaskManagerDialog final : public TabWidget {
-  enum Tabs {
-    TurnpointTab,
-    PropertiesTab,
-#ifdef HAVE_HTTP
-    WeGlideTab,
-#endif
-    RulesTab,
-    CloseTab,
-  };
+  static constexpr unsigned TurnpointTab = 0;
 
   WndForm &dialog;
 
@@ -29,6 +21,9 @@ class TaskManagerDialog final : public TabWidget {
   bool fullscreen = false;
 
   bool modified = true;
+
+  unsigned rules_tab = 0;
+  unsigned close_tab = 0;
 
 public:
   TaskManagerDialog(WndForm &_dialog,

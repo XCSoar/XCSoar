@@ -942,7 +942,7 @@ type=key
 data=7
 event=UploadIGCFile
 event=Mode default
-label=WeGlide Upload
+label=Upload Flight$(CheckFlightUpload)
 location=6
 
 mode=Config2
@@ -1693,7 +1693,7 @@ type=key
 data=0
 event=UploadIGCFile
 event=Mode default
-label=WeGlide Upload
+label=Upload Flight$(CheckFlightUpload)
 location=43
 
 mode=RemoteStick

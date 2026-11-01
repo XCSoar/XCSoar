@@ -105,10 +105,12 @@ SoaringScoringTasksPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                      unsigned idx) noexcept
 {
   if (tasks.tasks.empty()) {
+    StaticString<160> sign_in;
+    sign_in.Format(_("Sign in from Services, %s."), "SoaringScoring");
     row_renderer.DrawFirstRow(canvas, rc,
                               SoaringScoring::AccountConnected()
                                 ? _("No tasks")
-                                : _("Sign in from Services, SoaringScoring."));
+                                : sign_in.c_str());
     return;
   }
 
@@ -183,7 +185,7 @@ SoaringScoringTasksPanel::ReloadList() noexcept
       UpdateButtons();
     },
     [this](std::exception_ptr error) {
-      ShowError(error, _("SoaringScoring"));
+      ShowError(error, "SoaringScoring");
     });
 }
 

@@ -60,7 +60,9 @@ static constexpr int BATTERY_WARNING_PERCENT = 10;
 static const char *
 GetDeviceListHelp() noexcept
 {
-  return _("XCSoar uses the first device that supplies each value "
+  return
+    /* xgettext:no-c-format */
+    _("XCSoar uses the first device that supplies each value "
            "(device A before B, and so on). "
            "Bold flags are the values XCSoar is using from this device. "
            "Flags that are not bold mean an earlier device already "

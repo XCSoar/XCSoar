@@ -97,6 +97,8 @@ constexpr std::string_view SoaringScoringAccessToken =
   "SoaringScoringAccessToken";
 constexpr std::string_view SoaringScoringAccessExpiry =
   "SoaringScoringAccessExpiry";
+constexpr std::string_view SoaringScoringAutomaticUpload =
+  "SoaringScoringAutomaticUpload";
 constexpr std::string_view CoPilotName = "CoPilotName";
 constexpr std::string_view CrewWeightTemplate = "CrewWeightTemplate";
 constexpr std::string_view AircraftType = "AircraftType";

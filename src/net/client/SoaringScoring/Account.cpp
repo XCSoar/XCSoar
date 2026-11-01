@@ -63,4 +63,12 @@ AccountConnected() noexcept
   return UnixNow() < account.access_expires_at;
 }
 
+bool
+AutomaticUpload() noexcept
+{
+  bool enabled = true;
+  Profile::Get(ProfileKeys::SoaringScoringAutomaticUpload, enabled);
+  return enabled;
+}
+
 } // namespace SoaringScoring

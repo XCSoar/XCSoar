@@ -90,7 +90,7 @@ static constexpr ConfigPanelLink config_panel_links[] = {
   {"config/time",       NC_("Setting", "Time"), CreateTimeConfigPanel},
   {"config/infoboxes",  N_("InfoBox Sets"), CreateInfoBoxesConfigPanel},
   {"config/pages",      N_("Pages"),      CreatePagesConfigPanel},
-  {"config/weglide",    N_("WeGlide"),    CreateWeGlideConfigPanel},
+  {"config/weglide",    "WeGlide",        CreateWeGlideConfigPanel},
   {"config/network",    N_("Network"),    CreateNetworkConfigPanel},
   {"config/weather",    N_("Weather"),    CreateWeatherConfigPanel},
   {"config/safety",     N_("Safety Factors"), CreateSafetyFactorsConfigPanel},

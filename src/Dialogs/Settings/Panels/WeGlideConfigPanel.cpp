@@ -10,6 +10,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "util/StaticString.hxx"
 
 #include <stdio.h>
 
@@ -25,6 +26,9 @@ enum ControlIndex {
 
 class WeGlideConfigPanel final
   : public RowFormWidget, DataFieldListener {
+  /** Help text; %s is the untranslated service name. */
+  StaticString<512> automatic_upload_help;
+
 public:
   WeGlideConfigPanel() noexcept
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
@@ -70,9 +74,11 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
       _("Allow download of declared tasks from Weglide in the Task Manager."),
       weglide.enabled, this);
 
-  AddBoolean(_("Automatic Upload"),
-             _("Asks whether to upload flight to Weglide, after flight is "
-               "downloaded from external logger."),
+  automatic_upload_help.Format(
+      _("Asks whether to upload flight to %s, after flight is "
+        "downloaded from external logger."),
+      "WeGlide");
+  AddBoolean(_("Automatic Upload"), automatic_upload_help.c_str(),
              weglide.automatic_upload, this);
 
   AddInteger(_("Pilot"),

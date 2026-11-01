@@ -7,6 +7,7 @@
 #include "TaskPropertiesPanel.hpp"
 #include "TaskMiscPanel.hpp"
 #include "WeGlidePanel.hpp"
+#include "SoaringScoringTasksPanel.hpp"
 #include "TaskClosePanel.hpp"
 #include "../TaskDialogs.hpp"
 #include "UIGlobals.hpp"
@@ -33,6 +34,10 @@
 #include "Language/Language.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
+#include "net/http/Features.hpp"
+#ifdef HAVE_HTTP
+#include "net/client/SoaringScoring/Account.hpp"
+#endif
 
 /**
  * The task manager currently on screen, or nullptr.  A received task
@@ -93,9 +98,9 @@ TaskManagerDialog::KeyPress(unsigned key_code) noexcept
       /* close the dialog immediately if nothing was modified */
       return false;
 
-    if (GetCurrentIndex() != 3) {
+    if (GetCurrentIndex() != close_tab) {
       /* switch to "close" page instead of closing the dialog */
-      SetCurrent(CloseTab);
+      SetCurrent(close_tab);
       SetFocus();
       return true;
     }
@@ -149,13 +154,23 @@ TaskManagerDialog::Initialise(ContainerWindow &parent,
   AddTab(std::make_unique<TaskMiscPanel>(*this, task, &modified),
          _("Manage"), BrowseIcon);
 #ifdef HAVE_HTTP
-  const auto *WeGlideIcon = enable_icons ? &icons.hBmpTabWeGlide : nullptr;
-  AddTab(std::make_unique<WeGlidePanel>(*this, task, &modified),
-         _("WeGlide"), WeGlideIcon);
+  if (CommonInterface::GetComputerSettings().weglide.enabled) {
+    const auto *WeGlideIcon = enable_icons ? &icons.hBmpTabWeGlide : nullptr;
+    AddTab(std::make_unique<WeGlidePanel>(*this, task, &modified),
+           "WeGlide", WeGlideIcon);
+  }
+  if (SoaringScoring::AccountConnected()) {
+    const auto *SoaringScoringIcon =
+      enable_icons ? &icons.hBmpTabSoaringScoring : nullptr;
+    AddTab(CreateSoaringScoringTasksPanel(*this, task, &modified),
+           "SoaringScoring", SoaringScoringIcon);
+  }
 #endif
+  rules_tab = GetSize();
   AddTab(std::make_unique<VScrollWidget>(std::make_unique<TaskPropertiesPanel>(*this, task, &modified),
                                          GetLook()),
          _("Rules"), PropertiesIcon);
+  close_tab = GetSize();
   AddTab(std::make_unique<TaskClosePanel>(*this, &modified,
                                           UIGlobals::GetDialogLook()),
          _("Close"));
@@ -214,7 +229,7 @@ TaskManagerDialog::SwitchToEditTab()
 void
 TaskManagerDialog::SwitchToPropertiesPanel()
 {
-  SetCurrent(PropertiesTab);
+  SetCurrent(rules_tab);
   SetFocus();
 }
 

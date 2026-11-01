@@ -29,7 +29,7 @@ WeGlideReady()
   if (CommonInterface::GetComputerSettings().weglide.IsConfigured())
     return true;
 
-  ShowConfigPanel(_("WeGlide"), CreateWeGlideConfigPanel);
+  ShowConfigPanel("WeGlide", CreateWeGlideConfigPanel);
   return CommonInterface::GetComputerSettings().weglide.IsConfigured();
 }
 
