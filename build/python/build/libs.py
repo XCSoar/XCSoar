@@ -312,7 +312,7 @@ freetype = MesonProject(
         "http://download.savannah.gnu.org/releases/freetype/freetype-2.13.2.tar.xz",
         "http://downloads.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz",
     ),
-    "2d8d5917a1983ebd04921f2993a88858d6f72dec",
+    "12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d",
     "lib/libfreetype.a",
     [
         "-Dbrotli=disabled",
@@ -632,7 +632,7 @@ libsalsa = AutotoolsProject(
         "https://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2",
         "ftp://ftp.suse.com/pub/people/tiwai/salsa-lib/salsa-lib-0.1.6.tar.bz2",
     ),
-    "08a6481cdbf4c79e05a9cba3b6c48375",
+    "26aa9b2ad7ed5640b62877d5b4ce8256261e1a3ab90535bb5f391f420aba2c31",
     "lib/libsalsa.a",
     ["--disable-4bit", "--disable-user-elem", "--enable-shared=no", "--enable-tlv"],
     patches=abspath("lib/salsa-lib/patches"),
