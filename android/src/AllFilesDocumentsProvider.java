@@ -128,7 +128,8 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
 
     row.add(Root.COLUMN_FLAGS, Root.FLAG_LOCAL_ONLY
             | Root.FLAG_SUPPORTS_SEARCH
-            | Root.FLAG_SUPPORTS_CREATE);
+            | Root.FLAG_SUPPORTS_CREATE
+            | Root.FLAG_SUPPORTS_IS_CHILD);
 
     return (result);
   }
@@ -347,6 +348,43 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
       }
     }
     row.add(Document.COLUMN_FLAGS, flags);
+  }
+
+  @Override
+  public boolean isChildDocument(String parentDocumentId, String documentId) {
+    try {
+      final File root = getRootDirectory();
+      return isInside(resolveDocId(root, parentDocumentId),
+                      resolveDocId(root, documentId));
+    } catch (FileNotFoundException e) {
+      return false;
+    }
+  }
+
+  @Override
+  public DocumentsContract.Path findDocumentPath(String parentDocumentId,
+                                                 String childDocumentId)
+    throws FileNotFoundException {
+    final File root = getRootDirectory();
+    final File parent = parentDocumentId != null
+      ? getExistingFile(root, parentDocumentId)
+      : root;
+    File file = getExistingFile(root, childDocumentId);
+    if (!isInside(parent, file))
+      throw new FileNotFoundException(childDocumentId + " is not in " +
+                                      parentDocumentId);
+
+    final LinkedList<String> path = new LinkedList<>();
+    for (;; file = file.getParentFile()) {
+      path.addFirst(getDocIdForFile(root, file));
+      if (file.equals(parent))
+        break;
+    }
+
+    return new DocumentsContract.Path(parentDocumentId == null
+                                      ? ROOT_ID
+                                      : null,
+                                      path);
   }
 
   @Override

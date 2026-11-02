@@ -103,6 +103,9 @@
       <intent-filter>
         <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
       </intent-filter>
+      <!-- checked by file sync apps; do not rename -->
+      <meta-data android:name="org.xcsoar.DOCUMENT_TREE"
+                 android:value="true" />
     </provider>
 
   </application>
