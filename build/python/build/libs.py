@@ -27,26 +27,26 @@ _GITHUB_URLS = {
         "https://github.com/fmtlib/fmt/releases/download/{tag}/fmt-{version}.zip",
     ),
     "openssl/openssl": (
-        "https://www.openssl.org/source/{tag}.tar.gz",
         "https://github.com/openssl/openssl/releases/download/{tag}/{tag}.tar.gz",
+        "https://www.openssl.org/source/{tag}.tar.gz",
     ),
     "jedisct1/libsodium": (
-        "https://download.libsodium.org/libsodium/releases/libsodium-{version}.tar.gz",
         "https://github.com/jedisct1/libsodium/releases/download/{tag}/libsodium-{version}.tar.gz",
+        "https://download.libsodium.org/libsodium/releases/libsodium-{version}.tar.gz",
     ),
     "madler/zlib": (
-        "http://zlib.net/zlib-{version}.tar.xz",
         "https://github.com/madler/zlib/releases/download/{tag}/zlib-{version}.tar.xz",
+        "http://zlib.net/zlib-{version}.tar.xz",
     ),
     "c-ares/c-ares": (
         "https://github.com/c-ares/c-ares/releases/download/{tag}/c-ares-{version}.tar.gz",
     ),
     "curl/curl": (
-        "https://curl.se/download/curl-{version}.tar.xz",
         "https://github.com/curl/curl/releases/download/{tag}/curl-{version}.tar.xz",
+        "https://curl.se/download/curl-{version}.tar.xz",
     ),
     "zxing-cpp/zxing-cpp": (
-        "https://github.com/zxing-cpp/zxing-cpp/archive/{tag}.tar.gz",
+        "https://github.com/zxing-cpp/zxing-cpp/releases/download/{tag}/zxing-cpp-{version}.tar.gz",
     ),
     "libjpeg-turbo/libjpeg-turbo": (
         "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/{tag}/libjpeg-turbo-{version}.tar.gz",
@@ -60,8 +60,8 @@ _GITHUB_URLS = {
         "http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-{version}.tar.bz2",
     ),
     "libsdl-org/SDL": (
-        "http://www.libsdl.org/release/SDL2-{version}.tar.gz",
         "https://github.com/libsdl-org/SDL/releases/download/{tag}/SDL2-{version}.tar.gz",
+        "http://www.libsdl.org/release/SDL2-{version}.tar.gz",
     ),
     "Unidata/netcdf-c": (
         "https://github.com/Unidata/netcdf-c/archive/refs/tags/{tag}.tar.gz",
@@ -75,10 +75,9 @@ _GITHUB_VERSION = {
     "libsdl-org/SDL": lambda tag: tag.removeprefix("release-"),
 }
 
-# shortcut: these GitHub releases have no matching tarball asset, so
-# Renovate keeps the previous sha256. Replace it before merging a bump.
+# shortcut: netcdf-c releases ship no tarball, so Renovate keeps the
+# previous sha256. Replace it before merging a bump.
 _GITHUB_ARCHIVE = {
-    "zxing-cpp/zxing-cpp",
     "Unidata/netcdf-c",
 }
 
@@ -255,7 +254,7 @@ libfmt = github_tarball(
 zxing_cpp = github_tarball(
     CmakeProject,
     "zxing-cpp/zxing-cpp", "v3.1.1",
-    "7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542",
+    "c3c02c29c0b519de7bd4e25b376e606e87f0761befd1282815642a2246613d14",
     "lib/libZXing.a",
     [
         "-DBUILD_SHARED_LIBS=OFF",
