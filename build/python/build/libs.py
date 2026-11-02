@@ -13,6 +13,88 @@ from build.lua import LuaProject
 from build.musl import MuslProject
 
 
+def _tag_version(tag: str) -> str:
+    return tag[1:] if tag.startswith("v") else tag
+
+
+# {tag} is the GitHub release tag. {version} is that tag with a
+# leading "v" removed, unless the repo is listed in _GITHUB_VERSION.
+# Renovate edits the tag and the sha256; these templates build the
+# URLs. Archive entries unpack to a directory the tarball name does
+# not imply, so github_tarball sets base for those.
+_GITHUB_URLS = {
+    "fmtlib/fmt": (
+        "https://github.com/fmtlib/fmt/archive/{tag}.tar.gz",
+    ),
+    "openssl/openssl": (
+        "https://www.openssl.org/source/{tag}.tar.gz",
+        "https://github.com/openssl/openssl/releases/download/{tag}/{tag}.tar.gz",
+    ),
+    "jedisct1/libsodium": (
+        "https://download.libsodium.org/libsodium/releases/libsodium-{version}.tar.gz",
+        "https://github.com/jedisct1/libsodium/releases/download/{tag}/libsodium-{version}.tar.gz",
+    ),
+    "madler/zlib": (
+        "http://zlib.net/zlib-{version}.tar.xz",
+        "https://github.com/madler/zlib/releases/download/{tag}/zlib-{version}.tar.xz",
+    ),
+    "c-ares/c-ares": (
+        "https://github.com/c-ares/c-ares/releases/download/{tag}/c-ares-{version}.tar.gz",
+    ),
+    "curl/curl": (
+        "https://curl.se/download/curl-{version}.tar.xz",
+        "https://github.com/curl/curl/releases/download/{tag}/curl-{version}.tar.xz",
+    ),
+    "zxing-cpp/zxing-cpp": (
+        "https://github.com/zxing-cpp/zxing-cpp/archive/{tag}.tar.gz",
+    ),
+    "libjpeg-turbo/libjpeg-turbo": (
+        "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/{tag}/libjpeg-turbo-{version}.tar.gz",
+    ),
+    "libusb/libusb": (
+        "https://github.com/libusb/libusb/releases/download/{tag}/libusb-{version}.tar.bz2",
+        "http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-{version}/libusb-{version}.tar.bz2",
+    ),
+    "felixhaedicke/simple_usbmodeswitch": (
+        "https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/{tag}/simple_usbmodeswitch-{version}.tar.bz2",
+        "http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-{version}.tar.bz2",
+    ),
+    "libsdl-org/SDL": (
+        "http://www.libsdl.org/release/SDL2-{version}.tar.gz",
+        "https://github.com/libsdl-org/SDL/releases/download/{tag}/SDL2-{version}.tar.gz",
+    ),
+    "Unidata/netcdf-c": (
+        "https://github.com/Unidata/netcdf-c/archive/refs/tags/{tag}.tar.gz",
+    ),
+}
+
+_GITHUB_VERSION = {
+    "openssl/openssl": lambda tag: tag.removeprefix("openssl-"),
+    "jedisct1/libsodium": lambda tag: tag.removesuffix("-RELEASE"),
+    "curl/curl": lambda tag: tag.removeprefix("curl-").replace("_", "."),
+    "libsdl-org/SDL": lambda tag: tag.removeprefix("release-"),
+}
+
+# shortcut: these GitHub releases have no matching tarball asset, so
+# Renovate keeps the previous sha256. Replace it before merging a bump.
+_GITHUB_ARCHIVE = {
+    "fmtlib/fmt",
+    "zxing-cpp/zxing-cpp",
+    "Unidata/netcdf-c",
+}
+
+
+def github_tarball(cls, repo, tag, sha256, installed, *args, **kwargs):
+    version = _GITHUB_VERSION.get(repo, _tag_version)(tag)
+    urls = tuple(url.format(tag=tag, version=version)
+                 for url in _GITHUB_URLS[repo])
+    if repo in _GITHUB_ARCHIVE:
+        name = repo.rsplit("/", 1)[-1]
+        kwargs.setdefault("base", f"{name}-{version}")
+    return cls(urls[0] if len(urls) == 1 else urls, sha256, installed,
+               *args, **kwargs)
+
+
 class LibPngProject(CmakeProject):
     def configure(self, toolchain):
         src = self.unpack(toolchain)
@@ -121,11 +203,9 @@ musl = MuslProject(
     patches=abspath("lib/musl/patches"),
 )
 
-openssl = OpenSSLProject(
-    (
-        "https://www.openssl.org/source/openssl-3.1.7.tar.gz",
-        "https://github.com/openssl/openssl/releases/download/openssl-3.1.7/openssl-3.1.7.tar.gz",
-    ),
+openssl = github_tarball(
+    OpenSSLProject,
+    "openssl/openssl", "openssl-3.1.7",
     "053a31fa80cf4aebe1068c987d2ef1e44ce418881427c4464751ae800c31d06c",
     "include/openssl/ossl_typ.h",
 )
@@ -161,8 +241,9 @@ openssh = AutotoolsProject(
     use_destdir=True,
 )
 
-libfmt = CmakeProject(
-    "https://github.com/fmtlib/fmt/archive/11.2.0.tar.gz",
+libfmt = github_tarball(
+    CmakeProject,
+    "fmtlib/fmt", "11.2.0",
     "bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af",
     "lib/libfmt.a",
     [
@@ -170,13 +251,11 @@ libfmt = CmakeProject(
         "-DFMT_DOC=OFF",
         "-DFMT_TEST=OFF",
     ],
-    name="fmt",
-    version="11.2.0",
-    base="fmt-11.2.0",
 )
 
-zxing_cpp = CmakeProject(
-    "https://github.com/zxing-cpp/zxing-cpp/archive/v3.1.1.tar.gz",
+zxing_cpp = github_tarball(
+    CmakeProject,
+    "zxing-cpp/zxing-cpp", "v3.1.1",
     "7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542",
     "lib/libZXing.a",
     [
@@ -204,16 +283,11 @@ zxing_cpp = CmakeProject(
     ],
     # CreateBarcode.cpp calls the deprecated MultiFormatWriter.
     extra_cxxflags="-Wno-deprecated-declarations",
-    name="zxing-cpp",
-    version="3.1.1",
-    base="zxing-cpp-3.1.1",
 )
 
-libsodium = AutotoolsProject(
-    (
-        "https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz",
-        "https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz",
-    ),
+libsodium = github_tarball(
+    AutotoolsProject,
+    "jedisct1/libsodium", "1.0.20-RELEASE",
     "ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19",
     "include/sodium/crypto_hash_sha256.h",
     [
@@ -224,17 +298,13 @@ libsodium = AutotoolsProject(
         # workaround for https://github.com/jedisct1/libsodium/issues/1314
         "aarch64-linux-android": "-march=armv8-a+crypto",
     },
-    name="libsodium",
-    version="1.0.20",
     # suppress "visibility default" from sodium/export.h
     cppflags="-DSODIUM_STATIC",
 )
 
-zlib = ZlibProject(
-    (
-        "http://zlib.net/zlib-1.3.2.tar.xz",
-        "https://github.com/madler/zlib/releases/download/v1.3.2/zlib-1.3.2.tar.xz",
-    ),
+zlib = github_tarball(
+    ZlibProject,
+    "madler/zlib", "v1.3.2",
     "d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3",
     "lib/libz.a",
 )
@@ -256,8 +326,9 @@ freetype = MesonProject(
     patches=abspath("lib/freetype/patches"),
 )
 
-cares = CmakeProject(
-    "https://github.com/c-ares/c-ares/releases/download/v1.34.8/c-ares-1.34.8.tar.gz",
+cares = github_tarball(
+    CmakeProject,
+    "c-ares/c-ares", "v1.34.8",
     "c222b6d681096f9444d2c4863d2c1174019e27cacca0a4a5c114d36dd7d7bf78",
     "lib/libcares.a",
     [
@@ -269,11 +340,9 @@ cares = CmakeProject(
     ],
 )
 
-curl = CmakeProject(
-    (
-        "https://curl.se/download/curl-8.14.1.tar.xz",
-        "https://github.com/curl/curl/releases/download/curl-8_14_1/curl-8.14.1.tar.xz",
-    ),
+curl = github_tarball(
+    CmakeProject,
+    "curl/curl", "curl-8_14_1",
     "f4619a1e2474c4bbfedc88a7c2191209c8334b48fa1f4e53fd584cc12e9120dd",
     "lib/libcurl.a",
     [
@@ -379,8 +448,9 @@ libpng = LibPngProject(
     },
 )
 
-libjpeg = CmakeProject(
-    "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.2.1/libjpeg-turbo-3.2.1.tar.gz",
+libjpeg = github_tarball(
+    CmakeProject,
+    "libjpeg-turbo/libjpeg-turbo", "3.2.1",
     "c27ad72a68da151177929aa969ae773a2da5ac2af9ce946079314fdac8cece7f",
     "lib/libjpeg.a",
     [
@@ -394,11 +464,9 @@ libjpeg = CmakeProject(
     },
 )
 
-libusb = AutotoolsProject(
-    (
-        "https://github.com//libusb/libusb/releases/download/v1.0.21/libusb-1.0.21.tar.bz2",
-        "http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.21/libusb-1.0.21.tar.bz2",
-    ),
+libusb = github_tarball(
+    AutotoolsProject,
+    "libusb/libusb", "v1.0.21",
     "7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b",
     "lib/libusb-1.0.a",
     [
@@ -408,11 +476,9 @@ libusb = AutotoolsProject(
     ],
 )
 
-simple_usbmodeswitch = AutotoolsProject(
-    (
-        "https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/v1.0/simple_usbmodeswitch-1.0.tar.bz2",
-        "http://s15356785.onlinehome-server.info/~felix/simple_usbmodeswitch/simple_usbmodeswitch-1.0.tar.bz2",
-    ),
+simple_usbmodeswitch = github_tarball(
+    AutotoolsProject,
+    "felixhaedicke/simple_usbmodeswitch", "v1.0",
     "35e8a6ed8551ef419baf7310e54d6d1a81e18bf44e111b07d74285001f18e98d",
     "bin/simple_usbmodeswitch",
     ldflags="-pthread",
@@ -475,8 +541,9 @@ libgeotiff = CmakeProject(
     patches=abspath("lib/libgeotiff/patches"),
 )
 
-netcdf = CmakeProject(
-    "https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.10.0.tar.gz",
+netcdf = github_tarball(
+    CmakeProject,
+    "Unidata/netcdf-c", "v4.10.0",
     "ce160f9c1483b32d1ba8b7633d7984510259e4e439c48a218b95a023dc02fd4c",
     "lib/pkgconfig/netcdf.pc",
     [
@@ -497,16 +564,12 @@ netcdf = CmakeProject(
         "-DZLIB_LIBRARY=z",
         "-DNETCDF_ENABLE_MMAP=OFF",
     ],
-    base="netcdf-c-4.10.0",
     patches=abspath("lib/netcdf/patches"),
 )
 
-sdl2 = CmakeProject(
-    (
-        "http://www.libsdl.org/release/SDL2-2.30.0.tar.gz",
-        # GitHub release tarball mirror
-        "https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz",
-    ),
+sdl2 = github_tarball(
+    CmakeProject,
+    "libsdl-org/SDL", "release-2.30.0",
     "36e2e41557e0fa4a1519315c0f5958a87ccb27e25c51776beb6f1239526447b0",
     "lib/libSDL2.a",
     [
