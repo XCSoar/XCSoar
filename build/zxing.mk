@@ -22,17 +22,19 @@ $(eval $(call pkg-config-library,ZXING,zxing))
 else
 
 # Native UNIX has no third-party prefix, so build the pinned release
-# here.  WRITERS=OLD is zxing's own QR encoder (a module grid) and does
+# here.  The pin is zxing_cpp in build/python/build/libs.py.
+# WRITERS=OLD is zxing's own QR encoder (a module grid) and does
 # not pull in Zint.
 
-ZXING_VERSION = 3.1.1
-ZXING_URL = https://github.com/zxing-cpp/zxing-cpp/archive/v$(ZXING_VERSION).tar.gz
+ZXING_PIN = $(shell PYTHONPATH=$(topdir)/build/python python3 -c 'from build.libs import zxing_cpp; print(zxing_cpp.version); print(zxing_cpp.url); print(zxing_cpp.md5)')
+ZXING_VERSION = $(word 1,$(ZXING_PIN))
+ZXING_URL = $(word 2,$(ZXING_PIN))
+ZXING_SHA256 = $(word 3,$(ZXING_PIN))
 ZXING_TARBALL = $(DOWNLOAD_DIR)/$(notdir $(ZXING_URL))
 ZXING_SRC = $(OUT)/src/zxing-cpp-$(ZXING_VERSION)
 ZXING_BUILD = $(ARCH_OUTPUT_DIR)/build/zxing
 ZXING_PREFIX = $(ARCH_OUTPUT_DIR)/lib/zxing
 ZXING_LIB = $(ZXING_PREFIX)/lib/libZXing.a
-ZXING_SHA256 = 7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542
 
 $(ZXING_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 	@$(NQ)echo "  GET     $@"

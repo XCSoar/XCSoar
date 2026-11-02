@@ -143,7 +143,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "GitHub tarball pin in libs.py: repo, release tag, sha256. URLs are built from the tag. shortcut: zxing-cpp and netcdf-c ship no matching release asset, so a bump keeps the old sha256; replace it in that PR",
+      "description": "GitHub tarball pin in libs.py: repo, release tag, sha256. URLs are built from the tag. shortcut: netcdf-c releases ship no tarball, so a bump keeps the old sha256; replace it in that PR",
       "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
       "matchStrings": [
         "\"(?<depName>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)\", \"(?<currentValue>[^\"]+)\",\\n    \"(?<currentDigest>[a-f0-9]{64})\""
