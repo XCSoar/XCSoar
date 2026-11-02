@@ -238,6 +238,7 @@ FindDataPaths() noexcept
 #ifdef ANDROID
     const auto env = Java::GetEnv();
 
+    /* AllFilesDocumentsProvider.getRootDirectory() repeats this */
     bool external_files_dirs_path_added = false;
     for (auto &path : context->GetExternalFilesDirs(env)) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
