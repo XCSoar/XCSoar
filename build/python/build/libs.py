@@ -24,7 +24,7 @@ def _tag_version(tag: str) -> str:
 # not imply, so github_tarball sets base for those.
 _GITHUB_URLS = {
     "fmtlib/fmt": (
-        "https://github.com/fmtlib/fmt/archive/{tag}.tar.gz",
+        "https://github.com/fmtlib/fmt/releases/download/{tag}/fmt-{version}.zip",
     ),
     "openssl/openssl": (
         "https://www.openssl.org/source/{tag}.tar.gz",
@@ -78,7 +78,6 @@ _GITHUB_VERSION = {
 # shortcut: these GitHub releases have no matching tarball asset, so
 # Renovate keeps the previous sha256. Replace it before merging a bump.
 _GITHUB_ARCHIVE = {
-    "fmtlib/fmt",
     "zxing-cpp/zxing-cpp",
     "Unidata/netcdf-c",
 }
@@ -244,7 +243,7 @@ openssh = AutotoolsProject(
 libfmt = github_tarball(
     CmakeProject,
     "fmtlib/fmt", "11.2.0",
-    "bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af",
+    "203eb4e8aa0d746c62d8f903df58e0419e3751591bb53ff971096eaa0ebd4ec3",
     "lib/libfmt.a",
     [
         "-DBUILD_SHARED_LIBS=OFF",
