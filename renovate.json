@@ -11,7 +11,6 @@
   "prConcurrentLimit": 5,
   "commitMessageTopic": "{{{depName}}}",
   "commitMessageExtra": "to {{{newVersion}}}",
-  "prTitle": "{{{commitMessage}}}",
   "prBodyTemplate": "{{{table}}}\n\n---\n\nAutomated update by [Renovate](https://github.com/renovatebot/renovate).",
   "ignorePaths": [
     "output/**",
@@ -30,37 +29,39 @@
       "matchManagers": ["custom.regex"],
       "matchFileNames": ["build/python/build/libs.py"],
       "schedule": ["* 0-5 1 * *"],
-      "commitMessagePrefix": "build/python/build/libs.py: ",
-      "commitMessageTopic": "Update {{{depName}}}",
-      "commitMessageExtra": "to {{{newVersion}}}"
+      "commitMessagePrefix": "build/python/build/libs.py:"
     },
     {
       "description": "Group GitHub Actions updates (weekly)",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
-      "commitMessage": ".github/workflows: Update GitHub Actions"
+      "commitMessagePrefix": ".github/workflows:",
+      "commitMessageTopic": "GitHub Actions",
+      "commitMessageExtra": ""
     },
     {
       "description": "Python doc dependencies (weekly)",
       "matchManagers": ["pip_requirements"],
       "groupName": "Python dependencies",
       "groupSlug": "python-deps",
-      "commitMessage": "doc/requirements.txt: Update Python dependencies"
+      "commitMessagePrefix": "doc/requirements.txt:",
+      "commitMessageTopic": "Python dependencies",
+      "commitMessageExtra": ""
     },
     {
       "description": "Group Rust dependencies (weekly)",
       "matchManagers": ["cargo"],
       "groupName": "Rust dependencies",
       "groupSlug": "rust-deps",
-      "commitMessage": "build: Update Rust dependencies"
+      "commitMessagePrefix": "build:",
+      "commitMessageTopic": "Rust dependencies",
+      "commitMessageExtra": ""
     },
     {
       "description": "Docker base images (weekly)",
       "matchManagers": ["dockerfile"],
-      "commitMessagePrefix": "build: ",
-      "commitMessageTopic": "Update {{{depName}}}",
-      "commitMessageExtra": "to {{{newVersion}}}"
+      "commitMessagePrefix": "build:"
     },
     {
       "description": "Separate PRs for major version updates",
@@ -73,9 +74,9 @@
       "minimumReleaseAge": null
     },
     {
-      "description": "Git submodules: only android/ioio is tracked",
+      "description": "Git submodules: only android/ioio, lib/glm, and android/UsbSerial are tracked",
       "matchManagers": ["git-submodules"],
-      "matchDepNames": ["!android/ioio"],
+      "matchDepNames": ["!android/ioio", "!lib/glm", "!android/UsbSerial"],
       "enabled": false
     },
     {
@@ -85,8 +86,28 @@
       "dependencyDashboardApproval": true,
       "minimumReleaseAge": null,
       "commitMessagePrefix": "android/ioio:",
-      "commitMessageTopic": "to ytai/ioio",
-      "commitMessageExtra": "{{{newDigestShort}}}"
+      "commitMessageTopic": "ytai/ioio",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
+    },
+    {
+      "description": "lib/glm follows g-truc/glm master. A bump changes the OpenGL maths used by the renderer, so it is only listed in the Dependency Dashboard and opened from there",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["lib/glm"],
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "lib/glm:",
+      "commitMessageTopic": "g-truc/glm",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
+    },
+    {
+      "description": "android/UsbSerial follows XCSoar/UsbSerial master, a fork of felHR85/UsbSerial with local fixes. Each update needs a test with a USB serial adapter, so it is only listed in the Dependency Dashboard and opened from there",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["android/UsbSerial"],
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "android/UsbSerial:",
+      "commitMessageTopic": "XCSoar/UsbSerial",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
     }
   ],
   "customManagers": [
