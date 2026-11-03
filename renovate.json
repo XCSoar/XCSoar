@@ -11,7 +11,6 @@
   "prConcurrentLimit": 5,
   "commitMessageTopic": "{{{depName}}}",
   "commitMessageExtra": "to {{{newVersion}}}",
-  "prTitle": "{{{commitMessage}}}",
   "prBodyTemplate": "{{{table}}}\n\n---\n\nAutomated update by [Renovate](https://github.com/renovatebot/renovate).",
   "ignorePaths": [
     "output/**",
@@ -30,37 +29,77 @@
       "matchManagers": ["custom.regex"],
       "matchFileNames": ["build/python/build/libs.py"],
       "schedule": ["* 0-5 1 * *"],
-      "commitMessagePrefix": "build/python/build/libs.py: ",
-      "commitMessageTopic": "Update {{{depName}}}",
-      "commitMessageExtra": "to {{{newVersion}}}"
+      "commitMessagePrefix": "build/python/build/libs.py:"
+    },
+    {
+      "description": "Boost headers in libboost.mk (monthly). The checksum is not updated",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["build/libboost.mk"],
+      "schedule": ["* 0-5 1 * *"],
+      "commitMessagePrefix": "build/libboost.mk:",
+      "commitMessageTopic": "Boost"
+    },
+    {
+      "description": "curl tags are curl-8_14_1",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["curl/curl"],
+      "versioning": "regex:^curl-(?<major>\\d+)_(?<minor>\\d+)_(?<patch>\\d+)$"
+    },
+    {
+      "description": "OpenSSL tags are openssl-3.1.7",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["openssl/openssl"],
+      "versioning": "regex:^openssl-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
+      "description": "libsodium tags are 1.0.20-RELEASE",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["jedisct1/libsodium"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-RELEASE$"
+    },
+    {
+      "description": "SDL tags are release-2.30.0",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["libsdl-org/SDL"],
+      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
+      "description": "simple_usbmodeswitch tags are v1.0",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["felixhaedicke/simple_usbmodeswitch"],
+      "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)(?:\\.(?<patch>\\d+))?$"
     },
     {
       "description": "Group GitHub Actions updates (weekly)",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions",
-      "commitMessage": ".github/workflows: Update GitHub Actions"
+      "commitMessagePrefix": ".github/workflows:",
+      "commitMessageTopic": "GitHub Actions",
+      "commitMessageExtra": ""
     },
     {
       "description": "Python doc dependencies (weekly)",
       "matchManagers": ["pip_requirements"],
       "groupName": "Python dependencies",
       "groupSlug": "python-deps",
-      "commitMessage": "doc/requirements.txt: Update Python dependencies"
+      "commitMessagePrefix": "doc/requirements.txt:",
+      "commitMessageTopic": "Python dependencies",
+      "commitMessageExtra": ""
     },
     {
       "description": "Group Rust dependencies (weekly)",
       "matchManagers": ["cargo"],
       "groupName": "Rust dependencies",
       "groupSlug": "rust-deps",
-      "commitMessage": "build: Update Rust dependencies"
+      "commitMessagePrefix": "build:",
+      "commitMessageTopic": "Rust dependencies",
+      "commitMessageExtra": ""
     },
     {
       "description": "Docker base images (weekly)",
       "matchManagers": ["dockerfile"],
-      "commitMessagePrefix": "build: ",
-      "commitMessageTopic": "Update {{{depName}}}",
-      "commitMessageExtra": "to {{{newVersion}}}"
+      "commitMessagePrefix": "build:"
     },
     {
       "description": "Separate PRs for major version updates",
@@ -73,9 +112,9 @@
       "minimumReleaseAge": null
     },
     {
-      "description": "Git submodules: only android/ioio is tracked",
+      "description": "Git submodules: only android/ioio, lib/glm, and android/UsbSerial are tracked",
       "matchManagers": ["git-submodules"],
-      "matchDepNames": ["!android/ioio"],
+      "matchDepNames": ["!android/ioio", "!lib/glm", "!android/UsbSerial"],
       "enabled": false
     },
     {
@@ -85,139 +124,55 @@
       "dependencyDashboardApproval": true,
       "minimumReleaseAge": null,
       "commitMessagePrefix": "android/ioio:",
-      "commitMessageTopic": "to ytai/ioio",
-      "commitMessageExtra": "{{{newDigestShort}}}"
+      "commitMessageTopic": "ytai/ioio",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
+    },
+    {
+      "description": "lib/glm follows g-truc/glm master. A bump changes the OpenGL maths used by the renderer, so it is only listed in the Dependency Dashboard and opened from there",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["lib/glm"],
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "lib/glm:",
+      "commitMessageTopic": "g-truc/glm",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
+    },
+    {
+      "description": "android/UsbSerial follows XCSoar/UsbSerial master, a fork of felHR85/UsbSerial with local fixes. Each update needs a test with a USB serial adapter, so it is only listed in the Dependency Dashboard and opened from there",
+      "matchManagers": ["git-submodules"],
+      "matchDepNames": ["android/UsbSerial"],
+      "dependencyDashboardApproval": true,
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "android/UsbSerial:",
+      "commitMessageTopic": "XCSoar/UsbSerial",
+      "commitMessageExtra": "to {{{newDigestShort}}}"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Parse fmt library version, checksum, and unpack metadata from libs.py",
+      "description": "GitHub tarball pin in libs.py: repo, release tag, sha256. URLs are built from the tag. shortcut: netcdf-c releases ship no tarball, so a bump keeps the old sha256; replace it in that PR",
       "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
       "matchStrings": [
-        "(?s)https://github\\.com/fmtlib/fmt/archive/(?<currentValue>\\d+(?:\\.\\d+)+)\\.tar\\.gz\",\\n    \"(?<currentDigest>[a-f0-9]{64})\".*?version=\"\\d+(?:\\.\\d+)+\",\\n    base=\"fmt-\\d+(?:\\.\\d+)+\","
+        "\"(?<depName>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)\", \"(?<currentValue>[^\"]+)\",\\n    \"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "github-release-attachments",
+      "packageNameTemplate": "{{{depName}}}",
+      "autoReplaceStringTemplate": "\"{{{depName}}}\", \"{{{newValue}}}\",\n    \"{{{newDigest}}}\"",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Boost release in libboost.mk. Tags are boost-1.92.0. The makefile builds both URLs from BOOST_VERSION. shortcut: archives.boost.io publishes the sha256 in boost_<version>.tar.bz2.json, and this rule does not read it; replace BOOST_SHA256 from that file before merging",
+      "managerFilePatterns": ["/^build/libboost\\.mk$/"],
+      "matchStrings": [
+        "BOOST_VERSION = (?<currentValue>\\d+\\.\\d+\\.\\d+)"
       ],
       "datasourceTemplate": "github-releases",
-      "depNameTemplate": "fmtlib/fmt",
-      "packageNameTemplate": "fmtlib/fmt",
-      "autoReplaceStringTemplate": "https://github.com/fmtlib/fmt/archive/{{{newValue}}}.tar.gz\",\n    \"{{{newDigest}}}\",\n    \"lib/libfmt.a\",\n    [\n        \"-DBUILD_SHARED_LIBS=OFF\",\n        \"-DFMT_DOC=OFF\",\n        \"-DFMT_TEST=OFF\",\n    ],\n    name=\"fmt\",\n    version=\"{{{newValue}}}\",\n    base=\"fmt-{{{newValue}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse libsodium library version and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/jedisct1/libsodium/releases/download/(?<currentValue>\\d+(?:\\.\\d+)+-RELEASE)/libsodium-\\d+(?:\\.\\d+)+\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "jedisct1/libsodium",
-      "packageNameTemplate": "jedisct1/libsodium",
-      "autoReplaceStringTemplate": "https://github.com/jedisct1/libsodium/releases/download/{{{newValue}}}-RELEASE/libsodium-{{{newValue}}}.tar.gz\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse zlib library version and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/madler/zlib/releases/download/(?<currentValue>v\\d+(?:\\.\\d+)+)/zlib-\\d+(?:\\.\\d+)+\\.tar\\.xz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "madler/zlib",
-      "packageNameTemplate": "madler/zlib",
-      "autoReplaceStringTemplate": "https://github.com/madler/zlib/releases/download/v{{{newValue}}}/zlib-{{{newValue}}}.tar.xz\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse curl library version and checksum from libs.py (GitHub)",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/curl/curl/releases/download/(?<currentValue>curl-\\d+_\\d+_\\d+)/curl-\\d+(?:\\.\\d+)+\\.tar\\.xz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "curl/curl",
-      "packageNameTemplate": "curl/curl",
-      "autoReplaceStringTemplate": "https://github.com/curl/curl/releases/download/curl-{{{replace '\\\\.' '_' newValue}}}/curl-{{{newValue}}}.tar.xz\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse openssl library version and checksum from libs.py (GitHub)",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/openssl/openssl/releases/download/(?<currentValue>openssl-\\d+(?:\\.\\d+)+)/openssl-\\d+(?:\\.\\d+)+\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "openssl/openssl",
-      "packageNameTemplate": "openssl/openssl",
-      "autoReplaceStringTemplate": "https://github.com/openssl/openssl/releases/download/openssl-{{{newValue}}}/openssl-{{{newValue}}}.tar.gz\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse c-ares library version and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/c-ares/c-ares/releases/download/(?<currentValue>cares-\\d+_\\d+_\\d+)/c-ares-\\d+(?:\\.\\d+)+\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "c-ares/c-ares",
-      "packageNameTemplate": "c-ares/c-ares",
-      "autoReplaceStringTemplate": "https://github.com/c-ares/c-ares/releases/download/cares-{{{replace '\\\\.' '_' newValue}}}/c-ares-{{{newValue}}}.tar.gz\",\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse libusb library version and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/+libusb/libusb/releases/download/(?<currentValue>v\\d+(?:\\.\\d+)+)/libusb-\\d+(?:\\.\\d+)+\\.tar\\.bz2.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "libusb/libusb",
-      "packageNameTemplate": "libusb/libusb",
-      "autoReplaceStringTemplate": "https://github.com/libusb/libusb/releases/download/v{{{newValue}}}/libusb-{{{newValue}}}.tar.bz2\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse SDL2 library version and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/libsdl-org/SDL/releases/download/(?<currentValue>release-\\d+(?:\\.\\d+)+)/SDL2-\\d+(?:\\.\\d+)+\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "libsdl-org/SDL",
-      "packageNameTemplate": "libsdl-org/SDL",
-      "autoReplaceStringTemplate": "https://github.com/libsdl-org/SDL/releases/download/release-{{{newValue}}}/SDL2-{{{newValue}}}.tar.gz\",\n    ),\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse libjpeg-turbo GitHub URL and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/libjpeg-turbo/libjpeg-turbo/releases/download/(?<currentValue>\\d+(?:\\.\\d+)+)/libjpeg-turbo-\\d+(?:\\.\\d+)+\\.tar\\.gz.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "libjpeg-turbo/libjpeg-turbo",
-      "packageNameTemplate": "libjpeg-turbo/libjpeg-turbo",
-      "autoReplaceStringTemplate": "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/{{{newValue}}}/libjpeg-turbo-{{{newValue}}}.tar.gz\",\n    \"{{{newDigest}}}\"",
-      "versioningTemplate": "semver"
-    },
-    {
-      "customType": "regex",
-      "description": "Parse simple_usbmodeswitch GitHub mirror URL and checksum from libs.py",
-      "managerFilePatterns": ["/^build/python/build/libs\\.py$/"],
-      "matchStrings": [
-        "(?s)https://github\\.com/felixhaedicke/simple_usbmodeswitch/releases/download/(?<currentValue>v\\d+(?:\\.\\d+)+)/simple_usbmodeswitch-\\d+(?:\\.\\d+)+\\.tar\\.bz2.*?\"(?<currentDigest>[a-f0-9]{64})\""
-      ],
-      "datasourceTemplate": "github-release-attachments",
-      "depNameTemplate": "felixhaedicke/simple_usbmodeswitch",
-      "packageNameTemplate": "felixhaedicke/simple_usbmodeswitch",
-      "autoReplaceStringTemplate": "https://github.com/felixhaedicke/simple_usbmodeswitch/releases/download/v{{{newValue}}}/simple_usbmodeswitch-{{{newValue}}}.tar.bz2\",\n    ),\n    \"{{{newDigest}}}\"",
+      "depNameTemplate": "boostorg/boost",
+      "packageNameTemplate": "boostorg/boost",
+      "extractVersionTemplate": "^boost-(?<version>\\d+\\.\\d+\\.\\d+)$",
+      "autoReplaceStringTemplate": "BOOST_VERSION = {{{newValue}}}",
       "versioningTemplate": "semver"
     }
   ]

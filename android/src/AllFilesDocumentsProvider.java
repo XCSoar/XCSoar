@@ -36,11 +36,15 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.CancellationSignal;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
 import android.provider.DocumentsContract.Root;
 import android.provider.DocumentsProvider;
+import android.system.ErrnoException;
+import android.system.Os;
+import android.system.StructStat;
 
 import android.webkit.MimeTypeMap;
 
@@ -74,6 +78,9 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
   };
 
   private static final int MAX_SEARCH_RESULTS = 20;
+
+  private static final String ROOT_ID = "RootId";
+  private static final String DOC_ID_PREFIX = "root:";
 
   /**
    * @param projection the requested root column projection
@@ -111,11 +118,8 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
 
     Context context = Objects.requireNonNull(getContext());
 
-
-    File file = context.getExternalFilesDir(null);
-
-    row.add(Root.COLUMN_ROOT_ID, "RootId");
-    row.add(Root.COLUMN_DOCUMENT_ID, getDocIdForFile(file));
+    row.add(Root.COLUMN_ROOT_ID, ROOT_ID);
+    row.add(Root.COLUMN_DOCUMENT_ID, DOC_ID_PREFIX);
 
     ApplicationInfo applicationInfo = context.getApplicationInfo();
 
@@ -124,7 +128,8 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
 
     row.add(Root.COLUMN_FLAGS, Root.FLAG_LOCAL_ONLY
             | Root.FLAG_SUPPORTS_SEARCH
-            | Root.FLAG_SUPPORTS_CREATE);
+            | Root.FLAG_SUPPORTS_CREATE
+            | Root.FLAG_SUPPORTS_IS_CHILD);
 
     return (result);
   }
@@ -133,11 +138,12 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
   public Cursor queryChildDocuments(String parentDocumentId, String[] projection, String sortOrder) throws FileNotFoundException {
     MatrixCursor result = new MatrixCursor(resolveDocumentProjection(projection));
     try {
-      File filesDir = getFileForDocId(parentDocumentId);
+      final File root = getRootDirectory();
+      File filesDir = getExistingFile(root, parentDocumentId);
       for (File file : Objects.requireNonNull(filesDir.listFiles())) {
         // Don't show hidden files/folders
         if (!file.getName().startsWith(".")) {
-          addDocumentRow(result, file);
+          addDocumentRow(result, root, file);
         }
       }
     } catch (Exception e) {
@@ -151,7 +157,8 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
   public Cursor queryDocument(String documentId, String[] projection) throws FileNotFoundException {
     MatrixCursor result = new MatrixCursor(resolveDocumentProjection(projection));
     try {
-      addDocumentRow(result, getFileForDocId(documentId));
+      final File root = getRootDirectory();
+      addDocumentRow(result, root, getExistingFile(root, documentId));
     } catch (Exception e) {
       e.printStackTrace();
       throw new FileNotFoundException();
@@ -204,27 +211,125 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
     return getDocumentType(getFileForDocId(documentId));
   }
 
-  private String getDocIdForFile(File file) {
-    File rootFile = getContext().getExternalFilesDir(null);
-    return "root:" + rootFile.toURI().relativize(file.toURI()).toString();
-  }
+  /* the primary path of FindDataPaths() in src/LocalPath.cpp */
+  private File getRootDirectory() throws FileNotFoundException {
+    final Context context = Objects.requireNonNull(getContext());
+    try {
+      for (File dir : context.getExternalFilesDirs(null))
+        if (dir != null && new File(dir, "xcsoar.log").exists())
+          return dir.getCanonicalFile();
 
-  private File getFileForDocId(String documentId) throws FileNotFoundException {
-    String decoded = Uri.decode(documentId);
-    final int splitIndex = decoded.indexOf(':', 1);
-    final String path = decoded.substring(splitIndex + 1);
-    final File rootFile = getContext().getExternalFilesDir(null);
-    File file = new File(rootFile, path);
-    if (file.exists()) {
-      return file;
+      for (File dir : context.getExternalMediaDirs())
+        if (dir != null)
+          return dir.getCanonicalFile();
+
+      final File legacy =
+        Environment.getExternalStoragePublicDirectory("XCSoarData");
+      if (legacy != null && legacy.canWrite())
+        return legacy.getCanonicalFile();
+    } catch (IOException e) {
+      throw new FileNotFoundException(e.getMessage());
     }
-    throw new FileNotFoundException();
+
+    throw new FileNotFoundException("No data directory");
   }
 
-  private void addDocumentRow(MatrixCursor result, File file) throws FileNotFoundException {
+  private static boolean isInside(File parent, File file) {
+    final String parentPath = parent.getPath();
+    final String path = file.getPath();
+    return path.equals(parentPath) ||
+      path.startsWith(parentPath + File.separator);
+  }
+
+  private static String getDocIdForFile(File root, File file) {
+    final String rootPath = root.getPath();
+    final String path = file.getPath();
+    if (path.equals(rootPath))
+      return DOC_ID_PREFIX;
+    return DOC_ID_PREFIX +
+      Uri.encode(path.substring(rootPath.length() + 1), "/");
+  }
+
+  private static File resolveDocId(File root, String documentId)
+    throws FileNotFoundException {
+    if (!documentId.startsWith(DOC_ID_PREFIX))
+      throw new FileNotFoundException("Bad document id: " + documentId);
+
+    final String relative =
+      Uri.decode(documentId.substring(DOC_ID_PREFIX.length()));
+    final File file;
+    try {
+      file = new File(root, relative).getCanonicalFile();
+    } catch (IOException e) {
+      throw new FileNotFoundException(e.getMessage());
+    }
+
+    if (!isInside(root, file))
+      throw new FileNotFoundException("Bad document id: " + documentId);
+
+    return file;
+  }
+
+  private static File getExistingFile(File root, String documentId)
+    throws FileNotFoundException {
+    final File file = resolveDocId(root, documentId);
+    if (!file.exists())
+      throw new FileNotFoundException("No such document: " + documentId);
+    return file;
+  }
+
+  private File getFileForDocId(String documentId)
+    throws FileNotFoundException {
+    return getExistingFile(getRootDirectory(), documentId);
+  }
+
+  private static void checkDisplayName(String displayName)
+    throws FileNotFoundException {
+    if (displayName.isEmpty() || displayName.equals(".") ||
+        displayName.equals("..") || displayName.indexOf('/') >= 0 ||
+        displayName.indexOf('\0') >= 0)
+      throw new FileNotFoundException("Bad file name: " + displayName);
+  }
+
+  private static File buildUniqueFile(File parent, String displayName,
+                                      boolean isDirectory)
+    throws FileNotFoundException {
+    File file = new File(parent, displayName);
+    if (!file.exists())
+      return file;
+
+    String name = displayName;
+    String extension = "";
+    final int dot = displayName.lastIndexOf('.');
+    if (!isDirectory && dot > 0) {
+      name = displayName.substring(0, dot);
+      extension = displayName.substring(dot);
+    }
+
+    for (int i = 1; i < 32; ++i) {
+      file = new File(parent, name + " (" + i + ")" + extension);
+      if (!file.exists())
+        return file;
+    }
+
+    throw new FileNotFoundException("No unique name for " + displayName);
+  }
+
+  private static boolean isSameFile(File a, File b) {
+    try {
+      final StructStat sa = Os.stat(a.getPath());
+      final StructStat sb = Os.stat(b.getPath());
+      return sa.st_dev == sb.st_dev && sa.st_ino == sb.st_ino;
+    } catch (ErrnoException e) {
+      return false;
+    }
+  }
+
+  private void addDocumentRow(MatrixCursor result, File root, File file)
+    throws FileNotFoundException {
     MatrixCursor.RowBuilder row = result.newRow();
 
-    row.add(Document.COLUMN_DOCUMENT_ID, getDocIdForFile(file));
+    row.add(Document.COLUMN_DOCUMENT_ID, getDocIdForFile(root, file));
     row.add(Document.COLUMN_DISPLAY_NAME, file.getName());
     row.add(Document.COLUMN_SIZE, file.length());
     row.add(Document.COLUMN_LAST_MODIFIED, file.lastModified());
@@ -246,19 +351,53 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
   }
 
   @Override
+  public boolean isChildDocument(String parentDocumentId, String documentId) {
+    try {
+      final File root = getRootDirectory();
+      return isInside(resolveDocId(root, parentDocumentId),
+                      resolveDocId(root, documentId));
+    } catch (FileNotFoundException e) {
+      return false;
+    }
+  }
+
+  @Override
+  public DocumentsContract.Path findDocumentPath(String parentDocumentId,
+                                                 String childDocumentId)
+    throws FileNotFoundException {
+    final File root = getRootDirectory();
+    final File parent = parentDocumentId != null
+      ? getExistingFile(root, parentDocumentId)
+      : root;
+    File file = getExistingFile(root, childDocumentId);
+    if (!isInside(parent, file))
+      throw new FileNotFoundException(childDocumentId + " is not in " +
+                                      parentDocumentId);
+
+    final LinkedList<String> path = new LinkedList<>();
+    for (;; file = file.getParentFile()) {
+      path.addFirst(getDocIdForFile(root, file));
+      if (file.equals(parent))
+        break;
+    }
+
+    return new DocumentsContract.Path(parentDocumentId == null
+                                      ? ROOT_ID
+                                      : null,
+                                      path);
+  }
+
+  @Override
   public ParcelFileDescriptor openDocument(String documentId, String mode, CancellationSignal signal) throws FileNotFoundException {
     return ParcelFileDescriptor.open(getFileForDocId(documentId), ParcelFileDescriptor.parseMode(mode));
   }
 
   @Override
   public void deleteDocument(final String documentId) throws FileNotFoundException {
-    File file = getFileForDocId(documentId);
-    if (file.delete()) {
-      File parentFile = file.getParentFile();
-      if (parentFile != null) {
-        String parentDocumentId = getDocIdForFile(file.getParentFile());
-        notifyChildDocumentsChange(parentDocumentId);
-      }
+    final File root = getRootDirectory();
+    File file = getExistingFile(root, documentId);
+    if (!file.equals(root) && file.delete()) {
+      notifyChildDocumentsChange(getDocIdForFile(root, file.getParentFile()));
     } else {
       throw new FileNotFoundException("Failed to delete document id : " + documentId);
     }
@@ -267,7 +406,7 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
   @Override
   public Cursor querySearchDocuments(String rootId, String query, String[] projection) throws FileNotFoundException {
     final MatrixCursor result = new MatrixCursor(resolveDocumentProjection(projection));
-    final File parent = getContext().getExternalFilesDir(null);
+    final File parent = getRootDirectory();
     final LinkedList<File> pending = new LinkedList<>();
     final String lowerQuery = query.toLowerCase();
 
@@ -284,7 +423,7 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
       } else {
         // If it's a file and it matches, add it to the result cursor.
         if (file.getName().toLowerCase().contains(lowerQuery)) {
-          addDocumentRow(result, file);
+          addDocumentRow(result, parent, file);
         }
       }
     }
@@ -293,20 +432,25 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
 
   @Override
   public String createDocument(String parentDocumentId, String mimeType, String displayName) throws FileNotFoundException {
-    final File parent = getFileForDocId(parentDocumentId);
+    final File root = getRootDirectory();
+    final File parent = getExistingFile(root, parentDocumentId);
     if (!parent.isDirectory()) {
       throw new IllegalArgumentException("Parent document isn't a directory");
     }
-    File file = new File(parent, displayName);
+    checkDisplayName(displayName);
 
-    if (Document.MIME_TYPE_DIR.equals(mimeType)) {
-      if (!file.mkdirs()) {
+    final boolean isDirectory = Document.MIME_TYPE_DIR.equals(mimeType);
+    File file = buildUniqueFile(parent, displayName, isDirectory);
+
+    if (isDirectory) {
+      if (!file.mkdir()) {
         throw new FileNotFoundException("Failed to create directory with name " +
                                         displayName + " and documentId " + parentDocumentId);
       }
     } else {
       try {
-        file.createNewFile();
+        if (!file.createNewFile())
+          throw new IOException("File exists");
         file.setWritable(true);
         file.setReadable(true);
       } catch (IOException e) {
@@ -317,21 +461,29 @@ public class AllFilesDocumentsProvider extends DocumentsProvider {
 
     notifyChildDocumentsChange(parentDocumentId);
 
-    return getDocIdForFile(file);
+    return getDocIdForFile(root, file);
   }
 
   @Override
   public String renameDocument(String documentId, String displayName) throws FileNotFoundException {
-    File srcFile = getFileForDocId(documentId);
+    final File root = getRootDirectory();
+    File srcFile = getExistingFile(root, documentId);
+    if (srcFile.equals(root))
+      throw new FileNotFoundException("Cannot rename the root");
+    checkDisplayName(displayName);
+
     File parentFile = srcFile.getParentFile();
     File dstFile = new File(parentFile, displayName);
+    /* dstFile is srcFile for a case-only rename on case-insensitive storage */
+    if (dstFile.exists() && !isSameFile(srcFile, dstFile))
+      dstFile = buildUniqueFile(parentFile, displayName,
+                                srcFile.isDirectory());
+
     if (!srcFile.renameTo(dstFile)) {
       throw new FileNotFoundException("Failed to rename document with name " +
                                       displayName + " and documentId " + documentId);
     }
-    if (parentFile != null) {
-      notifyChildDocumentsChange(getDocIdForFile(parentFile));
-    }
-    return getDocIdForFile(dstFile);
+    notifyChildDocumentsChange(getDocIdForFile(root, parentFile));
+    return getDocIdForFile(root, dstFile);
   }
 }

@@ -83,7 +83,6 @@ concurrency:
 
 env:
   DEBUG: y
-  BOOST: boost_1_87_0
   # Names in the run Artifacts list; must match upload + download in
   # "Upload artifact for VirusTotal" and the upload-to-virustotal job.
   VT_ARTIFACT_WIN64OPENGL: virustotal-opengl-WIN64OPENGL
@@ -332,11 +331,11 @@ jobs:
       - name: "Cache Boost"
         uses: actions/cache@v6
         with:
-          key: ${{ env.BOOST }}-${{ hashFiles('lib/boost/patches/**') }}
+          key: boost-${{ hashFiles('build/libboost.mk', 'lib/boost/patches/**') }}
           path: |
-            ${{ github.workspace }}/output/download/${{ env.BOOST }}.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-${{ env.BOOST }}
-            ${{ github.workspace }}/output/src/${{ env.BOOST }}/boost
+            ${{ github.workspace }}/output/download/boost_*.tar.bz2
+            ${{ github.workspace }}/output/src/stamp-boost_*
+            ${{ github.workspace }}/output/src/boost_*/boost
 
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' }}

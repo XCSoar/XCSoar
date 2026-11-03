@@ -10,6 +10,12 @@ def untar(tarball_path: str, parent_path: str, base: str,
     except FileNotFoundError:
         pass
     os.makedirs(parent_path, exist_ok=True)
+    # GNU tar does not extract zip. fmt publishes its release as a zip.
+    if tarball_path.endswith('.zip'):
+        import zipfile
+        with zipfile.ZipFile(tarball_path) as archive:
+            archive.extractall(path=parent_path)
+        return path
     try:
         subprocess.check_call(['tar', 'xfC', tarball_path, parent_path])
     except FileNotFoundError:
