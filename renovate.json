@@ -32,6 +32,14 @@
       "commitMessagePrefix": "build/python/build/libs.py:"
     },
     {
+      "description": "Boost headers in libboost.mk (monthly). The checksum is not updated",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["build/libboost.mk"],
+      "schedule": ["* 0-5 1 * *"],
+      "commitMessagePrefix": "build/libboost.mk:",
+      "commitMessageTopic": "Boost"
+    },
+    {
       "description": "curl tags are curl-8_14_1",
       "matchManagers": ["custom.regex"],
       "matchDepNames": ["curl/curl"],
@@ -151,6 +159,20 @@
       "datasourceTemplate": "github-release-attachments",
       "packageNameTemplate": "{{{depName}}}",
       "autoReplaceStringTemplate": "\"{{{depName}}}\", \"{{{newValue}}}\",\n    \"{{{newDigest}}}\"",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Boost release in libboost.mk. Tags are boost-1.92.0. The makefile builds both URLs from BOOST_VERSION. shortcut: archives.boost.io publishes the sha256 in boost_<version>.tar.bz2.json, and this rule does not read it; replace BOOST_SHA256 from that file before merging",
+      "managerFilePatterns": ["/^build/libboost\\.mk$/"],
+      "matchStrings": [
+        "BOOST_VERSION = (?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "boostorg/boost",
+      "packageNameTemplate": "boostorg/boost",
+      "extractVersionTemplate": "^boost-(?<version>\\d+\\.\\d+\\.\\d+)$",
+      "autoReplaceStringTemplate": "BOOST_VERSION = {{{newValue}}}",
       "versioningTemplate": "semver"
     }
   ]

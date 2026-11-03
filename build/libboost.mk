@@ -1,6 +1,10 @@
-BOOST_URL = https://archives.boost.io/release/1.92.0/source/boost_1_92_0.tar.bz2
-BOOST_ALTERNATIVE_URL = https://sourceforge.net/projects/boost/files/boost/1.92.0/boost_1_92_0.tar.bz2/download
-BOOST_MD5 = 5c1d40cb8e19adbf740a4ec2da35b3e58f3f5804b1dce44deb53df72193cbc6c
+# One version. Both URLs are the same tarball; the SourceForge link is
+# the fallback. Renovate updates BOOST_VERSION and leaves BOOST_SHA256.
+BOOST_VERSION = 1.92.0
+BOOST_SHA256 = 5c1d40cb8e19adbf740a4ec2da35b3e58f3f5804b1dce44deb53df72193cbc6c
+BOOST_UNDERSCORE = $(subst .,_,$(BOOST_VERSION))
+BOOST_URL = https://archives.boost.io/release/$(BOOST_VERSION)/source/boost_$(BOOST_UNDERSCORE).tar.bz2
+BOOST_ALTERNATIVE_URL = https://sourceforge.net/projects/boost/files/boost/$(BOOST_VERSION)/boost_$(BOOST_UNDERSCORE).tar.bz2/download
 
 BOOST_TARBALL_NAME = $(notdir $(BOOST_URL))
 BOOST_TARBALL = $(DOWNLOAD_DIR)/$(BOOST_TARBALL_NAME)
@@ -11,7 +15,7 @@ BOOST_PATCHES = $(addprefix $(BOOST_PATCHES_DIR)/,$(shell cat $(BOOST_PATCHES_DI
 
 $(BOOST_TARBALL): | $(DOWNLOAD_DIR)/dirstamp
 	@$(NQ)echo "  GET     $@"
-	$(Q)./build/download.py $(BOOST_URL) $(BOOST_ALTERNATIVE_URL) $(BOOST_MD5) $(DOWNLOAD_DIR)
+	$(Q)./build/download.py $(BOOST_URL) $(BOOST_ALTERNATIVE_URL) $(BOOST_SHA256) $(DOWNLOAD_DIR)
 
 BOOST_UNTAR_STAMP = $(OUT)/src/stamp-$(BOOST_BASE_NAME)
 $(BOOST_UNTAR_STAMP): $(BOOST_TARBALL) $(BOOST_PATCHES_DIR)/series $(BOOST_PATCHES) | $(OUT)/src/dirstamp
