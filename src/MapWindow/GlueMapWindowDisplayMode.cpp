@@ -488,8 +488,8 @@ GlueMapWindow::CycleMapOrientation() noexcept
 
   StaticString<64> msg;
   msg.Format("%s: %s",
-             circling ? _("Circling orientation") : _("Cruise orientation"),
-             gettext(MapOrientationCaption(orientation)));
+              circling ? _("Circling orientation") : _("Cruise orientation"),
+              gettext(MapOrientationCaption(orientation)));
   Message::AddMessage(msg);
 
   ActionInterface::SendMapSettings(true);
@@ -577,7 +577,7 @@ GlueMapWindow::UpdateProjection() noexcept
   const bool circling =
     CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-    const auto center = rc.GetCenter();
+  const auto center = rc.GetCenter();
 
   const bool offset_active =
     !circling &&
@@ -634,9 +634,14 @@ GlueMapWindow::UpdateProjection() noexcept
     offset = offset_history.GetAverage();
 
     visible_projection.SetScreenOrigin(center + offset);
+  } else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
+             settings_map.cruise_orientation == MapOrientation::WIND_UP) {
+    const PixelPoint offset{0, 0};
+    visible_projection.SetScreenOrigin(center + offset);
   } else
     visible_projection.SetScreenOrigin(center.x,
       ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);
+
   if (freeze_for_gesture || !IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
   } else if (circling && calculated.thermal_locator.estimate_valid) {
@@ -647,7 +652,7 @@ GlueMapWindow::UpdateProjection() noexcept
       const auto d_max = 2 * visible_projection.GetMapScale();
       const auto t = std::min(d_t, d_max)/d_t;
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
-                                               t));
+                                            t));
     }
   } else if (basic.location_available)
     // Pan is off
