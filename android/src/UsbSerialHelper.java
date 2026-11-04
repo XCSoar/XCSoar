@@ -379,6 +379,29 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     registerReceiver();
   }
 
+  /**
+   * Add the attached devices that XCSoar may access but that are
+   * missing from the list, e.g. after a replug whose permission was
+   * granted by starting XCSoar for it rather than by our request.
+   */
+  private synchronized void addPermittedDevices() {
+    for (UsbDevice device : usbmanager.getDeviceList().values()) {
+      if (!usbmanager.hasPermission(device))
+        continue;
+
+      boolean listed = false;
+      for (UsbDeviceInterface i : interfaces) {
+        if (i.isDevice(device)) {
+          listed = true;
+          break;
+        }
+      }
+
+      if (!listed)
+        addAvailable(device);
+    }
+  }
+
   private void close() {
     unregisterReceiver();
   }
@@ -395,13 +418,17 @@ public final class UsbSerialHelper extends BroadcastReceiver {
   }
 
   private void requestPermission(UsbDevice device) {
-    int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-      ? PendingIntent.FLAG_IMMUTABLE
+    /* mutable, so the UsbManager can add EXTRA_DEVICE and
+       EXTRA_PERMISSION_GRANTED to the result; explicit, because
+       Android 14 refuses a mutable PendingIntent with an implicit
+       Intent */
+    int flags = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+      ? PendingIntent.FLAG_MUTABLE
       : 0;
+    Intent intent = new Intent(ACTION_USB_PERMISSION);
+    intent.setPackage(context.getPackageName());
     PendingIntent pi =
-      PendingIntent.getBroadcast(context, 0,
-                                 new Intent(ACTION_USB_PERMISSION),
-                                 flags);
+      PendingIntent.getBroadcast(context, 0, intent, flags);
 
     usbmanager.requestPermission(device, pi);
   }
@@ -410,6 +437,11 @@ public final class UsbSerialHelper extends BroadcastReceiver {
     throws IOException
   {
     UsbDeviceInterface deviface = getAvailable(id);
+    if (deviface == null) {
+      addPermittedDevices();
+      deviface = getAvailable(id);
+    }
+
     if (deviface == null)
       throw new IOException("USB serial device not found");
 
