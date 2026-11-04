@@ -37,6 +37,9 @@ Version 7.47 - not yet released
     ignore unexpected messages from the board instead of failing
   - let file sync apps open the XCSoar data folder through the
     Android folder picker, also when it is in Android/data
+  - reconnect a USB serial device that was unplugged and plugged in
+    again; XCSoar kept reporting "USB serial device not found" until
+    it was restarted #3450
 * dialogs
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
