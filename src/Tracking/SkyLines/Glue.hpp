@@ -11,6 +11,7 @@
 
 struct CloudSettings;
 struct DerivedInfo;
+struct MoreData;
 
 namespace SkyLinesTracking {
 
@@ -42,6 +43,7 @@ class Glue {
 
   bool cloud_show_traffic = true;
   bool cloud_roaming = true;
+  bool cloud_forward_to_ogn = false;
 
   StaticString<64> cloud_host;
 
@@ -58,7 +60,7 @@ public:
 
   void BeginShutdown() noexcept;
 
-  void Tick(const NMEAInfo &basic, const DerivedInfo &calculated);
+  void Tick(const MoreData &basic, const DerivedInfo &calculated);
 
   void RequestUserName(uint32_t user_id) {
     if ((user_id & OGN_PILOT_ID_MASK) != 0) {
@@ -75,7 +77,7 @@ private:
   void ReconnectClients();
 
   void SendFixes(const NMEAInfo &basic);
-  void SendCloudFix(const NMEAInfo &basic, const DerivedInfo &calculated);
+  void SendCloudFix(const MoreData &basic, const DerivedInfo &calculated);
 };
 
 } /* namespace SkyLinesTracking */

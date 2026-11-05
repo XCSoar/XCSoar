@@ -105,6 +105,7 @@ TEST_NAMES = \
 	TestFlarmNet TestFlarmMessaging TestFlarmBinaryProtocol \
 	TestFlarmSpokenAlert \
 	TestSpokenAirspaceAlert \
+	TestSkyLinesFix \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
@@ -528,12 +529,22 @@ TEST_AIRSPACE_WARNING_MANAGER_SOURCES = \
 TEST_AIRSPACE_WARNING_MANAGER_DEPENDS = $(TEST1_DEPENDS) UNITS
 $(eval $(call link-program,TestAirspaceWarningManager,TEST_AIRSPACE_WARNING_MANAGER))
 
+TEST_SKYLINES_FIX_SOURCES = \
+	$(SRC)/Tracking/SkyLines/Assemble.cpp \
+	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSkyLinesFix.cpp
+TEST_SKYLINES_FIX_DEPENDS = LIBNMEA GEO MATH UTIL TIME
+$(eval $(call link-program,TestSkyLinesFix,TEST_SKYLINES_FIX))
+
 TEST_OGN_APRS_PARSER_SOURCES = \
 	$(SRC)/Cloud/OGNAprs.cpp \
 	$(SRC)/Cloud/OGNTraffic.cpp \
+	$(SRC)/Cloud/OGNDeviceDatabase.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOGNAprsParser.cpp
-TEST_OGN_APRS_PARSER_DEPENDS = GEO MATH UTIL UNITS
+TEST_OGN_APRS_PARSER_DEPENDS = IO OS GEO MATH UTIL UNITS
 $(eval $(call link-program,TestOGNAprsParser,TEST_OGN_APRS_PARSER))
 
 TEST_OBSERVATION_STORE_SOURCES = \

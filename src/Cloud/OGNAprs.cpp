@@ -10,6 +10,7 @@
 #include "util/NumberParser.hxx"
 #include "util/StringStrip.hxx"
 
+#include <cmath>
 #include <cstdio>
 
 using std::string_view;
@@ -349,4 +350,97 @@ ParseOGNAprsLine(string_view line) noexcept
   r.address_type = address_type;
   ResolveOgnCallsign(line, r, r.callsign);
   return r;
+}
+
+/**
+ * Append a latitude or longitude in APRS form (degrees, minutes with
+ * two decimals, hemisphere) and return the third decimal of the
+ * minutes, for the "!W..!" precision extension.
+ */
+static unsigned
+AppendAprsAngle(std::string &dest, Angle angle, unsigned degree_digits,
+                char positive, char negative) noexcept
+{
+  /* thousandths of a minute */
+  const unsigned long total =
+    std::lround(std::fabs(angle.Degrees()) * 60000);
+  const unsigned degrees = total / 60000;
+  const unsigned thousandths = total % 60000;
+
+  char buffer[16];
+  snprintf(buffer, sizeof(buffer), "%0*u%02u.%02u%c",
+           int(degree_digits), degrees, thousandths / 1000,
+           thousandths % 1000 / 10,
+           angle.Native() < 0 ? negative : positive);
+  dest.append(buffer);
+  return thousandths % 10;
+}
+
+std::string
+FormatOGNXCSBeacon(const OGNXCSFix &fix) noexcept
+{
+  const unsigned address_type = (fix.id >> 24) & 0x3;
+  const char *prefix;
+  if (address_type == 2)
+    prefix = "FLR";
+  else if (address_type == 1)
+    prefix = "ICA";
+  else
+    return {};
+
+  /* stealth or no tracking: not forwarded at all */
+  if (fix.id & 0xc0000000)
+    return {};
+
+  /* below sea level: OGN parsers read the altitude as an unsigned
+     number and would drop it, with the course and the speed */
+  if (!fix.location.IsValid() || fix.gps_altitude < 0)
+    return {};
+
+  std::string line;
+  char buffer[64];
+
+  const auto seconds = fix.time_of_day.count() / 1000 % 86400;
+  snprintf(buffer, sizeof(buffer), "%s%06X>OGNXCS,qOR:/%02u%02u%02uh",
+           prefix, unsigned(fix.id & 0xffffff),
+           unsigned(seconds / 3600), unsigned(seconds / 60 % 60),
+           unsigned(seconds % 60));
+  line.append(buffer);
+
+  const unsigned lat_precision =
+    AppendAprsAngle(line, fix.location.latitude, 2, 'N', 'S');
+  line.push_back('/');
+  const unsigned lon_precision =
+    AppendAprsAngle(line, fix.location.longitude, 3, 'E', 'W');
+  line.push_back('\'');
+
+  /* APRS: course 0 means "unknown", north is 360 */
+  const unsigned course = fix.track_deg
+    ? (*fix.track_deg % 360 == 0 ? 360 : *fix.track_deg % 360)
+    : 0;
+  const unsigned speed = fix.ground_speed
+    ? unsigned(std::lround(Units::ToUserUnit(*fix.ground_speed,
+                                             Unit::KNOTS)))
+    : 0;
+  snprintf(buffer, sizeof(buffer), "%03u/%03u", course, speed);
+  line.append(buffer);
+
+  const long feet =
+    std::lround(Units::ToUserUnit(fix.gps_altitude, Unit::FEET));
+  snprintf(buffer, sizeof(buffer), "/A=%06ld", feet);
+  line.append(buffer);
+
+  snprintf(buffer, sizeof(buffer), " !W%u%u! id%08X",
+           lat_precision, lon_precision, unsigned(fix.id));
+  line.append(buffer);
+
+  if (fix.vertical_speed) {
+    const long fpm =
+      std::lround(Units::ToUserUnit(*fix.vertical_speed,
+                                    Unit::FEET_PER_MINUTE));
+    snprintf(buffer, sizeof(buffer), " %+04ldfpm", fpm);
+    line.append(buffer);
+  }
+
+  return line;
 }
