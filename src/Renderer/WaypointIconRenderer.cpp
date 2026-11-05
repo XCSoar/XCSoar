@@ -67,13 +67,16 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
     return look.pgtakeoff_icon;
   case Waypoint::Type::PGLANDING:
     return look.pglanding_icon;
-  default:
-    if (in_task) {
-      return look.task_turn_point_icon;
-    } else {
-      return look.turn_point_icon;
-    }
+  case Waypoint::Type::NORMAL:
+  case Waypoint::Type::AIRFIELD:
+  case Waypoint::Type::OUTLANDING:
+  case Waypoint::Type::COUNT:
+    break;
   }
+
+  if (in_task)
+    return look.task_turn_point_icon;
+  return look.turn_point_icon;
 }
 
 static void
