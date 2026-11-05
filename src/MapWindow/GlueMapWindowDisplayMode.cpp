@@ -488,8 +488,8 @@ GlueMapWindow::CycleMapOrientation() noexcept
 
   StaticString<64> msg;
   msg.Format("%s: %s",
-             circling ? _("Circling orientation") : _("Cruise orientation"),
-             gettext(MapOrientationCaption(orientation)));
+              circling ? _("Circling orientation") : _("Cruise orientation"),
+              gettext(MapOrientationCaption(orientation)));
   Message::AddMessage(msg);
 
   ActionInterface::SendMapSettings(true);
@@ -579,6 +579,17 @@ GlueMapWindow::UpdateProjection() noexcept
 
   const auto center = rc.GetCenter();
 
+  const bool offset_active =
+    !circling &&
+    IsNearSelf() &&
+    settings_map.glider_screen_position != 50 &&
+    settings_map.map_shift_bias != MapShiftBias::NONE &&
+    (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
+     settings_map.cruise_orientation == MapOrientation::WIND_UP);
+
+  if (!offset_active)
+    offset_history.Reset();
+
   /* Gesture ownership is not pan UI: while still FOLLOWING the
      aircraft, freeze origin/GPS so two-finger down does not jump to
      a pan-style centred projection below the pan-entry threshold. */
@@ -588,43 +599,48 @@ GlueMapWindow::UpdateProjection() noexcept
     /* keep the current screen origin */
   } else if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center);
-  else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
-           settings_map.cruise_orientation == MapOrientation::WIND_UP) {
+  else if (offset_active) {
     PixelPoint offset{0, 0};
-    if (settings_map.glider_screen_position != 50 &&
-        settings_map.map_shift_bias != MapShiftBias::NONE) {
-      double x = 0, y = 0;
-      if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
-        if (basic.track_available &&
-            basic.ground_speed_available &&
-             /* 8 m/s ~ 30 km/h */
-            basic.ground_speed > 8) {
-          auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
+    double x = 0, y = 0;
 
-          const auto sc = angle.SinCos();
-          x = sc.first;
-          y = sc.second;
-        }
-      } else if (settings_map.map_shift_bias == MapShiftBias::TARGET) {
-        if (calculated.task_stats.current_leg.solution_remaining.IsDefined()) {
-          auto angle = calculated.task_stats.current_leg.solution_remaining
-              .vector.bearing.Reciprocal() - visible_projection.GetScreenAngle();
+    if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
+      if (basic.track_available &&
+          basic.ground_speed_available &&
+          /* 8 m/s ~ 30 km/h */
+          basic.ground_speed > 8) {
+        auto angle = basic.track.Reciprocal() - visible_projection.GetScreenAngle();
 
-          const auto sc = angle.SinCos();
-          x = sc.first;
-          y = sc.second;
-        }
+        const auto sc = angle.SinCos();
+        x = sc.first;
+        y = sc.second;
       }
-      double position_factor = (50. - settings_map.glider_screen_position) / 100.;
-      offset.x = int(x * rc.GetWidth() * position_factor);
-      offset.y = int(-y * rc.GetHeight() * position_factor);
-      offset_history.Add(offset);
-      offset = offset_history.GetAverage();
+    } else if (settings_map.map_shift_bias == MapShiftBias::TARGET) {
+      if (calculated.task_stats.current_leg.solution_remaining.IsDefined()) {
+        auto angle = calculated.task_stats.current_leg.solution_remaining
+            .vector.bearing.Reciprocal() - visible_projection.GetScreenAngle();
+
+        const auto sc = angle.SinCos();
+        x = sc.first;
+        y = sc.second;
+      }
     }
+
+    const double position_factor =
+      (50. - settings_map.glider_screen_position) / 100.;
+    offset.x = int(x * rc.GetWidth() * position_factor);
+    offset.y = int(-y * rc.GetHeight() * position_factor);
+
+    offset_history.Add(offset);
+    offset = offset_history.GetAverage();
+
+    visible_projection.SetScreenOrigin(center + offset);
+  } else if (settings_map.cruise_orientation == MapOrientation::NORTH_UP ||
+             settings_map.cruise_orientation == MapOrientation::WIND_UP) {
+    const PixelPoint offset{0, 0};
     visible_projection.SetScreenOrigin(center + offset);
   } else
     visible_projection.SetScreenOrigin(center.x,
-        ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);
+      ((rc.top - rc.bottom) * settings_map.glider_screen_position / 100) + rc.bottom);
 
   if (freeze_for_gesture || !IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
@@ -636,7 +652,7 @@ GlueMapWindow::UpdateProjection() noexcept
       const auto d_max = 2 * visible_projection.GetMapScale();
       const auto t = std::min(d_t, d_max)/d_t;
       SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
-                                               t));
+                                            t));
     }
   } else if (basic.location_available)
     // Pan is off
