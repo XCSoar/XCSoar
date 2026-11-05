@@ -58,6 +58,7 @@ public:
 
   bool HasCredentials() const noexcept;
   bool IsThrottled() const noexcept;
+  unsigned GetLoginRejectedStatus() const noexcept;
 
   time_t GetThrottleRemainingSeconds() const noexcept;
   time_t GetDatafilesRetryRemainingSeconds() const noexcept;
@@ -126,6 +127,7 @@ public:
   [[nodiscard]] SkySightCache::Usage ClearDownloadedData() noexcept;
 
   void OnAuthenticated() noexcept;
+  void OnLoginRejected() noexcept;
   void OnRegions(boost::json::value value) noexcept;
   void OnLayers(boost::json::value value) noexcept;
   void OnLastUpdates(std::string_view requested_layer_id,
