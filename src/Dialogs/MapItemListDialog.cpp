@@ -4,6 +4,7 @@
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
+#include "InfoBoxes/Content/Alternate.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
@@ -122,6 +123,7 @@ class MapItemListWidget final
   MapItemListRenderer renderer;
 
   Button *settings_button, *details_button, *cancel_button, *goto_button;
+  Button *alternate_button;
   Button *sim_jump_button = nullptr;
   Button *ack_button, *enable_button;
   Button *clearance_button, *revoke_clearance_button;
@@ -178,8 +180,11 @@ public:
 protected:
   void UpdateButtons() {
     const MapItem *item = GetItem(GetCursorIndex());
+    const bool can_select_alternate =
+      item != nullptr && CanSelectAlternateItem(*item);
     details_button->SetEnabled(item != nullptr && HasDetails(*item));
     goto_button->SetEnabled(item != nullptr && CanGotoItem(*item));
+    alternate_button->SetEnabled(can_select_alternate);
     if (sim_jump_button != nullptr)
       sim_jump_button->SetEnabled(item != nullptr &&
                                   is_simulator() &&
@@ -194,6 +199,7 @@ protected:
   }
 
   void OnGotoClicked();
+  void OnAlternateClicked();
   void OnAckClicked();
   void OnEnableClicked();
   void OnClearanceClicked(bool set);
@@ -233,6 +239,15 @@ public:
 
     return item.type == MapItem::Type::WAYPOINT ||
            item.type == MapItem::Type::LOCATION;
+  }
+
+  /**
+   * Only landable waypoints may be selected as an alternate; the
+   * temporary "goto" location of a LOCATION item is not one.
+   */
+  static bool CanSelectAlternateItem(const MapItem &item) noexcept {
+    return CanGotoItem(item) && item.type == MapItem::Type::WAYPOINT &&
+           static_cast<const WaypointMapItem &>(item).waypoint->IsLandable();
   }
 
   bool CanAckItem(unsigned index) const noexcept {
@@ -333,6 +348,9 @@ MapItemListWidget::CreateButtons(WidgetDialog &dialog,
   goto_button = dialog.AddButton(_("GoTo"), [this](){
     OnGotoClicked();
   });
+
+  alternate_button = dialog.AddButton(C_("Button", "Select as Alternate"),
+                                      [this](){ OnAlternateClicked(); });
 
   if (is_simulator()) {
     sim_jump_button = dialog.AddButton(C_("Button", "Sim: Jump to"), [this](){
@@ -574,6 +592,23 @@ MapItemListWidget::OnSimJumpClicked() noexcept
 
   if (SimJumpTo(location))
     cancel_button->Click();
+}
+
+inline void
+MapItemListWidget::OnAlternateClicked()
+{
+  const MapItem *item = GetItem(GetCursorIndex());
+  if (item == nullptr || !CanSelectAlternateItem(*item))
+    return;
+
+  const auto &waypoint = static_cast<const WaypointMapItem &>(*item).waypoint;
+
+  const auto slot = dlgAlternateSlotShowModal(waypoint->name.c_str());
+  if (!slot.has_value())
+    return;
+
+  SelectManualAlternateWaypoint(*slot, waypoint);
+  cancel_button->Click();
 }
 
 inline void
