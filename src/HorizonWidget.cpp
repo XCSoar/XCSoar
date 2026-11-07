@@ -11,6 +11,31 @@
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
+#include "Math/Util.hpp"
+
+static bool
+SameAhrs(const AttitudeState &a, const AttitudeState &b) noexcept
+{
+  const bool bank = a.bank_angle_available;
+  const bool pitch = a.pitch_angle_available;
+  if (bank != bool(b.bank_angle_available) ||
+      pitch != bool(b.pitch_angle_available))
+    return false;
+  if (bank && a.bank_angle != b.bank_angle)
+    return false;
+  if (pitch && a.pitch_angle != b.pitch_angle)
+    return false;
+  return true;
+}
+
+static bool
+SameTape(const std::optional<double> &a,
+         const std::optional<double> &b) noexcept
+{
+  if (a.has_value() != b.has_value())
+    return false;
+  return !a || iround(*a) == iround(*b);
+}
 
 /**
  * A Window which renders a terrain and airspace cross-section
@@ -21,6 +46,7 @@ class HorizonWindow : public AntiFlickerWindow {
 
   AttitudeState attitude;
   HorizonRenderer::HorizonReadout readout;
+  bool have_sample = false;
 
   GestureManager gestures;
   bool dragging = false;
@@ -36,8 +62,17 @@ public:
   }
 
   void ReadBlackboard(const MoreData &basic) noexcept {
-    attitude = basic.attitude;
-    readout = HorizonRenderer::Readout(basic);
+    const AttitudeState next_attitude = basic.attitude;
+    const auto next_readout = HorizonRenderer::Readout(basic);
+    if (have_sample &&
+        SameAhrs(attitude, next_attitude) &&
+        SameTape(readout.speed, next_readout.speed) &&
+        SameTape(readout.altitude, next_readout.altitude))
+      return;
+
+    attitude = next_attitude;
+    readout = next_readout;
+    have_sample = true;
     Invalidate();
   }
 
@@ -133,7 +168,6 @@ HorizonWidget::Update(const MoreData &basic) noexcept
 {
   HorizonWindow &w = (HorizonWindow &)GetWindow();
   w.ReadBlackboard(basic);
-  w.Invalidate();
 }
 
 void
@@ -153,7 +187,7 @@ void
 HorizonWidget::Show(const PixelRect &rc) noexcept
 {
   Update(CommonInterface::Basic());
-  CommonInterface::GetLiveBlackboard().AddListener(*this);
+  CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
 
   WindowWidget::Show(rc);
 }
@@ -163,7 +197,8 @@ HorizonWidget::Hide() noexcept
 {
   WindowWidget::Hide();
 
-  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limiter);
+  rate_limiter.Cancel();
 }
 
 void
