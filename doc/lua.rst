@@ -668,6 +668,26 @@ The following attributes are provided by ``xcsoar.replay``:
  * - ``is_active``
    - Returns true if replay is currently active, false otherwise.
 
+.. _lua.key:
+
+Key press
+---------
+
+``xcsoar.key.press(name)`` queues one key press on the UI event queue,
+the same path as a real key. The call returns before the UI handles
+it. An optional count queues that many presses at once (at most
+10000), which is enough to pan the map in a benchmark. Pace a longer
+scenario with :ref:`lua.timer`.
+
+Names are the key-binding names, including ``LEFT``, ``RIGHT``,
+``UP``, ``DOWN``, ``ESCAPE``, ``RETURN``, ``F1`` and ``F2``. ``ESC``
+and ``ENTER`` are accepted as well.
+
+.. code-block:: lua
+
+ xcsoar.key.press("F1")
+ xcsoar.key.press("RIGHT", 30)
+
 .. _lua.timer:
 
 Timer
