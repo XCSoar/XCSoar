@@ -27,6 +27,7 @@
 #include "Tracking.hpp"
 #endif
 #include "Replay.hpp"
+#include "Key.hpp"
 #include "InputEvent.hpp"
 
 lua_State *
@@ -54,6 +55,7 @@ Lua::NewFullState()
   InitTracking(L);
 #endif
   InitReplay(L);
+  InitKey(L);
   InitInputEvent(L);
 
   {
