@@ -47,6 +47,7 @@ LUA_SOURCES = \
 	$(SRC)/lua/Wind.cpp \
 	$(SRC)/lua/Logger.cpp \
 	$(SRC)/lua/Replay.cpp \
+	$(SRC)/lua/Key.cpp \
 	$(SRC)/lua/InputEvent.cpp \
 
 ifeq ($(TARGET),ANDROID)

@@ -77,6 +77,8 @@ Version 7.47 - not yet released
 * task
   - scan task QR codes with the camera on iOS, like on Android
 * development
+  - queue a key press from Lua with xcsoar.key.press, for scripted
+    UI checks and map benchmarks
   - document which reload runs when a map zip finishes loading and
     when File Manager updates a configured file #3095
   - consolidate and simplify cross-compilation flags and options for

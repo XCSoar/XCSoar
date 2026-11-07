@@ -86,6 +86,14 @@ draw or backend paths::
   xcsoar.replay.start("test/data/issue-2661/short_2026-06-20_11-47.nmea")
   xcsoar.replay.process_all()
 
+``xcsoar.key.press`` queues a key on that same UI event queue, so a
+script can drive menus or pan the map. The UI handles the key after
+the call returns. Names include ``LEFT``, ``RIGHT``, ``UP``,
+``DOWN``, ``ESCAPE``, ``RETURN``, ``F1`` and ``F2`` (:ref:`lua.key`)::
+
+  xcsoar.key.press("F1")
+  xcsoar.key.press("RIGHT", 30)
+
 Experiment with scripts using ``RunLua`` (see :doc:`lua`). Replay
 bindings: :ref:`lua.replay`.
 
