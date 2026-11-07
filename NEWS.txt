@@ -60,6 +60,8 @@ Version 7.47 - not yet released
     bugs, QNH, the maximum forecast temperature, the ATC radial, Goto,
     and checklist ticks
   - describe shared thermal markers, their details, and Go To
+  - state that waypoint details image= and file= names start at the
+    data directory, as in waypoints/details/ETSI_1.png #3453
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
