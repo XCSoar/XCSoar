@@ -12917,3 +12917,6 @@ msgstr "Aparat nie nadaje się do użycia"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "NO AHRS"
+msgstr "Brak AHRS"

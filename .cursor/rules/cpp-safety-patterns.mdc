@@ -116,3 +116,28 @@ plane.max_speed = DEFAULT_MAX_SPEED;
 ```
 
 When the same value is expressed differently in different files (e.g., `36.1` vs `130.0 / 3.6`), use the same expression everywhere to make the relationship obvious and avoid subtle precision differences.
+
+## Screen resources outlive the screen
+
+A `Font` or `Bitmap` must not be a function-local `static`. `~Font` calls `Destroy()` (AppKit and UIKit have no `Font` destructor) and `~Bitmap` calls `Reset()`, and both assert `IsScreenInitialized()`, so quit aborts. `Pen` and `Brush` do not. The text cache may still key a `Font` by address: keep that object in something destroyed while the screen is up, or leak it on purpose.
+
+```cpp
+// BAD: ~Font runs after FreeType and the screen are gone
+static const Font *
+LabelFont() noexcept
+{
+  static Font font;
+  if (!font.IsDefined())
+    font.Load(FontDescription(12, true));
+  return &font;
+}
+
+// GOOD: destroyed with the Look, while the screen is still up
+struct LabelLook {
+  Font font;
+
+  void Initialise() {
+    font.Load(FontDescription(12, true));
+  }
+};
+```
