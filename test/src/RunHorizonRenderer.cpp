@@ -73,6 +73,7 @@ Main(TestMainWindow &main_window)
     HorizonRenderer::HorizonReadout readout;
     readout.speed = 110 + 20 * std::sin(t * 0.23);
     readout.altitude = 1500 + 200 * std::sin(t * 0.11);
+    readout.course = std::fmod(40 + t * 8, 360.0);
 
     horizon.SetState(attitude, readout);
   });

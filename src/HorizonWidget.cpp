@@ -11,7 +11,6 @@
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
-#include "Math/Util.hpp"
 
 static bool
 SameAhrs(const AttitudeState &a, const AttitudeState &b) noexcept
@@ -63,11 +62,12 @@ public:
 
   void ReadBlackboard(const MoreData &basic) noexcept {
     const AttitudeState next_attitude = basic.attitude;
-    const auto next_readout = HorizonRenderer::Readout(basic);
+    auto next_readout = HorizonRenderer::Readout(basic);
     if (have_sample &&
         SameAhrs(attitude, next_attitude) &&
         SameTape(readout.speed, next_readout.speed) &&
-        SameTape(readout.altitude, next_readout.altitude))
+        SameTape(readout.altitude, next_readout.altitude) &&
+        SameTape(readout.course, next_readout.course))
       return;
 
     attitude = next_attitude;
@@ -190,6 +190,17 @@ HorizonWidget::Show(const PixelRect &rc) noexcept
   CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
 
   WindowWidget::Show(rc);
+}
+
+void
+HorizonWidget::Move(const PixelRect &rc) noexcept
+{
+  WindowWidget::Move(rc);
+
+  /* A layout pass with the same pixel size (text size, DPI) does not
+     resize the window, so it would not repaint.  The draw refits the
+     tapes and chevrons from the rect and the layout scale. */
+  GetWindow().Invalidate();
 }
 
 void

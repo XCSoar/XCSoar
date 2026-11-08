@@ -15,12 +15,14 @@ class Canvas;
 
 namespace HorizonRenderer {
 
-/** User-unit speed and altitude for the full-horizon tapes. */
+/** User-unit speed and altitude, and true track, for the full horizon. */
 struct HorizonReadout {
   std::optional<double> speed;
   double speed_step = 10;
   std::optional<double> altitude;
   double altitude_step = 50;
+  /** True track in degrees, 0..360. */
+  std::optional<double> course;
 };
 
 void Draw(Canvas &canvas, const PixelRect &rc,
@@ -30,7 +32,8 @@ void Draw(Canvas &canvas, const PixelRect &rc,
 
 /**
  * Indicated airspeed when it is available, otherwise ground speed.
- * Altitude is the navigation altitude.  Steps match the user unit.
+ * Altitude is the navigation altitude.  Course is the true track.
+ * Steps match the user unit.
  */
 [[nodiscard]]
 inline HorizonReadout
@@ -55,6 +58,9 @@ Readout(const MoreData &basic) noexcept
 
   if (basic.NavAltitudeAvailable())
     readout.altitude = Units::ToUserAltitude(basic.nav_altitude);
+
+  if (basic.track_available)
+    readout.course = basic.track.AsBearing().Degrees();
 
   return readout;
 }
