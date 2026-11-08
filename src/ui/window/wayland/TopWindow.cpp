@@ -8,7 +8,6 @@
 #include "ui/event/poll/Queue.hpp"
 #include "ui/display/Display.hpp"
 #include "ui/display/wayland/Scale.hpp"
-#include "Asset.hpp"
 #include "LogFile.hpp"
 #include "xdg-shell-client-protocol.h"
 #include "xdg-decoration-unstable-v1-client-protocol.h"
@@ -24,7 +23,6 @@
 #include <wayland-egl.h>
 
 #include <stdexcept>
-#include <chrono>
 
 namespace UI {
 
@@ -272,7 +270,6 @@ TopWindow::CreateNative(const char *text, PixelSize size,
 {
   initial_requested_size = size;
   received_first_configure = false;
-  last_resize_flush_time = std::chrono::steady_clock::now();
   scale_120 = display.GetScale120();
 
   auto compositor = event_queue->GetCompositor();
@@ -615,24 +612,17 @@ TopWindow::OnResize(PixelSize new_size) noexcept
   event_queue->SetScreenSize(new_size);
   ApplySurfaceScale(CompositorLogicalSize());
 
-  if (screen != nullptr) {
+  if (screen != nullptr)
     Invalidate();
-    if (screen->IsReady() && IsVisible() && !IsFramePending()) {
-      ArmFrameCallback();
-      Expose();
-      const auto now = std::chrono::steady_clock::now();
-      const auto time_since_last_flush =
-        std::chrono::duration_cast<std::chrono::milliseconds>(
-          now - last_resize_flush_time).count();
-      const int throttle_ms = HasEPaper() ? 100 : 16;
-      if (time_since_last_flush >= throttle_ms) {
-        wl_display_flush(display.GetWaylandDisplay());
-        last_resize_flush_time = now;
-      }
-    } else if (wl_surface != nullptr) {
-      wl_surface_commit(wl_surface);
-    }
-  }
+
+  /* The matching xdg_surface.configure is still queued behind this
+     callback, so its ack has not been sent.  Expose() swaps buffers,
+     and Mesa waits inside that swap until the compositor releases
+     one.  The compositor will not do that before the ack, so the UI
+     thread stalls for the compositor's timeout.  Wake the loop
+     instead; it paints after dispatch has sent the ack. */
+  if (event_queue != nullptr)
+    event_queue->Push(Event::NOP);
 
   ContainerWindow::OnResize(new_size);
 
