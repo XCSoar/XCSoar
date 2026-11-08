@@ -284,6 +284,7 @@ jobs:
           path: ${{ github.workspace }}/output/download
 
       - name: "Cache target-specific downloads"
+        id: target_downloads
         uses: actions/cache@v6
         with:
           key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
@@ -915,6 +916,28 @@ jobs:
 
       - name: Show ccache stats
         run: ccache --show-stats || true
+
+      # The UNIX package is built in a copy of the tree, with a download
+      # directory of its own.
+      - name: "Collect the downloads of a failed package build"
+        if: ${{ failure() && matrix.target == 'UNIX' && steps.target_downloads.outputs.cache-hit != 'true' }}
+        run: |
+          [ ! -d output/UNIX/DPKG/output/download ] || \
+            rsync -a --ignore-existing --exclude='lock.*' \
+              output/UNIX/DPKG/output/download/ output/download/
+
+      # actions/cache saves only after a successful job, so a build that
+      # fails on a download loses the files it already fetched, and the
+      # next attempt starts over.  The separate key leaves the normal one
+      # free for the complete set; the restore key
+      # "downloads-$os-$target-" finds this one too.  Last in the job, so
+      # that a failure in any step is covered.
+      - name: "Keep the downloads of a failed build"
+        if: ${{ failure() && steps.target_downloads.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v6
+        with:
+          key: downloads-${{ runner.os }}-${{ matrix.target }}-partial-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ github.workspace }}/output/download
 
   # shortcut: WIN64OPENGL only; add WIN32OPENGL the same way when 32-bit tests matter
   windows-tests:
