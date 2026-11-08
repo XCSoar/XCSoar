@@ -172,7 +172,6 @@ class TopWindow : public ContainerWindow {
 
   PixelSize initial_requested_size{0, 0};
   PixelSize compositor_size{0, 0};
-  std::chrono::steady_clock::time_point last_resize_flush_time;
   unsigned scale_120 = 120;
 
 private:
