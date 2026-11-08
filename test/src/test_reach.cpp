@@ -18,6 +18,7 @@
 #include "Operation/Operation.hpp"
 #include "system/FileUtil.hpp"
 #include "util/PrintException.hxx"
+#include "FlyablePolar.hpp"
 
 #include <zzip/zzip.h>
 
@@ -31,7 +32,7 @@ test_reach(const RasterMap &map, double mwind, double mc, double height_min_work
   RoutePlannerConfig config;
   config.SetDefaults();
 
-  GlidePolar polar(mc);
+  GlidePolar polar = FlyablePolar(mc);
   SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
   route.UpdatePolar(settings, config, polar, polar, wind, height_min_working);

@@ -315,6 +315,7 @@ GlidePolarTest::TestNextLegEqThermal()
       Units::ToSysUnit(174.3, Unit::KILOMETER_PER_HOUR),
       Units::ToSysUnit(213.04, Unit::KILOMETER_PER_HOUR),
       -0.77, -1.89, -3.3), false);
+  asw20.SetVMax(75, false);
   asw20.Update();
   asw20.SetMC(1.5);
 
@@ -347,36 +348,35 @@ GlidePolarTest::Run()
 }
 
 /**
- * The constructor's stand-in polar must be recognisable as such, so
- * that it is never sent to a device as the pilot's polar (#3269).
+ * Without a plane there is no glider: neither a polar that could be
+ * flown nor its masses.  The settings are kept.
  */
 static void
-TestFallback()
+TestNullPolar()
 {
-  GlidePolar polar(0);
-  ok1(polar.IsValid());
-  ok1(polar.IsFallback());
+  const GlidePolar polars[] = {GlidePolar(), GlidePolar(0),
+                               GlidePolar::Invalid()};
+  for (const auto &polar : polars) {
+    ok1(!polar.IsValid());
+    ok1(!polar.IsBallastable());
+    ok1(polar.GetTotalMass() == 0);
+    ok1(polar.GetMaxBallast() == 0);
+  }
 
-  /* the masses, MC, bugs and ballast do not make it a glider's polar */
-  polar.SetMC(1.5);
-  polar.SetBugs(0.9);
-  polar.SetReferenceMass(383);
-  ok1(polar.IsFallback());
-
-  /* a polar set up for a glider is not the fallback */
-  polar.SetCoefficients(PolarCoefficients(0.0011, -0.07, 1.6));
-  ok1(!polar.IsFallback());
-
-  ok1(!GlidePolar::Invalid().IsFallback());
+  const GlidePolar polar(1.5, 0.9, 20);
+  ok1(!polar.IsValid());
+  ok1(equals(polar.GetMC(), 1.5));
+  ok1(equals(polar.GetBugs(), 0.9));
+  ok1(equals(polar.GetBallastLitres(), 20));
 }
 
 int main()
 {
-  plan_tests(69 + 3 + 21 + 5 + 9);
+  plan_tests(69 + 3 + 21 + 9 + 16);
 
   GlidePolarTest test;
   test.Run();
-  TestFallback();
+  TestNullPolar();
 
   return exit_status();
 }

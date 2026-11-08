@@ -2610,6 +2610,7 @@ TestLXV7PolarWrite()
   polar.SetWingArea(9.8);
   polar.SetBugs(1);
   polar.SetBallastLitres(0);
+  polar.SetVMax(75, false);
   polar.Update();
   ok1(polar.IsValid());
 

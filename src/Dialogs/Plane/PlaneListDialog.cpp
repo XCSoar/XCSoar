@@ -180,8 +180,7 @@ SendLoadedPolar(const GlidePolar &polar) noexcept
       backend_components->devices == nullptr)
     return;
 
-  /* The fallback stands in for a missing or broken plane profile. */
-  if (!polar.IsValid() || polar.IsFallback())
+  if (!polar.IsValid())
     return;
 
   MessageOperationEnvironment env;

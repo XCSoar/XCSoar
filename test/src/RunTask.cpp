@@ -8,6 +8,7 @@
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "FlyablePolar.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -117,7 +118,7 @@ int main(int argc, char **argv)
 
   task->UpdateGeometry();
 
-  const GlidePolar glide_polar(1);
+  const GlidePolar glide_polar = FlyablePolar(1);
 
   Run(*replay, *task, glide_polar);
   delete replay;

@@ -51,6 +51,7 @@
 #include "Computer/ConditionMonitor/ConditionMonitors.hpp"
 #include "Input/InputQueue.hpp"
 #include "Logger/Logger.hpp"
+#include "FlyablePolar.hpp"
 
 void dlgBasicSettingsShowModal() {}
 void ShowWindSettingsDialog() {}
@@ -137,7 +138,7 @@ Main(UI::Display &display)
 
   InterfaceBlackboard blackboard;
   blackboard.SetComputerSettings().SetDefaults();
-  blackboard.SetComputerSettings().polar.glide_polar_task = GlidePolar(1);
+  blackboard.SetComputerSettings().polar.glide_polar_task = FlyablePolar(1);
   blackboard.SetUISettings().SetDefaults();
 
   TaskBehaviour task_behaviour;

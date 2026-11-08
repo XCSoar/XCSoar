@@ -25,6 +25,7 @@
 #include "time/BrokenDateTime.hpp"
 #include "TestUtil.hpp"
 #include "time/FloatDuration.hxx"
+#include "FlyablePolar.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -128,7 +129,7 @@ struct Scene
   std::unique_ptr<AirspaceWarningManager> mgr;
 
   explicit Scene(AirspacePtr first, AirspacePtr second = nullptr)
-    : polar(2.0), a(std::move(first)), b(std::move(second))
+    : polar(FlyablePolar(2.0)), a(std::move(first)), b(std::move(second))
   {
     db.Add(a);
     if (b != nullptr)

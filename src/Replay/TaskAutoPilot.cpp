@@ -5,6 +5,7 @@
 #include "TaskAccessor.hpp"
 #include "Task/Stats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "Plane/Plane.hpp"
 
 #include <algorithm> // for std::clamp()
 
@@ -198,12 +199,28 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
   heading = heading.AsBearing();
 }
 
+/**
+ * The demo flies a glider even when none is set up.
+ */
+static GlidePolar
+MakeDemoPolar() noexcept
+{
+  GlidePolar polar(0);
+  polar.SetCoefficients(PolarCoefficients(0.00157, -0.0734, 1.48), false);
+  polar.SetReferenceMass(300, false);
+  polar.SetEmptyMass(300, false);
+  polar.SetCrewMass(90, false);
+  polar.SetVMax(DEFAULT_MAX_SPEED, false);
+  polar.Update();
+  polar.SetMC(0);
+  return polar;
+}
+
 void
 TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
                            const FloatDuration timestep) noexcept
 {
-  /* the demo flies a glider even when none is set up */
-  static const GlidePolar demo_polar(0);
+  static const GlidePolar demo_polar = MakeDemoPolar();
   const GlidePolar &glide_polar = task.GetGlidePolar().IsValid()
     ? task.GetGlidePolar()
     : demo_polar;

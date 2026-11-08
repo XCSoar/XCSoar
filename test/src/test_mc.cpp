@@ -15,6 +15,7 @@
 #include <string>
 #include <math.h>
 
+#include "FlyablePolar.hpp"
 extern "C" {
 #include "tap.h"
 }
@@ -24,7 +25,7 @@ const double Vmin(5.0);
 static void
 polar_mc(std::ofstream &ofile, const double mc)
 {
-  GlidePolar polar(mc);
+  GlidePolar polar = FlyablePolar(mc);
   ofile << (double)mc << " " 
         << (double)polar.GetVBestLD() << " " 
         << (double)polar.GetBestLD() << " " 
@@ -42,7 +43,7 @@ basic_polar(const double mc)
   std::ofstream pfile("output/results/res-polar.txt");
   std::ofstream mfile(bname);
 
-  GlidePolar polar(mc);
+  GlidePolar polar = FlyablePolar(mc);
   for (double V= Vmin; V<= polar.GetVMax(); V+= 0.25) {
     pfile << (double)mc << " " 
           << (double)V << " " 
@@ -71,7 +72,7 @@ test_glide_alt(const double h, const double W, const double Wangle,
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(1);
 
   AircraftState ac;
@@ -102,7 +103,7 @@ test_glide_stf(const double h, const double W, const double Wangle, const double
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(1);
 
   AircraftState ac;
@@ -215,7 +216,7 @@ test_glide_cb(const double h, const double W, const double Wangle,
   GlideSettings settings;
   settings.SetDefaults();
 
-  GlidePolar polar(1);
+  GlidePolar polar = FlyablePolar(1);
 
   AircraftState ac;
   ac.wind.norm = fabs(W);
