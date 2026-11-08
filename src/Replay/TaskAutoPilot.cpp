@@ -230,7 +230,8 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
   case FinalGlide:
   {
     const ElementStat &stat = task.GetLegStats();
-    if (stat.solution_remaining.v_opt > 0)
+    if (stat.solution_remaining.IsDefined() &&
+        stat.solution_remaining.v_opt > 0)
       state.true_airspeed = stat.solution_remaining.v_opt * speed_factor;
     else
       state.true_airspeed = glide_polar.GetVBestLD();
