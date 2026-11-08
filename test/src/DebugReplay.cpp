@@ -8,9 +8,10 @@
 #include "system/PathName.hpp"
 #include "Computer/Settings.hpp"
 #include "util/StringCompare.hxx"
+#include "FlyablePolar.hpp"
 
 DebugReplay::DebugReplay()
-  :glide_polar(1)
+  :glide_polar(FlyablePolar(1))
 {
   raw_basic.Reset();
   computed_basic.Reset();

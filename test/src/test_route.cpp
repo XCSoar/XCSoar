@@ -25,6 +25,7 @@
 
 #include <string.h>
 
+#include "FlyablePolar.hpp"
 extern "C" {
 #include "tap.h"
 }
@@ -74,7 +75,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     AGeoPoint loc_end(p_dest, map.GetHeight(p_dest).GetValueOr0() + 100);
 
     AircraftState state;
-    GlidePolar glide_polar(0.1);
+    GlidePolar glide_polar = FlyablePolar(0.1);
     const AirspaceAircraftPerformance perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
@@ -125,7 +126,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     // try the solver
     SpeedVector wind(Angle::Degrees(0), 0);
-    GlidePolar polar(1);
+    GlidePolar polar = FlyablePolar(1);
 
     GlideSettings settings;
     settings.SetDefaults();

@@ -7,6 +7,7 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "system/Args.hpp"
 #include "DebugReplay.hpp"
+#include "FlyablePolar.hpp"
 
 #include <stdio.h>
 
@@ -21,7 +22,7 @@ int main(int argc, char **argv)
 
   printf("# time wind_bearing (deg) wind_speed (m/s)\n");
 
-  GlidePolar glide_polar(0);
+  GlidePolar glide_polar = FlyablePolar(0);
 
   CirclingSettings circling_settings;
   circling_settings.SetDefaults();

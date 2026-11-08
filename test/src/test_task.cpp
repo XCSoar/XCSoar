@@ -6,6 +6,7 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "test_debug.hpp"
 
+#include "FlyablePolar.hpp"
 extern "C" {
 #include "tap.h"
 }
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
   static constexpr unsigned NUM_TYPE_MANIPS = 50;
   plan_tests(8+NUM_TYPE_MANIPS+NUM_TASKS+2+6+NUM_RANDOM);
   
-  GlidePolar glide_polar(2);
+  GlidePolar glide_polar = FlyablePolar(2);
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();

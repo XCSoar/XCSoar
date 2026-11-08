@@ -101,28 +101,31 @@ class GlidePolar
 
 public:
   /**
-   * Constructs an uninitialized object.
-   */
-  constexpr GlidePolar() noexcept : density_ratio(1.0) {}
-
-  /**
-   * Constructor.  Performs search for best LD at instantiation
+   * Constructs an object without a polar and without masses, so
+   * IsValid() is false until a glider has been set up.  MacCready,
+   * bugs and ballast are settings and do not depend on the glider.
    *
    * @param _mc MacCready value at construction
    * @param _bugs Bugs (clean) ratio (default clean)
    * @param _ballast Ballast in litres (default empty)
    */
-  GlidePolar(double _mc, double _bugs=1,
-             double _ballast=0) noexcept;
+  constexpr GlidePolar(double _mc=0, double _bugs=1,
+                       double _ballast=0) noexcept
+    :mc(_mc), inv_mc(_mc > 0 ? 1 / _mc : 0),
+     bugs(_bugs), ballast_litres(_ballast), cruise_efficiency(1),
+     bestLD(0), VbestLD(0), SbestLD(0),
+     Vmax(0), Smax(0), Vmin(0), Smin(0),
+     reference_polar(0, 0, 0), polar(0, 0, 0),
+     max_ballast(0), ballast_ratio(0),
+     reference_mass(0), empty_mass(0), crew_mass(0),
+     wing_area(0), density_ratio(1) {}
 
   /**
    * Constructs a GlidePolar object that is invalid.
    */
   [[gnu::const]]
   static GlidePolar Invalid() noexcept {
-    GlidePolar gp(0);
-    gp.SetInvalid();
-    return gp;
+    return GlidePolar(0);
   }
 
   /**
@@ -596,23 +599,6 @@ public:
       max_ballast = ballast_ratio * reference_mass;
     if (update)
       Update();
-  }
-
-  /**
-   * The polar the constructor starts with.  It stands in while no
-   * valid polar has been set up, e.g. when the plane profile is
-   * missing or broken, so it is not the pilot's glider.
-   */
-  static constexpr PolarCoefficients FALLBACK_POLAR{0.00157, -0.0734, 1.48};
-
-  /**
-   * Is this still the constructor's #FALLBACK_POLAR rather than a polar
-   * that was set up for a glider?
-   */
-  constexpr bool IsFallback() const noexcept {
-    return reference_polar.a == FALLBACK_POLAR.a &&
-      reference_polar.b == FALLBACK_POLAR.b &&
-      reference_polar.c == FALLBACK_POLAR.c;
   }
 
   /** Returns the ideal polar coefficients */

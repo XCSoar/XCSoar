@@ -30,6 +30,7 @@
 #include "Geo/GeoVector.hpp"
 #include "Radio/TransponderCode.hpp"
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 #include <chrono>
 #include <cmath>
@@ -142,7 +143,7 @@ main()
      path distances correspond directly to lon differences. */
   const GeoPoint origin = P(10.0, 50.0);
 
-  GlidePolar polar(2.0);
+  GlidePolar polar = FlyablePolar(2.0);
   ok1(polar.IsValid());
 
   TaskStats task_stats;

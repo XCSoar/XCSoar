@@ -37,9 +37,10 @@
 #include "system/Path.hpp"
 
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 static GlideSettings glide_settings;
-static GlidePolar glide_polar(1.0);
+static GlidePolar glide_polar = FlyablePolar(1.0);
 
 /**
  * Test that Waypoint::GetElevationOrZero() returns correct values

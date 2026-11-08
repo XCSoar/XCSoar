@@ -10,10 +10,11 @@
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskSettings ordered_task_settings;
-static GlidePolar glide_polar(0);
+static GlidePolar glide_polar = FlyablePolar(0);
 
 static constexpr GeoPoint
 MakeGeoPoint(double longitude, double latitude) noexcept

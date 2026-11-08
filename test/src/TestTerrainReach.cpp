@@ -7,6 +7,7 @@
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "FlyablePolar.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "TestUtil.hpp"
@@ -85,7 +86,7 @@ Solve(TerrainRoute &route, const RoutePlannerConfig &config,
 {
   GlideSettings settings;
   settings.SetDefaults();
-  const GlidePolar polar(0);
+  const GlidePolar polar = FlyablePolar(0);
   route.UpdatePolar(settings, config, polar, polar,
                     SpeedVector(Angle::Zero(), 0), height_min_working);
   return route.SolveReach(origin, config, INT_MAX, true, working);
@@ -97,7 +98,7 @@ SolveWind(TerrainRoute &route, const RoutePlannerConfig &config,
 {
   GlideSettings settings;
   settings.SetDefaults();
-  const GlidePolar polar(0);
+  const GlidePolar polar = FlyablePolar(0);
   route.UpdatePolar(settings, config, polar, polar, wind, 0);
   return route.SolveReach(origin, config, INT_MAX, true, false);
 }
@@ -202,7 +203,7 @@ TestTooLow(const RasterMap &map)
 
   GlideSettings settings;
   settings.SetDefaults();
-  const GlidePolar polar(0);
+  const GlidePolar polar = FlyablePolar(0);
   route.UpdatePolar(settings, config, polar, polar,
                     SpeedVector(Angle::Zero(), 0), 0);
 
