@@ -8,6 +8,7 @@
 #include "NMEA/Derived.hpp"
 #include "NMEA/MoreData.hpp"
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 #include <algorithm>
 #include <array>
@@ -102,7 +103,7 @@ TestMergedSensorSTF() noexcept
   ComputerSettings settings;
   settings.features.block_stf_enabled = false;
   settings.task.risk_gamma = 0.;
-  settings.polar.glide_polar_task = GlidePolar(1.);
+  settings.polar.glide_polar_task = FlyablePolar(1.);
 
   MoreData basic{};
   basic.clock = TimeStamp{FloatDuration{1}};

@@ -11,6 +11,7 @@
 #include "Engine/Task/TaskBehaviour.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -62,7 +63,7 @@ TestGlide() noexcept
   const GlideState high     = Leg(distance, 0, 6000, SpeedVector::Zero());
   const SpeedVector zero    = SpeedVector::Zero();
 
-  GlidePolar mc0(0);
+  GlidePolar mc0 = FlyablePolar(0);
   const GlideResult at0 = Fly(mc0, high);
   CheckHeight(mc0, high, at0);
   ok1(std::fabs(at0.v_opt - mc0.GetVBestLD()) < 0.05);
@@ -78,7 +79,7 @@ TestGlide() noexcept
   ok1(on.IsFinalGlide() && std::fabs(on.altitude_difference) < 1e-3);
   ok1(!Fly(mc0, Leg(distance, 0, at0.height_glide - 1, zero)).IsFinalGlide());
 
-  GlidePolar mc2(2);
+  GlidePolar mc2 = FlyablePolar(2);
   const GlideResult at2 = Fly(mc2, high);
   CheckHeight(mc2, high, at2);
   ok1(equals(at2.v_opt, mc2.GetVBestLD()));
@@ -93,18 +94,18 @@ TestGlide() noexcept
 
   const GlideState probe = Leg(40000, 0, 1500, zero);
   ok1(Fly(mc0, probe).IsFinalGlide());
-  ok1(!Fly(GlidePolar(4), probe).IsFinalGlide());
+  ok1(!Fly(FlyablePolar(4), probe).IsFinalGlide());
   double lo = 0, hi = 4;
   for (int i = 0; i < 20; ++i) {
     const double mid_mc = (lo + hi) / 2;
-    if (Fly(GlidePolar(mid_mc), probe).IsFinalGlide())
+    if (Fly(FlyablePolar(mid_mc), probe).IsFinalGlide())
       lo = mid_mc;
     else
       hi = mid_mc;
   }
-  const GlideResult edge = Fly(GlidePolar(lo), probe);
+  const GlideResult edge = Fly(FlyablePolar(lo), probe);
   ok1(edge.IsFinalGlide() && std::fabs(edge.altitude_difference) < 40);
-  ok1(!Fly(GlidePolar(hi), probe).IsFinalGlide());
+  ok1(!Fly(FlyablePolar(hi), probe).IsFinalGlide());
 
   constexpr double windy_distance = 25000;
   const GlideState calm           = Leg(windy_distance, 0, 7000, zero);
@@ -145,24 +146,24 @@ TestGlide() noexcept
   ok1(Fly(mc0, Leg(windy_distance, 0, need - 50, WindFrom(180, 12)))
         .IsFinalGlide());
 
-  GlidePolar heavy(0);
+  GlidePolar heavy = FlyablePolar(0);
   heavy.SetBallastLitres(heavy.GetMaxBallast());
   const GlideResult wet = Fly(heavy, high);
   ok1(wet.v_opt > at0.v_opt && wet.time_elapsed < at0.time_elapsed);
   const double ratio = wet.height_glide / at0.height_glide;
   ok1(ratio > 0.85 && ratio < 1.15);
 
-  GlidePolar dirty(0);
+  GlidePolar dirty = FlyablePolar(0);
   dirty.SetBugs(0.7);
   ok1(Fly(dirty, high).height_glide > at0.height_glide);
 
-  GlidePolar high_alt(0);
+  GlidePolar high_alt = FlyablePolar(0);
   high_alt.SetDensityRatio(1.2);
   const GlideResult up = Fly(high_alt, high);
   CheckHeight(high_alt, high, up);
   ok1(up.v_opt > at0.v_opt);
 
-  GlidePolar sloppy(2);
+  GlidePolar sloppy = FlyablePolar(2);
   sloppy.SetCruiseEfficiency(0.8);
   const GlideState room     = Leg(distance, 0, 8000, zero);
   const GlideResult perfect = Fly(mc2, room);
@@ -170,7 +171,7 @@ TestGlide() noexcept
   CheckHeight(sloppy, room, off);
   ok1(equals(off.height_glide, perfect.height_glide / 0.8));
 
-  GlidePolar limited(0);
+  GlidePolar limited = FlyablePolar(0);
   limited.SetMC(20);
   GlidePolar safety = limited;
   safety.SetMCLimitedByCruise(false);
@@ -180,7 +181,7 @@ TestGlide() noexcept
   ok1(equals(capped.v_opt, limited.GetVMax()));
   ok1(free.v_opt > capped.v_opt && free.height_glide > capped.height_glide);
 
-  GlidePolar mc1(1);
+  GlidePolar mc1 = FlyablePolar(1);
   const GlideResult wide    = Fly(mc1, Leg(distance, 0, 6000, zero));
   const GlideState low_gate = Leg(distance, 0, wide.height_glide + 400, zero);
   const GlideState high_gate =
@@ -200,7 +201,7 @@ TestGlide() noexcept
 static void
 TestBranches() noexcept
 {
-  GlidePolar polar(2);
+  GlidePolar polar = FlyablePolar(2);
   const double v            = polar.GetVBestLD();
   const double sink         = polar.SinkRate(v);
   constexpr double distance = 30000;
@@ -242,14 +243,14 @@ TestBranches() noexcept
   ok1(!climb.IsFinalGlide());
   ok1(equals(climb.time_elapsed.count(), deficit / polar.GetMC()));
   ok1(Fly(polar, Leg(0, 400, 900, WindFrom(0, 80))).IsFinalGlide());
-  ok1(Fly(GlidePolar(0), Leg(0, 0, -deficit, zero)).validity ==
+  ok1(Fly(FlyablePolar(0), Leg(0, 0, -deficit, zero)).validity ==
       GlideResult::Validity::MACCREADY_INSUFFICIENT);
 
   const double wind = 8;
-  GlidePolar weak(0.2);
+  GlidePolar weak = FlyablePolar(0.2);
   ok1(Fly(weak, Leg(0, 0, -deficit, WindFrom(0, wind))).validity ==
       GlideResult::Validity::MACCREADY_INSUFFICIENT);
-  GlidePolar strong(4);
+  GlidePolar strong = FlyablePolar(4);
   const GlideResult drifted =
     Fly(strong, Leg(0, 0, -deficit, WindFrom(0, wind)));
   const double denom1     = strong.GetVBestLD() - wind;
@@ -260,7 +261,7 @@ TestBranches() noexcept
   ok1(Fly(strong, Leg(0, 0, -deficit, WindFrom(0, strong.GetVBestLD() + 1)))
         .validity == GlideResult::Validity::WIND_EXCESSIVE);
 
-  GlidePolar slow(0.1);
+  GlidePolar slow = FlyablePolar(0.1);
   const double hole         = (slow.GetVBestLD() + slow.GetVMax()) / 2;
   const GlideState hole_leg = Leg(15000, 0, 12000, WindFrom(0, hole));
   ok1(MacCready(settings, slow)
@@ -271,7 +272,7 @@ TestBranches() noexcept
   const GlideResult searched = Fly(searching, hole_leg);
   ok1(searched.IsOk() && searched.v_opt > hole);
 
-  GlidePolar fast0(0);
+  GlidePolar fast0 = FlyablePolar(0);
   const GlideResult almost =
     Fly(fast0, Leg(5000, 0, 15000, WindFrom(0, fast0.GetVMax() - 1)));
   ok1(almost.IsOk() && almost.altitude_difference < 0);
@@ -289,7 +290,7 @@ TestBranches() noexcept
 static void
 TestSpeedToFly() noexcept
 {
-  GlidePolar polar(2);
+  GlidePolar polar = FlyablePolar(2);
   const GlideResult into = Fly(polar, Leg(20000, 0, 6000, WindFrom(0, 10)));
   const GlideResult away = Fly(polar, Leg(20000, 0, 6000, WindFrom(180, 10)));
 
@@ -326,7 +327,7 @@ TestSpeedToFly() noexcept
   ok1(polar.SpeedToFly(0, 8) > polar.SpeedToFly(0, 0) &&
       polar.SpeedToFly(0, 0) > polar.SpeedToFly(0, -8));
 
-  GlidePolar mc0(0);
+  GlidePolar mc0 = FlyablePolar(0);
   const GlideResult into0 = Fly(mc0, Leg(20000, 0, 6000, WindFrom(0, 10)));
   const GlideResult away0 = Fly(mc0, Leg(20000, 0, 6000, WindFrom(180, 10)));
   ac.Reset();
@@ -341,7 +342,7 @@ TestSpeedToFly() noexcept
 static void
 TestPossibleAndDrift() noexcept
 {
-  GlidePolar polar(2);
+  GlidePolar polar = FlyablePolar(2);
   ok1(!polar.IsGlidePossible(Leg(1000, 0, 0, SpeedVector::Zero())));
 
   constexpr double alt = 300;
@@ -352,7 +353,7 @@ TestPossibleAndDrift() noexcept
   ok1(polar.IsGlidePossible(tricky) && !Fly(polar, tricky).IsFinalGlide());
   ok1(!polar.IsGlidePossible(Leg(optimistic * 2, 0, alt, head)));
 
-  GlidePolar mc1(1);
+  GlidePolar mc1 = FlyablePolar(1);
   const GlideResult low      = Fly(mc1, Leg(80000, 0, 200, WindFrom(0, 8)));
   GlideSettings drift        = settings;
   drift.predict_wind_drift   = true;
@@ -383,7 +384,7 @@ Added(const GlideResult &a, const GlideResult &b) noexcept
 static void
 TestTwoLegs() noexcept
 {
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   constexpr double distance = 10000;
   const SpeedVector zero    = SpeedVector::Zero();
 
@@ -405,7 +406,7 @@ TestTwoLegs() noexcept
 static void
 TestRisk() noexcept
 {
-  GlidePolar polar(2);
+  GlidePolar polar = FlyablePolar(2);
 
   ok1(equals(polar.GetRiskMC(0.2, 0.05), polar.GetMC()));
   ok1(equals(polar.GetRiskMC(0.25, 0.95), 0.5));
@@ -489,8 +490,8 @@ TestFlightMode() noexcept
 static void
 TestPilotWatch() noexcept
 {
-  GlidePolar day(2);
-  GlidePolar flat(0);
+  GlidePolar day = FlyablePolar(2);
+  GlidePolar flat = FlyablePolar(0);
   const SpeedVector zero    = SpeedVector::Zero();
   constexpr double distance = 20000;
 
@@ -539,7 +540,7 @@ TestPilotWatch() noexcept
 static void
 TestStrategies() noexcept
 {
-  GlidePolar polar(2);
+  GlidePolar polar = FlyablePolar(2);
   const double v         = polar.GetVBestLD();
   const double sink      = polar.GetSBestLD();
   const double mc        = polar.GetMC();
@@ -589,7 +590,7 @@ TestStrategies() noexcept
   ac.ground_speed = 30;
   ac.vario        = 3;
   ok1(above.IsFinalGlide());
-  ok1(equals(above.InstantSpeed(ac, above, GlidePolar(0)), 30));
+  ok1(equals(above.InstantSpeed(ac, above, FlyablePolar(0)), 30));
 
   const double head  = above.head_wind;
   ac.vario           = 4;

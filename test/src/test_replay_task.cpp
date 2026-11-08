@@ -20,6 +20,7 @@
 
 #include <fstream>
 
+#include "FlyablePolar.hpp"
 extern "C" {
 #include "tap.h"
 }
@@ -80,7 +81,7 @@ test_replay()
   Directory::Create(Path("output/results"));
   std::ofstream f("output/results/res-sample.txt");
 
-  GlidePolar glide_polar(4.0);
+  GlidePolar glide_polar = FlyablePolar(4.0);
   Waypoints waypoints;
   AircraftState state_last;
 

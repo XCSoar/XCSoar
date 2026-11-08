@@ -9,11 +9,12 @@
 #include "Engine/GlideSolvers/MacCready.hpp"
 
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 #include <cmath>
 
 static GlideSettings glide_settings;
-static GlidePolar glide_polar(0);
+static GlidePolar glide_polar = FlyablePolar(0);
 
 static void
 Test(const double distance, const double altitude, const SpeedVector wind)
@@ -114,7 +115,7 @@ TestWind(const SpeedVector &wind)
 static void
 TestArrivesAtBestGlide()
 {
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
   polar.SetMC(4);
 
   const GeoVector vector(60000, Angle::Zero());
@@ -152,7 +153,7 @@ TestArrivesAtBestGlide()
 static void
 TestCrosswind()
 {
-  GlidePolar polar(1);
+  GlidePolar polar = FlyablePolar(1);
   const GeoVector north(20000, Angle::Zero());
   const double wind_speed = 10;
 

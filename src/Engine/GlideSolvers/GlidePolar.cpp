@@ -14,30 +14,6 @@
 
 #include <cassert>
 
-GlidePolar::GlidePolar(double _mc, double _bugs,
-                       double _ballast) noexcept
-  :mc(_mc),
-   bugs(_bugs),
-   ballast_litres(_ballast),
-   cruise_efficiency(1),
-   VbestLD(0),
-   Vmax(75),
-   Vmin(0),
-   reference_polar(FALLBACK_POLAR),
-   max_ballast(90),
-   ballast_ratio(0.3),
-   reference_mass(300),
-   empty_mass(reference_mass),
-   crew_mass(90.),
-   wing_area(0),
-   density_ratio(1)
-{
-  Update();
-
-  // Calculate inv_mc
-  SetMC(mc);
-}
-
 void
 GlidePolar::Update() noexcept
 {

@@ -17,6 +17,7 @@
 #include "Engine/GlideSolvers/MacCready.hpp"
 #include "Engine/GlideSolvers/GlideSettings.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "FlyablePolar.hpp"
 
 class FinalGlideBarWindow : public PaintWindow
 {
@@ -34,7 +35,7 @@ public:
            1000, 1000,
            SpeedVector(Angle::Zero(), 0))
   {
-    glide_polar = GlidePolar(0);
+    glide_polar = FlyablePolar(0);
 
     calculated.task_stats.total.solution_remaining =
       MacCready::Solve(glide_settings, glide_polar, state);
