@@ -97,9 +97,10 @@ Look::InitialiseConfigured(const UISettings &settings,
 void
 Look::ReinitialiseLayout(unsigned infobox_width, unsigned scale_title_font)
 {
-  /* dialog fonts follow Layout::FontScale(); reload after DPI or
-     Text size changes */
+  /* Fonts and pens follow Layout::.  Reload after a resize, DPI
+     change, or Text size change. */
   dialog.LoadFonts();
+  horizon.Initialise();
 
   info_box.ReinitialiseLayout(infobox_width, scale_title_font);
   vario.ReinitialiseLayout(infobox_width);
