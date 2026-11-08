@@ -24,6 +24,7 @@ public:
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Show(const PixelRect &rc) noexcept override;
   void Hide() noexcept override;
+  void Move(const PixelRect &rc) noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */
