@@ -459,10 +459,10 @@ RaspSettingsWidget::AddPageItems() noexcept
     if (Rasp::EditTimeOnLayout(overlay.draft))
       Refresh();
   }, {.value = time.c_str(),
+      .chevron = true,
       .help = _("Forecast time for the current map page. "
                 "Opens the same picker as the weather controls "
                 "(Auto, Now, or a fixed quarter-hour slot)."),
-      .chevron = true,
       .disabled = !Rasp::IsFieldTimeSelectable(draft.rasp_field)});
 
   /* the colors of the layer, as the map draws them */
