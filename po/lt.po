@@ -10464,7 +10464,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight el. paštas"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "El. pašto adresas, kurį naudojate prisijungimui prie skysight.io."
 
 #, no-c-format
@@ -12852,3 +12852,15 @@ msgstr "Kamera netinkama naudoti"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "neteisingas el. paštas arba slaptažodis"
+
+msgid "the subscription is not active"
+msgstr "prenumerata neaktyvi"
+
+msgid "too many devices use this account"
+msgstr "per daug įrenginių naudoja šią paskyrą"
+
+msgid "login rejected:"
+msgstr "prisijungimas atmestas:"

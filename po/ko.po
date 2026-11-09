@@ -10226,7 +10226,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight 이메일"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "skysight.io 로그인에 사용하는 이메일 주소입니다."
 
 #, no-c-format
@@ -12528,3 +12528,15 @@ msgstr "카메라를 사용할 수 없음"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "이메일 또는 비밀번호가 잘못되었습니다"
+
+msgid "the subscription is not active"
+msgstr "구독이 활성화되어 있지 않습니다"
+
+msgid "too many devices use this account"
+msgstr "너무 많은 기기가 이 계정을 사용하고 있습니다"
+
+msgid "login rejected:"
+msgstr "로그인 거부됨:"

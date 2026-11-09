@@ -10490,7 +10490,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "E-mail SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "Adresa de e-mail folosită pentru autentificare pe skysight.io."
 
 #, no-c-format
@@ -12888,3 +12888,15 @@ msgstr "Camera nu poate fi folosită"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "email sau parolă greșite"
+
+msgid "the subscription is not active"
+msgstr "abonamentul nu este activ"
+
+msgid "too many devices use this account"
+msgstr "prea multe dispozitive folosesc acest cont"
+
+msgid "login rejected:"
+msgstr "autentificare respinsă:"

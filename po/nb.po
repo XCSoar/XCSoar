@@ -10397,7 +10397,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight-e-post"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "E-postadressen du bruker for å logge inn på skysight.io."
 
 #, no-c-format
@@ -12771,3 +12771,15 @@ msgstr "Kameraet kan ikke brukes"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "feil e-post eller passord"
+
+msgid "the subscription is not active"
+msgstr "abonnementet er ikke aktivt"
+
+msgid "too many devices use this account"
+msgstr "for mange enheter bruker denne kontoen"
+
+msgid "login rejected:"
+msgstr "innlogging avvist:"

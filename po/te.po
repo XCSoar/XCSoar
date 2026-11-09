@@ -10279,7 +10279,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight ఇమెయిల్"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "skysight.ioకి సైన్ ఇన్ చేయడానికి మీరు ఉపయోగించే ఇమెయిల్ చిరునామా."
 
 #, no-c-format
@@ -12661,3 +12661,15 @@ msgstr "కెమెరా ఉపయోగించలేనిది"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "తప్పు ఇమెయిల్ లేదా పాస్‌వర్డ్"
+
+msgid "the subscription is not active"
+msgstr "సభ్యత్వం చురుకుగా లేదు"
+
+msgid "too many devices use this account"
+msgstr "చాలా పరికరాలు ఈ ఖాతాను ఉపయోగిస్తున్నాయి"
+
+msgid "login rejected:"
+msgstr "లాగిన్ తిరస్కరించబడింది:"

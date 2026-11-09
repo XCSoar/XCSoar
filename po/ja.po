@@ -10428,7 +10428,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight メール"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "skysight.io へのサインインに使うメールアドレス。"
 
 #, no-c-format
@@ -12719,3 +12719,15 @@ msgstr "カメラを使用できません"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "メールアドレスまたはパスワードが間違っています"
+
+msgid "the subscription is not active"
+msgstr "サブスクリプションが有効ではありません"
+
+msgid "too many devices use this account"
+msgstr "このアカウントを使用しているデバイスが多すぎます"
+
+msgid "login rejected:"
+msgstr "ログイン拒否:"

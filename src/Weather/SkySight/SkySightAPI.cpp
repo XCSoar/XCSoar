@@ -480,6 +480,12 @@ SkySightAPI::IsThrottled() const noexcept
   return request->IsThrottled();
 }
 
+unsigned
+SkySightAPI::GetLoginRejectedStatus() const noexcept
+{
+  return request->GetLoginRejectedStatus();
+}
+
 time_t
 SkySightAPI::GetThrottleRemainingSeconds() const noexcept
 {
@@ -1238,6 +1244,13 @@ SkySightAPI::OnAuthenticated() noexcept
   PollLayers();
   ResetLastUpdates();
   PollSelectedDatafiles();
+  owner.OnDataUpdated();
+}
+
+void
+SkySightAPI::OnLoginRejected() noexcept
+{
+  owner.OnLoginRejected();
   owner.OnDataUpdated();
 }
 

@@ -608,9 +608,18 @@ PageLayoutEditWidget::OnModified(DataField &df) noexcept
       if (layer != nullptr) {
         value.skysight_overlay = layer->id;
       } else if (value.skysight_overlay.empty()) {
+        StaticString<128> rejected;
+        rejected.clear();
+        if (skysight != nullptr)
+          rejected = skysight->GetLoginRejectedMessage();
+
         const char *message;
         if (skysight == nullptr)
           message = _("SkySight is unavailable.");
+        else if (!rejected.empty())
+          /* the catalog will not load until the credentials are
+             entered again */
+          message = rejected.c_str();
         else if (skysight->IsThrottled())
           message = _("SkySight API rate-limited. Retrying shortly.");
         else if (!skysight->HasForecastLayers())

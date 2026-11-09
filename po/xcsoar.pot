@@ -6504,7 +6504,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr ""
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr ""
 
 #, no-c-format
@@ -11512,4 +11512,16 @@ msgstr ""
 
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
+msgstr ""
+
+msgid "wrong email or password"
+msgstr ""
+
+msgid "the subscription is not active"
+msgstr ""
+
+msgid "too many devices use this account"
+msgstr ""
+
+msgid "login rejected:"
 msgstr ""
