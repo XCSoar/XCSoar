@@ -30,6 +30,23 @@ Brand names stay as published. Examples: `WeGlide`, `SoaringScoring`,
 sentence around it still translates, and the name stays unchanged
 inside that sentence.
 
+## Spelling consistency
+
+Use consistent spelling for common terms across all user-visible strings:
+
+| Preferred | Avoid | Notes |
+|-----------|-------|-------|
+| `email` | `e-mail` | Modern standard; no hyphen |
+| `login` (noun/adj) | `log-in`, `log in` | "the login failed", "login credentials" |
+| `log in` (verb) | `login` | "please log in again" |
+| `setup` (noun/adj) | `set-up`, `set up` | "the setup dialog", "page setup" |
+| `set up` (verb) | `setup` | "set up your account" |
+| `offline` | `off-line` | No hyphen |
+| `online` | `on-line` | No hyphen |
+
+When adding new strings, follow the preferred spelling. Do not start a
+cleanup of existing strings unless asked.
+
 ```cpp
 // BAD: the abbreviation becomes a translatable string
 data.FmtComment("{} {}", speed, C_("Abbreviation", "TAS"));
