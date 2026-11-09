@@ -61,7 +61,10 @@ public:
     if (skysight->NumSelectedLayers() == 0) {
       row_renderer.DrawFirstRow(canvas, rc, "SkySight");
 
-      if (skysight->IsThrottled())
+      if (const auto rejected = skysight->GetLoginRejectedMessage();
+          !rejected.empty())
+        row_renderer.DrawSecondRow(canvas, rc, rejected.c_str());
+      else if (skysight->IsThrottled())
         row_renderer.DrawSecondRow(canvas, rc,
                                    _("SkySight API rate-limited. Retrying shortly."));
       else if (!skysight->HasForecastLayers())
@@ -87,7 +90,15 @@ public:
       first_row.AppendFormat(" [%s]", C_("Status", "Current page"));
 
     StaticString<256> second_row;
-    if (layer->ShouldShowUpdating()) {
+    if (const auto rejected = skysight->GetLoginRejectedMessage();
+        !rejected.empty() &&
+        (layer->ShouldShowUpdating() || layer->SupportsLiveTiles() ||
+         layer->forecast_datafiles.empty() ||
+         (skysight->IsForecastDecodeAvailable() && layer->mtime == 0))) {
+      /* nothing will be downloaded until the credentials are entered
+         again; layers with downloaded forecast data still show it */
+      second_row = rejected.c_str();
+    } else if (layer->ShouldShowUpdating()) {
       if (skysight->IsThrottled())
         second_row.Format(_("Download limit reached; retrying in %u seconds..."),
                           unsigned(skysight->GetThrottleRemainingSeconds()));

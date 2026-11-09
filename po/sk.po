@@ -10451,7 +10451,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "E-mail SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "E-mailová adresa na prihlásenie do skysight.io."
 
 #, no-c-format
@@ -12832,3 +12832,15 @@ msgstr "Fotoaparát sa nedá použiť"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "nesprávny e-mail alebo heslo"
+
+msgid "the subscription is not active"
+msgstr "predplatné nie je aktívne"
+
+msgid "too many devices use this account"
+msgstr "príliš veľa zariadení používa tento účet"
+
+msgid "login rejected:"
+msgstr "prihlásenie odmietnuté:"

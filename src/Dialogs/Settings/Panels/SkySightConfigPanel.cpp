@@ -41,7 +41,7 @@ SkySightConfigPanel::Prepare(ContainerWindow &parent,
   RowFormWidget::Prepare(parent, rc);
 
   AddText(C_("Setting", "SkySight Email"),
-          _("The e-mail address you use to sign in to skysight.io."),
+          _("The email address you use to sign in to skysight.io."),
           settings.skysight.email);
   AddPassword(C_("Setting", "SkySight Password"),
               _("Your SkySight password."),

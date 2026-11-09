@@ -10437,7 +10437,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "E-pošta SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "Adresa e-pošte za prijavu na skysight.io."
 
 #, no-c-format
@@ -12813,3 +12813,15 @@ msgstr "Камера се не може користити"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "погрешан имејл или лозинка"
+
+msgid "the subscription is not active"
+msgstr "претплата није активна"
+
+msgid "too many devices use this account"
+msgstr "превише уређаја користи овај налог"
+
+msgid "login rejected:"
+msgstr "пријава одбијена:"

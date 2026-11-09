@@ -10364,7 +10364,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "דוא״ל SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "כתובת הדוא״ל לכניסה ל-skysight.io."
 
 #, no-c-format
@@ -12721,3 +12721,15 @@ msgstr "לא ניתן להשתמש במצלמה"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "אימייל או סיסמה שגויים"
+
+msgid "the subscription is not active"
+msgstr "המנוי אינו פעיל"
+
+msgid "too many devices use this account"
+msgstr "יותר מדי מכשירים משתמשים בחשבון זה"
+
+msgid "login rejected:"
+msgstr "ההתחברות נדחתה:"

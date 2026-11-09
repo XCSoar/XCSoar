@@ -11,6 +11,7 @@
 #include "ui/canvas/custom/GeoBitmap.hpp"
 #include "system/Path.hpp"
 #include "ui/event/PeriodicTimer.hpp"
+#include "util/StaticString.hxx"
 
 #include <array>
 #include <chrono>
@@ -101,6 +102,12 @@ public:
 
   bool IsThrottled() const noexcept;
 
+  /**
+   * @return a translated explanation why the server rejected the
+   * login, or an empty string if it did not
+   */
+  StaticString<128> GetLoginRejectedMessage() const noexcept;
+
   bool IsLiveViewUpdating(std::string_view layer_id) const noexcept;
   bool HasDownloadActivity() const noexcept;
 
@@ -120,6 +127,7 @@ public:
                              std::string_view displayed_id) noexcept;
   void OnDataUpdated() noexcept;
   void OnForecastThrottled() noexcept;
+  void OnLoginRejected() noexcept;
   void OnForecastResumed() noexcept;
   void OnForecastProgress(const SkySight::ForecastProgress &progress) noexcept;
   void OnForecastProgressCancelled() noexcept;

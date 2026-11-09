@@ -10590,7 +10590,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "Correo SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "La dirección de correo con la que inicia sesión en skysight.io."
 
 #, no-c-format
@@ -13000,3 +13000,15 @@ msgstr "La cámara no se puede usar"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "correo o contraseña incorrectos"
+
+msgid "the subscription is not active"
+msgstr "la suscripción no está activa"
+
+msgid "too many devices use this account"
+msgstr "demasiados dispositivos usan esta cuenta"
+
+msgid "login rejected:"
+msgstr "inicio de sesión rechazado:"

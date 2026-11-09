@@ -674,6 +674,27 @@ EDL imagery as a map overlay and does not expose additional model
 parameters beyond the forecast hour and the fixed isobar levels
 published by the EDL service.
 
+\section{Weather forecast, SkySight}\label{sec:skysight}
+
+SkySight layers need a SkySight subscription.  Enter the e-mail
+address and password of the account under \emph{System setup /
+Weather / SkySight}.
+
+If the SkySight server rejects the login, XCSoar says why once on the
+map, and again in the \bmenuw{SkySight} tab of
+\menulabelr{\bmenug{Info}\blink\bmenug{Weather}} and in the page setup
+when SkySight is chosen as the map overlay:
+\begin{description}
+\item[wrong e-mail or password] The account details do not match.
+\item[the subscription is not active] The account has no active
+  subscription.
+\item[too many devices use this account] SkySight limits the number
+  of devices per account.
+\end{description}
+Any other rejection shows the HTTP status of the server's answer.
+XCSoar does not try to log in again until the e-mail address or
+password is changed or XCSoar is restarted.
+
 \section{Rain radar}\label{sec:rain-radar}
 
 XCSoar can draw the European weather radar composite on the map.  The

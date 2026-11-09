@@ -10562,7 +10562,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "Email SkySight"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "Η διεύθυνση e-mail για είσοδο στο skysight.io."
 
 #, no-c-format
@@ -12977,3 +12977,15 @@ msgstr "Η κάμερα δεν μπορεί να χρησιμοποιηθεί"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "λάθος email ή κωδικός"
+
+msgid "the subscription is not active"
+msgstr "η συνδρομή δεν είναι ενεργή"
+
+msgid "too many devices use this account"
+msgstr "πάρα πολλές συσκευές χρησιμοποιούν αυτόν τον λογαριασμό"
+
+msgid "login rejected:"
+msgstr "η σύνδεση απορρίφθηκε:"

@@ -10053,7 +10053,7 @@ msgctxt "Setting"
 msgid "SkySight Email"
 msgstr "SkySight 邮箱"
 
-msgid "The e-mail address you use to sign in to skysight.io."
+msgid "The email address you use to sign in to skysight.io."
 msgstr "用于登录 skysight.io 的电子邮箱地址。"
 
 #, no-c-format
@@ -12331,3 +12331,15 @@ msgstr "相机不可用"
 #, no-c-format
 msgid "Show the speed-to-fly as indicated airspeed."
 msgstr ""
+
+msgid "wrong email or password"
+msgstr "邮箱或密码错误"
+
+msgid "the subscription is not active"
+msgstr "订阅未激活"
+
+msgid "too many devices use this account"
+msgstr "太多设备使用此账户"
+
+msgid "login rejected:"
+msgstr "登录被拒绝:"
