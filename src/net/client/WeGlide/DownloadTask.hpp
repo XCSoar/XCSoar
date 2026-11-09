@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string_view>
 
 class OrderedTask;
 class CurlGlobal;
@@ -28,7 +29,8 @@ DownloadTask(CurlGlobal &curl, const WeGlideSettings &settings,
              uint_least64_t task_id,
              const TaskBehaviour &task_behaviour,
              const Waypoints *waypoints,
-             ProgressListener &progress);
+             ProgressListener &progress,
+             std::string_view access_token = {});
 
 /**
  * Download the task declared in WeGlide.  Returns nullptr if no task

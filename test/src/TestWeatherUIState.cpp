@@ -86,13 +86,36 @@ TestWeatherUiStateXcthermCursor()
   ok1(!weather.xctherm_cursor.time_manual_override);
 }
 
+static void
+TestWeGlideSession()
+{
+  WeatherUIState weather;
+  weather.Clear();
+  ok1(!weather.weglide.HasPageOwnership());
+  ok1(!weather.weglide.cursor_initialized);
+
+  ok1(weather.weglide.EnterPage());
+  ok1(!weather.weglide.EnterPage());
+  weather.weglide.cursor_initialized = true;
+  weather.weglide.SuspendForPan();
+  ok1(weather.weglide.IsSuspendedForPan());
+  ok1(weather.weglide.HasPageOwnership());
+
+  weather.weglide.LeavePage();
+  ok1(weather.weglide.HasPageOwnership());
+  weather.Clear();
+  ok1(!weather.weglide.cursor_initialized);
+  ok1(!weather.weglide.HasPageOwnership());
+}
+
 int
 main()
 {
-  plan_tests(32);
+  plan_tests(32 + 9);
 
   TestOverlaySession();
   TestWeatherUiStateRaspReset();
   TestWeatherUiStateXcthermCursor();
+  TestWeGlideSession();
   return exit_status();
 }

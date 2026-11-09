@@ -9,6 +9,7 @@
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
+#include "lib/curl/Slist.hxx"
 #include "lib/fmt/ToBuffer.hxx"
 #include "co/Task.hxx"
 
@@ -172,9 +173,15 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
 
 static Co::Task<std::vector<TaskInfo>>
 FetchTaskList(CurlGlobal &curl, CurlEasy easy,
+              std::string authorization,
               ProgressListener &progress)
 {
   Curl::Setup(easy);
+  CurlSlist headers;
+  if (!authorization.empty()) {
+    headers.Append(authorization.c_str());
+    easy.SetRequestHeaders(headers.Get());
+  }
   const Net::ProgressAdapter progress_adapter{easy, progress};
 
   Json::ParserOutputStream parser;
@@ -191,12 +198,20 @@ FetchTaskList(CurlGlobal &curl, CurlEasy easy,
 Co::Task<std::vector<TaskInfo>>
 ListTasksByUser(CurlGlobal &curl, const WeGlideSettings &settings,
                 uint_least64_t user_id,
-                ProgressListener &progress)
+                ProgressListener &progress,
+                std::string_view access_token)
 {
+  std::string authorization;
+  if (!access_token.empty()) {
+    authorization = "Authorization: Bearer ";
+    authorization.append(access_token);
+  }
+
   return FetchTaskList(curl,
                        CurlEasy{FmtBuffer<256>("{}/task?user_id_in={}",
                                                settings.default_url,
                                                user_id)},
+                       std::move(authorization),
                        progress);
 }
 
@@ -207,6 +222,7 @@ ListDeclaredTasks(CurlGlobal &curl, const WeGlideSettings &settings,
   return FetchTaskList(curl,
                        CurlEasy{FmtBuffer<256>("{}/task/declaration",
                                                settings.default_url)},
+                       {},
                        progress);
 }
 
@@ -217,6 +233,7 @@ ListDailyCompetitions(CurlGlobal &curl, const WeGlideSettings &settings,
   return FetchTaskList(curl,
                        CurlEasy{FmtBuffer<256>("{}/task/competitions/today",
                                                settings.default_url)},
+                       {},
                        progress);
 }
 
@@ -227,6 +244,7 @@ ListRecentTaskScores(CurlGlobal &curl, const WeGlideSettings &settings,
   return FetchTaskList(curl,
                        CurlEasy{FmtBuffer<256>("{}/task/score/recent",
                                                settings.default_url)},
+                       {},
                        progress);
 }
 

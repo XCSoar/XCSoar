@@ -22,6 +22,7 @@
 #ifdef HAVE_WEATHER_OVERLAY
 #include "Weather/OPERA/RadarPageOverlay.hpp"
 #include "Weather/EUMETView/SatellitePageOverlay.hpp"
+#include "Weather/WeGlide/PageOverlay.hpp"
 #endif
 #include "DataGlobals.hpp"
 #include "Weather/SkySight/SkySightClient.hpp"
@@ -48,6 +49,7 @@ NetComponents::NetComponents(EventLoop &event_loop, CurlGlobal &curl,
 # ifdef HAVE_WEATHER_OVERLAY
   ,opera_radar(new RadarDownloadGlue(curl))
   ,eumetview_satellite(new SatelliteDownloadGlue(curl))
+  ,weglide_copilot(new WeGlideDownloadGlue(curl))
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -105,6 +107,9 @@ NetComponents::BeginShutdown() noexcept
 
   if (eumetview_satellite != nullptr)
     eumetview_satellite->BeginShutdown();
+
+  if (weglide_copilot != nullptr)
+    weglide_copilot->BeginShutdown();
 # endif
 
 #ifdef HAVE_DOWNLOAD_MANAGER
