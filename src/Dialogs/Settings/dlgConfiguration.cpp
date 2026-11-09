@@ -88,6 +88,7 @@
 #include "Panels/WeGlideConfigPanel.hpp"
 #ifdef HAVE_HTTP
 #include "Panels/SoaringScoringConfigPanel.hpp"
+#include "net/client/SoaringScoring/Account.hpp"
 #endif
 #include "Panels/NetworkConfigPanel.hpp"
 
@@ -276,19 +277,73 @@ static constexpr ConfigPage weather_pages[] = {
   { nullptr, nullptr }
 };
 
+#ifdef HAVE_LIVETRACK24
+
+static bool
+IsLiveTrack24Active() noexcept
+{
+  return CommonInterface::GetComputerSettings()
+    .tracking.livetrack24.enabled;
+}
+
+#endif
+
+#ifdef HAVE_SKYLINES_TRACKING
+
+static bool
+IsSkyLinesActive() noexcept
+{
+  return CommonInterface::GetComputerSettings()
+    .tracking.skylines.enabled;
+}
+
+#endif
+
+static bool
+IsWeGlideActive() noexcept
+{
+  return CommonInterface::GetComputerSettings().weglide.IsConfigured();
+}
+
+#ifdef HAVE_HTTP
+
+static bool
+IsSoaringScoringActive() noexcept
+{
+  return SoaringScoring::AccountConnected();
+}
+
+#endif
+
+#ifdef HAVE_TRACKING
+
+static bool
+IsCloudActive() noexcept
+{
+  return CommonInterface::GetComputerSettings().tracking.cloud.enabled ==
+    TriState::TRUE;
+}
+
+#endif
+
 static constexpr ConfigPage online_pages[] = {
 #ifdef HAVE_LIVETRACK24
-  { "LiveTrack24", CreateLiveTrack24ConfigPanel },
+  { "LiveTrack24", CreateLiveTrack24ConfigPanel, nullptr, nullptr,
+    IsLiveTrack24Active },
 #endif
 #ifdef HAVE_SKYLINES_TRACKING
-  { "SkyLines", CreateSkyLinesConfigPanel },
+  { "SkyLines", CreateSkyLinesConfigPanel, nullptr, nullptr,
+    IsSkyLinesActive },
 #endif
-  { "WeGlide", CreateWeGlideConfigPanel },
+  { "WeGlide", CreateWeGlideConfigPanel, nullptr, nullptr,
+    IsWeGlideActive },
 #ifdef HAVE_HTTP
-  { "SoaringScoring", CreateSoaringScoringConfigPanel },
+  { "SoaringScoring", CreateSoaringScoringConfigPanel, nullptr, nullptr,
+    IsSoaringScoringActive },
 #endif
 #ifdef HAVE_TRACKING
-  { "XCSoar Cloud", CreateCloudConfigPanel },
+  { "XCSoar Cloud", CreateCloudConfigPanel, nullptr, nullptr,
+    IsCloudActive },
 #endif
   { nullptr, nullptr }
 };

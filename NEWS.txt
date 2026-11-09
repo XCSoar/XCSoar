@@ -24,6 +24,8 @@ Version 7.47 - not yet released
   - show the configuration menu and its pages as the same list as
     Wind Settings. A group opens its pages. A page scrolls only
     when the rows do not fit
+  - show whether each service on the Services page is in use, with
+    the same badge as the weather pages
   - show a floating dialog's title as a heading on the page, in line
     with the contents. A dialog that fills the screen keeps a title
     bar
