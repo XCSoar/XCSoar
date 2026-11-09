@@ -527,11 +527,13 @@ PaintHalf(Canvas &canvas, const HorizonLook &look, bool compact,
 static void
 DrawSkyGround(Canvas &canvas, const PixelRect &rc,
               const HorizonLook &look, bool compact,
-              PixelPoint center, double bank_deg,
+              PixelPoint center, int height, double bank_deg,
               double pitch_deg) noexcept
 {
-  const int pitch_px =
-    int(rc.GetHeight() / 2.f * pitch_deg / MAX_PITCH_DEG);
+  /* Same scale as the pitch ladder.  The window is taller than the
+     dial once the course strip is in, and the fill must meet the
+     ladder's zero. */
+  const int pitch_px = PitchY(height, pitch_deg, 0);
   const Angle roll = Angle::Degrees(-bank_deg);
   const int span = std::max(int(rc.GetWidth()), int(rc.GetHeight()));
   PixelPoint h0{-span, pitch_px};
@@ -1248,7 +1250,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     ? attitude.pitch_angle.Degrees()
     : 0.;
 
-  DrawSkyGround(canvas, rc, look, compact, center, bank, pitch);
+  DrawSkyGround(canvas, rc, look, compact, center,
+                int(ball.GetHeight()), bank, pitch);
   DrawScales(canvas, look, compact, center, radius,
              int(ball.GetHeight()), bank, pitch,
              *fonts.mark, fonts.face);
