@@ -14,6 +14,8 @@ Version 7.47 - not yet released
   - label the MacCready InfoBox speed-to-fly comment TAS, because
     that speed is true airspeed. Setup can show it as indicated
     airspeed
+  - glide the map when panning with the cursor keys, the same way
+    keyboard zoom moves
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,

@@ -172,6 +172,12 @@ private:
   double zoom_from_map_scale = 0;
   double zoom_to_map_scale = 0;
   std::chrono::steady_clock::time_point zoom_start_time{};
+
+  /** Cursor-key pan.  Touch flick keeps using #kinetic_timer. */
+  UI::Timer pan_timer{[this]{ OnPanTimer(); }};
+  GeoPoint pan_from = GeoPoint::Invalid();
+  GeoPoint pan_to = GeoPoint::Invalid();
+  std::chrono::steady_clock::time_point pan_start_time{};
 #endif
 
 #ifdef HAVE_MULTI_TOUCH
@@ -575,6 +581,12 @@ public:
    */
   void AnimateFreeMapScale(double scale) noexcept;
 
+  /**
+   * Glide the map centre to a location (cursor keys).
+   * Without OpenGL the location is applied immediately.
+   */
+  void AnimateLocation(const GeoPoint location) noexcept;
+
 protected:
   DisplayMode GetDisplayMode() const noexcept {
     return GetUIState().display_mode;
@@ -592,6 +604,8 @@ private:
   void OnKineticTimer() noexcept;
   void CancelZoomAnimation() noexcept;
   void OnZoomTimer() noexcept;
+  void CancelPanAnimation() noexcept;
+  void OnPanTimer() noexcept;
   void NoteTerrainQuantisationUserActivity() noexcept;
   void OnTerrainQuantisationTimer() noexcept;
 #endif
