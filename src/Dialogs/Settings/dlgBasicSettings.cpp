@@ -244,6 +244,7 @@ FlightSetup::Build() noexcept
                        CommonInterface::GetComputerSettings()
                        .polar.glide_polar_task;
                      if (plane.IsOverMaxTakeoffMass(polar.GetTotalMass())) {
+                       state.value_warning = true;
                        state.badge = _("MTOW");
                        state.badge_style = BadgeStyle::DANGER;
                      }

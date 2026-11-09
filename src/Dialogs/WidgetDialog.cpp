@@ -261,7 +261,7 @@ WidgetDialog::ReinitialiseLayout(const PixelRect &rc) noexcept
 {
   if (fit_client_width > 0) {
     if (layout_refit != nullptr)
-      layout_refit(*this, parent_rc);
+      layout_refit(*this, rc);
     return;
   }
   else if (full)

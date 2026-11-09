@@ -78,13 +78,8 @@ struct Expected {
     e.minimum_control_height = std::min(font_h,
                                        e.min_screen_pixels / 12);
 
-    if (has_touch) {
-      e.maximum_control_height = Shift10(30, e.pt_scale);
-      if (e.maximum_control_height < e.minimum_control_height)
-        e.maximum_control_height = e.minimum_control_height;
-    } else {
-      e.maximum_control_height = e.minimum_control_height;
-    }
+    e.maximum_control_height = std::max(Shift10(30, e.pt_scale),
+                                       e.minimum_control_height);
 
     e.hit_radius = Shift10(has_touch ? 28 : 6, e.pt_scale);
     return e;

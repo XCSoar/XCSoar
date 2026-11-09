@@ -372,6 +372,9 @@ private:
     /** is #value drawn below the caption?  (the option, or too little room) */
     bool value_is_below = false;
 
+    /** draw #value in red: the number itself is the warning */
+    bool value_warning = false;
+
     /** the width of the box which holds #value; 0 if there is none */
     unsigned value_width = 0;
 
@@ -2396,6 +2399,11 @@ GroupedListControl::UpdateValues() noexcept
       element.help_full = 0;
       element.help_from = 0;
       layout = true;
+    }
+
+    if (element.value_warning != state.value_warning) {
+      element.value_warning = state.value_warning;
+      invalidate = true;
     }
 
     if (element.value != state.text) {
@@ -4619,10 +4627,18 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
         value_rc.bottom = value_y + (int)element.value_height;
       }
 
+      if (element.value_warning && HasColors())
+        canvas.SetTextColor(look.dark_mode
+                            ? COLOR_INVERSE_RED
+                            : COLOR_RED);
+
       DrawWrappedText(canvas, GetValueFont(element), value_rc,
                       element.value, element.wrapped_value,
                       element.wrapped_value_width, true,
                       GetValueMaxLines(element));
+
+      if (element.value_warning && HasColors())
+        canvas.SetTextColor(text_color);
     }
 
     if (!element.text.empty()) {

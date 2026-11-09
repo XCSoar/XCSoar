@@ -85,6 +85,8 @@ Version 7.47 - not yet released
     is one step higher
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
+  - size dialog rows and buttons to at least 30 pt on a mouse,
+    the same as on a touch screen #3021
 * map
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it

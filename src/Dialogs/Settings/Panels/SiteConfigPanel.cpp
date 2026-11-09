@@ -73,11 +73,12 @@ PickFile(const char *caption, const char *help, FileDataField &df)
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (FileTypeSupportsDownload(df.GetFileType()))
     list->AddButton(_("Download"), [&df, &dialog](){
-      const auto path = DownloadFilePicker(df.GetFileType());
-      if (path == nullptr)
+      const auto paths = DownloadFilePicker(df.GetFileType());
+      if (paths.empty())
         return;
 
-      df.ForceModify(path);
+      for (const auto &path : paths)
+        df.ForceModify(path);
       dialog.SetModalResult(mrOK);
     });
 #endif
@@ -120,12 +121,14 @@ PickFiles(const char *caption, const char *help, MultiFileDataField &df)
 #ifdef HAVE_DOWNLOAD_MANAGER
     if (FileTypeSupportsDownload(df.GetFileType()))
       list.AddButton(_("Download"), [&](){
-        auto path = DownloadFilePicker(df.GetFileType());
-        if (path == nullptr)
+        auto paths = DownloadFilePicker(df.GetFileType());
+        if (paths.empty())
           return;
 
-        df.ForceModify(path);
-        downloaded.emplace_back(std::move(path));
+        for (const auto &path : paths)
+          df.ForceModify(path);
+        for (auto &path : paths)
+          downloaded.emplace_back(std::move(path));
 
         fill();
         list.UpdateLayout();

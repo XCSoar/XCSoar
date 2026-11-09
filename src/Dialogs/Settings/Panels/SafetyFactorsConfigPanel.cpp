@@ -7,6 +7,7 @@
 #include "BackendComponents.hpp"
 #include "Components.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Formatter/GlideRatioFormatter.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"

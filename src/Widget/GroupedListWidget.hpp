@@ -203,6 +203,12 @@ public:
   struct ValueState {
     std::string text;
 
+    /**
+     * Draw #text in red.  The value is a warning, such as the wing
+     * loading when the glider is heavier than its MTOW.
+     */
+    bool value_warning = false;
+
     const char *help = nullptr;
 
     const char *badge = nullptr;
