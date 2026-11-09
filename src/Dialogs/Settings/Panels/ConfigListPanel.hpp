@@ -55,17 +55,21 @@ protected:
    *
    * @param help an explanation of the setting, shown above the
    * choice; nullptr for none
+   * @param disabled grey the row out, for a setting which depends
+   * on another one which is off
    */
   template<typename T>
   void AddEnumItem(const char *caption, const char *help,
-                   const StaticEnumChoice *list, T &value) noexcept {
+                   const StaticEnumChoice *list, T &value,
+                   bool disabled=false) noexcept {
     AddItem(caption, [this, caption, help, list, &value](){
       unsigned v = (unsigned)value;
       if (PickEnum(caption, help, list, v)) {
         value = (T)v;
         Refresh();
       }
-    }, {.value = GetEnumCaption(list, (unsigned)value), .chevron = true});
+    }, {.value = GetEnumCaption(list, (unsigned)value),
+        .chevron = !disabled, .disabled = disabled});
   }
 
   /**
@@ -121,17 +125,25 @@ protected:
   /**
    * Add an item which opens the text entry for a string; a password
    * is shown as asterisks.
+   *
+   * @param disabled grey the row out, for a setting which depends
+   * on another one which is off
    */
   template<std::size_t N>
   void AddTextItem(const char *caption, const char *help,
-                   StaticString<N> &value, bool password=false) noexcept {
-    ItemOptions options{.chevron = true, .help = help};
+                   StaticString<N> &value, bool password=false,
+                   bool disabled=false) noexcept {
+    ItemOptions options{.help = help, .disabled = disabled};
+    if (!disabled)
+      options.chevron = true;
 
     /* one asterisk per character, like the password fields */
     StaticString<N> masked;
-    if (value.empty())
+    if (value.empty()) {
       options.badge = C_("Badge", "none");
-    else if (password) {
+      /* a disabled row with no value would otherwise say "Disabled" */
+      options.disabled_badge_label = options.badge;
+    } else if (password) {
       masked.clear();
       for (std::size_t i = 0, n = value.length(); i < n; ++i)
         masked.push_back('*');
