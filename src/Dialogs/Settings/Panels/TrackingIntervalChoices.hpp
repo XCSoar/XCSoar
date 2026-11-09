@@ -5,8 +5,6 @@
 
 #include "util/StaticString.hxx"
 
-class RowFormWidget;
-
 /** The intervals a tracking page can offer, shortest first. */
 static constexpr unsigned TRACKING_INTERVAL_SECONDS[] = {
   1, 2, 3, 5, 10, 15, 20, 30, 45,
@@ -32,6 +30,3 @@ ClosestTrackingInterval(unsigned value) noexcept;
  */
 bool
 PickTrackingInterval(unsigned &interval) noexcept;
-
-void
-AddTrackingIntervalRow(RowFormWidget &form, unsigned value) noexcept;

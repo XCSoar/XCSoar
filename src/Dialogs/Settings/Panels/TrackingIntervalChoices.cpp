@@ -3,9 +3,7 @@
 
 #include "TrackingIntervalChoices.hpp"
 #include "Dialogs/GroupedListPicker.hpp"
-#include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
 
 #include <array>
 #include <cstdlib>
@@ -60,24 +58,4 @@ PickTrackingInterval(unsigned &interval) noexcept
 
   interval = TRACKING_INTERVAL_SECONDS[picked];
   return true;
-}
-
-static void
-FillTrackingIntervalChoices(DataFieldEnum &df, unsigned value) noexcept
-{
-  StaticString<16> buffer;
-  for (unsigned seconds : TRACKING_INTERVAL_SECONDS) {
-    FormatTrackingInterval(buffer, seconds);
-    df.AddChoice(seconds, buffer);
-  }
-  df.SetValue(ClosestTrackingInterval(value));
-}
-
-void
-AddTrackingIntervalRow(RowFormWidget &form, unsigned value) noexcept
-{
-  WndProperty *interval = form.AddEnum(_("Tracking Interval"), nullptr);
-  FillTrackingIntervalChoices(*(DataFieldEnum *)interval->GetDataField(),
-                              value);
-  interval->RefreshDisplay();
 }
