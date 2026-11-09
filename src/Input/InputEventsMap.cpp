@@ -149,9 +149,14 @@ InputEvents::sub_PanCursor(int dx, int dy)
   auto pt = projection.GetScreenOrigin();
   pt.x -= dx * Layout::FastScale(40);
   pt.y -= dy * Layout::FastScale(40);
-  map_window->SetLocation(projection.ScreenToGeo(pt));
+  const GeoPoint location = projection.ScreenToGeo(pt);
 
-  map_window->QuickRedraw();
+  /* Same choice as keyboard zoom: glide on a fast colour display. */
+  if (HasEPaper() || IsSlowCPU()) {
+    map_window->SetLocation(location);
+    map_window->QuickRedraw();
+  } else
+    map_window->AnimateLocation(location);
 }
 
 // called from UI or input event handler (same thread)
