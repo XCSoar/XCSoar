@@ -190,9 +190,14 @@ static constexpr unsigned LOOK_AHEAD_PERCENT[] = {50, 20};
 
 /**
  * The renderer of the texts which may take more than one line, the
- * second line of an item and the description of a hero card.  It is
- * never configured, all of its settings are the default ones, and it
- * therefore needs no state of its own.
+ * second line of an item and the description under a row of buttons.
+ * It is never configured, all of its settings are the default ones,
+ * and it therefore needs no state of its own.
+ *
+ * A hero card does not use it.  The height the scroll bar scrolls
+ * has to be the lines which are painted, clipped to the card, or the
+ * last line of the introduction sits under the bar and cannot be
+ * scrolled into view.
  */
 static constexpr TextRenderer text_renderer;
 
@@ -3269,16 +3274,33 @@ GroupedListControl::UpdateLayout() noexcept
 
         break;
 
-      case Element::Type::HERO:
-        element.height = GetLeadingGap(i)
-          + 2 * padding + look.heading2_font.GetHeight();
+      case Element::Type::HERO: {
+        /* the same width the card paints into, beside the scroll
+           bar.  A line which was measured wider than that is clipped
+           under the bar, and the bar's range never reaches it */
+        const int hero_width = std::max(text_width, 1);
+        const auto all_lines = std::numeric_limits<std::size_t>::max();
 
-        if (!element.value.empty())
-          element.height += caption_gap +
-            text_renderer.GetHeight(*look.list.font,
-                                        std::max(text_width, 1),
-                                        element.value.c_str());
+        element.text_height = GetTextHeight(look.heading2_font, hero_width,
+                                            element.text,
+                                            element.wrapped_text,
+                                            element.wrapped_text_width,
+                                            all_lines);
+
+        element.height = GetLeadingGap(i)
+          + 2 * padding + element.text_height;
+
+        element.value_height = 0;
+        if (!element.value.empty()) {
+          element.value_height =
+            GetTextHeight(*look.list.font, hero_width, element.value,
+                          element.wrapped_value,
+                          element.wrapped_value_width, all_lines);
+          element.height += caption_gap + element.value_height;
+        }
+
         break;
+      }
 
       case Element::Type::CAPTION:
         element.height = GetLeadingGap(i)
@@ -4613,24 +4635,35 @@ GroupedListControl::DrawElement(Canvas &canvas, std::size_t i,
       DrawCardBorder(canvas, card_rc, true, true, look.list.text_color,
                      radius, radius);
 
-    text_rc.top = card_rc.top + padding;
-    text_rc.bottom = card_rc.bottom - padding;
+    /* a box which opens upwards has no width: drawing into it would
+       take the unsigned width and run the line across the scroll bar */
+    if (text_rc.right <= text_rc.left)
+      text_rc.right = text_rc.left + 1;
 
     const Color title_color = look.list.GetTextColor(false, false, false);
-
-    canvas.Select(look.heading2_font);
     canvas.SetTextColor(title_color);
-    canvas.DrawClippedText({text_rc.left, text_rc.top}, text_rc,
-                           element.text.c_str());
 
-    if (!element.value.empty()) {
-      text_rc.top += (int)look.heading2_font.GetHeight()
+    const auto all_lines = std::numeric_limits<std::size_t>::max();
+
+    PixelRect title_rc = text_rc;
+    title_rc.top = card_rc.top + padding;
+    title_rc.bottom = title_rc.top + (int)element.text_height;
+
+    DrawWrappedText(canvas, look.heading2_font, title_rc, element.text,
+                    element.wrapped_text, element.wrapped_text_width,
+                    false, all_lines);
+
+    if (!element.value.empty() && element.value_height > 0) {
+      PixelRect description_rc = text_rc;
+      description_rc.top = title_rc.bottom
         + (int)Layout::VptScale(CAPTION_GAP_PT);
+      description_rc.bottom = description_rc.top
+        + (int)element.value_height;
 
-      canvas.Select(*look.list.font);
       canvas.SetTextColor(title_color);
-
-      text_renderer.Draw(canvas, text_rc, element.value.c_str());
+      DrawWrappedText(canvas, *look.list.font, description_rc,
+                      element.value, element.wrapped_value,
+                      element.wrapped_value_width, false, all_lines);
     }
 
     break;
@@ -4977,14 +5010,14 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
   if (scroll_bar.IsInside(p)) {
     if (scroll_bar.IsInsideSlider(p)) {
       scroll_bar.DragBegin(this, p.y);
-    } else if (scroll_bar.IsInsideUpArrow(p.y))
-      SetOrigin(origin - (int)GetItemHeight());
-    else if (scroll_bar.IsInsideDownArrow(p.y))
-      SetOrigin(origin + (int)GetItemHeight());
-    else if (scroll_bar.IsAboveSlider(p.y))
-      SetOrigin(origin - GetViewHeight());
-    else if (scroll_bar.IsBelowSlider(p.y))
-      SetOrigin(origin + GetViewHeight());
+    } else if (!scroll_bar.ArrowDown(this, p)) {
+      /* a press on the track beside the thumb: put the thumb under
+         the pointer and follow it.  A page jump from here skips a
+         hero card, and the thumb of a long introduction is shorter
+         than the finger which is trying to read it */
+      scroll_bar.DragBeginCentred(this);
+      SetOrigin(scroll_bar.DragMove(content_height, GetViewHeight(), p.y));
+    }
 
     return true;
   }
@@ -5024,6 +5057,9 @@ GroupedListControl::OnMouseDown(PixelPoint p) noexcept
 bool
 GroupedListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 {
+  if (scroll_bar.ArrowMove(this, p))
+    return true;
+
   if (drag_mode == DragMode::NONE && !scroll_bar.IsDragging() &&
       ContainerWindow::OnMouseMove(p, keys))
     /* the press began on a view of a widget group */
@@ -5061,6 +5097,13 @@ GroupedListControl::OnMouseMove(PixelPoint p, unsigned keys) noexcept
 bool
 GroupedListControl::OnMouseUp(PixelPoint p) noexcept
 {
+  if (scroll_bar.IsArrowHeld()) {
+    const bool up = scroll_bar.IsArrowUp();
+    if (scroll_bar.ArrowUp(this, p))
+      SetOrigin(origin + (up ? -1 : 1) * (int)GetItemHeight());
+    return true;
+  }
+
   if (drag_mode == DragMode::NONE && !scroll_bar.IsDragging() &&
       ContainerWindow::OnMouseUp(p))
     return true;
