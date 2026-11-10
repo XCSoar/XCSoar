@@ -191,6 +191,21 @@ public:
 
     /** something has succeeded, e.g. "connected" */
     SUCCESS,
+
+    /**
+     * Present, but not the value in use.  An outline, so a display
+     * which knows two colors can still tell it from a filled badge.
+     */
+    NEUTRAL,
+  };
+
+  /**
+   * One badge of a wrapping row under the caption.  #text is copied
+   * before AddItem() returns.
+   */
+  struct BadgeDefinition {
+    const char *text = nullptr;
+    BadgeStyle style = BadgeStyle::PRIMARY;
   };
 
   /**
@@ -362,11 +377,27 @@ public:
     BadgeStyle badge_style2 = BadgeStyle::PRIMARY;
 
     /**
+     * Badges drawn under the caption, wrapping onto further lines.
+     * #badge and #badge2 stay on the first line.  The pointers are
+     * copied before AddItem() returns.
+     */
+    const BadgeDefinition *row_badges = nullptr;
+
+    /** how many badges #row_badges points at */
+    unsigned row_badge_count = 0;
+
+    /**
      * The font of #badge.  A code which is read letter by letter, a
      * frequency or an identifier is easier to compare from one item
      * to the next when its characters line up.
      */
     TextFont badge_font = TextFont::DEFAULT;
+
+    /**
+     * The size of #badge, #badge2 and the wrapping badges.  #SMALL
+     * is the subtitle font, for a row of short flags.
+     */
+    TextSize badge_size = TextSize::DEFAULT;
 
     /** an arrow, marking an item which opens another page */
     bool chevron = false;
