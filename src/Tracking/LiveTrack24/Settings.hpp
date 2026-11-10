@@ -20,7 +20,6 @@ struct Settings {
   };
 
   bool enabled;
-  StaticString<64> server;
   StaticString<64> username;
   StaticString<64> password;
 
@@ -34,7 +33,6 @@ struct Settings {
 
   void SetDefaults() {
     enabled = false;
-    server = "www.livetrack24.com";
     username.clear();
     password.clear();
 

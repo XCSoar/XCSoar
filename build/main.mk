@@ -809,6 +809,8 @@ XCSOAR_SOURCES += \
 
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/LiveTrack24/SessionID.cpp \
+	$(SRC)/Tracking/LiveTrack24/AppKey.cpp \
+	$(SRC)/Tracking/LiveTrack24/Protocol.cpp \
 	$(SRC)/Tracking/LiveTrack24/Glue.cpp \
 	$(SRC)/Tracking/LiveTrack24/Client.cpp
 

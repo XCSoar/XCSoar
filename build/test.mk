@@ -382,6 +382,16 @@ TEST_SOARING_SCORING_SOURCES = \
 TEST_SOARING_SCORING_DEPENDS = JSON UTIL
 $(eval $(call link-program,TestSoaringScoring,TEST_SOARING_SCORING))
 
+TEST_NAMES += TestLiveTrack24
+
+TEST_LIVETRACK24_SOURCES = \
+	$(SRC)/Tracking/LiveTrack24/Protocol.cpp \
+	$(SRC)/util/MD5.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestLiveTrack24.cpp
+TEST_LIVETRACK24_DEPENDS = FMT GEO MATH UTIL
+$(eval $(call link-program,TestLiveTrack24,TEST_LIVETRACK24))
+
 TEST_NAMES += TestWeatherUIState
 
 TEST_WEATHER_UI_STATE_SOURCES = \
@@ -1870,7 +1880,10 @@ RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/net/SocketError.cxx \
 	$(SRC)/Tracking/LiveTrack24/SessionID.cpp \
+	$(SRC)/Tracking/LiveTrack24/AppKey.cpp \
+	$(SRC)/Tracking/LiveTrack24/Protocol.cpp \
 	$(SRC)/Tracking/LiveTrack24/Client.cpp \
+	$(SRC)/util/MD5.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
