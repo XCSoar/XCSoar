@@ -846,6 +846,17 @@ GlueMapWindow::OnKineticTimer() noexcept
 void
 GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
+#ifdef ENABLE_OPENGL
+#ifdef HAVE_MULTI_TOUCH
+  /* Hold the height grid only while two fingers are changing
+     the scale.  Button zoom, and the pan after the pinch ends,
+     take one fill. */
+  background.SetScaleInFlux(drag_mode == DRAG_MULTI_TOUCH_PINCH &&
+                            pinch_scaling);
+#else
+  background.SetScaleInFlux(false);
+#endif
+#endif
   MapWindow::Render(canvas, rc);
 
   if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {

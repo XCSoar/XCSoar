@@ -8,6 +8,7 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 #include "ui/event/Idle.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -352,6 +353,16 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
 #ifdef ENABLE_OPENGL
+  /* A pinch changes the scale every event.  Rescanning each one
+     is the hitch.  Draw the stored grid through the live
+     projection until the gesture ends. */
+  if (scale_in_flux && raster_renderer.HasGrid()) {
+#ifdef STOP_WATCH
+    LogFmt("Terrain hold");
+#endif
+    return true;
+  }
+
   /* Call once — the helper mutates quantisation_pixels. */
   const bool quantisation_improved = raster_renderer.UpdateQuantisation();
   raster_renderer.SetSunFromAzimuth(sunazimuth, settings.brightness,
@@ -396,9 +407,23 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     settings.contours == Contours::OFF ||
 #ifdef ENABLE_OPENGL
     raster_renderer.IsShaderHillshade() ||
-    raster_renderer.GetQuantisationPixels() > 2 ||
 #endif
     map_projection.GetScale() == last_projection_scale;
+
+#ifdef ENABLE_OPENGL
+  /* Each finished tile used to rescan and reshade the whole grid
+     on the UI thread.  Keep the picture and catch up a few times
+     a second. */
+  if (!panning && !quantisation_improved && sun_ok && image_current &&
+      compare_projection.CompareExact(map_projection) &&
+      !tiles_current) {
+    const auto now = std::chrono::steady_clock::now();
+    if (now < tile_shade_not_before)
+      return true;
+    tile_shade_not_before = now + std::chrono::milliseconds(250);
+  }
+#endif
+
   if (!quantisation_improved &&
       compare_projection.CompareExact(map_projection) &&
       tiles_current &&
@@ -467,8 +492,12 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     terrain_serial = terrain.GetSerial();
 
 #ifdef ENABLE_OPENGL
-  if (raster_renderer.IsShaderHillshade() &&
-      !raster_renderer.IsHeightMatrixChanged())
+  /* A finger move smaller than one sample used to rebuild the
+     whole slope bitmap.  The colours are already right. */
+  if (!raster_renderer.IsHeightMatrixChanged() &&
+      (raster_renderer.IsShaderHillshade() ||
+       (sun_ok &&
+        map_projection.GetScale() == last_projection_scale)))
     return true;
 #endif
 

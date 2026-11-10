@@ -11,8 +11,10 @@
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Main.hpp"
+#include "system/FileUtil.hpp"
 #include "MapWindow/MapWindow.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/ComputerProfile.hpp"
@@ -136,6 +138,14 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
     nmea_info.location.longitude = Angle::Degrees(7.7);
   }
 
+  /* Home can sit outside the loaded map.  The paint then stays
+     the white clear and draws no terrain. */
+  if (terrain != nullptr) {
+    const RasterTerrain::Lease map{*terrain};
+    if (map->IsDefined() && !map->IsInside(nmea_info.location))
+      nmea_info.location = map->GetMapCenter();
+  }
+
   nmea_info.location_available.Update(nmea_info.clock);
   nmea_info.track = Angle::Degrees(90);
   nmea_info.track_available.Update(nmea_info.clock);
@@ -159,6 +169,15 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
 void
 Main(TestMainWindow &main_window)
 {
+  /* The harness looks in profiles/.  An unmigrated data dir still
+     has default.prf at the root, which is the file the app uses. */
+  if (Profile::GetPath() != nullptr &&
+      !File::Exists(Profile::GetPath())) {
+    const auto legacy = LocalPath("default.prf");
+    if (File::Exists(legacy))
+      Profile::LoadFile(legacy);
+  }
+
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();
   Profile::Load(Profile::map, settings_computer);

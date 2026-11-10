@@ -56,7 +56,7 @@ GLint hillshade_projection, hillshade_translate,
   hillshade_height_slope_factor, hillshade_height_div,
   hillshade_q, hillshade_do_shading, hillshade_contour_div,
   hillshade_contour_thickness, hillshade_height_texel,
-  hillshade_height_span,
+  hillshade_height_origin, hillshade_height_span,
   hillshade_screen_origin, hillshade_screen_rot,
   hillshade_inv_draw_scale, hillshade_geo_center,
   hillshade_geo_bounds;
@@ -377,8 +377,15 @@ static constexpr char hillshade_fragment_shader[] =
     uniform float contour_div;
     uniform float contour_thickness;
     uniform vec2 height_texel;
-    /* Matrix coverage inside the allocated texture. */
+    /* Logical (0, 0) in the height texture, and the stored size.
+       Zero origin leaves every coordinate unchanged. */
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+    uniform highp vec2 height_origin;
+    uniform highp vec2 height_span;
+    #else
+    uniform vec2 height_origin;
     uniform vec2 height_span;
+    #endif
     varying vec2 texcoordvar;
     #if defined(GL_FRAGMENT_PRECISION_HIGH)
     varying highp vec2 screenpos;
@@ -393,6 +400,19 @@ static constexpr char hillshade_fragment_shader[] =
     /* mid longitude, 1/width, north, 1/height. */
     uniform highp vec4 geo_bounds;
     #endif
+
+    /* One step past the stored edge is the sample that stayed put. */
+    vec2 ring_offset(vec2 p) {
+      if (height_origin.x != 0.0) {
+        if (p.x >= height_span.x) p.x -= height_span.x;
+        else if (p.x < 0.0) p.x += height_span.x;
+      }
+      if (height_origin.y != 0.0) {
+        if (p.y >= height_span.y) p.y -= height_span.y;
+        else if (p.y < 0.0) p.y += height_span.y;
+      }
+      return p;
+    }
 
     /* Screen position to the height texel.  A triangle pair
        interpolates the corners along the diagonal, which slides
@@ -417,15 +437,18 @@ static constexpr char hillshade_fragment_shader[] =
       highp float fx = clamp(dl * geo_bounds.y + 0.5, 0.0, 1.0);
       highp float fy = clamp((geo_bounds.z - lat) * geo_bounds.w,
                              0.0, 1.0);
-      return vec2(fx * height_span.x, fy * height_span.y);
+      return ring_offset(vec2(height_origin.x + fx * height_span.x,
+                              height_origin.y + fy * height_span.y));
 #else
       return texcoordvar;
 #endif
     }
 
-    vec2 unpack_la(vec4 t) {
+    /* R is the low byte, G the high byte of the little-endian
+       height.  GLES 3 has no luminance-alpha texture. */
+    vec2 unpack_height(vec4 t) {
       return vec2(floor(t.r * 255.0 + 0.5),
-                  floor(t.a * 255.0 + 0.5));
+                  floor(t.g * 255.0 + 0.5));
     }
 
     /* TerrainHeight::IsSpecial(): value <= -30000.
@@ -457,12 +480,13 @@ static constexpr char hillshade_fragment_shader[] =
     /* True when this height texel starts a new contour interval,
        matching the CPU neighbour test. */
     bool contour_edge(vec2 uv) {
-      vec2 b = unpack_la(texture2D(height_tex, uv));
+      uv = ring_offset(uv);
+      vec2 b = unpack_height(texture2D(height_tex, uv));
       float h = is_special(b) ? 0.0 : height(b);
-      vec2 b_up = unpack_la(texture2D(height_tex,
-          uv - vec2(0.0, height_texel.y)));
-      vec2 b_lf = unpack_la(texture2D(height_tex,
-          uv - vec2(height_texel.x, 0.0)));
+      vec2 b_up = unpack_height(texture2D(height_tex,
+          ring_offset(uv - vec2(0.0, height_texel.y))));
+      vec2 b_lf = unpack_height(texture2D(height_tex,
+          ring_offset(uv - vec2(height_texel.x, 0.0))));
       float h_up = is_special(b_up) ? 0.0 : height(b_up);
       float h_lf = is_special(b_lf) ? 0.0 : height(b_lf);
       float ci = contour_interval(h);
@@ -472,7 +496,7 @@ static constexpr char hillshade_fragment_shader[] =
 
     void main() {
       vec2 uv = terrain_uv();
-      vec2 b = unpack_la(texture2D(height_tex, uv));
+      vec2 b = unpack_height(texture2D(height_tex, uv));
       if (is_special(b)) {
         gl_FragColor = ramp_lookup(255.0, 0.0);
         return;
@@ -483,14 +507,14 @@ static constexpr char hillshade_fragment_shader[] =
       float sindex = 0.0;
 
       if (do_shading > 0.5) {
-        vec2 b_above = unpack_la(texture2D(height_tex,
-            uv - vec2(0.0, texel_step.y)));
-        vec2 b_below = unpack_la(texture2D(height_tex,
-            uv + vec2(0.0, texel_step.y)));
-        vec2 b_left = unpack_la(texture2D(height_tex,
-            uv - vec2(texel_step.x, 0.0)));
-        vec2 b_right = unpack_la(texture2D(height_tex,
-            uv + vec2(texel_step.x, 0.0)));
+        vec2 b_above = unpack_height(texture2D(height_tex,
+            ring_offset(uv - vec2(0.0, texel_step.y))));
+        vec2 b_below = unpack_height(texture2D(height_tex,
+            ring_offset(uv + vec2(0.0, texel_step.y))));
+        vec2 b_left = unpack_height(texture2D(height_tex,
+            ring_offset(uv - vec2(texel_step.x, 0.0))));
+        vec2 b_right = unpack_height(texture2D(height_tex,
+            ring_offset(uv + vec2(texel_step.x, 0.0))));
 
         if (!is_special(b_above) && !is_special(b_below) &&
             !is_special(b_left) && !is_special(b_right)) {
@@ -726,6 +750,8 @@ OpenGL::InitShaders()
     hillshade_contour_thickness =
       hillshade_shader->GetUniformLocation("contour_thickness");
     hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
+    hillshade_height_origin =
+      hillshade_shader->GetUniformLocation("height_origin");
     hillshade_height_span =
       hillshade_shader->GetUniformLocation("height_span");
     hillshade_screen_origin =
@@ -742,6 +768,7 @@ OpenGL::InitShaders()
     hillshade_shader->Use();
     glUniform1i(hillshade_height_tex, 0);
     glUniform1i(hillshade_ramp_tex, 1);
+    glUniform2f(hillshade_height_origin, 0.f, 0.f);
     glUniform2f(hillshade_height_span, 1.f, 1.f);
   } catch (...) {
     delete hillshade_shader;
