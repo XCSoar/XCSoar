@@ -12143,15 +12143,8 @@ msgstr ""
 " inriktad»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar använder den första enhet som levererar varje värde (enhet A före B "
-"och så vidare). Feta markeringar är värdena som XCSoar tar från den här enh"
-"eten. Markeringar som inte är feta betyder att en tidigare enhet redan leve"
-"rerar samma data. Baro är höjden med aktuell QNH; QNE är tryckhöjd; Alt IGC"
-" är höjden som loggern skriver. QNE och Pressure är samma omgivningstryck, "
-"så bara den tidigare av de två är fet. Dålig GPS och ett batteri under 10 p"
-"rocent visas i rött på en färgskärm och i fetstil på e-papper."
 
 msgid "QNE"
 msgstr "QNE"

@@ -12171,15 +12171,8 @@ msgstr ""
 "vnano»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar uporabi prvo napravo, ki posreduje vsako vrednost (naprava A pred B "
-"in tako naprej). Krepke oznake so vrednosti, ki jih XCSoar vzame s te napra"
-"ve. Nekrepke pomenijo, da zgodnejša naprava že posreduje iste podatke. Baro"
-" je višina s trenutnim QNH; QNE je tlačna višina; Alt IGC je višina, ki jo "
-"zapiše zapisovalnik. QNE in Pressure sta isti zračni tlak, zato je krepka l"
-"e zgodnejša od njiju. Slab GPS in baterija pod 10 odstotkov sta na barvnem "
-"zaslonu rdeča, na e-papirju pa krepka."
 
 msgid "QNE"
 msgstr "QNE"

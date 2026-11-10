@@ -12282,16 +12282,8 @@ msgstr ""
 "tpliwości «Nie wyrównano»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar używa pierwszego urządzenia, które dostarcza daną wartość (urządzeni"
-"e A przed B i tak dalej). Pogrubione oznaczenia to wartości, których XCSoar"
-" używa z tego urządzenia. Niepogrubione znaczą, że wcześniejsze urządzenie "
-"już dostarcza te same dane. Baro to wysokość przy bieżącym QNH; QNE to wyso"
-"kość ciśnieniowa; Alt IGC to wysokość zapisywana przez rejestrator. QNE i P"
-"ressure to to samo ciśnienie otoczenia, więc pogrubione jest tylko wcześnie"
-"jsze z nich. Zły GPS i bateria poniżej 10 procent są czerwone na kolorowym "
-"ekranie i pogrubione na e-papierze."
 
 msgid "QNE"
 msgstr "QNE"

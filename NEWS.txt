@@ -601,12 +601,12 @@ Version 7.46 - 2026-10-19
     lines above a flight download, and the percent, the amount
     complete, the transfer speed and the time remaining inside the
     progress bar
-  - draw a Devices list flag in bold when XCSoar is using that
+  - put a Devices list flag in brackets when XCSoar is using that
     device's value
   - show Baro for QNH height, QNE for pressure altitude, and Alt
     IGC for the logger altitude as separate Devices list flags
-  - show Bad GPS, and Battery=N% below 10%, in red on a colour
-    display or in bold on e-paper
+  - show Bad GPS, and Battery=N% below 10%, as a red badge on a
+    colour display
   - add Help on the Devices list for these flags
   - toggle a checklist checkbox by tapping its line. A link on that
     line, such as a radio frequency, still opens the link
@@ -788,9 +788,9 @@ Version 7.46 - 2026-10-19
   - correct the Raspberry Pi display step: edit the existing line
     instead of adding another, and keep vc4-kms-v3d #1082
   - describe Bluetooth pulse oximeters and the Blood Oxygen InfoBox
-  - describe the Devices list flags: bold means XCSoar is using that
-    device's value; red on a colour display, or bold on e-paper, for
-    Bad GPS or Battery=N% below 10%; and Baro (QNH height), QNE
+  - describe the Devices list flags: brackets mean XCSoar is using
+    that device's value; a red badge on a colour display for Bad
+    GPS or Battery=N% below 10%; and Baro (QNH height), QNE
     (pressure altitude) and Alt IGC (logger altitude)
   - describe the Devices list Help button
   - drop Windows CE and Windows Mobile from the manuals; list iOS

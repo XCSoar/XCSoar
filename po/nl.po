@@ -12291,16 +12291,8 @@ msgstr ""
 "iet uitgelijnd»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar gebruikt het eerste apparaat dat elke waarde levert (apparaat A vóór"
-" B, enzovoort). Vette kenmerken zijn de waarden die XCSoar van dit apparaat"
-" gebruikt. Kenmerken die niet vet zijn, betekenen dat een eerder apparaat d"
-"ezelfde gegevens al levert. Baro is de hoogte met de huidige QNH; QNE is de"
-" drukhoogte; Alt IGC is de hoogte die de logger schrijft. QNE en Pressure z"
-"ijn dezelfde omgevingsdruk, dus alleen de eerdere van de twee is vet. Slech"
-"te GPS en een accu onder 10 procent worden rood getoond op een kleurenscher"
-"m en vet op e-papier."
 
 msgid "QNE"
 msgstr "QNE"

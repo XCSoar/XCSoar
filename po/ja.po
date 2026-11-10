@@ -12157,12 +12157,8 @@ msgid "Whether the instrument housing the IMU is permanently fixed and its axes 
 msgstr "IMU を収めた計器が恒久的に固定され、その軸が機体軸に揃っているか。剛に取り付けたときだけ「固定して整列」にします。迷うときは「未整列」。"
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar は各値を供給する最初の機器を使います（機器 A が B より前、以下同様）。太字の標識はこの機器から XCSoar が使っている値です。"
-"太字でない標識は、より前の機器が同じデータを既に供給していることを意味します。Baro は現在の QNH での高度、QNE は気圧高度、Alt IGC"
-" はロガーが書く高度です。QNE と Pressure は同じ外気圧なので、早い方だけが太字です。不良な GPS と 10パーセント 未満のバッテリー"
-"はカラー画面では赤、電子ペーパーでは太字で示されます。"
 
 msgid "QNE"
 msgstr "QNE"

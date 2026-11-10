@@ -12216,16 +12216,8 @@ msgstr ""
 "jojant «Nesulygiuota»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"XCSoar naudoja pirmą prietaisą, kuris teikia kiekvieną reikšmę (prietaisą A"
-" prieš B ir taip toliau). Paryškintos žymos yra reikšmės, kurias XCSoar ima"
-" iš šio prietaiso. Neparyškintos reiškia, kad ankstesnis prietaisas jau tei"
-"kia tuos pačius duomenis. Baro yra aukštis su dabartiniu QNH; QNE yra slėgi"
-"o aukštis; Alt IGC yra aukštis, kurį rašo registratorius. QNE ir Pressure y"
-"ra tas pats aplinkos slėgis, todėl paryškintas tik ankstesnis iš jų. Blogas"
-" GPS ir baterija žemiau 10 проценtų spalvotame ekrane rodomi raudonai, o e."
-" popieriuje paryškintai."
 
 msgid "QNE"
 msgstr "QNE"

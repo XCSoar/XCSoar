@@ -12237,16 +12237,8 @@ msgstr ""
 "él. Kétség esetén «Nincs igazítva»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
 msgstr ""
-"Az XCSoar az első eszközt használja, amely az adott értéket adja (az A eszk"
-"özt a B előtt, és így tovább). A félkövér jelzők azok az értékek, amelyeket"
-" az XCSoar ettől az eszköztől vesz. A nem félkövérek azt jelentik, hogy egy"
-" korábbi eszköz már adja ugyanazokat az adatokat. A Baro a magasság az aktu"
-"ális QNH-val; a QNE a nyomásmagasság; az Alt IGC a magasság, amelyet a napl"
-"ózó ír. A QNE és a Pressure ugyanaz a környezeti nyomás, ezért csak a koráb"
-"bi vastag. A rossz GPS és a 10 százalék alatti akkumulátor színes kijelzőn "
-"piros, e-papíron félkövér."
 
 msgid "QNE"
 msgstr "QNE"
