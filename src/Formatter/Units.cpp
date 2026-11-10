@@ -38,13 +38,12 @@ FormatWingLoading(char *buffer, size_t buffer_size, double value, Unit unit,
     return;
 
   const auto uvalue = Units::ToUserUnit(value, unit);
-  int precision = uvalue > 20 ? 0 : 1;
 
   if (include_unit)
-    StringFormat(buffer, buffer_size, "%.*f %s", precision, (double)uvalue,
+    StringFormat(buffer, buffer_size, "%.1f %s", (double)uvalue,
                  Units::GetUnitName(unit));
   else
-    StringFormat(buffer, buffer_size, "%.*f", precision, (double)uvalue);
+    StringFormat(buffer, buffer_size, "%.1f", (double)uvalue);
 }
 
 void
