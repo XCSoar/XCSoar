@@ -14,6 +14,13 @@ Version 7.47 - not yet released
   - label the MacCready InfoBox speed-to-fly comment TAS, because
     that speed is true airspeed. Setup can show it as indicated
     airspeed
+  - fix shaded terrain drifting off airspace when the map is zoomed
+    far out. The display shades the terrain, one sample per pen
+    pixel. Zoomed out to a continent, the colours stay and the
+    slope shading turns off #3449
+  - keep shaded terrain while panning and fill only the new edge.
+    A north or south pan zoomed out keeps the picture until the
+    view leaves it. A pinch keeps it until the fingers lift
 * map
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,

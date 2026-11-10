@@ -27,6 +27,9 @@ class BackgroundRenderer {
 #ifdef ENABLE_OPENGL
   /** force full terrain resolution regardless of user idle state */
   bool full_resolution = false;
+
+  /** Pinch in progress: do not resample the height grid. */
+  bool scale_in_flux = false;
 #endif
 
 public:
@@ -41,6 +44,10 @@ public:
    */
   void SetFullResolution() noexcept {
     full_resolution = true;
+  }
+
+  void SetScaleInFlux(bool on) noexcept {
+    scale_in_flux = on;
   }
 #endif
 

@@ -109,6 +109,7 @@ TEST_NAMES = \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
+	TestSlideGrid \
 	TestMacCready TestFinalGlide TestTerrainReach TestOrderedTask TestAATPoint TestTaskSave \
 	TestTaskFileSeeYouParsing \
 	TestPlanes \
@@ -1303,6 +1304,11 @@ TEST_FLAT_LINE_SOURCES = \
 	$(TEST_SRC_DIR)/TestFlatLine.cpp
 TEST_FLAT_LINE_DEPENDS = GEO MATH
 $(eval $(call link-program,TestFlatLine,TEST_FLAT_LINE))
+
+TEST_SLIDE_GRID_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestSlideGrid.cpp
+$(eval $(call link-program,TestSlideGrid,TEST_SLIDE_GRID))
 
 TEST_THERMALBASE_SOURCES = \
 	$(SRC)/Computer/ThermalBase.cpp \

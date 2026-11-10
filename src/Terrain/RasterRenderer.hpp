@@ -7,6 +7,7 @@
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
+#include "util/AllocatedArray.hxx"
 #endif
 
 #include <cstdint>
@@ -68,10 +69,21 @@ class RasterRenderer {
 
   bool height_matrix_changed = false;
 
+  /* Edge ScrollMap() vacated.  UploadHeightTexture() sends only
+     that rectangle. */
+  unsigned dirty_row_y = 0, dirty_row_h = 0;
+  unsigned dirty_col_x = 0, dirty_col_w = 0;
+
+  /* Texel where logical sample (0, 0) is stored.  A pan moves
+     this and uploads only the new edge. */
+  unsigned height_origin_x = 0, height_origin_y = 0;
+  int height_scroll_east = 0, height_scroll_north = 0;
+  bool height_scrolled = false;
+  AllocatedArray<uint8_t> height_upload;
+
   std::unique_ptr<GLTexture> height_texture;
   std::unique_ptr<GLTexture> ramp_texture;
   std::unique_ptr<uint8_t[]> ramp_rgba;
-  bool use_cpu_hillshade = false;
   bool shader_hillshade = false;
   bool ramp_texture_dirty = true;
   int sun_sx = 0, sun_sy = 0, sun_sz = 255;
@@ -115,23 +127,6 @@ public:
 
   RasterRenderer(const RasterRenderer &) = delete;
   RasterRenderer &operator=(const RasterRenderer &) = delete;
-
-  const HeightMatrix &GetHeightMatrix() const noexcept {
-    return height_matrix;
-  }
-
-  UnsignedPoint2D GetSize() const noexcept {
-    return height_matrix.GetSize();
-  }
-
-  /**
-   * Geographic size of one rendered pixel in meters, computed
-   * by the ScanMap() call.
-   */
-  [[gnu::pure]]
-  double GetPixelSize() const noexcept {
-    return pixel_size;
-  }
 
   unsigned GetQuantisationPixels() const noexcept {
     return quantisation_pixels;
@@ -183,19 +178,17 @@ public:
     return bounds;
   }
 
-  const GLTexture &BindAndGetTexture() const noexcept;
-
-  /**
-   * Use the CPU GenerateSlopeImage() path even on OpenGL (A/B tests).
-   */
-  void SetUseCpuHillshade(bool cpu) noexcept {
-    use_cpu_hillshade = cpu;
-    shader_hillshade = false;
-  }
-
   [[gnu::pure]]
   bool IsShaderHillshade() const noexcept {
     return shader_hillshade;
+  }
+
+  /** True when a height grid is already stored for Draw(). */
+  [[gnu::pure]]
+  bool HasGrid() const noexcept {
+    return bounds.IsValid() &&
+      height_matrix.GetSize().x > 1 &&
+      height_matrix.GetSize().y > 1;
   }
 
   void SetSunFromAzimuth(Angle sunazimuth, int brightness,
@@ -290,25 +283,30 @@ protected:
    */
   void GenerateSlopeImage(unsigned height_scale, int contrast,
                           int sx, int sy, int sz,
-                          unsigned contour_height_scale) noexcept;
+                          unsigned contour_height_scale,
+                          unsigned y0 = 0, unsigned y1 = ~0u,
+                          unsigned x0 = 0, unsigned x1 = ~0u) noexcept;
 
   /**
    * Convert the height matrix into the image, with slope shading.
+   * The optional rectangle shades only that part of the bitmap.
    */
   void GenerateSlopeImage(unsigned height_scale,
                           int contrast, int brightness,
                           Angle sunazimuth,
-                          unsigned contour_height_scale) noexcept;
+                          unsigned contour_height_scale,
+                          unsigned y0 = 0, unsigned y1 = ~0u,
+                          unsigned x0 = 0, unsigned x1 = ~0u) noexcept;
 
 private:
   void ContourStart(unsigned contour_height_scale) noexcept;
 
 #ifdef ENABLE_OPENGL
   void UploadHeightTexture() noexcept;
+  void AdvanceHeightOrigin() noexcept;
+  void UploadHeightRect(unsigned x, unsigned y,
+                        unsigned w, unsigned h) noexcept;
   void UploadRampTexture() noexcept;
-  void FillHeightRect(const RasterMap &map,
-                      unsigned x, unsigned y,
-                      unsigned w, unsigned h) noexcept;
   bool ScrollMap(const RasterMap &map, const GeoBounds &desired,
                  UnsignedPoint2D matrix_size) noexcept;
   void DrawHillshade(const WindowProjection &projection,

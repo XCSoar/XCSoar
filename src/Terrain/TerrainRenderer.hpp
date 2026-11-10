@@ -8,6 +8,8 @@
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/CompareProjection.hpp"
 
+#include <chrono>
+
 class Canvas;
 class WindowProjection;
 class RasterTerrain;
@@ -28,6 +30,14 @@ protected:
   const ColorRamp *last_color_ramp = nullptr;
   double last_projection_scale = 0;
   unsigned last_contour_spacing = 0;
+
+  /* Tile arrivals rescan the whole grid.  Do that at most a few
+     times a second so the UI thread can still move the map. */
+  std::chrono::steady_clock::time_point tile_shade_not_before{};
+
+  /* Pinch: keep the current grid and let the projection stretch
+     it.  The next Generate() after this clears does one fill. */
+  bool scale_in_flux = false;
 
   RasterRenderer raster_renderer;
 
@@ -65,6 +75,10 @@ public:
   [[gnu::pure]]
   unsigned GetContourSpacing() const noexcept {
     return last_contour_spacing;
+  }
+
+  void SetScaleInFlux(bool on) noexcept {
+    scale_in_flux = on;
   }
 
   void SetSettings(const TerrainRendererSettings &_settings) {

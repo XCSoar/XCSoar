@@ -3,9 +3,10 @@
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
+#include "LogFile.hpp"
 
+#include <algorithm>
 #include <cstdlib>
-#include <cstring>
 
 #ifdef ENABLE_OPENGL
 #include "Geo/GeoBounds.hpp"
@@ -14,6 +15,38 @@
 #endif
 
 #include <cassert>
+
+/* XCSOAR_TERRAIN_SLOW=N scans each row N times (capped).  A full
+   rebuild then costs N times a strip, which is the mistake the
+   benchmark is trying to see. */
+static unsigned
+TerrainScanRepeats() noexcept
+{
+  static const unsigned repeats = []() noexcept {
+    const char *env = std::getenv("XCSOAR_TERRAIN_SLOW");
+    if (env == nullptr || *env == '\0')
+      return 1u;
+    const int v = std::atoi(env);
+    if (v <= 1)
+      return 1u;
+    const unsigned capped = std::min(unsigned(v), 32u);
+    LogFmt("Terrain scan repeated {} times (XCSOAR_TERRAIN_SLOW)",
+           capped);
+    return capped;
+  }();
+  return repeats;
+}
+
+static void
+ScanTerrainLine(const RasterMap &map,
+                const GeoPoint a, const GeoPoint b,
+                TerrainHeight *row, unsigned width,
+                bool interpolate) noexcept
+{
+  const unsigned n = TerrainScanRepeats();
+  for (unsigned i = 0; i < n; ++i)
+    map.ScanLine(a, b, row, width, interpolate);
+}
 
 void
 HeightMatrix::FillGradient(UnsignedPoint2D _size,
@@ -72,44 +105,37 @@ HeightMatrix::Scroll(int east, int north) noexcept
   assert(std::abs(east) < (int)size.x);
   assert(std::abs(north) < (int)size.y);
 
-  const unsigned width = size.x;
-  const unsigned height = size.y;
-  auto *const base = data.data();
-  const auto sample_bytes = sizeof(TerrainHeight);
-
-  if (north > 0) {
-    const unsigned n = unsigned(north);
-    std::memmove(base + n * width, base,
-                 (height - n) * width * sample_bytes);
-  } else if (north < 0) {
-    const unsigned n = unsigned(-north);
-    std::memmove(base, base + n * width,
-                 (height - n) * width * sample_bytes);
-  }
-
-  if (east == 0)
-    return;
-
-  unsigned y0 = 0;
-  unsigned y1 = height;
-  if (north > 0)
-    y0 = unsigned(north);
-  else if (north < 0)
-    y1 = height - unsigned(-north);
-
-  for (unsigned y = y0; y < y1; ++y) {
-    auto *const row = base + y * width;
-    if (east > 0) {
-      const unsigned n = unsigned(east);
-      std::memmove(row, row + n, (width - n) * sample_bytes);
-    } else {
-      const unsigned n = unsigned(-east);
-      std::memmove(row + n, row, (width - n) * sample_bytes);
-    }
-  }
+  SlideGrid(data.data(), size.x, size.x, size.y,
+            sizeof(TerrainHeight), east, north);
 }
 
 #ifdef ENABLE_OPENGL
+
+void
+HeightMatrix::FillRect(const RasterMap &map, const GeoBounds &bounds,
+                       unsigned x, unsigned y,
+                       unsigned w, unsigned h,
+                       bool interpolate) noexcept
+{
+  if (w < 2 || h == 0 || size.x < 2)
+    return;
+
+  const unsigned height = size.y;
+  const Angle dlat = bounds.GetHeight() / double(height);
+  const Angle width_angle = bounds.GetWidth();
+  const double x_denom = double(size.x - 1);
+  const Angle west = bounds.GetWest();
+  const Angle north = bounds.GetNorth();
+
+  for (unsigned row = y; row < y + h; ++row) {
+    const Angle lat = north - dlat * double(row);
+    const Angle lon0 = west + width_angle * (double(x) / x_denom);
+    const Angle lon1 =
+      west + width_angle * (double(x + w - 1) / x_denom);
+    ScanTerrainLine(map, GeoPoint(lon0, lat), GeoPoint(lon1, lat),
+                    GetRow(row) + x, w, interpolate);
+  }
+}
 
 void
 HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
@@ -123,11 +149,10 @@ HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
   const Angle delta_y = bounds.GetHeight() / _size.y;
   Angle latitude = bounds.GetNorth();
   for (auto p = data.data(), end = p + _size.Area();
-       p != end; p += _size.x, latitude -= delta_y) {
-    map.ScanLine(GeoPoint(bounds.GetWest(), latitude),
-                 GeoPoint(bounds.GetEast(), latitude),
-                 p, _size.x, interpolate);
-  }
+       p != end; p += _size.x, latitude -= delta_y)
+    ScanTerrainLine(map, GeoPoint(bounds.GetWest(), latitude),
+                    GeoPoint(bounds.GetEast(), latitude),
+                    p, _size.x, interpolate);
 }
 
 #else
@@ -148,9 +173,11 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
   auto p = data.data();
   for (unsigned y = 0; y < screen_size.height;
        y += quantisation_pixels, p += size.x) {
-    map.ScanLine(projection.ScreenToGeo({0, (int)y}),
-                 projection.ScreenToGeo({(int)screen_size.width, (int)y}),
-                 p, size.x, interpolate);
+    ScanTerrainLine(map,
+                    projection.ScreenToGeo({0, (int)y}),
+                    projection.ScreenToGeo({(int)screen_size.width,
+                                            (int)y}),
+                    p, size.x, interpolate);
   }
 }
 
