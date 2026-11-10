@@ -1108,6 +1108,33 @@ RasterRenderer::UploadRampTexture() noexcept
   ramp_texture_dirty = false;
 }
 
+/** Mid-longitude, 1/width, north, 1/height for the hillshade shader. */
+static void
+SetHillshadeProjection(const WindowProjection &projection,
+                       const GeoBounds &bounds) noexcept
+{
+  const Angle rot = projection.GetScreenAngle();
+  const PixelPoint origin = projection.GetScreenOrigin();
+  const GeoPoint center = projection.GetGeoLocation();
+  const double width = bounds.GetWidth().Radians();
+  const double height = bounds.GetHeight().Radians();
+
+  glUniform2f(OpenGL::hillshade_screen_origin,
+              GLfloat(origin.x), GLfloat(origin.y));
+  glUniform2f(OpenGL::hillshade_screen_rot,
+              GLfloat(rot.fastcosine()), GLfloat(rot.fastsine()));
+  glUniform1f(OpenGL::hillshade_inv_draw_scale,
+              GLfloat(projection.PixelsToAngle(1).Radians()));
+  glUniform2f(OpenGL::hillshade_geo_center,
+              GLfloat(center.latitude.Radians()),
+              GLfloat(center.longitude.Radians()));
+  glUniform4f(OpenGL::hillshade_geo_bounds,
+              GLfloat(bounds.GetWest().Radians() + width * 0.5),
+              GLfloat(width > 0 ? 1.0 / width : 0),
+              GLfloat(bounds.GetNorth().Radians()),
+              GLfloat(height > 0 ? 1.0 / height : 0));
+}
+
 void
 RasterRenderer::DrawHillshade(const WindowProjection &projection,
                               float alpha) const noexcept
@@ -1168,6 +1195,11 @@ RasterRenderer::DrawHillshade(const WindowProjection &projection,
               GLfloat(contour_div_for_draw));
   glUniform1f(OpenGL::hillshade_contour_thickness,
               GLfloat(std::min(contour_thickness, 7u)));
+  glUniform2f(OpenGL::hillshade_height_span, x1, y1);
+
+  /* The fragment shader maps each pixel with the same projection
+     as airspace.  This quad only has to cover the bounds. */
+  SetHillshadeProjection(projection, bounds);
 
   if (alpha < 1.0f) {
     const GLBlend blend(alpha);
