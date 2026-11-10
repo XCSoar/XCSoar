@@ -15,6 +15,8 @@ Version 7.47 - not yet released
     that speed is true airspeed. Setup can show it as indicated
     airspeed
 * map
+  - draw the wind arrow light blue when the wind comes from an
+    external sensor, grey when XCSoar estimated it
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,
     lift and age, and can start a Go To. Markers within a

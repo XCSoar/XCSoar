@@ -122,6 +122,13 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   if (calculated.wind.norm < 1)
     return;
 
+  /* the average wind of an external sensor in a colour of its own, so
+     the pilot sees whether it was measured or estimated */
+  const Brush &brush =
+    calculated.wind_source == DerivedInfo::WindSource::EXTERNAL
+    ? look.arrow_brush_external
+    : look.arrow_brush;
+
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.wind_arrow_style, look.arrow_brush);
+                          settings.wind_arrow_style, brush);
 }
