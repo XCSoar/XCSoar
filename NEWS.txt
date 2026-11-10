@@ -58,6 +58,8 @@ Version 7.47 - not yet released
     when Dark mode is on
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
+  - fix shaded terrain drifting off airspace when the map is zoomed
+    far out #3449
 * map
   - draw the map scale, the contour spacing, and auto-zoom (with a
     magnifying glass) on one line, and each part of the line above
