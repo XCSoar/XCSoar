@@ -122,29 +122,25 @@ CloudConfigPanel::Fill() noexcept
   StaticString<16> port_text;
   port_text.Format("%u", port);
 
-  if (enabled) {
-    AddTextItem(_("Server"),
-                _("Hostname or IP address of the XCSoar Cloud server."),
-                host);
+  const bool off = !enabled;
 
-    AddItem(_("Port"), [this](){
-      unsigned value = port;
-      if (NumberEntryDialog(_("Port"), value, 5) && value != port &&
-          value >= 1 && value <= 65535) {
-        port = value;
-        Refresh();
-      }
-    }, {.value = port_text.c_str(), .chevron = true,
-        .help = _("UDP port of the XCSoar Cloud server.")});
+  AddTextItem(_("Server"),
+              _("Hostname or IP address of the XCSoar Cloud server."),
+              host, false, off);
 
-    AddTextItem(C_("Setting", "Own FLARM IDs"), own_flarm_help.c_str(),
-                own_flarm_ids);
-  } else {
-    AddItem(_("Server"), {.value = host.c_str(), .disabled = true});
-    AddItem(_("Port"), {.value = port_text.c_str(), .disabled = true});
-    AddItem(C_("Setting", "Own FLARM IDs"),
-            {.value = own_flarm_ids.c_str(), .disabled = true});
-  }
+  AddItem(_("Port"), [this](){
+    unsigned value = port;
+    if (NumberEntryDialog(_("Port"), value, 5) && value != port &&
+        value >= 1 && value <= 65535) {
+      port = value;
+      Refresh();
+    }
+  }, {.value = port_text.c_str(), .chevron = enabled,
+      .help = _("UDP port of the XCSoar Cloud server."),
+      .disabled = off});
+
+  AddTextItem(C_("Setting", "Own FLARM IDs"), own_flarm_help.c_str(),
+              own_flarm_ids, false, off);
 }
 
 bool

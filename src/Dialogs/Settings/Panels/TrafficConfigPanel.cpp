@@ -2,24 +2,14 @@
 // Copyright The XCSoar Project
 
 #include "TrafficConfigPanel.hpp"
-#include "Profile/Keys.hpp"
-#include "Profile/Profile.hpp"
-#include "Interface.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "MainWindow.hpp"
 #include "Monitor/TrafficMonitor.hpp"
-
-enum ControlIndex {
-  TrafficRadar,
-  AutoCloseFlarmDialog,
-  NoPositionTargetDistanceRing,
-  SpokenAlerts,
-  TestSpokenAlert,
-};
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 /** Not a GaugeLocation; used only in this panel's Off/position enum. */
 static constexpr unsigned TRAFFIC_RADAR_OFF = ~0u;
@@ -56,79 +46,68 @@ static constexpr StaticEnumChoice traffic_radar_list[] = {
   nullptr
 };
 
-class TrafficConfigPanel final
-  : public RowFormWidget, DataFieldListener {
+/** The FLARM radar and the spoken collision alarms. */
+class TrafficConfigPanel final : public ConfigListPanel {
+  unsigned radar;
+  bool auto_close, no_position, spoken;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
 public:
-  TrafficConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
-
-private:
-  void SetRadarEnabled(bool enabled) noexcept;
-
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-TrafficConfigPanel::SetRadarEnabled(bool enabled) noexcept
+TrafficConfigPanel::LoadSettings() noexcept
 {
-  SetRowEnabled(NoPositionTargetDistanceRing, enabled);
-}
+  const auto &traffic = CommonInterface::GetUISettings().traffic;
 
-void
-TrafficConfigPanel::OnModified(DataField &df) noexcept
-{
-  if (IsDataField(TrafficRadar, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    SetRadarEnabled(dfe.GetValue() != TRAFFIC_RADAR_OFF);
-  }
-}
-
-void
-TrafficConfigPanel::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
-{
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
-
-  RowFormWidget::Prepare(parent, rc);
-
-  const unsigned radar = ui_settings.traffic.enable_gauge
-    ? unsigned(ui_settings.traffic.gauge_location)
+  radar = traffic.enable_gauge
+    ? unsigned(traffic.gauge_location)
     : TRAFFIC_RADAR_OFF;
+  auto_close = traffic.auto_close_dialog;
+  no_position = traffic.no_position_target_distance_ring;
+  spoken = traffic.spoken_alerts;
+}
 
-  AddEnum(_("FLARM Radar"),
-          _("Enable the traffic radar and choose its position on the "
-            "main screen. The track bearing of the target relative to the "
-            "track bearing of the aircraft is displayed as an arrow head, "
-            "and a triangle pointing up or down shows the relative altitude "
-            "of the target relative to you. In all modes, the color of the "
-            "target indicates the threat level."),
-          traffic_radar_list, radar, this);
+void
+TrafficConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddBoolean(_("Auto close FLARM"),
-             _("Setting this to \"On\" will automatically close the FLARM dialog if there is no traffic. \"Off\" will keep the dialog open even without current traffic."),
-             ui_settings.traffic.auto_close_dialog);
-  SetExpertRow(AutoCloseFlarmDialog);
+  AddEnumItem(_("FLARM Radar"),
+              _("Enable the traffic radar and choose its position on the "
+                "main screen. The track bearing of the target relative to "
+                "the track bearing of the aircraft is displayed as an arrow "
+                "head, and a triangle pointing up or down shows the relative "
+                "altitude of the target relative to you. In all modes, the "
+                "color of the target indicates the threat level."),
+              traffic_radar_list, radar);
 
-  AddBoolean(_("No position target"),
-             _("This parameter enables or disables the No Position Target Distance Ring in Flarm Radar"),
-             ui_settings.traffic.no_position_target_distance_ring);
+  if (IsExpert())
+    AddToggleItem(_("Auto close FLARM"),
+                  _("Setting this to \"On\" will automatically close the "
+                    "FLARM dialog if there is no traffic. \"Off\" will keep "
+                    "the dialog open even without current traffic."),
+                  auto_close);
 
-  AddBoolean(_("Spoken alerts"),
-             _("Speak the collision alarms of FLARM, with the urgency, the "
-               "clock position and whether the traffic is above or below: "
-               "\"Traffic urgent! Three o'clock. Above.\" Obstacle and "
-               "alert zone alarms are not spoken."),
-             ui_settings.traffic.spoken_alerts);
+  AddToggleItem(_("No position target"),
+                _("This parameter enables or disables the No Position "
+                  "Target Distance Ring in Flarm Radar"),
+                no_position, nullptr, radar == TRAFFIC_RADAR_OFF);
 
-  AddButton(_("Test spoken alert"), [](){
-    PlaySpokenAlertExample();
-  });
+  AddToggleItem(_("Spoken alerts"),
+                _("Speak the collision alarms of FLARM, with the urgency, "
+                  "the clock position and whether the traffic is above or "
+                  "below: \"Traffic urgent! Three o'clock. Above.\" "
+                  "Obstacle and alert zone alarms are not spoken."),
+                spoken);
 
-  SetRadarEnabled(ui_settings.traffic.enable_gauge);
+  AddButton(_("Test spoken alert"), [](){ PlaySpokenAlertExample(); });
 }
 
 bool
@@ -136,40 +115,31 @@ TrafficConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-  UISettings &ui_settings = CommonInterface::SetUISettings();
-
-  const unsigned radar = GetValueEnum(TrafficRadar);
+  auto &traffic = CommonInterface::SetUISettings().traffic;
   const bool enable = radar != TRAFFIC_RADAR_OFF;
 
-  if (enable != ui_settings.traffic.enable_gauge) {
-    ui_settings.traffic.enable_gauge = enable;
-    Profile::Set(ProfileKeys::EnableFLARMGauge, enable);
-    changed = true;
-  }
+  changed |= Profile::Update(ProfileKeys::EnableFLARMGauge,
+                             traffic.enable_gauge, enable);
 
   if (enable) {
     const auto location =
       static_cast<TrafficSettings::GaugeLocation>(radar);
-    if (location != ui_settings.traffic.gauge_location) {
-      ui_settings.traffic.gauge_location = location;
-      Profile::SetEnum(ProfileKeys::FlarmLocation, location);
+    if (Profile::Update(ProfileKeys::FlarmLocation,
+                        traffic.gauge_location, location)) {
       CommonInterface::main_window->ReinitialiseLayout();
       changed = true;
     }
   }
 
-  changed |= SaveValue(AutoCloseFlarmDialog, ProfileKeys::AutoCloseFlarmDialog,
-                       ui_settings.traffic.auto_close_dialog);
-
-  changed |= SaveValue(NoPositionTargetDistanceRing,
-                       ProfileKeys::NoPositionTargetDistanceRing,
-                       ui_settings.traffic.no_position_target_distance_ring);
-
-  changed |= SaveValue(SpokenAlerts, ProfileKeys::FlarmSpokenAlerts,
-                       ui_settings.traffic.spoken_alerts);
+  changed |= Profile::Update(ProfileKeys::AutoCloseFlarmDialog,
+                             traffic.auto_close_dialog, auto_close);
+  changed |= Profile::Update(ProfileKeys::NoPositionTargetDistanceRing,
+                             traffic.no_position_target_distance_ring,
+                             no_position);
+  changed |= Profile::Update(ProfileKeys::FlarmSpokenAlerts,
+                             traffic.spoken_alerts, spoken);
 
   _changed |= changed;
-
   return true;
 }
 
