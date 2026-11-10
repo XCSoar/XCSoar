@@ -19,6 +19,8 @@ Version 7.47 - not yet released
 * map
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it
+  - draw the instantaneous wind of an external sensor (Larus) as a
+    second, light green wind arrow next to the average wind
   - show own-ship, Cloud, SkyLines, and Thermal Information Map
     thermals as one marker. A tap shows the source, position,
     lift and age, and can start a Go To. Markers within a
