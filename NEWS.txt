@@ -31,6 +31,9 @@ Version 7.47 - not yet released
     an API key #3347
   - show the WeGlide task manager page only while WeGlide is enabled,
     and use one Upload Flight action for WeGlide and SoaringScoring
+* devices
+  - Larus: pass on the instantaneous wind of ``$PLARW`` (``I``) next
+    to the average wind (``A``)
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)

@@ -1805,6 +1805,12 @@ TestLarus()
   ok1(equals(nmea_info.external_wind.bearing, 73.0));
   ok1(equals(nmea_info.external_wind.norm, Units::ToSysUnit(23, Unit::KILOMETER_PER_HOUR)));
 
+  ok1(device->ParseNMEA("$PLARW,80,15,I,A*5C", nmea_info));
+  ok1(nmea_info.external_instantaneous_wind_available);
+  ok1(equals(nmea_info.external_instantaneous_wind.bearing, 80.0));
+  ok1(equals(nmea_info.external_instantaneous_wind.norm,
+             Units::ToSysUnit(15, Unit::KILOMETER_PER_HOUR)));
+
   // $PLARS water ballast, bugs, mc, qnh, cir
   ok1(device->ParseNMEA("$PLARS,L,BAL,0.331*5C", nmea_info));
   ok1(nmea_info.settings.ballast_fraction_available);
@@ -4779,7 +4785,7 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1099 /* drivers */ + 45 /* PFLAU extended */
+  plan_tests(1103 /* drivers */ + 45 /* PFLAU extended */
              + 40 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
