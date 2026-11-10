@@ -25,7 +25,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                              unsigned tail_length,
                              WindArrowStyle arrow_style,
                              int offset,
-                             unsigned scale) noexcept
+                             unsigned scale,
+                             const Brush &brush) noexcept
 {
   // Draw arrow
 
@@ -40,7 +41,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
   PolygonRotateShift({arrow, ARRAY_SIZE(arrow)}, pos, angle, scale);
 
   canvas.Select(look.arrow_pen);
-  canvas.Select(look.arrow_brush);
+  canvas.Select(brush);
   {
 #ifdef ENABLE_OPENGL
     const ScopeAlphaBlend alpha_blend;
@@ -67,7 +68,8 @@ void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const PixelPoint pos,
                         const PixelRect &rc,
-                        WindArrowStyle arrow_style) noexcept
+                        WindArrowStyle arrow_style,
+                        const Brush &brush) noexcept
 {
   constexpr unsigned arrow_width = 6;
   constexpr unsigned arrow_tail_length = 3;
@@ -83,7 +85,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
             arrow_width, length, arrow_tail_length,
             arrow_style,
             arrow_offset,
-            scale);
+            scale, brush);
 
   // Draw wind speed label
 
@@ -121,5 +123,5 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.wind_arrow_style);
+                          settings.wind_arrow_style, look.arrow_brush);
 }
