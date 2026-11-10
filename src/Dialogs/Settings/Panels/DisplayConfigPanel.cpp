@@ -393,8 +393,8 @@ DisplayConfigPanel::Fill() noexcept
     AddItem(_("Stretch InfoBox area"), [this](){
       EditInfoBoxAreaStretch();
     }, {.value = edges.c_str(),
-        .help = gettext(infobox_area_stretch_help),
-        .chevron = true});
+        .chevron = true,
+        .help = gettext(infobox_area_stretch_help)});
   }
 #endif
 
