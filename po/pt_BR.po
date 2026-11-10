@@ -9573,11 +9573,6 @@ msgstr "Fixo (canto superior esquerdo)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Sem curvas de nível"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montanhas"
 

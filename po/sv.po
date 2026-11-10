@@ -9483,11 +9483,6 @@ msgstr "Fast (övre vänster)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Inga höjdkurvor"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Berg"
 

@@ -62,7 +62,7 @@ static constexpr StaticEnumChoice slope_shading_list[] = {
 };
 
 static constexpr StaticEnumChoice contours_list[] = {
-  { Contours::OFF, N_("Off"), NC_("Setting", "No contour lines"), },
+  { Contours::OFF, N_("Off"), },
   { Contours::MOUNTAINS, NC_("Setting", "Mountains"),
     N_("For steep mountain terrain, 256m minimum spacing"), },
   { Contours::HIGHLANDS, NC_("Setting", "Highlands"),

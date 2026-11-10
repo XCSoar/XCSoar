@@ -9617,11 +9617,6 @@ msgstr "Fix (a dalt a l'esquerra)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Capa curva di nivell"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagne"
 

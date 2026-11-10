@@ -9495,11 +9495,6 @@ msgstr "Pevné (vlevo nahoře)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez vrstevnic"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Hory"
 

@@ -9630,11 +9630,6 @@ msgstr "Fest (oben links)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Keine Höhenlinien"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Gebirge"
 

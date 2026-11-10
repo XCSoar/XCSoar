@@ -9356,11 +9356,6 @@ msgstr "Fiksno (gore lijevo)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez kontura"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Planine"
 

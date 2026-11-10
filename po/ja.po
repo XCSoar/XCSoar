@@ -9565,11 +9565,6 @@ msgstr "固定（左上）"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "等高線なし"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "山地"
 

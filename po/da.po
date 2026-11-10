@@ -9556,11 +9556,6 @@ msgstr "Fast (øverste venstre)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Ingen højdekurvor"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Berg"
 

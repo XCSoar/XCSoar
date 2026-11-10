@@ -9663,11 +9663,6 @@ msgstr "Fixe (haut gauche)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Pas de courbes de niveau"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagnes"
 

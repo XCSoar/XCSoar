@@ -9603,11 +9603,6 @@ msgstr "Фіксована (верхній лівий кут)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Без горизонталей"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Гори"
 

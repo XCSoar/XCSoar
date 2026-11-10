@@ -9610,11 +9610,6 @@ msgstr "Vast (linksboven)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Geen hoogtelijnen"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Bergen"
 

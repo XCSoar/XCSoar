@@ -9613,11 +9613,6 @@ msgstr "Stałe (lewy górny róg)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Brak warstwic"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Góry"
 

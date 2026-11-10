@@ -9632,11 +9632,6 @@ msgstr "Σταθερή (επάνω αριστερά)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Χωρίς ισοϋψείς"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Βουνά"
 
