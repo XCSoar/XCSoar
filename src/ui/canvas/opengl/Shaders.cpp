@@ -55,7 +55,11 @@ GLint hillshade_projection, hillshade_translate,
   hillshade_texel_step, hillshade_sun, hillshade_contrast,
   hillshade_height_slope_factor, hillshade_height_div,
   hillshade_q, hillshade_do_shading, hillshade_contour_div,
-  hillshade_contour_thickness, hillshade_height_texel;
+  hillshade_contour_thickness, hillshade_height_texel,
+  hillshade_height_span,
+  hillshade_screen_origin, hillshade_screen_rot,
+  hillshade_inv_draw_scale, hillshade_geo_center,
+  hillshade_geo_bounds;
 
 } // namespace OpenGL
 
@@ -331,7 +335,29 @@ static constexpr char round_line_fragment_shader[] =
     }
 )glsl";
 
-static const char *const hillshade_vertex_shader = texture_vertex_shader;
+static constexpr char hillshade_vertex_shader[] =
+  GLSL_VERSION
+  R"glsl(
+    uniform mat4 projection;
+    uniform vec2 translate;
+    attribute vec4 position;
+    attribute vec2 texcoord;
+    varying vec2 texcoordvar;
+    /* Map pixels, before the canvas translate.  The fragment
+       shader turns this back into longitude and latitude. */
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+    varying highp vec2 screenpos;
+    #else
+    varying vec2 screenpos;
+    #endif
+    void main() {
+      screenpos = position.xy;
+      gl_Position = position;
+      gl_Position.xy += translate;
+      gl_Position = projection * gl_Position;
+      texcoordvar = texcoord;
+    }
+)glsl";
 
 static constexpr char hillshade_fragment_shader[] =
   GLSL_VERSION
@@ -351,7 +377,51 @@ static constexpr char hillshade_fragment_shader[] =
     uniform float contour_div;
     uniform float contour_thickness;
     uniform vec2 height_texel;
+    /* Matrix coverage inside the allocated texture. */
+    uniform vec2 height_span;
     varying vec2 texcoordvar;
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+    varying highp vec2 screenpos;
+    #else
+    varying vec2 screenpos;
+    #endif
+    #if defined(GL_FRAGMENT_PRECISION_HIGH)
+    uniform highp vec2 screen_origin;
+    uniform highp vec2 screen_rot;
+    uniform highp float inv_draw_scale;
+    uniform highp vec2 geo_center;
+    /* mid longitude, 1/width, north, 1/height. */
+    uniform highp vec4 geo_bounds;
+    #endif
+
+    /* Screen position to the height texel.  A triangle pair
+       interpolates the corners along the diagonal, which slides
+       terrain off airspace once the view is many degrees wide.
+       shortcut: uses cos(), not the fastcosine table, about one
+       pixel at the edge of a continental view, upgrade if that
+       residual shows.  Without fragment highp, keep the texcoord. */
+    vec2 terrain_uv() {
+#if defined(GL_FRAGMENT_PRECISION_HIGH)
+      highp vec2 d = screenpos - screen_origin;
+      highp float rx = d.x * screen_rot.x - d.y * screen_rot.y;
+      highp float ry = d.y * screen_rot.x + d.x * screen_rot.y;
+      highp float lat = geo_center.x - ry * inv_draw_scale;
+      highp float lat_c = clamp(lat, -1.3962634, 1.3962634);
+      highp float lon = geo_center.y +
+        rx * inv_draw_scale / max(cos(lat_c), 0.02);
+      highp float dl = lon - geo_bounds.x;
+      if (dl > 3.14159265)
+        dl -= 6.2831853;
+      else if (dl < -3.14159265)
+        dl += 6.2831853;
+      highp float fx = clamp(dl * geo_bounds.y + 0.5, 0.0, 1.0);
+      highp float fy = clamp((geo_bounds.z - lat) * geo_bounds.w,
+                             0.0, 1.0);
+      return vec2(fx * height_span.x, fy * height_span.y);
+#else
+      return texcoordvar;
+#endif
+    }
 
     vec2 unpack_la(vec4 t) {
       return vec2(floor(t.r * 255.0 + 0.5),
@@ -401,7 +471,8 @@ static constexpr char hillshade_fragment_shader[] =
     }
 
     void main() {
-      vec2 b = unpack_la(texture2D(height_tex, texcoordvar));
+      vec2 uv = terrain_uv();
+      vec2 b = unpack_la(texture2D(height_tex, uv));
       if (is_special(b)) {
         gl_FragColor = ramp_lookup(255.0, 0.0);
         return;
@@ -413,13 +484,13 @@ static constexpr char hillshade_fragment_shader[] =
 
       if (do_shading > 0.5) {
         vec2 b_above = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(0.0, texel_step.y)));
+            uv - vec2(0.0, texel_step.y)));
         vec2 b_below = unpack_la(texture2D(height_tex,
-            texcoordvar + vec2(0.0, texel_step.y)));
+            uv + vec2(0.0, texel_step.y)));
         vec2 b_left = unpack_la(texture2D(height_tex,
-            texcoordvar - vec2(texel_step.x, 0.0)));
+            uv - vec2(texel_step.x, 0.0)));
         vec2 b_right = unpack_la(texture2D(height_tex,
-            texcoordvar + vec2(texel_step.x, 0.0)));
+            uv + vec2(texel_step.x, 0.0)));
 
         if (!is_special(b_above) && !is_special(b_below) &&
             !is_special(b_left) && !is_special(b_right)) {
@@ -446,7 +517,7 @@ static constexpr char hillshade_fragment_shader[] =
         /* ApplyContourExpansion() paints several matrix pixels.
            The matrix is finer than the screen, so one texel is
            thinner than a pixel and the line disappears. */
-        bool on_contour = contour_edge(texcoordvar);
+        bool on_contour = contour_edge(uv);
         if (!on_contour && contour_thickness > 1.5) {
           float tl = floor(contour_thickness * 0.5);
           float br = floor((contour_thickness - 1.0) * 0.5);
@@ -458,7 +529,7 @@ static constexpr char hillshade_fragment_shader[] =
                 continue;
               if (fx < -br || fx > tl || fy < -br || fy > tl)
                 continue;
-              if (contour_edge(texcoordvar +
+              if (contour_edge(uv +
                                vec2(fx * height_texel.x,
                                     fy * height_texel.y)))
                 on_contour = true;
@@ -655,10 +726,23 @@ OpenGL::InitShaders()
     hillshade_contour_thickness =
       hillshade_shader->GetUniformLocation("contour_thickness");
     hillshade_height_texel = hillshade_shader->GetUniformLocation("height_texel");
+    hillshade_height_span =
+      hillshade_shader->GetUniformLocation("height_span");
+    hillshade_screen_origin =
+      hillshade_shader->GetUniformLocation("screen_origin");
+    hillshade_screen_rot =
+      hillshade_shader->GetUniformLocation("screen_rot");
+    hillshade_inv_draw_scale =
+      hillshade_shader->GetUniformLocation("inv_draw_scale");
+    hillshade_geo_center =
+      hillshade_shader->GetUniformLocation("geo_center");
+    hillshade_geo_bounds =
+      hillshade_shader->GetUniformLocation("geo_bounds");
 
     hillshade_shader->Use();
     glUniform1i(hillshade_height_tex, 0);
     glUniform1i(hillshade_ramp_tex, 1);
+    glUniform2f(hillshade_height_span, 1.f, 1.f);
   } catch (...) {
     delete hillshade_shader;
     hillshade_shader = nullptr;

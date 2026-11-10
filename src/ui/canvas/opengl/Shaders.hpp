@@ -91,7 +91,11 @@ extern GLint hillshade_projection, hillshade_translate,
   hillshade_texel_step, hillshade_sun, hillshade_contrast,
   hillshade_height_slope_factor, hillshade_height_div,
   hillshade_q, hillshade_do_shading, hillshade_contour_div,
-  hillshade_contour_thickness, hillshade_height_texel;
+  hillshade_contour_thickness, hillshade_height_texel,
+  hillshade_height_span,
+  hillshade_screen_origin, hillshade_screen_rot,
+  hillshade_inv_draw_scale, hillshade_geo_center,
+  hillshade_geo_bounds;
 
 /**
  * Throws on error.
