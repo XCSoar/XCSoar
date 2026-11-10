@@ -609,6 +609,7 @@ Version 7.46 - 2026-10-19
   - show Bad GPS, Battery N% below 10%, and a port error as a
     red badge on a colour display, and No data and Debug in yellow
   - show that explanation below the device list
+  - allow the Devices Manage dialog in the simulator
   - toggle a checklist checkbox by tapping its line. A link on that
     line, such as a radio frequency, still opens the link
   - show the detected takeoff, landing and duration in the flight

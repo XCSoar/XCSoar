@@ -23,6 +23,7 @@
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
 #include "Device/Port/Listener.hpp"
+#include "Device/Port/NullPort.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -41,6 +42,7 @@
 #include "Components.hpp"
 #include "BackendComponents.hpp"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -323,6 +325,9 @@ protected:
   void DownloadFlightFromCurrent();
   void EditCurrent();
   void ManageCurrent();
+  void ShowManageDialog(DeviceDescriptor &descriptor, Device &device,
+                        unsigned index);
+  void ManageInSimulator(DeviceDescriptor &descriptor, unsigned index);
   void MonitorCurrent();
   void DebugCurrent();
 
@@ -531,10 +536,19 @@ DeviceListWidget::UpdateButtons()
   } else
     disable_button->SetEnabled(false);
 
-  if (is_simulator() || current < 0 || devices == nullptr) {
+  if (current < 0 || devices == nullptr) {
     reconnect_button->SetEnabled(false);
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
+    monitor_button->SetEnabled(false);
+    debug_button->SetEnabled(false);
+  } else if (is_simulator()) {
+    /* The simulator never opens a port. Manage still has a dialog
+       for the configured driver; the other buttons need that port. */
+    const DeviceDescriptor &device = (*devices)[current];
+    reconnect_button->SetEnabled(false);
+    flight_button->SetEnabled(false);
+    manage_button->SetEnabled(device.IsManageable());
     monitor_button->SetEnabled(false);
     debug_button->SetEnabled(false);
   } else {
@@ -887,6 +901,14 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
+  if (is_simulator()) {
+    if (Device *live = descriptor.GetDevice())
+      ShowManageDialog(descriptor, *live, current);
+    else
+      ManageInSimulator(descriptor, current);
+    return;
+  }
+
   if (descriptor.GetState() != PortState::READY) {
     ShowMessageBox(_("Device is not connected"), _("Manage"),
                    MB_OK | MB_ICONERROR);
@@ -906,11 +928,18 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
+  ShowManageDialog(descriptor, *device, current);
+}
+
+void
+DeviceListWidget::ShowManageDialog(DeviceDescriptor &descriptor,
+                                   Device &device, unsigned index)
+{
   if (descriptor.IsDriver("CAI 302"))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(),
-                       UIGlobals::GetDialogLook(), *device);
+                       UIGlobals::GetDialogLook(), device);
   else if (descriptor.IsDriver("Stratux"))
-    ManageStratuxDialog(*device);
+    ManageStratuxDialog(device);
   else if (descriptor.IsDriver("FLARM")) {
     FlarmVersion version;
     FlarmHardware hardware;
@@ -918,23 +947,23 @@ DeviceListWidget::ManageCurrent()
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
+      const NMEAInfo &basic = device_blackboard.RealState(index);
       version = basic.flarm.version;
       state = basic.flarm.state;
     }
 
-    ManageFlarmDialog(*device, version, hardware, state);
+    ManageFlarmDialog(device, version, hardware, state);
   } else if (descriptor.IsDriver("LX")) {
     DeviceInfo info, secondary_info;
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
+      const NMEAInfo &basic = device_blackboard.RealState(index);
       info = basic.device;
       secondary_info = basic.secondary_device;
     }
 
-    LXDevice &lx_device = *(LXDevice *)device;
+    LXDevice &lx_device = (LXDevice &)device;
     if (lx_device.IsLXNAVVario())
       ManageLXNAVVarioDialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
@@ -942,9 +971,29 @@ DeviceListWidget::ManageCurrent()
     else if (lx_device.IsLX16xx())
       ManageLX16xxDialog(lx_device, info);
   } else if (descriptor.IsDriver("Vega"))
-    dlgConfigurationVarioShowModal(*device);
+    dlgConfigurationVarioShowModal(device);
   else if (descriptor.IsDriver("BlueFly"))
-    dlgConfigurationBlueFlyVarioShowModal(*device);
+    dlgConfigurationBlueFlyVarioShowModal(device);
+}
+
+void
+DeviceListWidget::ManageInSimulator(DeviceDescriptor &descriptor,
+                                    unsigned index)
+{
+  /* The simulator does not open the port, so there is no device to
+     borrow. A port that accepts writes and never answers is enough
+     for the dialog. */
+  const DeviceConfig &config = descriptor.GetConfig();
+  const DeviceRegister *driver = FindDriverByName(config.driver_name);
+  if (driver == nullptr || driver->CreateOnPort == nullptr)
+    return;
+
+  NullPort port;
+  std::unique_ptr<Device> device{driver->CreateOnPort(config, port)};
+  if (device == nullptr)
+    return;
+
+  ShowManageDialog(descriptor, *device, index);
 }
 
 inline void
