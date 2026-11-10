@@ -56,13 +56,6 @@ static void Load(const ProfileMap &map,
                  LiveTrack24::Settings &settings) {
   map.Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
 
-  if (!map.Get(ProfileKeys::LiveTrack24Server, settings.server))
-    settings.server = "www.livetrack24.com";
-  else if (StringIsEqual(settings.server, "livexc.dhv1.de")) {
-    // DHV tracking server moved to new host (#3208)
-    settings.server = "livexc.dhv.de";
-  }
-
   map.Get(ProfileKeys::LiveTrack24Username, settings.username);
   map.Get(ProfileKeys::LiveTrack24Password, settings.password);
 

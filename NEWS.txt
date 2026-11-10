@@ -145,6 +145,9 @@ Version 7.47 - not yet released
   - XCSoar Cloud server: ignore a fix that arrives after a newer one
     from the same pilot, and send the fix time with Cloud traffic
     #3518
+  - send live tracks to LiveTrack24 again over its current interface.
+    Positions are only sent with a LiveTrack24 account; the server
+    choice is gone #3467
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
