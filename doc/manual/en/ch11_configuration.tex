@@ -1401,25 +1401,29 @@ lists.
   Blood Oxygen InfoBox shows its saturation.
   The Devices list shows {\it Heart Rate}, {\it Blood Oxygen},
   {\it Pressure}, {\it Temperature}, and {\it Relative humidity}
-  among the other sensor flags, and {\it Battery=N\%} when remaining
+  among the other sensor flags, and {\it Battery N\%} when remaining
   charge is known, including BLE sensors that expose the standard
   heart-rate, Pulse Oximeter, Environmental Sensing, and Battery
   services.
   XCSoar uses the first device that supplies each value (device~A
-  before~B, and so on).  A flag in brackets, such as {\it [GPS fix]},
-  {\it [Baro]} (QNH height), {\it [QNE]} (pressure altitude), or
-  {\it [Alt IGC]} (the altitude written to the IGC log), is a value
-  XCSoar is using from that device.  The same flag without brackets
-  on a later device is present but ignored.  {\it Baro}, {\it QNE},
-  and {\it Alt IGC} are separate values, so one device can supply
-  QNH height while another supplies pressure altitude or the logger
-  altitude.
+  before~B, and so on).  A filled badge, such as {\it GPS fix},
+  {\it Baro} (QNH height), {\it QNE} (pressure altitude), or
+  {\it Alt IGC} (the altitude written to the IGC log), is a value
+  XCSoar is using from that device.  The same flag as an outlined
+  badge on a later device is present but ignored.  {\it Baro},
+  {\it QNE}, and {\it Alt IGC} are separate values, so one device
+  can supply QNH height while another supplies pressure altitude or
+  the logger altitude.
   {\it Pressure} (static pressure) and {\it QNE} are the same ambient
-  pressure, so only the earlier of those two is in brackets.
-  {\it Bad GPS} is shown as a red badge on a colour display when
-  the device sends GPS sentences without a valid fix.
-  {\it Battery=N\%} is shown as a red badge on a colour display when
-  remaining charge is below 10~percent.
+  pressure, so only the earlier of those two is filled.
+  {\it Bad GPS} is red on a colour display when the device sends GPS
+  sentences without a valid fix.
+  {\it Battery N\%} is red on a colour display when remaining charge
+  is below 10~percent.  A port error, such as no reply from the
+  port, is red.  {\it No data} is yellow on a colour display
+  when the port is open and nothing has arrived.  {\it Debug} is
+  yellow while NMEA logging is on.  On a black-and-white display
+  the red and yellow badges are filled, like a value which is in use.
   The {\it FLARM} flag is shown while that device is sending
   updates.
   {\it GDL90} is shown while the connection is alive.

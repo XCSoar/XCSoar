@@ -12152,7 +12152,7 @@ msgid "Whether the instrument housing the IMU is permanently fixed and its axes 
 msgstr "IMU を収めた計器が恒久的に固定され、その軸が機体軸に揃っているか。剛に取り付けたときだけ「固定して整列」にします。迷うときは「未整列」。"
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Flags in brackets are the values XCSoar is using from this device. Flags without brackets mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is in brackets. Bad GPS and a battery below 10% are shown as a red badge on a colour display."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
 
 msgid "QNE"

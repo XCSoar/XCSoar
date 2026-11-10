@@ -43,6 +43,7 @@
 #include "BackendComponents.hpp"
 
 #include <string>
+#include <vector>
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -62,52 +63,68 @@ GetDeviceListHelp() noexcept
     /* xgettext:no-c-format */
     _("XCSoar uses the first device that supplies each value "
            "(device A before B, and so on). "
-           "Flags in brackets are the values XCSoar is using from "
-           "this device. "
-           "Flags without brackets mean an earlier device already "
-           "supplies the same data. "
+           "A filled badge is a value XCSoar is using from this "
+           "device. "
+           "An outlined badge is present, but an earlier device "
+           "already supplies the same data. "
            "Baro is height with the current QNH; QNE is pressure "
            "altitude; Alt IGC is the altitude the logger writes. "
            "QNE and Pressure are the same ambient pressure, so only "
-           "the earlier of those two is in brackets. "
-           "Bad GPS and a battery below 10% are shown as a red badge "
-           "on a colour display.");
+           "the earlier of those two is filled. "
+           "Bad GPS, a battery below 10%, and a port error are "
+           "red on a colour display. "
+           "No data and Debug are yellow. "
+           "On a black-and-white display the red and yellow "
+           "badges are filled, like a value which is in use.");
 }
+
+/** One sensor flag.  A filled badge is the value XCSoar is using. */
+struct FlagBadge {
+  std::string text;
+  GroupedListWidget::BadgeStyle style;
+
+  bool operator==(const FlagBadge &other) const noexcept {
+    return text == other.text && style == other.style;
+  }
+};
 
 /**
- * The status line is one font.  Brackets take the place of the bold
- * face: a flag in brackets is the value XCSoar is using.
+ * @p used is a value XCSoar is taking from this device.  The accent
+ * color, not green: green is a positive safety indication.
  */
 static void
-AppendFlag(std::string &line, const char *text, bool used)
+AddFlag(std::vector<FlagBadge> &badges, const char *text, bool used)
 {
-  if (!line.empty())
-    line.append("; ");
-
-  if (used)
-    line.push_back('[');
-
-  line.append(text);
-
-  if (used)
-    line.push_back(']');
+  badges.push_back({text, used
+                    ? GroupedListWidget::BadgeStyle::PRIMARY
+                    : GroupedListWidget::BadgeStyle::NEUTRAL});
 }
 
 static void
-NoteWarning(std::string &badge, std::string &badge2,
-            const char *text)
+AddWarning(std::vector<FlagBadge> &badges, const char *text)
 {
-  if (badge.empty())
-    badge = text;
-  else
-    badge2 = text;
+  badges.push_back({text, GroupedListWidget::BadgeStyle::DANGER});
+}
+
+/** Yellow: the port needs attention, and it has not failed. */
+static void
+AddCaution(std::vector<FlagBadge> &badges, const char *text)
+{
+  badges.push_back({text, GroupedListWidget::BadgeStyle::WARNING});
+}
+
+/** NMEA logging.  Yellow: it is on, and it is not a sensor value. */
+static void
+AddDebugFlag(std::vector<FlagBadge> &badges)
+{
+  AddCaution(badges, _("Debug"));
 }
 
 class DeviceListWidget final
   : public GroupedListWidget,
     NullBlackboardListener, PortListener {
   using ItemOptions = GroupedListWidget::ItemOptions;
-  using BadgeStyle = GroupedListWidget::BadgeStyle;
+  using BadgeDefinition = GroupedListWidget::BadgeDefinition;
 
   DeviceBlackboard &device_blackboard;
   MultipleDevices *const devices;
@@ -259,8 +276,7 @@ class DeviceListWidget final
   std::string error_messages[NUMDEV];
   std::string captions[NUMDEV];
   std::string statuses[NUMDEV];
-  std::string badge_text[NUMDEV];
-  std::string badge2_text[NUMDEV];
+  std::vector<FlagBadge> flag_badges[NUMDEV];
 
   Button *disable_button = nullptr;
   Button *reconnect_button = nullptr, *flight_button = nullptr;
@@ -299,7 +315,7 @@ protected:
   std::string MakeCaption(unsigned idx) const;
 
   void FormatRow(unsigned idx, std::string &line,
-                 std::string &badge, std::string &badge2) const;
+                 std::vector<FlagBadge> &badges) const;
 
   void UpdateButtons();
 
@@ -414,17 +430,17 @@ DeviceListWidget::Load()
       error_messages[i] = (*devices)[i].GetErrorMessage();
 
     std::string caption = MakeCaption(i);
-    std::string status, badge, badge2;
-    FormatRow(i, status, badge, badge2);
+    std::string status;
+    std::vector<FlagBadge> badges;
+    FormatRow(i, status, badges);
 
     if (caption != captions[i] || status != statuses[i] ||
-        badge != badge_text[i] || badge2 != badge2_text[i])
+        badges != flag_badges[i])
       changed = true;
 
     captions[i] = std::move(caption);
     statuses[i] = std::move(status);
-    badge_text[i] = std::move(badge);
-    badge2_text[i] = std::move(badge2);
+    flag_badges[i] = std::move(badges);
   }
 
   return changed;
@@ -437,15 +453,18 @@ DeviceListWidget::Build()
   AddGroup();
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
+    std::vector<BadgeDefinition> defs;
+    defs.reserve(flag_badges[i].size());
+    for (const FlagBadge &badge : flag_badges[i])
+      defs.push_back({badge.text.c_str(), badge.style});
+
     ItemOptions options;
-    options.subtitle = statuses[i].c_str();
-    if (!badge_text[i].empty()) {
-      options.badge = badge_text[i].c_str();
-      options.badge_style = BadgeStyle::DANGER;
-    }
-    if (!badge2_text[i].empty()) {
-      options.badge2 = badge2_text[i].c_str();
-      options.badge_style2 = BadgeStyle::DANGER;
+    options.badge_size = TextSize::SMALL;
+    if (!statuses[i].empty())
+      options.subtitle = statuses[i].c_str();
+    if (!defs.empty()) {
+      options.row_badges = defs.data();
+      options.row_badge_count = defs.size();
     }
     AddItem(captions[i].c_str(), options);
   }
@@ -536,11 +555,10 @@ DeviceListWidget::UpdateButtons()
 
 void
 DeviceListWidget::FormatRow(unsigned idx, std::string &line,
-                            std::string &badge, std::string &badge2) const
+                            std::vector<FlagBadge> &badges) const
 {
   line.clear();
-  badge.clear();
-  badge2.clear();
+  badges.clear();
 
   const DeviceConfig &config =
     CommonInterface::GetSystemSettings().devices[idx];
@@ -558,36 +576,34 @@ DeviceListWidget::FormatRow(unsigned idx, std::string &line,
     else if (flags.connecting)
       line = _("Connecting...");
     else if (flags.open) {
-      AppendFlag(line, _("No data"), false);
+      AddCaution(badges, _("No data"));
       if (flags.debug)
-        AppendFlag(line, _("Debug"), true);
+        AddDebugFlag(badges);
     } else if (flags.error) {
-      line = error_messages[idx].empty()
-        ? _("Error")
-        : error_messages[idx];
+      AddWarning(badges, error_messages[idx].empty()
+                 ? _("Error")
+                 : error_messages[idx].c_str());
     } else
       line = _("Not connected");
     return;
   }
 
   if (flags.location)
-    AppendFlag(line, _("GPS fix"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.location;
-               }));
-  else if (flags.gps) {
+    AddFlag(badges, _("GPS fix"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.location;
+            }));
+  else if (flags.gps)
     /* device sends GPGGA, but no valid location */
-    const char *text = _("Bad GPS");
-    AppendFlag(line, text, false);
-    NoteWarning(badge, badge2, text);
-  } else
-    AppendFlag(line, _("Connected"), false);
+    AddWarning(badges, _("Bad GPS"));
+  else
+    AddFlag(badges, _("Connected"), false);
 
   if (flags.baro)
-    AppendFlag(line, _("Baro"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.baro;
-               }));
+    AddFlag(badges, _("Baro"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.baro;
+            }));
 
   /* QNE and Pressure are one ambient-pressure source (#3268). */
   const auto earlier_ambient = [](const Flags &f) {
@@ -595,114 +611,115 @@ DeviceListWidget::FormatRow(unsigned idx, std::string &line,
   };
 
   if (flags.pressure_altitude)
-    AppendFlag(line, _("QNE"),
-               !EarlierHas(idx, earlier_ambient));
+    AddFlag(badges, _("QNE"),
+            !EarlierHas(idx, earlier_ambient));
 
   if (flags.igc_altitude)
-    AppendFlag(line, C_("Abbreviation", "Alt IGC"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.igc_altitude;
-               }));
+    AddFlag(badges, C_("Abbreviation", "Alt IGC"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.igc_altitude;
+            }));
 
   if (flags.pressure)
-    AppendFlag(line, _("Pressure"),
-               !EarlierHas(idx, earlier_ambient));
+    AddFlag(badges, _("Pressure"),
+            !EarlierHas(idx, earlier_ambient));
 
   if (flags.pitot)
-    AppendFlag(line, _("Pitot"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.pitot;
-               }));
+    AddFlag(badges, _("Pitot"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.pitot;
+            }));
 
   if (flags.airspeed)
-    AppendFlag(line, _("Airspeed"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.airspeed;
-               }));
+    AddFlag(badges, _("Airspeed"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.airspeed;
+            }));
 
   if (flags.vario)
-    AppendFlag(line, _("Vario"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.vario;
-               }));
+    AddFlag(badges, _("Vario"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.vario;
+            }));
 
   if (flags.gdl90)
-    AppendFlag(line, "GDL90", true);
+    AddFlag(badges, "GDL90", true);
   else if (flags.traffic)
-    AppendFlag(line, "FLARM", true);
+    AddFlag(badges, "FLARM", true);
 
   if (flags.foreflight_ahrs)
-    AppendFlag(line, "ForeFlight AHRS",
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.foreflight_ahrs;
-               }));
+    AddFlag(badges, "ForeFlight AHRS",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.foreflight_ahrs;
+            }));
 
   if (flags.foreflight_id)
-    AppendFlag(line, "ForeFlight ID", true);
+    AddFlag(badges, "ForeFlight ID", true);
 
   if (flags.temperature)
-    AppendFlag(line, _("Temperature"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.temperature;
-               }));
+    AddFlag(badges, _("Temperature"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.temperature;
+            }));
 
   if (flags.humidity)
-    AppendFlag(line, _("Relative humidity"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.humidity;
-               }));
+    AddFlag(badges, _("Relative humidity"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.humidity;
+            }));
 
   if (flags.imu)
-    AppendFlag(line, _("IMU"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.imu;
-               }));
+    AddFlag(badges, _("IMU"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.imu;
+            }));
 
   if (flags.accel)
-    AppendFlag(line, "G",
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.accel;
-               }));
+    AddFlag(badges, "G",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.accel;
+            }));
 
   if (flags.heart_rate)
-    AppendFlag(line, _("Heart Rate"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.heart_rate;
-               }));
+    AddFlag(badges, _("Heart Rate"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.heart_rate;
+            }));
 
   if (flags.blood_oxygen)
-    AppendFlag(line, _("Blood Oxygen"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.blood_oxygen;
-               }));
+    AddFlag(badges, _("Blood Oxygen"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.blood_oxygen;
+            }));
 
   if (flags.radio)
-    AppendFlag(line, _("Radio"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.radio;
-               }));
+    AddFlag(badges, _("Radio"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.radio;
+            }));
 
   if (flags.transponder)
-    AppendFlag(line, "XPDR",
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.transponder;
-               }));
+    AddFlag(badges, "XPDR",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.transponder;
+            }));
 
   if (flags.engine)
-    AppendFlag(line, _("Engine"),
-               !EarlierHas(idx, [](const Flags &f) {
-                 return f.engine;
-               }));
+    AddFlag(badges, _("Engine"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.engine;
+            }));
 
   if (flags.debug)
-    AppendFlag(line, _("Debug"), true);
+    AddDebugFlag(badges);
 
   if (flags.battery_percent >= 0) {
     StaticString<32> battery;
-    battery.Format("%s=%d%%", _("Battery"), flags.battery_percent);
-    AppendFlag(line, battery, false);
+    battery.Format("%s %d%%", _("Battery"), flags.battery_percent);
     if (flags.battery_percent < BATTERY_WARNING_PERCENT)
-      NoteWarning(badge, badge2, battery);
+      AddWarning(badges, battery);
+    else
+      AddFlag(badges, battery, false);
   }
 }
 
