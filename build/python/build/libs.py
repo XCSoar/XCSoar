@@ -63,6 +63,10 @@ _GITHUB_URLS = {
         "https://github.com/libsdl-org/SDL/releases/download/{tag}/SDL2-{version}.tar.gz",
         "http://www.libsdl.org/release/SDL2-{version}.tar.gz",
     ),
+    "OSGeo/PROJ": (
+        "https://github.com/OSGeo/PROJ/releases/download/{tag}/proj-{version}.tar.gz",
+        "https://download.osgeo.org/proj/proj-{version}.tar.gz",
+    ),
     "Unidata/netcdf-c": (
         "https://github.com/Unidata/netcdf-c/archive/refs/tags/{tag}.tar.gz",
     ),
@@ -398,12 +402,9 @@ sqlite3 = AutotoolsProject(
     autogen=True,
 )
 
-proj = CmakeProject(
-    (
-        "http://download.osgeo.org/proj/proj-9.4.0.tar.gz",
-        # HTTPS mirror (same infra, different scheme)
-        "https://download.osgeo.org/proj/proj-9.4.0.tar.gz",
-    ),
+proj = github_tarball(
+    CmakeProject,
+    "OSGeo/PROJ", "9.4.0",
     "3643b19b1622fe6b2e3113bdb623969f5117984b39f173b4e3fb19a8833bd216",
     "lib/libproj.a",
     [
