@@ -59,7 +59,12 @@ Version 7.47 - not yet released
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
   - fix shaded terrain drifting off airspace when the map is zoomed
-    far out #3449
+    far out. The display shades the terrain, one sample per pen
+    pixel. Zoomed out to a continent, the colours stay and the
+    slope shading turns off #3449
+  - keep shaded terrain while panning and fill only the new edge.
+    A north or south pan zoomed out keeps the picture until the
+    view leaves it. A pinch keeps it until the fingers lift
 * map
   - draw the map scale, the contour spacing, and auto-zoom (with a
     magnifying glass) on one line, and each part of the line above

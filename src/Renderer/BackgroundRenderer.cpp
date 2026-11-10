@@ -57,6 +57,9 @@ BackgroundRenderer::Draw(Canvas& canvas,
     }
 
     renderer->SetSettings(terrain_settings);
+#ifdef ENABLE_OPENGL
+    renderer->SetScaleInFlux(scale_in_flux);
+#endif
     if (renderer->Generate(proj, shading_angle))
       renderer->Draw(canvas, proj);
   }
