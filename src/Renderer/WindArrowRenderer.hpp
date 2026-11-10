@@ -13,6 +13,7 @@ struct PixelRect;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
+struct MoreData;
 struct MapSettings;
 enum class WindArrowStyle : uint8_t;
 
@@ -29,7 +30,7 @@ public:
 
   void Draw(Canvas &canvas, Angle screen_angle, PixelPoint pos,
             const PixelRect &rc, const DerivedInfo &calculated,
-            const MapSettings &settings) noexcept;
+            const MoreData &basic, const MapSettings &settings) noexcept;
 
   void DrawArrow(Canvas &canvas, PixelPoint pos, Angle angle,
                  unsigned width, unsigned length, unsigned tail_length,

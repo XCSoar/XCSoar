@@ -11,6 +11,7 @@
 #include "Math/Util.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Units/Units.hpp"
 #include "util/Macros.hpp"
 #include "MapSettings.hpp"
@@ -112,23 +113,31 @@ void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelPoint pos, const PixelRect &rc,
                         const DerivedInfo &calculated,
+                        const MoreData &basic,
                         const MapSettings &settings) noexcept
 {
-  if (!calculated.wind_available ||
-      settings.wind_arrow_style == WindArrowStyle::NO_ARROW)
+  if (settings.wind_arrow_style == WindArrowStyle::NO_ARROW)
     return;
 
-  // don't bother drawing it if not significant
-  if (calculated.wind.norm < 1)
-    return;
+  // don't bother drawing a wind that is not significant
+  if (calculated.wind_available && calculated.wind.norm >= 1) {
+    /* the average wind of an external sensor in a colour of its own,
+       so the pilot sees whether it was measured or estimated */
+    const Brush &brush =
+      calculated.wind_source == DerivedInfo::WindSource::EXTERNAL
+      ? look.arrow_brush_external
+      : look.arrow_brush;
 
-  /* the average wind of an external sensor in a colour of its own, so
-     the pilot sees whether it was measured or estimated */
-  const Brush &brush =
-    calculated.wind_source == DerivedInfo::WindSource::EXTERNAL
-    ? look.arrow_brush_external
-    : look.arrow_brush;
+    WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
+                            settings.wind_arrow_style, brush);
+  }
 
-  WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.wind_arrow_style, brush);
+  /* the instantaneous wind of an external sensor as a second arrow, so
+     gusts and the wind shift while circling become visible */
+  if (basic.external_instantaneous_wind_available &&
+      basic.external_instantaneous_wind.norm >= 1)
+    WindArrowRenderer::Draw(canvas, screen_angle,
+                            basic.external_instantaneous_wind, pos, rc,
+                            settings.wind_arrow_style,
+                            look.arrow_brush_instantaneous);
 }
