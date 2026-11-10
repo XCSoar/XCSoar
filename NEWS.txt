@@ -610,6 +610,9 @@ Version 7.46 - 2026-10-19
     red badge on a colour display, and No data and Debug in yellow
   - show that explanation below the device list
   - allow the Devices Manage dialog in the simulator
+  - show the FLARM manage page as the same list. Setup, range
+    statistics and simulation open from a row, and Reboot is a
+    button
   - toggle a checklist checkbox by tapping its line. A link on that
     line, such as a radio frequency, still opens the link
   - show the detected takeoff, landing and duration in the flight
