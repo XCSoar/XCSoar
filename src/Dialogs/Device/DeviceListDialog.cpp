@@ -15,7 +15,6 @@
 #include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
@@ -450,7 +449,7 @@ void
 DeviceListWidget::Build()
 {
   Clear();
-  AddGroup();
+  AddGroup(nullptr, {.footer = GetDeviceListHelp()});
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
     std::vector<BadgeDefinition> defs;
@@ -1010,9 +1009,6 @@ ShowDeviceList(MultipleDevices *devices)
            UIGlobals::GetDialogLook(), _("Devices"));
   dialog.SetWidget(*device_blackboard, devices);
   dialog.GetWidget().CreateButtons(dialog);
-  dialog.AddButton(_("Help"), [](){
-    HelpDialog(_("Devices"), GetDeviceListHelp());
-  });
   dialog.AddButton(_("Close"), mrOK);
   dialog.GetWidget().SetActionBar(dialog.GetButtonPanel());
   dialog.EnableCursorSelection();

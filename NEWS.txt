@@ -608,7 +608,7 @@ Version 7.46 - 2026-10-19
     IGC for the logger altitude as separate Devices list flags
   - show Bad GPS, Battery N% below 10%, and a port error as a
     red badge on a colour display, and No data and Debug in yellow
-  - add Help on the Devices list for these flags
+  - show that explanation below the device list
   - toggle a checklist checkbox by tapping its line. A link on that
     line, such as a radio frequency, still opens the link
   - show the detected takeoff, landing and duration in the flight
@@ -795,7 +795,7 @@ Version 7.46 - 2026-10-19
     display for Bad GPS, Battery N% below 10%, or a port error,
     and yellow No data and Debug; and Baro (QNH height), QNE
     (pressure altitude) and Alt IGC (logger altitude)
-  - describe the Devices list Help button
+  - describe that explanation below the device list
   - drop Windows CE and Windows Mobile from the manuals; list iOS
     and macOS among the supported devices, the built-in barometer
     on Android and iOS, and the Android motion sensor (G-sensor).
