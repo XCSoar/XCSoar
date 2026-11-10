@@ -14,12 +14,13 @@
 
 class WindWindow : public PaintWindow
 {
+  const WindArrowLook &look;
   WindArrowRenderer renderer;
   SpeedVector wind;
 
 public:
-  WindWindow(const WindArrowLook &look)
-    :renderer(look), wind(10, 0) {}
+  WindWindow(const WindArrowLook &_look)
+    :look(_look), renderer(_look), wind(10, 0) {}
 
   SpeedVector GetWind() const {
     return wind;
@@ -41,7 +42,8 @@ protected:
     canvas.SelectHollowBrush();
     canvas.DrawCircle(pt, 2);
 
-    renderer.Draw(canvas, Angle::Zero(), wind, pt, rc, WindArrowStyle::ARROW_HEAD);
+    renderer.Draw(canvas, Angle::Zero(), wind, pt, rc,
+                  WindArrowStyle::ARROW_HEAD, look.arrow_brush);
   }
 };
 
