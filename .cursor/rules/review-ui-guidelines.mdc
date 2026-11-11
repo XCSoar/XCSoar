@@ -1,0 +1,58 @@
+---
+description: >-
+  When reviewing UI changes, reject deviations from the user interface
+  guidelines in doc/architecture.rst.
+globs:
+  - "src/Dialogs/**"
+  - "src/Form/**"
+  - "src/InfoBoxes/**"
+  - "src/Input/**"
+  - "src/Look/**"
+  - "src/MainWindow.*"
+  - "src/MapWindow/**"
+  - "src/Menu/**"
+  - "src/Renderer/**"
+  - "src/Screen/**"
+  - "src/Widget/**"
+  - "src/ui/**"
+alwaysApply: false
+---
+
+# Review: user interface guidelines
+
+Read **User interface guidelines** in `doc/architecture.rst` before
+reviewing a UI change. That section is the source of truth, including
+Screen rectangles and Touch interaction. Do not invent a parallel
+colour, gesture, or layout rule. If this file and the section
+disagree, the section wins.
+
+## Reject
+
+- A new colour role, or a raw `Color(0x..)` outside Look
+  `Initialise()`. Red is a warning and wants a sound. Orange is a
+  caution. Green means OK. An advisory is neither red nor green.
+  InfoBox blue is derived or pending, not a safety colour.
+- Text or chrome that follows `UISettings::DarkMode` is readable with
+  dark mode off and on. Pass that flag into Look `Initialise()`.
+  InfoBoxes may follow the global mode, or stay Light or Dark. Kobo
+  stays light. Use the named colours in `Look/Colors.hpp`.
+- A control whose name or result differs from the same control in an
+  InfoBox, menu, dialogue, or status line.
+- An in-flight action more than three steps from `mode=default`, or a
+  rare option placed on the flying screen instead of Setup.
+- Menu timeout (`UISettings::menu_timeout`) applied to a warning.
+- An action left enabled when it cannot be done. A destructive action
+  that does not ask, and does not say what will be lost.
+- A gesture or long press with no label. Touch that commits on press
+  instead of lift-off. See `.cursor/rules/ui-touch.mdc`.
+- An in-flight target smaller than `Layout::GetInflightButtonHeight()`
+  (about 20 mm). Dialogue rows that ignore
+  `Layout::GetMinimumControlHeight()`.
+- Type sized for the wrong distance. Auto shrinks type when the short
+  edge is under 3.2 inches. Handheld always uses that closer-view
+  size. Panel keeps full-size type for arm's length. Use
+  `Layout::FontScale()` and `Layout::VptScale()`.
+- A widget in the wrong screen rectangle, or map chrome drawn on the
+  ownship symbol.
+- An e-paper path (`HasEPaper()`, `IsDithered()`) that needs colour,
+  a gradient, or a timer `Invalidate()` when the pixels did not change.
