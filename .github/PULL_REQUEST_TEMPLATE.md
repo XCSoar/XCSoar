@@ -60,6 +60,10 @@ Please verify the following before submitting your PR:
 
 - [ ] Reuses existing helpers and UI strings (no parallel API, extra
   abstraction, or near-duplicate `_()` msgid)
+- [ ] UI changes follow the user interface guidelines in
+  [architecture](https://xcsoar.readthedocs.io/en/latest/architecture.html)
+  (colour, dark and light mode, touch, screen rectangles, viewing
+  distance)
 - [ ] TAP tests for new UI-free logic (parsers, formatters, protocol,
   math/geo); registered in `build/test.mk`
 - [ ] User-visible behaviour: `NEWS.txt` and English manual

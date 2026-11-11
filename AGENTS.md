@@ -82,6 +82,7 @@ Details: `.cursor/rules/xcsoar-testing.mdc`.
 | Architecture, i18n, build, platforms | `.cursor/rules/xcsoar-project-rules.mdc` |
 | Pull requests / compile-before-PR | `.cursor/rules/pr-compilation.mdc` |
 | Code review (readable, cost, layers) | `.cursor/rules/review-human-readable.mdc`, `.cursor/rules/review-exponential.mdc`, `.cursor/rules/review-architecture.mdc` |
+| Code review (UI guidelines) | `.cursor/rules/review-ui-guidelines.mdc`, `doc/architecture.rst` (User interface guidelines) |
 | Layers, threads, blackboards, HTTP | `doc/architecture.rst` |
 | UI colour, EFB / NASA HF | `doc/architecture.rst` (User interface guidelines) |
 | Screen rectangles (client, safe area, HUD, shade) | `doc/architecture.rst` (Screen rectangles) |
