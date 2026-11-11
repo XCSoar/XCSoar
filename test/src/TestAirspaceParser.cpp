@@ -295,12 +295,12 @@ TestActivationTime()
 {
   Airspaces airspaces;
     if (!ParseFile(Path("test/data/airspace/openair_activation_time.txt"), airspaces)) {
-    skip(20, 0, "Failed to parse activation-time input file");
+    skip(22, 0, "Failed to parse activation-time input file");
     return;
   }
 
-  // 20 airspace definitions, including two AA NONE records
-  ok1(airspaces.GetSize() == 20);
+  // 22 airspace definitions, including two AA NONE records
+  ok1(airspaces.GetSize() == 22);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
@@ -446,6 +446,12 @@ TestActivationTime()
     } else if (StringIsEqual("AA-Bad-Range", airspace.GetName())) {
       ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 17, 3, 0, 0)));
 
+    } else if (StringIsEqual("AA-Backwards", airspace.GetName())) {
+      ok1(airspace.IsActiveToday());
+
+    } else if (StringIsEqual("AA-Bad-Clock", airspace.GetName())) {
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 16, 0, 0)));
+
     } else if (StringIsEqual("AA-Never-NONE-Test", airspace.GetName()) ||
                StringIsEqual("AA-MultiLine-NeverActive-Test",
                              airspace.GetName())) {
@@ -464,7 +470,7 @@ TestActivationTime()
 
 int main()
 try {
-  plan_tests(174 + 1 + 11 + 8 + 28);
+  plan_tests(174 + 1 + 11 + 10 + 30);
 
   TestOpenAir();
   TestTNP();

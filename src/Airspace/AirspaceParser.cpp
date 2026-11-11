@@ -685,6 +685,11 @@ ParseInterval(const char *in, AirspaceActivationInterval &interval) noexcept
   if (!ReadISO8601(slash_loc + 1, interval.end))
     return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
 
+  /* End must follow the start. A reversed pair stays active. */
+  if (interval.start.IsPlausible() && interval.end.IsPlausible() &&
+      !(interval.start < interval.end))
+    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+
   return AirspaceActivationDecode::INTERVAL;
 }
 
@@ -743,11 +748,14 @@ ParseWeekdayMask(std::string_view text, uint8_t &days) noexcept
 static bool
 ReadClock(const char *text, unsigned &minute, bool allow_24) noexcept
 {
-  unsigned hour, min;
-  char suffix = 0;
-  if (std::strlen(text) != 6 ||
-      std::sscanf(text, "%2u:%2u%c", &hour, &min, &suffix) != 3 ||
-      suffix != 'Z' || min > 59)
+  if (std::strlen(text) != 6 || text[2] != ':' || text[5] != 'Z' ||
+      !IsDigitASCII(text[0]) || !IsDigitASCII(text[1]) ||
+      !IsDigitASCII(text[3]) || !IsDigitASCII(text[4]))
+    return false;
+
+  const unsigned hour = (text[0] - '0') * 10u + (text[1] - '0');
+  const unsigned min = (text[3] - '0') * 10u + (text[4] - '0');
+  if (min > 59)
     return false;
 
   if (hour == 24 && min == 0 && allow_24) {
