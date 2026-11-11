@@ -549,6 +549,9 @@ General
    function, such as dialogue graphics as well as map overlays and
    infoboxes.
 
+-  A control keeps its name and its result wherever it appears: an
+   InfoBox, a menu, a dialogue, and a status line.
+
 -  Text should always be monochrome.
 
 Use aviation conventions or adopt best aviation human factors standards
@@ -582,13 +585,17 @@ General colour conventions
 
 Colour conventions generally in use throughout the program:
 
--  Red for indicator of warning
+-  Red means a warning: act now.  Pair it with a sound.  The warning
+   leaves when the condition leaves.
 
--  Orange for indicator of caution
+-  Orange means a caution: look now.
 
--  Green for positive indicator of safety
+-  Green means OK, safe, or cleared.  An advisory is not red and not
+   green.
 
--  Blue for neutral indicator of safety
+-  Blue on an InfoBox is a derived or estimated value, or a pending
+   state, such as a start gate that is waiting or a standby
+   frequency.  It is not a safety colour.
 
 Displayed data
 ^^^^^^^^^^^^^^
@@ -601,6 +608,9 @@ Displayed data
 -  Display numerical data with significant digits appropriate to the
    accuracy of the calculations, or its functional use by the pilot,
    whichever is lower.
+
+-  The screen shows the mode.  An automatic mode, a download, and a
+   setting that changed are visible.
 
 Dialogs and menu buttons
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -620,9 +630,15 @@ Colour conventions in use are:
 
 -  Medium blue for dialogue title bar
 
--  Text is black if the item is enabled
+-  Text is black on a light background when dark mode is off, and
+   light on a dark background when it is on.  Both have to stay
+   readable.  Pass the mode into Look ``Initialise()``
+   (``UISettings::DarkMode``).  Use the named colours in
+   ``Look/Colors.hpp``.  InfoBoxes may follow the global mode, or
+   stay Light or Dark on their own.  Kobo stays light.
 
--  Text is greyed out (but still visible) if the item is disabled
+-  Text is greyed out (but still visible) if the item is disabled.
+   Disable an action that cannot be done.
 
 dialogue types and navigation buttons
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -651,6 +667,10 @@ Select buttons.
 -  Dialogs that display information that cannot be modified.
 
    These shall have a Close button
+
+A destructive action asks before it runs, and the question says what
+will be lost.  When an entry is wrong, say so on that control, and
+say what to do.
 
 dialogue button placement and size
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -692,7 +712,24 @@ dialogue button placement and size
 Usability
 ^^^^^^^^^
 
--  Minimum size of buttons should be X by Y mm
+-  An action used in flight is at most three steps from the map
+   (``mode=default``).  Rare options live in Setup, with a default
+   so the common case needs no visit.  The button menu, and the
+   InfoBox arrange screen, close after Menu timeout
+   (``UISettings::menu_timeout``).  Do not put that timer on a
+   warning.  Escape in a menu returns to the map.  Escape on the map
+   itself is described under Touch interaction.
+
+-  An in-flight tap target is about 20 mm high
+   (``Layout::GetInflightButtonHeight()``, 56 pt), large enough for
+   a gloved tap.  Dialogue rows use
+   ``Layout::GetMinimumControlHeight()``.
+
+-  Type follows the viewing distance (``Layout::ViewingDistance``).
+   Auto uses the closer-view size when the short edge is under 3.2
+   inches.  Handheld always uses that size.  Panel keeps full-size
+   type, for a screen read at arm's length.  Scale that type with
+   ``Layout::FontScale()`` and ``Layout::VptScale()``.
 
 -  Ensure all dialogs are navigable using cursor keys only
 
@@ -811,6 +848,9 @@ Murphy; NASA 9.3.3.4.7).  Do not invent a parallel gesture language.
 -  One press has one winner: tap (lift before the hold is armed),
    drag (movement past slop before the hold is armed), or hold then
    lift.  After a drag has started, a further hold does nothing.
+
+-  A gesture shows its label (``InputEvents::GetGestureLabel``).
+   A long press shows the hold indicator described below.
 
 -  Show a busy indicator if input cannot be processed for more than
    0.5 s (SAE ARP 4791).  That 0.5 s is “the system is occupied”, not
