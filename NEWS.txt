@@ -40,6 +40,8 @@ Version 7.47 - not yet released
   - keep the panel's own dots per inch when both axes agree, so
     buttons stay the right size on a phone whose Android density
     is one step higher
+  - size dialog rows and buttons to at least 30 pt on a mouse,
+    the same as on a touch screen #3021
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
 * map
