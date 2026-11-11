@@ -62,9 +62,10 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info, bool reciprocal_wind)
        */
       info.ProvideExternalWind(wind.Reciprocal());
     } else {
-      /* Condor3 outputs the direction the wind is coming from. */
-      info.ProvideExternalWind(wind);
-    };
+      /* Condor 3 reports the wind at the glider (coming-from).
+         That is instantaneous wind, not a circling average. */
+      info.ProvideExternalInstantaneousWind(wind);
+    }
   };
   return true;
 }

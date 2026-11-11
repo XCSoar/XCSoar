@@ -1972,6 +1972,15 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   ok1(device != NULL);
 
   NMEAInfo nmea_info;
+  /* Condor 3 sends the wind at the glider, not an LX average. */
+  const bool instant_wind = condor && !reciprocal_wind;
+  const SpeedVector &reported_wind = instant_wind
+    ? nmea_info.external_instantaneous_wind
+    : nmea_info.external_wind;
+  const Validity &reported_wind_available = instant_wind
+    ? nmea_info.external_instantaneous_wind_available
+    : nmea_info.external_wind_available;
+
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
 
@@ -1994,7 +2003,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
     ok1(!nmea_info.pressure_altitude_available);
     ok1(nmea_info.baro_altitude_available);
     ok1(equals(nmea_info.baro_altitude, 1266.5));
-    ok1(equals(nmea_info.external_wind.bearing, reciprocal_wind ? 68 : 248));
+    ok1(equals(reported_wind.bearing, reciprocal_wind ? 68 : 248));
   } else {
     ok1(nmea_info.pressure_altitude_available);
     ok1(!nmea_info.baro_altitude_available);
@@ -2004,8 +2013,10 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   ok1(!nmea_info.airspeed_available);
   ok1(!nmea_info.total_energy_vario_available);
 
-  ok1(nmea_info.external_wind_available);
-  ok1(equals(nmea_info.external_wind.norm, 23.1 / 3.6));
+  ok1(reported_wind_available);
+  ok1(instant_wind ? !nmea_info.external_wind_available
+                   : !nmea_info.external_instantaneous_wind_available);
+  ok1(equals(reported_wind.norm, 23.1 / 3.6));
 
   nmea_info.Reset();
   nmea_info.clock = TimeStamp{FloatDuration{1}};
@@ -2026,9 +2037,11 @@ TestLX(const struct DeviceRegister &driver, bool condor=false, bool reciprocal_w
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 1.71));
 
-  ok1(nmea_info.external_wind_available);
-  ok1(equals(nmea_info.external_wind.norm, 10.1 / 3.6));
-  ok1(equals(nmea_info.external_wind.bearing, reciprocal_wind ? 354 : 174));
+  ok1(reported_wind_available);
+  ok1(instant_wind ? !nmea_info.external_wind_available
+                   : !nmea_info.external_instantaneous_wind_available);
+  ok1(equals(reported_wind.norm, 10.1 / 3.6));
+  ok1(equals(reported_wind.bearing, reciprocal_wind ? 354 : 174));
 
   if (!condor) {
     /* Partial six-slot vario with airspeed: still TE (#2763). */
@@ -4798,6 +4811,7 @@ int main()
              + 13 /* GGAEllipsoid */ + 9 /* EllipsoidComplement */
              + 13 /* GLL */ + 20 /* GSA */ + 23 /* MalformedInput */
              + 30 /* Condor3UDP */ + 10 /* Condor3Spectate */
+             + 6 /* Condor3 instant wind */
              + 29 /* FlarmTrafficBuilder */
              + 24 /* TrafficExtensionsWire */
              + 42 /* LK8EX1 */

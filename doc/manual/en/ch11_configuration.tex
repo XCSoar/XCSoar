@@ -286,8 +286,9 @@ This page provides options relating to screen elements overlayed to the map disp
   {\bf Full arrow}: Draws an arrow head with a dashed arrow line. \\
   The arrow is grey for the wind XCSoar estimated and light blue for
   the average wind of an external sensor.  When the sensor also sends
-  its instantaneous wind (e.g.\ Larus), that one appears as a second,
-  light green arrow.
+  its instantaneous wind (e.g.\ Larus or Condor 3), that one appears
+  as a second, light green arrow.  Condor 3 reports the wind at the
+  glider, so that value is only the green arrow.
 \item[FAI triangle areas] Whether to show FAI triangle areas on the map.
   
 \end{description}
@@ -651,7 +652,9 @@ This page sets the base for wind computations.
   {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
   {\bf Both}:  Uses Circling and ZigZag.
 \item[Prefere external wind]  If enabled, the wind vector received from external
-  devices overrides XCSoar's internal wind calculation.
+  devices overrides XCSoar's internal wind calculation.  Condor 3 sends
+  the wind at the glider as instantaneous wind, so this switch does not
+  apply to it.
 \end{description}
 
 
