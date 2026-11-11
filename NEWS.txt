@@ -81,6 +81,19 @@ Version 7.47 - not yet released
     #3094
   - add an Imhof Atlas lite terrain colour ramp: the Imhof Atlas
     colours from 500 m up, with lighter colours below that
+  - fix terrain shifting sideways against the map as you zoom
+  - skip tiny topography fills, simplify large areas without tearing
+    them, thin water and city polygons by screen pixels, clip long
+    roads to the map view, and keep recently seen shapes while panning
+  - fix map fills and outlines vanishing when only partly on the map
+  - keep terrain, topography and airspace in discrete zoom bands so
+    pinch inside a band stretches the picture instead of rebuilding
+    it; rotating the map does not rebuild those caches; FIR, UIR and
+    similar large volumes are outlined only at the widest overview,
+    not filled
+  - fix mouse-wheel and Zoom In/Out stopping at about 170 km on
+    high-DPI screens; the discrete scale list is the scale-bar
+    width, up to 1000 km
 * airspace
   - show the bottom airspace warning in bold, white on the red
     Inside fill
@@ -142,6 +155,9 @@ Version 7.47 - not yet released
   - describe the Imhof Atlas lite terrain colour ramp
   - describe GeoTIFF elevation from the XCM or a one-time JPEG2000
     convert, with topography still in the map file
+  - note discrete map zoom bands for terrain, topography and
+    airspace, and that FIR-class volumes are outlined only at the
+    widest overview
 * data
   - load elevation as Cloud-Optimized GeoTIFF: a .tif in Site
     files, terrain.tif inside the XCM, or JPEG2000 from the XCM
@@ -321,6 +337,8 @@ Version 7.46 - 2026-10-19
   - remove the legacy single-file Windows program; use the OpenGL
     version (installer or zip) #2132
 * Linux
+  - fix -WIDTHxHEIGHT so a Raspberry Pi or other KMS display
+    switches to that resolution when the display lists it
   - add a desktop menu entry and icon #1496
   - add restart and power-off to the Quit dialog
   - add an optional System Tools page for installed maintenance tools

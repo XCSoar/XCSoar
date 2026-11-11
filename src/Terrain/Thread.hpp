@@ -12,7 +12,7 @@ class TerrainBase;
 class WindowProjection;
 
 /**
- * A thread that loads topography files asynchronously.
+ * A thread that loads terrain tiles asynchronously.
  */
 class TerrainThread final : private StandbyThread {
   TerrainBase &terrain;

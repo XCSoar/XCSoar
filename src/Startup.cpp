@@ -363,6 +363,11 @@ try {
   if (data_components->terrain && data_components->terrain->IsDefined())
     SetAirspaceGroundLevels(*data_components->airspaces,
                             *data_components->terrain);
+
+  /* SetTopWidget() already painted the map, before this terrain
+     existed. */
+  if (map != nullptr)
+    map->FullRedraw();
 #ifdef HAVE_DOWNLOAD_MANAGER
   RepositoryAutoUpdateTerrainIdle();
 #endif

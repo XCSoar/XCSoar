@@ -7,6 +7,9 @@
 #include "util/Serial.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "Projection/CompareProjection.hpp"
+#ifdef ENABLE_OPENGL
+#include "Projection/MapLod.hpp"
+#endif
 
 class Canvas;
 class WindowProjection;
@@ -28,6 +31,9 @@ protected:
   const ColorRamp *last_color_ramp = nullptr;
   double last_projection_scale = 0;
   unsigned last_contour_spacing = 0;
+#ifdef ENABLE_OPENGL
+  unsigned last_lod = MAP_LOD_COUNT;
+#endif
 
   RasterRenderer raster_renderer;
 
