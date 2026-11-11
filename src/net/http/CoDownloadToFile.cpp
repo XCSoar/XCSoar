@@ -7,6 +7,7 @@
 #include "lib/curl/CoStreamRequest.hxx"
 #include "io/DigestOutputStream.hxx"
 #include "io/FileOutputStream.hxx"
+#include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "lib/sodium/SHA256.hxx"
 
@@ -45,6 +46,8 @@ CoDownloadToFile(CurlGlobal &curl, const char *url,
 
   auto response = co_await Curl::CoStreamRequest(curl, std::move(easy), *os);
   file.Commit();
+  /* Android keeps the replaced file's mtime; publish the new one. */
+  File::Touch(path);
 
   if (sha256 != nullptr)
     digest->Final(std::span{*sha256});
