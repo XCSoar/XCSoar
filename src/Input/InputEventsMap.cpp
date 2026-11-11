@@ -146,7 +146,13 @@ InputEvents::sub_PanCursor(int dx, int dy)
   if (!projection.IsValid())
     return;
 
+  /* A repeat arrives before the 180 ms glide ends.  Step from the
+     pending target so the key does not lose the rest of that glide. */
   auto pt = projection.GetScreenOrigin();
+  const GeoPoint target = map_window->GetAnimatedPanTarget();
+  if (target.IsValid())
+    pt = projection.GeoToScreen(target);
+
   pt.x -= dx * Layout::FastScale(40);
   pt.y -= dy * Layout::FastScale(40);
   const GeoPoint location = projection.ScreenToGeo(pt);
