@@ -124,6 +124,7 @@ TEST_NAMES = \
 	TestObservationStore \
 	TestAirspaceClearance \
 	TestAirspaceBoundary \
+	TestMapItemList \
 	TestMETARParser \
 	TestIGCParser TestIGCFlightTimes \
 	TestNanoFileTransfer \
@@ -568,6 +569,17 @@ TEST_AIRSPACE_BOUNDARY_SOURCES = \
 	$(TEST_SRC_DIR)/TestAirspaceBoundary.cpp
 TEST_AIRSPACE_BOUNDARY_DEPENDS = AIRSPACE GLIDE TASK GEO MATH UTIL UNITS TIME FMT
 $(eval $(call link-program,TestAirspaceBoundary,TEST_AIRSPACE_BOUNDARY))
+
+TEST_MAP_ITEM_LIST_SOURCES = \
+	$(SRC)/MapWindow/Items/List.cpp \
+	$(SRC)/MapWindow/Items/MapItem.cpp \
+	$(SRC)/Radio/TransponderCode.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestMapItemList.cpp
+TEST_MAP_ITEM_LIST_DEPENDS = AIRSPACE TASK GEO MATH UTIL TIME FMT
+$(eval $(call link-program,TestMapItemList,TEST_MAP_ITEM_LIST))
 
 TEST_DATE_TIME_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \

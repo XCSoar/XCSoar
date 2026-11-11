@@ -79,6 +79,7 @@ Version 7.47 - not yet released
   - describe shared thermal markers, their details, and Go To
   - state that waypoint details image= and file= names start at the
     data directory, as in waypoints/details/ETSI_1.png #3453
+  - describe which airspace the list of map elements selects
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
@@ -89,6 +90,9 @@ Version 7.47 - not yet released
     without restarting. This covers the map, waypoints, airspace,
     RASP, FLARMNet, the checklist, and the input file #1115 #3092
 * airspace
+  - open the list of map elements at a touched location on the
+    airspace drawn there: the smallest one, such as the CTR inside a
+    TMA, unless a waypoint is there
   - show when an OpenAir airspace is active from its activation
     times #2520
 * task

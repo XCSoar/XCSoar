@@ -384,7 +384,12 @@ MapItemListWidget::Prepare(ContainerWindow &parent,
     }
   }
 
-  // If no waypoint found, fall back to first item with details or can goto
+  /* Then the airspace drawn at the touched location: the smallest
+     of those that contain it */
+  if (selected_index >= list.size())
+    selected_index = list.FindSmallestAirspace();
+
+  // Otherwise, fall back to first item with details or can goto
   if (selected_index >= list.size()) {
     for (unsigned i = 0; i < list.size(); ++i) {
       const MapItem &item = *list[i];
