@@ -6,6 +6,7 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Weather/Features.hpp"
+#include "Geo/GeoBounds.hpp"
 
 static bool
 CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
@@ -91,4 +92,27 @@ void
 MapItemList::Sort()
 {
   std::sort(begin(), end(), CompareMapItems);
+}
+
+std::size_t
+MapItemList::FindSmallestAirspace() const noexcept
+{
+  std::size_t smallest = size();
+  double smallest_extent = 0;
+
+  for (std::size_t i = 0; i < size(); ++i) {
+    const MapItem &item = *(*this)[i];
+    if (item.type != MapItem::Type::AIRSPACE)
+      continue;
+
+    const GeoBounds bounds =
+      static_cast<const AirspaceMapItem &>(item).airspace->GetGeoBounds();
+    const double extent = bounds.GetGeoWidth() * bounds.GetGeoHeight();
+    if (smallest == size() || extent < smallest_extent) {
+      smallest = i;
+      smallest_extent = extent;
+    }
+  }
+
+  return smallest;
 }
