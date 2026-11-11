@@ -5,6 +5,7 @@
 #include "Topography/XShape.hpp"
 #include "Convert.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Projection/MapLod.hpp"
 #include "util/ScopeExit.hxx"
 #include "util/TruncateString.hpp"
 #include "util/StringCompare.hxx"
@@ -417,17 +418,7 @@ TopographyFile::GetFillThinningLevel(double map_scale) const noexcept
   if (MapBenchTopoHead())
     return GetThinningLevel(map_scale);
 #endif
-  /* GetMapScale() is metres for min_edge/8.  The Bern city+lake peak
-     is a 30–50 km scale bar (~3–5.5 km here); that must already be
-     level 2, not 1. */
-  if (map_scale > 5000)
-    return 3;
-  if (map_scale > 2500)
-    return 2;
-  if (map_scale > 1200)
-    return 1;
-
-  return 0;
+  return MapLodFillLevel(map_scale);
 }
 
 #ifdef ENABLE_OPENGL

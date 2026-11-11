@@ -13,6 +13,11 @@ Version 7.47 - not yet released
     screen pixel is at least that coarse, so a wide view does not
     decode every fine tile; the first start after this update
     rebuilds the terrain cache
+  - keep terrain, topography and airspace in discrete zoom bands so
+    pinch inside a band stretches the picture instead of rebuilding
+    it; rotating the map does not rebuild those caches; FIR, UIR and
+    similar large volumes are outlined only at the widest overview,
+    not filled
   - skip tiny topography fills, simplify large areas without tearing
     them, thin water and city polygons by screen pixels (so a 186 km
     overview is not every OSM shoreline), clip long roads to the map
@@ -27,6 +32,10 @@ Version 7.47 - not yet released
   - fix topography labels flickering on and off while panning,
     centre area names on the feature, sit place names under point
     icons, and enlarge place names when zoomed in
+* documentation
+  - note discrete map zoom bands for terrain, topography and
+    airspace, and that FIR-class volumes are outlined only at the
+    widest overview
 * development
   - add RunTerrainRenderer to show TerrainRenderer hillshade with a
     rotating sun; --cpu-shade compares CPU GenerateSlopeImage vs the

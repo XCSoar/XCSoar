@@ -6,6 +6,7 @@
 #include "Screen/Layout.hpp"
 #include "ui/canvas/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Projection/MapLod.hpp"
 #include "util/Macros.hpp"
 #include "ui/event/Idle.hpp"
 
@@ -330,30 +331,19 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
   settings.SetDefaults();
 }
 
-#ifdef ENABLE_OPENGL
-/**
- * Checks if the size difference of any dimension is more than a
- * factor of two.  This is used to check whether the terrain has to be
- * redrawn after zooming in.
- */
-static bool
-IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
-{
-  assert(a.IsValid());
-  assert(b.IsValid());
-
-  return a.GetWidth().Native() > 2 * b.GetWidth().Native() ||
-    a.GetHeight().Native() > 2 * b.GetHeight().Native();
-}
-#endif
-
 bool
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
 #ifdef ENABLE_OPENGL
-  /* Call once — the helper mutates quantisation_pixels. */
-  const bool quantisation_improved = raster_renderer.UpdateQuantisation();
+  const unsigned lod = MapLod(map_projection.GetMapScale());
+  const bool same_lod = last_lod < MAP_LOD_COUNT && last_lod == lod;
+
+  /* Call once — the helper mutates quantisation_pixels.  In-band
+     pinch must not resample when idle-q drops. */
+  const bool quantisation_improved =
+    (!same_lod || IsUserIdle(750)) &&
+    raster_renderer.UpdateQuantisation();
   raster_renderer.SetSunFromAzimuth(sunazimuth, settings.brightness,
                                     settings.contrast);
   const bool sun_ok = raster_renderer.IsShaderHillshade() ||
@@ -388,7 +378,8 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
      UI thread, and a pan hitch repeats until the finger lifts. */
 #ifdef ENABLE_OPENGL
   const bool tiles_current =
-    terrain_serial == terrain.GetSerial() || panning;
+    terrain_serial == terrain.GetSerial() ||
+    (panning && same_lod);
 #else
   const bool tiles_current = terrain_serial == terrain.GetSerial();
 #endif
@@ -418,20 +409,21 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
       return false;
   }
 
-  /* While the finger is down, ScanMap slides the picture and reads
-     only the strip that entered from the direction of the pan.
-     This reuse is for a still view whose samples are already
-     current. */
-  if (!panning &&
-      !quantisation_improved &&
-      old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
-      !IsLargeSizeDifference(old_bounds, new_bounds) &&
+  /* In-band pinch, pan, and rotate that stay inside the last height
+     matrix only stretch the texture.  Do not use AABB size: a twist
+     inflates GetScreenBounds() without a real zoom. */
+  const bool in_band_stretch =
+    same_lod &&
+    MapLodQuadInside(old_bounds, map_projection.GetGeoQuadrilateral());
+  if (!quantisation_improved &&
+      in_band_stretch &&
       tiles_current &&
       sun_ok &&
       image_current) {
     /* CPU contours need a rebuild when zoom changes the interval.
        The shader updates contour_div as a uniform. */
     compare_projection = CompareProjection(map_projection);
+    last_lod = lod;
     return true;
   }
 
@@ -478,6 +470,9 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
                                 last_contour_spacing);
 
   last_projection_scale = map_projection.GetScale();
+#ifdef ENABLE_OPENGL
+  last_lod = lod;
+#endif
 
   return true;
 }

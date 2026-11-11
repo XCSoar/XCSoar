@@ -5,6 +5,7 @@
 
 #include "thread/StandbyThread.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Projection/MapLod.hpp"
 #include "Geo/GeoBounds.hpp"
 
 #include <functional>
@@ -23,6 +24,7 @@ class TopographyThread final : private StandbyThread {
 
   GeoBounds last_bounds;
   double scale_threshold;
+  unsigned last_lod = MAP_LOD_COUNT;
 
 public:
   TopographyThread(TopographyStore &_store, std::function<void()> &&_callback);

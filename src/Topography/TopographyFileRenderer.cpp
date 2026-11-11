@@ -8,6 +8,7 @@
 #include "Look/TopographyLook.hpp"
 #include "Renderer/LabelBlock.hpp"
 #include "Projection/WindowProjection.hpp"
+#include "Projection/MapLod.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Features.hpp"
 #include "Screen/Layout.hpp"
@@ -663,33 +664,37 @@ struct TopoShapeBatch {
 bool
 TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection) noexcept
 {
-  const double scale = projection.GetScale();
-  const unsigned fill_level =
-    file.GetFillThinningLevel(projection.GetMapScale());
+  const double map_scale = projection.GetMapScale();
+  const unsigned lod = MapLod(map_scale);
+  const unsigned fill_level = file.GetFillThinningLevel(map_scale);
   const GeoBounds screen = projection.GetScreenBounds();
   if (file.GetSerial() == visible_serial &&
-      scale <= visible_scale &&
-      fill_level <= visible_fill_level &&
-      visible_bounds.IsValid() &&
-      visible_bounds.IsInside(screen))
-    /* still inside the last 2× viewport; pan only reprojects */
+      lod == visible_lod &&
+      MapLodQuadInside(visible_bounds, projection.GetGeoQuadrilateral()))
+    /* still inside the last 2× viewport; pan / rotate / in-band
+       pinch only reproject */
     return false;
 
   visible_serial = file.GetSerial();
-  visible_scale = scale;
-  visible_fill_level = fill_level;
+  visible_lod = lod;
   visible_bounds = screen.Scale(TopographyFile::CACHE_BOUNDS_SCALE);
   visible_shapes.clear();
   visible_points.clear();
   visible_labels.clear();
 
-  const Angle fill_span =
-    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()));
-  const Angle line_span =
-    projection.PixelsToAngle(LineMinBBoxPx(fill_level));
+  const double spacing = MapLodSpacingFactor(map_scale, lod);
+  const Angle fill_span = Angle::Native(
+    projection.PixelsToAngle(FillMinBBoxPx(fill_level, file.GetName()))
+      .Native() * spacing);
+  const Angle line_span = Angle::Native(
+    projection.PixelsToAngle(LineMinBBoxPx(fill_level)).Native() *
+    spacing);
   const int collapse_px = LineCollapsePx(fill_level, file.GetName());
   const Angle collapse_span =
-    collapse_px > 0 ? projection.PixelsToAngle(collapse_px) : Angle::Zero();
+    collapse_px > 0
+    ? Angle::Native(projection.PixelsToAngle(collapse_px).Native() *
+                    spacing)
+    : Angle::Zero();
 
   std::vector<const XShape *> dual_cands;
 
@@ -814,6 +819,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     return;
 
   const unsigned fill_level = file.GetFillThinningLevel(map_scale);
+  const unsigned lod = MapLod(map_scale);
 
 #ifdef ENABLE_OPENGL
   const auto t0 = std::chrono::steady_clock::now();
@@ -871,15 +877,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     line_min_distance = d;
     fill_min_distance = d;
   } else {
+    const double spacing = MapLodSpacingFactor(map_scale, lod);
     line_min_distance =
       ShapeScalar(projection.PixelsToAngle(SHAPE_LINE_SPACING_PX[line_level])
-                    .Native());
+                    .Native() * spacing);
     fill_min_distance =
       ShapeScalar(projection.PixelsToAngle(int(FillSpacingPx(fill_level,
                                                            file.GetName())))
-                    .Native());
+                    .Native() * spacing);
   }
-  const unsigned cache_thinning = (fill_level << 8) | line_level;
+  const unsigned cache_thinning = lod;
 
   glUniformMatrix4fv(OpenGL::solid_modelview, 1, GL_FALSE,
                      glm::value_ptr(ToGLM(projection, file.GetCenter())));

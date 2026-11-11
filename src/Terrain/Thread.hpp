@@ -4,6 +4,7 @@
 #pragma once
 
 #include "thread/StandbyThread.hpp"
+#include "Projection/MapLod.hpp"
 #include "Geo/GeoPoint.hpp"
 
 #include <functional>
@@ -12,7 +13,7 @@ class RasterTerrain;
 class WindowProjection;
 
 /**
- * A thread that loads topography files asynchronously.
+ * A thread that loads terrain tiles asynchronously.
  */
 class TerrainThread final : private StandbyThread {
   RasterTerrain &terrain;
@@ -21,10 +22,12 @@ class TerrainThread final : private StandbyThread {
 
   GeoPoint last_center = GeoPoint::Invalid();
   double last_radius;
+  unsigned last_lod = MAP_LOD_COUNT;
 
   GeoPoint next_center;
   double next_radius;
   double next_pixel_size = 0;
+  unsigned next_lod = 0;
 
 public:
   TerrainThread(RasterTerrain &_terrain, std::function<void()> &&_callback);

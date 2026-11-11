@@ -12,9 +12,12 @@
 #include "util/Serial.hpp"
 #else
 #include "util/AllocatedArray.hxx"
+#include "util/Serial.hpp"
 #include "Math/Point2D.hpp"
+#include "Geo/GeoBounds.hpp"
 #include <cstdint>
 #include <unordered_map>
+#include <vector>
 #endif
 
 struct AirspaceLook;
@@ -79,9 +82,23 @@ public:
     double pad_cos = 0;
   };
 
+  struct VisibleAirspace {
+    const AbstractAirspace *airspace = nullptr;
+    bool fill = true;
+  };
+
 private:
   std::unordered_map<const AbstractAirspace *, GeoPolyCache>
     geo_poly_cache;
+
+  std::vector<VisibleAirspace> visible_airspaces;
+  GeoBounds visible_bounds = GeoBounds::Invalid();
+  unsigned visible_lod = ~0u;
+  unsigned visible_settings_key = 0;
+  Serial visible_airspaces_serial;
+  Serial visible_warning_serial;
+
+  static constexpr double VIS_BOUNDS_SCALE = 2;
 #endif
 
 public:
@@ -122,6 +139,10 @@ public:
 #else
     triangle_cache.clear();
     geo_poly_cache.clear();
+    visible_airspaces.clear();
+    visible_bounds = GeoBounds::Invalid();
+    visible_lod = ~0u;
+    visible_settings_key = 0;
 #endif
   }
 
@@ -133,6 +154,11 @@ public:
   GeoPolyCache &GetGeoPoly(const AbstractAirspace &airspace) noexcept {
     return geo_poly_cache[&airspace];
   }
+
+  void UpdateVisibleAirspaces(const WindowProjection &projection,
+                              const AirspaceRendererSettings &settings,
+                              const AirspaceWarningCopy &awc,
+                              const AirspacePredicate &visible) noexcept;
 #endif
 
 private:

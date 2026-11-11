@@ -52,17 +52,10 @@ class TopographyFileRenderer final
   GeoBounds visible_bounds = GeoBounds::Invalid();
 
   /**
-   * #Projection::GetScale() (px/m) used to build #visible_shapes.
-   * Recache when the map is zoomed in (larger scale) so previously
-   * skipped sub-pixel fills can appear.
+   * #MapLod() used to build #visible_shapes.  In-band pinch and
+   * rotate keep the list; a band change rebuilds.
    */
-  double visible_scale = 0;
-
-  /**
-   * Fill thinning level used to skip sub-pixel cities/lakes in
-   * #visible_shapes.  Recache when it rises (zoom out) so they drop.
-   */
-  unsigned visible_fill_level = 0;
+  unsigned visible_lod = ~0u;
 
   std::vector<const XShape *> visible_shapes, visible_labels;
 
