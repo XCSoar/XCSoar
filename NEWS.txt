@@ -613,6 +613,8 @@ Version 7.46 - 2026-10-19
   - show the FLARM manage page as the same list. Setup, range
     statistics and simulation open from a row, and Reboot is a
     button
+  - show an empty map, Waypoints or Airspace row on Site files in
+    yellow
   - toggle a checklist checkbox by tapping its line. A link on that
     line, such as a radio frequency, still opens the link
   - show the detected takeoff, landing and duration in the flight

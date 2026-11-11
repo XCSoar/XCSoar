@@ -34,6 +34,7 @@
 
 using SelectionMode = GroupedListWidget::SelectionMode;
 using ItemOptions = GroupedListWidget::ItemOptions;
+using BadgeStyle = GroupedListWidget::BadgeStyle;
 using TextFont = GroupedListWidget::TextFont;
 using ToggleHitArea = GroupedListWidget::ToggleHitArea;
 
@@ -131,10 +132,11 @@ public:
 
 private:
   void AddFileItem(const char *caption, const char *help,
-                   FileDataField &df) noexcept;
+                   FileDataField &df, bool warn_if_empty=false) noexcept;
 
   void AddFilesItem(const char *caption, const char *help,
-                    MultiFileDataField &df) noexcept;
+                    MultiFileDataField &df,
+                    bool warn_if_empty=false) noexcept;
 
   void Fill() noexcept;
 
@@ -147,7 +149,7 @@ public:
 
 void
 SiteConfigPanel::AddFileItem(const char *caption, const char *help,
-                             FileDataField &df) noexcept
+                             FileDataField &df, bool warn_if_empty) noexcept
 {
   /* the file, with every line of it */
   ItemOptions options{.value_all_lines = true,
@@ -156,8 +158,11 @@ SiteConfigPanel::AddFileItem(const char *caption, const char *help,
   const char *name = df.GetAsDisplayString();
   if (*name != '\0')
     options.value = name;
-  else
+  else {
     options.badge = C_("Badge", "none");
+    if (warn_if_empty)
+      options.badge_style = BadgeStyle::WARNING;
+  }
 
   AddItem(caption, [this, caption, help, &df](){
     PickFile(caption, help, df);
@@ -168,7 +173,8 @@ SiteConfigPanel::AddFileItem(const char *caption, const char *help,
 
 void
 SiteConfigPanel::AddFilesItem(const char *caption, const char *help,
-                              MultiFileDataField &df) noexcept
+                              MultiFileDataField &df,
+                              bool warn_if_empty) noexcept
 {
   /* one file per line below the caption */
   std::string names;
@@ -184,8 +190,11 @@ SiteConfigPanel::AddFilesItem(const char *caption, const char *help,
                       .chevron = true};
   if (!names.empty())
     options.value = names.c_str();
-  else
+  else {
     options.badge = C_("Badge", "none");
+    if (warn_if_empty)
+      options.badge_style = BadgeStyle::WARNING;
+  }
 
   AddItem(caption, [this, caption, help, &df](){
     PickFiles(caption, help, df);
@@ -213,13 +222,13 @@ SiteConfigPanel::Fill() noexcept
   AddFileItem(_("Map database"),
               _("The name of the file (.xcm) containing terrain, topography, and optionally "
                 "waypoints, their details and airspaces."),
-              map_file);
+              map_file, true);
 
   AddFilesItem(_("Waypoints"),
                _("Primary waypoints files.  Supported file types are "
                  "Cambridge/WinPilot files (.dat), "
                  "Zander files (.wpz) or SeeYou files (.cup, .cupx)."),
-               waypoint_files);
+               waypoint_files, true);
 
   if (expert) {
     AddFilesItem(_("Watched WPTs"),
@@ -243,7 +252,7 @@ SiteConfigPanel::Fill() noexcept
                  "buttons to activate or deactivate"
                  " airspace files respectively. Supported file types are: "
                  "Openair (.openair /.txt /.air), and Tim Newport-Pearce (.sua)."),
-               airspace_files);
+               airspace_files, true);
 
   AddFileItem(_("FLARM database"),
               _("The name of the file containing information about registered FLARM devices."),
