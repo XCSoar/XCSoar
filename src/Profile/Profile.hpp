@@ -8,6 +8,7 @@
 #include "Profile/ProfileMap.hpp"
 // IWYU pragma: end_exports
 
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -77,7 +78,17 @@ GetPath(std::string_view key) noexcept;
 std::vector<AllocatedPath> GetMultiplePaths(std::string_view key,
                                             const char *patterns);
 
-void
+/**
+ * @see ProfileMap::SetMultiplePaths()
+ */
+bool
+SetMultiplePaths(std::string_view key,
+                 std::span<const Path> values) noexcept;
+
+/**
+ * @see ProfileMap::SetPath()
+ */
+bool
 SetPath(std::string_view key, Path value) noexcept;
 
 [[gnu::pure]]

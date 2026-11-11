@@ -640,18 +640,17 @@ of the safety heights. \\
 %%%%%%%%%%%%%%%%%%
 \section{Glide Computer / Wind} \label{sec:wind}
 
-This page sets the base for wind computations.
+Circling wind, ZigZag wind and External wind. They are the same
+switches as in the wind dialogue (Section~\ref{sec:wind-setup}). The
+configuration dialogue keeps them when it closes. The wind vector and
+trail drift stay in the wind dialogue.
 
 \begin{description}
-\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
-  automatic wind algorithm. \\
-  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate. \\
-  {\bf Circling}: Circling mode requires only a GPS source. \\
-  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
-  {\bf Both}:  Uses Circling and ZigZag.
-\item[Prefere external wind]  If enabled, the wind vector received from external
-  devices overrides XCSoar's internal wind calculation.
+\item[Circling wind]  \label{conf:autowind} Estimate the wind vector while
+  circling. Requires only a GPS.
+\item[ZigZag wind]  Estimate the wind vector during glides. Requires an
+  airspeed sensor.
+\item[External wind]  Accept wind estimates from other instruments.
 \end{description}
 
 
@@ -966,6 +965,9 @@ cue.
   needle displays the average net value.
 \end{description}
 
+
+The Services page of Configuration lists these services. Next to each
+name, a badge says whether that service is in use.
 
 %%%%%%%%%%%%%%%%%%
 \section{Services / LiveTrack24}
@@ -1295,6 +1297,17 @@ When WeGlide is also enabled, Upload Flight asks which service to use.
 %%%%%%%%%%%%%%%%%%
 \section{Configure Plane}
 
+The plane profile lists the current values. Tap the label to select a
+row; its explanation eases open below it. Cursor keys open it once the
+row has stayed selected. Tap the value to change it.
+Enter does the same once the row is selected. Polar opens
+the polar dialogue. A red badge names a missing empty mass or wing area,
+because the polar cannot be calculated without them. A max.\ ballast
+of zero shows a No max ballast badge. Dump time of zero
+shows a No dump time badge, and a max.\ cruise speed of zero shows a
+No max cruise speed badge. WeGlide is one row: the aircraft name with
+its type number in parentheses, or a No WeGlide type badge when unset.
+
 This dialogue allows the glide polar to be defined. For a large variety of glider
 \marginlabel{\bmenug{Config 2/3}\blink\bmenug{Plane}} 
 types XCSoar provides a predefined glide polar, they could be modified if 
@@ -1342,6 +1355,7 @@ for every glide performance relevant computation of XCSoar.
 \item[Max.\ ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
   Set to zero if it does not apply.
 \item[Dump time]  The time in seconds needed for dumping full ballast.
+  Set to 0 for no dump time.
 \end{description}
 
 
@@ -1387,29 +1401,34 @@ lists.
   Blood Oxygen InfoBox shows its saturation.
   The Devices list shows {\it Heart Rate}, {\it Blood Oxygen},
   {\it Pressure}, {\it Temperature}, and {\it Relative humidity}
-  among the other sensor flags, and {\it Battery=N\%} when remaining
+  among the other sensor flags, and {\it Battery N\%} when remaining
   charge is known, including BLE sensors that expose the standard
   heart-rate, Pulse Oximeter, Environmental Sensing, and Battery
   services.
   XCSoar uses the first device that supplies each value (device~A
-  before~B, and so on).  Winning sensor flags such as {\it GPS fix},
-  {\it Baro} (QNH height), {\it QNE} (pressure altitude), and
-  {\it Alt IGC} (the altitude written to the IGC log) are
-  drawn in bold; the same flag that is not bold on a later device is
-  present but ignored.  {\it Baro}, {\it QNE}, and {\it Alt IGC} are
-  separate values, so one device can supply QNH height while another
-  supplies pressure altitude or the logger altitude.
+  before~B, and so on).  A filled badge, such as {\it GPS fix},
+  {\it Baro} (QNH height), {\it QNE} (pressure altitude), or
+  {\it Alt IGC} (the altitude written to the IGC log), is a value
+  XCSoar is using from that device.  The same flag as an outlined
+  badge on a later device is present but ignored.  {\it Baro},
+  {\it QNE}, and {\it Alt IGC} are separate values, so one device
+  can supply QNH height while another supplies pressure altitude or
+  the logger altitude.
   {\it Pressure} (static pressure) and {\it QNE} are the same ambient
-  pressure, so only the earlier of those two is bold.
-  {\it Bad GPS} is shown in red on a colour display, or in bold on
-  e-paper, when the device sends GPS sentences without a valid fix.
-  {\it Battery=N\%} is shown in red on a colour display, or in bold
-  on e-paper, when remaining charge is below 10~percent.
+  pressure, so only the earlier of those two is filled.
+  {\it Bad GPS} is red on a colour display when the device sends GPS
+  sentences without a valid fix.
+  {\it Battery N\%} is red on a colour display when remaining charge
+  is below 10~percent.  A port error, such as no reply from the
+  port, is red.  {\it No data} is yellow on a colour display
+  when the port is open and nothing has arrived.  {\it Debug} is
+  yellow while NMEA logging is on.  On a black-and-white display
+  the red and yellow badges are filled, like a value which is in use.
   The {\it FLARM} flag is shown while that device is sending
   updates.
   {\it GDL90} is shown while the connection is alive.
   Traffic from every such device is used.
-  The {\it Help} button on the Devices list repeats this.
+  This explanation is shown below the device list.
 \item[Baudrate]  Set this to the communication speed of the connected device.
 \item[TCP Port]  This setting is useful to e.g.\ connect to the Condor flight
   simulator and do some XCSoar training in winter time.

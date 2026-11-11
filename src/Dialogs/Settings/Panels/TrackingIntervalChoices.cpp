@@ -2,26 +2,29 @@
 // Copyright The XCSoar Project
 
 #include "TrackingIntervalChoices.hpp"
-#include "Form/DataField/Enum.hpp"
+#include "Dialogs/GroupedListPicker.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
-#include "util/StaticString.hxx"
 
+#include <array>
 #include <cstdlib>
 
-static constexpr unsigned tracking_interval_seconds[] = {
-  1, 2, 3, 5, 10, 15, 20, 30, 45,
-  60, 120, 180, 300, 600, 900, 1200, 1800, 2400, 3000, 3600,
-};
-
-[[gnu::pure]]
-static unsigned
-FindClosestTrackingInterval(unsigned value) noexcept
+void
+FormatTrackingInterval(StaticString<16> &buffer,
+                       unsigned seconds) noexcept
 {
-  unsigned closest_value = tracking_interval_seconds[0];
+  if (seconds < 60)
+    buffer.Format(_("%u sec"), seconds);
+  else
+    buffer.Format(_("%u min"), seconds / 60);
+}
+
+unsigned
+ClosestTrackingInterval(unsigned value) noexcept
+{
+  unsigned closest_value = TRACKING_INTERVAL_SECONDS[0];
   int closest_diff = -1;
 
-  for (unsigned seconds : tracking_interval_seconds) {
+  for (unsigned seconds : TRACKING_INTERVAL_SECONDS) {
     const int diff = std::abs(int(value) - int(seconds));
     if (closest_diff < 0 || diff < closest_diff) {
       closest_diff = diff;
@@ -32,25 +35,27 @@ FindClosestTrackingInterval(unsigned value) noexcept
   return closest_value;
 }
 
-static void
-FillTrackingIntervalChoices(DataFieldEnum &df, unsigned value) noexcept
+bool
+PickTrackingInterval(unsigned &interval) noexcept
 {
-  StaticString<16> buffer;
-  for (unsigned seconds : tracking_interval_seconds) {
-    if (seconds < 60)
-      buffer.Format(_("%u sec"), seconds);
-    else
-      buffer.Format(_("%u min"), seconds / 60);
-    df.AddChoice(seconds, buffer);
-  }
-  df.SetValue(FindClosestTrackingInterval(value));
-}
+  std::array<StaticString<16>, TRACKING_INTERVAL_COUNT> captions;
+  std::array<PickerChoice, TRACKING_INTERVAL_COUNT> choices;
 
-void
-AddTrackingIntervalRow(RowFormWidget &form, unsigned value) noexcept
-{
-  WndProperty *interval = form.AddEnum(_("Tracking Interval"), nullptr);
-  FillTrackingIntervalChoices(*(DataFieldEnum *)interval->GetDataField(),
-                              value);
-  interval->RefreshDisplay();
+  int current = 0;
+  for (unsigned i = 0; i < TRACKING_INTERVAL_COUNT; ++i) {
+    const unsigned seconds = TRACKING_INTERVAL_SECONDS[i];
+    FormatTrackingInterval(captions[i], seconds);
+    choices[i] = {captions[i].c_str()};
+    if (seconds == interval)
+      current = (int)i;
+  }
+
+  const int picked = PickChoice(_("Tracking Interval"), nullptr,
+                                choices, current);
+  if (picked < 0 ||
+      TRACKING_INTERVAL_SECONDS[picked] == interval)
+    return false;
+
+  interval = TRACKING_INTERVAL_SECONDS[picked];
+  return true;
 }

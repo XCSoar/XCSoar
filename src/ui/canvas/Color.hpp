@@ -76,6 +76,30 @@ DarkColor(Color c) noexcept
 #endif
 }
 
+constexpr uint8_t
+MixColors(uint8_t a, uint8_t b, uint8_t weight_a) noexcept
+{
+  return (uint8_t)((a * weight_a + b * (0xff - weight_a) + 0x7f) / 0xff);
+}
+
+/**
+ * Blends two colors, like the CSS color-mix() function.
+ *
+ * @param weight_a the weight of color `a` (0..255, where 255 yields
+ * `a` and 0 yields `b`)
+ */
+constexpr Color
+MixColors(Color a, Color b, uint8_t weight_a) noexcept
+{
+#ifdef GREYSCALE
+  return Color(MixColors(a.GetLuminosity(), b.GetLuminosity(), weight_a));
+#else
+  return Color(MixColors(a.Red(), b.Red(), weight_a),
+               MixColors(a.Green(), b.Green(), weight_a),
+               MixColors(a.Blue(), b.Blue(), weight_a));
+#endif
+}
+
 [[gnu::const]]
 Color
 Desaturate(Color c) noexcept;

@@ -9,10 +9,9 @@
 struct PixelRect;
 
 /**
- * A soft black shadow, like a CSS "box-shadow" without an offset.  It
- * consists of up to two layers, which are drawn on top of each other:
- * a wide, soft one for a gentle fade, and a tight one which darkens
- * the area close to the box.
+ * A soft black shadow, like a CSS "box-shadow".  It consists of up
+ * to two layers, drawn on top of each other.  #Layer::offset_y is
+ * the CSS vertical offset; 0 keeps the shadow centred on the box.
  */
 struct BoxShadowStyle {
   /**
@@ -36,11 +35,20 @@ struct BoxShadowStyle {
     /** The opacity where the layer is darkest; 0 for no layer */
     uint8_t alpha;
 
+    /**
+     * Downward shift of this layer, in virtual points.  Positive is
+     * down, as in a CSS box-shadow offset.
+     */
+    int offset_y = 0;
+
     [[gnu::pure]]
     int GetScaledSpread() const noexcept;
 
     [[gnu::pure]]
     unsigned GetScaledBlur() const noexcept;
+
+    [[gnu::pure]]
+    int GetScaledOffsetY() const noexcept;
   };
 
   std::array<Layer, 2> layers;
@@ -71,8 +79,9 @@ inline constexpr BoxShadowStyle BoxShadowStyle::FLOATING{{{
 /**
  * Draw a soft black drop shadow around the given rectangle, to make it
  * look like it floats above what is painted behind it.  The shadow
- * surrounds the rectangle evenly on all four sides, and its corners
- * are rounded, the way the corners of a blurred rectangle are.
+ * surrounds the rectangle, and its corners are rounded the way the
+ * corners of a blurred rectangle are.  A layer with a downward
+ * #Layer::offset_y sits below the box, as a CSS shadow does.
  *
  * This must be called before the box itself is painted: the shadow is
  * drawn as a solid shape which is blurred at its edges, so the area
@@ -89,3 +98,10 @@ inline constexpr BoxShadowStyle BoxShadowStyle::FLOATING{{{
 void
 DrawBoxShadow(const PixelRect &rc, const BoxShadowStyle &style,
               unsigned corner_radius=0) noexcept;
+
+/**
+ * How far #DrawBoxShadow paints beyond @p rc for @p style, in pixels.
+ */
+[[gnu::pure]]
+unsigned
+BoxShadowExtent(const BoxShadowStyle &style) noexcept;

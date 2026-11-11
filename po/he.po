@@ -9468,11 +9468,6 @@ msgstr "Fiksno (gore lijevo)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez kontura"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Planine"
 
@@ -12101,14 +12096,8 @@ msgstr ""
 "וע ומיושר» רק כשהוא מורכב בקשיחות. במקרה של ספק, «לא מיושר»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar משתמש במכשיר הראשון שמספק כל ערך (מכשיר A לפני B, וכן הלאה). הסימוני"
-"ם המודגשים הם הערכים ש-XCSoar לוקח מהמכשיר הזה. סימונים שאינם מודגשים אומרי"
-"ם שמכשיר מוקדם יותר כבר מספק את אותם נתונים. Baro הוא גובה עם ה-QNH הנוכחי;"
-" QNE הוא גובה לחץ; Alt IGC הוא הגובה שהלוגר כותב. QNE ו-Pressure הם אותו לח"
-"ץ סביבה, ולכן רק המוקדם מבין השניים מודגש. GPS גרוע וסוללה מתחת ל-10 אחוז מ"
-"וצגים באדום במסך צבע, ובמודגש בנייר אלקטרוני."
 
 msgid "QNE"
 msgstr "QNE"

@@ -9663,11 +9663,6 @@ msgstr "Fixe (haut gauche)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Pas de courbes de niveau"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagnes"
 
@@ -12358,17 +12353,8 @@ msgstr ""
 "rigidement. Dans le doute, « Non aligné »."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar utilise le premier appareil qui fournit chaque valeur (l'appareil A "
-"avant B, et ainsi de suite). Les indicateurs en gras sont les valeurs que X"
-"CSoar prend sur cet appareil. Ceux qui ne sont pas en gras signifient qu'un"
-" appareil précédent fournit déjà les mêmes données. Baro est la hauteur ave"
-"c le QNH actuel ; QNE est l'altitude pression ; Alt IGC est l'altitude que "
-"le logger écrit. QNE et Pressure sont la même pression ambiante, donc seul "
-"le plus ancien des deux est en gras. Un mauvais GPS et une batterie sous 10"
-" pour cent s'affichent en rouge sur un écran couleur, et en gras sur du pap"
-"ier électronique."
 
 msgid "QNE"
 msgstr "QNE"

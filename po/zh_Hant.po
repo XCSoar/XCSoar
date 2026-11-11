@@ -9203,11 +9203,6 @@ msgstr "固定（左上）"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "無等高線"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "山地"
 
@@ -11786,11 +11781,8 @@ msgid "Whether the instrument housing the IMU is permanently fixed and its axes 
 msgstr "裝有 IMU 的儀表是否永久固定，且其軸與飛機軸對齊。僅在剛性安裝時設為「固定並對準」。有疑問時用「未對準」。"
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar 使用最先提供每個數值的裝置（裝置 A 先於 B，依此類推）。粗體標誌是 XCSoar 正在使用的、來自該裝置的數值。非粗體標誌表示更早的"
-"裝置已經提供相同資料。Baro 是目前 QNH 下的高度；QNE 是氣壓高度；Alt IGC 是紀錄器寫入的高度。QNE 與 Pressure 是同一"
-"環境氣壓，因此二者中只有更早的那個為粗體。GPS 不良和電量低於 百分之十 在彩色螢幕上顯示為紅色，在電子紙上顯示為粗體。"
 
 msgid "QNE"
 msgstr "QNE"

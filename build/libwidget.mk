@@ -7,6 +7,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/CreateWindowWidget.cpp \
 	$(SRC)/Widget/ListWidget.cpp \
 	$(SRC)/Widget/TextListWidget.cpp \
+	$(SRC)/Widget/GroupedListWidget.cpp \
 	$(SRC)/Widget/ContainerWidget.cpp \
 	$(SRC)/Widget/SolidWidget.cpp \
 	$(SRC)/Widget/PanelWidget.cpp \
@@ -19,9 +20,7 @@ WIDGET_SOURCES = \
 	$(SRC)/Widget/OverlappedWidget.cpp \
 	$(SRC)/Widget/TwoWidgets.cpp \
 	$(SRC)/Widget/RowFormWidget.cpp \
-	$(SRC)/Widget/FileRowFormWidget.cpp \
 	$(SRC)/Widget/EditRowFormWidget.cpp \
-	$(SRC)/Widget/ProfileRowFormWidget.cpp \
 	$(SRC)/Widget/UnitRowFormWidget.cpp \
 	$(SRC)/Widget/ManagedWidget.cpp \
 	$(SRC)/Widget/PagerWidget.cpp \

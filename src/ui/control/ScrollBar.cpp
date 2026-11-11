@@ -3,6 +3,7 @@
 
 #include "ScrollBar.hpp"
 #include "ui/canvas/Canvas.hpp"
+#include "ui/canvas/Brush.hpp"
 #include "Screen/Layout.hpp"
 #include "ui/window/PaintWindow.hpp"
 #include "Asset.hpp"
@@ -108,35 +109,32 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
   const ButtonState down_state = down_pressed
     ? ButtonState::PRESSED : ButtonState::ENABLED;
 
-  // draw rectangle around entire scrollbar area
-  canvas.SelectBlackPen();
-  canvas.SelectHollowBrush();
-  canvas.DrawRectangle(rc);
+  const ButtonLook &look = button_renderer.GetLook();
+  const int width = GetWidth();
 
-  // draw the up/down arrow buttons
-  const int arrow_padding = std::max(GetWidth() / 4, 4);
+  /* the track is the quiet step between the page and a button face,
+     so the bar reads as a channel in the surface instead of as a
+     frame around its parts */
+  canvas.DrawFilledRectangle(rc, IsDithered()
+                             ? COLOR_WHITE
+                             : look.disabled.background_color);
 
+  /* the arrows keep their button faces: they are tap targets like
+     any other button */
   PixelRect up_arrow_rect = rc;
-  ++up_arrow_rect.left;
-  up_arrow_rect.bottom = up_arrow_rect.top + GetWidth();
+  up_arrow_rect.bottom = up_arrow_rect.top + width;
 
   PixelRect down_arrow_rect = rc;
-  ++down_arrow_rect.left;
-  down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
-
-  canvas.DrawExactLine(up_arrow_rect.GetBottomLeft(),
-                       up_arrow_rect.GetBottomRight());
-  canvas.DrawExactLine({down_arrow_rect.left, down_arrow_rect.top - 1},
-                       {down_arrow_rect.right, down_arrow_rect.top - 1});
+  down_arrow_rect.top = down_arrow_rect.bottom - width;
 
   button_renderer.DrawButton(canvas, up_arrow_rect, up_state);
   button_renderer.DrawButton(canvas, down_arrow_rect, down_state);
 
-  const ButtonLook &look = button_renderer.GetLook();
   canvas.SelectNullPen();
 
+  const int arrow_padding = std::max(width / 4, 4);
   const auto draw_arrow = [&](const PixelRect &arrow_rc, bool up,
-                              bool pressed) {
+                              ButtonState state) {
     const int tip_y = up
       ? arrow_rc.top + arrow_padding
       : arrow_rc.bottom - arrow_padding;
@@ -148,38 +146,42 @@ ScrollBar::Paint(Canvas &canvas) const noexcept
       { arrow_rc.left + arrow_padding, base_y },
       { rc.right - arrow_padding, base_y },
     };
-    canvas.Select(pressed
-                  ? look.focused.foreground_brush
+    canvas.Select(state == ButtonState::PRESSED
+                  ? look.focused.pressed_foreground_brush
                   : look.standard.foreground_brush);
     canvas.DrawTriangleFan(tri, ARRAY_SIZE(tri));
   };
 
-  draw_arrow(up_arrow_rect, true, up_pressed);
-  draw_arrow(down_arrow_rect, false, down_pressed);
+  draw_arrow(up_arrow_rect, true, up_state);
+  draw_arrow(down_arrow_rect, false, down_state);
 
+  canvas.SelectHollowBrush();
+
+  /* the slider is a pill lying on the track, not a button: it has no
+     face and no border of its own */
   if (rc_slider.top + 4 < rc_slider.bottom) {
-    canvas.SelectBlackPen();
-    canvas.DrawExactLine(rc_slider.GetTopLeft(), rc_slider.GetTopRight());
-    canvas.DrawExactLine(rc_slider.GetBottomLeft(),
-                         rc_slider.GetBottomRight());
+    PixelRect thumb = rc_slider;
+    const int inset = std::max(1, width / 5);
+    if ((int)thumb.GetWidth() > 2 * inset)
+      thumb.Grow(-inset, 0);
 
-    PixelRect rc_slider2 = rc_slider;
-    ++rc_slider2.left;
-    ++rc_slider2.top;
-    button_renderer.DrawButton(canvas, rc_slider2,
-                               dragging ? ButtonState::PRESSED : ButtonState::ENABLED);
+    /* the slider darkens while it is dragged; it takes that from its
+       own color rather than from a button state, which would tie the
+       track to a face it has nothing to do with */
+    const Brush brush{IsDithered()
+        ? COLOR_BLACK
+        : (dragging
+           ? DarkColor(look.standard.ring_color)
+           : look.standard.ring_color)};
+    canvas.Select(brush);
+
+    if (IsDithered())
+      canvas.DrawFilledRectangle(thumb, COLOR_BLACK);
+    else
+      canvas.DrawRoundRectangle(thumb, PixelSize{(unsigned)thumb.GetWidth()});
+
+    canvas.SelectHollowBrush();
   }
-
-  // fill the rest with darker gray
-  const Color background_color = IsDithered() ? COLOR_BLACK : COLOR_GRAY;
-
-  if (up_arrow_rect.bottom + 1 < rc_slider.top)
-    canvas.DrawFilledRectangle({rc.left + 1, up_arrow_rect.bottom + 1, rc.right, rc_slider.top},
-                               background_color);
-
-  if (rc_slider.bottom + 1 < down_arrow_rect.top - 1)
-    canvas.DrawFilledRectangle({rc.left + 1, rc_slider.bottom + 1, rc.right, down_arrow_rect.top - 1},
-                               background_color);
 }
 
 bool

@@ -11,6 +11,7 @@
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Look/DialogLook.hpp"
+#include "Renderer/ButtonRenderer.hpp"
 #include "Profile/Profile.hpp"
 #include "Repository/FileType.hpp"
 #include "ProfileListDialog.hpp"
@@ -56,7 +57,13 @@ public:
 
 private:
   PixelRect GetButtonRect(PixelRect rc) noexcept {
+    /* the button keeps the gap to the edges that buttons have between
+       each other */
+    const int margin = (int)ButtonFrameRenderer::GetEdgeMargin(rc);
+
+    rc.right -= margin;
     rc.left = rc.right - Layout::Scale(75);
+    rc.top += margin;
     rc.bottom = rc.top + Layout::GetMaximumControlHeight();
     return rc;
   }

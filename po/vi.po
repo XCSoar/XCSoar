@@ -9482,11 +9482,6 @@ msgstr "Fiksno (gore lijevo)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez kontura"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Planine"
 
@@ -12142,15 +12137,8 @@ msgstr ""
 "ưa căn»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar dùng thiết bị đầu tiên cung cấp từng giá trị (thiết bị A trước B, và"
-" tiếp theo). Cờ in đậm là giá trị XCSoar lấy từ thiết bị này. Cờ không đậm "
-"nghĩa là thiết bị trước đó đã cung cấp cùng dữ liệu. Baro là độ cao với QNH"
-" hiện tại; QNE là độ cao khí áp; Alt IGC là độ cao máy ghi viết. QNE và Pre"
-"ssure là cùng áp suất môi trường, nên chỉ cái sớm hơn trong hai cái được in"
-" đậm. GPS kém và pin dưới 10 phần trăm hiện màu đỏ trên màn hình màu và in "
-"đậm trên giấy điện tử."
 
 msgid "QNE"
 msgstr "QNE"

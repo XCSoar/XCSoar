@@ -9513,11 +9513,6 @@ msgstr "Fiksno (gore lijevo)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez kontura"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Planine"
 
@@ -12177,16 +12172,8 @@ msgstr ""
 "nuksessa. Epäselvissä tapauksissa «Ei kohdistettu»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar käyttää ensimmäistä laitetta, joka toimittaa kunkin arvon (laite A e"
-"nnen B:tä ja niin edelleen). Lihavoidut merkinnät ovat arvot, jotka XCSoar "
-"ottaa tältä laitteelta. Merkinnät, jotka eivät ole lihavoituja, tarkoittava"
-"t, että aiempi laite toimittaa jo samat tiedot. Baro on korkeus nykyisellä "
-"QNH:lla; QNE on painekorkeus; Alt IGC on korkeus, jonka loki kirjoittaa. QN"
-"E ja Pressure ovat sama ympäristön paine, joten vain aiempi niistä on lihav"
-"oitu. Huono GPS ja alle 10 prosentin akku näytetään punaisena värinäytöllä "
-"ja lihavoituna sähköpaperilla."
 
 msgid "QNE"
 msgstr "QNE"

@@ -500,9 +500,28 @@ TestPressure()
   ok1(StringIsEqual(buffer, "29.92"));
 }
 
+static void
+TestWingLoading()
+{
+  char buffer[256];
+
+  FormatWingLoading(buffer, sizeof(buffer), 45, Unit::KG_PER_M2);
+  ok1(StringIsEqual(buffer, "45.0 kg/m²"));
+
+  FormatWingLoading(buffer, sizeof(buffer), 45.4, Unit::KG_PER_M2);
+  ok1(StringIsEqual(buffer, "45.4 kg/m²"));
+
+  FormatWingLoading(buffer, sizeof(buffer), 45, Unit::KG_PER_M2, false);
+  ok1(StringIsEqual(buffer, "45.0"));
+
+  FormatWingLoading(buffer, sizeof(buffer),
+                    Units::ToSysUnit(10, Unit::LB_PER_FT2), Unit::LB_PER_FT2);
+  ok1(StringIsEqual(buffer, "10.0 lb/ft²"));
+}
+
 int main()
 {
-  plan_tests(205);
+  plan_tests(209);
 
   TestAltitude();
   TestRelativeAltitude();
@@ -513,6 +532,7 @@ int main()
   TestVerticalSpeed();
   TestTemperature();
   TestPressure();
+  TestWingLoading();
 
   return exit_status();
 }

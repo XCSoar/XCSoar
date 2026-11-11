@@ -9617,11 +9617,6 @@ msgstr "Fix (a dalt a l'esquerra)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Capa curva di nivell"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagne"
 
@@ -12294,17 +12289,8 @@ msgstr ""
 "n estigui muntat rígidament. En cas de dubte, useu «No alineat»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar fa servir el primer dispositiu que aporta cada valor (el dispositiu "
-"A abans que el B, i així successivament). Les marques en negreta són els va"
-"lors que XCSoar pren d'aquest dispositiu. Les que no ho són volen dir que u"
-"n dispositiu anterior ja aporta les mateixes dades. Baro és l'altura amb el"
-" QNH actual; QNE és l'altitud de pressió; Alt IGC és l'altitud que escriu e"
-"l registrador. QNE i Pressure són la mateixa pressió ambient, així que nomé"
-"s el més primerenc dels dos va en negreta. Un GPS dolent i una bateria per "
-"sota del 10 per cent es mostren en vermell en una pantalla en color, i en n"
-"egreta en paper electrònic."
 
 msgid "QNE"
 msgstr "QNE"

@@ -117,9 +117,11 @@ bool
 SoaringScoringConfigPanel::Save(bool &changed) noexcept
 {
 #ifdef HAVE_HTTP
-  changed |= SaveValue(AutomaticUpload,
-                       ProfileKeys::SoaringScoringAutomaticUpload,
-                       automatic_upload);
+  if (SaveValue(AutomaticUpload, automatic_upload)) {
+    Profile::Set(ProfileKeys::SoaringScoringAutomaticUpload,
+                 automatic_upload);
+    changed = true;
+  }
 #else
   (void)changed;
 #endif

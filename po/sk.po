@@ -9537,11 +9537,6 @@ msgstr "Pevné (vlevo hore)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Bez vrstevnic"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Hory"
 
@@ -12201,15 +12196,8 @@ msgstr ""
 "é»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar použije prvé zariadenie, ktoré dodáva každú hodnotu (zariadenie A pr"
-"ed B a tak ďalej). Tučné príznaky sú hodnoty, ktoré XCSoar z tohto zariaden"
-"ia berie. Netučné znamenajú, že skoršie zariadenie už tie isté údaje dodáva"
-". Baro je výška s aktuálnym QNH; QNE je tlaková výška; Alt IGC je výška, kt"
-"orú zapisuje záznamník. QNE a Pressure sú ten istý okolitý tlak, takže tučn"
-"é je len skoršie z nich. Zlé GPS a batéria pod 10 percent sa na farebnom di"
-"spleji ukazujú červeno a na elektronickom papieri tučne."
 
 msgid "QNE"
 msgstr "QNE"

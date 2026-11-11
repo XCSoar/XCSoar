@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <span>
 #include <string_view>
+#include <type_traits>
 
 class KeyValueFileWriter;
 
@@ -129,6 +130,29 @@ static inline void
 SetEnum(std::string_view key, T value) noexcept
 {
   Set(key, (int)value);
+}
+
+/**
+ * Store a new value in a setting and in the profile, unless the
+ * setting has it already; an enumeration is stored as its number.
+ *
+ * @return true if the setting has changed
+ */
+template<typename T>
+static inline bool
+Update(std::string_view key, T &setting, const T &value) noexcept
+{
+  if (setting == value)
+    return false;
+
+  setting = value;
+
+  if constexpr (std::is_enum_v<T>)
+    SetEnum(key, value);
+  else
+    Set(key, value);
+
+  return true;
 }
 
 template<std::size_t max>

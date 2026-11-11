@@ -2,67 +2,63 @@
 // Copyright The XCSoar Project
 
 #include "WeatherConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
 #include "Weather/Settings.hpp"
 #include "Weather/Features.hpp"
-#include "Widget/RowFormWidget.hpp"
 #include "net/http/Features.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 
-#include <string_view>
-
-enum ControlIndex {
+/** The weather sources which need nothing but a switch. */
+class WeatherConfigPanel final : public ConfigListPanel {
 #ifdef HAVE_HTTP
-  ENABLE_TIM,
+  bool enable_tim;
 #endif
-};
 
-class WeatherConfigPanel final
-  : public RowFormWidget {
-public:
-  WeatherConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
 
 public:
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-WeatherConfigPanel::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
+WeatherConfigPanel::LoadSettings() noexcept
 {
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
-  const auto &settings = CommonInterface::GetComputerSettings().weather;
-#endif
-
-  RowFormWidget::Prepare(parent, rc);
-
 #ifdef HAVE_HTTP
-  AddBoolean(_("Thermal Information Map"),
-             _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
-             settings.enable_tim);
+  enable_tim = CommonInterface::GetComputerSettings().weather.enable_tim;
+#endif
+}
+
+void
+WeatherConfigPanel::Fill() noexcept
+{
+#ifdef HAVE_HTTP
+  AddGroup();
+
+  AddToggleItem(_("Thermal Information Map"),
+                _("Show thermal locations downloaded from Thermal Information Map (thermalmap.info)."),
+                enable_tim);
 #endif
 }
 
 bool
 WeatherConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
-
-#if defined(HAVE_PCMET) || defined(HAVE_HTTP)
-  auto &settings = CommonInterface::SetComputerSettings().weather;
-#endif
-
 #ifdef HAVE_HTTP
-  changed |= SaveValue(ENABLE_TIM, ProfileKeys::EnableThermalInformationMap,
-                       settings.enable_tim);
+  auto &settings = CommonInterface::SetComputerSettings().weather;
+
+  _changed |= Profile::Update(ProfileKeys::EnableThermalInformationMap,
+                              settings.enable_tim, enable_tim);
+#else
+  (void)_changed;
 #endif
 
-  _changed |= changed;
   return true;
 }
 

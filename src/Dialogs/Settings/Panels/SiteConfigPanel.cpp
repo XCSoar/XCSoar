@@ -2,186 +2,442 @@
 // Copyright The XCSoar Project
 
 #include "SiteConfigPanel.hpp"
-#include "ConfigPanel.hpp"
+#include "Dialogs/DialogSettings.hpp"
+#include "Dialogs/GroupedListPicker.hpp"
+#include "Dialogs/TextEntry.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/DataField/File.hpp"
+#include "Form/DataField/MultiFile.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
+#include "Look/DialogLook.hpp"
 #include "Profile/Keys.hpp"
-#include "Repository/FileType.hpp"
 #include "Profile/Profile.hpp"
-#include "UIGlobals.hpp"
+#include "Repository/FileType.hpp"
 #include "Repository/Glue.hpp"
+#include "UIGlobals.hpp"
 #include "UtilsSettings.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Widget/GroupedListWidget.hpp"
+#include "net/http/Features.hpp"
 #include "system/Path.hpp"
+#include "util/StaticString.hxx"
+#include "util/StringAPI.hxx"
 
-enum ControlIndex {
-  DataPath,
-  MapFile,
-  WaypointFileList,
-  WatchedWaypointFileList,
-  AirfieldFileList,
-  AirspaceFileList,
-  FlarmFile,
-  RaspFile,
-  ChecklistFile,
-  UserRepositoriesList,
 #ifdef HAVE_DOWNLOAD_MANAGER
-  AutoUpdate,
+#include "Dialogs/DownloadFilePicker.hpp"
 #endif
-};
 
-class SiteConfigPanel final : public RowFormWidget {
-  enum Buttons {
-    WAYPOINT_EDITOR,
+#include <algorithm>
+#include <functional>
+#include <string>
+#include <vector>
+
+using SelectionMode = GroupedListWidget::SelectionMode;
+using ItemOptions = GroupedListWidget::ItemOptions;
+using BadgeStyle = GroupedListWidget::BadgeStyle;
+using TextFont = GroupedListWidget::TextFont;
+using ToggleHitArea = GroupedListWidget::ToggleHitArea;
+
+/**
+ * Let the user check the files the field shall use.  The choice is
+ * taken over with OK and dropped with Cancel.
+ */
+static void
+PickFiles(const char *caption, const char *help, MultiFileDataField &df)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  WidgetDialog dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+                      look, caption);
+
+  auto _list = std::make_unique<GroupedListWidget>(look);
+  GroupedListWidget &list = *_list;
+
+  /* the files which the Download button has fetched; they are used
+     right away, and dropped again if the view is cancelled */
+  std::vector<AllocatedPath> downloaded;
+
+  std::function<void()> fill = [&](){
+    list.Clear();
+    list.AddHero(caption, help);
+    list.AddGroup(nullptr, {.selection_mode = SelectionMode::MULTIPLE});
+
+    const auto selected = df.GetPathFiles();
+    for (const Path path : df.GetAllPaths())
+      list.AddItem(path.GetBase().c_str(),
+                   {.checked = std::find(selected.begin(), selected.end(),
+                                         path) != selected.end()});
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+    if (FileTypeSupportsDownload(df.GetFileType()))
+      list.AddButton(_("Download"), [&](){
+        auto paths = DownloadFilePicker(df.GetFileType());
+        if (paths.empty())
+          return;
+
+        for (const auto &path : paths)
+          df.ForceModify(path);
+        for (auto &path : paths)
+          downloaded.emplace_back(std::move(path));
+
+        fill();
+        list.UpdateLayout();
+      });
+#endif
   };
 
-public:
-  SiteConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+  fill();
+
+  dialog.FinishPreliminary(std::move(_list));
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  if (dialog.ShowModal() == mrOK) {
+    const auto paths = df.GetAllPaths();
+    for (unsigned i = 0, n = paths.size(); i < n; ++i) {
+      if (list.IsItemChecked(i))
+        df.AddValue(paths[i]);
+      else
+        df.UnSet(paths[i]);
+    }
+  } else
+    for (const Path path : downloaded)
+      df.UnSet(path);
+}
+
+/**
+ * The files XCSoar loads, one item per kind, which opens the view
+ * where the files are chosen.
+ */
+class SiteConfigPanel final : public GroupedListWidget {
+  FileDataField map_file, flarm_file, rasp_file, checklist_file;
+
+  MultiFileDataField waypoint_files, watched_waypoint_files,
+    airfield_files, airspace_files;
+
+  /** the URIs of the user repositories, separated by '|' */
+  StaticString<1024> user_repositories;
+
+  /** the user level the list was filled for */
+  bool expert;
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  /** Download a newer copy of each installed file at startup. */
+  bool auto_update = false;
+#endif
 
 public:
+  SiteConfigPanel() noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()) {}
+
+private:
+  void AddFileItem(const char *caption, const char *help,
+                   FileDataField &df, bool warn_if_empty=false) noexcept;
+
+  void AddFilesItem(const char *caption, const char *help,
+                    MultiFileDataField &df,
+                    bool warn_if_empty=false) noexcept;
+
+  void Fill() noexcept;
+
+public:
+  /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  void Show(const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 };
 
 void
-SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unused]] const PixelRect &rc) noexcept
+SiteConfigPanel::AddFileItem(const char *caption, const char *help,
+                             FileDataField &df, bool warn_if_empty) noexcept
 {
-  WndProperty *wp = Add(_("XCSoar data path"), _("Click to view full path"), false);
-  wp->SetText(GetPrimaryDataPath().c_str());
-  wp->SetReadOnly(true);
+  /* the file, with every line of it */
+  ItemOptions options{.value_all_lines = true,
+                      .chevron = true};
 
-  AddFile(_("Map database"),
-          _("The name of the file (.xcm) containing terrain, topography, and optionally "
-            "waypoints, their details and airspaces."),
-          ProfileKeys::MapFile, GetFileTypePatterns(FileType::MAP),
-          FileType::MAP);
+  const char *name = df.GetAsDisplayString();
+  if (*name != '\0')
+    options.value = name;
+  else {
+    options.badge = C_("Badge", "none");
+    if (warn_if_empty)
+      options.badge_style = BadgeStyle::WARNING;
+  }
 
-  AddMultipleFiles(_("Waypoints"),
-                   _("Primary waypoints files.  Supported file types are "
-                     "Cambridge/WinPilot files (.dat), "
-                     "Zander files (.wpz) or SeeYou files (.cup, .cupx)."),
-                   ProfileKeys::WaypointFileList,
-                   GetFileTypePatterns(FileType::WAYPOINT),
-                   FileType::WAYPOINT);
+  AddItem(caption, [this, caption, help, &df](){
+    PickFile(caption, help, df);
+    Fill();
+    UpdateLayout();
+  }, options);
+}
 
-  AddMultipleFiles(_("Watched WPTs"),
-                   _("Waypoint files containing special waypoints for which "
-                     "additional computations like "
-                     "calculation of arrival height in map display always "
-                     "takes place. Useful for "
-                     "waypoints like known reliable thermal sources (e.g. "
-                     "powerplants) or mountain passes."),
-                   ProfileKeys::WatchedWaypointFileList,
-                   GetFileTypePatterns(FileType::WAYPOINT),
-                   FileType::WAYPOINT);
-  SetExpertRow(WatchedWaypointFileList);
+void
+SiteConfigPanel::AddFilesItem(const char *caption, const char *help,
+                              MultiFileDataField &df,
+                              bool warn_if_empty) noexcept
+{
+  /* one file per line below the caption */
+  std::string names;
+  for (const Path path : df.GetPathFiles()) {
+    if (!names.empty())
+      names.push_back('\n');
 
-  AddMultipleFiles(_("WPT A/F details"),
-                   _("The files may contain extracts from enroute supplements "
-                     "or other contributed "
-                     "information about individual waypoints and airfields."),
-                   ProfileKeys::AirfieldFileList,
-                   GetFileTypePatterns(FileType::WAYPOINTDETAILS),
-                   FileType::WAYPOINTDETAILS);
-  SetExpertRow(AirfieldFileList);
+    const Path base = path.GetBase();
+    names += (base != nullptr ? base : path).c_str();
+  }
 
-  AddMultipleFiles(_("Airspace"),
-                   _("List of active airspace files. Use the Add and Remove "
-                     "buttons to activate or deactivate"
-                     " airspace files respectively. Supported file types are: "
-                     "Openair (.openair /.txt /.air), and Tim Newport-Pearce (.sua)."),
-                   ProfileKeys::AirspaceFileList,
-                   GetFileTypePatterns(FileType::AIRSPACE),
-                   FileType::AIRSPACE);
+  ItemOptions options{.value_all_lines = true,
+                      .chevron = true};
+  if (!names.empty())
+    options.value = names.c_str();
+  else {
+    options.badge = C_("Badge", "none");
+    if (warn_if_empty)
+      options.badge_style = BadgeStyle::WARNING;
+  }
 
-  AddFile(_("FLARM database"),
-          _("The name of the file containing information about registered FLARM devices."),
-          ProfileKeys::FlarmFile,
-          GetFileTypePatterns(FileType::FLARMNET),
-          FileType::FLARMNET);
+  AddItem(caption, [this, caption, help, &df](){
+    PickFiles(caption, help, df);
+    Fill();
+    UpdateLayout();
+  }, options);
+}
 
-  AddFile("RASP",
-          _("Regional Atmospheric Soaring Prediction file providing "
-            "weather forecasts for soaring. Displays color-coded map "
-            "overlays for thermal strength, boundary layer winds, "
-            "cloud cover, and other soaring-relevant parameters at "
-            "various forecast times throughout the day."),
-          ProfileKeys::RaspFile,
-          GetFileTypePatterns(FileType::RASP),
-          FileType::RASP);
+void
+SiteConfigPanel::Fill() noexcept
+{
+  Clear();
 
-  AddFile(_("Checklist"),
-          _("The checklist file containing pre-flight and other checklists."),
-          ProfileKeys::ChecklistFile,
-          GetFileTypePatterns(FileType::CHECKLIST),
-          FileType::CHECKLIST);
-  
-  const char *user_repositories_list_value = Profile::Get(ProfileKeys::UserRepositoriesList, "");
+  expert = UIGlobals::GetDialogSettings().expert;
 
-  AddText(_("User repositories"),
-          _("List of additional user repository URIs, separated by '|' character."),
-          user_repositories_list_value);
-  SetExpertRow(UserRepositoriesList);
+  AddGroup();
+  AddItem(_("XCSoar data path"),
+          {.value = GetPrimaryDataPath().c_str(),
+           .value_below = true,
+           .value_font = TextFont::MONO,
+           .value_all_lines = true});
+
+  AddGroup();
+
+  AddFileItem(_("Map database"),
+              _("The name of the file (.xcm) containing terrain, topography, and optionally "
+                "waypoints, their details and airspaces."),
+              map_file, true);
+
+  AddFilesItem(_("Waypoints"),
+               _("Primary waypoints files.  Supported file types are "
+                 "Cambridge/WinPilot files (.dat), "
+                 "Zander files (.wpz) or SeeYou files (.cup, .cupx)."),
+               waypoint_files, true);
+
+  if (expert) {
+    AddFilesItem(_("Watched WPTs"),
+                 _("Waypoint files containing special waypoints for which "
+                   "additional computations like "
+                   "calculation of arrival height in map display always "
+                   "takes place. Useful for "
+                   "waypoints like known reliable thermal sources (e.g. "
+                   "powerplants) or mountain passes."),
+                 watched_waypoint_files);
+
+    AddFilesItem(_("WPT A/F details"),
+                 _("The files may contain extracts from enroute supplements "
+                   "or other contributed "
+                   "information about individual waypoints and airfields."),
+                 airfield_files);
+  }
+
+  AddFilesItem(_("Airspace"),
+               _("List of active airspace files. Use the Add and Remove "
+                 "buttons to activate or deactivate"
+                 " airspace files respectively. Supported file types are: "
+                 "Openair (.openair /.txt /.air), and Tim Newport-Pearce (.sua)."),
+               airspace_files, true);
+
+  AddFileItem(_("FLARM database"),
+              _("The name of the file containing information about registered FLARM devices."),
+              flarm_file);
+
+  AddFileItem("RASP",
+              _("Regional Atmospheric Soaring Prediction file providing "
+                "weather forecasts for soaring. Displays color-coded map "
+                "overlays for thermal strength, boundary layer winds, "
+                "cloud cover, and other soaring-relevant parameters at "
+                "various forecast times throughout the day."),
+              rasp_file);
+
+  AddFileItem(_("Checklist"),
+              _("The checklist file containing pre-flight and other checklists."),
+              checklist_file);
+
+  if (expert) {
+    /* one URI per line below the caption */
+    std::string uris = user_repositories.c_str();
+    std::replace(uris.begin(), uris.end(), '|', '\n');
+
+    ItemOptions options{
+      .value_all_lines = true,
+      .chevron = true,
+      .help = _("List of additional user repository URIs, separated by '|' character."),
+    };
+
+    if (!uris.empty())
+      options.value = uris.c_str();
+    else
+      options.badge = C_("Badge", "none");
+
+    AddGroup();
+    AddItem(_("User repositories"), [this](){
+      if (!TextEntryDialog(user_repositories, _("User repositories")))
+        return;
+
+      Fill();
+      UpdateLayout();
+    }, options);
+  }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  bool auto_update = false;
-  Profile::Get(ProfileKeys::RepositoryAutoUpdate, auto_update);
-  AddBoolean(C_("Setting", "Auto update"),
-             _("At startup, download a newer copy of each file already "
-               "on this device. The progress bar shows the download."),
-             auto_update);
+  AddGroup();
+  const unsigned auto_item = GetItemCount();
+  AddItem(C_("Setting", "Auto update"), [this, auto_item](){
+    auto_update = IsItemChecked(auto_item);
+  }, {
+    .toggle = true,
+    .toggle_hit_area = ToggleHitArea::ROW,
+    .checked = auto_update,
+    .help = _("At startup, download a newer copy of each file already "
+              "on this device. The progress bar shows the download."),
+  });
 #endif
+}
+
+/**
+ * Let the field know the files of its kind, and which one the
+ * profile names.
+ */
+static void
+LoadFile(FileDataField &df, FileType type, std::string_view key) noexcept
+{
+  df.SetFileType(type);
+  df.AddNull();
+  df.ScanMultiplePatterns(GetFileTypePatterns(type));
+  df.Sort(FileDataField::SortOrder::ASCENDING, true);
+
+  const auto path = Profile::GetPath(key);
+  if (path != nullptr)
+    df.SetValue(path);
+}
+
+static void
+LoadFiles(MultiFileDataField &df, FileType type,
+          std::string_view key) noexcept
+{
+  const char *patterns = GetFileTypePatterns(type);
+
+  df.SetFileType(type);
+  df.ScanMultiplePatterns(patterns);
+  df.GetFileDataField().Sort();
+
+  for (const auto &path : Profile::GetMultiplePaths(key, patterns))
+    df.AddInitialPath(path);
+}
+
+void
+SiteConfigPanel::Prepare(ContainerWindow &parent,
+                         const PixelRect &rc) noexcept
+{
+  LoadFile(map_file, FileType::MAP, ProfileKeys::MapFile);
+  LoadFiles(waypoint_files, FileType::WAYPOINT,
+            ProfileKeys::WaypointFileList);
+  LoadFiles(watched_waypoint_files, FileType::WAYPOINT,
+            ProfileKeys::WatchedWaypointFileList);
+  LoadFiles(airfield_files, FileType::WAYPOINTDETAILS,
+            ProfileKeys::AirfieldFileList);
+  LoadFiles(airspace_files, FileType::AIRSPACE,
+            ProfileKeys::AirspaceFileList);
+  LoadFile(flarm_file, FileType::FLARMNET, ProfileKeys::FlarmFile);
+  LoadFile(rasp_file, FileType::RASP, ProfileKeys::RaspFile);
+  LoadFile(checklist_file, FileType::CHECKLIST, ProfileKeys::ChecklistFile);
+
+  user_repositories = Profile::Get(ProfileKeys::UserRepositoriesList, "");
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  Profile::Get(ProfileKeys::RepositoryAutoUpdate, auto_update);
+#endif
+
+  Fill();
+
+  GroupedListWidget::Prepare(parent, rc);
+}
+
+void
+SiteConfigPanel::Show(const PixelRect &rc) noexcept
+{
+  /* the user level may have changed on the menu since the list was
+     filled */
+  if (expert != UIGlobals::GetDialogSettings().expert) {
+    Fill();
+    UpdateLayout();
+  }
+
+  GroupedListWidget::Show(rc);
 }
 
 bool
 SiteConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
+  MapFileChanged = Profile::SetPath(ProfileKeys::MapFile, map_file.GetValue());
 
-  MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
-
-  // WaypointFileChanged has already a meaningful value
-  const bool primary_changed = SaveValueMultiFileReader(
-      WaypointFileList, ProfileKeys::WaypointFileList);
-  const bool watched_changed = SaveValueMultiFileReader(
-      WatchedWaypointFileList, ProfileKeys::WatchedWaypointFileList);
+  const bool primary_changed =
+    Profile::SetMultiplePaths(ProfileKeys::WaypointFileList,
+                              waypoint_files.GetPathFiles());
+  const bool watched_changed =
+    Profile::SetMultiplePaths(ProfileKeys::WatchedWaypointFileList,
+                              watched_waypoint_files.GetPathFiles());
   PrimaryWaypointFileChanged |= primary_changed;
   WatchedWaypointFileChanged |= watched_changed;
   WaypointFileChanged |= primary_changed || watched_changed;
 
-  AirspaceFileChanged |= SaveValueMultiFileReader(
-      AirspaceFileList, ProfileKeys::AirspaceFileList);
+  AirspaceFileChanged |=
+    Profile::SetMultiplePaths(ProfileKeys::AirspaceFileList,
+                              airspace_files.GetPathFiles());
 
-  FlarmFileChanged = SaveValueFileReader(FlarmFile, ProfileKeys::FlarmFile);
+  FlarmFileChanged = Profile::SetPath(ProfileKeys::FlarmFile,
+                                      flarm_file.GetValue());
 
-  AirfieldFileChanged = SaveValueMultiFileReader(
-      AirfieldFileList, ProfileKeys::AirfieldFileList);
+  AirfieldFileChanged =
+    Profile::SetMultiplePaths(ProfileKeys::AirfieldFileList,
+                              airfield_files.GetPathFiles());
 
-  RaspFileChanged = SaveValueFileReader(RaspFile, ProfileKeys::RaspFile);
+  RaspFileChanged = Profile::SetPath(ProfileKeys::RaspFile,
+                                     rasp_file.GetValue());
 
-  ChecklistFileChanged = SaveValueFileReader(ChecklistFile, ProfileKeys::ChecklistFile);
+  ChecklistFileChanged = Profile::SetPath(ProfileKeys::ChecklistFile,
+                                          checklist_file.GetValue());
 
-  const std::string old_repos{Profile::Get(ProfileKeys::UserRepositoriesList, "")};
-  std::string new_repos = old_repos;
-  UserRepositoriesListChanged = SaveValue(
-      UserRepositoriesList, ProfileKeys::UserRepositoriesList, new_repos);
-  if (UserRepositoriesListChanged)
-    PurgeChangedUserRepositoryFiles(old_repos.c_str(), new_repos.c_str());
-
-  changed = WaypointFileChanged || AirfieldFileChanged ||
-            AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
-            RaspFileChanged || ChecklistFileChanged ||
-            UserRepositoriesListChanged;
+  const std::string old_repositories{
+    Profile::Get(ProfileKeys::UserRepositoriesList, "")};
+  UserRepositoriesListChanged =
+    !StringIsEqual(old_repositories.c_str(), user_repositories.c_str());
+  if (UserRepositoriesListChanged) {
+    Profile::Set(ProfileKeys::UserRepositoriesList, user_repositories.c_str());
+    PurgeChangedUserRepositoryFiles(old_repositories.c_str(),
+                                    user_repositories.c_str());
+  }
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  bool auto_update = false;
-  Profile::Get(ProfileKeys::RepositoryAutoUpdate, auto_update);
-  changed |= SaveValue(AutoUpdate, ProfileKeys::RepositoryAutoUpdate,
-                       auto_update);
+  bool stored_auto_update = false;
+  Profile::Get(ProfileKeys::RepositoryAutoUpdate, stored_auto_update);
+  if (auto_update != stored_auto_update) {
+    Profile::Set(ProfileKeys::RepositoryAutoUpdate, auto_update);
+    _changed = true;
+  }
 #endif
 
-  _changed |= changed;
+  _changed |= WaypointFileChanged || AirfieldFileChanged ||
+    AirspaceFileChanged || MapFileChanged || FlarmFileChanged ||
+    RaspFileChanged || ChecklistFileChanged ||
+    UserRepositoriesListChanged;
 
   return true;
 }

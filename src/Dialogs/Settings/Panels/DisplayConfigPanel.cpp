@@ -2,15 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "DisplayConfigPanel.hpp"
+#include "ConfigListPanel.hpp"
 #include "ui/canvas/Features.hpp" // for DRAW_MOUSE_CURSOR
 #include "ui/window/Features.hpp" // for HAVE_FULL_SCREEN_SETTING
 #include "Profile/Keys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
-#include "Form/DataField/String.hpp"
-#include "Form/Edit.hpp"
 #include "Hardware/DisplayBrightness.hpp"
 #include "Hardware/RotateDisplay.hpp"
 #include "Interface.hpp"
@@ -22,7 +19,7 @@
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
 #include "Language/Language.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "UtilsSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Asset.hpp"
 #include "util/Macros.hpp"
@@ -39,26 +36,6 @@
 #if defined(KOBO) || (defined(__linux__) && !defined(ANDROID))
 #define HAVE_DISPLAY_BRIGHTNESS_CONTROL
 #endif
-
-enum ControlIndex {
-  AppDisplayType,
-  CustomDPI,
-  Orientation,
-#if defined(HAVE_DISPLAY_BRIGHTNESS_CONTROL)
-  ScreenBrightness,
-#endif
-#ifdef HAVE_FULL_SCREEN_SETTING
-  FullScreen,
-  InfoBoxAreaStretch,
-#endif
-#ifdef HAVE_STATUS_BAR_SETTING
-  StatusBar,
-#endif
-#ifdef DRAW_MOUSE_CURSOR
-  CursorSize,
-  CursorInverted,
-#endif
-};
 
 #ifdef HAVE_FULL_SCREEN_SETTING
 /**
@@ -118,52 +95,6 @@ FormatInfoBoxAreaStretch(uint8_t edges) noexcept
 
   return result;
 }
-
-static bool
-EditInfoBoxAreaStretch(const char *caption, DataField &df,
-                    [[maybe_unused]] const char *help_text)
-{
-  DisplaySettings &settings = CommonInterface::SetUISettings().display;
-
-  auto picker =
-    std::make_unique<InfoBoxAreaStretchWidget>(UIGlobals::GetDialogLook(),
-                                            settings.infobox_area_stretch);
-  auto &picker_ref = *picker;
-
-  TWidgetDialog<StaticHelpTextWidget>
-    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
-           UIGlobals::GetDialogLook(), _("Stretch InfoBox area"));
-  dialog.SetWidget(std::move(picker), gettext(infobox_area_stretch_hint));
-  dialog.AddButton(_("OK"), mrOK);
-
-  /* the row's help text is not reachable from here: WndProperty only
-     falls back to OnHelp() when there is no edit callback */
-  dialog.AddButton(_("Help"), [caption](){
-    HelpDialog(caption, gettext(infobox_area_stretch_help));
-  });
-
-  dialog.AddButton(_("Cancel"), mrCancel);
-
-  if (dialog.ShowModal() != mrOK)
-    return false;
-
-  const uint8_t edges = picker_ref.GetEdges();
-  if (edges == settings.infobox_area_stretch)
-    return false;
-
-  settings.infobox_area_stretch = edges;
-  Profile::Set(ProfileKeys::InfoBoxAreaStretch, unsigned(edges));
-  Profile::Save();
-
-  /* in "Auto" mode the status bar follows the top edge, and the area
-     the InfoBoxes and gauges may use changed */
-  CommonInterface::main_window->ApplyFullScreenSettings();
-  CommonInterface::main_window->ReinitialiseLayout();
-
-  ((DataFieldString &)df).ModifyValue(FormatInfoBoxAreaStretch(edges).c_str());
-  return true;
-}
-
 #endif
 
 #ifdef HAVE_STATUS_BAR_SETTING
@@ -211,129 +142,293 @@ static constexpr StaticEnumChoice display_orientation_list[] = {
   nullptr
 };
 
-static void
-FillDpiChoices(DataFieldEnum &df, unsigned value) noexcept
-{
-  static constexpr unsigned dpi_choices[] = {
-    120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
-  };
-
-  df.AddChoice(0, _("Automatic"));
-  for (unsigned dpi : dpi_choices) {
-    StaticString<20> buffer;
-    buffer.Format(_("%u dpi"), dpi);
-    df.AddChoice(dpi, buffer);
-  }
-  df.SetValue(value);
-}
-
-class DisplayConfigPanel final
-  : public RowFormWidget, DataFieldListener {
-  std::unique_ptr<DisplayBrightness> brightness;
-
-public:
-  DisplayConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()),
-     brightness(DisplayBrightness::Detect()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-  bool Save(bool &changed) noexcept override;
-
-private:
-  void OnModified(DataField &df) noexcept override;
+static constexpr StaticEnumChoice dark_mode_list[] = {
+  { UISettings::DarkMode::AUTO, N_("Auto"),
+    N_("Use the system-wide setting") },
+  { UISettings::DarkMode::OFF, N_("Off"),
+    N_("Black text on white background") },
+  { UISettings::DarkMode::ON, N_("On"),
+    N_("White text on black background") },
+  nullptr
 };
 
-void
-DisplayConfigPanel::OnModified(DataField &df) noexcept
+/** the resolutions the user may choose instead of the detected one */
+static constexpr unsigned dpi_choices[] = {
+  120, 160, 240, 260, 280, 300, 340, 360, 400, 420, 520,
+};
+
+/** The caption of a resolution; 0 stands for the detected one. */
+static void
+FormatDpi(StaticString<32> &buffer, unsigned dpi) noexcept
 {
-#ifdef HAVE_FULL_SCREEN_SETTING
-  if (IsDataField(FullScreen, df)) {
-    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
-    SetRowAvailable(InfoBoxAreaStretch, dfb.GetValue());
-  }
-#else
-  (void)df;
-#endif
+  if (dpi == 0)
+    buffer = _("Automatic");
+  else
+    buffer.Format(_("%u dpi"), dpi);
 }
 
+/**
+ * Let the user pick the resolution from #dpi_choices or the detected
+ * one.
+ *
+ * @return true if the value has changed
+ */
+static bool
+PickDpi(const char *caption, const char *help, unsigned &value) noexcept
+{
+  constexpr unsigned n = std::size(dpi_choices) + 1;
+
+  StaticString<32> captions[n];
+  PickerChoice choices[n];
+  int current = 0;
+
+  FormatDpi(captions[0], 0);
+  choices[0] = {captions[0].c_str()};
+
+  for (unsigned i = 0; i < std::size(dpi_choices); ++i) {
+    FormatDpi(captions[i + 1], dpi_choices[i]);
+    choices[i + 1] = {captions[i + 1].c_str()};
+
+    if (dpi_choices[i] == value)
+      current = i + 1;
+  }
+
+  const int picked = PickChoice(caption, help, choices, current);
+  if (picked < 0 || picked == current)
+    return false;
+
+  value = picked == 0 ? 0 : dpi_choices[picked - 1];
+  return true;
+}
+
+/**
+ * The screen: its technology, its resolution and orientation, its
+ * brightness and the size of the text on it.
+ */
+class DisplayConfigPanel final : public ConfigListPanel {
+  std::unique_ptr<DisplayBrightness> brightness;
+
+  DisplayType display_type;
+  unsigned custom_dpi;
+  DisplayOrientation orientation;
+#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
+  int brightness_percent;
+#endif
+#ifdef HAVE_FULL_SCREEN_SETTING
+  bool full_screen;
+  uint8_t infobox_area_stretch;
+#endif
+#ifdef HAVE_STATUS_BAR_SETTING
+  DisplaySettings::StatusBar status_bar;
+#endif
+  UISettings::DarkMode dark_mode;
+  int scale;
+#ifdef DRAW_MOUSE_CURSOR
+  int cursor_size;
+  bool invert_cursor_colors;
+#endif
+
+public:
+  DisplayConfigPanel() noexcept
+    :brightness(DisplayBrightness::Detect()) {}
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+  void EditInfoBoxAreaStretch() noexcept;
+#endif
+
+public:
+  /* virtual methods from class Widget */
+  bool Save(bool &changed) noexcept override;
+};
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+
 void
-DisplayConfigPanel::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
+DisplayConfigPanel::EditInfoBoxAreaStretch() noexcept
+{
+  auto picker =
+    std::make_unique<InfoBoxAreaStretchWidget>(UIGlobals::GetDialogLook(),
+                                               infobox_area_stretch);
+  auto &picker_ref = *picker;
+
+  TWidgetDialog<StaticHelpTextWidget>
+    dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
+           UIGlobals::GetDialogLook(), _("Stretch InfoBox area"));
+  dialog.SetWidget(std::move(picker), gettext(infobox_area_stretch_hint));
+  dialog.AddButton(_("OK"), mrOK);
+
+  /* the row's help text is not reachable from here */
+  dialog.AddButton(_("Help"), [](){
+    HelpDialog(_("Stretch InfoBox area"),
+               gettext(infobox_area_stretch_help));
+  });
+
+  dialog.AddButton(_("Cancel"), mrCancel);
+
+  if (dialog.ShowModal() != mrOK)
+    return;
+
+  const uint8_t edges = picker_ref.GetEdges();
+  if (edges == infobox_area_stretch)
+    return;
+
+  infobox_area_stretch = edges;
+
+  auto &settings = CommonInterface::SetUISettings().display;
+  settings.infobox_area_stretch = edges;
+  Profile::Set(ProfileKeys::InfoBoxAreaStretch, unsigned(edges));
+  Profile::Save();
+
+  /* in "Auto" mode the status bar follows the top edge, and the area
+     the InfoBoxes and gauges may use changed */
+  CommonInterface::main_window->ApplyFullScreenSettings();
+  CommonInterface::main_window->ReinitialiseLayout();
+  Refresh();
+}
+
+#endif
+
+void
+DisplayConfigPanel::LoadSettings() noexcept
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  RowFormWidget::Prepare(parent, rc);
-
-  AddEnum(C_("Setting", "Display type"),
-          _("Select the display technology. E-ink modes disable kinetic "
-            "and smooth scrolling for slow refresh screens."),
-          display_type_list,
-          (unsigned)ui_settings.display.display_type);
-  SetExpertRow(AppDisplayType);
-
-  WndProperty *wp_dpi = AddEnum(_("Display resolution"),
-                                _("The display resolution is used to adapt line widths, "
-                                  "font size, landable size and more."));
-  FillDpiChoices(*(DataFieldEnum *)wp_dpi->GetDataField(),
-                 ui_settings.custom_dpi);
-  wp_dpi->RefreshDisplay();
-  SetExpertRow(CustomDPI);
-
-  if (Display::RotateSupported())
-    AddEnum(_("Display orientation"),
-            _("Rotate the display on devices that support it."),
-            display_orientation_list,
-            (unsigned)ui_settings.display.orientation);
-  else
-    AddDummy();
+  display_type = ui_settings.display.display_type;
+  custom_dpi = ui_settings.custom_dpi;
+  orientation = ui_settings.display.orientation;
 
 #ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
-  if (brightness != nullptr) {
-    AddInteger(_("Screen brightness"),
-               brightness->IsWritable()
-               ? _("Adjust the screen brightness.")
-               : _("Screen brightness is read-only because writing requires additional permissions."),
-               "%d %%", "%d", 0, 100, 5,
-               brightness->GetBrightnessPercent());
-
-    if (!brightness->IsWritable())
-      SetReadOnly(ScreenBrightness);
-  } else
-    AddDummy();
+  brightness_percent = brightness != nullptr
+    ? brightness->GetBrightnessPercent()
+    : 0;
 #endif
 
 #ifdef HAVE_FULL_SCREEN_SETTING
-  AddBoolean(_("Full screen"),
-             _("Let XCSoar use the whole screen, including the areas behind "
-               "the system bars and the display cutout. The map fills it "
-               "completely, while \"Stretch InfoBox area\" decides which "
-               "edges the InfoBoxes, gauges, map overlays and the menu "
-               "may reach."),
-             ui_settings.display.full_screen, this);
-
-  const auto edges = FormatInfoBoxAreaStretch(ui_settings.display
-                                          .infobox_area_stretch);
-  auto *edges_row = Add(_("Stretch InfoBox area"),
-                        gettext(infobox_area_stretch_help),
-                        new DataFieldString(edges.c_str()));
-  edges_row->SetEditCallback(EditInfoBoxAreaStretch);
-  SetExpertRow(InfoBoxAreaStretch);
-  SetRowAvailable(InfoBoxAreaStretch, ui_settings.display.full_screen);
+  full_screen = ui_settings.display.full_screen;
+  infobox_area_stretch = ui_settings.display.infobox_area_stretch;
 #endif
 
 #ifdef HAVE_STATUS_BAR_SETTING
-  AddEnum(_("System status bar"),
-          _("Whether the system status bar with the clock and the battery "
-            "level stays visible."),
-          status_bar_list,
-          unsigned(ui_settings.display.status_bar));
+  status_bar = ui_settings.display.status_bar;
 #endif
 
+  dark_mode = ui_settings.dark_mode;
+  scale = ui_settings.scale;
+
 #ifdef DRAW_MOUSE_CURSOR
-  AddInteger(_("Cursor zoom"), _("Cursor zoom factor"), "%d x", "%d x",
-             1, 10, 1, (unsigned)ui_settings.display.cursor_size);
-  AddBoolean(_("Invert cursor color"), _("Enable black cursor"),
-             ui_settings.display.invert_cursor_colors);
+  cursor_size = ui_settings.display.cursor_size;
+  invert_cursor_colors = ui_settings.display.invert_cursor_colors;
+#endif
+}
+
+void
+DisplayConfigPanel::Fill() noexcept
+{
+  /* the hardware */
+  AddGroup();
+
+  if (IsExpert()) {
+    AddEnumItem(C_("Setting", "Display type"),
+                _("Select the display technology. E-ink modes disable kinetic "
+                  "and smooth scrolling for slow refresh screens."),
+                display_type_list, display_type);
+
+    const char *dpi_caption = _("Display resolution");
+    const char *dpi_help =
+      _("The display resolution is used to adapt line widths, "
+        "font size, landable size and more.");
+
+    StaticString<32> dpi;
+    FormatDpi(dpi, custom_dpi);
+
+    AddItem(dpi_caption, [this, dpi_caption, dpi_help](){
+      if (PickDpi(dpi_caption, dpi_help, custom_dpi))
+        Refresh();
+    }, {.value = dpi.c_str(), .chevron = true});
+  }
+
+  if (Display::RotateSupported())
+    AddEnumItem(_("Display orientation"),
+                _("Rotate the display on devices that support it."),
+                display_orientation_list, orientation);
+
+#ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
+  if (brightness != nullptr) {
+    const char *caption = _("Screen brightness");
+
+    if (brightness->IsWritable())
+      AddPercentItem(caption, _("Adjust the screen brightness."),
+                     0, 100, 5, brightness_percent);
+    else {
+      StaticString<8> percent;
+      percent.Format("%d %%", brightness_percent);
+
+      AddItem(caption, {
+        .value = percent.c_str(),
+        .help = _("Screen brightness is read-only because writing requires additional permissions."),
+        .disabled = true,
+        .selectable_when_disabled = true,
+      });
+    }
+  }
+#endif
+
+#ifdef HAVE_FULL_SCREEN_SETTING
+  AddToggleItem(_("Full screen"),
+                _("Let XCSoar use the whole screen, including the areas behind "
+                  "the system bars and the display cutout. The map fills it "
+                  "completely, while \"Stretch InfoBox area\" decides which "
+                  "edges the InfoBoxes, gauges, map overlays and the menu "
+                  "may reach."),
+                full_screen);
+
+  if (IsExpert() && full_screen) {
+    const std::string edges =
+      FormatInfoBoxAreaStretch(infobox_area_stretch);
+    AddItem(_("Stretch InfoBox area"), [this](){
+      EditInfoBoxAreaStretch();
+    }, {.value = edges.c_str(),
+        .chevron = true,
+        .help = gettext(infobox_area_stretch_help)});
+  }
+#endif
+
+#ifdef HAVE_STATUS_BAR_SETTING
+  AddEnumItem(_("System status bar"),
+              _("Whether the system status bar with the clock and the battery "
+                "level stays visible."),
+              status_bar_list, status_bar);
+#endif
+
+  /* the look of everything on it */
+  AddGroup();
+
+  AddEnumItem(_("Dark mode"), nullptr, dark_mode_list, dark_mode);
+
+  AddPercentItem(_("Text size"), nullptr,
+                 UISettings::SCALE_MIN, UISettings::SCALE_MAX,
+                 UISettings::SCALE_STEP, scale);
+
+#ifdef DRAW_MOUSE_CURSOR
+  AddGroup();
+
+  StaticString<8> zoom;
+  zoom.Format("%d x", cursor_size);
+
+  AddItem(_("Cursor zoom"), [this](){
+    if (PickNumber(_("Cursor zoom"), _("Cursor zoom factor"),
+                   1, 10, 1, cursor_size,
+                   [](StaticString<32> &s, int v){ s.Format("%d x", v); }))
+      Refresh();
+  }, {.value = zoom.c_str(), .chevron = true});
+
+  AddToggleItem(_("Invert cursor color"), _("Enable black cursor"),
+                invert_cursor_colors);
 #endif
 }
 
@@ -344,8 +439,8 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  if (SaveValueEnum(AppDisplayType, ProfileKeys::DisplayType,
-                    ui_settings.display.display_type)) {
+  if (Profile::Update(ProfileKeys::DisplayType,
+                      ui_settings.display.display_type, display_type)) {
     changed = true;
     SetDisplayType(ui_settings.display.display_type);
     /* Reload 1-bit vs anti-aliased glyphs (Kobo mono path). */
@@ -353,8 +448,8 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
     CommonInterface::main_window->ReinitialiseLook();
   }
 
-  if (SaveValueEnum(CustomDPI, ProfileKeys::CustomDPI,
-                    ui_settings.custom_dpi)) {
+  if (Profile::Update(ProfileKeys::CustomDPI,
+                      ui_settings.custom_dpi, custom_dpi)) {
     changed = true;
     if (CommonInterface::main_window != nullptr) {
       CommonInterface::main_window->Initialise();
@@ -364,8 +459,8 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
   }
 
   if (Display::RotateSupported() &&
-      SaveValueEnum(Orientation, ProfileKeys::MapOrientation,
-                    ui_settings.display.orientation)) {
+      Profile::Update(ProfileKeys::MapOrientation,
+                      ui_settings.display.orientation, orientation)) {
     changed = true;
 
     if (!Display::Rotate(ui_settings.display.orientation))
@@ -384,24 +479,21 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
   }
 
 #ifdef HAVE_DISPLAY_BRIGHTNESS_CONTROL
-  if (brightness != nullptr && brightness->IsWritable()) {
-    const unsigned old_percent = brightness->GetBrightnessPercent();
-    const unsigned new_percent = GetValueInteger(ScreenBrightness);
-    if (new_percent != old_percent)
-      brightness->SetBrightnessPercent(new_percent);
-  }
+  if (brightness != nullptr && brightness->IsWritable() &&
+      unsigned(brightness_percent) != brightness->GetBrightnessPercent())
+    brightness->SetBrightnessPercent(brightness_percent);
 #endif
 
 #ifdef HAVE_FULL_SCREEN_SETTING
   bool full_screen_changed =
-    SaveValue(FullScreen, ProfileKeys::FullScreen,
-              ui_settings.display.full_screen);
+    Profile::Update(ProfileKeys::FullScreen,
+                    ui_settings.display.full_screen, full_screen);
   /* the per-edge settings are applied by their own dialog */
   changed |= full_screen_changed;
 
 #ifdef HAVE_STATUS_BAR_SETTING
-  if (SaveValueEnum(StatusBar, ProfileKeys::StatusBar,
-                    ui_settings.display.status_bar)) {
+  if (Profile::Update(ProfileKeys::StatusBar,
+                      ui_settings.display.status_bar, status_bar)) {
     changed = true;
     full_screen_changed = true;
   }
@@ -413,13 +505,28 @@ DisplayConfigPanel::Save(bool &_changed) noexcept
     CommonInterface::main_window->ApplyFullScreenSettings();
 #endif
 
+  changed |= Profile::Update(ProfileKeys::DarkMode,
+                             ui_settings.dark_mode, dark_mode);
+
+  if (Profile::Update(ProfileKeys::UIScale,
+                      ui_settings.scale, unsigned(scale))) {
+    changed = true;
+    if (CommonInterface::main_window != nullptr) {
+      CommonInterface::main_window->Initialise();
+      CommonInterface::main_window->ReinitialiseLook();
+      CommonInterface::main_window->ReinitialiseLayout();
+    }
+  }
+
 #ifdef DRAW_MOUSE_CURSOR
-  changed |= SaveValueInteger(CursorSize, ProfileKeys::CursorSize,
-                              ui_settings.display.cursor_size);
+  changed |= Profile::Update(ProfileKeys::CursorSize,
+                             ui_settings.display.cursor_size,
+                             uint8_t(cursor_size));
   CommonInterface::main_window->SetCursorSize(ui_settings.display.cursor_size);
 
-  changed |= SaveValue(CursorInverted, ProfileKeys::CursorColorsInverted,
-                       ui_settings.display.invert_cursor_colors);
+  changed |= Profile::Update(ProfileKeys::CursorColorsInverted,
+                             ui_settings.display.invert_cursor_colors,
+                             invert_cursor_colors);
   CommonInterface::main_window->SetCursorColorsInverted(
     ui_settings.display.invert_cursor_colors);
 #endif

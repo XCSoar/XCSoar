@@ -1,6 +1,7 @@
 ifeq ($(TARGET_IS_DARWIN),y)
 
 TARGET_LDLIBS += -framework Foundation
+TARGET_LDLIBS += -framework CoreText
 TARGET_LDLIBS += -framework AVFoundation
 TARGET_LDLIBS += -framework Network
 

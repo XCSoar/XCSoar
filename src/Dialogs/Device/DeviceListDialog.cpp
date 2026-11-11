@@ -15,7 +15,6 @@
 #include "LX/ManageLX16xxDialog.hpp"
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "util/StaticString.hxx"
@@ -24,17 +23,14 @@
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
 #include "Device/Port/Listener.hpp"
+#include "Device/Port/NullPort.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "ui/event/Notify.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Look/DialogLook.hpp"
-#include "Widget/ListWidget.hpp"
-#include "ui/canvas/Canvas.hpp"
-#include "ui/canvas/Color.hpp"
-#include "ui/control/List.hpp"
-#include "Screen/Layout.hpp"
-#include "Asset.hpp"
+#include "Widget/GroupedListWidget.hpp"
+#include "Form/Button.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Simulator.hpp"
@@ -45,6 +41,10 @@
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "BackendComponents.hpp"
+
+#include <memory>
+#include <string>
+#include <vector>
 
 #ifdef ANDROID
 #include "java/Global.hxx"
@@ -64,52 +64,74 @@ GetDeviceListHelp() noexcept
     /* xgettext:no-c-format */
     _("XCSoar uses the first device that supplies each value "
            "(device A before B, and so on). "
-           "Bold flags are the values XCSoar is using from this device. "
-           "Flags that are not bold mean an earlier device already "
-           "supplies the same data. "
+           "A filled badge is a value XCSoar is using from this "
+           "device. "
+           "An outlined badge is present, but an earlier device "
+           "already supplies the same data. "
            "Baro is height with the current QNH; QNE is pressure "
            "altitude; Alt IGC is the altitude the logger writes. "
            "QNE and Pressure are the same ambient pressure, so only "
-           "the earlier of those two is bold. "
-           "Bad GPS and a battery below 10% are shown in red on a colour "
-           "display, and in bold on e-paper.");
+           "the earlier of those two is filled. "
+           "Bad GPS, a battery below 10%, and a port error are "
+           "red on a colour display. "
+           "No data and Debug are yellow. "
+           "On a black-and-white display the red and yellow "
+           "badges are filled, like a value which is in use.");
+}
+
+/** One sensor flag.  A filled badge is the value XCSoar is using. */
+struct FlagBadge {
+  std::string text;
+  GroupedListWidget::BadgeStyle style;
+
+  bool operator==(const FlagBadge &other) const noexcept {
+    return text == other.text && style == other.style;
+  }
+};
+
+/**
+ * @p used is a value XCSoar is taking from this device.  The accent
+ * color, not green: green is a positive safety indication.
+ */
+static void
+AddFlag(std::vector<FlagBadge> &badges, const char *text, bool used)
+{
+  badges.push_back({text, used
+                    ? GroupedListWidget::BadgeStyle::PRIMARY
+                    : GroupedListWidget::BadgeStyle::NEUTRAL});
 }
 
 static void
-DrawStatusToken(Canvas &canvas, PixelPoint &p,
-                const Font &regular, const Font &bold,
-                const char *text, bool used, bool &need_sep,
-                bool warning=false) noexcept
+AddWarning(std::vector<FlagBadge> &badges, const char *text)
 {
-  if (need_sep) {
-    canvas.Select(regular);
-    canvas.DrawText(p, "; ");
-    p.x += canvas.CalcTextWidth("; ");
-  }
+  badges.push_back({text, GroupedListWidget::BadgeStyle::DANGER});
+}
 
-  const Color old_color = canvas.GetTextColor();
-  if (warning && HasColors())
-    canvas.SetTextColor(COLOR_RED);
+/** Yellow: the port needs attention, and it has not failed. */
+static void
+AddCaution(std::vector<FlagBadge> &badges, const char *text)
+{
+  badges.push_back({text, GroupedListWidget::BadgeStyle::WARNING});
+}
 
-  canvas.Select(used || warning ? bold : regular);
-  canvas.DrawText(p, text);
-  p.x += canvas.CalcTextWidth(text);
-
-  if (warning && HasColors())
-    canvas.SetTextColor(old_color);
-
-  need_sep = true;
+/** NMEA logging.  Yellow: it is on, and it is not a sensor value. */
+static void
+AddDebugFlag(std::vector<FlagBadge> &badges)
+{
+  AddCaution(badges, _("Debug"));
 }
 
 class DeviceListWidget final
-  : public ListWidget,
+  : public GroupedListWidget,
     NullBlackboardListener, PortListener {
+  using ItemOptions = GroupedListWidget::ItemOptions;
+  using BadgeDefinition = GroupedListWidget::BadgeDefinition;
+
   DeviceBlackboard &device_blackboard;
   MultipleDevices *const devices;
 
-  const DialogLook &look;
-
-  unsigned font_height;
+  /** true while the port and blackboard listeners are installed */
+  bool listening = false;
 
   struct Flags {
     bool duplicate:1;
@@ -253,30 +275,48 @@ class DeviceListWidget final
 
   Item items[NUMDEV];
   std::string error_messages[NUMDEV];
+  std::string captions[NUMDEV];
+  std::string statuses[NUMDEV];
+  std::vector<FlagBadge> flag_badges[NUMDEV];
 
-  Button *disable_button;
-  Button *reconnect_button, *flight_button;
-  Button *edit_button;
-  Button *manage_button, *monitor_button;
-  Button *debug_button;
+  Button *disable_button = nullptr;
+  Button *reconnect_button = nullptr, *flight_button = nullptr;
+  Button *edit_button = nullptr;
+  Button *manage_button = nullptr, *monitor_button = nullptr;
+  Button *debug_button = nullptr;
 
-  Notify port_state_notify{[this]{
-    if (RefreshList())
-      UpdateButtons();
-  }};
+  Notify port_state_notify{[this]{ Refresh(); }};
 
 public:
   DeviceListWidget(DeviceBlackboard &_device_blackboard,
-                   MultipleDevices *_devices,
-                   const DialogLook &_look) noexcept
-    :device_blackboard(_device_blackboard),
-     devices(_devices),
-     look(_look) {}
+                   MultipleDevices *_devices) noexcept
+    :GroupedListWidget(UIGlobals::GetDialogLook()),
+     device_blackboard(_device_blackboard),
+     devices(_devices)
+  {
+    SetVisibilityCallback([this](bool visible){ Listen(visible); });
+    SetCursorCallback([this](int){ UpdateButtons(); });
+  }
 
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
-  bool RefreshList();
+  /** @return true when a row's words have changed */
+  bool Load();
+
+  void Build();
+  void Refresh();
+
+  void Listen(bool visible);
+
+  [[nodiscard]]
+  int Current() const noexcept;
+
+  [[nodiscard]]
+  std::string MakeCaption(unsigned idx) const;
+
+  void FormatRow(unsigned idx, std::string &line,
+                 std::vector<FlagBadge> &badges) const;
 
   void UpdateButtons();
 
@@ -285,39 +325,12 @@ protected:
   void DownloadFlightFromCurrent();
   void EditCurrent();
   void ManageCurrent();
+  void ShowManageDialog(DeviceDescriptor &descriptor, Device &device,
+                        unsigned index);
+  void ManageInSimulator(DeviceDescriptor &descriptor, unsigned index);
   void MonitorCurrent();
   void DebugCurrent();
 
-public:
-  /* virtual methods from class Widget */
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
-
-  void Show(const PixelRect &rc) noexcept override {
-    ListWidget::Show(rc);
-
-    if (devices != nullptr)
-      devices->AddPortListener(*this);
-    CommonInterface::GetLiveBlackboard().AddListener(*this);
-
-    RefreshList();
-    UpdateButtons();
-  }
-
-  void Hide() noexcept override {
-    ListWidget::Hide();
-
-    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
-
-    if (devices != nullptr)
-      devices->RemovePortListener(*this);
-  }
-
-  /* virtual methods from class List::Handler */
-   void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                    unsigned idx) noexcept override;
-  void OnCursorMoved(unsigned index) noexcept override;
-
-private:
   template<typename Pred>
   bool EarlierHas(unsigned idx, Pred pred) const noexcept {
     for (unsigned i = 0; i < idx; ++i)
@@ -326,8 +339,10 @@ private:
     return false;
   }
 
-  void DrawAliveStatus(Canvas &canvas, PixelPoint p,
-                       unsigned idx) noexcept;
+public:
+  /* virtual methods from class Widget */
+  void Prepare(ContainerWindow &parent,
+               const PixelRect &rc) noexcept override;
 
 private:
   /* virtual methods from class BlackboardListener */
@@ -343,47 +358,130 @@ void
 DeviceListWidget::Prepare(ContainerWindow &parent,
                           const PixelRect &rc) noexcept
 {
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  const unsigned margin = Layout::GetTextPadding();
-  font_height = look.list.font->GetHeight();
-  CreateList(parent, look, rc, 3 * margin + font_height +
-             look.small_font.GetHeight()).SetLength(NUMDEV);
-
-  for (Item &i : items)
-    i.Clear();
-
+  Load();
+  Build();
+  GroupedListWidget::Prepare(parent, rc);
   UpdateButtons();
 }
 
-bool
-DeviceListWidget::RefreshList()
+void
+DeviceListWidget::Listen(bool visible)
 {
-  bool modified = false;
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    Item &item = items[i];
+  if (visible) {
+    if (!listening) {
+      if (devices != nullptr)
+        devices->AddPortListener(*this);
+      CommonInterface::GetLiveBlackboard().AddListener(*this);
+      listening = true;
+    }
+    Refresh();
+    return;
+  }
 
+  if (!listening)
+    return;
+
+  listening = false;
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+  if (devices != nullptr)
+    devices->RemovePortListener(*this);
+}
+
+int
+DeviceListWidget::Current() const noexcept
+{
+  const int i = GetCursorIndex();
+  if (i < 0 || (unsigned)i >= NUMDEV)
+    return -1;
+  return i;
+}
+
+std::string
+DeviceListWidget::MakeCaption(unsigned idx) const
+{
+  const DeviceConfig &config =
+    CommonInterface::GetSystemSettings().devices[idx];
+
+  char port_name_buffer[128];
+  const char *port_name =
+    config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
+
+  StaticString<256> text("A: ");
+  text[0u] += idx;
+
+  if (config.UsesDriver()) {
+    const char *driver_name = FindDriverDisplayName(config.driver_name);
+    text.AppendFormat(_("%s on %s"), driver_name, port_name);
+  } else
+    text.append(port_name);
+
+  return std::string{text.c_str()};
+}
+
+bool
+DeviceListWidget::Load()
+{
+  bool changed = false;
+
+  for (unsigned i = 0; i < NUMDEV; ++i) {
     Item n;
     n.Set(CommonInterface::GetSystemSettings().devices[i],
           devices != nullptr ? &(*devices)[i] : nullptr,
           device_blackboard.RealState(i));
+    items[i] = n;
 
-    if (n != item) {
-      item = n;
-      modified = true;
-    }
+    if (devices != nullptr)
+      error_messages[i] = (*devices)[i].GetErrorMessage();
 
-    if (devices != nullptr) {
-      auto error_message = (*devices)[i].GetErrorMessage();
-      if (error_message != error_messages[i]) {
-        error_messages[i] = std::move(error_message);
-        modified = true;
-      }
-    }
+    std::string caption = MakeCaption(i);
+    std::string status;
+    std::vector<FlagBadge> badges;
+    FormatRow(i, status, badges);
+
+    if (caption != captions[i] || status != statuses[i] ||
+        badges != flag_badges[i])
+      changed = true;
+
+    captions[i] = std::move(caption);
+    statuses[i] = std::move(status);
+    flag_badges[i] = std::move(badges);
   }
 
-  if (modified)
-    GetList().Invalidate();
-  return modified;
+  return changed;
+}
+
+void
+DeviceListWidget::Build()
+{
+  Clear();
+  AddGroup(nullptr, {.footer = GetDeviceListHelp()});
+
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    std::vector<BadgeDefinition> defs;
+    defs.reserve(flag_badges[i].size());
+    for (const FlagBadge &badge : flag_badges[i])
+      defs.push_back({badge.text.c_str(), badge.style});
+
+    ItemOptions options;
+    options.badge_size = TextSize::SMALL;
+    if (!statuses[i].empty())
+      options.subtitle = statuses[i].c_str();
+    if (!defs.empty()) {
+      options.row_badges = defs.data();
+      options.row_badge_count = defs.size();
+    }
+    AddItem(captions[i].c_str(), options);
+  }
+
+  UpdateLayout();
+}
+
+void
+DeviceListWidget::Refresh()
+{
+  if (Load())
+    Build();
+  UpdateButtons();
 }
 
 void
@@ -421,10 +519,14 @@ DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 void
 DeviceListWidget::UpdateButtons()
 {
-  const unsigned current = GetList().GetCursorIndex();
+  if (edit_button == nullptr)
+    return;
 
-  if (current < NUMDEV) {
-    const auto &config = CommonInterface::GetSystemSettings().devices[current];
+  const int current = Current();
+
+  if (current >= 0) {
+    const auto &config =
+      CommonInterface::GetSystemSettings().devices[current];
 
     if (config.port_type != DeviceConfig::PortType::DISABLED) {
       disable_button->SetEnabled(true);
@@ -434,16 +536,25 @@ DeviceListWidget::UpdateButtons()
   } else
     disable_button->SetEnabled(false);
 
-  if (is_simulator() || current >= NUMDEV || devices == nullptr) {
+  if (current < 0 || devices == nullptr) {
     reconnect_button->SetEnabled(false);
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
     monitor_button->SetEnabled(false);
     debug_button->SetEnabled(false);
+  } else if (is_simulator()) {
+    /* The simulator never opens a port. Manage still has a dialog
+       for the configured driver; the other buttons need that port. */
+    const DeviceDescriptor &device = (*devices)[current];
+    reconnect_button->SetEnabled(false);
+    flight_button->SetEnabled(false);
+    manage_button->SetEnabled(device.IsManageable());
+    monitor_button->SetEnabled(false);
+    debug_button->SetEnabled(false);
   } else {
     const DeviceDescriptor &device = (*devices)[current];
 
-    reconnect_button->SetEnabled(!device.GetConfig().IsDisabled() && 
+    reconnect_button->SetEnabled(!device.GetConfig().IsDisabled() &&
                                  !device.IsWaitingToCallOpen());
     flight_button->SetEnabled(device.IsLogger());
     manage_button->SetEnabled(device.IsManageable());
@@ -452,36 +563,60 @@ DeviceListWidget::UpdateButtons()
                              device.GetState() == PortState::READY);
   }
 
-  edit_button->SetEnabled(current < NUMDEV);
+  edit_button->SetEnabled(current >= 0);
 }
 
 void
-DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
-                                  unsigned idx) noexcept
+DeviceListWidget::FormatRow(unsigned idx, std::string &line,
+                            std::vector<FlagBadge> &badges) const
 {
+  line.clear();
+  badges.clear();
+
+  const DeviceConfig &config =
+    CommonInterface::GetSystemSettings().devices[idx];
   const Flags flags(*items[idx]);
-  const Font &regular = look.small_font;
-  const Font &bold = look.small_font_bold;
-  bool need_sep = false;
+
+  if (!flags.alive) {
+    if (config.IsDisabled())
+      line = _("Disabled");
+    else if (is_simulator() || !config.IsAvailable())
+      line = _("N/A");
+    else if (flags.bluetooth_disabled)
+      line = _("Bluetooth is disabled");
+    else if (flags.duplicate)
+      line = _("Duplicate");
+    else if (flags.connecting)
+      line = _("Connecting...");
+    else if (flags.open) {
+      AddCaution(badges, _("No data"));
+      if (flags.debug)
+        AddDebugFlag(badges);
+    } else if (flags.error) {
+      AddWarning(badges, error_messages[idx].empty()
+                 ? _("Error")
+                 : error_messages[idx].c_str());
+    } else
+      line = _("Not connected");
+    return;
+  }
 
   if (flags.location)
-    DrawStatusToken(canvas, p, regular, bold, _("GPS fix"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.location;
-                    }), need_sep);
+    AddFlag(badges, _("GPS fix"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.location;
+            }));
   else if (flags.gps)
     /* device sends GPGGA, but no valid location */
-    DrawStatusToken(canvas, p, regular, bold, _("Bad GPS"),
-                    false, need_sep, true);
+    AddWarning(badges, _("Bad GPS"));
   else
-    DrawStatusToken(canvas, p, regular, bold, _("Connected"),
-                    false, need_sep);
+    AddFlag(badges, _("Connected"), false);
 
   if (flags.baro)
-    DrawStatusToken(canvas, p, regular, bold, _("Baro"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.baro;
-                    }), need_sep);
+    AddFlag(badges, _("Baro"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.baro;
+            }));
 
   /* QNE and Pressure are one ambient-pressure source (#3268). */
   const auto earlier_ambient = [](const Flags &f) {
@@ -489,207 +624,124 @@ DeviceListWidget::DrawAliveStatus(Canvas &canvas, PixelPoint p,
   };
 
   if (flags.pressure_altitude)
-    DrawStatusToken(canvas, p, regular, bold, _("QNE"),
-                    !EarlierHas(idx, earlier_ambient), need_sep);
+    AddFlag(badges, _("QNE"),
+            !EarlierHas(idx, earlier_ambient));
 
   if (flags.igc_altitude)
-    DrawStatusToken(canvas, p, regular, bold,
-                    C_("Abbreviation", "Alt IGC"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.igc_altitude;
-                    }), need_sep);
+    AddFlag(badges, C_("Abbreviation", "Alt IGC"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.igc_altitude;
+            }));
 
   if (flags.pressure)
-    DrawStatusToken(canvas, p, regular, bold, _("Pressure"),
-                    !EarlierHas(idx, earlier_ambient), need_sep);
+    AddFlag(badges, _("Pressure"),
+            !EarlierHas(idx, earlier_ambient));
 
   if (flags.pitot)
-    DrawStatusToken(canvas, p, regular, bold, _("Pitot"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.pitot;
-                    }), need_sep);
+    AddFlag(badges, _("Pitot"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.pitot;
+            }));
 
   if (flags.airspeed)
-    DrawStatusToken(canvas, p, regular, bold, _("Airspeed"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.airspeed;
-                    }), need_sep);
+    AddFlag(badges, _("Airspeed"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.airspeed;
+            }));
 
   if (flags.vario)
-    DrawStatusToken(canvas, p, regular, bold, _("Vario"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.vario;
-                    }), need_sep);
+    AddFlag(badges, _("Vario"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.vario;
+            }));
 
   if (flags.gdl90)
-    DrawStatusToken(canvas, p, regular, bold, "GDL90",
-                    flags.alive, need_sep);
+    AddFlag(badges, "GDL90", true);
   else if (flags.traffic)
-    DrawStatusToken(canvas, p, regular, bold, "FLARM",
-                    true, need_sep);
+    AddFlag(badges, "FLARM", true);
 
   if (flags.foreflight_ahrs)
-    DrawStatusToken(canvas, p, regular, bold, "ForeFlight AHRS",
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.foreflight_ahrs;
-                    }), need_sep);
+    AddFlag(badges, "ForeFlight AHRS",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.foreflight_ahrs;
+            }));
 
   if (flags.foreflight_id)
-    DrawStatusToken(canvas, p, regular, bold, "ForeFlight ID",
-                    true, need_sep);
+    AddFlag(badges, "ForeFlight ID", true);
 
   if (flags.temperature)
-    DrawStatusToken(canvas, p, regular, bold, _("Temperature"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.temperature;
-                    }), need_sep);
+    AddFlag(badges, _("Temperature"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.temperature;
+            }));
 
   if (flags.humidity)
-    DrawStatusToken(canvas, p, regular, bold, _("Relative humidity"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.humidity;
-                    }), need_sep);
+    AddFlag(badges, _("Relative humidity"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.humidity;
+            }));
 
   if (flags.imu)
-    DrawStatusToken(canvas, p, regular, bold, _("IMU"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.imu;
-                    }), need_sep);
+    AddFlag(badges, _("IMU"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.imu;
+            }));
 
   if (flags.accel)
-    DrawStatusToken(canvas, p, regular, bold, "G",
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.accel;
-                    }), need_sep);
+    AddFlag(badges, "G",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.accel;
+            }));
 
   if (flags.heart_rate)
-    DrawStatusToken(canvas, p, regular, bold, _("Heart Rate"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.heart_rate;
-                    }), need_sep);
+    AddFlag(badges, _("Heart Rate"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.heart_rate;
+            }));
 
   if (flags.blood_oxygen)
-    DrawStatusToken(canvas, p, regular, bold, _("Blood Oxygen"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.blood_oxygen;
-                    }), need_sep);
+    AddFlag(badges, _("Blood Oxygen"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.blood_oxygen;
+            }));
 
   if (flags.radio)
-    DrawStatusToken(canvas, p, regular, bold, _("Radio"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.radio;
-                    }), need_sep);
+    AddFlag(badges, _("Radio"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.radio;
+            }));
 
   if (flags.transponder)
-    DrawStatusToken(canvas, p, regular, bold, "XPDR",
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.transponder;
-                    }), need_sep);
+    AddFlag(badges, "XPDR",
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.transponder;
+            }));
 
   if (flags.engine)
-    DrawStatusToken(canvas, p, regular, bold, _("Engine"),
-                    !EarlierHas(idx, [](const Flags &f) {
-                      return f.engine;
-                    }), need_sep);
+    AddFlag(badges, _("Engine"),
+            !EarlierHas(idx, [](const Flags &f) {
+              return f.engine;
+            }));
 
   if (flags.debug)
-    DrawStatusToken(canvas, p, regular, bold, _("Debug"),
-                    true, need_sep);
+    AddDebugFlag(badges);
 
   if (flags.battery_percent >= 0) {
     StaticString<32> battery;
-    battery.Format("%s=%d%%", _("Battery"), flags.battery_percent);
-    DrawStatusToken(canvas, p, regular, bold, battery, false, need_sep,
-                    flags.battery_percent < BATTERY_WARNING_PERCENT);
-  }
-}
-
-void
-DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                              unsigned idx) noexcept
-{
-  assert(idx < NUMDEV);
-
-  const DeviceConfig &config =
-    CommonInterface::SetSystemSettings().devices[idx];
-  const Flags flags(*items[idx]);
-
-  const unsigned margin = Layout::GetTextPadding();
-
-  char port_name_buffer[128];
-  const char *port_name =
-    config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
-
-  StaticString<256> text("A: ");
-  text[0u] += idx;
-
-  if (config.UsesDriver()) {
-    const char *driver_name = FindDriverDisplayName(config.driver_name);
-
-    text.AppendFormat(_("%s on %s"), driver_name, port_name);
-  } else {
-    text.append(port_name);
-  }
-
-  canvas.Select(*look.list.font);
-  canvas.DrawText(rc.GetTopLeft() + PixelSize{margin, margin}, text);
-
-  /* show a list of features that are available in the second row;
-     merge-priority flags are bold when this device is the first
-     source (A before B, and so on) */
-
-  const PixelPoint status_p =
-    rc.GetTopLeft() + PixelSize{margin, 2 * margin + font_height};
-
-  if (flags.alive) {
-    DrawAliveStatus(canvas, status_p, idx);
-    return;
-  }
-
-  const char *status;
-  if (config.IsDisabled()) {
-    status = _("Disabled");
-  } else if (is_simulator() || !config.IsAvailable()) {
-    status = _("N/A");
-  } else if (flags.bluetooth_disabled) {
-    status = _("Bluetooth is disabled");
-  } else if (flags.duplicate) {
-    status = _("Duplicate");
-  } else if (flags.connecting) {
-    status = _("Connecting...");
-  } else if (flags.open) {
-    bool need_sep = false;
-    PixelPoint p = status_p;
-    DrawStatusToken(canvas, p, look.small_font, look.small_font_bold,
-                    _("No data"), false, need_sep);
-    if (flags.debug)
-      DrawStatusToken(canvas, p, look.small_font, look.small_font_bold,
-                      _("Debug"), true, need_sep);
-    return;
-  } else if (flags.error) {
-    if (error_messages[idx].empty())
-      status = _("Error");
+    battery.Format("%s %d%%", _("Battery"), flags.battery_percent);
+    if (flags.battery_percent < BATTERY_WARNING_PERCENT)
+      AddWarning(badges, battery);
     else
-      status = error_messages[idx].c_str();
-  } else {
-    status = _("Not connected");
+      AddFlag(badges, battery, false);
   }
-
-  canvas.Select(look.small_font);
-  canvas.DrawText(status_p, status);
 }
 
-void
-DeviceListWidget::OnCursorMoved([[maybe_unused]] unsigned index) noexcept
-{
-  UpdateButtons();
-}
 
 inline void
 DeviceListWidget::EnableDisableCurrent()
 {
-  const unsigned index = GetList().GetCursorIndex();
-  if (index >= NUMDEV)
+  const int index = Current();
+  if (index < 0)
     return;
 
   DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
@@ -702,12 +754,9 @@ DeviceListWidget::EnableDisableCurrent()
   Profile::SetDeviceConfig(Profile::map, index, config);
   Profile::Save();
 
-  /* update the UI */
+  /* update the UI and reopen the device */
 
-  GetList().Invalidate();
-  UpdateButtons();
-
-  /* .. and reopen the device */
+  Refresh();
 
   if (devices != nullptr) {
     DeviceDescriptor &descriptor = (*devices)[index];
@@ -726,8 +775,8 @@ DeviceListWidget::ReconnectCurrent()
   if (devices == nullptr)
     return;
 
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
 #ifdef ANDROID
@@ -760,8 +809,8 @@ DeviceListWidget::DownloadFlightFromCurrent()
   if (devices == nullptr)
     return;
 
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
   DeviceDescriptor &device = (*devices)[current];
@@ -788,8 +837,8 @@ DeviceListWidget::DownloadFlightFromCurrent()
 inline void
 DeviceListWidget::EditCurrent()
 {
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
   const unsigned index = current;
@@ -807,12 +856,9 @@ DeviceListWidget::EditCurrent()
   Profile::SetDeviceConfig(Profile::map, index, config);
   Profile::Save();
 
-  /* update the UI */
+  /* update the UI and reopen the device */
 
-  GetList().Invalidate();
-  UpdateButtons();
-
-  /* .. and reopen the device */
+  Refresh();
 
   if (devices != nullptr) {
     DeviceDescriptor &descriptor = (*devices)[index];
@@ -831,8 +877,8 @@ DeviceListWidget::ManageCurrent()
   if (devices == nullptr)
     return;
 
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
   DeviceDescriptor &descriptor = (*devices)[current];
@@ -844,13 +890,22 @@ DeviceListWidget::ManageCurrent()
   if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 ||
       (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR &&
        config.press_use == DeviceConfig::PressureUse::PITOT)) {
-    ManageI2CPitotDialog(UIGlobals::GetMainWindow(), look, descriptor);
+    ManageI2CPitotDialog(UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(), descriptor);
     return;
   }
 #endif
 
   if (descriptor.IsDriver("GDL90")) {
     ManageGDL90Dialog();
+    return;
+  }
+
+  if (is_simulator()) {
+    if (Device *live = descriptor.GetDevice())
+      ShowManageDialog(descriptor, *live, current);
+    else
+      ManageInSimulator(descriptor, current);
     return;
   }
 
@@ -873,10 +928,18 @@ DeviceListWidget::ManageCurrent()
     return;
   }
 
+  ShowManageDialog(descriptor, *device, current);
+}
+
+void
+DeviceListWidget::ShowManageDialog(DeviceDescriptor &descriptor,
+                                   Device &device, unsigned index)
+{
   if (descriptor.IsDriver("CAI 302"))
-    ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
+    ManageCAI302Dialog(UIGlobals::GetMainWindow(),
+                       UIGlobals::GetDialogLook(), device);
   else if (descriptor.IsDriver("Stratux"))
-    ManageStratuxDialog(*device);
+    ManageStratuxDialog(device);
   else if (descriptor.IsDriver("FLARM")) {
     FlarmVersion version;
     FlarmHardware hardware;
@@ -884,23 +947,23 @@ DeviceListWidget::ManageCurrent()
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
+      const NMEAInfo &basic = device_blackboard.RealState(index);
       version = basic.flarm.version;
       state = basic.flarm.state;
     }
 
-    ManageFlarmDialog(*device, version, hardware, state);
+    ManageFlarmDialog(device, version, hardware, state);
   } else if (descriptor.IsDriver("LX")) {
     DeviceInfo info, secondary_info;
 
     {
       const std::lock_guard lock{device_blackboard.mutex};
-      const NMEAInfo &basic = device_blackboard.RealState(current);
+      const NMEAInfo &basic = device_blackboard.RealState(index);
       info = basic.device;
       secondary_info = basic.secondary_device;
     }
 
-    LXDevice &lx_device = *(LXDevice *)device;
+    LXDevice &lx_device = (LXDevice &)device;
     if (lx_device.IsLXNAVVario())
       ManageLXNAVVarioDialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
@@ -908,9 +971,29 @@ DeviceListWidget::ManageCurrent()
     else if (lx_device.IsLX16xx())
       ManageLX16xxDialog(lx_device, info);
   } else if (descriptor.IsDriver("Vega"))
-    dlgConfigurationVarioShowModal(*device);
+    dlgConfigurationVarioShowModal(device);
   else if (descriptor.IsDriver("BlueFly"))
-    dlgConfigurationBlueFlyVarioShowModal(*device);
+    dlgConfigurationBlueFlyVarioShowModal(device);
+}
+
+void
+DeviceListWidget::ManageInSimulator(DeviceDescriptor &descriptor,
+                                    unsigned index)
+{
+  /* The simulator does not open the port, so there is no device to
+     borrow. A port that accepts writes and never answers is enough
+     for the dialog. */
+  const DeviceConfig &config = descriptor.GetConfig();
+  const DeviceRegister *driver = FindDriverByName(config.driver_name);
+  if (driver == nullptr || driver->CreateOnPort == nullptr)
+    return;
+
+  NullPort port;
+  std::unique_ptr<Device> device{driver->CreateOnPort(config, port)};
+  if (device == nullptr)
+    return;
+
+  ShowManageDialog(descriptor, *device, index);
 }
 
 inline void
@@ -919,8 +1002,8 @@ DeviceListWidget::MonitorCurrent()
   if (devices == nullptr)
     return;
 
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
   DeviceDescriptor &descriptor = (*devices)[current];
@@ -933,8 +1016,8 @@ DeviceListWidget::DebugCurrent()
   if (devices == nullptr)
     return;
 
-  const unsigned current = GetList().GetCursorIndex();
-  if (current >= NUMDEV)
+  const int current = Current();
+  if (current < 0)
     return;
 
   DeviceDescriptor &device = (*devices)[current];
@@ -944,7 +1027,7 @@ DeviceListWidget::DebugCurrent()
   static constexpr unsigned MINUTES = 10;
 
   device.EnableDumpTemporarily(std::chrono::minutes(MINUTES));
-  RefreshList();
+  Refresh();
 
   StaticString<256> msg;
   msg.Format(_("Communication with this device will be logged for the next %u minutes."),
@@ -955,8 +1038,7 @@ DeviceListWidget::DebugCurrent()
 void
 DeviceListWidget::OnGPSUpdate([[maybe_unused]] const MoreData &basic)
 {
-  if (RefreshList())
-    UpdateButtons();
+  Refresh();
 }
 
 void
@@ -974,13 +1056,10 @@ ShowDeviceList(MultipleDevices *devices)
   TWidgetDialog<DeviceListWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), _("Devices"));
-  dialog.SetWidget(*device_blackboard, devices,
-                   UIGlobals::GetDialogLook());
+  dialog.SetWidget(*device_blackboard, devices);
   dialog.GetWidget().CreateButtons(dialog);
-  dialog.AddButton(_("Help"), [](){
-    HelpDialog(_("Devices"), GetDeviceListHelp());
-  });
   dialog.AddButton(_("Close"), mrOK);
+  dialog.GetWidget().SetActionBar(dialog.GetButtonPanel());
   dialog.EnableCursorSelection();
 
   dialog.ShowModal();

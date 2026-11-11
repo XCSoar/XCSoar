@@ -9,7 +9,7 @@ class Canvas;
 class MaskedIcon;
 
 /**
- * Render #TabDisplay / #TabMenuDisplay buttons.
+ * Render #TabDisplay buttons.
  */
 class TabRenderer {
 public:

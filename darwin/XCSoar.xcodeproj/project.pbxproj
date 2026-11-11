@@ -6422,7 +6422,6 @@
 		5CBFECE42D742FA600F05795 /* DrawWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DrawWidget.hpp; sourceTree = "<group>"; };
 		5CBFECE52D742FA600F05795 /* DrawWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DrawWidget.cpp; sourceTree = "<group>"; };
 		5CBFECE62D742FA600F05795 /* EditRowFormWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EditRowFormWidget.cpp; sourceTree = "<group>"; };
-		5CBFECE72D742FA600F05795 /* FileRowFormWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileRowFormWidget.cpp; sourceTree = "<group>"; };
 		5CBFECE82D742FA600F05795 /* FixedWindowWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FixedWindowWidget.hpp; sourceTree = "<group>"; };
 		5CBFECE92D742FA600F05795 /* KeyboardWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardWidget.hpp; sourceTree = "<group>"; };
 		5CBFECEA2D742FA600F05795 /* KeyboardWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardWidget.cpp; sourceTree = "<group>"; };
@@ -6440,7 +6439,6 @@
 		5CBFECF62D742FA600F05795 /* PagerWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PagerWidget.cpp; sourceTree = "<group>"; };
 		5CBFECF72D742FA600F05795 /* PanelWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PanelWidget.hpp; sourceTree = "<group>"; };
 		5CBFECF82D742FA600F05795 /* PanelWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PanelWidget.cpp; sourceTree = "<group>"; };
-		5CBFECF92D742FA600F05795 /* ProfileRowFormWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProfileRowFormWidget.cpp; sourceTree = "<group>"; };
 		5CBFECFA2D742FA600F05795 /* ProgressWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProgressWidget.hpp; sourceTree = "<group>"; };
 		5CBFECFB2D742FA600F05795 /* ProgressWidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressWidget.cpp; sourceTree = "<group>"; };
 		5CBFECFC2D742FA600F05795 /* QuestionWidget.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = QuestionWidget.hpp; sourceTree = "<group>"; };
@@ -19441,7 +19439,6 @@
 				5CBFECE42D742FA600F05795 /* DrawWidget.hpp */,
 				5CBFECE52D742FA600F05795 /* DrawWidget.cpp */,
 				5CBFECE62D742FA600F05795 /* EditRowFormWidget.cpp */,
-				5CBFECE72D742FA600F05795 /* FileRowFormWidget.cpp */,
 				5CBFECE82D742FA600F05795 /* FixedWindowWidget.hpp */,
 				5CBFECE92D742FA600F05795 /* KeyboardWidget.hpp */,
 				5CBFECEA2D742FA600F05795 /* KeyboardWidget.cpp */,
@@ -19459,7 +19456,6 @@
 				5CBFECF62D742FA600F05795 /* PagerWidget.cpp */,
 				5CBFECF72D742FA600F05795 /* PanelWidget.hpp */,
 				5CBFECF82D742FA600F05795 /* PanelWidget.cpp */,
-				5CBFECF92D742FA600F05795 /* ProfileRowFormWidget.cpp */,
 				5CBFECFA2D742FA600F05795 /* ProgressWidget.hpp */,
 				5CBFECFB2D742FA600F05795 /* ProgressWidget.cpp */,
 				5CBFECFC2D742FA600F05795 /* QuestionWidget.hpp */,

@@ -10,6 +10,7 @@
 #include <memory>
 #include <type_traits>
 class Widget;
+class GroupedListWidget;
 
 class WidgetDialog : public WndForm {
 protected:
@@ -20,6 +21,25 @@ private:
   bool full;
   bool auto_size;
   bool changed = false;
+
+  /** FitToList() is on the stack */
+  bool fitting = false;
+
+  /**
+   * Set by the floating-list code, which the debug tools do not
+   * link.  Null leaves a fitted dialog where it is.
+   */
+  static void (*layout_refit)(WidgetDialog &dialog,
+                              const PixelRect &rc);
+
+  static void RefitLayout(WidgetDialog &dialog,
+                          const PixelRect &rc) noexcept;
+
+  /**
+   * Client width asked for by FitToList().  Zero means this dialog
+   * is not sized to a list.
+   */
+  unsigned fit_client_width = 0;
 
 protected:
   // Expose auto_size to derived classes
@@ -65,6 +85,15 @@ public:
   WidgetDialog(Full, UI::SingleWindow &parent, const DialogLook &look,
                const char *caption, Widget *widget) noexcept;
 
+  struct Floating {};
+
+  /**
+   * A short grouped list, centred, with the buttons under the list.
+   * The width comes from the rows, once they have a value.
+   */
+  WidgetDialog(Floating, UI::SingleWindow &parent, const DialogLook &look,
+               const char *caption, GroupedListWidget *list) noexcept;
+
   virtual ~WidgetDialog();
 
   const ButtonLook &GetButtonLook() const {
@@ -77,6 +106,36 @@ public:
   bool GetChanged() const {
     return changed;
   }
+
+  /**
+   * Place the button strip and return the rectangle left for the
+   * widget.  A short dialog can keep the strip along the bottom
+   * when the client is wider than it is tall.
+   */
+  virtual PixelRect LayoutButtons() noexcept;
+
+  /**
+   * Size this dialog to a short grouped list and keep it centred on
+   * #parent_rc.  The buttons stay under the list.  A later layout
+   * change repeats this fit.
+   *
+   * @param preferred_client_width the width the list asks for,
+   * before the frame and the shadow
+   */
+  void FitToList(const PixelRect &parent_rc,
+                 unsigned preferred_client_width) noexcept;
+
+  /**
+   * Fit again to the width of the rows.  A short explanation is
+   * included.  A longer one scrolls inside the list.
+   */
+  void RefitList() noexcept;
+
+  /**
+   * Cursor keys, the button bar, and a refit while the explanation
+   * opens.  Call it after the buttons have been added.
+   */
+  void PrepareFloatingList() noexcept;
 
   /**
    * Ensure that the widget is prepared.
@@ -117,6 +176,14 @@ public:
 
   void AddButtonKey(unsigned key_code) {
     return buttons.AddKey(key_code);
+  }
+
+  /**
+   * The buttons of this dialog, e.g. for
+   * GroupedListWidget::SetActionBar().
+   */
+  ButtonPanel &GetButtonPanel() noexcept {
+    return buttons;
   }
 
   /**

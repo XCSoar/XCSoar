@@ -5,7 +5,6 @@
 
 #include "Form/DataField/Base.hpp"
 #include "Form/Edit.hpp"
-#include "Repository/FileType.hpp"
 #include "Units/Group.hpp"
 #include "WindowWidget.hpp"
 #include "time/BrokenDate.hpp"
@@ -19,16 +18,13 @@
 #include <concepts>
 #include <cstdint>
 #include <functional>
-#include <initializer_list>
 #include <memory>
 #include <type_traits>
 
 struct DialogLook;
 struct StaticEnumChoice;
 class Angle;
-class FileDataField;
 class RoughTimeDelta;
-class Path;
 class Button;
 
 /**
@@ -433,30 +429,6 @@ public:
 
   void AddSpacer() noexcept;
 
-  WndProperty *AddFile(const char *label, const char *help,
-                       std::string_view profile_key, const char *filters,
-                       FileType file_type,
-                       bool nullable = true) noexcept;
-
-  WndProperty *AddFile(const char *label, const char *help,
-                       std::string_view profile_key, const char *filters,
-                       std::initializer_list<FileType> file_types,
-                       bool nullable = true) noexcept;
-
-  WndProperty *AddFile(const char *label, const char *help,
-                       std::string_view profile_key,
-                       std::initializer_list<FileType> file_types,
-                       bool nullable = true) noexcept;
-
-  WndProperty *AddFile(const char *label, const char *help,
-                       std::string_view profile_key, const char *filters,
-                       bool nullable = true) noexcept {
-    return AddFile(label, help, profile_key, filters, FileType::UNKNOWN,
-                   nullable);
-  }
-  WndProperty *AddMultipleFiles(const char *label, const char *help,
-                                std::string_view profile_key,
-                                const char *filters, FileType file_type);
   /**
    * Add a read-only multi-line control.  You can use
    * SetMultiLineText() to update its text.
@@ -601,8 +573,6 @@ public:
 
   void LoadValue(unsigned i, RoughTime value) noexcept;
 
-  void LoadValue(unsigned i, Path value) noexcept;
-
   /**
    * Load a value into a control created by AddDuration().
    */
@@ -648,15 +618,6 @@ public:
 
   [[gnu::pure]]
   RoughTime GetValueRoughTime(unsigned i) const noexcept;
-
-  [[gnu::pure]]
-  Path GetValueFile(unsigned i) const noexcept;
-
-  [[gnu::pure]]
-  FileDataField &GetFileDataField(unsigned i) noexcept;
-
-  [[gnu::pure]]
-  const FileDataField &GetFileDataField(unsigned i) const noexcept;
 
   [[gnu::pure]]
   const char *GetValueString(unsigned i) const noexcept {
@@ -705,49 +666,6 @@ public:
     return SaveValue(i, value.data(), value.capacity());
   }
 
-  bool SaveValue(unsigned i, std::string_view profile_key,
-                 char *string, size_t max_size) const noexcept;
-
-  bool SaveValue(unsigned i, std::string_view profile_key,
-                 std::string &string) const noexcept;
-
-  template<size_t max>
-  bool SaveValue(unsigned i, std::string_view profile_key,
-                 BasicStringBuffer<char, max> &value) const noexcept {
-    return SaveValue(i, profile_key, value.data(), value.capacity());
-  }
-
-  bool SaveValue(unsigned i, std::string_view profile_key, bool &value,
-                 bool negated = false) const noexcept;
-
-  template<typename T>
-  bool SaveValueInteger(unsigned i, std::string_view profile_key,
-                        T &value) const noexcept {
-    bool result = SaveValueInteger(i, value);
-    if (result)
-      SetProfile(profile_key, value);
-
-    return result;
-  }
-
-  bool SaveValue(unsigned i, std::string_view profile_key, double &value) const noexcept;
-  bool SaveValue(unsigned i, std::string_view profile_key, BrokenDate &value) const noexcept;
-  bool SaveValue(unsigned i, std::string_view profile_key,
-                 std::chrono::seconds &value) const noexcept;
-  bool SaveValueMultiFileReader(unsigned i,
-                                std::string_view registry_key) noexcept;
-
-  template<class Rep, class Period>
-  bool SaveValue(unsigned i, std::string_view profile_key,
-                 std::chrono::duration<Rep,Period> &value_r) const noexcept {
-    auto value = std::chrono::round<std::chrono::seconds>(value_r);
-    if (!SaveValue(i, profile_key, value))
-      return false;
-
-    value_r = std::chrono::duration_cast<std::chrono::duration<Rep,Period>>(value);
-    return true;
-  }
-
   bool SaveValue(unsigned i, UnitGroup unit_group, double &value) const noexcept;
 
   bool SaveValue(unsigned i, UnitGroup unit_group,
@@ -771,21 +689,6 @@ public:
   bool SaveValueEnum(unsigned i, T &value) const noexcept {
     return SaveValueEnum(i, reinterpret_cast<std::underlying_type_t<T> &>(value));
   }
-
-  template<typename T>
-  bool SaveValueEnum(unsigned i, std::string_view profile_key,
-                     T &value) const noexcept {
-    bool result = SaveValueEnum(i, value);
-    if (result)
-      SetProfile(profile_key, static_cast<unsigned>(value));
-
-    return result;
-  }
-
-  bool SaveValueFileReader(unsigned i, std::string_view profile_key) noexcept;
-
-private:
-  static void SetProfile(std::string_view profile_key, unsigned value) noexcept;
 
 protected:
   [[gnu::pure]]

@@ -9656,11 +9656,6 @@ msgstr "Fisso (in alto a sinistra)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Nessuna curva di livello"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagne"
 
@@ -12343,17 +12338,8 @@ msgstr ""
 "tato rigidamente. Nel dubbio, «Non allineato»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar usa il primo dispositivo che fornisce ciascun valore (il dispositivo"
-" A prima di B, e così via). I contrassegni in grassetto sono i valori che X"
-"CSoar prende da questo dispositivo. Quelli non in grassetto significano che"
-" un dispositivo precedente fornisce già gli stessi dati. Baro è la quota co"
-"n il QNH attuale; QNE è l'altitudine di pressione; Alt IGC è l'altitudine c"
-"he scrive il logger. QNE e Pressure sono la stessa pressione ambiente, quin"
-"di solo il precedente dei due è in grassetto. Un GPS scadente e una batteri"
-"a sotto il 10 per cento sono rossi su uno schermo a colori e in grassetto s"
-"u carta elettronica."
 
 msgid "QNE"
 msgstr "QNE"

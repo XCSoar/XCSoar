@@ -9603,11 +9603,6 @@ msgstr "Фіксована (верхній лівий кут)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Без горизонталей"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Гори"
 
@@ -12270,16 +12265,8 @@ msgstr ""
 " «Не вирівняно»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar використовує перший пристрій, який дає кожне значення (пристрій A ра"
-"ніше за B і так далі). Жирні позначки — це значення, які XCSoar бере з цьог"
-"о пристрою. Нежирні означають, що раніший пристрій уже дає ті самі дані. Ba"
-"ro — висота з поточним QNH; QNE — висота за стандартним тиском; Alt IGC — в"
-"исота, яку пише реєстратор. QNE і Pressure — той самий тиск довкілля, тож ж"
-"ирною лишається лише раніша з двох. Поганий GPS і батарея нижче 10 відсоткі"
-"в показуються червоним на кольоровому екрані й жирним на електронному папер"
-"і."
 
 msgid "QNE"
 msgstr "QNE"

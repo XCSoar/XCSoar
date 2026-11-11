@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <cassert>
 #include <memory>
+#include <span>
 
 #include "Menu/ShowButton.hpp"
 
@@ -87,6 +88,12 @@ class MainWindow : public UI::SingleWindow {
    * bottom widget, or in a reserved screen-bottom strip while dialogs are open.
    */
   WindowWidget *bottom_banner_widget = nullptr;
+
+  /**
+   * Is #bottom_widget currently shown?  #Widget::Show() and
+   * #Widget::Hide() may only be called on a transition.
+   */
+  bool bottom_widget_visible = false;
 
   /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
@@ -182,6 +189,12 @@ private:
   PixelRect safe_area_rect{0, 0, 0, 0};
 
   bool FullScreen = false;
+
+  /**
+   * Are the info boxes currently hidden because the menu is open?
+   * Unlike full screen mode the map keeps its size.
+   */
+  bool menu_hides_info_boxes = false;
 
   /**
    * Nesting count for #BeginCoalesceMapLayout() /
@@ -287,6 +300,18 @@ protected:
 
   /** Keep the banner above page content, below menu buttons and dialogs. */
   void RaiseBottomBannerWidget() noexcept;
+
+  /**
+   * The area the "bottom" #Widget occupies below the map.
+   */
+  [[gnu::pure]]
+  PixelRect GetBottomAreaRect() const noexcept;
+
+  /**
+   * Show or hide the "bottom" #Widget, depending on whether anything
+   * currently covers the area below the map.
+   */
+  void UpdateBottomWidget() noexcept;
 
 public:
   Widget *GetBottomWidget() const noexcept {
@@ -436,6 +461,16 @@ public:
    * keep the north arrow's clearance in step with them.
    */
   void UpdateMapOverlayButtonLayout() noexcept;
+
+  /**
+   * Other map-overlay buttons, as client rectangles in @p button's
+   * coordinates, so its drop shadow can stay off their rounded faces.
+   *
+   * @return how many rectangles were written
+   */
+  unsigned
+  CollectOverlayShadowNeighbors(const Window &button,
+                                std::span<PixelRect> neighbors) const noexcept;
 
   /**
    * Called by XCSoarInterface::Startup() after startup has been
@@ -655,6 +690,12 @@ public:
 
   void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
                 bool full=true) noexcept;
+
+  /**
+   * Hide the info boxes while the menu is open, so the menu captions
+   * do not have to compete with them.
+   */
+  void UpdateMenuInfoBoxes() noexcept;
 
   [[gnu::pure]]
   bool IsMenuButtonEnabled(unsigned idx) noexcept;

@@ -9655,11 +9655,6 @@ msgstr "Fijo (arriba izquierda)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Sin curvas de nivel"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montañas"
 
@@ -12343,17 +12338,8 @@ msgstr ""
 "está montado rígidamente. En caso de duda, use «No alineado»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar usa el primer dispositivo que aporta cada valor (el dispositivo A an"
-"tes que el B, y así sucesivamente). Las marcas en negrita son los valores q"
-"ue XCSoar toma de este dispositivo. Las que no lo están significan que un d"
-"ispositivo anterior ya aporta los mismos datos. Baro es la altura con el QN"
-"H actual; QNE es la altitud de presión; Alt IGC es la altitud que escribe e"
-"l registrador. QNE y Pressure son la misma presión ambiente, así que solo e"
-"l más temprano de los dos va en negrita. Un GPS malo y una batería por deba"
-"jo del 10 por ciento se muestran en rojo en una pantalla en color, y en neg"
-"rita en papel electrónico."
 
 msgid "QNE"
 msgstr "QNE"

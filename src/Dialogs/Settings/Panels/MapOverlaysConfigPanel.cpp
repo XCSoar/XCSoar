@@ -2,20 +2,12 @@
 // Copyright The XCSoar Project
 
 #include "MapOverlaysConfigPanel.hpp"
-#include "Profile/Keys.hpp"
-#include "Interface.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Listener.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
-
-enum ControlIndex {
-  EnableThermalProfile,
-  FinalGlideBarDisplayModeControl,
-  EnableFinalGlideBarMC0,
-  EnableVarioBar,
-};
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
   { FinalGlideBarDisplayMode::OFF, N_("Off"),
@@ -27,68 +19,61 @@ static constexpr StaticEnumChoice final_glide_bar_display_mode_list[] = {
   nullptr
 };
 
-class MapOverlaysConfigPanel final
-  : public RowFormWidget, DataFieldListener {
+/** The bars drawn over the map. */
+class MapOverlaysConfigPanel final : public ConfigListPanel {
+  bool thermal_profile, mc0, vario_bar;
+  FinalGlideBarDisplayMode final_glide;
+
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
 public:
-  MapOverlaysConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
-
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
-
-private:
-  /* methods from DataFieldListener */
-  void OnModified(DataField &df) noexcept override;
 };
 
 void
-MapOverlaysConfigPanel::OnModified(DataField &df) noexcept
+MapOverlaysConfigPanel::LoadSettings() noexcept
 {
-  if (IsDataField(FinalGlideBarDisplayModeControl, df)) {
-    const DataFieldEnum &dfe = (const DataFieldEnum &)df;
-    FinalGlideBarDisplayMode fgbdm = (FinalGlideBarDisplayMode)dfe.GetValue();
-    SetRowAvailable(EnableFinalGlideBarMC0,
-                    fgbdm != FinalGlideBarDisplayMode::OFF);
-  }
+  const MapSettings &map = CommonInterface::GetMapSettings();
+
+  thermal_profile = map.show_thermal_profile;
+  final_glide = map.final_glide_bar_display_mode;
+  mc0 = map.final_glide_bar_mc0_enabled;
+  vario_bar = map.vario_bar_enabled;
 }
 
 void
-MapOverlaysConfigPanel::Prepare(ContainerWindow &parent,
-                                const PixelRect &rc) noexcept
+MapOverlaysConfigPanel::Fill() noexcept
 {
-  const MapSettings &map_settings = CommonInterface::GetMapSettings();
+  AddGroup();
 
-  RowFormWidget::Prepare(parent, rc);
+  AddToggleItem(_("Thermal Band"),
+                _("This enables the display of the thermal profile "
+                  "(climb band) display on the map."),
+                thermal_profile);
 
-  AddBoolean(_("Thermal Band"),
-             _("This enables the display of the thermal profile "
-               "(climb band) display on the map."),
-             map_settings.show_thermal_profile);
+  if (!IsExpert())
+    return;
 
-  AddEnum(_("Final glide bar"),
-          _("If set to \"On\" the final glide will always be shown, "
-            "if set to \"Auto\" it will be shown when approaching "
-            "the final glide possibility."),
-          final_glide_bar_display_mode_list,
-          (unsigned)map_settings.final_glide_bar_display_mode,
-          this);
-  SetExpertRow(FinalGlideBarDisplayModeControl);
+  AddEnumItem(_("Final glide bar"),
+              _("If set to \"On\" the final glide will always be shown, "
+                "if set to \"Auto\" it will be shown when approaching "
+                "the final glide possibility."),
+              final_glide_bar_display_mode_list, final_glide);
 
-  AddBoolean(_("Final glide bar MC0"),
-             _("If set to \"On\" the final glide bar will show a "
-               "second arrow indicating the required height to reach "
-               "the final waypoint at MC zero."),
-             map_settings.final_glide_bar_mc0_enabled);
-  SetExpertRow(EnableFinalGlideBarMC0);
+  if (final_glide != FinalGlideBarDisplayMode::OFF)
+    AddToggleItem(_("Final glide bar MC0"),
+                  _("If set to \"On\" the final glide bar will show a "
+                    "second arrow indicating the required height to reach "
+                    "the final waypoint at MC zero."),
+                  mc0);
 
-  SetRowAvailable(EnableFinalGlideBarMC0,
-                  map_settings.final_glide_bar_display_mode !=
-                    FinalGlideBarDisplayMode::OFF);
-
-  AddBoolean(_("Vario bar"),
-             _("If set to \"On\" the vario bar will be shown."),
-             map_settings.vario_bar_enabled);
-  SetExpertRow(EnableVarioBar);
+  AddToggleItem(_("Vario bar"),
+                _("If set to \"On\" the vario bar will be shown."),
+                vario_bar);
 }
 
 bool
@@ -96,24 +81,18 @@ MapOverlaysConfigPanel::Save(bool &_changed) noexcept
 {
   bool changed = false;
 
-  MapSettings &map_settings = CommonInterface::SetMapSettings();
+  MapSettings &map = CommonInterface::SetMapSettings();
 
-  changed |= SaveValue(EnableThermalProfile, ProfileKeys::EnableThermalProfile,
-                       map_settings.show_thermal_profile);
-
-  changed |= SaveValueEnum(FinalGlideBarDisplayModeControl,
-                           ProfileKeys::FinalGlideBarDisplayMode,
-                           map_settings.final_glide_bar_display_mode);
-
-  changed |= SaveValue(EnableFinalGlideBarMC0,
-                       ProfileKeys::EnableFinalGlideBarMC0,
-                       map_settings.final_glide_bar_mc0_enabled);
-
-  changed |= SaveValue(EnableVarioBar, ProfileKeys::EnableVarioBar,
-                       map_settings.vario_bar_enabled);
+  changed |= Profile::Update(ProfileKeys::EnableThermalProfile,
+                             map.show_thermal_profile, thermal_profile);
+  changed |= Profile::Update(ProfileKeys::FinalGlideBarDisplayMode,
+                             map.final_glide_bar_display_mode, final_glide);
+  changed |= Profile::Update(ProfileKeys::EnableFinalGlideBarMC0,
+                             map.final_glide_bar_mc0_enabled, mc0);
+  changed |= Profile::Update(ProfileKeys::EnableVarioBar,
+                             map.vario_bar_enabled, vario_bar);
 
   _changed |= changed;
-
   return true;
 }
 

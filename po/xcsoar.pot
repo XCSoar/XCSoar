@@ -3315,7 +3315,7 @@ msgid "Whether you use a K6Bt to connect the device."
 msgstr ""
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
 
 #, no-c-format
@@ -7296,11 +7296,6 @@ msgid "Terrain brightness"
 msgstr ""
 
 msgid "Defines the brightness (whiteness) of the terrain rendering. This controls the average illumination of the terrain."
-msgstr ""
-
-#, no-c-format
-msgctxt "Setting"
-msgid "No contour lines"
 msgstr ""
 
 #, no-c-format

@@ -49,7 +49,9 @@ private:
 
   /**
    * An optional #Widget that is shown in the remaining area in the
-   * buttons row/column.  This object will be deleted automatically.
+   * buttons row/column.  In portrait, it gets a row of its own only
+   * while its minimum height is not zero; call Move() after that has
+   * changed.  This object will be deleted automatically.
    */
   const std::unique_ptr<Widget> extra;
 

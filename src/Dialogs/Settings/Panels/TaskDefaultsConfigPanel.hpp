@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <memory>
+
 class Widget;
 
 std::unique_ptr<Widget>

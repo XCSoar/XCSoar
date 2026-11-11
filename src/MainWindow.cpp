@@ -148,9 +148,12 @@ MainWindow::GetShowQuickMenuButtonRect(const PixelRect rc) noexcept
   const UISettings &settings = CommonInterface::GetUISettings();
   const unsigned padding = Layout::GetTextPadding();
 
+  /* the buttons of the column touch: #ButtonFrameRenderer insets each
+     face by its margin, which makes the gap between two of them the
+     same as the one towards the screen edge */
   int top = rc.top + int(padding);
   if (settings.show_menu_button)
-    top = GetShowMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowMenuButtonRect(rc).bottom;
 
   return GetMapOverlayButtonRect(rc, top);
 }
@@ -165,14 +168,14 @@ MainWindow::GetShowZoomButtonRect(const PixelRect rc,
 
   int top = rc.top + int(padding);
   if (settings.show_quickmenu_button)
-    top = GetShowQuickMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowQuickMenuButtonRect(rc).bottom;
   else if (settings.show_menu_button)
-    top = GetShowMenuButtonRect(rc).bottom + int(padding);
+    top = GetShowMenuButtonRect(rc).bottom;
 
   if (sign == ShowZoomButton::Sign::ZOOM_OUT) {
     const PixelRect zoom_in =
       GetShowZoomButtonRect(rc, ShowZoomButton::Sign::ZOOM_IN);
-    top = zoom_in.bottom + int(padding);
+    top = zoom_in.bottom;
   }
 
   return GetMapOverlayButtonRect(rc, top);
@@ -387,6 +390,33 @@ MainWindow::GetHudRect() const noexcept
 }
 
 PixelRect
+MainWindow::GetBottomAreaRect() const noexcept
+{
+  return GetBottomWidgetRect(GetAreaStackRect(), bottom_widget);
+}
+
+void
+MainWindow::UpdateBottomWidget() noexcept
+{
+  if (bottom_widget == nullptr)
+    return;
+
+  /* the bottom widget is only visible below the map, not below a
+     custom main widget (see HaveBottomWidget()), and the menu covers
+     it just like it covers the info boxes */
+  const bool visible = HaveBottomWidget() && !menu_hides_info_boxes;
+  if (visible == bottom_widget_visible)
+    return;
+
+  bottom_widget_visible = visible;
+
+  if (visible)
+    bottom_widget->Show(GetBottomAreaRect());
+  else
+    bottom_widget->Hide();
+}
+
+PixelRect
 MainWindow::GetMapAreaRect() const noexcept
 {
   if (map != nullptr)
@@ -579,11 +609,43 @@ MainWindow::OnDialogChanged() noexcept
   UpdateMapOverlayButtonLayout();
 }
 
+unsigned
+MainWindow::CollectOverlayShadowNeighbors(const Window &button,
+                                          std::span<PixelRect> neighbors)
+  const noexcept
+{
+  const Window *const others[] = {
+    show_menu_button,
+    show_quickmenu_button,
+    show_zoom_out_button,
+    show_zoom_in_button,
+  };
+
+  const PixelPoint origin = button.GetTopLeft();
+  unsigned n = 0;
+
+  for (const Window *other : others) {
+    if (other == nullptr || other == &button || !other->IsVisible())
+      continue;
+    if (n >= neighbors.size())
+      break;
+
+    PixelRect neighbor = other->GetClientRect();
+    neighbor.Offset(other->GetTopLeft().x - origin.x,
+                    other->GetTopLeft().y - origin.y);
+    neighbors[n++] = neighbor;
+  }
+
+  return n;
+}
+
 void
 MainWindow::UpdateMapOverlayButtonLayout() noexcept
 {
   const bool overlay_buttons_active =
     widget == nullptr && map != nullptr &&
+    /* the menu bar covers the map; its own buttons take over */
+    !menu_hides_info_boxes &&
     PageActions::AllowMapOverlayButtons();
 
   /* the HUD rectangle: clear of the InfoBoxes, the top and bottom
@@ -1025,7 +1087,7 @@ MainWindow::ReinitialiseLayout() noexcept
   ReinitialiseLayout_vario(ib_layout);
 
   if (map != nullptr) {
-    if (FullScreen)
+    if (FullScreen || menu_hides_info_boxes)
       InfoBoxManager::Hide();
     else
       InfoBoxManager::Show();
@@ -1045,6 +1107,7 @@ MainWindow::ReinitialiseLayout() noexcept
     map->BringToBottom();
 
   RaiseBottomBannerWidget();
+  ReinitialiseDialogs();
 }
 
 void
@@ -1698,6 +1761,23 @@ MainWindow::OnClose() noexcept
 void
 MainWindow::OnPaint(Canvas &canvas) noexcept
 {
+  if (menu_hides_info_boxes && look != nullptr &&
+      (map == nullptr || !map->IsVisible() ||
+       !map->GetPosition().Contains(GetClientRect()))) {
+    /* Fill the space of the hidden info boxes only where nothing
+       else paints it, in the widget's own background color so the
+       strip beside it does not stand out.  The client rect stops at
+       the display margins, which nothing repaints. */
+    const Color *widget_background = widget != nullptr
+      ? widget->GetBackgroundColor()
+      : nullptr;
+
+    canvas.DrawFilledRectangle(GetClientRect(),
+                               widget_background != nullptr
+                               ? *widget_background
+                               : look->dialog.background_color);
+  }
+
   if (HaveTopWidget() && map != nullptr) {
     /* draw a separator between top widget and map */
     PixelRect rc = map->GetPosition();
@@ -1770,7 +1850,7 @@ MainWindow::SetFullScreen(bool _full_screen) noexcept
 
   FullScreen = _full_screen;
 
-  if (FullScreen)
+  if (FullScreen || menu_hides_info_boxes)
     InfoBoxManager::Hide();
   else
     InfoBoxManager::Show();
@@ -1883,6 +1963,8 @@ MainWindow::ActivateMap() noexcept
   if (widget != nullptr) {
     KillWidget();
 
+    UpdateBottomWidget();
+
     LayoutMapArea();
     map->Show();
     RaiseBottomBannerWidget();
@@ -1978,7 +2060,8 @@ MainWindow::KillBottomWidget() noexcept
   Widget *const old = bottom_widget;
   bottom_widget = nullptr;
 
-  old->Hide();
+  if (std::exchange(bottom_widget_visible, false))
+    old->Hide();
 
   old->Unprepare();
   delete old;
@@ -2046,11 +2129,7 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
     bottom_widget->Prepare(*this, main_rect);
   }
 
-  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
-                                                    bottom_widget);
-
-  if (bottom_widget != nullptr)
-    bottom_widget->Show(bottom_rect);
+  UpdateBottomWidget();
 
   LayoutMapArea();
   map->FullRedraw();
@@ -2122,6 +2201,9 @@ MainWindow::SetWidget(Widget *_widget) noexcept
 
   widget = _widget;
 
+  /* no bottom widget below the menu bar */
+  UpdateBottomWidget();
+
   const PixelRect area = GetAreaStackRect();
   widget->Initialise(*this, area);
   widget->Prepare(*this, area);
@@ -2152,8 +2234,43 @@ MainWindow::ShowMenu(const Menu &menu, const Menu *overlay, bool full) noexcept
      area may have changed since the MenuBar was created */
   menu_bar->OnResize(GetInfoBoxAreaRect());
   MenuGlue::Set(*menu_bar, menu, overlay, full);
+  UpdateMenuInfoBoxes();
+
   /* Menus overlay the page; opening them must not move its bottom area. */
   RaiseBottomBannerWidget();
+}
+
+void
+MainWindow::UpdateMenuInfoBoxes() noexcept
+{
+  const bool menu_visible =
+    menu_bar != nullptr && menu_bar->IsAnyButtonVisible();
+  if (menu_visible == menu_hides_info_boxes)
+    return;
+
+  menu_hides_info_boxes = menu_visible;
+
+  if (menu_visible)
+    /* only hide them; deliberately no re-layout, so the map and
+       everything drawn on it stays where it is */
+    InfoBoxManager::Hide();
+  else if (!FullScreen)
+    /* in full screen mode they stay hidden anyway */
+    InfoBoxManager::Show();
+
+  /* the area below the map goes away with them; the map already
+     covers it, so again no re-layout is needed */
+  UpdateBottomWidget();
+
+  /* the map overlay buttons sit where the menu bar now is */
+  UpdateMapOverlayButtonLayout();
+
+  if (map != nullptr)
+    /* and so do some of the HUD elements the map draws itself */
+    map->SetMenuVisible(menu_visible);
+
+  /* repaint the area the boxes occupied */
+  Invalidate();
 }
 
 bool

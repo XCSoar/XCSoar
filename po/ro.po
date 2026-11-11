@@ -9564,11 +9564,6 @@ msgstr "Fix (stânga sus)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Niciuna curva di nivel"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Montagne"
 
@@ -12243,17 +12238,8 @@ msgstr ""
 " La îndoială, «Nealiniat»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar folosește primul dispozitiv care furnizează fiecare valoare (dispozi"
-"tivul A înainte de B și așa mai departe). Indicatoarele îngroșate sunt valo"
-"rile pe care XCSoar le ia de la acest dispozitiv. Cele neîngroșate înseamnă"
-" că un dispozitiv anterior furnizează deja aceleași date. Baro este înălțim"
-"ea cu QNH-ul curent; QNE este altitudinea de presiune; Alt IGC este altitud"
-"inea pe care o scrie înregistratorul. QNE și Pressure sunt aceeași presiune"
-" ambiantă, deci doar cel mai devreme dintre ele este îngroșat. Un GPS slab "
-"și o baterie sub 10 la sută apar roșii pe un ecran color și îngroșate pe hâ"
-"rtie electronică."
 
 msgid "QNE"
 msgstr "QNE"

@@ -2,17 +2,13 @@
 // Copyright The XCSoar Project
 
 #include "GaugesConfigPanel.hpp"
-#include "Profile/Keys.hpp"
-#include "Interface.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "ConfigListPanel.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
 #include "MainWindow.hpp"
-
-enum ControlIndex {
-  TAPosition,
-};
+#include "Profile/Keys.hpp"
+#include "Profile/Profile.hpp"
 
 static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
   { UISettings::ThermalAssistantPosition::OFF,
@@ -51,44 +47,50 @@ static constexpr StaticEnumChoice thermal_assistant_position_list[] = {
   nullptr
 };
 
-class GaugesConfigPanel final : public RowFormWidget {
-public:
-  GaugesConfigPanel()
-    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+/** Where the thermal assistant sits on the map. */
+class GaugesConfigPanel final : public ConfigListPanel {
+  UISettings::ThermalAssistantPosition position;
 
-  void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
+protected:
+  /* virtual methods from class ConfigListPanel */
+  void LoadSettings() noexcept override;
+  void Fill() noexcept override;
+
+public:
+  /* virtual methods from class Widget */
   bool Save(bool &changed) noexcept override;
 };
 
 void
-GaugesConfigPanel::Prepare(ContainerWindow &parent,
-                           const PixelRect &rc) noexcept
+GaugesConfigPanel::LoadSettings() noexcept
 {
-  const UISettings &ui_settings = CommonInterface::GetUISettings();
+  position = CommonInterface::GetUISettings().thermal_assistant_position;
+}
 
-  RowFormWidget::Prepare(parent, rc);
+void
+GaugesConfigPanel::Fill() noexcept
+{
+  AddGroup();
 
-  AddEnum(_("Thermal Assistant"),
-          _("Enable and select the position of the thermal assistant when overlayed on the main screen."),
-          thermal_assistant_position_list,
-          (unsigned)ui_settings.thermal_assistant_position);
+  AddEnumItem(_("Thermal Assistant"),
+              _("Enable and select the position of the thermal assistant "
+                "when overlayed on the main screen."),
+              thermal_assistant_position_list, position);
 }
 
 bool
 GaugesConfigPanel::Save(bool &_changed) noexcept
 {
-  bool changed = false;
+  auto &ui_settings = CommonInterface::SetUISettings();
 
-  UISettings &ui_settings = CommonInterface::SetUISettings();
-
-  if (SaveValueEnum(TAPosition, ProfileKeys::TAPosition,
-                    ui_settings.thermal_assistant_position)) {
+  /* the gauge moves: the main window lays itself out again */
+  const bool changed = Profile::Update(ProfileKeys::TAPosition,
+                                       ui_settings.thermal_assistant_position,
+                                       position);
+  if (changed)
     CommonInterface::main_window->ReinitialiseLayout();
-    changed = true;
-  }
 
   _changed |= changed;
-
   return true;
 }
 

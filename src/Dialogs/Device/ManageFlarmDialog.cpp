@@ -11,7 +11,7 @@
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/Error.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Widget/RowFormWidget.hpp"
+#include "Widget/GroupedListWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -20,30 +20,32 @@
 #include "FLARM/Version.hpp"
 #include "FLARM/Hardware.hpp"
 #include "FLARM/State.hpp"
+#include "util/StaticString.hxx"
 
+#include <cstring>
 #include <string>
 
-class ManageFLARMWidget final
-  : public RowFormWidget {
-  enum Controls {
-    Setup,
-    Reboot,
-  };
-
+class ManageFLARMWidget final : public GroupedListWidget {
   FlarmDevice &device;
   const FlarmVersion version;
   FlarmHardware hardware;
   const FlarmState state;
 
+  void AddFact(const char *caption, const char *value) noexcept {
+    if (value == nullptr || *value == '\0')
+      return;
+
+    AddItem(caption, {.value = value});
+  }
+
 public:
   ManageFLARMWidget(const DialogLook &look, FlarmDevice &_device,
                     const FlarmVersion &version,
                     FlarmHardware &hardware,
-                    const FlarmState &_state)
-    :RowFormWidget(look), device(_device),
+                    const FlarmState &_state) noexcept
+    :GroupedListWidget(look), device(_device),
      version(version), hardware(hardware), state(_state) {}
 
-  /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
 };
 
@@ -58,8 +60,12 @@ void
 ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                            [[maybe_unused]] const PixelRect &rc) noexcept
 {
+  /* the caller passes an uninitialised block; a query which gets no
+     answer, as in the simulator, must not be shown as a device */
+  hardware = {};
+
   PopupOperationEnvironment env;
-  if(device.RequestAllSettings(flarm_config_names, env)) {
+  if (device.RequestAllSettings(flarm_config_names, env)) {
     if (const auto x = device.GetSetting("DEVTYPE"))
       hardware.device_type = *x;
 
@@ -67,57 +73,59 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
       hardware.capabilities = *x;
 
     if (const auto x = device.GetSetting("RADIOID")) {
-      if (const char *id = strchr(x->c_str(), ',')) {
+      if (const char *id = strchr(x->c_str(), ','))
         hardware.radio_id = FlarmId::Parse(id + 1, nullptr);
-      }
     }
 
     hardware.available.Update(TimeStamp{FloatDuration{1}});
   }
 
-  if (hardware.available) {
-    StaticString<64> buffer;
+  AddGroup();
 
+  if (hardware.available) {
     if (!hardware.device_type.empty()) {
+      StaticString<64> buffer;
       buffer.clear();
       buffer.UnsafeAppendASCII(hardware.device_type.c_str());
-      AddReadOnly(_("Hardware type"), NULL, buffer.c_str());
+      AddFact(_("Hardware type"), buffer.c_str());
     }
 
     if (hardware.radio_id.IsDefined()) {
-      char tmp_id[10];    
+      char tmp_id[10];
+      StaticString<64> buffer;
       buffer.clear();
       buffer.UnsafeAppendASCII(hardware.radio_id.Format(tmp_id));
-      AddReadOnly(_("Flarm ID"), NULL, buffer.c_str());
+      AddFact(_("Flarm ID"), buffer.c_str());
     }
   }
 
   if (version.available) {
-    StaticString<64> buffer;
-
     if (!version.hardware_version.empty()) {
+      StaticString<64> buffer;
       buffer.clear();
       buffer.UnsafeAppendASCII(version.hardware_version.c_str());
-      AddReadOnly(_("Hardware version"), NULL, buffer.c_str());
+      AddFact(_("Hardware version"), buffer.c_str());
     }
 
     if (!version.software_version.empty()) {
+      StaticString<64> buffer;
       buffer.clear();
       buffer.UnsafeAppendASCII(version.software_version.c_str());
-      AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
+      AddFact(_("Firmware version"), buffer.c_str());
     }
 
     if (!version.obstacle_version.empty()) {
+      StaticString<64> buffer;
       buffer.clear();
       buffer.UnsafeAppendASCII(version.obstacle_version.c_str());
-      AddReadOnly(_("Obstacle database"), NULL, buffer.c_str());
+      AddFact(_("Obstacle database"), buffer.c_str());
     }
   }
 
   if (state.available) {
-    AddReadOnly(_("Flight state"), nullptr,
-                state.flight == FlarmState::Flight::IN_FLIGHT
-                ? _("In flight") : _("On ground"));
+    AddFact(_("Flight state"),
+            state.flight == FlarmState::Flight::IN_FLIGHT
+            ? _("In flight") : _("On ground"));
 
     const char *recorder_text;
     switch (state.recorder) {
@@ -131,35 +139,25 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
       recorder_text = _("Off");
       break;
     }
-    AddReadOnly(_("IGC recorder"), nullptr, recorder_text);
+    AddFact(_("IGC recorder"), recorder_text);
   }
 
-  AddButton(C_("Button", "Setup"), [this](){
-    FLARMConfigWidget widget(GetLook(), device, hardware);
-    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
-                        "FLARM", widget);
-  });
+  AddItem(C_("Button", "Setup"), [this](){
+    const DialogLook &look = UIGlobals::GetDialogLook();
+    FLARMConfigWidget widget(look, device, hardware);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), look, "FLARM", widget);
+  }, {.chevron = true});
 
   /* a PowerFLARM keeps statistics of its own; for any other FLARM,
      XCSoar estimates the range from the traffic it reports */
-  AddButton(_("Range statistics"), [this](){
+  AddItem(_("Range statistics"), [this](){
     if (hardware.isPowerFlarm())
       FlarmRangeStatisticsDialog(device);
     else if (const auto &glide_computer = backend_components->glide_computer)
       FlarmRangeEstimateDialog(device, glide_computer->GetFlarmRange());
-  });
+  }, {.chevron = true});
 
-  AddButton(_("Reboot"), [this](){
-    try {
-      MessageOperationEnvironment env;
-      device.Restart(env);
-    } catch (OperationCancelled) {
-    } catch (...) {
-      ShowError(std::current_exception(), _("Error"));
-    }
-  });
-
-  AddButton(_("Simulation"), [this](){
+  AddItem(_("Simulation"), [this](){
     ComboList list;
     const auto sim1_label = std::to_string(1) + " - " + _("FLARM collision");
     list.Append(1, "1",
@@ -205,19 +203,33 @@ ManageFLARMWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     } catch (...) {
       ShowError(std::current_exception(), _("Error"));
     }
+  }, {.chevron = true});
+
+  AddButton(_("Reboot"), [this](){
+    try {
+      MessageOperationEnvironment env;
+      device.Restart(env);
+    } catch (OperationCancelled) {
+    } catch (...) {
+      ShowError(std::current_exception(), _("Error"));
+    }
   });
+
+  GroupedListWidget::Prepare(parent, rc);
 }
 
 void
 ManageFlarmDialog(Device &device, const FlarmVersion &version,
                   FlarmHardware &hardware, const FlarmState &state)
 {
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      UIGlobals::GetDialogLook(),
-                      "FLARM",
-                      new ManageFLARMWidget(UIGlobals::GetDialogLook(),
-                                            (FlarmDevice &)device,
-                                            version, hardware, state));
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  auto *widget = new ManageFLARMWidget(look, (FlarmDevice &)device,
+                                       version, hardware, state);
+
+  WidgetDialog dialog(WidgetDialog::Floating{}, UIGlobals::GetMainWindow(),
+                      look, "FLARM", widget);
   dialog.AddButton(_("Close"), mrCancel);
+  dialog.PrepareFloatingList();
+  dialog.RefitList();
   dialog.ShowModal();
 }

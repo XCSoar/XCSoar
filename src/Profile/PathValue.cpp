@@ -81,6 +81,33 @@ ProfileMap::GetMultiplePaths(std::string_view key, const char *patterns) const
 }
 
 bool
+ProfileMap::SetMultiplePaths(std::string_view key,
+                             std::span<const Path> values) noexcept
+{
+  std::string joined;
+
+  for (Path value : values) {
+    const auto contracted = ContractLocalPath(value);
+    if (contracted != nullptr)
+      value = contracted;
+
+    if (value.empty())
+      continue;
+
+    if (!joined.empty())
+      joined.push_back('|');
+
+    joined += value.c_str();
+  }
+
+  if (StringIsEqual(Get(key, ""), joined.c_str()))
+    return false;
+
+  Set(key, joined.c_str());
+  return true;
+}
+
+bool
 ProfileMap::GetPathIsEqual(std::string_view key, Path value) const noexcept
 {
   const auto saved_value = GetPath(key);
@@ -113,18 +140,22 @@ ProfileMap::GetPathBase(std::string_view key) const noexcept
   return path;
 }
 
-void
+bool
 ProfileMap::SetPath(std::string_view key, Path value) noexcept
 {
-  if (value == nullptr || StringIsEmpty(value.c_str()))
-    Set(key, "");
-  else {
-    const auto contracted = ContractLocalPath(value);
-    if (contracted != nullptr)
-      value = contracted;
+  AllocatedPath contracted = nullptr;
+  const char *new_value = "";
 
-    Set(key, value.c_str());
+  if (value != nullptr && !StringIsEmpty(value.c_str())) {
+    contracted = ContractLocalPath(value);
+    new_value = contracted != nullptr ? contracted.c_str() : value.c_str();
   }
+
+  if (StringIsEqual(Get(key, ""), new_value))
+    return false;
+
+  Set(key, new_value);
+  return true;
 }
 
 AllocatedPath
@@ -140,13 +171,20 @@ Profile::GetMultiplePaths(std::string_view key, const char *patterns)
 }
 
 bool
+Profile::SetMultiplePaths(std::string_view key,
+                          std::span<const Path> values) noexcept
+{
+  return map.SetMultiplePaths(key, values);
+}
+
+bool
 Profile::GetPathIsEqual(std::string_view key, Path value) noexcept
 {
   return map.GetPathIsEqual(key, value);
 }
 
-void
+bool
 Profile::SetPath(std::string_view key, Path value) noexcept
 {
-  map.SetPath(key, value);
+  return map.SetPath(key, value);
 }

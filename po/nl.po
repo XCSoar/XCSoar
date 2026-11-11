@@ -9610,11 +9610,6 @@ msgstr "Vast (linksboven)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Geen hoogtelijnen"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Bergen"
 
@@ -12291,16 +12286,8 @@ msgstr ""
 "iet uitgelijnd»."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar gebruikt het eerste apparaat dat elke waarde levert (apparaat A vóór"
-" B, enzovoort). Vette kenmerken zijn de waarden die XCSoar van dit apparaat"
-" gebruikt. Kenmerken die niet vet zijn, betekenen dat een eerder apparaat d"
-"ezelfde gegevens al levert. Baro is de hoogte met de huidige QNH; QNE is de"
-" drukhoogte; Alt IGC is de hoogte die de logger schrijft. QNE en Pressure z"
-"ijn dezelfde omgevingsdruk, dus alleen de eerdere van de twee is vet. Slech"
-"te GPS en een accu onder 10 procent worden rood getoond op een kleurenscher"
-"m en vet op e-papier."
 
 msgid "QNE"
 msgstr "QNE"

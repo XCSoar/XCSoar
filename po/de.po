@@ -9630,11 +9630,6 @@ msgstr "Fest (oben links)"
 
 #, no-c-format
 msgctxt "Setting"
-msgid "No contour lines"
-msgstr "Keine Höhenlinien"
-
-#, no-c-format
-msgctxt "Setting"
 msgid "Mountains"
 msgstr "Gebirge"
 
@@ -12348,16 +12343,8 @@ msgstr ""
 "montiert ist. Im Zweifel «Nicht ausgerichtet» verwenden."
 
 #, no-c-format
-msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). Bold flags are the values XCSoar is using from this device. Flags that are not bold mean an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is bold. Bad GPS and a battery below 10% are shown in red on a colour display, and in bold on e-paper."
+msgid "XCSoar uses the first device that supplies each value (device A before B, and so on). A filled badge is a value XCSoar is using from this device. An outlined badge is present, but an earlier device already supplies the same data. Baro is height with the current QNH; QNE is pressure altitude; Alt IGC is the altitude the logger writes. QNE and Pressure are the same ambient pressure, so only the earlier of those two is filled. Bad GPS, a battery below 10%, and a port error are red on a colour display. No data and Debug are yellow. On a black-and-white display the red and yellow badges are filled, like a value which is in use."
 msgstr ""
-"XCSoar verwendet das erste Gerät, das jeden Wert liefert (Gerät A vor B und"
-" so weiter). Fette Kennzeichen sind die Werte, die XCSoar von diesem Gerät "
-"verwendet. Nicht fette Kennzeichen bedeuten, dass ein früheres Gerät diesel"
-"ben Daten bereits liefert. Baro ist die Höhe mit dem aktuellen QNH; QNE ist"
-" die Druckhöhe; Alt IGC ist die Höhe, die der Logger schreibt. QNE und Pres"
-"sure sind derselbe Umgebungsdruck, daher ist nur das frühere der beiden fet"
-"t. Schlechtes GPS und ein Akku unter 10 Prozent werden auf einem Farbdispla"
-"y rot und auf E-Paper fett angezeigt."
 
 msgid "QNE"
 msgstr "QNE"
