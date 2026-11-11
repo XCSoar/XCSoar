@@ -16,6 +16,9 @@ Version 7.47 - not yet released
     airspeed
   - glide the map when panning with the cursor keys, the same way
     keyboard zoom moves
+  - keep the panel's own dots per inch when both axes agree, so
+    buttons stay the right size on a phone whose Android density
+    is one step higher
 * map
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it

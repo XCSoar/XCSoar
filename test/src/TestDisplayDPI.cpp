@@ -14,7 +14,7 @@ CheckUnchanged(PixelSize size, UnsignedPoint2D dpi) noexcept
 int
 main()
 {
-  plan_tests(19);
+  plan_tests(23);
 
   /* HiBreak: 824x1648 portrait pixels with landscape inches
      (xdpi=188, ydpi=667).  Pair the short physical edge with the
@@ -72,6 +72,36 @@ main()
                                                  {200, 200}, 400);
     ok1(out.x == 400);
     ok1(out.y == 400);
+  }
+
+  /* 373 dpi panel, density bucket 480.  Axes agree and the short
+     edge is 2.9 inches, so the measurement wins. */
+  {
+    const auto out = Display::SanitizeDisplayDpi({1080, 2340},
+                                                 {373, 373}, 480);
+    ok1(out.x == 373 && out.y == 373);
+  }
+
+  /* Same panel rotated to landscape.  Short edge is the height. */
+  {
+    const auto out = Display::SanitizeDisplayDpi({2340, 1080},
+                                                 {373, 373}, 480);
+    ok1(out.x == 373 && out.y == 373);
+  }
+
+  /* Agreed and one step away, but the short edge is under 1.5
+     inches, so the density bucket wins. */
+  {
+    const auto out = Display::SanitizeDisplayDpi({400, 800},
+                                                 {373, 373}, 480);
+    ok1(out.x == 480 && out.y == 480);
+  }
+
+  /* Short edge over 12 inches: same fallback. */
+  {
+    const auto out = Display::SanitizeDisplayDpi({5000, 8000},
+                                                 {373, 373}, 480);
+    ok1(out.x == 480 && out.y == 480);
   }
 
   /* No density: geometric align only. */

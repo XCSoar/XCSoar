@@ -56,13 +56,57 @@ DpiFarFrom(unsigned dpi, unsigned density) noexcept
   return dpi > density + slack || density > dpi + slack;
 }
 
+/** Measured panels agree.  188 vs 667 does not. */
+static constexpr bool
+DpiAxesAgree(UnsignedPoint2D dpi) noexcept
+{
+  if (dpi.x == 0 || dpi.y == 0)
+    return false;
+
+  const unsigned lo = dpi.x < dpi.y ? dpi.x : dpi.y;
+  const unsigned hi = dpi.x < dpi.y ? dpi.y : dpi.x;
+  return (hi - lo) * 10 <= hi;
+}
+
+/** 320 to 480 is one bucket.  200 vs 400 is not. */
+static constexpr bool
+WithinOneDensityStep(unsigned dpi, unsigned density) noexcept
+{
+  if (dpi == 0 || density == 0)
+    return false;
+
+  const unsigned lo = dpi < density ? dpi : density;
+  const unsigned hi = dpi < density ? density : dpi;
+  return hi * 2 <= lo * 3;
+}
+
+/** shortcut: short edge outside 1.5–12 inches still uses density. */
+static constexpr bool
+ShortEdgeIsScreen(PixelSize size, UnsignedPoint2D dpi) noexcept
+{
+  if (size.width == 0 || size.height == 0 || dpi.x == 0 || dpi.y == 0)
+    return false;
+
+  const bool portrait = size.height > size.width;
+  const unsigned px = portrait ? size.width : size.height;
+  const unsigned dpi_short = portrait ? dpi.x : dpi.y;
+  return px * 2 >= dpi_short * 3 && px <= dpi_short * 12;
+}
+
 UnsignedPoint2D
 Display::SanitizeDisplayDpi(PixelSize size, UnsignedPoint2D physical,
                             unsigned density_dpi) noexcept
 {
   const auto dpi = AlignDpiToPixelAxes(size, physical);
-  if (DpiFarFrom(dpi.x, density_dpi) || DpiFarFrom(dpi.y, density_dpi))
+  if (DpiFarFrom(dpi.x, density_dpi) || DpiFarFrom(dpi.y, density_dpi)) {
+    if (DpiAxesAgree(physical) &&
+        WithinOneDensityStep(dpi.x, density_dpi) &&
+        WithinOneDensityStep(dpi.y, density_dpi) &&
+        ShortEdgeIsScreen(size, dpi))
+      return dpi;
+
     return {density_dpi, density_dpi};
+  }
 
   return dpi;
 }

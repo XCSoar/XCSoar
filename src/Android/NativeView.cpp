@@ -146,6 +146,11 @@ NativeView::NativeView(JNIEnv *env, jobject _obj,
   if (dpi.x != _xdpi || dpi.y != _ydpi)
     LogFmt("Corrected display DPI {}x{} (density {}) -> {}x{}",
            _xdpi, _ydpi, _density_dpi, dpi.x, dpi.y);
+  else if (_density_dpi != 0 &&
+           (dpi.x != _density_dpi || dpi.y != _density_dpi))
+    /* A kept measurement still has to show up next to the density. */
+    LogFmt("Display DPI {}x{} (density {})",
+           dpi.x, dpi.y, _density_dpi);
 
   /* setTextSize() is already framebuffer pixels from this DPI.
      Scaling the em or adding letter-spacing from the OEM axes
