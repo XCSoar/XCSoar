@@ -697,12 +697,23 @@ GlueMapWindow::OnKeyDown(unsigned key_code) noexcept
 #ifdef ENABLE_OPENGL
   kinetic_timer.Cancel();
   CancelZoomAnimation();
-  CancelPanAnimation();
+  /* Leave a running cursor glide in place so this key can step from
+     its target.  Cancel afterwards unless the handler replaced it. */
+  const auto pan_start = pan_start_time;
+  const bool pan_pending = pan_timer.IsPending();
 #endif
 
   if (InputEvents::processKey(key_code)) {
+#ifdef ENABLE_OPENGL
+    if (pan_pending && pan_start_time == pan_start)
+      CancelPanAnimation();
+#endif
     return true; // don't go to default handler
   }
+
+#ifdef ENABLE_OPENGL
+  CancelPanAnimation();
+#endif
 
   return false;
 }

@@ -587,6 +587,12 @@ public:
    */
   void AnimateLocation(const GeoPoint location) noexcept;
 
+  /**
+   * Target of a cursor-key glide still in progress, or Invalid().
+   * A key repeat steps from here so it keeps the rest of that glide.
+   */
+  GeoPoint GetAnimatedPanTarget() const noexcept;
+
 protected:
   DisplayMode GetDisplayMode() const noexcept {
     return GetUIState().display_mode;

@@ -325,6 +325,16 @@ GlueMapWindow::AnimateLocation(const GeoPoint location) noexcept
 
 #endif
 
+GeoPoint
+GlueMapWindow::GetAnimatedPanTarget() const noexcept
+{
+#ifdef ENABLE_OPENGL
+  if (pan_timer.IsPending() && pan_to.IsValid())
+    return pan_to;
+#endif
+  return GeoPoint::Invalid();
+}
+
 void
 GlueMapWindow::RestoreMapScale() noexcept
 {
