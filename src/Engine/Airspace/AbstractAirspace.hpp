@@ -18,6 +18,7 @@
 #include <iosfwd>
 #endif
 #include <string>
+#include <vector>
 
 struct AircraftState;
 struct AltitudeState;
@@ -27,6 +28,48 @@ struct AirspaceInterceptSolution;
 struct FlatBoundingBox;
 class FlatProjection;
 class AirspaceIntersectionVector;
+
+/**
+ * One OpenAir AA period. An implausible bound is open
+ * (`AA NONE/end` or `AA start/NONE`). The end instant is excluded.
+ */
+struct AirspaceActivationInterval {
+  BrokenDateTime start = BrokenDateTime::Invalid();
+  BrokenDateTime end = BrokenDateTime::Invalid();
+
+  [[nodiscard]]
+  constexpr bool Contains(BrokenDateTime now) const noexcept {
+    if (start.IsPlausible() && now < start)
+      return false;
+    if (end.IsPlausible() && !(now < end))
+      return false;
+    return true;
+  }
+};
+
+[[nodiscard]]
+inline const AirspaceActivationInterval *
+FindActivation(const std::vector<AirspaceActivationInterval> &intervals,
+               BrokenDateTime now) noexcept
+{
+  for (const auto &interval : intervals)
+    if (interval.Contains(now))
+      return &interval;
+
+  return nullptr;
+}
+
+/**
+ * Weekly window, for example `AA MON-FRI 07:00Z/15:00Z`.
+ * `days == 0` means every day. Bit 0 is Sunday.
+ * Minutes after UTC midnight. 24*60 is 24:00.
+ * An end at or before the start finishes the next day.
+ */
+struct AirspaceWeekdayPeriod {
+  uint8_t days = 0;
+  uint16_t start_minute = 0;
+  uint16_t end_minute = 0;
+};
 
 /** Abstract base class for airspace regions */
 class AbstractAirspace {
@@ -55,15 +98,18 @@ protected:
   /** Airspace name (identifier) */
   std::string name;
 
-  /** Activation times related variables are meaningless
-   ** unless has_activation_time == true
-   */
+  /** Meaningful when has_activation_time is true. */
   bool has_activation_time = false;
-  BrokenDateTime activation_start_time = BrokenDateTime::Invalid();
-  BrokenDateTime activation_end_time = BrokenDateTime::Invalid();
-  bool active_today = true;
+  /** `AA NONE`: loaded, never shown as active. */
   bool never_active = false;
-  /** end of Activation times related variables */
+  /** A bad AA must not hide the airspace. */
+  bool activation_unreadable = false;
+  /**
+   * shortcut: 64 AA lines per airspace. More than that is stored as
+   * unreadable, which stays active.
+   */
+  std::vector<AirspaceActivationInterval> activation_intervals;
+  std::vector<AirspaceWeekdayPeriod> activation_weekdays;
 
   /** Airspace type */
   AirspaceClass astype;
@@ -225,24 +271,11 @@ public:
   void SetActivity(const AirspaceActivity mask) const noexcept;
 
   /**
-   * Set fundamental properties of airspace
-   *
-   * @param _Name Name of airspace
-   * @param _has_activation_time
-   * @param _activation_start_time
-   * @param _activation_end_time
-   * @param _active_today, _never_active
-   * @param _classs Class
-   * @param _type Type
-   * @param _base Lower limit
-   * @param _top Upper limit
+   * Set fundamental properties of airspace.
+   * AA periods are attached afterwards with SetActivationSchedule().
    */
-
   void SetProperties(std::string &&_name,
-                     bool _has_activation_time,
-                     BrokenDateTime _activation_start_time,
-                     BrokenDateTime _activation_end_time,
-                     bool _active_today, bool _never_active,
+                     bool _has_activation_time, bool _never_active,
                      std::string &&_station_name,
                      TransponderCode &&_transponder_code,
                      const AirspaceClass _class, const AirspaceClass _type,
@@ -250,20 +283,10 @@ public:
                      const AirspaceAltitude &_top) noexcept
   {
     has_activation_time = _has_activation_time;
-    if (has_activation_time) {
-      activation_start_time = std::move(_activation_start_time);
-      activation_end_time   = std::move(_activation_end_time);
-      never_active          = _never_active;
-      active_today          = _active_today;
-      /* Add() applies the day mask on the next update. Until then
-         the constructor would leave this airspace active. */
-      active                = _active_today;
-    } else {
-      activation_start_time = BrokenDateTime::Invalid();
-      activation_end_time   = BrokenDateTime::Invalid();
-      never_active          = false;
-      active_today          = true;
-    }
+    never_active = _has_activation_time && _never_active;
+    activation_unreadable = false;
+    activation_intervals.clear();
+    activation_weekdays.clear();
     name = std::move(_name);
     station_name = std::move(_station_name);
     transponder_code = std::move(_transponder_code);
@@ -299,6 +322,19 @@ public:
    */
   void SetDays(const AirspaceActivity mask) noexcept {
     days_of_operation = mask;
+  }
+
+  /**
+   * OpenAir AA periods. Also refreshes active from the current UTC time.
+   */
+  void SetActivationSchedule(
+      std::vector<AirspaceActivationInterval> intervals,
+      std::vector<AirspaceWeekdayPeriod> weekdays,
+      bool unreadable) noexcept {
+    activation_intervals = std::move(intervals);
+    activation_weekdays = std::move(weekdays);
+    activation_unreadable = unreadable;
+    active = IsActiveToday();
   }
 
   /**
@@ -432,13 +468,22 @@ public:
   }
 
   [[nodiscard]]
-  BrokenDateTime GetActivationStartTime() const noexcept {
-    return activation_start_time;
+  BrokenDateTime GetActivationStartTime(
+      BrokenDateTime now = BrokenDateTime::NowUTC()) const noexcept;
+
+  [[nodiscard]]
+  BrokenDateTime GetActivationEndTime(
+      BrokenDateTime now = BrokenDateTime::NowUTC()) const noexcept;
+
+  [[nodiscard]]
+  std::size_t GetActivationIntervalCount() const noexcept {
+    return activation_intervals.size();
   }
 
   [[nodiscard]]
-  BrokenDateTime GetActivationEndTime() const noexcept {
-    return activation_end_time;
+  AirspaceActivationInterval
+  GetActivationInterval(std::size_t i) const noexcept {
+    return activation_intervals[i];
   }
 
   [[gnu::pure]]
@@ -446,10 +491,17 @@ public:
     return never_active;
   }
 
-  [[gnu::pure]]
-  bool IsActiveToday() const noexcept {
-    return active_today;
-  }
+  /**
+   * True when the airspace is on at `now` (UTC).
+   * No AA line means on. `AA NONE` means off. An AA line that did not
+   * parse means on, so a typo or a sun event cannot hide it.
+   */
+  [[nodiscard]]
+  bool IsActiveAt(BrokenDateTime now) const noexcept;
+
+  /** @see IsActiveAt() at the current UTC time. Not the local weekday. */
+  [[nodiscard]]
+  bool IsActiveToday() const noexcept;
 
   [[gnu::pure]]
   const char *GetStationName() const noexcept {

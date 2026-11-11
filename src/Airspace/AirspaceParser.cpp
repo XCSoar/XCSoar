@@ -6,6 +6,10 @@
  * Version 2.1.2
  * as of 2026-05-21
  * https://github.com/naviter/seeyou_file_formats/blob/main/OpenAir_File_Format_Support.md#aa-airspace-activation-times
+ *
+ * A weekly AA line from the OpenAir 3.0 draft is read
+ * (`AA MON-FRI 07:00Z/15:00Z`). A date range, AA EXCEPT, or a sun
+ * event is not: that line keeps the airspace active.
  */
 
 #include "AirspaceParser.hpp"
@@ -35,15 +39,22 @@
 #include "LogFile.hpp"
 
 #include <cassert>
+#include <cstdio>
+#include <cstring>
 #include <stdexcept>
 
 using std::string_view_literals::operator""sv;
 
 enum class AirspaceActivationDecode {
-  NOT_APPLICABLE,
   NEVER_ACTIVE,
-  IS_ACTIVE_NOW,
+  INTERVAL,
+  WEEKDAY,
   UNDETECTABLE_CONTENT,
+};
+
+struct ParsedActivation {
+  AirspaceActivationInterval interval;
+  AirspaceWeekdayPeriod weekday;
 };
 
 enum class AirspaceFileType {
@@ -188,10 +199,12 @@ struct TempAirspace
   std::optional<AirspaceAltitude> top;
   AirspaceActivity days_of_operation;
   bool has_activation_time;
-  BrokenDateTime activation_start_time;
-  BrokenDateTime activation_end_time;
-  bool active_today;
   bool never_active;
+  bool activation_unreadable = false;
+  /** shortcut: 64 AA lines; more marks the airspace active. */
+  static constexpr std::size_t MAX_ACTIVATION_INTERVALS = 64;
+  std::vector<AirspaceActivationInterval> activation_intervals;
+  std::vector<AirspaceWeekdayPeriod> activation_weekdays;
 
   // Polygon
   std::vector<GeoPoint> points;
@@ -213,10 +226,10 @@ struct TempAirspace
   {
     days_of_operation.SetAll();
     has_activation_time = false;
-    activation_start_time = BrokenDateTime::Invalid();
-    activation_end_time   = BrokenDateTime::Invalid();
-    active_today = false;
     never_active = false;
+    activation_unreadable = false;
+    activation_intervals.clear();
+    activation_weekdays.clear();
     name.clear();
     radio_frequency = RadioFrequency::Null();
     transponder_code = TransponderCode::Null();
@@ -242,6 +255,24 @@ struct TempAirspace
     radius = -1;
     rotation = 1;
     first_line_number = line_number;
+  }
+
+  void
+  CopyPropertiesTo(AbstractAirspace &airspace) noexcept
+  {
+    airspace.SetProperties(std::move(name),
+                           has_activation_time, never_active,
+                           std::move(station_name),
+                           std::move(transponder_code),
+                           asclass, astype, *base, *top);
+    if (has_activation_time)
+      airspace.SetActivationSchedule(std::move(activation_intervals),
+                                     std::move(activation_weekdays),
+                                     activation_unreadable);
+
+    airspace.SetRadioFrequency(radio_frequency);
+    airspace.SetDays(days_of_operation);
+    airspace.SetOrigin(origin);
   }
 
   /**
@@ -281,19 +312,7 @@ struct TempAirspace
       throw CommitError{"No top altitude"};
 
     auto as = std::make_shared<AirspacePolygon>(points);
-    as->SetProperties(std::move(name),
-                      std::move(has_activation_time),
-                      std::move(activation_start_time),
-                      std::move(activation_end_time),
-                      std::move(active_today),
-                      std::move(never_active),
-                      std::move(station_name),
-                      std::move(transponder_code), asclass, astype, *base,
-                      *top);
-    as->SetRadioFrequency(radio_frequency);
-    as->SetTransponderCode(transponder_code);
-    as->SetDays(days_of_operation);
-    as->SetOrigin(origin);
+    CopyPropertiesTo(*as);
     airspace_database.Add(std::move(as));
   }
 
@@ -325,19 +344,7 @@ struct TempAirspace
 
     auto as = std::make_shared<AirspaceCircle>(RequireCenter(),
                                                RequireRadius());
-    as->SetProperties(std::move(name),
-                      std::move(has_activation_time),
-                      std::move(activation_start_time),
-                      std::move(activation_end_time),
-                      std::move(active_today),
-                      std::move(never_active),
-                      std::move(station_name),
-                      std::move(transponder_code), asclass, astype, *base,
-                      *top);
-    as->SetRadioFrequency(radio_frequency);
-    as->SetTransponderCode(transponder_code);
-    as->SetDays(days_of_operation);
-    as->SetOrigin(origin);
+    CopyPropertiesTo(*as);
     airspace_database.Add(std::move(as));
   }
 
@@ -653,66 +660,181 @@ ReadISO8601(const char *ts, BrokenDateTime &dt) noexcept
 }
 
 static AirspaceActivationDecode
-ParseActivationTime(const char *in,
-                    BrokenDateTime &start_time,
-                    BrokenDateTime &end_time) noexcept
+ParseInterval(const char *in, AirspaceActivationInterval &interval) noexcept
 {
   char active_time_pair[80];
-  BrokenDateTime dt              = BrokenDateTime::Invalid();
-  const BrokenDateTime now       = BrokenDateTime::NowUTC();
-  bool time_interval_has_started = false;
-  bool time_interval_before_end  = false;
 
-
-  start_time = BrokenDateTime::Invalid();
-  end_time   = BrokenDateTime::Invalid();
+  interval.start = BrokenDateTime::Invalid();
+  interval.end = BrokenDateTime::Invalid();
 
   CopyTruncateString(active_time_pair, sizeof(active_time_pair), in);
 
+  char *slash_loc = std::strchr(active_time_pair, '/');
+  if (slash_loc == nullptr)
+    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+
+  *slash_loc = 0;
+  /* "NONE" leaves the start implausible, which Contains() treats as open. */
+  if (!StringIsEqualIgnoreCase(active_time_pair, "NONE") &&
+      !ReadISO8601(active_time_pair, interval.start))
+    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+
+  if (StringIsEqualIgnoreCase(slash_loc + 1, "NONE"))
+    return AirspaceActivationDecode::INTERVAL;
+
+  if (!ReadISO8601(slash_loc + 1, interval.end))
+    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
+
+  return AirspaceActivationDecode::INTERVAL;
+}
+
+/** Sunday is 0, matching BrokenDate::day_of_week. */
+static int
+DayIndex(std::string_view name) noexcept
+{
+  static constexpr const char *names[] = {
+    "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT",
+  };
+
+  if (name.size() != 3)
+    return -1;
+
+  for (unsigned i = 0; i < ARRAY_SIZE(names); ++i)
+    if (StringIsEqualIgnoreCase(name, names[i]))
+      return i;
+
+  return -1;
+}
+
+/** `MON-FRI`, `SAT,SUN` or `FRI-MON`. */
+static bool
+ParseWeekdayMask(std::string_view text, uint8_t &days) noexcept
+{
+  days = 0;
+  while (!text.empty()) {
+    const auto comma = text.find(',');
+    const auto part = text.substr(0, comma);
+    const auto dash = part.find('-');
+    const int first = DayIndex(dash == std::string_view::npos
+                                   ? part
+                                   : part.substr(0, dash));
+    const int last = dash == std::string_view::npos
+                         ? first
+                         : DayIndex(part.substr(dash + 1));
+    if (first < 0 || last < 0 ||
+        (dash != std::string_view::npos && first == last))
+      return false;
+
+    for (int day = first;; day = (day + 1) % 7) {
+      days |= uint8_t(1u << day);
+      if (day == last)
+        break;
+    }
+
+    if (comma == std::string_view::npos)
+      break;
+    text.remove_prefix(comma + 1);
+  }
+
+  return days != 0;
+}
+
+/** `hh:mmZ`. 24:00Z is allowed only as an end. Seconds are not read. */
+static bool
+ReadClock(const char *text, unsigned &minute, bool allow_24) noexcept
+{
+  unsigned hour, min;
+  char suffix = 0;
+  if (std::strlen(text) != 6 ||
+      std::sscanf(text, "%2u:%2u%c", &hour, &min, &suffix) != 3 ||
+      suffix != 'Z' || min > 59)
+    return false;
+
+  if (hour == 24 && min == 0 && allow_24) {
+    minute = 24 * 60;
+    return true;
+  }
+
+  if (hour > 23)
+    return false;
+
+  minute = hour * 60 + min;
+  return true;
+}
+
+static bool
+ParseWeekday(const char *in, AirspaceWeekdayPeriod &out) noexcept
+{
+  char buf[80];
+  CopyTruncateString(buf, sizeof(buf), in);
+
+  char *clock = buf;
+  while (*clock != 0 && (*clock < '0' || *clock > '9'))
+    ++clock;
+  if (*clock == 0)
+    return false;
+
+  const char *days = nullptr;
+  if (clock != buf) {
+    if (clock[-1] != ' ')
+      return false;
+    clock[-1] = 0;
+    days = buf;
+  }
+
+  char *slash = std::strchr(clock, '/');
+  if (slash == nullptr || std::strchr(slash + 1, ' ') != nullptr)
+    return false;
+
+  *slash = 0;
+  unsigned start_minute, end_minute;
+  out = {};
+  if (days != nullptr && !ParseWeekdayMask(days, out.days))
+    return false;
+  if (!ReadClock(clock, start_minute, false) ||
+      !ReadClock(slash + 1, end_minute, true))
+    return false;
+
+  out.start_minute = start_minute;
+  out.end_minute = end_minute;
+  return true;
+}
+
+static bool
+LooksLikeInterval(std::string_view text) noexcept
+{
+  /* NONE/end is an interval. A weekday name such as SAT also
+     contains a T, so the ISO mark has to follow a digit. */
+  if (text.size() >= 5 &&
+      StringIsEqualIgnoreCase(text.substr(0, 5), "NONE/"sv))
+    return true;
+
+  for (std::size_t i = 1; i < text.size(); ++i)
+    if ((text[i] == 'T' || text[i] == 't') &&
+        text[i - 1] >= '0' && text[i - 1] <= '9')
+      return true;
+
+  return false;
+}
+
+static AirspaceActivationDecode
+ParseActivationTime(const char *in, ParsedActivation &parsed) noexcept
+{
+  std::string_view text(in);
+  while (!text.empty() && text.front() == ' ')
+    text.remove_prefix(1);
+
   /* NONE means no activation time. The airspace is kept, inactive. */
-  if (StringIsEqualIgnoreCase(active_time_pair,"NONE"))
+  if (StringIsEqualIgnoreCase(text, "NONE"sv))
     return AirspaceActivationDecode::NEVER_ACTIVE;
 
-  char *slash_loc = std::strchr(active_time_pair,'/');
-  if (slash_loc) {
-    *slash_loc = 0;
-    if (StringIsEqualIgnoreCase(active_time_pair, "NONE")) {
-      time_interval_has_started = true;
-    } else if (ReadISO8601(active_time_pair, dt)) {
-      /* Catch activation in near future.
-       * 18 hours should be enough to catch activation
-       * times between now (parse time) and sunset.
-       */
-      if ((dt - std::chrono::seconds(18 * 3600)) < now) {
-        time_interval_has_started = true;
-        start_time = dt;
-      }
-    } else {
-      // can't recognize start time
-      return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
-    }
+  /* EXCEPT, a date range and sun events fail below and stay active. */
+  if (LooksLikeInterval(text))
+    return ParseInterval(in, parsed.interval);
 
-    if (StringIsEqualIgnoreCase(slash_loc + 1, "NONE")) {
-      time_interval_before_end = true;
-    } else if (ReadISO8601(slash_loc + 1, dt)) {
-      if (now < dt) {
-        time_interval_before_end = true;
-        end_time = dt;
-      }
-    } else {
-      // can't recognize end time
-      return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
-    }
-
-    if (time_interval_has_started && time_interval_before_end)
-      return AirspaceActivationDecode::IS_ACTIVE_NOW;
-    else
-      return AirspaceActivationDecode::NOT_APPLICABLE;
-
-  } else {
-    // can't recognize the 2 time stamps
-    return AirspaceActivationDecode::UNDETECTABLE_CONTENT;
-  }
+  return ParseWeekday(in, parsed.weekday)
+             ? AirspaceActivationDecode::WEEKDAY
+             : AirspaceActivationDecode::UNDETECTABLE_CONTENT;
 }
 
 [[gnu::pure]]
@@ -792,37 +914,45 @@ ParseLine(Airspaces &airspace_database, unsigned line_number,
     case 'a':
       if (input.SkipWhitespace()) {
         temp_area.has_activation_time = true;
-        BrokenDateTime activation_start_time;
-        BrokenDateTime activation_end_time;
-        switch (ParseActivationTime(input.c_str(),
-                                    activation_start_time,
-                                    activation_end_time)) {
-          case AirspaceActivationDecode::IS_ACTIVE_NOW :
-            if (temp_area.never_active)
-              break;
-            temp_area.active_today = true;
-            temp_area.activation_start_time = activation_start_time;
-            temp_area.activation_end_time   = activation_end_time;
+        ParsedActivation parsed;
+        const auto decoded = ParseActivationTime(input.c_str(), parsed);
+        switch (decoded) {
+        case AirspaceActivationDecode::INTERVAL:
+        case AirspaceActivationDecode::WEEKDAY:
+          if (temp_area.never_active)
             break;
-          case AirspaceActivationDecode::NOT_APPLICABLE :
-            // this AA is not active, but more AAs may come
-            break;
-          case AirspaceActivationDecode::NEVER_ACTIVE :
-            temp_area.never_active = true;
-            temp_area.active_today = false;
-            temp_area.activation_start_time = BrokenDateTime::Invalid();
-            temp_area.activation_end_time = BrokenDateTime::Invalid();
-            break;
-          case AirspaceActivationDecode::UNDETECTABLE_CONTENT :
-            if (temp_area.never_active)
-              break;
-            /* An unreadable time must not silence the airspace. */
-            temp_area.active_today = true;
-            LogFormat("Airspace %s: Activation Time(s) not plausible : %s",
-              temp_area.name.c_str(), input.c_str());
+          if (temp_area.activation_intervals.size() +
+                  temp_area.activation_weekdays.size() >=
+              TempAirspace::MAX_ACTIVATION_INTERVALS) {
+            /* shortcut: extra lines must not hide the airspace. */
+            temp_area.activation_unreadable = true;
+            LogFormat("Airspace %s: too many activation times",
+                      temp_area.name.c_str());
             break;
           }
+          if (decoded == AirspaceActivationDecode::INTERVAL)
+            temp_area.activation_intervals.push_back(parsed.interval);
+          else
+            temp_area.activation_weekdays.push_back(parsed.weekday);
+          break;
+
+        case AirspaceActivationDecode::NEVER_ACTIVE:
+          temp_area.never_active = true;
+          temp_area.activation_unreadable = false;
+          temp_area.activation_intervals.clear();
+          temp_area.activation_weekdays.clear();
+          break;
+
+        case AirspaceActivationDecode::UNDETECTABLE_CONTENT:
+          if (temp_area.never_active)
+            break;
+          /* An unreadable time must not silence the airspace. */
+          temp_area.activation_unreadable = true;
+          LogFormat("Airspace %s: Activation Time(s) not plausible : %s",
+                    temp_area.name.c_str(), input.c_str());
+          break;
         }
+      }
       break;
 
     case 'C':

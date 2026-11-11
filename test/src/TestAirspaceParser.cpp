@@ -294,13 +294,13 @@ static void
 TestActivationTime()
 {
   Airspaces airspaces;
-  if (!ParseFile(Path("test/data/airspace/openair_activation_time.txt"), airspaces)) {
-    skip(12, 0, "Failed to parse activation-time input file");
+    if (!ParseFile(Path("test/data/airspace/openair_activation_time.txt"), airspaces)) {
+    skip(20, 0, "Failed to parse activation-time input file");
     return;
   }
 
-  // 11 airspace definitions, including two AA NONE records
-  ok1(airspaces.GetSize() == 11);
+  // 20 airspace definitions, including two AA NONE records
+  ok1(airspaces.GetSize() == 20);
 
   for (const auto &as_ : airspaces.QueryAll()) {
     const AbstractAirspace &airspace = as_.GetAirspace();
@@ -378,6 +378,74 @@ TestActivationTime()
       ok1(airspace.IsActiveToday());
       ok1(!airspace.IsNeverActive());
 
+    } else if (StringIsEqual("AA-Future-Periods-Test", airspace.GetName())) {
+      /* Both periods are after the test clock, and both are kept. */
+      ok1(airspace.HasActivationTime());
+      ok1(!airspace.IsActiveToday());
+      ok1(!airspace.IsNeverActive());
+      ok1(airspace.GetActivationIntervalCount() == 2);
+      const auto first = airspace.GetActivationInterval(0);
+      const auto second = airspace.GetActivationInterval(1);
+      ok1(first.start == BrokenDateTime(2098, 1, 1, 0, 0, 0));
+      ok1(first.end == BrokenDateTime(2098, 1, 1, 6, 0, 0));
+      ok1(second.start == BrokenDateTime(2098, 1, 2, 12, 0, 0));
+      ok1(second.end == BrokenDateTime(2098, 1, 2, 18, 0, 0));
+      ok1(first.Contains(BrokenDateTime(2098, 1, 1, 3, 0, 0)));
+      ok1(!first.Contains(BrokenDateTime(2098, 1, 1, 6, 0, 0)));
+      ok1(!second.Contains(BrokenDateTime::NowUTC()));
+
+    } else if (StringIsEqual("AA-MonFri", airspace.GetName())) {
+      const auto wed = BrokenDateTime(2026, 11, 11, 10, 0, 0);
+      ok1(airspace.IsActiveAt(wed));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 6, 59, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 15, 0, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 10, 0, 0)));
+      ok1(airspace.GetActivationStartTime(wed) ==
+          BrokenDateTime(2026, 11, 11, 7, 0, 0));
+      ok1(airspace.GetActivationEndTime(wed) ==
+          BrokenDateTime(2026, 11, 11, 15, 0, 0));
+
+    } else if (StringIsEqual("AA-Friday-Night", airspace.GetName())) {
+      const auto fri = BrokenDateTime(2026, 11, 13, 23, 0, 0);
+      const auto sat = BrokenDateTime(2026, 11, 14, 1, 0, 0);
+      ok1(airspace.IsActiveAt(fri));
+      ok1(airspace.GetActivationStartTime(fri) ==
+          BrokenDateTime(2026, 11, 13, 22, 0, 0));
+      ok1(airspace.GetActivationEndTime(fri) ==
+          BrokenDateTime(2026, 11, 14, 2, 0, 0));
+      ok1(airspace.IsActiveAt(sat));
+      ok1(airspace.GetActivationEndTime(sat) ==
+          BrokenDateTime(2026, 11, 14, 2, 0, 0));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 2, 0, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 13, 21, 0, 0)));
+
+    } else if (StringIsEqual("AA-Sun", airspace.GetName())) {
+      ok1(airspace.IsActiveToday());
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 3, 0, 0)));
+
+    } else if (StringIsEqual("AA-Sun-And-Weekday", airspace.GetName())) {
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 16, 0, 0)));
+
+    } else if (StringIsEqual("AA-Weekend-And-Interval", airspace.GetName())) {
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 11, 10, 0, 0)));
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 10, 0, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 19, 0, 0)));
+      ok1(airspace.IsActiveAt(BrokenDateTime(2098, 1, 1, 3, 0, 0)));
+
+    } else if (StringIsEqual("AA-Every-Day", airspace.GetName())) {
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 12, 0, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 21, 0, 0)));
+
+    } else if (StringIsEqual("AA-Fri-Mon", airspace.GetName())) {
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 13, 8, 30, 0)));
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 14, 8, 30, 0)));
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 15, 8, 30, 0)));
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 16, 8, 30, 0)));
+      ok1(!airspace.IsActiveAt(BrokenDateTime(2026, 11, 17, 8, 30, 0)));
+
+    } else if (StringIsEqual("AA-Bad-Range", airspace.GetName())) {
+      ok1(airspace.IsActiveAt(BrokenDateTime(2026, 11, 17, 3, 0, 0)));
+
     } else if (StringIsEqual("AA-Never-NONE-Test", airspace.GetName()) ||
                StringIsEqual("AA-MultiLine-NeverActive-Test",
                              airspace.GetName())) {
@@ -396,7 +464,7 @@ TestActivationTime()
 
 int main()
 try {
-  plan_tests(174);
+  plan_tests(174 + 1 + 11 + 8 + 28);
 
   TestOpenAir();
   TestTNP();
