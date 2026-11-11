@@ -62,6 +62,9 @@ Version 7.47 - not yet released
   - show the WeGlide task manager page only while WeGlide is enabled,
     and use one Upload Flight action for WeGlide and SoaringScoring
 * devices
+  - show Condor 3 wind as the light green instantaneous arrow. It is
+    the wind at the glider, so it no longer replaces the wind used
+    for glide calculations
   - Larus: pass on the instantaneous wind of ``$PLARW`` (``I``) next
     to the average wind (``A``)
 * android
@@ -89,6 +92,8 @@ Version 7.47 - not yet released
     login (wrong e-mail or password, subscription not active, too
     many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
+  - describe Condor 3 wind as the instantaneous arrow, which does
+    not replace the calculated wind
   - describe the MacCready InfoBox speed-to-fly comment as true
     airspeed, labelled TAS, and the Setup switch for indicated
     airspeed
