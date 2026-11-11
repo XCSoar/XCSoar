@@ -7,3 +7,4 @@
 [submodule "android/UsbSerial"]
 	path = android/UsbSerial
 	url = https://github.com/XCSoar/UsbSerial.git
+	branch = 6.1.0+xcsoar
