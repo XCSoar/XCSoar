@@ -855,7 +855,8 @@ Startup(UI::Display &display)
     map_window->SetAirspaces(data_components->airspaces.get());
 
     map_window->SetTopography(data_components->topography.get());
-    map_window->SetTerrain(data_components->terrain.get());
+    /* terrain is attached in OnTerrainLoaded(); setting it again
+       stops the tile thread and waits for the current decode */
     map_window->SetRasp(rasp);
 
 #ifdef HAVE_NOAA
