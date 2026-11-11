@@ -374,9 +374,8 @@ PolarSendProcessTimer(OperationEnvironment &env) noexcept
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const GlidePolar &gp = calculated.glide_polar_safety;
 
-  /* the fallback stands in for a missing or broken plane profile;
-     sending it would replace the pilot's polar in the vario (#3269) */
-  if (!gp.IsValid() || gp.IsFallback())
+  /* without a plane there is nothing to send to the vario (#3269) */
+  if (!gp.IsValid())
     return false;
 
   backend_components->devices->PutPolar(gp, env);
@@ -427,8 +426,10 @@ PlaneProfileProcessTimer() noexcept
 
         SetComputerSettings().plane = plane_copy;
         Profile::SetPath("PlanePath", found_path);
-        PlaneGlue::Synchronize(plane_copy, SetComputerSettings(),
-                               SetComputerSettings().polar.glide_polar_task);
+        auto &polar = SetComputerSettings().polar.glide_polar_task;
+        if (!PlaneGlue::Synchronize(plane_copy, SetComputerSettings(), polar))
+          Message::AddMessage(_("The polar of this plane is invalid. "
+                                "Check it in the plane setup."));
         if (backend_components)
           backend_components->SetTaskPolar(GetComputerSettings().polar);
         Profile::Save();
@@ -457,8 +458,10 @@ PlaneProfileProcessTimer() noexcept
         if (PlaneGlue::ReadFile(plane, path)) {
           plane.plane_profile_active = true;
           SetComputerSettings().plane = plane;
-          PlaneGlue::Synchronize(plane, SetComputerSettings(),
-                                 SetComputerSettings().polar.glide_polar_task);
+          auto &polar = SetComputerSettings().polar.glide_polar_task;
+          if (!PlaneGlue::Synchronize(plane, SetComputerSettings(), polar))
+            Message::AddMessage(_("The polar of this plane is invalid. "
+                                  "Check it in the plane setup."));
           if (backend_components)
             backend_components->SetTaskPolar(GetComputerSettings().polar);
           Profile::SetPath("PlanePath", path);

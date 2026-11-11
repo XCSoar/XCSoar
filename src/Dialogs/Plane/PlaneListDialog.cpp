@@ -180,8 +180,7 @@ SendLoadedPolar(const GlidePolar &polar) noexcept
       backend_components->devices == nullptr)
     return;
 
-  /* The fallback stands in for a missing or broken plane profile. */
-  if (!polar.IsValid() || polar.IsFallback())
+  if (!polar.IsValid())
     return;
 
   MessageOperationEnvironment env;
@@ -224,8 +223,11 @@ LoadFile(Path path, bool edited_active) noexcept
        (!edited_active && !same_plane)))
     ActionInterface::SetMaxTakeoffMass(new_mtow);
 
-  PlaneGlue::Synchronize(settings.plane, settings,
-                         settings.polar.glide_polar_task);
+  if (!PlaneGlue::Synchronize(settings.plane, settings,
+                              settings.polar.glide_polar_task))
+    ShowMessageBox(_("The polar of this plane is invalid. "
+                     "Check it in the plane setup."),
+                   _("Polar"), MB_OK | MB_ICONWARNING);
   backend_components->SetTaskPolar(settings.polar);
 
   if (!edited_active && !same_plane)

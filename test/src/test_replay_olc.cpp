@@ -20,6 +20,7 @@
 #include <cmath>
 #include <fstream>
 
+#include "FlyablePolar.hpp"
 extern "C" {
 #include "tap.h"
 }
@@ -129,7 +130,7 @@ ReplayFlight(TraceComputer &trace_computer, unsigned handicap)
   Directory::Create(Path("output/results"));
   std::ofstream f("output/results/res-sample.txt");
 
-  GlidePolar glide_polar(2);
+  GlidePolar glide_polar = FlyablePolar(2);
 
   ReplayLoggerSim sim(std::make_unique<FileLineReaderA>(replay_file));
 

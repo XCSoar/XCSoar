@@ -70,7 +70,7 @@ PlaneGlue::FromProfile(Plane &plane, const ProfileMap &profile) noexcept
     plane.weglide_glider_type = 0;
 }
 
-void
+bool
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp) noexcept
 {
@@ -83,16 +83,26 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
   /* Don't apply polar if no plane profile is loaded (reference_mass == 0)
    * - wait for device POLAR data instead */
   if (plane.polar_shape.reference_mass <= 0)
-    return;
+    return true;
 
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
-  if (!pc.IsValid())
-    return;
+  if (!pc.IsValid()) {
+    gp.SetInvalid();
+    return false;
+  }
 
   gp.SetCoefficients(pc, false);
 
   gp.SetReferenceMass(plane.polar_shape.reference_mass, false);
   gp.SetEmptyMass(plane.empty_mass, false);
+
+  /* without any dry mass, e.g. an empty mass of 0 and no crew, there
+     is no plane to fly; ballast left from the previous plane must not
+     make up for it */
+  if (gp.GetDryMass() <= 0) {
+    gp.SetInvalid();
+    return false;
+  }
 
   // Ballast weight - set max_ballast directly (configured value)
   gp.SetMaxBallast(plane.max_ballast, false);
@@ -103,7 +113,9 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 
   gp.Update();
 
-  if (plane.max_speed > 0)
+  if (plane.max_speed > 0 && gp.IsValid())
     gp.SetVMax(std::clamp(plane.max_speed,
                           gp.GetVMin() + 10, DEFAULT_MAX_SPEED));
+
+  return gp.IsValid();
 }

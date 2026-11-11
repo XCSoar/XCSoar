@@ -9,6 +9,7 @@
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TestUtil.hpp"
+#include "FlyablePolar.hpp"
 
 class DummyTaskWaypoint: public TaskWaypoint
 {
@@ -87,7 +88,7 @@ TestGotoElevation()
   Waypoints waypoints;
   GotoTask task(behaviour, waypoints);
   const AircraftState aircraft = MakeAircraft();
-  GlidePolar polar(0);
+  GlidePolar polar = FlyablePolar(0);
 
   ok1(task.DoGoto(MakeGotoWaypoint(999, false)));
 

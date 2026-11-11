@@ -39,7 +39,9 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromValue(0);
   chart.ScaleXFromValue(scale);
 
-  const auto s = -glide_polar.GetSBestLD();
+  /* without a polar there is no cruise sink rate to mark */
+  const bool have_polar = glide_polar.IsValid();
+  const auto s = have_polar ? -glide_polar.GetSBestLD() : 0.;
   const auto mc = glide_polar.GetMC();
 
   constexpr double y_padding = 0.5;
@@ -48,7 +50,8 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
   chart.ScaleYFromValue(fs.vario_cruise_histogram.GetMaxX() + y_padding);
   chart.ScaleYFromValue(fs.vario_circling_histogram.GetMinX() - y_padding);
   chart.ScaleYFromValue(fs.vario_circling_histogram.GetMaxX() + y_padding);
-  chart.ScaleYFromValue(s - y_padding);
+  if (have_polar)
+    chart.ScaleYFromValue(s - y_padding);
   chart.ScaleYFromValue(mc + y_padding);
 
   // draw red area at higher than cruise sink rate, blue area above mc
@@ -60,7 +63,7 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
                          chart_look.color_positive, chart_look.background_color,
                          chart_look.background_color);
   }
-  {
+  if (have_polar) {
     PixelRect rc_lower = chart.GetChartRect();
     rc_lower.top = chart.ScreenY(s);
 
@@ -88,14 +91,16 @@ RenderVarioHistogram(Canvas &canvas, const PixelRect rc,
 
   // draw current MC setting
   chart.DrawLine({0, mc}, {scale, mc}, ChartLook::STYLE_REDTHICKDASH);
-  chart.DrawLine({0, s}, {scale, s}, ChartLook::STYLE_BLUETHINDASH);
+  if (have_polar)
+    chart.DrawLine({0, s}, {scale, s}, ChartLook::STYLE_BLUETHINDASH);
 
   // draw labels and other overlays
   chart.DrawYGrid(Units::ToSysVSpeed(1), 1, ChartRenderer::UnitFormat::NUMERIC);
 
   const double tref = chart.GetXMin()*0.1+chart.GetXMax()*0.9;
   chart.DrawLabel({tref, mc}, "MC");
-  chart.DrawLabel({tref, s}, "S cruise");
+  if (have_polar)
+    chart.DrawLabel({tref, s}, "S cruise");
 
   chart.Finish();
 }

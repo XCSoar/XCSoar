@@ -40,6 +40,7 @@ aat_min_time(int test_num) noexcept
 
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "FlyablePolar.hpp"
 
 class PrintTaskAutoPilot final : public TaskAutoPilot
 {
@@ -248,7 +249,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 {
   // multipurpose flight test
 
-  GlidePolar glide_polar(2);
+  GlidePolar glide_polar = FlyablePolar(2);
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

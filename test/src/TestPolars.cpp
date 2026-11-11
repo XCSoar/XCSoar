@@ -15,6 +15,7 @@
 #include "util/Macros.hpp"
 #include "util/PrintException.hxx"
 #include "util/StringAPI.hxx"
+#include "FlyablePolar.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -199,7 +200,7 @@ TestBuiltInPolarsPlausibility()
 
     ok(pc.IsValid(), polarName);
 
-    GlidePolar gp(0);
+    GlidePolar gp = FlyablePolar(0);
     gp.SetCoefficients(pc, false);
 
     // Glider empty weight
