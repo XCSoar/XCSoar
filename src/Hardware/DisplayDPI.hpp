@@ -34,8 +34,9 @@ AlignDpiToPixelAxes(PixelSize size, UnsignedPoint2D dpi) noexcept;
 /**
  * Align physical DPI to the pixel axes, then fall back to
  * #density_dpi when either axis is more than 20% away from it.
- * Android's density is what the OEM tuned; xdpi/ydpi are often
- * garbage.  density_dpi 0 skips the fallback.
+ * Axes that already agree, within one density step (320 to 480),
+ * are kept when the short edge is 1.5 to 12 inches.  density_dpi 0
+ * skips the fallback.
  */
 [[gnu::const]]
 UnsignedPoint2D
