@@ -129,14 +129,8 @@ Apply(PixelSize new_size, UnsignedPoint2D dpi,
   minimum_control_height = std::min(FontScale(23),
                                     min_screen_pixels / 12);
 
-  if (has_touch) {
-    /* larger rows for touch screens */
-    maximum_control_height = PtScale(30);
-    if (maximum_control_height < minimum_control_height)
-      maximum_control_height = minimum_control_height;
-  } else {
-    maximum_control_height = minimum_control_height;
-  }
+  /* 30 pt is the row height. Touch only changes the hit radius. */
+  maximum_control_height = std::max(PtScale(30), minimum_control_height);
 
   hit_radius = PtScale(has_touch ? 28 : 6);
 }
