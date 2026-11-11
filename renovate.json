@@ -138,9 +138,10 @@
       "commitMessageExtra": "to {{{newDigestShort}}}"
     },
     {
-      "description": "android/UsbSerial follows XCSoar/UsbSerial master, a fork of felHR85/UsbSerial with local fixes. Each update needs a test with a USB serial adapter, so it is only listed in the Dependency Dashboard and opened from there",
+      "description": "android/UsbSerial follows XCSoar/UsbSerial branch 6.1.0+xcsoar, a fork of felHR85/UsbSerial with local fixes. The branch name is valid semver and the repo has a 6.1.0 tag, so allowedVersions keeps Renovate on this branch. Each update needs a test with a USB serial adapter, so it is only listed in the Dependency Dashboard and opened from there",
       "matchManagers": ["git-submodules"],
       "matchDepNames": ["android/UsbSerial"],
+      "allowedVersions": "/^6\\.1\\.0\\+xcsoar$/",
       "dependencyDashboardApproval": true,
       "minimumReleaseAge": null,
       "commitMessagePrefix": "android/UsbSerial:",
