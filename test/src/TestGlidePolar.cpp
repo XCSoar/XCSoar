@@ -368,11 +368,16 @@ TestNullPolar()
   ok1(equals(polar.GetMC(), 1.5));
   ok1(equals(polar.GetBugs(), 0.9));
   ok1(equals(polar.GetBallastLitres(), 20));
+
+  /* a fraction of an empty capacity is 0 litres */
+  GlidePolar empty;
+  empty.SetBallastFraction(1);
+  ok1(equals(empty.GetBallastLitres(), 0));
 }
 
 int main()
 {
-  plan_tests(69 + 3 + 21 + 9 + 16);
+  plan_tests(69 + 3 + 21 + 9 + 17);
 
   GlidePolarTest test;
   test.Run();
