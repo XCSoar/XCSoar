@@ -77,6 +77,10 @@ Version 7.47 - not yet released
   - reconnect a USB serial device that was unplugged and plugged in
     again; XCSoar kept reporting "USB serial device not found" until
     it was restarted #3450
+  - reconnect a USB serial device that sends no valid data for 10
+    seconds, e.g. after a knock on the USB plug, instead of only when
+    it is unplugged; drivers for devices that may stay silent, such as
+    radios, are left out #3346
 * dialogs
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
