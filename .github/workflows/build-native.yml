@@ -706,7 +706,8 @@ jobs:
         run: |
           echo "Running unit tests..."
           if [ ${{ matrix.target }} = 'IOS64' ]; then
-            gmake check-ios-sim
+            # Nested gmake in check-ios-sim.py reads this from the env.
+            USE_CCACHE=y gmake check-ios-sim
           else
             gmake TARGET=MACOS check
           fi
