@@ -103,6 +103,7 @@ Version 7.47 - not yet released
   - state that waypoint details image= and file= names start at the
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
+  - describe OpenAir AA activation times in the data files chapter
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
@@ -118,6 +119,13 @@ Version 7.47 - not yet released
     TMA, unless a waypoint is there
   - show when an OpenAir airspace is active from its activation
     times #2520
+  - honour OpenAir AA activation periods in UTC, including a weekly
+    schedule from the OpenAir 3.0 draft such as MON-FRI 07:00Z/15:00Z.
+    The airspace is active only while a period is in effect, including
+    one that starts after the file is loaded. AA NONE keeps it loaded
+    and inactive. A date range, a holiday exception, or sunrise and
+    sunset is not calculated, so an AA line that uses them keeps the
+    airspace active
 * task
   - scan task QR codes with the camera on iOS, like on Android
 * development

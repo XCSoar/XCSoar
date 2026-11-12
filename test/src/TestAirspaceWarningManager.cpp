@@ -39,11 +39,7 @@ MakeAirspace(AirspaceClass cls,
   top.altitude = 1000;
 
   airspace->SetProperties(std::string{name},
-                          false,                      // has_activation_time
-                          BrokenDateTime::Invalid(),  // activation start time
-                          BrokenDateTime::Invalid(),  // activation end time
-                          true,                       // active_today, with activation time
-                          false,                      // never_active, with activation time
+                          false, false,
                           std::string{station_name},
                           TransponderCode::Null(),
                           cls, cls, base, top);

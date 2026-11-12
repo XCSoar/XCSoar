@@ -24,6 +24,8 @@ class AirspaceIntersectionVisitor;
 class Airspaces : public AirspacesInterface {
   AtmosphericPressure qnh = AtmosphericPressure::Zero();
   AirspaceActivity activity_mask;
+  /** At least one airspace has an AA schedule. Stays set after erase. */
+  bool activation_schedules = false;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
