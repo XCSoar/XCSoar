@@ -34,6 +34,7 @@ enum ControlIndex {
   ROAMING,
 #endif
   SHOW_THERMALS,
+  FORWARD_TO_OGN,
   HOST,
   PORT,
   OWN_FLARM_ID,
@@ -67,6 +68,7 @@ CloudConfigPanel::SetEnabled(bool enabled)
   SetRowEnabled(ROAMING, enabled);
 #endif
   SetRowEnabled(SHOW_THERMALS, enabled);
+  SetRowEnabled(FORWARD_TO_OGN, enabled);
   SetRowEnabled(HOST, enabled);
   SetRowEnabled(PORT, enabled);
   SetRowEnabled(OWN_FLARM_ID, enabled);
@@ -113,6 +115,15 @@ CloudConfigPanel::Prepare(ContainerWindow &parent,
   AddBoolean(_("Show thermals"),
              _("Obtain and show thermal locations reported by others."),
              settings.show_thermals);
+
+  AddBoolean(_("Send to OGN"),
+             _("Let the XCSoar Cloud pass your position on to the Open "
+               "Glider Network, where it joins the track that OGN "
+               "receivers pick up from your FLARM. This needs a FLARM "
+               "connected to XCSoar: its radio id and aircraft type are "
+               "used, and nothing is sent if it is set to privacy or "
+               "no tracking."),
+             settings.forward_to_ogn);
 
   AddText(_("Server"),
           _("Hostname or IP address of the XCSoar Cloud server."),
@@ -181,6 +192,9 @@ CloudConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(SHOW_THERMALS, ProfileKeys::CloudShowThermals,
                        settings.show_thermals);
+
+  changed |= SaveValue(FORWARD_TO_OGN, ProfileKeys::CloudForwardToOGN,
+                       settings.forward_to_ogn);
 
   if (SaveValue(HOST, ProfileKeys::CloudHost, settings.host)) {
     if (settings.host.empty())

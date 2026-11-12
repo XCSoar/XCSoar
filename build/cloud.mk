@@ -8,6 +8,7 @@ CLOUD_SERVER_SOURCES = \
 	$(SRC)/Cloud/OGNAprs.cpp \
 	$(SRC)/Cloud/OGNTraffic.cpp \
 	$(SRC)/Cloud/OGNClient.cpp \
+	$(SRC)/Cloud/OGNDeviceDatabase.cpp \
 	$(SRC)/Cloud/Sender.cpp \
 	$(SRC)/Cloud/Main.cpp
 CLOUD_SERVER_DEPENDS = ASYNC LIBNET IO OS GEO MATH UTIL TIME UNITS

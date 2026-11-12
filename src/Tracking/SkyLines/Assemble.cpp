@@ -4,7 +4,8 @@
 #include "Assemble.hpp"
 #include "Export.hpp"
 #include "Protocol.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
+#include "FLARM/Hardware.hpp"
 #include "util/ByteOrder.hxx"
 #include "util/CRC16CCITT.hpp"
 #include "util/SpanCast.hxx"
@@ -211,7 +212,7 @@ SkyLinesTracking::MakeThermalRequest(uint64_t key)
 
 SkyLinesTracking::TrafficRequestPacket
 SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
-                                     bool near)
+                                     bool nearby)
 {
   assert(key != 0);
 
@@ -222,7 +223,7 @@ SkyLinesTracking::MakeTrafficRequest(uint64_t key, bool followees, bool club,
   packet.header.key = ToBE64(key);
   packet.flags = ToBE32((followees ? packet.FLAG_FOLLOWEES : 0)
                         | (club ? packet.FLAG_CLUB : 0)
-                        | (near ? packet.FLAG_NEAR : 0));
+                        | (nearby ? packet.FLAG_NEAR : 0));
   packet.reserved = 0;
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
@@ -243,5 +244,54 @@ SkyLinesTracking::MakeUserNameRequest(uint64_t key, uint32_t user_id)
   packet.reserved = 0;
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
+  return packet;
+}
+
+uint32_t
+SkyLinesTracking::MakeOGNId(const FlarmHardware &hardware) noexcept
+{
+  if (!hardware.radio_id.IsDefined() || hardware.radio_id_type == 0)
+    return 0;
+
+  return (uint32_t(hardware.aircraft_type & 0xf) << 26) |
+    (uint32_t(hardware.radio_id_type & 0x3) << 24) |
+    (hardware.radio_id.Value() & 0xffffff);
+}
+
+SkyLinesTracking::OGNFixPacket
+SkyLinesTracking::ToOGNFix(uint64_t key, const MoreData &basic,
+                           uint32_t id, bool opt_in)
+{
+  OGNFixPacket packet;
+  packet.fix = ToFix(key, basic);
+  packet.fix.header.crc = 0;
+  packet.fix.flags |= ToBE32(FixPacket::FLAG_OGN);
+
+  uint16_t flags = 0;
+  if (opt_in)
+    flags |= FixOGNExtension::FLAG_OPT_IN;
+
+  packet.ogn.id = ToBE32(id);
+  packet.ogn.reserved[0] = packet.ogn.reserved[1] =
+    packet.ogn.reserved[2] = 0;
+
+  if (basic.gps_altitude_available) {
+    flags |= FixOGNExtension::FLAG_GPS_ALTITUDE;
+    packet.ogn.gps_altitude = ToBE16(int(basic.gps_altitude));
+  } else
+    packet.ogn.gps_altitude = 0;
+
+  /* not total energy compensated: what the aircraft climbs, like the
+     climb rate OGN receivers report */
+  if (basic.gps_vario_available) {
+    flags |= FixOGNExtension::FLAG_VERTICAL_SPEED;
+    packet.ogn.vertical_speed = ToBE16(int(basic.gps_vario * 256));
+  } else
+    packet.ogn.vertical_speed = 0;
+
+  packet.ogn.flags = ToBE16(flags);
+
+  packet.fix.header.crc =
+    ToBE16(UpdateCRC16CCITT(ReferenceAsBytes(packet), 0));
   return packet;
 }

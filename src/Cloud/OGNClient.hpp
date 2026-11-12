@@ -66,7 +66,18 @@ class OGNClient final : ConnectSocketHandler {
 
   ConnectSocket connector;
   SocketEvent read_event;
+
+  /**
+   * Did APRS-IS verify the login on this connection?  It drops the
+   * packets of an unverified login without telling.
+   */
+  bool login_verified = false;
   CoarseTimerEvent reconnect_timer;
+
+  /**
+   * Reconnects when the server stays silent too long.
+   */
+  CoarseTimerEvent idle_timer;
 
   std::string rx_buffer;
 
@@ -79,12 +90,28 @@ public:
   void Start() noexcept;
   void Stop() noexcept;
 
+  /**
+   * May lines be sent?  Only a login which APRS-IS verified may send;
+   * it drops the packets of "N0CALL" and of a wrong passcode.
+   */
+  [[gnu::pure]]
+  bool CanSend() const noexcept;
+
+  /**
+   * Send one APRS line (without line end).
+   *
+   * @return false if not connected or the line could not be written
+   * at once; it is then lost
+   */
+  bool SendLine(std::string_view line) noexcept;
+
 private:
   /* ConnectSocketHandler */
   void OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept override;
   void OnSocketConnectError(std::exception_ptr error) noexcept override;
 
   void OnReconnectTimer() noexcept;
+  void OnIdleTimer() noexcept;
   void OnReadReady(unsigned events) noexcept;
 
   void BeginLookup() noexcept;
@@ -92,5 +119,6 @@ private:
   void SendLogin() noexcept;
   void CloseConnection() noexcept;
   void ScheduleReconnect() noexcept;
+  void CheckLoginResponse(std::string_view line) noexcept;
   void ConsumeInput(std::string_view chunk);
 };

@@ -8,6 +8,7 @@
 #include "net/SocketAddress.hxx"
 #include "util/BindMethod.hxx"
 #include "util/SpanCast.hxx"
+#include "util/StringCompare.hxx"
 #include "util/PrintException.hxx"
 #include "util/Exception.hxx"
 #include "util/EnvParser.hpp"
@@ -20,6 +21,12 @@
 namespace {
 constexpr auto CONNECT_TIMEOUT = std::chrono::seconds(15);
 constexpr auto RECONNECT_DELAY = std::chrono::seconds(25);
+
+/**
+ * APRS-IS sends a "# aprsc" line every 20 seconds.  A connection that
+ * stays silent longer was lost without notice (e.g. a NAT timeout).
+ */
+constexpr auto IDLE_TIMEOUT = std::chrono::seconds(60);
 constexpr std::size_t RX_BUFFER_CAPACITY = 16384;
 } // namespace
 
@@ -38,7 +45,8 @@ OGNClient::OGNClient(EventLoop &_loop, Cares::Channel &_cares,
     resolver_handler(*this),
     connector(loop, *this),
     read_event(loop, BIND_THIS_METHOD(OnReadReady)),
-    reconnect_timer(loop, BIND_THIS_METHOD(OnReconnectTimer)) {}
+    reconnect_timer(loop, BIND_THIS_METHOD(OnReconnectTimer)),
+    idle_timer(loop, BIND_THIS_METHOD(OnIdleTimer)) {}
 
 void
 OGNClient::Start() noexcept
@@ -84,8 +92,10 @@ OGNClient::OnSocketConnectSuccess(UniqueSocketDescriptor fd) noexcept
 {
   std::cerr << "OGN\tconnected\t" << host << ':' << port << std::endl;
 
+  login_verified = false;
   read_event.Open(fd.Release());
   read_event.ScheduleRead();
+  idle_timer.Schedule(IDLE_TIMEOUT);
   rx_buffer.clear();
   try {
     rx_buffer.reserve(RX_BUFFER_CAPACITY);
@@ -103,6 +113,39 @@ OGNClient::OnSocketConnectError(std::exception_ptr error) noexcept
   std::cerr << "OGN\tconnect-error\t" << host << ':' << port << '\t'
             << GetFullMessage(error) << std::endl;
   ScheduleReconnect();
+}
+
+bool
+OGNClient::CanSend() const noexcept
+{
+  return user != "N0CALL" && login_verified && read_event.IsDefined();
+}
+
+bool
+OGNClient::SendLine(std::string_view line) noexcept
+{
+  if (!CanSend())
+    return false;
+
+  std::string buffer;
+  buffer.reserve(line.size() + 2);
+  buffer.append(line);
+  buffer.append("\r\n");
+
+  const auto nbytes =
+    read_event.GetSocket().WriteNoWait(AsBytes(std::string_view{buffer}));
+  if (nbytes == ssize_t(buffer.size()))
+    return true;
+
+  if (nbytes > 0) {
+    /* a part of the line went out; the next one would be appended to
+       it, so start over with a new connection */
+    std::cerr << "OGN\tshort-write\t" << host << ':' << port << std::endl;
+    CloseConnection();
+    ScheduleReconnect();
+  }
+
+  return false;
 }
 
 void
@@ -124,6 +167,7 @@ void
 OGNClient::CloseConnection() noexcept
 {
   read_event.Close();
+  idle_timer.Cancel();
 
   if (connector.IsPending())
     connector.Cancel();
@@ -142,6 +186,13 @@ void
 OGNClient::OnReconnectTimer() noexcept
 {
   BeginLookup();
+}
+
+void
+OGNClient::OnIdleTimer() noexcept
+{
+  std::cerr << "OGN\tidle\t" << host << ':' << port << std::endl;
+  ScheduleReconnect();
 }
 
 void
@@ -168,6 +219,8 @@ OGNClient::OnReadReady(unsigned events) noexcept
     return;
   }
 
+  idle_timer.Schedule(IDLE_TIMEOUT);
+
   if (GetEnvBool("XCS_CLOUD_DEBUG"))
     std::cerr << "OGN\trx\t" << nbytes << " bytes" << std::endl;
 
@@ -177,6 +230,22 @@ OGNClient::OnReadReady(unsigned events) noexcept
     std::cerr << "OGN\talloc-error\t" << host << ':' << port << std::endl;
     ScheduleReconnect();
   }
+}
+
+void
+OGNClient::CheckLoginResponse(std::string_view line) noexcept
+{
+  /* "# logresp XCSOAR verified, server GLIDERN1" */
+  using namespace std::string_view_literals;
+  if (!SkipPrefix(line, "# logresp "sv) ||
+      !SkipPrefix(line, std::string_view{user}) ||
+      !SkipPrefix(line, " "sv))
+    return;
+
+  login_verified = line.starts_with("verified,"sv);
+  if (!login_verified)
+    std::cerr << "OGN\tlogin-unverified\t" << host << ':' << port
+              << std::endl;
 }
 
 void
@@ -194,6 +263,7 @@ OGNClient::ConsumeInput(std::string_view chunk)
     while (!line.empty() && line.back() == '\r')
       line.remove_suffix(1);
 
+    CheckLoginResponse(line);
     handler.OnAprsLine(line);
     cut = nl + 1;
   }
