@@ -54,6 +54,13 @@ ShowWaypointListPersistentDialog(
 void
 dlgConfigWaypointsShowModal(Waypoints &waypoints) noexcept;
 
+/**
+ * Map display filter for waypoint types (SeeYou CUP styles).
+ * Toggle Display like the airspace filter dialog.
+ */
+void
+dlgWaypointFilterShowModal() noexcept;
+
 enum class WaypointEditResult {
   /** editing was canceled by the user */
   CANCEL,

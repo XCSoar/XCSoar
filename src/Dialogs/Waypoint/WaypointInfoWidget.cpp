@@ -85,6 +85,9 @@ GetWaypointTypeName(Waypoint::Type type) noexcept
     return _("PG Landing Zone");
   case Waypoint::Type::THERMAL_HOTSPOT:
     return _("Thermal hotspot");
+
+  case Waypoint::Type::COUNT:
+    break;
   }
 
   return _("Unknown");
