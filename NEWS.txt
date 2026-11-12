@@ -636,6 +636,9 @@ Version 7.46 - 2026-10-19
     image keep it moving for a moment
   - show the MacCready setting beside L/D on the Analysis glide
     polar page #2035
+  - add an optional daily update check and Software Update dialog;
+    repository offers open the trusted download page and never
+    install automatically
   - stop quitting the simulator when the battery falls below 5%
   - remove the Free RAM InfoBox from the picker; it has shown no
     value since Windows CE support ended. A layout that still

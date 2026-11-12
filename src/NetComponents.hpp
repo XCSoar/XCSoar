@@ -26,6 +26,7 @@ class SatelliteDownloadGlue;
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
 class RaspDownloadGlue;
+namespace Repository { class Service; }
 #endif
 
 /**
@@ -53,6 +54,7 @@ struct NetComponents {
 # endif
 #endif
 #ifdef HAVE_DOWNLOAD_MANAGER
+  const std::unique_ptr<Repository::Service> repository;
   const std::unique_ptr<RaspDownloadGlue> rasp_download;
 #endif
 
