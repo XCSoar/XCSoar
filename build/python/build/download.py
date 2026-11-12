@@ -1,6 +1,11 @@
 from typing import Sequence, Union
+import http.client
 import os
+import socket
+import ssl
 from tempfile import NamedTemporaryFile
+import time
+import urllib.error
 import urllib.request
 
 from .verify import verify_file_digest
@@ -18,9 +23,50 @@ def __get_any(x: Union[str, Sequence[str]]) -> str:
     else:
         return x[0]
 
+# Retry a brief 429/5xx/network outage.  From Dominic Spreitz, PR #3462.
+RETRY_DELAYS = (10, 30, 60)
+
+# seconds a server may stay silent before the attempt counts as failed
+DOWNLOAD_TIMEOUT = 60
+
+def __is_transient(error: Exception) -> bool:
+    """Might the same request succeed in a moment?  A 404, a bad
+    certificate or an unknown host name will not."""
+
+    if isinstance(error, urllib.error.HTTPError):
+        return error.code == 429 or error.code >= 500
+
+    if isinstance(error, urllib.error.URLError):
+        if isinstance(error.reason, ssl.SSLCertVerificationError):
+            return False
+        if isinstance(error.reason, socket.gaierror):
+            return error.reason.errno != socket.EAI_NONAME
+
+    return isinstance(error, (urllib.error.URLError, http.client.HTTPException,
+                              ConnectionError, TimeoutError))
+
 def __download_one(url: str, path: str) -> None:
     print("download", url)
-    urllib.request.urlretrieve(url, path)
+
+    # urlretrieve() has no timeout parameter
+    old_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(DOWNLOAD_TIMEOUT)
+
+    try:
+        for delay in RETRY_DELAYS:
+            try:
+                urllib.request.urlretrieve(url, path)
+                return
+            except Exception as e:
+                if not __is_transient(e):
+                    raise
+                print("download error:", type(e).__name__,
+                      "- retry in", delay, "s")
+                time.sleep(delay)
+
+        urllib.request.urlretrieve(url, path)
+    finally:
+        socket.setdefaulttimeout(old_timeout)
 
 def __download(urls: Sequence[str], path: str) -> None:
     for url in urls[:-1]:
