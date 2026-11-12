@@ -143,6 +143,54 @@ jobs:
           body: ${{ env.CHANGELOGENTRY }}
           prerelease: ${{ env.PRERELEASE }}
 
+  downloads:
+    name: Prefetch third-party downloads
+    runs-on: ubuntu-24.04
+    # One missing tarball must not skip every matrix target; they can
+    # still fetch what they need during the compile.
+    continue-on-error: true
+    outputs:
+      cache-key: ${{ steps.restore.outputs.cache-primary-key }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
+          submodules: false
+
+      - name: Restore downloads cache
+        id: restore
+        uses: actions/cache/restore@v6
+        with:
+          path: output/download
+          key: downloads-union-${{ hashFiles('build/libboost.mk', 'build/kobo.mk', 'build/python/build/libs.py', 'build/python/build/angle.py', 'build/prefetch_downloads.py') }}
+          restore-keys: |
+            downloads-union-
+          enableCrossOsArchive: true
+
+      - name: Fetch missing tarballs
+        if: steps.restore.outputs.cache-hit != 'true'
+        run: python3 build/prefetch_downloads.py
+
+      - name: Save downloads cache
+        if: steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: output/download
+          key: ${{ steps.restore.outputs.cache-primary-key }}
+          enableCrossOsArchive: true
+
+      # Incomplete files must not use the exact union key: the next
+      # run would treat it as a hit and skip the fetch.  restore-keys
+      # downloads-union- still finds this partial blob.
+      - name: Save partial downloads cache
+        if: ${{ failure() && steps.restore.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v6
+        with:
+          path: output/download
+          key: downloads-union-partial-${{ github.run_id }}-${{ github.run_attempt }}
+          enableCrossOsArchive: true
+
   docs:
     name: "Build and Publish Manuals"
     needs: release
@@ -156,7 +204,8 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: release
+    needs: [release, downloads]
+    if: ${{ !cancelled() && needs.release.result == 'success' }}
     permissions:
       contents: write
     # On push/tag, one failed matrix leg (e.g. iOS/macOS) must not block
@@ -235,7 +284,7 @@ jobs:
           if [ "${{ matrix.os }}" = 'ubuntu-24.04' ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
+            ca-certificates rsync openssh-client zstd
           fi
 
       - name: Set vars for release
@@ -275,67 +324,12 @@ jobs:
           ccache --set-config hard_link=false
           ccache --set-config compression=true
 
-      - name: "Cache common downloads"
-        uses: actions/cache@v6
+      - name: Restore downloads cache
+        uses: actions/cache/restore@v6
         with:
-          key: downloads-common-${{ runner.os }}-${{ hashFiles('build/libboost.mk') }}
-          restore-keys: |
-            downloads-common-${{ runner.os }}-
-          path: ${{ github.workspace }}/output/download
-
-      - name: "Cache target-specific downloads"
-        uses: actions/cache@v6
-        with:
-          key: downloads-${{ runner.os }}-${{ matrix.target }}-${{ hashFiles('build/kobo.mk', 'build/thirdparty.py', 'build/python/build/libs.py') }}
-          # Only this target's own cache, or the shared one.  A bare
-          # "downloads-$os-" would also match another target's cache,
-          # which restores 190 MB without the files this target needs.
-          restore-keys: |
-            downloads-${{ runner.os }}-${{ matrix.target }}-
-            downloads-common-${{ runner.os }}-
-          path: ${{ github.workspace }}/output/download
-
-      - name: "Cache apt packages"
-        if: ${{ matrix.os == 'ubuntu-24.04' }}
-        uses: actions/cache@v6
-        with:
-          key: apt-${{ matrix.target_container }}-${{ hashFiles('ide/provisioning/install-debian-packages.sh') }}
-          restore-keys: |
-            apt-${{ matrix.target_container }}
-            apt
-          path: /var/cache/apt
-
-      - name: "Cache Homebrew packages"
-        if: ${{ startsWith(matrix.os, 'macos-') }}
-        uses: actions/cache@v6
-        with:
-          key: brew-${{ matrix.os }}-${{ hashFiles('ide/provisioning/install-darwin-packages.sh') }}
-          restore-keys: |
-            brew-${{ matrix.os }}
-            brew
-          path: |
-            /opt/homebrew/var/cache
-            /opt/homebrew/var/homebrew/cache
-            /usr/local/var/cache
-            /usr/local/var/homebrew/cache
-            /Users/runner/Library/Caches/Homebrew
-
-      - name: "Cache ANGLE downloads"
-        if: ${{ matrix.target == 'MACOS' }}
-        uses: actions/cache@v6
-        with:
-          key: angle-${{ hashFiles('darwin/fetch-angle-from-chrome.sh') }}
-          restore-keys: angle-
-          path: output/angle-download
-
-      - name: "Cache Boost"
-        uses: actions/cache@v6
-        with:
-          key: boost-${{ hashFiles('build/libboost.mk', 'lib/boost/patches/**') }}
-          path: |
-            ${{ github.workspace }}/output/download/boost_*.tar.bz2
-            ${{ github.workspace }}/output/src/stamp-boost_*
-            ${{ github.workspace }}/output/src/boost_*/boost
+          path: output/download
+          key: ${{ needs.downloads.outputs.cache-key }}
+          enableCrossOsArchive: true
 
       - name: "Cache Android SDK/NDK"
         if: ${{ matrix.target == 'ANDROID' }}
