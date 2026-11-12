@@ -970,10 +970,11 @@ cue.
 %%%%%%%%%%%%%%%%%%
 \section{Services / LiveTrack24}
 
-The `{\em LiveTrack24}' protocol is used e.g.\ by the tracking portal on
-\url{http://www.livetrack24.com}.
-Please consult the web pages of the service provider listed under `Server'
-for details on this setup.
+XCSoar sends your position to the tracking portal
+\url{https://www.livetrack24.com}.  You need a LiveTrack24 account;
+without one, no position is sent.  XCSoar also needs a key issued by
+LiveTrack24; a version without it shows a `Status' line saying so and
+sends nothing.
 
 \begin{description}
 \item[Enable]  Switch this {\bf On} to enable the live stream of 
@@ -981,11 +982,9 @@ for details on this setup.
 \item[Tracking Interval]  The time interval for which one position is sent to
   the tracking service.
 \item[Vehicle Type]  Type of vehicle used.
-\item[Server]  The service's web address to stream your position to. There is currently 
-  a choice of some predefined.
-\item[Username]  If you created an account you can enter those credentials here. 
-  Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
-\item[Password]  The password to your tracking account.
+\item[Vehicle Name]  Name of the vehicle, shown with your track.
+\item[Username]  The username of your LiveTrack24 account.
+\item[Password]  The password of your LiveTrack24 account.
 \end{description}
 
 

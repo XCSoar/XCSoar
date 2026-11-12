@@ -10,6 +10,7 @@
 #include "Form/DataField/Listener.hpp"
 #include "Language/Language.hpp"
 #include "Tracking/Features.hpp"
+#include "Tracking/LiveTrack24/AppKey.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Widget/RowFormWidget.hpp"
 #include "Interface.hpp"
@@ -22,16 +23,8 @@ enum ControlIndex {
   LT24_INVERVAL,
   LT24_VEHICLE_TYPE,
   LT24_VEHICLE_NAME,
-  LT24_SERVER,
   LT24_USERNAME,
   LT24_PASSWORD,
-};
-
-static constexpr StaticEnumChoice server_list[] = {
-  { 0, "www.livetrack24.com" },
-  { 1, "test.livetrack24.com" },
-  { 2, "livexc.dhv.de" },
-  nullptr,
 };
 
 static constexpr StaticEnumChoice vehicle_type_list[] = {
@@ -65,7 +58,6 @@ LiveTrack24ConfigPanel::SetEnabled(bool enabled)
   SetRowEnabled(LT24_INVERVAL, enabled);
   SetRowEnabled(LT24_VEHICLE_TYPE, enabled);
   SetRowEnabled(LT24_VEHICLE_NAME, enabled);
-  SetRowEnabled(LT24_SERVER, enabled);
   SetRowEnabled(LT24_USERNAME, enabled);
   SetRowEnabled(LT24_PASSWORD, enabled);
 }
@@ -97,13 +89,16 @@ LiveTrack24ConfigPanel::Prepare(ContainerWindow &parent,
   AddText(_("Vehicle Name"), _("Name of vehicle used."),
           settings.livetrack24.vehicle_name);
 
-  WndProperty *edit = AddEnum(_("Server"), "", server_list, 0);
-  ((DataFieldEnum *)edit->GetDataField())->SetValue(
-    settings.livetrack24.server);
-  edit->RefreshDisplay();
-
-  AddText(_("Username"), "", settings.livetrack24.username);
+  AddText(_("Username"),
+          _("Your LiveTrack24 account.  Without an account, no position "
+            "is sent."),
+          settings.livetrack24.username);
   AddPassword(_("Password"), "", settings.livetrack24.password);
+
+  if (!LiveTrack24::HasAppKey())
+    AddReadOnly(_("Status"), nullptr,
+                _("This version of XCSoar has no LiveTrack24 key and "
+                  "cannot send positions."));
 
   SetEnabled(settings.livetrack24.enabled);
 }
@@ -130,9 +125,6 @@ LiveTrack24ConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(LT24_VEHICLE_NAME,
                        ProfileKeys::LiveTrack24TrackingVehicleName,
                        settings.livetrack24.vehicle_name);
-
-  changed |= SaveValue(LT24_SERVER, ProfileKeys::LiveTrack24Server,
-                       settings.livetrack24.server);
 
   changed |= SaveValue(LT24_USERNAME, ProfileKeys::LiveTrack24Username,
                        settings.livetrack24.username);

@@ -3,21 +3,16 @@
 
 #include "SessionID.hpp"
 
-#include <cstdlib>
+#include <random>
 
 namespace LiveTrack24 {
 
 SessionID
 GenerateSessionID() noexcept
 {
-  int r = rand();
-  return (r & 0x7F000000) | 0x80000000;
-}
-
-SessionID
-GenerateSessionID(UserID user_id) noexcept
-{
-  return GenerateSessionID() | (user_id & 0x00ffffff);
+  static std::mt19937 generator{std::random_device{}()};
+  std::uniform_int_distribution<SessionID> distribution{1};
+  return distribution(generator);
 }
 
 } // namespace Livetrack24
