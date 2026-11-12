@@ -325,6 +325,7 @@ jobs:
           ccache --set-config compression=true
 
       - name: Restore downloads cache
+        if: ${{ needs.downloads.outputs.cache-key != '' }}
         uses: actions/cache/restore@v6
         with:
           path: output/download
