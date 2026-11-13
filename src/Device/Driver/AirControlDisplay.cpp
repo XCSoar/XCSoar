@@ -2,7 +2,8 @@
 // Copyright The XCSoar Project
 
 #include "Device/Driver/AirControlDisplay.hpp"
-#include "Device/Driver.hpp"
+#include "Device/Driver/AirControlDisplay/Internal.hpp"
+#include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -14,52 +15,21 @@
 #include "Units/System.hpp"
 #include "Math/Util.hpp"
 #include "util/StaticString.hxx"
+#include "util/NumberParser.hxx"
 #include "util/Macros.hpp"
 #include "Formatter/NMEAFormatter.hpp"
 #include "NMEA/MoreData.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/Cancelled.hpp"
 #include "time/PeriodClock.hpp"
+#include "time/TimeoutClock.hpp"
 
 #include <atomic>
 #include <cassert>
+#include <chrono>
+#include <fmt/format.h>
 
 using std::string_view_literals::operator""sv;
-
-class ACDDevice : public AbstractDevice {
-  friend bool ParsePAAVS(NMEAInputLine &line, NMEAInfo &info,
-                         ACDDevice *dev) noexcept;
-
-  Port &port;
-  PeriodClock status_clock;
-
-  /**
-   * Last COM standby channel (kHz) from the panel or from our own
-   * PutStandbyFrequency.  CHN1 is read-only on the ACD; tuning active uses
-   * CHN2 + swap + restore (see PutActiveFrequency).
-   */
-  std::atomic<unsigned> cached_com_standby_khz{0};
-  std::atomic<bool> com_standby_khz_known{false};
-
-public:
-  ACDDevice(Port &_port):port(_port) {}
-
-  /* virtual methods from class Device */
-  bool ParseNMEA(const char *line, struct NMEAInfo &info) override;
-  bool PutQNH(const AtmosphericPressure &pres,
-              OperationEnvironment &env) override;
-  bool PutVolume(unsigned volume, OperationEnvironment &env) override;
-  bool PutActiveFrequency(RadioFrequency frequency,
-                          const char *name,
-                          OperationEnvironment &env) override;
-  bool PutStandbyFrequency(RadioFrequency frequency,
-                           const char *name,
-                           OperationEnvironment &env) override;
-  bool ExchangeRadioFrequencies(OperationEnvironment &env,
-                                NMEAInfo &info) override;
-  bool PutTransponderCode(TransponderCode code, OperationEnvironment &env) override;
-  void OnCalculatedUpdate(const MoreData &basic,
-                          [[maybe_unused]] const DerivedInfo &calculated) override;
-};
 
 bool
 ParsePAAVS(NMEAInputLine &line, NMEAInfo &info, ACDDevice *dev) noexcept
@@ -282,10 +252,122 @@ ACDDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 
   NMEAInputLine line(_line);
 
-  if (line.ReadCompare("$PAAVS"))
+  const auto type = line.ReadView();
+  if (type == "$PAAVS"sv)
     return ParsePAAVS(line, info, this);
+  else if (type == "$PAAVC"sv)
+    return ParseConfiguration(line);
   else
     return false;
+}
+
+bool
+ACDDevice::ParseConfiguration(NMEAInputLine &line) noexcept
+{
+  if (line.ReadView() != "A"sv)
+    return false;
+
+  const auto code = line.ReadView();
+  const auto item = line.ReadView();
+  const auto value = line.ReadView();
+  const std::lock_guard lock{response_mutex};
+  if (!response_pending || response_ready)
+    return true;
+
+  if (code == "ERROR"sv ||
+      (code == pending_code && item == "ERROR"sv)) {
+    response_ok = false;
+  } else if (code == pending_code && item == pending_item &&
+             value.size() < response_value.capacity()) {
+    response_value = value;
+    response_ok = true;
+  } else {
+    return true;
+  }
+
+  response_ready = true;
+  response_cond.notify_one();
+  return true;
+}
+
+bool
+ACDDevice::RequestConfiguration(const char *request, const char *code,
+                                const char *item, std::string &value,
+                                OperationEnvironment &env)
+{
+  {
+    const std::lock_guard lock{response_mutex};
+    assert(!response_pending);
+    pending_code = code;
+    pending_item = item;
+    response_pending = true;
+    response_ready = false;
+  }
+
+  try {
+    PortWriteNMEA(port, request, env);
+  } catch (...) {
+    const std::lock_guard lock{response_mutex};
+    response_pending = false;
+    throw;
+  }
+
+  TimeoutClock timeout{std::chrono::milliseconds(500)};
+  std::unique_lock lock{response_mutex};
+  while (!response_ready) {
+    if (env.IsCancelled()) {
+      response_pending = false;
+      throw OperationCancelled{};
+    }
+
+    const auto remaining = timeout.GetRemainingSigned();
+    if (remaining <= std::chrono::steady_clock::duration::zero()) {
+      response_pending = false;
+      return false;
+    }
+
+    response_cond.wait_for(lock, remaining);
+  }
+
+  response_pending = false;
+  if (!response_ok)
+    return false;
+
+  value = response_value.c_str();
+  return true;
+}
+
+bool
+ACDDevice::ReadConfiguration(const char *code, const char *item,
+                             std::string &value, OperationEnvironment &env)
+{
+  const auto request = fmt::format("PAAVC,R,{},{}", code, item);
+  return RequestConfiguration(request.c_str(), code, item, value, env);
+}
+
+bool
+ACDDevice::ReadConfigurationUnsigned(const char *code, const char *item,
+                                     unsigned &value, unsigned max,
+                                     OperationEnvironment &env)
+{
+  std::string text;
+  unsigned parsed;
+  if (!ReadConfiguration(code, item, text, env) ||
+      !ParseIntegerTo(std::string_view{text}, parsed) || parsed > max)
+    return false;
+
+  value = parsed;
+  return true;
+}
+
+bool
+ACDDevice::WriteConfiguration(const char *code, const char *item,
+                              unsigned value, OperationEnvironment &env)
+{
+  const auto request = fmt::format("PAAVC,S,{},{},{}", code, item, value);
+  std::string response;
+  return RequestConfiguration(request.c_str(), code, item, response, env) &&
+    response == fmt::format("{}", value);
 }
 
 void
@@ -319,6 +401,7 @@ AirControlDisplayCreateOnPort([[maybe_unused]] const DeviceConfig &config, Port 
 const struct DeviceRegister acd_driver = {
   "ACD",
   "Air Control Display",
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
+  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS |
+    DeviceRegister::MANAGE,
   AirControlDisplayCreateOnPort,
 };

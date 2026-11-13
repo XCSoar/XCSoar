@@ -5,6 +5,7 @@
 #include "Device/Declaration.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Driver/AirControlDisplay.hpp"
+#include "Device/Driver/AirControlDisplay/Internal.hpp"
 #include "Device/Driver/AltairPro.hpp"
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/BorgeltB50.hpp"
@@ -47,6 +48,7 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/NullPort.hpp"
+#include "NMEA/Checksum.hpp"
 #include "DumpPort.hpp"
 #include "Device/Driver/LX/LXNAVPolarConversion.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
@@ -98,8 +100,10 @@
 #include <chrono>
 #include <cstdio>
 #include <cstring>
+#include <future>
 #include <memory>
 #include <span>
+#include <thread>
 
 #ifdef _WIN32
 #include <process.h>
@@ -3692,6 +3696,129 @@ TestACD()
   delete device;
 }
 
+class ACDConfigurationPort final : public Port {
+  std::string request;
+  std::string reply_body, followup_body;
+  std::promise<void> request_complete;
+  ACDDevice *device = nullptr;
+  bool stopped = false;
+
+public:
+  ACDConfigurationPort(DataHandler &handler, std::string _reply_body,
+                       std::string _followup_body = {})
+    :Port(nullptr, handler), reply_body(std::move(_reply_body)),
+     followup_body(std::move(_followup_body)) {}
+
+  PortState GetState() const noexcept override { return PortState::READY; }
+  std::size_t Write(std::span<const std::byte> src) override {
+    request.append(reinterpret_cast<const char *>(src.data()), src.size());
+    if (!request.empty() && request.back() == '\n') {
+      request_complete.set_value();
+      if (device == nullptr || reply_body.empty())
+        return src.size();
+
+      NMEAInfo info;
+      info.Reset();
+      info.clock = TimeStamp{FloatDuration{1}};
+      const auto send_reply = [this, &info](const std::string &body) {
+        const auto response = fmt::format("${}*{:02X}", body,
+                                          NMEAChecksum(body));
+        device->ParseNMEA(response.c_str(), info);
+      };
+      send_reply(reply_body);
+      if (!followup_body.empty())
+        send_reply(followup_body);
+    }
+    return src.size();
+  }
+  bool Drain() override { return true; }
+  void Flush() override {}
+  unsigned GetBaudrate() const noexcept override { return 9600; }
+  void SetBaudrate(unsigned) override {}
+  bool StopRxThread() override { stopped = true; return true; }
+  bool StartRxThread() override { stopped = false; return true; }
+  std::size_t Read(std::span<std::byte>) override { return 0; }
+  void WaitRead(std::chrono::steady_clock::duration) override {}
+
+  void SetDevice(ACDDevice &_device) noexcept { device = &_device; }
+  void WaitForRequest() { request_complete.get_future().wait(); }
+  const std::string &GetRequest() const noexcept { return request; }
+  bool IsStopped() const noexcept { return stopped; }
+};
+
+static void
+TestACDConfiguration()
+{
+  NullDataHandler handler;
+  NullOperationEnvironment env;
+  ACDConfigurationPort read_port(handler, "PAAVC,A,ACD,SWVER,46");
+  ACDDevice read_device(read_port);
+  read_port.SetDevice(read_device);
+  std::string value;
+  ok1(read_device.ReadConfiguration("ACD", "SWVER", value, env));
+  ok1(value == "46");
+  ok1(read_port.GetRequest().starts_with("$PAAVC,R,ACD,SWVER*"));
+  ok1(!read_port.IsStopped());
+
+  ACDConfigurationPort delayed_port(handler, "");
+  ACDDevice delayed_device(delayed_port);
+  delayed_port.SetDevice(delayed_device);
+  std::string delayed_value;
+  bool delayed_ok = false;
+  std::jthread requester([&] {
+    delayed_ok = delayed_device.ReadConfiguration("ACD", "SWVER",
+                                                  delayed_value, env);
+  });
+  delayed_port.WaitForRequest();
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  NMEAInfo delayed_info;
+  delayed_info.Reset();
+  delayed_info.clock = TimeStamp{FloatDuration{1}};
+  ok1(delayed_device.ParseNMEA("$PAAVC,A,ACD,SWVER,46*05", delayed_info));
+  requester.join();
+  ok1(delayed_ok && delayed_value == "46");
+
+  ACDConfigurationPort write_port(handler, "PAAVC,A,COMM,RXVOL1,75");
+  ACDDevice write_device(write_port);
+  write_port.SetDevice(write_device);
+  ok1(write_device.WriteConfiguration("COMM", "RXVOL1", 75, env));
+  ok1(write_port.GetRequest().starts_with(
+        "$PAAVC,S,COMM,RXVOL1,75*"));
+
+  ACDConfigurationPort error_port(handler, "PAAVC,A,COMM,ERROR",
+                                  "PAAVC,A,COMM,SQL,45");
+  ACDDevice error_device(error_port);
+  error_port.SetDevice(error_device);
+  ok1(!error_device.ReadConfiguration("COMM", "SQL", value, env));
+
+  ACDConfigurationPort generic_error_port(handler, "PAAVC,A,ERROR",
+                                          "PAAVC,A,COMM,SQL,45");
+  ACDDevice generic_error_device(generic_error_port);
+  generic_error_port.SetDevice(generic_error_device);
+  ok1(!generic_error_device.ReadConfiguration("COMM", "SQL", value, env));
+
+  unsigned number = 0;
+  ACDConfigurationPort numeric_port(handler, "PAAVC,A,COMM,RXVOL1,75");
+  ACDDevice numeric_device(numeric_port);
+  numeric_port.SetDevice(numeric_device);
+  ok1(numeric_device.ReadConfigurationUnsigned(
+    "COMM", "RXVOL1", number, 100, env));
+  ok1(number == 75);
+
+  ACDConfigurationPort invalid_port(handler, "PAAVC,A,COMM,RXVOL1,75x");
+  ACDDevice invalid_device(invalid_port);
+  invalid_port.SetDevice(invalid_device);
+  ok1(!invalid_device.ReadConfigurationUnsigned(
+    "COMM", "RXVOL1", number, 100, env));
+  ok1(number == 75);
+
+  ACDConfigurationPort range_port(handler, "PAAVC,A,COMM,RXVOL1,101");
+  ACDDevice range_device(range_port);
+  range_port.SetDevice(range_device);
+  ok1(!range_device.ReadConfigurationUnsigned(
+    "COMM", "RXVOL1", number, 100, env));
+}
+
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
@@ -4785,7 +4912,8 @@ int main()
   SetSingleDataPath(data_path);
   CreateDataPath();
 
-  plan_tests(1103 /* drivers */ + 45 /* PFLAU extended */
+  plan_tests(1103 /* drivers */ + 15 /* ACD configuration */
+             + 45 /* PFLAU extended */
              + 40 /* PFLAA v7+ */ + 4 /* PFLAA high speed */
              + 12 /* PFLAE */ + 10 /* PFLAJ */
              + 16 /* PFLAQ */
@@ -4854,6 +4982,7 @@ int main()
   TestVaulter();
   TestXCTracer();
   TestACD();
+  TestACDConfiguration();
   TestXCVario();
   TestLoEFGREN();
 
