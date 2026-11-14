@@ -1054,8 +1054,8 @@ DrawTape(Canvas &canvas, const PixelRect &strip, const Font &font,
 }
 
 /**
- * Horizontal track tape along the top.  Higher bearings sit to
- * the right.  The centre bug is the current true track.
+ * Horizontal heading tape along the top.  Higher bearings sit to
+ * the right.  The centre bug is the current heading.
  */
 static void
 DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
