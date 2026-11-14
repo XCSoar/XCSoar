@@ -1054,6 +1054,22 @@ DrawTape(Canvas &canvas, const PixelRect &strip, const Font &font,
 }
 
 /**
+ * The letter of a cardinal point, or nullptr for any other bearing.
+ */
+[[gnu::const]]
+static const char *
+CardinalLabel(int deg) noexcept
+{
+  switch (deg) {
+  case 0: return "N";
+  case 90: return "E";
+  case 180: return "S";
+  case 270: return "W";
+  default: return nullptr;
+  }
+}
+
+/**
  * Horizontal heading tape along the top.  Higher bearings sit to
  * the right.  The centre bug is the current heading.
  */
@@ -1093,19 +1109,28 @@ DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
 
         canvas.DrawLine({x, edge - tick_len}, {x, edge});
 
-        if (BearingDeg(tick) % 30 != 0)
+        const int deg = BearingDeg(tick);
+        if (deg % 30 != 0)
           continue;
 
-        char label[8];
-        StringFormatUnsafe(label, "%d", BearingDeg(tick));
+        /* the cardinal points as letters, as on a compass card, and in
+           the larger face, so that the eye finds north, east, south and
+           west at once; the other labels stay numbers */
+        const char *cardinal = CardinalLabel(deg);
+        char number[8];
+        if (cardinal == nullptr)
+          StringFormatUnsafe(number, "%d", deg);
+        const char *label = cardinal != nullptr ? cardinal : number;
+
+        canvas.Select(cardinal != nullptr ? value_font : font);
         const PixelSize ls = canvas.CalcTextSize(label);
         const int label_y = edge - tick_len - int(ls.height);
-        if (label_y < strip.top ||
-            x - int(ls.width) / 2 <= strip.left ||
-            x + int(ls.width) / 2 >= strip.right)
-          continue;
+        if (label_y >= strip.top &&
+            x - int(ls.width) / 2 > strip.left &&
+            x + int(ls.width) / 2 < strip.right)
+          canvas.DrawText({x - int(ls.width) / 2, label_y}, label);
 
-        canvas.DrawText({x - int(ls.width) / 2, label_y}, label);
+        canvas.Select(font);
       }
     }
   }
