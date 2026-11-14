@@ -123,8 +123,13 @@ ClipText(const Font &font, std::string_view text,
   if (text.empty() || x >= int(canvas_width))
     return {};
 
-  /* this is an approximation, just good enough for clipping */
+  /* Height/4 is about half a monospace cell, so it keeps too many
+     characters.  A face taller than that guess cuts a line that
+     fits.  Never guess wider than the advance DrawText steps. */
   unsigned font_width = std::max(font.GetHeight() / 4U, 1U);
+  const unsigned advance = font.GetAdvance();
+  if (font_width > advance)
+    font_width = advance;
 
   unsigned max_width = canvas_width - x;
   unsigned max_chars = max_width / font_width;

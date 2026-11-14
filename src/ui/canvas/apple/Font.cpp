@@ -44,6 +44,7 @@ using NativeFontT =
 void
 Font::Load(const FontDescription &d)
 {
+  advance = 0;
   NativeFontT *native_font;
 
   /* the bold cut of the system font is asked for directly, so only

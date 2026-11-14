@@ -145,6 +145,7 @@ void
 Font::LoadFile(const char *file, unsigned ptsize, [[maybe_unused]] bool bold, [[maybe_unused]] bool italic)
 {
   assert(IsScreenInitialized());
+  advance = 0;
 
   Destroy();
 

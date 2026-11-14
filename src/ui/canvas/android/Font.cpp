@@ -16,6 +16,7 @@ void
 Font::Load(const FontDescription &d)
 {
   assert(IsScreenInitialized());
+  advance = 0;
 
   delete text_util_object;
   text_util_object = TextUtil::create(d);

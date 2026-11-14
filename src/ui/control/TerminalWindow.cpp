@@ -76,7 +76,13 @@ void
 TerminalWindow::OnCreate()
 {
   PaintWindow::OnCreate();
-  cell_size = look.font.TextSize("W");
+
+  /* Pitch is the step DrawText advances for a digit.  The ink
+     of "W" is wider, so a row of NMEA stopped short of the window.
+     The row height stays the measured line box. */
+  const PixelSize box = look.font.TextSize("0");
+  cell_size.width = look.font.GetAdvance();
+  cell_size.height = std::max(box.height, 1u);
   cursor_x = 0;
   cursor_y = 0;
   data.Reset();

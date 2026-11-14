@@ -76,6 +76,7 @@ Version 7.47 - not yet released
     again; XCSoar kept reporting "USB serial device not found" until
     it was restarted #3450
 * dialogs
+  - draw port monitor text across the full width of the window
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
     text, clears the ticks for that file or page #2536
