@@ -16,7 +16,7 @@ Sample() noexcept
 int
 main()
 {
-  plan_tests(13);
+  plan_tests(16);
 
   Units::current.speed_unit = Unit::KILOMETER_PER_HOUR;
   Units::current.altitude_unit = Unit::METER;
@@ -35,16 +35,31 @@ main()
   ok1(ias.altitude && equals(*ias.altitude, 1500));
   ok1(equals(ias.altitude_step, 50));
 
+  /* an attitude indicator shows the airspeed only, never the ground
+     speed in its place */
   MoreData ground = Sample();
   ground.ground_speed_available.Update(ground.clock);
   ground.ground_speed = 10;
   const auto gs = HorizonRenderer::Readout(ground);
-  ok1(gs.speed && equals(*gs.speed, 36));
+  ok1(!gs.speed);
   ok1(equals(gs.speed_step, 10));
 
   const auto empty = HorizonRenderer::Readout(Sample());
   ok1(!empty.speed);
   ok1(!empty.altitude);
+  ok1(!empty.course);
+
+  /* the tape shows where the nose points, not the track */
+  MoreData drift = Sample();
+  drift.track_available.Update(drift.clock);
+  drift.track = Angle::Degrees(80);
+  const auto track_only = HorizonRenderer::Readout(drift);
+  ok1(!track_only.course);
+
+  drift.attitude.heading_available.Update(drift.clock);
+  drift.attitude.heading = Angle::Degrees(-30);
+  const auto heading = HorizonRenderer::Readout(drift);
+  ok1(heading.course && equals(*heading.course, 330));
 
   Units::current.altitude_unit = Unit::FEET;
   const auto feet = HorizonRenderer::Readout(both);

@@ -23,11 +23,14 @@ Version 7.47 - not yet released
     attitude indicator InfoBox shows "---" and "NO AHRS" in its
     comment #2047
   - show a speed tape and an altitude tape as a shaded overlay on
-    the full-screen horizon.  Speed is indicated airspeed, or ground
-    speed when airspeed is missing.  Altitude is the navigation
-    altitude.  A missing value is shown as "---"
-  - show the true track on a tape along the top of the
-    full-screen horizon.  A missing track is shown as "---"
+    the full-screen horizon.  Speed is indicated airspeed only, as
+    on an attitude indicator; ground speed is left to the InfoBoxes.
+    Altitude is the navigation altitude.  A missing value is shown
+    as "---"
+  - show the heading on a tape along the top of the full-screen
+    horizon: from a compass when one is connected, otherwise the
+    track corrected for the wind, and the track itself while the wind
+    is not known.  A missing heading is shown as "---"
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears

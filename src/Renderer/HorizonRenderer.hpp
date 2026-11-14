@@ -15,13 +15,13 @@ class Canvas;
 
 namespace HorizonRenderer {
 
-/** User-unit speed and altitude, and true track, for the full horizon. */
+/** User-unit speed and altitude, and the heading, for the full horizon. */
 struct HorizonReadout {
   std::optional<double> speed;
   double speed_step = 10;
   std::optional<double> altitude;
   double altitude_step = 50;
-  /** True track in degrees, 0..360. */
+  /** Heading in degrees, 0..360. */
   std::optional<double> course;
 };
 
@@ -31,9 +31,14 @@ void Draw(Canvas &canvas, const PixelRect &rc,
           const HorizonReadout &readout = {});
 
 /**
- * Indicated airspeed when it is available, otherwise ground speed.
- * Altitude is the navigation altitude.  Course is the true track.
- * Steps match the user unit.
+ * The references of an attitude indicator: indicated airspeed, the
+ * navigation altitude and the heading, from a compass when one is
+ * connected, otherwise the track corrected for the wind, and the track
+ * itself while the wind is not known, as BasicComputer provides it.  Steps match the user unit.
+ *
+ * The horizon is an attitude indicator, not a navigation display, so
+ * it shows what the aircraft does in the air: no ground speed in place
+ * of a missing airspeed and no track; the InfoBoxes offer both.
  */
 [[nodiscard]]
 inline HorizonReadout
@@ -53,14 +58,14 @@ Readout(const MoreData &basic) noexcept
 
   if (basic.airspeed_available)
     readout.speed = Units::ToUserSpeed(basic.indicated_airspeed);
-  else if (basic.ground_speed_available)
-    readout.speed = Units::ToUserSpeed(basic.ground_speed);
 
   if (basic.NavAltitudeAvailable())
     readout.altitude = Units::ToUserAltitude(basic.nav_altitude);
 
-  if (basic.track_available)
-    readout.course = basic.track.AsBearing().Degrees();
+  /* where the nose points; the track differs from it by the drift
+     angle */
+  if (basic.attitude.heading_available)
+    readout.course = basic.attitude.heading.AsBearing().Degrees();
 
   return readout;
 }

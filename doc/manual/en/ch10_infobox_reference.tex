@@ -110,9 +110,14 @@ does not jump.  Without attitude data the full horizon stays level,
 with a red cross and a red ribbon with ``NO AHRS'' in white.  The
 InfoBox shows ``---'' and puts ``NO AHRS'' in its comment.  The full
 horizon has a shaded speed tape on the left and a shaded altitude
-tape on the right, over the sky and ground.  Speed is indicated
-airspeed, or ground speed when airspeed is missing.  Altitude is
-the navigation altitude.  The true track runs along the top.
+tape on the right, over the sky and ground, and the heading along
+the top.  The horizon is an attitude indicator, not a navigation
+display: speed is the indicated airspeed, never the ground speed in
+its place, and the heading comes from a compass when one is
+connected, otherwise from the track corrected for the wind, and
+from the track itself while the wind is not known.  Ground
+speed and track are available as InfoBoxes.  Altitude is the
+navigation altitude.
 A missing value is shown as ``---''.}
 
 
