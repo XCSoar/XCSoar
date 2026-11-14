@@ -89,6 +89,12 @@ class MainWindow : public UI::SingleWindow {
   WindowWidget *bottom_banner_widget = nullptr;
 
   /**
+   * The height of the warning banner when the InfoBoxes were last laid
+   * out; the InfoBox area ends this far above the bottom.
+   */
+  unsigned banner_layout_height = 0;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-nullptr.
@@ -333,11 +339,18 @@ private:
   }
 
   /**
-   * The area in which everything except the map itself is laid out.
-   * This is the whole client area on the edges the user chose to
-   * stretch to, and the safe area on all others.
+   * The whole client area on the edges the user chose to stretch to,
+   * and the safe area on all others, regardless of the airspace
+   * warning banner.
    *
    * @see DisplaySettings::infobox_area_stretch
+   */
+  [[gnu::pure]]
+  PixelRect GetStretchedAreaRect() const noexcept;
+
+  /**
+   * The area in which everything except the map itself is laid out:
+   * #GetStretchedAreaRect() above the airspace warning banner.
    */
   [[gnu::pure]]
   PixelRect GetInfoBoxAreaRect() const noexcept;
@@ -381,12 +394,18 @@ private:
   PixelRect GetMapAreaRect() const noexcept;
 
   /**
-   * Return the banner rectangle inside the InfoBox boundaries, above the
-   * configured bottom widget, for both map and custom pages.  While a dialog
-   * is open, use a full-width strip at the bottom of the client area instead.
+   * Return the banner rectangle: a full-width strip at the bottom of
+   * the safe area, on the map, on a custom page and over a dialog
+   * alike.
    */
   [[gnu::pure]]
   PixelRect GetBottomBannerRect() const noexcept;
+
+  /**
+   * The height of the warning banner if it is shown, else 0.
+   */
+  [[gnu::pure]]
+  unsigned GetVisibleBannerHeight() const noexcept;
 
   /**
    * Lay out the top/bottom widgets, banner and active main content inside
