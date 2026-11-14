@@ -43,6 +43,9 @@ protected:
 
   unsigned height, ascent_height, capital_height;
 
+  /** Step between two glyphs.  0 until the first GetAdvance(). */
+  mutable unsigned advance = 0;
+
   void CalculateHeights() noexcept;
 
 public:
@@ -95,6 +98,23 @@ public:
 
   [[gnu::pure]]
   PixelSize TextSize(std::string_view text) const noexcept;
+
+  /**
+   * The step DrawText advances by, for one digit.  The ink box of
+   * "W" is wider than this on a proportional face.
+   */
+  unsigned GetAdvance() const noexcept {
+    if (advance != 0)
+      return advance;
+
+    const unsigned one = TextSize("0").width;
+    const unsigned two = TextSize("00").width;
+    unsigned step = two > one ? two - one : one;
+    if (step == 0)
+      step = 1;
+    advance = step;
+    return advance;
+  }
 
   /**
    * Can this font render the given Unicode character?  Backends whose
