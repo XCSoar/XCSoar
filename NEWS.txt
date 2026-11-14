@@ -30,7 +30,8 @@ Version 7.47 - not yet released
   - show the heading on a tape along the top of the full-screen
     horizon: from a compass when one is connected, otherwise the
     track corrected for the wind, and the track itself while the wind
-    is not known.  A missing heading is shown as "---"
+    is not known.  The cardinal points are marked N, E, S and W in a
+    larger face.  A missing heading is shown as "---"
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears
