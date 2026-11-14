@@ -293,34 +293,24 @@ GetOuterBorder(const PixelRect &infobox_area_rc, const PixelRect &rc) noexcept
   return border;
 }
 
-struct MapAreaLayout {
-  PixelRect top, map, bottom_banner, bottom;
-};
-
+/**
+ * The map area between the top and the bottom widget.  The warning
+ * banner does not take part: it lies over the bottom edge of the
+ * screen and leaves the map as it is.
+ */
 [[gnu::pure]]
-static MapAreaLayout
-CalculateMapAreaLayout(const PixelRect &main_rect,
-                       const Widget *top_widget,
-                       const Widget *bottom_banner_widget,
-                       const Widget *bottom_widget) noexcept
+static PixelRect
+CalculateMapAreaRect(const PixelRect &main_rect,
+                     const Widget *top_widget,
+                     const Widget *bottom_widget) noexcept
 {
   PixelRect rc = main_rect;
-
-  const PixelRect top_rect = GetTopWidgetRect(rc, top_widget);
-  rc = GetMapRectBelow(rc, top_rect);
-
-  const PixelRect bottom_rect = GetBottomWidgetRect(rc, bottom_widget);
-  rc = GetMapRectAbove(rc, bottom_rect);
-
-  const PixelRect bottom_banner_rect =
-    GetBottomWidgetRect(rc, bottom_banner_widget);
-  const PixelRect map_rect = GetMapRectAbove(rc, bottom_banner_rect);
-
-  return {top_rect, map_rect, bottom_banner_rect, bottom_rect};
+  rc = GetMapRectBelow(rc, GetTopWidgetRect(rc, top_widget));
+  return GetMapRectAbove(rc, GetBottomWidgetRect(rc, bottom_widget));
 }
 
 PixelRect
-MainWindow::GetInfoBoxAreaRect() const noexcept
+MainWindow::GetStretchedAreaRect() const noexcept
 {
   const PixelRect rc = GetClientRect();
   const PixelRect safe_rc = GetSafeAreaRect();
@@ -344,6 +334,36 @@ MainWindow::GetInfoBoxAreaRect() const noexcept
     edges & DisplaySettings::INFOBOX_AREA_STRETCH_BOTTOM
       ? rc.bottom : std::min(rc.bottom, safe_rc.bottom),
   };
+}
+
+PixelRect
+MainWindow::GetInfoBoxAreaRect() const noexcept
+{
+  PixelRect rc = GetStretchedAreaRect();
+
+  /* everything ends above the airspace warning banner, with the
+     height it had when the InfoBoxes were laid out, so that the
+     gauges and the menu agree with the InfoBoxes.  The banner sits on
+     the bottom of the safe area, not of the screen: where the
+     InfoBoxes are stretched behind the navigation bar, counting from
+     the screen edge would leave them reaching into the banner by the
+     height of that bar. */
+  if (banner_layout_height > 0)
+    rc.bottom = std::max(rc.top,
+                         std::min(rc.bottom,
+                                  GetSafeAreaRect().bottom
+                                  - int(banner_layout_height)));
+  return rc;
+}
+
+unsigned
+MainWindow::GetVisibleBannerHeight() const noexcept
+{
+  if (!HaveBottomBannerWidget() ||
+      !bottom_banner_widget->GetWindow().IsVisible())
+    return 0;
+
+  return GetBottomBannerRect().GetHeight();
 }
 
 void
@@ -392,8 +412,7 @@ MainWindow::GetMapAreaRect() const noexcept
   if (map != nullptr)
     return map->GetPosition();
 
-  return CalculateMapAreaLayout(GetMainRect(), top_widget,
-                                bottom_banner_widget, bottom_widget).map;
+  return CalculateMapAreaRect(GetMainRect(), top_widget, bottom_widget);
 }
 
 PixelRect
@@ -401,19 +420,15 @@ MainWindow::GetBottomBannerRect() const noexcept
 {
   assert(bottom_banner_widget != nullptr);
 
-  if (HasDialog())
-    return GetBottomWidgetRect(GetSafeAreaRect(), bottom_banner_widget);
-
-  PixelRect available = GetAreaStackRect();
-  if (HaveTopWidget())
-    available = GetMapRectBelow(available,
-                                GetTopWidgetRect(available, top_widget));
-  if (HaveBottomWidget())
-    available = GetMapRectAbove(available,
-                                GetBottomWidgetRect(available, bottom_widget));
-
-  return GetBottomWidgetRect(available, bottom_banner_widget);
+  /* always at the bottom edge of the screen, on the map just as over
+     a dialog: a banner that sat above the InfoBoxes on the map, above
+     the menu buttons with the menu open, and at the very bottom of a
+     dialog left the pilot guessing whether its buttons or the ones
+     next to it were meant.  The InfoBoxes, the map and the menu make
+     room for it, see GetInfoBoxAreaRect(). */
+  return GetBottomWidgetRect(GetSafeAreaRect(), bottom_banner_widget);
 }
+
 
 void
 MainWindow::BeginCoalesceMapLayout() noexcept
@@ -463,6 +478,14 @@ MainWindow::LayoutMapArea() noexcept
     return;
   }
 
+  if (GetVisibleBannerHeight() != banner_layout_height) {
+    /* the warning banner came, went or changed its height: the
+       InfoBoxes and the map make room for it or take it back, and
+       ReinitialiseLayout() comes back here */
+    ReinitialiseLayout();
+    return;
+  }
+
   PixelRect main_rect = GetMainRect();
 
   /* the top and bottom areas (cross section, airspace and NOTAM
@@ -502,40 +525,14 @@ MainWindow::LayoutMapArea() noexcept
       main_rect = GetMapRectAbove(main_rect, bottom_rect);
   }
 
-  /* transient warnings sit above the configured bottom area, on the
-     map and on a custom page.  While a dialog is open the banner is
-     the dialog overlay and must not shorten the map. */
-  PixelRect banner_rect{};
-  if (bottom_banner_widget != nullptr && !HasDialog()) {
-    PixelRect above_bottom = area_stack_rc;
-    if (HaveTopWidget())
-      above_bottom = GetMapRectBelow(above_bottom, top_rect);
-    if (HaveBottomWidget())
-      above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
-
-    banner_rect = GetBottomWidgetRect(above_bottom, bottom_banner_widget);
-    if (bottom_banner_widget->GetWindow().IsVisible())
-      bottom_banner_widget->Move(banner_rect);
-    hud_rect = GetMapRectAbove(hud_rect, banner_rect);
-
-    if (main_rect.bottom <= banner_rect.bottom)
-      main_rect = GetMapRectAbove(main_rect, banner_rect);
-  }
-
   map->Move(main_rect);
   if (widget != nullptr)
     widget->Move(hud_rect);
 
-  if (banner_visible) {
-    if (HasDialog()) {
-      banner_rect = GetBottomWidgetRect(GetSafeAreaRect(),
-                                        bottom_banner_widget);
-      bottom_banner_widget->Move(banner_rect);
-    }
-
+  if (banner_visible)
     SetDialogOverlay(&bottom_banner_widget->GetWindow(),
-                     banner_rect.GetHeight());
-  } else
+                     GetBottomBannerRect().GetHeight());
+  else
     SetDialogOverlay(nullptr);
 
   RaiseBottomBannerWidget();
@@ -980,6 +977,17 @@ MainWindow::ReinitialiseLayout() noexcept
        yet either, so there is nothing to do here */
     return;
 
+  /* The banner decides its line and button rows from its width, and
+     the width changes with a resize; it has to know the new width
+     before its height is recorded, or the InfoBoxes keep the room of
+     the old height and reach under a banner that has grown. */
+  if (HaveBottomBannerWidget() &&
+      bottom_banner_widget->GetWindow().IsVisible())
+    bottom_banner_widget->Move(GetBottomBannerRect());
+
+  /* before anything asks for the InfoBox area */
+  banner_layout_height = GetVisibleBannerHeight();
+
   const PixelRect rc = GetClientRect();
   const PixelRect infobox_area_rc = GetInfoBoxAreaRect();
 
@@ -1014,7 +1022,7 @@ MainWindow::ReinitialiseLayout() noexcept
 
      @see GlueMapWindow::UpdateProjection(), which keeps the aircraft
      in the part of the map that is not hidden behind the InfoBoxes */
-  map_rect = infobox_area_rc.Contains(rc)
+  map_rect = GetStretchedAreaRect().Contains(rc)
     ? ib_layout.remaining
     : rc;
 
@@ -1706,36 +1714,12 @@ MainWindow::OnPaint(Canvas &canvas) noexcept
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
-  const bool map_banner = HaveBottomBannerWidget() && !HasDialog();
-  if ((map_banner || HaveBottomWidget()) && map != nullptr) {
+  if (HaveBottomWidget() && map != nullptr) {
     /* draw a separator between the map and the strip below it */
     PixelRect rc = map->GetPosition();
     rc.top = rc.bottom;
     rc.bottom += separator_height;
     canvas.DrawFilledRectangle(rc, COLOR_BLACK);
-  }
-
-  if (map_banner && HaveBottomWidget()) {
-    /* separator between the warning banner and the configured bottom
-       area; the map may extend underneath both */
-    const PixelRect area_stack_rc = GetAreaStackRect();
-    PixelRect above_bottom = area_stack_rc;
-    if (HaveTopWidget())
-      above_bottom = GetMapRectBelow(above_bottom,
-                                     GetTopWidgetRect(area_stack_rc,
-                                                      top_widget));
-
-    const PixelRect bottom_rect =
-      GetBottomWidgetRect(area_stack_rc, bottom_widget);
-    above_bottom = GetMapRectAbove(above_bottom, bottom_rect);
-    const PixelRect banner_rect =
-      GetBottomWidgetRect(above_bottom, bottom_banner_widget);
-
-    PixelRect rc = banner_rect;
-    rc.top = banner_rect.bottom;
-    rc.bottom = bottom_rect.top;
-    if (rc.top < rc.bottom)
-      canvas.DrawFilledRectangle(rc, COLOR_BLACK);
   }
 
   SingleWindow::OnPaint(canvas);
@@ -2075,14 +2059,9 @@ MainWindow::SetBottomBannerWidget(WindowWidget *_widget) noexcept
   bottom_banner_widget = _widget;
 
   if (bottom_banner_widget != nullptr) {
-    PixelRect available = GetMainRect();
-    available = GetMapRectBelow(available,
-                                GetTopWidgetRect(available, top_widget));
-    available = GetMapRectAbove(available,
-                                GetBottomWidgetRect(available, bottom_widget));
-
-    /* Prepare with the available active-content area so the banner can
-       determine its final minimum size. */
+    /* Prepare with the width the banner will have, the safe area, so
+       that it can determine its final minimum size. */
+    const PixelRect available = GetSafeAreaRect();
     bottom_banner_widget->Initialise(*this, available);
     bottom_banner_widget->Prepare(*this, available);
   }
