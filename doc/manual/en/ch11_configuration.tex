@@ -988,7 +988,8 @@ XCSoar sends your position to the tracking portal
 \url{https://www.livetrack24.com}.  You need a LiveTrack24 account;
 without one, no position is sent.  Positions are only sent while
 XCSoar detects a flight and has a fix from a real GPS, not in the
-simulator or during a replay.
+simulator or during a replay.  If the server reports that too many
+positions were sent, XCSoar pauses for 20 minutes.
 
 \begin{description}
 \item[Enable]  Switch this {\bf On} to enable the live stream of 

@@ -6,12 +6,19 @@
 #include "Protocol.hpp"
 #include "SessionID.hpp"
 
+#include <stdexcept>
 #include <string>
 
 class CurlGlobal;
 namespace Co { template<typename T> class Task; }
 
 namespace LiveTrack24 {
+
+/** The server rejected a request because of its rate limit. */
+class RateLimitError : public std::runtime_error {
+public:
+  using std::runtime_error::runtime_error;
+};
 
 /**
  * A client for the LiveTracking API v2 on t2.livetrack24.com.  Every

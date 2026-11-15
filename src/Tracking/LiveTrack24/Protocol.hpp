@@ -101,6 +101,11 @@ struct Reply {
   constexpr bool IsOK() const noexcept {
     return code == 0;
   }
+
+  /** Too many requests; the server blocks the pilot for a while. */
+  constexpr bool IsRateLimited() const noexcept {
+    return code == 14;
+  }
 };
 
 /**

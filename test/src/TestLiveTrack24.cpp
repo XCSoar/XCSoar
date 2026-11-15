@@ -40,6 +40,10 @@ TestParseReply()
   ok1(reply && reply->code == 22 && !reply->IsOK() &&
       reply->message == "Wrong password");
 
+  reply = ParseReply("14;Too many requests");
+  ok1(reply && reply->IsRateLimited() && !reply->IsOK());
+  ok1(!ParseReply("0;OK")->IsRateLimited());
+
   ok1(!ParseReply(""));
   ok1(!ParseReply("<html>Just a moment...</html>"));
   ok1(!ParseReply(";OK"));
@@ -95,7 +99,7 @@ TestPaths()
 int
 main()
 {
-  plan_tests(3 + 8 + 5);
+  plan_tests(3 + 10 + 5);
 
   TestToken();
   TestParseReply();
