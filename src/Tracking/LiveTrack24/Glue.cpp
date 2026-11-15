@@ -133,6 +133,10 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* use "today" if the GPS didn't provide a date */
     (BrokenDate &)date_time = BrokenDate::TodayUTC();
 
+  if (session.IsDefined() && date_time.ToTimePoint() == last_timestamp)
+    /* the GPS has not delivered a new fix since the last packet */
+    return;
+
   location = basic.location;
   altitude = basic.NavAltitudeAvailable()
     ? (int)std::lround(basic.nav_altitude)
