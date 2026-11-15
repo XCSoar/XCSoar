@@ -149,7 +149,11 @@ similar operating systems:
 
 -  to run XCSoar, you need one of the following fonts (Debian package):
    DejaVu (``fonts-dejavu``), Roboto (``fonts-roboto``), Droid
-   (``fonts-droid``), Freefont (``fonts-freefont-ttf``)
+   (``fonts-droid``), Freefont (``fonts-freefont-ttf``).
+   The port monitor requests a monospace face. On Debian install
+   ``fonts-dejavu-mono`` (``DejaVuSansMono.ttf``).
+   ``ide/provisioning/install-debian-packages.sh`` installs that
+   package for the Linux and Windows targets.
 
 Install host packages on Debian/Ubuntu::
 
