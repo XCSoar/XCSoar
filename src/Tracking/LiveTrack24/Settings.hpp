@@ -40,6 +40,12 @@ struct Settings {
 
   Privacy privacy;
 
+  /**
+   * Random, generated once per installation, see
+   * Profile::InitLiveTrack24DeviceID()
+   */
+  StaticString<20> device_id;
+
   void SetDefaults() {
     enabled = false;
     username.clear();
@@ -51,6 +57,8 @@ struct Settings {
     vehicle_name.clear();
 
     privacy = Privacy::PUBLIC;
+
+    device_id.clear();
   }
 };
 
