@@ -40,6 +40,9 @@ class Glue final {
   unsigned course;
   bool flying = false, last_flying;
 
+  /** No request before this time, after the server's rate limit. */
+  std::chrono::steady_clock::time_point paused_until{};
+
   Net::AsyncTask task;
 
 public:

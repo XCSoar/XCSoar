@@ -12,6 +12,7 @@
 #include "co/Task.hxx"
 #include "lib/curl/Global.hxx"
 #include "net/State.hpp"
+#include "util/Exception.hxx"
 #include "util/Macros.hpp"
 
 #include <algorithm>
@@ -31,6 +32,9 @@ static constexpr const char *DEVICE_ID = "xcsoar";
  * requests per minute.
  */
 static constexpr std::chrono::seconds MIN_INTERVAL{5};
+
+/** How long the server blocks a pilot who sent too many requests. */
+static constexpr std::chrono::minutes RATE_LIMIT_PAUSE{20};
 
 static VehicleType
 MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
@@ -96,6 +100,10 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 
   if (settings.username.empty() || settings.password.empty())
     /* the server only takes tracks of a logged-in pilot */
+    return;
+
+  if (std::chrono::steady_clock::now() < paused_until)
+    /* a request now would only extend the server's block */
     return;
 
   if (GetNetState() == NetState::DISCONNECTED)
@@ -204,8 +212,13 @@ Glue::Tick(Settings settings)
 void
 Glue::OnCompletion(std::exception_ptr error) noexcept
 {
-  if (error)
-    LogError(error, "LiveTrack24 error");
+  if (!error)
+    return;
+
+  LogError(error, "LiveTrack24 error");
+
+  if (FindNested<RateLimitError>(error) != nullptr)
+    paused_until = std::chrono::steady_clock::now() + RATE_LIMIT_PAUSE;
 }
 
 } // namespace LiveTrack24

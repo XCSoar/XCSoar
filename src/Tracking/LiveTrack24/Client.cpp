@@ -9,6 +9,8 @@
 #include "util/NumberParser.hxx"
 #include "co/Task.hxx"
 
+#include <fmt/format.h>
+
 #include <stdexcept>
 
 namespace LiveTrack24 {
@@ -27,6 +29,10 @@ Client::Request(std::string path)
   const auto reply = ParseReply(response.body);
   if (!reply)
     throw std::runtime_error("Unexpected reply from LiveTrack24");
+
+  if (reply->IsRateLimited())
+    throw RateLimitError(fmt::format("LiveTrack24: {} ({})",
+                                     reply->message, reply->code));
 
   if (!reply->IsOK())
     throw FmtRuntimeError("LiveTrack24: {} ({})", reply->message,
