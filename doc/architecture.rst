@@ -620,10 +620,6 @@ Colors
 
 Colour conventions in use are:
 
--  Grey for buttons
-
--  Buttons and other widgets rendered with an evenly shaded border
-
 -  Yellow for clicked items
 
 -  Light blue for the key focused item
