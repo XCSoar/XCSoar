@@ -12826,3 +12826,9 @@ msgstr "liian monta laitetta käyttää tätä tiliä"
 
 msgid "login rejected:"
 msgstr "kirjautuminen hylätty:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

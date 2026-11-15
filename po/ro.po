@@ -12900,3 +12900,9 @@ msgstr "prea multe dispozitive folosesc acest cont"
 
 msgid "login rejected:"
 msgstr "autentificare respinsă:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

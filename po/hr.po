@@ -12835,3 +12835,9 @@ msgstr "previše uređaja koristi ovaj račun"
 
 msgid "login rejected:"
 msgstr "prijava odbijena:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

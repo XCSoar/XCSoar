@@ -12790,3 +12790,9 @@ msgstr "för många enheter använder detta konto"
 
 msgid "login rejected:"
 msgstr "inloggning nekad:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

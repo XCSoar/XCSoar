@@ -12864,3 +12864,9 @@ msgstr "per daug įrenginių naudoja šią paskyrą"
 
 msgid "login rejected:"
 msgstr "prisijungimas atmestas:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

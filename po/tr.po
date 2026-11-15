@@ -12840,3 +12840,9 @@ msgstr "çok fazla cihaz bu hesabı kullanıyor"
 
 msgid "login rejected:"
 msgstr "giriş reddedildi:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

@@ -13012,3 +13012,9 @@ msgstr "demasiados dispositivos usan esta cuenta"
 
 msgid "login rejected:"
 msgstr "inicio de sesión rechazado:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

@@ -12731,3 +12731,9 @@ msgstr "このアカウントを使用しているデバイスが多すぎます
 
 msgid "login rejected:"
 msgstr "ログイン拒否:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

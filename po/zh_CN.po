@@ -12343,3 +12343,9 @@ msgstr "太多设备使用此账户"
 
 msgid "login rejected:"
 msgstr "登录被拒绝:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

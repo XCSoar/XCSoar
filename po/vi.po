@@ -12780,3 +12780,9 @@ msgstr "quá nhiều thiết bị sử dụng tài khoản này"
 
 msgid "login rejected:"
 msgstr "đăng nhập bị từ chối:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

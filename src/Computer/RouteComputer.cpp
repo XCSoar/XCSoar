@@ -3,6 +3,7 @@
 
 #include "RouteComputer.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -36,6 +37,14 @@ RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
 {
   if (!basic.location_available || !basic.NavAltitudeAvailable())
     return;
+
+  if (!glide_polar.IsValid()) {
+    /* no glider, no reach; otherwise the fan keeps the previous one */
+    protected_route_planner.ClearReach();
+    calculated.terrain_base_valid = false;
+    calculated.terrain_warning_location.SetInvalid();
+    return;
+  }
 
   protected_route_planner.SetPolars(settings, config,
                                     glide_polar, safety_polar,
