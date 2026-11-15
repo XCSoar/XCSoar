@@ -7,7 +7,7 @@
 
 int main()
 {
-  plan_tests(8);
+  plan_tests(14);
 
   ok1(VersionNumber("1.2.3") == VersionNumber(1, 2, 3));
   ok1(VersionNumber("1.2") == VersionNumber(1, 2, 0));
@@ -19,6 +19,13 @@ int main()
   ok1(v.toString() == "1.2.3");
   ok1(v.toString() != "1.2");
   ok1(v.toString(false) == "1.2");
+
+  ok1(VersionNumber::Parse("1.2") == VersionNumber(1, 2));
+  ok1(VersionNumber::Parse("1.2.3") == VersionNumber(1, 2, 3));
+  ok1(!VersionNumber::Parse("1"));
+  ok1(!VersionNumber::Parse("1.2.3.4"));
+  ok1(!VersionNumber::Parse("1.2-rc1"));
+  ok1(!VersionNumber::Parse("1.2."));
 
   return exit_status();
 }
