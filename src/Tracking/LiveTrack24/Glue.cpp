@@ -171,7 +171,8 @@ Glue::Tick(Settings settings)
     if (session.IsDefined()) {
       /* landing: end tracking session; this does not depend on the
          previous fix, so a Tick() that ended early cannot lose it */
-      const Session old_session = std::exchange(session, Session{});
+      Session old_session = std::exchange(session, Session{});
+      old_session.privacy = unsigned(settings.privacy);
       last_timestamp = {};
       co_await client.EndTracking(old_session, packet_id);
     }
@@ -185,7 +186,8 @@ Glue::Tick(Settings settings)
   if (session.IsDefined() &&
       current_timestamp + std::chrono::minutes(1) < last_timestamp) {
     /* time warp: create a new session */
-    const Session old_session = std::exchange(session, Session{});
+    Session old_session = std::exchange(session, Session{});
+    old_session.privacy = unsigned(settings.privacy);
     co_await client.EndTracking(old_session, packet_id);
 
     /* that was this interval's request; log in with the next one */
@@ -209,6 +211,10 @@ Glue::Tick(Settings settings)
        with the next one */
     co_return;
   }
+
+  /* every request carries the privacy, so a change made during the
+     flight goes out with the next fix */
+  session.privacy = unsigned(settings.privacy);
 
   const Fix fix{current_timestamp, location, altitude, ground_speed, course};
 

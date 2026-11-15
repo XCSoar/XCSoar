@@ -94,12 +94,16 @@ TestPaths()
 
   ok1(TrackEndPath(app, session, 7) ==
       "/api/t/lt/trackEnd/KEY/7.47/xcsoar/123/45/T-_/0/99/7/0/1");
+
+  session.privacy = 2;
+  ok1(TrackEndPath(app, session, 8) ==
+      "/api/t/lt/trackEnd/KEY/7.47/xcsoar/123/45/T-_/2/99/8/0/1");
 }
 
 int
 main()
 {
-  plan_tests(3 + 10 + 5);
+  plan_tests(3 + 10 + 6);
 
   TestToken();
   TestParseReply();

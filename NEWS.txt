@@ -146,7 +146,8 @@ Version 7.47 - not yet released
     from the same pilot, and send the fix time with Cloud traffic
     #3518
   - send live tracks to LiveTrack24 again over its current interface.
-    Positions are only sent with a LiveTrack24 account; the server
+    Positions are only sent with a LiveTrack24 account, at most every
+    5 seconds; the pilot chooses who can see the track, and the server
     choice is gone #3467
 * android
   - add Share to Export flights so selected IGC/NMEA files can be

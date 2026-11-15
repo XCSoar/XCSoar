@@ -24,6 +24,7 @@ enum ControlIndex {
   LT24_VEHICLE_NAME,
   LT24_USERNAME,
   LT24_PASSWORD,
+  LT24_PRIVACY,
 };
 
 static constexpr StaticEnumChoice vehicle_type_list[] = {
@@ -33,6 +34,16 @@ static constexpr StaticEnumChoice vehicle_type_list[] = {
   { LiveTrack24::Settings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
   { LiveTrack24::Settings::VehicleType::HANGGLIDER_FLEX, N_("Hangglider (Flex/FAI1)") },
   { LiveTrack24::Settings::VehicleType::HANGGLIDER_RIGID, N_("Hangglider (Rigid/FAI5)") },
+  nullptr,
+};
+
+static constexpr StaticEnumChoice privacy_list[] = {
+  { LiveTrack24::Settings::Privacy::PUBLIC, N_("Public"),
+    N_("Everybody can see the track.") },
+  { LiveTrack24::Settings::Privacy::FRIENDS, N_("Friends only"),
+    N_("Only your LiveTrack24 friends can see the track.") },
+  { LiveTrack24::Settings::Privacy::PRIVATE, N_("Private"),
+    N_("Only you can see the track.") },
   nullptr,
 };
 
@@ -59,6 +70,7 @@ LiveTrack24ConfigPanel::SetEnabled(bool enabled)
   SetRowEnabled(LT24_VEHICLE_NAME, enabled);
   SetRowEnabled(LT24_USERNAME, enabled);
   SetRowEnabled(LT24_PASSWORD, enabled);
+  SetRowEnabled(LT24_PRIVACY, enabled);
 }
 
 void
@@ -94,6 +106,9 @@ LiveTrack24ConfigPanel::Prepare(ContainerWindow &parent,
           settings.livetrack24.username);
   AddPassword(_("Password"), "", settings.livetrack24.password);
 
+  AddEnum(_("Privacy"), _("Who can see your track on LiveTrack24."),
+          privacy_list, (unsigned)settings.livetrack24.privacy);
+
   SetEnabled(settings.livetrack24.enabled);
 }
 
@@ -125,6 +140,9 @@ LiveTrack24ConfigPanel::Save(bool &_changed) noexcept
 
   changed |= SaveValue(LT24_PASSWORD, ProfileKeys::LiveTrack24Password,
                        settings.livetrack24.password);
+
+  changed |= SaveValueEnum(LT24_PRIVACY, ProfileKeys::LiveTrack24Privacy,
+                           settings.livetrack24.privacy);
 
   _changed |= changed;
   return true;

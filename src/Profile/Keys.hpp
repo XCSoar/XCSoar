@@ -304,6 +304,7 @@ constexpr std::string_view LiveTrack24Password = "LiveTrack24Password";
 constexpr std::string_view LiveTrack24TrackingInterval = "TrackingInterval";
 constexpr std::string_view LiveTrack24TrackingVehicleType = "TrackingVehicleType";
 constexpr std::string_view LiveTrack24TrackingVehicleName = "TrackingVehicleName";
+constexpr std::string_view LiveTrack24Privacy = "LiveTrack24Privacy";
 
 constexpr std::string_view PCMetUsername = "PCMetUsername";
 constexpr std::string_view PCMetPassword = "PCMetPassword";
