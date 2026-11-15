@@ -14,6 +14,7 @@
 #include "net/State.hpp"
 #include "util/Macros.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 namespace LiveTrack24 {
@@ -23,6 +24,13 @@ namespace LiveTrack24 {
  * stable string that is not "0".
  */
 static constexpr const char *DEVICE_ID = "xcsoar";
+
+/**
+ * LiveTrack24 asks for at least this much time between two requests
+ * that carry one fix each; it blocks a pilot who sends more than 60
+ * requests per minute.
+ */
+static constexpr std::chrono::seconds MIN_INTERVAL{5};
 
 static VehicleType
 MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
@@ -98,7 +106,8 @@ Glue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.CheckUpdate(std::chrono::seconds(settings.interval)))
+  if (!clock.CheckUpdate(std::max(std::chrono::seconds(settings.interval),
+                                  MIN_INTERVAL)))
     /* later */
     return;
 
