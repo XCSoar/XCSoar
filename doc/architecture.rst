@@ -620,6 +620,11 @@ Colors
 
 Colour conventions in use are:
 
+-  A button that can be used has to contrast with the background
+   behind it.  WCAG 2.2 success criterion 1.4.11 (Non-text Contrast)
+   requires 3:1 for the face or the border that shows the button.
+   A disabled control is exempt.
+
 -  Yellow for clicked items
 
 -  Light blue for the key focused item
