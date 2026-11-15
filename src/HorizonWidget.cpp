@@ -11,6 +11,10 @@
 #include "ui/window/AntiFlickerWindow.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "Renderer/HorizonRenderer.hpp"
+#include "Look/IconLook.hpp"
+#include "Look/DialogLook.hpp"
+#include "Renderer/ButtonRenderer.hpp"
+#include "Dialogs/Settings/Panels/HorizonConfigPanel.hpp"
 
 static bool
 SameAhrs(const AttitudeState &a, const AttitudeState &b) noexcept
@@ -50,6 +54,15 @@ class HorizonWindow : public AntiFlickerWindow {
   GestureManager gestures;
   bool dragging = false;
 
+  /**
+   * The button that opens the settings of the tapes, in the upper
+   * right corner of the dial; empty while the dial has no room for it.
+   */
+  PixelRect settings_button{};
+
+  /** The gear is held: it is drawn pressed until the finger lifts. */
+  bool settings_pressed = false;
+
 public:
   /**
    * Constructor. Initializes most class members.
@@ -62,8 +75,13 @@ public:
 
   void ReadBlackboard(const MoreData &basic) noexcept {
     const AttitudeState next_attitude = basic.attitude;
-    auto next_readout = HorizonRenderer::Readout(basic);
+    auto next_readout =
+      HorizonRenderer::Readout(basic, CommonInterface::Calculated(),
+                               CommonInterface::GetUISettings().horizon);
     if (have_sample &&
+        readout.speed_title == next_readout.speed_title &&
+        readout.altitude_title == next_readout.altitude_title &&
+        readout.course_title == next_readout.course_title &&
         SameAhrs(attitude, next_attitude) &&
         SameTape(readout.speed, next_readout.speed) &&
         SameTape(readout.altitude, next_readout.altitude) &&
@@ -83,6 +101,15 @@ private:
 
     dragging = false;
     ReleaseCapture();
+    SetSettingsPressed(false);
+  }
+
+  void SetSettingsPressed(bool pressed) noexcept {
+    if (pressed == settings_pressed)
+      return;
+
+    settings_pressed = pressed;
+    Invalidate();
   }
 
 protected:
@@ -95,6 +122,37 @@ protected:
 
     HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude,
                           readout);
+    DrawSettingsButton(canvas);
+  }
+
+  /**
+   * A gear in the upper right corner of the page shows that the tapes
+   * can be chosen, and opens their settings when tapped.  It has the
+   * size, the place and the look of the menu buttons over the map,
+   * which are not shown on this page, so that it is recognised as a
+   * button.
+   */
+  void DrawSettingsButton(Canvas &canvas) noexcept {
+    const PixelRect rc = canvas.GetRect();
+    const int size = int(Layout::GetMaximumControlHeight());
+    const int margin = int(Layout::GetTextPadding());
+    if (int(rc.GetWidth()) < size * 4 || int(rc.GetHeight()) < size * 4) {
+      settings_button = {};
+      return;
+    }
+
+    settings_button = {rc.right - margin - size, rc.top + margin,
+                       rc.right - margin, rc.top + margin + size};
+
+    const ButtonLook &button_look = UIGlobals::GetDialogLook().button;
+    ButtonFrameRenderer(button_look).DrawButton(canvas, settings_button,
+                                                settings_pressed
+                                                ? ButtonState::PRESSED
+                                                : ButtonState::ENABLED);
+    canvas.SetTextColor(button_look.standard.foreground_color);
+    UIGlobals::GetIconLook().hBmpTabSettings.Draw(
+      canvas, settings_button.GetCenter(),
+      settings_button.GetHeight() * 2 / 3);
   }
 
   /* virtual methods from Window */
@@ -121,20 +179,30 @@ HorizonWindow::OnMouseDown(PixelPoint p) noexcept
     dragging = true;
     SetCapture();
     gestures.Start(p, Layout::Scale(20));
+    SetSettingsPressed(settings_button.Contains(p));
   }
 
   return true;
 }
 
 bool
-HorizonWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
+HorizonWindow::OnMouseUp(PixelPoint p) noexcept
 {
   if (dragging) {
+    const bool on_settings = settings_pressed;
     StopDragging();
 
     const char *gesture = gestures.Finish();
     if (gesture && InputEvents::processGesture(gesture))
       return true;
+
+    if (gesture == nullptr && on_settings && settings_button.Contains(p)) {
+      ShowHorizonConfigDialog();
+      /* the titles and values change at once, not with the next fix */
+      have_sample = false;
+      ReadBlackboard(CommonInterface::Basic());
+      return true;
+    }
   }
 
   return false;
@@ -144,8 +212,11 @@ bool
 HorizonWindow::OnMouseMove(PixelPoint p,
                            [[maybe_unused]] unsigned keys) noexcept
 {
-  if (dragging)
+  if (dragging) {
     gestures.Update(p);
+    if (settings_pressed && !settings_button.Contains(p))
+      SetSettingsPressed(false);
+  }
 
   return true;
 }

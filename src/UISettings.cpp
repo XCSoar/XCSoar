@@ -49,6 +49,7 @@ UISettings::SetDefaults() noexcept
   info_boxes.SetDefaults();
   vario.SetDefaults();
   traffic.SetDefaults();
+  horizon.SetDefaults();
   pages.SetDefaults();
   dialog.SetDefaults();
   sound.SetDefaults();

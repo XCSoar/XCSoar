@@ -1013,6 +1013,7 @@ $(eval $(call link-program,TestUnits,TEST_UNITS))
 TEST_HORIZON_READOUT_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestHorizonReadout.cpp
 TEST_HORIZON_READOUT_DEPENDS = MATH UNITS
