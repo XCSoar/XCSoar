@@ -7,6 +7,11 @@
 #include "Tracking/TrackingSettings.hpp"
 #include "util/NumberParser.hxx"
 
+#include <fmt/format.h>
+
+#include <cstdint>
+#include <random>
+
 #ifdef HAVE_TRACKING
 
 namespace Profile {
@@ -63,6 +68,7 @@ static void Load(const ProfileMap &map,
   map.GetEnum(ProfileKeys::LiveTrack24TrackingVehicleType, settings.vehicleType);
   map.Get(ProfileKeys::LiveTrack24TrackingVehicleName, settings.vehicle_name);
   map.GetEnum(ProfileKeys::LiveTrack24Privacy, settings.privacy);
+  map.Get(ProfileKeys::LiveTrack24DeviceID, settings.device_id);
 }
 }
 
@@ -72,6 +78,19 @@ Profile::Load(const ProfileMap &map, TrackingSettings &settings)
   Load(map, settings.skylines);
   Load(map, settings.cloud);
   Load(map, settings.livetrack24);
+}
+
+void
+Profile::InitLiveTrack24DeviceID(ProfileMap &map)
+{
+  if (map.Get(ProfileKeys::LiveTrack24DeviceID) != nullptr)
+    return;
+
+  /* 16 random hexadecimal digits, derived from no hardware number */
+  std::random_device random;
+  const uint64_t id = (uint64_t(random()) << 32) | random();
+  map.Set(ProfileKeys::LiveTrack24DeviceID,
+          fmt::format("{:016x}", id).c_str());
 }
 
 #endif /* HAVE_TRACKING */

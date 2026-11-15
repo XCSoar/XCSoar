@@ -26,11 +26,19 @@ public:
  */
 class Client final {
   CurlGlobal &curl;
-  const AppInfo app;
+  AppInfo app;
 
 public:
   Client(CurlGlobal &_curl, const AppInfo &_app) noexcept
     :curl(_curl), app(_app) {}
+
+  /**
+   * @param device_id must stay valid until the next call, and must
+   * not change while a request is running
+   */
+  void SetDeviceID(std::string_view device_id) noexcept {
+    app.device_id = device_id;
+  }
 
   /**
    * Logs in and returns the user id.

@@ -10,4 +10,10 @@ class ProfileMap;
 
 namespace Profile {
   void Load(const ProfileMap &map, TrackingSettings &settings);
+
+  /**
+   * Stores a random LiveTrack24 device id in the profile, unless it
+   * has one already.
+   */
+  void InitLiveTrack24DeviceID(ProfileMap &map);
 };

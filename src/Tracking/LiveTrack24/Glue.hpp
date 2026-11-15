@@ -24,6 +24,12 @@ class Glue final {
 
   Settings settings;
 
+  /**
+   * The device id the #Client points to.  Unlike #settings, it is
+   * only written after the task has been cancelled.
+   */
+  decltype(Settings::device_id) device_id;
+
   /** The current session; undefined while not flying. */
   Session session;
   unsigned packet_id;

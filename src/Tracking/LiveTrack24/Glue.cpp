@@ -21,10 +21,11 @@
 namespace LiveTrack24 {
 
 /**
- * Sent instead of a device serial number; the protocol only needs a
- * stable string that is not "0".
+ * Sent until the profile has a device id of its own (see
+ * Profile::InitLiveTrack24DeviceID()); the protocol only needs a
+ * string that is not "0".
  */
-static constexpr const char *DEVICE_ID = "xcsoar";
+static constexpr const char *FALLBACK_DEVICE_ID = "xcsoar";
 
 /**
  * LiveTrack24 asks for at least this much time between two requests
@@ -56,7 +57,7 @@ MapVehicleTypeToLivetrack24(Settings::VehicleType vt)
 }
 
 Glue::Glue(CurlGlobal &curl) noexcept
-  :client(curl, AppInfo{GetAppKey(), XCSoar_Version, DEVICE_ID}),
+  :client(curl, AppInfo{GetAppKey(), XCSoar_Version, FALLBACK_DEVICE_ID}),
    task(curl.GetEventLoop())
 {
   settings.SetDefaults();
@@ -72,7 +73,8 @@ void
 Glue::SetSettings(const Settings &_settings)
 {
   if (_settings.username != settings.username ||
-      _settings.password != settings.password) {
+      _settings.password != settings.password ||
+      _settings.device_id != settings.device_id) {
     /* wait for the current job to finish */
     task.Cancel();
 
@@ -82,6 +84,10 @@ Glue::SetSettings(const Settings &_settings)
     /* now it's safe to access these variables */
     settings = _settings;
     session = {};
+    device_id = settings.device_id;
+    client.SetDeviceID(device_id.empty()
+                       ? std::string_view{FALLBACK_DEVICE_ID}
+                       : std::string_view{device_id.c_str()});
   } else {
     /* no fundamental setting changes */
     settings = _settings;
