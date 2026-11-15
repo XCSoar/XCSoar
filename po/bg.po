@@ -12951,3 +12951,67 @@ msgstr "твърде много устройства използват този
 
 msgid "login rejected:"
 msgstr "входът отказан:"
+
+#, no-c-format
+msgid "Indicated airspeed"
+msgstr ""
+
+#, no-c-format
+msgid "The speed the wing feels, as on an airspeed indicator."
+msgstr ""
+
+#, no-c-format
+msgid "True airspeed"
+msgstr ""
+
+#, no-c-format
+msgid "The speed through the air, corrected for the air density."
+msgstr ""
+
+#, no-c-format
+msgid "Ground speed"
+msgstr ""
+
+#, no-c-format
+msgid "The speed over the ground from the GPS, which differs from the airspeed by the wind."
+msgstr ""
+
+#, no-c-format
+msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind, or the track itself while the wind is not known."
+msgstr ""
+
+#, no-c-format
+msgid "The direction of motion over the ground from the GPS, which differs from the heading by the drift angle."
+msgstr ""
+
+#, no-c-format
+msgid "Height above ground"
+msgstr ""
+
+#, no-c-format
+msgid "The height above the terrain below; needs a terrain file."
+msgstr ""
+
+#, no-c-format
+msgid "The pressure altitude from a connected instrument, corrected with the QNH."
+msgstr ""
+
+#, no-c-format
+msgid "GPS altitude"
+msgstr ""
+
+#, no-c-format
+msgid "The altitude from the GPS."
+msgstr ""
+
+msgid "What the tape on the left of the full-screen horizon shows."
+msgstr ""
+
+msgid "Course"
+msgstr ""
+
+msgid "What the tape along the top of the full-screen horizon shows."
+msgstr ""
+
+msgid "What the tape on the right of the full-screen horizon shows."
+msgstr ""

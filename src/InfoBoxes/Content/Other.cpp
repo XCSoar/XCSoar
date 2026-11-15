@@ -245,8 +245,10 @@ InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas,
 {
   const Look &look = UIGlobals::GetLook();
   const auto &basic = CommonInterface::Basic();
-  HorizonRenderer::Draw(canvas, rc, look.horizon, basic.attitude,
-                        HorizonRenderer::Readout(basic));
+  const auto readout =
+    HorizonRenderer::Readout(basic, CommonInterface::Calculated(),
+                             CommonInterface::GetUISettings().horizon);
+  HorizonRenderer::Draw(canvas, rc, look.horizon, basic.attitude, readout);
 }
 
 void

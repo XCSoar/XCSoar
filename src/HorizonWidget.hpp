@@ -29,4 +29,7 @@ public:
 private:
   /* virtual methods from class BlackboardListener */
   void OnGPSUpdate(const MoreData &basic) noexcept override;
+  void OnCalculatedUpdate(const MoreData &basic,
+                          const DerivedInfo &calculated) noexcept override;
+  void OnUISettingsUpdate(const UISettings &settings) noexcept override;
 };

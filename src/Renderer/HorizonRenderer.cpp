@@ -7,6 +7,7 @@
 #include "Look/FontDescription.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Look/HorizonLook.hpp"
+#include "Language/Language.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
 #include "NMEA/Attitude.hpp"
@@ -106,18 +107,31 @@ TapeWidth(Canvas &canvas, const Font &font, const char *sample) noexcept
   return text + gap * 2;
 }
 
+/** Height of the title bar above a value, 0 without a title face. */
 static int
-CourseHeight(Canvas &canvas, const Font &font) noexcept
+TitleHeight(Canvas &canvas, const Font &title) noexcept
+{
+  if (!title.IsDefined())
+    return 0;
+
+  canvas.Select(title);
+  const int text = int(canvas.CalcTextSize("AGL").height);
+  return text + std::max(1, text / 6) * 2;
+}
+
+static int
+CourseHeight(Canvas &canvas, const Font &font, const Font &title) noexcept
 {
   if (!font.IsDefined())
     return 0;
 
+  const int title_h = TitleHeight(canvas, title);
   canvas.Select(font);
   const int text = int(canvas.CalcTextSize("000").height);
   const int face = std::max(1, int(font.GetHeight()));
   const int gap = FacePx(face, 4);
   const int tip = std::max(FacePx(face, 8), text / 3);
-  return text + gap + tip + gap;
+  return title_h + text + gap + tip + gap;
 }
 
 /** Side column.  A fifth left the five-digit value too small. */
@@ -216,6 +230,8 @@ AhrsFont(const PixelRect &rc, const char *label, bool large) noexcept
 struct HorizonFace {
   const Font *mark;
   const Font *value;
+  /** The small titles above the values. */
+  const Font *title;
   int face;
 };
 
@@ -231,25 +247,30 @@ LoadHorizonFace(const PixelRect &rc, const HorizonLook &look) noexcept
 {
   static Font *mark_store;
   static Font *value_store;
+  static Font *title_store;
   static FaceKey key;
 
   const unsigned width = rc.GetWidth();
   const unsigned height = rc.GetHeight();
   const unsigned budget = TapeBudget(width);
   if (budget < 16 || height < 16)
-    return {&look.mark_font, &look.value_font,
+    return {&look.mark_font, &look.value_font, &look.mark_font,
             int(look.value_font.GetHeight())};
 
   if (mark_store != nullptr && value_store != nullptr &&
-      key.Matches(width, height) &&
-      mark_store->IsDefined() && value_store->IsDefined())
-    return {mark_store, value_store, int(value_store->GetHeight())};
+      title_store != nullptr && key.Matches(width, height) &&
+      mark_store->IsDefined() && value_store->IsDefined() &&
+      title_store->IsDefined())
+    return {mark_store, value_store, title_store,
+            int(value_store->GetHeight())};
 
   try {
     if (mark_store == nullptr)
       mark_store = new Font();
     if (value_store == nullptr)
       value_store = new Font();
+    if (title_store == nullptr)
+      title_store = new Font();
 
     FontDescription value_d(10, true);
     /* Three fifths of the column.  Filling it made the chevron digits huge. */
@@ -262,8 +283,13 @@ LoadHorizonFace(const PixelRect &rc, const HorizonLook &look) noexcept
 
     const unsigned mark_h = std::max(6u, value_d.GetHeight() * 2 / 3);
     mark_store->Load(FontDescription(mark_h));
+
+    /* the titles only say which value it is, like the title of an
+       InfoBox, and must not compete with the value itself */
+    const unsigned title_h = std::max(6u, value_d.GetHeight() * 2 / 5);
+    title_store->Load(FontDescription(title_h));
   } catch (...) {
-    return {&look.mark_font, &look.value_font,
+    return {&look.mark_font, &look.value_font, &look.mark_font,
             int(look.value_font.GetHeight())};
   }
 
@@ -272,7 +298,8 @@ LoadHorizonFace(const PixelRect &rc, const HorizonLook &look) noexcept
 #endif
 
   key = FaceKey::Now(width, height);
-  return {mark_store, value_store, int(value_store->GetHeight())};
+  return {mark_store, value_store, title_store,
+          int(value_store->GetHeight())};
 }
 
 struct TapeColumns {
@@ -283,10 +310,11 @@ struct TapeColumns {
 
 /** Column widths, or zeros when the horizon is too small for tapes. */
 static TapeColumns
-FitTapes(Canvas &canvas, const PixelRect &rc, const Font &value) noexcept
+FitTapes(Canvas &canvas, const PixelRect &rc, const Font &value,
+         const Font &title) noexcept
 {
   TapeColumns cols;
-  cols.course_h = CourseHeight(canvas, value);
+  cols.course_h = CourseHeight(canvas, value, title);
   if (cols.course_h <= 0 ||
       rc.GetHeight() <= unsigned(cols.course_h) * 3)
     cols.course_h = 0;
@@ -933,14 +961,48 @@ DrawBugFill(Canvas &canvas, const PixelRect &body,
 }
 
 /**
+ * The title bar above a value plate, in the colours of the plate, so
+ * that the pilot sees which value he reads, as with an InfoBox.
+ * @p bar is the rectangle of the bar; its bottom edge is the top edge
+ * of the plate.
+ */
+static void
+DrawTitleBar(Canvas &canvas, const PixelRect &bar, const Font &font,
+             const Color ink, unsigned frame, const char *title) noexcept
+{
+  if (title == nullptr || bar.GetHeight() < 2 || bar.GetWidth() < 2)
+    return;
+
+  const Color plate = HasColors() ? COLOR_BLACK : COLOR_WHITE;
+  canvas.DrawFilledRectangle(bar, plate);
+
+  canvas.Select(Pen(frame, ink));
+  canvas.DrawLine({bar.left, bar.top}, {bar.right, bar.top});
+  canvas.DrawLine({bar.left, bar.top}, {bar.left, bar.bottom});
+  canvas.DrawLine({bar.right, bar.top}, {bar.right, bar.bottom});
+
+  canvas.Select(font);
+  canvas.SetBackgroundTransparent();
+  canvas.SetTextColor(ink);
+  const PixelSize ts = canvas.CalcTextSize(title);
+  if (ts.width + 2 > bar.GetWidth())
+    return;
+
+  canvas.DrawText({bar.left + int(bar.GetWidth() - ts.width) / 2,
+                   bar.top + int(bar.GetHeight() - ts.height) / 2},
+                  title);
+}
+
+/**
  * Vertical tape beside the horizon.  @p value is already in the user
  * unit.  Ticks sit on the inner edge, toward the free space.
  * @p speed is the left tape: its scale stops at zero.
  */
 static void
 DrawTape(Canvas &canvas, const PixelRect &strip, const Font &font,
-         const Font &value_font, const Color ink,
-         std::optional<double> value, double step, bool speed) noexcept
+         const Font &value_font, const Font &title_font, const Color ink,
+         std::optional<double> value, double step, bool speed,
+         const char *title) noexcept
 {
   if (strip.GetWidth() < 4 || strip.GetHeight() < 4)
     return;
@@ -1051,6 +1113,12 @@ DrawTape(Canvas &canvas, const PixelRect &strip, const Font &font,
   const int x = body.left
     + int((int(body.GetWidth()) - int(ts.width)) / 2);
   canvas.DrawText({x, mid - int(ts.height) / 2}, bug);
+
+  const int title_h = TitleHeight(canvas, title_font);
+  if (body.top - title_h > strip.top)
+    DrawTitleBar(canvas, {body.left, body.top - title_h,
+                          body.right, body.top},
+                 title_font, ink, frame, title);
 }
 
 /**
@@ -1075,8 +1143,8 @@ CardinalLabel(int deg) noexcept
  */
 static void
 DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
-           const Font &value_font, const Color ink,
-           std::optional<double> course) noexcept
+           const Font &value_font, const Font &title_font, const Color ink,
+           std::optional<double> course, const char *title) noexcept
 {
   if (strip.GetWidth() < 4 || strip.GetHeight() < 4)
     return;
@@ -1139,6 +1207,9 @@ DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
   if (course && std::isfinite(*course))
     FormatBearing(bug, sizeof(bug), Angle::Degrees(*course));
 
+  /* the title bar takes the top of the strip, the plate hangs below */
+  const int title_h = TitleHeight(canvas, title_font);
+
   canvas.Select(value_font);
   canvas.SetTextColor(ink);
   const PixelSize ts = canvas.CalcTextSize(bug);
@@ -1149,7 +1220,7 @@ DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
   const int point_y = strip.bottom - 1 - gap;
   const int shoulder = point_y - tip;
   const int body_w = int(ts.width) + int(frame) * 2 + FacePx(face, 4);
-  const PixelRect body{mid - body_w / 2, strip.top,
+  const PixelRect body{mid - body_w / 2, strip.top + title_h,
                        mid + body_w / 2, shoulder};
   const BulkPixelPoint chevron[3] = {
     {body.left, shoulder},
@@ -1170,11 +1241,15 @@ DrawCourse(Canvas &canvas, const PixelRect &strip, const Font &font,
   canvas.DrawText({x, body.top + int((int(body.GetHeight())
                                       - int(ts.height)) / 2)},
                   bug);
+
+  if (title_h > 0)
+    DrawTitleBar(canvas, {body.left, strip.top, body.right, body.top},
+                 title_font, ink, frame, title);
 }
 
 static void
 DrawTapes(Canvas &canvas, const PixelRect &rc, int speed_w, int alt_w,
-          const Font &mark, const Font &value,
+          const Font &mark, const Font &value, const Font &title,
           const HorizonRenderer::HorizonReadout &readout) noexcept
 {
   const Color ink = HasColors() ? COLOR_WHITE : COLOR_BLACK;
@@ -1182,10 +1257,11 @@ DrawTapes(Canvas &canvas, const PixelRect &rc, int speed_w, int alt_w,
   const PixelRect altitude{rc.right - alt_w, rc.top,
                            rc.right, rc.bottom};
 
-  DrawTape(canvas, speed, mark, value, ink,
-           readout.speed, readout.speed_step, true);
-  DrawTape(canvas, altitude, mark, value, ink,
-           readout.altitude, readout.altitude_step, false);
+  DrawTape(canvas, speed, mark, value, title, ink,
+           readout.speed, readout.speed_step, true, readout.speed_title);
+  DrawTape(canvas, altitude, mark, value, title, ink,
+           readout.altitude, readout.altitude_step, false,
+           readout.altitude_title);
 }
 
 /** Level horizon is not an attitude source: cross it out. */
@@ -1247,14 +1323,14 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   probe.UpdateLayout(rc);
   const bool compact = IsCompact(probe.GetRadius());
   const HorizonFace fonts = compact
-    ? HorizonFace{&look.mark_font, &look.value_font, 0}
+    ? HorizonFace{&look.mark_font, &look.value_font, &look.mark_font, 0}
     : LoadHorizonFace(rc, look);
 
   /* Sky and ground fill the whole window, under the tapes.  Marks
      stay in the gap so the plates do not cover them. */
   const TapeColumns cols = compact
     ? TapeColumns{}
-    : FitTapes(canvas, rc, *fonts.value);
+    : FitTapes(canvas, rc, *fonts.value, *fonts.title);
   PixelRect ball = rc;
   if (cols.speed_w > 0) {
     ball.left += cols.speed_w;
@@ -1283,15 +1359,15 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (cols.speed_w > 0 && cols.alt_w > 0)
     DrawTapes(canvas, rc, cols.speed_w, cols.alt_w,
-              *fonts.mark, *fonts.value, readout);
+              *fonts.mark, *fonts.value, *fonts.title, readout);
 
   if (cols.course_h > 0) {
     const Color ink = HasColors() ? COLOR_WHITE : COLOR_BLACK;
     const PixelRect strip{rc.left + cols.speed_w, rc.top,
                           rc.right - cols.alt_w,
                           rc.top + cols.course_h};
-    DrawCourse(canvas, strip, *fonts.mark, *fonts.value, ink,
-               readout.course);
+    DrawCourse(canvas, strip, *fonts.mark, *fonts.value, *fonts.title,
+               ink, readout.course, readout.course_title);
   }
 
   if (!attitude.bank_angle_available && !attitude.pitch_angle_available)

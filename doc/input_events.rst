@@ -488,6 +488,9 @@ Event list
 
      ``System``, ``Weather``, ``Switches``, ``Teamcode``,
      ``Target``, ``Plane``, ``Profile``, ``Alternates``
+
+     ``Horizon``: what the tapes of the full-screen horizon show; Enter
+     on the horizon page is bound to it
  * - ``SnailTrail S``
    - Change snail trail setting. Possible arguments: ``off``,
      ``short``, ``long``, ``full``, ``toggle``, ``show``.

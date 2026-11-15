@@ -15,6 +15,7 @@ namespace Profile {
   static void Load(const ProfileMap &map, FormatSettings &settings);
   static void Load(const ProfileMap &map, VarioSettings &settings);
   static void Load(const ProfileMap &map, TrafficSettings &settings);
+  static void Load(const ProfileMap &map, HorizonSettings &settings);
   static void Load(const ProfileMap &map, DialogSettings &settings);
   static void Load(const ProfileMap &map, SoundSettings &settings);
   static void Load(const ProfileMap &map, VarioSoundSettings &settings);
@@ -64,6 +65,14 @@ Profile::Load(const ProfileMap &map, TrafficSettings &settings)
   map.Get(ProfileKeys::FlarmRadarZoom, settings.radar_zoom);
   map.Get(ProfileKeys::NoPositionTargetDistanceRing, settings.no_position_target_distance_ring);
   map.Get(ProfileKeys::FlarmSpokenAlerts, settings.spoken_alerts);
+}
+
+void
+Profile::Load(const ProfileMap &map, HorizonSettings &settings)
+{
+  map.GetEnum(ProfileKeys::HorizonSpeed, settings.speed);
+  map.GetEnum(ProfileKeys::HorizonCourse, settings.course);
+  map.GetEnum(ProfileKeys::HorizonAltitude, settings.altitude);
 }
 
 void
@@ -167,6 +176,7 @@ Profile::Load(const ProfileMap &map, UISettings &settings)
   Load(map, settings.info_boxes);
   Load(map, settings.vario);
   Load(map, settings.traffic);
+  Load(map, settings.horizon);
   Load(map, settings.pages);
   Load(map, settings.dialog);
   Load(map, settings.sound);

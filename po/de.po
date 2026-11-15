@@ -12971,3 +12971,67 @@ msgstr "zu viele Geräte nutzen dieses Konto"
 
 msgid "login rejected:"
 msgstr "Anmeldung abgelehnt:"
+
+#, no-c-format
+msgid "Indicated airspeed"
+msgstr "Angezeigte Fahrt (IAS)"
+
+#, no-c-format
+msgid "The speed the wing feels, as on an airspeed indicator."
+msgstr "Die Fahrt, die der Flügel spürt, wie auf dem Fahrtmesser."
+
+#, no-c-format
+msgid "True airspeed"
+msgstr "Wahre Fahrt (TAS)"
+
+#, no-c-format
+msgid "The speed through the air, corrected for the air density."
+msgstr "Die Geschwindigkeit durch die Luft, um die Luftdichte korrigiert."
+
+#, no-c-format
+msgid "Ground speed"
+msgstr "Grundgeschwindigkeit"
+
+#, no-c-format
+msgid "The speed over the ground from the GPS, which differs from the airspeed by the wind."
+msgstr "Die Geschwindigkeit über Grund vom GPS; sie weicht um den Wind von der Fahrt ab."
+
+#, no-c-format
+msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind, or the track itself while the wind is not known."
+msgstr "Wohin die Nase zeigt: vom Kompass, wenn einer angeschlossen ist, sonst der um den Wind korrigierte Track, und der Track selbst, solange der Wind nicht bekannt ist."
+
+#, no-c-format
+msgid "The direction of motion over the ground from the GPS, which differs from the heading by the drift angle."
+msgstr "Die Bewegungsrichtung über Grund vom GPS; sie weicht um den Vorhaltewinkel vom Steuerkurs ab."
+
+#, no-c-format
+msgid "Height above ground"
+msgstr "Höhe über Grund"
+
+#, no-c-format
+msgid "The height above the terrain below; needs a terrain file."
+msgstr "Die Höhe über dem Gelände darunter; braucht eine Geländedatei."
+
+#, no-c-format
+msgid "The pressure altitude from a connected instrument, corrected with the QNH."
+msgstr "Die Druckhöhe eines angeschlossenen Geräts, mit dem QNH korrigiert."
+
+#, no-c-format
+msgid "GPS altitude"
+msgstr "GPS-Höhe"
+
+#, no-c-format
+msgid "The altitude from the GPS."
+msgstr "Die Höhe vom GPS."
+
+msgid "What the tape on the left of the full-screen horizon shows."
+msgstr "Was das Band links im Vollbild-Horizont zeigt."
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "What the tape along the top of the full-screen horizon shows."
+msgstr "Was das Band oben im Vollbild-Horizont zeigt."
+
+msgid "What the tape on the right of the full-screen horizon shows."
+msgstr "Was das Band rechts im Vollbild-Horizont zeigt."

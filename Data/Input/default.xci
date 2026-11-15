@@ -92,6 +92,13 @@ type=key
 data=RETURN
 event=Traffic details
 
+# Full-screen horizon: Enter opens the choice of the tapes, the same
+# dialog as the gear button, for a keyboard or a remote stick
+mode=default.Horizon
+type=key
+data=RETURN
+event=Setup Horizon
+
 # Traffic radar: F1 = AVG/ALT side labels; F2/F3 = zoom;
 # F5 = auto zoom; F6 = north-up; UP/DOWN and F4 = next/prev target
 mode=default.Traffic Display1.Traffic Display2.Traffic

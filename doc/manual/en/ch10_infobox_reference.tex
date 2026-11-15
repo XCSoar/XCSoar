@@ -112,13 +112,18 @@ InfoBox shows ``---'' and puts ``NO AHRS'' in its comment.  The full
 horizon has a shaded speed tape on the left and a shaded altitude
 tape on the right, over the sky and ground, and the heading along
 the top.  The horizon is an attitude indicator, not a navigation
-display: speed is the indicated airspeed, never the ground speed in
-its place, and the heading comes from a compass when one is
-connected, otherwise from the track corrected for the wind, and
-from the track itself while the wind is not known; its
-cardinal points are marked N, E, S and W.  Ground
-speed and track are available as InfoBoxes.  Altitude is the
-navigation altitude.
+display: by default the speed is the indicated airspeed, and a
+missing airspeed is never replaced by the ground speed; the heading
+comes from a compass when one is connected, otherwise from the track
+corrected for the wind, and from the track itself while the wind is
+not known; its cardinal points are marked N, E, S and W.  The gear
+button in the upper right corner of the page, or Enter on a keyboard
+or remote stick, chooses what the tapes show: indicated
+airspeed, true airspeed or ground speed on the left, heading or track
+along the top, height above ground, barometric or GPS altitude on the
+right.  The default is indicated airspeed, heading and height above
+ground.  A small title above each value (IAS, TAS, GS, HDG, TRK, AGL,
+Baro, GPS) says which one is shown.
 A missing value is shown as ``---''.}
 
 
