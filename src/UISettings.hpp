@@ -8,6 +8,7 @@
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Gauge/VarioSettings.hpp"
 #include "Gauge/TrafficSettings.hpp"
+#include "Gauge/HorizonSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "DisplaySettings.hpp"
@@ -90,6 +91,7 @@ struct UISettings {
   InfoBoxSettings info_boxes;
   VarioSettings vario;
   TrafficSettings traffic;
+  HorizonSettings horizon;
   PageSettings pages;
   DialogSettings dialog;
   SoundSettings sound;

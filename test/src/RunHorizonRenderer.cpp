@@ -74,6 +74,9 @@ Main(TestMainWindow &main_window)
     readout.speed = 110 + 20 * std::sin(t * 0.23);
     readout.altitude = 1500 + 200 * std::sin(t * 0.11);
     readout.course = std::fmod(40 + t * 8, 360.0);
+    readout.speed_title = "IAS";
+    readout.altitude_title = "AGL";
+    readout.course_title = "HDG";
 
     horizon.SetState(attitude, readout);
   });
