@@ -73,6 +73,7 @@ install_linux() {
     imagemagick gettext \
     mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev \
     fonts-dejavu \
+    fonts-dejavu-mono \
     ttf-bitstream-vera \
     fonts-roboto-unhinted \
     xz-utils
@@ -138,7 +139,8 @@ install_win() {
       zip \
       meson \
       nsis \
-      fonts-dejavu
+      fonts-dejavu \
+      fonts-dejavu-mono
   echo
 }
 
