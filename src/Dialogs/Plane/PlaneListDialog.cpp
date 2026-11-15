@@ -7,6 +7,7 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
+#include "Renderer/TextButtonRenderer.hpp"
 #include "Renderer/TwoTextRowsRenderer.hpp"
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
@@ -29,8 +30,28 @@
 #include "Device/MultipleDevices.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
+#include <algorithm>
+#include <memory>
 #include <vector>
 #include <cassert>
+
+/**
+ * Width stays the larger of Activate and Deactivate, so changing the
+ * caption when the cursor moves does not clip the label.
+ */
+class ActivateButtonRenderer final : public TextButtonRenderer {
+public:
+  using TextButtonRenderer::TextButtonRenderer;
+
+  unsigned GetMinimumButtonWidth() const noexcept override {
+    const ButtonLook &look = GetLook();
+    const unsigned activate =
+      TextButtonRenderer::GetMinimumButtonWidth(look, _("Activate"));
+    const unsigned deactivate =
+      TextButtonRenderer::GetMinimumButtonWidth(look, _("Deactivate"));
+    return std::max(activate, deactivate);
+  }
+};
 
 class PlaneListWidget final
   : public ListWidget {
@@ -74,10 +95,13 @@ public:
 
 private:
   void UpdateList() noexcept;
+  bool IsActive(unsigned i) const noexcept;
+  void UpdateActivateButton() noexcept;
   bool Load(unsigned i, bool edited_active) noexcept;
   bool LoadWithDialog(unsigned i) noexcept;
 
   void LoadClicked() noexcept;
+  void DeactivateClicked() noexcept;
   void NewClicked() noexcept;
   void EditClicked(bool copy) noexcept;
   void DeleteClicked() noexcept;
@@ -94,6 +118,10 @@ protected:
   /* virtual methods from ListCursorHandler */
   bool CanActivateItem([[maybe_unused]] unsigned index) const noexcept override {
     return true;
+  }
+
+  void OnCursorMoved([[maybe_unused]] unsigned index) noexcept override {
+    UpdateActivateButton();
   }
 
   void OnActivateItem(unsigned index) noexcept override;
@@ -121,9 +149,24 @@ PlaneListWidget::UpdateList() noexcept
   edit_button->SetEnabled(!empty);
   copy_button->SetEnabled(!empty);
   delete_button->SetEnabled(!empty);
+  UpdateActivateButton();
 
   if (form != nullptr)
     form->ResyncButtonPanelSelection();
+}
+
+bool
+PlaneListWidget::IsActive(unsigned i) const noexcept
+{
+  return i < list.size() &&
+    Profile::GetPathIsEqual("PlanePath", list[i].path);
+}
+
+void
+PlaneListWidget::UpdateActivateButton() noexcept
+{
+  const unsigned i = GetList().GetCursorIndex();
+  load_button->SetCaption(IsActive(i) ? _("Deactivate") : _("Activate"));
 }
 
 void
@@ -135,7 +178,10 @@ PlaneListWidget::CreateButtons(WidgetDialog &dialog) noexcept
   edit_button = dialog.AddButton(_("Edit"), [this](){ EditClicked(false); });
   copy_button = dialog.AddButton(_("Copy"), [this](){ EditClicked(true); });
   delete_button = dialog.AddButton(C_("Button", "Delete"), [this](){ DeleteClicked(); });
-  load_button = dialog.AddButton(_("Activate"), [this](){ LoadClicked(); });
+  load_button = dialog.AddButton(
+    std::make_unique<ActivateButtonRenderer>(dialog.GetButtonLook(),
+                                             _("Activate")),
+    [this](){ LoadClicked(); });
 }
 
 void
@@ -264,8 +310,37 @@ PlaneListWidget::LoadWithDialog(unsigned i) noexcept
 inline void
 PlaneListWidget::LoadClicked() noexcept
 {
-  if (LoadWithDialog(GetList().GetCursorIndex()))
+  const unsigned i = GetList().GetCursorIndex();
+  if (IsActive(i))
+    DeactivateClicked();
+  else if (LoadWithDialog(i))
     form->SetModalResult(mrOK);
+}
+
+inline void
+PlaneListWidget::DeactivateClicked() noexcept
+{
+  if (ShowMessageBox(_("Deactivate the current plane?"),
+                     _("Deactivate"), MB_YESNO) != IDYES)
+    return;
+
+  Profile::SetPath("PlanePath", nullptr);
+
+  /* back to the startup state: no glider, MacCready and crew kept */
+  ComputerSettings &settings = CommonInterface::SetComputerSettings();
+  const double mc = settings.polar.glide_polar_task.GetMC();
+  const double bugs = settings.polar.glide_polar_task.GetBugs();
+  const double crew = settings.polar.glide_polar_task.GetCrewMass();
+
+  settings.plane = {};
+
+  GlidePolar &gp = settings.polar.glide_polar_task;
+  gp = GlidePolar(mc, bugs);
+  gp.SetCrewMass(crew);
+  backend_components->SetTaskPolar(settings.polar);
+
+  Profile::Save();
+  form->SetModalResult(mrOK);
 }
 
 inline void
@@ -397,6 +472,11 @@ void
 PlaneListWidget::OnActivateItem(unsigned i) noexcept
 {
   assert(i < list.size());
+
+  if (IsActive(i)) {
+    DeactivateClicked();
+    return;
+  }
 
   StaticString<256> tmp;
   tmp.Format(_("Activate plane \"%s\"?"),

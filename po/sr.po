@@ -12825,3 +12825,9 @@ msgstr "превише уређаја користи овај налог"
 
 msgid "login rejected:"
 msgstr "пријава одбијена:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

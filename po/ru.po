@@ -12926,3 +12926,9 @@ msgstr "слишком много устройств используют это
 
 msgid "login rejected:"
 msgstr "вход отклонён:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

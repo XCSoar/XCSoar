@@ -12793,3 +12793,9 @@ msgstr "příliš mnoho zařízení používá tento účet"
 
 msgid "login rejected:"
 msgstr "přihlášení odmítnuto:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

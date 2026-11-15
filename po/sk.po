@@ -12844,3 +12844,9 @@ msgstr "príliš veľa zariadení používa tento účet"
 
 msgid "login rejected:"
 msgstr "prihlásenie odmietnuté:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

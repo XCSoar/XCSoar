@@ -12351,3 +12351,9 @@ msgstr "太多裝置使用此帳戶"
 
 msgid "login rejected:"
 msgstr "登入被拒絕:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

@@ -12939,3 +12939,9 @@ msgstr "massa dispositius usen aquest compte"
 
 msgid "login rejected:"
 msgstr "inici de sessió rebutjat:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

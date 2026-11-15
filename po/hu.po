@@ -12898,3 +12898,9 @@ msgstr "túl sok eszköz használja ezt a fiókot"
 
 msgid "login rejected:"
 msgstr "bejelentkezés elutasítva:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

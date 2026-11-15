@@ -12733,3 +12733,9 @@ msgstr "יותר מדי מכשירים משתמשים בחשבון זה"
 
 msgid "login rejected:"
 msgstr "ההתחברות נדחתה:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

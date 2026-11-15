@@ -12852,3 +12852,9 @@ msgstr "for mange enheder bruger denne konto"
 
 msgid "login rejected:"
 msgstr "login afvist:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

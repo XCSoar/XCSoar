@@ -12673,3 +12673,9 @@ msgstr "చాలా పరికరాలు ఈ ఖాతాను ఉపయ�
 
 msgid "login rejected:"
 msgstr "లాగిన్ తిరస్కరించబడింది:"
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""

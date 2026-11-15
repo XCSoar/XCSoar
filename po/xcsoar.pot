@@ -11565,3 +11565,9 @@ msgstr ""
 #: src/Dialogs/Device/ManageACDDialog.cpp
 msgid "Auxiliary volume"
 msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Deactivate the current plane?"
+msgstr ""
