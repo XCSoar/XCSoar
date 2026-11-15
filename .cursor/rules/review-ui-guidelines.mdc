@@ -32,6 +32,9 @@ disagree, the section wins.
   `Initialise()`. Red is a warning and wants a sound. Orange is a
   caution. Green means OK. An advisory is neither red nor green.
   InfoBox blue is derived or pending, not a safety colour.
+- A usable button whose face and border are both under 3:1 against
+  the background behind it (WCAG 2.2 success criterion 1.4.11).
+  A disabled control is exempt.
 - Text or chrome that follows `UISettings::DarkMode` is readable with
   dark mode off and on. Pass that flag into Look `Initialise()`.
   InfoBoxes may follow the global mode, or stay Light or Dark. Kobo
