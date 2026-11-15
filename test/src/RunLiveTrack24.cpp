@@ -13,10 +13,17 @@
 #include "co/Task.hxx"
 #include "util/PrintException.hxx"
 
+#include <chrono>
 #include <cmath>
 #include <cstdio>
+#include <thread>
 
 using namespace LiveTrack24;
+
+/* LiveTrack24 takes at most one fix every 5 seconds, and a test
+   should not send a whole flight */
+static constexpr std::chrono::seconds SEND_INTERVAL{5};
+static constexpr unsigned MAX_FIXES = 12;
 
 struct Instance : CoInstance {
   const Net::ScopeInit net_init{GetEventLoop()};
@@ -48,13 +55,21 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
 
   printf("Sending positions ");
   unsigned packet_id = 1;
-  while (replay->Next()) {
-    if (packet_id % 10 == 0) {
-      putchar('.');
-      fflush(stdout);
-    }
-
+  TimeStamp last_time = TimeStamp::Undefined();
+  while (packet_id <= MAX_FIXES && replay->Next()) {
     const MoreData &basic = replay->Basic();
+    if (!basic.time_available || !basic.location_available)
+      continue;
+
+    if (last_time.IsDefined() && basic.time < last_time + SEND_INTERVAL)
+      continue;
+
+    if (last_time.IsDefined())
+      std::this_thread::sleep_for(SEND_INTERVAL);
+    last_time = basic.time;
+
+    putchar('.');
+    fflush(stdout);
 
     const BrokenTime time = basic.date_time_utc;
     BrokenDateTime datetime(now.year, now.month, now.day, time.hour,
