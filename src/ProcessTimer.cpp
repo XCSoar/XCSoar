@@ -408,7 +408,17 @@ ProcessTimer() noexcept
   if (net_components != nullptr) {
 #ifdef HAVE_TRACKING
     if (net_components->tracking) {
-      net_components->tracking->SetSettings(CommonInterface::GetComputerSettings().tracking);
+      const ComputerSettings &computer = CommonInterface::GetComputerSettings();
+      TrackingSettings tracking = computer.tracking;
+      if (tracking.livetrack24.vehicle_name.empty())
+        /* when the pilot has not named the vehicle, LiveTrack24
+           shows the registration, or else the glider type */
+        tracking.livetrack24.vehicle_name =
+          computer.plane.registration.empty()
+          ? computer.plane.type.c_str()
+          : computer.plane.registration.c_str();
+
+      net_components->tracking->SetSettings(tracking);
       net_components->tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
     }
 #endif
