@@ -13038,7 +13038,7 @@ msgid "The speed over the ground from the GPS, which differs from the airspeed b
 msgstr ""
 
 #, no-c-format
-msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind, or the track itself while the wind is not known."
+msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind (HDG*), or the track itself while the wind is not known (TRK*)."
 msgstr ""
 
 #, no-c-format
@@ -13075,4 +13075,8 @@ msgid "What the tape along the top of the full-screen horizon shows."
 msgstr ""
 
 msgid "What the tape on the right of the full-screen horizon shows."
+msgstr ""
+
+#, no-c-format
+msgid "Where the nose of the glider points.  The title is HDG when the heading comes from a compass of a connected device.  Without a compass it is estimated from the GPS track: HDG* is the track corrected for the wind, TRK* the track itself while the wind is not known yet, for example before the first climb.  The track differs from the heading by the drift angle."
 msgstr ""

@@ -27,8 +27,9 @@ Version 7.47 - not yet released
   - show the heading on a tape along the top of the full-screen
     horizon: from a compass when one is connected, otherwise the
     track corrected for the wind, and the track itself while the wind
-    is not known.  The cardinal points are marked N, E, S and W in a
-    larger face.  A missing heading is shown as "---"
+    is not known.  The title says which: HDG, HDG* or TRK*.  The
+    cardinal points are marked N, E, S and W in a larger face.  A
+    missing heading is shown as "---"
   - choose what the tapes of the full-screen horizon show with the
     gear button in its upper right corner, or with Enter on a
     keyboard or remote stick: indicated airspeed, true airspeed or
@@ -36,6 +37,10 @@ Version 7.47 - not yet released
     or GPS altitude.  The default is indicated airspeed, heading and
     height above ground.  A small title above each value says which
     one it is
+  - add a Heading InfoBox.  Its title is HDG when the heading comes
+    from a compass, HDG* when it is the GPS track corrected for the
+    wind, and TRK* when it is the track itself because the wind is
+    not known yet
   - show whether the aircraft is in flight on the Status Times page
   - remember the ATC radial and the current Goto when an unfinished
     flight is restored; loading or resuming an ordered task clears

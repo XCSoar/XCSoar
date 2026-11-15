@@ -38,7 +38,7 @@ Title(const char *title, const char *expected) noexcept
 int
 main()
 {
-  plan_tests(36);
+  plan_tests(41);
 
   Units::current.speed_unit = Unit::KILOMETER_PER_HOUR;
   Units::current.altitude_unit = Unit::METER;
@@ -75,6 +75,20 @@ main()
   ok1(equals(def.altitude_step, 50));
   ok1(def.course && equals(*def.course, 330));
   ok1(Title(def.course_title, "HDG"));
+
+  /* without a compass the title says how the heading was found */
+  MoreData estimated = both;
+  estimated.attitude.heading_source = AttitudeState::HeadingSource::WIND;
+  const auto wind = Read(estimated, terrain);
+  ok1(wind.course && equals(*wind.course, 330));
+  ok1(Title(wind.course_title, "HDG*"));
+
+  estimated.attitude.heading_source = AttitudeState::HeadingSource::TRACK;
+  ok1(Title(Read(estimated, terrain).course_title, "TRK*"));
+
+  /* a track chosen on purpose is the track, without a mark */
+  ok1(Title(Read(estimated, terrain, HorizonSettings::Speed::INDICATED,
+                 HorizonSettings::Course::TRACK).course_title, "TRK"));
 
   /* the choices of the settings */
   const auto tas = Read(both, terrain, HorizonSettings::Speed::TRUE_AIRSPEED);
@@ -115,6 +129,7 @@ main()
   ok1(!missing.altitude);
   ok1(!missing.course);
   ok1(Title(missing.speed_title, "IAS"));
+  ok1(Title(missing.course_title, "HDG"));
 
   const auto no_baro = Read(ground, no_terrain,
                             HorizonSettings::Speed::TRUE_AIRSPEED,

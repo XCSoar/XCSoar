@@ -1392,6 +1392,17 @@ static constexpr MetaData meta_data[] = {
     IBFHelper<InfoBoxContentCustomText>::Create,
   },
 
+  // e_Heading
+  {
+    Group::SPEED,
+    N_("Heading"),
+    /* the ICAO abbreviation, not translated; the content changes it
+       to "HDG*" or "TRK*" when the heading is only an estimate */
+    "HDG",
+    N_("Where the nose of the glider points.  The title is HDG when the heading comes from a compass of a connected device.  Without a compass it is estimated from the GPS track: HDG* is the track corrected for the wind, TRK* the track itself while the wind is not known yet, for example before the first climb.  The track differs from the heading by the drift angle."),
+    IBFHelper<InfoBoxContentHeading>::Create,
+  },
+
 };
 
 static_assert(ARRAY_SIZE(meta_data) == NUM_TYPES,

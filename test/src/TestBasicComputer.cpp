@@ -6,6 +6,7 @@
 #include "NMEA/Derived.hpp"
 #include "NMEA/MoreData.hpp"
 #include "TestUtil.hpp"
+#include "util/StringAPI.hxx"
 
 static MoreData
 Sample(double time_s, double track_deg, double altitude,
@@ -56,12 +57,12 @@ Settle(BasicComputer &computer, const MoreData &sample,
 int
 main()
 {
-  plan_tests(18);
+  plan_tests(27);
 
   BasicComputer computer;
   /* One merge of the 15° roll must be the 50 ms ease step. */
   computer.SetPlaybackFrame(0.05);
-  DerivedInfo calculated;
+  DerivedInfo calculated{};
   calculated.flight.flying = false;
   calculated.wind_available.Clear();
   calculated.turn_rate_heading = Angle::Zero();
@@ -138,6 +139,38 @@ main()
   Run(replay_computer, sensed_next, sensed, calculated, settings);
   ok1(equals(sensed_next.attitude.bank_angle, 7));
   ok1(equals(sensed_next.attitude.pitch_angle, -3));
+
+  /* Where the heading comes from, as the displays mark it: without a
+     compass and without wind it is the track itself. */
+  ok1(level.attitude.heading_source == AttitudeState::HeadingSource::TRACK);
+  ok1(StringIsEqual(level.attitude.GetHeadingTitle(), "TRK*"));
+
+  /* In flight with a known wind it is the track corrected for it:
+     30 m/s on 0° with 10 m/s from the west, so the nose points
+     somewhat west of north. */
+  DerivedInfo windy = calculated;
+  windy.flight.flying = true;
+  windy.wind = SpeedVector(Angle::Degrees(270), 10);
+  windy.wind_available.Update(TimeStamp{FloatDuration{40}});
+  BasicComputer wind_computer;
+  auto wind_last = Sample(40, 0, 1000, false);
+  auto wind_fix = Sample(41, 0, 1000, false);
+  Run(wind_computer, wind_fix, wind_last, windy, settings);
+  ok1(wind_fix.attitude.heading_available);
+  ok1(wind_fix.attitude.heading_source ==
+      AttitudeState::HeadingSource::WIND);
+  ok1(between(wind_fix.attitude.heading.AsBearing().Degrees(), 340, 359));
+  ok1(StringIsEqual(wind_fix.attitude.GetHeadingTitle(), "HDG*"));
+
+  /* A compass heading from a device is kept and not marked. */
+  auto compass = Sample(42, 0, 1000, false);
+  compass.attitude.heading = Angle::Degrees(15);
+  compass.attitude.heading_available.Update(compass.clock);
+  Run(wind_computer, compass, wind_fix, windy, settings);
+  ok1(compass.attitude.heading_source ==
+      AttitudeState::HeadingSource::COMPASS);
+  ok1(equals(compass.attitude.heading, 15));
+  ok1(StringIsEqual(compass.attitude.GetHeadingTitle(), "HDG"));
 
   return exit_status();
 }

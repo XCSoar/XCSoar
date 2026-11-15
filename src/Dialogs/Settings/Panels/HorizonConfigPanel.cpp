@@ -32,8 +32,8 @@ static constexpr StaticEnumChoice speed_list[] = {
 static constexpr StaticEnumChoice course_list[] = {
   { HorizonSettings::Course::HEADING, N_("Heading"),
     N_("Where the nose points: from a compass when one is connected, "
-       "otherwise the track corrected for the wind, or the track "
-       "itself while the wind is not known.") },
+       "otherwise the track corrected for the wind (HDG*), or the "
+       "track itself while the wind is not known (TRK*).") },
   { HorizonSettings::Course::TRACK, N_("Track"),
     N_("The direction of motion over the ground from the GPS, which "
        "differs from the heading by the drift angle.") },

@@ -32,3 +32,17 @@ InfoBoxContentTrack::GetDialogContent() noexcept
 
   return track_panels;
 }
+
+void
+InfoBoxContentHeading::Update(InfoBoxData &data) noexcept
+{
+  const AttitudeState &attitude = CommonInterface::Basic().attitude;
+  if (!attitude.heading_available) {
+    data.SetTitle("HDG");
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetTitle(attitude.GetHeadingTitle());
+  data.SetValue(attitude.heading);
+}

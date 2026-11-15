@@ -69,6 +69,13 @@ of the InfoBox.}
 mode, tap or Enter opens a panel that changes the speed and the track.}
 \ibi{Track}{Track}{Magnetic track reported by the GPS. In simulation
 mode, tap or Enter opens the same panel as Speed ground.}
+\ibi{Heading}{HDG}{Where the nose of the glider points.  The title
+says where the value comes from: HDG from a compass of a connected
+device; HDG* without a compass, the GPS track corrected for the wind;
+TRK* while the wind is not known yet, for example before the first
+climb, the track itself.  The track differs from the heading by the
+drift angle, so HDG* and TRK* are estimates, and TRK* is no better
+than the Track InfoBox.}
 \ibi{Airspeed IAS}{V IAS}{Indicated Airspeed reported by a supported external
 intelligent vario.}
 \ibi{G load}{G}{Magnitude of G loading reported by a supported external
@@ -116,7 +123,8 @@ display: by default the speed is the indicated airspeed, and a
 missing airspeed is never replaced by the ground speed; the heading
 comes from a compass when one is connected, otherwise from the track
 corrected for the wind, and from the track itself while the wind is
-not known; its cardinal points are marked N, E, S and W.  The gear
+not known.  Its title says which, as on the Heading InfoBox: HDG,
+HDG* or TRK*; its cardinal points are marked N, E, S and W.  The gear
 button in the upper right corner of the page, or Enter on a keyboard
 or remote stick, chooses what the tapes show: indicated
 airspeed, true airspeed or ground speed on the left, heading or track

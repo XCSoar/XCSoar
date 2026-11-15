@@ -12,8 +12,10 @@ AttitudeState::Complement(const AttitudeState &add) noexcept
   if (pitch_angle_available.Complement(add.pitch_angle_available))
     pitch_angle = add.pitch_angle;
 
-  if (heading_available.Complement(add.heading_available))
+  if (heading_available.Complement(add.heading_available)) {
     heading = add.heading;
+    heading_source = add.heading_source;
+  }
 }
 
 void

@@ -48,8 +48,8 @@ void Draw(Canvas &canvas, const PixelRect &rc,
  * are the references of an attitude indicator: indicated airspeed,
  * the heading, from a compass when one is connected, otherwise the
  * track corrected for the wind and the track itself while the wind is
- * not known, as BasicComputer provides it, and the height above the
- * terrain.  A value that is not available stays
+ * not known, as BasicComputer provides it and titled HDG, HDG* or
+ * TRK* accordingly, and the height above the terrain.  A value that is not available stays
  * empty and is shown as "---"; another one is never put in its place.
  * Steps match the user unit.
  */
@@ -115,8 +115,11 @@ Readout(const MoreData &basic, const TerrainInfo &terrain,
     /* where the nose points; the track differs from it by the drift
        angle */
     readout.course_title = "HDG";
-    if (basic.attitude.heading_available)
+    if (basic.attitude.heading_available) {
       readout.course = basic.attitude.heading.AsBearing().Degrees();
+      /* without a compass the title says that it is an estimate */
+      readout.course_title = basic.attitude.GetHeadingTitle();
+    }
     break;
 
   case HorizonSettings::Course::TRACK:

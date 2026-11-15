@@ -123,6 +123,7 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
 {
   if (attitude.heading_available) {
     /* compass connected, don't need to calculate it */
+    attitude.heading_source = AttitudeState::HeadingSource::COMPASS;
     return;
   }
 
@@ -142,8 +143,10 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
     y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
 
     attitude.heading = Angle::FromXY(y0, x0).AsBearing();
+    attitude.heading_source = AttitudeState::HeadingSource::WIND;
   } else {
     attitude.heading = basic.track;
+    attitude.heading_source = AttitudeState::HeadingSource::TRACK;
   }
   attitude.heading_available = basic.track_available;
 }

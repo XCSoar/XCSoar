@@ -12997,8 +12997,8 @@ msgid "The speed over the ground from the GPS, which differs from the airspeed b
 msgstr "Die Geschwindigkeit über Grund vom GPS; sie weicht um den Wind von der Fahrt ab."
 
 #, no-c-format
-msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind, or the track itself while the wind is not known."
-msgstr "Wohin die Nase zeigt: vom Kompass, wenn einer angeschlossen ist, sonst der um den Wind korrigierte Track, und der Track selbst, solange der Wind nicht bekannt ist."
+msgid "Where the nose points: from a compass when one is connected, otherwise the track corrected for the wind (HDG*), or the track itself while the wind is not known (TRK*)."
+msgstr "Wohin die Nase zeigt: vom Kompass, wenn einer angeschlossen ist, sonst der um den Wind korrigierte Track (HDG*), oder der Track selbst, solange der Wind nicht bekannt ist (TRK*)."
 
 #, no-c-format
 msgid "The direction of motion over the ground from the GPS, which differs from the heading by the drift angle."
@@ -13035,3 +13035,7 @@ msgstr "Was das Band oben im Vollbild-Horizont zeigt."
 
 msgid "What the tape on the right of the full-screen horizon shows."
 msgstr "Was das Band rechts im Vollbild-Horizont zeigt."
+
+#, no-c-format
+msgid "Where the nose of the glider points.  The title is HDG when the heading comes from a compass of a connected device.  Without a compass it is estimated from the GPS track: HDG* is the track corrected for the wind, TRK* the track itself while the wind is not known yet, for example before the first climb.  The track differs from the heading by the drift angle."
+msgstr "Wohin die Nase des Segelflugzeugs zeigt.  Der Titel ist HDG, wenn der Steuerkurs vom Kompass eines angeschlossenen Geräts kommt.  Ohne Kompass wird er aus dem GPS-Track geschätzt: HDG* ist der um den Wind korrigierte Track, TRK* der Track selbst, solange der Wind noch nicht bekannt ist, zum Beispiel vor dem ersten Steigen.  Der Track weicht um den Vorhaltewinkel vom Steuerkurs ab."
