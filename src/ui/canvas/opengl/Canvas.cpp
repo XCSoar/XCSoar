@@ -29,6 +29,7 @@
 #include "util/UTF8.hpp"
 #endif
 
+#include <algorithm>
 #include <cassert>
 
 AllocatedArray<BulkPixelPoint> Canvas::vertex_buffer;
@@ -579,6 +580,33 @@ Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 
   texture->Bind();
   texture->Draw(p);
+}
+
+void
+Canvas::DrawVerticalText(PixelRect rc, std::string_view text) noexcept
+{
+  assert(ValidateUTF8(text));
+  assert(offset == OpenGL::translate);
+
+  if (font == nullptr || rc.IsEmpty())
+    return;
+
+  GLTexture *texture = TextCache::Get(*font, text);
+  if (texture == nullptr)
+    return;
+
+  const unsigned width = std::min(texture->GetWidth(), rc.GetHeight());
+  const unsigned height = std::min(texture->GetHeight(), rc.GetWidth());
+  if (width == 0 || height == 0)
+    return;
+
+  const PixelPoint p{rc.left + int((rc.GetWidth() - height) / 2),
+                     rc.top + int((rc.GetHeight() - width) / 2)};
+  PrepareColoredAlphaTexture(text_color);
+  const ScopeAlphaBlend alpha_blend;
+  texture->Bind();
+  texture->Draw(PixelRect{p, PixelSize{height, width}},
+                PixelRect{PixelSize{width, height}}, true);
 }
 
 void

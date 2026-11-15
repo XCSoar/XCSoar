@@ -271,6 +271,42 @@ Canvas::DrawText(PixelPoint p, std::string_view text) noexcept
 }
 
 void
+Canvas::DrawVerticalText(PixelRect rc, std::string_view text) noexcept
+{
+  assert(ValidateUTF8(text));
+
+  if (rc.IsEmpty())
+    return;
+
+  const auto s = RenderText(font, text);
+  if (!s)
+    return;
+
+  const unsigned width = std::min(s.size.width, rc.GetHeight());
+  const unsigned height = std::min(s.size.height, rc.GetWidth());
+  if (width == 0 || height == 0)
+    return;
+
+  /* Rotate the cached alpha mask, preserving antialiasing on both
+     colour and greyscale canvases.  Limit the buffer to the tab size. */
+  WritableImageBuffer<GreyscalePixelTraits> rotated;
+  rotated.Allocate({height, width});
+  const auto *src = static_cast<const uint8_t *>(s.data);
+  for (unsigned y = 0; y < height; ++y)
+    for (unsigned x = 0; x < width; ++x)
+      *rotated.At(y, width - 1 - x) = Luminosity8(src[y * s.pitch + x]);
+
+  SDLRasterCanvas canvas(buffer);
+  CopyTextRectangle(canvas,
+                    rc.left + int((rc.GetWidth() - height) / 2),
+                    rc.top + int((rc.GetHeight() - width) / 2),
+                    height, width,
+                    {rotated.data, unsigned(rotated.pitch), rotated.size},
+                    text_color, background_color, background_mode == OPAQUE);
+  rotated.Free();
+}
+
+void
 Canvas::DrawTransparentText(PixelPoint p, std::string_view text) noexcept
 {
   assert(ValidateUTF8(text));

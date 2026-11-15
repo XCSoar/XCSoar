@@ -47,8 +47,10 @@ public:
    * Paints one button
    */
   void Draw(Canvas &canvas, const DialogLook &look,
-            bool focused, bool pressed, bool selected) const noexcept {
-    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected);
+            bool focused, bool pressed, bool selected,
+            bool vertical) const noexcept {
+    renderer.Draw(canvas, rc, look, caption, icon, focused, pressed, selected,
+                  vertical);
   }
 };
 
@@ -77,7 +79,7 @@ TabDisplay::Button::GetRecommendedWidth(const DialogLook &look) const noexcept
   if (icon != nullptr)
     return icon->GetSize().width + 2 * Layout::GetTextPadding();
 
-  return look.button.font->TextSize(caption).width + 2 * Layout::GetTextPadding();
+  return look.button.font->GetHeight() + 2 * Layout::GetTextPadding();
 }
 
 inline unsigned
@@ -92,7 +94,7 @@ TabDisplay::Button::GetRecommendedHeight(const DialogLook &look) const noexcept
 unsigned
 TabDisplay::GetRecommendedColumnWidth() const noexcept
 {
-  unsigned width = Layout::GetMaximumControlHeight();
+  unsigned width = Layout::GetMinimumControlHeight();
   for (auto *i : buttons) {
     unsigned w = i->GetRecommendedWidth(GetLook()) + tab_line_height;
     if (w > width)
@@ -242,7 +244,7 @@ TabDisplay::OnPaint(Canvas &canvas) noexcept
     const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == current_index;
 
-    button.Draw(canvas, look, is_focused, is_down, is_selected);
+    button.Draw(canvas, look, is_focused, is_down, is_selected, vertical);
   }
 
   if (!buttons.empty()) {

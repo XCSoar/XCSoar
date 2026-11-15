@@ -277,6 +277,9 @@ public:
 
   void DrawText(PixelPoint p, std::string_view text) noexcept;
 
+  /** Draw text bottom-to-top, centered and clipped to the rectangle. */
+  void DrawVerticalText(PixelRect rc, std::string_view text) noexcept;
+
   void DrawTransparentText(PixelPoint p, std::string_view text) noexcept;
 
   void DrawOpaqueText(PixelPoint p, const PixelRect &rc,

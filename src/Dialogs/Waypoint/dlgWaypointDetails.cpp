@@ -328,9 +328,9 @@ WaypointImagePageWidget::Layout::Layout(const PixelRect &rc) noexcept
   const unsigned button_height = ::Layout::GetMaximumControlHeight();
 
   if (rc.GetWidth() > rc.GetHeight()) {
-    auto buttons = image.CutLeftSafe(::Layout::Scale(70));
+    auto buttons = image.CutLeftSafe(button_height);
     std::tie(magnify_button, shrink_button) =
-      buttons.CutTopSafe(button_height).VerticalSplit();
+      buttons.CutTopSafe(button_height * 2).HorizontalSplit();
   } else {
     const unsigned padding = ::Layout::GetTextPadding();
 
@@ -599,6 +599,7 @@ class WaypointDetailsWidget final : public TabWidget {
   AllocatedPath source_path{nullptr};
   std::optional<unsigned> first_image_page;
   bool caption_initialised = false;
+  WaypointDetailsWidget *previous_image_input_target = nullptr;
 
   bool HasDetails() const noexcept;
   void AddImageTabs() noexcept;
@@ -639,6 +640,7 @@ public:
   void Initialise(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   void Unprepare() noexcept override;
+  bool KeyPress(unsigned key_code) noexcept override;
 };
 
 static WaypointDetailsWidget *waypoint_image_input_target = nullptr;
@@ -772,17 +774,40 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
 {
   TabWidget::Prepare(parent, rc);
 
-  if (first_image_page.has_value())
+  if (first_image_page.has_value()) {
+    previous_image_input_target = waypoint_image_input_target;
     waypoint_image_input_target = this;
+  }
 }
 
 void
 WaypointDetailsWidget::Unprepare() noexcept
 {
   if (waypoint_image_input_target == this)
-    waypoint_image_input_target = nullptr;
+    waypoint_image_input_target = previous_image_input_target;
+  previous_image_input_target = nullptr;
 
   TabWidget::Unprepare();
+}
+
+bool
+WaypointDetailsWidget::KeyPress(unsigned key_code) noexcept
+{
+  if (TabWidget::KeyPress(key_code))
+    return true;
+
+  switch (key_code) {
+  case KEY_LEFT:
+    ChangePage(-1);
+    return true;
+
+  case KEY_RIGHT:
+    ChangePage(+1);
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 void

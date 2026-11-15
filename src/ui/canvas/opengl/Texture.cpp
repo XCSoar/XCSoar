@@ -124,13 +124,13 @@ GLTexture::Configure() noexcept
 }
 
 void
-GLTexture::Draw(PixelRect dest, PixelRect src) const noexcept
+GLTexture::Draw(PixelRect dest, PixelRect src, bool vertical) const noexcept
 {
   const BulkPixelPoint vertices[] = {
-    dest.GetTopLeft(),
-    dest.GetTopRight(),
-    dest.GetBottomLeft(),
-    dest.GetBottomRight(),
+    vertical ? dest.GetBottomLeft() : dest.GetTopLeft(),
+    vertical ? dest.GetTopLeft() : dest.GetTopRight(),
+    vertical ? dest.GetBottomRight() : dest.GetBottomLeft(),
+    vertical ? dest.GetTopRight() : dest.GetBottomRight(),
   };
 
   const ScopeVertexPointer vp(vertices);
