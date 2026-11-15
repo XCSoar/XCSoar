@@ -47,6 +47,8 @@ TestTracking(int argc, char *argv[], LiveTrack24::Client &client)
                                            GetAppSecret());
   session.id = GenerateSessionID();
   session.token = MakeToken(password, session.id, GetAppSecret());
+  /* LiveTrack24 asks for private tracks during development */
+  session.privacy = 1;
   printf("User id %u, session id %u\n", session.user, session.id);
 
   const TrackInfo info{VehicleType::GLIDER, "Hornet", "XCSoar"};

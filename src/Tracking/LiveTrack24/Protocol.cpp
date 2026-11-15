@@ -134,8 +134,8 @@ LoginPath(const AppInfo &app, std::string_view token,
                      token, Escape(username));
 }
 
-/* public track (privacy 0), vehicle described by the app (profile 99) */
-static constexpr unsigned PRIVACY = 0, PROFILE = 99;
+/* the vehicle is described by the app (profile 99) */
+static constexpr unsigned PROFILE = 99;
 
 static std::string
 SessionPrefix(std::string_view command, const AppInfo &app,
@@ -143,7 +143,7 @@ SessionPrefix(std::string_view command, const AppInfo &app,
 {
   return fmt::format("{}/{}/{}/{}/{}/{}/{}", AppPrefix(command, app),
                      session.id, session.user, session.token,
-                     PRIVACY, PROFILE, packet_id);
+                     session.privacy, PROFILE, packet_id);
 }
 
 std::string

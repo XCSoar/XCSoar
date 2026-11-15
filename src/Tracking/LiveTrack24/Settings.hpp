@@ -19,6 +19,13 @@ struct Settings {
     HANGGLIDER_RIGID = 5,
   };
 
+  /** Who may see the track; the values are the protocol's. */
+  enum class Privacy : uint8_t {
+    PUBLIC = 0,
+    PRIVATE = 1,
+    FRIENDS = 2,
+  };
+
   bool enabled;
   StaticString<64> username;
   StaticString<64> password;
@@ -31,6 +38,8 @@ struct Settings {
   VehicleType vehicleType;
   StaticString<64> vehicle_name;
 
+  Privacy privacy;
+
   void SetDefaults() {
     enabled = false;
     username.clear();
@@ -39,6 +48,9 @@ struct Settings {
     interval = 60;
 
     vehicleType = VehicleType::GLIDER;
+    vehicle_name.clear();
+
+    privacy = Privacy::PUBLIC;
   }
 };
 

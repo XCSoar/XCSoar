@@ -66,6 +66,9 @@ struct Session {
   /** MakeToken() with #id */
   std::string token;
 
+  /** 0 public, 1 private, 2 friends only */
+  unsigned privacy = 0;
+
   constexpr bool IsDefined() const noexcept {
     return id != 0;
   }

@@ -180,6 +180,7 @@ Glue::Tick(Settings settings)
                                                  settings.password,
                                                  GetAppSecret());
     new_session.id = GenerateSessionID();
+    new_session.privacy = unsigned(settings.privacy);
     new_session.token = MakeToken(settings.password.c_str(),
                                   new_session.id, GetAppSecret());
     session = std::move(new_session);
