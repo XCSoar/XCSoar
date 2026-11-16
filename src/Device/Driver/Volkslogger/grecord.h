@@ -27,7 +27,7 @@ class GRECORD {
   int  gcnt;
   uint8_t ba[3];
   FILE *ausgabe;
-  void init(void);                  // Initialisieren der Werte
+  void init(void); /* Initialisieren der Werte */
 
  public:
   GRECORD(FILE *ausgabedatei);
@@ -38,40 +38,38 @@ class GRECORD {
 
 
 /*
-DATA-GCS:
-  - Bin‰rblock beim Logger anfordern und im Speicher ablegen
-* - Bin‰rblock ins IGC-Format konvertieren
-* - IGC-Datei abspeichern
-  - Bin‰rblock im radix-64-Format als G-Records an IGC-Datei anh‰ngen
-
-VALI-GCS:
-  - IGC-Datei laden und ohne die nicht vom Logger stammenden Datens‰tze
-    und Whitespaces in temp1.igc abspeichern
-  - G-Records aus IGC-Datei laden von radix-64 in Bin‰rblock umwandeln
-* - Bin‰rblock ins IGC-Format konvertieren
-*   und speichern in Datei temp2.igc
-  - Sicherheitscheck:
-    Dateien temp1 und temp2 vergleichen
-    Signatur ¸berpr¸fen
-
-* kann f¸r DATA- und VALI-Programm genutzt werden
-
-
-
-Benˆtigte Funktionen: (D=f¸r DATA, V=f¸r VALI, P=schon programmiert)
-DV P
-x  x - Verzeichnis der Fl¸ge auslesen
-x  x - Bin‰rblock(Flug) vom Logger lesen
-xx   - Bin‰rblock ins IGC-Format konvertieren dabei IGC-Datei abspeichern
-x    - Dateiname nach IGC-Vorschrift generieren
-xx   - Datei kopieren
- x   - Signatur in Bin‰rblock ¸berpr¸fen
-x  x - Bin‰rblock in GR64 konvertieren und anh‰ngen
- x   - GR64 laden, in Bin‰rblock umwandeln und im Speicher ablegen
-     - IGC-Datei laden und alle nicht vom Logger stammenden Datens‰tze
-       ausfiltern, die Datei dann wieder als temp-Datei abspeichern
-
-*/
+ * DATA-GCS:
+ *   - Bin√§rblock beim Logger anfordern und im Speicher ablegen
+ *   * Bin√§rblock ins IGC-Format konvertieren
+ *   * IGC-Datei abspeichern
+ *   - Bin√§rblock im radix-64-Format als G-Records an die IGC-Datei
+ *     anh√§ngen
+ *
+ * VALI-GCS:
+ *   - IGC-Datei laden und ohne die nicht vom Logger stammenden
+ *     Datens√§tze und Whitespaces in temp1.igc abspeichern
+ *   - G-Records aus der IGC-Datei laden und von radix-64 in einen
+ *     Bin√§rblock umwandeln
+ *   * Bin√§rblock ins IGC-Format konvertieren und in temp2.igc speichern
+ *   - Sicherheitscheck: temp1 und temp2 vergleichen, Signatur pr√ºfen
+ *
+ * Ein * markiert einen Schritt f√ºr das DATA- und das VALI-Programm.
+ *
+ * Ben√∂tigte Funktionen (D = DATA, V = VALI, P = schon programmiert):
+ *
+ *   D V P
+ *   x   x  Verzeichnis der Fl√ºge auslesen
+ *   x   x  Bin√§rblock (Flug) vom Logger lesen
+ *   x x    Bin√§rblock ins IGC-Format konvertieren und die IGC-Datei
+ *          speichern
+ *   x      Dateiname nach IGC-Vorschrift generieren
+ *   x x    Datei kopieren
+ *     x    Signatur im Bin√§rblock √ºberpr√ºfen
+ *   x   x  Bin√§rblock in GR64 konvertieren und anh√§ngen
+ *     x    GR64 laden, in einen Bin√§rblock umwandeln und ablegen
+ *          IGC-Datei laden, loggerfremde Datens√§tze ausfiltern und als
+ *          tempor√§re Datei speichern
+ */
 
 void
 print_g_record(FILE *datei, const uint8_t *puffer, size_t puflen);
