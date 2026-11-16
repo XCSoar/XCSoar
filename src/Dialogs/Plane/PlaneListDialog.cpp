@@ -325,6 +325,9 @@ PlaneListWidget::DeactivateClicked() noexcept
     return;
 
   Profile::SetPath("PlanePath", nullptr);
+  /* a pre-6.7 PolarInformation value would otherwise become the
+     polar again at the next start, with no plane file */
+  Profile::Remove(ProfileKeys::Polar);
 
   /* back to the startup state: no glider, MacCready and crew kept */
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
