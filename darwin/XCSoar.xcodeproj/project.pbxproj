@@ -1144,7 +1144,6 @@
 		5CBFD6F42D742FA600F05795 /* globe.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = globe.svg; sourceTree = "<group>"; };
 		5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_acquiring.svg; sourceTree = "<group>"; };
 		5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = gps_disconnected.svg; sourceTree = "<group>"; };
-		5CBFD6F82D742FA600F05795 /* icon_template.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = icon_template.svg; sourceTree = "<group>"; };
 		5CBFD6F92D742FA600F05795 /* map_bridge.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_bridge.svg; sourceTree = "<group>"; };
 		5CBFD6FA2D742FA600F05795 /* map_castle.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_castle.svg; sourceTree = "<group>"; };
 		5CBFD6FB2D742FA600F05795 /* map_dam.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = map_dam.svg; sourceTree = "<group>"; };
@@ -1189,12 +1188,8 @@
 		5CBFD7242D742FA600F05795 /* Info.plist.in.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist.in.xml; sourceTree = "<group>"; };
 		5CBFD7252D742FA600F05795 /* iOS-Icon.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "iOS-Icon.svg"; sourceTree = "<group>"; };
 		5CBFD7262D742FA600F05795 /* iOS-Icon_red.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "iOS-Icon_red.svg"; sourceTree = "<group>"; };
-		5CBFD7282D742FA600F05795 /* gce.lua */ = {isa = PBXFileReference; lastKnownFileType = text; path = gce.lua; sourceTree = "<group>"; };
-		5CBFD7292D742FA600F05795 /* gestures.lua */ = {isa = PBXFileReference; lastKnownFileType = text; path = gestures.lua; sourceTree = "<group>"; };
-		5CBFD72A2D742FA600F05795 /* init.lua */ = {isa = PBXFileReference; lastKnownFileType = text; path = init.lua; sourceTree = "<group>"; };
 		5CBFD72C2D742FA600F05795 /* Info.plist.in.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist.in.xml; sourceTree = "<group>"; };
 		5CBFD72F2D742FA600F05795 /* egm96s.dem */ = {isa = PBXFileReference; lastKnownFileType = text; path = egm96s.dem; sourceTree = "<group>"; };
-		5CBFD7302D742FA600F05795 /* egm96s.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = egm96s.hdr; sourceTree = "<group>"; };
 		5CBFD7332D742FA600F05795 /* beep_bweep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_bweep.wav; sourceTree = "<group>"; };
 		5CBFD7342D742FA600F05795 /* beep_clear.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_clear.wav; sourceTree = "<group>"; };
 		5CBFD7352D742FA600F05795 /* beep_drip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_drip.wav; sourceTree = "<group>"; };
@@ -4469,7 +4464,6 @@
 		5CBFE4AE2D742FA600F05795 /* Details.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Details.cpp; sourceTree = "<group>"; };
 		5CBFE4AF2D742FA600F05795 /* Error.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Error.hpp; sourceTree = "<group>"; };
 		5CBFE4B02D742FA600F05795 /* Error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
-		5CBFE4B12D742FA600F05795 /* FlarmDetails.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FlarmDetails.hpp; sourceTree = "<group>"; };
 		5CBFE4B22D742FA600F05795 /* FlarmNetDatabase.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FlarmNetDatabase.hpp; sourceTree = "<group>"; };
 		5CBFE4B32D742FA600F05795 /* FlarmNetDatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FlarmNetDatabase.cpp; sourceTree = "<group>"; };
 		5CBFE4B42D742FA600F05795 /* FlarmNetReader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FlarmNetReader.hpp; sourceTree = "<group>"; };
@@ -5964,7 +5958,6 @@
 		5CBFEAED2D742FA600F05795 /* PixelTraits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PixelTraits.hpp; sourceTree = "<group>"; };
 		5CBFEAEE2D742FA600F05795 /* RasterCanvas.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RasterCanvas.hpp; sourceTree = "<group>"; };
 		5CBFEAEF2D742FA600F05795 /* RawBitmap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RawBitmap.cpp; sourceTree = "<group>"; };
-		5CBFEAF02D742FA600F05795 /* SSE2.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SSE2.hpp; sourceTree = "<group>"; };
 		5CBFEAF12D742FA600F05795 /* SubCanvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubCanvas.cpp; sourceTree = "<group>"; };
 		5CBFEAF22D742FA600F05795 /* UncompressedImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UncompressedImage.hpp; sourceTree = "<group>"; };
 		5CBFEAF32D742FA600F05795 /* VirtualCanvas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualCanvas.cpp; sourceTree = "<group>"; };
@@ -5979,7 +5972,6 @@
 		5CBFEAFD2D742FA600F05795 /* CanvasRotateShift.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CanvasRotateShift.hpp; sourceTree = "<group>"; };
 		5CBFEAFE2D742FA600F05795 /* CanvasRotateShift.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasRotateShift.cpp; sourceTree = "<group>"; };
 		5CBFEAFF2D742FA600F05795 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Color.hpp; sourceTree = "<group>"; };
-		5CBFEB002D742FA600F05795 /* Compatibility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Compatibility.hpp; sourceTree = "<group>"; };
 		5CBFEB012D742FA600F05795 /* ConstantAlpha.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConstantAlpha.hpp; sourceTree = "<group>"; };
 		5CBFEB022D742FA600F05795 /* ConstantAlpha.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConstantAlpha.cpp; sourceTree = "<group>"; };
 		5CBFEB032D742FA600F05795 /* Debug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Debug.hpp; sourceTree = "<group>"; };
@@ -11843,7 +11835,6 @@
 				5CBFD6F42D742FA600F05795 /* globe.svg */,
 				5CBFD6F52D742FA600F05795 /* gps_acquiring.svg */,
 				5CBFD6F62D742FA600F05795 /* gps_disconnected.svg */,
-				5CBFD6F82D742FA600F05795 /* icon_template.svg */,
 				5CBFD6F92D742FA600F05795 /* map_bridge.svg */,
 				5CBFD6FA2D742FA600F05795 /* map_castle.svg */,
 				5CBFD6FB2D742FA600F05795 /* map_dam.svg */,
@@ -11906,16 +11897,6 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
-		5CBFD72B2D742FA600F05795 /* Lua */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD7282D742FA600F05795 /* gce.lua */,
-				5CBFD7292D742FA600F05795 /* gestures.lua */,
-				5CBFD72A2D742FA600F05795 /* init.lua */,
-			);
-			path = Lua;
-			sourceTree = "<group>";
-		};
 		5CBFD72D2D742FA600F05795 /* OSX */ = {
 			isa = PBXGroup;
 			children = (
@@ -11928,7 +11909,6 @@
 			isa = PBXGroup;
 			children = (
 				5CBFD72F2D742FA600F05795 /* egm96s.dem */,
-				5CBFD7302D742FA600F05795 /* egm96s.hdr */,
 			);
 			path = other;
 			sourceTree = "<group>";
@@ -11961,7 +11941,6 @@
 				5CBFD7202D742FA600F05795 /* icons */,
 				5CBFD7222D742FA600F05795 /* Input */,
 				5CBFD7272D742FA600F05795 /* iOS */,
-				5CBFD72B2D742FA600F05795 /* Lua */,
 				5CBFD72D2D742FA600F05795 /* OSX */,
 				5CBFD7322D742FA600F05795 /* other */,
 				5CBFD7392D742FA600F05795 /* sound */,
@@ -16520,7 +16499,6 @@
 				5CBFE4AE2D742FA600F05795 /* Details.cpp */,
 				5CBFE4AF2D742FA600F05795 /* Error.hpp */,
 				5CBFE4B02D742FA600F05795 /* Error.cpp */,
-				5CBFE4B12D742FA600F05795 /* FlarmDetails.hpp */,
 				5CBFE4B22D742FA600F05795 /* FlarmNetDatabase.hpp */,
 				5CBFE4B32D742FA600F05795 /* FlarmNetDatabase.cpp */,
 				5CBFE4B42D742FA600F05795 /* FlarmNetReader.hpp */,
@@ -18613,7 +18591,6 @@
 				5CBFEAED2D742FA600F05795 /* PixelTraits.hpp */,
 				5CBFEAEE2D742FA600F05795 /* RasterCanvas.hpp */,
 				5CBFEAEF2D742FA600F05795 /* RawBitmap.cpp */,
-				5CBFEAF02D742FA600F05795 /* SSE2.hpp */,
 				5CBFEAF12D742FA600F05795 /* SubCanvas.cpp */,
 				5CBFEAF22D742FA600F05795 /* UncompressedImage.hpp */,
 				5CBFEAF32D742FA600F05795 /* VirtualCanvas.cpp */,
@@ -18635,7 +18612,6 @@
 				5CBFEAFD2D742FA600F05795 /* CanvasRotateShift.hpp */,
 				5CBFEAFE2D742FA600F05795 /* CanvasRotateShift.cpp */,
 				5CBFEAFF2D742FA600F05795 /* Color.hpp */,
-				5CBFEB002D742FA600F05795 /* Compatibility.hpp */,
 				5CBFEB012D742FA600F05795 /* ConstantAlpha.hpp */,
 				5CBFEB022D742FA600F05795 /* ConstantAlpha.cpp */,
 				5CBFEB032D742FA600F05795 /* Debug.hpp */,
