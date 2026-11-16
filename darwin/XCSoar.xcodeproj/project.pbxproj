@@ -6577,7 +6577,6 @@
 		5CBFEF122D742FA600F05795 /* TransponderMode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TransponderMode.cpp; sourceTree = "<group>"; };
 		5CBFED812D742FA600F05795 /* RateLimiter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RateLimiter.hpp; sourceTree = "<group>"; };
 		5CBFED822D742FA600F05795 /* RateLimiter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RateLimiter.cpp; sourceTree = "<group>"; };
-		5CBFED832D742FA600F05795 /* resource-launch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "resource-launch.h"; sourceTree = "<group>"; };
 		5CBFED842D742FA600F05795 /* ResourceId.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourceId.hpp; sourceTree = "<group>"; };
 		5CBFED852D742FA600F05795 /* ResourceLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourceLoader.hpp; sourceTree = "<group>"; };
 		5CBFED862D742FA600F05795 /* ResourceLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceLoader.cpp; sourceTree = "<group>"; };
@@ -19686,7 +19685,6 @@
 				5CBFED7E2D742FA600F05795 /* Protection.cpp */,
 				5CBFED812D742FA600F05795 /* RateLimiter.hpp */,
 				5CBFED822D742FA600F05795 /* RateLimiter.cpp */,
-				5CBFED832D742FA600F05795 /* resource-launch.h */,
 				5CBFED842D742FA600F05795 /* ResourceId.hpp */,
 				5CBFED852D742FA600F05795 /* ResourceLoader.hpp */,
 				5CBFED862D742FA600F05795 /* ResourceLoader.cpp */,
