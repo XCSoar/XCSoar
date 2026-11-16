@@ -59,9 +59,20 @@ CompareMapItems(const MapItem *a, const MapItem *b)
     return ((const TrafficMapItem *)a)->id <
            ((const TrafficMapItem *)b)->id;
 
-  case MapItem::Type::THERMAL:
-    return ((const ThermalMapItem *)a)->thermal.received >
-           ((const ThermalMapItem *)b)->thermal.received;
+  case MapItem::Type::THERMAL: {
+    const auto &thermal_a = *(const ThermalMapItem *)a;
+    const auto &thermal_b = *(const ThermalMapItem *)b;
+
+    /* Preserve the previous type ordering: standard sources precede FLARM
+       sources, with each group ordered from newest to oldest. */
+    if (thermal_a.IsTraffic() != thermal_b.IsTraffic())
+      return !thermal_a.IsTraffic();
+
+    if (thermal_a.IsTraffic())
+      return thermal_a.traffic->last_seen > thermal_b.traffic->last_seen;
+
+    return thermal_a.thermal.received > thermal_b.thermal.received;
+  }
 
   case MapItem::Type::AIRSPACE:
     return AirspaceAltitude::SortHighest(

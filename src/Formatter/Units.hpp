@@ -22,6 +22,14 @@ FormatAltitude(char *buffer, double value, Unit unit,
                bool include_unit = true);
 
 /**
+ * Format an altitude interval, collapsing equal displayed values to one.
+ */
+void
+FormatAltitudeRange(char *buffer, size_t buffer_size,
+                    double minimum, double maximum, Unit unit,
+                    bool include_unit = true);
+
+/**
  * Converts a mass into a formatted string
  * @param buffer buffer string to write to (pointer)
  * @param size Size of the buffer

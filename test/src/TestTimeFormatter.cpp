@@ -307,9 +307,38 @@ TestFormatLocalDateTimeYYYYMMDDHHMM()
                   [](char value) { return value == char{0x55}; }));
 }
 
+static void
+TestFlightClockElapsedTime()
+{
+  const TimeStamp event{12h};
+  const TimeStamp now{12h + 2min};
+
+  // Live flight and replay timestamps use the same flight-clock domain.
+  ok1(ElapsedTimeOrZero(now, event) == 2min);
+  ok1(ElapsedTimeOrZero(TimeStamp{1h + 2min}, TimeStamp{1h}) == 2min);
+
+  // Flight time may continue beyond midnight; no one-day correction belongs
+  // in the elapsed-time calculation.
+  ok1(ElapsedTimeOrZero(TimeStamp{24h + 1min},
+                        TimeStamp{23h + 59min}) == 2min);
+
+  // A reset/snapshot race must not display a negative age.
+  ok1(ElapsedTimeOrZero(TimeStamp{10min}, TimeStamp{11min}) == 0s);
+  ok1(ElapsedTimeOrZero(TimeStamp::Undefined(), event) == 0s);
+
+  // UTC/DST offsets affect the displayed clock only, never the age.
+  ok1(StringIsEqual(FormatLocalTimeHHMM(event,
+                                        RoughTimeDelta::FromHours(1)).c_str(),
+                    "13:00"));
+  ok1(StringIsEqual(FormatLocalTimeHHMM(event,
+                                        RoughTimeDelta::FromHours(2)).c_str(),
+                    "14:00"));
+  ok1(ElapsedTimeOrZero(now, event) == 2min);
+}
+
 int main()
 {
-  plan_tests(119);
+  plan_tests(127);
 
   TestFormat();
   TestFormatLong();
@@ -320,6 +349,7 @@ int main()
   TestFlightTimeFromRoundedBrokenDateTime();
   TestFormatUTCTime();
   TestFormatLocalDateTimeYYYYMMDDHHMM();
+  TestFlightClockElapsedTime();
 
   return exit_status();
 }
