@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+  <!-- four arrows for the pan label -->
+  <path fill="#000" d="M11,1.6 L14.6,6.2 L12.6,6.2 L12.6,11 L9.4,11 L9.4,6.2 L7.4,6.2 Z"/>
+  <path fill="#000" d="M11,20.4 L14.6,15.8 L12.6,15.8 L12.6,11 L9.4,11 L9.4,15.8 L7.4,15.8 Z"/>
+  <path fill="#000" d="M20.4,11 L15.8,14.6 L15.8,12.6 L11,12.6 L11,9.4 L15.8,9.4 L15.8,7.4 Z"/>
+  <path fill="#000" d="M1.6,11 L6.2,14.6 L6.2,12.6 L11,12.6 L11,9.4 L6.2,9.4 L6.2,7.4 Z"/>
+</svg>
