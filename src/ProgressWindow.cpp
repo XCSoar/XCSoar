@@ -8,6 +8,7 @@
 #include "Look/FontDescription.hpp"
 #include "Resources.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
+#include "Asset.hpp"
 
 #include "ui/canvas/Canvas.hpp"
 
@@ -15,9 +16,13 @@
 #include <cstdint>
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
-  :background_color(GlobalSettings::dark_mode
+  :ProgressWindow(parent, GlobalSettings::dark_mode) {}
+
+ProgressWindow::ProgressWindow(ContainerWindow &parent,
+                               bool _dark_mode) noexcept
+  :background_color(!IsDithered() && _dark_mode
                     ? COLOR_DARK_THEME_BACKGROUND : COLOR_WHITE),
-   dark_mode(GlobalSettings::dark_mode)
+   dark_mode(!IsDithered() && _dark_mode)
 {
   message.clear();
 
@@ -40,6 +45,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
 
   // Initialize progress bar
   progress_bar.Create(*this, progress_bar_position);
+  progress_bar.SetDarkMode(dark_mode);
 
   // Set progress bar step size and range
   SetRange(0, 1000);
@@ -336,9 +342,11 @@ ProgressWindow::OnPaint(Canvas &canvas) noexcept
 
   logo.draw(canvas, logo_position, dark_mode);
 
-  // Draw progress bar background
-  canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
-                 bitmap_progress_border);
+  /* The border bitmap is a light bezel.  Dark mode uses the bar's
+     own track instead. */
+  if (!dark_mode)
+    canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
+                   bitmap_progress_border);
 
   canvas.Select(font);
   canvas.SetBackgroundTransparent();

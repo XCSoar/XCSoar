@@ -51,6 +51,8 @@ Version 7.47 - not yet released
     is one step higher
   - size dialog rows and buttons to at least 30 pt on a mouse,
     the same as on a touch screen #3021
+  - fix the progress dialog staying on the light splash colours
+    when Dark mode is on
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
 * map

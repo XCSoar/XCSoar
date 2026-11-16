@@ -71,6 +71,16 @@ ProgressBar::SetText(const char *text) noexcept
   Invalidate();
 }
 
+void
+ProgressBar::SetDarkMode(bool dark) noexcept
+{
+  if (dark_mode == dark)
+    return;
+
+  dark_mode = dark;
+  Invalidate();
+}
+
 #ifdef EYE_CANDY
 /* Rounded corners leave the parent's background visible in the
    corner pixels. */
@@ -80,10 +90,17 @@ ProgressBar::SetText(const char *text) noexcept
 void
 ProgressBar::OnPaint(Canvas &canvas) noexcept
 {
+  /* E-paper stays black on white.  A colour dark theme uses a dark
+     track; the fill is the light brand blue, so the caption flips. */
+  const bool dark = dark_mode && !IsDithered();
+  const Color track = COLOR_DARK_THEME_LIST;
+
 #ifdef ROUND_PROGRESS_BAR
-  DrawRoundProgressBar(canvas, canvas.GetRect(), value, min_value, max_value);
+  DrawRoundProgressBar(canvas, canvas.GetRect(), value, min_value, max_value,
+                       dark ? &track : nullptr);
 #else
-  DrawSimpleProgressBar(canvas, canvas.GetRect(), value, min_value, max_value);
+  DrawSimpleProgressBar(canvas, canvas.GetRect(), value, min_value, max_value,
+                        dark ? &track : nullptr);
 #endif
 
   if (caption.empty() || !font.IsDefined())
@@ -96,12 +113,12 @@ ProgressBar::OnPaint(Canvas &canvas) noexcept
   const int x = (int(canvas.GetWidth()) - int(size.width)) / 2;
   const int y = (int(canvas.GetHeight()) - int(size.height)) / 2;
 
-  canvas.SetTextColor(COLOR_BLACK);
+  canvas.SetTextColor(dark ? COLOR_WHITE : COLOR_BLACK);
   canvas.DrawText({x, y}, caption);
 
-  /* On a black e-paper fill, redraw the part that sits on the bar
-     in white.  The colour fill is light, so black stays readable. */
-  if (!IsDithered() || max_value <= min_value)
+  /* Recolour the slice that sits on the fill: white on the black
+     e-paper fill, black on the light brand fill. */
+  if ((!IsDithered() && !dark) || max_value <= min_value)
     return;
 
   const unsigned clamped = std::clamp(value, min_value, max_value);
@@ -123,7 +140,7 @@ ProgressBar::OnPaint(Canvas &canvas) noexcept
   if (x >= int(fill))
     return;
 
-  canvas.SetTextColor(COLOR_WHITE);
+  canvas.SetTextColor(dark ? COLOR_BLACK : COLOR_WHITE);
   canvas.DrawClippedText({x, y}, unsigned(int(fill) - x),
                          std::string_view{caption});
 }

@@ -13,6 +13,8 @@ class ProgressBar : public PaintWindow {
   StaticString<64> caption;
   Font font;
 
+  bool dark_mode = false;
+
 public:
   void SetRange(unsigned min_value, unsigned max_value);
 
@@ -25,6 +27,7 @@ public:
   void Step();
 
   void SetText(const char *text) noexcept;
+  void SetDarkMode(bool dark) noexcept;
 
 protected:
   void OnPaint(Canvas &canvas) noexcept override;

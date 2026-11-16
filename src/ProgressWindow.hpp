@@ -59,6 +59,9 @@ class ProgressWindow : public ContainerWindow {
 public:
   explicit ProgressWindow(ContainerWindow &parent) noexcept;
 
+  /** @param dark_mode follow the dialog theme, not the OS night bit */
+  ProgressWindow(ContainerWindow &parent, bool dark_mode) noexcept;
+
   void SetMessage(const char *text) noexcept;
 
   void SetRange(unsigned min_value, unsigned max_value) noexcept;
