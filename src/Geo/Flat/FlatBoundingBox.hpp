@@ -85,14 +85,6 @@ struct FlatBoundingBox
     return lower_left.y;
   }
 
-  constexpr FlatGeoPoint GetTopLeft() const noexcept {
-    return FlatGeoPoint(GetLeft(), GetTop());
-  }
-
-  constexpr FlatGeoPoint GetBottomRight() const noexcept {
-    return FlatGeoPoint(GetRight(), GetBottom());
-  }
-
   constexpr unsigned GetWidth() const noexcept {
     return GetRight() - GetLeft();
   }
@@ -100,9 +92,6 @@ struct FlatBoundingBox
   constexpr unsigned GetHeight() const noexcept {
     return GetTop() - GetBottom();
   }
-
-  [[gnu::pure]]
-  unsigned SquareDistanceTo(FlatGeoPoint p) const noexcept;
 
   /**
    * Calculate non-overlapping distance from one box to another.
