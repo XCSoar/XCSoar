@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "FlightInfo.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "time/Convert.hxx"
 #include "TestUtil.hpp"
@@ -136,6 +137,15 @@ TestTime()
   ok1(BrokenTime(23, 59) + std::chrono::minutes(2) == BrokenTime(0, 1));
   ok1(BrokenTime(23, 59) + std::chrono::minutes(2) == BrokenTime(0, 1));
   ok1(BrokenTime(0, 1) - std::chrono::minutes(2) == BrokenTime(23, 59));
+
+  /* 20:00 + 3:00 must stay 23:00.  A bound of >= 23 wraps that hour
+     through 255 and lands on 15:00. */
+  ok1(AddClock(BrokenTime(20, 0, 0), BrokenTime(3, 0, 0)) ==
+      BrokenTime(23, 0, 0));
+  ok1(AddClock(BrokenTime(23, 0, 0), BrokenTime(1, 0, 0)) ==
+      BrokenTime(0, 0, 0));
+  ok1(AddClock(BrokenTime(22, 30, 40), BrokenTime(1, 29, 30)) ==
+      BrokenTime(0, 0, 10));
 }
 
 static void
@@ -231,7 +241,7 @@ TestDateTime()
 
 int main()
 {
-  plan_tests(110 + 10 + 5);
+  plan_tests(110 + 10 + 5 + 3);
 
   TestDate();
   TestTime();
