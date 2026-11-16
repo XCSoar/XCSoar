@@ -97,7 +97,7 @@ TEST_NAMES = \
 	TestOperaRadar \
 	TestEumetviewSatellite \
 	TestEumetviewEnhance \
-	TestLogger TestGPSDeviceName TestGLoadSample TestBlackboard TestGRecord TestClimbAvCalc TestCirclingWind \
+	TestLogger TestGPSDeviceName TestGLoadSample TestBlackboard TestGRecord TestVolksloggerGRecord TestClimbAvCalc TestCirclingWind \
 	TestFilteredVarioComputer \
 	TestBasicComputer \
 	TestVarioSynthesiser TestAudioVario \
@@ -1496,6 +1496,13 @@ TEST_GRECORD_SOURCES = \
 	$(TEST_SRC_DIR)/TestGRecord.cpp
 TEST_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,TestGRecord,TEST_GRECORD))
+
+TEST_VOLKSLOGGER_GRECORD_SOURCES = \
+	$(SRC)/Device/Driver/Volkslogger/grecord.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestVolksloggerGRecord.cpp
+TEST_VOLKSLOGGER_GRECORD_DEPENDS =
+$(eval $(call link-program,TestVolksloggerGRecord,TEST_VOLKSLOGGER_GRECORD))
 
 TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Port/NullPort.cpp \
