@@ -19,6 +19,11 @@ class ProgressWindow : public ContainerWindow {
   Color background_color;
   bool dark_mode;
 
+  /** Splash paints its own page.  A dialog leaves the client
+      gradient, so the logo sits on the same background as other
+      dialogs. */
+  bool paint_background = true;
+
   Bitmap bitmap_progress_border;
 
   Font font;
@@ -59,8 +64,12 @@ class ProgressWindow : public ContainerWindow {
 public:
   explicit ProgressWindow(ContainerWindow &parent) noexcept;
 
-  /** @param dark_mode follow the dialog theme, not the OS night bit */
-  ProgressWindow(ContainerWindow &parent, bool dark_mode) noexcept;
+  /**
+   * @param dark_mode follow the dialog theme, not the OS night bit
+   * @param paint_background false leaves the parent's gradient
+   */
+  ProgressWindow(ContainerWindow &parent, bool dark_mode,
+                 bool paint_background) noexcept;
 
   void SetMessage(const char *text) noexcept;
 
