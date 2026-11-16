@@ -70,9 +70,11 @@ LineToTriangles(const BulkPixelPoint *points, unsigned num_points,
                 bool loop=false, bool tcap=false) noexcept;
 
 /**
- * OpenGL ES only guarantees 1px line width.  On Android (Adreno),
- * GL_LINE_LOOP with glLineWidth() > 1 produces spurious lines on
- * high-DPI devices (#1514).
+ * True when a closed outline is drawn with GL_LINE_LOOP.
+ * Every platform does this only for a pen one pixel wide.  A wider
+ * outline is a triangle strip: OpenGL ES only requires a 1px line,
+ * and a wider line loop drew spurious lines from the corner on
+ * Samsung devices (#1514).
  */
 [[gnu::const]]
 bool
