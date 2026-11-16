@@ -18,14 +18,19 @@ unsigned
 GetMapScaleBandHeight(const Font &font) noexcept;
 
 /**
- * How far above the bottom of the scale rectangle the GPS status must
- * stay: the scale bar, then the title drawn ABOVE it.
+ * How far above the bottom of the scale rectangle the condition stack
+ * must stay: the scale pill, a gap, the title pill, and a gap.
  */
 [[gnu::pure]]
 unsigned
 GetMapScaleAndTitleClearance(const Font &font) noexcept;
 
-void
+/**
+ * Draw the scale, and the contour spacing when @p contour_spacing_m
+ * is set.  Returns the right edge of the last label, or @c rc.left
+ * when nothing was drawn.
+ */
+int
 RenderMapScale(Canvas &canvas,
                const WindowProjection& projection,
                const PixelRect &rc,

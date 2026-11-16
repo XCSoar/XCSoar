@@ -74,6 +74,10 @@ MapLook::Initialise(const MapSettings &settings,
 
   waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1_ALL, false);
   no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
+  plane_icon.LoadResource(IDB_PLANE_ALL, false);
+  battery_icon.LoadResource(IDB_BATTERY_ALL, false);
+  simulator_icon.LoadResource(IDB_SIMULATOR_ALL, false);
+  replay_icon.LoadResource(IDB_REPLAY_ALL, false);
 
   topography.Initialise();
   airspace.Initialise(settings.airspace, topography.important_label_font);

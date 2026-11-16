@@ -68,7 +68,8 @@ struct MapLook {
   MaskedIcon traffic_alarm_icon;
 
   MaskedIcon cruise_mode_icon, climb_mode_icon, final_glide_mode_icon, abort_mode_icon;
-  MaskedIcon waiting_for_fix_icon, no_gps_icon;
+  MaskedIcon waiting_for_fix_icon, no_gps_icon, plane_icon, battery_icon;
+  MaskedIcon simulator_icon, replay_icon;
 
   TopographyLook topography;
 

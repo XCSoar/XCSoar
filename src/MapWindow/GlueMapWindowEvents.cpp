@@ -865,10 +865,10 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
 {
   MapWindow::Render(canvas, rc);
 
+  const auto layout = GetHudLayout(GetHudRect(rc));
+
   if (IsNearSelf() || DEBUG_ALL_MAP_OVERLAYS) {
     draw_sw.Mark("DrawGlueMisc");
-
-    const auto layout = GetHudLayout(GetHudRect(rc));
 
     if (GetMapSettings().show_thermal_profile || DEBUG_ALL_MAP_OVERLAYS)
       DrawThermalBand(canvas, layout);
@@ -876,7 +876,9 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc) noexcept
     DrawFlightMode(canvas, layout);
     DrawFinalGlide(canvas, layout);
     DrawVario(canvas, layout);
-    const int status_top = DrawGPSStatus(canvas, layout, Basic());
-    DrawPolarStatus(canvas, layout, status_top);
-  }
+    DrawWarnings(canvas, layout, true);
+  } else
+    /* Simulator and Replay stay visible while the map is panned
+       away; the fault labels do not */
+    DrawWarnings(canvas, layout, false);
 }

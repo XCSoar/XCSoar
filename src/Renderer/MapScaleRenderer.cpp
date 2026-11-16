@@ -2,6 +2,7 @@
 // Copyright The XCSoar Project
 
 #include "MapScaleRenderer.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Screen/Layout.hpp"
@@ -13,17 +14,20 @@
 unsigned
 GetMapScaleBandHeight(const Font &font) noexcept
 {
-  return font.GetCapitalHeight() + Layout::GetTextPadding();
+  /* one padding, split above and below the text */
+  return font.GetHeight() + Layout::GetTextPadding();
 }
 
 unsigned
 GetMapScaleAndTitleClearance(const Font &font) noexcept
 {
-  return GetMapScaleBandHeight(font)
-    + font.GetHeight() + Layout::GetTextPadding();
+  /* scale pill, a gap, the title pill, a gap for the condition stack */
+  const unsigned band = GetMapScaleBandHeight(font);
+  const unsigned gap = Layout::GetTextPadding();
+  return band + 1 + gap + band + gap;
 }
 
-void
+int
 RenderMapScale(Canvas &canvas,
                const WindowProjection& projection,
                const PixelRect &rc,
@@ -31,7 +35,7 @@ RenderMapScale(Canvas &canvas,
                unsigned contour_spacing_m)
 {
   if (!projection.IsValid())
-    return;
+    return rc.left;
 
   StaticString<80> buffer;
 
@@ -44,60 +48,68 @@ RenderMapScale(Canvas &canvas,
 
   // check if window too small to bother drawing
   if (text_size.width * 3 > rc.GetWidth())
-    return;
+    return rc.left;
 
-  const int text_padding_x = Layout::GetTextPadding();
+  const int padding = int(Layout::GetTextPadding());
   const int height = int(GetMapScaleBandHeight(font));
-
   const int top = rc.bottom - height - 1;
+  const int text_y = top + (height - int(font.GetHeight())) / 2;
+  const unsigned icon_px = font.GetHeight();
 
-  /* The icons are scaled to the height of the white boxes so that the
-     whole scale bar is one band, independent of DPI and font metrics.
-     They are flush with the edge of their bitmap where they meet a
-     box; overlap that seam by one pixel, because magnifying a texture
-     can leave its outermost pixel column slightly translucent. */
-  constexpr int overlap = 1;
-
-  /* MaskedIcon::Draw() inverts greyscale icons when the canvas' text
-     colour suggests a dark background.  These icons always sit on a
-     white box, so pin the text colour before drawing them. */
+  /* black text keeps a monochrome mark from inverting on the white pill */
   canvas.SetTextColor(COLOR_BLACK);
 
-  int x = rc.left;
-  look.map_scale_left_icon.Draw(canvas, PixelPoint(x, top), height);
+  const int left_w =
+    look.map_scale_left_icon.GetScaledSize(icon_px).width;
+  const int right_w =
+    look.map_scale_right_icon.GetScaledSize(icon_px).width;
+  const int icon_y = top + (height - int(icon_px)) / 2;
 
-  x += look.map_scale_left_icon.GetScaledSize(height).width;
-  canvas.DrawFilledRectangle({{x - overlap, top},
-                              PixelSize{overlap + 2 * text_padding_x + (int)text_size.width, height}}, COLOR_WHITE);
+  PixelRect scale;
+  scale.left = rc.left;
+  scale.top = top;
+  scale.bottom = top + height;
+  const int left_slot = left_w + padding;
+  const int right_slot = right_w + padding;
+  scale.right = rc.left + left_slot + padding + (int)text_size.width
+    + padding + right_slot;
+  DrawPill(canvas, scale);
 
+  look.map_scale_left_icon.Draw(canvas,
+    {scale.left + (left_slot - left_w) / 2, icon_y}, icon_px);
+
+  canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
-  x += text_padding_x;
-  canvas.DrawText({x, rc.bottom - (int)(font.GetAscentHeight() + Layout::Scale(1u)) - 1},
-                  buffer);
+  canvas.DrawText({scale.left + left_slot + padding, text_y}, buffer);
 
-  x += text_padding_x + text_size.width;
-  look.map_scale_right_icon.Draw(canvas, PixelPoint(x - overlap, top), height);
+  look.map_scale_right_icon.Draw(canvas,
+    {scale.right - right_slot + (right_slot - right_w) / 2, icon_y},
+    icon_px);
 
   if (contour_spacing_m > 0) {
-    x += look.map_scale_right_icon.GetScaledSize(height).width;
-    x += text_padding_x * 2;
-
     const auto contour_buf = FormatUserAltitude((double)contour_spacing_m);
-    PixelSize contour_size = canvas.CalcTextSize(contour_buf.c_str());
-    const int icon_width = look.contour_spacing_icon.GetScaledSize(height).width;
+    const PixelSize contour_size = canvas.CalcTextSize(contour_buf.c_str());
+    const int icon_width =
+      look.contour_spacing_icon.GetScaledSize(icon_px).width;
+    const int slot = icon_width + padding;
 
-    canvas.DrawFilledRectangle(
-      {{x, top},
-       PixelSize{icon_width + 2 * text_padding_x + (int)contour_size.width, height}},
-      COLOR_WHITE);
+    PixelRect contour;
+    contour.left = scale.right + padding * 2;
+    contour.top = top;
+    contour.bottom = top + height;
+    contour.right = contour.left + slot + padding
+      + (int)contour_size.width + padding;
+    DrawPill(canvas, contour);
 
-    look.contour_spacing_icon.Draw(canvas, PixelPoint(x, top), height);
+    canvas.SetTextColor(COLOR_BLACK);
+    look.contour_spacing_icon.Draw(canvas,
+      {contour.left + (slot - icon_width) / 2, icon_y}, icon_px);
 
     canvas.SetBackgroundTransparent();
-    canvas.SetTextColor(COLOR_BLACK);
-    canvas.DrawText(
-      {x + icon_width + text_padding_x,
-       rc.bottom - (int)(font.GetAscentHeight() + Layout::Scale(1u)) - 1},
-      contour_buf.c_str());
+    canvas.DrawText({contour.left + slot + padding, text_y},
+                    contour_buf.c_str());
+    return contour.right;
   }
+
+  return scale.right;
 }

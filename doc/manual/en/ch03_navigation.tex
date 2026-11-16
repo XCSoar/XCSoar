@@ -66,8 +66,11 @@ Up (see left) zooms in, Down zooms out.\gesturespec{up}
 \end{enumerate}
 
 The map scale is displayed in the lower left corner of the moving map
-display. The indicated distance is measured from the left to the right border
-of the map display. The current InfoBox panel is named beside it:
+display, as a translucent rounded label. The indicated distance is measured from
+the left to the right border of the map display. When contour lines
+are drawn, their spacing is a label of the same kind beside the
+scale. Above the scale, each part of the page is its own label of
+the same kind:
 Circling, Cruise or FinalGlide, or the name you gave that panel.
 A weather-overlay page shows its own title here instead.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
@@ -90,7 +93,8 @@ independent of the following Auto Zoom settings.
 \subsection*{Auto Zoom}
 Auto Zoom automatically zooms in when approaching a waypoint to keep
 the waypoint at a reasonable screen distance. When \emph{Auto Zoom} is active,
-`AUTO' appears next to the map scale.
+`Auto', with a magnifying glass, appears on the map scale line, after
+the range and the contour spacing.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
 
 To invoke Auto Zoom use the gesture \gesturespec{ud}
@@ -121,9 +125,9 @@ is particularly useful when task planning.
 \end{enumerate} 
 
 \sketch{figures/pan.png}
-When pan is active, the letters `PAN' appears next to the map scale.  While
-panning the location of the focus stays in the middle of the display under the
-cross hairs. 
+When pan is active, the letters `PAN' appear on their own label above
+the map scale.  While panning, the location of the focus stays in the
+middle of the display under the cross hairs. 
 
 Despite the focus under the cross-hairs the map
 still offers the `\emph{What's here?}' feature just by touching any 
