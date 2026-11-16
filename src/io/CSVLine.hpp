@@ -83,4 +83,13 @@ public:
    * Read a #double only if the unit string which follows matches.
    */
   bool ReadCheckedCompare(double &value_r, std::string_view string) noexcept;
+
+private:
+  /**
+   * Move past a field that a numeric parser stopped in.
+   *
+   * @return false when the field is not a bare number.  The rest of
+   * that field is skipped.
+   */
+  bool AcceptParsedField(char *endptr) noexcept;
 };

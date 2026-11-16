@@ -60,22 +60,26 @@ IsNotificationPermissionGranted() noexcept
   return env->CallBooleanMethod(permission_manager, mid);
 }
 
-void
-RequestLocationPermissions() noexcept
+static void
+CallPermissionManager(const char *method) noexcept
 {
   if (permission_manager == nullptr)
     return;
 
   JNIEnv *env = Java::GetEnv();
   jclass cls = env->GetObjectClass(permission_manager);
-  jmethodID mid = env->GetMethodID(cls,
-                                   "requestAllLocationPermissionsDirect",
-                                   "()V");
+  jmethodID mid = env->GetMethodID(cls, method, "()V");
   env->DeleteLocalRef(cls);
   if (mid == nullptr)
     return;
 
   env->CallVoidMethod(permission_manager, mid);
+}
+
+void
+RequestLocationPermissions() noexcept
+{
+  CallPermissionManager("requestAllLocationPermissionsDirect");
 }
 
 void
@@ -99,19 +103,7 @@ RequestLocationPermissions(std::function<void(bool)> callback) noexcept
 void
 RequestNotificationPermission() noexcept
 {
-  if (permission_manager == nullptr)
-    return;
-
-  JNIEnv *env = Java::GetEnv();
-  jclass cls = env->GetObjectClass(permission_manager);
-  jmethodID mid = env->GetMethodID(cls,
-                                   "requestNotificationPermissionDirect",
-                                   "()V");
-  env->DeleteLocalRef(cls);
-  if (mid == nullptr)
-    return;
-
-  env->CallVoidMethod(permission_manager, mid);
+  CallPermissionManager("requestNotificationPermissionDirect");
 }
 
 void
@@ -127,19 +119,7 @@ RequestNotificationPermission(std::function<void(bool)> callback) noexcept
 void
 SuppressPermissionDialogs() noexcept
 {
-  if (permission_manager == nullptr)
-    return;
-
-  JNIEnv *env = Java::GetEnv();
-  jclass cls = env->GetObjectClass(permission_manager);
-  jmethodID mid = env->GetMethodID(cls,
-                                   "suppressPermissionDialogs",
-                                   "()V");
-  env->DeleteLocalRef(cls);
-  if (mid == nullptr)
-    return;
-
-  env->CallVoidMethod(permission_manager, mid);
+  CallPermissionManager("suppressPermissionDialogs");
 }
 
 /* ---- Native permission disclosure dialog ---- */
