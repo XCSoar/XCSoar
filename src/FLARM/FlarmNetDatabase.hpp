@@ -38,14 +38,6 @@ public:
       : NULL;
   }
 
-  /**
-   * Finds a FLARMNetRecord object based on the given Callsign
-   * @param cn Callsign
-   * @return FLARMNetRecord object
-   */
-  [[gnu::pure]]
-  const FlarmNetRecord *FindFirstRecordByCallSign(const char *cn) const noexcept;
-
   unsigned FindRecordsByCallSign(const char *cn,
                                  const FlarmNetRecord *array[],
                                  unsigned size) const noexcept;

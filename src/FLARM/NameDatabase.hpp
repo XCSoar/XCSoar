@@ -41,9 +41,6 @@ public:
   [[gnu::pure]]
   const char *Get(FlarmId id) const noexcept;
 
-  [[gnu::pure]]
-  FlarmId Get(const char *name) const noexcept;
-
   /**
    * Look up all records with the specified name.
    *
@@ -60,7 +57,4 @@ public:
 protected:
   [[gnu::pure]]
   int Find(FlarmId id) const noexcept;
-
-  [[gnu::pure]]
-  int Find(const char *name) const noexcept;
 };

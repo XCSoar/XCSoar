@@ -16,19 +16,6 @@ FlarmNetDatabase::Insert(const FlarmNetRecord &record) noexcept
   map.insert(std::make_pair(record.id, record));
 }
 
-const FlarmNetRecord *
-FlarmNetDatabase::FindFirstRecordByCallSign(const char *cn) const noexcept
-{
-  for (const auto &[id, record] : map) {
-    assert(id.IsDefined());
-
-    if (StringIsEqual(record.callsign, cn))
-      return &record;
-  }
-
-  return NULL;
-}
-
 unsigned
 FlarmNetDatabase::FindRecordsByCallSign(const char *cn,
                                         const FlarmNetRecord *array[],

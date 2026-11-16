@@ -8,7 +8,6 @@
 #include <string>
 
 class FlarmId;
-struct FlarmNetRecord;
 struct MessagingRecord;
 
 enum class ResolvedSource : unsigned char {
@@ -47,16 +46,6 @@ struct ResolvedInfo {
 namespace FlarmDetails {
 
 /**
- * Looks up the FLARM id in the FLARMNet Database
- * and returns the FLARMNet Record
- * @param id FLARM id
- * @return The corresponding FLARMNet Record if found, otherwise NULL
- */
-[[gnu::pure]]
-const FlarmNetRecord *
-LookupRecord(FlarmId id) noexcept;
-
-/**
  * Looks up the FLARM id in the FLARM details array
  * and the FLARMnet file and returns the callsign
  * @param id FLARM id
@@ -65,16 +54,6 @@ LookupRecord(FlarmId id) noexcept;
 [[gnu::pure]]
 const char *
 LookupCallsign(FlarmId id) noexcept;
-
-/**
- * Looks up the callsign in the FLARM details array
- * and the FLARMnet file and returns the FLARM id
- * @param cn Callsign
- * @return The corresponding FLARM id if found, otherwise 0
- */
-[[gnu::pure]]
-FlarmId
-LookupId(const char *cn) noexcept;
 
 /**
  * Adds a FLARM details couple (callsign + FLARM id)

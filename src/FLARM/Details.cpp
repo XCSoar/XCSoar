@@ -19,16 +19,6 @@ extern void SaveFlarmMessagingPeriodic() noexcept __attribute__((weak));
 
 namespace FlarmDetails {
 
-const FlarmNetRecord *
-LookupRecord(FlarmId id) noexcept
-{
-  // try to find flarm from FlarmNet.org File
-  if (traffic_databases == nullptr)
-    return NULL;
-
-  return traffic_databases->flarm_net.FindRecordById(id);
-}
-
 const char *
 LookupCallsign(FlarmId id) noexcept
 {
@@ -36,14 +26,6 @@ LookupCallsign(FlarmId id) noexcept
     return nullptr;
 
   return traffic_databases->FindNameById(id);
-}
-
-FlarmId
-LookupId(const char *cn) noexcept
-{
-  assert(traffic_databases != nullptr);
-
-  return traffic_databases->FindIdByName(cn);
 }
 
 bool
