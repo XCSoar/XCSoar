@@ -94,14 +94,6 @@ FlatProjection::ProjectRangeInteger(const GeoPoint &tp,
   return iround(ProjectRangeFloat(tp, range));
 }
 
-GeoBounds
-FlatProjection::Unproject(const FlatBoundingBox &bb) const
-{
-  assert(IsValid());
-
-  return GeoBounds(Unproject(bb.GetTopLeft()), Unproject(bb.GetBottomRight()));
-}
-
 FlatBoundingBox
 FlatProjection::Project(const GeoBounds &bb) const
 {

@@ -37,11 +37,3 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
 GeoPoint
 FindLatitudeLongitudeS(const GeoPoint &loc,
                        Angle bearing, double distance) noexcept;
-
-/**
- * @see ProjectedDistance()
- */
-[[gnu::pure]]
-double
-ProjectedDistanceS(const GeoPoint &loc1, const GeoPoint &loc2,
-                   const GeoPoint &loc3) noexcept;

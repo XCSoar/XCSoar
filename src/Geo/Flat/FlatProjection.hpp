@@ -100,16 +100,6 @@ public:
   GeoPoint Unproject(const FlatGeoPoint &tp) const;
 
   /**
-   * Projects a integer 2-d representation bounding box to a GeoBounds
-   *
-   * @param bb BB to project
-   *
-   * @return Projected bounds
-   */
-  [[gnu::pure]]
-  GeoBounds Unproject(const FlatBoundingBox &bb) const;
-
-  /**
    * Project a Geodetic point to an floating point 2-d representation
    *
    * @param tp Point to project
