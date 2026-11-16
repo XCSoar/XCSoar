@@ -35,24 +35,6 @@ TrafficDatabases::FindNameById(FlarmId id) const noexcept
   return nullptr;
 }
 
-FlarmId
-TrafficDatabases::FindIdByName(const char *name) const noexcept
-{
-  assert(!StringIsEmpty(name));
-
-  // try to find flarm from userFile
-  const FlarmId id = flarm_names.Get(name);
-  if (id.IsDefined())
-    return id;
-
-  // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.FindFirstRecordByCallSign(name);
-  if (record != NULL)
-    return record->id;
-
-  return FlarmId::Undefined();
-}
-
 unsigned
 TrafficDatabases::FindIdsByName(const char *name,
                                 FlarmId *buffer, unsigned max) const noexcept

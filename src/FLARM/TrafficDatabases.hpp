@@ -41,9 +41,6 @@ struct TrafficDatabases {
   [[gnu::pure]]
   const char *FindNameById(FlarmId id) const noexcept;
 
-  [[gnu::pure]] [[gnu::nonnull]]
-  FlarmId FindIdByName(const char *name) const noexcept;
-
   /**
    * Look up all records with the specified name.
    *

@@ -16,18 +16,6 @@ FlarmNameDatabase::Find(FlarmId id) const noexcept
   return -1;
 }
 
-int
-FlarmNameDatabase::Find(const char *name) const noexcept
-{
-  assert(name != nullptr);
-
-  for (unsigned i = 0, size = data.size(); i != size; ++i)
-    if (data[i].name.equals(name))
-      return i;
-
-  return -1;
-}
-
 const char *
 FlarmNameDatabase::Get(FlarmId id) const noexcept
 {
@@ -36,16 +24,6 @@ FlarmNameDatabase::Get(FlarmId id) const noexcept
     return nullptr;
 
   return data[i].name;
-}
-
-FlarmId
-FlarmNameDatabase::Get(const char *name) const noexcept
-{
-  int i = Find(name);
-  if (i < 0)
-    return FlarmId::Undefined();
-
-  return data[i].id;
 }
 
 unsigned
