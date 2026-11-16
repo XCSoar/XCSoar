@@ -32,6 +32,7 @@ ProgressAdapter::Callback(curl_off_t dltotal, curl_off_t dlnow,
 
   listener.SetProgressRange(range);
   listener.SetProgressPosition(dlnow + ulnow);
+  listener.SetProgressBytes(dlnow + ulnow);
 }
 
 int

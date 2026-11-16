@@ -13,7 +13,9 @@
 #include "ui/event/PeriodicTimer.hpp"
 
 #include <cassert>
+#include <cstdint>
 #include <exception>
+#include <limits>
 
 /**
  * Tracks a single file download and updates a #ProgressDialog.
@@ -72,10 +74,22 @@ private:
       set_position = got_size && position >= 0;
     }
 
+    /* shortcut: past 4 GiB the counters pin, use a wider type
+       when a download can be that large. */
+    const auto clamp = [](int64_t value) noexcept -> unsigned {
+      if (value <= 0)
+        return 0;
+      if (uint64_t(value) > std::numeric_limits<unsigned>::max())
+        return std::numeric_limits<unsigned>::max();
+      return unsigned(value);
+    };
+
     if (set_range)
-      env.SetProgressRange(uint64_t(size) / 1024u);
-    if (set_position)
-      env.SetProgressPosition(uint64_t(position) / 1024u);
+      env.SetProgressRange(clamp(size));
+    if (set_position) {
+      env.SetProgressBytes(clamp(position));
+      env.SetProgressPosition(clamp(position));
+    }
   }
 
   void OnDownloadComplete(Path _path_relative) noexcept override {
