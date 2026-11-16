@@ -24,8 +24,11 @@ comfortable.
 
 When operating PDAs under internal battery, XCSoar detects a low
 battery condition and allows the operating system to shut down and
-preserve the memory.  In addition, it can be set up to blank the
-screen after a period of inactivity, so that it can reduce the power
+preserve the memory.  Below 10\%, and while not charging, the map
+shows a yellow warning, a battery symbol and \emph{Battery low},
+on the lower left.
+In addition, it can be set up to blank the screen after a period of
+inactivity, so that it can reduce the power
 consumption.  When the screen is blanked, pressing one of the hardware
 buttons on the PDA activates the screen again.  When a status message
 is issued by the system, the screen becomes activated.
@@ -44,8 +47,10 @@ XCSoar requires a 3D GPS fix for its navigation functions.
 
 \subsection*{GPS status}
 
-GPS status icons and text may appear on the bottom edge of the
-map display to indicate:
+GPS status appears on the lower left of the map, as a label with
+the icon, and stays until that condition clears.  Waiting for a
+fix is a yellow warning, and only while a GPS is connected.  GPS
+not connected is a red error, and replaces that warning:
 
 \begin{tabular}{c c}%{c c}
 \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_acquiring.pdf} & \includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/gps_disconnected.pdf}\\

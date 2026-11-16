@@ -10,6 +10,12 @@
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Renderer/TextInBox.hpp"
+#include "Look/Colors.hpp"
+#include "Asset.hpp"
+#include "Hardware/PowerGlobal.hpp"
+#ifdef HAVE_BATTERY
+#include "Hardware/PowerInfo.hpp"
+#endif
 #include "Weather/Rasp/RaspRenderer.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
@@ -17,6 +23,7 @@
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "util/Macros.hpp"
+#include "util/StaticArray.hxx"
 #include "util/StringAPI.hxx"
 #include "Look/GestureLook.hpp"
 #include "Renderer/GestureRenderer.hpp"
@@ -28,6 +35,9 @@
 #include "Replay/Replay.hpp"
 #include "ui/canvas/Pen.hpp"
 #include "ui/canvas/Brush.hpp"
+
+#include <cassert>
+#include <string_view>
 
 #ifdef ENABLE_OPENGL
 #include "Asset.hpp"
@@ -209,8 +219,8 @@ GlueMapWindow::DrawPageIndicator(Canvas &canvas) const noexcept
   const unsigned gap = Layout::VptScale(5);
   const unsigned height = dot + 2 * Layout::VptScale(5);
 
-  /* the round ends of the pill are half its height wide */
-  const unsigned width = n_pages * dot + (n_pages - 1) * gap + height;
+  const unsigned side = Layout::GetTextPadding();
+  const unsigned width = n_pages * dot + (n_pages - 1) * gap + 2 * side;
 
   /* bottom centre of the HUD, as far from its bottom as the gesture
      label is from its top (see DrawGesture()); the map scale is on
@@ -236,7 +246,7 @@ GlueMapWindow::DrawPageIndicator(Canvas &canvas) const noexcept
   const Brush brush(color);
 
   const unsigned radius = (dot - pen_width) / 2;
-  PixelPoint center{pill.left + int(height / 2 + dot / 2),
+  PixelPoint center{pill.left + int(side + dot / 2),
                     pill.GetCenter().y};
 
   for (unsigned i = 0; i < n_pages; ++i) {
@@ -388,72 +398,196 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas,
   }
 }
 
-int
-GlueMapWindow::DrawGPSStatus(Canvas &canvas, const MapHudLayout &layout,
-                             const NMEAInfo &info) const noexcept
-{
-  const PixelRect &area = layout.bottom;
-  const int clear_bottom = area.bottom - int(layout.scale_title_clearance);
-
-  const char *txt;
+/* shortcut: 8 pills; raise the cap when a ninth fault is added */
+struct Pill {
+  const char *text;
   const MaskedIcon *icon;
+  Color fill;
+};
 
-  if (!info.alive) {
-    icon = &look.no_gps_icon;
-    txt = _("GPS not connected");
-  } else if (!info.location_available) {
-    icon = &look.waiting_for_fix_icon;
-    txt = _("GPS waiting for fix");
-  } else if (DEBUG_ALL_MAP_OVERLAYS) {
-    icon = &look.waiting_for_fix_icon;
-    txt = "GPS status";
-  } else
-    // early exit
-    return clear_bottom;
+using PillList = StaticArray<Pill, 8>;
 
-  const Font &font = *look.overlay.overlay_font;
+static void
+AddPill(PillList &list, const char *text,
+        const MaskedIcon *icon, Color fill) noexcept
+{
+  if (!list.checked_append({text, icon, fill}))
+    assert(false);
+}
+
+/** Black ink on a light fill, white ink on a dark one. */
+static Color
+PillInk(Color fill) noexcept
+{
+  const unsigned sum = unsigned(fill.Red()) + fill.Green() + fill.Blue();
+  return sum > 384 ? COLOR_BLACK : COLOR_WHITE;
+}
+
+/**
+ * On a monochrome display a light fill becomes white and a dark fill
+ * black, so any caller colour still reads.
+ */
+static Color
+PillFill(Color fill) noexcept
+{
+  if (HasColors() && !IsDithered())
+    return fill;
+
+  return PillInk(fill) == COLOR_BLACK ? COLOR_WHITE : COLOR_BLACK;
+}
+
+/** @return the pill, so the next one can sit above it or to its right */
+static PixelRect
+DrawMapPill(Canvas &canvas, const Font &font,
+            int left, int bottom, const Pill &item) noexcept
+{
   canvas.Select(font);
 
-  const int row_height = std::max((int)icon->GetSize().height,
-                                  (int)font.GetHeight());
-  PixelPoint p(area.left, clear_bottom - row_height);
-  icon->Draw(canvas, p);
+  const PixelSize tsize = canvas.CalcTextSize(item.text);
+  const unsigned padding = Layout::GetTextPadding();
+  const unsigned height = GetMapScaleBandHeight(font);
+  const unsigned icon_px = font.GetHeight();
+  /* a mark gets its own slot; text alone starts after the padding */
+  const bool has_icon = item.icon != nullptr;
+  const unsigned lead = has_icon
+    ? item.icon->GetScaledSize(icon_px).width + padding
+    : padding;
+  const unsigned mid = has_icon ? padding : 0;
+  const unsigned width = lead + mid + tsize.width + padding;
 
-  p.x += icon->GetSize().width + Layout::FastScale(4);
-  p.y = clear_bottom - (int)font.GetAscentHeight()
-    - ((row_height - (int)font.GetHeight()) / 2);
+  PixelRect pill;
+  pill.left = left;
+  pill.right = pill.left + int(width);
+  pill.bottom = bottom;
+  pill.top = pill.bottom - int(height);
 
-  TextInBoxMode mode;
-  mode.shape = LabelShape::ROUNDED_BLACK;
+  const Color ink = PillInk(item.fill);
+  /* a warning or an error is opaque; a white condition stays translucent */
+  const bool solid = item.fill != COLOR_WHITE;
+  DrawPill(canvas, pill, 0xff, PillFill(item.fill), solid);
 
-  TextInBox(canvas, txt, p, mode, area, nullptr);
+  /* ink colour also tells a monochrome icon whether to invert */
+  canvas.SetTextColor(ink);
 
-  return clear_bottom - row_height;
+  if (has_icon) {
+    const PixelPoint symbol{pill.left + int(lead / 2),
+                            pill.GetCenter().y};
+    const PixelSize scaled = item.icon->GetScaledSize(icon_px);
+    item.icon->Draw(canvas,
+                    {symbol.x - int(scaled.width / 2),
+                     symbol.y - int(scaled.height / 2)},
+                    icon_px);
+  }
+
+  canvas.Select(font);
+  canvas.SetTextColor(ink);
+  canvas.SetBackgroundTransparent();
+  canvas.DrawText({pill.left + int(lead + mid),
+                   pill.top + (int(height) - int(tsize.height)) / 2},
+                  item.text);
+  return pill;
+}
+
+static void
+DrawMapPills(Canvas &canvas, const Font &font,
+             const MapHudLayout &layout,
+             const PillList &list) noexcept
+{
+  const PixelRect &area = layout.bottom;
+  int bottom = area.bottom - int(layout.scale_title_clearance);
+  const int gap = int(Layout::GetTextPadding());
+
+  for (const Pill &item : list)
+    bottom = DrawMapPill(canvas, font, area.left, bottom, item).top - gap;
+}
+
+static void
+AppendPolarPill(const ComputerSettings &settings, const MapLook &look,
+                PillList &list) noexcept
+{
+  if (!settings.polar.glide_polar_task.IsValid() ||
+      DEBUG_ALL_MAP_OVERLAYS)
+    AddPill(list, _("No polar"), &look.plane_icon,
+            COLOR_AIRSPACE_WARNING_NEAR);
+}
+
+static void
+AppendGpsError(const NMEAInfo &info, const MapLook &look,
+               PillList &list) noexcept
+{
+  if (!info.alive || DEBUG_ALL_MAP_OVERLAYS)
+    AddPill(list, _("GPS not connected"), &look.no_gps_icon,
+            COLOR_AIRSPACE_WARNING_INSIDE);
+}
+
+static void
+AppendGpsWarning(const NMEAInfo &info, const MapLook &look,
+                 PillList &list) noexcept
+{
+  /* a connected GPS can still have no position; a dead one is only
+     the error, not a second warning */
+  if ((info.alive && !info.location_available) || DEBUG_ALL_MAP_OVERLAYS)
+    AddPill(list, _("GPS waiting for fix"), &look.waiting_for_fix_icon,
+            COLOR_AIRSPACE_WARNING_NEAR);
+}
+
+static void
+AppendBatteryPill(const MapLook &look, PillList &list) noexcept
+{
+#ifdef HAVE_BATTERY
+  /* same 10% as BatteryTimer, and only while running on battery */
+  const auto percent = Power::global_info.battery.remaining_percent;
+  const bool low =
+    Power::global_info.external.status ==
+    Power::ExternalInfo::Status::OFF &&
+    percent && *percent > 0 && *percent < 10;
+#else
+  /* this desktop file has no host-battery readout */
+  constexpr bool low = false;
+#endif
+  if (low || DEBUG_ALL_MAP_OVERLAYS)
+    AddPill(list, _("Battery low"), &look.battery_icon,
+            COLOR_AIRSPACE_WARNING_NEAR);
+}
+
+/**
+ * Simulator and replay stay for the whole session.  The formatted
+ * replay line must outlive DrawMapPills().
+ */
+static void
+AppendModePill(const NMEAInfo &basic, const MapLook &look,
+               StaticString<32> &mode, PillList &list) noexcept
+{
+  if (basic.gps.replay) {
+    if (backend_components != nullptr &&
+        backend_components->replay != nullptr)
+      mode.Format(_("REPLAY %.0fx "),
+                  backend_components->replay->GetTimeScale());
+    else
+      mode = _("REPLAY ");
+    AddPill(list, mode.c_str(), &look.replay_icon, COLOR_WHITE);
+  } else if (basic.gps.simulator) {
+    AddPill(list, _("Simulator"), &look.simulator_icon, COLOR_WHITE);
+  }
 }
 
 void
-GlueMapWindow::DrawPolarStatus(Canvas &canvas, const MapHudLayout &layout,
-                               int bottom) const noexcept
+GlueMapWindow::DrawWarnings(Canvas &canvas,
+                            const MapHudLayout &layout,
+                            bool faults) const noexcept
 {
-  /* final glide, speed to fly and reach are all off without one */
-  if (GetComputerSettings().polar.glide_polar_task.IsValid() &&
-      !DEBUG_ALL_MAP_OVERLAYS)
-    return;
+  PillList list;
+  StaticString<32> mode;
+  /* first entry is the bottom: error, then warning, then condition */
+  if (faults) {
+    AppendGpsError(Basic(), look, list);
+    AppendPolarPill(GetComputerSettings(), look, list);
+    AppendGpsWarning(Basic(), look, list);
+    AppendBatteryPill(look, list);
+  }
+  AppendModePill(Basic(), look, mode, list);
 
-  const Font &font = *look.overlay.overlay_font;
-  canvas.Select(font);
-
-  /* in line with the text of the GPS status, right of its icon */
-  const PixelRect &area = layout.bottom;
-  const PixelPoint p(area.left + int(look.no_gps_icon.GetSize().width) +
-                     Layout::FastScale(4),
-                     bottom - int(Layout::GetTextPadding()) -
-                     int(font.GetHeight()));
-
-  TextInBoxMode mode;
-  mode.shape = LabelShape::ROUNDED_BLACK;
-
-  TextInBox(canvas, _("No polar"), p, mode, area, nullptr);
+  DrawMapPills(canvas, *look.overlay.overlay_font, layout, list);
 }
 
 void
@@ -645,73 +779,85 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
       background.AreContoursVisible())
     contour_spacing_m = background.GetContourSpacing();
 
-  RenderMapScale(canvas, projection, scale_pos, look.overlay, contour_spacing_m);
+  const int scale_right =
+    RenderMapScale(canvas, projection, scale_pos,
+                   look.overlay, contour_spacing_m);
 
   if (!projection.IsValid())
     return;
 
-  StaticString<256> buffer;
+  const Font &font = *look.overlay.overlay_font;
+  const int height = int(GetMapScaleBandHeight(font));
+  const int gap = int(Layout::GetTextPadding());
+  const int box_gap = gap * 2;
 
-  buffer.clear();
+  /* same band and gap as the range and the contour spacing */
+  if (GetMapSettings().auto_zoom_enabled &&
+      scale_right > scale_pos.left)
+    DrawMapPill(canvas, font, scale_right + box_gap,
+                scale_pos.bottom - 1,
+                {C_("Status", "Auto"),
+                 &look.overlay.auto_zoom_icon, COLOR_WHITE});
 
-  if (GetMapSettings().auto_zoom_enabled)
-    buffer = "AUTO ";
+  int left = scale_pos.left;
+  const int bottom = scale_pos.bottom - height - 1 - gap;
+  const int origin = left;
 
-  switch (follow_mode) {
-  case FOLLOW_SELF:
-    break;
+  auto place = [&](const char *text) {
+    if (text == nullptr || *text == '\0')
+      return;
+    left = DrawMapPill(canvas, font, left, bottom,
+                       {text, nullptr, COLOR_WHITE}).right + box_gap;
+  };
 
-  case FOLLOW_PAN:
-    buffer += "PAN ";
-    break;
-  }
+  /* ", " and " | " are the joins inside the page title */
+  auto place_split = [&](const char *text) {
+    while (text != nullptr && *text != '\0') {
+      const char *comma = StringFind(text, ", ");
+      const char *pipe = StringFind(text, " | ");
+      const char *sep = nullptr;
+      unsigned skip = 0;
+      if (comma != nullptr && (pipe == nullptr || comma < pipe)) {
+        sep = comma;
+        skip = 2;
+      } else if (pipe != nullptr) {
+        sep = pipe;
+        skip = 3;
+      }
+
+      const std::size_t n = sep != nullptr
+        ? std::size_t(sep - text)
+        : StringLength(text);
+      if (n > 0) {
+        StaticString<128> piece;
+        piece.assign(std::string_view(text, n));
+        place(piece.c_str());
+      }
+      if (sep == nullptr)
+        break;
+      text = sep + skip;
+    }
+  };
+
+  if (follow_mode == FOLLOW_PAN)
+    place("PAN");
 
   const UIState &ui_state = GetUIState();
-  if (Basic().gps.replay) {
-    if (backend_components != nullptr &&
-        backend_components->replay != nullptr)
-      buffer.AppendFormat(_("REPLAY %.0fx "),
-                          backend_components->replay->GetTimeScale());
-    else
-      buffer += _("REPLAY ");
-  } else if (Basic().gps.simulator) {
-    buffer += _("Simulator");
-    buffer += " ";
+  if (!ui_state.map_scale_page_title.empty())
+    place_split(ui_state.map_scale_page_title.c_str());
+  else if (!ui_state.panel_name.empty())
+    place(ui_state.panel_name.c_str());
+
+  if (GetComputerSettings().polar.ballast_timer_active) {
+    StaticString<32> ballast;
+    ballast.Format("BALLAST %d LITERS",
+                   (int)GetComputerSettings().polar.glide_polar_task
+                     .GetBallastLitres());
+    place(ballast.c_str());
   }
 
-  if (!ui_state.map_scale_page_title.empty()) {
-    buffer += "| ";
-    buffer += ui_state.map_scale_page_title;
-    buffer += " ";
-  } else if (!ui_state.panel_name.empty()) {
-    buffer += ui_state.panel_name;
-    buffer += " ";
-  }
-
-  if (GetComputerSettings().polar.ballast_timer_active)
-    buffer.AppendFormat(
-        "BALLAST %d LITERS ",
-        (int)GetComputerSettings().polar.glide_polar_task.GetBallastLitres());
-
-  if (buffer.empty() && DEBUG_ALL_MAP_OVERLAYS)
-    buffer = "Map title";
-
-  if (!buffer.empty()) {
-
-    const Font &font = *look.overlay.overlay_font;
-    canvas.Select(font);
-    const int height = int(GetMapScaleBandHeight(font));
-
-    TextInBoxMode mode;
-    mode.vertical_position = TextInBoxMode::VerticalPosition::ABOVE;
-    mode.shape = LabelShape::OUTLINED;
-
-    /* the same left edge as the scale bar, which is the HUD, not the
-       map window: the map runs under the system bars and the InfoBoxes */
-    TextInBox(canvas, buffer,
-              {scale_pos.left, scale_pos.bottom - height},
-              mode, scale_pos, nullptr);
-  }
+  if (left == origin && DEBUG_ALL_MAP_OVERLAYS)
+    place("Map title");
 }
 
 void

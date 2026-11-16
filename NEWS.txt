@@ -10,9 +10,12 @@ Version 7.47 - not yet released
     one, instead of flying with a built-in glider nobody chose #3270
   - say so when a plane with an invalid polar is loaded, and do not
     keep using the previous plane's polar #3270
-  - show "No polar" on the map while there is none, and warn once
-    when no plane is set up and there is still no polar 30 seconds
-    after the start #3270
+  - show warning labels on the lower left of the map, and leave
+    them there while they apply: a solid yellow "No polar", and
+    the GPS status (a solid red "GPS not connected", or a solid
+    yellow "GPS waiting for fix" while a GPS is connected but
+    there is no position). Warn once when no plane is set up and
+    there is still no polar 30 seconds after the start #3270
   - deactivate the current plane from the Planes dialog, which
     clears its polar #3270
 * ui
@@ -54,6 +57,15 @@ Version 7.47 - not yet released
   - fix a long pause after the quick guide while a fine terrain
     file loads the tiles under the map
 * map
+  - draw the map scale, the contour spacing, and auto-zoom (with a
+    magnifying glass) on one line, and each part of the line above
+    them (PAN, the page name, an overlay, ballast) as its own
+    rounded label on the lower left, as translucent as a NOTAM label
+  - show a yellow "Battery low" with a battery symbol on the lower
+    left while the internal battery is below 10% and not charging
+  - show Simulator, with a joystick symbol, and Replay, with a
+    circular arrow, as white labels at the top of that lower-left
+    stack. Errors sit at the bottom, warnings between
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it
   - draw the instantaneous wind of an external sensor (Larus) as a

@@ -189,8 +189,18 @@ connected variometer sends its polar, final glide, speed to fly and
 reach are off and show no value.  A plane whose polar is invalid, for
 example with the wrong sign on a sink rate, is reported when it is
 loaded, and XCSoar then has no polar rather than the previous plane's.
-While there is no polar, the map shows \emph{No polar} above the GPS
-status.  If no plane is set up and there is still no polar 30 seconds
+While there is no polar, the lower left of the map shows a plane
+symbol and \emph{No polar}.  The same place shows \emph{GPS not
+connected} when no GPS is connected, and \emph{GPS waiting for
+fix} while a GPS is connected but there is no position, and
+\emph{Battery low} while the internal battery is below 10\% and
+not charging.  \emph{No polar}, \emph{GPS waiting for fix} and
+\emph{Battery low} are solid yellow warnings.  \emph{GPS not connected}
+is a solid red error.  Simulator, with a joystick symbol, and Replay, with
+a circular arrow, are white labels at the top of the same stack.
+Errors sit at the bottom and warnings between them.  Each label
+stays until that condition clears.
+If no plane is set up and there is still no polar 30 seconds
 after the start, a message says so once; that leaves a variometer
 time to send its polar first.  In flight this is a status message, so
 it does not block the map.  In the Planes dialogue, with that plane

@@ -788,12 +788,24 @@ child of the main window on the map.
 
 ``MainWindow::GetHudRect()``
   The area stack minus the top and bottom areas.  This is where
-  in-flight map chrome belongs: the compass, the map scale and the
-  title beside it (Simulator, PAN, replay, the page name), the final
+  in-flight map chrome belongs: the compass, the map scale, auto-zoom
+  on that line when it is on, and the titles above it (PAN, the page
+  name, an overlay and ballast, each its own label), the final
   glide bar, the vario bar, the thermal profile, the GPS status, the
-  flight mode icon, the gesture label, the page indicator, the pan
-  elevation and coordinates, the overlay buttons (menu, QuickMenu,
-  zoom), status messages, and a widget that replaces the map.
+  condition labels, the flight mode icon, the gesture label, the page
+  indicator, the pan elevation and coordinates, the overlay buttons
+  (menu, QuickMenu, zoom), status messages, and a widget that
+  replaces the map.
+  The condition labels are the persistent channel.  A yellow or red
+  pill stays while its warning or error is true.  Simulator, with a
+  joystick, and Replay, with a circular arrow, are white rounded
+  labels at the top of the same stack.  Errors sit at the bottom,
+  warnings between.  Each drops when that condition clears.
+  ``Message::AddMessage()``
+  is the occurrence channel: a status popup at the moment something
+  happens, which then expires.  Use a pill when the pilot should
+  keep seeing the condition.  Use ``AddMessage()`` when the news is
+  the moment it happened.
   ``LayoutMapArea()`` then stores the same hole on the map as
   ``MapWindow::GetHudRect()``.  Draw map overlays with that function,
   not with the map's ``GetClientRect()``: the map is larger than the

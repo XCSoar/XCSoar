@@ -149,8 +149,10 @@ For Xcode builds on iOS and macOS, set ``DEBUG_ALL_MAP_OVERLAYS=y`` in
 The flag is defined in :file:`build/options.mk` (default ``n``) and
 adds ``-DDEBUG_ALL_MAP_OVERLAYS=1``. When enabled, it forces the
 thermal band, FLARM alarm-level icon (not the FLARM traffic gauge
-widget), stall-ratio line, pan chrome, GPS-status and map-title
-placeholders, final-glide bar, and vario bar. Missing sensor data is
+widget), stall-ratio line, pan chrome, map-title placeholder,
+final-glide bar, and vario bar. The lower-left pills are forced
+too: yellow "No polar", red "GPS not connected", yellow "GPS
+waiting for fix", and yellow "Battery low". Missing sensor data is
 filled with placeholders so layout and collision can be tested
 without live traffic or a real flight. Separate MainWindow gauges
 (``GaugeFLARM``, thermal assistant) are unchanged.
