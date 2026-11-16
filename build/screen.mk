@@ -84,9 +84,7 @@ SCREEN_SOURCES += \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/android/Window.cpp \
 	$(WINDOW_SRC_DIR)/android/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/android/SingleWindow.cpp \
 	$(CANVAS_SRC_DIR)/android/Bitmap.cpp \
 	$(CANVAS_SRC_DIR)/android/Font.cpp
 endif
@@ -164,7 +162,6 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/sdl/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/sdl/Window.cpp \
 	$(WINDOW_SRC_DIR)/sdl/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/sdl/SingleWindow.cpp
 ifeq ($(OPENGL),n)
@@ -181,9 +178,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/egl/TopCanvas.cpp \
 	$(SRC)/ui/display/egl/ConfigChooser.cpp \
 	$(SRC)/ui/display/egl/Display.cpp \
-	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp
 else ifeq ($(VFB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
 SCREEN_SOURCES += \
@@ -193,9 +188,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/custom/ResourceBitmap.cpp \
 	$(CANVAS_SRC_DIR)/custom/UncompressedImage.cpp \
 	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
-	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
+	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp
 FB_CPPFLAGS = -DUSE_VFB
 else ifeq ($(USE_FB),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES_IMG)
@@ -208,9 +201,7 @@ SCREEN_SOURCES += \
 	$(CANVAS_SRC_DIR)/memory/Export.cpp \
 	$(WINDOW_SRC_DIR)/poll/TopWindow.cpp \
 	$(WINDOW_SRC_DIR)/fb/TopWindow.cpp \
-	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp \
-	$(WINDOW_SRC_DIR)/fb/Window.cpp \
-	$(WINDOW_SRC_DIR)/fb/SingleWindow.cpp
+	$(CANVAS_SRC_DIR)/fb/TopCanvas.cpp
 FB_CPPFLAGS = -DUSE_FB
 else ifeq ($(HAVE_WIN32),y)
 $(error Windows GDI support has been removed; use TARGET=WIN64OPENGL or TARGET=WIN32OPENGL)

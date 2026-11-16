@@ -6131,9 +6131,7 @@
 		5CBFEBBD2D742FA600F05795 /* SystemExt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SystemExt.hpp; sourceTree = "<group>"; };
 		5CBFEBBE2D742FA600F05795 /* Types.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Types.hpp; sourceTree = "<group>"; };
 		5CBFEBC02D742FA600F05795 /* Features.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Features.hpp; sourceTree = "<group>"; };
-		5CBFEBC12D742FA600F05795 /* SingleWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SingleWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBC22D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
-		5CBFEBC32D742FA600F05795 /* Window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		5CBFEBC52D742FA600F05795 /* ContainerWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContainerWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBC62D742FA600F05795 /* DoubleClick.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DoubleClick.hpp; sourceTree = "<group>"; };
 		5CBFEBC72D742FA600F05795 /* DoubleClick.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DoubleClick.cpp; sourceTree = "<group>"; };
@@ -6143,14 +6141,11 @@
 		5CBFEBCB2D742FA600F05795 /* Window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		5CBFEBCC2D742FA600F05795 /* WList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WList.hpp; sourceTree = "<group>"; };
 		5CBFEBCD2D742FA600F05795 /* WList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WList.cpp; sourceTree = "<group>"; };
-		5CBFEBCF2D742FA600F05795 /* SingleWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SingleWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBD02D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
-		5CBFEBD12D742FA600F05795 /* Window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		5CBFEBD92D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBDB2D742FA600F05795 /* Features.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Features.hpp; sourceTree = "<group>"; };
 		5CBFEBDC2D742FA600F05795 /* SingleWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SingleWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBDD2D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
-		5CBFEBDE2D742FA600F05795 /* Window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		5CBFEBE02D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBE22D742FA600F05795 /* TopWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TopWindow.cpp; sourceTree = "<group>"; };
 		5CBFEBE42D742FA600F05795 /* AntiFlickerWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AntiFlickerWindow.hpp; sourceTree = "<group>"; };
@@ -18991,9 +18986,7 @@
 			isa = PBXGroup;
 			children = (
 				5CBFEBC02D742FA600F05795 /* Features.hpp */,
-				5CBFEBC12D742FA600F05795 /* SingleWindow.cpp */,
 				5CBFEBC22D742FA600F05795 /* TopWindow.cpp */,
-				5CBFEBC32D742FA600F05795 /* Window.cpp */,
 			);
 			path = android;
 			sourceTree = "<group>";
@@ -19017,9 +19010,7 @@
 		5CBFEBD22D742FA600F05795 /* fb */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFEBCF2D742FA600F05795 /* SingleWindow.cpp */,
 				5CBFEBD02D742FA600F05795 /* TopWindow.cpp */,
-				5CBFEBD12D742FA600F05795 /* Window.cpp */,
 			);
 			path = fb;
 			sourceTree = "<group>";
@@ -19038,7 +19029,6 @@
 				5CBFEBDB2D742FA600F05795 /* Features.hpp */,
 				5CBFEBDC2D742FA600F05795 /* SingleWindow.cpp */,
 				5CBFEBDD2D742FA600F05795 /* TopWindow.cpp */,
-				5CBFEBDE2D742FA600F05795 /* Window.cpp */,
 			);
 			path = sdl;
 			sourceTree = "<group>";

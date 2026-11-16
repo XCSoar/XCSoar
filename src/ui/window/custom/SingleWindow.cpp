@@ -3,6 +3,10 @@
 
 #include "../SingleWindow.hpp"
 
+#ifndef ENABLE_SDL
+#include "ui/event/shared/Event.hpp"
+#endif
+
 namespace UI {
 
 [[gnu::pure]]
@@ -44,5 +48,26 @@ SingleWindow::FilterMouseEvent(PixelPoint pt,
     container = next;
   }
 }
+
+/* SDL unpacks its own event in sdl/SingleWindow.cpp. */
+#ifndef ENABLE_SDL
+
+bool
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const noexcept
+{
+  assert(allowed != nullptr);
+
+  switch (event.type) {
+  case Event::MOUSE_MOTION:
+  case Event::MOUSE_DOWN:
+  case Event::MOUSE_UP:
+    return FilterMouseEvent(event.point, allowed);
+
+  default:
+    return true;
+  }
+}
+
+#endif
 
 } // namespace UI
