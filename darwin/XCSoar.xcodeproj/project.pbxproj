@@ -1209,10 +1209,8 @@
 		5CBFD7292D742FA600F05795 /* gestures.lua */ = {isa = PBXFileReference; lastKnownFileType = text; path = gestures.lua; sourceTree = "<group>"; };
 		5CBFD72A2D742FA600F05795 /* init.lua */ = {isa = PBXFileReference; lastKnownFileType = text; path = init.lua; sourceTree = "<group>"; };
 		5CBFD72C2D742FA600F05795 /* Info.plist.in.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist.in.xml; sourceTree = "<group>"; };
-		5CBFD72E2D742FA600F05795 /* canopy.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = canopy.txt; sourceTree = "<group>"; };
 		5CBFD72F2D742FA600F05795 /* egm96s.dem */ = {isa = PBXFileReference; lastKnownFileType = text; path = egm96s.dem; sourceTree = "<group>"; };
 		5CBFD7302D742FA600F05795 /* egm96s.hdr */ = {isa = PBXFileReference; lastKnownFileType = text; path = egm96s.hdr; sourceTree = "<group>"; };
-		5CBFD7312D742FA600F05795 /* plane.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = plane.txt; sourceTree = "<group>"; };
 		5CBFD7332D742FA600F05795 /* beep_bweep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_bweep.wav; sourceTree = "<group>"; };
 		5CBFD7342D742FA600F05795 /* beep_clear.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_clear.wav; sourceTree = "<group>"; };
 		5CBFD7352D742FA600F05795 /* beep_drip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep_drip.wav; sourceTree = "<group>"; };
@@ -11973,10 +11971,8 @@
 		5CBFD7322D742FA600F05795 /* other */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD72E2D742FA600F05795 /* canopy.txt */,
 				5CBFD72F2D742FA600F05795 /* egm96s.dem */,
 				5CBFD7302D742FA600F05795 /* egm96s.hdr */,
-				5CBFD7312D742FA600F05795 /* plane.txt */,
 			);
 			path = other;
 			sourceTree = "<group>";
