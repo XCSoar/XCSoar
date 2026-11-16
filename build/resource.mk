@@ -302,6 +302,18 @@ $(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp: $(TARGET_OUTPUT_DIR)/re
 
 $(call SRC_TO_OBJ,$(SRC)/ResourceLookup.cpp): $(TARGET_OUTPUT_DIR)/include/ResourceLookup_entries.cpp $(TARGET_OUTPUT_DIR)/include/MakeResource.hpp
 
+####### gesture icons, drawn from the name in Data/resources.txt
+
+GESTURES := $(patsubst gesture_%,%,$(shell sed -n \
+	's/.*"\(gesture_[a-z0-9]*\)".*/\1/p' \
+	$(topdir)/Data/resources.txt))
+
+$(DATA)/graphics2/gesture_%.svg: $(topdir)/tools/GenerateGestureSvg.py \
+	| $(DATA)/graphics2/dirstamp
+	@$(NQ)echo "  GEN     $@"
+	$(Q)/usr/bin/env python3 $< $* > $@.tmp
+	$(Q)mv $@.tmp $@
+
 ifeq ($(TARGET_IS_ANDROID),n)
 ifneq ($(TARGET),IOS)
 
@@ -310,9 +322,6 @@ ifneq ($(TARGET),IOS)
 SVG_DISCLOSURE = Data/graphics/location_pin.svg Data/graphics/notification_bell.svg Data/graphics/bluetooth.svg Data/graphics/warning_triangle.svg Data/graphics/rotate.svg
 PNG_DISCLOSURE_DST = $(patsubst Data/graphics/%.svg,$(DATA)/graphics2/%.png,$(SVG_DISCLOSURE))
 
-####### add gesture icons from docs
-
-GESTURES = down dl dr du left ldr ldrdl lu right rd rl up ud uldr urd urdl
 GESTURES_DST = $(addprefix $(DATA)/graphics2/gesture_, \
 	$(addsuffix .png,$(GESTURES)))
 
@@ -327,7 +336,7 @@ $(eval $(call rsvg-convert,$(PNG_DISCLOSURE_DST), \
 	--width=80 --height=80))
 $(eval $(call rsvg-convert,$(GESTURES_DST), \
 	$(DATA)/graphics2/gesture_%.png, \
-	doc/manual/figures/gesture_%.svg, \
+	$(DATA)/graphics2/gesture_%.svg, \
 	--width=82 --height=82))
 
 RESOURCE_FILES += $(GESTURES_DST)

@@ -1112,22 +1112,6 @@
 		5CBFD6B12D742FA600F05795 /* zzip.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = zzip.mk; sourceTree = "<group>"; };
 		5CBFD6B32D742FA600F05795 /* xcsoar-cloud.service */ = {isa = PBXFileReference; lastKnownFileType = text; path = "xcsoar-cloud.service"; sourceTree = "<group>"; };
 		5CBFD6B62D742FA600F05795 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; name = COPYING; path = ../COPYING; sourceTree = SOURCE_ROOT; };
-		5CBFD6C52D742FA600F05795 /* D.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = D.svg; sourceTree = "<group>"; };
-		5CBFD6C62D742FA600F05795 /* DL.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = DL.svg; sourceTree = "<group>"; };
-		5CBFD6C72D742FA600F05795 /* DR.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = DR.svg; sourceTree = "<group>"; };
-		5CBFD6C82D742FA600F05795 /* DU.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = DU.svg; sourceTree = "<group>"; };
-		5CBFD6C92D742FA600F05795 /* L.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = L.svg; sourceTree = "<group>"; };
-		5CBFD6CA2D742FA600F05795 /* LD.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LD.svg; sourceTree = "<group>"; };
-		5CBFD6CB2D742FA600F05795 /* LR.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LR.svg; sourceTree = "<group>"; };
-		5CBFD6CC2D742FA600F05795 /* LU.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LU.svg; sourceTree = "<group>"; };
-		5CBFD6CD2D742FA600F05795 /* R.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = R.svg; sourceTree = "<group>"; };
-		5CBFD6CE2D742FA600F05795 /* RD.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RD.svg; sourceTree = "<group>"; };
-		5CBFD6CF2D742FA600F05795 /* RL.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RL.svg; sourceTree = "<group>"; };
-		5CBFD6D02D742FA600F05795 /* RU.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RU.svg; sourceTree = "<group>"; };
-		5CBFD6D12D742FA600F05795 /* U.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = U.svg; sourceTree = "<group>"; };
-		5CBFD6D22D742FA600F05795 /* UD.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UD.svg; sourceTree = "<group>"; };
-		5CBFD6D32D742FA600F05795 /* UL.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UL.svg; sourceTree = "<group>"; };
-		5CBFD6D42D742FA600F05795 /* UR.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UR.svg; sourceTree = "<group>"; };
 		5CBFD6D62D742FA600F05795 /* dialog_title.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = dialog_title.svg; sourceTree = "<group>"; };
 		5CBFD6D72D742FA600F05795 /* dialog_title_red.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = dialog_title_red.svg; sourceTree = "<group>"; };
 		5CBFD6D82D742FA600F05795 /* launcher.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = launcher.svg; sourceTree = "<group>"; };
@@ -11822,29 +11806,6 @@
 			path = ../cloud;
 			sourceTree = SOURCE_ROOT;
 		};
-		5CBFD6D52D742FA600F05795 /* gestures */ = {
-			isa = PBXGroup;
-			children = (
-				5CBFD6C52D742FA600F05795 /* D.svg */,
-				5CBFD6C62D742FA600F05795 /* DL.svg */,
-				5CBFD6C72D742FA600F05795 /* DR.svg */,
-				5CBFD6C82D742FA600F05795 /* DU.svg */,
-				5CBFD6C92D742FA600F05795 /* L.svg */,
-				5CBFD6CA2D742FA600F05795 /* LD.svg */,
-				5CBFD6CB2D742FA600F05795 /* LR.svg */,
-				5CBFD6CC2D742FA600F05795 /* LU.svg */,
-				5CBFD6CD2D742FA600F05795 /* R.svg */,
-				5CBFD6CE2D742FA600F05795 /* RD.svg */,
-				5CBFD6CF2D742FA600F05795 /* RL.svg */,
-				5CBFD6D02D742FA600F05795 /* RU.svg */,
-				5CBFD6D12D742FA600F05795 /* U.svg */,
-				5CBFD6D22D742FA600F05795 /* UD.svg */,
-				5CBFD6D32D742FA600F05795 /* UL.svg */,
-				5CBFD6D42D742FA600F05795 /* UR.svg */,
-			);
-			path = gestures;
-			sourceTree = "<group>";
-		};
 		5CBFD6E12D742FA600F05795 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
@@ -12001,7 +11962,6 @@
 		5CBFD73E2D742FA600F05795 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				5CBFD6D52D742FA600F05795 /* gestures */,
 				5CBFD6E12D742FA600F05795 /* graphics */,
 				5CBFD7202D742FA600F05795 /* icons */,
 				5CBFD7222D742FA600F05795 /* Input */,

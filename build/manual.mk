@@ -49,6 +49,7 @@ SVG_TRANSLATE_PT_BR = $(patsubst %,$(MANUAL_OUTPUT_DIR)/figures/%-pt_BR.pdf,$(SV
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/figures/*.svg)
 SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
+GESTURE_FIGURES = $(addprefix $(MANUAL_OUTPUT_DIR)/figures/gesture_,$(addsuffix .pdf,$(GESTURES)))
 
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
 SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
@@ -122,7 +123,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash.pdf: $(DOC)/manual/en/XCSoar-in-a-flash.t
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -131,7 +132,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/html/en/index.html
 $(MANUAL_OUTPUT_DIR)/html/en/index.html: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/en/dirstamp
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/html/en/dirstamp
 	$(LATEX2HTML_RUN) -dir $(@D) $<
 
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf
@@ -144,7 +145,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Blitzeinstieg.pdf: $(DOC)/manual/de/XCSoar-Blitzeins
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex \
 	$(TEX_FILES_DE) $(TEX_INCLUDES_DE) $(TEX_INCLUDES) \
-	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_DE) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_TRANSLATE_DE) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -153,7 +154,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-de.pdf: $(DOC)/manual/de/XCSoar-manual-de.tex
 
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-main.tex $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
-	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -161,7 +162,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-Prise-en-main.pdf: $(DOC)/manual/fr/XCSoar-Prise-en-
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(TEX_INCLUDES) \
-	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_FR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_FR) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_TRANSLATE_FR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -169,7 +170,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-manual-fr.pdf: $(DOC)/manual/fr/XCSoar-manual-fr.tex
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pl.pdf: $(DOC)/manual/pl/XCSoar-manual-pl.tex \
 	$(TEX_FILES_PL) $(TEX_INCLUDES_PL) $(TEX_INCLUDES) \
-	$(FIGURES_PL) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_PL) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -184,7 +185,7 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-in-a-flash-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-in-
 .DELETE_ON_ERROR: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-pt_BR.pdf: $(DOC)/manual/pt_BR/XCSoar-manual-pt_BR.tex \
 	$(TEX_FILES_PT_BR) $(TEX_INCLUDES_PT_BR) $(TEX_INCLUDES) \
-	$(FIGURES_PT_BR) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_TRANSLATE_PT_BR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
+	$(FIGURES_PT_BR) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_TRANSLATE_PT_BR) $(SVG_GRAPHICS) $(SVG_LOGOS)| $(MANUAL_OUTPUT_DIR)/dirstamp
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $<
 	$(TEX_RUN) $<
@@ -214,6 +215,10 @@ $(SVG_TRANSLATE_PT_BR): $(MANUAL_OUTPUT_DIR)/figures/%-pt_BR.pdf: $(topdir)/doc/
 $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
 
+$(GESTURE_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/gesture_%.pdf: \
+	$(DATA)/graphics2/gesture_%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
+	rsvg-convert -a -f pdf $< -o $@
+
 $(MANUAL_OUTPUT_DIR)/figures.pot: $(SVG_FIGURES_SHARED) | $(MANUAL_OUTPUT_DIR)/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) $(topdir)/tools/svg2po.pl $^ >$@.tmp
@@ -231,7 +236,7 @@ $(SVG_LOGOS): $(MANUAL_OUTPUT_DIR)/graphics/%.png: $(topdir)/Data/graphics/%.svg
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: T=$(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(TEX_INCLUDES) \
-	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) \
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(GESTURE_FIGURES) $(SVG_GRAPHICS) $(SVG_LOGOS) \
 	$(SVG_TRANSLATE_DE) $(SVG_TRANSLATE_FR) $(SVG_TRANSLATE_PT_BR) \
 	$(TEX_FILES_FR) $(TEX_INCLUDES_FR) $(FIGURES_FR)
 	rm -rf $(T)
