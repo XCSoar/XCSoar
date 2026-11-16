@@ -35,16 +35,18 @@ RouteComputer::ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
                             const GlidePolar &glide_polar,
                             const GlidePolar &safety_polar)
 {
-  if (!basic.location_available || !basic.NavAltitudeAvailable())
-    return;
-
   if (!glide_polar.IsValid()) {
-    /* no glider, no reach; otherwise the fan keeps the previous one */
+    /* no glider, no reach; otherwise the fan and the planned
+       route keep the previous glider. Location is not needed. */
     protected_route_planner.ClearReach();
     calculated.terrain_base_valid = false;
     calculated.terrain_warning_location.SetInvalid();
+    calculated.planned_route.clear();
     return;
   }
+
+  if (!basic.location_available || !basic.NavAltitudeAvailable())
+    return;
 
   protected_route_planner.SetPolars(settings, config,
                                     glide_polar, safety_polar,
