@@ -145,7 +145,7 @@ jobs:
 
   downloads:
     name: Prefetch third-party downloads
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     # One missing tarball must not skip every matrix target; they can
     # still fetch what they need during the compile.
     continue-on-error: true
