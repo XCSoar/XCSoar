@@ -120,15 +120,28 @@ RenderShadowedText(Canvas &canvas, const char *text,
 }
 
 /**
- * The opacity of a #LabelShape::PILL.
+ * Fill opacity of a map label, shared by the pills and the NOTAM
+ * labels.
  */
-static constexpr uint8_t PILL_ALPHA = 0xf2;
+static constexpr uint8_t LABEL_FILL_ALPHA = 0xa0;
+
+/**
+ * Corner diameter shared with the NOTAM labels. Capped so a short
+ * label stays a rounded rectangle.
+ */
+static unsigned
+RoundedLabelCorner(unsigned height) noexcept
+{
+  return std::min(Layout::VptScale(8),
+                  std::max(2u, height / 2));
+}
 
 void
-DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity) noexcept
+DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity,
+         Color fill, bool solid) noexcept
 {
-  /* a pill: the diameter of the corners is the box's height */
-  const PixelSize ellipse{unsigned(rc.GetHeight())};
+  const unsigned corner = RoundedLabelCorner(rc.GetHeight());
+  const PixelSize ellipse{corner};
 
   canvas.SelectNullPen();
 
@@ -136,18 +149,15 @@ DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity) noexcept
   /* Android may choose an EGL config without a stencil buffer */
   GLint stencil_bits = 0;
   glGetIntegerv(GL_STENCIL_BITS, &stencil_bits);
+  const bool shadow = !IsSlowCPU() && stencil_bits > 0;
 
-  if (!IsSlowCPU() && stencil_bits > 0) {
-    /* the pill is translucent, so keep its shadow out from under it:
-       mark the pill's area in the stencil buffer, and draw the shadow
-       only around it */
+  if (shadow) {
+    /* keep the shadow out from under the fill */
     const GLEnable<GL_STENCIL_TEST> stencil_test;
     glClear(GL_STENCIL_BUFFER_BIT);
-
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
     glStencilFunc(GL_ALWAYS, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
     canvas.SelectWhiteBrush();
     canvas.DrawRoundRectangle(rc, ellipse);
 
@@ -155,25 +165,23 @@ DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity) noexcept
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-    BoxShadowStyle shadow = BoxShadowStyle::FLOATING;
-    for (auto &layer : shadow.layers)
+    BoxShadowStyle style = BoxShadowStyle::FLOATING;
+    for (auto &layer : style.layers)
       layer.alpha = layer.alpha * opacity / 0xff;
-
-    DrawBoxShadow(rc, shadow, rc.GetHeight() / 2);
+    DrawBoxShadow(rc, style, corner / 2);
   } else
-    /* no shadow on a slow CPU or without a stencil buffer: a black
-       outline sets the pill off the map */
     canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(opacity)));
 
   const ScopeAlphaBlend alpha_blend;
-  canvas.Select(Brush(COLOR_WHITE.WithAlpha(PILL_ALPHA * opacity / 0xff)));
+  const uint8_t alpha = solid
+    ? opacity
+    : uint8_t(LABEL_FILL_ALPHA * opacity / 0xff);
+  canvas.Select(Brush(fill.WithAlpha(alpha)));
 #else
   (void)opacity;
-
-  /* no shadow without OpenGL: a black outline sets the pill off the
-     map */
+  (void)solid;
   canvas.SelectBlackPen();
-  canvas.SelectWhiteBrush();
+  canvas.Select(Brush(fill));
 #endif
 
   canvas.DrawRoundRectangle(rc, ellipse);
@@ -203,11 +211,7 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
     p.y -= tsize.height / 2;
 
   const unsigned padding = Layout::GetTextPadding();
-
-  /* the round ends of a pill need room of their own */
-  const unsigned side_padding = mode.shape == LabelShape::PILL
-    ? (tsize.height + 2 * padding) / 2
-    : padding;
+  const unsigned side_padding = padding;
 
   PixelRect rc;
   rc.left = p.x - side_padding - 1;
@@ -248,17 +252,14 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
     {
 #ifdef ENABLE_OPENGL
       const ScopeAlphaBlend alpha_blend;
-      canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xa0)));
+      canvas.Select(Brush(COLOR_WHITE.WithAlpha(LABEL_FILL_ALPHA)));
 #else
       canvas.SelectWhiteBrush();
 #endif
 
       /* DrawRoundRectangle takes an ellipse diameter (radius =
-         diameter/2). Cap it so short labels stay rounded rectangles
-         instead of pills. */
-      const unsigned ellipse =
-        std::min(Layout::VptScale(8),
-                 std::max(2u, (unsigned)rc.GetHeight() / 2));
+         diameter/2). */
+      const unsigned ellipse = RoundedLabelCorner(rc.GetHeight());
       canvas.DrawRoundRectangle(rc, PixelSize{ellipse});
     }
 
