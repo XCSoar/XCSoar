@@ -4,6 +4,7 @@
 #pragma once
 
 #include "LabelShape.hpp"
+#include "ui/canvas/Color.hpp"
 
 #include <cstdint>
 
@@ -18,15 +19,16 @@ RenderShadowedText(Canvas &canvas, const char *text,
                    bool inverted) noexcept;
 
 /**
- * Draw the box of a #LabelShape::PILL and its shadow, e.g. as the
- * background of something which is not text.
- *
- * @param opacity scales the pill's opacity, for fading it out; only
- * OpenGL honours it
+ * Rounded label box. The corner matches a NOTAM label. OpenGL draws
+ * a shadow and, unless @p solid, a translucent fill. Otherwise the
+ * fill is opaque and a black outline stands in for the shadow.
+ * @p opacity fades the page dots; only OpenGL honours it.
  */
 void
 DrawPill(Canvas &canvas, const PixelRect &rc,
-         uint8_t opacity=0xff) noexcept;
+         uint8_t opacity=0xff,
+         Color fill=COLOR_WHITE,
+         bool solid=false) noexcept;
 
 struct TextInBoxMode {
   enum Alignment : uint8_t {
