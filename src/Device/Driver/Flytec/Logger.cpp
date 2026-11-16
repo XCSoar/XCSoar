@@ -123,31 +123,6 @@ ParseTime(const char *str, BrokenTime &time)
   return str != endptr;
 }
 
-static BrokenTime
-operator+(BrokenTime &a, BrokenTime &b)
-{
-  BrokenTime c;
-
-  c.hour = a.hour + b.hour;
-  c.minute = a.minute + b.minute;
-  c.second = a.second + b.second;
-
-  while (c.second >= 60) {
-    c.second -= 60;
-    c.minute++;
-  }
-
-  while (c.minute >= 60) {
-    c.minute -= 60;
-    c.hour++;
-  }
-
-  while (c.hour >= 23)
-    c.hour -= 24;
-
-  return c;
-}
-
 bool
 FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
@@ -217,7 +192,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
     if (!ParseTime(field_buffer, duration))
       continue;
 
-    flight.end_time = flight.start_time + duration;
+    flight.end_time = AddClock(flight.start_time, duration);
     flight_list.append(flight);
   }
 
