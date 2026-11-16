@@ -7,6 +7,7 @@
 #include "Asset.hpp"
 
 #include <algorithm>
+#include <cstdint>
 
 static constexpr unsigned
 CalcProgressBarPosition(unsigned current_value,
@@ -17,7 +18,9 @@ CalcProgressBarPosition(unsigned current_value,
     return 0;
 
   const unsigned value = std::clamp(current_value, min_value, max_value);
-  return (value - min_value) * width / (max_value - min_value);
+  /* Byte counts times the pixel width do not fit in 32 bits. */
+  return static_cast<unsigned>(uint64_t(value - min_value) * width
+                               / (max_value - min_value));
 }
 
 void
