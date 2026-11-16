@@ -13,6 +13,7 @@ struct OverlayLook {
   MaskedIcon map_scale_right_icon;
   MaskedIcon contour_spacing_icon;
   MaskedIcon auto_zoom_icon;
+  MaskedIcon pan_icon;
 
   const Font *overlay_font;
 

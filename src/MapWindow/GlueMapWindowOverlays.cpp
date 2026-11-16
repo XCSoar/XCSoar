@@ -690,15 +690,17 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const MapHudLayout &layout,
   const char *page = !ui_state.map_page_label.empty()
     ? ui_state.map_page_label.c_str()
     : ui_state.panel_name.c_str();
+  MapLabelList titles;
+  if (follow_mode == FOLLOW_PAN)
+    AddLabel(titles, "PAN", &look.overlay.pan_icon);
+
   const char *const labels[] = {
-    follow_mode == FOLLOW_PAN ? "PAN" : nullptr,
     page,
     ui_state.map_overlay_label.c_str(),
     ui_state.map_bottom_label.c_str(),
     show_ballast ? ballast.c_str() : nullptr,
   };
 
-  MapLabelList titles;
   for (const char *text : labels)
     if (text != nullptr && *text != '\0')
       AddLabel(titles, text);

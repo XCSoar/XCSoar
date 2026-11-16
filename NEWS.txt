@@ -59,8 +59,9 @@ Version 7.47 - not yet released
 * map
   - draw the map scale, the contour spacing, and auto-zoom (with a
     magnifying glass) on one line, and each part of the line above
-    them (PAN, the page name, an overlay, ballast) as its own
-    rounded label on the lower left, as translucent as a NOTAM label
+    them (PAN with a four-arrow mark, the page name, an overlay,
+    ballast) as its own rounded label on the lower left, as
+    translucent as a NOTAM label
   - show a yellow "Battery low" with a battery symbol on the lower
     left while the internal battery is below 10% and not charging
   - show Simulator, with a joystick symbol, and Replay, with a
