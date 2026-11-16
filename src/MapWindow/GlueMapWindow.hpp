@@ -31,7 +31,7 @@ class TerrainThread;
  * placeholder data, ignoring the conditions that normally make them
  * mutually exclusive — the GPS status only appears without a fix, the
  * pan info only while panning, the final glide bar only with a valid
- * task, the thermal profile only after climbs, the gesture pill only
+ * task, the thermal profile only after climbs, the gesture label only
  * while a finger traces a gesture, the page indicator only for a
  * moment after a page switch, and so on.  Enable with:
  *   make DEBUG_ALL_MAP_OVERLAYS=y …

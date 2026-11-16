@@ -12,7 +12,9 @@ UIState::Clear()
   auxiliary_enabled = false;
   panel_index = 0;
   panel_name.clear();
-  map_scale_page_title.clear();
+  map_page_label.clear();
+  map_overlay_label.clear();
+  map_bottom_label.clear();
   page_overlay = PageLayout::Overlay::NONE;
   pages.Clear();
   page_indicator_time = {};

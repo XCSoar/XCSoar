@@ -8,6 +8,7 @@
 #include "Weather/Rasp/RaspStore.hpp"
 #include "util/StaticString.hxx"
 #include "util/StringBuilder.hxx"
+#include "util/UTF8.hpp"
 #include "util/Compiler.h"
 
 #ifdef HAVE_EDL
@@ -22,17 +23,24 @@
 #include "Weather/xctherm/XCThermCatalog.hpp"
 #endif
 
-void
-AppendOverlayTitle(BasicStringBuilder<char> &builder,
+bool
+FormatOverlayLabel(std::span<char> buffer,
                    const PageLayout &layout,
-                   const RaspStore *rasp)
+                   const RaspStore *rasp) noexcept
 {
+  if (buffer.empty() || layout.overlay == PageLayout::Overlay::NONE)
+    return false;
+
+  buffer.front() = '\0';
+  BasicStringBuilder<char> builder{buffer};
+
+  try {
   switch (layout.overlay) {
   case PageLayout::Overlay::NONE:
     break;
 
   case PageLayout::Overlay::RASP:
-    builder.Append(", RASP");
+    builder.Append("RASP");
     if (rasp != nullptr &&
         layout.rasp_field >= 0 &&
         unsigned(layout.rasp_field) < rasp->GetItemCount()) {
@@ -48,7 +56,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::EDL:
-    builder.Append(", EDL");
+    builder.Append("EDL");
 #ifdef HAVE_EDL
     {
       EDL::EnsureInitialised();
@@ -68,7 +76,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::XCTHERM:
-    builder.Append(", XC Therm");
+    builder.Append("XC Therm");
 #ifdef HAVE_HTTP
     {
       builder.Append(' ');
@@ -88,7 +96,7 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::SKYSIGHT:
-    builder.Append(" | SkySight");
+    builder.Append("SkySight");
     if (!layout.skysight_overlay.empty()) {
       const char *label = layout.skysight_overlay.c_str();
 #ifdef HAVE_HTTP
@@ -104,16 +112,19 @@ AppendOverlayTitle(BasicStringBuilder<char> &builder,
     break;
 
   case PageLayout::Overlay::RADAR:
-    builder.Append(", ");
     builder.Append(_("Radar"));
     break;
 
   case PageLayout::Overlay::SATELLITE:
-    builder.Append(", ");
     builder.Append(_("Satellite"));
     break;
 
   case PageLayout::Overlay::MAX:
     gcc_unreachable();
   }
+  } catch (BasicStringBuilder<char>::Overflow) {
+    CropIncompleteUTF8(buffer.data());
+  }
+
+  return buffer.front() != '\0';
 }

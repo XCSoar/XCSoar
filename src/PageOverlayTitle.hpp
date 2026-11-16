@@ -5,12 +5,15 @@
 
 #include "PageSettings.hpp"
 
+#include <span>
+
 class RaspStore;
 
-template<typename T>
-class BasicStringBuilder;
-
-void
-AppendOverlayTitle(BasicStringBuilder<char> &builder,
+/**
+ * The overlay's own label, without the separator used when it is
+ * joined onto a page title. False when the page has no overlay.
+ */
+bool
+FormatOverlayLabel(std::span<char> buffer,
                    const PageLayout &layout,
-                   const RaspStore *rasp);
+                   const RaspStore *rasp) noexcept;

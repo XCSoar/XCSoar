@@ -14,8 +14,8 @@ enum class LabelShape : uint8_t {
   ROUNDED_BLACK,
 
   /**
-   * White background with fully rounded ends, slightly transparent,
-   * floating above the map on a soft shadow.
+   * Rounded label with a soft shadow. The corner matches a NOTAM
+   * label.
    */
-  PILL,
+  ROUNDED,
 };

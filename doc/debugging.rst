@@ -150,7 +150,7 @@ The flag is defined in :file:`build/options.mk` (default ``n``) and
 adds ``-DDEBUG_ALL_MAP_OVERLAYS=1``. When enabled, it forces the
 thermal band, FLARM alarm-level icon (not the FLARM traffic gauge
 widget), stall-ratio line, pan chrome, map-title placeholder,
-final-glide bar, and vario bar. The lower-left pills are forced
+final-glide bar, and vario bar. The lower-left labels are forced
 too: yellow "No polar", red "GPS not connected", yellow "GPS
 waiting for fix", and yellow "Battery low". Missing sensor data is
 filled with placeholders so layout and collision can be tested

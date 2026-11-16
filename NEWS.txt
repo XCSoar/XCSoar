@@ -830,7 +830,7 @@ Version 7.46 - 2026-10-19
     testing
   - macOS/iOS: read DEBUG_ALL_MAP_OVERLAYS=y from darwin/.env, so Xcode
     builds can force all map overlays
-  - build system: also force the gesture pill and the page indicator
+  - build system: also force the gesture label and the page indicator
     on in DEBUG_ALL_MAP_OVERLAYS builds
   - build system: include the git commit in unreleased version strings
     (splash, log) so testers can identify snapshot builds #3117
