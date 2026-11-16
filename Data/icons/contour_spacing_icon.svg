@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    version="1.1"
-   viewBox="0 0 25 22"
+   viewBox="-2 -2 29 26"
    id="svg3"
    sodipodi:docname="contour_spacing_icon.svg"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
@@ -115,15 +115,6 @@
   <g
      transform="matrix(2.004224,0,0,1.995702,-0.012184,-0.083862)"
      id="content">
-  <rect
-     style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:0.506457;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"
-     id="rect13"
-     width="12.493641"
-     height="11.04375"
-     x="-0.0039009624"
-     y="0.032046739"
-     rx="2"
-     ry="2" />
   <path
      style="fill:#1a1a1a;fill-rule:evenodd;stroke:#1a1a1a;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none"
      d="m 0.98257081,1.5457516 c 10.47276719,0 10.47276719,0 10.47276719,0"

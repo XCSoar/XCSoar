@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+  <!-- magnifying glass for the auto-zoom label -->
+  <path fill="#000" fill-rule="evenodd" d="M14.8,8.4 A6.4,6.4 0 1 1 2,8.4 A6.4,6.4 0 1 1 14.8,8.4 Z M12.2,8.4 A3.8,3.8 0 1 0 4.6,8.4 A3.8,3.8 0 1 0 12.2,8.4 Z"/>
+  <path fill="#000" d="M11.48,13.53 L13.53,11.48 L20.43,18.37 L18.37,20.43 Z"/>
+</svg>
