@@ -119,6 +119,8 @@ bitmap_icon_scaled IDB_REPORTING_POINT "map_reporting_point"
 bitmap_icon_scaled IDB_PGTAKEOFF "map_pgtakeoff"
 bitmap_icon_scaled IDB_PGLANDING "map_pglanding"
 
+// The picture is generated from the name: up, down, left, right,
+// or a run of those letters (ud, ldrdl).
 bitmap_graphic IDB_GESTURE_DOWN "gesture_down"
 bitmap_graphic IDB_GESTURE_DL "gesture_dl"
 bitmap_graphic IDB_GESTURE_DR "gesture_dr"
