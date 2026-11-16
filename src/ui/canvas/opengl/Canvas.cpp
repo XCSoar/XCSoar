@@ -3,7 +3,6 @@
 
 #include "Canvas.hpp"
 #include "Triangulate.hpp"
-#include "Asset.hpp"
 #include "Globals.hpp"
 #include "Texture.hpp"
 #include "Scope.hpp"
@@ -91,6 +90,17 @@ GLDrawLineLoopOutline(ScopeVertexPointer &vp,
       glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
     }
   }
+}
+
+/**
+ * A solid pen wider than one pixel is a triangle strip.  A dashed
+ * pen stays a line so the dash shader still runs.
+ */
+static bool
+SolidPenNeedsTriangles(const Pen &pen) noexcept
+{
+  return pen.GetStyle() == Pen::SOLID &&
+         !UseOpenGLLineLoopOutline(pen.GetWidth());
 }
 
 void
@@ -185,8 +195,7 @@ Canvas::DrawPolyline(const BulkPixelPoint *points, unsigned num_points) noexcept
 
   pen.Bind();
 
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  if (SolidPenNeedsTriangles(pen)) {
     unsigned strip_len = LineToTriangles(points, num_points, vertex_buffer,
                                          pen.GetWidth(), false, false);
     if (strip_len > 0) {
@@ -285,6 +294,8 @@ void
 Canvas::DrawHLine(int x1, int x2, int y, Color color) noexcept
 {
   color.Bind();
+  /* A hairline.  A previous pen leaves glLineWidth() unchanged. */
+  glLineWidth(1);
 
   const BulkPixelPoint v[] = {
     { GLvalue(x1), GLvalue(y) },
@@ -340,8 +351,7 @@ Canvas::DrawLine(PixelPoint a, PixelPoint b) noexcept
   }
 
   const BulkPixelPoint v[] = { a, b };
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  if (SolidPenNeedsTriangles(pen)) {
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
@@ -363,8 +373,7 @@ Canvas::DrawExactLine(PixelPoint a, PixelPoint b) noexcept
 
   pen.Bind();
 
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  if (SolidPenNeedsTriangles(pen)) {
     const BulkPixelPoint v[] = { {(GLvalue)a.x, (GLvalue)a.y},
                                  {(GLvalue)b.x, (GLvalue)b.y} };
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
@@ -383,8 +392,8 @@ Canvas::DrawExactLine(PixelPoint a, PixelPoint b) noexcept
 }
 
 /**
- * Draw a line from a to b, using triangle caps if pen-size > 2 to hide
- * gaps between consecutive lines.
+ * Draw a line from a to b, using triangle caps if the pen is wider
+ * than one pixel to hide gaps between consecutive lines.
  */
 void
 Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b) noexcept
@@ -394,7 +403,7 @@ Canvas::DrawLinePiece(const PixelPoint a, const PixelPoint b) noexcept
   pen.Bind();
 
   const BulkPixelPoint v[] = { {a.x, a.y}, {b.x, b.y} };
-  if (pen.GetWidth() > (IsMacOSX() ? 1u : 2u)) {
+  if (!UseOpenGLLineLoopOutline(pen.GetWidth())) {
     unsigned strip_len = LineToTriangles(v, 2, vertex_buffer, pen.GetWidth(),
                                          false, true);
     if (strip_len > 0) {
@@ -417,8 +426,7 @@ Canvas::DrawTwoLines(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
   pen.Bind();
 
   const BulkPixelPoint v[] = { a, b, c };
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  if (SolidPenNeedsTriangles(pen)) {
     unsigned strip_len = LineToTriangles(v, 3, vertex_buffer, pen.GetWidth(),
                                          false, false);
     if (strip_len > 0) {
@@ -440,8 +448,7 @@ Canvas::DrawTwoLinesExact(PixelPoint a, PixelPoint b, PixelPoint c) noexcept
 
   pen.Bind();
 
-  // On macOS, glLineWidth() is capped at 1px, so use triangles for pens > 1px
-  if (IsMacOSX() && pen.GetStyle() == Pen::SOLID && pen.GetWidth() > 1u) {
+  if (SolidPenNeedsTriangles(pen)) {
     const BulkPixelPoint v[] = { {(GLvalue)a.x, (GLvalue)a.y},
                                  {(GLvalue)b.x, (GLvalue)b.y},
                                  {(GLvalue)c.x, (GLvalue)c.y} };
