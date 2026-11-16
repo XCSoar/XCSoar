@@ -24,7 +24,7 @@ ProgressDialog::ProgressDialog(SingleWindow &parent,
                                const DialogLook &dialog_look,
                                const char *caption)
   :WndForm(parent, dialog_look, parent.GetDialogRect(), caption),
-   progress(GetClientAreaWindow())
+   progress(GetClientAreaWindow(), dialog_look.dark_mode)
 {
   SetFillsClient(true);
 
