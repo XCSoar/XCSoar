@@ -76,6 +76,9 @@ Version 7.47 - not yet released
     kilometre keep the newer one #3093
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
+* airspace
+  - show the bottom airspace warning in bold, white on the red
+    Inside fill
 * task
   - sign in to SoaringScoring from Services and load the contest task
     from its task manager page, shown while signed in. Upload Flight

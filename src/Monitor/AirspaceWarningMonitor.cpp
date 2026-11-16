@@ -17,6 +17,8 @@
 #include "ui/canvas/AnyCanvas.hpp"
 #include "ui/canvas/Font.hpp"
 #include "Widget/QuestionWidget.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Form/Frame.hpp"
 #include "Widget/ButtonPanelWidget.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Language/Language.hpp"
@@ -144,7 +146,7 @@ class AirspaceWarningWidget final
     }
 
     AnyCanvas canvas;
-    canvas.Select(UIGlobals::GetDialogLook().text_font);
+    canvas.Select(UIGlobals::GetDialogLook().bold_font);
 
     StaticString<256> one_line;
     one_line.Format("%s  %s", name_text.c_str(), details_text.c_str());
@@ -160,6 +162,14 @@ class AirspaceWarningWidget final
       buffer.Format("%s  %s", name_text.c_str(), details_text.c_str());
   }
 
+  /** The banner is a warning; the same bold face as the airspace rows. */
+  void SetMessageFont() noexcept {
+    auto &bpw = static_cast<ButtonPanelWidget &>(GetWidget());
+    auto &tw = static_cast<TextWidget &>(bpw.GetWidget());
+    static_cast<WndFrame &>(tw.GetWindow()).SetFont(
+        UIGlobals::GetDialogLook().bold_font);
+  }
+
   /**
    * Mark the message with the same colours the airspace warning list
    * uses for its Inside / Near badge.
@@ -170,12 +180,12 @@ class AirspaceWarningWidget final
          contrast than a dithered fill */
       return;
 
-    /* Black on both fills: 5.7:1 on Inside red and 19.4:1 on Near
-       yellow, whereas white would only reach 3.7:1 on the red. */
-    SetMessageColors(state == AirspaceWarning::WARNING_INSIDE
+    /* White on the Inside red, black on the Near yellow. */
+    const bool inside = state == AirspaceWarning::WARNING_INSIDE;
+    SetMessageColors(inside
                      ? COLOR_AIRSPACE_WARNING_INSIDE
                      : COLOR_AIRSPACE_WARNING_NEAR,
-                     COLOR_BLACK);
+                     inside ? COLOR_WHITE : COLOR_BLACK);
   }
 
 public:
@@ -252,6 +262,7 @@ public:
 
     QuestionWidget::Prepare(parent, rc);
     SetMessage(buffer);
+    SetMessageFont();
     UpdateButtonRows();
   }
 
@@ -262,6 +273,7 @@ public:
 
     QuestionWidget::Move(rc);
     SetMessage(buffer);
+    SetMessageFont();
     UpdateButtonRows();
   }
 
@@ -271,8 +283,15 @@ public:
        that height has to be in the banner or the row covers the
        text. */
     PixelSize size = QuestionWidget::GetMinimumSize();
+    const DialogLook &dialog_look = UIGlobals::GetDialogLook();
     if (two_lines)
-      size.height += UIGlobals::GetDialogLook().text_font.GetHeight();
+      size.height += dialog_look.bold_font.GetHeight();
+
+    /* the reserved line is the regular face; bold can be taller */
+    const int bold_extra = int(dialog_look.bold_font.GetHeight()) -
+      int(dialog_look.text_font.GetHeight());
+    if (bold_extra > 0)
+      size.height += bold_extra;
 
     if (button_rows > 1) {
       const unsigned rows_height =
