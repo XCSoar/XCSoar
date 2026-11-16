@@ -11,6 +11,7 @@
 #include "Asset.hpp"
 
 #include <algorithm>
+#include <cstdint>
 
 void
 ProgressBar::SetRange(unsigned min_value, unsigned max_value)
@@ -114,11 +115,13 @@ ProgressBar::OnPaint(Canvas &canvas) noexcept
   if (width <= 2 * margin)
     return;
   fill = margin
-    + (clamped - min_value) * (width - 2 * margin)
-      / (max_value - min_value);
+    + static_cast<unsigned>(uint64_t(clamped - min_value)
+                            * (width - 2 * margin)
+                            / (max_value - min_value));
 #else
-  fill = (clamped - min_value) * canvas.GetWidth()
-    / (max_value - min_value);
+  fill = static_cast<unsigned>(uint64_t(clamped - min_value)
+                               * canvas.GetWidth()
+                               / (max_value - min_value));
 #endif
   if (x >= int(fill))
     return;
