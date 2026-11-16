@@ -9,6 +9,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
+#include "Engine/Task/Stats/DistanceStat.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -763,83 +764,66 @@ UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data) noexcept
   data.SetComment(_("Time Below"));
 }
 
-void
-UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept
+static bool
+VmgDuration(const DistanceStat &remaining, FloatDuration &duration) noexcept
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
   if (!basic.ground_speed_available || !task_stats.task_valid ||
-      !task_stats.current_leg.remaining.IsDefined()) {
+      !remaining.IsDefined() || basic.ground_speed <= 0)
+    return false;
+
+  duration = FloatDuration{remaining.GetDistance() / basic.ground_speed};
+  return true;
+}
+
+void
+UpdateInfoBoxNextETEVMG(InfoBoxData &data) noexcept
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+
+  FloatDuration duration;
+  if (!VmgDuration(task_stats.current_leg.remaining, duration)) {
     data.SetInvalid();
     return;
   }
 
-  const auto d = task_stats.current_leg.remaining.GetDistance();
-  const auto v = basic.ground_speed;
-
-  if (!task_stats.task_valid ||
-      v <= 0) {
-    data.SetInvalid();
-    return;
-  }
-
-  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
+  data.SetValueFromTimeTwoLines(duration);
 }
 
 void
 UpdateInfoBoxNextETAVMG(InfoBoxData &data) noexcept
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available || !task_stats.task_valid ||
-      !task_stats.current_leg.remaining.IsDefined()) {
-    data.SetInvalid();
-    return;
-  }
-
-  const auto d = task_stats.current_leg.remaining.GetDistance();
-  const auto v = basic.ground_speed;
-
-  if (!task_stats.task_valid ||
-      v <= 0) {
+  FloatDuration duration;
+  if (!VmgDuration(task_stats.current_leg.remaining, duration)) {
     data.SetInvalid();
     return;
   }
 
   const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
   if (now_local.IsPlausible()) {
-    const std::chrono::seconds dd{long(d/v)};
+    const std::chrono::seconds dd{long(duration.count())};
     const BrokenTime t = now_local + dd;
     data.FmtValue("{:02}:{:02}", t.hour, t.minute);
     data.FmtComment("{:02}", t.second);
   }
-
 }
 
 void
 UpdateInfoBoxFinalETEVMG(InfoBoxData &data) noexcept
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  if (!basic.ground_speed_available || !task_stats.task_valid ||
-      !task_stats.total.remaining.IsDefined()) {
+  FloatDuration duration;
+  if (!VmgDuration(task_stats.total.remaining, duration)) {
     data.SetInvalid();
     return;
   }
 
-  const auto d = task_stats.total.remaining.GetDistance();
-  const auto v = basic.ground_speed;
-
-  if (!task_stats.task_valid ||
-      v <= 0) {
-    data.SetInvalid();
-    return;
-  }
-
-  data.SetValueFromTimeTwoLines(FloatDuration{d / v});
+  data.SetValueFromTimeTwoLines(duration);
 }
 
 void

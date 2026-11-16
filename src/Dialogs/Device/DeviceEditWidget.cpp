@@ -183,107 +183,67 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config) noexcept
 
 [[gnu::pure]]
 static bool
-SupportsBulkBaudRate(const DataField &df) noexcept
+DriverCan(const DataField &df,
+          bool (DeviceRegister::*query)() const) noexcept
 {
   const char *driver_name = df.GetAsString();
   if (driver_name == nullptr)
     return false;
 
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  const DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == nullptr)
     return false;
 
-  return driver->SupportsBulkBaudRate();
+  return (driver->*query)();
+}
+
+[[gnu::pure]]
+static bool
+SupportsBulkBaudRate(const DataField &df) noexcept
+{
+  return DriverCan(df, &DeviceRegister::SupportsBulkBaudRate);
 }
 
 [[gnu::pure]]
 static bool
 CanReceiveSettings(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanReceiveSettings();
+  return DriverCan(df, &DeviceRegister::CanReceiveSettings);
 }
 
 [[gnu::pure]]
 static bool
 CanSendSettings(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendSettings();
+  return DriverCan(df, &DeviceRegister::CanSendSettings);
 }
 
 [[gnu::pure]]
 static bool
 CanSendPosition(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendPosition();
+  return DriverCan(df, &DeviceRegister::CanSendPosition);
 }
 
 [[gnu::pure]]
 static bool
 CanPassThrough(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->HasPassThrough();
+  return DriverCan(df, &DeviceRegister::HasPassThrough);
 }
 
 [[gnu::pure]]
 static bool
 CanReceivePolar(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanReceivePolar();
+  return DriverCan(df, &DeviceRegister::CanReceivePolar);
 }
 
 [[gnu::pure]]
 static bool
 CanSendPolar(const DataField &df) noexcept
 {
-  const char *driver_name = df.GetAsString();
-  if (driver_name == nullptr)
-    return false;
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == nullptr)
-    return false;
-
-  return driver->CanSendPolar();
+  return DriverCan(df, &DeviceRegister::CanSendPolar);
 }
 
 void

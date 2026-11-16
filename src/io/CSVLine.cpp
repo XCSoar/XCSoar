@@ -105,22 +105,33 @@ CSVLine::Read(double default_value) noexcept
 }
 
 bool
+CSVLine::AcceptParsedField(char *endptr) noexcept
+{
+  assert(endptr >= data && endptr <= end);
+
+  if (endptr >= end) {
+    data = end;
+    return true;
+  }
+
+  if (*endptr == ',') {
+    data = endptr + 1;
+    return true;
+  }
+
+  data = endptr;
+  Skip();
+  return false;
+}
+
+bool
 CSVLine::ReadChecked(double &value_r) noexcept
 {
   char *endptr;
-  double value = strtod(data, &endptr);
-  assert(endptr >= data && endptr <= end);
-
-  bool success = endptr > data;
-  if (endptr >= end) {
-    data = end;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-  } else {
-    data = endptr;
-    Skip();
+  const double value = strtod(data, &endptr);
+  const bool success = endptr > data;
+  if (!AcceptParsedField(endptr))
     return false;
-  }
 
   if (success)
     value_r = value;
@@ -142,19 +153,10 @@ bool
 CSVLine::ReadChecked(long &value_r) noexcept
 {
   char *endptr;
-  long value = strtol(data, &endptr, 10);
-  assert(endptr >= data && endptr <= end);
-
-  bool success = endptr > data;
-  if (endptr >= end) {
-    data = end;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-  } else {
-    data = endptr;
-    Skip();
+  const long value = strtol(data, &endptr, 10);
+  const bool success = endptr > data;
+  if (!AcceptParsedField(endptr))
     return false;
-  }
 
   if (success)
     value_r = value;
@@ -165,19 +167,10 @@ bool
 CSVLine::ReadHexChecked(unsigned &value_r) noexcept
 {
   char *endptr;
-  unsigned long value = strtoul(data, &endptr, 16);
-  assert(endptr >= data && endptr <= end);
-
-  bool success = endptr > data;
-  if (endptr >= end) {
-    data = end;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-  } else {
-    data = endptr;
-    Skip();
+  const unsigned long value = strtoul(data, &endptr, 16);
+  const bool success = endptr > data;
+  if (!AcceptParsedField(endptr))
     return false;
-  }
 
   if (success)
     value_r = value;
@@ -188,19 +181,10 @@ bool
 CSVLine::ReadChecked(unsigned long &value_r) noexcept
 {
   char *endptr;
-  unsigned long value = strtoul(data, &endptr, 10);
-  assert(endptr >= data && endptr <= end);
-
-  bool success = endptr > data;
-  if (endptr >= end) {
-    data = end;
-  } else if (*endptr == ',') {
-    data = endptr + 1;
-  } else {
-    data = endptr;
-    Skip();
+  const unsigned long value = strtoul(data, &endptr, 10);
+  const bool success = endptr > data;
+  if (!AcceptParsedField(endptr))
     return false;
-  }
 
   if (success)
     value_r = value;
