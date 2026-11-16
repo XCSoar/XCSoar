@@ -40,7 +40,7 @@ public:
     return GetSliceHeight(slices.size());
   }
 
-  // height of ceiling of this container (including fractional height in top slice)
+  // height of the center of slice index (top slice follows its fractional fill)
   [[gnu::pure]]
   double GetSliceCenter(unsigned index) const noexcept;
 
