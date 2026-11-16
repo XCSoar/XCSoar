@@ -25,7 +25,7 @@ RenderShadowedText(Canvas &canvas, const char *text,
  * @p opacity fades the page dots; only OpenGL honours it.
  */
 void
-DrawPill(Canvas &canvas, const PixelRect &rc,
+DrawRoundedLabel(Canvas &canvas, const PixelRect &rc,
          uint8_t opacity=0xff,
          Color fill=COLOR_WHITE,
          bool solid=false) noexcept;

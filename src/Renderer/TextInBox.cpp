@@ -120,8 +120,7 @@ RenderShadowedText(Canvas &canvas, const char *text,
 }
 
 /**
- * Fill opacity of a map label, shared by the pills and the NOTAM
- * labels.
+ * Fill opacity of a rounded label, shared with the NOTAM labels.
  */
 static constexpr uint8_t LABEL_FILL_ALPHA = 0xa0;
 
@@ -137,7 +136,7 @@ RoundedLabelCorner(unsigned height) noexcept
 }
 
 void
-DrawPill(Canvas &canvas, const PixelRect &rc, uint8_t opacity,
+DrawRoundedLabel(Canvas &canvas, const PixelRect &rc, uint8_t opacity,
          Color fill, bool solid) noexcept
 {
   const unsigned corner = RoundedLabelCorner(rc.GetHeight());
@@ -266,8 +265,8 @@ TextInBox(Canvas &canvas, const char *text, PixelPoint p,
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
     canvas.DrawText(p, text);
-  } else if (mode.shape == LabelShape::PILL) {
-    DrawPill(canvas, rc);
+  } else if (mode.shape == LabelShape::ROUNDED) {
+    DrawRoundedLabel(canvas, rc);
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);

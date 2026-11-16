@@ -392,6 +392,14 @@ struct PageLayout
     }
   }
 
+  /**
+   * The InfoBox half of a page title: "Info Auto", "Info <panel>",
+   * "Info Hide", or the longer forms used in the page list.
+   */
+  void FormatInfoTitle(std::span<char> buffer,
+                       const InfoBoxSettings &info_box_settings,
+                       bool concise) const noexcept;
+
   [[nodiscard]]
   const char *MakeTitle(const InfoBoxSettings &info_box_settings,
                         std::span<char> buffer,

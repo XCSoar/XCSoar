@@ -5,11 +5,49 @@
 #include "PageOverlayTitle.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
+#include "util/StringAPI.hxx"
 #include "util/StringBuilder.hxx"
 #include "util/UTF8.hpp"
 
 #include <algorithm>
 #include <cassert>
+
+void
+PageLayout::FormatInfoTitle(std::span<char> buffer,
+                            const InfoBoxSettings &info_box_settings,
+                            bool concise) const noexcept
+{
+  if (buffer.empty())
+    return;
+
+  buffer.front() = '\0';
+  BasicStringBuilder<char> builder{buffer};
+
+  try {
+    if (infobox_config.enabled) {
+      builder.Append(concise ? _("Info") : _("Map and InfoBoxes"));
+
+      if (!infobox_config.auto_switch &&
+          infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
+        builder.Append(' ');
+        builder.Append(gettext(info_box_settings.panels[infobox_config.panel].name));
+      } else if (concise) {
+        builder.Append(' ');
+        builder.Append(C_("Status", "Auto"));
+      } else {
+        builder.Append(" (");
+        builder.Append(C_("Status", "Auto"));
+        builder.Append(')');
+      }
+    } else if (concise) {
+      builder.Append(_("Info Hide"));
+    } else {
+      builder.Append(_("Map (Full screen)"));
+    }
+  } catch (BasicStringBuilder<char>::Overflow) {
+    CropIncompleteUTF8(buffer.data());
+  }
+}
 
 const char *
 PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
@@ -40,40 +78,24 @@ PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   }
 
   assert(!buffer.empty());
-  /* Callers often pass an uninitialized StaticString buffer.  Start
-     with an empty C string so Overflow before the first Append does
-     not return stack garbage to CalcTextSize. */
-  buffer.front() = '\0';
+  /* Write the InfoBox title straight into the caller's buffer.  A
+     later piece that does not fit is skipped, so a short page-list
+     row keeps "Map and InfoBoxes" instead of going blank. */
+  FormatInfoTitle(buffer, info_box_settings, concise);
 
   BasicStringBuilder<char> builder{buffer};
+  builder.Extend(StringLength(buffer.data()));
 
   try {
-    if (infobox_config.enabled) {
-      builder.Append(concise ? _("Info") : _("Map and InfoBoxes"));
-
-      if (!infobox_config.auto_switch &&
-          infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
-        builder.Append(' ');
-        builder.Append(gettext(info_box_settings.panels[infobox_config.panel].name));
+    char label[128];
+    if (FormatOverlayLabel({label, std::size(label)}, *this, rasp)) {
+      const char *sep = overlay == PageLayout::Overlay::SKYSIGHT
+        ? " | " : ", ";
+      if (builder.CanAppend(StringLength(sep) + StringLength(label))) {
+        builder.Append(sep);
+        builder.Append(label);
       }
-      else {
-        if (concise) {
-          builder.Append(' ');
-          builder.Append(C_("Status", "Auto"));
-        } else {
-          builder.Append(" (");
-          builder.Append(C_("Status", "Auto"));
-          builder.Append(')');
-        }
-      }
-    } else {
-      if (concise)
-        builder.Append(_("Info Hide"));
-      else
-        builder.Append(_("Map (Full screen)"));
     }
-
-    AppendOverlayTitle(builder, *this, rasp);
 
     switch (bottom) {
     case Bottom::NOTHING:

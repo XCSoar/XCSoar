@@ -797,13 +797,13 @@ child of the main window on the map.
   (menu, QuickMenu, zoom), status messages, and a widget that
   replaces the map.
   The condition labels are the persistent channel.  A yellow or red
-  pill stays while its warning or error is true.  Simulator, with a
+  label stays while its warning or error is true.  Simulator, with a
   joystick, and Replay, with a circular arrow, are white rounded
   labels at the top of the same stack.  Errors sit at the bottom,
   warnings between.  Each drops when that condition clears.
   ``Message::AddMessage()``
   is the occurrence channel: a status popup at the moment something
-  happens, which then expires.  Use a pill when the pilot should
+  happens, which then expires.  Use a label when the pilot should
   keep seeing the condition.  Use ``AddMessage()`` when the news is
   the moment it happened.
   ``LayoutMapArea()`` then stores the same hole on the map as

@@ -2,7 +2,11 @@
 // Copyright The XCSoar Project
 
 #include "Weather/MapOverlay/PagePlacement.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
+#include "PageSettings.hpp"
 #include "TestUtil.hpp"
+
+#include <cstring>
 
 using namespace WeatherMapOverlay;
 
@@ -227,10 +231,30 @@ TestAddPageFromDraftCopiesCursors()
   ok1(settings.pages[new_page_index].skysight_time == 1785542400);
 }
 
+static void
+TestMakeTitleKeepsPrefixInSmallBuffer()
+{
+  PageLayout page = PageLayout::Default();
+  page.infobox_config.auto_switch = false;
+  page.infobox_config.panel = 0;
+
+  InfoBoxSettings info_boxes{};
+  info_boxes.panels[0].name = "CustomPanelNameIsLong";
+
+  /* shorter than "Map and InfoBoxes" plus that panel name */
+  char narrow[24];
+  const char *title = page.MakeTitle(info_boxes, narrow, nullptr, false);
+  ok1(strncmp(title, "Map and InfoBoxes", 17) == 0);
+
+  char wide[80];
+  const char *full = page.MakeTitle(info_boxes, wide, nullptr, false);
+  ok1(strstr(full, "CustomPanelNameIsLong") != nullptr);
+}
+
 int
 main()
 {
-  plan_tests(43 + 9 + 6 + 5 + 3);
+  plan_tests(43 + 9 + 6 + 5 + 3 + 2);
 
   TestApplyToCurrentPage();
   TestAddNewOverlayPageFromNonMapSource();
@@ -241,6 +265,7 @@ main()
   TestNormaliseCursorValues();
   TestXCThermManualCursorDefaultsOnAdd();
   TestAddPageFromDraftCopiesCursors();
+  TestMakeTitleKeepsPrefixInSmallBuffer();
 
   return exit_status();
 }

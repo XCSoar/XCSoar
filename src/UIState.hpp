@@ -58,10 +58,13 @@ struct UIState {
   StaticString<32u> panel_name;
 
   /**
-   * Pre-rendered map page title for the map scale overlay (draw thread).
-   * Empty when the current page has no weather overlay.
+   * Map-page labels for the draw thread, already split. Empty when
+   * the current page has no weather overlay; the map then shows
+   * #panel_name instead of #map_page_label.
    */
-  StaticString<128> map_scale_page_title;
+  StaticString<64> map_page_label;
+  StaticString<128> map_overlay_label;
+  StaticString<8> map_bottom_label;
 
   /**
    * Overlay of the current map page.
