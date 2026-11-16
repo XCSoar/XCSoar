@@ -78,7 +78,6 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
   case PortType::BLE_SENSOR:
   case PortType::BLE_SERIAL:
   case PortType::RFCOMM_SERVER:
-  case PortType::ANDROID_USB_SERIAL:
   case PortType::IOIOUART:
   case PortType::DROIDSOAR_V2:
   case PortType::NUNCHUCK:
@@ -87,6 +86,12 @@ DeviceConfig::ShouldReopenOnTimeout() const noexcept
   case PortType::TCP_CLIENT:
     /* errors on these are detected automatically by the driver */
     return false;
+
+  case PortType::ANDROID_USB_SERIAL:
+    /* unplugging is detected, but after a glitch on the USB link the
+       UsbSerial read thread can stop without an error, and the port
+       stays silent until it is opened again */
+    return true;
 
   case PortType::INTERNAL:
     /* reopening the Android / Apple internal GPS doesn't help */
