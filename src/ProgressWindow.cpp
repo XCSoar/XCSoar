@@ -16,13 +16,15 @@
 #include <cstdint>
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent) noexcept
-  :ProgressWindow(parent, GlobalSettings::dark_mode) {}
+  :ProgressWindow(parent, GlobalSettings::dark_mode, true) {}
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent,
-                               bool _dark_mode) noexcept
+                               bool _dark_mode,
+                               bool _paint_background) noexcept
   :background_color(!IsDithered() && _dark_mode
                     ? COLOR_DARK_THEME_BACKGROUND : COLOR_WHITE),
-   dark_mode(!IsDithered() && _dark_mode)
+   dark_mode(!IsDithered() && _dark_mode),
+   paint_background(_paint_background)
 {
   message.clear();
 
@@ -45,7 +47,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent,
 
   // Initialize progress bar
   progress_bar.Create(*this, progress_bar_position);
-  progress_bar.SetDarkMode(dark_mode);
 
   // Set progress bar step size and range
   SetRange(0, 1000);
@@ -344,15 +345,15 @@ ProgressWindow::OnResize(PixelSize new_size) noexcept
 void
 ProgressWindow::OnPaint(Canvas &canvas) noexcept
 {
-  canvas.Clear(background_color);
+  /* The dialog client has already drawn its gradient.  Clearing
+     here would hide it. */
+  if (paint_background)
+    canvas.Clear(background_color);
 
   logo.draw(canvas, logo_position, dark_mode);
 
-  /* The border bitmap is a light bezel.  Dark mode uses the bar's
-     own track instead. */
-  if (!dark_mode)
-    canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
-                   bitmap_progress_border);
+  canvas.Stretch(bottom_position.GetTopLeft(), bottom_position.GetSize(),
+                 bitmap_progress_border);
 
   canvas.Select(font);
   canvas.SetBackgroundTransparent();
