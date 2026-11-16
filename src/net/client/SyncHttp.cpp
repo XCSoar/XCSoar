@@ -203,6 +203,7 @@ MakeSyncHttpProgress(ProgressListener *listener,
 
     listener->SetProgressRange((unsigned)bytes_total);
     listener->SetProgressPosition((unsigned)bytes_now);
+    listener->SetProgressBytes((unsigned)bytes_now);
     return true;
   };
 }

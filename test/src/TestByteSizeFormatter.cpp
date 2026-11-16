@@ -8,7 +8,7 @@
 
 int main()
 {
-  plan_tests(33);
+  plan_tests(33 + 6);
 
   char buffer[256];
 
@@ -116,6 +116,31 @@ int main()
 
   FormatByteSize(buffer, ARRAY_SIZE(buffer), (uint64_t) 1 * 1024 * 1024 * 1024 * 1024, true);
   ok1(StringIsEqual(buffer, "1.0T"));
+
+  /* A byte bar prints both sides in the same unit as the rate. */
+  const unsigned file_bytes = 50u * 1024u * 1024u;
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), 0, file_bytes,
+                       true, 0);
+  ok1(StringIsEqual(buffer, "0 B/50.0 MB"));
+
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), file_bytes, file_bytes,
+                       true, file_bytes);
+  ok1(StringIsEqual(buffer, "50.0 MB/50.0 MB"));
+
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), 100, 200, true, 100);
+  ok1(StringIsEqual(buffer, "100 B/200 B"));
+
+  /* Percent, a KiB counter, and a plain count stay numeric. */
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), 40, 100,
+                       true, 5u * 1024u * 1024u);
+  ok1(StringIsEqual(buffer, "40/100"));
+
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), 2048, 100000,
+                       true, 2048u * 1024u);
+  ok1(StringIsEqual(buffer, "2048/100000"));
+
+  FormatProgressAmount(buffer, ARRAY_SIZE(buffer), 12, 100, false, 0);
+  ok1(StringIsEqual(buffer, "12/100"));
 
   return exit_status();
 }

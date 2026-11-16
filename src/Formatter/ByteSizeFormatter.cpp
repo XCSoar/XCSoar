@@ -33,3 +33,32 @@ FormatByteSize(char *buffer, size_t size, uint64_t bytes, bool simple)
 
   StringFormat(buffer, size, format, value, unit);
 }
+
+static bool
+BarShowsBytes(unsigned done, unsigned total, bool bytes,
+              unsigned byte_count) noexcept
+{
+  /* A percent or block counter can carry a separate byte rate.
+     Label the amount only when the bar itself is that byte count.
+     0..100 while both are still zero is a percent. */
+  return bytes && done == byte_count && (done > 0 || total >= 1024u);
+}
+
+void
+FormatProgressAmount(char *buffer, size_t size,
+                     unsigned done, unsigned total,
+                     bool bytes, unsigned byte_count) noexcept
+{
+  assert(buffer != NULL);
+  assert(size >= 8);
+
+  if (!BarShowsBytes(done, total, bytes, byte_count)) {
+    StringFormat(buffer, size, "%u/%u", done, total);
+    return;
+  }
+
+  char done_s[16], total_s[16];
+  FormatByteSize(done_s, sizeof(done_s), done);
+  FormatByteSize(total_s, sizeof(total_s), total);
+  StringFormat(buffer, size, "%s/%s", done_s, total_s);
+}

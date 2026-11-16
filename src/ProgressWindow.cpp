@@ -86,9 +86,10 @@ ProgressWindow::UpdateLayout(PixelRect rc) noexcept
 static void
 FormatSpeed(StaticString<16> &out, unsigned per_sec, bool bytes) noexcept
 {
-  /* A fast unnamed counter is a byte stream that did not call
-     SetProgressBytes().  A slow one is lines, fixes, or a percent. */
-  if (!bytes && per_sec < 1024) {
+  /* Only a real byte count gets a unit.  A KiB or line counter must
+     not be passed through FormatByteSize: 2048 KiB/s would print
+     "2 KB/s". */
+  if (!bytes) {
     out.Format("%u/s", per_sec);
     return;
   }
@@ -125,7 +126,8 @@ SmoothToward(int shown, int sample) noexcept
 
 static StaticString<64>
 FormatBarLabel(unsigned percent, unsigned done, unsigned total,
-               int eta_secs, int per_sec, bool bytes) noexcept
+               int eta_secs, int per_sec, bool bytes,
+               unsigned byte_count) noexcept
 {
   StaticString<16> eta("--:--");
   if (done >= total)
@@ -139,9 +141,13 @@ FormatBarLabel(unsigned percent, unsigned done, unsigned total,
 
   /* Digits, a percent sign, and the speed text.  Nothing here is a
      sentence, so it stays out of the translation catalog. */
+  char amount[40];
+  FormatProgressAmount(amount, sizeof(amount), done, total,
+                       bytes, byte_count);
+
   StaticString<64> text;
-  text.Format("%u%% (%u/%u)  %s  %s",
-              percent, done, total, speed.c_str(), eta.c_str());
+  text.Format("%u%% (%s)  %s  %s",
+              percent, amount, speed.c_str(), eta.c_str());
   return text;
 }
 
@@ -228,7 +234,7 @@ ProgressWindow::UpdateBarLabel(unsigned value) noexcept
     static_cast<unsigned>(uint64_t{done} * 100u / total);
   progress_bar.SetText(FormatBarLabel(percent, done, total,
                                        shown_secs, shown_rate,
-                                       have_bytes));
+                                       have_bytes, byte_count));
 }
 
 static unsigned
