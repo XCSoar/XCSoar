@@ -19,8 +19,14 @@ struct Settings {
     HANGGLIDER_RIGID = 5,
   };
 
+  /** Who may see the track; the values are the protocol's. */
+  enum class Privacy : uint8_t {
+    PUBLIC = 0,
+    PRIVATE = 1,
+    FRIENDS = 2,
+  };
+
   bool enabled;
-  StaticString<64> server;
   StaticString<64> username;
   StaticString<64> password;
 
@@ -32,15 +38,27 @@ struct Settings {
   VehicleType vehicleType;
   StaticString<64> vehicle_name;
 
+  Privacy privacy;
+
+  /**
+   * Random, generated once per installation, see
+   * Profile::InitLiveTrack24DeviceID()
+   */
+  StaticString<20> device_id;
+
   void SetDefaults() {
     enabled = false;
-    server = "www.livetrack24.com";
     username.clear();
     password.clear();
 
     interval = 60;
 
     vehicleType = VehicleType::GLIDER;
+    vehicle_name.clear();
+
+    privacy = Privacy::PUBLIC;
+
+    device_id.clear();
   }
 };
 

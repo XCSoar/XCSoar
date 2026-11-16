@@ -17,25 +17,13 @@ class CurlGlobal;
 namespace LiveTrack24 {
 
 class Glue final {
-  struct State
-  {
-    LiveTrack24::SessionID session_id;
-    unsigned packet_id;
-
-    void ResetSession() {
-      session_id = 0;
-    }
-
-    bool HasSession() {
-      return session_id != 0;
-    }
-  };
-
   PeriodClock clock;
 
   Settings settings;
 
-  State state;
+  /** The current session; undefined while not flying. */
+  Session session;
+  unsigned packet_id;
 
   Client client;
 
@@ -47,10 +35,13 @@ class Glue final {
 
   BrokenDateTime date_time;
   GeoPoint location;
-  unsigned altitude;
+  int altitude;
   unsigned ground_speed;
-  Angle track;
+  unsigned course;
   bool flying = false, last_flying;
+
+  /** No request before this time, after the server's rate limit. */
+  std::chrono::steady_clock::time_point paused_until{};
 
   Net::AsyncTask task;
 

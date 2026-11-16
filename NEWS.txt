@@ -69,6 +69,11 @@ Version 7.47 - not yet released
     settings; retain unsent edits if a save fails
   - Larus: pass on the instantaneous wind of ``$PLARW`` (``I``) next
     to the average wind (``A``)
+* tracking
+  - send live tracks to LiveTrack24 again over its current interface.
+    Positions are only sent with a LiveTrack24 account, at most every
+    5 seconds; the pilot chooses who can see the track, and the server
+    choice is gone #3467
 * android
   - add Share to Export flights so selected IGC/NMEA files can be
     sent via the system share sheet (Nearby Share, Drive, mail, …)
