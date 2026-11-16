@@ -26,7 +26,7 @@ correctly in dark mode, and survive the rsvg → ImageMagick pipeline.
 | **UI / toolbar** | `0 0 22 22` | `mode_cruise.svg`, `settings.svg`, `task.svg` |
 | **Exceptions** | `0 0 24 24` | rare; match an existing neighbour if adding one |
 
-- Start from `Data/icons/icon_template.svg` for new files.
+- Start from an existing icon with the same viewBox.
 - Keep artwork **centred** with ~1 px margin inside the viewBox; do not rely
   on negative coordinates outside the box.
 - Filename prefix: `map_*` (map symbols), `alt_*` / `alt2_*` (landable
