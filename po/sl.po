@@ -4423,7 +4423,7 @@ msgstr "Imhova atlas"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "Imhova svetli atlas"
 
 #, no-c-format
 msgid "ICAO"

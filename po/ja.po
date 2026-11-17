@@ -4437,7 +4437,7 @@ msgstr "イムホフ アトラス"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "イムホフ アトラス ライト"
 
 #, no-c-format
 msgid "ICAO"
