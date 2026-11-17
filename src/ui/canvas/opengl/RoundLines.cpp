@@ -96,9 +96,14 @@ HaveStencilBuffer() noexcept
  *
  * The first stencil bit records the painted pixels, #MASK_BIT (from
  * DrawMask()) the ones to leave alone.
+ *
+ * In a group, #GROUP_BIT keeps the pixels for the following Draw()
+ * calls.  Only the pixels at least half covered are kept: a faint
+ * edge pixel may still be painted by the next line, or a light seam
+ * would show where two lines join.
  */
 void
-RoundLines::Draw(Color color, bool masked) const noexcept
+RoundLines::Draw(Color color, bool masked, bool grouped) const noexcept
 {
   if (vertices.empty())
     return;
@@ -106,7 +111,8 @@ RoundLines::Draw(Color color, bool masked) const noexcept
   const ScopeAlphaBlend alpha_blend;
 
   WithVertices(color, [&](GLsizei n){
-    if ((color.IsOpaque() && !masked) || !HaveStencilBuffer()) {
+    if ((color.IsOpaque() && !masked && !grouped) ||
+        !HaveStencilBuffer()) {
       /* painting a pixel twice does no harm to an opaque colour;
          without a stencil buffer, a translucent one shows its joints
          and ignores the mask, which is still better than blending
@@ -121,10 +127,16 @@ RoundLines::Draw(Color color, bool masked) const noexcept
     /* clear only the first bit, keep the mask */
     glStencilMask(1);
     glClear(GL_STENCIL_BUFFER_BIT);
-    glStencilFunc(GL_EQUAL, 0, masked ? 1 | MASK_BIT : 1);
+    glStencilFunc(GL_EQUAL, 0,
+                  1 | (masked ? MASK_BIT : 0) | (grouped ? GROUP_BIT : 0));
     glStencilOp(GL_KEEP, GL_KEEP, GL_INVERT);
 
     for (unsigned i = COVERAGE_STEPS; i-- > 0;) {
+      /* both bits are clear where the test passes, so inverting
+         sets them */
+      glStencilMask(grouped && i * 2 >= COVERAGE_STEPS
+                    ? 1 | GROUP_BIT
+                    : 1);
       glUniform1f(OpenGL::round_line_min_coverage,
                   float(i) / COVERAGE_STEPS);
       glDrawArrays(GL_TRIANGLES, 0, n);
@@ -132,6 +144,14 @@ RoundLines::Draw(Color color, bool masked) const noexcept
 
     glStencilMask(~0u);
   });
+}
+
+void
+RoundLines::BeginGroup() noexcept
+{
+  glStencilMask(GROUP_BIT);
+  glClear(GL_STENCIL_BUFFER_BIT);
+  glStencilMask(~0u);
 }
 
 void

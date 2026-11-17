@@ -5,6 +5,7 @@
 
 #include "Point.hpp"
 
+#include <utility>
 #include <vector>
 
 class GeoBounds;
@@ -12,6 +13,14 @@ class GeoBounds;
 class TracePointVector : public std::vector<TracePoint> {
 public:
   void ScanBounds(GeoBounds &bounds) const noexcept;
+
+  /**
+   * The lowest and the highest vario reading [m/s] after leaving out
+   * the given share of the readings at either end, so a few spikes do
+   * not count.  Must not be called on an empty vector.
+   */
+  [[gnu::pure]]
+  std::pair<double, double> GetVarioPercentiles(double share) const;
 };
 
 /**

@@ -17,6 +17,7 @@ TrailSettings::SetDefaults() noexcept
   scaling_enabled = true;
   type = Type::VARIO_2;
   length = Length::LONG;
+  fade = Fade::OFF;
 }
 
 void

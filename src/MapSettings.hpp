@@ -92,6 +92,14 @@ struct TrailSettings {
     FULL,
   } length;
 
+  /** Fade the trail with its age, a step every minute */
+  enum class Fade: uint8_t {
+    OFF,
+    CIRCLING,
+    ALWAYS,
+    COUNT
+  } fade;
+
   void SetDefaults() noexcept;
 };
 

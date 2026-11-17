@@ -10,6 +10,8 @@
 #include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "MapSettings.hpp"
+#include "Asset.hpp"
+#include "util/Macros.hpp"
 
 enum ControlIndex {
   DISPLAY_TRACK_BEARING,
@@ -18,6 +20,7 @@ enum ControlIndex {
   FADE_TRAFFIC,
   TRAIL_LENGTH,
   TRAIL_DRIFT,
+  TRAIL_FADE,
   TRAIL_TYPE,
   TRAIL_WIDTH,
   ENABLE_DETOUR_COST_MARKERS,
@@ -50,6 +53,8 @@ SymbolsConfigPanel::ShowTrailControls(bool show)
 {
   /* Trail drift also sets the projected track curve while circling,
      including when the snail trail itself is off. */
+  /* a dithered display does not fade the trail */
+  SetRowAvailable(TRAIL_FADE, show && !IsDithered());
   SetRowAvailable(TRAIL_TYPE, show);
   SetRowAvailable(TRAIL_WIDTH, show);
 }
@@ -78,6 +83,21 @@ static constexpr StaticEnumChoice trail_length_list[] = {
   { TrailSettings::Length::FULL, N_("Full") },
   nullptr
 };
+
+static constexpr StaticEnumChoice trail_fade_list[] = {
+  { TrailSettings::Fade::OFF, N_("Off"),
+    N_("The whole trail is drawn at full strength.") },
+  { TrailSettings::Fade::CIRCLING, N_("Circling"),
+    N_("In circling mode, the trail fades with its age, so the last "
+       "circles stand out.") },
+  { TrailSettings::Fade::ALWAYS, N_("Always"),
+    N_("The trail fades with its age, also in cruise.") },
+  nullptr
+};
+
+static_assert(ARRAY_SIZE(trail_fade_list) ==
+              unsigned(TrailSettings::Fade::COUNT) + 1,
+              "trail_fade_list must match TrailSettings::Fade::COUNT");
 
 static constexpr StaticEnumChoice trail_type_list[] = {
   { TrailSettings::Type::VARIO_1, N_("Vario #1"), N_("Within lift areas "
@@ -170,6 +190,12 @@ SymbolsConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
              settings_map.trail.wind_drift_enabled);
   SetExpertRow(TRAIL_DRIFT);
 
+  AddEnum(_("Trail fade"),
+          _("Fades the snail trail with its age, a step every minute, so "
+            "its most recent part stands out."),
+          trail_fade_list, (unsigned)settings_map.trail.fade);
+  SetExpertRow(TRAIL_FADE);
+
   AddEnum(_("Trail type"),
           _("Sets the type of the snail trail display."), trail_type_list, (int)settings_map.trail.type);
   SetExpertRow(TRAIL_TYPE);
@@ -230,6 +256,8 @@ SymbolsConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValueEnum(TRAIL_LENGTH, ProfileKeys::SnailTrail, settings_map.trail.length);
 
   changed |= SaveValue(TRAIL_DRIFT, ProfileKeys::TrailDrift, settings_map.trail.wind_drift_enabled);
+
+  changed |= SaveValueEnum(TRAIL_FADE, ProfileKeys::TrailFade, settings_map.trail.fade);
 
   changed |= SaveValueEnum(TRAIL_TYPE, ProfileKeys::SnailType, settings_map.trail.type);
 

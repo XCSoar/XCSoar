@@ -12951,3 +12951,21 @@ msgstr ""
 
 msgid "While circling, speak the average climb of the last 30 seconds every 30 seconds: \"one point five\"."
 msgstr ""
+
+msgid "Trail fade"
+msgstr ""
+
+msgid "Fades the snail trail with its age, a step every minute, so its most recent part stands out."
+msgstr ""
+
+msgid "The whole trail is drawn at full strength."
+msgstr ""
+
+msgid "In circling mode, the trail fades with its age, so the last circles stand out."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "The trail fades with its age, also in cruise."
+msgstr ""

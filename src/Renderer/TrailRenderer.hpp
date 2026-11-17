@@ -14,10 +14,16 @@
 #include "time/Stamp.hpp"
 #include "util/Serial.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/RoundLines.hpp"
+#endif
+
+#include <utility>
 #include <vector>
 
 struct BulkPixelPoint;
 class Canvas;
+class Pen;
 class TraceComputer;
 class Projection;
 class WindowProjection;
@@ -52,6 +58,8 @@ class TrailRenderer {
   struct CachedColourRun {
     unsigned color_index{};
     std::vector<CachedPathPoint> points;
+    /** The time of the fix that ends this run's leg, for the fade. */
+    TracePoint::Time time{};
   };
 
   /** Tessellated, coloured geometry for one completed GPS leg. */
@@ -121,6 +129,15 @@ class TrailRenderer {
   /** Keep completed-segment drift stable between GPS trace updates. */
   TimeStamp stable_drift_time{TimeStamp::Undefined()};
 
+#ifdef ENABLE_OPENGL
+  /** the faded trail per fade level and colour, reused each Draw() */
+  std::vector<RoundLines> faded_lines;
+#endif
+
+  /** the netto vario at the ends of the colour scale of the last
+      trail drawn [m/s] */
+  std::pair<double, double> vario_range{-2.0, 0.75};
+
 public:
   TrailRenderer(const TrailLook &_look) noexcept:look(_look) {}
 
@@ -147,7 +164,8 @@ public:
   void Draw(Canvas &canvas, const TraceComputer &trace_computer,
             const WindowProjection &projection,
             TimeStamp min_time,
-            bool enable_traildrift, PixelPoint pos, const NMEAInfo &basic,
+            bool enable_traildrift, bool enable_fade,
+            PixelPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated,
             const TrailSettings &settings) noexcept;
 
@@ -180,6 +198,9 @@ public:
                     const ContestTraceVector &trace) noexcept;
 
 private:
+  const Pen &GetTrailPen(unsigned color_index,
+                         bool scaled_trail) const noexcept;
+
   void SelectTrailPen(Canvas &canvas, unsigned color_index,
                       bool scaled_trail) const noexcept;
 
@@ -190,7 +211,8 @@ private:
                           size_t first, size_t last) noexcept;
 
   void DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
-                          const BulkPixelPoint *pts, unsigned n) noexcept;
+                          const BulkPixelPoint *pts, unsigned n,
+                          unsigned fade=0) noexcept;
 
   void DrawCachedSegments(Canvas &canvas,
                           const WindowProjection &projection,
@@ -199,7 +221,9 @@ private:
                           bool enable_traildrift,
                           const GeoPoint &traildrift,
                           TimeStamp drift_now,
-                          const std::vector<CachedTrailSegment> &segments) noexcept;
+                          const std::vector<CachedTrailSegment> &segments,
+                          bool fade,
+                          TracePoint::Time now) noexcept;
 
   [[gnu::pure]]
   static PixelPoint ProjectCachedPathPoint(const CachedPathPoint &p,
