@@ -3,6 +3,19 @@
 
 #include "WaypointRendererSettings.hpp"
 #include "Profile/Profile.hpp"
+#include "util/StringFormat.hpp"
+
+#include <cassert>
+
+static const char *
+MakeWaypointTypeDisplayName(char *buffer, size_t size, unsigned i) noexcept
+{
+  const int written = StringFormat(buffer, size, "WaypointTypeDisplay%u", i);
+  assert(written > 0 && size_t(written) < size);
+  if (written <= 0 || size_t(written) >= size)
+    buffer[0] = '\0';
+  return buffer;
+}
 
 void
 WaypointRendererSettings::LoadFromProfile() noexcept
@@ -33,4 +46,48 @@ WaypointRendererSettings::LoadFromProfile() noexcept
   Get(ProfileKeys::AppScaleRunwayLength, scale_runway_length);
   Get(ProfileKeys::AppLandableRenderingScale, landable_rendering_scale);
   Get(ProfileKeys::MapWaypointIconScale, map_waypoint_icon_scale);
+
+  for (unsigned i = 0; i < unsigned(Waypoint::Type::COUNT); ++i) {
+    char name[64];
+    MakeWaypointTypeDisplayName(name, sizeof(name), i);
+    Get(name, display_types[i]);
+  }
+
+  Get(ProfileKeys::WaypointDisplayNonIcaoAirports,
+      display_non_icao_airports);
+}
+
+bool
+WaypointRendererSettings::IsWaypointDisplayed(const Waypoint &waypoint) const noexcept
+{
+  if (!IsTypeDisplayed(waypoint.type))
+    return false;
+
+  if (!display_non_icao_airports && waypoint.IsAirport() &&
+      waypoint.shortname.length() != 4)
+    return false;
+
+  return true;
+}
+
+void
+WaypointRendererSettings::SaveTypeDisplay(Waypoint::Type type,
+                                          bool display) noexcept
+{
+  const unsigned type_index = unsigned(type);
+  if (type_index >= unsigned(Waypoint::Type::COUNT))
+    return;
+
+  display_types[type_index] = display;
+
+  char name[64];
+  MakeWaypointTypeDisplayName(name, sizeof(name), type_index);
+  Profile::Set(name, display);
+}
+
+void
+WaypointRendererSettings::SaveNonIcaoAirportsDisplay(bool display) noexcept
+{
+  display_non_icao_airports = display;
+  Profile::Set(ProfileKeys::WaypointDisplayNonIcaoAirports, display);
 }
