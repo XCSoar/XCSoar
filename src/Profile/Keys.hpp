@@ -68,6 +68,7 @@ constexpr std::string_view SafteySpeed = "SafteySpeed";
 constexpr std::string_view DryMass = "DryMass";
 constexpr std::string_view SnailTrail = "SnailTrail";
 constexpr std::string_view TrailDrift = "TrailDrift";
+constexpr std::string_view TrailFade = "TrailFade";
 constexpr std::string_view DetourCostMarker = "DetourCostMarker";
 constexpr std::string_view DisplayTrackBearing = "DisplayTrackBearing";
 constexpr std::string_view TurnBackMarkerEnabled = "TurnBackMarkerEnabled";

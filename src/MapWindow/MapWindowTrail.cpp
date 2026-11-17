@@ -17,11 +17,11 @@ MapWindow::RenderTrail(Canvas &canvas, const PixelPoint aircraft_pos) noexcept
 void
 MapWindow::DrawTrail(Canvas &canvas, const PixelPoint aircraft_pos,
                      TimeStamp min_time,
-                     bool enable_traildrift) noexcept
+                     bool enable_traildrift, bool enable_fade) noexcept
 {
   if (glide_computer)
     trail_renderer.Draw(canvas, glide_computer->GetTraceComputer(),
                         render_projection, min_time,
-                        enable_traildrift, aircraft_pos,
+                        enable_traildrift, enable_fade, aircraft_pos,
                         Basic(), Calculated(), GetMapSettings().trail);
 }

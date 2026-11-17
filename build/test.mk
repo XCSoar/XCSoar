@@ -1652,6 +1652,7 @@ TEST_TRACE_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(SRC)/Engine/Trace/Point.cpp \
 	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
 	$(TEST_SRC_DIR)/TestTraceBounds.cpp
 TEST_TRACE_BOUNDS_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,TestTraceBounds,TEST_TRACE_BOUNDS))

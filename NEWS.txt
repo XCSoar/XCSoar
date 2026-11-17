@@ -101,6 +101,12 @@ Version 7.47 - not yet released
     #3094
   - add an Imhof Atlas lite terrain colour ramp: the Imhof Atlas
     colours from 500 m up, with lighter colours below that
+  - add a Trail fade setting (Map, Elements, off by default) that
+    fades the trail every minute of its age, down to 30 % opacity,
+    while circling or always, so the last circles stand out
+  - span the vario trail's colours over its readings without the 5 %
+    strongest lift and sink, so a gust spike does not take the
+    brightest colours away from the rest
   - fix the kinked and doubled snail trail while circling with
     Trail drift on #3027
   - fix small gaps in the scaled vario snail trail in tight turns

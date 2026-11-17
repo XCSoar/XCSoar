@@ -153,6 +153,7 @@ void
 Profile::Load(const ProfileMap &map, TrailSettings &settings)
 {
   map.Get(ProfileKeys::TrailDrift, settings.wind_drift_enabled);
+  map.GetEnum(ProfileKeys::TrailFade, settings.fade);
   map.Get(ProfileKeys::SnailWidthScale, settings.scaling_enabled);
   map.GetEnum(ProfileKeys::SnailType, settings.type);
   map.GetEnum(ProfileKeys::SnailTrail, settings.length);

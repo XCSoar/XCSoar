@@ -351,7 +351,8 @@ protected:
   void DrawWaypoints(Canvas &canvas) noexcept;
 
   void DrawTrail(Canvas &canvas, PixelPoint aircraft_pos,
-                 TimeStamp min_time, bool enable_traildrift = false) noexcept;
+                 TimeStamp min_time, bool enable_traildrift = false,
+                 bool enable_fade = false) noexcept;
   virtual void RenderTrail(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
   virtual void RenderTrackBearing(Canvas &canvas, PixelPoint aircraft_pos) noexcept;
 

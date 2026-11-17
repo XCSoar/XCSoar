@@ -4286,6 +4286,24 @@ msgstr ""
 msgid "Determines whether the snail trail is drifted with the wind when displayed in circling mode at near map scales. Switched Off, the snail trail stays uncompensated for wind drift. In circling this also applies to the projected track curve: On keeps it relative to the air mass; Off includes wind."
 msgstr ""
 
+msgid "Trail fade"
+msgstr ""
+
+msgid "Fades the snail trail with its age, a step every minute, so its most recent part stands out."
+msgstr ""
+
+msgid "The whole trail is drawn at full strength."
+msgstr ""
+
+msgid "In circling mode, the trail fades with its age, so the last circles stand out."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "The trail fades with its age, also in cruise."
+msgstr ""
+
 #, no-c-format
 msgctxt "Wind source"
 msgid "Source"

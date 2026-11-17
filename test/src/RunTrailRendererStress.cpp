@@ -339,7 +339,8 @@ BenchmarkDrawMs(Canvas &canvas, TrailRenderer &renderer,
   const auto t0 = clock::now();
   for (unsigned i = 0; i < draws; ++i)
     renderer.Draw(canvas, trace_computer, projection, {},
-                  false, aircraft_pos, basic, calculated, trail_settings);
+                  false, false, aircraft_pos, basic, calculated,
+                  trail_settings);
   const auto t1 = clock::now();
 
   return std::chrono::duration<double, std::milli>(t1 - t0).count();

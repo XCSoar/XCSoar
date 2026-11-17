@@ -761,7 +761,13 @@ GlueMapWindow::RenderTrail(Canvas &canvas,
     InCirclingMode() &&
     render_projection.GetMapScale() <= TRAIL_DRIFT_MAX_MAP_SCALE;
 
-  DrawTrail(canvas, aircraft_pos, min_time, enable_traildrift);
+  const auto fade = GetMapSettings().trail.fade;
+  /* on a dithered display a faded trail would lose its contrast */
+  const bool enable_fade = !IsDithered() &&
+    (fade == TrailSettings::Fade::ALWAYS ||
+     (fade == TrailSettings::Fade::CIRCLING && InCirclingMode()));
+
+  DrawTrail(canvas, aircraft_pos, min_time, enable_traildrift, enable_fade);
 }
 
 void

@@ -36,6 +36,9 @@ class RoundLines {
   /** the stencil bit set by DrawMask() */
   static constexpr unsigned MASK_BIT = 2;
 
+  /** the stencil bit of the pixels painted since BeginGroup() */
+  static constexpr unsigned GROUP_BIT = 4;
+
   /** the width of the soft edge, centred on the radius */
   float softness;
 
@@ -73,8 +76,19 @@ public:
    *
    * @param masked leave the pixels marked by the last DrawMask()
    * alone
+   * @param grouped leave the pixels alone which another grouped
+   * Draw() has painted since the last BeginGroup(), and mark the
+   * ones painted now
    */
-  void Draw(Color color, bool masked=false) const noexcept;
+  void Draw(Color color, bool masked=false,
+            bool grouped=false) const noexcept;
+
+  /**
+   * Start a group of Draw() calls with grouped=true.  Translucent
+   * lines of several colours are then blended only once where they
+   * cross or join each other; the first one drawn is on top.
+   */
+  static void BeginGroup() noexcept;
 
   /**
    * Mark the pixels these segments cover in the stencil buffer

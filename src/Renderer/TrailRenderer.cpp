@@ -14,6 +14,10 @@
 #include "Engine/Contest/ContestTrace.hpp"
 #include "Screen/Layout.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "ui/canvas/opengl/Scope.hpp"
+#endif
+
 #include <algorithm>
 #include <new>
 #include <utility>
@@ -306,6 +310,13 @@ GetRibbonWidth(const TrailLook &look, unsigned color_index) noexcept
 }
 
 [[gnu::pure]]
+static double
+GetRibbonHalfWidth(const TrailLook &look, unsigned color_index) noexcept
+{
+  return std::max(1., GetRibbonWidth(look, color_index) * 0.5);
+}
+
+[[gnu::pure]]
 static PixelPoint
 LerpPixelPoint(const PixelPoint &a, const PixelPoint &b,
                double u) noexcept
@@ -490,6 +501,29 @@ TrailRenderer::RefilterTraceFromHistory(const TrailSpatialFilter &filter) noexce
   }
 }
 
+/**
+ * A high and a low percentile rather than the extremes, so a gust
+ * spike does not take the strongest colours away from the lift the
+ * trail mostly shows; in steps of 0.25 m/s, so the scale (and the
+ * cached trail) changes only now and then.
+ */
+static std::pair<double, double>
+ComputeVarioRange(const TracePointVector &trace)
+{
+  static constexpr double PERCENTILE = 0.05, STEP = 0.25;
+  double value_max = 0.75;
+  double value_min = -2.0;
+  if (!trace.empty()) {
+    const auto [low, high] = trace.GetVarioPercentiles(PERCENTILE);
+    value_max = std::max(std::ceil(high / STEP) * STEP, value_max);
+    value_min = std::min(std::floor(low / STEP) * STEP, value_min);
+  }
+
+  value_max = std::min(7.5, value_max);
+  value_min = std::max(-5.0, value_min);
+  return std::make_pair(value_min, value_max);
+}
+
 bool
 TrailRenderer::SyncTrace(const TraceComputer &trace_computer,
                          const TrailQuery &query) noexcept
@@ -541,6 +575,7 @@ TrailRenderer::SyncTrace(const TraceComputer &trace_computer,
     const TrailSpatialFilter filter =
       trace_computer.LockedMakeSpatialFilter(query);
     RefilterTraceFromHistory(filter);
+    vario_range = ComputeVarioRange(trace);
   } catch (const std::bad_alloc &) {
     InvalidateHistory();
     InvalidateSegmentCache();
@@ -602,29 +637,14 @@ TrailRenderer::ColorScale::FromMinMax(TrailSettings::Type type,
 
 [[gnu::pure]]
 static std::pair<double, double>
-GetMinMax(TrailSettings::Type type, const TracePointVector &trace) noexcept
+GetAltitudeRange(const TracePointVector &trace) noexcept
 {
-  double value_min, value_max;
+  double value_max = 1000;
+  double value_min = 500;
 
-  if (type == TrailSettings::Type::ALTITUDE) {
-    value_max = 1000;
-    value_min = 500;
-
-    for (const auto &i : trace) {
-      value_max = std::max(i.GetAltitude(), value_max);
-      value_min = std::min(i.GetAltitude(), value_min);
-    }
-  } else {
-    value_max = 0.75;
-    value_min = -2.0;
-
-    for (const auto &i : trace) {
-      value_max = std::max(i.GetVario(), value_max);
-      value_min = std::min(i.GetVario(), value_min);
-    }
-
-    value_max = std::min(7.5, value_max);
-    value_min = std::max(-5.0, value_min);
+  for (const auto &i : trace) {
+    value_max = std::max(i.GetAltitude(), value_max);
+    value_min = std::min(i.GetAltitude(), value_min);
   }
 
   return std::make_pair(value_min, value_max);
@@ -664,6 +684,67 @@ TrailRenderer::ProjectCachedColourRun(
       simplify_projected);
 }
 
+/** the trail older than this fades by a level */
+static constexpr std::chrono::seconds FADE_STEP{60};
+static constexpr unsigned FADE_LEVELS = 4;
+/** the opacity of the oldest trail, so it still shows its lift */
+static constexpr double FADE_MIN = 0.3;
+
+/** how far a fade level goes from the colour to nothing */
+static constexpr double
+FadeShare(unsigned level) noexcept
+{
+  return (1 - FADE_MIN) * level / (FADE_LEVELS - 1);
+}
+
+/**
+ * In a thermal the older trail fades: the level of a point of this
+ * time, 0 for the recent ones.
+ */
+[[gnu::const]]
+static unsigned
+FadeLevel(const TracePoint::Time time, const TracePoint::Time now) noexcept
+{
+  if (now <= time)
+    return 0;
+
+  return std::min<unsigned>((now - time) / FADE_STEP, FADE_LEVELS - 1);
+}
+
+/**
+ * Without OpenGL the faded trail is mixed with white instead of drawn
+ * translucent.
+ */
+[[gnu::const]]
+static Color
+Faded(const Color color, const unsigned level) noexcept
+{
+  const double f = FadeShare(level);
+  auto Mix = [f](uint8_t c) {
+    return uint8_t(c + (255 - c) * f);
+  };
+#ifdef GREYSCALE
+  return Color(Mix(color.GetLuminosity()));
+#else
+  return Color(Mix(color.Red()), Mix(color.Green()), Mix(color.Blue()));
+#endif
+}
+
+/**
+ * The colour of a faded trail dot: translucent with OpenGL, else mixed
+ * with white.
+ */
+[[gnu::const]]
+static Color
+FadedDot(const Color color, const unsigned level) noexcept
+{
+#ifdef ENABLE_OPENGL
+  return color.WithAlpha(uint8_t(255 * (1 - FadeShare(level))));
+#else
+  return Faded(color, level);
+#endif
+}
+
 void
 TrailRenderer::DrawCachedSegments(Canvas &canvas,
                                   const WindowProjection &projection,
@@ -672,13 +753,66 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
                                   const bool enable_traildrift,
                                   const GeoPoint &traildrift,
                                   const TimeStamp drift_now,
-                                  const std::vector<CachedTrailSegment> &segments) noexcept
+                                  const std::vector<CachedTrailSegment> &segments,
+                                  const bool fade,
+                                  const TracePoint::Time now) noexcept
 {
+  auto LevelOf = [fade, now](const CachedColourRun &run) {
+    return fade ? FadeLevel(run.time, now) : 0u;
+  };
+
   const bool suppress_sink_lines = IsVarioDotsOnlyMode(type);
   const bool use_ribbon = UseRibbonTrail(type, scaled_trail);
   const bool simplify_projected = IsLowDpiTrail() && use_ribbon;
   static constexpr unsigned null_color_index =
     TrailLook::NUMSNAILCOLORS / 2;
+
+#ifdef ENABLE_OPENGL
+  /* the faded trail translucent, the most recent first and on top;
+     where it crosses or joins itself it is blended only once, also
+     between colours and fade levels, so neither the joints of a wide
+     trail nor the crossings of its circles show */
+  static constexpr bool translucent = true;
+  static constexpr unsigned N = TrailLook::NUMSNAILCOLORS;
+  if (fade) {
+    faded_lines.resize((FADE_LEVELS - 1) * N);
+    for (const auto &seg : segments) {
+      for (const auto &run : seg.colour_runs) {
+        const unsigned level = LevelOf(run);
+        if (level == 0 || run.points.size() < 2 ||
+            (suppress_sink_lines && run.color_index < null_color_index))
+          continue;
+
+        auto *dst = Prepare(run.points.size());
+        unsigned n = 0;
+        ProjectCachedColourRun(run, 0, projection, enable_traildrift,
+                               traildrift, drift_now, dst, n,
+                               simplify_projected);
+        const unsigned i = run.color_index;
+        const double radius = use_ribbon
+          ? GetRibbonHalfWidth(look, i)
+          : GetTrailPen(i, scaled_trail).GetWidth() * 0.5;
+        faded_lines[(level - 1) * N + i].AddLine({dst, n}, float(radius));
+      }
+    }
+
+    RoundLines::BeginGroup();
+    for (unsigned level = 1; level < FADE_LEVELS; ++level) {
+      const auto alpha = uint8_t(255 * (1 - FadeShare(level)));
+      for (unsigned i = 0; i < N; ++i) {
+        RoundLines &lines = faded_lines[(level - 1) * N + i];
+        lines.Draw(look.trail_pens[i].GetColor().WithAlpha(alpha),
+                   false, true);
+        lines.clear();
+      }
+    }
+  }
+#else
+  static constexpr bool translucent = false;
+#endif
+  auto Translucent = [&](const CachedColourRun &run) {
+    return translucent && LevelOf(run) > 0;
+  };
 
   if (use_ribbon) {
     for (const auto &seg : segments) {
@@ -686,7 +820,8 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
         if (run.points.size() < 2)
           continue;
 
-        if (suppress_sink_lines && run.color_index < null_color_index)
+        if ((suppress_sink_lines && run.color_index < null_color_index) ||
+            Translucent(run))
           continue;
 
         auto *dst = Prepare(run.points.size());
@@ -695,7 +830,7 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
                                traildrift, drift_now, dst, n,
                                simplify_projected);
 
-        DrawRibbonPolyline(canvas, run.color_index, dst, n);
+        DrawRibbonPolyline(canvas, run.color_index, dst, n, LevelOf(run));
       }
     }
 
@@ -728,13 +863,18 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
     points.GrowDiscard(max_batch_points);
 
   unsigned batch_color = TrailLook::NUMSNAILCOLORS;
+  unsigned batch_fade = 0;
   unsigned batch_n = 0;
 
   auto flush_batch = [&]() noexcept {
     if (batch_n < 2)
       return;
 
-    SelectTrailPen(canvas, batch_color, scaled_trail);
+    const Pen &pen = GetTrailPen(batch_color, scaled_trail);
+    if (batch_fade > 0)
+      canvas.Select(Pen(pen.GetWidth(), Faded(pen.GetColor(), batch_fade)));
+    else
+      canvas.Select(pen);
     DrawPreparedPolyline(canvas, batch_n);
     batch_n = 0;
   };
@@ -744,15 +884,18 @@ TrailRenderer::DrawCachedSegments(Canvas &canvas,
       if (run.points.size() < 2)
         continue;
 
-      if (suppress_sink_lines && run.color_index < null_color_index) {
+      if ((suppress_sink_lines && run.color_index < null_color_index) ||
+          Translucent(run)) {
         flush_batch();
         continue;
       }
 
-      if (run.color_index != batch_color)
+      const unsigned level = LevelOf(run);
+      if (run.color_index != batch_color || level != batch_fade)
         flush_batch();
 
       batch_color = run.color_index;
+      batch_fade = level;
 
       size_t start = 0;
       if (batch_n > 0 && !run.points.empty()) {
@@ -948,6 +1091,9 @@ TrailRenderer::BuildCachedSegment(const WindowProjection &projection,
   }
 
   MergeAdjacentColourRuns(dest.colour_runs);
+
+  for (auto &run : dest.colour_runs)
+    run.time = curr_tp.GetTime();
 }
 
 void
@@ -1039,7 +1185,8 @@ void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection,
                     TimeStamp min_time,
-                    bool enable_traildrift, const PixelPoint pos,
+                    bool enable_traildrift, const bool enable_fade,
+                    const PixelPoint pos,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
                     const TrailSettings &settings) noexcept
 {
@@ -1061,7 +1208,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     traildrift = basic.location - tp1;
   }
 
-  const auto minmax = GetMinMax(settings.type, trace);
+  const auto minmax = settings.type == TrailSettings::Type::ALTITUDE
+    ? GetAltitudeRange(trace)
+    : vario_range;
   const ColorScale color_scale =
     ColorScale::FromMinMax(settings.type, minmax.first, minmax.second);
 
@@ -1135,38 +1284,51 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   cache_modify_serial = synced_modify_serial;
   fingerprint = new_fingerprint;
 
-  for (size_t i = 1; i < valid_points.size(); ++i) {
-    const auto &curr_data = valid_points[i];
-    const unsigned color_index = color_scale.Index(curr_data.value);
+  const auto now = basic.time.Cast<TracePoint::Time>();
+  {
+    /* the faded dots blend with the map */
+#ifdef ENABLE_OPENGL
+    const ScopeAlphaBlend alpha_blend;
+#endif
 
-    const bool draw_dots =
-      (curr_data.value < 0 &&
-       (IsVarioDotsOnlyMode(settings.type) ||
-        settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
-        settings.type == TrailSettings::Type::VARIO_EINK)) ||
-      (curr_data.value >= 0 &&
-       (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
-        settings.type == TrailSettings::Type::VARIO_EINK));
+    for (size_t i = 1; i < valid_points.size(); ++i) {
+      const auto &curr_data = valid_points[i];
+      const unsigned color_index = color_scale.Index(curr_data.value);
 
-    if (!draw_dots)
-      continue;
+      const bool draw_dots =
+        (curr_data.value < 0 &&
+         (IsVarioDotsOnlyMode(settings.type) ||
+          settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
+          settings.type == TrailSettings::Type::VARIO_EINK)) ||
+        (curr_data.value >= 0 &&
+         (settings.type == TrailSettings::Type::VARIO_DOTS_AND_LINES ||
+          settings.type == TrailSettings::Type::VARIO_EINK));
 
-    const auto &prev_data = valid_points[i - 1];
-    if (curr_data.value < 0) {
-      canvas.SelectNullPen();
-      canvas.Select(look.trail_brushes[color_index]);
-    } else {
-      canvas.Select(look.trail_brushes[color_index]);
-      canvas.Select(look.trail_pens[color_index]);
+      if (!draw_dots)
+        continue;
+
+      const auto &prev_data = valid_points[i - 1];
+      const unsigned level = enable_fade ? FadeLevel(curr_data.time, now) : 0;
+      const Pen &pen = look.trail_pens[color_index];
+      if (level > 0)
+        canvas.Select(Brush(FadedDot(pen.GetColor(), level)));
+      else
+        canvas.Select(look.trail_brushes[color_index]);
+      if (curr_data.value < 0)
+        canvas.SelectNullPen();
+      else if (level > 0)
+        canvas.Select(Pen(pen.GetWidth(), FadedDot(pen.GetColor(), level)));
+      else
+        canvas.Select(pen);
+      canvas.DrawCircle({(curr_data.point.x + prev_data.point.x) / 2,
+                         (curr_data.point.y + prev_data.point.y) / 2},
+                        look.trail_widths[color_index]);
     }
-    canvas.DrawCircle({(curr_data.point.x + prev_data.point.x) / 2,
-                       (curr_data.point.y + prev_data.point.y) / 2},
-                      look.trail_widths[color_index]);
   }
 
   DrawCachedSegments(canvas, projection, settings.type, scaled_trail,
                      enable_traildrift, traildrift, stable_drift_time,
-                     segment_cache);
+                     segment_cache, enable_fade, now);
   DrawOpenLeg(canvas, settings, color_scale, scaled_trail, basic, pos);
 }
 
@@ -1193,14 +1355,20 @@ TrailRenderer::Prepare(unsigned n) noexcept
   return points.data();
 }
 
+const Pen &
+TrailRenderer::GetTrailPen(unsigned color_index,
+                           bool scaled_trail) const noexcept
+{
+  return scaled_trail
+    ? look.scaled_trail_pens[color_index]
+    : look.trail_pens[color_index];
+}
+
 void
 TrailRenderer::SelectTrailPen(Canvas &canvas, unsigned color_index,
                               bool scaled_trail) const noexcept
 {
-  if (scaled_trail)
-    canvas.Select(look.scaled_trail_pens[color_index]);
-  else
-    canvas.Select(look.trail_pens[color_index]);
+  canvas.Select(GetTrailPen(color_index, scaled_trail));
 }
 
 void
@@ -1239,17 +1407,20 @@ TrailRenderer::DrawColourPolyline(Canvas &canvas, unsigned color_index,
 void
 TrailRenderer::DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
                                   const BulkPixelPoint *pts,
-                                  unsigned n) noexcept
+                                  unsigned n, unsigned fade) noexcept
 {
   if (n < 2)
     return;
 
-  const double half_width =
-    std::max(1., GetRibbonWidth(look, color_index) * 0.5);
+  const double half_width = GetRibbonHalfWidth(look, color_index);
   const unsigned join_radius = unsigned(std::ceil(half_width));
 
   canvas.SelectNullPen();
-  canvas.Select(look.trail_brushes[color_index]);
+  if (fade > 0)
+    canvas.Select(Brush(Faded(look.trail_pens[color_index].GetColor(),
+                              fade)));
+  else
+    canvas.Select(look.trail_brushes[color_index]);
 
   for (unsigned i = 0; i + 1 < n; ++i) {
     const auto &a = pts[i];

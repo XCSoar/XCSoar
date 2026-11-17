@@ -175,13 +175,68 @@ TestCrossingLegKept() noexcept
   ok1(bounded.back().GetTime() == seconds{10});
 }
 
+static TracePoint
+MakeVarioPoint(unsigned time, double vario) noexcept
+{
+  return TracePoint(GeoPoint(Angle::Degrees(8), Angle::Degrees(48)),
+                    seconds{time}, 1000., vario, 0);
+}
+
+/**
+ * A trace of @p n readings of +2 m/s with @p lift readings of +8 m/s
+ * and @p sink readings of -6 m/s among them.
+ */
+static TracePointVector
+MakeSpikyVario(unsigned n, unsigned lift, unsigned sink) noexcept
+{
+  TracePointVector v;
+  for (unsigned i = 0; i < n; ++i)
+    v.push_back(MakeVarioPoint(i, i < lift ? 8.
+                               : i < lift + sink ? -6.
+                               : 2.));
+  return v;
+}
+
+/**
+ * The strongest 5 % of the lift and of the sink are left out, counted
+ * from the number of readings.
+ */
+static void
+TestVarioPercentiles() noexcept
+{
+  /* 20 readings: one spike each way is 5 % */
+  auto range = MakeSpikyVario(20, 1, 1).GetVarioPercentiles(0.05);
+  ok1(equals(range.first, 2));
+  ok1(equals(range.second, 2));
+
+  /* 100 readings: five spikes each way are 5 % */
+  range = MakeSpikyVario(100, 5, 5).GetVarioPercentiles(0.05);
+  ok1(equals(range.first, 2));
+  ok1(equals(range.second, 2));
+
+  /* one spike more each way than the 5 % reaches the ends */
+  range = MakeSpikyVario(100, 6, 6).GetVarioPercentiles(0.05);
+  ok1(equals(range.first, -6));
+  ok1(equals(range.second, 8));
+
+  /* too few readings to leave any out */
+  range = MakeSpikyVario(19, 1, 1).GetVarioPercentiles(0.05);
+  ok1(equals(range.first, -6));
+  ok1(equals(range.second, 8));
+
+  range = MakeSpikyVario(1, 0, 0).GetVarioPercentiles(0.05);
+  ok1(equals(range.first, 2));
+  ok1(equals(range.second, 2));
+}
+
 int
 main()
 {
-  plan_tests(9 + 7 + 4 + 5);
+  plan_tests(9 + 7 + 4 + 5 + 10);
   TestBoundsFirstQuery();
   TestCrossingLegKept();
   TestThinningKeepsLatestPoint();
   TestThinningAnchoredAtTip();
+  TestVarioPercentiles();
   return exit_status();
 }

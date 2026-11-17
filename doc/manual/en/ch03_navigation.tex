@@ -392,7 +392,10 @@ Note that in all cases, the label format is configurable in the
 
 An optional `snail trail' is drawn on the map showing the glider's
 path history.  The colour and thickness of the trail depends on the altitude or
-on the variometer value. 
+on the variometer value.  The vario colours span the trail's own range,
+from its sink to its lift without the 5\% strongest readings at
+either end, so a gust spike does not take the brightest colours away
+from the rest.
 
 \begin{center}
 \includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/snail.pdf}
@@ -412,7 +415,9 @@ menu.
 \menulabel{\bmenug{Display 2}\blink\bmenut{Trail}{Full}}
 
 Note that for all of these modes, the snail trail is short in
-circling mode in order to reduce screen clutter.
+circling mode in order to reduce screen clutter.  The trail can also
+fade with its age \config{trailfade}, a step every minute down to 30\%
+opacity, so the last circles stand out.
 
 In order to assist centring thermals in the presence of wind, the
 snail trail can be artificially drifted with the wind as it is
