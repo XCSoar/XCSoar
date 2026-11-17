@@ -191,6 +191,56 @@ jobs:
           key: downloads-union-partial-${{ github.run_id }}-${{ github.run_attempt }}
           enableCrossOsArchive: true
 
+  android-tools:
+    name: Prefetch Android SDK/NDK
+    runs-on: ubuntu-24.04
+    container: debian:trixie-slim
+    # The Android build can still install the SDK if this job fails.
+    continue-on-error: true
+    outputs:
+      cache-key: ${{ steps.restore.outputs.cache-primary-key }}
+    steps:
+      - name: Install checkout dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            git ca-certificates wget unzip zstd default-jdk-headless
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ (github.event.inputs != null && github.event.inputs.ref) || github.ref }}
+          submodules: false
+
+      - name: Restore Android SDK/NDK cache
+        id: restore
+        uses: actions/cache/restore@v6
+        with:
+          path: |
+            ~/opt/android-sdk-linux
+            ~/opt/android-ndk-r26d
+            ~/opt/bundletool
+          key: android-tools-r26d-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/targets.mk') }}
+          restore-keys: |
+            android-tools-r26d-
+
+      - name: Install Android SDK/NDK
+        if: steps.restore.outputs.cache-hit != 'true'
+        run: |
+          ./ide/provisioning/install-android-tools.sh NDK
+          ./ide/provisioning/install-android-tools.sh SDK
+          ./ide/provisioning/install-android-tools.sh BUNDLETOOL
+
+      - name: Save Android SDK/NDK cache
+        if: steps.restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: |
+            ~/opt/android-sdk-linux
+            ~/opt/android-ndk-r26d
+            ~/opt/bundletool
+          key: ${{ steps.restore.outputs.cache-primary-key }}
+
   docs:
     name: "Build and Publish Manuals"
     needs: release
@@ -204,7 +254,7 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: [release, downloads]
+    needs: [release, downloads, android-tools]
     if: ${{ !cancelled() && needs.release.result == 'success' }}
     permissions:
       contents: write
@@ -332,18 +382,15 @@ jobs:
           key: ${{ needs.downloads.outputs.cache-key }}
           enableCrossOsArchive: true
 
-      - name: "Cache Android SDK/NDK"
-        if: ${{ matrix.target == 'ANDROID' }}
-        uses: actions/cache@v6
+      - name: Restore Android SDK/NDK cache
+        if: ${{ matrix.target == 'ANDROID' && needs.android-tools.outputs.cache-key != '' }}
+        uses: actions/cache/restore@v6
         with:
-          key: android-tools-${{ matrix.ndk }}-${{ hashFiles('ide/provisioning/install-android-tools.sh', 'build/android.mk', 'build/targets.mk') }}
-          restore-keys: |
-            android-tools-${{ matrix.ndk }}-
-            android-tools-
           path: |
             ~/opt/android-sdk-linux
             ~/opt/android-ndk-${{ matrix.ndk }}
             ~/opt/bundletool
+          key: ${{ needs.android-tools.outputs.cache-key }}
 
       - name: "Cache third-party libraries (Android)"
         if: ${{ matrix.target == 'ANDROID' }}
