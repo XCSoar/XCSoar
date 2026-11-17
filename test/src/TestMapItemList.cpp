@@ -10,7 +10,6 @@
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Engine/Airspace/AirspaceAltitude.hpp"
 #include "Radio/TransponderCode.hpp"
-#include "time/BrokenDateTime.hpp"
 #include "TestUtil.hpp"
 
 #include <memory>
@@ -33,10 +32,7 @@ static void
 SetProperties(AbstractAirspace &airspace, const char *name,
               double base, double top)
 {
-  airspace.SetProperties(name, false,
-                         BrokenDateTime::Invalid(),
-                         BrokenDateTime::Invalid(),
-                         true, false, "", TransponderCode{},
+  airspace.SetProperties(name, false, false, "", TransponderCode{},
                          AirspaceClass::CLASSD, AirspaceClass::CLASSD,
                          MSL(base), MSL(top));
 }

@@ -118,6 +118,19 @@ DP 47:00:00 N 012:00:00 E
 DP 47:00:00 N 011:00:00 E
 DP 48:00:00 N 011:00:00 E
 
+* ---- Two periods both in the future: kept, inactive now ----
+AC R
+AN AA-Future-Periods-Test
+AL 1000ft MSL
+AH FL100
+AA 2098-01-01T00:00Z/2098-01-01T06:00Z
+AA 2098-01-02T12:00Z/2098-01-02T18:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
 * ---- Multiple AA lines: active then NONE → NONE wins, kept inactive ----
 AC R
 AN AA-MultiLine-NeverActive-Test
@@ -125,6 +138,128 @@ AL 1000ft MSL
 AH FL100
 AA 2000-01-01T00:00:00Z/2099-12-31T23:59:59Z
 AA NONE
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Weekday: working days 07:00-15:00 UTC ----
+AC R
+AN AA-MonFri
+AL 1000ft MSL
+AH FL100
+AA MON-FRI 07:00Z/15:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Friday 22:00 to Saturday 02:00 ----
+AC R
+AN AA-Friday-Night
+AL 1000ft MSL
+AH FL100
+AA FRI 22:00Z/02:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Sun event is not calculated, so the airspace stays active ----
+AC R
+AN AA-Sun
+AL 1000ft MSL
+AH FL100
+AA SR/SS
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- One unread AA line drops the weekday rule too ----
+AC R
+AN AA-Sun-And-Weekday
+AL 1000ft MSL
+AH FL100
+AA MON-FRI 07:00Z/15:00Z
+AA SR/SS
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- A fixed interval and a weekend rule ----
+AC R
+AN AA-Weekend-And-Interval
+AL 1000ft MSL
+AH FL100
+AA 2098-01-01T00:00Z/2098-01-01T06:00Z
+AA SAT,SUN 08:00Z/18:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Every day when the weekday list is left out ----
+AC R
+AN AA-Every-Day
+AL 1000ft MSL
+AH FL100
+AA 06:00Z/20:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- Range that wraps past Sunday ----
+AC R
+AN AA-Fri-Mon
+AL 1000ft MSL
+AH FL100
+AA FRI-MON 08:00Z/09:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- MON-MON is not a range; the airspace stays active ----
+AC R
+AN AA-Bad-Range
+AL 1000ft MSL
+AH FL100
+AA MON-MON 08:00Z/09:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- End before start stays active ----
+AC R
+AN AA-Backwards
+AL 1000ft MSL
+AH FL100
+AA 2026-11-12T15:00Z/2026-11-12T07:00Z
+DP 48:00:00 N 011:00:00 E
+DP 48:00:00 N 012:00:00 E
+DP 47:00:00 N 012:00:00 E
+DP 47:00:00 N 011:00:00 E
+DP 48:00:00 N 011:00:00 E
+
+* ---- A clock that is not four digits stays active ----
+AC R
+AN AA-Bad-Clock
+AL 1000ft MSL
+AH FL100
+AA 07:+0Z/15:00Z
 DP 48:00:00 N 011:00:00 E
 DP 48:00:00 N 012:00:00 E
 DP 47:00:00 N 012:00:00 E

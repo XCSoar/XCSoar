@@ -125,6 +125,8 @@ Airspaces::Add(AirspacePtr airspace) noexcept
   // reset day to all so set_activity will be triggered next update
   // this allows for airspaces to be add at any time
   activity_mask.SetAll();
+  if (airspace->HasActivationTime())
+    activation_schedules = true;
 
   if (IsEmpty())
     task_projection.Reset(airspace->GetReferenceLocation());
@@ -137,6 +139,8 @@ Airspaces::Add(AirspacePtr airspace) noexcept
 void
 Airspaces::Clear() noexcept
 {
+  activation_schedules = false;
+
   // delete temporaries in case they were added without an optimise() call
   tmp_as.clear();
 
@@ -206,12 +210,17 @@ Airspaces::SetFlightLevels(const AtmosphericPressure press) noexcept
 void
 Airspaces::SetActivity(const AirspaceActivity mask) noexcept
 {
-  if (!mask.equals(activity_mask)) {
+  const bool day_changed = !mask.equals(activity_mask);
+  /* An AA window can open or close while the local day stays the same. */
+  if (!day_changed && !activation_schedules)
+    return;
+
+  if (day_changed)
     activity_mask = mask;
 
-    for (auto &v : QueryAll())
+  for (auto &v : QueryAll())
+    if (day_changed || v.GetAirspace().HasActivationTime())
       v.SetActivity(mask);
-  }
 }
 
 void

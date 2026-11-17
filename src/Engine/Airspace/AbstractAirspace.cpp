@@ -14,6 +14,7 @@
 #include "util/StringAPI.hxx"
 
 #include <cassert>
+#include <chrono>
 
 AbstractAirspace::~AbstractAirspace() noexcept = default;
 
@@ -235,10 +236,152 @@ AbstractAirspace::ClearClearance() const noexcept
   m_clearance.clear();
 }
 
+static int
+UtcWeekday(BrokenDate date) noexcept
+{
+  using std::chrono::day;
+  using std::chrono::month;
+  using std::chrono::sys_days;
+  using std::chrono::weekday;
+  using std::chrono::year;
+  using std::chrono::year_month_day;
+
+  const year_month_day ymd{year{int(date.year)}, month{date.month},
+                           day{date.day}};
+  if (!ymd.ok())
+    return -1;
+
+  return weekday{sys_days{ymd}}.c_encoding();
+}
+
+static bool
+OnDay(uint8_t days, BrokenDate date) noexcept
+{
+  const int weekday = UtcWeekday(date);
+  return weekday >= 0 &&
+         (days == 0 || (days & (1u << weekday)) != 0);
+}
+
+static BrokenDateTime
+AtMinute(BrokenDate date, unsigned minute) noexcept
+{
+  if (minute >= 24 * 60) {
+    date.IncrementDay();
+    minute -= 24 * 60;
+  }
+
+  return BrokenDateTime(date.year, date.month, date.day,
+                        minute / 60, minute % 60);
+}
+
+/** The weekly window that contains `now`, if there is one. */
+static bool
+FindWeekday(const std::vector<AirspaceWeekdayPeriod> &rules,
+            BrokenDateTime now, BrokenDateTime &start,
+            BrokenDateTime &end) noexcept
+{
+  if (!now.IsPlausible())
+    return false;
+
+  const unsigned now_minute = now.hour * 60u + now.minute;
+  const BrokenDate today(now.year, now.month, now.day);
+
+  for (const auto &rule : rules) {
+    const bool overnight = rule.end_minute <= rule.start_minute;
+    BrokenDate start_day = today;
+    bool hit = false;
+
+    if (OnDay(rule.days, today)) {
+      if (!overnight && now_minute >= rule.start_minute &&
+          now_minute < rule.end_minute)
+        hit = true;
+      else if (overnight && now_minute >= rule.start_minute)
+        hit = true;
+    }
+
+    if (!hit && overnight && now_minute < rule.end_minute) {
+      start_day.DecrementDay();
+      hit = OnDay(rule.days, start_day);
+    }
+
+    if (!hit)
+      continue;
+
+    start = AtMinute(start_day, rule.start_minute);
+    end = AtMinute(start_day, overnight ? rule.end_minute + 24 * 60
+                                       : rule.end_minute);
+    return true;
+  }
+
+  return false;
+}
+
+bool
+AbstractAirspace::IsActiveAt(BrokenDateTime now) const noexcept
+{
+  if (!has_activation_time)
+    return true;
+
+  if (never_active)
+    return false;
+
+  /* A bad line, or a sun event we do not calculate, stays on. */
+  if (activation_unreadable)
+    return true;
+
+  if (FindActivation(activation_intervals, now) != nullptr)
+    return true;
+
+  BrokenDateTime start, end;
+  if (FindWeekday(activation_weekdays, now, start, end))
+    return true;
+
+  /* No periods and no weekly rule: nothing is waiting to start. */
+  return activation_intervals.empty() && activation_weekdays.empty();
+}
+
+bool
+AbstractAirspace::IsActiveToday() const noexcept
+{
+  return IsActiveAt(BrokenDateTime::NowUTC());
+}
+
+BrokenDateTime
+AbstractAirspace::GetActivationStartTime(BrokenDateTime now) const noexcept
+{
+  if (never_active || activation_unreadable)
+    return BrokenDateTime::Invalid();
+
+  if (const auto *interval = FindActivation(activation_intervals, now))
+    return interval->start;
+
+  BrokenDateTime start, end;
+  if (FindWeekday(activation_weekdays, now, start, end))
+    return start;
+
+  return BrokenDateTime::Invalid();
+}
+
+BrokenDateTime
+AbstractAirspace::GetActivationEndTime(BrokenDateTime now) const noexcept
+{
+  if (never_active || activation_unreadable)
+    return BrokenDateTime::Invalid();
+
+  if (const auto *interval = FindActivation(activation_intervals, now))
+    return interval->end;
+
+  BrokenDateTime start, end;
+  if (FindWeekday(activation_weekdays, now, start, end))
+    return end;
+
+  return BrokenDateTime::Invalid();
+}
+
 void
 AbstractAirspace::SetActivity(const AirspaceActivity mask) const noexcept
 {
-  active = (has_activation_time) ? active_today :
-                                   days_of_operation.Matches(mask);
+  active = has_activation_time ? IsActiveToday()
+                               : days_of_operation.Matches(mask);
 }
 

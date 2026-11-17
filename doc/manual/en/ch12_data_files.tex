@@ -97,6 +97,13 @@ The following is the list of supported airspace types: Class A-G, Prohibited,
 Danger Areas, Restricted, Task Area, CTR, No Gliders, Wave, Transponder 
 Mandatory, and Other.  All other airspace types will be drawn as type ``Other''.
 In addition to the OpenAir standard the 'AF' or 'AR' command is recognized as the airspace radio frequency.
+The AA command lists UTC periods when the airspace is active.
+Several periods are kept, and the airspace is shown only while one
+of them is in effect. A weekly schedule such as
+MON-FRI 07:00Z/15:00Z is kept the same way. AA NONE keeps the
+airspace loaded and inactive. A date range, a holiday exception,
+or sunrise and sunset is not read, so an airspace that uses them
+stays active.
 Ie. Since 2018, Naviter proposes the following change 'AF 999.999' (find 'Additional OpenAir fields' here - \url{http://www.winpilot.com/UsersGuide/UserAirspace.asp})
 
 \section{Airfields or Waypoint details}\label{sec:airfield-details}

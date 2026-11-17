@@ -60,8 +60,7 @@ MakeCircle(const GeoPoint &center, double radius_m,
   auto as = std::make_shared<AirspaceCircle>(center, radius_m);
   TransponderCode code;
   as->SetProperties("test", false,
-                    BrokenDateTime::Invalid(), BrokenDateTime::Invalid(),
-                    true, false,
+                    false,
                     "", std::move(code),
                     AirspaceClass::RESTRICTED,
                     AirspaceClass::RESTRICTED,
@@ -76,8 +75,7 @@ MakeNotam(const GeoPoint &center, double radius_m,
   auto as = std::make_shared<AirspaceCircle>(center, radius_m);
   TransponderCode code;
   as->SetProperties("notam", false,
-                    BrokenDateTime::Invalid(), BrokenDateTime::Invalid(),
-                    true, false,
+                    false,
                     station, std::move(code),
                     AirspaceClass::NOTAM, AirspaceClass::NOTAM,
                     Alt(0.0), Alt(3000.0));
@@ -98,8 +96,7 @@ MakeRectangle(double west_lon, double south_lat,
   auto as = std::make_shared<AirspacePolygon>(pts);
   TransponderCode code;
   as->SetProperties("test", false,
-                    BrokenDateTime::Invalid(), BrokenDateTime::Invalid(),
-                    true, false,
+                    false,
                     "", std::move(code),
                     AirspaceClass::RESTRICTED,
                     AirspaceClass::RESTRICTED,
@@ -647,17 +644,12 @@ main()
     };
     auto lahr_as = std::make_shared<AirspacePolygon>(lahr);
     auto alt_as = std::make_shared<AirspacePolygon>(altdorf);
-    lahr_as->SetProperties("CTR LAHR", false,
-                           BrokenDateTime::Invalid(),
-                           BrokenDateTime::Invalid(),
-                           true, false,
+    lahr_as->SetProperties("CTR LAHR", false, false,
                            "", TransponderCode{},
                            AirspaceClass::CTR, AirspaceClass::CTR,
                            Alt(0.0), Alt(762.0));
     alt_as->SetProperties("ALTDORF", false,
-                          BrokenDateTime::Invalid(),
-                          BrokenDateTime::Invalid(),
-                          true, false,
+                          false,
                           "", TransponderCode{},
                           AirspaceClass::CTR, AirspaceClass::CTR,
                           Alt(0.0), Alt(609.0));
@@ -773,17 +765,12 @@ main()
     };
     auto lahr_as = std::make_shared<AirspacePolygon>(lahr);
     auto alt_as = std::make_shared<AirspacePolygon>(altdorf);
-    lahr_as->SetProperties("CTR LAHR", false,
-                           BrokenDateTime::Invalid(),
-                           BrokenDateTime::Invalid(),
-                           true, false,
+    lahr_as->SetProperties("CTR LAHR", false, false,
                            "", TransponderCode{},
                            AirspaceClass::CTR, AirspaceClass::CTR,
                            Alt(0.0), Alt(762.0));
     alt_as->SetProperties("ALTDORF", false,
-                          BrokenDateTime::Invalid(),
-                          BrokenDateTime::Invalid(),
-                          true, false,
+                          false,
                           "", TransponderCode{},
                           AirspaceClass::CTR, AirspaceClass::CTR,
                           Alt(0.0), Alt(609.0));
