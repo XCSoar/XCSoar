@@ -4316,7 +4316,7 @@ msgstr "Imhof అత్యంతరం"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "Imhof లేత అట్లాస్"
 
 #, no-c-format
 msgid "ICAO"

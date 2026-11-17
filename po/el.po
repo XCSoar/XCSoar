@@ -4483,7 +4483,7 @@ msgstr "Ατλας Ιμφού"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "Ατλας Ιμφού ανοιχτός"
 
 #, no-c-format
 msgid "ICAO"

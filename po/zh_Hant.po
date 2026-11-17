@@ -4271,7 +4271,7 @@ msgstr "Imhof地圖"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "Imhof淺色地圖"
 
 #, no-c-format
 msgid "ICAO"

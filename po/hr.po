@@ -4419,7 +4419,7 @@ msgstr "Atlas Imhof"
 
 #, no-c-format
 msgid "Imhof Atlas lite"
-msgstr ""
+msgstr "Atlas Imhof svijetli"
 
 #, no-c-format
 msgid "ICAO"
