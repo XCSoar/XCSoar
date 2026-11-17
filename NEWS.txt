@@ -79,6 +79,8 @@ Version 7.47 - not yet released
     kilometre keep the newer one #3093
   - draw own-ship, Cloud, and SkyLines wave lines from one list
     #3094
+  - add an Imhof Atlas lite terrain colour ramp: the Imhof Atlas
+    colours from 500 m up, with lighter colours below that
 * airspace
   - show the bottom airspace warning in bold, white on the red
     Inside fill
@@ -137,6 +139,7 @@ Version 7.47 - not yet released
   - state that waypoint details image= and file= names start at the
     data directory, as in waypoints/details/ETSI_1.png #3453
   - describe which airspace the list of map elements selects
+  - describe the Imhof Atlas lite terrain colour ramp
 * data
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar

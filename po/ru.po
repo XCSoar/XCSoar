@@ -4447,6 +4447,10 @@ msgid "Imhof Atlas"
 msgstr "Атлас Имхофф"
 
 #, no-c-format
+msgid "Imhof Atlas lite"
+msgstr ""
+
+#, no-c-format
 msgid "ICAO"
 msgstr "Код ИКАО"
 
