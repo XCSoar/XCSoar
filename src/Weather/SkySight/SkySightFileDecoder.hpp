@@ -69,7 +69,6 @@ private:
   UI::Notify notify;
   SkySightPreparedData prepared;
   std::string variable_name;
-  std::map<float, SkySight::LegendColor> legend;
   AllocatedPath result_path;
   std::exception_ptr error;
   std::function<void(AllocatedPath)> on_success;
@@ -82,7 +81,6 @@ public:
   ~SkySightFileDecodeJob() noexcept;
 
   void Start(SkySightPreparedData prepared, std::string variable_name,
-             std::map<float, SkySight::LegendColor> legend,
              std::function<void(AllocatedPath)> on_success,
              std::function<void(std::exception_ptr)> on_error);
 
