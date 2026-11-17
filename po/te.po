@@ -4315,6 +4315,10 @@ msgid "Imhof Atlas"
 msgstr "Imhof అత్యంతరం"
 
 #, no-c-format
+msgid "Imhof Atlas lite"
+msgstr ""
+
+#, no-c-format
 msgid "ICAO"
 msgstr "ICAO"
 

@@ -43,7 +43,7 @@ ContourSpacing(Contours contours, unsigned height_scale,
 
 struct TerrainRendererSettings {
   /** Number of available color ramps */
-  static constexpr unsigned NUM_RAMPS = 18;
+  static constexpr unsigned NUM_RAMPS = 19;
 
   /** Map will show terrain */
   bool enable;

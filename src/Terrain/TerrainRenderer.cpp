@@ -285,7 +285,22 @@ static constexpr ColorRampEntry terrain_colors[][NUM_COLOR_RAMP_LEVELS] = {
     {115, { 186, 186, 17 }},
     {130, { 135, 134, 134 }},
     {145, { 232, 230, 230 }},
-   }
+   },
+  { // Imhof Atlas lite
+    {0, { 193, 217, 236 }},
+    {400, { 133, 160, 165 }},
+    {500, { 117, 148, 153 }},
+    {670, { 155, 178, 140 }},
+    {905, { 192, 190, 139 }},
+    {1222, { 215, 199, 137 }},
+    {1650, { 229, 203, 171 }},
+    {2227, { 246, 206, 171 }},
+    {3007, { 252, 246, 244 }},
+    {5001, { 252, 246, 244 }},
+    {7000, { 252, 246, 244 }},
+    {8000, { 252, 246, 244 }},
+    {9000, { 252, 246, 244 }}
+  },
 };
 static_assert(ARRAY_SIZE(terrain_colors) == TerrainRendererSettings::NUM_RAMPS,
               "mismatched size");
@@ -309,6 +324,7 @@ static constexpr ColorRamp terrain_ramps[] = {
   { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[15], nullptr },
   { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[16], nullptr },
   { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[17], nullptr },
+  { false, NUM_COLOR_RAMP_LEVELS, terrain_colors[18], nullptr },
 };
 static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
               "mismatched size");
