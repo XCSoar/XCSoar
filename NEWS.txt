@@ -81,6 +81,8 @@ Version 7.47 - not yet released
     #3094
   - add an Imhof Atlas lite terrain colour ramp: the Imhof Atlas
     colours from 500 m up, with lighter colours below that
+  - fix the kinked and doubled snail trail while circling with
+    Trail drift on #3027
 * airspace
   - show the bottom airspace warning in bold, white on the red
     Inside fill
