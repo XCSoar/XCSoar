@@ -138,9 +138,16 @@ symbol.
 to show the
 item list under the cross-hair, or your index finger on the map.
 
-The airfields or waypoint details dialogue contains two major pages (accessed via the
-\bmenuw{$>$} and \bmenuw{$<$} buttons). Depending on the availability of further
-details of the waypoint they will by shown on extra pages.
+The airfields or waypoint details dialogue has \button{Info} and
+\button{Commands} tabs. A \button{Details} tab appears when further text or
+external files are available, and up to five images have their own tabs.
+In landscape, tab labels run vertically in a narrow column to leave more
+room for the page. In portrait, tabs run across the top.
+
+Use Left and Right to change tabs. On a zoomed image these keys pan the
+picture instead. Up and Down move the focus between controls; from the
+first or last Commands button they also reach the tabs and dialogue
+buttons. On a zoomed image, Up and Down pan vertically.
 
 \subsection*{Waypoint details}\label{sec:waypointdetails}
 This page contains text giving the name of the waypoint,
@@ -167,10 +174,8 @@ the corresponding waypoint:
   value as speed-to-fly.
 \end{description}
 
-From the main Waypoint Info screen, you can access the second page by using the
-\bmenuw{$>$} and \bmenuw{$<$} buttons in the bottom left corner of the page.
-Depending of the type and number of details available for a waypoint,
-other pages could be available.
+Select the \button{Commands} tab for task actions, or the optional
+\button{Details} and image tabs for further waypoint information.
 
 \subsection*{Task actions menu}
 This page contains a column of buttons allowing various actions to be performed:
@@ -184,11 +189,14 @@ This page contains a column of buttons allowing various actions to be performed:
   Note that this option is only visible if the selected waypoint is included in
   the active task.
 \item[\button{Set as new home}] sets the waypoint as the home airfield.
-\item[\button{Pan to waypoint}] switches to pan mode and pans to that waypoint.
 \item[\button{Set Active Frequency}] %TODO To define
 \item[\button{Set Standby Frequency}] %TODO To define
 \item[\button{Edit}] allows to change the various attributes of the selected waypoint
 \end{description}
+
+The dialogue's \button{GoTo} button starts navigation to the waypoint.
+When navigation is unavailable, \button{Pan To} pans the map to it.
+In simulator mode, \button{Sim: Jump to} moves the aircraft to the waypoint.
 
 It is a good idea to set your home waypoint from the airfields or waypoint details
 dialogue. This causes XCSoar to start up at the home location regardless
@@ -205,7 +213,10 @@ See Section~\ref{sec:airfield-details}.
 \end{center}
 
 \subsection*{Waypoint details image}
-This page shows a satellite image of the waypoint.
+Each image tab shows a picture associated with the waypoint. Use the
+\button{+} and \button{-} buttons to zoom; in landscape they are stacked
+beside the picture. F1 fits the picture, F2 zooms in, and F3 zooms out.
+Escape first resets a zoomed image to fit.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}

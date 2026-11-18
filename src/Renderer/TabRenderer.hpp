@@ -18,5 +18,6 @@ public:
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DialogLook &look,
             const char *caption, const MaskedIcon *icon,
-            bool focused, bool pressed, bool selected) const noexcept;
+            bool focused, bool pressed, bool selected,
+            bool vertical=false) const noexcept;
 };

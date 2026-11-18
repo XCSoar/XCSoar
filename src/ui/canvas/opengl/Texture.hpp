@@ -105,7 +105,8 @@ public:
                               GL_TEXTURE_2D, id, 0);
   }
 
-  void Draw(PixelRect dest, PixelRect src) const noexcept;
+  /** @param vertical rotate the source bottom-to-top inside dest */
+  void Draw(PixelRect dest, PixelRect src, bool vertical=false) const noexcept;
 
   void Draw(PixelPoint dest) const noexcept {
     Draw(PixelRect(dest, GetSize()), GetRect());

@@ -11,7 +11,8 @@ void
 TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                   const DialogLook &look,
                   const char *caption, const MaskedIcon *icon,
-                  bool focused, bool pressed, bool selected) const noexcept
+                  bool focused, bool pressed, bool selected,
+                  bool vertical) const noexcept
 {
   canvas.DrawFilledRectangle(rc,
                              look.list.GetBackgroundColor(selected, focused,
@@ -23,6 +24,10 @@ TabRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (icon != nullptr) {
     icon->Draw(canvas, rc, selected);
+  } else if (vertical) {
+    PixelRect text_rc = rc;
+    text_rc.Grow(-int(Layout::GetTextPadding()));
+    canvas.DrawVerticalText(text_rc, caption);
   } else {
     /* draw single-line text centered in the tab button; avoid
        DrawFormattedText / TextRenderer which word-wrap at spaces,
