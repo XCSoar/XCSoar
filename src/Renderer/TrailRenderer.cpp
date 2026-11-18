@@ -1281,7 +1281,10 @@ TrailRenderer::DrawRibbonPolyline(Canvas &canvas, unsigned color_index,
   }
 
   if (join_radius > 1) {
-    for (unsigned i = 1; i + 1 < n; ++i)
+    /* including both ends: the next colour run or leg starts there
+       with another heading, and without a round cap a wedge stays
+       open on the outside of a tight turn */
+    for (unsigned i = 0; i < n; ++i)
       canvas.DrawCircle({pts[i].x, pts[i].y}, join_radius);
   }
 }

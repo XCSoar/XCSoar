@@ -83,6 +83,7 @@ Version 7.47 - not yet released
     colours from 500 m up, with lighter colours below that
   - fix the kinked and doubled snail trail while circling with
     Trail drift on #3027
+  - fix small gaps in the scaled vario snail trail in tight turns
 * airspace
   - show the bottom airspace warning in bold, white on the red
     Inside fill
