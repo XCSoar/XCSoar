@@ -130,6 +130,7 @@ TEST_NAMES = \
 	TestIGCParser TestIGCFlightTimes \
 	TestNanoFileTransfer \
 	TestTraceBounds \
+	TestTraceDrift \
 	TestStrings TestUnescapeCString TestUTF8 TestWrapText TestLayout \
 	TestContainerWindow \
 	TestDisplayDPI \
@@ -1582,6 +1583,13 @@ TEST_TRACE_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/TestTraceBounds.cpp
 TEST_TRACE_BOUNDS_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,TestTraceBounds,TEST_TRACE_BOUNDS))
+
+TEST_TRACE_DRIFT_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(TEST_SRC_DIR)/TestTraceDrift.cpp
+TEST_TRACE_DRIFT_DEPENDS = GEO MATH UTIL
+$(eval $(call link-program,TestTraceDrift,TEST_TRACE_DRIFT))
 
 FLIGHT_TABLE_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
