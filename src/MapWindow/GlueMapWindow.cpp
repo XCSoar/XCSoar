@@ -57,9 +57,17 @@ GlueMapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 
   MapWindow::SetTerrain(_terrain);
 
-  if (_terrain != nullptr)
+  if (_terrain != nullptr) {
     terrain_thread =
       new TerrainThread(*_terrain, [this](){ InjectRedraw(); });
+
+    /* For COG auto-tile terrain, trigger initial tile loading if the
+       projection is already valid (e.g., home location was set before
+       terrain was loaded). Without this, COG terrain won't start
+       downloading tiles until the first GPS fix or user interaction. */
+    if (visible_projection.IsValid())
+      terrain_thread->Trigger(visible_projection);
+  }
 }
 
 void
