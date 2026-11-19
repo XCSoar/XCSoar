@@ -65,4 +65,8 @@ TerrainThread::Tick() noexcept
     const ScopeUnlock unlock(mutex);
     callback();
   }
+
+  /* reschedule if there are still pending tiles */
+  if (terrain.HasPendingTiles())
+    StandbyThread::Trigger();
 }
