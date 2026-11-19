@@ -6,6 +6,7 @@
 #include "RasterTraits.hpp"
 #include "Operation/Operation.hpp"
 #include "system/Path.hpp"
+#include "LocalPath.hpp"
 #include "LogFile.hpp"
 
 #ifdef HAVE_HTTP
@@ -155,6 +156,13 @@ CogTerrain::OpenAutoTile(CurlGlobal &curl, const char *provider)
   terrain->source_path = provider;
   terrain->auto_tile_mode = true;
 
+  auto cache_path = GetCachePath();
+  if (cache_path != nullptr) {
+    auto terrain_cache = AllocatedPath::Build(cache_path, "terrain");
+    terrain->tile_manager.SetCachePath(terrain_cache.c_str());
+    LogFormat("COG terrain cache: %s", terrain_cache.c_str());
+  }
+
   auto p = CogTileManager::ParseProvider(provider);
   terrain->tile_manager.SetProvider(p, curl);
 
@@ -200,7 +208,8 @@ CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
     if (tile_manager.HasPendingInternalTiles())
       tile_manager.ProcessInternalTiles();
 
-    return has_pending || tile_manager.HasPendingInternalTiles();
+    return tile_manager.HasPendingTiles() ||
+           tile_manager.HasPendingInternalTiles();
   }
 
   auto &tile_cache = map.GetTileCache();

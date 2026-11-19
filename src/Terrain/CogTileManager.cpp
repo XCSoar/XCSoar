@@ -155,12 +155,12 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
     return false;
 
   constexpr double DEGREES_PER_METER = 1.0 / 111000.0;
-  const double radius_deg = radius * DEGREES_PER_METER * 1.5;
+  const double radius_deg = radius * DEGREES_PER_METER * 2.0;
 
   const int min_lat = static_cast<int>(std::floor(center.latitude.Degrees() - radius_deg));
-  const int max_lat = static_cast<int>(std::floor(center.latitude.Degrees() + radius_deg));
+  const int max_lat = static_cast<int>(std::ceil(center.latitude.Degrees() + radius_deg));
   const int min_lon = static_cast<int>(std::floor(center.longitude.Degrees() - radius_deg));
-  const int max_lon = static_cast<int>(std::floor(center.longitude.Degrees() + radius_deg));
+  const int max_lon = static_cast<int>(std::ceil(center.longitude.Degrees() + radius_deg));
 
   const std::lock_guard lock{tiles_mutex};
 
@@ -176,22 +176,37 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
   last_center = center;
   last_radius = radius;
 
+  LogFormat("COG UpdateTiles: center=%.2f,%.2f radius=%.0fm radius_deg=%.2f lat=%d-%d lon=%d-%d",
+            center.latitude.Degrees(), center.longitude.Degrees(),
+            radius, radius_deg, min_lat, max_lat, min_lon, max_lon);
+
+  unsigned queued = 0, loaded = 0, failed = 0, pending = 0;
   for (int lat = min_lat; lat <= max_lat; ++lat) {
     for (int lon = min_lon; lon <= max_lon; ++lon) {
       CogTileId tile{lat, lon};
 
-      if (loaded_tiles.find(tile) != loaded_tiles.end())
+      if (loaded_tiles.find(tile) != loaded_tiles.end()) {
+        ++loaded;
         continue;
+      }
 
-      if (failed_tiles.find(tile) != failed_tiles.end())
+      if (failed_tiles.find(tile) != failed_tiles.end()) {
+        ++failed;
         continue;
+      }
 
-      if (pending_tiles.find(tile) != pending_tiles.end())
+      if (pending_tiles.find(tile) != pending_tiles.end()) {
+        ++pending;
         continue;
+      }
 
       pending_tiles.insert(tile);
+      ++queued;
     }
   }
+
+  LogFormat("COG UpdateTiles: queued=%u loaded=%u failed=%u pending=%u total_pending=%zu",
+            queued, loaded, failed, pending, pending_tiles.size());
 
   return !pending_tiles.empty();
 }
