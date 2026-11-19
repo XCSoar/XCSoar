@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "CogTileId.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "RasterMap.hpp"
 
@@ -15,41 +16,6 @@
 class CurlGlobal;
 class OperationEnvironment;
 class CogLoader;
-
-/**
- * Tile identifier for SRTM-style 1-degree tiles.
- * Format: N47E011 for latitude 47°N, longitude 11°E
- */
-struct CogTileId {
-  int lat;
-  int lon;
-
-  constexpr bool operator<(const CogTileId &other) const noexcept {
-    if (lat != other.lat)
-      return lat < other.lat;
-    return lon < other.lon;
-  }
-
-  constexpr bool operator==(const CogTileId &other) const noexcept {
-    return lat == other.lat && lon == other.lon;
-  }
-
-  /**
-   * Get the tile ID for a given location.
-   */
-  static constexpr CogTileId FromLocation(const GeoPoint &location) noexcept {
-    return {
-      static_cast<int>(std::floor(location.latitude.Degrees())),
-      static_cast<int>(std::floor(location.longitude.Degrees()))
-    };
-  }
-
-  /**
-   * Format the tile ID as a filename (e.g., "N47E011.tif").
-   */
-  [[gnu::pure]]
-  std::string ToFilename() const noexcept;
-};
 
 /**
  * Manages automatic downloading and caching of COG terrain tiles.
