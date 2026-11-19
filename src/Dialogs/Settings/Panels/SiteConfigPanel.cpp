@@ -12,11 +12,15 @@
 #include "Repository/Glue.hpp"
 #include "UtilsSettings.hpp"
 #include "Widget/RowFormWidget.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "system/Path.hpp"
+
+#include <cstring>
 
 enum ControlIndex {
   DataPath,
   MapFile,
+  TerrainSource,
   WaypointFileList,
   WatchedWaypointFileList,
   AirfieldFileList,
@@ -56,6 +60,34 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
             "waypoints, their details and airspaces."),
           ProfileKeys::MapFile, GetFileTypePatterns(FileType::MAP),
           FileType::MAP);
+
+  static constexpr StaticEnumChoice terrain_source_list[] = {
+    { 0, N_("From Map database"),
+      N_("Use terrain from the .xcm map database file.") },
+    { 1, N_("SRTM GL1 (30m)"),
+      N_("Download high-resolution (1 arc-second / ~30m) SRTM terrain tiles "
+         "automatically from OpenTopography as needed. Requires internet connection.") },
+    { 2, N_("SRTM GL3 (90m)"),
+      N_("Download medium-resolution (3 arc-second / ~90m) SRTM terrain tiles "
+         "automatically from OpenTopography as needed. Requires internet connection.") },
+    nullptr
+  };
+
+  unsigned terrain_source = 0;
+  const char *terrain_file = Profile::Get(ProfileKeys::TerrainFile);
+  if (terrain_file != nullptr && *terrain_file != '\0') {
+    if (strcmp(terrain_file, "srtm_gl1") == 0)
+      terrain_source = 1;
+    else if (strcmp(terrain_file, "srtm_gl3") == 0)
+      terrain_source = 2;
+  }
+
+  AddEnum(_("Terrain source"),
+          _("Choose the source of terrain elevation data. "
+            "By default, terrain is loaded from the map database (.xcm file). "
+            "Alternatively, terrain tiles can be downloaded automatically from "
+            "online sources as you move around the map."),
+          terrain_source_list, terrain_source);
 
   AddMultipleFiles(_("Waypoints"),
                    _("Primary waypoints files.  Supported file types are "
@@ -140,6 +172,36 @@ SiteConfigPanel::Save(bool &_changed) noexcept
   bool changed = false;
 
   MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
+
+  unsigned old_terrain_source = 0;
+  const char *old_terrain_file = Profile::Get(ProfileKeys::TerrainFile);
+  if (old_terrain_file != nullptr && *old_terrain_file != '\0') {
+    if (strcmp(old_terrain_file, "srtm_gl1") == 0)
+      old_terrain_source = 1;
+    else if (strcmp(old_terrain_file, "srtm_gl3") == 0)
+      old_terrain_source = 2;
+  }
+
+  unsigned terrain_source = old_terrain_source;
+  if (SaveValueEnum(TerrainSource, terrain_source) &&
+      terrain_source != old_terrain_source) {
+    const char *terrain_file = nullptr;
+    switch (terrain_source) {
+    case 0:
+      terrain_file = "";
+      break;
+    case 1:
+      terrain_file = "srtm_gl1";
+      break;
+    case 2:
+      terrain_file = "srtm_gl3";
+      break;
+    }
+    if (terrain_file != nullptr) {
+      Profile::Set(ProfileKeys::TerrainFile, terrain_file);
+      MapFileChanged = true;
+    }
+  }
 
   // WaypointFileChanged has already a meaningful value
   const bool primary_changed = SaveValueMultiFileReader(

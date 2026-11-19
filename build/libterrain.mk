@@ -18,6 +18,7 @@ TERRAIN_SOURCES = \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Terrain/CogLoader.cpp \
 	$(SRC)/Terrain/CogTerrain.cpp \
+	$(SRC)/Terrain/CogTileManager.cpp \
 	$(SRC)/Terrain/TerrainBase.cpp
 
 TERRAIN_CXXFLAGS_INTERNAL = -Wno-shift-negative-value

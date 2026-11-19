@@ -5,6 +5,7 @@
 
 #include "TerrainBase.hpp"
 #include "CogLoader.hpp"
+#include "CogTileManager.hpp"
 
 #include <string>
 
@@ -17,6 +18,11 @@ class CurlGlobal;
  * Unlike RasterTerrain which loads from .xcm archives, this class
  * loads terrain directly from COG files, either local or via HTTP.
  *
+ * Supports two modes:
+ * 1. Single-file mode: Load a specific COG file (local or HTTP)
+ * 2. Auto-tile mode: Automatically download tiles based on location
+ *    using predefined providers (e.g., OpenTopography SRTM)
+ *
  * The same CogTerrain instance is compatible with the existing
  * terrain rendering infrastructure through its RasterMap.
  */
@@ -28,8 +34,11 @@ public:
 
 private:
   CogLoader loader;
+  CogTileManager tile_manager;
 
   std::string source_path;
+
+  bool auto_tile_mode = false;
 
 #ifdef HAVE_HTTP
   CurlGlobal *curl = nullptr;
@@ -98,6 +107,23 @@ public:
                                                   CurlGlobal *curl,
                                                   const char *path_or_url,
                                                   OperationEnvironment &operation);
+
+  /**
+   * Open terrain in auto-tile mode using a predefined provider.
+   * Tiles will be downloaded automatically as needed based on location.
+   *
+   * @param curl curl instance for HTTP requests
+   * @param provider provider name (e.g., "srtm_gl1", "srtm_gl3")
+   * @return terrain instance (not yet loaded - call UpdateTiles)
+   */
+  static std::unique_ptr<CogTerrain> OpenAutoTile(CurlGlobal &curl,
+                                                   const char *provider);
+
+  /**
+   * Check if a provider name indicates auto-tile mode.
+   */
+  [[gnu::pure]]
+  static bool IsAutoTileProvider(const char *name) noexcept;
 
   bool UpdateTiles(const GeoPoint &location, double radius) noexcept override;
 

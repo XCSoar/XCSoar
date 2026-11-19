@@ -12,6 +12,7 @@
 #include "lib/curl/Global.hxx"
 #endif
 
+#include <cstring>
 #include <stdexcept>
 
 void
@@ -132,9 +133,58 @@ CogTerrain::OpenTerrain([[maybe_unused]] FileCache *cache,
 }
 
 bool
-CogTerrain::UpdateTiles([[maybe_unused]] const GeoPoint &location,
-                        [[maybe_unused]] double radius) noexcept
+CogTerrain::IsAutoTileProvider(const char *name) noexcept
 {
+  if (name == nullptr || *name == '\0')
+    return false;
+
+  return strcmp(name, "srtm_gl1") == 0 ||
+         strcmp(name, "srtm_gl3") == 0 ||
+         strcmp(name, "SRTM_GL1") == 0 ||
+         strcmp(name, "SRTM_GL3") == 0;
+}
+
+#ifdef HAVE_HTTP
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenAutoTile(CurlGlobal &curl, const char *provider)
+{
+  auto terrain = std::make_unique<CogTerrain>();
+
+  terrain->curl = &curl;
+  terrain->source_path = provider;
+  terrain->auto_tile_mode = true;
+
+  auto p = CogTileManager::ParseProvider(provider);
+  terrain->tile_manager.SetProvider(p, curl);
+
+  LogFormat("COG auto-tile terrain initialized with provider: %s", provider);
+
+  return terrain;
+}
+
+#else
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenAutoTile([[maybe_unused]] CurlGlobal &curl,
+                         [[maybe_unused]] const char *provider)
+{
+  throw std::runtime_error("Auto-tile terrain not available (no HTTP support)");
+}
+
+#endif
+
+bool
+CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
+{
+  if (auto_tile_mode) {
+    if (!location.IsValid())
+      return false;
+
+    NullOperationEnvironment operation;
+    return tile_manager.UpdateTiles(location, radius, map, operation);
+  }
+
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())
     return false;
