@@ -11,7 +11,7 @@ class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
 class TerrainRenderer;
-class RasterTerrain;
+class TerrainBase;
 struct DerivedInfo;
 
 /**
@@ -20,7 +20,7 @@ struct DerivedInfo;
 class BackgroundRenderer {
   static constexpr Angle DEFAULT_SHADING_ANGLE = Angle::Degrees(-45);
 
-  const RasterTerrain *terrain = nullptr;
+  const TerrainBase *terrain = nullptr;
   std::unique_ptr<TerrainRenderer> renderer;
   Angle shading_angle = DEFAULT_SHADING_ANGLE;
 
@@ -56,7 +56,7 @@ public:
   void SetShadingAngle(const WindowProjection &projection,
                        const TerrainRendererSettings &settings,
                        const DerivedInfo &calculated) noexcept;
-  void SetTerrain(const RasterTerrain *terrain) noexcept;
+  void SetTerrain(const TerrainBase *terrain) noexcept;
 
   /**
    * Returns true if contour lines are currently being rendered (not

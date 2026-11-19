@@ -17,7 +17,7 @@
 static const char *const terrain_cache_name = "terrain";
 
 inline bool
-RasterTerrain::LoadCache(FileCache &cache, Path path)
+XcmTerrain::LoadCache(FileCache &cache, Path path)
 {
   auto r = cache.Load(terrain_cache_name, path);
   if (!r)
@@ -29,13 +29,13 @@ RasterTerrain::LoadCache(FileCache &cache, Path path)
 }
 
 inline bool
-RasterTerrain::LoadCache(FileCache *cache, Path path)
+XcmTerrain::LoadCache(FileCache *cache, Path path)
 {
   return cache != nullptr && LoadCache(*cache, path);
 }
 
 inline void
-RasterTerrain::SaveCache(FileCache &cache, Path path) const
+XcmTerrain::SaveCache(FileCache &cache, Path path) const
 {
   auto os = cache.Save(terrain_cache_name, path);
   BufferedOutputStream bos(*os);
@@ -45,7 +45,7 @@ RasterTerrain::SaveCache(FileCache &cache, Path path) const
 }
 
 inline void
-RasterTerrain::Load(Path path, FileCache *cache,
+XcmTerrain::Load(Path path, FileCache *cache,
                     OperationEnvironment &operation)
 {
   try {
@@ -68,17 +68,17 @@ RasterTerrain::Load(Path path, FileCache *cache,
   }
 }
 
-std::unique_ptr<RasterTerrain>
-RasterTerrain::OpenTerrain(FileCache *cache, Path path,
+std::unique_ptr<XcmTerrain>
+XcmTerrain::OpenTerrain(FileCache *cache, Path path,
                            OperationEnvironment &operation)
 {
-  auto rt = std::make_unique<RasterTerrain>(ZipArchive{path});
+  auto rt = std::make_unique<XcmTerrain>(ZipArchive{path});
   rt->Load(path, cache, operation);
   return rt;
 }
 
-std::unique_ptr<RasterTerrain>
-RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
+std::unique_ptr<XcmTerrain>
+XcmTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
 try {
   const auto path = Profile::GetPath(ProfileKeys::MapFile);
   if (path == nullptr)
@@ -91,7 +91,7 @@ try {
 }
 
 bool
-RasterTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
+XcmTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 {
   auto &tile_cache = map.GetTileCache();
   if (!tile_cache.IsValid())

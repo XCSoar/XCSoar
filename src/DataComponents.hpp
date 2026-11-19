@@ -6,7 +6,7 @@
 #include <memory>
 
 class TopographyStore;
-class RasterTerrain;
+class TerrainBase;
 class Waypoints;
 class Airspaces;
 class ObservationDatabase;
@@ -24,7 +24,7 @@ struct DataComponents {
 
   std::unique_ptr<TopographyStore> topography;
 
-  std::unique_ptr<RasterTerrain> terrain;
+  std::unique_ptr<TerrainBase> terrain;
 
   DataComponents() noexcept;
   ~DataComponents() noexcept;

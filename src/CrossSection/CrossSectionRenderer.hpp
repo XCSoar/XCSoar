@@ -16,7 +16,7 @@ struct AirspaceLook;
 struct ChartLook;
 struct MapSettings;
 class Airspaces;
-class RasterTerrain;
+class TerrainBase;
 class ChartRenderer;
 class Canvas;
 
@@ -41,7 +41,7 @@ protected:
   TerrainXSRenderer terrain_renderer;
 
   /** Pointer to a RasterTerrain instance or NULL */
-  const RasterTerrain *terrain = nullptr;
+  const TerrainBase *terrain = nullptr;
 
   /** Pointer to an airspace database instance or NULL */
   const Airspaces *airspace_database = nullptr;
@@ -85,7 +85,7 @@ public:
    * Set RasterTerrain to use
    * @param _terrain Pointer to the RasterTerrain or NULL
    */
-  void SetTerrain(const RasterTerrain *_terrain) {
+  void SetTerrain(const TerrainBase *_terrain) {
     terrain = _terrain;
   }
 

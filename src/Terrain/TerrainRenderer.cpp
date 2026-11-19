@@ -340,7 +340,7 @@ static_assert(ARRAY_SIZE(terrain_ramps) == TerrainRendererSettings::NUM_RAMPS,
 //  mapscale/7.5 terrain units/pixel
 //
 // this is for TerrainInfo.StepSize = 0.0025;
-TerrainRenderer::TerrainRenderer(const RasterTerrain &_terrain)
+TerrainRenderer::TerrainRenderer(const TerrainBase &_terrain)
   :terrain(_terrain)
 {
   settings.SetDefaults();
@@ -428,7 +428,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   assert(new_bounds.IsValid());
 
   {
-    RasterTerrain::Lease map(terrain);
+    TerrainBase::Lease map(terrain);
     if (!new_bounds.IntersectWith(map->GetBounds()))
       /* map is outside of visible screen area */
       return false;
@@ -471,7 +471,7 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   }
 
   {
-    RasterTerrain::Lease map(terrain);
+    TerrainBase::Lease map(terrain);
     raster_renderer.ScanMap(map, map_projection, !tiles_current);
   }
 

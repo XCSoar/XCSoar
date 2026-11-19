@@ -8,7 +8,7 @@ namespace UI { class SingleWindow; }
 class FullBlackboard;
 class GlideComputer;
 class Airspaces;
-class RasterTerrain;
+class TerrainBase;
 
 enum class AnalysisPage {
   BAROGRAPH,
@@ -31,5 +31,5 @@ dlgAnalysisShowModal(UI::SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
                      GlideComputer &glide_computer,
                      const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
+                     const TerrainBase *terrain,
                      AnalysisPage page=AnalysisPage::COUNT);

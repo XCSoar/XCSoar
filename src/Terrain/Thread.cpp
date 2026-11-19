@@ -2,11 +2,11 @@
 // Copyright The XCSoar Project
 
 #include "Thread.hpp"
-#include "RasterTerrain.hpp"
+#include "TerrainBase.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "thread/Util.hpp"
 
-TerrainThread::TerrainThread(RasterTerrain &_terrain,
+TerrainThread::TerrainThread(TerrainBase &_terrain,
                              std::function<void()> &&_callback)
   :StandbyThread("Terrain"), terrain(_terrain),
    callback(std::move(_callback)) {}

@@ -187,7 +187,7 @@ MapWindow::SetTopography(TopographyStore *_topography) noexcept
 }
 
 void
-MapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
+MapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 {
   terrain = _terrain;
   background.SetTerrain(_terrain);

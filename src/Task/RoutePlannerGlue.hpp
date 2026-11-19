@@ -6,15 +6,15 @@
 #include "Route/AirspaceRoute.hpp"
 
 struct GlideSettings;
-class RasterTerrain;
+class TerrainBase;
 class ProtectedAirspaceWarningManager;
 
 class RoutePlannerGlue {
-  const RasterTerrain *terrain = nullptr;
+  const TerrainBase *terrain = nullptr;
   AirspaceRoute planner;
 
 public:
-  void SetTerrain(const RasterTerrain *terrain);
+  void SetTerrain(const TerrainBase *terrain);
 
   void UpdatePolar(const GlideSettings &settings,
                    const RoutePlannerConfig &config,

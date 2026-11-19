@@ -1814,7 +1814,7 @@ MainWindow::ApplyFullScreenSettings() noexcept
 #endif /* HAVE_FULL_SCREEN_SETTING */
 
 void
-MainWindow::SetTerrain(RasterTerrain *terrain) noexcept
+MainWindow::SetTerrain(TerrainBase *terrain) noexcept
 {
   if (map != nullptr)
     map->SetTerrain(terrain);

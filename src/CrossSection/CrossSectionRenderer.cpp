@@ -103,7 +103,7 @@ CrossSectionRenderer::UpdateTerrain(TerrainHeight *elevations) const
 
   const GeoPoint point_diff = vec.EndPoint(start) - start;
 
-  RasterTerrain::Lease map(*terrain);
+  TerrainBase::Lease map(*terrain);
   for (unsigned i = 0; i < NUM_SLICES; ++i) {
     const auto slice_distance_factor = double(i) / (NUM_SLICES - 1);
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;

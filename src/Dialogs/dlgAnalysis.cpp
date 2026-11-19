@@ -73,7 +73,7 @@ public:
                const CrossSectionLook &cross_section_look,
                const AirspaceLook &airspace_look,
                const Airspaces *airspaces,
-               const RasterTerrain *terrain,
+               const TerrainBase *terrain,
                const FullBlackboard &_blackboard,
                const GlideComputer &_glide_computer)
     :analysis_widget(_analysis_widget),
@@ -137,7 +137,7 @@ class AnalysisWidget final : public NullWidget {
 public:
   AnalysisWidget(WndForm &_dialog, const Look &look,
                  const Airspaces *airspaces,
-                 const RasterTerrain *terrain,
+                 const TerrainBase *terrain,
                  const FullBlackboard &_blackboard,
                  GlideComputer &_glide_computer)
     :blackboard(_blackboard), glide_computer(_glide_computer),
@@ -718,7 +718,7 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
                      const FullBlackboard &blackboard,
                      GlideComputer &glide_computer,
                      const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
+                     const TerrainBase *terrain,
                      AnalysisPage _page)
 {
   TWidgetDialog<AnalysisWidget> dialog(WidgetDialog::Full{}, parent,

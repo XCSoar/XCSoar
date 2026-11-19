@@ -8,7 +8,7 @@
 #include <memory>
 
 class RaspStore;
-class RasterTerrain;
+class TerrainBase;
 #ifdef HAVE_HTTP
 class SkySightClient;
 #endif
@@ -36,7 +36,7 @@ void
 UnsetTerrain() noexcept;
 
 void
-SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept;
+SetTerrain(std::unique_ptr<TerrainBase> _terrain) noexcept;
 
 std::shared_ptr<RaspStore>
 GetRasp() noexcept;

@@ -328,7 +328,7 @@ GlideComputer::OnTransitionEnter()
 
 
 void
-GlideComputer::SetTerrain(RasterTerrain* _terrain)
+GlideComputer::SetTerrain(TerrainBase* _terrain)
 {
   air_data_computer.SetTerrain(_terrain);
   task_computer.SetTerrain(_terrain);

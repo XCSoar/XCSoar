@@ -7,7 +7,7 @@ struct PixelRect;
 class Canvas;
 class OrderedTask;
 class OrderedTaskPoint;
-class RasterTerrain;
+class TerrainBase;
 class Airspaces;
 class WindowProjection;
 struct GeoPoint;
@@ -29,7 +29,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
-          const RasterTerrain *terrain, const Airspaces *airspaces,
+          const TerrainBase *terrain, const Airspaces *airspaces,
           bool fai_sectors,
           int highlight_index);
 
@@ -46,7 +46,7 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const OverlayLook &overlay_look,
-          const RasterTerrain *terrain, const Airspaces *airspaces,
+          const TerrainBase *terrain, const Airspaces *airspaces,
           bool fai_sectors=false,
           int highlight_index = -1);
 
@@ -62,5 +62,5 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
                const OverlayLook &overlay_look,
-               const RasterTerrain *terrain, const Airspaces *airspaces,
+               const TerrainBase *terrain, const Airspaces *airspaces,
                int highlight_index = -1);

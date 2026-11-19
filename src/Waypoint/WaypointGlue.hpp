@@ -6,7 +6,7 @@
 #include "Engine/Waypoint/Ptr.hpp"
 
 class Waypoints;
-class RasterTerrain;
+class TerrainBase;
 class ProgressListener;
 struct PlacesOfInterestSettings;
 struct TeamCodeSettings;
@@ -85,7 +85,7 @@ SaveHome(ProfileMap &profile,
  */
 bool
 LoadWaypoints(Waypoints &way_points,
-              const RasterTerrain *terrain,
+              const TerrainBase *terrain,
               ProgressListener &progress);
 
 /**
@@ -96,7 +96,7 @@ LoadWaypoints(Waypoints &way_points,
  */
 void
 ReloadWaypointFiles(Waypoints &way_points,
-                    const RasterTerrain *terrain,
+                    const TerrainBase *terrain,
                     ProgressListener &progress,
                     bool primary, bool watched, bool map_file);
 

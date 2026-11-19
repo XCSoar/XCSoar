@@ -2,25 +2,25 @@
 // Copyright The XCSoar Project
 
 #include "AsyncLoader.hpp"
-#include "RasterTerrain.hpp"
+#include "TerrainBase.hpp"
 #include "Job/Job.hpp"
 #include "system/Path.hpp"
 
 class AsyncTerrainOverviewLoader::LoaderJob final : public Job {
   FileCache *const cache;
   const AllocatedPath path;
-  std::unique_ptr<RasterTerrain> terrain;
+  std::unique_ptr<TerrainBase> terrain;
 
 public:
   LoaderJob(FileCache *_cache, Path _path) noexcept
     :cache(_cache), path(_path) {}
 
-  std::unique_ptr<RasterTerrain> &&Finish() noexcept {
+  std::unique_ptr<TerrainBase> &&Finish() noexcept {
     return std::move(terrain);
   }
 
   void Run(OperationEnvironment &env) override {
-    terrain = RasterTerrain::OpenTerrain(cache, path, env);
+    terrain = TerrainBase::OpenTerrain(cache, env);
   }
 };
 
@@ -46,7 +46,7 @@ AsyncTerrainOverviewLoader::Start(FileCache *cache, Path path,
   async.Start(job.get(), env, &notify);
 }
 
-std::unique_ptr<RasterTerrain>
+std::unique_ptr<TerrainBase>
 AsyncTerrainOverviewLoader::Wait()
 {
   assert(job);

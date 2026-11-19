@@ -8,14 +8,14 @@
 
 #include <functional>
 
-class RasterTerrain;
+class TerrainBase;
 class WindowProjection;
 
 /**
  * A thread that loads topography files asynchronously.
  */
 class TerrainThread final : private StandbyThread {
-  RasterTerrain &terrain;
+  TerrainBase &terrain;
 
   const std::function<void()> callback;
 
@@ -26,7 +26,7 @@ class TerrainThread final : private StandbyThread {
   double next_radius;
 
 public:
-  TerrainThread(RasterTerrain &_terrain, std::function<void()> &&_callback);
+  TerrainThread(TerrainBase &_terrain, std::function<void()> &&_callback);
 
   using StandbyThread::LockStop;
 

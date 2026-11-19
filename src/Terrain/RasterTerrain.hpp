@@ -3,70 +3,46 @@
 
 #pragma once
 
-#include "RasterMap.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "thread/Guard.hpp"
+#include "TerrainBase.hpp"
 #include "io/ZipArchive.hpp"
 
-#include <memory>
-
 class Path;
-class FileCache;
-class OperationEnvironment;
 
 /**
- * Class to manage raster terrain database, potentially with caching
- * or demand-loading.
+ * Class to manage raster terrain database from .xcm (ZIP) archives,
+ * potentially with caching or demand-loading.
  */
-class RasterTerrain : public Guard<RasterMap> {
+class XcmTerrain final : public TerrainBase {
 public:
-  friend class RoutePlannerGlue; // for route planning
-  friend class ProtectedTaskManager; // for intersection
-  friend class WaypointVisitorMap; // for intersection rendering
+  friend class RoutePlannerGlue;
+  friend class ProtectedTaskManager;
+  friend class WaypointVisitorMap;
 
 private:
   ZipArchive archive;
 
-  RasterMap map;
-
 public:
-  /**
-   * Constructor.  Returns uninitialised object.
-   */
-  explicit RasterTerrain(ZipArchive &&_archive) noexcept
-    :Guard<RasterMap>(map), archive(std::move(_archive)) {}
-
-  const Serial &GetSerial() const noexcept {
-    return map.GetSerial();
-  }
+  explicit XcmTerrain(ZipArchive &&_archive) noexcept
+    :archive(std::move(_archive)) {}
 
   /**
    * Throws on error.
    */
-  static std::unique_ptr<RasterTerrain> OpenTerrain(FileCache *cache,
+  static std::unique_ptr<XcmTerrain> OpenTerrain(FileCache *cache,
                                                     Path path,
                                                     OperationEnvironment &operation);
 
   /**
-   * Load the terrain.  Determines the file to load from profile settings.
+   * Load the terrain from .xcm archive. Determines the file to load
+   * from profile settings (ProfileKeys::MapFile).
+   *
+   * Note: For COG terrain support, use TerrainBase::OpenTerrain()
+   * which checks TerrainFile first, then falls back to MapFile.
    */
-  static std::unique_ptr<RasterTerrain> OpenTerrain(FileCache *cache,
+  static std::unique_ptr<XcmTerrain> OpenTerrain(FileCache *cache,
                                                     OperationEnvironment &operation);
 
-  [[gnu::pure]]
-  TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {
-    Lease lease(*this);
-    return lease->GetHeight(location);
-  }
-
-  GeoPoint GetTerrainCenter() const noexcept {
-    return map.GetMapCenter();
-  }
-
-  /**
-   * @return true if the method shall be called again
-   */
-  bool UpdateTiles(const GeoPoint &location, double radius) noexcept;
+  bool UpdateTiles(const GeoPoint &location, double radius) noexcept override;
 
 private:
   /**

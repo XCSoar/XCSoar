@@ -19,7 +19,7 @@ struct OneClimbInfo;
 struct TerrainInfo;
 struct ThermalLocatorInfo;
 class Waypoints;
-class RasterTerrain;
+class TerrainBase;
 class GlidePolar;
 
 // TODO: replace copy constructors so copies of these structures
@@ -28,7 +28,7 @@ class GlidePolar;
 
 class GlideComputerAirData {
   const Waypoints &waypoints;
-  const RasterTerrain *terrain;
+  const TerrainBase *terrain;
 
   AutoQNH auto_qnh;
 
@@ -53,7 +53,7 @@ class GlideComputerAirData {
 public:
   GlideComputerAirData(const Waypoints &way_points);
 
-  void SetTerrain(const RasterTerrain* _terrain) {
+  void SetTerrain(const TerrainBase* _terrain) {
     terrain = _terrain;
   }
 

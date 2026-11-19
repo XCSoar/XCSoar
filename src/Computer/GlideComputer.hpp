@@ -20,7 +20,7 @@
 class Waypoints;
 class ProtectedTaskManager;
 class GlideComputerTaskEvents;
-class RasterTerrain;
+class TerrainBase;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -61,7 +61,7 @@ public:
                 ProtectedTaskManager& task,
                 GlideComputerTaskEvents& events);
 
-  void SetTerrain(RasterTerrain *_terrain);
+  void SetTerrain(TerrainBase *_terrain);
 
   void SetLogger(Logger *logger) {
     log_computer.SetLogger(logger);

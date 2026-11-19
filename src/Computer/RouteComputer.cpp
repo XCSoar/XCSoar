@@ -145,7 +145,7 @@ RouteComputer::Reach(const MoreData &basic, DerivedInfo &calculated,
 }
 
 void
-RouteComputer::set_terrain(const RasterTerrain* _terrain) {
+RouteComputer::set_terrain(const TerrainBase* _terrain) {
   terrain = _terrain;
   protected_route_planner.SetTerrain(terrain);
 }

@@ -4,7 +4,7 @@
 #include "DataGlobals.hpp"
 #include "Profile/Current.hpp"
 #include "Profile/Profile.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
@@ -46,7 +46,7 @@ DataGlobals::UnsetTerrain() noexcept
 }
 
 void
-DataGlobals::SetTerrain(std::unique_ptr<RasterTerrain> _terrain) noexcept
+DataGlobals::SetTerrain(std::unique_ptr<TerrainBase> _terrain) noexcept
 {
   assert(!data_components->terrain);
 

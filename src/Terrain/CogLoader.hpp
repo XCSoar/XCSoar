@@ -11,11 +11,13 @@
 #include <memory>
 #include <vector>
 #include <cstdint>
+#include <string>
 
 struct zzip_dir;
 class Path;
 class RasterTileCache;
 class OperationEnvironment;
+class CurlGlobal;
 
 /**
  * Information about a single pyramid level in a COG file.
@@ -32,6 +34,13 @@ struct CogLevel {
    * Resolution relative to full resolution (level 0 = 1, level 1 = 2, etc.)
    */
   unsigned scale;
+
+  /**
+   * File offsets for each tile in this level (for HTTP access).
+   * Index = ty * tiles_x + tx
+   */
+  std::vector<uint64_t> tile_offsets;
+  std::vector<uint64_t> tile_byte_counts;
 };
 
 /**
@@ -40,6 +49,10 @@ struct CogLevel {
  * COG files provide efficient random access to tiled elevation data
  * with built-in pyramid levels (overviews), enabling fast rendering
  * at any zoom level without scanning the entire file.
+ *
+ * Supports two backends:
+ * - Local files: Uses libtiff for direct file access
+ * - HTTP URLs: Uses HTTP byte-range requests (CoGetRange)
  */
 class CogLoader {
 public:
@@ -57,29 +70,54 @@ public:
   CogLoader &operator=(const CogLoader &) = delete;
 
   /**
-   * Check if a file appears to be a TIFF/COG file by extension.
+   * Check if a path/URL appears to be a TIFF/COG file by extension.
    */
   [[gnu::pure]]
   static bool IsCogFile(const char *path) noexcept;
 
   /**
-   * Open a COG file and read its metadata.
+   * Check if a string is an HTTP/HTTPS URL.
+   */
+  [[gnu::pure]]
+  static bool IsHttpUrl(const char *path) noexcept;
+
+  /**
+   * Open a COG file from a local filesystem path.
+   * Uses libtiff for file access.
    *
-   * @param dir the zip archive containing the terrain file, or nullptr
+   * @return true on success
+   */
+  bool Open(Path path);
+
+  /**
+   * Open a COG file from a zip archive.
+   *
+   * @param dir the zip archive containing the terrain file
    * @param path path to the COG file within the archive
    * @return true on success
    */
   bool Open(struct zzip_dir *dir, const char *path);
 
   /**
-   * Open a COG file from a filesystem path.
+   * Open a COG file from an HTTP URL.
+   * Uses byte-range requests to fetch header and tiles on demand.
+   *
+   * @param curl the curl instance for HTTP requests
+   * @param url the HTTP/HTTPS URL of the COG file
+   * @return true on success
    */
-  bool Open(Path path);
+  bool OpenHttp(CurlGlobal &curl, const char *url);
 
   void Close() noexcept;
 
   [[gnu::pure]]
   bool IsOpen() const noexcept;
+
+  /**
+   * @return true if this loader is using HTTP backend
+   */
+  [[gnu::pure]]
+  bool IsHttp() const noexcept;
 
   /**
    * Get the geographic bounds of the terrain.
@@ -128,6 +166,12 @@ public:
    */
   [[gnu::pure]]
   UnsignedPoint2D GetTileSize(unsigned level) const noexcept;
+
+  /**
+   * Get the URL (for HTTP mode) or empty string (for local mode).
+   */
+  [[gnu::pure]]
+  const std::string &GetUrl() const noexcept;
 };
 
 /**

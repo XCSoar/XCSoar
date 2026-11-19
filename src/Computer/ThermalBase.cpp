@@ -9,13 +9,13 @@
 #include "Geo/SpeedVector.hpp"
 
 static double
-GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)
+GetElevation(TerrainBase::Lease &map, const GeoPoint loc)
 {
   return (double)map->GetHeight(loc).GetValueOr0();
 }
 
 void
-EstimateThermalBase(const RasterTerrain *terrain,
+EstimateThermalBase(const TerrainBase *terrain,
                     const GeoPoint location, const double altitude,
                     const double average, const SpeedVector wind,
                     GeoPoint &ground_location, double &ground_alt)
@@ -39,7 +39,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
     return;
   }
 
-  RasterTerrain::Lease map(*terrain);
+  TerrainBase::Lease map(*terrain);
 
   // Height step of the 10 calculation intervals
   const auto dh = altitude / 10;

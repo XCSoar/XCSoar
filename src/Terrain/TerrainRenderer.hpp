@@ -10,11 +10,11 @@
 
 class Canvas;
 class WindowProjection;
-class RasterTerrain;
+class TerrainBase;
 struct ColorRamp;
 
 class TerrainRenderer {
-  const RasterTerrain &terrain;
+  const TerrainBase &terrain;
 
   Serial terrain_serial;
 
@@ -32,7 +32,7 @@ protected:
   RasterRenderer raster_renderer;
 
 public:
-  TerrainRenderer(const RasterTerrain &_terrain);
+  TerrainRenderer(const TerrainBase &_terrain);
   ~TerrainRenderer() {}
 
   TerrainRenderer(const TerrainRenderer &) = delete;

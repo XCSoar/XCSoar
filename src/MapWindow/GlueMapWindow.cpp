@@ -47,7 +47,7 @@ GlueMapWindow::SetTopography(TopographyStore *_topography) noexcept
 }
 
 void
-GlueMapWindow::SetTerrain(RasterTerrain *_terrain) noexcept
+GlueMapWindow::SetTerrain(TerrainBase *_terrain) noexcept
 {
   if (terrain_thread != nullptr) {
     terrain_thread->LockStop();

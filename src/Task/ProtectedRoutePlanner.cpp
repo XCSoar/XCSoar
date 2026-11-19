@@ -5,7 +5,7 @@
 #include "Engine/Route/ReachResult.hpp"
 
 void
-ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain) noexcept
+ProtectedRoutePlanner::SetTerrain(const TerrainBase *terrain) noexcept
 {
   const std::scoped_lock lock{route_mutex};
   route_planner.SetTerrain(terrain);

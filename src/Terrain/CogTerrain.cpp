@@ -1,0 +1,143 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright The XCSoar Project
+
+#include "CogTerrain.hpp"
+#include "RasterTileCache.hpp"
+#include "RasterTraits.hpp"
+#include "Operation/Operation.hpp"
+#include "system/Path.hpp"
+#include "LogFile.hpp"
+
+#ifdef HAVE_HTTP
+#include "lib/curl/Global.hxx"
+#endif
+
+#include <stdexcept>
+
+void
+CogTerrain::Load(OperationEnvironment &operation)
+{
+  operation.SetProgressRange(100);
+  operation.SetProgressPosition(10);
+
+  const UnsignedPoint2D size = loader.GetSize();
+  if (size.x == 0 || size.y == 0)
+    throw std::runtime_error("COG terrain has zero size");
+
+  const GeoBounds &bounds = loader.GetBounds();
+  if (!bounds.IsValid())
+    throw std::runtime_error("COG terrain has no valid geographic bounds");
+
+  auto &cache = map.GetTileCache();
+  cache.SetBounds(bounds);
+
+  operation.SetProgressPosition(30);
+
+  const unsigned level_count = loader.GetLevelCount();
+  if (level_count == 0)
+    throw std::runtime_error("COG has no pyramid levels");
+
+  const CogLevel &full_level = loader.GetLevel(0);
+  const UnsignedPoint2D tile_size = loader.GetTileSize(0);
+
+  cache.SetSize({size.x, size.y},
+                {static_cast<uint_least16_t>(tile_size.x),
+                 static_cast<uint_least16_t>(tile_size.y)},
+                {full_level.tiles_x, full_level.tiles_y});
+
+  operation.SetProgressPosition(50);
+
+  map.UpdateProjection();
+
+  operation.SetProgressPosition(70);
+
+  LogFmt("COG terrain loaded: {}x{} pixels, {} levels, {}x{} tiles, bounds: {:.4f},{:.4f} to {:.4f},{:.4f}",
+         size.x, size.y, level_count,
+         full_level.tiles_x, full_level.tiles_y,
+         bounds.GetWest().Degrees(), bounds.GetSouth().Degrees(),
+         bounds.GetEast().Degrees(), bounds.GetNorth().Degrees());
+
+  operation.SetProgressPosition(100);
+}
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenTerrain([[maybe_unused]] FileCache *cache,
+                        Path path,
+                        OperationEnvironment &operation)
+{
+  auto terrain = std::make_unique<CogTerrain>();
+
+  terrain->source_path = path.c_str();
+
+  if (!terrain->loader.Open(path))
+    throw std::runtime_error("Failed to open COG terrain file");
+
+  terrain->Load(operation);
+
+  return terrain;
+}
+
+#ifdef HAVE_HTTP
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenTerrainHttp(CurlGlobal &curl,
+                            const char *url,
+                            OperationEnvironment &operation)
+{
+  auto terrain = std::make_unique<CogTerrain>();
+
+  terrain->curl = &curl;
+  terrain->source_path = url;
+
+  if (!terrain->loader.OpenHttp(curl, url))
+    throw std::runtime_error("Failed to open COG terrain from HTTP");
+
+  terrain->Load(operation);
+
+  return terrain;
+}
+
+#else
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenTerrainHttp([[maybe_unused]] CurlGlobal &curl,
+                            [[maybe_unused]] const char *url,
+                            [[maybe_unused]] OperationEnvironment &operation)
+{
+  throw std::runtime_error("HTTP terrain loading not available");
+}
+
+#endif
+
+std::unique_ptr<CogTerrain>
+CogTerrain::OpenTerrain([[maybe_unused]] FileCache *cache,
+                        [[maybe_unused]] CurlGlobal *curl,
+                        const char *path_or_url,
+                        OperationEnvironment &operation)
+{
+  if (path_or_url == nullptr || *path_or_url == '\0')
+    throw std::runtime_error("No terrain path specified");
+
+  if (IsHttpUrl(path_or_url)) {
+#ifdef HAVE_HTTP
+    if (curl == nullptr)
+      throw std::runtime_error("HTTP terrain requires curl");
+    return OpenTerrainHttp(*curl, path_or_url, operation);
+#else
+    throw std::runtime_error("HTTP terrain not supported in this build");
+#endif
+  }
+
+  return OpenTerrain(cache, Path(path_or_url), operation);
+}
+
+bool
+CogTerrain::UpdateTiles([[maybe_unused]] const GeoPoint &location,
+                        [[maybe_unused]] double radius) noexcept
+{
+  auto &tile_cache = map.GetTileCache();
+  if (!tile_cache.IsValid())
+    return false;
+
+  return map.IsDirty();
+}
