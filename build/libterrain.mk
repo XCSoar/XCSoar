@@ -32,7 +32,7 @@ TERRAIN_DEPENDS += LIBTIFF
 endif
 
 ifeq ($(HAVE_HTTP),y)
-TERRAIN_DEPENDS += ZLIB
+TERRAIN_DEPENDS += ZLIB CURL
 endif
 
 $(eval $(call link-library,libterrain,TERRAIN))

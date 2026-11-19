@@ -25,6 +25,7 @@
 #include "lib/curl/Setup.hxx"
 #include <zlib.h>
 #include <map>
+#include <set>
 #endif
 
 #ifdef _WIN32
@@ -58,7 +59,6 @@ static constexpr uint16_t COG_COMPRESSION_ZLIB = 32946;
 
 static constexpr uint16_t COG_TYPE_SHORT = 3;
 static constexpr uint16_t COG_TYPE_LONG = 4;
-static constexpr uint16_t COG_TYPE_DOUBLE = 12;
 static constexpr uint16_t COG_TYPE_LONG8 = 16;
 
 struct TileCacheKey {
@@ -91,7 +91,8 @@ struct CogLoader::Impl {
   uint16_t sample_format = 1;
   
   mutable std::map<TileCacheKey, std::vector<TerrainHeight>> tile_cache;
-  static constexpr size_t MAX_CACHED_TILES = 32;
+  mutable std::set<TileCacheKey> pending_internal_tiles;
+  static constexpr size_t MAX_CACHED_TILES = 64;
 #endif
 
   ~Impl() noexcept {
@@ -721,18 +722,20 @@ CogLoader::ReadTile(unsigned level, unsigned tx, unsigned ty,
     const unsigned tile_pixels = lev.tile_width * lev.tile_height;
 
     if (bits_per_sample == 16) {
-      const int16_t *src = reinterpret_cast<const int16_t *>(raw_buffer.data());
+      const auto *src = raw_buffer.data();
       for (unsigned i = 0; i < tile_pixels; ++i) {
-        int16_t value = src[i];
+        int16_t value;
+        std::memcpy(&value, src + i * sizeof(int16_t), sizeof(int16_t));
         if (value == -32768)
           buffer[i] = TerrainHeight::Invalid();
         else
           buffer[i] = TerrainHeight(value);
       }
     } else if (bits_per_sample == 32 && sample_format == SAMPLEFORMAT_IEEEFP) {
-      const float *src = reinterpret_cast<const float *>(raw_buffer.data());
+      const auto *src = raw_buffer.data();
       for (unsigned i = 0; i < tile_pixels; ++i) {
-        float value = src[i];
+        float value;
+        std::memcpy(&value, src + i * sizeof(float), sizeof(float));
         if (std::isnan(value) || value < -32767 || value > 32767)
           buffer[i] = TerrainHeight::Invalid();
         else
@@ -794,9 +797,10 @@ CogLoader::ReadTile(unsigned level, unsigned tx, unsigned ty,
       if (impl->bits_per_sample == 16) {
         if (tile_data.size() < tile_pixels * 2)
           return false;
-        const int16_t *src = reinterpret_cast<const int16_t *>(tile_data.data());
+        const char *src = tile_data.data();
         for (unsigned i = 0; i < tile_pixels; ++i) {
-          int16_t value = src[i];
+          int16_t value;
+          std::memcpy(&value, src + i * sizeof(int16_t), sizeof(int16_t));
           if (value == -32768)
             buffer[i] = TerrainHeight::Invalid();
           else
@@ -805,9 +809,10 @@ CogLoader::ReadTile(unsigned level, unsigned tx, unsigned ty,
       } else if (impl->bits_per_sample == 32 && impl->sample_format == 3) {
         if (tile_data.size() < tile_pixels * 4)
           return false;
-        const float *src = reinterpret_cast<const float *>(tile_data.data());
+        const char *src = tile_data.data();
         for (unsigned i = 0; i < tile_pixels; ++i) {
-          float value = src[i];
+          float value;
+          std::memcpy(&value, src + i * sizeof(float), sizeof(float));
           if (std::isnan(value) || value < -32767 || value > 32767)
             buffer[i] = TerrainHeight::Invalid();
           else
@@ -931,6 +936,29 @@ CogLoader::GetHeight(const GeoPoint &location,
       return it->second[idx];
     }
 
+    // Fall back to coarser levels if requested level not cached
+    for (unsigned fallback = level + 1; fallback < impl->levels.size(); ++fallback) {
+      const CogLevel &flev = impl->levels[fallback];
+      
+      const unsigned fpx = static_cast<unsigned>(lon_ratio * flev.width);
+      const unsigned fpy = static_cast<unsigned>(lat_ratio * flev.height);
+      
+      if (fpx >= flev.width || fpy >= flev.height)
+        continue;
+      
+      const unsigned ftx = fpx / flev.tile_width;
+      const unsigned fty = fpy / flev.tile_height;
+      
+      TileCacheKey fkey{fallback, ftx, fty};
+      auto fit = impl->tile_cache.find(fkey);
+      if (fit != impl->tile_cache.end()) {
+        const unsigned local_x = fpx % flev.tile_width;
+        const unsigned local_y = fpy % flev.tile_height;
+        const unsigned idx = local_y * flev.tile_width + local_x;
+        return fit->second[idx];
+      }
+    }
+
     return TerrainHeight::Invalid();
   }
 #endif
@@ -997,6 +1025,128 @@ CogLoader::LoadInternalTile([[maybe_unused]] unsigned level,
 
   impl->tile_cache[key] = std::move(tile_buffer);
   return true;
+#else
+  return false;
+#endif
+}
+
+unsigned
+CogLoader::QueueInternalTiles([[maybe_unused]] const GeoBounds &bounds,
+                              [[maybe_unused]] unsigned quantisation) noexcept
+{
+#ifdef HAVE_HTTP
+  if (!impl->is_http || impl->levels.empty() || !bounds.IsValid())
+    return 0;
+
+  unsigned level = 0;
+  if (quantisation > 1 && impl->levels.size() > 1) {
+    const double meters_per_pixel = quantisation * 90.0;
+    level = SelectLevel(meters_per_pixel);
+  }
+
+  const CogLevel &lev = impl->levels[level];
+
+  LogFormat("COG QueueInternalTiles: quant=%u level=%u lev=%ux%u tiles=%ux%u",
+            quantisation, level, lev.width, lev.height, lev.tiles_x, lev.tiles_y);
+  LogFormat("COG QueueInternalTiles: bounds=%.4f,%.4f to %.4f,%.4f impl_bounds=%.4f,%.4f to %.4f,%.4f",
+            bounds.GetWest().Degrees(), bounds.GetSouth().Degrees(),
+            bounds.GetEast().Degrees(), bounds.GetNorth().Degrees(),
+            impl->bounds.GetWest().Degrees(), impl->bounds.GetSouth().Degrees(),
+            impl->bounds.GetEast().Degrees(), impl->bounds.GetNorth().Degrees());
+
+  const double lat_min = (impl->bounds.GetNorth().Degrees() - bounds.GetNorth().Degrees()) /
+                         impl->bounds.GetHeight().Degrees();
+  const double lat_max = (impl->bounds.GetNorth().Degrees() - bounds.GetSouth().Degrees()) /
+                         impl->bounds.GetHeight().Degrees();
+  const double lon_min = (bounds.GetWest().Degrees() - impl->bounds.GetWest().Degrees()) /
+                         impl->bounds.GetWidth().Degrees();
+  const double lon_max = (bounds.GetEast().Degrees() - impl->bounds.GetWest().Degrees()) /
+                         impl->bounds.GetWidth().Degrees();
+
+  const int px_min = std::max(0, static_cast<int>(lon_min * lev.width));
+  const int px_max = std::min(static_cast<int>(lev.width) - 1,
+                              static_cast<int>(lon_max * lev.width));
+  const int py_min = std::max(0, static_cast<int>(lat_min * lev.height));
+  const int py_max = std::min(static_cast<int>(lev.height) - 1,
+                              static_cast<int>(lat_max * lev.height));
+
+  const unsigned tx_min = px_min / lev.tile_width;
+  const unsigned tx_max = px_max / lev.tile_width;
+  const unsigned ty_min = py_min / lev.tile_height;
+  const unsigned ty_max = py_max / lev.tile_height;
+
+  LogFormat("COG QueueInternalTiles: px=%d-%d py=%d-%d tx=%u-%u ty=%u-%u cache=%zu pending=%zu",
+            px_min, px_max, py_min, py_max, tx_min, tx_max, ty_min, ty_max,
+            impl->tile_cache.size(), impl->pending_internal_tiles.size());
+
+  unsigned queued = 0;
+  for (unsigned ty = ty_min; ty <= ty_max && ty < lev.tiles_y; ++ty) {
+    for (unsigned tx = tx_min; tx <= tx_max && tx < lev.tiles_x; ++tx) {
+      TileCacheKey key{level, tx, ty};
+
+      bool in_cache = impl->tile_cache.find(key) != impl->tile_cache.end();
+      bool in_pending = impl->pending_internal_tiles.find(key) != impl->pending_internal_tiles.end();
+      
+      if (in_cache || in_pending) {
+        LogFormat("COG QueueInternalTiles: tile %u,%u,%u already %s", 
+                  level, tx, ty, in_cache ? "cached" : "pending");
+        continue;
+      }
+
+      impl->pending_internal_tiles.insert(key);
+      ++queued;
+      LogFormat("COG QueueInternalTiles: queued tile %u,%u,%u", level, tx, ty);
+    }
+  }
+
+  return queued;
+#else
+  return 0;
+#endif
+}
+
+bool
+CogLoader::ProcessOneInternalTile() noexcept
+{
+#ifdef HAVE_HTTP
+  if (!impl->is_http || impl->pending_internal_tiles.empty())
+    return false;
+
+  TileCacheKey key = *impl->pending_internal_tiles.begin();
+  impl->pending_internal_tiles.erase(impl->pending_internal_tiles.begin());
+
+  if (impl->tile_cache.find(key) != impl->tile_cache.end())
+    return true;
+
+  if (key.level >= impl->levels.size())
+    return true;
+
+  const CogLevel &lev = impl->levels[key.level];
+  if (key.tx >= lev.tiles_x || key.ty >= lev.tiles_y)
+    return true;
+
+  const unsigned tile_pixels = lev.tile_width * lev.tile_height;
+  std::vector<TerrainHeight> tile_buffer(tile_pixels);
+
+  if (!ReadTile(key.level, key.tx, key.ty, tile_buffer.data()))
+    return true;
+
+  if (impl->tile_cache.size() >= Impl::MAX_CACHED_TILES)
+    impl->tile_cache.erase(impl->tile_cache.begin());
+
+  impl->tile_cache[key] = std::move(tile_buffer);
+  LogFormat("COG: Loaded internal tile level=%u tx=%u ty=%u", key.level, key.tx, key.ty);
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
+CogLoader::HasPendingInternalTiles() const noexcept
+{
+#ifdef HAVE_HTTP
+  return impl && impl->is_http && !impl->pending_internal_tiles.empty();
 #else
   return false;
 #endif
