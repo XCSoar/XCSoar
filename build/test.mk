@@ -1711,7 +1711,8 @@ DEBUG_PROGRAM_NAMES += DownloadFile \
 	UploadFile \
 	RunWeGlideClient \
 	RunTimClient \
-	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
+	RunNOAADownloader RunSkyLinesTracking RunLiveTrack24 \
+	RunCogTerrain
 endif
 
 ifeq ($(TARGET_IS_LINUX),y)
@@ -1850,6 +1851,13 @@ RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
 RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBHTTP ASYNC LIBNET OPERATION IO OS THREAD UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
+
+RUN_COG_TERRAIN_SOURCES = \
+	$(SRC)/net/SocketError.cxx \
+	$(SRC)/Version.cpp \
+	$(TEST_SRC_DIR)/RunCogTerrain.cpp
+RUN_COG_TERRAIN_DEPENDS = GEO MATH LIBHTTP ASYNC LIBNET IO OS THREAD UTIL FMT ZLIB
+$(eval $(call link-program,RunCogTerrain,RUN_COG_TERRAIN))
 
 UPLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
