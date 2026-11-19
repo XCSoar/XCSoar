@@ -188,15 +188,32 @@ public:
 
   /**
    * Pre-cache all tiles needed to cover a bounding box at a given
-   * quantisation level. This avoids per-pixel HTTP requests during
-   * height matrix fill.
+   * quantisation level. Currently a no-op for HTTP tiles to avoid
+   * blocking - tiles are loaded on demand by background thread.
    *
    * @param bounds geographic bounds to cover
    * @param quantisation desired pixel quantisation for level selection
-   * @return number of tiles loaded (0 if all were already cached)
+   * @return number of tiles loaded (always 0 for HTTP)
    */
   unsigned PreCacheTiles(const GeoBounds &bounds,
                          unsigned quantisation = 1) noexcept;
+
+  /**
+   * Load one internal tile into cache (blocking I/O).
+   * Call from background thread only.
+   *
+   * @param level pyramid level
+   * @param tx tile X index
+   * @param ty tile Y index
+   * @return true if tile was loaded
+   */
+  bool LoadInternalTile(unsigned level, unsigned tx, unsigned ty) noexcept;
+
+  /**
+   * Check if an internal tile is cached.
+   */
+  [[gnu::pure]]
+  bool IsInternalTileCached(unsigned level, unsigned tx, unsigned ty) const noexcept;
 };
 
 /**
