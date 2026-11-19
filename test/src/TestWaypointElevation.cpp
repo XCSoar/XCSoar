@@ -259,8 +259,8 @@ TestTerrainElevation()
 {
   NullOperationEnvironment operation;
   const auto terrain =
-    RasterTerrain::OpenTerrain(nullptr, Path("test/data/benalla9.xcm"),
-                               operation);
+    XcmTerrain::OpenTerrain(nullptr, Path("test/data/benalla9.xcm"),
+                            operation);
 
   const GeoPoint on_map = terrain->GetTerrainCenter();
   const GeoPoint off_map(Angle::Degrees(7.0), Angle::Degrees(47.0));

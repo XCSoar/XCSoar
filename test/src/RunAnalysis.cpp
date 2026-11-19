@@ -82,14 +82,14 @@ void Logger::LogPoint([[maybe_unused]] const NMEAInfo &gps_info) {}
 
 /* done with fake symbols. */
 
-static RasterTerrain *terrain;
+static XcmTerrain *terrain;
 
 static void
 LoadFiles(Airspaces &airspace_database)
 {
   ConsoleOperationEnvironment operation;
 
-  terrain = RasterTerrain::OpenTerrain(nullptr, operation).release();
+  terrain = XcmTerrain::OpenTerrain(nullptr, operation).release();
 
   const AtmosphericPressure pressure = AtmosphericPressure::Standard();
   ReadAirspace(airspace_database, pressure, operation);
