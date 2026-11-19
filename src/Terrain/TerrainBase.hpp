@@ -67,6 +67,20 @@ public:
   }
 
   /**
+   * Pre-cache all internal tiles needed to cover a bounding box.
+   * This avoids per-pixel HTTP requests during height matrix fill.
+   * Default implementation does nothing (for non-COG terrain).
+   *
+   * @param bounds geographic bounds to cover
+   * @param quantisation desired pixel quantisation for level selection
+   * @return number of tiles loaded (0 for non-COG terrain)
+   */
+  virtual unsigned PreCacheTiles([[maybe_unused]] const GeoBounds &bounds,
+                                 [[maybe_unused]] unsigned quantisation = 1) const noexcept {
+    return 0;
+  }
+
+  /**
    * Check if this terrain is in auto-tile mode (tiles download on demand).
    * Only CogTerrain can be in auto-tile mode; XcmTerrain always returns false.
    */

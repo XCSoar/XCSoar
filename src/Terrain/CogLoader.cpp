@@ -946,6 +946,86 @@ CogLoader::GetHeight(const GeoPoint &location,
   return tile_buffer[idx];
 }
 
+unsigned
+CogLoader::PreCacheTiles(const GeoBounds &bounds,
+                         unsigned quantisation) noexcept
+{
+#ifdef HAVE_HTTP
+  if (!impl->is_http || impl->levels.empty() || !impl->bounds.IsValid())
+    return 0;
+
+  if (!bounds.IsValid() || !bounds.Overlaps(impl->bounds))
+    return 0;
+
+  unsigned level = 0;
+  if (quantisation > 1 && impl->levels.size() > 1) {
+    for (unsigned i = 1; i < impl->levels.size(); ++i) {
+      if (impl->levels[i].scale <= quantisation)
+        level = i;
+      else
+        break;
+    }
+  }
+  const CogLevel &lev = impl->levels[level];
+
+  const double north = std::min(bounds.GetNorth().Degrees(),
+                                impl->bounds.GetNorth().Degrees());
+  const double south = std::max(bounds.GetSouth().Degrees(),
+                                impl->bounds.GetSouth().Degrees());
+  const double west = std::max(bounds.GetWest().Degrees(),
+                               impl->bounds.GetWest().Degrees());
+  const double east = std::min(bounds.GetEast().Degrees(),
+                               impl->bounds.GetEast().Degrees());
+
+  auto to_pixel_x = [&](double lon) -> unsigned {
+    double ratio = (lon - impl->bounds.GetWest().Degrees()) /
+                   impl->bounds.GetWidth().Degrees();
+    return std::min(static_cast<unsigned>(ratio * lev.width), lev.width - 1);
+  };
+
+  auto to_pixel_y = [&](double lat) -> unsigned {
+    double ratio = (impl->bounds.GetNorth().Degrees() - lat) /
+                   impl->bounds.GetHeight().Degrees();
+    return std::min(static_cast<unsigned>(ratio * lev.height), lev.height - 1);
+  };
+
+  const unsigned px_west = to_pixel_x(west);
+  const unsigned px_east = to_pixel_x(east);
+  const unsigned py_north = to_pixel_y(north);
+  const unsigned py_south = to_pixel_y(south);
+
+  const unsigned tx_min = px_west / lev.tile_width;
+  const unsigned tx_max = px_east / lev.tile_width;
+  const unsigned ty_min = py_north / lev.tile_height;
+  const unsigned ty_max = py_south / lev.tile_height;
+
+  unsigned loaded = 0;
+  const unsigned tile_pixels = lev.tile_width * lev.tile_height;
+
+  for (unsigned ty = ty_min; ty <= ty_max && ty < lev.tiles_y; ++ty) {
+    for (unsigned tx = tx_min; tx <= tx_max && tx < lev.tiles_x; ++tx) {
+      TileCacheKey key{level, tx, ty};
+      if (impl->tile_cache.find(key) != impl->tile_cache.end())
+        continue;
+
+      std::vector<TerrainHeight> tile_buffer(tile_pixels);
+      if (ReadTile(level, tx, ty, tile_buffer.data())) {
+        if (impl->tile_cache.size() >= Impl::MAX_CACHED_TILES)
+          impl->tile_cache.erase(impl->tile_cache.begin());
+        impl->tile_cache[key] = std::move(tile_buffer);
+        ++loaded;
+      }
+    }
+  }
+
+  return loaded;
+#else
+  (void)bounds;
+  (void)quantisation;
+  return 0;
+#endif
+}
+
 void
 UpdateCogTiles([[maybe_unused]] struct zzip_dir *dir,
                [[maybe_unused]] const char *path,

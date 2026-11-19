@@ -185,6 +185,18 @@ public:
   [[gnu::pure]]
   TerrainHeight GetHeight(const GeoPoint &location,
                           unsigned quantisation = 1) const noexcept;
+
+  /**
+   * Pre-cache all tiles needed to cover a bounding box at a given
+   * quantisation level. This avoids per-pixel HTTP requests during
+   * height matrix fill.
+   *
+   * @param bounds geographic bounds to cover
+   * @param quantisation desired pixel quantisation for level selection
+   * @return number of tiles loaded (0 if all were already cached)
+   */
+  unsigned PreCacheTiles(const GeoBounds &bounds,
+                         unsigned quantisation = 1) noexcept;
 };
 
 /**

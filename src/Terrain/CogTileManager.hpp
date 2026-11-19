@@ -164,6 +164,17 @@ public:
   }
 
   /**
+   * Pre-cache all internal tiles needed to cover a bounding box.
+   * This avoids per-pixel HTTP requests during height matrix fill.
+   *
+   * @param bounds geographic bounds to cover
+   * @param quantisation desired pixel quantisation for level selection
+   * @return number of tiles loaded
+   */
+  unsigned PreCacheTiles(const GeoBounds &bounds,
+                         unsigned quantisation = 1) const noexcept;
+
+  /**
    * Get the base URL for the provider.
    */
   static const char *GetProviderUrl(Provider p) noexcept;

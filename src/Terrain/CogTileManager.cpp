@@ -218,3 +218,23 @@ CogTileManager::GetBounds() const noexcept
 
   return bounds;
 }
+
+unsigned
+CogTileManager::PreCacheTiles(const GeoBounds &bounds,
+                              unsigned quantisation) const noexcept
+{
+  if (!bounds.IsValid())
+    return 0;
+
+  const std::lock_guard lock{tiles_mutex};
+
+  unsigned total_loaded = 0;
+  for (const auto &[tile_id, loader] : loaded_tiles) {
+    const auto &tile_bounds = loader->GetBounds();
+    if (tile_bounds.IsValid() && tile_bounds.Overlaps(bounds)) {
+      total_loaded += loader->PreCacheTiles(bounds, quantisation);
+    }
+  }
+
+  return total_loaded;
+}

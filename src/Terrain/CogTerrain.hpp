@@ -180,6 +180,21 @@ public:
   }
 
   /**
+   * Pre-cache all internal tiles needed to cover a bounding box.
+   * This avoids per-pixel HTTP requests during height matrix fill.
+   *
+   * @param bounds geographic bounds to cover
+   * @param quantisation desired pixel quantisation for level selection
+   * @return number of tiles loaded
+   */
+  unsigned PreCacheTiles(const GeoBounds &bounds,
+                         unsigned quantisation = 1) const noexcept override {
+    if (auto_tile_mode)
+      return tile_manager.PreCacheTiles(bounds, quantisation);
+    return 0;
+  }
+
+  /**
    * Get the source path or URL.
    */
   [[gnu::pure]]

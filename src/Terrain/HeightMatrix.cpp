@@ -180,6 +180,8 @@ HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
   const double meters_per_sample = std::max(meters_per_sample_x, meters_per_sample_y);
   const unsigned quantisation = std::max(1u, static_cast<unsigned>(meters_per_sample / 30.0));
 
+  terrain.PreCacheTiles(bounds, quantisation);
+
   Angle latitude = bounds.GetNorth();
 
   auto p = data.data();
@@ -206,6 +208,8 @@ HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
     return;
 
   SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
+
+  terrain.PreCacheTiles(projection.GetScreenBounds(), quantisation_pixels);
 
   auto p = data.data();
   for (unsigned y = 0; y < screen_size.height; y += quantisation_pixels) {
