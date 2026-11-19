@@ -81,6 +81,9 @@ struct CogLoader::Impl {
   GeoBounds bounds;
   std::vector<CogLevel> levels;
 
+  mutable std::map<TileCacheKey, std::vector<TerrainHeight>> tile_cache;
+  static constexpr size_t MAX_CACHED_TILES = 64;
+
 #ifdef HAVE_HTTP
   CurlGlobal *curl = nullptr;
   std::string url;
@@ -90,9 +93,7 @@ struct CogLoader::Impl {
   uint16_t bits_per_sample = 16;
   uint16_t sample_format = 1;
   
-  mutable std::map<TileCacheKey, std::vector<TerrainHeight>> tile_cache;
   mutable std::set<TileCacheKey> pending_internal_tiles;
-  static constexpr size_t MAX_CACHED_TILES = 64;
 #endif
 
   ~Impl() noexcept {
@@ -963,6 +964,17 @@ CogLoader::GetHeight(const GeoPoint &location,
   }
 #endif
 
+  /* For local files, use tile cache to avoid re-reading from disk */
+  TileCacheKey key{level, tx, ty};
+  auto it = impl->tile_cache.find(key);
+  if (it != impl->tile_cache.end()) {
+    const unsigned local_x = px % lev.tile_width;
+    const unsigned local_y = py % lev.tile_height;
+    const unsigned idx = local_y * lev.tile_width + local_x;
+    return it->second[idx];
+  }
+
+  /* Tile not cached, read from file and cache it */
   const unsigned tile_pixels = lev.tile_width * lev.tile_height;
   std::vector<TerrainHeight> tile_buffer(tile_pixels);
 
@@ -972,8 +984,15 @@ CogLoader::GetHeight(const GeoPoint &location,
   const unsigned local_x = px % lev.tile_width;
   const unsigned local_y = py % lev.tile_height;
   const unsigned idx = local_y * lev.tile_width + local_x;
+  TerrainHeight result = tile_buffer[idx];
 
-  return tile_buffer[idx];
+  /* Cache the tile (evict old entries if cache is full) */
+  if (impl->tile_cache.size() >= impl->MAX_CACHED_TILES) {
+    impl->tile_cache.erase(impl->tile_cache.begin());
+  }
+  impl->tile_cache[key] = std::move(tile_buffer);
+
+  return result;
 }
 
 unsigned
