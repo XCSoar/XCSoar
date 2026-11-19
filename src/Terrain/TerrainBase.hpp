@@ -104,6 +104,13 @@ public:
   virtual bool UpdateTiles(const GeoPoint &location, double radius) noexcept = 0;
 
   /**
+   * Check if there are pending tile downloads.
+   * Used by TerrainThread to decide whether to continue processing.
+   */
+  [[nodiscard]]
+  virtual bool HasPendingTiles() const noexcept { return false; }
+
+  /**
    * Open terrain from profile settings.
    * Checks TerrainFile first (for COG), then MapFile (for .xcm).
    *

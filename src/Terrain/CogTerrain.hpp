@@ -205,10 +205,11 @@ public:
    * Check if there are pending tiles to process.
    */
   [[gnu::pure]]
-  bool HasPendingTiles() const noexcept {
+  bool HasPendingTiles() const noexcept override {
     if (!auto_tile_mode)
       return false;
-    return tile_manager.HasPendingInternalTiles();
+    return tile_manager.HasPendingTiles() ||
+           tile_manager.HasPendingInternalTiles();
   }
 
   /**

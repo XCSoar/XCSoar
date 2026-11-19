@@ -20,8 +20,20 @@ TerrainThread::Trigger(const WindowProjection &projection)
 
   GeoPoint center = projection.GetGeoScreenCenter();
   auto radius = projection.GetScreenWidthMeters() / 2;
-  if (last_center.IsValid() && last_radius >= radius &&
-      last_center.DistanceS(center) < 1000)
+
+  bool should_trigger = false;
+
+  if (!last_center.IsValid()) {
+    should_trigger = true;
+  } else if (last_radius < radius) {
+    should_trigger = true;
+  } else if (last_center.DistanceS(center) >= 100) {
+    should_trigger = true;
+  } else if (terrain.HasPendingTiles()) {
+    should_trigger = true;
+  }
+
+  if (!should_trigger)
     return;
 
   next_center = center;

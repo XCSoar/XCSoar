@@ -121,6 +121,15 @@ public:
   size_t GetLoadedTileCount() const noexcept;
 
   /**
+   * Check if there are pending tile downloads.
+   */
+  [[gnu::pure]]
+  bool HasPendingTiles() const noexcept {
+    const std::lock_guard lock{tiles_mutex};
+    return !pending_tiles.empty();
+  }
+
+  /**
    * Clear all loaded tiles.
    */
   void Clear() noexcept;
