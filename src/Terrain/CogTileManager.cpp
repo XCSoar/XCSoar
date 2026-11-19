@@ -179,7 +179,8 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius,
 }
 
 TerrainHeight
-CogTileManager::GetHeight(const GeoPoint &location) const noexcept
+CogTileManager::GetHeight(const GeoPoint &location,
+                          unsigned quantisation) const noexcept
 {
   if (!location.IsValid())
     return TerrainHeight::Invalid();
@@ -195,7 +196,7 @@ CogTileManager::GetHeight(const GeoPoint &location) const noexcept
     return TerrainHeight::Invalid();
 
   const auto &loader = *it->second;
-  return loader.GetHeight(location);
+  return loader.GetHeight(location, quantisation);
 }
 
 GeoBounds

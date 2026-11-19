@@ -870,7 +870,8 @@ LoadCogTerrain(struct zzip_dir *dir, const char *path,
 }
 
 TerrainHeight
-CogLoader::GetHeight(const GeoPoint &location) const noexcept
+CogLoader::GetHeight(const GeoPoint &location,
+                     unsigned quantisation) const noexcept
 {
   if (!IsOpen() || impl->levels.empty() || !impl->bounds.IsValid())
     return TerrainHeight::Invalid();
@@ -878,7 +879,15 @@ CogLoader::GetHeight(const GeoPoint &location) const noexcept
   if (!impl->bounds.IsInside(location))
     return TerrainHeight::Invalid();
 
-  const unsigned level = impl->levels.size() - 1;
+  unsigned level = 0;
+  if (quantisation > 1 && impl->levels.size() > 1) {
+    for (unsigned i = 1; i < impl->levels.size(); ++i) {
+      if (impl->levels[i].scale <= quantisation)
+        level = i;
+      else
+        break;
+    }
+  }
   const CogLevel &lev = impl->levels[level];
 
   const double lat_ratio = (impl->bounds.GetNorth().Degrees() - location.latitude.Degrees()) /

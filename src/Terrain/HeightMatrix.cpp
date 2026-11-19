@@ -3,7 +3,9 @@
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
+#include "TerrainBase.hpp"
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 
@@ -172,13 +174,19 @@ HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
 
   const Angle delta_y = bounds.GetHeight() / _size.y;
   const Angle delta_x = bounds.GetWidth() / _size.x;
+
+  const double meters_per_sample_x = bounds.GetWidth().Degrees() * 111000.0 / _size.x;
+  const double meters_per_sample_y = bounds.GetHeight().Degrees() * 111000.0 / _size.y;
+  const double meters_per_sample = std::max(meters_per_sample_x, meters_per_sample_y);
+  const unsigned quantisation = std::max(1u, static_cast<unsigned>(meters_per_sample / 30.0));
+
   Angle latitude = bounds.GetNorth();
 
   auto p = data.data();
   for (unsigned y = 0; y < _size.y; ++y, latitude -= delta_y) {
     Angle longitude = bounds.GetWest();
     for (unsigned x = 0; x < _size.x; ++x, longitude += delta_x) {
-      *p++ = terrain.GetTerrainHeight(GeoPoint(longitude, latitude));
+      *p++ = terrain.GetTerrainHeight(GeoPoint(longitude, latitude), quantisation);
     }
   }
 }
@@ -203,7 +211,7 @@ HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
   for (unsigned y = 0; y < screen_size.height; y += quantisation_pixels) {
     for (unsigned x = 0; x < size.x; ++x) {
       const GeoPoint loc = projection.ScreenToGeo({(int)(x * quantisation_pixels), (int)y});
-      *p++ = terrain.GetTerrainHeight(loc);
+      *p++ = terrain.GetTerrainHeight(loc, quantisation_pixels);
     }
   }
 }

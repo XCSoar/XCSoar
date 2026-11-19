@@ -129,9 +129,13 @@ public:
 
   /**
    * Get terrain height, using tile manager in auto-tile mode.
+   *
+   * @param location geographic location
+   * @param quantisation pixel quantisation for pyramid level selection
    */
   [[gnu::pure]]
-  TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept override;
+  TerrainHeight GetTerrainHeight(const GeoPoint location,
+                                 unsigned quantisation = 1) const noexcept override;
 
   /**
    * Check if this terrain is in auto-tile mode.

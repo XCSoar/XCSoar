@@ -175,11 +175,16 @@ public:
 
   /**
    * Get terrain height at a geographic location.
-   * Uses appropriate pyramid level based on internal settings.
+   * Uses appropriate pyramid level based on quantisation parameter.
    * Returns TerrainHeight::Invalid() if location is outside bounds.
+   *
+   * @param location geographic location to query
+   * @param quantisation desired pixel quantisation (1=full resolution,
+   *        higher values select lower-resolution pyramid levels)
    */
   [[gnu::pure]]
-  TerrainHeight GetHeight(const GeoPoint &location) const noexcept;
+  TerrainHeight GetHeight(const GeoPoint &location,
+                          unsigned quantisation = 1) const noexcept;
 };
 
 /**

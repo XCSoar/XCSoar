@@ -139,9 +139,13 @@ public:
   /**
    * Get terrain height at a location from loaded tiles.
    * Returns TerrainHeight::Invalid() if no tile covers the location.
+   *
+   * @param location geographic location to query
+   * @param quantisation desired pixel quantisation for pyramid level selection
    */
   [[gnu::pure]]
-  TerrainHeight GetHeight(const GeoPoint &location) const noexcept;
+  TerrainHeight GetHeight(const GeoPoint &location,
+                          unsigned quantisation = 1) const noexcept;
 
   /**
    * Get the combined bounds of all loaded tiles.

@@ -175,10 +175,11 @@ CogTerrain::OpenAutoTile([[maybe_unused]] CurlGlobal &curl,
 #endif
 
 TerrainHeight
-CogTerrain::GetTerrainHeight(const GeoPoint location) const noexcept
+CogTerrain::GetTerrainHeight(const GeoPoint location,
+                             unsigned quantisation) const noexcept
 {
   if (auto_tile_mode)
-    return tile_manager.GetHeight(location);
+    return tile_manager.GetHeight(location, quantisation);
 
   Lease lease(*this);
   return lease->GetHeight(location);

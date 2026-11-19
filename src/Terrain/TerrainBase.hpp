@@ -36,8 +36,17 @@ public:
     return map.GetSerial();
   }
 
+  /**
+   * Get terrain height at a location.
+   *
+   * @param location geographic location
+   * @param quantisation pixel quantisation hint for pyramid level selection
+   *        (1=full resolution, higher values may select lower-resolution data)
+   */
   [[gnu::pure]]
-  virtual TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {
+  virtual TerrainHeight GetTerrainHeight(const GeoPoint location,
+                                         unsigned quantisation = 1) const noexcept {
+    (void)quantisation;
     Lease lease(*this);
     return lease->GetHeight(location);
   }
