@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Event/EventBus.hpp"
-#include "Event/TerrainEvents.hpp"
+#include "EventBus/EventBus.hpp"
+#include "EventBus/TerrainEvents.hpp"
 #include "Terrain/TerrainBase.hpp"
 #include "Terrain/CogTileManager.hpp"
 #include "Geo/GeoPoint.hpp"
