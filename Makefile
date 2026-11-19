@@ -210,6 +210,7 @@ include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
 include $(topdir)/build/libtopo.mk
 include $(topdir)/build/libterrain.mk
+include $(topdir)/build/libservice.mk
 include $(topdir)/build/lua.mk
 include $(topdir)/build/harness.mk
 include $(topdir)/build/flarm.mk

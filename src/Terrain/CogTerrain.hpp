@@ -128,6 +128,14 @@ public:
   bool UpdateTiles(const GeoPoint &location, double radius) noexcept override;
 
   /**
+   * Process one pending tile request from the queue.
+   * Call this from a background thread to load tiles without blocking UI.
+   *
+   * @return true if a tile was processed, false if queue is empty
+   */
+  bool ProcessPendingTile() noexcept;
+
+  /**
    * Get terrain height, using tile manager in auto-tile mode.
    *
    * @param location geographic location

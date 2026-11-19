@@ -206,3 +206,12 @@ CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 
   return map.IsDirty();
 }
+
+bool
+CogTerrain::ProcessPendingTile() noexcept
+{
+  if (!auto_tile_mode)
+    return false;
+
+  return tile_manager.ProcessOneRequest();
+}
