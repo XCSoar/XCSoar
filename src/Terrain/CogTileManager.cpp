@@ -164,6 +164,18 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
 
   const std::lock_guard lock{tiles_mutex};
 
+  if (last_center.IsValid()) {
+    const double distance = last_center.DistanceS(center);
+    if (distance > 100000) {
+      LogFormat("COG: View jumped %.0f km, clearing %zu pending tiles",
+                distance / 1000.0, pending_tiles.size());
+      pending_tiles.clear();
+    }
+  }
+
+  last_center = center;
+  last_radius = radius;
+
   for (int lat = min_lat; lat <= max_lat; ++lat) {
     for (int lon = min_lon; lon <= max_lon; ++lon) {
       CogTileId tile{lat, lon};
@@ -292,13 +304,49 @@ CogTileManager::PreCacheTiles(const GeoBounds &bounds,
 
   const std::lock_guard lock{tiles_mutex};
 
-  unsigned total_loaded = 0;
+  LogFormat("COG PreCacheTiles: %zu loaded tiles, quant=%u",
+            loaded_tiles.size(), quantisation);
+
+  unsigned total_queued = 0;
   for (const auto &[tile_id, loader] : loaded_tiles) {
     const auto &tile_bounds = loader->GetBounds();
+    LogFormat("COG PreCacheTiles: checking tile %s, bounds valid=%d, overlaps=%d",
+              tile_id.ToFilename().c_str(),
+              tile_bounds.IsValid(),
+              tile_bounds.IsValid() && tile_bounds.Overlaps(bounds));
     if (tile_bounds.IsValid() && tile_bounds.Overlaps(bounds)) {
-      total_loaded += loader->PreCacheTiles(bounds, quantisation);
+      total_queued += loader->QueueInternalTiles(bounds, quantisation);
     }
   }
 
-  return total_loaded;
+  LogFormat("COG PreCacheTiles: queued %u tiles", total_queued);
+  return total_queued;
+}
+
+bool
+CogTileManager::ProcessInternalTiles() noexcept
+{
+  const std::lock_guard lock{tiles_mutex};
+
+  for (auto &[tile_id, loader] : loaded_tiles) {
+    if (loader->HasPendingInternalTiles()) {
+      if (loader->ProcessOneInternalTile())
+        return true;
+    }
+  }
+
+  return false;
+}
+
+bool
+CogTileManager::HasPendingInternalTiles() const noexcept
+{
+  const std::lock_guard lock{tiles_mutex};
+
+  for (const auto &[tile_id, loader] : loaded_tiles) {
+    if (loader->HasPendingInternalTiles())
+      return true;
+  }
+
+  return false;
 }

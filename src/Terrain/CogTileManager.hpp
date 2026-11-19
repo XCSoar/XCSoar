@@ -53,6 +53,9 @@ private:
   std::set<CogTileId> pending_tiles;
   std::set<CogTileId> failed_tiles;
 
+  GeoPoint last_center{GeoPoint::Invalid()};
+  double last_radius = 0;
+
   /**
    * Get the cache file path for a tile.
    */
@@ -150,15 +153,28 @@ public:
   }
 
   /**
-   * Pre-cache all internal tiles needed to cover a bounding box.
-   * This avoids per-pixel HTTP requests during height matrix fill.
+   * Queue internal tiles needed to cover a bounding box for background loading.
    *
    * @param bounds geographic bounds to cover
    * @param quantisation desired pixel quantisation for level selection
-   * @return number of tiles loaded
+   * @return number of tiles queued
    */
   unsigned PreCacheTiles(const GeoBounds &bounds,
                          unsigned quantisation = 1) const noexcept;
+
+  /**
+   * Process one pending internal tile (blocking I/O).
+   * Call from background thread only.
+   *
+   * @return true if a tile was processed
+   */
+  bool ProcessInternalTiles() noexcept;
+
+  /**
+   * Check if any tiles have pending internal tiles to load.
+   */
+  [[gnu::pure]]
+  bool HasPendingInternalTiles() const noexcept;
 
   /**
    * Get the base URL for the provider.
