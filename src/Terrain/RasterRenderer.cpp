@@ -546,20 +546,25 @@ RasterRenderer::ScanTerrain(const TerrainBase &terrain,
   height_matrix.FillFromTerrain(terrain, bounds, matrix_size);
 
   /* Calculate quantisation_effective for slope shading.
-     This is the ratio of terrain data resolution to screen pixel size,
-     determining how many height matrix cells to step when computing slopes. */
+     This determines how many height matrix cells to step when computing slopes.
+     For COG/SRTM terrain, the native resolution is ~30m (GL1) or ~90m (GL3).
+     We use a fixed terrain resolution since COG tiles have consistent resolution. */
   {
     const double screen_pixel_size = 1.0 / projection.GetScale();
-    /* Approximate terrain data resolution in meters per height matrix cell.
-       For COG SRTM tiles this is typically 30-90m, but here we calculate
-       from the actual sampling: bounds width/height per matrix cell. */
-    const double terrain_res_x = bounds.GetWidth().Degrees() * 111000.0 / matrix_size.x;
-    const double terrain_res_y = bounds.GetHeight().Degrees() * 111000.0 / matrix_size.y;
-    const double terrain_resolution = std::max(terrain_res_x, terrain_res_y);
+    /* SRTM GL1 is ~30m resolution, GL3 is ~90m. Use 30m as default. */
+    constexpr double SRTM_RESOLUTION_METERS = 30.0;
+    
+    /* Calculate how many meters per height matrix cell we're sampling at */
+    const double sample_res_x = bounds.GetWidth().Degrees() * 111000.0 / matrix_size.x;
+    const double sample_res_y = bounds.GetHeight().Degrees() * 111000.0 / matrix_size.y;
+    const double sample_resolution = std::max(sample_res_x, sample_res_y);
+    
+    /* Use the coarser of terrain resolution and sample resolution */
+    const double effective_resolution = std::max(SRTM_RESOLUTION_METERS, sample_resolution);
 
     if (screen_pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
       /* How many screen pixels does one terrain data point stretch? */
-      auto q = terrain_resolution / screen_pixel_size;
+      auto q = effective_resolution / screen_pixel_size;
       quantisation_effective = std::max(1, static_cast<int>(q));
 
       /* Cap at reasonable maximum to avoid artifacts */
@@ -568,7 +573,7 @@ RasterRenderer::ScanTerrain(const TerrainBase &terrain,
         quantisation_effective = max_q;
     } else if (screen_pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
       /* At low zoom levels, use adaptive coarse quantisation */
-      auto q = terrain_resolution / screen_pixel_size;
+      auto q = effective_resolution / screen_pixel_size;
       const double zoom_factor = 1.0 + (screen_pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
       quantisation_effective = std::max(1, static_cast<int>(q * zoom_factor));
 
@@ -590,20 +595,23 @@ RasterRenderer::ScanTerrain(const TerrainBase &terrain,
   /* Calculate quantisation_effective for slope shading (non-OpenGL path) */
   {
     const double screen_pixel_size = 1.0 / projection.GetScale();
+    constexpr double SRTM_RESOLUTION_METERS = 30.0;
+    
     const auto screen_bounds = projection.GetScreenBounds();
     const auto screen_size = projection.GetScreenSize();
-    const double terrain_res_x = screen_bounds.GetWidth().Degrees() * 111000.0 / screen_size.width;
-    const double terrain_res_y = screen_bounds.GetHeight().Degrees() * 111000.0 / screen_size.height;
-    const double terrain_resolution = std::max(terrain_res_x, terrain_res_y);
+    const double sample_res_x = screen_bounds.GetWidth().Degrees() * 111000.0 / screen_size.width;
+    const double sample_res_y = screen_bounds.GetHeight().Degrees() * 111000.0 / screen_size.height;
+    const double sample_resolution = std::max(sample_res_x, sample_res_y);
+    const double effective_resolution = std::max(SRTM_RESOLUTION_METERS, sample_resolution);
 
     if (screen_pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
-      auto q = terrain_resolution / screen_pixel_size;
+      auto q = effective_resolution / screen_pixel_size;
       quantisation_effective = std::max(1, static_cast<int>(q));
       const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_NEAR);
       if (quantisation_effective > max_q)
         quantisation_effective = max_q;
     } else if (screen_pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
-      auto q = terrain_resolution / screen_pixel_size;
+      auto q = effective_resolution / screen_pixel_size;
       const double zoom_factor = 1.0 + (screen_pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
       quantisation_effective = std::max(1, static_cast<int>(q * zoom_factor));
       const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);

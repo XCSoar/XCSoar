@@ -1070,18 +1070,26 @@ CogLoader::QueueInternalTiles([[maybe_unused]] const GeoBounds &bounds,
   const int py_max = std::min(static_cast<int>(lev.height) - 1,
                               static_cast<int>(lat_max * lev.height));
 
+  /* Add 1-tile margin around the visible area to ensure neighboring tiles
+     are loaded for smooth slope shading at boundaries */
   const unsigned tx_min = px_min / lev.tile_width;
   const unsigned tx_max = px_max / lev.tile_width;
   const unsigned ty_min = py_min / lev.tile_height;
   const unsigned ty_max = py_max / lev.tile_height;
+  
+  const unsigned tx_min_margin = tx_min > 0 ? tx_min - 1 : 0;
+  const unsigned tx_max_margin = std::min(tx_max + 1, lev.tiles_x - 1);
+  const unsigned ty_min_margin = ty_min > 0 ? ty_min - 1 : 0;
+  const unsigned ty_max_margin = std::min(ty_max + 1, lev.tiles_y - 1);
 
   LogFormat("COG QueueInternalTiles: px=%d-%d py=%d-%d tx=%u-%u ty=%u-%u cache=%zu pending=%zu",
-            px_min, px_max, py_min, py_max, tx_min, tx_max, ty_min, ty_max,
+            px_min, px_max, py_min, py_max, tx_min_margin, tx_max_margin, 
+            ty_min_margin, ty_max_margin,
             impl->tile_cache.size(), impl->pending_internal_tiles.size());
 
   unsigned queued = 0;
-  for (unsigned ty = ty_min; ty <= ty_max && ty < lev.tiles_y; ++ty) {
-    for (unsigned tx = tx_min; tx <= tx_max && tx < lev.tiles_x; ++tx) {
+  for (unsigned ty = ty_min_margin; ty <= ty_max_margin && ty < lev.tiles_y; ++ty) {
+    for (unsigned tx = tx_min_margin; tx <= tx_max_margin && tx < lev.tiles_x; ++tx) {
       TileCacheKey key{level, tx, ty};
 
       bool in_cache = impl->tile_cache.find(key) != impl->tile_cache.end();
