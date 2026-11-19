@@ -189,16 +189,15 @@ bool
 CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 {
   if (auto_tile_mode) {
-    if (!location.IsValid()) {
-      LogFormat("COG UpdateTiles: invalid location");
+    if (!location.IsValid())
       return false;
-    }
 
-    LogFormat("COG UpdateTiles: location %.4f,%.4f radius %.0f",
-              location.latitude.Degrees(), location.longitude.Degrees(), radius);
+    bool has_pending = tile_manager.UpdateTiles(location, radius);
 
-    NullOperationEnvironment operation;
-    return tile_manager.UpdateTiles(location, radius, map, operation);
+    if (has_pending)
+      tile_manager.ProcessOneRequest();
+
+    return has_pending;
   }
 
   auto &tile_cache = map.GetTileCache();

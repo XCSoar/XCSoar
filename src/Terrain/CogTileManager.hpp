@@ -8,6 +8,7 @@
 
 #include <string>
 #include <map>
+#include <set>
 #include <memory>
 #include <mutex>
 
@@ -53,9 +54,11 @@ struct CogTileId {
 /**
  * Manages automatic downloading and caching of COG terrain tiles.
  *
- * Given a base URL template (e.g., "https://example.com/srtm/{tile}.tif"),
- * this class automatically fetches the appropriate tiles for the current
- * viewport and merges them into a single RasterMap.
+ * Architecture:
+ * - UpdateTiles() is non-blocking: queues needed tiles, returns immediately
+ * - ProcessOneRequest() does actual I/O: call from background thread
+ * - GetHeight() uses only loaded tiles: never blocks on I/O
+ * - Disk cache checked before network requests
  *
  * Tile naming follows SRTM conventions:
  * - N47E011.tif for latitude 47°N, longitude 11°E
@@ -74,18 +77,31 @@ public:
 
 private:
   std::string base_url;
-  Provider provider;
+  std::string cache_path;
+  Provider provider = Provider::OPENTOPOGRAPHY_SRTM_GL1;
 
   CurlGlobal *curl = nullptr;
 
   mutable std::mutex tiles_mutex;
   std::map<CogTileId, std::unique_ptr<CogLoader>> loaded_tiles;
+  std::set<CogTileId> pending_tiles;
+  std::set<CogTileId> failed_tiles;
 
-  GeoPoint last_center = GeoPoint::Invalid();
-  double last_radius = 0;
+  /**
+   * Get the cache file path for a tile.
+   */
+  [[gnu::pure]]
+  std::string GetCachePath(const CogTileId &tile) const noexcept;
 
 public:
   CogTileManager() noexcept = default;
+
+  /**
+   * Set the cache directory path for persistent tile storage.
+   */
+  void SetCachePath(const char *path) noexcept {
+    cache_path = path ? path : "";
+  }
 
   /**
    * Initialize with a provider preset.
@@ -106,18 +122,22 @@ public:
   std::string GetTileUrl(const CogTileId &tile) const noexcept;
 
   /**
-   * Update tiles for the given viewport.
-   * Downloads any missing tiles that intersect the viewport.
+   * Queue tiles needed for the given viewport.
+   * This is non-blocking - just identifies needed tiles and queues them.
    *
    * @param center center of the viewport
    * @param radius radius in meters
-   * @param map RasterMap to update with new terrain data
-   * @param operation for progress reporting
-   * @return true if more updates are pending
+   * @return true if there are pending tiles to load
    */
-  bool UpdateTiles(const GeoPoint &center, double radius,
-                   RasterMap &map,
-                   OperationEnvironment &operation) noexcept;
+  bool UpdateTiles(const GeoPoint &center, double radius) noexcept;
+
+  /**
+   * Process one pending tile request (blocking I/O).
+   * Call this from a background thread.
+   *
+   * @return true if a tile was processed, false if queue is empty
+   */
+  bool ProcessOneRequest() noexcept;
 
   /**
    * Check if a tile is already loaded.

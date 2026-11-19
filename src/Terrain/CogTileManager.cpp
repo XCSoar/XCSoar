@@ -3,7 +3,8 @@
 
 #include "CogTileManager.hpp"
 #include "CogLoader.hpp"
-#include "Operation/Operation.hpp"
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
 #include "LogFile.hpp"
 
 #include <cstdio>
@@ -72,6 +73,31 @@ CogTileManager::SetCustomUrl(const char *url, CurlGlobal &_curl) noexcept
 }
 
 std::string
+CogTileManager::GetCachePath(const CogTileId &tile) const noexcept
+{
+  if (cache_path.empty())
+    return {};
+
+  const char *provider_dir = nullptr;
+  switch (provider) {
+  case Provider::OPENTOPOGRAPHY_SRTM_GL1:
+    provider_dir = "srtm_gl1";
+    break;
+  case Provider::OPENTOPOGRAPHY_SRTM_GL3:
+    provider_dir = "srtm_gl3";
+    break;
+  case Provider::CUSTOM:
+    provider_dir = "custom";
+    break;
+  }
+
+  char buf[256];
+  snprintf(buf, sizeof(buf), "%s/%s/%s",
+           cache_path.c_str(), provider_dir, tile.ToFilename().c_str());
+  return buf;
+}
+
+std::string
 CogTileManager::GetTileUrl(const CogTileId &tile) const noexcept
 {
   if (provider == Provider::CUSTOM) {
@@ -123,19 +149,10 @@ CogTileManager::Clear() noexcept
 }
 
 bool
-CogTileManager::UpdateTiles(const GeoPoint &center, double radius,
-                            [[maybe_unused]] RasterMap &map,
-                            OperationEnvironment &operation) noexcept
+CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
 {
-  if (!center.IsValid() || curl == nullptr)
+  if (!center.IsValid())
     return false;
-
-  if (last_center.IsValid() && last_radius >= radius &&
-      last_center.DistanceS(center) < 10000)
-    return false;
-
-  last_center = center;
-  last_radius = radius;
 
   constexpr double DEGREES_PER_METER = 1.0 / 111000.0;
   const double radius_deg = radius * DEGREES_PER_METER * 1.5;
@@ -145,37 +162,84 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius,
   const int min_lon = static_cast<int>(std::floor(center.longitude.Degrees() - radius_deg));
   const int max_lon = static_cast<int>(std::floor(center.longitude.Degrees() + radius_deg));
 
-  bool loaded_new = false;
+  const std::lock_guard lock{tiles_mutex};
 
   for (int lat = min_lat; lat <= max_lat; ++lat) {
     for (int lon = min_lon; lon <= max_lon; ++lon) {
       CogTileId tile{lat, lon};
 
-      if (IsTileLoaded(tile))
+      if (loaded_tiles.find(tile) != loaded_tiles.end())
         continue;
 
-      std::string url = GetTileUrl(tile);
-      LogFormat("COG: Loading tile %s from %s", tile.ToFilename().c_str(), url.c_str());
+      if (failed_tiles.find(tile) != failed_tiles.end())
+        continue;
 
-      operation.SetText(tile.ToFilename().c_str());
+      if (pending_tiles.find(tile) != pending_tiles.end())
+        continue;
 
-      try {
-        auto loader = std::make_unique<CogLoader>();
-        if (loader->OpenHttp(*curl, url.c_str())) {
-          const std::lock_guard lock{tiles_mutex};
-          loaded_tiles[tile] = std::move(loader);
-          loaded_new = true;
-          LogFormat("COG: Successfully loaded tile %s", tile.ToFilename().c_str());
-        } else {
-          LogFormat("COG: Tile %s not available", tile.ToFilename().c_str());
-        }
-      } catch (...) {
-        LogError(std::current_exception(), "COG: Failed to load tile");
-      }
+      pending_tiles.insert(tile);
     }
   }
 
-  return loaded_new;
+  return !pending_tiles.empty();
+}
+
+bool
+CogTileManager::ProcessOneRequest() noexcept
+{
+  CogTileId tile{0, 0};
+
+  {
+    const std::lock_guard lock{tiles_mutex};
+    if (pending_tiles.empty())
+      return false;
+
+    tile = *pending_tiles.begin();
+    pending_tiles.erase(pending_tiles.begin());
+  }
+
+  std::string path = GetCachePath(tile);
+  if (!path.empty() && File::Exists(Path(path.c_str()))) {
+    try {
+      auto loader = std::make_unique<CogLoader>();
+      if (loader->Open(Path(path.c_str()))) {
+        const std::lock_guard lock{tiles_mutex};
+        loaded_tiles[tile] = std::move(loader);
+        LogFormat("COG: Loaded tile %s from cache", tile.ToFilename().c_str());
+        return true;
+      }
+    } catch (...) {
+    }
+  }
+
+  if (curl == nullptr) {
+    const std::lock_guard lock{tiles_mutex};
+    failed_tiles.insert(tile);
+    return true;
+  }
+
+  std::string url = GetTileUrl(tile);
+  LogFormat("COG: Loading tile %s from %s", tile.ToFilename().c_str(), url.c_str());
+
+  try {
+    auto loader = std::make_unique<CogLoader>();
+    if (loader->OpenHttp(*curl, url.c_str())) {
+      const std::lock_guard lock{tiles_mutex};
+      loaded_tiles[tile] = std::move(loader);
+      LogFormat("COG: Successfully loaded tile %s", tile.ToFilename().c_str());
+      return true;
+    } else {
+      LogFormat("COG: Tile %s not available", tile.ToFilename().c_str());
+      const std::lock_guard lock{tiles_mutex};
+      failed_tiles.insert(tile);
+    }
+  } catch (...) {
+    LogError(std::current_exception(), "COG: Failed to load tile");
+    const std::lock_guard lock{tiles_mutex};
+    failed_tiles.insert(tile);
+  }
+
+  return true;
 }
 
 TerrainHeight
