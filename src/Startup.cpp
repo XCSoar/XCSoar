@@ -18,6 +18,7 @@
 #include "Simulator.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Terrain/CogTerrain.hpp"
 #include "Terrain/AsyncLoader.hpp"
 #include "io/ZipArchive.hpp"
 #include "Message.hpp"
@@ -86,6 +87,7 @@
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Waypoint/Factory.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "Storage/StorageManager.hpp"
 #include "DataLayoutMigration.hpp"
 
@@ -173,6 +175,7 @@ WasStartupCancelledByUser() noexcept
 static bool
 LoadProfile()
 {
+  LogString("LoadProfile() called");
   /* run the data-layout migration BEFORE the profile is selected and
      loaded: it moves root-level profiles into profiles/ - selecting or
      loading first ends up with an empty profile that later overwrites
@@ -180,7 +183,13 @@ LoadProfile()
      upgrade) */
   MigrateDataLayoutToSubdirs();
 
-  if (Profile::GetPath() == nullptr &&
+  const auto profile_path = Profile::GetPath();
+  if (profile_path != nullptr)
+    LogFormat("Profile path: %s", profile_path.c_str());
+  else
+    LogString("Profile path: (null)");
+
+  if (profile_path == nullptr &&
       !dlgStartupShowModal()) {
     LogString("LoadProfile: no profile path and startup dialog was cancelled");
     startup_cancelled_by_user = true;
@@ -188,6 +197,7 @@ LoadProfile()
   }
 
   Profile::Load();
+  LogString("Profile loaded, calling Use()");
   Profile::Use(Profile::map);
 
   Units::SetConfig(CommonInterface::GetUISettings().format.units);
@@ -259,17 +269,44 @@ AfterStartup()
 #endif
 }
 
+
 void
 MainWindow::LoadTerrain() noexcept
 {
+  LogString("MainWindow::LoadTerrain() called");
   SetTopWidget(nullptr);
 
   delete terrain_loader;
   terrain_loader = nullptr;
 
-  if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
+  const auto terrain_file = Profile::Get(ProfileKeys::TerrainFile);
+  LogFormat("TerrainFile profile value: %s", terrain_file ? terrain_file : "(null)");
+  const bool has_cog_terrain = terrain_file != nullptr && *terrain_file != '\0';
+
+  if (has_cog_terrain) {
+    LogFormat("Loading COG terrain: %s", terrain_file);
+
+    if (CogTerrain::IsAutoTileProvider(terrain_file)) {
+      NullOperationEnvironment operation;
+      auto terrain = TerrainBase::OpenTerrain(file_cache, operation);
+      if (terrain) {
+        DataGlobals::SetTerrain(std::move(terrain));
+        LogString("COG auto-tile terrain loaded synchronously");
+      }
+    } else {
+      terrain_loader = new AsyncTerrainOverviewLoader();
+
+      terrain_loader_env = std::make_unique<PluggableOperationEnvironment>();
+      auto *progress = new ProgressWidget(*terrain_loader_env,
+                                          _("Loading Terrain..."));
+      SetTopWidget(progress);
+
+      terrain_loader->Start(file_cache, nullptr, *terrain_loader_env,
+                            terrain_loader_notify);
+    }
+  } else if (const auto path = Profile::GetPath(ProfileKeys::MapFile);
       path != nullptr) {
-    LogFormat("Loading terrain: %s", path.c_str());
+    LogFormat("Loading terrain from map: %s", path.c_str());
 
     /* Quick synchronous validation: try opening the ZIP archive
        before launching the async loader to fail fast on missing or
@@ -322,14 +359,17 @@ try {
   DataGlobals::SetTerrain(std::move(new_terrain));
 
   /* Dependents of the new terrain. Topography stays as loaded.
-     Waypoints were usually read before the terrain was there. */
-  if (data_components->terrain && data_components->waypoints)
+     Waypoints were usually read before the terrain was there.
+     For auto-tile COG terrain, skip if no tiles loaded yet. */
+  if (data_components->terrain && data_components->terrain->IsDefined() &&
+      data_components->waypoints)
     UpdateTerrainElevations(*data_components->waypoints,
                             *data_components->terrain);
   DataGlobals::UpdateHome(false);
 
-  SetAirspaceGroundLevels(*data_components->airspaces,
-                          *data_components->terrain);
+  if (data_components->terrain && data_components->terrain->IsDefined())
+    SetAirspaceGroundLevels(*data_components->airspaces,
+                            *data_components->terrain);
 #ifdef HAVE_DOWNLOAD_MANAGER
   RepositoryAutoUpdateTerrainIdle();
 #endif
@@ -790,6 +830,12 @@ Startup(UI::Display &display)
                         false);
   RestoreSessionGoto();
   Session::SetReady();
+
+  // For auto-tile terrain, download tiles covering the waypoint area
+  // For auto-tile terrain, tiles will be downloaded on-demand when the map
+  // view requests them. No synchronous download here to avoid blocking startup.
+
+  // Set startup location after terrain tiles are loaded (for auto-tile mode)
   ActionInterface::SetStartupLocation();
 
   // ReSynchronise the blackboards here since SetStartupLocation

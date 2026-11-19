@@ -174,12 +174,27 @@ CogTerrain::OpenAutoTile([[maybe_unused]] CurlGlobal &curl,
 
 #endif
 
+TerrainHeight
+CogTerrain::GetTerrainHeight(const GeoPoint location) const noexcept
+{
+  if (auto_tile_mode)
+    return tile_manager.GetHeight(location);
+
+  Lease lease(*this);
+  return lease->GetHeight(location);
+}
+
 bool
 CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
 {
   if (auto_tile_mode) {
-    if (!location.IsValid())
+    if (!location.IsValid()) {
+      LogFormat("COG UpdateTiles: invalid location");
       return false;
+    }
+
+    LogFormat("COG UpdateTiles: location %.4f,%.4f radius %.0f",
+              location.latitude.Degrees(), location.longitude.Degrees(), radius);
 
     NullOperationEnvironment operation;
     return tile_manager.UpdateTiles(location, radius, map, operation);

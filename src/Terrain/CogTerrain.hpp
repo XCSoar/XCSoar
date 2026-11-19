@@ -128,6 +128,54 @@ public:
   bool UpdateTiles(const GeoPoint &location, double radius) noexcept override;
 
   /**
+   * Get terrain height, using tile manager in auto-tile mode.
+   */
+  [[gnu::pure]]
+  TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept override;
+
+  /**
+   * Check if this terrain is in auto-tile mode.
+   */
+  [[gnu::pure]]
+  bool IsAutoTileMode() const noexcept override {
+    return auto_tile_mode;
+  }
+
+  /**
+   * Check if terrain data is available (tiles loaded in auto-tile mode).
+   */
+  [[gnu::pure]]
+  bool IsDefined() const noexcept override {
+    if (auto_tile_mode)
+      return tile_manager.HasLoadedTiles();
+    return map.IsDefined();
+  }
+
+  /**
+   * Get terrain center, using tile manager bounds in auto-tile mode.
+   */
+  [[gnu::pure]]
+  GeoPoint GetTerrainCenter() const noexcept override {
+    if (auto_tile_mode) {
+      const auto bounds = tile_manager.GetBounds();
+      if (bounds.IsValid())
+        return bounds.GetCenter();
+      return GeoPoint::Invalid();
+    }
+    return map.GetMapCenter();
+  }
+
+  /**
+   * Get terrain bounds, using tile manager in auto-tile mode.
+   */
+  [[gnu::pure]]
+  GeoBounds GetBounds() const noexcept override {
+    if (auto_tile_mode)
+      return tile_manager.GetBounds();
+    return map.GetBounds();
+  }
+
+  /**
    * Get the source path or URL.
    */
   [[gnu::pure]]

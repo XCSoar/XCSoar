@@ -177,3 +177,43 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius,
 
   return loaded_new;
 }
+
+TerrainHeight
+CogTileManager::GetHeight(const GeoPoint &location) const noexcept
+{
+  if (!location.IsValid())
+    return TerrainHeight::Invalid();
+
+  CogTileId tile_id{
+    static_cast<int>(std::floor(location.latitude.Degrees())),
+    static_cast<int>(std::floor(location.longitude.Degrees()))
+  };
+
+  const std::lock_guard lock{tiles_mutex};
+  auto it = loaded_tiles.find(tile_id);
+  if (it == loaded_tiles.end())
+    return TerrainHeight::Invalid();
+
+  const auto &loader = *it->second;
+  return loader.GetHeight(location);
+}
+
+GeoBounds
+CogTileManager::GetBounds() const noexcept
+{
+  const std::lock_guard lock{tiles_mutex};
+
+  if (loaded_tiles.empty())
+    return GeoBounds::Invalid();
+
+  GeoBounds bounds = GeoBounds::Invalid();
+  for (const auto &[tile_id, loader] : loaded_tiles) {
+    const auto &tile_bounds = loader->GetBounds();
+    if (tile_bounds.IsValid()) {
+      bounds.Extend(tile_bounds.GetNorthWest());
+      bounds.Extend(tile_bounds.GetSouthEast());
+    }
+  }
+
+  return bounds;
+}

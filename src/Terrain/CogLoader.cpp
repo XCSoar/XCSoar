@@ -24,6 +24,7 @@
 #include "lib/curl/Easy.hxx"
 #include "lib/curl/Setup.hxx"
 #include <zlib.h>
+#include <map>
 #endif
 
 #ifdef _WIN32
@@ -60,6 +61,18 @@ static constexpr uint16_t COG_TYPE_LONG = 4;
 static constexpr uint16_t COG_TYPE_DOUBLE = 12;
 static constexpr uint16_t COG_TYPE_LONG8 = 16;
 
+struct TileCacheKey {
+  unsigned level;
+  unsigned tx;
+  unsigned ty;
+  
+  bool operator<(const TileCacheKey &other) const noexcept {
+    if (level != other.level) return level < other.level;
+    if (ty != other.ty) return ty < other.ty;
+    return tx < other.tx;
+  }
+};
+
 struct CogLoader::Impl {
 #ifdef USE_LIBTIFF
   TIFF *tiff = nullptr;
@@ -76,6 +89,9 @@ struct CogLoader::Impl {
   uint16_t compression = COG_COMPRESSION_NONE;
   uint16_t bits_per_sample = 16;
   uint16_t sample_format = 1;
+  
+  mutable std::map<TileCacheKey, std::vector<TerrainHeight>> tile_cache;
+  static constexpr size_t MAX_CACHED_TILES = 32;
 #endif
 
   ~Impl() noexcept {
@@ -851,6 +867,74 @@ LoadCogTerrain(struct zzip_dir *dir, const char *path,
 {
   (void)dir;
   LoadCogTerrain(Path(path), cache, env);
+}
+
+TerrainHeight
+CogLoader::GetHeight(const GeoPoint &location) const noexcept
+{
+  if (!IsOpen() || impl->levels.empty() || !impl->bounds.IsValid())
+    return TerrainHeight::Invalid();
+
+  if (!impl->bounds.IsInside(location))
+    return TerrainHeight::Invalid();
+
+  const unsigned level = impl->levels.size() - 1;
+  const CogLevel &lev = impl->levels[level];
+
+  const double lat_ratio = (impl->bounds.GetNorth().Degrees() - location.latitude.Degrees()) /
+                           impl->bounds.GetHeight().Degrees();
+  const double lon_ratio = (location.longitude.Degrees() - impl->bounds.GetWest().Degrees()) /
+                           impl->bounds.GetWidth().Degrees();
+
+  const unsigned px = static_cast<unsigned>(lon_ratio * lev.width);
+  const unsigned py = static_cast<unsigned>(lat_ratio * lev.height);
+
+  if (px >= lev.width || py >= lev.height)
+    return TerrainHeight::Invalid();
+
+  const unsigned tx = px / lev.tile_width;
+  const unsigned ty = py / lev.tile_height;
+
+#ifdef HAVE_HTTP
+  if (impl->is_http) {
+    TileCacheKey key{level, tx, ty};
+    auto it = impl->tile_cache.find(key);
+    if (it != impl->tile_cache.end()) {
+      const unsigned local_x = px % lev.tile_width;
+      const unsigned local_y = py % lev.tile_height;
+      const unsigned idx = local_y * lev.tile_width + local_x;
+      return it->second[idx];
+    }
+
+    const unsigned tile_pixels = lev.tile_width * lev.tile_height;
+    std::vector<TerrainHeight> tile_buffer(tile_pixels);
+
+    if (!const_cast<CogLoader *>(this)->ReadTile(level, tx, ty, tile_buffer.data()))
+      return TerrainHeight::Invalid();
+
+    if (impl->tile_cache.size() >= Impl::MAX_CACHED_TILES)
+      impl->tile_cache.erase(impl->tile_cache.begin());
+
+    impl->tile_cache[key] = std::move(tile_buffer);
+    
+    const unsigned local_x = px % lev.tile_width;
+    const unsigned local_y = py % lev.tile_height;
+    const unsigned idx = local_y * lev.tile_width + local_x;
+    return impl->tile_cache[key][idx];
+  }
+#endif
+
+  const unsigned tile_pixels = lev.tile_width * lev.tile_height;
+  std::vector<TerrainHeight> tile_buffer(tile_pixels);
+
+  if (!const_cast<CogLoader *>(this)->ReadTile(level, tx, ty, tile_buffer.data()))
+    return TerrainHeight::Invalid();
+
+  const unsigned local_x = px % lev.tile_width;
+  const unsigned local_y = py % lev.tile_height;
+  const unsigned idx = local_y * lev.tile_width + local_x;
+
+  return tile_buffer[idx];
 }
 
 void

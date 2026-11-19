@@ -3,6 +3,7 @@
 
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
+#include "Terrain/TerrainBase.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Constants.hpp"
 #include "Screen/Layout.hpp"
@@ -435,6 +436,13 @@ RasterRenderer::ScanMap(const RasterMap &map,
   }
 
 #ifdef ENABLE_OPENGL
+  if (!map.IsDefined()) {
+    /* terrain not yet loaded (e.g., auto-tile with no tiles fetched) */
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
   GeoBounds desired =
     projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
   if (!desired.IntersectWith(map.GetBounds())) {
@@ -487,6 +495,61 @@ RasterRenderer::ScanMap(const RasterMap &map,
 #else
   (void)force_full;
   height_matrix.Fill(map, projection, quantisation_pixels, true);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
+#endif
+}
+
+void
+RasterRenderer::ScanTerrain(const TerrainBase &terrain,
+                            const WindowProjection &projection) noexcept
+{
+  const GeoPoint center = projection.GetGeoLocation();
+  if (!center.IsValid())
+    return;
+
+  const auto terrain_bounds = terrain.GetBounds();
+  if (!terrain_bounds.IsValid())
+    return;
+
+#ifdef ENABLE_OPENGL
+  GeoBounds desired = projection.GetScreenBounds().Scale(BOUNDS_SCALE_FACTOR);
+  if (!desired.IntersectWith(terrain_bounds)) {
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
+  UnsignedPoint2D matrix_size =
+    (UnsignedPoint2D)projection.GetScreenSize()
+    * static_cast<unsigned>(BOUNDS_SCALE_FACTOR * 128.0f + 0.5f)
+    / quantisation_pixels / 128;
+  if (matrix_size.x == 0 || matrix_size.y == 0) {
+    height_matrix_changed = false;
+    quantisation_effective = 0;
+    return;
+  }
+
+  const unsigned max_texture = OpenGL::max_texture_size > 0
+    ? OpenGL::max_texture_size
+    : OpenGL::DEFAULT_MAX_TEXTURE_SIZE;
+  if (matrix_size.x > max_texture || matrix_size.y > max_texture) {
+    const double scale = std::min(double(max_texture) / matrix_size.x,
+                                  double(max_texture) / matrix_size.y);
+    matrix_size = {std::max(1u, unsigned(matrix_size.x * scale)),
+                   std::max(1u, unsigned(matrix_size.y * scale))};
+  }
+
+  bounds = desired;
+  height_matrix_changed = true;
+  height_matrix.FillFromTerrain(terrain, bounds, matrix_size);
+
+  ClampQuantisationEffectiveToMatrix(quantisation_effective,
+                                     height_matrix.GetSize());
+  last_quantisation_pixels = quantisation_pixels;
+#else
+  height_matrix.FillFromTerrain(terrain, projection, quantisation_pixels);
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
                                      height_matrix.GetSize());

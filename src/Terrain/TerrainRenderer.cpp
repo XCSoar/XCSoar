@@ -8,6 +8,7 @@
 #include "Projection/WindowProjection.hpp"
 #include "util/Macros.hpp"
 #include "ui/event/Idle.hpp"
+#include "LogFile.hpp"
 
 #include <cassert>
 
@@ -427,12 +428,15 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   GeoBounds new_bounds = map_projection.GetScreenBounds();
   assert(new_bounds.IsValid());
 
-  {
-    TerrainBase::Lease map(terrain);
-    if (!new_bounds.IntersectWith(map->GetBounds()))
-      /* map is outside of visible screen area */
-      return false;
-  }
+  if (!terrain.IsDefined())
+    return false;
+
+  const auto terrain_bounds = terrain.GetBounds();
+  if (!terrain_bounds.IsValid())
+    return false;
+
+  if (!new_bounds.IntersectWith(terrain_bounds))
+    return false;
 
   /* While the finger is down, ScanMap slides the picture and reads
      only the strip that entered from the direction of the pan.
@@ -470,7 +474,9 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
     last_color_ramp = color_ramp;
   }
 
-  {
+  if (terrain.IsAutoTileMode()) {
+    raster_renderer.ScanTerrain(terrain, map_projection);
+  } else {
     TerrainBase::Lease map(terrain);
     raster_renderer.ScanMap(map, map_projection, !tiles_current);
   }

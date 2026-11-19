@@ -155,3 +155,57 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
 }
 
 #endif
+
+#include "TerrainBase.hpp"
+
+#ifdef ENABLE_OPENGL
+
+void
+HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
+                              const GeoBounds &bounds,
+                              UnsignedPoint2D _size) noexcept
+{
+  if (_size.x == 0 || _size.y == 0)
+    return;
+
+  SetSize(_size);
+
+  const Angle delta_y = bounds.GetHeight() / _size.y;
+  const Angle delta_x = bounds.GetWidth() / _size.x;
+  Angle latitude = bounds.GetNorth();
+
+  auto p = data.data();
+  for (unsigned y = 0; y < _size.y; ++y, latitude -= delta_y) {
+    Angle longitude = bounds.GetWest();
+    for (unsigned x = 0; x < _size.x; ++x, longitude += delta_x) {
+      *p++ = terrain.GetTerrainHeight(GeoPoint(longitude, latitude));
+    }
+  }
+}
+
+#else
+
+void
+HeightMatrix::FillFromTerrain(const TerrainBase &terrain,
+                              const WindowProjection &projection,
+                              unsigned quantisation_pixels) noexcept
+{
+  if (quantisation_pixels < 1)
+    quantisation_pixels = 1;
+
+  const auto screen_size = projection.GetScreenSize();
+  if (screen_size.width == 0 || screen_size.height == 0)
+    return;
+
+  SetSize((UnsignedPoint2D)screen_size, quantisation_pixels);
+
+  auto p = data.data();
+  for (unsigned y = 0; y < screen_size.height; y += quantisation_pixels) {
+    for (unsigned x = 0; x < size.x; ++x) {
+      const GeoPoint loc = projection.ScreenToGeo({(int)(x * quantisation_pixels), (int)y});
+      *p++ = terrain.GetTerrainHeight(loc);
+    }
+  }
+}
+
+#endif

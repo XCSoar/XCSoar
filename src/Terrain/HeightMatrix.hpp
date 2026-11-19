@@ -8,6 +8,7 @@
 #include "util/AllocatedArray.hxx"
 
 class RasterMap;
+class TerrainBase;
 
 #ifdef ENABLE_OPENGL
 class GeoBounds;
@@ -38,12 +39,24 @@ public:
    */
   void Fill(const RasterMap &map, const GeoBounds &bounds,
             UnsignedPoint2D _size, bool interpolate) noexcept;
+
+  /**
+   * Copy values from a TerrainBase to the buffer, north-up only.
+   * This version reads height data point by point, suitable for
+   * terrain implementations that don't use RasterMap's tile cache.
+   */
+  void FillFromTerrain(const TerrainBase &terrain, const GeoBounds &bounds,
+                       UnsignedPoint2D _size) noexcept;
 #else
   /**
    * @param interpolate true enables interpolation of sub-pixel values
    */
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
             unsigned quantisation_pixels, bool interpolate) noexcept;
+
+  void FillFromTerrain(const TerrainBase &terrain,
+                       const WindowProjection &projection,
+                       unsigned quantisation_pixels) noexcept;
 #endif
 
   /**

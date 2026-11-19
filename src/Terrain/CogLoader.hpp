@@ -172,6 +172,14 @@ public:
    */
   [[gnu::pure]]
   const std::string &GetUrl() const noexcept;
+
+  /**
+   * Get terrain height at a geographic location.
+   * Uses appropriate pyramid level based on internal settings.
+   * Returns TerrainHeight::Invalid() if location is outside bounds.
+   */
+  [[gnu::pure]]
+  TerrainHeight GetHeight(const GeoPoint &location) const noexcept;
 };
 
 /**

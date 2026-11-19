@@ -226,8 +226,6 @@ public:
   void Reset() noexcept;
 
   const GeoBounds &GetBounds() const noexcept {
-    assert(bounds.IsValid());
-
     return bounds;
   }
 

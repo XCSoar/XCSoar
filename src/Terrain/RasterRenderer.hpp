@@ -17,6 +17,7 @@ static constexpr unsigned NUM_COLOR_RAMP_LEVELS = 13;
 class Angle;
 class Canvas;
 class RasterMap;
+class TerrainBase;
 class WindowProjection;
 class RawBitmap;
 struct RawColor;
@@ -237,6 +238,13 @@ public:
   void ScanMap(const RasterMap &map,
                const WindowProjection &projection,
                bool force_full = false) noexcept;
+
+  /**
+   * Scan terrain and fill the height matrix point by point.
+   * Used for terrain implementations that don't use RasterMap's tile cache.
+   */
+  void ScanTerrain(const TerrainBase &terrain,
+                   const WindowProjection &projection) noexcept;
 
 #ifdef ENABLE_OPENGL
   /**

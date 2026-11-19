@@ -37,24 +37,33 @@ public:
   }
 
   [[gnu::pure]]
-  TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {
+  virtual TerrainHeight GetTerrainHeight(const GeoPoint location) const noexcept {
     Lease lease(*this);
     return lease->GetHeight(location);
   }
 
   [[gnu::pure]]
-  GeoPoint GetTerrainCenter() const noexcept {
+  virtual GeoPoint GetTerrainCenter() const noexcept {
     return map.GetMapCenter();
   }
 
   [[gnu::pure]]
-  const GeoBounds &GetBounds() const noexcept {
+  virtual GeoBounds GetBounds() const noexcept {
     return map.GetBounds();
   }
 
   [[gnu::pure]]
-  bool IsDefined() const noexcept {
+  virtual bool IsDefined() const noexcept {
     return map.IsDefined();
+  }
+
+  /**
+   * Check if this terrain is in auto-tile mode (tiles download on demand).
+   * Only CogTerrain can be in auto-tile mode; XcmTerrain always returns false.
+   */
+  [[gnu::pure]]
+  virtual bool IsAutoTileMode() const noexcept {
+    return false;
   }
 
   /**

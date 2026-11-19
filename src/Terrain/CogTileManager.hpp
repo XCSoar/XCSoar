@@ -137,6 +137,29 @@ public:
   void Clear() noexcept;
 
   /**
+   * Get terrain height at a location from loaded tiles.
+   * Returns TerrainHeight::Invalid() if no tile covers the location.
+   */
+  [[gnu::pure]]
+  TerrainHeight GetHeight(const GeoPoint &location) const noexcept;
+
+  /**
+   * Get the combined bounds of all loaded tiles.
+   * Returns invalid bounds if no tiles are loaded.
+   */
+  [[gnu::pure]]
+  GeoBounds GetBounds() const noexcept;
+
+  /**
+   * Check if any tiles are loaded.
+   */
+  [[gnu::pure]]
+  bool HasLoadedTiles() const noexcept {
+    const std::lock_guard lock{tiles_mutex};
+    return !loaded_tiles.empty();
+  }
+
+  /**
    * Get the base URL for the provider.
    */
   static const char *GetProviderUrl(Provider p) noexcept;
