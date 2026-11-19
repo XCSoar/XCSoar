@@ -214,6 +214,31 @@ public:
    */
   [[gnu::pure]]
   bool IsInternalTileCached(unsigned level, unsigned tx, unsigned ty) const noexcept;
+
+  /**
+   * Queue internal tiles needed to cover a bounding box at a given
+   * quantisation level for background loading.
+   *
+   * @param bounds geographic bounds to cover
+   * @param quantisation desired pixel quantisation for level selection
+   * @return number of tiles queued
+   */
+  unsigned QueueInternalTiles(const GeoBounds &bounds,
+                              unsigned quantisation = 1) noexcept;
+
+  /**
+   * Process one pending internal tile (blocking I/O).
+   * Call from background thread only.
+   *
+   * @return true if a tile was processed, false if queue is empty
+   */
+  bool ProcessOneInternalTile() noexcept;
+
+  /**
+   * Check if there are pending internal tiles to load.
+   */
+  [[gnu::pure]]
+  bool HasPendingInternalTiles() const noexcept;
 };
 
 /**

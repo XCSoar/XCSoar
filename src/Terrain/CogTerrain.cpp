@@ -197,7 +197,10 @@ CogTerrain::UpdateTiles(const GeoPoint &location, double radius) noexcept
     if (has_pending)
       tile_manager.ProcessOneRequest();
 
-    return has_pending;
+    if (tile_manager.HasPendingInternalTiles())
+      tile_manager.ProcessInternalTiles();
+
+    return has_pending || tile_manager.HasPendingInternalTiles();
   }
 
   auto &tile_cache = map.GetTileCache();
@@ -213,5 +216,8 @@ CogTerrain::ProcessPendingTile() noexcept
   if (!auto_tile_mode)
     return false;
 
-  return tile_manager.ProcessOneRequest();
+  if (tile_manager.ProcessOneRequest())
+    return true;
+
+  return tile_manager.ProcessInternalTiles();
 }

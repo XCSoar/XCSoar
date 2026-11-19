@@ -7,6 +7,7 @@
 #include "Event/TerrainEvents.hpp"
 #include "Terrain/TerrainBase.hpp"
 #include "Terrain/CogTileManager.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "thread/StandbyThread.hpp"
 #include "io/FileCache.hpp"
 
@@ -60,6 +61,10 @@ private:
   std::queue<WorkItem> work_queue;
   bool terrain_loading = false;
   AllocatedPath terrain_path{nullptr};
+
+  GeoPoint current_view_center{GeoPoint::Invalid()};
+  double current_view_radius = 0;
+  unsigned current_quantisation = 1;
 
 public:
   explicit TerrainService(Event::EventBus &_bus, FileCache *_file_cache);

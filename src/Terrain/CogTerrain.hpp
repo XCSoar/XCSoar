@@ -188,18 +188,27 @@ public:
   }
 
   /**
-   * Pre-cache all internal tiles needed to cover a bounding box.
-   * This avoids per-pixel HTTP requests during height matrix fill.
+   * Queue internal tiles needed to cover a bounding box for background loading.
    *
    * @param bounds geographic bounds to cover
    * @param quantisation desired pixel quantisation for level selection
-   * @return number of tiles loaded
+   * @return number of tiles queued
    */
   unsigned PreCacheTiles(const GeoBounds &bounds,
                          unsigned quantisation = 1) const noexcept override {
     if (auto_tile_mode)
       return tile_manager.PreCacheTiles(bounds, quantisation);
     return 0;
+  }
+
+  /**
+   * Check if there are pending tiles to process.
+   */
+  [[gnu::pure]]
+  bool HasPendingTiles() const noexcept {
+    if (!auto_tile_mode)
+      return false;
+    return tile_manager.HasPendingInternalTiles();
   }
 
   /**

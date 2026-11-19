@@ -4,6 +4,7 @@
 #include "TerrainService.hpp"
 #include "Terrain/CogTerrain.hpp"
 #include "Terrain/RasterTerrain.hpp"  // For XcmTerrain
+#include "Geo/GeoBounds.hpp"
 #include "Operation/Operation.hpp"
 #include "LogFile.hpp"
 
@@ -77,8 +78,17 @@ TerrainService::OnViewChanged(const Event::ViewChangedEvent &event)
   if (!event.center.IsValid())
     return;
 
+  {
+    const std::lock_guard lock{mutex};
+    current_view_center = event.center;
+    current_view_radius = event.radius_meters;
+    current_quantisation = event.quantisation;
+  }
+
   if (terrain != nullptr) {
     if (terrain->UpdateTiles(event.center, event.radius_meters)) {
+      QueueWork({WorkType::PROCESS_TILE_QUEUE});
+    } else {
       QueueWork({WorkType::PROCESS_TILE_QUEUE});
     }
   }
@@ -218,6 +228,52 @@ TerrainService::DoProcessTileQueue()
     const std::lock_guard lock{mutex};
     if (IsStopped())
       break;
+  }
+
+  GeoPoint view_center;
+  double view_radius;
+  unsigned quantisation;
+
+  {
+    const std::lock_guard lock{mutex};
+    view_center = current_view_center;
+    view_radius = current_view_radius;
+    quantisation = current_quantisation;
+  }
+
+  if (view_center.IsValid() && view_radius > 0) {
+    constexpr double DEGREES_PER_METER = 1.0 / 111000.0;
+    const double radius_deg = view_radius * DEGREES_PER_METER;
+    const GeoBounds view_bounds{
+      GeoPoint{
+        view_center.longitude - Angle::Degrees(radius_deg),
+        view_center.latitude + Angle::Degrees(radius_deg)
+      },
+      GeoPoint{
+        view_center.longitude + Angle::Degrees(radius_deg),
+        view_center.latitude - Angle::Degrees(radius_deg)
+      }
+    };
+
+    cog_terrain->PreCacheTiles(view_bounds, quantisation);
+
+    bool processed_any = false;
+    while (cog_terrain->HasPendingTiles()) {
+      if (!cog_terrain->ProcessPendingTile())
+        break;
+      processed_any = true;
+
+      const std::lock_guard lock{mutex};
+      if (IsStopped())
+        break;
+    }
+
+    if (processed_any) {
+      bus.PostToMain(Event::TerrainInternalTileLoadedEvent{
+        CogTileId::FromLocation(view_center),
+        0, 0, 0
+      });
+    }
   }
 
   if (cog_terrain->IsDefined()) {
