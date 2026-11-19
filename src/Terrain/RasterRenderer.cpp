@@ -545,11 +545,74 @@ RasterRenderer::ScanTerrain(const TerrainBase &terrain,
   height_matrix_changed = true;
   height_matrix.FillFromTerrain(terrain, bounds, matrix_size);
 
+  /* Calculate quantisation_effective for slope shading.
+     This is the ratio of terrain data resolution to screen pixel size,
+     determining how many height matrix cells to step when computing slopes. */
+  {
+    const double screen_pixel_size = 1.0 / projection.GetScale();
+    /* Approximate terrain data resolution in meters per height matrix cell.
+       For COG SRTM tiles this is typically 30-90m, but here we calculate
+       from the actual sampling: bounds width/height per matrix cell. */
+    const double terrain_res_x = bounds.GetWidth().Degrees() * 111000.0 / matrix_size.x;
+    const double terrain_res_y = bounds.GetHeight().Degrees() * 111000.0 / matrix_size.y;
+    const double terrain_resolution = std::max(terrain_res_x, terrain_res_y);
+
+    if (screen_pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
+      /* How many screen pixels does one terrain data point stretch? */
+      auto q = terrain_resolution / screen_pixel_size;
+      quantisation_effective = std::max(1, static_cast<int>(q));
+
+      /* Cap at reasonable maximum to avoid artifacts */
+      const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_NEAR);
+      if (quantisation_effective > max_q)
+        quantisation_effective = max_q;
+    } else if (screen_pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
+      /* At low zoom levels, use adaptive coarse quantisation */
+      auto q = terrain_resolution / screen_pixel_size;
+      const double zoom_factor = 1.0 + (screen_pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
+      quantisation_effective = std::max(1, static_cast<int>(q * zoom_factor));
+
+      const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);
+      if (quantisation_effective > max_q)
+        quantisation_effective = max_q;
+    } else {
+      /* Disable slope shading when zoomed out extremely far */
+      quantisation_effective = 0;
+    }
+  }
+
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
                                      height_matrix.GetSize());
   last_quantisation_pixels = quantisation_pixels;
 #else
   height_matrix.FillFromTerrain(terrain, projection, quantisation_pixels);
+
+  /* Calculate quantisation_effective for slope shading (non-OpenGL path) */
+  {
+    const double screen_pixel_size = 1.0 / projection.GetScale();
+    const auto screen_bounds = projection.GetScreenBounds();
+    const auto screen_size = projection.GetScreenSize();
+    const double terrain_res_x = screen_bounds.GetWidth().Degrees() * 111000.0 / screen_size.width;
+    const double terrain_res_y = screen_bounds.GetHeight().Degrees() * 111000.0 / screen_size.height;
+    const double terrain_resolution = std::max(terrain_res_x, terrain_res_y);
+
+    if (screen_pixel_size < PIXEL_SIZE_NORMAL_THRESHOLD) {
+      auto q = terrain_resolution / screen_pixel_size;
+      quantisation_effective = std::max(1, static_cast<int>(q));
+      const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_NEAR);
+      if (quantisation_effective > max_q)
+        quantisation_effective = max_q;
+    } else if (screen_pixel_size < PIXEL_SIZE_LOW_ZOOM_THRESHOLD) {
+      auto q = terrain_resolution / screen_pixel_size;
+      const double zoom_factor = 1.0 + (screen_pixel_size - PIXEL_SIZE_NORMAL_THRESHOLD) / ZOOM_FACTOR_DIVISOR;
+      quantisation_effective = std::max(1, static_cast<int>(q * zoom_factor));
+      const unsigned max_q = Layout::FastScale(MAX_QUANTISATION_LOW_ZOOM);
+      if (quantisation_effective > max_q)
+        quantisation_effective = max_q;
+    } else {
+      quantisation_effective = 0;
+    }
+  }
 
   ClampQuantisationEffectiveToMatrix(quantisation_effective,
                                      height_matrix.GetSize());
