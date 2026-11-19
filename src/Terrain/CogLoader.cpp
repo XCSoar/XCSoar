@@ -1101,10 +1101,10 @@ CogLoader::QueueInternalTiles([[maybe_unused]] const GeoBounds &bounds,
   const unsigned ty_min_margin = ty_min > 0 ? ty_min - 1 : 0;
   const unsigned ty_max_margin = std::min(ty_max + 1, lev.tiles_y - 1);
 
-  LogFormat("COG QueueInternalTiles: px=%d-%d py=%d-%d tx=%u-%u ty=%u-%u cache=%zu pending=%zu",
+  LogFormat("COG QueueInternalTiles: px=%d-%d py=%d-%d tx=%u-%u ty=%u-%u cache=%u pending=%u",
             px_min, px_max, py_min, py_max, tx_min_margin, tx_max_margin, 
             ty_min_margin, ty_max_margin,
-            impl->tile_cache.size(), impl->pending_internal_tiles.size());
+            (unsigned)impl->tile_cache.size(), (unsigned)impl->pending_internal_tiles.size());
 
   unsigned queued = 0;
   for (unsigned ty = ty_min_margin; ty <= ty_max_margin && ty < lev.tiles_y; ++ty) {

@@ -167,8 +167,8 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
   if (last_center.IsValid()) {
     const double distance = last_center.DistanceS(center);
     if (distance > 100000) {
-      LogFormat("COG: View jumped %.0f km, clearing %zu pending tiles",
-                distance / 1000.0, pending_tiles.size());
+      LogFormat("COG: View jumped %.0f km, clearing %u pending tiles",
+                distance / 1000.0, (unsigned)pending_tiles.size());
       pending_tiles.clear();
     }
   }
@@ -205,8 +205,8 @@ CogTileManager::UpdateTiles(const GeoPoint &center, double radius) noexcept
     }
   }
 
-  LogFormat("COG UpdateTiles: queued=%u loaded=%u failed=%u pending=%u total_pending=%zu",
-            queued, loaded, failed, pending, pending_tiles.size());
+  LogFormat("COG UpdateTiles: queued=%u loaded=%u failed=%u pending=%u total_pending=%u",
+            queued, loaded, failed, pending, (unsigned)pending_tiles.size());
 
   return !pending_tiles.empty();
 }
@@ -319,8 +319,8 @@ CogTileManager::PreCacheTiles(const GeoBounds &bounds,
 
   const std::lock_guard lock{tiles_mutex};
 
-  LogFormat("COG PreCacheTiles: %zu loaded tiles, quant=%u",
-            loaded_tiles.size(), quantisation);
+  LogFormat("COG PreCacheTiles: %u loaded tiles, quant=%u",
+            (unsigned)loaded_tiles.size(), quantisation);
 
   unsigned total_queued = 0;
   for (const auto &[tile_id, loader] : loaded_tiles) {
