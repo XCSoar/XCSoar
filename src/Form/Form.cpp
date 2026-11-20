@@ -334,6 +334,15 @@ WndForm::ShowModal()
       continue;
     }
 
+    /* Text may share numeric codes with navigation keys. */
+    if (character_function && (event.GetCharacterCount() > 0)) {
+      bool handled = false;
+      for (size_t i = 0; i < event.GetCharacterCount(); ++i)
+        handled = character_function(event.GetCharacter(i)) || handled;
+      if (handled)
+        continue;
+    }
+
     if (event.IsKeyDown()) {
       if (OnAnyKeyDown(event.GetKeyCode()))
         continue;
@@ -376,14 +385,6 @@ WndForm::ShowModal()
         continue;
       }
 #endif
-    }
-
-    if (character_function && (event.GetCharacterCount() > 0)) {
-      bool handled = false;
-      for (size_t i = 0; i < event.GetCharacterCount(); ++i)
-        handled = character_function(event.GetCharacter(i)) || handled;
-      if (handled)
-        continue;
     }
 
     loop.Dispatch(event);
