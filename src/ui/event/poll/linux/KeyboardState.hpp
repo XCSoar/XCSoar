@@ -28,7 +28,7 @@ public:
   explicit KeyboardState(const Keymap *source) noexcept;
   /** Load configuration before input dispatch, never on a key event. */
   void Initialise() noexcept;
-  KeyboardState(const KeyboardState &) = delete;
+  KeyboardState(const KeyboardState &) noexcept = default;
   KeyboardState &operator=(const KeyboardState &) = delete;
 
   const Keymap *GetKeymap() const noexcept {
@@ -36,6 +36,10 @@ public:
   }
 
   void Reset() noexcept;
+  void CopyLocksFrom(const KeyboardState &source) noexcept {
+    caps_lock = source.caps_lock;
+    num_lock = source.num_lock;
+  }
   void Update(unsigned key, bool down) noexcept;
   unsigned GetCharacter(unsigned key) const noexcept;
 };
