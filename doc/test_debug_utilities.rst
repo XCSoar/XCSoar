@@ -1238,3 +1238,9 @@ Additional Resources
 - ``test/src/DebugPort.hpp``: Device port utilities
 - ``test/data/``: Sample flight data files for testing
 - ``build/test.mk``: Build system definitions for all utilities
+
+Text entry
+==========
+
+``RunTextEntry [--rotary] [--initial TEXT] [--allowed CHARS]`` opens the
+keyboard editor, or the HighScore editor with ``--rotary``.
