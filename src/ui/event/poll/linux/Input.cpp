@@ -117,7 +117,7 @@ LinuxInputDevice::Open(const char *path) noexcept
 
   rel_x = rel_y = rel_wheel = 0;
   down = false;
-  moving = pressing = releasing = false;
+  moving = pressing = releasing = events_dropped = false;
   return true;
 }
 
@@ -152,6 +152,51 @@ LinuxInputDevice::Read() noexcept
 
   for (unsigned i = 0; i < n; ++i) {
     const struct input_event &e = buffer[i];
+
+    if (events_dropped) {
+      if (e.type == EV_SYN && e.code == SYN_REPORT) {
+        events_dropped = false;
+        keyboard.Resynchronise(fd.Get());
+        if (is_pointer) {
+          input_absinfo abs;
+          bool position_changed = false;
+          if (ioctl(fd.Get(), EVIOCGABS(ABS_X), &abs) == 0) {
+            edit_position.x = abs.value;
+            position_changed = true;
+          }
+          if (ioctl(fd.Get(), EVIOCGABS(ABS_Y), &abs) == 0) {
+            edit_position.y = abs.value;
+            position_changed = true;
+          }
+          if (position_changed) {
+            public_position = edit_position;
+            merge.MoveAbsolute(public_position.x, public_position.y,
+                               min_x, max_x, min_y, max_y);
+          }
+
+          const bool new_down =
+            keyboard.IsPressed(BTN_TOUCH) || keyboard.IsPressed(BTN_MOUSE);
+          if (new_down != down) {
+            down = new_down;
+            merge.SetDown(down);
+          }
+          queue.WakeUp();
+        }
+        // The snapshot already includes transitions in this read buffer.
+        return;
+      }
+      continue;
+    }
+
+    if (e.type == EV_SYN && e.code == SYN_DROPPED) {
+      events_dropped = true;
+      edit_position = public_position;
+      if (pressing != releasing)
+        down = releasing;
+      moving = pressing = releasing = false;
+      rel_x = rel_y = rel_wheel = 0;
+      continue;
+    }
 
     switch (e.type) {
     case EV_SYN:
