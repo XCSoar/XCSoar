@@ -1174,6 +1174,7 @@ $(eval $(call link-program,TestInputTransformMode,TEST_INPUT_TRANSFORM_MODE))
 
 TEST_TEXT_INPUT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Form/TextEntryBuffer.cpp \
 	$(TEST_SRC_DIR)/TestTextInput.cpp
 TEST_TEXT_INPUT_DEPENDS = UTIL
 ifeq ($(TARGET_IS_LINUX),y)
