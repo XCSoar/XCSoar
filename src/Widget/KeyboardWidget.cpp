@@ -4,6 +4,7 @@
 #include "KeyboardWidget.hpp"
 #include "Renderer/SymbolButtonRenderer.hpp"
 #include "Asset.hpp"
+#include "Language/Language.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/CharUtil.hxx"
@@ -23,6 +24,10 @@ namespace {
 
 static constexpr char KEYBOARD_LETTERS[] =
   "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+static constexpr char KEYBOARD_SYMBOLS[] =
+  "!@#$%^&*()[]{}<>/\\|?-_=+;:'\",.`~";
+static_assert(sizeof(KEYBOARD_SYMBOLS) - 1 == 32);
 
 /** Digits 0-9; matches first keys in @c KEYBOARD_LETTERS order. */
 static constexpr int NUMBER_ROW_KEY_COUNT = 10;
@@ -78,7 +83,12 @@ KeyboardWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
                         std::make_unique<SymbolButtonRenderer>(look, "v"),
                         [this](){ OnShiftClicked(); });
   }
-  UpdateShiftState();
+  WindowStyle style;
+  style.Hide();
+  style.TabStop();
+  symbols_button.Create(parent, look, _("Symbols"), {0, 0, 16, 16}, style,
+                        [this]() { OnSymbolsClicked(); });
+  UpdatePage();
 }
 
 void
@@ -86,16 +96,14 @@ KeyboardWidget::Show(const PixelRect &rc) noexcept
 {
   OnResize(rc);
 
-  for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].Show();
-
-  if (show_shift_button)
-    shift_button.Show();
+  UpdatePage();
+  symbols_button.Show();
 }
 
 void
 KeyboardWidget::Hide() noexcept
 {
+  symbols_button.Hide();
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].Hide();
 
@@ -112,10 +120,20 @@ KeyboardWidget::Move(const PixelRect &rc) noexcept
 void
 KeyboardWidget::SetAllowedCharacters(const char *allowed)
 {
-  for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].SetEnabled(allowed == nullptr ||
-                          StringFind(allowed, buttons[i].GetCharacter()) !=
-                            nullptr);
+  allowed_characters.reset();
+  if (allowed == nullptr)
+    allowed_characters.set();
+  else
+    for (const unsigned char *p = (const unsigned char *)allowed; *p; ++p)
+      if (*p < allowed_characters.size())
+        allowed_characters.set(*p);
+
+  if (!symbols) {
+    UpdateShiftState();
+  } else {
+    for (unsigned i = 0; i < num_buttons; ++i)
+      buttons[i].SetEnabled(allowed_characters[buttons[i].GetCharacter()]);
+  }
 }
 
 bool
@@ -188,29 +206,33 @@ KeyboardWidget::MoveButtonsToRow(const PixelRect &rc, const char *row_keys,
 void
 KeyboardWidget::MoveButtons(const PixelRect &rc)
 {
-  MoveButtonsToRow(rc, "1234567890", 0, 0);
-  MoveButtonsToRow(rc, "QWERTYUIOP", 1, 0);
-  MoveButtonsToRow(rc, "ASDFGHJKL", 2, int(button_size.width / 3));
-  MoveButtonsToRow(rc, "ZXCVBNM@.", 3, int(button_size.width));
-
-  if (IsLandscape(rc)) {
-    MoveSymbolKey(rc.GetTopLeft() + PixelSize(int(button_size.width) * 9,
-                                              int(Layout::Scale(160U))));
-    MoveButton(' ', rc.GetTopLeft() + PixelSize(int(Layout::Scale(80U)),
-                                                 int(Layout::Scale(160U))));
-    ResizeButton(' ', {Layout::Scale(93U), Layout::Scale(40U)});
+  if (symbols) {
+    for (unsigned i = 0; i < sizeof(KEYBOARD_SYMBOLS) - 1; ++i) {
+      const unsigned row = i / 10;
+      const unsigned column = i % 10 + (row == 3 ? 1 : 0);
+      buttons[i].Move(rc.GetTopLeft() +
+                     PixelSize(column * button_size.width,
+                               row * button_size.height));
+    }
   } else {
-    const int h = int(button_size.height);
-    const int w = int(button_size.width);
-    MoveSymbolKey(rc.GetTopLeft() + PixelSize(w * 8, h * 4));
-    MoveButton(' ', rc.GetTopLeft() + PixelSize(w * 2, h * 4));
-    ResizeButton(' ', {button_size.width * 11 / 2, button_size.height});
+    MoveButtonsToRow(rc, "1234567890", 0, 0);
+    MoveButtonsToRow(rc, "QWERTYUIOP", 1, 0);
+    MoveButtonsToRow(rc, "ASDFGHJKL", 2, int(button_size.width / 3));
+    MoveButtonsToRow(rc, "ZXCVBNM@.", 3, int(button_size.width));
+    MoveSymbolKey(rc.GetTopLeft() +
+                  PixelSize(button_size.width * 8, button_size.height * 4));
   }
 
-  if (show_shift_button) {
-    shift_button.Move(
-      rc.GetTopLeft() + PixelSize{0U, 3U * (unsigned)button_size.height});
-  }
+  MoveButton(' ', rc.GetTopLeft() +
+             PixelSize(button_size.width * 2, button_size.height * 4));
+  ResizeButton(' ', {button_size.width * 11 / 2, button_size.height});
+  symbols_button.Move(rc.GetTopLeft() +
+                      PixelSize(0U, button_size.height * 4));
+  symbols_button.Resize({button_size.width * 2, button_size.height});
+
+  if (show_shift_button)
+    shift_button.Move(rc.GetTopLeft() +
+                      PixelSize(0U, button_size.height * 3));
 }
 
 void
@@ -223,6 +245,7 @@ KeyboardWidget::PrepareSize(const PixelRect &rc) noexcept
 void
 KeyboardWidget::OnResize(const PixelRect &rc)
 {
+  keyboard_rect = rc;
   PrepareSize(rc);
   ResizeButtons();
   MoveButtons(rc);
@@ -249,23 +272,21 @@ KeyboardWidget::UpdateShiftState() noexcept
   if (show_shift_button)
     shift_button.SetCaption(shift_state ? "v" : "^");
 
+  if (symbols)
+    return;
   for (unsigned i = 0; i < num_buttons; ++i) {
-    unsigned uch = buttons[i].GetCharacter();
-    if (uch < 0x80) {
-      const char c = char(uch);
-      if (shift_state) {
-        if (IsLowerAlphaASCII(c))
-          buttons[i].SetCharacter(c - 0x20);
-        else if (show_shift_button && c == '-')
-          /* '-' doubles as '_', which is otherwise not reachable */
-          buttons[i].SetCharacter('_');
-      } else {
-        if (IsUpperAlphaASCII(c))
-          buttons[i].SetCharacter(c + 0x20);
-        else if (show_shift_button && c == '_')
-          buttons[i].SetCharacter('-');
-      }
-    }
+    const unsigned original = i < sizeof(KEYBOARD_LETTERS) - 1
+      ? KEYBOARD_LETTERS[i] : " .@-"[i - (sizeof(KEYBOARD_LETTERS) - 1)];
+    unsigned character = original;
+    if (IsUpperAlphaASCII(char(original))) {
+      const unsigned lower = ToLowerASCII(char(original));
+      character = shift_state ? original : lower;
+      if (!show_shift_button && !allowed_characters[character])
+        character = shift_state ? lower : original;
+    } else if (show_shift_button && shift_state && original == '-')
+      character = '_';
+    buttons[i].SetCharacter(character);
+    buttons[i].SetEnabled(allowed_characters[character]);
   }
 }
 
@@ -278,6 +299,42 @@ KeyboardWidget::OnShiftClicked() noexcept
   UpdateShiftState();
 }
 
+void
+KeyboardWidget::UpdatePage() noexcept
+{
+  for (unsigned i = 0; i < num_buttons; ++i) {
+    const bool visible = !symbols || i < sizeof(KEYBOARD_SYMBOLS) - 1 ||
+      i == sizeof(KEYBOARD_LETTERS) - 1;
+    if (visible) {
+      if (symbols) {
+        const unsigned ch = i == sizeof(KEYBOARD_LETTERS) - 1
+          ? ' ' : KEYBOARD_SYMBOLS[i];
+        buttons[i].SetCharacter(ch);
+        buttons[i].SetEnabled(allowed_characters[ch]);
+      }
+      buttons[i].Show();
+    } else
+      buttons[i].Hide();
+  }
+  UpdateShiftState();
+  buttons[sizeof(KEYBOARD_LETTERS) - 1].SetCaption(_("Space"));
+  if (show_shift_button && !symbols)
+    shift_button.Show();
+  else if (show_shift_button)
+    shift_button.Hide();
+  symbols_button.SetCaption(symbols ? _("Letters") : _("Symbols"));
+}
+
+void
+KeyboardWidget::OnSymbolsClicked() noexcept
+{
+  symbols = !symbols;
+  UpdatePage();
+  MoveButtons(keyboard_rect);
+  /* Keep focus on the toggle while the other keys change identity. */
+  symbols_button.SetFocus();
+}
+
 const Button *
 KeyboardWidget::GetByIndex(int idx) const noexcept
 {
@@ -285,6 +342,8 @@ KeyboardWidget::GetByIndex(int idx) const noexcept
     return &buttons[(unsigned)idx];
   if (show_shift_button && idx == (int)num_buttons)
     return &shift_button;
+  if (idx == (int)num_buttons + (show_shift_button ? 1 : 0))
+    return &symbols_button;
   return nullptr;
 }
 
@@ -303,6 +362,8 @@ KeyboardWidget::FindIndexOf(const Window *w) const noexcept
       return (int)i;
   if (show_shift_button && w == (const Window *)&shift_button)
     return (int)num_buttons;
+  if (w == &symbols_button)
+    return (int)num_buttons + (show_shift_button ? 1 : 0);
   return -1;
 }
 

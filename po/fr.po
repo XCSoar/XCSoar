@@ -13022,3 +13022,12 @@ msgstr ""
 
 msgid "Deactivate the current plane?"
 msgstr ""
+
+msgid "Symbols"
+msgstr "Symboles"
+
+msgid "Letters"
+msgstr "Lettres"
+
+msgid "Space"
+msgstr "Espace"
