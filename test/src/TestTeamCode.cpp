@@ -8,7 +8,7 @@
 
 int main()
 {
-  plan_tests(12);
+  plan_tests(12 + 29);
 
   TeamCode tc;
 
@@ -32,6 +32,30 @@ int main()
   ok1(StringIsEqual(tc.GetCode(), "R01"));
   ok1(iround(tc.GetBearing().Degrees()) == 270);
   ok1(equals(tc.GetRange(), 100));
+
+  ok1(tc.Update("AB12"));
+  const auto bearing = tc.GetBearing();
+  const auto range = tc.GetRange();
+  ok1(tc.Update("ab12"));
+  ok1(StringIsEqual(tc.GetCode(), "AB12"));
+  ok1(tc.GetBearing() == bearing);
+  ok1(tc.GetRange() == range);
+
+  ok1(tc.Update("r01"));
+  ok1(StringIsEqual(tc.GetCode(), "R01"));
+  ok1(tc.Update("i0668"));
+  ok1(StringIsEqual(tc.GetCode(), "I0668"));
+
+  for (const char *invalid : {"A", "AB", "AB1234", "AB!2", "AB 2",
+                              "ABé", "AB\n2", "AB１２"}) {
+    ok1(!tc.Update(invalid));
+    ok1(StringIsEqual(tc.GetCode(), "I0668"));
+  }
+
+  ok1(tc.Update(""));
+  ok1(!tc.IsDefined());
+  ok1(!tc.Update(nullptr));
+  ok1(!tc.IsDefined());
 
   return exit_status();
 }
