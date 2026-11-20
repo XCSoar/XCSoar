@@ -6,6 +6,9 @@
 #include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Util.hpp"
+#include "util/CharUtil.hxx"
+
+#include <algorithm>
 
 static constexpr unsigned BASE = 36;
 static constexpr unsigned TEAMCODE_COMBINATIONS = BASE * BASE;
@@ -121,10 +124,20 @@ TeamCode::Update(Angle bearing, double range)
   NumberToTeamCode(uround(range / 100), code.buffer() + 2, 0);
 }
 
-void
+bool
 TeamCode::Update(const char* _code)
 {
-  code = _code;
+  if (_code == nullptr)
+    return false;
+
+  const std::string_view value{_code};
+  if (!value.empty() && (value.size() < 3 || value.size() > 5))
+    return false;
+  if (!std::all_of(value.begin(), value.end(), IsAlphaNumericASCII))
+    return false;
+
+  *CopyASCIIUpper(code.buffer(), code.capacity() - 1, value) = 0;
+  return true;
 }
 
 GeoPoint
