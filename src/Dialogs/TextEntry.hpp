@@ -38,7 +38,8 @@ TextEntryDialog(BasicStringBuffer<char, N> &text,
 
 bool
 KnobTextEntry(char *text, size_t width,
-              const char *caption);
+              const char *caption,
+              AllowedCharacters ac = AllowedCharacters());
 
 /**
  * @param use_system_keyboard use the operating system's on-screen
