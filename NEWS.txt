@@ -117,6 +117,8 @@ Version 7.47 - not yet released
     again; XCSoar kept reporting "USB serial device not found" until
     it was restarted #3450
 * dialogs
+  - enter password punctuation with the on-screen #+= key or HighScore
+    controls, and type directly in HighScore with an attached keyboard
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
     text, clears the ticks for that file or page #2536

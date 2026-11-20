@@ -13020,3 +13020,6 @@ msgstr ""
 
 msgid "Deactivate the current plane?"
 msgstr ""
+
+msgid "Space"
+msgstr "Spazio"
