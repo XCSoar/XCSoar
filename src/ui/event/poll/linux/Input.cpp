@@ -196,8 +196,8 @@ LinuxInputDevice::Read() noexcept
 
         const auto [translated_key_code, is_char] = TranslateKeyCode(e.code);
         Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
-                 translated_key_code);
-        ev.is_char = is_char;
+                 TranslateBindingKeyCode(e.code));
+        ev.ch = is_char ? translated_key_code : 0;
         queue.Push(ev);
       }
 
