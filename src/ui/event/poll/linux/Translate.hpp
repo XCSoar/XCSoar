@@ -59,6 +59,17 @@ static constexpr struct {
   { KEY_SPACE, ' ', true },
 };
 
+/** Preserve existing bindings without mapping punctuation to function keys. */
+constexpr unsigned
+TranslateBindingKeyCode(unsigned key_code) noexcept
+{
+  for (auto entry : key_code_translation_table)
+    if (entry.from == key_code)
+      return entry.to;
+
+  return key_code;
+}
+
 /**
  * @return the translated key code and a flag indicating whether this
  * is an (ASCII) character

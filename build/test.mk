@@ -77,7 +77,7 @@ TEST_NAMES = \
 	TestWaypoints \
 	test_pressure \
 	test_task \
-	TestInputTransformMode \
+	TestInputTransformMode TestTextInput \
 	TestOverwritingRingBuffer \
 	TestDateTime TestISO8601 TestRoughTime TestRoughSpeed TestWrapClock \
 	TestPosixTimeZone \
@@ -1170,6 +1170,12 @@ TEST_INPUT_TRANSFORM_MODE_SOURCES = \
 	$(TEST_SRC_DIR)/TestInputTransformMode.cpp
 TEST_INPUT_TRANSFORM_MODE_DEPENDS = UTIL
 $(eval $(call link-program,TestInputTransformMode,TEST_INPUT_TRANSFORM_MODE))
+
+TEST_TEXT_INPUT_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTextInput.cpp
+TEST_TEXT_INPUT_DEPENDS = UTIL
+$(eval $(call link-program,TestTextInput,TEST_TEXT_INPUT))
 
 TEST_POLARS_SOURCES = \
 	$(SRC)/Polar/Shape.cpp \
