@@ -75,6 +75,48 @@ KeyboardState::Reset() noexcept
 }
 
 void
+KeyboardState::Resynchronise(int fd) noexcept
+{
+  constexpr unsigned bits_per_word = 8 * sizeof(unsigned long);
+  unsigned long keys[(KEY_CNT + bits_per_word - 1) / bits_per_word]{};
+  pressed.reset();
+  if (ioctl(fd, EVIOCGKEY(sizeof(keys)), keys) >= 0)
+    for (unsigned key = 0; key < KEY_CNT; ++key)
+      pressed[key] = (keys[key / bits_per_word] >>
+                      (key % bits_per_word)) & 1UL;
+
+  unsigned long supported = 0, leds = 0;
+  if (ioctl(fd, EVIOCGBIT(EV_LED, sizeof(supported)), &supported) < 0 ||
+      ioctl(fd, EVIOCGLED(sizeof(leds)), &leds) < 0)
+    supported = 0;
+
+  constexpr unsigned long caps_led = 1UL << LED_CAPSL;
+  constexpr unsigned long num_led = 1UL << LED_NUML;
+  if (supported & caps_led)
+    caps_lock = leds & caps_led;
+  if (supported & num_led)
+    num_lock = leds & num_led;
+#ifndef KOBO
+  if ((supported & (caps_led | num_led)) != (caps_led | num_led)) {
+    for (const char *path : {"/dev/tty", "/dev/tty0"}) {
+      const int console = open(path, O_RDONLY | O_NOCTTY | O_CLOEXEC);
+      if (console < 0)
+        continue;
+      AtScopeExit(console) { close(console); };
+      const int locks = ReadConsoleLocks(console);
+      if (locks < 0)
+        continue;
+      if (!(supported & caps_led))
+        caps_lock = locks & K_CAPSLOCK;
+      if (!(supported & num_led))
+        num_lock = locks & K_NUMLOCK;
+      break;
+    }
+  }
+#endif
+}
+
+void
 KeyboardState::Update(unsigned key, bool down) noexcept
 {
   if (key >= pressed.size() || pressed[key] == down)

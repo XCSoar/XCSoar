@@ -52,6 +52,7 @@ class LinuxInputDevice final {
   bool pressing, releasing;
 
   bool is_pointer;
+  bool events_dropped = false;
 
   KeyboardState keyboard;
 

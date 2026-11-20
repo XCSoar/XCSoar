@@ -36,10 +36,12 @@ public:
   }
 
   void Reset() noexcept;
+  void Resynchronise(int fd) noexcept;
   void CopyLocksFrom(const KeyboardState &source) noexcept {
     caps_lock = source.caps_lock;
     num_lock = source.num_lock;
   }
+  bool IsPressed(unsigned key) const noexcept { return pressed[key]; }
   void Update(unsigned key, bool down) noexcept;
   unsigned GetCharacter(unsigned key) const noexcept;
 };
