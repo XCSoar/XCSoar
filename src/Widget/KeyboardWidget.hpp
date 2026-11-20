@@ -8,6 +8,8 @@
 #include "Form/CharacterButton.hpp"
 #include "Form/Button.hpp"
 
+#include <bitset>
+
 #include <cstdint>
 
 struct ButtonLook;
@@ -26,11 +28,16 @@ protected:
   OnCharacterCallback_t on_character;
 
   PixelSize button_size;
+  PixelRect keyboard_rect;
 
   unsigned num_buttons;
   CharacterButton buttons[MAX_BUTTONS];
 
   Button shift_button;
+  Button symbols_button;
+  bool symbols = false;
+  std::bitset<128> allowed_characters;
+
   bool shift_state;
 
   const bool show_shift_button;
@@ -55,7 +62,7 @@ public:
                  bool _default_shift_state = true)
     :look(_look), on_character(_on_character), num_buttons(0),
      shift_state(_default_shift_state),
-     show_shift_button(_show_shift_button) {}
+     show_shift_button(_show_shift_button) { allowed_characters.set(); }
 
   /**
    * Show only the buttons representing the specified character list.
@@ -101,6 +108,8 @@ private:
   }
 
   void UpdateShiftState() noexcept;
+  void UpdatePage() noexcept;
+  void OnSymbolsClicked() noexcept;
   void AddButton(ContainerWindow &parent, const char *caption, unsigned ch);
   void OnShiftClicked() noexcept;
 
@@ -155,7 +164,7 @@ private:
 
   [[gnu::pure]]
   int GetNavigableCount() const noexcept {
-    return (int)num_buttons + (show_shift_button ? 1 : 0);
+    return (int)num_buttons + (show_shift_button ? 1 : 0) + 1;
   }
 
   const Button *GetByIndex(int idx) const noexcept;

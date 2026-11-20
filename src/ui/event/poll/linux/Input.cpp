@@ -62,6 +62,20 @@ IsPointerDevice(int fd) noexcept
   return CheckBit(features, EV_ABS) || CheckBit(features, EV_REL);
 }
 
+static bool
+HasKeyboardKeys(int fd) noexcept
+{
+  unsigned long keys[BitsToInts<unsigned long>(KEY_KPDOT)]{};
+  if (ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(keys)), keys) < 0)
+    return false;
+
+  for (unsigned key = KEY_ESC; key <= KEY_KPDOT; ++key)
+    if (CheckBit(keys, key))
+      return true;
+
+  return false;
+}
+
 bool
 LinuxInputDevice::Open(const char *path) noexcept
 {
@@ -75,7 +89,9 @@ LinuxInputDevice::Open(const char *path) noexcept
 
   min_x = max_x = min_y = max_y = 0;
 
-  is_pointer = IsPointerDevice(event.GetFileDescriptor().Get());
+  is_pointer = IsPointerDevice(_fd.Get());
+  if (!is_pointer || HasKeyboardKeys(_fd.Get()))
+    keyboard.Initialise();
   if (is_pointer) {
     merge.AddPointer();
 
@@ -101,7 +117,7 @@ LinuxInputDevice::Open(const char *path) noexcept
 
   rel_x = rel_y = rel_wheel = 0;
   down = false;
-  moving = pressing = releasing = false;
+  moving = pressing = releasing = events_dropped = false;
   return true;
 }
 
@@ -114,6 +130,7 @@ LinuxInputDevice::Close() noexcept
   if (is_pointer)
     merge.RemovePointer();
 
+  keyboard.Reset();
   event.Close();
 }
 
@@ -135,6 +152,51 @@ LinuxInputDevice::Read() noexcept
 
   for (unsigned i = 0; i < n; ++i) {
     const struct input_event &e = buffer[i];
+
+    if (events_dropped) {
+      if (e.type == EV_SYN && e.code == SYN_REPORT) {
+        events_dropped = false;
+        keyboard.Resynchronise(fd.Get());
+        if (is_pointer) {
+          input_absinfo abs;
+          bool position_changed = false;
+          if (ioctl(fd.Get(), EVIOCGABS(ABS_X), &abs) == 0) {
+            edit_position.x = abs.value;
+            position_changed = true;
+          }
+          if (ioctl(fd.Get(), EVIOCGABS(ABS_Y), &abs) == 0) {
+            edit_position.y = abs.value;
+            position_changed = true;
+          }
+          if (position_changed) {
+            public_position = edit_position;
+            merge.MoveAbsolute(public_position.x, public_position.y,
+                               min_x, max_x, min_y, max_y);
+          }
+
+          const bool new_down =
+            keyboard.IsPressed(BTN_TOUCH) || keyboard.IsPressed(BTN_MOUSE);
+          if (new_down != down) {
+            down = new_down;
+            merge.SetDown(down);
+          }
+          queue.WakeUp();
+        }
+        // The snapshot already includes transitions in this read buffer.
+        return;
+      }
+      continue;
+    }
+
+    if (e.type == EV_SYN && e.code == SYN_DROPPED) {
+      events_dropped = true;
+      edit_position = public_position;
+      if (pressing != releasing)
+        down = releasing;
+      moving = pressing = releasing = false;
+      rel_x = rel_y = rel_wheel = 0;
+      continue;
+    }
 
     switch (e.type) {
     case EV_SYN:
@@ -194,10 +256,11 @@ LinuxInputDevice::Read() noexcept
          * on the executing shell. This fixes #3403. */
         tcflush(STDIN_FILENO, TCIFLUSH);
 
-        const auto [translated_key_code, is_char] = TranslateKeyCode(e.code);
+        keyboard.Update(e.code, e.value != 0);
         Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
-                 translated_key_code);
-        ev.is_char = is_char;
+                 TranslateBindingKeyCode(e.code));
+        if (e.value != 0)
+          ev.ch = keyboard.GetCharacter(e.code);
         queue.Push(ev);
       }
 

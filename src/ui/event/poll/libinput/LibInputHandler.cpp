@@ -115,6 +115,8 @@ LibInputHandler::Open() noexcept
       || fd.IsDefined())
     return false;
 
+  keyboard.Initialise();
+
   if (nullptr == udev_context) {
     udev_context = new UdevContext(UdevContext::NewRef());
     if ((nullptr == udev_context) || (nullptr == udev_context->Get())) {
@@ -167,6 +169,7 @@ LibInputHandler::Open() noexcept
 void
 LibInputHandler::Close() noexcept
 {
+  keyboard_states.clear();
   fd.ReleaseFileDescriptor();
 
   if (nullptr != li)
@@ -205,6 +208,7 @@ LibInputHandler::CloseDevice(int fd) noexcept
 void
 LibInputHandler::Suspend() noexcept
 {
+  keyboard_states.clear();
   if (li != nullptr)
     libinput_suspend(li);
 }
@@ -247,10 +251,18 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
           --n_touch_screens;
       }
       if (is_keyboard) {
-        if (is_added)
+        if (is_added) {
           ++n_keyboards;
-        else if (n_keyboards > 0)
-          --n_keyboards;
+          try {
+            keyboard_states.try_emplace(event_device, keyboard);
+          } catch (...) {
+            LogError(std::current_exception(), "Creating keyboard state");
+          }
+        } else {
+          if (n_keyboards > 0)
+            --n_keyboards;
+          keyboard_states.erase(event_device);
+        }
       }
     }
     break;
@@ -267,11 +279,17 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
       libinput_key_state key_state =
         libinput_event_keyboard_get_key_state(kb_li_event);
 
-      const auto [translated_key_code, is_char] = TranslateKeyCode(key_code);
-      Event e(key_state == LIBINPUT_KEY_STATE_PRESSED
-                  ? Event::KEY_DOWN : Event::KEY_UP,
-              translated_key_code);
-      e.is_char = is_char;
+      const bool down = key_state == LIBINPUT_KEY_STATE_PRESSED;
+      Event e(down ? Event::KEY_DOWN : Event::KEY_UP,
+              TranslateBindingKeyCode(key_code));
+      const auto i = keyboard_states.find(libinput_event_get_device(li_event));
+      if (i != keyboard_states.end()) {
+        i->second.CopyLocksFrom(keyboard);
+        i->second.Update(key_code, down);
+        keyboard.CopyLocksFrom(i->second);
+        if (down)
+          e.ch = i->second.GetCharacter(key_code);
+      }
       queue.Push(e);
     }
     break;

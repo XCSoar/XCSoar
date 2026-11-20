@@ -1006,75 +1006,25 @@ WaylandEventQueue::KeyboardModifiers(uint32_t mods_depressed, uint32_t mods_latc
 void
 WaylandEventQueue::KeyboardKey(uint32_t key, uint32_t state) noexcept
 {
-  unsigned key_code = 0;
-  bool is_char = false;
-
-  /* Linux evdev key codes for arrow keys (from linux/input-event-codes.h) */
-  constexpr uint32_t EVDEV_KEY_UP = 103;
-  constexpr uint32_t EVDEV_KEY_DOWN = 108;
-  constexpr uint32_t EVDEV_KEY_LEFT = 105;
-  constexpr uint32_t EVDEV_KEY_RIGHT = 106;
-
-  /* Check if this is an arrow key BEFORE translation. Linux input event
-     codes KEY_UP=103, KEY_DOWN=108, KEY_LEFT=105, KEY_RIGHT=106 conflict
-     with ASCII 'g', 'l', 'i', 'j', so we must check the raw key code
-     first to distinguish arrow keys from letters */
-  if (key == EVDEV_KEY_UP) {
-    key_code = KEY_UP;
-    is_char = false;
-  } else if (key == EVDEV_KEY_DOWN) {
-    key_code = KEY_DOWN;
-    is_char = false;
-  } else if (key == EVDEV_KEY_LEFT) {
-    key_code = KEY_LEFT;
-    is_char = false;
-  } else if (key == EVDEV_KEY_RIGHT) {
-    key_code = KEY_RIGHT;
-    is_char = false;
-  } else {
-    /* Normal key - use XKB to get the actual character for text input.
-       XKB keycode = Linux evdev keycode + 8 (historical X11 offset) */
-    uint32_t xkb_keycode = key + 8;
-
-    if (xkb_state != nullptr && xkb_keymap != nullptr) {
-      uint32_t utf32 = xkb_state_key_get_utf32(xkb_state, xkb_keycode);
-
-      /* Check if it's a printable character: not control characters
-         (>= 0x20, except DEL 0x7F), valid Unicode scalar value
-         (<= 0x10FFFF, excluding surrogates 0xD800-0xDFFF) */
-      bool is_printable = (utf32 >= 0x20) &&
-                          (utf32 != 0x7F) &&
-                          (utf32 < 0xD800 || utf32 > 0xDFFF) &&
-                          (utf32 <= 0x10FFFF);
-
-      if (is_printable) {
-        key_code = utf32;
-        is_char = true;
-      } else {
-        const auto [translated_key_code, is_char_result] = TranslateKeyCode(key);
-        key_code = translated_key_code;
-        is_char = is_char_result;
-      }
-    } else {
-      const auto [translated_key_code, is_char_result] = TranslateKeyCode(key);
-      key_code = translated_key_code;
-      is_char = is_char_result;
-    }
-  }
-
+  const unsigned binding = TranslateBindingKeyCode(key);
   switch (state) {
   case WL_KEYBOARD_KEY_STATE_RELEASED:
-    {
-      Event e(Event::KEY_UP, key_code);
-      e.is_char = is_char;
-      queue.Push(e);
-    }
+    queue.Push(Event(Event::KEY_UP, binding));
     break;
 
   case WL_KEYBOARD_KEY_STATE_PRESSED:
     {
-      Event e(Event::KEY_DOWN, key_code);
-      e.is_char = is_char;
+      Event e(Event::KEY_DOWN, binding);
+      if (xkb_state != nullptr && xkb_keymap != nullptr) {
+        const auto ch = xkb_state_key_get_utf32(xkb_state, key + 8);
+        if (ch >= 0x20 && ch != 0x7f && ch <= 0x10ffff &&
+            (ch < 0xd800 || ch > 0xdfff))
+          e.ch = ch;
+      } else {
+        const auto [ch, printable] = TranslateKeyCode(key);
+        if (printable)
+          e.ch = ch;
+      }
       queue.Push(e);
     }
     break;

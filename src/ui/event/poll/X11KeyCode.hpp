@@ -18,6 +18,7 @@ enum {
   KEY_END = XK_End,
   KEY_TAB = XK_Tab,
   KEY_BACK = XK_BackSpace,
+  KEY_DELETE = XK_Delete,
   KEY_SPACE = XK_space,
   KEY_F1 = XK_F1,
   KEY_F2 = XK_F2,

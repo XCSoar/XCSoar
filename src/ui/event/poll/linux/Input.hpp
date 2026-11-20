@@ -5,6 +5,7 @@
 
 #include "event/PipeEvent.hxx"
 #include "Math/Point2D.hpp"
+#include "KeyboardState.hpp"
 
 namespace UI {
 
@@ -51,6 +52,9 @@ class LinuxInputDevice final {
   bool pressing, releasing;
 
   bool is_pointer;
+  bool events_dropped = false;
+
+  KeyboardState keyboard;
 
   PipeEvent event;
 

@@ -114,6 +114,8 @@ Version 7.47 - not yet released
     again; XCSoar kept reporting "USB serial device not found" until
     it was restarted #3450
 * dialogs
+  - enter password punctuation with the on-screen Symbols page or HighScore
+    controls, and type directly in HighScore with an attached keyboard
   - remember checklist checkbox ticks when an unfinished flight is
     restored; choosing a different checklist file, or editing a page's
     text, clears the ticks for that file or page #2536
@@ -177,6 +179,9 @@ Version 7.47 - not yet released
   - cross-compile for Raspberry Pi 4 and 5 with TARGET=PI4
     (TARGET=PI5 is an alias). The arm64 sysroot defaults to
     /opt/pi64/root
+* FLARM
+  - accept lowercase teammate codes and explain the format when a code
+    is invalid
 
 Version 7.46.1 - 2026-10-30
 * ui

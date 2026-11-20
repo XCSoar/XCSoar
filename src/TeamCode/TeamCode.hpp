@@ -61,10 +61,12 @@ public:
   void Update(Angle bearing, double range);
 
   /**
-   * Updates the team code to the given code
-   * @param _code The new team code
+   * Accept three to five ASCII letters or digits, normalizing letter case.
+   * Empty input clears the code; invalid input leaves it unchanged.
+   * @return true if the input was accepted
    */
-  void Update(const char* _code);
+  [[nodiscard]]
+  bool Update(const char* _code);
 };
 
 static_assert(std::is_trivial<TeamCode>::value, "type is not trivial");
