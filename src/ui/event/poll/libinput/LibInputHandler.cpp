@@ -254,7 +254,7 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
         if (is_added) {
           ++n_keyboards;
           try {
-            keyboard_states.try_emplace(event_device, keyboard.GetKeymap());
+            keyboard_states.try_emplace(event_device, keyboard);
           } catch (...) {
             LogError(std::current_exception(), "Creating keyboard state");
           }
@@ -284,7 +284,9 @@ LibInputHandler::HandleEvent(struct libinput_event *li_event) noexcept
               TranslateBindingKeyCode(key_code));
       const auto i = keyboard_states.find(libinput_event_get_device(li_event));
       if (i != keyboard_states.end()) {
+        i->second.CopyLocksFrom(keyboard);
         i->second.Update(key_code, down);
+        keyboard.CopyLocksFrom(i->second);
         if (down)
           e.ch = i->second.GetCharacter(key_code);
       }
