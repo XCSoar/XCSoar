@@ -741,12 +741,16 @@ Cycle through space, digits, letters and punctuation, or type on an attached
 keyboard.
 
 To enter text with the touch screen keyboard, press the letters of choice 
-one after the other. In some dialogues (e.g.\ waypoint editing) only the next
+one after the other. Choose \button{\#+=} for punctuation and
+\button{ABC} to return. In some dialogues (e.g.\ waypoint editing) only the
 \sketch{figures/textentry_keyboard.png}
-letters matching to an entry in the database will be shown. For deleting the 
+next letters matching to an entry in the database will be shown. For deleting the
 last letter use the \button{$<-$} button. The \button{Clear} button deletes all input.
 
 Press \button{Ok} to validate, or \button{Cancel} to exit.
+
+Both editors accept printable ASCII. On embedded Linux, XCSoar reads the
+console keyboard layout at startup and falls back to US if unavailable.
 
 
 \section{Acoustic alert and sound feedback}
