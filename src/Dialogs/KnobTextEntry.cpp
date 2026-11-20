@@ -3,6 +3,10 @@
 
 #include "Dialogs/TextEntry.hpp"
 #include "WidgetDialog.hpp"
+#include "Form/TextEntryBuffer.hpp"
+#include "Asset.hpp"
+#include "ui/event/TextInput.hpp"
+#include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Widget/WindowWidget.hpp"
 #include "ui/canvas/Canvas.hpp"
@@ -10,11 +14,11 @@
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "util/Macros.hpp"
-#include "util/StringStrip.hxx"
 #include "util/TruncateString.hpp"
 #include "util/UTF8.hpp"
 
 #include <algorithm>
+#include <utility>
 
 #include <string.h>
 
@@ -25,17 +29,17 @@ enum Buttons {
   RIGHT,
 };
 
-static constexpr size_t MAX_TEXTENTRY = 40;
+static constexpr size_t MAX_TEXTENTRY = TextEntryBuffer::CAPACITY;
 
 static constexpr char EntryLetters[] =
-  " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.-";
+  " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
 
 /**
- * Find a letter in the list and returns its index.  Returns 0
- * (i.e. the index of the space character) if the given letter is
- * unknown.
+ * Find a letter in the list and return its index. Return the space
+ * character index (zero) if the given letter is unknown.
  */
 [[gnu::const]]
 static unsigned
@@ -49,137 +53,111 @@ FindEntryLetter(char ch)
 }
 
 class KnobTextEntryWindow final : public PaintWindow {
-  const size_t max_width;
-
-  unsigned int cursor;
-  int lettercursor;
-
-  char buffer[MAX_TEXTENTRY];
+  TextEntryBuffer buffer;
+  AllowedCharacters allowed_characters;
+  int lettercursor = 0;
+  bool continue_after_cycle = false;
 
 public:
-  KnobTextEntryWindow(const char *text, size_t width)
-    :max_width(std::min(MAX_TEXTENTRY, width)),
-     cursor(0), lettercursor(0) {
-    CopyTruncateString(buffer, max_width, text);
+  KnobTextEntryWindow(const char *text, size_t width, AllowedCharacters allowed)
+    :buffer(text, width), allowed_characters(std::move(allowed)) {
+    buffer.Home();
     MoveCursor();
   }
 
-  char *GetValue() {
-    return buffer;
-  }
+  const char *GetValue() const noexcept { return buffer.GetValue(); }
 
 private:
-  std::size_t GetCurrentSequenceLength() const noexcept {
-    if (buffer[cursor] == 0)
-      return 0;
-
-    const std::size_t length = SequenceLengthUTF8(buffer + cursor);
-    return length > 0 ? length : 1;
-  }
-
-  unsigned GetPreviousCursor() const noexcept {
-    unsigned previous = 0;
-
-    for (unsigned i = 0; i < cursor;) {
-      previous = i;
-
-      const std::size_t length = SequenceLengthUTF8(buffer + i);
-      i += length > 0 ? length : 1;
-    }
-
-    return previous;
-  }
-
-  void UpdateCursor() {
-    if (lettercursor >= (int)MAXENTRYLETTERS)
-      lettercursor = 0;
-
-    if (lettercursor < 0)
-      lettercursor = MAXENTRYLETTERS - 1;
-
-    ReplaceCurrentCharacter(EntryLetters[lettercursor]);
-
-    if (IsDefined())
-      Invalidate();
-  }
-
-  void ReplaceCurrentCharacter(char ch) noexcept {
-    const std::size_t length = strlen(buffer);
-    if (cursor >= length) {
-      if (cursor + 2 > max_width)
-        return;
-
-      buffer[cursor] = ch;
-      buffer[cursor + 1] = 0;
-      return;
-    }
-
-    const std::size_t sequence = GetCurrentSequenceLength();
-    if (sequence > 1)
-      memmove(buffer + cursor + 1, buffer + cursor + sequence,
-              length - cursor - sequence + 1);
-
-    buffer[cursor] = ch;
+  const char *GetAllowedCharacters() const {
+    if (!allowed_characters)
+      return nullptr;
+    char prefix[MAX_TEXTENTRY];
+    CopyTruncateString(prefix, sizeof(prefix), buffer.GetValue());
+    /* The cursor always lands on a complete UTF-8 character boundary. */
+    prefix[buffer.GetCursor()] = 0;
+    return allowed_characters(prefix);
   }
 
   void MoveCursor() {
-    const std::size_t length = strlen(buffer);
-
-    if (cursor >= length) {
-      if (cursor + 2 > max_width) {
-        if (length == 0)
-          return;
-
-        cursor = GetPreviousCursor();
-      } else {
-        buffer[cursor] = EntryLetters[0];
-        buffer[cursor + 1] = 0;
-      }
-    }
-
-    lettercursor = GetCurrentSequenceLength() == 1
-      ? FindEntryLetter(buffer[cursor])
+    continue_after_cycle = false;
+    lettercursor = buffer.GetSequenceLength() == 1
+      ? FindEntryLetter(buffer.GetValue()[buffer.GetCursor()])
       : 0;
-
     if (IsDefined())
       Invalidate();
+  }
+
+  void CycleLetter(int direction) {
+    const char *allowed = GetAllowedCharacters();
+    for (unsigned i = 0; i < MAXENTRYLETTERS; ++i) {
+      lettercursor = (lettercursor + direction + MAXENTRYLETTERS) %
+        MAXENTRYLETTERS;
+      const char ch = TextEntryBuffer::Filter(EntryLetters[lettercursor],
+                                             allowed);
+      if (ch != 0) {
+        const bool replaced = buffer.Replace(ch);
+        MoveCursor();
+        continue_after_cycle = replaced;
+        return;
+      }
+    }
   }
 
 public:
   bool MoveCursorLeft() {
-    if (cursor < 1)
-      return false;
-
-    cursor = GetPreviousCursor();
+    const bool moved = buffer.MoveLeft();
     MoveCursor();
-    return true;
+    return moved;
   }
 
   bool MoveCursorRight() {
-    const std::size_t length = strlen(buffer);
-    const std::size_t sequence = GetCurrentSequenceLength();
-    const unsigned next = cursor + (sequence > 0 ? sequence : 1);
+    const bool moved = buffer.MoveRight();
+    MoveCursor();
+    return moved;
+  }
 
-    if (next >= length && next + 2 > max_width)
+  void IncrementLetter() { CycleLetter(1); }
+  void DecrementLetter() { CycleLetter(-1); }
+
+  bool Character(unsigned ch) {
+    if (ch < 0x20 || ch == 0x7f)
       return false;
-
-    cursor = next;
+    const bool moved = continue_after_cycle && buffer.MoveRight();
+    const char filtered = TextEntryBuffer::Filter(ch, GetAllowedCharacters());
+    if (filtered == 0 || !buffer.Insert(filtered)) {
+      if (moved)
+        buffer.MoveLeft();
+      return true;
+    }
     MoveCursor();
     return true;
   }
 
-  void IncrementLetter() {
-    ++lettercursor;
-    UpdateCursor();
-  }
-
-  void DecrementLetter() {
-    --lettercursor;
-    UpdateCursor();
+  bool KeyPress(unsigned key_code) {
+    switch (key_code) {
+    case KEY_BACK:
+    case KEY_F1:
+      buffer.Backspace();
+      break;
+    case KEY_DELETE:
+      buffer.Delete();
+      break;
+    case KEY_HOME:
+      buffer.Home();
+      break;
+    case KEY_END:
+      buffer.End();
+      break;
+    case KEY_SPACE:
+      return true; // text is delivered separately by some backends
+    default:
+      return false;
+    }
+    MoveCursor();
+    return true;
   }
 
 protected:
-  /* virtual methods from class Window */
   void OnPaint(Canvas &canvas) noexcept override;
 };
 
@@ -187,7 +165,9 @@ void
 KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 {
   const PixelRect rc = GetClientRect();
-  const std::string_view text{buffer};
+  const char *value = buffer.GetValue();
+  const std::string_view text{value};
+  const auto cursor = buffer.GetCursor();
 
   canvas.Clear(COLOR_BLACK);
 
@@ -196,17 +176,21 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  PixelSize tsizec = canvas.CalcTextSize({buffer, cursor});
-  PixelSize tsizea = canvas.CalcTextSize({buffer, cursor + GetCurrentSequenceLength()});
+  PixelSize tsizec = canvas.CalcTextSize({value, cursor});
+  PixelSize tsizea = canvas.CalcTextSize(
+    {value, cursor + buffer.GetSequenceLength()});
 
   BulkPixelPoint p[5];
-  p[0].x = 10;
+  const int padding = Layout::Scale(10);
+  const int cursor_right = tsizea.width + padding;
+  p[0].x = padding - std::max(0, cursor_right - int(rc.GetWidth()) + padding);
   p[0].y = (rc.GetHeight() - tsize.height - 5) / 2;
 
   p[2].x = p[0].x + tsizec.width;
   p[2].y = p[0].y + tsize.height + 5;
 
-  p[3].x = p[0].x + tsizea.width;
+  p[3].x = p[0].x + (buffer.GetSequenceLength() > 0
+    ? tsizea.width : tsizec.width + Layout::Scale(10));
   p[3].y = p[0].y + tsize.height + 5;
 
   p[1].x = p[2].x;
@@ -226,20 +210,26 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
 class KnobTextEntryWidget final : public WindowWidget {
   const char *const text;
   const size_t width;
+  AllowedCharacters allowed;
 
 public:
-  KnobTextEntryWidget(const char *_text, size_t _width) noexcept
-    :text(_text), width(_width) {}
+  KnobTextEntryWidget(const char *_text, size_t _width,
+                      AllowedCharacters _allowed) noexcept
+    :text(_text), width(_width), allowed(std::move(_allowed)) {}
 
   auto &GetWindow() noexcept {
     return (KnobTextEntryWindow &)WindowWidget::GetWindow();
   }
 
-  char *GetValue() {
+  const char *GetValue() {
     return GetWindow().GetValue();
   }
 
   void CreateButtons(WidgetDialog &dialog);
+
+  bool KeyPress(unsigned key_code) noexcept override {
+    return GetWindow().KeyPress(key_code);
+  }
 
   /* virtual methods from class Widget */
 
@@ -248,7 +238,7 @@ public:
     WindowStyle style;
     style.Hide();
 
-    auto w = std::make_unique<KnobTextEntryWindow>(text, width);
+    auto w = std::make_unique<KnobTextEntryWindow>(text, width, allowed);
     w->Create(parent, rc, style);
     SetWindow(std::move(w));
   }
@@ -272,7 +262,7 @@ KnobTextEntryWidget::CreateButtons(WidgetDialog &dialog)
 
 bool
 KnobTextEntry(char *text, size_t width,
-              const char *caption)
+              const char *caption, AllowedCharacters allowed)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;
@@ -280,12 +270,24 @@ KnobTextEntry(char *text, size_t width,
   TWidgetDialog<KnobTextEntryWidget>
     dialog(WidgetDialog::Full{}, UIGlobals::GetMainWindow(),
            UIGlobals::GetDialogLook(), caption);
-  dialog.SetWidget(text, width);
+  dialog.SetWidget(text, width, std::move(allowed));
+  dialog.SetCharacterFunction([&](unsigned ch) {
+    return dialog.GetWidget().GetWindow().Character(ch);
+  });
   dialog.AddButton(_("Close"), mrOK);
   dialog.GetWidget().CreateButtons(dialog);
 
-  if (dialog.ShowModal() == mrOK) {
-    StripRight(dialog.GetWidget().GetValue());
+  /* iOS can stop text events when the preceding editor hides its system
+     keyboard. Enable them again for an attached hardware keyboard. */
+  const bool system_text_input = UI::TextInput::HasScreenKeyboard() &&
+    HasKeyboard();
+  if (system_text_input)
+    UI::TextInput::ShowScreenKeyboard();
+  const bool accepted = dialog.ShowModal() == mrOK;
+  if (system_text_input)
+    UI::TextInput::HideScreenKeyboard();
+
+  if (accepted) {
     CopyTruncateString(text, width, dialog.GetWidget().GetValue());
     return true;
   }

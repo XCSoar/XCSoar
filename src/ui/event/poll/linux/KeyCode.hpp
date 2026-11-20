@@ -3,7 +3,8 @@
 
 #pragma once
 
-#if defined(KOBO) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+#if defined(KOBO) || defined(USE_LIBINPUT) || defined(USE_WAYLAND) || \
+    defined(USE_CONSOLE)
 #include <linux/input.h>
 
 /* these macros conflict with Event::Type */
@@ -13,6 +14,7 @@
 /* wrong meaning */
 #undef KEY_NEXT
 #undef KEY_BACK
+#undef KEY_DELETE
 
 /* these are defined in linux/input.h but we redefine them in our enum */
 #undef KEY_LEFT
@@ -36,12 +38,14 @@
 #endif
 
 enum {
-#if defined(KOBO) || defined(USE_LIBINPUT) || defined(USE_WAYLAND)
+#if defined(KOBO) || defined(USE_LIBINPUT) || defined(USE_WAYLAND) || \
+    defined(USE_CONSOLE)
   KEY_RETURN = KEY_ENTER,
   KEY_ESCAPE = KEY_ESC,
   KEY_PRIOR = KEY_PAGEUP,
   KEY_NEXT = KEY_PAGEDOWN,
   KEY_BACK = KEY_BACKSPACE,
+  KEY_DELETE = 111, /* Linux KEY_DELETE */
   KEY_F1 = 59,    /* Linux KEY_F1 */
   KEY_F2 = 60,    /* Linux KEY_F2 */
   KEY_F3 = 61,    /* Linux KEY_F3 */
@@ -104,5 +108,6 @@ enum {
   KEY_APP4,
   KEY_APP5,
   KEY_APP6,
+  KEY_DELETE = 0512,
 #endif
 };

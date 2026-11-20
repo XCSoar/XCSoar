@@ -27,10 +27,10 @@ TextEntryDialog(char *text, size_t width,
     if (HasPointer())
       return TouchTextEntry(text, width, caption, accb, default_shift_state);
     else
-      return KnobTextEntry(text, width, caption);
+      return KnobTextEntry(text, width, caption, accb);
 
   case DialogSettings::TextInputStyle::HighScore:
-    return KnobTextEntry(text, width, caption);
+    return KnobTextEntry(text, width, caption, accb);
   }
 
   return false;
