@@ -12990,3 +12990,6 @@ msgstr "Buchstaben"
 
 msgid "Space"
 msgstr "Leerzeichen"
+
+msgid "Enter three to five ASCII letters or digits. Leave the code empty to clear it."
+msgstr ""

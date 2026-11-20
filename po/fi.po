@@ -12845,3 +12845,6 @@ msgstr ""
 
 msgid "Space"
 msgstr ""
+
+msgid "Enter three to five ASCII letters or digits. Leave the code empty to clear it."
+msgstr ""
