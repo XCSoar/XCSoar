@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#include "Form/TextEntryBuffer.hpp"
 #include "ui/event/shared/Event.hpp"
 #include "util/StringCompare.hxx"
 #include "util/UTF8.hpp"
@@ -33,6 +34,71 @@ TestKeyEvents()
   key.type = UI::Event::KEY_UP;
   ok1(key.GetCharacterCount() == 0);
   ok1(UI::Event(UI::Event::KEY_DOWN, 28).GetCharacterCount() == 0);
+}
+
+static void
+TestTextEditing()
+{
+  TextEntryBuffer text("aé中Z ", 0);
+  ok1(text.GetCursor() == 8);
+  text.Home();
+  ok1(text.MoveRight());
+  ok1(text.GetSequenceLength() == 2);
+  ok1(text.Insert('!'));
+  ok1(StringIsEqual(text.GetValue(), "a!é中Z "));
+  ok1(text.GetCursor() == 2);
+  ok1(text.MoveRight());
+  ok1(text.Backspace());
+  ok1(StringIsEqual(text.GetValue(), "a!中Z "));
+  ok1(text.Replace('@'));
+  ok1(StringIsEqual(text.GetValue(), "a!@Z "));
+  ok1(ValidateUTF8(text.GetValue()));
+  ok1(text.Delete());
+  ok1(StringIsEqual(text.GetValue(), "a!Z "));
+  text.End();
+  ok1(!text.MoveRight());
+  ok1(text.Backspace());
+  ok1(StringIsEqual(text.GetValue(), "a!Z"));
+  text.Home();
+  ok1(!text.Backspace());
+  ok1(!text.MoveLeft());
+  text.Clear();
+  ok1(!text.Delete());
+  ok1(text.Replace(' '));
+  ok1(text.GetCursor() == 0);
+  ok1(StringIsEqual(text.GetValue(), " "));
+  text.End();
+  ok1(text.Insert(' '));
+  ok1(StringIsEqual(text.GetValue(), "  "));
+
+  TextEntryBuffer small("éZ", 3);
+  ok1(StringIsEqual(small.GetValue(), "é"));
+  ok1(!small.Insert('x'));
+  small.Home();
+  ok1(small.Replace('a'));
+  small.End();
+  ok1(small.Insert('b'));
+  ok1(!small.Insert('c'));
+  ok1(StringIsEqual(small.GetValue(), "ab"));
+  TextEntryBuffer empty("secret", 1);
+  ok1(StringIsEqual(empty.GetValue(), ""));
+  ok1(!empty.Insert('x'));
+
+  const std::string long_password(63, 'p');
+  TextEntryBuffer password(long_password.c_str(), 0);
+  ok1(StringIsEqual(password.GetValue(), long_password.c_str()));
+  ok1(password.Insert('!'));
+  ok1(password.GetCursor() == 64);
+  ok1(TextEntryBuffer::Filter('a', "ABC") == 'A');
+  ok1(TextEntryBuffer::Filter('!', "ABC") == 0);
+  ok1(TextEntryBuffer::Filter(0x7f, nullptr) == 0);
+  ok1(TextEntryBuffer::Filter(0xe9, nullptr) == 0);
+
+  for (unsigned ch = 0x20; ch <= 0x7e; ++ch) {
+    TextEntryBuffer character(nullptr, 2);
+    ok1(character.Insert(char(ch)) && character.GetValue()[0] == char(ch) &&
+        character.GetValue()[1] == 0);
+  }
 }
 
 #ifdef TEST_LINUX_KEYBOARD_STATE
@@ -190,12 +256,14 @@ TestKeyboardState()
 int
 main()
 {
-  plan_tests(7
+  plan_tests(7 + 40 + 95
 #ifdef TEST_LINUX_KEYBOARD_STATE
-             + 19 + 22 + 8 + 14 + 8 + 9 + 6
+             + 19 + 22
+             + 8 + 14 + 8 + 9 + 6
 #endif
              );
   TestKeyEvents();
+  TestTextEditing();
 #ifdef TEST_LINUX_KEYBOARD_STATE
   TestKeyboardState();
 #endif
