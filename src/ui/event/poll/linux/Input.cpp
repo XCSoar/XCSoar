@@ -62,6 +62,20 @@ IsPointerDevice(int fd) noexcept
   return CheckBit(features, EV_ABS) || CheckBit(features, EV_REL);
 }
 
+static bool
+HasKeyboardKeys(int fd) noexcept
+{
+  unsigned long keys[BitsToInts<unsigned long>(KEY_KPDOT)]{};
+  if (ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(keys)), keys) < 0)
+    return false;
+
+  for (unsigned key = KEY_ESC; key <= KEY_KPDOT; ++key)
+    if (CheckBit(keys, key))
+      return true;
+
+  return false;
+}
+
 bool
 LinuxInputDevice::Open(const char *path) noexcept
 {
@@ -75,7 +89,9 @@ LinuxInputDevice::Open(const char *path) noexcept
 
   min_x = max_x = min_y = max_y = 0;
 
-  is_pointer = IsPointerDevice(event.GetFileDescriptor().Get());
+  is_pointer = IsPointerDevice(_fd.Get());
+  if (!is_pointer || HasKeyboardKeys(_fd.Get()))
+    keyboard.Initialise();
   if (is_pointer) {
     merge.AddPointer();
 
@@ -114,6 +130,7 @@ LinuxInputDevice::Close() noexcept
   if (is_pointer)
     merge.RemovePointer();
 
+  keyboard.Reset();
   event.Close();
 }
 
@@ -194,10 +211,11 @@ LinuxInputDevice::Read() noexcept
          * on the executing shell. This fixes #3403. */
         tcflush(STDIN_FILENO, TCIFLUSH);
 
-        const auto [translated_key_code, is_char] = TranslateKeyCode(e.code);
+        keyboard.Update(e.code, e.value != 0);
         Event ev(e.value ? Event::KEY_DOWN : Event::KEY_UP,
                  TranslateBindingKeyCode(e.code));
-        ev.ch = is_char ? translated_key_code : 0;
+        if (e.value != 0)
+          ev.ch = keyboard.GetCharacter(e.code);
         queue.Push(ev);
       }
 

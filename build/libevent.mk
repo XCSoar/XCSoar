@@ -32,6 +32,7 @@ EVENT_SOURCES += \
 	$(WAYLAND_GENERATED)/pointer-constraints-unstable-v1-public.c \
 	$(SRC)/ui/event/poll/WaylandQueue.cpp
 else ifeq ($(USE_CONSOLE),y)
+EVENT_SOURCES += $(SRC)/ui/event/poll/linux/KeyboardState.cpp
 EVENT_SOURCES += \
 	$(SRC)/ui/event/poll/InputQueue.cpp
 CONSOLE_CPPFLAGS = -DUSE_CONSOLE

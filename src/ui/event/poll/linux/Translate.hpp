@@ -67,7 +67,12 @@ TranslateBindingKeyCode(unsigned key_code) noexcept
     if (entry.from == key_code)
       return entry.to;
 
-  return key_code;
+  // Linux reserves 249–255 below the button-code range.
+  switch (key_code) {
+  case KEY_SEMICOLON: return 249;
+  case KEY_APOSTROPHE: return 250;
+  default: return key_code;
+  }
 }
 
 /**
@@ -75,12 +80,53 @@ TranslateBindingKeyCode(unsigned key_code) noexcept
  * is an (ASCII) character
  */
 constexpr std::pair<unsigned, bool>
-TranslateKeyCode(unsigned key_code) noexcept
+TranslateKeyCode(unsigned key_code, bool shift_down = false) noexcept
 {
+  if (shift_down) {
+    switch (key_code) {
+    case KEY_1: return {'!', true};
+    case KEY_2: return {'@', true};
+    case KEY_3: return {'#', true};
+    case KEY_4: return {'$', true};
+    case KEY_5: return {'%', true};
+    case KEY_6: return {'^', true};
+    case KEY_7: return {'&', true};
+    case KEY_8: return {'*', true};
+    case KEY_9: return {'(', true};
+    case KEY_0: return {')', true};
+
+    case KEY_MINUS: return {'_', true};
+    case KEY_EQUAL: return {'+', true};
+    case KEY_LEFTBRACE: return {'{', true};
+    case KEY_RIGHTBRACE: return {'}', true};
+    case KEY_BACKSLASH: return {'|', true};
+    case KEY_SEMICOLON: return {':', true};
+    case KEY_APOSTROPHE: return {'"', true};
+    case KEY_GRAVE: return {'~', true};
+    case KEY_COMMA: return {'<', true};
+    case KEY_DOT: return {'>', true};
+    case KEY_SLASH: return {'?', true};
+    }
+  }
+
   for (auto i : key_code_translation_table) {
     if (key_code == i.from) {
       return {i.to, i.is_char};
     }
+  }
+
+  switch (key_code) {
+  case KEY_MINUS: return {'-', true};
+  case KEY_EQUAL: return {'=', true};
+  case KEY_LEFTBRACE: return {'[', true};
+  case KEY_RIGHTBRACE: return {']', true};
+  case KEY_BACKSLASH: return {'\\', true};
+  case KEY_SEMICOLON: return {';', true};
+  case KEY_APOSTROPHE: return {'\'', true};
+  case KEY_GRAVE: return {'`', true};
+  case KEY_COMMA: return {',', true};
+  case KEY_DOT: return {'.', true};
+  case KEY_SLASH: return {'/', true};
   }
 
   return {key_code, false};

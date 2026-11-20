@@ -1158,6 +1158,7 @@ endif
 TEST_INPUT_CONFIG_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(SRC)/Input/InputConfig.cpp \
+	$(SRC)/Input/InputKeys.cpp \
 	$(SRC)/Menu/MenuData.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestInputConfig.cpp
@@ -1175,6 +1176,10 @@ TEST_TEXT_INPUT_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTextInput.cpp
 TEST_TEXT_INPUT_DEPENDS = UTIL
+ifeq ($(TARGET_IS_LINUX),y)
+TEST_TEXT_INPUT_SOURCES += $(SRC)/ui/event/poll/linux/KeyboardState.cpp
+TEST_TEXT_INPUT_CPPFLAGS = -DTEST_LINUX_KEYBOARD_STATE
+endif
 $(eval $(call link-program,TestTextInput,TEST_TEXT_INPUT))
 
 TEST_POLARS_SOURCES = \
