@@ -6,6 +6,10 @@
 #include "util/CharUtil.hxx"
 #include "util/StringAPI.hxx"
 
+#if defined(USE_CONSOLE) || defined(USE_WAYLAND) || defined(KOBO)
+#include "ui/event/poll/linux/Translate.hpp"
+#endif
+
 struct string_to_key {
   const char *name;
   unsigned key;
@@ -68,10 +72,15 @@ ParseKeyCode(const char *data)
     if (StringIsEqual(data, p->name))
       return p->key;
 
-  if (StringLength(data) == 1)
+  if (StringLength(data) == 1) {
+#if defined(USE_CONSOLE) || defined(USE_WAYLAND) || defined(KOBO)
+    if (data[0] == ';')
+      return TranslateBindingKeyCode(KEY_SEMICOLON);
+    if (data[0] == '\'')
+      return TranslateBindingKeyCode(KEY_APOSTROPHE);
+#endif
     return ToUpperASCII(data[0]);
+  }
 
-  else
-    return 0;
-
+  return 0;
 }

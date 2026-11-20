@@ -2,12 +2,22 @@
 // Copyright The XCSoar Project
 
 #include "Input/InputConfig.hpp"
+#include "Input/InputKeys.hpp"
 #include "TestUtil.hpp"
 #include "ui/event/KeyCode.hpp"
 
+#if defined(USE_CONSOLE) || defined(USE_WAYLAND) || defined(KOBO)
+#include "ui/event/poll/linux/Translate.hpp"
+#define TEST_LINUX_PUNCTUATION_BINDINGS
+#endif
+
 int main()
 {
-  plan_tests(37);
+  plan_tests(37
+#ifdef TEST_LINUX_PUNCTUATION_BINDINGS
+             + 3
+#endif
+             );
 
   InputConfig config;
   config.SetDefaults();
@@ -113,6 +123,14 @@ int main()
   /* Test that non-existent bindings return 0 */
   ok1(config.GetKeyEvent(0, 'X') == 0);
   ok1(config.GetKeyEvent(0, 999) == 0);
+
+#ifdef TEST_LINUX_PUNCTUATION_BINDINGS
+  config.SetKeyEvent(0, ParseKeyCode(";"), 1000);
+  config.SetKeyEvent(0, ParseKeyCode("'"), 1001);
+  ok1(config.GetKeyEvent(0, TranslateBindingKeyCode(KEY_SEMICOLON)) == 1000);
+  ok1(config.GetKeyEvent(0, TranslateBindingKeyCode(KEY_APOSTROPHE)) == 1001);
+  ok1(config.GetKeyEvent(0, KEY_F1) == 600);
+#endif
 
   return exit_status();
 }

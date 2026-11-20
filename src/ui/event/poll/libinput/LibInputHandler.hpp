@@ -5,14 +5,17 @@
 
 #include "event/PipeEvent.hxx"
 #include "InputTransform.hpp"
+#include "ui/event/poll/linux/KeyboardState.hpp"
 #include "ui/dim/Size.hpp"
 #include "ui/dim/Point.hpp"
 #include "DisplayOrientation.hpp"
 
 #include <cassert>
+#include <map>
 
 struct libinput;
 struct libinput_event;
+struct libinput_device;
 struct libinput_interface;
 
 class UdevContext;
@@ -51,6 +54,8 @@ class LibInputHandler final {
    * session.
    */
   bool need_rescan = false;
+  KeyboardState keyboard;
+  std::map<libinput_device *, KeyboardState> keyboard_states;
 
 public:
   explicit LibInputHandler(EventQueue &_queue) noexcept;
