@@ -36,6 +36,7 @@ static constexpr char EntryLetters[] =
   "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
 static constexpr unsigned MAXENTRYLETTERS = ARRAY_SIZE(EntryLetters) - 1;
+static constexpr unsigned DELETE_SELECTION = MAXENTRYLETTERS;
 
 /**
  * Find a letter in the list and return its index. Return the space
@@ -89,12 +90,16 @@ private:
 
   void CycleLetter(int direction) {
     const char *allowed = GetAllowedCharacters();
-    for (unsigned i = 0; i < MAXENTRYLETTERS; ++i) {
-      lettercursor = (lettercursor + direction + MAXENTRYLETTERS) %
-        MAXENTRYLETTERS;
-      const char ch = TextEntryBuffer::Filter(EntryLetters[lettercursor],
-                                             allowed);
-      if (ch != 0) {
+    for (unsigned i = 0; i <= MAXENTRYLETTERS; ++i) {
+      lettercursor = (lettercursor + direction + MAXENTRYLETTERS + 1) %
+        (MAXENTRYLETTERS + 1);
+      if (lettercursor == DELETE_SELECTION) {
+        continue_after_cycle = false;
+        Invalidate();
+        return;
+      }
+      const char ch = EntryLetters[lettercursor];
+      if (allowed == nullptr || strchr(allowed, ch) != nullptr) {
         const bool replaced = buffer.Replace(ch);
         MoveCursor();
         continue_after_cycle = replaced;
@@ -135,6 +140,13 @@ public:
 
   bool KeyPress(unsigned key_code) {
     switch (key_code) {
+    case KEY_RETURN:
+      if (lettercursor != DELETE_SELECTION)
+        return false;
+      if (!buffer.Delete())
+        buffer.Backspace();
+      Invalidate();
+      return true;
     case KEY_BACK:
     case KEY_F1:
       buffer.Backspace();
@@ -168,6 +180,11 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   const char *value = buffer.GetValue();
   const std::string_view text{value};
   const auto cursor = buffer.GetCursor();
+  const bool delete_selected = lettercursor == DELETE_SELECTION;
+  const auto sequence_length = buffer.GetSequenceLength();
+  const auto target = delete_selected && sequence_length == 0
+    ? buffer.GetPreviousCursor() : cursor;
+  const auto target_end = cursor + sequence_length;
 
   canvas.Clear(COLOR_BLACK);
 
@@ -176,9 +193,8 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   canvas.Select(look.text_font);
 
   PixelSize tsize = canvas.CalcTextSize(text);
-  PixelSize tsizec = canvas.CalcTextSize({value, cursor});
-  PixelSize tsizea = canvas.CalcTextSize(
-    {value, cursor + buffer.GetSequenceLength()});
+  PixelSize tsizec = canvas.CalcTextSize({value, target});
+  PixelSize tsizea = canvas.CalcTextSize({value, target_end});
 
   BulkPixelPoint p[5];
   const int padding = Layout::Scale(10);
@@ -189,7 +205,7 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   p[2].x = p[0].x + tsizec.width;
   p[2].y = p[0].y + tsize.height + 5;
 
-  p[3].x = p[0].x + (buffer.GetSequenceLength() > 0
+  p[3].x = p[0].x + (target_end > target
     ? tsizea.width : tsizec.width + Layout::Scale(10));
   p[3].y = p[0].y + tsize.height + 5;
 
@@ -205,6 +221,8 @@ KnobTextEntryWindow::OnPaint(Canvas &canvas) noexcept
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_WHITE);
   canvas.DrawText(p[0], text);
+  if (delete_selected)
+    canvas.DrawText({padding, padding}, "[DEL]");
 }
 
 class KnobTextEntryWidget final : public WindowWidget {
