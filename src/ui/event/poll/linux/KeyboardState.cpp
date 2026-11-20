@@ -21,6 +21,15 @@ KeyboardState::KeyboardState(const Keymap *source) noexcept
   }
 }
 
+#ifndef KOBO
+static int
+ReadConsoleLocks(int fd) noexcept
+{
+  unsigned char locks;
+  return ioctl(fd, KDGKBLED, &locks) == 0 ? locks : -1;
+}
+#endif
+
 void
 KeyboardState::Initialise() noexcept
 {
@@ -37,6 +46,11 @@ KeyboardState::Initialise() noexcept
     kbentry entry{};
     if (ioctl(fd, KDGKBENT, &entry) < 0)
       continue; // a terminal emulator is not a Linux virtual console
+
+    if (const int locks = ReadConsoleLocks(fd); locks >= 0) {
+      caps_lock = locks & K_CAPSLOCK;
+      num_lock = locks & K_NUMLOCK;
+    }
 
     for (unsigned table = 0; table < keymap.size(); ++table)
       for (unsigned key = 0; key < keymap[table].size(); ++key) {
