@@ -297,6 +297,11 @@ MainWindow::LoadTerrain() noexcept
       } catch (...) {
         LogFormat("Failed to open map file: %s", zip.c_str());
         Message::AddMessage(_("Failed to open configured map file"));
+        if (data_components->terrain) {
+          const ScopeSuspendAllThreads suspend;
+          DataGlobals::UnsetTerrain();
+          DataGlobals::SetTerrain(nullptr);
+        }
         return;
       }
     }
@@ -355,6 +360,8 @@ try {
       if (wp != nullptr && wp->HasElevation()) {
         poi.home_elevation = wp->elevation;
         poi.home_elevation_available = true;
+      } else if (wp != nullptr) {
+        poi.home_elevation_available = false;
       }
     }
   }
