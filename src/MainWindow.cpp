@@ -510,7 +510,7 @@ MainWindow::LayoutMapArea() noexcept
 
     /* Do not let the map paint this strip.  On Wayland the map is
        the same EGL surface as the bar; sliding under it covers the
-       pixels even after RaiseTopWidget(). */
+       pixels. */
     if (main_rect.top < top_rect.bottom)
       main_rect = GetMapRectBelow(main_rect, top_rect);
   }
@@ -791,7 +791,7 @@ MainWindow::InitialiseConfigured()
   map->SetUIState(CommonInterface::GetUIState());
   map->Create(*this, map_rect);
 
-  popup = new PopupMessage(*this, look->dialog, ui_settings);
+  popup = new PopupMessage(*this, look->dialog, look->map, ui_settings);
   popup->Create(GetHudRect());
 
   UpdateMapOverlayButtonLayout();
@@ -2060,7 +2060,6 @@ MainWindow::SetBottomWidget(Widget *_widget) noexcept
   map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();
-  LayoutHudElements();
 }
 
 void
@@ -2096,7 +2095,6 @@ MainWindow::SetBottomBannerWidget(WindowWidget *_widget) noexcept
   map->FullRedraw();
 
   UpdateMapOverlayButtonLayout();
-  LayoutHudElements();
 }
 
 void

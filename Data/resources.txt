@@ -49,6 +49,7 @@ bitmap_icon_scaled IDB_PLANE "plane"
 bitmap_icon_scaled IDB_SIMULATOR "simulator"
 bitmap_icon_scaled IDB_REPLAY "replay"
 bitmap_icon_scaled IDB_BATTERY "battery"
+bitmap_icon_scaled IDB_DATABASE "database"
 bitmap_icon_scaled IDB_LANDABLE "winpilot_landable"
 #ifdef XCSOAR_TESTING
 bitmap_graphic IDB_LAUNCHER1 "launcher_red_640_1"

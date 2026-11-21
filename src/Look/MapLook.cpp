@@ -78,11 +78,10 @@ MapLook::Initialise(const MapSettings &settings,
   battery_icon.LoadResource(IDB_BATTERY_ALL, false);
   simulator_icon.LoadResource(IDB_SIMULATOR_ALL, false);
   replay_icon.LoadResource(IDB_REPLAY_ALL, false);
+  database_icon.LoadResource(IDB_DATABASE_ALL, false);
 
   topography.Initialise();
-  airspace.Initialise(settings.airspace,
-                      topography.GetLabelFont(true,
-                                              TopographyLook::LabelSize::SMALL));
+  airspace.Initialise(settings.airspace, topography.important_label_font);
 
   overlay.Initialise(font, bold_font);
 }

@@ -803,9 +803,11 @@ child of the main window on the map.
   warnings between.  Each drops when that condition clears.
   ``Message::AddMessage()``
   is the occurrence channel: rounded labels at the HUD top (the same
-  look as Simulator), which then expire.  File-load progress uses
-  that same stack, with a fill, and stays a moment after the load
-  finishes.
+  look as Simulator, including the same icons when the text matches),
+  which then expire.  Errors (stall, overspeed, failed) are red;
+  cautions (battery, GPS wait, terrain) are yellow; the rest are
+  white.  File-load progress uses that same stack, with
+  a fill, and stays a moment after the load finishes.
   Use a lower-left condition label when the pilot should keep seeing
   the condition.  Use ``AddMessage()`` when the news is the moment it
   happened.

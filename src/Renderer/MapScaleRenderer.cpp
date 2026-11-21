@@ -69,10 +69,16 @@ DrawSlotIcon(Canvas &canvas, const MaskedIcon &icon,
              int top, unsigned height, unsigned icon_px) noexcept
 {
   const PixelSize scaled = icon.GetScaledSize(icon_px);
-  icon.Draw(canvas,
-            {slot_left + (int(slot) - int(scaled.width)) / 2,
-             top + (int(height) - int(scaled.height)) / 2},
-            icon_px);
+  /* Draw() subtracts the hotspot; map symbols are centred, overlay
+     icons are top-left.  Pass the visual top-left plus that hotspot. */
+  int x = slot_left + (int(slot) - int(scaled.width)) / 2;
+  int y = top + (int(height) - int(scaled.height)) / 2;
+  const unsigned native_h = icon.GetSize().height;
+  if (native_h > 0 && icon_px > 0) {
+    x += int(icon.GetOrigin().x * icon_px / native_h);
+    y += int(icon.GetOrigin().y * icon_px / native_h);
+  }
+  icon.Draw(canvas, {x, y}, icon_px);
 }
 
 struct LabelChrome {
