@@ -11,16 +11,20 @@
 
 BackgroundDownloadProgress BackgroundDownloadProgress::instance;
 
-void
+bool
 BackgroundDownloadProgress::ShowOnMainThread(const char *text) noexcept
 {
   if (CommonInterface::main_window == nullptr)
-    return;
+    return false;
 
   if (widget != nullptr) {
     env->SetText(text);
-    return;
+    return true;
   }
+
+  /* Terrain convert already owns the strip. */
+  if (CommonInterface::main_window->HasTopWidget())
+    return false;
 
   env = std::make_unique<PluggableOperationEnvironment>();
   widget = new ProgressWidget(*env, text);
@@ -33,6 +37,7 @@ BackgroundDownloadProgress::ShowOnMainThread(const char *text) noexcept
     env->SetProgressRange(displayed_range);
     env->SetProgressPosition(displayed_position);
   }
+  return true;
 }
 
 void
@@ -103,11 +108,11 @@ BackgroundDownloadProgress::ProcessPendingVisibility() noexcept
     StaticString<128> text;
     {
       const std::lock_guard lock{text_mutex};
-      pending_show.store(false, std::memory_order_relaxed);
       text = pending_text;
     }
 
-    ShowOnMainThread(text);
+    if (ShowOnMainThread(text))
+      pending_show.store(false, std::memory_order_relaxed);
   }
 }
 

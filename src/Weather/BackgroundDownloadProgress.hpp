@@ -41,7 +41,7 @@ class BackgroundDownloadProgress final : public ProgressListener {
   void OnProgressNotify() noexcept;
 
   void ProcessPendingVisibility() noexcept;
-  void ShowOnMainThread(const char *text) noexcept;
+  bool ShowOnMainThread(const char *text) noexcept;
   void HideOnMainThread() noexcept;
   void ApplyPendingProgress() noexcept;
 
