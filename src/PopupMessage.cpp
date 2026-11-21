@@ -97,8 +97,10 @@ StatusIcon(const MapLook &look, const char *text) noexcept
     return &look.terrain_warning_icon;
   if (HasToken(text, "terrain"))
     return &look.waypoint.mountain_top_icon;
+  if (HasToken(text, "takeoff"))
+    return &look.takeoff_icon;
   if (HasToken(text, "stall") || HasToken(text, "overspeed") ||
-      HasToken(text, "polar") || HasToken(text, "takeoff"))
+      HasToken(text, "polar"))
     return &look.plane_icon;
   if (HasToken(text, "failed") || HasToken(text, "error"))
     return &look.abort_mode_icon;

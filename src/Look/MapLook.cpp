@@ -71,6 +71,7 @@ MapLook::Initialise(const MapSettings &settings,
   climb_mode_icon.LoadResource(IDB_CLIMB_ALL, false);
   final_glide_mode_icon.LoadResource(IDB_FINALGLIDE_ALL, false);
   abort_mode_icon.LoadResource(IDB_ABORT_ALL, false);
+  takeoff_icon.LoadResource(IDB_TAKEOFF_ALL, false);
 
   waiting_for_fix_icon.LoadResource(IDB_GPSSTATUS1_ALL, false);
   no_gps_icon.LoadResource(IDB_GPSSTATUS2_ALL, false);
