@@ -60,6 +60,9 @@ Version 7.47 - not yet released
     is one step higher
   - size dialog rows and buttons to at least 30 pt on a mouse,
     the same as on a touch screen #3021
+  - speak Stall, Overspeed, Airbrakes unlocked, and Check gear
+    while they apply in flight, and show them as red labels at
+    the top of the map
   - fix the progress dialog staying on the light splash colours
     when Dark mode is on
   - fix latitude and longitude displays that showed 60 seconds or
@@ -171,6 +174,8 @@ Version 7.47 - not yet released
     login (wrong e-mail or password, subscription not active, too
     many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
+  - describe spoken Stall, Overspeed, Airbrakes unlocked, and
+    Check gear warnings
   - describe the map Waypoints filter: a type can be hidden, the
     choice is saved, and task or watched waypoints stay drawn
   - describe the MacCready InfoBox speed-to-fly comment as true

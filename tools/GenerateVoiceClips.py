@@ -14,9 +14,9 @@ Usage:
   tools/GenerateVoiceClips.py en_GB-cori-high.onnx Data/sound
 
 XCSoar plays a traffic alert as up to three clips in a row (urgency,
-clock position, above/below). An airspace warning is one clip. Near
-and above have a pause between the two words. Each clip ends with a
-short pause.
+clock position, above/below). An airspace or aircraft warning is one
+clip. Near and above have a pause between the two words. Each clip
+ends with a short pause.
 """
 
 import io
@@ -38,6 +38,10 @@ CLIPS = {
     "airspace_near": ("Airspace near.", 0.75),
     "airspace_above": ("Airspace above.", 0.75),
     "airspace_inside": ("Airspace inside.", 0.7),
+    "stall": ("Stall.", 0.7),
+    "overspeed": ("Overspeed.", 0.7),
+    "airbrakes": ("Airbrakes unlocked.", 0.75),
+    "check_gear": ("Check gear.", 0.75),
 }
 
 # Silence after the first word of these clips.
