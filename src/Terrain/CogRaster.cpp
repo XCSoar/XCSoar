@@ -7,7 +7,7 @@
 #include "util/StringCompare.hxx"
 
 #ifdef USE_LIBTIFF
-#include <tiffio.h>
+#include "TiffGeoTags.hpp"
 #endif
 
 #ifdef USE_GEOTIFF
@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <cstdlib>
 #include <cstdarg>
 #include <cstring>
 #include <map>
@@ -73,6 +74,43 @@ LevelForQuantisation(const std::vector<CogLevel> &levels,
 #ifdef USE_LIBTIFF
 
 static TIFFErrorHandler previous_tiff_warning;
+#ifndef USE_GEOTIFF
+static TIFFExtendProc parent_tiff_extender;
+
+static void
+CogTiffExtender(TIFF *tiff)
+{
+  static const TIFFFieldInfo info[] = {
+    { TIFFTAG_GEOPIXELSCALE, -1, -1, TIFF_DOUBLE, FIELD_CUSTOM,
+      1, 1, const_cast<char *>("GeoPixelScale") },
+    { TIFFTAG_GEOTIEPOINTS, -1, -1, TIFF_DOUBLE, FIELD_CUSTOM,
+      1, 1, const_cast<char *>("GeoTiePoints") },
+    { TIFFTAG_GDAL_NODATA, -1, -1, TIFF_ASCII, FIELD_CUSTOM,
+      1, 0, const_cast<char *>("GDALNoDataValue") },
+  };
+  TIFFMergeFieldInfo(tiff, info, 3);
+  if (parent_tiff_extender != nullptr)
+    parent_tiff_extender(tiff);
+}
+#endif
+
+void
+InstallCogTiffSupport() noexcept
+{
+#ifdef USE_GEOTIFF
+  static bool geotiff;
+  if (!geotiff) {
+    XTIFFInitialize();
+    geotiff = true;
+  }
+#else
+  static bool tags;
+  if (!tags) {
+    parent_tiff_extender = TIFFSetTagExtender(CogTiffExtender);
+    tags = true;
+  }
+#endif
+}
 
 static void
 CogTiffWarning(const char *module, const char *fmt, va_list ap)
@@ -101,10 +139,7 @@ static TIFF *
 OpenTiff(Path path)
 {
   InstallTiffWarningFilter();
-
-#ifdef USE_GEOTIFF
-  XTIFFInitialize();
-#endif
+  InstallCogTiffSupport();
 
 #ifdef _WIN32
   return TIFFOpenW(UTF8ToWide(path.c_str()).c_str(), "r");
@@ -180,8 +215,26 @@ ReadGeoBounds(TIFF *tiff)
 }
 #endif
 
+[[gnu::pure]]
+static bool
+IsElevationDirectory(TIFF *tiff) noexcept
+{
+  if (!TIFFIsTiled(tiff))
+    return false;
+
+  uint16_t samples = 1, bits = 0, format = SAMPLEFORMAT_UINT;
+  TIFFGetFieldDefaulted(tiff, TIFFTAG_SAMPLESPERPIXEL, &samples);
+  TIFFGetField(tiff, TIFFTAG_BITSPERSAMPLE, &bits);
+  TIFFGetFieldDefaulted(tiff, TIFFTAG_SAMPLEFORMAT, &format);
+  if (samples != 1)
+    return false;
+  if (bits == 16)
+    return true;
+  return bits == 32 && format == SAMPLEFORMAT_IEEEFP;
+}
+
 static CogLevel
-ReadLevelInfo(TIFF *tiff, unsigned scale)
+ReadLevelInfo(TIFF *tiff, unsigned full_width)
 {
   CogLevel level;
 
@@ -191,21 +244,24 @@ ReadLevelInfo(TIFF *tiff, unsigned scale)
 
   level.width = width;
   level.height = height;
-  level.scale = scale;
+  level.directory = TIFFCurrentDirectory(tiff);
+  level.scale = (full_width > 0 && width > 0)
+    ? std::max(1u, full_width / width)
+    : 1;
 
-  if (TIFFIsTiled(tiff)) {
-    uint32_t tw, th;
-    TIFFGetField(tiff, TIFFTAG_TILEWIDTH, &tw);
-    TIFFGetField(tiff, TIFFTAG_TILELENGTH, &th);
-    level.tile_width = tw;
-    level.tile_height = th;
-  } else {
-    level.tile_width = width;
-    level.tile_height = 1;
-  }
+  uint32_t tw, th;
+  TIFFGetField(tiff, TIFFTAG_TILEWIDTH, &tw);
+  TIFFGetField(tiff, TIFFTAG_TILELENGTH, &th);
+  level.tile_width = tw;
+  level.tile_height = th;
 
   level.tiles_x = (level.width + level.tile_width - 1) / level.tile_width;
   level.tiles_y = (level.height + level.tile_height - 1) / level.tile_height;
+
+  char *nodata = nullptr;
+  if (TIFFGetField(tiff, TIFFTAG_GDAL_NODATA, &nodata) &&
+      nodata != nullptr && *nodata != '\0')
+    level.nodata = int16_t(atoi(nodata));
 
   return level;
 }
@@ -267,10 +323,21 @@ struct CogRaster::Impl {
       bounds = ReadGeoBoundsFromTags(tiff);
 #endif
 
-      unsigned scale = 1;
+      unsigned full_width = 0;
       do {
-        levels.push_back(ReadLevelInfo(tiff, scale));
-        scale *= 2;
+        if (!IsElevationDirectory(tiff))
+          continue;
+
+        uint32_t tw = 0, th = 0;
+        TIFFGetField(tiff, TIFFTAG_TILEWIDTH, &tw);
+        TIFFGetField(tiff, TIFFTAG_TILELENGTH, &th);
+        if (tw == 0 || th == 0 || tw > 1024 || th > 1024)
+          continue;
+
+        CogLevel level = ReadLevelInfo(tiff, full_width);
+        if (full_width == 0)
+          full_width = level.width;
+        levels.push_back(level);
       } while (TIFFReadDirectory(tiff));
 
       TIFFSetDirectory(tiff, 0);
@@ -297,16 +364,16 @@ struct CogRaster::Impl {
     if (tx >= lev.tiles_x || ty >= lev.tiles_y)
       return false;
 
-    if (TIFFSetDirectory(tiff, level) == 0)
+    if (TIFFSetDirectory(tiff, lev.directory) == 0)
       return false;
 
-    if (!TIFFIsTiled(tiff))
+    if (!IsElevationDirectory(tiff))
       return false;
 
     uint16_t bits_per_sample = 0;
     uint16_t sample_format = SAMPLEFORMAT_UINT;
     TIFFGetField(tiff, TIFFTAG_BITSPERSAMPLE, &bits_per_sample);
-    TIFFGetField(tiff, TIFFTAG_SAMPLEFORMAT, &sample_format);
+    TIFFGetFieldDefaulted(tiff, TIFFTAG_SAMPLEFORMAT, &sample_format);
 
     const tmsize_t tile_size = TIFFTileSize(tiff);
     if (tile_size <= 0)
@@ -330,7 +397,7 @@ struct CogRaster::Impl {
       for (unsigned i = 0; i < tile_pixels; ++i) {
         int16_t value;
         std::memcpy(&value, src + i * sizeof(int16_t), sizeof(int16_t));
-        if (value == -32768)
+        if (value == -32768 || value == lev.nodata)
           buffer[i] = TerrainHeight::Invalid();
         else
           buffer[i] = TerrainHeight(value);
@@ -417,6 +484,18 @@ struct CogRaster::Impl {
     auto &slot = tile_cache[key];
     slot = std::move(tile_buffer);
     SetPtr(key, slot.data());
+
+    if (key.level < levels.size()) {
+      const CogLevel &lev = levels[key.level];
+      const unsigned x0 = key.tx * lev.tile_width;
+      const unsigned y0 = key.ty * lev.tile_height;
+      const auto refresh = [&](TileCursor &cur) {
+        if (cur.level == key.level && cur.x0 == x0 && cur.y0 == y0)
+          cur.data = slot.data();
+      };
+      refresh(last_cur);
+      refresh(last_ov);
+    }
   }
 
   bool DecodeOnePending(unsigned only_level) noexcept;
@@ -425,6 +504,10 @@ struct CogRaster::Impl {
                       unsigned max_tiles = 0) noexcept;
 
   unsigned last_scan_level = 0;
+
+  ~Impl() noexcept {
+    CloseTiff();
+  }
 
   void SeedCoarsestOverview() noexcept {
     unsigned overview, tile_pixels, max_tx, max_ty;
@@ -958,22 +1041,26 @@ CogRaster::Impl::QueueLevel(const GeoBounds &view, unsigned level,
       lev.tiles_x == 0 || lev.tiles_y == 0)
     return 0;
 
+  GeoBounds clipped = view;
+  if (!clipped.IntersectWith(file_bounds))
+    return 0;
+
   const double file_h = file_bounds.GetHeight().Degrees();
   const double file_w = file_bounds.GetWidth().Degrees();
   if (file_h == 0 || file_w == 0)
     return 0;
 
   const double lat_min =
-    (file_bounds.GetNorth().Degrees() - view.GetNorth().Degrees()) /
+    (file_bounds.GetNorth().Degrees() - clipped.GetNorth().Degrees()) /
     file_h;
   const double lat_max =
-    (file_bounds.GetNorth().Degrees() - view.GetSouth().Degrees()) /
+    (file_bounds.GetNorth().Degrees() - clipped.GetSouth().Degrees()) /
     file_h;
   const double lon_min =
-    (view.GetWest().Degrees() - file_bounds.GetWest().Degrees()) /
+    (clipped.GetWest().Degrees() - file_bounds.GetWest().Degrees()) /
     file_w;
   const double lon_max =
-    (view.GetEast().Degrees() - file_bounds.GetWest().Degrees()) /
+    (clipped.GetEast().Degrees() - file_bounds.GetWest().Degrees()) /
     file_w;
 
   const int px_min = std::max(0, static_cast<int>(lon_min * lev.width));

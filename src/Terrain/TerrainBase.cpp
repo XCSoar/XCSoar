@@ -46,13 +46,8 @@ bool
 TerrainBase::UpdateTiles([[maybe_unused]] const GeoPoint &location,
                          [[maybe_unused]] double radius) noexcept
 {
-  if (raster.ProcessScanTile()) {
+  if (raster.ProcessScanTile() || raster.ProcessOneInternalTile())
     ++serial;
-    return raster.HasPendingInternalTiles();
-  }
-
-  if (raster.HasPendingInternalTiles())
-    raster.ProcessOneInternalTile();
   return raster.HasPendingInternalTiles();
 }
 
@@ -93,5 +88,5 @@ try {
 } catch (...) {
   LogError(std::current_exception(), "Failed to open terrain");
   operation.SetError(std::current_exception());
-  return nullptr;
+  throw;
 }

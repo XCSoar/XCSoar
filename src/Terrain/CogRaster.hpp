@@ -21,9 +21,12 @@ struct CogLevel {
   unsigned tile_height = 0;
   unsigned tiles_x = 0;
   unsigned tiles_y = 0;
+  unsigned directory = 0;
 
   /** 1, 2, 4, … relative to full resolution. */
   unsigned scale = 1;
+
+  int16_t nodata = -32768;
 };
 
 /**
