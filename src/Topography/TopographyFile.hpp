@@ -78,6 +78,12 @@ class TopographyFile {
 
   unsigned cached_shapes = 0;
 
+  /**
+   * Shapefile basename without directory or ".shp", for layer
+   * thinning.
+   */
+  char name[40]{};
+
   const int label_field;
 
   const ResourceId icon, mdpi_icon, xhdpi_icon, xxhdpi_icon;
@@ -198,6 +204,10 @@ public:
 
   const Serial &GetSerial() const noexcept {
     return serial;
+  }
+
+  const char *GetName() const noexcept {
+    return name;
   }
 
   const GeoPoint &GetCenter() const noexcept {

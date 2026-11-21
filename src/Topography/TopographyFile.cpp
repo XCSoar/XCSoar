@@ -7,6 +7,8 @@
 #include "Projection/WindowProjection.hpp"
 #include "Projection/MapLod.hpp"
 #include "util/ScopeExit.hxx"
+#include "util/TruncateString.hpp"
+#include "util/StringCompare.hxx"
 
 #ifdef ENABLE_OPENGL
 #include "Topography/ShapeRenderer.hpp"
@@ -19,6 +21,22 @@
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+
+static void
+CopyShapeBaseName(char *dest, std::size_t dest_size,
+                  const char *path) noexcept
+{
+  const char *base = path;
+  for (const char *p = path; *p != '\0'; ++p)
+    if (*p == '/' || *p == '\\')
+      base = p + 1;
+
+  CopyTruncateString(dest, dest_size, base);
+
+  const std::size_t n = StringLength(dest);
+  if (n >= 4 && StringIsEqualIgnoreCase(dest + n - 4, ".shp"))
+    dest[n - 4] = '\0';
+}
 
 TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
                                double _threshold,
@@ -40,6 +58,8 @@ TopographyFile::TopographyFile(zzip_dir *_dir, const char *filename,
    label_threshold(_label_threshold),
    important_label_threshold(_important_label_threshold)
 {
+  CopyShapeBaseName(name, sizeof(name), filename);
+
   const std::size_t n_shapes = file.size();
   constexpr std::size_t MAX_SHAPES = 16 * 1024 * 1024;
   if (n_shapes == 0)
