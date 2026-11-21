@@ -24,6 +24,13 @@ class TerrainLoader {
   OperationEnvironment &env;
 
   /**
+   * Optional hook after a full-resolution tile is stored. Used by
+   * JP2→COG convert to write and unload immediately.
+   */
+  void (*tile_loaded)(void *ctx, unsigned index) noexcept = nullptr;
+  void *tile_loaded_ctx = nullptr;
+
+  /**
    * The number of remaining segments after the current one.
    */
   mutable unsigned remaining_segments = 0;
@@ -51,6 +58,12 @@ public:
 
   void DecodeRequestedTiles(struct zzip_dir *dir, const char *path) {
     LoadJPG2000(dir, path);
+  }
+
+  void SetTileLoadedCallback(void (*cb)(void *ctx, unsigned index) noexcept,
+                             void *ctx) noexcept {
+    tile_loaded = cb;
+    tile_loaded_ctx = ctx;
   }
 
   /* callback methods for libjasper (via jas_rtc.cpp) */

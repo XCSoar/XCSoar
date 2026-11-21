@@ -3,6 +3,7 @@
 
 #include "CogFromXcm.hpp"
 #include "TerrainBase.hpp"
+#include "Height.hpp"
 #include "Loader.hpp"
 #include "RasterTile.hpp"
 #include "RasterTileCache.hpp"
@@ -13,6 +14,7 @@
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/SubOperationEnvironment.hpp"
 #include "system/FileUtil.hpp"
 #include "system/Path.hpp"
 #include "util/ScopeExit.hxx"
@@ -26,7 +28,7 @@
 #include <fmt/format.h>
 
 #ifdef USE_LIBTIFF
-#include <tiffio.h>
+#include "TiffGeoTags.hpp"
 #ifdef USE_GEOTIFF
 #include "Geo/GeoTIFFHeaders.hpp"
 #endif
@@ -70,6 +72,56 @@ ExtractZipMember(ZipArchive &archive, const char *name, Path dest)
 #ifdef USE_LIBTIFF
 
 static constexpr int16_t COG_NODATA = -32768;
+
+static void
+CopyCogTile(const RasterTile &tile, int16_t *dest,
+            unsigned tw, unsigned th) noexcept
+{
+  std::fill(dest, dest + std::size_t(tw) * th, COG_NODATA);
+  if (!tile.IsLoaded())
+    return;
+
+  const auto tsize = tile.buffer.GetSize();
+  const TerrainHeight *src = tile.buffer.GetData();
+  for (unsigned y = 0; y < tsize.y && y < th; ++y)
+    for (unsigned x = 0; x < tsize.x && x < tw; ++x)
+      dest[y * tw + x] = src[y * tsize.x + x].GetValue();
+}
+
+struct CogSink {
+  TIFF *tf;
+  RasterTileCache *rtc;
+  int16_t *buf;
+  uint32_t tw, th;
+  unsigned grid_x;
+  std::size_t buf_bytes;
+  bool failed = false;
+};
+
+static void
+OnConvertTile(void *ctx, unsigned index) noexcept
+{
+  auto &s = *static_cast<CogSink *>(ctx);
+  if (s.failed || s.grid_x == 0)
+    return;
+
+  const unsigned tx = index % s.grid_x;
+  const unsigned ty = index / s.grid_x;
+  const auto grid = s.rtc->GetTileGridSize();
+  if (tx >= grid.x || ty >= grid.y)
+    return;
+
+  RasterTile &tile = s.rtc->GetTile(tx, ty);
+  CopyCogTile(tile, s.buf, s.tw, s.th);
+  tile.Unload();
+  tile.ClearRequest();
+
+  const ttile_t tiff_index =
+    TIFFComputeTile(s.tf, tx * s.tw, ty * s.th, 0, 0);
+  if (TIFFWriteEncodedTile(s.tf, tiff_index, s.buf,
+                           tmsize_t(s.buf_bytes)) < 0)
+    s.failed = true;
+}
 
 static void
 SetCogTiffFields(TIFF *tf, uint32_t width, uint32_t height,
@@ -125,6 +177,7 @@ WriteCogOverviews(Path dest, unsigned src_w, unsigned src_h,
   std::vector<int16_t> src(std::size_t(tw) * th);
   std::vector<int32_t> acc(std::size_t(tw) * th);
   std::vector<uint16_t> cnt(std::size_t(tw) * th);
+  std::vector<uint16_t> water(std::size_t(tw) * th);
   std::vector<int16_t> dst(std::size_t(tw) * th);
 
   unsigned src_dir = 0;
@@ -160,6 +213,7 @@ WriteCogOverviews(Path dest, unsigned src_w, unsigned src_h,
 
         std::fill(acc.begin(), acc.end(), 0);
         std::fill(cnt.begin(), cnt.end(), 0);
+        std::fill(water.begin(), water.end(), 0);
 
         for (unsigned sty = 0; sty < 2; ++sty) {
           for (unsigned stx = 0; stx < 2; ++stx) {
@@ -172,7 +226,7 @@ WriteCogOverviews(Path dest, unsigned src_w, unsigned src_h,
               TIFFComputeTile(in, ftx * tw, fty * th, 0, 0);
             if (TIFFReadEncodedTile(in, index, src.data(),
                                     tile_bytes) < 0)
-              continue;
+              throw std::runtime_error("Failed to read COG overview source");
 
             for (unsigned y = 0; y < th; ++y) {
               for (unsigned x = 0; x < tw; ++x) {
@@ -180,11 +234,15 @@ WriteCogOverviews(Path dest, unsigned src_w, unsigned src_h,
                 const unsigned dy_i = (sty * th + y) / 2;
                 if (dx_i >= tw || dy_i >= th)
                   continue;
-                const int16_t v = src[y * tw + x];
-                if (v == COG_NODATA)
+                const TerrainHeight h{src[y * tw + x]};
+                if (h.IsInvalid())
                   continue;
                 const unsigned di = dy_i * tw + dx_i;
-                acc[di] += v;
+                if (h.IsWater()) {
+                  ++water[di];
+                  continue;
+                }
+                acc[di] += src[y * tw + x];
                 ++cnt[di];
               }
             }
@@ -194,7 +252,7 @@ WriteCogOverviews(Path dest, unsigned src_w, unsigned src_h,
         for (unsigned i = 0; i < dst.size(); ++i)
           dst[i] = cnt[i] > 0
             ? int16_t(acc[i] / int32_t(cnt[i]))
-            : COG_NODATA;
+            : water[i] > 0 ? int16_t(-32767) : COG_NODATA;
 
         const ttile_t index = TIFFComputeTile(out, tx * tw, ty * th, 0, 0);
         if (TIFFWriteEncodedTile(out, index, dst.data(), tile_bytes) < 0)
@@ -222,10 +280,21 @@ static void
 ConvertJp2ToCog(ZipArchive &archive, Path dest,
                 OperationEnvironment &operation)
 {
+  const auto t0 = std::chrono::steady_clock::now();
+  InstallCogTiffSupport();
+  operation.SetProgressRange(1000);
+  operation.SetProgressPosition(0);
+
+  const AllocatedPath tmp{
+    fmt::format("{}.tmp", dest.c_str()).c_str()};
+  File::Delete(tmp);
+  AtScopeExit(&tmp) { File::Delete(tmp); };
+
   RasterTileCache rtc;
   SharedMutex mutex;
-  QuietOperationEnvironment quiet;
-  TerrainLoader loader(mutex, rtc, true, false, quiet);
+  SubOperationEnvironment overview_env(operation, 0, 200);
+  overview_env.SetProgressRange(200);
+  TerrainLoader loader(mutex, rtc, true, false, overview_env);
   loader.LoadOverview(archive.get(), "terrain.jp2", "terrain.j2w");
 
   const auto size = rtc.GetSize();
@@ -248,8 +317,6 @@ ConvertJp2ToCog(ZipArchive &archive, Path dest,
   const uint32_t th = tile_px.y;
   const unsigned n_tiles = grid.x * grid.y;
   const unsigned n_ov = OverviewTileCount(size.x, size.y, tw, th);
-  operation.SetProgressRange(n_tiles + n_ov);
-  operation.SetProgressPosition(0);
 
   const double west = bounds.GetWest().Degrees();
   const double north = bounds.GetNorth().Degrees();
@@ -257,7 +324,7 @@ ConvertJp2ToCog(ZipArchive &archive, Path dest,
   const double dy = bounds.GetHeight().Degrees() / double(size.y);
 
   {
-    TIFF *tf = TIFFOpen(dest.c_str(), "w");
+    TIFF *tf = TIFFOpen(tmp.c_str(), "w");
     if (tf == nullptr)
       throw std::runtime_error("Failed to create COG cache");
     AtScopeExit(tf) { TIFFClose(tf); };
@@ -276,47 +343,50 @@ ConvertJp2ToCog(ZipArchive &archive, Path dest,
     }
 #endif
 
-    TerrainLoader tile_loader(mutex, rtc, false, false, quiet);
+    SubOperationEnvironment tiles_env(operation, 200, 850);
+    tiles_env.SetProgressRange(n_tiles);
+    TerrainLoader tile_loader(mutex, rtc, false, false, tiles_env);
     std::vector<int16_t> tile_buf(std::size_t(tw) * th, COG_NODATA);
 
-    unsigned done = 0;
-    for (unsigned ty = 0; ty < grid.y; ++ty) {
-      for (unsigned tx = 0; tx < grid.x; ++tx) {
-        if (operation.IsCancelled())
-          throw std::runtime_error("Cancelled");
-
-        RasterTile &tile = rtc.GetTile(tx, ty);
-        std::fill(tile_buf.begin(), tile_buf.end(), COG_NODATA);
-        if (tile.IsDefined()) {
-          tile.SetRequest();
-          tile_loader.DecodeRequestedTiles(archive.get(), "terrain.jp2");
-          if (tile.IsLoaded()) {
-            const auto tsize = tile.buffer.GetSize();
-            const TerrainHeight *src = tile.buffer.GetData();
-            for (unsigned y = 0; y < tsize.y && y < th; ++y)
-              for (unsigned x = 0; x < tsize.x && x < tw; ++x)
-                tile_buf[y * tw + x] = src[y * tsize.x + x].GetValue();
-          }
-          tile.Unload();
-          tile.ClearRequest();
-        }
-
-        const ttile_t index = TIFFComputeTile(tf, tx * tw, ty * th, 0, 0);
-        if (TIFFWriteEncodedTile(tf, index, tile_buf.data(),
-                                 tmsize_t(tile_buf.size() * sizeof(int16_t))) < 0)
-          throw std::runtime_error("Failed to write COG tile");
-
-        operation.SetProgressPosition(++done);
-      }
+    bool any = false;
+    for (unsigned k = 0; k < n_tiles; ++k) {
+      RasterTile &tile = rtc.GetTile(k % grid.x, k / grid.x);
+      if (!tile.IsDefined())
+        continue;
+      tile.SetRequest();
+      any = true;
     }
+
+    CogSink sink{
+      tf, &rtc, tile_buf.data(), tw, th, grid.x,
+      tile_buf.size() * sizeof(int16_t),
+    };
+    tile_loader.SetTileLoadedCallback(OnConvertTile, &sink);
+
+    if (any)
+      tile_loader.DecodeRequestedTiles(archive.get(), "terrain.jp2");
+
+    if (sink.failed)
+      throw std::runtime_error("Failed to write COG tile");
 
     if (!TIFFWriteDirectory(tf))
       throw std::runtime_error("Failed to finalize COG cache");
   }
 
-  unsigned done = n_tiles;
-  WriteCogOverviews(dest, size.x, size.y, tw, th,
-                    west, north, dx, dy, operation, done);
+  {
+    SubOperationEnvironment ov_env(operation, 850, 1000);
+    ov_env.SetProgressRange(n_ov > 0 ? n_ov : 1);
+    unsigned ov_done = 0;
+    WriteCogOverviews(tmp, size.x, size.y, tw, th,
+                      west, north, dx, dy, ov_env, ov_done);
+  }
+
+  if (!File::Replace(tmp, dest))
+    throw std::runtime_error("Failed to publish COG cache");
+
+  const auto sec = std::chrono::duration_cast<std::chrono::seconds>(
+    std::chrono::steady_clock::now() - t0).count();
+  LogFmt("Converted terrain.jp2 to COG in {} s", sec);
 }
 
 #endif

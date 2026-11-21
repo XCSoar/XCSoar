@@ -161,7 +161,8 @@ Version 7.47 - not yet released
 * data
   - load elevation as Cloud-Optimized GeoTIFF: a .tif in Site
     files, terrain.tif inside the XCM, or JPEG2000 from the XCM
-    converted once into the cache. Topography stays in the XCM.
+    converted once into the cache (one JPEG2000 read).
+    Topography stays in the XCM.
   - add an option on Site files to download newer copies of files
     already on the device when XCSoar starts. The progress bar
     shows the download, and a message reports when files were

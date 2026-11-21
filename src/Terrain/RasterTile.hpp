@@ -25,7 +25,7 @@ public:
    */
   unsigned distance;
 
-  bool request;
+  bool request = false;
 
   RasterBuffer buffer;
 
