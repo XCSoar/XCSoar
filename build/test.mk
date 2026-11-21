@@ -108,6 +108,7 @@ TEST_NAMES = \
 	TestFlarmSpokenAlert \
 	TestSpokenAirspaceAlert \
 	TestAircraftWarning \
+	TestDeviceFault \
 	TestColorRamp TestXCThermBandQuery TestGeoPoint TestDiffFilter \
 	TestFileUtil TestRepository TestFileType TestMarkdownCheckbox TestPath TestPolars TestCSVLine TestGlidePolar \
 	TestLXNAVPolarConversion \
@@ -250,6 +251,11 @@ TEST_AIRCRAFT_WARNING_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestAircraftWarning.cpp
 $(eval $(call link-program,TestAircraftWarning,TEST_AIRCRAFT_WARNING))
+
+TEST_DEVICE_FAULT_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDeviceFault.cpp
+$(eval $(call link-program,TestDeviceFault,TEST_DEVICE_FAULT))
 
 TEST_MOSMIX_STATION_SOURCES = \
 	$(SRC)/Weather/MOSMIX/Station.cpp \

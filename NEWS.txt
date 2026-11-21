@@ -93,6 +93,11 @@ Version 7.47 - not yet released
   - show Simulator, with a joystick symbol, and Replay, with a
     circular arrow, as white labels at the top of that lower-left
     stack. Errors sit at the bottom, warnings between
+  - show a red device label on the lower left while a configured
+    device is disconnected, has no data, or has a port error, named
+    like the Devices list (A, B, …). Internal GPS stays on the GPS
+    labels. Connecting is not shown. Each label drops when that
+    device recovers
   - draw the wind arrow light blue when the wind comes from an
     external sensor, grey when XCSoar estimated it
   - draw the instantaneous wind of an external sensor (Larus) as a
@@ -174,6 +179,7 @@ Version 7.47 - not yet released
     login (wrong e-mail or password, subscription not active, too
     many devices) instead of "Loading SkySight catalog..." #2860
 * documentation
+  - describe device disconnect labels on the lower left of the map
   - describe spoken Stall, Overspeed, Airbrakes unlocked, and
     Check gear warnings
   - describe the map Waypoints filter: a type can be hidden, the

@@ -152,7 +152,8 @@ thermal band, FLARM alarm-level icon (not the FLARM traffic gauge
 widget), stall-ratio line, pan chrome, map-title placeholder,
 final-glide bar, and vario bar. The lower-left labels are forced
 too: yellow "No polar", red "GPS not connected", yellow "GPS
-waiting for fix", and yellow "Battery low". The HUD-top occurrence
+waiting for fix", yellow "Battery low", and a red "A: Not connected"
+device fault. The HUD-top occurrence
 channel is filled too: stacked progress pills and one status pill
 for each colour and icon. Missing sensor data is
 filled with placeholders so layout and collision can be tested

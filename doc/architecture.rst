@@ -801,6 +801,10 @@ child of the main window on the map.
   joystick, and Replay, with a circular arrow, are white rounded
   labels at the top of the same stack.  Errors sit at the bottom,
   warnings between.  Each drops when that condition clears.
+  A configured device that has failed, has no data, or is not
+  connected is a red label there, named like the Devices list
+  (``A: No data``).  Internal GPS is only the GPS labels.  Connecting
+  is not a condition.
   ``Message::AddMessage()``
   is the occurrence channel: rounded labels at the HUD top (the same
   look as Simulator, including the same icons when the text matches),
